@@ -871,7 +871,7 @@ function getMenu()
 					<li><a class="fNiv" href="?page=map"><i class="fa fa-map-marker"></i> Karte</a></li>
 					<li><a class="fNiv" href="?page=index&sub=ratgeber"><i class="fa fa-question"></i> Ratgeber</a></li>
 					<li><a class="fNiv" href="?page=join"><i class="fa fa-group"></i> Mach-Mit!</a></li>
-					<li><a class="fNiv" href="?page=login"><i class="fa fa-key"></i> Login</a></li>
+					<li><a class="fNiv" href="?page=login"><i class="fa fa-lock"></i> Login</a></li>
 				</ul>',
 			'mobile' => '
 				<select id="mobilemenu">
