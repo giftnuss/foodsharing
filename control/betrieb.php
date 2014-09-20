@@ -1,0 +1,421 @@
+<?php
+$bezirk_id = getGet('bid');
+
+if(!isset($_GET['bid']))
+{
+	$bezirk_id = getBezirkId();
+}
+else
+{
+	$bezirk_id = (int)$_GET['bid'];
+}
+
+if(!isOrgaTeam() && $bezirk_id == 0)
+{
+	$bezirk_id = getBezirkId();
+}
+if($bezirk_id > 0)
+{
+	$bezirk = $db->getBezirk($bezirk_id);
+}
+else
+{
+	$bezirk = array('name'=>'kompletter Datenbank');
+}
+if(getAction('new'))
+{	
+	handle_add($bezirk_id);
+	
+	addBread(s('bread_betrieb'),'?page='.$page);
+	addBread(s('bread_new_betrieb'));
+			
+	addContent(betrieb_form($bezirk,$page));
+
+	
+	
+	addContent(v_field(v_menu(array(
+		array('name'=>s('back_to_overview'),'href'=>'?page=fsbetrieb&bid='.$bezirk_id)
+	)),s('actions')),CNT_RIGHT);
+}
+elseif($id = getActionId('delete'))
+{
+	if($db->del_betrieb($id))
+	{
+		info(s('betrieb_deleted'));
+		goPage();
+	}
+}
+elseif($id = getActionId('edit'))
+{
+	addBread(s('bread_betrieb'),'?page=betrieb');
+	addBread(s('bread_edit_betrieb'));
+	$data = $db->getOne_betrieb($id);
+	
+	if((isOrgaTeam() || $db->isVerantwortlich($id)) || isBotFor($data['bezirk_id']))
+	{
+		handle_edit();
+		
+		setEditData($data);
+		
+		addContent(betrieb_form($db->getBezirk($data['bezirk_id'])));
+	}
+	else
+	{
+		info('Diesen Betrieb kannst Du nicht bearbeiten');
+	}
+	
+			
+	addContent(v_field(v_menu(array(
+		pageLink('betrieb','back_to_overview')
+	)),s('actions')),CNT_RIGHT);
+}
+else if(isset($_GET['id']))
+{
+	go('?page=fsbetrieb&id='.(int)$_GET['id']);
+	//$data = $db->getOne_betrieb($_GET['id']);	
+	//addHead('<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&amp;language=de"></script>');
+	//addHead('<script type="text/javascript" src="js/gmap/gmap.js"></script>');
+	
+	$betrieb = $db->getBetrieb((int)$_GET['id']);
+	
+	addBread(s('bread_betrieb'),'?page=betrieb');
+	addBread($betrieb['name']);
+	
+	//$content = v_field(v_map($betrieb),v_getStatusAmpel($betrieb['betrieb_status_id']).' '.$betrieb['name']);
+	
+	
+	
+	addContent(v_field(v_clustermap('foodsaver',array(
+		'center' => $betrieb
+	)), v_getStatusAmpel($betrieb['betrieb_status_id']).' '.$betrieb['name']));
+	
+	
+	addContent(v_field('
+	<div class="ui-padding">
+		<p>'.$betrieb['ansprechpartner'].'</p>
+		
+		<p>'.$betrieb['str'].' '.$betrieb['hsnr'].'<br />
+			DE '.$betrieb['plz'].' <br />
+		</p>
+		<p>
+			<a href="mailto:'.$betrieb['email'].'">'.$betrieb['email'].'</a><br />
+			'.$betrieb['telefon'].'<br />
+			'.$betrieb['fax'].'
+		</p>
+	</div>
+	', 'Ansprechpartner & Adresse'),CNT_RIGHT);
+	
+	addHidden('<div id="dialog-comment"></div>');
+	addJs('
+	$("#dialog-comment").dialog({
+		autoOpen:false,
+		modal:true
+	});');
+	
+	$items = array();
+	$menu = '';
+	if(is_array($betrieb['notitzen']))
+	{
+		foreach ($betrieb['notitzen'] as $n)
+		{
+			$items[] = array(
+				'name' => dt($n['zeit_ts']),
+				'click' => "showComment('".$n['id']."');"
+			);
+			addHidden('<input type="hidden" id="comment-title-'.$n['id'].'" value="'.dt($n['zeit_ts']).'" />');
+			addHidden('<textarea id="comment-'.$n['id'].'" />'.nl2br($n['text']).'</textarea>');
+		}
+		$menu = v_menu($items);
+	}
+	addContent(v_field($menu, 'Notizen'),CNT_RIGHT);
+}
+else
+{
+	addBread(s('betrieb_bread'),'?page=betrieb');
+	
+	addContent(v_menu(array(
+			array('href' => '?page=betrieb&a=new&bid='.(int)$bezirk_id,'name' => 'Neuen Betrieb eintragen')
+	),'Aktionen'),CNT_RIGHT);
+	
+	if($betriebe = $db->listBetriebReq($bezirk_id))
+	{
+		if(isset($_GET['v']) && $_GET['v'] == 'karte')
+		{
+			addContent(v_field(v_multimap($betriebe),'Alle Betriebe aus '.$bezirk['name'].v_switch(array('Liste','Karte'))));
+		}
+		else
+		{
+			$betriebrows = array();
+			foreach ($betriebe as $b)
+			{
+				$status = v_getStatusAmpel($b['betrieb_status_id']);
+	
+				$betriebrows[] = array(
+						array('cnt' => '<a class="linkrow ui-corner-all" href="?page=betrieb&id='.$b['id'].'">'.$b['name'].'</a>'),
+						array('cnt' => $b['str'].' '.$b['hsnr']),
+						array('cnt' => ($b['added'])),
+						array('cnt' => $b['bezirk_name']),
+						array('cnt' => $status),
+						array('cnt' => v_toolbar(array('id'=>$b['id'],'types' => array('comment','edit','delete'),'confirmMsg'=>'Soll '.$b['name'].' wirklich unwideruflich gel&ouml;scht werden?'))
+									
+				));
+			}
+	
+			$table = v_tablesorter(array(
+					array('name' => 'Name'),
+					array('name' => 'Anschrift'),
+					array('name' => 'eingetragen'),
+					array('name' => s('bezirk')),
+					array('name' => 'Status','width'=>50),
+					array('name' => 'Aktionen','sort' => false,'width' => 75)
+			),$betriebrows,array('pager'=>true));
+	
+			addJs('$("#comment").dialog({title:"Kommentar zum Betrieb"});');
+	
+			addContent(v_field($table,v_toolbar(array('types'=>array('new'))).'Alle Betriebe aus dem Bezirk '.$bezirk['name'].v_switch(array('Liste','Karte'))));
+	
+		}
+	}
+	else
+	{
+		info('Es sind noch keine Betriebe eingetragen');
+	}
+	
+	/*
+	if($data = $db->getBasics_betrieb())
+	{
+		$rows = array();
+		foreach ($data as $d)
+		{
+					
+			$rows[] = array(
+				array('cnt' => '<a href="?page=betrieb&id='.$d['id'].'">'.$d['name'].'</a>'),
+				array('cnt' => v_toolbar(array('id'=>$d['id'],'types' => array('edit','delete'),'confirmMsg'=>sv('delete_sure',$d['name'])))			
+			));
+		}
+		
+		$table = v_tablesorter(array(
+			array('name' => s('name')),
+			array('name' => s('actions'),'sort' => false,'width' => 50)
+		),$rows);
+		
+		$content = v_field($table,'Alle betrieb');	
+	}
+	else
+	{
+		info(s('betrieb_empty'));		
+	}
+			
+	$right = v_field(v_menu(array(
+		array('href' => '?page=betrieb&a=neu','name' => s('neu_betrieb'))
+	)),'Aktionen');
+	*/
+}					
+function betrieb_form($bezirk = false,$page = '')
+{
+	global $db;
+	global $g_data;
+	
+	$bc = v_bezirkChooser('bezirk_id',$bezirk);
+	
+	
+	$lebensmittel_values = $db->getBasics_lebensmittel();
+	
+	
+	if(!isset($g_data['foodsaver']))
+	{
+		$g_data['foodsaver'] = array(fsId());
+	}
+	if(isset($_GET['id']))
+	{
+		$g_data['foodsaver'] = $db->getBetriebLeader($_GET['id']);
+	}
+	
+	if(isOrgateam() || isBotschafter())
+	{
+		$foodsaver_values = $db->getBasics_foodsaver();
+		$verantwortlich_select = v_form_checkbox('foodsaver',array('values' => $foodsaver_values));
+	
+	}
+	else if(getAction('new'))
+	{
+		$verantwortlich_select = v_input_wrapper(s('foodsaver'), '<input type="hidden" name="foodsaver[]" value="'.fsId().'" />Du wirst durch die Eintragrung vorerst verantwortlich für Diesen Betrieb');
+	}
+	
+	debug($g_data);
+	
+	
+	addJs('
+		$(".cb-foodsaver").click(function(){
+				if($(".cb-foodsaver:checked").length >= 4)
+				{
+					pulseError(\''.jsSafe(s('max_3_leader')).'\');
+					return false;
+				}
+				
+			});		
+			
+		$("#lat-wrapper").hide();
+		$("#lon-wrapper").hide();
+	');
+	
+	$first_post = '';
+	if(getAction('new'))
+	{
+		$first_post = v_form_textarea('first_post',array('required'=>true));
+	}
+	if(isset($g_data['stadt']))
+	{
+		$g_data['ort'] = $g_data['stadt'];
+	}
+	$view = loadView();
+	
+	addJs('$("textarea").css("height","70px");$("textarea").autosize();');
+	
+	return v_quickform('betrieb',array(
+	
+			$bc,
+			v_form_hidden('page', $page),
+			v_form_text('name'),
+			$view->latLonPicker('LatLng',array('hsnr'=>true)),
+			
+			
+			v_form_select('kette_id',array('add'=>true)),
+			v_form_select('betrieb_kategorie_id',array('add'=>true)),
+			
+			v_form_select('betrieb_status_id'),
+			
+			v_form_text('ansprechpartner'),
+			v_form_text('telefon'),
+			v_form_text('fax'),
+			v_form_text('email'),
+			
+			v_form_checkbox('lebensmittel',array('values' => $lebensmittel_values)),
+			v_form_date('begin'),
+			v_form_textarea('besonderheiten'),
+			v_form_textarea('public_info',array('maxlength' => 180,'desc' => 'Hier kannst Du ein paar Infos Angeben die für Foodsaver Die sich eventuell für das Team bewerben möchten. <br />(max. 180 Zeichen)<div>'.v_info('<strong>Wichtig</strong> Gib hier Keine genauen Abholzeiten an.<br />Es ist öftern vorgekommen, das Leute unabgesprochen zum Laden gegangen sind.').'</div>')),
+			v_form_select('public_time',array('values'=>array(
+					array('id'=>0,'name'=>'Keine Angabe'),
+					array('id'=>1,'name'=>'Morgens'),
+					array('id'=>2,'name'=>'Mittags / Nachmittags'),
+					array('id'=>3,'name'=>'Abends'),
+					array('id'=>4,'name'=>'Nachts')
+			))),
+			$first_post,
+			v_form_select('ueberzeugungsarbeit',array('values'=>array(
+				array('id'=>1,'name'=>'Überhaupt kein Problem, er/sie waren sofort begeistert!'),
+				array('id'=>2,'name'=>'Nach einiger Überzeugunsarbeit erklärte er/sie mitzumachen '),
+				array('id'=>3,'name'=>'Ganz schwierig, aber am Ende hat er/sie eingewilligt'),
+				array('id'=>4,'name'=>'Zuerst sah es so aus als ob er/sie nicht mitmachen wollte, aber dann hat sie/er sich doch bei mir gemeldet')
+			))),
+			v_form_select('presse',array('values'=>array(
+				array('id'=>1,'name'=> 'Ja'),
+				array('id'=>0,'name'=> 'Nein')
+			))),
+			v_form_select('sticker',array('values'=>array(
+				array('id'=>1,'name'=> 'Ja'),
+				array('id'=>0,'name'=> 'Nein')
+			))),
+			v_form_select('prefetchtime',array('values'=>array(
+				array('id'=>1209600,'name'=> '2 Wochen'),
+				array('id'=>1814400,'name'=> '3 Wochen'),
+				array('id'=>2419200,'name'=> '4 Wochen')
+			))),
+			v_form_select('abholmenge',array('values'=>array(
+				array('id'=>1,'name'=> '1-3kg'),
+				array('id'=>2,'name'=> '3-5kg'),
+				array('id'=>3,'name'=> '5-10kg'),
+				array('id'=>4,'name'=> '10-20kg'),
+				array('id'=>5,'name'=> '20-30kg'),
+				array('id'=>6,'name'=> '40-50kg'),
+				array('id'=>7,'name'=> 'mehr als 50kg')
+			))),
+			
+			$verantwortlich_select
+	));
+}
+
+function handle_edit()
+{
+	global $db;
+	global $g_data;
+	if(submitted())
+	{
+		/*
+		$g_data['lat'] = '';
+		$g_data['lon'] = '';
+		if($ll = getLatLon($g_data['str'].' '.$g_data['hsnr'], $g_data['plz'],$g_data['stadt']))
+		{
+			$g_data['lat'] = $ll['lat'];
+			$g_data['lon'] = $ll['lng'];
+		}
+		*/
+		//$g_data['foodsaver'] = array($g_data['foodsaver']);
+		
+		$g_data['stadt'] = $g_data['ort'];
+		
+		if($db->update_betrieb($_GET['id'],$g_data))
+		{
+			info(s('betrieb_edit_success'));
+			go('?page=fsbetrieb&id='.(int)$_GET['id']);
+		}
+		else
+		{
+			error(s('error'));
+		}
+	}
+}
+
+function handle_add($bezirk_id)
+{
+	global $db;
+	global $g_data;
+	if(submitted())
+	{
+		
+		$g_data['status_date'] = date('Y-m-d H:i:s');
+		
+		if(!isset($g_data['bezirk_id']))
+		{
+			$g_data['bezirk_id'] = getBezirkId();
+		}
+		
+		$g_data['stadt'] = $g_data['ort'];
+		
+		if($id = $db->add_betrieb($g_data))
+		{
+			$db->add_betrieb_notiz(array(
+					'foodsaver_id' =>fsId(),
+					'betrieb_id' => $id,
+					'text' => '{BETRIEB_ADDED}',
+					'zeit' => date('Y-m-d H:i:s',(time()-10)),
+					'milestone' => 1
+			));
+			
+			if(isset($g_data['first_post']) && !empty($g_data['first_post']))
+			{
+				$db->add_betrieb_notiz(array(
+						'foodsaver_id' =>fsId(),
+						'betrieb_id' => $id,
+						'text' => $g_data['first_post'],
+						'zeit' => date('Y-m-d H:i:s'),
+						'milestone' => 0
+				));
+			}
+			
+			$foodsaver = $db->getFoodsaver($g_data['bezirk_id']);
+			$db->addGlocke($foodsaver, strip_tags($g_data['name']).' wurde eingetragen','Neuer Betrieb','?page=betrieb&id='.(int)$id);
+			info(s('betrieb_add_success'));
+			
+			go('?page=fsbetrieb&id='.(int)$id);
+			
+			
+		}
+		else
+		{
+			error(s('error'));
+		}
+	}
+}
+				
+?>

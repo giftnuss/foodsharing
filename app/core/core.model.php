@@ -1,0 +1,232 @@
+<?php
+class Model extends ManualDb
+{
+	public function addPushQueue($sender_id,$recip_id,$title,$message,$ids = false,$data = array('t'=>0),$message_id = 0, $status = 0)
+	{
+		if($ids === false)
+		{
+			$ids = $this->getValues(array('gcm','iosid'), 'foodsaver', $recip_id);
+		}
+		
+		$data['i'] = (int)fsId();
+		
+		if($ids['gcm'] != '' || $ids['iosid'] != '')
+		{
+			$this->insert('
+				INSERT INTO `fs_pushqueue`
+				(
+					`sender_id`, 
+					`recip_id`, 
+					`time`, 
+					`message_id`, 
+					`title`, 
+					`message`, 
+					`data`, 
+					`status`,
+					`id_gcm`,
+					`id_apn`
+				) 
+				VALUES 
+				(
+					'.(int)$sender_id.',
+					'.(int)$recip_id.',
+					NOW(),
+					'.(int)$message_id.',
+					'.$this->strval($title).',
+					'.$this->strval($message).',
+					'.$this->strval(serialize($data)).',
+					'.(int)$status.',
+					'.$this->strval($ids['gcm']).',
+					'.$this->strval($ids['iosid']).'
+				)		
+			');
+		}
+	}
+	
+	public function mayBezirk($bid)
+	{
+		if(isset($_SESSION['client']['bezirke'][$bid]) || isBotschafter() || isOrgaTeam())
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	public function isBotschafter($fsid)
+	{
+		if($this->q('SELECT foodsaver_id FROM '.PREFIX.'botschafter WHERE foodsaver_id = '.(int)$fsid.' LIMIT 1'))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	public function getContent($id)
+	{
+		if($cnt = $this->qRow('
+			SELECT 	`title`,`body` FROM '.PREFIX.'content WHERE `id` = '.(int)$id.'		
+		'))
+		{
+			return $cnt;
+		}
+		return false;
+	}
+	
+	public function getBezirke()
+	{
+		if(isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke']))
+		{
+			return $_SESSION['client']['bezirke'];
+		}
+	}
+	
+	public function buddyStatus($fsid)
+	{
+		if(($status = $this->qOne('SELECT `confirmed` FROM '.PREFIX.'buddy WHERE `foodsaver_id` = '.(int)fsId().' AND `buddy_id` = '.(int)$fsid.'')) !== false)
+		{
+			return $status;
+		}
+		
+		return -1;
+	}
+	
+	public function buddyRequest($fsid)
+	{
+		$this->insert('
+			REPLACE INTO `'.PREFIX.'buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
+			VALUES ('.(int)fsId().','.(int)$fsid.',0)
+		');
+		return true;
+	}
+	
+	public function confirmBuddy($fsid)
+	{
+		$this->insert('
+			REPLACE INTO `'.PREFIX.'buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
+			VALUES ('.(int)fsId().','.(int)$fsid.',1)
+		');
+		$this->insert('
+			REPLACE INTO `'.PREFIX.'buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
+			VALUES ('.(int)$fsid.','.(int)fsid().',1)
+		');
+	}
+	
+	public function removeBuddy($fsid)
+	{
+		$this->del('
+			DELETE FROM `'.PREFIX.'buddy`
+			WHERE 	`foodsaver_id` = '.(int)fsId().'
+			AND 	`buddy_id` = '.$fsid.'
+		');
+		$this->del('
+			DELETE FROM `'.PREFIX.'buddy`
+			WHERE 	`foodsaver_id` = '.(int)$fsid.'
+			AND 	`buddy_id` = '.fsId().'
+		');
+	}
+	
+	public function getLocation($id)
+	{
+		return $this->qRow('
+			SELECT id, name, lat, lon, zip, city, street
+			FROM  '.PREFIX.'location
+			WHERE 	id = '.$this->intval($id).'
+		');
+	}
+	
+	public function getLocationByLatLon($lat,$lon)
+	{
+		return $this->qRow('
+			SELECT (id, name, lat, lon, zip, city, street)
+			FROM  '.PREFIX.'location
+			WHERE 	lat = '.$this->floatval($lat).'
+			AND 	lon = '.$this->floatval($lon).'
+		');
+	}
+	
+	public function getLocationIdByLatLon($lat,$lon)
+	{
+		$lat = round($lat,8);
+		$lon = round($lon,8);
+		return $this->qOne('
+			SELECT (id)
+			FROM  '.PREFIX.'location
+			WHERE 	lat = '.$this->floatval($lat).'
+			AND 	lon = '.$this->floatval($lon).'
+		');
+	}
+	
+	public function addLocation($location_name, $lat, $lon, $anschrift, $plz, $ort)
+ 	{
+ 		$lat = round($lat,8);
+ 		$lon = round($lon,8);
+ 		return $this->insert('	
+ 			INSERT INTO '.PREFIX.'location (name, lat, lon, zip, city, street) 
+ 			VALUES
+ 			(		
+ 				'.$this->strval($location_name).',
+ 				'.$this->floatval($lat).',
+ 				'.$this->floatval($lon).',
+ 				'.$this->strval($plz).',
+ 				'.$this->strval($ort).',
+ 				'.$this->strval($anschrift).'
+ 			)
+ 		');
+ 	}
+ 	
+ 	public function getCache($id)
+ 	{
+ 		if($value = $this->qOne('
+ 			SELECT `value` FROM `fs_cache` 
+ 			WHERE `id` = '.$this->strval($id).'
+ 		'))
+ 		{
+ 			return unserialize($value);
+ 		}
+ 		
+ 		return false;
+ 	}
+ 	
+ 	public function replaceCache($id,$value)
+ 	{
+ 		$value = serialize($value);
+ 		return $this->insert('
+ 				REPLACE INTO `fs_cache`
+ 				(`id`,`value`)
+ 				VALUES('.$this->strval($id).','.$this->strval($value).')
+ 		');
+ 	}
+ 	
+ 	public function setCache($id,$value)
+ 	{
+ 		$value = serialize($value);
+ 		return $this->insert('
+ 			INSERT INTO `fs_cache`
+ 			(`id`,`value`)
+ 			VALUES('.$this->strval($id).','.$this->strval($value).')
+ 			
+ 		');
+ 	}
+ 	
+ 	public function message($recip_id, $foodsaver_id, $message, $unread = 1)
+ 	{
+ 		$recd = 0;
+ 		if($unread == 0)
+ 		{
+ 			$recd = 1;
+ 		}
+ 		else
+ 		{
+ 			$unread = 1;
+ 		}
+ 		
+ 		$this->addPushQueue(fsId(), $recip_id, S::user('name').' hat Dir eine Nachricht geschrieben', $message,false,array('t'=>0,'i'=>fsId(),'t'=>time()));
+ 		return $this->insert('
+ 			INSERT INTO `fs_message`(`sender_id`, `recip_id`, `unread`, `msg`, `time`, `recd`) 
+ 			VALUES 
+ 			(
+ 				'.(int)$foodsaver_id.','.(int)$recip_id.','.(int)$unread.','.$this->strval($message).',NOW(),'.(int)$recd.'
+ 			)		
+ 		');
+ 	}
+}

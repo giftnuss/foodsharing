@@ -1,0 +1,39 @@
+.answer
+{
+	padding:15px;
+	margin:15px;
+	border-radius:15px;
+	
+}
+.answer .input-wrapper
+{
+	border:0 !important;
+}
+.answer label
+{
+	color:#FFFFFF !important;
+}
+#quizwrapper .answer label
+{
+	color:#000000 !important;
+}
+.q-green
+{
+	background-color:#488E1C;
+	color:#FFFFE8;
+}
+.q-red
+{
+	background-color:#E74955;
+	color:#FFF !important;
+}
+.question
+{
+	border-radius:15px;
+	padding:15px;
+	background-color:#FFF;
+	font-size:16px;
+	color:#665343;
+	font-weight:bold;
+	line-height:22px;
+}

@@ -1,0 +1,25 @@
+<?php
+global $g_lang;
+$g_lang['sent'] = 'Gesendet';
+$g_lang['inbox'] = 'Posteingang';
+$g_lang['trash'] = 'Papierkorb';
+$g_lang['refresh'] = 'Aktualisieren';
+$g_lang['new_message'] = 'Neue E-Mail';
+$g_lang['email_error'] = 'Die Empfänger E-Mail Adresse ist nicht korrekt';
+$g_lang['an'] = 'Empfänger';
+$g_lang['von'] = 'Absender';
+$g_lang['send_success'] = 'E-Mail wurde erfolgreich versendet!';
+$g_lang['answer'] = 'Antworten';
+$g_lang['forward'] = 'Weiterleiten';
+$g_lang['original_message'] = 'Original Nachricht';
+$g_lang['message_from'] = 'Nachricht vom {var}';
+$g_lang['no_message'] = 'Noch keine Nachrichten in dieser Mailbox!';
+$g_lang['new_mailbox'] = 'Neue Mailbox anlegen';
+$g_lang['mailbox_member'] = 'Mailbox Benutzer';
+$g_lang['email_name'] = 'Angezeigter Name';
+$g_lang['mailbox_add_success'] = 'Mailbox wurde erfolgreich angelegt';
+$g_lang['mailbox_name_desc'] = 'Nur den Namen der Mailbox eintragen, also ohne @'.DEFAULT_HOST;
+$g_lang['move_to_trash'] = 'In die Tonne';
+$g_lang['attach_file'] = 'Datei anhängen';
+$g_lang['wrong_file'] = 'Dieser Dateityp ist nicht erlaubt';
+$g_lang['file_to_big'] = 'Sorry die Datei ist zu groß';

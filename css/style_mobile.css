@@ -1,0 +1,38 @@
+.mobile ul.team li .infos
+{
+	display:block;
+	height:20px;
+}
+.mobile ul.team li .infos .item
+{
+	font-size:11px;
+	display:block;
+	color:#645242;
+	line-height:11px;
+	margin-bottom:2px;
+	height:11px;
+	overflow:hidden;
+}
+.mobile ul.team li .infos .item.name a strong,
+.mobile ul.team li .infos .item.phone a span
+{
+	color:#645242;
+	text-decoration: none;
+}
+.mobile ul.team li div a
+{
+	display:inline;
+	padding:0;
+	background-color:transparent;
+}
+.mobile ul.team li div a.ui-corner-all,
+.mobile ul.team li div.ui-corner-all
+{
+	display:block;
+	text-decoration:none;
+	margin:0;
+	display:block;
+	padding:5px;
+	background-color:#FFFFFF;
+	height:35px;
+}

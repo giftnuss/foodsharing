@@ -1,0 +1,902 @@
+<?php 
+class QuizXhr extends Control
+{
+	
+	public function __construct()
+	{
+		$this->model = new QuizModel();
+		$this->view = new QuizView();
+
+		parent::__construct();
+	}
+	
+	public function addquest()
+	{
+		/*
+		 *  [app] => quiz
+    [m] => addquest
+    [text] => rgds
+    [fp] => fdgh
+)
+		 */
+		if(isOrgaTeam())
+		{
+			if(isset($_GET['text']) && isset($_GET['fp']) && isset($_GET['qid']))
+			{
+				$fp = (int)$_GET['fp'];
+				$text = strip_tags($_GET['text']);
+				$duration = (int)$_GET['duration'];
+				
+				if(!empty($text))
+				{
+					if($id = $this->model->addQuestion($_GET['qid'],$text,$fp,$duration))
+					{
+						info('Frage wurde angelegt');
+						return array(
+							'status' => 1,
+							'script' => 'goTo("?page=quiz&id='.(int)$_GET['qid'].'&fid='.(int)$id.'");'
+						);	
+					}
+				}
+				else
+				{
+					return array(
+						'status' => 1,
+						'script' => 'pulseError("Du solltest Eine Frage angeben ;)");'
+					);
+				}
+			}
+		}
+		
+	}
+	
+	public function delquest()
+	{
+		if(isOrgaTeam() && isset($_GET['id']))
+		{
+			$this->model->deleteQuest($_GET['id']);
+			return array(
+					'status' => 1,
+					'script' => '$(".question-'.(int)$_GET['id'].'").remove();$("#questions").accordion("refresh");pulseInfo("Frage gelöscht!");'
+			);
+		}
+	}
+	
+	public function delanswer()
+	{
+		if(isOrgaTeam() && isset($_GET['id']))
+		{
+			$this->model->deleteAnswer($_GET['id']);
+			return array(
+				'status' => 1,
+				'script' => '$("#answer-'.(int)$_GET['id'].'").remove();pulseInfo("Antwort gelöscht!");'		
+			);
+		}
+	}
+	
+	public function addansw()
+	{
+		/*
+		 * 
+		qid		1
+		right	1
+		text	458
+		 */
+		
+		if(isOrgaTeam())
+		{
+			if(isset($_GET['text']) && isset($_GET['right']) && isset($_GET['qid']))
+			{
+				$text = strip_tags($_GET['text']);
+				$exp = strip_tags($_GET['explanation']);
+				$right = (int)$_GET['right'];
+		
+				if(!empty($text) && ($right == 0 || $right == 1 || $right == 2))
+				{
+					if($id = $this->model->addAnswer($_GET['qid'],$text,$exp,$right))
+					{
+						return array(
+								'status' => 1,
+								'script' => 'pulseInfo("Antwort wurde angelegt");$("#answerlist-'.(int)$_GET['qid'].'").append(\'<li class="right-'.(int)$right.'">'.jsSafe(nl2br(strip_tags($text))).'</li>\');$( "#questions" ).accordion( "refresh" );'
+						);
+					}
+				}
+				else
+				{
+					return array(
+							'status' => 1,
+							'script' => 'pulseError("Du solltest Einen Text angeben ;)");'
+					);
+				}
+			}
+		}
+		
+	}
+	
+	public function updateansw()
+	{
+		if(isOrgaTeam())
+		{
+			if(isset($_GET['text']) && isset($_GET['right']) && isset($_GET['id']))
+			{
+				$text = strip_tags($_GET['text']);
+				$exp = strip_tags($_GET['explanation']);
+				$right = (int)$_GET['right'];
+			
+				if(!empty($text) && ($right == 0 || $right == 1 || $right == 2))
+				{
+					$this->model->updateAnswer($_GET['id'],array(
+						'text' => $text,
+						'explanation' => $exp,
+						'right' => $right		
+					));
+					return array(
+							'status' => 1,
+							'script' => 'pulseInfo("Antwort wurde geändert");$("#answer-'.(int)$_GET['id'].'").replaceWith(\'<li id="answer-'.(int)$_GET['id'].'" class="right-'.(int)$right.'">'.jsSafe(nl2br(strip_tags($text))).'</li>\');$( "#questions" ).accordion( "refresh" );'
+					);
+					
+				}
+				else
+				{
+					return array(
+							'status' => 1,
+							'script' => 'pulseError("Du solltest Einen Text angeben ;)");'
+					);
+				}
+			}
+		}
+	}
+	
+	public function editanswer()
+	{
+		if(isOrgaTeam())
+		{
+			if($answer = $this->model->getAnswer($_GET['id']))
+			{
+				setEditData($answer);
+				$dia = new XhrDialog();
+				
+				$dia->addAbortButton();
+				$dia->setTitle('Antwort bearbeiten');
+				$dia->addOpt('width', 500);
+				$dia->addContent($this->view->answerForm());
+				
+				$dia->addButton('Speichern', 'ajreq(\'updateansw\',{id:'.(int)$_GET['id'].',explanation:$(\'#explanation\').val(),text:$(\'#text\').val(),right:$(\'#right\').val()});$(\'#'.$dia->getId().'\').dialog("close");');
+				
+				$return = $dia->xhrout();
+				
+				$return['script'] .= '
+				$("#text, #explanation").css({
+				"width":"95%",
+				"height":"50px"
+				});
+				$("#text, #explanation").autosize();';
+				
+				return $return;
+			}
+		}
+		
+	}
+	
+	public function addanswer()
+	{
+		$dia = new XhrDialog();
+		
+		$dia->addAbortButton();
+		$dia->setTitle('Neue Antwort zu Frage #'.(int)$_GET['qid']);
+		$dia->addOpt('width', 500);
+		$dia->addContent($this->view->answerForm());
+		
+		$dia->addButton('Speichern', 'ajreq(\'addansw\',{qid:'.(int)$_GET['qid'].',explanation:$(\'#explanation\').val(),text:$(\'#text\').val(),right:$(\'#right\').val()});$(\'#'.$dia->getId().'\').dialog("close");');
+		
+		$return = $dia->xhrout();
+		
+		$return['script'] .= '
+		$("#text, #explanation").css({
+		"width":"95%",
+		"height":"50px"
+		});
+		$("#text, #explanation").autosize();';
+		
+		return $return;
+	}
+	
+	public function addquestion()
+	{
+		$dia = new XhrDialog();
+		
+		$dia->addAbortButton();
+		$dia->setTitle('Neue Frage eingeben');
+		$dia->addOpt('width', 500);
+		$dia->addContent($this->view->questionForm());
+		
+		$dia->addButton('Speichern', 'ajreq(\'addquest\',{qid:'.(int)$_GET['qid'].',duration:$(\'#duration\').val(),text:$(\'#text\').val(),fp:$(\'#fp\').val()});');
+		
+		$return = $dia->xhrout();
+		
+		$return['script'] .= '
+			$("#text").css({
+				"width":"95%",
+				"height":"50px"
+			});
+			$("#text").autosize();
+			$("#fp").css({
+				"width":"95%"
+			});';
+		
+		return $return;
+	}
+	
+	public function editquest()
+	{
+		if(isOrgaTeam())
+		{
+			if($quest = $this->model->getQuestion($_GET['id']))
+			{
+				setEditData($quest);
+				$dia = new XhrDialog();
+				
+				$dia->addAbortButton();
+				$dia->setTitle('Frage bearbeiten');
+				$dia->addOpt('width', 500);
+				$dia->addContent($this->view->questionForm());
+				
+				$dia->addButton('Speichern', 'ajreq(\'updatequest\',{id:'.(int)$_GET['id'].',qid:'.(int)$_GET['qid'].',wikilink:$(\'#wikilink\').val(),duration:$(\'#duration\').val(),text:$(\'#text\').val(),fp:$(\'#fp\').val()});');
+				
+				$return = $dia->xhrout();
+				
+				$return['script'] .= '
+				$("#text").css({
+				"width":"95%",
+				"height":"50px"
+				});
+				$("#text").autosize();
+				$("#fp").css({
+				"width":"95%"
+				});';
+				
+				return $return;
+			}
+		}
+	}
+	
+	public function abort()
+	{
+		if(S::may())
+		{
+			$this->model->abortSession($_GET['sid']);
+			return array(
+				'status' => 1,
+				'script' => 'pulseInfo("Quiz wurde abgebrochen");'	
+					
+			);
+		}
+	}
+	
+	private function replaceDoubles($questions)
+	{
+		//print_r($questions);
+		return $questions;
+	}
+	
+	public function startquiz()
+	{
+		if(!S::may())
+		{
+			return false;
+		}
+		if($session = $this->model->getExsistingSession($_GET['qid']))
+		{
+			S::set('quiz-id', (int)$_GET['qid']);
+			S::set('quiz-questions', $session['quiz_questions']);
+			S::set('quiz-index', $session['quiz_index']);
+			S::set('quiz-session', $session['id']);
+			
+			$dia = new XhrDialog();
+			
+			$dia->setTitle('Quiz fortführen');
+			
+			$dia->addContent(v_input_wrapper('Du hast Dein Quiz nicht beendet', '<p>Aber keine Sorge Du kannst einfach jetzt das Quiz zum Ende bringen.</p><p>Also viel Spaß beim weiterquizzen.</p>'));
+			
+			$dia->addButton('Quiz Abbrechen', 'if(confirm(\'Möchtest Du das laufende Quiz wirklich beenden? Leider müssten wir das als Fehlversuch bewerten.\')){ajreq(\'abort\',{app:\'quiz\',sid:'.(int)$session['id'].'});}');
+			$dia->addButton('Quiz fortführen', 'ajreq(\'next\',{app:\'quiz\'});');
+			
+			return $dia->xhrout();
+			
+		}
+		else if($quiz = $this->model->getQuiz($_GET['qid']))
+		{
+			if($questions = $this->getRandomQuestions($_GET['qid'],$quiz['questcount']))
+			{
+				$content = $this->model->getContent(17);
+				$questions = array_slice($questions, 0, (int)$quiz['questcount']);
+				
+				// doppelte Fragen aussortieren
+				$questions = $this->replaceDoubles($questions);
+				
+				S::set('quiz-id', (int)$_GET['qid']);
+				S::set('quiz-questions', $questions);
+				S::set('quiz-index', 0);
+					
+				$dia = new XhrDialog();
+				$dia->addOpt('width', 600);
+				//$dia->addOpt('height', 480);
+				$dia->setTitle($quiz['name'].'-Quiz');
+				$dia->addContent($this->view->initQuiz($quiz,$content));
+				$dia->addAbortButton();
+				$dia->addButton('Quiz Starten', 'clearTimeout(g_chatheartbeatTO);clearInterval(g_interval_newBasket);ajreq(\'next\',{app:\'quiz\'});$(\'#'.$dia->getId().'\').dialog(\'close\');');
+						
+				return $dia->xhrout();
+				
+			}
+		}
+		
+		return array(
+			'status' => 1,
+			'script' => 'pulseError("Quiz konnte nicht gestartet werden...");'
+		);
+	}
+	
+	public function testquiz()
+	{
+		$dia = new XhrDialog();
+		$content = $this->model->getContent(18);
+		$dia->setTitle($content['title']);
+		
+		$dia->addOpt('width', 450);
+		
+		$dia->addContent($content['body']);
+		
+		$dia->addAbortButton();
+		$dia->addButton('Ja Ich möchte das Quiz jetzt ausprobieren!', 'goTo(\'?page=settings&sub=upgrade/up_fs\');');
+		
+		return $dia->xhrout();
+		
+	}
+	
+	public function addcomment()
+	{
+		if(!empty($_GET['comment']) && (int)$_GET['id'] > 0)
+		{
+			$this->model->addUserComment((int)$_GET['id'], $_GET['comment']);
+			return array(
+				'status' => 1,
+				'script' => 'pulseInfo("Kommentar wurde gespeichert");$("#qcomment-'.(int)$_GET['id'].'").hide();'		
+			);
+		}
+		
+	}
+	
+	public function next()
+	{
+		if(!S::may())
+		{
+			return false;
+		}
+		if($quiz = S::get('quiz-questions'))
+		{
+			$i = S::get('quiz-index');
+			
+			if($i == 0)
+			{
+				$quuizz = $this->model->getQuiz(S::get('quiz-id'));
+				// init quiz session in DB
+				if($id = $this->model->initQuizSession(S::get('quiz-id'), $quiz, $quuizz['maxfp'], $quuizz['questcount']))
+				{
+					S::set('quiz-session', $id);
+				}
+			}
+			
+			if(isset($_GET['answer']))
+			{
+				$answers = urldecode($_GET['answer']);
+				$params = array();
+				parse_str($_GET['answer'], $params);
+				if(isset($params['qanswers']))
+				{
+					$quiz[($i-1)]['answers'] = $params['qanswers'];
+				}
+				
+				$quiz[($i-1)]['userduration'] = (time() - (int)S::get('quiz-quest-start'));
+				$quiz[($i-1)]['noco'] = (int)$_GET['noco'];
+				
+				S::set('quiz-questions', $quiz);
+				$comment = strip_tags($_GET['comment']);
+					
+				if(!empty($comment))
+				{
+					$this->model->addUserComment((int)$_GET['qid'], $comment);
+				}
+			}
+			
+			if(isset($quiz[$i]))
+			{
+				if($question = $this->model->getQuestion($quiz[$i]['id']))
+				{					
+					if($answers = $this->model->getAnswers($question['id']))
+					{
+						shuffle($answers);
+						$i++;
+						S::set('quiz-index',$i);
+						
+						// update quiz session
+						$this->model->updateQuizSession(S::get('quiz-session'), $quiz, $i);
+						S::set('quiz-quest-start',time());
+						
+						$dia = new XhrDialog();
+						$dia->noClose();
+
+						$dia->addOpt('width', 1000);
+						$dia->addOpt('height', '($(window).height()-40)',false);
+						$dia->addOpt('position', 'center');
+						$dia->setTitle('Frage '.($i).' / '.count($quiz));
+						$dia->addContent($this->view->quizQuestion($question,$answers));
+						$dia->addContent($this->view->quizComment());
+						
+						if($i < count($quiz))
+						{
+							$dia->addButton('Abschicken & Pause', 'breaknext();');
+						}
+						$dia->addButton('Kommentar abgeben & Weiter', 'questcomment(this);');
+						
+						$dia->addButton('Auflösung der Quizfrage und weiter', 'questcheckresult();return false;');
+						
+						$dia->addButton('Weiter', 'questionnext();');
+						
+						$return = $dia->xhrout();
+						
+						$return['script'] .= '
+						
+							function questcomment(el)
+							{
+								if($(\'#qanswers input:checked\').length > 0)
+								{
+									clearInterval(counter);
+									$(".ui-dialog-buttonpane button:contains(\'Kommentar\')").hide();
+									$("#quizwrapper").hide();
+									$("#quizcomment").show();
+								}
+								else
+								{
+									pulseError(\'Bitte treffe erst eine Auswahl!\')
+								}
+							}
+							
+							function questgonext()
+							{
+								clearInterval(counter);
+								ajreq(\'next\',{answer:$(\'.qanswers\').serialize(),noco:$(\'.nocheck:checked\').length,app:\'quiz\',comment:$(\'#quizusercomment\').val(),qid:'.(int)$question['id'].'});
+							}
+							
+							function breaknext()
+							{
+								if($(\'#qanswers input:checked\').length > 0)
+								{
+									ajreq(\'pause\',{app:\'quiz\'});
+								}
+								else
+								{
+									pulseError(\'Bitte treffe erst eine Auswahl!\')
+								}
+							}
+							
+							function questionnext()
+							{
+								if($(\'#qanswers input:checked\').length > 0)
+								{
+									questgonext();
+								}
+								else
+								{
+									pulseError(\'Bitte treffe eine Auswahl!\')
+								}
+							}
+							$("li.noanswer").click(function(){
+								setTimeout(function(){
+									if($("input.nocheck:checked").length > 0)
+									{
+										$("li.answer input").each(function(){
+											this.checked = false;
+										});
+									}
+								},50);
+							});
+							
+							$("li.answer input").click(function(){
+								if(this.checked)
+								{
+								
+								}
+							});
+							
+							$("li.answer, li.noanswer").click(function(ev){
+								
+								var nName = ev.target.nodeName.toLowerCase();
+								
+								if(nName == "li" || nName == "label")
+								{
+									if($(this).children("label").children("input:checked").length >= 1)
+									{
+										$(this).children("label").children("input")[0].checked = false;
+									}
+									else
+									{
+										$(this).children("label").children("input")[0].checked = true;
+									}
+								}
+							});
+							
+							$("li.answer").click(function(){
+								
+								if($("li.answer input:checked").length > 0)
+								{
+									$("input.nocheck")[0].checked = false;
+								}
+							});
+	
+							var width = 1000;
+							if($(window).width() < 1000)
+							{
+								width = ($(window).width()-40);
+							}
+							$("#'.$dia->getId().'").dialog("option",{
+								width:width,
+								height:($(window).height()-40)
+							});
+							$(window).resize(function(){
+								var width = 1000;
+								if($(window).width() < 1000)
+								{
+									width = ($(window).width()-40);
+								}
+								$("#'.$dia->getId().'").dialog("option",{
+									width:width,
+									height:($(window).height()-40)
+								});
+							});
+						
+							$(\'#quizwrapper\').hide();
+							$(\'#quizbreath\').show();
+							$(".ui-dialog-buttonpane").css("visibility","hidden");
+							var count = '.(int)$question['duration'].';
+
+							var counter = null;
+							
+							setTimeout(function(){
+								$(\'#quizbreath span\').text("Auf die Plätze!");
+							},3000);
+							setTimeout(function(){
+								$(\'#quizbreath span\').text("Fertig...");
+							},4000);
+							setTimeout(function(){
+								$(\'#quizbreath span\').text("Weiter gehts!");
+							},5000);
+							
+							setTimeout(function(){
+								counter = setInterval(timer, 1000); 
+								$(\'#quizwrapper\').show();
+								$(\'#quizbreath\').hide();
+								$(".ui-dialog-buttonpane").css("visibility","visible");
+							},6000);
+							
+							function timer()
+							{
+							  count--;
+							  $("#countdown").text((count)+"");
+							  if (count <= 0)
+							  {
+							     //questgonext();
+							     ajreq(\'pause\',{app:\'quiz\',timefail:\'1\'});
+							     return;
+							  }
+							
+							  
+							}
+						';
+						
+						return $return;
+					}
+					else
+					{
+						$i++;
+						S::set('quiz-index',$i);
+						return array(
+							'status' => 1,
+							'script' => 'pulseError("Diese Frage hat Keine Antworten, überspringe...");ajreq("next",{app:"quiz"});'		
+						);
+					}
+				}
+			}
+			else
+			{
+				return $this->quizResult();
+			}
+		}
+		
+		$i++;
+		S::set('quiz-index',$i);
+		return array(
+				'status' => 1,
+				'script' => 'pulseError("Es ist ein Fehler aufgetreten, Frage wird übersprungen");ajreq("next",{app:"quiz"});'
+		);
+		
+	}
+	
+	private function quizResult()
+	{
+		if(!S::may())
+		{
+			return false;
+		}
+		
+		if($quiz = $this->model->getQuiz(S::get('quiz-id')))
+		{
+			if($questions = S::get('quiz-questions'))
+			{
+				
+				if($rightQuestions = $this->model->getRightQuestions(S::get('quiz-id')))
+				{
+					$explains = array();
+					$fp = 0;
+					$question_number = 0;
+					foreach ($questions as $q_key => $q)
+					{
+						$question_number++;
+						$valid = $this->validateAnswer($rightQuestions, $q);
+						$fp += $valid['fp'];
+						foreach ($valid['explain'] as $e)
+						{
+							if(!isset($explains[$q['id']]))
+							{
+								$explains[$q['id']] = $rightQuestions[$q['id']];
+								$explains[$q['id']]['explains'] = array();
+							}
+							$explains[$q['id']]['explains'][] = $e;
+							$explains[$q['id']]['number'] = $question_number;
+							$explains[$q['id']]['percent'] = round($valid['percent'],2);
+							$explains[$q['id']]['userfp'] = round($valid['fp'],2);
+						}
+					}
+				}
+				
+				$this->model->finishQuiz(S::get('quiz-session'), $questions, $explains, $fp, $quiz['maxfp']);
+				
+				return array(
+					'status' => 1,
+					'script' => 'goTo("?page=settings&sub=quizsession&sid='.(int)S::get('quiz-session').'");'
+				);
+				
+				//$this->model->updateQuizSession(S::get('quiz-id'), $questions, $explains, $fp, $quiz['maxfp']);
+				
+				$dia = new XhrDialog();
+				$dia->setTitle('Ergebnis');
+				
+				$dia->addOpt('width', 600);
+				$dia->addOpt('height', '($(window).height()-60)',false);
+				
+				$dia->addContent($this->view->result($explains,$fp,$quiz['maxfp']));
+				
+				$return = $dia->xhrout();
+				$return['script'] .= '
+				
+				$("#explains").accordion({
+						heightStyle: "content",
+						animate: 200,
+						collapsible: true,
+						autoHeight: false, 
+	    				active: false 
+					});
+					
+					var width = 1000;
+					if($(window).width() < 1000)
+					{
+						width = ($(window).width()-40);
+					}
+					$("#'.$dia->getId().'").dialog("option",{
+						width:width,
+						height:($(window).height()-40)
+					});
+					$(window).resize(function(){
+						var width = 1000;
+						if($(window).width() < 1000)
+						{
+							width = ($(window).width()-40);
+						}
+						$("#'.$dia->getId().'").dialog("option",{
+							width:width,
+							height:($(window).height()-40)
+						});
+					});';
+				
+				return $return;
+				
+			}
+		}
+	}
+	
+	public function pause()
+	{
+		$dia = new XhrDialog();
+		
+		$dia->removeTitlebar();
+		$dia->addContent($this->view->pause());
+		
+		$dia->addJs('
+			clearInterval(counter);		
+		');
+		
+		return $dia->xhrout();
+	}
+	
+	private function validateAnswer($rightQuestions,$question)
+	{
+		
+		$explains = array();
+		
+		$wrongAnswers = 0;
+		$checkCount = 0;
+		
+		$everything_false = true;
+		
+		$useranswers = array();
+		if(isset($question['answers']) && is_array($question['answers']))
+		{
+			$useranswers = $question['answers'];
+		}
+		if(isset($rightQuestions[$question['id']]['answers']))
+		{
+			foreach ($rightQuestions[$question['id']]['answers'] as $id => $a)
+			{			
+				switch ($a['right'])
+				{
+					// Antwort soll falsch sein
+					case 0 : 
+						$checkCount++;
+						if(in_array($a['id'], $useranswers))
+						{
+							$wrongAnswers++;
+							// Erklärungen anfügen
+							$explains[$a['id']] = $rightQuestions[$question['id']]['answers'][$a['id']];
+						}
+						break;
+					// Antwort ist richtig wenn nicht im array fehler
+					case 1 : 
+						$everything_false = false;
+						$checkCount++;
+						if(!in_array($a['id'], $useranswers))
+						{
+							$wrongAnswers++;
+							// Erklärungen anfügen
+							$explains[$a['id']] = $rightQuestions[$question['id']]['answers'][$a['id']];
+						}
+						break;
+					default :
+						
+						// Bei Neutralen Fragen einfach erklärung anfügen
+						$explains[$a['id']] = $rightQuestions[$question['id']]['answers'][$a['id']];
+						break;
+				}
+			}
+		}
+		else
+		{
+			$wrongAnswers = count($rightQuestions[$question['id']]['answers']);
+		}
+		
+		//print_r($rightQuestions[$question['id']]['answers']);
+		//print_r($useranswers);
+		
+		
+		
+		// wie viel prozent sind falsch?
+		$percent = $this->percentFrom($checkCount, $wrongAnswers);
+		
+		$fp = $this->percentTo($question['fp'], $percent);
+		
+		// wenn alles falsch angeklickt wurde das aber nciht stimmt gibts die volle fehlerpunkt zahl
+		if(
+			(!$everything_false && !isset($question['noco']))
+			||
+			(!$everything_false && (int)$question['noco'] > 0)
+		)
+		{
+			$fp = $question['fp'];
+			$percent = 100;
+		}
+		
+		return array(
+			'fp' => $fp,
+			'explain' => $explains,
+			'percent' => $percent
+		);
+	}
+	
+	private function getRandomQuestions($quiz_id, $count = 6)
+	{
+		$count_questions = $count;
+		$random_questions = array();
+		
+		if($questions = $this->model->getQuestionMetas($quiz_id))
+		{
+			// Wie viele Fragen gibt es insgesamt?
+			$summe = 0;
+			foreach($questions['meta'] as $key => $m)
+			{
+				$summe += $m;
+			}
+			
+			$out = array();
+			// Prozentanzeil von jeder Fragenart
+			foreach($questions['meta'] as $key => $m)
+			{
+				$percent = round($this->percentFrom($summe,$m));
+		
+				$count = round($this->percentTo($count_questions, $percent));
+		
+				if($rquest = $this->model->getRandomQuestions($count,$key,$quiz_id))
+				{
+					foreach ($rquest as $r)
+					{
+						$out[] = $r;
+					}
+				}
+			}
+
+			if(!empty($out))
+			{
+				shuffle($out);
+				return $out;
+			}
+			
+			return false;
+		}
+	}
+	
+	private function percentTo($part, $percent)
+    {
+        return ($part / 100) * $percent;
+    }
+	
+	private function percentFrom($total,$part)
+	{
+		return ($part / ($total / 100));
+	}
+	
+	public function updatequest()
+	{
+		if(isOrgaTeam())
+		{
+			
+			/*
+			 *   [id] => 10
+			     [text] => test
+			     [fp] => 3
+			 */
+			if(isset($_GET['text']) && isset($_GET['fp']) && isset($_GET['id']))
+			{
+				$fp = (int)$_GET['fp'];
+				$text = strip_tags($_GET['text']);
+				$duration = (int)$_GET['duration'];
+				$wikilink = strip_tags($_GET['wikilink']);
+				
+				if(!empty($text))
+				{
+					$this->model->updateQuestion($_GET['id'],$_GET['qid'],$text,$fp,$duration,$wikilink);
+					info('Frage wurde geändert');
+					return array(
+						'status' => 1,
+						'script' => 'reload();'
+					);	
+					
+				}
+				else
+				{
+					return array(
+						'status' => 1,
+						'script' => 'pulseError("Du solltest einen Text angeben ;)");'
+					);
+				}
+			}
+		}
+	}
+}

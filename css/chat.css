@@ -1,0 +1,140 @@
+.chatbox {
+	position: fixed;
+	position:expression("absolute");
+	width: 275px;
+	display:none;
+	-webkit-box-shadow: 0 1px 3px 0 #665343;
+	box-shadow: 0 1px 3px 0 #665343;
+	z-index: 200;
+	border:2px solid #FFFFFF;
+}
+
+.chatboxhead {
+	background-color: #B39985;
+	padding:0px;
+	color: #ffffff;
+
+	border-right:1px solid #B39985;
+	border-left:1px solid #B39985;
+}
+
+.chatboxblink {
+	background-color: #61AB23;
+	border-right:1px solid #61AB23;
+	border-left:1px solid #61AB23;
+}
+.chatboxmessagecontent a
+{
+	color:#665343;
+	text-decoration: none;
+}
+.chatboxmessagecontent a:hover
+{
+	color:#665343;
+	text-decoration: underline;
+}
+.chatboxcontent {
+	font-family: arial,sans-serif;
+	font-size: 13px;
+	color: #333333;
+	height:250px;
+	width:259px;
+	overflow-y:auto;
+	overflow-x:auto;
+	padding:7px;
+	border-left:1px solid #cccccc;
+	border-right:1px solid #cccccc;
+	border-bottom:1px solid #eeeeee;
+	background-color: #ffffff;
+	line-height: 1.3em;
+}
+
+.chatboxinput {
+	padding: 5px;
+	background-color: #ffffff;
+	border-left:1px solid #cccccc;
+	border-right:1px solid #cccccc;
+	border-bottom:1px solid #cccccc;
+}
+
+.chatboxtextarea {
+	width: 255px;
+	height:44px;
+	padding:3px 0pt 3px 3px;
+	border: 1px solid #eeeeee;
+	margin: 1px;
+	overflow:hidden;
+}
+
+.chatboxtextareaselected {
+	border: 2px solid #f99d39;
+	margin:0px;
+}
+.chatclosed
+{
+	
+}
+.chatboxmessage {
+	margin-left:1em;
+	border-bottom: 1px solid #F5F1E8;
+    padding: 5px 0;
+}
+
+.chatboxinfo {
+	margin-left:-1em;
+	color:#666666;
+
+}
+
+.chatboxmessagefrom {
+	margin-left:-1em;
+	font-weight: bold;
+	display:block;
+	float:left;
+	width:45px;
+	height:35px;
+}
+.chatboxmessagefrom .photo
+{
+	display:block;
+	margin-right:4px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+}
+.chatboxmessagefrom .photo img
+{
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+}
+
+.chatboxmessagecontent {
+	 display: inline;
+    font-size: 12.5px;
+    padding-top: 2px;
+    width: 202px;
+    line-height: 12px;
+}
+
+.chatboxoptions {
+	float: right;
+}
+
+.chatboxoptions a {
+	display:block;
+	padding:7px;
+	text-decoration: none;
+	color: white;
+	font-weight:bold;
+	font-family:Verdana,Arial,"Bitstream Vera Sans",sans-serif;
+}
+
+.chatboxtitle {
+	padding:7px;
+    color: #FFFFFF;
+    display: block;
+    float: left;
+    text-decoration: none;
+    width: 230px;
+}
