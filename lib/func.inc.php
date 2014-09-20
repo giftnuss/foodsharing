@@ -1344,7 +1344,7 @@ function getOrgaMenu()
 		return 
 			array(
 				'default' => '<li><a class="fNiv"><i class="fa fa-gear"></i></a>
-				    <ul>
+				    <ul class="bigmenu">
 				      <li><a href="?page=region">Regionen verwalten</a></li>
 				      <li><a href="?page=quiz">Quiz verwalten</a></li>
 				      <li><a href="?page=report&sub=uncom">Verstoßmeldungen</a></li>
