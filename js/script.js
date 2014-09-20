@@ -157,7 +157,7 @@ $(document).ready(function(){
 				}
 			});
 		});
-	$('.button').button();
+	//$('.button').button();
 	$('.dialog').dialog();
 	$('.v-switch').buttonset();
 	

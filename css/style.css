@@ -1,4 +1,4 @@
-h1, h2, h3, h4, h5, h6
+h1, h2, h3, h4, h5, h6, .head.ui-widget-header
 {
 	font-family: 'Alfa Slab One' !important;
 }
@@ -2101,6 +2101,26 @@ td.load
 	-moz-border-radius-bottomleft: 6px;
 	border-top-left-radius: 6px;
 	border-bottom-left-radius: 6px;
+}
+
+.ui-button, .button
+{
+	padding:0px 5px;
+	font-family: 'Alfa Slab One' !important;
+	font-size:1.2em !important;
+	color:#FFFFFF;
+	background-color:#46891B;
+	
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	border: 0 none;
+	text-decoration: none;
+}
+.ui-button:hover, .button:hover
+{
+	background-color: #46891B;
+	opacity:0.8;
 }
 @media (max-width: 600px) {
 	div#msgBar
