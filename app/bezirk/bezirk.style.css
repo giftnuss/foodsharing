@@ -34,7 +34,7 @@ span.thread_title
 	font-size:15px;
 	margin-top:15px !important;
 	margin-left:5px !important;
-	color:#665343;
+	color:#4A3520;
 	width:55%;
 }
 .last_post
@@ -79,11 +79,11 @@ div.post div.xv_left
 }
 div.post div.xv_left ul li a
 {
-	color:#665343;
+	color:#4A3520;
 }
 div.post div.xv_left ul li a:hover
 {
-	background-color:#665343;
+	background-color:#4A3520;
 	color:#FFFFFF;
 }
 div.post textarea
@@ -180,4 +180,8 @@ div.event
     margin: 0;
     padding: 0;
     text-align: center;
+}
+.thread .info
+{
+	font-weight:lighter !important;
 }

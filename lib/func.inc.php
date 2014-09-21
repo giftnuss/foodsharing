@@ -705,14 +705,15 @@ function getMenu()
 			);
 			
 			$bezirke = '
-					<li><a><i class="fa fa-globe"></i> Bezirke</a>
+					<li><a>Bezirke</a>
 						<ul class="jmenu-bezirke">';
 			
 			$bezirke_mob = '
 					<optgroup label="Bezirke">';
 			
 			$ags = '
-					<li><a href="?page=groups">GRUPPEN-ÜBERSICHT</a></li>';
+					<li><a href="?page=groups">GRUPPEN-ÜBERSICHT</a></li>
+					<li class="break"><span></span></li>';
 			
 			$ags_mob = '
 					<option value="/?page=groups">GRUPPEN-ÜBERSICHT</option>';
@@ -742,7 +743,7 @@ function getMenu()
 				$ags = '<ul class="bigmenu">'.$ags.'</ul>';
 			}
 			
-			$ags = '<li><a href="?page=groups"><i class="fa fa-group"></i> Gruppen</a>'.$ags.'</li>';
+			$ags = '<li><a href="?page=groups">Gruppen</a>'.$ags.'</li>';
 			$ags_mob = '
 					<optgroup label="Gruppen">
 						'.$ags_mob.'
@@ -754,7 +755,7 @@ function getMenu()
 			if(S::may('fs'))
 			{
 				$foodsaver = '
-				<li><a><i class="fa fa-leaf"></i> Foodsaver</a>
+				<li><a>Foodsaver</a>
 					<ul>
 						<li><a href="?page=fairteiler">Fair-Teiler</a></li>
 					    <li><a href="?page=message">Interne Nachrichten</a></li>
@@ -803,7 +804,7 @@ function getMenu()
 			else
 			{
 				$foodsaver .= '
-				<li><a><i class="fa fa-map-marker"></i> Foodsharer</a>
+				<li><a>Foodsharer</a>
 					<ul>
 						<li><a href="?page=fairteiler">Fair-Teiler</a></li>
 					    <li><a href="?page=message">Interne Nachrichten</a></li>
@@ -833,10 +834,10 @@ function getMenu()
 			
 			return array(
 				'default' => '
-						<ul id="mainMenu">
+						<ul id="mainMenu" class="jMenu">
 							'.$orgamenu['default'].'
 							<!--<li><a class="fNiv" href="http://forum.lebensmittelretten.de">öffentliches Forum</a></li>-->
-							<li><a class="fNiv" href="?page=map"><i class="fa fa-map-marker"></i> Karte</a></li>
+							<li><a class="fNiv" href="?page=map">Karte</a></li>
 							
 							'.$ags.'
 							'.$foodsaver.'
@@ -865,13 +866,13 @@ function getMenu()
 	{
 		return array(
 			'default' => '
-				<ul id="mainMenu">
+				<ul id="mainMenu" class="jMenu">
 					
-					<li><a class="fNiv" href="?page=basket"><i class="fa fa-leaf"></i> Essenskörbe</a></li>
-					<li><a class="fNiv" href="?page=map"><i class="fa fa-map-marker"></i> Karte</a></li>
-					<li><a class="fNiv" href="?page=index&sub=ratgeber"><i class="fa fa-question"></i> Ratgeber</a></li>
-					<li><a class="fNiv" href="?page=join"><i class="fa fa-group"></i> Mach-Mit!</a></li>
-					<li><a class="fNiv" href="?page=login"><i class="fa fa-lock"></i> Login</a></li>
+					<li><a class="fNiv" href="?page=basket">Essenskörbe</a></li>
+					<li><a class="fNiv" href="?page=map">Karte</a></li>
+					<li><a class="fNiv" href="?page=index&sub=ratgeber">Ratgeber</a></li>
+					<li><a class="fNiv" href="?page=join">Mach-Mit!</a></li>
+					<li><a class="fNiv" href="?page=login">Login</a></li>
 				</ul>',
 			'mobile' => '
 				<select id="mobilemenu">
@@ -946,7 +947,7 @@ function getBetriebeMenu()
 	if(isset($_SESSION['client']['betriebe']) && !empty($_SESSION['client']['betriebe']))
 	{
 		$out = '
-		<li class="jmenu-foodsaver"><a href="#" onclick="return false" class="fNiv"><i class="fa fa-home"></i> Betriebe</a>
+		<li class="jmenu-foodsaver"><a onclick="return false" class="fNiv">Betriebe</a>
 			<ul>';
 		$out_mob = '
 		<optgroup label="Betriebe">';
@@ -1265,13 +1266,13 @@ function emailBodyTpl($message, $email = false, $token = false)
 	$search = array('<a','<td','<li');
 	$replace = array('<a style="color:#F36933"','<td style="font-size:13px;font-family:Arial;color:#31210C;"','<li style="margin-bottom:11px"');
 	
-	return '<html><head><style type="text/css">a{text-decoration:none;}a:hover{text-decoration:underline;}a.button{display:inline-block;padding:6px 16px;border:1px solid #FFFFFF;background-color:#665343;color:#FFFFFF !important;font-weight:bold;border-radius:8px;}a.button:hover{border:1px solid #665343;background-color:#ffffff;color:#665343 !important;text-decoration:none !important;}.border{padding:10px;border-top:1px solid #665343;border-bottom:1px solid #665343;background-color:#FFFFFF;}</style></head>
+	return '<html><head><style type="text/css">a{text-decoration:none;}a:hover{text-decoration:underline;}a.button{display:inline-block;padding:6px 16px;border:1px solid #FFFFFF;background-color:#4A3520;color:#FFFFFF !important;font-weight:bold;border-radius:8px;}a.button:hover{border:1px solid #4A3520;background-color:#ffffff;color:#4A3520 !important;text-decoration:none !important;}.border{padding:10px;border-top:1px solid #4A3520;border-bottom:1px solid #4A3520;background-color:#FFFFFF;}</style></head>
 	<body style="margin:0;padding:0;">
 		<div style="background-color:#F1E7C9;border:1px solid #628043;border-top:0px;padding:2%;padding-top:0;margin-top:0px;">
 
 <table width="100%" style="margin-bottom:10px;margin-top:-2px;">
 <tr>
-				<td valign="top" height="30" style="background-color:#665343">
+				<td valign="top" height="30" style="background-color:#4A3520">
 					<div style="padding:5px;font-size:13px;font-family:Arial;color:#FAF7E5;overflow:hidden;" align="left">
 						<a style="display:block;color:#FAF7E5;text-decoration:none;" href="http://www.lebensmittelretten.de/" target="_blank">
 							<span style="margin-left:10px;font-size:20px;font-family:Arial Black, Arial;font-weight:bold;color:#FAF7E5;letter-spacing:-1px;">food</span><span style="margin-right:10px;font-size:20px;font-family:Arial Black, Arial;font-weight:bold;color:#4D971E;letter-spacing:-1px">sharing</span> <span style="font-style:italic">Lebensmittelretten<span style="color:#F36933">.</span>de</span>
@@ -1354,10 +1355,8 @@ function getOrgaMenu()
 				      <li><a href="?page=email">E-Mail Verteiler</a></li>
 					  <li><a href="?page=kette">Unternehmens-Ketten</a></li>
 					  <li><a href="?page=faq">FAQ\'s verwalten</a></li>
-					  <li><a href="?page=document">Dokumente verwalten</a></li>
 					  <li><a href="?page=lebensmittel">Lebensmittel-Typen verwalten</a></li>
 					  <li><a href="?page=content">Öffentliche Webseiten</a></li>
-					  <li><a href="?page=autokennzeichen">KFZ-Kennzeichen</a></li>
 					  <li><a href="?page=mailbox&a=manage">Mailboxen</a></li>
 					  <li><a href="?page=stat">Statistik-Auswertung</a></li>
 					  <li class="menu-bottom"><a class="menu-bottom" href="?page=message_tpl">E-Mail Vorlagen</a></li>

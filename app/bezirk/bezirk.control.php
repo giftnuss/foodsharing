@@ -194,7 +194,7 @@ class BezirkControl extends Control
 		addContent($this->view->menu($menu,array('active'=>$this->getSub())),CNT_LEFT);
 			
 		addContent(
-			v_field($this->view->fsAvatarList($bezirk['foodsaver'],array('shuffle' => false)), count($bezirk['foodsaver']).' Mitglieder in '.$bezirk['name']),
+			v_field($this->view->fsAvatarList($bezirk['foodsaver'],array('shuffle' => false)), count($bezirk['foodsaver']).' Mitglieder'),
 			CNT_LEFT
 		);
 			

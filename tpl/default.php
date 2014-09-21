@@ -25,6 +25,8 @@ if(!empty($content_right))
 }
 if(!empty($content_top))
 {
+	//$content_top = '';
+	/*
 	$content_top = '
 		<div class="pure-g">
 			<div id="content_top" class="pure-u-1">
@@ -33,6 +35,7 @@ if(!empty($content_top))
 				</div>
 			</div>
 		</div>';
+		*/
 }
 
 if(!empty($content_bottom))
@@ -51,6 +54,7 @@ if(!empty($content_main))
 	$content_main = '
 	<div class="pure-u-1 pure-u-md-'.$mainwidth.'-24">
 		<div class="inside">
+			'.$content_top.'
 			'.$content_main.'
 		</div>
 	</div>';
@@ -90,7 +94,7 @@ if(!empty($content_left) && !empty($content_right))
 					<div id="layout_logo"><a href="/" title="foodsharing home"><span>food</span>sharing</a></div>
 					<?php echo $msgbar; ?>
 					<?php echo $menu['mobile']; ?>
-					<div style="display:none;" class="menu">
+					<div class="menu">
 							<?php echo $menu['default']; ?>
 					</div>
 					<div style="clear:both;"></div>
@@ -101,8 +105,8 @@ if(!empty($content_left) && !empty($content_right))
 	<?php echo $content_overtop; ?>
 	<div id="main"<?php if(isMob()) { ?> class="mobile"<?php } ?>>
 		<?php echo getBread(); ?>
-		<?php if(!isMob()){echo $content_top;} ?>
-		<div class="pure-g">
+		<?php //if(!isMob()){echo $content_top;} ?>
+		<div class="pure-g mainpure">
 			<?php 
 			if(isMob())
 			{

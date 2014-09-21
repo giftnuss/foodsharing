@@ -25,8 +25,10 @@ function GET(v)
 {
 	if(!HTTP_GET_VARS[v]){return 'undefined';}
 	return HTTP_GET_VARS[v];
-} 
+}
+
 $(document).ready(function(){
+	$('textarea.comment').autosize();
 	 $('#nojs').css('display','none');
 	 $('#main').css('display','block');
 	 

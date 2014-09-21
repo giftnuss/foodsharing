@@ -645,6 +645,18 @@ function v_form_photo($id)
 	
 }
 
+function v_success($msg,$title =false)
+{
+	if($title !== false)
+	{
+		$title = '<strong>'.$title.'</strong> ';
+	}
+	return '
+	<div class="msg-inside success">
+			<i class="fa fa-check-circle"></i> '.$msg.'
+	</div>';
+}
+
 function v_info($msg,$title =false)
 {
 	if($title !== false)
@@ -652,13 +664,8 @@ function v_info($msg,$title =false)
 		$title = '<strong>'.$title.'</strong> ';
 	}
 	return '
-	<div class="ui-widget">
-	<div class="ui-state-highlight ui-corner-all" style="padding: 15px;">
-	<p>
-	<span class="ui-icon ui-icon-info" style="float: left; margin-right: 7px;margin-bottom:25px;"></span>
-	'.$title.$msg.'
-	</p>
-	</div>
+	<div class="msg-inside info">
+			<i class="fa fa-info-circle"></i> '.$msg.'
 	</div>';
 }
 
@@ -669,13 +676,8 @@ function v_error($msg,$title =false)
 		$title = '<strong>'.$title.'</strong> ';
 	}
 	return '
-	<div class="ui-widget">
-	<div class="ui-state-error ui-corner-all" style="padding: 15px;">
-	<p>
-	<span class="ui-icon ui-icon-info" style="float: left; margin-right: 7px;margin-bottom:25px;"></span>
-	'.$title.$msg.'
-	</p>
-	</div>
+	<div class="msg-inside error">
+			<i class="fa fa-warning"></i> '.$msg.'
 	</div>';
 }
 

@@ -23,8 +23,8 @@
 .tagedit-list li.tagedit-listelement-new input:focus {outline: none;}
 .tagedit-list li.tagedit-listelement-new input.tagedit-input-disabled {display: none;}
 /* Item that is put to the List */
-.tagedit-list li.tagedit-listelement-old {font-size:12px;background-color: #665343; border: 1px solid #665343; padding: 2px 0px 2px 6px; -moz-border-radius: 4px 4px 4px 4px; -webkit-border-radius: 4px 4px 4px 4px; border-radius: 4px 4px 4px 4px; height:16px;color:#FFFFFF;}
-.tagedit-list li.tagedit-listelement-old:hover {background-color: #FFFFFF; color:#665343;cursor:pointer;}
+.tagedit-list li.tagedit-listelement-old {font-size:12px;background-color: #4A3520; border: 1px solid #4A3520; padding: 2px 0px 2px 6px; -moz-border-radius: 4px 4px 4px 4px; -webkit-border-radius: 4px 4px 4px 4px; border-radius: 4px 4px 4px 4px; height:16px;color:#FFFFFF;}
+.tagedit-list li.tagedit-listelement-old:hover {background-color: #FFFFFF; color:#4A3520;cursor:pointer;}
 .tagedit-list li.tagedit-listelement-old a.tagedit-close,
 .tagedit-list li.tagedit-listelement-old a.tagedit-break,
 .tagedit-list li.tagedit-listelement-old a.tagedit-delete,

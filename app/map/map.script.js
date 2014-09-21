@@ -52,8 +52,25 @@ var fIcon = L.icon({
     popupAnchor:  [-18, -52]
 });
 
+var map = {
+	setView: function(lat,lon,zoom)
+	{
+		u_map.setView([lat,lon], zoom, {animation: true});
+	}
+};
+
 function u_init_map(lat,lon,zoom)
 {
+	if(lat == undefined)
+	{
+		lat = 50.89;
+		lon = 10.13;
+		zoom = 6;
+		getBrowserLocation(function(pos){
+			map.setView(pos.lat, pos.lon, 12);
+		});
+	}
+	
 	u_map = L.map('map').setView([lat, lon], zoom);
 	
 	L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {

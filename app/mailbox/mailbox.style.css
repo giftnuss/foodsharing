@@ -56,7 +56,7 @@
     border-left: 0 none;
 }
 .records-table tr.selected td {
-    background-color:#665343;
+    background-color:#4A3520;
     color: #FFFFFF !important;
 }
 .records-table tr.selected td a, .records-table tr.selected td span {
@@ -110,9 +110,9 @@
 	overflow:auto;
 	margin-top:10px;
 	padding:5px;
-	-moz-box-shadow:    inset 0 0 3px #665343;
-   -webkit-box-shadow: inset 0 0 3px #665343;
-   box-shadow:         inset 0 0 3px #665343;
+	-moz-box-shadow:    inset 0 0 3px #4A3520;
+   -webkit-box-shadow: inset 0 0 3px #4A3520;
+   box-shadow:         inset 0 0 3px #4A3520;
 }
 .mailbox-body-loader
 {
@@ -130,9 +130,9 @@
 	margin-top:10px;
 	padding:5px;
 	border:0;
-	-moz-box-shadow:    inset 0 0 3px #665343;
-   -webkit-box-shadow: inset 0 0 3px #665343;
-   box-shadow:         inset 0 0 3px #665343;
+	-moz-box-shadow:    inset 0 0 3px #4A3520;
+   -webkit-box-shadow: inset 0 0 3px #4A3520;
+   box-shadow:         inset 0 0 3px #4A3520;
    font-size:14px;
 }
 .von-select
@@ -182,9 +182,9 @@ span.status.answer-1
 	margin-top:10px;
 	height:23px;
 	padding:5px;
-	-moz-box-shadow:    inset 0 0 3px #665343;
-   -webkit-box-shadow: inset 0 0 3px #665343;
-   box-shadow:         inset 0 0 3px #665343;
+	-moz-box-shadow:    inset 0 0 3px #4A3520;
+   -webkit-box-shadow: inset 0 0 3px #4A3520;
+   box-shadow:         inset 0 0 3px #4A3520;
 }
 #mailattch ul
 {
@@ -217,7 +217,7 @@ span.status.answer-1
 }
 #mailattch ul li a:hover
 {
-	background-color:#665343;
+	background-color:#4A3520;
 	color:#FFFFFF;
 }
 span.dynatree-folder a
@@ -334,7 +334,7 @@ ul#et-file-list li.finish
     padding: 3px 10px;
 }
 .tt-suggestion.tt-is-under-cursor {
-    background-color: #665343;
+    background-color: #4A3520;
     color: #FFFFFF;
 }
 .tt-suggestion p {

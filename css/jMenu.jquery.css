@@ -1,3 +1,7 @@
+#mainMenu
+{
+
+}
 .jMenu {
     display: table;
     margin: 0;
@@ -31,7 +35,16 @@
    /* border-left: 1px solid #251e15;
     border-right: 1px solid #251e15;*/
 }
-
+.jMenu li.active > a
+{
+	background-color: #170200;
+}
+.jMenu li.active > a:hover
+{
+	cursor: default !important;
+    background-color: #170200;
+    color:#FFFFFF;
+}
 /* Lower levels */
 .jMenu li ul {
     display: none;
@@ -44,9 +57,9 @@
 	-moz-border-radius: 6px;
 	border-radius: 6px;
 	
-	-webkit-box-shadow: 0px 3px 3px 0px rgba(0,0,0,0.65);
-	-moz-box-shadow: 0px 3px 3px 0px rgba(0,0,0,0.65);
-	box-shadow: 0px 3px 3px 0px rgba(0,0,0,0.65);
+	-webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
+	box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
 }
 .jMenu li ul.bigmenu, .jMenu li ul.bigmenu > li
 {
@@ -59,7 +72,7 @@
 	white-space: nowrap !important;
 	  text-overflow: ellipsis;
 	  -o-text-overflow: ellipsis;
-	  width:285px;
+	  width:293px;
 }
 .jMenu li ul.bigmenu > li > ul
 {
@@ -89,11 +102,11 @@
 }
 
 .jMenu li ul li a {
-    font-size: 13px;
+    font-size: 12px;
     font-weight:normal;
     text-transform: none;
     text-decoration:none;
-    padding: 7px;
+    padding: 3px;
     display: block;
     border-top: 1px solid transparent;
     border-bottom: 1px solid transparent;
@@ -158,7 +171,7 @@ ul.jmenu-settings
 li.jmenu-foodsaver ul
 {
 	left:50% !important;
-	margin-left:215px !important;
+	margin-left:148px !important;
 }
 li.jmenu-foodsaver ul li ul.sub
 {

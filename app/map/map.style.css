@@ -100,7 +100,7 @@ div#top
 }
 #map-control-wrapper h3
 {
-	font-weight:bold;
+	
 }
 
 #map-option-wrapper
@@ -113,7 +113,9 @@ div#top
 }
 #map-options label
 {
-	display:block;
+	display: block;
+    font-size: 12px;
+    font-weight: lighter;
 }
 a.baskets span.icon
 {

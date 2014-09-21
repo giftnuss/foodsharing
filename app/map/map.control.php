@@ -14,6 +14,14 @@ class MapControl extends Control
 		$this->setTemplate('map');
 		
 		$center = $this->model->getValues(array('lat','lon'), 'foodsaver', fsId());
+
+		addContent(
+			//$this->view->map($center)
+			$this->view->lMap($center)
+		);
+		
+		addContent($this->view->mapControl(),CNT_TOP);
+		
 		
 		if(isset($_GET['load']) && $_GET['load'] == 'baskets')
 		{
@@ -31,23 +39,16 @@ class MapControl extends Control
 			}
 		}
 		
-		if(isset($_GET['bid']) && ($betrieb = $this->model->getBetrieb($_GET['bid'])))
+		if(S::may('fs') && isset($_GET['bid']) && ($betrieb = $this->model->getBetrieb($_GET['bid'])))
 		{
 			$center = array(
-				'lat' => $betrieb['lat'],
-				'lon' => $betrieb['lon']
+					'lat' => $betrieb['lat'],
+					'lon' => $betrieb['lon']
 			);
 			addJs('
-				u_loadDialog("xhr.php?f=bBubble&id='.(int)$_GET['bid'].'");		
+				u_loadDialog("xhr.php?f=bBubble&id='.(int)$_GET['bid'].'");
 			');
 		}
-		
-		addContent(
-			//$this->view->map($center)
-			$this->view->lMap($center)
-		);
-		
-		addContent($this->view->mapControl(),CNT_TOP);
 		
 		if(isMob())
 		{

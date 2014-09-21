@@ -9,9 +9,18 @@ class MapView extends View
 			</div>';
 	}
 	
-	public function lMap($center)
+	public function lMap($center = false,$zoom = 13)
 	{
-		addJs('u_init_map('.$center['lat'].','.$center['lon'].',13);');
+		//addJs('u_init_map('.$center['lat'].','.$center['lon'].','.$zoom.');');
+		
+		if(!$center)
+		{
+			addJs('u_init_map();');
+		}
+		else
+		{
+			addJs('u_init_map('.$center['lat'].','.$center['lon'].','.$zoom.');');
+		}
 		
 		addHidden('
 			<div id="b_content" class="loading">

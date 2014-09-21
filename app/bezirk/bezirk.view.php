@@ -217,12 +217,12 @@ class BezirkView extends View
 				{
 					$delete = '<a class="button bt_delete" href="#p'.$p['id'].'">'.s('delete_post').'</a>';
 				}
-				
+				$time = niceDate($p['time_ts']);
 				$out .= '
 				<div id="tpost-'.$p['id'].'" class="'.$class.'ui-widget ui-widget-content margin-bottom ui-padding">
 					<div class="post">
 						<div class="top_bar">
-							<a name="post'.$p['id'].'" id="post'.$p['id'].'">'.$p['fs_name'].'</a>
+							<span class="time">'.$time.'</span><a name="post'.$p['id'].'" id="post'.$p['id'].'">'.$p['fs_name'].'</a>
 						</div>
 						<div class="forum_user_info_holder">
 							<div class="xv_left">
@@ -241,7 +241,7 @@ class BezirkView extends View
 						<div style="clear:both"></div>
 						<div class="bottom_bar">
 							<div class="normal normal'.$p['id'].'">
-								<div class="float_left bottom_time">'.niceDate($p['time_ts']).'</div>
+								<div class="float_left bottom_time">'.$time.'</div>
 								<div class="float_right">
 									'.$delete.'
 									'.$edit.'
@@ -296,7 +296,7 @@ class BezirkView extends View
 							'.$t['name'].'
 						</span>
 						<span class="last_post ui-corner-all">
-							<span clas="time">'.niceDate($t['post_time_ts']).'</span>
+							<span class="time">'.niceDate($t['post_time_ts']).'</span>
 							<span class="info">Von '.$t['foodsaver_name'].'</span>
 						</span>
 						<span style="clear:both;"></span>

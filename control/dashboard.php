@@ -138,7 +138,7 @@ else
 				$(".button").button();
 			');
 	}
-	elseif (empty($_SESSION['client']['photo']))
+	elseif (false && empty($_SESSION['client']['photo']))
 	{
 		addJs('
 		$.fancybox(\'<div class="popbox"><h3>Foto</h3><p class="subtitle">Du hast noch kein Foto hochgeladen</p><p>Wir entschuldigen uns falls Du Dein Foto schon per E-Mail gesendet hast und bitten Dich dennoch es noch einmal direkt hier in der Plattform hochzuladen</p><p>Das erspart uns sehr viel Arbeit, <br />vielen Lieben Dank!</p><p><a href="?page=settings&pinit" class="button">Jetzt Foto hochladen</a></p>\',{

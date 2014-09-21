@@ -56,7 +56,8 @@ $g_css = array();
 $g_add_css = '';
 $hidden = '';
 $db = new ManualDb();
-addHead('<link href="http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext" rel="stylesheet" type="text/css">');
+addHead('<link href="http://fonts.googleapis.com/css?family=Raleway:300,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">');
+
 addHead('<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />');
 addCss('/fonts/alfaslabone/stylesheet.css');
 addCss('/css/foodsaver/jquery-ui-1.10.3.custom.min.css',true);
@@ -118,6 +119,16 @@ addHidden('<div id="uploadPhoto"><form method="post" enctype="multipart/form-dat
 
 addHidden('<div id="fs-profile"></div>');
 addJs('
+		
+	$("#mainMenu > li > a").each(function(){
+		if(parseInt(this.href.length) > 2 && this.href.indexOf("'.getPage().'") > 0)
+		{
+			$(this).parent().addClass("active").click(function(ev){
+				ev.preventDefault();
+			});
+		}
+	});
+		
 	$("#fs-profile-rate-comment").dialog({
 		modal: true,
 		title: "",
@@ -147,6 +158,37 @@ if(!S::may())
 {
 	addJs('clearInterval(g_interval_newBasket);');
 }
+if($pos = S::get('blocation'))
+{
+	addJsFunc('
+		function getBrowserLocation(success)
+		{
+			success({
+				lat:'.floatval($pos['lat']).',
+				lon:'.floatval($pos['lon']).'
+			});
+		}
+	');
+}
+else
+{
+	addJsFunc('
+		function getBrowserLocation(success)
+		{
+			if(navigator.geolocation)
+			{
+				navigator.geolocation.getCurrentPosition(function(pos){
+					ajreq("savebpos",{app:"map",lat:pos.coords.latitude,lon:pos.coords.longitude});
+					success({
+						lat: pos.coords.latitude,
+						lon: pos.coords.longitude
+					});
+				});
+			}
+		}
+	');
+}
+
 /*
 addHead('
 <script type="text/javascript">

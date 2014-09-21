@@ -31,21 +31,21 @@
 <body>
 <!-- <div class="ajax-loader"><img src="../images/469.gif" alt="loader" /></div> -->
 <?php getDebugging(); ?>
-<div id="top">
+	<div id="top">
 		<div class="inner">
 			<div class="pure-g">
 				<div class="pure-u-1">
-					<div id="layout_logo" style="float:left;"><a href="?page=dashboard"><img alt="foodsharing" src="css/gen/img/logo.png"></a></div>
+					<div id="layout_logo"><a href="/" title="foodsharing home"><span>food</span>sharing</a></div>
 					<?php echo $msgbar; ?>
-					<?php echo $mobilemenu; ?>
-					<div style="display:none;" class="menu">
-							<?php echo $menu ?>
+					<?php echo $menu['mobile']; ?>
+					<div class="menu">
+							<?php echo $menu['default']; ?>
 					</div>
 					<div style="clear:both;"></div>
 				</div>
 			</div>
 		</div>
-</div>
+	</div>
 
 <?php echo $content_main; ?>
 <?php echo $content_top; ?>

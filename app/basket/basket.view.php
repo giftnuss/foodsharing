@@ -109,7 +109,7 @@ class BasketView extends View
 	
 	public function listUpdates($updates)
 	{
-		$out = '<li class="header" style="text-align:center;color:#665343;padding:10px;">Anfragen</li>';
+		$out = '<li class="header" style="text-align:center;color:#4A3520;padding:10px;">Anfragen</li>';
 		foreach ($updates as $u)
 		{
 			$out .= '<li class="msg msg-'.$u['id'].'-'.$u['fs_id'].'"><a onclick="ajreq(\'answer\',{app:\'basket\',id:'.(int)$u['id'].',fid:'.(int)$u['fs_id'].'});return false;" href="#"><span class="photo"><img src="'.img($u['fs_photo']).'" alt="avatar"></span><span class="subject"><span class="from">Anfrage von '.$u['fs_name'].'</span><span class="time"><button onmouseout="$(this).removeClass(\'ui-state-hover\');" onmouseover="$(this).addClass(\'ui-state-hover\');" onclick="ajreq(\'removeRequest\',{app:\'basket\',id:'.(int)$u['id'].',fid:'.(int)$u['fs_id'].'});return false;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" role="button" aria-disabled="false" title="Anfrage verwerfen"><span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span><span class="ui-button-text">entfernen</span></button></span></span><span class="message">'.niceDate($u['time_ts']).'</span><span style="display:block;clear:both;"></span></a></li>';
@@ -120,7 +120,7 @@ class BasketView extends View
 	
 	public function listMyBaskets($baskets)
 	{
-		$out = '<li class="header" style="text-align:center;color:#665343;padding:10px;">Deine Essenskörbe</li>';
+		$out = '<li class="header" style="text-align:center;color:#4A3520;padding:10px;">Deine Essenskörbe</li>';
 		foreach ($baskets as $b)
 		{
 			$img = 'img/basket.png';
