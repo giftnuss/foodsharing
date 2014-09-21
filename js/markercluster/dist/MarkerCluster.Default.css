@@ -1,8 +1,10 @@
+
 .marker-cluster-small {
 	background-color: rgba(181, 226, 140, 0.6);
 	}
 .marker-cluster-small div {
-	background-color: rgba(110, 204, 57, 0.6);
+	 background-color: rgba(90,185,70,0.6);
+    
 	}
 
 .marker-cluster-medium {
@@ -58,3 +60,10 @@
 .marker-cluster span {
 	line-height: 30px;
 	}
+	
+.marker-cluster span
+{
+	color: #fff !important;
+    font-family: Alfa Slab One !important;
+    font-weight: lighter !important;
+}
