@@ -638,11 +638,7 @@ ul.msgbar-dropdown-menu li a span.time {
 }
 #left .linklist
 {
-	-moz-opacity: 0.60;
-	-khtml-opacity: 0.60;
-	opacity: 0.60;
-	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha"(Opacity=60);
-	filter: progid:DXImageTransform.Microsoft.Alpha(opacity=60);
+	
 		
 }
 #left .ui-widget-content
@@ -1490,7 +1486,7 @@ ul.linklist li a
 }
 ul.linklist li
 {
-	border-bottom:1px solid #F1E7C9 !important;
+	
 }
 ul.linklist li a span.title
 {

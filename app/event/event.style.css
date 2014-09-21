@@ -7,3 +7,7 @@ div.event
 {
 	min-height:70px;
 }
+textarea.comment
+{
+	width:97% !important;
+}

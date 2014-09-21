@@ -20,7 +20,8 @@ class EventControl extends Control
 			
 			$status = $this->model->getInviteStatus($event['id'],fsid());
 			
-			addContent($this->view->eventTop($event,$status),CNT_TOP);
+			addContent($this->view->eventTop($event),CNT_TOP);
+			addContent($this->view->statusMenu($event,$status),CNT_LEFT);
 			addContent($this->view->event($event));
 			
 			if($event['online'] == 0 && $event['location'] != false)
@@ -34,7 +35,7 @@ class EventControl extends Control
 		
 			if($event['invites'])
 			{
-				addContent($this->view->invites($event['invites']),CNT_LEFT);
+				addContent($this->view->invites($event['invites']),CNT_RIGHT);
 			}
 			addContent(v_field($this->wallposts('event', $event['id']),'Pinnwand'));
 		}

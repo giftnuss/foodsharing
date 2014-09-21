@@ -177,44 +177,76 @@ class EventView extends View
 		),array('submit'=>s('save'))), $title, array('class'=>'ui-padding'));
 	}
 	
-	public function eventTop($event,$user_status)
+	public function statusMenu($event,$user_status)
 	{
-	
 		$btns = '';
+		
+		$menu = array();
 		
 		if($event['fs_id'] == fsid() || isOrgaTeam())
 		{
-			$btns .= ' <a style="color:#FFF;font-size:12px;" class="button" href="?page=event&sub=edit&id='.(int)$event['id'].'">Event bearbeiten</a>';
+			$menu[] = array(
+				'name' => 'Event bearbeiten',
+				'href' => '?page=event&sub=edit&id='.(int)$event['id']
+			);
+			//$btns .= ' <a style="color:#FFF;font-size:12px;" class="button" href=""></a>';
 		}
 		
 		if($user_status != -1)
 		{
 			if($user_status != 3)
 			{
-				$btns .= ' <a style="color:#FFF;font-size:12px;" class="button" href="#" onclick="ajreq(\'ustat\',{id:'.(int)$event['id'].',s:3});return false;">Ich kann doch nicht</a>';
+				$menu[] = array(
+					'name' => 'Ich kann doch nicht',
+					'click' => 'ajreq(\'ustat\',{id:'.(int)$event['id'].',s:3});return false;'
+				);
+				//$btns .= ' <a style="color:#FFF;font-size:12px;" class="button" href="#" onclick=""></a>';
 			}
-			
+				
 			if($user_status == 0)
 			{
-				$btns .= ' <a style="color:#FFF;font-size:12px;" class="button" href="#" onclick="ajreq(\'ustat\',{id:'.(int)$event['id'].',s:1});return false;">Einladung annehmen</a>';
+				$menu[] = array(
+						'name' => 'Einladung annehmen',
+						'click' => 'ajreq(\'ustat\',{id:'.(int)$event['id'].',s:1});return false;'
+				);
+				//$btns .= ' <a style="color:#FFF;font-size:12px;" class="button" href="#" onclick=""></a>';
 			}
-			
+				
 			if($user_status != 0 && $user_status != 1)
 			{
-				$btns .= ' <a style="color:#FFF;font-size:12px;" class="button" href="#" onclick="ajreq(\'ustat\',{id:'.(int)$event['id'].',s:1});return false;">Ich kann doch</a>';
+				$menu[] = array(
+					'name' => 'Ich kann doch',
+					'click' => 'ajreq(\'ustat\',{id:'.(int)$event['id'].',s:1});return false;'
+				);
+				//$btns .= ' <a style="color:#FFF;font-size:12px;" class="button" href="#" onclick=""></a>';
 			}
-			
+				
 			if($user_status != 2)
 			{
-				$btns .= ' <a style="color:#FFF;font-size:12px;" class="button" href="#" onclick="ajreq(\'ustat\',{id:'.(int)$event['id'].',s:2});return false;">Ich kann vielleicht</a>';
+				$menu[] = array(
+					'name' => 'Ich kann vielleicht',
+					'click' => 'ajreq(\'ustat\',{id:'.(int)$event['id'].',s:2});return false;'
+				);
+				//$btns .= ' <a style="color:#FFF;font-size:12px;" class="button" href="#" onclick=""></a>';
 			}
 		}
 		else
 		{
-			$btns .= ' <a style="color:#FFF;font-size:12px;" class="button" href="#" onclick="ajreq(\'ustatadd\',{id:'.(int)$event['id'].',s:1});return false;">Ich werde teilnehmen</a>';
-			$btns .= ' <a style="color:#FFF;font-size:12px;" class="button" href="#" onclick="ajreq(\'ustatadd\',{id:'.(int)$event['id'].',s:2});return false;">Ich werde vielleicht teilnehmen</a>';
+			$menu[] = array(
+				'name' => 'Ich werde teilnehmen',
+				'click' => 'ajreq(\'ustatadd\',{id:'.(int)$event['id'].',s:1});return false;'
+			);
+			$menu[] = array(
+				'name' => 'Ich werde vielleicht teilnehmen',
+				'click' => 'ajreq(\'ustatadd\',{id:'.(int)$event['id'].',s:2});return false;'
+			);
 		}
 		
+		return v_field($this->menu($menu),'<i class="fa fa-gear"></i> '.s('event_options'));
+	}
+	
+	public function eventTop($event)
+	{
 		$end = '';
 	
 		if(date('Y-m-d',$event['start_ts']) != date('Y-m-d',$event['end_ts']))
@@ -240,9 +272,6 @@ class EventView extends View
 						<li>'.niceDate($event['start_ts']).$end.'</li>
 					</ul>
 					<div class="clear"></div>
-				</div>
-				<div style="position:absolute;right:10px;bottom:10px;">
-					<p> '.$btns.' </p>
 				</div>
 			</div>
 			<div class="clear"></div>
@@ -285,7 +314,7 @@ class EventView extends View
 			{
 				$icons = v_scroller($icons,200);
 			}
-			$out .= v_field($icons, ''.count($invites['invited']).' Einladungen');
+			$out .= v_field($icons, ''.count($invites['invited']).' Einladungen',array('class' => 'ui-padding'));
 		}
 		
 		return $out;

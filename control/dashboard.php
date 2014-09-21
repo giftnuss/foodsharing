@@ -322,9 +322,7 @@ else
 	
 	if($gerettet > 0)
 	{
-		$gerettet= '<div class="user_display_name v-desktop" style="float:right;margin:12px 10px 0 0;">
-			Du hast schon '.number_format($gerettet,2,",",".").' kg Lebensmittel gerettet
-		</div>';
+		$gerettet = ', Du hast '.number_format($gerettet,2,",",".").' KG gerettet';
 	}
 	else
 	{
@@ -346,7 +344,7 @@ else
 			</div>
 			<div class="welcome_quick_link">
 				<ul>
-					<li><a href="?page=bezirk&bid='.(int)$me['bezirk_id'].'&sub=forum">'.s('rolle_'.$me['rolle'].'_'.$me['geschlecht']).' für '.$me['bezirk_name'].'</a></li>
+					<li><a href="?page=bezirk&bid='.(int)$me['bezirk_id'].'&sub=forum">'.s('rolle_'.$me['rolle'].'_'.$me['geschlecht']).' für '.$me['bezirk_name'].'</a>'.$gerettet.'</li>
 				</ul>
 				<div class="clear"></div>
 			</div>
@@ -354,7 +352,6 @@ else
 		<div class="welcome_profile_survived v-desktop">
 			<a href="#" onclick="profile('.(int)fsId().');return false;"><img height="50" width="50" class="image_online" alt="" src="img/gerettet_icon.png" /></a>
 		</div>
-		'.$gerettet.'
 	
 		<div class="clear"></div>
 	</div>'
