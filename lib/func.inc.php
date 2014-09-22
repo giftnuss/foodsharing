@@ -712,7 +712,7 @@ function getMenu()
 					<optgroup label="Bezirke">';
 			
 			$ags = '
-					<li><a href="?page=groups">GRUPPEN-ÜBERSICHT</a></li>
+					<li><a href="?page=groups"><i class="fa fa-group"></i> GRUPPEN-ÜBERSICHT</a></li>
 					<li class="break"><span></span></li>';
 			
 			$ags_mob = '
@@ -757,14 +757,14 @@ function getMenu()
 				$foodsaver = '
 				<li><a>Foodsaver</a>
 					<ul>
-						<li><a href="?page=fairteiler">Fair-Teiler</a></li>
-					    <li><a href="?page=message">Interne Nachrichten</a></li>
+						<li><a href="?page=fairteiler"><i class="fa fa-recycle"></i> Fair-Teiler</a></li>
+					    <li><a href="?page=message"><i class="fa fa-comments"></i> Interne Nachrichten</a></li>
 				
 				
-						<li><a href="http://wiki.lebensmittelretten.de" target="_blank">foodsharing WIKI</a></li>
+						<li><a href="http://wiki.lebensmittelretten.de" target="_blank"><i class="fa fa-file-text"></i> foodsharing WIKI</a></li>
 				
-						<li><a href="?page=bcard">Persönliche Visitenkarte</a></li>
-						<li><a class="menu-bottom" href="?page=listFaq">FAQs</a></li>';
+						<li><a href="?page=bcard"><i class="fa fa-newspaper-o"></i> Persönliche Visitenkarte</a></li>
+						<li><a class="menu-bottom" href="?page=listFaq"><i class="fa fa-question-circle"></i> FAQs</a></li>';
 					
 				$foodsaver_mob = '
 				<optgroup label="Foodsaver">
@@ -777,7 +777,7 @@ function getMenu()
 			if(S::may('bieb'))
 			{
 				$foodsaver .= '
-						<li><a href="?page=mailbox">E-Mail Postfächer</a></li>';
+						<li><a href="?page=mailbox"><i class="fa fa-envelope"></i> E-Mail Postfächer</a></li>';
 				$foodsaver_mob .= '
 						<option value="?page=mailbox">E-Mail Postfächer</option>';
 			}
@@ -785,8 +785,8 @@ function getMenu()
 			if(S::may('bot'))
 			{
 				$foodsaver .= '
-						<li><a href="?page=blog">Blog-Eintrag schreiben</a></li>
-						<li class="menu-bottom"><a class="menu-bottom" href="?page=email">E-Mail Verteiler</a></li>';
+						<li><a href="?page=blog"><i class="fa fa-comment"></i> Blog-Eintrag schreiben</a></li>
+						<li class="menu-bottom"><a class="menu-bottom" href="?page=email"><i class="fa fa-exchange"></i> E-Mail Verteiler</a></li>';
 				
 				$foodsaver_mob .= '
 						<option value="?page=blog">Blog-Eintrag schreiben</option>

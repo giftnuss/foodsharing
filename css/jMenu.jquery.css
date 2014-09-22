@@ -73,7 +73,8 @@
 	white-space: nowrap !important;
 	  text-overflow: ellipsis;
 	  -o-text-overflow: ellipsis;
-	  width:293px;
+	  padding-right: 21px;
+	  width:274px;
 }
 .jMenu li ul.bigmenu > li > ul
 {
@@ -115,7 +116,7 @@
 .jMenu li ul li a i
 {
 	display:inline-block;
-	width:13px;
+	width:18px;
 }
 .jMenu li ul li.menu-bottom
 {
