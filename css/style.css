@@ -2176,7 +2176,7 @@ td.load
 {
 	background-color: #46891B;
 	opacity:0.8;
-	text-decoration: none;
+	text-decoration: none !important;
 }
 
 .ui-button .ui-button-text
