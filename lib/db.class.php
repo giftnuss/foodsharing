@@ -592,14 +592,6 @@ class Db
 				$out[] = qs($row[0]);
 			}
 		}
-		else
-		{
-			logg($sql);
-		}
-		
-		
-		
-
 		
 		if(count($out) > 0)
 		{
@@ -729,14 +721,6 @@ class Db
 				$out[] = $row;
 			}
 		}
-		else
-		{
-			logg($sql);
-		}
-		
-		
-		
-
 		
 		if(count($out) > 0)
 		{
@@ -746,7 +730,6 @@ class Db
 		{
 			return false;
 		}
-		
 	}
 	
 	public function resetPassword($fs_id,$email)

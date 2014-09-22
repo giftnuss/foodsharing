@@ -849,12 +849,12 @@ function getMenu()
 				'mobile' => '
 						<select id="mobilemenu">
 							<option class="famenu" value="dashboard" selected="selected">&#xf0c9;</option>
-							
+							'.$settings['mobile'].'
 							'.$ags_mob.'
 							'.$foodsaver_mob.'
 							'.$betriebe['mobile'].'
 							'.$bezirke_mob.'
-							'.$settings['mobile'].'
+							
 							'.$orgamenu['mobile'].'
 						</select>'
 
@@ -1526,18 +1526,12 @@ function getBezirkMenu($bezirk)
 				<li class="menu-top"><a class="menu-top" href="?page=bezirk&bid='.$bezirk['id'].'&sub=fairteiler">Fair-Teiler</a></li>
 				<li class="menu-top"><a class="menu-top" href="?page=bezirk&bid='.$bezirk['id'].'&sub=events">Termine</a></li>';
 	
-	$out_mob = '
-			<optgroup label="'.$bezirk['name'].'">
-			    <option value="?page=bezirk&bid='.$bezirk['id'].'&sub=forum">Forum</option>
-			    <option value="?page=bezirk&bid='.$bezirk['id'].'&sub=fairteiler">Fair-Teiler</option>
-				<option value="?page=bezirk&bid='.$bezirk['id'].'&sub=events">Termine</option>';
+	$out_mob = '<option value="?page=bezirk&bid='.$bezirk['id'].'&sub=forum">'.$bezirk['name'].'</option>';
 	
 	if(S::may('fs'))
 	{
 		$out .= '
 				<li class="menu-top"><a class="menu-top" href="?page=betrieb&bid='.$bezirk['id'].'">Betriebe</a></li>';
-		$out_mob .= '
-				<option value="?page=betrieb&bid='.$bezirk['id'].'">Betriebe</option>';
 	}
 	
 	if(isBotFor($bezirk['id']))
@@ -1546,18 +1540,10 @@ function getBezirkMenu($bezirk)
 			<li><a href="?page=foodsaver&bid='.$bezirk['id'].'">Foodsaver</a></li>
 			<li><a href="?page=message&a=neu&list&bid='.$bezirk['id'].'">Mailing-Liste</a></li>
 			<li class="menu-bottom"><a class="menu-bottom" href="?page=passgen&bid='.$bezirk['id'].'">Ausweise / Verifizierungen</a></li>';
-		
-		$out_mob .= '
-			<option value="?page=foodsaver&bid='.$bezirk['id'].'">Foodsaver</option>
-			<option value="?page=message&a=neu&list&bid='.$bezirk['id'].'">Mailing-Liste</option>
-			<option value="?page=passgen&bid='.$bezirk['id'].'">Ausweise / Verifizierungen</option>';
 	}
 	
 	$out .= '
 			</ul>';
-	
-	$out_mob .= '
-			</optgroup>';
 	
 	return array(
 		'default' => $out . '</li>',

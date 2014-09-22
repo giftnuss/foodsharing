@@ -135,7 +135,7 @@ class XhrDialog
 		
 		
 		$this->addContent(v_input_wrapper(s($id.'-desc'),'
-				<span id="' . $in_id . '">' . s($id . '-choose') . '</span>
+				<span id="' . $in_id . '"><i class="fa fa-image"></i> ' . s($id . '-choose') . '</span>
 				<input class="input" type="hidden" name="filename" id="'.$in_id.'-filename" value="" />
 				<div class="attach-preview" style="float:right;">
 					
@@ -162,11 +162,7 @@ class XhrDialog
 				$(".attach-preview").html(\'<a href="#" class="preview-thumb attach-load" rel="wallpost-gallery">&nbsp;</a><div style="clear:both;"></div>\');
 			});
 			
-			$("#'.$in_id.'").button({
-				icons: {
-					primary: "ui-icon-image"
-				}
-			}).click(function(){
+			$("#'.$in_id.'").button().click(function(){
 				$("#'.$in_id.'-file").trigger("click");
 			});;	
 		');

@@ -182,7 +182,7 @@ class SettingsView extends View
 			$i++;
 			$cnt = '<div class="question">'.$r['text'].'</div>';
 			
-			$cnt .= v_input_wrapper('Passender Wiki-Artikel', '<a href="'.$r['wikilink'].'">'.$r['wikilink'].'</a>');
+			$cnt .= v_input_wrapper('Passender Wiki-Artikel zu diesem Thema', '<a target="_blank" class="button" href="'.$r['wikilink'].'">zum WIKI-Artikel</a>');
 			
 			$answers = '';
 			$ai = 0;
