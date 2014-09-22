@@ -806,6 +806,7 @@ div.xv_left ul li a
 	background-color:#FFF;
 	text-align:center;
 	margin-top:4px;
+	font-weight: lighter;
 }
 div.xv_set
 {
@@ -1435,8 +1436,20 @@ div.welcome a:hover
 	color:#877A68;
 }
 div.welcome .welcome_profile_image {
+    -webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+    height: 50px;
     left: 10px;
+    overflow: hidden;
     position: absolute;
+    width: 50px;
+}
+div.welcome .welcome_profile_image img
+{
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
 }
 div.welcome .welcome_profile_name {
     margin-left: 60px;
@@ -2156,7 +2169,7 @@ td.load
 .ui-button, .button
 {
 
-	font-family: 'Alfa Slab One' !important;
+	font-family: 'Raleway' !important;
 	color:#FFFFFF !important;
 	background-color:#46891B;
 	
@@ -2166,7 +2179,7 @@ td.load
 	border: 0 none;
 	text-decoration: none;
 	background-image: none;
-	font-weight: lighter;
+	font-weight: bold !important;
 }
 .button, .ui-button
 {
