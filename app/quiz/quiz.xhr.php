@@ -161,7 +161,7 @@ class QuizXhr extends Control
 				$dia->addOpt('width', 500);
 				$dia->addContent($this->view->answerForm());
 				
-				$dia->addButton('Speichern', 'ajreq(\'updateansw\',{id:'.(int)$_GET['id'].',explanation:$(\'#explanation\').val(),text:$(\'#text\').val(),right:$(\'#right\').val()});$(\'#'.$dia->getId().'\').dialog("close");');
+				$dia->addButton('Speichern', 'ajreq(\'updateansw\',{id:'.(int)$_GET['id'].',explanation:$(\'#explanation\').val(),text:$(\'#text\').val(),right:$(\'#isright\').val()});$(\'#'.$dia->getId().'\').dialog("close");');
 				
 				$return = $dia->xhrout();
 				
@@ -247,12 +247,12 @@ class QuizXhr extends Control
 				
 				$return['script'] .= '
 				$("#text").css({
-				"width":"95%",
-				"height":"50px"
+					"width":"95%",
+					"height":"50px"
 				});
 				$("#text").autosize();
 				$("#fp").css({
-				"width":"95%"
+					"width":"95%"
 				});';
 				
 				return $return;
@@ -267,10 +267,37 @@ class QuizXhr extends Control
 			$this->model->abortSession($_GET['sid']);
 			return array(
 				'status' => 1,
-				'script' => 'pulseInfo("Quiz wurde abgebrochen");'	
-					
+				'script' => 'closeAllDialogs();pulseInfo("Quiz wurde abgebrochen");'	
 			);
 		}
+	}
+	
+	private function abortOrOpenDialog($session_id)
+	{
+		return '
+				$("body").append(\'<div id="abortOrPause">'.JsSafe($this->view->abortOrPause()).'</div>\');
+				$("#abortOrPause").dialog({
+					autoOpen: false,
+					title: "Quiz wirklich abbrechen?",
+					modal: true,
+					buttons: [
+						{
+							text: "Quiz-Pausieren",
+							click: function(){
+								$("#abortOrPause").dialog("close");
+								ajreq("pause",{app:"quiz",sid:'.(int)$session_id.'});
+							}
+						},
+						{
+							text: "Quiz-Abbrechen",
+							click: function(){
+								$("#abortOrPause").dialog("close");
+								closeAllDialogs();
+								ajreq("abort",{app:"quiz",sid:'.(int)$session_id.'});
+							}
+						}
+					]
+				});';
 	}
 	
 	private function replaceDoubles($questions)
@@ -279,19 +306,30 @@ class QuizXhr extends Control
 		return $questions;
 	}
 	
+	/**
+	 * Method to initiate a quiz session so get the defined amount of questions sort it randomly and store it in an session variable
+	 * 
+	 */
 	public function startquiz()
 	{
 		if(!S::may())
 		{
 			return false;
 		}
+		/*
+		 * First we want to check is there an quiz session what the user have lost?
+		 */
 		if($session = $this->model->getExsistingSession($_GET['qid']))
 		{
+			// if yes reinitiate the running quiz session
 			S::set('quiz-id', (int)$_GET['qid']);
 			S::set('quiz-questions', $session['quiz_questions']);
 			S::set('quiz-index', $session['quiz_index']);
 			S::set('quiz-session', $session['id']);
 			
+			/*
+			 * Make a little output that the user ca continue the quiz
+			 */
 			$dia = new XhrDialog();
 			
 			$dia->setTitle('Quiz fortführen');
@@ -301,23 +339,42 @@ class QuizXhr extends Control
 			$dia->addButton('Quiz Abbrechen', 'if(confirm(\'Möchtest Du das laufende Quiz wirklich beenden? Leider müssten wir das als Fehlversuch bewerten.\')){ajreq(\'abort\',{app:\'quiz\',sid:'.(int)$session['id'].'});}');
 			$dia->addButton('Quiz fortführen', 'ajreq(\'next\',{app:\'quiz\'});');
 			
-			return $dia->xhrout();
+			$return = $dia->xhrout();
+			
+			$return['script'] .= $this->abortOrOpenDialog($session['id']);
+			
+			return $return;
 			
 		}
+		/*
+		 * Otherwiser we start a new quiz session
+		 */
 		else if($quiz = $this->model->getQuiz($_GET['qid']))
 		{
+			/*
+			 * first get random sorted quiz questions
+			 */
 			if($questions = $this->getRandomQuestions($_GET['qid'],$quiz['questcount']))
 			{
+				//Get the description how the quiz works
 				$content = $this->model->getContent(17);
+				
+				// for safety check if there are not to many questions
 				$questions = array_slice($questions, 0, (int)$quiz['questcount']);
 				
-				// doppelte Fragen aussortieren
+				// check for double question (bugfix)
 				$questions = $this->replaceDoubles($questions);
 				
+				/*
+				 * Store quiz data in the users session
+				 */
 				S::set('quiz-id', (int)$_GET['qid']);
 				S::set('quiz-questions', $questions);
 				S::set('quiz-index', 0);
-					
+				
+				/*
+				 * Make a litte output for the user that he/she cat just start the quiz now
+				 */
 				$dia = new XhrDialog();
 				$dia->addOpt('width', 600);
 				//$dia->addOpt('height', 480);
@@ -326,11 +383,18 @@ class QuizXhr extends Control
 				$dia->addAbortButton();
 				$dia->addButton('Quiz Starten', 'clearTimeout(g_chatheartbeatTO);clearInterval(g_interval_newBasket);ajreq(\'next\',{app:\'quiz\'});$(\'#'.$dia->getId().'\').dialog(\'close\');');
 						
-				return $dia->xhrout();
+				$return = $dia->xhrout();
+			
+				$return['script'] .= $this->abortOrOpenDialog($session['id']);
+				
+				return $return;
 				
 			}
 		}
 		
+		/*
+		 * If we cant get an quiz from the db send an error
+		 */
 		return array(
 			'status' => 1,
 			'script' => 'pulseError("Quiz konnte nicht gestartet werden...");'
@@ -366,17 +430,28 @@ class QuizXhr extends Control
 		}
 		
 	}
-	
+	/**
+	 * xhr request to get next question stored in the users session
+	 * 
+	 * @return boolean|string|multitype:number string |Ambigous <boolean, multitype:number string , string>
+	 */
 	public function next()
 	{
 		if(!S::may())
 		{
 			return false;
 		}
+		/*
+		 * Try to find a current quiz session ant retrieve the questions
+		 */
 		if($quiz = S::get('quiz-questions'))
 		{
+			// get quiz_index it is the current array index of the questions
 			$i = S::get('quiz-index');
 			
+			/*
+			 * If the quiz index is 0 we have to start a new quiz session 
+			 */
 			if($i == 0)
 			{
 				$quuizz = $this->model->getQuiz(S::get('quiz-id'));
@@ -387,35 +462,81 @@ class QuizXhr extends Control
 				}
 			}
 			
+			// this variable we need to output an message that the last question was only a joke 
+			$was_a_joke = false;
+			
+			/*
+			 *  check if an answered quiz question is arrived
+			 */
 			if(isset($_GET['answer']))
 			{
+				/*
+				 * parse the anser parameter
+				 */
 				$answers = urldecode($_GET['answer']);
 				$params = array();
 				parse_str($_GET['answer'], $params);
+				
+				/*
+				 * store params in the quiz array to save users answers
+				 */
 				if(isset($params['qanswers']))
 				{
 					$quiz[($i-1)]['answers'] = $params['qanswers'];
 				}
 				
+				/*
+				 * check if there are 0 point for the questions its a joke
+				 */
+				if($quiz[($i-1)]['fp'] == 0)
+				{
+					$was_a_joke = true;
+				}
+				
+				/*
+				 * store the time how much time has the user need
+				 */
 				$quiz[($i-1)]['userduration'] = (time() - (int)S::get('quiz-quest-start'));
+				
+				/*
+				 * has store noco ;) its the value when the user marked that no answer is correct
+				 */
 				$quiz[($i-1)]['noco'] = (int)$_GET['noco'];
 				
+				/*
+				 * And store it all back to the session
+				 */
 				S::set('quiz-questions', $quiz);
+				
+				/*
+				 * Have a look has the user entered an comment for this question?
+				 */
 				$comment = strip_tags($_GET['comment']);
-					
 				if(!empty($comment))
 				{
+					// if yes lets store in the db
 					$this->model->addUserComment((int)$_GET['qid'], $comment);
 				}
 			}
 			
+			/*
+			 * check if there is a next question in quiz array push it to the user
+			 * othwise forward to the result of the quiz
+			 */
 			if(isset($quiz[$i]))
 			{
+				// get the question
 				if($question = $this->model->getQuestion($quiz[$i]['id']))
-				{					
+				{		
+					// get possible answers			
 					if($answers = $this->model->getAnswers($question['id']))
 					{
+						// random sorting for the answers
 						shuffle($answers);
+						
+						/*
+						 * increase the question index so we are at the next question ;)
+						 */ 
 						$i++;
 						S::set('quiz-index',$i);
 						
@@ -423,37 +544,73 @@ class QuizXhr extends Control
 						$this->model->updateQuizSession(S::get('quiz-session'), $quiz, $i);
 						S::set('quiz-quest-start',time());
 						
+						/*
+						 * let's prepare the output dialog
+						 */
 						$dia = new XhrDialog();
-						$dia->noClose();
-
+						//$dia->noClose();
+						$dia->addOpt('beforeClose', 'function(ev){abortOrPause();return false;}',false);
 						$dia->addOpt('width', 1000);
 						$dia->addOpt('height', '($(window).height()-40)',false);
 						$dia->addOpt('position', 'center');
 						$dia->setTitle('Frage '.($i).' / '.count($quiz));
+						
+						
+						
 						$dia->addContent($this->view->quizQuestion($question,$answers));
 						$dia->addContent($this->view->quizComment());
 						
+						/*
+						 * show the pause button only if there are more questions
+						 */
 						if($i < count($quiz))
 						{
 							$dia->addButton('Abschicken & Pause', 'breaknext();');
 						}
+						
+						// add comment button
 						$dia->addButton('Kommentar abgeben & Weiter', 'questcomment(this);');
 						
-						$dia->addButton('Auflösung der Quizfrage und weiter', 'questcheckresult();return false;');
+						/*
+						 * for later function is not ready yet :)
+						 */
+						//$dia->addButton('Auflösung der Quizfrage und weiter', 'questcheckresult();return false;');
 						
+						/*
+						 * add next() Button
+						 */
 						$dia->addButton('Weiter', 'questionnext();');
 						
 						$return = $dia->xhrout();
 						
-						$return['script'] .= '
+						// additional output if it was a joke question
+						if($was_a_joke)
+						{
+							$return['script'] .= 'pulseInfo("<h3>Das war eine Scherzfrage</h3>Du kannst beruhigt weitermachen und auch wenn die möglichen Antworten nicht falsch sind, müssen diese Fragen nicht richtig beantwortet werden, sie dienen lediglich des auflockerns für Zwischendurch ;)",{sticky:true});';
+						}
 						
+						/*
+						 * strange but it works ;) generate the js code and send is to the client for execute
+						 */
+						$return['script'] .= '
+							
+							function abortOrPause()
+							{
+								$("#abortOrPause").dialog("open");
+							}
+							
 							function questcomment(el)
 							{
 								if($(\'#qanswers input:checked\').length > 0)
 								{
 									clearInterval(counter);
 									$(".ui-dialog-buttonpane button:contains(\'Kommentar\')").hide();
-									$("#quizwrapper").hide();
+									//$("#quizwrapper").hide();
+									$("#quizwrapper input, #countdown").hide();
+									$("#quizwrapper").css({
+										"height":"100px",
+										"overflow":"auto"
+									});
 									$("#quizcomment").show();
 								}
 								else
@@ -557,7 +714,7 @@ class QuizXhr extends Control
 						
 							$(\'#quizwrapper\').hide();
 							$(\'#quizbreath\').show();
-							$(".ui-dialog-buttonpane").css("visibility","hidden");
+							$("#'.$dia->getId().'").next(".ui-dialog-buttonpane").css("visibility","hidden");
 							var count = '.(int)$question['duration'].';
 
 							var counter = null;
@@ -589,8 +746,6 @@ class QuizXhr extends Control
 							     ajreq(\'pause\',{app:\'quiz\',timefail:\'1\'});
 							     return;
 							  }
-							
-							  
 							}
 						';
 						
@@ -717,15 +872,16 @@ class QuizXhr extends Control
 	public function pause()
 	{
 		$dia = new XhrDialog();
-		
-		$dia->removeTitlebar();
+		$dia->setTitle('Pause');
+		//$dia->removeTitlebar();
 		$dia->addContent($this->view->pause());
-		
+		$dia->addJsBefore('closeAllDialogs();');
 		$dia->addJs('
 			clearInterval(counter);		
 		');
 		
 		return $dia->xhrout();
+	
 	}
 	
 	private function validateAnswer($rightQuestions,$question)
@@ -859,6 +1015,10 @@ class QuizXhr extends Control
 	
 	private function percentFrom($total,$part)
 	{
+		if($total == 0)
+		{
+			return 100;
+		}
 		return ($part / ($total / 100));
 	}
 	

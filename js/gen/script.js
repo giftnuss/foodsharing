@@ -133,6 +133,8 @@ return false;}
 function GET(v)
 {if(!HTTP_GET_VARS[v]){return'undefined';}
 return HTTP_GET_VARS[v];}
+function closeAllDialogs()
+{var $activeDialogs=$(".ui-dialog").find('.ui-dialog-content');$activeDialogs.each(function(){$dia=$(this);if(typeof $dia.dialog==='function'){$dia.dialog('close');}});}
 $(document).ready(function(){$('textarea.comment').autosize();$('#nojs').css('display','none');$('#main').css('display','block');$('.moreswap').each(function(){$this=$(this);$this.after('<a class="moreswaplink" href="#" data-show="0">Mehr anzeigen</a>');if($this.height()>100)
 {$this.css({'height':'100px','overflow':'hidden'});}});$('.moreswaplink').each(function(){$this=$(this);$this.click(function(ev){ev.preventDefault();if($this.attr('data-show')==0)
 {$this.prev().css({'height':'auto','overflow':'visible'});$this.text('einklappen');$this.attr('data-show',1);}

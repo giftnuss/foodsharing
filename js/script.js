@@ -27,6 +27,18 @@ function GET(v)
 	return HTTP_GET_VARS[v];
 }
 
+function closeAllDialogs()
+{
+    var $activeDialogs = $(".ui-dialog").find('.ui-dialog-content');
+    
+    $activeDialogs.each(function(){
+    	$dia = $(this);
+    	if(typeof $dia.dialog === 'function') {
+    		$dia.dialog('close');
+    	}
+    });
+}
+
 $(document).ready(function(){
 	$('textarea.comment').autosize();
 	 $('#nojs').css('display','none');

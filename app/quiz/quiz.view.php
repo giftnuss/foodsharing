@@ -1,6 +1,13 @@
 <?php
 class QuizView extends View
 {
+	public function abortOrPause()
+	{
+		return '
+				<p>Beim Abbrechen wird dieser Versuch als Fehlversuch gewertet.</p>
+				<p>Du kannst das Quiz auch pausieren und zu jedem späteren Zeitpunkt wieder aufnehmen.</p>';
+	}
+	
 	public function sessionList($sessions,$quiz)
 	{
 		$rows = array();
@@ -203,7 +210,7 @@ class QuizView extends View
 		return
 		v_form_textarea('text') .
 		v_form_textarea('explanation') .
-		v_form_select('right',array('values' => array(
+		v_form_select('isright',array('values' => array(
 			array('id'=>1,'name'=> 'Richtig'),
 			array('id'=>0,'name'=> 'Falsch'),
 			array('id'=>2,'name'=> 'Neutral')
@@ -445,15 +452,19 @@ class QuizView extends View
 			$out = '<ul class="linklist">';
 			foreach ($answers as $a)
 			{
-				$ampel = 'ampel-gruen';
+				$ampel = 'ampel ampel-gruen';
 				if($a['right'] == 0)
 				{
-					$ampel = 'ampel-rot';
+					$ampel = 'ampel ampel-rot';
+				}
+				else if($a['right'] == 2)
+				{
+					$ampel = '';
 				}
 				$out .= '
 				<li>
 					<a href="#" onclick="ajreq(\'editanswer\',{app:\'quiz\',id:'.$a['id'].'});return false;" class="ui-corner-all">
-						<span style="height:35px;overflow:hidden;font-size:11px;"><strong class="ampel '.$ampel.'" style="float:right;margin:0 0 0 3px;"><span>&nbsp;</span></strong>'.tt($a['text'],60).'</span>
+						<span style="height:35px;overflow:hidden;font-size:11px;"><strong class="'.$ampel.'" style="float:right;margin:0 0 0 3px;"><span>&nbsp;</span></strong>'.tt($a['text'],60).'</span>
 						<span style="clear:both;"></span>
 					</a>
 				</li>';

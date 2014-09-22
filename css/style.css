@@ -2354,4 +2354,5 @@ ul.bread li a:hover
 	content: "\f00d";
 	font-family:'FontAwesome';
 	text-indent: 0;
+	font-size:16px;
 }

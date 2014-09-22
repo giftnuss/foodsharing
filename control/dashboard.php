@@ -364,10 +364,6 @@ else
 	{
 		addContent(u_nextDates($dates),CNT_RIGHT);
 	}
-	else
-	{
-		addContent(v_info('Du hast keine Termine zum Essen abholen'),CNT_RIGHT);
-	}
 	
 	/*
 	 * Deine Bezirke

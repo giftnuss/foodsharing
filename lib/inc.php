@@ -158,6 +158,9 @@ if(!S::may())
 {
 	addJs('clearInterval(g_interval_newBasket);');
 }
+/*
+ * Browser location abfrage nur einmal dann in session speichern
+ */
 if($pos = S::get('blocation'))
 {
 	addJsFunc('

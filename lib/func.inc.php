@@ -821,7 +821,7 @@ function getMenu()
 			}
 			$bezirke .= '
 				<li class="break"><span></span></li>
-				<li><a href="#" onclick="becomeBezirk();">Weiterem Bezirk/Region beitreten</a></li>
+				<li><a href="#" onclick="becomeBezirk();return false;"><i class="fa fa-plus-circle"></i> Bezirk beitreten</a></li>
 			</ul>
 		</li>';
 			
@@ -3136,33 +3136,7 @@ function genPassword($length = 5)
 
 function getRolle($gender_id,$rolle_id)
 {
-	$rolle = array(
-			0 => array(
-					0 => 'Foodsharer',
-					1 => 'Foodsaver',
-					2 => 'Betriebsverantwortliche/r',
-					3 => 'Botschafter/in'
-			),
-			1 => array(
-					0 => 'Foodsharer',
-					1 => 'Foodsaver',
-					2 => 'Betriebsverantwortlicher',
-					3 => 'Botschafter'
-			),
-			2 => array(
-					0 => 'Foodsharer',
-					1 => 'Foodsaverin',
-					2 => 'Betriebsverantwortliche',
-					3 => 'Botschafterin'
-			),
-			3 => array(
-					0 => 'Foodsharer',
-					1 => 'Foodsaver',
-					2 => 'Betriebsverantwortliche/r',
-					3 => 'Botschafte/r'
-			)
-	);
-	return $rolle[$gender_id][$rolle_id];
+	return s('rolle_'.$rolle_id.'_'.$gender_id);
 }
 
 function cropImg($path,$img,$i,$x,$y,$w,$h)
@@ -3500,3 +3474,7 @@ function rolleWrap($roleStr)
 	return $roles[$roleStr];
 }
 
+function forceLogin()
+{
+	go('?page=login&ref='.urlencode($_SERVER['REQUEST_URI']));
+}

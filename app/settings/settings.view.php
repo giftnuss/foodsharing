@@ -160,6 +160,24 @@ class SettingsView extends View
 		$i=0;
 		foreach ($session['quiz_result'] as $r)
 		{
+			/*
+			 * If the question has no error points its a joke question lets store in clear in a variable
+			 */
+			$was_a_joke = false;
+			if($r['fp'] == 0)
+			{
+				$was_a_joke = true;
+			}
+			
+			/*
+			 * If the question has more than 10 error point its a k.o. question
+			*/
+			$was_a_ko_question = false;
+			if($r['fp'] > 10)
+			{
+				$was_a_ko_question = true;
+			}
+			
 			$ftext = 'hast Du komplett richtig beantwortet, Prima!';
 			$i++;
 			$cnt = '<div class="question">'.$r['text'].'</div>';
@@ -240,6 +258,23 @@ class SettingsView extends View
 			$cnt .= '<div id="qcomment-'.(int)$r['id'].'">'.v_input_wrapper('Kommentar zu dieser Frage Schreiben', '<textarea style="height:50px;" id="comment-'.$r['id'].'" name="desc" class="input textarea value"></textarea><br /><a class="button" href="#" onclick="ajreq(\'addcomment\',{app:\'quiz\',comment:$(\'#comment-'.(int)$r['id'].'\').val(),id:'.(int)$r['id'].'});return false;">Absenden</a>').'</div>';
 			
 			$cnt .= v_input_wrapper('Antworten', $answers);
+			
+			/*
+			 * If the question was a joke question lets diplay it to the user!
+			 */
+			if($was_a_joke)
+			{
+				$ftext = 'war nur eine Scherzfrage und wird natürlich nicht bewertet <i class="fa fa-smile-o"></i>';
+			}
+			
+			/*
+			 * If the question is k.o. quetsion and the user has error display a message to the user
+			 */
+			if($was_a_ko_question && $r['userfp'] > 0)
+			{
+				$ftext = 'Diese Frage war leider besonders wichtig und Du hast sie nicht korrekt beantwortet';
+				$cnt = v_info('Fragen wie diese sind besonders hoch gewichtet und führen leider zum nicht bestehen wenn Du sie falsch beantwortest.');
+			}
 			
 			$out .= v_field($cnt, 'Frage '.$i.' '.$ftext,array('class' => 'ui-padding'));
 		}

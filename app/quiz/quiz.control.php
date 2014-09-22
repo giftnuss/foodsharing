@@ -13,9 +13,9 @@ class QuizControl extends Control
 	
 	public function index()
 	{
-		if(!isOrgaTeam())
+		if(!S::may('orga'))
 		{
-			return false;
+			forceLogin();
 		}
 		// quiz&a=delete&id=9
 		if($id = getActionId('delete'))
