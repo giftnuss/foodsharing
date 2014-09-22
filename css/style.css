@@ -2355,3 +2355,7 @@ ul.bread li a:hover
 	text-indent: 0;
 	font-size:16px;
 }
+.pickermap {
+	width:93%;
+	height: 280px;
+}

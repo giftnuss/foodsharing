@@ -268,11 +268,6 @@ class View
 	
 	public function latLonPicker($id,$options = array())
 	{
-		addStyle('
-		.pickermap {
-		  width:415px;
-		  height: 280px;
-		}');
 		addHead('<script src="http://maps.google.com/maps/api/js?sensor=false"></script>');
 		addScript('/js/jquery.ui.addresspicker.js');
 		
