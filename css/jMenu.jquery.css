@@ -39,12 +39,14 @@
 {
 	background-color: #170200;
 }
+/*
 .jMenu li.active > a:hover
 {
 	cursor: default !important;
     background-color: #170200;
     color:#FFFFFF;
 }
+*/
 /* Lower levels */
 .jMenu li ul {
     display: none;
@@ -107,6 +109,8 @@
     padding: 5px 5px;
     display: block;
     color:#000000;
+    border:0 none;
+    margin:0;
 }
 .jMenu li ul li a i
 {
