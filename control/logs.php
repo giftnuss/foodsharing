@@ -12,5 +12,7 @@ if(isOrgateam())
 		$data = json_decode($c,true);
 		$content .= v_field('<pre style="font-size:10px;">'.print_r($data['data'],true)."\n===============================\n".print_r($data['session'],true)."\n===============================\n".print_r($data['add'],true).'</pre>',$data['date']);
 	}
+	
+	addContent(v_field($content,'Logs'));
 }
 
