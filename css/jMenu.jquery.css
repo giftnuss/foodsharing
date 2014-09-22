@@ -22,10 +22,10 @@
     color: #fff;
     cursor: pointer;
     display: block;
-    font: 16px "Alfa Slab One","Century Gothic","Trebuchet MS",Helvetica,sans-serif;
-    letter-spacing: 1px;
-    margin-top: 3px;
-    padding: 6px 9px;
+    font: 16px "Raleway","Century Gothic","Trebuchet MS",Helvetica,sans-serif;
+    
+    margin-top: 2px;
+    padding: 8px 9px;
     text-decoration: none;
 }
 .jMenu li a.fNiv:hover, .jMenu li.hover a.fNiv
@@ -57,9 +57,9 @@
 	-moz-border-radius: 6px;
 	border-radius: 6px;
 	
-	-webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
-	-moz-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
-	box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.3);
+	box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.3);
 }
 .jMenu li ul.bigmenu, .jMenu li ul.bigmenu > li
 {
@@ -68,7 +68,6 @@
 .jMenu li ul.bigmenu > li > a
 {
 	overflow: hidden;
-	font-weight:lighter;
 	white-space: nowrap !important;
 	  text-overflow: ellipsis;
 	  -o-text-overflow: ellipsis;
@@ -100,18 +99,20 @@
     border-bottom: none;
     padding-bottom: 5px
 }
-
 .jMenu li ul li a {
-    font-size: 12px;
-    font-weight:normal;
+    font-size: 13px;
+    font-weight:bold;
     text-transform: none;
     text-decoration:none;
-    padding: 3px;
+    padding: 5px 5px;
     display: block;
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
+    color:#000000;
 }
-
+.jMenu li ul li a i
+{
+	display:inline-block;
+	width:13px;
+}
 .jMenu li ul li.menu-bottom
 {
 	/*border-bottom: 1px solid #4A3520;*/
@@ -149,14 +150,11 @@ border-bottom-left-radius: 4px;
 }
 */
 
-.jMenu li ul li a
-{
-	color: #4A3522;
-}
+
 
 .jMenu li ul li a:hover {
 	color:#FFFFFF;
-    background-color: #4A3520;
+    background-color: #4a911c;
 }
 ul.jmenu-bezirke
 {
@@ -171,7 +169,7 @@ ul.jmenu-settings
 li.jmenu-foodsaver ul
 {
 	left:50% !important;
-	margin-left:148px !important;
+	margin-left:167px !important;
 }
 li.jmenu-foodsaver ul li ul.sub
 {

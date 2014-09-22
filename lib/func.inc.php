@@ -1463,8 +1463,8 @@ function getSettingsMenu()
 {
 	$default = '<li class="g_settings"><a class="fNiv" style="background-image:url('.img().');"><span>&nbsp;</span></a>
 				    <ul class="jmenu-settings">
-					  <li><a href="?page=settings">Einstellungen</a></li>
-				      <li class="menu-bottom"><a class="menu-bottom" href="?page=logout">Logout</a></li>
+					  <li><a href="?page=settings"><i class="fa fa-gear"></i> Einstellungen</a></li>
+				      <li class="menu-bottom"><a class="menu-bottom" href="?page=logout"><i class="fa fa-sign-out"></i> Logout</a></li>
 				    </ul>
 				  </li>';
 	
