@@ -112,7 +112,7 @@ class BasketView extends View
 		$out = '<li class="header" style="text-align:center;color:#4A3520;padding:10px;">Anfragen</li>';
 		foreach ($updates as $u)
 		{
-			$out .= '<li class="msg msg-'.$u['id'].'-'.$u['fs_id'].'"><a onclick="ajreq(\'answer\',{app:\'basket\',id:'.(int)$u['id'].',fid:'.(int)$u['fs_id'].'});return false;" href="#"><span class="photo"><img src="'.img($u['fs_photo']).'" alt="avatar"></span><span class="subject"><span class="from">Anfrage von '.$u['fs_name'].'</span><span class="time"><button onmouseout="$(this).removeClass(\'ui-state-hover\');" onmouseover="$(this).addClass(\'ui-state-hover\');" onclick="ajreq(\'removeRequest\',{app:\'basket\',id:'.(int)$u['id'].',fid:'.(int)$u['fs_id'].'});return false;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" role="button" aria-disabled="false" title="Anfrage verwerfen"><span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span><span class="ui-button-text">entfernen</span></button></span></span><span class="message">'.niceDate($u['time_ts']).'</span><span style="display:block;clear:both;"></span></a></li>';
+			$out .= '<li class="msg msg-'.$u['id'].'-'.$u['fs_id'].'"><a onclick="ajreq(\'answer\',{app:\'basket\',id:'.(int)$u['id'].',fid:'.(int)$u['fs_id'].'});return false;" href="#"><span class="photo"><img src="'.img($u['fs_photo']).'" alt="avatar"></span><span class="subject"><span class="from">Anfrage von '.$u['fs_name'].'</span><span class="time"><button onclick="ajreq(\'removeRequest\',{app:\'basket\',id:'.(int)$u['id'].',fid:'.(int)$u['fs_id'].'});return false;" class="button" title="Anfrage verwerfen"><i class="fa fa-close"></i></button></span></span><span class="message">'.niceDate($u['time_ts']).'</span><span style="display:block;clear:both;"></span></a></li>';
 		}
 		
 		return $out;
@@ -128,7 +128,7 @@ class BasketView extends View
 			{
 				$img = 'images/basket/thumb-'.$b['picture'];
 			}
-			$out .= '<li class="msg basket-'.$b['id'].'"><a href="#" onclick="return false;"><span class="photo"><img src="'.$img.'" alt="avatar"></span><span class="subject"><span class="from">'.tt($b['description'],150).'</span><span class="time"><button onmouseout="$(this).removeClass(\'ui-state-hover\');" onmouseover="$(this).addClass(\'ui-state-hover\');" onclick="ajreq(\'removeBasket\',{app:\'basket\',id:'.(int)$b['id'].'});return false;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" role="button" aria-disabled="false" title="Essenskorb entfernen"><span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span><span class="ui-button-text">entfernen</span></button></span></span><span class="message">'.niceDate($b['time_ts']).'</span><span style="display:block;clear:both;"></span></a></li>';
+			$out .= '<li class="msg basket-'.$b['id'].'"><a href="#" onclick="return false;"><span class="photo"><img src="'.$img.'" alt="avatar"></span><span class="subject"><span class="from">'.tt($b['description'],150).'</span><span class="time"><button onclick="ajreq(\'removeBasket\',{app:\'basket\',id:'.(int)$b['id'].'});return false;" class="button" title="Essenskorb entfernen"><i class="fa fa-close"></i></button></span></span><span class="message">'.niceDate($b['time_ts']).'</span><span style="display:block;clear:both;"></span></a></li>';
 		}
 		
 		return $out;

@@ -176,11 +176,7 @@ class Control
 				ev.preventDefault();
 				
 			});
-			$("#wallpost-attach-image").button({
-				icons: {
-					primary: "ui-icon-image"
-				}
-			}).click(function(){
+			$("#wallpost-attach-image").button().click(function(){
 				$("#wallpost-attach-trigger").click();
 			});
   			$("#wall-submit").button().click(function(ev){
@@ -276,7 +272,7 @@ class Control
 					
 				<div id="wallpost-submit" align="right">
 					
-					<span id="wallpost-loader"></span><span id="wallpost-attach-image">'.s('attach_image').'</span>
+					<span id="wallpost-loader"></span><span id="wallpost-attach-image"><i class="fa fa-image"></i> '.s('attach_image').'</span>
 					<a href="#" id="wall-submit">'.s('send').'</a>
 					<div style="overflow:hidden;height:1px;">
 						<form id="wallpost-attachimage-form" action="xhrapp.php?app=wallpost&m=attachimage&table='.$table.'&id='.$id.'" method="post" enctype="multipart/form-data" target="wallpost-frame">
