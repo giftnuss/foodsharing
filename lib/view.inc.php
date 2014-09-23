@@ -2289,6 +2289,16 @@ function v_input_wrapper($label,$content,$id = false,$option = array())
 		$label = $option['label'];
 	}
 	
+	if(isset($option['collapse']))
+	{
+		$label = '<i class="fa fa-caret-right"></i> ' . $label;
+		addJs('
+			$("#'.$id.'-wrapper .element-wrapper").hide();
+		');
+		
+		$option['click'] = 'collapse_wrapper(\''.$id.'\')';
+	}
+	
 	if(isset($option['click']))
 	{
 		$label = '<a href="#" onclick="'.$option['click'].';return false;">'.$label.'</a>';
@@ -2310,6 +2320,8 @@ function v_input_wrapper($label,$content,$id = false,$option = array())
 	{
 		$check['class'] .= ' '.$option['class'];
 	}
+	
+	
 	
 	return '
 	<div class="input-wrapper'.$check['class'].'" id="'.$id.'-wrapper">

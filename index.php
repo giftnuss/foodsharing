@@ -39,9 +39,11 @@ if(isset($_POST['form_submit']))
 	}
 }
 $msgbar = '';
+$logolink = '/';
 if(S::may())
 {
 	$msgbar = v_msgBar();
+	$logolink = '/?page=dashboard';
 }
 
 include 'tpl/'.$g_template.'.php';

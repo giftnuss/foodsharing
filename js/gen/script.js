@@ -133,6 +133,11 @@ return false;}
 function GET(v)
 {if(!HTTP_GET_VARS[v]){return'undefined';}
 return HTTP_GET_VARS[v];}
+function collapse_wrapper(id)
+{var $content=$('#'+id+'-wrapper .element-wrapper');var $label=$('#'+id+'-wrapper .wrapper-label i');if($content.is(':visible'))
+{$content.hide();$label.removeClass('fa-caret-down').addClass('fa-caret-right');}
+else
+{$content.show();$label.removeClass('fa-caret-right').addClass('fa-caret-down');}}
 function closeAllDialogs()
 {var $activeDialogs=$(".ui-dialog").find('.ui-dialog-content');$activeDialogs.each(function(){$dia=$(this);if(typeof $dia.dialog==='function'){$dia.dialog('close');}});}
 $(document).ready(function(){$('textarea.comment').autosize();$('#nojs').css('display','none');$('#main').css('display','block');$('.moreswap').each(function(){$this=$(this);$this.after('<a class="moreswaplink" href="#" data-show="0">Mehr anzeigen</a>');if($this.height()>100)

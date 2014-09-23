@@ -124,7 +124,7 @@ addJs('
 		if(parseInt(this.href.length) > 2 && this.href.indexOf("'.getPage().'") > 0)
 		{
 			$(this).parent().addClass("active").click(function(ev){
-				ev.preventDefault();
+				//ev.preventDefault();
 			});
 		}
 	});

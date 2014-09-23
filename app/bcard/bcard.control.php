@@ -15,6 +15,8 @@ class BcardControl extends Control
 	{		
 		addBread(s('bcard_generator'));
 		
+		addContent($this->view->top(),CNT_TOP);
+		
 		if($data = $this->model->getMyData())
 		{
 			if(strlen($data['anschrift'].', '.$data['plz'].' '.$data['stadt']) >= 49)

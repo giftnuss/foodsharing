@@ -27,6 +27,22 @@ function GET(v)
 	return HTTP_GET_VARS[v];
 }
 
+function collapse_wrapper(id)
+{
+	var $content = $('#' + id + '-wrapper .element-wrapper');
+	var $label = $('#' + id + '-wrapper .wrapper-label i');
+	if($content.is(':visible'))
+	{
+		$content.hide();
+		$label.removeClass('fa-caret-down').addClass('fa-caret-right');
+	}
+	else
+	{
+		$content.show();
+		$label.removeClass('fa-caret-right').addClass('fa-caret-down');
+	}
+}
+
 function closeAllDialogs()
 {
     var $activeDialogs = $(".ui-dialog").find('.ui-dialog-content');

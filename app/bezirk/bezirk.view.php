@@ -44,9 +44,15 @@ class BezirkView extends View
 	
 	public function topOrga()
 	{
+		//return $this->topbar($this->bezirk['name'],$this->bezirk['stat_fscount'].' Mitglieder','/img/groups.png');
+		
 		return '
 		<div class="welcome ui-padding margin-bottom ui-corner-all">
+			
 			<div class="welcome_profile_name">
+				<div class="welcome_profile_image">
+					<img src="/img/groups.png" class="image_online" height="50" width="50">
+				</div>
 				<div class="user_display_name">
 					Arbeitsgruppe - '.$this->bezirk['name'].'
 				</div>
@@ -59,6 +65,7 @@ class BezirkView extends View
 			</div>	
 			<div class="clear"></div>
 		</div>';
+		
 	}
 	
 	public function setBezirk($bezirk)

@@ -91,7 +91,7 @@ if(!empty($content_left) && !empty($content_right))
 		<div class="inner">
 			<div class="pure-g">
 				<div class="pure-u-1">
-					<div id="layout_logo"><a href="/" title="foodsharing home"><span>food</span>sharing</a></div>
+					<div id="layout_logo"><a href="<?php echo $logolink; ?>" title="foodsharing home"><span>food</span>sharing</a></div>
 					<?php echo $msgbar; ?>
 					<?php echo $menu['mobile']; ?>
 					<div class="menu">

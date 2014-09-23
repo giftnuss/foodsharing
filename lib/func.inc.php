@@ -644,7 +644,7 @@ function getMobileMenu()
 				<option value="/?page=faq">FAQ\'s verwalten</option>
 				<option value="/?page=document">Dokumente verwalten</option>
 				<option value="/?page=lebensmittel">Lebensmittel-Typen verwalten</option>
-				<option value="/?page=content">Öffentliche Webseiten</option>
+				<option value="/?page=content">Inhalte/Texte bearbeiten</option>
 				<option value="/?page=mailbox&a=manage">Mailboxen</option>
 				<option value="/?page=stat">Statistik-Auswertung</option>
 				<option value="/?page=message_tpl">E-Mail Vorlagen</option>
@@ -1356,7 +1356,7 @@ function getOrgaMenu()
 					  <li><a href="?page=kette">Unternehmens-Ketten</a></li>
 					  <li><a href="?page=faq">FAQ\'s verwalten</a></li>
 					  <li><a href="?page=lebensmittel">Lebensmittel-Typen verwalten</a></li>
-					  <li><a href="?page=content">Öffentliche Webseiten</a></li>
+					  <li><a href="?page=content">Inhalte/Texte bearbeiten</a></li>
 					  <li><a href="?page=mailbox&a=manage">Mailboxen</a></li>
 					  <li><a href="?page=stat">Statistik-Auswertung</a></li>
 					  <li class="menu-bottom"><a class="menu-bottom" href="?page=message_tpl">E-Mail Vorlagen</a></li>
