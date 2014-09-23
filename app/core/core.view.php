@@ -8,6 +8,26 @@ class View
 		$this->sub = $sub;
 	}
 	
+	public function login()
+	{
+		$action = '/?page=login';
+		if(!isset($_GET['ref']))
+		{
+			$action = '/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']);
+		}
+		return '
+			<div id="g_login">'.v_field(
+						v_form('Login',array(
+								v_form_text('email_adress'),
+								v_form_passwd('password'),
+								v_form_hidden('ismob', '0').
+								'<p>
+						<a href="/?page=login&sub=passwordReset">Passwort vergessen?</a>
+					</p>'
+						),array('action' => $action)),'Login',array('class' => 'ui-padding')).'
+			</div>';
+	}
+	
 	public function topbar($title,$subtitle,$image)
 	{
 		return '<div class="welcome ui-padding margin-bottom ui-corner-all">

@@ -1,6 +1,20 @@
 
+#g_login
+{
+	max-width:400px;
+	margin:0 auto;
+}
 
-
+.ui-widget-content a, a
+{
+	color:#46891b;
+	text-decoration: none;
+}
+.ui-widget-content a:hover, a:hover
+{
+	color:#46891b;
+	text-decoration: underline;
+}
 .ui-dialog, .ui-shadow
 {
   -moz-box-shadow:    1px 1px 13px rgba(0, 0, 0, 0.8);
@@ -1490,11 +1504,14 @@ ul.linklist li, ul.linklist li a, ul.linklist li a span
 	display:block;
 	margin:0;
 	padding:0;
+	
 }
 ul.linklist li a
 {
 	padding:8px;
 	text-decoration:none !important;
+	color:#4A3520;
+	font-weight: lighter;
 }
 ul.linklist li
 {

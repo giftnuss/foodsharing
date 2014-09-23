@@ -1276,9 +1276,15 @@ function v_form($name,$elements,$option=array())
 		addJs('$("#'.$id.'").dialog({modal:true,title:"'.$name.'"'.$noclose.'});');
 	}
 	
+	$action = getSelf();
+	if(isset($option['action']))
+	{
+		$action = $option['action'];
+	}
+	
 	$out = '
 	<div id="'.$id.'">
-	<form method="post" id="'.$id.'-form" class="validate" enctype="multipart/form-data" action="'.getSelf().'">
+	<form method="post" id="'.$id.'-form" class="validate" enctype="multipart/form-data" action="'.$action.'">
 		<input type="hidden" name="form_submit" value="'.$id.'" />';
 	foreach ($elements as $el)
 	{
