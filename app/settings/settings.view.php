@@ -182,7 +182,7 @@ class SettingsView extends View
 			$i++;
 			$cnt = '<div class="question">'.$r['text'].'</div>';
 			
-			$cnt .= v_input_wrapper('Passender Wiki-Artikel zu diesem Thema', '<a target="_blank" class="button" href="'.$r['wikilink'].'">zum WIKI-Artikel</a>');
+			$cnt .= v_input_wrapper('Passender Wiki-Artikel zu diesem Thema', '<a target="_blank" href="'.$r['wikilink'].'">'.$r['wikilink'].'</a>');
 			
 			$answers = '';
 			$ai = 0;
@@ -276,7 +276,10 @@ class SettingsView extends View
 				$cnt = v_info('Fragen wie diese sind besonders hoch gewichtet und führen leider zum nicht bestehen wenn Du sie falsch beantwortest.');
 			}
 			
-			$out .= v_field($cnt, 'Frage '.$i.' '.$ftext,array('class' => 'ui-padding'));
+			$out .= '
+					<div class="quizsession">' . 
+						v_field($cnt, 'Frage '.$i.' '.$ftext,array('class' => 'ui-padding')) . '
+					</div>';
 		}
 		
 		return $out;

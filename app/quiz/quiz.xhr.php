@@ -609,7 +609,7 @@ class QuizXhr extends Control
 									//$("#quizwrapper").hide();
 									$("#quizwrapper input, #countdown").hide();
 									$("#quizwrapper").css({
-										"height":"100px",
+										"height":"50%",
 										"overflow":"auto"
 									});
 									$("#quizcomment").show();
