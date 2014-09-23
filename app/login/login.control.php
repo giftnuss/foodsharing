@@ -20,36 +20,7 @@ class LoginControl extends Control
 				$this->handleLogin();
 			}
 			
-			addJs('
-				if(isMob())
-				{
-					$("#ismob").val("1");
-				}
-				$(window).resize(function(){
-					if(isMob())
-					{
-						$("#ismob").val("1");
-					}
-					else
-					{
-						$("#ismob").val("0");
-					}
-				});
-						
-				$("#login-form").submit(function(ev){
-					$("#ismob").val("1");
-				}
-				$(window).resize(function(){
-					if(isMob())
-					{
-						$("#ismob").val("1");
-					}
-					else
-					{
-						$("#ismob").val("0");
-					}
-				});		
-			');
+			
 			
 			addContent($this->view->login());
 		}

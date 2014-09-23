@@ -137,4 +137,9 @@
     float: left;
     text-decoration: none;
     width: 230px;
+    text-decoration: none;
+}
+.chatboxtitle:hover {
+	text-decoration: none;
+	color: #FFFFFF;
 }

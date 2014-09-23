@@ -8,6 +8,7 @@ class View
 		$this->sub = $sub;
 	}
 	
+	
 	public function login()
 	{
 		$action = '/?page=login';
@@ -15,6 +16,24 @@ class View
 		{
 			$action = '/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']);
 		}
+		
+		addJs('
+				if(isMob())
+				{
+					$("#ismob").val("1");
+				}
+				$(window).resize(function(){
+					if(isMob())
+					{
+						$("#ismob").val("1");
+					}
+					else
+					{
+						$("#ismob").val("0");
+					}
+				});
+			');
+		
 		return '
 			<div id="g_login">'.v_field(
 						v_form('Login',array(
