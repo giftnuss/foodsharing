@@ -220,7 +220,7 @@ class SettingsView extends View
 				{
 					if($a['right'])
 					{
-						$atext = ' wäre richtig gewesen!';
+						$atext = ' wäre auch richtig gewesen!';
 					}
 					else
 					{
