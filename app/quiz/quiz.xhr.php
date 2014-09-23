@@ -265,9 +265,10 @@ class QuizXhr extends Control
 		if(S::may())
 		{
 			$this->model->abortSession($_GET['sid']);
+			info("Quiz wurde abgebrochen");
 			return array(
 				'status' => 1,
-				'script' => 'closeAllDialogs();pulseInfo("Quiz wurde abgebrochen");'	
+				'script' => 'closeAllDialogs();reload();'	
 			);
 		}
 	}
