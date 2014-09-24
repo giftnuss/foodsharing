@@ -37,7 +37,7 @@ class SearchModel extends Model
 			$out['bezirk'] = $res;
 		}
 	
-		if($res = $this->searchTable('betrieb', array('name','stadt','plz'), $q,array(
+		if($res = $this->searchTable('betrieb', array('name','stadt','plz','str'), $q,array(
 				'name' => '`name`',
 				'click' => 'CONCAT("betrieb(",`id`,");")',
 				'teaser' => 'CONCAT(`str`,", ",`plz`," ",`stadt`)'

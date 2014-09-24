@@ -7,7 +7,7 @@ class LoginView extends View
 				v_form_passwd('password') .
 				v_form_hidden('ismob', '0') .
 				'<p>
-					<a href="/?page=login&sub=passwordReset">Passwort vergessen?</a>
+					<a id="forgotpasswordlink" href="/?page=login&sub=passwordReset">Passwort vergessen?</a>
 				</p>';
 							
 	}

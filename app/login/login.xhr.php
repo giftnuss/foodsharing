@@ -33,11 +33,18 @@ class LoginXhr extends Control
 			$result = array();
 			foreach ($buddies as $b)
 			{
+				$img = '/img/avatar-mini.png';
+				
+				if(!empty($b['photo']))
+				{
+					$img = img($b['photo']);
+				}
+				
 				$result[] = array(
 					'name' => $b['name'].' '.$b['nachname'],
 					'teaser' => '',
-					'img' => img($b['photo']),
-					'click' => 'profile(\''.$b['id'].'\');',
+					'img' => $img,
+					'click' => 'chat(\''.$b['id'].'\');',
 					'search' => array(
 						$b['name'],$b['nachname']
 					)
@@ -58,23 +65,23 @@ class LoginXhr extends Control
 			$result = array();
 			foreach ($groups as $b)
 			{
-				$img = false;
+				$img = '/img/groups.png';
 				if(!empty($b['photo']))
 				{
-					$img = 'images/photo/thumb_' . $b['photo'];
+					$img = 'images/' . str_replace('photo/','photo/thumb_',$b['photo']);
 				}
 				$result[] = array(
 						'name' => $b['name'],
-						'teaser' => tt($b['teaser'],80),
+						'teaser' => tt($b['teaser'],65),
 						'img' => $img,
-						'href' => '?page=bezirk&id='.$b['id'].'&sub=bezirk',
+						'href' => '?page=bezirk&bid='.$b['id'].'&sub=forum',
 						'search' => array(
 							$b['name']
 						)
 				);
 			}
 			$index[] = array(
-					'title' => 'Gruppen',
+					'title' => 'Deine Gruppen',
 					'result' => $result
 			);
 		}
@@ -98,7 +105,7 @@ class LoginXhr extends Control
 				);
 			}
 			$index[] = array(
-					'title' => 'Betriebe',
+					'title' => 'Deine Betriebe',
 					'result' => $result
 			);
 		}
@@ -116,14 +123,14 @@ class LoginXhr extends Control
 						'name' => $b['name'],
 						'teaser' => '',
 						'img' => false,
-						'href' => '?page=bezirk&id='.$b['id'].'&sub=bezirk',
+						'href' => '?page=bezirk&bid='.$b['id'].'&sub=forum',
 						'search' => array(
 								$b['name']
 						)
 				);
 			}
 			$index[] = array(
-					'title' => 'Bezirke',
+					'title' => 'Deine Bezirke',
 					'result' => $result
 			);
 		}
@@ -153,6 +160,18 @@ class LoginXhr extends Control
 			
 			$dia->addButton('Registrieren','alert(0);');
 			$dia->addButton('Einloggen',"ajreq('loginsubmit',{app:'login',u:$('#email_adress').val(),p:$('#password').val()});");
+			
+			$dia->addJs('
+				$("#forgotpasswordlink").focus(function(){
+					$(".ui-dialog-buttonpane button:last")[0].focus();
+				});
+				$("#password").keydown(function(ev){
+					if(ev.which == 13)
+					{
+						ajreq("loginsubmit",{app:"login",u:$("#email_adress").val(),p:$("#password").val()});
+					}
+				});		
+			');
 			
 			return $dia->xhrout();
 		}
@@ -196,7 +215,7 @@ class LoginXhr extends Control
 		{
 			return array(
 					'status' => 1,
-					'script' => 'pulseError("'.s('login_failed').'",{sticky:true});'
+					'script' => 'pulseError("'.s('login_failed').'");'
 			);
 		}
 	}

@@ -835,8 +835,10 @@ function getMenu()
 			return array(
 				'default' => '
 						<ul id="mainMenu" class="jMenu">
+							
 							'.$orgamenu['default'].'
 							<!--<li><a class="fNiv" href="http://forum.lebensmittelretten.de">öffentliches Forum</a></li>-->
+							<li><a href="/">Home</a></li>
 							<li><a class="fNiv" href="?page=map">Karte</a></li>
 							
 							'.$ags.'
@@ -867,7 +869,7 @@ function getMenu()
 		return array(
 			'default' => '
 				<ul id="mainMenu" class="jMenu">
-					
+					<li><a class="fNiv" href="/">Home</a></li>
 					<li><a class="fNiv" href="?page=basket">Essenskörbe</a></li>
 					<li><a class="fNiv" href="?page=map">Karte</a></li>
 					<li><a class="fNiv" href="?page=index&sub=ratgeber">Ratgeber</a></li>
@@ -2216,7 +2218,14 @@ function cssCompress()
 		{
 			if($write_new)
 			{
-				file_put_contents($genf, CssMin::minify(file_get_contents(ROOT_DIR.$src))."\n",FILE_APPEND);
+				if(strpos($src,'awesome') !== false)
+				{
+					file_put_contents($genf, (file_get_contents(ROOT_DIR.$src))."\n",FILE_APPEND);
+				}
+				else 
+				{
+					file_put_contents($genf, CssMin::minify(file_get_contents(ROOT_DIR.$src))."\n",FILE_APPEND);
+				}
 			}
 			unset($g_css[$src]);
 		}

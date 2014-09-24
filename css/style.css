@@ -116,10 +116,9 @@ body
 }
 .input-wrapper label.wrapper-label
 {
-	.color: #4a3522;
+	color: #4a3522;
     display: block;
-    font-family: Raleway;
-    font-size: 12px;
+
     font-weight: lighter;
     padding-top: 5px;
 }
@@ -310,7 +309,7 @@ div.tree-scroller
 }
 #searchbar
 {
-    background-color: rgba(255, 255, 255, 0.898);
+    background-color: #fff;
     margin-left: 4px;
     padding: 5px;
     position: absolute;
@@ -350,6 +349,33 @@ div.tree-scroller
 #searchbar ul li a:hover, #searchbar ul li a:hover span
 {
 	background-color:#4a911c;
+}
+#searchbar ul li span
+{
+	display:block;
+}
+#searchbar ul li span.c
+{
+	clear:both;
+}
+#searchbar ul li span.i
+{
+	float:left;
+	width:35px;
+	height:35px;
+	margin-right:8px;
+	border-radius: 6px 6px 6px 6px;
+	-moz-border-radius: 6px 6px 6px 6px;
+	-webkit-border-radius: 6px 6px 6px 6px;
+	border: 0px solid #000000;
+}
+#searchbar ul li span.i img
+{
+	width:35px;
+	border-radius: 6px 6px 6px 6px;
+	-moz-border-radius: 6px 6px 6px 6px;
+	-webkit-border-radius: 6px 6px 6px 6px;
+	border: 0px solid #000000;
 }
 #searchbar ul li.title
 {
@@ -719,6 +745,7 @@ ul.msgbar-dropdown-menu li a span.time {
 	
 		
 }
+/*
 #left .ui-widget-content
 {
 	background-color: transparent !important;
@@ -732,7 +759,6 @@ ul.msgbar-dropdown-menu li a span.time {
 #left .ui-widget-header
 {
 	color:#C1B9A1 !important;
-	font-family: Raleway !important;
 	font-weight:bold;
 }
 #left .inside
@@ -758,6 +784,7 @@ ul.msgbar-dropdown-menu li a span.time {
 	width: 163px !important;
 	padding:5px;
 }
+*/
 div.pulse-msg
 {
 	font-size: 14px;
@@ -1249,8 +1276,6 @@ ul.cblist
 .ur-feedback-btn {
     color: #FFFFFF;
     direction: ltr;
-    font-family: Raleway,Arial,Helvetica,sans-serif;
-    font-size: 12px;
     font-size-adjust: none;
     font-style: normal;
     font-weight: bold;
@@ -1536,11 +1561,9 @@ div.welcome .welcome_profile_name {
     float:left;
 }
 div.welcome .user_display_name {
-    font-size: 16px;
-    font-weight: lighter;
     padding-top: 6px;
-    font-family: 'Alfa Slab One';
     color:#4A3520;
+    font-weight:bold;
 }
 div.welcome .welcome_quick_link ul {
     list-style-type: none;
@@ -1552,7 +1575,6 @@ div.welcome .welcome_quick_link ul li {
     float: left;
     margin-right: 4px;
     position: relative;
-    font-weight: lighter;
 }
 div.welcome .welcome_profile_survived
 {
@@ -1574,7 +1596,7 @@ ul.linklist li, ul.linklist li a, ul.linklist li a span
 }
 ul.linklist li a
 {
-	padding:8px;
+	padding:6px;
 	text-decoration:none !important;
 	color:#4A3520;
 	font-weight: lighter;
@@ -1596,7 +1618,7 @@ ul.linklist li a.active
 }
 ul.linklist li a:hover, ul.linklist li a:hover span
 {
-	background-color:#4A3520;
+	background-color:#599022;
 	color:#FFFFFF !important;
 }
 
@@ -2248,8 +2270,6 @@ td.load
 
 .ui-button, .button
 {
-
-	font-family: 'Raleway' !important;
 	color:#FFFFFF !important;
 	background-color:#46891B;
 	
@@ -2392,10 +2412,6 @@ div.xv_left ul li a:hover
 		border-radius: 0px;
 	}
 }
-.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button
-{
-	font-family: Raleway;
-}
 
 ul.bread
 {
@@ -2453,7 +2469,7 @@ ul.bread li a:hover
 	font-size:16px;
 	position: relative;
 	left: 1px;
-	top: 1px;
+	top: 0px;
 }
 .pickermap {
 	width:93%;

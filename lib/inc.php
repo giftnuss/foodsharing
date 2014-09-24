@@ -54,10 +54,9 @@ $g_css = array();
 $g_add_css = '';
 $hidden = '';
 $db = new ManualDb();
-addHead('<link href="http://fonts.googleapis.com/css?family=Raleway:300,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">');
-
-addHead('<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />');
-addCss('/fonts/alfaslabone/stylesheet.css');
+//addHead('<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />');
+addCss('/fonts/alfaslabone/stylesheet.css',true);
+addCss('/css/font-awesome.min.css',true);
 addCss('/css/foodsaver/jquery-ui-1.10.3.custom.min.css',true);
 addCss('/css/jMenu.jquery.css',true);
 addCss('/js/fancybox/jquery.fancybox.css',true);
@@ -72,12 +71,15 @@ if (isMob())
 	addCss('/css/style_mobile.css',true);
 }
 
-addHead('<script src="'.PROTOCOL.'://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>');
-addHead('<script src="'.PROTOCOL.'://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>');
-//addHead('<script src="/js/jquery.js"></script>');
-//addHead('<script src="/js/jquery-ui-1.10.3.custom.min.js" /></script>');
+//addHead('<script src="'.PROTOCOL.'://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>');
+//addHead('<script src="'.PROTOCOL.'://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>');
+//addHead('<script src="/js/jquery.1.11.0.js"></script>');
+//addHead('<script src="/js/jquery-ui-1.10.4.js" /></script>');
 
-addHead('<link rel="stylesheet" href="'.PROTOCOL.'://cdnjs.cloudflare.com/ajax/libs/pure/0.4.2/pure-min.css">
+addScript('/js/jquery.1.11.0.js',true);
+addScript('/js/jquery-ui-1.10.4.js',true);
+
+addHead('<link rel="stylesheet" href="/css/pure/pure.min.css">
     <!--[if lte IE 8]>
         <link rel="stylesheet" href="/css/pure/grids-responsive-old-ie-min.css">
     <![endif]-->
@@ -96,6 +98,7 @@ addScript('/js/timeago.js',true);
 addScript('/js/autolink.js',true);
 //addScript('js/typeahead.js',true);
 addScript('/js/script.js',true);
+addScript('/js/instant-search.js',true);
 //addScript('js/quicks.js');
 addScript('/js/chat.js',true);
 
