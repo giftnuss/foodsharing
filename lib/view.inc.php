@@ -633,8 +633,13 @@ function v_msgBar()
 		<div class="bar-item bar-msg'.$msg_class.'"><span>&nbsp;</span></div>
 		<div class="bar-item bar-info'.$info_class.'"><span>&nbsp;</span></div>
 		<div class="bar-item bar-basket'.$basket_class.'"><span>&nbsp;</span></div>
-		<div onclick="goTo(\'?page=suche\');" class="bar-item bar-search"><span>&nbsp;</span></div>
+		<div onclick="search.open();" class="bar-item bar-search"><span>&nbsp;</span></div>
 		<div style="clear:left;"></div>
+	</div>
+	<div id="searchbar" style="display:none;">
+		<input type="text" value="" placeholder="'.s('search').'..." /><i class="fa fa-search" onclick="search.start();return false;"></i>
+		<ul class="linklist index"></ul>
+		<ul class="linklist result"></ul>
 	</div>';
 	
 	return $out;

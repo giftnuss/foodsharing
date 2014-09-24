@@ -25,7 +25,9 @@ class FoodsaverModel extends Model
 				
 			AND
 				hb.bezirk_id = '.(int)$bezirk_id.'
-							
+			
+			ORDER BY
+				fs.last_login DESC
 		');
 	}
 	
@@ -90,7 +92,8 @@ class FoodsaverModel extends Model
 				nachname,
 				photo,
 				rolle,
-				geschlecht
+				geschlecht,
+				last_login
 
 			FROM
 				'.PREFIX.'foodsaver

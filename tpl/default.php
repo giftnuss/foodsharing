@@ -134,6 +134,6 @@ if(!empty($content_left) && !empty($content_right))
 
 	<div class="pulse-msg ui-shadow ui-corner-all" id="pulse-error" style="display:none;"></div>
 	<div class="pulse-msg ui-shadow ui-corner-all" id="pulse-info" style="display:none;"></div>
-	
+	<div class="pulse-msg ui-shadow ui-corner-all" id="pulse-success" style="display:none;"></div>
   </body>
 </html>

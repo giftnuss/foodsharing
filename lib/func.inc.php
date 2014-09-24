@@ -872,7 +872,7 @@ function getMenu()
 					<li><a class="fNiv" href="?page=map">Karte</a></li>
 					<li><a class="fNiv" href="?page=index&sub=ratgeber">Ratgeber</a></li>
 					<li><a class="fNiv" href="?page=join">Mach-Mit!</a></li>
-					<li><a class="fNiv" href="?page=login">Login</a></li>
+					<li><a class="fNiv" href="?page=login" onclick="ajreq(\'login\',{app:\'login\'});return false;">Login</a></li>
 				</ul>',
 			'mobile' => '
 				<select id="mobilemenu">
@@ -1703,6 +1703,11 @@ function go($url)
 {
 	header('Location: '.$url);
 	exit();
+}
+
+function goLogin()
+{
+	go('?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']));
 }
 
 function goBack()

@@ -6,3 +6,10 @@
 {
 	display:none;
 }
+.avatarlink
+{
+	display:inline-block;
+	width:75px;
+	height:75px;
+	overflow:hidden;
+}

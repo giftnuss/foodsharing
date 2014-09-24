@@ -20,6 +20,33 @@ class BezirkModel extends Model
 		$this->bezirk = $bezirk;
 	}
 	
+	public function listMyBezirke()
+	{
+		return $this->q('
+			SELECT
+				b.`id`,
+				b.`name`,
+				b.`teaser`,
+				b.`photo`
+	
+			FROM
+				'.PREFIX.'bezirk b,
+				'.PREFIX.'foodsaver_has_bezirk hb
+	
+			WHERE
+				hb.bezirk_id = b.id
+	
+			AND
+				hb.`foodsaver_id` = '.(int)fsId().'
+	
+			AND
+				b.`type` != 7
+	
+			ORDER BY
+				b.`name`
+		');
+	}
+	
 	public function getEvent($id)
 	{
 		if($event = $this->qRow('

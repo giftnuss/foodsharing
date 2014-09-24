@@ -25,6 +25,31 @@ class BetriebModel extends Model
 		return $this->del('DELETE FROM `'.PREFIX.'fetchdate` WHERE `betrieb_id` = '.(int)$bid.' AND `time` = '.$this->dateval($date));
 	}
 	
+	public function listMyBetriebe()
+	{
+		return $this->q('
+			SELECT 	b.id,
+					b.name,
+					b.plz,
+					b.stadt,
+					b.str,
+					b.hsnr
+
+			FROM
+				'.PREFIX.'betrieb b,
+				'.PREFIX.'betrieb_team t
+				
+			WHERE
+				b.id = t.betrieb_id
+				
+			AND
+				t.foodsaver_id = '.fsId().'
+				
+			AND
+				t.active = 1
+		');
+	}
+	
 	public function listUpcommingFetchDates($bid)
 	{
 		if($dates = $this->q('

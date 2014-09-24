@@ -194,3 +194,5 @@ $g_lang['datetime'] = 'Zeitpunkt';
 
 $g_lang['deutschlandtour_desc'] = 'dann schreibe uns hier eine kurze Nachricht';
 $g_lang['deutschlandtour_message'] = 'Ja ich möchte einen Besuch von euch bekommen!';
+$g_lang['search'] = 'Suchen';
+$g_lang['no_result'] = 'Kein Ergebnis';

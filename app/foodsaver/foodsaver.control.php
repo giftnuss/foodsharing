@@ -9,6 +9,11 @@ class FoodsaverControl extends Control
 		
 		parent::__construct();
 		
+		if(isset($_GET['deleteaccount']))
+		{
+			$this->deleteAccount($_GET['id']);
+		}
+		
 	}
 	
 	/*
@@ -16,9 +21,6 @@ class FoodsaverControl extends Control
 	 */
 	public function index()
 	{
-		
-		
-		
 		// check bezirk_id and permissions
 		if(isset($_GET['bid']) && ($bezirk = $this->model->getBezirk($_GET['bid'])) && (S::may('orga') || isBotFor($_GET['bid'])))
 		{
@@ -74,6 +76,18 @@ class FoodsaverControl extends Control
 		else
 		{
 			addContent(v_info('Du hast leider keine Berechtigung für diesen Bezirk'));
+		}
+	}
+	
+	private function deleteAccount($id)
+	{
+		if((S::may('orga')))
+		{
+			$foodsaver = $this->model->getValues(array('email','name','nachname','bezirk_id'),'foodsaver',$id);
+		
+			$this->model->del_foodsaver($id);
+			info('Foodsaver '.$foodsaver['name'].' '.$foodsaver['nachname'].' wurde gelöscht, für die Wiederherstellung wende Dich an it@lebensmittelretten.de');
+			go('?page=dashboard');
 		}
 	}
 }

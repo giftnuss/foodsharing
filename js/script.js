@@ -1,6 +1,9 @@
 HTTP_GET_VARS=new Array();
 strGET=document.location.search.substr(1,document.location.search.length);
 var data = null;
+var user = {
+	token: ''
+};
 if(strGET!='')
 {
     gArr=strGET.split('&');
@@ -45,14 +48,24 @@ function collapse_wrapper(id)
 
 function closeAllDialogs()
 {
+	$(".xhrDialog").dialog("close");
+	$(".xhrDialog").dialog("destroy");
+	$(".xhrDialog").remove();
+	
+	/*
     var $activeDialogs = $(".ui-dialog").find('.ui-dialog-content');
     
     $activeDialogs.each(function(){
     	$dia = $(this);
     	if(typeof $dia.dialog === 'function') {
-    		$dia.dialog('close');
+    		if($dia.dialog("isOpen"))
+            {
+    			$dia.dialog('close');
+            }
+    		
     	}
     });
+    */
 }
 
 $(document).ready(function(){
@@ -346,6 +359,10 @@ function addbanana(fsid)
 	});
 	$('#fs-profile-rate-comment').dialog('open');
 }
+function login()
+{
+	ajreq('login',{app:'login'});
+}
 function profile(id)
 {
 	//alert(id);
@@ -498,7 +515,6 @@ function ajreq(name,options,method,app)
 		dataType:'json',
 		method:method,
 		success:function(data){
-			
 			if(data.status == 1)
 			{
 				if(data.append != undefined)
@@ -542,6 +558,35 @@ function pulseError(msg,opt)
 	setTimeout(function(){
 		$(document).bind('click',function() {
 			$("#pulse-error").stop().fadeOut();
+			$(document).unbind('click');
+			clearTimeout(u_pulse_error_to);
+		});
+	},500);
+}
+
+function pulseSuccess(msg,opt)
+{
+	if(opt == undefined)
+	{
+		opt = {
+			sticky: false
+		};
+	}
+	time = 2000;
+	if(opt.sticky)
+	{
+		time = 900000;
+	}
+	
+	$("#pulse-success").html(msg);
+	$("#pulse-success").stop().fadeIn();
+	u_pulse_error_to = setTimeout(function(){
+		$("#pulse-success").fadeOut();
+		$(document).unbind('click');
+	},time);
+	setTimeout(function(){
+		$(document).bind('click',function() {
+			$("#pulse-success").stop().fadeOut();
 			$(document).unbind('click');
 			clearTimeout(u_pulse_error_to);
 		});
@@ -1419,6 +1464,162 @@ function becomeBezirk()
 		});
 	$("#becomeBezirk-link").trigger('click');
 }
+var search = {
+	initiated: false,
+	isSearching:false,
+	index: false,
+	$icon: null,
+	$searchbar: null,
+	$result:null,
+	$indexResult:null,
+	$input: null,
+	
+	init: function(){
+		
+		this.$icon = $('#searchbar i');
+		this.$searchbar = $('#searchbar');
+		this.initiated = true;
+		this.$result = $('#searchbar .result');
+		this.$indexResult = $('#searchbar .index');
+		this.$input = $('#searchbar input:first');
+			
+		if(user.token != undefined && user.token.length > 4)
+		{
+			$.getJSON( "/cache/searchindex/" + user.token + ".json", function( data ) {
+				search.index = data;
+			});
+		}
+		
+		this.$input.keyup(function(){
+			
+			if(search.index !== false && search.index.length > 0)
+			{
+				search.indexSearch();
+			}
+			
+			if(search.$input.val().length > 3)
+			{
+				search.start();
+			}
+			else if(search.$input.val().length == 0)
+			{
+				search.$result.html('');
+				search.$indexResult.html('');
+			}
+		});
+	},
+	open: function(){
+		if(!this.initiated)
+		{
+			this.init();
+		}
+		if(search.$searchbar.is(':visible'))
+		{
+			search.$searchbar.hide();
+		}
+		else
+		{
+			search.$searchbar.show();
+			search.$input[0].focus();
+		}
+		
+	},
+	indexSearch: function(){
+		search.$indexResult.html('');
+		for(i=0;i<search.index.length;i++)
+		{
+			var hasTitle = false;
+			for(y=0;y<search.index[i].result.length;y++)
+			{
+				check = false;
+				
+				for(x=0;x<search.index[i].result[y].search.length;x++)
+				{
+					if(
+						search.index[i].result[y].search[x].toLowerCase() . 
+						indexOf(search.$input.val().toLowerCase())
+						>= 0
+					)
+					{
+						check = true;
+						x = (search.index[i].result[y].search.length+1);
+					}
+				}
+				if(check)
+				{
+					if(!hasTitle)
+					{
+						hasTitle = true;
+						search.$indexResult.append('<li class="title">' + search.index[i].title + '</li>');
+					}
+					click = '';
+					href = '#';
+					if(search.index[i].result[y].click != undefined)
+					{
+						click = ' onclick="' + search.index[i].result[y].click + ';return false;"';
+					}
+					else
+					{
+						href = search.index[i].result[y].href;
+					}
+					search.$indexResult.append('<li class="corner-all"><a class="corner-all" href="' + href + '"' + click + '><span class="n">' + search.index[i].result[y].name + '</span><span class="t">' + search.index[i].result[y].teaser + '</span></li>');
+				}
+			}
+		}
+	},
+	showLoader: function()
+	{
+		this.$icon.removeClass('fa-search').addClass('fa-spin fa-circle-o-notch');
+	},
+	hideLoader: function()
+	{
+		this.$icon.removeClass('fa-spin fa-circle-o-notch').addClass('fa-search');
+	},
+	showResult: function(result){
+		search.$result.html('');
+		for(i=0;i<result.length;i++)
+		{
+			search.$result.append('<li class="title">' + result[i].title + '</li>');
+			for(y=0;y<result[i].result.length;y++)
+			{
+				search.$result.append('<li class="corner-all"><a class="corner-all" href="#" onclick="' + result[i].result[y].click + 'return false;"><span class="n">' + result[i].result[y].name + '</span><span class="t">' + result[i].result[y].teaser + '</span></li>');
+			}
+		}
+	},
+	noResult: function()
+	{
+		search.$result.html('<li class="title">Kein Ergebnis</li>');
+	},
+	start: function()
+	{
+		this.showLoader();
+		
+		if(!this.isSearching)
+		{
+			this.isSearching = true;
+			$.ajax({
+				url: 'xhrapp.php?app=search&m=search&s=' + encodeURIComponent(search.$input.val()),
+				dataType: 'json',
+				success: function(data){
+					if(data.result != undefined && data.result.length > 0)
+					{
+						search.showResult(data.result);
+					}
+					else
+					{
+						search.noResult();
+					}
+				},
+				complete: function(){
+					setTimeout(function(){
+						search.isSearching = false;
+						search.hideLoader();
+					},200);
+				}
+			});
+		}
+	}
+};
 
 jQuery.fn.extend({ 
     disableSelection : function() { 

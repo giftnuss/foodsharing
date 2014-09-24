@@ -20,9 +20,9 @@
 }
 .ui-dialog, .ui-shadow
 {
-  -moz-box-shadow:    1px 1px 13px rgba(0, 0, 0, 0.8);
-  -webkit-box-shadow: 1px 1px 13px rgba(0, 0, 0, 0.8);
-  box-shadow: 1px 1px 13px rgba(0, 0, 0, 0.8);
+  -moz-box-shadow:    0px 0px 7px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.3);
 }
 textarea {
     resize: none;
@@ -50,10 +50,12 @@ q:before, q:after {
 .odd
 {
 	background-color:#FFFFFE;
+	border-bottom:1px solid #f1e7c9;
 }
 .even
 {
-	background-color:#F1E7C9;
+	background-color:#FFFFFE;
+	border-bottom:1px solid #f1e7c9;
 }
 
  .custom-combobox {
@@ -305,6 +307,61 @@ div.tree-scroller
 {
 	height:320px;
 	overflow:auto;
+}
+#searchbar
+{
+    background-color: rgba(255, 255, 255, 0.898);
+    margin-left: 4px;
+    padding: 5px;
+    position: absolute;
+    top: 41px;
+    width: 285px;
+    z-index: 40;
+    -moz-box-shadow:    0px 0px 3px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
+	box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
+	border-radius: 0px 0px 6px 6px;
+	-moz-border-radius: 0px 0px 6px 6px;
+	-webkit-border-radius: 0px 0px 6px 6px;
+	border: 0px solid #000000;
+}
+#searchbar input
+{
+	line-height:22px;
+	font-weight:bold;
+	height:22px;
+	font-size:13px;
+	border:0 none;
+	background-color:transparent;
+	width:262px;
+	color:#4a3520;
+}
+#searchbar i
+{
+	color: #4a3520;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 15px;
+    height: 14px;
+    line-height: 15px;
+    text-align: center;
+    width: 15px;
+}
+#searchbar ul li a:hover, #searchbar ul li a:hover span
+{
+	background-color:#4a911c;
+}
+#searchbar ul li.title
+{
+	border-top:1px solid #f1e7c9;
+	padding-top:10px;
+	padding-bottom:5px;
+	font-weight:lighter;
+	color:#4a3520;
+}
+#searchbar ul span.n
+{
+	font-weight:bold;
 }
 div#msgBar {
     margin-left: 150px;
@@ -703,27 +760,38 @@ ul.msgbar-dropdown-menu li a span.time {
 }
 div.pulse-msg
 {
-	position:fixed;
-	z-index:50000;
-	left:50%;
-	margin-left:-125px;
-	top:50%;
-	margin-top:-100px;    
-    padding: 25px;
-	width:240px;
 	font-size: 14px;
+    left: 50%;
     line-height: 17px;
-	border:5px solid #FFFFFF;
+    margin-left: -145px;
+    margin-top: -100px;
+    padding: 25px;
+    position: fixed;
+    top: 50%;
+    width: 240px;
+    z-index: 50000;
+    border-radius: 6px 6px 6px 6px;
+	-moz-border-radius: 6px 6px 6px 6px;
+	-webkit-border-radius: 6px 6px 6px 6px;
+	border: 0px solid #000000;
 }
 div.msg-inside
 {
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;
 	border-radius: 6px;
-	padding: 15px;
+	padding: 15px 15px 15px 30px;
 	
 	background-color: #F5F5B5;
 	margin-bottom:15px;
+}
+div.msg-inside i
+{
+	display:inline-block;
+	width:15px;
+	margin-right:-18px;
+	position:relative;
+	left:-20px;
 }
 div.msg-inside.info
 {
@@ -752,11 +820,15 @@ div.msg-inside.error i
 	color:#FFF;
 }
 
-
+div#pulse-success
+{
+	background-color: #46891b !important;
+    color: #ffffff !important;
+}
 div#pulse-error
 {
-	background-color: #FCDEDC !important;
-	color: #713336 !important;
+	background-color: #E74955 !important;
+	color: #ffffff !important;
 }
 div#pulse-info
 {
@@ -853,35 +925,6 @@ div.xv_left ul li a:hover
 {
 	background-color:#4A3520;
 	color:#fff;
-}
-
-div#searchBox {
-
-}
-
-div#searchBox input.search
-{
-	width:64%;
-	height:35px;
-	border:0;
-	padding:0;
-	margin:0;
-	padding-left:35px;
-	background-image:url(img/searchBox.png);
-	background-repeat:no-repeat;
-	background-position: 5px 5px;
-	
-	
-	 -moz-border-radius:6px; /* Firefox */
-	-webkit-border-radius:6px; /* Safari, Chrome */
-	-khtml-border-radius:6px; /* Konqueror */
-	border-radius:6px; /* CSS3 */
-}
-#seachGo{margin-left:5px;margin-bottom:4px;}
-#seachGo.ui-button .ui-button-text {
-    height: 35px;
-    line-height: 35px;
-    padding: 0 12px;
 }
 li.searchIcon
 {
@@ -1858,10 +1901,6 @@ a.light
     width: 100%;
     z-index: 30;
 }
-#bar-search
-{
-
-}
 .quicks
 {
 	background-color: #C2BAB4;
@@ -2402,14 +2441,22 @@ ul.bread li a:hover
 {
 	display:none;
 }
+.ui-dialog .ui-dialog-titlebar-close .ui-icon
+{
+	background-image:none !important;
+}
 .ui-dialog .ui-dialog-titlebar-close:before
 {
 	content: "\f00d";
 	font-family:'FontAwesome';
 	text-indent: 0;
 	font-size:16px;
+	position: relative;
+	left: 1px;
+	top: 1px;
 }
 .pickermap {
 	width:93%;
 	height: 280px;
 }
+

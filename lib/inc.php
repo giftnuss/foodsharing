@@ -29,11 +29,9 @@ if(isset($_GET['logout']))
 	unset($_SESSION['client']);
 }
 
-if(fsid() == 56)
-{
-	error_reporting(E_ALL);
-	ini_set('display_errors','1');
-}
+error_reporting(E_ALL);
+ini_set('display_errors','1');
+
 
 $content_main = '';
 $content_right = '';
@@ -118,8 +116,9 @@ addHidden('<div id="uploadPhoto"><form method="post" enctype="multipart/form-dat
 //addHidden('<audio id="xhr-chat-notify"><source src="img/notify.ogg" type="audio/ogg"><source src="img/notify.mp3" type="audio/mpeg"><source src="img/notify.wav" type="audio/wav"></audio>');
 
 addHidden('<div id="fs-profile"></div>');
+
 addJs('
-		
+	
 	$("#mainMenu > li > a").each(function(){
 		if(parseInt(this.href.length) > 2 && this.href.indexOf("'.getPage().'") > 0)
 		{
@@ -157,6 +156,10 @@ addHidden('<div id="fs-profile-rate-comment">'.v_form_textarea('fs-profile-rate-
 if(!S::may())
 {
 	addJs('clearInterval(g_interval_newBasket);');
+}
+else
+{
+	addJs('user.token = "'.S::user('token').'";');
 }
 /*
  * Browser location abfrage nur einmal dann in session speichern

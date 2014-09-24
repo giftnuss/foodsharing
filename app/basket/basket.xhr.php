@@ -20,7 +20,15 @@ class BasketXhr extends Control
 
 		parent::__construct();
 		
-		if(!S::may() && $_GET['m'] != 'login')
+		/*
+		 * allowed method for not logged in users
+		 */
+		$allowed = array(
+			'bubble' => true,
+			'login' => true
+		);
+		
+		if(!S::may() && !isset($allowed[$_GET['m']]))
 		{
 			return $this->appout(array(
 					'status' => 2
@@ -230,15 +238,28 @@ class BasketXhr extends Control
 	
 	public function bubble()
 	{
-		if(S::may() && ($basket = $this->model->getBasket($_GET['id'])))
+		if(($basket = $this->model->getBasket($_GET['id'])))
 		{
 			if($basket['fsf_id'] == 0)
 			{
 				$dia = new XhrDialog();
 				
-				$dia->setTitle('Essenskorb von '.$basket['fs_name']);
+				/*
+				 * What see the user if not logged in?
+				 */
+				if(!S::may())
+				{
+					$dia->setTitle('Essenskorb');
+					$dia->addContent($this->view->bubbleNoUser($basket));
+					$dia->addButton('Einloggen zum anfragen',"ajreq('login',{app:'login'});");
+				}
+				else
+				{
+					$dia->setTitle('Essenskorb von '.$basket['fs_name']);
+					$dia->addContent($this->view->bubble($basket));
+					$dia->addButton('Essenskorb anfragen', 'ajreq(\'request\',{app:\'basket\',id:'.(int)$basket['id'].'});');
+				}
 				
-				$dia->addContent($this->view->bubble($basket));
 				$modal = false;
 				if(isset($_GET['modal']))
 				{
@@ -247,7 +268,6 @@ class BasketXhr extends Control
 				$dia->addOpt('modal', 'false',$modal);
 				$dia->addOpt('resizeable', 'false',false);
 				
-				$dia->addButton('Essenskorb anfragen', 'ajreq(\'request\',{app:\'basket\',id:'.(int)$basket['id'].'});');
 				
 				$dia->addOpt('width', 400);
 				$dia->noOverflow();
@@ -261,7 +281,6 @@ class BasketXhr extends Control
 				return $this->fsBubble($basket);
 			}
 		}
-		
 		else
 		{
 			return array(

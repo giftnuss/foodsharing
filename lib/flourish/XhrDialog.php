@@ -189,7 +189,7 @@ class XhrDialog
 		$buttons = array();
 		foreach ($this->buttons as $b)
 		{
-			$buttons[] = '{"text":"'.$b['text'].'",click:function(){'.$b['click'].'}}';
+			$buttons[] = '{"text":\''.$b['text'].'\',click:function(){'.$b['click'].'}}';
 		}
 		
 		$this->addOpt('buttons', '['.implode(',', $buttons).']',false);
