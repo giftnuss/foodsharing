@@ -297,17 +297,16 @@ class QuizView extends View
 			$msg = v_info('Die Zeit ist abgelaufen, daher wird diese Frage leider als falsch bewertet');
 		}
 		return '
+		<!--
 		<div style="position:relative;width:267px;height:31px;overflow:hidden;border-radius:8px;">
 		  <div style="position:absolute;top:-269px;left:-5px">
 		    <iframe width="300" height="300" src="https://www.youtube.com/embed/kupOnNcoIUY?rel=0&autoplay=1"></iframe>
 		  </div>
 		</div>
+		-->
 		'.$msg.'
 		<p style="text-align:center;padding:40px;">
 			<img src="/img/clockloader.gif" />
-		</p>
-		<p style="text-align:center;">
-			<a href="#" onclick="ajreq(\'next\',{app:\'quiz\'});return false;" class="button">Weiter gehts!</a>
 		</p>';
 	}
 	

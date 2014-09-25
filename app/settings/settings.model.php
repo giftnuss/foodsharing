@@ -41,11 +41,15 @@ class SettingsModel extends Model
 		if($session = $this->qRow($sql))
 		{
 			$session['try_count'] = $this->qOne('SELECT COUNT(quiz_id) FROM '.PREFIX.'quiz_session WHERE foodsaver_id = '.(int)fsId()).' AND `quiz_id` = '.(int)$session['quiz_id'];
+			
+			/*
+			 * First of all sort the question array and get al questions_ids etc to calculate the result
+			 */
 			if(!empty($session['quiz_questions']))
 			{
 				$session['quiz_questions'] = unserialize($session['quiz_questions']);
 				
-				
+				//print_r($session['quiz_questions']);die();
 				
 				foreach ($session['quiz_questions'] as $q)
 				{
@@ -64,6 +68,9 @@ class SettingsModel extends Model
 					}
 				}
 			}
+			
+			
+			
 			if(!empty($session['quiz_questions']))
 			{
 				$session['quiz_result'] = unserialize($session['quiz_result']);
@@ -113,6 +120,13 @@ class SettingsModel extends Model
 					$session = array_merge($quiz,$session);
 					unset($session['quiz_questions']);
 					
+					
+					/*
+					 * Add questions they're complete right answered
+					 */
+					$session['quiz_result'] = $this->addRightAnswers($tmp,$session['quiz_result']);
+					
+					
 					return $session;
 				}
 				
@@ -121,6 +135,57 @@ class SettingsModel extends Model
 			return false;
 			
 		}
+	}
+	
+	/*
+	 * in the session are only the failired answeres stored in so now we get all the right answers an fill out the array
+	 */
+	public function addRightAnswers($indexList,$fullList)
+	{
+		$out = array();
+		
+		$model = loadModel('quiz');
+		
+		$number = 0;
+		
+		foreach ($indexList as $id => $value)
+		{
+			$number++;
+			if(!isset($fullList[$id]))
+			{
+				if($question = $model->getQuestion($id))
+				{
+					$answers = array();
+					if($qanswers = $model->getAnswers($id))
+					{
+						foreach ($qanswers as $a)
+						{
+							$answers[$a['id']] = $a;
+							$answers[$a['id']]['user_say'] = $a['right'];
+						}
+					}
+					$out[$id] = array(
+						'id' => $id,
+						'text' => $question['text'],
+						'duration' => $question['duration'],
+						'wikilink' => $question['wikilink'],
+						'fp' => $question['fp'],
+						'answers' => $answers,	
+						'number' => $number,
+						'percent' => 0,
+						'userfp' => 0,
+						'userduration' => 10,
+						'noco' => 0
+					);
+				}
+			}
+			else
+			{
+				$out[$id] = $fullList[$id];
+			}
+		}
+		
+		return $out;
 	}
 	
 	public function getFairteiler()

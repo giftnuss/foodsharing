@@ -133,8 +133,8 @@ function createChatBox(user,minimizeChatBox) {
 	$div.addClass("chatbox");
 	$div.addClass("ui-corner-top");
 	
-	$div.html('<div class="chatboxhead ui-corner-top"><a class="chatboxtitle" href="javascript:void(0)" onclick="javascript:toggleChatBoxGrowth(\''+user.f+'\')">'+user.n+'</a><div class="chatboxoptions"><a href="javascript:void(0)" onclick="javascript:closeChatBox(\''+user.f+'\')">X</a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea class="chatboxtextarea" onkeydown="javascript:return checkChatBoxInputKey(event,this,\''+user.f+'\');"></textarea></div>');
-			   
+	$div.html('<div class="chatboxhead ui-corner-top"><a class="chatboxtitle" href="javascript:void(0)" onclick="javascript:toggleChatBoxGrowth(\''+user.f+'\')"><i class="fa fa-comment fa-flip-horizontal"></i> '+user.n+'</a><div class="chatboxoptions"><a class="fa fa-close" href="javascript:void(0)" onclick="javascript:closeChatBox(\''+user.f+'\')"></a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea placeholder="schreibe etwas..." class="chatboxtextarea" onkeydown="javascript:return checkChatBoxInputKey(event,this,\''+user.f+'\');"></textarea></div>');
+	$('.chatboxinput textarea').autosize();	   
 	$("#chatbox_"+user.f).css('bottom', '0px');
 	
 	chatBoxeslength = 0;

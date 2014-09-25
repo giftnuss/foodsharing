@@ -265,10 +265,10 @@ class QuizXhr extends Control
 		if(S::may())
 		{
 			$this->model->abortSession($_GET['sid']);
-			info("Quiz wurde abgebrochen");
+			
 			return array(
 				'status' => 1,
-				'script' => 'closeAllDialogs();reload();'	
+				'script' => 'pulseInfo("Quiz wurde abgebrochen");reload();'	
 			);
 		}
 	}
@@ -285,16 +285,18 @@ class QuizXhr extends Control
 						{
 							text: "Quiz-Pausieren",
 							click: function(){
-								$("#abortOrPause").dialog("close");
+								$(this).dialog("close");
 								ajreq("pause",{app:"quiz",sid:'.(int)$session_id.'});
 							}
 						},
 						{
 							text: "Quiz-Abbrechen",
 							click: function(){
-								$("#abortOrPause").dialog("close");
-								closeAllDialogs();
-								ajreq("abort",{app:"quiz",sid:'.(int)$session_id.'});
+								if(confirm("Bist Du Dir ganz sicher? Du kannst auch pausieren, Deinen Computer ausschalten und in ein paar Tagen weitermachen ;)"))
+								{
+									ajreq("abort",{app:"quiz",sid:'.(int)$session_id.'});	
+								}
+								$(this).dialog("close");
 							}
 						}
 					]
@@ -329,7 +331,7 @@ class QuizXhr extends Control
 			S::set('quiz-session', $session['id']);
 			
 			/*
-			 * Make a little output that the user ca continue the quiz
+			 * Make a little output that the user can continue the quiz
 			 */
 			$dia = new XhrDialog();
 			
@@ -521,6 +523,18 @@ class QuizXhr extends Control
 			}
 			
 			/*
+			 * Check the special param if the next question should not be displayed
+			 */
+			if(isset($_GET['special']))
+			{
+				if($_GET['special'] == 'pause')
+				{
+					return $this->pause();
+				}
+			}
+			
+			
+			/*
 			 * check if there is a next question in quiz array push it to the user
 			 * othwise forward to the result of the quiz
 			 */
@@ -550,7 +564,7 @@ class QuizXhr extends Control
 						 */
 						$dia = new XhrDialog();
 						//$dia->noClose();
-						$dia->addOpt('beforeClose', 'function(ev){abortOrPause();return false;}',false);
+						//$dia->addOpt('beforeClose', 'function(ev){abortOrPause();return false;}',false);
 						$dia->addOpt('width', 1000);
 						$dia->addOpt('height', '($(window).height()-40)',false);
 						$dia->addOpt('position', 'center');
@@ -581,6 +595,18 @@ class QuizXhr extends Control
 						 * add next() Button
 						 */
 						$dia->addButton('Weiter', 'questionnext();');
+						
+						$dia->addOpt('open','
+						function(){
+							setTimeout(function(){
+								$close = $("#'.$dia->getId().'").prev().children(".ui-dialog-titlebar-close");
+								$close.unbind("click");
+								$close.click(function(){
+									
+									abortOrPause("'.$dia->getId().'");
+								});
+							},500);
+						}',false);
 						
 						$return = $dia->xhrout();
 						
@@ -620,17 +646,22 @@ class QuizXhr extends Control
 								}
 							}
 							
-							function questgonext()
+							function questgonext(special)
 							{
+								if(special == undefined)
+								{
+									special = 0;
+								}
 								clearInterval(counter);
-								ajreq(\'next\',{answer:$(\'.qanswers\').serialize(),noco:$(\'.nocheck:checked\').length,app:\'quiz\',comment:$(\'#quizusercomment\').val(),qid:'.(int)$question['id'].'});
+								ajreq(\'next\',{answer:$(\'.qanswers\').serialize(),noco:$(\'.nocheck:checked\').length,app:\'quiz\',comment:$(\'#quizusercomment\').val(),qid:'.(int)$question['id'].',special:special});
 							}
 							
 							function breaknext()
 							{
 								if($(\'#qanswers input:checked\').length > 0)
 								{
-									ajreq(\'pause\',{app:\'quiz\'});
+									//ajreq(\'pause\',{app:\'quiz\'});
+									questgonext("pause");
 								}
 								else
 								{
@@ -876,10 +907,43 @@ class QuizXhr extends Control
 		$dia->setTitle('Pause');
 		//$dia->removeTitlebar();
 		$dia->addContent($this->view->pause());
-		$dia->addJsBefore('closeAllDialogs();');
-		$dia->addJs('
-			clearInterval(counter);		
+		$dia->addJsBefore('
+			
 		');
+		$dia->addJs('
+			clearInterval(counter);	
+		');
+		
+		$dia->addOpt('open','
+			function(){
+				setTimeout(function(){
+					$close = $("#'.$dia->getId().'").prev().children(".ui-dialog-titlebar-close");
+					//$close.unbind("click");
+					$close.click(function(){
+					
+					ajreq(\'next\',{app:\'quiz\'});
+				});
+			},200);
+		}',false);
+		
+		$dia->addButton('Später weitermachen','$("#'.$dia->getId().'").dialog("close");');
+		$dia->addButton('weiter gehts!','ajreq(\'next\',{app:\'quiz\'});');
+		
+		/*
+		 * $("#'.$dia->getId().' .ui-dialog-titlebar-close").click(function(ev){
+				ev.preventDefault();
+			});
+		$dia->addJs('
+			var isCloseClicker = false;
+			$(".ui-dialog-titlebar-close").click(function(ev){
+				ev.preventDefault();
+				if(confirm(\'Möchtest Du aufhören? Du kannst auch zu jedem späteren Zeitpunkt weitermachen.\'))
+				{
+					$("#'.$dia->getId().'").dialog("close");
+				}
+			});
+		');
+		*/
 		
 		return $dia->xhrout();
 	

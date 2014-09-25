@@ -143,7 +143,6 @@ class SettingsControl extends Control
 	{
 		if($session = $this->model->getQuizSession($_GET['sid']))
 		{
-			
 			addContent($this->view->quizSession($session,$session['try_count']));
 		}
 	}

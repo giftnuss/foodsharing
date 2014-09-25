@@ -4,6 +4,28 @@ var data = null;
 var user = {
 	token: ''
 };
+
+var dialogs = {
+	dialogs:[],
+	add: function(dialog){
+		this.dialogs[this.dialogs.length] = dialog
+	},
+	closeAll: function(){
+		for(i=0;i<dialogs.dialogs.length;i++)
+		{
+			//alert(typeof(dialogs.dialogs[i]));
+			$dia = $('#' + dialogs.dialogs[i]);
+			if($dia.length > 0)
+			{
+				if($dia.dialog('isOpen') === true)
+				{
+					$dia.dialog('close');
+				}
+			}
+		}
+		dialogs.dialogs = [];
+	}
+};
 if(strGET!='')
 {
     gArr=strGET.split('&');
@@ -48,24 +70,37 @@ function collapse_wrapper(id)
 
 function closeAllDialogs()
 {
+	/*
 	$(".xhrDialog").dialog("close");
 	$(".xhrDialog").dialog("destroy");
 	$(".xhrDialog").remove();
 	
-	/*
+	$(".xhrDialog").each(function(){
+    	$dia = $(this);
+    	//alert($dia.dialog);
+    	
+
+    		$dia.dialog().dialog('close');
+            
+    		
+    	
+    	
+    });
+	*/
+	
     var $activeDialogs = $(".ui-dialog").find('.ui-dialog-content');
     
     $activeDialogs.each(function(){
     	$dia = $(this);
-    	if(typeof $dia.dialog === 'function') {
-    		if($dia.dialog("isOpen"))
-            {
-    			$dia.dialog('close');
-            }
-    		
+    	$dia.dialog();
+    	if($dia.dialog( "isOpen" ))
+    	{
+    		alert('true');
+    		$dia.dialog().dialog( "close" );
     	}
+    	
     });
-    */
+    
 }
 
 $(document).ready(function(){

@@ -230,7 +230,9 @@ class XhrDialog
 				$(".xhrDialog .input.textarea").autosize();
 				$("#'.$this->id.'").dialog({
 					'.implode(',', $options).'
-				});'.$this->script.$this->scriptAfter
+				});'.$this->script.$this->scriptAfter.'
+				dialogs.add("'.$this->id.'");
+				'
 		);;
 	}
 }

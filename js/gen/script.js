@@ -129,7 +129,11 @@ document.createElement("abbr");document.createElement("time");}));
 (function(){var autoLink,__slice=[].slice;autoLink=function(){var k,linkAttributes,option,options,pattern,v;options=1<=arguments.length?__slice.call(arguments,0):[];pattern=/(^|\s)((?:https?|ftp):\/\/[\-A-Z0-9+\u0026@#\/%?=()~_|!:,.;]*[\-A-Z0-9+\u0026@#\/%=~()_|])/gi;if(!(options.length>0)){return this.replace(pattern,"$1<a href='$2'>$2</a>");}
 option=options[0];linkAttributes=((function(){var _results;_results=[];for(k in option){v=option[k];if(k!=='callback'){_results.push(" "+k+"='"+v+"'");}}
 return _results;})()).join('');return this.replace(pattern,function(match,space,url){var link;link=(typeof option.callback==="function"?option.callback(url):void 0)||("<a href='"+url+"'"+linkAttributes+">"+url.replace('http://','').replace('https://','')+"</a>");return""+space+link;});};String.prototype['autoLink']=autoLink;}).call(this);
-HTTP_GET_VARS=new Array();strGET=document.location.search.substr(1,document.location.search.length);var data=null;var user={token:''};if(strGET!='')
+HTTP_GET_VARS=new Array();strGET=document.location.search.substr(1,document.location.search.length);var data=null;var user={token:''};var dialogs={dialogs:[],add:function(dialog){this.dialogs[this.dialogs.length]=dialog},closeAll:function(){for(i=0;i<dialogs.dialogs.length;i++)
+{$dia=$('#'+dialogs.dialogs[i]);if($dia.length>0)
+{if($dia.dialog('isOpen')===true)
+{$dia.dialog('close');}}}
+dialogs.dialogs=[];}};if(strGET!='')
 {gArr=strGET.split('&');for(i=0;i<gArr.length;++i)
 {v='';vArr=gArr[i].split('=');if(vArr.length>1){v=vArr[1];}
 HTTP_GET_VARS[unescape(vArr[0])]=unescape(v);}}
@@ -146,7 +150,8 @@ function collapse_wrapper(id)
 else
 {$content.show();$label.removeClass('fa-caret-right').addClass('fa-caret-down');}}
 function closeAllDialogs()
-{$(".xhrDialog").dialog("close");$(".xhrDialog").dialog("destroy");$(".xhrDialog").remove();}
+{var $activeDialogs=$(".ui-dialog").find('.ui-dialog-content');$activeDialogs.each(function(){$dia=$(this);$dia.dialog();if($dia.dialog("isOpen"))
+{alert('true');$dia.dialog().dialog("close");}});}
 $(document).ready(function(){$('textarea.comment').autosize();$('#nojs').css('display','none');$('#main').css('display','block');$('.moreswap').each(function(){$this=$(this);$this.after('<a class="moreswaplink" href="#" data-show="0">Mehr anzeigen</a>');if($this.height()>100)
 {$this.css({'height':'100px','overflow':'hidden'});}});$('.moreswaplink').each(function(){$this=$(this);$this.click(function(ev){ev.preventDefault();if($this.attr('data-show')==0)
 {$this.prev().css({'height':'auto','overflow':'visible'});$this.text('einklappen');$this.attr('data-show',1);}
@@ -475,7 +480,7 @@ return str;}
 function chatnl2br(str,is_xhtml){str=killBr(str).autoLink({target:'_blank'});var breakTag=(is_xhtml||typeof is_xhtml==='undefined')?'<br />':'<br>';return(str+'').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g,'$1'+breakTag+'$2');}
 function createChatBox(user,minimizeChatBox){if($("#chatbox_"+user.f).length>0){if($("#chatbox_"+user.f).css('display')=='none'){$("#chatbox_"+user.f).css('display','block');restructureChatBoxes();}
 $("#chatbox_"+user.f+" .chatboxtextarea").focus();return;}
-chatboxtitle=user.f;chatHiddenImg(user.f,user.p);var $div=$('<div />').appendTo('body');$div.attr("id","chatbox_"+user.f);$div.addClass("chatbox");$div.addClass("ui-corner-top");$div.html('<div class="chatboxhead ui-corner-top"><a class="chatboxtitle" href="javascript:void(0)" onclick="javascript:toggleChatBoxGrowth(\''+user.f+'\')">'+user.n+'</a><div class="chatboxoptions"><a href="javascript:void(0)" onclick="javascript:closeChatBox(\''+user.f+'\')">X</a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea class="chatboxtextarea" onkeydown="javascript:return checkChatBoxInputKey(event,this,\''+user.f+'\');"></textarea></div>');$("#chatbox_"+user.f).css('bottom','0px');chatBoxeslength=0;for(x in chatBoxes){if($("#chatbox_"+chatBoxes[x]).css('display')!='none'){chatBoxeslength++;}}
+chatboxtitle=user.f;chatHiddenImg(user.f,user.p);var $div=$('<div />').appendTo('body');$div.attr("id","chatbox_"+user.f);$div.addClass("chatbox");$div.addClass("ui-corner-top");$div.html('<div class="chatboxhead ui-corner-top"><a class="chatboxtitle" href="javascript:void(0)" onclick="javascript:toggleChatBoxGrowth(\''+user.f+'\')"><i class="fa fa-comment fa-flip-horizontal"></i> '+user.n+'</a><div class="chatboxoptions"><a class="fa fa-close" href="javascript:void(0)" onclick="javascript:closeChatBox(\''+user.f+'\')"></a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea placeholder="schreibe etwas..." class="chatboxtextarea" onkeydown="javascript:return checkChatBoxInputKey(event,this,\''+user.f+'\');"></textarea></div>');$('.chatboxinput textarea').autosize();$("#chatbox_"+user.f).css('bottom','0px');chatBoxeslength=0;for(x in chatBoxes){if($("#chatbox_"+chatBoxes[x]).css('display')!='none'){chatBoxeslength++;}}
 if(chatBoxeslength==0){$("#chatbox_"+user.f).css('right','20px');}else{width=(chatBoxeslength)*(273+7)+20;$("#chatbox_"+user.f).css('right',width+'px');}
 chatBoxes.push(user.f);if(minimizeChatBox==1){minimizedChatBoxes=new Array();if($.cookie('chatbox_minimized')){minimizedChatBoxes=$.cookie('chatbox_minimized').split(/\|/);}
 minimize=0;for(j=0;j<minimizedChatBoxes.length;j++){if(minimizedChatBoxes[j]==chatboxtitle){minimize=1;}}
