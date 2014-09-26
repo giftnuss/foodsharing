@@ -1,6 +1,12 @@
 <?php
 class BcardView extends View
 {
+	
+	public function top()
+	{
+		return $this->topbar('Deine foodsharing Visitenkarte','hier easy generieren, ausdrucken und ausschneiden...','/img/bcard.png');
+	}
+	
 	public function optionform($seldata)
 	{
 		addJs('

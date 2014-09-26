@@ -22,10 +22,10 @@
     color: #fff;
     cursor: pointer;
     display: block;
-    font: 16px "Raleway","Century Gothic","Trebuchet MS",Helvetica,sans-serif;
+    font-family:"Helvetica Neue",Helvetica,Arial,"lucida grande",tahoma,verdana,arial,sans-serif;
     
-    margin-top: 2px;
-    padding: 8px 9px;
+    margin-top: 4px;
+    padding: 7px;
     text-decoration: none;
 }
 .jMenu li a.fNiv:hover, .jMenu li.hover a.fNiv
@@ -164,7 +164,7 @@ border-bottom-left-radius: 4px;
 ul.jmenu-bezirke
 {
 	left:50% !important;
-	margin-left:238px !important;
+	margin-left:242px !important;
 }
 ul.jmenu-settings
 {
@@ -174,7 +174,7 @@ ul.jmenu-settings
 li.jmenu-foodsaver ul
 {
 	left:50% !important;
-	margin-left:167px !important;
+	margin-left:181px !important;
 }
 li.jmenu-foodsaver ul li ul.sub
 {

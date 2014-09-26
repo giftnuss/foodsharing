@@ -19,6 +19,14 @@ class FairteilerView extends View
 		$this->bezirk_id = $bezirk['id'];
 	}
 	
+	public function loginToFollow()
+	{
+		return v_field(
+				v_info('Wenn Du Dich einloggst kannst Du Dich benachrichtigen lassen bei Updates zu diesem FairTeiler')
+				. $this->menu(array(array('name' => 'jetzt einloggen', 'click' => 'login();')))
+				,false);
+	}
+	
 	public function setFairteiler($fairteiler,$follower)
 	{
 		$this->fairteiler = $fairteiler;
@@ -27,11 +35,14 @@ class FairteilerView extends View
 	
 	public function fairteilerHead()
 	{
-		$content = '<div class="ft-head ui-corner-bottom" style="background-image:url(img/fairteiler_head.jpg);"></div>';
+		$style = '';
+		
 		if($this->fairteiler['picture'])
 		{
-			$content = '<div class="ft-head ui-corner-bottom" style="background-image:url('.$this->fairteiler['pic']['head'].');"></div>';
+			$style = ' style="height:150px;background-image:url('.$this->fairteiler['pic']['head'].');"';
 		}
+		
+		$content = '<div class="ft-head ui-corner-bottom"'.$style.'></div>';
 		
 		return v_field($content, $this->fairteiler['name']);
 	}

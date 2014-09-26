@@ -1,10 +1,11 @@
 .ft-head
 {
-	width:513px;
-	backgground-position:center;
+	height:80px;
+	width:100%;
+	background-image: url(img/fairteiler_head.jpg);
+	background-position:center;
 	background-repeat:no-repeat;
-	height:100px;
-	margin:-1px;
+
 }
 /* fairteilerlist */
 ul.fairteilerlist li a span.image

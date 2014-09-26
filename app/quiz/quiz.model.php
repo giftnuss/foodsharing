@@ -468,6 +468,7 @@ class QuizModel extends Model
 	
 	public function initQuizSession($quiz_id, $questions, $maxfp, $questcount)
 	{
+		//print_r($questions);die();
 		$questions = serialize($questions);
 		
 		return $this->insert('

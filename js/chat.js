@@ -7,6 +7,8 @@ var chatHeartbeatTime = minChatHeartbeat;
 var originalTitle;
 var blinkOrder = 0;
 var g_chatheartbeatTO = null;
+var g_chatheartbeatTO1 = null;
+var g_chatheartbeatTO2 = null;
 
 var chatboxFocus = new Array();
 var newMessages = new Array();
@@ -133,8 +135,8 @@ function createChatBox(user,minimizeChatBox) {
 	$div.addClass("chatbox");
 	$div.addClass("ui-corner-top");
 	
-	$div.html('<div class="chatboxhead ui-corner-top"><a class="chatboxtitle" href="javascript:void(0)" onclick="javascript:toggleChatBoxGrowth(\''+user.f+'\')">'+user.n+'</a><div class="chatboxoptions"><a href="javascript:void(0)" onclick="javascript:closeChatBox(\''+user.f+'\')">X</a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea class="chatboxtextarea" onkeydown="javascript:return checkChatBoxInputKey(event,this,\''+user.f+'\');"></textarea></div>');
-			   
+	$div.html('<div class="chatboxhead ui-corner-top"><a class="chatboxtitle" href="javascript:void(0)" onclick="javascript:toggleChatBoxGrowth(\''+user.f+'\')"><i class="fa fa-comment fa-flip-horizontal"></i> '+user.n+'</a><div class="chatboxoptions"><a class="fa fa-close" href="javascript:void(0)" onclick="javascript:closeChatBox(\''+user.f+'\')"></a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea placeholder="schreibe etwas..." class="chatboxtextarea" onkeydown="javascript:return checkChatBoxInputKey(event,this,\''+user.f+'\');"></textarea></div>');
+	$('.chatboxinput textarea').autosize();	   
 	$("#chatbox_"+user.f).css('bottom', '0px');
 	
 	chatBoxeslength = 0;
@@ -154,23 +156,19 @@ function createChatBox(user,minimizeChatBox) {
 	
 	
 	chatBoxes.push(user.f);
-
+	minimize = 0;
+	
 	if (minimizeChatBox == 1) {
 		minimizedChatBoxes = new Array();
 
 		if ($.cookie('chatbox_minimized')) {
 			minimizedChatBoxes = $.cookie('chatbox_minimized').split(/\|/);
 		}
-		minimize = 0;
+		
 		for (j=0;j<minimizedChatBoxes.length;j++) {
 			if (minimizedChatBoxes[j] == chatboxtitle) {
 				minimize = 1;
 			}
-		}
-
-		if (minimize == 1) {
-			$('#chatbox_'+chatboxtitle+' .chatboxcontent').css('display','none');
-			$('#chatbox_'+chatboxtitle+' .chatboxinput').css('display','none');
 		}
 	}
 
@@ -213,6 +211,17 @@ function createChatBox(user,minimizeChatBox) {
 	        objEvent.preventDefault();
 	    }
 	});
+	
+	$("#chatbox_"+chatboxtitle+" .chatboxcontent").slimScroll({
+        height: '264px'
+    });
+	$('#chatbox_'+chatboxtitle+' .chatboxcontent').css('height','250px');
+	
+	if (minimize == 1) {
+		$('#chatbox_'+chatboxtitle+' .chatboxcontent').css('display','none');
+		$('#chatbox_'+chatboxtitle+' .slimScrollDiv').css('display','none');
+		$('#chatbox_'+chatboxtitle+' .chatboxinput').css('display','none');
+	}
 }
 
 
@@ -371,6 +380,8 @@ function toggleChatBoxGrowth(chatboxtitle) {
 
 		$.cookie('chatbox_minimized', newCookie);
 		$('#chatbox_'+chatboxtitle+' .chatboxcontent').css('display','block');
+		$('#chatbox_'+chatboxtitle+' .slimScrollDiv').css('display','block');
+		//slimScrollDiv
 		$('#chatbox_'+chatboxtitle+' .chatboxinput').css('display','block');
 		$("#chatbox_"+chatboxtitle+" .chatboxcontent").scrollTop($("#chatbox_"+chatboxtitle+" .chatboxcontent")[0].scrollHeight);
 		
@@ -386,6 +397,7 @@ function toggleChatBoxGrowth(chatboxtitle) {
 
 		$.cookie('chatbox_minimized',newCookie);
 		$('#chatbox_'+chatboxtitle+' .chatboxcontent').css('display','none');
+		$('#chatbox_'+chatboxtitle+' .slimScrollDiv').css('display','none');
 		$('#chatbox_'+chatboxtitle+' .chatboxinput').css('display','none');
 	}
 	
@@ -481,10 +493,10 @@ function startChatSession(){
 		for (i=0;i<chatBoxes.length;i++) {
 			chatboxtitle = chatBoxes[i];
 			$("#chatbox_"+chatboxtitle+" .chatboxcontent").scrollTop($("#chatbox_"+chatboxtitle+" .chatboxcontent")[0].scrollHeight);
-			setTimeout('$("#chatbox_"+chatboxtitle+" .chatboxcontent").scrollTop($("#chatbox_"+chatboxtitle+" .chatboxcontent")[0].scrollHeight);', 100); // yet another strange ie bug
+			g_chatheartbeatTO1 = setTimeout('$("#chatbox_"+chatboxtitle+" .chatboxcontent").scrollTop($("#chatbox_"+chatboxtitle+" .chatboxcontent")[0].scrollHeight);', 100); // yet another strange ie bug
 		}
 	
-		setTimeout('chatHeartbeat();',chatHeartbeatTime);
+		g_chatheartbeatTO2 = setTimeout('chatHeartbeat();',chatHeartbeatTime);
 		
 	}});
 }

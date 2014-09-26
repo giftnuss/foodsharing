@@ -263,9 +263,13 @@ class Control
 				});
 			},5000);
 		');
-		return '
-		<div id="wallposts">
-			<div class="tools ui-padding">
+  		
+  		$posthtml = '';
+  		
+  		if(S::may())
+  		{
+  			$posthtml = '
+  			<div class="tools ui-padding">
 				<textarea id="wallpost-text" name="text" title="'.s('write_teaser').'" class="comment textarea inlabel"></textarea>
 				<div id="attach-preview"></div>
 				<div style="display:none;" id="wallpost-attach" /></div>	
@@ -285,7 +289,12 @@ class Control
 				<div style="visibility:hidden;">
 				<iframe name="wallpost-frame" src="nix.html" style="height:1px;" frameborder="0"></iframe>
 				</div>
-			</div>	
+			</div>';
+  		}
+  		
+		return '
+		<div id="wallposts">
+			'.$posthtml.'
 			<div class="wall-posts">
 				
 			</div>

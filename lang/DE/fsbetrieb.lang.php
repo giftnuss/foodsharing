@@ -99,5 +99,5 @@ $g_lang['not_verified'] = 'Dein Account wurde noch nicht von einem Botschafter v
 $g_lang['team_status'] = 'Team Status';
 $g_lang['reportreason'] = 'Aus welchem grun möchtest Du den Foodsaver melden?';
 $g_lang['reportmessage'] = 'Beschreibe den Vorfall noch etwas genauer';
-
- ?>
+$g_lang['fetch_history'] = 'Abhol-History';
+ 

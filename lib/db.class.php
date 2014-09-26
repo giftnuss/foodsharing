@@ -986,7 +986,8 @@ class Db
 							`nachname`,
 							`lat`,
 							`lon`,
-							`email`
+							`email`,
+							`token`
 				
 				FROM 		`'.PREFIX.'foodsaver`
 

@@ -189,7 +189,7 @@ class XhrDialog
 		$buttons = array();
 		foreach ($this->buttons as $b)
 		{
-			$buttons[] = '{"text":"'.$b['text'].'",click:function(){'.$b['click'].'}}';
+			$buttons[] = '{"text":\''.$b['text'].'\',click:function(){'.$b['click'].'}}';
 		}
 		
 		$this->addOpt('buttons', '['.implode(',', $buttons).']',false);
@@ -230,7 +230,9 @@ class XhrDialog
 				$(".xhrDialog .input.textarea").autosize();
 				$("#'.$this->id.'").dialog({
 					'.implode(',', $options).'
-				});'.$this->script.$this->scriptAfter
+				});'.$this->script.$this->scriptAfter.'
+				dialogs.add("'.$this->id.'");
+				'
 		);;
 	}
 }

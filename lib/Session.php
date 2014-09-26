@@ -58,7 +58,8 @@ class S
 				'photo' => $user['photo'],
 				'bezirk_id' => $user['bezirk_id'],
 				'email' => $user['email'],
-				'rolle' => $user['rolle']
+				'rolle' => $user['rolle'],
+				'token' => $user['token']
 			));
 			
 			return true;

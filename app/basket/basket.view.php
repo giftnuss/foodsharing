@@ -149,6 +149,20 @@ class BasketView extends View
 		'<div style="text-align:center;"><a class="fsbutton" href="http://foodsharing.de/essenskoerbe/'.$basket['fsf_id'].'" target="_blank">Essenskorb anfragen auf foodsharing.de</a></div>';
 	}
 	
+	public function bubbleNoUser($basket)
+	{
+		$img = '';
+		if(!empty($basket['picture']))
+		{
+			$img = '<div style="width:100%;height:200px;overflow:hidden;"><img src="/images/basket/'.$basket['picture'].'" width="100%" /></div>';
+		}
+	
+		return '
+		'.$img.'
+		'.v_input_wrapper('Beschreibung', nl2br(autolink($basket['description']))).'
+		';
+	}
+	
 	public function bubble($basket)
 	{
 		$img = '';

@@ -55,20 +55,48 @@ ul.block, ul.block, ul.block li, ul.block li
 	margin:0;
 	padding:0;
 }
-body, div, p, ul, ol, th, td, input, textarea, select, option, label
+body, div, p, ul, ol, th, td, label
 {
-	font-size:13px;
-	font-family:Raleway,Arial, Helvetica;
-	line-height:16px;
-	font-weight:bold;
+	font-size:14px;
+	font-family:Helvetica,Arial,"lucida grande",tahoma,verdana,arial,sans-serif;
+	line-height: 1.38;
+	font-weight:normal;
 }
 
 h1, h2, h3, h4, h5, h6, .head.ui-widget-header
 {
-	font-family: 'Alfa Slab One' !important;
-	font-weight: lighter;
+	font-family: Helvetica,Arial,"lucida grande",tahoma,verdana,arial,sans-serif;
+	font-weight:bold;
 }
-
+div.welcome .welcome_quick_link ul li,
+ul.linklist li a,
+#searchbar ul li.title,
+.input-wrapper label.wrapper-label,
+.activity_feed_content_info p,
+.ur-feedback-btn,
+input, textarea, select, option,
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button
+{
+	font-size:12px;
+	color:#4a3520;
+	line-height:1.28;
+}
+.activity_feed_content_info p
+{
+	margin:0;
+}
+.activity_feed_content_text
+{
+	margin-bottom:5px;
+}
+.post.event
+{
+	padding-top:10px;
+}
+.activity_feed_content_info p a
+{
+	font-size:14px;
+}
 table.mce-item-table td
 {
 	padding:15px;
@@ -206,6 +234,10 @@ input.hasDatepicker {
 	border-radius:6px; /* CSS3 */
 	margin-right:7px;
 }
+#left .select
+{
+	width:100%;
+}
 .select-add
 {
 	margin-bottom:3px;
@@ -250,7 +282,7 @@ input.hasDatepicker {
 }
 .focus
 {
-	background-color:#CADCBA;
+	background-color:#F5F5B5;
 	border:1px solid #3F942F;
 }
 

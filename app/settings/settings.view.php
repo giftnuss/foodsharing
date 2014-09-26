@@ -74,16 +74,19 @@ class SettingsView extends View
 		),array('submit'=>s('save'))),s('settings_info'),array('class'=>'ui-padding'));
 	}
 	
-	public function quizSession($session,$try_count)
+	public function quizSession($session,$try_count,$model)
 	{
-		$subtitle = 'mit '.$session['fp'].' von maximal '.$session['maxfp'].' Fehlerpunkten leider nicht bestanden. <a href="http://wiki.lebensmittelretten.de/" target="_blank">Informiere Dich im Wiki</a> für den nächsten Versuch.';
+		$infotext = v_error('mit '.$session['fp'].' von maximal '.$session['maxfp'].' Fehlerpunkten leider nicht bestanden. <a href="http://wiki.lebensmittelretten.de/" target="_blank">Informiere Dich im Wiki</a> für den nächsten Versuch.<p>Lese Dir hier noch mal in Ruhe die Fragen und die dazugehörigen Antworten durch, damit es beim nächsten Mal besser klappt</p>');
+		$subtitle = 'Leider nicht bestanden';
 		if($session['fp'] < $session['maxfp'])
 		{
-			$subtitle = 'Herzlichen Glückwunsch! mit '.$session['fp'].' von maximal '.$session['maxfp'].' Fehlerpunkten bestanden!';
+			$subtitle = 'Bestanden!';
+			$infotext = v_success('Herzlichen Glückwunsch! mit '.$session['fp'].' von maximal '.$session['maxfp'].' Fehlerpunkten bestanden!');
 		}
-		addContent($this->topbar($session['name'].' Quiz', $subtitle, 'img/quiz.png'));
+		addContent('<div class="quizsession">'.$this->topbar($session['name'].' Quiz', $subtitle, 'img/quiz.png').'</div>');
 		$out = '';
 		
+		$out .= $infotext;
 		
 		if($session['fp'] < $session['maxfp'])
 		{
@@ -111,18 +114,9 @@ class SettingsView extends View
 		{
 			if($try_count == 1)
 			{
-				$out .= v_field('
-					
-				<p>Vielen Dank für Dein Bemühen.</p>
-				<p>Doch leider hast Du mehr Fehlerpunkte gemacht als sein dürfen -
-				aber kein Grund zur Sorge, das war ja erst Dein erster Versuch.</p>
-				<p>Bitte informiere Dich über <a href="http://wiki.lebensmittelretten.de" target="_blank">wiki.lebensmittelretten.de</a> und dann kannst Du es noch mal versuchen.
+				$cnt = $model->getContent(19);
 				
-				<p>Gern kannst Du ein Problem auch mit deiner/deinem BotschafterIn besprechen.</p>
-				
-				<p>Alles Liebe,<br />
-				Dein Foodsharing Team</p>
-						','Diesmal hat es leider nicht geklappt',array('class' => 'ui-padding'));
+				$out .= v_field($cnt['body'],$cnt['title'],array('class' => 'ui-padding'));
 			}
 			else if($try_count == 2)
 			{
@@ -185,7 +179,12 @@ class SettingsView extends View
 			$cnt .= v_input_wrapper('Passender Wiki-Artikel zu diesem Thema', '<a target="_blank" href="'.$r['wikilink'].'">'.$r['wikilink'].'</a>');
 			
 			$answers = '';
+			$right_answers = '';
+			$wrong_answers = '';
 			$ai = 0;
+			
+			$sort_right = 'right';
+			
 			$noclicked = true;
 			foreach ($r['answers'] as $a)
 			{
@@ -212,10 +211,12 @@ class SettingsView extends View
 					if($a['right'])
 					{
 						$atext = ' ist richtig!';
+						$sort_right = 'right';
 					}
 					else
 					{
 						$atext = ' ist falsch, dass hast Du richtig erkannt!';
+						$sort_right = 'right';
 					}
 				}
 				else
@@ -223,21 +224,35 @@ class SettingsView extends View
 					if($a['right'])
 					{
 						$atext = ' wäre auch richtig gewesen!';
+						$sort_right = 'false';
 					}
 					else
 					{
 						$atext = ' stimmt so nicht!';
+						$sort_right = 'false';
 					}
 				}
 				
 				//$atext .= '<pre>'.print_r($r,true).'</pre>';
 				
-				$answers .= '
-				<div class="answer q-'.$right.'">
-					'. v_input_wrapper('Antwort '.$ai.$atext, $a['text']).'
-					'. v_input_wrapper('Erklärung', $a['explanation']).'
+				if($sort_right == 'right')
+				{
+					$right_answers .= '
+					<div class="answer q-'.$right.'">
+						'. v_input_wrapper('Antwort '.$ai.$atext, $a['text']).'
+						'. v_input_wrapper('Erklärung', $a['explanation']).'
+						
+					</div>';
+				}
+				else if($sort_right == 'false')
+				{
+					$wrong_answers .= '
+					<div class="answer q-'.$right.'">
+						'. v_input_wrapper('Antwort '.$ai.$atext, $a['text']).'
+						'. v_input_wrapper('Erklärung', $a['explanation']).'
 					
-				</div>';
+					</div>';
+				}
 			}
 			
 			if($r['userfp'] > 0)
@@ -257,9 +272,18 @@ class SettingsView extends View
 				}
 			}
 			
-			$cnt .= '<div id="qcomment-'.(int)$r['id'].'">'.v_input_wrapper('Kommentar zu dieser Frage Schreiben', '<textarea style="height:50px;" id="comment-'.$r['id'].'" name="desc" class="input textarea value"></textarea><br /><a class="button" href="#" onclick="ajreq(\'addcomment\',{app:\'quiz\',comment:$(\'#comment-'.(int)$r['id'].'\').val(),id:'.(int)$r['id'].'});return false;">Absenden</a>').'</div>';
 			
-			$cnt .= v_input_wrapper('Antworten', $answers);
+			if(!empty($right_answers))
+			{
+				$cnt .= v_input_wrapper('Antworten die Du richtig ausgewählt hast', $right_answers,false,array('collapse' => true));
+			}
+			if(!empty($wrong_answers))
+			{
+				$cnt .= v_input_wrapper('Antworten die Du falsch ausgewählt hast', $wrong_answers,false,array('collapse' => true));
+			}	
+
+			$cnt .= '<div id="qcomment-'.(int)$r['id'].'">'.v_input_wrapper('Kommentar zu dieser Frage Schreiben', '<textarea style="height:50px;" id="comment-'.$r['id'].'" name="desc" class="input textarea value"></textarea><br /><a class="button" href="#" onclick="ajreq(\'addcomment\',{app:\'quiz\',comment:$(\'#comment-'.(int)$r['id'].'\').val(),id:'.(int)$r['id'].'});return false;">Absenden</a>',false,array('collapse' => true)).'</div>';
+				
 			
 			/*
 			 * If the question was a joke question lets diplay it to the user!

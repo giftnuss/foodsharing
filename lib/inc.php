@@ -29,11 +29,9 @@ if(isset($_GET['logout']))
 	unset($_SESSION['client']);
 }
 
-if(fsid() == 56)
-{
-	error_reporting(E_ALL);
-	ini_set('display_errors','1');
-}
+error_reporting(E_ALL);
+ini_set('display_errors','1');
+
 
 $content_main = '';
 $content_right = '';
@@ -56,10 +54,9 @@ $g_css = array();
 $g_add_css = '';
 $hidden = '';
 $db = new ManualDb();
-addHead('<link href="http://fonts.googleapis.com/css?family=Raleway:300,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">');
-
-addHead('<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />');
-addCss('/fonts/alfaslabone/stylesheet.css');
+//addHead('<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />');
+addCss('/fonts/alfaslabone/stylesheet.css',true);
+addCss('/css/font-awesome.min.css',true);
 addCss('/css/foodsaver/jquery-ui-1.10.3.custom.min.css',true);
 addCss('/css/jMenu.jquery.css',true);
 addCss('/js/fancybox/jquery.fancybox.css',true);
@@ -74,12 +71,15 @@ if (isMob())
 	addCss('/css/style_mobile.css',true);
 }
 
-addHead('<script src="'.PROTOCOL.'://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>');
-addHead('<script src="'.PROTOCOL.'://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>');
-//addHead('<script src="/js/jquery.js"></script>');
-//addHead('<script src="/js/jquery-ui-1.10.3.custom.min.js" /></script>');
+//addHead('<script src="'.PROTOCOL.'://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>');
+//addHead('<script src="'.PROTOCOL.'://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>');
+//addHead('<script src="/js/jquery.1.11.0.js"></script>');
+//addHead('<script src="/js/jquery-ui-1.10.4.js" /></script>');
 
-addHead('<link rel="stylesheet" href="'.PROTOCOL.'://cdnjs.cloudflare.com/ajax/libs/pure/0.4.2/pure-min.css">
+addScript('/js/jquery.1.11.0.js',true);
+addScript('/js/jquery-ui-1.10.4.js',true);
+
+addHead('<link rel="stylesheet" href="/css/pure/pure.min.css">
     <!--[if lte IE 8]>
         <link rel="stylesheet" href="/css/pure/grids-responsive-old-ie-min.css">
     <![endif]-->
@@ -96,8 +96,11 @@ addScript('/js/tagedit/js/jquery.autoGrowInput.js',true);
 addScript('/js/tagedit/js/jquery.tagedit.js',true);
 addScript('/js/timeago.js',true);
 addScript('/js/autolink.js',true);
+addScript('/js/jquery.slimscroll.min.js',true);
+
 //addScript('js/typeahead.js',true);
 addScript('/js/script.js',true);
+addScript('/js/instant-search.js',true);
 //addScript('js/quicks.js');
 addScript('/js/chat.js',true);
 
@@ -118,13 +121,14 @@ addHidden('<div id="uploadPhoto"><form method="post" enctype="multipart/form-dat
 //addHidden('<audio id="xhr-chat-notify"><source src="img/notify.ogg" type="audio/ogg"><source src="img/notify.mp3" type="audio/mpeg"><source src="img/notify.wav" type="audio/wav"></audio>');
 
 addHidden('<div id="fs-profile"></div>');
+
 addJs('
-		
+	
 	$("#mainMenu > li > a").each(function(){
 		if(parseInt(this.href.length) > 2 && this.href.indexOf("'.getPage().'") > 0)
 		{
 			$(this).parent().addClass("active").click(function(ev){
-				ev.preventDefault();
+				//ev.preventDefault();
 			});
 		}
 	});
@@ -157,6 +161,10 @@ addHidden('<div id="fs-profile-rate-comment">'.v_form_textarea('fs-profile-rate-
 if(!S::may())
 {
 	addJs('clearInterval(g_interval_newBasket);');
+}
+else
+{
+	addJs('user.token = "'.S::user('token').'";');
 }
 /*
  * Browser location abfrage nur einmal dann in session speichern

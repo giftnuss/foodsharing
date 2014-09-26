@@ -11,3 +11,8 @@ textarea.comment
 {
 	width:97% !important;
 }
+div.welcome .welcome_profile_image
+{
+	width:auto;
+	height:auto;
+}

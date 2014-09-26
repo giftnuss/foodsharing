@@ -1,6 +1,31 @@
 HTTP_GET_VARS=new Array();
 strGET=document.location.search.substr(1,document.location.search.length);
 var data = null;
+var user = {
+	token: ''
+};
+
+var dialogs = {
+	dialogs:[],
+	add: function(dialog){
+		this.dialogs[this.dialogs.length] = dialog
+	},
+	closeAll: function(){
+		for(i=0;i<dialogs.dialogs.length;i++)
+		{
+			//alert(typeof(dialogs.dialogs[i]));
+			$dia = $('#' + dialogs.dialogs[i]);
+			if($dia.length > 0)
+			{
+				if($dia.dialog('isOpen') === true)
+				{
+					$dia.dialog('close');
+				}
+			}
+		}
+		dialogs.dialogs = [];
+	}
+};
 if(strGET!='')
 {
     gArr=strGET.split('&');
@@ -27,16 +52,37 @@ function GET(v)
 	return HTTP_GET_VARS[v];
 }
 
+function collapse_wrapper(id)
+{
+	var $content = $('#' + id + '-wrapper .element-wrapper');
+	var $label = $('#' + id + '-wrapper .wrapper-label i');
+	if($content.is(':visible'))
+	{
+		$content.hide();
+		$label.removeClass('fa-caret-down').addClass('fa-caret-right');
+	}
+	else
+	{
+		$content.show();
+		$label.removeClass('fa-caret-right').addClass('fa-caret-down');
+	}
+}
+
 function closeAllDialogs()
 {
+	
     var $activeDialogs = $(".ui-dialog").find('.ui-dialog-content');
     
     $activeDialogs.each(function(){
     	$dia = $(this);
-    	if(typeof $dia.dialog === 'function') {
-    		$dia.dialog('close');
+    	$dia.dialog();
+    	if($dia.dialog( "isOpen" ))
+    	{
+    		$dia.dialog().dialog( "close" );
     	}
+    	
     });
+    
 }
 
 $(document).ready(function(){
@@ -330,6 +376,10 @@ function addbanana(fsid)
 	});
 	$('#fs-profile-rate-comment').dialog('open');
 }
+function login()
+{
+	ajreq('login',{app:'login'});
+}
 function profile(id)
 {
 	//alert(id);
@@ -482,7 +532,6 @@ function ajreq(name,options,method,app)
 		dataType:'json',
 		method:method,
 		success:function(data){
-			
 			if(data.status == 1)
 			{
 				if(data.append != undefined)
@@ -526,6 +575,35 @@ function pulseError(msg,opt)
 	setTimeout(function(){
 		$(document).bind('click',function() {
 			$("#pulse-error").stop().fadeOut();
+			$(document).unbind('click');
+			clearTimeout(u_pulse_error_to);
+		});
+	},500);
+}
+
+function pulseSuccess(msg,opt)
+{
+	if(opt == undefined)
+	{
+		opt = {
+			sticky: false
+		};
+	}
+	time = 2000;
+	if(opt.sticky)
+	{
+		time = 900000;
+	}
+	
+	$("#pulse-success").html(msg);
+	$("#pulse-success").stop().fadeIn();
+	u_pulse_error_to = setTimeout(function(){
+		$("#pulse-success").fadeOut();
+		$(document).unbind('click');
+	},time);
+	setTimeout(function(){
+		$(document).bind('click',function() {
+			$("#pulse-success").stop().fadeOut();
 			$(document).unbind('click');
 			clearTimeout(u_pulse_error_to);
 		});
@@ -662,6 +740,8 @@ function infoMenu()
 	
 	init_chat();
 	init_infos();
+	
+	$('.msgbar-dropdown-menu.extended').slimScroll();
 }
 function init_infos()
 {
@@ -1402,6 +1482,15 @@ function becomeBezirk()
 			maxWidth : 400
 		});
 	$("#becomeBezirk-link").trigger('click');
+}
+function preZero(number, length) {
+	if(length == undefined)
+	{
+		length = 2;
+	}
+    var num = '' + number;
+    while (num.length < length) num = '0' + num;
+    return num;
 }
 
 jQuery.fn.extend({ 

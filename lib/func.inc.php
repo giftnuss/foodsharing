@@ -644,7 +644,7 @@ function getMobileMenu()
 				<option value="/?page=faq">FAQ\'s verwalten</option>
 				<option value="/?page=document">Dokumente verwalten</option>
 				<option value="/?page=lebensmittel">Lebensmittel-Typen verwalten</option>
-				<option value="/?page=content">Öffentliche Webseiten</option>
+				<option value="/?page=content">Inhalte/Texte bearbeiten</option>
 				<option value="/?page=mailbox&a=manage">Mailboxen</option>
 				<option value="/?page=stat">Statistik-Auswertung</option>
 				<option value="/?page=message_tpl">E-Mail Vorlagen</option>
@@ -835,8 +835,10 @@ function getMenu()
 			return array(
 				'default' => '
 						<ul id="mainMenu" class="jMenu">
+							
 							'.$orgamenu['default'].'
 							<!--<li><a class="fNiv" href="http://forum.lebensmittelretten.de">öffentliches Forum</a></li>-->
+							<li><a href="/">Home</a></li>
 							<li><a class="fNiv" href="?page=map">Karte</a></li>
 							
 							'.$ags.'
@@ -867,12 +869,12 @@ function getMenu()
 		return array(
 			'default' => '
 				<ul id="mainMenu" class="jMenu">
-					
+					<li><a class="fNiv" href="/">Home</a></li>
 					<li><a class="fNiv" href="?page=basket">Essenskörbe</a></li>
 					<li><a class="fNiv" href="?page=map">Karte</a></li>
 					<li><a class="fNiv" href="?page=index&sub=ratgeber">Ratgeber</a></li>
 					<li><a class="fNiv" href="?page=join">Mach-Mit!</a></li>
-					<li><a class="fNiv" href="?page=login">Login</a></li>
+					<li><a class="fNiv" href="?page=login" onclick="ajreq(\'login\',{app:\'login\'});return false;">Login</a></li>
 				</ul>',
 			'mobile' => '
 				<select id="mobilemenu">
@@ -1356,7 +1358,7 @@ function getOrgaMenu()
 					  <li><a href="?page=kette">Unternehmens-Ketten</a></li>
 					  <li><a href="?page=faq">FAQ\'s verwalten</a></li>
 					  <li><a href="?page=lebensmittel">Lebensmittel-Typen verwalten</a></li>
-					  <li><a href="?page=content">Öffentliche Webseiten</a></li>
+					  <li><a href="?page=content">Inhalte/Texte bearbeiten</a></li>
 					  <li><a href="?page=mailbox&a=manage">Mailboxen</a></li>
 					  <li><a href="?page=stat">Statistik-Auswertung</a></li>
 					  <li class="menu-bottom"><a class="menu-bottom" href="?page=message_tpl">E-Mail Vorlagen</a></li>
@@ -1703,6 +1705,11 @@ function go($url)
 {
 	header('Location: '.$url);
 	exit();
+}
+
+function goLogin()
+{
+	go('?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']));
 }
 
 function goBack()
@@ -2211,7 +2218,14 @@ function cssCompress()
 		{
 			if($write_new)
 			{
-				file_put_contents($genf, CssMin::minify(file_get_contents(ROOT_DIR.$src))."\n",FILE_APPEND);
+				if(strpos($src,'awesome') !== false)
+				{
+					file_put_contents($genf, (file_get_contents(ROOT_DIR.$src))."\n",FILE_APPEND);
+				}
+				else 
+				{
+					file_put_contents($genf, CssMin::minify(file_get_contents(ROOT_DIR.$src))."\n",FILE_APPEND);
+				}
 			}
 			unset($g_css[$src]);
 		}
@@ -2257,6 +2271,12 @@ function addJs($njs)
 	global $js;
 
 	$js .= $njs;
+}
+
+function getJs()
+{
+	global $js;
+	return $js;
 }
 
 function addCss($src,$global = false)

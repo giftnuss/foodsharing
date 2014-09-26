@@ -16,6 +16,16 @@ class FairteilerControl extends Control
 		
 		parent::__construct();
 		
+		/*
+		 * allowed only for logged in users
+		 */
+		if(!S::may() && $_GET['sub'] != 'ft')
+		{
+			goLogin();
+		}
+		
+		
+		
 		if(isset($_GET['bid']) && (int)$_GET['bid'] > 0)
 		{
 			if($bezirk = $this->model->getBezirk($_GET['bid']))
@@ -227,27 +237,36 @@ class FairteilerControl extends Control
 			</div>'
 		);
 		
-		$items = array();
-		
-		if($this->mayEdit())
+		if(S::may())
 		{
-			$items[] = array('name' =>s('edit'),'href'=>'?page=fairteiler&bid='.$this->bezirk_id.'&sub=edit&id='.$this->fairteiler['id']);
-		}
-		
-		if($this->isFollower())
-		{
-			$items[] = array('name' => s('no_more_follow'),'href' => getSelf().'&follow=0');
+			$items = array();
+			
+			if($this->mayEdit())
+			{
+				$items[] = array('name' =>s('edit'),'href'=>'?page=fairteiler&bid='.$this->bezirk_id.'&sub=edit&id='.$this->fairteiler['id']);
+			}
+			
+			if($this->isFollower())
+			{
+				$items[] = array('name' => s('no_more_follow'),'href' => getSelf().'&follow=0');
+			}
+			else
+			{
+				$items[] = array('name' => s('follow'),'click' => 'u_follow();return false;');
+				addHidden($this->view->followHidden());
+			}
+			
+			addContent($this->view->options($items),CNT_LEFT);
+			addContent($this->view->follower(),CNT_LEFT);
 		}
 		else
 		{
-			$items[] = array('name' => s('follow'),'click' => 'u_follow();return false;');
-			addHidden($this->view->followHidden());
+			addContent($this->view->loginToFollow(),CNT_LEFT);
 		}
 		
-		addContent($this->view->options($items),CNT_LEFT);
-		addContent($this->view->follower(),CNT_LEFT);
 		addContent($this->view->desc(),CNT_RIGHT);
 		addContent($this->view->address(),CNT_RIGHT);
+		
 	}
 	
 	public function addFt()

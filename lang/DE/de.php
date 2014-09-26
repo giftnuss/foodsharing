@@ -16,6 +16,8 @@ $g_lang['reference'] = 'Hinweis';
 $g_lang['message'] = 'Nachricht';
 $g_lang['yes'] = 'Ja';
 $g_lang['no'] = 'Nein';
+$g_lang['from'] = 'von';
+$g_lang['to'] = 'bis';
 $g_lang['address'] = 'Adresse';
 $g_lang['delete'] = 'löschen';
 $g_lang['edit'] = 'bearbeiten';
@@ -194,3 +196,5 @@ $g_lang['datetime'] = 'Zeitpunkt';
 
 $g_lang['deutschlandtour_desc'] = 'dann schreibe uns hier eine kurze Nachricht';
 $g_lang['deutschlandtour_message'] = 'Ja ich möchte einen Besuch von euch bekommen!';
+$g_lang['search'] = 'Suchen';
+$g_lang['no_result'] = 'Kein Ergebnis';

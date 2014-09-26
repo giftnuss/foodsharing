@@ -314,7 +314,7 @@ class EventView extends View
 			{
 				$icons = v_scroller($icons,200);
 			}
-			$out .= v_field($icons, ''.count($invites['invited']).' Einladungen',array('class' => 'ui-padding'));
+			$out .= v_field($icons, ''.count($invites['invited']).' Einladungen');
 		}
 		
 		return $out;

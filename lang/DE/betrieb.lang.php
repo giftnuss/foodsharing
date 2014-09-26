@@ -35,4 +35,5 @@ $g_lang['position_search'] = 'Adress-Suche';
 $g_lang['public_info'] = 'Öffentliche Infos zum Betrieb';
 $g_lang['public_time'] = 'Ungefähre Tageszeit zum abholen';
 $g_lang['fetchercount'] = 'Anzahl der Abholer/innen';
+$g_lang['fetch_history'] = 'Abhol-History';
 $g_lang['prefetchtime'] = 'Wie viel Wochen im voraus können sich Foodsaver eintragen?';

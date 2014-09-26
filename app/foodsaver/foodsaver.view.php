@@ -24,9 +24,11 @@ class FoodsaverView extends View
 		}
 		else
 		{
-			$cnt = v_input_wrapper('Foto', '<img src="'.img($foodsaver['photo'],'med').'" />');
+			$cnt = v_input_wrapper('Foto', '<a class="avatarlink corner-all" href="#" onclick="profile('.(int)$foodsaver['id'].');return false;"><img style="display:none;" class="corner-all" src="'.img($foodsaver['photo'],'med').'" /></a>');
 			$cnt .= v_input_wrapper('Name', $foodsaver['name'].' '.$foodsaver['nachname']);
 			$cnt .= v_input_wrapper('Rolle', s('rolle_'.$foodsaver['rolle'].'_'.$foodsaver['geschlecht']));
+			
+			$cnt .= v_input_wrapper('Letzter Login',$foodsaver['last_login']);
 			
 			$cnt .= v_input_wrapper('Optionen', '
 				<span class="button" onclick="fsapp.delfromBezirk('.$foodsaver['id'].');">Aus Bezirk löschen</span>		
@@ -41,7 +43,7 @@ class FoodsaverView extends View
 		return 
 		'<div id="foodsaverlist">'.
 			v_field(
-				$this->fsAvatarList($foodsaver,array('id' => 'fslist')),
+				$this->fsAvatarList($foodsaver,array('id' => 'fslist','shuffle' => false)),
 				'Foodsaver in '.$bezirk['name']
 			).'
 		</div>';

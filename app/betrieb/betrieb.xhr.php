@@ -48,6 +48,106 @@ class BetriebXhr extends Control
 		}
 	}
 	
+	public function getfetchhistory()
+	{
+		if(S::may() && ($this->model->isVerantwortlich($_GET['bid']) || S::may('orga')))
+		{
+			if($history = $this->model->getFetchHistory($_GET['bid'],$_GET['from'],$_GET['to']))
+			{
+				//print_r($history);
+				//die();
+				return array(
+					'status' => 1,
+					'script' => '
+					$("daterange_from").datepicker("close");
+					$("daterange_to").datepicker("close");
+						
+					$("#daterange_content").html(\''.jsSafe($this->view->fetchlist($history)).'\');
+						'
+				);
+			}
+		}
+	}
+	
+	public function fetchhistory()
+	{
+		if(S::may() && ($this->model->isVerantwortlich($_GET['bid']) || S::may('orga')))
+		{
+			$dia = new XhrDialog();
+			$dia->setTitle('Abholungs-History');
+			
+			$id = 'daterange';
+			
+			$dia->addContent($this->view->fetchHistory());
+			
+			$dia->addJsAfter('
+
+					$( "#'.$id.'_from" ).datepicker({
+						changeMonth: true,
+						maxDate: "0",
+						
+						onClose: function( selectedDate ) {
+							$( "#'.$id.'_to" ).datepicker( "option", "minDate", selectedDate );
+						}
+					});
+					$( "#'.$id.'_to" ).datepicker({
+						changeMonth: true,
+						maxDate: "0",
+						autoOpen: true,
+						onClose: function( selectedDate ) {
+							$( "#'.$id.'_from" ).datepicker( "option", "maxDate", selectedDate );
+						}
+					});
+					
+					$( "#'.$id.'_from" ).datepicker("show");
+					
+					
+					$(window).resize(function(){
+						$("#'.$dia->getId().'").dialog("option",{
+							height:($(window).height()-40)
+						});
+					});
+					
+					$("#daterange_submit").click(function(ev){
+						ev.preventDefault();
+					
+						var date = $( "#'.$id.'_from" ).datepicker("getDate");
+						
+						var from = "";
+						var to = "";
+						
+						if(date !== null)
+						{
+							from = date.getFullYear() + "-" + preZero((date.getMonth()+1)) + "-" + preZero(date.getDate());
+							date = $( "#'.$id.'_to" ).datepicker("getDate");
+						
+							if(date === null)
+							{
+								to = from;
+							}
+							else
+							{
+								to = date.getFullYear() + "-" + preZero((date.getMonth()+1)) + "-" + preZero(date.getDate());
+							}
+					
+							ajreq("getfetchhistory",{app:"betrieb",from:from,to:to,bid:'.(int)$_GET['bid'].'});
+						}
+						else
+						{
+							alert("Du musst erst ein Datum ausw&auml;hlen ;)");
+						}
+					});
+					
+			');
+			
+			$dia->addOpt('width','500px');
+			$dia->addOpt('height','($(window).height()-40)',false);
+			
+			
+			return $dia->xhrout();
+		}
+	}
+	
 	public function adddate()
 	{
 		$dia = new XhrDialog();

@@ -115,7 +115,7 @@ class GroupsView extends View
 				
 				$member .= '
 				<div><strong>'.count($g['leader']).' Admin</strong></div>
-				<div>'.count($g['member']).' Mitwirkende Insgesamt</div>
+				<div>'.count($g['member']).' Mitwirkende</div>
 				
 			</div>';
 				

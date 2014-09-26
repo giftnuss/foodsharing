@@ -28,8 +28,14 @@ function v_scroller($content,$width='232')
 	else
 	{
 		$id = id('scroller');
-		addJs('$("#'.$id.'").tinyscrollbar();');
+		addJs('$("#'.$id.'").slimScroll();');
 	
+		return '
+			<div id="'.$id.'" class="scroller">
+				'.$content.'
+			</div>';
+		
+		/*
 		return '
 			<div id="'.$id.'" class="scroller">
 			    <div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
@@ -39,6 +45,7 @@ function v_scroller($content,$width='232')
 			        </div>
 			    </div>
 			</div>';
+		*/
 	}
 }
 
@@ -633,9 +640,22 @@ function v_msgBar()
 		<div class="bar-item bar-msg'.$msg_class.'"><span>&nbsp;</span></div>
 		<div class="bar-item bar-info'.$info_class.'"><span>&nbsp;</span></div>
 		<div class="bar-item bar-basket'.$basket_class.'"><span>&nbsp;</span></div>
-		<div onclick="goTo(\'?page=suche\');" class="bar-item bar-search"><span>&nbsp;</span></div>
+		<div class="bar-item bar-search"><span>&nbsp;</span></div>
+		
+		<div id="searchbar" style="display:none;">
+			<i class="fa fa-search"></i><input type="text" value="" placeholder="'.s('search').'..." />
+			<div class="result-wrapper" style="display:none;">
+				<ul class="linklist index"></ul>
+				<ul class="linklist result"></ul>
+				<ul style="display:none;" class="linklist more">
+					<li><a onclick="goTo(\'?page=suche&q=\' + encodeURIComponent($(\'#searchbar input\').val()));" href="#">Alle Ergebnisse</a></li>	
+				</ul>
+			</div>
+		</div>
+				
 		<div style="clear:left;"></div>
-	</div>';
+	</div>
+	';
 	
 	return $out;
 }
@@ -2289,6 +2309,16 @@ function v_input_wrapper($label,$content,$id = false,$option = array())
 		$label = $option['label'];
 	}
 	
+	if(isset($option['collapse']))
+	{
+		$label = '<i class="fa fa-caret-right"></i> ' . $label;
+		addJs('
+			$("#'.$id.'-wrapper .element-wrapper").hide();
+		');
+		
+		$option['click'] = 'collapse_wrapper(\''.$id.'\')';
+	}
+	
 	if(isset($option['click']))
 	{
 		$label = '<a href="#" onclick="'.$option['click'].';return false;">'.$label.'</a>';
@@ -2311,6 +2341,8 @@ function v_input_wrapper($label,$content,$id = false,$option = array())
 		$check['class'] .= ' '.$option['class'];
 	}
 	
+	
+	
 	return '
 	<div class="input-wrapper'.$check['class'].'" id="'.$id.'-wrapper">
 	'.$label_in.'
@@ -2323,6 +2355,51 @@ function v_input_wrapper($label,$content,$id = false,$option = array())
 	</div>';
 }
 
+function v_form_daterange($id = 'daterange',$option = array())
+{
+	$label = s($id);
+	$id = id($id);
+	
+	if(!isset($option['options']))
+	{
+		$option['options'] = array('from' => array(), 'to' => array());
+	}
+	
+	addJs('
+		 $(function() {
+			$( "#'.$id.'_from" ).datepicker({
+				changeMonth: true,
+				onClose: function( selectedDate ) {
+					$( "#'.$id.'_to" ).datepicker( "option", "minDate", selectedDate );
+				},
+				'.implode(',',$option['options']['from']).'
+			});
+			$( "#'.$id.'_to" ).datepicker({
+				changeMonth: true,
+				onClose: function( selectedDate ) {
+					$( "#'.$id.'_from" ).datepicker( "option", "maxDate", selectedDate );
+				}
+				'.implode(',',$option['options']['to']).'
+			});
+		});
+	');
+	
+	if(!isset($option['content_after']))
+	{
+		$option['content_after'] = '';
+	}
+	
+	return v_input_wrapper(
+		$label,
+		'
+		<input placeholder="'.s('from').'" class="input text date value" type="text" id="'.$id.'_from" name="'.$id.'[from]">
+		<input placeholder="'.s('to').'" class="input text date value" type="text" id="'.$id.'_to" name="'.$id.'[to]">' . $option['content_after'],
+		$id,
+		$option
+	);
+	
+	
+}
 function v_form_date($id,$option = array())
 {
 	$id = id($id);
