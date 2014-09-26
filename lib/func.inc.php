@@ -2273,6 +2273,12 @@ function addJs($njs)
 	$js .= $njs;
 }
 
+function getJs()
+{
+	global $js;
+	return $js;
+}
+
 function addCss($src,$global = false)
 {
 	global $g_css;

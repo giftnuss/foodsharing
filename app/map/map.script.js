@@ -1,6 +1,12 @@
 var u_map = null;
 var markers = null;
 
+var fsIcon = L.AwesomeMarkers.icon({
+    icon: 'fa-smile-o',
+    markerColor: 'darkgreen',
+    prefix: 'fa'
+});
+/*
 var fsIcon = L.icon({
     iconUrl: 'img/marker-foodsaver.png',
     shadowUrl: 'img/shadow-marker.png',
@@ -11,6 +17,13 @@ var fsIcon = L.icon({
     shadowAnchor: [36, 50],  // the same for the shadow
     popupAnchor:  [-18, -52] // point from which the popup should open relative to the iconAnchor
 });
+*/
+var bkIcon = L.AwesomeMarkers.icon({
+    icon: 'fa-lemon-o',
+    markerColor: 'green',
+    prefix: 'fa'
+});
+/*
 var bkIcon = L.icon({
     iconUrl: 'img/marker-baskets.png',
     shadowUrl: 'img/shadow-marker.png',
@@ -21,6 +34,13 @@ var bkIcon = L.icon({
     shadowAnchor: [36, 50],  // the same for the shadow
     popupAnchor:  [-18, -52] // point from which the popup should open relative to the iconAnchor
 });
+*/
+var botIcon = L.AwesomeMarkers.icon({
+    icon: 'fa-smile-o',
+    markerColor: 'darkred',
+    prefix: 'fa'
+});
+/*
 var botIcon = L.icon({
     iconUrl: 'img/marker-botschafter.png',
     shadowUrl: 'img/shadow-marker.png',
@@ -31,6 +51,13 @@ var botIcon = L.icon({
     shadowAnchor: [36, 50],  // the same for the shadow
     popupAnchor:  [-18, -52] // point from which the popup should open relative to the iconAnchor
 });
+*/
+var bIcon = L.AwesomeMarkers.icon({
+    icon: 'fa-home',
+    markerColor: 'orange',
+    prefix: 'fa'
+});
+/*
 var bIcon = L.icon({
     iconUrl: 'img/marker-supermarket.png',
     shadowUrl: 'img/shadow-marker.png',
@@ -41,6 +68,13 @@ var bIcon = L.icon({
     shadowAnchor: [36, 50],  
     popupAnchor:  [-18, -52]
 });
+*/
+var fIcon = L.AwesomeMarkers.icon({
+    icon: 'fa-recycle',
+    markerColor: 'yellow',
+    prefix: 'fa'
+});
+/*
 var fIcon = L.icon({
     iconUrl: 'img/marker-fairteiler.png',
     shadowUrl: 'img/shadow-marker.png',
@@ -51,7 +85,7 @@ var fIcon = L.icon({
     shadowAnchor: [36, 50],  
     popupAnchor:  [-18, -52]
 });
-
+*/
 var map = {
 	setView: function(lat,lon,zoom)
 	{

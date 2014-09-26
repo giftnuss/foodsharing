@@ -194,7 +194,7 @@ class LoginXhr extends Control
 				'script' => '
 					'.$token_js.'
 					pulseSuccess("'.s('login_success').'");
-					closeAllDialogs();
+					dialogs.closeAll();
 					$("#layout_logo").after(\''.jsSafe($msgbar).'\');
 					$("#mainMenu").replaceWith(\''.jsSafe($menu['default']).'\');
 					$("#mainMenu").jMenu({

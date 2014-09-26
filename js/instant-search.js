@@ -1,3 +1,23 @@
+$(document).ready(function(){
+	$('#searchbar').click(function(e){
+	    e.stopPropagation();
+	});
+	
+	$('#msgBar .bar-search').click(function(e){
+		$('#msgBar .bar-search').hide();
+		$('#searchbar').show();
+		$('#searchbar input').select();
+		//$('#searchbar input')[0].focus();
+		search.open();
+	     e.stopPropagation();
+	});
+	
+	$(document).click(function(){
+		$('#searchbar').hide();
+		$('#msgBar .bar-search').show();
+	});
+});
+
 var search = {
 	initiated: false,
 	isSearching:false,
@@ -7,6 +27,7 @@ var search = {
 	$result:null,
 	$indexResult:null,
 	$input: null,
+	$morelink: null,
 	
 	init: function(){
 		
@@ -16,11 +37,13 @@ var search = {
 		this.$result = $('#searchbar .result');
 		this.$indexResult = $('#searchbar .index');
 		this.$input = $('#searchbar input:first');
-			
+		this.$resultWrapper = $('#searchbar .result-wrapper');
+		this.$morelink = $('#searchbar .more');
+		
 		if(user.token != undefined && user.token.length > 4)
 		{
-			 var date = new Date(); 
-			 tstring = ''+date.getYear() + ''+date.getMonth() + ''+date.getDate() + ''+date.getHours();
+			var date = new Date(); 
+			tstring = ''+date.getYear() + ''+date.getMonth() + ''+date.getDate() + ''+date.getHours();
 			$.getJSON( "/cache/searchindex/" + user.token + ".json?t=" + tstring, function( data ) {
 				search.index = data;
 			});
@@ -31,16 +54,19 @@ var search = {
 			if(search.index !== false && search.index.length > 0 && search.$input.val().length > 1)
 			{
 				search.indexSearch();
+				search.$resultWrapper.show();
 			}
 			
 			if(search.$input.val().length > 3 && search.$indexResult.children('li').length < 5)
 			{
 				search.start();
+				search.$resultWrapper.show();
 			}
 			else if(search.$input.val().length == 0)
 			{
 				search.$result.html('');
 				search.$indexResult.html('');
+				search.$resultWrapper.hide();
 			}
 		});
 	},
@@ -49,16 +75,6 @@ var search = {
 		{
 			this.init();
 		}
-		if(search.$searchbar.is(':visible'))
-		{
-			search.$searchbar.hide();
-		}
-		else
-		{
-			search.$searchbar.show();
-			search.$input[0].focus();
-		}
-		
 	},
 	indexSearch: function(){
 		search.$indexResult.html('');

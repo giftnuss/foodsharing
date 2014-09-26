@@ -10,11 +10,12 @@
 	
 	<link rel="stylesheet" href="/js/markercluster/dist/MarkerCluster.css" />
 	<link rel="stylesheet" href="/js/markercluster/dist/MarkerCluster.Default.css" />
+	<link rel="stylesheet" href="/js/awesome-marker/leaflet.awesome-markers.css">
 	
 	<style type="text/css"><?php echo $g_add_css; ?></style>
 	
-	
 	<script src="/js/leaflet/leaflet.js"></script>
+	<script src="/js/awesome-marker/leaflet.awesome-markers.js"></script>
 	<script src="js/markercluster/dist/leaflet.markercluster.js"></script>
 	
 	<script type="text/javascript">
@@ -26,7 +27,7 @@
 		<?php echo JSMin::minify($js); ?>
 	});
 	</script>
-
+	
 </head>
 <body>
 <!-- <div class="ajax-loader"><img src="../images/469.gif" alt="loader" /></div> -->

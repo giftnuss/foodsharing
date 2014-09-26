@@ -227,7 +227,7 @@ ul.bread
 	border:0;
 	display:block;
 	font-family: 'Alfa Slab One';
-	font-size:22px;
+	font-size:19px;
 	line-height:30px;
 	color:#FFFFFF;
 	text-decoration: none;
@@ -309,42 +309,57 @@ div.tree-scroller
 }
 #searchbar
 {
-    background-color: #fff;
-    margin-left: 4px;
-    padding: 5px;
-    position: absolute;
-    top: 41px;
-    width: 285px;
+	border: 0 none;
+	
+    
+    margin-left: 103px;
+    padding:0;
+    width: 273px;
     z-index: 40;
-    -moz-box-shadow:    0px 0px 3px rgba(0, 0, 0, 0.3);
-	-webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
-	box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
-	border-radius: 0px 0px 6px 6px;
-	-moz-border-radius: 0px 0px 6px 6px;
-	-webkit-border-radius: 0px 0px 6px 6px;
-	border: 0px solid #000000;
 }
 #searchbar input
 {
+	background-color:#967d61;
 	line-height:22px;
 	font-weight:bold;
 	height:22px;
 	font-size:13px;
 	border:0 none;
-	background-color:transparent;
-	width:262px;
+	width:240px;
 	color:#4a3520;
+	margin:-2px 0 0 -15px;
+    padding: 4px 3px 3px 27px;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
 }
 #searchbar i
 {
-	color: #4a3520;
-    cursor: pointer;
+	color:#4a3520;
     display: inline-block;
     font-size: 15px;
     height: 14px;
-    line-height: 15px;
-    text-align: center;
-    width: 15px;
+    left: 10px;
+    position: relative;
+    top: 0;
+    width: 18px;
+}
+#searchbar .result-wrapper
+{
+	background-color:#FFFFFF;
+	padding:5px;
+	margin-top:6px;
+	border-radius: 0 0 6px 6px;
+	-moz-border-radius: 0 0 6px 6px;
+	-webkit-border-radius: 0 0 6px 6px;
+	
+	-moz-box-shadow:    0px 3px 3px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.3);
+	box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.3);
+}
+#searchbar ul
+{
+
 }
 #searchbar ul li a:hover, #searchbar ul li a:hover span
 {
@@ -354,29 +369,7 @@ div.tree-scroller
 {
 	display:block;
 }
-#searchbar ul li span.c
-{
-	clear:both;
-}
-#searchbar ul li span.i
-{
-	float:left;
-	width:35px;
-	height:35px;
-	margin-right:8px;
-	border-radius: 6px 6px 6px 6px;
-	-moz-border-radius: 6px 6px 6px 6px;
-	-webkit-border-radius: 6px 6px 6px 6px;
-	border: 0px solid #000000;
-}
-#searchbar ul li span.i img
-{
-	width:35px;
-	border-radius: 6px 6px 6px 6px;
-	-moz-border-radius: 6px 6px 6px 6px;
-	-webkit-border-radius: 6px 6px 6px 6px;
-	border: 0px solid #000000;
-}
+
 #searchbar ul li.title
 {
 	border-top:1px solid #f1e7c9;
@@ -385,10 +378,7 @@ div.tree-scroller
 	font-weight:lighter;
 	color:#4a3520;
 }
-#searchbar ul span.n
-{
-	font-weight:bold;
-}
+
 div#msgBar {
     margin-left: 150px;
     position: absolute;
@@ -1587,6 +1577,45 @@ ul.linklist
 	margin:0;
 	padding:0;
 }
+ul.linklist li span.n
+{
+	font-weight:bold;
+	display:block;
+}
+.history li.title
+{
+	font-size:13px;
+	fon-weight:bold;
+	border-top:1px solid #e3ded3;
+	padding-top:8px;
+	margin-top:8px;
+}
+ul.linklist li span.c
+{
+	clear:both;
+	display:block;
+}
+ul.linklist li span.i
+{
+	display:block;
+	float:left;
+	width:35px;
+	height:35px;
+	margin-right:8px;
+	border-radius: 6px 6px 6px 6px;
+	-moz-border-radius: 6px 6px 6px 6px;
+	-webkit-border-radius: 6px 6px 6px 6px;
+	border: 0px solid #000000;
+}
+ul.linklist li span.i img
+{
+	width:35px;
+	border-radius: 6px 6px 6px 6px;
+	-moz-border-radius: 6px 6px 6px 6px;
+	-webkit-border-radius: 6px 6px 6px 6px;
+	border: 0px solid #000000;
+}
+
 ul.linklist li, ul.linklist li a, ul.linklist li a span
 {
 	display:block;
@@ -1744,7 +1773,7 @@ border-radius: 4px;}
 #scrollbar1 .disable{ display: none; }
 .noSelect { user-select: none; -o-user-select: none; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; }
 
-.scroller { clear: both; margin: 10px 0; }
+.scroller { clear: both;margin:0;padding:0; }
 .scroller .viewport { height: 350px; overflow: hidden; position: relative; }
 .scroller .overview { list-style: none; position: absolute; left: 10px; top: 0; }
 .scroller .thumb .end,
@@ -2139,8 +2168,6 @@ ul.fsicons li
 	display:inline-block;
 	width:35px;
 	height:35px;
-	margin-top:2px;
-	margin-right:2px;
 }
 ul.fsicons li a
 {

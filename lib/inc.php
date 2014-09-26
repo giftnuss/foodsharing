@@ -96,6 +96,8 @@ addScript('/js/tagedit/js/jquery.autoGrowInput.js',true);
 addScript('/js/tagedit/js/jquery.tagedit.js',true);
 addScript('/js/timeago.js',true);
 addScript('/js/autolink.js',true);
+addScript('/js/jquery.slimscroll.min.js',true);
+
 //addScript('js/typeahead.js',true);
 addScript('/js/script.js',true);
 addScript('/js/instant-search.js',true);

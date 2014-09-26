@@ -74,7 +74,7 @@ class SettingsView extends View
 		),array('submit'=>s('save'))),s('settings_info'),array('class'=>'ui-padding'));
 	}
 	
-	public function quizSession($session,$try_count)
+	public function quizSession($session,$try_count,$model)
 	{
 		$infotext = v_error('mit '.$session['fp'].' von maximal '.$session['maxfp'].' Fehlerpunkten leider nicht bestanden. <a href="http://wiki.lebensmittelretten.de/" target="_blank">Informiere Dich im Wiki</a> für den nächsten Versuch.<p>Lese Dir hier noch mal in Ruhe die Fragen und die dazugehörigen Antworten durch, damit es beim nächsten Mal besser klappt</p>');
 		$subtitle = 'Leider nicht bestanden';
@@ -114,18 +114,9 @@ class SettingsView extends View
 		{
 			if($try_count == 1)
 			{
-				$out .= v_field('
-					
-				<p>Vielen Dank für Dein Bemühen.</p>
-				<p>Doch leider hast Du mehr Fehlerpunkte gemacht als sein dürfen -
-				aber kein Grund zur Sorge, das war ja erst Dein erster Versuch.</p>
-				<p>Bitte informiere Dich über <a href="http://wiki.lebensmittelretten.de" target="_blank">wiki.lebensmittelretten.de</a> und dann kannst Du es noch mal versuchen.
+				$cnt = $model->getContent(19);
 				
-				<p>Gern kannst Du ein Problem auch mit deiner/deinem BotschafterIn besprechen.</p>
-				
-				<p>Alles Liebe,<br />
-				Dein Foodsharing Team</p>
-						','Diesmal hat es leider nicht geklappt',array('class' => 'ui-padding'));
+				$out .= v_field($cnt['body'],$cnt['title'],array('class' => 'ui-padding'));
 			}
 			else if($try_count == 2)
 			{

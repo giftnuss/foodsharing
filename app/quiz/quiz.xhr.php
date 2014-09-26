@@ -529,6 +529,7 @@ class QuizXhr extends Control
 			{
 				if($_GET['special'] == 'pause')
 				{
+					$this->model->updateQuizSession(S::get('quiz-session'), $quiz, $i);
 					return $this->pause();
 				}
 			}
@@ -926,7 +927,7 @@ class QuizXhr extends Control
 			},200);
 		}',false);
 		
-		$dia->addButton('Später weitermachen','$("#'.$dia->getId().'").dialog("close");');
+		$dia->addButton('Später weitermachen','$(this).dialog("close");');
 		$dia->addButton('weiter gehts!','ajreq(\'next\',{app:\'quiz\'});');
 		
 		/*

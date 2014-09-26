@@ -40,7 +40,7 @@ class SettingsModel extends Model
 		$tmp = array();
 		if($session = $this->qRow($sql))
 		{
-			$session['try_count'] = $this->qOne('SELECT COUNT(quiz_id) FROM '.PREFIX.'quiz_session WHERE foodsaver_id = '.(int)fsId()).' AND `quiz_id` = '.(int)$session['quiz_id'];
+			$session['try_count'] = $this->qOne('SELECT COUNT(quiz_id) FROM '.PREFIX.'quiz_session WHERE foodsaver_id = '.(int)fsId().' AND `quiz_id` = '.(int)$session['quiz_id']);
 			
 			/*
 			 * First of all sort the question array and get al questions_ids etc to calculate the result

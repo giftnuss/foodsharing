@@ -404,6 +404,7 @@ else if(isset($_GET['id']))
 		}
 		if($betrieb['verantwortlich'] || S::may('orga'))
 		{
+			$menu[] = array('name'=>s('fetch_history'),'click' => "ajreq('fetchhistory',{app:'betrieb',bid:".(int)$betrieb['id']."});");
 			$menu[] = array('name'=>s('edit_betrieb'),'href'=>'?page=betrieb&a=edit&id='.$betrieb['id']);
 			$menu[] = array('name'=>s('edit_team'),'click'=>'$(\'#teamEditor\').dialog({modal:true,width:425,title:\''.s('edit_team').'\'});');
 			$menu[] = array('name'=>s('edit_fetchtime'),'click'=>'$(\'#bid\').val('.(int)$betrieb['id'].');$(\'#dialog_abholen\').dialog(\'open\');return false;');

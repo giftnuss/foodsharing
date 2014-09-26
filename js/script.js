@@ -70,23 +70,6 @@ function collapse_wrapper(id)
 
 function closeAllDialogs()
 {
-	/*
-	$(".xhrDialog").dialog("close");
-	$(".xhrDialog").dialog("destroy");
-	$(".xhrDialog").remove();
-	
-	$(".xhrDialog").each(function(){
-    	$dia = $(this);
-    	//alert($dia.dialog);
-    	
-
-    		$dia.dialog().dialog('close');
-            
-    		
-    	
-    	
-    });
-	*/
 	
     var $activeDialogs = $(".ui-dialog").find('.ui-dialog-content');
     
@@ -95,7 +78,6 @@ function closeAllDialogs()
     	$dia.dialog();
     	if($dia.dialog( "isOpen" ))
     	{
-    		alert('true');
     		$dia.dialog().dialog( "close" );
     	}
     	
@@ -758,6 +740,8 @@ function infoMenu()
 	
 	init_chat();
 	init_infos();
+	
+	$('.msgbar-dropdown-menu.extended').slimScroll();
 }
 function init_infos()
 {
@@ -1498,6 +1482,15 @@ function becomeBezirk()
 			maxWidth : 400
 		});
 	$("#becomeBezirk-link").trigger('click');
+}
+function preZero(number, length) {
+	if(length == undefined)
+	{
+		length = 2;
+	}
+    var num = '' + number;
+    while (num.length < length) num = '0' + num;
+    return num;
 }
 
 jQuery.fn.extend({ 

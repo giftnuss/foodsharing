@@ -234,6 +234,10 @@ input.hasDatepicker {
 	border-radius:6px; /* CSS3 */
 	margin-right:7px;
 }
+#left .select
+{
+	width:100%;
+}
 .select-add
 {
 	margin-bottom:3px;
@@ -278,7 +282,7 @@ input.hasDatepicker {
 }
 .focus
 {
-	background-color:#CADCBA;
+	background-color:#F5F5B5;
 	border:1px solid #3F942F;
 }
 

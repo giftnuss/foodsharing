@@ -37,11 +37,11 @@
 .chatboxcontent {
 	font-size: 13px;
 	color: #333333;
-	height:250px;
+	height:250px !important;
 	width:259px;
 	overflow-y:auto;
 	overflow-x:auto;
-	padding:7px;
+	padding:7px !important;
 	border-left:1px solid #cccccc;
 	border-right:1px solid #cccccc;
 	border-bottom:1px solid #eeeeee;
@@ -125,7 +125,7 @@
     font-size: 12px;
     line-height: 1.28;
     padding: 5px;
-    width: 221px;
+    width: 236px;
 }
 
 .chatboxoptions {

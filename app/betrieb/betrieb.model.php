@@ -19,6 +19,39 @@ class BetriebModel extends Model
 		');
 	}
 	
+	public function getFetchHistory($betrieb_id,$from,$to)
+	{
+		return $this->q('
+			SELECT
+				fs.id,
+				fs.name,
+				fs.nachname,
+				fs.photo,
+				a.date,
+				UNIX_TIMESTAMP(a.date) AS date_ts
+	
+			FROM
+				'.PREFIX.'foodsaver fs,
+				'.PREFIX.'abholer a
+	
+			WHERE
+				a.foodsaver_id = fs.id
+	
+			AND
+				a.betrieb_id = '.(int)$betrieb_id.'
+	
+			AND
+				a.date >= '.$this->dateVal($from).'
+	
+			AND
+				a.date <= '.$this->dateVal($to).'
+	
+			ORDER BY
+				a.date
+	
+		');
+	}
+	
 	public function deldate($bid,$date)
 	{
 		$this->del('DELETE FROM `'.PREFIX.'abholer` WHERE `betrieb_id` = '.(int)$bid.' AND `date` = '.$this->dateval($date));
