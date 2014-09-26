@@ -192,6 +192,8 @@ class SettingsView extends View
 				$ai++;
 				$right = 'red';
 				
+				$smilie = 'fa-frown-o';
+				
 				if($a['user_say'])
 				{
 					$noclicked = false;
