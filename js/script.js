@@ -523,6 +523,7 @@ function ajreq(name,options,method,app)
 	
 	if(opt.loader == undefined || opt.loader == true)
 	{
+		opt.loader = true;
 		showLoader();
 	}
 	
@@ -546,7 +547,10 @@ function ajreq(name,options,method,app)
 			}
 		},
 		complete:function(){
-			hideLoader();
+			if(opt.loader === true)
+			{
+				hideLoader();
+			}
 		}
 	});
 }

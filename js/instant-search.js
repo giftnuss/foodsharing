@@ -1,21 +1,5 @@
 $(document).ready(function(){
-	$('#searchbar').click(function(e){
-	    e.stopPropagation();
-	});
-	
-	$('#msgBar .bar-search').click(function(e){
-		$('#msgBar .bar-search').hide();
-		$('#searchbar').show();
-		$('#searchbar input').select();
-		//$('#searchbar input')[0].focus();
-		search.open();
-	     e.stopPropagation();
-	});
-	
-	$(document).click(function(){
-		$('#searchbar').hide();
-		$('#msgBar .bar-search').show();
-	});
+	search.addEvents();
 });
 
 var search = {
@@ -29,8 +13,28 @@ var search = {
 	$input: null,
 	$morelink: null,
 	
-	init: function(){
+	addEvents: function(){
 		
+		$('#searchbar').click(function(e){
+		    e.stopPropagation();
+		});
+		
+		$('#msgBar .bar-search').click(function(e){
+			$('#msgBar .bar-search').hide();
+			$('#searchbar').show();
+			$('#searchbar input').select();
+			//$('#searchbar input')[0].focus();
+			search.open();
+		     e.stopPropagation();
+		});
+		
+		$(document).click(function(){
+			$('#searchbar').hide();
+			$('#msgBar .bar-search').show();
+		});
+	},
+	init: function(){
+
 		this.$icon = $('#searchbar i');
 		this.$searchbar = $('#searchbar');
 		this.initiated = true;

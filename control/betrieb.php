@@ -51,6 +51,9 @@ elseif($id = getActionId('edit'))
 	addBread(s('bread_edit_betrieb'));
 	$data = $db->getOne_betrieb($id);
 	
+	addTitle($data['name']);
+	addTitle(s('edit'));
+	
 	if((isOrgaTeam() || $db->isVerantwortlich($id)) || isBotFor($data['bezirk_id']))
 	{
 		handle_edit();

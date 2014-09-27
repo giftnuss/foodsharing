@@ -109,7 +109,7 @@ else
 {
 	$id = id('tree');
 	addBread(s('bezirk_bread'),'?page=region');
-	
+	addTitle(s('bezirk_bread'));
 	$cnt = '
 	<div>
 		<div style="float:left;width:150px;" id="'.'..'.'"></div>

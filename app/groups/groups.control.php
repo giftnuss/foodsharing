@@ -36,6 +36,7 @@ class GroupsControl extends Control
 		
 		if(!isset($_GET['sub']))
 		{
+			addTitle(s('groups'));
 			addContent($this->view->topbar('foodsharing Arbeitsgruppen','hier findest Du Hilfe und viel zu tun ..','/img/groups.png'),CNT_TOP);
 			if($groups = $this->model->listGroups())
 			{

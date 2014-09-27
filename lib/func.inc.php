@@ -785,7 +785,7 @@ function getMenu()
 			if(S::may('bot'))
 			{
 				$foodsaver .= '
-						<li><a href="?page=blog"><i class="fa fa-comment"></i> Blog-Eintrag schreiben</a></li>
+						<li><a href="?page=blog&sub=manage"><i class="fa fa-comment"></i> Blog-Eintrag schreiben</a></li>
 						<li class="menu-bottom"><a class="menu-bottom" href="?page=email"><i class="fa fa-exchange"></i> E-Mail Verteiler</a></li>';
 				
 				$foodsaver_mob .= '
@@ -873,7 +873,7 @@ function getMenu()
 					<li><a class="fNiv" href="?page=basket">Essenskörbe</a></li>
 					<li><a class="fNiv" href="?page=map">Karte</a></li>
 					<li><a class="fNiv" href="?page=index&sub=ratgeber">Ratgeber</a></li>
-					<li><a class="fNiv" href="?page=join">Mach-Mit!</a></li>
+					<li><a onclick="ajreq(\'join\',{app:\'login\'});return false;" class="fNiv" href="?page=join">Mach-Mit!</a></li>
 					<li><a class="fNiv" href="?page=login" onclick="ajreq(\'login\',{app:\'login\'});return false;">Login</a></li>
 				</ul>',
 			'mobile' => '
@@ -2291,21 +2291,42 @@ function makeHead()
 	cssCompress();
 	global $g_script;
 	global $g_css;
-	global $head;
+	global $g_head;
 	foreach ($g_css as $src => $s)
 	{
-		$head .= '<link rel="stylesheet" type="text/css" href="'.$src.'" />'."\n";
+		$g_head .= '<link rel="stylesheet" type="text/css" href="'.$src.'" />'."\n";
 	}
 	foreach ($g_script as $src => $s)
 	{
-		$head .= '<script type="text/javascript" src="'.$src.'"></script>'."\n";
+		$g_head .= '<script type="text/javascript" src="'.$src.'"></script>'."\n";
 	}
 }
 
 function addHead($str)
 {
-	global $head;
-	$head .= "\n".$str;
+	global $g_head;
+	$g_head .= "\n" . $str;
+}
+
+function addTitle($name)
+{
+	global $g_title;
+	$g_title[] = $name;
+}
+
+function getHead()
+{
+	global $g_head;
+	global $g_title;
+	
+	return '<title>'.implode(' | ',$g_title).'</title>'.
+			$g_head;
+}
+
+function setTitle($name)
+{
+	global $g_title;
+	$g_title = array($name);
 }
 
 function pv($el)

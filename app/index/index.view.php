@@ -13,7 +13,7 @@ class IndexView extends View
 								<h2>Mach mit!</h2>
 								<p>und beginne schon heute, Deine überschüssigen Lebensmittel online anzubieten bzw. abzuholen. Die Registrierung ist ganz einfach und schnell.</p>
             
-								<p style="text-align:center;"><a href="/?page=join" class="button join">'.s('join').'</a></p>
+								<p style="text-align:center;"><a onclick="ajreq(\'join\',{app:\'login\'});return false;" href="/?page=join" class="button join">'.s('join').'</a></p>
 							</div>
 						</div>	
 					</div>
@@ -34,7 +34,7 @@ class IndexView extends View
 					    	<div class="text-content corner-all">
 								<h2>'.$n['name'].'</h2>
 								<p>'.$n['teaser'].'</p>
-								<a href="/?page=blog&post='.$n['id'].'" class="button read-more">'.s('read-more').'</a>
+								<a href="/?page=blog&sub=post&id='.$n['id'].'" class="button read-more">'.s('read-more').'</a>
 							</div>
 						</div>	
 					</div>

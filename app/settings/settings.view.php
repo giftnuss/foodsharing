@@ -112,42 +112,24 @@ class SettingsView extends View
 		}
 		else
 		{
+			/*
+			 * get the specific text from content table
+			 */
 			if($try_count == 1)
 			{
-				$cnt = $model->getContent(19);
-				
-				$out .= v_field($cnt['body'],$cnt['title'],array('class' => 'ui-padding'));
+				$content_id = 19;
 			}
 			else if($try_count == 2)
 			{
-				$out .= v_field('
-							
-					<p>Vielen Dank für Dein Bemühen.</p>
-					<p>Doch leider hast Du mehr Fehlerpunkte gemacht als sein dürfen -
-					und das leider das zweite Mal.</p>
-					<p>Womöglich solltest Du das Wiki (<a href="http://wiki.lebensmittelretten.de" target="_blank">wiki.lebensmittelretten.de</a>) genauer lesen und es dann noch ein letztes Mal versuchen. Solltest Du ein weiteres Mal zu viele Fehlerpunkte erreichen, erhältst Du leider einen Monat Lernpause, bis Du das Quiz erneut durchführen darfst.</p>
-					
-					<p>Gern kannst Du ein Problem auch mit deiner/deinem BotschafterIn besprechen.</p>
-
-						<p>Alles Liebe,<br />
-						Dein Foodsharing Team</p>
-						','Diesmal hat es leider nicht geklappt',array('class' => 'ui-padding'));
+				$content_id = 20;
 			}
 			else if($try_count == 3)
 			{
-				$out .= v_field('
-							
-					<p>Vielen Dank für Dein Bemühen - doch leider hast Du erneut mehr als 3 Fehlerpunkte gemacht.</p>
-					<p>Damit möglichst viele Lebensmittel gerettet werden können, ist Zuverlässigkeit, Sicherheit und Professionalität bei den Betrieben und im Team unverzichtbar.</p>
-					<p>Die Antworten, die Du gegeben hast, vermitteln dieses zum jetzigen Zeitpunkt leider nicht.</p>
-					<p>Daher bekommst Du einen Monat Lernpause und dann kannst Du Dich erneut an dem Quiz versuchen.</p>
-					
-					<p>Gern kannst Du ein Problem auch mit deiner/deinem BotschafterIn besprechen.</p>
-		
-						<p>Alles Liebe,<br />
-						Dein Foodsharing Team</p>
-						','Diesmal hat es leider nicht geklappt',array('class' => 'ui-padding'));
+				$content_id = 21;
 			}
+			
+			$cnt = $model->getContent($content_id);
+			$out .= v_field($cnt['body'],$cnt['title'],array('class' => 'ui-padding'));
 		}
 		
 		

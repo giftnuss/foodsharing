@@ -59,6 +59,7 @@ class BlogModel extends Model
 			`teaser`,
 			`body`,
 			`time`,
+			UNIX_TIMESTAMP(`time`) AS time_ts,
 			`picture`
 			
 			FROM 		`'.PREFIX.'blog_entry`

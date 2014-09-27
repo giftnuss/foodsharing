@@ -26,3 +26,4 @@ $g_lang['edit_article'] = 'Atikel bearbeiten';
 $g_lang['status'] = 'Status';
 $g_lang['status_0'] = 'inaktiv';
 $g_lang['status_1'] = 'veröffentlicht';
+$g_lang['manage_blog'] = 'Blog Einträge verwalten';

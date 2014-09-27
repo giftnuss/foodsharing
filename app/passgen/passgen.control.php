@@ -33,8 +33,11 @@ class PassgenControl extends Control
 	
 	public function index()
 	{	
+		addBread($this->bezirk['name'],'?page=bezirk&bid=' . $this->bezirk_id . '&sub=forum');
 		addBread('Pass-Generator',getSelf());
-		addBread($this->bezirk['name']);
+		
+		addTitle($this->bezirk['name']);
+		addTitle('Pass Generator');
 		
 		if(isset($_POST['foods']) && !empty($_POST['foods']))
 		{

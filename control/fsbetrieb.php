@@ -36,6 +36,7 @@ else if(isset($_GET['id']))
 {
 	
 	addBread(s('betrieb_bread'),'?page=fsbetrieb');
+	addTitle(s('betrieb_bread'));
 	addStyle('.button{margin-right:8px;}#right .tagedit-list{width:256px;}#foodsaver-wrapper{padding-top:0px;}');
 	global $g_data;
 	
@@ -83,7 +84,7 @@ else if(isset($_GET['id']))
 	
 	$betrieb = $db->getMyBetrieb($_GET['id']);
 	
-	
+	addTitle($betrieb['name']);
 	
 	if($db->isInTeam($_GET['id']) || S::may('orga') || isBotFor($betrieb['bezirk_id']))
 	{

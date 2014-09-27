@@ -16,6 +16,8 @@ class IndexControl extends Control
 		addScript('/js/slippry/slippry.min.js');
 		addCss('/js/slippry/slippry.css');
 		
+		addTitle('Restlos glücklich!');
+		
 		$articles = array();
 		
 		if(!S::may())

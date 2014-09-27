@@ -98,6 +98,9 @@ class BezirkControl extends Control
 		{
 			go('?page=bezirk&bid='.$this->bezirk_id.'&sub=forum');
 		}
+		
+		addTitle($this->bezirk['name']);
+		
 		$bezirk = $this->bezirk;
 		if(isBotFor($this->bezirk_id) || isOrgaTeam())
 		{
@@ -167,6 +170,8 @@ class BezirkControl extends Control
 		$bezirk = $this->bezirk;
 		$menu = array();
 		
+		addTitle($this->bezirk['name']);
+		
 		if(isBotFor($this->bezirk_id) || isOrgaTeam())
 		{
 			//$this->bezirkRequests();
@@ -214,7 +219,7 @@ class BezirkControl extends Control
 	{
 		addBread(s('fairteiler'),'?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=fairteiler');
 		addContent($this->view->ftOptions($this->bezirk_id),CNT_RIGHT);
-		
+		addTitle(s('fairteiler'));
 		if($fairteiler = $this->model->listFairteiler($this->bezirk_id))
 		{
 			addContent($this->view->listFairteiler($fairteiler));
@@ -364,6 +369,8 @@ class BezirkControl extends Control
 	{
 		addBread(s('forum'),'?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=forum');
 		
+		addTitle(s('forum'));
+		
 		if(isset($_POST['submitted']))
 		{
 			$sub = 'forum';
@@ -437,6 +444,8 @@ class BezirkControl extends Control
 	{
 		
 			addBread(s('forum'),'?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=botforum');
+			addTitle(s('bot_forum'));
+			
 			
 			if(isset($_POST['submitted']))
 			{
@@ -671,6 +680,8 @@ class BezirkControl extends Control
 	public function events()
 	{
 		addBread('Termine','?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=events');
+		
+		addTitle(s('dates'));
 		
 		if($events = $this->model->listEvents())
 		{

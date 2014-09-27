@@ -13,5 +13,4 @@ $g_lang['bread_new_bezirk'] = 'neuen Bezirk eintragen';
 $g_lang['bezirk_empty'] = 'Bisher wurde kein Bezirk eingetragen.';
 $g_lang['neu_bezirk'] = 'Neuen Bezirk eintragen';
 $g_lang['bezirk_edit_success'] = 'Änderungen wurden gespeichert!';
-
- ?>
+$g_lang['bezirk_bread'] = 'Regionen verwalten';

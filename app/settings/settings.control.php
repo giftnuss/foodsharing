@@ -31,6 +31,8 @@ class SettingsControl extends Control
 		{
 			go('?page=settings&sub=general');
 		}
+		
+		addTitle(s('settings'));
 	}
 	
 	public function index()

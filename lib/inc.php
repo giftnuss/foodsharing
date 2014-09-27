@@ -42,7 +42,8 @@ $g_template = 'default';
 $content_overtop = '';
 $js = '';
 $g_js_func = '';
-$head = '';
+$g_head = '';
+$g_title = array('foodsharing');
 $g_bread = array();
 
 $g_data = getPostData();
@@ -97,7 +98,6 @@ addScript('/js/tagedit/js/jquery.tagedit.js',true);
 addScript('/js/timeago.js',true);
 addScript('/js/autolink.js',true);
 addScript('/js/jquery.slimscroll.min.js',true);
-
 //addScript('js/typeahead.js',true);
 addScript('/js/script.js',true);
 addScript('/js/instant-search.js',true);

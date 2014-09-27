@@ -25,6 +25,7 @@ class QuizControl extends Control
 		}
 		
 		addBread('Quiz','?page=quiz');
+		addTitle('Quiz');
 		
 		$topbtn = '';
 		$slogan = 'Klausurfragen für Foodsaver, Betriebsverantwortliche & Botschafter';

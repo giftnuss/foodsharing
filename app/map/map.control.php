@@ -11,6 +11,7 @@ class MapControl extends Control
 	
 	public function index()
 	{		
+		addTitle(s('map'));
 		$this->setTemplate('map');
 		
 		$center = $this->model->getValues(array('lat','lon'), 'foodsaver', fsId());

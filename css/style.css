@@ -829,7 +829,7 @@ div.msg-inside.error a:hover
 }
 div.msg-inside.success, div.msg-inside.success a
 {
-	background-color: #5AB946 !important;
+	background-color: #46891b !important;
 	color: #fff !important;
 }
 div.msg-inside.error i
@@ -2310,6 +2310,7 @@ td.load
 .button, .ui-button
 {
 	padding:5px 10px;
+	font-size:13px;
 }
 .ui-button:hover, .button:hover
 {
@@ -2495,10 +2496,61 @@ ul.bread li a:hover
 	font-size:16px;
 	position: relative;
 	left: 1px;
-	top: 0px;
+	top: -1px;
 }
 .pickermap {
 	width:93%;
 	height: 280px;
 }
 
+.pac-container:after
+{
+	display:none !important;
+}
+.pac-container
+{
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
+.pac-item
+{
+  color:#aaa174 !important;
+}
+.pac-item-selected
+{
+	background-color: #46891B;
+  	color:#ffffff !important;
+}
+.pac-item:hover
+{
+	background-color: #F5F5B5 !important;
+}
+.pac-icon
+{
+	background: none !important;
+	display: inline !important;
+	height: auto !important;
+	width:auto !important;
+	margin-right:7px !important;
+}
+.pac-icon:before {
+  font-family: 'FontAwesome';
+  content: "\f041";
+  color:#aaa174;
+  font-size: 16px;
+    position: relative;
+    top: 1px;
+}
+.pac-item-selected .pac-icon:before 
+{
+	color:#ffffff !important;
+}
+.pac-item-query
+{
+	color:#4A3520 !important;
+}
+.pac-item-selected .pac-item-query
+{
+	color:#ffffff !important;
+}

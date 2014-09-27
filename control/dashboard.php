@@ -8,6 +8,7 @@ if(!may())
 else
 {
 	addBread('Dashboard');
+	addTitle('Dashboard');
 	$bid = getBezirkId();
 	
 	//if($bid == 0)

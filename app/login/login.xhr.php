@@ -208,7 +208,8 @@ class LoginXhr extends Control
 				      	},
 					});
 					infoMenu();
-					$("#layout_logo a").attr("href","/?page=dashboard");'
+					$("#layout_logo a").attr("href","/?page=dashboard");
+					search.addEvents();'
 			);
 		}
 		else 
@@ -217,6 +218,76 @@ class LoginXhr extends Control
 					'status' => 1,
 					'script' => 'pulseError("'.s('login_failed').'");'
 			);
+		}
+	}
+	
+	/**
+	 * Fancy ajax registration formular
+	 */
+	public function join()
+	{
+		if(!S::may())
+		{
+			$dia = new XhrDialog();
+			
+			$dia->setTitle(s('join'));
+			
+			$dia->addContent($this->view->join());
+			$dia->addOpt('height', 420);
+			$dia->addOpt('width', 700);
+			$dia->addOpt('autoOpen','false',false);
+			
+			$dia->setResizeable(false);
+			
+			$dia->addJsBefore('
+				showLoader();
+				var date = new Date();
+				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/fonts/octicons/octicons.css").appendTo("head");
+				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/css/join.css?" + date.getTime()).appendTo("head");	
+			');
+			
+			$dia->addJsAfter('
+
+			function initialize()
+			{
+				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/fonts/octicons/octicons.css").appendTo("head");
+				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/css/join.css?" + date.getTime()).appendTo("head");
+				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/js/leaflet/leaflet.css?" + date.getTime()).appendTo("head");
+				$.getScript("/js/jquery.geocomplete.js",function(){
+					$.getScript("/js/leaflet/leaflet.js",function(){
+						$.getScript("/js/join.js",function(){
+							$("#'.$dia->getId().'").dialog("open");
+							join.init();
+							hideLoader();
+						});	
+					});
+				});
+			}
+					
+			if(typeof join === "object")
+			{
+				$("#'.$dia->getId().'").dialog("open");
+				join.init();
+			}
+			else if(typeof L === "object")
+			{
+				$.getScript("/js/join.js",function(){
+					$("#'.$dia->getId().'").dialog("open");
+					join.init();
+				});	
+			}
+			else
+			{
+				$.getScript(\'http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&callback=initialize\',function(){
+		        	
+		        });	
+			}
+			
+				
+					
+			');
+			
+			return $dia->xhrout();
 		}
 	}
 }
