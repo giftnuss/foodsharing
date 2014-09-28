@@ -15,18 +15,32 @@ class LoginControl extends Control
 	{
 		if(!S::may())
 		{
-			if(isset($_POST['email_adress']))
+			if(!isset($_GET['sub']))
 			{
-				$this->handleLogin();
+				if(isset($_POST['email_adress']))
+				{
+					$this->handleLogin();
+				}
+				addContent($this->view->login());
 			}
-			
-			
-			
-			addContent($this->view->login());
 		}
 		else
 		{
 			go('/?page=dashboard');
+		}
+	}
+	
+	public function activate()
+	{
+		if($this->model->activate($_GET['e'],$_GET['t']))
+		{
+			info(s('activation_success'));
+			goPage('login');
+		}
+		else 
+		{
+			error(s('activation_failed'));
+			goPage('login');
 		}
 	}
 	

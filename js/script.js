@@ -564,7 +564,7 @@ function pulseError(msg,opt)
 			sticky: false
 		};
 	}
-	time = 2000;
+	time = 6000;
 	if(opt.sticky)
 	{
 		time = 900000;
@@ -593,7 +593,7 @@ function pulseSuccess(msg,opt)
 			sticky: false
 		};
 	}
-	time = 2000;
+	time = 5000;
 	if(opt.sticky)
 	{
 		time = 900000;
@@ -622,7 +622,7 @@ function pulseInfo(msg,opt)
 			sticky: false
 		};
 	}
-	time = 2000;
+	time = 4000;
 	if(opt.sticky)
 	{
 		time = 900000;

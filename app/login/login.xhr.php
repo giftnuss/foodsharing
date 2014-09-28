@@ -254,10 +254,6 @@ class LoginXhr extends Control
 			
 			$image->rename($name, true);
 			
-			//chmod(ROOT_DIR . 'tmp/' . $name, '777');
-			
-			exec('chmod 777 ' . '/var/www/foodsharing/tmp/' .$name);
-			
 			$image = new fImage(ROOT_DIR . 'tmp/' . $name);
 			
 			$image->resize(800, 0);
@@ -294,7 +290,7 @@ class LoginXhr extends Control
 			$token = uniqid('',true);
 			if($id = $this->model->insertNewUser($data,$token))
 			{
-				$activationUrl = DEFAULT_HOST . '?page=login&sub=activate&token=' . $token;
+				$activationUrl = 'http://' . DEFAULT_HOST . '?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
 				
 				tplMail(25, $data['email'],array(
 					'name' => $data['name'],

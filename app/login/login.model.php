@@ -1,6 +1,16 @@
 <?php
 class LoginModel extends Model
 {
+	
+	public function activate($email,$token)
+	{
+		if((int)$this->update('UPDATE '.PREFIX.'foodsaver SET `active` = 1 WHERE email = '.$this->strval($email).' AND `token` = '.$this->strval($token)) > 0)
+		{
+			return true;
+		}
+		return false;
+	}
+	
 	public function insertNewUser($data,$token)
 	{
 		/*

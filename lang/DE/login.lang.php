@@ -34,3 +34,7 @@ $g_lang['error'] = 'Es ist ein Fehler aufgetreten';
 $g_lang['error_name'] = 'Bitte gib einen Namen ein';
 $g_lang['error_email'] = 'Mit Deiner E-Mail Adresse stimmt etwas nicht';
 $g_lang['error_passwd'] = 'Dein Passwort muss mindestens 5 und darf maximal 30 Zeichen haben';
+
+
+$g_lang['activation_success'] = '<strong>Aktivierung erfolgreich!</strong> Logge Dich jetzt Mit Deiner E-Mail Adresse und Deinem gewählten Passwort ein.';
+$g_lang['activation_failed'] = '<strong>Aktivierung fehlgeschlagen!</strong> Ist der eingegebene Link auch korrekt?';

@@ -1863,14 +1863,34 @@ function handleForm($name)
 	}
 }
 
-function info($msg)
+function info($msg,$title = false)
 {
+	$t = '';
+	if($title !== false)
+	{
+		$t = '<strong>'.$title.'</strong> ';
+	}
 	$_SESSION['msg']['info'][] = $msg;
 }
 
-function error($msg)
+function success($msg,$title = false)
 {
-	$_SESSION['msg']['error'][] = $msg;
+	$t = '';
+	if($title !== false)
+	{
+		$t = '<strong>'.$title.'</strong> ';
+	}
+	$_SESSION['msg']['success'][] = $t.$msg;
+}
+
+function error($msg,$title = false)
+{
+	$t = '';
+	if($title !== false)
+	{
+		$t = '<strong>'.$title.'</strong> ';
+	}
+	$_SESSION['msg']['error'][] = $t.$msg;
 }
 
 function session_init()
@@ -1898,6 +1918,7 @@ function session_init()
 		$_SESSION['msg'] = array();
 		$_SESSION['msg']['info'] = array();
 		$_SESSION['msg']['error'] = array();
+		$_SESSION['msg']['success'] = array();
 	}
 	/*
 	if(!isset($_SESSION['geo']) || $_SESSION['geo'] == false)
@@ -2057,7 +2078,17 @@ function getMessages()
 		}
 		addJs('pulseInfo("'.jsSafe($msg,'"').'");');
 	}
+	if(isset($_SESSION['msg']['info']) && !empty($_SESSION['msg']['info']))
+	{
+		$msg = '';
+		foreach ($_SESSION['msg']['info'] as $i)
+		{
+			$msg .= '<p>'.$i.'</p>';
+		}
+		addJs('pulseSuccess("'.jsSafe($msg,'"').'");');
+	}
 	$_SESSION['msg']['info'] = array();
+	$_SESSION['msg']['success'] = array();
 	$_SESSION['msg']['error'] = array();
 	//return v_getMessages($g_error,$g_info);
 }
