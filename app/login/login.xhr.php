@@ -349,6 +349,11 @@ class LoginXhr extends Control
 			$data['type'] = 1;
 		}
 		
+		if($data['photo'] != '')
+		{
+			$data['photo'] = $this->resizeAvatar($data['photo']);
+		}
+		
 		$data['name'] = strip_tags($data['name']);
 		$data['name'] = trim($data['name']);
 		if($data['name'] == '')
@@ -517,6 +522,55 @@ class LoginXhr extends Control
             return $phone;
         }   // end if $mask == 8
         return false;       // Returns false if no conditions meet or input
+    }
+    
+    private function resizeAvatar($img)
+    {
+    	if(file_exists(ROOT_DIR . 'tmp/' . $img))
+    	{
+    		$folder = ROOT_DIR . 'tmp/';
+    		$image = new fImage(ROOT_DIR . 'tmp/' . $img);
+    		$image->move(ROOT_DIR . 'images/', false);
+    		
+    		// make 35x35
+    		copy($folder . $img, $folder . 'mini_q_' . $img);
+    		$image = fImage($folder . 'mini_q_' . $img);
+    		$image->cropToRatio(1, 1);
+    		$image->resize(35, 35);
+    		$image->saveChanges();
+    		
+    		// make 75x75
+    		copy($folder . $img, $folder . 'med_q_' . $img);
+    		$image = fImage($folder . 'med_q_' . $img);
+    		$image->cropToRatio(1, 1);
+    		$image->resize(75, 75);
+    		$image->saveChanges();
+    		
+    		// make 50x50
+    		copy($folder . $img, $folder . '50_q_' . $img);
+    		$image = fImage($folder . '50_q_' . $img);
+    		$image->cropToRatio(1, 1);
+    		$image->resize(75, 75);
+    		$image->saveChanges();
+    		
+    		// make 130x130
+    		copy($folder . $img, $folder . '130_q_' . $img);
+    		$image = fImage($folder . '130_q_' . $img);
+    		$image->cropToRatio(1, 1);
+    		$image->resize(130, 130);
+    		$image->saveChanges();
+    		
+    		// make 150x150
+    		copy($folder . $img, $folder . 'q_' . $img);
+    		$image = fImage($folder . 'q_' . $img);
+    		$image->cropToRatio(1, 1);
+    		$image->resize(150, 150);
+    		$image->saveChanges();
+    		
+    		return $img;
+    	}
+    	
+    	return '';
     }
     
     private function validate_phone_number ( $phone ) 
