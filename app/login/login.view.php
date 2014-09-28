@@ -68,17 +68,32 @@ class LoginView extends View
 									<input placeholder="'.s('login_email').'" type="text" value="" id="login_email" name="login_email" class="input text value" />
 								</div>
 								<div class="element-wrapper">
+									<select id="login_gender" name="c[]" class="input select value">
+										<option selected="selected" value="0">'.s('select_your_gender').'</option>
+										<option value="2">'.s('woman').'</option>
+										<option value="1">'.s('man').'</option>
+										<option value="0">'.s('other').'</option>
+									</select>
+								</div>
+								<div class="element-wrapper">
 									<input placeholder="'.s('login_passwd1').'" type="password" value="" id="login_passwd1" name="login_passwd1" class="input text value" />
 								</div>
 								<div class="element-wrapper">
 									<input placeholder="'.s('login_passwd2').'" type="password" value="" id="login_passwd2" name="login_passwd1" class="input text value" />
 								</div>
+								
 							</div>
 							<div class="avatar">
-								<a class="container corner-all" href="#">
-									<span class="mega-octicon octicon-device-camera"></span>		
-								</a><br />
-								<a href="#" class="button">'.s('select_picture').'</a>
+								<form action="/xhrapp.php?app=login&m=photoupload" id="join_photoform" target="join_upload_frame" method="post" enctype="multipart/form-data">
+									<input type="hidden" name="action" value="upload" />
+									<a onclick="$(\'#join_photo\').trigger(\'click\');return false;" class="container corner-all" href="#">
+										<span class="mega-octicon octicon-device-camera"></span>
+										<span class="fa fa-circle-o-notch fa-spin"></span>		
+									</a><br />
+									<a onclick="$(\'#join_photo\').trigger(\'click\');return false;" href="#" class="button">'.s('select_picture').'</a><span class="filewrapper"><input onchange="join.startUpload();" type="file" name="photo" id="join_photo" /></span>
+								</form>
+								<iframe frameborder="0" style="width:10px;height:10px;" name="join_upload_frame" src="/nix.html"></iframe>
+								<input type="hidden" name="c[]" value="" id="join_avatar" />
 							</div>
 							<div style="clear:both;"></div>
 						</div>
@@ -88,7 +103,7 @@ class LoginView extends View
 					</div>
 					<div style="display:none;" class="step step2">
 						<div class="content">
-							<h3>'.s('i_am_a').'</h3>
+							<h3>'.s('contact_info').'</h3>
 							<div class="element-wrapper">
 								<input placeholder="'.s('login_phone').'" type="text" value="" id="login_phone" name="login_phone" class="input text value" />
 								'.v_info(s('login_phone_info')).'
@@ -100,7 +115,7 @@ class LoginView extends View
 									<input type="hidden" name="lat" id="join_lat" value="" />
 									<input type="hidden" name="lng" id="join_lon" value="" />
 									<input type="hidden" name="route" id="join_str" value="" />
-									<input type="hidden" name="street_number" id="join_jsnr" value="" />
+									<input type="hidden" name="street_number" id="join_hsnr" value="" />
 									<input type="hidden" name="postal_code" id="join_plz" value="" />
 									<input type="hidden" name="locality" id="join_ort" value="" />
 									<input type="hidden" name="country_short" id="join_country" value="" />
@@ -113,9 +128,17 @@ class LoginView extends View
 					</div>
 					<div style="display:none;" class="step step3">
 						<div class="content">
-							'.v_input_wrapper('Datenschutzerklärung', '<textarea readonly="readonly">Bla bla bla</textarea>').'	
-							'.v_input_wrapper('Rechtsvereinbarung', '<textarea readonly="readonly">Bli bla blubb</textarea>').'	
-							<label><input type="checkbox" name="join_legal" value="1" /> '.s('have_read_the_legal_stuff').'</label>
+							<h3>'.s('legal_stuff').'</h3>
+							<div class="element-wrapper">
+								<h4>Datenschutzerklärung</h4>
+								<textarea readonly="readonly">Bla bla bla</textarea>
+							</div>
+							<div class="element-wrapper">
+								<h4>Rechtsvereinbarung</h4>
+								<textarea readonly="readonly">Bli bla blubb</textarea>
+							</div>
+							<label><input id="join_legal1" type="checkbox" name="join_legal1" value="1" /> '.s('have_read_the_legal_stuff1').'</label><br />
+							<label><input id="join_legal2" type="checkbox" name="join_legal2" value="1" /> '.s('have_read_the_legal_stuff2').'</label>
 						</div>
 						<div class="bottom">
 							<a class="button" href="" onclick="join.step(2);return false;">'.s('prev').'</a> <a class="button" href="" onclick="join.finish();return false;">'.s('finish').'</a>
@@ -123,6 +146,8 @@ class LoginView extends View
 					</div>
 				</div>
 				<div style="clear:both;"></div>
-		</div>';
+		</div>
+		<div id="joinloader" style="display:none;"><span class="fa fa-circle-o-notch fa-spin"></span></div>
+		<div id="joinready" style="display:none">'.v_success(s('check_mail'),s('join_success')).'</div>';
 	}
 }

@@ -14,13 +14,22 @@
 	float:left;
 	margin-left:10px;
 }
-
+#joinform .right select
+{
+	width:220px !important;
+	cursor: pointer;
+}
 #joinform .content {
     height: 330px !important;
 }
 
+#joinform .content textarea{
+	height:68px;
+	
+}
 #joinform .bottom {
     text-align: right;
+    padding-right:6px;
 }
 
 #joinform .right h3
@@ -120,23 +129,23 @@
 {
 	text-decoration:none !important;
 }
-.iamchooser a:hover span
+#joinform .iamchooser a:hover span
 {
 	color:#46891b;
 }
-.iamchooser a:hover i
+#joinform .iamchooser a:hover i
 {
 	text-decoration: none;
     color: #4a3520;
     border: 3px solid #5AB946;
 }
-.iamchooser a.active i
+#joinform .iamchooser a.active i
 {
 	background-color:#46891b !important;
 	border-color: #46891b !important;
 	color:#FFFFFF !important;
 }
-.avatar .container
+#joinform .avatar .container
 {
 	border: 3px solid #4a3520;
     display: inline-block;
@@ -147,19 +156,47 @@
     text-align: center;
     width: 80px;
 }
-.avatar .container span
+#joinform .avatar form .container span
 {
 	color: #4a3520;
     font-size: 60px;
+}
+#joinform .avatar .container
+{
+  background-size: 100px auto;
+  background-position: center;
+}
+
+#joinform .avatar form .container span.fa
+{
+	display:none;
+}
+#joinform .avatar form.load .container span.fa
+{
+	display:inline-block;
+}
+#joinform .avatar form.load a.button
+{
+	visibility:hidden;
+}
+.avatar form.load .container span.mega-octicon
+{
+	display:none;
 }
 #joinform .form
 {
 	float:left;
 	width:215px;
 }
-#joinform .form .element-wrapper
+#joinform .element-wrapper
 {
 	margin:0 0 18px 0;
+}
+#joinform .element-wrapper h4
+{
+	font-weight: normal;;
+	font-size: 12px;
+	color:#4a3520;
 }
 #joinform .avatar
 {
@@ -169,7 +206,7 @@
 }
 #join_mapview
 {
-	height: 118px;
+	height: 110px;
     width: 438px;
     overflow: hidden;
     margin-top:5px;
@@ -192,4 +229,23 @@
 {
 	margin-top:5px;
     width: 393px;
+}
+.filewrapper
+{
+	overflow:hidden;
+	display:inline-block;
+	width:1px;
+	height:1px;
+	opacity:0;
+}
+#joinloader
+{
+	text-align: center;
+	font-size: 44px;
+    line-height: 365px;
+	color:#4a3520 !important;
+}
+#joinready
+{
+	padding:150px 70px 0 70px;
 }

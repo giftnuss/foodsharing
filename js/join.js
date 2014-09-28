@@ -3,6 +3,7 @@ var join = {
 	map:null,
 	markerIcon:null,
 	marker:null,
+	isLoading:false,
 	init: function()
 	{
 		join.map = false;
@@ -14,6 +15,25 @@ var join = {
 			join.marker.setLatLng(latLng);
 			join.map.setView(latLng,14);
 		});
+	},
+	photoUploadError: function(error){
+		pulseError(error);
+		join.isLoading = false;
+		$('#joinform .avatar form').removeClass('load');
+	},
+	readyUpload: function(name){
+		$('#joinform .avatar .container').html('').css({
+			'background-image':'url(/tmp/' + name + ')'
+		});
+		join.isLoading = false;
+		$('#joinform .avatar form').removeClass('load');
+		$('#join_avatar').val(name);
+	},
+	startUpload: function()
+	{
+		$('#join_photoform').addClass('load').submit();
+		join.isLoading=true;
+		$('#joinform .avatar .container').css('background-image','none').html('<span class="mega-octicon octicon-device-camera"></span><span class="fa fa-circle-o-notch fa-spin"></span>');
 	},
 	loadMap: function()
 	{
@@ -47,7 +67,59 @@ var join = {
 		}
 	},
 	finish: function(){
-		alert('send...');
+		
+		if($('#join_legal1:checked').length <= 0)
+		{
+			pulseError('Bitte akzeptiere unsere Datenschutzerkl&auml;rung');
+			return false;
+		}
+		else if($('#join_legal2:checked').length <= 0)
+		{
+			pulseError('Bitte akzeptiere unsere Rechtsvereinbarung');
+			return false;
+		}
+		else
+		{
+			$('#joinform').hide();
+			$('#joinloader').show();
+			
+			$.ajax({
+				url: 'xhrapp.php?app=login&m=joinsubmit',
+				type:'post',
+				dataType:'json',
+				data:{
+					iam:$('#join_iam').val(),
+					name:$('#login_name').val(),
+					email:$('#login_email').val(),
+					pw:$('#login_passwd1').val(),
+					avatar:$('#join_avatar').val(),
+					phone:$('#login_phone').val(),
+					lat:$('#join_lat').val(),
+					lon:$('#join_lon').val(),
+					str:$('#join_str').val(),
+					nr:$('#join_hsnr').val(),
+					plz:$('#join_plz').val(),
+					city:$('#join_ort').val(),
+					gender:$('#login_gender').val(),
+					country:$('#join_country').val()
+				},
+				success: function(ret){
+					if(ret.status != undefined && ret.status == 1)
+					{
+						$('#joinloader').hide();
+						$('#joinready').show();
+					}
+					else if(ret.status != undefined && ret.status == 0)
+					{
+						pulseError(ret.error);
+						$('#joinloader').hide();
+						$('#joinform').show();
+						join.step(1);
+					}
+				}
+			});
+			
+		}
 	},
 	step: function(step)
 	{
@@ -73,7 +145,7 @@ var join = {
 		}
 	},
 	stepCheck: function(step){
-		
+		return true;
 		switch(join.currentStep)
 		{
 			case 1:
@@ -107,6 +179,13 @@ var join = {
 				{
 					pulseInfo('Deine Passwörter stimmen nicht überein');
 					$('#login_passwd1').select();
+					return false;
+					check = false;
+				}
+				
+				if(join.isLoading)
+				{
+					pulseInfo('Bitte warte bis Dein Foto hochgeladen ist');
 					return false;
 					check = false;
 				}

@@ -673,7 +673,7 @@ function v_success($msg,$title =false)
 	}
 	return '
 	<div class="msg-inside success">
-			<i class="fa fa-check-circle"></i> '.$msg.'
+			<i class="fa fa-check-circle"></i> '.$title.$msg.'
 	</div>';
 }
 
@@ -685,7 +685,7 @@ function v_info($msg,$title =false)
 	}
 	return '
 	<div class="msg-inside info">
-			<i class="fa fa-info-circle"></i> '.$msg.'
+			<i class="fa fa-info-circle"></i> '.$title.$msg.'
 	</div>';
 }
 
@@ -697,7 +697,7 @@ function v_error($msg,$title =false)
 	}
 	return '
 	<div class="msg-inside error">
-			<i class="fa fa-warning"></i> '.$msg.'
+			<i class="fa fa-warning"></i> '.$title.$msg.'
 	</div>';
 }
 

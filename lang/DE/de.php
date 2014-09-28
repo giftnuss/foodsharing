@@ -200,3 +200,8 @@ $g_lang['deutschlandtour_desc'] = 'dann schreibe uns hier eine kurze Nachricht';
 $g_lang['deutschlandtour_message'] = 'Ja ich möchte einen Besuch von euch bekommen!';
 $g_lang['search'] = 'Suchen';
 $g_lang['no_result'] = 'Kein Ergebnis';
+$g_lang['email_exists'] = 'Mit dieser E-Mail Adresse ist bereits ein Benutzer registriert.';
+$g_lang['anrede_0'] = 'Liebe/r';
+$g_lang['anrede_1'] = 'Lieber';
+$g_lang['anrede_2'] = 'Liebe';
+
