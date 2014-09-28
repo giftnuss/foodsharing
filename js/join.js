@@ -145,7 +145,7 @@ var join = {
 		}
 	},
 	stepCheck: function(step){
-		return true;
+
 		switch(join.currentStep)
 		{
 			case 1:

@@ -522,48 +522,60 @@ class LoginXhr extends Control
     
     private function resizeAvatar($img)
     {
-    	if(file_exists(ROOT_DIR . 'tmp/' . $img))
+    	$folder = ROOT_DIR . 'tmp/';
+    	if(file_exists($folder . $img))
     	{
-    		$folder = ROOT_DIR . 'tmp/';
-    		$image = new fImage(ROOT_DIR . 'tmp/' . $img);
-    		$image->move(ROOT_DIR . 'images/', false);
+    		$image = new fImage($folder . $img);
     		
-    		// make 35x35
-    		copy($folder . $img, $folder . 'mini_q_' . $img);
-    		$image = fImage($folder . 'mini_q_' . $img);
-    		$image->cropToRatio(1, 1);
-    		$image->resize(35, 35);
-    		$image->saveChanges();
+    		try {
+    			
+    			$folder = ROOT_DIR . 'images/';
+    			
+    			$image->move($folder, false);
+    			// make 35x35
+    			copy($folder . $img, $folder . 'mini_q_' . $img);
+    			$image = new fImage($folder . 'mini_q_' . $img);
+    			$image->cropToRatio(1, 1);
+    			$image->resize(35, 35);
+    			$image->saveChanges();
+    			
+    			// make 75x75
+    			copy($folder . $img, $folder . 'med_q_' . $img);
+    			$image = new fImage($folder . 'med_q_' . $img);
+    			$image->cropToRatio(1, 1);
+    			$image->resize(75, 75);
+    			$image->saveChanges();
+    			
+    			// make 50x50
+    			copy($folder . $img, $folder . '50_q_' . $img);
+    			$image = new fImage($folder . '50_q_' . $img);
+    			$image->cropToRatio(1, 1);
+    			$image->resize(75, 75);
+    			$image->saveChanges();
+    			
+    			// make 130x130
+    			copy($folder . $img, $folder . '130_q_' . $img);
+    			$image = new fImage($folder . '130_q_' . $img);
+    			$image->cropToRatio(1, 1);
+    			$image->resize(130, 130);
+    			$image->saveChanges();
+    			
+    			// make 150x150
+    			copy($folder . $img, $folder . 'q_' . $img);
+    			$image = new fImage($folder . 'q_' . $img);
+    			$image->cropToRatio(1, 1);
+    			$image->resize(150, 150);
+    			$image->saveChanges();
+    			
+    			return $img;
+    			
+    		} catch (Exception $e) {
+    			info('Dein Foto konnte nicht gespeichert werden');
+    			return '';
+    		}
     		
-    		// make 75x75
-    		copy($folder . $img, $folder . 'med_q_' . $img);
-    		$image = fImage($folder . 'med_q_' . $img);
-    		$image->cropToRatio(1, 1);
-    		$image->resize(75, 75);
-    		$image->saveChanges();
     		
-    		// make 50x50
-    		copy($folder . $img, $folder . '50_q_' . $img);
-    		$image = fImage($folder . '50_q_' . $img);
-    		$image->cropToRatio(1, 1);
-    		$image->resize(75, 75);
-    		$image->saveChanges();
     		
-    		// make 130x130
-    		copy($folder . $img, $folder . '130_q_' . $img);
-    		$image = fImage($folder . '130_q_' . $img);
-    		$image->cropToRatio(1, 1);
-    		$image->resize(130, 130);
-    		$image->saveChanges();
-    		
-    		// make 150x150
-    		copy($folder . $img, $folder . 'q_' . $img);
-    		$image = fImage($folder . 'q_' . $img);
-    		$image->cropToRatio(1, 1);
-    		$image->resize(150, 150);
-    		$image->saveChanges();
-    		
-    		return $img;
     	}
     	
     	return '';
