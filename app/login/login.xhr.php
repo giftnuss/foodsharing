@@ -240,7 +240,7 @@ class LoginXhr extends Control
 			$dia->setResizeable(false);
 			
 			$dia->addJsBefore('
-				showLoader();
+				
 				var date = new Date();
 				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/fonts/octicons/octicons.css").appendTo("head");
 				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/css/join.css?" + date.getTime()).appendTo("head");	
@@ -263,6 +263,8 @@ class LoginXhr extends Control
 					});
 				});
 			}
+			
+			showLoader();
 					
 			if(typeof join === "object")
 			{

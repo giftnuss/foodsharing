@@ -52,7 +52,7 @@ var join = {
 	step: function(step)
 	{
 		
-		if(join.currentStep > step || join.stepCheck(step))
+		if(join.currentStep >= step || join.stepCheck(step))
 		{
 			switch(step)
 			{
