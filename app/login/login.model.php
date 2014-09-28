@@ -54,7 +54,7 @@ class LoginModel extends Model
 				'.$this->strval($data['lat']).',
 				'.$this->strval($data['lon']).',
 				'.$this->strval($token).',
-				'.$this->strval($data['photo']).'
+				'.$this->strval($data['avatar']).'
 			)');
 	}
 }

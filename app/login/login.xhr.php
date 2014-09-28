@@ -349,9 +349,9 @@ class LoginXhr extends Control
 			$data['type'] = 1;
 		}
 		
-		if($data['photo'] != '')
+		if($data['avatar'] != '')
 		{
-			$data['photo'] = $this->resizeAvatar($data['photo']);
+			$data['avatar'] = $this->resizeAvatar($data['avatar']);
 		}
 		
 		$data['name'] = strip_tags($data['name']);
