@@ -221,19 +221,19 @@ if(data.script!=undefined)
 var u_pulse_error_to=null;var u_pulse_info_to=null;function pulseError(msg,opt)
 {if(opt==undefined)
 {opt={sticky:false};}
-time=2000;if(opt.sticky)
+time=6000;if(opt.sticky)
 {time=900000;}
 $("#pulse-error").html(msg);$("#pulse-error").stop().fadeIn();u_pulse_error_to=setTimeout(function(){$("#pulse-error").fadeOut();$(document).unbind('click');},time);setTimeout(function(){$(document).bind('click',function(){$("#pulse-error").stop().fadeOut();$(document).unbind('click');clearTimeout(u_pulse_error_to);});},500);}
 function pulseSuccess(msg,opt)
 {if(opt==undefined)
 {opt={sticky:false};}
-time=2000;if(opt.sticky)
+time=5000;if(opt.sticky)
 {time=900000;}
 $("#pulse-success").html(msg);$("#pulse-success").stop().fadeIn();u_pulse_error_to=setTimeout(function(){$("#pulse-success").fadeOut();$(document).unbind('click');},time);setTimeout(function(){$(document).bind('click',function(){$("#pulse-success").stop().fadeOut();$(document).unbind('click');clearTimeout(u_pulse_error_to);});},500);}
 function pulseInfo(msg,opt)
 {if(opt==undefined)
 {opt={sticky:false};}
-time=2000;if(opt.sticky)
+time=4000;if(opt.sticky)
 {time=900000;}
 $("#pulse-info").html(msg);$("#pulse-info").fadeIn();u_pulse_info_to=setTimeout(function(){$("#pulse-info").fadeOut();$(document).unbind('click');},time);setTimeout(function(){$(document).bind('click',function(){$("#pulse-info").fadeOut();$(document).unbind('click');clearTimeout(u_pulse_info_to);});},500);}
 function addHover(sel){$(sel).hover(function(){$(this).addClass("hover");},function(){$(this).removeClass("hover");});}

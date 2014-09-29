@@ -115,6 +115,7 @@ class SettingsView extends View
 			/*
 			 * get the specific text from content table
 			 */
+			$content_id = false;
 			if($try_count == 1)
 			{
 				$content_id = 19;
@@ -123,13 +124,16 @@ class SettingsView extends View
 			{
 				$content_id = 20;
 			}
-			else if($try_count == 3)
+			else if($try_count > 2)
 			{
 				$content_id = 21;
 			}
-			
-			$cnt = $model->getContent($content_id);
-			$out .= v_field($cnt['body'],$cnt['title'],array('class' => 'ui-padding'));
+
+			if($content_id)
+			{
+				$cnt = $model->getContent($content_id);
+				$out .= v_field($cnt['body'],$cnt['title'],array('class' => 'ui-padding'));
+			}
 		}
 		
 		
@@ -237,6 +241,8 @@ class SettingsView extends View
 				}
 			}
 			
+			$no_wrong_right_sort = false;
+			
 			if($r['userfp'] > 0)
 			{
 				$cnt .= v_input_wrapper('gesammelte Fehlerpunkte', $r['userfp']);
@@ -245,7 +251,8 @@ class SettingsView extends View
 					$ftext = ' wurde leider falsch beantwortet.';
 					if(!$r['noco'] && $noclicked)
 					{
-						$ftext = ' wurde leider als falsch gewertet. Da Du nichts ausgewählt hast.';
+						$no_wrong_right_sort = true;
+						$ftext = ' wurde leider als falsch gewertet. Da Du nichts ausgewählt hast oder die Zeit abgelaufen ist.';
 					}
 				}
 				else
@@ -254,15 +261,22 @@ class SettingsView extends View
 				}
 			}
 			
-			
-			if(!empty($right_answers))
+			if($no_wrong_right_sort)
 			{
-				$cnt .= v_input_wrapper('Antworten die Du richtig ausgewählt hast', $right_answers,false,array('collapse' => true));
+				$cnt .= v_input_wrapper('Antworten', $wrong_answers.$right_answers,false,array('collapse' => true));
 			}
-			if(!empty($wrong_answers))
+			else
 			{
-				$cnt .= v_input_wrapper('Antworten die Du falsch ausgewählt hast', $wrong_answers,false,array('collapse' => true));
-			}	
+				if(!empty($right_answers))
+				{
+					$cnt .= v_input_wrapper('Antworten die Du richtig ausgewählt hast', $right_answers,false,array('collapse' => true));
+				}
+				if(!empty($wrong_answers))
+				{
+					$cnt .= v_input_wrapper('Antworten die Du falsch ausgewählt hast', $wrong_answers,false,array('collapse' => true));
+				}
+			}
+				
 
 			$cnt .= '<div id="qcomment-'.(int)$r['id'].'">'.v_input_wrapper('Kommentar zu dieser Frage Schreiben', '<textarea style="height:50px;" id="comment-'.$r['id'].'" name="desc" class="input textarea value"></textarea><br /><a class="button" href="#" onclick="ajreq(\'addcomment\',{app:\'quiz\',comment:$(\'#comment-'.(int)$r['id'].'\').val(),id:'.(int)$r['id'].'});return false;">Absenden</a>',false,array('collapse' => true)).'</div>';
 				

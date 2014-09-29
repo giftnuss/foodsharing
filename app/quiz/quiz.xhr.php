@@ -343,7 +343,11 @@ class QuizXhr extends Control
 			$dia->addButton('Quiz fortführen', 'ajreq(\'next\',{app:\'quiz\'});');
 			
 			$return = $dia->xhrout();
-			
+			/*
+			$return['script'] .= '
+				$("head").append(\'<link rel="stylesheet" type="text/css" href="/js/timecircle/TimeCircles.css" />\');
+				$.getScript("/js/timecircle/TimeCircles.js",function(){});
+				';*/
 			$return['script'] .= $this->abortOrOpenDialog($session['id']);
 			
 			return $return;
@@ -385,9 +389,13 @@ class QuizXhr extends Control
 				$dia->addContent($this->view->initQuiz($quiz,$content));
 				$dia->addAbortButton();
 				$dia->addButton('Quiz Starten', 'clearTimeout(g_chatheartbeatTO);clearInterval(g_interval_newBasket);ajreq(\'next\',{app:\'quiz\'});$(\'#'.$dia->getId().'\').dialog(\'close\');');
-						
+				
 				$return = $dia->xhrout();
-			
+				/*
+				$return['script'] .= '
+				$("head").append(\'<link rel="stylesheet" type="text/css" href="/js/timecircle/TimeCircles.css" />\');
+				$.getScript("/js/timecircle/TimeCircles.js",function(){});
+					';*/
 				$return['script'] .= $this->abortOrOpenDialog($session['id']);
 				
 				return $return;
@@ -595,7 +603,7 @@ class QuizXhr extends Control
 						/*
 						 * add next() Button
 						 */
-						$dia->addButton('Weiter', 'questionnext();');
+						$dia->addButton('Abssenden & Weiter', 'questionnext();');
 						
 						$dia->addOpt('open','
 						function(){
@@ -762,8 +770,15 @@ class QuizXhr extends Control
 								$(\'#quizbreath span\').text("Weiter gehts!");
 							},5000);
 							
+							
 							setTimeout(function(){
 								counter = setInterval(timer, 1000); 
+								
+								$("#countdown").progressbar({
+					                  value: '.$question['duration'].',
+					                  max:'.$question['duration'].'
+					             });
+									
 								$(\'#quizwrapper\').show();
 								$(\'#quizbreath\').hide();
 								$(".ui-dialog-buttonpane").css("visibility","visible");
@@ -772,7 +787,8 @@ class QuizXhr extends Control
 							function timer()
 							{
 							  count--;
-							  $("#countdown").text((count)+"");
+					          $("#countdown").progressbar("value",count);
+							  //$("#countdown").text((count)+"");
 							  if (count <= 0)
 							  {
 							     //questgonext();

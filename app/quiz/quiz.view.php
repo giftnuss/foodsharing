@@ -243,7 +243,8 @@ class QuizView extends View
 	public function quizQuestion($question,$answers)
 	{
 		$out =  '
-			<div id="countdown" style="font-size:16px;font-weight:bold;float:right;margin-left:10px;background-color:#4A3520;padding:15px;border-radius:30px;height:30px;width:30px;line-height:30px;text-align:center;color:#FFFFFF;">'.$question['duration'].'</div>
+				<div style="float:right;width:150px;margin-left:50px;margin-bottom:10px;" id="countdown"></div>
+			<!-- <div id="countdown" style="font-size:16px;font-weight:bold;float:right;margin-left:10px;background-color:#4A3520;padding:15px;border-radius:30px;height:30px;width:30px;line-height:30px;text-align:center;color:#FFFFFF;">'.$question['duration'].'</div> -->
 		
 			<div style="border-radius:10px;font-size:14px;color:#000;padding:10px;background:#FFFFFF;margin-bottom:15px;line-height:20px;">'.$question['text'].'</div>
 		';
