@@ -194,15 +194,7 @@ class LoginXhr extends Control
 				'script' => '
 					'.$token_js.'
 					pulseSuccess("'.s('login_success').'");
-					
-					/*
-					if(false /*GET("page") == "map"*/ )
-					{
-						reload();
-					}
-					else
-					{
-					*/
+
 						dialogs.closeAll();
 						$("#layout_logo").after(\''.jsSafe($msgbar).'\');
 						$("#mainMenu").replaceWith(\''.jsSafe($menu['default']).'\');
@@ -218,8 +210,7 @@ class LoginXhr extends Control
 						});
 						infoMenu();
 						$("#layout_logo a").attr("href","/?page=dashboard");
-						search.addEvents();
-					/*}*/'
+						search.addEvents();'
 					
 			);
 		}
