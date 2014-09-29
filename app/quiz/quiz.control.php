@@ -28,7 +28,7 @@ class QuizControl extends Control
 		addTitle('Quiz');
 		
 		$topbtn = '';
-		$slogan = 'Klausurfragen für Foodsaver, Betriebsverantwortliche & Botschafter';
+		$slogan = 'Quiz-Fragen für Foodsaver, Betriebsverantwortliche & Botschafter';
 		if(!isset($_GET['sub']) && isset($_GET['id']) && (int)$_GET['id'] > 0)
 		{
 			if($name = $this->model->getVal('name', 'quiz', $_GET['id']))
@@ -77,7 +77,7 @@ class QuizControl extends Control
 				$name = strip_tags($_POST['name']);
 				$name = trim($name);
 					
-				$desc = strip_tags($_POST['desc']);
+				$desc = $_POST['desc'];
 				$desc = trim($desc);
 				
 				$maxfp = (int)$_POST['maxfp'];
@@ -105,7 +105,7 @@ class QuizControl extends Control
 			$name = strip_tags($_POST['name']);
 			$name = trim($name);
 			
-			$desc = strip_tags($_POST['desc']);
+			$desc = $_POST['desc'];
 			$desc = trim($desc);
 			
 			$maxfp = (int)$_POST['maxfp'];

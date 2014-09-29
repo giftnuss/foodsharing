@@ -12,7 +12,7 @@ class QuizModel extends Model
 			INSERT INTO `'.PREFIX.'quiz`
 			(`name`,`desc`,`maxfp`,`questcount`)
 			VALUES
-			('.$this->strval($name).','.$this->strval($desc).','.(int)$maxfp.','.(int)$questcount.')	
+			('.$this->strval($name).','.$this->strval($desc,true).','.(int)$maxfp.','.(int)$questcount.')	
 		');
 	}
 	
@@ -88,7 +88,7 @@ class QuizModel extends Model
 		return $this->update('
 			UPDATE	`'.PREFIX.'quiz`
 			SET 	`name` = '.$this->strval($name).',
-					`desc` = '.$this->strval($desc).',
+					`desc` = '.$this->strval($desc,true).',
 					`maxfp` = '.(int)$maxfp.',
 					`questcount` = '.(int)$questcount.'	
 				

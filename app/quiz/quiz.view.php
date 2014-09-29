@@ -233,7 +233,7 @@ class QuizView extends View
 	{
 		return v_quickform('Neues Quiz', array(
 			v_form_text('name'),
-			v_form_textarea('desc'),
+			v_form_tinymce('desc'),
 			v_form_text('maxfp'),
 			v_form_text('questcount')
 		));
