@@ -981,6 +981,7 @@ class Db
 							`bezirk_id`,
 							`photo`,
 							`rolle`,
+							`type`,
 							`verified`,
 							`name`,
 							`nachname`,

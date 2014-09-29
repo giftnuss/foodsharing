@@ -36,6 +36,7 @@ class MapControl extends Control
 			}
 			else
 			{
+				addStyle('#map-control-wrapper > .ui-widget-content{height:93px;}');
 				addJs('loadMarker(["baskets"]);');
 			}
 		}

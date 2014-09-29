@@ -59,6 +59,7 @@ class S
 				'bezirk_id' => $user['bezirk_id'],
 				'email' => $user['email'],
 				'rolle' => $user['rolle'],
+				'type' => $user['type'],
 				'token' => $user['token']
 			));
 			

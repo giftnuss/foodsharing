@@ -6,7 +6,7 @@ Version: 1.0
 
 /* Marker setup */
 .awesome-marker {
-  background: url('images/markers-soft.png') no-repeat 0 0;
+  background: url('images/markers-fs.png') no-repeat 0 0;
   width: 35px;
   height: 46px;
   position:absolute;
@@ -26,7 +26,7 @@ Version: 1.0
 @media (min--moz-device-pixel-ratio: 1.5),(-o-min-device-pixel-ratio: 3/2),
 (-webkit-min-device-pixel-ratio: 1.5),(min-device-pixel-ratio: 1.5),(min-resolution: 1.5dppx) {
  .awesome-marker {
-  background-image: url('images/markers-soft@2x.png');
+  background-image: url('images/markers-matte@2x.png');
   background-size: 720px 46px;
  }
  .awesome-marker-shadow {
@@ -36,10 +36,22 @@ Version: 1.0
 }
 
 .awesome-marker i {
-  color: #333;
-  margin-top: 10px;
+  color: #ffffff;
+  margin-top: 9px;
   display: inline-block;
-  font-size: 14px;
+  font-size: 17px;
+  width:20px;
+  height:20px;
+  padding:0;
+  text-align: center;
+}
+.awesome-marker i.img
+{
+	background-image:url(/img/icon-img.png?v=1);
+}
+.awesome-marker i.img.vegetables
+{
+	background-position:0px 0px;
 }
 
 .awesome-marker .icon-white {
@@ -70,7 +82,9 @@ Version: 1.0
 .awesome-marker-icon-green {
   background-position: -72px 0;
 }
-
+.awesome-marker-icon-brown {
+  background-position: -252px 0;
+}
 .awesome-marker-icon-darkgreen {
   background-position: -252px 0;
 }

@@ -2,9 +2,9 @@ var u_map = null;
 var markers = null;
 
 var fsIcon = L.AwesomeMarkers.icon({
-    icon: 'fa-smile-o',
-    markerColor: 'darkgreen',
-    prefix: 'fa'
+    icon: 'smile',
+    markerColor: 'orange',
+    prefix: 'img'
 });
 /*
 var fsIcon = L.icon({
@@ -19,9 +19,9 @@ var fsIcon = L.icon({
 });
 */
 var bkIcon = L.AwesomeMarkers.icon({
-    icon: 'fa-lemon-o',
+    icon: 'basket',
     markerColor: 'green',
-    prefix: 'fa'
+    prefix: 'img'
 });
 /*
 var bkIcon = L.icon({
@@ -36,9 +36,9 @@ var bkIcon = L.icon({
 });
 */
 var botIcon = L.AwesomeMarkers.icon({
-    icon: 'fa-smile-o',
-    markerColor: 'darkred',
-    prefix: 'fa'
+    icon: 'smile',
+    markerColor: 'red',
+    prefix: 'img'
 });
 /*
 var botIcon = L.icon({
@@ -53,9 +53,9 @@ var botIcon = L.icon({
 });
 */
 var bIcon = L.AwesomeMarkers.icon({
-    icon: 'fa-home',
-    markerColor: 'orange',
-    prefix: 'fa'
+    icon: 'store',
+    markerColor: 'brown',
+    prefix: 'img'
 });
 /*
 var bIcon = L.icon({
@@ -70,9 +70,9 @@ var bIcon = L.icon({
 });
 */
 var fIcon = L.AwesomeMarkers.icon({
-    icon: 'fa-recycle',
+    icon: 'recycle',
     markerColor: 'yellow',
-    prefix: 'fa'
+    prefix: 'img'
 });
 /*
 var fIcon = L.icon({
@@ -87,29 +87,46 @@ var fIcon = L.icon({
 });
 */
 var map = {
+	initiated:false,
+	init: function()
+	{
+		u_map = L.map('map').setView([50.89,10.13],6);
+		L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+			attribution: 'Tiles &copy; Esri 2014'
+		}).addTo(u_map);
+		
+		this.initiated = true;
+	},
 	setView: function(lat,lon,zoom)
 	{
+		if(!this.initiated)
+		{
+			this.init();
+		}
 		u_map.setView([lat,lon], zoom, {animation: true});
 	}
 };
 
 function u_init_map(lat,lon,zoom)
 {
+	map.init();
+	
 	if(lat == undefined)
 	{
-		lat = 50.89;
-		lon = 10.13;
-		zoom = 6;
 		getBrowserLocation(function(pos){
 			map.setView(pos.lat, pos.lon, 12);
 		});
 	}
 	
+	
+	
+	/*
 	u_map = L.map('map').setView([lat, lon], zoom);
 	
 	L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
 		attribution: 'Tiles &copy; Esri 2014'
 	}).addTo(u_map);
+	*/
 	/*
 	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -546,6 +563,7 @@ $(document).ready(function(){
 	
 	
 	init_bDialog();
+	/*
 	if(isMob())
 	{
 		$('#map-control-wrapper div:first').css({
@@ -561,6 +579,7 @@ $(document).ready(function(){
 		},200);
 		
 	}
+	
 	$(window).resize(function(){
 		if(isMob())
 		{
@@ -575,6 +594,7 @@ $(document).ready(function(){
 			$('.leaflet-bottom.leaflet-right, #g-texter').hide();
 		}
 	});
+	*/
 });
 
 

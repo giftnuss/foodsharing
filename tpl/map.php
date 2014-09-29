@@ -1,4 +1,11 @@
-<!DOCTYPE html>
+<?php 
+header("Pragma-directive: no-cache");
+header("Cache-directive: no-cache");
+header("Cache-control: no-cache");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+?><!DOCTYPE html>
 <html lang="de">
   <head>
     <meta charset="utf-8">
@@ -10,7 +17,7 @@
 	
 	<link rel="stylesheet" href="/js/markercluster/dist/MarkerCluster.css" />
 	<link rel="stylesheet" href="/js/markercluster/dist/MarkerCluster.Default.css" />
-	<link rel="stylesheet" href="/js/awesome-marker/leaflet.awesome-markers.css">
+	<link rel="stylesheet" href="/js/leaflet/leaflet.awesome-markers.css">
 	
 	<style type="text/css"><?php echo $g_add_css; ?></style>
 	
