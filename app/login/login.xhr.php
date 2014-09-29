@@ -158,7 +158,7 @@ class LoginXhr extends Control
 			
 			$dia->addContent($this->view->loginForm());
 			
-			$dia->addButton('Registrieren','alert(0);');
+			$dia->addButton('Registrieren','ajreq(\'join\',{app:\'login\',e:$(\'#email_adress\').val(),p:$(\'#password\').val()});');
 			$dia->addButton('Einloggen',"ajreq('loginsubmit',{app:'login',u:$('#email_adress').val(),p:$('#password').val()});");
 			
 			$dia->addJs('
@@ -407,7 +407,18 @@ class LoginXhr extends Control
 			
 			$dia->setTitle(s('join'));
 			
-			$dia->addContent($this->view->join());
+			$email = '';
+			$pass = '';
+			if(isset($_GET['p']) && isset($_GET['e']))
+			{
+				if(validEmail($_GET['e']))
+				{
+					$email = strip_tags($_GET['e']);
+				}
+				$pass = strip_tags($_GET['p']);
+			}
+			
+			$dia->addContent($this->view->join($email,$pass));
 			$dia->addOpt('height', 420);
 			$dia->addOpt('width', 700);
 			

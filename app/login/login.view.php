@@ -12,7 +12,7 @@ class LoginView extends View
 							
 	}
 	
-	public function join()
+	public function join($email='',$pass='')
 	{
 		return '
 				
@@ -65,7 +65,7 @@ class LoginView extends View
 									<input placeholder="'.s('login_name').'" type="text" value="" id="login_name" name="login_name" class="input text value" />
 								</div>
 								<div class="element-wrapper">
-									<input placeholder="'.s('login_email').'" type="text" value="" id="login_email" name="login_email" class="input text value" />
+									<input placeholder="'.s('login_email').'" type="text" value="'.$email.'" id="login_email" name="login_email" class="input text value" />
 								</div>
 								<div class="element-wrapper">
 									<select id="login_gender" name="c[]" class="input select value">
@@ -76,7 +76,7 @@ class LoginView extends View
 									</select>
 								</div>
 								<div class="element-wrapper">
-									<input placeholder="'.s('login_passwd1').'" type="password" value="" id="login_passwd1" name="login_passwd1" class="input text value" />
+									<input placeholder="'.s('login_passwd1').'" type="password" value="'.$pass.'" id="login_passwd1" name="login_passwd1" class="input text value" />
 								</div>
 								<div class="element-wrapper">
 									<input placeholder="'.s('login_passwd2').'" type="password" value="" id="login_passwd2" name="login_passwd1" class="input text value" />
