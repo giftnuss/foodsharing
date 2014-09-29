@@ -276,7 +276,7 @@ function loadMarker(types,loader)
 								{
 									if(type == 'fs')
 									{
-										var popup = new L.Popup({offset:new L.Point(-18,-52)});
+										var popup = new L.Popup({offset:new L.Point(1,-35)});
 										popup.setLatLng(el.latlng);
 										popup.setContent(data.html);
 										u_map.openPopup(popup);

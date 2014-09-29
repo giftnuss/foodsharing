@@ -194,22 +194,32 @@ class LoginXhr extends Control
 				'script' => '
 					'.$token_js.'
 					pulseSuccess("'.s('login_success').'");
-					dialogs.closeAll();
-					$("#layout_logo").after(\''.jsSafe($msgbar).'\');
-					$("#mainMenu").replaceWith(\''.jsSafe($menu['default']).'\');
-					$("#mainMenu").jMenu({
-						ulWidth:200,
-						absoluteTop:37,
-						TimeBeforeClosing : 0,
-						TimeBeforeOpening : 0,
-				        effects : {
-				          effectSpeedOpen : 0,
-				          effectSpeedClose : 0
-				      	},
-					});
-					infoMenu();
-					$("#layout_logo a").attr("href","/?page=dashboard");
-					search.addEvents();'
+					
+					if(GET("page") == "map")
+					{
+						reload();
+					}
+					else
+					{
+					
+						dialogs.closeAll();
+						$("#layout_logo").after(\''.jsSafe($msgbar).'\');
+						$("#mainMenu").replaceWith(\''.jsSafe($menu['default']).'\');
+						$("#mainMenu").jMenu({
+							ulWidth:200,
+							absoluteTop:37,
+							TimeBeforeClosing : 0,
+							TimeBeforeOpening : 0,
+					        effects : {
+					          effectSpeedOpen : 0,
+					          effectSpeedClose : 0
+					      	},
+						});
+						infoMenu();
+						$("#layout_logo a").attr("href","/?page=dashboard");
+						search.addEvents();
+					}'
+					
 			);
 		}
 		else 
