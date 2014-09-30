@@ -153,6 +153,7 @@ class QuizXhr extends Control
 		{
 			if($answer = $this->model->getAnswer($_GET['id']))
 			{
+				$answer['isright'] = $answer['right'];
 				setEditData($answer);
 				$dia = new XhrDialog();
 				
