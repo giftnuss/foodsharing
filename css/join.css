@@ -249,3 +249,7 @@
 {
 	padding:150px 70px 0 70px;
 }
+.ui-dialog .xhrDialog.ui-dialog-content
+{
+	overflow: hidden;
+}
