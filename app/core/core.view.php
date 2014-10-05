@@ -347,7 +347,18 @@ class View
 										data: {term:request.term},
 						                dataType: "json",
 						                success: function(data) {
-											response(merge(localsource,data,"id"));
+											
+											local = [];
+											term = request.term.toLowerCase();
+											for(i=0;i<localsource.length;i++)
+											{
+												if(localsource[i].value.indexOf(term) > 0)
+												{
+													local.push(localsource[i]);
+												}
+											}
+							
+											response(merge(local,data,"id"));
 						                }
 						            });
 								}
