@@ -59,10 +59,12 @@ class MsgView extends View
 				if(!empty($c['member']))
 				{
 					$picwidth = 50;
+					$size = 'med';
 					
 					if(count($c['member']) > 2)
 					{
 						$picwidth = 25;
+						$size = 'mini';
 						shuffle($c['member']);
 					}
 					
@@ -72,7 +74,7 @@ class MsgView extends View
 						{
 							continue;
 						}
-						$pics .= '<img src="'.img($m['photo']).'" width="'.$picwidth.'" />';
+						$pics .= '<img src="'.img($m['photo'],$size).'" width="'.$picwidth.'" />';
 						$names .= ', '.$m['name'];
 					}
 					$names = substr($names, 2);

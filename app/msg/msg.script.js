@@ -381,18 +381,19 @@ var msg = {
 		if(conversation.member != undefined && conversation.member.length > 0)
 		{
 			picwidth = 50;
-			
+			size = 'med';
 			if(conversation.member.length > 2)
 			{
 				conversation.member = shuffle(conversation.member);
 				picwidth = 25;
+				size = 'mini';
 			}
 			
 			for(y=0;y<conversation.member.length;y++)
 			{
 				if(msg.fsid != conversation.member[i].id)
 				{
-					pics += '<img width="'+picwidth+'" src="'+img(conversation.member[y].photo)+'" height="22" />';
+					pics += '<img width="'+picwidth+'" src="'+img(conversation.member[y].photo,size)+'" />';
 					names += ', '+conversation.member[y].name;
 				}
 			}	
