@@ -335,6 +335,7 @@ class View
 				complete: function(){
 					$("#'.$id.' input.tag").tagedit({
 						autocompleteOptions: {
+							delay: 0,
 							source: function(request, response) { 
 							
 								//response(localsource);
