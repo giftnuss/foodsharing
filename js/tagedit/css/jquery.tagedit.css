@@ -16,7 +16,7 @@
 .tagedit-list {margin: 0; padding: 5px 5px 0 5px; border:1px solid #C9BCAF;-moz-border-radius:6px; /* Firefox */
 	-webkit-border-radius:6px; /* Safari, Chrome */
 	-khtml-border-radius:6px; /* Konqueror */
-	border-radius:6px; /* CSS3 */background-color:#FFFFFF;cursor:text; width: 390px; overflow: auto; font-size: 1em;min-height:23px; }
+	border-radius:6px; /* CSS3 */background-color:#FFFFFF;cursor:text; width: 91%; overflow: auto; font-size: 1em;min-height:23px; }
 .tagedit-list li.tagedit-listelement {list-style-type: none; float: left; margin: 0 5px 5px 0; padding: 0; }
 /* New Item input */
 .tagedit-list li.tagedit-listelement-new input {border: 0; height: 100%; padding: 2px 5px; width: 15px; background: transparent;}

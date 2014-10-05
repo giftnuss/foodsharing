@@ -45,6 +45,7 @@ class LoginXhr extends Control
 					'teaser' => '',
 					'img' => $img,
 					'click' => 'chat(\''.$b['id'].'\');',
+					'id' => $b['id'],
 					'search' => array(
 						$b['name'],$b['nachname']
 					)
@@ -52,6 +53,7 @@ class LoginXhr extends Control
 			}
 			$index[] = array(
 				'title' => 'Menschen die Du kennst',
+				'key' => 'buddies',
 				'result' => $result
 			);
 		}

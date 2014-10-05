@@ -1679,9 +1679,15 @@ function v_form_textarea($id,$option = array())
 		$maxlength = ' maxlength="'.(int)$option['maxlength'].'"';
 	}
 	
+	$ph = '';
+	if(isset($option['placeholder']))
+	{
+		$ph = ' placeholder="'.$option['placeholder'].'"';
+	}
+	
 	return v_input_wrapper(
 			$label, 
-			'<textarea'.$style.$maxlength.' class="input textarea value" name="'.$id.'" id="'.$id.'">'.$value.'</textarea>', 
+			'<textarea'.$style.$maxlength.$ph.' class="input textarea value" name="'.$id.'" id="'.$id.'">'.$value.'</textarea>', 
 			$id,
 			$option);
 }

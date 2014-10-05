@@ -114,6 +114,22 @@ class S
 		return fSession::get($var,false);
 	}
 	
+	/**
+	 * gets a user specific option and will be available after next login
+	 * @param $name
+	 */
+	public static function option($key)
+	{
+		return S::get('useroption_'.$key);
+	}
+	
+	public static function setOption($key,$val)
+	{
+		global $db;
+		$db->setOption($key, $val);
+		S::set('useroption_'.$key,$val);
+	}
+	
 	public static function addMsg($message,$type,$title = null)
 	{
 		$msg = fSession::get('g_message',array());
@@ -134,5 +150,14 @@ class S
 		
 		$msg[$type][] = array('msg'=>$message,'title'=>$title);
 		fSession::set('g_message', $msg);
+	}
+	
+	/**
+	 * static method for disable session writing
+	 * this is important if more than one ajax request is sended to the server, if session writing is enabled php is waiting for finish and the requests cant live together
+	 */
+	public static function noWrite()
+	{
+		session_write_close();
 	}
 }

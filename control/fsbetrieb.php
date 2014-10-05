@@ -1022,7 +1022,10 @@ function u_team($betrieb)
 		$last = '';
 		if((int)$fs['last_fetch'] > 0)
 		{
-			$last = ''.$fs['stat_fetchcount'].'x abgeholt<br />zu letzt '.date('j.n.Y',$fs['last_fetch']);
+			$last = sv('stat_fetchcount',array(
+				'count' => $fs['stat_fetchcount'],
+				'date' =>  date('j.n.Y',$fs['last_fetch'])
+			));
 		}
 		
 		if (isMob())

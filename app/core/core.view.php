@@ -8,7 +8,6 @@ class View
 		$this->sub = $sub;
 	}
 	
-	
 	public function login()
 	{
 		$action = '/?page=login';
@@ -309,6 +308,84 @@ class View
 	}
 	
 	return $out;
+	}
+	
+	public function peopleChooser($id,$option = array())
+	{
+		addJs('
+			var date = new Date(); 
+			tstring = ""+date.getYear() + ""+date.getMonth() + ""+date.getDate() + ""+date.getHours();
+			var localsource = [];
+			$.ajax({
+				url: "/cache/searchindex/'.S::user('token').'.json",
+				dataType: "json",
+				data: {t:$.now()},
+				success: function(json){
+					
+					if(json.length > 0 && json[0] != undefined && json[0].key != undefined && json[0].key == "buddies")
+					{
+						
+						for(y=0;y<json[0].result.length;y++)
+						{
+							localsource.push({id:json[0].result[y].id,value:json[0].result[y].name});
+						}
+						
+					}
+				},
+				complete: function(){
+					$("#'.$id.' input.tag").tagedit({
+						autocompleteOptions: {
+							source: function(request, response) { 
+							
+								//response(localsource);
+					            /* Remote results only if string > 3: */
+								
+								if(request.term.length > 3)
+								{
+									$.ajax({
+						                url: "/xhrapp.php?app=msg&m=people",
+										data: {term:request.term},
+						                dataType: "json",
+						                success: function(data) {
+											response(merge(localsource,data,"id"));
+						                }
+						            });
+								}
+								else
+								{
+									response(localsource);
+								}
+								
+					        },
+							minLength: 1
+						},
+						allowEdit: false,
+						allowAdd: false,
+						animSpeed:1
+					});
+				}
+			});
+				
+				var localsource = [{"id":"56","value":"Raphael Wintrich"},{"id":"62","value":"Raphael"}];
+				/*
+				for(i=0;i<data.length;i++)
+				{
+					//console.log(data[i]);
+				}
+				*/
+				
+				
+			/*
+			$.getJSON( "/cache/searchindex/'.S::user('token').'.json?t=" + tstring, function( data ) {
+				
+				
+			});
+			*/
+		');
+		
+		$input = '<input type="text" name="'.$id.'[]" value="" class="tag input text value" />';
+		
+		return v_input_wrapper(s($id), '<div id="'.$id.'">'.$input.'</div>',$id,$option);
 	}
 	
 	public function latLonPicker($id,$options = array())

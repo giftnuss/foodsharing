@@ -603,6 +603,35 @@ class Db
 		}
 	}
 	
+	/**
+	 * Method to get an asoc array insted the colums are the keys
+	 * so aftter all we can check like this if(isset($test[$key])) ...
+	 * 
+	 * @param string $sql
+	 * @return multitype:array |boolean
+	 */
+	public function qColKey($sql)
+	{
+		$out = array();
+		if($res = $this->sql($sql))
+		{
+			while($row = $res->fetch_array())
+			{
+				$val = (int)($row[0]);
+				$out[$val] = $val;
+			}
+		}
+	
+		if(count($out) > 0)
+		{
+			return $out;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	public function qRow($sql)
 	{
 		
@@ -1022,8 +1051,25 @@ class Db
 					$image1->saveChanges();
 				}
 			}
-			// New Session Management
+			
+			/*
+			 * New Session Management
+			 */ 
 			S::login($fs);
+			
+			/*
+			 * store all options in the session
+			*/
+				
+			if(!empty($fs['option']))
+			{
+				$options = unserialize($fs['option']);
+				foreach ($options as $key => $val)
+				{
+					S::setOption($key, $val);
+				}
+			}
+			
 			$_SESSION['login'] = true;
 			$_SESSION['client'] = array
 			(
@@ -1299,6 +1345,24 @@ class Db
 		');
 	}
 	
+	/**
+	 * set option is an key value store each var is avalable in the user session
+	 * 
+	 * @param string $key
+	 * @param var $val
+	 */
+	public function setOption($key,$val)
+	{
+		$options = array();
+		if($opt = $this->getVal('option', 'foodsaver', fsId()))
+		{
+			$options = unserialize($opt);
+		}
+		
+		$options[$key] = $val;
+		$this->update('UPDATE '.PREFIX.'foodsaver SET option = '.$this->strval(serialize($options)).' WHERE id = '.(int)fsId());
+ 	}
+
 	public function updateRolle()
 	{
 	

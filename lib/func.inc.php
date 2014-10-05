@@ -758,7 +758,7 @@ function getMenu()
 				<li><a>Foodsaver</a>
 					<ul>
 						<li><a href="?page=fairteiler"><i class="fa fa-recycle"></i> Fair-Teiler</a></li>
-					    <li><a href="?page=message"><i class="fa fa-comments"></i> Interne Nachrichten</a></li>
+					    <li><a href="?page=msg"><i class="fa fa-comments"></i> Interne Nachrichten</a></li>
 				
 				
 						<li><a href="http://wiki.lebensmittelretten.de" target="_blank"><i class="fa fa-file-text"></i> foodsharing WIKI</a></li>

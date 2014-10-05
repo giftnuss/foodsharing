@@ -15,7 +15,7 @@ var newMessages = new Array();
 var newMessagesWin = new Array();
 var chatBoxes = new Array();
 var chatBlinkInterval = new Array();
-
+var chatHeartbeatPause = false;
 $(document).ready(function(){
 	originalTitle = document.title;
 	startChatSession();
@@ -224,9 +224,19 @@ function createChatBox(user,minimizeChatBox) {
 	}
 }
 
+function stopChatHeartbeat()
+{
+	chatHeartbeatPause = true;
+}
 
 function chatHeartbeat(){
 
+	
+	if(chatHeartbeatPause)
+	{
+		return false;
+	}
+	
 	var itemsfound = 0;
 	
 	if (windowFocus == false) {

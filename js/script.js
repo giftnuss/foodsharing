@@ -497,7 +497,99 @@ function profile(id)
         }
 	 */
 }
- 
+var ajax = {
+	data:{},
+	msg: function(msg){
+		for(i=0;i<msg.length;i++)
+		{
+			switch(msg[i].type)
+			{
+				case 'error':
+					pulseError(msg[i].text);
+					break;
+					
+				case 'success':
+					pulseSuccess(msg[i].text);
+					break;
+					
+				default:
+					pulseInfo(msg[i].text);
+					break;
+					
+			}
+		}
+	},
+	req: function(app,method,option){
+		
+		var opt = {};
+		if(option != undefined)
+		{
+			opt = option;
+		}
+		
+		if(opt.method == undefined)
+		{
+			opt.method = 'get';
+		}
+		
+		if(opt.loader == undefined || opt.loader == true)
+		{
+			opt.loader = true;
+			showLoader();
+		}
+		
+		if(opt.data == undefined)
+		{
+			opt.data = {};
+		}
+		
+		return $.ajax({
+			url:"xhrapp.php?app="+app+"&m=" + method,
+			data: opt.data,
+			dataType:'json',
+			method:opt.method,
+			success:function(ret){
+				if(ret.status == 1)
+				{
+					if(ret.msg != undefined)
+					{
+						ajax.msg(ret.msg);
+					}
+					
+					if(ret.append != undefined)
+					{
+						$(ret.append).html(data.html);
+					}
+					
+					if(ret.script != undefined)
+					{
+						if(ret.data != undefined)
+						{
+							ajax.data = ret.data;
+						}
+						$.globalEval( ret.script );
+					}	
+					
+					if(opt.success != undefined)
+					{
+						opt.success(ret.data);
+					}
+				}
+			},
+			complete:function(){
+				if(opt.loader === true)
+				{
+					hideLoader();
+				}
+				if(opt.complete != undefined)
+				{
+					opt.complete();
+				}
+			}
+		});
+		
+	}
+};
 function ajreq(name,options,method,app)
 {
 	opt = {};
@@ -829,15 +921,19 @@ function checkEmail(email) {
     	return true;
     }
 }
-function img(photo)
+function img(photo,size)
 {
+	if(size == undefined)
+	{
+		size = 'med';
+	}
 	if(photo.length > 3)
 	{
-		return 'images/med_q_'+photo;
+		return 'images/'+size+'_q_'+photo;
 	}
 	else
 	{
-		return 'img/med_q_avatar.png';
+		return 'img/'+size+'_q_avatar.png';
 	}
 }
 
@@ -930,6 +1026,12 @@ function fancy_xhr(func,loader)
 			}
 		}
 	});
+}
+
+function stopHeartbeats()
+{
+	clearInterval(g_interval_newBasket);
+	stopChatHeartbeat();
 }
 
 function fancy(content,title,subtitle)
@@ -1495,6 +1597,67 @@ function preZero(number, length) {
     var num = '' + number;
     while (num.length < length) num = '0' + num;
     return num;
+}
+
+function shuffle(o)
+{ 
+    for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
+}
+
+/**
+ * Merges two object-like arrays based on a key property and also merges its array-like attributes specified in objectPropertiesToMerge.
+ * It also removes falsy values after merging object properties.
+ *
+ * @param firstArray The original object-like array.
+ * @param secondArray An object-like array to add to the firstArray.
+ * @param keyProperty The object property that will be used to check if objects from different arrays are the same or not.
+ * @param objectPropertiesToMerge The list of object properties that you want to merge. It all must be arrays.
+ * @returns The updated original array.
+ */
+function merge(firstArray, secondArray, keyProperty, objectPropertiesToMerge) {
+
+    function mergeObjectProperties(object, otherObject, objectPropertiesToMerge) {
+        _.each(objectPropertiesToMerge, function (eachProperty) {
+            object[eachProperty] = _.chain(object[eachProperty]).union(otherObject[eachProperty]).compact().value();
+        });
+    }
+
+    if (firstArray.length === 0) {
+        _.each(secondArray, function (each) {
+            firstArray.push(each);
+        });
+    } else {
+        _.each(secondArray, function (itemFromSecond) {
+            var itemFromFirst = _.find(firstArray, function (item) {
+                return item[keyProperty] === itemFromSecond[keyProperty];
+            });
+
+            if (itemFromFirst) {
+                mergeObjectProperties(itemFromFirst, itemFromSecond, objectPropertiesToMerge);
+            } else {
+                firstArray.push(itemFromSecond);
+            }
+    });
+    }
+
+    return firstArray;
+}
+
+function strip_tags(input, allowed) {
+{
+	  allowed = (((allowed || '') + '')
+			    .toLowerCase()
+			    .match(/<[a-z][a-z0-9]*>/g) || [])
+			    .join(''); // making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)
+			  var tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
+			    commentsAndPhpTags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi;
+			  return input.replace(commentsAndPhpTags, '')
+			    .replace(tags, function($0, $1) {
+			      return allowed.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : '';
+			    });
+			}
+
 }
 
 jQuery.fn.extend({ 

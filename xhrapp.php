@@ -30,6 +30,7 @@ if(isset($_GET['app']) && isset($_GET['m']))
 	
 	S::init();
 	
+	
 	$class = ucfirst($app).'Xhr';
 	
 	$obj = new $class();
