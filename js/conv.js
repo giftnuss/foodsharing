@@ -118,7 +118,7 @@ var conv = {
 				key = conv.getKey(data.msg_chat[i].cid);
 				if(data.msg_chat[i].msg != undefined && data.msg_chat[i].msg.length > 0)
 				{
-					for(var x=0;x<data.msg_chat[x].msg.length;x++)
+					for(var x=0;x<data.msg_chat[i].msg.length;x++)
 					{
 						conv.append(key,data.msg_chat[i].msg[x]);
 					}
