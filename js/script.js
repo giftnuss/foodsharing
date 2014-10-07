@@ -344,7 +344,7 @@ $(document).ready(function(){
  
 function chat(fsid)
 {
-	conv.chat(fsid);
+	conv.userChat(fsid);
 	/*
 	closeDialogs();
 	showLoader();
