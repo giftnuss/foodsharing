@@ -8,6 +8,9 @@
 * @return void
 */
 
+error_reporting(E_ALL);
+ini_set('display_errors','1');
+
 require_once 'config.inc.php';
 require_once 'lib/func.inc.php';
 require_once 'lib/Session.php';
@@ -28,10 +31,6 @@ if(isset($_GET['logout']))
 	$_SESSION['client'] = array();
 	unset($_SESSION['client']);
 }
-
-error_reporting(E_ALL);
-ini_set('display_errors','1');
-
 
 $content_main = '';
 $content_right = '';
