@@ -367,6 +367,8 @@ var conv = {
 					
 				}
 				
+				console.log(title);
+				
 				conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').children('i').after(' '+title.join(', '));
 				
 				/*

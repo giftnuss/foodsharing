@@ -595,7 +595,7 @@ conv.registerPollingService();},maxbox:function(cid)
 {key=conv.getKey(cid);conv.chatboxes[key].el.children('.slimScrollDiv, .chatboxinput').hide();conv.chatboxes[key].minimized=true;},checkInputKey:function(event,chatboxtextarea,cid)
 {var $ta=$(chatboxtextarea);var val=$ta.val().trim();var key=this.getKey(cid);if(event.keyCode==13&&event.shiftKey==0&&val!='')
 {conv.showLoader(cid);setTimeout(function(){$ta.val('');},100);$ta.css('height','40px');$ta[0].focus();ajax.req('msg','sendmsg',{loader:false,method:'post',data:{c:cid,b:val},success:function(data)
-{console.log(data);conv.append(key,data.msg);conv.scrollBottom(cid);},complete:function(){conv.hideLoader(cid);}});}},scrollBottom:function(cid)
+{conv.append(key,data.msg);conv.scrollBottom(cid);},complete:function(){conv.hideLoader(cid);}});}},scrollBottom:function(cid)
 {$('#chat-'+cid+' .chatboxcontent').slimScroll({scrollTo:$('#chat-'+cid+' .chatboxcontent').prop('scrollHeight')+'px'});},img:function(photo,size)
 {if(size==undefined)
 {size='med';}
@@ -626,7 +626,7 @@ return tmp;},settings:function(cid)
 {conv.showLoader(cid);var key=this.getKey(cid);var cid=cid;ajax.req('msg','loadconversation',{loader:false,data:{id:cid},success:function(ret){title=new Array();for(i=0;i<ret.member.length;i++)
 {if(ret.member[i]!=undefined&&ret.member[i].id!=user.id)
 {title.push(ret.member[i].name);}}
-conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').children('i').after(' '+title.join(', '));if(ret.messages!=undefined&&ret.messages.length>0)
+console.log(title);conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').children('i').after(' '+title.join(', '));if(ret.messages!=undefined&&ret.messages.length>0)
 {for(y=(ret.messages.length-1);y>=0;y--)
 {conv.append(key,ret.messages[y]);}
 conv.scrollBottom(cid);}},complete:function(){conv.hideLoader(cid);conv.registerPollingService();}});},appendChatbox:function(cid,min)
