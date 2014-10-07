@@ -76,7 +76,7 @@ class MsgXhr extends Control
 							'time' => date('Y-m-d H:i:s'),
 							'fs_photo' => S::user('photo'),
 							'fs_name' => S::user('name'),
-							'fs_id' 
+							'fs_id' => fsId()
 						));
 						$xhr->send();
 					}
