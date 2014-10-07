@@ -310,10 +310,11 @@ div.tree-scroller
 #searchbar
 {
 	border: 0 none;
-	
-    
-    margin-left: 103px;
-    padding:0;
+    display: inline-block;
+    margin-left: 18px;
+    padding: 0;
+    position: absolute;
+    top: 8px;
     width: 273px;
     z-index: 40;
 }
@@ -333,6 +334,23 @@ div.tree-scroller
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
 }
+
+#searchbar input::-webkit-input-placeholder {
+    color: #4A3520;
+}
+#searchbar input:-moz-placeholder {
+    /* FF 4-18 */
+    color: #4A3520;
+}
+#searchbar input::-moz-placeholder {
+    /* FF 19+ */
+    color: #4A3520;
+}
+#searchbar input:-ms-input-placeholder {
+    /* IE 10+ */
+    color: #4A3520;
+}
+
 #searchbar i
 {
 	color:#4a3520;
