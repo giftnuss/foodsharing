@@ -63,6 +63,7 @@ if(!empty($content_left) && !empty($content_right))
 {
 	//addStyle('div#content{width:513px;}');
 }
+
 ?><!DOCTYPE html>
 <html lang="de">
   <head>

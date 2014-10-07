@@ -113,17 +113,17 @@ var conv = {
 		if(data.msg_chat != undefined && data.msg_chat.length > 0)
 		{
 			var key = 0;
-			for(i=0;i<data.msg_chat.length;i++)
+			for(z=0;z<data.msg_chat.length;z++)
 			{
-				key = conv.getKey(data.msg_chat[i].cid);
-				if(data.msg_chat[i].msg != undefined && data.msg_chat[i].msg.length > 0)
+				key = conv.getKey(data.msg_chat[z].cid);
+				if(data.msg_chat[z].msg != undefined && data.msg_chat[z].msg.length > 0)
 				{
-					for(x=0;x<data.msg_chat[i].msg.length;x++)
+					for(x=0;x<data.msg_chat[z].msg.length;x++)
 					{
-						conv.append(key,data.msg_chat[i].msg[x]);
+						conv.append(key,data.msg_chat[z].msg[x]);
 					}
-					conv.maxbox(data.msg_chat[i].cid);
-					conv.scrollBottom(data.msg_chat[i].cid);
+					conv.maxbox(data.msg_chat[z].cid);
+					conv.scrollBottom(data.msg_chat[z].cid);
 				}
 			}
 		}
@@ -366,8 +366,6 @@ var conv = {
 					}
 					
 				}
-				
-				console.log(title);
 				
 				conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').children('i').after(' '+title.join(', '));
 				

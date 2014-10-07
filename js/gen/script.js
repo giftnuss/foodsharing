@@ -581,11 +581,11 @@ this.appendChatbox(cid);},registerPollingService:function()
 else
 {info.removeService('msg','chat')}},push:function(data)
 {if(data.msg_chat!=undefined&&data.msg_chat.length>0)
-{var key=0;for(i=0;i<data.msg_chat.length;i++)
-{key=conv.getKey(data.msg_chat[i].cid);if(data.msg_chat[i].msg!=undefined&&data.msg_chat[i].msg.length>0)
-{for(x=0;x<data.msg_chat[i].msg.length;x++)
-{conv.append(key,data.msg_chat[i].msg[x]);}
-conv.maxbox(data.msg_chat[i].cid);conv.scrollBottom(data.msg_chat[i].cid);}}}},togglebox:function(cid)
+{var key=0;for(z=0;z<data.msg_chat.length;z++)
+{key=conv.getKey(data.msg_chat[z].cid);if(data.msg_chat[z].msg!=undefined&&data.msg_chat[z].msg.length>0)
+{for(x=0;x<data.msg_chat[z].msg.length;x++)
+{conv.append(key,data.msg_chat[z].msg[x]);}
+conv.maxbox(data.msg_chat[z].cid);conv.scrollBottom(data.msg_chat[z].cid);}}}},togglebox:function(cid)
 {key=conv.getKey(cid);conv.chatboxes[key].el.children('.slimScrollDiv, .chatboxinput').toggle();if($('#chat-'+cid+' .chatboxinput').is(':visible'))
 {conv.chatboxes[key].minimized=false;}
 else
@@ -626,7 +626,7 @@ return tmp;},settings:function(cid)
 {conv.showLoader(cid);var key=this.getKey(cid);var cid=cid;ajax.req('msg','loadconversation',{loader:false,data:{id:cid},success:function(ret){title=new Array();for(i=0;i<ret.member.length;i++)
 {if(ret.member[i]!=undefined&&ret.member[i].id!=user.id)
 {title.push(ret.member[i].name);}}
-console.log(title);conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').children('i').after(' '+title.join(', '));if(ret.messages!=undefined&&ret.messages.length>0)
+conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').children('i').after(' '+title.join(', '));if(ret.messages!=undefined&&ret.messages.length>0)
 {for(y=(ret.messages.length-1);y>=0;y--)
 {conv.append(key,ret.messages[y]);}
 conv.scrollBottom(cid);}},complete:function(){conv.hideLoader(cid);conv.registerPollingService();}});},appendChatbox:function(cid,min)
