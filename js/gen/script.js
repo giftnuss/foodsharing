@@ -129,11 +129,7 @@ document.createElement("abbr");document.createElement("time");}));
 (function(){var autoLink,__slice=[].slice;autoLink=function(){var k,linkAttributes,option,options,pattern,v;options=1<=arguments.length?__slice.call(arguments,0):[];pattern=/(^|\s)((?:https?|ftp):\/\/[\-A-Z0-9+\u0026@#\/%?=()~_|!:,.;]*[\-A-Z0-9+\u0026@#\/%=~()_|])/gi;if(!(options.length>0)){return this.replace(pattern,"$1<a href='$2'>$2</a>");}
 option=options[0];linkAttributes=((function(){var _results;_results=[];for(k in option){v=option[k];if(k!=='callback'){_results.push(" "+k+"='"+v+"'");}}
 return _results;})()).join('');return this.replace(pattern,function(match,space,url){var link;link=(typeof option.callback==="function"?option.callback(url):void 0)||("<a href='"+url+"'"+linkAttributes+">"+url.replace('http://','').replace('https://','')+"</a>");return""+space+link;});};String.prototype['autoLink']=autoLink;}).call(this);
-var timeformat={nice:function(dbtime)
-{if(dbtime.indexOf(':')>0)
-{return timeformat.niceDateTime(dbtime);}
-else
-{return timeformat.niceDate(dbtime);}},niceDateTime:function(dbtime){parts=dbtime.split(' ');time=parts[1];date=parts[0];parts=date.split('-');out=parts[2]+'.'+parts[1]+'.'+parts[0]+' ';parts=time.split(':');return out+parts[0]+'.'+parts[1]+' Uhr';},niceDate:function(dbtime){parts=dbtime.split('-');return parts[2]+'.'+parts[1]+'.'+parts[0];}};
+
 /*! Copyright (c) 2011 Piotr Rochala (http://rocha.la)
  * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
@@ -560,66 +556,7 @@ search.$indexResult.append('<li class="corner-all"><a class="corner-all" href="'
 {search.showResult(data.result);}
 else
 {search.noResult();}},complete:function(){setTimeout(function(){search.isSearching=false;search.hideLoader();},200);}});}}};
-var conv={initiated:false,chatboxes:null,$chat:null,chatCount:0,activeBox:0,init:function()
-{this.initiated=true;this.chatboxes=new Array();this.$chat=new Array();},chat:function(cid)
-{if(!this.initiated)
-{this.init();this.initiated=true;}
-this.appendChatbox(cid);},registerPollingService:function()
-{var ids=conv.getCids();if(ids.length>0)
-{var infos=conv.getChatInfos();info.editService('msg','chat',{speed:'fast',premethod:'setSessionInfo',ids:ids,infos:infos});}
-else
-{info.removeService('msg','chat')}},push:function(data)
-{if(data.msg_chat!=undefined&&data.msg_chat.length>0)
-{var key=0;for(i=0;i<data.msg_chat.length;i++)
-{key=conv.getKey(data.msg_chat[i].cid);if(data.msg_chat[i].msg!=undefined&&data.msg_chat[i].msg.length>0)
-{for(x=0;x<data.msg_chat[i].msg.length;x++)
-{conv.append(key,data.msg_chat[i].msg[x]);}
-conv.maxbox(data.msg_chat[i].cid);conv.scrollBottom(data.msg_chat[i].cid);}}}},togglebox:function(cid)
-{key=conv.getKey(cid);conv.chatboxes[key].el.children('.slimScrollDiv, .chatboxinput').toggle();if($('#chat-'+cid+' .chatboxinput').is(':visible'))
-{conv.chatboxes[key].minimized=false;}
-else
-{conv.chatboxes[key].minimized=true;}
-conv.registerPollingService();},maxbox:function(cid)
-{key=conv.getKey(cid);conv.chatboxes[key].el.children('.slimScrollDiv, .chatboxinput').show();conv.chatboxes[key].minimized=false;},minbox:function(cid)
-{key=conv.getKey(cid);conv.chatboxes[key].el.children('.slimScrollDiv, .chatboxinput').hide();conv.chatboxes[key].minimized=true;},checkInputKey:function(event,chatboxtextarea,cid)
-{var $ta=$(chatboxtextarea);var val=$ta.val().trim();var key=this.getKey(cid);if(event.keyCode==13&&event.shiftKey==0&&val!='')
-{conv.showLoader(cid);setTimeout(function(){$ta.val('');},100);$ta.css('height','40px');$ta[0].focus();ajax.req('msg','sendmsg',{loader:false,method:'post',data:{c:cid,b:val},success:function(data)
-{conv.append(key,data.msg);conv.scrollBottom(cid);},complete:function(){conv.hideLoader(cid);}});}},scrollBottom:function(cid)
-{$('#chat-'+cid+' .chatboxcontent').slimScroll({scrollTo:$('#chat-'+cid+' .chatboxcontent').prop('scrollHeight')+'px'});},close:function(cid)
-{var tmp=new Array();var x=0;for(i=0;i<conv.chatboxes.length;i++)
-{if(conv.chatboxes[i].id==cid)
-{conv.chatboxes[i].el.remove();}
-else
-{conv.chatboxes[i].el.css('right',(20+(x*285))+'px');tmp.push(conv.chatboxes[i]);x++;}}
-this.chatboxes=tmp;this.chatCount--;this.registerPollingService();},showLoader:function(cid)
-{key=this.getKey(cid);this.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').children('i').removeClass('fa-comment fa-flip-horizontal').addClass('fa-spinner fa-spin');},hideLoader:function(cid)
-{key=this.getKey(cid);this.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').children('i').removeClass('fa-spinner fa-spin').addClass('fa-comment fa-flip-horizontal');},getKey:function(cid)
-{for(i=0;i<conv.chatboxes.length;i++)
-{if(conv.chatboxes[i].id==cid)
-{return i;}}
-return-1;},getChatInfos:function()
-{var tmp=new Array();for(i=0;i<conv.chatboxes.length;i++)
-{tmp.push({id:parseInt(conv.chatboxes[i].id),min:conv.chatboxes[i].minimized,lmid:conv.chatboxes[i].last_mid});}
-return tmp;},getCids:function()
-{var tmp=new Array();for(i=0;i<conv.chatboxes.length;i++)
-{tmp.push(parseInt(conv.chatboxes[i].id));}
-return tmp;},settings:function(cid)
-{key=this.getKey(cid);this.chatboxes[key].el.children('.chatboxhead').children('.settings').toggle();},append:function(key,message)
-{conv.chatboxes[key].last_mid=parseInt(message.id);conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append('<div title="'+message.time+'" class="chatboxmessage"><span class="chatboxmessagefrom"><a href="#" class="photo" onclick="profile('+message.fs_id+');return false;"><img src="'+img(message.fs_photo,'mini')+'"></a></span><span class="chatboxmessagecontent">'+nl2br(message.body)+'<span class="time">'+timeformat.nice(message.time)+'</span></span><div style="clear:both;"></div></div>');},initChat:function(cid)
-{conv.showLoader(cid);var key=this.getKey(cid);var cid=cid;ajax.req('msg','loadconversation',{loader:false,data:{id:cid},success:function(ret){title=new Array();for(i=0;i<ret.member.length;i++)
-{if(ret.member[i]!=undefined&&ret.member[i].id!=user.id)
-{title.push(ret.member[i].name);}}
-conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').children('i').after(' '+title.join(', '));if(ret.messages!=undefined&&ret.messages.length>0)
-{for(y=(ret.messages.length-1);y>=0;y--)
-{conv.append(key,ret.messages[y]);}
-conv.scrollBottom(cid);}},complete:function(){conv.hideLoader(cid);conv.registerPollingService();}});},appendChatbox:function(cid,min)
-{if(min==undefined)
-{min=false;}
-if(conv.getKey(cid)===-1)
-{right=20+(this.chatCount*285);var $el=$('<div id="chat-'+cid+'" class="chatbox ui-corner-top" style="bottom: 0px; right: '+right+'px; display: block;"></div>').appendTo('body');$el.html('<div class="chatboxhead ui-corner-top"><a class="chatboxtitle" href="#" onclick="conv.togglebox('+cid+');return false;"><i class="fa fa-spinner fa-spin"></i> '+name+'</a><ul style="display:none;" class="settings linklist linkbubble ui-shadow corner-all"><li><a href="?page=msg&cid='+cid+'">Alle Nachrichten</a></li></ul><div class="chatboxoptions"><a href="#" class="fa fa-gear" title="Einstellungen" onclick="conv.settings('+cid+');return false;"></a><a title="schließen" class="fa fa-close" href="#" onclick="conv.close('+cid+');return false;"></a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea placeholder="schreibe etwas..." class="chatboxtextarea" onkeydown="conv.checkInputKey(event,this,\''+cid+'\');"></textarea></div>');$el.children('.chatboxcontent').slimScroll();$el.children('.chatboxinput').children('textarea').autosize();$el.children('.chatboxinput').children('textarea').focus(function(){conv.activeBox=cid;});this.chatboxes.push({el:$el,id:cid,minimized:false,last_mid:0});this.chatCount++;this.initChat(cid);$el.children('.chatboxinput').children('textarea').select();if(min)
-{conv.minbox(cid);}}
-else
-{this.maxbox(cid);}}};
+
 var info={$infobar:null,$badge:null,$linklist:null,$linkwrapper:null,services:null,user:null,hbCount:0,data:null,refreshTime:[],refreshTimeout:30000,hbXhr:null,startupTimeout:false,init:function()
 {setTimeout(function(){info.startupTimeout=true;info.heartbeat();},5000);this.services=new Array();this.$infobar=$('#infobar');this.data=new Array();this.data['msg']={};this.data['info']={};this.data['basket']={};this.$badge=new Array();this.$badge['msg']=$('#infobar > li.msg > a .badge');this.$badge['info']=$('#infobar > li.info > a .badge');this.$badge['basket']=$('#infobar > li.basket > a .badge');this.$linklist=new Array();this.$linklist['msg']=$('#infobar .msg .linklist');this.$linklist['info']=$('#infobar .info .linklist');this.$linklist['basket']=$('#infobar .basket .linklist');this.$linkwrapper=new Array();this.$linkwrapper['msg']=$('#infobar .msg .linkwrapper');this.$linkwrapper['info']=$('#infobar .info .linkwrapper');this.$linkwrapper['basket']=$('#infobar .basket .linkwrapper');$('#infobar .linkwrapper .linklist').slimScroll();this.initEvents();},initEvents:function()
 {this.$infobar.children('li').each(function(){var $this=$(this);var type=$this.attr('class');$this.mouseover(function(){info.refresh(type);info.$linkwrapper[type].show();});$this.mouseout(function(){info.$linkwrapper[type].hide();});$this.click(function(){info.$linkwrapper[type].toggle();});});},badge:function(type,val)
