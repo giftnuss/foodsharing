@@ -3,5 +3,5 @@ config.inc.php
 /data/logg.txt
 **/menus/
 **/images/
-**/js/gen/
-**/css/gen/
+js/gen/script.js
+css/gen/style.css
