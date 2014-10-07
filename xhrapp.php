@@ -6,8 +6,9 @@ $js = '';
 if(isset($_GET['app']) && isset($_GET['m']))
 {
 
-	$app = $_GET['app'];
-	$meth = $_GET['m'];
+	$app = str_replace('/','',$_GET['app']);
+	$meth = str_replace('/','',$_GET['m']);
+	
 	require_once 'config.inc.php';
 	require_once 'lib/Session.php';
 	require_once 'lang/DE/de.php';
@@ -53,9 +54,5 @@ if(isset($_GET['app']) && isset($_GET['m']))
 		$out['script'] = '$(".button").button();$(".tooltip").tooltip({show: false,hide:false,position: {	my: "center bottom-20",	at: "center top",using: function( position, feedback ) {	$( this ).css( position );	$("<div>").addClass( "arrow" ).addClass( feedback.vertical ).addClass( feedback.horizontal ).appendTo( this );}}});'.$out['script'];
 		
 		echo json_encode($out);
-	}
-	else 
-	{
-		echo strip_tags($meth);
 	}
 }

@@ -61,7 +61,7 @@ var conv = {
 	
 	getConvByFs: function(fsid)
 	{
-		for(i=0;i<conv.user2Conv.length;i++)
+		for(var i=0;i<conv.user2Conv.length;i++)
 		{
 			if(conv.user2Conv[i].fsid == fsid)
 			{
@@ -113,17 +113,25 @@ var conv = {
 		if(data.msg_chat != undefined && data.msg_chat.length > 0)
 		{
 			var key = 0;
-			for(i=0;i<data.msg_chat.length;i++)
+<<<<<<< HEAD
+			for(z=0;z<data.msg_chat.length;z++)
+=======
+			for(var i=0;i<data.msg_chat.length;i++)
+>>>>>>> development
 			{
-				key = conv.getKey(data.msg_chat[i].cid);
-				if(data.msg_chat[i].msg != undefined && data.msg_chat[i].msg.length > 0)
+				key = conv.getKey(data.msg_chat[z].cid);
+				if(data.msg_chat[z].msg != undefined && data.msg_chat[z].msg.length > 0)
 				{
-					for(x=0;x<data.msg_chat[i].msg.length;x++)
+<<<<<<< HEAD
+					for(x=0;x<data.msg_chat[z].msg.length;x++)
+=======
+					for(var x=0;x<data.msg_chat[i].msg.length;x++)
+>>>>>>> development
 					{
-						conv.append(key,data.msg_chat[i].msg[x]);
+						conv.append(key,data.msg_chat[z].msg[x]);
 					}
-					conv.maxbox(data.msg_chat[i].cid);
-					conv.scrollBottom(data.msg_chat[i].cid);
+					conv.maxbox(data.msg_chat[z].cid);
+					conv.scrollBottom(data.msg_chat[z].cid);
 				}
 			}
 		}
@@ -234,7 +242,7 @@ var conv = {
 	{		
 		var tmp = new Array();
 		var x = 0;
-		for(i=0;i<conv.chatboxes.length;i++)
+		for(var i=0;i<conv.chatboxes.length;i++)
 		{
 			if(conv.chatboxes[i].id == cid)
 			{
@@ -274,7 +282,7 @@ var conv = {
 	 */
 	getKey: function(cid)
 	{
-		for(i=0;i<conv.chatboxes.length;i++)
+		for(var i=0;i<conv.chatboxes.length;i++)
 		{
 			if(conv.chatboxes[i].id == cid)
 			{
@@ -292,7 +300,7 @@ var conv = {
 	{
 		var tmp = new Array();
 		
-		for(i=0;i<conv.chatboxes.length;i++)
+		for(var i=0;i<conv.chatboxes.length;i++)
 		{			
 			tmp.push({
 				id: parseInt(conv.chatboxes[i].id),
@@ -311,7 +319,7 @@ var conv = {
 	{
 		var tmp = new Array();
 		
-		for(i=0;i<conv.chatboxes.length;i++)
+		for(var i=0;i<conv.chatboxes.length;i++)
 		{
 			tmp.push(parseInt(conv.chatboxes[i].id));
 		}
@@ -358,7 +366,7 @@ var conv = {
 				 * first make a title with all the usernames
 				 */
 				title = new Array();
-				for(i=0;i<ret.member.length;i++)
+				for(var i=0;i<ret.member.length;i++)
 				{
 					if(ret.member[i] != undefined && ret.member[i].id != user.id)
 					{
@@ -366,8 +374,6 @@ var conv = {
 					}
 					
 				}
-				
-				console.log(title);
 				
 				conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').children('i').after(' '+title.join(', '));
 				
@@ -379,7 +385,7 @@ var conv = {
 					/*
 					 * list messages the reverse way
 					 */
-					for(y=(ret.messages.length-1);y>=0;y--)
+					for(var y=(ret.messages.length-1);y>=0;y--)
 					{
 						conv.append(key,ret.messages[y]);
 					}

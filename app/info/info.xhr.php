@@ -189,8 +189,21 @@ Array
 				sleep(10);
 			}
 			/*
-			 * slow services
+			 * slow polling services
 			 */
+			foreach ($services['slow'] as $app => $methods)
+			{
+				foreach ($methods as $method => $options)
+				{
+					if($ret = $apps[$app]->$method($options))
+					{
+						$xhr->addData($app.'_'.$method, $ret['data']);
+						$xhr->addScript($ret['script']);
+						$xhr->send();
+					}
+				}
+			}
+			
 			
 			$this->updateChecker();
 				
@@ -204,6 +217,10 @@ Array
 				$xhr->send();
 			}
 		}
+		
+		// nothing arrived just exit
+		$xhr->setStatus(0);
+		$xhr->send();
 	}
 	
 	private function updateChecker()

@@ -596,7 +596,6 @@ function v_msgBarNew()
 					</a>
 					<span style="display:none;" class="linkwrapper corner-all ui-shadow">
 						<ul class="linklist conversation-list">
-							<li><a href="#">Hans</a></li>
 						</ul>
 						<a class="more" href="?page=msg">Alle zeigen</a>
 					</span>

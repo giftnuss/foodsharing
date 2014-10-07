@@ -152,7 +152,7 @@ var msg = {
 				 */
 				if(ret.messages != undefined)
 				{
-					for(i=0;i<ret.messages.length;i++)
+					for(var i=0;i<ret.messages.length;i++)
 					{
 						//alert(ret.messages[i].id);
 						msg.appendMsg(ret.messages[i]);
@@ -165,7 +165,7 @@ var msg = {
 				 */
 				if(ret.convs)
 				{
-					for(i=0;i<ret.convs.length;i++)
+					for(var i=0;i<ret.convs.length;i++)
 					{						
 						// if the element exist remove to add it new on the top
 						$('#convlist-' + ret.convs[i].id).remove();
@@ -309,7 +309,7 @@ var msg = {
 				var names = [];
 				if(data.member != undefined && data.member.length > 0)
 				{
-					for(i=0;i<data.member.length;i++)
+					for(var i=0;i<data.member.length;i++)
 					{
 						if(data.member[i].id != msg.fsid)
 						{
@@ -333,7 +333,7 @@ var msg = {
 				if(data.messages != undefined)
 				{
 					data.messages.reverse();
-					for(i=0;i<data.messages.length;i++)
+					for(var i=0;i<data.messages.length;i++)
 					{
 						// $conversation.append('<li><span class="body">'++'</span><span class="time">'+timeformat.nice()+'</span></li>');
 						msg.appendMsg(data.messages[i]);
@@ -365,7 +365,7 @@ var msg = {
 					msg.$convs.html('');
 					msg.loadConversation(ret.convs[0].id);
 					
-					for(i=0;i<ret.convs.length;i++)
+					for(var i=0;i<ret.convs.length;i++)
 					{
 						msg.appendConvList(ret.convs[i]);
 					}
@@ -395,7 +395,7 @@ var msg = {
 				size = 'mini';
 			}
 			
-			for(y=0;y<conversation.member.length;y++)
+			for(var y=0;y<conversation.member.length;y++)
 			{
 				if(msg.fsid != conversation.member[i].id)
 				{
