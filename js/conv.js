@@ -115,16 +115,15 @@ var conv = {
 			var key = 0;
 			for(var i=0;i<data.msg_chat.length;i++)
 			{
-				key = conv.getKey(data.msg_chat[z].cid);
-				if(data.msg_chat[z].msg != undefined && data.msg_chat[z].msg.length > 0)
+				key = conv.getKey(data.msg_chat[i].cid);
+				if(data.msg_chat[i].msg != undefined && data.msg_chat[i].msg.length > 0)
 				{
-					for(var x=0;x<data.msg_chat[i].msg.length;x++)
-
+					for(var x=0;x<data.msg_chat[x].msg.length;x++)
 					{
-						conv.append(key,data.msg_chat[z].msg[x]);
+						conv.append(key,data.msg_chat[i].msg[x]);
 					}
-					conv.maxbox(data.msg_chat[z].cid);
-					conv.scrollBottom(data.msg_chat[z].cid);
+					conv.maxbox(data.msg_chat[i].cid);
+					conv.scrollBottom(data.msg_chat[i].cid);
 				}
 			}
 		}
