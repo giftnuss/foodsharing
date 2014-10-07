@@ -602,7 +602,18 @@ function v_msgBarNew()
 					</span>
 					
 				</li>
-			</ul>';
+			</ul>
+			
+			<div id="searchbar">
+			<i class="fa fa-search"></i><input type="text" value="" placeholder="'.s('search').'..." />
+			<div class="result-wrapper" style="display:none;">
+				<ul class="linklist index"></ul>
+				<ul class="linklist result"></ul>
+				<ul style="display:none;" class="linklist more">
+					<li><a onclick="goTo(\'?page=suche&q=\' + encodeURIComponent($(\'#searchbar input\').val()));" href="#">Alle Ergebnisse</a></li>	
+				</ul>
+			</div>
+		</div>';
 }
 
 function v_msgBar()

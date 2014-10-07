@@ -15,23 +15,10 @@ var search = {
 	
 	addEvents: function(){
 		
-		$('#searchbar').click(function(e){
-		    e.stopPropagation();
-		});
-		
-		$('#msgBar .bar-search').click(function(e){
-			$('#msgBar .bar-search').hide();
-			$('#searchbar').show();
-			$('#searchbar input').select();
-			//$('#searchbar input')[0].focus();
+		$('#searchbar input:first').focus(function(e){
 			search.open();
-		     e.stopPropagation();
 		});
-		
-		$(document).click(function(){
-			$('#searchbar').hide();
-			$('#msgBar .bar-search').show();
-		});
+
 	},
 	init: function(){
 
@@ -98,7 +85,7 @@ var search = {
 						string = parts[z].trim().toLowerCase();
 						
 						if(
-							string.length > 1 &&
+							string.length > 1 && !_.isNull(search.index[i].result[y].search[x]) &&
 							search.index[i].result[y].search[x].toLowerCase() . 
 							indexOf(string)
 							>= 0
