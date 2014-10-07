@@ -113,20 +113,13 @@ var conv = {
 		if(data.msg_chat != undefined && data.msg_chat.length > 0)
 		{
 			var key = 0;
-<<<<<<< HEAD
-			for(z=0;z<data.msg_chat.length;z++)
-=======
 			for(var i=0;i<data.msg_chat.length;i++)
->>>>>>> development
 			{
 				key = conv.getKey(data.msg_chat[z].cid);
 				if(data.msg_chat[z].msg != undefined && data.msg_chat[z].msg.length > 0)
 				{
-<<<<<<< HEAD
-					for(x=0;x<data.msg_chat[z].msg.length;x++)
-=======
 					for(var x=0;x<data.msg_chat[i].msg.length;x++)
->>>>>>> development
+
 					{
 						conv.append(key,data.msg_chat[z].msg[x]);
 					}
