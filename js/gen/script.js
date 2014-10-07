@@ -626,7 +626,7 @@ return tmp;},settings:function(cid)
 {conv.showLoader(cid);var key=this.getKey(cid);var cid=cid;ajax.req('msg','loadconversation',{loader:false,data:{id:cid},success:function(ret){title=new Array();for(i=0;i<ret.member.length;i++)
 {if(ret.member[i]!=undefined&&ret.member[i].id!=user.id)
 {title.push(ret.member[i].name);}}
-conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').children('i').after(' '+title.join(', '));if(ret.messages!=undefined&&ret.messages.length>0)
+console.log(title);conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').children('i').after(' '+title.join(', '));if(ret.messages!=undefined&&ret.messages.length>0)
 {for(y=(ret.messages.length-1);y>=0;y--)
 {conv.append(key,ret.messages[y]);}
 conv.scrollBottom(cid);}},complete:function(){conv.hideLoader(cid);conv.registerPollingService();}});},appendChatbox:function(cid,min)
