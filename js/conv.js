@@ -211,7 +211,21 @@ var conv = {
 		//el.slimScroll({scrollTo : el.prop('scrollHeight') + 'px' });
 	},
 	
-	
+	img: function(photo,size)
+	{
+		if(size == undefined)
+		{
+			size = 'med';
+		}
+		if(photo.length > 3)
+		{
+			return 'images/'+size+'_q_'+photo;
+		}
+		else
+		{
+			return 'img/'+size+'_q_avatar.png';
+		}
+	},
 	
 	/**
 	 * close the chatbox to thr given cid
@@ -320,7 +334,7 @@ var conv = {
 	append: function(key,message)
 	{
 		conv.chatboxes[key].last_mid = parseInt(message.id);
-		conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append('<div title="'+message.time+'" class="chatboxmessage"><span class="chatboxmessagefrom"><a href="#" class="photo" onclick="profile('+message.fs_id+');return false;"><img src="'+img(message.fs_photo,'mini')+'"></a></span><span class="chatboxmessagecontent">'+nl2br(message.body)+'<span class="time">'+timeformat.nice(message.time)+'</span></span><div style="clear:both;"></div></div>');
+		conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append('<div title="'+message.time+'" class="chatboxmessage"><span class="chatboxmessagefrom"><a href="#" class="photo" onclick="profile('+message.fs_id+');return false;"><img src="'+conv.img(message.fs_photo+'','mini')+'"></a></span><span class="chatboxmessagecontent">'+nl2br(message.body)+'<span class="time">'+timeformat.nice(message.time)+'</span></span><div style="clear:both;"></div></div>');
 	},
 	
 	/**

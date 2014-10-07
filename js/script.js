@@ -871,11 +871,13 @@ var g_interval_newMsg = null;
 var g_interval_newBasket = null;
 function init_chat()
 {    
+	/*
 	g_interval_newMsg = checkNewMsg(false);
 	ajreq('update',{app:'basket',loader:false});
 	g_interval_newBasket = setInterval(function(){
 		ajreq('update',{app:'basket',loader:false});
 	},10000);
+	*/
 	/*
 	setInterval(function(){
 		//http://localhost/xhr.php?f=getNewMsg
