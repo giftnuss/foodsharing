@@ -19,6 +19,8 @@ var conv = {
 	 */
 	activeBox:0,
 	
+	user2Conv:null,
+	
 	/*
 	 * init function have to be called one time on domready
 	 */
@@ -27,6 +29,46 @@ var conv = {
 		this.initiated = true;
 		this.chatboxes = new Array();
 		this.$chat = new Array();
+		this.user2Conv = new Array();
+	},
+	userChat: function(fsid)
+	{
+		if(!this.initiated)
+		{
+			this.init();
+		}
+		var cid = this.getConvByFs(fsid);
+		if(cid == false)
+		{
+			ajax.req('msg','user2conv',{
+				data:{fsid:fsid},
+				success: function(ret)
+				{
+					conv.user2Conv.push({
+						fsid: fsid,
+						cid: ret.cid
+					});
+					conv.chat(ret.cid);
+				}
+			});
+		}
+		else
+		{
+			conv.chat(cid);
+		}
+		
+	},
+	
+	getConvByFs: function(fsid)
+	{
+		for(i=0;i<conv.user2Conv.length;i++)
+		{
+			if(conv.user2Conv[i].fsid == fsid)
+			{
+				return conv.user2Conv[i].cid;
+			}
+		}
+		return false;
 	},
 	
 	chat: function(cid)
@@ -34,7 +76,6 @@ var conv = {
 		if(!this.initiated)
 		{
 			this.init();
-			this.initiated = true;
 		}
 		
 		this.appendChatbox(cid);

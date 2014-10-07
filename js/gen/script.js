@@ -249,7 +249,7 @@ else
 {$("#comment").dialog('close');$("#comment textarea").val('');info(data.msg);}
 else
 {alert(data);}}});}}});$('.toolbar-comment').click(function(){l=$(this).attr('attr').split(':');$('#comment-id').val(l[1]);$('#comment-name').val(l[0]);$('#comment').dialog('open');});$("#fancylink").fancybox({minWidth:470,maxWidth:470,minHeight:450,scrolling:"auto",beforeClose:function(){g_firstChatUpdate=true;},helpers:{overlay:{closeClick:false}}});});function chat(fsid)
-{conv.chat(fsid);}
+{conv.userChat(fsid);}
 function closeDialogs()
 {$('.dialogbox').each(function(){if($(this).dialog("isOpen"))
 {$(this).dialog("close");}});}
@@ -560,10 +560,21 @@ search.$indexResult.append('<li class="corner-all"><a class="corner-all" href="'
 {search.showResult(data.result);}
 else
 {search.noResult();}},complete:function(){setTimeout(function(){search.isSearching=false;search.hideLoader();},200);}});}}};
-var conv={initiated:false,chatboxes:null,$chat:null,chatCount:0,activeBox:0,init:function()
-{this.initiated=true;this.chatboxes=new Array();this.$chat=new Array();},chat:function(cid)
+var conv={initiated:false,chatboxes:null,$chat:null,chatCount:0,activeBox:0,user2Conv:null,init:function()
+{this.initiated=true;this.chatboxes=new Array();this.$chat=new Array();this.user2Conv=new Array();},userChat:function(fsid)
 {if(!this.initiated)
-{this.init();this.initiated=true;}
+{this.init();}
+var cid=this.getConvByFs(fsid);if(cid==false)
+{ajax.req('msg','user2conv',{data:{fsid:fsid},success:function(ret)
+{conv.user2Conv.push({fsid:fsid,cid:ret.cid});conv.chat(ret.cid);}});}
+else
+{conv.chat(cid);}},getConvByFs:function(fsid)
+{for(i=0;i<conv.user2Conv.length;i++)
+{if(conv.user2Conv[i].fsid==fsid)
+{return conv.user2Conv[i].cid;}}
+return false;},chat:function(cid)
+{if(!this.initiated)
+{this.init();}
 this.appendChatbox(cid);},registerPollingService:function()
 {var ids=conv.getCids();if(ids.length>0)
 {var infos=conv.getChatInfos();info.editService('msg','chat',{speed:'fast',premethod:'setSessionInfo',ids:ids,infos:infos});}

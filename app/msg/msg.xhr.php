@@ -23,7 +23,7 @@ class MsgXhr extends Control
 	{
 		$xhr = new Xhr();
 		$conversations = $this->model->listConversations(10);
-		$xhr->addData('html', $this->view->conversationList($conversations,'chat'));
+		$xhr->addData('html', $this->view->conversationList($conversations,'conv.chat'));
 		
 		$xhr->send();
 	}
@@ -130,6 +130,24 @@ class MsgXhr extends Control
 		}
 		
 		return false;
+	}
+	
+	public function user2conv()
+	{
+		$xhr = new Xhr();
+		
+		if(isset($_GET['fsid']) && (int)$_GET['fsid'] > 0)
+		{
+			if($cid = $this->model->addConversation(array((int)$_GET['fsid']=>(int)$_GET['fsid']),false))
+			{
+				$xhr->setStatus(1);
+				$xhr->addData('cid', $cid);
+				$xhr->send();
+			}
+		}
+		
+		$xhr->setStatus(0);
+		$xhr->send();
 	}
 	
 	/**

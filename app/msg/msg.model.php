@@ -109,36 +109,42 @@ class MsgModel extends Model
 			$conversation_id = $this->insertConversation($recips);
 		}
 		
-		/*
-		 * Add Message
-		 */
-		if($mid = $this->insert('
-			INSERT INTO `'.PREFIX.'msg`(`conversation_id`, `foodsaver_id`, `body`, `time`) 
-			VALUES ('.(int)$conversation_id.','.(int)fsId().','.$this->strval($body).',NOW())		
-		'))
+		if($body === false)
 		{
-			$member = $this->listConversationMembers($conversation_id);
-			/*
-			 * UPDATE conversation
-			*/
-			$this->update('
-				UPDATE
-					`'.PREFIX.'conversation`
-				
-				SET
-					`last` = NOW(),
-					`last_foodsaver_id` = '.(int)fsId().',
-					`last_message` = '.$this->strval($body).',
-					`last_message_id` = '.(int)$mid.',
-					`member` = '.$this->strval(serialize($member)).'
-				
-				WHERE
-					`id` = '.(int)$conversation_id.'
-			');
-			
 			return $conversation_id;
 		}
-		
+		else
+		{
+			/*
+			 * Add Message
+			 */
+			if($mid = $this->insert('
+				INSERT INTO `'.PREFIX.'msg`(`conversation_id`, `foodsaver_id`, `body`, `time`) 
+				VALUES ('.(int)$conversation_id.','.(int)fsId().','.$this->strval($body).',NOW())		
+			'))
+			{
+				$member = $this->listConversationMembers($conversation_id);
+				/*
+				 * UPDATE conversation
+				*/
+				$this->update('
+					UPDATE
+						`'.PREFIX.'conversation`
+					
+					SET
+						`last` = NOW(),
+						`last_foodsaver_id` = '.(int)fsId().',
+						`last_message` = '.$this->strval($body).',
+						`last_message_id` = '.(int)$mid.',
+						`member` = '.$this->strval(serialize($member)).'
+					
+					WHERE
+						`id` = '.(int)$conversation_id.'
+				');
+				return $conversation_id;
+			}
+			
+		}
 		return false;
 	}
 	
