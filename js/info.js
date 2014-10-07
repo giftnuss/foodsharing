@@ -164,7 +164,7 @@ var info = {
 	removeService: function(app,method)
 	{		
 		var tmp = new Array();
-		for(i=0;i<info.services.length;i++)
+		for(var i=0;i<info.services.length;i++)
 		{
 			if(!(info.services[i].a == app || info.services.m == method))
 			{
@@ -181,7 +181,7 @@ var info = {
 	editService: function(app,method,options)
 	{		
 		var tmp = new Array();
-		for(i=0;i<info.services.length;i++)
+		for(var i=0;i<info.services.length;i++)
 		{
 			if(!(info.services[i].a == app || info.services.m == method))
 			{
@@ -239,7 +239,7 @@ var info = {
 
 					if(ret.info != undefined && ret.info.length > 0)
 					{
-						for(i=0;i<ret.info.length;i++)
+						for(var i=0;i<ret.info.length;i++)
 						{	
 							// set badge count for each item
 							info.badge(ret.info[i].type,ret.info[i].badge);
