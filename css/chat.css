@@ -9,6 +9,12 @@
 	border:0 none;;
 }
 
+.chatbox .slimScrollDiv
+{
+	padding:0 0 15px 0;
+	background-color: #ffffff;
+}
+
 .chatboxhead {
 	background-color: #4a3520;
 	padding:0px;
@@ -17,6 +23,50 @@
 	border-right:1px solid #B39985;
 	border-left:1px solid #B39985;
 	outline: 0;
+}
+.chatboxtitle
+{
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.linklist.linkbubble
+{
+	background-color: #FFFFFF;
+	padding:3px;
+}
+.linklist.linkbubble:after
+{
+	border-color: #ffffff transparent;
+    border-style: solid;
+    border-width: 0 7px 8px;
+    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.35);
+    content: "";
+    display: block;
+    left: 136px;
+    position: absolute;
+    top: -6px;
+    width: 0;
+    z-index: 10;
+}
+.chatboxhead .linklist
+{
+    left: 68px;
+    position: absolute;
+    top: 29px;
+    width: 180px;
+    z-index: 11;
+    left: 88px;
+    position: absolute;
+    top: 30px;
+    width: 180px;
+    z-index: 100;
+}
+.chatboxhead .linklist li a
+{
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
 }
 
 .chatboxblink {
@@ -127,7 +177,12 @@
     padding: 5px;
     width: 236px;
 }
-
+.chatboxmessagecontent .time
+{
+	display:block;
+	color:#A2986D;
+	font-size:11px;
+}
 .chatboxoptions {
 	float: right;
 }
@@ -164,7 +219,7 @@
     display: block;
     float: left;
     text-decoration: none;
-    width: 230px;
+    width: 205px;
     text-decoration: none;
     font-size:13px;
     font-weight:bold;
@@ -182,4 +237,60 @@
 .chatboxtitle:hover {
 	text-decoration: none;
 	color: #FFFFFF;
+}
+
+
+.conversation-list .pics
+{
+	float:right;
+	margin:0;
+	padding:0;
+	border:0 none;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	overflow: hidden;
+	width:50px;
+	height:50px;
+	line-height: 8px;
+	text-align: right;
+}
+.conversation-list li a
+{
+	padding:6px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+.conversation-list li a:hover span
+{
+	background-color: transparent !important;
+}
+.conversation-list .pics img
+{
+	margin:0;
+	padding:0;
+	border:0 none;
+}
+.conversation-list .msg, #conversation-list .names
+{
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.conversation-list .msg
+{
+	line-height: 20px;
+}
+.conversation-list .names
+{
+	font-weight:bold;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.conversation-list .time
+{
+	color:#b4aba3;
+	font-size:11px;
 }

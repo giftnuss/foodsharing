@@ -269,15 +269,21 @@ class MsgModel extends Model
 	 * 
 	 * @return Ambigous <boolean, array >
 	 */
-	public function listConversations()
+	public function listConversations($limit = '')
 	{
+		if($limit != '')
+		{
+			$limit = ' LIMIT 0,'.(int)$limit;
+		}
+		
 		if($convs = $this->q('
 			SELECT 
 				c.`id`,
 				c.`last`,
 				UNIX_TIMESTAMP(c.`last`) AS last_ts,
 				c.`member`,
-				c.`last_message`
+				c.`last_message`,
+				hc.unread
 				
 			FROM 
 				'.PREFIX.'conversation c,
@@ -290,8 +296,7 @@ class MsgModel extends Model
 				hc.foodsaver_id = '.(int)fsId().'
 				
 			ORDER BY c.`last` DESC
-				
-						
+			'.$limit.'		
 		'))
 		{
 			
@@ -313,6 +318,11 @@ class MsgModel extends Model
 	public function checkConversationUpdates()
 	{
 		return $this->qColKey('SELECT conversation_id FROM '.PREFIX.'foodsaver_has_conversation WHERE foodsaver_id = '.(int)fsId().' AND unread = 1');
+	}
+	
+	public function checkChatUpdates($ids)
+	{
+		return $this->qColKey('SELECT conversation_id FROM '.PREFIX.'foodsaver_has_conversation WHERE foodsaver_id = '.(int)fsId().' AND unread = 1 AND conversation_id IN('.implode(',', $ids).')');
 	}
 	
 	public function getLastMessages($conv_id,$last_msg_id)

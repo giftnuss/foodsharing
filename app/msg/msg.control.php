@@ -44,7 +44,7 @@ class MsgControl extends Control
 			}
 			S::set('msg_conversations', $ids);
 		}
-		addContent($this->view->conversationList($conversations),CNT_RIGHT);
+		addContent($this->view->convListWrapper($this->view->conversationList($conversations)),CNT_RIGHT);
 		
 	}
 }

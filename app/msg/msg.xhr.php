@@ -17,6 +17,18 @@ class MsgXhr extends Control
 	}
 	
 	/**
+	 * ajax call to refresh infobar messages
+	 */
+	public function infobar()
+	{
+		$xhr = new Xhr();
+		$conversations = $this->model->listConversations(10);
+		$xhr->addData('html', $this->view->conversationList($conversations,'chat'));
+		
+		$xhr->send();
+	}
+	
+	/**
 	 * ajax call to load an existing conversation
 	 */
 	public function loadconversation()
@@ -242,6 +254,72 @@ class MsgXhr extends Control
 		
 		$xhr->setStatus(0);
 		$xhr->send();
+	}
+	
+	/**
+	 * polling call for retrieving new chat messages to given conversations
+	 */
+	public function chat($opt)
+	{
+		if($conv_ids = $this->model->checkChatUpdates($opt['ids']))
+		{
+			$this->model->setAsRead($conv_ids);
+			
+			/*
+			 * check is a new message there for active conversations?
+			*/
+			
+			$out = array();
+			foreach ($opt['infos'] as $i)
+			{
+				if(isset($conv_ids[$i['id']]))
+				{
+					if($messages = $this->model->getLastMessages($i['id'],$i['lmid']))
+					{
+						$out[] = array(
+							'cid' => $i['id'],
+							'msg' => $messages
+						);
+					}
+				}
+				
+			}
+			
+			if(!empty($out))
+			{
+				return array(
+					'data' => $out,
+					'script' => 'conv.push(ajax.data);'
+				);
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Method to store actually opened chat windows in the session
+	 * 
+	 * @param array $opt
+	 */
+	public function setSessionInfo($opt)
+	{	
+		if(isset($opt['infos']))
+		{
+			S::set('activechats', $opt['infos']);
+		}
+	}
+	
+	/**
+	 * Method to remove open chatboxes from the session
+	 *
+	 * @param array $opt
+	 */
+	public function removeSessionInfo($opt)
+	{
+		if(isset($opt['infos']))
+		{
+			S::set('activechats', array());
+		}
 	}
 	
 	public function people()

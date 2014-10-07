@@ -46,7 +46,7 @@ class MsgView extends View
 		return '<div id="compose">'.v_field($content, s('new_message'),array('class' => 'ui-padding')).'</div>';
 	}
 	
-	public function conversationList($conversations)
+	public function conversationList($conversations,$click = 'msg.loadConversation')
 	{
 		$list = '';
 		
@@ -78,7 +78,7 @@ class MsgView extends View
 						$names .= ', '.$m['name'];
 					}
 					$names = substr($names, 2);
-					$list .= '<li id="convlist-'.$c['id'].'"><a href="#" onclick="msg.loadConversation('.$c['id'].');return false;"><span class="pics">'.$pics.'</span><span class="names">'.$names.'</span><span class="msg">'.$c['last_message'].'</span><span class="time">'.niceDate($c['last_ts']).'</span><span class="clear"></span></a></li>';
+					$list .= '<li id="convlist-'.$c['id'].'"><a href="#" onclick="'.$click.'('.$c['id'].');return false;"><span class="pics">'.$pics.'</span><span class="names">'.$names.'</span><span class="msg">'.$c['last_message'].'</span><span class="time">'.niceDate($c['last_ts']).'</span><span class="clear"></span></a></li>';
 				}
 			}
 		}
@@ -87,7 +87,13 @@ class MsgView extends View
 			$list = '<li class="noconv">'.v_info(s('no_conversations')).'</li>';
 		}
 		
-		return v_field('<div id="conversation-list"><ul class="linklist">'.$list.'</ul></div>', '<i class="fa fa-comments"></i> '.s('conversations'));
+		return $list;
+		
+	}
+	
+	public function convListWrapper($list)
+	{
+		return v_field('<div id="conversation-list"><ul class="linklist conversation-list">'.$list.'</ul></div>', '<i class="fa fa-comments"></i> '.s('conversations'));
 	}
 	
 	public function conversation()

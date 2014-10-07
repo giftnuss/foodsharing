@@ -587,8 +587,27 @@ function v_bezirkChooser($id = 'bezirk_id',$bezirk = false,$option = array())
 			<input type="hidden" name="'.$id.'hId" id="'.$id.'-hId" value="'.$bezirk['id'].'" />');
 }
 
+function v_msgBarNew()
+{
+	return '<ul id="infobar">
+				<li class="msg">
+					<a href="#" onclick="return false;">
+						<i class="fa fa-comments"></i><span style="display:none;" class="badge">12</span>
+					</a>
+					<span style="display:none;" class="linkwrapper corner-all ui-shadow">
+						<ul class="linklist conversation-list">
+							<li><a href="#">Hans</a></li>
+						</ul>
+						<a class="more" href="?page=msg">Alle zeigen</a>
+					</span>
+					
+				</li>
+			</ul>';
+}
+
 function v_msgBar()
 {
+	return v_msgBarNew();
 	
 	$new_msg = true;
 	$new_info = false;

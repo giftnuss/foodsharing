@@ -67,6 +67,7 @@ addCss('/css/jquery.Jcrop.min.css',true);
 addCss('/js/tagedit/css/jquery.tagedit.css',true);
 addCss('/css/chat.css',true);
 addCss('/css/jquery.switchButton.css',true);
+addCss('/css/info.css',true);
 if (isMob())
 {
 	addCss('/css/style_mobile.css',true);
@@ -101,10 +102,12 @@ addScript('/js/js-time-format.js',true);
 addScript('/js/jquery.slimscroll.min.js',true);
 //addScript('js/typeahead.js',true);
 addScript('/js/underscore.js',true);
+addScript('/js/underscore.string.js',true);
 addScript('/js/script.js',true);
 addScript('/js/instant-search.js',true);
 //addScript('js/quicks.js');
-addScript('/js/chat.js',true);
+addScript('/js/conv.js',true);
+addScript('/js/info.js',true);
 
 $g_translate = printTranslate();
 //scriptCompress();
@@ -124,8 +127,33 @@ addHidden('<div id="uploadPhoto"><form method="post" enctype="multipart/form-dat
 
 addHidden('<div id="fs-profile"></div>');
 
-addJs('
+$user = '';
+if(S::may())
+{
+	$user = 'user = {id:'.(int)fsId().'};';
 	
+	/*
+	 * little check for chat messages
+	 */
+	
+	$user .= 'conv.init();';
+	
+	if($chats = S::get('activechats'))
+	{
+		if(is_array($chats))
+		{			
+			foreach ($chats as $c)
+			{
+				$user .= ' conv.appendChatbox('.$c['id'].','.$c['min'].'); ';
+			}
+
+		}
+	}
+}
+
+
+addJs('
+	'.$user.'
 	$("#mainMenu > li > a").each(function(){
 		if(parseInt(this.href.length) > 2 && this.href.indexOf("'.getPage().'") > 0)
 		{

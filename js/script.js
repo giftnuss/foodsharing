@@ -344,7 +344,7 @@ $(document).ready(function(){
  
 function chat(fsid)
 {
-	chatWith(fsid);
+	conv.chat(fsid);
 	/*
 	closeDialogs();
 	showLoader();
@@ -834,8 +834,10 @@ function infoMenu()
 		$(this).removeClass('hover');
 	});
 	
-	init_chat();
-	init_infos();
+	//init_chat();
+	//chat.init();
+	info.init();
+	//init_infos();
 	
 	$('.msgbar-dropdown-menu.extended').slimScroll();
 }
@@ -1031,7 +1033,7 @@ function fancy_xhr(func,loader)
 function stopHeartbeats()
 {
 	clearInterval(g_interval_newBasket);
-	stopChatHeartbeat();
+	//stopChatHeartbeat();
 }
 
 function fancy(content,title,subtitle)
