@@ -1,0 +1,225 @@
+<?php 
+class InfoXhr extends Control
+{
+	private $info;
+	private $check;
+	
+	/*
+	 * important array 
+	 */
+	private $allowed;
+	
+	public function __construct()
+	{
+		$this->model = new InfoModel();
+		$this->view = new InfoView();
+
+		$this->info = array();
+		$this->check = false;
+		
+		/*
+		 * here we define all apps and methods which can be used by polling service syntax is => app:method
+		 */
+		$this->allowed = array(
+			'msg:chat' => true,
+			'msg:setSessionInfo' => true
+		);
+		
+		parent::__construct();
+	}
+	
+	public function heartbeat()
+	{
+		/*
+		 * check for additional polling services
+		 */
+		$services = array(
+			'fast' => array(),
+			'slow' => array()
+		);
+		
+		$apps = array();
+		
+		if(isset($_GET['s']) && is_array($_GET['s']))
+		{
+			foreach ($_GET['s'] as $s)
+			{
+				// check is the service allowed?
+				if(isset($this->allowed[$s['a'].':'.$s['m']]))
+				{
+					
+					if(!isset($services[$s['a']]))
+					{
+						$services[$s['a']] = array();
+					}
+					
+					$speed = 'slow';
+					
+					if(isset($s['o']['speed']) && isset($services[$speed]))
+					{
+						$speed = $s['o']['speed'];
+					}
+					
+					$services[$speed][$s['a']][$s['m']] = $s['o'];
+					
+					if(!isset($apps[$s['a']]))
+					{
+						$apps[$s['a']] = loadXhr($s['a']);
+					}
+					// check is the a method defined to execute before polling?
+					if(isset($s['o']['premethod']) && isset($this->allowed[$s['a'].':'.$s['o']['premethod']]))
+					{
+						/*
+						 * PHP is crazy :o)
+						 */
+						$apps[$s['a']]->$s['o']['premethod']($s['o']);
+					}
+				}
+			}
+		}
+		else
+		{
+			S::set('activechats', array());
+		}
+		
+		if(isset($_GET['c']) && $_GET['c'] == 0)
+		{
+			$this->updateChecker();
+				
+				
+			/*
+			 * if there are any updates $check will be true and we can send the request
+			*/
+			if($this->check)
+			{
+				$xhr->addData('info', $this->info);
+				$xhr->send();
+			}
+		}
+		
+		
+		/*
+		 * 200 OK
+Array
+(
+    [app] => info
+    [m] => heartbeat
+    [c] => 0
+    [s] => Array
+        (
+            [0] => Array
+                (
+                    [a] => msg
+                    [m] => chat
+                    [o] => Array
+                        (
+                            [speed] => fast
+                            [premethod] => setSessionInfo
+                            [ids] => Array
+                                (
+                                    [0] => 1
+                                )
+
+                            [infos] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [id] => 1
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+        )
+		 */
+		// no session writing for no socket blocking
+		S::noWrite();
+		
+		// init ajax instance
+		$xhr = new Xhr();
+		
+		// kepp connection fpr 60 seconds
+		$xhr->keepAlive(60);
+		
+		/*
+		 * check if its the first heartbeat give me direct an output
+		 */
+		if(isset($_GET['c']) && (int)$_GET['c'] == 0)
+		{
+			$this->updateChecker();
+			if($this->check)
+			{
+				$xhr->addData('info', $this->info);
+				$xhr->addData('user', array(
+					'id' => fsId()
+				));
+				$xhr->send();
+			}
+		}
+		
+		for ($i=0;$i<6;$i++)
+		{
+			/*
+			 * fast polling calls
+			 */
+			if(!empty($services['fast']))
+			{
+				for ($y=0;$y<20;$y++)
+				{
+					foreach ($services['fast'] as $app => $methods)
+					{
+						foreach ($methods as $method => $options)
+						{
+							if($ret = $apps[$app]->$method($options))
+							{
+								$xhr->addData($app.'_'.$method, $ret['data']);
+								$xhr->addScript($ret['script']);
+								$xhr->send();
+							}
+						}
+					}
+					usleep(500000);
+				}
+			}
+			else
+			{
+				sleep(10);
+			}
+			/*
+			 * slow services
+			 */
+			
+			$this->updateChecker();
+				
+				
+			/*
+			 * if there are any updates $check will be true and we can send the request
+			*/
+			if($this->check)
+			{
+				$xhr->addData('info', $this->info);
+				$xhr->send();
+			}
+		}
+	}
+	
+	private function updateChecker()
+	{
+		/*
+		 * check for conversation updates
+		*/
+		if($conv_ids = $this->model->checkConversationUpdates())
+		{
+			$this->check = true;
+		
+			$this->info[] = array(
+					'type' => 'msg',
+					'data' => array('ids' => $conv_ids),
+					'badge' => count($conv_ids)
+			);
+		}
+	}
+}
