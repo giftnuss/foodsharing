@@ -137,7 +137,7 @@ if(S::may())
 	
 	$user .= 'conv.init();';
 	
-	if($chats = S::get('activechats'))
+	if(getPage() != 'msg' && ($chats = S::get('activechats')))
 	{
 		if(is_array($chats))
 		{			
