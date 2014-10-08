@@ -85,7 +85,6 @@ class FairteilerModel extends Model
 	
 			WHERE 	ff.foodsaver_id = fs.id
 			AND 	ff.fairteiler_id = '.(int)$fid.'
-			AND 	ff.infotype = 2
 		');
 	}
 	

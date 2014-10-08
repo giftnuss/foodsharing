@@ -45,56 +45,12 @@ Version: 1.0
   padding:0;
   text-align: center;
 }
-i.img
-{
-	background-image:url(images/icon-img.png?v=1);
-	background-position: center;
-}
-i.img-store
-{
-	background-position:0px 0px;
-}
-i.img-vegetables
-{
-	background-position:-17px 0px;
-}
-i.img-smile
-{
-	background-position:-51px 0px;
-}
-i.img-recycle
-{
-	background-position:-68px 0px;
-}
-i.img-basket
-{
-	background-position:-34px 0px;
-}
+
 .awesome-marker .icon-white {
   color: #fff;
 }
 
-/* Colors */
-.icon.brown
-{
-	background-color: #4A3520;
-}
-.icon.yellow
-{
-	background-color: #F2CD00;
-}
-.icon.orange
-{
-	background-color: #F4922F;
-}
-.icon.red
-{
-	background-color: #E64B36;
-}
-.icon.green
-{
-	background-color: #599022;
-}
+
 .awesome-marker-icon-red {
   background-position: 0 0;
 }

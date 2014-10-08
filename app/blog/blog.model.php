@@ -107,24 +107,37 @@ class BlogModel extends Model
 			'.$active.'
 			)');
 	
-		if($active == 0)
+		
+		$foodsaver = array();
+		$orgateam = $this->getOrgateam();
+		$botschafter = $this->getBotschafter($data['bezirk_id']);
+		
+		foreach ($orgateam as $o)
 		{
-			$foodsaver = array();
-			$orgateam = $this->getOrgateam();
-			$botschafter = $this->getBotschafter($data['bezirk_id']);
-			
-			foreach ($orgateam as $o)
-			{
-				$foodsaver[$o['id']] = $o;
-			}
-			foreach ($botschafter as $b)
-			{
-				$foodsaver[$b['id']] = $b;
-			}
-			
-			$this->addGlocke($foodsaver,$data['name'],'Neuer Blog Artikel','?page=blog&sub=edit&id='.$id);
-
+			$foodsaver[$o['id']] = $o;
 		}
+		foreach ($botschafter as $b)
+		{
+			$foodsaver[$b['id']] = $b;
+		}
+		
+		//$this->addGlocke($foodsaver,$data['name'],'Neuer Blog Artikel',);
+		
+		$this->addBell(
+			$foodsaver,
+			'blog_new_check_title',
+			'blog_new_check',
+			'fa fa-bullhorn',
+			array( 'href'=>'?page=blog&sub=edit&id='.$id),
+			array( 
+				'user' => S::user('name'), 
+				'teaser'=> tt($data['teaser'],100), 
+				'title' => $data['name']
+			),
+			'blog-check-'.$id
+		);
+
+		
 	
 		return $id;
 	}

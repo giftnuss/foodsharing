@@ -123,7 +123,16 @@ class PassgenControl extends Control
 				if(empty($fs['photo']))
 				{
 					$nophoto[] = $fs['name'].' '.$fs['nachname'];
-					$this->model->addGlocke($fs['id'], 'Dein Ausweis konnte nicht erstellt werden','Du hast noch kein Foto hochgeladen','?page=settings');
+					
+					$this->model->addBell(
+						$fs['id'],
+						'passgen_failed_title', 
+						'passgen_failed', 
+						'fa fa-camera', 
+						array('href' => '?page=settings'), 
+						array('user' => S::user('name')),
+						'pass-fail-'.$fs['id']
+					);
 					continue;
 				}
 

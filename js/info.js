@@ -7,7 +7,7 @@ var info = {
 	$badge:null,
 	$linklist:null,
 	$linkwrapper:null,
-	
+	$allWrapper:null,
 	/*
 	 * an array of the services that the heartbeat have to call
 	 */
@@ -62,27 +62,29 @@ var info = {
 		// init data array
 		this.data = new Array();
 		this.data['msg'] = {};
-		this.data['info'] = {};
+		this.data['bell'] = {};
 		this.data['basket'] = {};
 		
 		// init badge dom querys
 		this.$badge = new Array();
 		this.$badge['msg'] = $('#infobar > li.msg > a .badge');
-		this.$badge['info'] = $('#infobar > li.info > a .badge');
+		this.$badge['bell'] = $('#infobar > li.bell > a .badge');
 		this.$badge['basket'] = $('#infobar > li.basket > a .badge');
 		
 		// init linklist dom querys
 		this.$linklist = new Array();
 		this.$linklist['msg'] = $('#infobar .msg .linklist');
-		this.$linklist['info'] = $('#infobar .info .linklist');
+		this.$linklist['bell'] = $('#infobar .bell .linklist');
 		this.$linklist['basket'] = $('#infobar .basket .linklist');
 		
 		// init linkwrappers its where the conten comes in
 		this.$linkwrapper = new Array();
 		this.$linkwrapper['msg'] = $('#infobar .msg .linkwrapper');
-		this.$linkwrapper['info'] = $('#infobar .info .linkwrapper');
+		this.$linkwrapper['bell'] = $('#infobar .bell .linkwrapper');
 		this.$linkwrapper['basket'] = $('#infobar .basket .linkwrapper');	
-				
+		
+		this.$allWrapper = $('#infobar .linkwrapper');
+		
 		// add nice scroller to lists
 		$('#infobar .linkwrapper .linklist').slimScroll();
 		
@@ -99,24 +101,50 @@ var info = {
 	initEvents: function()
 	{
 		// onclick="$(this).children(\'.linkwrapper\').toggle();" class="msg" onmouseover="$(this).children(\'.linkwrapper\').show();info.refresh(\'msg\');" onmouseout="$(this).children(\'.linkwrapper\').hide();"
+		$('html').click(function() {
+			info.$allWrapper.hide();
+		});
 		
 		this.$infobar.children('li').each(function(){
 			var $this = $(this);
-			var type = $this.attr('class');
+			var type = $this.attr('class');			
 			
-			$this.mouseover(function(){
-				info.refresh(type);
-				info.$linkwrapper[type].show();
+			$this.children('span').click(function(event){
+				event.stopPropagation();
 			});
 			
-			$this.mouseout(function(){
-				info.$linkwrapper[type].hide();
-			});
-			
-			$this.click(function(){
-				info.$linkwrapper[type].toggle();
-			});
-			
+			$this.click(function(event){
+				
+				event.stopPropagation();
+				
+				if(info.$linkwrapper[type].is(':visible'))
+				{
+					info.$linkwrapper[type].hide();
+				}
+				else
+				{
+					info.$allWrapper.hide();
+					info.refresh(type);
+					info.$linkwrapper[type].show();
+				}
+			});			
+		});
+	},
+	
+	delBell: function(id)
+	{
+		ajax.req('bell','delbell',{
+			data:{id:id},
+			loader:false
+		});
+		
+		var $item = $('#belllist-' + id);
+		
+		$item.animate({
+			marginBottom: '-62px',
+			opacity:0
+		},200,function(){
+			$item.remove();
 		});
 	},
 	
@@ -297,6 +325,7 @@ var info = {
 					if(ret.html != undefined)
 					{
 						info.$linklist[item].html(ret.html);
+						info.$badge[item].hide();
 					}
 				}
 			});

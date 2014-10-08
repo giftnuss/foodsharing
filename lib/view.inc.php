@@ -592,7 +592,18 @@ function v_msgBarNew()
 	return '<ul id="infobar">
 				<li class="msg">
 					<a href="#" onclick="return false;">
-						<i class="fa fa-comments"></i><span style="display:none;" class="badge">12</span>
+						<i class="fa fa-comments"></i><span style="display:none;" class="badge">0</span>
+					</a>
+					<span style="display:none;" class="linkwrapper corner-all ui-shadow">
+						<ul class="linklist conversation-list">
+						</ul>
+						<a class="more" href="?page=msg">Alle zeigen</a>
+					</span>
+				</li>
+			
+				<li class="bell">
+					<a href="#" onclick="return false;">
+						<i class="fa fa-bell"></i><span style="display:none;" class="badge">0</span>
 					</a>
 					<span style="display:none;" class="linkwrapper corner-all ui-shadow">
 						<ul class="linklist conversation-list">

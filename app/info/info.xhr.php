@@ -32,6 +32,7 @@ class InfoXhr extends Control
 	public function heartbeat()
 	{
 		$duration = array('start'=>microtime());
+		
 		/*
 		 * check for additional polling services
 		 */
@@ -39,6 +40,9 @@ class InfoXhr extends Control
 			'fast' => array(),
 			'slow' => array()
 		);
+		
+		// init ajax instance
+		$xhr = new Xhr();
 		
 		$apps = array();
 		
@@ -87,8 +91,6 @@ class InfoXhr extends Control
 		if(isset($_GET['c']) && $_GET['c'] == 0)
 		{
 			$this->updateChecker();
-				
-				
 			/*
 			 * if there are any updates $check will be true and we can send the request
 			*/
@@ -139,9 +141,6 @@ Array
 		 */
 		// no session writing for no socket blocking
 		S::noWrite();
-		
-		// init ajax instance
-		$xhr = new Xhr();
 		
 		// kepp connection fpr 60 seconds
 		//$xhr->keepAlive(60);
@@ -243,9 +242,20 @@ Array
 			$this->check = true;
 		
 			$this->info[] = array(
-					'type' => 'msg',
-					'data' => array('ids' => $conv_ids),
-					'badge' => count($conv_ids)
+				'type' => 'msg',
+				'data' => array('ids' => $conv_ids),
+				'badge' => count($conv_ids)
+			);
+		}
+		
+		if($bell_ids = $this->model->checkBellUpdates())
+		{
+			$this->check = true;
+		
+			$this->info[] = array(
+				'type' => 'bell',
+				'data' => array('ids' => $bell_ids),
+				'badge' => count($bell_ids)
 			);
 		}
 	}

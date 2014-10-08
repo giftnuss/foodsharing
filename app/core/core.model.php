@@ -208,6 +208,43 @@ class Model extends ManualDb
  		');
  	}
  	
+ 	public function addBell($foodsaver_ids, $title, $body, $icon, $link_attributes, $vars, $identifier = '')
+ 	{
+ 		
+ 		if(!is_array($foodsaver_ids))
+ 		{
+ 			$foodsaver_ids = array($foodsaver_ids);
+ 		}
+ 		
+ 		if($link_attributes !== false)
+ 		{
+ 			$link_attributes = serialize($link_attributes);
+ 		}
+ 		
+ 		if($vars !== false)
+ 		{
+ 			$vars = serialize($vars);
+ 		}
+ 		
+ 		if($bid = $this->insert('INSERT INTO `'.PREFIX.'bell`(`name`, `body`, `vars`, `attr`, `icon`, `identifier`,`time`) VALUES ('.$this->strval($title).','.$this->strval($body).','.$this->strval($vars).','.$this->strval($link_attributes).','.$this->strval($icon).','.$this->strval($identifier).',NOW())'))
+ 		{
+ 			$values = array();
+ 			foreach ($foodsaver_ids as $id)
+ 			{
+ 				if(is_array($id))
+ 				{
+ 					$id = $id['id'];
+ 				}
+ 				
+ 				$values[] = '('.(int)$id.','.(int)$bid.',0)';
+ 			}
+ 			
+ 			return $this->insert('INSERT INTO `'.PREFIX.'foodsaver_has_bell`(`foodsaver_id`, `bell_id`, `seen`) VALUES '.implode(',', $values));
+ 		}
+ 		
+ 		return false;
+ 	}
+ 	
  	public function message($recip_id, $foodsaver_id, $message, $unread = 1)
  	{
  		$recd = 0;
