@@ -255,6 +255,88 @@
 	line-height: 8px;
 	text-align: right;
 }
+.conversation-list .icon
+{
+	border: 0 none;
+    float: right;
+    font-size: 22px;
+    height: 50px;
+    line-height: 34px;
+    margin: 0;
+    padding: 0;
+    text-align: right;
+    width: 25px;
+}
+.conversation-list .icon .img
+{
+	border: 5px solid;
+    border-radius: 14px;
+    display: inline-block;
+    height: 17px;
+    width: 17px;
+    
+	-webkit-border-radius: 14px;
+	-moz-border-radius: 14px;
+	border-radius: 14px;
+}
+.conversation-list .icon .img.yellow
+{
+	border-color: #f2cd00;
+}
+.conversation-list .icon .img.brown
+{
+	background-color: #4A3520;
+}
+.conversation-list .icon .img.orange
+{
+	background-color: #F4922F;
+}
+.conversation-list .icon .img.red
+{
+	background-color: #E64B36;
+}
+.conversation-list .icon .img.green
+{
+	background-color: #599022;
+}
+.bell .conversation-list .button
+{
+	border: 0 none;
+    float: right;
+    font-size: 22px;
+    height: 25px;
+    line-height: 24px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    width: 25px;
+	display:none;
+}
+.bell .conversation-list a:hover .icon
+{
+	display:none;
+}
+.bell .conversation-list a:hover .button
+{
+	display:inline-block;
+	background-color: #967D61 !important;
+	-webkit-border-radius: 14px;
+	-moz-border-radius: 14px;
+	border-radius: 14px;
+	-moz-opacity: 0.65;
+	-khtml-opacity: 0.65;
+	opacity: 0.65;
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha"(Opacity=65);
+}
+.bell .conversation-list a:hover .button:hover
+{
+	background-color: #599022 !important;
+	-moz-opacity: 1;
+	-khtml-opacity: 1;
+	opacity: 1;
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha"(Opacity=100);
+}
+
 .conversation-list li a
 {
 	padding:6px;

@@ -67,6 +67,7 @@ addCss('/js/tagedit/css/jquery.tagedit.css',true);
 addCss('/css/chat.css',true);
 addCss('/css/jquery.switchButton.css',true);
 addCss('/css/info.css',true);
+addCss('/css/icons.css',true);
 if (isMob())
 {
 	addCss('/css/style_mobile.css',true);

@@ -71,7 +71,16 @@ class FairteilerXhr extends Control
 			
 			if($follower = $this->model->getInfoFollower($_GET['fid']))
 			{
-				$this->model->addGlocke($follower, 'Updates im '.$ft['name'].' Fair-Teiler','Fair-Teiler Update','?page=fairteiler&sub=ft&id='.(int)$_GET['fid']);
+				$this->model->addBell(
+					$follower, 
+					'ft_update_title', 
+					'ft_update', 
+					'img img-recycle yellow', 
+					array('href' => '?page=fairteiler&sub=ft&id='.(int)$_GET['fid']), 
+					array('name' => $ft['name'],'user'=>S::user('name'),'teaser'=>tt($post['body'],100)),
+					'fairteiler-'.(int)$_GET['fid']
+				);
+				//$this->model->addGlocke($follower, 'Updates im '.$ft['name'].' Fair-Teiler','Fair-Teiler Update',);
 			}
 		}
 		

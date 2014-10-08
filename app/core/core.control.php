@@ -616,4 +616,13 @@ class Control
   	
   		return $response;
   	}
+  	
+  	public function addBell($foodsaver_ids, $title, $body, $link_attributes = false)
+  	{
+  		if($link_attributes !== false)
+  		{
+  			$attr = serialize($link_attributes);
+  		}
+  		return $this->model->addBell($foodsaver_ids, $title, $body, $link_attributes);
+  	}
 }
