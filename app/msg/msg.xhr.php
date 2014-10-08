@@ -21,6 +21,8 @@ class MsgXhr extends Control
 	 */
 	public function infobar()
 	{
+		S::noWrite();
+		
 		$xhr = new Xhr();
 		$conversations = $this->model->listConversations(10);
 		$xhr->addData('html', $this->view->conversationList($conversations,'conv.chat'));
@@ -60,6 +62,7 @@ class MsgXhr extends Control
 		$xhr = new Xhr();
 		if($this->mayConversation($_POST['c']))
 		{
+			S::noWrite();
 			
 			if(isset($_POST['b']))
 			{
@@ -92,7 +95,7 @@ class MsgXhr extends Control
 	 */
 	public function loadconvlist()
 	{
-		session_write_close();
+		S::noWrite();
 		
 		if($conversations = $this->model->listConversations())
 		{
@@ -342,7 +345,8 @@ class MsgXhr extends Control
 	
 	public function people()
 	{
-		session_write_close();
+		S::noWrite();
+		
 		$term = trim($_GET['term']);
 		if($people = $this->model->findConnectedPeople($term))
 		{
