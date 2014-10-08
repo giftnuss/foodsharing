@@ -21,11 +21,17 @@ var conv = {
 	
 	user2Conv:null,
 	
+	isBigPageMode:false,
+	
 	/*
 	 * init function have to be called one time on domready
 	 */
 	init: function()
 	{
+		if(GET('page') == 'msg')
+		{
+			this.isBigPageMode = true;
+		}
 		this.initiated = true;
 		this.chatboxes = new Array();
 		this.$chat = new Array();
@@ -79,6 +85,7 @@ var conv = {
 		}
 		
 		this.appendChatbox(cid);
+		
 	},
 	
 	/**
@@ -110,20 +117,23 @@ var conv = {
 	 */
 	push: function(data)
 	{
-		if(data.msg_chat != undefined && data.msg_chat.length > 0)
+		if(data.msg_chat.chats != undefined && data.msg_chat.chats.length > 0)
 		{
+			var chats = data.msg_chat.chats;
 			var key = 0;
-			for(var i=0;i<data.msg_chat.length;i++)
+			
+			for(var i=0;i<chats.length;i++)
 			{
-				key = conv.getKey(data.msg_chat[i].cid);
-				if(data.msg_chat[i].msg != undefined && data.msg_chat[i].msg.length > 0)
+				key = conv.getKey(chats[i].cid);
+				
+				if(chats[i].msg != undefined && chats[i].msg.length > 0)
 				{
-					for(var x=0;x<data.msg_chat[i].msg.length;x++)
+					for(var x=0;x<chats[i].msg.length;x++)
 					{
-						conv.append(key,data.msg_chat[i].msg[x]);
+						conv.append(key,chats[i].msg[x]);
 					}
-					conv.maxbox(data.msg_chat[i].cid);
-					conv.scrollBottom(data.msg_chat[i].cid);
+					conv.maxbox(chats[i].cid);
+					conv.scrollBottom(chats[i].cid);
 				}
 			}
 		}
@@ -371,7 +381,7 @@ var conv = {
 					
 				}
 				
-				conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').children('i').after(' '+title.join(', '));
+				conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html('<i class="fa fa-comment fa-flip-horizontal"></i> ' + title.join(', '));
 				
 				/*
 				 * now append all arrived messages
@@ -398,6 +408,13 @@ var conv = {
 	
 	appendChatbox: function(cid,min)
 	{		
+		
+		if(this.isBigPageMode)
+		{
+			msg.loadConversation(cid);
+			return false;
+		}
+		
 		if(min == undefined)
 		{
 			min = false;

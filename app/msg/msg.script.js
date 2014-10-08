@@ -139,6 +139,13 @@ var msg = {
 	 */
 	heartbeat: function(){
 		
+		info.editService('msg','heartbeat',{
+			cid:msg.conversation_id,
+			mid:msg.last_message_id,
+			speed:'fast'
+		});
+		
+		/*
 		msg.heartbeatXhr = ajax.req('msg','heartbeat',{
 			data:{
 				cid:msg.conversation_id,
@@ -149,7 +156,7 @@ var msg = {
 					
 				/*
 				 * update current chat if there are new messages
-				 */
+				 *
 				if(ret.messages != undefined)
 				{
 					for(var i=0;i<ret.messages.length;i++)
@@ -162,7 +169,7 @@ var msg = {
 				
 				/*
 				 * update conversation list move newest on top etc.
-				 */
+				 *
 				if(ret.convs)
 				{
 					for(var i=0;i<ret.convs.length;i++)
@@ -179,13 +186,57 @@ var msg = {
 				msg.heartbeat();
 			}
 		});
-			
+		*/
+
+	},
+	
+	/**
+	 * Method will be called if ther arrived something new from the server
+	 */
+	pushArrived: function(data)
+	{
+		var ret = data.msg_heartbeat;
+		
+		console.log(ret._duration);
+		
+		/*
+		 * update current chat if there are new messages
+		 */
+		if(ret.messages != undefined)
+		{
+			for(var i=0;i<ret.messages.length;i++)
+			{
+				//alert(ret.messages[i].id);
+				msg.appendMsg(ret.messages[i]);
+			}
+			msg.scrollBottom();
+		}
+		
+		/*
+		 * update conversation list move newest on top etc.
+		 */
+		if(ret.convs)
+		{
+			for(var i=0;i<ret.convs.length;i++)
+			{						
+				// if the element exist remove to add it new on the top
+				$('#convlist-' + ret.convs[i].id).remove();
+				msg.appendConvList(ret.convs[i],true);
+			}
+		}
 	},
 	
 	/**
 	 * function will abort the heartbeat ajax call and restart it
 	 */
 	heartbeatRestart: function(){
+		
+		info.editService('msg','heartbeat',{
+			cid:msg.conversation_id,
+			mid:msg.last_message_id,
+			speed:'fast'
+		});
+		/*
 		if(this.heartbeatXhr == false)
 		{
 			msg.heartbeat();
@@ -194,6 +245,7 @@ var msg = {
 		{
 			msg.heartbeatXhr.abort();
 		}
+		*/
 	},
 	initComposer: function(){
 		$('#compose_body').autosize();
@@ -285,6 +337,7 @@ var msg = {
 		if(id == msg.conversation_id)
 		{
 			msg.scrollBottom();
+			$('#msg_answer').select();
 			return false;
 		}
 		msg.conversation_id = id;
@@ -348,6 +401,8 @@ var msg = {
 				msg.$convs.children('li.active').removeClass('active');
 				$('#convlist-' + id).addClass('active');
 				
+				$('#msg_answer').select();
+				
 				msg.heartbeatRestart();
 				
 			} // success end
@@ -397,7 +452,7 @@ var msg = {
 			
 			for(var y=0;y<conversation.member.length;y++)
 			{
-				if(msg.fsid != conversation.member[i].id)
+				if(msg.fsid != conversation.member[y].id)
 				{
 					pics += '<img width="'+picwidth+'" src="'+img(conversation.member[y].photo,size)+'" />';
 					names += ', '+conversation.member[y].name;

@@ -226,55 +226,44 @@ class MsgXhr extends Control
 	 * ajax call to check every time updates in all conversations
 	 * GET[m] is the last message id and GET[cid] is the current conversation id
 	 */
-	public function heartbeat()
+	public function heartbeat($opt)
 	{
-		S::noWrite();
-		
-		$xhr = new Xhr();
-		$xhr->keepAlive(60);
-		
 		$cid = false;
 		$lmid = false;
-		if(isset($_GET['cid']) && $this->mayConversation($_GET['cid']) && isset($_GET['mid']))
-		{
-			$cid = (int)$_GET['cid'];
-			$lmid = (int)$_GET['mid'];
-		}
 		
-		for($i=0;$i<30;$i++)
+		if(isset($opt['cid']) && $this->mayConversation($opt['cid']) && isset($opt['mid']))
 		{
-		// so on after 10 seconds one complete conversation update check
-			if($conv_ids = $this->model->checkConversationUpdates())
+			$cid = (int)$opt['cid'];
+			$lmid = (int)$opt['mid'];
+		}
+
+		if($conv_ids = $this->model->checkConversationUpdates())
+		{
+			$this->model->setAsRead($conv_ids);
+			$return = array();
+			/*
+			 * check is a new message there for active conversation?
+			 */
+			if($cid && isset($conv_ids[$cid]))
 			{
-				$this->model->setAsRead($conv_ids);
-			
-				/*
-				 * check is a new message there for active conversation?
-				 */
-				if($cid && isset($conv_ids[$cid]))
+				if($messages = $this->model->getLastMessages($cid,$lmid))
 				{
-					if($messages = $this->model->getLastMessages($cid,$lmid))
-					{
-						$xhr->addData('messages', $messages);
-					}
+					$return['messages'] = $messages;
 				}
-				
-				$xhr->setStatus(1);
-				$xhr->addData('conv_ids', $conv_ids);
-				if($convs = $this->model->listConversationUpdates($conv_ids))
-				{
-					$xhr->addData('convs', $convs);
-				}
-				$xhr->send();
 			}
-				
-			// sleep 0.5 second for conversation updates
-			usleep(500000);
-		}
+			
+			if($convs = $this->model->listConversationUpdates($conv_ids))
+			{
+				$return['convs'] = $convs;
+			}
+			
+			return array(
+				'data' => $return,
+				'script' => 'msg.pushArrived(ajax.data);'
+			);
+		}		
 		
-		
-		$xhr->setStatus(0);
-		$xhr->send();
+		return false;
 	}
 	
 	/**
@@ -290,14 +279,16 @@ class MsgXhr extends Control
 			 * check is a new message there for active conversations?
 			*/
 			
-			$out = array();
+			$out = array(
+				'chats' => array()
+			);
 			foreach ($opt['infos'] as $i)
 			{
 				if(isset($conv_ids[$i['id']]))
 				{
 					if($messages = $this->model->getLastMessages($i['id'],$i['lmid']))
 					{
-						$out[] = array(
+						$out['chats'][] = array(
 							'cid' => $i['id'],
 							'msg' => $messages
 						);

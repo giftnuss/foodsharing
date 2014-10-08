@@ -22,7 +22,8 @@ class InfoXhr extends Control
 		 */
 		$this->allowed = array(
 			'msg:chat' => true,
-			'msg:setSessionInfo' => true
+			'msg:setSessionInfo' => true,
+			'msg:heartbeat' => true
 		);
 		
 		parent::__construct();
@@ -30,6 +31,7 @@ class InfoXhr extends Control
 	
 	public function heartbeat()
 	{
+		$duration = array('start'=>microtime());
 		/*
 		 * check for additional polling services
 		 */
@@ -142,11 +144,12 @@ Array
 		$xhr = new Xhr();
 		
 		// kepp connection fpr 60 seconds
-		$xhr->keepAlive(60);
+		//$xhr->keepAlive(60);
 		
 		/*
 		 * check if its the first heartbeat give me direct an output
 		 */
+		
 		if(isset($_GET['c']) && (int)$_GET['c'] == 0)
 		{
 			$this->updateChecker();
@@ -160,6 +163,9 @@ Array
 			}
 		}
 		
+		
+		$duration['start'] = microtime() - $duration['start'];
+		
 		for ($i=0;$i<6;$i++)
 		{
 			/*
@@ -171,10 +177,15 @@ Array
 				{
 					foreach ($services['fast'] as $app => $methods)
 					{
+						$duration['call'] = microtime();
 						foreach ($methods as $method => $options)
 						{
 							if($ret = $apps[$app]->$method($options))
 							{
+								$duration['call'] = microtime() - $duration['call'];
+								
+								$ret['data']['_duration'] = $duration;
+								
 								$xhr->addData($app.'_'.$method, $ret['data']);
 								$xhr->addScript($ret['script']);
 								$xhr->send();
@@ -204,9 +215,7 @@ Array
 				}
 			}
 			
-			
 			$this->updateChecker();
-				
 				
 			/*
 			 * if there are any updates $check will be true and we can send the request
@@ -228,6 +237,7 @@ Array
 		/*
 		 * check for conversation updates
 		*/
+		
 		if($conv_ids = $this->model->checkConversationUpdates())
 		{
 			$this->check = true;
