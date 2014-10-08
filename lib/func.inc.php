@@ -384,7 +384,22 @@ function format_day($dow)
 function sv($id,$var)
 {
 	global $g_lang;
-	return str_replace('{var}', $var, $g_lang[$id]);
+	if(is_array($var))
+	{
+		$search = array();
+		$replace = array();
+		foreach ($var as $key => $value)
+		{
+			$search[] = '{'.$key.'}';
+			$replace[] = $value;
+		}
+		return str_replace($search, $replace, $g_lang[$id]);
+	}
+	else 
+	{
+		return str_replace('{var}', $var, $g_lang[$id]);
+	}
+	
 }
 function addBread($name,$href = '')
 {
