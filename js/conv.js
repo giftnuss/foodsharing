@@ -170,17 +170,21 @@ var conv = {
 		var val = $ta.val().trim();
 		var key = this.getKey(cid);
 		
+		
+		
 		if(event.keyCode == 13 && event.shiftKey == 0  && val != '')  
 		{
 			conv.showLoader(cid);
 			
 			setTimeout(function(){
 				$ta.val('');
+				$ta.css('height','40px');
+				$ta[0].focus();
 			},100);
+
+			// replace to many line breaks
+			val = val.replace(new RegExp('(\n){3,}', 'gim') , '\n\n');
 			
-			$ta.css('height','40px');
-			$ta[0].focus();
-				
 			ajax.req('msg','sendmsg',{
 				loader:false,
 				method:'post',
@@ -334,7 +338,7 @@ var conv = {
 	append: function(key,message)
 	{
 		conv.chatboxes[key].last_mid = parseInt(message.id);
-		conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append('<div title="'+message.time+'" class="chatboxmessage"><span class="chatboxmessagefrom"><a href="#" class="photo" onclick="profile('+message.fs_id+');return false;"><img src="'+conv.img(message.fs_photo+'','mini')+'"></a></span><span class="chatboxmessagecontent">'+nl2br(message.body)+'<span class="time">'+timeformat.nice(message.time)+'</span></span><div style="clear:both;"></div></div>');
+		conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append('<div title="'+message.time+'" class="chatboxmessage"><span class="chatboxmessagefrom"><a href="#" class="photo" onclick="profile('+message.fs_id+');return false;"><img src="'+conv.img(message.fs_photo+'','mini')+'"></a></span><span class="chatboxmessagecontent">'+nl2br(message.body.autoLink())+'<span class="time">'+timeformat.nice(message.time)+'</span></span><div style="clear:both;"></div></div>');
 	},
 	
 	/**

@@ -5,26 +5,51 @@
 
   autoLink = function() {
     var k, linkAttributes, option, options, pattern, v;
+    var activeUrl = parse_url(document.URL);
+    
     options = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    
+    
+    
     pattern = /(^|\s)((?:https?|ftp):\/\/[\-A-Z0-9+\u0026@#\/%?=()~_|!:,.;]*[\-A-Z0-9+\u0026@#\/%=~()_|])/gi;
+   
+    
+    
     if (!(options.length > 0)) {
-      return this.replace(pattern, "$1<a href='$2'>$2</a>");
+      options[0] = {target:'auto'};
     }
+    
     option = options[0];
+    
+    
+    
     linkAttributes = ((function() {
       var _results;
       _results = [];
       for (k in option) {
         v = option[k];
         if (k !== 'callback') {
-          _results.push(" " + k + "='" + v + "'");
+          _results.push(' ' + k + '="' + v + '"');
         }
       }
       return _results;
     })()).join('');
+    
     return this.replace(pattern, function(match, space, url) {
       var link;
-      link = (typeof option.callback === "function" ? option.callback(url) : void 0) || ("<a href='" + url + "'" + linkAttributes + ">" + url.replace('http://','').replace('https://','') + "</a>");
+      
+      	pUrl = parse_url(url);
+      	
+      	if(pUrl.host != activeUrl.host)
+      	{
+      		linkAttributes = linkAttributes.replace(' target="auto"',' target="_blank"');
+      	}
+      	else
+      	{
+      		linkAttributes = linkAttributes.replace(' target="auto"','');
+      	}
+      
+      link = (typeof option.callback === "function" ? option.callback(url) : void 0) || ('<a href="' + url + '"' + linkAttributes + '>' + url.replace('http://','').replace('https://','') + '</a>');
       return "" + space + link;
     });
   };
