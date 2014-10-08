@@ -500,8 +500,8 @@ else if(isset($_GET['id']))
 			<input type="hidden" name="timedialog-id" id="timedialog-id" value="" />
 			<input type="hidden" name="timedialog-date" id="timedialog-date" value="" />
 				
-			<span class="shure_date" id="shure_date">'.v_info(sv('shure_date','<span id="date-label"></span>')).'</span>
-			<span class="shure_range_date" id="shure_range_date" style="display:none;">'.v_info(sv('shure_range_date','<span id="range-day-label"></span>')).'</span>
+			<span class="shure_date" id="shure_date">'.v_info(sv('shure_date',array('label'=>'<span id="date-label"></span>'))).'</span>
+			<span class="shure_range_date" id="shure_range_date" style="display:none;">'.v_info(s('shure_range_date',array('label' => '<span id="range-day-label"></span>'))).'</span>
 			<div class="rangeFetch" id="rangeFetch" style="display:none;">
 			
 					'.v_input_wrapper(s('zeitraum'), '<input type="text" value="" id="timedialog-from" name="timedialog-from" class="datefetch input text value"> bis <input type="text" value="" id="timedialog-to" name="timedialog-to" class="datefetch input text value">').'
@@ -778,7 +778,7 @@ else if(isset($_GET['id']))
 		if($betrieb['verantwortlich'] && empty($next_dates))
 		{
 		
-			$zeit_cnt = v_info(sv('no_fetchtime',$betrieb['name']),s('attention').'!') . 
+			$zeit_cnt = v_info(sv('no_fetchtime',array('name' => $betrieb['name'])),s('attention').'!') . 
 				'<p style="margin-top:10px;text-align:center;"><a class="button" href="#" onclick="ajreq(\'adddate\',{app:\'betrieb\',id:'.(int)$_GET['id'].'});return false;">einzelnen Termin eintragen</a></p>';
 		}
 		
@@ -853,7 +853,7 @@ else
 	$betriebe = $db->getMyBetriebe();
 	addContent(u_betriebList($betriebe['verantwortlich'],s('you_responsible'),true));
 	addContent(u_betriebList($betriebe['team'],s('you_fetcher'),false));
-	addContent(u_betriebList($betriebe['sonstige'],sv('more_stores',$bezirk['name']),false));
+	addContent(u_betriebList($betriebe['sonstige'],sv('more_stores',array('name' => $bezirk['name'])),false));
 }
 
 function u_getVerantwortlicher($betrieb)
@@ -1656,7 +1656,7 @@ function u_form_checkboxTagAlt($date,$option=array())
 			if($fs['confirmed'] == 0)
 			{
 				$class .= ' unconfirmed';
-				$fs['name'] = sv('not_confirmed',$fs['name']);
+				$fs['name'] = sv('not_confirmed',array('name' => $fs['name']));
 			}
 			$out .= '
 			<li class="filled '.$class.'">
