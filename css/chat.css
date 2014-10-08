@@ -294,3 +294,11 @@
 	color:#b4aba3;
 	font-size:11px;
 }
+#infobar .loader
+{
+	text-align: center;
+	font-size: 25px;
+	height:50px;
+	line-height: 50px;
+	color:#4A3520;
+}

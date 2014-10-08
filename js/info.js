@@ -263,7 +263,16 @@ var info = {
 	 */
 	showLoader: function(item)
 	{
-		
+		this.$linklist[item].prepend('<li class="loader"><i class="fa fa-spinner fa-spin"></i</li>');
+	},
+	
+	
+	/**
+	 * hide status 
+	 */
+	hideLoader: function(item)
+	{
+		this.$linklist[item].children('.loader').remove();
 	},
 	
 	/**
@@ -278,11 +287,13 @@ var info = {
 
 		if($.now() - info.refreshTime[item] > info.refreshTimeout)
 		{
+			info.showLoader(item);
 			info.refreshTime[item] = $.now();
 			ajax.req(item,'infobar',{
 				loader:false,
 				data:info.data[item],
 				success: function(ret){
+					info.hideLoader(item);
 					if(ret.html != undefined)
 					{
 						info.$linklist[item].html(ret.html);
