@@ -170,17 +170,21 @@ var conv = {
 		var val = $ta.val().trim();
 		var key = this.getKey(cid);
 		
+		
+		
 		if(event.keyCode == 13 && event.shiftKey == 0  && val != '')  
 		{
 			conv.showLoader(cid);
 			
 			setTimeout(function(){
 				$ta.val('');
+				$ta.css('height','40px');
+				$ta[0].focus();
 			},100);
+
+			// replace to many line breaks
+			val = val.replace(new RegExp('(\n){3,}', 'gim') , '\n\n');
 			
-			$ta.css('height','40px');
-			$ta[0].focus();
-				
 			ajax.req('msg','sendmsg',{
 				loader:false,
 				method:'post',
