@@ -958,6 +958,7 @@ class Db
 				FROM 	`'.PREFIX.'foodsaver`
 				WHERE 	`email` = "'.$email.'"
 				AND 	`passwd` 	= "'.$this->encryptMd5($email, $pass).'"
+				AND 	`beta` = 1
 		';
 		
 		if($user = $this->qRow($sql))
