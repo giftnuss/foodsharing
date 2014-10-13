@@ -83,7 +83,7 @@ class MailboxXhr extends Control
 	public function loadmails()
 	{
 		
-		$last_refresh = (int)$this->model->store->get('mailbox_refresh');
+		$last_refresh = (int)Mem::get('mailbox_refresh');
 		
 		$cur_time = (int)time();
 
@@ -93,7 +93,7 @@ class MailboxXhr extends Control
 			($cur_time - $last_refresh) > 30
 		)
 		{
-			$this->model->store->put('mailbox_refresh', $cur_time);
+			Mem::set('mailbox_refresh', $cur_time);
 			$ref = $this->refresh();
 		}
 

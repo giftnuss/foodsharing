@@ -245,6 +245,42 @@ class Model extends ManualDb
  		return false;
  	}
  	
+ 	/**
+ 	 * Method to check users online status by checking timestamp from memcahce
+ 	 *
+ 	 * @param integer $fs_id
+ 	 * @return boolean
+ 	 */
+ 	public function isActive($fs_id)
+ 	{
+ 		if($time = Mem::get('activity_'.$fs_id))
+ 		{
+ 			if((time()-$time) > 600)
+ 			{
+ 				return false;
+ 			}
+ 			else
+ 			{
+ 				return true;
+ 			}
+ 		}
+ 	
+ 		/*
+ 			if($time = $this->qOne('SELECT UNIX_TIMESTAMP(`zeit`) FROM `'.PREFIX.'activity` WHERE `foodsaver_id` = '.$this->intval($fs_id)))
+ 			{
+ 		if((time()-$time) > 600)
+ 		{
+ 		return false;
+ 		}
+ 		else
+ 		{
+ 		return true;
+ 		}
+ 		}
+ 		*/
+ 		return false;
+ 	}
+ 	
  	public function message($recip_id, $foodsaver_id, $message, $unread = 1)
  	{
  		$recd = 0;

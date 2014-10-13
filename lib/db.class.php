@@ -2,70 +2,82 @@
 require_once ROOT_DIR.'lib/simple_storage.class.php';
 
 
-class MiniStorage
+class Mem
 {
-	private $memcache;
-	private $connected;
-	
-	public function __construct()
-	{
-		$this->connected = false;
-	}
+	public static $memcache;
+	public static $connected;
+
 	
 	public function connect()
 	{
-		//$this->memcache= new Memcached();
-		//$this->memcache->addServer('127.0.0.1', 11211);
 		$this->connected = true;
 	}
 	
-	public function put($key,$data)
+	public static function set($key,$data)
 	{
-		/*
-		if(!$this->connected)
-		{
-			$this->connect();
-		}
-		*/
-		//return $this->memcache->set($key,$data,0);
 		return apc_store($key,$data,84400);
 	}
 	
-	public function get($key)
+	public static function get($key)
 	{
-		/*
-		if(!$this->connected)
-		{
-			$this->connect();
-		}
-		*/
-		//return $this->memcache->get($key);
 		return apc_fetch($key);
 	}
 	
-	public function flush()
+	public static function flush()
 	{
-		/*
-		if(!$this->connected)
-		{
-			$this->connect();
-		}
-		return $this->memcache->flush();
-		*/
-		//apc_clear_cache('user');
+		apc_clear_cache('user');
 	}
 	
-	public function del($key)
+	public static function del($key)
 	{
-		/*
-		if(!$this->connected)
+		apc_delete($key);
+	}
+	
+	public static function user($id,$key)
+	{
+		return Mem::get('user-'.$key.'-'.$id);
+	}
+	
+	public static function userSet($id,$key,$value)
+	{
+		return Mem::set('user-'.$key.'-'.$id, $value);
+	}
+	
+	public static function userDel($id,$key)
+	{
+		return Mem::del('user-'.$key.'-'.$id);
+	}
+	
+	/**
+	 * Method to check users online status by checking timestamp from memcahce
+	 *
+	 * @param integer $fs_id
+	 * @return boolean
+	 */
+	public static function userOnline($fs_id)
+	{
+		if($time = Mem::user($fs_id, 'active'))
 		{
-			$this->connect();
+			if((time()-$time) < 600)
+			{
+				
+				return true;
+			}
 		}
-		
-		return $this->memcache->delete($key);
-		*/
-		//apc_delete($key);
+		/*
+		 * free memcache from userdata
+		 */
+		Mem::userDel($fs_id, 'lastMailMessage');
+		Mem::userDel($fs_id, 'active');
+		return false;
+	}
+	
+	/**
+	 * update user activity to show user is online
+	 */
+	public static function userUpdate()
+	{
+		Mem::userSet(fsId(), 'active', time());
 	}
 }
 
@@ -76,7 +88,6 @@ class Db
 	private $mysqli;
 	private $is_connected;
 	private $values;
-	public $store;
 	
 	public function __construct()
 	{
@@ -89,8 +100,6 @@ class Db
 		$this->sql("SET CHARACTER SET 'utf8'");
 					
 		$g_dbclean['mysqli'] = $this->mysqli;
-		
-		$this->store = new MiniStorage();
 	}
 	
 	public function addPassRequest($email,$mail = true)
@@ -807,6 +816,10 @@ class Db
 	{
 		//$this->update('UPDATE '.PREFIX.'foodsaver SET `gcm` = "" WHERE id = '.(int)fsId());
 		$this->del('DELETE FROM '.PREFIX.'activity WHERE `foodsaver_id` = '.(int)fsId());
+		
+		Mem::userDel(fsId(), 'active');
+		Mem::userDel(fsId(), 'lastMailMessage');
+		
 	}
 	
 	public function updateMumble($pass)
@@ -981,7 +994,7 @@ class Db
 	 */
 	public function isActive($fs_id)
 	{
-		if($time = $this->store->get('activity_'.$fs_id))
+		if($time = Mem::user($fs_id, 'active'))
 		{
 			if((time()-$time) > 600)
 			{
@@ -1010,8 +1023,9 @@ class Db
 	}
 	
 	public function updateActivity()
-	{
-		$this->store->put('activity_'.(int)fsId(), time());
+	{		
+		Mem::userSet(fsId(), 'active', time());
+		
 		$this->update('UPDATE `'.PREFIX.'activity` SET `zeit` = NOW() WHERE `foodsaver_id` = '.$this->intval(fsId()));
 	}
 	

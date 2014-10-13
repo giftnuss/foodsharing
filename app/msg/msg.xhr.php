@@ -73,6 +73,29 @@ class MsgXhr extends Control
 					if($message_id = $this->model->sendMessage($_POST['c'],$body))
 					{
 						$xhr->setStatus(1);
+						
+						/*
+						 * for not so db intensive polling store updates in memcache if the recipients are online
+						*/
+						if($member = $this->model->listConversationMembers($_POST['c']))
+						{
+							foreach ($member as $m)
+							{
+								if($m['id'] != fsId())
+								{
+									Mem::userSet(fsId(), 'msg-update', true);
+						
+									/*
+									 * send an E-Mail if the user is not online
+									*/
+									if($this->model->wantMsgEmailInfo($m['id']))
+									{
+										$this->convMessage($m, $_POST['c'], $body);
+									}
+								}
+							}
+						}
+						
 						$xhr->addData('msg', array(
 							'id' => $message_id,
 							'body' => $body,

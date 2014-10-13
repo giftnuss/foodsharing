@@ -407,7 +407,9 @@ function handle_add()
 	{
 		if($db->add_bezirk($g_data))
 		{
-			$db->store->flush();
+			Mem::del('cb-'.$g_data['parent_id']);
+			Mem::set('cb-'.$g_data['parent_id'], $db->getChildBezirke($g_data['parent_id']));
+			
 			info(s('bezirk_add_success'));
 			goPage();
 		}

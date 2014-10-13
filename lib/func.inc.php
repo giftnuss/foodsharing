@@ -1986,7 +1986,7 @@ function cronjobs_daily($fsid = false)
 	}
 	else 
 	{
-		$last = $db->store->get('cronjobs_daily_date');
+		$last = Mem::get('cronjobs_daily_date');
 		if($last != date('Y-m-d'))
 		{
 			$check = true;
@@ -2005,6 +2005,25 @@ function wartung()
 	//$db->updateRolle();
 	$db->updateBezirkIds();
 	$db->del('DELETE FROM `'.PREFIX.'abholer` WHERE confirmed = 0 AND `date` < NOW()');
+	
+	/*
+	 * memcache befüllen
+	 */
+	//$db->store->flush();
+	
+	if($foodsaver = $db->q('SELECT id, infomail_message FROM '.PREFIX.'foodsaver'))
+	{
+		foreach ($foodsaver as $fs)
+		{			
+			$info = false;
+			if($fs['infomail_message'])
+			{
+				$info = true;
+			}
+			
+			Mem::userSet($fs['id'], 'infomail', $info);
+		}
+	}
 	
 	/*
 	 * alte Glocken löschen

@@ -9,8 +9,25 @@ class LoginXhr extends Control
 
 		parent::__construct();
 		
+	}
+	
+	/**
+	 * Method to add some user specific vars to the memcache for more performance and less db access
+	 */
+	private function fillMemcacheUserVars()
+	{
+		$info = $this->model->getVal('infomail_message', 'foodsaver', fsId());
 		
+		if((int)$info > 0)
+		{
+			Mem::userSet(fsId(), 'infomail', true);
+		}
+		else
+		{
+			Mem::userSet(fsId(), 'infomail', false);
+		}
 		
+		$this->model->updateActivity();
 	}
 	
 	/**
@@ -188,6 +205,8 @@ class LoginXhr extends Control
 			{
 				$token_js = 'user.token = "'.$token.'";';
 			}
+			
+			$this->fillMemcacheUserVars();
 			
 			$menu = getMenu();
 			$msgbar = v_msgBar();

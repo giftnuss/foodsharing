@@ -34,7 +34,7 @@ header("Expires: 0");
 	</script>
 	
 </head>
-<body>
+<body<?php echo $g_body_class; ?>>
 <!-- <div class="ajax-loader"><img src="../images/469.gif" alt="loader" /></div> -->
 <?php getDebugging(); ?>
 	<div id="top">

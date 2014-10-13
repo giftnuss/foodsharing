@@ -128,8 +128,19 @@ addHidden('<div id="uploadPhoto"><form method="post" enctype="multipart/form-dat
 addHidden('<div id="fs-profile"></div>');
 
 $user = '';
+$g_body_class = '';
 if(S::may())
 {
+	if(isset($_GET['uc']))
+	{
+		if(fsId() != $_GET['uc'])
+		{
+			$db->logout();
+			goLogin();
+		}
+	}
+	
+	$g_body_class = ' class="loggedin"';
 	$user = 'user = {id:'.(int)fsId().'};';
 	
 	/*
