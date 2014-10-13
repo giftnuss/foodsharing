@@ -9,6 +9,11 @@ class GeocleanControl extends Control
 		
 		parent::__construct();
 		
+		if(!S::may('orga'))
+		{
+			goLogin();
+		}
+		
 	}
 	
 	public function index()

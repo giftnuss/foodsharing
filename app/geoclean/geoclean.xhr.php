@@ -8,6 +8,11 @@ class GeocleanXhr extends Control
 		$this->view = new GeocleanView();
 
 		parent::__construct();
+		
+		if(!S::may('orga'))
+		{
+			return false;
+		}
 	}
 
 	public function masterupdate()
