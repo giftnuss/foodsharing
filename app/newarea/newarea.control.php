@@ -8,6 +8,10 @@ class NewareaControl extends Control
 		$this->view = new NewareaView();
 		
 		parent::__construct();
+
+    if(!S::may('orga')) {
+      go('?page=dashboard');
+    }
 		
 	}
 	
