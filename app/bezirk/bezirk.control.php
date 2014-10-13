@@ -18,7 +18,10 @@ class BezirkControl extends Control
 		$this->view->setMode($this->mode);
 		parent::__construct();
 		
-		
+		if(!S::may())
+		{
+			goLogin();
+		}
 		
 		$this->bezirk_id = false;
 		if(($this->bezirk_id = getGetId('bid')) === false)

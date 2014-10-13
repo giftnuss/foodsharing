@@ -37,8 +37,6 @@ class StatControl extends Control
 				
 			$cur_time = (int)time();
 				
-			$this->updateMumble($pass);
-				
 			if(
 					$last_refresh == 0
 					||
