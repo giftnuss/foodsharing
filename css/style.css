@@ -2349,7 +2349,7 @@ div.xv_left ul li a:hover
 {
 	display:none;
 }
-@media (max-width: 600px) {
+@media (max-width: 1025px) {
 	#top .menu
 	{
 		display:none;
@@ -2456,8 +2456,44 @@ div.xv_left ul li a:hover
 		-moz-border-radius: 0px;
 		border-radius: 0px;
 	}
+	#searchbar input
+	{
+		margin:-4px 0 0 -15px;
+	}
 }
-
+@media (max-width: 600px) {
+	#layout_logo
+	{
+		display:none;
+	}
+	#searchbar input
+	{
+		width:175px;
+	}
+	#infobar 
+	{
+	    margin-left: 6px;
+	}
+	#infobar .linkwrapper
+	{
+		margin-left:-6px !important;
+	}
+	#infobar .linkwrapper:after
+	{
+		margin-left: 12px !important;
+	}
+	#infobar, #infobar > li
+	{
+		line-height: 41px !important;
+		height: 41px !important;
+	}
+	#searchbar .result-wrapper
+	{
+		position: fixed;
+		width: 93%;
+		left: 5px;
+	}
+}
 ul.bread
 {
 	background-color: transparent !important;
