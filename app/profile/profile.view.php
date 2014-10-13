@@ -284,7 +284,7 @@ class ProfileView extends View
 							<div style="height:130px;">'.$photo.'</div>
 							'.$verify.'
 							<ul>
-								<li><a onclick="chat('.(int)$this->foodsaver['id'].');return false;" href="#">Nachricht schreiben</a></li>
+								<li><a onclick="chat('.(int)$this->foodsaver['id'].');closeAllDialogs();return false;" href="#">Nachricht schreiben</a></li>
 								'.$opt.'
 							</ul>
 						</div>
