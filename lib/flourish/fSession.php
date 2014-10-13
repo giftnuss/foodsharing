@@ -807,6 +807,7 @@ class fSession
 	 */
 	static public function setPath($directory)
 	{
+		
 		if (self::$open || isset($_SESSION)) {
 			throw new fProgrammerException(
 				'%1$s must be called before any of %2$s, %3$s, %4$s, %5$s, %6$s, %7$s or %8$s',
@@ -833,6 +834,7 @@ class fSession
 		}
 		
 		session_save_path($directory->getPath());
+		
 	}
 
 
