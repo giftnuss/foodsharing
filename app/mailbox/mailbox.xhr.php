@@ -10,10 +10,19 @@ class MailboxXhr extends Control
 
 		parent::__construct();
 		
+		if(!S::may('bieb'))
+		{
+			return false;
+		}
 	}
 	
 	public function testmail()
 	{
+		if(!S::may('orga'))
+		{
+			return false;
+		}
+		
 		if(!validEmail($_POST['email']))
 		{
 			return array(
@@ -183,6 +192,24 @@ class MailboxXhr extends Control
 			mb		1
 			sub		betr
 		 */
+		
+		/*
+		 * security only 1 email per minute
+		*/
+		
+		if($last = (int)Mem::user(fsId(), 'mailbox-last'))
+		{
+			if((time() - $last) < 60)
+			{
+				return array(
+					'status' => 1,
+					'script' => 'pulseError("Du kannst nur eine E-Mail pro Minute versenden, bitte warte einen Augenblick...");'
+				);
+			}
+		}
+		
+		Mem::userSet(fsId(),'mailbox-last', time());
+		
 		if($this->model->mayMailbox($_POST['mb']))
 		{
 			if($mailbox = $this->model->getMailbox($_POST['mb']))
