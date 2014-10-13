@@ -1,6 +1,6 @@
 <?php
 /* Bezirk Index Aufbauen */
-$db->store->flush();
+//$db->store->flush();
 
 /* Bezirk Statistiken*/
 
@@ -57,4 +57,4 @@ if($foodsaver = $db->q('SELECT id, photo FROM '.PREFIX.'foodsaver WHERE photo !=
 }
 
 /*KG gerettet UPDATE Ende*/
-$db->store->put('cronjobs_daily_date', date('Y-m-d'));
+Mem::set('cronjobs_daily_date', date('Y-m-d'));

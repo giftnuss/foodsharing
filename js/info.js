@@ -8,6 +8,8 @@ var info = {
 	$linklist:null,
 	$linkwrapper:null,
 	$allWrapper:null,
+	
+	hasTouchEvent:false,
 	/*
 	 * an array of the services that the heartbeat have to call
 	 */
@@ -113,21 +115,52 @@ var info = {
 				event.stopPropagation();
 			});
 			
-			$this.click(function(event){
+			/*
+			$this.bind('touchstart',function(event){
 				
 				event.stopPropagation();
+
+				info.hasTouchEvent = true;
 				
+				//event.stopPropagation();
+				info.$allWrapper.hide();
+				info.$linkwrapper[type].show();
+				/*
 				if(info.$linkwrapper[type].is(':visible'))
 				{
 					info.$linkwrapper[type].hide();
 				}
 				else
 				{
-					info.$allWrapper.hide();
+					
 					info.refresh(type);
-					info.$linkwrapper[type].show();
+					
 				}
-			});			
+				*/
+			/*
+				info.$infobar.children('li').removeClass('touched');
+				$this.addClass('touched');
+			});
+			*/
+			
+			$this.click(function(event){
+				event.stopPropagation();
+				info.$infobar.children('li').removeClass('touched');
+				if(!info.hasTouchEvent)
+				{
+					if(info.$linkwrapper[type].is(':visible'))
+					{
+						info.$linkwrapper[type].hide();
+					}
+					else
+					{
+						info.$allWrapper.hide();
+						info.refresh(type);
+						info.$linkwrapper[type].show();
+					}
+				}
+			});		
+			
 		});
 	},
 	

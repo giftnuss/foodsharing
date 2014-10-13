@@ -508,34 +508,40 @@ class Control
   		return false;
   	}
   	
-  	public function convMessage($sender_id,$recip_id, $conversation_id, $msg, $tpl_id = 9)
+  	public function convMessage($recipient, $conversation_id, $msg, $tpl_id = 9)
   	{
-  		$db = loadModel('mailbox');
-  		 
-  		$info = $db->getVal('infomail_message', 'foodsaver', $recip_id);
-  		if((int)$info > 0)
+  		/*
+  		 * only send email if the user is not online
+  		 */
+  		
+  		if(!Mem::userOnline($recipient['id']))
   		{
-  			if(!isset($_SESSION['lastMailMessage']))
+  			/*
+  			 * only send email if the user want to retrieve emails
+  			 */
+  			if(Mem::user($recipient['id'], 'infomail'))
   			{
-  				$_SESSION['lastMailMessage'] = array();
-  			}
-  			if(!$db->isActive($recip_id))
-  			{
-  				if(!isset($_SESSION['lastMailMessage'][$recip_id]) || (time() - $_SESSION['lastMailMessage'][$recip_id]) > 600)
-  				{
-  					$_SESSION['lastMailMessage'][$recip_id] = time();
-  					$foodsaver = $db->getOne_foodsaver($recip_id);
-  					$sender = $db->getOne_foodsaver($sender_id);
-  	
-  					tplMail($tpl_id, $foodsaver['email'],array(
-  					'anrede' => genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-  					'sender' => $sender['name'],
-  					'name' => $foodsaver['name'],
-  					'message' => $msg,
-  					'link' => BASE_URL.'?page=msg&cid='.(int)$sender_id
-  					));
-  				}
-  				 
+  				$sessdata = Mem::user(fsId(),'lastMailMessage');
+  			
+	  			if(!$sessdata)
+	  			{
+	  				$sessdata = array();
+	  			}
+	  			
+	  			if(!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600)
+	  			{
+	  				$sessdata[$recipient['id']] = time();
+	  				
+	  				tplMail($tpl_id, $recipient['email'],array(
+	  					'anrede' => genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+	  					'sender' => S::user('name'),
+	  					'name' => $recipient['name'],
+	  					'message' => $msg,
+	  					'link' => BASE_URL.'?page=msg&uc='.(int)fsId().'cid='.(int)$conversation_id
+	  				));
+	  			}
+	  			
+	  			Mem::userSet(fsId(), 'lastMailMessage', $sessdata);
   			}
   		}
   	}
@@ -551,6 +557,7 @@ class Control
   			{
   				$_SESSION['lastMailMessage'] = array();
   			}
+  			
   			if(!$db->isActive($recip_id))
   			{
   				if(!isset($_SESSION['lastMailMessage'][$recip_id]) || (time() - $_SESSION['lastMailMessage'][$recip_id]) > 600)

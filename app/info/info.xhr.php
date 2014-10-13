@@ -18,11 +18,6 @@ class InfoXhr extends Control
 		$this->check = false;
 		
 		/*
-		 * adds a new timestamp to memcache to say hello im online
-		 */
-		$this->model->updateActivity();
-		
-		/*
 		 * here we define all apps and methods which can be used by polling service syntax is => app:method
 		 */
 		$this->allowed = array(

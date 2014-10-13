@@ -29,7 +29,7 @@ border-radius: 6px;
 {
 	outline: 0 none;	
 }
-#infobar > li > a:hover
+#infobar > li > a:hover, #infobar > li.touched > a
 {
 	background-color: #967d61;
 	color:#B7AEA6;

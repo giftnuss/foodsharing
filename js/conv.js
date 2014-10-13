@@ -79,6 +79,17 @@ var conv = {
 	
 	chat: function(cid)
 	{
+		if(isMob())
+		{
+			if(GET('page') == 'msg')
+			{
+				msg.loadConversation(cid);
+			}
+			else
+			{
+				goTo('?page=msg&cid=' + cid);
+			}
+		}
 		if(!this.initiated)
 		{
 			this.init();

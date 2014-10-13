@@ -33,7 +33,7 @@ class StatControl extends Control
 			addContent(v_info('Wartung erledigt!'));
 			
 			/*mailbox refresh */
-			$last_refresh = (int)$this->store->get('mailbox_refresh');
+			$last_refresh = (int)Mem::get('mailbox_refresh');
 				
 			$cur_time = (int)time();
 				
@@ -45,7 +45,7 @@ class StatControl extends Control
 					($cur_time - $last_refresh) > 30
 			)
 			{
-				$this->store->put('mailbox_refresh', $cur_time);
+				Mem::set('mailbox_refresh', $cur_time);
 				$xhr = loadXhr('mailbox');
 				$xhr->refresh();
 			}

@@ -2349,7 +2349,7 @@ div.xv_left ul li a:hover
 {
 	display:none;
 }
-@media (max-width: 600px) {
+@media (max-width: 1025px) {
 	#top .menu
 	{
 		display:none;
@@ -2407,25 +2407,6 @@ div.xv_left ul li a:hover
 	{
 		margin-left:118px;
 	}
-	#layout_logo a
-	{
-		font-size: 16px !important;
-		line-height: 24px;
-		font-weight: lighter;
-	}
-	#top
-	{
-		height:37px !important;
-	}
-	#mobilemenu
-	{
-		height: 37px;
-		border-radius: 0px;
-		top:0px;
-		right:0px;
-		padding:0px 9px;
-		width:59px;
-	}
 	#msgbar-infos, #msgbar-basket, #msgbar-messages {
     	margin-left: 0px;
 	}
@@ -2456,8 +2437,55 @@ div.xv_left ul li a:hover
 		-moz-border-radius: 0px;
 		border-radius: 0px;
 	}
+	#top
+	{
+		position: fixed !important;
+		top:0px !important;
+	}
 }
-
+@media (max-width: 600px) {
+	body.loggedin #layout_logo
+	{
+		display:none;
+	}
+	#searchbar input
+	{
+		width:100px !important;
+	}
+	#infobar 
+	{
+	    margin-left: 10px !important;
+	}
+	#infobar .linkwrapper
+	{
+		margin-left:-6px !important;
+	}
+	#infobar .linkwrapper:after
+	{
+		margin-left: 12px !important;
+	}
+	
+	#infobar > li
+	{
+		margin-right:5px !important;
+	}
+	#infobar > li:last-child
+	{
+		margin-right: 0px !important;
+	}
+	#searchbar .result-wrapper
+	{
+		position: fixed;
+		width: 93%;
+		left: 5px;
+		top:32px;
+	}
+	#top
+	{
+		position: fixed !important;
+		top:0px !important;
+	}
+}
 ul.bread
 {
 	background-color: transparent !important;

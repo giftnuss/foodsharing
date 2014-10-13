@@ -220,7 +220,9 @@ class MsgModel extends Model
 			SELECT 
 				fs.id,
 				fs.name,
-				fs.photo
+				fs.photo,
+				fs.email,
+				fs.geschlecht
 
 			FROM 
 				`'.PREFIX.'foodsaver_has_conversation` hc,
@@ -231,6 +233,22 @@ class MsgModel extends Model
 			AND
 				hc.conversation_id = '.(int)$conversation_id.'
 		');
+	}
+	
+	public function wantMsgEmailInfo($foodsaver_id)
+	{
+		/*
+		 * only send email if the user is not online
+		 */
+		if(!$this->isActive($foodsaver_id))
+		{
+			if(Mem::get('infomail_message_'.$foodsaver_id))
+			{
+				return true;
+			}
+		}
+		
+		return true;
 	}
 	
 	/**
@@ -324,9 +342,9 @@ class MsgModel extends Model
 		/*
 		 * for more speed check the memcache first
 		 */
-		if($this->store->get('msg_update_'.fsId()))
+		if(Mem::user(fsId(),'msg-update'))
 		{
-			$this->store->set('msg_update_'.fsId(),false);
+			Mem::userSet(fsId(), 'msg-update', false);
 			return $this->qColKey('SELECT conversation_id FROM '.PREFIX.'foodsaver_has_conversation WHERE foodsaver_id = '.(int)fsId().' AND unread = 1');
 		}
 		
@@ -373,7 +391,7 @@ class MsgModel extends Model
 	 */
 	public function setAsRead($conv_ids)
 	{
-		$this->store->del('msg_update_'.fsId());
+		Mem::userDel(fsId(), 'msg-update');
 		
 		return $this->update('UPDATE '.PREFIX.'foodsaver_has_conversation SET unread = 0 WHERE foodsaver_id = '.(int)fsId().' AND conversation_id IN('.implode(',', $conv_ids).')');
 	}
@@ -411,20 +429,6 @@ class MsgModel extends Model
 		{
 			$this->update('UPDATE `'.PREFIX.'foodsaver_has_conversation` SET unread = 1 WHERE conversation_id = '.(int)$cid.' AND `foodsaver_id` != '.(int)fsId());
 			$this->updateConversation($cid, fsId(), $body, $mid);
-			
-			/*
-			 * for not so db intensive polling store updates in memcache if the recipients are online
-			 */
-			if($member = $this->listConversationMembers($cid))
-			{
-				foreach ($member as $m)
-				{
-					if($m['id'] != fsId())
-					{
-						$this->store->put('msg_update_'.$m['id'], true);
-					}
-				}
-			}
 			return $mid;
 		}
 		return false;

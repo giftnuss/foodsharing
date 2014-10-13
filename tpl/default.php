@@ -83,7 +83,7 @@ if(!empty($content_left) && !empty($content_right))
 	
 	</script>
   </head>
-  <body>
+  <body<?php echo $g_body_class; ?>>
    <?php getDebugging(); ?>
   
    	<div id="top">

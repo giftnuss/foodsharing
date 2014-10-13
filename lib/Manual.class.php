@@ -1727,7 +1727,7 @@ GROUP BY foodsaver_id'));
 	
 	public function getChildBezirke($bid,$nocache = false)
 	{
-		$cb = $this->store->get('cb-'.$bid);
+		$cb = Mem::get('cb-'.$bid);
 		if(is_array($cb))
 		{
 			return $cb;
@@ -1762,7 +1762,7 @@ GROUP BY foodsaver_id'));
 				$ou[$o] = $o;
 			}
 			
-			$this->store->put('cb-'.$bid,$ou);
+			Mem::set('cb-'.$bid,$ou);
 			
 			return $ou;
 		}
@@ -2679,7 +2679,7 @@ GROUP BY foodsaver_id'));
 			$has_children = 1;
 		}
 		
-		$this->store->del('cb-'.$id);
+		Mem::del('cb-'.$id);
 		
 		return $this->update('
 		UPDATE 	`'.PREFIX.'bezirk`
@@ -2743,7 +2743,7 @@ GROUP BY foodsaver_id'));
 			}
 		}
 		
-		$this->store->del('cb-'.$id);
+		Mem::del('cb-'.$id);
 		
 		return $this->update('
 		UPDATE 	`'.PREFIX.'bezirk`
