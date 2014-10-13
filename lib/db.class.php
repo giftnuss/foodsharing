@@ -973,8 +973,27 @@ class Db
 		
 	}
 	
+	/**
+	 * Method to check users online status by checking timestamp from memcahce
+	 * 
+	 * @param integer $fs_id
+	 * @return boolean
+	 */
 	public function isActive($fs_id)
 	{
+		if($time = $this->store->get('activity_'.$fs_id))
+		{
+			if((time()-$time) > 600)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+		
+		/*
 		if($time = $this->qOne('SELECT UNIX_TIMESTAMP(`zeit`) FROM `'.PREFIX.'activity` WHERE `foodsaver_id` = '.$this->intval($fs_id)))
 		{
 			if((time()-$time) > 600)
@@ -986,11 +1005,13 @@ class Db
 				return true;
 			}
 		}
+		*/
 		return false;
 	}
 	
 	public function updateActivity()
 	{
+		$this->store->put('activity_'.(int)fsId(), time());
 		$this->update('UPDATE `'.PREFIX.'activity` SET `zeit` = NOW() WHERE `foodsaver_id` = '.$this->intval(fsId()));
 	}
 	

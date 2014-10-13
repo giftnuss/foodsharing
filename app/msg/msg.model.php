@@ -321,7 +321,15 @@ class MsgModel extends Model
 	 */
 	public function checkConversationUpdates()
 	{
-		return $this->qColKey('SELECT conversation_id FROM '.PREFIX.'foodsaver_has_conversation WHERE foodsaver_id = '.(int)fsId().' AND unread = 1');
+		/*
+		 * for more speed check the memcache first
+		 */
+		if($this->store->get('msg_update_'.fsId()))
+		{
+			$this->store->set('msg_update_'.fsId(),false);
+			return $this->qColKey('SELECT conversation_id FROM '.PREFIX.'foodsaver_has_conversation WHERE foodsaver_id = '.(int)fsId().' AND unread = 1');
+		}
+		
 	}
 	
 	public function checkChatUpdates($ids)
@@ -365,6 +373,8 @@ class MsgModel extends Model
 	 */
 	public function setAsRead($conv_ids)
 	{
+		$this->store->del('msg_update_'.fsId());
+		
 		return $this->update('UPDATE '.PREFIX.'foodsaver_has_conversation SET unread = 0 WHERE foodsaver_id = '.(int)fsId().' AND conversation_id IN('.implode(',', $conv_ids).')');
 	}
 	
@@ -401,6 +411,20 @@ class MsgModel extends Model
 		{
 			$this->update('UPDATE `'.PREFIX.'foodsaver_has_conversation` SET unread = 1 WHERE conversation_id = '.(int)$cid.' AND `foodsaver_id` != '.(int)fsId());
 			$this->updateConversation($cid, fsId(), $body, $mid);
+			
+			/*
+			 * for not so db intensive polling store updates in memcache if the recipients are online
+			 */
+			if($member = $this->listConversationMembers($cid))
+			{
+				foreach ($member as $m)
+				{
+					if($m['id'] != fsId())
+					{
+						$this->store->put('msg_update_'.$m['id'], true);
+					}
+				}
+			}
 			return $mid;
 		}
 		return false;
