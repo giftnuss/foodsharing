@@ -12,7 +12,7 @@ class Mem
 	
 	public static function set($key,$data)
 	{
-		return apc_store($key,$data,84400);
+		return apc_store($key,$data,0);
 	}
 	
 	public static function get($key)
