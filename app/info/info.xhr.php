@@ -142,8 +142,8 @@ Array
 		// no session writing for no socket blocking
 		S::noWrite();
 		
-		// kepp connection fpr 60 seconds
-		//$xhr->keepAlive(60);
+		// kepp connection fpr 120 seconds
+		$xhr->keepAlive(120);
 		
 		/*
 		 * check if its the first heartbeat give me direct an output
