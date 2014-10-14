@@ -385,7 +385,7 @@ class QuizXhr extends Control
 				$dia->setTitle($quiz['name'].'-Quiz');
 				$dia->addContent($this->view->initQuiz($quiz,$content));
 				$dia->addAbortButton();
-				$dia->addButton('Quiz Starten', 'clearTimeout(g_chatheartbeatTO);clearInterval(g_interval_newBasket);ajreq(\'next\',{app:\'quiz\'});$(\'#'.$dia->getId().'\').dialog(\'close\');');
+				$dia->addButton('Quiz Starten', 'ajreq(\'next\',{app:\'quiz\'});$(\'#'.$dia->getId().'\').dialog(\'close\');');
 				
 				$return = $dia->xhrout();
 				

@@ -20,7 +20,6 @@ function u_getGeo(id,conti)
 
 function u_goAll()
 {
-	clearTimeout(g_chatheartbeatTO);
 	$('.hiddenid').each(function(){
 		ids[ids.length] = this.value;
 	});

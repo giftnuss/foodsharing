@@ -15,14 +15,6 @@ class StatControl extends Control
 	{
 		addBread('Statistik Tools');
 		addContent($this->view->index());
-		
-		addJs('
-			setTimeout(function(){
-				clearTimeout(g_chatheartbeatTO);
-				clearInterval(g_interval_newBasket);
-				showLoader();
-			},5000);		
-		');
 	}
 	
 	public function wartung()
