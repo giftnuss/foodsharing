@@ -4286,4 +4286,23 @@ GROUP BY foodsaver_id'));
 	
 		return $id;
 	}
+	
+	public function getOne_message_tpl($id)
+	{
+		$out = $this->qRow('
+			SELECT
+			`id`,
+			`language_id`,
+			`name`,
+			`subject`,
+			`body`
+			
+			FROM 		`'.PREFIX.'message_tpl`
+			
+			WHERE 		`id` = ' . $this->intval($id));
+	
+	
+	
+		return $out;
+	}
 }
