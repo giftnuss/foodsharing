@@ -5,3 +5,7 @@ config.inc.php
 **/images/
 js/gen/script.js
 css/gen/style.css
+.buildpath
+.project
+.project
+.settings
