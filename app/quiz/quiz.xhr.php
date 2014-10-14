@@ -344,11 +344,7 @@ class QuizXhr extends Control
 			$dia->addButton('Quiz fortführen', 'ajreq(\'next\',{app:\'quiz\'});');
 			
 			$return = $dia->xhrout();
-			/*
-			$return['script'] .= '
-				$("head").append(\'<link rel="stylesheet" type="text/css" href="/js/timecircle/TimeCircles.css" />\');
-				$.getScript("/js/timecircle/TimeCircles.js",function(){});
-				';*/
+			
 			$return['script'] .= $this->abortOrOpenDialog($session['id']);
 			
 			return $return;
@@ -392,11 +388,7 @@ class QuizXhr extends Control
 				$dia->addButton('Quiz Starten', 'clearTimeout(g_chatheartbeatTO);clearInterval(g_interval_newBasket);ajreq(\'next\',{app:\'quiz\'});$(\'#'.$dia->getId().'\').dialog(\'close\');');
 				
 				$return = $dia->xhrout();
-				/*
-				$return['script'] .= '
-				$("head").append(\'<link rel="stylesheet" type="text/css" href="/js/timecircle/TimeCircles.css" />\');
-				$.getScript("/js/timecircle/TimeCircles.js",function(){});
-					';*/
+				
 				$return['script'] .= $this->abortOrOpenDialog($session['id']);
 				
 				return $return;

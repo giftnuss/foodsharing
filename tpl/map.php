@@ -59,7 +59,6 @@ header("Expires: 0");
 	<div id="nojs">Ohne Javascript l&auml;ft hier leider nix!</div>
 </noscript> 
 <?php printHidden(); ?>
-<?php if(!isMob()){ echo $g_translate; } ?>
 <div class="pulse-msg ui-shadow" id="pulse-error" style="display:none;"></div>
 <div class="pulse-msg ui-shadow" id="pulse-info" style="display:none;"></div>
 <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-success" style="display:none;"></div>

@@ -284,20 +284,6 @@ function handleEmail()
 		{
 			error('In den ausgew&auml;hlten Bezirken gibt es noch keine Foodsaver');
 		}
-		
-		
-
-		/*
-		
-		if(fsMail($foodsaver,$betreff,$nachricht,$attach))
-		{
-			
-		}
-		else
-		{
-			error('E-Mails konnten nicht gesendet werden, sind vielleicht die Google zugangsdaten falsch?');
-		}
-		*/
 	}
 }
 

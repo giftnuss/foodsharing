@@ -632,7 +632,6 @@ function xhr_addComment($data)
 
 function xhr_uploadPicture($data)
 {
-	require_once ROOT_DIR.'lib/resize.inc.php';
 	$id = strtolower($data['id']);
 	$id = preg_replace('/[^a-z0-9_]/', '', $id);
 	if(isset($_FILES['uploadpic']) )
@@ -652,9 +651,12 @@ function xhr_uploadPicture($data)
 			$newname = uniqid().$ext;
 			
 			move_uploaded_file($_FILES['uploadpic']['tmp_name'], $path.'/orig_'.$newname);
-			$re = new resize($path.'/orig_'.$newname);
-			$re->resizeImage(600, 600,'auto');
-			$re->saveImage($path.'/'.$newname);
+			
+			copy($path.'/orig_'.$newname, $path.'/'.$newname);
+			$image = new fImage($path.'/'.$newname);
+			$image->resize(600, 0);
+			
+			$image->saveChanges();
 			
 			if($_GET['crop'] == 1)
 			{
@@ -716,15 +718,16 @@ function xhr_cropagain($data)
 			case 'jpg' : imagejpeg($dst_r, $new_path, $jpeg_quality ); break;
 			case 'png' : imagepng($dst_r, $new_path, 0 ); break;
 		}
-		require_once ROOT_DIR.'lib/resize.inc.php';
 		
-		$re = new resize($path.'/'.$img);
-		$re->resizeImage(150,150);
-		$re->saveImage($path.'/thumb_'.$img);
+		copy($path.'/'.$img, $path.'/thumb_'.$img);
+		$image = new fImage($path.'/thumb_'.$img);
+		$image->resize(150, 0);
+		$image->saveChanges();
 		
-		$re = new resize($path.'/crop_'.$img);
-		$re->resizeImage(200,200);
-		$re->saveImage($path.'/thumb_crop_'.$img);
+		copy($path.'/'.$img, $path.'/thumb_crop_'.$img);
+		$image = new fImage($path.'/thumb_crop_'.$img);
+		$image->resize(200, 0);
+		$image->saveChanges();
 		
 		return '1';
 	}
@@ -732,7 +735,6 @@ function xhr_cropagain($data)
 
 function xhr_pictureCrop($data)
 {
-	require_once ROOT_DIR.'lib/resize.inc.php';
 	$data['img'];
 	$data['id'];
 	/*
@@ -750,15 +752,17 @@ function xhr_pictureCrop($data)
 			cropImg(ROOT_DIR.'images/'.$data['id'],$data['img'], $i, $r['x'], $r['y'], $r['w'], $r['h']);
 			foreach ($resize as $r)
 			{
-				$re = new resize(ROOT_DIR.'images/'.$data['id'].'/crop_'.$i.'_'.$data['img']);
-				$re->resizeImage($r, $r,'landscape');
-				$re->saveImage(ROOT_DIR.'images/'.$data['id'].'/crop_'.$i.'_'.$r.'_'.$data['img']);
+				copy(ROOT_DIR.'images/'.$data['id'].'/crop_'.$i.'_'.$data['img'], ROOT_DIR.'images/'.$data['id'].'/crop_'.$i.'_'.$r.'_'.$data['img']);
+				$image = new fImage(ROOT_DIR.'images/'.$data['id'].'/crop_'.$i.'_'.$r.'_'.$data['img']);
+				$image->resize($r, 0);
+				$image->saveChanges();
 			}
 		}
 		
-		$re = new resize(ROOT_DIR.'images/'.$data['id'].'/'.$data['img']);
-		$re->resizeImage(150,150);
-		$re->saveImage(ROOT_DIR.'images/'.$data['id'].'/thumb_'.$data['img']);
+		copy(ROOT_DIR.'images/'.$data['id'].'/'.$data['img'], ROOT_DIR.'images/'.$data['id'].'/thumb_'.$data['img']);
+		$image = new fImage(ROOT_DIR.'images/'.$data['id'].'/thumb_'.$data['img']);
+		$image->resize(150, 0);
+		$image->saveChanges();
 		
 		return '<html><head></head><body onload="parent.pictureReady(\''.$data['id'].'\',\''.$data['img'].'\');"></body></html>';
 	}
@@ -770,23 +774,23 @@ function xhr_pictureResize($data)
 	$img = $data['img'];
 	$resize = json_decode($data['resize'],true);
 	
-	require_once ROOT_DIR.'lib/resize.inc.php';
 	if(is_array($resize))
 	{
-		
 		foreach ($resize as $r)
 		{
-			$re = new resize(ROOT_DIR.'images/'.$id.'/'.$img);
-			$re->resizeImage($r,$r);
-			$re->saveImage(ROOT_DIR.'images/'.$id.'/'.$r.'_'.$img);
+			copy(ROOT_DIR.'images/'.$id.'/'.$img, ROOT_DIR.'images/'.$id.'/'.$r.'_'.$img);
+			$image = new fImage(ROOT_DIR.'images/'.$id.'/'.$r.'_'.$img);
+			$image->resize($r, 0);
+			$image->saveChanges();
 		}
 		
 		
 	}
 	
-	$re = new resize(ROOT_DIR.'images/'.$id.'/'.$img);
-	$re->resizeImage(150,150);
-	$re->saveImage(ROOT_DIR.'images/'.$id.'/thumb_'.$img);
+	copy(ROOT_DIR.'images/'.$id.'/'.$img, ROOT_DIR.'images/'.$id.'/thumb_'.$img);
+	$image = new fImage(ROOT_DIR.'images/'.$id.'/thumb_'.$img);
+	$image->resize(150, 0);
+	$image->saveChanges();
 	
 	return '<html><head></head><body onload="parent.pictureReady(\''.$id.'\',\''.$img.'\');"></body></html>';
 }
@@ -1693,7 +1697,7 @@ function xhr_continueMail($data)
 function xhr_uploadPhoto($data)
 {
 	$func = '';
-	require_once 'lib/resize.inc.php';
+
 	if(isset($_POST['action']) && $_POST['action'] == 'upload')
 	{	
 		$id = strip_tags($_POST['pic_id']);
@@ -1708,12 +1712,11 @@ function xhr_uploadPhoto($data)
 			if(is_allowed($_FILES["uploadpic"]))
 			{
 				$file = makeUnique().$dateiendung;
-				move_uploaded_file($datei, './tmp/tmp_'.$file);
-					
-				$resize = new resize('./tmp/tmp_'.$file);
-				$resize->resizeImage(550, 550);
-				$resize->saveImage('./tmp/'.$file,100);
-				@unlink('./tmp/tmp_'.$file);
+				move_uploaded_file($datei, './tmp/'.$file);
+				
+				$image = new fImage('./tmp/'.$file);
+				$image->resize(550, 0);
+				$image->saveChanges();
 
 				$func = 'parent.fotoupload(\''.$file.'\',\''.$id.'\');';
 			}

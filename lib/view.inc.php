@@ -828,11 +828,10 @@ function v_form_tinymce($id,$option = array())
 	
 	addStyle('div#content {width: 580px;}div#right{width:222px;}');
 	
-	$css = 'css/content.css,css/foodsaver/jquery-ui-1.10.3.custom.min.css';
+	$css = 'css/content.css,css/jquery-ui.css';
 	$class = 'ui-widget ui-widget-content ui-padding';
 	if(isset($option['public_content']))
 	{
-		$css = 'css/content.css.php';
 		$class = 'post';
 	}
 	
@@ -2578,62 +2577,6 @@ function v_linkrow($href,$rows = array())
 	$out .= '<span style="clear:both;display:block;"></span></a>';
 	
 	return $out;
-}
-
-function v_multimap($adress)
-{
-	addScript('http://maps.google.com/maps/api/js?sensor=false&amp;language=de');
-	addScript('/js/gmap/gmap.js');
-	
-	$id = id('multimap');
-	
-	$js = array();
-	foreach ($adress as $a)
-	{
-		$js[] = '{address:"'.$a['anschrift'].', '.$a['plz'].'", data:"'.$a['name'].'"}';
-	}
-	
-	addJs('
-		$("#'.$id.'").gmap3({
-  map:{
-    options: {
-		zoom: 5
-	} 
-  },
-  marker:{
-    values:[
-      '.implode(',', $js).'
-    ],
-    options:{
-      draggable: false
-    },
-    events:{
-      mouseover: function(marker, event, context){
-        var map = $(this).gmap3("get"),
-          infowindow = $(this).gmap3({get:{name:"infowindow"}});
-        if (infowindow){
-          infowindow.open(map, marker);
-          infowindow.setContent(context.data);
-        } else {
-          $(this).gmap3({
-            infowindow:{
-              anchor:marker,
-              options:{content: context.data}
-            }
-          });
-        }
-      },
-      mouseout: function(){
-        var infowindow = $(this).gmap3({get:{name:"infowindow"}});
-        if (infowindow){
-          infowindow.close();
-        }
-      }
-    }
-  }},"autofit");
-	');
-	
-	return '<div class="map" id="'.$id.'"></div>';
 }
 
 function v_map($adress,$option = array())

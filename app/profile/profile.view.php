@@ -317,7 +317,7 @@ class ProfileView extends View
 								Hier kannst Du etwas dazu schreiben, warum Du gerne '.$this->foodsaver['name'].' eine Banane schenken möchtest. Du kannst jedem Foodsaver nur eine Banane schenken!<br />
 								Bitte gebe die Vertrauensbanane nur an Foodsaver die Du persönlich kennst und bei denen Du für Zuverlässigkeit, Vertrauen und Engagement gegen die Verschwendung von Lebensmitteln Deine Hand für ins Feuer legen würdest, also Du 100% sicher bist, dass die Verhaltensregeln und die Rechtsvereinbarung ordnungsgemäß eingehalten werden
 								<p><strong>Vertrauensbananen können nicht zurückgenommen werden, sei bitte deswegen besonders achtsam wem Du eine schenkst</strong></p>
-								<img src="css/gen/img/banana.png" style="float:right;" />
+								<img src="/img/banana.png" style="float:right;" />
 							</div>
 						</div>
 					</div>

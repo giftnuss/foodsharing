@@ -144,7 +144,8 @@ else
 	{
 		if(isset($_GET['v']) && $_GET['v'] == 'karte')
 		{
-			addContent(v_field(v_multimap($betriebe),'Alle Betriebe aus '.$bezirk['name'].v_switch(array('Liste','Karte'))));
+			echo 'map';die();
+			//addContent(v_field(v_multimap($betriebe),'Alle Betriebe aus '.$bezirk['name'].v_switch(array('Liste','Karte'))));
 		}
 		else
 		{

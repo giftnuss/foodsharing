@@ -41,7 +41,6 @@
 
 <iframe id="#forum" src="http://forum.lebensmittelretten.de/"></iframe>
 <?php printHidden(); ?>
-<?php if(!isMob()){ echo $g_translate; } ?>
 <div class="pulse-msg ui-shadow" id="pulse-error" style="display:none;"></div>
 <div class="pulse-msg ui-shadow" id="pulse-info" style="display:none;"></div>
 </body>

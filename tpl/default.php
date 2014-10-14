@@ -125,7 +125,6 @@ if(!empty($content_left) && !empty($content_right))
 
 		<?php echo $content_bottom; ?>
 	</div>
-	<!-- <input class="quicks" type="text" name="bar-search" id="bar-search" value="" placeholder="Schnellsuche..." /> -->
 	<noscript>
 		<div id="nojs">Ohne Javascript l&auml;ft hier leider nix!</div>
 	</noscript> 

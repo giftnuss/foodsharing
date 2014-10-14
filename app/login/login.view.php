@@ -92,7 +92,7 @@ class LoginView extends View
 									</a><br />
 									<a onclick="$(\'#join_photo\').trigger(\'click\');return false;" href="#" class="button">'.s('select_picture').'</a><span class="filewrapper"><input onchange="join.startUpload();" type="file" name="photo" id="join_photo" /></span>
 								</form>
-								<iframe frameborder="0" style="width:10px;height:10px;" name="join_upload_frame" src="/nix.html"></iframe>
+								<iframe frameborder="0" style="width:10px;height:10px;" name="join_upload_frame" src="/empty.html"></iframe>
 								<input type="hidden" name="c[]" value="" id="join_avatar" />
 							</div>
 							<div style="clear:both;"></div>

@@ -74,7 +74,7 @@ function handleLogin()
  * 	$("#login-form").submit(function(ev){
 					ev.preventDefault();
 					showLoader();
-					$("body").append(\'<div id="bbsubmitter"><form target="bbframe" action="http://forum.lebensmittelretten.de/ucp.php?mode=login" method="post"><input type="hidden" name="username" value="\'+$("#email_adress").val()+\'" /><input type="hidden" name="password" value="\'+$("#password").val()+\'" /><input type="hidden" name="login" value="Login" /><input type="hidden" name="redirect" value="/success.json" /><input type="hidden" name="autologin" value="1" /></form><iframe name="bbframe" src="nix.html" frameborder="0" scrolling="no" style="width:1px;height:1px" id="bbframe"><iframe></div>\');
+					$("body").append(\'<div id="bbsubmitter"><form target="bbframe" action="http://forum.lebensmittelretten.de/ucp.php?mode=login" method="post"><input type="hidden" name="username" value="\'+$("#email_adress").val()+\'" /><input type="hidden" name="password" value="\'+$("#password").val()+\'" /><input type="hidden" name="login" value="Login" /><input type="hidden" name="redirect" value="/success.json" /><input type="hidden" name="autologin" value="1" /></form><iframe name="bbframe" src="empty.html" frameborder="0" scrolling="no" style="width:1px;height:1px" id="bbframe"><iframe></div>\');
 					$("#bbsubmitter form").submit();
 					setTimeout(function(){
 						$("#bbsubmitter form").submit();
@@ -90,7 +90,7 @@ function handleLogin()
 						
 				});	ev.preventDefault();
 					showLoader();
-					$("body").append(\'<div id="bbsubmitter"><form target="bbframe" action="http://forum.lebensmittelretten.de/ucp.php?mode=login" method="post"><input type="hidden" name="username" value="\'+$("#email_adress").val()+\'" /><input type="hidden" name="password" value="\'+$("#password").val()+\'" /><input type="hidden" name="login" value="Login" /><input type="hidden" name="redirect" value="/success.json" /><input type="hidden" name="autologin" value="1" /></form><iframe name="bbframe" src="nix.html" frameborder="0" scrolling="no" style="width:1px;height:1px" id="bbframe"><iframe></div>\');
+					$("body").append(\'<div id="bbsubmitter"><form target="bbframe" action="http://forum.lebensmittelretten.de/ucp.php?mode=login" method="post"><input type="hidden" name="username" value="\'+$("#email_adress").val()+\'" /><input type="hidden" name="password" value="\'+$("#password").val()+\'" /><input type="hidden" name="login" value="Login" /><input type="hidden" name="redirect" value="/success.json" /><input type="hidden" name="autologin" value="1" /></form><iframe name="bbframe" src="empty.html" frameborder="0" scrolling="no" style="width:1px;height:1px" id="bbframe"><iframe></div>\');
 					$("#bbsubmitter form").submit();
 					setTimeout(function(){
 						$("#bbsubmitter form").submit();

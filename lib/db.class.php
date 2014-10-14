@@ -1,7 +1,4 @@
 <?php
-require_once ROOT_DIR.'lib/simple_storage.class.php';
-
-
 class Mem
 {
 	public static $memcache;

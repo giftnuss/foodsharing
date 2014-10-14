@@ -15,7 +15,6 @@ if(isset($_GET['app']) && isset($_GET['m']))
 	require_once 'lang/DE/'.$app.'.lang.php';
 	
 	require_once 'lib/db.class.php';
-	require_once 'lib/Foodsaver.class.php';
 	require_once 'lib/Manual.class.php';
 	require_once 'lib/func.inc.php';
 	require_once 'lib/view.inc.php';

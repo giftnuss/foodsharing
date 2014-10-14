@@ -1,5 +1,5 @@
 <?php
-class ManualDb extends FoodsaverDb
+class ManualDb extends Db
 {
 	public function __construct($host = 'localhost', $user = 'root', $pass = '', $db = 'foodsaver')
 	{

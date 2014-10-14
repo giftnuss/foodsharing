@@ -15,7 +15,6 @@ require_once 'config.inc.php';
 require_once 'lib/func.inc.php';
 require_once 'lib/Session.php';
 require_once 'lib/db.class.php';
-require_once 'lib/Foodsaver.class.php';
 require_once 'lib/Manual.class.php';
 require_once 'lang/DE/de.php';
 require_once 'lib/view.inc.php';
@@ -54,10 +53,10 @@ $g_css = array();
 $g_add_css = '';
 $hidden = '';
 $db = new ManualDb();
-//addHead('<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />');
+
 addCss('/fonts/alfaslabone/stylesheet.css',true);
 addCss('/css/font-awesome.min.css',true);
-addCss('/css/foodsaver/jquery-ui-1.10.3.custom.min.css',true);
+addCss('/css/jquery-ui.css',true);
 addCss('/css/jMenu.jquery.css',true);
 addCss('/js/fancybox/jquery.fancybox.css',true);
 addCss('/css/style.css',true);
@@ -68,10 +67,6 @@ addCss('/css/chat.css',true);
 addCss('/css/jquery.switchButton.css',true);
 addCss('/css/info.css',true);
 addCss('/css/icons.css',true);
-if (isMob())
-{
-	addCss('/css/style_mobile.css',true);
-}
 
 //addHead('<script src="'.PROTOCOL.'://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>');
 //addHead('<script src="'.PROTOCOL.'://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>');
@@ -105,11 +100,9 @@ addScript('/js/underscore.js',true);
 addScript('/js/underscore.string.js',true);
 addScript('/js/script.js',true);
 addScript('/js/instant-search.js',true);
-//addScript('js/quicks.js');
 addScript('/js/conv.js',true);
 addScript('/js/info.js',true);
 
-$g_translate = printTranslate();
 //scriptCompress();
 //cssCompress();
 

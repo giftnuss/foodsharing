@@ -618,33 +618,14 @@ class MailboxXhr extends Control
 			$from_email = $from['email'];
 			$from_name = $from['name'];
 		}
-		
-		require_once ROOT_DIR.'lib/PHPMailer/class.phpmailer.php';
 	
-		$mail = new PHPMailer();
-		//Tell PHPMailer to use SMTP
-		$mail->IsSMTP();
-		//Enable SMTP debugging
-		// 0 = off (for production use)
-		// 1 = client messages
-		// 2 = client and server messages
-		$mail->SMTPDebug  = 0;
-		$mail->Debugoutput = 'html';
-		//Set the hostname of the mail server
-		$mail->Host       = "kunden.greensta.de";
-		//Set the SMTP port number - likely to be 25, 465 or 587
-		$mail->Port       = 25;
-		//Whether to use SMTP authentication
-		$mail->SMTPAuth   = true;
-		//Username to use for SMTP authentication
-		$mail->Username   = "admin@lebensmittelretten.de";
-		//Password to use for SMTP authentication
-		$mail->Password   = "passwort123";
-		//Set who the message is to be sent from
-		$mail->SetFrom($from_email, $from_name);
-		//Set an alternative reply-to address
-		//$mail->AddReplyTo($bezirk['email'],$bezirk['email_name']);
-		//Set who the message is to be sent to
+		$mail = new fEmail();
+		
+		$smtp = new fSMTP(SMTP_HOST);
+		$smtp->authenticate(SMTP_USER, SMTP_PASS);
+		
+		$mail->setFromEmail($from_email, $from_name);
+
 	
 		if(is_array($email))
 		{
@@ -653,41 +634,36 @@ class MailboxXhr extends Control
 				if(validEmail($e))
 				{
 					$this->model->addContact($e);
-					$mail->AddAddress($e,$e);
+					$mail->addRecipient($e);
 				}
 			}
 		}
 		else
 		{
-			$mail->AddAddress($email,$email);
+			$mail->addRecipient($email);
 		}
 	
 		//Set the subject line
-		$mail->Subject = $subject;
-		//Read an HTML message body from an external file, convert referenced images to embedded, convert HTML into a basic plain-text alternative body
-		$mail->Body = $message;
-		//$mail->AltBody = $message;
-	
-		//Attach an image file
-		//$mail->AddAttachment('images/phpmailer_mini.gif');
-		$mail->CharSet = 'utf-8';
-	
-		$mail->SetLanguage('de');
+		$mail->setSubject($subject);
+		$mail->setHTMLBody($message);
+		
 	
 		if($attach !== false)
 		{
 			foreach ($attach as $a)
 			{
-				$mail->AddAttachment($a['path'],$a['name']);
-				//$mail->Attach($a['path'],$a['mime'],'inline',$a['name']);
+				$mail->addAttachment(new fFile($a['path']),$a['name']);
 			}
 		}
 	
-		//Send the message, check for errors
-		if(!$mail->Send()) {
-			logg($mail->ErrorInfo);
+		if(!$mail->send($smtp)) 
+		{
+			$smtp->close();
 			return false;
-		} else {
+		} 
+		else 
+		{
+			$smtp->close();
 			return true;
 		}
 	}

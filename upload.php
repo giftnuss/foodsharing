@@ -1,6 +1,6 @@
 <?php
 $func = '';
-require_once 'lib/resize.inc.php';
+
 if(isset($_POST['action']) && $_POST['action'] == 'upload')
 {
 	session_start();
@@ -16,13 +16,11 @@ if(isset($_POST['action']) && $_POST['action'] == 'upload')
 		if(is_allowed($_FILES["uploadpic"]))
 		{
 			$file = str_replace('/', '', $_SESSION['upload_name'].$dateiendung);
-			move_uploaded_file($datei, '../tmp/tmp_'.$file);
+			move_uploaded_file($datei, '../tmp/'.$file);
 			
-			$resize = new resize('../tmp/tmp_'.$file);
-			$resize->resizeImage(550, 550);
-			$resize->saveImage('../tmp/'.$file,100);
-			@unlink('../tmp/tmp_'.$file);
-			
+			$image = new fImage('../tmp/'.$file);
+			$image->resize(550, 0);
+			$image->saveChanges();			
 			
 			
 			$func = 'parent.fotoupload(\''.$file.'\');';
@@ -49,8 +47,6 @@ elseif(isset($_POST['action']) && $_POST['action'] == 'crop')
 
 function cropImage($bild,$x,$y,$w,$h)
 {
-	
-	
 	$targ_w = 467;
 	$targ_h = 600;
 	$jpeg_quality = 100;
@@ -80,9 +76,11 @@ function cropImage($bild,$x,$y,$w,$h)
 	}
 	if(file_exists('../tmp/crop_'.$bild))
 	{
-		$resizeObj = new resize('../tmp/crop_'.$bild);
-		$resizeObj->resizeImage(150, 150, 'portrait');
-		$resizeObj->saveImage('../tmp/thumb_crop_'.$bild, 100);
+		copy('../tmp/crop_'.$bild, '../tmp/thumb_crop_'.$bild);
+		
+		$image = new fImage('../tmp/thumb_crop_'.$bild);
+		$image->resize(150, 0);
+		$image->saveChanges();
 		
 		return 'thumb_crop_'.$bild;
 	}

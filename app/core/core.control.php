@@ -287,7 +287,7 @@ class Control
 				</div>
 				<div style="clear:both"></div>
 				<div style="visibility:hidden;">
-				<iframe name="wallpost-frame" src="nix.html" style="height:1px;" frameborder="0"></iframe>
+				<iframe name="wallpost-frame" src="empty.html" style="height:1px;" frameborder="0"></iframe>
 				</div>
 			</div>';
   		}

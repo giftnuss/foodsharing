@@ -341,18 +341,24 @@ function makeThumbs($pic)
 {
 	if(!file_exists(ROOT_DIR.'images/mini_q_'.$pic))
 	{
-		require_once ROOT_DIR.'lib/resize.inc.php';
-		$resize = new resize(ROOT_DIR.'images/'.$pic);
-		$resize->resizeImage(35, 35,'crop');
-		$resize->saveImage(ROOT_DIR.'images/mini_q_'.$pic);		
+		copy(ROOT_DIR.'images/mini_q_'.$pic, ROOT_DIR.'images/mini_q_'.$pic);
+		copy(ROOT_DIR.'images/mini_q_'.$pic, ROOT_DIR.'images/med_q_'.$pic);
+		copy(ROOT_DIR.'images/mini_q_'.$pic, ROOT_DIR.'images/q_'.$pic);
 		
-		$resize = new resize(ROOT_DIR.'images/'.$pic);
-		$resize->resizeImage(75, 75,'crop');
-		$resize->saveImage(ROOT_DIR.'images/med_q_'.$pic);
+		$image = new fImage(ROOT_DIR.'images/mini_q_'.$pic);
+		$image->cropToRatio(1, 1);
+		$image->resize(35, 35);
+		$image->saveChanges();
 		
-		$resize = new resize('images/'.$pic);
-		$resize->resizeImage(150, 150,'crop');
-		$resize->saveImage(ROOT_DIR.'images/q_'.$pic);
+		$image = new fImage(ROOT_DIR.'images/med_q_'.$pic);
+		$image->cropToRatio(1, 1);
+		$image->resize(75, 75);	
+		$image->saveChanges();
+		
+		$image = new fImage(ROOT_DIR.'images/q_'.$pic);
+		$image->cropToRatio(1, 1);
+		$image->resize(150, 150);
+		$image->saveChanges();
 	}
 }
 
@@ -1131,43 +1137,20 @@ function tplMailList($tpl_id, $to, $from = false,$attach = false)
 	{
 		$from = $db->getBezirkMail(false);
 	}
-	require_once ROOT_DIR.'lib/PHPMailer/class.phpmailer.php';
 	
-	$mail = new PHPMailer();
-	//Tell PHPMailer to use SMTP
-	$mail->IsSMTP();
-	//Enable SMTP debugging
-	// 0 = off (for production use)
-	// 1 = client messages
-	// 2 = client and server messages
-	$mail->SMTPDebug  = 0;
-	$mail->Debugoutput = 'html';
-	//Set the hostname of the mail server
-	$mail->Host       = "kunden.greensta.de";
-	//Set the SMTP port number - likely to be 25, 465 or 587
-	$mail->Port       = 25;
-	//Whether to use SMTP authentication
-	$mail->SMTPAuth   = true;
-	//Username to use for SMTP authentication
-	$mail->Username   = "admin@lebensmittelretten.de";
-	//Password to use for SMTP authentication
-	$mail->Password   = "passwort123";
-	//Set who the message is to be sent from
-	$mail->SetFrom($from['email'], $from['email_name']);
-	//Set an alternative reply-to address
-	//$mail->AddReplyTo($bezirk['email'],$bezirk['email_name']);
-	//Set who the message is to be sent to
+	$mail = new fEmail();
+	$smtp = new fSMTP(SMTP_HOST);
+	$smtp->authenticate(SMTP_USER, SMTP_PASS);
 	
-	//$mail->AddAttachment('images/phpmailer_mini.gif');
-	$mail->CharSet = 'utf-8';
-	$mail->SetLanguage('de');
+	$mail->setFromEmail($from['email'], $from['email_name']);
+	
+	
 	
 	if($attach !== false)
 	{
 		foreach ($attach as $a)
 		{
-			$mail->AddAttachment($a['path'],$a['name']);
-			//$mail->Attach($a['path'],$a['mime'],'inline',$a['name']);
+			$mail->addAttachment(new fFile($a['path']),$a['name']);
 		}
 	}
 	
@@ -1197,10 +1180,9 @@ function tplMailList($tpl_id, $to, $from = false,$attach = false)
 		$message = str_replace($search, $replace, $tpl_message['body']);
 		$subject = str_replace($search, $replace, $tpl_message['subject']);
 		
-		$mail->AddAddress($t['email'],$t['email']);
+		$mail->addRecipient($t['email']);
 		
-		//Set the subject line
-		$mail->Subject = $subject;
+		$mail->setSubject($subject);
 		//Read an HTML message body from an external file, convert referenced images to embedded, convert HTML into a basic plain-text alternative body
 		
 		if(!isset($t['token']))
@@ -1208,12 +1190,12 @@ function tplMailList($tpl_id, $to, $from = false,$attach = false)
 			$t['token'] = false;
 		}
 		
-		$mail->MsgHTML(emailBodyTpl($message,$t['email'],$t['token']));
+		$mail->setHTMLBody(emailBodyTpl($message,$t['email'],$t['token']));
 		
-		//Replace the plain text body with one created manually
+		// playintext body
 		$message = str_replace('<br />', "\r\n", $message);
 		$message = strip_tags($message);
-		$mail->AltBody = $message;
+		$mail->setBody($message);
 		
 		if(isAdmin())
 		{
@@ -1227,13 +1209,13 @@ function tplMailList($tpl_id, $to, $from = false,$attach = false)
 		}
 		
 		//Send the message, check for errors
-		if(!$mail->Send()) {
+		if(!$mail->send($smtp)) 
+		{
 			logg($mail->ErrorInfo);
 		}
-		$mail->ClearAddresses();
+		$mail->clearRecipients();
 	}
-	
-	
+	$smtp->close();	
 }
 
 function autolink($str, $attributes=array()) {
@@ -2399,78 +2381,6 @@ function pv($el)
 	//return '<pre>'.print_r($el,true).'</pre>';
 }
 
-function sendMailOrga($betreff,$msg,$from)
-{
-	global $db;
-	$team = $db->getOrgateam();
-	
-	foreach ($team as $t)
-	{
-		sendMail($t, $betreff, $msg, $from);
-	}
-}
-
-function sendMail($an,$betreff,$nachricht,$absender)
-{
-	global $db;
-	$headers   = array();
-	$headers[] = "MIME-Version: 1.0";
-	$headers[] = "Content-type: text/plain; charset=utf-8";
-	$headers[] = "From: {$absender}";
-	$headers[] = "Subject: {$betreff}";
-	$headers[] = "X-Mailer: PHP/".phpversion();
-	
-	$nachricht = str_replace('{NAME}', $an['name'], $nachricht);
-	$betreff = str_replace('{NAME}', $an['name'], $betreff);
-	
-	if(is_array($an))
-	{
-		//file_put_contents('data/email.txt', date('Y-m-d H:i')."\n".$an['email'].':'.$absender."\n".$betreff."\n".$nachricht."\n\n\n",FILE_APPEND);
-	}
-	else
-	{
-		
-	}
-	try {
-		require_once "lib/Pear/Mail.php";
-	
-		$mailobj = new Mail();
-	
-		$from = "koeln.foodsharing@gmail.com";
-		$to = "kontakt@prographix.de";
-		$subject = "Hi!";
-		$body = "Hi,\n\nHow are you?";
-		$host = "ssl://smtp.gmail.com"; $port = "465";
-		$username = "koeln.foodsharing@gmail.com";
-		$password = "EssenRetten2013";
-		$headers = array (
-				'From' => $from,
-				'To' => $to,
-				'Subject' => $subject
-		);
-	
-		$smtp = $mailobj->factory(
-				'smtp',
-				array ('host' => $host, 'port' => $port, 'auth' => true, 'username' => $username, 'password' => $password));
-		$mail = $smtp->send($to, $headers, $body);
-	}
-	catch (Exception $e)
-	{
-		$db->add_mail_error($data);
-		return $an;
-	}
-	/*
-	if(mail($an['email'],$betreff,$nachricht,implode("\r\n",$headers)))
-	{
-		return true;
-	}
-	else
-	{
-		return $an;
-	}
-	*/
-}
-
 function fsId()
 {
 	if(loggedIn())
@@ -2621,68 +2531,45 @@ function libmail($bezirk, $email, $subject, $message, $attach = false, $token = 
 			'attach' => $attach
 		));
 	}
-	
-	require_once ROOT_DIR.'lib/PHPMailer/class.phpmailer.php';
 
-	$mail = new PHPMailer();
-	//Tell PHPMailer to use SMTP
-	$mail->IsSMTP();
-	//Enable SMTP debugging
-	// 0 = off (for production use)
-	// 1 = client messages
-	// 2 = client and server messages
-	$mail->SMTPDebug  = 0;
-	$mail->Debugoutput = 'html';
-	//Set the hostname of the mail server
-	$mail->Host       = SMTP_HOST;
-	//Set the SMTP port number - likely to be 25, 465 or 587
-	$mail->Port       = SMTP_PORT;
-	//Whether to use SMTP authentication
-	$mail->SMTPAuth   = true;
-	//Username to use for SMTP authentication
-	$mail->Username   = SMTP_USER;
-	//Password to use for SMTP authentication
-	$mail->Password   = SMTP_PASS;
-	//Set who the message is to be sent from
-	$mail->SetFrom($bezirk['email'], $bezirk['email_name']);
-	//Set an alternative reply-to address
-	//$mail->AddReplyTo($bezirk['email'],$bezirk['email_name']);
-	//Set who the message is to be sent to
-	
-	$mail->AddAddress($email,$email);
 
-	//Set the subject line
-	$mail->Subject = $subject;
-	//Read an HTML message body from an external file, convert referenced images to embedded, convert HTML into a basic plain-text alternative body
+	$mail = new fEmail();
 	
-	//$message = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $message);
+	$smtp = new fSMTP(SMTP_HOST);
+	$smtp->authenticate(SMTP_USER, SMTP_PASS);
 	
+	$mail->setFromEmail($bezirk['email'], $bezirk['email_name']);
 	
-	$mail->MsgHTML(emailBodyTpl($message,$email,$token));
+	$mail->addRecipient($email);
+
+	$mail->setSubject($subject);
+	
+	$mail->setHTMLBody(emailBodyTpl($message,$email,$token));
 	
 	//Replace the plain text body with one created manually
 	$message = str_replace('<br />', "\r\n", $message);
 	$message = strip_tags($message);
-	$mail->AltBody = $message;
-	//Attach an image file
-	//$mail->AddAttachment('images/phpmailer_mini.gif');
-	$mail->CharSet = 'utf-8';
-	$mail->SetLanguage('de');
+	$mail->setBody($message);
+	
 	
 	if($attach !== false)
 	{
 		foreach ($attach as $a)
 		{
-			$mail->AddAttachment($a['path'],$a['name']);
-			//$mail->Attach($a['path'],$a['mime'],'inline',$a['name']);
+			$mail->addAttachment(new fFile($a['path']),$a['name']);
 		}
 	}
 	
 	//Send the message, check for errors
-	if(!$mail->Send()) {
+	if(!$mail->send($smtp)) 
+	{
 		logg($mail->ErrorInfo);
+		$smtp->close();
 		return false;
-	} else {
+	} 
+	else 
+	{
+		$smtp->close();
 		return true;
 	}
 }
@@ -2723,107 +2610,6 @@ function mailMessage($sender_id,$recip_id,$msg=NULL)
 			
 		}
 	}
-}
-
-function oldlibmail($bezirk, $email, $subject, $message, $attach = false)
-{	
-	require_once ROOT_DIR.'lib/libmail_170.php';
-	$mail = new Mail();
-	$mail->SetCharset('utf-8');
-	$mail->From($bezirk['email'],$bezirk['email_name']);
-	$mail->To($email);
-	$mail->Subject($subject);
-	
-	$mail->Body(strip_tags($message));
-	//$mail->Html($message);
-	
-	if($attach !== false)
-	{
-		foreach ($attach as $a)
-		{
-			$mail->Attach($a['path'],$a['mime'],'inline',$a['name']);
-		}
-	}
-	
-	
-	if($mail->Send())
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-
-function fsMail($foodsaver,$subject,$message,$attach = false)
-{
-	require_once ROOT_DIR.'lib/libmail_170.php';
-	global $db;
-	
-	$bezirk = $db->getMailBezirk(getBezirkId());
-
-	$attach_db = '';
-	if($attach !== false)
-	{
-		$attach_db = json_encode(array($attach));
-	}
-
-	$recip_db = array();
-	foreach ($foodsaver as $f)
-	{
-		$recip_db[] = $f['email'];
-	}
-	$recip_db = json_encode($recip_db);
-
-	$id = $db->add_send_email(array(
-			'foodsaver_id' => fsId(),
-			'name' => $subject,
-			'zeit' => date('Y-m-d H:i:s'),
-			'message' => $message,
-			'attach' => $attach_db,
-			'recip' => $recip_db
-	));
-
-	
-	
-	$i = 0;
-	foreach ($foodsaver as $fs)
-	{
-		$anrede = 'Liebe/r';
-		if($fs['geschlecht'] == 1)
-		{
-			$anrede = 'Lieber';
-		}
-		elseif ($fs['geschlecht'] == 2)
-		{
-			$anrede = 'Liebe';
-		}
-
-		$search = array('{NAME}','{ANREDE}');
-		$replace = array($fs['name'],$anrede);
-
-		$message = str_replace($search,$replace,$message);
-		$subject = str_replace($search, $replace, $subject);
-
-		if(libmail($bezirk, $fs['email'], $subject, $message, $attach))
-		{
-			$i++;
-		}
-
-		$db->add_message(array(
-				'sender_id' => fsId(),
-				'recip_id' => $fs['id'],
-				'unread' => 1,
-				'name' => $subject,
-				'msg' => $message,
-				'time' => date('Y-m-d H:i:s'),
-				'attach' => $attach_db
-		));
-	}
-
-	return $i;
 }
 
 function getBezirk()
@@ -3160,56 +2946,6 @@ function may()
 	}
 }
 
-function nettesPasswort()
-{
-	include 'data/words.php';
-	$in = 'data/pwin.txt';
-	
-	
-	if(file_exists($in))
-	{
-		
-		$data = json_decode(file_get_contents($in),true);
-		foreach ($words as $w)
-		{
-			if(strlen($w) < 15 && !isset($data[$w]))
-			{
-				$passin = $w;
-				$data[$w] = true;
-				file_put_contents($in, json_encode($data));
-				break;
-			}
-		}
-	}
-	else
-	{
-		$passin = $words[0];
-		$data = array();
-		$data[$words[0]] = true;
-		file_put_contents($in, json_encode($data));
-	}
-	
-	$passout = str_replace(array('ä','ö','ü','Ä','Ö','Ü','ß'), array('ae','oe','ue','Ae','Oe','Ue','ss'), $passin);
-	
-	$passout = trim($passout);
-	
-	do{
-		str_replace('  ', ' ', $passout);
-	}while (strpos($passout, '  ') !== false);
-	$passout = str_replace(' ', genPassword(1), $passout).genPassword(1);
-	$passout = preg_replace('/[^0-9a-zA-Z]/', '', $passout);
-	if(strlen($passout)<=4)
-	{
-		$passout = $passout.genPassword(3);
-	}
-	//$passout = str_replace(array('a','i','e','o'), array('4','1','3','0'), $passout);
-	
-	file_put_contents('data/passout.txt', $passout."\n",FILE_APPEND);
-	
-	return $passout;
-	
-}
-
 function genPassword($length = 5)
 {
 	$pool = "qwertzupasdfghkyxcvbnm";
@@ -3319,7 +3055,6 @@ function resizeImg($img,$width,$format)
 {
 	if(file_exists($img))
 	{
-		require_once ROOT_DIR.'lib/resize.inc.php';
 		$opt = 'auto';
 		if($format == 'q')
 		{
@@ -3417,75 +3152,6 @@ function is_allowed($img)
 	*/
 
 	return false;
-}
-
-function printTranslate()
-{
-	if(isOrgaTeam())
-	{
-		if(isset($_GET['page']))
-		{
-			$page = preg_replace('/[^a-zA-Z0-9_]/', '', $_GET['page']);
-			if(file_exists('lang/DE/'.$page.'.lang.php'))
-			{
-				addScript('/js/jquery.rte/jquery.rte.js');
-				addStyle('#g-string-editor textarea{width:500px;}.mce-container{width:500px}');
-				addJs('
-					$("#g-string-editor-link").fancybox({
-						minWidth : 600
-					});
-					
-					var g_trans_isAni = false;
-					$("#g-texter").mouseover(function(){
-						$("#g-texter").css("left","0px");
-					});
-					$("#g-texter").mouseout(function(){
-						$("#g-texter").attr("style","");
-					});
-					$("#g-texter").click(function(){
-						showLoader();
-						$.ajax({
-							url:"xhr.php?f=stringEditor",
-							data:{page:"'.$page.'"},
-							dataType:"json",
-							success:function(data){
-								if(data.script != undefined)
-								{
-									jQuery.globalEval(data.script);
-									$("#g-string-editor").html(data.html);
-									$("#g-string-editor-link").trigger("click");
-									$(".button").button();
-									
-									$("#g-string-editor textarea").focus(function(){
-										$(this).rte("js/jquery.rte/jquery.rte.css")
-									});
-			
-	
-									
-									$("#g-string-editor input[type=\'submit\']").css({
-										"position":"fixed",
-										"top":"38px",
-										"left":"50%",
-										"margin-left":"155px"
-									});
-								}
-							},
-							complete:function(){
-								hideLoader();
-							}
-						});
-					});
-				');
-				addStyle('#g-string-editor input.text{width:573px}');
-				addHidden('<a id="g-string-editor-link" href="#g-string-editor">&nbsp;</a><div id="g-string-editor"></div>');
-				
-				return '<div id="g-texter" class="ur-feedback-btn ur-btn-left"><div class="icon"></div><div class="intext"><span>Texte</span></div></div>';
-			}
-		}
-		
-	}
-	
-	return '';
 }
 
 function deleteFilesFromDirectory($ordnername){
