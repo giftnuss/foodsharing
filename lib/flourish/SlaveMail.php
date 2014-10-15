@@ -79,7 +79,7 @@ class SlaveMail implements SlaveInterface
 		
 		return array(
 			'type' => MSG_TYPE_EMAIL,
-			'data' => array('fEmail' => serialize($this->mailObj)),
+			'data' => array('fEmail' => $this->mailObj),
 			'files' => $this->files,
 			'identifier' => $this->identifier
 		);
