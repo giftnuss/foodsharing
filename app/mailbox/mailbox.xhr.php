@@ -621,7 +621,7 @@ class MailboxXhr extends Control
 	
 		$mail = new SlaveMail();
 		
-		$mail->setFrom($email,$name);
+		$mail->setFrom($from_email,$from_name);
 
 	
 		if(is_array($email))
