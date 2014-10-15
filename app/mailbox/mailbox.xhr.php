@@ -619,12 +619,9 @@ class MailboxXhr extends Control
 			$from_name = $from['name'];
 		}
 	
-		$mail = new fEmail();
+		$mail = new SlaveMail();
 		
-		$smtp = new fSMTP(SMTP_HOST);
-		$smtp->authenticate(SMTP_USER, SMTP_PASS);
-		
-		$mail->setFromEmail($from_email, $from_name);
+		$mail->setFrom($email,$name);
 
 	
 		if(is_array($email))
@@ -645,27 +642,27 @@ class MailboxXhr extends Control
 	
 		//Set the subject line
 		$mail->setSubject($subject);
-		$mail->setHTMLBody($message);
+		$mail->setHtmlBody($message);
+		
+		$message = str_replace(array('<br>','<br/>','<br />','<p>','</p>','</p>'),"\r\n",$message);
+		$message = strip_tags($message);
+		
+		$mail->setBody($message);
 		
 	
 		if($attach !== false)
 		{
 			foreach ($attach as $a)
 			{
-				$mail->addAttachment(new fFile($a['path']),$a['name']);
+				$mail->addAttachment($a['path'],$a['name']);
 			}
 		}
 	
-		if(!$mail->send($smtp)) 
-		{
-			$smtp->close();
-			return false;
-		} 
-		else 
-		{
-			$smtp->close();
-			return true;
-		}
+		$db = new SlaveDb();
+		$db->addJob($mail);
+		$db->send();
+		
+		return true;
 	}
 	
 	public function attach_allow($filename,$mime)
