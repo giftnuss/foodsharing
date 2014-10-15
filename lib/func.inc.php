@@ -1331,7 +1331,7 @@ function tplMail($tpl_id,$to,$var = array(),$from_bezirk_id = false,$from_email 
 	$message['subject'] = str_replace($search, $replace, $message['subject']);
 	
 	$mail->setSubject($message['subject']);
-	$mail->setHtmlBody($message['body']);
+	$mail->setHtmlBody(emailBodyTpl($message['body']));
 	
 	// playintext body
 	$body = str_replace(array('<br />','<br>','<br/>','<p>','</p>'), "\r\n", $message['body']);
