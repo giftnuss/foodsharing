@@ -1211,8 +1211,6 @@ function tplMailList($tpl_id, $to, $from = false,$attach = false)
 			}
 		}
 		
-		$mail->addAttachment('./img/groups.png');
-		
 		$slave->addJob($mail);
 	}
 	
@@ -1304,7 +1302,7 @@ function tplMail($tpl_id,$to,$var = array(),$from_bezirk_id = false,$from_email 
 	{
 		$db = new ManualDb();
 	}
-	
+	/*
 	if($from_email !== false)
 	{
 		$mail->setFrom($from_email);
@@ -1314,6 +1312,9 @@ function tplMail($tpl_id,$to,$var = array(),$from_bezirk_id = false,$from_email 
 		$from = $db->getBezirkMail($from_bezirk_id);
 		$mail->setFrom($from['email'],$from['email_name']);
 	}
+	*/
+	
+	$mail->setFrom(DEFAULT_EMAIL,DEFAULT_EMAIL_NAME);
 	
 	$message = $db->getOne_message_tpl($tpl_id);
 	

@@ -22,10 +22,7 @@ class SlaveDb
 	}
 
 	public static function connect()
-	{
-		set_time_limit(0);
-		ini_set('memory_limit ', -1);
-		
+	{		
 		if(SlaveDb::$mysqli === false)
 		{
 			SlaveDb::$mysqli = new mysqli();
@@ -101,7 +98,7 @@ class SlaveDb
 				$files = SlaveDb::strVal(serialize($l['files']));
 			}
 				
-			$values[] = '('.(int)fsId().','.(int)$status.',NOW(),'.(int)$type.',COMPRESS('.SlaveDb::strVal(serialize($data)).'),'.$files.','.$identifier.')';
+			$values[] = '('.(int)fsId().','.(int)$status.',NOW(),'.(int)$type.','.SlaveDb::strVal(serialize($data)).','.$files.','.$identifier.')';
 		}
 
 
