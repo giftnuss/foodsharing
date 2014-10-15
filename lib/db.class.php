@@ -78,6 +78,11 @@ class Mem
 	}
 }
 
+interface SlaveInterface
+{
+	public function toArray();
+}
+
 $g_dbclean = false;
 
 class Db

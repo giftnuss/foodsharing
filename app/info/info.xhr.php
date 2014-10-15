@@ -143,7 +143,7 @@ Array
 		S::noWrite();
 		
 		// kepp connection fpr 120 seconds
-		$xhr->keepAlive(120);
+		$xhr->keepAlive(300);
 		
 		/*
 		 * check if its the first heartbeat give me direct an output

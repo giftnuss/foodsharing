@@ -1121,38 +1121,12 @@ function logDel($data)
 }
 
 function tplMailList($tpl_id, $to, $from = false,$attach = false)
-{		
-	if($_SERVER['SERVER_NAME'] == 'localhost')
-	{
-		logg(array(
-			'bezirk' => $bezirk,
-			'email' => $email,
-			'subject' => $subject,
-			'msg' => $message,
-		));
-		return true;
-	}
-
+{
+	
 	if($from === false)
 	{
 		$from = $db->getBezirkMail(false);
-	}
-	
-	$mail = new fEmail();
-	$smtp = new fSMTP(SMTP_HOST);
-	$smtp->authenticate(SMTP_USER, SMTP_PASS);
-	
-	$mail->setFromEmail($from['email'], $from['email_name']);
-	
-	
-	
-	if($attach !== false)
-	{
-		foreach ($attach as $a)
-		{
-			$mail->addAttachment(new fFile($a['path']),$a['name']);
-		}
-	}
+	}	
 	
 	global $db;
 	
@@ -1163,12 +1137,19 @@ function tplMailList($tpl_id, $to, $from = false,$attach = false)
 	
 	$tpl_message = $db->getOne_message_tpl($tpl_id);
 	
+	$slave = new SlaveDb();
+	
 	foreach ($to as $t)
 	{	
 		if(!validEmail($t['email']))
 		{
 			continue;
 		}
+		
+		$mail = new SlaveMail();
+		$mail->setFrom($from['email'], $from['email_name']);
+
+		
 		$search = array();
 		$replace = array();
 		foreach ($t['var'] as $key => $v)
@@ -1208,14 +1189,24 @@ function tplMailList($tpl_id, $to, $from = false,$attach = false)
 			));
 		}
 		
-		//Send the message, check for errors
-		if(!$mail->send($smtp)) 
+		/*
+		 *  todo: implement logic that we dont have to send one attachment multiple time to the slave db ...
+		*/
+		
+		if($attach !== false)
 		{
-			logg($mail->ErrorInfo);
+			foreach ($attach as $a)
+			{
+				$mail->addAttachment($a['path'],$a['name']);
+			}
 		}
-		$mail->clearRecipients();
+		
+		$mail->addAttachment('./img/groups.png');
+		
+		$slave->addJob($mail);
 	}
-	$smtp->close();	
+	
+	$slave->send();
 }
 
 function autolink($str, $attributes=array()) {
@@ -1325,7 +1316,23 @@ function tplMail($tpl_id,$to,$var = array(),$from_bezirk_id = false,$from_email 
 	
 	$message['subject'] = str_replace($search, $replace, $message['subject']);
 	
-	return libmail($from, $to, $message['subject'], $message['body']);
+	/*
+	 * fill mail packet and send to slave server
+	 */
+	
+	$slave = new SlaveDb();
+	
+	$mail = new SlaveMail();
+	$mail->setFrom($from);
+	$mail->setBody($message['body']);
+	$mail->addRecipient($to);
+	
+	$slave->addJob($mail);
+	$slave->send();
+	
+	
+	
+	//return libmail($from, $to, $message['subject'], $message['body']);
 	
 }
 
@@ -2532,19 +2539,13 @@ function libmail($bezirk, $email, $subject, $message, $attach = false, $token = 
 		));
 	}
 
-
-	$mail = new fEmail();
 	
-	$smtp = new fSMTP(SMTP_HOST);
-	$smtp->authenticate(SMTP_USER, SMTP_PASS);
 	
-	$mail->setFromEmail($bezirk['email'], $bezirk['email_name']);
-	
+	$mail = new SlaveMail();
+	$mail->setFrom($bezirk['email'], $bezirk['email_name']);
 	$mail->addRecipient($email);
-
 	$mail->setSubject($subject);
-	
-	$mail->setHTMLBody(emailBodyTpl($message,$email,$token));
+	$mail->setHtmlBody(emailBodyTpl($message,$email,$token));	
 	
 	//Replace the plain text body with one created manually
 	$message = str_replace('<br />', "\r\n", $message);
@@ -2556,22 +2557,13 @@ function libmail($bezirk, $email, $subject, $message, $attach = false, $token = 
 	{
 		foreach ($attach as $a)
 		{
-			$mail->addAttachment(new fFile($a['path']),$a['name']);
+			$mail->addAttachment($a['path'],$a['name']);
 		}
 	}
 	
-	//Send the message, check for errors
-	if(!$mail->send($smtp)) 
-	{
-		logg($mail->ErrorInfo);
-		$smtp->close();
-		return false;
-	} 
-	else 
-	{
-		$smtp->close();
-		return true;
-	}
+	$slave = new SlaveDb();
+	$slave->addJob($mail);
+	$slave->send();
 }
 
 function mailMessage($sender_id,$recip_id,$msg=NULL)
