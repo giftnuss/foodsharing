@@ -1123,10 +1123,20 @@ function logDel($data)
 function tplMailList($tpl_id, $to, $from = false,$attach = false)
 {
 	
-	if($from === false)
+	if(!is_array($from) && validEmail($from))
 	{
-		$from = $db->getBezirkMail(false);
-	}	
+		$from = array(
+			'email' => $from,
+			'email_name' => $from
+		);
+	}
+	else if($from === false)
+	{
+		$from = array(
+				'email' => DEFAULT_EMAIL,
+				'email_name' => DEFAULT_EMAIL_NAME
+		);
+	}
 	
 	global $db;
 	
@@ -1288,6 +1298,7 @@ function emailBodyTpl($message, $email = false, $token = false)
 function tplMail($tpl_id,$to,$var = array(),$from_bezirk_id = false,$from_email = false)
 {
 	global $db;
+	$mail = new SlaveMail();
 	
 	if(!is_object($db))
 	{
@@ -1296,12 +1307,14 @@ function tplMail($tpl_id,$to,$var = array(),$from_bezirk_id = false,$from_email 
 	
 	if($from_email !== false)
 	{
-		$from = $from_email;
+		$mail->setFrom($from_email);
 	}
 	else 
 	{
 		$from = $db->getBezirkMail($from_bezirk_id);
+		$mail->setFrom($from['email'],$from['email_name']);
 	}
+	
 	$message = $db->getOne_message_tpl($tpl_id);
 	
 	$search = array();
@@ -1316,17 +1329,11 @@ function tplMail($tpl_id,$to,$var = array(),$from_bezirk_id = false,$from_email 
 	
 	$message['subject'] = str_replace($search, $replace, $message['subject']);
 	
-	/*
-	 * fill mail packet and send to slave server
-	 */
-	
-	$slave = new SlaveDb();
-	
-	$mail = new SlaveMail();
-	$mail->setFrom($from);
+	$mail->setSubject($message['subject']);
 	$mail->setBody($message['body']);
 	$mail->addRecipient($to);
 	
+	$slave = new SlaveDb();
 	$slave->addJob($mail);
 	$slave->send();
 	
