@@ -4305,4 +4305,14 @@ GROUP BY foodsaver_id'));
 	
 		return $out;
 	}
+	
+	public function getBasics_bezirk()
+	{
+		return $this->q('
+			SELECT 	 	`id`,
+						`name`
+			
+			FROM 		`'.PREFIX.'bezirk`
+			ORDER BY `name`');
+	}
 }

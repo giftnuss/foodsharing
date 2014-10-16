@@ -3,7 +3,6 @@ class Mem
 {
 	public static $memcache;
 	public static $connected;
-
 	
 	public function connect()
 	{
