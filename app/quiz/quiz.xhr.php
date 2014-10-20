@@ -528,10 +528,18 @@ class QuizXhr extends Control
 			 */
 			if(isset($_GET['special']))
 			{
+				// make a break
 				if($_GET['special'] == 'pause')
 				{
 					$this->model->updateQuizSession(S::get('quiz-session'), $quiz, $i);
 					return $this->pause();
+				}
+				
+				//
+				if($_GET['special'] == 'result')
+				{
+					$this->model->updateQuizSession(S::get('quiz-session'), $quiz, $i);
+					return $this->result($quiz[($i-1)]);
 				}
 			}
 			
@@ -591,7 +599,7 @@ class QuizXhr extends Control
 						/*
 						 * for later function is not ready yet :)
 						 */
-						//$dia->addButton('Auflösung der Quizfrage und weiter', 'questcheckresult();return false;');
+						$dia->addButton('Auflösung der Quizfrage und weiter', 'questcheckresult();return false;');
 						
 						/*
 						 * add next() Button
@@ -682,6 +690,20 @@ class QuizXhr extends Control
 									pulseError(\'Bitte treffe eine Auswahl!\')
 								}
 							}
+							
+							function questcheckresult()
+							{
+								if($(\'#qanswers input:checked\').length > 0)
+								{
+									//ajreq(\'pause\',{app:\'quiz\'});
+									questgonext("result");
+								}
+								else
+								{
+									pulseError(\'Bitte treffe erst eine Auswahl!\')
+								}	
+							}
+										
 							$("li.noanswer").click(function(){
 								setTimeout(function(){
 									if($("input.nocheck:checked").length > 0)
@@ -909,6 +931,133 @@ class QuizXhr extends Control
 				
 			}
 		}
+	}
+	
+	private function result($question)
+	{
+		$answers = array();
+		$joke = false;
+		
+		//if()
+		
+		foreach ($question['answers'] as $a)
+		{
+			$answers[$a] = $a;
+		}
+		// get the question
+		if($quest = $this->model->getQuestion($question['id']))
+		{		
+					// get possible answers			
+			if($answers = $this->model->getAnswers($question['id']))
+			{
+				/*
+				print_r($question);
+				print_r($answers);
+				die();
+				*/
+				$joke = false;
+				if($question['fp'] == 0)
+				{
+					$joke = true;
+				}
+				
+				$out = '';
+				foreach ($answers as $a)
+				{
+					$bg = '';
+					$atext = '';
+					
+					if($joke)
+					{
+						$bg = 'transparent';
+						$atext = '';
+					}
+					// Antwort richtig angeklickt
+					else if((isset($answers[$a['id']]) && $a['right'] == 1) || (!isset($answers[$a['id']]) && $a['right'] == 0))
+					{
+						if($a['right'] == 0)
+						{
+							$atext = 'Diese Antwort war natürlich falsch, das hast Du richtig erkannt';
+						}
+						else
+						{
+							$atext = 'Richtig! Diese Antwort stimmt.';
+						}
+						$bg = '#599022';
+					}
+					// Antwort richtig weil nicht angeklickt
+					else 
+					{
+						if($a['right'] == 0)
+						{
+							$atext = 'Falsch, Diese Antwort stimmt nicht.';
+						}
+						else
+						{
+							$atext = 'Auch diese Antwort wäre richtig gewesen.';
+						}
+						$bg = 'red';
+					}
+					
+					if(!empty($atext))
+					{
+						$atext = '<strong>'.$atext.'</strong><br />';
+					}
+					
+					$out .= '
+					<li class="answer" style="color:#fff ;cursor: pointer; border-radius: 10px; display: block; list-style: outside none none; padding: 10px; font-size: 14px; background-color: '.$bg.';">
+						'.$atext.'	
+						<p>'.nl2br($a['text']).'</p>
+						<p>
+							<strong>Erklärung</strong><br />
+							'.nl2br($a['explanation']).'
+						</p>
+					</li>';
+					
+				}
+			}
+		}
+		
+		$out = '
+			<div id="quizwrapper">
+				<div style="border-radius:10px;font-size:14px;color:#000;padding:10px;background:#FFFFFF;margin-bottom:15px;line-height:20px;">'.nl2br($quest['text']).'</div>
+				<ul style="display:block;list-style:none;">'.$out.'</ul>
+		</div>';
+		
+		$dia = new XhrDialog();
+		$dia->addOpt('height', '($(window).height()-40)',false);
+		$dia->addOpt('position', 'center');
+		
+		$dia->setTitle('Zwischenauswertung Frage '.(S::get('quiz-index')));
+		$dia->addContent($out);
+		
+		$dia->addButton('weiter gehts!','ajreq(\'next\',{app:\'quiz\'});');
+		
+		$dia->addJsAfter('
+			var width = 1000;
+			if($(window).width() < 1000)
+			{
+				width = ($(window).width()-40);
+			}
+			$("#'.$dia->getId().'").dialog("option",{
+				width:width,
+				height:($(window).height()-40)
+			});
+			$(window).resize(function(){
+				var width = 1000;
+				if($(window).width() < 1000)
+				{
+					width = ($(window).width()-40);
+				}
+				$("#'.$dia->getId().'").dialog("option",{
+					width:width,
+					height:($(window).height()-40)
+				});
+			});		
+		');
+		
+		
+		return $dia->xhrout();
 	}
 	
 	public function pause()
