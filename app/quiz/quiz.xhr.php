@@ -511,16 +511,16 @@ class QuizXhr extends Control
 				 * And store it all back to the session
 				 */
 				S::set('quiz-questions', $quiz);
-				
-				/*
-				 * Have a look has the user entered an comment for this question?
-				 */
+			}
+			
+			/*
+			 * Have a look has the user entered an comment for this question?
+			*/
+			if(isset($_GET['comment']) && !empty($_GET['comment']))
+			{
 				$comment = strip_tags($_GET['comment']);
-				if(!empty($comment))
-				{
-					// if yes lets store in the db
-					$this->model->addUserComment((int)$_GET['qid'], $comment);
-				}
+				// if yes lets store in the db
+				$this->model->addUserComment((int)$_GET['qid'], $comment);
 			}
 			
 			/*
@@ -583,28 +583,29 @@ class QuizXhr extends Control
 						
 						
 						$dia->addContent($this->view->quizQuestion($question,$answers));
-						$dia->addContent($this->view->quizComment());
+						//$dia->addContent($this->view->quizComment());
 						
 						/*
 						 * show the pause button only if there are more questions
 						 */
+						/*
 						if($i < count($quiz))
 						{
 							$dia->addButton('Abschicken & Pause', 'breaknext();');
 						}
-						
+						*/
 						// add comment button
-						$dia->addButton('Kommentar abgeben & Weiter', 'questcomment(this);');
+						//$dia->addButton('Kommentar abgeben & Weiter', 'questcomment(this);');
 						
 						/*
 						 * for later function is not ready yet :)
 						 */
-						$dia->addButton('Auflösung der Quizfrage und weiter', 'questcheckresult();return false;');
+						$dia->addButton('Weiter', 'questcheckresult();return false;');
 						
 						/*
 						 * add next() Button
 						 */
-						$dia->addButton('Abssenden & Weiter', 'questionnext();');
+						//$dia->addButton('Abssenden & Weiter', 'questionnext();');
 						
 						$dia->addOpt('open','
 						function(){
@@ -807,7 +808,8 @@ class QuizXhr extends Control
 							  if (count <= 0)
 							  {
 							     //questgonext();
-							     ajreq(\'pause\',{app:\'quiz\',timefail:\'1\'});
+							     // ajreq(\'pause\',{app:\'quiz\',timefail:\'1\'});
+					             ajreq(\'pause\',{app:\'quiz\'});
 							     return;
 							  }
 							}
@@ -996,7 +998,7 @@ class QuizXhr extends Control
 						{
 							$atext = 'Auch diese Antwort wäre richtig gewesen.';
 						}
-						$bg = 'red';
+						$bg = '#E74955';
 					}
 					
 					if(!empty($atext))
@@ -1031,7 +1033,11 @@ class QuizXhr extends Control
 		$dia->setTitle('Zwischenauswertung Frage '.(S::get('quiz-index')));
 		$dia->addContent($out);
 		
-		$dia->addButton('weiter gehts!','ajreq(\'next\',{app:\'quiz\'});');
+		$dia->addContent($this->view->quizComment());
+		
+		//$dia->addButton('nächste Frage','ajreq(\'next\',{app:\'quiz\'});');
+		
+		$dia->addButton('nächste Frage','ajreq(\'next\',{app:\'quiz\',comment:$(\'#quizusercomment\').val(),qid:'.(int)$question['id'].'});');
 		
 		$dia->addJsAfter('
 			var width = 1000;
@@ -1054,6 +1060,8 @@ class QuizXhr extends Control
 					height:($(window).height()-40)
 				});
 			});		
+				
+			$("#'.$dia->getId().'").scrollTop($("#'.$dia->getId().'").height());
 		');
 		
 		

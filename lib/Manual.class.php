@@ -13,6 +13,16 @@ FROM fs_quiz_session
 GROUP BY foodsaver_id'));
 	}
 	
+	public function getBasics_content()
+	{
+		return $this->q('
+			SELECT 	 	`id`,
+						`name`
+			
+			FROM 		`'.PREFIX.'content`
+			ORDER BY `name`');
+	}
+	
 	public function updates()
 	{
 		$updates = array();

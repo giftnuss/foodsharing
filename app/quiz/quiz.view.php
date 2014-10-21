@@ -160,8 +160,8 @@ class QuizView extends View
 	public function quizComment()
 	{
 		return '
-		<div style="display:none;" id="quizcomment">
-			'.v_form_textarea('quizusercomment').'
+		<div id="quizcomment">
+			'.v_form_textarea('quizusercomment',array('placeholder' => s('quizusercomment'),'nolabel' => true)).'
 		</div>';
 	}
 	
