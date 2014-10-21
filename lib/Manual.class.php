@@ -23,6 +23,25 @@ GROUP BY foodsaver_id'));
 			ORDER BY `name`');
 	}
 	
+	public function getOne_content($id)
+	{
+		$out = $this->qRow('
+			SELECT
+			`id`,
+			`name`,
+			`title`,
+			`body`,
+			`last_mod`
+			
+			FROM 		`'.PREFIX.'content`
+			
+			WHERE 		`id` = ' . $this->intval($id));
+	
+	
+	
+		return $out;
+	}
+	
 	public function updates()
 	{
 		$updates = array();
