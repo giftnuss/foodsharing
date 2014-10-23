@@ -16,7 +16,7 @@ class ReportControl extends Control
 	
 	public function index()
 	{
-		if(isOrgaTeam() || isBotFor(347))
+		if(S::may('orga') || isBotFor(347))
 		{
 			addBread('Reportmeldungen','?page=report');
 		}

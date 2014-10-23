@@ -8,6 +8,7 @@ class ReportXhr extends Control
 		$this->view = new ReportView();
 
 		parent::__construct();
+		
 		if(isset($_GET['fsid']))
 		{
 			$this->foodsaver = $this->model->getOne_foodsaver($_GET['fsid']);
@@ -193,6 +194,14 @@ class ReportXhr extends Control
 	
 	public function betriebreport()
 	{		
+		if(!$this->model->isInTeam((int)$_GET['bid']))
+		{
+			return array(
+				'status' => 1,
+				'script' => 'pulseError("'.s('access_error').'");'
+			);
+		}
+		
 		$reason_id = 1;
 		if($_GET['reason_id'] == 2)
 		{
