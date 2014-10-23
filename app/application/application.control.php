@@ -39,7 +39,7 @@ class ApplicationControl extends Control
 		$this->view->setBezirk($this->bezirk);
 		
 		
-		if(!mayBezirk($this->bezirk_id))
+		if(!isBotFor($this->bezirk_id))
 		{
 			go('/');
 		}
