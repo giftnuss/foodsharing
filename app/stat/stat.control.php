@@ -4,6 +4,15 @@ class StatControl extends Control
 	public function __construct()
 	{
 		
+		if(!S::may())
+		{
+			goLogin();
+		}
+		else if(!S::may('orga'))
+		{
+			go('/');
+		}
+		
 		$this->model = new StatModel();
 		$this->view = new StatView();
 		
