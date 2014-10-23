@@ -29,7 +29,44 @@ class BlogControl extends Control
 	
 	public function index()
 	{
+		if(!isset($_GET['sub']))
+		{
+			$this->listNews();
+		}
+	}
+	
+	public function listNews()
+	{
+		$page = 1;
+		if(isset($_GET['p']))
+		{
+			$page = (int)$_GET['p'];
+		}
 		
+		if($news = $this->model->listNews($page))
+		{
+			$out = '';
+			foreach ($news as $n)
+			{
+				$out .= $this->view->newsListItem($n);
+			}
+				
+			addContent(v_field($out, s('news')));
+			addContent($this->view->pager($page));
+		}
+		else if ($page > 1)
+		{
+			go('?page=blog');
+		}
+	}
+	
+	public function read()
+	{
+		if($news = $this->model->getPost($_GET['id']))
+		{
+			addBread($news['name']);
+			addContent($this->view->newsPost($news));
+		}
 	}
 	
 	public function manage()

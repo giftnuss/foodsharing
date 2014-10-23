@@ -42,16 +42,6 @@ class ProfileModel extends Model
 		');
 	}
 	
-	public function addRatingMessage($fsid,$msg)
-	{
-		return $this->update('
-			UPDATE `'.PREFIX.'rating`
-			SET 	`msg` = '.$this->strval($msg).'
-			WHERE 	`foodsaver_id` = '.(int)$fsid.'
-			AND 	`rater_id` = '.(int)fsId().'
-		');
-	}
-	
 	public function getData()
 	{
 		$data = $this->qRow('

@@ -17,6 +17,65 @@ class BlogModel extends Model
 		return false;
 	}
 	
+	public function getPost($id)
+	{
+		return $this->qRow('
+			SELECT
+				b.`id`,
+				b.`name`,
+				b.`time`,
+				UNIX_TIMESTAMP(b.`time`) AS time_ts,
+				b.`body`,
+				b.`time`,
+				b.`picture`,
+				CONCAT(fs.name," ",fs.nachname) AS fs_name
+	
+			FROM
+				`'.PREFIX.'blog_entry` b,
+				`'.PREFIX.'foodsaver` fs
+	
+			WHERE
+				b.foodsaver_id = fs.id
+	
+			AND
+				b.`active` = 1
+	
+			AND
+				b.id = '.(int)$id);
+	}
+	
+	public function listNews($page)
+	{
+		$page = ((int)$page-1)*10;
+		
+		return $this->q('
+			SELECT 	 	
+				b.`id`,
+				b.`name`,
+				b.`time`,
+				UNIX_TIMESTAMP(b.`time`) AS time_ts,
+				b.`active`,
+				b.`teaser`,
+				b.`time`,
+				b.`picture`,
+				CONCAT(fs.name," ",fs.nachname) AS fs_name
+		
+			FROM 
+				`'.PREFIX.'blog_entry` b,
+				`'.PREFIX.'foodsaver` fs
+		
+			WHERE 
+				b.foodsaver_id = fs.id
+				
+			AND
+				b.`active` = 1
+		
+			ORDER BY 
+				b.`id` DESC
+				
+			LIMIT '.$page.',10');
+	}
+	
 	public function listArticle()
 	{
 		$not = '';

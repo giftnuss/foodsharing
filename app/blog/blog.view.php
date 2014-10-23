@@ -40,6 +40,41 @@ class BlogView extends View
 		return (v_field($table,s('article')));
 	}
 	
+	public function newsPost($news)
+	{
+		return v_field('<div class="news-post full"><h2><a href="?page=blog&sub=read&id='.$news['id'].'">'.$news['name'].'</a></h2><p class="small"><span class="time">'.niceDate($news['time_ts']).'</span><span class="name"> von '.$news['fs_name'].'</span></p>'.$this->getImage($news,'crop_0_528_') . '<p>'.autolink($news['body']).'</p><div style="clear:both;"></div></div>');
+	}
+	
+	public function newsListItem($news)
+	{
+		return '<div class="news-post"><h2><a href="?page=blog&sub=read&id='.$news['id'].'">'.$news['name'].'</a></h2><p class="small"><span class="time">'.niceDate($news['time_ts']).'</span><span class="name"> von '.$news['fs_name'].'</span></p>'.$this->getImage($news) . '<p>'.autolink($news['teaser']).'</p><p><a class="button" href="?page=blog&sub=read&id='.$news['id'].'">weiter lesen</a></p><div style="clear:both;"></div></div>';
+	}
+	
+	private function getImage($news,$prefix = 'crop_1_528_')
+	{
+		if(!empty($news['picture']))
+		{
+			return '<a href="?page=blog&sub=read&id='.$news['id'].'"><img class="corner-all" src="http://www.lebensmittelretten.de/freiwillige/images/' . str_replace('/','/'.$prefix,$news['picture']).'" /></a>';
+		}
+		else
+		{
+			return '';
+		}
+	}
+	
+	public function pager($page)
+	{
+		$links = '';
+		if($page > 1)
+		{
+			$links .= '<a class="button" href="?page=blog&p='.($page-1).'"><i class="fa fa-arrow-circle-left"></i></a>';
+		}
+		
+		$links .= '<a class="button" href="?page=blog&p='.($page+1).'"><i class="fa fa-arrow-circle-right"></i></a>';
+		
+		return '<p class="pager">'.$links.'</p>';
+	}
+	
 	public function blog_entry_form($bezirke,$add = false)
 	{		
 		$bezirkchoose = '';

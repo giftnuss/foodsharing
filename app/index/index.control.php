@@ -31,6 +31,14 @@ class IndexControl extends Control
 		}
 		addContent($this->view->printSlider($articles),CNT_OVERTOP);
 		
+		if(!S::may())
+		{
+			addContent($this->view->login(),CNT_RIGHT);
+		}
+		
+		addContent('blubb');
+		addContent('',CNT_LEFT);
+		
 		//addContent('Hallo Foodsharing-Welt');
 	}
 }

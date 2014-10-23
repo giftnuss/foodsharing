@@ -2483,7 +2483,7 @@ function v_form_text($id,$option = array())
 	);
 }
 
-function v_field($content,$title,$option = array())
+function v_field($content,$title = false,$option = array())
 {
 	$class = '';
 	if(isset($option['class']))
@@ -2491,10 +2491,21 @@ function v_field($content,$title,$option = array())
 		$class = ' '.$option['class'].'';
 	}
 	
+	$corner = 'corner-bottom';
+	if($title !== false)
+	{
+		$title = '<div class="head ui-widget-header ui-corner-top">'.$title.'</div>';
+	}
+	else
+	{
+		$title = '';
+		$corner = 'corner-all';
+	}
+	
 	return '
 	<div class="field">
-		<div class="head ui-widget-header ui-corner-top">'.$title.'</div>
-		<div class="ui-widget ui-widget-content ui-corner-bottom margin-bottom'.$class.'">
+		'.$title.'
+		<div class="ui-widget ui-widget-content '.$corner.' margin-bottom'.$class.'">
 			'.$content.'
 		</div>
 	</div>';
