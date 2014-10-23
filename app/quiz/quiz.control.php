@@ -9,14 +9,18 @@ class QuizControl extends Control
 		
 		parent::__construct();
 		
+		if(!S::may())
+		{
+			goLogin();
+		}
+		else if(!S::may('orga'))
+		{
+			go('/');
+		}
 	}
 	
 	public function index()
 	{
-		if(!S::may('orga'))
-		{
-			forceLogin();
-		}
 		// quiz&a=delete&id=9
 		if($id = getActionId('delete'))
 		{
