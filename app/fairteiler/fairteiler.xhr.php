@@ -33,6 +33,11 @@ class FairteilerXhr extends Control
 	
 	public function infofollower()
 	{
+		if(!$this->mayFairteiler($_GET['fid']))
+		{
+			return false;
+		}
+		
 		if($ft = $this->model->getFairteiler($_GET['fid']))
 		{
 			if($follower = $this->model->getEmailFollower($_GET['fid']))
@@ -88,5 +93,18 @@ class FairteilerXhr extends Control
 			'status' => 1,
 			'script' => 'u_fbshare('.(int)$_GET['pid'].');'
 		);
+	}
+	
+	private function mayFairteiler($fid)
+	{
+		if($ids = $this->model->getFairteilerIds())
+		{
+			if(isset($ids[$fid]))
+			{
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

@@ -165,6 +165,11 @@ class FairteilerModel extends Model
 		return false;
 	}
 	
+	public function getFairteilerIds()
+	{
+		return $this->qColKey('SELECT fairteiler_id FROM '.PREFIX.'fairteiler_follower WHERE foodsaver_id = '.(int)fsId());
+	}
+	
 	public function follow($ft_id,$infotype)
 	{
 		return $this->insert('
