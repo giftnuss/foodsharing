@@ -15,6 +15,11 @@ class EventControl extends Control
 	{
 		if(!isset($_GET['sub']) && isset($_GET['id']) && ($event = $this->model->getEvent($_GET['id'])))
 		{
+			if(!$this->mayEvent($event))
+			{
+				return false;
+			}
+			
 			addBread('Termine','?page=event');
 			addBread($event['name']);
 			
@@ -46,10 +51,32 @@ class EventControl extends Control
 		
 	}
 	
+	private function isEventAdmin($event)
+	{
+		if($event['fs_id'] == fsId() || isBotFor($event['bezirk_id']) || S::may('orga'))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	private function mayEvent($event)
+	{
+		if($event['public'] == 1 || S::may('orga') || isBotFor($event['bezirk_id']) || isset($event['invites']['may'][fsId()]))
+		{
+			return true;
+		}
+		return false;
+	}
+	
 	public function edit()
 	{
 		if($event = $this->model->getEvent($_GET['id']))
 		{
+			if(!$this->isEventAdmin($event))
+			{
+				return false;
+			}
 			if($event['fs_id'] == fsId() || isOrgaTeam() || isBotFor($event['bezirk_id']))
 			{
 				addBread('Termine','?page=event');

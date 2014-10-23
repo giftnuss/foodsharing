@@ -2,12 +2,23 @@
 class EventXhr extends Control
 {
 	private $stats;
+	private $event;
+	
 	public function __construct()
 	{
 		$this->model = new EventModel();
 		$this->view = new EventView();
 
 		parent::__construct();
+		
+		if (isset($_GET['id']))
+		{
+			$this->event = $this->model->getEvent($_GET['id']);
+			if(!$this->mayEvent())
+			{
+				return false;
+			}
+		}
 		
 		$this->stats = array(
 				0 => true, // eingeladen
@@ -58,14 +69,13 @@ class EventXhr extends Control
 	
 	public function ustat()
 	{
-		
 		if(isset($this->stats[(int)$_GET['s']]))
 		{
 			if($this->model->setInviteStatus($_GET['id'],$_GET['s']))
 			{
 				return array(
-						'status' => 1,
-						'script' => 'pulseInfo("Einladungs-Status geändert!");'
+					'status' => 1,
+					'script' => 'pulseInfo("Einladungs-Status geändert!");'
 				);
 			}
 		}
@@ -78,10 +88,28 @@ class EventXhr extends Control
 			if($this->model->addInviteStatus($_GET['id'],$_GET['s']))
 			{
 				return array(
-						'status' => 1,
-						'script' => 'pulseInfo("Status geändert!");'
+					'status' => 1,
+					'script' => 'pulseInfo("Status geändert!");'
 				);
 			}
 		}
+	}
+	
+	private function isEventAdmin($event)
+	{
+		if($this->event['fs_id'] == fsId() || isBotFor($this->event['bezirk_id']) || S::may('orga'))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	private function mayEvent()
+	{
+		if($this->event['public'] == 1 || S::may('orga') || isBotFor($this->event['bezirk_id']) || isset($this->event['invites']['may'][fsId()]))
+		{
+			return true;
+		}
+		return false;
 	}
 }

@@ -247,10 +247,12 @@ class EventModel extends Model
 			$out = array(
 				'invited' => array(),
 				'accepted' => array(),
-				'maybe' => array()
+				'maybe' => array(),
+				'may' => array()
 			);
 			foreach ($invites as $i)
 			{
+				$out['may'][$i['id']] = true;
 				if($i['status'] == 0)
 				{
 					$out['invited'][] = $i;
