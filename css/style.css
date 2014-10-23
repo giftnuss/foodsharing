@@ -2032,7 +2032,7 @@ div.xv_left ul li a:hover
 	{
 		display:none;
 	}
-	div.xv_left ul
+	.post div.xv_left ul
 	{
 		display:none;
 	}
@@ -2046,12 +2046,12 @@ div.xv_left ul li a:hover
 		display: block;
 		text-align: center;
 	}
-	div.xv_left
+	.post div.xv_left
 	{
 		padding:0;
 		margin:0;
 	}
-	div.xv_left img
+	.post div.xv_left img
 	{
 		width:45px;
 	}
