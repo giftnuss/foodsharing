@@ -95,6 +95,7 @@ class MailsControl extends ConsoleControl
 								}
 							}
 						}
+						
 						if(empty($mboxes))
 						{
 							$mailbox->deleteMessages((int)$msg['uid']);
@@ -183,12 +184,10 @@ class MailsControl extends ConsoleControl
 								}
 							}
 						}
-						
-						$mailbox->deleteMessages((int)$message['uid']);
-		
 					}
-					//echo $message['text']."<br />==========================<br />";
 				}
+				
+				$mailbox->deleteMessages((int)$msg['uid']);
 			}
 			echo "\n";
 			success('ready :o)');
