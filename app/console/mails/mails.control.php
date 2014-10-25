@@ -193,6 +193,35 @@ class MailsControl extends ConsoleControl
 		}
 	}
 	
+	private function attach_allow($filename,$mime)
+	{
+		if(strlen($filename) < 300)
+		{
+			$ext = explode('.', $filename);
+			$ext = end($ext);
+			$ext = strtolower($ext);
+			$notallowed = array(
+					'php' => true,
+					'html' => true,
+					'htm' => true,
+					'php5' => true,
+					'php4' => true,
+					'php3' => true,
+					'php2' => true,
+					'php1' => true
+			);
+			$notallowed_mime = array();
+				
+			if(!isset($notallowed[$ext]) && !isset($notallowed_mime[$mime]))
+			{
+				return true;
+			}
+				
+		}
+	
+		return false;
+	}
+	
 	public static function handleEmail($data)
 	{
 		$data = $data->getData();
