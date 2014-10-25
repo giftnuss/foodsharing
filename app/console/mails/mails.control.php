@@ -2,6 +2,7 @@
 class MailsControl extends ConsoleControl
 {		
 	static $smtp;
+	private $model;
 	
 	public function __construct()
 	{		
@@ -37,6 +38,159 @@ class MailsControl extends ConsoleControl
 		$client = new SocketClient();
 		
 		$client->serverSignal('close');
+	}
+	
+	/**
+	 * This Method will check for new E-Mails and sort it to the mailboxes
+	 */
+	public function mailboxupdate()
+	{
+		$this->model = new MailsModel();
+		
+		$mailbox = new fMailbox('imap', IMAP_HOST, IMAP_USER, IMAP_PASS);
+		
+		$messages = $mailbox->listMessages();
+		if(is_array($messages))
+		{
+			info(count($messages).' in Inbox');
+			
+			$progressbar = $this->progressbar(count($messages));
+			
+			$have_send = array();
+			$i=0;
+			
+			foreach ($messages as $msg)
+			{
+				$i++;
+				$progressbar->update($i);
+				if($message = $mailbox->fetchMessage((int)$msg['uid']))
+				{
+					$mboxes = array();
+					if(isset($message['headers']) && isset($message['headers']['to']))
+					{
+						foreach ($message['headers']['to'] as $to)
+						{
+							if(strtolower($to['host']) == DEFAULT_HOST)
+							{
+								$mboxes[] = $to['mailbox'];
+							}
+						}
+						if(isset($message['headers']['cc']))
+						{
+							foreach ($message['headers']['cc'] as $to)
+							{
+								if(strtolower($to['host']) == DEFAULT_HOST)
+								{
+									$mboxes[] = $to['mailbox'];
+								}
+							}
+						}
+						if(isset($message['headers']['bcc']))
+						{
+							foreach ($message['headers']['cc'] as $to)
+							{
+								if(strtolower($to['host']) == DEFAULT_HOST)
+								{
+									$mboxes[] = $to['mailbox'];
+								}
+							}
+						}
+						if(empty($mboxes))
+						{
+							$mboxes = array('lost');
+						}
+		
+						$mb_ids = $this->model->getMailboxIds($mboxes);
+						
+						if(!$mb_ids)
+						{
+							$mb_ids = $this->model->getMailboxIds(array('lost'));
+						}
+						
+						if( $mb_ids )
+						{
+							$body = '';
+							$html = '';
+							if(isset($message['html']))
+							{
+								require_once 'lib/Html2Text.php';
+								$h2t = new Html2Text($message['html']);
+								$body = $h2t->get_text();
+								$html = $message['html'];
+								$html = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $html);
+							}
+							elseif(isset($message['text']))
+							{
+								$body = $message['text'];
+								$html = nl2br(autolink($message['text']));
+							}
+							else
+							{
+								$body = json_encode($message);
+							}
+		
+							$attach = '';
+							if(isset($message['attachment']) && !empty($message['attachment']))
+							{
+								$attach = array();
+								foreach ($message['attachment'] as $a)
+								{
+									if($this->attach_allow($a['filename'],$a['mimetype']))
+									{
+										$new_filename = uniqid();
+										$path = 'data/mailattach/';
+										while (file_exists($path.$new_filename))
+										{
+											$i++;
+											$new_filename = $i.'-'.$a['filename'];
+										}
+		
+										file_put_contents($path.$new_filename, $a['data']);
+										$attach[] = array(
+												'filename' => $new_filename,
+												'origname' => $a['filename'],
+												'mime' => $a['mimetype']
+										);
+									}
+								}
+								$attach = json_encode($attach);
+							}
+		
+							foreach ($mb_ids as $id)
+							{
+								if(!isset($have_send[$id]))
+								{
+									$have_send[$id] = array();
+								}
+								$md = $message['received'].':'.$message['headers']['subject'];
+								if(!isset($have_send[$id][$md]))
+								{
+									$have_send[$id][$md] = true;
+									$this->model->saveMessage(
+											$id, // mailbox id
+											1, // folder
+											json_encode($message['headers']['from']), // sender
+											json_encode($message['headers']['to']), // to
+											strip_tags($message['headers']['subject']), // subject
+											$body,
+											$html,
+											date('Y-m-d H:i:s',strtotime($message['received'])), // time,
+											$attach, // attachements
+											0,
+											0
+									);
+								}
+							}
+						}
+						
+						$mailbox->deleteMessages((int)$message['uid']);
+		
+					}
+					//echo $message['text']."<br />==========================<br />";
+				}
+			}
+			success('ready :o)');
+		}
 	}
 	
 	public static function handleEmail($data)
@@ -135,4 +289,6 @@ class MailsControl extends ConsoleControl
 	
 		return true;
 	}
+	
+	
 }
