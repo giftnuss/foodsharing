@@ -14,8 +14,14 @@ class StatsControl extends ConsoleControl
 		
 		if($fsids = $this->model->getFoodsaverIds())
 		{
+			$bar = new Console_ProgressBar('[%bar%] %percent% ETA: %estimate%', '=>', '-', 80, count($fsids));
+			
+			$i=0;
 			foreach ($fsids as $fsid)
 			{
+				$i++;
+				$bar->update($i);
+				
 				$stat_gerettet = $this->model->getGerettet($fsid);
 				$stat_fetchcount = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM '.PREFIX.'abholer WHERE foodsaver_id = '.(int)$fsid.' AND `date` < NOW()');
 				$stat_post = (int)$this->model->qOne('SELECT COUNT(id) FROM '.PREFIX.'theme_post WHERE foodsaver_id = '.(int)$fsid);
@@ -62,12 +68,12 @@ class StatsControl extends ConsoleControl
 		$count = count($betriebe);
 		$start_ts = time();
 		
+		$bar = new Console_ProgressBar('[%bar%] %percent% ETA: %estimate%', '=>', '-', 80, count($betriebe));
+		
 		foreach($betriebe as $i => $b)
 		{
-			info('calc '.$b['name'].' ('.($i+1).'/'.$count.')');
+			$bar->update($i+1);;
 			$this->calcBetrieb($b);
-			success('OK');
-			info($this->calcDuration($start_ts, ($i+1), $count));
 		}
 		
 		success('ready :o)');
