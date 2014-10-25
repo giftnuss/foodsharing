@@ -189,6 +189,7 @@ class MailsControl extends ConsoleControl
 					//echo $message['text']."<br />==========================<br />";
 				}
 			}
+			echo "\n";
 			success('ready :o)');
 		}
 	}
