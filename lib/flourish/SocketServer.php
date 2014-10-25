@@ -54,7 +54,7 @@ class SocketServer
 		success('Socket created');
 
 		// Bind the source address
-		$max_try = 5;
+		$max_try = 15;
 		while( !@socket_bind($this->sock, $this->host , $this->port))
 		{
 			$errorcode = socket_last_error();

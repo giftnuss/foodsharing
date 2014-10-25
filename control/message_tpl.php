@@ -19,7 +19,7 @@ if(getAction('neu'))
 }
 elseif($id = getActionId('delete'))
 {
-	if($db->del_message_tpl($id))
+	if(del_message_tpl($id))
 	{
 		info(s('message_tpl_deleted'));
 		goPage();
@@ -32,7 +32,7 @@ elseif($id = getActionId('edit'))
 	addBread(s('bread_message_tpl'),'?page=message_tpl');
 	addBread(s('bread_edit_message_tpl'));
 	
-	$data = $db->getOne_message_tpl($id);
+	$data = getOne_message_tpl($id);
 	setEditData($data);
 			
 	addContent(message_tpl_form());
@@ -43,14 +43,14 @@ elseif($id = getActionId('edit'))
 }
 else if(isset($_GET['id']))
 {
-	$data = $db->getOne_message_tpl($_GET['id']);	
+	$data = getOne_message_tpl($_GET['id']);	
 	print_r($data);	
 }
 else
 {
 	addBread(s('message_tpl_bread'),'?page=message_tpl');
 	
-	if($data = $db->getBasics_message_tpl())
+	if($data = getBasics_message_tpl())
 	{
 		$rows = array();
 		foreach ($data as $d)
@@ -117,7 +117,7 @@ function handle_edit()
 	global $g_data;
 	if(submitted())
 	{
-		if($db->update_message_tpl($_GET['id'],$g_data))
+		if(update_message_tpl($_GET['id'],$g_data))
 		{
 			info(s('message_tpl_edit_success'));
 			goPage();
@@ -145,5 +145,77 @@ function handle_add()
 		}
 	}
 }
-				
+
+function get_message_tpl()
+{
+	global $db;
+	$out = $db->q('
+		SELECT
+			`id`,
+			`language_id`,
+			`name`,
+			`subject`,
+			`body`
+			
+		FROM 		
+			`'.PREFIX.'message_tpl`
+		
+		ORDER BY 
+			`name`');
+
+	return $out;
+}
+	
+function getBasics_message_tpl()
+{
+	global $db;
+	return $db->q('
+			SELECT 	 	`id`,
+						`name`
+			
+			FROM 		`'.PREFIX.'message_tpl`
+			ORDER BY  	`name`');
+}
+	
+function getOne_message_tpl($id)
+{
+	global $db;
+	$out = $db->qRow('
+			SELECT
+			`id`,
+			`language_id`,
+			`name`,
+			`subject`,
+			`body`
+			
+			FROM 		`'.PREFIX.'message_tpl`
+			
+			WHERE 		`id` = ' . (int)$id);
+
+
+
+	return $out;
+}
+
+function del_message_tpl($id)
+{
+	global $db;
+	return $db->del('
+			DELETE FROM 	`'.PREFIX.'message_tpl`
+			WHERE 			`id` = '.$db->intval($id));
+}
+
+function update_message_tpl($id,$data)
+{
+	global $db;
+	return $db->update('
+		UPDATE 	`'.PREFIX.'message_tpl`
+
+		SET 	`language_id` =  '.$db->intval($data['language_id']).',
+				`name` =  '.$db->strval($data['name']).',
+				`subject` =  '.$db->strval($data['subject']).',
+				`body` =  '.$db->strval($data['body']).'
+
+		WHERE 	`id` = '.$db->intval($id));
+}			
 ?>
