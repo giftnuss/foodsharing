@@ -53,7 +53,13 @@ class MailsControl extends ConsoleControl
 		{
 			foreach ($data['attachments'] as $a)
 			{
-				$email->addAttachment(new fFile($a[0]),$a[1]);
+				$file = new fFile($a[0]);
+				
+				// only files smaller 10 MB
+				if($file->getSize() < 1310720)
+				{
+					$email->addAttachment($file,$a[1]);
+				}
 			}
 		}
 		
@@ -75,7 +81,18 @@ class MailsControl extends ConsoleControl
 			try {
 				$email->send(MailsControl::$smtp);
 				success('OK');
+				
+				// remove atachements from temp folder
+				if(!empty($data['attachments']))
+				{
+					foreach ($data['attachments'] as $a)
+					{
+						@unlink($a[0]);
+					}
+				}
+				
 				return true;
+				$sended = true;
 				break;
 			} 
 			catch (Exception $e) {

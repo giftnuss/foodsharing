@@ -75,10 +75,50 @@ function cliTime()
 	return date('Y-m-d H:i:s');
 }
 
+function qs($str)
+{
+	return $str;
+}
+
 class ConsoleControl
 {	
 	public function __construct()
 	{
 		
+	}
+	
+	public function calcDuration($start_ts,$current_item,$total_count)
+	{
+		$duration = (time() - $start_ts);
+		$duration_one = ($duration/$current_item);
+		$time_left = $duration_one * ($total_count - $current_item);
+		
+		return 'duration: '.$this->secs_to_h($duration).' time left: ' . $this->secs_to_h($time_left);
+	}
+	
+	public function secs_to_h($secs)
+	{
+        $units = array(
+                "week"   => 7*24*3600,
+                "day"    =>   24*3600,
+                "hour"   =>      3600,
+                "minute" =>        60,
+                "second" =>         1,
+        );
+
+	// specifically handle zero
+        if ( $secs == 0 ) return "0 seconds";
+
+        $s = "";
+
+        foreach ( $units as $name => $divisor ) {
+                if ( $quot = intval($secs / $divisor) ) {
+                        $s .= "$quot $name";
+                        $s .= (abs($quot) > 1 ? "s" : "") . ", ";
+                        $secs -= $quot * $divisor;
+                }
+        }
+
+        return substr($s, 0, -2);
 	}
 }

@@ -323,12 +323,18 @@ class MailboxView extends View
 		  	}
 		});
 		$("#etattach").change(function(){
-			$("#etattach-button").button( "option", "disabled", true );
-			setTimeout(function(){
-				$("#et-file-list").append("<li>"+$("#etattach-info").text()+"</li>");
-			},10);
-			$(".et-filebox form").submit();
-			
+			if(this.files[0].size < 1310720)
+			{
+				$("#etattach-button").button( "option", "disabled", true );
+				setTimeout(function(){
+					$("#et-file-list").append("<li>"+$("#etattach-info").text()+"</li>");
+				},10);
+				$(".et-filebox form").submit();
+			}
+			else
+			{
+				pulseError("'.s('file_to_big').'");
+			}
 		});
 		u_addTypeHead();
 		

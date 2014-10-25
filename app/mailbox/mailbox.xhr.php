@@ -43,7 +43,9 @@ class MailboxXhr extends Control
 	public function attach()
 	{		
 		$init = '';
-		if(isset($_FILES['etattach']['size']) && $_FILES['etattach']['size'] < 9136365 && $this->attach_allow($_FILES['etattach']['name'], $_FILES['etattach']['type']))
+		
+		// is filesize (10MB) and filetype allowed?
+		if(isset($_FILES['etattach']['size']) && $_FILES['etattach']['size'] < 1310720 && $this->attach_allow($_FILES['etattach']['name'], $_FILES['etattach']['type']))
 		{
 			$new_filename = uniqid();
 			
@@ -282,7 +284,7 @@ class MailboxXhr extends Control
 						$attach
 					);
 					
-					
+					/*
 					if(!empty($attach))
 					{
 						foreach ($attach as $a)
@@ -290,6 +292,7 @@ class MailboxXhr extends Control
 							@unlink($a['path']);
 						}
 					}
+					*/
 					
 					$to = array();
 					foreach ($an as $a)
