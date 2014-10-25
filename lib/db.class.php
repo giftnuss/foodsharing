@@ -1,36 +1,43 @@
 <?php
 class Mem
 {
-	public static $memcache;
+	public static $cache;
 	public static $connected;
 	
-	public function connect()
+	public static function connect()
 	{
-		$this->connected = true;
+		Mem::$connected = true;
+		Mem::$cache = new Memcached();
+		Mem::$cache->addServer(MEM_HOST,MEM_PORT);
 	}
 	
 	public static function set($key,$data)
 	{
-		return apc_store($key,$data,0);
+		//return apc_store($key,$data,0);
+		return Mem::$cache->set($key,$data,0);
 	}
 	
 	public static function get($key)
 	{
-		return apc_fetch($key);
+		//return apc_fetch($key);
+		return Mem::$cache->get($key);
 	}
 	
 	public static function flush()
 	{
-		apc_clear_cache('user');
+		//apc_clear_cache('user');
+		return Mem::$cache->flush();
 	}
 	
 	public static function del($key)
 	{
-		apc_delete($key);
+		//apc_delete($key);
+		return Mem::$cache->delete($key);
 	}
 	
 	public static function user($id,$key)
 	{
+		//return Mem::get('user-'.$key.'-'.$id);
 		return Mem::get('user-'.$key.'-'.$id);
 	}
 	
@@ -76,6 +83,8 @@ class Mem
 		Mem::userSet(fsId(), 'active', time());
 	}
 }
+
+Mem::connect();
 
 interface SlaveInterface
 {
