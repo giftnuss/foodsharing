@@ -97,7 +97,8 @@ class MailsControl extends ConsoleControl
 						}
 						if(empty($mboxes))
 						{
-							$mboxes = array('lost');
+							$mailbox->deleteMessages((int)$message['uid']);
+							continue;
 						}
 		
 						$mb_ids = $this->model->getMailboxIds($mboxes);
