@@ -390,6 +390,10 @@ class fMailbox
 	 */
 	static private function iconv($in_charset, $out_charset, $string)
 	{
+		if($in_charset == 'x-unknown')
+		{
+			return $string;
+		}
 		return iconv($in_charset, $out_charset, $string);
 	}
 	
