@@ -1723,6 +1723,10 @@ function v_form_textarea($id,$option = array())
 	{
 		$ph = ' placeholder="'.$option['placeholder'].'"';
 	}
+	elseif (isset($option['maxlength']))
+	{
+		$ph = ' placeholder="maximal '.$option['maxlength'].' Zeichen..."';
+	}
 	
 	return v_input_wrapper(
 			$label, 

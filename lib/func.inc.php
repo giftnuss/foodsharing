@@ -3095,6 +3095,11 @@ function tt($str,$length = 160)
 	return $str;
 }
 
+function avatar($foodsaver,$size = 'mini')
+{
+	return '<span style="background-image:url(\''.img($foodsaver['photo'],$size).'\');" class="avatar size-'.$size.' sleepmode-'.$foodsaver['sleep_status'].'"><i></i></span>';
+}
+
 function rolleWrapInt($roleInt)
 {
 	$roles = array(

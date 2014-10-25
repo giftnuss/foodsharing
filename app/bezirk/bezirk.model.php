@@ -491,10 +491,27 @@ class BezirkModel extends Model
 			WHERE 	c.`foodsaver_id` = fs.id
 			AND 	c.bezirk_id = '.(int)$id.'
 			AND 	c.active = 1
-				
+			AND 	fs.sleep_status = 0
+								
 			ORDER BY fs.`name`
 		');
 		
+		$bezirk['sleeper'] = $this->q('
+			SELECT 	fs.`id`,
+					fs.`photo`,
+					fs.`name`,
+					fs.`nachname`
+		
+			FROM 	`'.PREFIX.'foodsaver` fs,
+					`'.PREFIX.'foodsaver_has_bezirk` c
+		
+			WHERE 	c.`foodsaver_id` = fs.id
+			AND 	c.bezirk_id = '.(int)$id.'
+			AND 	c.active = 1
+			AND 	fs.sleep_status > 0
+		
+			ORDER BY fs.`name`
+		');
 		
 		$bezirk['fs_count'] = count($bezirk['foodsaver']);
 		

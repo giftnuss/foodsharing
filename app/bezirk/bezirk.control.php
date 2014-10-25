@@ -152,9 +152,17 @@ class BezirkControl extends Control
 		);
 			
 		addContent(
-			v_field($this->view->fsAvatarList($bezirk['foodsaver']), count($bezirk['foodsaver']).' Foodsaver in '.$bezirk['name']),
+			v_field($this->view->fsAvatarList($bezirk['foodsaver']), count($bezirk['foodsaver']).' aktive Foodsaver in '.$bezirk['name']),
 			CNT_LEFT
 		);
+		
+		if($this->bezirk['sleeper'])
+		{
+			addContent(
+			v_field($this->view->fsAvatarList($bezirk['sleeper']), count($bezirk['sleeper']).' Schlafmützen in '.$bezirk['name']),
+			CNT_LEFT
+			);
+		}
 			
 			
 		addContent(
@@ -202,10 +210,17 @@ class BezirkControl extends Control
 		addContent($this->view->menu($menu,array('active'=>$this->getSub())),CNT_LEFT);
 			
 		addContent(
-			v_field($this->view->fsAvatarList($bezirk['foodsaver'],array('shuffle' => false)), count($bezirk['foodsaver']).' Mitglieder'),
+			v_field($this->view->fsAvatarList($bezirk['foodsaver'],array('shuffle' => false)), count($bezirk['foodsaver']).' aktive Mitglieder'),
 			CNT_LEFT
 		);
 			
+		if($this->bezirk['sleeper'])
+		{
+			addContent(
+			v_field($this->view->fsAvatarList($bezirk['sleeper']), count($bezirk['sleeper']).' Schlafmützen in '.$bezirk['name']),
+			CNT_LEFT
+			);
+		}
 			
 		addContent(
 			$this->view->signout($this->bezirk),

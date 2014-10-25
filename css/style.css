@@ -1,3 +1,29 @@
+.avatar, .avatar > i
+{
+	display:inline-block;
+	background-repeat: no-repeat;
+	background-position: center;
+	margin:0;
+	padding:0;
+}
+.avatar.size-mini, .avatar.size-mini i
+{
+	width:35px;
+	height:35px;
+}
+.avatar.size-130, .avatar.size-130 i
+{
+	width:130px;
+	height:130px;
+}
+.avatar.size-mini.sleepmode-1 i, .avatar.size-mini.sleepmode-2 i
+{
+	background-image: url(/img/sleep35x35.png);
+}
+.avatar.size-130.sleepmode-1 i, .avatar.size-130.sleepmode-2 i
+{
+	background-image: url(/img/sleep130x130.png);
+}
 .red, .red a
 {
 	color:#E74955;
@@ -700,7 +726,7 @@ ul.team li a:hover .infos .item
 {
 	color:#FFFFFF;
 }
-ul.team li a img
+ul.team li a .avatar
 {
 	float:left;
 	margin-right:8px;

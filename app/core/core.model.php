@@ -281,6 +281,23 @@ class Model extends ManualDb
  		return false;
  	}
  	
+ 	public function updateSleepMode($status,$from,$to,$msg)
+ 	{
+ 		return $this->update('
+ 			UPDATE 
+ 				'.PREFIX.'foodsaver 
+ 				
+ 			SET	
+ 				`sleep_status` = '.(int)$status.',
+ 				`sleep_from` = '.$this->dateval($from).',
+ 				`sleep_until` = '.$this->dateval($to).',
+ 				`sleep_msg` = '.$this->strval($msg).'
+
+ 			WHERE 
+ 				id = '.(int)fsId().'
+ 		');
+ 	}
+ 	
  	public function message($recip_id, $foodsaver_id, $message, $unread = 1)
  	{
  		$recd = 0;

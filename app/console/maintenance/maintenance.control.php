@@ -8,7 +8,7 @@ class MaintenanceControl extends ConsoleControl
 		$this->model = new MaintenanceModel();
 	}
 	
-	public function index()
+	public function daily()
 	{
 		/*
 		 * update bezirk ids
@@ -31,7 +31,6 @@ class MaintenanceControl extends ConsoleControl
 		 */
 		$this->deleteImages();
 		
-		
 		/*
 		 * delete unconfirmed betrieb dates in the past
 		 */
@@ -43,16 +42,90 @@ class MaintenanceControl extends ConsoleControl
 		$this->deactivateBaskets();
 		
 		/*
-		 * some updates for new user management
-		 */
-		$this->model->updateRolle();
-		
-		/*
 		 * Master Bezirk Update
 		 * 
 		 * we have master bezirk that mean any user hierarchical under this bezirk have to be also in master self
 		 */
 		$this->masterBezirkUpdate();
+		
+		/*
+		 * check inactive users and send wake up emails or set in sleeping mode
+		 */
+		//$this->sleepingMode();
+		
+	}
+	
+	public function hourly()
+	{
+		/*
+		 * some updates for new user management
+		*/
+		$this->model->updateRolle();
+	}
+	
+	public function test()
+	{
+		$this->model->update('UPDATE fs_foodsaver SET sleep_status = 0');
+		$this->sleepingMode();
+	}
+	
+	private function sleepingMode()
+	{
+		/*
+		 * get foodsaver more than 30 days inactive set to sleeping mode and send email
+		 */
+		
+		info('sleeping mode');
+		
+		$inactive_fsids = array();
+		if($foodsaver = $this->model->listFoodsaverInactiveSince(30))
+		{
+			foreach ($foodsaver as $fs)
+			{
+				$inactive_fsids[$fs['id']] = $fs['id'];
+				$this->tplMail(27, $fs['email'],array(
+					'name' => $fs['name'],
+					'anrede' => s('anrede_'.$fs['geschlecht'])
+				));
+				
+				$this->infoToBotsUserDeactivated($fs);
+			}
+			$this->model->setFoodsaverInactive($inactive_fsids);
+			
+			info(count($inactive_fsids).' user going to sleep..');
+		}
+		
+		/*
+		 * get all foodasver theyre dont login since 14 days and send an wake up email
+		 */
+		if($foodsaver = $this->model->listFoodsaverInactiveSince(14))
+		{
+			foreach ($foodsaver as $fs)
+			{
+				$this->tplMail(26, $fs['email'],array(
+					'name' => $fs['name'],
+					'anrede' => s('anrede_'.$fs['geschlecht'])
+				));
+			}
+			
+			info(count($foodsaver).' get an wakeup email..');
+		}		
+	}
+	
+	private function infoToBotsUserDeactivated($foodsaver)
+	{
+		if($botschafer = $this->model->getUserBotschafter($foodsaver['id']))
+		{			
+			$this->model->addBell(
+				$botschafer,
+				'fs_sleepmode_title',
+				'fs_sleepmode',
+				'fa fa-user',
+				array('href' => '#','onclick' => 'profile('.$foodsaver['id'].');return false;'),
+				array('name' => $foodsaver['name'],'nachname' => $foodsaver['nachname'],'id' => $foodsaver['id']),
+				'fs-sleep'.(int)$foodsaver['id']
+			);
+		}
 	}
 	
 	private function deactivateBaskets()

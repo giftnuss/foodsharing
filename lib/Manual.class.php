@@ -3722,7 +3722,8 @@ GROUP BY foodsaver_id'));
 				SELECT 		fs.`id`,
 							fs.photo,
 							CONCAT(fs.name," ",fs.nachname) AS name,
-							name as vorname
+							name as vorname,
+							fs.sleep_status
 		
 				FROM 		`'.PREFIX.'betrieb_team` t,
 							`'.PREFIX.'foodsaver` fs
@@ -3821,7 +3822,8 @@ GROUP BY foodsaver_id'));
 							t.`stat_fetchcount`,
 							t.`stat_first_fetch`,
 							UNIX_TIMESTAMP(t.`stat_last_fetch`) AS last_fetch,
-							UNIX_TIMESTAMP(t.`stat_add_date`) AS add_date
+							UNIX_TIMESTAMP(t.`stat_add_date`) AS add_date,
+							fs.sleep_status
 					
 	
 				FROM 		`'.PREFIX.'betrieb_team` t,
@@ -3848,7 +3850,8 @@ GROUP BY foodsaver_id'));
 							t.`stat_last_update`,
 							t.`stat_fetchcount`,
 							t.`stat_first_fetch`,
-							UNIX_TIMESTAMP(t.`stat_add_date`) AS add_date
+							UNIX_TIMESTAMP(t.`stat_add_date`) AS add_date,
+							fs.sleep_status
 	
 				FROM 		`'.PREFIX.'betrieb_team` t,
 							`'.PREFIX.'foodsaver` fs

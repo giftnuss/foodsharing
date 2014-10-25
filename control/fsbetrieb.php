@@ -1033,7 +1033,7 @@ function u_team($betrieb)
 			$out .= '
 					<li class="team fs-'.$fs['id'].'">
 						<div class="ui-corner-all'.$class.'">
-							<a href="#" onclick="'.$click.'return false;" title="#tt-tt-'.$fs['id'].'"><img class="ui-corner-all" src="'.img($fs['photo']).'" alt="'.$fs['vorname'].'" /></a>
+							<a href="#" onclick="'.$click.'return false;" title="#tt-tt-'.$fs['id'].'">'.avatar($fs).'</a>
 							<span class="infos">
 								<span class="item name"><a href="#" onclick="'.$click.'return false;" title="#tt-tt-'.$fs['id'].'"><strong>'.$fs['name'].'</strong></a> <span style="float:right">('.$fs['stat_fetchcount'].')</span></span>
 								'.$tel.'
@@ -1050,7 +1050,7 @@ function u_team($betrieb)
 			$out .= '
 					<li class="team fs-'.$fs['id'].'">
 						<a class="ui-corner-all'.$class.'" title="#tt-tt-'.$fs['id'].'" href="#" onclick="'.$click.'return false;">
-							<img class="ui-corner-all" src="'.img($fs['photo']).'" alt="'.$fs['vorname'].'" />
+							'.avatar($fs).'
 							<span class="infos">
 								<span class="item"><strong>'.$fs['name'].'</strong> <span style="float:right">('.$fs['stat_fetchcount'].')</span></span>
 								'.$tel.'

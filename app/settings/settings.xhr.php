@@ -8,6 +8,11 @@ class SettingsXhr extends Control
 		$this->view = new SettingsView();
 
 		parent::__construct();
+		
+		if(!S::may())
+		{
+			return false;
+		}
 	}
 	
 	public function changemail()
@@ -126,5 +131,52 @@ class SettingsXhr extends Control
 			'status' => 1,
 			'script' => 'pulseError("Das Passwort wahl wohl falsch, vertippt?");$("#passcheck").val("");$("#passcheck")[0].focus();'
 		);
+	}
+	
+	public function sleepmode()
+	{
+		/*
+		 * from	
+		 * until
+			msg	
+			status	2
+				
+		 */
+		
+		$from = '';
+		$to = '';
+		$msg = '';
+		$status = 0;
+		
+		$states = array(
+			0 => true, // normal available
+			1 => true, // not available for a while
+			2 => true // not available unsure how long
+		);
+		
+		if($date = $this->getPostDbDate('from'))
+		{
+			$from = $date;
+		}
+		if($date = $this->getPostDbDate('until'))
+		{
+			$until = $date;
+		}
+		if($txt = $this->getPostString('msg'))
+		{
+			$msg = $txt;
+		}
+		$xhr = new Xhr();
+		$xhr->setStatus(0);
+		if(isset($states[$_POST['status']]))
+		{
+			$status = (int)$_POST['status'];
+			
+			$this->model->updateSleepMode($status,$from,$to,$msg);
+
+			$xhr->setStatus(1);
+		}
+		
+		$xhr->send();
 	}
 }

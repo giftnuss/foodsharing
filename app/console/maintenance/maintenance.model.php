@@ -180,4 +180,53 @@ class MaintenanceModel extends ConsoleModel
 			}
 		}
 	}
+	
+	public function setFoodsaverInactive($fsids)
+	{
+		return $this->update('UPDATE '.PREFIX.'foodsaver SET sleep_status = 2 WHERE id IN('.implode(',',$fsids).')');
+	}
+	
+	public function getUserBotschafter($fsid)
+	{
+		return $this->q('
+			SELECT 
+				fs.id,
+				fs.name,
+				fs.email
+				
+			FROM 
+				'.PREFIX.'foodsaver_has_bezirk hb,
+				'.PREFIX.'botschafter b,
+				'.PREFIX.'foodsaver fs
+				
+			WHERE 
+				b.foodsaver_id = fs.id
+				
+			AND 
+				b.bezirk_id = hb.bezirk_id
+				
+			AND
+				hb.foodsaver_id = '.(int)$fsid.'
+		');
+	}
+	
+	public function listFoodsaverInactiveSince($days)
+	{
+		return $this->q('
+			SELECT 
+				`id`,
+				`name`,
+				`nachname`,
+				`email`,
+				`geschlecht`
+
+			FROM 
+				'.PREFIX.'foodsaver
+				
+			WHERE 
+				sleep_status = 0
+			AND
+				`last_login` < "'.date('Y-m-d H:i:s',( time()-(84400*$days)) ).'"
+		');
+	}
 }

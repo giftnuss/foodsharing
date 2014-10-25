@@ -20,6 +20,26 @@ class ProfileView extends View
 		$ginfo = false;
 		$infos = array();
 		$bot = array();
+		
+		if($this->foodsaver['sleep_status'] > 0)
+		{
+			$value = $this->foodsaver['name'].' zur Zeit im Schlafmützenmodus und somit nicht aktiv';
+			if($this->foodsaver['sleep_until_ts'])
+			{
+				$value = $this->foodsaver['name'].' ist bis zum '.niceDateShort($this->foodsaver['sleep_until_ts']).' unterwegs';
+			}
+			
+			if($this->foodsaver['sleep_msg'] != '')
+			{
+				$value .= '<br />'.v_info($this->foodsaver['sleep_msg']);
+			}
+			
+			$infos[] = array(
+				'name' => 'Schlafmütze',
+				'val' => $value
+			);
+		}
+		
 		if($this->foodsaver['botschafter'])
 		{
 			
@@ -233,6 +253,8 @@ class ProfileView extends View
 			);
 		}
 		
+		$photo = avatar($this->foodsaver,'130');
+		/*
 		if(!empty($this->foodsaver['photo']))
 		{
 			$photo = '<img src="'.img($this->foodsaver['photo'],130,'q').'" alt="'.$this->foodsaver['name'].' '.$this->foodsaver['nachname'].'" />';
@@ -241,7 +263,7 @@ class ProfileView extends View
 		{
 			$photo = '<img src="img/130_q_avatar.png" alt="'.$this->foodsaver['name'].' '.$this->foodsaver['nachname'].'" />';
 		}
-		
+		*/
 		if(isOrgaTeam())
 		{
 			$data = array();

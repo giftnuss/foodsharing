@@ -77,7 +77,11 @@ class ProfileModel extends Model
 					fs.stat_fetchrate,
 					fs.stat_bananacount,
 					fs.verified,
-					fs.anmeldedatum
+					fs.anmeldedatum,
+					fs.sleep_status,
+					fs.sleep_msg,
+					UNIX_TIMESTAMP(fs.sleep_from) AS sleep_from_ts,
+					UNIX_TIMESTAMP(fs.sleep_until) AS sleep_until_ts
 		
 			FROM 	'.PREFIX.'foodsaver fs
 		

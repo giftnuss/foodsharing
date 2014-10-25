@@ -372,6 +372,16 @@ class Control
   		return false;
   	}
   	
+  	public function getPostDbDate($name)
+  	{
+  		if($ts = $this->getPostDate($name))
+  		{
+  			return date('Y-m-d H:i:s',$ts);
+  		}
+  		
+  		return false;
+  	}
+  	
   	public function getPostDate($name)
   	{
   		if($date = $this->getPostString($name))

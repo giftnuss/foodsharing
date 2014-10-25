@@ -50,6 +50,13 @@ $g_lang['follow_thread_desc'] = '';
 
 $g_lang['newmail'] = 'Gib hier Deine neue E-Mail Adresse ein';
 $g_lang['passcheck'] = 'Bestätige die Änderung bitte mit Deinem Passwort';
-
-
-
+$g_lang['sleep_mode_saved'] = 'Die Einstellungen wurden gespeichert';
+$g_lang['sleeping_user'] = 'Schlafmütze';
+$g_lang['no_sleepmode'] = 'Ich bin aktiv und voll dabei';
+$g_lang['temp_sleepmode'] = 'Ich bin für eine Weile nicht verfügbar';
+$g_lang['full_sleepmode'] = 'Ich tauche erstmal auf unbestimmte Zeit ab';
+$g_lang['daterange'] = 'gebe hier an in welchem Zeitraum Du in etwa nicht zur verfügung stehst.';
+$g_lang['sleep_status'] = 'Dein aktueller Status';
+$g_lang['sleepmode'] = 'Schlafmützen-Funktion';
+$g_lang['sleepmode_info'] = 'Mit der Schlafmützen-Funktion ist es Dir möglich der Community mitzuteilen, dass Du z.Z. verreist bist oder aus anderen Gründen keine Zeit für das Retten von Lebensmitteln hast.';
+$g_lang['sleep_msg'] = 'Hier kannst Du eine kurze Nachricht hinterlassen, warum Du gerade keine Zeit hast.';

@@ -53,6 +53,9 @@ class SettingsControl extends Control
 		addContent($this->view->menu($menu,array('title'=>s('settings'),'active'=>$this->getSub())),CNT_LEFT);
 		
 		$menu = array();
+		
+		$menu[] = array('name' => s('sleeping_user'), 'href' => '?page=settings&sub=sleeping');
+		
 		$menu[] = array('name' => 'E-Mail Adresse ändern', 'click' => 'ajreq(\'changemail\');return false;');
 		
 		//$menu[] = array();
@@ -76,6 +79,18 @@ class SettingsControl extends Control
 		
 		addContent($this->view->menu($menu,array('title'=>s('account_option'),'active'=>$this->getSub())),CNT_LEFT);
 		
+	}
+	
+	public function sleeping()
+	{
+		if(submitted())
+		{
+			print_r($_POST);
+		}
+		if($sleep = $this->model->getSleepData())
+		{
+			addContent($this->view->sleepMode($sleep));
+		}
 	}
 	
 	public function upgrade()

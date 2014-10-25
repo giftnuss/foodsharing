@@ -1,6 +1,79 @@
 <?php
 class SettingsView extends View
 {
+	public function sleepMode($sleep)
+	{
+		setEditData($sleep);
+		
+		if($sleep['sleep_status'] != 1)
+		{
+			addJs('$("#daterange-wrapper").hide();');
+		}
+		
+		if($sleep['sleep_status'] == 0)
+		{
+			addJs('$("#sleep_msg-wrapper").hide();');
+		}
+		
+		addJs('
+			$("#sleep_status").change(function(){
+				var $this = $(this);
+				if($this.val() == 1)
+				{
+					$("#daterange-wrapper").show();
+				}
+				else
+				{
+					$("#daterange-wrapper").hide();
+				}
+				
+				if($this.val() > 0)
+				{
+					$("#sleep_msg-wrapper").show();
+				}
+				else
+				{
+					$("#sleep_msg-wrapper").hide();
+				}
+			});	
+			$("#sleep_msg").css("height","50px").autosize();	
+				
+			$("#schlafmtzenfunktion-form").submit(function(ev){
+				ev.preventDefault();
+				ajax.req("settings","sleepmode",{
+					method:"post",
+					data: {
+						status: $("#sleep_status").val(),
+						from: $("#daterange_from").val(),
+						until: $("#daterange_to").val(),
+						msg: $("#sleep_msg").val()
+					},
+					success: function(){
+						pulseSuccess("'.s('sleep_mode_saved').'");
+					}
+				});
+			});
+			$("#formwrapper").show();
+		');
+		
+		$out = v_quickform(s('sleepmode'), array(
+			v_info(s('sleepmode_info')),
+			v_form_select('sleep_status',array(
+				'values' => array(
+					array('id' => 0,'name' => s('no_sleepmode')),
+					array('id' => 1,'name' => s('temp_sleepmode')),
+					array('id' => 2,'name' => s('full_sleepmode'))
+				)
+			)),
+			v_form_daterange(),
+			v_form_textarea('sleep_msg',array(
+				'maxlength' => 150		
+			))
+		),array('submit' => s('save')));
+		
+		return '<div id="formwrapper" style="display:none;">'.$out.'</div>';
+	}
+	
 	public function settingsInfo($fairteiler,$threads)
 	{
 		global $g_data;
