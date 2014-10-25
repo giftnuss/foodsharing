@@ -97,7 +97,7 @@ class MailsControl extends ConsoleControl
 						}
 						if(empty($mboxes))
 						{
-							$mailbox->deleteMessages((int)$message['uid']);
+							$mailbox->deleteMessages((int)$msg['uid']);
 							continue;
 						}
 		
