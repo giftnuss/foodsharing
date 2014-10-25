@@ -1475,7 +1475,8 @@ GROUP BY foodsaver_id'));
 					fs.bezirk_id,
 					fs.rolle,
 					fs.photo,
-					fs.geschlecht
+					fs.geschlecht,
+					fs.stat_fetchweight
 
 			FROM 	`'.PREFIX.'foodsaver` fs
 				

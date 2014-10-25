@@ -667,7 +667,6 @@ function getMobileMenu()
 				<option value="/?page=lebensmittel">Lebensmittel-Typen verwalten</option>
 				<option value="/?page=content">Inhalte/Texte bearbeiten</option>
 				<option value="/?page=mailbox&a=manage">Mailboxen</option>
-				<option value="/?page=stat">Statistik-Auswertung</option>
 				<option value="/?page=message_tpl">E-Mail Vorlagen</option>
 			</optgroup>';
 	}
@@ -1379,7 +1378,6 @@ function getOrgaMenu()
 					  <li><a href="?page=lebensmittel">Lebensmittel-Typen verwalten</a></li>
 					  <li><a href="?page=content">Inhalte/Texte bearbeiten</a></li>
 					  <li><a href="?page=mailbox&a=manage">Mailboxen</a></li>
-					  <li><a href="?page=stat">Statistik-Auswertung</a></li>
 					  <li class="menu-bottom"><a class="menu-bottom" href="?page=message_tpl">E-Mail Vorlagen</a></li>
 				    </ul>
 				  </li>',
@@ -1400,7 +1398,6 @@ function getOrgaMenu()
 						<option value="?page=content">Öffentliche Webseiten</option>
 						<option value="?page=autokennzeichen">KFZ-Kennzeichen</option>
 						<option value="?page=mailbox&a=manage">Mailboxen</option>
-						<option value="?page=stat">Statistik-Auswertung</option>
 					 	<option value="?page=message_tpl">E-Mail Vorlagen</option>
 				    </optgroup>'
 		);
@@ -1971,121 +1968,6 @@ function session_init()
 		}
 	}
 	*/
-}
-
-function cronjobs()
-{
-	cronjobs_daily();
-}
-
-function cronjobs_daily($fsid = false)
-{
-	$db = loadModel('profile');
-	
-	$check = false;
-	
-	if($fsid !== false)
-	{
-		$check = true;
-	}
-	else 
-	{
-		$last = Mem::get('cronjobs_daily_date');
-		if($last != date('Y-m-d'))
-		{
-			$check = true;
-		}
-	}
-
-	if($check)
-	{
-		include_once 'lib/cronjobs.daily.php';
-	}
-}
-
-function wartung()
-{
-	$db = new ManualDb();
-	//$db->updateRolle();
-	$db->updateBezirkIds();
-	$db->del('DELETE FROM `'.PREFIX.'abholer` WHERE confirmed = 0 AND `date` < NOW()');
-	
-	/*
-	 * memcache befüllen
-	 */
-	//$db->store->flush();
-	
-	if($foodsaver = $db->q('SELECT id, infomail_message FROM '.PREFIX.'foodsaver'))
-	{
-		foreach ($foodsaver as $fs)
-		{			
-			$info = false;
-			if($fs['infomail_message'])
-			{
-				$info = true;
-			}
-			
-			Mem::userSet($fs['id'], 'infomail', $info);
-		}
-	}
-	
-	/*
-	 * alte Glocken löschen
-	 */
-	if($glocken = $db->qCol('
-		SELECT id
-		FROM `'.PREFIX.'glocke`
-		WHERE `time` <= NOW( ) - INTERVAL 7 DAY	
-	'))
-	{
-		$count1 = $db->del('
-			DELETE FROM '.PREFIX.'glocke_read
-			WHERE 	glocke_id IN('.implode(',', $glocken).')
-		');
-		$count2 = $db->del('
-			DELETE FROM '.PREFIX.'glocke
-			WHERE id IN('.implode(',', $glocken).')
-		');
-		
-		$db->sql('LOCK TABLES `'.PREFIX.'glocke` WRITE');
-		$db->sql('ALTER TABLE `'.PREFIX.'glocke` AUTO_INCREMENT = (SELECT MAX(id) FROM `'.PREFIX.'glocke`)');
-		$db->sql('UNLOCK TABLES');
-	}	
-	
-	@unlink('images/.jpg');
-	@unlink('images/.png');
-	
-	// essenkörbe die älter als 2 wochen sind deaktivieren
-	$db->update('
-		UPDATE '.PREFIX.'basket
-		SET `status` = 6 WHERE
-		DATEDIFF(NOW(), `time`) > 14
-		AND `status` = 1
-	');
-	
-	// checke ob 50x50 thumbs existieren
-	if($foodsaver = $db->q('SELECT id, photo FROM '.PREFIX.'foodsaver WHERE photo != ""'))
-	{
-		$nophoto = array();
-		foreach ($foodsaver as $fs)
-		{
-			if(file_exists('images/' . $fs['photo']))
-			{
-				if(!file_exists('images/50_q_' . $fs['photo']))
-				{
-					copy('images/' . $fs['photo'], 'images/50_q_' . $fs['photo']);
-					$photo = new fImage('images/50_q_' . $fs['photo']);
-					$photo->cropToRatio(1, 1);
-					$photo->resize(50, 50);
-					$photo->saveChanges();
-				}
-			}
-			else
-			{
-				$nophoto[] = $fs['id'];
-			}
-		}
-	}
 }
 
 function getMessages()

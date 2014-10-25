@@ -64,7 +64,7 @@ class ProfileXhr extends Control
 			}
 			
 			$this->model->rate($fsid,$rate,$type,$message);
-			cronjobs_daily($fsid);
+
 			$comment = '';
 			if($msg = $this->model->getRateMessage($fsid))
 			{

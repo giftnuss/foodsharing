@@ -31,6 +31,35 @@ class StatsModel extends ConsoleModel
 		);
 	}
 	
+	public function getGerettet($fsid)
+	{
+		$out = 0;
+		if($res = $this->q('
+			SELECT COUNT(a.`betrieb_id`) AS anz, a.betrieb_id, b.abholmenge
+			FROM   `'.PREFIX.'abholer` a,
+			       `'.PREFIX.'betrieb` b
+			WHERE a.betrieb_id =b.id
+			AND   foodsaver_id = '.(int)$fsid.'
+			AND   a.`date` < NOW()
+			GROUP BY a.`betrieb_id`
+	
+	
+		'))
+		{
+			foreach ($res as $r)
+			{
+				$out += $this->gerettet_wrapper($r['abholmenge'])*$r['anz'];
+			}
+		}
+	
+		return $out;
+	}
+	
+	public function getFoodsaverIds()
+	{
+		return $this->qCol('SELECT id FROM '.PREFIX.'foodsaver');
+	}
+	
 	public function getLastFetchInBetrieb($bid,$fsid)
 	{
 		return $this->qOne('

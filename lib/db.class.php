@@ -940,30 +940,6 @@ class Db
 		return $ger[$id];
 	}
 	
-	public function getGerettet($fsid)
-	{
-		$out = 0;
-		if($res = $this->q('
-			SELECT COUNT(a.`betrieb_id`) AS anz, a.betrieb_id, b.abholmenge
-			FROM   `'.PREFIX.'abholer` a,
-			       `'.PREFIX.'betrieb` b
-			WHERE a.betrieb_id =b.id
-			AND   foodsaver_id = '.(int)$fsid.'
-			AND   a.`date` < NOW()
-			GROUP BY a.`betrieb_id`
-	
-		
-		'))
-		{
-			foreach ($res as $r)
-			{
-				$out += $this->gerettet_wrapper($r['abholmenge'])*$r['anz'];
-			}
-		}
-	
-		return $out;
-	}
-	
 	public function checkClient($email,$pass = false)
 	{
 		$email = $this->safe($email);
@@ -1368,29 +1344,6 @@ class Db
 		');
 	}
 	
-	public function updateBezirkIds()
-	{
-		$foodsaver = $this->q('SELECT `bezirk_id`, `id` FROM `'.PREFIX.'foodsaver` WHERE `bezirk_id` != 0');
-	
-		$query = array();
-	
-		foreach ($foodsaver as $fs)
-		{
-			$query[] = '('.$fs['id'].','.$fs['bezirk_id'].',1)';
-		}
-	
-		$this->sql('
-			REPLACE INTO `'.PREFIX.'foodsaver_has_bezirk`
-			(
-				`foodsaver_id`,
-				`bezirk_id`,
-				`active`
-			)
-			VALUES
-			'.implode(',', $query).'
-		');
-	}
-	
 	/**
 	 * set option is an key value store each var is avalable in the user session
 	 * 
@@ -1408,66 +1361,4 @@ class Db
 		$options[$key] = $val;
 		$this->update('UPDATE '.PREFIX.'foodsaver SET option = '.$this->strval(serialize($options)).' WHERE id = '.(int)fsId());
  	}
-
-	public function updateRolle()
-	{
-	
-		if($botschafter = $this->q('SELECT DISTINCT foodsaver_id FROM `'.PREFIX.'botschafter` '))
-		{
-			debug(count($botschafter).' Botschafter');
-			$foodsaver = $this->q('
-				SELECT DISTINCT bot.foodsaver_id 
-				
-				FROM 
-				    `'.PREFIX.'botschafter` bot,
-				    `'.PREFIX.'bezirk` b
-				
-				WHERE
-				    bot.bezirk_id = b.id
-				
-				AND
-				    b.`type` != 7
-					
-			');
-			$botsch = array();
-				
-			foreach ($botschafter as $b)
-			{
-				$botsch[$b['foodsaver_id']] = $b['foodsaver_id'];
-			}
-				
-			if(!empty($botsch))
-			{
-				$count = $this->update('
-					UPDATE `'.PREFIX.'foodsaver` 
-						
-					SET 
-						`rolle` = 3 
-						
-					WHERE
-						`rolle` < 3
-						
-					AND  
-						`id` IN('.implode(',', $botsch).')
-				');
-				debug($count.' botsch');
-			}
-				
-			$nomore = array();
-			foreach ($foodsaver as $fs)
-			{
-				if(!isset($botsch[$fs['id']]))
-				{
-					$nomore[] = $fs['id'];
-				}
-			}
-			if(!empty($nomore))
-			{
-				$count = $this->update('
-					UPDATE `'.PREFIX.'foodsaver` SET `rolle` = 1 WHERE `id` IN('.implode(',', $nomore).')
-				');
-				debug($count.' nomore');
-			}
-		}
-	}
 }

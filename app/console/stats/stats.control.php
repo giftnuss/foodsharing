@@ -8,6 +8,51 @@ class StatsControl extends ConsoleControl
 		$this->model = new StatsModel();
 	}
 	
+	public function foodsaver()
+	{
+		info('Statistik Auswertung für Foodsaver');
+		
+		if($fsids = $this->model->getFoodsaverIds())
+		{
+			foreach ($fsids as $fsid)
+			{
+				$stat_gerettet = $this->model->getGerettet($fsid);
+				$stat_fetchcount = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM '.PREFIX.'abholer WHERE foodsaver_id = '.(int)$fsid.' AND `date` < NOW()');
+				$stat_post = (int)$this->model->qOne('SELECT COUNT(id) FROM '.PREFIX.'theme_post WHERE foodsaver_id = '.(int)$fsid);
+				$stat_post += (int)$this->model->qOne('SELECT COUNT(id) FROM '.PREFIX.'wallpost WHERE foodsaver_id = '.(int)$fsid);
+				$stat_post += (int)$this->model->qOne('SELECT COUNT(id) FROM '.PREFIX.'betrieb_notiz WHERE foodsaver_id = '.(int)$fsid);
+		
+				$stat_bananacount = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM '.PREFIX.'rating WHERE `ratingtype` = 2 AND foodsaver_id = '.(int)$fsid);
+		
+				$stat_buddycount = (int)$this->model->qone('SELECT COUNT(foodsaver_id) FROM '.PREFIX.'buddy WHERE foodsaver_id = '.(int)$fsid.' AND confirmed = 1');
+		
+				$stat_fetchrate = 100;
+		
+				$count_not_fetch = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM '.PREFIX.'rating WHERE `ratingtype` = 3 AND foodsaver_id = '.(int)$fsid);
+		
+				if($count_not_fetch > 0 && $stat_fetchcount >= $count_not_fetch)
+				{
+					$stat_fetchrate =  round(100-($count_not_fetch / ($stat_fetchcount/100)),2);
+				}
+		
+				$this->model->update('
+						UPDATE '.PREFIX.'foodsaver
+		
+						SET 	stat_fetchweight = '.$this->model->floatval($stat_gerettet).',
+						stat_fetchcount = '.$this->model->intval($stat_fetchcount).',
+						stat_postcount = '.$this->model->intval($stat_post).',
+						stat_buddycount = '.$this->model->intval($stat_buddycount).',
+						stat_bananacount = '.$this->model->intval($stat_bananacount).',
+						stat_fetchrate = '.$this->model->floatval($stat_fetchrate).'
+		
+						WHERE 	id = '.$this->model->intval($fsid).'
+				');
+			}
+		}
+		
+		success('OK');
+	}
+	
 	public function betriebe()
 	{
 		info('Statistik Auswertung für Betriebe');

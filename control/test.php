@@ -1,6 +1,5 @@
 <?php
 //makeToken();
-//wartung();
 //badmail();
 
 function badmail()

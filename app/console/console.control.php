@@ -122,3 +122,31 @@ class ConsoleControl
         return substr($s, 0, -2);
 	}
 }
+
+function rolleWrapInt($roleInt)
+{
+	$roles = array(
+		0 => 'user',
+		1 => 'fs',
+		2 => 'bieb',
+		3 => 'bot',
+		4 => 'orga',
+		5 => 'admin'
+	);
+
+	return $roles[$roleInt];
+}
+
+function rolleWrap($roleStr)
+{
+	$roles = array(
+		'user' => 0,
+		'fs' => 1,
+		'bieb' => 2,
+		'bot' => 3,
+		'orga' => 4,
+		'admin' => 5
+	);
+
+	return $roles[$roleStr];
+}

@@ -319,7 +319,7 @@ else
 		$me['geschlecht'] = 0;
 	}
 	
-	$gerettet = $db->getGerettet(fsId());
+	$gerettet = $me['stat_fetchweight'];
 	
 	if($gerettet > 0)
 	{

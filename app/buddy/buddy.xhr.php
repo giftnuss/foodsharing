@@ -15,8 +15,7 @@ class BuddyXhr extends Control
 		if($this->model->buddyRequestedMe($_GET['id']))
 		{
 			$this->model->confirmBuddy($_GET['id']);
-			cronjobs_daily($_GET['id']);
-			cronjobs_daily(fsId());
+
 			return array(
 					'status' => 1,
 					'script' => '$(".buddyRequest").remove();pulseInfo("Jetzt kennt ihr euch!");init_infos();'
