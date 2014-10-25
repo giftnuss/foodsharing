@@ -31,6 +31,12 @@ class MaintenanceControl extends ConsoleControl
 		 */
 		$this->deleteImages();
 		
+		
+		/*
+		 * delete unconfirmed betrieb dates in the past
+		 */
+		$this->deleteUnconformedFetchDates();
+		
 		/*
 		 * deactivate too old food baskets
 		 */
@@ -62,6 +68,13 @@ class MaintenanceControl extends ConsoleControl
 			$this->model->deleteBells($ids);	
 			info(count($ids).' old bells deleted');		
 		}
+	}
+	
+	private function deleteUnconformedFetchDates()
+	{
+		info('delete unfonfirmed fetchdates...');
+		$count = $this->model->deleteUnconformedFetchDates();
+		success($count.' deleted');
 	}
 	
 	private function deleteImages()
