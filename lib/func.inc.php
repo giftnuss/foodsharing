@@ -1147,7 +1147,7 @@ function tplMailList($tpl_id, $to, $from = false,$attach = false)
 	
 	$tpl_message = $db->getOne_message_tpl($tpl_id);
 	
-	$slave = new SlaveDb();
+	$socket = new SocketClient();
 	
 	foreach ($to as $t)
 	{	
@@ -1156,7 +1156,7 @@ function tplMailList($tpl_id, $to, $from = false,$attach = false)
 			continue;
 		}
 		
-		$mail = new SlaveMail();
+		$mail = new SocketMail();
 		$mail->setFrom($from['email'], $from['email_name']);
 
 		
@@ -1211,10 +1211,11 @@ function tplMailList($tpl_id, $to, $from = false,$attach = false)
 			}
 		}
 		
-		$slave->addJob($mail);
+		$socket->queue($mail);
 	}
 	
-	$slave->send();
+	$socket->send();
+	$socket->close();
 }
 
 function autolink($str, $attributes=array()) {
@@ -1296,7 +1297,7 @@ function emailBodyTpl($message, $email = false, $token = false)
 function tplMail($tpl_id,$to,$var = array(),$from_bezirk_id = false,$from_email = false)
 {
 	global $db;
-	$mail = new SlaveMail();
+	$mail = new SocketMail();
 	
 	if(!is_object($db))
 	{
@@ -1340,11 +1341,11 @@ function tplMail($tpl_id,$to,$var = array(),$from_bezirk_id = false,$from_email 
 	
 	$mail->addRecipient($to);
 	
-	$slave = new SlaveDb();
-	$slave->addJob($mail);
-	$slave->send();
+	$socket = new SocketClient();
+	$socket->queue($mail);
 	
-	
+	$socket->send();
+	$socket->close();
 	
 	//return libmail($from, $to, $message['subject'], $message['body']);
 	
@@ -2555,7 +2556,7 @@ function libmail($bezirk, $email, $subject, $message, $attach = false, $token = 
 
 	
 	
-	$mail = new SlaveMail();
+	$mail = new SocketMail();
 	$mail->setFrom($bezirk['email'], $bezirk['email_name']);
 	$mail->addRecipient($email);
 	$mail->setSubject($subject);
@@ -2575,9 +2576,11 @@ function libmail($bezirk, $email, $subject, $message, $attach = false, $token = 
 		}
 	}
 	
-	$slave = new SlaveDb();
-	$slave->addJob($mail);
-	$slave->send();
+	$socket = new SocketClient();
+	$socket->queue($mail);
+
+	$socket->send();
+	$socket->close();
 }
 
 function mailMessage($sender_id,$recip_id,$msg=NULL)

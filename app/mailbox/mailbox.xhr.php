@@ -619,7 +619,7 @@ class MailboxXhr extends Control
 			$from_name = $from['name'];
 		}
 	
-		$mail = new SlaveMail();
+		$mail = new SocketMail();
 		
 		$mail->setFrom($from_email,$from_name);
 
@@ -658,11 +658,11 @@ class MailboxXhr extends Control
 			}
 		}
 	
-		$db = new SlaveDb();
-		$db->addJob($mail);
-		$db->send();
-		
-		return true;
+		$socket = new SocketClient();
+		$socket->queue($mail);
+		$socket->connect();
+		$socket->send();
+		$socket->close();
 	}
 	
 	public function attach_allow($filename,$mime)
