@@ -193,7 +193,7 @@ class MailsControl extends ConsoleControl
 		}
 	}
 	
-	public function attach_allow($filename,$mime)
+	private function attach_allow($filename,$mime)
 	{
 		if(strlen($filename) < 300)
 		{
