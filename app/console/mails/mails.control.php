@@ -49,6 +49,14 @@ class MailsControl extends ConsoleControl
 		$email->setHTMLBody($data['html']);
 		$email->setBody($data['body']);
 		
+		if(!empty($data['attachments']))
+		{
+			foreach ($data['attachments'] as $a)
+			{
+				$email->addAttachment(new fFile($a[0]),$a[1]);
+			}
+		}
+		
 		foreach ($data['recipients'] as $r)
 		{
 			$email->addRecipient($r[0],$r[1]);
