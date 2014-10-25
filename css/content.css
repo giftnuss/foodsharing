@@ -218,7 +218,7 @@ p
 	border-radius:6px; /* CSS3 */
 }
 input.hasDatepicker {
-    background-image: url(img/cal.png);
+    background-image: url(/img/cal.png);
     background-position: 175px 3px;
     background-repeat: no-repeat;
     cursor: pointer !important;

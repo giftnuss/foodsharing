@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ <html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+
+	<!-- BEGIN head -->
+	<head>
+
+		<!-- Title -->
+		<title></title>
+
+		<!-- Meta Tags -->
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="Ziel ist es die Lebensmittelverschwendung durch ein intelligentes, effizientes und lokales System zu beenden." />		
+		<!-- Favicon -->
+		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
+		<!-- Stylesheets -->
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=McLaren" type="text/css" />
+		<link rel="stylesheet" href="/css/style.css?v=0.1" type="text/css" />
+
+		<style type="text/css">@import url(/css/normale_browser.css) all;</style>
+
+		<!--[if IE]>
+		    <style type="text/css">@import url(/css/ie.css);</style>
+		<![endif]-->
+		
+		<!-- Addition HEadstuff -->
+				
+		<!-- JavaScripts -->
+		<script type="text/javascript">
+		  var _gaq = _gaq || [];  _gaq.push(['_setAccount', 'UA-43313114-1']);  _gaq.push(['_setDomainName', 'lebensmittelretten.de']);  _gaq.push(['_trackPageview']); (function() {var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);  })();
+		</script>
+		<script type="text/javascript" src="/js/jquery-1.8.2.min.js"></script> 
+				<script type="text/javascript" src="/js/script.js?v=0.0.2"></script>
+		
+		<!-- Additionas JS -->
+		
+		<script type="text/javascript">
+		//<![CDATA[
+			$(document).ready(function(){
+				
+			$.getJSON("http://www.geoplugin.net/json.gp?ip=89.0.239.23&jsoncallback=?", function(data) {
+			    if(data.geoplugin_status != undefined && data.geoplugin_status >= 200 && data.geoplugin_status < 300)
+				{
+					$.getJSON("http://www.geoplugin.net/extras/postalcode.gp?lat="+data.geoplugin_latitude+"&long="+data.geoplugin_longitude+"&format=json&jsoncallback=?", function(plz){
+						if(plz.geoplugin_place != undefined)
+						{
+							$.ajax({
+								url: "/freiwillige/xhr.php?f=geoip",
+								data: {
+									lat: data.geoplugin_latitude,
+									lon: data.geoplugin_longitude,
+									region: data.geoplugin_region,
+									city: plz.geoplugin_place,
+									plz: plz.geoplugin_postCode
+								}
+							});
+						}
+					});
+				}
+			});
+				
+			
+		
+			});
+		//]]>
+		</script>	<!-- END head -->
+	</head>
+
+	<!-- BEGIN body -->
+	<body class="top">
+				<!-- BEGIN .main-logo -->
+		<div class="main-logo">
+			<a href="/"><img src="/images/logo.png" alt="Lebensmittelretten.de" /></a>
+			
+		</div>
+
+		<!-- BEGIN .main-body-wrapper -->
+		<div class="main-body-wrapper">
+
+			<!-- BEGIN .main-content-wrapper -->
+			<div class="main-content-wrapper">
+
+				<!-- BEGIN .main-content -->
+				<div class="main-content">
+
+					<!-- BEGIN .main-menu -->
+					<div class="main-menu custom-font-1">
+						<table>
+							<tr>
+								<td>
+									<ul>
+										<li><a href="/ueber-uns"><span>über uns</span></a>
+											<ul>
+												<li><a href="/partner">Partner</a></li>
+												<li><a href="/statistik">Statistik</a></li>
+												<li><a href="/faq">FAQ</a></li>
+											</ul>
+										</li>
+										<li><a href="/map">Karte</a></li>
+										<li><a href="/blog">News</a></li>
+										<li>
+											<a href="/botschafter">Botschafter</a><!-- 
+											<ul>
+												<li><a href="#">Baden-Württemberg</a></li>
+												<li><a href="#">Bayern </a></li>
+												<li><a href="#">Berlin</a></li>
+												<li><a href="#">Brandenburg</a></li>
+												<li><a href="#">Bremen Bremen</a></li>
+												<li><a href="#">Hamburg</a></li>
+												<li><a href="#">Hessen</a></li>
+												<li><a href="#">Mecklenburg-Vorpommern</a></li>
+												<li><a href="#">Niedersachsen</a></li>
+												<li><a href="#">Nordrhein-Westfalen</a></li>
+												<li><a href="#">Rheinland-Pfalz</a></li>
+												<li><a href="#">Saarland Saarland </a></li>
+												<li><a href="#">Sachsen</a></li>
+												<li><a href="#">Sachsen-Anhalt</a></li>
+												<li><a href="#">Schleswig-Holstein</a></li>
+												<li><a href="#">Thüringen</a></li>
+											</ul>
+										--></li>
+										<li>
+											<a href="/fuer-unternehmen"><span>F&uuml;r Unternehmen</span></a>
+											<ul>
+												<li><a href="/tips">Tips</a></li>
+												<li><a href="/vorteile">Vorteile</a></li>
+												<li><a href="/erfolgsgeschichten">Erfolgsgeschichten</a></li>
+											</ul>
+										</li>
+										<li><a href="/mach-mit">Mach Mit</a></li><li class="xlogin"><a href="#"><span>Login</span></a><ul class="ylogin"><li><form id="login-form" action=""><div style="display:none;" class="xhr-in-error">Sorry, Zugangsdaten sind falsch!</div><input value="E-Mail Adresse" onblur="if(this.value==''){this.value='E-Mail Adresse'}" onclick="if(this.value=='E-Mail Adresse'){this.value='';}" onfocus="if(this.value=='E-Mail Adresse'){this.value='';}" name="email" type="text" class="input in-email in-real" /><input onblur="if(this.value==''){$(this).hide();$('#pass-dummy').show();}" name="pass" type="password" class="input in-passwd in-real" id="pass-real" /><input onclick="$('#pass-real').show();$('#pass-dummy').hide();$('#pass-real').focus();" onfocus="$('#pass-real').show();$('#pass-dummy').hide();$('#pass-real').focus();" style="display:none" value="Passwort" name="pass-dummy" id="pass-dummy" type="text" class="input in-passwd" /><input type="submit" value="" class="submit in-real" /></form><span class="passwordForget"><a href="?p=passwordReset">Passwort vergessen?</a></span></li></ul></li>									</ul>
+								</td>
+							</tr>
+						</table>
+						<div class="clear"></div>
+					<!-- END .main-menu -->
+					</div>
+
+					<div style="height:100px;"></div>
+<div class="error custom-font-1">
+	<div>
+		<p><span>Oooops!</span></p>
+		<p>Diese Seite existiert (noch) nicht!</p>
+	</div>
+</div>
+<div style="height:100px;"></div>
+					<div class="clear"></div>
+
+					<div class="main-footer custom-font-1">
+						<p>Eine Initiative von <a href="http://www.foodsharing.de" target="_blank">foodsharing e.V.</a></p>
+						<div>
+							<a href="#"><img src="/images/ico-youtube-1.png" alt="YouTube" width="23" height="21" /></a>
+							<a href="https://www.facebook.com/lebensmittelretten.de" target="_blank"><img src="/images/ico-facebook-1.png" alt="Facebook" width="23" height="21" /></a>
+							<a href="#"><img src="/images/ico-twitter-2.png" alt="Facebook" width="23" height="21" /></a>
+							<a href="#"><img src="/images/ico-rss-1.png" alt="Facebook" width="23" height="21" /></a>
+						</div>
+					</div>
+					
+				<!-- END .main-content -->
+				</div>
+				<div class="sub-foot"></div>
+			<!-- END .main-content-wrapper -->
+			</div>
+
+
+		<!-- END .main-body-wrapper -->
+		</div>
+		
+		<div class="sub-footer">
+			<div class="inner">
+				<div class="left">
+					<div class="partner" style="margin-left:0;">
+						<h4>Vielen Dank an unseren &Ouml;KO-Server-Hoster von</h4>
+						<a style="display:block;border-radius:4px;background-color:#ffffff;padding:10px;width:130px;text-align:center;" href="http://www.manitu.de" target="_blank" title="MANITU - Menschlich einfach besser"><img src="http://www.manitu.de/images/content/pages/company/press/manitu_logo.png"  alt="GREENSTA &Ouml;KO Webhosting - Klimafreundliches Webhosting, Garantiert 100% &Ouml;kostrom" /></a> 
+					</div>
+				</div>
+				<div class="middle">
+					
+				</div>
+				<div class="right">
+				
+				<div class="partner">
+					<h4>Vielen Dank an unseren &Ouml;KO-Webserver von</h4>
+					<a href="http://www.greensta.de" target="_blank" title="GREENSTA &Ouml;KO Webhosting - Klimafreundliches Webhosting, Garantiert 100% &Ouml;kostrom"><img src="/images/greensta150.png"  alt="GREENSTA &Ouml;KO Webhosting - Klimafreundliches Webhosting, Garantiert 100% &Ouml;kostrom" /></a> 
+				</div>
+				
+				
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+		</div>
+		<div class="second-footer">
+			<div class="inner">
+				<ul class="footer-secondary__copyright">
+			      <li><a href="/impressum">Impressum</a></li>
+			      <li><a href="/ueber-uns">Über Uns</a></li>
+			     <li><a href="/passwordReset">Passwort ändern</a></li>
+			    </ul>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+		var _urq = _urq || [];
+		_urq.push(['initSite', 'a1546919-b70f-4016-ae1d-0cda0cb44c3c']);
+		(function() {
+		var ur = document.createElement('script'); ur.type = 'text/javascript'; ur.async = true;
+		ur.src = 'http://sdscdn.userreport.com/userreport.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ur, s);
+		})();
+		</script> 
+	<!-- END body -->
+	<div class="pulse-msg ui-shadow ui-corner-all" id="pulse-error" style="display:none;"></div>
+	<div class="pulse-msg ui-shadow ui-corner-all" id="pulse-info" style="display:none;"></div>
+	</body>
+
+<!-- END html -->
+</html>
