@@ -29,6 +29,11 @@ class MaintenanceModel extends ConsoleModel
 		');
 	}
 	
+	public function deleteUnconformedFetchDates()
+	{
+		return $this->del('DELETE FROM '.PREFIX.'abholer WHERE confirmed = 0 AND `date` < NOW()');
+	}
+	
 	public function listAvatars()
 	{
 		return $this->q('SELECT id, photo FROM '.PREFIX.'foodsaver WHERE photo != ""');
