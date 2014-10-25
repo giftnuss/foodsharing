@@ -660,7 +660,6 @@ class MailboxXhr extends Control
 	
 		$socket = new SocketClient();
 		$socket->queue($mail);
-		$socket->connect();
 		$socket->send();
 		$socket->close();
 	}
