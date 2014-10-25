@@ -14,7 +14,7 @@ class StatsControl extends ConsoleControl
 		
 		if($fsids = $this->model->getFoodsaverIds())
 		{
-			$bar = new Console_ProgressBar('[%bar%] %percent% ETA: %estimate%', '=>', '-', 80, count($fsids));
+			$bar = $this->progressbar(count($fsids));
 			
 			$i=0;
 			foreach ($fsids as $fsid)
@@ -68,7 +68,7 @@ class StatsControl extends ConsoleControl
 		$count = count($betriebe);
 		$start_ts = time();
 		
-		$bar = new Console_ProgressBar('[%bar%] %percent% ETA: %estimate%', '=>', '-', 80, count($betriebe));
+		$bar = $this->progressbar(count($betriebe));
 		
 		foreach($betriebe as $i => $b)
 		{
