@@ -1469,7 +1469,7 @@ div.statdisplay span.item .name
 }
 span.verified
 {
-	background-image:url(img/verify.png);
+	background-image:url(/img/verify.png);
 	display:block;
 	width:36px;
 	height:36px;
