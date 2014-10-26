@@ -84,6 +84,7 @@ class SocketClient
 		while( ! socket_send ( $this->sock , $message , strlen($message) , 0))
 		{
 			$max_try--;
+			sleep(1);
 			if($max_try == 0)
 			{
 				return false;
