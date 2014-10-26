@@ -184,6 +184,7 @@ class BezirkModel extends Model
 						fs.id AS foodsaver_id,
 						fs.name AS foodsaver_name,
 						fs.photo AS foodsaver_photo,
+						fs.sleep_status,
 						p.body AS post_body,
 						p.`time` AS post_time,
 						UNIX_TIMESTAMP(p.`time`) AS post_time_ts,

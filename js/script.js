@@ -86,6 +86,19 @@ function closeAllDialogs()
 }
 
 $(document).ready(function(){
+	
+	//$(".sleepmode-1, .sleepmode-2").append('<span class="corner-all bubble bubble-right ui-shadow"> nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus</span>');
+	
+	
+	$(".sleepmode-1, .sleepmode-2").mouseover(function(){
+		var $this = $(this);
+		$this.append('<span class="corner-all bubble bubble-right ui-shadow">'+$this.text()+' nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus</span>');
+	});
+	$(".sleepmode-1, .sleepmode-2").mouseout(function(){
+		var $this = $(this);
+		$this.children('.bubble').remove();
+	});
+	
 	$('textarea.comment').autosize();
 	 $('#nojs').css('display','none');
 	 $('#main').css('display','block');

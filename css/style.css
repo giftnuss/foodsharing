@@ -6,6 +6,12 @@
 	margin:0;
 	padding:0;
 }
+.avatar i
+{
+	text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
 .avatar.size-mini, .avatar.size-mini i
 {
 	width:35px;
@@ -54,6 +60,39 @@
 .avatar.sleepmode-1, .avatar.sleepmode-2
 {
 	
+}
+.bubble
+{
+	background-color: #FFFFFF !important;
+	padding:8px !important;
+	position: absolute !important;
+	width:250px !important;
+	color:#4A3520 !important;
+	font-size:13px !important;
+	font-weight:bold !important;
+}
+.bubble-right:after
+{
+	border-color: transparent #ffffff !important;
+    border-style: solid !important;
+    border-width: 7px 7px 7px 0 !important;
+    content: "" !important;
+    display: block !important;
+    left: -7px !important;
+    position: absolute !important;
+    top: 45px;
+    width: 0 !important;
+    z-index: 1 !important;
+}
+
+.avatar .bubble
+{
+	margin-left:-5px;	
+}
+
+.avatar .bubble-right:after
+{
+	top:12px;
 }
 .xvptab-content
 {
@@ -1293,11 +1332,14 @@ div.welcome .welcome_profile_image {
 	border-radius: 6px;
     height: 50px;
     left: 10px;
-    overflow: hidden;
     position: absolute;
     width: 50px;
 }
-div.welcome .welcome_profile_image img
+div.welcome .welcome_profile_image .bubble
+{
+	display:none !important;
+}
+div.welcome .welcome_profile_image .avatar
 {
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;

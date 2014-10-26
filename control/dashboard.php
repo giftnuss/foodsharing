@@ -336,7 +336,7 @@ else
 	
 		<div class="welcome_profile_image">
 			<a href="#" onclick="profile('.(int)fsId().');return false;">
-				<img height="50" width="50" class="image_online" alt="'.$me['name'].'" src="'.img($me['photo'],'med').'">
+				'.avatar($me,50).'
 			</a>
 		</div>
 		<div class="welcome_profile_name">

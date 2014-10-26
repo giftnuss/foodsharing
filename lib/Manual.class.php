@@ -1478,7 +1478,8 @@ GROUP BY foodsaver_id'));
 					fs.rolle,
 					fs.photo,
 					fs.geschlecht,
-					fs.stat_fetchweight
+					fs.stat_fetchweight,
+					fs.sleep_status
 
 			FROM 	`'.PREFIX.'foodsaver` fs
 				
