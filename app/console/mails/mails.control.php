@@ -257,7 +257,7 @@ class MailsControl extends ConsoleControl
 		}
 		
 		// reconnect first time and force after 60 seconds inactive
-		if(MailsControl::$smtp === false || (time() - MailboxControl::$last_connect) > 60)
+		if(MailsControl::$smtp === false || (time() - MailsControl::$last_connect) > 60)
 		{
 			MailsControl::smtpReconnect();
 		}
