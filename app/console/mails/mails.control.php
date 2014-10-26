@@ -8,7 +8,7 @@ class MailsControl extends ConsoleControl
 	
 	public function __construct()
 	{
-		error_repoting(E_ALL);
+		error_reporting(E_ALL);
 		ini_set('display_errors','1');
 		MailsControl::$smtp = false;
 	}
