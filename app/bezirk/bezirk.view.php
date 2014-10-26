@@ -225,6 +225,13 @@ class BezirkView extends View
 					$delete = '<a class="button bt_delete" href="#p'.$p['id'].'">'.s('delete_post').'</a>';
 				}
 				$time = niceDate($p['time_ts']);
+				
+				$foodsaver = array(
+					'id' => $p['fs_id'],
+					'sleep_status' => $p['fs_sleep_status'],
+					'photo' => $p['fs_photo']
+				);
+				
 				$out .= '
 				<div id="tpost-'.$p['id'].'" class="'.$class.'ui-widget ui-widget-content margin-bottom ui-padding">
 					<div class="post">
@@ -234,7 +241,7 @@ class BezirkView extends View
 						<div class="forum_user_info_holder">
 							<div class="xv_left">
 								<a href="#" onclick="profile('.(int)$p['fs_id'].');return false;">
-									<img alt="'.$p['fs_name'].'" src="'.img($p['fs_photo'],130,'q').'">
+									'.avatar($foodsaver,130).'
 								</a>
 								<ul>
 									<li><a href="#" onclick="chat('.$p['fs_id'].');return false;">Nachricht schreiben</a></li>

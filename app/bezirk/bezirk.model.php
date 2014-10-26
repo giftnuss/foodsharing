@@ -226,6 +226,7 @@ class BezirkModel extends Model
 			SELECT 		fs.id AS fs_id,
 						fs.name AS fs_name,
 						fs.photo AS fs_photo,
+						fs.sleep_status AS fs_sleep_status,
 						p.body,
 						p.`time`,
 						p.id,
