@@ -2479,9 +2479,15 @@ function v_form_text($id,$option = array())
 	
 	$value = getValue($id);
 	
+	$pl = '';
+	if(isset($option['placeholder']))
+	{
+		$pl = ' placeholder="'.$option['placeholder'].'"';
+	}
+	
 	return v_input_wrapper(
 			$label, 
-			'<input class="input text value" type="text" name="'.$id.'" id="'.$id.'" value="'.$value.'" />', 
+			'<input'.$pl.' class="input text value" type="text" name="'.$id.'" id="'.$id.'" value="'.$value.'" />', 
 			$id,
 			$option
 	);
@@ -2527,7 +2533,13 @@ function v_form_passwd($id,$option = array())
 {
 	$id = id($id);
 
-	return v_input_wrapper(s($id), '<input class="input text" type="password" name="'.$id.'" id="'.$id.'" />', $id);
+	$pl = '';
+	if(isset($option['placeholder']))
+	{
+		$pl = ' placeholder="'.$option['placeholder'].'"';
+	}
+	
+	return v_input_wrapper(s($id), '<input' . $pl . ' class="input text" type="password" name="' . $id . '" id="' . $id . '" />', $id, $option);
 }
 
 

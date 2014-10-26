@@ -74,12 +74,16 @@ ul.linklist li a,
 .input-wrapper label.wrapper-label,
 .activity_feed_content_info p,
 .ur-feedback-btn,
-input, textarea, select, option,
-.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button
+input, textarea, select, option
 {
 	font-size:12px;
 	color:#4a3520;
 	line-height:1.28;
+}
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button
+{
+	line-height: normal;
+	font-size: 13px;
 }
 .activity_feed_content_info p
 {
@@ -337,7 +341,7 @@ select.v-switch {
 	display:block;
 	width:17px;
 	height:17px;
-	background-image:url(img/ampel.png);
+	background-image:url(/img/ampel.png);
 	background-repeat:no-repeat;
 	text-decoration:none;
 }

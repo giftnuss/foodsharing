@@ -70,7 +70,6 @@ function collapse_wrapper(id)
 
 function closeAllDialogs()
 {
-	
     var $activeDialogs = $(".ui-dialog").find('.ui-dialog-content');
     
     $activeDialogs.each(function(){
@@ -85,19 +84,25 @@ function closeAllDialogs()
     
 }
 
+var sleepmode = {
+	init: function()
+	{
+		$(".sleepmode-1, .sleepmode-2").mouseover(function(){
+			var $this = $(this);
+			$this.append('<span class="corner-all bubble bubble-right ui-shadow">'+$this.text()+' nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus</span>');
+		});
+		$(".sleepmode-1, .sleepmode-2").mouseout(function(){
+			var $this = $(this);
+			$this.children('.bubble').remove();
+		});
+	}
+};
+
 $(document).ready(function(){
 	
 	//$(".sleepmode-1, .sleepmode-2").append('<span class="corner-all bubble bubble-right ui-shadow"> nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus</span>');
+	sleepmode.init();
 	
-	
-	$(".sleepmode-1, .sleepmode-2").mouseover(function(){
-		var $this = $(this);
-		$this.append('<span class="corner-all bubble bubble-right ui-shadow">'+$this.text()+' nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus</span>');
-	});
-	$(".sleepmode-1, .sleepmode-2").mouseout(function(){
-		var $this = $(this);
-		$this.children('.bubble').remove();
-	});
 	
 	$('textarea.comment').autosize();
 	 $('#nojs').css('display','none');
@@ -1071,7 +1076,7 @@ function fancy(content,title,subtitle)
 
 function isMob()
 {
-	if($( window ).width() < 768)
+	if($( window ).width() < 900)
 	{
 		return true;
 	}

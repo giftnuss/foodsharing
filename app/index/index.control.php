@@ -33,11 +33,11 @@ class IndexControl extends Control
 		
 		if(!S::may())
 		{
-			addContent($this->view->login(),CNT_RIGHT);
+			addContent($this->view->login(),CNT_LEFT);
 		}
-		
+		addContent($this->view->fairteiler(),CNT_LEFT);
+		addContent($this->view->baskets(),CNT_RIGHT);
 		addContent('blubb');
-		addContent('',CNT_LEFT);
 		
 		//addContent('Hallo Foodsharing-Welt');
 	}

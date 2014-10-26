@@ -72,7 +72,7 @@ function xv_bBubble($b)
 		if($fs['verantwortlich'] == 1)
 		{
 			$verantwortlich .= '
-			<li><a class="ui-corner-all" href="#" onclick="profile('.(int)$fs['id'].');return false;"><img class="ui-corner-all" src="'.img($fs['photo']).'" /> <span class="name">'.$fs['name'].'</span><span style="clear:both;"></span></a></li>';
+			<li>'.avatar($fs,50).'</a></li>';
 		}
 	}
 	$verantwortlich .= '
@@ -96,7 +96,7 @@ function xv_bBubble($b)
 			$count_info = '<div>Bei diesem Betrieb wurde <strong>'.$fetch_times.'x</strong> abgeholt</div>';
 			
 			// gerettet_wrapper
-			$count_info .= '<div style="margin-left:22px;">Es wurden <strong>'.$fetch_weight.' Kg</strong> gerettet</div>';
+			$count_info .= '<div">Es wurden <strong>'.$fetch_weight.' Kg</strong> gerettet</div>';
 		}
 		
 	}
@@ -104,7 +104,7 @@ function xv_bBubble($b)
 	$time = strtotime($b['begin']);
 	if($time > 0)
 	{
-		$count_info .= '<div style="margin-left:22px;">Koorperation seit '.s('month_'.(int)date('m',$time)).' '.date('Y',$time).'</div>';
+		$count_info .= '<div>Koorperation seit '.s('month_'.(int)date('m',$time)).' '.date('Y',$time).'</div>';
 	}
 	
 	if((int)$b['public_time'] != 0)

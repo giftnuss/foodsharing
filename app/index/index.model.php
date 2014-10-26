@@ -29,4 +29,9 @@ class IndexModel extends Model
 				'.(int)$count.'
 		');
 	}
+	
+	public function getNewestFoodbaskets()
+	{
+		
+	}
 }

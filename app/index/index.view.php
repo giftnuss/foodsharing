@@ -2,6 +2,16 @@
 class IndexView extends View
 {
 	
+	public function fairteiler()
+	{
+		return v_field('',s('fairteiler'));
+	}
+	
+	public function baskets()
+	{
+		return v_field('',s('foodbaskets'));
+	}
+	
 	public function joinIndex()
 	{
 		

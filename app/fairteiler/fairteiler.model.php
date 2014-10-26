@@ -78,7 +78,8 @@ class FairteilerModel extends Model
 			SELECT 	fs.`id`,
 					fs.`name`,
 					fs.`nachname`,
-					fs.`email`
+					fs.`email`,
+					fs.sleep_status
 	
 			FROM 	`'.PREFIX.'fairteiler_follower` ff,
 					`'.PREFIX.'foodsaver` fs
@@ -207,7 +208,8 @@ class FairteilerModel extends Model
 					fs.`nachname`,
 					fs.`id`,
 					fs.`photo`,
-					ff.type
+					ff.type,
+					fs.sleep_status
 				
 			FROM 	'.PREFIX.'foodsaver fs,
 					'.PREFIX.'fairteiler_follower ff

@@ -36,13 +36,16 @@ class View
 		return '
 			<div id="g_login">'.v_field(
 						v_form('Login',array(
-								v_form_text('email_adress'),
-								v_form_passwd('password'),
+								v_form_text('email_adress',array('label' => false,'placeholder' => s('email_adress'))),
+								v_form_passwd('password', array('label' => false,'placeholder' => s('password'))),
 								v_form_hidden('ismob', '0').
 								'<p>
-						<a href="/?page=login&sub=passwordReset">Passwort vergessen?</a>
-					</p>'
-						),array('action' => $action)),'Login',array('class' => 'ui-padding')).'
+									<a href="/?page=login&sub=passwordReset">Passwort vergessen?</a>
+								</p>
+								<p class="buttons">
+									<input class="button" type="submit" value="'.s('login').'" name="login" /> <a href="#" onclick="ajreq(\'join\',{app:\'login\'});return false;" class="button">'.s('register').'</a>
+								</p>'
+						),array('action' => $action,'submit' => false )),'Login',array('class' => 'ui-padding')).'
 			</div>';
 	}
 	

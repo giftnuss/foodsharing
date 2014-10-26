@@ -470,21 +470,24 @@ function xhr_jsonBetriebe($data)
 
 function xhr_bBubble($data)
 {
-	global $db;
-	if($b = $db->getMyBetrieb($data['id']))
+	if(S::may('fs'))
 	{
-		$b['inTeam'] = false;
-		if($db->isInTeam($b['id']))
+		global $db;
+		if($b = $db->getMyBetrieb($data['id']))
 		{
-			$b['inTeam'] = true;
+			$b['inTeam'] = false;
+			if($db->isInTeam($b['id']))
+			{
+				$b['inTeam'] = true;
+			}
+			return json_encode(array(
+					'status' => 1,
+					'html' => xv_bBubble($b),
+					'betrieb' => array(
+							'name' => $b['name']
+					)
+			));
 		}
-		return json_encode(array(
-			'status' => 1,
-			'html' => xv_bBubble($b),
-			'betrieb' => array(
-				'name' => $b['name']
-			)
-		));
 	}
 	
 	return json_encode(array('status'=>0));

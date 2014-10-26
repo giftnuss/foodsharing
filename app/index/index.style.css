@@ -6,8 +6,8 @@
 .news-slider .text-wrapper
 {
 	margin: 0 auto;
-    max-width: 1000px;
-    padding: 18px 0 0;
+    max-width: 980px;
+    padding: 18px 10px 0 10px;
 }
 .news-slider {
   /* Style the actual content */
@@ -83,4 +83,17 @@
 .text-join
 {
 	float:right;
+}
+div#main
+{
+	margin: 25px auto 0;
+}
+#g_login
+{
+	max-width:900px !important;
+	margin:0;
+}
+#g_login .buttons
+{
+	text-align: center;
 }

@@ -284,6 +284,7 @@ function loadMarker(types,loader)
 									else if(type == 'b')
 									{
 										u_setDialogData(data);
+										sleepmode.init();
 									}
 								}
 							},

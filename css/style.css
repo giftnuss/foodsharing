@@ -59,7 +59,7 @@
 }
 .avatar.sleepmode-1, .avatar.sleepmode-2
 {
-	
+	opacity:0.6;
 }
 .bubble
 {
@@ -2111,6 +2111,7 @@ td.load
 {
 	padding:5px 10px;
 	font-size:13px;
+	line-height: normal;
 }
 .ui-button:hover, .button:hover
 {
