@@ -10,19 +10,54 @@
 {
 	width:35px;
 	height:35px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
 }
 .avatar.size-130, .avatar.size-130 i
 {
 	width:130px;
 	height:130px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
+.avatar.size-50, .avatar.size-50 i
+{
+	width:50px;
+	height:50px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
 }
 .avatar.size-mini.sleepmode-1 i, .avatar.size-mini.sleepmode-2 i
 {
 	background-image: url(/img/sleep35x35.png);
+	left: -4px;
+    position: relative;
+    top: -6px;
+}
+.avatar.size-50.sleepmode-1 i, .avatar.size-50.sleepmode-2 i
+{
+	background-image: url(/img/sleep50x50.png);
+	left: -8px;
+    position: relative;
+    top: -7px;
 }
 .avatar.size-130.sleepmode-1 i, .avatar.size-130.sleepmode-2 i
 {
 	background-image: url(/img/sleep130x130.png);
+	left: -30px;
+    position: relative;
+    top: -25px;
+}
+.avatar.sleepmode-1, .avatar.sleepmode-2
+{
+	
+}
+.xvptab-content
+{
+	height:500px;
 }
 .red, .red a
 {
@@ -1643,7 +1678,7 @@ top: auto;
 }
 span.vouch-banana span
 {
-	background-image:url(img/bananan.png);
+	background-image:url(/img/bananan.png);
 }
 a.vouch-banana:hover
 {

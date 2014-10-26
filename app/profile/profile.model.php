@@ -68,6 +68,7 @@ class ProfileModel extends Model
 					fs.`about_me_public`,
 					fs.`orgateam`,
 					fs.`data`,
+					fs.`last_login`,
 					fs.stat_fetchweight,
 					fs.stat_fetchcount,
 					fs.stat_ratecount,
@@ -80,6 +81,7 @@ class ProfileModel extends Model
 					fs.anmeldedatum,
 					fs.sleep_status,
 					fs.sleep_msg,
+					fs.sleep_until,
 					UNIX_TIMESTAMP(fs.sleep_from) AS sleep_from_ts,
 					UNIX_TIMESTAMP(fs.sleep_until) AS sleep_until_ts
 		

@@ -156,11 +156,30 @@ class ProfileView extends View
 			$opt .= '<li><a href="?page=merge&fsid='.$this->foodsaver['id'].'&rurl='.urlencode(getSelf()).'">*verwandeln*</a></li>';
 		}
 		
-		$add_date = new fDate($this->foodsaver['anmeldedatum']);
-		$topinfos[] = array(
-			'name' => 'Dabei seit',
-			'val' => $add_date->format('d.m.Y')
-		);
+		if($this->foodsaver['sleep_status'] == 0)
+		{
+			$date = new fDate($this->foodsaver['anmeldedatum']);
+			$topinfos[] = array(
+					'name' => 'Dabei seit',
+					'val' => $date->format('d.m.Y')
+			);
+		}
+		else if($this->foodsaver['sleep_until_ts'])
+		{
+			$date = new fDate($this->foodsaver['sleep_until']);
+			$topinfos[] = array(
+					'name' => 'schläft bis',
+					'val' => $date->format('d.m.Y')
+			);
+		}
+		else
+		{
+			$date = new fDate($this->foodsaver['last_login']);
+			$topinfos[] = array(
+					'name' => 'letzter Login',
+					'val' => $date->format('d.m.Y')
+			);
+		}
 		
 		$b_style = '';
 		if(!$ginfo)
@@ -328,7 +347,9 @@ class ProfileView extends View
 							</tr>
 						</table>
 						<div style="clear:both;"></div>
-						'.$this->xv_set($infos).'
+						<div class="xvmoreinfo" style="height:220px;">
+							'.$this->xv_set($infos).'
+						</div>
 						<div style="display:none">
 							<input type="hidden" name="profile-rate-id" id="profile-rate-id" value="'.$this->foodsaver['id'].'" />
 							<div class="vouch-banana-title">
@@ -347,11 +368,19 @@ class ProfileView extends View
 				</div>';
 	}
 	
-	public function xv_set($rows,$title = '')
+	public function xv_set($rows,$title = false)
 	{
+		if(!$title)
+		{
+			$title = '';
+		}
+		else
+		{
+			$title = '<h3>'.$title.'</h3>';
+		}
 		$out = '
-	<div class="xv_set">
-		<h3>'.$title.'</h3>';
+	<div id="'.id($title).'" class="xv_set">
+		'.$title;
 		foreach ($rows as $r)
 		{
 			$out .= '

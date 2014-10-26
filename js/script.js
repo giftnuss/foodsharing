@@ -438,8 +438,10 @@ function profile(id)
 				$('#tabs-profile').tabs('option',{
 					heightStyle: 'fill'
 				});
-
+				$('#tabs-profile .ui-tabs-panel:first').css('overflow','hidden');
+				$('.xvmoreinfo').slimScroll();
 				
+				$('#dialog-profile-info').dialog( 'option', 'position', 'center' );
 				/*
 				$('.fsrating').jRating({
 					step:true,

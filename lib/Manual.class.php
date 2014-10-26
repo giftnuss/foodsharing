@@ -88,7 +88,7 @@ GROUP BY foodsaver_id'));
 	{
 		if($ret = $this->q('
 				
-			SELECT 	n.id, n.milestone, n.`text` , n.`zeit` AS update_time, UNIX_TIMESTAMP( n.`zeit` ) AS update_time_ts, fs.name AS foodsaver_name, fs.id AS foodsaver_id, fs.photo AS foodsaver_photo, b.id AS betrieb_id, b.name AS betrieb_name
+			SELECT 	n.id, n.milestone, n.`text` , n.`zeit` AS update_time, UNIX_TIMESTAMP( n.`zeit` ) AS update_time_ts, fs.name AS foodsaver_name, fs.sleep_status, fs.id AS foodsaver_id, fs.photo AS foodsaver_photo, b.id AS betrieb_id, b.name AS betrieb_name
 			FROM 	'.PREFIX.'betrieb_notiz n, '.PREFIX.'foodsaver fs, '.PREFIX.'betrieb b, '.PREFIX.'betrieb_team bt
 			
 			WHERE 	n.foodsaver_id = fs.id
@@ -150,6 +150,7 @@ GROUP BY foodsaver_id'));
 						fs.id AS foodsaver_id,
 						fs.name AS foodsaver_name,
 						fs.photo AS foodsaver_photo,
+						fs.sleep_status,
 						p.body AS post_body,
 						p.`time` AS update_time,
 						UNIX_TIMESTAMP(p.`time`) AS update_time_ts,
@@ -185,6 +186,7 @@ GROUP BY foodsaver_id'));
 						fs.id AS foodsaver_id,
 						fs.name AS foodsaver_name,
 						fs.photo AS foodsaver_photo,
+						fs.sleep_status,
 						p.body AS post_body,
 						p.`time` AS update_time,
 						UNIX_TIMESTAMP(p.`time`) AS update_time_ts,

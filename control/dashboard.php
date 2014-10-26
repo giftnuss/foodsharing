@@ -606,10 +606,16 @@ function u_updates($updates)
 	$i=0;
 	foreach ($updates as $u)
 	{
+		$fs = array(
+			'id' => $u['foodsaver_id'],
+			'name' => $u['foodsaver_name'],
+			'photo' => $u['foodsaver_photo'],
+			'sleep_status' => $u['sleep_status']
+		);
 		$out .= '
 		<div class="updatepost">
 				<a class="poster ui-corner-all" href="#" onclick="profile('.(int)$u['foodsaver_id'].');return false;">
-					<img class="ui-corner-all" src="'.img($u['foodsaver_photo'],50,'q').'" alt="'.$u['foodsaver_name'].'" />
+					'.avatar($fs,50).'
 				</a>
 				<div class="post">
 					'.u_update_type($u).'
