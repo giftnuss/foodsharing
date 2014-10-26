@@ -4350,4 +4350,21 @@ GROUP BY foodsaver_id'));
 			FROM 		`'.PREFIX.'bezirk`
 			ORDER BY `name`');
 	}
+	
+	public function getOne_kette($id)
+	{
+		$out = $this->qRow('
+			SELECT
+			`id`,
+			`name`,
+			`logo`
+			
+			FROM 		`'.PREFIX.'kette`
+			
+			WHERE 		`id` = ' . $this->intval($id));
+	
+	
+	
+		return $out;
+	}
 }
