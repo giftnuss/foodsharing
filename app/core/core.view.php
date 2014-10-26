@@ -199,14 +199,7 @@ class View
 			$title = $fs['name'].' ist offline';
 			$ampel = 'ampel-grau';
 
-			if(!empty($fs['photo']))
-			{
-				$photo = '<img class="ui-corner-all" src="'.img($fs['photo']).'" alt="'.$fs['name'].'" />';
-			}
-			else
-			{
-				$photo = '<img class="ui-corner-all" src="img/avatar-mini.png" alt="'.$fs['name'].'" />';
-			}
+			$photo = avatar($fs);
 			
 			$click = ' onclick="profile('.(int)$fs['id'].');return false;"';
 			

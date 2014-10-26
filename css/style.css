@@ -70,6 +70,7 @@
 	color:#4A3520 !important;
 	font-size:13px !important;
 	font-weight:bold !important;
+	z-index:150;
 }
 .bubble-right:after
 {
@@ -2382,4 +2383,22 @@ ul.bread li a:hover
 .pac-item-selected .pac-item-query
 {
 	color:#ffffff !important;
+}
+.lisklist .avatar
+{
+	margin-top:7px;
+	margin-left:7px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+ul.linklist li a .avatar span.bubble, ul.linklist li a:hover .avatar span.bubble
+{
+ 	margin-left: 37px !important;
+    margin-top: -40px !important;
+    color:#4A3520 !important;
+}
+.slimScrollDiv .avatar .bubble
+{
+	display:none !important;
 }

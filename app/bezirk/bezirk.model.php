@@ -485,7 +485,8 @@ class BezirkModel extends Model
 			SELECT 	fs.`id`,
 					fs.`photo`,
 					fs.`name`,
-					fs.`nachname`
+					fs.`nachname`,
+					fs.sleep_status
 
 			FROM 	`'.PREFIX.'foodsaver` fs,
 					`'.PREFIX.'foodsaver_has_bezirk` c
@@ -502,7 +503,8 @@ class BezirkModel extends Model
 			SELECT 	fs.`id`,
 					fs.`photo`,
 					fs.`name`,
-					fs.`nachname`
+					fs.`nachname`,
+					fs.sleep_status
 		
 			FROM 	`'.PREFIX.'foodsaver` fs,
 					`'.PREFIX.'foodsaver_has_bezirk` c
@@ -521,7 +523,8 @@ class BezirkModel extends Model
 			SELECT 	fs.`id`,
 					fs.`photo`,
 					fs.`name`,
-					fs.`nachname`
+					fs.`nachname`,
+					fs.sleep_status
 
 			FROM 	`'.PREFIX.'foodsaver` fs,
 					`'.PREFIX.'botschafter` c

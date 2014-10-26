@@ -1,11 +1,15 @@
 <?php
+
 class MailsControl extends ConsoleControl
 {		
-	static $smtp;
+	static $smtp = false;
+	static $last_connect;
 	private $model;
 	
 	public function __construct()
-	{		
+	{
+		error_repoting(E_ALL);
+		ini_set('display_errors','1');
 		MailsControl::$smtp = false;
 	}
 	
@@ -252,7 +256,8 @@ class MailsControl extends ConsoleControl
 			$email->addRecipient($r[0],$r[1]);
 		}
 		
-		if(MailsControl::$smtp === false)
+		// reconnect first time and force after 60 seconds inactive
+		if(MailsControl::$smtp === false || (time() - MailboxControl::$last_connect) > 60)
 		{
 			MailsControl::smtpReconnect();
 		}
@@ -279,7 +284,8 @@ class MailsControl extends ConsoleControl
 				$sended = true;
 				break;
 			} 
-			catch (Exception $e) {
+			catch (Exception $e) 
+			{
 				MailsControl::smtpReconnect();
 				error('email sending error: ' . $e->getMessage());
 			}
@@ -299,29 +305,31 @@ class MailsControl extends ConsoleControl
 	 */
 	public static function smtpReconnect()
 	{
+		info('SMTP reconnect '.SMTP_HOST.':'.SMTP_USER);
 		try
 		{
 			if(MailsControl::$smtp !== false)
 			{
+				info('close smtp and sleep 5 sec ...');
 				@MailsControl::$smtp->close();
 				sleep(5);
+				success('OK');
 			}
-	
-			info('SMTP CONNECT '.SMTP_HOST.':'.SMTP_USER);
+
+			info('connect...');
 			MailsControl::$smtp = new fSMTP(SMTP_HOST,SMTP_PORT);
 			MailsControl::$smtp->authenticate(SMTP_USER, SMTP_PASS);
 			success('OK');
-	
+			MailsControl::$last_connect = time();
+			
 			return true;
 		}
 		catch (Exception $e)
 		{
-			error($e->getMessage());
+			error('reconnect failed: ' . $e->getMessage());
 			return false;
 		}
 	
 		return true;
 	}
-	
-	
 }
