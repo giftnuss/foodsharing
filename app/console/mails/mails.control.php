@@ -304,10 +304,13 @@ class MailsControl extends ConsoleControl
 			if(MailsControl::$smtp !== false)
 			{
 				@MailsControl::$smtp->close();
+				sleep(5);
 			}
 	
+			info('SMTP CONNECT '.SMTP_HOST.':'.SMTP_USER);
 			MailsControl::$smtp = new fSMTP(SMTP_HOST,SMTP_PORT);
 			MailsControl::$smtp->authenticate(SMTP_USER, SMTP_PASS);
+			success('OK');
 	
 			return true;
 		}
