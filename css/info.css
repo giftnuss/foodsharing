@@ -36,7 +36,7 @@ border-radius: 6px;
 }
 #infobar > li > a .badge
 {
-	display:inline-block;
+	display:inline-block !important;
 	width:18px;
 	height:18px;
 	background-color: #E74955;
