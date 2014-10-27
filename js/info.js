@@ -189,11 +189,11 @@ var info = {
 		this.$badge[type].text(val);
 		if(val > 0)
 		{
-			this.$badge[type].show();
+			this.$badge[type].css('display','inline-block');
 		}
 		else
 		{
-			this.$badge[type].hide();
+			this.$badge[type].css('display','none');
 		}
 	},
 	
