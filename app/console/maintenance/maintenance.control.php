@@ -345,7 +345,7 @@ class MaintenanceControl extends ConsoleControl
 			$data = unserialize($data);
 			
 			$bar = $this->progressbar(count($data));
-			
+			$i=0;
 			foreach ($data as $key => $val)
 			{
 				$i++;
