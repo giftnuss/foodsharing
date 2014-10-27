@@ -117,7 +117,7 @@ class IndexView extends View
 	
 	private function img($basket)
 	{
-		if($basket['picture'] != '' && file_exsists(ROOT_DIR . 'images/basket/75x75-'.$basket['picture']))
+		if($basket['picture'] != '' && file_exists(ROOT_DIR . 'images/basket/75x75-'.$basket['picture']))
 		{
 			return '<img src="/images/basket/thumb-'.$basket['picture'].'" height="75" />';
 		}
