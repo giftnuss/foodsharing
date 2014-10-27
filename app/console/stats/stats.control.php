@@ -8,6 +8,16 @@ class StatsControl extends ConsoleControl
 		$this->model = new StatsModel();
 	}
 	
+	public function test()
+	{
+		$cnt = file_get_contents('./Hotspot_foodsharing.pdf');
+		
+		Mem::set('test', $cnt);
+		
+		echo Mem::get('test');
+		
+	}
+	
 	public function foodsaver()
 	{
 		info('Statistik Auswertung für Foodsaver');

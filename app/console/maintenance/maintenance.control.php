@@ -311,4 +311,32 @@ class MaintenanceControl extends ConsoleControl
 		
 		success('OK');
 	}
+	
+	public function membackup()
+	{
+		if($keys = Mem::$cache->getAllKeys())
+		{
+			$data = array();
+			foreach ($keys as $key)
+			{
+				if(substr($key,0,3) == 'cb-')
+				{
+					$data[$key] = Mem::get($key);
+				}
+			}
+			file_put_contents(ROOT_DIR . 'tmp/membackup.ser',serialize($data));
+		}
+	}
+	
+	public function memrestore()
+	{
+		if($data = file_get_contents(ROOT_DIR . 'tmp/membackup.ser'))
+		{
+			$data = unserialize($data);
+			foreach ($data as $key => $val)
+			{
+				Mem::set($key, $val);
+			}
+		}
+	}
 }
