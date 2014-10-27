@@ -50,7 +50,7 @@ class MapControl extends Control
 		}
 		else
 		{
-			addJs('u_init_map('.$center['lat'].','.$center['lon'].','.$zoom.');');
+			addJs('u_init_map('.$center['lat'].','.$center['lon'].',6);');
 		}
 		
 		addJs('map.initMarker('.$jsarr.');');
