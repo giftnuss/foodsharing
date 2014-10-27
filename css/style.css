@@ -1384,9 +1384,12 @@ ul.linklist li span.n
 }
 ul.linklist li span.d
 {
-	font-size:13px;
-	margin-top:5px;
-	display:block;
+	display: block;
+    font-size: 13px;
+    margin-top: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .history li.title
 {
