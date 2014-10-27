@@ -14,7 +14,12 @@ ini_set('display_errors','1');
 require_once 'config.inc.php';
 require_once 'lib/func.inc.php';
 require_once 'lib/Session.php';
+
+//session_init();
+S::init();
+
 require_once 'lib/db.class.php';
+require_once 'lib/Caching.php';
 require_once 'lib/Manual.class.php';
 require_once 'lang/DE/de.php';
 require_once 'lib/view.inc.php';
@@ -22,8 +27,7 @@ require_once 'lib/minify/JSMin.php';
 
 error_reporting(E_ALL);
 
-//session_init();
-S::init();
+
 
 if(isset($_GET['logout']))
 {

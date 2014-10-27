@@ -45,6 +45,26 @@ if(S::may())
 	$msgbar = v_msgBar();
 	$logolink = '/?page=dashboard';
 }
+/*
+ * check for page caching
+ */
+if(isset($g_page_cache[$_SERVER['REQUEST_URI']][$g_page_cache_mode]))
+{
+	ob_start();
+	include 'tpl/'.$g_template.'.php';
+	$page = ob_get_contents();
+	Mem::setPageCache
+	(
+		$page,
+		$g_page_cache[$_SERVER['REQUEST_URI']][$g_page_cache_mode]
+	);
+	ob_end_clean();
+	
+	echo $page;
+}
+else
+{
+	include 'tpl/'.$g_template.'.php';
+}
 
-include 'tpl/'.$g_template.'.php';
 ?>

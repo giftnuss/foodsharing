@@ -1,16 +1,19 @@
 <?php 
 require_once 'config.inc.php';
 require_once 'lib/Session.php';
-require_once 'lang/DE/de.php';
 require_once 'lib/func.inc.php';
+
+//session_init();
+S::init();
+
 require_once 'lib/db.class.php';
+require_once 'lib/Caching.php';
+require_once 'lang/DE/de.php';
 require_once 'lib/Manual.class.php';
 require_once 'lib/handle.inc.php';
 require_once 'lib/xhr.inc.php';
 require_once 'lib/xhr.view.inc.php';
 require_once 'lib/view.inc.php';
-
-S::init();
 
 $action = $_GET['f'];
 
@@ -23,32 +26,23 @@ if(true)
 		$func = 'xhr_'.$action;
 		if(function_exists($func))
 		{
-			echo $func($_GET);
-		}
-		elseif(isOrgaTeam())
-		{
-			echo(
-'function '.$func.'($data)
-{
-	global $db;
-	return $db->update(\'
-		UPDATE `'.str_replace('xhr_update_', '', $func).'`
-		SET 	');
-			$where = 'WHERE 	`id` = \'.$this->intval().\'';
-			if(isset($_GET['id']))
+			/*
+			 * check for page caching
+			*/
+			if(isset($g_page_cache[$_SERVER['REQUEST_URI']][$g_page_cache_mode]))
 			{
-				$where = 'WHERE 	`id` = \'.$this->intval(data[\'id\']).\' ';
-				unset($_GET['id']);
+				ob_start();
+				echo $func($_GET);
+				$page = ob_get_contents();
+				Mem::setPageCache($page,$g_page_cache[$_SERVER['REQUEST_URI']][$g_page_cache_mode]);
+				ob_end_clean();
+			
+				echo $page;
 			}
-			foreach ($_GET as $field => $value)
+			else
 			{
-				echo '`'.$field.'` = $db->strval(\'.$data[\''.$field.'\'].\'), 
-			';
+				echo $func($_GET);
 			}
-			echo '
-				'.$where.'
-		\');
-}';
 		}
 	}
 }

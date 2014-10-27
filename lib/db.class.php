@@ -11,10 +11,10 @@ class Mem
 		Mem::$cache->addServer(MEM_HOST,MEM_PORT);
 	}
 	
-	public static function set($key,$data)
+	public static function set($key,$data,$ttl = 0)
 	{
 		//return apc_store($key,$data,0);
-		return Mem::$cache->set($key,$data,0);
+		return Mem::$cache->set($key,$data,$ttl);
 	}
 	
 	public static function get($key)
@@ -49,6 +49,17 @@ class Mem
 	public static function userDel($id,$key)
 	{
 		return Mem::del('user-'.$key.'-'.$id);
+	}
+	
+	public static function getPageCache()
+	{
+		global $g_page_cache_suffix;
+		return Mem::get('pc-'.$_SERVER['REQUEST_URI'] . ':' . fsId());
+	}
+	
+	public static function setPageCache($page,$ttl)
+	{
+		return Mem::set('pc-'.$_SERVER['REQUEST_URI'] . ':' . fsId(), $page, $ttl);
 	}
 	
 	/**
