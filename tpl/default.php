@@ -54,7 +54,6 @@ if(!empty($content_main))
 	$content_main = '
 	<div class="pure-u-1 pure-u-md-'.$mainwidth.'-24">
 		<div class="inside">
-			'.$content_top.'
 			'.$content_main.'
 		</div>
 	</div>';
