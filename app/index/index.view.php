@@ -20,7 +20,6 @@ class IndexView extends View
 			</li>';
 		}
 		
-		
 		$out .= '
 			<li><a href="?page=map&load=fairteiler" class="more">'.s('more_fairteiler').'</a></li>
 		</ul>';

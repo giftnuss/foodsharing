@@ -889,11 +889,12 @@ function getMenu()
 			'default' => '
 				<ul id="mainMenu" class="jMenu">
 					<li><a class="fNiv" href="/">Home</a></li>
-					<li><a class="fNiv" href="?page=about">Über Uns</a>
+					<li><a class="fNiv" href="/?page=blog">News</a></li>
+					<li><a class="fNiv" href="?page=content&sub=about">Über Uns</a>
 						<ul>
-							<li><a href="/?page=partner">Partner</a></li>
+							<li><a href="/?page=content&sub=partner">Partner</a></li>
 							<li><a href="/?page=statistics">Statistik</a></li>
-							<li><a href="/?page=faq">F.A.Q.</a></li>
+							<li><a href="/?page=content&sub=faq">F.A.Q.</a></li>
 						</ul>
 					</li>
 					<li><a class="fNiv" href="?page=map">Karte</a></li>

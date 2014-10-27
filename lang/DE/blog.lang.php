@@ -27,3 +27,4 @@ $g_lang['status'] = 'Status';
 $g_lang['status_0'] = 'inaktiv';
 $g_lang['status_1'] = 'veröffentlicht';
 $g_lang['manage_blog'] = 'Blog Einträge verwalten';
+$g_lang['news'] = 'News aus der Foodsharing-Welt';

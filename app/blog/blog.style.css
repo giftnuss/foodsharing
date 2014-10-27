@@ -58,3 +58,12 @@
 	margin:15px;
 	font-size: 25px;
 }
+@media (max-width: 900px) {
+	.news-post img
+	{
+		width:100% !important;
+		margin-bottom:15px;
+		margin-right:0;
+		float: none;
+	}
+}
