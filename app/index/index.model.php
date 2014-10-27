@@ -47,6 +47,8 @@ class IndexModel extends Model
 		
 			LEFT JOIN 	fs_fairteiler ft ON hw.fairteiler_id = ft.id
 				
+			WHERE 		wp.attach != ""
+				
 			ORDER BY 	wp.id DESC
 				
 			LIMIT 0,'.$limit.'
