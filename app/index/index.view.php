@@ -2,14 +2,48 @@
 class IndexView extends View
 {
 	
-	public function fairteiler()
+	public function fairteiler($posts)
 	{
-		return v_field('',s('fairteiler'));
+		$out = '
+		<ul class="linklist fairteiler">';
+		foreach ($posts as $p)
+		{			
+			$out .= '
+			<li>						
+				<a href="?page=fairteiler&id='.(int)$p['id'].'" class="corner-all">
+					<span class="i">'.$this->imgFt($p).'</span>
+					<span class="n">'.$p['ort'].' / '.$p['name'].'</span>
+					<span class="t">'.niceDate($p['time_ts']).'</span>
+					<span class="d">'.$p['body'].'</span>
+					<span class="c"></span>
+				</a>
+			</li>';
+		}
+		
+		
+		$out .= '
+			<li><a href="?page=map&load=fairteiler" class="more">'.s('more_fairteiler').'</a></li>
+		</ul>';
+		return v_field($out,s('fairteiler'));
 	}
 	
-	public function baskets()
+	private function imgFt($post)
 	{
-		return v_field('',s('foodbaskets'));
+		if(!empty($post['attach']))
+		{
+			$attach = json_decode($post['attach'],true);
+			if(isset($attach['image']) && !empty($attach['image']))
+			{
+				$img = $attach['image'][0];
+				
+				if(file_exists(ROOT_DIR . 'images/wallpost/thumb_'.$img['file']))
+				{
+					return '<img stc="images/wallpost/thumb_' . $img['file'] . '" height="75" />';
+				}
+			}
+		}
+		
+		return '<img src="/img/fairteiler75x75.png" height="75" />';
 	}
 	
 	public function joinIndex()
@@ -53,6 +87,41 @@ class IndexView extends View
 		}
 		
 		return $out;
+	}
+	
+	public function baskets($baskets)
+	{
+		$out = '<ul class="linklist baskets">';
+		foreach ($baskets as $b)
+		{			
+			$out .= '
+			<li>						
+				<a onclick="ajreq(\'bubble\',{app:\'basket\',id:'.(int)$b['id'].'});return false;" href="#" class="corner-all">
+					<span class="i">'.$this->img($b).'</span>
+					<span class="n">Essenkorb von '.$b['fs_name'].'</span>
+					<span class="t">veröffentlicht am '.niceDate($b['time_ts']).'</span>
+					<span class="d">'.$b['description'].'</span>
+					<span class="c"></span>
+				</a>
+						
+			</li>';
+		}
+		
+		
+		$out .= '
+			<li><a href="?page=map&load=baskets" class="more">'.s('more_baskets').'</a></li>
+				</ul>';
+		
+		return v_field($out,s('new_foodbaskets'));
+	}
+	
+	private function img($basket)
+	{
+		if($basket['picture'] != '' && file_exsists(ROOT_DIR . 'images/basket/75x75-'.$basket['picture']))
+		{
+			return '<img src="/images/basket/thumb-'.$basket['picture'].'" height="75" />';
+		}
+		return '<img src="/img/basket75x75.png" height="75" />';
 	}
 	
 	public function printSlider($articles = array())

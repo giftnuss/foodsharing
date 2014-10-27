@@ -26,6 +26,11 @@ class MapControl extends Control
 		{
 			$jsarr = '["baskets"]';
 		}
+		else if(isset($_GET['load']) && $_GET['load'] == 'fairteiler')
+		{
+			$jsarr = '["fairteiler"]';
+		}
+		/*
 		else
 		{
 			if(S::may('fs'))
@@ -37,6 +42,12 @@ class MapControl extends Control
 				addStyle('#map-control-wrapper > .ui-widget-content{height:93px;}');
 				$jsarr = '["baskets"]';
 			}
+		}
+		*/
+		
+		if(!S::may('fs'))
+		{
+			addStyle('#map-control-wrapper > .ui-widget-content{height:93px;}');
 		}
 		
 		addContent(

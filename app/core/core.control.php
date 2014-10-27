@@ -674,4 +674,12 @@ class Control
   		}
   		return $this->model->addBell($foodsaver_ids, $title, $body, $link_attributes);
   	}
+  	
+  	public function setContentWidth($left,$right)
+  	{
+  		global $content_left_width;
+  		global $content_right_width;
+  		$content_right_width = $right;
+  		$content_left_width = $left;
+  	}
 }

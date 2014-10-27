@@ -216,14 +216,21 @@ class BasketXhr extends Control
 		$img->saveChanges();
 		
 		copy('images/basket/' . $pic, 'images/basket/thumb-' . $pic);
+		copy('images/basket/' . $pic, 'images/basket/75x75-' . $pic);
 		copy('images/basket/' . $pic, 'images/basket/medium-' . $pic);
 		
 		$this->chmod('images/basket/thumb-' . $pic, 777);
+		$this->chmod('images/basket/75x75-' . $pic, 777);
 		$this->chmod('images/basket/medium-' . $pic, 777);
 		
 		$img = new fImage('images/basket/thumb-' . $pic);
 		$img->cropToRatio(1, 1);
 		$img->resize(200, 200);
+		$img->saveChanges();
+		
+		$img = new fImage('images/basket/75x75-' . $pic);
+		$img->cropToRatio(1, 1);
+		$img->resize(60, 60);
 		$img->saveChanges();
 		
 		$img = new fImage('images/basket/medium-' . $pic);

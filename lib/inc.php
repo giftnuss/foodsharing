@@ -36,6 +36,10 @@ $content_right = '';
 $content_left = '';;
 $content_top = '';
 $content_bottom = '';
+
+$content_left_width = 5;
+$content_right_width = 6;
+
 $g_template = 'default';
 $content_overtop = '';
 $js = '';

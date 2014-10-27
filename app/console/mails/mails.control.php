@@ -230,7 +230,7 @@ class MailsControl extends ConsoleControl
 	public static function handleEmail($data)
 	{
 		$data = $data->getData();
-		info('send email ...');
+		info('mail arrived ...');
 		$email = new fEmail();
 		$email->setFromEmail($data['from'][0],$data['from'][1]);
 		$email->setSubject($data['subject']);
@@ -268,8 +268,9 @@ class MailsControl extends ConsoleControl
 		{
 			$max_try--;
 			try {
+				info('send email try '.(5-$max_try));
 				$email->send(MailsControl::$smtp);
-				success('OK');
+				success('email send OK');
 				
 				// remove atachements from temp folder
 				if(!empty($data['attachments']))
@@ -287,7 +288,7 @@ class MailsControl extends ConsoleControl
 			catch (Exception $e) 
 			{
 				MailsControl::smtpReconnect();
-				error('email sending error: ' . $e->getMessage());
+				error('email send error: ' . $e->getMessage());
 			}
 			
 			if($max_try == 0)
@@ -313,14 +314,14 @@ class MailsControl extends ConsoleControl
 				info('close smtp and sleep 5 sec ...');
 				@MailsControl::$smtp->close();
 				sleep(5);
-				success('OK');
 			}
 
 			info('connect...');
 			MailsControl::$smtp = new fSMTP(SMTP_HOST,SMTP_PORT);
 			MailsControl::$smtp->authenticate(SMTP_USER, SMTP_PASS);
-			success('OK');
 			MailsControl::$last_connect = time();
+			
+			success('reconnect OK');
 			
 			return true;
 		}

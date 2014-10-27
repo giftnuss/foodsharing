@@ -117,11 +117,35 @@ var map = {
 		});
 	},
 	initMarker: function(items)
-	{
+	{		
 		$('#map-control .linklist a').removeClass('active');
-		if(storage.get('activeItems') != undefined)
+		if(items == undefined)
 		{
-			items = (storage.get('activeItems'));
+			if($('#map-control .foodsaver').length > 0)
+			{
+				items = new Array('betriebe');
+			}
+			else
+			{
+				items = new Array('baskets');
+			}
+			
+			if(GET('load') == undefined)
+			{
+				items = (storage.get('activeItems'));
+			}
+		}
+		
+		if(items == undefined)
+		{
+			if($('#map-control .foodsaver').length > 0)
+			{
+				items = new Array('betriebe');
+			}
+			else
+			{
+				items = new Array('baskets');
+			}	
 		}
 		
 		for(var i=0;i<items.length;i++)

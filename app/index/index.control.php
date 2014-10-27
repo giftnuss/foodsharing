@@ -18,12 +18,15 @@ class IndexControl extends Control
 		
 		addTitle('Restlos glücklich!');
 		
+		$this->setContentWidth(9, 9);
+		
 		$articles = array();
 		
+		/*
 		if(!S::may())
 		{
 			$articles[] = $this->view->joinIndex();
-		}
+		}*/
 		
 		if($news = $this->view->newsSlider($this->model->latestNews()))
 		{
@@ -31,13 +34,28 @@ class IndexControl extends Control
 		}
 		addContent($this->view->printSlider($articles),CNT_OVERTOP);
 		
+		$ftcount = 5;
 		if(!S::may())
 		{
 			addContent($this->view->login(),CNT_LEFT);
+			$ftcount = 2;
 		}
-		addContent($this->view->fairteiler(),CNT_LEFT);
-		addContent($this->view->baskets(),CNT_RIGHT);
-		addContent('blubb');
+		
+		/*
+		 * display some some nice fairteiler posts with images if user locationis not defined
+		*/
+		if($posts = $this->model->getNewestFairteilerPosts($ftcount))
+		{
+			addContent($this->view->fairteiler($posts),CNT_LEFT);
+		}
+		
+		/*
+		 * display some newest foodbaskets if user location is not defined
+		 */
+		if($baskets = $this->model->getNewestFoodbaskets(5))
+		{
+			addContent($this->view->baskets($baskets));
+		}
 		
 		//addContent('Hallo Foodsharing-Welt');
 	}

@@ -1382,6 +1382,12 @@ ul.linklist li span.n
 	font-weight:bold;
 	display:block;
 }
+ul.linklist li span.d
+{
+	font-size:13px;
+	margin-top:5px;
+	display:block;
+}
 .history li.title
 {
 	font-size:13px;
@@ -1399,8 +1405,6 @@ ul.linklist li span.i
 {
 	display:block;
 	float:left;
-	width:35px;
-	height:35px;
 	margin-right:8px;
 	border-radius: 6px 6px 6px 6px;
 	-moz-border-radius: 6px 6px 6px 6px;
@@ -1409,13 +1413,25 @@ ul.linklist li span.i
 }
 ul.linklist li span.i img
 {
-	width:35px;
 	border-radius: 6px 6px 6px 6px;
 	-moz-border-radius: 6px 6px 6px 6px;
 	-webkit-border-radius: 6px 6px 6px 6px;
 	border: 0px solid #000000;
 }
+ul.linklist li a.more
+{
+    background-color: #599022;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    color: #ffffff;
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 32px;
+    text-align: center;
+    margin-top:15px;
 
+}
 ul.linklist li, ul.linklist li a, ul.linklist li a span
 {
 	display:block;

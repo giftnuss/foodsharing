@@ -97,3 +97,17 @@ div#main
 {
 	text-align: center;
 }
+
+.linklist.baskets .n, .linklist.baskets .d, .linklist.fairteiler .n, .linklist.fairteiler .d
+{
+	font-size:14px;
+}
+.linklist.baskets .n,
+.linklist.fairteiler .n
+{
+	margin-top:9px;
+}
+.linklist.baskets .t
+{
+	font-size: 12px;
+}

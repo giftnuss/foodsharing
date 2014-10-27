@@ -5,9 +5,9 @@ $mainwidth = 24;
 
 if(!empty($content_left))
 {
-	$mainwidth -= 5;
+	$mainwidth -= $content_left_width;
 	$content_left = '
-		<div class="pure-u-1 pure-u-md-5-24" id="left">
+		<div class="pure-u-1 pure-u-md-'.$content_left_width.'-24" id="left">
 			<div class="inside">
 				'.$content_left.'
 			</div>
@@ -15,9 +15,9 @@ if(!empty($content_left))
 }
 if(!empty($content_right))
 {
-	$mainwidth -= 6;
+	$mainwidth -= $content_right_width;
 	$content_right = '
-		<div class="pure-u-1 pure-u-md-6-24" id="right">
+		<div class="pure-u-1 pure-u-md-'.$content_right_width.'-24" id="right">
 			<div class="inside">
 				'.$content_right.'
 			</div>
