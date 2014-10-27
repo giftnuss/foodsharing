@@ -325,7 +325,7 @@ class MaintenanceControl extends ConsoleControl
 			{
 				$i++;
 				$bar->update($i);
-				if(substr($key,0,3) == 'cb-' || substr($key,0,5) == 'user-' || substr($key,0,9) == 'memc.sess')
+				if(substr($key,0,3) == 'cb-' || substr($key,0,5) == 'user-')
 				{
 					$data[$key] = Mem::get($key);
 				}
@@ -355,14 +355,6 @@ class MaintenanceControl extends ConsoleControl
 				$bar->update($i);
 				
 				$ttl = 0;
-				
-				/*
-				 * store session var only until next morning 5 o'clock
-				 */
-				if(substr($key,0,9) == 'memc.sess')
-				{
-					$ttl = ($this_night_ts - time());
-				}
 				
 				Mem::set($key, $val,$ttl);
 			}
