@@ -780,7 +780,6 @@ function getMenu()
 						<li><a href="?page=fairteiler"><i class="fa fa-recycle"></i> Fair-Teiler</a></li>
 					    <li><a href="?page=msg"><i class="fa fa-comments"></i> Interne Nachrichten</a></li>
 				
-				
 						<li><a href="http://wiki.lebensmittelretten.de" target="_blank"><i class="fa fa-file-text"></i> foodsharing WIKI</a></li>
 				
 						<li><a href="?page=bcard"><i class="fa fa-newspaper-o"></i> Persönliche Visitenkarte</a></li>
@@ -890,7 +889,6 @@ function getMenu()
 			'default' => '
 				<ul id="mainMenu" class="jMenu">
 					<li><a class="fNiv" href="/">Home</a></li>
-					<li><a class="fNiv" href="?page=basket">Essenskörbe</a></li>
 					<li><a class="fNiv" href="?page=map">Karte</a></li>
 					<li><a class="fNiv" href="?page=index&sub=ratgeber">Ratgeber</a></li>
 					<li><a onclick="ajreq(\'join\',{app:\'login\'});return false;" class="fNiv" href="?page=join">Mach-Mit!</a></li>
@@ -899,7 +897,6 @@ function getMenu()
 			'mobile' => '
 				<select id="mobilemenu">
 					<option class="famenu" value="dashboard" selected="selected">&#xf0c9;</option>
-					<option value="?page=basket">Essenskörbe</option>
 					<option value="?page=map">Karte</option>
 					<option value="?page=index&sub=ratgeber">Ratgeber</option>
 					<option value="?page=join">Mach-Mit!</option>
