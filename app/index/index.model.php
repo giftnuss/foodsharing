@@ -79,6 +79,8 @@ class IndexModel extends Model
 				'.PREFIX.'foodsaver fs
 				
 			WHERE
+				b.foodsaver_id = fs.id
+			AND 
 				b.status = 1
 		
 			ORDER BY 

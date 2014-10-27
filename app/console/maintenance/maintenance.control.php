@@ -312,6 +312,24 @@ class MaintenanceControl extends ConsoleControl
 		success('OK');
 	}
 	
+	public function flushcache()
+	{
+		info('flush Page Cache...');
+		
+		if($keys = Mem::$cache->getAllKeys())
+		{
+			foreach ($keys as $key)
+			{
+				if(substr($key,0,3) == 'pc-')
+				{
+					Mem::del($key);
+				}
+			}
+		}
+
+		success('OK');
+	}
+	
 	public function membackup()
 	{
 		info('backup memcache to file...');
