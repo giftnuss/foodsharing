@@ -26,7 +26,7 @@ if(!empty($content_right))
 if(!empty($content_top))
 {
 	//$content_top = '';
-	/*
+	
 	$content_top = '
 		<div class="pure-g">
 			<div id="content_top" class="pure-u-1">
@@ -35,7 +35,7 @@ if(!empty($content_top))
 				</div>
 			</div>
 		</div>';
-		*/
+		
 }
 
 if(!empty($content_bottom))
@@ -104,7 +104,7 @@ if(!empty($content_left) && !empty($content_right))
 	<?php echo $content_overtop; ?>
 	<div id="main"<?php if(isMob()) { ?> class="mobile"<?php } ?>>
 		<?php echo getBread(); ?>
-		<?php //if(!isMob()){echo $content_top;} ?>
+		<?php echo $content_top; ?>
 		<div class="pure-g mainpure">
 			<?php 
 			if(isMob())

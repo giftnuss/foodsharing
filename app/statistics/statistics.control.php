@@ -18,7 +18,7 @@ class StatisticsControl extends Control
 		
 		addTitle($content['title']);
 		
-		
+		addBread($content['title']);
 		
 		$stat_gesamt = $this->model->getStatGesamt();
 		
@@ -29,20 +29,32 @@ class StatisticsControl extends Control
 			$stat_cities[$i]['percent'] = $this->getPercent($stat_gesamt['fetchweight'],$c['fetchweight']);
 		}
 		
-		addContent($this->view->getStatCities($stat_cities),CNT_RIGHT);
-		addContent($this->view->getStatGesamt($stat_gesamt),CNT_LEFT);
+		$stat_fs = $this->model->getStatFoodsaver();
+		
+		addContent($this->view->getStatGesamt($stat_gesamt),CNT_TOP);
+		
+		addContent($this->view->getStatCities($stat_cities),CNT_LEFT);
+		addContent($this->view->getStatFoodsaver($stat_fs),CNT_RIGHT);
+		
+		
+		$this->setContentWidth(12,12);
+		/*
+		echo '<pre>';
+		print_r($stat_gesamt);
+		print_r($content);
+		die();
 		
 		$content = str_replace(
 				'{STAT_GESAMT}', 
 				$stat_gesamt, 
 				$content['body']
 		);
+		*/
+		//print_r($content);die();
 		
-		addContent($content,CNT_LEFT);
+		//addContent($content);
 		
-		$stat_fs = $this->model->getStatFoodsaver();
 		
-		addContent($this->view->getStatFoodsaver($stat_fs),CNT_RIGHT);
 	}
 	
 	private function getPercent($gesamt,$teil)

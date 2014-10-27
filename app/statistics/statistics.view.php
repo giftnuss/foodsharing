@@ -4,9 +4,6 @@ class StatisticsView extends View
 	public function getStatCities($cities)
 	{
 		$out = '
-		<div class="main-title-1 custom-font-1">
-			<span>aktivste Städte</span>
-		</div>
 		<table class="stat_cities">
 		';
 	
@@ -34,7 +31,7 @@ class StatisticsView extends View
 		$out .= '
 		</table>';
 	
-		return $out;
+		return v_field($out,s('active_cities'),array('class'=> 'ui-padding'));
 	}
 	
 	public function getStatGesamt($stat)
@@ -49,61 +46,50 @@ class StatisticsView extends View
 		fscount,
 		fairteilercount
 		*/
-		return '
-		<div class="stat_item left">
-				<div class="stat_badge">
-					<div class="stat_icon fetchweight">
-	
+		return v_field('
+		<div id="stat_whole">
+			<div class="stat_item">
+					<div class="stat_badge">
+						<div class="stat_icon fetchweight"></div>
 					</div>
-				</div>
-				<div class="stat_text">
-					<h4>'.str_replace(',00', '', number_format($stat['fetchweight'], 2, ',', '.')).' KG</h4>
-					<p>Lebensmittel erfolgreich vor der Tonne gerettet.</p>
-				</div>
-		</div>
-		<div class="stat_item">
-				<div class="stat_badge">
-					<div class="stat_icon fetchcount">
-	
+					<div class="stat_text">
+						<h4>'.str_replace(',00', '', number_format($stat['fetchweight'], 2, ',', '.')).' KG</h4>
+						<p>Lebensmittel erfolgreich vor der Tonne gerettet.</p>
 					</div>
-				</div>
-				<div class="stat_text">
-					<h4>'.number_format($stat['fetchcount'], 0, ',', '.').'</h4>
-					<p>Rettungs-Einsätze haben unsere Foodsaver gemeistert.</p>
-				</div>
-		</div>
-		<div class="stat_item left">
-				<div class="stat_badge">
-					<div class="stat_icon korpcount">
-	
+			</div>
+			<div class="stat_item">
+					<div class="stat_badge">
+						<div class="stat_icon fetchcount"></div>
 					</div>
-				</div>
-				<div class="stat_text">
-					<h4>'.number_format($stat['korpcount'], 0, ',', '.').'</h4>
-					<p>Betriebe koorperieren kontinuierlich und zufrieden mit uns.</p>
-				</div>
-		</div>
-		<div class="stat_item">
-				<div class="stat_badge">
-					<div class="stat_icon fscount">
-	
+					<div class="stat_text">
+						<h4>'.number_format($stat['fetchcount'], 0, ',', '.').'</h4>
+						<p>Rettungs-Einsätze haben unsere Foodsaver gemeistert.</p>
 					</div>
-				</div>
-				<div class="stat_text">
-					<h4>'.number_format($stat['fscount'], 0, ',', '.').'</h4>
-					<p>Foosaver engagieren sich ehrenamtlich für eine Welt ohne Verschwendung von Lebensmitteln</p>
-				</div>
-		</div>
-		<div style="clear:both;"></div>';
+			</div><br />
+			<div class="stat_item">
+					<div class="stat_badge">
+						<div class="stat_icon korpcount"></div>
+					</div>
+					<div class="stat_text">
+						<h4>'.number_format($stat['korpcount'], 0, ',', '.').'</h4>
+						<p>Betriebe koorperieren kontinuierlich und zufrieden mit uns.</p>
+					</div>
+			</div>
+			<div class="stat_item">
+					<div class="stat_badge">
+						<div class="stat_icon fscount"></div>
+					</div>
+					<div class="stat_text">
+						<h4>'.number_format($stat['fscount'], 0, ',', '.').'</h4>
+						<p>Foosaver engagieren sich ehrenamtlich für eine Welt ohne Verschwendung von Lebensmitteln</p>
+					</div>
+			</div><br />
+		</div>',s('stat_whole'));
 	}
 	
 	public function getStatFoodsaver($foodsaver)
 	{
 		$out = '
-		<div style="height:45px"></div>
-		<div class="main-title-1 custom-font-1">
-			<span>Foodsaver</span>
-		</div>
 		<table class="stat_cities">
 		';
 	
@@ -129,6 +115,6 @@ class StatisticsView extends View
 		$out .= '
 		</table>';
 	
-		return $out;
+		return v_field($out,'unsere Foodsaver',array('class'=>'ui-padding'));
 	}
 }
