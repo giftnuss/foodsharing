@@ -314,11 +314,17 @@ class MaintenanceControl extends ConsoleControl
 	
 	public function membackup()
 	{
+		info('backup memcache to file...');
+		
 		if($keys = Mem::$cache->getAllKeys())
 		{
+			$bar = $this->progressbar(count($keys));
 			$data = array();
+			$i=0;
 			foreach ($keys as $key)
 			{
+				$i++;
+				$bar->update($i);
 				if(substr($key,0,3) == 'cb-')
 				{
 					$data[$key] = Mem::get($key);
@@ -326,17 +332,29 @@ class MaintenanceControl extends ConsoleControl
 			}
 			file_put_contents(ROOT_DIR . 'tmp/membackup.ser',serialize($data));
 		}
+		
+		echo "\n";
+		success('OK');
 	}
 	
 	public function memrestore()
 	{
+		info('backup memcache from file...');
 		if($data = file_get_contents(ROOT_DIR . 'tmp/membackup.ser'))
 		{
 			$data = unserialize($data);
+			
+			$bar = $this->progressbar(count($data));
+			
 			foreach ($data as $key => $val)
 			{
+				$i++;
+				$bar->update($i);
 				Mem::set($key, $val);
 			}
 		}
+		
+		echo "\n";
+		success('OK');
 	}
 }
