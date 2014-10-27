@@ -16,30 +16,44 @@ class MapControl extends Control
 		
 		$center = $this->model->getValues(array('lat','lon'), 'foodsaver', fsId());
 
-		addContent(
-			//$this->view->map($center)
-			$this->view->lMap($center)
-		);
+		
 		
 		addContent($this->view->mapControl(),CNT_TOP);
 		
 		
+		$jsarr = '';
 		if(isset($_GET['load']) && $_GET['load'] == 'baskets')
 		{
-			addJs('loadMarker(["baskets"]);');
+			$jsarr = '["baskets"]';
 		}
 		else
 		{
 			if(S::may('fs'))
 			{
-				addJs('loadMarker(["betriebe"]);');
+				$jsarr = '["betriebe"]';
 			}
 			else
 			{
 				addStyle('#map-control-wrapper > .ui-widget-content{height:93px;}');
-				addJs('loadMarker(["baskets"]);');
+				$jsarr = '["baskets"]';
 			}
 		}
+		
+		addContent(
+		//$this->view->map($center)
+			$this->view->lMap($center)
+		);
+		
+		if(!$center)
+		{
+			addJs('u_init_map();');
+		}
+		else
+		{
+			addJs('u_init_map('.$center['lat'].','.$center['lon'].','.$zoom.');');
+		}
+		
+		addJs('map.initMarker('.$jsarr.');');
 		
 		if(S::may('fs') && isset($_GET['bid']) && ($betrieb = $this->model->getBetrieb($_GET['bid'])))
 		{

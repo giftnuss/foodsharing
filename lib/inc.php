@@ -102,6 +102,7 @@ addScript('/js/script.js',true);
 addScript('/js/instant-search.js',true);
 addScript('/js/conv.js',true);
 addScript('/js/info.js',true);
+addScript('/js/storage.js',true);
 
 //scriptCompress();
 //cssCompress();

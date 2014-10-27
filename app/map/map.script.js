@@ -90,12 +90,59 @@ var map = {
 	initiated:false,
 	init: function()
 	{
-		u_map = L.map('map').setView([50.89,10.13],6);
+		storage.setPrefix('map');
+		
+		if(storage.get('center') != undefined && storage.get('zoom') != undefined)
+		{
+			u_map = L.map('map').setView(storage.get('center'),storage.get('zoom'));
+			
+		}
+		else
+		{
+			u_map = L.map('map').setView([50.89,10.13],6);
+		}
+		
 		L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
 			attribution: 'Tiles &copy; Esri 2014'
 		}).addTo(u_map);
 		
 		this.initiated = true;
+		
+		u_map.on('dragend',function(e){
+			map.updateStorage();
+		});
+		
+		u_map.on('zoomend',function(e){
+			map.updateStorage();
+		});
+	},
+	initMarker: function(items)
+	{
+		$('#map-control .linklist a').removeClass('active');
+		if(storage.get('activeItems') != undefined)
+		{
+			items = (storage.get('activeItems'));
+		}
+		
+		for(var i=0;i<items.length;i++)
+		{
+			$('#map-control .linklist a.' + items[i]).addClass('active');
+		}
+		
+		loadMarker(items);
+	},
+	updateStorage: function(){		
+		var center = u_map.getCenter();
+		var zoom = u_map.getZoom();
+		
+		var activeItems = new Array();
+		$('#map-control .linklist a.active').each(function(){
+			activeItems.push($(this).attr('name'));
+		});
+		
+		storage.set('center',[center.lat,center.lng]);
+		storage.set('zoom',zoom);
+		storage.set('activeItems',activeItems);
 	},
 	setView: function(lat,lon,zoom)
 	{
@@ -111,14 +158,12 @@ function u_init_map(lat,lon,zoom)
 {
 	map.init();
 	
-	if(lat == undefined)
+	if(lat == undefined && storage.get('center') == undefined)
 	{
 		getBrowserLocation(function(pos){
 			map.setView(pos.lat, pos.lon, 12);
 		});
 	}
-	
-	
 	
 	/*
 	u_map = L.map('map').setView([lat, lon], zoom);
@@ -530,6 +575,7 @@ $(document).ready(function(){
 			i++;
 		});
 		loadMarker(types);
+		map.updateStorage();
 		return false;
 	});
 	

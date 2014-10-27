@@ -14,6 +14,7 @@ class FoodsaverModel extends Model
 				fs.name,
 				fs.nachname,
 				fs.photo,
+				fs.sleep_status,
 				CONCAT("#",fs.id) AS href
 				
 			FROM
