@@ -10,7 +10,7 @@ class IndexView extends View
 		{			
 			$out .= '
 			<li>						
-				<a href="?page=fairteiler&id='.(int)$p['id'].'" class="corner-all">
+				<a href="?page=fairteiler&sub=ft&id='.(int)$p['id'].'" class="corner-all">
 					<span class="i">'.$this->imgFt($p).'</span>
 					<span class="n">'.$p['ort'].' / '.$p['name'].'</span>
 					<span class="t">'.niceDate($p['time_ts']).'</span>
@@ -38,7 +38,7 @@ class IndexView extends View
 				
 				if(file_exists(ROOT_DIR . 'images/wallpost/thumb_'.$img['file']))
 				{
-					return '<img stc="images/wallpost/thumb_' . $img['file'] . '" height="75" />';
+					return '<img src="/images/wallpost/thumb_' . $img['file'] . '" height="75" />';
 				}
 			}
 		}
