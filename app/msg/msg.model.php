@@ -8,13 +8,18 @@ class MsgModel extends Model
 		');
 	}
 	
+	public function user2conv($fsid)
+	{
+		return $this->addConversation(array($fsid=> $fsid),false);
+	}
+	
 	/**
 	 * Adds a new Conversation but first check if is there allready an conversation with exaclty this user_ids
 	 * 
 	 * @param array $recips
 	 * @param string $body
 	 */
-	public function addConversation($recips,$body)
+	public function addConversation($recips,$body = false)
 	{
 		/*
 		 * add the current user to the recipients
@@ -30,75 +35,23 @@ class MsgModel extends Model
 		
 		/*
 		 * First we want to check is there allready an conversation with exacly those user_ids stored in $recips array
-		 */
-		if($conv_ids = $this->qCol('
-			SELECT 
-				`conversation_id` 
+		*/
+		if($conv = $this->qRow('
+			SELECT
+				conversation_id,
+				GROUP_CONCAT(foodsaver_id ORDER BY foodsaver_id SEPARATOR ":") AS idstring
+		
+			FROM
+				fs_foodsaver_has_conversation
+		
+			GROUP BY
+				conversation_id
+		
+			HAVING
 				
-			FROM 
-				`'.PREFIX.'foodsaver_has_conversation` 
-				
-			WHERE 
-				`foodsaver_id` = '.(int)fsId().' 
-				
-			GROUP BY 
-				`conversation_id`	
-		'))
+				idstring = "' . implode(':',$recips).'"'))
 		{
-			if($conv = $this->q('
-				SELECT 
-					`conversation_id`,
-					`foodsaver_id`
-
-				FROM 
-					`'.PREFIX.'foodsaver_has_conversation`
-					
-				WHERE 
-					`conversation_id` IN('.implode(',', $conv_ids).')
-					
-				ORDER BY
-					`conversation_id`
-					
-			'))
-			{
-				$cur_cov_id = 0;
-					
-				$recip_conv = array();
-					
-					
-				foreach ($conv as $c)
-				{
-					if($c['conversation_id'] != $cur_cov_id)
-					{
-						/*
-						 * there arrived a new conversation id we have to check is this array exactly like the array of the recipient of the new conversation
-						*/
-						$check = true;
-						foreach ($recip_conv as $rc)
-						{
-							if (!isset($recips[$rc]))
-							{
-								$check = false;
-								//break;
-							}
-						}
-							
-						/*
-						 * all recip in this array than must be the size the same and we have allready an conversation with this people
-						*/
-						if($check === true && count($recips) === count($recip_conv))
-						{
-							$conversation_id = $c['conversation_id'];
-							break;
-						}
-							
-						$cur_cov_id = $c['conversation_id'];
-						$recip_conv = array();
-					}
-				
-					$recip_conv[$c['foodsaver_id']] = $c['foodsaver_id'];
-				}
-			}
+			$conversation_id = $conv['conversation_id'];
 		}
 		
 		/*
@@ -123,6 +76,7 @@ class MsgModel extends Model
 		}
 		
 		$member = $this->listConversationMembers($conversation_id);
+		
 		/*
 		 * UPDATE conversation
 		*/
@@ -140,6 +94,7 @@ class MsgModel extends Model
 			WHERE
 			`id` = '.(int)$conversation_id.'
 		');
+		
 		return $conversation_id;
 	}
 	

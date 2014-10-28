@@ -43,26 +43,13 @@ var conv = {
 		{
 			this.init();
 		}
-		var cid = this.getConvByFs(fsid);
-		if(cid == false)
-		{
-			ajax.req('msg','user2conv',{
-				data:{fsid:fsid},
-				success: function(ret)
-				{
-					conv.user2Conv.push({
-						fsid: fsid,
-						cid: ret.cid
-					});
-					conv.chat(ret.cid);
-				}
-			});
-		}
-		else
-		{
-			conv.chat(cid);
-		}
-		
+		ajax.req('msg','user2conv',{
+			data:{fsid:fsid},
+			success: function(ret)
+			{
+				conv.chat(ret.cid);
+			}
+		});
 	},
 	
 	getConvByFs: function(fsid)
@@ -96,7 +83,6 @@ var conv = {
 		}
 		
 		this.appendChatbox(cid);
-		
 	},
 	
 	/**

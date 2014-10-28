@@ -164,7 +164,9 @@ class MsgXhr extends Control
 		
 		if(isset($_GET['fsid']) && (int)$_GET['fsid'] > 0)
 		{
-			if($cid = $this->model->addConversation(array((int)$_GET['fsid']=>(int)$_GET['fsid']),false))
+			
+			//if($cid = $this->model->addConversation(array((int)$_GET['fsid']=>(int)$_GET['fsid']),false))
+			if($cid = $this->model->user2conv($_GET['fsid']))
 			{
 				$xhr->setStatus(1);
 				$xhr->addData('cid', $cid);
