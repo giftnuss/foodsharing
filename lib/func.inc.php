@@ -870,6 +870,9 @@ function getMenu()
 				'mobile' => '
 						<select id="mobilemenu">
 							<option class="famenu" value="dashboard" selected="selected">&#xf0c9;</option>
+							<option value="/">Home</option>
+							<option value="?page=dashboard">Dashboard</option>
+							<option value="?page=map">Karte</option>
 							'.$settings['mobile'].'
 							'.$ags_mob.'
 							'.$foodsaver_mob.'
@@ -905,6 +908,7 @@ function getMenu()
 			'mobile' => '
 				<select id="mobilemenu">
 					<option class="famenu" value="dashboard" selected="selected">&#xf0c9;</option>
+					<option value="/">Home</option>
 					<option value="?page=map">Karte</option>
 					<option value="?page=index&sub=ratgeber">Ratgeber</option>
 					<option value="?page=join">Mach-Mit!</option>
