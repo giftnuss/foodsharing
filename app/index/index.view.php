@@ -72,7 +72,7 @@ class IndexView extends View
 			{
 				$out[] = '
 				<article>
-					<div class="image-content" style="background-image:url(http://www.lebensmittelretten.de/freiwillige/images/'.$n['picture'].');">
+					<div class="image-content" style="background-image:url(/images/'.$n['picture'].');">
 						<div class="text-wrapper">
 					    	<div class="text-content corner-all">
 								<h2>'.$n['name'].'</h2>
