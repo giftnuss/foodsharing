@@ -2043,12 +2043,14 @@ a.preview-thumb
 .gallery a.preview-thumb
 {
 	float:left;
-	width:400px;
+	max-width:400px;
+	width:90%;
 	height:auto;
 }
 .gallery a.preview-thumb img
 {
-	width:400px;
+	max-width:400px;
+	width:90%;
 }
 a.preview-thumb:hover
 {

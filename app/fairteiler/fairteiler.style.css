@@ -69,3 +69,12 @@ span#wallpost-loader img
 {
 	margin:15px;
 }
+@media all and (max-width: 500px) {
+  	#fbshare-wrapper
+	{
+		display:none;
+	}
+	textarea.comment {
+	    width: 94% !important;
+	}
+}
