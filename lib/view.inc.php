@@ -612,6 +612,18 @@ function v_msgBarNew()
 					</span>
 					
 				</li>
+			
+				<li class="basket">
+					<a href="#" onclick="return false;">
+						<i class="img-fbasket"></i><span style="display:none;" class="badge">0</span>
+					</a>
+					<span style="display:none;" class="linkwrapper corner-all ui-shadow">
+						<ul class="linklist conversation-list">
+						</ul>
+						<a class="more" href="?page=basket">Alle zeigen</a>
+					</span>
+					
+				</li>
 			</ul>
 			
 			<div id="searchbar">

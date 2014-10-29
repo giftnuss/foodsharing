@@ -404,7 +404,7 @@
   list-style: none;
   text-align: center;
   position: relative;
-  z-index:100;
+  z-index:11;
 }
 .sy-pager li {
   display: inline-block;

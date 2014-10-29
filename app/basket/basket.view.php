@@ -109,10 +109,10 @@ class BasketView extends View
 	
 	public function listUpdates($updates)
 	{
-		$out = '<li class="header" style="text-align:center;color:#4A3520;padding:10px;">Anfragen</li>';
+		$out = '<li class="title">Anfragen</li>';
 		foreach ($updates as $u)
 		{
-			$out .= '<li class="msg msg-'.$u['id'].'-'.$u['fs_id'].'"><a onclick="ajreq(\'answer\',{app:\'basket\',id:'.(int)$u['id'].',fid:'.(int)$u['fs_id'].'});return false;" href="#"><span class="photo"><img src="'.img($u['fs_photo']).'" alt="avatar"></span><span class="subject"><span class="from">Anfrage von '.$u['fs_name'].'</span><span class="time"><button onclick="ajreq(\'removeRequest\',{app:\'basket\',id:'.(int)$u['id'].',fid:'.(int)$u['fs_id'].'});return false;" class="button" title="Anfrage verwerfen"><i class="fa fa-close"></i></button></span></span><span class="message">'.niceDate($u['time_ts']).'</span><span style="display:block;clear:both;"></span></a></li>';
+			$out .= '<li><a href="#" onclick="ajreq(\'answer\',{app:\'basket\',id:'.(int)$u['id'].',fid:'.(int)$u['fs_id'].'});return false;"><span class="button close" onclick="ajreq(\'removeRequest\',{app:\'basket\',id:'.(int)$u['id'].',fid:'.(int)$u['fs_id'].'});return false;"><i class="fa fa-close"></i></span><span class="pics"><img src="'.img($u['fs_photo']).'" alt="avatar" /></span><span class="names">Anfrage von '.$u['fs_name'].'</span><span class="msg">'.$u['description'].'</span><span class="time">'.niceDate($u['time_ts']).'</span><span class="clear"></span></a></li>';
 		}
 		
 		return $out;
@@ -120,18 +120,52 @@ class BasketView extends View
 	
 	public function listMyBaskets($baskets)
 	{
-		$out = '<li class="header" style="text-align:center;color:#4A3520;padding:10px;">Deine Essenskörbe</li>';
+		$out = '<li class="title">Deine Essenskörbe</li>';
 		foreach ($baskets as $b)
 		{
 			$img = 'img/basket.png';
 			if(!empty($b['picture']))
 			{
-				$img = 'images/basket/thumb-'.$b['picture'];
+				$img = 'images/basket/50x50-'.$b['picture'];
+				if(!file_exists($img))
+				{
+					try {
+						
+						copy('images/basket/thumb-' . $b['picture'], 'images/basket/50x50-' . $b['picture']);
+						$this->chmod('images/basket/50x50-' . $b['picture'], 777);
+						
+						$fimg = new fImage('images/basket/50x50-' . $b['picture']);
+						$fimg->cropToRatio(1, 1);
+						$fimg->resize(50, 50);
+						$fimg->saveChanges();
+						
+					} catch (Exception $e) {
+						$img = 'img/basket.png';
+					}
+				}
+				
 			}
-			$out .= '<li class="msg basket-'.$b['id'].'"><a href="#" onclick="return false;"><span class="photo"><img src="'.$img.'" alt="avatar"></span><span class="subject"><span class="from">'.tt($b['description'],150).'</span><span class="time"><button onclick="ajreq(\'removeBasket\',{app:\'basket\',id:'.(int)$b['id'].'});return false;" class="button" title="Essenskorb entfernen"><i class="fa fa-close"></i></button></span></span><span class="message">'.niceDate($b['time_ts']).'</span><span style="display:block;clear:both;"></span></a></li>';
+			
+			$reqtext = s('no_requests');
+			
+			if($b['req_count'] == 1)
+			{
+				$reqtext = s('one_request');
+			}
+			elseif ($b['req_count'] > 0)
+			{
+				$reqtext =sv('req_count',array('count'=> $b['req_count']));
+			}
+			
+			$out .= '<li class="basket-'.(int)$b['id'].'"><a href="#" onclick="ajreq(\'bubble\',{app:\'basket\',id:'.(int)$b['id'].'});return false;"><span class="button close" onclick="ajreq(\'removeBasket\',{app:\'basket\',id:'.(int)$b['id'].'});return false;"><i class="fa fa-close"></i></span><span class="pics"><img width="50" src="'.$img.'" alt="avatar" /></span><span class="names">'.tt($b['description'],150).'</span><span class="msg">'.$reqtext.'</span><span class="time">'.niceDate($b['time_ts']).'</span><span class="clear"></span></a></li>';
 		}
 		
 		return $out;
+	}
+	
+	private function chmod($file,$mode)
+	{
+		exec('chmod 777 /var/www/lmr-v1/freiwillige/' . $file);
 	}
 	
 	public function fsBubble($basket)
@@ -175,5 +209,50 @@ class BasketView extends View
 		'.$img.'
 		'.v_input_wrapper('Beschreibung', nl2br(autolink($basket['description']))).'
 		';
+	}
+	
+	public function basketInfoList($conversations,$click = 'msg.loadConversation')
+	{
+		$list = '';
+	
+		if(!empty($conversations))
+		{
+			foreach ($conversations as $c)
+			{
+				$pics = '';
+				$names = '';
+				if(!empty($c['member']))
+				{
+					$picwidth = 50;
+					$size = 'med';
+						
+					if(count($c['member']) > 2)
+					{
+						$picwidth = 25;
+						$size = 'mini';
+						shuffle($c['member']);
+					}
+						
+					foreach($c['member'] as $m)
+					{
+						if($m['id'] == fsId())
+						{
+							continue;
+						}
+						$pics .= '<img src="'.img($m['photo'],$size).'" width="'.$picwidth.'" />';
+						$names .= ', '.$m['name'];
+					}
+					$names = substr($names, 2);
+					$list .= '<li id="convlist-'.$c['id'].'"><a href="#" onclick="'.$click.'('.$c['id'].');return false;"><span class="pics">'.$pics.'</span><span class="names">'.$names.'</span><span class="msg">'.$c['last_message'].'</span><span class="time">'.niceDate($c['last_ts']).'</span><span class="clear"></span></a></li>';
+				}
+			}
+		}
+		else
+		{
+			$list = '<li class="noconv">'.v_info(s('no_conversations')).'</li>';
+		}
+	
+		return $list;
+	
 	}
 }

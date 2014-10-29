@@ -211,30 +211,42 @@ class BasketXhr extends Control
 		$this->chmod('images/basket/' . $pic, 777);
 		
 		$img = new fImage('images/basket/' . $pic);
-		
 		$img->resize(800, 800);
 		$img->saveChanges();
 		
-		copy('images/basket/' . $pic, 'images/basket/thumb-' . $pic);
-		copy('images/basket/' . $pic, 'images/basket/75x75-' . $pic);
-		copy('images/basket/' . $pic, 'images/basket/medium-' . $pic);
 		
-		$this->chmod('images/basket/thumb-' . $pic, 777);
-		$this->chmod('images/basket/75x75-' . $pic, 777);
+		copy('images/basket/' . $pic, 'images/basket/medium-' . $pic);
 		$this->chmod('images/basket/medium-' . $pic, 777);
+		
+		$img = new fImage('images/basket/medium-' . $pic);
+		$img->resize(450, 450);
+		$img->saveChanges();
+		
+		
+		copy('images/basket/medium-' . $pic, 'images/basket/thumb-' . $pic);
+		$this->chmod('images/basket/thumb-' . $pic, 777);
 		
 		$img = new fImage('images/basket/thumb-' . $pic);
 		$img->cropToRatio(1, 1);
 		$img->resize(200, 200);
 		$img->saveChanges();
 		
+		
+		copy('images/basket/thumb-' . $pic, 'images/basket/75x75-' . $pic);
+		$this->chmod('images/basket/75x75-' . $pic, 777);
+		
 		$img = new fImage('images/basket/75x75-' . $pic);
 		$img->cropToRatio(1, 1);
-		$img->resize(60, 60);
+		$img->resize(75, 75);
 		$img->saveChanges();
 		
-		$img = new fImage('images/basket/medium-' . $pic);
-		$img->resize(450, 450);
+		
+		copy('images/basket/75x75-' . $pic, 'images/basket/50x50-' . $pic);
+		$this->chmod('images/basket/50x50-' . $pic, 777);
+		
+		$img = new fImage('images/basket/50x50-' . $pic);
+		$img->cropToRatio(1, 1);
+		$img->resize(50, 50);
 		$img->saveChanges();
 	}
 	
@@ -390,10 +402,13 @@ class BasketXhr extends Control
 		);
 	}
 	
-	public function loadupdates()
+	public function infobar()
 	{
-		$out = '';
+		S::noWrite();
 		
+		$xhr = new Xhr();
+	
+		$out = '';
 		if($updates = $this->model->listUpdates())
 		{
 			$out = $this->view->listUpdates($updates);
@@ -404,22 +419,9 @@ class BasketXhr extends Control
 			$out .= $this->view->listMyBaskets($baskets);
 		}
 		
-		if(!empty($out))
-		{
-			return array(
-				'status' => 1,
-				'script' => '
-					$("#msgbar-basket ul li.loading, #msgbar-basket ul li.msg, #msgbar-basket ul li.header").remove();
-					$("#msgbar-basket ul").prepend(\''.jsSafe($out).'\');
-					$("#msgbar-basket li .time button").click(function(ev){
-					ev.stopPropagation();
-				});'
-			);
-		}
-		return array(
-				'status' => 1,
-				'script' => '$("#msgbar-basket ul li.loading, #msgbar-basket ul li.msg, #msgbar-basket ul li.header").remove();'
-		);
+		$xhr->addData('html', $out);
+		
+		$xhr->send();
 	}
 	
 	public function update()

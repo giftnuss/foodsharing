@@ -50,7 +50,7 @@ if(isset($_GET['app']) && isset($_GET['m']))
 			$out['script'] = '';
 		}
 		
-		$out['script'] = '$(".button").button();$(".tooltip").tooltip({show: false,hide:false,position: {	my: "center bottom-20",	at: "center top",using: function( position, feedback ) {	$( this ).css( position );	$("<div>").addClass( "arrow" ).addClass( feedback.vertical ).addClass( feedback.horizontal ).appendTo( this );}}});'.$out['script'];
+		$out['script'] = '$(".tooltip").tooltip({show: false,hide:false,position: {	my: "center bottom-20",	at: "center top",using: function( position, feedback ) {	$( this ).css( position );	$("<div>").addClass( "arrow" ).addClass( feedback.vertical ).addClass( feedback.horizontal ).appendTo( this );}}});'.$out['script'];
 		
 		echo json_encode($out);
 	}

@@ -24,6 +24,21 @@ i.img-basket
 	background-position:-34px 0px;
 }
 
+i.img-fbasket
+{
+	background-image: url(/img/bicon.png);
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+	display:inline-block;
+	width:23px;
+	height:22px;
+	margin:0;
+	padding:0;
+	position: relative;
+	top:3px;
+	
+}
+
 /* Colors */
 .brown
 {

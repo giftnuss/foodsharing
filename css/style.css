@@ -416,7 +416,7 @@ div.tree-scroller
     padding: 0;
     position: absolute;
     top: 8px;
-    width: 273px;
+    width: 260px;
     z-index: 40;
 }
 #searchbar input
@@ -427,7 +427,7 @@ div.tree-scroller
 	height:22px;
 	font-size:13px;
 	border:0 none;
-	width:240px;
+	width:227px;
 	color:#4a3520;
 	margin:-2px 0 0 -15px;
     padding: 4px 3px 3px 27px;
@@ -496,6 +496,16 @@ div.tree-scroller
 	padding-bottom:5px;
 	font-weight:lighter;
 	color:#4a3520;
+}
+#searchbar .t
+{
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+#searchbar .i img
+{
+	width: 50px;
 }
 
 textarea.xv

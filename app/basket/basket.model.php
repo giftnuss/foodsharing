@@ -247,7 +247,7 @@ class BasketModel extends Model
 	
 	public function listMyBaskets()
 	{
-		return $this->q('
+		if($baskets = $this->q('
 
 			SELECT 
 				`id`,
@@ -264,7 +264,17 @@ class BasketModel extends Model
 			AND 
 				`status` = 1
 				
-		');
+		'))
+		{
+			foreach ($baskets as $key => $b)
+			{
+				$baskets[$key]['req_count'] = $this->qOne('SELECT COUNT(foodsaver_id) FROM '.PREFIX.'basket_anfrage WHERE basket_id = '.(int)$b['id']);
+			}
+			
+			return $baskets;
+		}
+		
+		return false;
 	}
 	
 	public function setStatus($basket_id,$status,$fsid = false)
