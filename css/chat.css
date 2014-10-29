@@ -352,7 +352,7 @@
 {
 	background-color: transparent !important;
 }
-.conversation-list .pics img
+.conversation-list .pics img, .conversation-list .pics .avatar
 {
 	margin:0;
 	padding:0;

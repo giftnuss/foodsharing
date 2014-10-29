@@ -112,7 +112,7 @@ class BasketView extends View
 		$out = '<li class="title">Anfragen</li>';
 		foreach ($updates as $u)
 		{
-			$out .= '<li><a href="#" onclick="ajreq(\'answer\',{app:\'basket\',id:'.(int)$u['id'].',fid:'.(int)$u['fs_id'].'});return false;"><span class="button close" onclick="ajreq(\'removeRequest\',{app:\'basket\',id:'.(int)$u['id'].',fid:'.(int)$u['fs_id'].'});return false;"><i class="fa fa-close"></i></span><span class="pics"><img src="'.img($u['fs_photo']).'" alt="avatar" /></span><span class="names">Anfrage von '.$u['fs_name'].'</span><span class="msg">'.$u['description'].'</span><span class="time">'.niceDate($u['time_ts']).'</span><span class="clear"></span></a></li>';
+			$out .= '<li><a href="#" onclick="ajreq(\'answer\',{app:\'basket\',id:'.(int)$u['id'].',fid:'.(int)$u['fs_id'].'});return false;"><span class="button close" onclick="ajreq(\'removeRequest\',{app:\'basket\',id:'.(int)$u['id'].',fid:'.(int)$u['fs_id'].'});return false;"><i class="fa fa-close"></i></span><span class="pics">'.avatar($u['fs_photo'],50).'</span><span class="names">Anfrage von '.$u['fs_name'].'</span><span class="msg">'.$u['description'].'</span><span class="time">'.niceDate($u['time_ts']).'</span><span class="clear"></span></a></li>';
 		}
 		
 		return $out;
