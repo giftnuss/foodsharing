@@ -989,6 +989,9 @@ function u_team($betrieb)
 	$out = '<ul id="'.$id.'" class="team">';
 	$jssaver = array();
 	$first_n = true;
+	
+	$sleeper = '';
+	
 	foreach ($betrieb['foodsaver'] as $fs)
 	{
 		$jssaver[] = (int)$fs['id'];
@@ -1033,7 +1036,7 @@ function u_team($betrieb)
 			));
 		}
 		
-		$out .= '
+		$tmp = '
 			<li class="team fs-'.$fs['id'].'">
 				<a class="ui-corner-all'.$class.'" title="#tt-tt-'.$fs['id'].'" href="#" onclick="'.$click.'return false;">
 					'.avatar($fs).'
@@ -1047,6 +1050,15 @@ function u_team($betrieb)
 					'.$last.'
 				</span>
 			</li>';
+		
+		if($fs['sleep_status'] == 0)
+		{
+			$out .= $tmp;
+		}
+		else
+		{
+			$sleeper .= $tmp;
+		}
 		
 	}
 	
@@ -1080,7 +1092,7 @@ function u_team($betrieb)
 			}
 			
 			
-				$out .= '
+				$tmp = '
 					<li class="jumper fs-'.$fs['id'].'">
 						<a class="ui-corner-all'.$class.'" title="#tt-tt-'.$fs['id'].'" href="#" onclick="'.$click.'return false;">
 							'.avatar($fs).'
@@ -1093,12 +1105,19 @@ function u_team($betrieb)
 							'.$fs['vorname'].' ist Springer seit '.date('m/y',$fs['add_date']).'
 						</span>
 					</li>';
+				
+				if($fs['sleep_status'] == 0)
+				{
+					$out .= $tmp;
+				}
+				else
+				{
+					$sleeper .= $tmp;
+				}
 		}
 	}
 	
-	
-	
-	$out .= '</ul><div style="clear:both"></div>';
+	$out .= $sleeper . '</ul><div style="clear:both"></div>';
 	
 	
 	
