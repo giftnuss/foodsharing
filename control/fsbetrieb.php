@@ -432,7 +432,7 @@ else if(isset($_GET['id']))
 				setInterval(u_updatePosts,5000);		
 			');
 		
-			$opt = array('class'=> 'moreswap moreswap-height-200');
+			$opt = array();
 			if(isMob())
 			{
 				$opt = array('class'=> 'moreswap moreswap-height-200');
@@ -1011,17 +1011,17 @@ function u_team($betrieb)
 		$tel = '';
 		if(!empty($fs['handy']))
 		{
-			$tel .= '<span class="item phone"><a href="tel:'.$fs['handy'].'"><span>'.$fs['handy'].'</span></a></span>';
+			$tel .= '<span class="item phone"><span>'.$fs['handy'].'</span></span>';
 		}
 		if(!empty($fs['telefon']))
 		{
-			$tel .= '<span class="item phone"><a href="tel:'.$fs['telefon'].'"><span>'.$fs['telefon'].'</span></a></span>';
+			$tel .= '<span class="item phone"><span>'.$fs['telefon'].'</span></span>';
 		}
 		
 		$since = '';
 		if((int)$fs['add_date'] > 0)
 		{
-			$since = 'ist im Team seit '.date('j.n.Y',$fs['add_date']);
+			$since = 'ist im Team seit '.date('j.n.Y', $fs['add_date']);
 		}
 		
 		$last = '';
@@ -1072,18 +1072,18 @@ function u_team($betrieb)
 			$tel = '';
 			if(!empty($fs['handy']))
 			{
-				$tel .= '<span class="item phone"><a href="tel:'.$fs['handy'].'"><span>'.$fs['handy'].'</span></a></span>';
+				$tel .= '<span class="item phone"><span>'.$fs['handy'].'</span></span>';
 			}
 			if(!empty($fs['telefon']))
 			{
-				$tel .= '<span class="item phone"><a href="tel:'.$fs['telefon'].'"><span>'.$fs['telefon'].'</span></a></span>';
+				$tel .= '<span class="item phone"><span>'.$fs['telefon'].'</span></span>';
 			}
 			
 			
 				$out .= '
 					<li class="jumper fs-'.$fs['id'].'">
 						<a class="ui-corner-all'.$class.'" title="#tt-tt-'.$fs['id'].'" href="#" onclick="'.$click.'return false;">
-							<img class="ui-corner-all" src="'.img($fs['photo']).'" alt="'.$fs['vorname'].'" />
+							'.avatar($fs).'
 							<span class="infos">
 								<span class="item"><strong>'.$fs['name'].'</strong></span>
 								'.$tel.'
