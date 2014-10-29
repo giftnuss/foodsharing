@@ -179,6 +179,7 @@ class BasketModel extends Model
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,
 				fs.id AS fs_id,
+				fs.sleep_status,
 				b.id,
 				b.description
 				
