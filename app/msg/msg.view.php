@@ -55,34 +55,34 @@ class MsgView extends View
 			foreach ($conversations as $c)
 			{
 				$pics = '';
-				$names = '';
-				$title = $c['name'];
-				
+				$title = '';
 				
 				if(!empty($c['member']))
 				{
-					if($title == '')
+					
+					$picwidth = 50;
+					$size = 'med';
+					
+					if(count($c['member']) > 2)
 					{
-						$picwidth = 50;
-						$size = 'med';
+						$picwidth = 25;
+						$size = 'mini';
+						shuffle($c['member']);
+					}
 						
-						if(count($c['member']) > 2)
+					foreach($c['member'] as $m)
+					{
+						if($m['id'] == fsId())
 						{
-							$picwidth = 25;
-							$size = 'mini';
-							shuffle($c['member']);
+							continue;
 						}
-						
-						foreach($c['member'] as $m)
-						{
-							if($m['id'] == fsId())
-							{
-								continue;
-							}
-							$pics .= '<img src="'.img($m['photo'],$size).'" width="'.$picwidth.'" />';
-							$names .= ', '.$m['name'];
-						}
-						$title = substr($names, 2);
+						$pics .= '<img src="'.img($m['photo'],$size).'" width="'.$picwidth.'" />';
+						$title .= ', '.$m['name'];
+					}
+					
+					if($c['name'] == '')
+					{
+						$title = substr($title, 2);
 					}
 					
 					$list .= '<li id="convlist-'.$c['id'].'"><a href="#" onclick="'.$click.'('.$c['id'].');return false;"><span class="pics">'.$pics.'</span><span class="names">'.$title.'</span><span class="msg">'.$c['last_message'].'</span><span class="time">'.niceDate($c['last_ts']).'</span><span class="clear"></span></a></li>';
