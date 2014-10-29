@@ -98,6 +98,14 @@ class MsgModel extends Model
 		return $conversation_id;
 	}
 	
+	/**
+	 * Renames an Conversation
+	 */
+	public function renameConversation($cid,$name)
+	{
+		return $this->update('UPDATE '.PREFIX.'conversation SET name = '.$this->strval($name).' WHERE id = '.(int)$cid);
+	}
+	
 	public function updateConversation($cid,$last_fs_id,$body,$last_message_id)
 	{
 		return $this->update('
@@ -257,7 +265,8 @@ class MsgModel extends Model
 				UNIX_TIMESTAMP(c.`last`) AS last_ts,
 				c.`member`,
 				c.`last_message`,
-				hc.unread
+				hc.unread,
+				c.name
 				
 			FROM 
 				'.PREFIX.'conversation c,
@@ -424,8 +433,8 @@ class MsgModel extends Model
 				m.`time` 
 			
 			FROM 
-				`fs_msg` m,
-				`fs_foodsaver` fs
+				`'.PREFIX.'msg` m,
+				`'.PREFIX.'foodsaver` fs
 			
 			WHERE 
 				m.foodsaver_id = fs.id
@@ -447,6 +456,34 @@ class MsgModel extends Model
 			return true;
 		}
 		return false;
+	}
+	
+	public function deleteUserFromConversation($cid,$fsid)
+	{
+		/**
+		 * delete only users from non 1:1 conversations
+		 */
+		if((int)$this->qOne('SELECT COUNT(foodsaver_id) FROM `'.PREFIX.'foodsaver_has_conversation` WHERE conversation_id = '.(int)$cid) > 2)
+		{
+			$this->del('DELETE FROM `'.PREFIX.'foodsaver_has_conversation` WHERE conversation_id = '.(int)$cid.' AND foodsaver_id = '.(int)$fsid);
+			if($member = $this->qOne('SELECT member FROM '.PREFIX.'conversation WHERE id = '.(int)$cid))
+			{
+				$member = unserialize($member);
+				$out = array();
+				
+				foreach ($member as $k => $v)
+				{
+					if($v['id'] != fsId())
+					{
+						$out[$k] = $v;
+					}
+				}
+				
+				return $this->update('UPDATE '.PREFIX.'conversation SET member = '.$this->strval(serialize($out).' WHERE id = '.(int)$cid));
+			}
+			
+			return false;
+		}
 	}
 	
 	public function insertConversation($recipients)

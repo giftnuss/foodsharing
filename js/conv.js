@@ -364,31 +364,37 @@ var conv = {
 				id:cid
 			},
 			success: function(ret){
-				
 				/*
 				 * add link to leave the chat only if its no 1:1 conversation
 				 */
-				
 				if(ret.member.length > 2)
 				{
-					conv.addChatOption(cid,'<span class="optinput"><input placeholder="Unterhaltung benennen..." type="text" name="chatname" /><i class="fa fa-arrow-circle-right"></i></span>');
-					conv.addChatOption(cid,'<a href="#" onclick="ajax.req(\'conv\',\'leave\',{cid:'+cid+'});return false;">Unterhaltung verlassen</a>');
+					//conv.addChatOption(cid,'<a href="#" onclick="ajax.req(\'msg\',\'invite\',{data:{cid:'+cid+'}});return false;">Jemand zum Chat hinzufügen</a>');
+					conv.addChatOption(cid,'<a href="#" onclick="if(confirm(\'Bist Du Dir Sicher das Du den Chat verlassen möchtest?\')){ajax.req(\'msg\',\'leave\',{data:{cid:'+cid+'}});}return false;">Chat verlassen</a>');
+					conv.addChatOption(cid,'<span class="optinput"><input placeholder="Chat umbenennen..." type="text" name="chatname" value="" maxlength="30" /><i onclick="var val=$(this).prev().val();ajax.req(\'msg\',\'rename\',{data:{cid:'+cid+',name:val}});return false;" class="fa fa-arrow-circle-right"></i></span>');
 				}
 				
 				/*
 				 * first make a title with all the usernames
 				 */
-				title = new Array();
-				for(var i=0;i<ret.member.length;i++)
+				title = ret.conversation.name;
+				if(ret.conversation.name == '')
 				{
-					if(ret.member[i] != undefined && ret.member[i].id != user.id)
+					title = new Array();
+					for(var i=0;i<ret.member.length;i++)
 					{
-						title.push(ret.member[i].name);
+						if(ret.member[i] != undefined && ret.member[i].id != user.id)
+						{
+							title.push(ret.member[i].name);
+						}
+						
 					}
-					
+					title = title.join(', ');
 				}
 				
-				conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html('<i class="fa fa-comment fa-flip-horizontal"></i> ' + title.join(', '));
+				
+				
+				conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html('<i class="fa fa-comment fa-flip-horizontal"></i> ' + title);
 				
 				/*
 				 * now append all arrived messages

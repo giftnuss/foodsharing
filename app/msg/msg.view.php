@@ -56,29 +56,36 @@ class MsgView extends View
 			{
 				$pics = '';
 				$names = '';
+				$title = $c['name'];
+				
+				
 				if(!empty($c['member']))
 				{
-					$picwidth = 50;
-					$size = 'med';
-					
-					if(count($c['member']) > 2)
+					if($title == '')
 					{
-						$picwidth = 25;
-						$size = 'mini';
-						shuffle($c['member']);
-					}
-					
-					foreach($c['member'] as $m)
-					{
-						if($m['id'] == fsId())
+						$picwidth = 50;
+						$size = 'med';
+						
+						if(count($c['member']) > 2)
 						{
-							continue;
+							$picwidth = 25;
+							$size = 'mini';
+							shuffle($c['member']);
 						}
-						$pics .= '<img src="'.img($m['photo'],$size).'" width="'.$picwidth.'" />';
-						$names .= ', '.$m['name'];
+						
+						foreach($c['member'] as $m)
+						{
+							if($m['id'] == fsId())
+							{
+								continue;
+							}
+							$pics .= '<img src="'.img($m['photo'],$size).'" width="'.$picwidth.'" />';
+							$names .= ', '.$m['name'];
+						}
+						$ti = substr($names, 2);
 					}
-					$names = substr($names, 2);
-					$list .= '<li id="convlist-'.$c['id'].'"><a href="#" onclick="'.$click.'('.$c['id'].');return false;"><span class="pics">'.$pics.'</span><span class="names">'.$names.'</span><span class="msg">'.$c['last_message'].'</span><span class="time">'.niceDate($c['last_ts']).'</span><span class="clear"></span></a></li>';
+					
+					$list .= '<li id="convlist-'.$c['id'].'"><a href="#" onclick="'.$click.'('.$c['id'].');return false;"><span class="pics">'.$pics.'</span><span class="names">'.$title.'</span><span class="msg">'.$c['last_message'].'</span><span class="time">'.niceDate($c['last_ts']).'</span><span class="clear"></span></a></li>';
 				}
 			}
 		}
@@ -105,8 +112,7 @@ class MsgView extends View
 		$out .= '
 			<div id="msg-control">
 				<form>
-					'.v_form_textarea('msg_answer',array('nolabel'=>true,'placeholder' => s('write_something'))).'	
-					<p><input type="submit" class="button" name="submit" value="'.s('submit').'" /></p>
+					'.v_form_textarea('msg_answer',array('nolabel'=>true,'placeholder' => s('write_something'))).'<input id="conv_submit" type="submit" class="button" name="submit" value="'.s('submit').'" />
 				</form>
 			</div>';
 		

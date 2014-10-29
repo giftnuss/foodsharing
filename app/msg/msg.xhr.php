@@ -17,6 +17,47 @@ class MsgXhr extends Control
 	}
 	
 	/**
+	 * ajax call to rename an conversation
+	 */
+	public function rename()
+	{
+		if($this->mayConversation($_GET['cid']))
+		{
+			$xhr = new Xhr();
+			
+			$name = strip_tags($_GET['name']);
+			$name= trim($name);
+			
+			if($name != '')
+			{
+				if($this->model->renameConversation($_GET['cid'],$name))
+				{
+					$xhr->addScript('$("#chat-'.(int)$_GET['cid'].' .chatboxtitle").html(\'<i class="fa fa-comment fa-flip-horizontal"></i> '.$name.'\');conv.settings('.(int)$_GET['cid'].');$("#convlist-'.(int)$_GET['cid'].' .names").html("'.$name.'")');
+				}
+			}
+			
+			$xhr->send();
+			
+		}
+	}
+	
+	/**
+	 * ajax call to delete logged in user from an chat
+	 */
+	public function leave()
+	{
+		if($this->mayConversation($_GET['cid']))
+		{
+			if($this->model->deleteUserFromConversation($_GET['cid'],fsId()))
+			{
+				$xhr = new Xhr();
+				$xhr->addScript('conv.close('.(int)$_GET['cid'].');$("#convlist-'.(int)$_GET['cid'].'").remove();conv.registerPollingService();');
+				$xhr->send();
+			}
+		}
+	}
+	
+	/**
 	 * ajax call to refresh infobar messages
 	 */
 	public function infobar()
@@ -41,6 +82,7 @@ class MsgXhr extends Control
 			{
 				$xhr = new Xhr();
 				$xhr->addData('member', $member);
+				$xhr->addData('conversation', $this->model->getValues(array('name'), 'conversation', $_GET['id']));
 				if($msgs = $this->model->loadConversationMessages($_GET['id']))
 				{
 					$xhr->addData('messages', $msgs);

@@ -30,7 +30,7 @@ var msg = {
 		 */
 		this.initComposer();
 		
-		var height = ($(window).height()-250)+'px';
+		var height = ($(window).height()-200)+'px';
 		this.$conversation.css('height',height);
 		
 		this.$conversation.slimScroll({
@@ -42,7 +42,7 @@ var msg = {
 		 */
 		$(window).resize(function(){
 
-			var height = ($(window).height()-250)+'px';
+			var height = ($(window).height()-200)+'px';
 			msg.$conversation.css('height',height);
 			msg.$conversation.parent('.slimScrollDiv').css('height',height);
 			msg.$conversation.slimScroll({
@@ -359,6 +359,7 @@ var msg = {
 				 */
 				
 				var title = '';
+				
 				var names = [];
 				if(data.member != undefined && data.member.length > 0)
 				{
@@ -372,10 +373,14 @@ var msg = {
 					}
 				}
 				
+				str_title = data.conversation.name;
+				if(str_title == '')
+				{
+					str_title = 'Unterhaltung mit ' + names.join(', ');
+				}
 				
 				
-				
-				title = '&nbsp;<div class="images">' + title + '</div>Unterhaltung mit ' + names.join(', ') + '<div style="clear:both;"></div>';
+				title = '&nbsp;<div class="images">' + title + '</div>' + str_title + '<div style="clear:both;"></div>';
 				
 				$('#msg-conversation-title a').remove();
 				$('#msg-conversation-title').append(title);

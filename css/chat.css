@@ -62,6 +62,32 @@
     width: 180px;
     z-index: 100;
 }
+.chatboxhead .settings li .optinput
+{
+	padding:0;
+}
+.chatboxhead .settings li .optinput i
+{
+	color: #4a3520;
+    cursor: pointer;
+    font-size: 20px;
+    margin-left: -21px;
+    position: relative;
+    top: 3px;
+}
+.chatboxhead .settings li .optinput i:hover
+{
+	color:#46891b;
+}
+
+.chatboxhead .settings li input
+{
+	border: 1px solid #a2988e;
+    border-radius: 4px;
+    margin-bottom: 0px;
+    padding: 4px 5px;
+    width: 167px;
+}
 .chatboxhead .linklist li a
 {
 	-webkit-border-radius: 4px;

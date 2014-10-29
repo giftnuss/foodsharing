@@ -1,3 +1,11 @@
+
+#conv_submit
+{
+	float: right;
+    margin-top: -57px;
+    position: relative;
+    right: 16px;
+}
 #msg-conversation ul, #msg-conversation ul li, #msg-conversation ul li span, #conversation-list ul, #conversation-list ul li
 {
 	display:block;
