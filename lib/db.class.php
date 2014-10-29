@@ -46,6 +46,20 @@ class Mem
 		return Mem::set('user-'.$key.'-'.$id, $value);
 	}
 	
+	public static function userAppend($id,$key,$value)
+	{
+		$out = array();
+		if($val = Mem::user($id,$key))
+		{
+			if(is_array($val))
+			{
+				$out = $val;
+			}
+		}
+		$out[] = $value;
+		return Mem::set('user-'.$key.'-'.$id, $out);
+	}
+	
 	public static function userDel($id,$key)
 	{
 		return Mem::del('user-'.$key.'-'.$id);

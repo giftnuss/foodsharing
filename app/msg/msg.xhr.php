@@ -83,8 +83,9 @@ class MsgXhr extends Control
 							{
 								if($m['id'] != fsId())
 								{
-									Mem::userSet(fsId(), 'msg-update', true);
-						
+									Mem::userAppend($m['id'], 'msg-update', (int)$_POST['c']);
+
+									
 									/*
 									 * send an E-Mail if the user is not online
 									*/
@@ -261,15 +262,18 @@ class MsgXhr extends Control
 			$cid = (int)$opt['cid'];
 			$lmid = (int)$opt['mid'];
 		}
-
-		if($conv_ids = $this->model->checkConversationUpdates())
+		
+		if($convids = $this->model->checkConversationUpdates())
 		{
-			$this->model->setAsRead($conv_ids);
+			$conv_keys = array_flip($convids);
+			
+			$this->model->setAsRead($convids);
 			$return = array();
 			/*
 			 * check is a new message there for active conversation?
 			 */
-			if($cid && isset($conv_ids[$cid]))
+			
+			if($cid && isset($conv_keys[$cid]))
 			{
 				if($messages = $this->model->getLastMessages($cid,$lmid))
 				{
@@ -277,7 +281,7 @@ class MsgXhr extends Control
 				}
 			}
 			
-			if($convs = $this->model->listConversationUpdates($conv_ids))
+			if($convs = $this->model->listConversationUpdates($convids))
 			{
 				$return['convs'] = $convs;
 			}

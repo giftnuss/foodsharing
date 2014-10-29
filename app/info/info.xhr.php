@@ -100,8 +100,6 @@ class InfoXhr extends Control
 				$xhr->send();
 			}
 		}
-		
-		
 		/*
 		 * 200 OK
 Array
@@ -191,7 +189,8 @@ Array
 							}
 						}
 					}
-					usleep(500000);
+					sleep(1);
+					//usleep(500000);
 				}
 			}
 			else
@@ -234,17 +233,17 @@ Array
 	private function updateChecker()
 	{
 		/*
-		 * check for conversation updates
+		 * check for conversation updates only ifnot on big message page
 		*/
 		
-		if($conv_ids = $this->model->checkConversationUpdates())
+		if(($_GET['p'] !='msg') && ($conv_ids = $this->model->checkConversationUpdates()))
 		{
 			$this->check = true;
-		
+			
 			$this->info[] = array(
-				'type' => 'msg',
-				'data' => array('ids' => $conv_ids),
-				'badge' => count($conv_ids)
+					'type' => 'msg',
+					'data' => array('ids' => $conv_ids),
+					'badge' => count($conv_ids)
 			);
 		}
 		

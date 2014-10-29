@@ -289,7 +289,8 @@ var info = {
 					c:info.hbCount,
 					
 					// add services to param list
-					s:info.services
+					s:info.services,
+					p:GET('page')
 				},
 				success: function(ret){
 					

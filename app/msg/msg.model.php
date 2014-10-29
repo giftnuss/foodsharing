@@ -297,12 +297,35 @@ class MsgModel extends Model
 		/*
 		 * for more speed check the memcache first
 		 */
-		if(Mem::user(fsId(),'msg-update'))
+		
+		/*
+		 * Memcache var is settet but no updates
+		 */
+		$cache = Mem::user(fsId(),'msg-update');
+		
+		if($cache === 0)
 		{
-			Mem::userSet(fsId(), 'msg-update', false);
-			return $this->qColKey('SELECT conversation_id FROM '.PREFIX.'foodsaver_has_conversation WHERE foodsaver_id = '.(int)fsId().' AND unread = 1');
+			return false;
+		}
+		else if(is_array($cache))
+		{
+			Mem::userSet(fsId(), 'msg-update', 0);
+			return $cache;
 		}
 		
+		/*
+		 * Memcache is not settedso get coonversation ids direct fromdm
+		 */
+		else
+		{
+			Mem::userSet(fsId(), 'msg-update', 0);
+			return $this->getUpdatedConversationIds();
+		}
+	}
+	
+	public function getUpdatedConversationIds()
+	{
+		return $this->qCol('SELECT conversation_id FROM '.PREFIX.'foodsaver_has_conversation WHERE foodsaver_id = '.(int)fsId().' AND unread = 1');
 	}
 	
 	public function checkChatUpdates($ids)

@@ -366,6 +366,16 @@ var conv = {
 			success: function(ret){
 				
 				/*
+				 * add link to leave the chat only if its no 1:1 conversation
+				 */
+				
+				if(ret.member.length > 2)
+				{
+					conv.addChatOption(cid,'<span class="optinput"><input placeholder="Unterhaltung benennen..." type="text" name="chatname" /><i class="fa fa-arrow-circle-right"></i></span>');
+					conv.addChatOption(cid,'<a href="#" onclick="ajax.req(\'conv\',\'leave\',{cid:'+cid+'});return false;">Unterhaltung verlassen</a>');
+				}
+				
+				/*
 				 * first make a title with all the usernames
 				 */
 				title = new Array();
@@ -419,8 +429,11 @@ var conv = {
 		if(conv.getKey(cid) === -1)
 		{
 			right = 20 + (this.chatCount*285);
+			
+			options = '<li><a href="?page=msg&cid='+cid+'">Alle Nachrichten</a></li>';
+			
 			var $el = $('<div id="chat-'+cid+'" class="chatbox ui-corner-top" style="bottom: 0px; right: '+right+'px; display: block;"></div>').appendTo('body');
-			$el.html('<div class="chatboxhead ui-corner-top"><a class="chatboxtitle" href="#" onclick="conv.togglebox(' + cid + ');return false;"><i class="fa fa-spinner fa-spin"></i> ' + name + '</a><ul style="display:none;" class="settings linklist linkbubble ui-shadow corner-all"><li><a href="?page=msg&cid='+cid+'">Alle Nachrichten</a></li></ul><div class="chatboxoptions"><a href="#" class="fa fa-gear" title="Einstellungen" onclick="conv.settings('+cid+');return false;"></a><a title="schließen" class="fa fa-close" href="#" onclick="conv.close('+cid+');return false;"></a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea placeholder="schreibe etwas..." class="chatboxtextarea" onkeydown="conv.checkInputKey(event,this,\''+cid+'\');"></textarea></div>');
+			$el.html('<div class="chatboxhead ui-corner-top"><a class="chatboxtitle" href="#" onclick="conv.togglebox(' + cid + ');return false;"><i class="fa fa-spinner fa-spin"></i> ' + name + '</a><ul style="display:none;" class="settings linklist linkbubble ui-shadow corner-all">'+options+'</ul><div class="chatboxoptions"><a href="#" class="fa fa-gear" title="Einstellungen" onclick="conv.settings('+cid+');return false;"></a><a title="schließen" class="fa fa-close" href="#" onclick="conv.close('+cid+');return false;"></a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea placeholder="schreibe etwas..." class="chatboxtextarea" onkeydown="conv.checkInputKey(event,this,\''+cid+'\');"></textarea></div>');
 			
 			$el.children('.chatboxcontent').slimScroll();
 			$el.children('.chatboxinput').children('textarea').autosize();
@@ -460,5 +473,9 @@ var conv = {
 		{
 			this.maxbox(cid);
 		}
+	},
+	addChatOption: function(cid,el)
+	{
+		$('#chat-'+cid+' .settings').append('<li>'+el+'</li>');
 	}
 };
