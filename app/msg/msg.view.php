@@ -84,6 +84,10 @@ class MsgView extends View
 					{
 						$title = substr($title, 2);
 					}
+					else
+					{
+						$title = $c['name'];
+					}
 					
 					$list .= '<li id="convlist-'.$c['id'].'"><a href="#" onclick="'.$click.'('.$c['id'].');return false;"><span class="pics">'.$pics.'</span><span class="names">'.$title.'</span><span class="msg">'.$c['last_message'].'</span><span class="time">'.niceDate($c['last_ts']).'</span><span class="clear"></span></a></li>';
 				}
