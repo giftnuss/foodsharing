@@ -2259,6 +2259,7 @@ div.xv_left ul li a:hover
 		top:0px !important;
 	}
 }
+
 @media (max-width: 600px) {
 	body.loggedin #layout_logo
 	{
@@ -2266,7 +2267,7 @@ div.xv_left ul li a:hover
 	}
 	#searchbar input
 	{
-		width:100px !important;
+		width:200px !important;
 	}
 	#infobar 
 	{
@@ -2300,6 +2301,18 @@ div.xv_left ul li a:hover
 	{
 		position: fixed !important;
 		top:0px !important;
+	}
+}
+@media (max-width: 500px) {
+	#searchbar input
+	{
+		width:100px !important;
+	}
+}
+@media (max-width: 400px) {
+	#searchbar input
+	{
+		width:42px !important;
 	}
 }
 ul.bread
