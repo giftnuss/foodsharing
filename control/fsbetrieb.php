@@ -432,6 +432,11 @@ else if(isset($_GET['id']))
 				setInterval(u_updatePosts,5000);		
 			');
 		
+			$opt = array('class'=> 'moreswap moreswap-height-200');
+			if(isMob())
+			{
+				$opt = array('class'=> 'moreswap moreswap-height-200');
+			}
 			addContent(v_field('
 				<div id="pinnwand">
 					
@@ -446,7 +451,7 @@ else if(isset($_GET['id']))
 					</div>
 				
 					<div class="posts"></div>
-				</div>', 'Pinnwand'));
+				</div>', 'Pinnwand',$opt));
 			/*pinnwand ende*/
 		}
 		else 
@@ -1006,11 +1011,11 @@ function u_team($betrieb)
 		$tel = '';
 		if(!empty($fs['handy']))
 		{
-			$tel .= '<span class="item phone">'.((isMob()) ? '<a href="tel:'.$fs['handy'].'"><span>'.$fs['handy'].'</span></a>' : $fs['handy']).'</span>';
+			$tel .= '<span class="item phone"><a href="tel:'.$fs['handy'].'"><span>'.$fs['handy'].'</span></a></span>';
 		}
 		if(!empty($fs['telefon']))
 		{
-			$tel .= '<span class="item phone">'.((isMob()) ? '<a href="tel:'.$fs['telefon'].'"><span>'.$fs['telefon'].'</span></a>' : $fs['telefon']).'</span>';
+			$tel .= '<span class="item phone"><a href="tel:'.$fs['telefon'].'"><span>'.$fs['telefon'].'</span></a></span>';
 		}
 		
 		$since = '';
@@ -1028,40 +1033,21 @@ function u_team($betrieb)
 			));
 		}
 		
-		if (isMob())
-		{
-			$out .= '
-					<li class="team fs-'.$fs['id'].'">
-						<div class="ui-corner-all'.$class.'">
-							<a href="#" onclick="'.$click.'return false;" title="#tt-tt-'.$fs['id'].'">'.avatar($fs).'</a>
-							<span class="infos">
-								<span class="item name"><a href="#" onclick="'.$click.'return false;" title="#tt-tt-'.$fs['id'].'"><strong>'.$fs['name'].'</strong></a> <span style="float:right">('.$fs['stat_fetchcount'].')</span></span>
-								'.$tel.'
-							</span>
-						</div>
-						<span style="display:none" class="tt-'.$fs['id'].'">
-							'.$fs['vorname'].' '.$since.'<br />
-							'.$last.'
-						</span>
-					</li>';
-		}
-		else
-		{
-			$out .= '
-					<li class="team fs-'.$fs['id'].'">
-						<a class="ui-corner-all'.$class.'" title="#tt-tt-'.$fs['id'].'" href="#" onclick="'.$click.'return false;">
-							'.avatar($fs).'
-							<span class="infos">
-								<span class="item"><strong>'.$fs['name'].'</strong> <span style="float:right">('.$fs['stat_fetchcount'].')</span></span>
-								'.$tel.'
-							</span>
-						</a>
-						<span style="display:none" class="tt-'.$fs['id'].'">
-							'.$fs['vorname'].' '.$since.'<br />
-							'.$last.'
-						</span>
-					</li>';
-		}
+		$out .= '
+			<li class="team fs-'.$fs['id'].'">
+				<a class="ui-corner-all'.$class.'" title="#tt-tt-'.$fs['id'].'" href="#" onclick="'.$click.'return false;">
+					'.avatar($fs).'
+					<span class="infos">
+						<span class="item"><strong>'.$fs['name'].'</strong> <span style="float:right">('.$fs['stat_fetchcount'].')</span></span>
+						'.$tel.'
+					</span>
+				</a>
+				<span style="display:none" class="tt-'.$fs['id'].'">
+					'.$fs['vorname'].' '.$since.'<br />
+					'.$last.'
+				</span>
+			</li>';
+		
 	}
 	
 	if($betrieb['springer'])
@@ -1086,30 +1072,14 @@ function u_team($betrieb)
 			$tel = '';
 			if(!empty($fs['handy']))
 			{
-				$tel .= '<span class="item phone">'.((isMob()) ? '<a href="tel:'.$fs['handy'].'"><span>'.$fs['handy'].'</span></a>' : $fs['handy']).'</span>';
+				$tel .= '<span class="item phone"><a href="tel:'.$fs['handy'].'"><span>'.$fs['handy'].'</span></a></span>';
 			}
 			if(!empty($fs['telefon']))
 			{
-				$tel .= '<span class="item phone">'.((isMob()) ? '<a href="tel:'.$fs['telefon'].'"><span>'.$fs['telefon'].'</span></a>' : $fs['telefon']).'</span>';
+				$tel .= '<span class="item phone"><a href="tel:'.$fs['telefon'].'"><span>'.$fs['telefon'].'</span></a></span>';
 			}
 			
-			if (isMob())
-			{
-				$out .= '
-					<li class="jumper fs-'.$fs['id'].'">
-						<div class="ui-corner-all'.$class.'">
-							<a title="#tt-tt-'.$fs['id'].'" href="#" onclick="'.$click.'return false;"><img class="ui-corner-all" src="'.img($fs['photo']).'" alt="'.$fs['vorname'].'" /></a>
-							<span class="infos">
-								<span class="item"><a title="#tt-tt-'.$fs['id'].'" href="#" onclick="'.$click.'return false;"><strong>'.$fs['name'].'</strong></a></span>
-								'.$tel.'
-							</span>
-						</div>
-						<span style="display:none" class="tt-'.$fs['id'].'">
-							'.$fs['vorname'].' ist Springer seit '.date('m/y',$fs['add_date']).'
-						</span>
-					</li>';
-			}
-			else {
+			
 				$out .= '
 					<li class="jumper fs-'.$fs['id'].'">
 						<a class="ui-corner-all'.$class.'" title="#tt-tt-'.$fs['id'].'" href="#" onclick="'.$click.'return false;">
@@ -1123,7 +1093,6 @@ function u_team($betrieb)
 							'.$fs['vorname'].' ist Springer seit '.date('m/y',$fs['add_date']).'
 						</span>
 					</li>';
-			}
 		}
 	}
 	

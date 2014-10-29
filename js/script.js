@@ -97,7 +97,7 @@ var sleepmode = {
 		});
 	}
 };
-
+var g_moreswapheight = 100;
 $(document).ready(function(){
 	
 	//$(".sleepmode-1, .sleepmode-2").append('<span class="corner-all bubble bubble-right ui-shadow"> nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus</span>');
@@ -109,15 +109,29 @@ $(document).ready(function(){
 	 $('#main').css('display','block');
 	 
 	 $('.moreswap').each(function(){
+		 
+		 var height = 100;
+		 
 		 $this = $(this);
-		 $this.after('<a class="moreswaplink" href="#" data-show="0">Mehr anzeigen</a>');
+		 $this.after('<a class="moreswaplink" href="#" data-show="0">Mehr anzeigen</a>');		 
+		 
+		 cheight = $this.attr('class').split('moreswap-height-');
+		 
+		 if(cheight.length > 1)
+		 {
+			 height = parseInt(cheight[1])
+		 }
+		 
+		 g_moreswapheight = height;
+		 
 		 if($this.height() > 100)
 		 {
 			 $this.css({
-				 'height':'100px',
+				 'height':height+'px',
 				 'overflow':'hidden'
 			 });
 		 }
+
 	 });
 	 
 	 $('.moreswaplink').each(function(){
@@ -136,7 +150,7 @@ $(document).ready(function(){
 			 else
 		     {
 				 $this.prev().css({
-					 'height':'100px',
+					 'height':g_moreswapheight+'px',
 					 'overflow':'hidden'
 				 });
 				 $this.text('Mehr anzeigen');
