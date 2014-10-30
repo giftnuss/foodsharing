@@ -403,14 +403,17 @@ GROUP BY foodsaver_id'));
 			$children = $this->getChildBezirke($this->getCurrentBezirkId());
 		}
 		
-		if($res = $this->searchTable('bezirk', array('name'), $q,array(
-				'name' => '`name`',
-				'click' => 'CONCAT("goTo(\'?page=bezirk&bid=",`id`,"\');")',
-				'teaser' => 'CONCAT("")'
-			
-		)))
+		if(S::may('fs'))
 		{
-			$out['bezirk'] = $res;
+			if($res = $this->searchTable('bezirk', array('name'), $q,array(
+					'name' => '`name`',
+					'click' => 'CONCAT("goTo(\'?page=bezirk&bid=",`id`,"\');")',
+					'teaser' => 'CONCAT("")'
+				
+			)))
+			{
+				$out['bezirk'] = $res;
+			}
 		}
 		
 		if($res = $this->searchTable('foodsaver', array('name','nachname','plz','stadt'), $q,array(
@@ -423,14 +426,17 @@ GROUP BY foodsaver_id'));
 			$out['foodsaver'] = $res;
 		}
 		
-		if($res = $this->searchTable('betrieb', array('name','stadt','plz'), $q,array(
-				'name' => '`name`',
-				'click' => 'CONCAT("betrieb(",`id`,");")',
-				'teaser' => 'CONCAT(`str`,", ",`plz`," ",`stadt`)'
-				
-		),$children))
+		if(S::may('fs'))
 		{
-			$out['betrieb'] = $res;
+			if($res = $this->searchTable('betrieb', array('name','stadt','plz'), $q,array(
+					'name' => '`name`',
+					'click' => 'CONCAT("betrieb(",`id`,");")',
+					'teaser' => 'CONCAT(`str`,", ",`plz`," ",`stadt`)'
+					
+			),$children))
+			{
+				$out['betrieb'] = $res;
+			}
 		}
 		
 		return $out;

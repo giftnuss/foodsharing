@@ -587,7 +587,7 @@ function v_bezirkChooser($id = 'bezirk_id',$bezirk = false,$option = array())
 			<input type="hidden" name="'.$id.'hId" id="'.$id.'-hId" value="'.$bezirk['id'].'" />');
 }
 
-function v_msgBarNew()
+function v_msgBar()
 {
 	return '<ul id="infobar">
 				<li class="msg">
@@ -631,85 +631,11 @@ function v_msgBarNew()
 			<div class="result-wrapper" style="display:none;">
 				<ul class="linklist index"></ul>
 				<ul class="linklist result"></ul>
-				<ul style="display:none;" class="linklist more">
-					<li><a onclick="goTo(\'?page=suche&q=\' + encodeURIComponent($(\'#searchbar input\').val()));" href="#">Alle Ergebnisse</a></li>	
+				<ul class="linklist more">
+					<li><a class="more" onclick="goTo(\'?page=search&q=\' + encodeURIComponent($(\'#searchbar input\').val()));return false;" href="#">Alle Ergebnisse</a></li>	
 				</ul>
 			</div>
 		</div>';
-}
-
-function v_msgBar()
-{
-	return v_msgBarNew();
-	
-	$new_msg = true;
-	$new_info = false;
-	
-	$msg_class = '';
-	$info_class = '';
-	$basket_class = '';
-	if($new_msg)
-	{
-		$msg_class .= ' msg-new';
-	}
-	if($new_info)
-	{
-		$info_class .= ' info-new';
-	}
-	
-	$out = '
-			<div id="msgbar-messages" style="display:none;">
-							<ul class="msgbar-dropdown-menu extended inbox">
-                               <li>
-                                   <p>Keine neuen Nachrichten</p>
-                               </li>
-                               <li>
-                                   <a href="?page=message">Alle Nachrichten anzeigen</a>
-                               </li>
-								<li><a href="?page=message&a=neu">'.s('write_a_messages').'</a></li>
-                           </ul>
-			</div>
-			<div id="msgbar-infos" style="display:none;">
-							<ul class="msgbar-dropdown-menu extended inbox">
-                               <li>
-                                   <p>Keine neuen Meldungen</p>
-                               </li>
-                           </ul>
-			</div>
-			<div id="msgbar-basket" style="display:none;">
-							<ul class="msgbar-dropdown-menu extended inbox">
-                               <li>
-                                   <a href="#" onclick="ajreq(\'newbasket\',{app:\'basket\'});return false;">Neuen Essenskorb anbieten</a>
-                               </li>
-                           </ul>
-			</div>
-	<div id="msgBar-badge">
-		<span class="bar-msg" style="opacity:0;">0</span>
-		<span class="bar-info" style="opacity:0;">0</span>
-		<span class="bar-basket" style="opacity:0;">0</span>
-	</div>
-	<div id="msgBar">
-		<div class="bar-item bar-msg'.$msg_class.'"><span>&nbsp;</span></div>
-		<div class="bar-item bar-info'.$info_class.'"><span>&nbsp;</span></div>
-		<div class="bar-item bar-basket'.$basket_class.'"><span>&nbsp;</span></div>
-		<div class="bar-item bar-search"><span>&nbsp;</span></div>
-		
-		<div id="searchbar" style="display:none;">
-			<i class="fa fa-search"></i><input type="text" value="" placeholder="'.s('search').'..." />
-			<div class="result-wrapper" style="display:none;">
-				<ul class="linklist index"></ul>
-				<ul class="linklist result"></ul>
-				<ul style="display:none;" class="linklist more">
-					<li><a onclick="goTo(\'?page=suche&q=\' + encodeURIComponent($(\'#searchbar input\').val()));" href="#">Alle Ergebnisse</a></li>	
-				</ul>
-			</div>
-		</div>
-				
-		<div style="clear:left;"></div>
-	</div>
-	';
-	
-	return $out;
 }
 
 function v_form_photo($id)

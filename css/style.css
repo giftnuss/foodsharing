@@ -503,6 +503,10 @@ div.tree-scroller
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+#searchbar .linklist.more
+{
+	margin:0 -5px -5px -5px;
+}
 #searchbar .i img
 {
 	width: 50px;
