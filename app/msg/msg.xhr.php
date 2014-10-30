@@ -41,6 +41,11 @@ class MsgXhr extends Control
 		}
 	}
 	
+	public function fixchats()
+	{
+		return $this->model->fixchats();
+	}
+	
 	/**
 	 * ajax call to delete logged in user from an chat
 	 */

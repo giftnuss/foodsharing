@@ -116,8 +116,14 @@ class MailboxView extends View
 			*/
 			
 			$von = json_decode($m['sender'],true);
+			
+			$von_str = $von['mailbox'];
+			if(isset($von['host']))
+			{
+				$von_str = $von['mailbox'].'@'.$von['host'];
+			}
 			$to = json_decode($m['to']);
-			$von_str = $von['mailbox'].'@'.$von['host'];
+			
 			if(isset($von['personal']))
 			{
 				$von_str = $von['personal'];
@@ -142,7 +148,7 @@ class MailboxView extends View
 			$out .= '
 				<tr id="message-'.$m['id'].'" class="message '.$status.'">
 					<td class="subject"><span class="status '.$status.'">&nbsp;</span> '.$m['subject'].'</td>
-					<td class="from"><a href="#" onclick="return false;" title="'.$von['mailbox'].'@'.$von['host'].'">'.$von_str.'</a></td>
+					<td class="from"><a href="#" onclick="return false;" title="'.$von_str.'">'.$von_str.'</a></td>
 					
 					<td class="date">'.niceDateShort($m['time_ts']).'</td>
 					<td class="attachment"><span class="status a-'.$attach_class.'">&nbsp;</span></td>	

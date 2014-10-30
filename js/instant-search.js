@@ -110,7 +110,7 @@ var search = {
 					img = '';
 					if(search.index[i].result[y].click != undefined)
 					{
-						click = ' onclick="' + search.index[i].result[y].click + ';$(\'#searchbar\').hide();return false;"';
+						click = ' onclick="' + search.index[i].result[y].click + ';$(\'#searchbar .result-wrapper\').hide();return false;"';
 					}
 					else
 					{
@@ -140,7 +140,7 @@ var search = {
 			search.$result.append('<li class="title">' + result[i].title + '</li>');
 			for(y=0;y<result[i].result.length;y++)
 			{
-				search.$result.append('<li class="corner-all"><a class="corner-all" href="#" onclick="' + result[i].result[y].click + ';$(\'#searchbar\').hide();return false;"><span class="n">' + result[i].result[y].name + '</span><span class="t">' + result[i].result[y].teaser + '</span></li>');
+				search.$result.append('<li class="corner-all"><a class="corner-all" href="#" onclick="' + result[i].result[y].click + ';$(\'#searchbar .result-wrapper\').hide();return false;"><span class="n">' + result[i].result[y].name + '</span><span class="t">' + result[i].result[y].teaser + '</span></li>');
 			}
 		}
 	},

@@ -193,6 +193,7 @@ class MsgModel extends Model
 				
 			WHERE
 				hc.foodsaver_id = fs.id 
+				
 			AND
 				hc.conversation_id = '.(int)$conversation_id.'
 		');
@@ -458,6 +459,32 @@ class MsgModel extends Model
 		return false;
 	}
 	
+	public function fixchats()
+	{
+		if($chats = $this->qCol('SELECT id FROM fs_conversation'))
+		{
+			foreach ($chats as $id)
+			{
+				
+				$member = $this->listConversationMembers($id);
+				
+				/*
+				 * UPDATE conversation
+				*/
+				$this->update('
+				UPDATE
+					`'.PREFIX.'conversation`
+			
+				SET
+					`member` = '.$this->strval(serialize($member)).'
+			
+				WHERE
+					`id` = '.(int)$id.'
+			');
+			}
+		}
+	}
+	
 	public function deleteUserFromConversation($cid,$fsid)
 	{
 		/**
@@ -478,8 +505,8 @@ class MsgModel extends Model
 						$out[$k] = $v;
 					}
 				}
-				
-				return $this->update('UPDATE '.PREFIX.'conversation SET member = '.$this->strval(serialize($out).' WHERE id = '.(int)$cid));
+
+				return $this->update('UPDATE '.PREFIX.'conversation SET member = '.$this->strval(serialize($out)).' WHERE id = '.(int)$cid);
 			}
 			
 			return false;

@@ -2,9 +2,11 @@
 #conv_submit
 {
 	float: right;
-    margin-top: -57px;
+    font-family: "FontAwesome";
+    font-size: 38px;
+    margin-top: -69px;
     position: relative;
-    right: 16px;
+    right: 6px;
 }
 #msg-conversation ul, #msg-conversation ul li, #msg-conversation ul li span, #conversation-list ul, #conversation-list ul li
 {
@@ -133,3 +135,77 @@
     margin-bottom:-4px;
 }
 
+@media all and (max-width:600px)
+{
+	#right
+	{
+		display:none;
+	}
+	#msg-conversation-wrapper 
+	{
+	    height: 100%;
+	    left: 0;
+	    position: fixed;
+	    top: 41px;
+	    width: 100%;
+	}
+	#msg_answer-wrapper
+	{
+		padding:0;
+		border:0;
+		margin:0;
+	}
+	#msg-conversation-wrapper .field
+	{
+		height:100%;
+	}
+	#msg-conversation-wrapper .field .ui-widget-content
+	{
+		padding:0px;
+	}
+	#msg-conversation-wrapper .field .head
+	{
+		background-color: #DBD7D1;
+		border-radius:0;
+		-webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.45);
+		-moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.45);
+		box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.45);
+	}
+	#msg-conversation-wrapper .field .head .images
+	{
+		max-width:48px;
+		overflow:hidden;
+		height:22px;
+	}
+	#msg-conversation-title
+	{
+		color:#4A3520;
+	}
+	#msg_answer-wrapper
+	{
+		
+	}
+	#msg-conversation-wrapper
+	{
+		border-radius:0;
+	}
+	#msg_answer
+	{
+		position: fixed;
+		bottom:0px;
+		left:0px;
+		width:97%;
+		height:34px;
+		border-radius:0px;
+		z-index: 10;
+	}
+	#conv_submit
+	{
+		position: fixed;
+		bottom:0px;
+		right:0px;
+		z-index: 11;
+		border-radius:0px;
+		margin:0;
+	}
+}

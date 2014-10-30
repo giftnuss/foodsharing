@@ -30,25 +30,51 @@ var msg = {
 		 */
 		this.initComposer();
 		
-		var height = ($(window).height()-200)+'px';
-		this.$conversation.css('height',height);
 		
-		this.$conversation.slimScroll({
-			height: height
-		});
+		if(!msg.isMob())
+		{
+			var height = ($(window).height()-200)+'px';
+			this.$conversation.css('height',height);
+			
+			this.$conversation.slimScroll({
+				height: height
+			});
+		}
+		else
+		{
+			var height = ($(window).height()-130)+'px';
+			this.$conversation.css('height',height);
+			this.$conversation.slimScroll({
+				height: height
+			});
+		}
+		
+		
 		
 		/*
 		 * make the message windows as big as possible
 		 */
 		$(window).resize(function(){
 
-			var height = ($(window).height()-200)+'px';
-			msg.$conversation.css('height',height);
-			msg.$conversation.parent('.slimScrollDiv').css('height',height);
-			msg.$conversation.slimScroll({
-				height: height,
-				scrollTo : $('#msg-conversation').prop('scrollHeight') + 'px' 
-			});
+			if(!msg.isMob())
+			{
+				var height = ($(window).height()-200)+'px';
+				msg.$conversation.css('height',height);
+				msg.$conversation.parent('.slimScrollDiv').css('height',height);
+				msg.$conversation.slimScroll({
+					height: height,
+					scrollTo : $('#msg-conversation').prop('scrollHeight') + 'px' 
+				});
+			}
+			else
+			{
+				var height = ($(window).height()-140)+'px';
+				this.$conversation.css('height',height);
+				msg.$conversation.slimScroll({
+					height: height,
+					scrollTo : $('#msg-conversation').prop('scrollHeight') + 'px' 
+				});
+			}
 			//msg.scrollBottom();
 		});
 		
@@ -134,6 +160,16 @@ var msg = {
 		});	
 		*/	
 	},
+	
+	isMob:function()
+	{
+		if($(window).width() > 600)
+		{
+			return false;
+		}
+		return true;
+	},
+	
 	/**
 	 * list heartbeat checks everytime updates on all conversations
 	 */
@@ -496,6 +532,16 @@ var msg = {
 	scrollBottom: function()
 	{
 		$('#msg-conversation').slimScroll({scrollTo : $('#msg-conversation').prop('scrollHeight') + 'px' });
+		/*
+		if(!msg.isMob())
+		{
+			$('#msg-conversation').slimScroll({scrollTo : $('#msg-conversation').prop('scrollHeight') + 'px' });
+		}
+		else
+		{
+			$('#msg-conversation').scrollTop($('#msg-conversation')[0].scrollHeight);
+		}
+		*/
 	}
 };
 

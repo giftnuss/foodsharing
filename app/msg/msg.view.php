@@ -116,7 +116,7 @@ class MsgView extends View
 		$out .= '
 			<div id="msg-control">
 				<form>
-					'.v_form_textarea('msg_answer',array('nolabel'=>true,'placeholder' => s('write_something'))).'<input id="conv_submit" type="submit" class="button" name="submit" value="'.s('submit').'" />
+					'.v_form_textarea('msg_answer',array('nolabel'=>true,'placeholder' => s('write_something'))).'<input id="conv_submit" type="submit" class="button" name="submit" value="&#xf0a9;" />
 				</form>
 			</div>';
 		
