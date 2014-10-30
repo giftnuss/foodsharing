@@ -215,9 +215,12 @@ class LoginXhr extends Control
 				'script' => '
 					'.$token_js.'
 					pulseSuccess("'.s('login_success').'");
-
-						dialogs.closeAll();
-						$("#layout_logo").after(\''.jsSafe($msgbar).'\');
+					reload();'
+					/*
+					 * no reload page works not so fince later ;)
+					 * 
+					  	dialogs.closeAll();
+					  	$("#layout_logo").after(\''.jsSafe($msgbar).'\');
 						$("#mainMenu").replaceWith(\''.jsSafe($menu['default']).'\');
 						$("#mainMenu").jMenu({
 							ulWidth:200,
@@ -231,8 +234,8 @@ class LoginXhr extends Control
 						});
 						infoMenu();
 						$("#layout_logo a").attr("href","/?page=dashboard");
-						search.addEvents();'
-					
+						search.addEvents();
+					 */
 			);
 		}
 		else 
