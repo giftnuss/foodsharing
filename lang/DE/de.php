@@ -168,6 +168,7 @@ $g_lang['betrieb_status_4'] = 'Betrieb will nicht koorperieren';
 $g_lang['betrieb_status_3'] = 'Betrieb ist bereit zu spenden :)';
 $g_lang['betrieb_status_2'] = 'Verhandlungen laufen';
 $g_lang['betrieb_status_1'] = 'Es besteht noch kein Kontakt';
+$g_lang['betrieb_status_0'] = $g_lang['betrieb_status_2'];
 $g_lang['specials'] = 'Besonderheiten';
 
 $g_lang['photo_public'] = 'Kontaktaufnahme durch andere Foodsaver';
