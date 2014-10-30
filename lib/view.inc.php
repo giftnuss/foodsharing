@@ -534,11 +534,18 @@ function v_bezirkChooser($id = 'bezirk_id',$bezirk = false,$option = array())
 			}
 		}
 	});');
+	
+	$nodeselect = 'node.data.type == 1 || node.data.type == 2 || node.data.type == 3 || node.data.type == 4 || node.data.type == 7';
+	if (S::may('orga'))
+	{
+		$nodeselect = 'true';
+	}
+	
 	addJs('$("#'.$id.'-tree").dynatree({
             onSelect: function(select, node) {
 				$("#'.$id.'-hidden").html("");
 				$.map(node.tree.getSelectedNodes(), function(node){
-					if(node.data.type == 1 || node.data.type == 2 || node.data.type == 3 || node.data.type == 4 || node.data.type == 7)
+					if('.$nodeselect.')
 					{
 						$("#'.$id.'-hId").val(node.data.ident);
 						$("#'.$id.'").val(node.data.ident);

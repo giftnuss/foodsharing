@@ -310,7 +310,7 @@ else
 	 * Top
 	*/
 	$me = $db->getFoodsaverBasics(fsId());
-	if($me['rolle'] < 1 || $me['rolle'] > 3)
+	if($me['rolle'] < 0 || $me['rolle'] > 4)
 	{
 		$me['rolle'] = 0;
 	}
@@ -329,7 +329,7 @@ else
 	{
 		$gerettet='';
 	}
-
+	
 	addContent(
 	'
 	<div class="welcome ui-padding margin-bottom ui-corner-all">
