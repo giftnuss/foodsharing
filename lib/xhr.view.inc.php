@@ -72,7 +72,7 @@ function xv_bBubble($b)
 		if($fs['verantwortlich'] == 1)
 		{
 			$verantwortlich .= '
-			<li>'.avatar($fs,50).'</a></li>';
+			<li><a style="background-color:transparent !important;" href="#" onclick="profile('.(int)$fs['id'].');return false;">'.avatar($fs,50).'</a></li>';
 		}
 	}
 	$verantwortlich .= '
