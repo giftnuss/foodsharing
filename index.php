@@ -20,6 +20,7 @@ if(isset($_GET['g_path']))
 	
 }
 */
+
 require_once 'lib/inc.php';
 
 
@@ -66,5 +67,4 @@ else
 {
 	include 'tpl/'.$g_template.'.php';
 }
-
 ?>
