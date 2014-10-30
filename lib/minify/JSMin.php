@@ -149,7 +149,7 @@ class JSMin {
         if ($mbIntEnc !== null) {
             mb_internal_encoding($mbIntEnc);
         }
-        return str_replace("\n",' ',$this->output);
+        return $this->output;
     }
 
     /**
