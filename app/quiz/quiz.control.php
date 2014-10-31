@@ -50,7 +50,7 @@ class QuizControl extends Control
 			{
 				go('?page=quiz&id=1');
 			}
-			addContent($this->view->topbar('Quiz'.$topbtn, $slogan, 'img/quiz.png'),CNT_TOP);
+			addContent($this->view->topbar('Quiz'.$topbtn, $slogan, '<img src="img/quiz.png" />'),CNT_TOP);
 			addContent($this->view->listQuiz($this->model->listQuiz()),CNT_LEFT);
 			addContent($this->view->quizMenu(),CNT_LEFT);
 		}
@@ -65,7 +65,7 @@ class QuizControl extends Control
 				addBread($name,'?page=quiz&id='.(int)$_GET['id']);
 			}
 			addBread('Frage  #'.$q['id'],'?page=quiz&sub=wall&id='.(int)$q['id']);
-			addContent($this->view->topbar('Quizfrage  #'.$q['id'],'<a style="float:right;color:#FFF;font-size:13px;margin-top:-20px;" href="#" class="button" onclick="ajreq(\'editquest\',{id:'.(int)$q['id'].',qid:'.(int)$q['quiz_id'].'});return false;">Frage bearbeiten</a>' . $q['text'] . '<p><strong>'.$q['fp'].' Fehlerpunkte, '.$q['duration'].' Sekunden zum Antworten</strong></p>', 'img/quiz.png'),CNT_TOP);
+			addContent($this->view->topbar('Quizfrage  #'.$q['id'],'<a style="float:right;color:#FFF;font-size:13px;margin-top:-20px;" href="#" class="button" onclick="ajreq(\'editquest\',{id:'.(int)$q['id'].',qid:'.(int)$q['quiz_id'].'});return false;">Frage bearbeiten</a>' . $q['text'] . '<p><strong>'.$q['fp'].' Fehlerpunkte, '.$q['duration'].' Sekunden zum Antworten</strong></p>', '<img src="img/quiz.png" />'),CNT_TOP);
 			addContent(v_field($this->wallposts('question', $_GET['id']), 'Kommentare'),CNT_MAIN);
 			addContent($this->view->answerSidebar($this->model->getAnswers($q['id']),$_GET['id']),CNT_RIGHT);
 		}

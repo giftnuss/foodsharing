@@ -851,6 +851,12 @@ function getMenu()
 			$betriebe = getBetriebeMenu();
 			$settings = getSettingsMenu();
 			
+			if(!S::may('fs'))
+			{
+				$bezirke = '';
+				$ags = '';
+			}
+			
 			return array(
 				'default' => '
 						<ul id="mainMenu" class="jMenu">

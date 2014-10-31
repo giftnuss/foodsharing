@@ -42,10 +42,10 @@ class DashboardControl extends Control
 		}
 		
 		addContent(
-			$this->view->top(
+			$this->view->topbar(
 			sv('welcome',array('name'=>$this->user['name'])),
 				$subtitle,
-				avatar($this->user,75,'/img/fairteiler75x75.png')
+				avatar($this->user,50,'/img/fairteiler50x50.png')
 			),
 			CNT_TOP
 		);

@@ -49,35 +49,7 @@ class View
 			</div>';
 	}
 	
-	public function topbar($title,$subtitle,$image = false)
-	{
-		$img = '';
-		if($image !== false)
-		{
-			$img = '
-			<div class="welcome_profile_image">
-				<img width="50" height="50" src="'.$image.'" class="image_online">
-			</div>';
-		}
-		echo '
-	<div class="welcome ui-padding margin-bottom ui-corner-all">
-		'.$img.'
-		<div class="welcome_profile_name">
-			<div class="user_display_name">
-				'.$title.'
-			</div>
-			<div class="welcome_quick_link">
-				<ul>
-					<li>'.$subtitle.'</li>
-				</ul>
-				<div class="clear"></div>
-			</div>
-		</div>
-		<div class="clear"></div>
-	</div>';die();
-	}
-	
-	public function top($title,$subtitle = '',$icon = '')
+	public function topbar($title,$subtitle = '',$icon = '')
 	{
 		if ($icon != '')
 		{

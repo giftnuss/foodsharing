@@ -272,11 +272,11 @@ class FairteilerView extends View
 		
 		if($this->bezirk_id > 0)
 		{
-			addContent($this->topbar(sv('list_fairteiler',$this->bezirk['name']),'Es gibt '.$count.' Fair-Teiler in '.$this->bezirk['name'].' und allen Unterbezirken','img/fairteiler_thumb.png'),CNT_TOP);
+			addContent($this->topbar(sv('list_fairteiler',$this->bezirk['name']),'Es gibt '.$count.' Fair-Teiler in '.$this->bezirk['name'].' und allen Unterbezirken','<img src="img/fairteiler_thumb.png" />'),CNT_TOP);
 		}
 		else
 		{
-			addContent($this->topbar(s('your_fairteiler'),'Es gibt '.$count.' Fair-Teiler in allen Bezirken in denen Du aktiv bist','img/fairteiler_thumb.png'),CNT_TOP);
+			addContent($this->topbar(s('your_fairteiler'),'Es gibt '.$count.' Fair-Teiler in allen Bezirken in denen Du aktiv bist','<img src="img/fairteiler_thumb.png" />'),CNT_TOP);
 		}
 		
 		return $content;

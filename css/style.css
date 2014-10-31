@@ -83,11 +83,16 @@
 .top h3
 {
 	font-family: "Alfa Slab One";
-	font-size:23px;
-	color:#599022;
+	font-size:20px;
+	color:#4a3520;
 	font-weight:normal;
 	padding:0;
-	margin:4px 0 0 0;
+	margin:0;
+}
+.top p
+{
+	color:#4a3520;
+	margin:2px 0 0 0;
 }
 .bubble
 {
@@ -2343,6 +2348,14 @@ div.xv_left ul li a:hover
 	{
 		position: fixed !important;
 		top:0px !important;
+	}
+	.top .img
+	{
+		display:none;
+	}
+	.top h3, .top p
+	{
+		text-align: center;
 	}
 }
 @media (max-width: 500px) {

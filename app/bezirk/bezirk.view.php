@@ -45,27 +45,8 @@ class BezirkView extends View
 	public function topOrga()
 	{
 		//return $this->topbar($this->bezirk['name'],$this->bezirk['stat_fscount'].' Mitglieder','/img/groups.png');
-		
-		return '
-		<div class="welcome ui-padding margin-bottom ui-corner-all">
-			
-			<div class="welcome_profile_name">
-				<div class="welcome_profile_image">
-					<img src="/img/groups.png" class="image_online" height="50" width="50">
-				</div>
-				<div class="user_display_name">
-					Arbeitsgruppe - '.$this->bezirk['name'].'
-				</div>
-				<div class="welcome_quick_link">
-					<ul>
-						<li>'.$this->bezirk['stat_fscount'].' Mitglieder</li>
-					</ul>
-					<div class="clear"></div>
-				</div>
-			</div>	
-			<div class="clear"></div>
-		</div>';
-		
+
+		return $this->topbar('Arbeitsgruppe - '.$this->bezirk['name'], $this->bezirk['stat_fscount'].' Mitglieder','<img src="/img/groups.png" class="image_online" height="50" width="50" />');
 	}
 	
 	public function setBezirk($bezirk)
@@ -86,34 +67,6 @@ class BezirkView extends View
 			$items[] = array('name' => 'Fair-Teiler vorschlagen','href' => '?page=fairteiler&bid='.(int)$bezirk_id.'&sub=addFt');
 		}
 		return v_menu($items,'Optionen');
-	}
-	public function topBar($bezirk, $subtitle = '', $image = '')
-	{
-		return '
-			<div class="ui-padding margin-bottom ui-corner-all" id="welcome">
-		
-
-		<div class="welcome_profile_name">
-			<div class="user_display_name">
-				<span>'.$bezirk['name'].'</span>
-			</div>
-			<div class="welcome_quick_link">
-				<ul>
-					<li><span>'.$bezirk['fs_count'].' Foodsaver</span></li>
-				</ul>
-				<div class="clear"></div>
-			</div>
-		</div>
-		<!--
-		<div class="welcome_profile_survived">
-			<a href="#" title=""><img height="50" width="50" src="img/gerettet_icon.png" alt="" class="image_online"></a>
-		</div>
-		<div style="float:right;margin:12px 10px 0 0;" class="user_display_name">
-			'.$bezirk['name'].' hat schon 392,00 kg Lebensmittel gerettet
-		</div>
-		-->
-		<div class="clear"></div>
-	</div>';
 	}
 	
 	public function forum_top()
