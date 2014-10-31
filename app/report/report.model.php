@@ -61,8 +61,7 @@ class ReportModel extends Model
 					CONCAT(fs.nachname," (",COUNT(rp.foodsaver_id),")") AS nachname,
 					fs.photo,
 					fs.id,
-					CONCAT("?page=report&sub=foodsaver&id=",fs.id) AS `href`,
-					fs.sleep_status
+					CONCAT("?page=report&sub=foodsaver&id=",fs.id) AS `href`
 				
 			FROM 	'.PREFIX.'foodsaver fs,
 					'.PREFIX.'report rp
@@ -106,8 +105,7 @@ class ReportModel extends Model
 			SELECT 	`id`,
 					`name`,
 					`nachname`,
-					`photo`,
-					`sleep_status`
+					`photo`
 
 			FROM 	`'.PREFIX.'foodsaver`
 				
