@@ -71,7 +71,7 @@ class ReportModel extends Model
 				
 			GROUP 	BY rp.foodsaver_id
 				
-			ORDER BY COUNT(rp.foodsaver_id) DESC
+			ORDER BY COUNT(rp.foodsaver_id) DESC,fs.name
 		');
 	}
 	
