@@ -253,3 +253,15 @@
 {
 	overflow: hidden;
 }
+#joinform  #login_surname
+{
+	margin-right:-4px;
+}
+#joinform  #login_name
+{
+	margin-right:7px;
+}
+#joinform  #login_surname, #joinform  #login_name
+{
+	width:90px;
+}

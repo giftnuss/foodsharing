@@ -62,7 +62,7 @@ class LoginView extends View
 							<h3>'.s('login_info').'</h3>
 							<div class="form">
 								<div class="element-wrapper">
-									<input placeholder="'.s('login_name').'" type="text" value="" id="login_name" name="login_name" class="input text value" />
+									<input placeholder="'.s('login_name').'" type="text" value="" id="login_name" name="login_name" class="input text value" /><input placeholder="'.s('login_surname').'" type="text" value="" id="login_surname" name="login_surname" class="input text value" />
 								</div>
 								<div class="element-wrapper">
 									<input placeholder="'.s('login_email').'" type="text" value="'.$email.'" id="login_email" name="login_email" class="input text value" />
@@ -94,6 +94,7 @@ class LoginView extends View
 								</form>
 								<iframe frameborder="0" style="width:10px;height:10px;" name="join_upload_frame" src="/empty.html"></iframe>
 								<input type="hidden" name="c[]" value="" id="join_avatar" />
+								<input type="hidden" name="c[]" value="0" id="join_avatar_error" />
 							</div>
 							<div style="clear:both;"></div>
 						</div>

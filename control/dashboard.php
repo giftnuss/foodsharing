@@ -5,7 +5,7 @@ if(!may())
 {
 	getContent('login');
 }
-else
+else if(S::may('fs'))
 {
 	addBread('Dashboard');
 	addTitle('Dashboard');
@@ -476,6 +476,10 @@ else
 	{
 		addContent(u_myPartners($partn),CNT_LEFT);
 	}
+}
+else
+{
+	loadApp('dashboard');
 }
 
 

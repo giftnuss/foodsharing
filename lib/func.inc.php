@@ -1462,7 +1462,7 @@ function idimg($file = false,$size)
 	}
 }
 
-function img($file = false,$size = 'mini',$format = 'q')
+function img($file = false,$size = 'mini',$format = 'q',$altimg = false)
 {
 	
 	if($file === false)
@@ -1481,7 +1481,14 @@ function img($file = false,$size = 'mini',$format = 'q')
 	}
 	else
 	{
-		return 'img/'.$size.'_'.$format.'_avatar.png';
+		if($altimg === false)
+		{
+			return 'img/'.$size.'_'.$format.'_avatar.png';
+		}
+		else
+		{
+			return $altimg;
+		}
 	}
 
 }
@@ -3104,9 +3111,9 @@ function tt($str,$length = 160)
 	return $str;
 }
 
-function avatar($foodsaver,$size = 'mini')
+function avatar($foodsaver,$size = 'mini',$altimg = false)
 {
-	return '<span style="background-image:url(\''.img($foodsaver['photo'],$size).'\');" class="avatar size-'.$size.' sleepmode-'.$foodsaver['sleep_status'].'"><i>'.$foodsaver['name'].'</i></span>';
+	return '<span style="background-image:url('.img($foodsaver['photo'],$size,'q',$altimg).');" class="avatar size-'.$size.' sleepmode-'.$foodsaver['sleep_status'].'"><i>'.$foodsaver['name'].'</i></span>';
 }
 
 function rolleWrapInt($roleInt)

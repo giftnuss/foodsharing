@@ -20,6 +20,7 @@ var join = {
 		pulseError(error);
 		join.isLoading = false;
 		$('#joinform .avatar form').removeClass('load');
+		$('#join_avatar_error').val('1');
 	},
 	readyUpload: function(name){
 		$('#joinform .avatar .container').html('').css({
@@ -90,6 +91,7 @@ var join = {
 				data:{
 					iam:$('#join_iam').val(),
 					name:$('#login_name').val(),
+					surname:$('#login_surname').val(),
 					email:$('#login_email').val(),
 					pw:$('#login_passwd1').val(),
 					avatar:$('#join_avatar').val(),
@@ -188,6 +190,15 @@ var join = {
 					pulseInfo('Bitte warte bis Dein Foto hochgeladen ist');
 					return false;
 					check = false;
+				}
+				
+				if($('#join_avatar_error').val() == '0' && $('#join_avatar').val() == '')
+				{
+					if(!confirm('Du hast kein Foto hochgeladen, beachte das wenn Du später auch als Foodsaver aktiv werden möchtest,benötigen wir ein passbild artiges Foto von Dir. Möchtest Du ohne Foto fortfaren?'))
+					{
+						return false;
+						check = false;
+					}
 				}
 				
 				if(check)

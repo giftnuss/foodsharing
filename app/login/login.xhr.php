@@ -252,44 +252,48 @@ class LoginXhr extends Control
 	 */
 	public function photoupload()
 	{
-		$uploader = new fUpload();
-		$uploader->setMIMETypes(
-				array(
-						'image/gif',
-						'image/jpeg',
-						'image/pjpeg',
-						'image/png'
-				),
-				s('upload_no_image')
-		);
-		$uploader->setMaxSize('5MB');
-		
-		if(($error = $uploader->validate('photo', TRUE)) !== null)
-		{
-			$func = 'parent.join.photoUploadError(\''.$error.'\');';
+		$func = '';
+		try {
+			
+			$uploader = new fUpload();
+			$uploader->setMIMETypes(
+					array(
+							'image/gif',
+							'image/jpeg',
+							'image/pjpeg',
+							'image/png'
+					),
+					s('upload_no_image')
+			);
+			$uploader->setMaxSize('5MB');
+			
+			if(($error = $uploader->validate('photo', TRUE)) !== null)
+			{
+				$func = 'parent.join.photoUploadError(\''.$error.'\');';
+			}
+			else
+			{
+				// move the uploaded file in a temp folder
+				$image = $uploader->move(ROOT_DIR . 'tmp/', 'photo');
+					
+				// generate an unique name for the photo
+				$name = uniqid() . '.' . strtolower($image->getExtension());
+					
+				$image->rename($name, true);
+				
+				$image = new fImage(ROOT_DIR . 'tmp/' . $name);
+					
+				$image->resize(800, 0);
+				$image->saveChanges();
+					
+					
+					
+				$func = 'parent.join.readyUpload(\''.$name.'\');';
+			}
+			
+		} catch (Exception $e) {
+			$func = 'parent.join.photoUploadError(\''.s('error_image').'\');';
 		}
-		else
-		{
-			
-			
-			// move the uploaded file in a temp folder
-			$image = $uploader->move(ROOT_DIR . 'tmp/', 'photo');
-			
-			// generate an unique name for the photo
-			$name = uniqid() . '.' . strtolower($image->getExtension());
-			
-			$image->rename($name, true);
-			
-			$image = new fImage(ROOT_DIR . 'tmp/' . $name);
-			
-			$image->resize(800, 0);
-			$image->saveChanges();
-			
-			
-			
-			$func = 'parent.join.readyUpload(\''.$name.'\');';
-		}
-		
 		
 		echo '<html>
 <head><title>Upload</title></head><body onload="'.$func.'"></body>
@@ -378,6 +382,10 @@ class LoginXhr extends Control
 		
 		$data['name'] = strip_tags($data['name']);
 		$data['name'] = trim($data['name']);
+		
+		$data['surname'] = strip_tags($data['surname']);
+		$data['surname'] = trim($data['surname']);
+		
 		if($data['name'] == '')
 		{
 			return s('error_name');

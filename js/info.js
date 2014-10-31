@@ -50,51 +50,49 @@ var info = {
 	 */
 	init: function()
 	{	
-		
-		setTimeout(function(){
-			info.startupTimeout = true;
-			info.heartbeat();
-		},5000);
-		
-		//
-		this.services = new Array();
-		
-		this.$infobar = $('#infobar');
-		
-		// init data array
-		this.data = new Array();
-		this.data['msg'] = {};
-		this.data['bell'] = {};
-		this.data['basket'] = {};
-		
-		// init badge dom querys
-		this.$badge = new Array();
-		this.$badge['msg'] = $('#infobar > li.msg > a .badge');
-		this.$badge['bell'] = $('#infobar > li.bell > a .badge');
-		this.$badge['basket'] = $('#infobar > li.basket > a .badge');
-		
-		// init linklist dom querys
-		this.$linklist = new Array();
-		this.$linklist['msg'] = $('#infobar .msg .linklist');
-		this.$linklist['bell'] = $('#infobar .bell .linklist');
-		this.$linklist['basket'] = $('#infobar .basket .linklist');
-		
-		// init linkwrappers its where the conten comes in
-		this.$linkwrapper = new Array();
-		this.$linkwrapper['msg'] = $('#infobar .msg .linkwrapper');
-		this.$linkwrapper['bell'] = $('#infobar .bell .linkwrapper');
-		this.$linkwrapper['basket'] = $('#infobar .basket .linkwrapper');	
-		
-		this.$allWrapper = $('#infobar .linkwrapper');
-		
-		// add nice scroller to lists
-		$('#infobar .linkwrapper .linklist').slimScroll();
-		
-		// init dom events
-		this.initEvents();
-		
-		// start continiusly heartbeat
-		
+		if($('#infobar').length > 0)
+		{
+			setTimeout(function(){
+				info.startupTimeout = true;
+				info.heartbeat();
+			},5000);
+			//
+			this.services = new Array();
+			
+			this.$infobar = $('#infobar');
+			
+			// init data array
+			this.data = new Array();
+			this.data['msg'] = {};
+			this.data['bell'] = {};
+			this.data['basket'] = {};
+			
+			// init badge dom querys
+			this.$badge = new Array();
+			this.$badge['msg'] = $('#infobar > li.msg > a .badge');
+			this.$badge['bell'] = $('#infobar > li.bell > a .badge');
+			this.$badge['basket'] = $('#infobar > li.basket > a .badge');
+			
+			// init linklist dom querys
+			this.$linklist = new Array();
+			this.$linklist['msg'] = $('#infobar .msg .linklist');
+			this.$linklist['bell'] = $('#infobar .bell .linklist');
+			this.$linklist['basket'] = $('#infobar .basket .linklist');
+			
+			// init linkwrappers its where the conten comes in
+			this.$linkwrapper = new Array();
+			this.$linkwrapper['msg'] = $('#infobar .msg .linkwrapper');
+			this.$linkwrapper['bell'] = $('#infobar .bell .linkwrapper');
+			this.$linkwrapper['basket'] = $('#infobar .basket .linkwrapper');	
+			
+			this.$allWrapper = $('#infobar .linkwrapper');
+			
+			// add nice scroller to lists
+			$('#infobar .linkwrapper .linklist').slimScroll();
+			
+			// init dom events
+			this.initEvents();
+		}	
 	},
 	
 	/*

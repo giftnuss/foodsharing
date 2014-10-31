@@ -59,7 +59,7 @@ class View
 				<img width="50" height="50" src="'.$image.'" class="image_online">
 			</div>';
 		}
-		return '
+		echo '
 	<div class="welcome ui-padding margin-bottom ui-corner-all">
 		'.$img.'
 		<div class="welcome_profile_name">
@@ -74,7 +74,48 @@ class View
 			</div>
 		</div>
 		<div class="clear"></div>
-	</div>';
+	</div>';die();
+	}
+	
+	public function top($title,$subtitle = '',$icon = '')
+	{
+		if ($icon != '')
+		{
+			$icon = '<div class="img">'.$icon.'</div>';
+		}
+		
+		if ($subtitle != '')
+		{
+			$subtitle = '<p>'.$subtitle.'</p>';
+		}
+		
+		return '
+		<div class="top corner-all">
+			'.$icon.'
+			<h3>'.$title.'</h3>
+			'.$subtitle.'
+			<div style="clear:both;"></div>		
+		</div>';
+	}
+	
+	public function distance($distance)
+	{
+		$distance = round($distance,1);
+			
+		if($distance == 1.0)
+		{
+			$distance = '1 km';
+		}
+		else if($distance < 1)
+		{
+			$distance = ($distance*1000).' m';
+		}
+		else
+		{
+			$distance = number_format($distance,1,',','.').' km';
+		}
+		
+		return $distance;
 	}
 	
 	public function locationMumble()

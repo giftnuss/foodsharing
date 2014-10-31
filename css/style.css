@@ -28,6 +28,14 @@
 	-moz-border-radius: 6px;
 	border-radius: 6px;
 }
+.avatar.size-75, .avatar.size-75 i
+{
+	width:75px;
+	height:75px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
 .avatar.size-50, .avatar.size-50 i
 {
 	width:50px;
@@ -60,6 +68,26 @@
 .avatar.sleepmode-1, .avatar.sleepmode-2
 {
 	opacity:1;
+}
+.top
+{
+	background-color: #FFFFFF;
+	padding:15px;
+	margin-bottom:15px;
+}
+.top .img
+{
+	float:left;
+	margin-right:15px;
+}
+.top h3
+{
+	font-family: "Alfa Slab One";
+	font-size:23px;
+	color:#599022;
+	font-weight:normal;
+	padding:0;
+	margin:4px 0 0 0;
 }
 .bubble
 {
