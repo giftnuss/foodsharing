@@ -36,7 +36,7 @@ class ReportControl extends Control
 		{
 			addContent($this->view->listReports($reports));
 		}
-		addContent($this->view->topbar('Neue Verstoßmeldungen', count($reports).' gesamt', '/img/shit.png'),CNT_TOP);
+		addContent($this->view->topbar('Neue Verstoßmeldungen', count($reports).' gesamt', '<img src="/img/shit.png" />'),CNT_TOP);
 	}
 	
 	public function com()
