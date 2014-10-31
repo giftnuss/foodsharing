@@ -42,11 +42,13 @@ var msg = {
 		}
 		else
 		{
-			var height = ($(window).height()-130)+'px';
-			this.$conversation.css('height',height);
+			//var height = ($(window).height()-130)+'px';
+			this.$conversation.css('height','auto');
+			/*
 			this.$conversation.slimScroll({
 				height: height
 			});
+			*/
 		}
 		
 		
@@ -68,12 +70,14 @@ var msg = {
 			}
 			else
 			{
-				var height = ($(window).height()-140)+'px';
-				this.$conversation.css('height',height);
+				//var height = ($(window).height()-140)+'px';
+				this.$conversation.css('height','auto');
+				/*
 				msg.$conversation.slimScroll({
 					height: height,
 					scrollTo : $('#msg-conversation').prop('scrollHeight') + 'px' 
 				});
+				*/
 			}
 			//msg.scrollBottom();
 		});
@@ -531,17 +535,18 @@ var msg = {
 	},
 	scrollBottom: function()
 	{
-		$('#msg-conversation').slimScroll({scrollTo : $('#msg-conversation').prop('scrollHeight') + 'px' });
-		/*
+		//$('#msg-conversation').slimScroll({scrollTo : $('#msg-conversation').prop('scrollHeight') + 'px' });
+		
 		if(!msg.isMob())
 		{
 			$('#msg-conversation').slimScroll({scrollTo : $('#msg-conversation').prop('scrollHeight') + 'px' });
 		}
 		else
 		{
-			$('#msg-conversation').scrollTop($('#msg-conversation')[0].scrollHeight);
+			$(window).scrollTop($(document).height());
+			//$('body').scrollTop($('body')[0].scrollHeight);
 		}
-		*/
+		
 	}
 };
 
