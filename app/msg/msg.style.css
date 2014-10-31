@@ -137,6 +137,15 @@
 
 @media all and (max-width:600px)
 {
+	body
+	{
+		overflow-x:hidden !important;
+	}
+	div#main
+	{
+		margin:0;
+		padding:0
+	}
 	#right
 	{
 		display:none;
@@ -145,7 +154,10 @@
 	{
 	    height: auto;
 	    margin:0;
-	    width: 100%;
+	}
+	#msg-conversation
+	{
+		overflow:hidden;
 	}
 	#main .inside
 	{
@@ -169,6 +181,7 @@
 	#msg-conversation-wrapper .field .ui-widget-content
 	{
 		padding:0 0 45px 0;
+		background-color: #DBD7D1;
 	}
 	#msg-conversation-wrapper .field .head
 	{
@@ -200,6 +213,7 @@
 	#msg-conversation-wrapper
 	{
 		border-radius:0;
+		background-color: #DBD7D1;
 	}
 	#msg_answer
 	{
@@ -219,5 +233,11 @@
 		z-index: 11;
 		border-radius:0px;
 		margin:0;
+	}
+	#msg-conversation ul li
+	{
+		padding:0;
+		margin: 10px 15px 0 8px;
+		overflow:hidden !important;
 	}
 }

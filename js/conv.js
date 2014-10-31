@@ -77,12 +77,15 @@ var conv = {
 				goTo('?page=msg&cid=' + cid);
 			}
 		}
-		if(!this.initiated)
+		else
 		{
-			this.init();
+			if(!this.initiated)
+			{
+				this.init();
+			}
+			
+			this.appendChatbox(cid);
 		}
-		
-		this.appendChatbox(cid);
 	},
 	
 	/**

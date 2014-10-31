@@ -43,7 +43,14 @@ var msg = {
 		else
 		{
 			//var height = ($(window).height()-130)+'px';
-			this.$conversation.css('height','auto');
+			this.$conversation.css({
+				height:'auto',
+				//width:$(window).width()+'px',
+				overflow:'hidden',
+				padding:'0',
+				margin:'0'
+			});
+			msg.scrollBottom();
 			/*
 			this.$conversation.slimScroll({
 				height: height
@@ -70,8 +77,9 @@ var msg = {
 			}
 			else
 			{
+				msg.scrollBottom();
 				//var height = ($(window).height()-140)+'px';
-				this.$conversation.css('height','auto');
+				//this.$conversation.css('height','auto');
 				/*
 				msg.$conversation.slimScroll({
 					height: height,
