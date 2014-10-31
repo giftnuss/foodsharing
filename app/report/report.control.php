@@ -65,7 +65,7 @@ class ReportControl extends Control
 							$(".user_display_name a").trigger("click");
 						});
 				');
-				addContent($this->view->topbar('Meldungen von <a href="#" onclick="profile('.(int)$foodsaver['id'].');return false;">'.$foodsaver['name'].' '.$foodsaver['nachname'].'</a>', count($foodsaver['reports']).' gesamt', img($foodsaver['photo'])),CNT_TOP);
+				addContent($this->view->topbar('Meldungen von <a href="#" onclick="profile('.(int)$foodsaver['id'].');return false;">'.$foodsaver['name'].' '.$foodsaver['nachname'].'</a>', count($foodsaver['reports']).' gesamt', avatar($foodsaver,50)),CNT_TOP);
 				addContent(
 						v_field($this->wallposts('fsreport', (int)$_GET['id']),'Notizen')
 					);

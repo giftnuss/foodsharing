@@ -204,7 +204,7 @@ class View
 		$out = '
 		<div>
 			<ul id="'.$id.'" class="linklist">';
-		if(!isset($option['shuffle']) || (isset($option['shuffle']) && $option['shuffle'] === true))
+		if(!isset($option['noshuffle']))
 		{
 			shuffle($foodsaver);
 		}
