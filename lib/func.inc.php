@@ -863,8 +863,8 @@ function getMenu()
 							
 							'.$orgamenu['default'].'
 							<!--<li><a class="fNiv" href="http://forum.lebensmittelretten.de">öffentliches Forum</a></li>-->
-							<li><a href="/">Home</a></li>
-							<li><a class="fNiv" href="?page=map">Karte</a></li>
+							<li><a href="/"><i class="fa fa-home"></i></a></li>
+							<li><a class="fNiv" href="?page=map"><i class="fa fa-map-marker"></i></a></li>
 							
 							'.$ags.'
 							'.$foodsaver.'
@@ -897,7 +897,7 @@ function getMenu()
 		return array(
 			'default' => '
 				<ul id="mainMenu" class="jMenu">
-					<li><a class="fNiv" href="/">Home</a></li>
+					<li><a class="fNiv" href="/"><i class="fa fa-home"></i></a></li>
 					<li><a class="fNiv" href="/?page=blog">News</a></li>
 					<li><a class="fNiv" href="?page=content&sub=about">Über Uns</a>
 						<ul>
@@ -906,7 +906,7 @@ function getMenu()
 							<li><a href="/?page=content&sub=faq">F.A.Q.</a></li>
 						</ul>
 					</li>
-					<li><a class="fNiv" href="?page=map">Karte</a></li>
+					<li><a class="fNiv" href="?page=map"><i class="fa fa-map-marker"></i></a></li>
 					<li><a class="fNiv" href="?page=index&sub=ratgeber">Ratgeber</a></li>
 					<li><a onclick="ajreq(\'join\',{app:\'login\'});return false;" class="fNiv" href="?page=join">Mach-Mit!</a></li>
 					<!-- <li><a class="fNiv" href="?page=login" onclick="ajreq(\'login\',{app:\'login\'});return false;">Login</a></li> -->
