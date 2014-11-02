@@ -20,5 +20,9 @@ var storage = {
 			return val.v;
 		}
 		return val;
+	},
+	del: function(key)
+	{
+		removeItem(storage.prefix+key);
 	}
 };

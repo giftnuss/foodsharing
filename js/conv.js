@@ -36,6 +36,11 @@ var conv = {
 		this.chatboxes = new Array();
 		this.$chat = new Array();
 		this.user2Conv = new Array();
+		
+		console.log('openchats...');
+		console.log(storage.get('msg-chats'));
+		// later
+		
 	},
 	userChat: function(fsid)
 	{
@@ -98,17 +103,23 @@ var conv = {
 		
 		if(ids.length > 0)
 		{
-			var infos = conv.getChatInfos();			
+			var infos = conv.getChatInfos();	
+			storage.set('msg-chats',infos);
+			
+			/*
 			info.editService('msg','chat',{
 				speed:'fast',
 				premethod:'setSessionInfo',
 				ids:ids,
 				infos:infos
 			});
+			*/
+			
 		}
 		else
 		{
-			info.removeService('msg','chat')
+			storage.del('msg-chats');
+			info.removeService('msg-chats','chat')
 		}
 	},
 	
@@ -117,11 +128,19 @@ var conv = {
 	 */
 	push: function(data)
 	{
-		console.log(data);
-		//alert(data);
 		key = conv.getKey(data.cid);
+		if(key >= 0)
+		{
+			conv.maxbox(data.cid);
+			conv.append(key,data);
+			conv.scrollBottom(data.cid);
+		}
+		else
+		{
+			info.badgeInc('msg');
+		}
 		//alert(key);
-		conv.append(key,data);
+		
 		/*
 		if(data.msg_chat.chats != undefined && data.msg_chat.chats.length > 0)
 		{
@@ -387,6 +406,7 @@ var conv = {
 				/*
 				 * first make a title with all the usernames
 				 */
+				
 				title = ret.conversation.name;
 				if(ret.conversation.name == '')
 				{

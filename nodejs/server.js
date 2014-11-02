@@ -6,6 +6,10 @@ var client_port = 1337
 
 sendtoclient = function(client,a,m,o){
 	if(connected_clients[client]) {
+		console.log(client);
+		console.log(a);
+		console.log(m);
+		console.log(o);
 		connected_clients[client].emit(a, {"m":m,"o":o});
 		return true;
 	} else {
