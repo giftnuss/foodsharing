@@ -149,20 +149,6 @@ if(S::may())
 	/*
 	 * little check for chat messages
 	 */
-	
-	$user .= 'conv.init();';
-	
-	if(getPage() != 'msg' && ($chats = S::get('activechats')))
-	{
-		if(is_array($chats))
-		{			
-			foreach ($chats as $c)
-			{
-				$user .= ' conv.appendChatbox('.$c['id'].','.$c['min'].'); ';
-			}
-
-		}
-	}
 }
 
 

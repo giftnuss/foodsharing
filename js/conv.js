@@ -38,7 +38,15 @@ var conv = {
 		this.user2Conv = new Array();
 		
 		console.log('openchats...');
-		console.log(storage.get('msg-chats'));
+		chats = storage.get('msg-chats');
+		
+		if(chats != undefined)
+		{
+			for(var i=0;i<chats.length;i++)
+			{
+				conv.appendChatbox(chats[i].id,chats[i].min);
+			}
+		}
 		// later
 		
 	},
@@ -515,3 +523,6 @@ var conv = {
 		$('#chat-'+cid+' .settings').append('<li>'+el+'</li>');
 	}
 };
+$(function(){
+	conv.init();
+});
