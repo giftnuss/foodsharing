@@ -47,4 +47,9 @@ class MsgControl extends Control
 		addContent($this->view->convListWrapper($this->view->conversationList($conversations)),CNT_RIGHT);
 		
 	}
+	
+	public function test()
+	{
+		sendSock();
+	}
 }

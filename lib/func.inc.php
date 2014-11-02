@@ -10,7 +10,7 @@ function __autoload($class_name)
 		case 'v' : $folder = 'views'; break;
 	}
 
-	$file = $_SERVER['DOCUMENT_ROOT'] . '/lib/' . $folder . '/' . $class_name . '.php';
+	$file = ROOT_DIR . '/lib/' . $folder . '/' . $class_name . '.php';
 	
 	if (file_exists($file)) {
 		include $file;
@@ -3159,4 +3159,39 @@ function convertKbSize($size)
 function forceLogin()
 {
 	go('?page=login&ref='.urlencode($_SERVER['REQUEST_URI']));
+}
+
+function sendSock($fsid,$app,$method,$options)
+{
+	if($sid = Mem::user($fsid, 'sid'))
+	{
+		$query = http_build_query(array(
+			'c' => $sid, // client session id
+			'a' => $app, // app
+			'm' => $method, // method
+			'o' => json_encode($options) // options
+		));
+		$fp = @fopen ('http://127.0.0.1:1338/?' . $query , 'r');
+		
+		if($fp)
+		{
+			fclose($fp);
+		}
+	}
+	
+	
+	
+	
+	/*
+	 * http://127.0.0.1:1338/?client=123456&app=msg&module=module&options=[aaa,bbb,ccc]
+	$r = new HttpRequest('http://localhost:1338', HttpRequest::METH_GET);
+
+	$r->addQueryData(array('test' => 123));
+	try {
+		echo $r->getResponseCode();
+	
+	} catch (HttpException $ex) {
+		echo $ex;
+	}
+	*/
 }

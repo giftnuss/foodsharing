@@ -870,7 +870,6 @@ function infoMenu()
 	
 	//init_chat();
 	//chat.init();
-	info.init();
 	//init_infos();
 	
 	$('.msgbar-dropdown-menu.extended').slimScroll();

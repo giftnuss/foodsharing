@@ -1,5 +1,6 @@
+
+
 var info = {
-	
 	/*
 	 * preselect elements to reduce dom querys
 	 */
@@ -50,11 +51,16 @@ var info = {
 	 */
 	init: function()
 	{	
+		
+		//alert(location.host);
+		
+		//if($('#infobar').length > 0)
+		
 		if($('#infobar').length > 0)
 		{
 			setTimeout(function(){
 				info.startupTimeout = true;
-				info.heartbeat();
+				//info.heartbeat();
 			},5000);
 			//
 			this.services = new Array();
