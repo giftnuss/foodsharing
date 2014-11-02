@@ -30,8 +30,7 @@
 }
 
 .jMenu > li > a > .fa {
-    font-size: 19px;
-    margin-top: -2px;
+    font-size: 17px;
     width:17;
     display:inline-block;
     text-align: center;
@@ -44,6 +43,7 @@
    /* border-left: 1px solid #251e15;
     border-right: 1px solid #251e15;*/
 }
+
 .jMenu li.active > a
 {
 	background-color: #170200;
@@ -118,7 +118,7 @@
     text-decoration:none;
     padding: 5px 5px;
     display: block;
-    color:#000000;
+    color:#4A3520;
     border:0 none;
     margin:0;
 }
@@ -211,4 +211,9 @@ li.break
 	background:none;
 	border:0;
 	border-bottom:1px solid #E3DED3 !important;
+}
+.jMenu > li > a:hover
+{
+	background-color:#967d61 !important;
+	color:#ffffff !important;
 }

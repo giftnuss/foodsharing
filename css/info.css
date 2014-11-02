@@ -14,7 +14,7 @@
 }
 #infobar > li > a
 {
-	color: #B7AEA6;
+	color: #ffffff;
     display: inline-block;
     font-size: 22px;
     height: 32px;
@@ -32,7 +32,7 @@ border-radius: 6px;
 #infobar > li > a:hover, #infobar > li.touched > a
 {
 	background-color: #967d61;
-	color:#B7AEA6;
+	color:#ffffff;
 }
 #infobar > li > a .badge
 {
