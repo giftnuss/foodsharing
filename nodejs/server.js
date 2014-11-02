@@ -1,4 +1,6 @@
 var http = require('http');
+var input_port = 1338
+var client_port = 1337
 
 
 
@@ -39,8 +41,8 @@ var app = http.createServer(function  (req, res) {
 	}	
 	///// http://127.0.0.1:1338/?c=123456&a=msg&m=module&o=[aaa,bbb,ccc]
 });
-app.listen(1338, '127.0.0.1');
-console.log("http server started on port ", 1338);
+app.listen(input_port, 'localhost');
+console.log("http server started on port ", input_port);
 
 
 var app2 = http.createServer(function  (req, res) {
@@ -52,8 +54,8 @@ var io = require('socket.io')(app2);
 //io.set("transports", ['websocket', 'xhr-polling', 'htmlfile']);
 //io.set("polling duration", 10);
 
-app2.listen(1337, '127.0.0.1');
-console.log("socket.io started on port ", 1337);
+app2.listen(client_port, 'localhost');
+console.log("socket.io started on port ", client_port);
 
 var connected_clients = {};
 io.on('connection', function (socket) {
