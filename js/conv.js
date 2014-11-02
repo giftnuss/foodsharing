@@ -117,6 +117,12 @@ var conv = {
 	 */
 	push: function(data)
 	{
+		console.log(data);
+		//alert(data);
+		key = conv.getKey(data.cid);
+		//alert(key);
+		conv.append(key,data);
+		/*
 		if(data.msg_chat.chats != undefined && data.msg_chat.chats.length > 0)
 		{
 			var chats = data.msg_chat.chats;
@@ -137,6 +143,7 @@ var conv = {
 				}
 			}
 		}
+		*/
 	},
 	
 	// minimize or maximize the chatbox
