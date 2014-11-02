@@ -102,13 +102,13 @@ class FairteilerControl extends Control
 			}
 		}
 		
-		addHidden('
+/*		addHidden('
 				<div id="fbshare-dialog">
 				
 				<a href="https://www.facebook.com/sharer/sharer.php?u='.urlencode('http://www.'.DEFAULT_HOST.'/'.$this->bezirk['urlname'].'/fairteiler/'.$this->fairteiler['id'].'_'.$this->fairteiler['urlname']).'" id="ft-public-link" target="_blank"><img src="img/facebook_share.png" alt="Auf Facebook teilen" /></a>
 				
 				</div>');
-		
+*/		
 	}
 	
 	public function index()
