@@ -90,8 +90,8 @@ class FairteilerXhr extends Control
 		}
 		
 		return array(
-			'status' => 1,
-			'script' => 'u_fbshare('.(int)$_GET['pid'].');'
+			'status' => 1 //,
+//			'script' => 'u_fbshare('.(int)$_GET['pid'].');'
 		);
 	}
 	
