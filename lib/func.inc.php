@@ -768,75 +768,21 @@ function getMenu()
 					<optgroup label="Gruppen">
 						'.$ags_mob.'
 					</optgroup>';
-			
-			$foodsaver = '';
+
 			$foodsaver_mob = '';
 			
 			if(S::may('fs'))
 			{
-				$foodsaver = '
-				<li><a>Foodsaver</a>
-					<ul>
-						<li><a href="?page=fairteiler"><i class="fa fa-recycle"></i> Fair-Teiler</a></li>
-					    <li><a href="?page=msg"><i class="fa fa-comments"></i> Interne Nachrichten</a></li>
-				
-						<li><a href="http://wiki.lebensmittelretten.de" target="_blank"><i class="fa fa-file-text"></i> foodsharing WIKI</a></li>
-				
-						<li><a href="?page=bcard"><i class="fa fa-newspaper-o"></i> Persönliche Visitenkarte</a></li>
-						<li><a class="menu-bottom" href="?page=listFaq"><i class="fa fa-question-circle"></i> FAQs</a></li>';
+				if(S::may('bieb'))
+				{
 					
-				$foodsaver_mob = '
-				<optgroup label="Foodsaver">
-					<option value="?page=fairteiler">Fair-Teiler</option>
-					<option value="?page=message">Interne Nachrichten</option>
-				    <option value="http://wiki.lebensmittelretten.de" target="_blank">foodsharing WIKI</option>
-					<option value="?page=bcard">Persönliche Visitenkarte</option>
-					<option value="?page=listFaq">FAQs</option>';
-			
-			if(S::may('bieb'))
-			{
-				$foodsaver .= '
-						<li><a href="?page=mailbox"><i class="fa fa-envelope"></i> E-Mail Postfächer</a></li>';
-				$foodsaver_mob .= '
-						<option value="?page=mailbox">E-Mail Postfächer</option>';
-			}
-			
-			if(S::may('bot'))
-			{
-				$foodsaver .= '
-						<li><a href="?page=blog&sub=manage"><i class="fa fa-comment"></i> Blog-Eintrag schreiben</a></li>
-						<li class="menu-bottom"><a class="menu-bottom" href="?page=email"><i class="fa fa-exchange"></i> E-Mail Verteiler</a></li>';
+				}
 				
-				$foodsaver_mob .= '
-						<option value="?page=blog">Blog-Eintrag schreiben</option>
-						<option value="?page=email">E-Mail Verteiler</option>';
-			}
+				if(S::may('bot'))
+				{
+					
+				}
 			
-			$foodsaver .= '
-					</ul>
-				</li>';
-			
-			$foodsaver_mob .= '
-					</optgroup>';
-			
-			}
-			else
-			{
-				$foodsaver .= '
-				<li><a>Foodsharer</a>
-					<ul>
-						<li><a href="?page=fairteiler">Fair-Teiler</a></li>
-					    <li><a href="?page=message">Interne Nachrichten</a></li>
-					    <li><a href="http://wiki.lebensmittelretten.de" target="_blank">foodsharing WIKI</a></li>
-					</ul>
-				</li>';
-				
-				$foodsaver_mob .= '
-				<optgroup value="Foodsharer</optgroup>
-					<option value="?page=fairteiler">Fair-Teiler</option>
-					<option value="?page=message">Interne Nachrichten</option>
-					<option value="http://wiki.lebensmittelretten.de" target="_blank">foodsharing WIKI</option>
-				</optgroup>';
 			}
 			$bezirke .= '
 				<li class="break"><span></span></li>
@@ -860,14 +806,15 @@ function getMenu()
 			return array(
 				'default' => '
 						<ul id="mainMenu" class="jMenu">
-							
+							<li><a><i class="fa fa-question-circle"></i></a>
+							<ul>
+								<li><a href="?page=listFaq">F.A.Q.</a></li>
+								<li><a href="http://wiki.lebensmittelretten.de/">Wiki</a></li>
+							</ul>
 							'.$orgamenu['default'].'
-							<!--<li><a class="fNiv" href="http://forum.lebensmittelretten.de">öffentliches Forum</a></li>-->
 							<li><a href="/"><i class="fa fa-home"></i></a></li>
 							<li><a class="fNiv" href="?page=map"><i class="fa fa-map-marker"></i></a></li>
-							
 							'.$ags.'
-							'.$foodsaver.'
 							'.$betriebe['default'].'
 							'.$bezirke.'
 							'.$settings['default'].'
@@ -879,6 +826,8 @@ function getMenu()
 							<option value="/">Home</option>
 							<option value="?page=dashboard">Dashboard</option>
 							<option value="?page=map">Karte</option>
+							<option value="?page=listFaq">F.A.Q.</option>
+							<option value="http://wiki.lebensmittelretten.de">Wiki</option>
 							'.$settings['mobile'].'
 							'.$ags_mob.'
 							'.$foodsaver_mob.'
@@ -898,6 +847,7 @@ function getMenu()
 			'default' => '
 				<ul id="mainMenu" class="jMenu">
 					<li><a class="fNiv" href="/"><i class="fa fa-home"></i></a></li>
+					<li><a class="fNiv" href="?page=map"><i class="fa fa-map-marker"></i></a></li>
 					<li><a class="fNiv" href="/?page=blog">News</a></li>
 					<li><a class="fNiv" href="?page=content&sub=about">Über Uns</a>
 						<ul>
@@ -906,7 +856,7 @@ function getMenu()
 							<li><a href="/?page=content&sub=faq">F.A.Q.</a></li>
 						</ul>
 					</li>
-					<li><a class="fNiv" href="?page=map"><i class="fa fa-map-marker"></i></a></li>
+					
 					<li><a class="fNiv" href="?page=index&sub=ratgeber">Ratgeber</a></li>
 					<li><a onclick="ajreq(\'join\',{app:\'login\'});return false;" class="fNiv" href="?page=join">Mach-Mit!</a></li>
 					<!-- <li><a class="fNiv" href="?page=login" onclick="ajreq(\'login\',{app:\'login\'});return false;">Login</a></li> -->
@@ -1504,6 +1454,7 @@ function getSettingsMenu()
 	$default = '<li class="g_settings"><a class="fNiv corner-all" style="background-image:url('.img().');"><span>&nbsp;</span></a>
 				    <ul class="jmenu-settings">
 					  <li><a href="?page=settings"><i class="fa fa-gear"></i> Einstellungen</a></li>
+					  <li><a href="?page=mailbox"><i class="fa fa-envelope"></i> E-Mail Postfach</a></li>
 				      <li class="menu-bottom"><a class="menu-bottom" href="?page=logout"><i class="fa fa-sign-out"></i> Logout</a></li>
 				    </ul>
 				  </li>';

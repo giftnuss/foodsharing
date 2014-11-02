@@ -49,6 +49,8 @@ class SettingsControl extends Control
 		{
 			$menu[] = array('name' => s('settings_mumble'), 'href' => '?page=settings&sub=mumble');
 		}
+		
+		$menu[] = array('name' => s('bcard'), 'href' => '?page=bcard');
 				
 		addContent($this->view->menu($menu,array('title'=>s('settings'),'active'=>$this->getSub())),CNT_LEFT);
 		
@@ -75,6 +77,8 @@ class SettingsControl extends Control
 		}
 		
 		$menu[] = array('name' => s('delete_account'), 'href' => '?page=settings&sub=deleteaccount');
+		
+		
 		
 		addContent($this->view->menu($menu,array('title'=>s('account_option'),'active'=>$this->getSub())),CNT_LEFT);
 		

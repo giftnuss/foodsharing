@@ -28,6 +28,15 @@
     padding: 7px;
     text-decoration: none;
 }
+
+.jMenu > li > a > .fa {
+    font-size: 19px;
+    margin-top: -2px;
+    width:17;
+    display:inline-block;
+    text-align: center;
+}
+
 .jMenu li a.fNiv:hover, .jMenu li.hover a.fNiv
 {
 	background-color:#FFFFFF;

@@ -21,7 +21,7 @@ $g_lang['newsletter_desc'] = 'Ca. 1x im Monat senden wir aktuelle Informationen 
 $g_lang['infomail_message'] = 'Benachrichtigung über lebensmittelretten.de Nachrichten';
 $g_lang['infomail_message_desc'] = 'Wenn Du auf lebensmittelretten.de eine interne Nachricht geschickt bekommst, aber gerade nicht eingeloggt bist, kannst Du per E-Mail darüber informiert werden.  Möchtest Du das?';
 
-
+$g_lang['bcard'] = 'persönliche Visitenkarte';
 $g_lang['new_bezirk'] = 'Bezirk den das Orgateam neu anlegen soll';
 $g_lang['time'] = 'Wie viel Zeit kannst/willst Du für Deine Botschafterrolle pro Woche aufbringen (ungefähr)';
 $g_lang['photo_public'] = 'Um eine
