@@ -28,27 +28,31 @@ var conv = {
 	 */
 	init: function()
 	{
-		if(GET('page') == 'msg')
+		if(conv.initiated === false)
 		{
-			this.isBigPageMode = true;
-		}
-		this.initiated = true;
-		this.chatboxes = new Array();
-		this.$chat = new Array();
-		this.user2Conv = new Array();
-		
-		console.log('openchats...');
-		chats = storage.get('msg-chats');
-		
-		if(chats != undefined)
-		{
-			for(var i=0;i<chats.length;i++)
+			if(GET('page') == 'msg')
 			{
-				conv.appendChatbox(chats[i].id,chats[i].min);
+				this.isBigPageMode = true;
+			}
+			this.initiated = true;
+			this.chatboxes = new Array();
+			this.$chat = new Array();
+			this.user2Conv = new Array();
+			
+			console.log('openchats...');
+			chats = storage.get('msg-chats');
+			
+			if(chats != undefined)
+			{
+				for(var i=0;i<chats.length;i++)
+				{
+					if(chats[i].id != undefined)
+					{
+						conv.appendChatbox(chats[i].id,chats[i].min);
+					}
+				}
 			}
 		}
-		// later
-		
 	},
 	userChat: function(fsid)
 	{
@@ -127,7 +131,7 @@ var conv = {
 		else
 		{
 			storage.del('msg-chats');
-			info.removeService('msg-chats','chat')
+			//info.removeService('msg-chats','chat')
 		}
 	},
 	

@@ -9,11 +9,11 @@ var storage = {
 	set: function(key,val)
 	{
 		val = JSON.stringify({v:val});
-		localStorage.setItem(storage.prefix+key, val);
+		window.localStorage.setItem(storage.prefix+key, val);
 	},
 	get: function(key)
 	{
-		val = localStorage.getItem(storage.prefix+key);
+		val = window.localStorage.getItem(storage.prefix+key);
 		if(val != undefined)
 		{
 			val = JSON.parse(val);
@@ -23,6 +23,6 @@ var storage = {
 	},
 	del: function(key)
 	{
-		removeItem(storage.prefix+key);
+		window.localStorage.removeItem(storage.prefix+key);
 	}
 };
