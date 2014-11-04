@@ -4384,4 +4384,159 @@ GROUP BY foodsaver_id'));
 			FROM 		`'.PREFIX.'lebensmittel`
 			ORDER BY `name`');
 	}
+	
+	public function get_kette()
+	{
+		$out = $this->q('
+			SELECT
+			`id`,
+			`name`,
+			`logo`
+			
+			FROM 		`'.PREFIX.'kette`
+			ORDER BY `name`');
+	
+		return $out;
+	}
+		
+	public function getBasics_kette()
+	{
+		return $this->q('
+			SELECT 	 	`id`,
+						`name`
+			
+			FROM 		`'.PREFIX.'kette`
+			ORDER BY `name`');
+	}
+	
+	public function update_kette($id,$data)
+	{
+	
+	
+		return $this->update('
+		UPDATE 	`'.PREFIX.'kette`
+	
+		SET 	`name` =  '.$this->strval($data['name']).',
+				`logo` =  '.$this->strval($data['logo']).'
+	
+		WHERE 	`id` = '.$this->intval($id));
+	}
+	
+	public function getOne_lebensmittel($id)
+	{
+		$out = $this->qRow('
+			SELECT
+			`id`,
+			`name`
+			
+			FROM 		`'.PREFIX.'lebensmittel`
+			
+			WHERE 		`id` = ' . $this->intval($id));
+	
+	
+		$out['betrieb'] = $this->qCol('
+				SELECT 		`betrieb_id`
+	
+				FROM 		`'.PREFIX.'betrieb_has_lebensmittel`
+				WHERE 		`lebensmittel_id` = '.$this->intval($id).'
+			');
+	
+		return $out;
+	}
+	
+	public function update_lebensmittel($id,$data)
+	{
+	
+		if(isset($data['betrieb']) && is_array($data['betrieb']))
+		{
+	
+			$this->del('
+					DELETE FROM 	`fs_betrieb_has_lebensmittel`
+					WHERE 			`lebensmittel_id` = '.$this->intval($id).'
+				');
+				
+			foreach($data['betrieb'] as $betrieb_id)
+			{
+				$this->insert('
+						INSERT INTO `'.PREFIX.'betrieb_has_lebensmittel`
+						(
+							`lebensmittel_id`,
+							`betrieb_id`
+						)
+						VALUES
+						(
+							'.$this->intval($id).',
+							'.$this->intval($betrieb_id).'
+						)
+					');
+			}
+		}
+	
+		return $this->update('
+		UPDATE 	`'.PREFIX.'lebensmittel`
+	
+		SET 	`name` =  '.$this->strval($data['name']).'
+	
+		WHERE 	`id` = '.$this->intval($id));
+	}
+	
+	public function get_faq()
+	{
+		$out = $this->q('
+			SELECT
+			`id`,
+			`foodsaver_id`,
+			`faq_kategorie_id`,
+			`name`,
+			`answer`
+			
+			FROM 		`'.PREFIX.'faq`
+			ORDER BY `name`');
+	
+		return $out;
+	}
+	
+	public function getOne_faq($id)
+	{
+		$out = $this->qRow('
+			SELECT
+			`id`,
+			`foodsaver_id`,
+			`faq_kategorie_id`,
+			`name`,
+			`answer`
+			
+			FROM 		`'.PREFIX.'faq`
+			
+			WHERE 		`id` = ' . $this->intval($id));
+	
+	
+	
+		return $out;
+	}
+	
+	public function getBasics_faq_category()
+	{
+		return $this->q('
+			SELECT 	 	`id`,
+						`name`
+			
+			FROM 		`'.PREFIX.'faq_category`
+			ORDER BY `name`');
+	}
+	
+	public function update_faq($id,$data)
+	{
+	
+	
+		return $this->update('
+		UPDATE 	`'.PREFIX.'faq`
+	
+		SET 	`foodsaver_id` =  '.$this->intval($data['foodsaver_id']).',
+				`faq_kategorie_id` =  '.$this->intval($data['faq_kategorie_id']).',
+				`name` =  '.$this->strval($data['name']).',
+				`answer` =  '.$this->strval($data['answer']).'
+	
+		WHERE 	`id` = '.$this->intval($id));
+	}
 }
