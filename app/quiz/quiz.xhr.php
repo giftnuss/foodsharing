@@ -1086,10 +1086,12 @@ class QuizXhr extends Control
 		$uanswers = array();
 		$joke = false;
 	
-		
-		foreach ($question['answers'] as $a)
+		if(isset($question['answers']) && is_array($question['answers']))
 		{
-			$uanswers[$a] = $a;
+			foreach ($question['answers'] as $a)
+			{
+				$uanswers[$a] = $a;
+			}
 		}
 		// get the question
 		if($quest = $this->model->getQuestion($question['id']))
@@ -1173,7 +1175,7 @@ class QuizXhr extends Control
 			'status' => 1,
 			'script' => '
 				$(".ui-dialog-buttonset .ui-button").hide();
-				$(".ui-dialog-buttonset button:last").show();
+				$(".ui-dialog-buttonset .ui-button:last").show();
 				$("#quizcomment").show();
 				$("#countdown").hide();
 				
