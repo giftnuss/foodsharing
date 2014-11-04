@@ -615,7 +615,7 @@ function v_msgBar()
 					<span style="display:none;" class="linkwrapper corner-all ui-shadow">
 						<ul class="linklist conversation-list">
 						</ul>
-						<a class="more" href="?page=msg">Alle zeigen</a>
+						<!-- <a class="more" href="?page=msg">Alle zeigen</a> -->
 					</span>
 					
 				</li>
@@ -627,7 +627,7 @@ function v_msgBar()
 					<span style="display:none;" class="linkwrapper corner-all ui-shadow">
 						<ul class="linklist conversation-list">
 						</ul>
-						<a class="more" href="?page=basket">Alle zeigen</a>
+						<a class="more" href="#" onclick="ajreq(\'newbasket\',{app:\'basket\'});return false;">Neuen Essenskorb anlegen</a>
 					</span>
 					
 				</li>
