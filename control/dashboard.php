@@ -323,7 +323,7 @@ else if(S::may('fs'))
 	
 	if($gerettet > 0)
 	{
-		$gerettet = ', Du hast '.number_format($gerettet,2,",",".").' KG gerettet';
+		$gerettet = ', Du hast <strong>'.number_format($gerettet,2,",",".").' KG</strong> gerettet';
 	}
 	else
 	{
@@ -332,29 +332,11 @@ else if(S::may('fs'))
 	
 	addContent(
 	'
-	<div class="welcome ui-padding margin-bottom ui-corner-all">
-	
-		<div class="welcome_profile_image">
-			<a href="#" onclick="profile('.(int)fsId().');return false;">
-				'.avatar($me,50).'
-			</a>
-		</div>
-		<div class="welcome_profile_name">
-			<div class="user_display_name">
-				<a href="#" onclick="profile('.(int)fsId().');return false;">'.$me['name'].'</a>
-			</div>
-			<div class="welcome_quick_link">
-				<ul>
-					<li><a href="?page=bezirk&bid='.(int)$me['bezirk_id'].'&sub=forum">'.s('rolle_'.$me['rolle'].'_'.$me['geschlecht']).' für '.$me['bezirk_name'].'</a>'.$gerettet.'</li>
-				</ul>
-				<div class="clear"></div>
-			</div>
-		</div>
-		<div class="welcome_profile_survived v-desktop">
-			<a href="#" onclick="profile('.(int)fsId().');return false;"><img height="50" width="50" class="image_online" alt="" src="img/gerettet_icon.png" /></a>
-		</div>
-	
-		<div class="clear"></div>
+	<div class="top corner-all">
+		<div class="img">'.avatar($me,50).'</div>
+			<h3>Hallo '.$me['name'].'</h3>
+			<p>'.s('rolle_'.$me['rolle'].'_'.$me['geschlecht']).' für '.$me['bezirk_name'].'</a>'.$gerettet.'</p>
+		<div style="clear:both;"></div>		
 	</div>'
 		,CNT_TOP);
 	
