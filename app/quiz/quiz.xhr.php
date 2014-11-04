@@ -450,6 +450,7 @@ class QuizXhr extends Control
 		 */
 		if($quiz = S::get('quiz-questions'))
 		{
+			$dia = new XhrDialog();
 			// get quiz_index it is the current array index of the questions
 			$i = S::get('quiz-index');
 			
@@ -542,7 +543,7 @@ class QuizXhr extends Control
 				if($_GET['special'] == 'result')
 				{
 					$this->model->updateQuizSession(S::get('quiz-session'), $quiz, $i);
-					return $this->resultNew($quiz[($i-1)]);
+					return $this->resultNew($quiz[($i-1)],$dia->getId());
 				}
 			}
 			
@@ -583,7 +584,7 @@ class QuizXhr extends Control
 						/*
 						 * let's prepare the output dialog
 						 */
-						$dia = new XhrDialog();
+						
 						//$dia->noClose();
 						//$dia->addOpt('beforeClose', 'function(ev){abortOrPause();return false;}',false);
 						$dia->addOpt('width', 1000);
@@ -1081,7 +1082,7 @@ class QuizXhr extends Control
 		return $dia->xhrout();
 	}
 	
-	private function resultNew($question)
+	private function resultNew($question,$diaId)
 	{
 		$uanswers = array();
 		$joke = false;
@@ -1174,8 +1175,8 @@ class QuizXhr extends Control
 		return array(
 			'status' => 1,
 			'script' => '
-				$(".ui-dialog-buttonset:first .ui-button").hide();
-				$(".ui-dialog-buttonset:first .ui-button:last").show();
+				$("#'.$diaId.' .ui-dialog-buttonset:first .ui-button").hide();
+				$("#'.$diaId.' .ui-dialog-buttonset:first .ui-button:last").show();
 				$("#quizcomment").show();
 				$("#countdown").hide();
 				
