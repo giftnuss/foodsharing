@@ -410,7 +410,7 @@ function handle_add($bezirk_id)
 			$foodsaver = $db->getFoodsaver($g_data['bezirk_id']);
 			//$db->addGlocke($foodsaver, strip_tags($g_data['name']).' wurde eingetragen','Neuer Betrieb','?page=betrieb&id='.(int)$id);
 			
-			$model = loadModel('core');
+			$model = loadModel('betrieb');
 			$model->addBell($foodsaver, 'store_new_title', 'store_new', 'img img-store brown', array(
 				'href' => '?page=fsbetrieb&id='.(int)$id
 			), array(
