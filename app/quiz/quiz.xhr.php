@@ -1174,8 +1174,8 @@ class QuizXhr extends Control
 		return array(
 			'status' => 1,
 			'script' => '
-				$(".ui-dialog-buttonset .ui-button").hide();
-				$(".ui-dialog-buttonset .ui-button:last").show();
+				$(".ui-dialog-buttonset:first .ui-button").hide();
+				$(".ui-dialog-buttonset:first .ui-button:last").show();
 				$("#quizcomment").show();
 				$("#countdown").hide();
 				
