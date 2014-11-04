@@ -9,7 +9,7 @@ if(isset($_GET['app']) && isset($_GET['m']))
 	$app = str_replace('/','',$_GET['app']);
 	$meth = str_replace('/','',$_GET['m']);
 	
-	if(!file_exists(ROOT_DIR . 'app/'.$app.'/'.$app.'.xhr.php'))
+	if(!file_exists('app/'.$app.'/'.$app.'.xhr.php'))
 	{
 		exit();
 	}
