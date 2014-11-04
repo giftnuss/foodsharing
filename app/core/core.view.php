@@ -8,10 +8,14 @@ class View
 		$this->sub = $sub;
 	}
 	
-	public function login()
+	public function login($ref = false)
 	{
 		$action = '/?page=login';
-		if(!isset($_GET['ref']))
+		if($ref != false)
+		{
+			$action = $ref;
+		}
+		else if(!isset($_GET['ref']))
 		{
 			$action = '/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']);
 		}

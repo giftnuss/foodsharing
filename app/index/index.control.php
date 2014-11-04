@@ -37,7 +37,7 @@ class IndexControl extends Control
 		$ftcount = 5;
 		if(!S::may())
 		{
-			addContent($this->view->login(),CNT_LEFT);
+			addContent($this->view->login('/?page=dashboard'),CNT_LEFT);
 			$ftcount = 2;
 		}
 		
