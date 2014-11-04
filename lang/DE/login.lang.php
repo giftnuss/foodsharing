@@ -39,3 +39,6 @@ $g_lang['error_image'] = 'Dein Foto konnte nicht hochgeladen werden';
 
 $g_lang['activation_success'] = '<strong>Aktivierung erfolgreich!</strong> Logge Dich jetzt Mit Deiner E-Mail Adresse und Deinem gewählten Passwort ein.';
 $g_lang['activation_failed'] = '<strong>Aktivierung fehlgeschlagen!</strong> Ist der eingegebene Link auch korrekt?';
+
+$g_lang['pass1'] = 'Dein neues gewünschtes Passwort';
+$g_lang['pass2'] = 'Passwort Wiederholung';

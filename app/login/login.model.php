@@ -70,6 +70,30 @@ class LoginModel extends Model
 			)');
 	}
 	
+	public function checkResetKey($key)
+	{
+		return $this->qOne('SELECT `foodsaver_id` FROM `'.PREFIX.'pass_request` WHERE `name` = '.$this->strval($key));
+	}
+	
+	public function newPassword($data)
+	{
+		if((int)strlen($data['pass1']) > 4 && strlen($data['pass1']) < 20)
+		{
+				
+			if($fsid = $this->qOne('SELECT `foodsaver_id` FROM `'.PREFIX.'pass_request` WHERE `name` = '.$this->strval($data['k'])))
+			{
+	
+				if($fs = $this->qRow('SELECT `id`,`email` FROM `'.PREFIX.'foodsaver` WHERE `id` = '.$this->intval($fsid)))
+				{
+					$this->del('DELETE FROM `'.PREFIX.'pass_request` WHERE `foodsaver_id` = '.(int)$fs['id']);
+					return $this->update('UPDATE `'.PREFIX.'foodsaver` SET `passwd` = '.$this->strval($this->encryptMd5($fs['email'], $data['pass1'])).' WHERE `id` = '.(int)$fs['id'] );
+				}
+			}
+		}
+	
+		return false;
+	}
+	
 	public function add_login($data)
 	{
 		$id = $this->insert('

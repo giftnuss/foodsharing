@@ -151,4 +151,70 @@ class LoginView extends View
 		<div id="joinloader" style="display:none;"><span class="fa fa-circle-o-notch fa-spin"></span></div>
 		<div id="joinready" style="display:none">'.v_success(s('check_mail'),s('join_success')).'</div>';
 	}
+	
+	public function passwordRequest()
+	{
+		if(!S::may())
+		{
+			$mail = '';
+			if(isset($_GET['m']) && validEmail($_GET['m']))
+			{
+				$mail = $_GET['m'];
+			}
+			
+			$cnt = v_info('Bitte trage hier Deine E-Mail Adresse ein mit der Du auf Lebensmittelretten.de angemeldet bist.');
+			
+			$cnt .= '
+			<form name="passReset" method="post" class="contact-form" action="'.$_SERVER['REQUEST_URI'].'">
+					'.v_form_text('email',array('value' => $mail)).'
+					'.v_form_submit(s('send'), 'submitted').'
+			</form>';
+			
+			return v_field($cnt,'Passwort zurücksetzen',array('class' => 'ui-padding'));
+		}
+		else
+		{
+			return v_field(v_info('Du bist angemeldet als '.S::user('name'),'Du bist angemeldet'),array('class' => 'ui-padding'));
+		}
+		/*
+		'
+		<div class="post">
+			<p>
+				
+			</p>
+			<form name="passReset" method="post" class="contact-form" action="'.$_SERVER['REQUEST_URI'].'">
+				<table>
+					<tbody>
+					<tr>
+						<td class="label">Deine E-Mail Adresse:</td>
+						<td><p><input type="text" class="input-text-1" name="email" value="'.$mail.'" /></p></td>
+					</tr>
+	
+					<tr><td colspan="2" class="comment-spacer-1"></td></tr>
+					<tr>
+						<td></td>
+						<td><p class="show-all"><a onclick="document.forms.passReset.submit();return false;" class="btn-1 btn-1-color-default" href="#"><span>Absenden</span></a></p></td>
+					</tr>
+				</tbody></table>
+			</form>
+		</div>';*/
+	}
+	
+	public function newPasswordForm($key)
+	{
+		$key = preg_replace('/[^0-9a-zA-Z]/', '', $key);
+		
+		$cnt = v_info('Jetzt kannst Du Dein Passwort ändern.');
+		
+		$cnt .= '
+			<form name="newPass" method="post" class="contact-form">
+				<input type="hidden" name="k" value="'.$key.'" />
+				'.v_form_passwd('pass1').'
+				'.v_form_passwd('pass2').'
+				'.v_form_submit(s('save'), 'submitted').'
+			</form>';
+		
+		return v_field($cnt,'Neues Passwort setzen',array('class' => 'ui-padding'));
+		
+	}
 }

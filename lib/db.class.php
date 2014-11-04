@@ -141,6 +141,7 @@ class Db
 	{
 		if($fs = $this->qRow('SELECT `id`,`email`,`name`,`geschlecht` FROM `'.PREFIX.'foodsaver` WHERE `email` = '.$this->strval($email)))
 		{
+			
 			$k = uniqid();
 			$key = md5($k);
 				
@@ -161,15 +162,14 @@ class Db
 			if($mail)
 			{
 				$vars = array(
-						'link'=>BASE_URL.'/passwordReset/'.$key,
+						'link'=>BASE_URL.'/?page=login&sub=passwordReset&k='.$key,
 						'name' => $fs['name'],
 						'anrede' => genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r')
 				);
+
+				tplMail(10, $fs['email'],$vars);
+				return true;
 				
-				if($this->tplMail(10, $fs['email'],$vars))
-				{
-					return true;
-				}
 			}
 			else
 			{
