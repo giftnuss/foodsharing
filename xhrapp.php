@@ -9,6 +9,11 @@ if(isset($_GET['app']) && isset($_GET['m']))
 	$app = str_replace('/','',$_GET['app']);
 	$meth = str_replace('/','',$_GET['m']);
 	
+	if(!file_exists(ROOT_DIR . 'app/'.$app.'/'.$app.'.xhr.php'))
+	{
+		exit();
+	}
+	
 	require_once 'config.inc.php';
 	require_once 'lib/Session.php';
 	require_once 'lang/DE/de.php';
