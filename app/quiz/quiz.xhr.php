@@ -519,6 +519,10 @@ class QuizXhr extends Control
 			if(isset($_GET['comment']) && !empty($_GET['comment']))
 			{
 				$comment = strip_tags($_GET['comment']);
+				
+				$comment = $_GET['commentanswers'] . $comment;
+				
+				echo $comment;die();
 				// if yes lets store in the db
 				$this->model->addUserComment((int)$_GET['qid'], $comment);
 			}
@@ -539,7 +543,7 @@ class QuizXhr extends Control
 				if($_GET['special'] == 'result')
 				{
 					$this->model->updateQuizSession(S::get('quiz-session'), $quiz, $i);
-					return $this->result($quiz[($i-1)]);
+					return $this->resultNew($quiz[($i-1)]);
 				}
 			}
 			
@@ -553,11 +557,19 @@ class QuizXhr extends Control
 				// get the question
 				if($question = $this->model->getQuestion($quiz[$i]['id']))
 				{		
-					// get possible answers			
+					// get possible answers		
+					$comment_aswers = '';
 					if($answers = $this->model->getAnswers($question['id']))
 					{
 						// random sorting for the answers
 						shuffle($answers);
+
+						$x=1;
+						foreach ($answers as $a)
+						{
+							$comment_aswers .= $x.'. Frage #'.$a['id'].' => '.tt($a['text'],35)."\n";
+							$x++;
+						}
 						
 						/*
 						 * increase the question index so we are at the next question ;)
@@ -583,7 +595,7 @@ class QuizXhr extends Control
 						
 						
 						$dia->addContent($this->view->quizQuestion($question,$answers));
-						//$dia->addContent($this->view->quizComment());
+						$dia->addContent($this->view->quizComment());
 						
 						/*
 						 * show the pause button only if there are more questions
@@ -601,7 +613,7 @@ class QuizXhr extends Control
 						 * for later function is not ready yet :)
 						 */
 						$dia->addButton('Weiter', 'questcheckresult();return false;');
-						
+						$dia->addButton('nächste Frage','ajreq(\'next\',{app:\'quiz\'});');
 						/*
 						 * add next() Button
 						 */
@@ -616,6 +628,7 @@ class QuizXhr extends Control
 									
 									abortOrPause("'.$dia->getId().'");
 								});
+								$(".ui-dialog-buttonset button:last").hide();
 							},500);
 						}',false);
 						
@@ -664,7 +677,7 @@ class QuizXhr extends Control
 									special = 0;
 								}
 								clearInterval(counter);
-								ajreq(\'next\',{answer:$(\'.qanswers\').serialize(),noco:$(\'.nocheck:checked\').length,app:\'quiz\',comment:$(\'#quizusercomment\').val(),qid:'.(int)$question['id'].',special:special});
+								ajreq(\'next\',{answer:$(\'.qanswers\').serialize(),noco:$(\'.nocheck:checked\').length,app:\'quiz\',commentanswers:"'.jsSafe($comment_aswers).'",comment:$(\'#quizusercomment\').val(),qid:'.(int)$question['id'].',special:special});
 							}
 							
 							function breaknext()
@@ -1066,6 +1079,170 @@ class QuizXhr extends Control
 		
 		
 		return $dia->xhrout();
+	}
+	
+	private function resultNew($question)
+	{
+		$answers = array();
+		$joke = false;
+	
+		//if()
+	
+		foreach ($question['answers'] as $a)
+		{
+			$answers[$a] = $a;
+		}
+		// get the question
+		if($quest = $this->model->getQuestion($question['id']))
+		{
+			// get possible answers
+			if($answers = $this->model->getAnswers($question['id']))
+			{
+				/*
+					print_r($question);
+				print_r($answers);
+				die();
+				*/
+				$joke = false;
+				if($question['fp'] == 0)
+				{
+					$joke = true;
+				}
+	
+				$out = array();
+				foreach ($answers as $a)
+				{
+					$bg = '';
+					$atext = '';
+						
+					if($joke)
+					{
+						$bg = 'transparent';
+						$atext = '';
+					}
+					// Antwort richtig angeklickt
+					else if((isset($answers[$a['id']]) && $a['right'] == 1) || (!isset($answers[$a['id']]) && $a['right'] == 0))
+					{
+						if($a['right'] == 0)
+						{
+							$atext = 'Diese Antwort war natürlich falsch, das hast Du richtig erkannt';
+						}
+						else
+						{
+							$atext = 'Richtig! Diese Antwort stimmt.';
+						}
+						$bg = '#599022';
+					}
+					// Antwort richtig weil nicht angeklickt
+					else
+					{
+						if($a['right'] == 0)
+						{
+							$atext = 'Falsch, Diese Antwort stimmt nicht.';
+						}
+						else
+						{
+							$atext = 'Auch diese Antwort wäre richtig gewesen.';
+						}
+						$bg = '#E74955';
+					}
+						
+					$out[] = array(
+						'id' => $a['id'],
+						'exp' => nl2br($a['explanation']),
+						'bg' => $bg,
+						'atext' => $atext
+					);
+					/*
+					$out .= '
+					<li class="answer" style="color:#fff ;cursor: pointer; border-radius: 10px; display: block; list-style: outside none none; padding: 10px; font-size: 14px; background-color: '.$bg.';">
+						'.$atext.'
+						<p>'.nl2br($a['text']).'</p>
+						<p>
+							<strong>Erklärung</strong><br />
+							'.nl2br($a['explanation']).'
+						</p>
+					</li>';
+					*/
+						
+				}
+			}
+		}
+	
+		
+		return array(
+			'status' => 1,
+			'script' => '
+				$(".ui-dialog-buttonset .ui-button").hide();
+				$(".ui-dialog-buttonset button:last").show();
+				
+				$("#countdown").hide();
+				var answers = '.json_encode($out).';
+				$(".answer, .answer span").css({
+					"cursor":"default"
+				});
+				$("#qanswers input").attr("disabled",true);
+				$(".noanswer").hide();
+				for(var i=0;i<answers.length;i++)
+				{
+					$("#qanswer-" + answers[i].id).css({
+						"background-color":answers[i].bg,
+						"color":"#fff"
+					}).effect("highlight").attr("onmouseover","return false;").attr("onmouseout","return false;");
+					$("#qanswer-" + answers[i].id).append(\'<div style="margin:15px 0 0 43px;">\'+answers[i].atext+\' <a style="color:#FFFFFF;font-weight:bold;" href="#" onclick="$(this).parent().next().toggle();return false;">Erklärung <i class="fa fa-arrow-circle-o-right"></i></a></div><div id="explanation-\'+answers[i].id+\'" style="font-weight:bold;margin:15px 0 0 43px;display:none;">\'+answers[i].exp+\'</div>\');
+				}
+				
+			'
+		);
+		
+		/*
+		$out = '
+			<div id="quizwrapper">
+				<div style="border-radius:10px;font-size:14px;color:#000;padding:10px;background:#FFFFFF;margin-bottom:15px;line-height:20px;">'.nl2br($quest['text']).'</div>
+				<ul style="display:block;list-style:none;">'.$out.'</ul>
+		</div>';
+
+		$dia = new XhrDialog();
+		$dia->addOpt('height', '($(window).height()-40)',false);
+		$dia->addOpt('position', 'center');
+	
+		$dia->setTitle('Zwischenauswertung Frage '.(S::get('quiz-index')));
+		$dia->addContent($out);
+	
+		$dia->addContent($this->view->quizComment());
+	
+		//$dia->addButton('nächste Frage','ajreq(\'next\',{app:\'quiz\'});');
+	
+		$dia->addButton('nächste Frage','ajreq(\'next\',{app:\'quiz\',comment:$(\'#quizusercomment\').val(),qid:'.(int)$question['id'].'});');
+	
+		$dia->addJsAfter('
+			var width = 1000;
+			if($(window).width() < 1000)
+			{
+				width = ($(window).width()-40);
+			}
+			$("#'.$dia->getId().'").dialog("option",{
+				width:width,
+				height:($(window).height()-40)
+			});
+			$(window).resize(function(){
+				var width = 1000;
+				if($(window).width() < 1000)
+				{
+					width = ($(window).width()-40);
+				}
+				$("#'.$dia->getId().'").dialog("option",{
+					width:width,
+					height:($(window).height()-40)
+				});
+			});
+	
+			$("#'.$dia->getId().'").scrollTop($("#'.$dia->getId().'").height());
+		');
+	
+	
+		return $dia->xhrout();
+		*/
 	}
 	
 	public function pause()

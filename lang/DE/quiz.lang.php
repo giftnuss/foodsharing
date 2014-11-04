@@ -11,4 +11,4 @@ $g_lang['answers'] = 'Welche Antworten sind richtig?';
 $g_lang['maxfp'] = 'Maximale Anzahl von Fehlerpunkten um zu bestehen';
 $g_lang['questcount'] = 'Wie viele Fragen sollen bei Klausur gestellt werden?';
 $g_lang['wikilink'] = 'Link zur Wiki-Seite';
-$g_lang['quizusercomment'] = 'Gib uns Feedback zu dieser Frage (Zu schwer? / zu leicht? / Zeitlimit zu knapp?)';
+$g_lang['quizusercomment'] = 'Gib uns feedback zu dieser Frage (z.B. war sie zu leicht, zu schwer, unverständlich oder einzelne Antworten bzw. Erklärungen nicht richtig)';

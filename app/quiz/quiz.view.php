@@ -246,7 +246,7 @@ class QuizView extends View
 				<div style="float:right;width:150px;margin-left:50px;margin-bottom:10px;" id="countdown"></div>
 			<!-- <div id="countdown" style="font-size:16px;font-weight:bold;float:right;margin-left:10px;background-color:#4A3520;padding:15px;border-radius:30px;height:30px;width:30px;line-height:30px;text-align:center;color:#FFFFFF;">'.$question['duration'].'</div> -->
 		
-			<div style="border-radius:10px;font-size:14px;color:#000;padding:10px;background:#FFFFFF;margin-bottom:15px;line-height:20px;">'.$question['text'].'</div>
+			<div style="border-radius:10px;font-size:16px;color:#4A3520;padding:10px;background:#F5F5B5;margin-bottom:15px;line-height:20px;">'.$question['text'].'</div>
 		';
 		
 		$out .= '<div id="qanswers"><ul style="display:block;list-style:none;">';
@@ -256,7 +256,7 @@ class QuizView extends View
 			$i++;
 			$cb[] = array('id' => $a['id'], 'name' => $a['text']);
 			$out .= '
-			<li id="qanswer-'.$a['id'].'" class="answer" onmouseout="$(this).css(\'background-color\',\'transparent\');" onmouseover="$(this).css(\'background-color\',\'#FFFFFF\');" style="cursor:pointer;border-radius:10px;display:block;list-style:none;padding:10px 10px;font-size:14px;">
+			<li id="qanswer-'.$a['id'].'" class="answer" onmouseout="$(this).css(\'background-color\',\'transparent\');" onmouseover="$(this).css(\'background-color\',\'#FFFFFF\');" style="cursor:pointer;border-radius:10px;display:block;list-style:none;padding:10px 10px;font-size:14px;color:#4A3520">
 				<label>
 					<span style="cursor:pointer;-moz-user-select:none;-khtml-user-select: none;float:left">'.($k+1).'. &nbsp;</span>
 					<input id="qacb-'.$a['id'].'" style="cursor:pointer;float:left;" type="checkbox" class="qanswers" name="qanswers[]" value="'.$a['id'].'" />
@@ -271,7 +271,7 @@ class QuizView extends View
 			<label>
 				<span style="cursor:pointer;-moz-user-select:none;-khtml-user-select: none;float:left">'.($i).'. &nbsp;</span>
 				<input class="nocheck" style="float:left;" type="checkbox" name="none" value="0" />
-				<span style="cursor:pointer;-moz-user-select:none;-khtml-user-select: none;display:block;margin-left:43px;">Es ist keine Antwort richtig!</span>
+				<span style="cursor:pointer;-moz-user-select:none;-khtml-user-select: none;display:block;margin-left:43px;color:#4A3520;">Es ist keine Antwort richtig!</span>
 				<span style="clear:both;"></span>
 			</label>
 		</li>
