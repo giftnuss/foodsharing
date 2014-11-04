@@ -389,7 +389,7 @@ class QuizView extends View
 	
 	public function initQuiz($quiz,$page)
 	{
-		return v_input_wrapper($page['title'], $page['body']);
+		return '<h1>'.$page['title'].'</h1>'.$page['body'];
 	}
 	
 	public function listQuestions($questions,$quiz_id)
