@@ -821,9 +821,7 @@ class QuizXhr extends Control
 							  //$("#countdown").text((count)+"");
 							  if (count <= 0)
 							  {
-							     //questgonext();
-							     // ajreq(\'pause\',{app:\'quiz\',timefail:\'1\'});
-					             ajreq(\'pause\',{app:\'quiz\'});
+							     questcheckresult();
 							     return;
 							  }
 							}
