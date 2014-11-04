@@ -284,10 +284,10 @@ function betrieb_form($bezirk = false,$page = '')
 			$view->latLonPicker('LatLng',array('hsnr'=>true)),
 			
 			
-			v_form_select('kette_id',array('add'=>true)),
-			v_form_select('betrieb_kategorie_id',array('add'=>true)),
+			v_form_select('kette_id',array('add'=>true,'values'=>db_get_kette())),
+			v_form_select('betrieb_kategorie_id',array('add'=>true,'values' => db_get_betrieb_kategorie())),
 			
-			v_form_select('betrieb_status_id'),
+			v_form_select('betrieb_status_id',array('values' => db_get_betrieb_status())),
 			
 			v_form_text('ansprechpartner'),
 			v_form_text('telefon'),
@@ -430,5 +430,45 @@ function handle_add($bezirk_id)
 		}
 	}
 }
-				
+
+function db_get_kette()
+{
+	global $db;
+	$out = $db->q('
+			SELECT
+			`id`,
+			`name`,
+			`logo`
+			
+			FROM 		`'.PREFIX.'kette`
+			ORDER BY `name`');
+
+	return $out;
+}
+function db_get_betrieb_kategorie()
+{
+	global $db;
+	$out = $db->q('
+			SELECT
+			`id`,
+			`name`
+			
+			FROM 		`'.PREFIX.'betrieb_kategorie`
+			ORDER BY `name`');
+
+	return $out;
+}
+function db_get_betrieb_status()
+{
+	global $db;
+	$out = $db->q('
+			SELECT
+			`id`,
+			`name`
+			
+			FROM 		`'.PREFIX.'betrieb_status`
+			ORDER BY `name`');
+
+	return $out;
+}
 ?>
