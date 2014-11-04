@@ -522,7 +522,6 @@ class QuizXhr extends Control
 				
 				$comment = $_GET['commentanswers'] . $comment;
 				
-				echo $comment;die();
 				// if yes lets store in the db
 				$this->model->addUserComment((int)$_GET['qid'], $comment);
 			}
@@ -628,6 +627,7 @@ class QuizXhr extends Control
 									
 									abortOrPause("'.$dia->getId().'");
 								});
+								$("#quizcomment").hide();
 								$(".ui-dialog-buttonset button:last").hide();
 							},500);
 						}',false);
@@ -1083,14 +1083,13 @@ class QuizXhr extends Control
 	
 	private function resultNew($question)
 	{
-		$answers = array();
+		$uanswers = array();
 		$joke = false;
 	
-		//if()
-	
+		
 		foreach ($question['answers'] as $a)
 		{
-			$answers[$a] = $a;
+			$uanswers[$a] = $a;
 		}
 		// get the question
 		if($quest = $this->model->getQuestion($question['id']))
@@ -1121,7 +1120,7 @@ class QuizXhr extends Control
 						$atext = '';
 					}
 					// Antwort richtig angeklickt
-					else if((isset($answers[$a['id']]) && $a['right'] == 1) || (!isset($answers[$a['id']]) && $a['right'] == 0))
+					else if((isset($uanswers[$a['id']]) && $a['right'] == 1) || (!isset($uanswers[$a['id']]) && $a['right'] == 0))
 					{
 						if($a['right'] == 0)
 						{
@@ -1175,8 +1174,9 @@ class QuizXhr extends Control
 			'script' => '
 				$(".ui-dialog-buttonset .ui-button").hide();
 				$(".ui-dialog-buttonset button:last").show();
-				
+				$("#quizcomment").show();
 				$("#countdown").hide();
+				
 				var answers = '.json_encode($out).';
 				$(".answer, .answer span").css({
 					"cursor":"default"
