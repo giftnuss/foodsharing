@@ -236,7 +236,7 @@ Array
 		 * check for conversation updates only ifnot on big message page
 		*/
 		
-		if(($_GET['p'] !='msg') && ($conv_ids = $this->model->checkConversationUpdates()))
+		if((!isset($_GET['p']) || $_GET['p'] !='msg') && ($conv_ids = $this->model->checkConversationUpdates()))
 		{
 			$this->check = true;
 			
