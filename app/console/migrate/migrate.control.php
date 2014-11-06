@@ -13,7 +13,7 @@ class MigrateControl extends ConsoleControl
 	{
 		info('getold conversations');
 		
-		$count_complete = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_msg WHERE sender_id != 0 AND recip_id != 0');
+		$count_complete = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_message WHERE sender_id != 0 AND recip_id != 0');
 		
 		if($convs = $this->model->listOldConversations())
 		{
