@@ -177,6 +177,11 @@ class MsgModel extends Model
 		return false;
 	}
 	
+	public function getOldConvStartDate($sender_id,$recip_id)
+	{
+		
+	}
+	
 	public function listConversationMembers($conversation_id)
 	{
 		return $this->q('
