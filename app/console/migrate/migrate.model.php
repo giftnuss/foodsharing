@@ -1,6 +1,66 @@
 <?php
 class MigrateModel extends ConsoleModel
 {
+	public function getOldConvDates($recip1,$recip2)
+	{
+		return $this->qRow('
+			SELECT 
+				MIN( time ) AS min, 
+				MAX( time ) AS max
+				
+			FROM 
+				fs_message
+				
+			WHERE (
+				recip_id = '.$recip1.'
+				AND sender_id = '.$recip2.'
+			)
+			OR (
+				recip_id = '.$recip2.'
+				AND sender_id = '.$recip1.'
+			)		
+		');
+	}
+	
+	public function addMsg($conversation_id,$user_id,$body,$time)
+	{
+		return $this->insert('INSERT INTO `fs_msg`(`conversation_id`, `foodsaver_id`, `body`, `time`) VALUES ('.(int)$conversation_id.','.(int)$user_id.','.$this->strval($body).','.$this->dateval($time).')');
+	}
+	
+	public function connectUser($conversation_id,$recip1,$recip2,$unread)
+	{
+		return $this->insert('
+				INSERT INTO `fs_foodsaver_has_conversation`(`foodsaver_id`, `conversation_id`, `unread`) 
+				VALUES 
+				('.(int)$recip1.','.(int)$conversation_id.','.(int)$unread.'),
+				('.(int)$recip2.','.(int)$conversation_id.','.(int)$unread.')');
+	}
+	
+	public function listOldMessages($recip1,$recip2)
+	{
+		return $this->q('
+			SELECT 
+				id, 
+				msg, 
+				sender_id,
+				`time`,
+				unread
+				
+			FROM 
+				`fs_message`
+			WHERE (
+				recip_id = '.$recip1.'
+				AND sender_id = '.$recip2.'
+			)
+			OR (
+				recip_id = '.$recip2.'
+				AND sender_id = '.$recip1.'
+			)
+				
+			ORDER BY id		
+		');
+	}
+	
 	public function listOldConversations()
 	{
 		if($convs = $this->q('
@@ -41,8 +101,12 @@ class MigrateModel extends ConsoleModel
 		}
 	}
 	
-	public function getConversationId($recips)
+	public function getConversationId($recip1,$recip2)
 	{
+		$recips = array(
+			$recip1 => $recip1,
+			$recip2 => $recip2
+		);
 	
 		/*
 		 * make sure the order of this array
@@ -153,7 +217,7 @@ class MigrateModel extends ConsoleModel
 				`last_foodsaver_id`,
 				`start_foodsaver_id`
 			)
-			VALUES (NOW(),NOW(),'.(int)fsId().','.(int)fsId().')';
+			VALUES (NOW(),NOW(),0,0)';
 	
 		if(($cid = $this->insert($sql)) > 0)
 		{
@@ -161,14 +225,10 @@ class MigrateModel extends ConsoleModel
 			 * last add all recipients to this conversation
 			*/
 			$values = array();
-			unset($recipients[(int)fsId()]);
 			foreach ($recipients as $r)
 			{
 				$values[] = '('.(int)$r.','.(int)$cid.',1)';
 			}
-				
-			// add current user extra to set unread = 0
-			$values[] = '('.(int)fsId().','.(int)$cid.',0)';
 				
 			$this->insert('
 				INSERT INTO
