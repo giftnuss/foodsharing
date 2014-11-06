@@ -19,7 +19,7 @@ class MigrateControl extends ConsoleControl
 		{
 			file_put_contents('convs.txt',print_r($convs,true));
 			success(count($convs).' conversations found');
-			$bar = $this->progressbar(count($convs));
+			$bar = $this->progressbar($count_complete);
 			$x=0;
 			$cur_msg_count = 0;
 			foreach ($convs as $c)
