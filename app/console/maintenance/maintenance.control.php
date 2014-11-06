@@ -381,4 +381,10 @@ class MaintenanceControl extends ConsoleControl
 		echo "\n";
 		success('OK');
 	}
+	
+	public function compress()
+	{
+		require_once 'lib/inc.php';
+		
+	}
 }

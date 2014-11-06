@@ -931,6 +931,7 @@ class Db
 		if($client = $this->checkClient($email, $pass))
 		{
 			$this->initSessionData($client['id']);
+			
 			$this->updateMumble($pass);
 			$this->update('
 				UPDATE '.PREFIX.'foodsaver
@@ -1052,6 +1053,7 @@ class Db
 	public function updateActivity()
 	{		
 		Mem::userSet(fsId(), 'active', time());
+		Mem::userSet(fsId(), 'sid', session_id());
 		
 		$this->update('UPDATE `'.PREFIX.'activity` SET `zeit` = NOW() WHERE `foodsaver_id` = '.$this->intval(fsId()));
 	}
@@ -1063,7 +1065,6 @@ class Db
 	
 	public function initSessionData($fs_id)
 	{
-		
 		$this->insert('INSERT IGNORE INTO '.PREFIX.'activity(`foodsaver_id`,`zeit`)VALUE('.$this->intval($fs_id).',NOW()) ');
 		$this->updateActivity();
 		if($fs = $this->qRow('

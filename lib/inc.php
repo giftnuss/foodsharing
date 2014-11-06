@@ -111,7 +111,8 @@ addScript('/js/instant-search.js',true);
 addScript('/js/conv.js',true);
 addScript('/js/info.js',true);
 addScript('/js/storage.js',true);
-
+addScript('https://cdn.socket.io/socket.io-1.2.0.js');
+addScript('/js/socket.js');
 //scriptCompress();
 //cssCompress();
 
@@ -200,14 +201,17 @@ addJs('
 addHidden('<div id="fs-profile-rate-comment">'.v_form_textarea('fs-profile-rate-msg',array('desc'=>'...')).'</div>');
 
 //$mobilemenu = getMobileMenu();
-
+addJs('sock.connect("'.session_id().'");');
 if(!S::may())
 {
 	addJs('clearInterval(g_interval_newBasket);');
 }
 else
 {
-	addJs('user.token = "'.S::user('token').'";');
+	addJs('
+	user.token = "'.S::user('token').'";
+	info.init();
+	');
 }
 /*
  * Browser location abfrage nur einmal dann in session speichern
