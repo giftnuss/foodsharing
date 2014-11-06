@@ -123,10 +123,12 @@ class FairteilerControl extends Control
 			//addContent($this->view->changeBezirk($this->model->getBezirke()),CNT_RIGHT);
 			
 			$items = array();
-			$bezirke = $this->model->getBezirke();
-			foreach ($bezirke as $b)
+			if($bezirke = $this->model->getBezirke())
 			{
-				$items[] = array('name'=>$b['name'],'href'=>'?page=fairteiler&bid='.$b['id']);
+				foreach ($bezirke as $b)
+				{
+					$items[] = array('name'=>$b['name'],'href'=>'?page=fairteiler&bid='.$b['id']);
+				}
 			}
 			
 			//addContent(v_menu($items,s('bezirk_chooser')),CNT_RIGHT);

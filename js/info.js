@@ -40,6 +40,7 @@ var info = {
 	 * after this time we want to refrsh the info content
 	 */
 	refreshTimeout:30000,
+
 	
 	hbXhr:null,	
 	
@@ -50,11 +51,7 @@ var info = {
 	 * pseudo construct
 	 */
 	init: function()
-	{	
-		
-		//alert(location.host);
-		
-		//if($('#infobar').length > 0)
+	{
 		
 		if($('#infobar').length > 0)
 		{
@@ -164,7 +161,7 @@ var info = {
 					}
 				}
 			});		
-			
+		
 		});
 	},
 	
@@ -198,6 +195,32 @@ var info = {
 		else
 		{
 			this.$badge[type].css('display','none');
+		}
+	},
+	
+	
+	/*
+	 * function to increment current badge number to specific type
+	 */
+	badgeInc: function(type)
+	{
+		if(this.$badge[type] != undefined)
+		{
+			val = parseInt(this.$badge[type].text());
+			val++;
+			this.$badge[type].text(val+'');
+			if(val > 0)
+			{
+				this.$badge[type].css('display','inline-block');
+			}
+			else
+			{
+				this.$badge[type].css('display','none');
+			}
+		}
+		else
+		{
+			console.log(type + ' is undefined');
 		}
 	},
 	
@@ -350,7 +373,9 @@ var info = {
 		{
 			info.refreshTime[item] = 0;
 		}
-
+		info.badge(item,0);
+		info.$badge[item].hide();
+		
 		if($.now() - info.refreshTime[item] > info.refreshTimeout)
 		{
 			info.showLoader(item);
@@ -363,6 +388,7 @@ var info = {
 					if(ret.html != undefined)
 					{
 						info.$linklist[item].html(ret.html);
+						info.badge(item,0);
 						info.$badge[item].hide();
 					}
 				}

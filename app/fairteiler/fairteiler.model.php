@@ -94,13 +94,15 @@ class FairteilerModel extends Model
 		$bezirk_ids = array();
 		if($bezirk_id == 0)
 		{
-			$bezike = $this->getBezirke();
-			foreach ($bezike as $b)
+			if($bezike = $this->getBezirke())
 			{
-				$bb = $this->getChildBezirke($b['id']);
-				foreach ($bb as $c)
+				foreach ($bezike as $b)
 				{
-					$bezirk_ids[$c] = $c;
+					$bb = $this->getChildBezirke($b['id']);
+					foreach ($bb as $c)
+					{
+						$bezirk_ids[$c] = $c;
+					}
 				}
 			}
 		}

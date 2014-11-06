@@ -2,13 +2,13 @@
 /*
  * force only executing on commandline
 */
+require_once 'config.inc.php';
 if(!isset($argv))
 {
 	header('Location: http://www.' . DEFAULT_HOST);
 	exit();
 }
 
-require_once 'config.inc.php';
 require_once ROOT_DIR . 'app/console/console.control.php';
 require_once ROOT_DIR . 'app/console/console.model.php';
 require_once ROOT_DIR . 'lang/DE/de.php';
@@ -36,6 +36,8 @@ if(isset($argv) && is_array($argv))
 		$method = $argv[2];
 	}
 }
+
+echo "Starting $app::$method...\n";
 
 if($obj = loadApp($app))
 {

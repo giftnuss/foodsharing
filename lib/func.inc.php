@@ -3122,27 +3122,16 @@ function sendSock($fsid,$app,$method,$options)
 			'm' => $method, // method
 			'o' => json_encode($options) // options
 		));
-		$fp = @fopen ('http://127.0.0.1:1338/?' . $query , 'r');
 		
+		//$fp = fopen ('http://127.0.0.1:1338/?' . $query , 'r');
+		
+		file_get_contents('http://127.0.0.1:1338/?' . $query);
+		
+		/*
 		if($fp)
 		{
 			fclose($fp);
 		}
+		*/
 	}
-	
-	
-	
-	
-	/*
-	 * http://127.0.0.1:1338/?client=123456&app=msg&module=module&options=[aaa,bbb,ccc]
-	$r = new HttpRequest('http://localhost:1338', HttpRequest::METH_GET);
-
-	$r->addQueryData(array('test' => 123));
-	try {
-		echo $r->getResponseCode();
-	
-	} catch (HttpException $ex) {
-		echo $ex;
-	}
-	*/
 }

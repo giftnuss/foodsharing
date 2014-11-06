@@ -111,7 +111,7 @@ addScript('/js/instant-search.js',true);
 addScript('/js/conv.js',true);
 addScript('/js/info.js',true);
 addScript('/js/storage.js',true);
-addScript('https://cdn.socket.io/socket.io-1.2.0.js');
+addScript('/js/socket.io-1.2.0.js');
 addScript('/js/socket.js');
 //scriptCompress();
 //cssCompress();
@@ -149,20 +149,6 @@ if(S::may())
 	/*
 	 * little check for chat messages
 	 */
-	
-	$user .= 'conv.init();';
-	
-	if(getPage() != 'msg' && ($chats = S::get('activechats')))
-	{
-		if(is_array($chats))
-		{			
-			foreach ($chats as $c)
-			{
-				$user .= ' conv.appendChatbox('.$c['id'].','.$c['min'].'); ';
-			}
-
-		}
-	}
 }
 
 
