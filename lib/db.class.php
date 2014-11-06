@@ -620,7 +620,11 @@ class Db
 	
 	public function sql($query)
 	{
-		return $this->mysqli->query($query);
+		$res = $this->mysqli->query($query);
+		if ($res == false) {
+			error_log('SQL QUERY ERROR URL '.$_SERVER['REQUEST_URI'].' IN '.$query.' : '.$this->mysqli->error);
+		}
+		return $res;
 	}
 	
 	public function qOne($sql)
