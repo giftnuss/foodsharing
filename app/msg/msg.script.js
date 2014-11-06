@@ -238,6 +238,43 @@ var msg = {
 
 	},
 	
+	/*
+	 * Method for arrived message data from socket.io
+	 */
+	push: function(message)
+	{
+		
+		if(message.cid == msg.conversation_id)
+		{
+			msg.appendMsg(message);
+			msg.scrollBottom();
+		}
+		else
+		{
+			//$('#convlist-' + message.cid).remove();
+			msg.updateConvList(message);
+		}
+	},
+	
+	updateConvList: function(message)
+	{
+		$item = $('#convlist-' + message.cid);
+		$itemLink = $item.children('a');
+		if($item.length > 0)
+		{
+			$itemLink.children('.msg').html(message.body);
+			$itemLink.children('.time').text(timeformat.nice(message.time));
+			$item.hide();
+			$item.prependTo('#conversation-list ul:first');
+			$item.show('highlight',{color:'#F5F5B5'});
+			
+		}
+		else
+		{
+			msg.loadConversationList();
+		}
+	},
+	
 	/**
 	 * Method will be called if ther arrived something new from the server
 	 */
@@ -337,6 +374,7 @@ var msg = {
 		//msg.$submit.removeAttr("disabled"); 
 	},
 	appendMsg: function(message){
+		
 		var $el = $('<li id="msg-'+message.id+'" style="display:none;"><span class="img"><a title="'+message.fs_name+'" href="#" onclick="profile('+message.fs_id+');return false;"><img height="35" src="'+img(message.fs_photo,'mini')+'" /></a></span><span class="body">'+nl2br(message.body.autoLink())+'<span class="time">'+timeformat.nice(message.time)+'</span></span><span class="clear"></span></li>');
 		
 		if(msg.$conversation == undefined)
