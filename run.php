@@ -8,7 +8,7 @@ if(!isset($argv))
 	exit();
 }
 
-require_once 'config.inc.php';
+require_once 'config.inc.2.php';
 require_once ROOT_DIR . 'app/console/console.control.php';
 require_once ROOT_DIR . 'app/console/console.model.php';
 require_once ROOT_DIR . 'lang/DE/de.php';

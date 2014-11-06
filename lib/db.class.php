@@ -605,6 +605,18 @@ class Db
 			return false;
 		}
 	}
+
+  public function begin_transaction() {
+    $this->mysqli->query('BEGIN');
+  }
+
+  public function commit() {
+    $this->mysqli->commit();
+  }
+
+  public function rollback() {
+    $this->mysqli->rollback();
+  }
 	
 	public function sql($query)
 	{
