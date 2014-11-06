@@ -4248,7 +4248,7 @@ GROUP BY foodsaver_id'));
 			'.$this->strval($data['email_pass']).',
 			'.$this->strval($data['email_name']).'
 		)');
-    $this->insert('INSERT INTO `'.PREFIX.'bezirk_closure` (bezirk_id, ancestor_id, depth) SELECT t.ancestor_id, '.$id.', t.depth+1 FROM `'.PREFIX.'bezirk_closure` AS t WHERE t.bezirk_id = '.$this->intval($data['parent_id']).' UNION ALL SELECT '.$id.', '.$id.', 0')
+    $this->insert('INSERT INTO `'.PREFIX.'bezirk_closure` (bezirk_id, ancestor_id, depth) SELECT t.ancestor_id, '.$id.', t.depth+1 FROM `'.PREFIX.'bezirk_closure` AS t WHERE t.bezirk_id = '.$this->intval($data['parent_id']).' UNION ALL SELECT '.$id.', '.$id.', 0');
     $this->commit();
 	
 	
