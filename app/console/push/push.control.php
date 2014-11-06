@@ -21,7 +21,7 @@ class PushControl extends ConsoleControl
 	
 	private function runQueue()
 	{
-		if($res = $this->model->query('
+		if($res = $this->model->sql('
 		SELECT
 			id,
 			title,
@@ -45,9 +45,9 @@ class PushControl extends ConsoleControl
 				{
 					$send[$row['id']] = $row['id'];
 					$this->sendGcmNotification(array($row['id_gcm']), array(
-					'title' => $row['title'],
-					'message' => $row['message'],
-					'd' => $data
+						'title' => $row['title'],
+						'message' => $row['message'],
+						'd' => $data
 					));
 				}
 	
@@ -57,18 +57,18 @@ class PushControl extends ConsoleControl
 					$this->sendIosNotification(
 					$row['id_gcm'],
 					array(
-					'title' => $row['title'],
-					'message' => $row['message']
+						'title' => $row['title'],
+						'message' => $row['message']
 					),
-					$data
+						$data
 					);
 				}
 					
-				echo count($send). "send...\n";
+				info(count($send). 'send...');
 					
 				if(count($send) > 0)
 				{
-					$this->model->query('UPDATE fs_pushqueue SET `status` = 1 WHERE id IN('.implode(',', $send).')');
+					$this->model->update('UPDATE fs_pushqueue SET `status` = 1 WHERE id IN('.implode(',', $send).')');
 				}
 			}
 		}
