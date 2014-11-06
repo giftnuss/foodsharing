@@ -30,7 +30,7 @@ class MigrateModel extends ConsoleModel
 	public function connectUser($conversation_id,$recip1,$recip2,$unread)
 	{
 		return $this->insert('
-				INSERT INTO `fs_foodsaver_has_conversation`(`foodsaver_id`, `conversation_id`, `unread`) 
+				REPLACE INTO `fs_foodsaver_has_conversation`(`foodsaver_id`, `conversation_id`, `unread`) 
 				VALUES 
 				('.(int)$recip1.','.(int)$conversation_id.','.(int)$unread.'),
 				('.(int)$recip2.','.(int)$conversation_id.','.(int)$unread.')');
