@@ -281,6 +281,12 @@ class QuizModel extends Model
 			)		
 		'))
 		{
+			if($orgateam = $this->getOrgateam())
+			{
+				$this->addBell($orgateam, 'new_quiz_comment_title', 'new_quiz_comment', 'fa fa-question-circle', array('href'=>'?page=quiz&sub=wall&id='.(int)$question_id), array(
+					'comment' => $comment
+				));
+			}
 			$this->insert('INSERT INTO `'.PREFIX.'question_has_wallpost`(`question_id`, `wallpost_id`, `usercomment`) VALUES ('.(int)$question_id.','.(int)$id.',1)');
 			return true;
 		}

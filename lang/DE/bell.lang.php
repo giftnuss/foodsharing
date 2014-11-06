@@ -15,3 +15,5 @@ $g_lang['store_new'] = '{name} wurde eingetragen';
 
 $g_lang['fs_sleepmode_title'] = 'Neue Schlafmütze';
 $g_lang['fs_sleepmode'] = '{name} {nachname} ist jetzt inaktiv';
+$g_lang['new_quiz_comment_title'] = 'Neuer Quiz-Kommentar';
+$g_lang['new_quiz_comment'] = '{comment}';

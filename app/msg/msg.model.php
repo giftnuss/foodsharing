@@ -348,6 +348,36 @@ class MsgModel extends Model
 		return $this->qColKey('SELECT conversation_id FROM '.PREFIX.'foodsaver_has_conversation WHERE foodsaver_id = '.(int)fsId().' AND unread = 1 AND conversation_id IN('.implode(',', $ids).')');
 	}
 	
+	public function chatHistory($fsid)
+	{
+		if($conversation_id = $this->user2conv($fsid))
+		{
+			return $this->q('
+				SELECT
+					fs.name AS n,
+					m.`body` AS m,
+					UNIX_TIMESTAMP(m.`time`) AS t,
+					fs.photo AS p
+			
+				FROM
+					`'.PREFIX.'msg` m,
+					`'.PREFIX.'foodsaver` fs
+			
+				WHERE
+					m.foodsaver_id = fs.id
+			
+				AND
+					m.conversation_id = '.(int)$conversation_id.'
+				
+				ORDER BY
+					m.`time` DESC
+				
+				LIMIT 0,20
+			');
+		}
+		
+	}
+	
 	public function getLastMessages($conv_id,$last_msg_id)
 	{
 		return $this->q('

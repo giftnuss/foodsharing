@@ -41,20 +41,17 @@ class ApiXhr extends Control
 	{
 		$message = strip_tags($_GET['ms']);
 		$message = trim($message);
+		
+		$model =loadModel('msg');
+		
 		if((int)$_GET['id'] > 0 && $message != '')
 		{
 			file_put_contents('/tmp/lmr/chat.log', fsid().':'.(int)$_GET['id'].':'.$message."\n",FILE_APPEND);
 			
-			$sql = 'INSERT INTO fs_message
-			(sender_id,recip_id,msg,`time`,`unread`,`attach`,`name`)
-			values ('.(int)fsId().', '.(int)$_GET['id'].','.$this->model->strval($message).',NOW(),1,"","")';
-			
-			
-			
-			
-			
-			if($id = $this->model->insert($sql))
+			if($conversation_id = $model->user2conv($_GET['id']))
 			{
+				$model->sendMessage($conversation_id,$message);
+				
 				$user = $this->model->getValues(array('iosid','gcm'), 'foodsaver', $_GET['id']);
 					
 				if(!empty($user['gcm']) || !empty($user['iosid']))
@@ -65,10 +62,10 @@ class ApiXhr extends Control
 					),array('t' => 0,'i'=>(int)fsId(),'c' => time()),$id);
 				}
 				return $this->appout(array(
-					'status' => 1,
-					'time' => time(),
-					'msg' => $message,
-					'id' => (int)$_GET['id']
+						'status' => 1,
+						'time' => time(),
+						'msg' => $message,
+						'id' => (int)$_GET['id']
 				));
 			}
 		}
@@ -80,7 +77,9 @@ class ApiXhr extends Control
 	
 	public function chathistory()
 	{
-		if($history = $this->model->chatHistory($_GET['id']))
+		$model = loadModel('msg');
+		
+		if($history = $model->chatHistory($_GET['id']))
 		{
 			return $this->appout(array(
 				'status' => 1,

@@ -699,8 +699,82 @@ GROUP BY foodsaver_id'));
 	
 	public function getConversations()
 	{
+		
+		if($limit != '')
+		{
+			$limit = ' LIMIT 0,'.(int)$limit;
+		}
+		
+		$out = array();
+		if($conversations = $this->q('
+				SELECT 
+					c.id,
+					UNIX_TIMESTAMP(c.last) AS time_ts,
+					c.last
+				
+				FROM 
+					`'.PREFIX.'conversation` c,
+					`'.PREFIX.'foodsaver_has_conversation` hc
+				
+				WHERE 
+					hc.conversation_id = c.id
+				AND
+					hc.foodsaver_id = '.(int)fsId().'
+				
+				ORDER by c.last DESC
+				LIMIT 20')
+		)
+		{
+			foreach ($conversations as $conv)
+			{
+				if($member = $this->q('
+					SELECT
+						fs.id,
+						fs.name,
+						fs.photo
+					
+					FROM
+						`'.PREFIX.'foodsaver_has_conversation` hc,
+						`'.PREFIX.'foodsaver` fs
+				
+					WHERE
+						hc.foodsaver_id = fs.id
+				
+					AND
+						hc.conversation_id = '.(int)$conv['id'].'
+						
+					AND 
+						hc.foodsaver_id != '.(int)fsId().'
+				'))
+				{
+					if(count($member) == 1)
+					{
+						$out[] = array(
+							'time_ts' => $conv['time_ts'],
+							'sender_id' => $member[0]['id'],
+							'name' => $member[0]['name'],
+							'photo' => $member[0]['photo']
+						);
+					}
+				}
+			}
+			
+			if(!empty($out))
+			{
+				return $out;
+			}
+		}
+		
+		return false;
+		
+		/*
 		$sql = 'SELECT 	
-		MAX(UNIX_TIMESTAMP(time)) AS time_ts, `sender_id`, `'.PREFIX.'foodsaver`.`name`, `'.PREFIX.'foodsaver`.`photo`
+				
+			MAX(UNIX_TIMESTAMP(time)) AS time_ts, 
+			`sender_id`, 
+			`'.PREFIX.'foodsaver`.`name`, 
+			`'.PREFIX.'foodsaver`.`photo`
+					
 		FROM 	`'.PREFIX.'message`,
 				`'.PREFIX.'foodsaver`
 		WHERE 	`'.PREFIX.'message`.`sender_id` = `'.PREFIX.'foodsaver`.`id`
@@ -714,6 +788,7 @@ GROUP BY foodsaver_id'));
 		ORDER BY time_ts DESC';
 
 		return $this->q($sql);
+		*/
 	}
 	
 	
@@ -3019,7 +3094,7 @@ GROUP BY foodsaver_id'));
 				
 				WHERE 		`orgateam` = 1
 				
-				');
+		');
 	}
 	
 	public function updatePhoto($fs_id,$photo)
