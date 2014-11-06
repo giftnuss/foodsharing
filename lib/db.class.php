@@ -615,7 +615,7 @@ class Db
   }
 
   public function rollback() {
-    $this->mysqli->rollback():
+    $this->mysqli->rollback();
   }
 	
 	public function sql($query)
