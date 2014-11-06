@@ -1766,45 +1766,16 @@ GROUP BY foodsaver_id'));
 	
 	public function getChildBezirke($bid,$nocache = false)
 	{
-		$cb = Mem::get('cb-'.$bid);
-		if(is_array($cb))
-		{
-			return $cb;
-		}
-		else
-		{
-			$out = $this->qCol('
-				SELECT
-			    fs_bezirk.id
-				FROM
-				    (
-				        SELECT
-				            @rownum := @rownum+1 AS rownum,
-				            IF(@lastid <> mylist.id, @id := mylist.id, @id) AS pathid,
-				            @lastid := mylist.id AS id,
-				            @id := (SELECT parent_id FROM fs_bezirk  WHERE id = @id) AS parent_id
-				        FROM
-				            (SELECT @id := 0, @lastid := 0, @rownum := 0) AS vars,
-	
-				            (SELECT id FROM fs_bezirk) AS myloop,
-				            (SELECT id FROM fs_bezirk) AS mylist
-				    ) AS t
-				    INNER JOIN fs_bezirk
-				        ON t.id = fs_bezirk.id
-				WHERE    pathid = '.(int)$bid.'	
-			');
-			
-			$ou = array();
-			$ou[$bid] = $bid;
-			foreach ($out as $o)
-			{
-				$ou[$o] = $o;
-			}
-			
-			Mem::set('cb-'.$bid,$ou);
-			
-			return $ou;
-		}
+    $out = $this->qCol('SELECT bezirk_id FROM `'.PREFIX.'bezirk_closure` WHERE ancestor_id = '.(int)$bid);
+    
+    $ou = array();
+    $ou[$bid] = $bid;
+    foreach ($out as $o)
+    {
+      $ou[$o] = $o;
+    }
+    
+    return $ou;
 	}
 	
 	public function listBetriebReq($bezirk_id)
@@ -2673,6 +2644,7 @@ GROUP BY foodsaver_id'));
 	public function update_bezirkNew($id,$data)
 	{
 	
+    $bezirk_id = $this->intval($id);
 		if(isset($data['botschafter']) && is_array($data['botschafter']))
 		{
 	
@@ -2703,7 +2675,7 @@ GROUP BY foodsaver_id'));
 			}
 		}
 		
-		
+	  $this->begin_transaction();
 
 		if((int)$data['parent_id'] > 0)
 		{
@@ -2731,6 +2703,11 @@ GROUP BY foodsaver_id'));
 				`has_children` = '.(int)$has_children.'
 	
 		WHERE 	`id` = '.$this->intval($id));
+
+    $this->sql('DELETE a FROM `'.PREFIX.'bezirk_closure` AS a JOIN `'.PREFIX.'bezirk_closure` AS d ON a.bezirk_id = d.bezirk_id LEFT JOIN `'.PREFIX.'bezirk_closure` AS x ON x.ancestor_id = d.ancestor_id AND x.bezirk_id = a.ancestor_id WHERE d.ancestor_id = '.(int)$bezirk_id.' AND x.ancestor_id IS NULL');
+    $this->sql('INSERT INTO `'.PREFIX.'bezirk_closure` (ancestor_id, bezirk_id, depth) SELECT supertree.ancestor_id, subtree.bezirk_id, supertree.depth+subtree.depth+1 FROM `'.PREFIX.'bezirk_closure` AS supertree JOIN `'.PREFIX.'bezirk_closure` AS subtree WHERE subtree.ancestor_id = '.(int)$bezirk_id.' AND supertree.bezirk_id = '.(int)$this->intval($data['parent_id']));
+    $this->commit();
+
 	}
 	
 	public function update_blog_entry($id,$data)
@@ -4250,6 +4227,8 @@ GROUP BY foodsaver_id'));
 	
 	public function add_bezirk($data)
 	{
+    $this->begin_transaction();
+    
 		$id = $this->insert('
 		INSERT INTO 	`'.PREFIX.'bezirk`
 		(
@@ -4269,6 +4248,8 @@ GROUP BY foodsaver_id'));
 			'.$this->strval($data['email_pass']).',
 			'.$this->strval($data['email_name']).'
 		)');
+    $this->insert('INSERT INTO `'.PREFIX.'bezirk_closure` (bezirk_id, ancestor_id, depth) SELECT t.ancestor_id, '.$id.', t.depth+1 FROM `'.PREFIX.'bezirk_closure` AS t WHERE t.bezirk_id = '.$this->intval($data['parent_id']).' UNION ALL SELECT '.$id.', '.$id.', 0')
+    $this->commit();
 	
 	
 		if(isset($data['foodsaver']) && is_array($data['foodsaver']))
