@@ -2767,7 +2767,7 @@ GROUP BY foodsaver_id'));
 		
 		Mem::del('cb-'.$id);
 		
-		return $this->update('
+		$this->update('
 		UPDATE 	`'.PREFIX.'bezirk`
 	
 		SET 	`name` =  '.$this->strval($data['name']).',
