@@ -46,7 +46,7 @@ class ApiXhr extends Control
 		
 		if((int)$_GET['id'] > 0 && $message != '')
 		{
-			file_put_contents('/tmp/lmr/chat.log', fsid().':'.(int)$_GET['id'].':'.$message."\n",FILE_APPEND);
+			//file_put_contents('/tmp/lmr/chat.log', fsid().':'.(int)$_GET['id'].':'.$message."\n",FILE_APPEND);
 			
 			if($conversation_id = $model->user2conv($_GET['id']))
 			{
