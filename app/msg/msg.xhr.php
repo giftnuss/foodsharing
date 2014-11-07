@@ -67,6 +67,7 @@ class MsgXhr extends Control
 	 */
 	public function infobar()
 	{
+		S::set('badge-msg',0);
 		S::noWrite();
 		
 		$xhr = new Xhr();

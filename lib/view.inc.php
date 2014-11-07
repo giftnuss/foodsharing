@@ -596,10 +596,24 @@ function v_bezirkChooser($id = 'bezirk_id',$bezirk = false,$option = array())
 
 function v_msgBar()
 {
+	$msg_dis = 'none';
+	$info_dis = 'none';
+	$msg_badge = S::get('badge-msg');
+	$info_badge = S::get('badge-info');
+	
+	if($info_badge > 0)
+	{
+		$info_dis = 'inline-block';
+	}
+	if($msg_badge > 0)
+	{
+		$msg_dis = 'inline-block';
+	}
+	
 	return '<ul id="infobar">
 				<li class="msg">
 					<a href="#" onclick="return false;">
-						<i class="fa fa-comments"></i><span style="display:none;" class="badge">0</span>
+						<i class="fa fa-comments"></i><span style="display:'.$msg_dis.';" class="badge">'.$msg_badge.'</span>
 					</a>
 					<span style="display:none;" class="linkwrapper corner-all ui-shadow">
 						<ul class="linklist conversation-list">
@@ -610,7 +624,7 @@ function v_msgBar()
 			
 				<li class="bell">
 					<a href="#" onclick="return false;">
-						<i class="fa fa-bell"></i><span style="display:none;" class="badge">0</span>
+						<i class="fa fa-bell"></i><span style="display:'.$info_dis.';" class="badge">'.$info_badge.'</span>
 					</a>
 					<span style="display:none;" class="linkwrapper corner-all ui-shadow">
 						<ul class="linklist conversation-list">

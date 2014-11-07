@@ -15,6 +15,7 @@ class BellXhr extends Control
 	 */
 	public function infobar()
 	{
+		S::set('badge-info',0);
 		S::noWrite();
 		
 		$xhr = new Xhr();
