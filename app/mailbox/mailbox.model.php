@@ -13,7 +13,7 @@ class MailboxModel extends Model
 	public function addContact($email)
 	{
 		$id = $this->qOne('
-			SELECT 	`id` FROM  '.PREFIX.'contact WHERE `email` = '.strval($email).'
+			SELECT 	`id` FROM  '.PREFIX.'contact WHERE `email` = '.$this->strval($email).'
 		');
 		
 		if(!$id)
