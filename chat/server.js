@@ -26,11 +26,12 @@ sendtoclient = function(client,a,m,o){
 	}
 }
 
+var ccc = 0;
 var app = http.createServer(function  (req, res) {
 	if(req.url == "/stats") {
 		res.writeHead(200);
-		res.end(ccc);
-		return true;
+		res.end(""+ccc);
+		return;
 	}
 	var client,app,module,options;
 	var query = require('url').parse(req.url,true).query;
@@ -75,7 +76,6 @@ var io = require('socket.io')(app2);
 app2.listen(client_port, 'localhost');
 console.log("socket.io started on port ", client_port);
 
-var ccc = 0;
 var connected_clients = {};
 io.on('connection', function (socket) {
 	var sid;
