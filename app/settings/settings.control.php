@@ -45,6 +45,11 @@ class SettingsControl extends Control
 			
 		);
 		
+		if(!is_object($this->model))
+		{
+			$this->model = new SettingsModel();
+		}
+		
 		if($this->model->getMumbleName())
 		{
 			$menu[] = array('name' => s('settings_mumble'), 'href' => '?page=settings&sub=mumble');
