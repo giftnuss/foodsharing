@@ -3837,7 +3837,7 @@ GROUP BY foodsaver_id'));
 		$out['team_js'] = implode(',', $out['team_js']);
 		
 		$out['abholer'] = false;
-		if($abholer = $this->q('SELECT `betrieb_id`,`dow` FROM `'.PREFIX.'abholer` WHERE `betrieb_id` = '.(int)$id))
+		if($abholer = $this->q('SELECT `betrieb_id`,`dow` FROM `'.PREFIX.'abholzeiten` WHERE `betrieb_id` = '.(int)$id))
 		{
 			$out['abholer'] = array();
 			foreach ($abholer as $a)
