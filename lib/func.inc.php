@@ -806,14 +806,15 @@ function getMenu()
 			return array(
 				'default' => '
 						<ul id="mainMenu" class="jMenu">
-							<li><a><i class="fa fa-question-circle"></i></a>
-							<ul>
-								<li><a href="?page=listFaq">F.A.Q.</a></li>
-								<li><a href="http://wiki.lebensmittelretten.de/">Wiki</a></li>
-							</ul>
 							'.$orgamenu['default'].'
 							<li><a href="/"><i class="fa fa-home"></i></a></li>
 							<li><a class="fNiv" href="?page=map"><i class="fa fa-map-marker"></i></a></li>
+							<li><a><i class="fa fa-question-circle"></i></a>
+                                                       	<ul>
+                                                                <li><a href="?page=listFaq">F.A.Q.</a></li>
+                                                                <li><a href="http://wiki.lebensmittelretten.de/">Wiki</a></li>
+                                                        </ul>
+							</li>
 							'.$ags.'
 							'.$betriebe['default'].'
 							'.$bezirke.'
