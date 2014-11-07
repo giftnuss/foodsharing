@@ -176,7 +176,7 @@ class BezirkModel extends Model
 	
 	public function getThemes($bezirk_id,$bot_theme = 0,$page = 0,$last = 0)
 	{
-		$ret = $this->q('
+		if($ret = $this->q('
 			SELECT 		t.id,
 						t.name,
 						t.`time`,
@@ -206,18 +206,21 @@ class BezirkModel extends Model
 				
 			LIMIT '.(int)($page*$this->themes_per_page).', '.(int)$this->themes_per_page.'
 						
-		');
-		
-		if($last > 0)
+		'))
 		{
-			$ll = end($ret);
-			if($ll['id'] == $last)
+			if($last > 0)
 			{
-				return false;
+				$ll = end($ret);
+				if($ll['id'] == $last)
+				{
+					return false;
+				}
 			}
+			
+			return $ret;
 		}
 		
-		return $ret;
+		return false;
 	}
 	
 	public function getPosts($thread_id)
