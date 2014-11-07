@@ -298,7 +298,7 @@ class MsgModel extends Model
 			{
 				$member = @unserialize($convs[$i]['member']);
 				// unserialize error handling
-				if($ret === null){
+				if($member === null){
 					$member = $this->listConversationMembers($convs[$i]['id']);
 					$this->update('
 						UPDATE
