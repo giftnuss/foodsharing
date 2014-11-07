@@ -34,7 +34,7 @@ var app = http.createServer(function  (req, res) {
 			count += connected_clients[key].length;
 		});
 		res.writeHead(200);
-		res.end('{"registered":'+count+',"connected:"'+ccc+'}');
+		res.end('{"registered":'+count+',"connected":'+ccc+'}');
 		return;
 	}
 	var client,app,module,options;
