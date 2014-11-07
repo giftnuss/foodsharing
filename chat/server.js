@@ -1,3 +1,10 @@
+Array.prototype.remove = function(e) {
+	for (var i = 0; i < this.length; i++) {
+		if (e == this[i]) { return this.splice(i, 1); }
+	}
+};
+
+
 var http = require('http');
 var input_port = 1338
 var client_port = 1337
@@ -10,7 +17,9 @@ sendtoclient = function(client,a,m,o){
 		console.log(a);
 		console.log(m);
 		console.log(o);
-		connected_clients[client].emit(a, {"m":m,"o":o});
+		for(var i=0; i<connected_clients[client].length; i++) {
+			connected_clients[client][i].emit(a, {"m":m,"o":o});
+		}
 		return true;
 	} else {
 		return false;
@@ -67,10 +76,13 @@ io.on('connection', function (socket) {
 	socket.on('register', function (id) {
 		sid = id;
 		console.log("client", id, "registered");
-		connected_clients[id] = socket;
+		if(!connected_clients[id]) connected_clients[id] = [];
+		connected_clients[id].push(socket);
 	});
 	socket.on('disconnect',function(){
-		delete connected_clients[sid];
+		//delete connected_clients[sid];
+		connected_clients[sid].remove(socket);
+		if(!connected_clients[sid]) delete connected_clients[sid];
 		console.log(sid, "disconncted");
 	});
 });
