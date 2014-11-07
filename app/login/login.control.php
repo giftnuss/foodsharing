@@ -48,6 +48,7 @@ class LoginControl extends Control
 	{
 		if($this->model->login($_POST['email_adress'],$_POST['password']))
 		{
+			$this->genSearchIndex();
 			$this->model->add_login(array(
 				'foodsaver_id' => fsId(),
 				'ip' => $_SERVER['REMOTE_ADDR'],
@@ -195,5 +196,142 @@ class LoginControl extends Control
 		{
 			addContent($this->view->passwordRequest());
 		}
+	}
+	
+	/**
+	 * Method to generate search Index for instant seach
+	 */
+	private function genSearchIndex()
+	{
+		/*
+		 * The big array we want to fill ;)
+		*/
+		$index = array();
+	
+		/*
+		 * Buddies Load persons in the index array that connected with the user
+		*/
+	
+		$model = loadModel('buddy');
+		if($buddies = $model->listBuddies())
+		{
+			$result = array();
+			foreach ($buddies as $b)
+			{
+				$img = '/img/avatar-mini.png';
+	
+				if(!empty($b['photo']))
+				{
+					$img = img($b['photo']);
+				}
+	
+				$result[] = array(
+						'name' => $b['name'].' '.$b['nachname'],
+						'teaser' => '',
+						'img' => $img,
+						'click' => 'chat(\''.$b['id'].'\');',
+						'id' => $b['id'],
+						'search' => array(
+								$b['name'],$b['nachname']
+						)
+				);
+			}
+			$index[] = array(
+					'title' => 'Menschen die Du kennst',
+					'key' => 'buddies',
+					'result' => $result
+			);
+		}
+	
+		/*
+		 * Groups load Groups connected to the user in the array
+		*/
+		$model = loadModel('groups');
+		if($groups = $model->listMyGroups())
+		{
+			$result = array();
+			foreach ($groups as $b)
+			{
+				$img = '/img/groups.png';
+				if(!empty($b['photo']))
+				{
+					$img = 'images/' . str_replace('photo/','photo/thumb_',$b['photo']);
+				}
+				$result[] = array(
+						'name' => $b['name'],
+						'teaser' => tt($b['teaser'],65),
+						'img' => $img,
+						'href' => '?page=bezirk&bid='.$b['id'].'&sub=forum',
+						'search' => array(
+								$b['name']
+						)
+				);
+			}
+			$index[] = array(
+					'title' => 'Deine Gruppen',
+					'result' => $result
+			);
+		}
+	
+		/*
+		 * Betriebe load food stores connected to the user in the array
+		*/
+		$model = loadModel('betrieb');
+		if($betriebe = $model->listMyBetriebe())
+		{
+			$result = array();
+			foreach ($betriebe as $b)
+			{
+				$result[] = array(
+						'name' => $b['name'],
+						'teaser' => $b['str'].' '.$b['hsnr'].', '.$b['plz'].' '.$b['stadt'],
+						'href' => '?page=fsbetrieb&id='.$b['id'],
+						'search' => array(
+								$b['name'],$b['str']
+						)
+				);
+			}
+			$index[] = array(
+					'title' => 'Deine Betriebe',
+					'result' => $result
+			);
+		}
+	
+		/*
+		 * Bezirke load Bezirke connected to the user in the array
+		*/
+		$model = loadModel('bezirk');
+		if($bezirke = $model->listMyBezirke())
+		{
+			$result = array();
+			foreach ($bezirke as $b)
+			{
+				$result[] = array(
+						'name' => $b['name'],
+						'teaser' => '',
+						'img' => false,
+						'href' => '?page=bezirk&bid='.$b['id'].'&sub=forum',
+						'search' => array(
+								$b['name']
+						)
+				);
+			}
+			$index[] = array(
+					'title' => 'Deine Bezirke',
+					'result' => $result
+			);
+		}
+	
+		/*
+		 * Get or set an individual token as filename for the public json file
+		*/
+		if($token = S::user('token'))
+		{
+			file_put_contents('cache/searchindex/' . $token . '.json',json_encode($index));
+			return $token;
+		}
+	
+	
+		return false;
 	}
 }
