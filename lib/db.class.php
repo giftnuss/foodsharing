@@ -1091,9 +1091,7 @@ class Db
 				'lat' => $fs['lat'],
 				'lon' => $fs['lon']		
 			));
-			S::set('badge-info', (int)$this->qOne('SELECT COUNT(bell_id) FROM '.PREFIX.'foodsaver_has_bell WHERE foodsaver_id = '.(int)$fs_id.' AND seen = 0'));
-			S::set('badge-msg', (int)$this->qOne('SELECT COUNT(conversation_id) FROM '.PREFIX.'foodsaver_has_conversation WHERE foodsaver_id = '.(int)$fs_id.' AND unread = 1'));
-			S::set('badge-basket', 0);
+			
 			$this->insert('
 				INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_bezirk`(`foodsaver_id`, `bezirk_id`, `active`, `added`) VALUES 
 				('.(int)$fs['id'].','.(int)$fs['bezirk_id'].',1,NOW())
