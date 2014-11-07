@@ -55,7 +55,7 @@ class LoginControl extends Control
 				'time' => date('Y-m-d H:i:s'),
 				'agent' => $_SERVER['HTTP_USER_AGENT']
 			));
-			info(s('login_success'));
+			//info(s('login_success'));
 			
 			if(isset($_POST['ismob']))
 			{
