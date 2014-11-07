@@ -95,6 +95,38 @@ var info = {
 			
 			// init dom events
 			this.initEvents();
+			
+			var bell = storage.get('badge-bell');
+			var msg = storage.get('badge-info');
+			if(bell != undefined)
+			{
+				this.$badge['bell'].text(bell);
+				this.$badge['bell'].css('display','inline-block');
+			}
+			if(msg != undefined)
+			{
+				this.$badge['msg'].text(bell);
+				this.$badge['msg'].css('display','inline-block');
+			}
+			else
+			{
+				ajax.req('info','initbadge',{
+					success: function(ret){
+						if(ret.bell > 0)
+						{
+							info.badge('bell',ret.bell);
+						}
+						if(ret.msg > 0)
+						{
+							info.badge('msg',ret.msg);
+						}
+						if(ret.basket > 0)
+						{
+							info.badge('basket',ret.basket);
+						}
+					}
+				});
+			}
 		}	
 	},
 	

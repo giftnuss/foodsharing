@@ -29,6 +29,16 @@ class InfoXhr extends Control
 		parent::__construct();
 	}
 	
+	public function initbadge()
+	{
+		$xhr = new Xhr();
+		$xhr->addData('bell', (int)$this->model->qOne('SELECT COUNT(bell_id) FROM '.PREFIX.'foodsaver_has_bell WHERE foodsaver_id = '.(int)fsId().' AND seen = 0'));
+		$xhr->addData('msg', (int)$this->model->qOne('SELECT COUNT(conversation_id) FROM '.PREFIX.'foodsaver_has_conversation WHERE foodsaver_id = '.(int)fsId().' AND unread = 1'));
+		$xhr->addData('basket',0);
+		
+		$xhr->send();
+	}
+	
 	public function heartbeat()
 	{
 		$duration = array('start'=>microtime());
