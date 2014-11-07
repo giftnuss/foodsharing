@@ -19,7 +19,7 @@ class FairteilerControl extends Control
 		/*
 		 * allowed only for logged in users
 		 */
-		if(!S::may() && $_GET['sub'] != 'ft')
+		if(!S::may() && isset($_GET['sub']) && $_GET['sub'] != 'ft')
 		{
 			goLogin();
 		}

@@ -82,6 +82,11 @@ class ProfileXhr extends Control
 	
 	public function quickprofile()
 	{
+		if(!is_object($this->model))
+		{
+			$this->model = new ProfileModel();
+			$this->view = new ProfileView();
+		}
 		
 		$bezirk = $this->model->getBezirk($this->foodsaver['bezirk_id']);
 		
