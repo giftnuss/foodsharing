@@ -49,7 +49,7 @@ var app = http.createServer(function  (req, res) {
 		res.writeHead(200);
 		res.end("send!\n\n\n"+client+"\n"+app+"\n"+method+"\n"+options+"\n");
 	} else {
-		res.writeHead(404);
+		res.writeHead(200);
 		res.end("one or more clients not found!\n\n\n"+client+"\n"+app+"\n"+method+"\n"+options+"\n");
 	}	
 	///// http://127.0.0.1:1338/?c=123456&a=msg&m=module&o=[aaa,bbb,ccc]
@@ -76,13 +76,15 @@ io.on('connection', function (socket) {
 	socket.on('register', function (id) {
 		sid = id;
 		console.log("client", id, "registered");
-		if(!connected_clients[id]) connected_clients[id] = [];
+		if(!connected_clients[id]) connected_clients[id] = new Array();
 		connected_clients[id].push(socket);
 	});
 	socket.on('disconnect',function(){
 		//delete connected_clients[sid];
-		connected_clients[sid].remove(socket);
+		console.log("disconnect:", connected_clients[sid]);
+		if( connected_clients[sid]) connected_clients[sid].remove(socket);
 		if(!connected_clients[sid]) delete connected_clients[sid];
+		console.log("disconnect:", connected_clients[sid]);
 		console.log(sid, "disconncted");
 	});
 });
