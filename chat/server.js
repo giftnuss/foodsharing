@@ -26,7 +26,13 @@ sendtoclient = function(client,a,m,o){
 	}
 }
 
+var ccc = 0;
 var app = http.createServer(function  (req, res) {
+	if(req.url == "/stats") {
+		res.writeHead(200);
+		res.end(""+ccc);
+		return;
+	}
 	var client,app,module,options;
 	var query = require('url').parse(req.url,true).query;
 
@@ -78,13 +84,13 @@ io.on('connection', function (socket) {
 		console.log("client", id, "registered");
 		if(!connected_clients[id]) connected_clients[id] = new Array();
 		connected_clients[id].push(socket);
+		ccc++;
 	});
 	socket.on('disconnect',function(){
 		//delete connected_clients[sid];
-		console.log("disconnect:", connected_clients[sid]);
 		if( connected_clients[sid]) connected_clients[sid].remove(socket);
 		if(!connected_clients[sid]) delete connected_clients[sid];
-		console.log("disconnect:", connected_clients[sid]);
 		console.log(sid, "disconncted");
+		ccc--;
 	});
 });
