@@ -339,11 +339,11 @@ function msgTime($ts)
 
 function makeThumbs($pic)
 {
-	if(!file_exists(ROOT_DIR.'images/mini_q_'.$pic))
+	if(!file_exists(ROOT_DIR.'images/mini_q_'.$pic) && file_exists(ROOT_DIR.'images/'.$pic))
 	{
-		copy(ROOT_DIR.'images/mini_q_'.$pic, ROOT_DIR.'images/mini_q_'.$pic);
-		copy(ROOT_DIR.'images/mini_q_'.$pic, ROOT_DIR.'images/med_q_'.$pic);
-		copy(ROOT_DIR.'images/mini_q_'.$pic, ROOT_DIR.'images/q_'.$pic);
+		copy(ROOT_DIR.'images/'.$pic, ROOT_DIR.'images/mini_q_'.$pic);
+		copy(ROOT_DIR.'images/'.$pic, ROOT_DIR.'images/med_q_'.$pic);
+		copy(ROOT_DIR.'images/'.$pic, ROOT_DIR.'images/q_'.$pic);
 		
 		$image = new fImage(ROOT_DIR.'images/mini_q_'.$pic);
 		$image->cropToRatio(1, 1);
