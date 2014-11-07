@@ -598,8 +598,8 @@ function v_msgBar()
 {
 	$msg_dis = 'none';
 	$info_dis = 'none';
-	$msg_badge = S::get('badge-msg');
-	$info_badge = S::get('badge-info');
+	$msg_badge = (int)S::get('badge-msg');
+	$info_badge = (int)S::get('badge-info');
 	
 	if($info_badge > 0)
 	{
