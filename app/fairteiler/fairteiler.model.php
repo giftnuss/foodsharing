@@ -118,7 +118,7 @@ class FairteilerModel extends Model
 		//ksort($bezirk_ids);
 		
 		
-		if($fairteiler = $this->q('
+		if(!empty($bezirk_ids) && ($fairteiler = $this->q('
 	
 			SELECT 	ft.`id`,
 					ft.`name`,
@@ -132,7 +132,7 @@ class FairteilerModel extends Model
 			WHERE 	ft.bezirk_id = bz.id
 			AND 	ft.`bezirk_id` IN('.implode(',', $bezirk_ids).')
 			AND 	ft.`status` = 1
-		'))
+		')))
 		{
 			$out = array();
 			
