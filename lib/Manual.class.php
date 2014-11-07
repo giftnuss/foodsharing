@@ -697,7 +697,7 @@ GROUP BY foodsaver_id'));
 		');
 	}
 	
-	public function getConversations()
+	public function getConversations($limit = '')
 	{
 		
 		if($limit != '')
