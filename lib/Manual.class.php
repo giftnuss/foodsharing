@@ -1841,16 +1841,16 @@ GROUP BY foodsaver_id'));
 	
 	public function getChildBezirke($bid,$nocache = false)
 	{
-    $out = $this->qCol('SELECT bezirk_id FROM `'.PREFIX.'bezirk_closure` WHERE ancestor_id = '.(int)$bid);
-    
-    $ou = array();
-    $ou[$bid] = $bid;
-    foreach ($out as $o)
-    {
-      $ou[$o] = $o;
-    }
-    
-    return $ou;
+	    $out = $this->qCol('SELECT bezirk_id FROM `'.PREFIX.'bezirk_closure` WHERE ancestor_id = '.(int)$bid);
+	    
+	    $ou = array();
+	    $ou[$bid] = $bid;
+	    foreach ($out as $o)
+	    {
+	      $ou[(int)$o] = (int)$o;
+	    }
+	    
+	    return $ou;
 	}
 	
 	public function listBetriebReq($bezirk_id)

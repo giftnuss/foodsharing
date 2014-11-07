@@ -20,13 +20,17 @@ class GroupsView extends View
 		
 		// Lokale Gruppen
 		$items = array();
-		foreach ($bezirke as $b)
+		if(is_array($bezirke))
 		{
-			if($b['type'] != 7 && $b['type'] != 6)
+			foreach ($bezirke as $b)
 			{
-				$items[] = array('name' => 'Gruppen für '.$b['name'],'href' => '?page=groups&p='.$b['id']);
+				if($b['type'] != 7 && $b['type'] != 6)
+				{
+					$items[] = array('name' => 'Gruppen für '.$b['name'],'href' => '?page=groups&p='.$b['id']);
+				}
 			}
 		}
+		
 		$out .= v_field(v_menu($items), 'Lokalgruppen');
 		
 		
@@ -44,7 +48,7 @@ class GroupsView extends View
 		*/
 		$orgacheck = false;
 		$orga = '';
-		if($_SESSION['client']['bezirke'])
+		if(isset($_SESSION['client']['bezirke']))
 		{
 			$orga = '
 		<ul class="linklist">';
