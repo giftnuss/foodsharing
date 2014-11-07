@@ -2,13 +2,7 @@
 class BcardModel extends Model
 {
 	public function getMyData()
-	{
-		if(!$this->getVal('mailbox_id', 'foodsaver', fsId()))
-		{
-			$mbmod = loadModel('mailbox');
-			$mbmod->getBoxes();
-		}
-		
+	{		
 		$fs = $this->qRow('
 			SELECT 	fs.id,
 					fs.`name`,
