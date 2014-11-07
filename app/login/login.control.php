@@ -21,7 +21,12 @@ class LoginControl extends Control
 				{
 					$this->handleLogin();
 				}
-				addContent($this->view->login());
+				$ref = false;
+				if(isset($_GET['ref']))
+				{
+					$ref = urldecode($_GET['ref']);
+				}
+				addContent($this->view->login($ref));
 			}
 		}
 		else

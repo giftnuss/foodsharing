@@ -7,7 +7,7 @@ class SettingsControl extends Control
 	{
 		if(!S::may())
 		{
-			return false;
+			goLogin();
 		}
 		
 		$this->model = new SettingsModel();
@@ -49,12 +49,6 @@ class SettingsControl extends Control
 			array('name' => s('settings_info'), 'href' => '?page=settings&sub=info')
 			
 		);
-		
-		if(!is_object($this->model))
-		{
-			$this->model = new SettingsModel();
-			$this->view = new SettingsView();
-		}
 		
 		if($this->model->getMumbleName())
 		{
