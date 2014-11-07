@@ -528,5 +528,8 @@ var conv = {
 	}
 };
 $(function(){
-	conv.init();
+	if($('body.loggedin').length > 0)
+	{
+		conv.init();
+	}
 });
