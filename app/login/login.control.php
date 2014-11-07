@@ -164,9 +164,11 @@ class LoginControl extends Control
 						{
 							$check = false;
 							error('Sorry, Es gibt ein Problem mir Deinen Daten, es wurde ein Administrator informiert');
+							/*
 							tplMail(11, 'kontakt@prographix.de',array(
 								'data' => '<pre>'.print_r($_POST,true).'</pre>'
 							));
+							*/
 						}
 						
 						if($check)

@@ -54,7 +54,7 @@ class BlogView extends View
 	{
 		if(!empty($news['picture']))
 		{
-			return '<a href="?page=blog&sub=read&id='.$news['id'].'"><img class="corner-all" src="http://www.lebensmittelretten.de/freiwillige/images/' . str_replace('/','/'.$prefix,$news['picture']).'" /></a>';
+			return '<a href="?page=blog&sub=read&id='.$news['id'].'"><img class="corner-all" src="/images/' . str_replace('/','/'.$prefix,$news['picture']).'" /></a>';
 		}
 		else
 		{

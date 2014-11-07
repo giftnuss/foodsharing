@@ -1514,58 +1514,61 @@ function xhr_addPhoto($data)
 {
 	$data = getPostData();
 	
-	$user_id = (int)$data['fs_id'];
-	
-	if(isset($_FILES['photo']) && (int)$_FILES['photo']['size'] > 0)
+	if(isset($data['fs_id']))
 	{
-		global $db;
-		$ext = explode('.', $_FILES['photo']['name']);
-		$ext = strtolower(end($ext));
-		//$bild = uploadPhoto();
+		$user_id = (int)$data['fs_id'];
 		
-		$new_filename = 
-		
-		@unlink('./images/'.$user_id.'.'.$ext);
-		@unlink('./images/'.$file);
-		
-		$file = makeUnique().'.'.$ext;
-		if(move_uploaded_file($_FILES['photo']['tmp_name'], './images/'.$file))
-		{	
+		if(isset($_FILES['photo']) && (int)$_FILES['photo']['size'] > 0)
+		{
+			global $db;
+			$ext = explode('.', $_FILES['photo']['name']);
+			$ext = strtolower(end($ext));
+			//$bild = uploadPhoto();
 			
-			$image = new fImage('./images/'.$file);
-			$image->resize(800, 800);
-			$image->saveChanges();
+			//$new_filename = 
 			
-			copy('./images/'.$file, './images/thumb_crop_'.$file);
-			copy('./images/'.$file, './images/crop_'.$file);
+			@unlink('./images/'.$user_id.'.'.$ext);
+			@unlink('./images/'.$file);
 			
-			$image = new fImage('./images/thumb_crop_'.$file);
-			$image->cropToRatio(35, 45);
-			$image->resize(200, 200);
-			$image->saveChanges();
-			
-			$image = new fImage('./images/crop_'.$file);
-			$image->cropToRatio(35, 45);
-			$image->resize(600, 600);
-			$image->saveChanges();
-			
-			copy('./images/thumb_crop_'.$file, './images/mini_q_'.$file);
-			$image = new fImage('./images/mini_q_'.$file);
-			$image->cropToRatio(1, 1);
-			$image->resize(35, 35);
-			$image->saveChanges();
-			
-			copy('./images/thumb_crop_'.$file, './images/130_q_'.$file);
-			$image = new fImage('./images/130_q_'.$file);
-			$image->cropToRatio(1, 1);
-			$image->resize(130, 130);
-			$image->saveChanges();
-			
-			@unlink('./tmp/tmp_'.$file);
-			
-			$db->addPhoto($user_id,$file);
-			return '<html><head></head><body onload="parent.uploadPhotoReady('.$user_id.',\'./images/mini_q_'.$file.'\');"></body></html>';
-		}	
+			$file = makeUnique().'.'.$ext;
+			if(move_uploaded_file($_FILES['photo']['tmp_name'], './images/'.$file))
+			{	
+				
+				$image = new fImage('./images/'.$file);
+				$image->resize(800, 800);
+				$image->saveChanges();
+				
+				copy('./images/'.$file, './images/thumb_crop_'.$file);
+				copy('./images/'.$file, './images/crop_'.$file);
+				
+				$image = new fImage('./images/thumb_crop_'.$file);
+				$image->cropToRatio(35, 45);
+				$image->resize(200, 200);
+				$image->saveChanges();
+				
+				$image = new fImage('./images/crop_'.$file);
+				$image->cropToRatio(35, 45);
+				$image->resize(600, 600);
+				$image->saveChanges();
+				
+				copy('./images/thumb_crop_'.$file, './images/mini_q_'.$file);
+				$image = new fImage('./images/mini_q_'.$file);
+				$image->cropToRatio(1, 1);
+				$image->resize(35, 35);
+				$image->saveChanges();
+				
+				copy('./images/thumb_crop_'.$file, './images/130_q_'.$file);
+				$image = new fImage('./images/130_q_'.$file);
+				$image->cropToRatio(1, 1);
+				$image->resize(130, 130);
+				$image->saveChanges();
+				
+				@unlink('./tmp/tmp_'.$file);
+				
+				$db->addPhoto($user_id,$file);
+				return '<html><head></head><body onload="parent.uploadPhotoReady('.$user_id.',\'./images/mini_q_'.$file.'\');"></body></html>';
+			}	
+		}
 	}
 }
 
