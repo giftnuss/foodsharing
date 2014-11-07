@@ -190,7 +190,9 @@ class MsgModel extends Model
 				fs.name,
 				fs.photo,
 				fs.email,
-				fs.geschlecht
+				fs.geschlecht,
+				fs.gcm,
+				fs.iosid
 
 			FROM 
 				`'.PREFIX.'foodsaver_has_conversation` hc,

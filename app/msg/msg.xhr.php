@@ -144,6 +144,22 @@ class MsgXhr extends Control
 										'time' => date('Y-m-d H:i:s')
 									));
 									
+									if(!empty($m['gcm']) || !empty($m['iosid']))
+									{
+										$this->model->addPushQueue(
+												fsId(),
+												$m['id'],
+												S::user('name').' hat Dir eine Nachricht geschrieben',
+												$body,
+												array(
+														'gcm' => $m['gcm'],
+														'iosid' => $m['iosid']
+												),
+												array('t' => 0,'i'=>(int)fsId(),'c' => time()),
+												$message_id
+										);
+									}
+									
 									/*
 									 * send an E-Mail if the user is not online
 									*/
