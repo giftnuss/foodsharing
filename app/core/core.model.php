@@ -300,6 +300,8 @@ class Model extends ManualDb
  	
  	public function message($recip_id, $foodsaver_id, $message, $unread = 1)
  	{
+ 		$model = loadModel('msg');
+ 		
  		$recd = 0;
  		if($unread == 0)
  		{
@@ -311,12 +313,11 @@ class Model extends ManualDb
  		}
  		
  		$this->addPushQueue(fsId(), $recip_id, S::user('name').' hat Dir eine Nachricht geschrieben', $message,false,array('t'=>0,'i'=>fsId(),'t'=>time()));
- 		return $this->insert('
- 			INSERT INTO `fs_message`(`sender_id`, `recip_id`, `unread`, `msg`, `time`, `recd`) 
- 			VALUES 
- 			(
- 				'.(int)$foodsaver_id.','.(int)$recip_id.','.(int)$unread.','.$this->strval($message).',NOW(),'.(int)$recd.'
- 			)		
- 		');
+ 		
+ 		if($conversation_id = $model->user2conv($recip_id))
+		{
+			return $model->sendMessage($conversation_id,$message);
+		}
+		return false;
  	}
 }
