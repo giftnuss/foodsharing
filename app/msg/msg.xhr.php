@@ -67,7 +67,6 @@ class MsgXhr extends Control
 	 */
 	public function infobar()
 	{
-		S::set('badge-msg',0);
 		S::noWrite();
 		
 		$xhr = new Xhr();
@@ -93,6 +92,8 @@ class MsgXhr extends Control
 				{
 					$xhr->addData('messages', $msgs);
 				}
+				
+				$this->model->setAsRead(array((int)$_GET['id']));
 				
 				$xhr->send();
 			}
