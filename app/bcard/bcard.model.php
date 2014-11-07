@@ -19,15 +19,20 @@ class BcardModel extends Model
 					fs.`anschrift`,
 					fs.`telefon`,
 					fs.`handy`,
-					CONCAT(mb.`name`,"@","'.DEFAULT_HOST.'") AS email,
-					mb.name AS mailbox
+					fs.email
 				
-			FROM 	'.PREFIX.'foodsaver fs,
-					'.PREFIX.'mailbox mb
+			FROM 	'.PREFIX.'foodsaver fs
 
-			WHERE 	fs.mailbox_id = mb.id
-			AND 	fs.id = '.(int)fsId().'
+			WHERE 	fs.id = '.(int)fsId().'
 		');
+		
+		if(S::may('bieb'))
+		{
+			if($mailbox = $this->qOne('SELECT mb.name FROM '.PREFIX.'mailbox mb, '.PREFIX.'foodsaver fs WHERE fs.mailbox_id = mb.id AND fs.id = '.(int)fsId()))
+			{
+				$fs['email'] = $mailbox.'@'.DEFAULT_HOST;
+			}
+		}
 		
 		$fs['bot'] = $this->q('
 			SELECT 	b.name,
