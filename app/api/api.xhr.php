@@ -50,16 +50,24 @@ class ApiXhr extends Control
 			
 			if($conversation_id = $model->user2conv($_GET['id']))
 			{
-				$model->sendMessage($conversation_id,$message);
+				$id = $model->sendMessage($conversation_id,$message);
 				
 				$user = $this->model->getValues(array('iosid','gcm'), 'foodsaver', $_GET['id']);
 					
 				if(!empty($user['gcm']) || !empty($user['iosid']))
 				{
-					$this->model->addPushQueue(fsId(), $_GET['id'], S::user('name').' hat Dir eine Nachricht geschrieben', $message,array(
+					$this->model->addPushQueue(
+						fsId(), 
+						$_GET['id'], 
+						S::user('name').' hat Dir eine Nachricht geschrieben', 
+						$message,
+						array(
 							'gcm' => $user['gcm'],
 							'iosid' => $user['iosid']
-					),array('t' => 0,'i'=>(int)fsId(),'c' => time()),$id);
+						),
+						array('t' => 0,'i'=>(int)fsId(),'c' => time()),
+						$id
+					);
 				}
 				return $this->appout(array(
 						'status' => 1,
