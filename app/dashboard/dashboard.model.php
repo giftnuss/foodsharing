@@ -73,7 +73,7 @@ class DashboardModel extends Model
 				b.lon,
 				(6371 * acos( cos( radians( '.$this->floatval($loc['lat']).' ) ) * cos( radians( b.lat ) ) * cos( radians( b.lon ) - radians( '.$this->floatval($loc['lon']).' ) ) + sin( radians( '.$this->floatval($loc['lat']).' ) ) * sin( radians( b.lat ) ) ))
 				AS distance,
-				fs.name AS fs_name,
+				fs.name AS fs_name
 			FROM
 				fs_basket b,
 				'.PREFIX.'foodsaver fs
