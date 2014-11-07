@@ -707,7 +707,12 @@ function xhr_cropagain($data)
 		}
 		
 		
-		$dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
+		$dst_r = @ImageCreateTrueColor( $targ_w, $targ_h );
+		
+		if(!$dst_r)
+		{
+			return '0';
+		}
 		
 		imagecopyresampled($dst_r,$img_r,0,0,$data['x'],$data['y'],$targ_w,$targ_h,$data['w'],$data['h']);
 		
@@ -734,6 +739,8 @@ function xhr_cropagain($data)
 		
 		return '1';
 	}
+	
+	return '0';
 }
 
 function xhr_pictureCrop($data)

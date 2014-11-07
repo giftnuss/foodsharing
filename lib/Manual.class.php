@@ -2221,9 +2221,13 @@ GROUP BY foodsaver_id'));
 	
 	public function getBezirk($id = false)
 	{
-		if($id == false)
+		if($id == false && isset($_SESSION['client']['bezirk_id']))
 		{
 			$id = $_SESSION['client']['bezirk_id'];
+		}
+		else
+		{
+			return false;
 		}
 	
 		return $this->qRow('
@@ -3087,6 +3091,10 @@ GROUP BY foodsaver_id'));
 		if(!isset($data['bezirk_id']))
 		{
 			$data['bezirk_id'] = getBezirkId();
+		}
+		if(!isset($data['photo_public']))
+		{
+			$data['photo_public'] = 0;
 		}
 		
 		$sql = '
