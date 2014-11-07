@@ -67,7 +67,7 @@ class SettingsControl extends Control
 		
 		//$menu[] = array();
 		
-		
+		/*
 		if($this->foodsaver['rolle'] == 0)
 		{
 			$menu[] = array('name'=>'Werde '.getRolle($this->foodsaver['geschlecht'], 1),'href'=> '?page=settings&sub=upgrade/up_fs');
@@ -80,7 +80,7 @@ class SettingsControl extends Control
 		{
 			$menu[] = array('name'=>'Werde '.getRolle($this->foodsaver['geschlecht'], 3),'href'=> '?page=settings&sub=upgrade/up_bot');
 		}
-		
+		*/
 		$menu[] = array('name' => s('delete_account'), 'href' => '?page=settings&sub=deleteaccount');
 		
 		
