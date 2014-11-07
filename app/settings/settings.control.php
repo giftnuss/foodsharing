@@ -48,6 +48,7 @@ class SettingsControl extends Control
 		if(!is_object($this->model))
 		{
 			$this->model = new SettingsModel();
+			$this->view = new SettingsView();
 		}
 		
 		if($this->model->getMumbleName())
