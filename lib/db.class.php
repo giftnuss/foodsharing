@@ -1283,10 +1283,7 @@ class Db
 			{
 				$_SESSION['client']['verantwortlich'] = $r;
 				$_SESSION['client']['group']['verantwortlich'] = true;
-			}
-			
-			file_put_contents('menus/'.fsId().'_menu.html', getmenu());
-			
+			}			
 		}
 		else
 		{
