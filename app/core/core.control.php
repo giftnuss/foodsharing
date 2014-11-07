@@ -592,7 +592,10 @@ class Control
   	public function appout($data)
   	{
   		header('content-type: application/json; charset=utf-8');
-  		echo strip_tags($_GET['callback']) . '(' . json_encode($data) . ');';
+  		if(isset($_GET['callback']))
+  		{
+  			echo strip_tags($_GET['callback']) . '(' . json_encode($data) . ');';
+  		}
   		exit();
   	}
   	
