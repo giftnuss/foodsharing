@@ -3846,7 +3846,8 @@ GROUP BY foodsaver_id'));
 				{
 					$out['abholer'][$a['dow']] = array();
 				}
-				$out['abholer'][$a['dow']][] = array('id'=>$a['foodsaver_id'],'name'=>$foodsaver[$a['foodsaver_id']]);
+				// todo...
+				//$out['abholer'][$a['dow']][] = array('name' => $foodsaver[$a['foodsaver_id']]);
 			}
 			//$out['abholer'] = $abholer;
 		}
