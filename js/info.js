@@ -111,6 +111,7 @@ var info = {
 			else
 			{
 				ajax.req('info','initbadge',{
+					loader: false,
 					success: function(ret){
 						if(ret.bell > 0)
 						{
