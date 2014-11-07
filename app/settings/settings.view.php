@@ -156,7 +156,7 @@ class SettingsView extends View
 			$subtitle = 'Bestanden!';
 			$infotext = v_success('Herzlichen Glückwunsch! mit '.$session['fp'].' von maximal '.$session['maxfp'].' Fehlerpunkten bestanden!');
 		}
-		addContent('<div class="quizsession">'.$this->topbar($session['name'].' Quiz', $subtitle, 'img/quiz.png').'</div>');
+		addContent('<div class="quizsession">'.$this->topbar($session['name'].' Quiz', $subtitle, '<img src="/img/quiz.png" />').'</div>');
 		$out = '';
 		
 		$out .= $infotext;
