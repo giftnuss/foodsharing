@@ -39,11 +39,13 @@ if(getAction('new'))
 }
 elseif($id = getActionId('delete'))
 {
+	/*
 	if($db->del_betrieb($id))
 	{
 		info(s('betrieb_deleted'));
 		goPage();
 	}
+	*/
 }
 elseif($id = getActionId('edit'))
 {
@@ -234,7 +236,7 @@ function betrieb_form($bezirk = false,$page = '')
 	{
 		$g_data['foodsaver'] = $db->getBetriebLeader($_GET['id']);
 	}
-	
+	$verantwortlich_select = '';
 	if(isOrgateam() || isBotschafter())
 	{
 		$foodsaver_values = $db->getBasics_foodsaver();
