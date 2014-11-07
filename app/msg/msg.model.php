@@ -296,7 +296,22 @@ class MsgModel extends Model
 			
 			for($i=0;$i<count($convs);$i++)
 			{
-				$convs[$i]['member'] = unserialize($convs[$i]['member']);
+				$member = @unserialize($convs[$i]['member']);
+				// unserialize error handling
+				if($ret === null){
+					$member = $this->listConversationMembers($convs[$i]['id']);
+					$this->update('
+						UPDATE
+							`'.PREFIX.'conversation`
+					
+						SET
+							`member` = '.$this->strval(serialize($member)).'
+					
+						WHERE
+							`id` = '.(int)$convs[$i]['id'].'
+					');
+				}
+				$convs[$i]['member'] = $member;
 			}
 			
 			return $convs;
