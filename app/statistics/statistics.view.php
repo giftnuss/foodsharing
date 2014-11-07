@@ -81,7 +81,7 @@ class StatisticsView extends View
 					</div>
 					<div class="stat_text">
 						<h4>'.number_format($stat['fscount'], 0, ',', '.').'</h4>
-						<p>Foosaver engagieren sich ehrenamtlich für eine Welt ohne Verschwendung von Lebensmitteln</p>
+						<p>Foodsaver engagieren sich ehrenamtlich für eine Welt ohne Verschwendung von Lebensmitteln</p>
 					</div>
 			</div><br />
 		</div>',s('stat_whole'));
@@ -105,7 +105,7 @@ class StatisticsView extends View
 						<h4>'.$i.'.</h4>
 					</td>
 					<td class="city">
-						<h4>'.$fs['name'].' '.$fs['nachname'].'</h4>
+						<h4>'.$fs['name'].'</h4>
 						<p>'.str_replace(',00', '', number_format($fs['fetchweight'], 2, ',', '.')).' KG</p>
 						<p>'.number_format($fs['fetchcount'], 0, ',', '.').'x abgeholt</p>
 					</td>

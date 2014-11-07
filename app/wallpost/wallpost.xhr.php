@@ -104,7 +104,7 @@ class WallpostXhr extends Control
 					'status' => 1,
 					'html' => $this->view->posts($this->model->getLastPosts()),
 					'script' => '
-					if($.isFunction( u_wallpostReady ))
+					if(u_wallpostReady != undefined && $.isFunction(u_wallpostReady))
 					{
 						u_wallpostReady('.(int)$post_id.');
 					}'

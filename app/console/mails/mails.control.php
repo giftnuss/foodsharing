@@ -306,7 +306,7 @@ class MailsControl extends ConsoleControl
 	 */
 	public static function smtpReconnect()
 	{
-		info('SMTP reconnect '.SMTP_HOST.':'.SMTP_USER);
+		info('SMTP reconnect.. ');
 		try
 		{
 			if(MailsControl::$smtp !== false)
