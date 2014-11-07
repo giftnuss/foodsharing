@@ -28,7 +28,11 @@ class WallpostXhr extends Control
 			$this->id = (int)$_GET['id'];
 			$this->model->setTable($this->table, $this->id);
 		}
-		
+		else
+		{
+			echo '{status:0}';
+			exit();
+		}
 	}
 	
 	public function delpost()
