@@ -1452,10 +1452,15 @@ function img($file = false,$size = 'mini',$format = 'q',$altimg = false)
 
 function getSettingsMenu()
 {
+	$mailbox = '';
+	if(S::may('bieb'))
+	{
+		$mailbox = '<li><a href="?page=mailbox"><i class="fa fa-envelope"></i> E-Mail Postfach</a></li>';
+	}
 	$default = '<li class="g_settings"><a class="fNiv corner-all" style="background-image:url('.img().');"><span>&nbsp;</span></a>
 				    <ul class="jmenu-settings">
 					  <li><a href="?page=settings"><i class="fa fa-gear"></i> Einstellungen</a></li>
-					  <li><a href="?page=mailbox"><i class="fa fa-envelope"></i> E-Mail Postfach</a></li>
+					  '.$mailbox.'
 				      <li class="menu-bottom"><a class="menu-bottom" href="?page=logout"><i class="fa fa-sign-out"></i> Logout</a></li>
 				    </ul>
 				  </li>';
