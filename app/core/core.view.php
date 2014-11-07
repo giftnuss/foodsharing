@@ -13,7 +13,7 @@ class View
 		$action = '/?page=login';
 		if($ref != false)
 		{
-			$action = $ref;
+			$action = '/?page=login&ref=' . urlencode($ref);
 		}
 		else if(!isset($_GET['ref']))
 		{
