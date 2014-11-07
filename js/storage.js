@@ -24,5 +24,10 @@ var storage = {
 	del: function(key)
 	{
 		window.localStorage.removeItem(storage.prefix+key);
+	},
+	reset: function()
+	{
+		this.del('badge');
+		this.del('msg-chats');
 	}
 };

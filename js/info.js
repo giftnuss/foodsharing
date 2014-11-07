@@ -96,23 +96,26 @@ var info = {
 			// init dom events
 			this.initEvents();
 			
-			var bell = storage.get('badge-bell');
-			var msg = storage.get('badge-info');
-			if(bell != undefined)
+			var badge = storage.get('badge');
+
+			if(badge != undefined)
 			{
-				this.$badge['bell'].text(bell);
-				this.$badge['bell'].css('display','inline-block');
+				this.badge('bell',badge.bell);
+				this.badge('msg',badge.msg);
+				this.badge('basket',badge.basket);
 			}
-			if(msg != undefined)
-			{
-				this.$badge['msg'].text(bell);
-				this.$badge['msg'].css('display','inline-block');
-			}
+			
 			else
 			{
 				ajax.req('info','initbadge',{
 					loader: false,
 					success: function(ret){
+						storage.set('badge',{
+							bell: ret.bell,
+							msg: ret.msg,
+							basket: ret.basket
+						});
+						
 						if(ret.bell > 0)
 						{
 							info.badge('bell',ret.bell);
@@ -411,6 +414,7 @@ var info = {
 		
 		if($.now() - info.refreshTime[item] > info.refreshTimeout)
 		{
+			storage.del('badge');
 			info.showLoader(item);
 			info.refreshTime[item] = $.now();
 			ajax.req(item,'infobar',{

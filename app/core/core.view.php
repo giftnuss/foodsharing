@@ -21,7 +21,7 @@ class View
 		}
 		
 		addJs('
-				storage.del("msg-chats");
+				storage.reset();
 				if(isMob())
 				{
 					$("#ismob").val("1");
