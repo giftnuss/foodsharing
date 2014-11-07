@@ -184,7 +184,7 @@ addJs('
 addHidden('<div id="fs-profile-rate-comment">'.v_form_textarea('fs-profile-rate-msg',array('desc'=>'...')).'</div>');
 
 //$mobilemenu = getMobileMenu();
-addJs('sock.connect("'.session_id().'");');
+
 if(!S::may())
 {
 	addJs('clearInterval(g_interval_newBasket);');
@@ -192,8 +192,9 @@ if(!S::may())
 else
 {
 	addJs('
-	user.token = "'.S::user('token').'";
-	info.init();
+		sock.connect();
+		user.token = "'.S::user('token').'";
+		info.init();
 	');
 }
 /*

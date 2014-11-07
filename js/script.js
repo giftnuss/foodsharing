@@ -103,7 +103,6 @@ $(document).ready(function(){
 	//$(".sleepmode-1, .sleepmode-2").append('<span class="corner-all bubble bubble-right ui-shadow"> nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus</span>');
 	sleepmode.init();
 	
-	
 	$('textarea.comment').autosize();
 	 $('#nojs').css('display','none');
 	 $('#main').css('display','block');
@@ -1695,6 +1694,10 @@ function strip_tags(input, allowed) {
 			    });
 			}
 
+}
+
+function session_id() {
+    return /SESS\w*ID=([^;]+)/i.test(document.cookie) ? RegExp.$1 : false;
 }
 
 function parse_url(str, component) {
