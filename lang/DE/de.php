@@ -209,3 +209,4 @@ $g_lang['write_something'] = 'schreibe etwas';
 $g_lang['new_message'] = 'Neue Nachricht';
 $g_lang['access_error'] = 'Du hast nicht die nötigen Rechte dies zu tun';
 $g_lang['register'] = 'Registrieren';
+$g_lang['daterange'] = 'Zeitraum';
