@@ -118,7 +118,7 @@ class ApiXhr extends Control
 		$this->model->logout();
 		$_SESSION['login'] = false;
 		$_SESSION = array();
-		session_destroy();
+		
 		S::destroy();
 		
 		return $this->appout(array(
