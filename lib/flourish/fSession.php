@@ -299,7 +299,7 @@ class fSession
 			$params = session_get_cookie_params();
 			setcookie(session_name(), '', time()-43200, $params['path'], $params['domain'], $params['secure']);
 		}
-		session_destroy();
+		@session_destroy();
 		self::regenerateID();
 	}
 
