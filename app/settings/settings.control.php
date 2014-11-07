@@ -23,7 +23,7 @@ class SettingsControl extends Control
 				'email' => $this->foodsaver['email'],
 				'email_name' => $this->foodsaver['name'].' '.$this->foodsaver['nachname']
 			), 'loeschen@lebensmittelretten.de', $this->foodsaver['name'].' hat Account gelöscht',$this->foodsaver['name'].' '.$this->foodsaver['nachname'].' hat Account gelöscht'."\n\nGrund für das Löschen:\n".strip_tags($_GET['reason']));
-			$db->del_foodsaver(fsId());
+			$this->model->del_foodsaver(fsId());
 			go('?page=logout');
 		}
 		
