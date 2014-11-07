@@ -116,11 +116,30 @@ class IndexView extends View
 	
 	private function img($basket)
 	{
-		if($basket['picture'] != '' && file_exists(ROOT_DIR . 'images/basket/75x75-'.$basket['picture']))
+		if($basket['picture'] != '' && file_exists(ROOT_DIR . 'images/basket/thumb-'.$basket['picture']))
 		{
 			return '<img src="/images/basket/thumb-'.$basket['picture'].'" height="75" />';
 		}
 		return '<img src="/img/basket75x75.png" height="75" />';
+		/*
+		 * $check =false;
+		if($basket['picture'] != '')
+		{
+			if(file_exists(ROOT_DIR . 'images/basket/75x75-'.$basket['picture']))
+			{
+				$check = true;
+			}
+			else if(file_exists(ROOT_DIR . 'images/basket/'.$basket['picture']))
+			{
+				copy(ROOT_DIR . 'images/basket/'.$basket['picture']);
+			}
+		}
+		if($check)
+		{
+			return '<img src="/images/basket/thumb-'.$basket['picture'].'" height="75" />';
+		}
+		return '<img src="/img/basket75x75.png" height="75" />';
+		 */
 	}
 	
 	public function printSlider($articles = array())
