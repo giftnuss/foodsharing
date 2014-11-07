@@ -4098,40 +4098,44 @@ GROUP BY foodsaver_id'));
 	
 	public function getAbholdates($bid,$dates)
 	{		
-		$dsql = array();
-		foreach ($dates as $date => $time)
+		if(!empty($dates))
 		{
-			$dsql[] = $this->dateval($date);
-		}
-
-		if($res = $this->q('
+			$dsql = array();
+			foreach ($dates as $date => $time)
+			{
+				$dsql[] = $this->dateval($date);
+			}
+			
+			if($res = $this->q('
 			SELECT 	fs.id,
 					fs.name,
 					fs.photo,
 					a.date,
 					a.confirmed
-				
+			
 			FROM 	`'.PREFIX.'abholer` a,
 					`'.PREFIX.'foodsaver` fs
-				
+			
 			WHERE 	a.foodsaver_id = fs.id
 			AND 	a.betrieb_id = '.(int)$bid.'
 			AND  	a.date IN('.implode(',', $dsql).')
 		'))
-		{
-			//print_r($res);
-			global $g_data;
-			foreach ($res as $r)
 			{
-				$key = 'fetch-'.str_replace(array(':',' ','-'), '', $r['date']);
-				if(!isset($g_data[$key]))
+				//print_r($res);
+				global $g_data;
+				foreach ($res as $r)
 				{
-					$g_data[$key] = array();
+					$key = 'fetch-'.str_replace(array(':',' ','-'), '', $r['date']);
+					if(!isset($g_data[$key]))
+					{
+						$g_data[$key] = array();
+					}
+					$g_data[$key][] = $r;
 				}
-				$g_data[$key][] = $r;
+				return $res;
 			}
-			return $res;
 		}
+		return false;
 	}
 	
 	public function denyFetcher($fsid,$bid,$date)
