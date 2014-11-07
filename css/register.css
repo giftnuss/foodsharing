@@ -212,7 +212,7 @@ select
 }
 .customSelect {
 	
-	background:url("img/select-arrow.gif") no-repeat scroll 187px 4px #FFFFFF;
+	background:url("/img/select-arrow.gif") no-repeat scroll 187px 4px #FFFFFF;
   border: 4px solid #CADCBA;
   padding-right:5px;
   padding-top:6px;
@@ -277,7 +277,7 @@ span.ss-choice-label, li.ss-choice-item label
 input.date
 {
 	cursor:pointer;
-	background:url("img/select-arrow.gif") no-repeat scroll 136px 4px #FFFFFF;
+	background:url("/img/select-arrow.gif") no-repeat scroll 136px 4px #FFFFFF;
 	width:150px !important;
 }
 div#ui-datepicker-div
