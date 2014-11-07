@@ -313,12 +313,12 @@ class MailsControl extends ConsoleControl
 			{
 				info('close smtp and sleep 5 sec ...');
 				@MailsControl::$smtp->close();
-				sleep(5);
+				//sleep(5);
 			}
 
 			info('connect...');
 			MailsControl::$smtp = new fSMTP(SMTP_HOST,SMTP_PORT);
-			MailsControl::$smtp->authenticate(SMTP_USER, SMTP_PASS);
+			//MailsControl::$smtp->authenticate(SMTP_USER, SMTP_PASS);
 			MailsControl::$last_connect = time();
 			
 			success('reconnect OK');
