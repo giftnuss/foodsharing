@@ -56,6 +56,12 @@ class FairteilerControl extends Control
 		$this->follower = false;
 		if(isset($_GET['id']))
 		{
+			$this->fairteiler = $this->model->getFairteiler($_GET['id']);
+				
+			if(!$this->fairteiler)
+			{
+				go('?page=fairteiler');
+			}
 			if(isset($_GET['follow']))
 			{
 				if($_GET['follow'] == 1)
@@ -74,7 +80,8 @@ class FairteilerControl extends Control
 				$url = explode('&follow=', getSelf());
 				go($url[0]);
 			}
-			$this->fairteiler = $this->model->getFairteiler($_GET['id']);
+			
+			
 			$this->follower = $this->model->getFollower($_GET['id']);
 			$this->view->setFairteiler($this->fairteiler,$this->follower);
 
