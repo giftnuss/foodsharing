@@ -15,6 +15,11 @@ class SettingsControl extends Control
 		
 		parent::__construct();
 		
+		if(isset($_GET['newmail']))
+		{
+			$this->handle_newmail();
+		}
+		
 		$this->foodsaver = $this->model->getValues(array('rolle','email','name','nachname','geschlecht'), 'foodsaver', fsId());
 		
 		if(isset($_GET['deleteaccount']))
@@ -481,11 +486,6 @@ class SettingsControl extends Control
 	
 	public function general()
 	{
-		
-		if(isset($_GET['newmail']))
-		{
-			$this->handle_newmail();
-		}
 		
 		$this->handle_edit();
 		
