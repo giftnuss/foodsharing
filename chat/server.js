@@ -79,12 +79,12 @@ console.log("socket.io started on port ", client_port);
 var connected_clients = {};
 io.on('connection', function (socket) {
 	var sid;
+	ccc++;
 	socket.on('register', function (id) {
 		sid = id;
 		console.log("client", id, "registered");
 		if(!connected_clients[id]) connected_clients[id] = new Array();
 		connected_clients[id].push(socket);
-		ccc++;
 	});
 	socket.on('disconnect',function(){
 		//delete connected_clients[sid];
