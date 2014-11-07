@@ -1114,7 +1114,7 @@ function v_photo_edit($src,$fsid = false)
 		<div>
 		'.v_menu($menu).'
 		</div>
-		<div style="visibility:hidden"><img src="'.$original.'" /></div>';
+		<div style="visibility:hidden"><img src="/images/'.$original.'" /></div>';
 }
 
 function v_accordion($sections)
