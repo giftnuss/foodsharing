@@ -29,8 +29,12 @@ sendtoclient = function(client,a,m,o){
 var ccc = 0;
 var app = http.createServer(function  (req, res) {
 	if(req.url == "/stats") {
+		var count = 0;
+		Object.keys(connected_clients).forEach(function(key){
+			count += connected_clients[key].length;
+		});
 		res.writeHead(200);
-		res.end(""+ccc);
+		res.end('{"registered":'+count+',"connected:"'+ccc+'}');
 		return;
 	}
 	var client,app,module,options;
