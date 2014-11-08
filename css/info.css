@@ -114,3 +114,12 @@ border-radius: 6px;
 {
 	background-color: #4A3520;
 }
+#infobar li.unread-1
+{
+	background-color: #F5F5B5; /* #F1E7C9 */
+}
+#infobar li.unread-1 .time
+{
+	color:#4A3520;
+	font-weight:bold;
+}
