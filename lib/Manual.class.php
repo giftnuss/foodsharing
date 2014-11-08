@@ -3768,7 +3768,9 @@ GROUP BY foodsaver_id'));
 			`sticker`,
 			`abholmenge`,
 			`team_status`,
-			`prefetchtime`
+      `prefetchtime`,
+      `team_conversation_id`,
+      `springer_conversation_id`
 			
 			FROM 		`'.PREFIX.'betrieb`
 			

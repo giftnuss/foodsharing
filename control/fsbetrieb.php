@@ -405,8 +405,12 @@ else if(isset($_GET['id']))
 		
 		if(!$betrieb['jumper'] || S::may('orga'))
 		{
-			$menu[] = array('name'=>'Nachricht ans Team','href'=> '?page=message&a=neu&list='.$betrieb['id']);
-			$menu[] = array('name'=>'Nachricht an Springer','href'=> '?page=message&a=neu&slist='.$betrieb['id']);
+      if(!is_null($betrieb['team_converation_id'])) {
+			  $menu[] = array('name'=>'Nachricht ans Team','click' => "conv.chat(".$betrieb['team_conversation_id'].");");
+      }
+      if(!is_null($betrieb['springer_conversation_id'])) {
+			  $menu[] = array('name'=>'Nachricht an Springer','click' => "conv.chat(".$betrieb['springer_conversation_id'].");");
+      }
 		}
 		if($betrieb['verantwortlich'] || S::may('orga'))
 		{
