@@ -105,6 +105,12 @@ class MsgModel extends Model
 	{
 		return $this->update('UPDATE '.PREFIX.'conversation SET name = '.$this->strval($name).' WHERE id = '.(int)$cid);
 	}
+
+  public function conversationLocked($cid)
+  {
+    $res = $this->qOne('SELECT locked FROM '.PREFIX.'conversation WHERE id = '.(int)$cid);
+    return $res;
+  }
 	
 	public function updateConversation($cid,$last_fs_id,$body,$last_message_id)
 	{
@@ -298,7 +304,7 @@ class MsgModel extends Model
 			{
 				$member = @unserialize($convs[$i]['member']);
 				// unserialize error handling
-				if($member === null){
+				if($member === false){
 					$member = $this->listConversationMembers($convs[$i]['id']);
 					$this->update('
 						UPDATE

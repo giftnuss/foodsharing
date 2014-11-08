@@ -20,8 +20,9 @@ class MsgXhr extends Control
 	 * ajax call to rename an conversation
 	 */
 	public function rename()
-	{
-		if($this->mayConversation($_GET['cid']))
+  {
+    $cid = int($_GET['cid']);
+		if($this->mayConversation($_GET['cid']) && !$this->conversationLocked($_GET))
 		{
 			$xhr = new Xhr();
 			
@@ -51,7 +52,7 @@ class MsgXhr extends Control
 	 */
 	public function leave()
 	{
-		if($this->mayConversation($_GET['cid']))
+		if($this->mayConversation($_GET['cid']) && !$this->conversationLocked($_GET))
 		{
 			if($this->model->deleteUserFromConversation($_GET['cid'],fsId()))
 			{
