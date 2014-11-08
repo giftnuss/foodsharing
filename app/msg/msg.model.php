@@ -43,6 +43,8 @@ class MsgModel extends Model
 		
 			FROM
 				fs_foodsaver_has_conversation
+      WHERE
+        foodsaver_id IN ('. implode(',',$recips).')
 		
 			GROUP BY
 				conversation_id
