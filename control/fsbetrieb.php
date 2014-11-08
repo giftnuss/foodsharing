@@ -2,6 +2,11 @@
 addScript('/js/contextmenu/jquery.contextMenu.js');
 addCss('/js/contextmenu/jquery.contextMenu.css');
 
+if(!S::may())
+{
+	goLogin();
+}
+
 if(getAction('new'))
 {
 	handle_add();

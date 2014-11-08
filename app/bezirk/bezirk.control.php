@@ -553,8 +553,8 @@ class BezirkControl extends Control
 	
 	public function themeInfoBotschafter($theme_id)
 	{
-		$poster = $this->model->getVal('name', 'foodsaver', $theme['foodsaver_id']);
 		$theme = $this->model->getValues(array('foodsaver_id','name'), 'theme', $theme_id);
+		$poster = $this->model->getVal('name', 'foodsaver', $theme['foodsaver_id']);
 		
 		if($foodsaver = $this->model->getBotschafter($this->bezirk_id))
 		{

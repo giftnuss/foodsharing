@@ -398,9 +398,10 @@ GROUP BY foodsaver_id'));
 		$out = array();
 
 		$children = false;
-		if(!isBotschafter() && !isOrgaTeam())
+		$bezirk_id = (int)$this->getCurrentBezirkId();
+		if(!S::may('bot') && $bezirk_id > 0)
 		{
-			$children = $this->getChildBezirke($this->getCurrentBezirkId());
+			$children = $this->getChildBezirke($bezirk_id);
 		}
 		
 		if(S::may('fs'))
