@@ -189,7 +189,7 @@ class BasketView extends View
 		$img = '';
 		if(!empty($basket['picture']))
 		{
-			$img = '<div style="width:100%;height:200px;overflow:hidden;"><img src="/images/basket/'.$basket['picture'].'" width="100%" /></div>';
+			$img = '<div style="width:100%;overflow:hidden;"><img src="/images/basket/medium-'.$basket['picture'].'" width="100%" /></div>';
 		}
 	
 		return '
@@ -203,7 +203,7 @@ class BasketView extends View
 		$img = '';
 		if(!empty($basket['picture']))
 		{
-			$img = '<div style="width:100%;height:200px;overflow:hidden;"><img src="/images/basket/'.$basket['picture'].'" width="100%" /></div>';
+			$img = '<div style="width:100%;overflow:hidden;"><img src="/images/basket/medium-'.$basket['picture'].'" width="100%" /></div>';
 		}
 	
 		return '

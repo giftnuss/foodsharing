@@ -208,7 +208,6 @@ class BasketXhr extends Control
 	public function resizePic($pic)
 	{
 		copy('tmp/' . $pic, 'images/basket/' . $pic);
-		$this->chmod('images/basket/' . $pic, 777);
 		
 		$img = new fImage('images/basket/' . $pic);
 		$img->resize(800, 800);
@@ -216,7 +215,6 @@ class BasketXhr extends Control
 		
 		
 		copy('images/basket/' . $pic, 'images/basket/medium-' . $pic);
-		$this->chmod('images/basket/medium-' . $pic, 777);
 		
 		$img = new fImage('images/basket/medium-' . $pic);
 		$img->resize(450, 450);
@@ -224,7 +222,6 @@ class BasketXhr extends Control
 		
 		
 		copy('images/basket/medium-' . $pic, 'images/basket/thumb-' . $pic);
-		$this->chmod('images/basket/thumb-' . $pic, 777);
 		
 		$img = new fImage('images/basket/thumb-' . $pic);
 		$img->cropToRatio(1, 1);
@@ -233,7 +230,6 @@ class BasketXhr extends Control
 		
 		
 		copy('images/basket/thumb-' . $pic, 'images/basket/75x75-' . $pic);
-		$this->chmod('images/basket/75x75-' . $pic, 777);
 		
 		$img = new fImage('images/basket/75x75-' . $pic);
 		$img->cropToRatio(1, 1);
@@ -242,17 +238,11 @@ class BasketXhr extends Control
 		
 		
 		copy('images/basket/75x75-' . $pic, 'images/basket/50x50-' . $pic);
-		$this->chmod('images/basket/50x50-' . $pic, 777);
 		
 		$img = new fImage('images/basket/50x50-' . $pic);
 		$img->cropToRatio(1, 1);
 		$img->resize(50, 50);
 		$img->saveChanges();
-	}
-	
-	private function chmod($file,$mode)
-	{
-		exec('chmod 777 /var/www/lmr-v1/freiwillige/' . $file);
 	}
 	
 	public function bubble()
