@@ -36,24 +36,32 @@ class MsgModel extends Model
 		/*
 		 * First we want to check is there allready an conversation with exacly those user_ids stored in $recips array
 		*/
-		if($conv = $this->qRow('
+		
+		// get conversation id from xurrent user... i'ce tried with inner swelect but it is very slow defently faster with 2 querys
+		
+		if($cids = $this->qCol('SELECT conversation_id FROM `fs_foodsaver_has_conversation` WHERE `foodsaver_id` = '.(int)fsId()))
+		{
+			$sql = '
 			SELECT
 				conversation_id,
 				GROUP_CONCAT(foodsaver_id ORDER BY foodsaver_id SEPARATOR ":") AS idstring
-		
+			
 			FROM
-				fs_foodsaver_has_conversation
-      WHERE
-        foodsaver_id IN ('. implode(',',$recips).')
+				'.PREFIX.'foodsaver_has_conversation
 		
+		    WHERE
+		        conversation_id IN ('. implode(',',$cids).')
+			
 			GROUP BY
 				conversation_id
-		
+			
 			HAVING
-				
-				idstring = "' . implode(':',$recips).'"'))
-		{
-			$conversation_id = $conv['conversation_id'];
+				idstring = "' . implode(':',$recips).'"';
+			
+			if($conv = $this->qRow($sql))
+			{
+				$conversation_id = $conv['conversation_id'];
+			}
 		}
 		
 		/*

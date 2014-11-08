@@ -289,6 +289,7 @@ class MailsControl extends ConsoleControl
 			{
 				MailsControl::smtpReconnect();
 				error('email send error: ' . $e->getMessage());
+				error(print_r($data, true));
 			}
 			
 			if($max_try == 0)
