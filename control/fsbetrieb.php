@@ -405,7 +405,7 @@ else if(isset($_GET['id']))
 		
 		if(!$betrieb['jumper'] || S::may('orga'))
 		{
-      if(!is_null($betrieb['team_converation_id'])) {
+      if(!is_null($betrieb['team_conversation_id'])) {
 			  $menu[] = array('name'=>'Nachricht ans Team','click' => "conv.chat(".$betrieb['team_conversation_id'].");");
       }
       if(!is_null($betrieb['springer_conversation_id'])) {
