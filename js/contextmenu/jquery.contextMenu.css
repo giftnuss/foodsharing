@@ -111,7 +111,7 @@
     http://css-tricks.com/13224-pseudo-spriting/ to get an idea of how to implement 
     .context-menu-item.icon:before {}
  */
-.context-menu-item.icon { min-height: 32px; background-repeat: no-repeat; background-image: url(images/contextmenu.png);overflow:hidden; }
+.context-menu-item.icon { min-height: 32px; background-repeat: no-repeat; background-image: url(/img/contextmenu.png);overflow:hidden; }
 .context-menu-item.icon-wait { background-position: -32px -64px; }
 .context-menu-item.icon-wait.hover { background-position: 0px -64px; }
 
