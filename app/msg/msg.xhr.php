@@ -21,7 +21,7 @@ class MsgXhr extends Control
 	 */
 	public function rename()
   {
-    $cid = int($_GET['cid']);
+    $cid = (int)$_GET['cid'];
 		if($this->mayConversation($_GET['cid']) && !$this->model->conversationLocked($_GET))
 		{
 			$xhr = new Xhr();
