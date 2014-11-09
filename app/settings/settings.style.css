@@ -38,7 +38,15 @@
 	background-color:#E74955;
 	color:#FFF !important;
 }
-
+.q-neutral
+{
+	background-color: #F5F5B5;
+	color:#4A3520;
+}
+.q-neutral label.wrapper-label
+{
+	color:#4A3520 !important;
+}
 
 .question
 {

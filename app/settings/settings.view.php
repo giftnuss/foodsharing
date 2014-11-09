@@ -240,6 +240,7 @@ class SettingsView extends View
 			$answers = '';
 			$right_answers = '';
 			$wrong_answers = '';
+			$neutral_answers = '';
 			$ai = 0;
 			
 			$sort_right = 'right';
@@ -263,7 +264,7 @@ class SettingsView extends View
 					$atext = '';
 					$right = 'red';
 				}
-				else if($a['user_say'] == $a['right'] && !$r['noco'])
+				else if($a['user_say'] == true && $a['right'] == 1 && !$r['noco'])
 				{
 					$atext = '';
 					$right = 'green';
@@ -277,6 +278,13 @@ class SettingsView extends View
 						$atext = ' ist falsch, dass hast Du richtig erkannt!';
 						$sort_right = 'right';
 					}
+				}
+				else if($a['right'] == 2)
+				{
+					$atext = ' ist Neutral,daher ohne Wertung.';
+					$right = 'neutral';
+					$sort_right = 'neutral';
+					
 				}
 				else
 				{
@@ -301,6 +309,15 @@ class SettingsView extends View
 						'. v_input_wrapper('Antwort '.$ai.$atext, $a['text']).'
 						'. v_input_wrapper('Erklärung', $a['explanation']).'
 						
+					</div>';
+				}
+				else if($sort_right == 'neutral')
+				{
+					$neutral_answers .= '
+					<div class="answer q-'.$right.'">
+						'. v_input_wrapper('Antwort '.$ai.$atext, $a['text']).'
+						'. v_input_wrapper('Erklärung', $a['explanation']).'
+			
 					</div>';
 				}
 				else if($sort_right == 'false')
@@ -347,6 +364,10 @@ class SettingsView extends View
 				if(!empty($wrong_answers))
 				{
 					$cnt .= v_input_wrapper('Antworten die Du falsch ausgewählt hast', $wrong_answers,false,array('collapse' => true));
+				}
+				if(!empty($neutral_answers))
+				{
+					$cnt .= v_input_wrapper('Neutrale Antworten', $neutral_answers,false,array('collapse' => true));
 				}
 			}
 				

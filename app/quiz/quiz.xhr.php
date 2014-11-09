@@ -978,13 +978,15 @@ class QuizXhr extends Control
 				$out = '';
 				foreach ($answers as $a)
 				{
-					$bg = '';
+					$bg = '#F5F5B5';
 					$atext = '';
+					$color = '#4A3520';
 					
 					if($joke)
 					{
-						$bg = 'transparent';
+						$bg = '#F5F5B5';
 						$atext = '';
+						$color = '#4A3520';
 					}
 					// Antwort richtig angeklickt
 					else if((isset($answers[$a['id']]) && $a['right'] == 1) || (!isset($answers[$a['id']]) && $a['right'] == 0))
@@ -998,6 +1000,7 @@ class QuizXhr extends Control
 							$atext = 'Richtig! Diese Antwort stimmt.';
 						}
 						$bg = '#599022';
+						$color = '#ffffff';
 					}
 					// Antwort richtig weil nicht angeklickt
 					else 
@@ -1011,6 +1014,7 @@ class QuizXhr extends Control
 							$atext = 'Auch diese Antwort wäre richtig gewesen.';
 						}
 						$bg = '#E74955';
+						$color = '#ffffff';
 					}
 					
 					if(!empty($atext))
@@ -1112,13 +1116,23 @@ class QuizXhr extends Control
 				$out = array();
 				foreach ($answers as $a)
 				{
-					$bg = '';
+					$bg = '#F5F5B5';
 					$atext = '';
-						
+					$color = '#4A3520';
+					
+					// schwerzfrageoder
 					if($joke)
 					{
-						$bg = 'transparent';
+						$bg = '#F5F5B5';
 						$atext = '';
+						$color = '#4A3520';
+					}
+					//neutraleantwort
+					else if($a['right'] == 2)
+					{
+						$atext = 'Neutrale Antwort wird nicht gewertet';
+						$bg = '#F5F5B5';
+						$color = '#4A3520';
 					}
 					// Antwort richtig angeklickt
 					else if((isset($uanswers[$a['id']]) && $a['right'] == 1) || (!isset($uanswers[$a['id']]) && $a['right'] == 0))
@@ -1132,6 +1146,7 @@ class QuizXhr extends Control
 							$atext = 'Richtig! Diese Antwort stimmt.';
 						}
 						$bg = '#599022';
+						$color = '#ffffff';
 					}
 					// Antwort richtig weil nicht angeklickt
 					else
@@ -1145,13 +1160,15 @@ class QuizXhr extends Control
 							$atext = 'Auch diese Antwort wäre richtig gewesen.';
 						}
 						$bg = '#E74955';
+						$color = '#ffffff';
 					}
 						
 					$out[] = array(
 						'id' => $a['id'],
 						'exp' => nl2br($a['explanation']),
 						'bg' => $bg,
-						'atext' => $atext
+						'atext' => $atext,
+						'color'=> $color
 					);
 					/*
 					$out .= '
@@ -1188,9 +1205,9 @@ class QuizXhr extends Control
 				{
 					$("#qanswer-" + answers[i].id).css({
 						"background-color":answers[i].bg,
-						"color":"#fff"
+						"color":answers[i].color
 					}).effect("highlight").attr("onmouseover","return false;").attr("onmouseout","return false;");
-					$("#qanswer-" + answers[i].id).append(\'<div style="margin:15px 0 0 43px;">\'+answers[i].atext+\' <a style="color:#FFFFFF;font-weight:bold;" href="#" onclick="$(this).parent().next().toggle();return false;">Erklärung <i class="fa fa-arrow-circle-o-right"></i></a></div><div id="explanation-\'+answers[i].id+\'" style="font-weight:bold;margin:15px 0 0 43px;display:none;">\'+answers[i].exp+\'</div>\');
+					$("#qanswer-" + answers[i].id).append(\'<div style="margin:15px 0 0 43px;">\'+answers[i].atext+\' <a style="color:\'+answers[i].color+\';font-weight:bold;" href="#" onclick="$(this).parent().next().toggle();return false;">Erklärung <i class="fa fa-arrow-circle-o-right"></i></a></div><div id="explanation-\'+answers[i].id+\'" style="font-weight:bold;margin:15px 0 0 43px;display:none;">\'+answers[i].exp+\'</div>\');
 				}
 				
 			'
@@ -1309,15 +1326,18 @@ class QuizXhr extends Control
 		{
 			$useranswers = $question['answers'];
 		}
+		$allNeutral= true;
 		if(isset($rightQuestions[$question['id']]['answers']))
 		{
 			foreach ($rightQuestions[$question['id']]['answers'] as $id => $a)
 			{			
+				
 				switch ($a['right'])
 				{
 					// Antwort soll falsch sein
 					case 0 : 
 						$checkCount++;
+						$allNeutral = false;
 						if(in_array($a['id'], $useranswers))
 						{
 							$wrongAnswers++;
@@ -1328,6 +1348,7 @@ class QuizXhr extends Control
 					// Antwort ist richtig wenn nicht im array fehler
 					case 1 : 
 						$everything_false = false;
+						$allNeutral = false;
 						$checkCount++;
 						if(!in_array($a['id'], $useranswers))
 						{
@@ -1368,6 +1389,13 @@ class QuizXhr extends Control
 		{
 			$fp = $question['fp'];
 			$percent = 100;
+		}
+		
+		// fix alle fragen sind neutral
+		if($allNeutral)
+		{
+			$fp = 0;
+			$percent = '0';
 		}
 		
 		return array(

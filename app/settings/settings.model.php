@@ -102,10 +102,14 @@ class SettingsModel extends Model
 					
 					foreach ($r['answers'] as $k2 => $v2)
 					{
-						$session['quiz_result'][$k]['answers'][$k2]['right'] = false;
+						$session['quiz_result'][$k]['answers'][$k2]['right'] = 0;
 						if($v2['right'] == 1)
 						{
-							$session['quiz_result'][$k]['answers'][$k2]['right'] = true;
+							$session['quiz_result'][$k]['answers'][$k2]['right'] = 1;
+						}
+						if($v2['right'] == 2)
+						{
+							$session['quiz_result'][$k]['answers'][$k2]['right'] = 2;
 						}
 						$session['quiz_result'][$k]['answers'][$k2]['user_say'] = false;
 						if(isset($session['quiz_result'][$k]['user']['answers'][$v2['id']]))
