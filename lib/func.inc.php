@@ -2881,6 +2881,9 @@ function cropImage($bild,$x,$y,$w,$h)
 	$ext = explode('.',$bild);
 	$ext = end($ext);
 	$ext = strtolower($ext);
+	
+	$img_r = null;
+	
 	switch($ext)
 	{
 		case 'gif' : $img_r = imagecreatefromgif('./tmp/'.$bild); ;break;
@@ -2888,6 +2891,10 @@ function cropImage($bild,$x,$y,$w,$h)
 		case 'png' : $img_r = imagecreatefrompng('./tmp/'.$bild); ;break;
 	}
 
+	if($img_r === null)
+	{
+		return false;
+	}
 
 	$dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
 

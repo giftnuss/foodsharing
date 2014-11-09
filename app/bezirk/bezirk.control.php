@@ -518,7 +518,7 @@ class BezirkControl extends Control
 					info('Thema wurde aktiviert!');
 					go('?page=bezirk&bid='.$this->bezirk_id.'&sub=forum&tid='.(int)$thread_id);
 				}
-				elseif ($_GET['delete'])
+				else if (isset($_GET['delete']))
 				{
 					info('Thema wurde gelöscht!');
 					$this->model->deleteTheme($thread_id);

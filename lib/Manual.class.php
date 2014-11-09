@@ -1554,7 +1554,7 @@ GROUP BY foodsaver_id'));
 	
 	public function getFoodsaverBasics($fsid)
 	{
-		$fs = $this->qRow('
+		if($fs = $this->qRow('
 			SELECT 	fs.`name`,
 					fs.nachname,
 					fs.bezirk_id,
@@ -1567,14 +1567,17 @@ GROUP BY foodsaver_id'));
 			FROM 	`'.PREFIX.'foodsaver` fs
 				
 			WHERE fs.id = '.(int)$fsid.'
-		');
-		$fs['bezirk_name'] = '';
-		if($fs['bezirk_id'] > 0 )
+		'))
 		{
-			$fs['bezirk_name'] =$this->getVal('name', 'bezirk', $fs['bezirk_id']);
+			$fs['bezirk_name'] = '';
+			if($fs['bezirk_id'] > 0 )
+			{
+				$fs['bezirk_name'] =$this->getVal('name', 'bezirk', $fs['bezirk_id']);
+			}
+			
+			return $fs;
 		}
-		
-		return $fs;
+		return false;
 	}
 	
 	public function getMyBetriebe($options = array())
@@ -1843,6 +1846,10 @@ GROUP BY foodsaver_id'));
 	
 	public function getChildBezirke($bid,$nocache = false)
 	{
+		if((int)$bid == 0)
+		{
+			return false;
+		}
 	    $out = $this->qCol('SELECT bezirk_id FROM `'.PREFIX.'bezirk_closure` WHERE ancestor_id = '.(int)$bid);
 	    
 	    $ou = array();
@@ -4180,7 +4187,7 @@ GROUP BY foodsaver_id'));
 			$confirm = 1;
 		}
 		return $this->sql('
-			INSERT INTO `'.PREFIX.'abholer`
+			INSERT IGNORE INTO `'.PREFIX.'abholer`
 			(`foodsaver_id`,`betrieb_id`,`date`,`confirmed`)
 			VALUES
 			('.(int)$fsid.','.(int)$bid.','.$this->dateval($date).','.$confirm.')		
