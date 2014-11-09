@@ -98,21 +98,26 @@ class FairteilerModel extends Model
 			{
 				foreach ($bezike as $b)
 				{
-					$bb = $this->getChildBezirke($b['id']);
-					foreach ($bb as $c)
+					if($bb = $this->getChildBezirke($b['id']))
 					{
-						$bezirk_ids[$c] = $c;
+						foreach ($bb as $c)
+						{
+							$bezirk_ids[$c] = $c;
+						}
 					}
 				}
 			}
 		}
 		else
 		{
-			$bb = $this->getChildBezirke($bezirk_id);
-			foreach ($bb as $c)
+			if($bb = $this->getChildBezirke($bezirk_id))
 			{
-				$bezirk_ids[$c] = $c;
+				foreach ($bb as $c)
+				{
+					$bezirk_ids[$c] = $c;
+				}
 			}
+			
 		}
 		
 		//ksort($bezirk_ids);

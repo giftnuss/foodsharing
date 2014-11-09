@@ -432,31 +432,33 @@ class BezirkModel extends Model
 	
 	public function listFairteiler($bezirk_id)
 	{
-		$bids = $this->getChildBezirke($bezirk_id);
-		if($fairteiler = $this->q('
-	
-			SELECT 	`id`,
-					`name`,
-					`picture`
-			FROM 	`'.PREFIX.'fairteiler`
-			WHERE 	`bezirk_id` IN( '.implode(',', $bids).' )
-			AND 	`status` = 1
-		'))
+		if($bids = $this->getChildBezirke($bezirk_id))
 		{
-			foreach ($fairteiler as $key => $ft)
+			if($fairteiler = $this->q('
+		
+				SELECT 	`id`,
+						`name`,
+						`picture`
+				FROM 	`'.PREFIX.'fairteiler`
+				WHERE 	`bezirk_id` IN( '.implode(',', $bids).' )
+				AND 	`status` = 1
+			'))
 			{
-				$fairteiler[$key]['pic'] = false;
-				if(!empty($ft['picture']))
+				foreach ($fairteiler as $key => $ft)
 				{
-					$fairteiler[$key]['pic'] = array(
-							'thumb' => 'images/'.str_replace('/', '/crop_1_60_', $ft['picture']),
-							'head' => 'images/'.str_replace('/', '/crop_0_528_', $ft['picture']),
-							'orig' => 'images/'.($ft['picture'])
-					);
-				
+					$fairteiler[$key]['pic'] = false;
+					if(!empty($ft['picture']))
+					{
+						$fairteiler[$key]['pic'] = array(
+								'thumb' => 'images/'.str_replace('/', '/crop_1_60_', $ft['picture']),
+								'head' => 'images/'.str_replace('/', '/crop_0_528_', $ft['picture']),
+								'orig' => 'images/'.($ft['picture'])
+						);
+					
+					}
 				}
+				return $fairteiler;
 			}
-			return $fairteiler;
 		}
 		return false;
 	}

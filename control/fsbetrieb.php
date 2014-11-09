@@ -89,6 +89,11 @@ else if(isset($_GET['id']))
 	
 	$betrieb = $db->getMyBetrieb($_GET['id']);
 	
+	if(!$betrieb)
+	{
+		goLogin();
+	}
+	
 	addTitle($betrieb['name']);
 	
 	if($db->isInTeam($_GET['id']) || S::may('orga') || isBotFor($betrieb['bezirk_id']))
