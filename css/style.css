@@ -1210,11 +1210,11 @@ ul.imglist li a span
 	right:-21px;
 	width:16px;
 	height:16px;
-	background-image:url(img/check.png);
+	background-image:url(/img/check.png);
 }
 ul.imglist li.unconfirmed a span
 {
-	background-image:url(img/pending.png);
+	background-image:url(/img/pending.png);
 }
 div.input-wrapper.today
 {

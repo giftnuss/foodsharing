@@ -658,7 +658,7 @@ else if(isset($_GET['id']))
 								url : "xhr.php?f=addFetcher",
 								data : {
 									date:$("#timedialog-date").val(),
-									bid:'.$betrieb['id'].',
+									bid:'.(int)$betrieb['id'].',
 									from: $("#timedialog-from").val(),
 									to: $("#timedialog-to").val()
 								},
@@ -816,7 +816,7 @@ else if(isset($_GET['id']))
 				if($betrieb['verantwortlich'])
 				{
 					addHidden('<div id="changeStatus-hidden">'.v_form('changeStatusForm', array(
-					v_form_select('betrieb_status_id',array('value'=>$betrieb['betrieb_status_id']))
+					v_form_select('betrieb_status_id',array('value'=>$betrieb['betrieb_status_id'],'values' => $db->q('SELECT id, name FROM fs_betrieb_status')))
 					)).'</div>');
 				
 				
