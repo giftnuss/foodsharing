@@ -11,6 +11,7 @@ class XhrDialog
 	private $scriptAfter;
 	private $onclose;
 	private $onopen;
+	private $classnames;
 	
 	public function __construct($title = false)
 	{
@@ -22,6 +23,7 @@ class XhrDialog
 		$this->scriptBefore = '';
 		$this->onclose = array();
 		$this->onopen = array();
+		$this->classnames = array();
 		
 		if($title !== false)
 		{
@@ -34,6 +36,11 @@ class XhrDialog
 			    position: { "my": "center", "at": "center" }
 			});		
 		');
+	}
+	
+	public function addClass($name)
+	{
+		$this->classnames[] = $name;
 	}
 	
 	public function addOpt($opt,$value,$quotes = true)
@@ -213,6 +220,12 @@ class XhrDialog
 			$options[] = $opt.':'.$value;
 		}
 		
+		$classjs = '';
+		if(!empty($this->classnames))
+		{
+			$classjs = '$("#'.$this->id.'").parent().addClass("'.implode(' ',$this->classnames).'")';
+		}
+		
 		return array(
 			'status' => 1,
 			'script' => '
@@ -232,6 +245,7 @@ class XhrDialog
 					'.implode(',', $options).'
 				});'.$this->script.$this->scriptAfter.'
 				dialogs.add("'.$this->id.'");
+				'.$classjs.'
 				'
 		);;
 	}

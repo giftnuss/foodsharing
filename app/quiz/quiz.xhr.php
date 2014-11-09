@@ -451,6 +451,7 @@ class QuizXhr extends Control
 		if($quiz = S::get('quiz-questions'))
 		{
 			$dia = new XhrDialog();
+			$dia->addClass('quiz-questiondialog');
 			// get quiz_index it is the current array index of the questions
 			$i = S::get('quiz-index');
 			
@@ -629,7 +630,7 @@ class QuizXhr extends Control
 									abortOrPause("'.$dia->getId().'");
 								});
 								$("#quizcomment").hide();
-								$(".ui-dialog-buttonset button:last").hide();
+								$(".quiz-questiondialog .ui-dialog-buttonset button:last").hide();
 							},500);
 						}',false);
 						
@@ -706,9 +707,13 @@ class QuizXhr extends Control
 								}
 							}
 							
-							function questcheckresult()
+							function questcheckresult(nowait)
 							{
-								if($(\'#qanswers input:checked\').length > 0)
+								if(nowait == undefined)
+								{
+									nowait = false;
+								}
+								if(nowait || $(\'#qanswers input:checked\').length > 0)
 								{
 									//ajreq(\'pause\',{app:\'quiz\'});
 									questgonext("result");
@@ -821,7 +826,7 @@ class QuizXhr extends Control
 							  //$("#countdown").text((count)+"");
 							  if (count <= 0)
 							  {
-							     questcheckresult();
+							     questcheckresult(true);
 							     return;
 							  }
 							}
@@ -1190,8 +1195,8 @@ class QuizXhr extends Control
 		return array(
 			'status' => 1,
 			'script' => '
-				$(".ui-dialog-buttonset .ui-button").hide();
-				$(".ui-dialog-buttonset .ui-button:last").show();
+				$(".quiz-questiondialog .ui-dialog-buttonset .ui-button").hide();
+				$(".quiz-questiondialog .ui-dialog-buttonset .ui-button:last").show();
 				$("#quizcomment").show();
 				$("#countdown").hide();
 				
