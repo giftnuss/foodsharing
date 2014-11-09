@@ -167,6 +167,7 @@ GROUP BY foodsaver_id'));
 			AND 		bt.theme_id = t.id
 			AND 		bt.bezirk_id IN('.implode(',', $bids).') 
 			AND 		bt.bot_theme = 0
+			AND 		t.active = 1
 				
 			ORDER BY t.last_post_id DESC
 				

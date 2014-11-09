@@ -522,15 +522,21 @@ class BezirkControl extends Control
 				{
 					info('Thema wurde gelöscht!');
 					$this->model->deleteTheme($thread_id);
-					go('?page=bezirk&bid='.$this->bezirk_id.'&sub=forum');
+					go('?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=forum');
 				}
 				addContent($this->view->activateTheme($thread),CNT_TOP);
 			}
-			$posts = $this->model->getPosts($thread_id);
 			
+			if($thread['active'] == 1 || S::may('orga') || isBotFor($this->bezirk_id))
+			{
+				$posts = $this->model->getPosts($thread_id);
+				addContent($this->view->thread($thread,$posts));
+			}
+			else 
+			{
+				go('?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=forum');
+			}
 			
-			
-			addContent($this->view->thread($thread,$posts));
 		}
 		else
 		{
