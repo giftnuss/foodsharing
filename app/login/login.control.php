@@ -74,7 +74,7 @@ class LoginControl extends Control
 				$_SESSION['mob'] = 1;
 			}
 			
-			if(strpos($_SERVER['HTTP_REFERER'],URL_INTERN) !== false || isset($_GET['logout']))
+			if((isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'],URL_INTERN) !== false) || isset($_GET['logout']))
 			{
 				if(isset($_GET['ref']))
 				{
