@@ -208,7 +208,24 @@ class Model extends ManualDb
  		');
  	}
  	
- 	public function addBell($foodsaver_ids, $title, $body, $icon, $link_attributes, $vars, $identifier = '')
+ 	public function delBells($identifier)
+ 	{
+ 		if($bells = $this->q('SELECT id FROM '.PREFIX.'bell WHERE identifier = '.$this->strval($identifier)))
+ 		{
+ 			$ids = array();
+ 			foreach ($bells as $b)
+ 			{
+ 				$ids[(int)$b['id']] = (int)$b['id'];
+ 			}
+ 			
+ 			$ids = implode(',',$ids);
+ 			
+ 			$this->del('DELETE FROM '.PREFIX.'foodsaver_has_bell WHERE bell_id IN('.$ids.')');
+ 			$this->del('DELETE FROM '.PREFIX.'bell WHERE id IN('.$ids.')');
+ 		}
+ 	}
+ 	
+ 	public function addBell($foodsaver_ids, $title, $body, $icon, $link_attributes, $vars, $identifier = '',$closeable = 1)
  	{
  		
  		if(!is_array($foodsaver_ids))
@@ -226,7 +243,7 @@ class Model extends ManualDb
  			$vars = serialize($vars);
  		}
  		
- 		if($bid = $this->insert('INSERT INTO `'.PREFIX.'bell`(`name`, `body`, `vars`, `attr`, `icon`, `identifier`,`time`) VALUES ('.$this->strval($title).','.$this->strval($body).','.$this->strval($vars).','.$this->strval($link_attributes).','.$this->strval($icon).','.$this->strval($identifier).',NOW())'))
+ 		if($bid = $this->insert('INSERT INTO `'.PREFIX.'bell`(`name`, `body`, `vars`, `attr`, `icon`, `identifier`,`time`,`closeable`) VALUES ('.$this->strval($title).','.$this->strval($body).','.$this->strval($vars).','.$this->strval($link_attributes).','.$this->strval($icon).','.$this->strval($identifier).',NOW(),'.(int)$closeable.')'))
  		{
  			$values = array();
  			foreach ($foodsaver_ids as $id)

@@ -17,3 +17,7 @@ $g_lang['fs_sleepmode_title'] = 'Neue Schlafmütze';
 $g_lang['fs_sleepmode'] = '{name} {nachname} ist jetzt inaktiv';
 $g_lang['new_quiz_comment_title'] = 'Neuer Quiz-Kommentar';
 $g_lang['new_quiz_comment'] = '{comment}';
+
+$g_lang['new_foodsaver_title'] = '{name} neu in {bezirk}';
+$g_lang['new_foodsaver_verified'] = 'Ist schon verifiziert, kann loslegen!';
+$g_lang['new_foodsaver'] = 'Braucht Einführungsabholungen.';

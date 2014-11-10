@@ -5,11 +5,14 @@ $xhr_script = '';
 
 function xhr_verify($data)
 {
+	
 	if(isBotschafter())
 	{
 		global $db;
 		if($db->update('UPDATE `'.PREFIX.'foodsaver` SET `verified` = '.(int)$data['v'].' WHERE `id` = '.(int)$data['fid']))
 		{
+			$model = loadModel();
+			$model->delBells('new-fs-'.(int)$data['fid']);
 			return json_encode(array(
 				'status' => 1
 			));
@@ -2521,14 +2524,27 @@ function xhr_becomeBezirk($data)
 	if(may())
 	{
 		$bezirk_id = (int)$data['b'];
-		$new = preg_replace('/a-zA-ZäöüÄÖÜß\ /', '', $data['new']);
-		
+		$new = '';
+		if(isset($data['new']))
+		{
+			$new = preg_replace('/a-zA-ZäöüÄÖÜß\ /', '', $data['new']);
+		}
 		global $db;
 		
 		if(empty($new) && $bezirk_id > 0)
 		{
+			
 			if(($active = $db->qOne('SELECT `active` FROM `'.PREFIX.'foodsaver_has_bezirk` WHERE `bezirk_id` = '.(int)$bezirk_id.' AND `foodsaver_id` = '.(int)fsId().' ')) !== false)
 			{
+				if($active == 1)
+				{
+					return json_encode(array(
+							'script' => 'pulseInfo(\''.jsSafe(s('already_in_bezirk')).'\');',
+							'status' => 2
+					));
+				}
+			}
+			/*
 				// schon im bezirk
 				if($active == 1)
 				{
@@ -2547,16 +2563,71 @@ function xhr_becomeBezirk($data)
 			}
 			else
 			{
-				$active = 0;
+			*/
+				$active = 1;
+				/*
 				if(isOrgateam())
 				{
 					$active = 1;
 				}
+				*/
 				$db->insert('
-					INSERT INTO  `'.PREFIX.'foodsaver_has_bezirk` (`bezirk_id`,`foodsaver_id`,`active`)
+					REPLACE INTO  `'.PREFIX.'foodsaver_has_bezirk` (`bezirk_id`,`foodsaver_id`,`active`)
 					VALUES ('.(int)$bezirk_id.','.fsId().', '.$active.' )
 				');
 					
+				if(!getBezirkId())
+				{
+					$db->update('UPDATE '.PREFIX.'foodsaver SET bezirk_id = '.(int)$bezirk_id.' WHERE id = '.(int)fsId());
+				}
+				
+				if($bots = $db->getBotschafter($bezirk_id))
+				{
+					$model =loadModel();
+					
+					if(
+						($foodsaver = $db->getValues(array('verified','name','nachname','photo'), 'foodsaver', fsId())) &&
+						($bezirk = $db->getValues(array('name'),'bezirk',$bezirk_id))
+					)
+					{
+						if($foodsaver['verified'] == 1)
+						{
+							$model->addBell(
+								$bots,
+								'new_foodsaver_title',
+								'new_foodsaver_verified',
+								img($foodsaver['photo'],50),
+								array( 'href' => '#','onclick' => 'profile('.(int)fsId().');return false;'),
+								array( 
+									'name' => $foodsaver['name'].' '.$foodsaver['nachname'], 
+									'bezirk' => $bezirk['name'] 
+								),
+								'new-fs-'.fsId()
+							);
+						}
+						else
+						{
+							$model->addBell(
+								$bots,
+								'new_foodsaver_title',
+								'new_foodsaver',
+								img($foodsaver['photo'],50),
+								array( 'href' => '#','onclick' => 'profile('.(int)fsId().');return false;'),
+								array( 
+									'name' => $foodsaver['name'].' '.$foodsaver['nachname'], 
+									'bezirk' => $bezirk['name'] 
+								),
+								'new-fs-'.fsId(),
+								false
+							);
+						}
+					}
+					
+					
+					
+					
+				}
+				
 				
 				if($botschafter = $db->getBotschafter($bezirk_id))
 				{
@@ -2574,7 +2645,7 @@ function xhr_becomeBezirk($data)
 						'botschafter' => false
 					));
 				}
-			}
+			//}
 		}
 	}
 }

@@ -262,9 +262,12 @@ GROUP BY foodsaver_id'));
 	public function getBezirkIds()
 	{
 		$out = array();
-		foreach ($_SESSION['client']['bezirke'] as $b)
+		if(isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke']))
 		{
-			$out[] = $b['id'];
+			foreach ($_SESSION['client']['bezirke'] as $b)
+			{
+				$out[] = $b['id'];
+			}
 		}
 		
 		if(!empty($out))

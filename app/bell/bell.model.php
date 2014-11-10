@@ -24,7 +24,8 @@ class BellModel extends Model
 				b.`identifier`, 
 				b.`time`,
 				UNIX_TIMESTAMP(b.`time`) AS time_ts,
-				hb.seen
+				hb.seen,
+				b.closeable
 	
 			FROM
 				'.PREFIX.'bell b,

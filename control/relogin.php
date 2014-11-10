@@ -1,6 +1,6 @@
 <?php
 $db->relogin();
-
+//die();
 if(isset($_GET['url']) && !empty($_GET['url']))
 {
 	$url = urldecode($_GET['url']);

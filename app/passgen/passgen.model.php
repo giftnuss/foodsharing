@@ -21,17 +21,14 @@ class PassgenModel extends Model
 						fs.fs_id,
 						UNIX_TIMESTAMP(fs.last_pass) AS last_pass_ts,
 						b.name AS bezirk_name,
-						b.id AS bezirk_id,
-						a.name AS kfz
+						b.id AS bezirk_id
 				
 				FROM 	'.PREFIX.'foodsaver_has_bezirk fb,
 						'.PREFIX.'foodsaver fs,
-						'.PREFIX.'bezirk b,
-						'.PREFIX.'autokennzeichen a
+						'.PREFIX.'bezirk b
 				
 				WHERE 	fb.foodsaver_id = fs.id
 				AND 	fb.bezirk_id = b.id
-				AND 	fs.autokennzeichen_id = a.id
 				AND 	fb.`bezirk_id` IN('.implode(',',$this->getChildBezirke($bezirk_id)).') 
 				
 				ORDER BY bezirk_name

@@ -139,7 +139,6 @@ function v_bezirkChildChooser($id,$options = array())
 				$("#'.$id.'-notAvail").fadeIn();
 			}
 			
-			
 			$("#'.$id.'").val(element.value);
 			
 			el = $(element);

@@ -47,12 +47,25 @@ class BellView extends View
 				}
 				else 
 				*/
-				if(!empty($icon))
+				if(!empty($b['icon']))
 				{
-					$icon = '<i class="'.$b['icon'].'"></i>';
+					if(substr($b['icon'],0,1) == '/')
+					{
+						$icon = '<span class="pics"><img src="'.$b['icon'].'" /></span>';
+					}
+					else
+					{
+						$icon = '<span class="icon"><i class="'.$b['icon'].'"></i></span>';
+					}
 				}
 				
-				$list .= '<li id="belllist-'.$b['id'].'"><a'.$attr.'><span onclick="info.delBell('.$b['id'].');return false;" class="button close"><i class="fa fa-close"></i></span><span class="icon">'.$icon.'</span><span class="names">'.sv($b['name'],$b['vars']).'</span><span class="msg">'.sv($b['body'],$b['vars']).'</span><span class="time">'.niceDate($b['time_ts']).'</span><span class="clear"></span></a></li>';
+				$close = '';
+				if($b['closeable'] == 1)
+				{
+					$close = '<span onclick="info.delBell('.$b['id'].');return false;" class="button close"><i class="fa fa-close"></i></span>';
+				}
+				
+				$list .= '<li id="belllist-'.$b['id'].'"><a'.$attr.'>'.$close.$icon.'<span class="names">'.sv($b['name'],$b['vars']).'</span><span class="msg">'.sv($b['body'],$b['vars']).'</span><span class="time">'.niceDate($b['time_ts']).'</span><span class="clear"></span></a></li>';
 			}
 		}
 		else

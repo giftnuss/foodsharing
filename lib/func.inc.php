@@ -967,7 +967,7 @@ function getBetriebeMenu()
 	addHidden('
 		<div id="becomeBezirk">
 			<div class="popbox">
-				<h3>Wähle die Region aus, in der Du auch aktiv werden möchtest!</h3>
+				<h3>Wähle die Region aus, in der Du aktiv werden möchtest!</h3>
 				<p class="subtitle">
 					Es besteht auch die Möglichkeit eine neue Region/Bezirk zu gründen, wähle bitte dennoch die enspechende übergeordnete Region (Land / Bundesland Stadt etc.) aus.
 				</p>
@@ -1014,7 +1014,12 @@ function getBetriebeMenu()
 					pulseError(\'Das ist ein Land wähle bitte eine Stadt, eine Region, oder einen Bezirk aus.\');	
 					return false;		
 				}
-				else
+				else if(part[1] == 8)
+				{
+					pulseError(\'Das ist eine Großstadt wähle bitte eine Stadt, eine Region, oder einen Bezirk aus.\');	
+					return false;		
+				}
+				else if(part[1] == 1 || part[1] == 9 || part[1] == 2 || part[1] == 3)
 				{
 					bid = part[0];
 					showLoader();
@@ -1030,11 +1035,11 @@ function getBetriebeMenu()
 						success : function(data){
 							if(data.status == 1)
 							{
-								if(data.active == 1)
-								{
+								//if(data.active == 1)
+								//{
 									goTo( "?page=relogin&url=" + encodeURIComponent("?page=bezirk&bid=" +$("#'.$id.'").val()) );
-								}
-								pulseInfo(\''.jsSafe(s('bezirk_request_successfull')).'\');
+								//}
+								//pulseInfo(\''.jsSafe(s('bezirk_request_successfull')).'\');
 								$.fancybox.close();
 							}
 							if(data.script != undefined)
@@ -1046,6 +1051,11 @@ function getBetriebeMenu()
 							hideLoader();
 						}
 					});	
+				}
+				else
+				{
+					pulseError(\'In diesen Bezirk kanndst Du Dich nicht eintragen.\');	
+					return false;		
 				}
 			}
 			else
@@ -1434,13 +1444,13 @@ function img($file = false,$size = 'mini',$format = 'q',$altimg = false)
 		{
 			resizeImg('images/'.$file,$size,$format);
 		}
-		return 'images/'.$size.'_'.$format.'_'.$file;
+		return '/images/'.$size.'_'.$format.'_'.$file;
 	}
 	else
 	{
 		if($altimg === false)
 		{
-			return 'img/'.$size.'_'.$format.'_avatar.png';
+			return '/img/'.$size.'_'.$format.'_avatar.png';
 		}
 		else
 		{
@@ -2067,7 +2077,7 @@ function addScript($src,$global = false)
 	$g_script[$src] = array('global'=>$global);
 }
 
-function loadModel($model)
+function loadModel($model = 'api')
 {
 	require_once ROOT_DIR.'app/core/core.model.php';
 	require_once ROOT_DIR.'app/'.$model.'/'.$model.'.model.php';

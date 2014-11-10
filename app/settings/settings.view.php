@@ -687,18 +687,8 @@ class SettingsView extends View
 	}
 	
 	public function confirmBot($cnt)
-	{
-		$out = '';
-		if($cnt)
-		{
-			$out .= $cnt['body'];
-		}
-	
-		$out .= v_form('confirmFs', array(
-					
-		),array( 'submit' => 'Bestätigen'));
-	
-		$out = v_field($out, $cnt['title'],array('class' => 'ui-padding'));
+	{	
+		$out = v_field($cnt['body'], $cnt['title'],array('class' => 'ui-padding'));
 	
 		return $out;
 	}

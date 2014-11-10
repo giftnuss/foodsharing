@@ -296,7 +296,10 @@ class SettingsControl extends Control
 		{
 			if($this->isSubmitted())
 			{
-				$this->model->updateRole(1,$this->foodsaver['rolle']);
+				if(!S::may('fs'))
+				{
+					$this->model->updateRole(1,$this->foodsaver['rolle']);
+				}
 				info('Danke! Du bist jetzt Foodsaver');
 				go('?page=relogin&url=' . urlencode('?page=dashboard'));
 			}
@@ -380,13 +383,12 @@ class SettingsControl extends Control
 					$this->model->updateFields($data, 'foodsaver', fsId());
 		
 					$this->model->add_upgrade_request(array(
-							'foodsaver_id' => fsId(),
-							'rolle' => $rolle,
-							'bezirk_id' => $_POST['bezirk'],
-							'time' => date('Y-m-d H:i:s'),
-							'data' => json_encode($_POST)
+						'foodsaver_id' => fsId(),
+						'rolle' => $rolle,
+						'bezirk_id' => $_POST['bezirk'],
+						'time' => date('Y-m-d H:i:s'),
+						'data' => json_encode($_POST)
 					));
-						
 					
 					addContent(v_field(
 						v_info(s('upgrade_bot_success')),
@@ -405,20 +407,19 @@ class SettingsControl extends Control
 			if($showform)
 			{
 				addJs('$("#upBotsch").submit(function(ev){
-		
-			check = true;
-			if($("#bezirk").val() == 0)
-			{
-				check = false;
-				error("Du musst einen bezirk ausw&auml;hlen");
-			}
-		
-			if(!check)
-			{
-				ev.preventDefault();
-			}
-		
-		});');
+					check = true;
+					if($("#bezirk").val() == 0)
+					{
+						check = false;
+						error("Du musst einen bezirk ausw&auml;hlen");
+					}
+				
+					if(!check)
+					{
+						ev.preventDefault();
+					}
+				
+				});');
 				addContent(
 						
 				$this->view->confirmBot($this->model->getContent(16)) .

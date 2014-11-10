@@ -272,10 +272,16 @@ else if(S::may('fs'))
 	
 	
 	}
+	/*
 	$testcount = $db->quizSessionTestCount();
 	if($testcount < 126)
 	{
 		addJs('ajreq("testquiz",{app:"quiz"});');
+	}*/
+	
+	if(!getBezirkId())
+	{
+		addJs('becomeBezirk();');
 	}
 	
 	//print_r($_SESSION);
@@ -351,7 +357,7 @@ else if(S::may('fs'))
 	/*
 	 * Deine Bezirke
 	*/
-	if($_SESSION['client']['bezirke'])
+	if(isset($_SESSION['client']['bezirke']))
 	{
 		$orga = '
 	<ul class="linklist">';
