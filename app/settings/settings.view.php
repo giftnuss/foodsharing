@@ -189,18 +189,68 @@ class SettingsView extends View
 			 * get the specific text from content table
 			 */
 			$content_id = false;
-			if($try_count == 1)
+			
+			switch($session['quiz_id'])
 			{
-				$content_id = 19;
+				/*
+				 * failed Foodsaver
+				 */
+				case 1 :
+					if($try_count == 1)
+					{
+						$content_id = 19;
+					}
+					else if($try_count == 2)
+					{
+						$content_id = 20;
+					}
+					else if($try_count > 2)
+					{
+						$content_id = 21;
+					}
+					break;
+			
+				/*
+				 * failed Bieb
+				*/
+				case 2:
+					if($try_count == 1)
+					{
+						$content_id = 22;
+					}
+					else if($try_count == 2)
+					{
+						$content_id = 23;
+					}
+					else if($try_count > 2)
+					{
+						$content_id = 24;
+					}
+					
+					break;
+			
+				/*
+				 * failed Bot
+				*/
+				case 3:
+					if($try_count == 1)
+					{
+						$content_id = 25;
+					}
+					else if($try_count == 2)
+					{
+						$content_id = 26;
+					}
+					else if($try_count > 2)
+					{
+						$content_id = 27;
+					}
+					break;
+			
+				default:
+					break;
 			}
-			else if($try_count == 2)
-			{
-				$content_id = 20;
-			}
-			else if($try_count > 2)
-			{
-				$content_id = 21;
-			}
+			
 
 			if($content_id)
 			{
