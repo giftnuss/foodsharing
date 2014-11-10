@@ -6,38 +6,51 @@ class Mem
 	
 	public static function connect()
 	{
-		Mem::$connected = true;
-		Mem::$cache = new Memcached();
-		Mem::$cache->addServer(MEM_HOST,MEM_PORT);
+		if(MEM_ENABLED)
+		{
+			Mem::$connected = true;
+			Mem::$cache = new Memcached();
+			Mem::$cache->addServer(MEM_HOST,MEM_PORT);
+		}
 	}
 	
 	public static function set($key,$data,$ttl = 0)
 	{
-		//return apc_store($key,$data,0);
-		return Mem::$cache->set($key,$data,$ttl);
+		if(MEM_ENABLED)
+		{
+			return Mem::$cache->set($key,$data,$ttl);
+		}
+		return false;
 	}
 	
 	public static function get($key)
 	{
-		//return apc_fetch($key);
-		return Mem::$cache->get($key);
+		if(MEM_ENABLED)
+		{
+			return Mem::$cache->get($key);
+		}
+		return false;
 	}
 	
 	public static function flush()
 	{
-		//apc_clear_cache('user');
-		return Mem::$cache->flush();
+		if(MEM_ENABLED)
+		{
+			return Mem::$cache->flush();
+		}
 	}
 	
 	public static function del($key)
 	{
-		//apc_delete($key);
-		return Mem::$cache->delete($key);
+		if(MEM_ENABLED)
+		{
+			return Mem::$cache->delete($key);
+		}
+		return false;
 	}
 	
 	public static function user($id,$key)
 	{
-		//return Mem::get('user-'.$key.'-'.$id);
 		return Mem::get('user-'.$key.'-'.$id);
 	}
 	
