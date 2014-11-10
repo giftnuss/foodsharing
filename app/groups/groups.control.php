@@ -14,6 +14,11 @@ class GroupsControl extends Control
 
 		parent::__construct();
 		
+		if(!S::may())
+		{
+			goLogin();
+		}
+		
 		$this->setAgId(392);
 		
 		addBread('Arbeitsgruppen','?page=groups');		
