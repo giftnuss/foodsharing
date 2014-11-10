@@ -1724,12 +1724,18 @@ function xhr_uploadPhoto($data)
 			$dateiendung = strtolower(substr($datein, strlen($datein)-4, 4));
 			if(is_allowed($_FILES["uploadpic"]))
 			{
-				$file = makeUnique().$dateiendung;
-				move_uploaded_file($datei, './tmp/'.$file);
+				try 
+				{
+					$file = makeUnique().$dateiendung;
+					move_uploaded_file($datei, './tmp/'.$file);
+					$image = new fImage('./tmp/'.$file);
+					$image->resize(550, 0);
+					$image->saveChanges();
+					
+				} catch (Exception $e) {
+					$func = 'parent.pic_error(\'Deine Datei schein nicht in Ordnung zu sein, nimm am besten ein normales jpg Bild\',\''.$id.'\');';
+				}
 				
-				$image = new fImage('./tmp/'.$file);
-				$image->resize(550, 0);
-				$image->saveChanges();
 
 				$func = 'parent.fotoupload(\''.$file.'\',\''.$id.'\');';
 			}
