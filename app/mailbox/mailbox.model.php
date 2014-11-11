@@ -642,7 +642,7 @@ class MailboxModel extends Model
 		
 		if($me = $this->getValues(array('mailbox_id','name','nachname'), 'foodsaver', fsId()))
 		{
-			if($me['mailbox_id'] == 0)
+			if($me['mailbox_id'] == 0 && S::may('bieb'))
 			{
 				$me['name'] = explode(' ', $me['name']);
 				$me['name'] = $me['name'][0];

@@ -1463,7 +1463,7 @@ function img($file = false,$size = 'mini',$format = 'q',$altimg = false)
 function getSettingsMenu()
 {
 	$mailbox = '';
-	if(S::may('bieb'))
+	if(S::get('mailbox'))
 	{
 		$mailbox = '<li><a href="?page=mailbox"><i class="fa fa-envelope"></i> E-Mail Postfach</a></li>';
 	}

@@ -60,7 +60,8 @@ class S
 				'email' => $user['email'],
 				'rolle' => $user['rolle'],
 				'type' => $user['type'],
-				'token' => $user['token']
+				'token' => $user['token'],
+				'mailbox_id' => $user['mailbox_id']
 			));
 			
 			return true;

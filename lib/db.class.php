@@ -1093,7 +1093,8 @@ class Db
 							`lat`,
 							`lon`,
 							`email`,
-							`token`
+							`token`,
+							`mailbox_id`
 				
 				FROM 		`'.PREFIX.'foodsaver`
 
@@ -1104,6 +1105,12 @@ class Db
 				'lat' => $fs['lat'],
 				'lon' => $fs['lon']		
 			));
+			
+			$mailbox = false;
+			if((int)$fs['mailbox_id'] > 0)
+			{
+				$mailbox = true;
+			}
 			
 			$this->insert('
 				INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_bezirk`(`foodsaver_id`, `bezirk_id`, `active`, `added`) VALUES 
@@ -1184,7 +1191,7 @@ class Db
 			{
 				$_SESSION['client']['botschafter'] = $r;
 				$_SESSION['client']['group']['botschafter'] = true;
-				
+				$mailbox = true;
 				foreach ($r as $rr)
 				{
 					if(!$this->q('SELECT foodsaver_id FROM `'.PREFIX.'foodsaver_has_bezirk` WHERE foodsaver_id = '.$this->intval($fs['id']).' AND bezirk_id = '.(int)$rr['id'].' AND active = 1'))
@@ -1296,7 +1303,9 @@ class Db
 			{
 				$_SESSION['client']['verantwortlich'] = $r;
 				$_SESSION['client']['group']['verantwortlich'] = true;
-			}			
+				$mailbox = true;
+			}
+			S::set('mailbox', $mailbox);	
 		}
 		else
 		{
