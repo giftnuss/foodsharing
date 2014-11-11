@@ -204,12 +204,16 @@ function xhr_activeSwitch($data)
 
 function xhr_grabInfo($data)
 {	
-	global $db;
-	$fields = unsetAll($data, array('photo_public','bundesland_id','lat','lon','stadt','plz','anschrift'));
-
-	if($db->updateFields($fields, 'foodsaver', fsId()))
+	if(S::may())
 	{
-		return xhr_out();
+		Mem::delPageCache('/?page=dashboard');
+		global $db;
+		$fields = unsetAll($data, array('photo_public','bundesland_id','lat','lon','stadt','plz','anschrift'));
+		
+		if($db->updateFields($fields, 'foodsaver', fsId()))
+		{
+			return xhr_out();
+		}
 	}
 }
 
