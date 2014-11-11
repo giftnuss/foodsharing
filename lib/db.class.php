@@ -89,6 +89,11 @@ class Mem
 		return Mem::set('pc-'.$_SERVER['REQUEST_URI'] . ':' . fsId(), $page, $ttl);
 	}
 	
+	public static function delPageCache($page)
+	{
+		return Mem::del('pc-'. $page . ':' . fsId());
+	}
+	
 	/**
 	 * Method to check users online status by checking timestamp from memcahce
 	 *
