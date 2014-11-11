@@ -450,7 +450,13 @@ class LoginXhr extends Control
 				$pass = strip_tags($_GET['p']);
 			}
 			
-			$dia->addContent($this->view->join($email,$pass));
+			$datenschutz = $this->model->getContent(28);
+			$rechtsvereinbarung = $this->model->getContent(29);
+			
+			$rechtsvereinbarung['body'] = strip_tags(str_replace(array('<br>','<br />','<p>','</p>'),"\n",$rechtsvereinbarung['body']));
+			$datenschutz['body'] = strip_tags(str_replace(array('<br>','<br />','<p>','</p>'),"\n",$datenschutz['body']));
+			
+			$dia->addContent($this->view->join($email,$pass,$datenschutz,$rechtsvereinbarung));
 			$dia->addOpt('height', 420);
 			$dia->addOpt('width', 700);
 			

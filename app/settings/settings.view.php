@@ -693,37 +693,63 @@ class SettingsView extends View
 		return $out;
 	}
 	
-	public function confirmBip($cnt)
+	public function confirmBip($cnt,$rv)
 	{
-		$out = '';
+		$out = '
+			<form action="/?page=settings&amp;sub=upgrade/up_fs" enctype="multipart/form-data" class="validate" id="confirmfs-form" method="post">
+				<input type="hidden" value="confirmfs" name="form_submit">';
+		
+		
+		
 		if($cnt)
 		{
-			$out .= $cnt['body'];
+			$out .= v_field($cnt['body'],$cnt['title'],array('class' => 'ui-padding'));
 		}
-	
-		$out .= v_form('confirmFs', array(
-					
-		),array( 'submit' => 'Bestätigen'));
-	
-		$out = v_field($out, $cnt['title'],array('class' => 'ui-padding'));
-	
+		if($rv)
+		{
+			$rv['body'] .= '
+			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;'.s('rv_accept').'</label>
+			<div class="input-wrapper">
+				<p><input type="submit" value="Bestätigen" class="button"></p>
+			</div>';
+			
+			$out .= v_field($rv['body'],$rv['title'],array('class' => 'ui-padding'));
+		}
+		
+		
+		$out.= '
+			</form>';
+
 		return $out;
 	}
 	
-	public function confirmFs($cnt)
+	public function confirmFs($cnt,$rv)
 	{
-		$out = '';
+		$out = '
+			<form action="/?page=settings&amp;sub=upgrade/up_fs" enctype="multipart/form-data" class="validate" id="confirmfs-form" method="post">
+				<input type="hidden" value="confirmfs" name="form_submit">';
+		
+		
+		
 		if($cnt)
 		{
-			$out .= $cnt['body'];
+			$out .= v_field($cnt['body'],$cnt['title'],array('class' => 'ui-padding'));
+		}
+		if($rv)
+		{
+			$rv['body'] .= '
+			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;'.s('rv_accept').'</label>
+			<div class="input-wrapper">
+				<p><input type="submit" value="Bestätigen" class="button"></p>
+			</div>';
+			
+			$out .= v_field($rv['body'],$rv['title'],array('class' => 'ui-padding'));
 		}
 		
-		$out .= v_form('confirmFs', array(
-			
-		),array( 'submit' => 'Bestätigen'));
 		
-		$out = v_field($out, $cnt['title'],array('class' => 'ui-padding'));
-		
+		$out.= '
+			</form>';
+
 		return $out;
 	}
 	

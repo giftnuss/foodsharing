@@ -296,13 +296,22 @@ class SettingsControl extends Control
 		{
 			if($this->isSubmitted())
 			{
-				Mem::delPageCache('/?page=dashboard');
-				$this->model->updateRole(1,$this->foodsaver['rolle']);
-				info('Danke! Du bist jetzt Foodsaver');
-				go('?page=relogin&url=' . urlencode('?page=dashboard'));
+				if(empty($_POST['accepted']))
+				{
+					$check = false;
+					error(s('not_rv_accepted'));
+				}
+				else
+				{
+					Mem::delPageCache('/?page=dashboard');
+					$this->model->updateRole(1,$this->foodsaver['rolle']);
+					info('Danke! Du bist jetzt Foodsaver');
+					go('?page=relogin&url=' . urlencode('?page=dashboard'));
+				}
 			}
 			$cnt = $this->model->getContent(14);
-			addContent($this->view->confirmFs($cnt));
+			$rv = $this->model->getContent(30);
+			addContent($this->view->confirmFs($cnt,$rv));
 		}
 	}
 	
@@ -312,12 +321,21 @@ class SettingsControl extends Control
 		{
 			if($this->isSubmitted())
 			{
-				$this->model->updateRole(2,$this->foodsaver['rolle']);
-				info('Danke! Du bist jetzt betriebsverantwortlicher');
-				go('?page=relogin&url=' . urlencode('?page=dashboard'));
+				if(empty($_POST['accepted']))
+				{
+					$check = false;
+					error(s('not_rv_accepted'));
+				}
+				else
+				{
+					$this->model->updateRole(2,$this->foodsaver['rolle']);
+					info('Danke! Du bist jetzt betriebsverantwortlicher');
+					go('?page=relogin&url=' . urlencode('?page=dashboard'));
+				}
 			}
 			$cnt = $this->model->getContent(15);
-			addContent($this->view->confirmBip($cnt));
+			$rv = $this->model->getContent(31);
+			addContent($this->view->confirmBip($cnt,$rv));
 		}
 	}
 	
@@ -357,16 +375,10 @@ class SettingsControl extends Control
 					error('Du musst dem zustimmen das wir Deine Telefonnummer veröffentlichen');
 				}
 		
-				if(!isset($_POST['aufgaben_botschafter']))
+				if(!isset($_POST['rv_botschafter']))
 				{
 					$check = false;
-					error('Bitte bestätige das Du die Aufgaben der Botschafter gelesen hast und sie akzeptierst');
-				}
-		
-				if(!isset($_POST['datenschutz']))
-				{
-					$check = false;
-					error('Bitte akzeptiere die Datenschutzerklärung');
+					error(s('not_rv_accepted'));
 				}
 		
 				if((int)$_POST['bezirk'] == 0)
@@ -418,10 +430,15 @@ class SettingsControl extends Control
 					}
 				
 				});');
+				
+				// Rechtsvereinbarung
+				
+				$rv = $this->model->getContent(32);
+				
 				addContent(
 						
 				$this->view->confirmBot($this->model->getContent(16)) .
-						
+				
 				v_form('upBotsch', array( v_field(
 				v_bezirkChooser('bezirk',getBezirk(),array('label'=>'In welcher Region möchtest Du Botschafter werden?')).
 				'<div style="display:none" id="bezirk-notAvail">'.v_form_text('new_bezirk').'</div>'.
@@ -458,13 +475,10 @@ class SettingsControl extends Control
 												,'Botschafter werden',array('class'=>'ui-padding')),
 													
 													
-												v_field($this->model->getVal('body', 'document', 1).v_form_checkbox('aufgaben_botschafter',array('required'=>true,'values' => array(
-												array('id'=>1,'name'=>'Ja dem Stimme ich zu')
-												))), 'Aufgaben der BotschafterInnen',array('class'=>'ui-padding')),
-													
-												v_field($this->model->getVal('body', 'document', 11).v_form_checkbox('datenschutz',array('required'=>true,'values' => array(
-												array('id'=>1,'name'=>'Ja dem Stimme ich zu')
-												))), 'Aufgaben der BotschafterInnen',array('class'=>'ui-padding'))
+										v_field($rv['body'].v_form_checkbox('rv_botschafter',array('required'=>true,'values' => array(
+										array('id' => 1,'name' => s('rv_accept'))
+										))), $rv['title'],array('class'=>'ui-padding'))													
+												
 				),array('submit'=>'Antrag auf Botschafterrolle verbindlich absenden'))
 				);
 			}
