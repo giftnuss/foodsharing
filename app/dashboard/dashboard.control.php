@@ -25,14 +25,20 @@ class DashboardControl extends Control
 		/*
 		 * User is foodsaver
 		 */
-		if(S::user('rolle') == 0)
+		
+		if($this->user['rolle'] > 0 && !getBezirkId())
 		{
-			$this->dashFs();
+			addJs('becomeBezirk();');
 		}
+		
+		// foodsharer dashboard
+		$this->dashFs();
+		
 	}
 	
 	public function dashFs()
 	{
+		
 		//$this->setContentWidth(8, 8);
 		$subtitle = s('no_saved_food');
 		
