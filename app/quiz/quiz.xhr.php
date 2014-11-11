@@ -614,7 +614,7 @@ class QuizXhr extends Control
 						 * for later function is not ready yet :)
 						 */
 						$dia->addButton('Weiter', 'questcheckresult();return false;');
-						$dia->addButton('nächste Frage','ajreq(\'next\',{app:\'quiz\'});');
+						$dia->addButton('nächste Frage','ajreq(\'next\',{app:\'quiz\'});$(".quiz-questiondialog .ui-dialog-buttonset .ui-button").button( "option", "disabled", true );$(".quiz-questiondialog .ui-dialog-buttonset .ui-button span").prepend(\'<i class="fa fa-spinner fa-spin"></i> \')');
 						/*
 						 * add next() Button
 						 */
@@ -631,7 +631,7 @@ class QuizXhr extends Control
 								});
 								$("#quizcomment").hide();
 								$(".quiz-questiondialog .ui-dialog-buttonset button:last").hide();
-							},500);
+							},100);
 						}',false);
 						
 						$return = $dia->xhrout();
