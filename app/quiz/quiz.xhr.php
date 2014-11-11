@@ -568,7 +568,7 @@ class QuizXhr extends Control
 						$x=1;
 						foreach ($answers as $a)
 						{
-							$comment_aswers .= $x.'. Frage #'.$a['id'].' => '.tt($a['text'],35)."\n";
+							$comment_aswers .= $x.'. Frage #'.$a['id'].' => '.preg_replace('/[^a-zA-Z0-9\ \.]/','',tt($a['text'],25))."\n";
 							$x++;
 						}
 						
