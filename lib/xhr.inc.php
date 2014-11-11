@@ -2523,6 +2523,7 @@ function xhr_becomeBezirk($data)
 {
 	if(may())
 	{
+		Mem::delPageCache('/?page=dashboard');
 		$bezirk_id = (int)$data['b'];
 		$new = '';
 		if(isset($data['new']))
