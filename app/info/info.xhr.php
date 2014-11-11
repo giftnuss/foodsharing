@@ -45,10 +45,7 @@ class InfoXhr extends Control
 			}
 			if(!empty($ids))
 			{
-				if($betrieb_bells = $this->model->getBetriebBells($ids))
-				{
-					$bell += (int)$this->model->qOne('SELECT COUNT( betrieb_id ) FROM fs_abholer a WHERE betrieb_id IN('.implode(',',$ids).') AND confirmed = 0 ');
-				}
+				$bell += (int)$this->model->qOne('SELECT COUNT( betrieb_id ) FROM fs_abholer a WHERE betrieb_id IN('.implode(',',$ids).') AND confirmed = 0 ');
 			}
 		}
 		
