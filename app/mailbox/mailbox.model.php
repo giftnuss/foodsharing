@@ -10,6 +10,11 @@ class MailboxModel extends Model
 		');
 	}
 	
+	public function mailboxActivity($mid)
+	{
+		return $this->update('UPDATE '.PREFIX.'mailbox SET last_access = NOW() WHERE id = '.(int)$mid);
+	}
+	
 	public function addContact($email)
 	{
 		$id = $this->qOne('

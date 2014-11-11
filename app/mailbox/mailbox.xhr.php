@@ -111,6 +111,7 @@ class MailboxXhr extends Control
 		$mb_id = (int)$_GET['mb'];
 		if($this->model->mayMailbox($mb_id,$_GET['type']))
 		{
+			$this->model->mailboxActivity($mb_id);
 			if($messages = $this->model->listMessages($mb_id,$_GET['folder']))
 			{
 				$nc_js = '';
