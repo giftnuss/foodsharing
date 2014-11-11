@@ -29,6 +29,13 @@ class BellView extends View
 				    [time] => 0000-00-00 00:00:00
 				    [seen] => 0
 				 */
+				$unread = 0;
+				
+				if($b['seen'] == 0)
+				{
+					$unread = 1;
+				}
+				
 				$attr = ' href="#" onclick="return false;"';
 				if(!empty($b['attr']))
 				{
@@ -65,7 +72,7 @@ class BellView extends View
 					$close = '<span onclick="info.delBell('.$b['id'].');return false;" class="button close"><i class="fa fa-close"></i></span>';
 				}
 				
-				$list .= '<li id="belllist-'.$b['id'].'"><a'.$attr.'>'.$close.$icon.'<span class="names">'.sv($b['name'],$b['vars']).'</span><span class="msg">'.sv($b['body'],$b['vars']).'</span><span class="time">'.niceDate($b['time_ts']).'</span><span class="clear"></span></a></li>';
+				$list .= '<li id="belllist-'.$b['id'].'" class="unread-'.$unread.'"><a'.$attr.'>'.$close.$icon.'<span class="names">'.sv($b['name'],$b['vars']).'</span><span class="msg">'.sv($b['body'],$b['vars']).'</span><span class="time">'.niceDate($b['time_ts']).'</span><span class="clear"></span></a></li>';
 			}
 		}
 		else

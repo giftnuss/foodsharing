@@ -3381,7 +3381,7 @@ GROUP BY foodsaver_id'));
 	
 	public function changeBetriebStatus($bid,$status)
 	{
-		$last = $this->qRow('SELECT id,milestone FROM `'.PREFIX.'betrieb_notiz` WHERE `betrieb_id` = '.(int)$bid.' ORDER BY id DESC LIMIT 1');
+		$last = $this->qRow('SELECT id, milestone FROM `'.PREFIX.'betrieb_notiz` WHERE `betrieb_id` = '.(int)$bid.' ORDER BY id DESC LIMIT 1');
 		
 		if($last['milestone'] == 3)
 		{
@@ -3779,9 +3779,9 @@ GROUP BY foodsaver_id'));
 			`sticker`,
 			`abholmenge`,
 			`team_status`,
-      `prefetchtime`,
-      `team_conversation_id`,
-      `springer_conversation_id`
+		      `prefetchtime`,
+		      `team_conversation_id`,
+		      `springer_conversation_id`
 			
 			FROM 		`'.PREFIX.'betrieb`
 			

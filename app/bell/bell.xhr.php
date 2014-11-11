@@ -20,6 +20,49 @@ class BellXhr extends Control
 		
 		$xhr = new Xhr();
 		$bells = $this->model->listBells(20);
+		
+		// additionall add bell for betrieb verantwortliche
+		if(isset($_SESSION['client']['verantwortlich']))
+		{
+			$ids = array();
+			foreach ($_SESSION['client']['verantwortlich']as $v)
+			{
+				$ids[] = (int)$v['betrieb_id'];
+			}
+			if(!empty($ids))
+			{
+				if($betrieb_bells = $this->model->getBetriebBells($ids))
+				{
+					$bbells = array();
+					
+					foreach ($betrieb_bells as $b)
+					{
+						$bbells[]= array(
+							'id'=> 'b-'.$b['id'],
+							'name' => 'betrieb_fetch_title',
+							'body' => 'betrieb_fetch',
+							'vars' => array(
+								'betrieb' => $b['name'],
+								'count' => $b['count']
+							),
+							'attr' => array(
+								'href' => '?page=fsbetrieb&id='.$b['id']
+							),
+							'icon' => 'img img-store brown',
+							'time' => $b['date'],
+							'time_ts' => $b['date_ts'],
+							'seen' => 0,
+							'closeable' => 0
+						);
+					}
+					
+					$bells = array_merge($bbells,$bells);
+				}
+			}
+		}
+		
+		
+		
 		$xhr->addData('html', $this->view->bellList($bells));
 		
 		$xhr->send();
