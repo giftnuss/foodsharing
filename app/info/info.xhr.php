@@ -32,7 +32,27 @@ class InfoXhr extends Control
 	public function initbadge()
 	{
 		$xhr = new Xhr();
-		$xhr->addData('bell', (int)$this->model->qOne('SELECT COUNT(bell_id) FROM '.PREFIX.'foodsaver_has_bell WHERE foodsaver_id = '.(int)fsId().' AND seen = 0'));
+		
+		$bell = (int)$this->model->qOne('SELECT COUNT(bell_id) FROM '.PREFIX.'foodsaver_has_bell WHERE foodsaver_id = '.(int)fsId().' AND seen = 0');
+		
+		// extra bells for betrieb
+		if(isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich']))
+		{
+			$ids = array();
+			foreach ($_SESSION['client']['verantwortlich']as $v)
+			{
+				$ids[] = (int)$v['betrieb_id'];
+			}
+			if(!empty($ids))
+			{
+				if($betrieb_bells = $this->model->getBetriebBells($ids))
+				{
+					$bell += (int)$this->model->qOne('SELECT COUNT( betrieb_id ) FROM fs_abholer a WHERE betrieb_id IN('.implode(',',$ids).') AND confirmed = 0 ');
+				}
+			}
+		}
+		
+		$xhr->addData('bell', $bell);
 		$xhr->addData('msg', (int)$this->model->qOne('SELECT COUNT(conversation_id) FROM '.PREFIX.'foodsaver_has_conversation WHERE foodsaver_id = '.(int)fsId().' AND unread = 1'));
 		$xhr->addData('basket',0);
 		
