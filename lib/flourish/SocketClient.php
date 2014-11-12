@@ -110,6 +110,10 @@ class SocketClient
 			$max_try--;
 			if($max_try == 0)
 			{
+				$id = uniqid();
+				
+				file_put_contents(ROOT_DIR . 'data/lostmessage/' . $id .'.msg',$message );
+				
 				return false;
 				break;
 			}
