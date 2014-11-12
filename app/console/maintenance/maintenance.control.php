@@ -14,7 +14,7 @@ class MaintenanceControl extends ConsoleControl
 		 * update bezirk ids
 		 * there is this old 1:n relation foodsaver <=> bezirk we just check in one step the relation table
 		 */
-		$this->updateBezirkIds();
+		//$this->updateBezirkIds();
 		
 		/*
 		 * fill memcache with info about users if they want information mails etc..

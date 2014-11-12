@@ -305,7 +305,10 @@ class SettingsControl extends Control
 				else
 				{
 					Mem::delPageCache('/?page=dashboard');
-					$this->model->updateRole(1,$this->foodsaver['rolle']);
+					if(!S::may('fs'))
+					{
+						$this->model->updateRole(1,$this->foodsaver['rolle']);
+					}
 					info('Danke! Du bist jetzt Foodsaver');
 					go('?page=relogin&url=' . urlencode('?page=dashboard'));
 				}
