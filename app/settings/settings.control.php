@@ -67,11 +67,12 @@ class SettingsControl extends Control
 		
 		//$menu[] = array();
 		
-		/*
+		
 		if($this->foodsaver['rolle'] == 0)
 		{
 			$menu[] = array('name'=>'Werde '.getRolle($this->foodsaver['geschlecht'], 1),'href'=> '?page=settings&sub=upgrade/up_fs');
 		}
+		/*
 		else if($this->foodsaver['rolle'] == 1)
 		{
 			$menu[] = array('name'=>'Werde '.getRolle($this->foodsaver['geschlecht'], 2),'href'=> '?page=settings&sub=upgrade/up_bip');

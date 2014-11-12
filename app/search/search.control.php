@@ -9,6 +9,10 @@ class SearchControl extends Control
 		
 		parent::__construct();
 		
+		if(!S::may('fs'))
+		{
+			go('?page=dashboard');
+		}
 	}
 	
 	public function index()
