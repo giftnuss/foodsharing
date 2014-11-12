@@ -595,21 +595,7 @@ function v_bezirkChooser($id = 'bezirk_id',$bezirk = false,$option = array())
 
 function v_msgBar()
 {
-
-	$searchbar = '';
-	if(S::may('fs'))
-	{
-		$searchbar = '
-			<div id="searchbar">
-			<i class="fa fa-search"></i><input type="text" value="" placeholder="'.s('search').'..." />
-			<div class="result-wrapper" style="display:none;">
-				<ul class="linklist index"></ul>
-				<ul class="linklist result"></ul>
-				<ul class="linklist more">
-					<li><a class="more" onclick="goTo(\'?page=search&q=\' + encodeURIComponent($(\'#searchbar input\').val()));return false;" href="#">Alle Ergebnisse</a></li>	
-				</ul>
-			</div>';
-	}
+	
 	
 	return '<ul id="infobar">
 				<li class="msg">
@@ -648,7 +634,15 @@ function v_msgBar()
 				</li>
 			</ul>
 			
-			'.$searchbar.'
+			<div id="searchbar">
+			<i class="fa fa-search"></i><input type="text" value="" placeholder="'.s('search').'..." />
+			<div class="result-wrapper" style="display:none;">
+				<ul class="linklist index"></ul>
+				<ul class="linklist result"></ul>
+				<ul class="linklist more">
+					<li><a class="more" onclick="goTo(\'?page=search&q=\' + encodeURIComponent($(\'#searchbar input\').val()));return false;" href="#">Alle Ergebnisse</a></li>	
+				</ul>
+			</div>
 		</div>';
 }
 
