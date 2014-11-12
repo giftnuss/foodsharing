@@ -272,12 +272,9 @@ else if(S::may('fs'))
 	
 	
 	}
-	/*
-	$testcount = $db->quizSessionTestCount();
-	if($testcount < 126)
-	{
-		addJs('ajreq("testquiz",{app:"quiz"});');
-	}*/
+	
+	// quiz popup
+	addJs('ajreq("quizpopup",{app:"quiz",loader:false});');
 	
 	if(!getBezirkId())
 	{
