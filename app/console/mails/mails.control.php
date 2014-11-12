@@ -250,10 +250,55 @@ class MailsControl extends ConsoleControl
 				}
 			}
 		}
-		
+		$model = false;
 		foreach ($data['recipients'] as $r)
 		{
-			$email->addRecipient($r[0],$r[1]);
+			// check is it own lmr email? put direct into db
+			$r[0] = strtolower($r[0]);
+			if(
+				substr(
+					$r[0],
+					(strlen(DEFAULT_HOST)*-1),
+					strlen(DEFAULT_HOST)
+				) == DEFAULT_HOST
+			)
+			{
+				info($r[0].' own host save direct into db');
+				if($model === false)
+				{
+					$model = loadModel('mailbox');
+				}
+				
+				$mailbox = str_replace('@'.DEFAULT_HOST,'',$r[0]);
+				
+				$mb_id = getMailboxId($mailbox);
+				if(!$mb_id)
+				{
+					// lost mailbox id
+					$mb_id = 25631;
+				}
+				
+				$toarr = array();
+				foreach ($data['recipients'] as $r)
+				{
+					$toarr[] = MailsControl::parseEmailAddress($r[0],$r[1]);
+				}
+				
+				$model->saveMessage(
+						$mb_id, // mailbox id
+						1, // folder inbox
+						json_encode(MailsControl::parseEmailAddress($data['from'][0],$data['from'][1])), // sender
+						json_encode($toarr), // to
+						$data['subject'], // subject
+						$data['body'],
+						$data['html'],
+						date('Y-m-d H:i:s') // time,
+				);
+			}
+			else
+			{
+				$email->addRecipient($r[0],$r[1]);
+			}
 		}
 		
 		// reconnect first time and force after 60 seconds inactive
@@ -300,6 +345,22 @@ class MailsControl extends ConsoleControl
 		}
 		
 		return true;
+	}
+	
+	public static function parseEmailAddress($email,$name = false)
+	{
+		$p = explode('@',$email);
+		
+		if($name === false)
+		{
+			$name = $email;
+		}
+		
+		return array(
+			'personal' => $name,
+			'mailbox' => $p[0],
+			'host' => $p[1]
+		);
 	}
 	
 	/**
