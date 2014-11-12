@@ -17,10 +17,15 @@ class SearchModel extends Model
 			$children = $this->getChildBezirke($this->getCurrentBezirkId());
 		}
 	
+		$teaser = 'stadt';
+		if(S::may('orga'))
+		{
+			$teaser = 'IF(`photo_public` BETWEEN 1 AND 3, CONCAT(`anschrift`,", ",`plz`," ",`stadt`), "")';
+		}
 		if($res = $this->searchTable('foodsaver', array('name','nachname','plz','stadt'), $q,array(
 				'name' => 'CONCAT(`name`," ",`nachname`)',
 				'click' => 'CONCAT("profile(",`id`,");")',
-				'teaser' => 'IF(`photo_public` BETWEEN 1 AND 3, CONCAT(`anschrift`,", ",`plz`," ",`stadt`), "")'
+				'teaser' => $teaser
 		
 		),$children))
 		{

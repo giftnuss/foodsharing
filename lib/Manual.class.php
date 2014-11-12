@@ -421,16 +421,18 @@ GROUP BY foodsaver_id'));
 			}
 		}
 		
-		if($res = $this->searchTable('foodsaver', array('name','nachname','plz','stadt'), $q,array(
-				'name' => 'CONCAT(`name`," ",`nachname`)',
-				'click' => 'CONCAT("profile(",`id`,");")',
-				'teaser' => 'IF(`photo_public` BETWEEN 1 AND 3, CONCAT(`anschrift`,", ",`plz`," ",`stadt`), "")'
-				
-		),$children))
+		if(S::may('fs'))
 		{
-			$out['foodsaver'] = $res;
+			if($res = $this->searchTable('foodsaver', array('name','nachname','plz','stadt'), $q,array(
+					'name' => 'CONCAT(`name`," ",`nachname`)',
+					'click' => 'CONCAT("profile(",`id`,");")',
+					'teaser' => 'stadt'
+					
+			),$children))
+			{
+				$out['foodsaver'] = $res;
+			}
 		}
-		
 		if(S::may('fs'))
 		{
 			if($res = $this->searchTable('betrieb', array('name','stadt','plz'), $q,array(
