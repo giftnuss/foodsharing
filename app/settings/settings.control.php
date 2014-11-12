@@ -211,6 +211,7 @@ class SettingsControl extends Control
 				// 3x nicht bestanden 30 Tage Lernpause
 				else if($status['failed'] == 3 && (time() - $status['last_try']) < (86400*30))
 				{
+					$this->model->updateRole(0,$this->foodsaver['rolle']);
 					$days_to_wait = ((time() - $status['last_try']) - (86400*30) / 30);
 					return $this->view->pause($days_to_wait,$desc);
 				}
