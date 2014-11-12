@@ -12,7 +12,7 @@ class SearchXhr extends Control
 	
 	public function search()
 	{
-		if(S::may())
+		if(S::may('fs'))
 		{
 			if($res = $this->model->search($_GET['s']))
 			{
