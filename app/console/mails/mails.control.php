@@ -266,12 +266,12 @@ class MailsControl extends ConsoleControl
 				info($r[0].' own host save direct into db');
 				if($model === false)
 				{
-					$model = loadModel('mailbox');
+					$model = new MailsModel();
 				}
 				
 				$mailbox = str_replace('@'.DEFAULT_HOST,'',$r[0]);
 				
-				$mb_id = getMailboxId($mailbox);
+				$mb_id = $model->getMailboxId($mailbox);
 				if(!$mb_id)
 				{
 					// lost mailbox id
@@ -299,6 +299,12 @@ class MailsControl extends ConsoleControl
 			{
 				$email->addRecipient($r[0],$r[1]);
 			}
+		}
+		
+		if($model !==false)
+		{
+			$model->close();
+			$model = false;
 		}
 		
 		// reconnect first time and force after 60 seconds inactive

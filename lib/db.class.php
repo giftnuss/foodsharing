@@ -864,6 +864,11 @@ class Db
 		@$this->mysqli->close();
 	}
 	
+	public function close()
+	{
+		@$this->mysqli->close();
+	}
+	
 	public function safe($str)
 	{
 		return $this->mysqli->escape_string($str);

@@ -47,6 +47,13 @@ class MailsModel extends ConsoleModel
 		');
 	}
 	
+	public function getMailboxId($mb_name)
+	{
+		return $this->qOne('
+			SELECT id FROM '.PREFIX.'mailbox WHERE `name` = '.$this->strval($mb_name).'
+		');
+	}
+	
 	public function getMailboxIds($mb_names)
 	{
 		$where = array();
