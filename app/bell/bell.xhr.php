@@ -55,8 +55,14 @@ class BellXhr extends Control
 							'closeable' => 0
 						);
 					}
-					
-					$bells = array_merge($bbells,$bells);
+					if($bells)
+					{
+						$bells = array_merge($bbells,$bells);
+					}
+					else
+					{
+						$bells = $bbells;
+					}
 				}
 			}
 		}

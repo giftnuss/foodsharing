@@ -2036,6 +2036,12 @@ GROUP BY foodsaver_id'));
 		{
 			$fsid = ',`fs_id` = '.$this->intval($data['fs_id']).'';
 		}
+		
+		$rolle = '';
+		if(isset($data['rolle']))
+		{
+			$rolle = '`rolle` =  ' . $this->intval($data['rolle']) . ',';
+		}
 
 		return $this->update('
 		
@@ -2054,7 +2060,7 @@ GROUP BY foodsaver_id'));
 				`telefon` =  ' . $this->strval($data['telefon']) . ',
 				`handy` =  ' . $this->strval($data['handy']) . ',
 				`geschlecht` =  ' . $this->intval($data['geschlecht']) . ',
-				`rolle` =  ' . $this->intval($data['rolle']) . ',
+				'.$rolle.'
 				`geb_datum` =  ' . $this->dateval($data['geb_datum']) . '
 				' . $orga . '
 				' . $fsid . '

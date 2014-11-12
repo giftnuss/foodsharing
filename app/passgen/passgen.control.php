@@ -265,22 +265,26 @@ class PassgenControl extends Control
 				0 => array(
 						0 => 'Freiwilliger',
 						1 => 'Foodsaver',
-						2 => 'Botschafter'
+						2 => 'Betriebsverantwortliche/r',
+						3 => 'Botschafter'
 				),
 				1 => array(
 						0 => 'Freiwilliger',
 						1 => 'Foodsaver',
-						2 => 'Botschafter'
+						2 => 'Betriebsverantwortlicher',
+						3 => 'Botschafter'
 				),
 				2 => array(
 						0 => 'Freiwillige',
 						1 => 'Foodsaverin',
-						2 => 'Botschafterin'
+						2 => 'Betriebsverantwortliche',
+						3 => 'Botschafterin'
 				),
 				3 => array(
 						0 => 'Freiwillige/r',
 						1 => 'Foodsave/r',
-						2 => 'Botschafte/r'
+						2 => 'Betriebsverantwortliche/r',
+						3 => 'Botschafte/r'
 				)
 		);
 		return $rolle[$gender_id][$rolle_id];
