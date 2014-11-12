@@ -305,6 +305,7 @@ class SettingsControl extends Control
 				}
 				else
 				{
+					S::set('hastodoquiz',false);
 					Mem::delPageCache('/?page=dashboard');
 					if(!S::may('fs'))
 					{

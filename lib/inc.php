@@ -232,6 +232,36 @@ else
 }
 
 /*
+ * temporary quiz stuff
+ */
+$quizinfo = '';
+if(S::get('hastodoquiz'))
+{
+	addJs('
+		$(window).resize(function(){
+			if($(window).width() < 990)
+			{
+				$("#quizinfobadge").hide();
+			}
+			else
+			{
+				$("#quizinfobadge").show();
+			}
+		});
+		if($(window).width() < 990)
+		{
+			$("#quizinfobadge").hide();
+		}
+	');
+	$quizinfo = '
+	<a onmouseout="$(this).css({opacity:1});" onmouseover="$(this).css({opacity:0.8});" id="quizinfobadge" href="#" onclick="ajreq(\'quizpopup\',{app:\'quiz\'});$(this).css({left:\'-300px\'});return false;" style="padding:8px;display:block;text-align:center;position:fixed;left:0px;top:50%;height:93px;width:100px;margin-top:-50px;background-color:#46891b;" class="ui-shadow corner-right">
+		<i style="color:#fff;font-size:30px;" class="fa fa-bullhorn"></i>
+		<h3 style="font-family:\'Alfa Slab One\';font-weight:normal;color:#ffffff;font-size:17px;">Quiz schon gemacht?</h3>
+		<span style="font-size:11px;color:#fff;">(bis 12/12/2014)</span>
+	</a>';
+}
+
+/*
 addHead('
 <script type="text/javascript">
 

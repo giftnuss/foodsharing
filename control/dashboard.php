@@ -274,7 +274,7 @@ else if(S::may('fs'))
 	}
 	
 	// quiz popup
-	addJs('ajreq("quizpopup",{app:"quiz",loader:false});');
+	//addJs('ajreq("quizpopup",{app:"quiz",loader:false});');
 	
 	if(!getBezirkId())
 	{

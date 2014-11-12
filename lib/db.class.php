@@ -1116,6 +1116,20 @@ class Db
 				'lon' => $fs['lon']		
 			));
 			
+			/*
+			 * temporary special stuff for quiz
+			 */
+			if((int)$fs['rolle'] > 0)
+			{
+				$count = (int)$this->qOne('SELECT COUNT(id) FROM '.PREFIX.'quiz_session WHERE foodsaver_id = '.(int)fsId().' AND quiz_id = 1 AND `status` = 1');
+				if($count == 0)
+				{
+					S::set('hastodoquiz',true);
+				}
+			}
+
+			
+			
 			$mailbox = false;
 			if((int)$fs['mailbox_id'] > 0)
 			{

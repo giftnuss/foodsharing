@@ -22,17 +22,26 @@ class ProfileXhr extends Control
 		if(isset($_GET['id']))
 		{
 			$this->model->setFsId($_GET['id']);
-			if($fs = $this->model->getData($_GET['id']))
+			$fs = $this->model->getData($_GET['id']);
+			
+			if(isset($fs['id']))
 			{
 				$this->foodsaver = $fs;
 				/*
-				 * -1: no buddy 
-				 *  0: requested
-				 *  1: buddy
-				 */
+					* -1: no buddy
+					*  0: requested
+					*  1: buddy
+				*/
 				$this->foodsaver['buddy'] = $this->model->buddyStatus($this->foodsaver['id']);
 				
 				$this->view->setData($this->foodsaver);
+			}
+			else
+			{
+				$this->model->delBells('new-fs-'.(int)$_GET['id']);
+				return array(
+						'status' => 0
+				);
 			}
 		}
 	}

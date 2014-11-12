@@ -2,7 +2,6 @@
 
 $mainwidth = 24;
 
-
 if(!empty($content_left))
 {
 	$mainwidth -= $content_left_width;
@@ -119,6 +118,7 @@ if(!empty($content_left) && !empty($content_right))
 
 		<?php echo $content_bottom; ?>
 	</div>
+	<?php echo $quizinfo; ?>
 	<noscript>
 		<div id="nojs">Ohne Javascript l&auml;ft hier leider nix!</div>
 	</noscript> 
