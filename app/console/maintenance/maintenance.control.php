@@ -60,7 +60,7 @@ class MaintenanceControl extends ConsoleControl
 		/*
 		 * some updates for new user management
 		*/
-		$this->model->updateRolle();
+		//$this->model->updateRolle();
 	}
 	
 	public function test()
