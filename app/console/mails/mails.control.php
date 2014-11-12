@@ -255,6 +255,12 @@ class MailsControl extends ConsoleControl
 		{
 			// check is it own lmr email? put direct into db
 			$r[0] = strtolower($r[0]);
+			$has_recip = false;
+			info(substr(
+					$r[0],
+					(strlen(DEFAULT_HOST)*-1),
+					strlen(DEFAULT_HOST)
+				));
 			if(
 				substr(
 					$r[0],
@@ -298,6 +304,7 @@ class MailsControl extends ConsoleControl
 			else
 			{
 				$email->addRecipient($r[0],$r[1]);
+				$has_recip = true;
 			}
 		}
 		
@@ -305,6 +312,10 @@ class MailsControl extends ConsoleControl
 		{
 			$model->close();
 			$model = false;
+			if(!$has_recip)
+			{
+				return true;
+			}
 		}
 		
 		// reconnect first time and force after 60 seconds inactive
