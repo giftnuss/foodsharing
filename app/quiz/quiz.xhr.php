@@ -407,20 +407,24 @@ class QuizXhr extends Control
 	
 	public function quizpopup()
 	{
-		if(S::may('fs') && (int)$this->model->qOne('SELECT COUNT(id) FROM '.PREFIX.'quiz_session WHERE foodsaver_id = '.(int)fsId().' AND quiz_id = 1 AND `status` = 1') > 1)
+		if(S::may('fs'))
 		{
-			$dia = new XhrDialog();
-			$content = $this->model->getContent(18);
-			$dia->setTitle($content['title']);
-			
-			$dia->addOpt('width', 575);
-			
-			$dia->addContent($content['body']);
-			
-			$dia->addAbortButton();
-			$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Foodsaver Rolle bestätigen!', 'goTo(\'?page=settings&sub=upgrade/up_fs\');');
-			
-			return $dia->xhrout();
+			$count = (int)$this->model->qOne('SELECT COUNT(id) FROM '.PREFIX.'quiz_session WHERE foodsaver_id = '.(int)fsId().' AND quiz_id = 1 AND `status` = 1');
+			if($count == 0)
+			{
+				$dia = new XhrDialog();
+				$content = $this->model->getContent(18);
+				$dia->setTitle($content['title']);
+					
+				$dia->addOpt('width', 575);
+					
+				$dia->addContent($content['body']);
+					
+				$dia->addAbortButton();
+				$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Foodsaver Rolle bestätigen!', 'goTo(\'?page=settings&sub=upgrade/up_fs\');');
+					
+				return $dia->xhrout();
+			}
 		}
 		return array(
 			'status' => 0
