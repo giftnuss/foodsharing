@@ -530,7 +530,7 @@ class QuizModel extends Model
 		$status = 2;
 		
 		// quiz fertig und bestanden
-		if($fp < $maxfp)
+		if($fp <= $maxfp)
 		{
 			$status = 1;
 		}
