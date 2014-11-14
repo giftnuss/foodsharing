@@ -1590,7 +1590,6 @@ function xhr_continueMail($data)
 {
 	if(isOrgaTeam() || isBotschafter())
 	{
-		require_once 'lib/libmail_170.php';
 		global $db;
 		$mail_id = (int)$data['id'];
 		
