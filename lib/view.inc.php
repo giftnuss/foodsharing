@@ -927,6 +927,7 @@ function v_form_recip_chooser()
 			<option value="bezirk" selected="selected">'.sv('recip_all_bezirk',$bezirk['name']).'</option>
 			<option value="choose">'.s('recip_choose_bezirk').'</option>
 			<option value="choosebot">Botschafter in bestimmten Bezirken</option>
+			<option value="after_update">nach dickem update User</option>
 			<option value="manual">Manuelle Eingabe</option>
 		</select>
 		<div id="'.$id.'-hidden" style="display:none">

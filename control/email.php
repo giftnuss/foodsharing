@@ -243,6 +243,21 @@ function handleEmail()
 					$foodsaver = $db->getEmailFoodSaverFromBezirkList($data['recip_choose-choose']);
 				}
 			}
+			else if($data['recip_choose'] == 'after_update')
+			{
+				$foodsaver = $db->q('
+					SELECT id, email, name, geschlecht, nachname
+						
+					FROM
+						'.PREFIX.'foodsaver
+
+					WHERE
+						active = 0
+						
+					OR
+						anmeldedatum > "2014-11-06 00:00:00"
+				');
+			}
 		}
 		else
 		{
