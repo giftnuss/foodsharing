@@ -822,7 +822,7 @@ GROUP BY foodsaver_id'));
 		');
 		
 		$model = loadModel('msg');
-		if($cid = $model->$this->addConversation(array($sender_id=> $sender_id,$recip_id=>$recip_id),false,false))
+		if($cid = $model->addConversation(array($sender_id=> $sender_id,$recip_id=>$recip_id),false,false))
 		{
 			$model->sendMessage($cid,$message,$sender_id);
 			mailMessage($sender_id,$recip_id,$message);
@@ -858,7 +858,7 @@ GROUP BY foodsaver_id'));
 		*/
 	
 		$model = loadModel('msg');
-		if($cid = $model->$this->addConversation(array($data['sender_id']=> $data['sender_id'],$data['recip_id']=>$data['recip_id']),false,false))
+		if($cid = $model->addConversation(array($data['sender_id']=> $data['sender_id'],$data['recip_id']=>$data['recip_id']),false,false))
 		{
 			$model->sendMessage($cid,$data['msg'],$data['sender_id']);
 		}
