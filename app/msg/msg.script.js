@@ -152,6 +152,10 @@ var msg = {
 			cid = gcid;
 			this.loadConversation(cid);
 		}
+		else if(GET('u2c') != undefined)
+		{
+			conv.userChat(parseInt(GET('u2c')));
+		}
 		else if($('#conversation-list ul li a').length > 0)
 		{
 			cid = $('#conversation-list ul li:first').attr('id').split('-')[1];

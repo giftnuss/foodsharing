@@ -19,12 +19,15 @@ class MsgModel extends Model
 	 * @param array $recips
 	 * @param string $body
 	 */
-	public function addConversation($recips,$body = false)
+	public function addConversation($recips,$body = false,$own = true)
 	{
 		/*
 		 * add the current user to the recipients
 		 */
-		$recips[(int)fsId()] = (int)fsId();
+		if($own)
+		{
+			$recips[(int)fsId()] = (int)fsId();
+		}
 		
 		/*
 		 * make sure the order of this array
@@ -479,10 +482,14 @@ class MsgModel extends Model
 		return false;
 	}
 	
-	public function sendMessage($cid,$body)
+	public function sendMessage($cid,$body,$sender_id = false)
 	{
 		if($mid = $this->insert('INSERT INTO `'.PREFIX.'msg`(`conversation_id`, `foodsaver_id`, `body`, `time`) VALUES ('.(int)$cid.','.(int)fsId().','.$this->strval($body).',NOW())'))
 		{
+			if(!$sender_id)
+			{
+				$sender_id = fsId();
+			}
 			$this->update('UPDATE `'.PREFIX.'foodsaver_has_conversation` SET unread = 1 WHERE conversation_id = '.(int)$cid.' AND `foodsaver_id` != '.(int)fsId());
 			$this->updateConversation($cid, fsId(), $body, $mid);
 			return $mid;

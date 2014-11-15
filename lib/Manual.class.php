@@ -820,13 +820,20 @@ GROUP BY foodsaver_id'));
 			INSERT INTO `'.PREFIX.'message` ( sender_id, recip_id, unread, name, msg, time, attach) 
 			VALUES('.$this->intval($sender_id).','.$this->intval($recip_id).',1,'.$this->strval($name).','.$this->strval($message).',"'.date('Y-m-d H:i:s').'",'.$this->strval($attach).' )		
 		');
-		mailMessage($sender_id,$recip_id,$message);
+		
+		$model = loadModel('msg');
+		if($cid = $model->$this->addConversation(array($sender_id=> $sender_id,$recip_id=>$recip_id),false,false))
+		{
+			$model->sendMessage($cid,$message,$sender_id);
+			mailMessage($sender_id,$recip_id,$message);
+		}
 
 		return $id;
 	}
 	
 	public function add_message($data)
 	{
+		/*
 		$id = $this->insert('
 			INSERT INTO 	`'.PREFIX.'message`
 			(
@@ -848,8 +855,13 @@ GROUP BY foodsaver_id'));
 			'.$this->dateval($data['time']).',
 			'.$this->strval($data['attach']).'
 			)');
+		*/
 	
-	
+		$model = loadModel('msg');
+		if($cid = $model->$this->addConversation(array($data['sender_id']=> $data['sender_id'],$data['recip_id']=>$data['recip_id']),false,false))
+		{
+			$model->sendMessage($cid,$data['msg'],$data['sender_id']);
+		}
 	
 		return $id;
 	}

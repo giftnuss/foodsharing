@@ -2476,7 +2476,7 @@ function mailMessage($sender_id,$recip_id,$msg=NULL)
 				if (!isset($msg))
 				{
 					// FIXME this is error-prone;
-					$msg = $db->qOne('SELECT msg FROM '.PREFIX.'message WHERE sender_id = '.(int)$sender_id.' AND recip_id = '.(int)$recip_id.' ORDER BY id DESC LIMIT 1');
+					$msg = '';
 				}
 				
 				tplMail(9, $foodsaver['email'],array(
@@ -2484,7 +2484,7 @@ function mailMessage($sender_id,$recip_id,$msg=NULL)
 					'sender' => $sender['name'],
 					'name' => $foodsaver['name'],
 					'message' => $msg,
-					'link' => BASE_URL.'?page=message&conv='.(int)$sender_id
+					'link' => BASE_URL.'?page=msg&u2c='.(int)$sender_id
 				));
 			}
 			
