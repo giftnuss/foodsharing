@@ -66,7 +66,7 @@ class BellModel extends Model
 	
 	public function getBetriebBells($bids)
 	{
-		return $this->q('SELECT COUNT( b.id ) AS count, b.name, b.id, MAX( a.date ) AS `date`, UNIX_TIMESTAMP(MAX( a.date )) AS date_ts FROM `fs_betrieb` b, fs_abholer a	WHERE a.betrieb_id = b.id AND a.betrieb_id IN('.implode(',',$bids).') AND	a.confirmed = 0 GROUP BY b.id');
+		return $this->q('SELECT COUNT( b.id ) AS count, b.name, b.id, MAX( a.date ) AS `date`, UNIX_TIMESTAMP(MAX( a.date )) AS date_ts FROM `fs_betrieb` b, fs_abholer a	WHERE a.betrieb_id = b.id AND a.betrieb_id IN('.implode(',',$bids).') AND	a.confirmed = 0  AND a.`date` > NOW() GROUP BY b.id');
 	}
 	
 	public function delbell($id)

@@ -581,7 +581,7 @@ class Control
   							'sender' => $sender['name'],
   							'name' => $foodsaver['name'],
   							'message' => $msg,
-  							'link' => BASE_URL.'?page=message&conv='.(int)$sender_id
+  							'link' => BASE_URL.'?page=msg&u2c='.(int)$sender_id
   					));
   				}
   	
