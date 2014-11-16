@@ -1269,7 +1269,7 @@ function emailBodyTpl($message, $email = false, $token = false)
 </html>';
 }
 
-function tplMail($tpl_id,$to,$var = array(),$from_bezirk_id = false,$from_email = false)
+function tplMail($tpl_id,$to,$var = array(),$from_email = false,$from_email = false)
 {
 	global $db;
 	$mail = new SocketMail();
@@ -1290,7 +1290,14 @@ function tplMail($tpl_id,$to,$var = array(),$from_bezirk_id = false,$from_email 
 	}
 	*/
 	
-	$mail->setFrom(DEFAULT_EMAIL,DEFAULT_EMAIL_NAME);
+	if($from_email !== false && validEmail($from_email))
+	{
+		$mail->setFrom($from_email);
+	}
+	else
+	{
+		$mail->setFrom(DEFAULT_EMAIL,DEFAULT_EMAIL_NAME);
+	}
 	
 	$message = $db->getOne_message_tpl($tpl_id);
 	
