@@ -58,6 +58,12 @@ class DashboardControl extends Control
 		
 		addContent($this->view->foodsharerMenu(),CNT_LEFT);
 		
+		if((int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = '.(int)fsId()) == 0)
+		{
+			$cnt = $this->model->getContent(33);
+			addContent(v_info($cnt['body'],$cnt['title']));	
+		}
+		
 		if($this->user['lat'] && ($baskets = $this->model->listCloseBaskets(50)))
 		{
 			addContent($this->view->closeBaskets($baskets));

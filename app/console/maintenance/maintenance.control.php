@@ -289,22 +289,25 @@ class MaintenanceControl extends ConsoleControl
 			{
 				if(!$this->model->qRow('SELECT bezirk_id FROM `'.PREFIX.'foodsaver_has_bezirk` WHERE foodsaver_id = '.(int)$fs['foodsaver_id'].' AND bezirk_id = '.$fs['master']))
 				{
-					$this->model->insert('
-					INSERT INTO `'.PREFIX.'foodsaver_has_bezirk`
-					(
-						`foodsaver_id`,
-						`bezirk_id`,
-						`active`,
-						`added`
-					)
-					VALUES
-					(
-						'.(int)$fs['foodsaver_id'].',
-						'.(int)$fs['master'].',
-						1,
-						NOW()
-					)
-					');
+					if((int)$fs['master'] > 0)
+					{
+						$this->model->insert('
+						INSERT INTO `'.PREFIX.'foodsaver_has_bezirk`
+						(
+							`foodsaver_id`,
+							`bezirk_id`,
+							`active`,
+							`added`
+						)
+						VALUES
+						(
+							'.(int)$fs['foodsaver_id'].',
+							'.(int)$fs['master'].',
+							1,
+							NOW()
+						)
+						');
+					}
 				}
 			}
 		}

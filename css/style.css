@@ -1598,6 +1598,10 @@ div.statdisplay span.item
 	text-align: center;
 	width:62px;
 }
+div.statdisplay span.item span
+{
+	color: #FAFAFC;
+}
 div.statdisplay span.item .val
 {
 	font-size:17px;

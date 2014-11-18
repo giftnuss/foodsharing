@@ -134,7 +134,10 @@
     padding:0;
     margin-bottom:-4px;
 }
-
+#msg-conversation-title, #msg-conversation-title i
+{
+	color:#fff;
+}
 @media all and (max-width:600px)
 {
 	body

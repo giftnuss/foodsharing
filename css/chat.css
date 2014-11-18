@@ -256,6 +256,7 @@
 	margin-right:3px;
 	position:relative;
 	top:-1px;
+    color: #FFFFFF;
 }
 .chatboxtitle, .chatboxtitle:hover, .chatboxtitle:active, .chatboxtitle:focus {
     outline: 0 !important;

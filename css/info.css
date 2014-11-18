@@ -22,8 +22,12 @@
     text-align: center;
     width: 32px;
     -webkit-border-radius: 6px;
--moz-border-radius: 6px;
-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
+#infobar > li > a > i
+{
+	color: #ffffff;
 }
 #infobar > li > a, #infobar > li > a:focus, #infobar > li > a:hover, #infobar > li > a:active
 {
