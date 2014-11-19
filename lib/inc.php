@@ -72,6 +72,10 @@ addCss('/css/chat.css',true);
 addCss('/css/jquery.switchButton.css',true);
 addCss('/css/info.css',true);
 addCss('/css/icons.css',true);
+if (isMob())
+{
+	 addCss('css/style_mobile.css',true);
+}
 
 //addHead('<script src="'.PROTOCOL.'://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>');
 //addHead('<script src="'.PROTOCOL.'://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>');

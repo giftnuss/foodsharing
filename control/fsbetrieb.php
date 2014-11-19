@@ -1028,11 +1028,11 @@ function u_team($betrieb)
 		$tel = '';
 		if(!empty($fs['handy']))
 		{
-			$tel .= '<span class="item phone"><span>'.$fs['handy'].'</span></span>';
+			$tel .= '<span class="item phone">'.((isMob()) ? '<a href="tel:'.$fs['handy'].'"><span>'.$fs['handy'].'</span></a>' : $fs['handy']).'</span>';
 		}
 		if(!empty($fs['telefon']))
 		{
-			$tel .= '<span class="item phone"><span>'.$fs['telefon'].'</span></span>';
+			$tel .= '<span class="item phone">'.((isMob()) ? '<a href="tel:'.$fs['telefon'].'"><span>'.$fs['telefon'].'</span></a>' : $fs['telefon']).'</span>';
 		}
 		
 		$since = '';
@@ -1050,20 +1050,40 @@ function u_team($betrieb)
 			));
 		}
 		
-		$tmp = '
-			<li class="team fs-'.$fs['id'].'">
-				<a class="ui-corner-all'.$class.'" title="#tt-tt-'.$fs['id'].'" href="#" onclick="'.$click.'return false;">
-					'.avatar($fs).'
-					<span class="infos">
-						<span class="item"><strong>'.$fs['name'].'</strong> <span style="float:right">('.$fs['stat_fetchcount'].')</span></span>
-						'.$tel.'
+		if (isMob())
+		{
+			$tmp = '
+				<li class="team fs-'.$fs['id'].'">
+					<div class="ui-corner-all'.$class.'">
+						<a title="#tt-tt-'.$fs['id'].'" href="#" onclick="'.$click.'return false;">'.avatar($fs).'</a>
+							<span class="infos">
+								<span class="item name"><a href="#" onclick="'.$click.'return false;" title="#tt-tt-'.$fs['id'].'"><strong>'.$fs['name'].'</strong></a> <span style="float:right">('.$fs['stat_fetchcount'].')</span></span>
+								'.$tel.'
+							</span>
+				
+					</div>
+					<span style="display:none" class="tt-'.$fs['id'].'">
+						'.$fs['vorname'].' '.$since.'<br />
+						'.$last.'
 					</span>
-				</a>
-				<span style="display:none" class="tt-'.$fs['id'].'">
-					'.$fs['vorname'].' '.$since.'<br />
-					'.$last.'
-				</span>
-			</li>';
+				</li>';
+		}
+		else {
+			$tmp = '
+				<li class="team fs-'.$fs['id'].'">
+					<a class="ui-corner-all'.$class.'" title="#tt-tt-'.$fs['id'].'" href="#" onclick="'.$click.'return false;">
+						'.avatar($fs).'
+						<span class="infos">
+							<span class="item"><strong>'.$fs['name'].'</strong> <span style="float:right">('.$fs['stat_fetchcount'].')</span></span>
+							'.$tel.'
+						</span>
+					</a>
+					<span style="display:none" class="tt-'.$fs['id'].'">
+						'.$fs['vorname'].' '.$since.'<br />
+						'.$last.'
+					</span>
+				</li>';
+		}
 		
 		if($fs['sleep_status'] == 0)
 		{
@@ -1970,5 +1990,5 @@ function u_form_abhol_tableOld($zeiten = false,$option = array())
 
 	return $out;
 }
-				
+
 ?>
