@@ -3884,6 +3884,7 @@ GROUP BY foodsaver_id'));
 	{
 		return $this->q('
 				SELECT 		fs.`id`,
+							fs.`verified`,
 							fs.`active`,
 							fs.`telefon`,
 							fs.`handy`,

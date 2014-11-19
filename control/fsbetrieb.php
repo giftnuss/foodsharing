@@ -1018,6 +1018,11 @@ function u_team($betrieb)
 			$click = '';
 		}
 
+		if ($fs['verified']!=1)
+		{
+			$class .= ' notVerified';
+		}
+
 		$ampel = 'ampel-gruen';
 		
 		$tel = '';

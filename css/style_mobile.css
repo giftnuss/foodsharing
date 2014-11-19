@@ -35,3 +35,12 @@
 	background-color:#FFFFFF;
 	height:35px;
 }
+.mobile ul.team li div.notVerified
+{
+	background-color:#F3F3F3;
+}
+.mobile ul.team li div.notVerified .infos .item a strong,
+.mobile ul.team li div.notVerified .infos .item a span
+{
+	color:#C0C0C0
+}
