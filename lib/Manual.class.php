@@ -402,10 +402,10 @@ GROUP BY foodsaver_id'));
 		$out = array();
 
 		$children = false;
-		$bezirk_id = (int)$this->getCurrentBezirkId();
+		//$bezirk_id = (int)$this->getCurrentBezirkId();
 		if(!S::may('bot') && $bezirk_id > 0)
 		{
-			$children = $this->getChildBezirke($bezirk_id);
+			$children = $this->getBezirkIds();
 		}
 		
 		if(S::may('fs'))
