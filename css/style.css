@@ -867,6 +867,14 @@ ul.team li a.verantwortlich
 {
 	background-color:#DCC27E;
 }
+ul.team li a.notVerified
+{
+	background-color:#F3F3F3;
+}
+ul.team li a.notVerified .infos .item
+{
+	color:#C0C0C0
+}
 ul.team li.jumper
 {
 	opacity:0.4;
