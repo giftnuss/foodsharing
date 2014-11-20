@@ -71,37 +71,59 @@ class ApiXhr extends Control
 								'time' => date('Y-m-d H:i:s')
 							));
 
-							/*
-							if($member = $model->listConversationMember($conversation_id))
+							
+							if($member = $model->listConversationMembers($conversation_id))
 							{
-								$socket = new SocketClient();
+								$count = 0;
+								$socket = false;
+								
+								$push = new SocketPush();
+								$push->setConversationId($conversation_id);
+								$push->setMessage($message);
+								$push->setTitle('Neue Nachricht');
 								
 								foreach ($member as $m)
 								{
-									if(!empty($m['gcm']) || !empty($m['iosid']))
+									if($m['id'] != fsId())
 									{
-										$push = new SocketPush();
-										$push->setData(array(
+										//if(!empty($m['gcm']) || !empty($m['iosid']))
+										if(true)
+										{
+											$count++;
+											if($socket === false)
+											{
+												
+											}
 											
-										));
-										if(!empty($m['iosid']))
-										{
-											$push->setIos($m['iosid']);
-										}
-										if(!empty($m['gcm']))
-										{
-											$push->setGcm($m['gcm']);
-										}
+											/*	
+											if(!empty($m['iosid']))
+											{
+												$push->addIos($m['iosid']);
+											}
+											if(!empty($m['gcm']))
+											{
+												$push->addGcm($m['gcm']);
+											}
+											*/
+											$push->addGcm('APA91bHSLf0Yly3sRKHmCRVG1_K_XqNnsPKm7Kh8DETqyI3hyt8cyBjmBB2ImW-E-4HXjYPQEZsZ_HPVLFUQYdfaNIp08Ljv07fxrlYCDxzEg36N5bs3WbJoArWgo2yHEuicraVDb0qcF5mP4aw-BPig-xtaydAZaMNLSYh_VjrbUz0A0OByLPE');
+											
+											
+											
 										
-										$socket->queue($push);
+											
+										}
 									}
-									
 								}
 								
-								$socket->send();
-								$socket->close();
+								if($count > 0)
+								{
+									$socket = new SocketClient();
+									$socket->queue($push);
+									$socket->send();
+									$socket->close();
+								}	
 							}
-							*/
+							
 							
 							/*
 							if(!empty($m['gcm']) || !empty($m['iosid']))
@@ -173,8 +195,9 @@ class ApiXhr extends Control
 		{
 			return $this->appout(array(
 				'status' => 1,
+				'id'=> (int)$_GET['id'],
 				'history' => $history,
-				'user' => $this->model->getValues(array('id','name','photo'), 'foodsaver', $_GET['id'])
+				'user' => $model->listConversationMembers($_GET['id'])
 			));
 		}
 		

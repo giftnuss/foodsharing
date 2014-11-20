@@ -144,7 +144,7 @@ class MsgXhr extends Control
 										'body' => $body,
 										'time' => date('Y-m-d H:i:s')
 									));
-									
+									/*
 									if(!empty($m['gcm']) || !empty($m['iosid']))
 									{
 										$this->model->addPushQueue(
@@ -160,7 +160,7 @@ class MsgXhr extends Control
 												$message_id
 										);
 									}
-									
+									+/
 									/*
 									 * send an E-Mail if the user is not online
 									*/

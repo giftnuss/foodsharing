@@ -12,11 +12,26 @@ class PushControl extends ConsoleControl
 	
 	public function index()
 	{
+		$this->socketServer();
+		/*
 		while(true)
 		{
 			$this->runQueue();
 			usleep(500000);
 		}
+		*/
+	}
+	
+	/**
+	 * Method to start socket server the server will listen for push jobs
+	 */
+	private function socketServer()
+	{
+		$server = new SocketServer();
+	
+		$server->addHandler('email',$this,'handleEmail');
+	
+		$server->start();
 	}
 	
 	private function runQueue()

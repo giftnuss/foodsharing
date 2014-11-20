@@ -8,7 +8,7 @@ class SocketClient
 	private $queue;
 	private $queue_size;
 
-	public function __construct($host = '127.0.0.1', $port = 6010)
+	public function __construct($port = 6010, $host = '127.0.0.1')
 	{
 		
 		$this->host = $host;
