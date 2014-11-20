@@ -54,7 +54,7 @@ class MailsControl extends ConsoleControl
 		$mailbox = new fMailbox('imap', IMAP_HOST, IMAP_USER, IMAP_PASS);
 		
 		$messages = $mailbox->listMessages();
-		if(is_array($messages))
+		if(is_array($messages) && count($messages) > 0)
 		{
 			info(count($messages).' in Inbox');
 			
