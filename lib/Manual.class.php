@@ -4259,7 +4259,7 @@ GROUP BY foodsaver_id'));
 				`'.PREFIX.'foodsaver_has_event` fe
 	
 			WHERE 
-				e.start > DATE_ADD(NOW(),INTERVAL 1 DAY)
+				e.start >= CURDATE()
 				
 			AND
 				fe.event_id = e.id
@@ -4285,7 +4285,7 @@ GROUP BY foodsaver_id'));
 				`'.PREFIX.'event` e
 		
 			WHERE
-				e.start > NOW()
+				e.start >= CURDATE()
 				
 			AND 
 				e.public = 1
