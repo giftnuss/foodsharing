@@ -292,6 +292,7 @@ class MsgModel extends Model
 				UNIX_TIMESTAMP(c.`last`) AS last_ts,
 				c.`member`,
 				c.`last_message`,
+				c.`last_foodsaver_id`,
 				hc.unread,
 				c.name
 				
@@ -304,9 +305,6 @@ class MsgModel extends Model
 				
 			AND 
 				hc.foodsaver_id = '.(int)fsId().'
-				
-			AND
-				c.last_message_id != 0
 				
 			ORDER BY c.`last` DESC
 			'.$limit.'		
@@ -384,9 +382,10 @@ class MsgModel extends Model
 		return $this->qColKey('SELECT conversation_id FROM '.PREFIX.'foodsaver_has_conversation WHERE foodsaver_id = '.(int)fsId().' AND unread = 1 AND conversation_id IN('.implode(',', $ids).')');
 	}
 	
-	public function chatHistory($fsid)
+	public function chatHistory($conversation_id)
 	{
-		if($conversation_id = $this->user2conv($fsid))
+		//if($conversation_id = $this->user2conv($fsid))
+		if($conversation_id > 0)
 		{
 			return $this->q('
 				SELECT
@@ -408,7 +407,7 @@ class MsgModel extends Model
 				ORDER BY
 					m.`time` DESC
 				
-				LIMIT 0,20
+				LIMIT 0,50
 			');
 		}
 		

@@ -59,7 +59,10 @@ class MsgView extends View
 				
 				if(!empty($c['member']))
 				{
-					
+					if(count($c['member']) == 1)
+					{
+						continue;
+					}
 					$picwidth = 50;
 					$size = 'med';
 					

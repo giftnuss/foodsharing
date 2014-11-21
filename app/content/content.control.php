@@ -13,88 +13,92 @@ class ContentControl extends Control
 	
 	public function index()
 	{
-		if(!S::may('orga'))
+		if(!isset($_GET['sub']))
 		{
-			go('/');
-		}
-		
-		$db = $this->model;
-		
-		if(getAction('neu'))
-		{
-			handle_add();
-		
-			addBread(s('bread_content'),'?page=content');
-			addBread(s('bread_new_content'));
-				
-			addContent(content_form());
-		
-			addContent(v_field(v_menu(array(
-			pageLink('content','back_to_overview')
-			)),s('actions')),CNT_RIGHT);
-		}
-		elseif($id = getActionId('delete'))
-		{
-			if($db->del_content($id))
+			if(!S::may('orga'))
 			{
-				info(s('content_deleted'));
-				goPage();
+				go('/');
 			}
-		}
-		elseif($id = getActionId('edit'))
-		{
-			handle_edit();
-		
-			addBread(s('bread_content'),'?page=content');
-			addBread(s('bread_edit_content'));
-		
-			$data = $db->getOne_content($id);
-			setEditData($data);
-				
-			addContent(content_form());
-				
-			addContent(v_field(v_menu(array(
-			pageLink('content','back_to_overview')
-			)),s('actions')),CNT_RIGHT);
-		}
-		else if(isset($_GET['id']))
-		{
-			go('?page=content&a=edit&id='.(int)$_GET['id']);
-		}
-		else
-		{
-			addBread(s('content_bread'),'?page=content');
-		
-			if($data = $db->getBasics_content())
+			
+			$db = $this->model;
+			
+			if(getAction('neu'))
 			{
-				$rows = array();
-				foreach ($data as $d)
+				handle_add();
+			
+				addBread(s('bread_content'),'?page=content');
+				addBread(s('bread_new_content'));
+			
+				addContent(content_form());
+			
+				addContent(v_field(v_menu(array(
+				pageLink('content','back_to_overview')
+				)),s('actions')),CNT_RIGHT);
+			}
+			elseif($id = getActionId('delete'))
+			{
+				if($db->del_content($id))
 				{
-						
-					$rows[] = array(
-							array('cnt'=>$d['id']),
-							array('cnt' => '<a class="linkrow ui-corner-all" href="?page=content&id='.$d['id'].'">'.$d['name'].'</a>'),
-							array('cnt' => v_toolbar(array('id'=>$d['id'],'types' => array('edit','delete'),'confirmMsg'=>sv('delete_sure',$d['name'])))
-							));
+					info(s('content_deleted'));
+					goPage();
 				}
-		
-				$table = v_tablesorter(array(
-						array('name' => 'ID','width'=>30),
-						array('name' => s('name')),
-						array('name' => s('actions'),'sort' => false,'width' => 50)
-				),$rows);
-		
-				addContent(v_field($table,'Öffentliche Webseiten bearbeiten'));
+			}
+			elseif($id = getActionId('edit'))
+			{
+				handle_edit();
+			
+				addBread(s('bread_content'),'?page=content');
+				addBread(s('bread_edit_content'));
+			
+				$data = $db->getOne_content($id);
+				setEditData($data);
+			
+				addContent(content_form());
+			
+				addContent(v_field(v_menu(array(
+				pageLink('content','back_to_overview')
+				)),s('actions')),CNT_RIGHT);
+			}
+			else if(isset($_GET['id']))
+			{
+				go('?page=content&a=edit&id='.(int)$_GET['id']);
 			}
 			else
 			{
-				info(s('content_empty'));
+				addBread(s('content_bread'),'?page=content');
+			
+				if($data = $db->getBasics_content())
+				{
+					$rows = array();
+					foreach ($data as $d)
+					{
+			
+						$rows[] = array(
+								array('cnt'=>$d['id']),
+								array('cnt' => '<a class="linkrow ui-corner-all" href="?page=content&id='.$d['id'].'">'.$d['name'].'</a>'),
+								array('cnt' => v_toolbar(array('id'=>$d['id'],'types' => array('edit','delete'),'confirmMsg'=>sv('delete_sure',$d['name'])))
+								));
+					}
+			
+					$table = v_tablesorter(array(
+							array('name' => 'ID','width'=>30),
+							array('name' => s('name')),
+							array('name' => s('actions'),'sort' => false,'width' => 50)
+					),$rows);
+			
+					addContent(v_field($table,'Öffentliche Webseiten bearbeiten'));
+				}
+				else
+				{
+					info(s('content_empty'));
+				}
+			
+				addContent(v_field(v_menu(array(
+				array('href' => '?page=content&a=neu','name' => s('neu_content'))
+				)),'Aktionen'),CNT_RIGHT);
 			}
-				
-			addContent(v_field(v_menu(array(
-			array('href' => '?page=content&a=neu','name' => s('neu_content'))
-			)),'Aktionen'),CNT_RIGHT);
 		}
+		
 	}
 	
 	public function partner()

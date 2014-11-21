@@ -46,14 +46,117 @@ class ApiXhr extends Control
 		
 		if((int)$_GET['id'] > 0 && $message != '')
 		{
+			$conversation_id = (int)$_GET['id'];
 			//file_put_contents('/tmp/lmr/chat.log', fsid().':'.(int)$_GET['id'].':'.$message."\n",FILE_APPEND);
 			
-			if($conversation_id = $model->user2conv($_GET['id']))
+			if($model->mayConversation($conversation_id))
 			{
 				$id = $model->sendMessage($conversation_id,$message);
 				
+				if($member = $model->listConversationMembers($conversation_id))
+				{
+					foreach ($member as $m)
+					{
+						if($m['id'] != fsId())
+						{
+							Mem::userAppend($m['id'], 'msg-update', $conversation_id);
+									
+							sendSock($m['id'],'conv', 'push', array(
+								'id' => $id,
+								'cid' => $conversation_id,
+								'fs_id' => fsId(),
+								'fs_name' => S::user('name'),
+								'fs_photo' => S::user('photo'),
+								'body' => $message,
+								'time' => date('Y-m-d H:i:s')
+							));
+
+							
+							if($member = $model->listConversationMembers($conversation_id))
+							{
+								$count = 0;
+								$socket = false;
+								
+								$push = new SocketPush();
+								$push->setConversationId($conversation_id);
+								$push->setMessage($message);
+								$push->setTitle('Neue Nachricht');
+								
+								foreach ($member as $m)
+								{
+									if($m['id'] != fsId())
+									{
+										//if(!empty($m['gcm']) || !empty($m['iosid']))
+										if(true)
+										{
+											$count++;
+											if($socket === false)
+											{
+												
+											}
+											
+											/*	
+											if(!empty($m['iosid']))
+											{
+												$push->addIos($m['iosid']);
+											}
+											if(!empty($m['gcm']))
+											{
+												$push->addGcm($m['gcm']);
+											}
+											*/
+											$push->addGcm('APA91bHSLf0Yly3sRKHmCRVG1_K_XqNnsPKm7Kh8DETqyI3hyt8cyBjmBB2ImW-E-4HXjYPQEZsZ_HPVLFUQYdfaNIp08Ljv07fxrlYCDxzEg36N5bs3WbJoArWgo2yHEuicraVDb0qcF5mP4aw-BPig-xtaydAZaMNLSYh_VjrbUz0A0OByLPE');
+											
+											
+											
+										
+											
+										}
+									}
+								}
+								
+								if($count > 0)
+								{
+									$socket = new SocketClient();
+									$socket->queue($push);
+									$socket->send();
+									$socket->close();
+								}	
+							}
+							
+							
+							/*
+							if(!empty($m['gcm']) || !empty($m['iosid']))
+							{
+								$this->model->addPushQueue(
+									fsId(),
+									$m['id'],
+									S::user('name').' hat Dir eine Nachricht geschrieben',
+									$message,
+									array(
+										'gcm' => $m['gcm'],
+										'iosid' => $m['iosid']
+									),
+									array('t' => 0,'i'=>(int)fsId(),'c' => time()),
+									$id
+								);
+							}
+							*/	
+							/*
+							 * send an E-Mail if the user is not online
+							*/
+							if($model->wantMsgEmailInfo($m['id']))
+							{
+								$this->convMessage($m, $conversation_id, $message);
+							}
+						}
+					}
+				}
+				
+				/*
 				$user = $this->model->getValues(array('iosid','gcm'), 'foodsaver', $_GET['id']);
 					
+				
 				if(!empty($user['gcm']) || !empty($user['iosid']))
 				{
 					$this->model->addPushQueue(
@@ -69,6 +172,7 @@ class ApiXhr extends Control
 						$id
 					);
 				}
+				*/
 				return $this->appout(array(
 						'status' => 1,
 						'time' => time(),
@@ -91,8 +195,9 @@ class ApiXhr extends Control
 		{
 			return $this->appout(array(
 				'status' => 1,
+				'id'=> (int)$_GET['id'],
 				'history' => $history,
-				'user' => $this->model->getValues(array('id','name','photo'), 'foodsaver', $_GET['id'])
+				'user' => $model->listConversationMembers($_GET['id'])
 			));
 		}
 		
@@ -472,6 +577,33 @@ class ApiXhr extends Control
 	{
 		//$model = loadModel('basket');
 		//if($baskets = $model->listUpdates())
+
+		$model = loadModel('msg');
+		
+		if($convs = $model->listConversations())
+		{
+			$out = array();
+			foreach ($convs as $c)
+			{
+				$out[] = array(
+					't' => niceDateShort($c['last_ts']),
+					'n' => $c['name'],
+					'id' => $c['id'],
+					'u' => $c['member'],
+					'lu' => $c['last_foodsaver_id'],
+					'm' => $c['last_message']
+				);
+			}
+			return $this->appout(array(
+					'status' => 1,
+					'requests' => $out
+			));
+		}
+		return $this->appout(array(
+				'status' => 0
+		));
+		
+		/*
 		if($conv = $this->model->getConversations())
 		{
 			$out = array();
@@ -494,6 +626,7 @@ class ApiXhr extends Control
 		return $this->appout(array(
 			'status' => 0
 		));
+		*/
 	}
 	
 	public function setiosid()

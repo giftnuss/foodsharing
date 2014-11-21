@@ -22,6 +22,9 @@ class MailsControl extends ConsoleControl
 		
 		$server->addHandler('email',$this,'handleEmail');
 		
+		// push messagehandler not working yet later...
+		//$server->addHandler('push',$this,'handlePush');
+		
 		$server->start();
 	}
 	
@@ -54,7 +57,7 @@ class MailsControl extends ConsoleControl
 		$mailbox = new fMailbox('imap', IMAP_HOST, IMAP_USER, IMAP_PASS);
 		
 		$messages = $mailbox->listMessages();
-		if(is_array($messages))
+		if(is_array($messages) && count($messages) > 0)
 		{
 			info(count($messages).' in Inbox');
 			
@@ -225,6 +228,52 @@ class MailsControl extends ConsoleControl
 		}
 	
 		return false;
+	}
+	
+	public static function handlePush($sd)
+	{
+		try {
+			$data = $sd->getData();
+			$count = 0;
+			if($data['gcm'] !== false)
+			{
+				info('to: '.implode(',',$data['gcm']));
+				$count += count($data['gcm']);
+				MailsControl::sendGcmNotification(
+					$data['gcm'],
+					array(
+						'title' => $data['title'],
+						'message' => $data['message'],
+						'd' => array(
+							'i' => $data['cid']
+						)
+					)
+				);
+			}
+			
+			if($data['ios'] !== false)
+			{
+				$count += count($data['ios']);
+				foreach ($data['ios'] as $id)
+				{
+					MailsControl::sendIosNotification(
+					$id,
+					array(
+					'title' => $data['title'],
+					'message' => $data['message']
+					),
+					array(
+					'i' => $data['cid']
+					)
+					);
+				}
+			}
+			
+			success($count.' push messages send!');
+		} catch (Exception $e) {
+			error('push not send...');
+		}
+		
 	}
 	
 	public static function handleEmail($data)
@@ -411,5 +460,49 @@ class MailsControl extends ConsoleControl
 		}
 	
 		return true;
+	}
+	
+	public static function sendGcmNotification( $registrationIdsArray, $messageData )
+	{
+		$apiKey = 'AIzaSyCgLZcUaDR17RMxq5JBdb-IPXWR0KhOf4o';
+		$headers = array("Content-Type:" . "application/json", "Authorization:" . "key=" . $apiKey);
+		$data = array(
+				'data' => $messageData,
+				'registration_ids' => $registrationIdsArray
+		);
+	
+		$ch = curl_init();
+	
+		curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
+		curl_setopt( $ch, CURLOPT_URL, 'https://android.googleapis.com/gcm/send' );
+		curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, 0 );
+		curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, 0 );
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode($data) );
+	
+		$response = curl_exec($ch);
+		curl_close($ch);
+	
+		return $response;
+	}
+	
+	public static function sendIosNotification($deviceToken, $messageData, $data)
+	{
+	
+		// set enovirnment and cretificate path
+		$push = new PushNotification('production','/var/www/lmr-prod/ck.pem');
+		// set device token
+		$push->setDeviceToken($deviceToken);
+		// Set pass phrase if any
+		$push->setPassPhrase('FcY9Rkvk');
+		// Set badge
+		$push->setBadge(1);
+		// Set message body
+		$push->setMessageBody($messageData['title']);
+	
+		$push->setData($data);
+	
+		$push->sendNotification();
+	
 	}
 }
