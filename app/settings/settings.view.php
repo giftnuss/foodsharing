@@ -515,7 +515,7 @@ class SettingsView extends View
 	<div style="margin:20px;text-align:center;">
 		<span id="delete-account">'.s('delete_now').'</span>
 	</div>
-	'.v_info(s('posible_restore_account'),s('reference'));
+	'.v_info('Du bist dabei Deinen Account zu löschen, bist Du Dir ganz sicher?',s('reference'));
 	
 		addHidden('
 		<div id="delete-account-confirm">
