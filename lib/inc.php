@@ -239,7 +239,7 @@ else
  * temporary quiz stuff
  */
 $quizinfo = '';
-if(S::get('hastodoquiz'))
+if(S::get('hastodoquiz') === true)
 {
 	addJs('
 		$(window).resize(function(){
