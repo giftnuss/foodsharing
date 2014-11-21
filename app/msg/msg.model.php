@@ -306,9 +306,6 @@ class MsgModel extends Model
 			AND 
 				hc.foodsaver_id = '.(int)fsId().'
 				
-			AND
-				c.last_message_id != 0
-				
 			ORDER BY c.`last` DESC
 			'.$limit.'		
 		'))
