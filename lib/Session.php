@@ -3,7 +3,10 @@ class S
 {
 	public static function init()
 	{
-		//fSession::setPath('/tmp/lmr');
+		if(defined('SESSION_DIR'))
+		{
+			fSession::setPath(SESSION_DIR);
+		}
 		fSession::setLength('24 hours', '1 week');
 		//fSession::enablePersistence();
 		
