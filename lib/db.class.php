@@ -1119,10 +1119,11 @@ class Db
 			/*
 			 * temporary special stuff for quiz
 			 */
+			S::set('hastodoquiz',false);
 			if((int)$fs['rolle'] > 0)
 			{
 				$count = (int)$this->qOne('SELECT COUNT(id) FROM '.PREFIX.'quiz_session WHERE foodsaver_id = '.(int)fsId().' AND quiz_id = 1 AND `status` = 1');
-				if($count == 0)
+				if($count === 0)
 				{
 					S::set('hastodoquiz',true);
 				}
