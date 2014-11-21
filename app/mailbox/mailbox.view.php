@@ -323,9 +323,13 @@ class MailboxView extends View
 				$("#message-editor").dialog("option",{
 					height: ($( window ).height()-40)
 				});
-				$(".edit-body").css({
-						"height" : ($("#message-editor").height()-100)+"px"
-				});
+				var height = ($("#message-editor").height()-100);
+				if(height > 50)
+				{
+					$(".edit-body").css({
+							"height" : height+"px"
+					});
+				}
 		  	}
 		});
 		$("#etattach").change(function(){
@@ -397,7 +401,12 @@ class MailboxView extends View
 				$("#mail-subject").before(\'<tr><td class="label">&nbsp;</td><td class="data"><input type="text" name="an[]" class="edit-an" value="" /></td></tr>\');	
 					
 				u_addTypeHead();
-				$("#edit-body").css("height",(bodytextheight-(availmail_count*28))+"px");
+				var height = (bodytextheight-(availmail_count*28));
+				if(height > 40)
+				{
+					$("#edit-body").css("height",(bodytextheight-(availmail_count*28))+"px");	
+				}
+				
 				$(".edit-an:last").focus();			
 			}		
 		}

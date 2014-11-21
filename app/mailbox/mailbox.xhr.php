@@ -508,10 +508,12 @@ class MailboxXhr extends Control
 	
 		//Set the subject line
 		$mail->setSubject($subject);
-		$mail->setHtmlBody($message);
+		
 		
 		$message = str_replace(array('<br>','<br/>','<br />','<p>','</p>','</p>'),"\r\n",$message);
 		$message = strip_tags($message);
+		
+		$mail->setHtmlBody(nl2br($message));
 		
 		$mail->setBody($message);
 		
