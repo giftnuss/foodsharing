@@ -194,13 +194,14 @@ class ReportXhr extends Control
 	
 	public function betriebreport()
 	{		
+		/*
 		if(!$this->model->isInTeam((int)$_GET['bid']))
 		{
 			return array(
 				'status' => 1,
 				'script' => 'pulseError("'.s('access_error').'");'
 			);
-		}
+		}*/
 		
 		$reason_id = 1;
 		if($_GET['reason_id'] == 2)
