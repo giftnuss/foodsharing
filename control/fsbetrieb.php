@@ -443,7 +443,7 @@ else if(isset($_GET['id']))
 		{
 			addJs('
 				u_updatePosts();
-				setInterval(u_updatePosts,5000);		
+				//setInterval(u_updatePosts,5000);		
 			');
 		
 			$opt = array();

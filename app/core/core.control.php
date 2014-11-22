@@ -244,7 +244,10 @@ class Control
 						}
 					}
 			});
-			setInterval(function(){
+			
+		');
+  		/*
+  		 * setInterval(function(){
 				last = 0;
 				if($(".wall-posts input.pid").length > 0)
 				{
@@ -262,8 +265,7 @@ class Control
 					}
 				});
 			},5000);
-		');
-  		
+  		 */
   		$posthtml = '';
   		
   		if(S::may())
