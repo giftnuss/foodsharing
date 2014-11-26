@@ -18,7 +18,7 @@ class BetrieblistsControl extends ConsoleControl
             $cid = $betrieb['team_conversation_id'];
             if(is_null($betrieb['team_conversation_id']))
             {
-                $cid = $this->model->insert('INSERT INTO fs_conversation (`name`, `locked`) VALUES("Team '.$this->model->strval($betrieb['name']).'", 1)');
+                $cid = $this->model->insert('INSERT INTO fs_conversation (`name`, `locked`) VALUES('.$this->model->strval("Team ".betrieb['name']).', 1)');
                 if($cid > 0)
                 {
                     $this->model->sql('UPDATE fs_betrieb SET team_conversation_id = '.$cid.' WHERE id = '.$betrieb['id']);
@@ -27,7 +27,7 @@ class BetrieblistsControl extends ConsoleControl
             $sid = $betrieb['springer_conversation_id'];
             if(is_null($betrieb['springer_conversation_id']))
             {
-                $sid = $this->model->insert('INSERT INTO fs_conversation (`name`, `locked`) VALUES("Springer '.$this->model->strval($betrieb['name']).'", 1)');
+                $sid = $this->model->insert('INSERT INTO fs_conversation (`name`, `locked`) VALUES('.$this->model->strval("Springer ".$betrieb['name']).', 1)');
                 if($sid > 0)
                 {
                     $this->model->sql('UPDATE fs_betrieb SET springer_conversation_id = '.$sid.' WHERE id = '.$betrieb['id']);
