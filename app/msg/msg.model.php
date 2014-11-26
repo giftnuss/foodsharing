@@ -576,7 +576,7 @@ class MsgModel extends Model
         $values[] = '('.(int)$cid.', '.(int)$user.', '.$ur.')';
       }
       if(count($values) > 0)
-        $this->insert('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_conversation` (conversation_id, foodsaver_id, unread) '.implode(",",$values) );
+        $this->insert('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_conversation` (conversation_id, foodsaver_id, unread) VALUES '.implode(",",$values) );
     }
   }
 
@@ -587,7 +587,7 @@ class MsgModel extends Model
     if($unread)
       $ur = 1;
 
-    $this->insert('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_conversation` (conversation_id, foodsaver_id, unread) ('.(int)$cid.', '.(int)$fsid.', '.$ur.')');
+    $this->insert('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_conversation` (conversation_id, foodsaver_id, unread) VALUES ('.(int)$cid.', '.(int)$fsid.', '.$ur.')');
   }
 	
 	public function deleteUserFromConversation($cid,$fsid,$deleteAlways = False)
