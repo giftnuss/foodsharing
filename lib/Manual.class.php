@@ -3671,8 +3671,8 @@ GROUP BY foodsaver_id'));
     $msg = loadModel('msg');
     $tcid = $msg->insertConversation(array(), true);
     $scid = $msg->insertConversation(array(), true);
-    $msg->renameConversation($tcid, "Team ".$this->strval($data['name']))
-    $msg->renameConversation($scid, "Springer ".$this->strval($data['name']))
+    $msg->renameConversation($tcid, "Team ".$this->strval($data['name']));
+    $msg->renameConversation($scid, "Springer ".$this->strval($data['name']));
 		$id = $this->insert('
 			INSERT INTO 	`'.PREFIX.'betrieb`
 			(
