@@ -565,15 +565,19 @@ class MsgModel extends Model
     if($unread)
       $ur = 1;
 
-    $ids = implode(',', $fsids);
-    $this->del('DELETE FROM `'.PREFIX.'foodsaver_has_conversation` WHERE conversation_id = '.(int)$cid.' AND foodsaver_id NOT IN ('.$ids.')');
-    $values = array();
-    foreach($fsids as $user)
-    {
-      $values[] = '('.(int)$cid.', '.(int)$user.', '.$ur.')';
+    if(count($fsids) < 1) {
+      $this->del('DELETE FROM `'.PREFIX.'foodsaver_has_conversation` WHERE conversation_id = '.(int)$cid);
+    } else {
+      $ids = implode(',', $fsids);
+      $this->del('DELETE FROM `'.PREFIX.'foodsaver_has_conversation` WHERE conversation_id = '.(int)$cid.' AND foodsaver_id NOT IN ('.$ids.')');
+      $values = array();
+      foreach($fsids as $user)
+      {
+        $values[] = '('.(int)$cid.', '.(int)$user.', '.$ur.')';
+      }
+      if(count($values) > 0)
+        $this->insert('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_conversation` (conversation_id, foodsaver_id, unread) '.implode(",",$values) );
     }
-    if(count($values) > 0)
-      $this->insert('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_conversation` (conversation_id, foodsaver_id, unread) '.implode(",",$values) );
   }
 
 
