@@ -37,17 +37,17 @@ class BetrieblistsControl extends ConsoleControl
             echo "Updating ".$betrieb['name']." (C: $cid, S: $sid)\n";
             $team = $this->model->getBetriebTeam($betrieb['id']);
             $springer = $this->model->getBetriebSpringer($betrieb['id']);
-            $q = "";
-            $first = true;
             $teamIds = array();
             foreach ($team as $user)
             {
               $teamIds[] = $user['id'];
             }
             $springerIds = array();
-            foreach($springer as $user)
-            {
-              $springerIds[] = $user['id'];
+            if($springer) {
+              foreach($springer as $user)
+              {
+                $springerIds[] = $user['id'];
+              }
             }
             $msg = loadModel('msg');
             $msg->setConversationMembers($cid, $teamIds);
