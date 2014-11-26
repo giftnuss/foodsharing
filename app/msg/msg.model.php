@@ -567,7 +567,13 @@ class MsgModel extends Model
 
     $ids = implode(',', $fsids);
     $this->del('DELETE FROM `'.PREFIX.'foodsaver_has_conversation` WHERE conversation_id = '.(int)$cid.' AND foodsaver_id NOT IN ('.$ids.')');
-    $this->insert('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_conversation` (conversation_id, foodsaver_id, unread) ('.(int)$cid.', ('.$ids.'), '.$ur.')');
+    $values = array();
+    foreach($fsids as $user)
+    {
+      $values[] = '('.(int)$cid.', ('.$ids.'), '.$ur.')';
+    }
+    if(count($values) > 0)
+      $this->insert('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_conversation` (conversation_id, foodsaver_id, unread) '.implode(",",$values) );
   }
 
 
