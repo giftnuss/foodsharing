@@ -49,7 +49,7 @@ class BetrieblistsControl extends ConsoleControl
             {
               $springerIds[] = $user['id'];
             }
-            $msg = loadApp('msg');
+            $msg = loadModel('msg');
             $msg->setConversationMembers($cid, $teamIds);
             $msg->setConversationMembers($sid, $springerIds);
         }

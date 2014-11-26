@@ -146,6 +146,13 @@ function rolleWrap($roleStr)
 	return $roles[$roleStr];
 }
 
+function loadModel($model = 'api')
+{
+	require_once ROOT_DIR.'app/core/core.model.php';
+	require_once ROOT_DIR.'app/'.$model.'/'.$model.'.model.php';
+	$mod = ucfirst($model).'Model';
+	return new $mod();
+}
 
 function loadApp($app)
 {
