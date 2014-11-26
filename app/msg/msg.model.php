@@ -567,7 +567,7 @@ class MsgModel extends Model
 
     $ids = implode(',', $fsids);
     $this->del('DELETE FROM `'.PREFIX.'foodsaver_has_conversation` WHERE conversation_id = '.(int)$cid.' AND foodsaver_id NOT IN ('.$ids.')');
-    $this->insert('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_conversation` (conversation_id, foodsaver_id, unread) ('.(int)$cid.', ('.$ids.'), $ur)');
+    $this->insert('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_conversation` (conversation_id, foodsaver_id, unread) ('.(int)$cid.', ('.$ids.'), '.$ur.')');
   }
 
 
@@ -577,7 +577,7 @@ class MsgModel extends Model
     if($unread)
       $ur = 1;
 
-    $this->insert('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_conversation` (conversation_id, foodsaver_id, unread) ('.(int)$cid.', '.(int)$fsid.', $ur)');
+    $this->insert('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_conversation` (conversation_id, foodsaver_id, unread) ('.(int)$cid.', '.(int)$fsid.', '.$ur.')');
   }
 	
 	public function deleteUserFromConversation($cid,$fsid,$deleteAlways = False)
