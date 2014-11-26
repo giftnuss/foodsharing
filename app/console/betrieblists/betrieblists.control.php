@@ -15,31 +15,43 @@ class BetrieblistsControl extends ConsoleControl
         $betriebe = $this->model->q('SELECT id, `name`, team_conversation_id, springer_conversation_id FROM fs_betrieb');
         foreach ($betriebe as $betrieb)
         {
-            $conversation = $betrieb['team_conversation_id'];
+            $cid = $betrieb['team_conversation_id'];
             if(is_null($betrieb['team_conversation_id']))
             {
-                $conversation = $this->model->insert('INSERT INTO fs_conversation (`name`, `locked`) VALUES("Team '.$betrieb['name'].'", 1)');
-                if($conversation > 0)
+                $cid = $this->model->insert('INSERT INTO fs_conversation (`name`, `locked`) VALUES("Team '.$betrieb['name'].'", 1)');
+                if($cid > 0)
                 {
-                    $this->model->sql('UPDATE fs_betrieb SET team_conversation_id = '.$conversation.' WHERE id = '.$betrieb['id']);
+                    $this->model->sql('UPDATE fs_betrieb SET team_conversation_id = '.$cid.' WHERE id = '.$betrieb['id']);
+                }
+            }
+            $sid = $betrieb['springer_conversation_id'];
+            if(is_null($betrieb['springer_conversation_id']))
+            {
+                $sid = $this->model->insert('INSERT INTO fs_conversation (`name`, `locked`) VALUES("Springer '.$betrieb['name'].'", 1)');
+                if($sid > 0)
+                {
+                    $this->model->sql('UPDATE fs_betrieb SET springer_conversation_id = '.$sid.' WHERE id = '.$betrieb['id']);
                 }
             }
 
-            echo "Updating ".$betrieb['name']." (C: $conversation)\n";
+            echo "Updating ".$betrieb['name']." (C: $cid, S: $sid)\n";
             $team = $this->model->getBetriebTeam($betrieb['id']);
+            $springer = $this->model->getBetriebSpringer($betrieb['id']);
             $q = "";
             $first = true;
+            $teamIds = array();
             foreach ($team as $user)
             {
-                if(!$first)
-                {
-                    $q .= ",";
-                }
-                $q .= "(".$user['id'].", $conversation, 0)";
-                $first = false;
-                echo "Inserted user".$user['name']."\n";
+              $teamIds[] = $user['id'];
             }
-            $this->model->sql('INSERT IGNORE INTO fs_foodsaver_has_conversation (foodsaver_id, conversation_id, unread) VALUES '.$q);
+            $springerIds = array();
+            foreach($springer as $user)
+            {
+              $springerIds[] = $user['id'];
+            }
+            $msg = loadModel('msg');
+            $msg->setConversationMembers($cid, $teamIds);
+            $msg->setConversationMembers($sid, $springerIds);
         }
     }
 }
