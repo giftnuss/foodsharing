@@ -38,9 +38,11 @@ class BetrieblistsControl extends ConsoleControl
             $team = $this->model->getBetriebTeam($betrieb['id']);
             $springer = $this->model->getBetriebSpringer($betrieb['id']);
             $teamIds = array();
-            foreach ($team as $user)
-            {
-              $teamIds[] = $user['id'];
+            if($team) {
+              foreach ($team as $user)
+              {
+                $teamIds[] = $user['id'];
+              }
             }
             $springerIds = array();
             if($springer) {
