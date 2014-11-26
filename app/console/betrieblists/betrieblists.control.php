@@ -18,7 +18,7 @@ class BetrieblistsControl extends ConsoleControl
             $cid = $betrieb['team_conversation_id'];
             if(is_null($betrieb['team_conversation_id']))
             {
-                $cid = $this->model->insert('INSERT INTO fs_conversation (`name`, `locked`) VALUES('.$this->model->strval("Team ".betrieb['name']).', 1)');
+                $cid = $this->model->insert('INSERT INTO fs_conversation (`name`, `locked`) VALUES('.$this->model->strval("Team ".$betrieb['name']).', 1)');
                 if($cid > 0)
                 {
                     $this->model->sql('UPDATE fs_betrieb SET team_conversation_id = '.$cid.' WHERE id = '.$betrieb['id']);
