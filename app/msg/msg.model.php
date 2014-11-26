@@ -570,7 +570,7 @@ class MsgModel extends Model
     $values = array();
     foreach($fsids as $user)
     {
-      $values[] = '('.(int)$cid.', ('.$ids.'), '.$ur.')';
+      $values[] = '('.(int)$cid.', '.(int)$user.', '.$ur.')';
     }
     if(count($values) > 0)
       $this->insert('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_conversation` (conversation_id, foodsaver_id, unread) '.implode(",",$values) );
