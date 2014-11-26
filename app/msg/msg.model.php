@@ -558,13 +558,34 @@ class MsgModel extends Model
 			}
 		}
 	}
+
+  public function setConversationMembers($cid,$fsids,$unread = False)
+  {
+    $ur = 0;
+    if($unread)
+      $ur = 1;
+
+    $ids = implode(',', $fsids);
+    $this->del('DELETE FROM `'.PREFIX.'foodsaver_has_conversation` WHERE conversation_id = '.(int)$cid.' AND foodsaver_id NOT IN ('.$ids.')');
+    $this->insert('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_conversation` (conversation_id, foodsaver_id, unread) ('.(int)$cid.', ('.$ids.'), $ur)');
+  }
+
+
+  public function addUserToConversation($cid,$fsid,$unread = False)
+  {
+    $ur = 0;
+    if($unread)
+      $ur = 1;
+
+    $this->insert('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_conversation` (conversation_id, foodsaver_id, unread) ('.(int)$cid.', '.(int)$fsid.', $ur)');
+  }
 	
-	public function deleteUserFromConversation($cid,$fsid)
+	public function deleteUserFromConversation($cid,$fsid,$deleteAlways = False)
 	{
 		/**
 		 * delete only users from non 1:1 conversations
 		 */
-		if((int)$this->qOne('SELECT COUNT(foodsaver_id) FROM `'.PREFIX.'foodsaver_has_conversation` WHERE conversation_id = '.(int)$cid) > 2)
+		if($deleteAlways || ((int)$this->qOne('SELECT COUNT(foodsaver_id) FROM `'.PREFIX.'foodsaver_has_conversation` WHERE conversation_id = '.(int)$cid) > 2))
 		{
 			$this->del('DELETE FROM `'.PREFIX.'foodsaver_has_conversation` WHERE conversation_id = '.(int)$cid.' AND foodsaver_id = '.(int)$fsid);
 			if($member = $this->qOne('SELECT member FROM '.PREFIX.'conversation WHERE id = '.(int)$cid))
@@ -587,20 +608,24 @@ class MsgModel extends Model
 		}
 	}
 	
-	public function insertConversation($recipients)
+	public function insertConversation($recipients,$locked = false)
 	{
 		/*
 		 * first get one new conversation
 		 */
+    $lock = 0;
+    if($locked)
+      $lock = 1;
 		
 		$sql = 'INSERT INTO `'.PREFIX.'conversation`
 			(
 				`start`, 
 				`last`, 
 				`last_foodsaver_id`,
-				`start_foodsaver_id`
+        `start_foodsaver_id`,
+        `locked`
 			) 
-			VALUES (NOW(),NOW(),'.(int)fsId().','.(int)fsId().')';
+			VALUES (NOW(),NOW(),'.(int)fsId().','.(int)fsId().','.(int)$lock.')';
 		
 		if(($cid = $this->insert($sql)) > 0)
 		{

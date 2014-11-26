@@ -7,7 +7,7 @@ if(!S::may())
 	goLogin();
 }
 
-if(getAction('new'))
+if(getAction('new') && ( S::may('orga') || isBotFor($g_data['bezirk_id'])))
 {
 	handle_add();
 	
@@ -20,7 +20,7 @@ if(getAction('new'))
 		pageLink('betrieb','back_to_overview')
 	)),s('actions')),CNT_RIGHT);
 }
-elseif($id = getActionId('delete'))
+elseif($id = getActionId('delete') && ( S::may('orga') || isBotFor($g_data['bezirk_id'])))
 {
 	if($db->del_betrieb($id))
 	{
@@ -45,7 +45,7 @@ else if(isset($_GET['id']))
 	addStyle('.button{margin-right:8px;}#right .tagedit-list{width:256px;}#foodsaver-wrapper{padding-top:0px;}');
 	global $g_data;
 	
-	if(isset($_POST['form_submit']) && $_POST['form_submit'] == 'team')
+	if(isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && ($db->isVerantwortlich($_GET['id']) || isOrgaTeam()))
 	{
 		if($_POST['form_submit'] == 'zeiten')
 		{

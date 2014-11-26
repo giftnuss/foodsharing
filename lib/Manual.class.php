@@ -3609,6 +3609,11 @@ GROUP BY foodsaver_id'));
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $bid);
 		$this->addGlocke(array($fsid), 'Du bist dabei, Deine Anfrage wurde angenommen!',$betrieb,'?page=fsbetrieb&id='.(int)$bid);
+    $msg = loadModel('msg');
+    $scid = getBetriebConversation($bid, true);
+    $tcid = getBetriebConversation($bid, false);
+    $msg->deleteUserFromConversation($scid, $fsid, true);
+    $msg->addUserToConversation($tcid, $fsid, true);
 		return $this->update('
 					UPDATE 	 	`'.PREFIX.'betrieb_team`
 					SET 		`active` = 1
@@ -3621,6 +3626,8 @@ GROUP BY foodsaver_id'));
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $bid);
 		$this->addGlocke(array($fsid), 'Du bist auf der Springer- / Warteliste, Bei bedarf wirst Du kontaktiert!',$betrieb,'?page=fsbetrieb&id='.(int)$bid);
+    $scid = getBetriebConversation($bid, true);
+    $msg->addUserToConversation($scid, $fsid, True);
 		return $this->update('
 					UPDATE 	 	`'.PREFIX.'betrieb_team`
 					SET 		`active` = 2
@@ -3661,6 +3668,9 @@ GROUP BY foodsaver_id'));
 	
 	public function add_betrieb($data)
 	{
+    $msg = loadModel('msg');
+    $tcid = $msg->insertConversation(array(), true);
+    $scid = $msg->insertConversation(array(), true);
 		$id = $this->insert('
 			INSERT INTO 	`'.PREFIX.'betrieb`
 			(
@@ -3689,7 +3699,9 @@ GROUP BY foodsaver_id'));
 			`ueberzeugungsarbeit`,
 			`presse`,
 			`sticker`,
-			`abholmenge`
+      `abholmenge`,
+      `team_conversation_id`,
+      `springer_conversation_id`
 			)
 			VALUES
 			(
@@ -3718,7 +3730,9 @@ GROUP BY foodsaver_id'));
 			'.$this->intval($data['ueberzeugungsarbeit']).',
 			'.$this->intval($data['presse']).',
 			'.$this->intval($data['sticker']).',
-			'.$this->intval($data['abholmenge']).'
+      '.$this->intval($data['abholmenge']).',
+      '.$tcid.',
+      '.$scid.'
 			)');
 	
 		if(isset($data['lebensmittel']) && is_array($data['lebensmittel']))
@@ -3976,6 +3990,17 @@ GROUP BY foodsaver_id'));
 	{
 		$this->del('DELETE FROM `'.PREFIX.'abholer` WHERE `betrieb_id` = '.(int)$betrieb_id);
 	}
+
+  public function getBetriebConversation($bid,$springerConversation = false)
+  {
+    if($springerConversation)
+      $ccol = "springer_conversation_id";
+    else
+      $ccol = "team_conversation_id";
+
+    $this->qOne('SELECT '.$ccol.' FROM `'.PREFIX.'betrieb` WHERE `betrieb_id` = '.(int)$bid);
+  }
+
 	
 	public function addBetriebTeam($bid,$member,$verantwortlicher = false)
 	{
@@ -4018,6 +4043,10 @@ GROUP BY foodsaver_id'));
 		$this->del('DELETE FROM `'.PREFIX.'betrieb_team` WHERE `betrieb_id` = '.$this->intval($bid).' AND active = 1 AND foodsaver_id NOT IN('.implode(',', $member_ids).')');
 		
 		$sql = 'INSERT IGNORE INTO `'.PREFIX.'betrieb_team` (`betrieb_id`,`foodsaver_id`,`verantwortlich`,`active`)VALUES'.implode(',', $values);
+
+    $msg = loadModel('msg');
+    $cid = getBetriebConversation($bid);
+    $msg->setConversationMembers($cid, $member_ids);
 		
 		if($this->sql($sql))
 		{
