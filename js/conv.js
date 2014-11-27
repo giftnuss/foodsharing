@@ -83,6 +83,7 @@ var conv = {
 	
 	chat: function(cid)
 	{
+		$('#convlist-4768').removeClass('unread-1').addClass('unread-0');
 		if(isMob())
 		{
 			if(GET('page') == 'msg')
