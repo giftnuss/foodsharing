@@ -292,7 +292,7 @@ else if(S::may('fs'))
 		}
 		if(!empty($ids))
 		{
-			if($bids = $db->q('SELECT id,name,bezirk_id FROM fs_betrieb WHERE bezirk_id = 0 OR bezirk_id IS NULL'))
+			if($bids = $db->q('SELECT id,name,bezirk_id,str,hsnr FROM fs_betrieb WHERE id IN('.implode(',',$ids).') AND ( bezirk_id = 0 OR bezirk_id IS NULL)'))
 			{
 				addJs('ajax.req("betrieb","setbezirkids");');
 			}
