@@ -855,6 +855,7 @@ function getMenu()
 							<li><a href="/?page=content&sub=partner">Partner</a></li>
 							<li><a href="/?page=statistics">Statistik</a></li>
 							<li><a href="/?page=content&sub=faq">F.A.Q.</a></li>
+							<li><a href="/?page=content&sub=impressum">Impressum</a></li>
 						</ul>
 					</li>
 					

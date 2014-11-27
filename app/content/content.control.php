@@ -112,6 +112,17 @@ class ContentControl extends Control
 		}
 	}
 	
+	public function impressum()
+	{
+		if($cnt = $this->model->getContent(8))
+		{
+			addBread($cnt['title']);
+			addTitle($cnt['title']);
+				
+			addContent($this->view->impressum($cnt));
+		}
+	}
+	
 	public function about()
 	{
 		if($cnt = $this->model->getContent(9))
