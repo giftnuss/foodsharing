@@ -199,35 +199,38 @@ $(document).ready(function(){
 	 });
 
 	 infoMenu();	 
-	 
-	 $('#main a').tooltip({
-			show:false,
-			hide:false,
-			content: function() {
-				var el = $( this );
-				if(el.attr('title').substring(0,4) == '#tt-')
-				{
-					id = el.attr('title').substring(4);
-					return $('.' + id).html();
+	 if(!isMob())
+     {
+		 $('#main a').tooltip({
+				show:false,
+				hide:false,
+				content: function() {
+					var el = $( this );
+					if(el.attr('title').substring(0,4) == '#tt-')
+					{
+						id = el.attr('title').substring(4);
+						return $('.' + id).html();
+					}
+					else
+					{
+						return el.attr('title');
+					}
+				},
+				position: {
+					my: "center bottom-20",
+					at: "center top",
+					using: function( position, feedback ) {
+					$( this ).css( position );
+					$( "<div>" )
+						.addClass( "arrow" )
+						.addClass( feedback.vertical )
+						.addClass( feedback.horizontal )
+						.appendTo( this );
+					}
 				}
-				else
-				{
-					return el.attr('title');
-				}
-			},
-			position: {
-				my: "center bottom-20",
-				at: "center top",
-				using: function( position, feedback ) {
-				$( this ).css( position );
-				$( "<div>" )
-					.addClass( "arrow" )
-					.addClass( feedback.vertical )
-					.addClass( feedback.horizontal )
-					.appendTo( this );
-				}
-			}
 		});
+     }
+	
 	 
 	 //$('.select').customSelect();
 	 

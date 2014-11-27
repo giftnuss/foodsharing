@@ -1031,8 +1031,10 @@ function u_team($betrieb)
 		$ampel = 'ampel-gruen';
 		
 		$tel = '';
+		$number = false;
 		if(!empty($fs['handy']))
 		{
+			$number = $fs['handy'];
 			$tel .= '<span class="item phone">'.((isMob()) ? '<a href="tel:'.$fs['handy'].'"><span>'.$fs['handy'].'</span></a>' : $fs['handy']).'</span>';
 		}
 		if(!empty($fs['telefon']))
@@ -1057,12 +1059,19 @@ function u_team($betrieb)
 		
 		if (isMob())
 		{
+			$onclick = ' onclick="'.$click.'return false;"';
+			$href = '#';
+			if($number !== false)
+			{
+				$onclick = '';
+				$href = 'tel:'.preg_replace('/[^0-9\+]/','',$number);
+			}
 			$tmp = '
 				<li class="team fs-'.$fs['id'].'">
 					<div class="ui-corner-all'.$class.'">
-						<a title="#tt-tt-'.$fs['id'].'" href="#" onclick="'.$click.'return false;">'.avatar($fs).'</a>
+						<a title="#tt-tt-'.$fs['id'].'" href="'.$href.'"'.$onclick.'">'.avatar($fs).'</a>
 							<span class="infos">
-								<span class="item name"><a href="#" onclick="'.$click.'return false;" title="#tt-tt-'.$fs['id'].'"><strong>'.$fs['name'].'</strong></a> <span style="float:right">('.$fs['stat_fetchcount'].')</span></span>
+								<span class="item name"><a href="'.$href.'"'.$onclick.' title="#tt-tt-'.$fs['id'].'"><strong>'.$fs['name'].'</strong></a> <span style="float:right">('.$fs['stat_fetchcount'].')</span></span>
 								'.$tel.'
 							</span>
 				
@@ -1121,6 +1130,7 @@ function u_team($betrieb)
 			}
 			
 			$tel = '';
+			$number = false;
 			if(!empty($fs['handy']))
 			{
 				$tel .= '<span class="item phone"><span>'.$fs['handy'].'</span></span>';
@@ -1130,10 +1140,17 @@ function u_team($betrieb)
 				$tel .= '<span class="item phone"><span>'.$fs['telefon'].'</span></span>';
 			}
 			
+			$onclick = ' onclick="'.$click.'return false;"';
+			$href = '#';
+			if(isMob() && $number !== false)
+			{
+				$onclick = '';
+				$href = 'tel:'.preg_replace('/[^0-9\+]/','',$number);
+			}
 			
 				$tmp = '
 					<li class="jumper fs-'.$fs['id'].'">
-						<a class="ui-corner-all'.$class.'" title="#tt-tt-'.$fs['id'].'" href="#" onclick="'.$click.'return false;">
+						<a class="ui-corner-all'.$class.'" title="#tt-tt-'.$fs['id'].'" href="'.$href.'"'.$onclick.'>
 							'.avatar($fs).'
 							<span class="infos">
 								<span class="item"><strong>'.$fs['name'].'</strong></span>
