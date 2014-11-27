@@ -558,49 +558,99 @@ class MsgModel extends Model
 			}
 		}
 	}
+
+  public function setConversationMembers($cid,$fsids,$unread = False)
+  {
+  	if((int)$cid > 0)
+  	{
+  		$ur = 0;
+  		if($unread)
+  			$ur = 1;
+  		
+  		if(count($fsids) < 1) {
+  			$this->del('DELETE FROM `'.PREFIX.'foodsaver_has_conversation` WHERE conversation_id = '.(int)$cid);
+  		} else {
+  			$ids = implode(',', $fsids);
+  			$this->del('DELETE FROM `'.PREFIX.'foodsaver_has_conversation` WHERE conversation_id = '.(int)$cid.' AND foodsaver_id NOT IN ('.$ids.')');
+  			$values = array();
+  			foreach($fsids as $user)
+  			{
+  				$values[] = '('.(int)$cid.', '.(int)$user.', '.$ur.')';
+  			}
+  			if(count($values) > 0)
+  				$this->insert('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_conversation` (conversation_id, foodsaver_id, unread) VALUES '.implode(",",$values) );
+  		}
+  		
+  		return $this->updateConversationMembers($cid);
+  	}
+  }
+
+
+  public function addUserToConversation($cid,$fsid,$unread = False)
+  {
+    $ur = 0;
+    if($unread)
+    {
+    	$ur = 1;
+    }
+
+    $this->insert('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_conversation` (conversation_id, foodsaver_id, unread) VALUES ('.(int)$cid.', '.(int)$fsid.', '.$ur.')');
+  	return $this->updateConversationMembers($cid);
+  }
 	
-	public function deleteUserFromConversation($cid,$fsid)
+	public function deleteUserFromConversation($cid,$fsid,$deleteAlways = False)
 	{
 		/**
 		 * delete only users from non 1:1 conversations
 		 */
-		if((int)$this->qOne('SELECT COUNT(foodsaver_id) FROM `'.PREFIX.'foodsaver_has_conversation` WHERE conversation_id = '.(int)$cid) > 2)
+		if($deleteAlways || ((int)$this->qOne('SELECT COUNT(foodsaver_id) FROM `'.PREFIX.'foodsaver_has_conversation` WHERE conversation_id = '.(int)$cid) > 2))
 		{
 			$this->del('DELETE FROM `'.PREFIX.'foodsaver_has_conversation` WHERE conversation_id = '.(int)$cid.' AND foodsaver_id = '.(int)$fsid);
-			if($member = $this->qOne('SELECT member FROM '.PREFIX.'conversation WHERE id = '.(int)$cid))
-			{
-				$member = unserialize($member);
-				$out = array();
-				
-				foreach ($member as $k => $v)
-				{
-					if($v['id'] != fsId())
-					{
-						$out[$k] = $v;
-					}
-				}
-
-				return $this->update('UPDATE '.PREFIX.'conversation SET member = '.$this->strval(serialize($out)).' WHERE id = '.(int)$cid);
-			}
-			
-			return false;
+			return $this->updateConversationMembers($cid);
 		}
+		
+		return false;
 	}
 	
-	public function insertConversation($recipients)
+	public function updateConversationMembers($cid)
+	{
+		if($member = $this->qOne('SELECT member FROM '.PREFIX.'conversation WHERE id = '.(int)$cid))
+		{
+			$member = unserialize($member);
+			$out = array();
+		
+			foreach ($member as $k => $v)
+			{
+				if((int)$v['id'] > 0)
+				{
+					$out[$k] = $v;
+				}
+			}
+		
+			return $this->update('UPDATE '.PREFIX.'conversation SET member = '.$this->strval(serialize($out)).' WHERE id = '.(int)$cid);
+		}
+			
+		return false;
+	}
+	
+	public function insertConversation($recipients,$locked = false)
 	{
 		/*
 		 * first get one new conversation
 		 */
+    $lock = 0;
+    if($locked)
+      $lock = 1;
 		
 		$sql = 'INSERT INTO `'.PREFIX.'conversation`
 			(
 				`start`, 
 				`last`, 
 				`last_foodsaver_id`,
-				`start_foodsaver_id`
+        `start_foodsaver_id`,
+        `locked`
 			) 
-			VALUES (NOW(),NOW(),'.(int)fsId().','.(int)fsId().')';
+			VALUES (NOW(),NOW(),'.(int)fsId().','.(int)fsId().','.(int)$lock.')';
 		
 		if(($cid = $this->insert($sql)) > 0)
 		{
