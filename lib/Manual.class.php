@@ -1263,7 +1263,8 @@ GROUP BY foodsaver_id'));
 			`ansprechpartner`,
 			`telefon`,
 			`fax`,
-			`email`	
+			`email`,
+			`public_info`
 			
 			FROM 		`'.PREFIX.'betrieb`
 			
@@ -3375,7 +3376,8 @@ GROUP BY foodsaver_id'));
 			`presse`,
 			`sticker`,
 			`abholmenge`,
-			`prefetchtime`
+			`prefetchtime`,
+			`public_info`
 			
 			FROM 		`'.PREFIX.'betrieb`
 			

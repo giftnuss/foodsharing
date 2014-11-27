@@ -248,8 +248,6 @@ function betrieb_form($bezirk = false,$page = '')
 		$verantwortlich_select = v_input_wrapper(s('foodsaver'), '<input type="hidden" name="foodsaver[]" value="'.fsId().'" />Du wirst durch die Eintragrung vorerst verantwortlich für Diesen Betrieb');
 	}
 	
-	debug($g_data);
-	
 	
 	addJs('
 		$(".cb-foodsaver").click(function(){
