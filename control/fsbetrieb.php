@@ -1057,35 +1057,17 @@ function u_team($betrieb)
 			));
 		}
 		
-		if (isMob())
+		$onclick = ' onclick="'.$click.'return false;"';
+		$href = '#';
+		if($number !== false && isMob())
 		{
-			$onclick = ' onclick="'.$click.'return false;"';
-			$href = '#';
-			if($number !== false)
-			{
-				$onclick = '';
-				$href = 'tel:'.preg_replace('/[^0-9\+]/','',$number);
-			}
-			$tmp = '
-				<li class="team fs-'.$fs['id'].'">
-					<div class="ui-corner-all'.$class.'">
-						<a title="#tt-tt-'.$fs['id'].'" href="'.$href.'"'.$onclick.'">'.avatar($fs).'</a>
-							<span class="infos">
-								<span class="item name"><a href="'.$href.'"'.$onclick.' title="#tt-tt-'.$fs['id'].'"><strong>'.$fs['name'].'</strong></a> <span style="float:right">('.$fs['stat_fetchcount'].')</span></span>
-								'.$tel.'
-							</span>
-				
-					</div>
-					<span style="display:none" class="tt-'.$fs['id'].'">
-						'.$fs['vorname'].' '.$since.'<br />
-						'.$last.'
-					</span>
-				</li>';
+			$onclick = '';
+			$href = 'tel:'.preg_replace('/[^0-9\+]/','',$number);
 		}
-		else {
-			$tmp = '
+		
+		$tmp = '
 				<li class="team fs-'.$fs['id'].'">
-					<a class="ui-corner-all'.$class.'" title="#tt-tt-'.$fs['id'].'" href="#" onclick="'.$click.'return false;">
+					<a class="ui-corner-all'.$class.'" title="#tt-tt-'.$fs['id'].'" href="'.$href.'"'.$onclick.'>
 						'.avatar($fs).'
 						<span class="infos">
 							<span class="item"><strong>'.$fs['name'].'</strong> <span style="float:right">('.$fs['stat_fetchcount'].')</span></span>
@@ -1093,11 +1075,9 @@ function u_team($betrieb)
 						</span>
 					</a>
 					<span style="display:none" class="tt-'.$fs['id'].'">
-						'.$fs['vorname'].' '.$since.'<br />
-						'.$last.'
+						'.$fs['vorname'].' ist Springer seit '.date('m/y',$fs['add_date']).'
 					</span>
 				</li>';
-		}
 		
 		if($fs['sleep_status'] == 0)
 		{
