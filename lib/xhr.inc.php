@@ -2542,7 +2542,7 @@ function xhr_becomeBezirk($data)
 		
 		if(empty($new) && $bezirk_id > 0)
 		{
-			
+			/*
 			if(($active = $db->qOne('SELECT `active` FROM `'.PREFIX.'foodsaver_has_bezirk` WHERE `bezirk_id` = '.(int)$bezirk_id.' AND `foodsaver_id` = '.(int)fsId().' ')) !== false)
 			{
 				if($active == 1)
@@ -2553,6 +2553,7 @@ function xhr_becomeBezirk($data)
 					));
 				}
 			}
+			*/
 			/*
 				// schon im bezirk
 				if($active == 1)
