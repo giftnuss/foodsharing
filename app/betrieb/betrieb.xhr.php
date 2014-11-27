@@ -220,7 +220,7 @@ class BetriebXhr extends Control
 			}
 			if(!empty($ids))
 			{
-				if($betriebe = $this->model->q('SELECT id,name,bezirk_id,str,hsnr FROM fs_betrieb WHERE bezirk_id = 0 OR bezirk_id IS NULL'))
+				if($betriebe = $this->model->q('SELECT id,name,bezirk_id,str,hsnr FROM fs_betrieb WHERE in IN('.implode(',',$ids).') AND ( bezirk_id = 0 OR bezirk_id IS NULL)'))
 				{
 					$dia = new XhrDialog();
 				
