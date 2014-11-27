@@ -192,4 +192,105 @@ class BetriebXhr extends Control
 		
 		return $dia->xhrout();
 	}
+	
+	public function savebezirkids()
+	{
+		if(isset($_GET['ids']) && is_array($_GET['ids']) && count($_GET['ids']) > 0)
+		{
+			foreach ($_GET['ids'] as $b)
+			{
+				if($this->model->isVerantwortlich($b['id']) && (int)$b['v'] > 0)
+				{
+					$this->model->updateBetriebBezirk($b['id'],$b['v']);
+				}
+			}
+			
+		}
+		return array('status'=>1);
+	}
+	
+	public function setbezirkids()
+	{
+		if(isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich']) )
+		{
+			$ids = array();
+			foreach ($_SESSION['client']['verantwortlich'] as $b)
+			{
+				$ids[] = (int)$b['betrieb_id'];
+			}
+			if(!empty($ids))
+			{
+				if($betriebe = $this->model->q('SELECT id,name,bezirk_id,str,hsnr FROM fs_betrieb WHERE bezirk_id = 0 OR bezirk_id IS NULL'))
+				{
+					$dia = new XhrDialog();
+				
+					$dia->setTitle('Fehlende Zuordnung');
+					$dia->addContent(v_info('Für folgende Betriebe wurde noch kein Bezirk zugeordnet, bitte gebe einen Bezirk an.'));
+					$dia->addOpt('width', '650px');
+					$dia->noOverflow();
+					
+					$bezirks = $this->model->getBezirke();
+					
+					foreach ($bezirks as $key => $b)
+					{
+						if( !in_array($b['type'],array(1,2,3,9)) )
+						{
+							unset($bezirks[$key]);
+						}
+					}
+					
+					$cnt= '
+					<div id="betriebetoselect">';
+					foreach ($betriebe as $b)
+					{
+						$cnt .= v_form_select('b_'.$b['id'],array(
+							'label'=> $b['name'].', '.$b['str'].' '.$b['hsnr'],
+							'values'=> $bezirks
+						));
+					}
+					$cnt .= '
+					</div>';
+					$dia->addJs('
+						$("#savebetriebetoselect").click(function(ev){
+							ev.preventDefault();
+							
+							var saveArr = new Array();
+							
+							$("#betriebetoselect select.input.select").each(function(){
+								var $this = $(this);
+								var value = parseInt($this.val());
+								var id = parseInt($this.attr("id").split("b_")[1]);
+							
+								if(id > 0 && value > 0)
+								{
+									saveArr.push({
+										id:id,
+										v:value
+									});
+								}
+							});
+							
+							if(saveArr.length > 0)
+							{
+								ajax.req("betrieb","savebezirkids",{
+									data: {ids: saveArr},
+									success: function(){
+										pulseInfo("Erfolgreich gespeichert!");
+										$("#'.$dia->getId().'").dialog("close");
+									}
+								});
+							}
+						});		
+					');
+					$dia->addContent($cnt);
+					$dia->addContent(v_input_wrapper(false, '<a class="button" id="savebetriebetoselect" href="#">'.s('save').'</a>'));
+					
+					return $dia->xhrout();
+				}
+			}
+		}
+		
+		
+		
+	}
 }

@@ -280,6 +280,24 @@ else if(S::may('fs'))
 	{
 		addJs('becomeBezirk();');
 	}
+	/*
+	 * check is there are betrieb not ordered to an bezirk
+	 */
+	else if (isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich']) )
+	{
+		$ids = array();
+		foreach ($_SESSION['client']['verantwortlich'] as $b)
+		{
+			$ids[] = (int)$b['betrieb_id'];
+		}
+		if(!empty($ids))
+		{
+			if($bids = $db->q('SELECT id,name,bezirk_id FROM fs_betrieb WHERE bezirk_id = 0 OR bezirk_id IS NULL'))
+			{
+				addJs('ajax.req("betrieb","setbezirkids");');
+			}
+		}
+	}
 	
 	//print_r($_SESSION);
 	

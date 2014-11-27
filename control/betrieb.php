@@ -62,7 +62,9 @@ elseif($id = getActionId('edit'))
 		
 		setEditData($data);
 		
-		addContent(betrieb_form($db->getBezirk($data['bezirk_id'])));
+		$bezirk = $db->getValues(array('id','name'),'bezirk',$data['bezirk_id']);
+		
+		addContent(betrieb_form($bezirk));
 	}
 	else
 	{
@@ -221,6 +223,7 @@ function betrieb_form($bezirk = false,$page = '')
 {
 	global $db;
 	global $g_data;
+	
 	
 	$bc = v_bezirkChooser('bezirk_id',$bezirk);
 	
