@@ -214,7 +214,7 @@ function update_message_tpl($id,$data)
 		SET 	`language_id` =  '.$db->intval($data['language_id']).',
 				`name` =  '.$db->strval($data['name']).',
 				`subject` =  '.$db->strval($data['subject']).',
-				`body` =  '.$db->strval($data['body']).'
+				`body` =  '.$db->strval($data['body'],'<p><br><a><h1><h2><h3><ul><li><ol>').'
 
 		WHERE 	`id` = '.$db->intval($id));
 }			
