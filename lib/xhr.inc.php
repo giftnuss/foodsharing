@@ -2148,11 +2148,18 @@ function xhr_signoutBetrieb($data)
 	{
 		$db->del('DELETE FROM `'.PREFIX.'betrieb_team` WHERE `betrieb_id` = '.(int)$data['bid'].' AND `foodsaver_id` = '.fsId().' ');
 		$db->del('DELETE FROM `'.PREFIX.'abholer` WHERE `betrieb_id` = '.(int)$data['bid'].' AND `foodsaver_id` = '.fsId().' AND `date` > NOW()');
-    $msg = loadModel('msg');
-    $tcid = getBetriebConversation($data['bid']);
-    $scid = getBetriebConversation($data['bid'], true);
-    $msg->deleteUserFromConversation($tcid, fsId(), true);
-    $msg->deleteUserFromConversation($scid, fsId(), true);
+
+		$msg = loadModel('msg');
+		
+	    if($tcid = $msg->getBetriebConversation($data['bid']))
+	    {
+	    	$msg->deleteUserFromConversation($tcid, fsId(), true);
+	    }
+	    if($scid = $msg->getBetriebConversation($data['bid'], true))
+	    {
+	    	$msg->deleteUserFromConversation($scid, fsId(), true);
+	    }
+	    
 		return 1;
 	}
 	
