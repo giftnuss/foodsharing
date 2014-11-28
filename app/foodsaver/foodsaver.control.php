@@ -206,9 +206,10 @@ function foodsaver_form($title = 'Foodsaver')
 			');
 
 	$bezirk = false;
+	
 	if((int)$g_data['bezirk_id'] > 0)
 	{
-	$bezirk = $db->getBezirk($g_data['bezirk_id']);
+		$bezirk = $db->getBezirk($g_data['bezirk_id']);
 	}
 
 	$bezirkchoose = v_bezirkChooser('bezirk_id',$bezirk);

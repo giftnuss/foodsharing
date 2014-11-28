@@ -2254,11 +2254,12 @@ GROUP BY foodsaver_id'));
 	
 	public function getBezirk($id = false)
 	{
-		if($id == false && isset($_SESSION['client']['bezirk_id']))
+		if($id === false && isset($_SESSION['client']['bezirk_id']) && (int)$_SESSION['client']['bezirk_id'] > 0)
 		{
 			$id = $_SESSION['client']['bezirk_id'];
 		}
-		else
+		
+		if($id == 0)
 		{
 			return false;
 		}
