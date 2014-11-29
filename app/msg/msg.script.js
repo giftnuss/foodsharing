@@ -596,7 +596,6 @@ var msg = {
 			$(window).scrollTop($(document).height());
 			//$('body').scrollTop($('body')[0].scrollHeight);
 		}
-		
 	}
 };
 

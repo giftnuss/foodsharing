@@ -138,6 +138,11 @@
 {
 	color:#fff;
 }
+li.unread-1 
+{
+    background-color: #f5f5b5;
+}
+
 @media all and (max-width:600px)
 {
 	body
