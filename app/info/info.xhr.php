@@ -45,8 +45,17 @@ class InfoXhr extends Control
 			}
 			if(!empty($ids))
 			{
-				$bell += (int)$this->model->qOne('SELECT COUNT( betrieb_id ) FROM fs_abholer a WHERE betrieb_id IN('.implode(',',$ids).') AND confirmed = 0 ');
+				$bell += (int)$this->model->qOne('SELECT COUNT( betrieb_id ) FROM fs_abholer a WHERE betrieb_id IN('.implode(',',$ids).') AND confirmed = 0 AND `date` > NOW() ');
 			}
+		}
+		// get new fairteiler badgecount only for region admin
+		if(S::may('bot'))
+		{
+			if($count = $this->model->getFairteilerBadgdeCount())
+			{
+				$bell += $count;
+			}
+			
 		}
 		
 		$xhr->addData('bell', $bell);

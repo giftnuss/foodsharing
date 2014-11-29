@@ -20,4 +20,15 @@ class InfoModel extends Model
 	{
 		return $this->qCol('SELECT bell_id FROM '.PREFIX.'foodsaver_has_bell WHERE foodsaver_id = '.(int)fsId().' AND seen = 0');
 	}
+	
+	/**
+	 * returns the count of new fairteiler
+	 */
+	public function getFairteilerBadgdeCount()
+	{
+		if($ids = $this->getBotBezirkIds())
+		{
+			return $this->qOne('SELECT COUNT(id) FROM '.PREFIX.'fairteiler WHERE bezirk_id IN('.implode(',',$ids).') AND `status` = 0');
+		}
+	}
 }
