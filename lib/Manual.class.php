@@ -1868,13 +1868,17 @@ GROUP BY foodsaver_id'));
 		{
 			return false;
 		}
-	    $out = $this->qCol('SELECT bezirk_id FROM `'.PREFIX.'bezirk_closure` WHERE ancestor_id = '.(int)$bid);
-	    
-	    $ou = array();
-	    $ou[$bid] = $bid;
-	    foreach ($out as $o)
+		
+		$ou = array();
+		$ou[$bid] = $bid;
+		
+	    if($out = $this->qCol('SELECT bezirk_id FROM `'.PREFIX.'bezirk_closure` WHERE ancestor_id = '.(int)$bid))
 	    {
-	      $ou[(int)$o] = (int)$o;
+	    	
+	    	foreach ($out as $o)
+	    	{
+	    		$ou[(int)$o] = (int)$o;
+	    	}
 	    }
 	    
 	    return $ou;

@@ -337,4 +337,23 @@ class Model extends ManualDb
 		}
 		return false;
  	}
+ 	
+ 	public function getRealBezirke()
+ 	{
+ 		if($bezirks = $this->getBezirke())
+ 		{
+ 			$out = array();
+ 			foreach ($bezirks as $b)
+ 			{
+ 				if( in_array($b['type'],array(1,2,3,9)) )
+ 				{
+ 					$out[] = $b;
+ 				}
+ 			}
+ 			
+ 			return $out;
+ 		}
+
+ 		return false;
+ 	}
 }

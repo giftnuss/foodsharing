@@ -69,6 +69,30 @@ class BellModel extends Model
 		return $this->q('SELECT COUNT( b.id ) AS count, b.name, b.id, MAX( a.date ) AS `date`, UNIX_TIMESTAMP(MAX( a.date )) AS date_ts FROM `fs_betrieb` b, fs_abholer a	WHERE a.betrieb_id = b.id AND a.betrieb_id IN('.implode(',',$bids).') AND	a.confirmed = 0  AND a.`date` > NOW() GROUP BY b.id');
 	}
 	
+	public function getFairteilerBells()
+	{
+		if($bids = $this->getBotBezirkIds())
+		{
+			return $this->q('
+				SELECT 	
+					ft.id,
+					ft.`bezirk_id`,
+					bz.name AS bezirk_name,
+					ft.`name`,
+					ft.`add_date`,
+					UNIX_TIMESTAMP(ft.`add_date`) AS time_ts
+				
+				FROM 	
+					'.PREFIX.'fairteiler ft,
+					'.PREFIX.'bezirk bz
+						
+					
+				WHERE 	ft.bezirk_id = bz.id
+				AND 	ft.status = 0
+				AND 	ft.bezirk_id IN('.implode(',',$bids).')');
+		}
+	}
+	
 	public function delbell($id)
 	{
 		return $this->del('DELETE FROM `'.PREFIX.'foodsaver_has_bell` WHERE `bell_id` = '.(int)$id.' AND foodsaver_id = '.(int)fsId());

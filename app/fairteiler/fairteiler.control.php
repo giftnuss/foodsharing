@@ -47,7 +47,7 @@ class FairteilerControl extends Control
 			$this->bezirk_id = 0;
 			$this->bezirk = false;
 		}
-		$this->bezirke = $this->model->getBezirke();
+		$this->bezirke = $this->model->getRealBezirke();
 		$this->view->setBezirke($this->bezirke);
 		
 		$this->view->setBezirk($this->bezirk);

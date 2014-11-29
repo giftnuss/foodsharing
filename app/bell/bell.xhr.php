@@ -67,7 +67,45 @@ class BellXhr extends Control
 			}
 		}
 		
-		
+		/*
+		 * additional bells for new fairteiler
+		 */
+		if(S::may('bot'))
+		{
+			if($fbells = $this->model->getFairteilerBells())
+			{
+				$bbells = array();
+					
+				foreach ($fbells as $b)
+				{
+					$bbells[]= array(
+							'id'=> 'f-'.$b['id'],
+							'name' => 'sharepoint_activate_title',
+							'body' => 'sharepoint_activate',
+							'vars' => array(
+									'bezirk' => $b['bezirk_name'],
+									'name' => $b['name']
+							),
+							'attr' => array(
+									'href' => '?page=fairteiler&sub=check&id='.$b['id']
+							),
+							'icon' => 'img img-recycle yellow',
+							'time' => $b['add_date'],
+							'time_ts' => $b['time_ts'],
+							'seen' => 0,
+							'closeable' => 0
+					);
+				}
+				if($bells)
+				{
+					$bells = array_merge($bbells,$bells);
+				}
+				else
+				{
+					$bells = $bbells;
+				}
+			}
+		}
 		
 		$xhr->addData('html', $this->view->bellList($bells));
 		
