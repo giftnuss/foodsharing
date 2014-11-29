@@ -55,7 +55,7 @@ function mb_new_message(email)
 function mb_mailto(email)
 {
 	mb_clearEditor();
-	$("#edit-an").val(email);
+	$(".edit-an:first").val(email);
 	$("#message-body").dialog("close");
 	$("#message-editor").dialog("open");
 	if($("#edit-subject").length > 0)

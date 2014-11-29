@@ -40,6 +40,21 @@ class ProfileView extends View
 			);
 		}
 		
+		if(S::may('orga'))
+		{
+			$infos[] = array(
+					'name' => s('private_mail'),
+					'val' => '<a href="?page=mailbox&mailto='.urlencode($this->foodsaver['email']).'">'.$this->foodsaver['email'].'</a>'
+			);
+			if($this->foodsaver['mailbox'])
+			{
+				$infos[] = array(
+						'name' => s('mailbox'),
+						'val' => '<a href="?page=mailbox&mailto='.urlencode($this->foodsaver['mailbox']).'">'.$this->foodsaver['mailbox'].'</a>'
+				);
+			}
+		}
+		
 		if($this->foodsaver['botschafter'])
 		{
 			

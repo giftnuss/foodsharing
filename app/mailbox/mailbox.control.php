@@ -69,6 +69,11 @@ class MailboxControl extends Control
 			addContent($this->view->options(),CNT_LEFT);
 			
 		}
+		
+		if(isset($_GET['mailto']) && validEmail($_GET['mailto']))
+		{
+			addJs('mb_mailto("'.$_GET['mailto'].'");');
+		}
 	}
 	
 	public function newbox()

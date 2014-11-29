@@ -347,7 +347,6 @@ class MailboxView extends View
 			}
 		});
 		u_addTypeHead();
-		
 		');
 		
 		addJsFunc('

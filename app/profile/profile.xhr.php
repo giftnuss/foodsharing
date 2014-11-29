@@ -27,6 +27,12 @@ class ProfileXhr extends Control
 			if(isset($fs['id']))
 			{
 				$this->foodsaver = $fs;
+				$this->foodsaver['mailbox'] = false;
+				if(S::may('orga') && (int)$fs['mailbox_id'] > 0)
+				{
+					$this->foodsaver['mailbox'] = $this->model->getVal('name', 'mailbox', $fs['mailbox_id']).'@'.DEFAULT_HOST;
+				}
+				
 				/*
 					* -1: no buddy
 					*  0: requested
