@@ -37,3 +37,5 @@ $g_lang['public_time'] = 'Ungefähre Tageszeit zum abholen';
 $g_lang['fetchercount'] = 'Anzahl der Abholer/innen';
 $g_lang['fetch_history'] = 'Abhol-History';
 $g_lang['prefetchtime'] = 'Wie viel Wochen im voraus können sich Foodsaver eintragen?';
+$g_lang['no_member'] = 'Du bist gar kein Mitglied in diesem Betrieb';
+$g_lang['signout_error_admin'] = 'Du bist verantwortlich für diesen Betrieb und kannst Dich nicht löschen!';

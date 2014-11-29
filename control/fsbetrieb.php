@@ -569,19 +569,13 @@ else if(isset($_GET['id']))
 			    	text: $("#signout_shure .sure").text(),
 			    	click:function(){
 			    		showLoader();
-			    		$.ajax({
-			    			url:"xhr.php?f=signoutBetrieb",
-			    			data:{"bid":signout_bid},
-			    			success:function(ret){
-			    				if(ret == 1)
-			    				{
-			    					goTo("?page=relogin&url=" + encodeURIComponent("?page=dashboard") );
-			    				}
-			    			},
-			    			complete:function(){
-			    				hideLoader();
-			    			}
-			    		});
+						
+						ajax.req("betrieb","signout",{
+							data:{id:'.(int)$_GET['id'].'},
+							success: function(){
+								
+							}
+						});
 			    	}
 			    },
 			    {

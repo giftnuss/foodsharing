@@ -8,6 +8,12 @@ class BetriebXhr extends Control
 		$this->view = new BetriebView();
 
 		parent::__construct();
+		
+		if(!S::may('fs'))
+		{
+			exit();
+		}
+		
 	}
 	
 	public function savedate()
@@ -289,8 +295,38 @@ class BetriebXhr extends Control
 				}
 			}
 		}
-		
-		
-		
+	}
+	
+	public function signout()
+	{
+		$xhr = new Xhr();
+		if($this->model->isVerantwortlich($_GET['id']))
+		{
+			$xhr->addMessage(s('signout_error_admin'),'error');
+		}
+		else if($this->model->isInTeam($_GET['id']))
+		{
+			$this->model->del('DELETE FROM `'.PREFIX.'betrieb_team` WHERE `betrieb_id` = '.(int)$_GET['id'].' AND `foodsaver_id` = '.fsId().' ');
+			$this->model->del('DELETE FROM `'.PREFIX.'abholer` WHERE `betrieb_id` = '.(int)$_GET['id'].' AND `foodsaver_id` = '.fsId().' AND `date` > NOW()');
+	
+			$msg = loadModel('msg');
+	
+			if($tcid = $msg->getBetriebConversation($_GET['id']))
+			{
+				$msg->deleteUserFromConversation($tcid, fsId(), true);
+			}
+			if($scid = $msg->getBetriebConversation($_GET['id'], true))
+			{
+				$msg->deleteUserFromConversation($scid, fsId(), true);
+			}
+			$xhr->addScript('goTo("?page=relogin&url=" + encodeURIComponent("?page=dashboard") );');
+		}
+		else
+		{
+			//$xhr->setStatus(0);
+			$xhr->addMessage(s('no_member'),'error');
+		}
+	
+		$xhr->send();
 	}
 }

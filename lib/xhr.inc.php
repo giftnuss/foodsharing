@@ -2141,31 +2141,6 @@ function xhr_denyRequest($data)
 	}
 }
 
-function xhr_signoutBetrieb($data)
-{
-	global $db;
-	if($db->isInTeam($data['bid']))
-	{
-		$db->del('DELETE FROM `'.PREFIX.'betrieb_team` WHERE `betrieb_id` = '.(int)$data['bid'].' AND `foodsaver_id` = '.fsId().' ');
-		$db->del('DELETE FROM `'.PREFIX.'abholer` WHERE `betrieb_id` = '.(int)$data['bid'].' AND `foodsaver_id` = '.fsId().' AND `date` > NOW()');
-
-		$msg = loadModel('msg');
-		
-	    if($tcid = $msg->getBetriebConversation($data['bid']))
-	    {
-	    	$msg->deleteUserFromConversation($tcid, fsId(), true);
-	    }
-	    if($scid = $msg->getBetriebConversation($data['bid'], true))
-	    {
-	    	$msg->deleteUserFromConversation($scid, fsId(), true);
-	    }
-	    
-		return 1;
-	}
-	
-	return 0;
-}
-
 function xhr_signoutBezirk($data)
 {
 	$db = loadModel('bezirk');
