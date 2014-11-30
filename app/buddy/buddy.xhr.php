@@ -16,6 +16,9 @@ class BuddyXhr extends Control
 		{
 			$this->model->confirmBuddy($_GET['id']);
 
+			$this->model->delBells('buddy-' . fsId() . '-' . (int)$_GET['id']);
+			$this->model->delBells('buddy-' . (int)$_GET['id'] . fsId());
+			
 			return array(
 					'status' => 1,
 					'script' => '$(".buddyRequest").remove();pulseInfo("Jetzt kennt ihr euch!");init_infos();'
@@ -43,8 +46,9 @@ class BuddyXhr extends Control
 			// variables for the language strings
 			$vars = array('name' => S::user('name'));
 			
+			$identifier = 'buddy-' . fsId() . '-' . (int)$_GET['id'];
 			
-			$this->model->addBell($_GET['id'], $title, $body, $icon, $link_attributes, $vars);
+			$this->model->addBell($_GET['id'], $title, $body, $icon, $link_attributes, $vars, $identifier);
 			
 			return array(
 				'status' => 1,
