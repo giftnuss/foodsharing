@@ -112,6 +112,28 @@ class ContentControl extends Control
 		}
 	}
 	
+	public function faq()
+	{
+		addBread('F.A.Q');
+		addTitle('F.A.Q.');
+		
+		$cat_ids = array(1,6,7);
+		if(S::may('fs'))
+		{
+			$cat_ids[] = 2;
+			$cat_ids[] = 4;
+		}
+		if(S::may('bot'))
+		{
+			$cat_ids[] = 5;
+		}
+		
+		if($faq = $this->model->listFaq($cat_ids))
+		{
+			addContent($this->view->faq($faq));
+		}
+	}
+	
 	public function impressum()
 	{
 		if($cnt = $this->model->getContent(8))

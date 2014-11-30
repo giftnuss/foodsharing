@@ -40,6 +40,18 @@ div.partner h4
 	float: left;
     margin-right: 15px;
 }
+.faq
+{
+	background-color: #fff;
+	margin-bottom:15px;
+}
+.faq h3
+{
+	color: #46891b;
+    font-family: "Alfa Slab One";
+    font-size: 25px;
+    font-weight:normal;
+}
 @media (max-width: 900px) {
 	div.partner
 	{
