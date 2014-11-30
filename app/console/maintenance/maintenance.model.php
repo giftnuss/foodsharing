@@ -229,4 +229,136 @@ class MaintenanceModel extends ConsoleModel
 				`last_login` < "'.date('Y-m-d H:i:s',( time()-(84400*$days)) ).'"
 		');
 	}
+	
+	public function getAlertBetriebeAdmins()
+	{
+		$dow = (int)date('w');
+		
+		$dow2 = $dow+1;
+		if($dow2 == 7)
+		{
+			$dow2 = 0;
+		}
+		
+		$sql = '
+			SELECT 
+				DISTINCT z.betrieb_id
+
+			FROM 
+				fs_abholzeiten z
+				
+			LEFT JOIN
+				fs_betrieb b
+				
+			ON
+				z.betrieb_id = b.id
+				
+			WHERE
+				b.betrieb_status_id IN(3,5)
+				
+			AND
+			(
+				(
+					z.dow = '.(int)$dow.'
+					AND
+					z.time >= "15:00:00"
+				)
+				OR
+				(
+					z.dow = '.(int)$dow2.'
+					AND
+					z.time < "15:00:00"
+				)
+			)
+		';
+		
+		if($betriebe = $this->q($sql))
+		{
+			$bids = array();
+			
+			foreach ($betriebe as $b)
+			{
+				$bids[(int)$b['betrieb_id']] = (int)$b['betrieb_id']; 
+			}
+			
+			$date1 = date('Y-m-d') . ' 15:00:00';
+			$date1_end = date('Y-m-d') . ' 23:59:59';
+			
+			$date2 = date('Y-m-d', time()+86400) . ' 00:00:00';
+			$date2_end = date('Y-m-d', time()+86400) . ' 15:00:00';
+			
+			$sql2 = '
+				SELECT
+					b.id
+				
+				FROM
+					'.PREFIX.'betrieb b,
+					'.PREFIX.'abholer a
+				
+				WHERE
+					a.betrieb_id = b.id
+						
+				AND 
+					a.confirmed = 1
+						
+				AND 
+					b.id IN('.implode(',',$bids).')
+							
+				AND 
+				(
+					a.date >= "'.$date1.'"
+					AND
+					a.date <= "'.$date1_end.'"
+				)
+				OR
+				(
+					a.date >= "'.$date2.'"
+					AND
+					a.date <= "'.$date2_end.'"
+				)
+			';
+			
+			if($betrieb_has_fetcher = $this->q($sql2))
+			{
+				foreach ($betrieb_has_fetcher as $bb)
+				{
+					unset($bids[$bb['id']]);
+				}
+			}
+			
+			if(!empty($bids))
+			{
+				return $this->q('
+					SELECT
+						fs.id AS fs_id,
+						fs.email AS fs_email,
+						fs.geschlecht,
+						fs.name AS fs_name,
+						b.id AS betrieb_id,
+						b.name AS betrieb_name
+						
+					FROM
+						'.PREFIX.'betrieb b,
+						'.PREFIX.'betrieb_team bt,
+						'.PREFIX.'foodsaver fs
+						
+					WHERE
+						b.id = bt.betrieb_id
+						
+					AND
+						bt.foodsaver_id = fs.id
+						
+					AND
+						bt.active = 1
+						
+					AND
+						bt.verantwortlich = 1
+					
+					AND
+						b.id IN('.implode(',',$bids).')');
+			}
+		}
+		
+		return false;
+	}
 }

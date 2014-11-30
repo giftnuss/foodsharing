@@ -11,6 +11,11 @@ class MaintenanceControl extends ConsoleControl
 	public function daily()
 	{
 		/*
+		 * warn food store manager if there are no fetching people
+		 */
+		$this->betriebFetchWarning();
+		
+		/*
 		 * update bezirk ids
 		 * there is this old 1:n relation foodsaver <=> bezirk we just check in one step the relation table
 		 */
@@ -62,13 +67,13 @@ class MaintenanceControl extends ConsoleControl
 		*/
 		//$this->model->updateRolle();
 	}
-	
+	/*
 	public function test()
 	{
 		$this->model->update('UPDATE fs_foodsaver SET sleep_status = 0');
 		$this->sleepingMode();
 	}
-	
+	*/
 	private function sleepingMode()
 	{
 		/*
@@ -389,5 +394,23 @@ class MaintenanceControl extends ConsoleControl
 	{
 		require_once 'lib/inc.php';
 		
+	}
+	
+	public function betriebFetchWarning()
+	{
+		if($foodsaver = $this->model->getAlertBetriebeAdmins())
+		{
+			info('send '.count($foodsaver).' warnings...');
+			foreach ($foodsaver as $fs)
+			{
+				$this->tplMail(28, $fs['fs_email'],array(
+					'anrede' => s('anrede_' . $fs['geschlecht']),
+					'name' => $fs['fs_name'],
+					'betrieb' => $fs['betrieb_name'],
+					'link' => URL_INTERN . '?page=fsbetrieb&id='.$fs['betrieb_id']
+				));
+			}
+			success('OK');
+		}
 	}
 }
