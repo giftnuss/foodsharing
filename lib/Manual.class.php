@@ -4023,7 +4023,7 @@ GROUP BY foodsaver_id'));
 			$ccol = 'team_conversation_id';
 		}
 		
-		return $this->qOne('SELECT '.$ccol.' FROM `'.PREFIX.'betrieb` WHERE `betrieb_id` = '.(int)$bid);
+		return $this->qOne('SELECT '.$ccol.' FROM `'.PREFIX.'betrieb` WHERE `id` = '.(int)$bid);
 	}
 
 	
