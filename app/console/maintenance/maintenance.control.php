@@ -8,6 +8,14 @@ class MaintenanceControl extends ConsoleControl
 		$this->model = new MaintenanceModel();
 	}
 	
+	public function test()
+	{
+		if($foodsaver = $this->model->getAlertBetriebeAdmins())
+		{
+			info(count($foodsaver));
+		}
+	}
+	
 	public function daily()
 	{
 		/*
