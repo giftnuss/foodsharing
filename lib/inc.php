@@ -183,7 +183,7 @@ addJs('
 				}
 			}
 		]
-	}).siblings(".ui-dialog-titlebar").remove();;
+	}).siblings(".ui-dialog-titlebar").remove();
 ');
 addHidden('<div id="fs-profile-rate-comment">'.v_form_textarea('fs-profile-rate-msg',array('desc'=>'...')).'</div>');
 
