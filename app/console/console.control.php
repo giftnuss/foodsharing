@@ -103,7 +103,7 @@ class ConsoleControl
 			$email->setBody($message['body']);
 	
 			$smtp = new fSMTP(SMTP_HOST,SMTP_PORT);
-			$smtp->authenticate(SMTP_USER, SMTP_PASS);
+			//$smtp->authenticate(SMTP_USER, SMTP_PASS);
 	
 			$email->send($smtp);
 		}
