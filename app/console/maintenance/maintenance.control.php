@@ -8,12 +8,9 @@ class MaintenanceControl extends ConsoleControl
 		$this->model = new MaintenanceModel();
 	}
 	
-	public function test()
+	public function warnings()
 	{
-		if($foodsaver = $this->model->getAlertBetriebeAdmins())
-		{
-			info(count($foodsaver));
-		}
+		$this->betriebFetchWarning();
 	}
 	
 	public function daily()
