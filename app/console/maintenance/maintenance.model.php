@@ -289,7 +289,7 @@ class MaintenanceModel extends ConsoleModel
 			
 			$sql2 = '
 				SELECT
-					b.id
+					DISTINCT b.id
 				
 				FROM
 					'.PREFIX.'betrieb b,
@@ -306,15 +306,17 @@ class MaintenanceModel extends ConsoleModel
 							
 				AND 
 				(
-					a.date >= "'.$date1.'"
-					AND
-					a.date <= "'.$date1_end.'"
-				)
-				OR
-				(
-					a.date >= "'.$date2.'"
-					AND
-					a.date <= "'.$date2_end.'"
+					(
+						a.date >= "'.$date1.'"
+						AND
+						a.date <= "'.$date1_end.'"
+					)
+					OR
+					(
+						a.date >= "'.$date2.'"
+						AND
+						a.date <= "'.$date2_end.'"
+					)
 				)
 			';
 			
