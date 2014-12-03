@@ -58,7 +58,7 @@ class GroupsView extends View
 				{
 					$orgacheck = true;
 					$orga .= '
-			<li><a class="ui-corner-all" href="?page=bezirk&bid='.$b['id'].'&sub=forum">'.$b['name'].'</a></li>';
+			<li><a class="ui-corner-all" href="/?page=bezirk&bid='.$b['id'].'&sub=forum">'.$b['name'].'</a></li>';
 				}
 			}
 			$orga .= '
@@ -143,12 +143,12 @@ class GroupsView extends View
 			
 			if(isOrgaTeam() || isBotFor($g['id']) || isBotFor($g['parent_id']))
 			{
-				$btn .= '<a class="button" href="?page=groups&sub=edit&id='.$g['id'].'">Gruppe bearbeiten</a>';
+				$btn .= '<a class="button" href="/?page=groups&sub=edit&id='.$g['id'].'">Gruppe bearbeiten</a>';
 			}
 			
 			if(mayBezirk($g['id']) || isBotFor($g['parent_id']))
 			{
-				$btn .= '<a class="button" href="?page=bezirk&bid='.$g['id'].'">Zur Gruppe</a>';
+				$btn .= '<a class="button" href="/?page=bezirk&bid='.$g['id'].'">Zur Gruppe</a>';
 			}				
 			
 				

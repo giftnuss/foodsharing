@@ -842,11 +842,11 @@ else if(isset($_GET['id']))
 		{
 			addBread($betrieb['name']);
 			info(s('not_in_team'));
-			go('?page=map&bid='.$_GET['id']);
+			go('/karte?bid='.$_GET['id']);
 		}
 		else
 		{
-			go('?page=map');
+			go('/karte');
 		}
 		
 		//addStyle('div.map {height: 400px;width: 980px;}');
@@ -1319,7 +1319,7 @@ function u_betriebList($betriebe,$title,$verantwortlich)
 			$status = v_getStatusAmpel($b['betrieb_status_id']);
 		
 			$betriebrows[$i] = array(
-					array('cnt' => '<a class="linkrow ui-corner-all" href="?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].'</a>'),
+					array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].'</a>'),
 					array('cnt' => $b['str'].' '.$b['hsnr']),
 					array('cnt' => $b['plz']),
 					array('cnt' => $status)

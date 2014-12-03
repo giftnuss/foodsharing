@@ -167,15 +167,15 @@ class SettingsView extends View
 			switch($session['quiz_id'])
 			{
 				case 1 :
-					$btn = '<a href="?page=settings&sub=upgrade/up_fs" class="button">Jetzt die Foodsaver Anmeldung abschließen!</a>';
+					$btn = '<a href="/?page=settings&sub=upgrade/up_fs" class="button">Jetzt die Foodsaver Anmeldung abschließen!</a>';
 					break;
 						
 				case 2:
-					$btn = '<a href="?page=settings&sub=upgrade/up_bip" class="button">Jetzt die Betriebsverantwortlichen Anmeldung abschließen!</a>';
+					$btn = '<a href="/?page=settings&sub=upgrade/up_bip" class="button">Jetzt die Betriebsverantwortlichen Anmeldung abschließen!</a>';
 					break;
 						
 				case 3:
-					$btn = '<a href="?page=settings&sub=upgrade/up_bot" class="button">Jetzt die Botschafter Anmeldung abschließen!</a>';
+					$btn = '<a href="/?page=settings&sub=upgrade/up_bot" class="button">Jetzt die Botschafter Anmeldung abschließen!</a>';
 					break;
 						
 				default:
@@ -502,7 +502,7 @@ class SettingsView extends View
 					$("#delete-account-confirm").dialog("close");
 				},
 				"'.s('delete_account_confirm_bt').'" : function(){
-					goTo("?page=settings&deleteaccount=1&reason=" + encodeURIComponent($("#reason_to_delete").val()));
+					goTo("/?page=settings&deleteaccount=1&reason=" + encodeURIComponent($("#reason_to_delete").val()));
 				}
 			}
 		});
@@ -555,12 +555,16 @@ class SettingsView extends View
 				array('name' => 'Meine Daten niemandem zeigen','id' => 4)
 		)));
 	
-		if(isBotschafter())
+		if(S::may('bot'))
 		{
 			$oeff = '<input type="hidden" name="photo_public" value="1" />';
 		}
 		$bezirkchoose = '';
-		if(isOrgaTeam())
+		$position = '';
+		$communications = v_form_text('homepage').
+				v_form_text('tox',array('desc' => s('tox_desc')));
+		
+		if(S::may('orga'))
 		{
 			$bezirk = array('id'=>0,'name'=>false);
 			if($b = getBezirk($g_data['bezirk_id']))
@@ -570,6 +574,12 @@ class SettingsView extends View
 			}
 	
 			$bezirkchoose = v_bezirkChooser('bezirk_id',$bezirk);
+			
+			$position = v_form_text('position');
+			
+			$communications .= 
+				v_form_text('twitter').
+				v_form_text('github');
 		}
 	
 		addJs('
@@ -598,9 +608,12 @@ class SettingsView extends View
 	');
 		
 		$g_data['ort'] = $g_data['stadt'];
+		
+		
 	
 		return v_quickform(s('settings'),array(
 				$bezirkchoose,
+				
 				//v_form_text('name'),
 				//v_form_text('nachname'),
 				/*
@@ -622,6 +635,8 @@ class SettingsView extends View
 				$this->latLonPicker('LatLng'),
 				v_form_text('telefon'),
 				v_form_text('handy'),
+				$communications,
+				$position,
 				v_form_textarea('about_me_public',array('desc'=>'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz, hier unsere Vorlage: http://foodsharing.de/ueber-uns Gerne kannst du auch Deine Website, Projekt oder sonstiges erwähnen, was Du öffentlich an Informationen teilen möchtest, die vorteilhaft sind.')),
 				$oeff
 		),array('submit'=>s('save')));

@@ -257,7 +257,7 @@ class FairteilerView extends View
 				}
 				$out .= '
 					<li>
-						<a href="?page=fairteiler&bid='.$bezirk['id'].'&sub=ft&id='.$ft['id'].'">
+						<a href="/?page=fairteiler&bid='.$bezirk['id'].'&sub=ft&id='.$ft['id'].'">
 							'.$image.'
 							<span class="name">'.$ft['name'].'</span>
 							<span class="clear"></span>

@@ -64,8 +64,8 @@ else
 			
 			$row_tmp[] = array('cnt' => v_activeSwitcher('blog_entry',$d['id'],$d['active']));
 			
-			$row_tmp[] = array('cnt' => '<a class="linkrow ui-corner-all" href="?page=blog_entry&a=edit&id='.$d['id'].'">'.format_d($d['time_ts']).'</a>');
-			$row_tmp[] = array('cnt' => '<a class="linkrow ui-corner-all" href="?page=blog_entry&a=edit&id='.$d['id'].'">'.$d['name'].'</a>');
+			$row_tmp[] = array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=blog_entry&a=edit&id='.$d['id'].'">'.format_d($d['time_ts']).'</a>');
+			$row_tmp[] = array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=blog_entry&a=edit&id='.$d['id'].'">'.$d['name'].'</a>');
 			$row_tmp[] = array('cnt' => v_toolbar(array('id'=>$d['id'],'types' => array('edit','delete'),'confirmMsg'=>sv('delete_sure',$d['name']))));
 			
 			

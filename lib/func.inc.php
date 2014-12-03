@@ -589,13 +589,13 @@ function getMobileMenu()
 			<select id="mobilemenu">
 				<option class="famenu" value="dashboard" selected="selected">&#xf0c9;</option>
 				<option value="/">Home</option>
-				<option value="/?page=map">Karte</option>';
+				<option value="/karte">Karte</option>';
 	
 	$out .= '
 				<option value="/?page=fairteiler">Fair-Teiler</option>
 				<option value="/?page=message">Interne Nachrichten</option>
 				<option value="/?page=mailbox">E-Mail Postfächer</option>
-				<option value="/?page=blog">Blog</option>
+				<option value="/news">Blog</option>
 				<option value="/?page=listDocument">Dokumente</option>
 				<option value="/?page=bcard">Persönliche Visitenkarte</option>
 				<option value="/?page=listFaq">FAQs</option>
@@ -732,7 +732,7 @@ function getMenu()
 					<optgroup label="Bezirke">';
 			
 			$ags = '
-					<li><a href="?page=groups"><i class="fa fa-group"></i> GRUPPEN-ÜBERSICHT</a></li>
+					<li><a href="/?page=groups"><i class="fa fa-group"></i> GRUPPEN-ÜBERSICHT</a></li>
 					<li class="break"><span></span></li>';
 			
 			$ags_mob = '
@@ -763,7 +763,7 @@ function getMenu()
 				$ags = '<ul class="bigmenu">'.$ags.'</ul>';
 			}
 			
-			$ags = '<li><a href="?page=groups">Gruppen</a>'.$ags.'</li>';
+			$ags = '<li><a href="/?page=groups">Gruppen</a>'.$ags.'</li>';
 			$ags_mob = '
 					<optgroup label="Gruppen">
 						'.$ags_mob.'
@@ -808,10 +808,10 @@ function getMenu()
 						<ul id="mainMenu" class="jMenu">
 							'.$orgamenu['default'].'
 							<li><a href="/"><i class="fa fa-home"></i></a></li>
-							<li><a class="fNiv" href="?page=map"><i class="fa fa-map-marker"></i></a></li>
+							<li><a class="fNiv" href="/karte"><i class="fa fa-map-marker"></i></a></li>
 							<li><a><i class="fa fa-question-circle"></i></a>
                                                        	<ul>
-                                                                <li><a href="?page=listFaq">F.A.Q.</a></li>
+                                                                <li><a href="/?page=listFaq">F.A.Q.</a></li>
                                                                 <li><a href="http://wiki.lebensmittelretten.de/">Wiki</a></li>
                                                         </ul>
 							</li>
@@ -825,9 +825,9 @@ function getMenu()
 						<select id="mobilemenu">
 							<option class="famenu" value="dashboard" selected="selected">&#xf0c9;</option>
 							<option value="/">Home</option>
-							<option value="?page=dashboard">Dashboard</option>
-							<option value="?page=map">Karte</option>
-							<option value="?page=listFaq">F.A.Q.</option>
+							<option value="/?page=dashboard">Dashboard</option>
+							<option value="/karte">Karte</option>
+							<option value="/?page=listFaq">F.A.Q.</option>
 							<option value="http://wiki.lebensmittelretten.de">Wiki</option>
 							'.$settings['mobile'].'
 							'.$ags_mob.'
@@ -848,9 +848,9 @@ function getMenu()
 			'default' => '
 				<ul id="mainMenu" class="jMenu">
 					<li><a class="fNiv" href="/"><i class="fa fa-home"></i></a></li>
-					<li><a class="fNiv" href="?page=map"><i class="fa fa-map-marker"></i></a></li>
+					<li><a class="fNiv" href="/karte"><i class="fa fa-map-marker"></i></a></li>
 					<li><a class="fNiv" href="/?page=blog">News</a></li>
-					<li><a class="fNiv" href="?page=content&sub=about">Über Uns</a>
+					<li><a class="fNiv" href="/?page=content&sub=about">Über Uns</a>
 						<ul>
 							<li><a href="/?page=content&sub=partner">Partner</a></li>
 							<li><a href="/?page=statistics">Statistik</a></li>
@@ -859,18 +859,18 @@ function getMenu()
 						</ul>
 					</li>
 					
-					<li><a class="fNiv" href="?page=index&sub=ratgeber">Ratgeber</a></li>
-					<li><a onclick="ajreq(\'join\',{app:\'login\'});return false;" class="fNiv" href="?page=join">Mach-Mit!</a></li>
-					<!-- <li><a class="fNiv" href="?page=login" onclick="ajreq(\'login\',{app:\'login\'});return false;">Login</a></li> -->
+					<li><a class="fNiv" href="/?page=index&sub=ratgeber">Ratgeber</a></li>
+					<li><a onclick="ajreq(\'join\',{app:\'login\'});return false;" class="fNiv" href="/?page=join">Mach-Mit!</a></li>
+					<!-- <li><a class="fNiv" href="/?page=login" onclick="ajreq(\'login\',{app:\'login\'});return false;">Login</a></li> -->
 				</ul>',
 			'mobile' => '
 				<select id="mobilemenu">
 					<option class="famenu" value="dashboard" selected="selected">&#xf0c9;</option>
 					<option value="/">Home</option>
-					<option value="?page=map">Karte</option>
-					<option value="?page=index&sub=ratgeber">Ratgeber</option>
-					<option value="?page=join">Mach-Mit!</option>
-					<option value="?page=login">Login</option>
+					<option value="/karte">Karte</option>
+					<option value="/ratgeber">Ratgeber</option>
+					<option value="/mach-mit">Mach-Mit!</option>
+					<option value="/login">Login</option>
 				</select>'
 		
 			);
@@ -913,7 +913,7 @@ function getBetriebeMenuOld()
 		foreach ($_SESSION['client']['betriebe'] as $b)
 		{
 			$out .= '
-			<li><a href="?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].'</a></li>';
+			<li><a href="/?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].'</a></li>';
 		}
 		$out .= '
 		</ul>';
@@ -944,10 +944,10 @@ function getBetriebeMenu()
 		foreach ($_SESSION['client']['betriebe'] as $cb)
 		{
 			$out .= '
-				<li><a href="?page=fsbetrieb&id='.$cb['id'].'&sub=forum">'.$cb['name'].'</a></li>';
+				<li><a href="/?page=fsbetrieb&id='.$cb['id'].'&sub=forum">'.$cb['name'].'</a></li>';
 			
 			$out_mob .= '
-				<option value="?page=fsbetrieb&id='.$cb['id'].'&sub=forum">'.$cb['name'].'</option>';
+				<option value="/?page=fsbetrieb&id='.$cb['id'].'&sub=forum">'.$cb['name'].'</option>';
 		}
 		$out .= '
 			</ul>
@@ -1038,7 +1038,7 @@ function getBetriebeMenu()
 							{
 								//if(data.active == 1)
 								//{
-									goTo( "?page=relogin&url=" + encodeURIComponent("?page=bezirk&bid=" +$("#'.$id.'").val()) );
+									goTo( "/?page=relogin&url=" + encodeURIComponent("/?page=bezirk&bid=" +$("#'.$id.'").val()) );
 								//}
 								//pulseInfo(\''.jsSafe(s('bezirk_request_successfull')).'\');
 								$.fancybox.close();
@@ -1075,12 +1075,12 @@ function getBetriebeMenu()
 			<li class="jmenu-foodsaver"><a class="fNiv">Foodsaver</a>
 				<ul>
 					<li class="arrow"></li>
-					<li><a href="?page=blog_entry">Blog</a></li>
-					<li><a href="?page=fsbetrieb">Deine Betriebe</a></li>
+					<li><a href="/?page=blog_entry">Blog</a></li>
+					<li><a href="/?page=fsbetrieb">Deine Betriebe</a></li>
 					<li><a href=".">Übersichts-Karte</a></li>
-					<li><a href="?page=message&a=neu&list">Mailing-Liste</a></li>
-					<li><a href="?page=listDocument">Dokumente</a></li>
-					<li class="menu-bottom"><a class="menu-bottom" href="?page=listFaq">FAQs</a></li>
+					<li><a href="/?page=message&a=neu&list">Mailing-Liste</a></li>
+					<li><a href="/?page=listDocument">Dokumente</a></li>
+					<li class="menu-bottom"><a class="menu-bottom" href="/?page=listFaq">FAQs</a></li>
 				</ul>
 			</li>';
 			*/
@@ -1338,7 +1338,7 @@ function getSearchMenu()
 {
 	if(isBotschafter() || isOrgaTeam())
 	{
-		return '<li class="searchIcon"><a class="fNiv" href="?page=suche">&nbsp</a></li>';
+		return '<li class="searchIcon"><a class="fNiv" href="/?page=suche">&nbsp</a></li>';
 	}
 }
 
@@ -1350,39 +1350,39 @@ function getOrgaMenu()
 			array(
 				'default' => '<li><a class="fNiv"><i class="fa fa-gear"></i></a>
 				    <ul class="bigmenu">
-				      <li><a href="?page=region">Regionen verwalten</a></li>
-				      <li><a href="?page=quiz">Quiz verwalten</a></li>
-				      <li><a href="?page=report&sub=uncom">Verstoßmeldungen</a></li>
-					  <li><a href="?page=newarea">Regionswünsche von Foodsavern</a></li>
-					  <li><a href="?page=foodsaver&bid=0">Alle Foodsaver</a></li>
-					  <li><a href="?page=betrieb&bid=0">Alle Betriebe</a></li>
-				      <li><a href="?page=email">E-Mail Verteiler</a></li>
-					  <li><a href="?page=kette">Unternehmens-Ketten</a></li>
-					  <li><a href="?page=faq">FAQ\'s verwalten</a></li>
-					  <li><a href="?page=lebensmittel">Lebensmittel-Typen verwalten</a></li>
-					  <li><a href="?page=content">Inhalte/Texte bearbeiten</a></li>
-					  <li><a href="?page=mailbox&a=manage">Mailboxen</a></li>
-					  <li class="menu-bottom"><a class="menu-bottom" href="?page=message_tpl">E-Mail Vorlagen</a></li>
+				      <li><a href="/?page=region">Regionen verwalten</a></li>
+				      <li><a href="/?page=quiz">Quiz verwalten</a></li>
+				      <li><a href="/?page=report&sub=uncom">Verstoßmeldungen</a></li>
+					  <li><a href="/?page=newarea">Regionswünsche von Foodsavern</a></li>
+					  <li><a href="/?page=foodsaver&bid=0">Alle Foodsaver</a></li>
+					  <li><a href="/?page=betrieb&bid=0">Alle Betriebe</a></li>
+				      <li><a href="/?page=email">E-Mail Verteiler</a></li>
+					  <li><a href="/?page=kette">Unternehmens-Ketten</a></li>
+					  <li><a href="/?page=faq">FAQ\'s verwalten</a></li>
+					  <li><a href="/?page=lebensmittel">Lebensmittel-Typen verwalten</a></li>
+					  <li><a href="/?page=content">Inhalte/Texte bearbeiten</a></li>
+					  <li><a href="/?page=mailbox&a=manage">Mailboxen</a></li>
+					  <li class="menu-bottom"><a class="menu-bottom" href="/?page=message_tpl">E-Mail Vorlagen</a></li>
 				    </ul>
 				  </li>',
 			
 				'mobile' => '
 					<optgroup label="Orga">
-				    	<option value="?page=region">Regionen verwalten</option>
-				    	<option value="?page=quiz">Quiz verwalten</option>
-				    	<option value="?page=report&sub=uncom">Verstoßmeldungen</option>
-						<option value="?page=newarea">Regionswünsche von Foodsavern</option>
-						<option value="?page=foodsaver&bid=0">Alle Foodsaver</option>
-						<option value="?page=betrieb&bid=0">Alle Betriebe</option>
-				    	<option value="?page=email">E-Mail Verteiler</option>
-						<option value="?page=kette">Unternehmens-Ketten</option>
-						<option value="?page=faq">FAQ\'s verwalten</option>
-					 	<option value="?page=document">Dokumente verwalten</option>
-						<option value="?page=lebensmittel">Lebensmittel-Typen verwalten</option>
-						<option value="?page=content">Öffentliche Webseiten</option>
-						<option value="?page=autokennzeichen">KFZ-Kennzeichen</option>
-						<option value="?page=mailbox&a=manage">Mailboxen</option>
-					 	<option value="?page=message_tpl">E-Mail Vorlagen</option>
+				    	<option value="/?page=region">Regionen verwalten</option>
+				    	<option value="/?page=quiz">Quiz verwalten</option>
+				    	<option value="/?page=report&sub=uncom">Verstoßmeldungen</option>
+						<option value="/?page=newarea">Regionswünsche von Foodsavern</option>
+						<option value="/?page=foodsaver&bid=0">Alle Foodsaver</option>
+						<option value="/?page=betrieb&bid=0">Alle Betriebe</option>
+				    	<option value="/?page=email">E-Mail Verteiler</option>
+						<option value="/?page=kette">Unternehmens-Ketten</option>
+						<option value="/?page=faq">FAQ\'s verwalten</option>
+					 	<option value="/?page=document">Dokumente verwalten</option>
+						<option value="/?page=lebensmittel">Lebensmittel-Typen verwalten</option>
+						<option value="/?page=content">Öffentliche Webseiten</option>
+						<option value="/?page=autokennzeichen">KFZ-Kennzeichen</option>
+						<option value="/?page=mailbox&a=manage">Mailboxen</option>
+					 	<option value="/?page=message_tpl">E-Mail Vorlagen</option>
 				    </optgroup>'
 		);
 	}
@@ -1473,13 +1473,13 @@ function getSettingsMenu()
 	$mailbox = '';
 	if(S::get('mailbox'))
 	{
-		$mailbox = '<li><a href="?page=mailbox"><i class="fa fa-envelope"></i> E-Mail Postfach</a></li>';
+		$mailbox = '<li><a href="/?page=mailbox"><i class="fa fa-envelope"></i> E-Mail Postfach</a></li>';
 	}
 	$default = '<li class="g_settings"><a class="fNiv corner-all" style="background-image:url('.img().');"><span>&nbsp;</span></a>
 				    <ul class="jmenu-settings">
-					  <li><a href="?page=settings"><i class="fa fa-gear"></i> Einstellungen</a></li>
+					  <li><a href="/?page=settings"><i class="fa fa-gear"></i> Einstellungen</a></li>
 					  '.$mailbox.'
-				      <li class="menu-bottom"><a class="menu-bottom" href="?page=logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+				      <li class="menu-bottom"><a class="menu-bottom" href="/?page=logout"><i class="fa fa-sign-out"></i> Logout</a></li>
 				    </ul>
 				  </li>';
 	
@@ -1507,19 +1507,19 @@ function getAgMenu($ag)
 {
 	
 	$out_mob = '
-		<option value="?page=bezirk&bid='.$ag['id'].'&sub=forum">'.$ag['name'].'</option>';
+		<option value="/?page=bezirk&bid='.$ag['id'].'&sub=forum">'.$ag['name'].'</option>';
 
 	$out = '
-		<li><a href="?page=bezirk&bid='.$ag['id'].'&sub=forum">'.$ag['name'].'</a>
+		<li><a href="/?page=bezirk&bid='.$ag['id'].'&sub=forum">'.$ag['name'].'</a>
 			<ul>
-				<li class="menu-top"><a class="menu-top" href="?page=bezirk&bid='.$ag['id'].'&sub=forum">Forum</a></li>
-				<li class="menu-top"><a class="menu-top" href="?page=bezirk&bid='.$ag['id'].'&sub=events">Termine</a></li>';
+				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid='.$ag['id'].'&sub=forum">Forum</a></li>
+				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid='.$ag['id'].'&sub=events">Termine</a></li>';
 	
 	if(isBotFor($ag['id']))
 	{
 		$out .= '
-			<li><a href="?page=groups&sub=edit&id='.(int)$ag['id'].'">Gruppe/Mitglieder verwalten</a></li>
-			<li><a href="?page=message&a=neu&list&bid='.$ag['id'].'">Mailing-Liste</a></li>';
+			<li><a href="/?page=groups&sub=edit&id='.(int)$ag['id'].'">Gruppe/Mitglieder verwalten</a></li>
+			<li><a href="/?page=message&a=neu&list&bid='.$ag['id'].'">Mailing-Liste</a></li>';
 	}
 	
 	$out .= '
@@ -1535,26 +1535,26 @@ function getBezirkMenu($bezirk)
 {
 	global $db;
 	
-	$out = '<li><a href="?page=bezirk&bid='.$bezirk['id'].'&sub=forum">'.$bezirk['name'].'</a>
+	$out = '<li><a href="/?page=bezirk&bid='.$bezirk['id'].'&sub=forum">'.$bezirk['name'].'</a>
 			<ul>
-				<li class="menu-top"><a class="menu-top" href="?page=bezirk&bid='.$bezirk['id'].'&sub=forum">Forum</a></li>
-				<li class="menu-top"><a class="menu-top" href="?page=bezirk&bid='.$bezirk['id'].'&sub=fairteiler">Fair-Teiler</a></li>
-				<li class="menu-top"><a class="menu-top" href="?page=bezirk&bid='.$bezirk['id'].'&sub=events">Termine</a></li>';
+				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid='.$bezirk['id'].'&sub=forum">Forum</a></li>
+				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid='.$bezirk['id'].'&sub=fairteiler">Fair-Teiler</a></li>
+				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid='.$bezirk['id'].'&sub=events">Termine</a></li>';
 	
-	$out_mob = '<option value="?page=bezirk&bid='.$bezirk['id'].'&sub=forum">'.$bezirk['name'].'</option>';
+	$out_mob = '<option value="/?page=bezirk&bid='.$bezirk['id'].'&sub=forum">'.$bezirk['name'].'</option>';
 	
 	if(S::may('fs'))
 	{
 		$out .= '
-				<li class="menu-top"><a class="menu-top" href="?page=betrieb&bid='.$bezirk['id'].'">Betriebe</a></li>';
+				<li class="menu-top"><a class="menu-top" href="/?page=betrieb&bid='.$bezirk['id'].'">Betriebe</a></li>';
 	}
 	
 	if(isBotFor($bezirk['id']))
 	{	
 		$out .= '
-			<li><a href="?page=foodsaver&bid='.$bezirk['id'].'">Foodsaver</a></li>
-			<li><a href="?page=message&a=neu&list&bid='.$bezirk['id'].'">Mailing-Liste</a></li>
-			<li class="menu-bottom"><a class="menu-bottom" href="?page=passgen&bid='.$bezirk['id'].'">Ausweise / Verifizierungen</a></li>';
+			<li><a href="/?page=foodsaver&bid='.$bezirk['id'].'">Foodsaver</a></li>
+			<li><a href="/?page=message&a=neu&list&bid='.$bezirk['id'].'">Mailing-Liste</a></li>
+			<li class="menu-bottom"><a class="menu-bottom" href="/?page=passgen&bid='.$bezirk['id'].'">Ausweise / Verifizierungen</a></li>';
 	}
 	
 	$out .= '
@@ -2346,6 +2346,16 @@ function validPlz($plz)
 	{
 		return false;
 	}
+}
+
+function validUrl($url)
+{
+	if(!filter_var($url, FILTER_VALIDATE_URL))
+	{
+		return false;
+	}
+	
+	return true;
 }
 
 function isAdmin()

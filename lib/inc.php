@@ -72,6 +72,7 @@ addCss('/css/chat.css',true);
 addCss('/css/jquery.switchButton.css',true);
 addCss('/css/info.css',true);
 addCss('/css/icons.css',true);
+addCss('/css/popup.css',true);
 if (isMob())
 {
 	 addCss('css/style_mobile.css',true);
@@ -112,8 +113,10 @@ addScript('/js/instant-search.js',true);
 addScript('/js/conv.js',true);
 addScript('/js/info.js',true);
 addScript('/js/storage.js',true);
-addScript('/js/socket.io-1.2.0.js');
-addScript('/js/socket.js');
+addScript('/js/jquery.popup.min.js',true);
+addScript('/js/socket.io-1.2.0.js',true);
+addScript('/js/socket.js',true);
+
 //scriptCompress();
 //cssCompress();
 

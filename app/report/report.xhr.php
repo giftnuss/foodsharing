@@ -31,7 +31,7 @@ class ReportXhr extends Control
 				
 				if(isset($report['betrieb']))
 				{
-					$content .= v_input_wrapper('Zugeordneter Betrieb', '<a href="?page=fsbetrieb&id='.$report['betrieb']['id'].'">'.$report['betrieb']['name'].'</a>');
+					$content .= v_input_wrapper('Zugeordneter Betrieb', '<a href="/?page=fsbetrieb&id='.$report['betrieb']['id'].'">'.$report['betrieb']['name'].'</a>');
 				}
 				
 				if(is_array($reason))

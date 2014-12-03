@@ -19,7 +19,7 @@ class ApplicationXhr extends Control
 				info("Bewerbung angenommen");
 				return array(
 					'status' => 1,
-					'script' => 'goTo("?page=bezirk&bid='.(int)$_GET['bid'].'");'
+					'script' => 'goTo("/?page=bezirk&bid='.(int)$_GET['bid'].'");'
 				);
 			}
 		}
@@ -34,7 +34,7 @@ class ApplicationXhr extends Control
 				info("Bewerbungs Status geändert");
 				return array(
 						'status' => 1,
-						'script' => 'goTo("?page=bezirk&bid='.(int)$_GET['bid'].'");'
+						'script' => 'goTo("/?page=bezirk&bid='.(int)$_GET['bid'].'");'
 				);
 			}
 		}
@@ -49,7 +49,7 @@ class ApplicationXhr extends Control
 			info("Bewerbung abgelehnt");
 			return array(
 						'status' => 1,
-						'script' => 'goTo("?page=bezirk&bid='.(int)$_GET['bid'].'");'
+						'script' => 'goTo("/?page=bezirk&bid='.(int)$_GET['bid'].'");'
 			);
 		}
 	}

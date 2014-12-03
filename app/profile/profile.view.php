@@ -44,13 +44,13 @@ class ProfileView extends View
 		{
 			$infos[] = array(
 					'name' => s('private_mail'),
-					'val' => '<a href="?page=mailbox&mailto='.urlencode($this->foodsaver['email']).'">'.$this->foodsaver['email'].'</a>'
+					'val' => '<a href="/?page=mailbox&mailto='.urlencode($this->foodsaver['email']).'">'.$this->foodsaver['email'].'</a>'
 			);
 			if($this->foodsaver['mailbox'])
 			{
 				$infos[] = array(
 						'name' => s('mailbox'),
-						'val' => '<a href="?page=mailbox&mailto='.urlencode($this->foodsaver['mailbox']).'">'.$this->foodsaver['mailbox'].'</a>'
+						'val' => '<a href="/?page=mailbox&mailto='.urlencode($this->foodsaver['mailbox']).'">'.$this->foodsaver['mailbox'].'</a>'
 				);
 			}
 		}
@@ -60,7 +60,7 @@ class ProfileView extends View
 			
 			foreach ($this->foodsaver['botschafter'] as $b)
 			{
-				$bot[$b['id']] = '<a class="light" href="?page=bezirk&bid='.$b['id'].'&sub=forum">'.$b['name'].'</a>';
+				$bot[$b['id']] = '<a class="light" href="/?page=bezirk&bid='.$b['id'].'&sub=forum">'.$b['name'].'</a>';
 			}
 			$infos[] = array(
 				'name' => $this->foodsaver['name'].' ist Botschafter für',
@@ -74,7 +74,7 @@ class ProfileView extends View
 			{
 				if(!isset($bot[$b['id']]))
 				{
-					$fsa[] = '<a class="light" href="?page=bezirk&bid='.$b['id'].'&sub=forum">'.$b['name'].'</a>';
+					$fsa[] = '<a class="light" href="/?page=bezirk&bid='.$b['id'].'&sub=forum">'.$b['name'].'</a>';
 				}
 			}
 			if(!empty($fsa))
@@ -92,7 +92,7 @@ class ProfileView extends View
 			{
 				if(isOrgateam())
 				{
-					$bot[$b['id']] = '<a class="light" href="?page=bezirk&bid='.$b['id'].'&sub=forum">'.$b['name'].'</a>';
+					$bot[$b['id']] = '<a class="light" href="/?page=bezirk&bid='.$b['id'].'&sub=forum">'.$b['name'].'</a>';
 				}
 				else
 				{
@@ -156,7 +156,7 @@ class ProfileView extends View
 		$opt = '';
 		if(isOrgaTeam() || isBotschafter())
 		{
-			$opt .= '<li><a href="?page=foodsaver&a=edit&id='.$this->foodsaver['id'].'">bearbeiten</a></li>';
+			$opt .= '<li><a href="/?page=foodsaver&a=edit&id='.$this->foodsaver['id'].'">bearbeiten</a></li>';
 		}
 		
 		if($this->foodsaver['buddy'] === -1 && $this->foodsaver['id'] != fsId())
@@ -168,7 +168,7 @@ class ProfileView extends View
 		
 		if(isAdmin())
 		{
-			$opt .= '<li><a href="?page=merge&fsid='.$this->foodsaver['id'].'&rurl='.urlencode(getSelf()).'">*verwandeln*</a></li>';
+			$opt .= '<li><a href="/?page=merge&fsid='.$this->foodsaver['id'].'&rurl='.urlencode(getSelf()).'">*verwandeln*</a></li>';
 		}
 		
 		if($this->foodsaver['sleep_status'] == 0)

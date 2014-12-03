@@ -32,7 +32,7 @@ class QuizView extends View
 			
 			$rows[] = array(
 				array('cnt' => '<a style="margin-left:10px;" href="#"><img src="'.img($s['fs_photo']).'" /></a>'),
-				array('cnt' => '<a class="usersessionlink" href="?page=quiz&sub=sessiondetail&fsid='.$s['fs_id'].'">' . $s['fs_name'] . '</a>'),
+				array('cnt' => '<a class="usersessionlink" href="/?page=quiz&sub=sessiondetail&fsid='.$s['fs_id'].'">' . $s['fs_name'] . '</a>'),
 				array('cnt' => $s['max_fp']),
 				array('cnt' => substr($s['time_start'],0,-3)),
 				array('cnt' => $s['trycount']),
@@ -153,7 +153,7 @@ class QuizView extends View
 	{
 		return '
 		<div class="ui-widget ui-widget-content ui-corner-all ui-padding margin-bottom">
-			<a href="#" class="button" onclick="ajreq(\'addquestion\',{qid:'.(int)$quizid.'});return false;">Neue Frage</a> <a href="#" class="button" onclick="ajreq(\'startquiz\',{qid:'.(int)$quizid.'});return false;">Quiz testen</a> <a href="?page=quiz&sub=edit&qid='.(int)$_GET['id'].'" class="button">Quiz bearbeiten</a> <a href="?page=quiz&sub=sessions&id='.(int)$_GET['id'].'" class="button">Auswertung</a>
+			<a href="#" class="button" onclick="ajreq(\'addquestion\',{qid:'.(int)$quizid.'});return false;">Neue Frage</a> <a href="#" class="button" onclick="ajreq(\'startquiz\',{qid:'.(int)$quizid.'});return false;">Quiz testen</a> <a href="/?page=quiz&sub=edit&qid='.(int)$_GET['id'].'" class="button">Quiz bearbeiten</a> <a href="/?page=quiz&sub=sessions&id='.(int)$_GET['id'].'" class="button">Auswertung</a>
 		</div>';
 	}
 	
@@ -365,15 +365,15 @@ class QuizView extends View
 			switch(S::get('quiz-id'))
 			{
 				case 1 :
-					$out .= '<a href="?page=settings&sub=upgrade/up_fs" class="button">Jetzt die Foodsaver Anmeldung abschließen!</a>';
+					$out .= '<a href="/?page=settings&sub=upgrade/up_fs" class="button">Jetzt die Foodsaver Anmeldung abschließen!</a>';
 					break;
 					
 				case 2:
-					$out .= '<a href="?page=settings&sub=upgrade/up_bip" class="button">Jetzt die Betriebsverantwortlichen Anmeldung abschließen!</a>';
+					$out .= '<a href="/?page=settings&sub=upgrade/up_bip" class="button">Jetzt die Betriebsverantwortlichen Anmeldung abschließen!</a>';
 					break;
 					
 				case 3:
-					$out .= '<a href="?page=settings&sub=upgrade/up_bot" class="button">Jetzt die Botschafter Anmeldung abschließen!</a>';
+					$out .= '<a href="/?page=settings&sub=upgrade/up_bot" class="button">Jetzt die Botschafter Anmeldung abschließen!</a>';
 					break;
 					
 				default:
@@ -426,7 +426,7 @@ class QuizView extends View
 					'.v_input_wrapper('Frage',$q['text'].'
 					<p><strong>'.$q['fp'].' Fehlerpunkte, '.$q['duration'].' Sekunden zum Antworten</strong></p>
 					<p style="margin-top:15px;">
-						<a href="#" class="button" onclick="ajreq(\'addanswer\',{qid:'.(int)$q['id'].'});return false;">Antwort hinzufügen</a> <a href="#" class="button" onclick="if(confirm(\'Wirklich die ganze Frage löschen?\')){ajreq(\'delquest\',{id:'.(int)$q['id'].'});}return false;">Frage komplett löschen</a> <a href="#" class="button" onclick="ajreq(\'editquest\',{id:'.(int)$q['id'].',qid:'.(int)$quiz_id.'});return false;">Frage bearbeiten</a> <a class="button" href="?page=quiz&sub=wall&id='.(int)$q['id'].'">Kommentare</a>
+						<a href="#" class="button" onclick="ajreq(\'addanswer\',{qid:'.(int)$q['id'].'});return false;">Antwort hinzufügen</a> <a href="#" class="button" onclick="if(confirm(\'Wirklich die ganze Frage löschen?\')){ajreq(\'delquest\',{id:'.(int)$q['id'].'});}return false;">Frage komplett löschen</a> <a href="#" class="button" onclick="ajreq(\'editquest\',{id:'.(int)$q['id'].',qid:'.(int)$quiz_id.'});return false;">Frage bearbeiten</a> <a class="button" href="/?page=quiz&sub=wall&id='.(int)$q['id'].'">Kommentare</a>
 					</p>').'
 					
 					'.v_input_wrapper('Antworten',$answers).'

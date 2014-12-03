@@ -142,7 +142,7 @@ else if(S::may('fs'))
 	elseif (false && empty($_SESSION['client']['photo']))
 	{
 		addJs('
-		$.fancybox(\'<div class="popbox"><h3>Foto</h3><p class="subtitle">Du hast noch kein Foto hochgeladen</p><p>Wir entschuldigen uns falls Du Dein Foto schon per E-Mail gesendet hast und bitten Dich dennoch es noch einmal direkt hier in der Plattform hochzuladen</p><p>Das erspart uns sehr viel Arbeit, <br />vielen Lieben Dank!</p><p><a href="?page=settings&pinit" class="button">Jetzt Foto hochladen</a></p>\',{
+		$.fancybox(\'<div class="popbox"><h3>Foto</h3><p class="subtitle">Du hast noch kein Foto hochgeladen</p><p>Wir entschuldigen uns falls Du Dein Foto schon per E-Mail gesendet hast und bitten Dich dennoch es noch einmal direkt hier in der Plattform hochzuladen</p><p>Das erspart uns sehr viel Arbeit, <br />vielen Lieben Dank!</p><p><a href="/?page=settings&pinit" class="button">Jetzt Foto hochladen</a></p>\',{
 				minWidth : 370,
 				closeClick:false,
 				closeBtn:false,
@@ -384,13 +384,13 @@ else if(S::may('fs'))
 			if($b['type'] != 7)
 			{
 				$out .= '
-		<li><a class="ui-corner-all" href="?page=bezirk&bid='.$b['id'].'&sub=forum">'.$b['name'].'</a></li>';
+		<li><a class="ui-corner-all" href="/?page=bezirk&bid='.$b['id'].'&sub=forum">'.$b['name'].'</a></li>';
 			}
 			else
 			{
 				$orgacheck = true;
 				$orga .= '
-		<li><a class="ui-corner-all" href="?page=bezirk&bid='.$b['id'].'&sub=forum">'.$b['name'].'</a></li>';
+		<li><a class="ui-corner-all" href="/?page=bezirk&bid='.$b['id'].'&sub=forum">'.$b['name'].'</a></li>';
 			}
 		}
 		$out .= '
@@ -454,7 +454,7 @@ else if(S::may('fs'))
 		$out .= '
 		</ul>
 		<div style="text-align:center;">
-			<a class="button" href="?page=map&load=baskets">Alle Körbe auf der Karte</a>
+			<a class="button" href="/karte?load=baskets">Alle Körbe auf der Karte</a>
 		</div>';
 		
 		addContent(v_field($out,'Essenskörbe in Deiner Nähe'),CNT_LEFT);
@@ -495,7 +495,7 @@ function u_nextDates($dates)
 	{
 		$out .= '
 			<li>
-				<a href="?page=fsbetrieb&id='.$d['betrieb_id'].'" class="ui-corner-all">
+				<a href="/?page=fsbetrieb&id='.$d['betrieb_id'].'" class="ui-corner-all">
 					<span class="title">'.niceDate($d['date_ts']).'</span>
 					<span>'.$d['betrieb_name'].'</span>
 				</a>
@@ -518,7 +518,7 @@ function u_myBetriebe($betriebe)
 		{
 			$list .= '
 			<li>
-				<a class="ui-corner-all" href="?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].'</a>
+				<a class="ui-corner-all" href="/?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].'</a>
 			</li>';
 		}
 		$list .= '
@@ -534,7 +534,7 @@ function u_myBetriebe($betriebe)
 		{
 			$list .= '
 			<li>
-				<a class="ui-corner-all" href="?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].'</a>
+				<a class="ui-corner-all" href="/?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].'</a>
 			</li>';
 		}
 		$list .= '
@@ -553,7 +553,7 @@ function u_myBetriebe($betriebe)
 			<div class="ui-widget ui-widget-content ui-corner-all margin-bottom ui-padding">
 				<ul class="linklist">
 					<li>
-						<a href="?page=betrieb&a=new" class="ui-corner-all">Neuen Betrieb eintragen</a>
+						<a href="/?page=betrieb&a=new" class="ui-corner-all">Neuen Betrieb eintragen</a>
 					</li>
 				</ul>
 			</div>';
@@ -645,7 +645,7 @@ function u_update_type($u)
 			<div class="activity_feed_content">
 				<div class="activity_feed_content_text">
 					<div class="activity_feed_content_info">
-						<a href="#" onclick="profile('.(int)$u['foodsaver_id'].');return false;">'.$u['foodsaver_name'].'</a> hat etwas zum Thema "<a href="?page=bezirk&bid='.$u['bezirk_id'].'&sub=forum&tid='.$u['id'].'&pid='.$u['last_post_id'].'#post'.$u['last_post_id'].'">'.$u['name'].'</a>" ins Forum geschrieben.
+						<a href="#" onclick="profile('.(int)$u['foodsaver_id'].');return false;">'.$u['foodsaver_name'].'</a> hat etwas zum Thema "<a href="/?page=bezirk&bid='.$u['bezirk_id'].'&sub=forum&tid='.$u['id'].'&pid='.$u['last_post_id'].'#post'.$u['last_post_id'].'">'.$u['name'].'</a>" ins Forum geschrieben.
 					</div>
 				</div>
 
@@ -670,7 +670,7 @@ function u_update_type($u)
 			<div class="activity_feed_content">
 				<div class="activity_feed_content_text">
 					<div class="activity_feed_content_info">
-						<a href="#" onclick="profile('.(int)$u['foodsaver_id'].');">'.$u['foodsaver_name'].'</a> hat etwas zum Thema "<a href="?page=bezirk&bid='.$u['bezirk_id'].'&sub=botforum&tid='.$u['id'].'&pid='.$u['last_post_id'].'#post'.$u['last_post_id'].'">'.$u['name'].'</a>" ins Botschafter-Forum geschrieben.
+						<a href="#" onclick="profile('.(int)$u['foodsaver_id'].');">'.$u['foodsaver_name'].'</a> hat etwas zum Thema "<a href="/?page=bezirk&bid='.$u['bezirk_id'].'&sub=botforum&tid='.$u['id'].'&pid='.$u['last_post_id'].'#post'.$u['last_post_id'].'">'.$u['name'].'</a>" ins Botschafter-Forum geschrieben.
 					</div>
 				</div>
 
@@ -695,7 +695,7 @@ function u_update_type($u)
 			<div class="activity_feed_content">
 				<div class="activity_feed_content_text">
 					<div class="activity_feed_content_info">
-						<a href="#" onclick="profile('.(int)$u['foodsaver_id'].');">'.$u['foodsaver_name'].'</a> hat etwas auf die Pinnwand von <a href="?page=fsbetrieb&id='.$u['betrieb_id'].'">'.$u['betrieb_name'].'</a> geschrieben.
+						<a href="#" onclick="profile('.(int)$u['foodsaver_id'].');">'.$u['foodsaver_name'].'</a> hat etwas auf die Pinnwand von <a href="/?page=fsbetrieb&id='.$u['betrieb_id'].'">'.$u['betrieb_name'].'</a> geschrieben.
 					</div>
 				</div>
 
@@ -729,7 +729,7 @@ function u_invites($invites)
 	{
 		$out .= '
 		<div class="post event" style="border-bottom:1px solid #E3DED3; padding-bottom:15px;">
-			<a href="?page=event&id='.(int)$i['id'].'" class="calendar">
+			<a href="/?page=event&id='.(int)$i['id'].'" class="calendar">
 				<span class="month">'.s('month_'.(int)date('m',$i['start_ts'])).'</span>
 				<span class="day">'.date('d',$i['start_ts']).'</span>
 			</a>
@@ -738,7 +738,7 @@ function u_invites($invites)
 			<div class="activity_feed_content">
 				<div class="activity_feed_content_text">
 					<div class="activity_feed_content_info">
-						<p><a href="?page=event&id='.(int)$i['id'].'">'.$i['name'].'</a></p>
+						<p><a href="/?page=event&id='.(int)$i['id'].'">'.$i['name'].'</a></p>
 						<p>'.niceDate($i['start_ts']).'</p>
 					</div>
 				</div>
@@ -763,7 +763,7 @@ function u_events($events)
 	{
 		$out .= '
 		<div class="post event" style="border-bottom:1px solid #E3DED3; padding-bottom:15px;padding-top:15px;">
-			<a href="?page=event&id='.(int)$i['id'].'" class="calendar">
+			<a href="/?page=event&id='.(int)$i['id'].'" class="calendar">
 				<span class="month">'.s('month_'.(int)date('m',$i['start_ts'])).'</span>
 				<span class="day">'.date('d',$i['start_ts']).'</span>
 			</a>
@@ -772,13 +772,13 @@ function u_events($events)
 			<div class="activity_feed_content">
 				<div class="activity_feed_content_text">
 					<div class="activity_feed_content_info">
-						<p><a href="?page=event&id='.(int)$i['id'].'">'.$i['name'].'</a></p>
+						<p><a href="/?page=event&id='.(int)$i['id'].'">'.$i['name'].'</a></p>
 						<p>'.niceDate($i['start_ts']).'</p>
 					</div>
 				</div>
 
 				<div>
-					<a href="?page=event&id='.(int)$i['id'].'" class="button">Zum Event</a> 
+					<a href="/?page=event&id='.(int)$i['id'].'" class="button">Zum Event</a> 
 				</div>
 			</div>
 		

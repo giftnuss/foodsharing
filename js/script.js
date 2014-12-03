@@ -580,7 +580,7 @@ var ajax = {
 		}
 		
 		return $.ajax({
-			url:"xhrapp.php?app="+app+"&m=" + method,
+			url:"/xhrapp.php?app="+app+"&m=" + method,
 			data: opt.data,
 			dataType:'json',
 			method:opt.method,
@@ -656,7 +656,7 @@ function ajreq(name,options,method,app)
 	}
 	
 	$.ajax({
-		url:"xhrapp.php?app="+app+"&m=" + name,
+		url:"/xhrapp.php?app="+app+"&m=" + name,
 		data: opt,
 		dataType:'json',
 		method:method,

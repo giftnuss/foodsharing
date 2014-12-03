@@ -63,7 +63,7 @@ class ReportModel extends Model
 					fs.id,
 					fs.sleep_status,
 					COUNT(rp.foodsaver_id) AS count,
-					CONCAT("?page=report&sub=foodsaver&id=",fs.id) AS `href`
+					CONCAT("/?page=report&sub=foodsaver&id=",fs.id) AS `href`
 				
 			FROM 	'.PREFIX.'foodsaver fs,
 					'.PREFIX.'report rp

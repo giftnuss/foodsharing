@@ -55,4 +55,5 @@ $g_lang['delete_account_confirm_bt'] = 'Ja, Account jetzt löschen';
 $g_lang['foodsaver_bread'] = 'Foodsaver';
 $g_lang['last_login'] = 'Letzter Login';
 $g_lang['search_name'] = 'nach foodsaver suchen';
+$g_lang['position'] = 'Position bei foodsharing (öffentlich)';
  ?>

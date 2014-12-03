@@ -687,4 +687,36 @@ class Control
   		$content_right_width = $right;
   		$content_left_width = $left;
   	}
+  	
+	public function uri($index) 
+	{
+		if (isset ( $_GET['uri'] )) 
+		{
+			$uri = explode('/',$_GET['uri']);
+			if(isset($uri[$index]))
+			{
+				return $uri[$index];
+			}
+			
+		}
+		return false;
+	}
+	
+	public function uriInt($index) 
+	{
+		if (($val = ( int ) $this->uri ( $index )) !== false) 
+		{
+			return $val;
+		}
+		return false;
+	}
+	
+	public function uriStr($index) 
+	{
+		if (($val = $this->uri ( $index )) !== false) 
+		{
+			return preg_replace ( '/[^a-z0-9\-]/', '', $val );
+		}
+		return false;
+	}
 }

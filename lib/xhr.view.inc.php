@@ -59,7 +59,7 @@ function xv_bBubble($b)
 	$button = '';
 	if(($b['inTeam']) || isOrgaTeam())
 	{
-		$button .= '<div class="buttonrow"><a class="lbutton" href="?page=fsbetrieb&id='.(int)$b['id'].'">'.s('to_team_page').'</a></div>';
+		$button .= '<div class="buttonrow"><a class="lbutton" href="/?page=fsbetrieb&id='.(int)$b['id'].'">'.s('to_team_page').'</a></div>';
 	}
 	if($b['team_status'] != 0 && (!$b['inTeam']))
 	{
@@ -135,7 +135,7 @@ function xv_bBubble($b)
 	{
 		if($img = $db->getVal('logo', 'kette', $b['kette_id']))
 		{
-			$img = '<a href="?page=betrieb&id='.(int)$b['id'].'"><img style="float:right;margin-left:10px;" src="'.idimg($img,100).'" /></a>';
+			$img = '<a href="/?page=betrieb&id='.(int)$b['id'].'"><img style="float:right;margin-left:10px;" src="'.idimg($img,100).'" /></a>';
 		}
 	}
 	$button = '';

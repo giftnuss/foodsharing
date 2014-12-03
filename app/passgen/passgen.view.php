@@ -33,7 +33,7 @@ class PassgenView extends View
 			$data[] = array(
 					array('cnt' => '<input class="checkbox bezirk'.$bezirk['id'].' date'.date('Y-m-d-H-i-s',$fs['last_pass_ts']).'" type="checkbox" name="foods[]" value="'.$fs['id'].'" />'),
 					array('cnt' => '<span style="display:none">a'.$fs['photo'].'</span><a href="#" class="fsname"><img src="'.$img.'" width="35" /></a>'),
-					array('cnt' => '<a href="?page=foodsaver&a=edit&id='.$fs['id'].'" class="linkrow ui-corner-all">'.$fs['name'].'</a>'),
+					array('cnt' => '<a href="/?page=foodsaver&a=edit&id='.$fs['id'].'" class="linkrow ui-corner-all">'.$fs['name'].'</a>'),
 					array('cnt' => $last),
 					array('cnt' => $verified)
 			);

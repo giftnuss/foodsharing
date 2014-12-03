@@ -604,13 +604,65 @@ class SettingsControl extends Control
 		{
 			$data = getPostData();
 			$data['stadt'] = $data['ort']; 
-			if($this->model->updateProfile(fsId(),$data))
+			$check = true;
+			
+			if($data['homepage'] != '')
 			{
-				info(s('foodsaver_edit_success'));
+				if(substr($data['homepage'],0,4) != 'http')
+				{
+					$data['homepage'] ='http://' . $data['homepage'];
+				}
+					
+				if(!validUrl($data['homepage']))
+				{
+					$check = false;
+					error('Mit Deiner Homepage URL stimmt etwas nicht');
+				}	
 			}
-			else
+			
+			if($data['github'] != '')
 			{
-				error(s('error'));
+				if(substr($data['github'],0,19) != 'https://github.com/')
+				{
+					$data['github'] ='https://github.com/' . $data['github'];
+				}
+					
+				if(!validUrl($data['github']))
+				{
+					$check = false;
+					error('Mit Deiner github URL stimmt etwas nicht');
+				}	
+			}
+			
+			if($data['twitter'] != '')
+			{
+				if(substr($data['twitter'],0,20) != 'https://twitter.com/')
+				{
+					$data['twitter'] ='https://twitter.com/' . $data['twitter'];
+				}
+					
+				if(!validUrl($data['twitter']))
+				{
+					$check = false;
+					error('Mit Deiner twitter URL stimmt etwas nicht');
+				}
+			}
+			
+			if($data['tox'] != '')
+			{
+				$data['tox'] = preg_replace('/[^0-9A-Z]/','',$data['tox']);
+			}
+			
+			if($check)
+			{
+				if($this->model->updateProfile(fsId(),$data))
+				{
+					info(s('foodsaver_edit_success'));
+				}
+				else
+				{
+					error(s('error'));
+				}
 			}
 		}
 	}

@@ -58,7 +58,7 @@ elseif(isset($_GET['id']))
 		{
 			addJs('$(".dl-button").button();');
 			
-			addContent(v_field('<div class="ui-padding" style="text-align:center;"><a class="dl-button" href="?page=listDocument&id='.$res['id'].'&a=dl">Download</a></div>', 'Aktion'),CNT_RIGHT);
+			addContent(v_field('<div class="ui-padding" style="text-align:center;"><a class="dl-button" href="/?page=listDocument&id='.$res['id'].'&a=dl">Download</a></div>', 'Aktion'),CNT_RIGHT);
 		}
 		if(!empty($res['body']))
 		{

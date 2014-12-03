@@ -73,7 +73,7 @@ else if(false)
 				{
 					
 					$rows[] = array(
-							array('cnt' => '<a href="?page=region&id='.$b['id'].'">'.$b['name'].'</a>'),
+							array('cnt' => '<a href="/?page=region&id='.$b['id'].'">'.$b['name'].'</a>'),
 						array('cnt' => $b['anz_betriebe']),
 						array('cnt' => $b['anz_fs']),
 						array('cnt' => v_toolbar(array('id'=>$b['id'],'types' => array('comment','edit','delete'),'confirmMsg'=>'Soll '.$b['name'].' wirklich unwideruflich gel&ouml;scht werden?'))
@@ -128,7 +128,7 @@ else
 	});');
 	
 	/*
-	 * ifconfirm("?page=region&delete="+$("#tree-hidden").val(),"Soll "+$("#tree-hidden-name").val()+" wirklich gelöscht werden?","Bezirk löschen");
+	 * ifconfirm("/?page=region&delete="+$("#tree-hidden").val(),"Soll "+$("#tree-hidden-name").val()+" wirklich gelöscht werden?","Bezirk löschen");
 	 * 
 	 */
 	$bezirke = $db->getBasics_bezirk();

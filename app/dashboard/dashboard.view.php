@@ -30,7 +30,7 @@ class DashboardView extends View
 	{
 		return $this->menu(array(
 			array('name'=> s('new_basket'),'click' => "ajreq('newbasket',{app:'basket'});return false;"),
-			array('name' => s('all_baskets'),'href'=> '/?page=map&load=baskets')
+			array('name' => s('all_baskets'),'href'=> '/karte?load=baskets')
 		));
 	}
 	

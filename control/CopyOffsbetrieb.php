@@ -623,7 +623,7 @@ function u_betriebList($betriebe,$title,$verantwortlich)
 			$status = v_getStatusAmpel($b['betrieb_status_id']);
 		
 			$betriebrows[$i] = array(
-					array('cnt' => '<a href="?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].'</a>'),
+					array('cnt' => '<a href="/?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].'</a>'),
 					array('cnt' => $b['str'].' '.$b['hsnr']),
 					array('cnt' => $b['plz']),
 					array('cnt' => $status)

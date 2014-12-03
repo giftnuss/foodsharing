@@ -34,7 +34,7 @@ class QuizXhr extends Control
 						info('Frage wurde angelegt');
 						return array(
 							'status' => 1,
-							'script' => 'goTo("?page=quiz&id='.(int)$_GET['qid'].'&fid='.(int)$id.'");'
+							'script' => 'goTo("/?page=quiz&id='.(int)$_GET['qid'].'&fid='.(int)$id.'");'
 						);	
 					}
 				}
@@ -910,7 +910,7 @@ class QuizXhr extends Control
 				
 				return array(
 					'status' => 1,
-					'script' => 'goTo("?page=settings&sub=quizsession&sid='.(int)S::get('quiz-session').'");'
+					'script' => 'goTo("/?page=settings&sub=quizsession&sid='.(int)S::get('quiz-session').'");'
 				);
 				
 				//$this->model->updateQuizSession(S::get('quiz-id'), $questions, $explains, $fp, $quiz['maxfp']);

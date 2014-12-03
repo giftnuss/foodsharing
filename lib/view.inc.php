@@ -243,7 +243,7 @@ function v_clustermap($id,$option = array())
 		$img = '';
 		if(!empty($option['center']['kette']['logo']))
 		{
-			$img = '<a href="?page=betrieb&id='.(int)$option['center']['id'].'"><img style="float:right;margin-left:10px;" src="'.idimg($option['center']['kette']['logo'],100).'" /></a>';
+			$img = '<a href="/?page=betrieb&id='.(int)$option['center']['id'].'"><img style="float:right;margin-left:10px;" src="'.idimg($option['center']['kette']['logo'],100).'" /></a>';
 		}
 		
 		$center_marker = '
@@ -605,7 +605,7 @@ function v_msgBar()
 					<span style="display:none;" class="linkwrapper corner-all ui-shadow">
 						<ul class="linklist conversation-list">
 						</ul>
-						<a class="more" href="?page=msg">Alle zeigen</a>
+						<a class="more" href="/?page=msg">Alle zeigen</a>
 					</span>
 				</li>
 			
@@ -616,7 +616,7 @@ function v_msgBar()
 					<span style="display:none;" class="linkwrapper corner-all ui-shadow">
 						<ul class="linklist conversation-list">
 						</ul>
-						<!-- <a class="more" href="?page=msg">Alle zeigen</a> -->
+						<!-- <a class="more" href="/?page=msg">Alle zeigen</a> -->
 					</span>
 					
 				</li>

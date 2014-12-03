@@ -293,7 +293,7 @@ class PassgenControl extends Control
 	public function download1()
 	{
 		addJs('
-			setTimeout(function(){goTo("?page=passgen&bid='.$this->bezirk_id.'&dl2")},100);		
+			setTimeout(function(){goTo("/?page=passgen&bid='.$this->bezirk_id.'&dl2")},100);		
 		');
 	}
 	public function download2()

@@ -102,7 +102,7 @@ function u_delete_account()
 					$("#delete-account-confirm").dialog("close");
 				},
 				"'.s('delete_account_confirm_bt').'" : function(){
-					goTo("?page=settings&deleteaccount=1&reason=" + encodeURIComponent($("#reason_to_delete").val()));
+					goTo("/?page=settings&deleteaccount=1&reason=" + encodeURIComponent($("#reason_to_delete").val()));
 				}
 			}
 		});

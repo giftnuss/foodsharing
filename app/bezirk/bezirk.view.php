@@ -141,8 +141,8 @@ class BezirkView extends View
 		return v_field(
 			v_info('Dieses Thema ist noch nicht Aktiv, hier hast Du die Möglichkeit das Thema zu akzeptieren und Alle Foodsaver darüber zu informieren.').'
 				<div class="ui-padding" style="text-align:center;">
-					<a class="button" href="?page=bezirk&bid='.$this->bezirk_id.'&sub=forum&tid='.$theme['id'].'&activate=1">Thema jetzt aktivieren</a>
-					<a class="button" href="?page=bezirk&bid='.$this->bezirk_id.'&sub=forum&tid='.$theme['id'].'&delete=1" onclick="if(!confirm(\'Thema wirklich löschen?\')){return false;}">Thema löschen</a>
+					<a class="button" href="/?page=bezirk&bid='.$this->bezirk_id.'&sub=forum&tid='.$theme['id'].'&activate=1">Thema jetzt aktivieren</a>
+					<a class="button" href="/?page=bezirk&bid='.$this->bezirk_id.'&sub=forum&tid='.$theme['id'].'&delete=1" onclick="if(!confirm(\'Thema wirklich löschen?\')){return false;}">Thema löschen</a>
 				</div>',
 				'Thema inaktiv!',
 				array('class'=>'ui-padding')
@@ -307,7 +307,7 @@ class BezirkView extends View
 			}
 			$out .= '
 				<li>
-					<a href="?page=fairteiler&bid='.$this->bezirk_id.'&sub=ft&id='.$ft['id'].'">
+					<a href="/?page=fairteiler&bid='.$this->bezirk_id.'&sub=ft&id='.$ft['id'].'">
 						'.$image.'
 						<span class="name">'.$ft['name'].'</span>
 						<span class="clear"></span>
@@ -431,7 +431,7 @@ class BezirkView extends View
 			}
 			$out .= '
 			<li>
-				<a href="?page=event&id='.$event['id'].'">
+				<a href="/?page=event&id='.$event['id'].'">
 					<span class="calendar" style="margin-right:10px;">
 						<span class="month">'.s('month_'.(int)date('m',$event['start_ts'])).'</span>
 						<span class="day">'.date('d',$event['start_ts']).'</span>
@@ -519,7 +519,7 @@ class BezirkView extends View
 	
 	public function addEvent()
 	{
-		return v_field('<p align="center"><a class="button" href="?page=event&sub=add&bid='.(int)$this->bezirk_id.'">Jetzt neuen Termin Eintragen</a></p>', 'Neues Event',array('class' => 'ui-padding'));
+		return v_field('<p align="center"><a class="button" href="/?page=event&sub=add&bid='.(int)$this->bezirk_id.'">Jetzt neuen Termin Eintragen</a></p>', 'Neues Event',array('class' => 'ui-padding'));
 	}
 	
 	public function applications($requests)

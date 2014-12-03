@@ -24,7 +24,7 @@ class GeocleanView extends View
 			$data[] = array(
 					array('cnt' => '<input class="hiddenid" type="hidden" name="fs-'.$fs['id'].'" id="fs-'.$fs['id'].'" value="'.$fs['id'].'" />'.$fs['name'].' '.$fs['nachname']),
 					array('cnt' => $fs['anschrift'].', '.$fs['plz'].' '.$fs['stadt']),
-					array('cnt' => '<a href="?page=foodsaver&a=edit&id='.$fs['id'].'" class="button">'.s('edit').'</a> <a href="#" onclick="u_getGeo('.(int)$fs['id'].');return false;" class="button">Koordinaten ermitteln</a>')
+					array('cnt' => '<a href="/?page=foodsaver&a=edit&id='.$fs['id'].'" class="button">'.s('edit').'</a> <a href="#" onclick="u_getGeo('.(int)$fs['id'].');return false;" class="button">Koordinaten ermitteln</a>')
 			);
 			addHidden('
 				'.v_form_hidden('fs'.$fs['id'].'anschrift', $fs['anschrift']).'

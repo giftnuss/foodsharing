@@ -390,7 +390,7 @@ function xhr_profile($data)
 	$edit = '';
 	if(isOrgaTeam() || isBotschafter())
 	{
-		$edit = '<li><a href="?page=foodsaver&a=edit&id='.$foodsaver['id'].'">bearbeiten</a></li>';
+		$edit = '<li><a href="/?page=foodsaver&a=edit&id='.$foodsaver['id'].'">bearbeiten</a></li>';
 	}
 	
 	return json_encode(array(
@@ -820,7 +820,7 @@ function xhr_getNewMsg($data)
 		$mb = '';
 		if(isBotschafter())
 		{
-			$mb = '<li><a href="?page=mailbox">'.s('mailboxes').'</a></li>';
+			$mb = '<li><a href="/?page=mailbox">'.s('mailboxes').'</a></li>';
 		}
 		global $db;
 		
@@ -865,7 +865,7 @@ function xhr_getNewMsg($data)
 					}
 				}
 
-				$email_out .= '<li class="msg email"><a href="?page=mailbox&show='.(int)$m['id'].'"><span class="photo"><img alt="E-Mail" src="img/email-msg.png"></span><span class="subject"><span class="from">An: '.$to.'</span><span class="from">Von: '.$m['sender'].'</span><span class="time">'.msgTime($m['time_ts']).'</span></span><span class="message">'.jsonSafe($m['subject']).'</span><span style="display:block;clear:both;"></span></a></li>';
+				$email_out .= '<li class="msg email"><a href="/?page=mailbox&show='.(int)$m['id'].'"><span class="photo"><img alt="E-Mail" src="img/email-msg.png"></span><span class="subject"><span class="from">An: '.$to.'</span><span class="from">Von: '.$m['sender'].'</span><span class="time">'.msgTime($m['time_ts']).'</span></span><span class="message">'.jsonSafe($m['subject']).'</span><span style="display:block;clear:both;"></span></a></li>';
 			}
 		}
 		
@@ -901,7 +901,7 @@ function xhr_getNewMsg($data)
 			}
 			
 			
-			$out .= '<li><a href="?page=message">'.s('show_all_messages').'</a></li>'.$mb.'<li><a href="?page=message&a=neu">'.s('write_a_messages').'</a></li>';
+			$out .= '<li><a href="/?page=message">'.s('show_all_messages').'</a></li>'.$mb.'<li><a href="/?page=message&a=neu">'.s('write_a_messages').'</a></li>';
 			return fJSON::encode(array(
 				'status' => 1,
 				'html' => $out.$email_out,
@@ -995,13 +995,13 @@ function xhr_getNewMsg($data)
 						}
 					}
 					
-					$out .= '<li class="msg email"><a href="?page=mailbox&show='.(int)$m['id'].'"><span class="photo"><img alt="E-Mail" src="img/email-msg.png"></span><span class="subject"><span class="from">An: '.$to.'</span><span class="from">Von: '.$m['sender'].'</span><span class="time">'.msgTime($m['time_ts']).'</span></span><span class="message">'.jsonSafe($m['subject']).'</span><span style="display:block;clear:both;"></span></a></li>';
+					$out .= '<li class="msg email"><a href="/?page=mailbox&show='.(int)$m['id'].'"><span class="photo"><img alt="E-Mail" src="img/email-msg.png"></span><span class="subject"><span class="from">An: '.$to.'</span><span class="from">Von: '.$m['sender'].'</span><span class="time">'.msgTime($m['time_ts']).'</span></span><span class="message">'.jsonSafe($m['subject']).'</span><span style="display:block;clear:both;"></span></a></li>';
 				}
 			}
 			
 			return fJSON::encode(array(
 					'status'=>0,
-					'html'=>'<li><p>'.s('no_new_messages').'</p></li>'.$out.$email_out.'<li><a href="?page=message">'.s('show_all_messages').'</a></li>'.$mb.'<li><a href="?page=message&a=neu">'.s('write_a_messages').'</a></li>',
+					'html'=>'<li><p>'.s('no_new_messages').'</p></li>'.$out.$email_out.'<li><a href="/?page=message">'.s('show_all_messages').'</a></li>'.$mb.'<li><a href="/?page=message&a=neu">'.s('write_a_messages').'</a></li>',
 					'script'=>'$("#msgBar-badge .bar-msg").css("visibility","hidden")'));
 		}
 		else
@@ -1009,7 +1009,7 @@ function xhr_getNewMsg($data)
 			return fJSON::encode(array(
 					'status'=>1,
 					'count' => $email_count,
-					'html'=>'<li><p>'.sv('new_message_count',$email_count).'</p></li>'.$email_out.'<li><a href="?page=message">'.s('show_all_messages').'</a></li>'.$mb.'<li><a href="?page=message&a=neu">'.s('write_a_messages').'</a></li>',
+					'html'=>'<li><p>'.sv('new_message_count',$email_count).'</p></li>'.$email_out.'<li><a href="/?page=message">'.s('show_all_messages').'</a></li>'.$mb.'<li><a href="/?page=message&a=neu">'.s('write_a_messages').'</a></li>',
 					'script'=>'$("#msgBar-badge .bar-msg").css("visibility","hidden")'));
 		}
 	}
@@ -2084,7 +2084,7 @@ function xhr_getBezirk($data)
 			{
 				if($img = $db->getVal('logo', 'kette', $b['kette_id']))
 				{
-					$img = '<a href="?page=betrieb&id='.(int)$b['id'].'"><img style="float:right;margin-left:10px;" src="'.idimg($img,100).'" /></a>';
+					$img = '<a href="/?page=betrieb&id='.(int)$b['id'].'"><img style="float:right;margin-left:10px;" src="'.idimg($img,100).'" /></a>';
 				}
 			}
 			$button = '';

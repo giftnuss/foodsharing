@@ -19,8 +19,8 @@ class BlogView extends View
 			{
 				$row_tmp[] = array('cnt' => s('status_'.$d['active']));
 			}
-			$row_tmp[] = array('cnt' => '<span style="display:none;">a'.$d['time_ts'].'</span><a class="linkrow ui-corner-all" href="?page=blog&sub=edit&id='.$d['id'].'">'.format_d($d['time_ts']).'</a>');
-			$row_tmp[] = array('cnt' => '<a class="linkrow ui-corner-all" href="?page=blog&sub=edit&id='.$d['id'].'">'.$d['name'].'</a>');
+			$row_tmp[] = array('cnt' => '<span style="display:none;">a'.$d['time_ts'].'</span><a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id='.$d['id'].'">'.format_d($d['time_ts']).'</a>');
+			$row_tmp[] = array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id='.$d['id'].'">'.$d['name'].'</a>');
 			$row_tmp[] = array('cnt' => v_toolbar(array('id'=>$d['id'],'types' => array('edit','delete'),'confirmMsg'=>sv('delete_sure',$d['name']))));
 				
 				
@@ -42,19 +42,19 @@ class BlogView extends View
 	
 	public function newsPost($news)
 	{
-		return v_field('<div class="news-post full"><h2><a href="?page=blog&sub=read&id='.$news['id'].'">'.$news['name'].'</a></h2><p class="small"><span class="time">'.niceDate($news['time_ts']).'</span><span class="name"> von '.$news['fs_name'].'</span></p>'.$this->getImage($news,'crop_0_528_') . '<p>'.autolink($news['body']).'</p><div style="clear:both;"></div></div>');
+		return v_field('<div class="news-post full"><h2><a href="/?page=blog&sub=read&id='.$news['id'].'">'.$news['name'].'</a></h2><p class="small"><span class="time">'.niceDate($news['time_ts']).'</span><span class="name"> von '.$news['fs_name'].'</span></p>'.$this->getImage($news,'crop_0_528_') . '<p>'.autolink($news['body']).'</p><div style="clear:both;"></div></div>');
 	}
 	
 	public function newsListItem($news)
 	{
-		return '<div class="news-post"><h2><a href="?page=blog&sub=read&id='.$news['id'].'">'.$news['name'].'</a></h2><p class="small"><span class="time">'.niceDate($news['time_ts']).'</span><span class="name"> von '.$news['fs_name'].'</span></p>'.$this->getImage($news) . '<p>'.autolink($news['teaser']).'</p><p><a class="button" href="?page=blog&sub=read&id='.$news['id'].'">weiter lesen</a></p><div style="clear:both;"></div></div>';
+		return '<div class="news-post"><h2><a href="/?page=blog&sub=read&id='.$news['id'].'">'.$news['name'].'</a></h2><p class="small"><span class="time">'.niceDate($news['time_ts']).'</span><span class="name"> von '.$news['fs_name'].'</span></p>'.$this->getImage($news) . '<p>'.autolink($news['teaser']).'</p><p><a class="button" href="/?page=blog&sub=read&id='.$news['id'].'">weiter lesen</a></p><div style="clear:both;"></div></div>';
 	}
 	
 	private function getImage($news,$prefix = 'crop_1_528_')
 	{
 		if(!empty($news['picture']))
 		{
-			return '<a href="?page=blog&sub=read&id='.$news['id'].'"><img class="corner-all" src="/images/' . str_replace('/','/'.$prefix,$news['picture']).'" /></a>';
+			return '<a href="/?page=blog&sub=read&id='.$news['id'].'"><img class="corner-all" src="/images/' . str_replace('/','/'.$prefix,$news['picture']).'" /></a>';
 		}
 		else
 		{
@@ -67,10 +67,10 @@ class BlogView extends View
 		$links = '';
 		if($page > 1)
 		{
-			$links .= '<a class="button" href="?page=blog&p='.($page-1).'"><i class="fa fa-arrow-circle-left"></i></a>';
+			$links .= '<a class="button" href="/?page=blog&p='.($page-1).'"><i class="fa fa-arrow-circle-left"></i></a>';
 		}
 		
-		$links .= '<a class="button" href="?page=blog&p='.($page+1).'"><i class="fa fa-arrow-circle-right"></i></a>';
+		$links .= '<a class="button" href="/?page=blog&p='.($page+1).'"><i class="fa fa-arrow-circle-right"></i></a>';
 		
 		return '<p class="pager">'.$links.'</p>';
 	}

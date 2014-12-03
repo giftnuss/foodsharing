@@ -319,7 +319,7 @@ class BetriebXhr extends Control
 			{
 				$msg->deleteUserFromConversation($scid, fsId(), true);
 			}
-			$xhr->addScript('goTo("?page=relogin&url=" + encodeURIComponent("?page=dashboard") );');
+			$xhr->addScript('goTo("/?page=relogin&url=" + encodeURIComponent("/?page=dashboard") );');
 		}
 		else
 		{

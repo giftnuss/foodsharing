@@ -407,7 +407,7 @@ function u_delete_account()
 					$("#delete-account-confirm").dialog("close");
 				},
 				"'.s('delete_account_confirm_bt').'" : function(){
-					goTo("?page=foodsaver&a=edit&id='.(int)$_GET['id'].'&deleteaccount=1");
+					goTo("/?page=foodsaver&a=edit&id='.(int)$_GET['id'].'&deleteaccount=1");
 				}
 			}
 		});

@@ -145,9 +145,13 @@ function foodsaver_form($title = 'Foodsaver')
 	global $g_data;
 
 	$orga = '';
-	if(isOrgaTeam())
+	
+	$position= '';
+	
+	if(S::may('orga'))
 	{
-	$options = array(
+		$position = v_form_text('position');
+		$options = array(
 			'values' => array(
 					array('id'=>1,'name'=>'ist im Bundesweiten Orgateam dabei')
 			)
@@ -155,7 +159,7 @@ function foodsaver_form($title = 'Foodsaver')
 
 	if($g_data['orgateam'] == 1)
 	{
-	$options['checkall'] = true;
+		$options['checkall'] = true;
 	}
 
 	$orga = v_form_checkbox('orgateam',$options);
@@ -214,12 +218,16 @@ function foodsaver_form($title = 'Foodsaver')
 
 	$bezirkchoose = v_bezirkChooser('bezirk_id',$bezirk);
 
+	
 
 	return v_quickform($title,array(
 			$bezirkchoose,
 			$orga,
 			v_form_text('name',array('required' => true)),
 			v_form_text('nachname',array('required' => true)),
+			
+			$position,
+			
 			v_form_text('fs_id',array('required' => true)),
 			v_form_text('stadt',array('required' => true)),
 			v_form_text('plz',array('required' => true)),
@@ -333,7 +341,7 @@ function u_delete_account()
 					$("#delete-account-confirm").dialog("close");
 				},
 				"'.s('delete_account_confirm_bt').'" : function(){
-					goTo("?page=foodsaver&a=edit&id='.(int)$_GET['id'].'&deleteaccount=1");
+					goTo("/?page=foodsaver&a=edit&id='.(int)$_GET['id'].'&deleteaccount=1");
 				}
 			}
 		});

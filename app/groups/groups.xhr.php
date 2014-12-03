@@ -37,7 +37,7 @@ class GroupsXhr extends Control
 				$this->model->addMeToGroup($_GET['id']);
 				return array(
 					'status' => 1,
-					'script' => 'goTo("?page=bezirk&bid='.(int)$_GET['id'].'&sub=wall");'		
+					'script' => 'goTo("/?page=bezirk&bid='.(int)$_GET['id'].'&sub=wall");'		
 				);
 			}
 		}

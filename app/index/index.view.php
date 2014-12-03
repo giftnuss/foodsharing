@@ -10,7 +10,7 @@ class IndexView extends View
 		{			
 			$out .= '
 			<li>						
-				<a href="?page=fairteiler&sub=ft&id='.(int)$p['id'].'" class="corner-all">
+				<a href="/?page=fairteiler&sub=ft&id='.(int)$p['id'].'" class="corner-all">
 					<span class="i">'.$this->imgFt($p).'</span>
 					<span class="n">'.$p['ort'].' / '.$p['name'].'</span>
 					<span class="t">'.niceDate($p['time_ts']).'</span>
@@ -21,7 +21,7 @@ class IndexView extends View
 		}
 		
 		$out .= '
-			<li><a href="?page=map&load=fairteiler" class="more">'.s('more_fairteiler').'</a></li>
+			<li><a href="/karte?load=fairteiler" class="more">'.s('more_fairteiler').'</a></li>
 		</ul>';
 		return v_field($out,s('fairteiler'));
 	}
@@ -108,7 +108,7 @@ class IndexView extends View
 		
 		
 		$out .= '
-			<li><a href="?page=map&load=baskets" class="more">'.s('more_baskets').'</a></li>
+			<li><a href="/karte?load=baskets" class="more">'.s('more_baskets').'</a></li>
 				</ul>';
 		
 		return v_field($out,s('new_foodbaskets'));

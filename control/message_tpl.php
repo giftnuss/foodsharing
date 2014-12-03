@@ -58,7 +58,7 @@ else
 					
 			$rows[] = array(
 				array('cnt'=>$d['id']),
-				array('cnt' => '<a class="linkrow ui-corner-all" href="?page=message_tpl&a=edit&id='.$d['id'].'">'.$d['name'].'</a>')		
+				array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=message_tpl&a=edit&id='.$d['id'].'">'.$d['name'].'</a>')		
 			);
 		}
 		

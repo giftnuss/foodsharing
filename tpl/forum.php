@@ -27,7 +27,7 @@
 		<div class="inner">
 			<div class="pure-g">
 				<div class="pure-u-1">
-					<div id="layout_logo" style="float:left;"><a href="?page=dashboard"><img alt="foodsharing" src="css/gen/img/logo.png"></a></div>
+					<div id="layout_logo" style="float:left;"><a href="/?page=dashboard"><img alt="foodsharing" src="css/gen/img/logo.png"></a></div>
 					<?php echo $msgbar; ?>
 					<?php echo $mobilemenu; ?>
 					<div style="display:none;" class="menu">

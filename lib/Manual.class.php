@@ -1427,7 +1427,12 @@ GROUP BY foodsaver_id'));
 				`about_me_public`,
 				`orgateam`,
 				`data`,
-				`rolle`
+				`rolle`,
+				`position`,
+				`tox`,
+				`github`,
+				`twitter`,
+				`homepage`
 				
 			
 			FROM 		`'.PREFIX.'foodsaver`
@@ -2061,6 +2066,12 @@ GROUP BY foodsaver_id'));
 		{
 			$rolle = '`rolle` =  ' . $this->intval($data['rolle']) . ',';
 		}
+		
+		$position = '';
+		if(isset($data['position']))
+		{
+			$rolle = '`position` =  ' . $this->strval($data['position']) . ',';
+		}
 
 		return $this->update('
 		
@@ -2079,6 +2090,7 @@ GROUP BY foodsaver_id'));
 				`telefon` =  ' . $this->strval($data['telefon']) . ',
 				`handy` =  ' . $this->strval($data['handy']) . ',
 				`geschlecht` =  ' . $this->intval($data['geschlecht']) . ',
+				'.$position.'
 				'.$rolle.'
 				`geb_datum` =  ' . $this->dateval($data['geb_datum']) . '
 				' . $orga . '
@@ -3150,7 +3162,12 @@ GROUP BY foodsaver_id'));
 				`handy` =  '.$this->strval($data['handy']).',
 
 				`about_me_public` =  '.$this->strval($data['about_me_public']).',
-				`photo_public` = '.$this->intval($data['photo_public']).'
+				`photo_public` = '.$this->intval($data['photo_public']).',
+				`homepage` = '.$this->strval($data['homepage']).',
+				`twitter` = '.$this->strval($data['twitter']).',
+				`tox` = '.$this->strval($data['tox']).',
+				`position` = '.$this->strval($data['position']).',
+				`github` = '.$this->strval($data['github']).'
 		
 		WHERE 	`id` = '.$this->intval($fs_id);
 		

@@ -208,7 +208,7 @@ class MailboxView extends View
 					<ul class="attach">';
 			foreach ($mail['attach'] as $i => $a)
 			{
-				$attach .= '<li><a class="ui-corner-all" href="?page=mailbox&a=dlattach&mid='.(int)$mail['id'].'&i='.(int)$i.'">'.$a['origname'].'</a></li>';
+				$attach .= '<li><a class="ui-corner-all" href="/?page=mailbox&a=dlattach&mid='.(int)$mail['id'].'&i='.(int)$i.'">'.$a['origname'].'</a></li>';
 			}
 			$attach .= '</ul></div>';
 		}

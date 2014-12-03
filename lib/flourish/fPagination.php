@@ -44,7 +44,7 @@ class fPagination
 			'type'   => 'without_first_last',
 			'size'   => 4,
 			'pieces' => array(
-				'info'          => '<div class="paginator_info">Page {{ page }} of {{ total_records }} items</div>',
+				'info'          => '<div class="paginator_info"/?page {{ page }} of {{ total_records }} items</div>',
 				'start'         => '<div class="paginator_list"><ul>',
 				'prev'          => '<li class="prev"><a href="{{ url }}">Prev</a></li>',
 				'prev_disabled' => '',
@@ -286,7 +286,7 @@ class fPagination
 				'type'   => 'without_first_last',
 				'size'   => 4,
 				'pieces' => array(
-					'info'          => '<div class="paginator_info">Page {{ page }} of {{ total_records }} items</div>',
+					'info'          => '<div class="paginator_info"/?page {{ page }} of {{ total_records }} items</div>',
 					'start'         => '<div class="paginator_list"><ul>',
 					'prev'          => '<li class="prev"><a href="{{ url }}">Prev</a></li>',
 					'prev_disabled' => '',

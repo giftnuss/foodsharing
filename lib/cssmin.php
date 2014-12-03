@@ -1059,7 +1059,7 @@ class CssMin
 			// T_AT_PAGE_START
 			elseif ($tokens[$i][0] == self::T_AT_PAGE_START)
 				{
-				$r .= "@page{";
+				$r .= "/?page{";
 				}
 			// T_PAGE_DECLARATION
 			elseif ($tokens[$i][0] == self::T_PAGE_DECLARATION)
@@ -1395,7 +1395,7 @@ class CssMin
 				/*
 				 * Start of at-rule @page block
 				 */
-				elseif ($c == "@" && $currentState == self::T_DOCUMENT && strtolower(substr($css, $i, 5)) == "@page")
+				elseif ($c == "@" && $currentState == self::T_DOCUMENT && strtolower(substr($css, $i, 5)) == "/?page")
 					{
 					$r[]		= array(self::T_AT_PAGE_START);
 					$i			= $i + 5;
