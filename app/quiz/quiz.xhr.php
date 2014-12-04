@@ -409,7 +409,7 @@ class QuizXhr extends Control
 	{
 		if(S::may('fs'))
 		{
-			$count = (int)$this->model->qOne('SELECT COUNT(id) FROM '.PREFIX.'quiz_session WHERE foodsaver_id = '.(int)fsId().' AND quiz_id = 1 AND `status` = 1');
+			$count = (int)$this->model->qOne('SELECT COUNT(id) FROM '.PREFIX.'quiz_session WHERE foodsaver_id = '.(int)fsId().' AND quiz_id = ' . (int)S::get('hastodoquiz-id') . ' AND `status` = 1');
 			if($count == 0)
 			{
 				$dia = new XhrDialog();
@@ -421,7 +421,21 @@ class QuizXhr extends Control
 				$dia->addContent($content['body']);
 					
 				$dia->addAbortButton();
-				$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Foodsaver Rolle bestätigen!', 'goTo(\'?page=settings&sub=upgrade/up_fs\');');
+				
+				if(S::get('hastodoquiz-id') == 1)
+				{
+					$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Foodsaver Rolle bestätigen!', 'goTo(\'?page=settings&sub=upgrade/up_fs\');');
+				}
+				else if(S::get('hastodoquiz-id') == 2)
+				{
+					$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Betriebsverantwortliche Rolle bestätigen!', 'goTo(\'?page=settings&sub=upgrade/up_bip\');');
+				}
+				else if(S::get('hastodoquiz-id') == 3)
+				{
+					$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Botschafter Rolle bestätigen!', 'goTo(\'?page=settings&sub=upgrade/up_bot\');');
+				}
+				
+				
 					
 				return $dia->xhrout();
 			}

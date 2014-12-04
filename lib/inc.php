@@ -24,8 +24,6 @@ require_once 'lib/minify/JSMin.php';
 
 error_reporting(E_ALL);
 
-
-
 if(isset($_GET['logout']))
 {
 	$_SESSION['client'] = array();
@@ -260,11 +258,18 @@ if(S::get('hastodoquiz') === true)
 			$("#quizinfobadge").hide();
 		}
 	');
+	
+	$date = '12/12/2014';
+	if(S::get('hastodoquiz-id') > 1)
+	{
+		$date = '06/01/2015';
+	}
+	
 	$quizinfo = '
 	<a onmouseout="$(this).css({opacity:1});" onmouseover="$(this).css({opacity:0.8});" id="quizinfobadge" href="#" onclick="ajreq(\'quizpopup\',{app:\'quiz\'});$(this).css({left:\'-300px\'});return false;" style="padding:8px;display:block;text-align:center;position:fixed;left:0px;top:50%;height:93px;width:100px;margin-top:-50px;background-color:#46891b;" class="ui-shadow corner-right">
 		<i style="color:#fff;font-size:30px;" class="fa fa-bullhorn"></i>
 		<h3 style="font-family:\'Alfa Slab One\';font-weight:normal;color:#ffffff;font-size:17px;">Quiz schon gemacht?</h3>
-		<span style="font-size:11px;color:#fff;">(bis 12/12/2014)</span>
+		<span style="font-size:11px;color:#fff;">(bis ' . $date . ')</span>
 	</a>';
 }
 

@@ -1120,16 +1120,45 @@ class Db
 			 * temporary special stuff for quiz
 			 */
 			S::set('hastodoquiz',false);
-			if((int)$fs['rolle'] > 0)
+			S::set('hastodoquiz-id',0);
+			
+			if((int)$fs['rolle'] == 1 || (int)$fs['rolle'] == 2 || (int)$fs['rolle'] == 3)
 			{
 				$count = (int)$this->qOne('SELECT COUNT(id) FROM '.PREFIX.'quiz_session WHERE foodsaver_id = '.(int)fsId().' AND quiz_id = 1 AND `status` = 1');
 				if($count === 0)
 				{
 					S::set('hastodoquiz',true);
+					S::set('hastodoquiz-id',1);
+				}
+				elseif (
+					
+					(int)$fs['rolle'] >= 2
+						
+					||
+						
+					(
+						isset($_SESSION['client']['verantwortlich']) && 
+						count($_SESSION['client']['verantwortlich']) > 0
+					)
+				)
+				{
+					$count = (int)$this->qOne('SELECT COUNT(id) FROM '.PREFIX.'quiz_session WHERE foodsaver_id = '.(int)fsId().' AND quiz_id = 2 AND `status` = 1');
+					if($count === 0)
+					{
+						S::set('hastodoquiz',true);
+						S::set('hastodoquiz-id',2);
+					}
+					else if($fs['rolle'] == 3)
+					{
+						$count = (int)$this->qOne('SELECT COUNT(id) FROM '.PREFIX.'quiz_session WHERE foodsaver_id = '.(int)fsId().' AND quiz_id = 2 AND `status` = 1');
+						if($count === 0)
+						{
+							S::set('hastodoquiz',true);
+							S::set('hastodoquiz-id',3);
+						}
+					}
 				}
 			}
-
-			
 			
 			$mailbox = false;
 			if((int)$fs['mailbox_id'] > 0)
