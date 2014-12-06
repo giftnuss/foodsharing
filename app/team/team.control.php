@@ -9,6 +9,7 @@ class TeamControl extends Control
 		
 		parent::__construct();
 		
+		addScript('/js/jquery.qrcode.min.js');
 	}
 	
 	public function index()

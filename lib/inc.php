@@ -114,6 +114,7 @@ addScript('/js/storage.js',true);
 addScript('/js/jquery.popup.min.js',true);
 addScript('/js/socket.io-1.2.0.js',true);
 addScript('/js/socket.js',true);
+addScript('/js/popup.js',true);
 
 //scriptCompress();
 //cssCompress();
@@ -240,9 +241,12 @@ else
  * temporary quiz stuff
  */
 $quizinfo = '';
+
+//echo S::get('hastodoquiz').' => ' . S::get('hastodoquiz-id');die();
+
 if(S::get('hastodoquiz') === true)
 {
-	addJs('
+	addJs('			
 		$(window).resize(function(){
 			if($(window).width() < 990)
 			{

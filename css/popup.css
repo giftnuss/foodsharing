@@ -1,4 +1,20 @@
 /* Magnific Popup CSS */
+
+.white-popup {
+  position: relative;
+  background: #FFF;
+  padding: 20px;
+  width: auto;
+  max-width: 650px;
+  margin: 20px auto;
+}
+
+.white-popup h3
+{
+	font-size:16px;
+	font-family:'Alfa Slab One';
+	font-weight:normal;
+}
 .mfp-bg {
   top: 0;
   left: 0;

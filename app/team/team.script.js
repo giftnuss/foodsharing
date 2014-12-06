@@ -16,7 +16,7 @@ $(function(){
 		if($this.hasClass('fa-lock'))
 		{
 			ev.preventDefault();
-			alert($this.children('span').text());
+			u_tox($this.children('span').text());
 			
 		}
 		
@@ -53,7 +53,17 @@ $(function(){
 });
 
 
-function u_tox(tox_id)
+function u_tox(id)
 {
-	alert(tox_id);
+	var p1 = new Popup();
+	
+	var $cnt = $('#tox-pop-' + id);
+	var $qr = $cnt.children('.tox-qr');
+	
+	var tox_id = $qr.text();
+	$qr.html('');
+	
+	$qr.qrcode(tox_id);
+	p1.setContent($cnt.html());
+	p1.open();
 }

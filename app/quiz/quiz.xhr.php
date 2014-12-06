@@ -413,12 +413,13 @@ class QuizXhr extends Control
 			if($count == 0)
 			{
 				$dia = new XhrDialog();
-				$content = $this->model->getContent(18);
-				$dia->setTitle($content['title']);
+				
+				
+				
 					
-				$dia->addOpt('width', 575);
+				$dia->addOpt('width', 700);
 					
-				$dia->addContent($content['body']);
+				$content_id = 18;
 					
 				$dia->addAbortButton();
 				
@@ -428,14 +429,18 @@ class QuizXhr extends Control
 				}
 				else if(S::get('hastodoquiz-id') == 2)
 				{
-					$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Betriebsverantwortliche Rolle bestätigen!', 'goTo(\'?page=settings&sub=upgrade/up_bip\');');
+					$content_id = 34;
+					$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche/r Rolle bestätigen!', 'goTo(\'?page=settings&sub=upgrade/up_bip\');');
 				}
 				else if(S::get('hastodoquiz-id') == 3)
 				{
-					$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Botschafter Rolle bestätigen!', 'goTo(\'?page=settings&sub=upgrade/up_bot\');');
+					$content_id = 35;
+					$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Rolle als Botschafter Rolle!', 'goTo(\'?page=settings&sub=upgrade/up_bot\');');
 				}
 				
-				
+				$content = $this->model->getContent($content_id);
+				$dia->setTitle($content['title']);
+				$dia->addContent($content['body']);
 					
 				return $dia->xhrout();
 			}

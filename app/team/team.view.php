@@ -35,7 +35,7 @@ class TeamView extends View
 		
 		if($user['tox'] != '')
 		{
-			$socials .= '<li><a title="tox: sichere skype alternative" href="#" onclick="u_tox(\'' . $user['tox'] . '\');return false;" target="_blank"><i class="fa fa-lock"></i></a></li>';
+			$socials .= '<li><a title="tox: sichere skype alternative" href="#" onclick="u_tox(\'' . $user['id'] . '\');return false;" target="_blank"><i class="fa fa-lock"></i></a></li>';
 		}
 		
 		if(!empty($socials))
@@ -99,7 +99,7 @@ class TeamView extends View
 			
 			if($t['tox'] != '')
 			{
-				$socials .= '<i class="fa fa-lock"><span>'.$t['tox'].'</span></i>';
+				$socials .= '<i class="fa fa-lock"><span>'.$t['id'].'</span></i>';
 			}
 			
 			$out .= '
@@ -125,5 +125,17 @@ class TeamView extends View
 		</ul>';
 		
 		return $out;
+	}
+	
+	private function toxPopTpl($user)
+	{
+		return '
+		<div style="text-align:center" id="tox-pop-'.$user['id'].'">
+			<a href="https://tox.im/de" target="_blank"><img src="http://tox.im/assets/imgs/logo_head.png" /></a>
+			<h3>Tox-ID von '.$user['name'].'</h3>
+			'.v_info('Tox ist eine sichere  OpenSource Alternative zu Skype oder WhatsApp. Mit der Tox-ID kannst Du '.$user['name'].' Zu Deiner Kontaktliste hinzufügen.').'
+			<div class="tox-qr"></div>
+			<input type="text" name="tox-id" value="'.$user['tox'].'" />
+		</div>';
 	}
 }
