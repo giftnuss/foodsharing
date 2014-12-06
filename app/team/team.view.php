@@ -118,6 +118,7 @@ class TeamView extends View
 								
 					</span>
 				</a>
+				'.$this->toxPopTpl($t).'
 			</li>';
 		}
 	
@@ -130,12 +131,16 @@ class TeamView extends View
 	private function toxPopTpl($user)
 	{
 		return '
-		<div style="text-align:center" id="tox-pop-'.$user['id'].'">
-			<a href="https://tox.im/de" target="_blank"><img src="http://tox.im/assets/imgs/logo_head.png" /></a>
-			<h3>Tox-ID von '.$user['name'].'</h3>
-			'.v_info('Tox ist eine sichere  OpenSource Alternative zu Skype oder WhatsApp. Mit der Tox-ID kannst Du '.$user['name'].' Zu Deiner Kontaktliste hinzufügen.').'
-			<div class="tox-qr"></div>
-			<input type="text" name="tox-id" value="'.$user['tox'].'" />
-		</div>';
+		<a style="display:none;overflow:hidden:width:1px;height:1px;" id="tox-pop-'.$user['id'].'-opener" href="#tox-pop-'.$user['id'].'">&nbsp;</a>
+		<div id="tox-pop-'.$user['id'].'" class="white-popup mfp-hide tox-popup">
+			<div style="text-align:center">
+				<a href="https://tox.im/de" target="_blank"><img src="http://tox.im/assets/imgs/logo_head.png" /></a>
+				'.v_info('Tox ist eine sichere  OpenSource Alternative zu Skype oder WhatsApp. Mit der Tox-ID kannst Du '.$user['name'].' Zu Deiner Kontaktliste hinzufügen.').'
+				<h3>Tox-ID von '.$user['name'].'</h3>
+				<input type="text" class="tox-id" value="'.$user['tox'].'" onkeydown="return false;" />
+				<div class="tox-qr"></div>
+				
+			</div>
+		<div id="test-popup" class="white-popup mfp-hide">';
 	}
 }

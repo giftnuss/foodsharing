@@ -849,13 +849,14 @@ function getMenu()
 				<ul id="mainMenu" class="jMenu">
 					<li><a class="fNiv" href="/"><i class="fa fa-home"></i></a></li>
 					<li><a class="fNiv" href="/karte"><i class="fa fa-map-marker"></i></a></li>
-					<li><a class="fNiv" href="/?page=blog">News</a></li>
-					<li><a class="fNiv" href="/?page=content&sub=about">Über Uns</a>
+					<li><a class="fNiv" href="/news">News</a></li>
+					<li><a class="fNiv" href="/ueber-uns">Über Uns</a>
 						<ul>
-							<li><a href="/?page=content&sub=partner">Partner</a></li>
-							<li><a href="/?page=statistics">Statistik</a></li>
-							<li><a href="/?page=content&sub=faq">F.A.Q.</a></li>
-							<li><a href="/?page=content&sub=impressum">Impressum</a></li>
+							<li><a href="/team">Team</a></li>
+							<li><a href="/partner">Partner</a></li>
+							<li><a href="/statistik">Statistik</a></li>
+							<li><a href="/faq">F.A.Q.</a></li>
+							<li><a href="/impressum">Impressum</a></li>
 						</ul>
 					</li>
 					

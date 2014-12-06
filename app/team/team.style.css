@@ -74,6 +74,8 @@
 {
 	color:#4A3520 !important;
 	margin-bottom:30px;
+	display:inline-block;
+	height:30px;
 }
 #teamlist .img, #team-user .img
 {
@@ -148,4 +150,30 @@
 	height:20px;
 	line-height:20px;
 	text-align: center;
+}
+.tox-popup .tox-id
+{
+	width:100%;
+	padding:6px;
+	border:1px solid #F5F5B5;
+	border-radius:6px;
+	color:black;
+	text-align: center;
+	margin-bottom:15px;
+}
+@media all and (max-width: 980px) {
+	#teamlist li
+	{
+		width:42%;
+		margin:80px 24px;
+		display:inline-block;
+	}
+}
+@media all and (max-width: 700px) {
+	#teamlist li
+	{
+		width:100%;
+		margin:80px 0px;
+		display:block;
+	}
 }

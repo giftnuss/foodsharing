@@ -55,15 +55,23 @@ $(function(){
 
 function u_tox(id)
 {
-	var p1 = new Popup();
+	var $pop = $('#tox-pop-'+id+'-opener');
 	
-	var $cnt = $('#tox-pop-' + id);
-	var $qr = $cnt.children('.tox-qr');
+	$pop.magnificPopup({
+		type:'inline'
+	});
 	
-	var tox_id = $qr.text();
-	$qr.html('');
+	var $qr = $('#tox-pop-'+id+' .tox-qr');
 	
-	$qr.qrcode(tox_id);
-	p1.setContent($cnt.html());
-	p1.open();
+	if($qr.children().length == 0)
+	{
+		var $input = $('#tox-pop-'+id+' .tox-id');
+		$('#tox-pop-'+id+' .tox-qr').qrcode($input.val());
+		
+		$input.bind('focus click',function(){
+			$(this).select();
+		});
+	}
+	
+	$pop.trigger('click');
 }
