@@ -9,6 +9,7 @@ class TeamModel extends Model
 					fs.id, 
 					CONCAT(mb.name,"@'.DEFAULT_HOST.'") AS email, 
 					fs.name,
+					fs.nachname,
 					fs.photo,
 					fs.about_me_public AS `desc`,
 					fs.rolle,

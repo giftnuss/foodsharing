@@ -106,7 +106,7 @@ class TeamView extends View
 			<li>
 				<a id="t-'.$t['id'].'" href="/team/'.$t['id'].'" class="corner-all" target="_blank">
 					<span class="img" style="background-image:url(/images/q_'.$t['photo'].');"></span>
-					<h3>'.$t['name'].'</h3>
+					<h3>'.$t['name'].' '.$t['nachname'].'</h3>
 					<span class="subtitle">'.$t['position'].'</span>
 					<span class="desc">
 						'.tt($t['desc'],80).'
