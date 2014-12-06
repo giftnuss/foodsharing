@@ -417,7 +417,7 @@ class QuizXhr extends Control
 				
 				
 					
-				$dia->addOpt('width', 700);
+				$dia->addOpt('width', 720);
 					
 				$content_id = 18;
 					
