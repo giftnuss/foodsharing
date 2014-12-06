@@ -235,7 +235,7 @@ class View
 				<li>
 					<a href="'.$href.'"'.$click.' class="ui-corner-all">
 						<span style="float:left;margin-right:7px;">'.$photo.'</span>
-						<span class="title">'.$fs['name'].' '.$fs['nachname'].'</span>
+						<span class="title">'.$fs['name'].'</span>
 						<span style="clear:both;"></span>
 					</a>
 				</li>';
