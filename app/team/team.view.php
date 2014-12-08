@@ -123,12 +123,12 @@ class TeamView extends View
 			
 			$out .= '
 			<li>
-				<a id="t-'.$t['id'].'" href="/team/'.$t['id'].'" class="corner-all" target="_blank">
+				<a id="t-'.$t['id'].'" href="/team/'.$t['id'].'" class="corner-all" target="_self">
 					<span class="img" style="background-image:url(/images/q_'.$t['photo'].');"></span>
 					<h3>'.$t['name'].' '.$t['nachname'].'</h3>
 					<span class="subtitle">'.$t['position'].'</span>
 					<span class="desc">
-						'.tt($t['desc'],175).'
+						'.tt($t['desc'],240).'
 					</span>
 					<span class="foot corner-bottom">
 						'.$socials.'
@@ -160,6 +160,6 @@ class TeamView extends View
 				<div class="tox-qr"></div>
 				
 			</div>
-		<div id="test-popup" class="white-popup mfp-hide">';
+		</div>';
 	}
 }

@@ -6,7 +6,7 @@ $(function(){
 		var val = $this.children('span').text();
 		if(val != '')
 		{
-			$this.parent().parent().attr('href',val);
+			$this.parent().parent().attr('href',val).attr('target','_blank');
 		}
 	});
 	
@@ -31,7 +31,7 @@ $(function(){
 	$('#teamlist .foot i').mouseout(function(){
 		var $this = $(this).parent().parent();
 		
-		$this.attr('href','/team/' + $this.attr('id').substring(2));
+		$this.attr('href','/team/' + $this.attr('id').substring(2)).attr('target','_self');
 		
 	});
 	
