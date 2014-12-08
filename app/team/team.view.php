@@ -151,7 +151,7 @@ class TeamView extends View
 	{
 		return '
 		<a style="display:none;overflow:hidden:width:1px;height:1px;" id="tox-pop-'.$user['id'].'-opener" href="#tox-pop-'.$user['id'].'">&nbsp;</a>
-		<div id="tox-pop-'.$user['id'].'" class="white-popup mfp-hide tox-popup">
+		<div id="tox-pop-'.$user['id'].'" class="white-popup mfp-hide tox-popup corner-all">
 			<div style="text-align:center">
 				<a href="https://tox.im/de" target="_blank"><img src="http://tox.im/assets/imgs/logo_head.png" /></a>
 				'.v_info('Tox ist eine sichere  OpenSource Alternative zu Skype oder WhatsApp. Mit der Tox-ID kannst Du '.$user['name'].' Zu Deiner Kontaktliste hinzufügen.').'
