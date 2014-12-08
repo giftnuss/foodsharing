@@ -92,8 +92,6 @@ class TeamView extends View
 			}
 		}
 		
-		
-		
 		$out = '
 		<ul id="teamlist" class="linklist">';
 		
@@ -131,10 +129,7 @@ class TeamView extends View
 						'.tt($t['desc'],240).'
 					</span>
 					<span class="foot corner-bottom">
-						'.$socials.'
-						
-						
-								
+						'.$socials.'	
 					</span>
 				</a>
 				'.$this->toxPopTpl($t).'
@@ -158,7 +153,6 @@ class TeamView extends View
 				<h3>Tox-ID von '.$user['name'].'</h3>
 				<input type="text" class="tox-id" value="'.$user['tox'].'" onkeydown="return false;" />
 				<div class="tox-qr"></div>
-				
 			</div>
 		</div>';
 	}
