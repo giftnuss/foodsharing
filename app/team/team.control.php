@@ -19,7 +19,7 @@ class TeamControl extends Control
 		
 		
 		
-		if($id = $this->uriInt(1))
+		if($id = $this->uriInt(2))
 		{
 			if($user = $this->model->getUser($id))
 			{

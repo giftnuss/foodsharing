@@ -58,7 +58,8 @@ class TeamView extends View
 			<span class="foot corner-bottom">
 				'.$socials.'					
 			</span>
-		</div>';
+		</div>' . $this->toxPopTpl($user);
+		
 		return $out;
 	}
 	
