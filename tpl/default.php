@@ -118,6 +118,7 @@ if(!empty($content_left) && !empty($content_right))
 
 		<?php echo $content_bottom; ?>
 	</div>
+	<?php getTemplate('footer'); ?>
 	<?php echo $quizinfo; ?>
 	<noscript>
 		<div id="nojs">Ohne Javascript l&auml;ft hier leider nix!</div>

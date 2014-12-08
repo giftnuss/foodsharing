@@ -283,7 +283,7 @@ body
 	display:none;
 }
 
-div#main
+div#main, footer .wrapper
 {
     line-height: 1.6em;
     margin: 45px auto 0 auto;
@@ -2217,171 +2217,7 @@ div.xv_left ul li a:hover
 {
 	display:none;
 }
-@media (max-width: 1025px) {
-	#top .menu
-	{
-		display:none;
-	}
-	.post div.xv_left ul
-	{
-		display:none;
-	}
-	.bottom_time
-	{
-		display:none !important;
-	}
-	div.bottom_bar .float_right
-	{
-		float: none !important;
-		display: block;
-		text-align: center;
-	}
-	.post div.xv_left
-	{
-		padding:0;
-		margin:0;
-	}
-	.post div.xv_left .avatar, .post div.xv_left .avatar i
-	{
-		width:45px;
-		height:45px;
-		background-size:45px;
-	}
-	.post div.xv_left .avatar i
-	{
-		left: -10px;
-    	top: -5px;
-	}
-	div.forum_user_info_holder
-	{
-		width:45px !important;
-		float:left !important;
-		float: left;
-	    margin: 0 10px 0 0;
-	    width: 160px;
-	}
-	.top_bar .time
-	{
-		float:left !important;
-		font-weight: lighter;
-		font-size: 12px;
-		display: inline;
-	}
-	div.post_body
-	{
-		width:100% !important;
-		display: inline;
-		float:none !important;
-	}
-	div#msgBar
-	{
-		margin-left:111px;
-		top:4px;
-	}
-	div#msgBar-badge
-	{
-		margin-left:118px;
-	}
-	#msgbar-infos, #msgbar-basket, #msgbar-messages {
-    	margin-left: 0px;
-	}
-	#msgbar-basket .msgbar-dropdown-menu:after
-	{
-		left:205px;
-	}
-	#msgbar-infos .msgbar-dropdown-menu:after
-	{
-		left:164px;
-	}
-	#msgbar-messages .msgbar-dropdown-menu:after
-	{
-		left:124px;
-	}
-	div#msgBar div.bar-item span
-	{
-		margin-right:4px;
-		margin-left:4px;
-	}
-	div#msgBar .bar-item.bar-search
-	{
-		display:none;
-	}
-	.inside, .mainpure
-	{
-		-webkit-border-radius: 0px;
-		-moz-border-radius: 0px;
-		border-radius: 0px;
-	}
-	#top
-	{
-		position: fixed !important;
-		top:0px !important;
-	}
-}
 
-@media (max-width: 600px) {
-	body.loggedin #layout_logo
-	{
-		display:none;
-	}
-	#searchbar input
-	{
-		width:200px !important;
-	}
-	#infobar 
-	{
-	    margin-left: 10px !important;
-	}
-	#infobar .linkwrapper
-	{
-		margin-left:-6px !important;
-	}
-	#infobar .linkwrapper:after
-	{
-		margin-left: 12px !important;
-	}
-	
-	#infobar > li
-	{
-		margin-right:5px !important;
-	}
-	#infobar > li:last-child
-	{
-		margin-right: 0px !important;
-	}
-	#searchbar .result-wrapper
-	{
-		position: fixed;
-		width: 93%;
-		left: 5px;
-		top:32px;
-	}
-	#top
-	{
-		position: fixed !important;
-		top:0px !important;
-	}
-	.top .img
-	{
-		display:none;
-	}
-	.top h3, .top p
-	{
-		text-align: center;
-	}
-}
-@media (max-width: 500px) {
-	#searchbar input
-	{
-		width:100px !important;
-	}
-}
-@media (max-width: 400px) {
-	#searchbar input
-	{
-		width:66px !important;
-	}
-}
 ul.bread
 {
 	background-color: transparent !important;
@@ -2513,4 +2349,213 @@ ul.linklist li a .avatar span.bubble, ul.linklist li a:hover .avatar span.bubble
 .slimScrollDiv .avatar .bubble
 {
 	display:none !important;
+}
+footer .inside
+{
+	color:#F1E7C9;
+}
+footer .imglink
+{
+	background-color: #fff;
+	padding:6px;
+	display:inline-block;
+}
+footer
+{
+	background-color: #4A3520;
+	-webkit-box-shadow: inset 0px 20px 20px -20px rgba(0,0,0,0.75);
+	-moz-box-shadow: inset 0px 20px 20px -20px rgba(0,0,0,0.75);
+	box-shadow: inset 0px 20px 20px -20px rgba(0,0,0,0.75);
+}
+footer .wrapper
+{
+	padding-top:30px;
+	padding-bottom:30px;
+}
+footer .linklist li a
+{
+	background-color: #4A3520;
+	color:#F1E7C9 !important;
+}
+footer .linklist li a:hover
+{
+	background-color: #fff;
+	color:#4A3520 !important;
+}
+
+@media (max-width: 1025px) {
+	#top .menu
+	{
+		display:none;
+	}
+	.post div.xv_left ul
+	{
+		display:none;
+	}
+	.bottom_time
+	{
+		display:none !important;
+	}
+	div.bottom_bar .float_right
+	{
+		float: none !important;
+		display: block;
+		text-align: center;
+	}
+	.post div.xv_left
+	{
+		padding:0;
+		margin:0;
+	}
+	.post div.xv_left .avatar, .post div.xv_left .avatar i
+	{
+		width:45px;
+		height:45px;
+		background-size:45px;
+	}
+	.post div.xv_left .avatar i
+	{
+		left: -10px;
+    	top: -5px;
+	}
+	div.forum_user_info_holder
+	{
+		width:45px !important;
+		float:left !important;
+		float: left;
+	    margin: 0 10px 0 0;
+	    width: 160px;
+	}
+	.top_bar .time
+	{
+		float:left !important;
+		font-weight: lighter;
+		font-size: 12px;
+		display: inline;
+	}
+	div.post_body
+	{
+		width:100% !important;
+		display: inline;
+		float:none !important;
+	}
+	div#msgBar
+	{
+		margin-left:111px;
+		top:4px;
+	}
+	div#msgBar-badge
+	{
+		margin-left:118px;
+	}
+	#msgbar-infos, #msgbar-basket, #msgbar-messages {
+    	margin-left: 0px;
+	}
+	#msgbar-basket .msgbar-dropdown-menu:after
+	{
+		left:205px;
+	}
+	#msgbar-infos .msgbar-dropdown-menu:after
+	{
+		left:164px;
+	}
+	#msgbar-messages .msgbar-dropdown-menu:after
+	{
+		left:124px;
+	}
+	div#msgBar div.bar-item span
+	{
+		margin-right:4px;
+		margin-left:4px;
+	}
+	div#msgBar .bar-item.bar-search
+	{
+		display:none;
+	}
+	.inside, .mainpure
+	{
+		-webkit-border-radius: 0px;
+		-moz-border-radius: 0px;
+		border-radius: 0px;
+	}
+	#top
+	{
+		position: fixed !important;
+		top:0px !important;
+	}
+}
+
+@media (max-width: 600px) {
+	footer .linklist li, footer .inside
+	{
+		display:block;
+		text-align:center;
+	}
+	footer ul.linklist
+	{
+		margin-bottom:20px;
+		padding-bottom:20px;
+		border-bottom:1px solid #F1E7C9;
+	}
+	body.loggedin #layout_logo
+	{
+		display:none;
+	}
+	#searchbar input
+	{
+		width:200px !important;
+	}
+	#infobar 
+	{
+	    margin-left: 10px !important;
+	}
+	#infobar .linkwrapper
+	{
+		margin-left:-6px !important;
+	}
+	#infobar .linkwrapper:after
+	{
+		margin-left: 12px !important;
+	}
+	
+	#infobar > li
+	{
+		margin-right:5px !important;
+	}
+	#infobar > li:last-child
+	{
+		margin-right: 0px !important;
+	}
+	#searchbar .result-wrapper
+	{
+		position: fixed;
+		width: 93%;
+		left: 5px;
+		top:32px;
+	}
+	#top
+	{
+		position: fixed !important;
+		top:0px !important;
+	}
+	.top .img
+	{
+		display:none;
+	}
+	.top h3, .top p
+	{
+		text-align: center;
+	}
+}
+@media (max-width: 500px) {
+	#searchbar input
+	{
+		width:100px !important;
+	}
+}
+@media (max-width: 400px) {
+	#searchbar input
+	{
+		width:66px !important;
+	}
 }

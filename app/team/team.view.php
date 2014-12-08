@@ -110,7 +110,7 @@ class TeamView extends View
 					<h3>'.$t['name'].' '.$t['nachname'].'</h3>
 					<span class="subtitle">'.$t['position'].'</span>
 					<span class="desc">
-						'.tt($t['desc'],80).'
+						'.tt($t['desc'],175).'
 					</span>
 					<span class="foot corner-bottom">
 						'.$socials.'

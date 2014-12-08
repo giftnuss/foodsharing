@@ -849,7 +849,6 @@ function getMenu()
 							<li><a href="/partner">Partner</a></li>
 							<li><a href="/statistik">Statistik</a></li>
 							<li><a href="/faq">F.A.Q.</a></li>
-							<li><a href="/impressum">Impressum</a></li>
 						</ul>
 					</li>
 					
@@ -3169,4 +3168,9 @@ function sendSock($fsid,$app,$method,$options)
 		}
 		*/
 	}
+}
+
+function getTemplate($tpl)
+{
+	include 'tpl/' . $tpl . '.php';
 }
