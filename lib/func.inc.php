@@ -2,15 +2,8 @@
 function __autoload($class_name)
 {
 	$first = substr($class_name,0,1);
-	
-	$folder = 'flourish';
-	switch ($first)
-	{
-		case 'f' : $folder = 'flourish'; break;
-		case 'v' : $folder = 'views'; break;
-	}
 
-	$file = ROOT_DIR . '/lib/' . $folder . '/' . $class_name . '.php';
+	$file = ROOT_DIR . '/lib/flourish/' . $class_name . '.php';
 	
 	if (file_exists($file)) {
 		include $file;
@@ -860,7 +853,7 @@ function getMenu()
 						</ul>
 					</li>
 					
-					<li><a class="fNiv" href="/?page=index&sub=ratgeber">Ratgeber</a></li>
+					<li><a class="fNiv" href="/ratgeber">Ratgeber</a></li>
 					<li><a onclick="ajreq(\'join\',{app:\'login\'});return false;" class="fNiv" href="/?page=join">Mach-Mit!</a></li>
 					<!-- <li><a class="fNiv" href="/?page=login" onclick="ajreq(\'login\',{app:\'login\'});return false;">Login</a></li> -->
 				</ul>',

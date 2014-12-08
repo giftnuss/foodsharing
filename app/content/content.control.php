@@ -155,6 +155,16 @@ class ContentControl extends Control
 			addContent($this->view->about($cnt));
 		}
 	}
+	
+	public function ratgeber()
+	{
+		$this->setContentWidth(9, 7);
+		addBread('Ratgeber');
+		addTitle('Ratgeber');
+		addContent($this->view->ratgeber());
+		
+		addContent($this->view->ratgeberRight(),CNT_RIGHT);
+	}
 }
 
 function content_form($title = 'Content Management')

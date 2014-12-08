@@ -448,3 +448,62 @@ i
 	font-style:italic;
 }
 
+.page h1,.page h2,.page h3,.page h4
+{
+	color:#4A3520;
+}
+
+.page h1
+{
+	font-family:'Alfa Slab One';
+	font-weight:normal;
+	font-size:20px;
+	color:#4A3520;
+	margin-bottom:30px;
+}
+.page p
+{
+	margin-bottom:30px;
+	color:#4A3520;
+}
+.page ul
+{
+	margin-bottom:30px;
+}
+.page li
+{
+	color:#4A3520;
+}
+
+.reddot h5
+{
+	font-family:'Alfa Slab One';
+	font-weight:normal;
+	font-size:17px;
+	color:#4A3520;
+}
+.reddot h5 span
+{
+	display:inline-block;
+	background-color: #CD071E;
+	text-align: center;
+	color:#FFFFFF;
+	width:24px;
+	height:24px;
+	line-height:24px;
+	-webkit-border-radius: 24px;
+-moz-border-radius: 24px;
+border-radius: 24px;
+}
+
+.reddot p
+{
+	margin-bottom:20px;
+}
+.page .ui-accordion h3
+{
+	font-family:'Alfa Slab One';
+	font-weight:normal;
+	font-size:17px;
+	color:#fff;
+}

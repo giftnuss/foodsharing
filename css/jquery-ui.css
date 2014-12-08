@@ -1809,7 +1809,7 @@ body .ui-tooltip {
 }
 
 .ui-accordion-header .ui-icon {
-	background-image: url("/css/gen/img/ui-icons_ffffff_256x240.png") !important;
+	background-image: url("/img/ui-icons_ffffff_256x240.png") !important;
 }
 
 .ui-accordion-header:hover {
