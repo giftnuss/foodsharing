@@ -3,17 +3,29 @@ class ContentView extends View
 {
 	public function partner($cnt)
 	{
-		return v_field($cnt['body'],$cnt['title'],array('class'=> 'ui-padding'));
+		return '
+		<div class="page ui-padding ui-widget-content corner-all">
+			<h1>'.$cnt['title'].'</h1>
+			'.$cnt['body'].'
+		</div>';
 	}
 	
 	public function impressum($cnt)
 	{
-		return v_field($cnt['body'],$cnt['title'],array('class'=> 'ui-padding'));
+		return '
+		<div class="page ui-padding ui-widget-content corner-all">
+			<h1>'.$cnt['title'].'</h1>
+			'.$cnt['body'].'
+		</div>';
 	}
 	
 	public function about($cnt)
 	{
-		return v_field($cnt['body'],$cnt['title'],array('class'=> 'ui-padding'));
+		return '
+		<div class="page ui-padding ui-widget-content corner-all">
+			<h1>'.$cnt['title'].'</h1>
+			'.$cnt['body'].'
+		</div>';
 	}
 	
 	public function faq($faqs)
@@ -162,15 +174,14 @@ class ContentView extends View
         <p>Denn der Erfolg und auch das Gelingen von Foodsharing hängt vom respektvollen und achtsamen Umgang mit allen Lebensmittelnab!</p>
         <p>Es sollte bei der Abgabe von Lebensmitteln durch foodsharing darauf geachtet werden, dass die Anbieter selbst, sich über die aufgeführten Punkte im Klaren sind und beim Auftreten bestimmter Krankheitssymptome keine Lebensmittel anbieten.</p>');
 		
-		return v_field('
-		<div class="page">
+		return '
+		<div class="page ui-padding ui-widget-content corner-all">
 			<h1>Ratgeber</h1>
 			<h2>Einleitung</h2>
 			<p>Da Lebensmittel uns am Leben erhalten, sollte man mit ihnen auch respektvoll umgehen. Gegen die Lebensmittelverschwendung etwas zu tun, ist eine Möglichkeit Respekt zu zeigen. Um den Lebensmitteltausch oder die Lebensmittelabgabe für alle Teilnehmer so sicher wie möglich zu gestalten, haben wir die wichtigsten Voraussetzungen im folgenden Leitfaden zusammengefasst. Lebensmittel an andere weiterzugeben ist eine sehr menschliche aber auch verantwortungsvolle Situation. Grundsätzlich gilt wohl immer: „Nichts an andere weitergeben, was man selbst nicht mehr essen würde“. Die nun aufgeführten Punkte, sollen die Entscheidung erleichtern. </p>
 			'.v_info('Nicht gestattet ist das Anbieten und Teilen hygienisch riskanter Lebensmittel. Dazu gehören alle Lebensmittel, die ein Verbrauchsdatum tragen („zu verbrauchen bis…“), wie auch roher Fisch, Geflügel und anderes Fleisch, insbesondere Hackfleisch, rohe Eierspeisen und zubereitete Lebensmittel, die Fleisch oder Fisch enthalten, es sei denn es kann durch Lieferscheine sichergestellt werden, dass die Kühlkette lückenlos war. Foodsharing.de behält sich vor, derartige Angebote zu löschen. Unproblematisch sind hingegen Lebensmittel mit einem Mindesthaltbarkeitsdatum („mindestens haltbar bis…“), auch nach Ablauf dieses Datums.','Beachte die Regeln!').'
 			
 			'.$accordion->render().'
-		</div>
-		',false,array('class'=>'ui-padding'));
+		</div>';
 	}
 }
