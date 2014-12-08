@@ -75,7 +75,25 @@ class TeamView extends View
 	
 	public function teamlist($team)
 	{
-
+		$firsts = array(
+			56 => true,
+			37 => true,
+			913 => true
+		);
+		
+		shuffle($team);
+		
+		foreach ($team as $key => $t)
+		{
+			if(isset($firsts[(int)$t['id']]))
+			{
+				unset($team[$key]);
+				array_unshift($team,$t);
+			}
+		}
+		
+		
+		
 		$out = '
 		<ul id="teamlist" class="linklist">';
 		
