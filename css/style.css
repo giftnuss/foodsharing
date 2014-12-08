@@ -282,14 +282,16 @@ body
 {
 	display:none;
 }
-
+div#main
+{
+	min-height: 650px;
+}
 div#main, footer .wrapper
 {
     line-height: 1.6em;
     margin: 45px auto 0 auto;
     max-width: 1000px;
     padding: 0;
-	min-height: 650px;
 }
 #content-wrapper
 {
