@@ -14,6 +14,7 @@ class FairteilerControl extends Control
 		{
 			go('/?page=fairteiler&sub=ft&id=' . $ftid);
 		}
+		
 		$this->model = new FairteilerModel();
 		$this->view = new FairteilerView();
 		

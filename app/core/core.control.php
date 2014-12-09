@@ -15,27 +15,22 @@ class Control
 		$this->sub_func = false;
 		if(isset($_GET['sub']))
 		{
-			$this->initSub($_GET['sub']);
-		}
-	}
-	
-	public function initSub($sub)
-	{
-		$parts = explode('/', $sub);
-		foreach ($parts as $i => $p)
-		{
-			if(empty($p))
+			$parts = explode('/', $_GET['sub']);
+			foreach ($parts as $i => $p)
 			{
-				unset($parts[$i]);
+				if(empty($p))
+				{
+					unset($parts[$i]);
+				}
 			}
-		}
-		$sub = $parts[0];
-		$sub_func = end($parts);
+			$sub = $parts[0];
+			$sub_func = end($parts);
 			
-		if(method_exists($this, $sub) && method_exists($this, $sub_func))
-		{
-			$this->sub = $sub;
-			$this->sub_func = $sub_func;
+			if(method_exists($this, $sub) && method_exists($this, $sub_func))
+			{
+				$this->sub = $sub;
+				$this->sub_func = $sub_func;
+			}
 		}
 	}
 	
