@@ -593,6 +593,13 @@ function v_bezirkChooser($id = 'bezirk_id',$bezirk = false,$option = array())
 			<input type="hidden" name="'.$id.'hId" id="'.$id.'-hId" value="'.$bezirk['id'].'" />');
 }
 
+function v_login()
+{
+	return '<form id="loginbar" action="/?page=login&ref=%2F%3Fpage%3Ddashboard" method="post">
+				<input style="margin-right:4px;" class="input corner-all" type="email" name="email_adress" value="" placeholder="E-Mail Adresse" /><input class="input corner-all" type="password" name="password" value="" placeholder="Passwort" /><input class="submit corner-right" type="submit" value="&#xf0a9;" />
+			</form>';
+}
+
 function v_msgBar()
 {
 	

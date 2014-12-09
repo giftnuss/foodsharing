@@ -46,6 +46,10 @@ if(S::may())
 	$msgbar = v_msgBar();
 	$logolink = '/?page=dashboard';
 }
+else
+{
+	$msgbar = v_login();
+}
 /*
  * check for page caching
  */

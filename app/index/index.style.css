@@ -1,113 +1,120 @@
-/* News */
-#index-slider
+/* biglogo */
+.biglogo img
 {
-	visibility: hidden;
+	float:left;
 }
-.news-slider .text-wrapper
+#top
 {
-	margin: 0 auto;
-    max-width: 980px;
-    padding: 18px 10px 0 10px;
+	box-shadow:none;
 }
-.news-slider {
-  /* Style the actual content */
-}
-.news-slider .text-content {
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 1em;
-  width: 30%;
-  height: 80%;
-}
-.news-slider .text-content h2 {
-  margin: 0;
-  color:#5AB946;
-  font-size: 1.5em;
-  line-height: 1.5em;
-  font-family:'Alfa Slab One';
-  font-weight:lighter;
-}
-.news-slider .text-content p {
-  margin: 1em 0;
-  color:#4A3520;
-  font-size:1.2em;
-  line-height: 1.2em;
-}
-.news-slider .text-content a.button {
-  padding: 0.25em 0.5em;
-  font-size:1.1em;
-}
-.news-slider
+.biglogo p, .biglogo h1
 {
-	margin-top:40px;
+	color:#ffffff;
+	font-family:'Alfa Slab One';
+	font-weight:normal;
 }
-.news-slider .image-content {
-  line-height: 0;
-  background: no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  width:100%;
-  height:350px; 
-
-}
-.news-slider .image-content img {
-  max-width: 100%;
-}
-.news-slider .news-pager {
-  text-align: center;
-  display: block;
-  margin: 0.2em 0 0;
-  padding: 0;
-  list-style: none;
-}
-.news-slider .news-pager li {
-  display: inline-block;
-  padding: 0.6em;
-  margin: 0 0 0 1em;
-}
-.news-slider .news-pager li.sy-active a {
-  color: #31ace2;
-}
-.news-slider .news-pager li a {
-  font-weight: 500;
-  text-decoration: none;
-  display: block;
-  color: #222;
-}
-.text-content h2
+.biglogo p
 {
-	font-size:1.5em;
-	color:
+	margin-top:80px;
+	font-size:40px;
 }
-.text-join
+.biglogo p.small
 {
-	float:right;
+	margin-top:0px;
+	font-size:29px;
 }
-div#main
+.biglogo h1
 {
-	margin: 25px auto 0;
+	color:#5ab946;
+	font-size:50px;
 }
-#g_login
+.biglogo h1 span
 {
-	max-width:900px !important;
-	margin:0;
+	color:#ffffff;
 }
-#g_login .buttons
+.biglogo
 {
 	text-align: center;
 }
+.biglogo .centerblock
+{
+	display:inline-block;
+	text-align:left;
+	max-width:700px;
+	width:100%;
+}
+#home
+{
+	background-color: #4A3520;
+}
+#main{min-height:1000px;}
 
-.linklist.baskets .n, .linklist.baskets .d, .linklist.fairteiler .n, .linklist.fairteiler .d
+.countnumber p
 {
-	font-size:14px;
+	font-size:40px;
+	text-align: center;
+	color:#5ab946;
+	font-family:'Alfa Slab One';
+	font-weight:normal;
 }
-.linklist.baskets .n,
-.linklist.fairteiler .n
+.countnumber p.number
 {
-	margin-top:9px;
+	font-size:60px;
+	color:#4A3520;
+	font-family:'Alfa Slab One';
+	font-weight:normal;
 }
-.linklist.baskets .t
+.section .inside
 {
-	font-size: 12px;
+	padding:10px 30px;
+}
+.section .inside h3
+{
+	font-family:'Alfa Slab One';
+	font-weight:normal;
+	color:#4A3520;
+	font-size:34px;
+}
+.section .inside p
+{
+	color:#4A3520;
+}
+.linklist span.n
+{
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.leaflet-top .leaflet-control
+{
+	margin-top:60px !important;	
+}
+@media (max-width: 700px) {
+	
+	
+	.section .inside
+	{
+		text-align:center;
+	}
+	.vidlink
+	{
+		margin-top:30px;
+	}
+	.biglogo h1
+	{
+		font-size:30px;
+	}
+	.biglogo p
+	{
+		margin-top:0px;
+		font-size:26px;
+	}
+	.biglogo p.small
+	{
+		font-size:22px;
+	}
+	.section .inside
+	{
+		padding:0px;
+	}
 }
