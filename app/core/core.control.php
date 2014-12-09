@@ -15,11 +15,11 @@ class Control
 		$this->sub_func = false;
 		if(isset($_GET['sub']))
 		{
-			$this->setSub($_GET['sub']);
+			$this->initSub($_GET['sub']);
 		}
 	}
 	
-	public function setSub($sub)
+	public function initSub($sub)
 	{
 		$parts = explode('/', $sub);
 		foreach ($parts as $i => $p)
