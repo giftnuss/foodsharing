@@ -1,22 +1,111 @@
 <?php
 
+
 class MigrateControl extends ConsoleControl
 {		
 	private $model;
+  private $fs_db;
+  private $source_table;
 	
 	public function __construct()
 	{
+    $this->source_table = 'foodsharing_at';
+    $this->source_table = 'foodsharing_ch';
+    $this->source_table = 'foodsharing_de';
 		$this->model = new MigrateModel();
+		$this->fs_db = new mysqli(DB_HOST, DB_USER, DB_PASS, $this->source_table);
 	}
 	
 	public function fs_user()
-	{
-		
+  {
+    $this->model->update("UPDATE fs_foodsaver SET fs_id = NULL");
+    if($result = $this->fs_db->query("SELECT p.zipcode as plz, c.name as stadt, p.lat as lat, p.lng as lon, p.picture as fs_picture, u.email as email, p.firstname as name, p.lastname as nachname, p.street as anschrift, p.phone as telefon, p.mobile as handy, if(p.gender=false,1,2) as geschlecht, p.birthdate as geb_datum, u.id as fs_id, u.created as anmeldedatum, 1 as active, if (u.last_login is null, current_date(), u.last_login) as last_login, u.password as fs_password FROM users u LEFT JOIN profiles p ON u.id = p.user_id LEFT JOIN cities c ON p.city_id = c.id WHERE u.deleted = 0 AND p.deleted = 0")) {
+			$bar = $this->progressbar($result->num_rows());
+      $cur_user_cnt = 0;
+      while($row = $result->fetch_object()) {
+        $cur_user_cnt++;
+				$bar->update($cur_user_cnt);
+        //$photo_id = fetch_and_convert_image();
+        //sanitize_plz
+        $this->model->insert("INSERT INTO fs_foodsaver (plz, stadt, lat, lon, photo, email, name, nachname, anschrift, telefon, handy, geschlecht, geb_datum, fs_id, anmeldedatum, active, data, about_me_public, token, last_login, fs_password) ("
+          .$row->plz.", "
+        ."'".$row->stadt."', "
+        ."'".$row->lat."', "
+        ."'".$row->lon."', "
+        ."'".$photo_id."', "
+        ."'".$row->email."', "
+        ."'".$row->name."', "
+        ."'".$row->nachname."', "
+        ."'".$row->anschrift."', "
+        ."'".$row->telefon."', "
+        ."'".$row->handy."', "
+        .$row->geschlecht.", "
+        .$row->geb_datum.", "
+        .$row->fs_id.", "
+        .$row->anmeldedatum.", "
+        ."1, '$this->source_table import', '', '', "
+        .$row->last_login.", "
+        ."'".$row->fs_password."')");
+      }
+    }
 	}
+
+  private function fs_user_lookup($fs_id) {
+    static $usermap = array();
+    if(array_key_exists($fs_id, $usermap)) {
+      return $usermap[$fs_id];
+    }
+
+    $res = (int)$this->model->qOne('SELECT id FROM fs_foodsaver WHERE fs_id = $fs_id');
+    $usermap[$fs_id] = $res;
+    return $res;
+  }
 	
 	public function fs_chats()
 	{
-		
+    if($result = $this->fs_db->query("SELECT id, created, modified, initial_sender_id, initial_recipient_id FROM conversations")) {
+			$bar = $this->progressbar($result->num_rows);
+      $usermap = array();
+      $cur_msg_row = 0;
+      while($row = $result->fetch_object()) {
+        $cur_msg_row++;
+				$bar->update($cur_msg_row);
+        $sender_id = fs_user_lookup($row->initial_sender_id);
+        $recipient_id = fs_user_lookup($row->initial_recipient_id);
+        if($sender_id == false || $recipient_id == false)
+          continue;
+
+        $conversation_id === false;
+        $mindate = '';
+        $maxdate = '';
+        $unread = 0;
+        $last_foodsaver_id = 0;
+        $last_message = '';
+        $last_message_id = 0;
+				if($conversation_id = $this->model->getConversationId($sender_id,$recipient_id)) {
+          $msgs = $this->fs_db->query("SELECT conversation_id, sender_id, message, viewed, created FROM messages WHERE conversation_id = ".$row->id." AND deleted = 0");
+          while($msg = $msgs->fetch_object()) {
+							$body = str_replace(array('<br />','<br>','<br/>','<p>','</p>'),"\n",$msg->message);
+							$body = strip_tags($body);
+							$body = trim($body);
+							$id = $this->model->addMsg($conversation_id,fs_user_lookup($msg->sender_id),$body,$msg->created);
+              $maxdate = $msg->created;
+					    $this->model->connectUser($conversation_id,$sender_id,$recipient_id, 0);
+              $last_foodsaver_id = fs_user_lookup($msg->sender_id);
+              $last_message = $body;
+              $last_message_id = $id;
+          }
+					$this->model->updateConversation(
+						$conversation_id, 
+						$maxdate, 
+						$maxdate, 
+						$last_foodsaver_id, 
+						$last_message, 
+						$last_message_id
+					);
+        }
+      }
+    }
 	}
 	
 	public function chats()
