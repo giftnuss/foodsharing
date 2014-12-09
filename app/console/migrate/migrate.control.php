@@ -9,6 +9,16 @@ class MigrateControl extends ConsoleControl
 		$this->model = new MigrateModel();
 	}
 	
+	public function fs_user()
+	{
+		
+	}
+	
+	public function fs_chats()
+	{
+		
+	}
+	
 	public function chats()
 	{
 		info('getold conversations');
