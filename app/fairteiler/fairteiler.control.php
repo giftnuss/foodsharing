@@ -10,7 +10,10 @@ class FairteilerControl extends Control
 	
 	public function __construct()
 	{
-		
+		if(isset($_GET['uri']) && ($ftid = $this->uriInt(2)))
+		{
+			go('/?page=fairteiler&sub=ft&id=' . $ftid);
+		}
 		$this->model = new FairteilerModel();
 		$this->view = new FairteilerView();
 		
