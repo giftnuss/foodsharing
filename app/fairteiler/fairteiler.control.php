@@ -28,8 +28,6 @@ class FairteilerControl extends Control
 			goLogin();
 		}
 		
-		
-		
 		if(isset($_GET['bid']) && (int)$_GET['bid'] > 0)
 		{
 			if($bezirk = $this->model->getBezirk($_GET['bid']))

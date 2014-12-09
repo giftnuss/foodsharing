@@ -2614,4 +2614,7 @@ footer .linklist li a:hover
 	{
 		width:66px !important;
 	}
+	#loginbar {
+		display:none;
+	}
 }
