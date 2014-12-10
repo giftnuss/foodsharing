@@ -1004,13 +1004,32 @@ class Db
 	
 		return $ger[$id];
 	}
+
+  /**
+   * Generate a foodsharing.de style hash before 12.12.2014
+   * fusion.
+   * Uses sha1 of concatenation of fixed salt and password.
+   */
+  private function fs_sha1hash($pass)
+  {
+    $salt='DYZG93b04yJfIxfs2guV3Uub5wv7iR2G0FgaC9mi';
+    return sha1($salt.$pass);
+  }
 	
+  /**
+   * Check given email and password combination,
+   * update password if old-style one is detected.
+   */
 	public function checkClient($email,$pass = false)
 	{
 		$email = $this->safe($email);
 		$pass = $this->safe($pass);
+    if(strlen($email) < 2 || strlen($pass) < 1)
+    {
+      return false;
+    }
+    $hashed = $this->encryptMd5($email, $pass);
 		
-		//die('<pre>'.$email."\n".$pass);
 		$user = false;
 		$sql = '
 				SELECT 	`id`,
@@ -1021,15 +1040,33 @@ class Db
 			
 				FROM 	`'.PREFIX.'foodsaver`
 				WHERE 	`email` = "'.$email.'"
-				AND 	`passwd` 	= "'.$this->encryptMd5($email, $pass).'"
+				AND 	`passwd` 	= "'.$hashed.'"
 		';
 		
 		if($user = $this->qRow($sql))
 		{
 			return $user;
 		}
-		else
+    else
 		{
+      $old_fs_hash = $this->fs_sha1hash($pass);
+      $sql = '
+        SELECT 	`id`,
+            `bezirk_id`,
+            `admin`,
+            `orgateam`,
+            `photo`
+
+        FROM 	`'.PREFIX.'foodsaver`
+        WHERE 	`email` = "'.$email.'"
+        AND 	`fs_password` 	= "'.$old_fs_hash.'"
+      ';
+      if($user = $this->qRow($sql))
+      {
+        $this->update("UPDATE `".PREFIX."foodsaver` SET `fs_password` = NULL, `passwd` = `".$hashed."` WHERE `id` = ".$user['id']);
+        return $user;
+      }
+
 			return false;
 		}
 		
