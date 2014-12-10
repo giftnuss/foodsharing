@@ -128,12 +128,11 @@ class vMap extends vCore
 		{
 			addScriptTop('/js/leaflet.search.min.js');
 			addScriptTop('https://maps.googleapis.com/maps/api/js?v=3&sensor=false');
-			addCss('/css/leaflet.search.css');
 		}
 		elseif ($this->searchpanel !== false)
 		{
 			addScriptTop('http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places');
-			//addScript('/js/jquery.geocomplete.js');
+			addScript('/js/jquery.geocomplete.js');
 			
 			$hm = '';
 			if($this->home_marker)
@@ -145,7 +144,7 @@ class vMap extends vCore
 			$("#'.$this->searchpanel.'").geocomplete().bind("geocode:result", function(event, result){
 				latLng = [result.geometry.location.lat(),result.geometry.location.lng()];
 				'.$this->id.'_latLng = latLng;
-				$("#'.$this->id.'-latLng").val(JSON.stringify(latLng));
+				$("#'.$this->id.'-latLng").val(JSON.stringify(latLng)).change();
 			    '.$this->id.'.setView(latLng,'.(int)$this->zoom.');
 			    '.$hm.'
 			 });
@@ -283,7 +282,7 @@ class vMap extends vCore
 					autoType: false,
 					autoCollapse: false,
 					zoom: '.$this->zoom.',
-					text: "'.T::jsSafe(s('search')).'"
+					text: "'.jsSafe(s('search')).'"
 				}) );
 			');
 			addJsFunc('
@@ -314,7 +313,7 @@ class vMap extends vCore
 		$this->initLocation();
 		
 		return '
-		<div class="vmap" id="'.$this->id.'"></div><input type="hidden" name="latlng" id="'.$this->id.'-latLng" value="'.json_encode($this->location).'">';
+		<div class="vmap" id="'.$this->id.'"></div><input type="hidden" name="latlng" id="'.$this->id.'-latLng" value="" />';
 	}
 	
 	private function initLocation()

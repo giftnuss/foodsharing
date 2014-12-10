@@ -22,6 +22,32 @@ class BasketControl extends Control
 				$this->basket($basket);
 			}
 		}
+		else 
+		{
+			if($m = $this->uriStr(2))
+			{
+				if(method_exists($this,$m))
+				{
+					$this->$m();
+				}
+				else
+				{
+					go('/basket/find');
+				}
+			}
+			else
+			{
+				go('/basket/find');
+			}
+		}
+	}
+	
+	public function find()
+	{
+		$baskets = $this->model->closeBaskets(50);
+		$this->view->find($baskets);
+		
+		
 	}
 	
 	private function basket($basket)

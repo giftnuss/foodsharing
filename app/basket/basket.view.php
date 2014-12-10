@@ -2,6 +2,78 @@
 class BasketView extends View
 {
 	
+	public function find($baskets)
+	{
+		$page = new vPage('Essenkörbe', $this->findMap());
+		
+		if($baskets)
+		{
+			$page->addSectionRight($this->closeBaskets($baskets),'in Deiner Nähe');
+		}
+		
+		$page->render();
+	}
+	
+	public function findMap()
+	{
+		$map = new vMap();
+		
+		if($loc = S::getLocation())
+		{
+			$map->setLocation($loc['lat'], $loc['lon']);
+		}
+		
+		$map->setSearchPanel('mapsearch');
+		
+		return '<input id="mapsearch" type="text" name="mapsearch" value="" placeholder="Adress-Suche..." /><div class="findmap">'.$map->render().'</div>';
+	}
+	
+	public function closeBaskets($baskets)
+	{
+		$out = '
+		<ul class="linklist">';
+		foreach ($baskets as $b)
+		{
+			$img = 'img/basket.png';
+			if(!empty($b['picture']))
+			{
+				$img = 'images/basket/thumb-'.$b['picture'];
+			}
+			
+			$distance = round($b['distance'],1);
+			
+			if($distance == 1.0)
+			{
+				$distance = '1 km';
+			}
+			else if($distance < 1)
+			{
+				$distance = ($distance*1000).' m';
+			}
+			else
+			{
+				$distance = number_format($distance,1,',','.').' km';
+			}
+			
+			$out .= '
+				<li>
+					<a class="ui-corner-all" onclick="ajreq(\'bubble\',{app:\'basket\',id:'.(int)$b['id'].',modal:1});return false;" href="#">
+						<span style="float:left;margin-right:7px;"><img width="35px" alt="Maike" src="'.$img.'" class="ui-corner-all"></span>
+						<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">('.$distance.')</strong>'.tt($b['description'],50).'</span>
+						
+						<span style="clear:both;"></span>
+					</a>
+				</li>';
+		}
+		$out .= '
+		</ul>
+		<div style="text-align:center;">
+			<a class="button" href="/karte?load=baskets">Alle Körbe auf der Karte</a>
+		</div>';
+		
+		return $out;
+	}
+	
 	public function basket($basket,$wallposts,$requests)
 	{
 		

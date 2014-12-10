@@ -103,6 +103,14 @@ class S
 		return $loc;
 	}
 	
+	public static function setLocation($lat,$lng)
+	{
+		S::set('g_location', array(
+			'lat' => $lat,
+			'lon' => $lng
+		));
+	}
+	
 	public static function destroy()
 	{
 		fSession::destroy();
