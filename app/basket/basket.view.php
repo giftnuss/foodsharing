@@ -34,10 +34,10 @@ class BasketView extends View
 		<ul class="linklist">';
 		foreach ($baskets as $b)
 		{
-			$img = 'img/basket.png';
+			$img = '/img/basket.png';
 			if(!empty($b['picture']))
 			{
-				$img = 'images/basket/thumb-'.$b['picture'];
+				$img = '/images/basket/thumb-'.$b['picture'];
 			}
 			
 			$distance = round($b['distance'],1);
