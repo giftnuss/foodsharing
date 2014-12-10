@@ -125,7 +125,7 @@ class Control
   			{
   				var id = id;
   				$.ajax({
-						url: "xhrapp.php?app=wallpost&m=delpost&table='.$table.'&id='.$id.'&post=" + id,
+						url: "/xhrapp.php?app=wallpost&m=delpost&table='.$table.'&id='.$id.'&post=" + id,
 						dataType: "JSON",
 						success: function(data)
 						{
@@ -201,7 +201,7 @@ class Control
   					}
   						
 	  				$.ajax({
-						url: "xhrapp.php?app=wallpost&m=post&table='.$table.'&id='.$id.'",
+						url: "/xhrapp.php?app=wallpost&m=post&table='.$table.'&id='.$id.'",
 						type: "POST",
 						data: {
 	  						text: text,
@@ -233,7 +233,7 @@ class Control
   				$("#wall-submit")[0].focus();
   			});
 			$.ajax({
-					url: "xhrapp.php?app=wallpost&m=update&table='.$table.'&id='.$id.'&last=0",
+					url: "/xhrapp.php?app=wallpost&m=update&table='.$table.'&id='.$id.'&last=0",
 					dataType: "JSON",
 					success: function(data)
 					{
@@ -692,7 +692,7 @@ class Control
 	{
 		if (isset ( $_GET['uri'] )) 
 		{
-			$uri = explode('/',$_GET['uri']);
+			$uri = explode('/',$_SERVER['REQUEST_URI']);
 			if(isset($uri[$index]))
 			{
 				return $uri[$index];

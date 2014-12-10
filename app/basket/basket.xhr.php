@@ -260,14 +260,15 @@ class BasketXhr extends Control
 				{
 					$dia->setTitle('Essenskorb');
 					$dia->addContent($this->view->bubbleNoUser($basket));
-					$dia->addButton('Einloggen zum anfragen',"ajreq('login',{app:'login'});");
+					
 				}
 				else
 				{
 					$dia->setTitle('Essenskorb von '.$basket['fs_name']);
 					$dia->addContent($this->view->bubble($basket));
-					$dia->addButton('Essenskorb anfragen', 'ajreq(\'request\',{app:\'basket\',id:'.(int)$basket['id'].'});');
 				}
+				
+				$dia->addButton('zum Essenskorb', 'goTo(\'/basket/'.(int)$basket['id'].'\');');
 				
 				$modal = false;
 				if(isset($_GET['modal']))

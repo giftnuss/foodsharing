@@ -453,13 +453,22 @@ i
 	color:#4A3520;
 }
 
-.page h1
+.page h1, .page h2, , .page h3
 {
 	font-family:'Alfa Slab One';
 	font-weight:normal;
 	font-size:20px;
 	color:#4A3520;
 	margin-bottom:30px;
+}
+.page h3
+{
+	font-size:16px;
+	margin-bottom:10px;
+}
+.page-section
+{
+	margin-top:15px;
 }
 .page p
 {

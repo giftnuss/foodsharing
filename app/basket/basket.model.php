@@ -63,8 +63,15 @@ class BasketModel extends Model
 		');
 	}
 	
-	public function getBasket($id)
+	public function getBasket($id,$status = false)
 	{
+		$status_sql = '';
+		
+		if($status !== false)
+		{
+			$status_sql = 'AND `status` = '.(int)$status;
+		}
+		
 		$basket = $this->qRow('
 
 			SELECT
@@ -75,13 +82,24 @@ class BasketModel extends Model
 				b.tel,
 				b.handy,
 				b.fs_id AS fsf_id,
-				b.foodsaver_id
+				b.lat,
+				b.lon,
+				b.foodsaver_id,
+				fs.id AS fs_id,
+				fs.name AS fs_name,
+				fs.photo AS fs_photo,
+				fs.sleep_status
 				
 			FROM
-				'.PREFIX.'basket b
+				'.PREFIX.'basket b,
+				'.PREFIX.'foodsaver fs
 				
 			WHERE 
+				b.foodsaver_id = fs.id
+			
+			AND
 				b.id = '.(int)$id.'
+			'.$status_sql.'
 				
 		');
 		
@@ -129,6 +147,43 @@ class BasketModel extends Model
 				'.implode(',', $sql).'
 			');
 		}
+	}
+	
+	public function listRequests($basket_id)
+	{
+		return $this->q('
+		
+				SELECT
+					UNIX_TIMESTAMP(a.time) AS time_ts,
+					fs.name AS fs_name,
+					fs.photo AS fs_photo,
+					fs.id AS fs_id,
+					fs.geschlecht AS fs_gender,
+					fs.sleep_status,
+					b.id
+		
+		
+				FROM
+					'.PREFIX.'basket_anfrage a,
+					'.PREFIX.'basket b,
+					'.PREFIX.'foodsaver fs
+		
+				WHERE
+					a.basket_id = b.id
+		
+				AND
+					a.`status` IN(0,1)
+		
+				AND
+					a.foodsaver_id = fs.id
+		
+				AND
+					b.foodsaver_id = '.(int)fsId().'
+		
+				AND
+					a.basket_id = '.(int)$basket_id.'
+		
+				');
 	}
 	
 	public function getRequest($basket_id,$fs_id)

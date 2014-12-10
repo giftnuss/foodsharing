@@ -1817,7 +1817,7 @@ a.light
 }
 .leaflet-top, .leaflet-bottom
 {
-	z-index:150 !important;
+	z-index:50 !important;
 	right: auto;
 	left:0px;
 }
@@ -2201,6 +2201,13 @@ td.load
 	font-size:13px;
 	line-height: normal;
 }
+.button.button-big
+{
+	font-size:16px;
+	width:91%;
+	display:block;
+	text-align: center;
+}
 .ui-button:hover, .button:hover
 {
 	background-color: #46891B;
@@ -2438,6 +2445,11 @@ footer .linklist li a:hover
 	text-align: center;
 	width:23px;
 	margin-left:-23px;
+}
+.vmap {
+	width: 100%;
+	height: 250px;
+	background-color: #fff
 }
 @media (max-width: 1025px) {
 	#top .menu

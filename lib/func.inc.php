@@ -2078,6 +2078,19 @@ function addScript($src,$global = false)
 	$g_script[$src] = array('global'=>$global);
 }
 
+function addScriptTop($src)
+{
+	global $g_script;
+	$tmp = array();
+	$tmp[$src] = array('global'=> false);
+	foreach ($g_script as $k => $v)
+	{
+		$tmp[$k] = $v;
+	}
+	
+	$g_script = $tmp;
+}
+
 function loadModel($model = 'api')
 {
 	require_once ROOT_DIR.'app/core/core.model.php';
@@ -2218,6 +2231,19 @@ function getJs()
 {
 	global $js;
 	return $js;
+}
+
+function addCssTop($src)
+{
+	global $g_css;
+	$tmp = array();
+	$tmp[$src] = array('global'=> false);
+	foreach ($g_css as $k => $v)
+	{
+		$tmp[$k] = $v;
+	}
+	
+	$g_css = $tmp;
 }
 
 function addCss($src,$global = false)

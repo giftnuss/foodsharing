@@ -1,6 +1,109 @@
 <?php
 class BasketView extends View
 {
+	
+	public function basket($basket,$wallposts,$requests)
+	{
+		
+		$page = new vPage('Essenskorb #'.$basket['id'], '
+		<div class="pure-g">
+		    <div class="pure-u-1 pure-u-md-1-3">
+				'.$this->pageImg($basket['picture']).'	
+			</div>
+		    <div class="pure-u-1 pure-u-md-2-3">
+				<p>'.nl2br($basket['description']).'</p>
+			</div>
+		</div>
+		');
+		
+		if($wallposts)
+		{
+			$page->addSection($wallposts,'Pinnwand');
+		}
+		if(S::may())
+		{
+			$page->addSectionRight($this->userBox($basket),'AnbieterIn');
+			
+			if($basket['lat'] != 0 || $basket['lon'] != 0)
+			{
+				$map = new vMap();
+				$map->addMarker($basket['lat'], $basket['lon']);
+				
+				$map->setDefaultMarker('basket', 'green');
+				
+				$page->addSectionRight($map->render(),'Wo?');
+			}
+			
+			if($basket['fs_id'] == fsId())
+			{
+				if($requests)
+				{
+					$page->addSectionRight($this->requests($requests),count($requests).' Anfragen');
+				}
+			}
+		}
+		else
+		{
+			$page->addSectionRight(v_info('Für Detailierte Infos darfst Du Dich einloggen!','Hinweis!').'<div>
+				<a class="button button-big" href="#"onclick="ajreq(\'login\',{app:\'login\'});return false;">Einloggen</a>
+			</div>',array('wrapper' => false));
+		}		
+		
+		$page->render();
+	}
+	
+	public function requests($requests)
+	{
+		$out = '
+		<ul class="linklist conversation-list">';
+		
+		foreach ($requests as $r)
+		{
+			$out .= '
+			<li><a onclick="profile('.(int)$r['fs_id'].');return false;" href="#"><span class="pics"><img width="50" alt="avatar" src="'.img($r['fs_photo']).'"></span><span class="names">'.$r['fs_name'].'</span><span class="msg"></span><span class="time">'.niceDate($r['time_ts']).'</span><span class="clear"></span></a></li>';
+		}
+		
+		$out.= '
+		</ul>';
+		
+		return $out;
+	}
+	
+	public function userBox($basket)
+	{
+		$request = '';
+		
+		if($basket['fs_id'] !=fsId())
+		{
+			$request = '<div><a class="button button-big" href="#" onclick="ajreq(\'request\',{app:\'basket\',id:'.(int)$basket['id'].'});">Essenskorb Anfragen</a>	</div>';
+		}
+		else
+		{
+			$request = '<div><a class="button button-big" href="#" onclick="ajreq(\'removeBasket\',{app:\'basket\',id:'.(int)$basket['id'].'});">Essenskorb löschen</a>	</div>';
+		}
+		
+		return $this->fsAvatarList(array(array(
+			'id' => $basket['fs_id'],
+			'name' => $basket['fs_name'],
+			'photo' => $basket['fs_photo'],
+			'sleep_status' => $basket['sleep_status']
+		)),array('height' => 60,'scroller' => false)) . 
+		$request;
+		
+	}
+	
+	private function pageImg($img)
+	{
+		if($img != '')
+		{
+			return '<img class="basket-img" src="/images/basket/medium-'.$img.'" />';
+		}
+		else
+		{
+			return '<img class="basket-img" src="/img/foodloob.gif" />';
+		}
+	}
+	
 	public function basketForm($foodsaver)
 	{
 		global $g_data;
@@ -158,7 +261,7 @@ class BasketView extends View
 				$reqtext =sv('req_count',array('count'=> $b['req_count']));
 			}
 			
-			$out .= '<li class="basket-'.(int)$b['id'].'"><a href="#" onclick="ajreq(\'bubble\',{app:\'basket\',id:'.(int)$b['id'].'});return false;"><span class="button close" onclick="ajreq(\'removeBasket\',{app:\'basket\',id:'.(int)$b['id'].'});return false;"><i class="fa fa-close"></i></span><span class="pics"><img width="50" src="'.$img.'" alt="avatar" /></span><span class="names">'.tt($b['description'],150).'</span><span class="msg">'.$reqtext.'</span><span class="time">'.niceDate($b['time_ts']).'</span><span class="clear"></span></a></li>';
+			$out .= '<li class="basket-'.(int)$b['id'].'"><a href="/basket/'.(int)$b['id'].'"><span class="button close" onclick="ajreq(\'removeBasket\',{app:\'basket\',id:'.(int)$b['id'].'});return false;"><i class="fa fa-close"></i></span><span class="pics"><img width="50" src="'.$img.'" alt="avatar" /></span><span class="names">'.tt($b['description'],150).'</span><span class="msg">'.$reqtext.'</span><span class="time">'.niceDate($b['time_ts']).'</span><span class="clear"></span></a></li>';
 		}
 		
 		return $out;

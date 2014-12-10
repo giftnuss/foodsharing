@@ -205,6 +205,12 @@ class View
 			$id = $option['id'];
 		}
 		
+		$height = 185;
+		if(isset($option['height']))
+		{
+			$height = $option['height'];
+		}
+		
 		
 		$out = '
 		<div>
@@ -249,7 +255,7 @@ class View
 		
 		if($option['scroller'])
 		{
-			$out = v_scroller($out,185);
+			$out = v_scroller($out,$height);
 			addStyle('.scroller .overview{left:0;}.scroller{margin:0}');
 		}
 		return $out;
