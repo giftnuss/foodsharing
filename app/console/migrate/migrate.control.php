@@ -98,11 +98,21 @@ class MigrateControl extends ConsoleControl
         if(strlen($plz) > 5 || strlen($plz) < 4) {
           $plz = "";
         }
+        $lat = floatval($row->lat);
+        $lon = floatval($row->lon);
+        if(($lat == 0 && $lon == 0) || $lat == 1.0 || $lon == 1.0 || abs($lat) > 90 || abs($lon) > 180) {
+          $lat = "0";
+          $lon = "0";
+        } else {
+          $lat = strval($lat);
+          $lon = strval($lon);
+        }
+
         $this->model->insert("INSERT INTO fs_foodsaver (plz, stadt, lat, lon, photo, email, name, nachname, anschrift, telefon, handy, geschlecht, geb_datum, fs_id, anmeldedatum, active, data, about_me_public, token, last_login, fs_password) ("
         ."'".$plz."', "
         ."'".$row->stadt."', "
-        ."'".$row->lat."', "
-        ."'".$row->lon."', "
+        ."'".$lat."', "
+        ."'".$lon."', "
         ."'".$photo_id."', "
         ."'".$row->email."', "
         ."'".$row->name."', "
