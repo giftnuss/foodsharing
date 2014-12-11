@@ -461,7 +461,7 @@ class MailboxView extends View
 						<td class="et-right">
 								<div class="wrapper">
 									<div class="et-filebox">
-										<form method="post" target="et-upload" action="xhrapp.php?app=mailbox&m=attach" enctype="multipart/form-data">
+										<form method="post" target="et-upload" action="/xhrapp.php?app=mailbox&m=attach" enctype="multipart/form-data">
 											'.v_form_file('et-attach',array('btlabel'=>s('attach_file'))).'
 										</form>
 									</div>

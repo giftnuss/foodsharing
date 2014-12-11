@@ -83,7 +83,7 @@ class XhrDialogConsole extends XhrDialog
 		
 		if(!isset($options['url']))
 		{
-			$options['url'] = 'xhrapp.php?app='.$options['app'].'&m='.$options['action'];
+			$options['url'] = '/xhrapp.php?app='.$options['app'].'&m='.$options['action'];
 		}
 		
 		$params = array();

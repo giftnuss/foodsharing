@@ -85,7 +85,7 @@ var join = {
 			$('#joinloader').show();
 			
 			$.ajax({
-				url: 'xhrapp.php?app=login&m=joinsubmit',
+				url: '/xhrapp.php?app=login&m=joinsubmit',
 				type:'post',
 				dataType:'json',
 				data:{

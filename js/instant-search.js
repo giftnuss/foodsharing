@@ -156,7 +156,7 @@ var search = {
 		{
 			this.isSearching = true;
 			$.ajax({
-				url: 'xhrapp.php?app=search&m=search&s=' + encodeURIComponent(search.$input.val()),
+				url: '/xhrapp.php?app=search&m=search&s=' + encodeURIComponent(search.$input.val()),
 				dataType: 'json',
 				success: function(data){
 					if(data.result != undefined && data.result.length > 0)

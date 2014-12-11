@@ -106,7 +106,7 @@ class BezirkView extends View
 					  showLoader();
 					  loadedPages[loadedPages.length] = page;
 					  $.ajax({
-							url: "xhrapp.php?app=bezirk&m=morethemes&bid='.(int)$this->bezirk_id.'&page=" + page + "&bot='.$bot.'&last=" + $(".thread:last").attr("id").split("-")[1],
+							url: "/xhrapp.php?app=bezirk&m=morethemes&bid='.(int)$this->bezirk_id.'&page=" + page + "&bot='.$bot.'&last=" + $(".thread:last").attr("id").split("-")[1],
 							dataType: "json",
 							success: function(data){
 								if(data.status == 1)
