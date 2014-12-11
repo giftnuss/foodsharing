@@ -5,13 +5,10 @@ class IndexView extends View
 	public function index($gerettet,$fairteiler, $baskets)
 	{
 		$ps = new vPageslider();
-		addJs('$("#layout_logo").fadeOut(1);');
 		
 		$ps->addSection($this->fsBigLogo(),array(
 			'color' => '#4A3520',
-			'anchor' => 'home',
-			'onload' => '$("#layout_logo").fadeOut();',
-			'onleave' => '$("#layout_logo").fadeIn();'
+			'anchor' => 'home'
 		));
 		
 		$ps->addSection($this->countNumber(),array(
