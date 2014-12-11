@@ -842,7 +842,7 @@ function getMenu()
 				<ul id="mainMenu" class="jMenu">
 					<li><a class="fNiv" href="/"><i class="fa fa-home"></i></a></li>
 					<li><a class="fNiv" href="/karte"><i class="fa fa-map-marker"></i></a></li>
-					<li><a class="fNiv" href="/basket/find/">Essenskörbe</a></li>
+					<li><a class="fNiv" href="/essenskoerbe/find/">Essenskörbe</a></li>
 					<li><a class="fNiv" href="/news">News</a></li>
 					<li><a class="fNiv" href="/ueber-uns">Über Uns</a>
 						<ul>

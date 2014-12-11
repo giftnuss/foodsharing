@@ -78,8 +78,13 @@ class BasketView extends View
 	
 	public function basket($basket,$wallposts,$requests)
 	{
-		
+		/*
+		 * <div style="float: right;font-size: 12px;margin-top: -56px;width: 200px;font-size:12px !important;">
+			'.v_info('Veröffentlicht am <strong>'.niceDate($basket['time_ts']).'</strong><br />Gültig bis <strong>'.niceDate($basket['until_ts']).'</strong>').'
+		</div>
+		 */
 		$page = new vPage('Essenskorb #'.$basket['id'], '
+		
 		<div class="pure-g">
 		    <div class="pure-u-1 pure-u-md-1-3">
 				'.$this->pageImg($basket['picture']).'	
@@ -89,6 +94,8 @@ class BasketView extends View
 			</div>
 		</div>
 		');
+		
+		$page->setSubTitle('<p>Veröffentlicht am <strong>'.niceDate($basket['time_ts']).'</strong></p><p>Gültig bis <strong>'.niceDate($basket['until_ts']).'</strong></p>');
 		
 		if($wallposts)
 		{
@@ -120,7 +127,7 @@ class BasketView extends View
 		{
 			$page->addSectionRight(v_info('Für Detailierte Infos darfst Du Dich einloggen!','Hinweis!').'<div>
 				<a class="button button-big" href="#"onclick="ajreq(\'login\',{app:\'login\'});return false;">Einloggen</a>
-			</div>',array('wrapper' => false));
+			</div>',false,array('wrapper' => false));
 		}		
 		
 		$page->render();

@@ -45,7 +45,8 @@ class BasketModel extends Model
 				`lat`,
 				`lon`,
 				`bezirk_id`,
-				`appost`
+				`appost`,
+				`until`
 			) 
 			VALUES 
 			(
@@ -62,7 +63,8 @@ class BasketModel extends Model
 				'.$this->floatval($lat).',
 				'.$this->floatval($lon).',
 				'.(int)$bezirk_id.',
-				'.(int)$appost.'
+				'.(int)$appost.',
+				"' . date('Y-m-d',(time()+1209600)) . '"
 				
 			)		
 		');
@@ -90,6 +92,8 @@ class BasketModel extends Model
 				b.lat,
 				b.lon,
 				b.foodsaver_id,
+				UNIX_TIMESTAMP(b.time) AS time_ts,
+				UNIX_TIMESTAMP(b.until) AS until_ts,
 				fs.id AS fs_id,
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,

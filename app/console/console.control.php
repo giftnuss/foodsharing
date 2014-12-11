@@ -110,6 +110,18 @@ class ConsoleControl
 	}
 }
 
+function validEmail($email)
+{
+	if (filter_var($email, FILTER_VALIDATE_EMAIL))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 function s($id)
 {
 	global $g_lang;

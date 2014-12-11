@@ -6,6 +6,7 @@ class vPage
 	private $sections;
 	private $sections_left;
 	private $sections_right;
+	private $subtitle;
 	
 	public function __construct($title,$content)
 	{
@@ -15,11 +16,17 @@ class vPage
 		$this->sections = array();
 		$this->sections_left = array();
 		$this->sections_right = array();
+		$this->subtitle = false;
 	}
 	
 	public function setTitle($title)
 	{
 		$this->title = $title;
+	}
+	
+	public function setSubTitle($subtitle)
+	{
+		$this->subtitle = $subtitle;
 	}
 	
 	public function setContent($html)
@@ -74,9 +81,18 @@ class vPage
 		addBread($this->title);
 		addTitle($this->title);		
 		
+		$subtitle = '';
+		if($this->subtitle !==false)
+		{
+			$subtitle = '<small>'.$this->subtitle.'</small>';
+		}
+		
 		addContent('
 		<div class="page ui-padding ui-widget-content corner-all">
-			<h1>' . $this->title . '</h1>
+			<div class="h1">
+				<h1>' . $this->title . '</h1>
+				'.$subtitle.'
+			</div>
 			'.$this->content.'
 		</div>');
 		
@@ -125,6 +141,7 @@ class vPage
 		{
 			$title = '';
 			$class = '';
+			
 			if($s['title'] !== false)
 			{
 				$title = '<h3>' . $s['title'] . '</h3>

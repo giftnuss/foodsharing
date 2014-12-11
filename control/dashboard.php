@@ -454,7 +454,7 @@ else if(S::may('fs'))
 		$out .= '
 		</ul>
 		<div style="text-align:center;">
-			<a class="button" href="/basket/find/">Alle Essenskörbe</a>
+			<a class="button" href="/essenskoerbe/find/">Alle Essenskörbe</a>
 		</div>';
 		
 		addContent(v_field($out,'Essenskörbe in Deiner Nähe'),CNT_LEFT);

@@ -138,7 +138,7 @@ class IndexView extends View
 		foreach ($baskets as $b)
 		{
 			$bout .= '
-			<li><a href="/basket/'.$b['id'].'" class="corner-all">'.$this->img($b).'</a></li>';
+			<li><a href="/essenskoerbe/'.$b['id'].'" class="corner-all">'.$this->img($b).'</a></li>';
 		}
 		
 		$bout .= '
