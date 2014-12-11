@@ -1063,7 +1063,7 @@ class Db
       ';
       if($user = $this->qRow($sql))
       {
-        $this->update("UPDATE `".PREFIX."foodsaver` SET `fs_password` = NULL, `passwd` = `".$hashed."` WHERE `id` = ".$user['id']);
+        $this->update("UPDATE `".PREFIX."foodsaver` SET `fs_password` = NULL, `passwd` = '".$hashed."' WHERE `id` = ".$user['id']);
         return $user;
       }
 
