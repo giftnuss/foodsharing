@@ -120,10 +120,7 @@ class MigrateControl extends ConsoleControl
 				else
 					$handy = $row->handy;
 
-				if(strlen($row->stadt) > 50)
-					$stadt = "";
-				else
-					$stadt = $row->stadt;
+			  $stadt = substr($row->stadt, 0, 50);
 
         $this->model->insert("INSERT IGNORE INTO fs_foodsaver (plz, stadt, lat, lon, photo, email, name, nachname, anschrift, telefon, handy, geschlecht, geb_datum, fs_id, anmeldedatum, active, data, about_me_public, token, last_login, fs_password) VALUES ("
         ."'".$this->model->safe($plz)."', "
