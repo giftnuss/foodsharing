@@ -99,4 +99,4 @@ var mapsearch = {
 		
 		this.$basketList.append('<li><a class="ui-corner-all" onclick="ajreq(\'bubble\',{app:\'basket\',id:'+basket.id+',modal:1});return false;" href="#"><span style="float:left;margin-right:7px;"><img width="35px" src="' + img + '" class="ui-corner-all"></span><span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' + distance + ')</strong>' + basket.description + '</span><span style="clear:both;"></span></a></li>');
 	}
-}
+};
