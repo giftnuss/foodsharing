@@ -299,7 +299,7 @@ class BasketXhr extends Control
 					$dia->addContent($this->view->bubble($basket));
 				}
 				
-				$dia->addButton('zum Essenskorb', 'goTo(\'/basket/'.(int)$basket['id'].'\');');
+				$dia->addButton('zum Essenskorb', 'goTo(\'/essenskoerbe/'.(int)$basket['id'].'\');');
 				
 				$modal = false;
 				if(isset($_GET['modal']))
