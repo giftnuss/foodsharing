@@ -15,6 +15,11 @@ class BasketModel extends Model
 		return array();
 	}
 	
+	public function getBasketChoords()
+	{
+		return $this->q('SELECT id,lat,lon FROM fs_basket WHERE status = 1');
+	}
+	
 	public function addBasket($desc, $pic, $tel, $contact_type, $weight, $location_type, $lat, $lon, $bezirk_id)
 	{
 		$appost = 1;

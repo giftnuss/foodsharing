@@ -25,7 +25,9 @@ class BasketXhr extends Control
 		 */
 		$allowed = array(
 			'bubble' => true,
-			'login' => true
+			'login' => true,
+			'basketchoords' => true,
+			'closebaskets'=> true
 		);
 		
 		if(!S::may() && !isset($allowed[$_GET['m']]))
@@ -35,6 +37,17 @@ class BasketXhr extends Control
 			));
 		}
 		
+	}
+	
+	public function basketchoords()
+	{
+		$xhr = new Xhr();
+		if($baskets = $this->model->getBasketChoords())
+		{
+			$xhr->addData('baskets', $baskets);
+		}
+		
+		$xhr->send();
 	}
 	
 	public function getnear()
@@ -243,6 +256,24 @@ class BasketXhr extends Control
 		$img->cropToRatio(1, 1);
 		$img->resize(50, 50);
 		$img->saveChanges();
+	}
+	
+	public function closebaskets()
+	{
+		$xhr = new Xhr();
+		
+		if(isset($_GET['choords']))
+		{
+			if($basket = $this->model->closeBaskets(50,array(
+				'lat' => $_GET['choords'][0],
+				'lon'=> $_GET['choords'][1]
+			)))
+			{
+				$xhr->addData('baskets', $basket);
+			}
+		}
+		
+		$xhr->send();
 	}
 	
 	public function bubble()

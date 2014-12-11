@@ -24,6 +24,8 @@ class BasketView extends View
 		}
 		
 		$map->setSearchPanel('mapsearch');
+		$map->setMarkerCluster();
+		$map->setDefaultMarker('basket', 'green');
 		
 		return '<input id="mapsearch" type="text" name="mapsearch" value="" placeholder="Adress-Suche..." /><div class="findmap">'.$map->render().'</div>';
 	}
@@ -31,7 +33,7 @@ class BasketView extends View
 	public function closeBaskets($baskets)
 	{
 		$out = '
-		<ul class="linklist">';
+		<ul class="linklist" id="cbasketlist">';
 		foreach ($baskets as $b)
 		{
 			$img = '/img/basket.png';
@@ -58,7 +60,7 @@ class BasketView extends View
 			$out .= '
 				<li>
 					<a class="ui-corner-all" onclick="ajreq(\'bubble\',{app:\'basket\',id:'.(int)$b['id'].',modal:1});return false;" href="#">
-						<span style="float:left;margin-right:7px;"><img width="35px" alt="Maike" src="'.$img.'" class="ui-corner-all"></span>
+						<span style="float:left;margin-right:7px;"><img width="35px" src="'.$img.'" class="ui-corner-all"></span>
 						<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">('.$distance.')</strong>'.tt($b['description'],50).'</span>
 						
 						<span style="clear:both;"></span>

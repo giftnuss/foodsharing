@@ -108,9 +108,13 @@ GROUP BY foodsaver_id'));
 		return false;
 	}
 	
-	public function closeBaskets($distance = 50)
+	public function closeBaskets($distance = 50,$loc = false)
 	{
-		$loc = S::getLocation();
+		if($loc === false)
+		{
+			$loc = S::getLocation();
+		}
+		
 		return $this->q('
 			SELECT 	
 				b.id, 

@@ -1817,7 +1817,7 @@ a.light
 }
 .leaflet-top, .leaflet-bottom
 {
-	z-index:50 !important;
+	z-index:25 !important;
 	right: auto;
 	left:0px;
 }
