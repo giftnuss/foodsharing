@@ -297,7 +297,7 @@ $(document).ready(function(){
 			{
 				$.ajax({
 					dataType:"json",
-					url:"xhr.php?f=sendmail&sub="+$("#sendMail input:first").val()+"&msg=" + encodeURIComponent($("#sendMail textarea").val() + '&fs=' + $('#sendmail-fs-id').val()),
+					url:"/xhr.php?f=sendmail&sub="+$("#sendMail input:first").val()+"&msg=" + encodeURIComponent($("#sendMail textarea").val() + '&fs=' + $('#sendmail-fs-id').val()),
 					success : function(data){
 						if(data.status == 1)
 						{
@@ -336,7 +336,7 @@ $(document).ready(function(){
 			{
 				$.ajax({
 					dataType:"json",
-					url:"xhr.php?f=addComment&name="+$('#comment-name').val()+"&id="+$('#comment-id').val()+"&comment=" + encodeURIComponent($("#comment textarea").val()),
+					url:"/xhr.php?f=addComment&name="+$('#comment-name').val()+"&id="+$('#comment-id').val()+"&comment=" + encodeURIComponent($("#comment textarea").val()),
 					success : function(data){
 						if(data.status == 1)
 						{
@@ -421,7 +421,7 @@ function profile(id)
 	showLoader();
 	$.ajax({
 		dataType:"json",
-		url:"xhrapp.php?app=profile&m=quickprofile&id=" + id,
+		url:"/xhrapp.php?app=profile&m=quickprofile&id=" + id,
 		success : function(data){
 			hideLoader();
 			if(data.status == 1)
@@ -880,7 +880,7 @@ function init_infos()
 {
 	$.ajax({
 		dataType:"json",
-		url:"xhr.php?f=getGlocke",
+		url:"/xhr.php?f=getGlocke",
 		success : function(data){
 			hideLoader();
 			if(data.status == 1)
@@ -985,7 +985,7 @@ function updateChat()
 {
 	$.ajax({
 		dataType:"json",
-		url:"xhr.php?f=updateChat&fsid=" + $("#xhr_sender_id").val() + '&fu=' + g_firstChatUpdate,
+		url:"/xhr.php?f=updateChat&fsid=" + $("#xhr_sender_id").val() + '&fu=' + g_firstChatUpdate,
 		success : function(data){
 			hideLoader();
 			if(data.status == 1)
@@ -1041,7 +1041,7 @@ function fancy_xhr(func,loader)
 	
 	$.ajax({
 		dataType:"json",
-		url:"xhr.php?f=" + func,
+		url:"/xhr.php?f=" + func,
 		success : function(data){
 			if(data.status == 1)
 			{
@@ -1113,7 +1113,7 @@ function checkNewMsg(sound)
 	
 	$.ajax({
 		dataType:"json",
-		url:"xhr.php?f=getNewMsg&mob="+mob,
+		url:"/xhr.php?f=getNewMsg&mob="+mob,
 		success : function(data){
 			if(data.status == 1)
 			{
@@ -1160,7 +1160,7 @@ function xhrf(func)
 	showLoader();
 	$.ajax({
 		dataType:"json",
-		url:"xhr.php?f=" + func,
+		url:"/xhr.php?f=" + func,
 		success : function(data){
 			hideLoader();
 			if(data.status == 1)
@@ -1202,7 +1202,7 @@ function hiddenDialog(id,table,title)
 				showLoader();
 				$.ajax({
 					dataType:"json",
-					url:"xhr.php?f=update_"+table+"&" + $('#' + id + ' form').serialize(),
+					url:"/xhr.php?f=update_"+table+"&" + $('#' + id + ' form').serialize(),
 					success : function(data){
 						$("#" + id).dialog('close');
 						
@@ -1280,7 +1280,7 @@ function addSelect(id)
 	{
 		$.ajax({
 			dataType:"json",
-			url:"xhr.php?f=add" + ucfirst(id) + "&neu=" + encodeURIComponent($("#" + id + "neu").val()),
+			url:"/xhr.php?f=add" + ucfirst(id) + "&neu=" + encodeURIComponent($("#" + id + "neu").val()),
 			success : function(data){
 				
 				$("#" + id).append('<option value="'+data.id+'">'+data.name+'</option>');
@@ -1503,7 +1503,7 @@ function checkOnline(saver)
 {
 	$.ajax({
 		dataType:"json",
-		url:"xhr.php?f=checkOnline",
+		url:"/xhr.php?f=checkOnline",
 		data: "saver="+saver,
 		success : function(data){
 			
@@ -1599,7 +1599,7 @@ function betriebRequest(id)
 {
 	showLoader();
 	$.ajax({
-		url: "xhr.php?f=betriebRequest",
+		url: "/xhr.php?f=betriebRequest",
 		data: { "id": id },
 		dataType: "json",
 		success: function(data) {
