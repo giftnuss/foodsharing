@@ -9,8 +9,9 @@ class MigrateControl extends ConsoleControl
   
   public function __construct()
   {
-    $this->source_table = 'foodsharing_at';
-    //$this->source_table = 'foodsharing_ch';
+    //$this->source_table = 'foodsharing_at';
+// WARNING: CH does not contain last login field! Change query below!!
+    $this->source_table = 'foodsharing_ch';
     //$this->source_table = 'foodsharing_de';
     $this->model = new MigrateModel();
     $this->fs_db = new mysqli(DB_HOST, DB_USER, DB_PASS, $this->source_table);
@@ -73,27 +74,28 @@ class MigrateControl extends ConsoleControl
 
 
   private function fetch_and_convert_image($img) {
-    $path = "http://media.myfoodsharing.org/live/de/profiles/pictures/200/";
+    return "";
+    $path = "http://media.myfoodsharing.org/live/at/profiles/pictures/200/";
     $target = ROOT_DIR . 'tmp_mfs/';
     $photo = uniqid() . '.' . strtolower(pathinfo($img, PATHINFO_EXTENSION));
-    echo "Downloading img $img...";
+    if(strlen($img) < 3) {
+      return "";
+    }
     file_put_contents($target.$photo, fopen($path.$img, 'r'));
-    echo "\n";
+    return $target.$photo;
   }
  
   public function fs_user()
   {
     $this->model->update("UPDATE fs_foodsaver SET fs_id = NULL");
+    $this->model->begin_transaction();
     if($result = $this->fs_db->query("SELECT p.zipcode as plz, c.name as stadt, p.lat as lat, p.lng as lon, p.picture as fs_picture, u.email as email, p.firstname as name, p.lastname as nachname, p.street as anschrift, p.phone as telefon, p.mobile as handy, if(p.gender=false,1,2) as geschlecht, p.birthdate as geb_datum, u.id as fs_id, u.created as anmeldedatum, 1 as active, if (u.last_login is null, current_date(), u.last_login) as last_login, u.password as fs_password FROM users u LEFT JOIN profiles p ON u.id = p.user_id LEFT JOIN cities c ON p.city_id = c.id WHERE u.deleted = 0 AND p.deleted = 0")) {
-      $bar = $this->progressbar($result->num_rows());
+      $bar = $this->progressbar($result->num_rows);
       $cur_user_cnt = 0;
       while($row = $result->fetch_object()) {
         $cur_user_cnt++;
         $bar->update($cur_user_cnt);
-        $photo = fetch_and_convert_image($row->fs_picture);
-        if(strlen($photo) < 3) {
-          $photo = "";
-        }
+        $photo = $this->fetch_and_convert_image($row->fs_picture);
         $plz = $row->plz;
         if(strlen($plz) > 5 || strlen($plz) < 4) {
           $plz = "";
@@ -107,26 +109,40 @@ class MigrateControl extends ConsoleControl
           $lat = strval($lat);
           $lon = strval($lon);
         }
+				if(strlen($row->telefon) > 30)
+					$telefon = "";
+				else
+					$telefon = $row->telefon;
 
-        $this->model->insert("INSERT INTO fs_foodsaver (plz, stadt, lat, lon, photo, email, name, nachname, anschrift, telefon, handy, geschlecht, geb_datum, fs_id, anmeldedatum, active, data, about_me_public, token, last_login, fs_password) ("
-        ."'".$plz."', "
-        ."'".$row->stadt."', "
+				if(strlen($row->handy) > 50)
+					$handy = "";
+				else
+					$handy = $row->handy;
+
+				if(strlen($row->stadt) > 50)
+					$stadt = "";
+				else
+					$stadt = $row->stadt;
+
+        $this->model->insert("INSERT IGNORE INTO fs_foodsaver (plz, stadt, lat, lon, photo, email, name, nachname, anschrift, telefon, handy, geschlecht, geb_datum, fs_id, anmeldedatum, active, data, about_me_public, token, last_login, fs_password) VALUES ("
+        ."'".$this->model->safe($plz)."', "
+        ."'".$this->model->safe($stadt)."', "
         ."'".$lat."', "
         ."'".$lon."', "
-        ."'".$photo_id."', "
-        ."'".$row->email."', "
-        ."'".$row->name."', "
-        ."'".$row->nachname."', "
-        ."'".$row->anschrift."', "
-        ."'".$row->telefon."', "
-        ."'".$row->handy."', "
+        ."'".$photo."', "
+        ."'".$this->model->safe($row->email)."', "
+        ."'".$this->model->safe($row->name)."', "
+        ."'".$this->model->safe($row->nachname)."', "
+        ."'".$this->model->safe($row->anschrift)."', "
+        ."'".$this->model->safe($telefon)."', "
+        ."'".$this->model->safe($handy)."', "
         .$row->geschlecht.", "
-        .$row->geb_datum.", "
+        ."'".$this->model->safe($row->geb_datum)."', "
         .$row->fs_id.", "
-        .$row->anmeldedatum.", "
+        ."'".$this->model->safe($row->anmeldedatum)."', "
         ."1, '$this->source_table import', '', '', "
-        .$row->last_login.", "
-        ."'".$row->fs_password."')");
+        ."'".$this->model->safe($row->last_login)."', "
+        ."'".$this->model->safe($row->fs_password)."')");
       }
     }
   }
