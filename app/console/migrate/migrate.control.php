@@ -11,10 +11,11 @@ class MigrateControl extends ConsoleControl
   {
     //$this->source_table = 'foodsharing_at';
 // WARNING: CH does not contain last login field! Change query below!!
-    $this->source_table = 'foodsharing_ch';
-    //$this->source_table = 'foodsharing_de';
+    //$this->source_table = 'foodsharing_ch';
+    $this->source_table = 'foodsharing_de';
     $this->model = new MigrateModel();
     $this->fs_db = new mysqli(DB_HOST, DB_USER, DB_PASS, $this->source_table);
+    $this->fs_db->set_charset('utf8');
   }
 
   private function resizeAvatar($img)
@@ -145,6 +146,7 @@ class MigrateControl extends ConsoleControl
         ."'".$this->model->safe($row->fs_password)."')");
       }
     }
+    $this->model->commit();
   }
 
   private function fs_user_lookup($fs_id) {
@@ -153,13 +155,14 @@ class MigrateControl extends ConsoleControl
       return $usermap[$fs_id];
     }
 
-    $res = (int)$this->model->qOne('SELECT id FROM fs_foodsaver WHERE fs_id = $fs_id');
+    $res = (int)$this->model->qOne("SELECT id FROM fs_foodsaver WHERE fs_id = $fs_id");
     $usermap[$fs_id] = $res;
     return $res;
   }
   
   public function fs_chats()
   {
+    $this->model->begin_transaction();
     if($result = $this->fs_db->query("SELECT id, created, modified, initial_sender_id, initial_recipient_id FROM conversations")) {
       $bar = $this->progressbar($result->num_rows);
       $usermap = array();
@@ -167,12 +170,12 @@ class MigrateControl extends ConsoleControl
       while($row = $result->fetch_object()) {
         $cur_msg_row++;
         $bar->update($cur_msg_row);
-        $sender_id = fs_user_lookup($row->initial_sender_id);
-        $recipient_id = fs_user_lookup($row->initial_recipient_id);
+        $sender_id = $this->fs_user_lookup($row->initial_sender_id);
+        $recipient_id = $this->fs_user_lookup($row->initial_recipient_id);
         if($sender_id == false || $recipient_id == false)
           continue;
 
-        $conversation_id === false;
+	$conversation_id = false;
         $mindate = '';
         $maxdate = '';
         $unread = 0;
@@ -185,10 +188,10 @@ class MigrateControl extends ConsoleControl
               $body = str_replace(array('<br />','<br>','<br/>','<p>','</p>'),"\n",$msg->message);
               $body = strip_tags($body);
               $body = trim($body);
-              $id = $this->model->addMsg($conversation_id,fs_user_lookup($msg->sender_id),$body,$msg->created);
+              $id = $this->model->addMsg($conversation_id,$this->fs_user_lookup($msg->sender_id),$body,$msg->created);
               $maxdate = $msg->created;
               $this->model->connectUser($conversation_id,$sender_id,$recipient_id, 0);
-              $last_foodsaver_id = fs_user_lookup($msg->sender_id);
+              $last_foodsaver_id = $this->fs_user_lookup($msg->sender_id);
               $last_message = $body;
               $last_message_id = $id;
           }
@@ -203,6 +206,7 @@ class MigrateControl extends ConsoleControl
         }
       }
     }
+    $this->model->commit();
   }
   
   public function chats()
