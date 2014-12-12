@@ -48,9 +48,9 @@ elseif(isset($_GET['id']))
 		}
 		if(empty($res['body']) && !empty($res['file']))
 		{
-			go('?page=listDocument&id='.$res['id'].'&a=dl');
+			go('/?page=listDocument&id='.$res['id'].'&a=dl');
 		}
-		addBread('Dokumente','?page=document');
+		addBread('Dokumente','/?page=document');
 		addBread(substr($res['name'],0,30));
 		
 		$cnt = '';
@@ -75,7 +75,7 @@ elseif(isset($_GET['id']))
 else
 {
 
-	addBread('Dokumente','?page=document');
+	addBread('Dokumente','/?page=document');
 	
 	
 	
@@ -84,7 +84,7 @@ else
 	foreach ($docs as $d)
 	{
 		$menu[] = array(
-			'href' => '?page=listDocument&id='.$d['id'],
+			'href' => '/?page=listDocument&id='.$d['id'],
 			'name' => $d['name']
 		);
 	}

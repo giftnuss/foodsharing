@@ -13,7 +13,7 @@ if(getAction('neu'))
 {
 	handle_add();
 	
-	addBread(s('bread_bezirk'),'?page=region');
+	addBread(s('bread_bezirk'),'/?page=region');
 	addBread(s('bread_new_bezirk'));
 			
 	addContent(bezirk_form());
@@ -34,7 +34,7 @@ elseif($id = getActionId('edit'))
 {
 	handle_edit();
 	
-	addBread(s('bread_bezirk'),'?page=bezirk');
+	addBread(s('bread_bezirk'),'/?page=bezirk');
 	addBread(s('bread_edit_bezirk'));
 	
 	$data = $db->getOne_bezirk($id);
@@ -55,7 +55,7 @@ else if(isset($_GET['id']))
 }
 else if(false)
 {
-	addBread(s('region_bread'),'?page=region');
+	addBread(s('region_bread'),'/?page=region');
 	
 	if($data = $db->getBasics_region())
 	{
@@ -102,13 +102,13 @@ else if(false)
 	}
 			
 	addContent(v_field(v_menu(array(
-		array('href' => '?page=region&a=neu','name' => s('neu_region'))
+		array('href' => '/?page=region&a=neu','name' => s('neu_region'))
 	)),'Aktionen'));
 }		
 else
 {
 	$id = id('tree');
-	addBread(s('bezirk_bread'),'?page=region');
+	addBread(s('bezirk_bread'),'/?page=region');
 	addTitle(s('bezirk_bread'));
 	$cnt = '
 	<div>
@@ -123,7 +123,7 @@ else
 	$("#deletebezirk").button().click(function(){
 		if(confirm($("#tree-hidden-name").val()+\' wirklich löschen?\'))
 		{
-			goTo(\'?page=region&delete=\'+$("#tree-hidden").val());
+			goTo(\'/?page=region&delete=\'+$("#tree-hidden").val());
 		}
 	});');
 	

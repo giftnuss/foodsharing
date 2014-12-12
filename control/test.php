@@ -180,7 +180,7 @@ function findLoneyBetrieb()
 							'anrede' => genderWord($v['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'name' => $v['name'],
 							'betrieb' => $b['name'],
-							'link' => BASE_URL.'?page=fsbetrieb&id='.$b['id']
+							'link' => BASE_URL.'/?page=fsbetrieb&id='.$b['id']
 						));
 						echo $v['name'].':'.$v['email'].':sende...<br />';
 					}

@@ -92,7 +92,7 @@ var conv = {
 			}
 			else
 			{
-				goTo('?page=msg&cid=' + cid);
+				goTo('/?page=msg&cid=' + cid);
 			}
 		}
 		else

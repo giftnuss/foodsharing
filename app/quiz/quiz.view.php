@@ -133,7 +133,7 @@ class QuizView extends View
 			{
 				$menu[] = array(
 					'name' => $q['name'],
-					'href' => '?page=quiz&id='.(int)$q['id']		
+					'href' => '/?page=quiz&id='.(int)$q['id']		
 				);
 			}
 		}
@@ -223,7 +223,7 @@ class QuizView extends View
 		
 		$menu[] = array(
 			'name' => 'Neues Quiz Anlegen',
-			'href' => '?page=quiz&sub=newquiz'
+			'href' => '/?page=quiz&sub=newquiz'
 		);
 		
 		return $this->menu($menu);

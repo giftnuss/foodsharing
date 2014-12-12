@@ -416,7 +416,7 @@ GROUP BY foodsaver_id'));
 		{
 			if($res = $this->searchTable('bezirk', array('name'), $q,array(
 					'name' => '`name`',
-					'click' => 'CONCAT("goTo(\'?page=bezirk&bid=",`id`,"\');")',
+					'click' => 'CONCAT("goTo(\'/?page=bezirk&bid=",`id`,"\');")',
 					'teaser' => 'CONCAT("")'
 				
 			)))
@@ -3591,7 +3591,7 @@ GROUP BY foodsaver_id'));
 	public function acceptBezirkRequest($fsid,$bid)
 	{
 		$bezirk = $this->getVal('name', 'bezirk', $bid);
-		$this->addGlocke(array($fsid), 'Du bist dabei, Deine Anfrage wurde angenommen!',$bezirk,'?page=bezirk&bid='.(int)$bid);
+		$this->addGlocke(array($fsid), 'Du bist dabei, Deine Anfrage wurde angenommen!',$bezirk,'/?page=bezirk&bid='.(int)$bid);
 		return $this->update('
 					UPDATE 	 	`'.PREFIX.'foodsaver_has_bezirk`
 					SET 		`active` = 1,
@@ -3636,7 +3636,7 @@ GROUP BY foodsaver_id'));
 	public function acceptRequest($fsid,$bid)
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $bid);
-		$this->addGlocke(array($fsid), 'Du bist dabei, Deine Anfrage wurde angenommen!',$betrieb,'?page=fsbetrieb&id='.(int)$bid);
+		$this->addGlocke(array($fsid), 'Du bist dabei, Deine Anfrage wurde angenommen!',$betrieb,'/?page=fsbetrieb&id='.(int)$bid);
 		$msg = loadModel('msg');
 		
 		if($scid = $msg->getBetriebConversation($bid, true))
@@ -3661,7 +3661,7 @@ GROUP BY foodsaver_id'));
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $bid);
 		
-		$this->addGlocke(array($fsid), 'Du bist auf der Springer- / Warteliste, Bei bedarf wirst Du kontaktiert!',$betrieb,'?page=fsbetrieb&id='.(int)$bid);
+		$this->addGlocke(array($fsid), 'Du bist auf der Springer- / Warteliste, Bei bedarf wirst Du kontaktiert!',$betrieb,'/?page=fsbetrieb&id='.(int)$bid);
 	    
 	    if($scid = $this->getBetriebConversation($bid, true))
 	    {
@@ -3679,7 +3679,7 @@ GROUP BY foodsaver_id'));
 	public function denyRequest($fsid,$bid)
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $bid);
-		$this->addGlocke(array($fsid), 'Das Team ist leider schon zu voll!',$betrieb,'?page=fsbetrieb&id='.(int)$bid);
+		$this->addGlocke(array($fsid), 'Das Team ist leider schon zu voll!',$betrieb,'/?page=fsbetrieb&id='.(int)$bid);
 		return $this->update('
 					DELETE FROM 	`fs_betrieb_team`
 					WHERE 		`betrieb_id` = '.$this->intval($bid).'

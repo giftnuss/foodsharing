@@ -11,7 +11,7 @@ if(getAction('new') && ( S::may('orga') || isBotFor($g_data['bezirk_id'])))
 {
 	handle_add();
 	
-	addBread(s('bread_betrieb'),'?page=fsbetrieb');
+	addBread(s('bread_betrieb'),'/?page=fsbetrieb');
 	addBread(s('bread_new_betrieb'));
 			
 	addBetrieb(betrieb_form());
@@ -31,7 +31,7 @@ elseif($id = getActionId('delete') && ( S::may('orga') || isBotFor($g_data['bezi
 elseif($id = getActionId('edit'))
 {
 	if($db->isVerantwortlich($_GET['id']) || isOrgaTeam()){
-		go('?page=betrieb&a=edit&id='.(int)$_GET['id']);
+		go('/?page=betrieb&a=edit&id='.(int)$_GET['id']);
 	}
 	else{
 		goPage();
@@ -40,7 +40,7 @@ elseif($id = getActionId('edit'))
 else if(isset($_GET['id']))
 {
 	
-	addBread(s('betrieb_bread'),'?page=fsbetrieb');
+	addBread(s('betrieb_bread'),'/?page=fsbetrieb');
 	addTitle(s('betrieb_bread'));
 	addStyle('.button{margin-right:8px;}#right .tagedit-list{width:256px;}#foodsaver-wrapper{padding-top:0px;}');
 	global $g_data;
@@ -420,7 +420,7 @@ else if(isset($_GET['id']))
 		if($betrieb['verantwortlich'] || S::may('orga'))
 		{
 			$menu[] = array('name'=>s('fetch_history'),'click' => "ajreq('fetchhistory',{app:'betrieb',bid:".(int)$betrieb['id']."});");
-			$menu[] = array('name'=>s('edit_betrieb'),'href'=>'?page=betrieb&a=edit&id='.$betrieb['id']);
+			$menu[] = array('name'=>s('edit_betrieb'),'href'=>'/?page=betrieb&a=edit&id='.$betrieb['id']);
 			$menu[] = array('name'=>s('edit_team'),'click'=>'$(\'#teamEditor\').dialog({modal:true,width:425,title:\''.s('edit_team').'\'});');
 			$menu[] = array('name'=>s('edit_fetchtime'),'click'=>'$(\'#bid\').val('.(int)$betrieb['id'].');$(\'#dialog_abholen\').dialog(\'open\');return false;');
 		}
@@ -858,7 +858,7 @@ else
 	addBread('Deine Betriebe');
 	
 	addContent(v_menu(array(
-			array('href' => '?page=betrieb&a=new','name' => s('add_new'))
+			array('href' => '/?page=betrieb&a=new','name' => s('add_new'))
 	),'Aktionen'),CNT_RIGHT);
 	
 	$bezirk = getBezirk();

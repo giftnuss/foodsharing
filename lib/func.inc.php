@@ -464,7 +464,7 @@ function pageLink($page,$id, $action = '')
 	{
 		$action = '&a='.$action;
 	}
-	return array('href' => '?page='.$page.$action,'name' => s($id));
+	return array('href' => '/?page='.$page.$action,'name' => s($id));
 }
 
 function getActionId($a)
@@ -1213,7 +1213,7 @@ function emailBodyTpl($message, $email = false, $token = false)
 	<tr>
 		<td height="20" valign="top" style="background-color:#FAF7E5">
 			<div style="text-align:center;padding-top:10px;font-size:11px;font-family:Arial;padding:15px;color:#594129;">
-				Willst Du Keine Nachrichten mehr bekommen? Du kannst Deinen unter <a style="color:#F36933" href="'.BASE_URL.'?page=settings&sub=info" target="_blank">Deinen Einstellungen</a> einstellen, welche Mails Du bekommst.
+				Willst Du Keine Nachrichten mehr bekommen? Du kannst Deinen unter <a style="color:#F36933" href="'.BASE_URL.'/?page=settings&sub=info" target="_blank">Deinen Einstellungen</a> einstellen, welche Mails Du bekommst.
 			</div>
 		</td>
 	</tr>';
@@ -1705,7 +1705,7 @@ function goPage($page = false)
 			$page .= '&bid='.(int)$_GET['bid'];
 		}
 	}
-	go('?page='.$page);
+	go('/?page='.$page);
 }
 
 function go($url)
@@ -1716,7 +1716,7 @@ function go($url)
 
 function goLogin()
 {
-	go('?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']));
+	go('/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']));
 }
 
 function goBack()
@@ -2522,7 +2522,7 @@ function mailMessage($sender_id,$recip_id,$msg=NULL)
 					'sender' => $sender['name'],
 					'name' => $foodsaver['name'],
 					'message' => $msg,
-					'link' => BASE_URL.'?page=msg&u2c='.(int)$sender_id
+					'link' => BASE_URL.'/?page=msg&u2c='.(int)$sender_id
 				));
 			}
 			
@@ -3170,7 +3170,7 @@ function convertKbSize($size)
 
 function forceLogin()
 {
-	go('?page=login&ref='.urlencode($_SERVER['REQUEST_URI']));
+	go('/?page=login&ref='.urlencode($_SERVER['REQUEST_URI']));
 }
 
 function sendSock($fsid,$app,$method,$options)

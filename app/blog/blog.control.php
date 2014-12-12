@@ -23,7 +23,7 @@ class BlogControl extends Control
 			}
 			goPage();
 		}
-		addBread(s('blog_bread'),'?page=blog');
+		addBread(s('blog_bread'),'/?page=blog');
 		addTitle(s('blog_bread'));
 	}
 	
@@ -56,7 +56,7 @@ class BlogControl extends Control
 		}
 		else if ($page > 1)
 		{
-			go('?page=blog');
+			go('/?page=blog');
 		}
 	}
 	
@@ -89,7 +89,7 @@ class BlogControl extends Control
 				
 			addContent(v_field(v_menu(array(
 			array(
-			'href' => '?page=blog&sub=add',
+			'href' => '/?page=blog&sub=add',
 			'name' => s('new_article')
 			)
 			)),s('actions')),CNT_LEFT);
@@ -105,7 +105,7 @@ class BlogControl extends Control
 				if($post['active'] == 1)
 				{
 					addTitle($post['name']);
-					addBread($post['name'],'?page=blog&post=' . (int)$post['id']);
+					addBread($post['name'],'/?page=blog&post=' . (int)$post['id']);
 					addContent($this->view->topbar($post['name'], niceDate($post['time_ts'])));
 					addContent(v_field($post['body'], $post['name'],array('class' => 'ui-padding')));
 				}
@@ -155,7 +155,7 @@ class BlogControl extends Control
 		{
 			$this->handle_edit();
 			
-			addBread(s('bread_blog_entry'),'?page=blog&sub=manage');
+			addBread(s('bread_blog_entry'),'/?page=blog&sub=manage');
 			addBread(s('bread_edit_blog_entry'));
 			
 			

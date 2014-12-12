@@ -549,7 +549,7 @@ class Control
 	  					'sender' => S::user('name'),
 	  					'name' => $recipient['name'],
 	  					'message' => $msg,
-	  					'link' => BASE_URL.'?page=msg&uc='.(int)fsId().'cid='.(int)$conversation_id
+	  					'link' => BASE_URL.'/?page=msg&uc='.(int)fsId().'cid='.(int)$conversation_id
 	  				));
 	  			}
 	  			
@@ -583,7 +583,7 @@ class Control
   							'sender' => $sender['name'],
   							'name' => $foodsaver['name'],
   							'message' => $msg,
-  							'link' => BASE_URL.'?page=msg&u2c='.(int)$sender_id
+  							'link' => BASE_URL.'/?page=msg&u2c='.(int)$sender_id
   					));
   				}
   	

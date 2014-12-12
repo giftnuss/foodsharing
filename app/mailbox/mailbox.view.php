@@ -72,7 +72,7 @@ class MailboxView extends View
 	public function manageOpt()
 	{
 		return v_menu(array(
-				array('name' => s('new_mailbox'),'href'=>'?page=mailbox&a=newbox')
+				array('name' => s('new_mailbox'),'href'=>'/?page=mailbox&a=newbox')
 		),s('options'));
 	}
 	

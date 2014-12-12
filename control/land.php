@@ -4,7 +4,7 @@ if(getAction('neu'))
 {
 	handle_add();
 	
-	addBread(s('bread_land'),'?page=land');
+	addBread(s('bread_land'),'/?page=land');
 	addBread(s('bread_new_land'));
 			
 	$content = land_form();
@@ -25,7 +25,7 @@ elseif($id = getActionId('edit'))
 {
 	handle_edit();
 	
-	addBread(s('bread_land'),'?page=land');
+	addBread(s('bread_land'),'/?page=land');
 	addBread(s('bread_edit_land'));
 	
 	$data = $db->getOne_land($id);
@@ -44,7 +44,7 @@ else if(isset($_GET['id']))
 }
 else
 {
-	addBread(s('land_bread'),'?page=land');
+	addBread(s('land_bread'),'/?page=land');
 	
 	if($data = $db->getBasics_land())
 	{
@@ -71,7 +71,7 @@ else
 	}
 			
 	$right = v_field(v_menu(array(
-		array('href' => '?page=land&a=neu','name' => s('neu_land'))
+		array('href' => '/?page=land&a=neu','name' => s('neu_land'))
 	)),'Aktionen');
 }					
 function land_form()

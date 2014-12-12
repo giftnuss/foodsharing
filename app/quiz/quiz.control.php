@@ -28,7 +28,7 @@ class QuizControl extends Control
 			goBack();
 		}
 		
-		addBread('Quiz','?page=quiz');
+		addBread('Quiz','/?page=quiz');
 		addTitle('Quiz');
 		
 		$topbtn = '';
@@ -37,7 +37,7 @@ class QuizControl extends Control
 		{
 			if($name = $this->model->getVal('name', 'quiz', $_GET['id']))
 			{
-				addBread($name,'?page=quiz&id='.(int)$_GET['id']);
+				addBread($name,'/?page=quiz&id='.(int)$_GET['id']);
 				$topbtn = ' - '.$name;
 				$slogan = 'Klausurfragen für '.$name;
 			}
@@ -48,7 +48,7 @@ class QuizControl extends Control
 		{
 			if(!isset($_GET['id']))
 			{
-				go('?page=quiz&id=1');
+				go('/?page=quiz&id=1');
 			}
 			addContent($this->view->topbar('Quiz'.$topbtn, $slogan, '<img src="img/quiz.png" />'),CNT_TOP);
 			addContent($this->view->listQuiz($this->model->listQuiz()),CNT_LEFT);
@@ -62,9 +62,9 @@ class QuizControl extends Control
 		{
 			if($name = $this->model->getVal('name', 'quiz', $q['quiz_id']))
 			{
-				addBread($name,'?page=quiz&id='.(int)$_GET['id']);
+				addBread($name,'/?page=quiz&id='.(int)$_GET['id']);
 			}
-			addBread('Frage  #'.$q['id'],'?page=quiz&sub=wall&id='.(int)$q['id']);
+			addBread('Frage  #'.$q['id'],'/?page=quiz&sub=wall&id='.(int)$q['id']);
 			addContent($this->view->topbar('Quizfrage  #'.$q['id'],'<a style="float:right;color:#FFF;font-size:13px;margin-top:-20px;" href="#" class="button" onclick="ajreq(\'editquest\',{id:'.(int)$q['id'].',qid:'.(int)$q['quiz_id'].'});return false;">Frage bearbeiten</a>' . $q['text'] . '<p><strong>'.$q['fp'].' Fehlerpunkte, '.$q['duration'].' Sekunden zum Antworten</strong></p>', '<img src="img/quiz.png" />'),CNT_TOP);
 			addContent(v_field($this->wallposts('question', $_GET['id']), 'Kommentare'),CNT_MAIN);
 			addContent($this->view->answerSidebar($this->model->getAnswers($q['id']),$_GET['id']),CNT_RIGHT);
@@ -92,7 +92,7 @@ class QuizControl extends Control
 					if($id = $this->model->updateQuiz($_GET['qid'],$name,$desc,$maxfp,$questcount))
 					{
 						info('Quiz wurde erfolgreich geändert!');
-						go('?page=quiz&id='.(int)$id);
+						go('/?page=quiz&id='.(int)$id);
 					}
 				}
 			}
@@ -120,7 +120,7 @@ class QuizControl extends Control
 				if($id = $this->model->addQuiz($name,$desc,$maxfp,$questcount))
 				{
 					info('Quiz wurde erfolgreich angelegt!');
-					go('?page=quiz&id='.(int)$id);
+					go('/?page=quiz&id='.(int)$id);
 				}
 			}
 		}
@@ -158,7 +158,7 @@ class QuizControl extends Control
 			{
 				addContent($this->view->noSessions($quiz));
 			}
-			addBread($quiz['name'],'?page=quiz&id='.(int)$_GET['id']);
+			addBread($quiz['name'],'/?page=quiz&id='.(int)$_GET['id']);
 			addBread('Auswertung');
 			$slogan = 'Klausurfragen für '.$quiz['name'];
 			

@@ -4,7 +4,7 @@ if(getAction('new'))
 {
 	handle_add();
 	
-	addBread(s('bread_betrieb'),'?page=fsbetrieb');
+	addBread(s('bread_betrieb'),'/?page=fsbetrieb');
 	addBread(s('bread_new_betrieb'));
 			
 	$content = betrieb_form();
@@ -25,7 +25,7 @@ elseif($id = getActionId('edit'))
 {
 	handle_edit();
 	
-	addBread(s('bread_betrieb'),'?page=fsbetrieb');
+	addBread(s('bread_betrieb'),'/?page=fsbetrieb');
 	addBread(s('bread_edit_betrieb'));
 	
 	$data = $db->getOne_betrieb($id);
@@ -46,7 +46,7 @@ else if(isset($_GET['id']))
 	
 	$betrieb = $db->getBetrieb((int)$_GET['id']);
 	
-	addBread(s('bread_betrieb'),'?page=fsbetrieb');
+	addBread(s('bread_betrieb'),'/?page=fsbetrieb');
 	addBread($betrieb['name']);
 	
 	$content = v_field(v_map($betrieb),v_getStatusAmpel($betrieb['betrieb_status_id']).' '.$betrieb['name']);
@@ -89,7 +89,7 @@ else if(isset($_GET['id']))
 }
 else
 {
-	addBread(s('betrieb_bread'),'?page=fsbetrieb');
+	addBread(s('betrieb_bread'),'/?page=fsbetrieb');
 	
 	$right .= v_menu(array(
 			array('click' => 'alert(0);','name' => 'Vertretung finden')
@@ -211,7 +211,7 @@ else
 	}
 			
 	$right = v_field(v_menu(array(
-		array('href' => '?page=fsbetrieb&a=neu','name' => s('neu_betrieb'))
+		array('href' => '/?page=fsbetrieb&a=neu','name' => s('neu_betrieb'))
 	)),'Aktionen');
 	*/
 }					

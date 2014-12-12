@@ -74,8 +74,8 @@ if(isBotschafter() && isset($_GET['id']))
 	CNT_RIGHT);
 	
 	addContent(v_menu(array(
-		array('href'=>'?page=checkReg&id='.$id.'&activate=1','name'=>$fs['name'].' Freischalten'),
-		array('click'=>'ifconfirm(\'?page=checkReg&id='.$id.'&delete=1\',\'Willst Du '.$fs['name'].' wirklich Ablehnen?\',\''.$fs['name'].' Ablehnen\')','name'=>$fs['name'].' Ablehnen')
+		array('href'=>'/?page=checkReg&id='.$id.'&activate=1','name'=>$fs['name'].' Freischalten'),
+		array('click'=>'ifconfirm(\'/?page=checkReg&id='.$id.'&delete=1\',\'Willst Du '.$fs['name'].' wirklich Ablehnen?\',\''.$fs['name'].' Ablehnen\')','name'=>$fs['name'].' Ablehnen')
 	),s('options')),CNT_RIGHT);
 }
 else

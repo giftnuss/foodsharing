@@ -106,7 +106,7 @@ class BezirkView extends View
 					  showLoader();
 					  loadedPages[loadedPages.length] = page;
 					  $.ajax({
-							url: "/xhrapp.php?app=bezirk&m=morethemes&bid='.(int)$this->bezirk_id.'&page=" + page + "&bot='.$bot.'&last=" + $(".thread:last").attr("id").split("-")[1],
+							url: "/xhrapp.php?app=bezirk&m=morethemes&bid='.(int)$this->bezirk_id.'/?page=" + page + "&bot='.$bot.'&last=" + $(".thread:last").attr("id").split("-")[1],
 							dataType: "json",
 							success: function(data){
 								if(data.status == 1)
@@ -259,7 +259,7 @@ class BezirkView extends View
 					'sleep_status' => $t['sleep_status'],
 					'photo' => $t['foodsaver_photo']
 				);
-				$link = '?page=bezirk&bid='.$this->bezirk_id.'&sub='.$sub.'&tid='.$t['id'].'&pid='.$t['last_post_id'].'#post'.$t['last_post_id'];
+				$link = '/?page=bezirk&bid='.$this->bezirk_id.'&sub='.$sub.'&tid='.$t['id'].'&pid='.$t['last_post_id'].'#post'.$t['last_post_id'];
 				$out .= '
 				<li class="thread" id="thread-'.$t['id'].'">
 					<a class="ui-corner-all" href="'.$link.'">
@@ -537,7 +537,7 @@ class BezirkView extends View
 		
 		foreach ($requests as $r)
 		{
-			$url = '?page=application&bid='.$this->bezirk_id.'&fid='.$r['id'];
+			$url = '/?page=application&bid='.$this->bezirk_id.'&fid='.$r['id'];
 			
 			$rows[] = array(
 				array('cnt' => '<span class="photo"><a href="'.$url.'"><img id="miniq-'.$r['id'].'" src="'.img($r['photo']).'" /></a></span>'),

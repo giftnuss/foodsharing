@@ -4,7 +4,7 @@ if(getAction('neu'))
 {
 	handle_add();
 	
-	addBread(s('bread_kette'),'?page=kette');
+	addBread(s('bread_kette'),'/?page=kette');
 	addBread(s('bread_new_kette'));
 			
 	addContent(kette_form());
@@ -25,7 +25,7 @@ elseif($id = getActionId('edit'))
 {
 	handle_edit();
 	
-	addBread(s('bread_kette'),'?page=kette');
+	addBread(s('bread_kette'),'/?page=kette');
 	addBread(s('bread_edit_kette'));
 	
 	$data = $db->getOne_kette($id);
@@ -39,11 +39,11 @@ elseif($id = getActionId('edit'))
 }
 else if(isset($_GET['id']))
 {
-	go('?page=kette&a=edit&id='.(int)$_GET['id']);
+	go('/?page=kette&a=edit&id='.(int)$_GET['id']);
 }
 else
 {
-	addBread(s('kette_bread'),'?page=kette');
+	addBread(s('kette_bread'),'/?page=kette');
 	
 	if($data = $db->getBasics_kette())
 	{
@@ -70,7 +70,7 @@ else
 	}
 			
 	addContent(v_field(v_menu(array(
-		array('href' => '?page=kette&a=neu','name' => s('neu_kette'))
+		array('href' => '/?page=kette&a=neu','name' => s('neu_kette'))
 	)),'Aktionen'),CNT_RIGHT);
 }					
 function kette_form()

@@ -4,7 +4,7 @@ if(getAction('neu'))
 {
 	handle_add();
 	
-	addBread(s('bread_autokennzeichen'),'?page=autokennzeichen');
+	addBread(s('bread_autokennzeichen'),'/?page=autokennzeichen');
 	addBread(s('bread_new_autokennzeichen'));
 			
 	addCOntent(autokennzeichen_form());
@@ -25,7 +25,7 @@ elseif($id = getActionId('edit'))
 {
 	handle_edit();
 	
-	addBread(s('bread_autokennzeichen'),'?page=autokennzeichen');
+	addBread(s('bread_autokennzeichen'),'/?page=autokennzeichen');
 	addBread(s('bread_edit_autokennzeichen'));
 	
 	$data = $db->getOne_autokennzeichen($id);
@@ -44,7 +44,7 @@ else if(isset($_GET['id']))
 }
 else
 {
-	addBread(s('autokennzeichen_bread'),'?page=autokennzeichen');
+	addBread(s('autokennzeichen_bread'),'/?page=autokennzeichen');
 	
 	if($data = $db->get_autokennzeichen())
 	{
@@ -71,7 +71,7 @@ else
 	}
 			
 	addContent(v_field(v_menu(array(
-		array('href' => '?page=autokennzeichen&a=neu','name' => s('neu_autokennzeichen'))
+		array('href' => '/?page=autokennzeichen&a=neu','name' => s('neu_autokennzeichen'))
 	)),'Aktionen'),CNT_RIGHT);
 }					
 function autokennzeichen_form()

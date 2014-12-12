@@ -35,7 +35,7 @@ class EventXhr extends Control
 			$dialog = new XhrDialog();
 			$dialog->setTitle('Einladung');
 			$dialog->addContent(v_info('Lieben Dank! Du hast die Einladung angenommen.'));
-			$dialog->addButton('Zum Event', 'goTo(\'?page=event&id='.(int)$_GET['id'].'\');');
+			$dialog->addButton('Zum Event', 'goTo(\'/?page=event&id='.(int)$_GET['id'].'\');');
 			$dialog->addAbortButton();
 			
 			return $dialog->xhrout();
@@ -49,7 +49,7 @@ class EventXhr extends Control
 			$dialog = new XhrDialog();
 			$dialog->setTitle('Einladung');
 			$dialog->addContent(v_info('Lieben Dank! Schön das Du vielleicht dabei bist.'));
-			$dialog->addButton('Zum Event', 'goTo(\'?page=event&id='.(int)$_GET['id'].'\');');
+			$dialog->addButton('Zum Event', 'goTo(\'/?page=event&id='.(int)$_GET['id'].'\');');
 			$dialog->addAbortButton();
 				
 			return $dialog->xhrout();

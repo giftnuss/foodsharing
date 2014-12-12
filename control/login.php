@@ -54,11 +54,11 @@ function handleLogin()
 			{
 				go(urldecode($_GET['ref']));
 			}
-			go(str_replace('?page=login&logout','?page=dashboard',$_SERVER['HTTP_REFERER']));
+			go(str_replace('/?page=login&logout','/?page=dashboard',$_SERVER['HTTP_REFERER']));
 		}
 		else
 		{
-			go('?page=dashboard');
+			go('/?page=dashboard');
 		}
 		
 		

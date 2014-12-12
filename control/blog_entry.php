@@ -6,7 +6,7 @@ if(getAction('neu'))
 {
 	handle_add();
 	
-	addBread(s('bread_blog_entry'),'?page=blog_entry');
+	addBread(s('bread_blog_entry'),'/?page=blog_entry');
 	addBread(s('bread_new_blog_entry'));
 	
 	addContent(blog_entry_form());
@@ -27,7 +27,7 @@ elseif($id = getActionId('edit'))
 {
 	handle_edit();
 	
-	addBread(s('bread_blog_entry'),'?page=blog_entry');
+	addBread(s('bread_blog_entry'),'/?page=blog_entry');
 	addBread(s('bread_edit_blog_entry'));
 	
 	$data = $db->getOne_blog_entry($id);
@@ -46,7 +46,7 @@ else if(isset($_GET['id']))
 }
 else
 {
-	addBread(s('blog_entry_bread'),'?page=blog_entry');
+	addBread(s('blog_entry_bread'),'/?page=blog_entry');
 	
 	$title = 'Alle Artikel aus '.$bezirk['name'];
 	
@@ -90,7 +90,7 @@ else
 	}
 			
 	addContent(v_field(v_menu(array(
-		array('href' => '?page=blog_entry&a=neu','name' => s('neu_blog_entry'))
+		array('href' => '/?page=blog_entry&a=neu','name' => s('neu_blog_entry'))
 	)),'Aktionen'),CNT_LEFT);
 }					
 function blog_entry_form()

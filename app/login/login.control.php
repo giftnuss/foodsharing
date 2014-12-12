@@ -91,11 +91,11 @@ class LoginControl extends Control
 				{
 					go(urldecode($_GET['ref']));
 				}
-				go(str_replace('?page=login&logout','?page=dashboard',$_SERVER['HTTP_REFERER']));
+				go(str_replace('/?page=login&logout','/?page=dashboard',$_SERVER['HTTP_REFERER']));
 			}
 			else
 			{
-				go('?page=dashboard');
+				go('/?page=dashboard');
 			}
 			
 			
@@ -190,7 +190,7 @@ class LoginControl extends Control
 						
 						if($check)
 						{
-							go('?page=login');
+							go('/?page=login');
 						}
 					}
 					else
@@ -277,7 +277,7 @@ class LoginControl extends Control
 						'name' => $b['name'],
 						'teaser' => tt($b['teaser'],65),
 						'img' => $img,
-						'href' => '?page=bezirk&bid='.$b['id'].'&sub=forum',
+						'href' => '/?page=bezirk&bid='.$b['id'].'&sub=forum',
 						'search' => array(
 								$b['name']
 						)
@@ -301,7 +301,7 @@ class LoginControl extends Control
 				$result[] = array(
 						'name' => $b['name'],
 						'teaser' => $b['str'].' '.$b['hsnr'].', '.$b['plz'].' '.$b['stadt'],
-						'href' => '?page=fsbetrieb&id='.$b['id'],
+						'href' => '/?page=fsbetrieb&id='.$b['id'],
 						'search' => array(
 								$b['name'],$b['str']
 						)
@@ -326,7 +326,7 @@ class LoginControl extends Control
 						'name' => $b['name'],
 						'teaser' => '',
 						'img' => false,
-						'href' => '?page=bezirk&bid='.$b['id'].'&sub=forum',
+						'href' => '/?page=bezirk&bid='.$b['id'].'&sub=forum',
 						'search' => array(
 								$b['name']
 						)

@@ -10,6 +10,6 @@ if(isset($_GET['url']) && !empty($_GET['url']))
 	}
 	else
 	{
-		go('?page=dashboard');
+		go('/?page=dashboard');
 	}
 }

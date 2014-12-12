@@ -187,7 +187,7 @@ class BlogModel extends Model
 			'blog_new_check_title',
 			'blog_new_check',
 			'fa fa-bullhorn',
-			array( 'href'=>'?page=blog&sub=edit&id='.$id),
+			array( 'href'=>'/?page=blog&sub=edit&id='.$id),
 			array( 
 				'user' => S::user('name'), 
 				'teaser'=> tt($data['teaser'],100), 

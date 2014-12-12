@@ -8,7 +8,7 @@ if(getAction('neu'))
 {
 	handle_add();
 	
-	addBread(s('bread_lebensmittel'),'?page=lebensmittel');
+	addBread(s('bread_lebensmittel'),'/?page=lebensmittel');
 	addBread(s('bread_new_lebensmittel'));
 			
 	addContent(lebensmittel_form());
@@ -29,7 +29,7 @@ elseif($id = getActionId('edit'))
 {
 	handle_edit();
 	
-	addBread(s('bread_lebensmittel'),'?page=lebensmittel');
+	addBread(s('bread_lebensmittel'),'/?page=lebensmittel');
 	addBread(s('bread_edit_lebensmittel'));
 	
 	$data = $db->getOne_lebensmittel($id);
@@ -48,7 +48,7 @@ else if(isset($_GET['id']))
 }
 else
 {
-	addBread(s('lebensmittel_bread'),'?page=lebensmittel');
+	addBread(s('lebensmittel_bread'),'/?page=lebensmittel');
 	
 	if($data = $db->getBasics_lebensmittel())
 	{
@@ -75,7 +75,7 @@ else
 	}
 			
 	addContent(v_field(v_menu(array(
-		array('href' => '?page=lebensmittel&a=neu','name' => s('neu_lebensmittel'))
+		array('href' => '/?page=lebensmittel&a=neu','name' => s('neu_lebensmittel'))
 	)),'Aktionen'),CNT_RIGHT);
 }					
 function lebensmittel_form()

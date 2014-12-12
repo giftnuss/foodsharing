@@ -10,7 +10,7 @@ class NewareaControl extends Control
 		parent::__construct();
 
     if(!S::may('orga')) {
-      go('?page=dashboard');
+      go('/?page=dashboard');
     }
 		
 	}

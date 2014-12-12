@@ -29,12 +29,12 @@ class SettingsControl extends Control
 				'email_name' => $this->foodsaver['name'].' '.$this->foodsaver['nachname']
 			), 'loeschen@lebensmittelretten.de', $this->foodsaver['name'].' hat Account gelöscht',$this->foodsaver['name'].' '.$this->foodsaver['nachname'].' hat Account gelöscht'."\n\nGrund für das Löschen:\n".strip_tags($_GET['reason']));
 			$this->model->del_foodsaver(fsId());
-			go('?page=logout');
+			go('/?page=logout');
 		}
 		
 		if(!isset($_GET['sub']))
 		{
-			go('?page=settings&sub=general');
+			go('/?page=settings&sub=general');
 		}
 		
 		addTitle(s('settings'));
@@ -42,26 +42,26 @@ class SettingsControl extends Control
 	
 	public function index()
 	{
-		addBread('Einstellungen','?page=settings');
+		addBread('Einstellungen','/?page=settings');
 		
 		$menu = array(
-			array('name' => s('settings_general'), 'href' => '?page=settings&sub=general'),
-			array('name' => s('settings_info'), 'href' => '?page=settings&sub=info')
+			array('name' => s('settings_general'), 'href' => '/?page=settings&sub=general'),
+			array('name' => s('settings_info'), 'href' => '/?page=settings&sub=info')
 			
 		);
 		
 		if($this->model->getMumbleName())
 		{
-			$menu[] = array('name' => s('settings_mumble'), 'href' => '?page=settings&sub=mumble');
+			$menu[] = array('name' => s('settings_mumble'), 'href' => '/?page=settings&sub=mumble');
 		}
 		
-		$menu[] = array('name' => s('bcard'), 'href' => '?page=bcard');
+		$menu[] = array('name' => s('bcard'), 'href' => '/?page=bcard');
 				
 		addContent($this->view->menu($menu,array('title'=>s('settings'),'active'=>$this->getSub())),CNT_LEFT);
 		
 		$menu = array();
 		
-		$menu[] = array('name' => s('sleeping_user'), 'href' => '?page=settings&sub=sleeping');
+		$menu[] = array('name' => s('sleeping_user'), 'href' => '/?page=settings&sub=sleeping');
 		
 		$menu[] = array('name' => 'E-Mail Adresse ändern', 'click' => 'ajreq(\'changemail\');return false;');
 		
@@ -70,19 +70,19 @@ class SettingsControl extends Control
 		
 		if($this->foodsaver['rolle'] == 0)
 		{
-			$menu[] = array('name'=>'Werde '.getRolle($this->foodsaver['geschlecht'], 1),'href'=> '?page=settings&sub=upgrade/up_fs');
+			$menu[] = array('name'=>'Werde '.getRolle($this->foodsaver['geschlecht'], 1),'href'=> '/?page=settings&sub=upgrade/up_fs');
 		}
 		else if($this->foodsaver['rolle'] == 1)
 		{
-			$menu[] = array('name'=>'Werde '.getRolle($this->foodsaver['geschlecht'], 2),'href'=> '?page=settings&sub=upgrade/up_bip');
+			$menu[] = array('name'=>'Werde '.getRolle($this->foodsaver['geschlecht'], 2),'href'=> '/?page=settings&sub=upgrade/up_bip');
 		}
 		/*
 		else if($this->foodsaver['rolle'] == 2)
 		{
-			$menu[] = array('name'=>'Werde '.getRolle($this->foodsaver['geschlecht'], 3),'href'=> '?page=settings&sub=upgrade/up_bot');
+			$menu[] = array('name'=>'Werde '.getRolle($this->foodsaver['geschlecht'], 3),'href'=> '/?page=settings&sub=upgrade/up_bot');
 		}
 		*/
-		$menu[] = array('name' => s('delete_account'), 'href' => '?page=settings&sub=deleteaccount');
+		$menu[] = array('name' => s('delete_account'), 'href' => '/?page=settings&sub=deleteaccount');
 		
 		
 		
@@ -312,7 +312,7 @@ class SettingsControl extends Control
 						$this->model->updateRole(1,$this->foodsaver['rolle']);
 					}
 					info('Danke! Du bist jetzt Foodsaver');
-					go('?page=relogin&url=' . urlencode('?page=dashboard'));
+					go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
 				}
 			}
 			$cnt = $this->model->getContent(14);
@@ -336,7 +336,7 @@ class SettingsControl extends Control
 				{
 					$this->model->updateRole(2,$this->foodsaver['rolle']);
 					info('Danke! Du bist jetzt betriebsverantwortlicher');
-					go('?page=relogin&url=' . urlencode('?page=dashboard'));
+					go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
 				}
 			}
 			$cnt = $this->model->getContent(15);

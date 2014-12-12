@@ -1,4 +1,4 @@
 <?php
-go('?page=msg');
+go('/?page=msg');
 				
 ?>

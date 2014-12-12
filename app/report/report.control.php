@@ -5,7 +5,7 @@ class ReportControl extends Control
 	{
 		if(!isset($_GET['sub']))
 		{
-			go('?page=report&sub=uncom');
+			go('/?page=report&sub=uncom');
 		}
 		$this->model = new ReportModel();
 		$this->view = new ReportView();
@@ -18,11 +18,11 @@ class ReportControl extends Control
 	{
 		if(S::may('orga') || isBotFor(347))
 		{
-			addBread('Reportmeldungen','?page=report');
+			addBread('Reportmeldungen','/?page=report');
 		}
 		else
 		{
-			go('?page=dashboard');
+			go('/?page=dashboard');
 		}
 	}
 	
@@ -58,7 +58,7 @@ class ReportControl extends Control
 		{
 			if($foodsaver = $this->model->getReportedSaver($_GET['id']))
 			{
-				addBread('Reportmeldungen','?page=report&sub=foodsaver&id='.(int)$foodsaver['id']);
+				addBread('Reportmeldungen','/?page=report&sub=foodsaver&id='.(int)$foodsaver['id']);
 				addJs('
 						$(".welcome_profile_image").css("cursor","pointer");
 						$(".welcome_profile_image").click(function(){
@@ -74,7 +74,7 @@ class ReportControl extends Control
 		}
 		else
 		{
-			go('?page=dashboard');
+			go('/?page=dashboard');
 		}
 	}
 	

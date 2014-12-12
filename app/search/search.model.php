@@ -34,7 +34,7 @@ class SearchModel extends Model
 		
 		if($res = $this->searchTable('bezirk', array('name'), $q,array(
 				'name' => '`name`',
-				'click' => 'CONCAT("goTo(\'?page=bezirk&bid=",`id`,"\');")',
+				'click' => 'CONCAT("goTo(\'/?page=bezirk&bid=",`id`,"\');")',
 				'teaser' => 'CONCAT("")'
 		
 		)))

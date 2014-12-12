@@ -4,7 +4,7 @@ if(getAction('neu'))
 {
 	handle_add();
 	
-	addBread(s('bread_faq'),'?page=faq');
+	addBread(s('bread_faq'),'/?page=faq');
 	addBread(s('bread_new_faq'));
 			
 	addContent(faq_form());
@@ -25,7 +25,7 @@ elseif($id = getActionId('edit'))
 {
 	handle_edit();
 	
-	addBread(s('bread_faq'),'?page=faq');
+	addBread(s('bread_faq'),'/?page=faq');
 	addBread(s('bread_edit_faq'));
 	
 	$data = $db->getOne_faq($id);
@@ -44,7 +44,7 @@ else if(isset($_GET['id']))
 }
 else
 {
-	addBread(s('faq_bread'),'?page=faq');
+	addBread(s('faq_bread'),'/?page=faq');
 	
 	if($data = $db->get_faq())
 	{
@@ -85,7 +85,7 @@ else
 	}
 			
 	addContent(v_field(v_menu(array(
-		array('href' => '?page=faq&a=neu','name' => s('neu_faq'))
+		array('href' => '/?page=faq&a=neu','name' => s('neu_faq'))
 	)),'Aktionen'),CNT_RIGHT);
 }					
 function faq_form()

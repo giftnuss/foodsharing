@@ -14,7 +14,7 @@ class GroupsView extends View
 		
 		// Überregionale
 		$items = array();
-		$items[] = array('name' => 'Alle Anzeigen','href' => '?page=groups');
+		$items[] = array('name' => 'Alle Anzeigen','href' => '/?page=groups');
 		$out .= v_field(v_menu($items), 'Überregionale Gruppen');
 		
 		
@@ -26,7 +26,7 @@ class GroupsView extends View
 			{
 				if($b['type'] != 7 && $b['type'] != 6)
 				{
-					$items[] = array('name' => 'Gruppen für '.$b['name'],'href' => '?page=groups&p='.$b['id']);
+					$items[] = array('name' => 'Gruppen für '.$b['name'],'href' => '/?page=groups&p='.$b['id']);
 				}
 			}
 		}
@@ -38,7 +38,7 @@ class GroupsView extends View
 		$items = array();
 		foreach ($countrys as $c)
 		{
-			$items[] = array('name' => 'Gruppen für '.$c['name'],'href' => '?page=groups&p='.$c['id']);
+			$items[] = array('name' => 'Gruppen für '.$c['name'],'href' => '/?page=groups&p='.$c['id']);
 		}
 		$out .= v_field(v_menu($items), 'Länderspezifische Gruppen');
 

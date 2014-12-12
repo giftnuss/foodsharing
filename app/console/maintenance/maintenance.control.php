@@ -412,7 +412,7 @@ class MaintenanceControl extends ConsoleControl
 					'anrede' => s('anrede_' . $fs['geschlecht']),
 					'name' => $fs['fs_name'],
 					'betrieb' => $fs['betrieb_name'],
-					'link' => URL_INTERN . '?page=fsbetrieb&id='.$fs['betrieb_id']
+					'link' => URL_INTERN . '/?page=fsbetrieb&id='.$fs['betrieb_id']
 				));
 			}
 			success('OK');

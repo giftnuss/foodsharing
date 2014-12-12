@@ -22,12 +22,12 @@ class BcardControl extends Control
 			if(strlen($data['anschrift'].', '.$data['plz'].' '.$data['stadt']) >= 49)
 			{
 				error('Deine Anschrift ist zu lang, Anschrift Postleitzahl und Stadt dürfen zusammen maximal 49 Zeichen haben.');
-				go('?page=settings');
+				go('/?page=settings');
 			}
 			if(strlen($data['telefon'].$data['handy']) <= 3)
 			{
 				error('Du musst eine gültige Telefonnummer angegeben haben um Deine Visitenkarte zu generieren');
-				go('?page=settings');
+				go('/?page=settings');
 			}
 			$sel_data = array();
 			if($data['bot'])

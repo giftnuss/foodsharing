@@ -1296,7 +1296,7 @@ function addSelect(id)
 
 function betrieb(id)
 {
-	goTo('?page=betrieb&id='+id);
+	goTo('/?page=betrieb&id='+id);
 }
 
 function goTo(url)

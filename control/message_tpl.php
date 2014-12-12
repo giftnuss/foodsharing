@@ -8,7 +8,7 @@ if(getAction('neu'))
 {
 	handle_add();
 	
-	addBread(s('bread_message_tpl'),'?page=message_tpl');
+	addBread(s('bread_message_tpl'),'/?page=message_tpl');
 	addBread(s('bread_new_message_tpl'));
 			
 	addContent(message_tpl_form());
@@ -29,7 +29,7 @@ elseif($id = getActionId('edit'))
 {
 	handle_edit();
 	
-	addBread(s('bread_message_tpl'),'?page=message_tpl');
+	addBread(s('bread_message_tpl'),'/?page=message_tpl');
 	addBread(s('bread_edit_message_tpl'));
 	
 	$data = getOne_message_tpl($id);
@@ -48,7 +48,7 @@ else if(isset($_GET['id']))
 }
 else
 {
-	addBread(s('message_tpl_bread'),'?page=message_tpl');
+	addBread(s('message_tpl_bread'),'/?page=message_tpl');
 	
 	if($data = getBasics_message_tpl())
 	{
@@ -75,7 +75,7 @@ else
 	}
 			
 	addContent(v_field(v_menu(array(
-		array('href' => '?page=message_tpl&a=neu','name' => s('neu_message_tpl'))
+		array('href' => '/?page=message_tpl&a=neu','name' => s('neu_message_tpl'))
 	)),'Aktionen'),CNT_RIGHT);
 }					
 function message_tpl_form()

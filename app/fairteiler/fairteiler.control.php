@@ -282,7 +282,7 @@ class FairteilerControl extends Control
 	
 	public function addFt()
 	{
-		//addBread(s('fairteiler'),'?page=fairteiler&bid='.(int)$this->bezirk_id);
+		//addBread(s('fairteiler'),'/?page=fairteiler&bid='.(int)$this->bezirk_id);
 		addBread(s('add_fairteiler'));
 	
 		if(isset($_POST['form_submit']) && $_POST['form_submit'] == 'fairteiler')

@@ -11,7 +11,7 @@ class SearchControl extends Control
 		
 		if(!S::may('fs'))
 		{
-			go('?page=dashboard');
+			go('/?page=dashboard');
 		}
 	}
 	

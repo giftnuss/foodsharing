@@ -8,7 +8,7 @@ if(isset($_GET['deleteaccount']) && (isOrgaTeam()))
 	
 	$db->del_foodsaver($_GET['id']);
 	info('Foodsaver '.$foodsaver['name'].' '.$foodsaver['nachname'].' wurde gelöscht, für die Wiederherstellung wende Dich an it@lebensmittelretten.de');
-	go('?page=dashboard');
+	go('/?page=dashboard');
 }
 
 if(!isset($_GET['bid']))
@@ -29,7 +29,7 @@ if(isBotFor($bezirk_id) || isOrgaTeam())
 	}
 	if(getAction('nneu') && isOrgaTeam())
 	{
-		addBread(s('bread_foodsaver'),'?page=foodsaver');
+		addBread(s('bread_foodsaver'),'/?page=foodsaver');
 		addBread('Vorhandene Foodsaver eintragen');
 		
 		addContent(u_invite($bezirk));
@@ -42,7 +42,7 @@ if(isBotFor($bezirk_id) || isOrgaTeam())
 	{
 		handle_add();
 	
-		addBread(s('bread_foodsaver'),'?page=foodsaver');
+		addBread(s('bread_foodsaver'),'/?page=foodsaver');
 		addBread(s('bread_new_foodsaver'));
 			
 		addContent(foodsaver_form('Foodsaver eintragen'));
@@ -65,7 +65,7 @@ if(isBotFor($bezirk_id) || isOrgaTeam())
 		$data = $db->getOne_foodsaver($id);
 		$bids = $db->getFsBezirkIds($id);
 		
-		addBread(s('bread_foodsaver'),'?page=foodsaver');
+		addBread(s('bread_foodsaver'),'/?page=foodsaver');
 		addBread(s('bread_edit_foodsaver'));
 		
 		if(isOrgaTeam() || isBotForA($bids))
@@ -99,7 +99,7 @@ if(isBotFor($bezirk_id) || isOrgaTeam())
 	}
 	else
 	{
-		addBread(s('foodsaver_bread'),'?page=foodsaver');
+		addBread(s('foodsaver_bread'),'/?page=foodsaver');
 	
 		if($data = $db->listFoodsaverReq($bezirk_id))
 		{
@@ -148,10 +148,10 @@ if(isBotFor($bezirk_id) || isOrgaTeam())
 		if(isOrgateam())
 		{
 			$opt = array();
-			$opt[] = array('href' => '?page=foodsaver&a=neu','name' => s('neu_foodsaver'));
+			$opt[] = array('href' => '/?page=foodsaver&a=neu','name' => s('neu_foodsaver'));
 			if(isOrgaTeam())
 			{
-				$opt[] = array('href' => '?page=foodsaver&a=nneu','name' => 'Vorhandene Foodsaver eintragen');
+				$opt[] = array('href' => '/?page=foodsaver&a=nneu','name' => 'Vorhandene Foodsaver eintragen');
 			}
 			addContent(v_field(v_menu($opt),'Aktionen'),CNT_RIGHT);
 		}
@@ -335,7 +335,7 @@ function handle_edit()
 		if(isset($g_data['orgateam']) && is_array($g_data['orgateam']) && $g_data['orgateam'][0] == 1)
 		{
 			$g_data['orgateam'] = 1;
-			$db->addGlocke($_GET['id'], 'Du bist jetzt im Bundesweiten Orgateam','Willkommen','?page=relogin');
+			$db->addGlocke($_GET['id'], 'Du bist jetzt im Bundesweiten Orgateam','Willkommen','/?page=relogin');
 		}
 		else
 		{
@@ -460,7 +460,7 @@ function u_invite($bezirk)
 				');
 			}
 			info('Foodsaver einsortiert!');
-			go('?page=foodsaver&bid='.(int)$bezirk['id'].'&a=nneu');
+			go('/?page=foodsaver&bid='.(int)$bezirk['id'].'&a=nneu');
 		}
 	}
 	

@@ -283,7 +283,7 @@ class QuizModel extends Model
 		{
 			if($orgateam = $this->getOrgateam())
 			{
-				$this->addBell($orgateam, 'new_quiz_comment_title', 'new_quiz_comment', 'fa fa-question-circle', array('href'=>'?page=quiz&sub=wall&id='.(int)$question_id), array(
+				$this->addBell($orgateam, 'new_quiz_comment_title', 'new_quiz_comment', 'fa fa-question-circle', array('href'=>'/?page=quiz&sub=wall&id='.(int)$question_id), array(
 					'comment' => $comment
 				));
 			}

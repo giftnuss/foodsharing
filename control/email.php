@@ -6,7 +6,7 @@ if(!S::may('orga'))
 }
 
 handleEmail();
-addBread(s('mailinglist'),'?page=email');
+addBread(s('mailinglist'),'/?page=email');
 $bezirk = $db->getBezirk();
 
 

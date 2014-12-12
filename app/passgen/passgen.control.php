@@ -27,13 +27,13 @@ class PassgenControl extends Control
 		}
 		else
 		{
-			go('?page=dashboard');
+			go('/?page=dashboard');
 		}
 	}
 	
 	public function index()
 	{	
-		addBread($this->bezirk['name'],'?page=bezirk&bid=' . $this->bezirk_id . '&sub=forum');
+		addBread($this->bezirk['name'],'/?page=bezirk&bid=' . $this->bezirk_id . '&sub=forum');
 		addBread('Pass-Generator',getSelf());
 		
 		addTitle($this->bezirk['name']);
@@ -86,7 +86,7 @@ class PassgenControl extends Control
 		
 		if(!validEmail($this->bezirk['email']))
 		{
-			//orgaGlocke('Bezirk hat noch keine E-Mail Adresse',$bezirk['name'],'?page=region');
+			//orgaGlocke('Bezirk hat noch keine E-Mail Adresse',$bezirk['name'],'/?page=region');
 			//error('Dein Bezirk hat noch keine E-Mail Adresse');
 			//return false;
 		}
@@ -129,7 +129,7 @@ class PassgenControl extends Control
 						'passgen_failed_title', 
 						'passgen_failed', 
 						'fa fa-camera', 
-						array('href' => '?page=settings'), 
+						array('href' => '/?page=settings'), 
 						array('user' => S::user('name')),
 						'pass-fail-'.$fs['id']
 					);

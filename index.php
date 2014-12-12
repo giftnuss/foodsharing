@@ -36,7 +36,7 @@ if(isset($_POST['form_submit']))
 {
 	if(handleForm($_POST['form_submit']))
 	{
-		go('?page='.getPage());
+		go('/?page='.getPage());
 	}
 }
 $msgbar = '';

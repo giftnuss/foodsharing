@@ -422,7 +422,7 @@ class BezirkModel extends Model
 						'forum_answer_title',
 						'forum_answer',
 						'fa fa-comments',
-						array( 'href'=>'?page=bezirk&bid='.$bezirk['id'].'&sub=forum&tid='.$theme_id.'&pid='.$post_id.'#post'.$post_id),
+						array( 'href'=>'/?page=bezirk&bid='.$bezirk['id'].'&sub=forum&tid='.$theme_id.'&pid='.$post_id.'#post'.$post_id),
 						array( 'user' => S::user('name'), 'forum'=>$bezirk['name'] ),
 						'forum-post-'.$post_id
 				);

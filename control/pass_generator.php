@@ -74,7 +74,7 @@ function handle_pass_generator($bezirk_id)
 		
 		if(!validEmail($bezirk['email']))
 		{
-			//orgaGlocke('Bezirk hat noch keine E-Mail Adresse',$bezirk['name'],'?page=region');
+			//orgaGlocke('Bezirk hat noch keine E-Mail Adresse',$bezirk['name'],'/?page=region');
 			//error('Dein Bezirk hat noch keine E-Mail Adresse');
 			//return false;
 		}
@@ -109,7 +109,7 @@ function handle_pass_generator($bezirk_id)
 				if(empty($fs['photo']))
 				{
 					$nophoto[] = $fs['name'].' '.$fs['nachname'];
-					$db->addGlocke($fs['id'], 'Dein Ausweis konnte nicht erstellt werden','Du hast noch kein Foto hochgeladen','?page=settings');
+					$db->addGlocke($fs['id'], 'Dein Ausweis konnte nicht erstellt werden','Du hast noch kein Foto hochgeladen','/?page=settings');
 					continue;
 				}
 				if(preg_replace('/[^0-9]/','',$fs['fs_id']) == '')
@@ -120,7 +120,7 @@ function handle_pass_generator($bezirk_id)
 					{
 						$msg = 'Deine Foodsharing ID ist ungültig';
 					}
-					$db->addGlocke($fs['id'],'Dein Ausweis konnte nicht erstellt werden', $msg,'?page=settings');
+					$db->addGlocke($fs['id'],'Dein Ausweis konnte nicht erstellt werden', $msg,'/?page=settings');
 					continue;
 				}
 				

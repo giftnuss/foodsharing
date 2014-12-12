@@ -239,7 +239,7 @@ function xhr_addPinPost($data)
 		{
 			$poster = $db->getVal('name','foodsaver',fsId());
 			$betrieb = $db->getVal('name', 'betrieb', (int)$data['bid']);
-			//$db->addGlocke(explode(',', $data['team']), $betrieb, 'Neuer Pinnwandeintrag von '.$poster,'?page=fsbetrieb&id='.(int)$data['bid']);
+			//$db->addGlocke(explode(',', $data['team']), $betrieb, 'Neuer Pinnwandeintrag von '.$poster,'/?page=fsbetrieb&id='.(int)$data['bid']);
 			$_SESSION['last_pinPost'] = time();
 			return xhr_getPinPost($data);
 		}
@@ -1232,7 +1232,7 @@ function xhr_getGlocke($data)
 				}
 				$msg = $a['name'].' m&ouml;chte '.$rolle[$a['geschlecht']][$a['rolle']].' werden.';
 				$title = 'Neue Anmeldung / Kein Botschafter';
-				$href = '?page=checkReg&id='.$a['id'];
+				$href = '/?page=checkReg&id='.$a['id'];
 				$time = msgTime($a['anmeldedatum']);
 				
 				$html .= xv_glockeMsg($msg, $title, $href, $time, $pic);
@@ -1250,7 +1250,7 @@ function xhr_getGlocke($data)
 				{
 					$msg = 'Es möchte jemand in seinem Bezirk aktiv werden';
 				}
-				$html .= xv_glockeMsg($msg, 'Neue Bezirke?', '?page=wantNew', '&nbsp;', false);
+				$html .= xv_glockeMsg($msg, 'Neue Bezirke?', '/?page=wantNew', '&nbsp;', false);
 			}
 		}
 	}
@@ -1291,7 +1291,7 @@ function xhr_getGlocke($data)
 				
 						$msg = $a['name'].' m&ouml;chte '.$rolle[$a['geschlecht']][$a['rolle']].' werden';
 						$title = 'Anmeldung '.$bezirk['name'];
-						$href = '?page=checkReg&id='.$a['id'];
+						$href = '/?page=checkReg&id='.$a['id'];
 						$time = msgTime($a['anmeldedatum']);
 				
 						$html .= xv_glockeMsg($msg, $title, $href, $time, $pic);
@@ -1308,7 +1308,7 @@ function xhr_getGlocke($data)
 		{
 			$count++;
 			
-			$html .= xv_glockeMsg('unbestätigte Abholzeiten', $c['name'], '?page=fsbetrieb&id='.(int)$c['id'], false, false);
+			$html .= xv_glockeMsg('unbestätigte Abholzeiten', $c['name'], '/?page=fsbetrieb&id='.(int)$c['id'], false, false);
 		}
 	}
 	
@@ -1325,7 +1325,7 @@ function xhr_getGlocke($data)
 					
 					$v = $db->qRow('SELECT CONCAT(`name`," ",`nachname`) AS name, photo FROM '.PREFIX.'foodsaver WHERE id = '.(int)$r['foodsaver_id']);
 					
-					$html .= xv_glockeMsg($v['name'].' möchte Botschafter/in werden','Upgrade Aufrage','?page=checkUpgradeRequest&fid='.(int)$r['foodsaver_id'],msgTime($r['zeit']),img($v['photo']));
+					$html .= xv_glockeMsg($v['name'].' möchte Botschafter/in werden','Upgrade Aufrage','/?page=checkUpgradeRequest&fid='.(int)$r['foodsaver_id'],msgTime($r['zeit']),img($v['photo']));
 				}
 			}
 		}
@@ -1687,7 +1687,7 @@ function xhr_continueMail($data)
 						'name' => $fs['name'],
 						'sender' => $sender['name'],
 						'anrede' => genderWord($sender['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-						'link' => BASE_URL.'?page=message&amp;conv='.(int)fsId()
+						'link' => BASE_URL.'/?page=message&amp;conv='.(int)fsId()
 					));
 					$check = true;
 				}
@@ -1887,7 +1887,7 @@ function xhr_update_abholen($data)
 		}
 		*/
 		$betrieb = $db->getVal('name', 'betrieb', $data['bid']);
-		$db->addGlocke(explode(',',$data['team']), 'Die Abholzeiten wurden geändert!',$betrieb,'?page=fsbetrieb&id='.(int)$data['bid']);
+		$db->addGlocke(explode(',',$data['team']), 'Die Abholzeiten wurden geändert!',$betrieb,'/?page=fsbetrieb&id='.(int)$data['bid']);
 		
 		return json_encode(array('status' => 1));
 	}
@@ -2090,7 +2090,7 @@ function xhr_getBezirk($data)
 			$button = '';
 			if($db->isInTeam($b['id']))
 			{
-				$button = '<div style="text-align:center;padding:top:8px;"><span onclick="goTo(\'?page=fsbetrieb&id='.(int)$b['id'].'\');" class="bigbutton cardbutton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Zur Teamseite</span></span></div>';
+				$button = '<div style="text-align:center;padding:top:8px;"><span onclick="goTo(\'/?page=fsbetrieb&id='.(int)$b['id'].'\');" class="bigbutton cardbutton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Zur Teamseite</span></span></div>';
 			}
 			else
 			{
@@ -2201,7 +2201,7 @@ function xhr_betriebRequest($data)
 		$msg = 'Der Verartwortliche wurde über Deine Anfrage informiert und wird sich bei Dir melden!';
 		
 		
-		$db->addGlocke(array($fsid), $foodsaver.' möchte ins Team!',$betrieb,'?page=fsbetrieb&id='.(int)$data['id'].'&request='.(int)fsId());
+		$db->addGlocke(array($fsid), $foodsaver.' möchte ins Team!',$betrieb,'/?page=fsbetrieb&id='.(int)$data['id'].'&request='.(int)fsId());
 	}
 	else
 	{
@@ -2224,7 +2224,7 @@ function xhr_betriebRequest($data)
 			$add = ' Es gibt aber keinen Botschafter';
 		}
 		
-		$db->addGlocke($botsch, $foodsaver.' möchte ins Team!'.$add,$betrieb,'?page=fsbetrieb&id='.(int)$data['id'].'&request='.(int)fsId());
+		$db->addGlocke($botsch, $foodsaver.' möchte ins Team!'.$add,$betrieb,'/?page=fsbetrieb&id='.(int)$data['id'].'&request='.(int)fsId());
 	}
 	
 	$db->teamRequest(fsId(), $data['id']);

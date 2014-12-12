@@ -33,7 +33,7 @@ if((isBotschafter() || isOrgaTeam()) && isset($_GET['fid']))
 				
 				$db->del('DELETE FROM '.PREFIX.'upgrade_request WHERE foodsaver_id = '.(int)$id);
 				
-				$db->addGlocke($id, 'Botschafter '.$bezirk['name'],'Du bist jetzt Botschafter/in für '.$bezirk['name'],'?page=relogin');
+				$db->addGlocke($id, 'Botschafter '.$bezirk['name'],'Du bist jetzt Botschafter/in für '.$bezirk['name'],'/?page=relogin');
 				
 				info(sv('user_is_botschafter_now',$fs['name']));
 				goPage('dashboard');
@@ -110,8 +110,8 @@ if((isBotschafter() || isOrgaTeam()) && isset($_GET['fid']))
 				,CNT_RIGHT);
 			
 				addContent(v_menu(array(
-						array('href'=>'?page=checkUpgradeRequest&fid='.$id.'&activate=1','name'=>$fs['name'].' als '.getRolle($fs['geschlecht'],2).' Freischalten und Partnerschaft übernehmen'),
-						/*	array('click'=>'ifconfirm(\'?page=checkReg&id='.$id.'&delete=1\',\'Willst Du '.$fs['name'].' wirklich Ablehnen?\',\''.$fs['name'].' Ablehnen\')','name'=>'Antrag Ablehnen'), */
+						array('href'=>'/?page=checkUpgradeRequest&fid='.$id.'&activate=1','name'=>$fs['name'].' als '.getRolle($fs['geschlecht'],2).' Freischalten und Partnerschaft übernehmen'),
+						/*	array('click'=>'ifconfirm(\'/?page=checkReg&id='.$id.'&delete=1\',\'Willst Du '.$fs['name'].' wirklich Ablehnen?\',\''.$fs['name'].' Ablehnen\')','name'=>'Antrag Ablehnen'), */
 						array('click'=>'chat('.(int)$fs['id'].');return false;','name'=>$fs['name'].' Eine Nachricht schreiben')
 				),s('options')),CNT_RIGHT);
 			}

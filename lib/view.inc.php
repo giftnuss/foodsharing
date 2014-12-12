@@ -647,7 +647,7 @@ function v_msgBar()
 				<ul class="linklist index"></ul>
 				<ul class="linklist result"></ul>
 				<ul class="linklist more">
-					<li><a class="more" onclick="goTo(\'?page=search&q=\' + encodeURIComponent($(\'#searchbar input\').val()));return false;" href="#">Alle Ergebnisse</a></li>	
+					<li><a class="more" onclick="goTo(\'/?page=search&q=\' + encodeURIComponent($(\'#searchbar input\').val()));return false;" href="#">Alle Ergebnisse</a></li>	
 				</ul>
 			</div>
 		</div>';
@@ -1214,12 +1214,12 @@ function v_statusbox()
 					
 				array
 				(
-						'href' => '?page=foodsaver',
+						'href' => '/?page=foodsaver',
 						'name' => 'Foodsaver aus '.$bezirk['name']
 				),
 				array
 				(
-						'href' => '?page=betrieb',
+						'href' => '/?page=betrieb',
 						'name' => 'Zu den Betrieben'
 				)
 					
@@ -1234,7 +1234,7 @@ function v_statusbox()
 					
 					array
 					(
-						'href' => '?page=email',
+						'href' => '/?page=email',
 						'name' => 'E-Mail an alle foodsaver'		
 					)
 					
@@ -1249,7 +1249,7 @@ function v_statusbox()
 			{
 				$menu[] = array
 				(
-					'href' => '?page=betrieb&id='.(int)$v['betrieb_id'],
+					'href' => '/?page=betrieb&id='.(int)$v['betrieb_id'],
 					'name' => $v['betrieb_name']
 				);
 			}
@@ -1467,14 +1467,14 @@ function v_toolbar($option = array())
 				$out .= '<li onclick="sendMail('.$option['fs_id'].');" title="E-Mail schreiben" class="ui-state-default'.$corner.'"><span class="ui-icon ui-icon-mail-closed"></span></li>';
 				break;
 			case 'new' :
-				$out .= '<li onclick="goTo(\'?page='.$page.'&id='.$id.'&a=new\');" title="neu" class="ui-state-default'.$corner.'"><span class="ui-icon ui-icon-document"></span></li>';
+				$out .= '<li onclick="goTo(\'/?page='.$page.'&id='.$id.'&a=new\');" title="neu" class="ui-state-default'.$corner.'"><span class="ui-icon ui-icon-document"></span></li>';
 				break;
 			case 'comment' :
 				$out .= '<li attr="'.$page.':'.$id.'" title="Notitz hinzuf&uuml;gen" class="toolbar-comment ui-state-default'.$corner.'"><span class="ui-icon ui-icon-comment"></span></li>';
 				break;
 	
 			case 'edit' :
-				$out .= '<li onclick="goTo(\'?page='.$page.'&id='.$id.'&a=edit\');" title="bearbeiten" class="ui-state-default'.$corner.'"><span class="ui-icon ui-icon-wrench"></span></li>';
+				$out .= '<li onclick="goTo(\'/?page='.$page.'&id='.$id.'&a=edit\');" title="bearbeiten" class="ui-state-default'.$corner.'"><span class="ui-icon ui-icon-wrench"></span></li>';
 				break;
 					
 			case 'delete' :
@@ -1486,7 +1486,7 @@ function v_toolbar($option = array())
 				{
 					$cmsg = 'Wirklich l&ouml;schen?';
 				}
-				$out .= '<li onclick="ifconfirm(\'?page='.$page.'&a=delete&id='.$id.'\',\''.jsSafe($cmsg).'\');" title="l&ouml;schen" class="ui-state-default'.$corner.'"><span class="ui-icon ui-icon-trash"></span></li>';
+				$out .= '<li onclick="ifconfirm(\'/?page='.$page.'&a=delete&id='.$id.'\',\''.jsSafe($cmsg).'\');" title="l&ouml;schen" class="ui-state-default'.$corner.'"><span class="ui-icon ui-icon-trash"></span></li>';
 				break;
 	
 			default : break;

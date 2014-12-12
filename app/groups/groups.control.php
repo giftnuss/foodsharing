@@ -21,7 +21,7 @@ class GroupsControl extends Control
 		
 		$this->setAgId(392);
 		
-		addBread('Arbeitsgruppen','?page=groups');		
+		addBread('Arbeitsgruppen','/?page=groups');		
 		
 		if(isset($_GET['p']) && (int)$_GET['p'] > 0)
 		{
@@ -124,12 +124,12 @@ class GroupsControl extends Control
 				{
 					$this->model->updateTeam($group['id']);
 					info('Änderungen gespeichert!');
-					go('?page=groups&sub=edit&id='.(int)$group['id']);
+					go('/?page=groups&sub=edit&id='.(int)$group['id']);
 				}
 					
 			}
 			
-			addBread($group['name'].' bearbeiten','?page=groups&sub=edit&id='.(int)$group['id']);
+			addBread($group['name'].' bearbeiten','/?page=groups&sub=edit&id='.(int)$group['id']);
 			
 			addContent($this->view->editGroup($group));
 		}

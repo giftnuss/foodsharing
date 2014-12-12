@@ -31,7 +31,7 @@ class BezirkControl extends Control
 		
 		if(!mayBezirk($this->bezirk_id))
 		{
-			go('?page=dashboard');
+			go('/?page=dashboard');
 		}
 		
 		$this->bezirk = false;
@@ -68,7 +68,7 @@ class BezirkControl extends Control
 			}
 			else
 			{
-				go('?page=bezirk&bid='.$this->bezirk_id.'&sub=forum');
+				go('/?page=bezirk&bid='.$this->bezirk_id.'&sub=forum');
 			}
 		}
 		
@@ -99,7 +99,7 @@ class BezirkControl extends Control
 	{
 		if(!isset($_GET['sub']))
 		{
-			go('?page=bezirk&bid='.$this->bezirk_id.'&sub=forum');
+			go('/?page=bezirk&bid='.$this->bezirk_id.'&sub=forum');
 		}
 		
 		addTitle($this->bezirk['name']);
@@ -109,7 +109,7 @@ class BezirkControl extends Control
 		{
 			$this->bezirkRequests();
 		}
-		addBread($bezirk['name'],'?page=bezirk&bid='.(int)$this->bezirk_id);
+		addBread($bezirk['name'],'/?page=bezirk&bid='.(int)$this->bezirk_id);
 		addContent($this->view->top(),CNT_TOP);
 		
 		$menu = array();
@@ -122,23 +122,23 @@ class BezirkControl extends Control
 		{
 			if($reports = $this->model->getReports())
 			{
-				$menu[] = array('name'=>'Meldungen <strong>('.count($reports).')</strong>', 'href'=>'?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=reports');
+				$menu[] = array('name'=>'Meldungen <strong>('.count($reports).')</strong>', 'href'=>'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=reports');
 			}
 		}
 		*/
-		$menu[] = array('name'=>'Forum', 'href'=>'?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=forum');
-		$menu[] = array('name'=>'Termine', 'href'=>'?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=events');
+		$menu[] = array('name'=>'Forum', 'href'=>'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=forum');
+		$menu[] = array('name'=>'Termine', 'href'=>'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=events');
 		
 		if(isBotFor($this->bezirk_id) || isOrgaTeam())
 		{
-			$menu[] = array('name'=>'Botschafter Forum', 'href'=>'?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=botforum');
+			$menu[] = array('name'=>'Botschafter Forum', 'href'=>'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=botforum');
 		}
 			
-		$menu[] =  array('name'=>'Fair-Teiler', 'href'=>'?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=fairteiler');
-		//$menu[] = array('name'=>'Termine','href'=>'?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=termine');
+		$menu[] =  array('name'=>'Fair-Teiler', 'href'=>'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=fairteiler');
+		//$menu[] = array('name'=>'Termine','href'=>'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=termine');
 		if($this->mode == 'normal')
 		{
-			$menu[] = array('name'=>'Mailing-Liste', 'href'=>'?page=message&a=neu&list&bid='.(int)$this->bezirk_id);
+			$menu[] = array('name'=>'Mailing-Liste', 'href'=>'/?page=message&a=neu&list&bid='.(int)$this->bezirk_id);
 		}
 			
 		addContent($this->view->menu($menu,array('active'=>$this->getSub())),CNT_LEFT);
@@ -175,7 +175,7 @@ class BezirkControl extends Control
 	{
 		if(!isset($_GET['sub']))
 		{
-			go('?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=wall');
+			go('/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=wall');
 		}
 		
 		$bezirk = $this->bezirk;
@@ -189,22 +189,22 @@ class BezirkControl extends Control
 			
 			if($requests = $this->model->getBezirkRequests($this->bezirk_id))
 			{
-				$menu[] = array('name'=>'Bewerbungen <strong>('.count($requests).')</strong>', 'href'=>'?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=applications');
+				$menu[] = array('name'=>'Bewerbungen <strong>('.count($requests).')</strong>', 'href'=>'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=applications');
 			}
 			
 		}
-		addBread($bezirk['name'],'?page=bezirk&bid='.(int)$this->bezirk_id);
+		addBread($bezirk['name'],'/?page=bezirk&bid='.(int)$this->bezirk_id);
 		addContent($this->view->topOrga(),CNT_TOP);
 		
 		
 			
-		$menu[] = array('name'=>'Pinnwand', 'href'=>'?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=wall');
-		$menu[] = array('name'=>'Forum', 'href'=>'?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=forum');
-		$menu[] = array('name'=>'Termine', 'href'=>'?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=events');
+		$menu[] = array('name'=>'Pinnwand', 'href'=>'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=wall');
+		$menu[] = array('name'=>'Forum', 'href'=>'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=forum');
+		$menu[] = array('name'=>'Termine', 'href'=>'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=events');
 
 		if(S::may('orga') || isBotFor($this->bezirk_id))
 		{
-			$menu[] = array('name'=>'Gruppe verwalten', 'href' => '?page=groups&sub=edit&id='.(int)$this->bezirk_id);
+			$menu[] = array('name'=>'Gruppe verwalten', 'href' => '/?page=groups&sub=edit&id='.(int)$this->bezirk_id);
 		}
 		
 		addContent($this->view->menu($menu,array('active'=>$this->getSub())),CNT_LEFT);
@@ -235,7 +235,7 @@ class BezirkControl extends Control
 	
 	public function fairteiler()
 	{
-		addBread(s('fairteiler'),'?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=fairteiler');
+		addBread(s('fairteiler'),'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=fairteiler');
 		addContent($this->view->ftOptions($this->bezirk_id),CNT_RIGHT);
 		addTitle(s('fairteiler'));
 		if($fairteiler = $this->model->listFairteiler($this->bezirk_id))
@@ -250,7 +250,7 @@ class BezirkControl extends Control
 	
 	public function addFt()
 	{
-		addBread(s('fairteiler'),'?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=fairteiler');
+		addBread(s('fairteiler'),'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=fairteiler');
 		addBread(s('add_fairteiler'));
 		
 		if(isset($_POST['form_submit']) && $_POST['form_submit'] == 'fairteiler')
@@ -258,7 +258,7 @@ class BezirkControl extends Control
 			if($this->handleAddFt())
 			{
 				info(s('fairteiler_add_success'));
-				go('?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=fairteiler');
+				go('/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=fairteiler');
 			}
 			else
 			{
@@ -268,7 +268,7 @@ class BezirkControl extends Control
 		
 		addContent($this->view->fairteilerForm());
 		addContent(v_menu(array(
-			array('name'=>s('back'),'href' => '?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=fairteiler')
+			array('name'=>s('back'),'href' => '/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=fairteiler')
 		),s('options')),CNT_RIGHT);
 	}
 	
@@ -375,7 +375,7 @@ class BezirkControl extends Control
 	
 	public function reports()
 	{
-		addBread(s('reports'),'?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=reports');
+		addBread(s('reports'),'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=reports');
 		
 		if($reports = $this->model->getReports())
 		{
@@ -385,7 +385,7 @@ class BezirkControl extends Control
 	
 	public function forum()
 	{
-		addBread(s('forum'),'?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=forum');
+		addBread(s('forum'),'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=forum');
 		
 		addTitle(s('forum'));
 		
@@ -426,12 +426,12 @@ class BezirkControl extends Control
 					}
 				}
 				
-				go('?page=bezirk&bid='.$this->bezirk_id.'&sub='.$sub.'&tid='.(int)$_POST['thread'].'&pid='.$post_id.'#post'.$post_id);
+				go('/?page=bezirk&bid='.$this->bezirk_id.'&sub='.$sub.'&tid='.(int)$_POST['thread'].'&pid='.$post_id.'#post'.$post_id);
 			}
 			else
 			{
 				error(s('post_could_not_saved'));
-				go('?page=bezirk&bid='.$this->bezirk_id.'&sub='.$sub.'&tid='.(int)$_POST['thread'].'&pid='.(int)$_POST['post'].'#post'.(int)$_POST['post']);
+				go('/?page=bezirk&bid='.$this->bezirk_id.'&sub='.$sub.'&tid='.(int)$_POST['thread'].'&pid='.(int)$_POST['post'].'#post'.(int)$_POST['post']);
 			}
 		}
 		
@@ -461,7 +461,7 @@ class BezirkControl extends Control
 	public function botforum()
 	{
 		
-			addBread(s('forum'),'?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=botforum');
+			addBread(s('forum'),'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=botforum');
 			addTitle(s('bot_forum'));
 			
 			
@@ -472,12 +472,12 @@ class BezirkControl extends Control
 				$body = autolink($body);
 				if($post_id = $this->model->addThemePost($_POST['thread'], $body,$_POST['post'],$this->bezirk))
 				{
-					go('?page=bezirk&bid='.$this->bezirk_id.'&sub='.$this->getSub().'&tid='.(int)$_POST['thread'].'&pid='.$post_id.'#post'.$post_id);
+					go('/?page=bezirk&bid='.$this->bezirk_id.'&sub='.$this->getSub().'&tid='.(int)$_POST['thread'].'&pid='.$post_id.'#post'.$post_id);
 				}
 				else
 				{
 					error(s('post_could_not_saved'));
-					go('?page=bezirk&bid='.$this->bezirk_id.'&sub='.$this->getSub().'&tid='.(int)$_POST['thread'].'&pid='.(int)$_POST['post'].'#post'.(int)$_POST['post']);
+					go('/?page=bezirk&bid='.$this->bezirk_id.'&sub='.$this->getSub().'&tid='.(int)$_POST['thread'].'&pid='.(int)$_POST['post'].'#post'.(int)$_POST['post']);
 				}
 			}
 			
@@ -516,13 +516,13 @@ class BezirkControl extends Control
 					$this->model->activateTheme($thread_id);
 					$this->themeInfoMail($thread_id);
 					info('Thema wurde aktiviert!');
-					go('?page=bezirk&bid='.$this->bezirk_id.'&sub=forum&tid='.(int)$thread_id);
+					go('/?page=bezirk&bid='.$this->bezirk_id.'&sub=forum&tid='.(int)$thread_id);
 				}
 				else if (isset($_GET['delete']))
 				{
 					info('Thema wurde gelöscht!');
 					$this->model->deleteTheme($thread_id);
-					go('?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=forum');
+					go('/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=forum');
 				}
 				addContent($this->view->activateTheme($thread),CNT_TOP);
 			}
@@ -534,24 +534,24 @@ class BezirkControl extends Control
 			}
 			else 
 			{
-				go('?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=forum');
+				go('/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=forum');
 			}
 			
 		}
 		else
 		{
-			go('?page=bezirk&bid='.$this->bezirk_id.'&sub='.$this->getSub());
+			go('/?page=bezirk&bid='.$this->bezirk_id.'&sub='.$this->getSub());
 		}
 	}
 	
 	public function ntheme()
 	{
-		addBread(s('forum'),'?page=bezirk&bid='.(int)$this->bezirk_id.'&sub='.$this->getSub());
+		addBread(s('forum'),'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub='.$this->getSub());
 		addBread(s('new_theme'));
 		
 		if($this->handleNtheme())
 		{
-			go('?page=bezirk&bid='.(int)$this->bezirk_id.'&sub='.$this->getSub());
+			go('/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub='.$this->getSub());
 		}
 		
 		addContent($this->view->newThemeForm());
@@ -591,7 +591,7 @@ class BezirkControl extends Control
 		$body = $this->model->getVal('body', 'theme_post', $theme['last_post_id']);
 		
 		$poster = $this->model->getVal('name', 'foodsaver', $theme['foodsaver_id']);
-		$link = URL_INTERN.'?page=bezirk&bid='.$this->bezirk_id.'&sub='.$this->getSub().'&tid='.$theme_id;
+		$link = URL_INTERN.'/?page=bezirk&bid='.$this->bezirk_id.'&sub='.$this->getSub().'&tid='.$theme_id;
 		
 		if($this->bot_theme == 1)
 		{
@@ -703,7 +703,7 @@ class BezirkControl extends Control
 	
 	public function events()
 	{
-		addBread('Termine','?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=events');
+		addBread('Termine','/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=events');
 		
 		addTitle(s('dates'));
 		
@@ -721,7 +721,7 @@ class BezirkControl extends Control
 	
 	public function newevent()
 	{
-		addBread('Termine','?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=events');
+		addBread('Termine','/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=events');
 		addBread('Neuer Termin');
 		
 		if($this->isSubmitted())
@@ -731,7 +731,7 @@ class BezirkControl extends Control
 				if($id = $this->model->addEvent($data))
 				{
 					info('Event wurde erfolgreich eingetragen!');
-					go('?page=bezirk&bid='.$this->bezirk_id.'&sub=events/show&id='.(int)$id);
+					go('/?page=bezirk&bid='.$this->bezirk_id.'&sub=events/show&id='.(int)$id);
 				}
 			}
 		}
@@ -761,7 +761,7 @@ class BezirkControl extends Control
 	{
 		if($event = $this->model->getEvent($_GET['id']))
 		{
-			addBread('Termine','?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=events');
+			addBread('Termine','/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=events');
 			addBread($event['name']);
 			addContent($this->view->eventTop($event),CNT_TOP);
 			addContent($this->view->event($event));
@@ -776,7 +776,7 @@ class BezirkControl extends Control
 		}
 		else
 		{
-			go('?page=bezirk&bid='.$this->bezirk_id.'&sub=events');
+			go('/?page=bezirk&bid='.$this->bezirk_id.'&sub=events');
 		}
 	}
 	

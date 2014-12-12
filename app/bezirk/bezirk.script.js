@@ -47,7 +47,7 @@ $(document).ready(function(){
 		    			success:function(ret){
 		    				if(ret == 1)
 		    				{
-		    					goTo('?page=relogin&url='+encodeURIComponent('?page=dashboard'));
+		    					goTo('/?page=relogin&url='+encodeURIComponent('/?page=dashboard'));
 		    					
 		    				}
 		    			},

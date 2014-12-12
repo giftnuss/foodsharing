@@ -5,7 +5,7 @@ if(isset($_GET['id']))
 	if($res = $db->getOne_faq($_GET['id']))
 	{
 		
-		addBread('FAQ`s','?page=listFaq');
+		addBread('FAQ`s','/?page=listFaq');
 		addBread(substr($res['name'],0,30));
 		
 		$cnt = '';
@@ -25,7 +25,7 @@ if(isset($_GET['id']))
 else
 {
 
-	addBread('FAQ`s','?page=listFaq');
+	addBread('FAQ`s','/?page=listFaq');
 	
 	
 	
@@ -34,7 +34,7 @@ else
 	foreach ($docs as $d)
 	{
 		$menu[] = array(
-			'href' => '?page=listFaq&id='.$d['id'],
+			'href' => '/?page=listFaq&id='.$d['id'],
 			'name' => $d['name']
 		);
 	}

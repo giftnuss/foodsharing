@@ -81,7 +81,7 @@ class FairteilerXhr extends Control
 					'ft_update_title', 
 					'ft_update', 
 					'img img-recycle yellow', 
-					array('href' => '?page=fairteiler&sub=ft&id='.(int)$_GET['fid']), 
+					array('href' => '/?page=fairteiler&sub=ft&id='.(int)$_GET['fid']), 
 					array('name' => $ft['name'],'user'=>S::user('name'),'teaser'=>tt($post['body'],100)),
 					'fairteiler-'.(int)$_GET['fid']
 				);

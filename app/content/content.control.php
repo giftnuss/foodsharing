@@ -26,7 +26,7 @@ class ContentControl extends Control
 			{
 				handle_add();
 			
-				addBread(s('bread_content'),'?page=content');
+				addBread(s('bread_content'),'/?page=content');
 				addBread(s('bread_new_content'));
 			
 				addContent(content_form());
@@ -47,7 +47,7 @@ class ContentControl extends Control
 			{
 				handle_edit();
 			
-				addBread(s('bread_content'),'?page=content');
+				addBread(s('bread_content'),'/?page=content');
 				addBread(s('bread_edit_content'));
 			
 				$data = $db->getOne_content($id);
@@ -61,11 +61,11 @@ class ContentControl extends Control
 			}
 			else if(isset($_GET['id']))
 			{
-				go('?page=content&a=edit&id='.(int)$_GET['id']);
+				go('/?page=content&a=edit&id='.(int)$_GET['id']);
 			}
 			else
 			{
-				addBread(s('content_bread'),'?page=content');
+				addBread(s('content_bread'),'/?page=content');
 			
 				if($data = $db->getBasics_content())
 				{
@@ -94,7 +94,7 @@ class ContentControl extends Control
 				}
 			
 				addContent(v_field(v_menu(array(
-				array('href' => '?page=content&a=neu','name' => s('neu_content'))
+				array('href' => '/?page=content&a=neu','name' => s('neu_content'))
 				)),'Aktionen'),CNT_RIGHT);
 			}
 		}
@@ -198,7 +198,7 @@ function handle_edit()
 		if($db->update_content($_GET['id'],$g_data))
 		{
 			info(s('content_edit_success'));
-			go('?page=content&a=edit&id='.(int)$_GET['id']);
+			go('/?page=content&a=edit&id='.(int)$_GET['id']);
 		}
 		else
 		{

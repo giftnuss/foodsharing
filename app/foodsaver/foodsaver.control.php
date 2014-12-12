@@ -28,8 +28,8 @@ class FoodsaverControl extends Control
 			if($foodsaver = $this->model->listFoodsaver($_GET['bid']))
 			{
 				// add breadcrumps
-				addBread('Foodsaver','?page=foodsaver&bid='.$bezirk['id']);
-				addBread($bezirk['name'],'?page=foodsaver&bid='.$bezirk['id']);
+				addBread('Foodsaver','/?page=foodsaver&bid='.$bezirk['id']);
+				addBread($bezirk['name'],'/?page=foodsaver&bid='.$bezirk['id']);
 				
 				// list fooodsaver
 				addContent(
@@ -51,7 +51,7 @@ class FoodsaverControl extends Control
 			$data = $this->model->getOne_foodsaver($id);
 			$bids = $this->model->getFsBezirkIds($id);
 			
-			addBread(s('bread_foodsaver'),'?page=foodsaver');
+			addBread(s('bread_foodsaver'),'/?page=foodsaver');
 			addBread(s('bread_edit_foodsaver'));
 			
 			if(isOrgaTeam() || isBotForA($bids))
@@ -87,7 +87,7 @@ class FoodsaverControl extends Control
 		
 			$this->model->del_foodsaver($id);
 			info('Foodsaver '.$foodsaver['name'].' '.$foodsaver['nachname'].' wurde gelöscht, für die Wiederherstellung wende Dich an it@lebensmittelretten.de');
-			go('?page=dashboard');
+			go('/?page=dashboard');
 		}
 	}
 }
@@ -105,7 +105,7 @@ function handle_edit()
 		if(isset($g_data['orgateam']) && is_array($g_data['orgateam']) && $g_data['orgateam'][0] == 1)
 		{
 			$g_data['orgateam'] = 1;
-			$db->addGlocke($_GET['id'], 'Du bist jetzt im Bundesweiten Orgateam','Willkommen','?page=relogin');
+			$db->addGlocke($_GET['id'], 'Du bist jetzt im Bundesweiten Orgateam','Willkommen','/?page=relogin');
 		}
 		else
 		{

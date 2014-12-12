@@ -93,7 +93,7 @@ class LoginXhr extends Control
 						'name' => $b['name'],
 						'teaser' => tt($b['teaser'],65),
 						'img' => $img,
-						'href' => '?page=bezirk&bid='.$b['id'].'&sub=forum',
+						'href' => '/?page=bezirk&bid='.$b['id'].'&sub=forum',
 						'search' => array(
 							$b['name']
 						)
@@ -117,7 +117,7 @@ class LoginXhr extends Control
 				$result[] = array(
 						'name' => $b['name'],
 						'teaser' => $b['str'].' '.$b['hsnr'].', '.$b['plz'].' '.$b['stadt'],
-						'href' => '?page=fsbetrieb&id='.$b['id'],
+						'href' => '/?page=fsbetrieb&id='.$b['id'],
 						'search' => array(
 							$b['name'],$b['str']
 						)
@@ -142,7 +142,7 @@ class LoginXhr extends Control
 						'name' => $b['name'],
 						'teaser' => '',
 						'img' => false,
-						'href' => '?page=bezirk&bid='.$b['id'].'&sub=forum',
+						'href' => '/?page=bezirk&bid='.$b['id'].'&sub=forum',
 						'search' => array(
 								$b['name']
 						)
@@ -320,7 +320,7 @@ class LoginXhr extends Control
 			$token = uniqid('',true);
 			if($id = $this->model->insertNewUser($data,$token))
 			{
-				$activationUrl = 'http://' . DEFAULT_HOST . '?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
+				$activationUrl = 'http://' . DEFAULT_HOST . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
 				
 				tplMail(25, $data['email'],array(
 					'name' => $data['name'],

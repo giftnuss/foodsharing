@@ -29,7 +29,7 @@ if(getAction('new'))
 {	
 	handle_add($bezirk_id);
 	
-	addBread(s('bread_betrieb'),'?page='.$page);
+	addBread(s('bread_betrieb'),'/?page='.$page);
 	addBread(s('bread_new_betrieb'));
 			
 	addContent(betrieb_form($bezirk,$page));
@@ -37,7 +37,7 @@ if(getAction('new'))
 	
 	
 	addContent(v_field(v_menu(array(
-		array('name'=>s('back_to_overview'),'href'=>'?page=fsbetrieb&bid='.$bezirk_id)
+		array('name'=>s('back_to_overview'),'href'=>'/?page=fsbetrieb&bid='.$bezirk_id)
 	)),s('actions')),CNT_RIGHT);
 }
 elseif($id = getActionId('delete'))
@@ -52,7 +52,7 @@ elseif($id = getActionId('delete'))
 }
 elseif($id = getActionId('edit'))
 {
-	addBread(s('bread_betrieb'),'?page=betrieb');
+	addBread(s('bread_betrieb'),'/?page=betrieb');
 	addBread(s('bread_edit_betrieb'));
 	$data = $db->getOne_betrieb($id);
 	
@@ -81,14 +81,14 @@ elseif($id = getActionId('edit'))
 }
 else if(isset($_GET['id']))
 {
-	go('?page=fsbetrieb&id='.(int)$_GET['id']);
+	go('/?page=fsbetrieb&id='.(int)$_GET['id']);
 	//$data = $db->getOne_betrieb($_GET['id']);	
 	//addHead('<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&amp;language=de"></script>');
 	//addHead('<script type="text/javascript" src="js/gmap/gmap.js"></script>');
 	
 	$betrieb = $db->getBetrieb((int)$_GET['id']);
 	
-	addBread(s('bread_betrieb'),'?page=betrieb');
+	addBread(s('bread_betrieb'),'/?page=betrieb');
 	addBread($betrieb['name']);
 	
 	//$content = v_field(v_map($betrieb),v_getStatusAmpel($betrieb['betrieb_status_id']).' '.$betrieb['name']);
@@ -141,10 +141,10 @@ else if(isset($_GET['id']))
 }
 else
 {
-	addBread(s('betrieb_bread'),'?page=betrieb');
+	addBread(s('betrieb_bread'),'/?page=betrieb');
 	
 	addContent(v_menu(array(
-			array('href' => '?page=betrieb&a=new&bid='.(int)$bezirk_id,'name' => 'Neuen Betrieb eintragen')
+			array('href' => '/?page=betrieb&a=new&bid='.(int)$bezirk_id,'name' => 'Neuen Betrieb eintragen')
 	),'Aktionen'),CNT_RIGHT);
 	
 	if($betriebe = $db->listBetriebReq($bezirk_id))
@@ -218,7 +218,7 @@ else
 	}
 			
 	$right = v_field(v_menu(array(
-		array('href' => '?page=betrieb&a=neu','name' => s('neu_betrieb'))
+		array('href' => '/?page=betrieb&a=neu','name' => s('neu_betrieb'))
 	)),'Aktionen');
 	*/
 }					
@@ -367,7 +367,7 @@ function handle_edit()
 		if($db->update_betrieb($_GET['id'],$g_data))
 		{
 			info(s('betrieb_edit_success'));
-			go('?page=fsbetrieb&id='.(int)$_GET['id']);
+			go('/?page=fsbetrieb&id='.(int)$_GET['id']);
 		}
 		else
 		{
@@ -414,11 +414,11 @@ function handle_add($bezirk_id)
 			}
 			
 			$foodsaver = $db->getFoodsaver($g_data['bezirk_id']);
-			//$db->addGlocke($foodsaver, strip_tags($g_data['name']).' wurde eingetragen','Neuer Betrieb','?page=betrieb&id='.(int)$id);
+			//$db->addGlocke($foodsaver, strip_tags($g_data['name']).' wurde eingetragen','Neuer Betrieb','/?page=betrieb&id='.(int)$id);
 			
 			$model = loadModel('betrieb');
 			$model->addBell($foodsaver, 'store_new_title', 'store_new', 'img img-store brown', array(
-				'href' => '?page=fsbetrieb&id='.(int)$id
+				'href' => '/?page=fsbetrieb&id='.(int)$id
 			), array(
 				'user' => S::user('name'),
 				'name' => $g_data['name']
@@ -426,7 +426,7 @@ function handle_add($bezirk_id)
 			
 			info(s('betrieb_add_success'));
 			
-			go('?page=fsbetrieb&id='.(int)$id);
+			go('/?page=fsbetrieb&id='.(int)$id);
 			
 			
 		}

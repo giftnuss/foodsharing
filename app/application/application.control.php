@@ -50,7 +50,7 @@ class ApplicationControl extends Control
 	{
 		if($application = $this->model->getApplication($this->bezirk_id,$_GET['fid']))
 		{
-			addBread($this->bezirk['name'],'?page=bezirk&bid='.$this->bezirk_id);
+			addBread($this->bezirk['name'],'/?page=bezirk&bid='.$this->bezirk_id);
 			addBread('Bewerbung von '.$application['name'],'');
 			addContent($this->view->application($application));
 			

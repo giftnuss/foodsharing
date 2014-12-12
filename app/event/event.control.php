@@ -20,7 +20,7 @@ class EventControl extends Control
 				return false;
 			}
 			
-			addBread('Termine','?page=event');
+			addBread('Termine','/?page=event');
 			addBread($event['name']);
 			
 			$status = $this->model->getInviteStatus($event['id'],fsid());
@@ -79,7 +79,7 @@ class EventControl extends Control
 			}
 			if($event['fs_id'] == fsId() || isOrgaTeam() || isBotFor($event['bezirk_id']))
 			{
-				addBread('Termine','?page=event');
+				addBread('Termine','/?page=event');
 				addBread('Neuer Termin');
 					
 				if($this->isSubmitted())
@@ -97,7 +97,7 @@ class EventControl extends Control
 								$this->model->inviteBezirk($data['bezirk_id'],$_GET['id'],$data['invitesubs']);
 							}
 							info('Event wurde erfolgreich geändert!');
-							go('?page=event&id='.(int)$_GET['id']);
+							go('/?page=event&id='.(int)$_GET['id']);
 						}
 					}
 				}
@@ -123,14 +123,14 @@ class EventControl extends Control
 			}
 			else
 			{
-				go('?page=event');
+				go('/?page=event');
 			}
 		}
 	}
 	
 	public function add()
 	{
-		addBread('Termine','?page=event');
+		addBread('Termine','/?page=event');
 		addBread('Neuer Termin');
 		
 		if($this->isSubmitted())
@@ -144,7 +144,7 @@ class EventControl extends Control
 						$this->model->inviteBezirk($data['bezirk_id'],$id,$data['invitesubs']);
 					}
 					info('Event wurde erfolgreich eingetragen!');
-					go('?page=event&id='.(int)$id);
+					go('/?page=event&id='.(int)$id);
 				}
 			}
 		}

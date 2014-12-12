@@ -4,7 +4,7 @@ if(getAction('new'))
 {
 	handle_add();
 	
-	addBread(s('bread_betrieb'),'?page=fsbetrieb');
+	addBread(s('bread_betrieb'),'/?page=fsbetrieb');
 	addBread(s('bread_new_betrieb'));
 			
 	$content = betrieb_form();
@@ -24,7 +24,7 @@ elseif($id = getActionId('delete'))
 elseif($id = getActionId('edit'))
 {
 	if($db->isVerantwortlich($_GET['id']) || isOrgaTeam()){
-		go('?page=betrieb&a=edit&id='.(int)$_GET['id']);
+		go('/?page=betrieb&a=edit&id='.(int)$_GET['id']);
 	}
 	else{
 		goPage();
@@ -32,7 +32,7 @@ elseif($id = getActionId('edit'))
 }
 else if(isset($_GET['id']))
 {
-	addBread(s('betrieb_bread'),'?page=fsbetrieb');
+	addBread(s('betrieb_bread'),'/?page=fsbetrieb');
 	addStyle('textarea.comment{width:475px}.button{margin-right:8px;}div#content{width:514px;}div#right{width:290px;}#right .tagedit-list{width:256px;}#foodsaver-wrapper{padding-top:0px;}');
 	global $g_data;
 	
@@ -463,7 +463,7 @@ else
 	addBread('Deine Betriebe');
 	
 	$right .= v_menu(array(
-			array('href' => '?page=betrieb&a=new','name' => s('add_new'))
+			array('href' => '/?page=betrieb&a=new','name' => s('add_new'))
 	),'Aktionen');
 	
 	$bezirk = getBezirk();

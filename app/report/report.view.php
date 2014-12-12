@@ -190,8 +190,8 @@ class ReportView extends View
 	public function statsMenu($stats)
 	{
 		$menu = array(
-			array('name' => 'Neue Meldungen ('.$stats['new'].')','href' => '?page=report&sub=uncom'),
-			array('name' => 'Bestätigte ('.$stats['com'].')','href' => '?page=report&sub=com')		
+			array('name' => 'Neue Meldungen ('.$stats['new'].')','href' => '/?page=report&sub=uncom'),
+			array('name' => 'Bestätigte ('.$stats['com'].')','href' => '/?page=report&sub=com')		
 		);
 		
 		$active = 'uncom';

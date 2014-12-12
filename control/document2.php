@@ -4,7 +4,7 @@ if(getAction('neu'))
 {
 	handle_add();
 	
-	addBread(s('bread_document'),'?page=document');
+	addBread(s('bread_document'),'/?page=document');
 	addBread(s('bread_new_document'));
 			
 	addContent(document_form());
@@ -25,7 +25,7 @@ elseif($id = getActionId('edit'))
 {
 	handle_edit();
 	
-	addBread(s('bread_document'),'?page=document');
+	addBread(s('bread_document'),'/?page=document');
 	addBread(s('bread_edit_document'));
 	
 	$data = $db->getOne_document($id);
@@ -39,11 +39,11 @@ elseif($id = getActionId('edit'))
 }
 else if(isset($_GET['id']))
 {
-	go('?page=listDocument&id='.(int)$_GET['id']);
+	go('/?page=listDocument&id='.(int)$_GET['id']);
 }
 else
 {
-	addBread(s('document_bread'),'?page=document');
+	addBread(s('document_bread'),'/?page=document');
 	
 	if(isOrgaTeam())
 	{
@@ -72,7 +72,7 @@ else
 			info(s('document_empty'));		
 		}
 		addContent(v_field(v_menu(array(
-			array('href' => '?page=document&a=neu','name' => s('neu_document'))
+			array('href' => '/?page=document&a=neu','name' => s('neu_document'))
 		)),'Aktionen'),CNT_RIGHT);
 
 	}

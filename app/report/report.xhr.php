@@ -59,7 +59,7 @@ class ReportXhr extends Control
 				$dialog->addContent($content);
 				$dialog->addOpt('width', '600px');
 				
-				$dialog->addButton('Alle Meldungen von '.$report['fs_name'], 'goTo(\'?page=report&sub=foodsaver&id='.$report['fs_id'].'\');');
+				$dialog->addButton('Alle Meldungen von '.$report['fs_name'], 'goTo(\'/?page=report&sub=foodsaver&id='.$report['fs_id'].'\');');
 				
 				if($report['committed'] == 0)
 				{

@@ -78,7 +78,7 @@ class MailboxControl extends Control
 	
 	public function newbox()
 	{
-		addBread('Mailbox Manager','?page=mailbox&a=manage');
+		addBread('Mailbox Manager','/?page=mailbox&a=manage');
 		addBread('Neue Mailbox');
 		
 		if(isOrgaTeam())
@@ -90,7 +90,7 @@ class MailboxControl extends Control
 					if($this->model->addMailbox($mailbox,1))
 					{
 						info(s('mailbox_add_success'));
-						go('?page=mailbox&a=manage');
+						go('/?page=mailbox&a=manage');
 					}
 					else
 					{
@@ -121,7 +121,7 @@ class MailboxControl extends Control
 				if($this->model->updateMember($_POST['mbid'],$g_data[$index]))
 				{
 					info(s('edit_success'));
-					go('?page=mailbox&a=manage');
+					go('/?page=mailbox&a=manage');
 				}
 			}
 			

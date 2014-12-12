@@ -11,13 +11,13 @@ if(isset($_GET['deleteaccount']))
 		'email_name' => $foodsaver['name'].' '.$foodsaver['nachname']
 	), 'loeschen@lebensmittelretten.de', $foodsaver['name'].' hat Account gelöscht',$foodsaver['name'].' '.$foodsaver['nachname'].' hat Account gelöscht'."\n\nGrund für das Löschen:\n".strip_tags($_GET['reason']));
 	$db->del_foodsaver(fsId());
-	go('?page=logout');
+	go('/?page=logout');
 }
 else
 {
 	handle_edit();
 	
-	addBread('Profil & Foto','?page=settings');
+	addBread('Profil & Foto','/?page=settings');
 	
 	$data = $db->getOne_foodsaver(fsId());
 	
@@ -35,14 +35,14 @@ else
 		/*
 		if(isset($_SESSION['client']['rolle']) && $_SESSION['client']['rolle'] == 1)
 		{
-			$upgradeMenu[] = array('name'=>'werde Foodsaver','href'=>'?page=upgrade&form=foodsaver');
+			$upgradeMenu[] = array('name'=>'werde Foodsaver','href'=>'/?page=upgrade&form=foodsaver');
 		}
 		elseif(!isBotschafter())
 		{
-			$upgradeMenu[] = array('name'=>'Werde Botschafter','href'=> '?page=upgrade&form=botschafter');
+			$upgradeMenu[] = array('name'=>'Werde Botschafter','href'=> '/?page=upgrade&form=botschafter');
 		}
 		*/
-		$upgradeMenu[] = array('name'=>'Werde Botschafter','href'=> '?page=upgrade&form=botschafter');
+		$upgradeMenu[] = array('name'=>'Werde Botschafter','href'=> '/?page=upgrade&form=botschafter');
 		
 		if(!empty($upgradeMenu))
 		{

@@ -46,7 +46,7 @@ class BellXhr extends Control
 								'count' => $b['count']
 							),
 							'attr' => array(
-								'href' => '?page=fsbetrieb&id='.$b['id']
+								'href' => '/?page=fsbetrieb&id='.$b['id']
 							),
 							'icon' => 'img img-store brown',
 							'time' => $b['date'],

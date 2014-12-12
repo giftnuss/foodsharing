@@ -15,7 +15,7 @@ class FsbetriebControl extends Control
 	{
 		if(isset($_GET['id']) && (int)$_GET['id'] > 0)
 		{
-			addBread(s('betrieb_bread'),'?page=fsbetrieb');
+			addBread(s('betrieb_bread'),'/?page=fsbetrieb');
 			addStyle('textarea.comment{width:475px}.button{margin-right:8px;}#right .tagedit-list{width:256px;}#foodsaver-wrapper{padding-top:0px;}');
 			global $g_data;
 			

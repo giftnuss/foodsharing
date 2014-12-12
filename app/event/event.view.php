@@ -187,7 +187,7 @@ class EventView extends View
 		{
 			$menu[] = array(
 				'name' => 'Event bearbeiten',
-				'href' => '?page=event&sub=edit&id='.(int)$event['id']
+				'href' => '/?page=event&sub=edit&id='.(int)$event['id']
 			);
 			//$btns .= ' <a style="color:#FFF;font-size:12px;" class="button" href=""></a>';
 		}
