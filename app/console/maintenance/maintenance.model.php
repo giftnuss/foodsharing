@@ -58,12 +58,12 @@ class MaintenanceModel extends ConsoleModel
 		');
 	}
 	
-	public function deactivateOldBaskets($days = 14)
+	public function deactivateOldBaskets()
 	{
 		return $this->update('
 			UPDATE '.PREFIX.'basket
 			SET `status` = 6 WHERE
-			DATEDIFF(NOW(), `time`) > '.(int)$days.'
+			until < NOW()
 			AND `status` = 1
 		');
 	}

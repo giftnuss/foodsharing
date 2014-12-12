@@ -140,7 +140,7 @@ class MaintenanceControl extends ConsoleControl
 	
 	private function deactivateBaskets()
 	{
-		$count = $this->model->deactivateOldBaskets(14);
+		$count = $this->model->deactivateOldBaskets();
 		info($count.' old foodbaskets deactivated');
 	}
 	
