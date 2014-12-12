@@ -369,12 +369,13 @@ class FairteilerModel extends Model
 					fs.nachname AS fs_nachname,
 					fs.id AS fs_id	
 				
-			FROM 	'.PREFIX.'fairteiler ft,
+			FROM 	'.PREFIX.'fairteiler ft
+			LEFT JOIN
 					'.PREFIX.'foodsaver fs
 					
 				
-			WHERE 	ft.add_foodsaver = fs.id
-			AND 	ft.id = '.(int)$id.'
+			ON 	ft.add_foodsaver = fs.id
+			WHERE 	ft.id = '.(int)$id.'
 		'))
 		{
 			$ft['pic'] = false;

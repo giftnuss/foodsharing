@@ -294,6 +294,10 @@ div#main, footer .wrapper
     max-width: 1000px;
     padding: 0;
 }
+div#main
+{
+	margin-top:45px;
+}
 #content-wrapper
 {
 	

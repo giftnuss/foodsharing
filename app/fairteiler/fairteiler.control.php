@@ -59,7 +59,7 @@ class FairteilerControl extends Control
 		if(isset($_GET['id']))
 		{
 			$this->fairteiler = $this->model->getFairteiler($_GET['id']);
-				
+			
 			if(!$this->fairteiler)
 			{
 				go('/?page=fairteiler');
@@ -241,6 +241,7 @@ class FairteilerControl extends Control
 	public function ft()
 	{
 		addBread($this->fairteiler['name']);
+		addTitle($this->fairteiler['name']);
 		addContent(
 			$this->view->fairteilerHead().
 			'<div class="ui-widget ui-widget-content ui-corner-all margin-bottom">
