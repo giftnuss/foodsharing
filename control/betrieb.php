@@ -1,5 +1,8 @@
 <?php
 $bezirk_id = getGet('bid');
+if(!S::may()) {
+  goLogin();
+}
 
 if(!isset($_GET['bid']))
 {

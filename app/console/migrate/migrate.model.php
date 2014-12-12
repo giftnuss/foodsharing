@@ -1,6 +1,12 @@
 <?php
 class MigrateModel extends ConsoleModel
 {
+	function __construct() {
+		parent::__construct();
+		global $g_dbclean;
+		$g_dbclean['mysqli']->set_charset('utf8');
+	}
+
 	public function getOldConvDates($recip1,$recip2)
 	{
 		return $this->qRow('
