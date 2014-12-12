@@ -9,10 +9,10 @@ class MigrateControl extends ConsoleControl
   
   public function __construct()
   {
-    //$this->source_table = 'foodsharing_at';
+    $this->source_table = 'foodsharing_at';
 // WARNING: CH does not contain last login field! Change query below!!
     //$this->source_table = 'foodsharing_ch';
-    $this->source_table = 'foodsharing_de';
+    //$this->source_table = 'foodsharing_de';
     $this->model = new MigrateModel();
     $this->fs_db = new mysqli(DB_HOST, DB_USER, DB_PASS, $this->source_table);
     $this->fs_db->set_charset('utf8');
@@ -27,7 +27,7 @@ class MigrateControl extends ConsoleControl
 
       try {
 
-        $folder = ROOT_DIR . 'images/';
+        $folder = ROOT_DIR . 'mfs-out/';
 
         $image->move($folder, false);
         // make 35x35
@@ -75,22 +75,25 @@ class MigrateControl extends ConsoleControl
 
 
   private function fetch_and_convert_image($img) {
-    return "";
     $path = "http://media.myfoodsharing.org/live/at/profiles/pictures/200/";
     $target = ROOT_DIR . 'tmp_mfs/';
     $photo = uniqid() . '.' . strtolower(pathinfo($img, PATHINFO_EXTENSION));
     if(strlen($img) < 3) {
       return "";
     }
-    file_put_contents($target.$photo, fopen($path.$img, 'r'));
-    return $target.$photo;
+    if(file_put_contents($target.$photo, fopen($path.$img, 'r'))) {
+	    $this->resizeAvatar($photo);
+	    return $target.$photo;
+    } else {
+      return "";
+    }
   }
  
   public function fs_user()
   {
     $this->model->update("UPDATE fs_foodsaver SET fs_id = NULL");
     $this->model->begin_transaction();
-    if($result = $this->fs_db->query("SELECT p.zipcode as plz, c.name as stadt, p.lat as lat, p.lng as lon, p.picture as fs_picture, u.email as email, p.firstname as name, p.lastname as nachname, p.street as anschrift, p.phone as telefon, p.mobile as handy, if(p.gender=false,1,2) as geschlecht, p.birthdate as geb_datum, u.id as fs_id, u.created as anmeldedatum, 1 as active, if (u.last_login is null, current_date(), u.last_login) as last_login, u.password as fs_password, p.type as profile_type, p.organisation_name as organisation_name, p.organisation_fax as organisation_fax, p.organisation_email as organisation_email, p.organisation_vr as organisation_vr, p.organisation_logo as organisation_logo, p.company_name as company_name, p.company_fax as company_fax, p.company_email as company_email, p.company_hrg as company_hrg, p.company_logo as company_logo FROM users u LEFT JOIN profiles p ON u.id = p.user_id LEFT JOIN cities c ON p.city_id = c.id WHERE u.deleted = 0 AND p.deleted = 0 AND u.role in (2, 3, 4)")) {
+    if($result = $this->fs_db->query("SELECT p.zipcode as plz, c.name as stadt, p.lat as lat, p.lng as lon, p.picture as fs_picture, u.email as email, p.firstname as name, p.lastname as nachname, p.street as anschrift, p.phone as telefon, p.mobile as handy, if(p.gender=false,1,2) as geschlecht, p.birthdate as geb_datum, u.id as fs_id, u.created as anmeldedatum, 1 as active, if (u.last_login is null, current_date(), u.last_login) as last_login, u.password as fs_password, p.type as profile_type, p.organisation_name as organisation_name, p.organisation_fax as organisation_fax, p.organisation_email as organisation_email, p.organisation_vr as organisation_vr, p.organisation_logo as organisation_logo, p.company_name as company_name, p.company_fax as company_fax, p.company_email as company_email, p.company_hrg as company_hrg, p.company_logo as company_logo FROM users u LEFT JOIN profiles p ON u.id = p.user_id LEFT JOIN cities c ON p.city_id = c.id WHERE u.deleted = 0 AND p.deleted = 0 AND u.role_id in (2, 3, 4)")) {
       $bar = $this->progressbar($result->num_rows);
       $cur_user_cnt = 0;
       while($row = $result->fetch_object()) {
