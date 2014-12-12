@@ -290,7 +290,7 @@ div#main
 div#main, footer .wrapper
 {
     line-height: 1.6em;
-    margin: 45px auto 0 auto;
+    margin: 0 auto;
     max-width: 1000px;
     padding: 0;
 }
