@@ -87,7 +87,7 @@ class BellXhr extends Control
 									'name' => $b['name']
 							),
 							'attr' => array(
-									'href' => '?page=fairteiler&sub=check&id='.$b['id']
+									'href' => '/?page=fairteiler&sub=check&id='.$b['id']
 							),
 							'icon' => 'img img-recycle yellow',
 							'time' => $b['add_date'],

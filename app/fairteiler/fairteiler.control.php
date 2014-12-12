@@ -62,7 +62,7 @@ class FairteilerControl extends Control
 				
 			if(!$this->fairteiler)
 			{
-				go('?page=fairteiler');
+				go('/?page=fairteiler');
 			}
 			if(isset($_GET['follow']))
 			{
@@ -106,7 +106,7 @@ class FairteilerControl extends Control
 				if($this->model->deleteFairteiler($this->fairteiler['id']))
 				{
 					info(s('delete_success'));
-					go('?page=fairteiler&bid='.$this->bezirk_id);
+					go('/?page=fairteiler&bid='.$this->bezirk_id);
 				}
 			}
 		}
@@ -122,10 +122,10 @@ class FairteilerControl extends Control
 	
 	public function index()
 	{
-		addBread(s('your_fairteiler'),'?page=fairteiler');
+		addBread(s('your_fairteiler'),'/?page=fairteiler');
 		if($this->bezirk_id > 0)
 		{
-			addBread($this->bezirk['name'],'?page=fairteiler&bid='.$this->bezirk_id);
+			addBread($this->bezirk['name'],'/?page=fairteiler&bid='.$this->bezirk_id);
 		}
 		if(!isset($_GET['sub']))
 		{
@@ -136,7 +136,7 @@ class FairteilerControl extends Control
 			{
 				foreach ($bezirke as $b)
 				{
-					$items[] = array('name'=>$b['name'],'href'=>'?page=fairteiler&bid='.$b['id']);
+					$items[] = array('name'=>$b['name'],'href'=>'/?page=fairteiler&bid='.$b['id']);
 				}
 			}
 			
@@ -158,7 +158,7 @@ class FairteilerControl extends Control
 	
 	public function edit()
 	{
-		addBread($this->fairteiler['name'],'?page=fairteiler&sub=ft&bid='.$this->bezirk_id.'&id='.$this->fairteiler['id']);
+		addBread($this->fairteiler['name'],'/?page=fairteiler&sub=ft&bid='.$this->bezirk_id.'&id='.$this->fairteiler['id']);
 		addBread(s('edit'));
 		if(isset($_POST['form_submit']) && $_POST['form_submit'] == 'fairteiler')
 		{
@@ -175,12 +175,12 @@ class FairteilerControl extends Control
 		
 		$data = $this->fairteiler;
 		$items = array(
-			array('name' => s('back'),'href'=>'?page=fairteiler&sub=ft&bid='.$this->bezirk_id.'&id='.$this->fairteiler['id'])
+			array('name' => s('back'),'href'=>'/?page=fairteiler&sub=ft&bid='.$this->bezirk_id.'&id='.$this->fairteiler['id'])
 		);
 		
 		if(isOrgaTeam() || isBotFor($this->bezirk_id))
 		{
-			$items[] = array('name' => s('delete'),'click'=>'if(confirm(\''.sv('delete_sure',$this->fairteiler['name']).'\')){goTo(\'?page=fairteiler&sub=ft&bid='.$this->bezirk_id.'&id='.$this->fairteiler['id'].'&delete=1\');}return false;');
+			$items[] = array('name' => s('delete'),'click'=>'if(confirm(\''.sv('delete_sure',$this->fairteiler['name']).'\')){goTo(\'/?page=fairteiler&sub=ft&bid='.$this->bezirk_id.'&id='.$this->fairteiler['id'].'&delete=1\');}return false;');
 		}
 
 		$data['bfoodsaver'] = $this->follower['verantwortlich'];
@@ -210,20 +210,20 @@ class FairteilerControl extends Control
 					{
 						$this->model->acceptFairteiler($_GET['id']);
 						info('Fair-Teiler ist jetzt Aktiv');
-						go('?page=fairteiler&sub=ft&id='.(int)$_GET['id']);
+						go('/?page=fairteiler&sub=ft&id='.(int)$_GET['id']);
 					}
 					else if($_GET['agree'] == 0)
 					{
 						$this->model->deleteFairteiler($_GET['id']);
 						info('Fair-Teiler wurde gelöscht');
-						go('?page=fairteiler');
+						go('/?page=fairteiler');
 					}
 				}
 					
 				addContent($this->view->checkFairteiler($ft));
 				addContent($this->view->menu(array(
-				array('href' => '?page=fairteiler&sub=check&id='.(int)$ft['id'].'&agree=1','name' => 'Fair-Teiler Freischalten'),
-				array('click' => 'if(confirm(\'Achtung! Wenn Du den Fair-Teiler löschst wird er gelöscht. Fortfahren?\')){goTo(this.href);}else{return false;}','href'=>'?page=fairteiler&sub=check&id='.(int)$ft['id'].'&agree=0','name' => 'Fair-Teiler Ablehnen')
+				array('href' => '/?page=fairteiler&sub=check&id='.(int)$ft['id'].'&agree=1','name' => 'Fair-Teiler Freischalten'),
+				array('click' => 'if(confirm(\'Achtung! Wenn Du den Fair-Teiler löschst wird er gelöscht. Fortfahren?\')){goTo(this.href);}else{return false;}','href'=>'/?page=fairteiler&sub=check&id='.(int)$ft['id'].'&agree=0','name' => 'Fair-Teiler Ablehnen')
 				),array('title' => 'Optionen')),CNT_RIGHT);
 			}
 			else
@@ -254,7 +254,7 @@ class FairteilerControl extends Control
 			
 			if($this->mayEdit())
 			{
-				$items[] = array('name' =>s('edit'),'href'=>'?page=fairteiler&bid='.$this->bezirk_id.'&sub=edit&id='.$this->fairteiler['id']);
+				$items[] = array('name' =>s('edit'),'href'=>'/?page=fairteiler&bid='.$this->bezirk_id.'&sub=edit&id='.$this->fairteiler['id']);
 			}
 			
 			if($this->isFollower())
@@ -298,7 +298,7 @@ class FairteilerControl extends Control
 					//tplMailList($tpl_id, $to)
 					info(s('fairteiler_prepare_success'));
 				}
-				go('?page=fairteiler&bid='.(int)$this->bezirk_id);
+				go('/?page=fairteiler&bid='.(int)$this->bezirk_id);
 			}
 			else
 			{
@@ -308,7 +308,7 @@ class FairteilerControl extends Control
 		
 		addContent($this->view->fairteilerForm());
 		addContent(v_menu(array(
-		array('name'=>s('back'),'href' => '?page=fairteiler&bid='.(int)$this->bezirk_id.'')
+		array('name'=>s('back'),'href' => '/?page=fairteiler&bid='.(int)$this->bezirk_id.'')
 		),s('options')),CNT_RIGHT);
 	}
 	

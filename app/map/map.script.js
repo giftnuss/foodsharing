@@ -333,7 +333,7 @@ function loadMarker(types,loader)
 					else if(type == 'f')
 					{
 						bid = (el.layer.options.bid);
-						goTo('?page=fairteiler&sub=ft&bid='+bid+'&id='+fsid);
+						goTo('/?page=fairteiler&sub=ft&bid='+bid+'&id='+fsid);
 					}
 					if(url != '')
 					{

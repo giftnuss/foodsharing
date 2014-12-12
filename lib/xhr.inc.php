@@ -1215,7 +1215,7 @@ function xhr_getGlocke($data)
 			foreach ($fairteiler as $ft)
 			{
 				$fts[$ft['id']] = $ft['id'];
-				$html .= xv_glockeMsg($ft['name'].' wurde vogeschlagen', 'Neuer Fair-Teiler', '?page=fairteiler&sub=check&id='.(int)$ft['id'], msgTime($ft['add_date']), false);
+				$html .= xv_glockeMsg($ft['name'].' wurde vogeschlagen', 'Neuer Fair-Teiler', '/?page=fairteiler&sub=check&id='.(int)$ft['id'], msgTime($ft['add_date']), false);
 			}
 		}
 		if($anm = $db->getNeuanmeldungenOhneBotschafter())
@@ -1265,7 +1265,7 @@ function xhr_getGlocke($data)
 			{
 				if(!isset($fts[$ft['id']]))
 				{
-					$html .= xv_glockeMsg($ft['name'].' wurde vogeschlagen', 'Neuer Fair-Teiler', '?page=fairteiler&sub=check&id='.(int)$ft['id'], msgTime($ft['add_date']), false);
+					$html .= xv_glockeMsg($ft['name'].' wurde vogeschlagen', 'Neuer Fair-Teiler', '/?page=fairteiler&sub=check&id='.(int)$ft['id'], msgTime($ft['add_date']), false);
 				}
 			}
 		}

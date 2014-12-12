@@ -216,7 +216,7 @@ class FairteilerView extends View
 		if(is_array($bezirke))
 		{			
 			$select = '
-			<select name="bezirkswitcher" id="bezirkswitcher" onchange="goTo(\'?page=fairteiler&bid=\'+this.value);">
+			<select name="bezirkswitcher" id="bezirkswitcher" onchange="goTo(\'/?page=fairteiler&bid=\'+this.value);">
 				<option value="0">Bitte auswählen...</option>';
 			foreach ($bezirke as $b)
 			{
@@ -287,11 +287,11 @@ class FairteilerView extends View
 		$items = array();
 		if(isBotFor($bezirk_id) || isOrgaTeam())
 		{
-			$items[] = array('name' => 'Fair-Teiler eintragen','href' => '?page=fairteiler&bid='.(int)$bezirk_id.'&sub=addFt');
+			$items[] = array('name' => 'Fair-Teiler eintragen','href' => '/?page=fairteiler&bid='.(int)$bezirk_id.'&sub=addFt');
 		}
 		else
 		{
-			$items[] = array('name' => 'Fair-Teiler vorschlagen','href' => '?page=fairteiler&bid='.(int)$bezirk_id.'&sub=addFt');
+			$items[] = array('name' => 'Fair-Teiler vorschlagen','href' => '/?page=fairteiler&bid='.(int)$bezirk_id.'&sub=addFt');
 		}
 		return v_menu($items,'Optionen');
 	}

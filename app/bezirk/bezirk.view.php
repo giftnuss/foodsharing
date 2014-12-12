@@ -60,11 +60,11 @@ class BezirkView extends View
 		$items = array();
 		if(isBotFor($bezirk_id) || isOrgaTeam())
 		{
-			$items[] = array('name' => 'Fair-Teiler eintragen','href' => '?page=fairteiler&bid='.(int)$bezirk_id.'&sub=addFt');
+			$items[] = array('name' => 'Fair-Teiler eintragen','href' => '/?page=fairteiler&bid='.(int)$bezirk_id.'&sub=addFt');
 		}
 		else
 		{
-			$items[] = array('name' => 'Fair-Teiler vorschlagen','href' => '?page=fairteiler&bid='.(int)$bezirk_id.'&sub=addFt');
+			$items[] = array('name' => 'Fair-Teiler vorschlagen','href' => '/?page=fairteiler&bid='.(int)$bezirk_id.'&sub=addFt');
 		}
 		return v_menu($items,'Optionen');
 	}
