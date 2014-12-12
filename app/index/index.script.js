@@ -154,7 +154,7 @@ function loadMarker(types,loader)
 					}
 					else if(type == 'f')
 					{
-						goTo('/fairteiler/'+fsid);
+						goTo('/?page=fairteiler&sub=ft&id='+fsid);
 					}
 					if(url != '')
 					{
