@@ -1,4 +1,10 @@
 <?php 
+
+if(!S::may('orga'))
+{
+	go('/');
+}
+
 handleEmail();
 addBread(s('mailinglist'),'?page=email');
 $bezirk = $db->getBezirk();

@@ -801,6 +801,16 @@ Raphael Fellmer, Raphael Wintrich und Valentin Thurn<br />
 		return $tmp;
 	}
 	
+	public function fs_user()
+	{
+		
+	}
+	
+	public function fs_chats()
+	{
+		
+	}
+	
 	public function chats()
 	{
 		info('getold conversations');

@@ -32,12 +32,12 @@ class BasketControl extends Control
 				}
 				else
 				{
-					go('/basket/find');
+					go('/essenskoerbe/find');
 				}
 			}
 			else
 			{
-				go('/basket/find');
+				go('/essenskoerbe/find');
 			}
 		}
 	}

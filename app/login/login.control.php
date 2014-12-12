@@ -11,6 +11,17 @@ class LoginControl extends Control
 		
 	}
 	
+	public function unsubscribe()
+	{
+		addTitle('Newsletter Abmeldung');
+		addBread('Newsletter Abmeldung');
+		if(isset($_GET['e']) && validEmail($_GET['e']))
+		{
+			addContent(v_info('Du wirst nun keineweiteren Newsletter von uns erhalten','Erfolg!'));
+			file_put_contents('../unsubscribe.txt',$_GET['e']."\n",FILE_APPEND);
+		}
+	}
+	
 	public function index()
 	{
 		if(!S::may())
