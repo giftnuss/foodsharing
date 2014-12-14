@@ -243,8 +243,11 @@ class FairteilerControl extends Control
 		addBread($this->fairteiler['name']);
 		addTitle($this->fairteiler['name']);
 		addContent(
-			$this->view->fairteilerHead().
-			'<div class="ui-widget ui-widget-content ui-corner-all margin-bottom">
+			$this->view->fairteilerHead().'
+			<div>
+				'.v_info('Beachte, dass Deine Beiträge auf der Fair-Teiler Pinnwand öffentlich einsehbar sind.','Hinweis!').'
+			</div>
+			<div class="ui-widget ui-widget-content ui-corner-all margin-bottom">
 				'.$this->wallposts('fairteiler',$this->fairteiler['id']).'
 			</div>'
 		);
