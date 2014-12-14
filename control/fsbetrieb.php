@@ -1296,8 +1296,8 @@ function u_team($betrieb)
 			v_form_select('team_status',array(
 			'values' => array(
 				array('id' => 0,'name' => 'Team ist voll'),
-				array('id' => 1,'name' => 'Helfer gesucht'),
-				array('id' => 2,'name' => 'Es werden dringend Helfer gesucht!')
+				array('id' => 1,'name' => 'HelferInnen gesucht'),
+				array('id' => 2,'name' => 'Es werden dringend HelferInnen gesucht!')
 			)
 		)).'</div>';
 	}
