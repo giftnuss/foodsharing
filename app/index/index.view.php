@@ -102,7 +102,7 @@ class IndexView extends View
 			<div class="biglogo">
 				<div class="centerblock">
 					<img width="25%" src="/img/gabel.png" alt="foodsharing Logo"/>
-					<p>Teile Lebensmittel.</p>
+					<p>Teile Lebensmittel,</p>
 					<p class="small">anstatt sie wegzuwerfen!</p>
 					<h1>foodsharing<span>.de</span></h1>
 				</div>
