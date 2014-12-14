@@ -48,8 +48,8 @@ class MapView extends View
 						<div id="map-options">
 							<h3>Betrieb Anzeigeoptionen</h3>
 							<label><input type="checkbox" name="viewopt[]" value="allebetriebe" /> Alle Betriebe</label>
-							<label><input checked="checked" type="checkbox" name="viewopt[]" value="needhelp" /> Helfer gesucht</label>
-							<label><input checked="checked" type="checkbox" name="viewopt[]" value="needhelpinstant" /> Helfer dringend gesucht</label>
+							<label><input checked="checked" type="checkbox" name="viewopt[]" value="needhelp" /> HelferInnen gesucht</label>
+							<label><input checked="checked" type="checkbox" name="viewopt[]" value="needhelpinstant" /> HelferInnen dringend gesucht</label>
 							<label><input type="checkbox" name="viewopt" value="nkoorp" /> in Verhandlung</label>
 						</div>
 					</div>
