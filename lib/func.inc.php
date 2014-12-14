@@ -799,6 +799,7 @@ function getMenu()
 			return array(
 				'default' => '
 						<ul id="mainMenu" class="jMenu">
+							<li><a href="/essenskoerbe/find">Essenskörbe</a></li>
 							'.$orgamenu['default'].'
 							<li><a href="/"><i class="fa fa-home"></i></a></li>
 							<li><a class="fNiv" href="/karte"><i class="fa fa-map-marker"></i></a></li>

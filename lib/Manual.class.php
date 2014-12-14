@@ -2074,7 +2074,7 @@ GROUP BY foodsaver_id'));
 		$position = '';
 		if(isset($data['position']))
 		{
-			$rolle = '`position` =  ' . $this->strval($data['position']) . ',';
+			$position = '`position` =  ' . $this->strval($data['position']) . ',';
 		}
 
 		return $this->update('
