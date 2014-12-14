@@ -151,7 +151,7 @@ class TeamView extends View
 				<a href="https://tox.im/de" target="_blank"><img src="http://tox.im/assets/imgs/logo_head.png" /></a>
 				'.v_info('Tox ist eine sichere  OpenSource Alternative zu Skype oder WhatsApp. Mit der Tox-ID kannst Du '.$user['name'].' Zu Deiner Kontaktliste hinzufügen.').'
 				<h3>Tox-ID von '.$user['name'].'</h3>
-				<input type="text" class="tox-id" value="'.$user['tox'].'" onkeydown="return false;" />
+				<input type="text" class="tox-id" value="'.$user['tox'].'" />
 				<div class="tox-qr"></div>
 			</div>
 		</div>';
