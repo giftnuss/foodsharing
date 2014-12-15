@@ -539,7 +539,7 @@ function xhr_loadMarker($data)
 		{
 			if($t == 'foodsaver')
 			{
-				$out['foodsaver'] = $db->q(' SELECT `id`, `photo_public`,`lat`,`lon` FROM `'.PREFIX.'foodsaver` WHERE `active` = 1 AND `photo_public` != 4 AND lat != "" ');
+				$out['foodsaver'] = $db->q(' SELECT `id`, `photo_public`,`lat`,`lon` FROM `'.PREFIX.'foodsaver` WHERE `active` = 1 AND rolle IN(1,2,3,4) AND `photo_public` != 4 AND lat != "" ');
 			}
 			elseif($t == 'betriebe')
 			{
