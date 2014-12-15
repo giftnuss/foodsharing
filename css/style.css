@@ -1443,6 +1443,7 @@ ul.linklist li span.n
 {
 	font-weight:bold;
 	display:block;
+	
 	overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
