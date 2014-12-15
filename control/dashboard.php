@@ -322,10 +322,15 @@ else if(S::may('fs'))
 	}
 	
 	/*UPDATES*/
+	/*
 	if($updates = $db->updates())
 	{
 		addContent(u_updates($updates));
 	}
+	*/
+	addScript('/js/activity.js');
+	addJs('activity.init();');
+	addContent(v_field('<div id="activity"><div class="loader" style="padding:40px;background-image:url(/img/469.gif);background-repeat:no-repeat;background-position:center;"></div></div>','Updates Übersicht'));
 	
 	/*
 	 * Top
