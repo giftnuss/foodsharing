@@ -33,8 +33,8 @@ class TeamXhr extends Control
 				
 				$msg = 'Name: ' . strip_tags($_POST['name']) . "\n\n" . $msg;
 				
-				$mail->setBody($message);
-				$mail->setHtmlBody(nl2br($message));
+				$mail->setBody($msg);
+				$mail->setHtmlBody(nl2br($msg));
 				
 				$mail->addRecipient($user['email']);
 				
