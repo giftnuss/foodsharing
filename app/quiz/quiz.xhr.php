@@ -705,6 +705,16 @@ class QuizXhr extends Control
 						
 						$countdown_js = '';
 						
+						if(!S::get('quiz-easymode'))
+						{
+							$countdown_js = '
+							counter = setInterval(timer, 1000); 
+							$("#countdown").progressbar({
+					             value: '.$question['duration'].',
+					             max:'.$question['duration'].'
+					        });';
+						}
+						
 						$return['script'] .= '
 							
 							function abortOrPause()
@@ -865,24 +875,22 @@ class QuizXhr extends Control
 								$(\'#quizbreath span\').text("Weiter gehts!");
 							},5000);
 							
-							
-						';
-						
-						if(!S::get('quiz-easymode'))
-						{
-							$return['script'] .= '
 							setTimeout(function(){
-								counter = setInterval(timer, 1000); 
 								
-								$("#countdown").progressbar({
-					                  value: '.$question['duration'].',
-					                  max:'.$question['duration'].'
-					             });
+								
+								'.$countdown_js.'
 									
 								$(\'#quizwrapper\').show();
 								$(\'#quizbreath\').hide();
 								$(".ui-dialog-buttonpane").css("visibility","visible");
 							},6000);
+							
+						';
+						/*
+						if(!S::get('quiz-easymode'))
+						{
+							$return['script'] .= '
+							
 							
 							function timer()
 							{
@@ -897,6 +905,7 @@ class QuizXhr extends Control
 							}
 									';
 						}
+						*/
 						
 						return $return;
 					}
