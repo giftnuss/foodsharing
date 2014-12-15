@@ -1443,6 +1443,9 @@ ul.linklist li span.n
 {
 	font-weight:bold;
 	display:block;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 ul.linklist li span.d
 {
@@ -1476,6 +1479,14 @@ ul.linklist li span.i
 	-webkit-border-radius: 6px 6px 6px 6px;
 	border: 0px solid #000000;
 }
+
+ul.linklist li span.t
+{
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 ul.linklist li span.time
 {
 	font-size:10px;

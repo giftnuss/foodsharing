@@ -46,7 +46,7 @@ class ActivityModel extends Model
 									'href' => '#'
 							),
 							'title' => $u['mb_name'].'@ Neue E-Mail '.$u['subject'],
-							'desc' => $u['body'],
+							'desc' => trim(tt(strip_tags($u['body']),160)),
 							'time' => $u['time'],
 							'icon' => '/img/mailbox-50x50.png'
 					);
@@ -133,7 +133,7 @@ class ActivityModel extends Model
 								'href' => $url
 							),
 							'title' => 'Antwort auf '.$u['name'].' im Forum '.$u['bezirk_name'] . ' von ' . $u['foodsaver_name'],
-							'desc' => $u['post_body'],
+							'desc' => trim(tt(strip_tags($u['post_body']),160)),
 							'time' => $u['time'],
 							'icon' => img($u['foodsaver_photo'],50)
 					);
@@ -176,7 +176,7 @@ class ActivityModel extends Model
 									'href' => '/?page=fsbetrieb&id=' . $r['betrieb_id']
 							),
 							'title' => $r['foodsaver_name'].' hat auf die Pinnwand von '.$r['betrieb_name'] . ' geschrieben',
-							'desc' => $r['text'],
+							'desc' => trim(tt(strip_tags($r['text']),160)),
 							'time' => $r['update_time'],
 							'icon' => img($r['foodsaver_photo'],50)
 					);
