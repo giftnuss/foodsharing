@@ -330,6 +330,12 @@ class QuizXhr extends Control
 			S::set('quiz-questions', $session['quiz_questions']);
 			S::set('quiz-index', $session['quiz_index']);
 			S::set('quiz-session', $session['id']);
+			$easymode = false;
+			if ($session['easymode'] == 1 && (int)$_GET['qid'] == 1)
+			{
+				$easymode = true;
+			}
+			S::set('quiz-easymode', $easymode);
 			
 			/*
 			 * Make a little output that the user can continue the quiz
@@ -355,6 +361,21 @@ class QuizXhr extends Control
 		 */
 		else if($quiz = $this->model->getQuiz($_GET['qid']))
 		{
+			
+			/*
+			 * if foodsaver quiz user can choose between easy and quick mode
+			*/
+			
+			if($_GET['qid'] == 1 && isset($_GET['easymode']) && $_GET['easymode'] == 1)
+			{
+				S::set('quiz-easymode', true);
+				$quiz['questcount'] = 20;
+			}
+			else
+			{
+				S::set('quiz-easymode', false);
+			}
+			
 			/*
 			 * first get random sorted quiz questions
 			 */
@@ -375,6 +396,8 @@ class QuizXhr extends Control
 				S::set('quiz-id', (int)$_GET['qid']);
 				S::set('quiz-questions', $questions);
 				S::set('quiz-index', 0);
+				
+				
 				
 				/*
 				 * Make a litte output for the user that he/she cat just start the quiz now
@@ -488,9 +511,15 @@ class QuizXhr extends Control
 			 */
 			if($i == 0)
 			{
+				$easymode = 0;
+				if($easymode = S::get('quiz-easymode'))
+				{
+					$easymode = 1;
+				}
+				
 				$quuizz = $this->model->getQuiz(S::get('quiz-id'));
 				// init quiz session in DB
-				if($id = $this->model->initQuizSession(S::get('quiz-id'), $quiz, $quuizz['maxfp'], $quuizz['questcount']))
+				if($id = $this->model->initQuizSession(S::get('quiz-id'), $quiz, $quuizz['maxfp'], $quuizz['questcount'],$easymode))
 				{
 					S::set('quiz-session', $id);
 				}
@@ -673,6 +702,9 @@ class QuizXhr extends Control
 						/*
 						 * strange but it works ;) generate the js code and send is to the client for execute
 						 */
+						
+						$countdown_js = '';
+						
 						$return['script'] .= '
 							
 							function abortOrPause()
@@ -834,6 +866,11 @@ class QuizXhr extends Control
 							},5000);
 							
 							
+						';
+						
+						if(!S::get('quiz-easymode'))
+						{
+							$return['script'] .= '
 							setTimeout(function(){
 								counter = setInterval(timer, 1000); 
 								
@@ -858,7 +895,8 @@ class QuizXhr extends Control
 							     return;
 							  }
 							}
-						';
+									';
+						}
 						
 						return $return;
 					}

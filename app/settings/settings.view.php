@@ -694,7 +694,12 @@ class SettingsView extends View
 		
 		$out .= v_input_wrapper($quiz['name'], $quiz['desc']);
 		
-		$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:'.(int)$quiz['id'].'});" href="#" class="button">Quiz jetzt starten</a></p>';
+		$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:'.(int)$quiz['id'].'});" href="#" class="button button-big">Quiz jetzt starten</a></p>';
+		
+		if($quiz['id'] == 1)
+		{
+			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',easymode:1,qid:'.(int)$quiz['id'].'});" href="#" class="button button-big">Quiz ohne Zeitlimit starten</a></p>';
+		}
 		
 		$out = v_field($out, 'Du musst noch das Quiz bestehen!',array('class' => 'ui-padding'));
 		
@@ -778,7 +783,12 @@ class SettingsView extends View
 		
 		$out .= v_input_wrapper($quiz['name'], nl2br($quiz['desc']));
 		
-		$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:'.(int)$quiz['id'].'});" href="#" class="button">Quiz jetzt starten</a></p>';
+		$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:'.(int)$quiz['id'].'});" href="#" class="button button-big">Quiz jetzt starten</a></p>';
+		
+		if($quiz['id'] == 1)
+		{
+			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',easymode:1,qid:'.(int)$quiz['id'].'});" href="#" class="button button-big">Quiz ohne Zeitlimit starten</a></p>';
+		}
 		
 		$out = v_field($out, 'Du musst noch das Quiz bestehen!',array('class' => 'ui-padding'));
 		

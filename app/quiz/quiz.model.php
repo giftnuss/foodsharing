@@ -406,7 +406,8 @@ class QuizModel extends Model
 			SELECT 
 				id,
 				quiz_index,
-				quiz_questions
+				quiz_questions,
+				easymode
 
 			FROM
 				'.PREFIX.'quiz_session
@@ -472,10 +473,16 @@ class QuizModel extends Model
 		return $out;
 	}
 	
-	public function initQuizSession($quiz_id, $questions, $maxfp, $questcount)
+	public function initQuizSession($quiz_id, $questions, $maxfp, $questcount, $easymode = 0)
 	{
 		//print_r($questions);die();
 		$questions = serialize($questions);
+		
+		// quiz easymode
+		if($easymode)
+		{
+			//$maxfp = 
+		}
 		
 		return $this->insert('
 			INSERT INTO '.PREFIX.'quiz_session (
@@ -487,7 +494,8 @@ class QuizModel extends Model
 				time_start, 
 				fp, 
 				maxfp, 
-				quest_count
+				quest_count,
+				easymode
 			) 
 			VALUES
 			(
@@ -499,7 +507,8 @@ class QuizModel extends Model
 				NOW(),
 				0,
 				'.(int)$maxfp.',
-				'.(int)$questcount.'
+				'.(int)$questcount.',
+				'.(int)$easymode.'
 			)
 		');
 	}
