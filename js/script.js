@@ -414,11 +414,20 @@ function login()
 {
 	ajreq('login',{app:'login'});
 }
+
 function profile(id)
+{
+	showLoader();
+	goTo('/profile/' + id);
+}
+
+function quickprofile(id)
 {
 	//alert(id);
 	//fancy_xhr('profile&id='+id);
+	
 	showLoader();
+	
 	$.ajax({
 		dataType:"json",
 		url:"/xhrapp.php?app=profile&m=quickprofile&id=" + id,

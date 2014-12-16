@@ -20,7 +20,8 @@ class WallpostXhr extends Control
 			'event' => true,
 			'fsreport' => true,
 			'question' => true,
-			'basket' => true
+			'basket' => true,
+			'usernotes'=> true
 		);
 		
 		if($this->isAllowed($_GET['table']) && (int)$_GET['id'] > 0)

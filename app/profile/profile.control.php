@@ -7,21 +7,37 @@ class ProfileControl extends Control
 	public function __construct()
 	{
 		
+		if(!S::may())
+		{
+			go('/');
+		}
+		
 		$this->model = new ProfileModel();
 		$this->view = new ProfileView();
 		
-		
-		
+
 		parent::__construct();
 		
-		if(isset($_GET['id']))
+		if($id = $this->uriInt(2))
 		{
-			$this->model->setFsId((int)$_GET['id']);
-			$this->fs_id = (int)$_GET['id'];
-			if($data = $this->model->getProfile())
+			$this->model->setFsId((int)$id);
+			$this->fs_id = (int)$id;
+			if($data = $this->model->getData())
 			{
 				$this->foodsaver = $data;
 				$this->foodsaver['buddy'] = $this->model->buddyStatus($this->foodsaver['id']);
+				
+				$this->view->setData($this->foodsaver);
+				
+				if($this->uriStr(3) == 'notes')
+				{
+					$this->organotes();
+				}
+				else
+				{
+					$this->profile();
+				}
+				
 			}
 			else
 			{
@@ -37,11 +53,24 @@ class ProfileControl extends Control
 	
 	public function index()
 	{
-		addBread($this->foodsaver['name'].' '.$this->foodsaver['nachname']);
-		addContent(
-			'<div class="ui-widget ui-widget-content ui-corner-all margin-bottom">
-				'.$this->wallposts('foodsaver',$this->foodsaver['id']).'
-			</div>'
-		);
+		
+	}
+	
+	public function organotes()
+	{
+		addBread($this->foodsaver['name'],'/profile/' . $this->foodsaver['id']);
+		if(S::may('orga'))
+		{
+			$this->view->usernotes($this->wallposts('usernotes',$this->foodsaver['id']));
+		}
+		else
+		{
+			go('/profile/' . $this->foodsaver['id']);
+		}
+	}
+	
+	public function profile()
+	{
+		$this->view->profile($this->wallposts('foodsaver',$this->foodsaver['id']));
 	}
 }

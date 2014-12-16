@@ -118,9 +118,10 @@ class Control
 	  	
 	  }
   
-  	public function wallposts($table,$id)
-  	{
-  		addJsFunc('
+
+	  public function wallposts($table,$id)
+	  {
+	  	addJsFunc('
 			function u_delPost(id)
   			{
   				var id = id;
@@ -152,29 +153,29 @@ class Control
   				$("a.attach-load").remove();
   			}
   		');
-  		addJs('
-			//$("#wallpost-submit").hide();	
-  			$("#wallpost-text").autosize(); 
+	  	addJs('
+			//$("#wallpost-submit").hide();
+  			$("#wallpost-text").autosize();
 			$("#wallpost-text").focus(function(){
-				$("#wallpost-submit").show();	
-			});	
-  				
+				$("#wallpost-submit").show();
+			});
+	  
   			$("#wallpost-attach-trigger").change(function(){
   				$("#attach-preview div:last").remove();
   				$("#attach-preview").append(\'<a rel="wallpost-gallery" class="preview-thumb attach-load" href="#" onclick="return false;">&nbsp;</a>\');
   				$("#attach-preview").append(\'<div style="clear:both;"></div>\');
   				$("#wallpost-attachimage-form").submit();
   			});
-  				
+	  
 			$("#wallpost-text").blur(function(){
 				setTimeout(function(){
-					//$("#wallpost-submit").hide();	
+					//$("#wallpost-submit").hide();
 				},1000);
-				$("#wallpost-submit").show();	
+				$("#wallpost-submit").show();
 			});
 			$("#wallpost-post").submit(function(ev){
 				ev.preventDefault();
-				
+	  
 			});
 			$("#wallpost-attach-image").button().click(function(){
 				$("#wallpost-attach-trigger").click();
@@ -182,24 +183,24 @@ class Control
   			$("#wall-submit").button().click(function(ev){
   				ev.preventDefault();
   				if(($("#wallpost-text").val() != "" && $("#wallpost-text").val() != "'.s('write_teaser').'") || $("#attach-preview a").length > 0)
-  				{  	
-  					$(".wall-posts table tr:first").before(\'<tr><td colspan="2" class="load">&nbsp;</td></tr>\');	
-
+  				{
+  					$(".wall-posts table tr:first").before(\'<tr><td colspan="2" class="load">&nbsp;</td></tr>\');
+	  
   					attach = "";
   					$("#wallpost-attach input").each(function(){
-  						attach = attach + ":" + $(this).val(); 
+  						attach = attach + ":" + $(this).val();
   					});
   					if(attach.length > 0)
   					{
   						attach = attach.substring(1);
-  					}	
-  					
+  					}
+  		
   					text = $("#wallpost-text").val();
   					if(text == "'.s('write_teaser').'")
   					{
-  						text = "";	
+  						text = "";
   					}
-  						
+	  
 	  				$.ajax({
 						url: "/xhrapp.php?app=wallpost&m=post&table='.$table.'&id='.$id.'",
 						type: "POST",
@@ -244,40 +245,40 @@ class Control
 						}
 					}
 			});
-			
+		
 		');
-  		/*
-  		 * setInterval(function(){
-				last = 0;
-				if($(".wall-posts input.pid").length > 0)
-				{
-					last = $(".wall-posts input.pid:first").val();
-				}
-				$.ajax({
-					url: "xhrapp.php?app=wallpost&m=update&table='.$table.'&id='.$id.'&last=" + last,
-					dataType: "JSON",
-					success: function(data)
-					{
-						if(data.status == 1)
-						{
-							$(".wall-posts").html(data.html);
-						}
-					}
-				});
-			},5000);
-  		 */
-  		$posthtml = '';
-  		
-  		if(S::may())
-  		{
-  			$posthtml = '
+	  	/*
+	  	 * setInterval(function(){
+	  				last = 0;
+	  				if($(".wall-posts input.pid").length > 0)
+	  				{
+	  	 		last = $(".wall-posts input.pid:first").val();
+	  				}
+	  				$.ajax({
+	  						url: "xhrapp.php?app=wallpost&m=update&table='.$table.'&id='.$id.'&last=" + last,
+	  						dataType: "JSON",
+	  						success: function(data)
+	  						{
+	  						if(data.status == 1)
+	  						{
+	  						$(".wall-posts").html(data.html);
+	  						}
+	  						}
+	  						});
+	  	 		},5000);
+	  	*/
+	  	$posthtml = '';
+	  
+	  	if(S::may())
+	  	{
+	  		$posthtml = '
   			<div class="tools ui-padding">
 				<textarea id="wallpost-text" name="text" title="'.s('write_teaser').'" class="comment textarea inlabel"></textarea>
 				<div id="attach-preview"></div>
-				<div style="display:none;" id="wallpost-attach" /></div>	
-					
+				<div style="display:none;" id="wallpost-attach" /></div>
+			
 				<div id="wallpost-submit" align="right">
-					
+			
 					<span id="wallpost-loader"></span><span id="wallpost-attach-image"><i class="fa fa-image"></i> '.s('attach_image').'</span>
 					<a href="#" id="wall-submit">'.s('send').'</a>
 					<div style="overflow:hidden;height:1px;">
@@ -285,24 +286,24 @@ class Control
 							<input id="wallpost-attach-trigger" type="file" maxlength="100000" size="chars" name="etattach" />
 						</form>
 					</div>
-					
+			
 				</div>
 				<div style="clear:both"></div>
 				<div style="visibility:hidden;">
 				<iframe name="wallpost-frame" src="empty.html" style="height:1px;" frameborder="0"></iframe>
 				</div>
 			</div>';
-  		}
-  		
-		return '
+	  	}
+	  
+	  	return '
 		<div id="wallposts">
 			'.$posthtml.'
 			<div class="wall-posts">
-				
+	  
 			</div>
 		</div>';
-  	}
-  	
+	  }
+	  
   	public function isSubmitted($form = false)
   	{
   		if(isset($_POST) && !empty($_POST))

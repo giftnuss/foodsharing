@@ -282,11 +282,6 @@ body
 {
 	display:none;
 }
-div#main
-{
-	min-height: 650px;
-}
-
 div#main, footer .wrapper
 {
     line-height: 1.6em;
@@ -296,8 +291,12 @@ div#main, footer .wrapper
 }
 div#main
 {
+	min-height: 650px;
 	margin-top:45px;
+	padding-bottom:40px;
 }
+
+
 #content-wrapper
 {
 	
@@ -1457,6 +1456,13 @@ ul.linklist li span.d
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+ul.linklist li a i.fa
+{
+	display: inline-block;
+    height: 14px;
+    text-align: left;
+    width: 17px;
+}
 .history li.title
 {
 	font-size:13px;
@@ -1617,7 +1623,7 @@ div.toolmenu
 	visibility:hidden;
 }
 
-div.statdisplay span.item
+div.statdisplay .item
 {
 	display:block;
 	float:left;
@@ -1626,27 +1632,32 @@ div.statdisplay span.item
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
 	border-radius: 8px;
-	background-color: #75B93F;
-	color: #FAFAFC;
+	background-color: #599022;
+	color: #ffffff;
 	text-align: center;
 	width:62px;
 }
-div.statdisplay span.item span
+div.statdisplay .item span
 {
 	color: #FAFAFC;
 }
-div.statdisplay span.item .val
+div.statdisplay .item .val
 {
 	font-size:17px;
 	font-weight: bold;	
 	display:block;
 	margin:14px 0 1px;
 }
-div.statdisplay span.item .name
+div.statdisplay .item .name
 {
 	font-weight: 11px;
 	display:block;
 	margin:0 0 14px 0;
+}
+div.statdisplay a.item:hover
+{
+	text-decoration: none;
+	opacity:0.8;
 }
 span.verified
 {
@@ -2161,7 +2172,7 @@ td.load
 {
 	width:95%;
 }
-.corner-all
+.corner-all, .linklist li a
 {
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;
@@ -2226,6 +2237,13 @@ td.load
 .button.button-big
 {
 	font-size:16px;
+	width:91%;
+	display:block;
+	text-align: center;
+}
+.button.button-med
+{
+	font-size:14px;
 	width:91%;
 	display:block;
 	text-align: center;

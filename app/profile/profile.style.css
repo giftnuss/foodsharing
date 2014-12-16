@@ -1,0 +1,38 @@
+.infos p
+{
+	font-size: 12px;
+    letter-spacing: normal;
+    margin: 0 0 10px;
+}
+.profile.statdisplay {
+	position: relative;
+	top: -50px;
+	float: right;
+	display: block;
+	width: 100%;
+	margin: 0 0 -85px 0;
+}
+.profile.statdisplay .item
+{
+	float:right;
+}
+.profile.statdisplay .item span
+{
+	letter-spacing: normal;
+}
+.stat_bananacount
+{
+	background-image: url("/img/bananan.png");
+    background-position: center 22px;
+    background-repeat: no-repeat;
+}
+.page ul.linklist
+{
+	margin-top:10px;
+	margin-bottom: 0;
+}
+
+div.statdisplay .item
+{
+	border-radius:40px;
+}

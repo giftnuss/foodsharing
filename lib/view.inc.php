@@ -670,7 +670,7 @@ function v_success($msg,$title =false)
 	</div>';
 }
 
-function v_info($msg,$title =false)
+function v_info($msg,$title =false,$icon = '<i class="fa fa-info-circle"></i>')
 {
 	if($title !== false)
 	{
@@ -678,7 +678,7 @@ function v_info($msg,$title =false)
 	}
 	return '
 	<div class="msg-inside info">
-			<i class="fa fa-info-circle"></i> '.$title.$msg.'
+			'.$icon.' '.$title.$msg.'
 	</div>';
 }
 
