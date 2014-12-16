@@ -182,7 +182,7 @@ class ActivityModel extends Model
 							'desc' => trim(tt(strip_tags($r['text']),160)),
 							'time' => $r['update_time'],
 							'icon' => img($r['foodsaver_photo'],50),
-							'time_ts' => $u['update_time_ts']
+							'time_ts' => $r['update_time_ts']
 					);
 				}
 					
