@@ -10,6 +10,34 @@ class ActivityXhr extends Control
 		parent::__construct();
 	}
 	
+	public function loadmore()
+	{
+		$xhr = new Xhr();
+		
+		/*
+		 * get FOrum updates
+		*/
+		
+		$updates = array();
+		if($up = $this->model->loadForumUpdates($_GET['page']))
+		{
+			$updates = $up;
+				
+			if($up = $this->model->loadBetriebUpdates($_GET['page']))
+			{
+				$updates = array_merge($updates,$up);
+			}
+			if($up = $this->model->loadMailboxUpdates($_GET['page']))
+			{
+				$updates = array_merge($updates,$up);
+			}
+		}
+		
+		$xhr->addData('updates', $updates);
+		
+		$xhr->send();
+	}
+	
 	public function load()
 	{
 		/*

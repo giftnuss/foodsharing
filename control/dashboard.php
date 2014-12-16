@@ -328,6 +328,23 @@ else if(S::may('fs'))
 		addContent(u_updates($updates));
 	}
 	*/
+	addStyle('
+		#activity ul.linklist li span.time{margin-left:58px;}
+			
+		#activity ul.linklist li a span.long{display:none;}
+		#activity ul.linklist li a:hover span.long{
+			display:block;
+			white-space: normal;
+		}
+		#activity ul.linklist li a span.short{
+			display:block;
+			overflow: hidden;
+		    text-overflow: ellipsis;
+		    white-space: nowrap;
+		}
+		#activity ul.linklist li a:hover span.short{display:none;}
+	');
+	
 	addScript('/js/activity.js');
 	addJs('activity.init();');
 	addContent(v_field('<div id="activity"><div class="loader" style="padding:40px;background-image:url(/img/469.gif);background-repeat:no-repeat;background-position:center;"></div></div>','Updates Übersicht'));

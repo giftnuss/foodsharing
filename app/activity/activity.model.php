@@ -1,8 +1,9 @@
 <?php
 class ActivityModel extends Model
 {
+	private $items_per_page = 10;
 	
-	public function loadMailboxUpdates()
+	public function loadMailboxUpdates($page = 0)
 	{
 		$model = loadModel('mailbox');
 		
@@ -36,7 +37,7 @@ class ActivityModel extends Model
 					
 				ORDER BY m.id DESC
 		
-				LIMIT 0, 10
+				LIMIT '.((int)$page*$this->items_per_page).', '.$this->items_per_page.'
 			'))
 			{
 				$out = array();
@@ -44,10 +45,10 @@ class ActivityModel extends Model
 				{
 					$out[] = array(
 							'attr' => array(
-									'href' => '#'
+									'href' => '/?page=mailbox&show=' . $u['id']
 							),
 							'title' => $u['mb_name'].'@ Neue E-Mail '.$u['subject'],
-							'desc' => trim(tt(strip_tags($u['body']),160)),
+							'desc' => $this->textPrepare($u['body']),
 							'time' => $u['time'],
 							'icon' => '/img/mailbox-50x50.png',
 							'time_ts' => $u['time_ts']
@@ -62,7 +63,14 @@ class ActivityModel extends Model
 		return false;
 	}
 	
-	public function loadForumUpdates()
+	private function textPrepare($txt)
+	{
+		$txt = trim($txt);
+		
+		return '<span class="short">' . tt(strip_tags($txt)) . '</span><span class="long">' . strip_tags($txt,'<br>') . '</span>';
+	}
+	
+	public function loadForumUpdates($page = 0)
 	{
 		$tmp = $this->getBezirkIds();
 		$bids = array();
@@ -108,7 +116,7 @@ class ActivityModel extends Model
 		
 			ORDER BY t.last_post_id DESC
 		
-			LIMIT 0, 10
+			LIMIT '.((int)$page*$this->items_per_page).', '.$this->items_per_page.'
 		
 		'))
 		{
@@ -134,8 +142,8 @@ class ActivityModel extends Model
 							'attr' => array(
 								'href' => $url
 							),
-							'title' => 'Antwort auf '.$u['name'].' im Forum '.$u['bezirk_name'] . ' von ' . $u['foodsaver_name'],
-							'desc' => trim(tt(strip_tags($u['post_body']),160)),
+							'title' => $u['bezirk_name'] . ': '.$u['foodsaver_name'] . ' hat etwas zu '.$u['name'] . ' geschrieben',
+							'desc' => $this->textPrepare($u['post_body']),
 							'time' => $u['time'],
 							'icon' => img($u['foodsaver_photo'],50),
 							'time_ts' => $u['update_time_ts']
@@ -150,7 +158,7 @@ class ActivityModel extends Model
 		return false;
 	}
 	
-	public function loadBetriebUpdates()
+	public function loadBetriebUpdates($page = 0)
 	{
 		if($bids = $this->getMyBetriebIds())
 		{
@@ -167,7 +175,7 @@ class ActivityModel extends Model
 			AND 	n.last = 1
 			
 			ORDER BY n.id DESC
-			LIMIT 0 , 10
+			LIMIT '.((int)$page*$this->items_per_page).', '.$this->items_per_page.'
 			
 		'))
 			{
@@ -179,7 +187,7 @@ class ActivityModel extends Model
 									'href' => '/?page=fsbetrieb&id=' . $r['betrieb_id']
 							),
 							'title' => $r['foodsaver_name'].' hat auf die Pinnwand von '.$r['betrieb_name'] . ' geschrieben',
-							'desc' => trim(tt(strip_tags($r['text']),160)),
+							'desc' => $this->textPrepare($r['text']),
 							'time' => $r['update_time'],
 							'icon' => img($r['foodsaver_photo'],50),
 							'time_ts' => $r['update_time_ts']

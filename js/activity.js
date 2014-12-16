@@ -5,9 +5,15 @@ var activity = {
 		 */
 		$container: null,
 		$loader:null,
+		$page:null,
+		
+		isLoading:null,
+		page:null,
 		
 		init: function()
 		{
+			this.isLoading = false;
+			this.page = 0;
 			$('#activity').append('<ul class="linklist"></ul>');
 			this.$container = $('#activity > ul.linklist');
 			this.$loader = $('#activity > .loader');
@@ -24,6 +30,33 @@ var activity = {
 						}
 					}
 					activity.sortUpdates();
+				}
+			});
+			
+			$(window).scroll(function () {
+				if(!activity.isLoading)
+				{
+					if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
+					      activity.isLoading = true;
+					      activity.page++;
+					      ajax.req('activity','loadmore',{
+					    	  data:{
+					    		  page:activity.page
+					    	  },
+					    	  success: function(ret)
+					    	  {
+					    		  if(ret.updates != undefined && ret.updates.length > 0)
+									{
+										for(var i = 0;i<ret.updates.length;i++)
+										{
+											activity.append(ret.updates[i]);
+										}
+									}
+									activity.sortUpdates();
+					    		  activity.isLoading = false;
+					    	  }
+					      });
+					   }
 				}
 			});
 		},
