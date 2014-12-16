@@ -650,7 +650,7 @@ GROUP BY foodsaver_id'));
 	
 	public function getBezirkByParent($parent_id)
 	{
-		$sql = 'AND 		`type` != 7';
+		$sql = 'AND 		`type` != 7 AND id != 0';
 		if(isOrgaTeam())
 		{
 			$sql = '';
