@@ -344,7 +344,7 @@ else if(S::may('fs'))
 		}
 		#activity ul.linklist li a:hover span.short{display:none;}
 	');
-	
+	addScript('/js/jquery.tinysort.min.js');
 	addScript('/js/activity.js');
 	addJs('activity.init();');
 	addContent(v_field('<div id="activity"><div class="loader" style="padding:40px;background-image:url(/img/469.gif);background-repeat:no-repeat;background-position:center;"></div></div>','Updates Übersicht'));
