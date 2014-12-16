@@ -342,7 +342,7 @@ class BasketView extends View
 				$reqtext =sv('req_count',array('count'=> $b['req_count']));
 			}
 			
-			$out .= '<li class="basket-'.(int)$b['id'].'"><a href="/essenskoerbe/'.(int)$b['id'].'"><span class="button close" onclick="ajreq(\'removeBasket\',{app:\'basket\',id:'.(int)$b['id'].'});return false;"><i class="fa fa-close"></i></span><span class="pics"><img width="50" src="'.$img.'" alt="avatar" /></span><span class="names">'.tt($b['description'],150).'</span><span class="msg">'.$reqtext.'</span><span class="time">'.niceDate($b['time_ts']).'</span><span class="clear"></span></a></li>';
+			$out .= '<li class="basket-'.(int)$b['id'].'"><a href="/essenskoerbe/'.(int)$b['id'].'"><span class="button close" onclick="ajreq(\'removeBasket\',{app:\'basket\',id:'.(int)$b['id'].'});return false;"><i class="fa fa-close"></i></span><span class="pics"><img width="50" src="/'.$img.'" alt="avatar" /></span><span class="names">'.tt($b['description'],150).'</span><span class="msg">'.$reqtext.'</span><span class="time">'.niceDate($b['time_ts']).'</span><span class="clear"></span></a></li>';
 		}
 		
 		return $out;
