@@ -16,6 +16,7 @@ class ActivityModel extends Model
 			
 			if($updates = $this->q('
 				SELECT
+					m.id,
 					m.sender,
 					m.subject,
 					m.body,
@@ -41,14 +42,15 @@ class ActivityModel extends Model
 				$out = array();
 				foreach ($updates as $u)
 				{
-					$out[$u['time']] = array(
+					$out[] = array(
 							'attr' => array(
 									'href' => '#'
 							),
 							'title' => $u['mb_name'].'@ Neue E-Mail '.$u['subject'],
 							'desc' => trim(tt(strip_tags($u['body']),160)),
 							'time' => $u['time'],
-							'icon' => '/img/mailbox-50x50.png'
+							'icon' => '/img/mailbox-50x50.png',
+							'time_ts' => $u['time_ts']
 					);
 				}
 				
@@ -128,14 +130,15 @@ class ActivityModel extends Model
 				
 				if($check)
 				{
-					$out[$u['time']] = array(
+					$out[] = array(
 							'attr' => array(
 								'href' => $url
 							),
 							'title' => 'Antwort auf '.$u['name'].' im Forum '.$u['bezirk_name'] . ' von ' . $u['foodsaver_name'],
 							'desc' => trim(tt(strip_tags($u['post_body']),160)),
 							'time' => $u['time'],
-							'icon' => img($u['foodsaver_photo'],50)
+							'icon' => img($u['foodsaver_photo'],50),
+							'time_ts' => $u['update_time_ts']
 					);
 				}
 				
@@ -171,14 +174,15 @@ class ActivityModel extends Model
 				$out = array();
 				foreach ($ret as $r)
 				{
-					$out[$r['update_time']] = array(
+					$out[] = array(
 							'attr' => array(
 									'href' => '/?page=fsbetrieb&id=' . $r['betrieb_id']
 							),
 							'title' => $r['foodsaver_name'].' hat auf die Pinnwand von '.$r['betrieb_name'] . ' geschrieben',
 							'desc' => trim(tt(strip_tags($r['text']),160)),
 							'time' => $r['update_time'],
-							'icon' => img($r['foodsaver_photo'],50)
+							'icon' => img($r['foodsaver_photo'],50),
+							'time_ts' => $u['update_time_ts']
 					);
 				}
 					

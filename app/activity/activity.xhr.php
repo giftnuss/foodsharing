@@ -32,15 +32,7 @@ class ActivityXhr extends Control
 			}
 		}
 		
-		ksort($updates);
-		
-		$out = array();
-		foreach ($updates as $u)
-		{
-			$out[] = $u;
-		}
-		
-		$xhr->addData('updates', $out);
+		$xhr->addData('updates', $updates);
 		
 		$xhr->send();
 	}

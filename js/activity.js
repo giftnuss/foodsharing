@@ -23,6 +23,7 @@ var activity = {
 							activity.append(ret.updates[i]);
 						}
 					}
+					activity.sortUpdates();
 				}
 			});
 		},
@@ -42,7 +43,19 @@ var activity = {
 				click = ' onclick="'+up.attr.onclick+';return false;"';
 			}
 			
-			activity.$container.append('<li><a class="corner-all" href="'+href+'"'+click+'><span class="i"><img src="'+up.icon+'" /></span><span class="n">'+up.title+'</span><span class="t">'+up.desc+'</span><span class="time">'+timeformat.nice(up.time)+'</span><span class="c"></span></a></li>');
+			activity.$container.append('<li id="'+up.time_ts+'"><a class="corner-all" href="'+href+'"'+click+'><span class="i"><img src="'+up.icon+'" /></span><span class="n">'+up.title+'</span><span class="t">'+up.desc+'</span><span class="time">'+timeformat.nice(up.time)+'</span><span class="c"></span></a></li>');
+		},
+		
+		sortUpdates: function()
+		{
+			$("#activity li").sort(function (a, b) {
+			    return parseInt(a.id) > parseInt(b.id);
+			}).each(function(){
+			    var elem = $(this);
+			    
+			    elem.remove();
+			    $(elem).prependTo("#activity ul");
+			});
 		}
 		
 };
