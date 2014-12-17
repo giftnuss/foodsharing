@@ -389,9 +389,9 @@ else if(S::may('fs'))
 	
 		@media (max-width: 400px) 
 		{
-			#activity ul.linklist li span.t span.txt
+			ul.linklist li span.n
 			{
-				margin-top:25px;
+				height:55px;
 			}
 			#activity ul.linklist li span.time
 			{
