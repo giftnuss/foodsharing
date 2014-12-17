@@ -345,8 +345,8 @@ else if(S::may('fs'))
 		#activity ul.linklist li a:hover span.short{display:none;}
 		#activity ul.linklist li span.t {
 		    overflow: hidden;
-		    text-overflow: ellipsis;
-		    white-space: nowrap;
+		    text-overflow: unset;
+    		white-space: inherit;
 			padding-left:10px;
 			border-left:2px solid #4A3520;
 			max-height:60px;
@@ -378,6 +378,8 @@ else if(S::may('fs'))
 				font-weight:normal;
 				font-size:13px;	
 				margin-bottom:10px;
+				text-overflow: unset;
+    			white-space: inherit;
 			}
 			#activity ul.linklist li a:hover span.n
 			{
