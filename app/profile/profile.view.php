@@ -204,7 +204,7 @@ class ProfileView extends View
 			});');
 			$bananacount = '
 				<a href="#bananas" onclick="return false;" class="item stat_bananacount">
-					<span class="val">1</span>
+					<span class="val">'.(int)$this->foodsaver['stat_bananacount'].'</span>
 					<span class="name">&nbsp;</span>
 				</a>
 				';
