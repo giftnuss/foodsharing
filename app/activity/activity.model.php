@@ -134,7 +134,7 @@ class ActivityModel extends Model
 					}
 				}
 
-				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub='.$sub.'&tid=' . (int)$u['id'] . '&pid='.(int)$u['last_post_id'].'#'.(int)$u['last_post_id'];
+				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub='.$sub.'&tid=' . (int)$u['id'] . '&pid='.(int)$u['last_post_id'].'#tpost-'.(int)$u['last_post_id'];
 				
 				if($check)
 				{
