@@ -91,9 +91,7 @@ class ActivityModel extends Model
 		else 
 		{
 			return '<span class="txt">'.$txt.'</span>';
-		}
-		
-		//return '<span class="short">' . tt(strip_tags($txt)) . '</span><span class="long">' .  . '</span>';
+		}		
 	}
 	
 	public function loadForumUpdates($page = 0)

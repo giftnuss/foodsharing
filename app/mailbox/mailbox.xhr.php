@@ -198,11 +198,18 @@ class MailboxXhr extends Control
 				{
 					$subject = 'Re: '.trim(str_replace(array('Re:','RE:', 're:','aw:','Aw:','AW:'),'',$message['subject']));
 					
-					$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von ".niceDate($message['time_ts'])." ---------\n\n>\t".str_replace($message['body'],"\n","\n>\t");
+					$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von ".niceDate($message['time_ts'])." ---------\n\n>\t".str_replace("\n","\n>\t",$message['body']);
 					
 					$mail = new SocketMail();
 					$mail->setFrom($message['mailbox'].'@'.DEFAULT_HOST,S::user('name'));
-					$mail->addRecipient($sender['mailbox'].'@'.$sender['host'], $sender['personal']);
+					if($sender['personal'])
+					{
+						$mail->addRecipient($sender['mailbox'].'@'.$sender['host'], $sender['personal']);
+					}
+					else
+					{
+						$mail->addRecipient($sender['mailbox'].'@'.$sender['host']);	
+					}
 					$mail->setSubject($subject);
 					$mail->setHtmlBody(nl2br($body));	
 					$mail->setBody($body);
