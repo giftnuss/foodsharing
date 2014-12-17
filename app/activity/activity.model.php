@@ -64,7 +64,7 @@ class ActivityModel extends Model
 									'href' => '/?page=mailbox&show=' . $u['id']
 							),
 							'title' => $from . ' <i class="fa fa-angle-right"></i> <a href="/?page=mailbox&show=' . $u['id'].'">'.ttt($u['subject'],30).'</a><small>'.ttt($u['mb_name'].'@'.DEFAULT_HOST,19).'</small>',
-							'desc' => $this->textPrepare($u['body']),
+							'desc' => $this->textPrepare(nl2br($u['body'])),
 							'time' => $u['time'],
 							'icon' => '/img/mailbox-50x50.png',
 							'time_ts' => $u['time_ts'],
