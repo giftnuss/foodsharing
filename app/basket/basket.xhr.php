@@ -392,6 +392,13 @@ class BasketXhr extends Control
 	
 	public function sendreqmessage()
 	{
+		if(!S::may())
+		{
+			return array(
+					'status' => 1,
+					'script' => 'pulseError("Du bist nicht eingeloggt, vielleicht ist Deine Session abgelaufen, bitte logge Dich ein und sende Deine Anfrage erneut ab.");'
+			);
+		}
 		if($fs_id = $this->model->getVal('foodsaver_id', 'basket', $_GET['id']))
 		{
 			$msg = strip_tags($_GET['msg']);
