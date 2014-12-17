@@ -29,16 +29,15 @@ class BasketXhr extends Control
 			'basketchoords' => true,
 			'closebaskets'=> true
 		);
-		
+
 		if(!S::may() && !isset($allowed[$_GET['m']]))
 		{
-			return array(
+			echo json_encode(array(
 				'status' => 1,
 				'script' => 'pulseError("Du bist nicht eingeloggt, vielleicht ist Deine Session abgelaufen, bitte logge Dich ein und sende Deine Anfrage erneut ab.");'
-			);
-			
+			));
+			exit();
 		}
-		
 	}
 	
 	public function basketchoords()
