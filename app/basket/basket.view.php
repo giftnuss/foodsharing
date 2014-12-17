@@ -141,7 +141,7 @@ class BasketView extends View
 		foreach ($requests as $r)
 		{
 			$out .= '
-			<li><a onclick="profile('.(int)$r['fs_id'].');return false;" href="#"><span class="pics"><img width="50" alt="avatar" src="'.img($r['fs_photo']).'"></span><span class="names">'.$r['fs_name'].'</span><span class="msg"></span><span class="time">'.niceDate($r['time_ts']).'</span><span class="clear"></span></a></li>';
+			<li><a onclick="chat('.(int)$r['fs_id'].');return false;" href="#"><span class="pics"><img width="50" alt="avatar" src="'.img($r['fs_photo']).'"></span><span class="names">'.$r['fs_name'].'</span><span class="msg"></span><span class="time">'.niceDate($r['time_ts']).'</span><span class="clear"></span></a></li>';
 		}
 		
 		$out.= '
