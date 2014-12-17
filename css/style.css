@@ -1456,7 +1456,7 @@ ul.linklist li span.d
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-ul.linklist li a i.fa
+ul.linklist li > a i.fa
 {
 	display: inline-block;
     height: 14px;
@@ -1497,7 +1497,7 @@ ul.linklist li span.t
 ul.linklist li span.time
 {
 	font-size:10px;
-	opacity:0.5;
+	opacity:0.8;
 	margin-top: 3px;
 }
 ul.linklist li span.i img
@@ -1507,7 +1507,7 @@ ul.linklist li span.i img
 	-webkit-border-radius: 6px 6px 6px 6px;
 	border: 0px solid #000000;
 }
-ul.linklist li a.more
+ul.linklist li > a.more
 {
     background-color: #599022;
     border-bottom-left-radius: 6px;
@@ -1521,14 +1521,14 @@ ul.linklist li a.more
     margin-top:15px;
 
 }
-ul.linklist li, ul.linklist li a, ul.linklist li a span
+ul.linklist li, ul.linklist li > a, ul.linklist li > a span
 {
 	display:block;
 	margin:0;
 	padding:0;
 	
 }
-ul.linklist li a
+ul.linklist li > a
 {
 	padding:6px;
 	text-decoration:none !important;
@@ -1539,18 +1539,18 @@ ul.linklist li
 {
 	
 }
-ul.linklist li a span.title
+ul.linklist li > a span.title
 {
 	text-decoration:none !important;
 	color:#4A3522;
 	font-weight:bold;
 }
-ul.linklist li a.active
+ul.linklist li > a.active
 {
 	color:#4A3522;
 	font-weight:bold;
 }
-ul.linklist li a:hover, ul.linklist li a:hover span
+ul.linklist li > a:hover, ul.linklist li > a:hover span
 {
 	background-color:#599022;
 	color:#FFFFFF !important;
@@ -2060,7 +2060,7 @@ a.light
     text-align: center;
     text-decoration: none;
 }
-ul.linklist li a:hover span.day
+ul.linklist li > a:hover span.day
 {
     color: #2F291E !important;
 }
@@ -2172,7 +2172,7 @@ td.load
 {
 	width:95%;
 }
-.corner-all, .linklist li a
+.corner-all, .linklist li > a
 {
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;
@@ -2390,7 +2390,7 @@ ul.bread li a:hover
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 }
-ul.linklist li a .avatar span.bubble, ul.linklist li a:hover .avatar span.bubble
+ul.linklist li > a .avatar span.bubble, ul.linklist li > a:hover .avatar span.bubble
 {
  	margin-left: 37px !important;
     margin-top: -40px !important;

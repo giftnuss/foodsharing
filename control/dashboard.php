@@ -329,62 +329,63 @@ else if(S::may('fs'))
 	}
 	*/
 	addStyle('
-		#activity ul.linklist li span.time{margin-left:58px;}
-			
-		#activity ul.linklist li a span.long{display:none;}
-		#activity ul.linklist li a:hover span.long{
-			display:block;
-			white-space: normal;
-		}
-		#activity ul.linklist li a span.short{
-			display:block;
-			overflow: hidden;
-		    text-overflow: ellipsis;
-		    white-space: nowrap;
-		}
-		#activity ul.linklist li a:hover span.short{display:none;}
-		#activity ul.linklist li span.t {
+		#activity ul.linklist li span.time{margin-left:58px;display:block;margin-top:10px;}
+
+		
+
+		#activity ul.linklist li span.t span.txt {
 		    overflow: hidden;
 		    text-overflow: unset;
-    		white-space: inherit;
+    		white-space: normal;
 			padding-left:10px;
 			border-left:2px solid #4A3520;
-			max-height:60px;
 			margin-bottom:10px;
+			display:block;
 		}
-			#activity ul.linklist li
+			#activity ul.linklist li span
 			{
-				border-bottom: 1px solid #F1E7C9;
-				
+				color:#4A3520;
 			}
-			#activity ul.linklist li a
+			#activity ul.linklist li span a
 			{
-				padding-top:10px;
-				padding-bottom:10px;
+				color:#46891b !important;
+			}
+			#activity span.n i.fa	
+			{
+				display:inline-block;
+				width:11px;
+				text-align:center;
+			}
+			#activity span.n small
+			{
+				float:right;
 				opacity:0.8;
+				font-size:12px;
 			}
-			#activity ul.linklist li a:hover
+			#activity ul.linklist li span a:hover
 			{
-				background-color:#ffffff;
-				opacity:1;
+				text-decoration:underline !important;
+				color:#46891b !important;
 			}
-			#activity ul.linklist li a:hover span
-			{
-				background-color:#ffffff;
-				color:#4A3520 !important;
-			}
-			ul.linklist li span.n
-			{
-				font-weight:normal;
-				font-size:13px;	
-				margin-bottom:10px;
-				text-overflow: unset;
-    			white-space: inherit;
-			}
-			#activity ul.linklist li a:hover span.n
-			{
-				font-weight:bold;
-			}
+		
+		#activity ul.linklist li
+		{
+			border-bottom: 1px solid #F1E7C9;
+			
+		}
+		#activity ul.linklist li
+		{
+			padding:10px;
+		}
+
+		ul.linklist li span.n
+		{
+			font-weight:normal;
+			font-size:13px;	
+			margin-bottom:10px;
+			text-overflow: unset;
+    		white-space: inherit;
+		}
 	');
 	addScript('/js/jquery.tinysort.min.js');
 	addScript('/js/activity.js');

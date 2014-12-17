@@ -43,11 +43,27 @@ class ActivityModel extends Model
 				$out = array();
 				foreach ($updates as $u)
 				{
+					$sender = @json_decode($u['sender'],true);
+					
+					$from = 'E-Mail';
+					
+					if($sender != null)
+					{
+						if(isset($sender['from']) && !empty($sender['from']))
+						{
+							$from = '<a title="'.$sender['mailbox'].'@'.$sender['host'].'" href="/?page=mailbox&mailto='.urlencode($sender['mailbox'].'@'.$sender['host']).'">'.$sender['personal'].'</a>';
+						}
+						else if(isset($sender['mailbox']))
+						{
+							$from = '<a title="'.$sender['mailbox'].'@'.$sender['host'].'" href="/?page=mailbox&mailto='.urlencode($sender['mailbox'].'@'.$sender['host']).'">'.$sender['mailbox'].'@'.$sender['host'].'</a>';
+						}
+					}
+					
 					$out[] = array(
 							'attr' => array(
 									'href' => '/?page=mailbox&show=' . $u['id']
 							),
-							'title' => $u['mb_name'].'@ Neue E-Mail '.$u['subject'],
+							'title' => '<small>'.$u['mb_name'].'@'.DEFAULT_HOST.'</small>'.$from . ' <i class="fa fa-angle-right"></i> '.$u['subject'],
 							'desc' => $this->textPrepare($u['body']),
 							'time' => $u['time'],
 							'icon' => '/img/mailbox-50x50.png',
@@ -67,7 +83,17 @@ class ActivityModel extends Model
 	{
 		$txt = trim($txt);
 		
-		return strip_tags($txt,'<br>');
+		$txt = strip_tags($txt,'<br>');
+		
+		if(strlen($txt) > 100)
+		{
+			return '<span class="txt">'.substr($txt,0,80) . '... <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fa fa-angle-down"></i></a></span><span class="txt" style="display:none;">'.$txt.'</span>';
+		}
+		else 
+		{
+			return '<span class="txt">'.$txt.'</span>';
+		}
+		
 		//return '<span class="short">' . tt(strip_tags($txt)) . '</span><span class="long">' .  . '</span>';
 	}
 	
@@ -143,7 +169,7 @@ class ActivityModel extends Model
 							'attr' => array(
 								'href' => $url
 							),
-							'title' => $u['bezirk_name'] . ': '.$u['foodsaver_name'] . ' hat etwas zu '.$u['name'] . ' geschrieben',
+							'title' => '<a href="/profile/'.(int)$u['foodsaver_id'].'">'.$u['foodsaver_name'].'</a> <i class="fa fa-angle-right"></i> <a href="'.$url.'">'.$u['name'] . '</a> <small>'.$u['bezirk_name'] . '</small>',
 							'desc' => $this->textPrepare($u['post_body']),
 							'time' => $u['time'],
 							'icon' => img($u['foodsaver_photo'],50),
@@ -187,7 +213,7 @@ class ActivityModel extends Model
 							'attr' => array(
 									'href' => '/?page=fsbetrieb&id=' . $r['betrieb_id']
 							),
-							'title' => $r['foodsaver_name'].' hat auf die Pinnwand von '.$r['betrieb_name'] . ' geschrieben',
+							'title' => '<a href="/profile/'.$r['foodsaver_id'].'">'.$r['foodsaver_name'].'</a> <i class="fa fa-angle-right"></i> <a href="/?page=fsbetrieb&id=' . $r['betrieb_id'].'">'.$r['betrieb_name'].'</a>',
 							'desc' => $this->textPrepare($r['text']),
 							'time' => $r['update_time'],
 							'icon' => img($r['foodsaver_photo'],50),
