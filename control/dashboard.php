@@ -343,6 +343,46 @@ else if(S::may('fs'))
 		    white-space: nowrap;
 		}
 		#activity ul.linklist li a:hover span.short{display:none;}
+		#activity ul.linklist li span.t {
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		    white-space: nowrap;
+			padding-left:10px;
+			border-left:2px solid #4A3520;
+			max-height:60px;
+			margin-bottom:10px;
+		}
+			#activity ul.linklist li
+			{
+				border-bottom: 1px solid #F1E7C9;
+				
+			}
+			#activity ul.linklist li a
+			{
+				padding-top:10px;
+				padding-bottom:10px;
+				opacity:0.8;
+			}
+			#activity ul.linklist li a:hover
+			{
+				background-color:#ffffff;
+				opacity:1;
+			}
+			#activity ul.linklist li a:hover span
+			{
+				background-color:#ffffff;
+				color:#4A3520 !important;
+			}
+			ul.linklist li span.n
+			{
+				font-weight:normal;
+				font-size:13px;	
+				margin-bottom:10px;
+			}
+			#activity ul.linklist li a:hover span.n
+			{
+				font-weight:bold;
+			}
 	');
 	addScript('/js/jquery.tinysort.min.js');
 	addScript('/js/activity.js');

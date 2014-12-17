@@ -67,7 +67,8 @@ class ActivityModel extends Model
 	{
 		$txt = trim($txt);
 		
-		return '<span class="short">' . tt(strip_tags($txt)) . '</span><span class="long">' . strip_tags($txt,'<br>') . '</span>';
+		return strip_tags($txt,'<br>');
+		//return '<span class="short">' . tt(strip_tags($txt)) . '</span><span class="long">' .  . '</span>';
 	}
 	
 	public function loadForumUpdates($page = 0)
