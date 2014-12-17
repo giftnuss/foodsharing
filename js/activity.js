@@ -93,7 +93,7 @@ var activity = {
 		<a class="corner-all" href="'+href+'"'+click+'>
 		*/
 			
-			activity.$container.append('<li data-ts="'+up.time_ts+'"><span class="i"><img src="'+up.icon+'" /></span><span class="n">'+up.title+'</span><span class="t">'+up.desc+'</span><span class="time"><i class="fa fa-clock-o"></i> '+$.timeago(up.time)+' <i class="fa fa-angle-right"></i> '+timeformat.nice(up.time)+'</span><span class="c"></span></li>');
+			activity.$container.append('<li data-ts="'+up.time+'"><span class="i"><img src="'+up.icon+'" /></span><span class="n">'+up.title+'</span><span class="t">'+up.desc+'</span><span class="time"><i class="fa fa-clock-o"></i> '+$.timeago(up.time)+' <i class="fa fa-angle-right"></i> '+timeformat.nice(up.time)+'</span><span class="c"></span></li>');
 		},
 		
 		sortUpdates: function()
