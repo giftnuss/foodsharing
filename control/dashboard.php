@@ -386,6 +386,23 @@ else if(S::may('fs'))
 			text-overflow: unset;
     		white-space: inherit;
 		}
+	
+		@media (max-width: 400px) 
+		{
+			#activity ul.linklist li span.t span.txt
+			{
+				margin-top:25px;
+			}
+			#activity ul.linklist li span.time
+			{
+				margin-left:0px;
+			}
+			#activity span.n small
+			{
+				float:none;
+				display:block;
+			}
+		}
 	');
 	addScript('/js/jquery.tinysort.min.js');
 	addScript('/js/activity.js');
