@@ -67,7 +67,8 @@ class ActivityModel extends Model
 							'desc' => $this->textPrepare($u['body']),
 							'time' => $u['time'],
 							'icon' => '/img/mailbox-50x50.png',
-							'time_ts' => $u['time_ts']
+							'time_ts' => $u['time_ts'],
+							'quickreply' => '/xhrapp.php?app=mailbox&m=quickreply&mid=' . (int)$u['id']
 					);
 				}
 				
@@ -169,9 +170,10 @@ class ActivityModel extends Model
 							),
 							'title' => '<a href="/profile/'.(int)$u['foodsaver_id'].'">'.$u['foodsaver_name'].'</a> <i class="fa fa-angle-right"></i> <a href="'.$url.'">'.$u['name'] . '</a> <small>'.$u['bezirk_name'] . '</small>',
 							'desc' => $this->textPrepare($u['post_body']),
-							'time' => $u['time'],
+							'time' => $u['update_time'],
 							'icon' => img($u['foodsaver_photo'],50),
-							'time_ts' => $u['update_time_ts']
+							'time_ts' => $u['update_time_ts'],
+							'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $sub
 					);
 				}
 				

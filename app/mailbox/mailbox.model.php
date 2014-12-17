@@ -287,20 +287,27 @@ class MailboxModel extends Model
 	public function getMessage($message_id)
 	{
 		$mail = $this->qRow('
-			SELECT 	`id`,
-					`folder`,
-					`sender`,
-					`to`,
-					`subject`,
-					`time`,
-					UNIX_TIMESTAMP(`time`) AS time_ts,
-					`attach`,
-					`read`,
-					`answer`,
-					`body`,
-					`mailbox_id`
-			FROM 	'.PREFIX.'mailbox_message
-			WHERE	id = '.(int)$message_id.'
+			SELECT 	m.`id`,
+					m.`folder`,
+					m.`sender`,
+					m.`to`,
+					m.`subject`,
+					m.`time`,
+					UNIX_TIMESTAMP(m.`time`) AS time_ts,
+					m.`attach`,
+					m.`read`,
+					m.`answer`,
+					m.`body`,
+					m.`mailbox_id`,
+					b.name AS mailbox
+				
+			FROM 	'.PREFIX.'mailbox_message m
+				
+			LEFT JOIN '.PREFIX.'mailbox b
+				
+			ON m.mailbox_id = b.id
+				
+			WHERE	m.id = '.(int)$message_id.'
 
 		');
 

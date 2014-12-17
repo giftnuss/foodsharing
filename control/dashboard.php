@@ -331,7 +331,43 @@ else if(S::may('fs'))
 	addStyle('
 		#activity ul.linklist li span.time{margin-left:58px;display:block;margin-top:10px;}
 
+		#activity ul.linklist li span.qr
+		{
+			margin-left:58px;
+			-webkit-border-radius: 3px;
+			-moz-border-radius: 3px;
+			border-radius: 3px;
+		}
 		
+		#activity ul.linklist li span.qr img
+		{
+			height:32px;
+			width:32px;
+			margin-right:-35px;
+			border-right:1px solid #ffffff;
+			-webkit-border-top-left-radius: 3px;
+			-webkit-border-bottom-left-radius: 3px;
+			-moz-border-radius-topleft: 3px;
+			-moz-border-radius-bottomleft: 3px;
+			border-top-left-radius: 3px;
+			border-bottom-left-radius: 3px;
+		}
+		#activity ul.linklist li span.qr textarea
+		{
+			border: 0 none;
+		    height: 16px;
+		    margin-left: 36px;
+		    padding: 8px;
+		    width: 78.6%;
+			-webkit-border-top-right-radius: 3px;
+			-webkit-border-bottom-right-radius: 3px;
+			-moz-border-radius-topright: 3px;
+			-moz-border-radius-bottomright: 3px;
+			border-top-right-radius: 3px;
+			border-bottom-right-radius: 3px;
+			margin-right:-30px;
+			background-color:#F9F9F9;
+		}
 
 		#activity ul.linklist li span.t span.txt {
 		    overflow: hidden;
@@ -387,13 +423,24 @@ else if(S::may('fs'))
     		white-space: inherit;
 		}
 	
+		@media (max-width: 900px) 
+		{
+			#activity ul.linklist li span.qr textarea
+			{
+				width:74.6%;
+			}
+		}
 		@media (max-width: 400px) 
 		{
 			ul.linklist li span.n
 			{
 				height:55px;
 			}
-			#activity ul.linklist li span.time
+			#activity ul.linklist li span.qr textarea
+			{
+				width:82%;
+			}
+			#activity ul.linklist li span.time, #activity ul.linklist li span.qr
 			{
 				margin-left:0px;
 			}

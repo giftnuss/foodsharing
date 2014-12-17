@@ -9,6 +9,7 @@ var activity = {
 		
 		isLoading:null,
 		page:null,
+		user:null,
 		
 		init: function()
 		{
@@ -22,8 +23,11 @@ var activity = {
 				loader:false,
 				success: function(ret){
 					activity.$loader.hide();
+					
 					if(ret.updates != undefined && ret.updates.length > 0)
 					{
+						activity.user = ret.user;
+						
 						for(var i = 0;i<ret.updates.length;i++)
 						{
 							activity.append(ret.updates[i]);
@@ -93,12 +97,74 @@ var activity = {
 		<a class="corner-all" href="'+href+'"'+click+'>
 		*/
 			
-			activity.$container.append('<li data-ts="'+up.time+'"><span class="i"><img src="'+up.icon+'" /></span><span class="n">'+up.title+'</span><span class="t">'+up.desc+'</span><span class="time"><i class="fa fa-clock-o"></i> '+$.timeago(up.time)+' <i class="fa fa-angle-right"></i> '+timeformat.nice(up.time)+'</span><span class="c"></span></li>');
+			var quickreply = '';
+			
+			if(up.quickreply != undefined)
+			{
+				quickreply = '<span class="qr"><img src="'+activity.user.avatar+'" /><textarea data-url="'+up.quickreply+'" name="quickreply" class="quickreply noninit" placeholder="Schreibe eine Antwort..."></textarea></span>';
+			}
+			
+			activity.$container.append('<li data-ts="'+up.time+'"><span class="i"><img src="'+up.icon+'" /></span><span class="n">'+up.title+'</span><span class="t">'+up.desc+'</span>'+quickreply+'<span class="time"><i class="fa fa-clock-o"></i> '+$.timeago(up.time)+' <i class="fa fa-angle-right"></i> '+timeformat.nice(up.time)+'</span><span class="c"></span></li>');
+		},
+		
+		initQuickreply: function()
+		{
+			var $act = $('#activity');
+			
+			
+			// noninit
+			$('.quickreply.noninit').each(function(){
+				var $el = $(this);
+				
+				
+				
+				$el.autosize();
+				
+				$el.keydown(function(event){
+					if(event.which == 13 && !event.shiftKey && $el.val() != '')  
+					{
+						event.preventDefault();
+						showLoader();
+						$.ajax({
+							url: $el.data('url'),
+							data:{msg:$el.val()},
+							dataType:'json',
+							type:'post',
+							complete: function(){
+								hideLoader();
+							},
+							success: function(ret){
+								
+								if(ret.status != undefined)
+								{
+									if(ret.status == 1)
+									{
+										$el.parent().fadeOut('fast',function(){
+											pulseInfo(ret.message);
+										});
+									}
+									else
+									{
+										pulseError(ret.message);
+									}
+								}
+								else
+								{
+									pulseError('Es ist ein Fehler aufgetreten');
+								}
+							}
+						});
+					}
+				});
+				$el.removeClass('noninit');
+			});
 		},
 		
 		sortUpdates: function()
 		{
 			$('#activity li').tsort('',{order:'desc',attr:'data-ts'});
+			
+			this.initQuickreply();
 			/*
 			$("#activity li").sort(function (a, b) {
 			    return parseInt(a.id) > parseInt(b.id);

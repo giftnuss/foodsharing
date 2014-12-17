@@ -61,6 +61,11 @@ class ActivityXhr extends Control
 		}
 		
 		$xhr->addData('updates', $updates);
+		$xhr->addData('user', array(
+			'id' => fsId(),
+			'name' => S::user('name'),
+			'avatar' => img(S::user('photo'))
+		));
 		
 		$xhr->send();
 	}
