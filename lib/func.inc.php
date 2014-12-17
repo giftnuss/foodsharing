@@ -3129,6 +3129,14 @@ function tt($str,$length = 160)
 	}
 	return $str;
 }
+function ttt($str,$length = 160)
+{
+	if(strlen($str) > $length)
+	{
+		$str = substr($str,0,($length-4)).'...';
+	}
+	return $str;
+}
 
 function avatar($foodsaver,$size = 'mini',$altimg = false)
 {

@@ -51,11 +51,11 @@ class ActivityModel extends Model
 					{
 						if(isset($sender['from']) && !empty($sender['from']))
 						{
-							$from = '<a title="'.$sender['mailbox'].'@'.$sender['host'].'" href="/?page=mailbox&mailto='.urlencode($sender['mailbox'].'@'.$sender['host']).'">'.$sender['personal'].'</a>';
+							$from = '<a title="'.$sender['mailbox'].'@'.$sender['host'].'" href="/?page=mailbox&mailto='.urlencode($sender['mailbox'].'@'.$sender['host']).'">'.ttt($sender['personal'],22).'</a>';
 						}
 						else if(isset($sender['mailbox']))
 						{
-							$from = '<a title="'.$sender['mailbox'].'@'.$sender['host'].'" href="/?page=mailbox&mailto='.urlencode($sender['mailbox'].'@'.$sender['host']).'">'.$sender['mailbox'].'@'.$sender['host'].'</a>';
+							$from = '<a title="'.$sender['mailbox'].'@'.$sender['host'].'" href="/?page=mailbox&mailto='.urlencode($sender['mailbox'].'@'.$sender['host']).'">'.ttt($sender['mailbox'].'@'.$sender['host'],22).'</a>';
 						}
 					}
 					
@@ -63,7 +63,7 @@ class ActivityModel extends Model
 							'attr' => array(
 									'href' => '/?page=mailbox&show=' . $u['id']
 							),
-							'title' => '<small>'.$u['mb_name'].'@'.DEFAULT_HOST.'</small>'.$from . ' <i class="fa fa-angle-right"></i> '.$u['subject'],
+							'title' => $from . ' <i class="fa fa-angle-right"></i> <a href="/?page=mailbox&show=' . $u['id'].'">'.ttt($u['subject'],30).'</a><small>'.ttt($u['mb_name'].'@'.DEFAULT_HOST,19).'</small>',
 							'desc' => $this->textPrepare($u['body']),
 							'time' => $u['time'],
 							'icon' => '/img/mailbox-50x50.png',
