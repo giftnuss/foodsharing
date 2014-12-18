@@ -18,7 +18,7 @@ var activity = {
 			$('#activity').append('<ul class="linklist"></ul>');
 			this.$container = $('#activity > ul.linklist');
 			this.$loader = $('#activity > .loader');
-			
+
 			ajax.req('activity','load',{
 				loader:false,
 				success: function(ret){
@@ -101,7 +101,7 @@ var activity = {
 			
 			if(up.quickreply != undefined)
 			{
-				quickreply = '<span class="qr"><img src="'+activity.user.avatar+'" /><textarea data-url="'+up.quickreply+'" name="quickreply" class="quickreply noninit" placeholder="Schreibe eine Antwort..."></textarea></span>';
+				quickreply = '<span class="qr"><img src="'+activity.user.avatar+'" /><textarea data-load="0" data-url="'+up.quickreply+'" name="quickreply" class="quickreply noninit" placeholder="Schreibe eine Antwort..."></textarea><span class="loader" style="display:none;"><i class="fa fa-spinner fa-spin"></i></span></span>';
 			}
 			
 			activity.$container.append('<li data-ts="'+up.time+'"><span class="i"><img src="'+up.icon+'" /></span><span class="n">'+up.title+'</span><span class="t">'+up.desc+'</span>'+quickreply+'<span class="time"><i class="fa fa-clock-o"></i> '+$.timeago(up.time)+' <i class="fa fa-angle-right"></i> '+timeformat.nice(up.time)+'</span><span class="c"></span></li>');
@@ -115,23 +115,31 @@ var activity = {
 			// noninit
 			$('.quickreply.noninit').each(function(){
 				var $el = $(this);
-				
-				
+				var $loader = $el.next();
 				
 				$el.autosize();
 				
 				$el.keydown(function(event){
-					if(event.which == 13 && !event.shiftKey && $el.val() != '')  
+					if(event.which == 13 && !event.shiftKey && $el.val() != '' && $el.data('load') == '0')  
 					{
 						event.preventDefault();
-						showLoader();
+						
+						$el.attr('data-load','1');
+						$el.hide();
+						$loader.show();
+						
 						$.ajax({
 							url: $el.data('url'),
 							data:{msg:$el.val()},
 							dataType:'json',
 							type:'post',
 							complete: function(){
-								hideLoader();
+								$loader.hide();
+								$el.attr('data-load','0');
+							},
+							error:function()
+							{
+								$el.show();
 							},
 							success: function(ret){
 								
@@ -139,12 +147,14 @@ var activity = {
 								{
 									if(ret.status == 1)
 									{
+										$el.val('');
 										$el.parent().fadeOut('fast',function(){
 											pulseInfo(ret.message);
 										});
 									}
 									else
 									{
+										$el.show();
 										pulseError(ret.message);
 									}
 								}

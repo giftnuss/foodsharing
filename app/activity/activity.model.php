@@ -86,7 +86,7 @@ class ActivityModel extends Model
 		
 		if(strlen($txt) > 100)
 		{
-			return '<span class="txt">'.tt(strip_tags($txt),90) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fa fa-angle-down"></i></a></span><span class="txt" style="display:none;">'.strip_tags($txt,'<br>').'</span>';
+			return '<span class="txt">'.tt(strip_tags($txt),90) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fa fa-angle-down"></i></a></span><span class="txt" style="display:none;">'.strip_tags($txt,'<br>').' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fa fa-angle-up"></i></a></span>';
 		}
 		else 
 		{

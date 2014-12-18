@@ -352,7 +352,7 @@ else if(S::may('fs'))
 			border-top-left-radius: 3px;
 			border-bottom-left-radius: 3px;
 		}
-		#activity ul.linklist li span.qr textarea
+		#activity ul.linklist li span.qr textarea, #activity ul.linklist li span.qr .loader
 		{
 			border: 0 none;
 		    height: 16px;
@@ -368,6 +368,14 @@ else if(S::may('fs'))
 			margin-right:-30px;
 			background-color:#F9F9F9;
 		}
+			
+		#activity ul.linklist li span.qr .loader
+		{
+			background-color: #ffffff;
+		    position: relative;
+		    text-align: left;
+		    top: -10px;
+		}
 
 		#activity ul.linklist li span.t span.txt {
 		    overflow: hidden;
@@ -378,31 +386,31 @@ else if(S::may('fs'))
 			margin-bottom:10px;
 			display:block;
 		}
-			#activity ul.linklist li span
-			{
-				color:#4A3520;
-			}
-			#activity ul.linklist li span a
-			{
-				color:#46891b !important;
-			}
-			#activity span.n i.fa	
-			{
-				display:inline-block;
-				width:11px;
-				text-align:center;
-			}
-			#activity span.n small
-			{
-				float:right;
-				opacity:0.8;
-				font-size:12px;
-			}
-			#activity ul.linklist li span a:hover
-			{
-				text-decoration:underline !important;
-				color:#46891b !important;
-			}
+		#activity ul.linklist li span
+		{
+			color:#4A3520;
+		}
+		#activity ul.linklist li span a
+		{
+			color:#46891b !important;
+		}
+		#activity span.n i.fa	
+		{
+			display:inline-block;
+			width:11px;
+			text-align:center;
+		}
+		#activity span.n small
+		{
+			float:right;
+			opacity:0.8;
+			font-size:12px;
+		}
+		#activity ul.linklist li span a:hover
+		{
+			text-decoration:underline !important;
+			color:#46891b !important;
+		}
 		
 		#activity ul.linklist li
 		{
@@ -425,7 +433,7 @@ else if(S::may('fs'))
 	
 		@media (max-width: 900px) 
 		{
-			#activity ul.linklist li span.qr textarea
+			#activity ul.linklist li span.qr textarea, #activity ul.linklist li span.qr .loader
 			{
 				width:74.6%;
 			}
@@ -436,7 +444,7 @@ else if(S::may('fs'))
 			{
 				height:55px;
 			}
-			#activity ul.linklist li span.qr textarea
+			#activity ul.linklist li span.qr textarea, #activity ul.linklist li span.qr .loader
 			{
 				width:82%;
 			}
