@@ -110,7 +110,7 @@ class BezirkXhr extends Control
 							tplMail(19, $f['email'],array(
 								'anrede' => genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 								'name' => $f['name'],
-								'link' => 'http://www.'.DEFAULT_HOST.'/?page=bezirk&bid='.$this->bezirk_id.'&sub='.$sub.'&tid='.(int)$_POST['thread'].'&pid='.$post_id.'#post'.$post_id,
+								'link' => 'http://www.'.DEFAULT_HOST.'/?page=bezirk&bid='.$bezirk['id'].'&sub='.$sub.'&tid='.(int)$_GET['tid'].'&pid='.$post_id.'#post'.$post_id,
 								'theme' => $theme,
 								'post' => $body,
 								'poster' => S::user('name')
