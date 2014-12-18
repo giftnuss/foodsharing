@@ -241,19 +241,8 @@ var activity = {
 					
 					if(!this.checked)
 					{
-						check = true;
-						for(var i=0;i<activity.listOptions.length;i++)
-						{
-							if(activity.listOptions[i].index == $el.attr('name') && activity.listOptions[i].id == $el.val())
-							{
-								check = false;
-							}
-						}
 						$el = $(this);
-						if(check)
-						{
-							activity.listOptions.push({index:$el.attr('name'),id:$el.val()});
-						}
+						activity.listOptions.push({index:$el.attr('name'),id:$el.val()});
 					}
 				});
 				
