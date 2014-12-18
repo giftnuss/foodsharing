@@ -17,8 +17,8 @@ class ActivityXhr extends Control
 		 */
 		$hidden_ids = array(
 				'bezirk' => array(),
-				'store' => array(),
-				'mailbox' => array()
+				'mailbox' => array(),
+				'buddywall' => array()
 		);
 		
 		if($sesOptions = S::option('activity-listings'))
@@ -47,7 +47,15 @@ class ActivityXhr extends Control
 		{
 			$updates = array_merge($updates,$up);
 		}
-		if($up = $this->model->loadMailboxUpdates($_GET['page']))
+		if($up = $this->model->loadMailboxUpdates($_GET['page'],$hidden_ids['buddywall']))
+		{
+			$updates = array_merge($updates,$up);
+		}
+		if($up = $this->model->loadFriendWallUpdates($page,$hidden_ids['buddywall']))
+		{
+			$updates = array_merge($updates,$up);
+		}
+		if($up = $this->model->loadBasketWallUpdates($page))
 		{
 			$updates = array_merge($updates,$up);
 		}
@@ -90,9 +98,8 @@ class ActivityXhr extends Control
 		$page = 0;
 		$hidden_ids = array(
 			'bezirk' => array(),
-			'store' => array(),
 			'mailbox' => array(),
-			'buddywalls'=> array()
+			'buddywall'=> array()
 		);
 		
 		if($sesOptions = S::option('activity-listings'))
@@ -120,7 +127,11 @@ class ActivityXhr extends Control
 		{
 			$updates = array_merge($updates,$up);
 		}
-		if($up = $this->model->loadFriendWallUpdates($page,$hidden_ids['buddywalls']))
+		if($up = $this->model->loadFriendWallUpdates($page,$hidden_ids['buddywall']))
+		{
+			$updates = array_merge($updates,$up);
+		}
+		if($up = $this->model->loadBasketWallUpdates($page))
 		{
 			$updates = array_merge($updates,$up);
 		}
@@ -139,7 +150,8 @@ class ActivityXhr extends Control
 					'groups' => array(),
 					'regions' => array(),
 					'mailboxes' => array(),
-					'stores' => array()
+					'stores' => array(),
+					'buddywalls' => array()
 			);
 			
 			$option = array();
@@ -178,6 +190,26 @@ class ActivityXhr extends Control
 			}
 			
 			/*
+			 * listings buddywalls
+			 */
+			if($buddys = $this->model->getBuddys())
+			{
+				foreach ($buddys as $b)
+				{
+					$checked = true;
+					if(isset($option['buddywall-' . $b['id']]))
+					{
+						$checked = false;
+					}
+					$listings['buddywalls'][] = array(
+							'id' => $b['id'],
+							'name' => '<img style="border-radius:4px;position:relative;top:5px;" src="'.img($b['photo']) . '" height="24" /> '.$b['name'],
+							'checked' => $checked
+					);
+				}
+			}
+			
+			/*
 			 * listings mailboxes
 			*/
 			if($boxes = $mailbox->getBoxes())
@@ -209,15 +241,15 @@ class ActivityXhr extends Control
 							'items' => $listings['regions']
 					),
 					2 => array(
-							'name' => s('stores'),
-							'index' => 'betrieb',
-							'items' => $listings['stores']
-					),
-					3 => array(
 							'name' => s('mailboxes'),
 							'index' => 'mailbox',
 							'items' => $listings['mailboxes']
-					)
+					),
+					3 => array(
+							'name' => s('buddywalls'),
+							'index' => 'buddywall',
+							'items' => $listings['buddywalls']
+					),
 			));
 		}
 		

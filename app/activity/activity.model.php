@@ -3,6 +3,71 @@ class ActivityModel extends Model
 {
 	private $items_per_page = 10;
 	
+	public function loadBasketWallUpdates($page = 0)
+	{
+		if($updates = $this->q('
+			SELECT
+				w.id,
+				w.body,
+				w.time,
+				UNIX_TIMESTAMP(w.time) AS time_ts,
+				fs.id AS fs_id,
+				fs.name AS fs_name,
+				fs.photo AS fs_photo,
+				b.id AS basket_id
+		
+		
+			FROM
+				'.PREFIX.'basket_has_wallpost hw,
+				'.PREFIX.'foodsaver fs,
+				'.PREFIX.'wallpost w,
+				'.PREFIX.'basket b
+		
+			WHERE
+				w.id = hw.wallpost_id
+		
+			AND
+				w.foodsaver_id = fs.id
+		
+			AND
+				hw.basket_id = b.id
+				
+			AND 
+				b.foodsaver_id = '.(int)fsId().'
+				
+			AND 
+				w.foodsaver_id != '.(int)fsId().'
+		
+			ORDER BY w.id DESC
+		
+			LIMIT '.((int)$page*$this->items_per_page).', '.$this->items_per_page.'
+		
+		'))
+		{
+			$out = array();
+				
+			foreach ($updates as $u)
+			{
+				$smtitle = '';
+				$title = 'Essenskorb #'.$u['basket_id'];
+		
+				$out[] = array(
+						'attr' => array(
+								'href' => '/profile/' . $u['fs_id']
+						),
+						'title' => '<a href="/profile/'.$u['fs_id'].'">'.$u['fs_name'].'</a> <i class="fa fa-angle-right"></i> <a href="/essenskoerbe/'.$u['basket_id'].'">'.$title.'</a><small>'.$smtitle.'</small>',
+						'desc' => $this->textPrepare(nl2br($u['body'])),
+						'time' => $u['time'],
+						'icon' => img($u['fs_photo'],50),
+						'time_ts' => $u['time_ts'],
+						'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=basket&id=' . (int)$u['basket_id']
+				);
+			}
+				
+			return $out;
+		}
+	}
+	
 	public function loadFriendWallUpdates($page = 0,$hidden_ids)
 	{
 		$buddy_ids = array();
@@ -96,6 +161,8 @@ class ActivityModel extends Model
 			
 			return $out;
 		}
+		
+		return false;
 	}
 	
 	public function loadMailboxUpdates($page = 0, $model= false,$hidden_ids = false)
@@ -325,6 +392,15 @@ class ActivityModel extends Model
 			}
 		}
 		
+		return false;
+	}
+	
+	public function getBuddys()
+	{
+		if($bids = S::get('buddy-ids'))
+		{
+			return $this->q('SELECT photo,name,id FROM '.PREFIX.'foodsaver WHERE id IN('.implode(',',$bids).')');
+		}
 		return false;
 	}
 }
