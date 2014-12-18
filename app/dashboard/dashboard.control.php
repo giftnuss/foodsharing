@@ -39,7 +39,7 @@ class DashboardControl extends Control
 	public function dashFs()
 	{
 		
-		//$this->setContentWidth(8, 8);
+		$this->setContentWidth(8, 8);
 		$subtitle = s('no_saved_food');
 		
 		if($this->user['stat_fetchweight'] > 0)
@@ -58,21 +58,25 @@ class DashboardControl extends Control
 		
 		addContent($this->view->foodsharerMenu(),CNT_LEFT);
 		
+		
+		
 		if((int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = '.(int)fsId()) == 0)
 		{
 			$cnt = $this->model->getContent(33);
 			addContent(v_info($cnt['body'],$cnt['title']));	
 		}
 		
+		$this->view->updates();
+		
 		if($this->user['lat'] && ($baskets = $this->model->listCloseBaskets(50)))
 		{
-			addContent($this->view->closeBaskets($baskets));
+			addContent($this->view->closeBaskets($baskets),CNT_LEFT);
 		}
 		else
 		{
 			if($baskets = $this->model->getNewestFoodbaskets())
 			{
-				addContent($this->view->newBaskets($baskets));
+				addContent($this->view->newBaskets($baskets),CNT_LEFT);
 			}
 		}
 	}

@@ -6,6 +6,7 @@ var activity = {
 		$container: null,
 		$loader:null,
 		$page:null,
+		$info:null,
 		
 		isLoading:null,
 		page:null,
@@ -20,6 +21,7 @@ var activity = {
 			$('#activity').append('<ul class="linklist"></ul>');
 			this.$container = $('#activity > ul.linklist');
 			this.$loader = $('#activity > .loader');
+			this.$info = $('#activity-info');
 
 			this.initLoad();
 			
@@ -56,11 +58,12 @@ var activity = {
 			this.page = 0;
 			this.$container.html('');
 			
-			opt = {};
+			opt = {listings:1};
 			if(option != undefined)
 			{
 				opt = option;
 			}
+			
 			activity.$loader.show();
 			ajax.req('activity','load',{
 				loader:false,
@@ -76,14 +79,20 @@ var activity = {
 					
 					if(ret.updates != undefined && ret.updates.length > 0)
 					{
+						activity.$info.hide();
 						activity.user = ret.user;
 						
 						for(var i = 0;i<ret.updates.length;i++)
 						{
 							activity.append(ret.updates[i]);
 						}
+						activity.sortUpdates();
 					}
-					activity.sortUpdates();
+					else 
+					{
+						activity.$info.show();
+					}
+					
 				}
 			});
 		},
@@ -216,7 +225,9 @@ var activity = {
 		initOption: function(listings)
 		{
 			var html = '<form id="activity-option-form" class="pure-form pure-form-stacked"><fieldset><legend>Updates-Anzeige Optionen</legend>'
-				+ '';
+				+ '<div class="msg-inside info">'
+				+ '<i class="fa fa-info-circle"></i> Hier kannst Du einstellen welche Updates auf Deiner Startseite angezeigt werden.'
+				+ '</div>';
 				
 			for(var i=0;i<listings.length;i++)
 			{

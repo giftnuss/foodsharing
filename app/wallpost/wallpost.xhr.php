@@ -73,6 +73,29 @@ class WallpostXhr extends Control
 		}
 	}
 	
+	public function quickreply()
+	{
+		$message = trim(strip_tags($_POST['msg']));
+
+		if(!empty($message))
+		{
+			if($post_id = $this->model->post($message))
+			{
+				echo json_encode(array(
+						'status' => 1,
+						'message' => 'Klasse! Dein Pinnwandeintrag wurde gespeichert.'
+				));
+				exit();
+			}
+		}
+		
+		echo json_encode(array(
+				'status' => 0,
+				'message' => 'Upps! Dein Pinnwandeintrag konnte nicht gespeichert werden.'
+		));
+		exit();
+	}
+	
 	public function post()
 	{
 		$message = strip_tags($_POST['text']);

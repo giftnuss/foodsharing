@@ -19,6 +19,16 @@ class BuddyXhr extends Control
 			$this->model->delBells('buddy-' . fsId() . '-' . (int)$_GET['id']);
 			$this->model->delBells('buddy-' . (int)$_GET['id'] . fsId());
 			
+			$buddy_ids = array();
+			if($b = S::get('buddy-ids'))
+			{
+				$buddy_ids = $b;
+			}
+			
+			$buddy_ids[(int)$_GET['id']] = (int)$_GET['id'];
+			
+			S::set('buddy-ids', $buddy_ids);
+			
 			return array(
 					'status' => 1,
 					'script' => '$(".buddyRequest").remove();pulseInfo("Jetzt kennt ihr euch!");init_infos();'

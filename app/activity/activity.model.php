@@ -3,16 +3,117 @@ class ActivityModel extends Model
 {
 	private $items_per_page = 10;
 	
-	public function loadMailboxUpdates($page = 0)
+	public function loadFriendWallUpdates($page = 0,$hidden_ids)
 	{
-		$model = loadModel('mailbox');
+		$buddy_ids = array();
+		
+		if($b = S::get('buddy-ids'))
+		{
+			$buddy_ids = $b;
+		}
+		
+		$buddy_ids[fsId()] = fsId();
+		
+		$bids = array();
+		foreach ($buddy_ids as $id)
+		{
+			if(!isset($hidden_ids[$id]))
+			{
+				$bids[] = $id;
+			}
+		}
+		
+		if($updates = $this->q('
+			SELECT 
+				w.id,
+				w.body,
+				w.time,
+				UNIX_TIMESTAMP(w.time) AS time_ts,
+				fs.id AS fs_id,
+				fs.name AS fs_name,
+				fs.photo AS fs_photo,
+				
+				poster.id AS poster_id,
+				poster.name AS poster_name
+				
+
+			FROM 
+				'.PREFIX.'foodsaver_has_wallpost hw,
+				'.PREFIX.'foodsaver fs,
+				'.PREFIX.'wallpost w
+				
+			LEFT JOIN
+				'.PREFIX.'foodsaver poster
+				
+			ON w.foodsaver_id = poster.id
+				
+			WHERE 
+				w.id = hw.wallpost_id
+
+			AND 
+				hw.foodsaver_id = fs.id
+
+			AND 
+				hw.foodsaver_id IN('.implode(',',$bids).')
+				
+			
+				
+			ORDER BY w.id DESC
+		
+			LIMIT '.((int)$page*$this->items_per_page).', '.$this->items_per_page.'
+
+		'))
+		{
+			/*
+			 * AND 
+				poster_id != '.(int)fsId().'
+			 */
+			$out = array();
+			
+			foreach ($updates as $u)
+			{
+				$smtitle = $u['fs_name'].'s Pinnwand';
+				$title = $u['fs_name'];
+				
+				if($u['fs_id'] ==fsId())
+				{
+					$smtitle = 'Deine Pinnwand';
+					$title = 'Deine Pinnwand';
+				}
+				
+				$out[] = array(
+						'attr' => array(
+								'href' => '/profile/' . $u['fs_id']
+						),
+						'title' => '<a href="/profile/'.$u['poster_id'].'">'.$u['poster_name'].'</a> <i class="fa fa-angle-right"></i> <a href="/profile/'.$u['fs_id'].'">'.$title.'</a><small>'.$smtitle.'</small>',
+						'desc' => $this->textPrepare(nl2br($u['body'])),
+						'time' => $u['time'],
+						'icon' => img($u['fs_photo'],50),
+						'time_ts' => $u['time_ts'],
+						'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=foodsaver&id=' . (int)$u['fs_id']
+				);
+			}
+			
+			return $out;
+		}
+	}
+	
+	public function loadMailboxUpdates($page = 0, $model= false,$hidden_ids = false)
+	{
+		if($model === false)
+		{
+			$model = loadModel('mailbox');
+		}
 		
 		if($boxes = $model->getBoxes())
 		{
 			$mb_ids = array();
 			foreach ($boxes as $b)
 			{
-				$mb_ids[] = $b['id'];
+				if(!isset($hidden_ids[$b['id']]))
+				{
+					$mb_ids[] = $b['id'];
+				}
 			}
 			
 			if($updates = $this->q('

@@ -67,6 +67,8 @@ class S
 				'mailbox_id' => $user['mailbox_id']
 			));
 			
+			S::set('buddy-ids', $user['buddys']);
+			
 			return true;
 		}
 		return false;

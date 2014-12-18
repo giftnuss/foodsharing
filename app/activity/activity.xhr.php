@@ -42,15 +42,14 @@ class ActivityXhr extends Control
 		if($up = $this->model->loadForumUpdates($_GET['page'],$hidden_ids['bezirk']))
 		{
 			$updates = $up;
-				
-			if($up = $this->model->loadBetriebUpdates($_GET['page']))
-			{
-				$updates = array_merge($updates,$up);
-			}
-			if($up = $this->model->loadMailboxUpdates($_GET['page']))
-			{
-				$updates = array_merge($updates,$up);
-			}
+		}
+		if($up = $this->model->loadBetriebUpdates($_GET['page']))
+		{
+			$updates = array_merge($updates,$up);
+		}
+		if($up = $this->model->loadMailboxUpdates($_GET['page']))
+		{
+			$updates = array_merge($updates,$up);
 		}
 		
 		$xhr->addData('updates', $updates);
@@ -63,6 +62,8 @@ class ActivityXhr extends Control
 		/*
 		 * get Forum updates
 		 */
+		
+		$mailbox =loadModel('mailbox');
 		
 		if(isset($_GET['options']))
 		{
@@ -90,7 +91,8 @@ class ActivityXhr extends Control
 		$hidden_ids = array(
 			'bezirk' => array(),
 			'store' => array(),
-			'mailbox' => array()
+			'mailbox' => array(),
+			'buddywalls'=> array()
 		);
 		
 		if($sesOptions = S::option('activity-listings'))
@@ -99,7 +101,7 @@ class ActivityXhr extends Control
 			{
 				if(isset($hidden_ids[$o['index']]))
 				{
-					$hidden_ids[$o['index']][$o['id']] = true;
+					$hidden_ids[$o['index']][$o['id']] = $o['id'];
 				}
 			}
 		}
@@ -109,94 +111,115 @@ class ActivityXhr extends Control
 		if($up = $this->model->loadForumUpdates($page,$hidden_ids['bezirk']))
 		{			
 			$updates = $up;
-			
-			if($up = $this->model->loadBetriebUpdates())
-			{
-				$updates = array_merge($updates,$up);
-			}
-			if($up = $this->model->loadMailboxUpdates($hidden_ids['mailbox']))
-			{
-				$updates = array_merge($updates,$up);
-			}
 		}
-		
-		$listings = array(
-			'groups' => array(),
-			'regions' => array(),
-			'mailboxes' => array(),
-			'stores' => array()
-		);
-		
-		$option = array();
-		
-		if($list = S::option('activity-listings'))
+		if($up = $this->model->loadBetriebUpdates())
 		{
-			$option = $list;
+			$updates = array_merge($updates,$up);
 		}
-		
-		/*
-		 * listings bezirke
-		 */
-		if($bezirke = $this->model->getBezirke())
+		if($up = $this->model->loadMailboxUpdates($page,$mailbox,$hidden_ids['mailbox']))
 		{
-			foreach ($bezirke as $b)
-			{
-				$checked = true;
-				if(isset($option['bezirk-' . $b['id']]))
-				{
-					$checked = false;
-				}
-				$dat = array(
-					'id' => $b['id'],
-					'name' => $b['name'],
-					'checked' => $checked
-				);
-				if($b['type'] == 7)
-				{
-					$listings['groups'][] = $dat;
-				}
-				else
-				{
-					$listings['regions'][] = $dat;
-				}
-			}
+			$updates = array_merge($updates,$up);
 		}
-		
-		/*
-		 * listings mailboxes
-		*/
-		
-		
-		
+		if($up = $this->model->loadFriendWallUpdates($page,$hidden_ids['buddywalls']))
+		{
+			$updates = array_merge($updates,$up);
+		}
 		
 		$xhr->addData('updates', $updates);
-		$xhr->addData('listings', array(
-			0 => array(
-				'name' => s('groups'),
-				'index' => 'bezirk',
-				'items' => $listings['groups']
-			),
-			1 => array(
-				'name' => s('regions'),
-				'index' => 'bezirk',
-				'items' => $listings['regions']
-			),
-			2 => array(
-				'name' => s('stores'),
-				'index' => 'betrieb',
-				'items' => $listings['stores']
-			)/*,
-			2 => array(
-				'name' => s('mailboxes'),
-				'index' => 'mailbox',
-				'items' => $listings['mailboxes']
-			)*/
-		));
+		
 		$xhr->addData('user', array(
-			'id' => fsId(),
-			'name' => S::user('name'),
-			'avatar' => img(S::user('photo'))
+				'id' => fsId(),
+				'name' => S::user('name'),
+				'avatar' => img(S::user('photo'))
 		));
+		
+		if(isset($_GET['listings']))
+		{
+			$listings = array(
+					'groups' => array(),
+					'regions' => array(),
+					'mailboxes' => array(),
+					'stores' => array()
+			);
+			
+			$option = array();
+			
+			if($list = S::option('activity-listings'))
+			{
+				$option = $list;
+			}
+			
+			/*
+			 * listings bezirke
+			*/
+			if($bezirke = $this->model->getBezirke())
+			{
+				foreach ($bezirke as $b)
+				{
+					$checked = true;
+					if(isset($option['bezirk-' . $b['id']]))
+					{
+						$checked = false;
+					}
+					$dat = array(
+							'id' => $b['id'],
+							'name' => $b['name'],
+							'checked' => $checked
+					);
+					if($b['type'] == 7)
+					{
+						$listings['groups'][] = $dat;
+					}
+					else
+					{
+						$listings['regions'][] = $dat;
+					}
+				}
+			}
+			
+			/*
+			 * listings mailboxes
+			*/
+			if($boxes = $mailbox->getBoxes())
+			{
+				foreach ($boxes as $b)
+				{
+					$checked = true;
+					if(isset($option['mailbox-' . $b['id']]))
+					{
+						$checked = false;
+					}
+					$listings['mailboxes'][] = array(
+							'id' => $b['id'],
+							'name' => $b['name'].'@'.DEFAULT_HOST,
+							'checked' => $checked
+					);
+				}
+			}
+			
+			$xhr->addData('listings', array(
+					0 => array(
+							'name' => s('groups'),
+							'index' => 'bezirk',
+							'items' => $listings['groups']
+					),
+					1 => array(
+							'name' => s('regions'),
+							'index' => 'bezirk',
+							'items' => $listings['regions']
+					),
+					2 => array(
+							'name' => s('stores'),
+							'index' => 'betrieb',
+							'items' => $listings['stores']
+					),
+					3 => array(
+							'name' => s('mailboxes'),
+							'index' => 'mailbox',
+							'items' => $listings['mailboxes']
+					)
+			));
+		}
 		
 		$xhr->send();
 	}

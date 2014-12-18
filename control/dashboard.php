@@ -468,7 +468,11 @@ else if(S::may('fs'))
 	addScript('/js/jquery.tinysort.min.js');
 	addScript('/js/activity.js');
 	addJs('activity.init();');
-	addContent(v_field('<div id="activity"><div class="loader" style="padding:40px;background-image:url(/img/469.gif);background-repeat:no-repeat;background-position:center;"></div></div>','Updates Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>'));
+	addContent(v_field('
+	<div id="activity">
+		<div class="loader" style="padding:40px;background-image:url(/img/469.gif);background-repeat:no-repeat;background-position:center;"></div>
+		<div style="display:none" id="activity-info">'.v_info('Es gibt gerade nichts neues').'</div>
+	</div>','Updates Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>'));
 	
 	/*
 	 * Top

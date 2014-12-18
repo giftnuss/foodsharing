@@ -1243,6 +1243,8 @@ class Db
 				}
 			}
 			
+			$fs['buddys'] = $this->qColKey('SELECT buddy_id FROM '.PREFIX.'buddy WHERE foodsaver_id = '.(int)$fs_id.' AND confirmed = 1');
+			
 			/*
 			 * New Session Management
 			 */ 
