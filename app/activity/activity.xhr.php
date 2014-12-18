@@ -12,6 +12,26 @@ class ActivityXhr extends Control
 	
 	public function loadmore()
 	{
+		/*
+		 * get ids to not display from options
+		 */
+		$hidden_ids = array(
+				'bezirk' => array(),
+				'store' => array(),
+				'mailbox' => array()
+		);
+		
+		if($sesOptions = S::option('activity-listings'))
+		{
+			foreach ($sesOptions as $o)
+			{
+				if(isset($hidden_ids[$o['index']]))
+				{
+					$hidden_ids[$o['index']][$o['id']] = true;
+				}
+			}
+		}
+		
 		$xhr = new Xhr();
 		
 		/*
@@ -19,7 +39,7 @@ class ActivityXhr extends Control
 		*/
 		
 		$updates = array();
-		if($up = $this->model->loadForumUpdates($_GET['page']))
+		if($up = $this->model->loadForumUpdates($_GET['page'],$hidden_ids['bezirk']))
 		{
 			$updates = $up;
 				
