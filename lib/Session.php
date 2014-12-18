@@ -135,9 +135,13 @@ class S
 		return S::get('useroption_'.$key);
 	}
 	
-	public static function setOption($key,$val)
+	public static function setOption($key,$val,$db = false)
 	{
-		global $db;
+		if(!$db)
+		{
+			$db = loadModel('content');	
+		}
+		
 		$db->setOption($key, $val);
 		S::set('useroption_'.$key,$val);
 	}

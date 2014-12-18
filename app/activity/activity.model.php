@@ -94,17 +94,18 @@ class ActivityModel extends Model
 		}		
 	}
 	
-	public function loadForumUpdates($page = 0)
+	public function loadForumUpdates($page = 0, $bids_not_load = false)
 	{
 		$tmp = $this->getBezirkIds();
 		$bids = array();
 		foreach ($tmp as $t)
 		{
-			if($t > 0)
+			if($t > 0 && !isset($bids_not_load[$t]))
 			{
 				$bids[] = $t;
 			}
 		}
+		
 		
 		if($updates = $this->q('
 		

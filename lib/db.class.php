@@ -1141,7 +1141,8 @@ class Db
 							`lon`,
 							`email`,
 							`token`,
-							`mailbox_id`
+							`mailbox_id`,
+							`option`
 				
 				FROM 		`'.PREFIX.'foodsaver`
 
@@ -1526,6 +1527,6 @@ class Db
 		}
 		
 		$options[$key] = $val;
-		$this->update('UPDATE '.PREFIX.'foodsaver SET option = '.$this->strval(serialize($options)).' WHERE id = '.(int)fsId());
- 	}
+		return $this->update('UPDATE '.PREFIX.'foodsaver SET `option` = '.$this->strval(serialize($options)).' WHERE id = '.(int)fsId());
+	}
 }

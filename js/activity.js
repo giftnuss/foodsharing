@@ -10,6 +10,8 @@ var activity = {
 		isLoading:null,
 		page:null,
 		user:null,
+		listOptions:null,
+		initiated:false,
 		
 		init: function()
 		{
@@ -19,23 +21,7 @@ var activity = {
 			this.$container = $('#activity > ul.linklist');
 			this.$loader = $('#activity > .loader');
 
-			ajax.req('activity','load',{
-				loader:false,
-				success: function(ret){
-					activity.$loader.hide();
-					
-					if(ret.updates != undefined && ret.updates.length > 0)
-					{
-						activity.user = ret.user;
-						
-						for(var i = 0;i<ret.updates.length;i++)
-						{
-							activity.append(ret.updates[i]);
-						}
-					}
-					activity.sortUpdates();
-				}
-			});
+			this.initLoad();
 			
 			$(window).scroll(function () {
 				if(!activity.isLoading)
@@ -61,6 +47,43 @@ var activity = {
 					    	  }
 					      });
 					   }
+				}
+			});
+		},
+		
+		initLoad: function(option)
+		{
+			this.page = 0;
+			this.$container.html('');
+			
+			opt = {};
+			if(option != undefined)
+			{
+				opt = option;
+			}
+			
+			ajax.req('activity','load',{
+				loader:false,
+				data:opt,
+				success: function(ret){
+					activity.$loader.hide();
+					
+					if(ret.listings != undefined && !activity.initiated)
+					{
+						activity.initiated = true;
+						activity.initOption(ret.listings);
+					}
+					
+					if(ret.updates != undefined && ret.updates.length > 0)
+					{
+						activity.user = ret.user;
+						
+						for(var i = 0;i<ret.updates.length;i++)
+						{
+							activity.append(ret.updates[i]);
+						}
+					}
+					activity.sortUpdates();
 				}
 			});
 		},
@@ -188,6 +211,83 @@ var activity = {
 			    $(elem).prependTo("#activity > ul");
 			});
 			*/
+		},
+		
+		initOption: function(listings)
+		{
+			var html = '<form id="activity-option-form" class="pure-form pure-form-stacked"><fieldset><legend>Updates-Anzeige Optionen</legend>'
+				+ '';
+				
+			for(var i=0;i<listings.length;i++)
+			{
+				html += this.initOptionListing(listings[i]);
+			}
+			
+			html += '<legend><a href="#" id="activity-save-option" class="button" style="float:right;">Einstellungen Speichern</a></legend></fieldset></form>'
+			
+			$('body').append('<div id="activity-listings" class="corner-all white-popup mfp-hide">'+html+'</div>');
+			
+			$('#activity-option').magnificPopup({
+				  type:'inline'
+			});
+			
+			$('#activity-save-option').click(function(ev){
+				ev.preventDefault();
+				
+				activity.listOptions = null;
+				activity.listOptions = new Array();
+				
+				$('#activity-option-form input[type=\'checkbox\']').each(function(){
+					
+					if(!this.checked)
+					{
+						check = true;
+						for(var i=0;i<activity.listOptions.length;i++)
+						{
+							if(activity.listOptions[i].index == $el.attr('name') && activity.listOptions[i].id == $el.val())
+							{
+								check = false;
+							}
+						}
+						$el = $(this);
+						if(check)
+						{
+							activity.listOptions.push({index:$el.attr('name'),id:$el.val()});
+						}
+					}
+				});
+				
+				console.log(activity.listOptions);
+				
+				activity.initLoad({
+					options: activity.listOptions
+				});
+				$.magnificPopup.close();
+			});
+		},
+		
+		initOptionListing: function(list)
+		{
+			if(list.items.length > 0)
+			{
+				out = '<h4>'+list.name+'</h4><p>';
+				for(var i=0;i<list.items.length;i++)
+				{
+					check = '';
+					if(list.items[i].checked)
+					{
+						check = ' checked="checked"';
+					}
+					out += '<label class="pure-checkbox"><input'+check+' type="checkbox" name="'+list.index+'" value="'+list.items[i].id+'" /> '+list.items[i].name+'</label>'
+				}
+				out += '</p>';
+				
+				return out;
+			}
+			else
+			{
+				return '';
+			}
 		}
 		
 };

@@ -468,7 +468,7 @@ else if(S::may('fs'))
 	addScript('/js/jquery.tinysort.min.js');
 	addScript('/js/activity.js');
 	addJs('activity.init();');
-	addContent(v_field('<div id="activity"><div class="loader" style="padding:40px;background-image:url(/img/469.gif);background-repeat:no-repeat;background-position:center;"></div></div>','Updates Übersicht'));
+	addContent(v_field('<div id="activity"><div class="loader" style="padding:40px;background-image:url(/img/469.gif);background-repeat:no-repeat;background-position:center;"></div></div>','Updates Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>'));
 	
 	/*
 	 * Top
@@ -910,7 +910,6 @@ function u_events($events)
 				<span class="month">'.s('month_'.(int)date('m',$i['start_ts'])).'</span>
 				<span class="day">'.date('d',$i['start_ts']).'</span>
 			</a>
-			
 		
 			<div class="activity_feed_content">
 				<div class="activity_feed_content_text">

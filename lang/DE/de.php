@@ -212,3 +212,4 @@ $g_lang['register'] = 'Registrieren';
 $g_lang['daterange'] = 'Zeitraum';
 $g_lang['rv_accept'] = 'Ja ich habe die Rechtsvereinbarung gelesen und Akzeptiere sie';
 $g_lang['not_rv_accepted'] = 'Du musst die Rechtsvereinbarung akzeptieren';
+$g_lang['regions'] = 'Bezirke';
