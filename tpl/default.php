@@ -67,7 +67,7 @@ if(!empty($content_left) && !empty($content_right))
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="favicon" href="favicon.ico" type="image/x-icon" />
+	<link rel="favicon" href="/favicon.ico" type="image/x-icon" />
 	<?php echo getHead(); ?>
 	<style type="text/css">#deutschlandtour_message{width:97%;height:50px;}<?php echo str_replace(array("\r","\n"),'',$g_add_css); ?></style>
 	<script type="text/javascript">

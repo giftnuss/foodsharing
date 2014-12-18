@@ -667,6 +667,7 @@ GROUP BY foodsaver_id'));
 			FROM 		`'.PREFIX.'bezirk`
 		
 			WHERE 		`parent_id` = '.$this->intval($parent_id).'
+			AND id != 0
 			'.$sql.'
 		
 			ORDER BY 	`name`');
