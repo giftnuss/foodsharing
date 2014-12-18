@@ -61,7 +61,7 @@ var activity = {
 			{
 				opt = option;
 			}
-			
+			activity.$loader.show();
 			ajax.req('activity','load',{
 				loader:false,
 				data:opt,
