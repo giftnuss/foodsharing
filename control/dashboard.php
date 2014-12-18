@@ -337,6 +337,12 @@ else if(S::may('fs'))
 			-webkit-border-radius: 3px;
 			-moz-border-radius: 3px;
 			border-radius: 3px;
+			opacity:0.5;
+		}
+			
+		#activity ul.linklist li span.qr:hover
+		{
+			opacity:1;
 		}
 		
 		#activity ul.linklist li span.qr img

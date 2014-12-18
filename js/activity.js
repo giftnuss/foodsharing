@@ -118,6 +118,9 @@ var activity = {
 				var $loader = $el.next();
 				
 				$el.autosize();
+				$el.focus(function(){
+					$el.parent().css({opacity:1});
+				});
 				
 				$el.keydown(function(event){
 					if(event.which == 13 && !event.shiftKey && $el.val() != '' && $el.data('load') == '0')  
