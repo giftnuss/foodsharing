@@ -787,8 +787,8 @@ class SettingsView extends View
 		
 		if($quiz['id'] == 1)
 		{
-			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:'.(int)$quiz['id'].'});" href="#" class="button button-big">Quiz jetzt mit Zeitlimit starten</a></p>';
-			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',easymode:1,qid:'.(int)$quiz['id'].'});" href="#" class="button button-big">Quiz ohne Zeitlimit starten</a></p>';
+			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:'.(int)$quiz['id'].'});" href="#" class="button button-big">Quiz mit Zeitlimit & 10 Fragen starten</a></p>';
+			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',easymode:1,qid:'.(int)$quiz['id'].'});" href="#" class="button button-big">Quiz ohne Zeitlimit & 20 starten</a></p>';
 		}
 		else
 		{
