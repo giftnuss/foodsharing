@@ -64,7 +64,8 @@ class S
 				'rolle' => $user['rolle'],
 				'type' => $user['type'],
 				'token' => $user['token'],
-				'mailbox_id' => $user['mailbox_id']
+				'mailbox_id' => $user['mailbox_id'],
+				'gender' => $user['geschlecht']
 			));
 			
 			S::set('buddy-ids', $user['buddys']);

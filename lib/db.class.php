@@ -1142,7 +1142,8 @@ class Db
 							`email`,
 							`token`,
 							`mailbox_id`,
-							`option`
+							`option`,
+							`geschlecht`
 				
 				FROM 		`'.PREFIX.'foodsaver`
 

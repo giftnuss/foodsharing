@@ -61,10 +61,27 @@ class DashboardControl extends Control
 		$check = false;
 		
 		$is_bieb = S::may('bieb');
+		$is_bot = S::may('bot');
+		$is_fs = S::may('fs');
+		
+		if(isset($_SESSION['client']['betriebe']) && is_array($_SESSION['client']['betriebe']) && count($_SESSION['client']['betriebe']) > 0)
+		{
+			$is_fs = true;
+		}
+		
+		if(isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich']) && count($_SESSION['client']['verantwortlich']) > 0)
+		{
+			$is_bieb = true;
+		}
+		
+		if(isset($_SESSION['client']['botschafter']) && is_array($_SESSION['client']['botschafter']) && count($_SESSION['client']['botschafter']) > 0)
+		{
+			$is_bieb = true;
+		}
 		
 		if(
 			(
-				S::may('fs')
+				$is_fs
 				&&
 				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = '.(int)fsId()) == 0
 			)
@@ -76,7 +93,7 @@ class DashboardControl extends Control
 			)
 			||
 			(
-				S::may('bot')
+				$is_bot
 				&&
 				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 3 AND status = 1 AND foodsaver_id = '.(int)fsId()) == 0
 			)
@@ -85,11 +102,21 @@ class DashboardControl extends Control
 			$check = true;
 		}
 		
-		if($check)
+		if(true)
 		{
 			$cnt = $this->model->getContent(33);
 			
-			$cnt['body'] = '<div>' . substr(strip_tags($cnt['body']),0,120) . ' ...<a href="#" onclick="$(this).parent().hide().next().show();return false;">weiterlesen</a></div><div>'.$cnt['body'].'</div>';
+			$cnt['body'] = str_replace(array(
+				'{NAME}',
+				'{ANREDE}'
+			),array(
+				S::user('name'),
+				s('anrede_'.S::user('gender'))
+			),$cnt['body']);
+			
+			$cnt['body'] = '<div>' . substr(strip_tags($cnt['body']),0,120) . ' ...<a href="#" onclick="$(this).parent().hide().next().show();return false;">weiterlesen</a></div><div style="display:none;">'.$cnt['body'].'</div>';
+			
+			
 			
 			addContent(v_info($cnt['body'],$cnt['title']));	
 		}
