@@ -676,7 +676,7 @@ class SettingsView extends View
 		
 		$out .= v_input_wrapper($quiz['name'], $quiz['desc']);
 	
-		$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:'.(int)$quiz['id'].'});" href="#" class="button">Quiz jetzt weiter beantworten!</a></p>';
+		$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:'.(int)$quiz['id'].'});" href="#" class="button button-big">Quiz jetzt weiter beantworten!</a></p>';
 	
 		$out = v_field($out, 'Quiz fortführen',array('class' => 'ui-padding'));
 	
