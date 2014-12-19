@@ -87,6 +87,9 @@ class ActivityModel extends Model
 				
 				AND 	
 					w.foodsaver_id != '.(int)fsId().'
+				
+				AND 
+					ba.foodsaver_id = '.(int)fsId().'
 			
 			'))
 		{
