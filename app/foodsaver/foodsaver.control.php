@@ -228,7 +228,6 @@ function foodsaver_form($title = 'Foodsaver')
 			
 			$position,
 			
-			v_form_text('fs_id',array('required' => true)),
 			v_form_text('stadt',array('required' => true)),
 			v_form_text('plz',array('required' => true)),
 			v_form_text('anschrift',array('required' => true)),
