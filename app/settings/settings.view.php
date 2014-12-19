@@ -161,7 +161,7 @@ class SettingsView extends View
 		
 		$out .= $infotext;
 		
-		if($session['fp'] < $session['maxfp'])
+		if($session['fp'] <= $session['maxfp'])
 		{
 			$btn = '';
 			switch($session['quiz_id'])
