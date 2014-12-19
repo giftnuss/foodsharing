@@ -59,9 +59,7 @@ class ActivityModel extends Model
 					fs.id AS fs_id,
 					fs.name AS fs_name,
 					fs.photo AS fs_photo,
-					b.id AS basket_id,
-					ba.status,
-					ba.foodsaver_id
+					b.id AS basket_id
 		
 				FROM
 					'.PREFIX.'basket_has_wallpost hw,
@@ -90,6 +88,10 @@ class ActivityModel extends Model
 				
 				AND 
 					ba.foodsaver_id = '.(int)fsId().'
+				
+				ORDER BY w.id DESC
+		
+				LIMIT '.((int)$page*$this->items_per_page).', '.$this->items_per_page.'
 			
 			'))
 		{
@@ -102,6 +104,15 @@ class ActivityModel extends Model
 			
 			foreach ($updates as $u)
 			{
+				/*
+				 * quick fix later list all comments in a package
+				*/
+				if(isset($hb[$u['basket_id']]))
+				{
+					continue;
+				}
+				$hb[$u['basket_id']] = true;
+				
 				$smtitle = '';
 				$title = 'Essenskorb #'.$u['basket_id'];
 			
@@ -190,9 +201,18 @@ class ActivityModel extends Model
 				poster_id != '.(int)fsId().'
 			 */
 			$out = array();
-			
+			$hb = array();
 			foreach ($updates as $u)
 			{
+				/*
+				 * quick fix later list all comments in a package
+				*/
+				if(isset($hb[$u['fs_id']]))
+				{
+					continue;
+				}
+				$hb[$u['fs_id']] = true;
+				
 				$smtitle = $u['fs_name'].'s Pinnwand';
 				$title = $u['fs_name'];
 				
