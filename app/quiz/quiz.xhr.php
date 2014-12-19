@@ -10,6 +10,11 @@ class QuizXhr extends Control
 		parent::__construct();
 	}
 	
+	public function hideinfo()
+	{
+		S::setOption('quiz-infobox-seen', true);
+	}
+	
 	public function addquest()
 	{
 		/*

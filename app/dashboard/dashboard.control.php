@@ -114,8 +114,14 @@ class DashboardControl extends Control
 				s('anrede_'.S::user('gender'))
 			),$cnt['body']);
 			
-			$cnt['body'] = '<div>' . substr(strip_tags($cnt['body']),0,120) . ' ...<a href="#" onclick="$(this).parent().hide().next().show();return false;">weiterlesen</a></div><div style="display:none;">'.$cnt['body'].'</div>';
-			
+			if(S::option('quiz-infobox-seen'))
+			{
+				$cnt['body'] = '<div>' . substr(strip_tags($cnt['body']),0,120) . ' ...<a href="#" onclick="$(this).parent().hide().next().show();return false;">weiterlesen</a></div><div style="display:none;">'.$cnt['body'].'</div>';
+			}
+			else 
+			{
+				$cnt['body'] = $cnt['body'].'<p><a href="#"onclick="$(this).parent().parent().hide();ajax.req(\'quiz\',\'hideinfo\');return false;"><i class="fa fa-check-square-o"></i> Hinweis gelesen und nicht mehr anzeigen</a></p>';
+			}
 			
 			
 			addContent(v_info($cnt['body'],$cnt['title']));	
