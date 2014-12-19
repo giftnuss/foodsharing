@@ -58,11 +58,39 @@ class DashboardControl extends Control
 		
 		addContent($this->view->foodsharerMenu(),CNT_LEFT);
 		
+		$check = false;
 		
+		$is_bieb = S::may('bieb');
 		
-		if((int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = '.(int)fsId()) == 0)
+		if(
+			(
+				S::may('fs')
+				&&
+				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = '.(int)fsId()) == 0
+			)
+			||
+			(
+				$is_bieb
+				&&
+				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 2 AND status = 1 AND foodsaver_id = '.(int)fsId()) == 0
+			)
+			||
+			(
+				S::may('bot')
+				&&
+				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 3 AND status = 1 AND foodsaver_id = '.(int)fsId()) == 0
+			)
+		)
+		{
+			$check = true;
+		}
+		
+		if($check)
 		{
 			$cnt = $this->model->getContent(33);
+			
+			$cnt['body'] = '<div>' . substr(strip_tags($cnt['body']),0,120) . ' ...<a href="#" onclick="$(this).parent().hide().next().show();return false;">weiterlesen</a></div><div>'.$cnt['body'].'</div>';
+			
 			addContent(v_info($cnt['body'],$cnt['title']));	
 		}
 		
