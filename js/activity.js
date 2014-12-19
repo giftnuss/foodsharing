@@ -133,7 +133,7 @@ var activity = {
 			
 			if(up.quickreply != undefined)
 			{
-				quickreply = '<span class="qr"><img src="'+activity.user.avatar+'" /><textarea data-load="0" data-url="'+up.quickreply+'" name="quickreply" class="quickreply noninit" placeholder="Schreibe eine Antwort..."></textarea><span class="loader" style="display:none;"><i class="fa fa-spinner fa-spin"></i></span></span>';
+				quickreply = '<span class="qr"><img width="50" src="'+activity.user.avatar+'" /><textarea data-load="0" data-url="'+up.quickreply+'" name="quickreply" class="quickreply noninit" placeholder="Schreibe eine Antwort..."></textarea><span class="loader" style="display:none;"><i class="fa fa-spinner fa-spin"></i></span></span>';
 			}
 			
 			activity.$container.append('<li data-ts="'+up.time+'"><span class="i"><img src="'+up.icon+'" /></span><span class="n">'+up.title+'</span><span class="t">'+up.desc+'</span>'+quickreply+'<span class="time"><i class="fa fa-clock-o"></i> '+$.timeago(up.time)+' <i class="fa fa-angle-right"></i> '+timeformat.nice(up.time)+'</span><span class="c"></span></li>');
