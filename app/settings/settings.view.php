@@ -694,7 +694,7 @@ class SettingsView extends View
 		
 		$out .= v_input_wrapper($quiz['name'], $quiz['desc']);
 		
-		$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:'.(int)$quiz['id'].'});" href="#" class="button button-big">Quiz jetzt starten</a></p>';
+		$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:'.(int)$quiz['id'].'});" href="#" class="button button-big">Quiz jetzt mit Zeitlimit starten</a></p>';
 		
 		if($quiz['id'] == 1)
 		{

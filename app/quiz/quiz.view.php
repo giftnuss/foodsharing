@@ -4,8 +4,8 @@ class QuizView extends View
 	public function abortOrPause()
 	{
 		return '
-				<p>Beim Abbrechen wird dieser Versuch als Fehlversuch gewertet.</p>
-				<p>Du kannst das Quiz auch pausieren und zu jedem späteren Zeitpunkt wieder aufnehmen.</p>';
+				<p>Nimm Dir doch noch die Zeit diese Frage zu beantworten - ansonsten wird diese Frage als falsch gewertet.</p>
+				<p>Nach der Beantwortung der Frage kannst Du auch <strong>pausieren</strong> ohne Fehlerpunkte zu bekommen.</p>';
 	}
 	
 	public function sessionList($sessions,$quiz)

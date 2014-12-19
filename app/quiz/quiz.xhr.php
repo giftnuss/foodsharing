@@ -293,7 +293,7 @@ class QuizXhr extends Control
 						{
 							text: "Quiz-Abbrechen",
 							click: function(){
-								if(confirm("Bist Du Dir ganz sicher? Du kannst auch pausieren, Deinen Computer ausschalten und in ein paar Tagen weitermachen ;)"))
+								if(confirm("Bist Du Dir ganz sicher? Du kannst auch pausieren, Deinen Computer ausschalten und in ein paar Tagen weitermachen ;) Bitte breche das Quiz erst ab wenn Du Deine aktuelle Frage beantwortet hast, andernfalls wird diese als falsch gewertet."))
 								{
 									ajreq("abort",{app:"quiz",sid:'.(int)$session_id.'});	
 								}
@@ -346,7 +346,7 @@ class QuizXhr extends Control
 			
 			$dia->addContent( '<h1>Du hast Dein Quiz nicht beendet</h1><p>Aber keine Sorge Du kannst einfach jetzt das Quiz zum Ende bringen.</p><p>Also viel Spaß beim weiterquizzen.</p>');
 			
-			$dia->addButton('Quiz Abbrechen', 'if(confirm(\'Möchtest Du das laufende Quiz wirklich beenden? Leider müssten wir das als Fehlversuch bewerten.\')){ajreq(\'abort\',{app:\'quiz\',sid:'.(int)$session['id'].'});}');
+			//$dia->addButton('Quiz Abbrechen', 'if(confirm(\'Möchtest Du das laufende Quiz wirklich beenden? Leider müssten wir das als Fehlversuch bewerten.\')){ajreq(\'abort\',{app:\'quiz\',sid:'.(int)$session['id'].'});}');
 			$dia->addButton('Quiz fortführen', 'ajreq(\'next\',{app:\'quiz\'});');
 			
 			$return = $dia->xhrout();
