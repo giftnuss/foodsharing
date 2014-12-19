@@ -12,6 +12,8 @@ class ActivityXhr extends Control
 	
 	public function loadmore()
 	{
+		$mailbox =loadModel('mailbox');
+		$page = 0;
 		/*
 		 * get ids to not display from options
 		 */
@@ -47,7 +49,7 @@ class ActivityXhr extends Control
 		{
 			$updates = array_merge($updates,$up);
 		}
-		if($up = $this->model->loadMailboxUpdates($_GET['page'],$hidden_ids['buddywall']))
+		if($up = $this->model->loadMailboxUpdates($page,$mailbox,$hidden_ids['mailbox']))
 		{
 			$updates = array_merge($updates,$up);
 		}

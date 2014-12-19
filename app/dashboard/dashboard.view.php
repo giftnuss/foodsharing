@@ -120,12 +120,12 @@ class DashboardView extends View
 		
 		#activity ul.linklist li
 		{
-			border-bottom: 1px solid #F1E7C9;
-		
-		}
-		#activity ul.linklist li
-		{
+			margin-bottom:10px;
+			background-color:#ffffff;
 			padding:10px;
+			-webkit-border-radius: 6px;
+			-moz-border-radius: 6px;
+			border-radius: 6px;
 		}
 		
 		ul.linklist li span.n
@@ -168,11 +168,14 @@ class DashboardView extends View
 		addScript('/js/jquery.tinysort.min.js');
 		addScript('/js/activity.js');
 		addJs('activity.init();');
-		addContent(v_field('
+		addContent('
+	<div class="head ui-widget-header ui-corner-top">
+		Updates Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>
+	</div>
 	<div id="activity">
 		<div class="loader" style="padding:40px;background-image:url(/img/469.gif);background-repeat:no-repeat;background-position:center;"></div>
 		<div style="display:none" id="activity-info">'.v_info('Es gibt gerade nichts neues').'</div>
-	</div>','Updates Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>'));
+	</div>');
 		
 	}
 	
