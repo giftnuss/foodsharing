@@ -342,6 +342,25 @@ class BasketModel extends Model
 		return false;
 	}
 	
+	public function follow($basket_id)
+	{
+		$status = $this->qOne('SELECT 1 FROM `'.PREFIX.'basket_anfrage` WHERE basket_id = '.(int)$basket_id.' AND foodsaver_id = ' . (int)fsId().' AND status <= 9');
+
+		if(!$status)
+		{
+			$this->insert('
+			REPLACE INTO `'.PREFIX.'basket_anfrage`
+			(
+				`foodsaver_id`, `basket_id`, `status`, `time`,`appost`
+			)
+			VALUES
+			(
+				'.(int)fsId().','.(int)$basket_id.',9, NOW(), 0
+			)
+		');
+		}
+	}
+	
 	public function setStatus($basket_id,$status,$fsid = false)
 	{
 		//$this->del('DELETE FROM `'.PREFIX.'basket_anfrage` WHERE `foodsaver_id` = '.(int)$fsid.' AND `basket_id` = '.(int)$basket_id);

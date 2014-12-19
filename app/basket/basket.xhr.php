@@ -13,8 +13,9 @@ class BasketXhr extends Control
 			'ungelesen'	=> 0,
 			'gelesen' => 1,
 			'abgeholt' => 2,
-			'abgeleht' => 3,
+			'abgelehnt' => 3,
 			'nicht_gekommen' => 4,
+			'wall_follow' => 9,
 			'angeklickt' => 10	
 		);
 
@@ -607,6 +608,14 @@ class BasketXhr extends Control
 		}
 		//
 		
+	}
+	
+	public function follow()
+	{
+		if(isset($_GET['bid']) && (int)$_GET['bid'] > 0)
+		{
+			$this->model->follow($_GET['bid']);
+		}
 	}
 	
 	public function finishRequest()

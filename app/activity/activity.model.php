@@ -4,8 +4,10 @@ class ActivityModel extends Model
 	private $items_per_page = 10;
 	
 	public function loadBasketWallUpdates($page = 0)
-	{
-		if($updates = $this->q('
+	{		
+		$updates = array();
+		
+		if($up = $this->q('
 			SELECT
 				w.id,
 				w.body,
@@ -32,25 +34,74 @@ class ActivityModel extends Model
 			AND
 				hw.basket_id = b.id
 				
-			AND 
+			AND
 				b.foodsaver_id = '.(int)fsId().'
-				
+					
 			AND 
 				w.foodsaver_id != '.(int)fsId().'
-		
+			
 			ORDER BY w.id DESC
 		
 			LIMIT '.((int)$page*$this->items_per_page).', '.$this->items_per_page.'
 		
 		'))
 		{
-			$out = array();
+			
+			$updates = $up;
+		}
+		
+		if($up = $this->q('
+				SELECT
+					w.id,
+					w.body,
+					w.time,
+					UNIX_TIMESTAMP(w.time) AS time_ts,
+					fs.id AS fs_id,
+					fs.name AS fs_name,
+					fs.photo AS fs_photo,
+					b.id AS basket_id,
+					ba.status,
+					ba.foodsaver_id
+		
+				FROM
+					'.PREFIX.'basket_has_wallpost hw,
+					'.PREFIX.'foodsaver fs,
+					'.PREFIX.'wallpost w,
+					'.PREFIX.'basket b,
+					'.PREFIX.'basket_anfrage ba
+			
+				WHERE
+					w.id = hw.wallpost_id
+		
+				AND
+					w.foodsaver_id = fs.id
+		
+				AND
+					hw.basket_id = b.id
+			
+				AND
+					ba.basket_id = b.id
+	
+				AND
+					ba.status < 10
 				
+				AND 	
+					w.foodsaver_id != '.(int)fsId().'
+			
+			'))
+		{
+			$updates = $updates + $up;
+		}
+		
+		if(!empty($updates))
+		{
+			$out = array();
+			
 			foreach ($updates as $u)
 			{
 				$smtitle = '';
 				$title = 'Essenskorb #'.$u['basket_id'];
-		
+			
 				$out[] = array(
 						'attr' => array(
 								'href' => '/profile/' . $u['fs_id']
@@ -63,9 +114,11 @@ class ActivityModel extends Model
 						'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=basket&id=' . (int)$u['basket_id']
 				);
 			}
-				
+			
 			return $out;
 		}
+		
+		return false;
 	}
 	
 	public function loadFriendWallUpdates($page = 0,$hidden_ids)
