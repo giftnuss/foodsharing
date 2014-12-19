@@ -289,16 +289,6 @@ class QuizXhr extends Control
 								$(this).dialog("close");
 								ajreq("pause",{app:"quiz",sid:'.(int)$session_id.'});
 							}
-						},
-						{
-							text: "Quiz-Abbrechen",
-							click: function(){
-								if(confirm("Bist Du Dir ganz sicher? Du kannst auch pausieren, Deinen Computer ausschalten und in ein paar Tagen weitermachen ;) Bitte breche das Quiz erst ab wenn Du Deine aktuelle Frage beantwortet hast, andernfalls wird diese als falsch gewertet."))
-								{
-									ajreq("abort",{app:"quiz",sid:'.(int)$session_id.'});	
-								}
-								$(this).dialog("close");
-							}
 						}
 					]
 				});';
