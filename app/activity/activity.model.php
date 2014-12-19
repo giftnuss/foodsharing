@@ -90,7 +90,7 @@ class ActivityModel extends Model
 			
 			'))
 		{
-			$updates = $updates + $up;
+			$updates = array_merge($updates,$up);
 		}
 		
 		if(!empty($updates))

@@ -45,19 +45,19 @@ class ActivityXhr extends Control
 		}
 		if($up = $this->model->loadBetriebUpdates($_GET['page']))
 		{
-			$updates = $updates + $up;
+			$updates = array_merge($updates,$up);
 		}
 		if($up = $this->model->loadMailboxUpdates($_GET['page'],$hidden_ids['buddywall']))
 		{
-			$updates = $updates + $up;
+			$updates = array_merge($updates,$up);
 		}
 		if($up = $this->model->loadFriendWallUpdates($page,$hidden_ids['buddywall']))
 		{
-			$updates = $updates + $up;
+			$updates = array_merge($updates,$up);
 		}
 		if($up = $this->model->loadBasketWallUpdates($page))
 		{
-			$updates = $updates + $up;
+			$updates = array_merge($updates,$up);
 		}
 		
 		$xhr->addData('updates', $updates);
