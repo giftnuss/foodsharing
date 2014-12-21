@@ -270,6 +270,12 @@ class SettingsControl extends Control
 					return $this->confirm_bot();
 				}
 				
+				// Quiz wurde shcon probiert aber noche keine 3x nicht bestanden
+				else if($status['failed'] < 3)
+				{
+					addContent($this->view->quizRetry($quiz,$desc,$status['failed'],3));
+				}
+				
 				// 3x nicht bestanden 30 Tage Lernpause
 				else if($status['failed'] == 3 && (time() - $status['last_try']) < (86400*30))
 				{
@@ -291,7 +297,7 @@ class SettingsControl extends Control
 			}
 			else
 			{
-				addContent(v_info('Fehler! Quizdaten Für Deine Rollekonnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:it@'.DEFAULT_HOST.'"">it@'.DEFAULT_HOST.'</a>'));
+				addContent(v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:it@'.DEFAULT_HOST.'"">it@'.DEFAULT_HOST.'</a>'));
 			}
 		}
 		else
