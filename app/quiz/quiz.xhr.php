@@ -453,7 +453,7 @@ class QuizXhr extends Control
 				else if(S::get('hastodoquiz-id') == 3)
 				{
 					$content_id = 35;
-					$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Rolle als Botschafter Rolle!', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
+					$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Rolle als Botschafter bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
 				}
 				
 				$content = $this->model->getContent($content_id);
