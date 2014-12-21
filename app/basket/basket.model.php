@@ -333,7 +333,7 @@ class BasketModel extends Model
 		{
 			foreach ($baskets as $key => $b)
 			{
-				$baskets[$key]['req_count'] = $this->qOne('SELECT COUNT(foodsaver_id) FROM '.PREFIX.'basket_anfrage WHERE basket_id = '.(int)$b['id']);
+				$baskets[$key]['req_count'] = $this->qOne('SELECT COUNT(foodsaver_id) FROM '.PREFIX.'basket_anfrage WHERE basket_id = '.(int)$b['id'].' AND status < 10');
 			}
 			
 			return $baskets;
