@@ -97,8 +97,8 @@ class ProfileView extends View
 				$bot[$b['id']] = '<a class="light" href="/?page=bezirk&bid='.$b['id'].'&sub=forum">'.$b['name'].'</a>';
 			}
 			$infos[] = array(
-					'name' => $this->foodsaver['name'].' ist Botschafter für',
-					'val' => implode(', ', $bot)
+				'name' => $this->foodsaver['name'].' ist Botschafter für',
+				'val' => implode(', ', $bot)
 			);
 		}
 		
@@ -190,45 +190,70 @@ class ProfileView extends View
 		}
 		
 		$bananacount = '';
+		
 		/*
 		 * Banana
 		*/
-		
-		$bval = '- noch keine -';
-
-		if((int)$this->foodsaver['stat_bananacount'] > 0)
+		if(S::may('fs'))
 		{
+			$bval = '- noch keine -';
+			$count_banana = count($this->foodsaver['bananen']);
+			if($count_banana == 0)
+			{
+				$count_banana = '&nbsp;';
+			}
+			
+			$banana_button_class = ' bouched';
+			$givebanana = '';
+			
+			// if current user has give the pfofile user an banana
+			if(!$this->foodsaver['bouched'])
+			{
+				$banana_button_class = '';
+				$givebanana = '
+				<a onclick="$(this).hide().next().show().children(\'textarea\').autosize();return false;" href="#">Schenke '.$this->foodsaver['name'].' eine Banane</a>
+				<div class="vouch-banana-wrapper" style="display:none;">
+					<div class="vouch-banana-desc">		
+						Hier kannst Du etwas dazu schreiben, warum Du gerne '.$this->foodsaver['name'].' eine Banane schenken möchtest. Du kannst jedem Foodsaver nur eine Banane schenken!<br />
+						Bitte gebe die Vertrauensbanane nur an Foodsaver die Du persönlich kennst und bei denen Du für Zuverlässigkeit, Vertrauen und Engagement gegen die Verschwendung von Lebensmitteln Deine Hand für ins Feuer legen würdest, also Du 100% sicher bist, dass die Verhaltensregeln und die Rechtsvereinbarung ordnungsgemäß eingehalten werden
+						<p><strong>Vertrauensbananen können nicht zurückgenommen werden, sei bitte deswegen besonders achtsam wem Du eine schenkst</strong></p>
+						<a href="#" style="float:right;" onclick="ajreq(\'rate\',{app:\'profile\',type:2,id:'.(int)$this->foodsaver['id'].',message:$(\'#bouch-ta\').val()});return false;"><img src="/img/banana.png" /></a>
+					</div>
+					<textarea id="bouch-ta" class="textarea" placeholder="mind.100 Zeichen..." style="height:50px;"></textarea>
+				</div>';
+			}
+			
+			//if((int)$this->foodsaver['stat_bananacount'] > 0)
+		
 			addJs('
 			$(".stat_bananacount").magnificPopup({
-			  type:"inline"
+				type:"inline"
 			});');
 			$bananacount = '
-				<a href="#bananas" onclick="return false;" class="item stat_bananacount">
-					<span class="val">'.(int)$this->foodsaver['stat_bananacount'].'</span>
-					<span class="name">&nbsp;</span>
-				</a>
-				';
-			
+			<a href="#bananas" onclick="return false;" class="item stat_bananacount'.$banana_button_class.'">
+				<span class="val">'.$count_banana.'</span>
+				<span class="name">&nbsp;</span>
+			</a>
+			';
 		
-			if((int)count($this->foodsaver['bananen']) > 0)
+			$bananacount .= '
+			<div id="bananas" class="white-popup mfp-hide corner-all">
+				<h3>' . str_replace('&nbsp;','',$count_banana) . ' Vertrauensbananen</h3>
+				'.$givebanana.'
+				<table class="pintable">
+					<tbody>';
+			$odd = 'even';
+			foreach ($this->foodsaver['bananen'] AS $b)
 			{
-				$bananacount .= '
-					<div id="bananas" class="white-popup mfp-hide corner-all">
-						<h3>' . count($this->foodsaver['bananen']) . ' Vertrauensbananen</h3>
-						<table class="pintable">
-							<tbody>';
-				$odd = 'even';
-				foreach ($this->foodsaver['bananen'] AS $b)
+				if($odd == 'even')
 				{
-					if($odd == 'even')
-					{
-						$odd = 'odd';
-					}
-					else
-					{
-						$odd = 'even';
-					}
-					$bananacount .= '
+					$odd = 'odd';
+				}
+				else
+				{
+					$odd = 'even';
+				}
+				$bananacount .= '
 				<tr class="'.$odd.' bpost">
 					<td class="img"><a class="tooltip" title="'.$b['name'].'" href="#"><img onclick="profile('.$b['id'].');return false;" src="'.img($b['photo']).'"></a></td>
 					<td><span class="msg">'.nl2br($b['msg']).'</span>
@@ -236,27 +261,28 @@ class ProfileView extends View
 						<span class="time">'.niceDate($b['time_ts']).' von '.$b['name'].'</span>
 					</div></td>
 				</tr>';
-				}
-				$bananacount .= '
-						</tbody>
-					</table>
-				</div>';
 			}
-		}
-		
-		if($this->foodsaver['id'] == fsId())
-		{
-			$banana = $bval.'<span class="vouch-banana" title="Das sind Deine Bananen"><span>&nbsp;</span></span>';
+			$bananacount .= '
+					</tbody>
+				</table>
+			</div>';
 			
-		}
-		elseif(!$this->foodsaver['bouched'])
-		{
-			$banana = $bval.'<a onclick="addbanana('.$this->foodsaver['id'].');return false;" href="#" title="'.$this->foodsaver['name'].' eine Vertrauensbanane schenken" class="vouch-banana"><span>&nbsp;</span></a>';
 			
-		}
-		else
-		{
-			$banana = $bval.'<span class="vouch-banana" title="Du hast '.$this->foodsaver['name'].' schon eine Banane geschenkt"><span>&nbsp;</span></span>';
+			
+			if($this->foodsaver['id'] == fsId())
+			{
+				$banana = $bval.'<span class="vouch-banana" title="Das sind Deine Bananen"><span>&nbsp;</span></span>';
+					
+			}
+			elseif(!$this->foodsaver['bouched'])
+			{
+				$banana = $bval.'<a onclick="addbanana('.$this->foodsaver['id'].');return false;" href="#" title="'.$this->foodsaver['name'].' eine Vertrauensbanane schenken" class="vouch-banana"><span>&nbsp;</span></a>';
+					
+			}
+			else
+			{
+				$banana = $bval.'<span class="vouch-banana" title="Du hast '.$this->foodsaver['name'].' schon eine Banane geschenkt"><span>&nbsp;</span></span>';
+			}
 		}
 		
 			

@@ -14,7 +14,6 @@ class ProfileControl extends Control
 		
 		$this->model = new ProfileModel();
 		$this->view = new ProfileView();
-		
 
 		parent::__construct();
 		

@@ -22,9 +22,13 @@
 }
 .stat_bananacount
 {
-	background-image: url("/img/bananan.png");
+	background-image: url("/img/banana.png");
     background-position: center 22px;
     background-repeat: no-repeat;
+}
+.stat_bananacount.bouched
+{
+	background-image: url("/img/bananan.png");
 }
 .page ul.linklist
 {
