@@ -289,6 +289,10 @@ class SettingsControl extends Control
 					return $this->view->quizFailed($this->model->getContent(13));
 				}
 			}
+			else
+			{
+				addContent(v_info('Fehler! Quizdaten Für Deine Rollekonnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:it@'.DEFAULT_HOST.'"">it@'.DEFAULT_HOST.'</a>'));
+			}
 		}
 		else
 		{
