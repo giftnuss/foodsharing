@@ -668,6 +668,7 @@ class QuizXhr extends Control
 						 * for later function is not ready yet :)
 						 */
 						$dia->addButton('Weiter', 'questcheckresult();return false;');
+						$dia->addButton('Pause', 'ajreq(\'pause\',{app:\'quiz\',sid:\''.$session_id.'\'});');
 						$dia->addButton('nächste Frage','ajreq(\'next\',{app:\'quiz\'});$(".quiz-questiondialog .ui-dialog-buttonset .ui-button").button( "option", "disabled", true );$(".quiz-questiondialog .ui-dialog-buttonset .ui-button span").prepend(\'<i class="fa fa-spinner fa-spin"></i> \')');
 						/*
 						 * add next() Button
@@ -685,6 +686,7 @@ class QuizXhr extends Control
 								});
 								$("#quizcomment").hide();
 								$(".quiz-questiondialog .ui-dialog-buttonset button:last").hide();
+								$(".quiz-questiondialog .ui-dialog-buttonset .ui-button:contains(\'Pause\')").hide();
 								$(".ui-dialog-titlebar-close").hide();
 							},100);
 						}',false);
@@ -1295,6 +1297,7 @@ class QuizXhr extends Control
 				
 				$(".quiz-questiondialog .ui-dialog-buttonset .ui-button").hide();
 				$(".quiz-questiondialog .ui-dialog-buttonset .ui-button:last").show();
+				$(".quiz-questiondialog .ui-dialog-buttonset .ui-button:contains(\'Pause\')").show();
 				$("#quizcomment").show();
 				$("#countdown").hide();
 				
