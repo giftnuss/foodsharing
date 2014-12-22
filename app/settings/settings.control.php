@@ -233,7 +233,11 @@ class SettingsControl extends Control
 	
 	public function up_bot()
 	{
-		if(S::may() && $this->foodsaver['rolle'] >= 2)
+		if(true)
+		{
+			addContent(v_info('Hier wird gerade gearbeitet, probiere es später gerne noch einmal','Hinweis'));
+		}
+		else if(S::may() && $this->foodsaver['rolle'] >= 2)
 		{
 			/*
 			 * Array
