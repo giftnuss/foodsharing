@@ -70,11 +70,11 @@ class SettingsControl extends Control
 		
 		if($this->foodsaver['rolle'] == 0)
 		{
-			$menu[] = array('name'=>'Werde '.getRolle(1,$this->foodsaver['geschlecht']),'href'=> '/?page=settings&sub=upgrade/up_fs');
+			$menu[] = array('name'=>'Werde '.s('rolle_2_' . $this->foodsaver['geschlecht']),'href'=> '/?page=settings&sub=upgrade/up_fs');
 		}
 		else if($this->foodsaver['rolle'] == 1)
 		{
-			$menu[] = array('name'=>'Werde '.getRolle(2,$this->foodsaver['geschlecht']),'href'=> '/?page=settings&sub=upgrade/up_bip');
+			$menu[] = array('name'=>'Werde '.s('rolle_2_' . $this->foodsaver['geschlecht']),'href'=> '/?page=settings&sub=upgrade/up_bip');
 		}
 		/*
 		else if($this->foodsaver['rolle'] == 2)
