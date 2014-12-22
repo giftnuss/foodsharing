@@ -2429,14 +2429,21 @@ function libmailList()
 
 function libmail($bezirk, $email, $subject, $message, $attach = false, $token = false)
 {	
-	if(!is_array($bezirk))
+	if($bezirk === false)
+	{
+		$bezirk = array(
+			'email' => DEFAULT_EMAIL,
+			'email_name' => DEFAULT_EMAIL_NAME
+		);
+	}
+	else if(!is_array($bezirk))
 	{
 		$bezirk = array(
 			'email' => $bezirk,
 			'email_name' => $bezirk
 		);
 	}
-	else 
+	else
 	{
 		if(!validEmail($bezirk['email']))
 		{
@@ -2474,8 +2481,6 @@ function libmail($bezirk, $email, $subject, $message, $attach = false, $token = 
 			'attach' => $attach
 		));
 	}
-
-	
 	
 	$mail = new SocketMail();
 	$mail->setFrom($bezirk['email'], $bezirk['email_name']);
