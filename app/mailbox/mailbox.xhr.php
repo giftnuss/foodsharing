@@ -32,7 +32,7 @@ class MailboxXhr extends Control
 		}
 		else
 		{
-			libmail(false, $_POST['email'], $_POST['subject'], $_POST['message']);
+			libmail(DEFAULT_EMAIL, $_POST['email'], $_POST['subject'], $_POST['message']);
 			return array(
 				'status' => 1,
 				'script' => 'pulseInfo("E-Mail wurde versendet!");'
