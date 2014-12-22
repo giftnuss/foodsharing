@@ -7,6 +7,7 @@ class vPage
 	private $sections_left;
 	private $sections_right;
 	private $subtitle;
+	private $bread;
 	
 	public function __construct($title,$content)
 	{
@@ -17,11 +18,17 @@ class vPage
 		$this->sections_left = array();
 		$this->sections_right = array();
 		$this->subtitle = false;
+		$this->bread = array($title,false);
 	}
 	
 	public function setTitle($title)
 	{
 		$this->title = $title;
+	}
+	
+	public function setBread($name,$url = false)
+	{
+		$this->bread = array($name,$url);
 	}
 	
 	public function setSubTitle($subtitle)
@@ -78,7 +85,7 @@ class vPage
 	
 	public function render()
 	{
-		addBread($this->title);
+		addBread($this->bread[0],$this->bread[1]);
 		addTitle($this->title);		
 		
 		$subtitle = '';
@@ -113,7 +120,7 @@ class vPage
 			
 		}
 		
-		foreach ($this->sections_left as $s)
+		foreach ($this->sections_left as $key => $s)
 		{
 			$title = '';
 			if($s['title'] !== false)
@@ -122,10 +129,17 @@ class vPage
 				';
 			}
 			
+			$class = ' page-section';
+			
+			if($key == 0)
+			{
+				$class = '';
+			}
+			
 			if($s['option']['wrapper'])
 			{
 				$s['cnt'] = '
-			<div class="page ui-padding ui-widget-content corner-all">
+			<div class="page'.$class.' ui-padding ui-widget-content corner-all">
 				'.$title.$s['cnt'].'
 			</div>';
 			}

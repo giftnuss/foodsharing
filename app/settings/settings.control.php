@@ -149,8 +149,8 @@ class SettingsControl extends Control
 					return $this->view->pause($days_to_wait,$desc);
 				}
 	
-				// Lernpause vorbei noch keine weiteren 3 Fehlversuche
-				else if($status['failed'] >= 3 && $status['failed'] < 6 && (time() - $status['last_try']) >= (86400*14))
+				// Lernpause vorbei noch keine weiteren 2 Fehlversuche
+				else if($status['failed'] >= 3 && $status['failed'] < 5 && (time() - $status['last_try']) >= (86400*14))
 				{
 					addContent($this->view->quizIndex($quiz,$desc));
 				}
@@ -216,8 +216,8 @@ class SettingsControl extends Control
 					return $this->view->pause($days_to_wait,$desc);
 				}
 	
-				// Lernpause vorbei noch keine weiteren 3 Fehlversuche
-				else if($status['failed'] >= 3 && $status['failed'] < 6 && (time() - $status['last_try']) >= (86400*14))
+				// Lernpause vorbei noch keine weiteren 2 Fehlversuche
+				else if($status['failed'] >= 3 && $status['failed'] < 5 && (time() - $status['last_try']) >= (86400*14))
 				{
 					addContent($this->view->quizIndex($quiz,$desc));
 				}
@@ -270,6 +270,12 @@ class SettingsControl extends Control
 					return $this->confirm_bot();
 				}
 				
+				// Quiz wurde shcon probiert aber noche keine 3x nicht bestanden
+				else if($status['failed'] < 3)
+				{
+					addContent($this->view->quizRetry($quiz,$desc,$status['failed'],3));
+				}
+				
 				// 3x nicht bestanden 30 Tage Lernpause
 				else if($status['failed'] == 3 && (time() - $status['last_try']) < (86400*30))
 				{
@@ -277,8 +283,8 @@ class SettingsControl extends Control
 					return $this->view->pause($days_to_wait,$desc);
 				}
 				
-				// Lernpause vorbei noch keine weiteren 3 Fehlversuche
-				else if($status['failed'] >= 3 && $status['failed'] < 6 && (time() - $status['last_try']) >= (86400*14))
+				// Lernpause vorbei noch keine weiteren 2 Fehlversuche
+				else if($status['failed'] >= 3 && $status['failed'] < 5 && (time() - $status['last_try']) >= (86400*14))
 				{
 					addContent($this->view->quizIndex($quiz,$desc));
 				}
@@ -288,6 +294,29 @@ class SettingsControl extends Control
 				{
 					return $this->view->quizFailed($this->model->getContent(13));
 				}
+			}
+			else
+			{
+				addContent(v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:it@'.DEFAULT_HOST.'"">it@'.DEFAULT_HOST.'</a>'));
+			}
+		}
+		else
+		{
+			switch ($this->foodsaver['rolle'])
+			{
+				case 0:
+					info('Du musst erst Foodsaver werden');
+					go('/?page=settings&sub=upgrade/up_fs');
+					break;
+					
+				case 1:
+					info('Du musst erst BetriebsverantwortlicheR werden');
+					go('/?page=settings&sub=upgrade/up_bip');
+					break;
+					
+				default:
+					go('/?page=settings');
+					break;
 			}
 		}
 	}

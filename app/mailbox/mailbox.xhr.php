@@ -32,7 +32,7 @@ class MailboxXhr extends Control
 		}
 		else
 		{
-			libmail(false, $_POST['email'], $_POST['subject'], $_POST['message']);
+			libmail(DEFAULT_EMAIL, $_POST['email'], $_POST['subject'], $_POST['message']);
 			return array(
 				'status' => 1,
 				'script' => 'pulseInfo("E-Mail wurde versendet!");'
@@ -185,6 +185,55 @@ class MailboxXhr extends Control
 				'script' => '$("tr#message-'.(int)$_GET['mid'].'").remove();$("#message-body").dialog("close");'
 			);
 		}
+	}
+	
+	public function quickreply()
+	{
+		if(isset($_GET['mid']) && $this->model->mayMessage($_GET['mid']))
+		{
+			if($message = $this->model->getMessage($_GET['mid']))
+			{		
+				$sender = @json_decode($message['sender'],true);		
+				if($sender != null && isset($sender['mailbox']) && isset($sender['host']))
+				{
+					$subject = 'Re: '.trim(str_replace(array('Re:','RE:', 're:','aw:','Aw:','AW:'),'',$message['subject']));
+					
+					$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von ".niceDate($message['time_ts'])." ---------\n\n>\t".str_replace("\n","\n>\t",$message['body']);
+					
+					$mail = new SocketMail();
+					$mail->setFrom($message['mailbox'].'@'.DEFAULT_HOST,S::user('name'));
+					if($sender['personal'])
+					{
+						$mail->addRecipient($sender['mailbox'].'@'.$sender['host'], $sender['personal']);
+					}
+					else
+					{
+						$mail->addRecipient($sender['mailbox'].'@'.$sender['host']);	
+					}
+					$mail->setSubject($subject);
+					$mail->setHtmlBody(nl2br($body));	
+					$mail->setBody($body);
+					
+					$socket = new SocketClient();
+					$socket->queue($mail);
+					
+					$socket->send();
+					$socket->close();
+					
+					echo json_encode(array(
+							'status' => 1,
+							'message' => 'Spitze! Die E-Mail wurde versendet.'
+					));
+					exit();
+				}
+			}
+		}
+		
+		echo json_encode(array(
+				'status' => 0,
+				'message' => 'Die E-Mail konnte nicht gesendet werden.'
+		));
+		exit();
 	}
 	
 	public function send_message()

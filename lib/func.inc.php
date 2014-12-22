@@ -1470,7 +1470,7 @@ function getSettingsMenu()
 	{
 		$mailbox = '<li><a href="/?page=mailbox"><i class="fa fa-envelope"></i> E-Mail Postfach</a></li>';
 	}
-	$default = '<li class="g_settings"><a class="fNiv corner-all" style="background-image:url('.img().');"><span>&nbsp;</span></a>
+	$default = '<li class="g_settings"><a href="/profile/'.fsId().'" class="fNiv corner-all" style="background-image:url('.img().');"><span>&nbsp;</span></a>
 				    <ul class="jmenu-settings">
 					  <li><a href="/?page=settings"><i class="fa fa-gear"></i> Einstellungen</a></li>
 					  '.$mailbox.'
@@ -3137,6 +3137,14 @@ function tt($str,$length = 160)
 	if(strlen($str) > $length)
 	{
 		$str = preg_replace("/[^ ]*$/", '', substr($str, 0, $length)).' ...';
+	}
+	return $str;
+}
+function ttt($str,$length = 160)
+{
+	if(strlen($str) > $length)
+	{
+		$str = substr($str,0,($length-4)).'...';
 	}
 	return $str;
 }

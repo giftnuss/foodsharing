@@ -10,6 +10,11 @@ class QuizXhr extends Control
 		parent::__construct();
 	}
 	
+	public function hideinfo()
+	{
+		S::setOption('quiz-infobox-seen', true);
+	}
+	
 	public function addquest()
 	{
 		/*
@@ -289,16 +294,6 @@ class QuizXhr extends Control
 								$(this).dialog("close");
 								ajreq("pause",{app:"quiz",sid:'.(int)$session_id.'});
 							}
-						},
-						{
-							text: "Quiz-Abbrechen",
-							click: function(){
-								if(confirm("Bist Du Dir ganz sicher? Du kannst auch pausieren, Deinen Computer ausschalten und in ein paar Tagen weitermachen ;)"))
-								{
-									ajreq("abort",{app:"quiz",sid:'.(int)$session_id.'});	
-								}
-								$(this).dialog("close");
-							}
 						}
 					]
 				});';
@@ -346,7 +341,7 @@ class QuizXhr extends Control
 			
 			$dia->addContent( '<h1>Du hast Dein Quiz nicht beendet</h1><p>Aber keine Sorge Du kannst einfach jetzt das Quiz zum Ende bringen.</p><p>Also viel Spaß beim weiterquizzen.</p>');
 			
-			$dia->addButton('Quiz Abbrechen', 'if(confirm(\'Möchtest Du das laufende Quiz wirklich beenden? Leider müssten wir das als Fehlversuch bewerten.\')){ajreq(\'abort\',{app:\'quiz\',sid:'.(int)$session['id'].'});}');
+			//$dia->addButton('Quiz Abbrechen', 'if(confirm(\'Möchtest Du das laufende Quiz wirklich beenden? Leider müssten wir das als Fehlversuch bewerten.\')){ajreq(\'abort\',{app:\'quiz\',sid:'.(int)$session['id'].'});}');
 			$dia->addButton('Quiz fortführen', 'ajreq(\'next\',{app:\'quiz\'});');
 			
 			$return = $dia->xhrout();
@@ -458,7 +453,7 @@ class QuizXhr extends Control
 				else if(S::get('hastodoquiz-id') == 3)
 				{
 					$content_id = 35;
-					$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Rolle als Botschafter Rolle!', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
+					$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Rolle als Botschafter bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
 				}
 				
 				$content = $this->model->getContent($content_id);
@@ -509,14 +504,15 @@ class QuizXhr extends Control
 			/*
 			 * If the quiz index is 0 we have to start a new quiz session 
 			 */
-			if($i == 0)
+			
+			$easymode = 0;
+			if(S::get('quiz-easymode'))
 			{
-				$easymode = 0;
-				if($easymode = S::get('quiz-easymode'))
-				{
-					$easymode = 1;
-				}
-				
+				$easymode = 1;
+			}
+			
+			if($i == 0)
+			{				
 				$quuizz = $this->model->getQuiz(S::get('quiz-id'));
 				// init quiz session in DB
 				if($id = $this->model->initQuizSession(S::get('quiz-id'), $quiz, $quuizz['maxfp'], $quuizz['questcount'],$easymode))
@@ -636,7 +632,8 @@ class QuizXhr extends Control
 						S::set('quiz-index',$i);
 						
 						// update quiz session
-						$this->model->updateQuizSession(S::get('quiz-session'), $quiz, $i);
+						$session_id = S::get('quiz-session');
+						$this->model->updateQuizSession($session_id, $quiz, $i);
 						S::set('quiz-quest-start',time());
 						
 						/*
@@ -683,11 +680,12 @@ class QuizXhr extends Control
 								$close = $("#'.$dia->getId().'").prev().children(".ui-dialog-titlebar-close");
 								$close.unbind("click");
 								$close.click(function(){
-									
-									abortOrPause("'.$dia->getId().'");
+									ajreq("pause",{app:"quiz",sid:'.(int)$session_id.'});
+									//abortOrPause("'.$dia->getId().'");
 								});
 								$("#quizcomment").hide();
 								$(".quiz-questiondialog .ui-dialog-buttonset button:last").hide();
+								$(".ui-dialog-titlebar-close").hide();
 							},100);
 						}',false);
 						
@@ -703,7 +701,65 @@ class QuizXhr extends Control
 						 * strange but it works ;) generate the js code and send is to the client for execute
 						 */
 						
-						$countdown_js = '';
+						
+						$quizbreath = '
+							$(\'#quizwrapper\').show();
+							$(\'#quizbreath\').hide();
+							var count = '.(int)$question['duration'].';
+
+							var counter = null;
+		
+						';
+						
+						if($easymode == 0)
+						{
+							
+							$quizbreath = '
+				
+							$(\'#quizwrapper\').hide();
+							$(\'#quizbreath\').show();
+							$("#'.$dia->getId().'").next(".ui-dialog-buttonpane").css("visibility","hidden");
+							var count = '.(int)$question['duration'].';
+
+							var counter = null;
+									
+							function timer()
+							{
+							  count--;
+					          $("#countdown").progressbar("value",count);
+							  //$("#countdown").text((count)+"");
+							  if (count <= 0)
+							  {
+							     questcheckresult(true);
+							     return;
+							  }
+							}
+							
+							setTimeout(function(){
+								$(\'#quizbreath span\').text("Auf die Plätze!");
+							},3000);
+							setTimeout(function(){
+								$(\'#quizbreath span\').text("Fertig...");
+							},4000);
+							setTimeout(function(){
+								$(\'#quizbreath span\').text("Weiter gehts!");
+							},5000);
+							
+							setTimeout(function(){
+								
+								
+								counter = setInterval(timer, 1000); 
+								$("#countdown").progressbar({
+						             value: '.$question['duration'].',
+						             max:'.$question['duration'].'
+						        });
+									
+								$(\'#quizwrapper\').show();
+								$(\'#quizbreath\').hide();
+								$(".ui-dialog-buttonpane").css("visibility","visible");
+							},6000);';
+							
+						}
 						
 						$return['script'] .= '
 							
@@ -848,41 +904,14 @@ class QuizXhr extends Control
 								});
 							});
 						
-							$(\'#quizwrapper\').hide();
-							$(\'#quizbreath\').show();
-							$("#'.$dia->getId().'").next(".ui-dialog-buttonpane").css("visibility","hidden");
-							var count = '.(int)$question['duration'].';
-
-							var counter = null;
-							
-							setTimeout(function(){
-								$(\'#quizbreath span\').text("Auf die Plätze!");
-							},3000);
-							setTimeout(function(){
-								$(\'#quizbreath span\').text("Fertig...");
-							},4000);
-							setTimeout(function(){
-								$(\'#quizbreath span\').text("Weiter gehts!");
-							},5000);
 							
 							
-						';
-						
+						' . $quizbreath;
+						/*
 						if(!S::get('quiz-easymode'))
 						{
 							$return['script'] .= '
-							setTimeout(function(){
-								counter = setInterval(timer, 1000); 
-								
-								$("#countdown").progressbar({
-					                  value: '.$question['duration'].',
-					                  max:'.$question['duration'].'
-					             });
-									
-								$(\'#quizwrapper\').show();
-								$(\'#quizbreath\').hide();
-								$(".ui-dialog-buttonpane").css("visibility","visible");
-							},6000);
+							
 							
 							function timer()
 							{
@@ -897,6 +926,7 @@ class QuizXhr extends Control
 							}
 									';
 						}
+						*/
 						
 						return $return;
 					}
@@ -1261,6 +1291,8 @@ class QuizXhr extends Control
 		return array(
 			'status' => 1,
 			'script' => '
+				$(".ui-dialog-titlebar-close").show();
+				
 				$(".quiz-questiondialog .ui-dialog-buttonset .ui-button").hide();
 				$(".quiz-questiondialog .ui-dialog-buttonset .ui-button:last").show();
 				$("#quizcomment").show();
@@ -1353,11 +1385,10 @@ class QuizXhr extends Control
 					$close = $("#'.$dia->getId().'").prev().children(".ui-dialog-titlebar-close");
 					//$close.unbind("click");
 					$close.click(function(){
-					
-					ajreq(\'next\',{app:\'quiz\'});
-				});
-			},200);
-		}',false);
+						ajreq(\'next\',{app:\'quiz\'});
+					});
+				},200);
+			}',false);
 		
 		$dia->addButton('Später weitermachen','$(this).dialog("close");');
 		$dia->addButton('weiter gehts!','ajreq(\'next\',{app:\'quiz\'});');

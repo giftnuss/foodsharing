@@ -272,11 +272,11 @@ var conv = {
 		}
 		if(photo.length > 3)
 		{
-			return 'images/'+size+'_q_'+photo;
+			return '/images/'+size+'_q_'+photo;
 		}
 		else
 		{
-			return 'img/'+size+'_q_avatar.png';
+			return '/img/'+size+'_q_avatar.png';
 		}
 	},
 	

@@ -30,3 +30,4 @@ $g_lang['offline'] = 'Ganz normal im echten Leben';
 $g_lang['online'] = 'Multilokal auf mumble.lebensmittelretten.de';
 $g_lang['mumble_room'] = 'In welchem mumble Konferenzraum treffen wir uns?';
 $g_lang['dateend'] = 'End-Datum';
+$g_lang['post_could_not_saved'] = 'Post konnte nicht gespeichert werden.';

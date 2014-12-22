@@ -296,7 +296,7 @@ function loadMarker(types,loader)
 	}
 	
 	$.ajax({
-		url: 'xhr.php?f=loadMarker',
+		url: '/xhr.php?f=loadMarker',
 		data:{types:types,options:options},
 		dataType:'json',
 		success:function(data){

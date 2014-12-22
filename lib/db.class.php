@@ -1022,7 +1022,7 @@ class Db
    */
 	public function checkClient($email,$pass = false)
 	{
-		$email = $this->safe($email);
+		$email = $this->safe(trim($email));
 		$pass = $this->safe($pass);
     if(strlen($email) < 2 || strlen($pass) < 1)
     {
@@ -1141,7 +1141,9 @@ class Db
 							`lon`,
 							`email`,
 							`token`,
-							`mailbox_id`
+							`mailbox_id`,
+							`option`,
+							`geschlecht`
 				
 				FROM 		`'.PREFIX.'foodsaver`
 
@@ -1241,6 +1243,8 @@ class Db
 					$image1->saveChanges();
 				}
 			}
+			
+			$fs['buddys'] = $this->qColKey('SELECT buddy_id FROM '.PREFIX.'buddy WHERE foodsaver_id = '.(int)$fs_id.' AND confirmed = 1');
 			
 			/*
 			 * New Session Management
@@ -1526,6 +1530,6 @@ class Db
 		}
 		
 		$options[$key] = $val;
-		$this->update('UPDATE '.PREFIX.'foodsaver SET option = '.$this->strval(serialize($options)).' WHERE id = '.(int)fsId());
- 	}
+		return $this->update('UPDATE '.PREFIX.'foodsaver SET `option` = '.$this->strval(serialize($options)).' WHERE id = '.(int)fsId());
+	}
 }

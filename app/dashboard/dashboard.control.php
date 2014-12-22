@@ -39,7 +39,7 @@ class DashboardControl extends Control
 	public function dashFs()
 	{
 		
-		//$this->setContentWidth(8, 8);
+		$this->setContentWidth(8, 8);
 		$subtitle = s('no_saved_food');
 		
 		if($this->user['stat_fetchweight'] > 0)
@@ -58,15 +58,17 @@ class DashboardControl extends Control
 		
 		addContent($this->view->foodsharerMenu(),CNT_LEFT);
 		
+		$this->view->updates();
+		
 		if($this->user['lat'] && ($baskets = $this->model->listCloseBaskets(50)))
 		{
-			addContent($this->view->closeBaskets($baskets));
+			addContent($this->view->closeBaskets($baskets),CNT_LEFT);
 		}
 		else
 		{
 			if($baskets = $this->model->getNewestFoodbaskets())
 			{
-				addContent($this->view->newBaskets($baskets));
+				addContent($this->view->newBaskets($baskets),CNT_LEFT);
 			}
 		}
 	}

@@ -64,8 +64,11 @@ class S
 				'rolle' => $user['rolle'],
 				'type' => $user['type'],
 				'token' => $user['token'],
-				'mailbox_id' => $user['mailbox_id']
+				'mailbox_id' => $user['mailbox_id'],
+				'gender' => $user['geschlecht']
 			));
+			
+			S::set('buddy-ids', $user['buddys']);
 			
 			return true;
 		}
@@ -135,9 +138,13 @@ class S
 		return S::get('useroption_'.$key);
 	}
 	
-	public static function setOption($key,$val)
+	public static function setOption($key,$val,$db = false)
 	{
-		global $db;
+		if(!$db)
+		{
+			$db = loadModel('content');	
+		}
+		
 		$db->setOption($key, $val);
 		S::set('useroption_'.$key,$val);
 	}

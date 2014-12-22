@@ -84,9 +84,14 @@ class ProfileModel extends Model
 					fs.sleep_until,
 					UNIX_TIMESTAMP(fs.sleep_from) AS sleep_from_ts,
 					UNIX_TIMESTAMP(fs.sleep_until) AS sleep_until_ts,
-					fs.mailbox_id
+					fs.mailbox_id,
+					UNIX_TIMESTAMP(a.zeit) AS last_activity
 		
 			FROM 	'.PREFIX.'foodsaver fs
+				
+			LEFT JOIN '.PREFIX.'activity a
+				
+			ON fs.id = a.foodsaver_id
 		
 			WHERE 	fs.id = '.(int)$this->fs_id.'
 		
@@ -97,6 +102,12 @@ class ProfileModel extends Model
 		if($this->qOne('SELECT 1 FROM `fs_rating` WHERE rater_id = '.(int)fsId().' AND foodsaver_id = '.(int)$this->fs_id.' AND ratingtype = 2'))
 		{
 			$data['bouched'] = true;
+		}
+		$data['online'] = false;
+		
+		if( (time()-(int)$data['last_activity']) <  1800)
+		{
+			$data['online'] = true;
 		}
 		
 		$data['bananen'] = $this->q('
@@ -127,6 +138,14 @@ class ProfileModel extends Model
 		$data['botschafter'] = false;
 		$data['foodsaver'] = false;
 		$data['orga'] = false;
+		
+		if(S::may('orga'))
+		{
+			$data['violation_count'] = (int)$this->getViolationCount($this->fs_id);
+			$data['note_count'] = (int)$this->getNotesCount($this->fs_id);
+		}
+		
+		
 		if($bot = $this->q('
 			SELECT 	bz.`name`,
 					bz.`id` 
@@ -183,6 +202,33 @@ class ProfileModel extends Model
 		return $data;
 	}
 	
+	public function getNotesCount($fsid)
+	{
+		return (int)$this->qOne('
+			SELECT
+				COUNT(wallpost_id)
+			FROM
+	           	`'.PREFIX.'usernotes_has_wallpost`
+			WHERE
+				usernotes_id = '.(int)$fsid.'
+		');
+	}
+	
+	public function getViolationCount($fsid)
+	{
+		return (int)$this->qOne('
+			SELECT 
+					COUNT(r.id)
+					
+          
+				FROM
+	            	`'.PREFIX.'report` r
+				
+				WHERE
+					r.foodsaver_id = '.(int)$fsid.'
+		');
+	}
+	
 	public function getProfile()
 	{
 		return $this->qRow('
@@ -190,7 +236,9 @@ class ProfileModel extends Model
 			SELECT 	fs.id,
 					fs.name,
 					fs.nachname,
-					fs.geschlecht
+					fs.geschlecht,
+					fs.photo,
+					fs.sleep_status
 				
 			FROM 	'.PREFIX.'foodsaver fs
 				

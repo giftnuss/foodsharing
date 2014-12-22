@@ -1,6 +1,80 @@
 <?php
 
 //debug($_SESSION);
+
+if(S::may())
+{
+	$db =loadModel('content');
+	$check = false;
+	
+	$is_bieb = S::may('bieb');
+	$is_bot = S::may('bot');
+	$is_fs = S::may('fs');
+	
+	if(isset($_SESSION['client']['betriebe']) && is_array($_SESSION['client']['betriebe']) && count($_SESSION['client']['betriebe']) > 0)
+	{
+		$is_fs = true;
+	}
+	
+	if(isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich']) && count($_SESSION['client']['verantwortlich']) > 0)
+	{
+		$is_bieb = true;
+	}
+	
+	if(isset($_SESSION['client']['botschafter']) && is_array($_SESSION['client']['botschafter']) && count($_SESSION['client']['botschafter']) > 0)
+	{
+		$is_bieb = true;
+	}
+	
+	if(
+			(
+					$is_fs
+					&&
+					(int)$db->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = '.(int)fsId()) == 0
+			)
+			||
+			(
+					$is_bieb
+					&&
+					(int)$db->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 2 AND status = 1 AND foodsaver_id = '.(int)fsId()) == 0
+			)
+			||
+			(
+					$is_bot
+					&&
+					(int)$db->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 3 AND status = 1 AND foodsaver_id = '.(int)fsId()) == 0
+			)
+	)
+	{
+		$check = true;
+	}
+	
+	if($check)
+	{
+		$cnt = $db->getContent(33);
+			
+		$cnt['body'] = str_replace(array(
+				'{NAME}',
+				'{ANREDE}'
+		),array(
+				S::user('name'),
+				s('anrede_'.S::user('gender'))
+		),$cnt['body']);
+			
+		if(S::option('quiz-infobox-seen'))
+		{
+			$cnt['body'] = '<div>' . substr(strip_tags($cnt['body']),0,120) . ' ...<a href="#" onclick="$(this).parent().hide().next().show();return false;">weiterlesen</a></div><div style="display:none;">'.$cnt['body'].'</div>';
+		}
+		else
+		{
+			$cnt['body'] = $cnt['body'].'<p><a href="#" onclick="ajreq(\'quizpopup\',{app:\'quiz\'});return false;">Weiter zum Quiz</a></p><p><a href="#"onclick="$(this).parent().parent().hide();ajax.req(\'quiz\',\'hideinfo\');return false;"><i class="fa fa-check-square-o"></i> Hinweis gelesen und nicht mehr anzeigen</a></p>';
+		}
+			
+			
+		addContent(v_info($cnt['body'],$cnt['title']));
+	}
+}
+
 if(!may())
 {
 	getContent('login');
@@ -322,10 +396,160 @@ else if(S::may('fs'))
 	}
 	
 	/*UPDATES*/
+	/*
 	if($updates = $db->updates())
 	{
 		addContent(u_updates($updates));
 	}
+	*/
+	addStyle('
+		#activity ul.linklist li span.time{margin-left:58px;display:block;margin-top:10px;}
+
+		#activity ul.linklist li span.qr
+		{
+			margin-left:58px;
+			-webkit-border-radius: 3px;
+			-moz-border-radius: 3px;
+			border-radius: 3px;
+			opacity:0.5;
+		}
+			
+		#activity ul.linklist li span.qr:hover
+		{
+			opacity:1;
+		}
+		
+		#activity ul.linklist li span.qr img
+		{
+			height:32px;
+			width:32px;
+			margin-right:-35px;
+			border-right:1px solid #ffffff;
+			-webkit-border-top-left-radius: 3px;
+			-webkit-border-bottom-left-radius: 3px;
+			-moz-border-radius-topleft: 3px;
+			-moz-border-radius-bottomleft: 3px;
+			border-top-left-radius: 3px;
+			border-bottom-left-radius: 3px;
+		}
+		#activity ul.linklist li span.qr textarea, #activity ul.linklist li span.qr .loader
+		{
+			border: 0 none;
+		    height: 16px;
+		    margin-left: 36px;
+		    padding: 8px;
+		    width: 78.6%;
+			-webkit-border-top-right-radius: 3px;
+			-webkit-border-bottom-right-radius: 3px;
+			-moz-border-radius-topright: 3px;
+			-moz-border-radius-bottomright: 3px;
+			border-top-right-radius: 3px;
+			border-bottom-right-radius: 3px;
+			margin-right:-30px;
+			background-color:#F9F9F9;
+		}
+			
+		#activity ul.linklist li span.qr .loader
+		{
+			background-color: #ffffff;
+		    position: relative;
+		    text-align: left;
+		    top: -10px;
+		}
+
+		#activity ul.linklist li span.t span.txt {
+		    overflow: hidden;
+		    text-overflow: unset;
+    		white-space: normal;
+			padding-left:10px;
+			border-left:2px solid #4A3520;
+			margin-bottom:10px;
+			display:block;
+		}
+		#activity ul.linklist li span
+		{
+			color:#4A3520;
+		}
+		#activity ul.linklist li span a
+		{
+			color:#46891b !important;
+		}
+		#activity span.n i.fa	
+		{
+			display:inline-block;
+			width:11px;
+			text-align:center;
+		}
+		#activity span.n small
+		{
+			float:right;
+			opacity:0.8;
+			font-size:12px;
+		}
+		#activity ul.linklist li span a:hover
+		{
+			text-decoration:underline !important;
+			color:#46891b !important;
+		}
+		
+		#activity ul.linklist li
+		{
+			margin-bottom:10px;
+			background-color:#ffffff;
+			padding:10px;
+			-webkit-border-radius: 6px;
+			-moz-border-radius: 6px;
+			border-radius: 6px;
+		}
+
+		ul.linklist li span.n
+		{
+			font-weight:normal;
+			font-size:13px;	
+			margin-bottom:10px;
+			text-overflow: unset;
+    		white-space: inherit;
+		}
+	
+		@media (max-width: 900px) 
+		{
+			#activity ul.linklist li span.qr textarea, #activity ul.linklist li span.qr .loader
+			{
+				width:74.6%;
+			}
+		}
+		@media (max-width: 400px) 
+		{
+			ul.linklist li span.n
+			{
+				height:55px;
+			}
+			#activity ul.linklist li span.qr textarea, #activity ul.linklist li span.qr .loader
+			{
+				width:82%;
+			}
+			#activity ul.linklist li span.time, #activity ul.linklist li span.qr
+			{
+				margin-left:0px;
+			}
+			#activity span.n small
+			{
+				float:none;
+				display:block;
+			}
+		}
+	');
+	addScript('/js/jquery.tinysort.min.js');
+	addScript('/js/activity.js');
+	addJs('activity.init();');
+	addContent('
+	<div class="head ui-widget-header ui-corner-top">
+		Updates Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>
+	</div>
+	<div id="activity">
+		<div class="loader" style="padding:40px;background-image:url(/img/469.gif);background-repeat:no-repeat;background-position:center;"></div>
+		<div style="display:none" id="activity-info">'.v_info('Es gibt gerade nichts neues').'</div>
+	</div>');
 	
 	/*
 	 * Top
@@ -767,7 +991,6 @@ function u_events($events)
 				<span class="month">'.s('month_'.(int)date('m',$i['start_ts'])).'</span>
 				<span class="day">'.date('d',$i['start_ts']).'</span>
 			</a>
-			
 		
 			<div class="activity_feed_content">
 				<div class="activity_feed_content_text">

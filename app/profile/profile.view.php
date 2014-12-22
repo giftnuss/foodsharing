@@ -3,6 +3,374 @@ class ProfileView extends View
 {
 	private $foodsaver;
 	
+	public function profile($wallposts)
+	{
+		$page = new vPage($this->foodsaver['name'], $this->infos());
+		
+		$page->addSection($wallposts,'Pinnwand');
+		
+		$page->addSectionLeft($this->photo());
+		
+		$page->addSectionLeft($this->sideInfos(),'Infos');
+		
+		$page->render();
+	}
+	
+	public function usernotes($notes)
+	{
+		$page = new vPage($this->foodsaver['name'].' Notizen', v_info(s('user_notes_info')) . $notes);
+	
+		$page->setBread('Notizen');
+	
+		$page->addSectionLeft($this->photo());
+	
+		$page->addSectionLeft($this->sideInfos(),'Infos');
+	
+		$page->render();
+	}
+	
+	public function sideInfos()
+	{
+		$infos = array();
+		
+		if(S::may('orga'))
+		{
+			$date = new fDate($this->foodsaver['last_login']);
+			
+			$infos[] = array(
+					'name' => 'letzter Login',
+					'val' => $date->format('d.m.Y')
+			);
+			
+			$infos[] = array(
+					'name' => s('private_mail'),
+					'val' => '<a href="/?page=mailbox&mailto='.urlencode($this->foodsaver['email']).'">'.$this->foodsaver['email'].'</a>'
+			);
+			if(isset($this->foodsaver['mailbox']))
+			{
+				$infos[] = array(
+						'name' => s('mailbox'),
+						'val' => '<a href="/?page=mailbox&mailto='.urlencode($this->foodsaver['mailbox']).'">'.$this->foodsaver['mailbox'].'</a>'
+				);
+			}			
+		}
+		
+		if($this->foodsaver['stat_buddycount'] > 0)
+		{
+			$infos[] = array(
+					'name' => 'Bekannte',
+					'val' => $this->foodsaver['name'].' kennen '.$this->foodsaver['stat_buddycount'].' Foodsaver'
+			);
+		}
+		
+		if($this->foodsaver['stat_fetchcount'] > 0)
+		{
+			$infos[] = array(
+					'name' => 'Abholquote',
+					'val' => ''.round($this->foodsaver['stat_fetchrate'],2).' %'
+			);
+		}
+		
+		
+		$out = '';
+		foreach ($infos as $key => $info)
+		{
+			$out .= '<p><strong>'.$info['name'].'</strong><br />'.$info['val'].'</p>';
+		
+		}
+			
+		return '
+		<div class="pure-g">
+		    <div class="infos"> '.$out.' </div>
+		</div>';
+	}
+	
+	public function infos()
+	{
+		$infos = array();		
+		
+		if($this->foodsaver['botschafter'])
+		{
+				
+			foreach ($this->foodsaver['botschafter'] as $b)
+			{
+				$bot[$b['id']] = '<a class="light" href="/?page=bezirk&bid='.$b['id'].'&sub=forum">'.$b['name'].'</a>';
+			}
+			$infos[] = array(
+				'name' => $this->foodsaver['name'].' ist Botschafter für',
+				'val' => implode(', ', $bot)
+			);
+		}
+		
+		
+		if($this->foodsaver['foodsaver'])
+		{
+			$fsa = array();
+			foreach ($this->foodsaver['foodsaver'] as $b)
+			{
+				if(!isset($bot[$b['id']]))
+				{
+					$fsa[] = '<a class="light" href="/?page=bezirk&bid='.$b['id'].'&sub=forum">'.$b['name'].'</a>';
+				}
+			}
+			if(!empty($fsa))
+			{
+				$infos[] = array(
+						'name' => $this->foodsaver['name'].' ist Foodsaver für',
+						'val' => implode(', ', $fsa)
+				);
+			}
+		}
+		
+		if($this->foodsaver['orga'])
+		{
+			$bot = array();
+			foreach ($this->foodsaver['orga'] as $b)
+			{
+				if(isOrgateam())
+				{
+					$bot[$b['id']] = '<a class="light" href="/?page=bezirk&bid='.$b['id'].'&sub=forum">'.$b['name'].'</a>';
+				}
+				else
+				{
+					$bot[$b['id']] = $b['name'];
+				}
+			}
+			$infos[] = array(
+					'name' => genderWord($this->foodsaver['geschlecht'], 'Er','Sie', 'Er/Sie').' ist aktiv in den Orgagruppen',
+					'val' => implode(', ', $bot)
+			);
+		}
+		
+	
+			
+		$out = '';
+		foreach ($infos as $key => $info)
+		{
+
+		
+			$out .= '<p><strong>'.$info['name'].'</strong><br />'.$info['val'].'</p>';
+
+		}
+		
+		/*
+		 * Statistics
+		 */
+		$fetchweight = '';
+		if($this->foodsaver['stat_fetchweight'] > 0)
+		{
+			$ginfo = true;
+			$fetchweight = '
+				<span class="item stat_fetchweight">
+					<span class="val">'.number_format($this->foodsaver['stat_fetchweight'], 0, ",", ".").'kg</span>
+					<span class="name">gerettet</span>
+				</span>';
+		}
+		
+		$fetchcount = '';
+		if($this->foodsaver['stat_fetchcount'] > 0)
+		{
+			$ginfo = true;
+			$fetchcount = '
+				<span class="item stat_fetchcount">
+					<span class="val">'.number_format($this->foodsaver['stat_fetchcount'], 0, ",", ".").'x</span>
+					<span class="name">abgeholt</span>
+				</span>';
+		}
+		
+		$postcount = '';
+		if($this->foodsaver['stat_postcount'] > 0)
+		{
+			$ginfo = true;
+			$postcount = '
+				<span class="item stat_postcount">
+					<span class="val">'.number_format($this->foodsaver['stat_postcount'], 0, ",", ".").'</span>
+					<span class="name">Beiträge</span>
+				</span>';
+		}
+		
+		$bananacount = '';
+		
+		/*
+		 * Banana
+		*/
+		if(S::may('fs'))
+		{
+			$bval = '- noch keine -';
+			$count_banana = count($this->foodsaver['bananen']);
+			if($count_banana == 0)
+			{
+				$count_banana = '&nbsp;';
+			}
+			
+			$banana_button_class = ' bouched';
+			$givebanana = '';
+			
+			// if current user has give the pfofile user an banana
+			if(!$this->foodsaver['bouched'])
+			{
+				$banana_button_class = '';
+				$givebanana = '
+				<a onclick="$(this).hide().next().show().children(\'textarea\').autosize();return false;" href="#">Schenke '.$this->foodsaver['name'].' eine Banane</a>
+				<div class="vouch-banana-wrapper" style="display:none;">
+					<div class="vouch-banana-desc">		
+						Hier kannst Du etwas dazu schreiben, warum Du gerne '.$this->foodsaver['name'].' eine Banane schenken möchtest. Du kannst jedem Foodsaver nur eine Banane schenken!<br />
+						Bitte gebe die Vertrauensbanane nur an Foodsaver die Du persönlich kennst und bei denen Du für Zuverlässigkeit, Vertrauen und Engagement gegen die Verschwendung von Lebensmitteln Deine Hand für ins Feuer legen würdest, also Du 100% sicher bist, dass die Verhaltensregeln und die Rechtsvereinbarung ordnungsgemäß eingehalten werden
+						<p><strong>Vertrauensbananen können nicht zurückgenommen werden, sei bitte deswegen besonders achtsam wem Du eine schenkst</strong></p>
+						<a href="#" style="float:right;" onclick="ajreq(\'rate\',{app:\'profile\',type:2,id:'.(int)$this->foodsaver['id'].',message:$(\'#bouch-ta\').val()});return false;"><img src="/img/banana.png" /></a>
+					</div>
+					<textarea id="bouch-ta" class="textarea" placeholder="mind.100 Zeichen..." style="height:50px;"></textarea>
+				</div>';
+			}
+			
+			//if((int)$this->foodsaver['stat_bananacount'] > 0)
+		
+			addJs('
+			$(".stat_bananacount").magnificPopup({
+				type:"inline"
+			});');
+			$bananacount = '
+			<a href="#bananas" onclick="return false;" class="item stat_bananacount'.$banana_button_class.'">
+				<span class="val">'.$count_banana.'</span>
+				<span class="name">&nbsp;</span>
+			</a>
+			';
+		
+			$bananacount .= '
+			<div id="bananas" class="white-popup mfp-hide corner-all">
+				<h3>' . str_replace('&nbsp;','',$count_banana) . ' Vertrauensbananen</h3>
+				'.$givebanana.'
+				<table class="pintable">
+					<tbody>';
+			$odd = 'even';
+			foreach ($this->foodsaver['bananen'] AS $b)
+			{
+				if($odd == 'even')
+				{
+					$odd = 'odd';
+				}
+				else
+				{
+					$odd = 'even';
+				}
+				$bananacount .= '
+				<tr class="'.$odd.' bpost">
+					<td class="img"><a class="tooltip" title="'.$b['name'].'" href="#"><img onclick="profile('.$b['id'].');return false;" src="'.img($b['photo']).'"></a></td>
+					<td><span class="msg">'.nl2br($b['msg']).'</span>
+					<div class="foot">
+						<span class="time">'.niceDate($b['time_ts']).' von '.$b['name'].'</span>
+					</div></td>
+				</tr>';
+			}
+			$bananacount .= '
+					</tbody>
+				</table>
+			</div>';
+			
+			
+			
+			if($this->foodsaver['id'] == fsId())
+			{
+				$banana = $bval.'<span class="vouch-banana" title="Das sind Deine Bananen"><span>&nbsp;</span></span>';
+					
+			}
+			elseif(!$this->foodsaver['bouched'])
+			{
+				$banana = $bval.'<a onclick="addbanana('.$this->foodsaver['id'].');return false;" href="#" title="'.$this->foodsaver['name'].' eine Vertrauensbanane schenken" class="vouch-banana"><span>&nbsp;</span></a>';
+					
+			}
+			else
+			{
+				$banana = $bval.'<span class="vouch-banana" title="Du hast '.$this->foodsaver['name'].' schon eine Banane geschenkt"><span>&nbsp;</span></span>';
+			}
+		}
+		
+			
+		return '
+			<div class="pure-g">
+				<div class="profile statdisplay">
+					'.$fetchweight.'
+					'.$fetchcount.'
+					'.$postcount.'
+					'.$bananacount.'
+				</div>
+			    <div class="infos"> '.$out.' </div>
+			</div>';
+		
+	}
+	
+	public function photo()
+	{
+		
+		$menu = $this->profileMenu();
+		
+		$sleep_info = '';
+		/*
+		if($this->foodsaver['sleep_status'] > 0)
+		{		
+			if($this->foodsaver['sleep_msg'] != '')
+			{
+				$sleep_info .= '<br />'.v_info($this->foodsaver['sleep_msg']);
+			}
+		}
+		*/
+		
+		$online = '';
+		
+		if($this->foodsaver['online'])
+		{
+			$online = '<div style="margin-top:10px;">'.v_info($this->foodsaver['name'].' ist Online!',false,'<i class="fa fa-circle" style="color:#5ab946;"></i>').'</div>';
+		}
+		
+		return '<div style="text-align:center;">
+					'.avatar($this->foodsaver,130).$sleep_info.'
+				</div>
+				'.$online.'
+				'.$menu;
+	}
+	
+	private function profileMenu()
+	{
+		$opt = '';
+		if($this->foodsaver['buddy'] === -1 && $this->foodsaver['id'] != fsId())
+		//if(true)
+		{
+			$name = explode(' ', $this->foodsaver['name']);
+			$name = $name[0];
+			$opt .= '<li class="buddyRequest"><a onclick="ajreq(\'request\',{app:\'buddy\',id:'.(int)$this->foodsaver['id'].'});return false;" href="#"><i class="fa fa-user"></i>Ich kenne '.$name.'</a></li>';
+		}
+
+		if(isOrgaTeam() || isBotschafter())
+		{
+			$opt .= '<li><a href="/?page=foodsaver&a=edit&id='.$this->foodsaver['id'].'"><i class="fa fa-pencil"></i>bearbeiten</a></li>';
+		}
+		
+		if(S::may('orga'))
+		{
+			if(isset($this->foodsaver['violation_count']) && $this->foodsaver['violation_count'] > 0)
+			{
+				$opt .= '<li><a href="/?page=report&sub=foodsaver&id='.(int)$this->foodsaver['id'].'"><i class="fa fa-meh-o"></i>'.sv('violation_count',array('count' => $this->foodsaver['violation_count'])).'</a></li>';
+			}
+				
+			if(isset($this->foodsaver['note_count']))
+			{
+				$opt .= '<li><a href="/profile/'.(int)$this->foodsaver['id'].'/notes/"><i class="fa fa-file-text-o"></i>'.sv('notes_count',array('count' => $this->foodsaver['note_count'])).'</a></li>';
+			}
+		}
+		
+		if(isAdmin())
+		{
+			$opt .= '<li><a href="/?page=merge&fsid='.$this->foodsaver['id'].'&rurl='.urlencode(getSelf()).'"><i class="fa fa-magic"></i>verwandeln</a></li>';
+		}
+		
+		return '
+		<ul class="linklist">
+			<li><a href="#" onclick="chat('.$this->foodsaver['id'].');return false;"><i class="fa fa-comment"></i>Nachricht schreiben</a></li>
+			'.$opt.'
+			<li><a href="#" onclick="ajreq(\'reportDialog\',{app:\'report\',fsid:'.(int)$this->foodsaver['id'].'});return false;"><i class="fa fa-life-ring"></i>Verstoß melden</a></li>
+		</ul>';
+	}
+	
 	public function setData($data)
 	{
 		$this->foodsaver = $data;

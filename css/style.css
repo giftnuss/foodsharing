@@ -282,11 +282,6 @@ body
 {
 	display:none;
 }
-div#main
-{
-	min-height: 650px;
-}
-
 div#main, footer .wrapper
 {
     line-height: 1.6em;
@@ -296,8 +291,12 @@ div#main, footer .wrapper
 }
 div#main
 {
+	min-height: 650px;
 	margin-top:45px;
+	padding-bottom:40px;
 }
+
+
 #content-wrapper
 {
 	
@@ -322,6 +321,29 @@ div#main
     font-weight: normal;
     margin: 0;
     padding: 10px;
+}
+.head .option
+{
+	display:inline-block;
+	float:right;
+	text-align: right;
+}
+.head .option a
+{
+	border-radius: 50%;
+    display: inline-block;
+    height: 15px;
+    line-height: 15px;
+    margin-top: -1px;
+    padding: 3px;
+    text-align: center;
+    width: 15px;
+}
+.head .option a:hover
+{
+	background-color:#fff;
+	text-decoration: none;
+	color:#4A3520;
 }
 .clear
 {
@@ -1443,6 +1465,10 @@ ul.linklist li span.n
 {
 	font-weight:bold;
 	display:block;
+	
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 ul.linklist li span.d
 {
@@ -1452,6 +1478,13 @@ ul.linklist li span.d
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+ul.linklist li > a i.fa
+{
+	display: inline-block;
+    height: 14px;
+    text-align: left;
+    width: 17px;
 }
 .history li.title
 {
@@ -1476,6 +1509,20 @@ ul.linklist li span.i
 	-webkit-border-radius: 6px 6px 6px 6px;
 	border: 0px solid #000000;
 }
+
+ul.linklist li span.t
+{
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+ul.linklist li span.time
+{
+	font-size:10px;
+	opacity:0.8;
+	margin-top: 3px;
+}
 ul.linklist li span.i img
 {
 	border-radius: 6px 6px 6px 6px;
@@ -1483,7 +1530,7 @@ ul.linklist li span.i img
 	-webkit-border-radius: 6px 6px 6px 6px;
 	border: 0px solid #000000;
 }
-ul.linklist li a.more
+ul.linklist li > a.more
 {
     background-color: #599022;
     border-bottom-left-radius: 6px;
@@ -1497,14 +1544,14 @@ ul.linklist li a.more
     margin-top:15px;
 
 }
-ul.linklist li, ul.linklist li a, ul.linklist li a span
+ul.linklist li, ul.linklist li > a, ul.linklist li > a span
 {
 	display:block;
 	margin:0;
 	padding:0;
 	
 }
-ul.linklist li a
+ul.linklist li > a
 {
 	padding:6px;
 	text-decoration:none !important;
@@ -1515,18 +1562,18 @@ ul.linklist li
 {
 	
 }
-ul.linklist li a span.title
+ul.linklist li > a span.title
 {
 	text-decoration:none !important;
 	color:#4A3522;
 	font-weight:bold;
 }
-ul.linklist li a.active
+ul.linklist li > a.active
 {
 	color:#4A3522;
 	font-weight:bold;
 }
-ul.linklist li a:hover, ul.linklist li a:hover span
+ul.linklist li > a:hover, ul.linklist li > a:hover span
 {
 	background-color:#599022;
 	color:#FFFFFF !important;
@@ -1599,7 +1646,7 @@ div.toolmenu
 	visibility:hidden;
 }
 
-div.statdisplay span.item
+div.statdisplay .item
 {
 	display:block;
 	float:left;
@@ -1608,27 +1655,32 @@ div.statdisplay span.item
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
 	border-radius: 8px;
-	background-color: #75B93F;
-	color: #FAFAFC;
+	background-color: #599022;
+	color: #ffffff;
 	text-align: center;
 	width:62px;
 }
-div.statdisplay span.item span
+div.statdisplay .item span
 {
 	color: #FAFAFC;
 }
-div.statdisplay span.item .val
+div.statdisplay .item .val
 {
 	font-size:17px;
 	font-weight: bold;	
 	display:block;
 	margin:14px 0 1px;
 }
-div.statdisplay span.item .name
+div.statdisplay .item .name
 {
 	font-weight: 11px;
 	display:block;
 	margin:0 0 14px 0;
+}
+div.statdisplay a.item:hover
+{
+	text-decoration: none;
+	opacity:0.8;
 }
 span.verified
 {
@@ -2031,7 +2083,7 @@ a.light
     text-align: center;
     text-decoration: none;
 }
-ul.linklist li a:hover span.day
+ul.linklist li > a:hover span.day
 {
     color: #2F291E !important;
 }
@@ -2143,7 +2195,7 @@ td.load
 {
 	width:95%;
 }
-.corner-all
+.corner-all, .linklist li > a
 {
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;
@@ -2208,6 +2260,13 @@ td.load
 .button.button-big
 {
 	font-size:16px;
+	width:91%;
+	display:block;
+	text-align: center;
+}
+.button.button-med
+{
+	font-size:14px;
 	width:91%;
 	display:block;
 	text-align: center;
@@ -2354,7 +2413,7 @@ ul.bread li a:hover
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 }
-ul.linklist li a .avatar span.bubble, ul.linklist li a:hover .avatar span.bubble
+ul.linklist li > a .avatar span.bubble, ul.linklist li > a:hover .avatar span.bubble
 {
  	margin-left: 37px !important;
     margin-top: -40px !important;

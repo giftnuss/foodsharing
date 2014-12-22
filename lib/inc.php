@@ -277,7 +277,7 @@ if(S::get('hastodoquiz') === true)
 	$date = '12/12/2014';
 	if(S::get('hastodoquiz-id') > 1)
 	{
-		$date = '06/01/2015';
+		$date = '12/01/2015';
 	}
 	
 	$quizinfo = '
