@@ -4095,6 +4095,12 @@ GROUP BY foodsaver_id'));
 		{
 			$msg->setConversationMembers($cid, $member_ids);
 		}
+
+    if($sid = $this->getBetriebConversation($bid, true)) {
+      foreach($verantwortlicher as $user) {
+        $msg->addUserToConversation($sid, $user);
+      }
+    }
 		
 		if($this->sql($sql))
 		{
