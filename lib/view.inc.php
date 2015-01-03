@@ -935,6 +935,8 @@ function v_form_recip_chooser()
 			<option value="choose">'.s('recip_choose_bezirk').'</option>
 			<option value="choosebot">Botschafter in bestimmten Bezirken</option>
 			<option value="after_update">nach dickem update User</option>
+			<option value="allberlin">(Special) Alle Foodsaver aus Berlin</option>
+			<option value="allnotberlin">(Special) Alle Foodsaver außer Berliner</option>
 			<option value="manual">Manuelle Eingabe</option>
 		</select>
 		<div id="'.$id.'-hidden" style="display:none">
