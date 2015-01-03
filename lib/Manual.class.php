@@ -683,6 +683,7 @@ GROUP BY foodsaver_id'));
 					`'.PREFIX.'betrieb_team` bt
 				
 			WHERE 	bt.foodsaver_id = fs.id
+				
 			AND 	bt.verantwortlich = 1
 		'))
 		{
@@ -697,10 +698,10 @@ GROUP BY foodsaver_id'));
 	
 	public function getAllEmailFoodsaver($newsletter = false)
 	{
-		$where = '';
+		$where = 'WHERE rolle > 0';
 		if($newsletter !== false)
 		{
-			$where = 'WHERE newsletter = 1';
+			$where = 'WHERE newsletter = 1 AND rolle > 0';
 		}
 		return $this->q('
 				SELECT 	`id`,`email`
