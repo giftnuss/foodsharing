@@ -409,11 +409,13 @@ class SettingsView extends View
 			{
 				if(!empty($right_answers))
 				{
-					$cnt .= v_input_wrapper('Antworten die Du richtig ausgewählt hast', $right_answers,false,array('collapse' => true));
+					//$cnt .= v_input_wrapper('Antworten die Du richtig ausgewählt hast', $right_answers,false,array('collapse' => true));
+					$cnt .= v_input_wrapper('Richtige Antworten', $right_answers,false,array('collapse' => true));
 				}
 				if(!empty($wrong_answers))
 				{
-					$cnt .= v_input_wrapper('Antworten die Du falsch ausgewählt hast', $wrong_answers,false,array('collapse' => true));
+					//$cnt .= v_input_wrapper('Antworten die Du falsch ausgewählt hast', $wrong_answers,false,array('collapse' => true));
+					$cnt .= v_input_wrapper('Falsche Antworten', $wrong_answers,false,array('collapse' => true));
 				}
 				if(!empty($neutral_answers))
 				{
