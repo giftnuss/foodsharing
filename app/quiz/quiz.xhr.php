@@ -1313,7 +1313,7 @@ class QuizXhr extends Control
 						"background-color":answers[i].bg,
 						"color":answers[i].color
 					}).effect("highlight").attr("onmouseover","return false;").attr("onmouseout","return false;");
-					$("#qanswer-" + answers[i].id).append(\'<div style="margin:15px 0 0 43px;">\'+answers[i].atext+\' <a style="color:\'+answers[i].color+\';font-weight:bold;" href="#" onclick="$(this).parent().next().toggle();return false;">Erklärung <i class="fa fa-arrow-circle-o-right"></i></a></div><div id="explanation-\'+answers[i].id+\'" style="font-weight:bold;margin:15px 0 0 43px;display:none;">\'+answers[i].exp+\'</div>\');
+					$("#qanswer-" + answers[i].id).append(\'<div style="margin:15px 0 0 43px;">\'+answers[i].atext+\'</div><div id="explanation-\'+answers[i].id+\'" style="font-weight:bold;margin:15px 0 0 43px;"><span class="tail">\'+answers[i].exp.substr(0,60)+\'...</span><span class="complete" style="display:none">\'+answers[i].exp+\'</span> <a style="color:\'+answers[i].color+\';font-weight:bold;" href="#" onclick="$(this).parent().children().toggle();return false;">mehr lesen <i class="fa fa-arrow-circle-o-right"></i></a></div>\');
 				}
 				
 			'
