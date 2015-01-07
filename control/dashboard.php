@@ -47,6 +47,12 @@ if(S::may())
 	)
 	{
 		$check = true;
+		
+		if($is_bot)
+		{
+			addJs('ajreq("endpopup",{app:"quiz"});');
+		}
+		
 	}
 	
 	if($check)

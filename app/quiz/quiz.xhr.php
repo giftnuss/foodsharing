@@ -423,6 +423,39 @@ class QuizXhr extends Control
 		);
 	}
 	
+	public function endpopup()
+	{
+		$dia = new XhrDialog();
+		
+		
+		
+			
+		$dia->addOpt('width', 720);
+			
+		$content_id = 36;
+			
+		$dia->addAbortButton();
+		
+		if(S::get('hastodoquiz-id') == 1)
+		{
+			$dia->addButton('jetzt mit dem Quiz meine Foodsaver Rolle bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
+		}
+		else if(S::get('hastodoquiz-id') == 2)
+		{
+			$dia->addButton('jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche*r bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bip\');');
+		}
+		else if(S::get('hastodoquiz-id') == 3)
+		{
+			$dia->addButton('jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
+		}
+		
+		$content = $this->model->getContent($content_id);
+		$dia->setTitle($content['title']);
+		$dia->addContent($content['body']);
+			
+		return $dia->xhrout();
+	}
+	
 	public function quizpopup()
 	{
 		if(S::may('fs'))
