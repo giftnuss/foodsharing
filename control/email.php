@@ -204,20 +204,12 @@ function handleEmail()
 			elseif ($data['recip_choose'] == 'noquizfinishbip')
 			{
 				$foodsaver = $db->q('
-					SELECT DISTINCT fs.id,
-							fs.email,
-							fs.name,
-							qs.status
-			
-					FROM 	fs_foodsaver fs
-			
-					LEFT JOIN
-							fs_quiz_session qs
-			
-					ON
-						fs.id = qs.foodsaver_id
-			
-					WHERE fs.rolle = 2 AND qs.status IS NULL
+					SELECT DISTINCT fs.id, fs.email, fs.name, qs.status
+					FROM fs_betrieb_team t
+					LEFT JOIN fs_foodsaver fs ON fs.id = t.foodsaver_id
+					LEFT JOIN fs_quiz_session qs ON fs.id = qs.foodsaver_id
+					WHERE t.verantwortlich = 1
+					AND qs.status IS NULL
 				');
 			}
 			elseif ($data['recip_choose'] == 'noquizfinishfs')
