@@ -936,6 +936,9 @@ function v_form_recip_chooser()
 			<option value="choosebot">Botschafter in bestimmten Bezirken</option>
 			<option value="after_update">nach dickem update User</option>
 			<option value="noquizfinishall">Alle Quiz noch gar nicht gemacht</option>
+			<option value="noquizfinishbot">Bot Quiz noch gar nicht gemacht</option>
+			<option value="noquizfinishfs">FS Quiz noch gar nicht gemacht</option>
+			<option value="noquizfinishbip">BIEB Quiz noch gar nicht gemacht</option>
 			<option value="allberlin">(Special) Alle Foodsaver aus Berlin</option>
 			<option value="allnotberlin">(Special) Alle Foodsaver außer Berliner</option>
 			<option value="manual">Manuelle Eingabe</option>
