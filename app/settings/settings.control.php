@@ -115,7 +115,11 @@ class SettingsControl extends Control
 				
 			if(($status = $model->getQuizStatus(2)) && ($quiz = $model->getQuiz(2)))
 			{
-	
+				if((int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = '.(int)fsId()) == 0)
+				{
+					info('Du darfst zunächst das Foodsaver Quiz machen');
+					go('/?page=settings&sub=upgrade/up_fs');
+				}
 				$desc = $this->model->getContent(12);
 	
 				// Quiz wurde noch gar nicht probiert

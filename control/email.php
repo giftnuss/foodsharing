@@ -182,6 +182,25 @@ function handleEmail()
 			{
 				$foodsaver = $db->getAllFilialverantwortlich();
 			}
+			elseif ($data['recip_choose'] == 'noquizfinishall')
+			{
+				$foodsaver = $db->q('
+					SELECT DISTINCT fs.id,
+							fs.email,
+							fs.name,
+							qs.status
+
+					FROM 	fs_foodsaver fs
+						
+					LEFT JOIN
+							fs_quiz_session qs
+						
+					ON 
+						fs.id = qs.foodsaver_id
+						
+					WHERE fs.rolle > 0 AND qs.status IS NULL	
+				');
+			}
 			elseif ($data['recip_choose'] == 'allberlin')
 			{
 				$cbs = $db->getChildBezirke(47);
