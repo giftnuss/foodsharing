@@ -121,7 +121,7 @@ function niceDateShort($ts)
 	}
 	else
 	{
-		return date('n.m.Y. H:i',$ts);
+		return date('j.m.Y. H:i',$ts);
 	}
 }
 
