@@ -581,7 +581,8 @@ class QuizModel extends Model
 					fs.sleep_status,
 					fs.telefon,
 					fs.handy,
-					fs.email
+					fs.email,
+					fs.plz
 			
 				FROM
 					'.PREFIX.'foodsaver fs,
@@ -615,7 +616,9 @@ class QuizModel extends Model
 							$finished[$s['quiz_id']] = true;
 						}
 					}
-			
+					
+					
+					
 					if(!isset($finished[1]))
 					{
 						$b['finished'] = $finished;
@@ -649,7 +652,8 @@ class QuizModel extends Model
 					fs.sleep_status,
 					fs.telefon,
 					fs.handy,
-					fs.email
+					fs.email,
+					fs.plz
 				
 				FROM
 					'.PREFIX.'foodsaver fs,
@@ -732,7 +736,8 @@ class QuizModel extends Model
 				fs.sleep_status,
 				fs.telefon,
 				fs.handy,
-				fs.email
+				fs.email,
+				fs.plz
 				
 			FROM 
 				'.PREFIX.'foodsaver fs,

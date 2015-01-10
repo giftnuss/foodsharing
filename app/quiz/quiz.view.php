@@ -33,6 +33,7 @@ class QuizView extends View
 					array('cnt' => '<input type="hidden" class="rid" name="rid" value="'.$b['id'].'"><span class="photo"><a title="'.$b['name'].' '.$b['nachname'].'" href="#" onclick="quickprofile('.(int)$b['id'].');return false;"><img src="'.img($b['photo']).'" /></a></span>'),
 					
 					array('cnt' => $b['name'].' '.$b['nachname']),
+					array('cnt' => $b['plz']),
 					array('cnt' => $b['telefon'].'<br />'.$b['handy']),
 					
 					array('cnt' => '<span style="font-weight:bold;color:red;">'.$quiz.'</span>')
@@ -43,6 +44,7 @@ class QuizView extends View
 				//array('name' => s('picture'),'sort'=> false, 'width' => 45),
 				array('name' => '&nbsp;', 'width' => 50),
 				array('name' => 'Name'),
+				array('name' => 'Postleitzahl', 'width' => 50),
 				array('name' => 'Telefon/Handy', 'width' => 150),
 				array('name' => 'hat nicht gemacht/bestanden...', 'width' => 180),
 				//array('name' => s('actions'),'sort' => false,'width' => 75)
