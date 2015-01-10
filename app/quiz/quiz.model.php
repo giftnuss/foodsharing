@@ -616,7 +616,7 @@ class QuizModel extends Model
 						}
 					}
 			
-					if(count($finished) < 3)
+					if(!isset($finished[1]) || !$finished[2])
 					{
 						$b['finished'] = $finished;
 						$tmp[] = $b;
@@ -684,7 +684,7 @@ class QuizModel extends Model
 					}
 				}
 				
-				if(count($finished) < 3)
+				if(!isset($finished[1]))
 				{
 					$b['finished'] = $finished;
 					$tmp[] = $b;
