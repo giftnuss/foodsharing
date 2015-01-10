@@ -616,7 +616,7 @@ class QuizModel extends Model
 						}
 					}
 			
-					if(!isset($finished[1]) || !$finished[2])
+					if(!isset($finished[1]))
 					{
 						$b['finished'] = $finished;
 						$tmp[] = $b;
