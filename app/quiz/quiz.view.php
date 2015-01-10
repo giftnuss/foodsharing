@@ -8,6 +8,49 @@ class QuizView extends View
 				<p>Nach der Beantwortung der Frage kannst Du auch <strong>pausieren</strong> ohne Fehlerpunkte zu bekommen.</p>';
 	}
 	
+	public function failoverList($bots)
+	{
+		
+		$rows = array();
+		foreach ($bots as $b)
+		{
+			$quiz = '';
+			
+			if(!isset($b['finished'][1]))
+			{
+				$quiz .= 'foodsaver<br />';
+			}
+			if(!isset($b['finished'][2]))
+			{
+				$quiz .= 'betriebsverantwortliche*r<br />';
+			}
+			if(!isset($b['finished'][3]))
+			{
+				$quiz .= 'botschafter*in';
+			}
+			
+			$rows[] = array(
+					array('cnt' => '<input type="hidden" class="rid" name="rid" value="'.$b['id'].'"><span class="photo"><a title="'.$b['name'].' '.$b['nachname'].'" href="#" onclick="quickprofile('.(int)$b['id'].');return false;"><img src="'.img($b['photo']).'" /></a></span>'),
+					
+					array('cnt' => $b['name'].' '.$b['nachname']),
+					array('cnt' => $b['telefon'].'<br />'.$b['handy']),
+					
+					array('cnt' => '<span style="font-weight:bold;color:red;">'.$quiz.'</span>')
+			);
+		}
+		
+		$table = v_tablesorter(array(
+				//array('name' => s('picture'),'sort'=> false, 'width' => 45),
+				array('name' => '&nbsp;', 'width' => 50),
+				array('name' => 'Name'),
+				array('name' => 'Telefon/Handy', 'width' => 150),
+				array('name' => 'hat nicht gemacht/bestanden...', 'width' => 180),
+				//array('name' => s('actions'),'sort' => false,'width' => 75)
+		),$rows,array('pager'=>true));
+		
+		return $table;
+	}
+	
 	public function sessionList($sessions,$quiz)
 	{
 		$rows = array();

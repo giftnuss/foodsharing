@@ -166,6 +166,21 @@ class QuizControl extends Control
 		}
 	}
 	
+	public function failover()
+	{
+		if(S::may('orga'))
+		{
+			if($bots = $this->model->listFailoverBots())
+			{
+				addContent($this->view->failoverList($bots));
+			}
+			else
+			{
+				addContent(v_info('Alle Botschafter haben ihre Quizze bestanden.'));
+			}
+		}
+	}
+	
 	public function listQuestions($quiz_id)
 	{
 		addContent($this->view->quizbuttons($quiz_id));

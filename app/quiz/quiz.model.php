@@ -562,6 +562,61 @@ class QuizModel extends Model
 
 	}
 	
+	public function listFailoverBots()
+	{
+		if($botschafter = $this->q('
+			SELECT 
+				DISTINCT fs.id,
+				fs.name,
+				fs.nachname,
+				fs.photo,
+				fs.sleep_status,
+				fs.telefon,
+				fs.handy,
+				fs.email
+				
+			FROM 
+				'.PREFIX.'foodsaver fs,
+				'.PREFIX.'botschafter b
+				
+			WHERE
+				b.foodsaver_id = fs.id
+		'))
+		{
+			$tmp = array();
+			foreach ($botschafter as $k => $b)
+			{
+				$finished = array();
+				if($sessions = $this->q('
+					SELECT 
+						quiz_id
+						
+					FROM 
+						'.PREFIX.'quiz_session
+						
+					WHERE 
+						foodsaver_id = '.(int)$b['id'].'
+					AND `status` = 1
+				'))
+				{
+					foreach ($sessions as $s)
+					{
+						$finished[$s['quiz_id']] = true;
+					}
+				}
+				
+				if(count($finished) < 3)
+				{
+					$b['finished'] = $finished;
+					$tmp[] = $b;
+				}
+				
+			}
+			
+			return $tmp;
+		}
+	}
+	
 	public function updateQuestion($id,$quiz_id,$text,$fp,$duration,$wikilink)
 	{
 		$this->update('
