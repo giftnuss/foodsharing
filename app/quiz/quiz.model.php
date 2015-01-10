@@ -562,6 +562,165 @@ class QuizModel extends Model
 
 	}
 	
+	public function listFailoverFsBetriebe()
+	{
+		$betriebIds = array();
+		if(!empty($_SESSION['client']['verantwortlich']))
+		{
+			foreach ($_SESSION['client']['verantwortlich'] as $b)
+			{
+				$betriebIds[] = $b['betrieb_id'];
+			}
+			
+			if($foodsaver = $this->q('
+				SELECT
+					DISTINCT fs.id,
+					fs.name,
+					fs.nachname,
+					fs.photo,
+					fs.sleep_status,
+					fs.telefon,
+					fs.handy,
+					fs.email
+			
+				FROM
+					'.PREFIX.'foodsaver fs,
+					'.PREFIX.'betrieb_team t
+			
+				WHERE
+					t.foodsaver_id = fs.id
+			
+				AND
+					t.betrieb_id IN('.implode(',',$betriebIds).')
+			'))
+			{
+				$tmp = array();
+				foreach ($foodsaver as $k => $b)
+				{
+					$finished = array();
+					if($sessions = $this->q('
+						SELECT
+							quiz_id
+				
+						FROM
+							'.PREFIX.'quiz_session
+				
+						WHERE
+							foodsaver_id = '.(int)$b['id'].'
+						AND `status` = 1
+				'))
+					{
+						foreach ($sessions as $s)
+						{
+							$finished[$s['quiz_id']] = true;
+						}
+					}
+			
+					if(count($finished) < 3)
+					{
+						$b['finished'] = $finished;
+						$tmp[] = $b;
+					}
+			
+				}
+					
+				return $tmp;
+			}
+			
+		}
+	}
+	
+	public function listFailoverFs()
+	{
+		$bezIds = array();
+		if(!empty($_SESSION['client']['botschafter']))
+		{
+			foreach ($_SESSION['client']['botschafter'] as $b)
+			{
+				$bezIds[] = $b['bezirk_id'];
+			}
+			
+			if($foodsaver = $this->q('
+				SELECT
+					DISTINCT fs.id,
+					fs.name,
+					fs.nachname,
+					fs.photo,
+					fs.sleep_status,
+					fs.telefon,
+					fs.handy,
+					fs.email
+				
+				FROM
+					'.PREFIX.'foodsaver fs,
+					'.PREFIX.'foodsaver_has_bezirk hb
+				
+				WHERE
+					hb.foodsaver_id = fs.id
+					
+				AND
+					hb.bezirk_id IN('.implode(',',$bezIds).')
+			'))
+			{
+				$tmp = array();
+			foreach ($foodsaver as $k => $b)
+			{
+				$finished = array();
+				if($sessions = $this->q('
+					SELECT 
+						quiz_id
+						
+					FROM 
+						'.PREFIX.'quiz_session
+						
+					WHERE 
+						foodsaver_id = '.(int)$b['id'].'
+					AND `status` = 1
+				'))
+				{
+					foreach ($sessions as $s)
+					{
+						$finished[$s['quiz_id']] = true;
+					}
+				}
+				
+				if(count($finished) < 3)
+				{
+					$b['finished'] = $finished;
+					$tmp[] = $b;
+				}
+				
+			}
+			
+			return $tmp;
+			}
+			
+		}
+	}
+	
+	private function getFsTeams($fsid)
+	{
+		return $this->q('
+			SELECT
+				b.name,
+				b.id,
+				bt.verantwortlich
+	
+			FROM
+				'.PREFIX.'betrieb b,
+				'.PREFIX.'betrieb_team bt
+	
+			WHERE
+				b.id = bt.betrieb_id
+	
+			AND
+				bt.foodsaver_id = '.(int)$fsid.'
+	
+			AND
+				bt.active = 1
+		');
+	}
+	
 	public function listFailoverBots()
 	{
 		if($botschafter = $this->q('

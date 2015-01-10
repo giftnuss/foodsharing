@@ -166,12 +166,42 @@ class QuizControl extends Control
 		}
 	}
 	
+	public function fobot()
+	{
+		if(S::may('bot'))
+		{
+			if($bots = $this->model->listFailoverFs())
+			{
+				addContent(v_info('Foodsaver in Deinen Bezirken die ihre Quizze noch nicht erledigt haben und somit am 12.12. als foodsaver wegfallen, also nicht mehr in ihren Betriebs-Teams sein werden.'));
+				addContent($this->view->failoverList($bots));
+			}
+			else
+			{
+				addContent(v_info('Alle Foodsaver haben ihre Quizze bestanden.'));
+			}
+		}
+	}
+	
+	public function fobieb()
+	{
+		if($bots = $this->model->listFailoverFsBetriebe())
+		{
+			addContent(v_info('Foodsaver in Deinen Betrieben die ihre Quizze noch nicht erledigt haben und somit am 12.12. als foodsaver wegfallen, also nicht mehr im Team sein werden.'));
+			addContent($this->view->failoverList($bots));
+		}
+		else
+		{
+			addContent(v_info('Alle Foodsaver haben ihre Quizze bestanden.'));
+		}
+	}
+	
 	public function failover()
 	{
 		if(S::may('orga'))
 		{
 			if($bots = $this->model->listFailoverBots())
 			{
+				addContent(v_info('Folgende Botschafter haben ihr Quiz noch nicht gemacht'));
 				addContent($this->view->failoverList($bots));
 			}
 			else
