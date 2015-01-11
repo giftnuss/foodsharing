@@ -718,7 +718,7 @@ class SettingsView extends View
 	public function confirmBip($cnt,$rv)
 	{
 		$out = '
-			<form action="/?page=settings&amp;sub=upgrade/up_fs" enctype="multipart/form-data" class="validate" id="confirmfs-form" method="post">
+			<form action="/?page=settings&amp;sub=upgrade/up_bip" enctype="multipart/form-data" class="validate" id="confirmfs-form" method="post">
 				<input type="hidden" value="confirmfs" name="form_submit">';
 		
 		
