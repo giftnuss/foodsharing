@@ -3165,16 +3165,16 @@ function avatar($foodsaver,$size = 'mini',$altimg = false)
 		switch ($foodsaver['rolle'])
 		{
 			case 1 : 
-				$bg = 'border:6px solid #4A3520;';
+				$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #4A3520;';
 				break;
 			case 2 :
-				$bg = 'border:6px solid #599022;';
+				$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #599022;';
 				break;
 			case 3 :
-				$bg = 'border:6px solid #FFBB00;';
+				$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #FFBB00;';
 				break;
 			case 4 :
-				$bg = 'border:6px solid #FF4800;';
+				$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #FF4800;';
 				break;
 			default:
 				break;
