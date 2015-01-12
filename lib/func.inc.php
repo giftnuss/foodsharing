@@ -3160,9 +3160,9 @@ function avatar($foodsaver,$size = 'mini',$altimg = false)
 	 * temporary for quiz
 	 */
 	$bg = '';
-	if(isset($foodsaver['rolle']))
+	if(isset($foodsaver['quiz_rolle']))
 	{
-		switch ($foodsaver['rolle'])
+		switch ($foodsaver['quiz_rolle'])
 		{
 			case 1 : 
 				$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #4A3520;';

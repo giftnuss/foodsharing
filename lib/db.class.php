@@ -1168,7 +1168,21 @@ class Db
 			$count_verantwortlich = (int)$this->qOne('SELECT COUNT(betrieb_id) FROM '.PREFIX.'betrieb_team WHERE foodsaver_id = '.(int)$fs_id.' AND verantwortlich = 1');
 			$count_botschafter = (int)$this->qOne('SELECT COUNT( bezirk_id )FROM '.PREFIX.'botschafter WHERE foodsaver_id = ' . (int)$fs_id);
 
+			$quiz_rolle = 0;
+			if($count_fs_quiz > 0)
+			{
+				$quiz_rolle = 1;
+			}
+			if($count_bib_quiz > 0 && $count_fs_quiz > 0)
+			{
+				$quiz_rolle = 2;
+			}
+			if($count_bib_quiz > 0 && $count_fs_quiz > 0 && $count_bot_quiz > 0)
+			{
+				$quiz_rolle = 3;
+			}
 			
+			$this->update('UPDATE '.PREFIX.'foodsaver SET quiz_rolle = '.(int)$quiz_rolle.' WHERE id = '.(int)$fs['id']);
 			/*
 			echo '<pre>';
 			echo $count_verantwortlich."\n";

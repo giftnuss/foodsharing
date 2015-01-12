@@ -3978,7 +3978,7 @@ GROUP BY foodsaver_id'));
 							fs.`telefon`,
 							fs.`handy`,
 							fs.photo,
-							fs.rolle,
+							fs.quiz_rolle,
 							CONCAT(fs.name," ",fs.nachname) AS name,
 							name as vorname,
 							t.`verantwortlich`,

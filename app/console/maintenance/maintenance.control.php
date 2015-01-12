@@ -418,4 +418,35 @@ class MaintenanceControl extends ConsoleControl
 			success('OK');
 		}
 	}
+	
+	public function quizrole()
+	{
+		if($foodsaver = $this->model->q('SELECT id FROM fs_foodsaver WHERE rolle > 0'))
+		{
+			$bar = $this->progressbar(count($foodsaver));
+			foreach ($foodsaver as $key => $fs)
+			{
+				$bar->update(($key+1));
+				$count_fs_quiz = (int)$this->qOne('SELECT COUNT(id) FROM '.PREFIX.'quiz_session WHERE foodsaver_id = '.(int)$fs['id'].' AND quiz_id = 1 AND `status` = 1');
+				$count_bib_quiz = (int)$this->qOne('SELECT COUNT(id) FROM '.PREFIX.'quiz_session WHERE foodsaver_id = '.(int)$fs['id'].' AND quiz_id = 2 AND `status` = 1');
+				$count_bot_quiz = (int)$this->qOne('SELECT COUNT(id) FROM '.PREFIX.'quiz_session WHERE foodsaver_id = '.(int)$fs['id'].' AND quiz_id = 3 AND `status` = 1');
+					
+				$quiz_rolle = 0;
+				if($count_fs_quiz > 0)
+				{
+					$quiz_rolle = 1;
+				}
+				if($count_bib_quiz > 0 && $count_fs_quiz > 0)
+				{
+					$quiz_rolle = 2;
+				}
+				if($count_bib_quiz > 0 && $count_fs_quiz > 0 && $count_bot_quiz > 0)
+				{
+					$quiz_rolle = 3;
+				}
+					
+				$this->update('UPDATE '.PREFIX.'foodsaver SET quiz_rolle = '.(int)$quiz_rolle.' WHERE id = '.(int)$fs['id']);
+			}
+		}
+	}
 }

@@ -240,7 +240,7 @@ class ProfileModel extends Model
 					fs.geschlecht,
 					fs.photo,
 					fs.sleep_status,
-					fs.rolle
+					fs.quiz_rolle
 				
 			FROM 	'.PREFIX.'foodsaver fs
 				
