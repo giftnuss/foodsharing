@@ -3156,7 +3156,35 @@ function ttt($str,$length = 160)
 
 function avatar($foodsaver,$size = 'mini',$altimg = false)
 {
-	return '<span style="background-image:url('.img($foodsaver['photo'],$size,'q',$altimg).');" class="avatar size-'.$size.' sleepmode-'.$foodsaver['sleep_status'].'"><i>'.$foodsaver['name'].'</i></span>';
+	/*
+	 * temporary for quiz
+	 */
+	$bg = '';
+	if(isset($foodsaver['rolle']))
+	{
+		switch ($foodsaver['rolle'])
+		{
+			case 1 : 
+				$bg = 'border:6px solid #4A3520;';
+				break;
+			case 2 :
+				$bg = 'border:6px solid #5AB946;';
+				break;
+			case 3 :
+				$bg = 'border:6px solid #FFBB00;';
+				break;
+			case 4 :
+				$bg = 'border:6px solid #FF4800;';
+				break;
+			default:
+				break;
+		}
+	}
+	/*
+	echo '<pre>';
+	print_r($foodsaver);die();*/
+	
+	return '<span style="'.$bg.'background-image:url('.img($foodsaver['photo'],$size,'q',$altimg).');" class="avatar size-'.$size.' sleepmode-'.$foodsaver['sleep_status'].'"><i>'.$foodsaver['name'].'</i></span>';
 }
 
 function rolleWrapInt($roleInt)

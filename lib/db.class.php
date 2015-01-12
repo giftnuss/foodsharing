@@ -1167,6 +1167,7 @@ class Db
 			
 			$count_verantwortlich = (int)$this->qOne('SELECT COUNT(betrieb_id) FROM '.PREFIX.'betrieb_team WHERE foodsaver_id = '.(int)$fs_id.' AND verantwortlich = 1');
 			$count_botschafter = (int)$this->qOne('SELECT COUNT( bezirk_id )FROM '.PREFIX.'botschafter WHERE foodsaver_id = ' . (int)$fs_id);
+
 			
 			/*
 			echo '<pre>';

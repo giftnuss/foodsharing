@@ -82,6 +82,7 @@ class ProfileModel extends Model
 					fs.sleep_status,
 					fs.sleep_msg,
 					fs.sleep_until,
+					fs.rolle,
 					UNIX_TIMESTAMP(fs.sleep_from) AS sleep_from_ts,
 					UNIX_TIMESTAMP(fs.sleep_until) AS sleep_until_ts,
 					fs.mailbox_id,
@@ -238,7 +239,8 @@ class ProfileModel extends Model
 					fs.nachname,
 					fs.geschlecht,
 					fs.photo,
-					fs.sleep_status
+					fs.sleep_status,
+					fs.rolle
 				
 			FROM 	'.PREFIX.'foodsaver fs
 				
