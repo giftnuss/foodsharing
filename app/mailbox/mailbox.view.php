@@ -267,7 +267,7 @@ class MailboxView extends View
 				PHP_EOL.
 				'www.lebensmittelretten.de - die Freiwilligen Plattform von foodsharing'.
 				PHP_EOL.PHP_EOL.PHP_EOL.PHP_EOL.
-				'----------- '.sv('message_from',date('n.m.Y H:i',$ts)).' Uhr -----------'.
+				'----------- '.sv('message_from',date('j.m.Y H:i',$ts)).' Uhr -----------'.
 				PHP_EOL.PHP_EOL.
 				PHP_EOL.'> '.str_replace(array("\r","\n"), array('',PHP_EOL.'> '), $plain);
 	}
