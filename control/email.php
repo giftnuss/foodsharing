@@ -201,6 +201,28 @@ function handleEmail()
 					WHERE fs.rolle > 0 AND qs.status IS NULL	
 				');
 			}
+			elseif ($data['recip_choose'] == 'noquizfinishall14')
+			{
+				$foodsaver = $db->q('
+					SELECT DISTINCT fs.id,
+							fs.email,
+							fs.name,
+							fs.last_login,
+							qs.status
+			
+					FROM 	fs_foodsaver fs
+			
+					LEFT JOIN
+							fs_quiz_session qs
+			
+					ON
+						fs.id = qs.foodsaver_id
+			
+					WHERE fs.rolle > 0 AND qs.status IS NULL
+						
+					AND to_days(fs.last_login) >= (to_days(now())-14) 
+				');
+			}
 			elseif ($data['recip_choose'] == 'noquizfinishbip')
 			{
 				$foodsaver = $db->q('

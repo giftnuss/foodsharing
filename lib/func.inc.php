@@ -3168,7 +3168,7 @@ function avatar($foodsaver,$size = 'mini',$altimg = false)
 				$bg = 'border:6px solid #4A3520;';
 				break;
 			case 2 :
-				$bg = 'border:6px solid #5AB946;';
+				$bg = 'border:6px solid #599022;';
 				break;
 			case 3 :
 				$bg = 'border:6px solid #FFBB00;';
