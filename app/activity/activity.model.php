@@ -349,6 +349,10 @@ class ActivityModel extends Model
 				$bids[] = $t;
 			}
 		}
+
+    if(count($bids) == 0) {
+      return false;
+    }
 		
 		
 		if($updates = $this->q('
