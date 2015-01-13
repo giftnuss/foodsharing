@@ -1482,8 +1482,9 @@ ul.linklist li span.d
 ul.linklist li > a i.fa
 {
 	display: inline-block;
-    height: 14px;
-    text-align: left;
+    height: 17px;
+    line-height: 18px;
+    text-align: center;
     width: 17px;
 }
 .history li.title
