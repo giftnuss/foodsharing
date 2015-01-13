@@ -1173,11 +1173,11 @@ class Db
 			{
 				$quiz_rolle = 1;
 			}
-			if($count_bib_quiz > 0 && $count_fs_quiz > 0)
+			if($count_bib_quiz > 0)
 			{
 				$quiz_rolle = 2;
 			}
-			if($count_bib_quiz > 0 && $count_fs_quiz > 0 && $count_bot_quiz > 0)
+			if($count_bot_quiz > 0)
 			{
 				$quiz_rolle = 3;
 			}

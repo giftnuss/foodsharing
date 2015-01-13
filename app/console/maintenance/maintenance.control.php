@@ -419,6 +419,82 @@ class MaintenanceControl extends ConsoleControl
 		}
 	}
 	
+	public function quizdrop()
+	{
+		if($foodsaver = $this->model->q('
+			SELECT 
+				fs.id, fs.name
+			
+			FROM 
+				fs_foodsaver fs 
+				
+			WHERE id NOT IN
+			(
+				SELECT 
+				  fs.id
+				
+				FROM 
+				  `fs_abholer` a,
+				  fs_foodsaver fs
+				
+				WHERE a.`foodsaver_id` = fs.id
+				
+				AND a.`date` > NOW()
+				AND a.`date` < "2015-01-20"
+			)
+			AND fs.id NOT IN
+			(
+				SELECT foodsaver_id FROM fs_betrieb_team WHERE verantwortlich = 1
+			)
+			AND fs.id NOT IN
+			(
+				SELECT foodsaver_id FROM fs_botschafter
+			)
+			AND fs.quiz_rolle = 0
+			AND rolle = 1		
+		'))
+		{
+			$tmp = array();
+			foreach ($foodsaver as $fs)
+			{
+				$tmp[] = $fs['id'];
+				/*
+				 * Betrieb status update
+				 */
+				
+				if($betriebe = $this->q('SELECT betrieb_id FROM fs_betrieb_team WHERE foodsaver_id = '.(int)$fs['id']))
+				{
+					foreach ($betriebe as $b)
+					{
+						$this->model->insert('
+								INSERT INTO fs_betrieb_notiz (foodsaver_id, betrieb_id, milestone,text,zeit)
+								VALUES('.$fs['id'].','.$b['betrieb_id'].',2,"{QUIZ_DROPPED}",NOW())');
+					}
+				}
+				
+				$this->model->del('
+					DELETE FROM fs_betrieb_team WHERE foodsaver_id = '.(int)$fs['id'].'		
+				');
+				
+				/*
+				 * DELETE BEZIRKE
+				 */
+				$this->model->del('
+					DELETE FROM fs_foodsaver_has_bezirk WHERE foodsaver_id = '.(int)$fs['id'].'
+				');
+				
+				$this->model->del('
+					DELETE FROM `fs_abholer` WHERE `date` > NOW() AND foodsaver_id = '.$fs['id'].'	
+				');
+				
+				$this->model->update('UPDATE fs_foodsaver SET rolle = 0 WHERE id = '.$fs['id']);
+				
+			}
+			
+			echo implode(',',$tmp);
+		}
+	}
+	
 	public function quizrole()
 	{
 		if($foodsaver = $this->model->q('SELECT id FROM fs_foodsaver WHERE rolle > 0'))
@@ -436,11 +512,11 @@ class MaintenanceControl extends ConsoleControl
 				{
 					$quiz_rolle = 1;
 				}
-				if($count_bib_quiz > 0 && $count_fs_quiz > 0)
+				if($count_bib_quiz > 0)
 				{
 					$quiz_rolle = 2;
 				}
-				if($count_bib_quiz > 0 && $count_fs_quiz > 0 && $count_bot_quiz > 0)
+				if($count_bot_quiz > 0)
 				{
 					$quiz_rolle = 3;
 				}

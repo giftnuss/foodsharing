@@ -29,6 +29,7 @@ $g_lang['begin'] = 'Begin der Koorperation';
 $g_lang['first_post'] = 'Erster Pinnwandeintrag';
 $g_lang['betrieb_added'] = 'hat den Betrieb am {var} eingetragen';
 $g_lang['accept_request'] = '{var} ist jetzt im Team';
+$g_lang['quiz_dropped'] = '{var} ist jetzt nicht mehr im Team';
 $g_lang['foodsaver'] = 'Verantwortliche Foodsaver';
 $g_lang['max_3_leader'] = 'Es darf maximal 3 Verantwortliche für eine Filliale geben';
 $g_lang['position_search'] = 'Adress-Suche';
