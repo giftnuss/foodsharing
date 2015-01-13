@@ -939,6 +939,7 @@ function v_form_recip_chooser()
 			<option value="noquizfinishbot">Bot Quiz noch gar nicht gemacht</option>
 			<option value="noquizfinishfs">FS Quiz noch gar nicht gemacht</option>
 			<option value="noquizfinishbip">BIEB Quiz noch gar nicht gemacht</option>
+			<option value="quizfinishallfs">Alle Foodsaver - Quiz bestanden</option>
 			<option value="noquizfinishall14">Alle Quiz nicht gemacht + in letzten 14 Tagen eingeloggt</option>
 			<option value="allnotberlin">(Special) Alle Foodsaver außer Berliner</option>
 			<option value="dropquiz01">Alle gedroppted Foodsaver vom 12.01.</option>

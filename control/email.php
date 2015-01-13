@@ -234,6 +234,16 @@ function handleEmail()
 					AND qs.status IS NULL
 				');
 			}
+			elseif($data['recip_choose'] == 'quizfinishallfs')
+			{
+				$foodsaver = $db->q('
+					SELECT id, email, name
+
+					FROM fs_foodsaver 
+						
+					WHERE quiz_rolle = 1
+				');
+			}
 			elseif ($data['recip_choose'] == 'noquizfinishfs')
 			{
 				$foodsaver = $db->q('
