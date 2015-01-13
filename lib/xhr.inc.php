@@ -161,6 +161,11 @@ function xhr_getPinPost($data)
 					$pic = 'img/milestone.png';
 					$msg = '<span class="msg"><strong>'.sv('status_change_at',format_d($o['zeit'])).'</strong> '.s($o['text']).'</span>';
 				}
+				elseif($o['milestone'] == 5)
+				{
+					$odd .= ' milestone';
+					$msg = '<span class="msg">'.sv('quiz_dropped','<a href="#" onclick="profile('.(int)$o['fsid'].');return false">'.$db->getVal('name', 'foodsaver', $o['fsid']).'</a>').'</span>';
+				}
 				
 				$html .= '
 					<tr class="'.$odd.' bpost bpost-'.$o['id'].'">
