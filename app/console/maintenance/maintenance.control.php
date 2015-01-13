@@ -462,7 +462,7 @@ class MaintenanceControl extends ConsoleControl
 				 * Betrieb status update
 				 */
 				
-				if($betriebe = $this->q('SELECT betrieb_id FROM fs_betrieb_team WHERE foodsaver_id = '.(int)$fs['id']))
+				if($betriebe = $this->model->q('SELECT betrieb_id FROM fs_betrieb_team WHERE foodsaver_id = '.(int)$fs['id']))
 				{
 					foreach ($betriebe as $b)
 					{
