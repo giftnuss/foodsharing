@@ -495,6 +495,12 @@ class MaintenanceControl extends ConsoleControl
 		}
 	}
 	
+	public function eqalrole()
+	{
+		$count = $this->model->update('UPDATE fs_foodsaver SET rolle = quiz_rolle WHERE quiz_rolle > rolle');
+		info($count . ' updates...');
+	}
+	
 	public function quizrole()
 	{
 		if($foodsaver = $this->model->q('SELECT id FROM fs_foodsaver WHERE rolle > 0'))
