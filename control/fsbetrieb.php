@@ -126,6 +126,15 @@ else if(isset($_GET['id']))
 		
 		$verantwortlich_select = '';
 		
+		$bibsaver = array();
+		foreach ($betrieb['foodsaver'] as $fs)
+		{
+			if($fs['rolle'] >= 2)
+			{
+				$bibsaver[] = $fs;
+			}
+		}
+		
 		if($betrieb['verantwortlich'])
 		{
 			$checked = array();
@@ -136,7 +145,7 @@ else if(isset($_GET['id']))
 					$checked[] = $fs['id'];
 				}
 			}
-			$verantwortlich_select = v_form_checkbox('verantwortlicher',array('values'=>$betrieb['foodsaver'],'checked'=>$checked));
+			$verantwortlich_select = v_form_checkbox('verantwortlicher',array('values'=>$bibsaver,'checked'=>$checked));
 			
 			$edit_team = v_form('team',array(
 					v_form_tagselect('foodsaver',array('data'=>$db->xhrGetTagFsAll())),
