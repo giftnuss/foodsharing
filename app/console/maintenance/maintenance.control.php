@@ -435,6 +435,7 @@ class MaintenanceControl extends ConsoleControl
 					{
 						foreach ($foodsaver as $fs)
 						{
+							echo $b['id'].',';
 							$this->model->insert('INSERT IGNORE INTO `fs_betrieb_team`(`foodsaver_id`, `betrieb_id`, `verantwortlich`, `active`) VALUES ('.$fs['id'].','.$b['id'].',1,1)');
 						}
 					}
