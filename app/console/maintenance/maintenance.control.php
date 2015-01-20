@@ -419,6 +419,31 @@ class MaintenanceControl extends ConsoleControl
 		}
 	}
 	
+	public function setbotasbib()
+	{
+		if($betriebe = $this->model->q('SELECT id, name, bezirk_id FROM fs_betrieb'))
+		{
+			foreach ($betriebe as $b)
+			{
+				if(!$this->q('SELECT foodsaver_id FROM fs_betrieb_team WHERE verantwortlich = 1 AND betrieb_id = '.(int)$b['id']))
+				{
+					if($foodsaver = $this->model->q('
+						SELECT 	fs.id, fs.name
+						FROM fs_foodsaver fs, fs_botschafter b
+						WHERE b.foodsaver_id = fs.id
+						AND b.bezirk_id = '.$b['bezirk_id']))
+					{
+						foreach ($foodsaver as $fs)
+						{
+							$this->model->insert('INSERT IGNORE INTO `fs_betrieb_team`(`foodsaver_id`, `betrieb_id`, `verantwortlich`, `active`) VALUES ('.$fs['id'].','.$b['id'].',1,1)');
+						}
+					}
+				}
+			}
+			
+		}
+	}
+	
 	public function dropbot()
 	{
 		if($foodsaver = $this->model->q('
