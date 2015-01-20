@@ -419,6 +419,112 @@ class MaintenanceControl extends ConsoleControl
 		}
 	}
 	
+	public function dropbot()
+	{
+		if($foodsaver = $this->model->q('
+			SELECT id, name, email 
+			FROM fs_foodsaver 
+			WHERE rolle = 3
+			AND quiz_rolle < 3		
+		'))
+		{
+			foreach ($foodsaver as $fs)
+			{
+				/*
+				$this->model->update('
+					UPDATE fs_foodsaver
+					SET rolle = 2 WHERE id = '.(int)$fs['id'].'		
+				');
+				$this->model->del('
+					DELETE FROM fs_botschafter WHERE foodsaver_id = '.(int)$fs['id'].'		
+				');
+				*/
+				echo $fs['id'].',';
+			}
+			info(count($foodsaver));
+		}
+	}
+	
+	public function dropbib()
+	{
+		if($foodsaver = $this->model->q('
+			SELECT DISTINCT fs.id, fs.name, fs.email
+			FROM fs_foodsaver fs, fs_betrieb_team t
+			WHERE t.foodsaver_id = fs.id
+			AND fs.quiz_rolle < 2
+		'))
+		{
+			foreach ($foodsaver as $fs)
+			{
+				/*
+					$this->model->update('
+							UPDATE fs_foodsaver
+							SET rolle = 1 WHERE id = '.(int)$fs['id'].'
+							');
+				$this->model->del('
+					UPDATE fs_betrieb_team SET verantwortlich = 0 WHERE foodsaver_id = '.(int)$fs['id'].'
+				');
+				*/
+				echo $fs['id'].',';
+			}
+			
+			info(count($foodsaver));
+		}
+	}
+	
+	public function dropfs()
+	{
+		if($foodsaver = $this->model->q('
+			SELECT id, name, email
+			FROM fs_foodsaver
+			WHERE rolle = 1
+			AND quiz_rolle = 0
+		'))
+		{
+
+			foreach ($foodsaver as $fs)
+			{
+				
+
+					/*
+					 * Betrieb status update
+					
+				
+					if($betriebe = $this->model->q('SELECT betrieb_id FROM fs_betrieb_team WHERE foodsaver_id = '.(int)$fs['id']))
+					{
+						foreach ($betriebe as $b)
+						{
+							$this->model->insert('
+								INSERT INTO fs_betrieb_notiz (foodsaver_id, betrieb_id, milestone,text,zeit)
+								VALUES('.$fs['id'].','.$b['betrieb_id'].',2,"{QUIZ_DROPPED}",NOW())');
+						}
+					}
+				
+					$this->model->del('
+						DELETE FROM fs_betrieb_team WHERE foodsaver_id = '.(int)$fs['id'].'
+					');
+				
+					/*
+					 * DELETE BEZIRKE
+					
+					$this->model->del('
+						DELETE FROM fs_foodsaver_has_bezirk WHERE foodsaver_id = '.(int)$fs['id'].'
+					');
+				
+					$this->model->del('
+						DELETE FROM `fs_abholer` WHERE `date` > NOW() AND foodsaver_id = '.$fs['id'].'
+					');
+				
+					$this->model->update('UPDATE fs_foodsaver SET rolle = 0 WHERE id = '.$fs['id']);
+				
+				
+				*/
+				echo $fs['id'].',';
+			}
+			info(count($foodsaver));
+		}
+	}
+	
 	public function quizdrop()
 	{
 		if($foodsaver = $this->model->q('
