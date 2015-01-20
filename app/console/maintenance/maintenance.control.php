@@ -425,7 +425,7 @@ class MaintenanceControl extends ConsoleControl
 		{
 			foreach ($betriebe as $b)
 			{
-				if(!$this->q('SELECT foodsaver_id FROM fs_betrieb_team WHERE verantwortlich = 1 AND betrieb_id = '.(int)$b['id']))
+				if(!$this->model->q('SELECT foodsaver_id FROM fs_betrieb_team WHERE verantwortlich = 1 AND betrieb_id = '.(int)$b['id']))
 				{
 					if($foodsaver = $this->model->q('
 						SELECT 	fs.id, fs.name
