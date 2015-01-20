@@ -426,11 +426,11 @@ class MaintenanceControl extends ConsoleControl
 			FROM fs_foodsaver 
 			WHERE rolle = 3
 			AND quiz_rolle < 3		
+			AND id NOT IN(4890,5766,4112,5448)
 		'))
 		{
 			foreach ($foodsaver as $fs)
 			{
-				/*
 				$this->model->update('
 					UPDATE fs_foodsaver
 					SET rolle = 2 WHERE id = '.(int)$fs['id'].'		
@@ -438,7 +438,7 @@ class MaintenanceControl extends ConsoleControl
 				$this->model->del('
 					DELETE FROM fs_botschafter WHERE foodsaver_id = '.(int)$fs['id'].'		
 				');
-				*/
+				
 				echo $fs['id'].',';
 			}
 			info(count($foodsaver));
@@ -453,19 +453,20 @@ class MaintenanceControl extends ConsoleControl
 			WHERE t.foodsaver_id = fs.id
 			AND fs.quiz_rolle < 2
 			AND t.verantwortlich = 1
+			AND fs.id NOT IN(4890,5766,4112,5448)
 		'))
 		{
 			foreach ($foodsaver as $fs)
 			{
-				/*
-					$this->model->update('
-							UPDATE fs_foodsaver
-							SET rolle = 1 WHERE id = '.(int)$fs['id'].'
-							');
+				
+				$this->model->update('
+					UPDATE fs_foodsaver
+					SET rolle = 1 WHERE id = '.(int)$fs['id'].'
+				');
 				$this->model->del('
 					UPDATE fs_betrieb_team SET verantwortlich = 0 WHERE foodsaver_id = '.(int)$fs['id'].'
 				');
-				*/
+				
 				echo $fs['id'].',';
 			}
 			
@@ -480,6 +481,7 @@ class MaintenanceControl extends ConsoleControl
 			FROM fs_foodsaver
 			WHERE rolle = 1
 			AND quiz_rolle = 0
+			AND id NOT IN(4890,5766,4112,5448)
 		'))
 		{
 
@@ -489,7 +491,7 @@ class MaintenanceControl extends ConsoleControl
 
 					/*
 					 * Betrieb status update
-					
+					*/
 				
 					if($betriebe = $this->model->q('SELECT betrieb_id FROM fs_betrieb_team WHERE foodsaver_id = '.(int)$fs['id']))
 					{
@@ -507,7 +509,7 @@ class MaintenanceControl extends ConsoleControl
 				
 					/*
 					 * DELETE BEZIRKE
-					
+					*/
 					$this->model->del('
 						DELETE FROM fs_foodsaver_has_bezirk WHERE foodsaver_id = '.(int)$fs['id'].'
 					');
@@ -519,7 +521,6 @@ class MaintenanceControl extends ConsoleControl
 					$this->model->update('UPDATE fs_foodsaver SET rolle = 0 WHERE id = '.$fs['id']);
 				
 				
-				*/
 				echo $fs['id'].',';
 			}
 			info(count($foodsaver));
