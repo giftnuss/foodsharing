@@ -452,7 +452,7 @@ class MaintenanceControl extends ConsoleControl
 			FROM fs_foodsaver fs, fs_betrieb_team t
 			WHERE t.foodsaver_id = fs.id
 			AND fs.quiz_rolle < 2
-			AND t.verantwortlich = 0
+			AND t.verantwortlich = 1
 		'))
 		{
 			foreach ($foodsaver as $fs)
