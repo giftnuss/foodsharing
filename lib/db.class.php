@@ -1299,8 +1299,9 @@ class Db
 			{
 				$_SESSION['client']['group']['orgateam'] = true;
 			}
-			
-			if($r = $this->q('
+			if((int)$fs['rolle'] > 0)
+			{
+				if($r = $this->q('
 						SELECT 	`'.PREFIX.'botschafter`.`bezirk_id`,
 								`'.PREFIX.'bezirk`.`has_children`,
 								`'.PREFIX.'bezirk`.`parent_id`,
@@ -1315,85 +1316,86 @@ class Db
 			
 						AND 	`'.PREFIX.'botschafter`.`foodsaver_id` = '.$this->intval($fs['id']).'
 				'))
-			{
-				$_SESSION['client']['botschafter'] = $r;
-				$_SESSION['client']['group']['botschafter'] = true;
-				$mailbox = true;
-				foreach ($r as $rr)
 				{
-					if(!$this->q('SELECT foodsaver_id FROM `'.PREFIX.'foodsaver_has_bezirk` WHERE foodsaver_id = '.$this->intval($fs['id']).' AND bezirk_id = '.(int)$rr['id'].' AND active = 1'))
+					$_SESSION['client']['botschafter'] = $r;
+					$_SESSION['client']['group']['botschafter'] = true;
+					$mailbox = true;
+					foreach ($r as $rr)
 					{
-						$this->insert('
-						REPLACE INTO `'.PREFIX.'foodsaver_has_bezirk`
-						(
-							`bezirk_id`,
-							`foodsaver_id`,
-							`active`,
-							`added`
-						)
-						VALUES
-						(
-							'.(int)$rr['id'].',
-							'.(int)$fs['id'].',
-							1,
-							NOW()
-						)
-					');
-					}
-					
-				}
-			}
-			
-			if($r = $this->q('
-						SELECT 	b.`id`,
-								b.name,
-								b.type,
-								b.`master`
-				
-						FROM 	`'.PREFIX.'foodsaver_has_bezirk` hb,
-								`'.PREFIX.'bezirk` b
-				
-						WHERE 	hb.bezirk_id = b.id 	
-						AND 	`foodsaver_id` = '.$this->intval($fs['id']).'
-						AND 	hb.active = 1
-					
-						ORDER BY b.name
-				'))
-			{
-				$_SESSION['client']['bezirke'] = array();
-				$mastercheck = array();
-				foreach ($r as $rr)
-				{
-					$_SESSION['client']['bezirke'][$rr['id']] = array(
-						'id' => $rr['id'],
-						'name' => $rr['name'],
-						'type' => $rr['type']
-					);
-					$mastercheck[$rr['master']] = $rr['master'];
-				}
-				foreach ($mastercheck as $m)
-				{
-					/*
-					if(!isset($_SESSION['client']['bezirke'][$m]) && (int)$m > 0)
-					{
-						$this->insert('
-							INSERT INTO `'.PREFIX.'foodsaver_has_bezirk`
+						if(!$this->q('SELECT foodsaver_id FROM `'.PREFIX.'foodsaver_has_bezirk` WHERE foodsaver_id = '.$this->intval($fs['id']).' AND bezirk_id = '.(int)$rr['id'].' AND active = 1'))
+						{
+							$this->insert('
+							REPLACE INTO `'.PREFIX.'foodsaver_has_bezirk`
 							(
-								`foodsaver_id`,
 								`bezirk_id`,
+								`foodsaver_id`,
 								`active`,
 								`added`
 							)
 							VALUES
 							(
+								'.(int)$rr['id'].',
 								'.(int)$fs['id'].',
-								'.(int)$m.',
 								1,
 								NOW()
 							)
 						');
-						$_SESSION['client']['bezirke'][$m] = $this->getValues(array('id','name','type'), 'bezirk', $m);
-					}*/
+						}
+						
+					}
+				}
+				
+				if($r = $this->q('
+							SELECT 	b.`id`,
+									b.name,
+									b.type,
+									b.`master`
+					
+							FROM 	`'.PREFIX.'foodsaver_has_bezirk` hb,
+									`'.PREFIX.'bezirk` b
+					
+							WHERE 	hb.bezirk_id = b.id 	
+							AND 	`foodsaver_id` = '.$this->intval($fs['id']).'
+							AND 	hb.active = 1
+						
+							ORDER BY b.name
+					'))
+				{
+					$_SESSION['client']['bezirke'] = array();
+					$mastercheck = array();
+					foreach ($r as $rr)
+					{
+						$_SESSION['client']['bezirke'][$rr['id']] = array(
+							'id' => $rr['id'],
+							'name' => $rr['name'],
+							'type' => $rr['type']
+						);
+						$mastercheck[$rr['master']] = $rr['master'];
+					}
+					foreach ($mastercheck as $m)
+					{
+						/*
+						if(!isset($_SESSION['client']['bezirke'][$m]) && (int)$m > 0)
+						{
+							$this->insert('
+								INSERT INTO `'.PREFIX.'foodsaver_has_bezirk`
+								(
+									`foodsaver_id`,
+									`bezirk_id`,
+									`active`,
+									`added`
+								)
+								VALUES
+								(
+									'.(int)$fs['id'].',
+									'.(int)$m.',
+									1,
+									NOW()
+								)
+							');
+							$_SESSION['client']['bezirke'][$m] = $this->getValues(array('id','name','type'), 'bezirk', $m);
+						}*/
+					}
 				}
 			}
 			$_SESSION['client']['betriebe'] = false;
