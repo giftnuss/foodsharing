@@ -260,6 +260,9 @@ function handle_add()
 
 function handleImages($body)
 {
+  /* temporarily disable this as it produces broken links */
+  return $body;
+
 	if(strpos($body,'<') === false)
 	{
 		return $body;
