@@ -1234,11 +1234,13 @@ class Db
 			{
 				$mailbox = true;
 			}
-			
-			$this->insert('
-				INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_bezirk`(`foodsaver_id`, `bezirk_id`, `active`, `added`) VALUES 
-				('.(int)$fs['id'].','.(int)$fs['bezirk_id'].',1,NOW())
-			');
+			if((int)$fs['bezirk_id'] > 0 && $fs['rolle'] > 0)
+			{
+				$this->insert('
+					INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_bezirk`(`foodsaver_id`, `bezirk_id`, `active`, `added`) VALUES 
+					('.(int)$fs['id'].','.(int)$fs['bezirk_id'].',1,NOW())
+				');
+			}
 			
 			if($master = $this->getVal('master','bezirk',$fs['bezirk_id']))
 			{
