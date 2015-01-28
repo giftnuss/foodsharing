@@ -112,6 +112,8 @@ class BasketView extends View
 				
 				$map->setDefaultMarker('basket', 'green');
 				
+				$map->setLocation($basket['lat'], $basket['lon']);
+				
 				$page->addSectionRight($map->render(),'Wo?');
 			}
 			
