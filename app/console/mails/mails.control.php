@@ -300,11 +300,11 @@ class MailsControl extends ConsoleControl
 			}
 		}
 		$model = false;
+    $has_recip = false;
 		foreach ($data['recipients'] as $r)
 		{
 			// check is it own lmr email? put direct into db
 			$r[0] = strtolower($r[0]);
-			$has_recip = false;
 			info(substr(
 					$r[0],
 					(strlen(DEFAULT_HOST)*-1),
