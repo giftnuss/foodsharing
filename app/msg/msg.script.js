@@ -554,13 +554,15 @@ var msg = {
 						msg.prependMsg(ret.messages[i]);
 					}
 					
+					var position = $('#msg-' + lmid).position();
+					
 					if(!msg.isMob())
 					{
-						$('#msg-conversation').slimScroll({scrollTo : '10px' });
+						$('#msg-conversation').slimScroll({scrollTo : position.top + 'px' });
 					}
 					else
 					{
-						$(window).scrollTop(50);
+						$(window).scrollTop(position.top);
 						//$('body').scrollTop($('body')[0].scrollHeight);
 					}
 					
