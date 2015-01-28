@@ -5,6 +5,7 @@ var msg = {
 	fsid:0,
 	heartbeatXhr:false,
 	listTimeout:false,
+	moreIsLoading:false,
 	$conversation:null,
 	$answer:null,
 	$submit:null,
@@ -377,10 +378,26 @@ var msg = {
 		this.$conversation.children('.loader').hide();
 		//msg.$submit.removeAttr("disabled"); 
 	},
+	
+	prependMsg: function(message){
+		
+		var $el = msg.msgTpl(message);
+		
+		if(msg.$conversation == undefined)
+		{
+			msg.$conversation = $('#msg-conversation');
+		}
+		
+		msg.$conversation.children('ul:first').prepend($el);
+		
+		//msg.$conversation.children('ul:first').append($el);
+		$el.show('highlight',{color:'#F5F5B5'});
+	},
+	
 	appendMsg: function(message){
 		
-		var $el = $('<li id="msg-'+message.id+'" style="display:none;"><span class="img"><a title="'+message.fs_name+'" href="#" onclick="profile('+message.fs_id+');return false;"><img height="35" src="'+img(message.fs_photo,'mini')+'" /></a></span><span class="body">'+nl2br(message.body.autoLink())+'<span class="time">'+timeformat.nice(message.time)+'</span></span><span class="clear"></span></li>');
-		
+		var $el = msg.msgTpl(message);
+			
 		if(msg.$conversation == undefined)
 		{
 			msg.$conversation = $('#msg-conversation');
@@ -393,6 +410,12 @@ var msg = {
 		
 		this.last_message_id = message.id;
 	},
+	
+	msgTpl: function(message)
+	{
+		return $('<li id="msg-'+message.id+'" style="display:none;"><span class="img"><a title="'+message.fs_name+'" href="#" onclick="profile('+message.fs_id+');return false;"><img height="35" src="'+img(message.fs_photo,'mini')+'" /></a></span><span class="body">'+nl2br(message.body.autoLink())+'<span class="time">'+timeformat.nice(message.time)+'</span></span><span class="clear"></span></li>');
+	},
+	
 	getRecipients: function(){
 		var out = [];
 		$('#compose_recipients li.tagedit-listelement-old input').each(function(){
@@ -500,12 +523,75 @@ var msg = {
 				
 				msg.heartbeatRestart();
 				
+				msg.scrollTrigger();
+				
 			} // success end
 		}); // ajax end
 		
 		
 		
 	},
+	
+	loadMore: function()
+	{
+		//alert(msg.last_message_id);
+		var lmid = parseInt($('#msg-conversation li:first').attr('id').replace('msg-',''));
+		
+		if(!msg.moreIsLoading)
+		{
+			msg.moreIsLoading = true;
+			ajax.req('msg','loadmore',{
+				loader:true,
+				data:{
+					lmid:lmid,
+					cid:msg.conversation_id
+				},
+				success: function(ret){
+					msg.moreIsLoading = false;
+					
+					for(var i=0; i<ret.messages.length; i++)
+					{
+						msg.prependMsg(ret.messages[i]);
+					}
+				}
+			});
+		}
+	},
+	
+	scrollTrigger: function()
+	{
+		msg.moreIsLoading = false;
+		
+		if(!msg.isMob())
+		{
+			msg.$conversation.unbind('scroll');
+			msg.$conversation.scroll(function(){
+				
+				var $conv = $(this);
+				if($conv.scrollTop() == 0)
+				{
+					msg.loadMore();
+				}
+				
+			});
+		}
+		else
+		{
+			$(window).unbind('scroll');
+			$(window).scroll(function(){
+				
+				var $conv = $(this);
+
+				if($conv.scrollTop() == 0)
+				{
+					msg.loadMore();
+				}
+				
+			});
+		}
+		
+	},
+	
 	loadConversationList: function(){
 		ajax.req('msg','loadconvlist',{
 			loader:false,

@@ -102,6 +102,29 @@ class MsgXhr extends Control
 	}
 	
 	/**
+	 * ajax call to load more older messages from a specified conversation
+	 * 
+	 * GET['lmid'] = last message id
+	 * GET['cid'] = conversation_id
+	 */
+	public function loadmore()
+	{
+		if($this->mayConversation((int)$_GET['cid']))
+		{
+			$xhr = new Xhr();
+			if($msgs = $this->model->loadMore((int)$_GET['cid'],(int)$_GET['lmid']))
+			{
+				$xhr->addData('messages', $msgs);
+			}
+			else
+			{
+				$xhr->setStatus(0);
+			}
+			$xhr->send();
+		}
+	}
+	
+	/**
 	 * ajax call to send a message to an conversation
 	 * 
 	 * GET['b'] = body text

@@ -413,6 +413,37 @@ class MsgModel extends Model
 		
 	}
 	
+	public function loadMore($conversation_id, $last_message_id)
+	{
+		return $this->q('
+			SELECT
+				m.id,
+				fs.`id` AS fs_id,
+				fs.name AS fs_name,
+				fs.photo AS fs_photo,
+				m.`body`,
+				m.`time`
+		
+			FROM
+				`'.PREFIX.'msg` m,
+				`'.PREFIX.'foodsaver` fs
+		
+			WHERE
+				m.foodsaver_id = fs.id
+		
+			AND
+				m.conversation_id = '.(int)$conversation_id.'
+				
+			AND 
+				m.id < '.(int)$last_message_id.'
+		
+			ORDER BY
+				m.`time` DESC
+		
+			LIMIT 0,20
+		');
+	}
+	
 	public function getLastMessages($conv_id,$last_msg_id)
 	{
 		return $this->q('

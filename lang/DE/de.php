@@ -214,3 +214,4 @@ $g_lang['rv_accept'] = 'Ja ich habe die Rechtsvereinbarung gelesen und Akzeptier
 $g_lang['not_rv_accepted'] = 'Du musst die Rechtsvereinbarung akzeptieren';
 $g_lang['regions'] = 'Bezirke';
 $g_lang['buddywalls'] = 'Pinnwände von Bekannten';
+$g_lang['user_add_success'] = 'Prima! Dein Account wurde angelegt!';
