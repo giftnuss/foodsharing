@@ -553,6 +553,17 @@ var msg = {
 					{
 						msg.prependMsg(ret.messages[i]);
 					}
+					
+					if(!msg.isMob())
+					{
+						$('#msg-conversation').slimScroll({scrollTo : '10px' });
+					}
+					else
+					{
+						$(window).scrollTop(50);
+						//$('body').scrollTop($('body')[0].scrollHeight);
+					}
+					
 				}
 			});
 		}
