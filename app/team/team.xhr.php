@@ -30,11 +30,13 @@ class TeamXhr extends Control
 				}
 				
 				$msg = strip_tags($_POST['message']);
+        $name = strip_tags($_POST['name']);
 				
-				$msg = 'Name: ' . strip_tags($_POST['name']) . "\n\n" . $msg;
+				$msg = 'Name: ' . $name . "\n\n" . $msg;
 				
 				$mail->setBody($msg);
 				$mail->setHtmlBody(nl2br($msg));
+        $mail->setSubject("Foodsharing.de Kontaktformular Anfrage von ".$name);
 				
 				$mail->addRecipient($user['email']);
 				
