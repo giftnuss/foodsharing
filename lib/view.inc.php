@@ -2647,7 +2647,7 @@ function v_switch($views = array())
 			$sel = ' selected="selected"';
 		}
 		$out .= '
-				<option value="'.addGet('v',$id).'"'.$sel.'>'.$v.'</a>';
+				<option value="'.addGet('v',$id).'"'.$sel.'>'.$v.'</option>';
 	}
 	
 	return $out.'
@@ -2668,7 +2668,7 @@ function v_sortswitch($fields = array())
 			$sel = ' selected="selected"';
 		}
 		$out .= '
-				<option value="'.addGet('v',$id).'"'.$sel.'>'.$v.'</a>';
+				<option value="'.addGet('v',$id).'"'.$sel.'>'.$v.'</option>';
 	}
 
 	return $out.'
