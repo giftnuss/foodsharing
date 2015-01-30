@@ -124,7 +124,7 @@ function v_bezirkChildChooser($id,$options = array())
 			
 			part = val.split(":");
 			
-			parent = part[0];
+			var parent = part[0];
 			
 			u_current_bezirk_type = part[1];
 			
