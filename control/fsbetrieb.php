@@ -44,8 +44,15 @@ else if(isset($_GET['id']))
 	addTitle(s('betrieb_bread'));
 	addStyle('.button{margin-right:8px;}#right .tagedit-list{width:256px;}#foodsaver-wrapper{padding-top:0px;}');
 	global $g_data;
+
+	$betrieb = $db->getMyBetrieb($_GET['id']);
 	
-	if(isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && ($db->isVerantwortlich($_GET['id']) || isOrgaTeam()))
+	if(!$betrieb)
+	{
+		goLogin();
+	}
+	
+	if(isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && ($db->isVerantwortlich($_GET['id']) || isOrgaTeam() || isBotFor($betrieb['bezirk_id'])))
 	{
 		if($_POST['form_submit'] == 'zeiten')
 		{
@@ -81,17 +88,10 @@ else if(isset($_GET['id']))
 		info(s('changes_saved'));
 		clearPost();
 	}
-	else if(isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform')
+	else if(isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && ($db->isVerantwortlich($_GET['id']) || isOrgaTeam() || isBotFor($betrieb['bezirk_id'])))
 	{
 		$db->changeBetriebStatus($_GET['id'],$_POST['betrieb_status_id']);
 		go(getSelf());
-	}
-	
-	$betrieb = $db->getMyBetrieb($_GET['id']);
-	
-	if(!$betrieb)
-	{
-		goLogin();
 	}
 	
 	addTitle($betrieb['name']);
