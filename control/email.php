@@ -201,6 +201,25 @@ function handleEmail()
 					WHERE fs.rolle > 0 AND qs.status IS NULL	
 				');
 			}
+			else if($data['recip_choose'] == 'allfs14dayslogin')
+			{
+				$foodsaver = $db->q('
+						SELECT 
+							fs.id,
+							fs.email,
+							fs.name
+						
+						FROM 
+							fs_foodsaver fs
+						
+						WHERE 
+							rolle > 0
+						
+						AND 
+							to_days(fs.last_login) >= (to_days(now())-14) 
+						
+				');
+			}
 			elseif ($data['recip_choose'] == 'noquizfinishall14')
 			{
 				$foodsaver = $db->q('
