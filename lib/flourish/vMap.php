@@ -131,7 +131,7 @@ class vMap extends vCore
 		}
 		elseif ($this->searchpanel !== false)
 		{
-			addScriptTop('http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places');
+			addScriptTop('https://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places');
 			addScript('/js/jquery.geocomplete.js');
 			
 			$hm = '';

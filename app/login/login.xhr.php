@@ -498,7 +498,7 @@ class LoginXhr extends Control
 			}
 			else
 			{
-				$.getScript(\'http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&callback=initialize\',function(){
+				$.getScript(\'https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&callback=initialize\',function(){
 		        	
 		        });	
 			}
