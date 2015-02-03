@@ -21,6 +21,18 @@ class BellXhr extends Control
 		$xhr = new Xhr();
 		$bells = $this->model->listBells(20);
 		
+		if(!empty($rbells))
+		{
+			if($bells)
+			{
+				$bells = array_merge($rbells,$bells);
+			}
+			else
+			{
+				$bells = $rbells;
+			}
+		}
+		
 		// additionall add bell for betrieb verantwortliche
 		if(isset($_SESSION['client']['verantwortlich']))
 		{
