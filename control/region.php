@@ -290,8 +290,8 @@ function v_bezirk_tree($id)
 function i_map($id)
 {
 	addHead('
-		<script src="http://www.google.com/jsapi"></script>
-		<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclusterer/1.0/src/markerclusterer.js"></script>
+		<script src="https://www.google.com/jsapi"></script>
+		<script type="text/javascript" src="https://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclusterer/1.0/src/markerclusterer.js"></script>
 		<script type="text/javascript">
 			
 			google.load(\'maps\', \'3\', {
