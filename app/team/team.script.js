@@ -1,4 +1,48 @@
 $(function(){
+	var $form = $('#contactform-form');
+	if($form.length > 0)
+	{
+		var $email = $('#email');
+		
+		$email.keyup(function(){
+			var $el = $(this);
+			if(checkEmail($el.val()))
+			{
+				$email.removeClass('input-error');
+			}
+		});
+		
+		$email.blur(function(){
+			var $el = $(this);
+			if( !checkEmail($el.val()) )
+			{
+				$email.addClass('input-error');
+				pulseError('Mit Deiner E-Mail Adressse stimmt etwas nicht.');
+			}
+		});
+		
+		$form.submit(function(ev){
+			ev.preventDefault();
+			if(!checkEmail($email.val()))
+			{
+				$email.select();
+				$email.addClass('input-error');
+				pulseError('Bitte gib eine gültige E-Mail Adresse ein damit wir Dir antworten können ;)');
+			}
+			else
+			{
+				ajax.req('team','contact',{
+					data: $form.serialize(),
+					method: 'post',
+					success: function()
+					{
+						$("#team-user").next().fadeOut();
+					}
+				});
+			}
+		});
+	}
+	
 	$('#teamlist .foot i').mouseover(function(){
 		
 		var $this = $(this);
@@ -35,21 +79,7 @@ $(function(){
 		
 	});
 	
-	if($('#contactform').length > 0)
-	{
-		$('#contactform-form').submit(function(ev){
-			ev.preventDefault();
-			
-			ajax.req('team','contact',{
-				data: $('#contactform-form').serialize(),
-				method: 'post',
-				success: function()
-				{
-					$("#team-user").next().fadeOut();
-				}
-			});
-		});
-	}
+	
 });
 
 

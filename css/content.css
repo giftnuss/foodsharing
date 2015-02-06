@@ -280,17 +280,17 @@ input.hasDatepicker {
 	width:139px;
 	margin-left:5px;
 }
-.input-error
-{
-	border:1px solid #E17984;
-	background-color:#F8DBDD;
-}
+
 .focus
 {
 	background-color:#F5F5B5;
 	border:1px solid #3F942F;
 }
-
+.input-error
+{
+	border:1px solid #E17984;
+	background-color:#F8DBDD;
+}
 a.linkrow:hover
 {
 	background:url("img/ui-bg_highlight-soft_40_407B35_1x100.png") repeat-x scroll 50% 50% #407B35;
