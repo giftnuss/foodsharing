@@ -1357,6 +1357,8 @@ function getOrgaMenu()
 					  <li><a href="/?page=lebensmittel">Lebensmittel-Typen verwalten</a></li>
 					  <li><a href="/?page=content">Inhalte/Texte bearbeiten</a></li>
 					  <li><a href="/?page=mailbox&a=manage">Mailboxen</a></li>
+					  <li><a href="/?page=geoclean&sub=lostregion">Regionen ohne Botschafter</a></li>
+					  <li><a href="/?page=geoclean">Foodsaver ohne Region</a></li>
 					  <li class="menu-bottom"><a class="menu-bottom" href="/?page=message_tpl">E-Mail Vorlagen</a></li>
 				    </ul>
 				  </li>',

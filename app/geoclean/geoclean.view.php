@@ -47,4 +47,24 @@ class GeocleanView extends View
 				, 'Foodsaver ohne Koordinaten');
 		
 	}
+	
+	public function regionlist($regions)
+	{
+		$rows = array();
+		
+		foreach ($regions as $r)
+		{				
+			$rows[] = array(
+					array('cnt' => '<a class="linkrow ui-corner-all" href="?page=bezirk&bid='.$r['id'].'&sub=forum">'.$r['name'].'</a>'),
+					array('cnt' => $r['fscount'].' Foodsaver')
+			);
+		}
+		
+		$out .= v_tablesorter(array(
+				array('name' => 'Name'),
+				array('name' => 'Anzahl Foodsaver','width' => 120)
+		),$rows,array('pager'=>true));
+		
+		return $out;
+	}
 }
