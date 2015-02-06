@@ -1557,7 +1557,7 @@ function u_loadCoords(addressdata,func)
 	}
 	address = encodeURIComponent(anschrift +', '+ addressdata.plz+', '+addressdata.stadt+', Deutschland');
 	
-	url = "http://maps.google.com/maps/api/geocode/json?address="+address+"&sensor=false&region=DE&language=de";
+	url = "https://maps.google.com/maps/api/geocode/json?address="+address+"&sensor=false&region=DE&language=de";
 	
 	showLoader();
 	$(document).ready(function(){
