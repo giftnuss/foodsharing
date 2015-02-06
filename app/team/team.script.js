@@ -36,7 +36,7 @@ $(function(){
 					method: 'post',
 					success: function()
 					{
-						$("#team-user").next().fadeOut();
+						$("#team-user").next('.field').fadeOut();
 					}
 				});
 			}
