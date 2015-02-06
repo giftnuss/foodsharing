@@ -3254,3 +3254,45 @@ function getTemplate($tpl)
 {
 	include 'tpl/' . $tpl . '.php';
 }
+
+function getIp() 
+{
+	if (! isset ( $_SERVER ['HTTP_X_FORWARDED_FOR'] )) 
+	{
+		return $_SERVER ['REMOTE_ADDR'];
+	} 
+	else 
+	{
+		return $_SERVER ['HTTP_X_FORWARDED_FOR'];
+	}
+	
+	return false;
+}
+
+/**
+ * Function to check and block an ip address
+ * @param integer $duration
+ * @param string $context
+ * @return boolean
+ */
+function ipIsBlocked ($duration = 60, $context = 'default') 
+{
+	$db = loadModel('team');
+	$ip = getIp();
+	
+	if($block = $db->qRow('SELECT UNIX_TIMESTAMP(`start`) AS `start`,`duration` FROM '.PREFIX.'ipblock WHERE ip = '.$db->strval(getIp()).' AND context = '.$db->strval($context) ))
+	{
+		if(time() < ((int)$block['start'] + (int)$block['duration']))
+		{
+			return true;
+		}
+	}
+	
+	$db->insert('
+	REPLACE INTO '.PREFIX.'ipblock
+	(`ip`,`context`,`start`,`duration`)
+	VALUES
+	('.$db->strval($ip).','.$db->strval($context).',NOW(),'.(int)$duration.')');
+	
+	return false;
+}

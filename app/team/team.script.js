@@ -33,11 +33,7 @@ $(function(){
 			{
 				ajax.req('team','contact',{
 					data: $form.serialize(),
-					method: 'post',
-					success: function()
-					{
-						$("#contactform").parent().parent().parent().fadeOut();
-					}
+					method: 'post'
 				});
 			}
 		});

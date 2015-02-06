@@ -59,6 +59,11 @@ class MaintenanceControl extends ConsoleControl
 		$this->masterBezirkUpdate();
 		
 		/*
+		 * Delete old blocked ips
+		 */
+		$this->model->deleteOldIpBlocks();
+		
+		/*
 		 * check inactive users and send wake up emails or set in sleeping mode
 		 */
 		//$this->sleepingMode();

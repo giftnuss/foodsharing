@@ -14,6 +14,12 @@ class TeamXhr extends Control
 	{
 		$xhr = new Xhr();
 		
+		if(ipIsBlocked(120,'contact'))
+		{
+			$xhr->addMessage('Du hast zu viele Nachrichten versendet, bitte warte einen Moment','error');
+			$xhr->send();
+		}
+		
 		if($id = $this->getPostInt('id'))
 		{
 			if($user = $this->model->getUser($id))
@@ -44,6 +50,7 @@ class TeamXhr extends Control
 				$socket->queue($mail);
 				$socket->send();
 				
+				$xhr->addScript('$("#contactform").parent().parent().parent().fadeOut();');
 				$xhr->addMessage(s('mail_send_success'),'success');
 				$xhr->send();
 			}

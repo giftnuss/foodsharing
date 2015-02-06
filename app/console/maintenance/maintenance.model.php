@@ -363,4 +363,9 @@ class MaintenanceModel extends ConsoleModel
 		
 		return false;
 	}
+	
+	public function deleteOldIpBlocks()
+	{
+		return $this->del('DELETE FROM `fs_ipblock` WHERE UNIX_TIMESTAMP(NOW()) > UNIX_TIMESTAMP(start)+duration ');
+	}
 }
