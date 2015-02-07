@@ -276,13 +276,13 @@ class PassgenControl extends Control
 				),
 				2 => array(
 						0 => 'Freiwillige',
-						1 => 'Foodsaverin',
+						1 => 'Foodsaver',
 						2 => 'Betriebsverantwortliche',
 						3 => 'Botschafterin'
 				),
 				3 => array(
 						0 => 'Freiwillige/r',
-						1 => 'Foodsave/r',
+						1 => 'Foodsaver',
 						2 => 'Betriebsverantwortliche/r',
 						3 => 'Botschafte/r'
 				)
