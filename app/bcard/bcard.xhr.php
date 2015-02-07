@@ -131,7 +131,7 @@ class BcardXhr extends Control
 
 			$pdf->Text(53.4+$x, 53.6+$y, utf8_decode($tel));
 			$pdf->Text(53.4+$x, 58.3+$y, utf8_decode($data['email']));
-			$pdf->Text(53.4+$x, 63.2+$y, utf8_decode('www.lebensmittelretten.de'));
+			$pdf->Text(53.4+$x, 63.2+$y, utf8_decode('www.foodsharing.de'));
 			if($x == 0)
 			{
 				$x += 91;
