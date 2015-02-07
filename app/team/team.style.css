@@ -80,14 +80,13 @@
 }
 #teamlist .img, #team-user .img
 {
-
-	-webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
   
     border: 4px solid #4a3520;
-    border-radius: 150px;
+    border-radius: 50px;
     display: inline-block;
     height: 150px;
     margin-bottom: 15px;
@@ -97,8 +96,8 @@
 #team-user .img
 {
 	float:right;
+    height: 250px;
     width: 200px;
-    height: 200px;
 }
 #teamlist a:hover .img
 {
