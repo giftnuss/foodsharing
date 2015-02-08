@@ -140,6 +140,8 @@ class BezirkControl extends Control
 		{
 			$menu[] = array('name'=>'Mailing-Liste', 'href'=>'/?page=message&a=neu&list&bid='.(int)$this->bezirk_id);
 		}
+		
+		$menu[] = array('name' => 'Arbeitsgruppen', 'href' => '/?page=groups&p=4'.(int)$this->bezirk_id);
 			
 		addContent($this->view->menu($menu,array('active'=>$this->getSub())),CNT_LEFT);
 		
