@@ -387,7 +387,13 @@ class FairteilerControl extends Control
 	
 	public function mayEdit()
 	{
-		if(isBotFor($this->bezirk_id) || isOrgaTeam() || (isset($this->follower['all'][fsId()]) && $this->follower['all'][fsId()] = 'verantwortlich'))
+		if(
+				isBotFor($this->bezirk_id) || 
+				isOrgaTeam() || 
+				(
+					isset($this->follower['all'][fsId()]) && 
+					$this->follower['all'][fsId()] == 'verantwortlich')
+				)
 		{
 			return true;
 		}
