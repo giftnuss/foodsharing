@@ -1052,12 +1052,15 @@ function u_team($betrieb)
 		}
 		
 		$last = '';
-		if((int)$fs['last_fetch'] > 0)
+		if((int)$fs['last_fetch'] > 0) 
 		{
-			$last = sv('stat_fetchcount',array(
-				'count' => $fs['stat_fetchcount'],
-				'date' =>  date('j.n.Y',$fs['last_fetch'])
+			$last = sv('stat_fetchcount', array(
+				'date' =>  date('d.m.Y', $fs['last_fetch'])
 			));
+		} 
+		else 
+		{
+			$last = sv('stat_fetchcount_none', array());
 		}
 		
 		$onclick = ' onclick="'.$click.'return false;"';
@@ -1078,7 +1081,7 @@ function u_team($betrieb)
 						</span>
 					</a>
 					<span style="display:none" class="tt-'.$fs['id'].'">
-						'.$fs['vorname'].' ist Springer seit '.date('m/y',$fs['add_date']).'
+						'.$last.'
 					</span>
 				</li>';
 		
