@@ -150,8 +150,6 @@ class Db
 		$this->mysqli = new mysqli();
 		$this->mysqli->connect(DB_HOST, DB_USER, DB_PASS, DB_DB);
 		$this->sql("SET NAMES 'utf8'");
-		$this->sql("SET CHARACTER SET 'utf8'");
-					
 		$g_dbclean['mysqli'] = $this->mysqli;
 	}
 	
