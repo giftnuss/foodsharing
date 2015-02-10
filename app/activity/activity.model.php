@@ -258,6 +258,10 @@ class ActivityModel extends Model
 					$mb_ids[] = $b['id'];
 				}
 			}
+
+			if(count($mb_ids) == 0) {
+				return false;
+			}
 			
 			if($updates = $this->q('
 				SELECT
@@ -342,6 +346,9 @@ class ActivityModel extends Model
 	{
 		$tmp = $this->getBezirkIds();
 		$bids = array();
+		if($tmp == false or count($tmp) == 0) {
+			return false;
+		}
 		foreach ($tmp as $t)
 		{
 			if($t > 0 && !isset($bids_not_load[$t]))
@@ -350,9 +357,9 @@ class ActivityModel extends Model
 			}
 		}
 
-    if(count($bids) == 0) {
-      return false;
-    }
+		if(count($bids) == 0) {
+			return false;
+		}
 		
 		
 		if($updates = $this->q('
