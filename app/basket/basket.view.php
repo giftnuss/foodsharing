@@ -394,6 +394,7 @@ class BasketView extends View
 	
 		return '
 		'.$img.'
+		'.v_input_wrapper('Einstelldatum', niceDate($basket['time_ts'])).'
 		'.v_input_wrapper('Beschreibung', nl2br(autolink($basket['description']))).'
 		';
 	}
