@@ -919,7 +919,7 @@ function u_form_checkboxTagAlt($date,$option=array())
 											
 						
 					},
-					"Regelmäßig Abholen": function() {
+					"Regelmäßig abholen": function() {
 						$("#'.$id.'shure_date").hide();
 						$("#'.$id.'rangeFetch").show();
 						$("#'.$id.'shure_range_date").show();

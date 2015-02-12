@@ -137,7 +137,7 @@ class GroupsView extends View
 			
 			$group .= $photo;
 			
-			$btn = '<a class="button" href="#" onclick="ajreq(\'contactgroup\',{id:'.(int)$g['id'].'});return false;">Gruppe Kontaktieren</a>';
+			$btn = '<a class="button" href="#" onclick="ajreq(\'contactgroup\',{id:'.(int)$g['id'].'});return false;">Gruppe kontaktieren</a>';
 			
 			$info = '';
 			
@@ -160,7 +160,7 @@ class GroupsView extends View
 			{
 				if($this->canApply($g,$mystats))
 				{
-					$btn .= '<a class="button" href="#" onclick="ajreq(\'apply\',{id:'.$g['id'].'});">Für Diese Arbeitsgruppe bewerben</a>';
+					$btn .= '<a class="button" href="#" onclick="ajreq(\'apply\',{id:'.$g['id'].'});">Für diese Arbeitsgruppe bewerben</a>';
 				}
 				elseif ($g['apply_type'] == 3)
 				{
@@ -245,10 +245,10 @@ class GroupsView extends View
 
 		 */
 		return v_form('apply', array(
-			v_form_textarea('motivation',array('label' => 'Was ist Deine Motivation in der Gruppe '.$group['name'].' mitzuwirken?')),
-			v_form_textarea('faehigkeit',array('label' => 'Was sind Deine Fähigkeiten die Du in dem Bereich hast?')),
-			v_form_textarea('erfahrung',array('label' => 'Kannst Du in der Gruppe auf Erfahrungen die Du woanders gemacht hast zurückgreifen, wenn ja wo bzw. was')),
-			v_form_select('zeit',array('label' => 'Wie viel Stunden hast Du pro Woche Zeit und Lust dafür aufzuwenden?','values' => array(
+			v_form_textarea('motivation',array('label' => 'Was ist Deine Motivation, in der Gruppe '.$group['name'].' mitzuwirken?')),
+			v_form_textarea('faehigkeit',array('label' => 'Was sind Deine Fähigkeiten, die Du in diesem Bereich hast?')),
+			v_form_textarea('erfahrung',array('label' => 'Kannst Du in der Gruppe auf Erfahrungen, die Du woanders gesammelt hast zurückgreifen? Wenn ja, wo bzw. was?')),
+			v_form_select('zeit',array('label' => 'Wie viele Stunden hast Du pro Woche Zeit und Lust dafür aufzuwenden?','values' => array(
 				array('id' => '1-2 Stunden','name' => '1-2 Stunden'),
 				array('id' => '2-3 Stunden','name' => '2-3 Stunden'),
 				array('id' => '3-4 Stunden','name' => '3-4 Stunden'),

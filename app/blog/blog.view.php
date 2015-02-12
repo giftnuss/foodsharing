@@ -47,7 +47,7 @@ class BlogView extends View
 	
 	public function newsListItem($news)
 	{
-		return '<div class="news-post"><h2><a href="/?page=blog&sub=read&id='.$news['id'].'">'.$news['name'].'</a></h2><p class="small"><span class="time">'.niceDate($news['time_ts']).'</span><span class="name"> von '.$news['fs_name'].'</span></p>'.$this->getImage($news) . '<p>'.autolink($news['teaser']).'</p><p><a class="button" href="/?page=blog&sub=read&id='.$news['id'].'">weiter lesen</a></p><div style="clear:both;"></div></div>';
+		return '<div class="news-post"><h2><a href="/?page=blog&sub=read&id='.$news['id'].'">'.$news['name'].'</a></h2><p class="small"><span class="time">'.niceDate($news['time_ts']).'</span><span class="name"> von '.$news['fs_name'].'</span></p>'.$this->getImage($news) . '<p>'.autolink($news['teaser']).'</p><p><a class="button" href="/?page=blog&sub=read&id='.$news['id'].'">weiterlesen</a></p><div style="clear:both;"></div></div>';
 	}
 	
 	private function getImage($news,$prefix = 'crop_1_528_')

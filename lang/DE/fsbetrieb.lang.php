@@ -61,13 +61,13 @@ $g_lang['info'] = 'Infos';
 $g_lang['edit_team'] = 'Team bearbeiten';
 $g_lang['add_me_here'] = 'Mich hier eintragen';
 $g_lang['i_do'] = 'Mach Ich!';
-$g_lang['shure_date'] = 'Möchtest Du Dich wirklich verbindlich für <strong>{label}</strong> Eintragen?';
+$g_lang['shure_date'] = 'Möchtest Du Dich wirklich verbindlich für <strong>{label}</strong> eintragen?';
 $g_lang['not_ready'] = 'Betrieb ist noch nicht bereit zu spenden';
 $g_lang['change_status'] = 'Status ändern';
 $g_lang['status_msg_1'] = 'Es besteht noch kein Kontakt';
 $g_lang['status_msg_2'] = 'Verhandlungen laufen';
 $g_lang['status_msg_3'] = 'Betrieb ist bereit zu spenden';
-$g_lang['status_msg_4'] = 'Betrieb will nicht koorperieren';
+$g_lang['status_msg_4'] = 'Betrieb will nicht kooperieren';
 $g_lang['status_msg_5'] = 'Betrieb spendet bereits';
 $g_lang['status_msg_6'] = 'spendet an Tafel etc. & wirft nichts weg';
 $g_lang['status_change_at'] = 'Statusänderung am {var}';
@@ -81,7 +81,7 @@ am {DATE} kann ich leider doch kein Essen abholen. Daher suche ich dringend eine
 
 Liebe Grüße';
 $g_lang['team_msg'] = 'Nachricht ans ganze Team';
-$g_lang['shure_of_backup'] = 'Hast Du eine Vertretung? Unsere verlässlichkeit ist sehr wichtig!';
+$g_lang['shure_of_backup'] = 'Hast Du eine Vertretung? Unsere Verlässlichkeit ist sehr wichtig!';
 $g_lang['msg_to_team'] = 'Team benachrichtigen';
 $g_lang['have_backup'] = 'Ich habe schon eine Vertretung';
 $g_lang['del_date_for'] = 'Austragen für';

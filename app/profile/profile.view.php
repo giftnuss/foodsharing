@@ -319,7 +319,7 @@ class ProfileView extends View
 		
 		if($this->foodsaver['online'])
 		{
-			$online = '<div style="margin-top:10px;">'.v_info($this->foodsaver['name'].' ist Online!',false,'<i class="fa fa-circle" style="color:#5ab946;"></i>').'</div>';
+			$online = '<div style="margin-top:10px;">'.v_info($this->foodsaver['name'].' ist online!',false,'<i class="fa fa-circle" style="color:#5ab946;"></i>').'</div>';
 		}
 		
 		return '<div style="text-align:center;">

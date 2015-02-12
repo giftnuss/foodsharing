@@ -1876,7 +1876,7 @@ function v_form_checkboxTagAlt($id,$option=array())
 		'.v_info('<strong>Achtung!</strong> Es darf '.$option['label'].' keine Lücke entstehen achte darauf das andere abholen.</span>').'
 	</div>
 	<div id="'.$id.'-timedialog">
-		'.v_info('Möchtest Du Dich wirklich verbindlich für <strong>'.$option['label'].'</strong> Eintragen?</span>').'
+		'.v_info('Möchtest Du Dich wirklich verbindlich für <strong>'.$option['label'].'</strong> eintragen?</span>').'
 	</div>');
 	
 	addJs('

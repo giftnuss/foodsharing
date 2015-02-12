@@ -40,12 +40,12 @@ if(isBotFor($bezirk_id) || isOrgaTeam())
 		foreach ($bez as $b)
 		{
 			
-			$inner = '<ul class="cblist"><li><label class="checkall"><input type="checkbox" class="checkall" /> <strong>Alle Auswählen</strong></label></li>';
+			$inner = '<ul class="cblist"><li><label class="checkall"><input type="checkbox" class="checkall" /> <strong>Alle auswählen</strong></label></li>';
 			foreach ($b['foodsaver'] as $f)
 			{
 				$inner .= '<li><label><input class="fsch-'.$b['id'].'" type="checkbox" name="choose_foodsaver[]" value="'.$f['id'].'" /> '.$f['name'].'</label></li>';
 			}
-			$inner .= '<li><label class="checkall"><input type="checkbox" class="checkall" /> <strong>Alle Auswählen</strong></label></li></ul>';
+			$inner .= '<li><label class="checkall"><input type="checkbox" class="checkall" /> <strong>Alle auswählen</strong></label></li></ul>';
 			$cnt[] = v_field($inner, 'Foodsaver aus '.$b['bezirk']);
 		}
 	}

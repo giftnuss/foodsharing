@@ -19,7 +19,7 @@ class GroupsXhr extends Control
 			$dialog->addContent($this->view->applyForm($group));
 			
 			$dialog->setTitle('Bewerbung '.$group['name']);
-			$dialog->addButton('Bewebung absenden', 'ajreq(\'applysend\',{d:\''.$dialog->getId().'\',id:'.(int)$group['id'].', f:$(\'#apply-form\').serialize()})');
+			$dialog->addButton('Bewerbung absenden', 'ajreq(\'applysend\',{d:\''.$dialog->getId().'\',id:'.(int)$group['id'].', f:$(\'#apply-form\').serialize()})');
 			
 			$dialog->setResizeable(false);
 			$dialog->addOpt('width', 450);

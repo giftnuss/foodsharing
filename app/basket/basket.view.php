@@ -158,7 +158,7 @@ class BasketView extends View
 		
 		if($basket['fs_id'] !=fsId())
 		{
-			$request = '<div><a class="button button-big" href="#" onclick="ajreq(\'request\',{app:\'basket\',id:'.(int)$basket['id'].'});">Essenskorb Anfragen</a>	</div>';
+			$request = '<div><a class="button button-big" href="#" onclick="ajreq(\'request\',{app:\'basket\',id:'.(int)$basket['id'].'});">Essenskorb anfragen</a>	</div>';
 		}
 		else
 		{
@@ -268,7 +268,7 @@ class BasketView extends View
 	public function contactTitle($basket)
 	{
 		return '<img src="'.img($basket['fs_photo']).'" style="float:left;margin-right:15px;" />
-		<p>'.$basket['fs_name'].' Kontaktieren</p>
+		<p>'.$basket['fs_name'].' kontaktieren</p>
 		<div style="clear:both;"></div>';
 	}
 	

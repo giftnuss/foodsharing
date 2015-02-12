@@ -171,7 +171,7 @@ var join = {
 				
 				if($('#login_passwd1').val().length < 4) // || $('#login_passwd1').val() != $('#login_passwd2').val())
 				{
-					pulseInfo('Dein Passwort muss länger als 4 buchstaben sein');
+					pulseInfo('Dein Passwort muss länger als 4 Buchstaben sein');
 					$('#login_passwd1').select();
 					return false;
 					check = false;

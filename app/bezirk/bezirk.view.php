@@ -519,7 +519,7 @@ class BezirkView extends View
 	
 	public function addEvent()
 	{
-		return v_field('<p align="center"><a class="button" href="/?page=event&sub=add&bid='.(int)$this->bezirk_id.'">Jetzt neuen Termin Eintragen</a></p>', 'Neues Event',array('class' => 'ui-padding'));
+		return v_field('<p align="center"><a class="button" href="/?page=event&sub=add&bid='.(int)$this->bezirk_id.'">Jetzt neuen Termin eintragen</a></p>', 'Neues Event',array('class' => 'ui-padding'));
 	}
 	
 	public function applications($requests)

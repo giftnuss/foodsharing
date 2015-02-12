@@ -702,7 +702,7 @@ else if(isset($_GET['id']))
 							
 			
 						},
-						"Regelmäßig Abholen": function() {
+						"Regelmäßig abholen": function() {
 							$("#shure_date").hide();
 							$("#rangeFetch").show();
 							$("#shure_range_date").show();

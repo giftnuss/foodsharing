@@ -845,7 +845,7 @@ function getMenu()
 					<li><a class="fNiv" href="/karte"><i class="fa fa-map-marker"></i></a></li>
 					<li><a class="fNiv" href="/essenskoerbe/find/">Essenskörbe</a></li>
 					<li><a class="fNiv" href="/news">News</a></li>
-					<li><a class="fNiv" href="/ueber-uns">Über Uns</a>
+					<li><a class="fNiv" href="/ueber-uns">Über uns</a>
 						<ul>
 							<li><a href="/team">Team</a></li>
 							<li><a href="/partner">Partner</a></li>

@@ -47,10 +47,10 @@ class LoginView extends View
 							<input type="hidden" name="iam" id="join_iam" value="human" />
 							
 							<div style="display:none;" class="humanshow msg-inside success">
-									<i class="fa fa-info-circle"></i> Melde Dich als Foodsharer an um als Privatperson Lebensmittel zu teilen und zu retten
+									<i class="fa fa-info-circle"></i> Melde Dich als Foodsharer an, um als Privatperson Lebensmittel zu teilen und zu retten.
 							</div>
 							<div style="display:none;" class="orgshow msg-inside success">
-									<i class="fa fa-info-circle"></i> Melde Dich als Soziale-Organisation, Hausprojekt oder Sonstiges an um größere Mengen an Lebensmitteln zu Spenden oder zu erhalten
+									<i class="fa fa-info-circle"></i> Melde Dich als soziale Organisation, Hausprojekt oder sonstiges an, um größere Mengen an Lebensmitteln zu spenden oder zu erhalten.
 							</div>
 						</div>
 						<div class="bottom">

@@ -133,13 +133,13 @@ class EventView extends View
 		}
 		
 		
-		$bezirkchoose = v_input_wrapper('Für Welchen Bezirk oder welche AG ist das Event?', '
+		$bezirkchoose = v_input_wrapper('Für welchen Bezirk oder welche AG ist das Event?', '
 			<select class="input select value" name="bezirk_id" id="bezirk_id">
 				'.$ag.'
 				'.$bez.'
 			</select>
 			<p style="padding-top:10px;">
-				<label><input type="checkbox" name="invite" id="invite" checked="checked" value="'.$g_data['invite'].'" /> Alle Foodsaver aus der Gruppe/Bezirk zum Termin einladen?</label><br />
+				<label><input type="checkbox" name="invite" id="invite" checked="checked" value="'.$g_data['invite'].'" /> Alle Foodsaver aus der Gruppe/dem Bezirk zum Termin einladen?</label><br />
 				<label><input type="checkbox" name="invitesubs" id="invitesubs" checked="checked" value="'.$g_data['invitesubs'].'" /> Alle untergeordneten Gruppen/Bezirke einschließen?</label>
 				'.$delinvites.'
 			</p>
