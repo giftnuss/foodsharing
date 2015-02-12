@@ -72,7 +72,7 @@ class StatisticsView extends View
 					</div>
 					<div class="stat_text">
 						<h4>'.number_format($stat['korpcount'], 0, ',', '.').'</h4>
-						<p>Betriebe koorperieren kontinuierlich und zufrieden mit uns.</p>
+						<p>Betriebe kooperieren kontinuierlich und zufrieden mit uns.</p>
 					</div>
 			</div>
 			<div class="stat_item">

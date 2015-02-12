@@ -306,10 +306,10 @@ function betrieb_form($bezirk = false,$page = '')
 			v_form_textarea('public_info',array('maxlength' => 180,'desc' => 'Hier kannst du einige Infos für die Foodsaver angeben, die sich für das Team bewerben möchten. <br />(max. 180 Zeichen)<div>'.v_info('<strong>Wichtig</strong> Gib hier keine genauen Abholzeiten an.<br />Es ist öfters vorgekommen, dass Leute unabgesprochen zum Laden gegangen sind.').'</div>')),
 			v_form_select('public_time',array('values'=>array(
 					array('id'=>0,'name'=>'Keine Angabe'),
-					array('id'=>1,'name'=>'Morgens'),
-					array('id'=>2,'name'=>'Mittags / Nachmittags'),
-					array('id'=>3,'name'=>'Abends'),
-					array('id'=>4,'name'=>'Nachts')
+					array('id'=>1,'name'=>'morgens'),
+					array('id'=>2,'name'=>'mittags/nachmittags'),
+					array('id'=>3,'name'=>'abends'),
+					array('id'=>4,'name'=>'nachts')
 			))),
 			$first_post,
 			v_form_select('ueberzeugungsarbeit',array('values'=>array(

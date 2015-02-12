@@ -2756,9 +2756,9 @@ function v_getStatusAmpel($status)
 	{
 		case 1 : $out = '<span class="hidden">1</span><a href="#" onclick="return false;" title="Es besteht noch kein Kontakt" class="ampel ampel-grau"><span>&nbsp;</span></a>'; break;
 		case 2 : $out = '<span class="hidden">2</span><a href="#" onclick="return false;" title="Verhandlungen laufen" class="ampel ampel-gelb"><span>&nbsp;</span></a>'; break;
-		case 3 : $out = '<span class="hidden">3</span><a href="#" onclick="return false;" title="Betrieb koorperiert bereits" class="ampel ampel-gruen"><span>&nbsp;</span></a>'; break;
-		case 5 : $out = '<span class="hidden">3</span><a href="#" onclick="return false;" title="Betrieb koorperiert bereits" class="ampel ampel-gruen"><span>&nbsp;</span></a>'; break;
-		case 4 : $out = '<span class="hidden">4</span><a href="#" onclick="return false;" title="Will nicht koorperieren" class="ampel ampel-rot"><span>&nbsp;</span></a>'; break;
+		case 3 : $out = '<span class="hidden">3</span><a href="#" onclick="return false;" title="Betrieb kooperiert bereits" class="ampel ampel-gruen"><span>&nbsp;</span></a>'; break;
+		case 5 : $out = '<span class="hidden">3</span><a href="#" onclick="return false;" title="Betrieb kooperiert bereits" class="ampel ampel-gruen"><span>&nbsp;</span></a>'; break;
+		case 4 : $out = '<span class="hidden">4</span><a href="#" onclick="return false;" title="Will nicht kooperieren" class="ampel ampel-rot"><span>&nbsp;</span></a>'; break;
 	}
 	
 	return $out;

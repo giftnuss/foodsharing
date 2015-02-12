@@ -515,9 +515,9 @@ class BasketXhr extends Control
 				</div>'	
 				. v_form_radio('fetchstate',array(
 				'values' => array(
-					array('id' => 3, 'name' => 'Ja, '.genderWord($request['fs_gender'], 'Er', 'Sie', 'Er/Sie').' hat den Korb angeholt'),
-					array('id' => 5, 'name' => 'Nein, '.genderWord($request['fs_gender'], 'Er', 'Sie', 'Er/Sie').' ist leider nicht wie verabredet erschienen'),
-					array('id' => 5, 'name' => 'Die Lebensmittel wurden von jemand anderes angeholt.'),
+					array('id' => 3, 'name' => 'Ja, '.genderWord($request['fs_gender'], 'er', 'sie', 'er/sie').' hat den Korb abgeholt.'),
+					array('id' => 5, 'name' => 'Nein, '.genderWord($request['fs_gender'], 'er', 'sie', 'er/sie').' ist leider nicht wie verabredet erschienen.'),
+					array('id' => 5, 'name' => 'Die Lebensmittel wurden von jemand anderem abgeholt.'),
 				)		
 			)));
 			$dia->addAbortButton();
