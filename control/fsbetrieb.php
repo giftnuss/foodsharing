@@ -529,7 +529,7 @@ else if(isset($_GET['id']))
 			<input type="hidden" name="timedialog-date" id="timedialog-date" value="" />
 				
 			<span class="shure_date" id="shure_date">'.v_info(sv('shure_date',array('label'=>'<span id="date-label"></span>'))).'</span>
-			<span class="shure_range_date" id="shure_range_date" style="display:none;">'.v_info(s('shure_range_date',array('label' => '<span id="range-day-label"></span>'))).'</span>
+			<span class="shure_range_date" id="shure_range_date" style="display:none;">'.v_info(sv('shure_range_date',array('label' => '<span id="range-day-label"></span>'))).'</span>
 			<div class="rangeFetch" id="rangeFetch" style="display:none;">
 			
 					'.v_input_wrapper(s('zeitraum'), '<input type="text" value="" id="timedialog-from" name="timedialog-from" class="datefetch input text value"> bis <input type="text" value="" id="timedialog-to" name="timedialog-to" class="datefetch input text value">').'
@@ -642,7 +642,7 @@ else if(isset($_GET['id']))
 					
 					$("#timedialog-date").val(date);
 					$("#date-label").html(day + ", " + label);
-					$("#range-day-label").html(day);
+					$("#range-day-label").html(day.toLowerCase());
 					$("#timedialog-id").val(id);
 					$("#timedialog").dialog("open");
 				}
@@ -975,7 +975,7 @@ function handleRequests($betrieb)
 		<tr class="'.$odd.' request-'.$r['id'].'">
 			<td class="img" width="35px"><a href="#" onclick="profile('.(int)$r['id'].');return false;"><img src="'.img($r['photo']).'" /></a></td>
 			<td style="padding-top:17px;"><span class="msg"><a href="#" onclick="profile('.(int)$r['id'].');return false;">'.$r['name'].'</a></span></td>
-			<td style="width:92px;padding-top:17px;"><span class="msg"><ul class="toolbar"><li class="ui-state-default ui-corner-left" title="Ablehnen" onclick="denyRequest('.(int)$r['id'].','.(int)$betrieb['id'].');"><span class="ui-icon ui-icon-closethick"></span></li><li class="ui-state-default" title="auf die Springer- / Warteliste setzen" onclick="warteRequest('.(int)$r['id'].','.(int)$betrieb['id'].');"><span class="ui-icon ui-icon-star"></span></li><li class="ui-state-default ui-corner-right" title="Akteptieren" onclick="acceptRequest('.(int)$r['id'].','.(int)$betrieb['id'].');"><span class="ui-icon ui-icon-heart"></span></li></ul></span></td>
+			<td style="width:92px;padding-top:17px;"><span class="msg"><ul class="toolbar"><li class="ui-state-default ui-corner-left" title="Ablehnen" onclick="denyRequest('.(int)$r['id'].','.(int)$betrieb['id'].');"><span class="ui-icon ui-icon-closethick"></span></li><li class="ui-state-default" title="auf die Springer- / Warteliste setzen" onclick="warteRequest('.(int)$r['id'].','.(int)$betrieb['id'].');"><span class="ui-icon ui-icon-star"></span></li><li class="ui-state-default ui-corner-right" title="Akzeptieren" onclick="acceptRequest('.(int)$r['id'].','.(int)$betrieb['id'].');"><span class="ui-icon ui-icon-heart"></span></li></ul></span></td>
 		</tr>';
 	}
 	
