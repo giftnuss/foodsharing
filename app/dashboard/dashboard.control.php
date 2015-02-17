@@ -59,6 +59,20 @@ class DashboardControl extends Control
 		addContent($this->view->becomeFoodsaver());
 		
 		addContent($this->view->foodsharerMenu(),CNT_LEFT);
+
+		$db =loadModel('content');
+
+		$cnt = $db->getContent(33);
+
+		$cnt['body'] = str_replace(array(
+			'{NAME}',
+			'{ANREDE}'
+		),array(
+			S::user('name'),
+			s('anrede_'.S::user('gender'))
+		),$cnt['body']);
+
+		addContent(v_info($cnt['body'],$cnt['title']));
 		
 		$this->view->updates();
 		
