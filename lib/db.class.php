@@ -978,7 +978,7 @@ class Db
 
 			$blocked = $this->qOne('
 			SELECT email FROM `'.PREFIX.'email_blacklist`
-			WHERE email = '.$this->strval($email));
+			WHERE email = `'.$this->strval($email).'`');
 
 			return ($blocked === false);
 		}
