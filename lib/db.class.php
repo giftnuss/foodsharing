@@ -978,7 +978,7 @@ class Db
 
 			$blocked = $this->qOne('
 			SELECT email FROM `'.PREFIX.'email_blacklist`
-			WHERE email = "'.$this->strval($email).'"');
+			WHERE email = '.$this->strval($email));
 
 			return ($blocked === false);
 		}
@@ -1061,7 +1061,7 @@ class Db
             `photo`
 
         FROM 	`'.PREFIX.'foodsaver`
-        WHERE 	`email` = "'.$email.'"
+        WHERE 	`email` = '.$this->strval($email).'
         AND 	`fs_password` 	= "'.$old_fs_hash.'"
       ';
       if($user = $this->qRow($sql))
