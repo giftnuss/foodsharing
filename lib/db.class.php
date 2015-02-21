@@ -949,6 +949,7 @@ class Db
 	
 	public function login($email,$pass)
 	{
+		$email = trim($email);
 		if($client = $this->checkClient($email, $pass))
 		{
 			$this->initSessionData($client['id']);
@@ -974,8 +975,12 @@ class Db
 			'.$this->strval($_SERVER['HTTP_USER_AGENT']).',
 			'.$this->dateval(date('Y-m-d H:i:s')).'
 			)');
-			
-			return true;
+
+			$blocked = $this->qOne('
+			SELECT email FROM `'.PREFIX.'email_blacklist`
+			WHERE email = `'.$this->strval($email).'`');
+
+			return ($blocked === false);
 		}
 		else
 		{
