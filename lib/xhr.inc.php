@@ -2569,7 +2569,13 @@ function xhr_becomeBezirk($data)
 			else
 			{
 			*/
-				$active = 1;
+				$active = 0;
+				/*
+				if(S::may('orga'))
+				{
+					$active = 1;
+				}*/
+				
 				/*
 				if(isOrgateam())
 				{
