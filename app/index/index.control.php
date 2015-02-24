@@ -35,7 +35,7 @@ class IndexControl extends Control
 		}
 		
 		addContent($this->view->index(
-			$page_content,
+			$page_content['body'],
 			$gerettet,
 			$this->model->getNewestFairteilerPosts(5),
 			$this->model->getNewestFoodbaskets(5)
