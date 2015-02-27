@@ -218,6 +218,9 @@ class ReportModel extends Model
 				fs.name AS fs_name,
 				fs.nachname AS fs_nachname,
 				fs.photo AS fs_photo,
+				fs.stadt AS fs_stadt,
+
+
 				
 				rp.id AS rp_id,
 				rp.name AS rp_name,

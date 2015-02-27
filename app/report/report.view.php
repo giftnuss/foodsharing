@@ -243,6 +243,7 @@ class ReportView extends View
 				array('cnt' => '<span class="photo"><a title="'.$r['rp_name'].' '.$r['rp_nachname'].'" href="#" onclick="profile('.(int)$r['rp_id'].');return false;"><img id="miniq-'.$r['rp_id'].'" src="'.img($r['rp_photo']).'" /></a></span>'),		
 				array('cnt' => tt($r['msg'],50)),
 				array('cnt' => '<span style="display:none;">a'.$r['time_ts'].' </span>'.niceDateShort($r['time_ts']).' Uhr'),
+				array('cnt' => $r['fs_stadt']),
 			);
 		}
 		
@@ -252,6 +253,7 @@ class ReportView extends View
 				array('name' => 'Von', 'width' => 50),
 				array('name' => s('message')),
 				array('name' => s('datetime'),'width' => 80),
+				array('name' => 'FS Wohnort', 'width' => 25),
 				
 				//array('name' => s('actions'),'sort' => false,'width' => 75)
 		),$rows,array('pager'=>true));
