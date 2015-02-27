@@ -655,8 +655,15 @@ class BezirkControl extends Control
 		if(isset($_POST['form_submit']))
 		{
 			$active = 1;
-			
-			if($this->mode == 'big' && !(isBotFor($this->bezirk_id) || $this->getSub() == 'botforum'))
+			if(
+				!isVerified()
+				||
+				(
+					$this->mode == 'big' 
+					&& 
+					!(isBotFor($this->bezirk_id) || $this->getSub() == 'botforum')
+				)
+			)
 			{
 				info('Das Thema wurde gespeichert und wird veröffentlicht sobald ein Botschafter aus '.$this->bezirk['name'].' es bestätigt.');
 				$active = 0;
