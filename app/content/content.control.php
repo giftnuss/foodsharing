@@ -111,6 +111,17 @@ class ContentControl extends Control
 			addContent($this->view->partner($cnt));
 		}
 	}
+
+	public function fuer_unternehmen()
+	{
+		if($cnt = $this->model->getContent(4))
+		{
+			addBread($cnt['title']);
+			addTitle($cnt['title']);
+			
+			addContent($this->view->partner($cnt));
+		}
+	}
 	
 	public function faq()
 	{
