@@ -286,7 +286,10 @@ function handleImages($body)
 						$new_filename = $y.'-'.$filename;
 						$y++;
 					}
+					
 					copy($file, $new_path.$new_filename);
+					chmod($new_path.$new_filename, 0777);
+					
 					$fimage = new fImage($new_path.$new_filename);
 					if(!empty($src) && $width = $tag->getAttribute('width'))
 					{
@@ -297,7 +300,7 @@ function handleImages($body)
 						$fimage->resize(0, $height);
 					}
 					$fimage->saveChanges();
-					$tag->setAttribute('src', 'http://www.lebensmittelretten.de/freiwillige/'.$new_path.$new_filename);
+					$tag->setAttribute('src', 'http://foodsharing.de/'.$new_path.$new_filename);
 					$tag->setAttribute('name', $old_filepath);
 					$tag->removeAttribute('width');
 					$tag->removeAttribute('height');
