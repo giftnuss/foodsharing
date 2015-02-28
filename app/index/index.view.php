@@ -2,11 +2,11 @@
 class IndexView extends View
 {
 	
-	public function index($gerettet,$fairteiler, $baskets)
+	public function index($first_content, $gerettet, $fairteiler, $baskets)
 	{
 		$ps = new vPageslider();
-		
-		$ps->addSection($this->fsBigLogo(),array(
+
+		$ps->addSection($first_content,array(
 			'color' => '#4A3520',
 			'anchor' => 'home'
 		));
@@ -94,20 +94,6 @@ class IndexView extends View
 			<p class="number"><span id="stat-count-number">0</span> KG</p>
 			<p>gerettet!</p>
 		</div>';
-	}
-	
-	private function fsBigLogo()
-	{
-		return '
-			<div class="biglogo">
-				<div class="centerblock">
-					<img width="25%" src="/img/gabel.png" alt="foodsharing Logo"/>
-					<p>Teile Lebensmittel,</p>
-					<p class="small">anstatt sie wegzuwerfen!</p>
-					<h1>foodsharing<span>.de</span></h1>
-				</div>
-			</div>
-				';
 	}
 	
 	public function foodSlider($ftposts,$baskets)

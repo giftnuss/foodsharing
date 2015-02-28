@@ -13,6 +13,7 @@ class IndexControl extends Control
 	
 	public function index()
 	{		
+		$db = loadModel('content');
 		addTitle('Restlos glücklich!');
 		
 		//$this->setTemplate('home');
@@ -26,12 +27,19 @@ class IndexControl extends Control
 		}
 		
 		$gerettet = round($gerettet,0);
+
+		if(strpos($_SERVER['REQUEST_URI'], 'myfoodsharing.at')) {
+			$page_content = $db->getContent(37);
+		} else {
+			$page_content = $db->getContent(38);
+		}
 		
 		addContent($this->view->index(
+			$page_content['body'],
 			$gerettet,
 			$this->model->getNewestFairteilerPosts(5),
 			$this->model->getNewestFoodbaskets(5)
-			
+
 		),CNT_OVERTOP);
 		
 		//$this->setContentWidth(9, 9);
