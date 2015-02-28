@@ -1,7 +1,7 @@
 <footer>
 	<div class="wrapper">
 		<div class="pure-g">
-		    <div class="pure-u-1 pure-u-md-6-24"> 
+		    <div class="pure-u-1 pure-u-md-5-24">
 		    	<div class="inside">
 		    		<ul class="linklist">
 						<li><a class="corner-all" href="/team">Team</a></li>
@@ -11,7 +11,7 @@
 		    		</ul>
 		   		</div> 
 		    </div>
-		    <div class="pure-u-1 pure-u-md-6-24"> 
+		    <div class="pure-u-1 pure-u-md-5-24">
 		    	<div class="inside">
 		    		<ul class="linklist">
 			    		<li><a class="corner-all" href="/partner">Partner</a></li>
@@ -21,13 +21,13 @@
 					</ul>
 				</div>
 		    </div>
-		    <div class="pure-u-1 pure-u-md-12-24">
+		    <div class="pure-u-1 pure-u-md-14-24">
 		    	<div class="inside">
 <?php
 		if(strpos($_SERVER['REQUEST_URI'], 'myfoodsharing.at')) {
 ?>
-							<a class="corner-all imglink" href="http://www.lebensministerium.at/" target="_blank"><img src="/img/wien-bmlfuw.png" alt="Lebensministerium" /></a>
-							<a class="corner-all imglink" href="https://www.wienertafel.at/" target="_blank"><img src="/img/wien_tafel.png" alt="Wiener Tafel" /></a>
+							<a class="corner-all" href="http://www.lebensministerium.at/" target="_blank"><img src="/img/wien_bmlfuw.png" alt="Lebensministerium" /></a>
+							<a class="corner-all" href="http://www.wienertafel.at/" target="_blank"><img src="/img/wien_tafel.png" alt="Wiener Tafel" /></a>
 <?php
 			}
 ?>
