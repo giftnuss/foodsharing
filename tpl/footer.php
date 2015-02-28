@@ -23,18 +23,29 @@
 		    </div>
 		    <div class="pure-u-1 pure-u-md-16-24">
 		    	<div class="inside">
+					<div class="pure-g">
 <?php
-		if(strpos($_SERVER['HTTP_HOST'], 'foodsharing.at') !== false) {
+		if(strpos($_SERVER['REQUEST_URI'], 'myfoodsharing.at')) {
 ?>
-							<a class="corner-all" href="http://www.bmlfuw.gv.at/" target="_blank"><img src="/img/mfelo.png" alt="Lebensministerium" /></a>
-							<a class="corner-all" href="http://www.wienertafel.at/" target="_blank"><img src="/img/wien_tafel.png" alt="Wiener Tafel" /></a>
-							<a class="corner-all" href="http://www.denns-biomarkt.at/" target="_blank"><img src="/img/denns_logo_100.png" alt="Denn's Biomarkt" /></a>
+						<div class="pure-u-1 pure-u-md-1-3">
+							<a class="corner-all imglink" href="http://www.lebensministerium.at/" target="_blank"><img src="/img/wien-bmlfuw.png" alt="Lebensministerium" /></a>
+						</div>
+						<div class="pure-u-1 pure-u-md-1-3">
+							<a class="corner-all imglink" href="https://www.wienertafel.at/" target="_blank"><img src="/img/wien_tafel.png" alt="Wiener Tafel" /></a>
+						</div>
+						<div class="pure-u-1 pure-u-md-1-3">
+<?php
+			} else {
+?>
+						<div class="pure-u-1">
 <?php
 			}
 ?>
 
 							<h6>Vielen Dank an unseren Öko-Hoster</h6>
 							<a class="corner-all imglink" href="https://www.manitu.de/" target="_blank"><img src="/img/manitu_logo.png" alt="Manitu" /></a>
+						</div>
+					</div>
 		    	</div>
 		    </div>
 		</div>
