@@ -4,10 +4,10 @@
 		    <div class="pure-u-1 pure-u-md-4-24">
 		    	<div class="inside">
 		    		<ul class="linklist">
-		    			<li><a class="corner-all" href="/team">Team</a></li>
-		    			<li><a class="corner-all" href="/impressum">Impressum</a></li>
-		    			<li><a class="corner-all" href="/ratgeber">Ratgeber</a></li>
-						<li><a class="corner-all" href="/fuer_unternehmen">Unternehmen</a></li>
+						<li><a class="corner-all" href="/team">Team</a></li>
+						<li><a class="corner-all" href="/impressum">Impressum</a></li>
+						<li><a class="corner-all" href="/ratgeber">Ratgeber</a></li>
+						<li><a class="corner-all" href="/fuer-unternehmen">Unternehmen</a></li>
 		    		</ul>
 		   		</div> 
 		    </div>
