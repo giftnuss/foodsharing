@@ -76,13 +76,19 @@ class ProfileView extends View
 	{
 		$infos = array();
 		
-		if(S::may('orga'))
+		if(S::may('bot') || S::may('orga') || S::may('admin'))
 		{
-			$date = new fDate($this->foodsaver['last_login']);
+			$last_login = new fDate($this->foodsaver['last_login']);
+			$registration_date = new fDate($this->foodsaver['anmeldedatum']);
 			
 			$infos[] = array(
-					'name' => 'letzter Login',
-					'val' => $date->format('d.m.Y')
+					'name' => s('last_login'),
+					'val' => $last_login->format('d.m.Y')
+			);
+
+			$infos[] = array(
+					'name' => s('registration_date'),
+					'val' => $registration_date->format('d.m.Y')
 			);
 			
 			$infos[] = array(
