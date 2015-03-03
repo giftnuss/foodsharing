@@ -2419,7 +2419,7 @@ function xhr_saveBezirk($data)
 function xhr_addFetcher($data)
 {
 	global $db;
-	if($db->isInTeam($data['bid']) || isBotschafter() || isOrgaTeam())
+	if(($db->isInTeam($data['bid']) || isBotschafter() || isOrgaTeam()) && isVerified())
 	{
 		/*
 		 * 	[f] => addFetcher
