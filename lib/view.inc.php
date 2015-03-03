@@ -2422,6 +2422,9 @@ function v_form_date($id,$option = array())
 	$id = id($id);
 	$label = s($id);
 
+	$yearRangeFrom = (isset($option['yearRangeFrom'])) ? $option['yearRangeFrom'] : (date('Y')-60);
+	$yearRangeTo = (isset($option['yearRangeTo'])) ? $option['yearRangeTo'] : (date('Y')+60);
+
 	$value = getValue($id);
 
 	addJs('$("#'.$id.'").datepicker({
@@ -2429,7 +2432,7 @@ function v_form_date($id,$option = array())
 		changeMonth: true,
 		dateFormat: "yy-mm-dd",
 		monthNames: [ "Januar", "Februar", "M&auml;rz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" ],
-		yearRange: "'.(date('Y')-60).':'.(date('Y')+60).'"
+		yearRange: "'.$yearRangeFrom.':'.$yearRangeTo.'"
 	});');
 	
 	return v_input_wrapper(

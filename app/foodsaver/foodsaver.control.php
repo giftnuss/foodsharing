@@ -244,7 +244,7 @@ function foodsaver_form($title = 'Foodsaver')
 					array('required' => true)
 			)),
 
-			v_form_date('geb_datum',array('required' => true))
+			v_form_date('geb_datum',array('required' => true, 'yearRangeFrom' => (date('Y')-111), 'yearRangeTo' => date('Y')))
 		
 			/*
 			 * v_form_select('autokennzeichen_id',array('required' => true)
