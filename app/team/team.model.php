@@ -18,7 +18,8 @@ class TeamModel extends Model
 					fs.github,
 					fs.tox,
 					fs.twitter,
-					fs.position
+					fs.position,
+					fs.contact_public
 				
 				FROM 
 					'.PREFIX.'foodsaver fs
@@ -59,7 +60,8 @@ class TeamModel extends Model
 				fs.homepage,
 				fs.github,
 				fs.position,
-				fs.email
+				fs.email,
+				fs.contact_public
 				
 			FROM 
 				'.PREFIX.'foodsaver fs

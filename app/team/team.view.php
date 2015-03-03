@@ -73,7 +73,7 @@ class TeamView extends View
 		),array('id' => 'contactform'));
 	}
 	
-	public function teamlist($team)
+	public function teamlist($team, $header)
 	{
 		$firsts = array(
 			56 => true,
@@ -97,7 +97,12 @@ class TeamView extends View
 		
 		foreach ($team as $t)
 		{
-			$socials = '<i class="fa fa-envelope"></i>';
+			if($t['contact_public'])
+			{
+				$socials = '<i class="fa fa-envelope"></i>';
+			} else {
+				$socials = '';
+			}
 			
 			if($t['homepage'] != '')
 			{
@@ -139,7 +144,7 @@ class TeamView extends View
 		$out .= '
 		</ul>';
 		
-		return $out;
+		return $header['body'].$out;
 	}
 	
 	private function toxPopTpl($user)

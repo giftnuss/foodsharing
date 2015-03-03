@@ -27,7 +27,10 @@ class TeamControl extends Control
 				addBread($user['name']);
 				addContent($this->view->user($user));
 				
-				addContent($this->view->contactForm($user));
+				if($user['contact_public'])
+				{
+					addContent($this->view->contactForm($user));
+				}
 			}
 			else
 			{
@@ -36,7 +39,8 @@ class TeamControl extends Control
 		}
 		else if($team = $this->model->getTeam())
 		{
-			addContent($this->view->teamlist($team));
+			$db = loadModel('content');
+			addContent($this->view->teamlist($team, $db->getContent(39)));
 		}
 	}
 }
