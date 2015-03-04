@@ -22,16 +22,20 @@ class TeamModel extends Model
 					fs.contact_public
 				
 				FROM 
+					'.PREFIX.'foodsaver_has_bezirk hb
+
+				LEFT JOIN
 					'.PREFIX.'foodsaver fs
+				ON
+					hb.foodsaver_id = fs.id
 				
 				LEFT JOIN
 					'.PREFIX.'mailbox mb 
-				
 				ON 
 					fs.mailbox_id = mb.id
-				
+
 				WHERE 
-					fs.rolle >= 4
+					hb.bezirk_id = 258
 		'))
 		{
 			foreach ($orgas as $o)
