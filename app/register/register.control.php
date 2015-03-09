@@ -15,7 +15,7 @@ class RegisterControl extends Control
 	{
 		global $g_data;
 		$lang = 'de';
-		if($_GET['lang'] == 'en') {
+		if(isset($_GET['lang']) && $_GET['lang'] == 'en') {
 			$lang = 'en';
 		}
 		if($lang == 'de') {
@@ -25,6 +25,7 @@ class RegisterControl extends Control
 		}
 		$foodsaver = array();
 		if(S::may()) {
+			$fs = $this->model->getOne_foodsaver(fsId());
 			$foodsaver['rolle'] = $fs['rolle'];
 			$g_data['name'] = $fs['name'].' '.$fs['nachname'];
 			$g_data['geb_datum'] = $fs['geb_datum'];
