@@ -36,7 +36,7 @@ class RegisterControl extends Control
 	{
 		global $g_data;
 		$lang = 'de';
-		if(isset($_REQUEST['lang']) && $_REQUEST['lang'] == 'en') {
+		if($_GET['lang'] == 'en') {
 			$lang = 'en';
 		}
 		if($lang == 'de') {
