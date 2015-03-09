@@ -2125,7 +2125,14 @@ function loadApp($app)
 	require_once ROOT_DIR.'app/'.$app.'/'.$app.'.model.php';
 	require_once ROOT_DIR.'app/'.$app.'/'.$app.'.view.php';
 	require_once ROOT_DIR.'lang/DE/'.$app.'.lang.php';
-	
+	if(isset($_GET['lang']) && $_GET['lang'] == 'en')
+	{
+		$fn = ROOT_DIR.'lang/EN/'.$app.'.lang.php';
+		if(file_exists($fn))
+		{
+			require_once $fn;
+		}
+	}
 	addJsFunc(file_get_contents(ROOT_DIR.'app/'.$app.'/'.$app.'.script.js'));
 	addStyle(file_get_contents(ROOT_DIR.'app/'.$app.'/'.$app.'.style.css'));
 	
