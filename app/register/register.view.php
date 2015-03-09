@@ -11,10 +11,19 @@ class RegisterView extends View
 	public function signup_form($foodsaver)
 	{
 		$role_values=array();
+		$rolle = 0;
+		if(isset($foodsaver['rolle']))
+		{
+			$rolle = $foodsaver['rolle'] + 1;
+			if($rolle > 4)
+			{
+				$rolle = 4;
+			}
+		}
 		foreach(array('interested','foodsharer','foodsaver','bieb','bot') as $k=>$v)
 		{
 			$role_values[$k] = array('id' => $k, 'name'=>s($v));
-			if(isset($foodsaver['rolle']) && ($foodsaver['rolle'] + 1 == $k)) {
+			if($rolle == $k) {
 				$role_values[$k]['selected'] = true;
 			}
 		}
