@@ -1,31 +1,29 @@
 <?php
 class RegisterView extends View
 {
-	public function signup($infotext, $foodsaver)
+	public function signup($infotext)
 	{
 		$page = new vPage($infotext['title'],$infotext['body']);
 		$page->addSection($this->signup_form($foodsaver));
 		$page->render();
 	}
 
-	public function signup_form($foodsaver)
+	public function signup_form()
 	{
+		global $g_data;
 		$role_values=array();
-		$rolle = 0;
-		if(isset($foodsaver['rolle']))
+		if(isset($g_data['rolle']))
 		{
-			$rolle = $foodsaver['rolle'] + 1;
+			$rolle = $g_data['rolle'] + 1;
 			if($rolle > 4)
 			{
 				$rolle = 4;
 			}
+			$g_data['rolle'] = $rolle;
 		}
 		foreach(array('interested','foodsharer','foodsaver','bieb','bot') as $k=>$v)
 		{
 			$role_values[$k] = array('id' => $k, 'name'=>s($v));
-			if($rolle == $k) {
-				$role_values[$k]['selected'] = true;
-			}
 		}
 		return v_form('signup_meeting',array(
 			v_form_text('name', array('required'=>true)),

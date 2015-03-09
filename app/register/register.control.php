@@ -23,10 +23,9 @@ class RegisterControl extends Control
 		} else {
 			$infotext = $this->model->getContent(41);
 		}
-		$foodsaver = array();
 		if(S::may()) {
 			$fs = $this->model->getOne_foodsaver(fsId());
-			$foodsaver['rolle'] = $fs['rolle'];
+			$g_data['rolle'] = $fs['rolle'];
 			$g_data['name'] = $fs['name'].' '.$fs['nachname'];
 			$g_data['geb_datum'] = $fs['geb_datum'];
 			$g_data['address'] = $fs['anschrift'].' '.$fs['plz'];
@@ -34,6 +33,6 @@ class RegisterControl extends Control
 			$g_data['email'] = $fs['email'];
 			$g_data['phone'] = $fs['handy'];
 		}
-		$this->view->signup($infotext, $foodsaver);
+		$this->view->signup($infotext);
 	}
 }
