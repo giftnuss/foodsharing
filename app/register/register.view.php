@@ -19,7 +19,7 @@ class RegisterView extends View
 			{
 				$rolle = 4;
 			}
-			$g_data['rolle'] = $rolle;
+			$g_data['already_foodsaver'] = $rolle;
 		}
 		foreach(array('interested','foodsharer','foodsaver','bieb','bot') as $k=>$v)
 		{
