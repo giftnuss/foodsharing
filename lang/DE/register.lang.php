@@ -1,4 +1,4 @@
-<?
+<?php
 global $g_lang;
 
 $g_lang['signup'] = 'Anmelden!';
@@ -27,3 +27,4 @@ $g_lang['bieb'] = 'BetriebsverantwortlicheR';
 $g_lang['bot'] = 'BotschafterIn';
 $g_lang['childcare'] = 'Ich benötige Kinderbetreung für meine Kinder (Name + Alter)';
 $g_lang['comments'] = 'Sonstige Anmerkungen, Wünsche oder Fragen';
+?>
