@@ -100,7 +100,7 @@ class RegisterControl extends Control
 		} else
 		{
 			$validationCode = sha1($this->salt.$fields['email']);
-			tplMail(23, $fields['email'], array('anrede' => 'Liebe/r', 'name' => $fields['name'],
+			tplMail(29, $fields['email'], array('anrede' => 'Liebe/r', 'name' => $fields['name'],
 				'link' => 'https://'.DEFAULT_HOST.'/?page=register&validate='.$fields['email'].'&code='.$validationCode));
 			$this->view->signupOkay();
 		}
