@@ -27,4 +27,11 @@ $g_lang['bieb'] = 'BetriebsverantwortlicheR';
 $g_lang['bot'] = 'BotschafterIn';
 $g_lang['childcare'] = 'Ich benötige Kinderbetreung für meine Kinder (Name + Alter)';
 $g_lang['comments'] = 'Sonstige Anmerkungen, Wünsche oder Fragen';
+$g_lang['thank_you'] = 'Danke Dir!';
+$g_lang['signup_successful'] = 'Vielen Dank für Deine Anmeldung! Bitte klicke den Bestätigungslink in der Email, welche du in diesem Moment erhalten haben solltest.';
+$g_lang['err_not_all_req_fields'] = 'Fehler: Du hast folgende, benötigte Felder nicht ausgefüllt: ';
+$g_lang['err_wait_moment'] = 'Fehler: Von deinem Rechner wurde soeben bereits eine Anmeldung durchgeführt. Bitte warte einen kurzen Moment!';
+$g_lang['err_email'] = 'Fehler: Deine Email-Adresse enthält ein ungültiges Format.';
+$g_lang['err_already_registered'] = 'Fehler: Deine Email-Adresse ist bereits für dieses Event registriert. Solltest du weitere Hilfe benötigen, wende dich bitte an info@foodsharing.de';
+$g_lang['err_unknown'] = 'Es ist ein unbekannter Fehler aufgetreten. Probiere es bitte später erneut oder schreib uns an info@foodsharing.de!';
 ?>

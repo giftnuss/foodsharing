@@ -4,7 +4,20 @@ class RegisterView extends View
 	public function signup($infotext)
 	{
 		$page = new vPage($infotext['title'],$infotext['body']);
-		$page->addSection($this->signup_form($foodsaver));
+		$page->addSection($this->signup_form());
+		$page->render();
+	}
+
+	public function signupError($reason, $additional_text = '')
+	{
+		$page = new vPage(s('error'), v_error(s($reason).$additional_text));
+		$page->addSection($this->signup_form());
+		$page->render();
+	}
+
+	public function signupOkay()
+	{
+		$page = new vPage(s('thank_you'), s('signup_successful'));
 		$page->render();
 	}
 
@@ -38,7 +51,7 @@ class RegisterView extends View
 						array('id' => 1,'name'=>s('friday')),
 						array('id' => 2,'name'=>s('saturday')),
 						array('id' => 3,'name'=>s('sunday'))
-					)
+					), 'required' => true
 			)),
 			v_form_checkbox('sleep_at',array(
 					'values'=>array(
@@ -95,8 +108,8 @@ class RegisterView extends View
 			v_form_radio('already_foodsaver',array(
 				'values'=>$role_values
 			)),
-      v_form_textarea('childcare'),
-      v_form_textarea('comments')
+			v_form_textarea('childcare'),
+			v_form_textarea('comments')
 
 		),array('submit'=>s('signup')));
 	}
