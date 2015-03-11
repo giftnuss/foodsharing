@@ -187,7 +187,7 @@ class PassgenControl extends Control
 					}
 					elseif(file_exists('images/'.$photo))
 					{
-						$pdf->Image('images/'.$photo,73+$x,24+$y,22);
+						$pdf->Image('images/'.$photo,14+$x,29.7+$y,22);
 					}
 				}
 		
