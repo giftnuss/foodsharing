@@ -11,9 +11,14 @@ class RegisterControl extends Control
 		
 	}
 
-	private $fields_required = array('name' => true, 'geb_datum' => true, 'address' => true, 'ort' => true, 'email' => true, 'phone' => false, 'take_part' => true, 'sleep_at' => false, 'sleep_slots' => true, 'languages' => false, 'nutrition' => false, 'special_nutriton' => false, 'other_languages' => false, 'translation_necessary' => false, 'already_foodsaver' => false, 'childcare' => false, 'comments' => false);
+	private $fields_required = array('name' => true, 'geb_datum' => true, 'address' => true, 'ort' => true, 'email' => true, 'phone' => false, 'take_part' => true, 'sleep_at' => false, 'sleep_slots' => true, 'languages' => false, 'nutrition' => false, 'special_nutrition' => false, 'other_languages' => false, 'translation_necessary' => false, 'already_foodsaver' => false, 'childcare' => false, 'comments' => false);
 
 	private $salt = 'Z3SzsG6nEgXX43CJyRf55o7Y_6v';
+
+	private function calcValidationCode($email)
+	{
+		return sha1($this->salt.$email);
+	}
 	
 	public function index()
 	{
@@ -22,9 +27,24 @@ class RegisterControl extends Control
 		if(isset($_REQUEST['lang']) && $_REQUEST['lang'] == 'en') {
 			$lang = 'en';
 		}
-		if(getPost('form_submit') == 'signup_meeting')
+		if($this->myGetPost('form_submit') == 'signup_meeting')
 		{
 			$this->handleSignup();
+		} elseif(isset($_REQUEST['validate']))
+		{
+			$email = trim($_REQUEST['validate']);
+			$code = trim($_REQUEST['code']);
+			if($this->calcValidationCode($email) == $code)
+			{
+				$this->model->setValid($email);
+				$this->view->signupSuccess();
+			} else
+			{
+				goPage();
+			}
+		} elseif((S::may('orga') || fsid() == 6632) && isset($_REQUEST['list']))
+		{ // Sascha or Orga
+			$this->view->registrationList($this->model->getRegistrations($this->fields_required));
 		} else
 		{
 			// Prefill signup page with data from login
@@ -51,7 +71,14 @@ class RegisterControl extends Control
 	{
 		if(isset($_POST[$k]))
 		{
-			return $_POST[$k];
+			$v = $_POST[$k];
+			if(is_array($v))
+			{
+				return array_map(trim, $v);
+			} else
+			{
+				return trim($_POST[$k]);
+			}
 		}
 		return false;
 	}
@@ -99,9 +126,9 @@ class RegisterControl extends Control
 			$this->view->signupError('err_unknown');
 		} else
 		{
-			$validationCode = sha1($this->salt.$fields['email']);
+			$validationCode = calcValidationCode($fields['email']);
 			tplMail(29, $fields['email'], array('anrede' => 'Liebe/r', 'name' => $fields['name'],
-				'link' => 'https://'.DEFAULT_HOST.'/?page=register&validate='.$fields['email'].'&code='.$validationCode));
+				'link' => 'https://'.$_SERVER["HTTP_HOST"].'foodsharing.de/?page=register&validate='.$fields['email'].'&code='.$validationCode));
 			$this->view->signupOkay();
 		}
 	}

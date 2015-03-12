@@ -21,6 +21,46 @@ class RegisterView extends View
 		$page->render();
 	}
 
+	public function signupSuccess()
+	{
+		$page = new vPage(s('thank_you'), s('signup_validated'));
+		$page->render();
+	}
+
+	public function registrationList($registrations)
+	{
+		$out = '';
+
+		addStyle('#table td{ cursor:pointer; }');
+
+		addJs('
+			$("#table tr").click(function(){
+				rid = parseInt($(this).children("td:first").children("input:first").val());
+				ajreq("loadreport",{id:rid});
+			});		
+		');
+		$headline = array();
+		$h = array_keys($registrations[0]);
+		foreach($h as $col) {
+			$headline[] = array('name' => $col);
+		}
+
+		$rows = array();
+		foreach($registrations as $r)
+		{
+			$temp_row = array();
+			foreach($r as $row)
+			{
+				$temp_row[] = array('cnt' => $row);
+			}
+			$rows[] = $temp_row;
+		}
+		$table = v_tablesorter($headline,$rows,array('pager'=>true));
+		
+		$page = new vPage("Liste der Anmeldungen", $table);
+		$page->render();
+	}
+
 	public function signup_form()
 	{
 		global $g_data;
@@ -98,7 +138,7 @@ class RegisterView extends View
 				array('id' => 2,'name'=>s('everything'))
 				)
 			)),
-			v_form_text('other_nutrition'),
+			v_form_text('special_nutrition'),
 			v_form_radio('translation_necessary',array(
 				'values'=>array(
 				array('id' => 0,'name'=>s('no')),
