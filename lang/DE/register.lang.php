@@ -1,7 +1,8 @@
 <?php
 global $g_lang;
 
-$g_lang['signup'] = 'Anmelden!';
+$g_lang['signup_meeting'] = 'Anmelden!';
+$g_lang['edit_meeting'] = 'Änderungen speichern!';
 $g_lang['geb_datum'] = 'Geburtsdatum';
 $g_lang['email'] = 'Email-Adresse (für weitere Informationen vor dem Treffen)';
 $g_lang['phone'] = 'Telefonnummer (für kurzfristige Rückfragen)';

@@ -2,6 +2,7 @@
 global $g_lang;
 
 $g_lang['signup'] = 'Signup!';
+$g_lang['edit_meeting'] = 'Save changes!';
 $g_lang['geb_datum'] = 'Date of birth';
 $g_lang['email'] = 'Email-Adress (you will get additional information soon)';
 $g_lang['phone'] = 'Phone number (in case of any spontaneous questions)';
@@ -27,4 +28,11 @@ $g_lang['bieb'] = 'BIEB';
 $g_lang['bot'] = 'BOT';
 $g_lang['childcare'] = 'I need childcare (please provide name and age of your children)';
 $g_lang['comments'] = 'Do you have any wishes, questions or suggestions for us?';
+$g_lang['thank_you'] = 'Thank You!';
+$g_lang['signup_successful'] = 'Thanks for your registration. Please validate your signup request by clicking the link in the email we sent you.';
+$g_lang['err_not_all_req_fields'] = 'Error: You missed to fill the following, required fields: ';
+$g_lang['err_wait_moment'] = 'Error: Your PC was used for another registration a short time ago. Please wait a minute.';
+$g_lang['err_email'] = 'Error: Your email address does not seem to be valid. In case we missed that, please write us at info@foodsharing.de';
+$g_lang['err_already_registered'] = 'Error: You already signed up via this email address.';
+$g_lang['err_unknown'] = 'An unknown error occured. Please leave us a short message at info@foodsharing.de and we will get back to you.';
 ?>

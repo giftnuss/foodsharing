@@ -1,17 +1,17 @@
 <?php
 class RegisterView extends View
 {
-	public function signup($infotext)
+	public function signup($infotext, $edit = False)
 	{
 		$page = new vPage($infotext['title'],$infotext['body']);
-		$page->addSection($this->signup_form());
+		$page->addSection($this->signup_form($edit));
 		$page->render();
 	}
 
-	public function signupError($reason, $additional_text = '')
+	public function signupError($reason, $edit = False, $additional_text = '')
 	{
 		$page = new vPage(s('error'), v_error(s($reason).$additional_text));
-		$page->addSection($this->signup_form());
+		$page->addSection($this->signup_form($edit));
 		$page->render();
 	}
 
@@ -61,7 +61,7 @@ class RegisterView extends View
 		$page->render();
 	}
 
-	public function signup_form()
+	public function signup_form($edit)
 	{
 		global $g_data;
 		$role_values=array();
@@ -78,7 +78,13 @@ class RegisterView extends View
 		{
 			$role_values[$k] = array('id' => $k, 'name'=>s($v));
 		}
-		return v_form('signup_meeting',array(
+		if($edit)
+		{
+			$form_name = 'edit_meeting';
+		} else {
+			$form_name = 'signup_meeting';
+		}
+		return v_form($form_name,array(
 			v_form_text('name', array('required'=>true)),
 			v_form_date('geb_datum', array('required'=>true, 'yearRangeFrom' => 1890, 'yearRangeTo' => 2015)),
 			v_form_text('address', array('required'=>true)),
@@ -151,6 +157,6 @@ class RegisterView extends View
 			v_form_textarea('childcare'),
 			v_form_textarea('comments')
 
-		),array('submit'=>s('signup')));
+		),array('submit'=>s($form_name)));
 	}
 }

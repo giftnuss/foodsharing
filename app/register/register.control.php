@@ -27,43 +27,67 @@ class RegisterControl extends Control
 		if(isset($_REQUEST['lang']) && $_REQUEST['lang'] == 'en') {
 			$lang = 'en';
 		}
-		if($this->myGetPost('form_submit') == 'signup_meeting')
-		{
-			$this->handleSignup();
-		} elseif(isset($_REQUEST['validate']))
-		{
-			$email = trim($_REQUEST['validate']);
-			$code = trim($_REQUEST['code']);
-			if($this->calcValidationCode($email) == $code)
-			{
-				$this->model->setValid($email);
-				$this->view->signupSuccess();
-			} else
-			{
-				goPage();
-			}
-		} elseif((S::may('orga') || fsid() == 6632) && isset($_REQUEST['list']))
-		{ // Sascha or Orga
+		if($lang == 'de') {
+			$infotext = $this->model->getContent(40);
+		} else {
+			$infotext = $this->model->getContent(41);
+		}
+		if((S::may('orga') || fsid() == 6632) && isset($_REQUEST['list']))
+		{ // Sascha or Orga: List page
 			$this->view->registrationList($this->model->getRegistrations($this->fields_required));
 		} else
 		{
-			// Prefill signup page with data from login
-			if($lang == 'de') {
-				$infotext = $this->model->getContent(40);
-			} else {
-				$infotext = $this->model->getContent(41);
+			// Do we have any previous data on the user?
+			$fsid_registered = $this->model->fsidIsRegistered(fsid());
+			$validation_success = False;
+			if(isset($_REQUEST['validate']) && isset($_REQUEST['code']))
+			{
+				$email = trim($_REQUEST['validate']);
+				$code = trim($_REQUEST['code']);
+				if($this->calcValidationCode($email) == $code)
+				{
+					$validation_success = True;
+				}
 			}
-			if(S::may()) {
-				$fs = $this->model->getOne_foodsaver(fsId());
-				$g_data['rolle'] = $fs['rolle'];
-				$g_data['name'] = $fs['name'].' '.$fs['nachname'];
-				$g_data['geb_datum'] = $fs['geb_datum'];
-				$g_data['address'] = $fs['anschrift'].' '.$fs['plz'];
-				$g_data['ort'] = $fs['stadt'];
-				$g_data['email'] = $fs['email'];
-				$g_data['phone'] = $fs['handy'];
+
+			if($this->myGetPost('form_submit') == 'signup_meeting')
+			{
+				$this->handleSignup();
+				// Dirty... Signup page handles everything itself
+				return;
+			} elseif($this->myGetPost('form_submit') == 'edit_meeting' && ($fsid_registered || $validation_success))
+			{
+				$this->handleEdit();
 			}
-			$this->view->signup($infotext);
+			if($fsid_registered || $validation_success)
+			{
+				if($validation_success)
+				{
+					$this->model->setValid($email);
+				} else
+				{
+					$fs = $this->model->getOne_foodsaver(fsId());
+					$email = $fs['email'];
+				}
+				$registration = $this->model->getRegistrations($this->fields_required, $email);
+				array_walk($registration[0], function($v, $k) { global $g_data; if($k == 'sleep_at' || $k == 'take_part' || $k == 'languages') $g_data[$k] = explode(',', $v); else $g_data[$k] = $v; });
+				// Edit page
+				$this->view->signup($infotext, True);
+			} else
+			{
+				// Signup page
+				if(S::may()) {
+					$fs = $this->model->getOne_foodsaver(fsId());
+					$g_data['rolle'] = $fs['rolle'];
+					$g_data['name'] = $fs['name'].' '.$fs['nachname'];
+					$g_data['geb_datum'] = $fs['geb_datum'];
+					$g_data['address'] = $fs['anschrift'].' '.$fs['plz'];
+					$g_data['ort'] = $fs['stadt'];
+					$g_data['email'] = $fs['email'];
+					$g_data['phone'] = $fs['handy'];
+				}
+				$this->view->signup($infotext, False);
+			}
 		}
 	}
 
@@ -74,7 +98,7 @@ class RegisterControl extends Control
 			$v = $_POST[$k];
 			if(is_array($v))
 			{
-				return array_map(trim, $v);
+				return array_map("trim", $v);
 			} else
 			{
 				return trim($_POST[$k]);
@@ -99,7 +123,7 @@ class RegisterControl extends Control
 		return $vals;
 	}
 
-	private function handleSignup()
+	private function validate($edit = False)
 	{
 		$fields = $this->validateInputData($this->fields_required);
 		$missing_fields = array_diff_key($this->fields_required, $fields);
@@ -111,25 +135,45 @@ class RegisterControl extends Control
 		}
 		if(!empty($missing_required_fields))
 		{
-			$this->view->signupError('err_not_all_req_fields', implode(', ', array_keys($missing_required_fields)));
+			$this->view->signupError('err_not_all_req_fields', $edit, implode(', ', array_keys($missing_required_fields)));
 		} elseif(!validEmail($fields['email']))
 		{
-			$this->view->signupError('err_email');
-		} elseif($this->model->isIpBlock($_SERVER['REMOTE_ADDR']))
-		{
-			$this->view->signupError('err_wait_moment');
-		} elseif($this->model->alreadyRegistered(getPost('email')))
-		{
-			$this->view->signupError('err_already_registered');
-		} elseif(!$this->model->register($fields))
-		{
-			$this->view->signupError('err_unknown');
+			$this->view->signupError('err_email', $edit);
 		} else
 		{
-			$validationCode = calcValidationCode($fields['email']);
-			tplMail(29, $fields['email'], array('anrede' => 'Liebe/r', 'name' => $fields['name'],
-				'link' => 'https://'.$_SERVER["HTTP_HOST"].'foodsharing.de/?page=register&validate='.$fields['email'].'&code='.$validationCode));
-			$this->view->signupOkay();
+			return $fields;
+		}
+		return False;
+	}
+
+	private function handleEdit()
+	{
+		if($fields = $this->validate(True))
+		{
+			$this->model->edit($fields, $fields['email']);
+		}
+	}
+
+	private function handleSignup()
+	{
+		if($fields = $this->validate(False))
+		{
+			if($this->model->isIpBlock($_SERVER['REMOTE_ADDR']))
+			{
+				$this->view->signupError('err_wait_moment');
+			} elseif($this->model->alreadyRegistered(getPost('email')))
+			{
+				$this->view->signupError('err_already_registered');
+			} elseif(!$this->model->register($fields))
+			{
+				$this->view->signupError('err_unknown');
+			} else
+			{
+				$validationCode = $this->calcValidationCode($fields['email']);
+				tplMail(29, $fields['email'], array('anrede' => 'Liebe/r', 'name' => $fields['name'],
+					'link' => 'https://foodsharing.de/?page=register&validate='.$fields['email'].'&code='.$validationCode));
+				$this->view->signupOkay();
+			}
 		}
 	}
 }
