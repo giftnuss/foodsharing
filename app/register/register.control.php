@@ -11,7 +11,7 @@ class RegisterControl extends Control
 		
 	}
 
-	private $fields_required = array('name' => true, 'geb_datum' => true, 'address' => true, 'ort' => true, 'email' => true, 'phone' => false, 'take_part' => true, 'sleep_at' => false, 'sleep_slots' => true, 'languages' => false, 'nutrition' => false, 'special_nutrition' => false, 'other_languages' => false, 'translation_necessary' => false, 'already_foodsaver' => false, 'childcare' => false, 'comments' => false);
+	private $fields_required = array('name' => true, 'geb_datum' => true, 'ort' => true, 'email' => true, 'phone' => false, 'take_part' => true, 'sleep_at' => false, 'sleep_slots' => true, 'languages' => false, 'languages_translate' => false, 'nutrition' => false, 'special_nutrition' => false, 'other_languages' => false, 'other_languages_translate' => false, 'translation_necessary' => false, 'already_foodsaver' => false, 'childcare' => false, 'comments' => false);
 
 	private $salt = 'Z3SzsG6nEgXX43CJyRf55o7Y_6v';
 

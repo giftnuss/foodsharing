@@ -87,7 +87,6 @@ class RegisterView extends View
 		return v_form($form_name,array(
 			v_form_text('name', array('required'=>true)),
 			v_form_date('geb_datum', array('required'=>true, 'yearRangeFrom' => 1890, 'yearRangeTo' => 2015)),
-			v_form_text('address', array('required'=>true)),
 			v_form_text('ort', array('required'=>true)),
 			v_form_text('email', array('required'=>true)),
 			v_form_text('phone'),
@@ -137,6 +136,15 @@ class RegisterView extends View
 					)
 			)),
 			v_form_text('other_languages'),
+			v_form_checkbox('languages_translate',array(
+					'values'=>array(
+						array('id' => 0,'name'=>'Deutsch'),
+						array('id' => 1,'name'=>'English'),
+						array('id' => 2,'name'=>'Francais'),
+						array('id' => 3,'name'=>'Español'),
+					)
+			)),
+			v_form_text('other_languages_translate'),
 			v_form_radio('nutrition',array(
 				'values'=>array(
 				array('id' => 0,'name'=>s('vegan')),
