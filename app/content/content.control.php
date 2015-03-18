@@ -311,7 +311,7 @@ function handleImages($body)
 						$fimage->resize(0, $height);
 					}
 					$fimage->saveChanges();
-					$tag->setAttribute('src', 'http://foodsharing.de/'.$new_path.$new_filename);
+					$tag->setAttribute('src', 'https://foodsharing.de/'.$new_path.$new_filename);
 					$tag->setAttribute('name', $old_filepath);
 					$tag->removeAttribute('width');
 					$tag->removeAttribute('height');
@@ -319,7 +319,7 @@ function handleImages($body)
 			}
 			elseif (substr($src, 0,7) != 'http://' && substr($src, 0,8) != 'https://')
 			{
-				$tag->setAttribute('src','http://www.lebensmittelretten.de/freiwillige/'.$src);
+				$tag->setAttribute('src','https://foodsharing.de/'.$src);
 			}
 		}
 
