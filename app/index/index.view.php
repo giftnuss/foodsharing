@@ -79,7 +79,7 @@ class IndexView extends View
 				</div>
 			    <div class="pure-u-1 pure-u-md-1-2">
 					<div class="inside">
-						<a class="vidlink" href="http://www.youtube.com/embed/dqsVjuK3rTc?autoplay=1"><img class="corner-all" src="/img/howto.jpg" /></a>
+						<a class="vidlink" href="https://www.youtube.com/embed/dqsVjuK3rTc?autoplay=1"><img class="corner-all" src="/img/howto.jpg" /></a>
 					</div>
 				</div>
 			</div>
