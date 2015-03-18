@@ -132,6 +132,17 @@ class ContentControl extends Control
 			addContent($this->view->partner($cnt));
 		}
 	}
+
+	public function unterstuetzung()
+	{
+		if($cnt = $this->model->getContent(42))
+		{
+			addBread($cnt['title']);
+			addTitle($cnt['title']);
+			
+			addContent($this->view->simple($cnt));
+		}
+	}
 	
 	public function faq()
 	{

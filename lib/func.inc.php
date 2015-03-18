@@ -851,6 +851,7 @@ function getMenu()
 							<li><a href="/partner">Partner</a></li>
 							<li><a href="/statistik">Statistik</a></li>
 							<li><a href="/faq">F.A.Q.</a></li>
+							<li><a href="/unterstuetzung">Unterstützung</a></li>
 						</ul>
 					</li>
 					
@@ -864,6 +865,7 @@ function getMenu()
 					<option value="/">Home</option>
 					<option value="/karte">Karte</option>
 					<option value="/ratgeber">Ratgeber</option>
+					<option value="/unterstuetzung">Unterstützung</option>
 					<option value="/mach-mit">Mach-Mit!</option>
 					<option value="/login">Login</option>
 				</select>'
