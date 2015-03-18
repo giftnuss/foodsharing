@@ -37,4 +37,11 @@ $g_lang['err_wait_moment'] = 'Error: Your PC was used for another registration a
 $g_lang['err_email'] = 'Error: Your email address does not seem to be valid. In case we missed that, please write us at info@foodsharing.de';
 $g_lang['err_already_registered'] = 'Error: You already signed up via this email address.';
 $g_lang['err_unknown'] = 'An unknown error occured. Please leave us a short message at info@foodsharing.de and we will get back to you.';
+$g_lang['monday'] = 'Monday';
+$g_lang['tuesday'] = 'Tuesday';
+$g_lang['wednesday'] = 'Wednesday';
+$g_lang['thursday'] = 'Thursday';
+$g_lang['friday'] = 'Friday';
+$g_lang['saturday'] = 'Saturday';
+$g_lang['sunday'] = 'Sunday';
 ?>
