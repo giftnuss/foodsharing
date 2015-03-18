@@ -1,6 +1,15 @@
 <?php
 class ContentView extends View
 {
+	public function simple($cnt)
+	{
+		return '
+		<div class="page ui-padding ui-widget-content corner-all">
+			<h1>'.$cnt['title'].'</h1>
+			'.$cnt['body'].'
+		</div>';
+	}
+
 	public function partner($cnt)
 	{
 		return '
