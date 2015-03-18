@@ -59,6 +59,16 @@ class ContentControl extends Control
 				pageLink('content','back_to_overview')
 				)),s('actions')),CNT_RIGHT);
 			}
+			else if($id = getActionId('view'))
+			{
+				if($cnt = $this->model->getContent($id))
+				{
+					addBread($cnt['title']);
+					addTitle($cnt['title']);
+
+					addContent($this->view->simple($cnt));
+				}
+			}
 			else if(isset($_GET['id']))
 			{
 				go('/?page=content&a=edit&id='.(int)$_GET['id']);
