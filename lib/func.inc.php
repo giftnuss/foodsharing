@@ -1227,8 +1227,21 @@ function emailBodyTpl($message, $email = false, $token = false)
 		<tr>
 			<td height="20" valign="top" style="background-color:#FAF7E5">
 				<div style="text-align:center;padding-top:10px;font-size:11px;font-family:Arial;padding:15px;color:#594129;">
-					Möchtest Du keinen Newsletter mehr erhalten? <a style="color:#F36933" href="http://www.lebensmittelretten.de/unsubscribe/'.$token.'-'.$email.'" target="_blank">Klicke hier zum Abbestellen.</a> Du kannst Deinen unter <a style="color:#F36933" href="http://www.lebensmittelretten.de/freiwillige/?page=settings&sub=info" target="_blank">Deinen Einstellungen</a> einstellen, welche Mails Du bekommst.
+					Möchtest Du keinen Newsletter mehr erhalten? <a style="color:#F36933" href="https://www.foodsharing.de/?page=login&sub=unsubscribe&t='.$token.'&e='.$email.'" target="_blank">Klicke hier zum Abbestellen.</a> Du kannst Deinen unter <a style="color:#F36933" href="https://www.foodsharing.de/?page=settings&sub=info" target="_blank">Deinen Einstellungen</a> einstellen, welche Mails Du bekommst.
 				</div>
+<p style="font-size:11px;"><strong>Impressum</strong><br />
+Angaben gemäß § 5 TMG:<br />
+<br />Foodsharing e.V.<br/>
+Marsiliusstr 36<br />
+50937 Köln<br />
+Vertreten durch:<br /><br />
+Raphael Fellmer, Raphael Wintrich und Valentin Thurn<br />
+Kontakt:<br />E-Mail: info@foodsharing.de<br />
+Registereintrag:<br /><br />Eintragung im Vereinsregister.<br />
+Registergericht: Amtsgericht Köln<br />
+Registernummer: VR 17439<br />
+Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
+<br />Raphael Fellmer, Raphael Wintrich und Valentin Thurn<br /></p>
 			</td>
 		</tr>';
 	}
@@ -1246,7 +1259,7 @@ function emailBodyTpl($message, $email = false, $token = false)
 <tr>
 				<td valign="top" height="30" style="background-color:#4A3520">
 					<div style="padding:5px;font-size:13px;font-family:Arial;color:#FAF7E5;overflow:hidden;" align="left">
-						<a style="display:block;color:#FAF7E5;text-decoration:none;" href="http://www.lebensmittelretten.de/" target="_blank">
+						<a style="display:block;color:#FAF7E5;text-decoration:none;" href="https://www.foodsharing.de/" target="_blank">
 							<span style="margin-left:10px;font-size:20px;font-family:Arial Black, Arial;font-weight:bold;color:#FAF7E5;letter-spacing:-1px;">food</span><span style="margin-right:10px;font-size:20px;font-family:Arial Black, Arial;font-weight:bold;color:#4D971E;letter-spacing:-1px">sharing</span> <span style="font-style:italic">Lebensmittelretten<span style="color:#F36933">.</span>de</span>
 						</a>
 					</div>
