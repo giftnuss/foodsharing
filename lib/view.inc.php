@@ -924,7 +924,8 @@ function v_form_recip_chooser()
 	$out = '
 		<select class="select" name="'.$id.'" id="'.$id.'">
 			<option value="all">'.s('recip_all').'</option>
-			<option value="newsletter">Alle Newsletter Abonnenten</option>
+			<option value="newsletter">Alle Newsletter Abonnenten (mindestens Foodsaver)</option>
+			<option value="newsletter_all">Alle Newsletter Abonnenten (Foodsharer, Foodsaver, alle)</option>
 			<option value="botschafter">Alle Botschafter Weltweit</option>
 			<option value="filialverantwortlich">Alle Filialverantwortlichen Weltweit</option>
 			<option value="filialbot">Alle Filialverantwortlichen + Botscahfter</option>

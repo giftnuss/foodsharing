@@ -696,12 +696,19 @@ GROUP BY foodsaver_id'));
 		}
 	}
 	
-	public function getAllEmailFoodsaver($newsletter = false)
+	public function getAllEmailFoodsaver($newsletter = false, $only_foodsaver = true)
 	{
-		$where = 'WHERE rolle > 0';
+		if($only_foodsaver)
+		{
+			$min_rolle = 1;
+		} else
+		{
+			$min_rolle = 0;
+		}
+		$where = "WHERE rolle >= $min_rolle";
 		if($newsletter !== false)
 		{
-			$where = 'WHERE newsletter = 1 AND rolle > 0';
+			$where = "WHERE newsletter = 1 AND rolle >= $min_rolle";
 		}
 		return $this->q('
 				SELECT 	`id`,`email`

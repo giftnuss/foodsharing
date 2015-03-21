@@ -22,6 +22,7 @@ class EmailXhr extends Control
 		else
 		{
 			libmail(false, $_POST['email'], $_POST['subject'], $_POST['message']);
+			libmail(false, $_POST['email'], $_POST['subject'], $_POST['message'], false, 'testtoken');
 			return array(
 				'status' => 1,
 				'script' => 'pulseInfo("E-Mail wurde versendet!");'
