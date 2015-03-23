@@ -1,6 +1,6 @@
 <?php
 global $g_lang;
-
+$g_lang['name'] = 'Vor- und Nachname';
 $g_lang['signup_meeting'] = 'Anmelden!';
 $g_lang['edit_meeting'] = 'Änderungen speichern!';
 $g_lang['geb_datum'] = 'Geburtsdatum';
@@ -30,7 +30,7 @@ $g_lang['bot'] = 'BotschafterIn';
 $g_lang['childcare'] = 'Ich benötige Kinderbetreuung für meine Kinder (Name + Alter)';
 $g_lang['comments'] = 'Sonstige Anmerkungen, Wünsche oder Fragen';
 $g_lang['thank_you'] = 'Danke Dir!';
-$g_lang['signup_successful'] = 'Vielen Dank für Deine Anmeldung! Bitte klicke den Bestätigungslink in der Email, welche du in diesem Moment erhalten haben solltest.';
+$g_lang['signup_successful'] = 'Vielen Dank für Deine Anmeldung! Du erhälst in der nächsten Zeit eine Bestätigungsmail, welche auch einen Link zum Ändern deiner Anmeldedaten enthält.';
 $g_lang['err_not_all_req_fields'] = 'Fehler: Du hast folgende, benötigte Felder nicht ausgefüllt: ';
 $g_lang['err_wait_moment'] = 'Fehler: Von deinem Rechner wurde soeben bereits eine Anmeldung durchgeführt. Bitte warte einen kurzen Moment!';
 $g_lang['err_email'] = 'Fehler: Deine Email-Adresse enthält ein ungültiges Format.';
