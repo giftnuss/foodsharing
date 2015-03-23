@@ -70,7 +70,7 @@ class RegisterControl extends Control
 					$email = $fs['email'];
 				}
 				$registration = $this->model->getRegistrations($this->fields_required, $email);
-				array_walk($registration[0], function($v, $k) { global $g_data; if($k == 'sleep_at' || $k == 'take_part' || $k == 'languages') $g_data[$k] = explode(',', $v); else $g_data[$k] = $v; });
+				array_walk($registration[0], function($v, $k) { global $g_data; if($k == 'sleep_at' || $k == 'take_part' || $k == 'languages' || $k == 'languages_translate') $g_data[$k] = explode(',', $v); else $g_data[$k] = $v; });
 				// Edit page
 				$this->view->signup($infotext, True);
 			} else
