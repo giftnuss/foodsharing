@@ -33,12 +33,6 @@ class RegisterView extends View
 
 		addStyle('#table td{ cursor:pointer; }');
 
-		addJs('
-			$("#table tr").click(function(){
-				rid = parseInt($(this).children("td:first").children("input:first").val());
-				ajreq("loadreport",{id:rid});
-			});		
-		');
 		$headline = array();
 		$h = array_keys($registrations[0]);
 		foreach($h as $col) {
@@ -59,6 +53,46 @@ class RegisterView extends View
 		
 		$page = new vPage("Liste der Anmeldungen", $table);
 		$page->render();
+	}
+
+	public function workshop_confirmation_matrix($uws, $workshops)
+	{
+		$headline = array("Name");
+		$col_to_wid = array();
+		$col = 1;
+		foreach($workshops as $workshop)
+		{
+			$headline[] = array('name' => substr($workshop['name'], 12)."<br />(".$workshop['attendants']."/".$workshop['registrations']."/".$workshop['allowed_attendants'].")");
+			$col_to_wid[$col] = $workshop['id'];
+		}
+		$rows = array();
+		foreach($uws as $uw)
+		{
+			$temp_row = array();
+			$workshops = explode($uw['wids']);
+			$confirmed = explode($uw['confirmed']);
+			$temp_row[] = array('cnt' => $uw['name']);
+			for($i = 1; $i < $col; $i++)
+			{
+				$wid = $col_to_wid[$col];
+				$wish = array_search($wid, $workshops);
+				if($confirmed[$wish]) {
+					$confirmlink = '<a href="/?page=register&confirmuid='.$uw['uid'].'&wid='.$wid.'&confirm=0" style="color:green">'.$wish.'</a>';
+				} else {
+					$confirmlink = '<a href="/?page=register&confirmuid='.$uw['uid'].'&wid='.$wid.'&confirm=1" style="color:red">('.$wish.')</a>';
+				}
+				if($wish !== false) {
+					$text = $confirmlink;
+				} else {
+					$text = "";
+				}
+				$temp_row[] = array('cnt' => $text);
+			}
+			$rows[] = $temp_row;
+		}
+		$table = v_tablesorter($headline,$rows,array('pager'=>false));
+
+		return $table;
 	}
 
 	public function signup_form($edit)
