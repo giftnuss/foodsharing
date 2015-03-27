@@ -23,6 +23,18 @@ define('CNT_LEFT',4);
 define('CNT_OVERTOP',5);
 $g_debug = array();
 $g_user_menu = array();
+
+function getfSMTP()
+{
+	static $smtp = false;
+	if($smtp === false)
+	{
+		$smtp = new fSMTP(SMTP_HOST, SMTP_PORT);
+			//MailsControl::$smtp->authenticate(SMTP_USER, SMTP_PASS);
+	}
+	return $smtp;
+}
+
 function jsonSafe($str)
 {
 	if((string)$str == '' || !is_string($str))
@@ -1130,8 +1142,6 @@ function tplMailList($tpl_id, $to, $from = false,$attach = false)
 	
 	$tpl_message = $db->getOne_message_tpl($tpl_id);
 	
-	$socket = new SocketClient();
-	
 	foreach ($to as $t)
 	{	
 		if(!validEmail($t['email']))
@@ -1139,8 +1149,8 @@ function tplMailList($tpl_id, $to, $from = false,$attach = false)
 			continue;
 		}
 		
-		$mail = new SocketMail();
-		$mail->setFrom($from['email'], $from['email_name']);
+		$mail = new fEmail();
+		$mail->setFromEmail($from['email'], $from['email_name']);
 
 		
 		$search = array();
@@ -1156,6 +1166,10 @@ function tplMailList($tpl_id, $to, $from = false,$attach = false)
 		
 		$mail->addRecipient($t['email']);
 		
+		if(!$subject)
+		{
+			$subject = "Foodsharing Mail";
+		}
 		$mail->setSubject($subject);
 		//Read an HTML message body from an external file, convert referenced images to embedded, convert HTML into a basic plain-text alternative body
 		
@@ -1190,15 +1204,11 @@ function tplMailList($tpl_id, $to, $from = false,$attach = false)
 		{
 			foreach ($attach as $a)
 			{
-				$mail->addAttachment($a['path'],$a['name']);
+				$mail->addAttachment(new fFile($a['path']),$a['name']);
 			}
 		}
-		
-		$socket->queue($mail);
+		$mail->send(getfSMTP());
 	}
-	
-	$socket->send();
-	$socket->close();
 }
 
 function autolink($str, $attributes=array()) {
@@ -1299,25 +1309,14 @@ function tplMail($tpl_id,$to,$var = array(),$from_email = false,$from_email = fa
 	{
 		$db = new ManualDb();
 	}
-	/*
-	if($from_email !== false)
-	{
-		$mail->setFrom($from_email);
-	}
-	else 
-	{
-		$from = $db->getBezirkMail($from_bezirk_id);
-		$mail->setFrom($from['email'],$from['email_name']);
-	}
-	*/
 	
 	if($from_email !== false && validEmail($from_email))
 	{
-		$mail->setFrom($from_email);
+		$mail->setFromEmail($from_email);
 	}
 	else
 	{
-		$mail->setFrom(DEFAULT_EMAIL,DEFAULT_EMAIL_NAME);
+		$mail->setFromEmail(DEFAULT_EMAIL,DEFAULT_EMAIL_NAME);
 	}
 	
 	$message = $db->getOne_message_tpl($tpl_id);
@@ -1333,9 +1332,13 @@ function tplMail($tpl_id,$to,$var = array(),$from_email = false,$from_email = fa
 	$message['body'] = str_replace($search, $replace, $message['body']);
 	
 	$message['subject'] = str_replace($search, $replace, $message['subject']);
+	if(!$message['subject'])
+	{
+		$message['subject'] = "Foodsharing mail";
+	}
 	
 	$mail->setSubject($message['subject']);
-	$mail->setHtmlBody(emailBodyTpl($message['body']));
+	$mail->setHTMLBody(emailBodyTpl($message['body']));
 	
 	// playintext body
 	$body = str_replace(array('<br />','<br>','<br/>','<p>','</p>'), "\r\n", $message['body']);
@@ -1343,15 +1346,7 @@ function tplMail($tpl_id,$to,$var = array(),$from_email = false,$from_email = fa
 	$mail->setBody($body);
 	
 	$mail->addRecipient($to);
-	
-	$socket = new SocketClient();
-	$socket->queue($mail);
-	
-	$socket->send();
-	$socket->close();
-	
-	//return libmail($from, $to, $message['subject'], $message['body']);
-	
+	$mail->send(getfSMTP());
 }
 
 function getSearchMenu()
@@ -2516,11 +2511,15 @@ function libmail($bezirk, $email, $subject, $message, $attach = false, $token = 
 		));
 	}
 	
-	$mail = new SocketMail();
-	$mail->setFrom($bezirk['email'], $bezirk['email_name']);
+	$mail = new fEmail();
+	$mail->setFromEmail($bezirk['email'], $bezirk['email_name']);
 	$mail->addRecipient($email);
+	if(!$subject)
+	{
+		$subject = "Foodsharing Mail";
+	}
 	$mail->setSubject($subject);
-	$mail->setHtmlBody(emailBodyTpl($message,$email,$token));	
+	$mail->setHTMLBody(emailBodyTpl($message,$email,$token));	
 	
 	//Replace the plain text body with one created manually
 	$message = str_replace('<br />', "\r\n", $message);
@@ -2532,15 +2531,11 @@ function libmail($bezirk, $email, $subject, $message, $attach = false, $token = 
 	{
 		foreach ($attach as $a)
 		{
-			$mail->addAttachment($a['path'],$a['name']);
+			$mail->addAttachment(new fFile($a['path']),$a['name']);
 		}
 	}
 	
-	$socket = new SocketClient();
-	$socket->queue($mail);
-
-	$socket->send();
-	$socket->close();
+	$mail->send(getfSMTP());
 }
 
 function mailMessage($sender_id,$recip_id,$msg=NULL)
