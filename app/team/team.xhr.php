@@ -24,31 +24,29 @@ class TeamXhr extends Control
 		{
 			if($user = $this->model->getUser($id))
 			{
-				$mail = new SocketMail();
+				$mail = new fEmail();
 				
 				if(validEmail($_POST['email']))
 				{
-					$mail->setFrom($_POST['email']);
+					$mail->setFromEmail($_POST['email']);
 				}
 				else
 				{
-					$mail->setFrom(DEFAULT_EMAIL);
+					$mail->setFromEmail(DEFAULT_EMAIL);
 				}
 				
 				$msg = strip_tags($_POST['message']);
-        $name = strip_tags($_POST['name']);
+				$name = strip_tags($_POST['name']);
 				
 				$msg = 'Name: ' . $name . "\n\n" . $msg;
 				
 				$mail->setBody($msg);
-				$mail->setHtmlBody(nl2br($msg));
-        $mail->setSubject("Foodsharing.de Kontaktformular Anfrage von ".$name);
+				$mail->setHTMLBody(nl2br($msg));
+				$mail->setSubject("Foodsharing.de Kontaktformular Anfrage von ".$name);
 				
 				$mail->addRecipient($user['email']);
 				
-				$socket = new SocketClient();
-				$socket->queue($mail);
-				$socket->send();
+				$mail->send(getfSMTP());
 				
 				$xhr->addScript('$("#contactform").parent().parent().parent().fadeOut();');
 				$xhr->addMessage(s('mail_send_success'),'success');

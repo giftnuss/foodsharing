@@ -200,8 +200,8 @@ class MailboxXhr extends Control
 					
 					$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von ".niceDate($message['time_ts'])." ---------\n\n>\t".str_replace("\n","\n>\t",$message['body']);
 					
-					$mail = new SocketMail();
-					$mail->setFrom($message['mailbox'].'@'.DEFAULT_HOST,S::user('name'));
+					$mail = new fEmail();
+					$mail->setFromEmail($message['mailbox'].'@'.DEFAULT_HOST,S::user('name'));
 					if($sender['personal'])
 					{
 						$mail->addRecipient($sender['mailbox'].'@'.$sender['host'], $sender['personal']);
@@ -211,14 +211,10 @@ class MailboxXhr extends Control
 						$mail->addRecipient($sender['mailbox'].'@'.$sender['host']);	
 					}
 					$mail->setSubject($subject);
-					$mail->setHtmlBody(nl2br($body));	
+					$mail->setHTMLBody(nl2br($body));	
 					$mail->setBody($body);
-					
-					$socket = new SocketClient();
-					$socket->queue($mail);
-					
-					$socket->send();
-					$socket->close();
+
+					$mail->send(getfSMTP());
 					
 					echo json_encode(array(
 							'status' => 1,
@@ -251,11 +247,11 @@ class MailboxXhr extends Control
 		
 		if($last = (int)Mem::user(fsId(), 'mailbox-last'))
 		{
-			if((time() - $last) < 60)
+			if((time() - $last) < 15)
 			{
 				return array(
 					'status' => 1,
-					'script' => 'pulseError("Du kannst nur eine E-Mail pro Minute versenden, bitte warte einen Augenblick...");'
+					'script' => 'pulseError("Du kannst nur eine E-Mail pro 15 Sekunden versenden, bitte warte einen Augenblick...");'
 				);
 			}
 		}
@@ -534,9 +530,9 @@ class MailboxXhr extends Control
 			$from_name = $from['name'];
 		}
 	
-		$mail = new SocketMail();
+		$mail = new fEmail();
 		
-		$mail->setFrom($from_email,$from_name);
+		$mail->setFromEmail($from_email,$from_name);
 
 	
 		if(is_array($email))
@@ -562,7 +558,7 @@ class MailboxXhr extends Control
 		$message = str_replace(array('<br>','<br/>','<br />','<p>','</p>','</p>'),"\r\n",$message);
 		$message = strip_tags($message);
 		
-		$mail->setHtmlBody(nl2br($message));
+		$mail->setHTMLBody(nl2br($message));
 		
 		$mail->setBody($message);
 		
@@ -575,10 +571,7 @@ class MailboxXhr extends Control
 			}
 		}
 	
-		$socket = new SocketClient();
-		$socket->queue($mail);
-		$socket->send();
-		$socket->close();
+		$mail->send(getfSMTP());
 	}
 	
 	public function attach_allow($filename,$mime)
