@@ -196,6 +196,47 @@ class LoginXhr extends Control
 		}
 	}
 	
+	public function loginphpbb()
+	{
+		if($u = $this->model->checkClient($_GET['u'],$_GET['p']))
+		{
+			$user = $this->model->qRow('
+				SELECT 
+					id,
+					name,
+					photo,
+					email	
+
+				FROM 
+					'.PREFIX.'foodsaver 
+					
+				WHERE 
+					id = '.(int)$u['id'].'
+			');
+			
+			if(!empty($user['photo']))
+			{
+				$user['photo'] = img($user['photo']);
+			}
+			
+			echo json_encode(array(
+				'status' => 1,
+				'id' => $user['id'],
+				'name' => $user['name'],
+				'email' => $user['email'],
+				'photo' => $user['photo']
+			));
+			exit();
+		}
+		else 
+		{
+			echo json_encode(array(
+					'status' => 0
+			));
+			exit();
+		}
+	}
+	
 	public function loginsubmit()
 	{
 		if($this->model->login($_GET['u'],$_GET['p']))
