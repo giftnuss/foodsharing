@@ -20,15 +20,15 @@ class MsgXhr extends Control
 	 * ajax call to rename an conversation
 	 */
 	public function rename()
-  {
-    $cid = (int)$_GET['cid'];
+	{
+		$cid = (int)$_GET['cid'];
 		if($this->mayConversation($_GET['cid']) && !$this->model->conversationLocked($_GET))
 		{
 			$xhr = new Xhr();
-			
-			$name = strip_tags($_GET['name']);
+
+			$name = htmlentities($_GET['name']);
 			$name= trim($name);
-			
+
 			if($name != '')
 			{
 				if($this->model->renameConversation($_GET['cid'],$name))
@@ -36,9 +36,9 @@ class MsgXhr extends Control
 					$xhr->addScript('$("#chat-'.(int)$_GET['cid'].' .chatboxtitle").html(\'<i class="fa fa-comment fa-flip-horizontal"></i> '.$name.'\');conv.settings('.(int)$_GET['cid'].');$("#convlist-'.(int)$_GET['cid'].' .names").html("'.$name.'")');
 				}
 			}
-			
+
 			$xhr->send();
-			
+
 		}
 	}
 	
@@ -139,7 +139,7 @@ class MsgXhr extends Control
 			
 			if(isset($_POST['b']))
 			{
-				$body = strip_tags($_POST['b']);
+				$body = htmlentities($_POST['b']);
 				$body = trim($body);
 				if(!empty($body))
 				{
@@ -313,7 +313,7 @@ class MsgXhr extends Control
 			/*
 			 * quick body text preparing
 			 */
-			$body = trim(strip_tags($_POST['body']));
+			$body = trim(htmlentities($_POST['body']));
 			
 			if(!empty($recip) && $body != '')
 			{
