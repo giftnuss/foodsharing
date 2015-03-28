@@ -25,8 +25,8 @@ class MsgXhr extends Control
 		if($this->mayConversation($_GET['cid']) && !$this->model->conversationLocked($_GET))
 		{
 			$xhr = new Xhr();
-			
-			$name = strip_tags($_GET['name']);
+
+			$name = htmlentities($_GET['name']);
 			$name= trim($name);
 
 			if($name != '')
@@ -139,7 +139,7 @@ class MsgXhr extends Control
 			
 			if(isset($_POST['b']))
 			{
-				$body = strip_tags($_POST['b']);
+				$body = htmlentities($_POST['b']);
 				$body = trim($body);
 				if(!empty($body))
 				{
@@ -313,7 +313,7 @@ class MsgXhr extends Control
 			/*
 			 * quick body text preparing
 			 */
-			$body = trim(strip_tags($_POST['body']));
+			$body = trim(htmlentities($_POST['body']));
 			
 			if(!empty($recip) && $body != '')
 			{
