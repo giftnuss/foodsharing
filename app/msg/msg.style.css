@@ -17,7 +17,7 @@
 }
 #msg-conversation-wrapper
 {
-	
+
 }
 #msg-conversation
 {
@@ -36,7 +36,7 @@
 #msg-conversation ul
 {
 	padding:0px;
-	
+
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;
 	border-radius: 6px;
@@ -67,7 +67,7 @@
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;
 	border-radius: 6px;
-	
+
 	background: none repeat scroll 0 0 #ffffff;
 
     margin-left: 50px;
@@ -79,7 +79,7 @@
 
 #msg-conversation span.body:after
 {
-    
+
 	content: '';
 	position: absolute;
 	border-style: solid;
@@ -106,7 +106,7 @@
 }
 #msg-control
 {
-	
+
 }
 #msg_answer
 {
@@ -117,7 +117,7 @@
 {
 	float:right;
 	text-align: right;
-	
+
 }
 #msg-conversation-title img
 {
@@ -138,7 +138,7 @@
 {
 	color:#fff;
 }
-li.unread-1 
+li.unread-1
 {
     background-color: #f5f5b5;
 }
@@ -158,10 +158,11 @@ li.unread-1
 	{
 		display:none;
 	}
-	#msg-conversation-wrapper 
+	#msg-conversation-wrapper
 	{
-	    height: auto;
-	    margin:0;
+		height: 100vh;
+		margin:0;
+		padding-top:100px;
 	}
 	#msg-conversation
 	{
@@ -216,7 +217,7 @@ li.unread-1
 	}
 	#msg_answer-wrapper
 	{
-		
+
 	}
 	#msg-conversation-wrapper
 	{
