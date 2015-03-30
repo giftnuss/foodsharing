@@ -160,9 +160,9 @@ li.unread-1
 	}
 	#msg-conversation-wrapper
 	{
-	    height: 100vh;
-			margin:0;
-			padding-top:100px;
+		height: 100vh;
+		margin:0;
+		padding-top:100px;
 	}
 	#msg-conversation
 	{
