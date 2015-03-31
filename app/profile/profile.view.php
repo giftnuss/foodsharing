@@ -7,7 +7,15 @@ class ProfileView extends View
 	{
 		$page = new vPage($this->foodsaver['name'], $this->infos());
 		
-		$page->addSection($wallposts,'Pinnwand');
+		$page->addSection($wallposts,'Status updates von ' . $this->foodsaver['name']);
+		
+		
+		//echo fsId() . ' == ' . $this->foodsaver['id'];die();
+		
+		if(fsId() != $this->foodsaver['id'])
+		{
+			addStyle('#wallposts .tools{display:none;}');
+		}
 		
 		$page->addSectionLeft($this->photo());
 		
