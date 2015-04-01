@@ -230,8 +230,8 @@ class ActivityModel extends Model
 						'desc' => $this->textPrepare(nl2br($u['body'])),
 						'time' => $u['time'],
 						'icon' => img($u['fs_photo'],50),
-						'time_ts' => $u['time_ts'],
-						'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=foodsaver&id=' . (int)$u['fs_id']
+						'time_ts' => $u['time_ts']
+						//'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=foodsaver&id=' . (int)$u['fs_id']
 				);
 			}
 			
