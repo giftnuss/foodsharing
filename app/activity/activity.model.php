@@ -213,7 +213,7 @@ class ActivityModel extends Model
 				}
 				$hb[$u['fs_id']] = true;
 				
-				$smtitle = $u['fs_name'].'s Pinnwand';
+				$smtitle = $u['fs_name'].'s Status';
 				$title = $u['fs_name'];
 				
 				if($u['fs_id'] ==fsId())
@@ -226,7 +226,7 @@ class ActivityModel extends Model
 						'attr' => array(
 								'href' => '/profile/' . $u['fs_id']
 						),
-						'title' => '<a href="/profile/'.$u['poster_id'].'">'.$u['poster_name'].'</a> <i class="fa fa-angle-right"></i> <a href="/profile/'.$u['fs_id'].'">'.$title.'</a><small>'.$smtitle.'</small>',
+						'title' => '<a href="/profile/'.$u['poster_id'].'">'.$u['poster_name'].'</a> <small>'.$smtitle.'</small>',
 						'desc' => $this->textPrepare(nl2br($u['body'])),
 						'time' => $u['time'],
 						'icon' => img($u['fs_photo'],50),
