@@ -51,8 +51,10 @@ class RegisterModel extends Model
 
 	function getRegistrations($fields, $singleMail = False)
 	{
-		$cols = array_keys($fields);
+		$cols = array_merge(array('on_place'), array_keys($fields));
 		$cols[] = 'emailvalid';
+		$cols[] = 'admin_comment';
+		$cols[] = 'id';
 		$cols = array_map(function($v) { return '`'.$v.'`'; }, $cols);
 		$where = "";
 		if($singleMail) {
@@ -60,6 +62,20 @@ class RegisterModel extends Model
 		}
 
 		return $this->q("SELECT ".implode(',', $cols)." FROM fs_event_registration$where");
+	}
+	
+	function updateSeen($seen)
+	{
+	    $ids = implode(',', array_keys($seen));
+	    return $this->update("UPDATE fs_event_registration SET on_place = 1 WHERE id IN ($ids)");
+	}
+	
+	function updateComments($comments)
+	{
+	    foreach($comments as $id=>$comment)
+	    {
+	        $this->update("UPDATE fs_event_registration SET admin_comment = '".$this->safe($comment)."' WHERE id = ".intval($id));
+	    }
 	}
 
 	function listWorkshops() {

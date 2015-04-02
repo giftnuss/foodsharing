@@ -35,6 +35,27 @@ class RegisterControl extends Control
 		}
 		if((S::may('orga') || in_array(fsid(), $this->list_allowed)) && isset($_REQUEST['list']))
 		{ // Sascha or Orga: List page
+		    if(isset($_REQUEST['form_submit']))
+		    {
+		        $seen = array();
+		        $comments = array();
+		        foreach($_POST as $k=>$v)
+		        {
+		            $pat = "/^on_place(\d+)$/";
+		            if(preg_match($pat, $k, $res))
+		            {
+		                $seen[$res[1]] = True;
+		            }
+		            $pat = "/^admin_comment(\d+)$/";
+		            if(preg_match($pat, $k, $res))
+		            {
+		                $comments[$res[1]] = $v;
+		            }
+		        }
+		        $this->model->updateSeen($seen);
+		        $this->model->updateComments($comments);
+		        goPage('register&list');
+		    }
 			$this->view->registrationList($this->model->getRegistrations($this->fields_required));
 		} else
 		{

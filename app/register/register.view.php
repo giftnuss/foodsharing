@@ -29,6 +29,7 @@ class RegisterView extends View
 
 	public function registrationList($registrations)
 	{
+	    global $g_data;
 		$out = '';
 
 		addStyle('#table td{ cursor:pointer; }');
@@ -38,20 +39,59 @@ class RegisterView extends View
 		foreach($h as $col) {
 			$headline[] = array('name' => $col);
 		}
+		$days = array(0, 0, 0, 0);
+		$nights = array(0, 0, 0, 0); 
 
 		$rows = array();
 		foreach($registrations as $r)
 		{
 			$temp_row = array();
-			foreach($r as $row)
+			foreach($r as $col => $row)
 			{
-				$temp_row[] = array('cnt' => $row);
+				if($col == "on_place") {
+					$cnt = v_form_checkbox('on_place'.$r['id'],array(
+					'values'=>array(array('id' => 0,'name'=>s('Seen'))),
+					'checked' => ($row > 0) ? array(0) : False,
+					'nolabel' => True
+					));
+				} elseif($col == "admin_comment") {
+				    $g_data['admin_comment'.$r['id']] = htmlentities($row);
+				    $cnt = v_form_textarea('admin_comment'.$r['id'],array(
+				            'nolabel' => True,
+				            'style'=>'width:300px;'
+				    ));
+				} else {
+				    if($col == 'take_part')
+				    {
+				        foreach(explode(',', $row) as $day){
+				            if(array_key_exists($day, $days))
+				            {
+				                $days[$day] ++;
+				            }
+				        }
+				    }
+				    if($col == 'sleep_at')
+				    {
+				        foreach(explode(',', $row) as $day){
+				            if(array_key_exists($day, $days))
+				            {
+				                $nights[$day] ++;
+				            }
+				        }
+				    }
+				    $cnt = htmlentities($row);
+				}
+				$temp_row[] = array('cnt' => $cnt
+				);
 			}
 			$rows[] = $temp_row;
 		}
-		$table = v_tablesorter($headline,$rows,array('pager'=>true));
+		$table = v_tablesorter($headline,$rows,array('pager'=>false));
 		
-		$page = new vPage("Liste der Anmeldungen", $table);
+		
+		$page = new vPage("Liste der Anmeldungen", v_form('',array("$table")));
+		$page->addSection("Anzahl der Personen pro Tag: ".implode(', ',$days));
+		$page->addSection("Anzahl der Personen pro Nacht: ".implode(', ',$nights));
 		$page->render();
 	}
 
