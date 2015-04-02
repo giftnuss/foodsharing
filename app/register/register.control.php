@@ -13,7 +13,7 @@ class RegisterControl extends Control
 
 	private $fields_required = array('name' => true, 'geb_datum' => true, 'ort' => true, 'email' => true, 'phone' => false, 'take_part' => true, 'sleep_at' => false, 'sleep_slots' => true, 'languages' => false, 'languages_translate' => false, 'nutrition' => false, 'special_nutrition' => false, 'other_languages' => false, 'other_languages_translate' => false, 'translation_necessary' => false, 'already_foodsaver' => false, 'childcare' => false, 'comments' => false);
 
-	private $list_allowed = array(6632);
+	private $list_allowed = array(37,41,58,101,133,222,770,953,966,1163,1770,2038,2630,2855,2943,3040,3166,3327,3452,3743,3825,4173,4282,6632,6844,7801,8327,81417,83340);
 	private $salt = 'Z3SzsG6nEgXX43CJyRf55o7Y_6v';
 
 	private function calcValidationCode($email)
