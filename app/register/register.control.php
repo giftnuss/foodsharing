@@ -13,6 +13,7 @@ class RegisterControl extends Control
 
 	private $fields_required = array('name' => true, 'geb_datum' => true, 'ort' => true, 'email' => true, 'phone' => false, 'take_part' => true, 'sleep_at' => false, 'sleep_slots' => true, 'languages' => false, 'languages_translate' => false, 'nutrition' => false, 'special_nutrition' => false, 'other_languages' => false, 'other_languages_translate' => false, 'translation_necessary' => false, 'already_foodsaver' => false, 'childcare' => false, 'comments' => false);
 
+	private $list_allowed = array(37,41,58,101,133,222,770,953,966,1163,1770,2038,2630,2855,2943,3040,3166,3327,3452,3743,3825,4173,4282,6632,6844,7801,8327,81417,83340);
 	private $salt = 'Z3SzsG6nEgXX43CJyRf55o7Y_6v';
 
 	private function calcValidationCode($email)
@@ -32,8 +33,29 @@ class RegisterControl extends Control
 		} else {
 			$infotext = $this->model->getContent(41);
 		}
-		if((S::may('orga') || fsid() == 6632) && isset($_REQUEST['list']))
+		if((S::may('orga') || in_array(fsid(), $this->list_allowed)) && isset($_REQUEST['list']))
 		{ // Sascha or Orga: List page
+		    if(isset($_REQUEST['form_submit']))
+		    {
+		        $seen = array();
+		        $comments = array();
+		        foreach($_POST as $k=>$v)
+		        {
+		            $pat = "/^on_place(\d+)$/";
+		            if(preg_match($pat, $k, $res))
+		            {
+		                $seen[$res[1]] = True;
+		            }
+		            $pat = "/^admin_comment(\d+)$/";
+		            if(preg_match($pat, $k, $res))
+		            {
+		                $comments[$res[1]] = $v;
+		            }
+		        }
+		        $this->model->updateSeen($seen);
+		        $this->model->updateComments($comments);
+		        goPage('register&list');
+		    }
 			$this->view->registrationList($this->model->getRegistrations($this->fields_required));
 		} else
 		{
