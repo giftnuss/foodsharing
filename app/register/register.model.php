@@ -64,6 +64,11 @@ class RegisterModel extends Model
 		return $this->q("SELECT ".implode(',', $cols)." FROM fs_event_registration$where");
 	}
 	
+	function getIDbyEmail($email)
+	{
+	    return $this->qOne("SELECT id FROM fs_event_registration WHERE `email` = '".$this->safe($email)."'");
+	}
+	
 	function updateSeen($seen)
 	{
 	    $ids = implode(',', array_keys($seen));
@@ -79,11 +84,22 @@ class RegisterModel extends Model
 	}
 
 	function listWorkshops() {
-		return $this->q("SELECT w.`id`, w.`name`, w.`start`, w.`duration`, w.`description`, w.`allowed_attendants`, COUNT(rc.`id`) AS registrations, SUM(rc.`confirmed`) AS attendants FROM fs_event_workshops w LEFT JOIN fs_event_workshop_registration rc ON w.id = rc.wid GROUP BY w.`id` ORDER BY `start`");
+		return $this->q("SELECT w.`id`, w.`name`, UNIX_TIMESTAMP(w.`start`) as start, w.`duration`, w.`name_en`, w.`allowed_attendants`, COUNT(rc.`id`) AS registrations, SUM(rc.`confirmed`) AS attendants FROM fs_event_workshops w LEFT JOIN fs_event_workshop_registration rc ON w.id = rc.wid GROUP BY w.`id` ORDER BY `start`, `name`");
 	}
 
 	function updateWorkshopWish($uid, $wid, $wish) {
+	    if(!$wid)
+	    {
+	        $wid = "NULL";
+	    } else
+	    {
+	        $wid = intval($wid);
+	    }
 		$this->insert("INSERT INTO fs_event_workshop_registration (`uid`, `wid`, `wish`) VALUES ($uid, $wid, $wish) ON DUPLICATE KEY UPDATE `wid` = $wid, `confirmed` = 0");
+	}
+	
+	function getWorkshopWishes($uid) {
+	    return $this->q("SELECT `wish`, `wid` FROM fs_event_workshop_registration WHERE `uid` = $uid ORDER BY `wish`");
 	}
 
 	/* set confirmed state (uid, wid) pairs in the array
