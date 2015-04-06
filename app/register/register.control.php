@@ -91,10 +91,48 @@ class RegisterControl extends Control
 					$fs = $this->model->getOne_foodsaver(fsId());
 					$email = $fs['email'];
 				}
-				$registration = $this->model->getRegistrations($this->fields_required, $email);
-				array_walk($registration[0], function($v, $k) { global $g_data; if($k == 'sleep_at' || $k == 'take_part' || $k == 'languages' || $k == 'languages_translate') $g_data[$k] = explode(',', $v); else $g_data[$k] = $v; });
-				// Edit page
-				$this->view->signup($infotext, True);
+				if($lang == 'de') {
+				    $infotext = $this->model->getContent(43);
+				} else {
+				    $infotext = $this->model->getContent(44);
+				}
+				$uid = $this->model->getIDbyEmail($email);
+				if(isset($_REQUEST['workshops'])) {
+				    if($this->myGetPost('form_submit') == 'register_workshop')
+				    {
+				        $w1 = $this->myGetPost('wish1');
+				        $w2 = $this->myGetPost('wish2');
+				        $w3 = $this->myGetPost('wish3');
+				        $this->model->updateWorkshopWish($uid, $w1, 1);
+				        $this->model->updateWorkshopWish($uid, $w2, 2);
+				        $this->model->updateWorkshopWish($uid, $w3, 3);
+
+				    }
+				    $workshops = $this->model->listWorkshops();
+				    $wishes = $this->model->getWorkshopWishes($uid);
+				    foreach ($wishes as $wish) {
+				        switch($wish['wish'])
+				        {
+				            case 1:
+				                $g_data['wish1'] = $wish['wid'];
+				                break;
+                            case 2:
+                                $g_data['wish2'] = $wish['wid'];
+                                break;
+                            case 3:
+                                $g_data['wish3'] = $wish['wid'];
+                                break;
+				        }
+				    }
+				    
+				    $this->view->workshopSignup($workshops, $infotext, $lang);
+				} else
+				{
+    				$registration = $this->model->getRegistrations($this->fields_required, $email);
+    				array_walk($registration[0], function($v, $k) { global $g_data; if($k == 'sleep_at' || $k == 'take_part' || $k == 'languages' || $k == 'languages_translate') $g_data[$k] = explode(',', $v); else $g_data[$k] = $v; });
+    				// Edit page
+    				$this->view->signup($infotext, True);
+				}
 			} else
 			{
 				// Signup page

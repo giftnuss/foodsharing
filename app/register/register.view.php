@@ -134,6 +134,30 @@ class RegisterView extends View
 
 		return $table;
 	}
+	
+	public function workshopSignup($workshops, $infotext, $lang)
+	{
+	    $option = array();
+	    foreach($workshops as $w)
+	    {
+	        if($lang == 'de')
+	        {
+	           $option[] = array('id' => $w['id'], 'name' => date("D d.m. H:i", $w['start'])." (".$w['duration']." min): ".htmlentities($w['name']));
+	        } elseif($lang == 'en')
+	        {
+	            $option[] = array('id' => $w['id'], 'name' => date("D d.m. h:i a", $w['start'])." (".$w['duration']." min): ".htmlentities($w['name_en']));
+	        }
+	    }
+	    $form = v_form('register_workshop', array(
+	            v_form_select('wish1', array('values' => $option)),
+	            v_form_select('wish2', array('values' => $option)),
+	            v_form_select('wish3', array('values' => $option)),
+
+	    ));
+	    $body = str_replace('{{FORM}}', $form, $infotext['body']);
+	    $page = new vPage($infotext['title'], $body);
+	    $page->render();
+	}
 
 	public function signup_form($edit)
 	{
