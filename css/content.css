@@ -231,7 +231,6 @@ input.hasDatepicker {
 }
 .select
 {
-	width:205px; 
 	border:1px solid #C9BCAF;
 	-moz-border-radius:6px; /* Firefox */
 	-webkit-border-radius:6px; /* Safari, Chrome */
