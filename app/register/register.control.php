@@ -21,6 +21,16 @@ class RegisterControl extends Control
 		return sha1($this->salt.$email);
 	}
 	
+	private function sendRegistrationMail($name, $email)
+	{
+	    $validationCode = $this->calcValidationCode($email);
+	    tplMail(29, $email, array('anrede' => 'Liebe/r', 'name' => $name,
+	    'link' => 'https://foodsharing.de/?page=register&validate='.$email.'&code='.$validationCode,
+	    'link_en' => 'https://foodsharing.de/?page=register&validate='.$email.'&lang=en&code='.$validationCode,
+	    'workshop' => 'https://foodsharing.de/?page=register&validate='.$email.'&workshops&code='.$validationCode,
+	    'workshop_en' => 'https://foodsharing.de/?page=register&validate='.$email.'&workshops&lang=en&code='.$validationCode));
+	}
+	
 	public function index()
 	{
 		global $g_data;
@@ -55,6 +65,15 @@ class RegisterControl extends Control
 		        $this->model->updateSeen($seen);
 		        $this->model->updateComments($comments);
 		        goPage('register&list');
+		    }
+		    if(isset($_REQUEST['newsletter']))
+		    {
+		        $registrations = $this->model->getRegistrations(array('email' => True, 'name' => True));
+		        foreach($registrations as $registration)
+		        {
+		            $this->sendRegistrationMail($registration['name'], $registration['email']);
+		        }
+		        
 		    }
 			$this->view->registrationList($this->model->getRegistrations($this->fields_required));
 		} else
@@ -91,13 +110,14 @@ class RegisterControl extends Control
 					$fs = $this->model->getOne_foodsaver(fsId());
 					$email = $fs['email'];
 				}
-				if($lang == 'de') {
-				    $infotext = $this->model->getContent(43);
-				} else {
-				    $infotext = $this->model->getContent(44);
-				}
+				
 				$uid = $this->model->getIDbyEmail($email);
 				if(isset($_REQUEST['workshops'])) {
+				    if($lang == 'de') {
+				        $infotext = $this->model->getContent(43);
+				    } else {
+				        $infotext = $this->model->getContent(44);
+				    }
 				    if($this->myGetPost('form_submit') == 'register_workshop')
 				    {
 				        $w1 = $this->myGetPost('wish1');
@@ -229,9 +249,7 @@ class RegisterControl extends Control
 				$this->view->signupError('err_unknown');
 			} else
 			{
-				$validationCode = $this->calcValidationCode($fields['email']);
-				tplMail(29, $fields['email'], array('anrede' => 'Liebe/r', 'name' => $fields['name'],
-					'link' => 'https://foodsharing.de/?page=register&validate='.$fields['email'].'&code='.$validationCode));
+			    $this->sendRegistrationMail($fields['name'], $fields['email']);
 				$this->view->signupOkay();
 			}
 		}
