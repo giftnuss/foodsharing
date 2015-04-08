@@ -36,4 +36,7 @@ $g_lang['err_wait_moment'] = 'Fehler: Von deinem Rechner wurde soeben bereits ei
 $g_lang['err_email'] = 'Fehler: Deine Email-Adresse enthält ein ungültiges Format.';
 $g_lang['err_already_registered'] = 'Fehler: Deine Email-Adresse ist bereits für dieses Event registriert. Solltest du weitere Hilfe benötigen, wende dich bitte an info@foodsharing.de';
 $g_lang['err_unknown'] = 'Es ist ein unbekannter Fehler aufgetreten. Probiere es bitte später erneut oder schreib uns an info@foodsharing.de!';
+$g_lang['wish1'] = 'Erstwunsch';
+$g_lang['wish2'] = 'Zweitwunsch';
+$g_lang['wish3'] = 'Drittwunsch';
 ?>

@@ -45,4 +45,7 @@ $g_lang['thursday'] = 'Thursday';
 $g_lang['friday'] = 'Friday';
 $g_lang['saturday'] = 'Saturday';
 $g_lang['sunday'] = 'Sunday';
+$g_lang['wish1'] = 'First choice';
+$g_lang['wish2'] = 'Second choice';
+$g_lang['wish3'] = 'Third choice';
 ?>
