@@ -1303,7 +1303,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 function tplMail($tpl_id,$to,$var = array(),$from_email = false,$from_email = false)
 {
 	global $db;
-	$mail = new SocketMail();
+	$mail = new fEmail();
 	
 	if(!is_object($db))
 	{
