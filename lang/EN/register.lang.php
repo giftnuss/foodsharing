@@ -48,4 +48,5 @@ $g_lang['sunday'] = 'Sunday';
 $g_lang['wish1'] = 'First choice';
 $g_lang['wish2'] = 'Second choice';
 $g_lang['wish3'] = 'Third choice';
+$g_lang['available_thursday'] = 'I am willing to help to prepare food on thursday';
 ?>

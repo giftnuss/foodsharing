@@ -151,8 +151,7 @@ class RegisterView extends View
 	    $form = v_form('register_workshop', array(
 	            v_form_select('wish1', array('values' => $option)),
 	            v_form_select('wish2', array('values' => $option)),
-	            v_form_select('wish3', array('values' => $option)),
-
+	            v_form_select('wish3', array('values' => $option))
 	    ));
 	    $body = str_replace('{{FORM}}', $form, $infotext['body']);
 	    $page = new vPage($infotext['title'], $body);
@@ -261,7 +260,10 @@ class RegisterView extends View
 				'values'=>$role_values
 			)),
 			v_form_textarea('childcare'),
-			v_form_textarea('comments')
+			v_form_textarea('comments'),
+		    v_form_checkbox('available_thursday',array(
+		        'values'=>array(
+		        array('id' => 0,'name'=>s('yes')))))
 
 		),array('submit'=>s($form_name)));
 	}

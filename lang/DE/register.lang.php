@@ -39,4 +39,5 @@ $g_lang['err_unknown'] = 'Es ist ein unbekannter Fehler aufgetreten. Probiere es
 $g_lang['wish1'] = 'Erstwunsch';
 $g_lang['wish2'] = 'Zweitwunsch';
 $g_lang['wish3'] = 'Drittwunsch';
+$g_lang['available_thursday'] = 'Ich bin schon am Donnerstag ab 15 Uhr dabei und würde mit Schnippeln helfen';
 ?>
