@@ -197,6 +197,9 @@ class RegisterControl extends Control
 			if($val !== false)
 			{
 				$vals[$k] = $val;
+			} else
+			{
+			    $vals[$k] = Null;
 			}
 			$g_data[$k] = $val;
 		}
