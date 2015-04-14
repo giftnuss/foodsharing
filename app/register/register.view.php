@@ -86,10 +86,10 @@ class RegisterView extends View
 			}
 			$rows[] = $temp_row;
 		}
-		$table = v_tablesorter($headline,$rows,array('pager'=>false));
+		$table = v_tablesorter($headline,$rows,array());
 		
 		
-		$page = new vPage("Liste der Anmeldungen", v_form('',array("$table")));
+		$page = new vPage("Liste der Anmeldungen", v_form('event-registration-list',array("$table")));
 		$page->addSection("Anzahl der Personen pro Tag: ".implode(', ',$days));
 		$page->addSection("Anzahl der Personen pro Nacht: ".implode(', ',$nights));
 		$page->render();
