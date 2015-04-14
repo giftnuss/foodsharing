@@ -145,10 +145,15 @@ function niceDate($ts)
 	else
 	{
 		$days = getDow();
-		$pre = $days[date('w',$ts)].', '.(int)date('d',$ts).'. '.s('smonth_'.date('n',$ts)).', ';
+		$pre = $days[date('w',$ts)].', '.(int)date('d',$ts).'. '.s('smonth_'.date('n',$ts));
+	}
+	$year = date('Y', $ts);
+	if($year != date('Y'))
+	{
+		$pre = $pre.' '.$year;
 	}
 	
-	return $pre.date('H:i',$ts).' '.s('clock');
+	return $pre.', '.date('H:i',$ts).' '.s('clock');
 }
 
 function incLang($id)
