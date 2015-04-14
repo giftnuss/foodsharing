@@ -97,7 +97,7 @@ function handle_edit()
 	global $db;
 	global $g_data;
 	
-	$bid = $db->getVal('bezirk_id', 'foodsaver', fsId());
+	$bid = $db->getVal('bezirk_id', 'foodsaver', $_GET['id']);
 	
 	if(submitted() && (S::may('orga') || isBotFor($bid)))
 	{
