@@ -1020,7 +1020,7 @@ function v_berlinevent()
 {
 	return '
 	<div class="msg-inside info">
-		<i class="fa fa-info-circle"></i> <strong><a href="/?page=blog&sub=read&id=195">Komm zum großen kostenfreien foodsharing-Treffen nach Berlin</a></strong>
+		<i class="fa fa-info-circle"></i> <strong><a href="/event">Komm zum großen kostenfreien foodsharing-Treffen nach Berlin</a></strong>
 	</div>';
 }
 
