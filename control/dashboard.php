@@ -389,6 +389,8 @@ else if(S::may('fs'))
 	','Umzug auf neuen Server',array('class'=>'ui-padding')));
 	*/
 	
+	addContent(v_berlinevent());
+	
 	/* Einladungen */
 	if($invites = $db->getInvites())
 	{

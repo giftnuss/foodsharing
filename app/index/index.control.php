@@ -34,6 +34,8 @@ class IndexControl extends Control
 			$page_content = $db->getContent(38);
 		}
 		
+		
+		
 		addContent($this->view->index(
 			$page_content['body'],
 			$gerettet,
@@ -41,6 +43,8 @@ class IndexControl extends Control
 			$this->model->getNewestFoodbaskets(5)
 
 		),CNT_OVERTOP);
+		
+		addContent($this->view->berlinbadge());
 		
 		//$this->setContentWidth(9, 9);
 		
