@@ -296,7 +296,7 @@ class IndexView extends View
 	public function berlinbadge()
 	{
 		return '
-		<a style="width:300px;height:300px;display:block;position:absolute;top:30px;left:10px;background-image:url(/img/berlinbadge.png);background-repeat:no-repeat;z-index:500" href="/event">&nbsp;</a>';
+		<a style="width:300px;height:300px;display:block;position:absolute;top:30px;left:10px;background-image:url(/img/berlinbadge.png);background-repeat:no-repeat;z-index:500;text-decoration:none !important;" href="/event">&nbsp;</a>';
 	}
 	
 	public function printSlider($articles = array())
