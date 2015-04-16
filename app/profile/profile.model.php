@@ -44,7 +44,7 @@ class ProfileModel extends Model
 	
 	public function getData()
 	{
-		$data = $this->qRow('
+		if(($data = $this->qRow('
 		
 			SELECT 	fs.`id`,
 					fs.`autokennzeichen_id`,
@@ -96,7 +96,11 @@ class ProfileModel extends Model
 		
 			WHERE 	fs.id = '.(int)$this->fs_id.'
 		
-		');
+			')) == false)
+		{
+			return false;
+		}
+
 		//echo 'SELECT COUNT(rater_id) FROM `fs_rating` WHERE rater_id = '.(int)fsId().' AND foodsaver_id = '.(int)$this->fs_id.' AND ratingtype = 2';
 		$data['bouched'] = false;
 		$data['bananen'] = false;
