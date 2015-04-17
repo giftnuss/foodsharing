@@ -97,31 +97,35 @@ class RegisterView extends View
 
 	public function workshop_confirmation_matrix($uws, $workshops)
 	{
-		$headline = array("Name");
+	    $headline = array();
+		$headline[] = array('name' => "Name");
 		$col_to_wid = array();
 		$col = 1;
 		foreach($workshops as $workshop)
 		{
-			$headline[] = array('name' => substr($workshop['name'], 12)."<br />(".$workshop['attendants']."/".$workshop['registrations']."/".$workshop['allowed_attendants'].")");
+			$headline[] = array('name' => mb_substr($workshop['name'], 0, 20)."<br />(".niceDateShort($workshop['start'])."<br />(".$workshop['attendants']."/".$workshop['registrations']."/".$workshop['allowed_attendants'].")",
+			        'width' => '100'
+			);
 			$col_to_wid[$col] = $workshop['id'];
+			$col++;
 		}
 		$rows = array();
 		foreach($uws as $uw)
 		{
 			$temp_row = array();
-			$workshops = explode($uw['wids']);
-			$confirmed = explode($uw['confirmed']);
+			$workshops = explode(',', $uw['wids']);
+			$confirmed = explode(',', $uw['confirmed']);
 			$temp_row[] = array('cnt' => $uw['name']);
 			for($i = 1; $i < $col; $i++)
 			{
-				$wid = $col_to_wid[$col];
-				$wish = array_search($wid, $workshops);
-				if($confirmed[$wish]) {
-					$confirmlink = '<a href="/?page=register&confirmuid='.$uw['uid'].'&wid='.$wid.'&confirm=0" style="color:green">'.$wish.'</a>';
-				} else {
-					$confirmlink = '<a href="/?page=register&confirmuid='.$uw['uid'].'&wid='.$wid.'&confirm=1" style="color:red">('.$wish.')</a>';
-				}
-				if($wish !== false) {
+				$wid = $col_to_wid[$i];
+				$wish = array_keys($workshops, $wid);
+				if($wish) {
+    				if($confirmed[$wish[0]]) {
+    					$confirmlink = '<a href="/?page=register&list&workshops&confirmuid='.$uw['uid'].'&wid='.$wid.'&confirm=0" style="color:green">'.implode($wish, ',').'</a>';
+    				} else {
+    					$confirmlink = '<a href="/?page=register&list&workshops&confirmuid='.$uw['uid'].'&wid='.$wid.'&confirm=1" style="color:red">('.implode($wish, ',').')</a>';
+    				}
 					$text = $confirmlink;
 				} else {
 					$text = "";
@@ -130,9 +134,9 @@ class RegisterView extends View
 			}
 			$rows[] = $temp_row;
 		}
-		$table = v_tablesorter($headline,$rows,array('pager'=>false));
-
-		return $table;
+		$table = v_tablesorter($headline,$rows,array());
+		$page = new vPage("Workshop Anmeldungen", $table);
+		$page->render();
 	}
 	
 	public function workshopSignup($workshops, $infotext, $lang)

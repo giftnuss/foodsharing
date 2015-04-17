@@ -84,7 +84,7 @@ class RegisterModel extends Model
 	}
 
 	function listWorkshops() {
-		return $this->q("SELECT w.`id`, w.`name`, UNIX_TIMESTAMP(w.`start`) as start, w.`duration`, w.`name_en`, w.`allowed_attendants`, COUNT(rc.`id`) AS registrations, SUM(rc.`confirmed`) AS attendants FROM fs_event_workshops w LEFT JOIN fs_event_workshop_registration rc ON w.id = rc.wid GROUP BY w.`id` ORDER BY `start`, `name`");
+		return $this->q("SELECT w.`id`, w.`name`, UNIX_TIMESTAMP(w.`start`) as start, w.`duration`, w.`name_en`, w.`allowed_attendants`, COUNT(rc.`id`) AS registrations, COALESCE(SUM(rc.`confirmed`), 0) AS attendants FROM fs_event_workshops w LEFT JOIN fs_event_workshop_registration rc ON w.id = rc.wid GROUP BY w.`id` ORDER BY `start`, `name`");
 	}
 
 	function updateWorkshopWish($uid, $wid, $wish) {
@@ -112,16 +112,27 @@ class RegisterModel extends Model
 
 		$this->update("UPDATE fs_event_workshop_registration SET `confirmed` = $val WHERE $where");
 	}
+	
+	function setConfirmedWorkshop($uid, $workshop, $confirm) {
+	    $val = $confirm ? 1 : 0;
+	    $this->update("UPDATE fs_event_workshop_registration SET `confirmed` = $val WHERE `uid` = ".intval($uid)." AND `wid` = ".intval($workshop));
+	}
 
 	function listWorkshopWishes() {
-		return	$this->q(
-			"SELECT e.`name`, e.`uid`,
+		$res = $this->q(
+			"SELECT e.`name`, e.`id` as uid,
 			GROUP_CONCAT(w.`wid` ORDER BY w.`wish`) as wids,
 		GROUP_CONCAT(w.`confirmed` ORDER BY w.`wish`) as confirmed
 		FROM fs_event_workshop_registration w
 		LEFT JOIN fs_event_registration e ON w.uid = e.id
-		ORDER BY e.id GROUP BY w.uid"
+		GROUP BY w.uid
+        ORDER BY e.id"
 	);
+		if($res) {
+		    return $res;
+		} else {
+		    return array();
+		}
 	}
 
 

@@ -6,6 +6,7 @@ class RegisterControl extends Control
 		
 		$this->model = new RegisterModel();
 		$this->view = new RegisterView();
+		mb_internal_encoding('UTF-8');
 		
 		parent::__construct();
 		
@@ -75,7 +76,17 @@ class RegisterControl extends Control
 		        }
 		        
 		    }
-			$this->view->registrationList($this->model->getRegistrations($this->fields_required));
+		    if(isset($_REQUEST['workshops'])) {
+		        if(isset($_REQUEST['confirmuid'])) {
+		            $uid = intval($_REQUEST['confirmuid']);
+		            $wid = intval($_REQUEST['wid']);
+		            $confirm = intval($_REQUEST['confirm']);
+		            $this->model->setConfirmedWorkshop($uid, $wid, $confirm);
+		        }
+		        $this->view->workshop_confirmation_matrix($this->model->listWorkshopWishes(), $this->model->listWorkshops());
+		    } else {
+		        $this->view->registrationList($this->model->getRegistrations($this->fields_required));
+		    }
 		} else
 		{
 			// Do we have any previous data on the user?
