@@ -97,14 +97,53 @@ class RegisterView extends View
 
 	public function workshop_confirmation_matrix($uws, $workshops)
 	{
+	    addStyle('.fixed-table-container {
+	            width:2500px;
+      height: 400px;
+      border: 1px solid black;
+      margin: 10px auto;
+      background-color: white;
+      /* above is decorative or flexible */
+      position: relative; /* could be absolute or relative */
+      padding-top: 150px; /* height of header */
+    }
+
+    .fixed-table-container-inner {
+      overflow-x: hidden;
+      overflow-y: auto;
+      height: 100%;
+    }
+	  .th-inner {
+      position: absolute;
+      top: 0;
+      line-height: 20px; /* height of header */
+      text-align: left;
+      border-left: 1px solid black;
+      padding-left: 5px;
+      margin-left: -5px;
+	            background-color: #000;
+	            width:50px;
+    }
+	                td {
+      border-bottom: 1px solid #ccc;
+      padding: 5px;
+      text-align: left; /* IE */
+    }
+    td + td {
+      border-left: 1px solid #ccc;
+    }
+    th {
+      padding: 0 5px;
+      text-align: left; /* IE */
+    }
+	            #table.tablesorter td,th{border: 1px solid black;padding:0px; text-align:center; font-size:8pt;word-wrap:break-word;min-width:30px;max-width:30px;width:30px;} thead{display:table-header-group}');
 	    $headline = array();
 		$headline[] = array('name' => "Name");
 		$col_to_wid = array();
 		$col = 1;
 		foreach($workshops as $workshop)
 		{
-			$headline[] = array('name' => mb_substr($workshop['name'], 0, 20)."<br />(".niceDateShort($workshop['start'])."<br />(".$workshop['attendants']."/".$workshop['registrations']."/".$workshop['allowed_attendants'].")",
-			        'width' => '100'
+			$headline[] = array('name' => '<div class="th-inner"><span>'.mb_substr($workshop['name'], 0, 20)."<br />(".niceDateShort($workshop['start'])."<br />(".$workshop['attendants']."/".$workshop['registrations']."/".$workshop['allowed_attendants'].")</span></div>",
 			);
 			$col_to_wid[$col] = $workshop['id'];
 			$col++;
@@ -135,7 +174,7 @@ class RegisterView extends View
 			$rows[] = $temp_row;
 		}
 		$table = v_tablesorter($headline,$rows,array());
-		$page = new vPage("Workshop Anmeldungen", $table);
+		$page = new vPage("Workshop Anmeldungen", '<div class="fixed-table-container"><div class="fixed-table-container-inner">'.$table.'</div></div>');
 		$page->render();
 	}
 	
