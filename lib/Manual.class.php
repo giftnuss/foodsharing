@@ -3093,11 +3093,14 @@ GROUP BY foodsaver_id'));
 							fs.`geschlecht`,
 							fs.`email`
 		
-				FROM 		`'.PREFIX.'foodsaver` fs,
-							`'.PREFIX.'botschafter` b
-		
-				WHERE 		fs.id = b.foodsaver_id
-		
+				FROM 		`'.PREFIX.'foodsaver` fs
+				WHERE		fs.id
+				IN			(SELECT foodsaver_id
+							FROM `'.PREFIX.'fs_botschafter` b
+							LEFT JOIN `'.PREFIX.'bezirk` bz
+							ON b.bezirk_id = bz.id
+							WHERE bz.type != 7
+							)
 				');
 	}
 	
