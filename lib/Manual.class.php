@@ -1879,6 +1879,19 @@ GROUP BY foodsaver_id'));
 		
 		return $out;
 	}
+
+	public function getParentBezirke($bid)
+	{
+		if(is_array($bid))
+		{
+			$where = "WHERE ancestor_id IN (".implode(',', array_map("intval", $bid)).")";
+		} else
+		{
+			$where = "WHERE ancestor_id = ".intval($bid);
+		}
+
+		return $this->qCol('SELECT bezirk_id FROM `'.PREFIX.'`bezirk_closure` '.$where);
+	}
 	
 	public function getChildBezirke($bid,$nocache = false)
 	{
