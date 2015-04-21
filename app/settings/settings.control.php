@@ -368,7 +368,7 @@ class SettingsControl extends Control
 				else
 				{
 					$this->model->updateRole(2,$this->foodsaver['rolle']);
-					info('Danke! Du bist jetzt betriebsverantwortlicher');
+					info('Danke! Du bist jetzt Betriebsverantwortlicher');
 					go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
 				}
 			}
