@@ -431,8 +431,6 @@ class SettingsControl extends Control
 					$data = unsetAll($_POST, array('photo_public','new_bezirk'));
 					$this->model->updateFields($data, 'foodsaver', fsId());
 		
-					$this->model->updateRole(3,$this->foodsaver['rolle']);
-					
 					addContent(v_field(
 						v_info(s('upgrade_bot_success')),
 						s('upgrade_request_send'),
