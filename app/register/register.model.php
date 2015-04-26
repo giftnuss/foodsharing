@@ -90,7 +90,7 @@ class RegisterModel extends Model
 	function updateWorkshopWish($uid, $wid, $wish) {
 	    if(!$wid)
 	    {
-	        $wid = "NULL";
+	        $wid = "0";
 	    } else
 	    {
 	        $wid = intval($wid);
