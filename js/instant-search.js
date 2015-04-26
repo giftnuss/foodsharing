@@ -5,6 +5,7 @@ $(document).ready(function(){
 var search = {
 	initiated: false,
 	isSearching:false,
+	lastSearch : '',
 	index: false,
 	$icon: null,
 	$searchbar: null,
@@ -155,8 +156,9 @@ var search = {
 		if(!this.isSearching)
 		{
 			this.isSearching = true;
+			this.lastSearch = search.$input.val();
 			$.ajax({
-				url: '/xhrapp.php?app=search&m=search&s=' + encodeURIComponent(search.$input.val()),
+				url: '/xhrapp.php?app=search&m=search&s=' + encodeURIComponent(this.lastSearch),
 				dataType: 'json',
 				success: function(data){
 					if(data.result != undefined && data.result.length > 0)
@@ -169,10 +171,14 @@ var search = {
 					}
 				},
 				complete: function(){
-					setTimeout(function(){
+					search.hideLoader();
+					setTimeout(function() {
 						search.isSearching = false;
-						search.hideLoader();
-					},200);
+						if(search.lastSearch != search.$input.val())
+						{
+							search.start();
+						}
+					}, 300);
 				}
 			});
 		}
