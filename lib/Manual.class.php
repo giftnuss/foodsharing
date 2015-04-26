@@ -1879,6 +1879,19 @@ GROUP BY foodsaver_id'));
 		
 		return $out;
 	}
+
+	public function getParentBezirke($bid)
+	{
+		if(is_array($bid))
+		{
+			$where = "WHERE ancestor_id IN (".implode(',', array_map("intval", $bid)).")";
+		} else
+		{
+			$where = "WHERE ancestor_id = ".intval($bid);
+		}
+
+		return $this->qCol('SELECT bezirk_id FROM `'.PREFIX.'`bezirk_closure` '.$where);
+	}
 	
 	public function getChildBezirke($bid,$nocache = false)
 	{
@@ -3093,11 +3106,14 @@ GROUP BY foodsaver_id'));
 							fs.`geschlecht`,
 							fs.`email`
 		
-				FROM 		`'.PREFIX.'foodsaver` fs,
-							`'.PREFIX.'botschafter` b
-		
-				WHERE 		fs.id = b.foodsaver_id
-		
+				FROM 		`'.PREFIX.'foodsaver` fs
+				WHERE		fs.id
+				IN			(SELECT foodsaver_id
+							FROM `'.PREFIX.'fs_botschafter` b
+							LEFT JOIN `'.PREFIX.'bezirk` bz
+							ON b.bezirk_id = bz.id
+							WHERE bz.type != 7
+							)
 				');
 	}
 	

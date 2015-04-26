@@ -47,15 +47,15 @@ class FoodsaverControl extends Control
 		}
 		else if(($id = getActionId('edit')) && (isBotschafter() || isOrgaTeam()))
 		{
-			handle_edit();
-			$data = $this->model->getOne_foodsaver($id);
-			$bids = $this->model->getFsBezirkIds($id);
 			
-			addBread(s('bread_foodsaver'),'/?page=foodsaver');
-			addBread(s('bread_edit_foodsaver'));
-			
-			if(isOrgaTeam() || isBotForA($bids))
+			if(isOrgaTeam() || isBotForA($bids, false, true))
 			{
+				handle_edit();
+				$data = $this->model->getOne_foodsaver($id);
+				$bids = $this->model->getFsBezirkIds($id);
+
+				addBread(s('bread_foodsaver'),'/?page=foodsaver');
+				addBread(s('bread_edit_foodsaver'));
 				setEditData($data);
 					
 				addContent(foodsaver_form($data['name'].' '.$data['nachname'].' bearbeiten'));
@@ -99,7 +99,7 @@ function handle_edit()
 	
 	$bid = $db->getVal('bezirk_id', 'foodsaver', $_GET['id']);
 	
-	if(submitted() && (S::may('orga') || isBotFor($bid)))
+	if(submitted())
 	{
 		
 		if(isset($g_data['orgateam']) && is_array($g_data['orgateam']) && $g_data['orgateam'][0] == 1)

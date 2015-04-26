@@ -508,15 +508,20 @@ function getContent($name)
 	include 'control/'.$name.'.php';
 }
 
-function isBotForA($bezirk_ids)
+function isBotForA($bezirk_ids, $include_groups = true, $include_parent_bezirke = false)
 {
 	if(isBotschafter() && is_array($bezirk_ids))
 	{
+		if($include_parent_bezirke)
+		{
+			global $db;
+			$bezirk_ids = $db->getParentBezirke($bezirk_ids);
+		}
 		foreach ($_SESSION['client']['botschafter'] as $b)
 		{
 			foreach ($bezirk_ids as $bid)
 			{
-				if($b['bezirk_id'] == $bid)
+				if($b['bezirk_id'] == $bid && ($include_groups || $b['type'] != 7))
 				{
 					return true;
 					break;
