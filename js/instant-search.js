@@ -49,7 +49,7 @@ var search = {
 				search.$resultWrapper.show();
 			}
 			
-			if(search.$input.val().length > 3 && search.$indexResult.children('li').length < 5)
+			if(search.$input.val().length > 3 && search.$indexResult.children('li').length < 10)
 			{
 				search.start();
 				search.$resultWrapper.show();
