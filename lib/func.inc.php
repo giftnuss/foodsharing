@@ -132,25 +132,25 @@ function niceDate($ts)
 	
 	if($date->eq('today'))
 	{
-		$pre = s('today').', ';
+		$pre = s('today');
 	}
 	else if($date->eq('tomorrow'))
 	{
-		$pre = s('tomorrow').', ';
+		$pre = s('tomorrow');
 	}
 	else if($date->eq('-1 day'))
 	{
-		$pre = s('yesterday').', ';
+		$pre = s('yesterday');
 	}
 	else
 	{
 		$days = getDow();
 		$pre = $days[date('w',$ts)].', '.(int)date('d',$ts).'. '.s('smonth_'.date('n',$ts));
-	}
-	$year = date('Y', $ts);
-	if($year != date('Y'))
-	{
-		$pre = $pre.' '.$year;
+		$year = date('Y', $ts);
+		if($year != date('Y'))
+		{
+			$pre = $pre.' '.$year;
+		}
 	}
 	
 	return $pre.', '.date('H:i',$ts).' '.s('clock');
