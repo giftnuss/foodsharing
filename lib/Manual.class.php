@@ -1884,13 +1884,13 @@ GROUP BY foodsaver_id'));
 	{
 		if(is_array($bid))
 		{
-			$where = "WHERE ancestor_id IN (".implode(',', array_map("intval", $bid)).")";
+			$where = "WHERE bezirk_id IN (".implode(',', array_map("intval", $bid)).")";
 		} else
 		{
-			$where = "WHERE ancestor_id = ".intval($bid);
+			$where = "WHERE bezirk_id = ".intval($bid);
 		}
 
-		return $this->qCol('SELECT bezirk_id FROM `'.PREFIX.'`bezirk_closure` '.$where);
+		return $this->qCol('SELECT DISTINCT ancestor_id FROM `'.PREFIX.'bezirk_closure` '.$where);
 	}
 	
 	public function getChildBezirke($bid,$nocache = false)
