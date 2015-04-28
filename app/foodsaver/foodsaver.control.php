@@ -22,7 +22,7 @@ class FoodsaverControl extends Control
 	public function index()
 	{
 		// check bezirk_id and permissions
-		if(isset($_GET['bid']) && ($bezirk = $this->model->getBezirk($_GET['bid'])) && (S::may('orga') || isBotFor($_GET['bid'])))
+		if(isset($_GET['bid']) && ($bezirk = $this->model->getBezirk($_GET['bid'])) && (S::may('orga') || isBotForA(array($_GET['bid']), false, true)))
 		{
 			// permission granted so we can load the foodsavers
 			if($foodsaver = $this->model->listFoodsaver($_GET['bid']))
@@ -47,11 +47,10 @@ class FoodsaverControl extends Control
 		}
 		else if(($id = getActionId('edit')) && (isBotschafter() || isOrgaTeam()))
 		{
-			
-			if(isOrgaTeam() || isBotForA($bids, false, true))
+			$data = $this->model->getOne_foodsaver($id);
+			if($data && (isOrgaTeam() || isBotForA(array($data['bezirk_id'], false, true))))
 			{
 				handle_edit();
-				$data = $this->model->getOne_foodsaver($id);
 				$bids = $this->model->getFsBezirkIds($id);
 
 				addBread(s('bread_foodsaver'),'/?page=foodsaver');
@@ -71,7 +70,6 @@ class FoodsaverControl extends Control
 					addContent(u_delete_account(),CNT_RIGHT);
 				}
 			}
-			
 		}
 		else
 		{
