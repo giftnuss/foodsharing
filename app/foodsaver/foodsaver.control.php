@@ -48,9 +48,10 @@ class FoodsaverControl extends Control
 		else if(($id = getActionId('edit')) && (isBotschafter() || isOrgaTeam()))
 		{
 			$data = $this->model->getOne_foodsaver($id);
-			if($data && (isOrgaTeam() || isBotForA(array($data['bezirk_id'], false, true))))
+			if($data && (isOrgaTeam() || isBotForA(array($data['bezirk_id']), false, true)))
 			{
 				handle_edit();
+				$data = $this->model->getOne_foodsaver($id);
 				$bids = $this->model->getFsBezirkIds($id);
 
 				addBread(s('bread_foodsaver'),'/?page=foodsaver');
