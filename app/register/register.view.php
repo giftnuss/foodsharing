@@ -30,22 +30,35 @@ class RegisterView extends View
 	public function registrationList($registrations)
 	{
 	    global $g_data;
+		addStyle('
+			td + td {
+			  border-left: 1px solid #ccc;
+			}
+			th {
+			  padding: 0 5px;
+			  text-align: left; /* IE */
+			}
+		');
 		$out = '';
 
 		addStyle('#table td{ cursor:pointer; }');
 
 		$headline = array();
+		print_r($registrations);
 		$h = array_keys($registrations[0]);
 		foreach($h as $col) {
 			$headline[] = array('name' => $col);
 		}
 		$days = array(0, 0, 0, 0);
 		$nights = array(0, 0, 0, 0); 
+		$days_seen = array(0, 0, 0, 0);
+		$nights_seen = array(0, 0, 0, 0);
 
 		$rows = array();
 		foreach($registrations as $r)
 		{
 			$temp_row = array();
+			$on_place = false;
 			foreach($r as $col => $row)
 			{
 				if($col == "on_place") {
@@ -54,19 +67,29 @@ class RegisterView extends View
 					'checked' => ($row > 0) ? array(0) : False,
 					'nolabel' => True
 					));
+					$on_place = ($row > 0);
 				} elseif($col == "admin_comment") {
 				    $g_data['admin_comment'.$r['id']] = htmlentities($row);
 				    $cnt = v_form_textarea('admin_comment'.$r['id'],array(
 				            'nolabel' => True,
 				            'style'=>'width:300px;'
 				    ));
-				} else {
+				} elseif($col == 'edit')
+				{
+					$cnt = "<a href=\"$row\" target=\"_blank\">Edit</a>";
+				}
+				
+				else {
 				    if($col == 'take_part')
 				    {
 				        foreach(explode(',', $row) as $day){
 				            if(array_key_exists($day, $days))
 				            {
 				                $days[$day] ++;
+												if($on_place)
+												{
+													$days_seen[$day]++;
+												}
 				            }
 				        }
 				    }
@@ -76,6 +99,10 @@ class RegisterView extends View
 				            if(array_key_exists($day, $days))
 				            {
 				                $nights[$day] ++;
+												if($on_place)
+												{
+													$nights_seen[$day]++;
+												}
 				            }
 				        }
 				    }
@@ -90,8 +117,8 @@ class RegisterView extends View
 		
 		
 		$page = new vPage("Liste der Anmeldungen", v_form('event-registration-list',array("$table")));
-		$page->addSection("Anzahl der Personen pro Tag: ".implode(', ',$days));
-		$page->addSection("Anzahl der Personen pro Nacht: ".implode(', ',$nights));
+		$page->addSection("Anzahl der Personen pro Tag: ".implode(', ',$days)." Anwesend: ".implode(', ', $days_seen));
+		$page->addSection("Anzahl der Personen pro Nacht: ".implode(', ',$nights)." Anwesend: ".implode(', ', $nights_seen));
 		$page->render();
 	}
 

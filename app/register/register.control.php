@@ -85,7 +85,11 @@ class RegisterControl extends Control
 		        }
 		        $this->view->workshop_confirmation_matrix($this->model->listWorkshopWishes(), $this->model->listWorkshops());
 		    } else {
-		        $this->view->registrationList($this->model->getRegistrations($this->fields_required));
+
+				$registrations = $this->model->getRegistrations($this->fields_required);
+				array_walk($registrations, function(&$v, $k) {$validationCode = $this->calcValidationCode($v['email']); $link = 'https://foodsharing.de/?page=register&validate='.$v['email'].'&code='.$validationCode; $v['edit'] = "$link";});
+	    
+		        $this->view->registrationList($registrations);
 		    }
 		} else
 		{
