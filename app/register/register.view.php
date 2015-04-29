@@ -44,7 +44,6 @@ class RegisterView extends View
 		addStyle('#table td{ cursor:pointer; }');
 
 		$headline = array();
-		print_r($registrations);
 		$h = array_keys($registrations[0]);
 		foreach($h as $col) {
 			$headline[] = array('name' => $col);
