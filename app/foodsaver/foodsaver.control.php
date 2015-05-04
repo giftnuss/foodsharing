@@ -49,7 +49,7 @@ class FoodsaverControl extends Control
 		{
 			$data = $this->model->getOne_foodsaver($id);
 			$bids = $this->model->getFsBezirkIds($id);
-			if($data && (isOrgaTeam() || isBotForA($bids), false, true)))
+			if($data && (isOrgaTeam() || isBotForA($bids, false, true)))
 			{
 				handle_edit();
 				$data = $this->model->getOne_foodsaver($id);
