@@ -20,7 +20,7 @@ class SettingsControl extends Control
 			$this->handle_newmail();
 		}
 		
-		$this->foodsaver = $this->model->getValues(array('rolle','email','name','nachname','geschlecht'), 'foodsaver', fsId());
+		$this->foodsaver = $this->model->getValues(array('rolle','email','name','nachname','geschlecht','verified'), 'foodsaver', fsId());
 		
 		if(isset($_GET['deleteaccount']))
 		{	
@@ -111,58 +111,65 @@ class SettingsControl extends Control
 	{
 		if(S::may() && $this->foodsaver['rolle'] > 0)
 		{
-			$model = loadModel('quiz');
-				
-			if(($status = $model->getQuizStatus(2)) && ($quiz = $model->getQuiz(2)))
+			if(!$this->foodsaver['verified'])
 			{
-				if((int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = '.(int)fsId()) == 0)
+				addContent($this->view->simpleContent($this->model->getContent(45)));
+			}
+			else
+			{
+				$model = loadModel('quiz');
+
+				if(($status = $model->getQuizStatus(2)) && ($quiz = $model->getQuiz(2)))
 				{
-					info('Du darfst zunächst das Foodsaver Quiz machen');
-					go('/?page=settings&sub=upgrade/up_fs');
-				}
-				$desc = $this->model->getContent(12);
-	
-				// Quiz wurde noch gar nicht probiert
-				if($status['times'] == 0)
-				{
-					addContent($this->view->quizIndex($quiz,$desc));
-				}
-				
-				// quiz ist bereits bestanden
-				else if($status['cleared'] > 0)
-				{
-					return $this->confirm_bip();
-				}
-				
-				// es läuft ein quiz weitermachen
-				else if($status['running'] > 0)
-				{
-					addContent($this->view->quizContinue($quiz,$desc));
-				}
-				
-				// Quiz wurde shcon probiert aber noche keine 3x nicht bestanden
-				else if($status['failed'] < 3)
-				{
-					addContent($this->view->quizRetry($quiz,$desc,$status['failed'],3));
-				}
-	
-				// 3x nicht bestanden 30 Tage Lernpause
-				else if($status['failed'] == 3 && (time() - $status['last_try']) < (86400*30))
-				{
-					$days_to_wait = ((time() - $status['last_try']) - (86400*30) / 30);
-					return $this->view->pause($days_to_wait,$desc);
-				}
-	
-				// Lernpause vorbei noch keine weiteren 2 Fehlversuche
-				else if($status['failed'] >= 3 && $status['failed'] < 5 && (time() - $status['last_try']) >= (86400*14))
-				{
-					addContent($this->view->quizIndex($quiz,$desc));
-				}
-	
-				// hat alles nichts genützt
-				else
-				{
-					addContent($this->view->quizFailed($this->model->getContent(13)));
+					if((int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = '.(int)fsId()) == 0)
+					{
+						info('Du darfst zunächst das Foodsaver Quiz machen');
+						go('/?page=settings&sub=upgrade/up_fs');
+					}
+					$desc = $this->model->getContent(12);
+
+					// Quiz wurde noch gar nicht probiert
+					if($status['times'] == 0)
+					{
+						addContent($this->view->quizIndex($quiz,$desc));
+					}
+
+					// quiz ist bereits bestanden
+					else if($status['cleared'] > 0)
+					{
+						return $this->confirm_bip();
+					}
+
+					// es läuft ein quiz weitermachen
+					else if($status['running'] > 0)
+					{
+						addContent($this->view->quizContinue($quiz,$desc));
+					}
+
+					// Quiz wurde shcon probiert aber noche keine 3x nicht bestanden
+					else if($status['failed'] < 3)
+					{
+						addContent($this->view->quizRetry($quiz,$desc,$status['failed'],3));
+					}
+
+					// 3x nicht bestanden 30 Tage Lernpause
+					else if($status['failed'] == 3 && (time() - $status['last_try']) < (86400*30))
+					{
+						$days_to_wait = ((time() - $status['last_try']) - (86400*30) / 30);
+						return $this->view->pause($days_to_wait,$desc);
+					}
+
+					// Lernpause vorbei noch keine weiteren 2 Fehlversuche
+					else if($status['failed'] >= 3 && $status['failed'] < 5 && (time() - $status['last_try']) >= (86400*14))
+					{
+						addContent($this->view->quizIndex($quiz,$desc));
+					}
+
+					// hat alles nichts genützt
+					else
+					{
+						addContent($this->view->quizFailed($this->model->getContent(13)));
+					}
 				}
 			}
 		}
