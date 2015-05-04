@@ -56,8 +56,6 @@ class DashboardControl extends Control
 			CNT_TOP
 		);
 		
-		addContent(v_berlinevent());
-		
 		addContent($this->view->foodsharerMenu(),CNT_LEFT);
 		
 		$this->view->updates();

@@ -1016,14 +1016,6 @@ function v_form_recip_chooser()
 	return v_input_wrapper(s('recip_chooser'), $out);
 }
 
-function v_berlinevent()
-{
-	return '
-	<div class="msg-inside info">
-		<i class="fa fa-info-circle"></i> <strong><a href="/?page=blog&sub=read&id=195">Komm zum großen kostenfreien foodsharing-Treffen nach Berlin</a></strong>
-	</div>';
-}
-
 function v_photo_edit($src,$fsid = false)
 {
 	if(!$fsid)
