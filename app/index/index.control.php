@@ -28,7 +28,7 @@ class IndexControl extends Control
 		
 		$gerettet = round($gerettet,0);
 
-		if(strpos($_SERVER['HTTP_HOST'], 'myfoodsharing.at')) {
+		if(strpos($_SERVER['HTTP_HOST'], 'foodsharing.at') !== false) {
 			$page_content = $db->getContent(37);
 		} else {
 			$page_content = $db->getContent(38);

@@ -24,7 +24,7 @@
 		    <div class="pure-u-1 pure-u-md-14-24">
 		    	<div class="inside">
 <?php
-		if(strpos($_SERVER['HTTP_HOST'], 'myfoodsharing.at')) {
+		if(strpos($_SERVER['HTTP_HOST'], 'foodsharing.at') !== false) {
 ?>
 							<a class="corner-all" href="http://www.lebensministerium.at/" target="_blank"><img src="/img/wien_bmlfuw.png" alt="Lebensministerium" /></a>
 							<a class="corner-all" href="http://www.wienertafel.at/" target="_blank"><img src="/img/wien_tafel.png" alt="Wiener Tafel" /></a>
