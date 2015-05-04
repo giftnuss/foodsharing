@@ -3189,6 +3189,7 @@ GROUP BY foodsaver_id'));
 				`anschrift` =  '.$this->strval($data['anschrift']).',
 				`telefon` =  '.$this->strval($data['telefon']).',
 				`handy` =  '.$this->strval($data['handy']).',
+				`geb_datum` =  '.$this->dateval($data['geb_datum']).',
 
 				`about_me_public` =  '.$this->strval($data['about_me_public']).',
 				`photo_public` = '.$this->intval($data['photo_public']).',
