@@ -1644,7 +1644,7 @@ GROUP BY foodsaver_id'));
 	
 				AND 	'.PREFIX.'betrieb_team.foodsaver_id = '.$this->intval(fsId()).'
 				
-				ORDER BY '.PREFIX.'betrieb_team.verantwortlich DESC
+				ORDER BY '.PREFIX.'betrieb_team.verantwortlich DESC, '.PREFIX.'betrieb.name ASC
 		');
 		$out = array();
 		$out['verantwortlich'] = array();

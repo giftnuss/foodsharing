@@ -1412,6 +1412,7 @@ class Db
 						WHERE 	bt.betrieb_id = b.id
 						AND 	bt.`foodsaver_id` = '.$this->intval($fs['id']).'
 						AND 	bt.active = 1
+						ORDER BY b.name
 				'))
 			{
 				$_SESSION['client']['betriebe'] = array();
