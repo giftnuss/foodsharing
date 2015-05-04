@@ -557,4 +557,10 @@ class View
 		'';
 	}
 
+	public function simpleContent($content)
+	{
+		$out = v_field($content['body'], $content['title'],array('class' => 'ui-padding'));
+
+		return $out;
+	}
 }
