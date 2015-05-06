@@ -4755,4 +4755,13 @@ GROUP BY foodsaver_id'));
 	
 		WHERE 	`id` = '.$this->intval($id));
 	}
+
+	/* retrieves all biebs that are biebs for a given bezirk (by being bieb in a betrieb that is part of that bezirk) */
+	public function getBiebs($bezirk)
+	{
+		return $this->qCol(' SELECT DISTINCT bt.foodsaver_id FROM `'.PREFIX.'bezirk_closure` c
+			LEFT JOIN `'.PREFIX.'betrieb b ON c.bezirk_id = b.bezirk_id
+			LEFT JOIN `'.PREFIX.'betrieb_team` bt ON bt.betrieb_id = b.id
+			WHERE c.ancestor_id = '.this->intval($bezirk));
+	}
 }

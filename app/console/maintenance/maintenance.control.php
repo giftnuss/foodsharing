@@ -67,6 +67,12 @@ class MaintenanceControl extends ConsoleControl
 		 * check inactive users and send wake up emails or set in sleeping mode
 		 */
 		//$this->sleepingMode();
+
+		/*
+		 * There may be some groups where people should automatically be added
+		 * (e.g. Hamburgs BIEB group)
+		 */
+		$this->updateSpecialGroupMemberships();
 		
 	}
 	
@@ -84,6 +90,16 @@ class MaintenanceControl extends ConsoleControl
 		$this->sleepingMode();
 	}
 	*/
+
+	private function updateSpecialGroupMemberships()
+	{
+		$hh_biebs = $this->model->getBiebs(31);
+		$this->model->updateGroupMembers(826, $hh_biebs);
+
+		$biebs = $this->model->getBiebs(741);
+		$this->model->updateGroupMembers(826, $biebs);
+	}
+
 	private function sleepingMode()
 	{
 		/*
