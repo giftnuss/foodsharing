@@ -37,10 +37,6 @@ class LoginView extends View
 									<i class="mega-octicon octicon-person"></i>
 									<span>'.s('peer').'</span>
 								</a>
-								<a onmouseover="$(\'.orgshow\').show();" onmouseout="$(\'.orgshow\').hide();" href="#org" onclick="$(this).addClass(\'active\').prev().removeClass(\'active\');$(\'#join_iam\').val(\'org\');">
-									<i class="mega-octicon octicon-home"></i>
-									<span>'.s('organisation').'</span>
-								</a>
 								<br />
 								<span class="peer"></span>
 							</div>
@@ -48,9 +44,6 @@ class LoginView extends View
 							
 							<div style="display:none;" class="humanshow msg-inside success">
 									<i class="fa fa-info-circle"></i> Melde Dich als Foodsharer an, um als Privatperson Lebensmittel zu teilen und zu retten.
-							</div>
-							<div style="display:none;" class="orgshow msg-inside success">
-									<i class="fa fa-info-circle"></i> Melde Dich als soziale Organisation, Hausprojekt oder sonstiges an, um größere Mengen an Lebensmitteln zu spenden oder zu erhalten.
 							</div>
 						</div>
 						<div class="bottom">
