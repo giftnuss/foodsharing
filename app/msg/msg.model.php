@@ -36,6 +36,7 @@ class MsgModel extends Model
 
 		$conversation_id = false;
 
+		$cids = $this->qCol('SELECT conversation_id FROM `fs_foodsaver_has_conversation` WHERE `foodsaver_id` = '.(int)fsId());
 		$sql = '
 			SELECT
 				conversation_id,
