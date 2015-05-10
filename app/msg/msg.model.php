@@ -36,27 +36,29 @@ class MsgModel extends Model
 
 		$conversation_id = false;
 
-		$cids = $this->qCol('SELECT conversation_id FROM `fs_foodsaver_has_conversation` WHERE `foodsaver_id` = '.(int)fsId());
-		$sql = '
-			SELECT
-				conversation_id,
-				GROUP_CONCAT(foodsaver_id ORDER BY foodsaver_id SEPARATOR ":") AS idstring
-
-			FROM
-				'.PREFIX.'foodsaver_has_conversation
-
-			WHERE
-				conversation_id IN ('. implode(',',$cids).')
-
-			GROUP BY
-				conversation_id
-
-			HAVING
-				idstring = "' . implode(':',$recips).'"';
-
-		if($conv = $this->qRow($sql))
+		if($cids = $this->qCol('SELECT conversation_id FROM `fs_foodsaver_has_conversation` WHERE `foodsaver_id` = '.(int)fsId()))
 		{
-			$conversation_id = $conv['conversation_id'];
+			$sql = '
+		SELECT
+		  conversation_id,
+		  GROUP_CONCAT(foodsaver_id ORDER BY foodsaver_id SEPARATOR ":") AS idstring
+
+		FROM
+		  '.PREFIX.'foodsaver_has_conversation
+
+		WHERE
+		  conversation_id IN ('. implode(',',$cids).')
+
+		GROUP BY
+		  conversation_id
+
+		HAVING
+		  idstring = "' . implode(':',$recips).'"';
+
+			if($conv = $this->qRow($sql))
+			{
+				$conversation_id = $conv['conversation_id'];
+			}
 		}
 
 		/*
