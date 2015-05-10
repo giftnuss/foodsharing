@@ -601,7 +601,7 @@ class MsgModel extends Model
 			unset($recipients[(int)fsId()]);
 			foreach ($recipients as $r)
 			{
-				$values[] = '('.(int)$r.','.(int)$cid.',$ur)';
+				$values[] = '('.(int)$r.','.(int)$cid.','.$ur.')';
 			}
 
 			// add current user extra to set unread = 0
