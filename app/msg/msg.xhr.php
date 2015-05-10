@@ -131,17 +131,17 @@ class MsgXhr extends Control
 		if($this->mayConversation($_POST['c']))
 		{
 			S::noWrite();
-			
+
 			if(isset($_POST['b']))
 			{
-				$body = htmlentities($_POST['b']);
 				$body = trim($body);
+				$body = htmlentities($_POST['b']);
 				if(!empty($body))
 				{
 					if($message_id = $this->model->sendMessage($_POST['c'],$body))
 					{
 						$xhr->setStatus(1);
-						
+
 						/*
 						 * for not so db intensive polling store updates in memcache if the recipients are online
 						*/
@@ -302,14 +302,14 @@ class MsgXhr extends Control
 				if((int)$r > 0)
 				{
 					$recip[(int)$r] = (int)$r;
-				}				
+				}
 			}
-			
+
 			/*
 			 * quick body text preparing
 			 */
-			$body = trim(htmlentities($_POST['body']));
-			
+			$body = htmlentities(trim($_POST['body']));
+
 			if(!empty($recip) && $body != '')
 			{
 				/*
