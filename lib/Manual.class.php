@@ -3688,7 +3688,8 @@ GROUP BY foodsaver_id'));
 		$betrieb = $this->getVal('name', 'betrieb', $bid);
 		
 		$this->addGlocke(array($fsid), 'Du bist auf der Springer- / Warteliste, Bei bedarf wirst Du kontaktiert!',$betrieb,'/?page=fsbetrieb&id='.(int)$bid);
-	    
+
+		$msg = loadModel('msg');
 	    if($scid = $this->getBetriebConversation($bid, true))
 	    {
 	    	$msg->addUserToConversation($scid, $fsid, True);
@@ -3734,11 +3735,11 @@ GROUP BY foodsaver_id'));
 	
 	public function add_betrieb($data)
 	{
-    $msg = loadModel('msg');
-    $tcid = $msg->insertConversation(array(), true);
-    $scid = $msg->insertConversation(array(), true);
-    $msg->renameConversation($tcid, "Team ".$this->strval($data['name']));
-    $msg->renameConversation($scid, "Springer ".$this->strval($data['name']));
+		$msg = loadModel('msg');
+		$tcid = $msg->insertConversation(array(), true);
+		$scid = $msg->insertConversation(array(), true);
+		$msg->renameConversation($tcid, "Team ".$this->strval($data['name']));
+		$msg->renameConversation($scid, "Springer ".$this->strval($data['name']));
 		$id = $this->insert('
 			INSERT INTO 	`'.PREFIX.'betrieb`
 			(
@@ -4124,11 +4125,11 @@ GROUP BY foodsaver_id'));
 			$msg->setConversationMembers($cid, $member_ids);
 		}
 
-    if($sid = $this->getBetriebConversation($bid, true)) {
-      foreach($verantwortlicher as $user) {
-        $msg->addUserToConversation($sid, $user);
-      }
-    }
+		if($sid = $this->getBetriebConversation($bid, true)) {
+			foreach($verantwortlicher as $user) {
+				$msg->addUserToConversation($sid, $user);
+			}
+		}
 		
 		if($this->sql($sql))
 		{
