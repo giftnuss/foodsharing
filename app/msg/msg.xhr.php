@@ -134,8 +134,8 @@ class MsgXhr extends Control
 
 			if(isset($_POST['b']))
 			{
-				$body = trim($body);
-				$body = htmlentities($_POST['b']);
+				$body = trim($_POST['b']);
+				$body = htmlentities($body);
 				if(!empty($body))
 				{
 					if($message_id = $this->model->sendMessage($_POST['c'],$body))
