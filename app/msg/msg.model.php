@@ -4,18 +4,18 @@ class MsgModel extends Model
 	public function listPeople()
 	{
 		return $this->q('
-			SELECT id, name AS value FROM '.PREFIX.'foodsaver LIMIT 10		
+			SELECT id, name AS value FROM '.PREFIX.'foodsaver LIMIT 10
 		');
 	}
-	
+
 	public function user2conv($fsid)
 	{
 		return $this->addConversation(array($fsid=> $fsid),false);
 	}
-	
+
 	/**
 	 * Adds a new Conversation but first check if is there allready an conversation with exaclty this user_ids
-	 * 
+	 *
 	 * @param array $recips
 	 * @param string $body
 	 */
@@ -28,12 +28,12 @@ class MsgModel extends Model
 		{
 			$recips[(int)fsId()] = (int)fsId();
 		}
-		
+
 		/*
 		 * make sure the order of this array
 		 */
 		ksort($recips);
-		
+
 		$conversation_id = false;
 		
 		/*
@@ -48,25 +48,24 @@ class MsgModel extends Model
 			SELECT
 				conversation_id,
 				GROUP_CONCAT(foodsaver_id ORDER BY foodsaver_id SEPARATOR ":") AS idstring
-			
+
 			FROM
 				'.PREFIX.'foodsaver_has_conversation
-		
-		    WHERE
-		        conversation_id IN ('. implode(',',$cids).')
-			
+
+			WHERE
+				conversation_id IN ('. implode(',',$cids).')
+
 			GROUP BY
 				conversation_id
-			
+
 			HAVING
 				idstring = "' . implode(':',$recips).'"';
-			
-			if($conv = $this->qRow($sql))
-			{
-				$conversation_id = $conv['conversation_id'];
-			}
+
+		if($conv = $this->qRow($sql))
+		{
+			$conversation_id = $conv['conversation_id'];
 		}
-		
+
 		/*
 		 * If we dont have an existing conversation create a new one
 		*/
@@ -110,7 +109,7 @@ class MsgModel extends Model
 		
 		return $conversation_id;
 	}
-	
+
 	/**
 	 * Renames an Conversation
 	 */
@@ -119,35 +118,35 @@ class MsgModel extends Model
 		return $this->update('UPDATE '.PREFIX.'conversation SET name = '.$this->strval($name).' WHERE id = '.(int)$cid);
 	}
 
-  public function conversationLocked($cid)
-  {
-    $res = $this->qOne('SELECT locked FROM '.PREFIX.'conversation WHERE id = '.(int)$cid);
-    return $res;
-  }
-	
+	public function conversationLocked($cid)
+	{
+		$res = $this->qOne('SELECT locked FROM '.PREFIX.'conversation WHERE id = '.(int)$cid);
+		return $res;
+	}
+
 	public function updateConversation($cid,$last_fs_id,$body,$last_message_id)
 	{
 		return $this->update('
 				UPDATE
 					`'.PREFIX.'conversation`
-				
+
 				SET
 					`last` = NOW(),
 					`last_foodsaver_id` = '.(int)$last_fs_id.',
 					`last_message` = '.$this->strval($body).',
 					`last_message_id` = '.(int)$last_message_id.'
-				
+
 				WHERE
 					`id` = '.(int)$cid.'
 		');
 	}
-	
+
 	public function findConnectedPeople($term)
 	{
 		$out = array();
-		
+
 		// add user in bezirk and groups
-		
+
 		if(isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke']) && count($_SESSION['client']['bezirke'] > 0))
 		{
 			$ids = array();
@@ -155,56 +154,41 @@ class MsgModel extends Model
 			{
 				$ids[] = $bezirk['id'];
 			}
-			
+
 			$sql = '
-				SELECT 
+				SELECT
 					DISTINCT fs.id AS id,
 					CONCAT(fs.name," ",fs.nachname ) AS value
-					
+
 				FROM
 					'.PREFIX.'foodsaver fs,
 					'.PREFIX.'foodsaver_has_bezirk hb
-					
-				WHERE 
-					hb.foodsaver_id = fs.id 
-					
-				AND 
-					hb.bezirk_id IN('.implode(',', $ids).') 
-					
-				AND 
+
+				WHERE
+					hb.foodsaver_id = fs.id
+
+				AND
+					hb.bezirk_id IN('.implode(',', $ids).')
+
+				AND
 					CONCAT(fs.name," ",fs.nachname ) LIKE "%'.$this->safe($term).'%"
 			';
-			
-			
-			
+
+
+
 			if($user = $this->q($sql))
 			{
-				$out = array_merge($out,$user);	
+				$out = array_merge($out,$user);
 			}
 		}
-		
+
 		return $out;
 	}
-	
-	public function getLastConversationId()
-	{
-		if($res = $this->qRow('SELECT MAX( `time` ) , conversation_id FROM '.PREFIX.'msg'))
-		{
-			return $res['conversation_id'];
-		}
-		
-		return false;
-	}
-	
-	public function getOldConvStartDate($sender_id,$recip_id)
-	{
-		
-	}
-	
+
 	public function listConversationMembers($conversation_id)
 	{
 		return $this->q('
-			SELECT 
+			SELECT
 				fs.id,
 				fs.name,
 				fs.photo,
@@ -237,45 +221,13 @@ class MsgModel extends Model
 				return true;
 			}
 		}
-		
+
 		return true;
 	}
-	
-	/**
-	 * Method to get or check if ther are unread messages to one conversation
-	 */
-	public function getUnreadMessages($cid)
-	{
-		return $this->q('
-			SELECT 
-				m.id, 
-				fs.`id` AS fs_id, 
-				fs.name AS fs_name,
-				fs.photo AS fs_photo,
-				m.`body`, 
-				m.`time` 
-			
-			FROM 
-				`fs_msg` m,
-				`fs_foodsaver` fs
-			
-			WHERE 
-				m.foodsaver_id = fs.id
-			
-			AND 
-				m.conversation_id = '.(int)$cid.'
-				
-			AND 
-				
-				
-			ORDER BY 
-				m.`time` ASC
-		');
-	}
-	
+
 	/**
 	 * Method returns an array of all conversation from the user
-	 * 
+	 *
 	 * @return Ambigous <boolean, array >
 	 */
 	public function listConversations($limit = '')
@@ -284,9 +236,9 @@ class MsgModel extends Model
 		{
 			$limit = ' LIMIT 0,'.(int)$limit;
 		}
-		
+
 		if($convs = $this->q('
-			SELECT 
+			SELECT
 				c.`id`,
 				c.`last`,
 				UNIX_TIMESTAMP(c.`last`) AS last_ts,
@@ -295,22 +247,22 @@ class MsgModel extends Model
 				c.`last_foodsaver_id`,
 				hc.unread,
 				c.name
-				
-			FROM 
+
+			FROM
 				'.PREFIX.'conversation c,
 				`'.PREFIX.'foodsaver_has_conversation` hc
-				
-			WHERE 
+
+			WHERE
 				hc.conversation_id = c.id
-				
-			AND 
+
+			AND
 				hc.foodsaver_id = '.(int)fsId().'
-				
+
 			ORDER BY c.`last` DESC
-			'.$limit.'		
+			'.$limit.'
 		'))
 		{
-			
+
 			for($i=0;$i<count($convs);$i++)
 			{
 				$member = @unserialize($convs[$i]['member']);
@@ -330,15 +282,14 @@ class MsgModel extends Model
 				}
 				$convs[$i]['member'] = $member;
 			}
-			
 			return $convs;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * check if there are unread messages in conversation give back the conversation ids
-	 * 
+	 *
 	 * @return Ambigous <boolean, array >
 	 */
 	public function checkConversationUpdates()
@@ -346,12 +297,12 @@ class MsgModel extends Model
 		/*
 		 * for more speed check the memcache first
 		 */
-		
+
 		/*
 		 * Memcache var is settet but no updates
 		 */
 		$cache = Mem::user(fsId(),'msg-update');
-		
+
 		if($cache === 0)
 		{
 			return false;
@@ -361,7 +312,7 @@ class MsgModel extends Model
 			Mem::userSet(fsId(), 'msg-update', 0);
 			return $cache;
 		}
-		
+
 		/*
 		 * Memcache is not settedso get coonversation ids direct fromdm
 		 */
@@ -371,20 +322,19 @@ class MsgModel extends Model
 			return $this->getUpdatedConversationIds();
 		}
 	}
-	
+
 	public function getUpdatedConversationIds()
 	{
 		return $this->qCol('SELECT conversation_id FROM '.PREFIX.'foodsaver_has_conversation WHERE foodsaver_id = '.(int)fsId().' AND unread = 1');
 	}
-	
+
 	public function checkChatUpdates($ids)
 	{
 		return $this->qColKey('SELECT conversation_id FROM '.PREFIX.'foodsaver_has_conversation WHERE foodsaver_id = '.(int)fsId().' AND unread = 1 AND conversation_id IN('.implode(',', $ids).')');
 	}
-	
+
 	public function chatHistory($conversation_id)
 	{
-		//if($conversation_id = $this->user2conv($fsid))
 		if($conversation_id > 0)
 		{
 			return $this->q('
@@ -393,26 +343,26 @@ class MsgModel extends Model
 					m.`body` AS m,
 					UNIX_TIMESTAMP(m.`time`) AS t,
 					fs.photo AS p
-			
+
 				FROM
 					`'.PREFIX.'msg` m,
 					`'.PREFIX.'foodsaver` fs
-			
+
 				WHERE
 					m.foodsaver_id = fs.id
-			
+
 				AND
 					m.conversation_id = '.(int)$conversation_id.'
-				
+
 				ORDER BY
 					m.`time` DESC
-				
+
 				LIMIT 0,50
 			');
 		}
-		
+
 	}
-	
+
 	public function loadMore($conversation_id, $last_message_id)
 	{
 		return $this->q('
@@ -423,56 +373,56 @@ class MsgModel extends Model
 				fs.photo AS fs_photo,
 				m.`body`,
 				m.`time`
-		
+
 			FROM
 				`'.PREFIX.'msg` m,
 				`'.PREFIX.'foodsaver` fs
-		
+
 			WHERE
 				m.foodsaver_id = fs.id
-		
+
 			AND
 				m.conversation_id = '.(int)$conversation_id.'
-				
-			AND 
+
+			AND
 				m.id < '.(int)$last_message_id.'
-		
+
 			ORDER BY
 				m.`time` DESC
-		
+
 			LIMIT 0,20
 		');
 	}
-	
+
 	public function getLastMessages($conv_id,$last_msg_id)
 	{
 		return $this->q('
-			SELECT 
-				m.id, 
-				fs.`id` AS fs_id, 
+			SELECT
+				m.id,
+				fs.`id` AS fs_id,
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,
-				m.`body`, 
-				m.`time` 
-			
-			FROM 
+				m.`body`,
+				m.`time`
+
+			FROM
 				`fs_msg` m,
 				`fs_foodsaver` fs
-			
-			WHERE 
+
+			WHERE
 				m.foodsaver_id = fs.id
-			
-			AND 
+
+			AND
 				m.conversation_id = '.(int)$conv_id.'
-				
-			AND 
+
+			AND
 				m.id > '.(int)$last_msg_id.'
-				
-			ORDER BY 
+
+			ORDER BY
 				m.`time` ASC
 		');
 	}
-	
+
 	/**
 	 * set conversatioens as readed
 	 * @param array $conv_ids
@@ -481,14 +431,14 @@ class MsgModel extends Model
 	public function setAsRead($conv_ids)
 	{
 		Mem::userDel(fsId(), 'msg-update');
-		
+
 		return $this->update('UPDATE '.PREFIX.'foodsaver_has_conversation SET unread = 0 WHERE foodsaver_id = '.(int)fsId().' AND conversation_id IN('.implode(',', $conv_ids).')');
 	}
-	
+
 	public function listConversationUpdates($conv_ids)
 	{
 		if($return = $this->q('
-			SELECT 
+			SELECT
 				`id` AS id,
 				`last` AS time,
 				`last_message` AS body,
@@ -496,7 +446,7 @@ class MsgModel extends Model
 
 			FROM
 				`'.PREFIX.'conversation`
-				
+
 			WHERE
 				`id` IN(' . implode(',', $conv_ids) . ')
 		'))
@@ -505,13 +455,13 @@ class MsgModel extends Model
 			{
 				$return[$i]['member'] = unserialize($return[$i]['member']);
 			}
-			
+
 			return $return;
 		}
-		
+
 		return false;
 	}
-	
+
 	public function sendMessage($cid,$body,$sender_id = false)
 	{
 		if($mid = $this->insert('INSERT INTO `'.PREFIX.'msg`(`conversation_id`, `foodsaver_id`, `body`, `time`) VALUES ('.(int)$cid.','.(int)fsId().','.$this->strval($body).',NOW())'))
@@ -526,35 +476,35 @@ class MsgModel extends Model
 		}
 		return false;
 	}
-	
+
 	public function loadConversationMessages($conversation_id)
 	{
 		return $this->q('
-			SELECT 
-				m.id, 
-				fs.`id` AS fs_id, 
+			SELECT
+				m.id,
+				fs.`id` AS fs_id,
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,
-				m.`body`, 
-				m.`time` 
-			
-			FROM 
+				m.`body`,
+				m.`time`
+
+			FROM
 				`'.PREFIX.'msg` m,
 				`'.PREFIX.'foodsaver` fs
-			
-			WHERE 
+
+			WHERE
 				m.foodsaver_id = fs.id
-			
-			AND 
+
+			AND
 				m.conversation_id = '.(int)$conversation_id.'
-				
-			ORDER BY 
+
+			ORDER BY
 				m.`time` DESC
-				
+
 			LIMIT 0,20
 		');
 	}
-	
+
 	public function mayConversation($conversation_id)
 	{
 		if($this->q('SELECT foodsaver_id FROM `'.PREFIX.'foodsaver_has_conversation` WHERE `foodsaver_id` = '.(int)fsId().' AND conversation_id = '.(int)$conversation_id))

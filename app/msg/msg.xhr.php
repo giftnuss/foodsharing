@@ -1,21 +1,21 @@
-<?php 
+<?php
 class MsgXhr extends Control
 {
-	
+
 	public function __construct()
 	{
 		$this->model = new MsgModel();
 		$this->view = new MsgView();
 
 		parent::__construct();
-		
+
 		if(!S::may())
 		{
 			echo '';
 			exit();
 		}
 	}
-	
+
 	/**
 	 * ajax call to rename an conversation
 	 */
@@ -41,12 +41,7 @@ class MsgXhr extends Control
 
 		}
 	}
-	
-	public function fixchats()
-	{
-		return $this->model->fixchats();
-	}
-	
+
 	/**
 	 * ajax call to delete logged in user from an chat
 	 */
@@ -62,21 +57,21 @@ class MsgXhr extends Control
 			}
 		}
 	}
-	
+
 	/**
 	 * ajax call to refresh infobar messages
 	 */
 	public function infobar()
 	{
 		S::noWrite();
-		
+
 		$xhr = new Xhr();
 		$conversations = $this->model->listConversations(10);
 		$xhr->addData('html', $this->view->conversationList($conversations,'conv.chat'));
-		
+
 		$xhr->send();
 	}
-	
+
 	/**
 	 * ajax call to load an existing conversation
 	 */
@@ -93,17 +88,17 @@ class MsgXhr extends Control
 				{
 					$xhr->addData('messages', $msgs);
 				}
-				
+
 				$this->model->setAsRead(array((int)$_GET['id']));
-				
+
 				$xhr->send();
 			}
 		}
 	}
-	
+
 	/**
 	 * ajax call to load more older messages from a specified conversation
-	 * 
+	 *
 	 * GET['lmid'] = last message id
 	 * GET['cid'] = conversation_id
 	 */
@@ -123,10 +118,10 @@ class MsgXhr extends Control
 			$xhr->send();
 		}
 	}
-	
+
 	/**
 	 * ajax call to send a message to an conversation
-	 * 
+	 *
 	 * GET['b'] = body text
 	 * GET['c'] = conversation id
 	 */
@@ -157,7 +152,7 @@ class MsgXhr extends Control
 								if($m['id'] != fsId())
 								{
 									Mem::userAppend($m['id'], 'msg-update', (int)$_POST['c']);
-									
+
 									sendSock($m['id'],'conv', 'push', array(
 										'id' => $message_id,
 										'cid' => (int)$_POST['c'],
@@ -194,7 +189,7 @@ class MsgXhr extends Control
 								}
 							}
 						}
-						
+
 						$xhr->addData('msg', array(
 							'id' => $message_id,
 							'body' => $body,
@@ -211,14 +206,14 @@ class MsgXhr extends Control
 		$xhr->addMessage(s('error'),'error');
 		$xhr->send();
 	}
-	
+
 	/**
 	 * ajax call to load all active conversations
 	 */
 	public function loadconvlist()
 	{
 		S::noWrite();
-		
+
 		if($conversations = $this->model->listConversations())
 		{
 			$xhr = new Xhr();
@@ -226,22 +221,22 @@ class MsgXhr extends Control
 			$xhr->send();
 		}
 	}
-	
+
 	/**
 	 * Method to check that the user is part of an conversation and has access, to reduce database querys we store conversation_ids in an array
-	 * 
+	 *
 	 * @param Integer $conversation_id
 	 */
 	private function mayConversation($conversation_id)
 	{
 		$ids = array();
-		
+
 		// first get the session array
 		if(!($ids = S::get('msg_conversations')))
 		{
 			$ids = array();
 		}
-		
+
 		// check if the conversation in stored in the session
 		if(isset($ids[(int)$conversation_id]))
 		{
@@ -253,17 +248,17 @@ class MsgXhr extends Control
 			S::set('msg_conversations', $ids);
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	public function user2conv()
 	{
 		$xhr = new Xhr();
-		
+
 		if(isset($_GET['fsid']) && (int)$_GET['fsid'] > 0)
 		{
-			
+
 			//if($cid = $this->model->addConversation(array((int)$_GET['fsid']=>(int)$_GET['fsid']),false))
 			if($cid = $this->model->user2conv($_GET['fsid']))
 			{
@@ -272,11 +267,11 @@ class MsgXhr extends Control
 				$xhr->send();
 			}
 		}
-		
+
 		$xhr->setStatus(0);
 		$xhr->send();
 	}
-	
+
 	/**
 	 * ajax call to add an new conversation to this call comes 2 important POST parameters recip => an array with user ids body => the message body text
 	 */
@@ -287,7 +282,7 @@ class MsgXhr extends Control
 			recip[]	56
 			recip[]	58
 		 */
-		
+
 		/*
 		 * Check is there are correct post data sendet?
 		 */
@@ -297,7 +292,7 @@ class MsgXhr extends Control
 			 * initiate an xhr object
 			 */
 			$xhr = new Xhr();
-			
+
 			/*
 			 * Make all ids to int and remove doubles check its not 0
 			 */
@@ -326,7 +321,6 @@ class MsgXhr extends Control
 					 * add the conversation id to ajax output
 					 */
 					$xhr->addData('cid', $cid);
-					//$xhr->addMessage(s('send_successfull'),'success');
 				}
 				else
 				{
@@ -337,15 +331,15 @@ class MsgXhr extends Control
 			{
 				$xhr->addMessage(s('wrong_recip_count'),'error');
 			}
-			
+
 			/*
 			 * send all ajax stuff to the client
 			 */
 			$xhr->send();
 		}
-		
+
 	}
-	
+
 	/**
 	 * ajax call to check every time updates in all conversations
 	 * GET[m] is the last message id and GET[cid] is the current conversation id
@@ -354,23 +348,23 @@ class MsgXhr extends Control
 	{
 		$cid = false;
 		$lmid = false;
-		
+
 		if(isset($opt['cid']) && $this->mayConversation($opt['cid']) && isset($opt['mid']))
 		{
 			$cid = (int)$opt['cid'];
 			$lmid = (int)$opt['mid'];
 		}
-		
+
 		if($convids = $this->model->checkConversationUpdates())
 		{
 			$conv_keys = array_flip($convids);
-			
+
 			$this->model->setAsRead($convids);
 			$return = array();
 			/*
 			 * check is a new message there for active conversation?
 			 */
-			
+
 			if($cid && isset($conv_keys[$cid]))
 			{
 				if($messages = $this->model->getLastMessages($cid,$lmid))
@@ -378,21 +372,21 @@ class MsgXhr extends Control
 					$return['messages'] = $messages;
 				}
 			}
-			
+
 			if($convs = $this->model->listConversationUpdates($convids))
 			{
 				$return['convs'] = $convs;
 			}
-			
+
 			return array(
 				'data' => $return,
 				'script' => 'msg.pushArrived(ajax.data);'
 			);
-		}		
-		
+		}
+
 		return false;
 	}
-	
+
 	/**
 	 * polling call for retrieving new chat messages to given conversations
 	 */
@@ -401,11 +395,11 @@ class MsgXhr extends Control
 		if($conv_ids = $this->model->checkChatUpdates($opt['ids']))
 		{
 			$this->model->setAsRead($conv_ids);
-			
+
 			/*
 			 * check is a new message there for active conversations?
 			*/
-			
+
 			$out = array(
 				'chats' => array()
 			);
@@ -421,9 +415,9 @@ class MsgXhr extends Control
 						);
 					}
 				}
-				
+
 			}
-			
+
 			if(!empty($out))
 			{
 				return array(
@@ -434,20 +428,20 @@ class MsgXhr extends Control
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Method to store actually opened chat windows in the session
-	 * 
+	 *
 	 * @param array $opt
 	 */
 	public function setSessionInfo($opt)
-	{	
+	{
 		if(isset($opt['infos']))
 		{
 			S::set('activechats', $opt['infos']);
 		}
 	}
-	
+
 	/**
 	 * Method to remove open chatboxes from the session
 	 *
@@ -460,18 +454,18 @@ class MsgXhr extends Control
 			S::set('activechats', array());
 		}
 	}
-	
+
 	public function people()
 	{
 		S::noWrite();
-		
+
 		$term = trim($_GET['term']);
 		if($people = $this->model->findConnectedPeople($term))
 		{
 			echo json_encode($people);
 			exit();
 		}
-		
+
 		echo json_encode(array());
 		exit();
 	}
