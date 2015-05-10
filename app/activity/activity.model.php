@@ -274,14 +274,13 @@ class ActivityModel extends Model
 					b.name AS mb_name
 			
 				FROM
-					'.PREFIX.'mailbox_message m,
+					'.PREFIX.'mailbox_message m
+				LEFT JOIN
 					'.PREFIX.'mailbox b
+				ON b.id = m.mailbox_id
 			
 				WHERE
-					m.mailbox_id = b.id
-			
-				AND
-					b.id IN('.implode(',',$mb_ids).')
+					m.mailbox_id IN('.implode(',',$mb_ids).')
 					
 				ORDER BY m.id DESC
 		
