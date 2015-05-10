@@ -84,7 +84,7 @@ class MsgModel extends Model
 
 				SET
 					`last_message` = '.$this->strval($body).',
-					`last_message_id` = '.(int)$mid.',
+					`last_message_id` = '.(int)$mid.'
 
 				WHERE
 				`id` = '.(int)$conversation_id.'
