@@ -4762,7 +4762,7 @@ GROUP BY foodsaver_id'));
 		return $this->qCol('SELECT DISTINCT bt.foodsaver_id FROM `'.PREFIX.'bezirk_closure` c
 			INNER JOIN `'.PREFIX.'betrieb` b ON c.bezirk_id = b.bezirk_id
 			INNER JOIN `'.PREFIX.'betrieb_team` bt ON bt.betrieb_id = b.id
-			WHERE c.ancestor_id = '.$this->intval($bezirk));
+			WHERE c.ancestor_id = '.$this->intval($bezirk).' AND bt.verantwortlich = 1');
 	}
 
 	/* retrieves the list of all bots for given bezirk or sub bezirk */
