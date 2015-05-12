@@ -95,6 +95,7 @@ class MaintenanceControl extends ConsoleControl
 	{
 		info('updating HH bieb austausch');
 		$hh_biebs = $this->model->getBiebIds(31);
+		$hh_biebs[] = 3166;   // Gerard Roscoe
 		$counts = $this->model->updateGroupMembers(826, $hh_biebs, true);
 		info('+'.$counts[0].', -'.$counts[1]);
 
