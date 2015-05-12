@@ -71,26 +71,7 @@ class MsgModel extends Model
 
 		if($body !== false)
 		{
-			$mid = 0;
-			$mid = $this->insert('
-				INSERT INTO `'.PREFIX.'msg`(`conversation_id`, `foodsaver_id`, `body`, `time`)
-				VALUES ('.(int)$conversation_id.','.(int)fsId().','.$this->strval($body).',NOW())
-			');
-
-			/*
-			 * UPDATE conversation
-			*/
-			$this->update('
-				UPDATE
-					`'.PREFIX.'conversation`
-
-				SET
-					`last_message` = '.$this->strval($body).',
-					`last_message_id` = '.(int)$mid.'
-
-				WHERE
-				`id` = '.(int)$conversation_id.'
-			');
+			$this->sendMessage($conversation_id, $body, fsId());
 		}
 
 		return $conversation_id;
