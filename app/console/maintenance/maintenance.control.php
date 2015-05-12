@@ -93,11 +93,11 @@ class MaintenanceControl extends ConsoleControl
 
 	private function updateSpecialGroupMemberships()
 	{
-		$hh_biebs = $this->model->getBiebs(31);
-		$this->model->updateGroupMembers(826, $hh_biebs);
+		$hh_biebs = $this->model->getBiebIds(31);
+		$this->model->updateGroupMembers(826, $hh_biebs, true);
 
-		$biebs = $this->model->getBiebs(741);
-		$this->model->updateGroupMembers(826, $biebs);
+		$bots = $this->model->getBotIds(741);
+		$this->model->updateGroupMembers(881, $bots, true);
 	}
 
 	private function sleepingMode()

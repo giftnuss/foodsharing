@@ -4721,47 +4721,81 @@ GROUP BY foodsaver_id'));
 			`faq_kategorie_id`,
 			`name`,
 			`answer`
-			
+
 			FROM 		`'.PREFIX.'faq`
-			
+
 			WHERE 		`id` = ' . $this->intval($id));
-	
-	
-	
+
+
+
 		return $out;
 	}
-	
+
 	public function getBasics_faq_category()
 	{
 		return $this->q('
 			SELECT 	 	`id`,
 						`name`
-			
+
 			FROM 		`'.PREFIX.'faq_category`
 			ORDER BY `name`');
 	}
-	
+
 	public function update_faq($id,$data)
 	{
-	
-	
+
+
 		return $this->update('
 		UPDATE 	`'.PREFIX.'faq`
-	
+
 		SET 	`foodsaver_id` =  '.$this->intval($data['foodsaver_id']).',
 				`faq_kategorie_id` =  '.$this->intval($data['faq_kategorie_id']).',
 				`name` =  '.$this->strval($data['name']).',
 				`answer` =  '.$this->strval($data['answer']).'
-	
+
 		WHERE 	`id` = '.$this->intval($id));
 	}
 
-	/* retrieves all biebs that are biebs for a given bezirk (by being bieb in a betrieb that is part of that bezirk) */
-	public function getBiebs($bezirk)
+	/* retrieves all biebs that are biebs for a given bezirk (by being bieb in a betrieb that is part of that bezirk, which is semantically not the same we use on platform) */
+	public function getBiebIds($bezirk)
 	{
-		return $this->qCol(' SELECT DISTINCT bt.foodsaver_id FROM `'.PREFIX.'bezirk_closure` c
-			LEFT JOIN `'.PREFIX.'betrieb b ON c.bezirk_id = b.bezirk_id
-			LEFT JOIN `'.PREFIX.'betrieb_team` bt ON bt.betrieb_id = b.id
-			WHERE c.ancestor_id = '.this->intval($bezirk));
+		return $this->qCol('SELECT DISTINCT bt.foodsaver_id FROM `'.PREFIX.'bezirk_closure` c
+			INNER JOIN `'.PREFIX.'betrieb` b ON c.bezirk_id = b.bezirk_id
+			INNER JOIN `'.PREFIX.'betrieb_team` bt ON bt.betrieb_id = b.id
+			WHERE c.ancestor_id = '.$this->intval($bezirk));
 	}
+
+	/* retrieves the list of all bots for given bezirk or sub bezirk */
+	public function getBotIds($bezirk)
+	{
+		return $this->qCol('SELECT DISTINCT bot.foodsaver_id FROM `'.PREFIX.'bezirk_closure` c
+			INNER JOIN `'.PREFIX.'botschafter` bot ON bot.bezirk_id = c.bezirk_id
+			WHERE c.ancestor_id = '.$this->intval($bezirk));
+	}
+
+	/* updates the member list to given list of IDs, optionally leaving admins
+		that are not in the list in place */
+	public function updateGroupMembers($bezirk, $foodsaver_ids, $leave_admins)
+	{
+		if($leave_admins)
+		{
+			$admins = $this->qCol('SELECT foodsaver_id FROM `'.PREFIX.'botschafter` b WHERE b.bezirk_id = '.$this->intval($bezirk));
+			if($admins)
+			{
+				$foodsaver_ids = array_merge($foodsaver_ids, $admins);
+			}
+		}
+		$ids = implode(',',array_map(array($this, 'intval'), $foodsaver_ids));
+		if($ids)
+		{
+			$this->del('DELETE FROM `'.PREFIX.'foodsaver_has_bezirk` WHERE bezirk_id = '.$this->intval($bezirk).' AND foodsaver_id NOT IN ('.$ids.')');
+			$insert_strings = array_map(function($id) use ($bezirk) { return '('.$id.','.$bezirk.',1,NOW())'; }, $foodsaver_ids);
+			$insert_values = implode(',',$insert_strings);
+			$this->insert('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_bezirk` (foodsaver_id, bezirk_id, active, added) VALUES '.$insert_values);
+		} else
+		{
+			$this->del('DELETE FROM `'.PREFIX.'foodsaver_has_bezirk` WHERE bezirk_id = '.$this->intval($bezirk));
+		}
+	}
+
 }
