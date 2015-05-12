@@ -64,16 +64,28 @@ class ManualTest extends PHPUnit_Framework_TestCase
 	public function testUpdateGroupMembers()
 	{
 		$id = 9999999;
-		$this->db->updateGroupMembers($id, array(7955), 1);
+		/* cleanup first... */
+		$cnt = $this->db->updateGroupMembers($id, array(), 1);
+
+		$cnt = $this->db->updateGroupMembers($id, array(7955), 1);
 		$this->assertTrue(in_array($id, $this->db->getFsBezirkIds(7955)));
-		$this->db->updateGroupMembers($id, array(), 1);
+		$this->assertEquals(array(1, 0), $cnt);
+
+		$cnt = $this->db->updateGroupMembers($id, array(), 1);
 		$this->assertFalse(in_array($id, $this->db->getFsBezirkIds(7955)));
-		$this->db->updateGroupMembers($id, array(56, 7955), 1);
+		$this->assertEquals(array(0, 1), $cnt);
+
+		$cnt = $this->db->updateGroupMembers($id, array(56, 7955), 1);
 		$this->assertTrue(in_array($id, $this->db->getFsBezirkIds(7955)));
 		$this->assertTrue(in_array($id, $this->db->getFsBezirkIds(56)));
-		$this->db->updateGroupMembers($id, array(7955), 1);
+		$this->assertEquals(array(2, 0), $cnt);
+
+		$cnt = $this->db->updateGroupMembers($id, array(7955), 1);
 		$this->assertTrue(in_array($id, $this->db->getFsBezirkIds(7955)));
 		$this->assertFalse(in_array($id, $this->db->getFsBezirkIds(56)));
+		$this->assertEquals(array(0, 1), $cnt);
+
+		$this->db->updateGroupMembers($id, array(), 1);
 	}
 
 

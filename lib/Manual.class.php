@@ -4777,6 +4777,8 @@ GROUP BY foodsaver_id'));
 		that are not in the list in place */
 	public function updateGroupMembers($bezirk, $foodsaver_ids, $leave_admins)
 	{
+		$rows_ins = 0;
+		$rows_del = 0;
 		if($leave_admins)
 		{
 			$admins = $this->qCol('SELECT foodsaver_id FROM `'.PREFIX.'botschafter` b WHERE b.bezirk_id = '.$this->intval($bezirk));
@@ -4788,14 +4790,15 @@ GROUP BY foodsaver_id'));
 		$ids = implode(',',array_map(array($this, 'intval'), $foodsaver_ids));
 		if($ids)
 		{
-			$this->del('DELETE FROM `'.PREFIX.'foodsaver_has_bezirk` WHERE bezirk_id = '.$this->intval($bezirk).' AND foodsaver_id NOT IN ('.$ids.')');
+			$rows_del = $this->del('DELETE FROM `'.PREFIX.'foodsaver_has_bezirk` WHERE bezirk_id = '.$this->intval($bezirk).' AND foodsaver_id NOT IN ('.$ids.')');
 			$insert_strings = array_map(function($id) use ($bezirk) { return '('.$id.','.$bezirk.',1,NOW())'; }, $foodsaver_ids);
 			$insert_values = implode(',',$insert_strings);
-			$this->insert('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_bezirk` (foodsaver_id, bezirk_id, active, added) VALUES '.$insert_values);
+			$rows_ins = $this->del('INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_bezirk` (foodsaver_id, bezirk_id, active, added) VALUES '.$insert_values);
 		} else
 		{
-			$this->del('DELETE FROM `'.PREFIX.'foodsaver_has_bezirk` WHERE bezirk_id = '.$this->intval($bezirk));
+			$rows_del = $this->del('DELETE FROM `'.PREFIX.'foodsaver_has_bezirk` WHERE bezirk_id = '.$this->intval($bezirk));
 		}
+		return array($rows_ins, $rows_del);
 	}
 
 }
