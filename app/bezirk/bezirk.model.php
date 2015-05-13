@@ -480,7 +480,8 @@ class BezirkModel extends Model
 				`stat_botcount`,
 				`stat_postcount`,
 				`stat_betriebcount`,
-				`stat_korpcount`
+				`stat_korpcount`,
+				`moderated`
 				
 			FROM 	`'.PREFIX.'bezirk`
 				

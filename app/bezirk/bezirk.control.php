@@ -663,6 +663,8 @@ class BezirkControl extends Control
 					&& 
 					!(isBotFor($this->bezirk_id) || $this->getSub() == 'botforum')
 				)
+				||
+				$this->bezirk['moderated']
 			)
 			{
 				info('Das Thema wurde gespeichert und wird veröffentlicht sobald ein Botschafter aus '.$this->bezirk['name'].' es bestätigt.');
@@ -675,7 +677,7 @@ class BezirkControl extends Control
 			
 			if($theme_id = $this->model->addTheme($this->bezirk_id, $_POST['title'], $body,$this->bot_theme,$active))
 			{
-				if($this->mode != 'big')
+				if($active)
 				{
 					$this->themeInfoMail($theme_id);
 				}
