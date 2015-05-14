@@ -15,6 +15,7 @@ class MsgModel extends Model
 
 	/**
 	 * Adds a new Conversation but first check if is there allready an conversation with exaclty this user_ids
+	 * Does not include locked conversations as those may be automatically changed
 	 *
 	 * @param array $recips
 	 * @param string $body
@@ -36,7 +37,7 @@ class MsgModel extends Model
 
 		$conversation_id = false;
 
-		if($cids = $this->qCol('SELECT conversation_id FROM `fs_foodsaver_has_conversation` WHERE `foodsaver_id` = '.(int)fsId()))
+		if($cids = $this->qCol('SELECT conversation_id FROM `fs_foodsaver_has_conversation` WHERE `foodsaver_id` = '.(int)fsId().' AND locked = 0'))
 		{
 			$sql = '
 		SELECT
