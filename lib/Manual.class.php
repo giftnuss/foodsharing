@@ -4766,11 +4766,20 @@ GROUP BY foodsaver_id'));
 	}
 
 	/* retrieves the list of all bots for given bezirk or sub bezirk */
-	public function getBotIds($bezirk)
+	public function getBotIds($bezirk, $include_bezirk_bot = true, $include_group_bot = false)
 	{
+		$where_type = '';
+		if(!$include_bezirk_bot)
+		{
+			$where_type = 'bz.type <> 7';
+		}elseif(!$include_group_bot)
+		{
+			$where_type = 'bz.type = 7';
+		}
 		return $this->qCol('SELECT DISTINCT bot.foodsaver_id FROM `'.PREFIX.'bezirk_closure` c
+			LEFT JOIN `'.PREFIX.'bezirk` bz ON bz.id = c.bezirk_id
 			INNER JOIN `'.PREFIX.'botschafter` bot ON bot.bezirk_id = c.bezirk_id
-			WHERE c.ancestor_id = '.$this->intval($bezirk));
+			WHERE c.ancestor_id = '.$this->intval($bezirk).' AND '.$where_type);
 	}
 
 	/* updates the member list to given list of IDs, optionally leaving admins
