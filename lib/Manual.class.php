@@ -4771,10 +4771,10 @@ GROUP BY foodsaver_id'));
 		$where_type = '';
 		if(!$include_bezirk_bot)
 		{
-			$where_type = 'bz.type <> 7';
+			$where_type = 'bz.type = 7';
 		}elseif(!$include_group_bot)
 		{
-			$where_type = 'bz.type = 7';
+			$where_type = 'bz.type <> 7';
 		}
 		return $this->qCol('SELECT DISTINCT bot.foodsaver_id FROM `'.PREFIX.'bezirk_closure` c
 			LEFT JOIN `'.PREFIX.'bezirk` bz ON bz.id = c.bezirk_id
