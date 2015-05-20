@@ -220,4 +220,12 @@ class DashboardView extends View
 		}
 		return '<img src="/img/basket50x50.png" height="50" />';
 	}
+
+	function becomeFoodsaver()
+	{
+		return '
+	   <div class="msg-inside info">
+			   <i class="fa fa-info-circle"></i> <strong><a href="/?page=settings&sub=upgrade/up_fs">Möchtest du auch Lebensmittel bei Betrieben retten und fairteilen?<br />Werde Foodsaver!</a></strong>
+	   </div>';
+	}
 }

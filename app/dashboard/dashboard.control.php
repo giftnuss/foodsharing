@@ -20,8 +20,8 @@ class DashboardControl extends Control
 	
 	public function index()
 	{
-		addBread(s('dashbaord'));
-		addTitle(s('dashbaord'));
+		addBread(s('dashboard'));
+		addTitle(s('dashboard'));
 		/*
 		 * User is foodsaver
 		 */
@@ -55,6 +55,8 @@ class DashboardControl extends Control
 			),
 			CNT_TOP
 		);
+		
+		addContent($this->view->becomeFoodsaver());
 		
 		addContent($this->view->foodsharerMenu(),CNT_LEFT);
 		
