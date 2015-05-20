@@ -290,7 +290,7 @@ function betrieb_form($bezirk = false,$page = '')
 			$view->latLonPicker('LatLng',array('hsnr'=>true)),
 			
 			
-			v_form_select('kette_id',array('add'=>true,'values'=>db_get_kette())),
+			v_form_select('kette_id',array('add'=>true,'values'=>db_get_kette(), 'desc' => 'Bitte nur inhabergeführte Betriebe selbstständig ansprechen, niemals Betriebe einer Kette anfragen!')),
 			v_form_select('betrieb_kategorie_id',array('add'=>true,'values' => db_get_betrieb_kategorie())),
 			
 			v_form_select('betrieb_status_id',array('values' => db_get_betrieb_status())),
