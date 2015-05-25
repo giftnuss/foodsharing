@@ -166,7 +166,7 @@ class MsgModel extends Model
 
 			FROM
 				`'.PREFIX.'foodsaver_has_conversation` hc
-			LEFT JOIN
+			INNER JOIN
 				`'.PREFIX.'foodsaver` fs ON fs.id = hc.foodsaver_id
 
 			WHERE
