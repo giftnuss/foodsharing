@@ -4341,20 +4341,6 @@ GROUP BY foodsaver_id'));
 		');
 	}
 
-	public function getMyPartnerschaften()
-	{
-		return $this->q('
-			SELECT 	CONCAT(fs.`name`," ",fs.`nachname`) AS name,
-					fs.id AS id,
-					p.form
-
-			FROM 	`'.PREFIX.'partnerschaft` p,
-					`'.PREFIX.'foodsaver` fs
-			WHERE 	p.partner_id = fs.id
-			AND 	p.foodsaver_id = '.(int)fsId().'
-		');
-	}
-
 	public function getNextEvents()
 	{
 		$next = $this->q('

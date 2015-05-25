@@ -702,13 +702,6 @@ else if(S::may('fs'))
 	{
 		addContent(v_info('Du bist bis jetzt in keinem Fillialteam'),CNT_LEFT);
 	}
-	/*
-	 * Partnerschaften
-	 */
-	if($partn = $db->getMyPartnerschaften())
-	{
-		addContent(u_myPartners($partn),CNT_LEFT);
-	}
 }
 else
 {
@@ -790,52 +783,6 @@ function u_myBetriebe($betriebe)
 	}
 	return $out;
 }
-
-
-//addContent(v_field($cnt,$title.v_switch(array('Deine Region','Bundesweit'))));
-
-function u_myPartners($partner)
-{
-	if(fsid() != 3674)
-	{
-		$botp = array();
-		$fsp = array();
-		
-		foreach ($partner as $p)
-		{
-			if($p['form'] == 2)
-			{
-				$botp[] = array(
-						'click' => 'profile('.$p['id'].');',
-						'name' => $p['name']
-				);
-			}
-			else
-			{
-				$fsp[] = array(
-						'click' => 'profile('.$p['id'].');',
-						'name' => $p['name']
-				);
-			}
-		}
-		
-		$out = '';
-		if(!empty($botp))
-		{
-			$out .= v_menu($botp,s('bot_partners'));
-		}
-		if(!empty($fsp))
-		{
-			$out .= v_menu($fsp,s('fs_partners'));
-		}
-		return $out;
-	}
-	else
-	{
-		return '';
-	}
-}
-	
 
 function u_updates($updates)
 {
