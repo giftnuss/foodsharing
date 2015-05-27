@@ -190,14 +190,15 @@ class ApiXhr extends Control
 	public function chathistory()
 	{
 		$model = loadModel('msg');
+		$cid = (int)$_GET['id'];
 		
-		if($history = $model->chatHistory($_GET['id']))
+		if($model->mayConversation($cid) && $history = $model->chatHistory($cid))
 		{
 			return $this->appout(array(
 				'status' => 1,
-				'id'=> (int)$_GET['id'],
+				'id'=> $cid,
 				'history' => $history,
-				'user' => $model->listConversationMembers($_GET['id'])
+				'user' => $model->listConversationMembers($cid)
 			));
 		}
 		
