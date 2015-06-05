@@ -567,6 +567,22 @@ else if(isset($_GET['id']))
 		{
 			$verified = 1;
 		}
+
+
+		//Fix for Issue #171
+		$data = $db->getOne_betrieb($betrieb['id']);
+		$seconds = $data['prefetchtime'];
+		if($seconds>=86400)
+		{
+			$days = $seconds/86400;
+			
+		} else
+		{
+			//If Bieb did not set the option "how many weeks in advance can a foodsaver apply" an alternative value
+			$days = 7;
+
+		}
+
 		
 		addJs('
 		
@@ -710,16 +726,18 @@ else if(isset($_GET['id']))
 							 $( "#timedialog-from" ).datepicker({
 								defaultDate: "+1w",
 							 	minDate: "0",
+							 	maxDate: "+'.(int)$days.'",
 								numberOfMonths: 1,
 								onClose: function( selectedDate ) {
 									$( "#timedialog-to" ).datepicker( "option", "minDate", selectedDate );
-									$( "#timedialog-to" ).datepicker( "option", "maxDate", "+60" );
+									$( "#timedialog-to" ).datepicker( "option", "maxDate", "+'.(int)$days.'");
 								}
 							});
+
 							$( "#timedialog-to" ).datepicker({
 								defaultDate: "+1w",
 								minDate: "+2",
-								maxDate: "+60",
+								maxDate: "+'.(int)$days.'",
 								numberOfMonths: 1,
 								onClose: function( selectedDate ) {
 									$( "#timedialog-from" ).datepicker( "option", "maxDate", selectedDate );
@@ -809,7 +827,6 @@ else if(isset($_GET['id']))
 		 */
 		hiddenDialog('abholen', array(u_form_abhol_table($zeiten),v_form_hidden('bid', 0),'<input type="hidden" name="team" value="'.$betrieb['team_js'].'" />'),s('add_fetchtime'),array('reload'=>true,'width'=>500));
 		//hiddenDialog('abholer', array(v_form_hidden('bbdow', 0),v_form_hidden('bbid', 0),v_form_desc('abholerdesc', ''),v_form_select_foodsaver(array('nolabel'=>true))),'Abholer auswählen',array('reload' => true));
-		
 		
 		
 		if(!$betrieb['jumper'])
