@@ -405,6 +405,13 @@ else if(isset($_GET['id']))
 		{
 			$info .= v_input_wrapper(s('menge'), $betrieb['menge']);
 		}
+		if($betrieb['presse'] == 1)
+		{
+			$info .= v_input_wrapper('Namensnennung', 'Dieser Betrieb darf &ouml;ffentlich genannt werden.');
+		}elseif($betrieb['presse'] == 0)
+		{
+			$info .= v_input_wrapper('Namensnennung', 'Bitte diesen Betrieb niemals &ouml;ffentlich (z.B. bei der &Uuml;bergabe von Essensk&ouml;rben oder bei Presseanfragen) nennen!');
+		}
 		
 		addContent(v_field(
 			v_input_wrapper(s('address'), $betrieb['str'].' '.$betrieb['hsnr'].'<br />'.$betrieb['plz'].' '.$betrieb['stadt']).
@@ -570,8 +577,7 @@ else if(isset($_GET['id']))
 
 
 		//Fix for Issue #171
-		$data = $db->getOne_betrieb($betrieb['id']);
-		$seconds = $data['prefetchtime'];
+		$seconds = $betrieb['prefetchtime'];
 		if($seconds>=86400)
 		{
 			$days = $seconds/86400;
