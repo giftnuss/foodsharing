@@ -729,7 +729,10 @@ else if(isset($_GET['id']))
 							 	maxDate: "+'.(int)$days.'",
 								numberOfMonths: 1,
 								onClose: function( selectedDate ) {
-									$( "#timedialog-to" ).datepicker( "option", "minDate", selectedDate );
+									if(selectedDate!="")
+									{
+										$( "#timedialog-to" ).datepicker( "option", "minDate", selectedDate );
+									}
 									$( "#timedialog-to" ).datepicker( "option", "maxDate", "+'.(int)$days.'");
 								}
 							});
