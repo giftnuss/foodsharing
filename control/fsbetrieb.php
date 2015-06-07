@@ -410,7 +410,7 @@ else if(isset($_GET['id']))
 			$info .= v_input_wrapper('Namensnennung', 'Dieser Betrieb darf &ouml;ffentlich genannt werden.');
 		}elseif($betrieb['presse'] == 0)
 		{
-			$info .= v_input_wrapper('Namensnennung', 'Bitte diesen Betrieb niemals &ouml;ffentlich (z.B. bei der &Uuml;bergabe von Essensk&ouml;rben oder bei Presseanfragen) nennen!');
+			$info .= v_input_wrapper('Namensnennung', 'Bitte diesen Betrieb niemals &ouml;ffentlich (z.B. : Bei Essensk&ouml;rben, Facebook oder Presseanfragen) nennen!');
 		}
 		
 		addContent(v_field(
