@@ -153,6 +153,15 @@ class BasketXhr extends Control
 			$lat = $fs['lat'];
 			$lon = $fs['lon'];
 		}
+
+
+		if($lat == 0 && $lon == 0)
+		{
+			return array(
+				'status' => 1,
+				'script' => 'pulseInfo("Bitte gib in deinem Profil eine Adresse ein!");'
+			);
+		}
 		
 		$contact_type = 1;
 		$tel = array(
