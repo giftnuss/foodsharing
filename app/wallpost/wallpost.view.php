@@ -1,6 +1,13 @@
 <?php
 class WallpostView extends View
 {
+	private $table;
+
+	public function setTable($table)
+	{
+		$this->table = $table;
+	}
+
 	public function posts($posts)
 	{
 		/*
@@ -48,7 +55,10 @@ class WallpostView extends View
 				</div>';
 			}
 			$del = '';
-			if(isBotschafter() || isOrgateam() || $p['foodsaver_id'] == fsId())
+			if(
+				$p['foodsaver_id'] == fsId()
+				|| ( ! in_array($this->table, array('fairteiler', 'foodsaver')) && (isBotschafter() || isOrgateam()) )
+			)
 			{
 				$del = '<span class="dot">·</span><a onclick="u_delPost('.$p['id'].');return false;" href="#p'.$p['id'].'" class="pdelete light">'.s('delete').'</a>';
 			}
