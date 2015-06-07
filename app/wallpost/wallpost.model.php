@@ -117,4 +117,8 @@ class WallpostModel extends Model
 		');
 		return $post_id;
 	}
+
+	public function getFsByPost($post_id) {
+		return $this->getVal('foodsaver_id', $this->table, $post_id);
+	}
 }

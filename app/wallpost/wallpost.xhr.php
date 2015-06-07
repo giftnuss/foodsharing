@@ -29,6 +29,7 @@ class WallpostXhr extends Control
 			$this->table = $_GET['table'];
 			$this->id = (int)$_GET['id'];
 			$this->model->setTable($this->table, $this->id);
+			$this->view->setTable($this->table);
 		}
 		else
 		{
@@ -39,13 +40,18 @@ class WallpostXhr extends Control
 	
 	public function delpost()
 	{
-		if((int)$_GET['post'] > 0)
-		{
-			if($this->model->delpost($_GET['post']))
+		if((int)$_GET['post'] > 0) {
+
+			$fs = $this->model->getFsByPost((int)$_GET['post']);
+
+			if ($fs == fsId()
+				|| (!in_array($this->table, array('fairteiler', 'foodsaver')) && (isBotschafter() || isOrgateam())) )
 			{
-				return array(
-					'status' => 1
-				);
+				if ($this->model->delpost($_GET['post'])) {
+					return array(
+						'status' => 1
+					);
+				}
 			}
 		}
 		return array(
