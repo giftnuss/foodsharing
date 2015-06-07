@@ -173,7 +173,7 @@ class BezirkView extends View
 				$edit = '';
 				$delete = '';
 				
-				if(isOrgaTeam()|| $p['fs_id'] == fsId())
+				if(isOrgaTeam()|| $p['fs_id'] == fsId() || ($this->mode == 'orgateam' && isBotFor($this->bezirk_id)))
 				{
 					$delete = '<a class="button bt_delete" href="#p'.$p['id'].'">'.s('delete_post').'</a>';
 				}
