@@ -2667,7 +2667,7 @@ function xhr_delPost($data)
 	$db = loadModel('bezirk');
 	
 	$fsid = $db->getVal('foodsaver_id', 'theme_post', $data['pid']);
-    $bezirkId = $db->getVal('bezirk_id', 'bezirk_has_wallpost', $data['pid']);
+	$bezirkId = $db->getVal('bezirk_id', 'bezirk_has_wallpost', $data['pid']);
 
 	if(isOrgaTeam() || $fsid == fsId() || ($bezirkId && isBotFor($bezirkId)))
 	{
