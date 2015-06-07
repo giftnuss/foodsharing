@@ -55,12 +55,10 @@ class MapControl extends Control
 			$this->view->lMap($center)
 		);
 
-		if(S::may('fs') && isset($_GET['bid']) && ($betrieb = $this->model->getBetrieb($_GET['bid'])))
+		if(S::may('fs') && isset($_GET['bid']))
 		{
-			$center = array(
-					'lat' => $betrieb['lat'],
-					'lon' => $betrieb['lon']
-			);
+			$center = $this->model->getValues(array('lat','lon'), 'betrieb', (int)$_GET['bid']);
+
 			addJs('
 				u_loadDialog("xhr.php?f=bBubble&id='.(int)$_GET['bid'].'");
 			');
@@ -72,7 +70,8 @@ class MapControl extends Control
 		}
 		else
 		{
-			addJs('u_init_map('.$center['lat'].','.$center['lon'].',6);');
+			addJs('u_init_map('.$center['lat'].','.$center['lon'].',15);');
+			addJs('u_map.setView('.$center['lat'].','.$center['lon'].',15);');
 		}
 		
 		addJs('map.initMarker('.$jsarr.');');
