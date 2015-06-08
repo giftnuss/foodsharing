@@ -43,11 +43,10 @@ class WallpostXhr extends Control
 		if((int)$_GET['post'] > 0) {
 
 			$fs = $this->model->getFsByPost((int)$_GET['post']);
-
 			if ($fs == fsId()
 				|| (!in_array($this->table, array('fairteiler', 'foodsaver')) && (isBotschafter() || isOrgateam())) )
 			{
-				if ($this->model->delpost($_GET['post'])) {
+				if ($this->model->delpost((int)$_GET['post'])) {
 					return array(
 						'status' => 1
 					);

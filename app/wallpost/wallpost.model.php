@@ -119,6 +119,6 @@ class WallpostModel extends Model
 	}
 
 	public function getFsByPost($post_id) {
-		return $this->getVal('foodsaver_id', $this->table, $post_id);
+		return $this->getVal('foodsaver_id', 'wallpost', $post_id);
 	}
 }
