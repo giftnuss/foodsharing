@@ -160,7 +160,7 @@ class SettingsXhr extends Control
 		}
 		if($date = $this->getPostDbDate('until'))
 		{
-			$until = $date;
+			$to = $date;
 		}
 		if($txt = $this->getPostString('msg'))
 		{
