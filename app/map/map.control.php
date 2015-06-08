@@ -64,14 +64,11 @@ class MapControl extends Control
 			');
 		}
 		
-		if(!$center)
+		addJs('u_init_map();');
+		
+		if($center)
 		{
-			addJs('u_init_map();');
-		}
-		else
-		{
-			addJs('u_init_map('.$center['lat'].','.$center['lon'].',15);');
-			addJs('u_map.setView('.$center['lat'].','.$center['lon'].',15);');
+			addJs('u_map.setView(['.$center['lat'].','.$center['lon'].'],15);');
 		}
 		
 		addJs('map.initMarker('.$jsarr.');');
