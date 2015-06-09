@@ -877,7 +877,7 @@ else if(isset($_GET['id']))
 		{
 			addBread($betrieb['name']);
 			info(s('not_in_team'));
-			go('/karte?bid='.$_GET['id']);
+			go('/?page=map&bid='.$_GET['id']);
 		}
 		else
 		{
