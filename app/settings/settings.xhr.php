@@ -154,13 +154,13 @@ class SettingsXhr extends Control
 			2 => true // not available unsure how long
 		);
 		
-		if($date = $this->getPostDbDate('from'))
+		if(isset($_POST['from']) && $date = DateTime::createFromFormat('d.m.Y', $_POST['from']))
 		{
-			$from = $date;
+			$from = $date->format('Y-m-d H:i:s');;
 		}
-		if($date = $this->getPostDbDate('until'))
+		if(isset($_POST['until']) && $date = DateTime::createFromFormat('d.m.Y', $_POST['until']))
 		{
-			$until = $date;
+			$to = $date->format('Y-m-d H:i:s');;
 		}
 		if($txt = $this->getPostString('msg'))
 		{
