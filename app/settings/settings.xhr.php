@@ -158,7 +158,7 @@ class SettingsXhr extends Control
 		{
 			$from = $date->format('Y-m-d H:i:s');;
 		}
-		if(isset($_POST['from']) && $date = DateTime::createFromFormat('d.m.Y', $_POST['from']))
+		if(isset($_POST['until']) && $date = DateTime::createFromFormat('d.m.Y', $_POST['until']))
 		{
 			$to = $date->format('Y-m-d H:i:s');;
 		}
