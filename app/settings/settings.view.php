@@ -14,6 +14,20 @@ class SettingsView extends View
 		{
 			addJs('$("#sleep_msg-wrapper").hide();');
 		}
+
+		if($sleep['sleep_status'] == 1)
+		{
+			$date = DateTime::createFromFormat('Y-m-d', $sleep['sleep_from']);
+			$from = $date->format('d.m.Y');
+
+			$date = DateTime::createFromFormat('Y-m-d', $sleep['sleep_until']);
+			$to = $date->format('d.m.Y');
+
+			addJs("
+				$('#daterange_from').val('$from');
+				$('#daterange_to').val('$to');
+			");
+		}
 		
 		addJs('
 			$("#sleep_status").change(function(){
