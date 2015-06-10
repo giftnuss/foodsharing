@@ -135,6 +135,10 @@ $(document).ready(function(){
 	 
 	 $('.moreswaplink').each(function(){
 		 $this = $(this);
+		 $this.prev().css({
+			 'height':g_moreswapheight+'px',
+			 'overflow':'hidden'
+		 });
 		 $this.click(function(ev){
 			 ev.preventDefault();
 			 if($this.attr('data-show') == 0)
