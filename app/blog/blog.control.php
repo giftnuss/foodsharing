@@ -115,17 +115,27 @@ class BlogControl extends Control
 	
 	public function add()
 	{
-		$this->handle_add();
 		
-		addBread(s('bread_new_blog_entry'));
 		
-		$bezirke = $this->model->getBezirke();
+		if($this->model->canAdd((int)fsId()))
+		{
+			$this->handle_add();
 		
-		addContent($this->view->blog_entry_form($bezirke,true));
+			addBread(s('bread_new_blog_entry'));
 		
-		addContent(v_field(v_menu(array(
+			$bezirke = $this->model->getBezirke();
+		
+			addContent($this->view->blog_entry_form($bezirke,true));
+		
+			addContent(v_field(v_menu(array(
 			pageLink('blog','back_to_overview')
-		)),s('actions')),CNT_LEFT);
+			)),s('actions')),CNT_LEFT);
+		}else
+		{
+			info('Du darfst keine Artikel erstellen!');
+			goPage();
+		}
+		
 	}
 	
 	public function handle_add()

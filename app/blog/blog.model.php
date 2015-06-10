@@ -16,6 +16,44 @@ class BlogModel extends Model
 		}
 		return false;
 	}
+
+	public function canAdd($fsId)
+	{
+		
+		if(isOrgaTeam())
+		{
+			return true;
+		}
+		if($val = $this->getBezID($fsId))
+		{
+			if(isBotFor($val['bezirk_id']))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public function getBezID($fsId)
+	{
+		return $this->qRow('
+			SELECT
+				b.`bezirk_id`
+	
+			FROM
+				`'.PREFIX.'botschafter` b,
+				`'.PREFIX.'bezirk` bz
+	
+			WHERE
+				bz.parent_id = 392
+				AND
+				bz.type = 7
+				AND
+				b.bezirk_id = bz.id
+				AND
+				b.foodsaver_id = '.(int)$fsId.'
+				LIMIT 1');
+	}
 	
 	public function getPost($id)
 	{
