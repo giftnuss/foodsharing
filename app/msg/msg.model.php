@@ -223,7 +223,9 @@ class MsgModel extends Model
 			AND
 				hc.foodsaver_id = '.(int)fsId().'
 
-			ORDER BY c.`last` DESC
+			ORDER BY 
+				hc.unread DESC,
+				c.`last` DESC
 			'.$limit.'
 		'))
 		{
