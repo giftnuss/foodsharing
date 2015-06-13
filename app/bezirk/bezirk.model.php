@@ -182,7 +182,7 @@ class BezirkModel extends Model
 						t.`time`,
 						UNIX_TIMESTAMP(t.`time`) AS time_ts,
 						fs.id AS foodsaver_id,
-						fs.name AS foodsaver_name,
+						IFNULL(fs.name,"abgemeldeter Benutzer") AS foodsaver_name,
 						fs.photo AS foodsaver_photo,
 						fs.sleep_status,
 						p.body AS post_body,
@@ -190,15 +190,18 @@ class BezirkModel extends Model
 						UNIX_TIMESTAMP(p.`time`) AS post_time_ts,
 						t.last_post_id
 				
-			FROM 		'.PREFIX.'theme t,
-						'.PREFIX.'theme_post p,
-						'.PREFIX.'bezirk_has_theme bt,
+			FROM 		'.PREFIX.'theme t
+						INNER JOIN
+						'.PREFIX.'bezirk_has_theme bt
+						ON bt.theme_id = t.id
+						LEFT JOIN
+						'.PREFIX.'theme_post p
+						ON p.id = t.last_post_id
+						LEFT JOIN
 						'.PREFIX.'foodsaver fs
+						ON  fs.id = p.foodsaver_id
 				
-			WHERE 		t.last_post_id = p.id
-			AND 		p.foodsaver_id = fs.id
-			AND 		bt.theme_id = t.id
-			AND 		bt.bezirk_id = '.(int)$bezirk_id.'
+			WHERE       bt.bezirk_id = '.(int)$bezirk_id.'
 			AND 		bt.bot_theme = '.(int)$bot_theme.'
 			AND 		t.`active` = 1
 				
@@ -228,19 +231,18 @@ class BezirkModel extends Model
 		return $this->q('
 
 			SELECT 		fs.id AS fs_id,
-						fs.name AS fs_name,
+						IFNULL(fs.name,"abgemeldeter Benutzer") AS fs_name,
 						fs.photo AS fs_photo,
 						fs.sleep_status AS fs_sleep_status,
-						p.body,
+						IF(fs.id IS NULL, "Beitrag von nicht mehr angemeldetem Benutzer", p.body) as body,
 						p.`time`,
 						p.id,
 						UNIX_TIMESTAMP(p.`time`) AS time_ts
 		
-			FROM 		'.PREFIX.'theme_post p,
-						'.PREFIX.'foodsaver fs
-		
-			WHERE 		p.foodsaver_id = fs.id
-			AND 		p.theme_id = '.(int)$thread_id.'	
+			FROM 		'.PREFIX.'theme_post p
+			LEFT JOIN   '.PREFIX.'foodsaver fs
+				ON 		p.foodsaver_id = fs.id
+			WHERE 		p.theme_id = '.(int)$thread_id.'	
 			
 			ORDER BY 	p.`time`
 		');
@@ -298,15 +300,18 @@ class BezirkModel extends Model
 						t.last_post_id,
 						t.`active`
 		
-			FROM 		'.PREFIX.'theme t,
-						'.PREFIX.'theme_post p,
-						'.PREFIX.'bezirk_has_theme bt,
+			FROM 		'.PREFIX.'theme t
+						INNER JOIN
+						'.PREFIX.'theme_post p
+						ON t.last_post_id = p.id
+						INNER JOIN
+						'.PREFIX.'bezirk_has_theme bt
+						ON bt.theme_id = t.id
+						LEFT JOIN
 						'.PREFIX.'foodsaver fs
+						ON p.foodsaver_id = fs.id
 		
-			WHERE 		t.last_post_id = p.id
-			AND 		p.foodsaver_id = fs.id
-			AND 		bt.theme_id = t.id
-			AND 		bt.bezirk_id = '.(int)$bezirk_id.'
+			WHERE 		bt.bezirk_id = '.(int)$bezirk_id.'
 			AND 		t.id = '.(int)$thread_id.'
 			AND 		bt.bot_theme = '.(int)$bot_theme.'
 				
