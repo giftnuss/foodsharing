@@ -78,17 +78,20 @@ var msg = {
 			}
 			else
 			{
-				msg.scrollBottom();
-				//var height = ($(window).height()-140)+'px';
-				//this.$conversation.css('height','auto');
-				/*
-				msg.$conversation.slimScroll({
-					height: height,
-					scrollTo : $('#msg-conversation').prop('scrollHeight') + 'px' 
-				});
-				*/
+                // resize event is triggered also on scrolling in android / ios
+                // http://stackoverflow.com/questions/14257541/android-browser-triggers-jquery-window-resize-on-scolling
+                clearTimeout(app.resize.timer);
+                app.resize.timer = setTimeout(function(){
+                    // do not check height, because it changes on scrolling due to hide / show address bar
+                    var window_changed = $(window).width() != app.size.window_width;
+                    if(window_changed) {
+
+                        // window was actually resized
+                        msg.scrollBottom();
+
+                    }
+                }, 500);
 			}
-			//msg.scrollBottom();
 		});
 		
 		$('#msg_answer').autosize();
