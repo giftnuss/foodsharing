@@ -78,19 +78,19 @@ var msg = {
 			}
 			else
 			{
-                // resize event is triggered also on scrolling in android / ios
-                // http://stackoverflow.com/questions/14257541/android-browser-triggers-jquery-window-resize-on-scolling
-                clearTimeout(app.resize.timer);
-                app.resize.timer = setTimeout(function(){
-                    // do not check height, because it changes on scrolling due to hide / show address bar
-                    var window_changed = $(window).width() != app.size.window_width;
-                    if(window_changed) {
+				// resize event is triggered also on scrolling in android / ios
+				// http://stackoverflow.com/questions/14257541/android-browser-triggers-jquery-window-resize-on-scolling
+				clearTimeout(app.resize.timer);
+				app.resize.timer = setTimeout(function(){
+					// do not check height, because it changes on scrolling due to hide / show address bar
+					var window_changed = $(window).width() != app.size.window_width;
+					if(window_changed) {
 
-                        // window was actually resized
-                        msg.scrollBottom();
+						// window was actually resized
+						msg.scrollBottom();
 
-                    }
-                }, 500);
+					}
+				}, 500);
 			}
 		});
 		
