@@ -60,7 +60,7 @@ class ProfileControl extends Control
 		addBread($this->foodsaver['name'],'/profile/' . $this->foodsaver['id']);
 		if(S::may('orga'))
 		{
-			$this->view->usernotes($this->wallposts('usernotes',$this->foodsaver['id']));
+			$this->view->usernotes($this->wallposts('usernotes',$this->foodsaver['id']), $this->model->getCompanies($this->foodsaver['id']), $this->model->getCompaniesCount($this->foodsaver['id']));
 		}
 		else
 		{
@@ -70,6 +70,14 @@ class ProfileControl extends Control
 	
 	public function profile()
 	{
-		$this->view->profile($this->wallposts('foodsaver',$this->foodsaver['id']));
+		if(S::may('orga'))
+		{
+			$this->view->profile($this->wallposts('foodsaver',$this->foodsaver['id']), $this->model->getCompanies($this->foodsaver['id']), $this->model->getCompaniesCount($this->foodsaver['id']));		
+					
+		}else
+		{
+			$this->view->profile($this->wallposts('foodsaver',$this->foodsaver['id']), null,null);	
+		}
+		
 	}
 }

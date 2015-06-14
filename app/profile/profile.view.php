@@ -3,7 +3,7 @@ class ProfileView extends View
 {
 	private $foodsaver;
 	
-	public function profile($wallposts)
+	public function profile($wallposts,$userCompanies, $userCompaniesCount)
 	{
 		$page = new vPage($this->foodsaver['name'], $this->infos());
 		
@@ -20,11 +20,41 @@ class ProfileView extends View
 		$page->addSectionLeft($this->photo());
 		
 		$page->addSectionLeft($this->sideInfos(),'Infos');
-		
+		if(S::may('orga'))
+		{
+			$page->addSectionLeft($this->sideInfosCompanies($userCompanies),'Betriebe ('.$userCompaniesCount.')');
+		}
 		$page->render();
 	}
 	
-	public function usernotes($notes)
+	public function sideInfosCompanies($userCompanies)
+	{
+		$out = '';
+		foreach ($userCompanies as $b)
+		{
+			
+			$out .= '<p><a class="light" href="/?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].'</a></p>';
+
+			/*Comment out, maybe if orgs want to see if fs is bieb for company in profile view		
+			if($b['verantwortlich'] == 0)
+			{
+				$out .= '<p><a class="light" href="/?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].'</a></p>';
+			}
+			if($b['verantwortlich'] == 1)
+			{
+				$out .= '<p><a class="light" href="/?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].' (Verantwortlich)</a></p>';
+			}*/
+				
+		
+		}
+
+		return '
+		<div class="pure-g">
+		    <div class="infos"> '.$out.' </div>
+		</div>';
+	}
+
+	public function usernotes($notes,$userCompanies, $userCompaniesCount)
 	{
 		$page = new vPage($this->foodsaver['name'].' Notizen', v_info(s('user_notes_info')) . $notes);
 	
@@ -33,6 +63,11 @@ class ProfileView extends View
 		$page->addSectionLeft($this->photo());
 	
 		$page->addSectionLeft($this->sideInfos(),'Infos');
+
+		if(S::may('orga'))
+		{
+			$page->addSectionLeft($this->sideInfosCompanies($userCompanies),'Betriebe ('.$userCompaniesCount.')');
+		}
 	
 		$page->render();
 	}
@@ -92,6 +127,8 @@ class ProfileView extends View
 		    <div class="infos"> '.$out.' </div>
 		</div>';
 	}
+
+
 	
 	public function infos()
 	{

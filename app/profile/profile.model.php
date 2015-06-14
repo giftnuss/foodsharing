@@ -252,6 +252,43 @@ class ProfileModel extends Model
 				
 		');
 	}
+
+	public function getCompanies($fsid)
+	{
+		return $this->q('
+
+			SELECT 	b.id,
+					b.name,
+					bt.verantwortlich
+				
+			FROM 	'.PREFIX.'betrieb_team bt,
+					'.PREFIX.'betrieb b
+				
+			WHERE 	bt.betrieb_id = b.id
+			AND
+					bt.foodsaver_id = '.(int)$fsid.'
+			order by b.name asc
+
+				
+		');
+	}
+
+	public function getCompaniesCount($fsid)
+	{
+		return $this->qOne('
+
+			SELECT 	count(b.id)
+				
+			FROM 	'.PREFIX.'betrieb_team bt,
+					'.PREFIX.'betrieb b
+				
+			WHERE 	bt.betrieb_id = b.id
+			AND
+					bt.foodsaver_id = '.(int)$fsid.'
+
+				
+		');
+	}
 	
 	public function getStats()
 	{
