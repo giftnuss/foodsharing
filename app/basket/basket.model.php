@@ -3,7 +3,18 @@ class BasketModel extends Model
 {
 	public function getTodayFsBaskets()
 	{
-		if($col = $this->q('SELECT fs_id FROM '.PREFIX.'basket WHERE fs_id > 0 AND DATE(`time`) = DATE(NOW()) '))
+		if($col = $this->q('
+			SELECT
+			 	fs_id
+			FROM
+			 	'.PREFIX.'basket
+			WHERE
+				fs_id > 0
+			AND
+				status = 1
+			AND
+				DATE(`time`) = DATE(NOW())
+		'))
 		{
 			$out = array();
 			foreach ($col as $c)

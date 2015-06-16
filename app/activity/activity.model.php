@@ -39,6 +39,9 @@ class ActivityModel extends Model
 					
 			AND 
 				w.foodsaver_id != '.(int)fsId().'
+
+			AND
+				b.status = 1
 			
 			ORDER BY w.id DESC
 		
@@ -76,6 +79,9 @@ class ActivityModel extends Model
 		
 				AND
 					hw.basket_id = b.id
+
+				AND
+					b.status = 1
 			
 				AND
 					ba.basket_id = b.id
