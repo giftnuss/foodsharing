@@ -1,4 +1,4 @@
-<?php
+g<?php
 class BezirkModel extends Model
 {
 	private $themes_per_page;
@@ -188,7 +188,8 @@ class BezirkModel extends Model
 						p.body AS post_body,
 						p.`time` AS post_time,
 						UNIX_TIMESTAMP(p.`time`) AS post_time_ts,
-						t.last_post_id
+						t.last_post_id,
+						t.`active`
 				
 			FROM 		'.PREFIX.'theme t
 						INNER JOIN
@@ -203,9 +204,9 @@ class BezirkModel extends Model
 				
 			WHERE       bt.bezirk_id = '.(int)$bezirk_id.'
 			AND 		bt.bot_theme = '.(int)$bot_theme.'
-			AND 		t.`active` = 1
+			AND 		t.`active` IN(0,1)
 				
-			ORDER BY t.last_post_id DESC
+			ORDER BY t.`active`, t.last_post_id DESC
 				
 			LIMIT '.(int)($page*$this->themes_per_page).', '.(int)$this->themes_per_page.'
 						
