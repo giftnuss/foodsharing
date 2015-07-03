@@ -178,6 +178,14 @@ function handleEmail()
 			{
 				$foodsaver = $db->getAllEmailFoodsaver(true, false);
 			}
+			else if($data['recip_choose'] == 'newsletter_only_foodsharer')
+			{
+				$foodsaver = $db->q('
+					SELECT 	`id`,`email`
+					FROM `'.PREFIX.'foodsaver`
+					WHERE newsletter = 1 AND rolle = 0		
+				');
+			}
 			elseif($data['recip_choose'] == 'all_no_botschafter')
 			{
 				$foodsaver = $db->getAllFoodsaverNoBotschafter();
