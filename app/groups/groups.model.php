@@ -59,6 +59,8 @@ class GroupsModel extends Model
 					
 				AND
 					foodsaver_id NOT IN('.implode(',', $g_data['member']).')
+				AND
+					`active` != 1
 			');
 			
 			$values = array();
@@ -162,6 +164,8 @@ class GroupsModel extends Model
 		return $this->del('
 			DELETE FROM `'.PREFIX.'foodsaver_has_bezirk`
 			WHERE bezirk_id = '.(int)$group_id.'
+			AND
+			`active` != 1
 		');
 	}
 	
