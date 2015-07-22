@@ -336,14 +336,11 @@ function xhr_profile($data)
 		if(isOrgaTeam())
 		{
 			$data[] = array('name' => 'E-Mail Adresse', 'val' => $foodsaver['email']);
+			$data[] = array('name' => 'Adresse', 'val' => $foodsaver['anschrift'].'<br />'.$foodsaver['plz'].' '.$foodsaver['stadt']);
 		}
 	}
 	
-	
-	
-	
-	$data[] = array('name' => 'Adresse', 'val' => $foodsaver['anschrift'].'<br />'.$foodsaver['plz'].' '.$foodsaver['stadt']);
-	
+
 	$about = array();
 	$about[] = array('name'=>'Rolle','val' => $foodsaver['name'].' '.$subtitle);
 	
@@ -467,16 +464,23 @@ function xhr_jsonTeam($data)
 function xhr_jsonFsMaps($data)
 {
 	global $db;
+	$fs = '';
+	if((isBotschafter() || isOrgaTeam() || S::may('fs') ||isset($foodsaver['botschafter'])))
+	{
 	$fs = $db->q(' SELECT `id`,lat,lon FROM '.PREFIX.'foodsaver WHERE `active` = 1 AND lat != "" ');
-	
+	}
+
 	return 'var fsMaps = '.json_encode($fs);
 }
 
 function xhr_jsonBetriebe($data)
 {
 	global $db;
+	$b = '';
+	if((isBotschafter() || isOrgaTeam() || S::may('fs') || isset($foodsaver['botschafter'])))
+	{
 	$b = $db->q(' SELECT `id`,lat,lon FROM '.PREFIX.'betrieb WHERE lat != "" ');
-	
+	}
 	return 'var g_betriebe = '.json_encode($b);
 }
 
@@ -527,7 +531,11 @@ function xhr_jsonBoth($data)
 function xhr_jsonFoodsaver($data)
 {
 	global $db;
+	$fs = '';
+	if((isBotschafter() || isOrgaTeam() || S::may('fs') || isset($foodsaver['botschafter'])))
+	{
 	$fs = $db->q(' SELECT `id`, `photo_public`,`lat`,`lon` FROM `'.PREFIX.'foodsaver` WHERE `active` = 1 AND lat != "" ');
+	}
 	
 	return 'var foodsaver = '.json_encode($fs);
 }
