@@ -1,4 +1,4 @@
-g<?php
+<?php
 class BezirkModel extends Model
 {
 	private $themes_per_page;
