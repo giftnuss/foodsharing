@@ -73,7 +73,7 @@ class BezirkView extends View
 	{
 		return '
 		<div class="ui-widget ui-widget-content ui-corner-all margin-bottom ui-padding">
-			<a class="button" href="'.getSelf().'/n">'.s('new_theme').'</a>
+			<a class="button" href="'.getSelf().'/ntheme">'.s('new_theme').'</a>
 		</div>';
 	}
 	
