@@ -253,35 +253,7 @@ class BezirkView extends View
 		{
 			foreach ($themes as $t)
 			{
-				if((S::may('orga') || isBotFor($this->bezirk_id)) && $t['active'] == 0)
-				{
-					$fs = array(
-					'id' => $t['foodsaver_id'],
-					'name' => $t['foodsaver_name'],
-					'sleep_status' => $t['sleep_status'],
-					'photo' => $t['foodsaver_photo']
-				);
-				$link = '/?page=bezirk&bid='.$this->bezirk_id.'&sub='.$sub.'&tid='.$t['id'].'&pid='.$t['last_post_id'].'#post'.$t['last_post_id'];
-				$out .= '
-				<li class="thread" id="thread-'.$t['id'].'">
-					<a class="ui-corner-all" href="'.$link.'">
-						<span class="user_pic">
-							'.avatar($fs).'	
-						</span>
-						<span class="thread_title">
-							'.$t['name'].' (inaktiv)
-						</span>
-						<span class="last_post ui-corner-all">
-							<span class="time">'.niceDate($t['post_time_ts']).'</span>
-							<span class="info">Von '.$t['foodsaver_name'].'</span>
-						</span>
-						<span style="clear:both;"></span>
-					</a>
-				</li>';	
-				}
-				if($t['active'] == 1)
-				{
-					$fs = array(
+				$fs = array(
 					'id' => $t['foodsaver_id'],
 					'name' => $t['foodsaver_name'],
 					'sleep_status' => $t['sleep_status'],
@@ -304,9 +276,6 @@ class BezirkView extends View
 						<span style="clear:both;"></span>
 					</a>
 				</li>';	
-				}
-				
-				
 			}
 		}
 		if(!$append)
