@@ -14,26 +14,11 @@ class MailsControl extends ConsoleControl
 	}
 	
 	/**
-	 * Method to start socket server the server will listen for mail jobs
-	 */
-	private function socketServer()
-	{
-		$server = new SocketServer();
-		
-		$server->addHandler('email',$this,'handleEmail');
-		
-		// push messagehandler not working yet later...
-		//$server->addHandler('push',$this,'handlePush');
-		
-		$server->start();
-	}
-	
-	/**
 	 * default method starts the server
 	 */
 	public function index()
 	{
-		$this->socketServer();
+		$this->queueWorker();
 	}
 	
 	/**
@@ -45,6 +30,34 @@ class MailsControl extends ConsoleControl
 		$client = new SocketClient();
 		
 		$client->serverSignal('close');
+	}
+
+	public function queueWorker()
+	{
+		while(1)
+		{
+			$elem = Mem::$cache->brpoplpush('workqueue','workqueueprocessing');
+			if($elem !=== false && $e = unserialize($elem))
+			{
+				switch($e['type'])
+				{
+				case 'email':
+					$res = handleEmail($e['data']);
+					// very basic email rate limit
+					usleep(300000);
+					break;
+				default:
+					$res = false;
+					break;
+				}
+				if($res)
+				{
+					Mem::$cache->lrem('workqueueprocessing', $elem, 1);
+				} else {
+					// TODO handle failed tasks?
+				}
+			}
+		}
 	}
 	
 	/**
@@ -278,7 +291,6 @@ class MailsControl extends ConsoleControl
 	
 	public static function handleEmail($data)
 	{
-		$data = $data->getData();
 		info('mail arrived ...');
 		$email = new fEmail();
 		$email->setFromEmail($data['from'][0],$data['from'][1]);
@@ -300,7 +312,7 @@ class MailsControl extends ConsoleControl
 			}
 		}
 		$model = false;
-    $has_recip = false;
+		$has_recip = false;
 		foreach ($data['recipients'] as $r)
 		{
 			// check is it own lmr email? put direct into db
@@ -373,13 +385,13 @@ class MailsControl extends ConsoleControl
 			MailsControl::smtpReconnect();
 		}
 		
-		$max_try = 5;
+		$max_try = 2;
 		$sended = false;
 		while(!$sended)
 		{
 			$max_try--;
 			try {
-				info('send email try '.(5-$max_try));
+				info('send email tries remaining '.($max_try));
 				$email->send(MailsControl::$smtp);
 				success('email send OK');
 				

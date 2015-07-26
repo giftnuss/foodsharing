@@ -2511,8 +2511,8 @@ function libmail($bezirk, $email, $subject, $message, $attach = false, $token = 
 		));
 	}
 	
-	$mail = new fEmail();
-	$mail->setFromEmail($bezirk['email'], $bezirk['email_name']);
+	$mail = new AsyncMail();
+	$mail->setFrom($bezirk['email'], $bezirk['email_name']);
 	$mail->addRecipient($email);
 	if(!$subject)
 	{
@@ -2535,7 +2535,7 @@ function libmail($bezirk, $email, $subject, $message, $attach = false, $token = 
 		}
 	}
 	
-	$mail->send(getfSMTP());
+	$mail->send();
 }
 
 function mailMessage($sender_id,$recip_id,$msg=NULL)
