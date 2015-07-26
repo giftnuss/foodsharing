@@ -9,20 +9,39 @@ class Mem
 		if(MEM_ENABLED)
 		{
 			Mem::$connected = true;
-			Mem::$cache = new Memcached();
-			Mem::$cache->addServer(MEM_HOST,MEM_PORT);
+			Mem::$cache = new Redis();
+			Mem::$cache->connect(REDIS_HOST, REDIS_PORT);
 		}
 	}
 	
+	// Set a key to a value, ttl in seconds
 	public static function set($key,$data,$ttl = 0)
 	{
 		if(MEM_ENABLED)
 		{
-			return Mem::$cache->set($key,$data,$ttl);
+			$options = array();
+			if(ttl > 0)
+				$options['ex'] = $ttl;
+			if($options)
+				return Mem::$cache->set($key,$data,$options);
+			else
+				return Mem::$cache->set($key,$data);
 		}
 		return false;
 	}
-	
+
+	/* enqueue work of specified type.
+	   counterpart of asynchronous queue runner in mails.control
+	 */
+	public function queueWork($type, $data)
+	{
+		if(MEM_ENABLED)
+		{
+			$e = serialize(array('type'=>$type, 'data'=>$data));
+			return Mem::$cache->lPush('workqueue', $e);
+		}
+	}
+
 	public static function get($key)
 	{
 		if(MEM_ENABLED)
@@ -30,14 +49,6 @@ class Mem
 			return Mem::$cache->get($key);
 		}
 		return false;
-	}
-	
-	public static function flush()
-	{
-		if(MEM_ENABLED)
-		{
-			return Mem::$cache->flush();
-		}
 	}
 	
 	public static function del($key)
