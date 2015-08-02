@@ -24,7 +24,7 @@ class TeamXhr extends Control
 		{
 			if($user = $this->model->getUser($id))
 			{
-				$mail = new fEmail();
+				$mail = new AsyncMail();
 				
 				if(validEmail($_POST['email']))
 				{
@@ -46,7 +46,7 @@ class TeamXhr extends Control
 				
 				$mail->addRecipient($user['email']);
 				
-				$mail->send(getfSMTP());
+				$mail->send();
 				
 				$xhr->addScript('$("#contactform").parent().parent().parent().fadeOut();');
 				$xhr->addMessage(s('mail_send_success'),'success');

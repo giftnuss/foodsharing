@@ -95,17 +95,14 @@ class ConsoleControl
 	
 			$message['subject'] = str_replace($search, $replace, $message['subject']);
 	
-			$email = new fEmail();
-			$email->setFromEmail(DEFAULT_EMAIL,DEFAULT_EMAIL_NAME);
+			$email = new AsyncMail();
+			$email->setFrom(DEFAULT_EMAIL,DEFAULT_EMAIL_NAME);
 			$email->addRecipient($to);
 			$email->setSubject($message['subject']);
 			$email->setHTMLBody(emailBodyTpl($message['body']));
 			$email->setBody($message['body']);
 	
-			$smtp = new fSMTP(SMTP_HOST,SMTP_PORT);
-			//$smtp->authenticate(SMTP_USER, SMTP_PASS);
-	
-			$email->send($smtp);
+			$email->send();
 		}
 	}
 }

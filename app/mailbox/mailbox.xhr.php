@@ -213,7 +213,6 @@ class MailboxXhr extends Control
 					$mail->setSubject($subject);
 					$mail->setHTMLBody(nl2br($body));	
 					$mail->setBody($body);
-
 					$mail->send();
 					
 					echo json_encode(array(
@@ -570,7 +569,6 @@ class MailboxXhr extends Control
 				$mail->addAttachment($a['path'],$a['name']);
 			}
 		}
-	
 		$mail->send();
 	}
 	
