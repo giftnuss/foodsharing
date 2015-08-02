@@ -33,7 +33,7 @@ class Mem
 	/* enqueue work of specified type.
 	   counterpart of asynchronous queue runner in mails.control
 	 */
-	public function queueWork($type, $data)
+	public static function queueWork($type, $data)
 	{
 		if(MEM_ENABLED)
 		{
