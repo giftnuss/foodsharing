@@ -1717,6 +1717,11 @@ function xhr_continueMail($data)
 		}
 		
 		$mails_left = $db->getMailsLeft($mail['id']);
+		if($mails_left)
+		{
+			// throttle to 5 mails per second here to avoid queue bloat
+			sleep(2);
+		}
 		
 		return json_encode(array('left' => $mails_left,'status' => 1,'comment'=>'Versende E-Mails ... (aktuelle E-Mail Adresse: '.$fs['email'].')'));
 	}

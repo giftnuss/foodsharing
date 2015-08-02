@@ -20,7 +20,7 @@ class Mem
 		if(MEM_ENABLED)
 		{
 			$options = array();
-			if(ttl > 0)
+			if($ttl > 0)
 				$options['ex'] = $ttl;
 			if($options)
 				return Mem::$cache->set($key,$data,$options);

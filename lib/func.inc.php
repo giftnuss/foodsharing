@@ -1149,8 +1149,8 @@ function tplMailList($tpl_id, $to, $from = false,$attach = false)
 			continue;
 		}
 		
-		$mail = new fEmail();
-		$mail->setFromEmail($from['email'], $from['email_name']);
+		$mail = new AsyncMail();
+		$mail->setFrom($from['email'], $from['email_name']);
 
 		
 		$search = array();
@@ -1207,7 +1207,7 @@ function tplMailList($tpl_id, $to, $from = false,$attach = false)
 				$mail->addAttachment(new fFile($a['path']),$a['name']);
 			}
 		}
-		$mail->send(getfSMTP());
+		$mail->send();
 	}
 }
 
@@ -1303,7 +1303,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 function tplMail($tpl_id,$to,$var = array(),$from_email = false,$from_email = false)
 {
 	global $db;
-	$mail = new fEmail();
+	$mail = new AsyncMail();
 	
 	if(!is_object($db))
 	{
@@ -1312,11 +1312,11 @@ function tplMail($tpl_id,$to,$var = array(),$from_email = false,$from_email = fa
 	
 	if($from_email !== false && validEmail($from_email))
 	{
-		$mail->setFromEmail($from_email);
+		$mail->setFrom($from_email);
 	}
 	else
 	{
-		$mail->setFromEmail(DEFAULT_EMAIL,DEFAULT_EMAIL_NAME);
+		$mail->setFrom(DEFAULT_EMAIL,DEFAULT_EMAIL_NAME);
 	}
 	
 	$message = $db->getOne_message_tpl($tpl_id);
@@ -1346,7 +1346,7 @@ function tplMail($tpl_id,$to,$var = array(),$from_email = false,$from_email = fa
 	$mail->setBody($body);
 	
 	$mail->addRecipient($to);
-	$mail->send(getfSMTP());
+	$mail->send();
 }
 
 function getSearchMenu()
