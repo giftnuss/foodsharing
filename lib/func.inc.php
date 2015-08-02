@@ -1255,13 +1255,13 @@ Angaben gemäß § 5 TMG:<br />
 Marsiliusstr 36<br />
 50937 Köln<br />
 Vertreten durch:<br /><br />
-Raphael Fellmer, Raphael Wintrich und Valentin Thurn<br />
+Valentin Thurn, Frank Bowinkelmann<br />
 Kontakt:<br />E-Mail: info@foodsharing.de<br />
 Registereintrag:<br /><br />Eintragung im Vereinsregister.<br />
 Registergericht: Amtsgericht Köln<br />
 Registernummer: VR 17439<br />
 Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
-<br />Raphael Fellmer, Raphael Wintrich und Valentin Thurn<br /></p>
+<br />Valentin Thurn<br /></p>
 			</td>
 		</tr>';
 	}
