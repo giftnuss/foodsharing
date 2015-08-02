@@ -36,15 +36,15 @@ class MailsControl extends ConsoleControl
 	{
 		while(1)
 		{
-			$elem = Mem::$cache->brpoplpush('workqueue','workqueueprocessing');
-			if($elem !=== false && $e = unserialize($elem))
+			$elem = Mem::$cache->brpoplpush('workqueue','workqueueprocessing', 10);
+			if($elem !== false && $e = unserialize($elem))
 			{
 				switch($e['type'])
 				{
 				case 'email':
-					$res = handleEmail($e['data']);
+					$res = $this->handleEmail($e['data']);
 					// very basic email rate limit
-					usleep(300000);
+					usleep(100000);
 					break;
 				default:
 					$res = false;
@@ -291,7 +291,8 @@ class MailsControl extends ConsoleControl
 	
 	public static function handleEmail($data)
 	{
-		info('mail arrived ...');
+		info('mail arrived ...: ' . $data['from'][0] . '@' . $data['from'][1]);
+		return;
 		$email = new fEmail();
 		$email->setFromEmail($data['from'][0],$data['from'][1]);
 		$email->setSubject($data['subject']);
