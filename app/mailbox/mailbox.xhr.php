@@ -200,8 +200,8 @@ class MailboxXhr extends Control
 					
 					$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von ".niceDate($message['time_ts'])." ---------\n\n>\t".str_replace("\n","\n>\t",$message['body']);
 					
-					$mail = new fEmail();
-					$mail->setFromEmail($message['mailbox'].'@'.DEFAULT_HOST,S::user('name'));
+					$mail = new AsyncMail();
+					$mail->setFrom($message['mailbox'].'@'.DEFAULT_HOST,S::user('name'));
 					if($sender['personal'])
 					{
 						$mail->addRecipient($sender['mailbox'].'@'.$sender['host'], $sender['personal']);
@@ -214,7 +214,7 @@ class MailboxXhr extends Control
 					$mail->setHTMLBody(nl2br($body));	
 					$mail->setBody($body);
 
-					$mail->send(getfSMTP());
+					$mail->send();
 					
 					echo json_encode(array(
 							'status' => 1,
@@ -530,9 +530,9 @@ class MailboxXhr extends Control
 			$from_name = $from['name'];
 		}
 	
-		$mail = new fEmail();
+		$mail = new AsyncMail();
 		
-		$mail->setFromEmail($from_email,$from_name);
+		$mail->setFrom($from_email,$from_name);
 
 	
 		if(is_array($email))
@@ -571,7 +571,7 @@ class MailboxXhr extends Control
 			}
 		}
 	
-		$mail->send(getfSMTP());
+		$mail->send();
 	}
 	
 	public function attach_allow($filename,$mime)
