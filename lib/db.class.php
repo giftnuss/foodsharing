@@ -1123,12 +1123,16 @@ class Db
 		return false;
 	}
 	
-	public function updateActivity()
-	{		
-		Mem::userSet(fsId(), 'active', time());
-		Mem::userSet(fsId(), 'sid', session_id());
+	public function updateActivity($fs_id = false)
+	{
+		if($fs_id === false)
+		{
+			$fs_id = fsId();
+		}
+		Mem::userSet($fs_id, 'active', time());
+		Mem::userSet($fs_id, 'sid', session_id());
 		
-		$this->update('UPDATE `'.PREFIX.'activity` SET `zeit` = NOW() WHERE `foodsaver_id` = '.$this->intval(fsId()));
+		$this->update('UPDATE `'.PREFIX.'activity` SET `zeit` = NOW() WHERE `foodsaver_id` = '.$this->intval($fs_id));
 	}
 	
 	public function dbLoginAs($fs_id)
@@ -1139,7 +1143,7 @@ class Db
 	public function initSessionData($fs_id)
 	{
 		$this->insert('INSERT IGNORE INTO '.PREFIX.'activity(`foodsaver_id`,`zeit`)VALUE('.$this->intval($fs_id).',NOW()) ');
-		$this->updateActivity();
+		$this->updateActivity($fs_id);
 		if($fs = $this->qRow('
 				SELECT 		`id`,
 							`admin`,
