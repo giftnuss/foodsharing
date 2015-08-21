@@ -37,7 +37,7 @@ class MsgModel extends Model
 
 		$conversation_id = false;
 
-		if($cids = $this->qCol('SELECT conversation_id FROM `fs_foodsaver_has_conversation` WHERE `foodsaver_id` = '.(int)fsId().' AND locked = 0'))
+		if($cids = $this->qCol('SELECT hc.conversation_id FROM `fs_foodsaver_has_conversation` hc LEFT JOIN `fs_conversation` c ON c.id = hc.conversation_id WHERE hc.`foodsaver_id` = '.(int)fsId().' AND c.locked = 0'))
 		{
 			$sql = '
 		SELECT
