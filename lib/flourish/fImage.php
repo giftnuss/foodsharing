@@ -415,7 +415,7 @@ class fImage extends fFile
 			return 'gif';
 		}
 
-		if ($_6_4 == 'JFIF' || $_6_4 == 'Exif' || ($_0_4 == "\xFF\xD8\xFF\xED" && $_20_4 == "8BIM")) {
+		if ($_6_4 == 'JFIF' || $_6_4 == 'Exif' || ($_0_4 == "\xFF\xD8\xFF\xED" && $_20_4 == "8BIM") || ($_0_4 == "\xFF\xD8\xFF\xE2")) {
 			return 'jpg';
 		}
 
