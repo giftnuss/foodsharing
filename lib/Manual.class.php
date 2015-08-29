@@ -4353,43 +4353,22 @@ GROUP BY foodsaver_id'));
 				fe.`status`
 
 			FROM
-				`'.PREFIX.'event` e,
-				`'.PREFIX.'foodsaver_has_event` fe
-
-			WHERE
-				e.start >= CURDATE()
-
-			AND
-				fe.event_id = e.id
-
-			AND
-				fe.foodsaver_id = '.(int)fsId().'
-
-			AND
-				fe.`status` IN(1,2)
-
-			ORDER BY e.`start`
-		');
-
-		$public = $this->q('
-			SELECT
-				e.id,
-				e.name,
-				e.`description`,
-				e.`start`,
-				UNIX_TIMESTAMP(e.`start`) AS start_ts
-
-			FROM
 				`'.PREFIX.'event` e
+			LEFT JOIN
+				`'.PREFIX.'foodsaver_has_event` fe
+			ON
+				e.id = fe.event_id AND fe.foodsaver_id = '.(int)fsId().'
 
 			WHERE
 				e.start >= CURDATE()
-
 			AND
-				e.public = 1
-
+				((e.public = 1 AND (fe.`status` IS NULL OR fe.`status` <> 3))
+				OR
+					fe.`status` IN(1,2)
+				)
 			ORDER BY e.`start`
 		');
+
 
 		$out = array();
 
@@ -4400,19 +4379,8 @@ GROUP BY foodsaver_id'));
 				$out[date('Y-m-d H:i',$n['start_ts']).'-'.$n['id']] = $n;
 			}
 		}
-
-		if($public)
-		{
-			foreach ($public as $n)
-			{
-				$out[date('Y-m-d H:i',$n['start_ts']).'-'.$n['id']] = $n;
-			}
-		}
-
 		if(!empty($out))
 		{
-			ksort($out);
-
 			return $out;
 		}
 	}
