@@ -125,11 +125,12 @@ class LoginView extends View
 							<h3>'.s('legal_stuff').'</h3>
 							<div class="element-wrapper">
 								<h4>'.$datenschutz['title'].'</h4>
+								
 								<textarea readonly="readonly">'.$datenschutz['body'].'</textarea>
 							</div>
 							<div class="element-wrapper">
 								<h4>'.$rechtsvereinbarung['title'].'</h4>
-								<textarea readonly="readonly">'.$rechtsvereinbarung['body'].'</textarea>
+								<a href="http://wiki.lebensmittelretten.de/Rechtsvereinbarung" target="_blank">Hier klicken</a> um unsere <a href="http://wiki.lebensmittelretten.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> in einem neuen Fenster zu &ouml;ffen
 							</div>
 							<label><input id="join_legal1" type="checkbox" name="join_legal1" value="1" /> '.s('have_read_the_legal_stuff1').'</label><br />
 							<label><input id="join_legal2" type="checkbox" name="join_legal2" value="1" /> '.s('have_read_the_legal_stuff2').'</label>
