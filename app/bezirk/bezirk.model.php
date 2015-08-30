@@ -205,7 +205,7 @@ class BezirkModel extends Model
 			AND 		bt.bot_theme = '.(int)$bot_theme.'
 			AND 		t.`active` = 1
 				
-			ORDER BY t.last_post_id DESC
+			ORDER BY t.sticky DESC, t.last_post_id DESC
 				
 			LIMIT '.(int)($page*$this->themes_per_page).', '.(int)$this->themes_per_page.'
 						
