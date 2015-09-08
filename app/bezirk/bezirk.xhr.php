@@ -11,6 +11,26 @@ class BezirkXhr extends Control
 		parent::__construct();
 	}
 	
+	public function followTheme()
+	{
+		if(!S::may())
+		{
+			goLogin();
+		}
+
+		$this->model->followTheme($_GET['tid']);
+	}
+
+	public function unfollowTheme()
+	{
+		if(!S::may())
+		{
+			goLogin();
+		}
+
+		$this->model->unfollowTheme($_GET['tid']);
+	}
+
 	public function morethemes()
 	{
 		if(isset($_GET['page']) && mayBezirk($_GET['bid']))

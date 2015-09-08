@@ -383,6 +383,18 @@ class BezirkModel extends Model
 			AND 	tf.foodsaver_id != '.(int)fsId().'
 		');
 	}
+
+	/*Does Foodsaver Follow Topic*/
+	public function getFollowingCounter($theme_id)
+	{
+		return $this->qOne('
+			SELECT  count(distinct tf.theme_id)
+			FROM 	
+					'.PREFIX.'theme_follower tf
+			WHERE   tf.theme_id = '.(int)$theme_id.'
+			AND 	tf.foodsaver_id = '.(int)fsId().'
+		');
+	}
 	
 	public function followTheme($theme_id)
 	{
@@ -394,6 +406,17 @@ class BezirkModel extends Model
 				'.(int)$theme_id.',
 				1
 			)
+		');
+	}
+
+	public function unfollowTheme($theme_id)
+	{
+		return $this->del('
+			DELETE FROM `'.PREFIX.'theme_follower`
+			WHERE
+			theme_id = '.(int)$theme_id.'
+			AND
+			foodsaver_id = '.(int)fsId().'
 		');
 	}
 	
