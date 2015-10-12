@@ -288,6 +288,20 @@ if(S::get('hastodoquiz') === true)
 	</a>';
 }
 
+if(S::may('fs')) {
+	addHead('
+	<script type="text/javascript">
+var _urq = _urq || [];
+_urq.push([\'initSite\', \'768517ac-2582-4827-8794-1db96953966d\']);
+(function() {
+var ur = document.createElement(\'script\'); ur.type = \'text/javascript\'; ur.async = true;
+ur.src = (\'https:\' == document.location.protocol ? \'https://cdn.userreport.com/userreport.js\' : \'http://cdn.userreport.com/userreport.js\');
+var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(ur, s);
+})();
+</script>
+	');
+}
+
 /*
 addHead('
 <script type="text/javascript">
