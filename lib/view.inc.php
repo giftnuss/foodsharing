@@ -845,7 +845,7 @@ function v_form_tinymce($id,$option = array())
 		plugins: "'.implode(' ', $plugins).'",
 		toolbar: "'.implode(' | ', $toolbar).'",
 		relative_urls: false,
-		valid_elements : "a[href|name|target=_blank|class|style],span,strong,b,div[align|class],br,p[class],ul[class],li[class],ol,h1,h2,h3,h4,h5,h6,table,tr,td[valign=top|align|style],th,tbody,thead,tfoot,img[src|width|name|class]",
+		valid_elements : "a[href|name|target=_blank|class|style],span,strong,b,div[align|class],br,i,p[class],ul[class],li[class],ol,h1,h2,h3,h4,h5,h6,table,tr,td[valign=top|align|style],th,tbody,thead,tfoot,img[src|width|name|class]",
 		convert_urls: false'.$addOpt.'
 	 
 	});';
