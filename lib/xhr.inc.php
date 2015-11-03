@@ -2719,6 +2719,18 @@ function xhr_bcontext($data)
 		{
 			$check = true;
 			$db->del('DELETE FROM `'.PREFIX.'betrieb_team` WHERE foodsaver_id = '.(int)$data['fsid'].' AND betrieb_id = '.(int)$data['bid']);
+			$db->del('DELETE FROM `'.PREFIX.'abholer` WHERE `betrieb_id` = '.(int)$data['bid'].' AND `foodsaver_id` = '.(int)$data['fsid'].' AND `date` > NOW()');
+           
+            $msg = loadModel('msg');
+           
+            if($tcid = $msg->getBetriebConversation((int)$data['bid']))
+            {
+               $msg->deleteUserFromConversation($tcid, (int)$data['fsid'], true);
+            }
+            if($scid = $msg->getBetriebConversation((int)$data['bid'], true))
+            {
+              $msg->deleteUserFromConversation($scid, (int)$data['fsid'], true);
+         	}                       
 		}
 		
 		if($check)
