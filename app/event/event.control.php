@@ -226,19 +226,14 @@ class EventControl extends Control
 			$lat = $this->getPost('lat');
 			$lon = $this->getPost('lon');
 				
-			$id = $this->model->getLocationIdByLatLon($lat,$lon);
-	
-			if(!$id)
-			{
-				$id = $this->model->addLocation(
-						$this->getPostString('location_name'),
-						$lat,
-						$lon,
-						$this->getPostString('anschrift'),
-						$this->getPostString('plz'),
-						$this->getPostString('ort')
-				);
-			}
+			$id = $this->model->addLocation(
+					$this->getPostString('location_name'),
+					$lat,
+					$lon,
+					$this->getPostString('anschrift'),
+					$this->getPostString('plz'),
+					$this->getPostString('ort')
+			);
 				
 			$out['location_id'] = $id;
 		}
