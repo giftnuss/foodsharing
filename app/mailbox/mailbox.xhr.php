@@ -474,10 +474,10 @@ class MailboxXhr extends Control
 						'append' => '#message-body',
 						'script' => '
 			
-					bodymin = 50;
+					bodymin = 80;
 					if($("#mailattch").length > 0)
 					{
-						bodymin = 93;
+						bodymin += 40;
 					}
 			
 					$("#message-body").dialog("option",{
