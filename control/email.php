@@ -728,7 +728,7 @@ function handleImages($body)
 			}
 			elseif (substr($src, 0,7) != 'http://' && substr($src, 0,8) != 'https://')
 			{
-				$tag->setAttribute('src',BASE_URL.$src);
+				$tag->setAttribute('src',BASE_URL.'/'.$src);
 			}
 		}
 
