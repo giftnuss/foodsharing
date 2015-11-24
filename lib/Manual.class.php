@@ -1209,7 +1209,7 @@ GROUP BY foodsaver_id'));
 		//libmail($bezirk, $fs['email'], 'Du bist jetzt dabei!', 'jetzt kannst Du Dich einloggen, Dein Passwort lautet: '.$new_pass);
 
 		tplMail(7, $fs['email'],array(
-			'link'=>BASE_URL.'?p=passwordReset&k='.$key,
+			'link'=>BASE_URL.'/?p=passwordReset&k='.$key,
 			'pass'=>$new_pass,
 			'anrede' => genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 			'name' => $fs['name']

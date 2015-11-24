@@ -720,7 +720,7 @@ function handleImages($body)
 						$fimage->resize(0, $height);
 					}
 					$fimage->saveChanges();
-					$tag->setAttribute('src', BASE_URL.$new_path.$new_filename);
+					$tag->setAttribute('src', BASE_URL.'/'.$new_path.$new_filename);
 					$tag->setAttribute('name', $old_filepath);
 					$tag->removeAttribute('width');
 					$tag->removeAttribute('height');
