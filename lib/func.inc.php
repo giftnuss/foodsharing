@@ -3344,6 +3344,6 @@ function generate_api_token($fs)
 		return false;
 	}
 
-	$db->insert('INSERT INTO '.PREFIX.'apitoken (fs, token) VALUES ('.(int)$fs.', "'.$token.'")');
+	$db->insert('INSERT INTO '.PREFIX.'apitoken (foodsaver_id, token) VALUES ('.(int)$fs.', "'.$token.'")');
 	return $token;
 }
