@@ -14,7 +14,7 @@ require_once 'lib/Manual.class.php';
 function check_api_token($fs, $key)
 {
 	global $db;
-	$res = $db->qOne('SELECT COUNT(fs) FROM '.PREFIX.'apitoken WHERE foodsaver_id = '.(int)$fs.' AND token="'.$db->safe($key).'"');
+	$res = $db->qOne('SELECT COUNT(foodsaver_id) FROM '.PREFIX.'apitoken WHERE foodsaver_id = '.(int)$fs.' AND token="'.$db->safe($key).'"');
 	return ($res == 1);
 }
 
