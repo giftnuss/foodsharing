@@ -3330,3 +3330,20 @@ function ipIsBlocked ($duration = 60, $context = 'default')
 	
 	return false;
 }
+
+/** Creates and saves a new API token for given user
+	@param $fs Foodsaver ID
+	@return false in case of error or weak algorithm, generated token otherwise
+ */
+function generate_api_token($fs)
+{
+	global $db;
+
+	$token = bin2hex(openssl_random_pseudo_bytes(10, $strong));
+	if(!$strong || $token === false) {
+		return false;
+	}
+
+	$db->insert('INSERT INTO '.PREFIX.'apitoken (fs, token) VALUES ('.(int)$fs.', "'.$token.'")');
+	return $token;
+}

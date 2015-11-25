@@ -67,3 +67,5 @@ $g_lang['homepage'] = 'Deine Webseite';
 $g_lang['position'] = 'Deine Position bei foodsharing (öffentlich)';
 $g_lang['tox'] = 'TOX ID';
 $g_lang['tox_desc'] = '<a href="https://tox.im/" target="_blank">Tox ist eine sichere OpenSource Skype Alternative</a>';
+
+$g_lang['calendar'] = 'Kalender';

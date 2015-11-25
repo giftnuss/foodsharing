@@ -56,6 +56,8 @@ class SettingsControl extends Control
 		}
 		
 		$menu[] = array('name' => s('bcard'), 'href' => '/?page=bcard');
+
+		//$menu[] = array('name' => s('calendar'), 'href' => '/?page=settings&sub=calendar');
 				
 		addContent($this->view->menu($menu,array('title'=>s('settings'),'active'=>$this->getSub())),CNT_LEFT);
 		
@@ -555,6 +557,13 @@ class SettingsControl extends Control
 		addContent($this->view->settingsMumble($mumblename));
 	}
 	
+	public function calendar()
+	{
+		addBread(s('calendar'));
+		$token = generate_api_token(fsId());
+		addContent($this->view->settingsCalendar($token));
+	}
+
 	public function info()
 	{
 		global $g_data;

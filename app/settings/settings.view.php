@@ -480,6 +480,24 @@ class SettingsView extends View
 			v_form_passwd('passcheck');
 	}
 	
+	public function settingsCalendar($token)
+	{
+		$url = BASE_URL.'/api.php?f=cal&fs='.fsId().'&key='.$token.'&opts=s';
+		return v_field('
+<p>Du kannst Deinen Abholkalender auch mit einem Kalenderprogramm deiner Wahl ansehen. Dazu abboniere folgenden Kalender.</p>
+<p>Hinweis: Halte den Link unbedingt geheim, er enthält einen Schlüssel, um ohne Passwort auf deinen Account zuzugreifen.</p>
+<p>Hinweis: Dein Kalenderprogramm muss den Kalender regelmäßig neu synchronisieren. Nur dann tauchen neue Abholtermine auf!</p>
+
+				<table style="border-spacing: 10px;border-collapse: separate;">
+				<tr>
+					<td style="width:75px;">ICS/ICAL/WebCal:</td>
+					<td><strong><a href="'.$url.'">'.$url.'</strong></td>
+				</tr>
+				</table>
+
+				', 'Dein Abholkalender',array('class'=>'ui-padding'));
+	}
+
 	public function settingsMumble($name)
 	{
 		return v_field('
