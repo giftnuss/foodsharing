@@ -385,7 +385,7 @@ class MailsControl extends ConsoleControl
 			MailsControl::smtpReconnect();
 		}
 		
-		$max_try = 2;
+		$max_try = 3;
 		$sended = false;
 		while(!$sended)
 		{
