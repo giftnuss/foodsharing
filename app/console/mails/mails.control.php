@@ -292,7 +292,6 @@ class MailsControl extends ConsoleControl
 	public static function handleEmail($data)
 	{
 		info('mail arrived ...: ' . $data['from'][0] . '@' . $data['from'][1]);
-		return;
 		$email = new fEmail();
 		$email->setFromEmail($data['from'][0],$data['from'][1]);
 		$email->setSubject($data['subject']);
