@@ -17,9 +17,6 @@ class GroupsControl extends Control
 		if(!S::may())
 		{
 			goLogin();
-		}else if(!S::may('orga'))
-		{
-			go('/');
 		}
 		
 		$this->setAgId(392);
