@@ -238,17 +238,13 @@ class ReportView extends View
 		$rows = array();
 		foreach ($reports as $r)
 		{
-			if(!isset($has[$r['id']]))
-			{
-				$rows[] = array(
-					array('cnt' => '<input type="hidden" class="rid" name="rid" value="'.$r['id'].'"><span class="photo"><a title="'.$r['fs_name'].' '.$r['fs_nachname'].' (aus '.$r['fs_stadt'].'") href="#" onclick="profile('.(int)$r['fs_id'].');return false;"><img id="miniq-'.$r['fs_id'].'" src="'.img($r['fs_photo']).'" /></a></span>'),
-					array('cnt' => '<span class="photo"><a title="'.$r['rp_name'].' '.$r['rp_nachname'].'" href="#" onclick="profile('.(int)$r['rp_id'].');return false;"><img id="miniq-'.$r['rp_id'].'" src="'.img($r['rp_photo']).'" /></a></span>'),		
-					array('cnt' => tt($r['msg'],50)),
-					array('cnt' => '<span style="display:none;">a'.$r['time_ts'].' </span>'.niceDateShort($r['time_ts']).' Uhr'),
-					array('cnt' => $r['fs_stadt']),
-				);
-			}
-			$has[$r['id']] = true;
+			$rows[] = array(
+				array('cnt' => '<input type="hidden" class="rid" name="rid" value="'.$r['id'].'"><span class="photo"><a title="'.$r['fs_name'].' '.$r['fs_nachname'].'" href="#" onclick="profile('.(int)$r['fs_id'].');return false;"><img id="miniq-'.$r['fs_id'].'" src="'.img($r['fs_photo']).'" /></a></span>'),
+				array('cnt' => '<span class="photo"><a title="'.$r['rp_name'].' '.$r['rp_nachname'].'" href="#" onclick="profile('.(int)$r['rp_id'].');return false;"><img id="miniq-'.$r['rp_id'].'" src="'.img($r['rp_photo']).'" /></a></span>'),		
+				array('cnt' => tt($r['msg'],50)),
+				array('cnt' => '<span style="display:none;">a'.$r['time_ts'].' </span>'.niceDateShort($r['time_ts']).' Uhr'),
+				array('cnt' => $r['fs_stadt']),
+			);
 		}
 		
 		$table = v_tablesorter(array(
