@@ -161,11 +161,11 @@ class BezirkView extends View
 		$out = '<div class="head ui-widget-header ui-corner-top">'.$thread['name'].'</div>';
 
 		addJsFunc('
-				function unfollowTheme(tid){
+				function unfollowTheme(tid,bid,fsid){
 					showLoader();
 					$.ajax({
 						url:"xhrapp.php?app=bezirk&m=unfollowTheme",
-		    			data: "tid="+tid+"",
+		    			data: "tid="+tid+"&bid="+bid+"&fsid="+fsid+"",
 						success : function(data){
 							reload();
 								
@@ -173,11 +173,11 @@ class BezirkView extends View
 						complete:function(){hideLoader();}
 					});
 				}
-				function follow(tid){
+				function follow(tid,bid,fsid){
 					showLoader();
 					$.ajax({
 						url:"xhrapp.php?app=bezirk&m=followTheme",
-		    			data: "tid="+tid+"",
+		    			data: "tid="+tid+"&bid="+bid+"&fsid="+fsid+"",
 						success : function(data){
 								reload();
 						},
@@ -188,10 +188,10 @@ class BezirkView extends View
 		$follow = '';
 		if($followCounter == 1)
 		{
-			$follow = '<a class="button bt_unfollow" onclick="unfollowTheme('.$thread['id'].')" href="#">Thema entfolgen</a>';
+			$follow = '<a class="button bt_unfollow" onclick="unfollowTheme('.$thread['id'].', '.$this->bezirk_id.', '.fsId().')" href="#">Thema entfolgen</a>';
 		} else
 		{
-			$follow = '<a class="button bt_follow" onclick="follow('.$thread['id'].')" href="#">Thema folgen</a>';
+			$follow = '<a class="button bt_follow" onclick="follow('.$thread['id'].', '.$this->bezirk_id.', '.fsId().')" href="#">Thema folgen</a>';
 		}
 
 		if($posts)

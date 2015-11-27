@@ -395,6 +395,17 @@ class BezirkModel extends Model
 			AND 	tf.foodsaver_id = '.(int)fsId().'
 		');
 	}
+
+	public function getBotThemestatus($theme_id)
+	{
+		return $this->qRow('
+			SELECT  ht.bot_theme,
+					ht.bezirk_id
+			FROM 	
+					'.PREFIX.'bezirk_has_theme ht
+			WHERE   ht.theme_id = '.(int)$theme_id.'
+		');
+	}
 	
 	public function followTheme($theme_id)
 	{
