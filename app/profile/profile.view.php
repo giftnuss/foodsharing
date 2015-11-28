@@ -76,7 +76,7 @@ class ProfileView extends View
 	{
 		$infos = array();
 		
-		if(S::may('bot') || S::may('orga') || S::may('admin'))
+		if(S::may('orga'))
 		{
 			$last_login = new fDate($this->foodsaver['last_login']);
 			$registration_date = new fDate($this->foodsaver['anmeldedatum']);
