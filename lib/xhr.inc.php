@@ -2574,19 +2574,7 @@ function xhr_becomeBezirk($data)
 			else
 			{
 			*/
-				$active = 0;
-				/*
-				if(S::may('orga'))
-				{
-					$active = 1;
-				}*/
-				
-				/*
-				if(isOrgateam())
-				{
-					$active = 1;
-				}
-				*/
+				$active = 1;
 				$db->insert('
 					REPLACE INTO  `'.PREFIX.'foodsaver_has_bezirk` (`bezirk_id`,`foodsaver_id`,`active`)
 					VALUES ('.(int)$bezirk_id.','.fsId().', '.$active.' )
