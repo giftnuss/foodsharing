@@ -35,6 +35,7 @@ function api_generate_calendar($fs, $options)
 	}
 	$fetches = $db->q('SELECT b.id, b.name, b.str, b.hsnr, b.plz, b.stadt, a.confirmed, UNIX_TIMESTAMP(a.`date`) AS date_ts FROM '.PREFIX.'abholer a INNER JOIN '.PREFIX.'betrieb b ON a.betrieb_id = b.id WHERE a.foodsaver_id = '.(int)$fs.' AND a.`date` > NOW() - INTERVAL 1 DAY');
 
+	echo "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Foodsharing.de//NONSGML v1.0//EN\r\nCALSCALE:GREGORIAN\r\n";
 	foreach($fetches as $f)
 	{
 		$datestart = dateToLocalCal($f['date_ts']);
@@ -49,7 +50,7 @@ function api_generate_calendar($fs, $options)
 		$description = 'Foodsharing Abholung bei '.$f['name'];
 		$uri = BASE_URL.'/?page=fsbetrieb&id='.$f['id'];
 	// 3. Echo out the ics file's contents
-		echo "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Foodsharing.de//NONSGML v1.0//EN\r\nCALSCALE:GREGORIAN\r\nBEGIN:VEVENT\r\nDTEND:";
+		echo "BEGIN:VEVENT\r\nDTEND:";
 		echo $dateend."\r\nUID:";
 		echo $uid."\r\nDTSTAMP:";
 		echo dateToCal(time())."\r\nLOCATION:";
@@ -57,8 +58,9 @@ function api_generate_calendar($fs, $options)
 		echo escapeString($description)."\r\nURL;VALUE=URI:";
 		echo escapeString($uri)."\r\nSUMMARY:";
 		echo escapeString($summary)."\r\nDTSTART:";
-		echo $datestart."\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n";
+		echo $datestart."\r\nEND:VEVENT\r\n";
 	}
+	echo "END:VCALENDAR\r\n";
 }
 
 $db = new ManualDb();
