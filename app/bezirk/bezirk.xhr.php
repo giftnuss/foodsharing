@@ -11,6 +11,59 @@ class BezirkXhr extends Control
 		parent::__construct();
 	}
 	
+	public function followTheme()
+	{
+		if(!S::may())
+		{
+			goLogin();
+		}
+
+		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
+
+
+		if($bot_theme['bot_theme']==0 && mayBezirk($bot_theme['bezirk_id']))
+		{
+			$this->model->followTheme($_GET['tid']);
+		}
+		elseif($bot_theme['bot_theme']==1 && isBotFor($bot_theme['bezirk_id']))
+		{
+			$this->model->followTheme($_GET['tid']);
+		}
+		else
+		{
+			go('/?page=dashboard');
+		}
+
+		
+
+		
+	}
+
+	public function unfollowTheme()
+	{
+		if(!S::may())
+		{
+			goLogin();
+		}
+
+		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
+
+
+		if($bot_theme['bot_theme']==0 && mayBezirk($bot_theme['bezirk_id']))
+		{
+			$this->model->unfollowTheme($_GET['tid']);
+		}
+		elseif($bot_theme['bot_theme']==1 && isBotFor($bot_theme['bezirk_id']))
+		{
+			$this->model->unfollowTheme($_GET['tid']);
+		}
+		else
+		{
+			go('/?page=dashboard');
+		}
+		
+	}
+
 	public function morethemes()
 	{
 		if(isset($_GET['page']) && mayBezirk($_GET['bid']))

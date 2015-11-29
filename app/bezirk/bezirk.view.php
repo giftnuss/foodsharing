@@ -149,7 +149,7 @@ class BezirkView extends View
 			);
 	}
 	
-	public function thread($thread,$posts)
+	public function thread($thread,$posts,$followCounter)
 	{
 		addHidden('
 			<div id="delete_shure" title="'.s('delete_sure_title').'">
@@ -159,6 +159,41 @@ class BezirkView extends View
 			</div>
 		');
 		$out = '<div class="head ui-widget-header ui-corner-top">'.$thread['name'].'</div>';
+
+		addJsFunc('
+				function unfollowTheme(tid,bid,fsid){
+					showLoader();
+					$.ajax({
+						url:"xhrapp.php?app=bezirk&m=unfollowTheme",
+		    			data: "tid="+tid+"&bid="+bid+"&fsid="+fsid+"",
+						success : function(data){
+							reload();
+								
+						},
+						complete:function(){hideLoader();}
+					});
+				}
+				function follow(tid,bid,fsid){
+					showLoader();
+					$.ajax({
+						url:"xhrapp.php?app=bezirk&m=followTheme",
+		    			data: "tid="+tid+"&bid="+bid+"&fsid="+fsid+"",
+						success : function(data){
+								reload();
+						},
+						complete:function(){hideLoader();}
+					});
+				}');
+
+		$follow = '';
+		if($followCounter == 1)
+		{
+			$follow = '<a class="button bt_unfollow" onclick="unfollowTheme('.$thread['id'].', '.$this->bezirk_id.', '.fsId().')" href="#">Thema entfolgen</a>';
+		} else
+		{
+			$follow = '<a class="button bt_follow" onclick="follow('.$thread['id'].', '.$this->bezirk_id.', '.fsId().')" href="#">Thema folgen</a>';
+		}
+
 		if($posts)
 		{
 			
@@ -211,6 +246,7 @@ class BezirkView extends View
 							<div class="normal normal'.$p['id'].'">
 								<div class="float_left bottom_time">'.$time.'</div>
 								<div class="float_right">
+									'.$follow.'
 									'.$delete.'
 									'.$edit.'
 									<a class="button bt_answer" href="#p'.$p['id'].'">Antworten</a>

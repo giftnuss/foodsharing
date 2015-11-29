@@ -409,6 +409,10 @@ class BezirkControl extends Control
 				{
 					$this->model->followTheme($_POST['thread']);
 				}
+				elseif($_POST['follow'] == 0)
+				{
+					$this->model->unfollowTheme($_POST['thread']);
+				}
 				
 				if($follower = $this->model->getThreadFollower($_POST['thread']))
 				{
@@ -532,7 +536,8 @@ class BezirkControl extends Control
 			if($thread['active'] == 1 || S::may('orga') || isBotFor($this->bezirk_id))
 			{
 				$posts = $this->model->getPosts($thread_id);
-				addContent($this->view->thread($thread,$posts));
+				$followCounter = $this->model->getFollowingCounter($thread_id);
+				addContent($this->view->thread($thread,$posts,$followCounter));
 			}
 			else 
 			{
