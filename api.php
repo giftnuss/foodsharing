@@ -33,14 +33,14 @@ function escapeString($string) {
 function generate_calendar_event($utc_begin, $utc_end, $utc_change, $uid, $location, $description, $summary, $uri)
 {
 	$out = "BEGIN:VEVENT\r\nDTEND:";
-	$out .= dateToCal($dateend)."\r\nUID:";
+	$out .= dateToCal($utc_end)."\r\nUID:";
 	$out .= $uid."\r\nDTSTAMP:";
 	$out .= dateToCal($utc_change)."\r\nLOCATION:";
 	$out .= escapeString($location)."\r\nDESCRIPTION:";
 	$out .= escapeString($description)."\r\nURL;VALUE=URI:";
 	$out .= escapeString($uri)."\r\nSUMMARY:";
 	$out .= escapeString($summary)."\r\nDTSTART:";
-	$out .= dateToCal($datestart)."\r\nEND:VEVENT\r\n";
+	$out .= dateToCal($utc_begin)."\r\nEND:VEVENT\r\n";
 	return $out;
 }
 
