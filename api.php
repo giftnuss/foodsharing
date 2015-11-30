@@ -25,7 +25,7 @@ function api_generate_calendar($fs, $options)
 	header('Content-type: text/calendar; charset=utf-8');
 	header('Content-Disposition: attachment; filename=calendar.ics');
 	function dateToCal($timestamp) {
-		return date('Ymd\THis\Z', $timestamp);
+		return gmdate('Ymd\THis\Z', $timestamp);
 	}
 	function dateToLocalCal($timestamp) {
 		return date('Ymd\THis', $timestamp);
@@ -38,8 +38,8 @@ function api_generate_calendar($fs, $options)
 	echo "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Foodsharing.de//NONSGML v1.0//EN\r\nCALSCALE:GREGORIAN\r\n";
 	foreach($fetches as $f)
 	{
-		$datestart = dateToLocalCal($f['date_ts']);
-		$dateend = dateToLocalCal($f['date_ts'] + 30 * 60);
+		$datestart = dateToCal($f['date_ts']);
+		$dateend = dateToCal($f['date_ts'] + 30 * 60);
 		$uid = $f['id'].$f['date_ts'].'@foodsharing.de';
 		$address = $f['str'].' '.$f['hsnr'].', '.$f['plz'].' '.$f['stadt'];
 		$summary = $f['name'].' Abholung';
