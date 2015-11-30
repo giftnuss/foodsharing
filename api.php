@@ -25,8 +25,8 @@ function dateToLocalCal($timestamp) {
 	return date('Ymd\THis', $timestamp);
 }
 function escapeString($string) {
-	str_replace("\r\n", "\\n", $string);
-	str_replace("\n", "\\n", $string);
+	$string = str_replace("\r\n", "\\n", $string);
+	$string = str_replace("\n", "\\n", $string);
 	return preg_replace('/([\,;])/','\\\$1', $string);
 }
 
