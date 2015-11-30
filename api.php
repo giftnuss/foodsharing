@@ -52,22 +52,24 @@ function api_generate_calendar($fs, $options)
 	if(strpos($options, 's') !== FALSE)
 	{
 		$fetches = $db->q('SELECT b.id, b.name, b.str, b.hsnr, b.plz, b.stadt, a.confirmed, UNIX_TIMESTAMP(a.`date`) AS date_ts FROM '.PREFIX.'abholer a INNER JOIN '.PREFIX.'betrieb b ON a.betrieb_id = b.id WHERE a.foodsaver_id = '.(int)$fs.' AND a.`date` > NOW() - INTERVAL 1 DAY');
-
-		foreach($fetches as $f)
+		if(is_array($fetches))
 		{
-			$datestart = $f['date_ts'];
-			$dateend = $f['date_ts'] + 30 * 60;
-			$uid = $f['id'].$f['date_ts'].'@fetch.foodsharing.de';
-			$address = $f['str'].' '.$f['hsnr'].', '.$f['plz'].' '.$f['stadt'];
-			$summary = $f['name'].' Abholung';
-			if(!$f['confirmed'])
+			foreach($fetches as $f)
 			{
-				$summary .= ' (unbestätigt)';
+				$datestart = $f['date_ts'];
+				$dateend = $f['date_ts'] + 30 * 60;
+				$uid = $f['id'].$f['date_ts'].'@fetch.foodsharing.de';
+				$address = $f['str'].' '.$f['hsnr'].', '.$f['plz'].' '.$f['stadt'];
+				$summary = $f['name'].' Abholung';
+				if(!$f['confirmed'])
+				{
+					$summary .= ' (unbestätigt)';
+				}
+				$description = 'Foodsharing Abholung bei '.$f['name'];
+				$uri = BASE_URL.'/?page=fsbetrieb&id='.$f['id'];
+				// 3. Echo out the ics file's contents
+				echo generate_calendar_event($datestart, $dateend, time(), $uid, $address, $description, $summary, $uri);
 			}
-			$description = 'Foodsharing Abholung bei '.$f['name'];
-			$uri = BASE_URL.'/?page=fsbetrieb&id='.$f['id'];
-		// 3. Echo out the ics file's contents
-			echo generate_calendar_event($datestart, $dateend, time(), $uid, $address, $description, $summary, $uri);
 		}
 	}
 
@@ -103,27 +105,30 @@ function api_generate_calendar($fs, $options)
 					OR
 						fe.`status` IN(1,2)
 					)');
-		foreach($calendar as $c)
+		if(is_array($calendar))
 		{
-			$datestart = $c['start_ts'];
-			$dateend = $c['end_ts'];
-			$uid = $c['id'].$c['start_ts'].'@event.foodsharing.de';
-			if($c['online'])
+			foreach($calendar as $c)
 			{
-				$address = "Online, mumble.lebensmittelretten.de";
-			} else
-			{
-				$address = $c['loc_name'].', '.$c['street'].' '.$c['zip'].', '.$c['city'];
+				$datestart = $c['start_ts'];
+				$dateend = $c['end_ts'];
+				$uid = $c['id'].$c['start_ts'].'@event.foodsharing.de';
+				if($c['online'])
+				{
+					$address = "Online, mumble.lebensmittelretten.de";
+				} else
+				{
+					$address = $c['loc_name'].', '.$c['street'].' '.$c['zip'].', '.$c['city'];
+				}
+				$summary = $c['name'].' Event';
+				if(!$c['status'] == 1)
+				{
+					$summary = '('.$summary.')';
+				}
+				$description = 'Foodsharing Event: '.$c['description'];
+				$uri = BASE_URL.'/?page=event&id='.$c['id'];
+				// 3. Echo out the ics file's contents
+				echo generate_calendar_event($datestart, $dateend, time(), $uid, $address, $description, $summary, $uri);
 			}
-			$summary = $c['name'].' Event';
-			if(!$c['status'] == 1)
-			{
-				$summary = '('.$summary.')';
-			}
-			$description = 'Foodsharing Event: '.$c['description'];
-			$uri = BASE_URL.'/?page=event&id='.$c['id'];
-		// 3. Echo out the ics file's contents
-			echo generate_calendar_event($datestart, $dateend, time(), $uid, $address, $description, $summary, $uri);
 		}
 	}
 	
