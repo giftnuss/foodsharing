@@ -18,6 +18,17 @@ function check_api_token($fs, $key)
 	return ($res == 1);
 }
 
+function dateToCal($timestamp) {
+	return gmdate('Ymd\THis\Z', $timestamp);
+}
+function dateToLocalCal($timestamp) {
+	return date('Ymd\THis', $timestamp);
+}
+function escapeString($string) {
+	str_replace("\r\n", "\\n", $string);
+	return preg_replace('/([\,;])/','\\\$1', $string);
+}
+
 function generate_calendar_event($utc_begin, $utc_end, $utc_change, $uid, $location, $description, $summary, $uri)
 {
 	$out = "BEGIN:VEVENT\r\nDTEND:";
@@ -39,15 +50,6 @@ function api_generate_calendar($fs, $options)
 	/* from https://gist.github.com/jakebellacera/635416 */
 	header('Content-type: text/calendar; charset=utf-8');
 	header('Content-Disposition: attachment; filename=calendar.ics');
-	function dateToCal($timestamp) {
-		return gmdate('Ymd\THis\Z', $timestamp);
-	}
-	function dateToLocalCal($timestamp) {
-		return date('Ymd\THis', $timestamp);
-	}
-	function escapeString($string) {
-		return preg_replace('/([\,;])/','\\\$1', $string);
-	}
 	echo "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Foodsharing.de//NONSGML v1.0//EN\r\nCALSCALE:GREGORIAN\r\n";
 	if(strpos($options, 's') !== FALSE)
 	{
