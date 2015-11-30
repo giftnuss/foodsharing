@@ -24,7 +24,7 @@ function generate_calendar_event($utc_begin, $utc_end, $utc_change, $uid, $locat
 	$out .= dateToCal($dateend)."\r\nUID:";
 	$out .= $uid."\r\nDTSTAMP:";
 	$out .= dateToCal($utc_change)."\r\nLOCATION:";
-	$out .= escapeString($address)."\r\nDESCRIPTION:";
+	$out .= escapeString($location)."\r\nDESCRIPTION:";
 	$out .= escapeString($description)."\r\nURL;VALUE=URI:";
 	$out .= escapeString($uri)."\r\nSUMMARY:";
 	$out .= escapeString($summary)."\r\nDTSTART:";
