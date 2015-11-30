@@ -91,7 +91,7 @@ function api_generate_calendar($fs, $options)
 				INNER JOIN
 					`'.PREFIX.'foodsaver_has_event` fe
 				ON
-					e.id = fe.event_id AND fe.foodsaver_id = '.(int)fsId().'
+					e.id = fe.event_id AND fe.foodsaver_id = '.(int)$fs.'
 				LEFT JOIN
 					`'.PREFIX.'location` loc
 				ON
