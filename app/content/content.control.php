@@ -144,6 +144,17 @@ class ContentControl extends Control
 		}
 	}
 	
+	public function leeretonne()
+	{
+		if($cnt = $this->model->getContent(46))
+		{
+			addBread($cnt['title']);
+			addTitle($cnt['title']);
+			
+			addContent($this->view->simple($cnt));
+		}
+	}
+	
 	public function faq()
 	{
 		addBread('F.A.Q');
