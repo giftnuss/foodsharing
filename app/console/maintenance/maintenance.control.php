@@ -101,6 +101,11 @@ class MaintenanceControl extends ConsoleControl
 		$bots = $this->model->getBotIds(741);
 		$counts = $this->model->updateGroupMembers(881, $bots, true);
 		info('+'.$counts[0].', -'.$counts[1]);
+
+		info('updating berlin bieb austausch');
+		$berlin_biebs = $this->model->getBiebIds(47);
+		$counts = $this->model->updateGroupMembers(1057, $berlin_biebs, true);
+		info('+'.$counts[0].', -'.$counts[1]);
 	}
 
 	private function sleepingMode()
