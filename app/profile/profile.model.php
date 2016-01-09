@@ -144,7 +144,7 @@ class ProfileModel extends Model
 		$data['foodsaver'] = false;
 		$data['orga'] = false;
 		
-		if(S::may('orga'))
+		if(mayHandleReports())
 		{
 			$data['violation_count'] = (int)$this->getViolationCount($this->fs_id);
 			$data['note_count'] = (int)$this->getNotesCount($this->fs_id);

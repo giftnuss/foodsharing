@@ -396,7 +396,7 @@ class ProfileView extends View
 			$opt .= '<li><a href="/?page=foodsaver&a=edit&id='.$this->foodsaver['id'].'"><i class="fa fa-pencil"></i>bearbeiten</a></li>';
 		}
 		
-		if(S::may('orga'))
+		if(mayHandleReports())
 		{
 			if(isset($this->foodsaver['violation_count']) && $this->foodsaver['violation_count'] > 0)
 			{
