@@ -1364,7 +1364,6 @@ function getOrgaMenu()
 	{
 		$menu = array('manage_regions' => 'region',
 			'quiz' => 'quiz',
-			'reports' => 'report&sub=uncom',
 			'newarea' => 'newarea',
 			'all_fs' => 'foodsaver&bid=0',
 			'all_store' => 'betrieb&bid=0',
@@ -1378,6 +1377,11 @@ function getOrgaMenu()
 			'foodsaver_without_region' => 'geoclean',
 			'email_tpl' => 'message_tpl'
 		);
+	}
+
+	if(mayHandleReports())
+	{
+		$menu['reports'] = 'report&sub=uncom';
 	}
 
 	$len = count($menu);
