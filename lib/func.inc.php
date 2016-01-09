@@ -2703,6 +2703,12 @@ function mayGroup($group)
 	return false;
 }
 
+function mayHandleReports()
+{
+	// group "Verstöße/Meldungen"
+	return S::may('orga') || isBotFor(432);
+}
+
 function may()
 {
 	if(isset($_SESSION) && isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0)

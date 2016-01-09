@@ -18,7 +18,7 @@ class ReportXhr extends Control
 	
 	public function loadreport()
 	{
-		if($this->may())
+		if(mayHandleReports())
 		{
 			if($report = $this->model->getReport($_GET['id']))
 			{				
@@ -74,7 +74,7 @@ class ReportXhr extends Control
 	
 	public function comreport()
 	{
-		if($this->may())
+		if(mayHandleReports())
 		{
 			$this->model->confirmReport($_GET['id']);
 			info('Report wurde bestätigt!');
@@ -87,7 +87,7 @@ class ReportXhr extends Control
 	
 	public function delreport()
 	{
-		if($this->may())
+		if(mayHandleReports())
 		{
 			$this->model->delReport($_GET['id']);
 			info('Report wurde gelöscht!');
@@ -181,15 +181,6 @@ class ReportXhr extends Control
 		');
 		
 		return $dialog->xhrout();
-	}
-	
-	public function may()
-	{
-		if(isOrgaTeam() || isBotFor(432))
-		{
-			return true;
-		}
-		return false;
 	}
 	
 	public function betriebreport()

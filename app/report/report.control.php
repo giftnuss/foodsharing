@@ -16,7 +16,7 @@ class ReportControl extends Control
 	
 	public function index()
 	{
-		if($this->may())
+		if(mayHandleReports())
 		{
 			addBread('Reportmeldungen','/?page=report');
 		}
@@ -28,7 +28,7 @@ class ReportControl extends Control
 	
 	public function uncom()
 	{
-		if($this->may())
+		if(mayHandleReports())
 		{
 			addContent($this->view->statsMenu($this->model->getReportStats()),CNT_LEFT);
 			addContent($this->view->listReportedSavers($this->model->getReportedSavers()),CNT_LEFT);
@@ -44,7 +44,7 @@ class ReportControl extends Control
 	
 	public function com()
 	{
-		if($this->may())
+		if(mayHandleReports())
 		{
 			addContent($this->view->statsMenu($this->model->getReportStats()),CNT_LEFT);
 			addContent($this->view->listReportedSavers($this->model->getReportedSavers()),CNT_LEFT);
@@ -60,7 +60,7 @@ class ReportControl extends Control
 	
 	public function foodsaver()
 	{
-		if($this->may())
+		if(mayHandleReports())
 		{
 			if($foodsaver = $this->model->getReportedSaver($_GET['id']))
 			{
@@ -82,14 +82,5 @@ class ReportControl extends Control
 		{
 			go('/?page=dashboard');
 		}
-	}
-	
-	public function may()
-	{
-		if(isOrgaTeam() || isBotFor(432))
-		{
-			return true;
-		}
-		return false;
 	}
 }
