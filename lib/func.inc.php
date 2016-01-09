@@ -1363,7 +1363,6 @@ function getOrgaMenu()
 	if(isOrgaTeam())
 	{
 		$menu = array('manage_regions' => 'region',
-			'quiz' => 'quiz',
 			'newarea' => 'newarea',
 			'all_fs' => 'foodsaver&bid=0',
 			'all_store' => 'betrieb&bid=0',
@@ -1382,6 +1381,11 @@ function getOrgaMenu()
 	if(mayHandleReports())
 	{
 		$menu['reports'] = 'report&sub=uncom';
+	}
+
+	if(mayEditQuiz())
+	{
+		$menu['quiz'] = 'quiz';
 	}
 
 	$len = count($menu);
@@ -2711,6 +2715,11 @@ function mayHandleReports()
 {
 	// group "Verstöße/Meldungen"
 	return S::may('orga') || isBotFor(432);
+}
+
+function mayEditQuiz()
+{
+	return S::may('orga') || isBotFor(341);
 }
 
 function may()

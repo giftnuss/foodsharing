@@ -24,7 +24,7 @@ class QuizXhr extends Control
     [fp] => fdgh
 )
 		 */
-		if(isOrgaTeam())
+		if(mayEditQuiz())
 		{
 			if(isset($_GET['text']) && isset($_GET['fp']) && isset($_GET['qid']))
 			{
@@ -57,7 +57,7 @@ class QuizXhr extends Control
 	
 	public function delquest()
 	{
-		if(isOrgaTeam() && isset($_GET['id']))
+		if(mayEditQuiz() && isset($_GET['id']))
 		{
 			$this->model->deleteQuest($_GET['id']);
 			return array(
@@ -69,7 +69,7 @@ class QuizXhr extends Control
 	
 	public function delanswer()
 	{
-		if(isOrgaTeam() && isset($_GET['id']))
+		if(mayEditQuiz() && isset($_GET['id']))
 		{
 			$this->model->deleteAnswer($_GET['id']);
 			return array(
@@ -88,7 +88,7 @@ class QuizXhr extends Control
 		text	458
 		 */
 		
-		if(isOrgaTeam())
+		if(mayEditQuiz())
 		{
 			if(isset($_GET['text']) && isset($_GET['right']) && isset($_GET['qid']))
 			{
@@ -120,7 +120,7 @@ class QuizXhr extends Control
 	
 	public function updateansw()
 	{
-		if(isOrgaTeam())
+		if(mayEditQuiz())
 		{
 			if(isset($_GET['text']) && isset($_GET['right']) && isset($_GET['id']))
 			{
@@ -154,7 +154,7 @@ class QuizXhr extends Control
 	
 	public function editanswer()
 	{
-		if(isOrgaTeam())
+		if(mayEditQuiz())
 		{
 			if($answer = $this->model->getAnswer($_GET['id']))
 			{
@@ -235,7 +235,7 @@ class QuizXhr extends Control
 	
 	public function editquest()
 	{
-		if(isOrgaTeam())
+		if(mayEditQuiz())
 		{
 			if($quest = $this->model->getQuestion($_GET['id']))
 			{
@@ -503,7 +503,7 @@ class QuizXhr extends Control
 	
 	public function addcomment()
 	{
-		if(!empty($_GET['comment']) && (int)$_GET['id'] > 0)
+		if(S::may() && !empty($_GET['comment']) && (int)$_GET['id'] > 0)
 		{
 			$this->model->addUserComment((int)$_GET['id'], $_GET['comment']);
 			return array(
@@ -1602,7 +1602,7 @@ class QuizXhr extends Control
 	
 	public function updatequest()
 	{
-		if(isOrgaTeam())
+		if(mayEditQuiz())
 		{
 			
 			/*
