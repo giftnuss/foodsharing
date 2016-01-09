@@ -71,7 +71,7 @@ class BlogControl extends Control
 	
 	public function manage()
 	{
-		if(S::may('bot'))
+		if(mayEditBlog())
 		{
 			addBread(s('manage_blog'));
 			$title = 'Blog Artikel';
@@ -98,16 +98,19 @@ class BlogControl extends Control
 	
 	public function post()
 	{
-		if(isset($_GET['id']))
+		if(mayEditBlog())
 		{
-			if($post = $this->model->getOne_blog_entry($_GET['id']))
+			if(isset($_GET['id']))
 			{
-				if($post['active'] == 1)
+				if($post = $this->model->getOne_blog_entry($_GET['id']))
 				{
-					addTitle($post['name']);
-					addBread($post['name'],'/?page=blog&post=' . (int)$post['id']);
-					addContent($this->view->topbar($post['name'], niceDate($post['time_ts'])));
-					addContent(v_field($post['body'], $post['name'],array('class' => 'ui-padding')));
+					if($post['active'] == 1)
+					{
+						addTitle($post['name']);
+						addBread($post['name'],'/?page=blog&post=' . (int)$post['id']);
+						addContent($this->view->topbar($post['name'], niceDate($post['time_ts'])));
+						addContent(v_field($post['body'], $post['name'],array('class' => 'ui-padding')));
+					}
 				}
 			}
 		}
@@ -115,9 +118,7 @@ class BlogControl extends Control
 	
 	public function add()
 	{
-		
-		
-		if($this->model->canAdd((int)fsId()))
+		if(mayEditBlog() && $this->model->canAdd((int)fsId()))
 		{
 			$this->handle_add();
 		
@@ -142,7 +143,7 @@ class BlogControl extends Control
 	{
 		global $g_data;
 		
-		if(submitted())
+		if(mayEditBlog() && submitted())
 		{
 			$g_data['foodsaver_id'] = fsId();
 			$g_data['time'] = date('Y-m-d H:i:s');
@@ -161,7 +162,7 @@ class BlogControl extends Control
 	
 	public function edit()
 	{
-		if($this->model->canEdit($_GET['id']) && ($data = $this->model->getOne_blog_entry($_GET['id'])))
+		if(mayEditBlog() && $this->model->canEdit($_GET['id']) && ($data = $this->model->getOne_blog_entry($_GET['id'])))
 		{
 			$this->handle_edit();
 			
@@ -185,13 +186,11 @@ class BlogControl extends Control
 		}
 	}
 	
-	public function handle_edit()
+	private function handle_edit()
 	{
 		global $g_data;
-		if(submitted())
+		if(mayEditBlog() && submitted())
 		{
-			
-			
 			$data = $this->model->getValues(array('time','foodsaver_id'), 'blog_entry', $_GET['id']);
 
 			$g_data['foodsaver_id'] = $data['foodsaver_id'];

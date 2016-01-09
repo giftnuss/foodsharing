@@ -79,6 +79,7 @@ class MaintenanceControl extends ConsoleControl
 		 */
 		$this->wakeupSleepingUsers();
 
+
 	}
 
 	public function hourly()
@@ -294,6 +295,11 @@ class MaintenanceControl extends ConsoleControl
 			}
 
 			info('memcache userinfo updated');
+		}
+
+		if($groups = $this->model->getBotIds(392, false, true))
+		{
+			Mem::set('all_global_groups', serialize($groups));
 		}
 	}
 

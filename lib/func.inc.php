@@ -1394,6 +1394,11 @@ function getOrgaMenu()
 		$menu['quiz'] = 'quiz';
 	}
 
+	if(mayEditBlog())
+	{
+		$menu['blog'] = 'blog&sub=manage';
+	}
+
 	$len = count($menu);
 	if($len)
 	{
@@ -2726,6 +2731,11 @@ function mayHandleReports()
 function mayEditQuiz()
 {
 	return S::may('orga') || isBotFor(341);
+}
+
+function mayEditBlog()
+{
+	return S::may('orga') || isBotForA(unserialize(Mem::get('all_global_groups')));
 }
 
 function may()

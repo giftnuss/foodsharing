@@ -231,4 +231,5 @@ $g_lang['menu_mailbox_manage'] = 'Mailboxen verwalten';
 $g_lang['menu_regions_without_bots'] = 'Regionen ohne Botschafter';
 $g_lang['menu_foodsaver_without_region'] = 'Foodsaver ohne Region';
 $g_lang['menu_email_tpl'] = 'E-Mail Vorlagen';
+$g_lang['menu_blog'] = 'Blogbeiträge bearbeiten';
 
