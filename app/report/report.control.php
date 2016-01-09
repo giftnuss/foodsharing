@@ -16,7 +16,7 @@ class ReportControl extends Control
 	
 	public function index()
 	{
-		if(S::may('orga') || isBotFor(347))
+		if($this->may())
 		{
 			addBread('Reportmeldungen','/?page=report');
 		}
@@ -28,28 +28,34 @@ class ReportControl extends Control
 	
 	public function uncom()
 	{
-		addContent($this->view->statsMenu($this->model->getReportStats()),CNT_LEFT);
-		addContent($this->view->listReportedSavers($this->model->getReportedSavers()),CNT_LEFT);
-		
-		$reports = array();
-		if($reports = $this->model->getReports(0))
+		if($this->may())
 		{
-			addContent($this->view->listReports($reports));
+			addContent($this->view->statsMenu($this->model->getReportStats()),CNT_LEFT);
+			addContent($this->view->listReportedSavers($this->model->getReportedSavers()),CNT_LEFT);
+
+			$reports = array();
+			if($reports = $this->model->getReports(0))
+			{
+				addContent($this->view->listReports($reports));
+			}
+			addContent($this->view->topbar('Neue Verstoßmeldungen', count($reports).' gesamt', '<img src="/img/shit.png" />'),CNT_TOP);
 		}
-		addContent($this->view->topbar('Neue Verstoßmeldungen', count($reports).' gesamt', '<img src="/img/shit.png" />'),CNT_TOP);
 	}
 	
 	public function com()
 	{
-		addContent($this->view->statsMenu($this->model->getReportStats()),CNT_LEFT);
-		addContent($this->view->listReportedSavers($this->model->getReportedSavers()),CNT_LEFT);
-		
-		$reports = array();
-		if($reports = $this->model->getReports(1))
+		if($this->may())
 		{
-			addContent($this->view->listReports($reports));
+			addContent($this->view->statsMenu($this->model->getReportStats()),CNT_LEFT);
+			addContent($this->view->listReportedSavers($this->model->getReportedSavers()),CNT_LEFT);
+
+			$reports = array();
+			if($reports = $this->model->getReports(1))
+			{
+				addContent($this->view->listReports($reports));
+			}
+			addContent($this->view->topbar('Bestätigte Verstoßmeldungen', count($reports).' gesamt', '/img/shit.png'),CNT_TOP);
 		}
-		addContent($this->view->topbar('Bestätigte Verstoßmeldungen', count($reports).' gesamt', '/img/shit.png'),CNT_TOP);
 	}
 	
 	public function foodsaver()
