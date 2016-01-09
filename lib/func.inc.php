@@ -1359,57 +1359,59 @@ function getSearchMenu()
 
 function getOrgaMenu()
 {
+	$menu = array();
 	if(isOrgaTeam())
 	{
-		return 
-			array(
-				'default' => '<li><a class="fNiv"><i class="fa fa-gear"></i></a>
-				    <ul class="bigmenu">
-				      <li><a href="/?page=region">Regionen verwalten</a></li>
-				      <li><a href="/?page=quiz">Quiz verwalten</a></li>
-				      <li><a href="/?page=report&sub=uncom">Verstoßmeldungen</a></li>
-					  <li><a href="/?page=newarea">Regionswünsche von Foodsavern</a></li>
-					  <li><a href="/?page=foodsaver&bid=0">Alle Foodsaver</a></li>
-					  <li><a href="/?page=betrieb&bid=0">Alle Betriebe</a></li>
-				      <li><a href="/?page=email">E-Mail Verteiler</a></li>
-					  <li><a href="/?page=kette">Unternehmens-Ketten</a></li>
-					  <li><a href="/?page=faq">FAQ\'s verwalten</a></li>
-					  <li><a href="/?page=lebensmittel">Lebensmittel-Typen verwalten</a></li>
-					  <li><a href="/?page=content">Inhalte/Texte bearbeiten</a></li>
-					  <li><a href="/?page=mailbox&a=manage">Mailboxen</a></li>
-					  <li><a href="/?page=geoclean&sub=lostregion">Regionen ohne Botschafter</a></li>
-					  <li><a href="/?page=geoclean">Foodsaver ohne Region</a></li>
-					  <li class="menu-bottom"><a class="menu-bottom" href="/?page=message_tpl">E-Mail Vorlagen</a></li>
-				    </ul>
-				  </li>',
-			
-				'mobile' => '
-					<optgroup label="Orga">
-				    	<option value="/?page=region">Regionen verwalten</option>
-				    	<option value="/?page=quiz">Quiz verwalten</option>
-				    	<option value="/?page=report&sub=uncom">Verstoßmeldungen</option>
-						<option value="/?page=newarea">Regionswünsche von Foodsavern</option>
-						<option value="/?page=foodsaver&bid=0">Alle Foodsaver</option>
-						<option value="/?page=betrieb&bid=0">Alle Betriebe</option>
-				    	<option value="/?page=email">E-Mail Verteiler</option>
-						<option value="/?page=kette">Unternehmens-Ketten</option>
-						<option value="/?page=faq">FAQ\'s verwalten</option>
-					 	<option value="/?page=document">Dokumente verwalten</option>
-						<option value="/?page=lebensmittel">Lebensmittel-Typen verwalten</option>
-						<option value="/?page=content">Öffentliche Webseiten</option>
-						<option value="/?page=autokennzeichen">KFZ-Kennzeichen</option>
-						<option value="/?page=mailbox&a=manage">Mailboxen</option>
-					 	<option value="/?page=message_tpl">E-Mail Vorlagen</option>
-				    </optgroup>'
+		$menu = array('manage_regions' => 'region',
+			'quiz' => 'quiz',
+			'reports' => 'report&sub=uncom',
+			'newarea' => 'newarea',
+			'all_fs' => 'foodsaver&bid=0',
+			'all_store' => 'betrieb&bid=0',
+			'email' => 'email',
+			'chain' => 'kette',
+			'faq' => 'faq',
+			'foodtypes' => 'lebensmittel',
+			'content' => 'content',
+			'mailbox_manage' => 'mailbox&a=manage',
+			'regions_without_bots' => 'geoclean&sub=lostregion',
+			'foodsaver_without_region' => 'geoclean',
+			'email_tpl' => 'message_tpl'
 		);
 	}
-	else
+
+	$len = count($menu);
+	if($len)
 	{
-		return array(
-			'default' => '',
-			'mobile' => ''
-		);
+		$i = 0;
+		$default = '<li><a class="fNiv"><i class="fa fa-gear"></i></a><ul class="bigmenu">';
+		$mob = '<optgroup label="Orga">';
+		foreach($menu as $lang_id => $link)
+		{
+			if($i == $len-1)
+			{
+				$default_style = ' class="menu-bottom"';
+			} else
+			{
+				$default_style = '';
+			}
+
+			$default .= '<li'.$default_style.'><a'.$default_style.' href="/?page='.$link.'">'.s('menu_'.$lang_id).'</a></li>';
+			$mob .= '<option value="/?page'.$link.'">'.s('menu_'.$lang_id).'</option>';
+			$i++;
+		}
+		$default .= '</ul></li>';
+		$mob .= '</optgroup>';
+	} else
+	{
+		$default = '';
+		$mob = '';
 	}
+	return
+		array(
+			'default' => $default,
+			'mobile' => $mob
+		);
 }
 
 function dt($ts)

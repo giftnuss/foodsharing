@@ -215,3 +215,20 @@ $g_lang['not_rv_accepted'] = 'Du musst die Rechtsvereinbarung akzeptieren';
 $g_lang['regions'] = 'Bezirke';
 $g_lang['buddywalls'] = 'Pinnwände von Bekannten';
 $g_lang['user_add_success'] = 'Prima! Dein Account wurde angelegt!';
+
+$g_lang['menu_manage_regions'] = 'Regionen verwalten';
+$g_lang['menu_quiz'] = 'Quiz verwalten';
+$g_lang['menu_reports'] = 'Verstoßmeldungen';
+$g_lang['menu_newarea'] = 'Regionswünsche von Foodsavern';
+$g_lang['menu_all_fs'] = 'Alle Foodsaver';
+$g_lang['menu_all_store'] = 'Alle Betriebe';
+$g_lang['menu_email'] = 'E-Mail Verteiler';
+$g_lang['menu_chain'] = 'Betriebs-Ketten';
+$g_lang['menu_faq'] = 'FAQs verwalten';
+$g_lang['menu_foodtypes'] = 'Lebensmittel-Typen verwalten';
+$g_lang['menu_content'] = 'Inhalte bearbeiten';
+$g_lang['menu_mailbox_manage'] = 'Mailboxen verwalten';
+$g_lang['menu_regions_without_bots'] = 'Regionen ohne Botschafter';
+$g_lang['menu_foodsaver_without_region'] = 'Foodsaver ohne Region';
+$g_lang['menu_email_tpl'] = 'E-Mail Vorlagen';
+
