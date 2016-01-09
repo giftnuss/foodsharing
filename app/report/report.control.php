@@ -80,7 +80,7 @@ class ReportControl extends Control
 	
 	public function may()
 	{
-		if(isOrgaTeam() || isBotFor(347))
+		if(isOrgaTeam() || isBotFor(432))
 		{
 			return true;
 		}
