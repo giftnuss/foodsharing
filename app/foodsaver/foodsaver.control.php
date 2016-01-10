@@ -101,14 +101,18 @@ function handle_edit()
 	if(submitted())
 	{
 		
-		if(isset($g_data['orgateam']) && is_array($g_data['orgateam']) && $g_data['orgateam'][0] == 1)
+		if(isOrgateam())
 		{
-			$g_data['orgateam'] = 1;
-			$db->addGlocke($_GET['id'], 'Du bist jetzt im Bundesweiten Orgateam','Willkommen','/?page=relogin');
+			if(isset($g_data['orgateam']) && is_array($g_data['orgateam']) && $g_data['orgateam'][0] == 1)
+			{
+				$g_data['orgateam'] = 1;
+				$db->addGlocke($_GET['id'], 'Du bist jetzt im Bundesweiten Orgateam','Willkommen','/?page=relogin');
+			}
 		}
 		else
 		{
 			$g_data['orgateam'] = 0;
+			unset($g_data['email']);
 		}
 
 		if($db->update_foodsaver($_GET['id'],$g_data))

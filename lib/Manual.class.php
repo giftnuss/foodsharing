@@ -2082,11 +2082,6 @@ GROUP BY foodsaver_id'));
 			$orga = ',`orgateam` = '.$this->intval($data['orgateam']).'';
 		}
 
-		if(isset($data['fs_id']))
-		{
-			$fsid = ',`fs_id` = '.$this->intval($data['fs_id']).'';
-		}
-
 		$rolle = '';
 		if(isset($data['rolle']))
 		{
@@ -2099,6 +2094,12 @@ GROUP BY foodsaver_id'));
 			$position = '`position` =  ' . $this->strval($data['position']) . ',';
 		}
 
+		$email = '';
+		if(isset($data['email']))
+		{
+			$email = '`email` = '.$this->strval($data['email']).'';
+		}
+
 		return $this->update('
 
 		UPDATE 	`'.PREFIX.'foodsaver`
@@ -2109,7 +2110,6 @@ GROUP BY foodsaver_id'));
 				`stadt` =  ' . $this->strval(trim($data['stadt'])) . ',
 				`lat` =  ' . $this->strval(trim($data['lat'])) . ',
 				`lon` =  ' . $this->strval(trim($data['lon'])) . ',
-				`email` =  ' . $this->strval($data['email']) . ',
 				`name` =  ' . $this->strval($data['name']) . ',
 				`nachname` =  ' . $this->strval($data['nachname']) . ',
 				`anschrift` =  ' . $this->strval($data['anschrift']) . ',
@@ -2120,7 +2120,7 @@ GROUP BY foodsaver_id'));
 				'.$rolle.'
 				`geb_datum` =  ' . $this->dateval($data['geb_datum']) . '
 				' . $orga . '
-				' . $fsid . '
+				' . $email . '
 
 		WHERE 	`id` = '.$this->intval($id));
 	}
