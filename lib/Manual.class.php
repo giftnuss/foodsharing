@@ -2079,7 +2079,7 @@ GROUP BY foodsaver_id'));
 
 		if(isset($data['orgateam']))
 		{
-			$orga = ',`orgateam` = '.$this->intval($data['orgateam']).'';
+			$orga = ',`orgateam` = '.$this->intval($data['orgateam']).',';
 		}
 
 		$rolle = '';
@@ -2097,7 +2097,7 @@ GROUP BY foodsaver_id'));
 		$email = '';
 		if(isset($data['email']))
 		{
-			$email = '`email` = '.$this->strval($data['email']).'';
+			$email = '`email` = '.$this->strval($data['email']).',';
 		}
 
 		return $this->update('
@@ -2118,9 +2118,9 @@ GROUP BY foodsaver_id'));
 				`geschlecht` =  ' . $this->intval($data['geschlecht']) . ',
 				'.$position.'
 				'.$rolle.'
-				`geb_datum` =  ' . $this->dateval($data['geb_datum']) . '
 				' . $orga . '
 				' . $email . '
+				`geb_datum` =  ' . $this->dateval($data['geb_datum']) . '
 
 		WHERE 	`id` = '.$this->intval($id));
 	}
