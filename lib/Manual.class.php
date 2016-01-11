@@ -2077,9 +2077,10 @@ GROUP BY foodsaver_id'));
 			$data['bezirk_id'] = getBezirkId();
 		}
 
+		$orga = '';
 		if(isset($data['orgateam']))
 		{
-			$orga = ',`orgateam` = '.$this->intval($data['orgateam']).',';
+			$orga = '`orgateam` = '.$this->intval($data['orgateam']).',';
 		}
 
 		$rolle = '';
