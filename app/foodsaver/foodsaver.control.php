@@ -113,6 +113,7 @@ function handle_edit()
 		{
 			$g_data['orgateam'] = 0;
 			unset($g_data['email']);
+			unset($g_data['rolle']);
 		}
 
 		if($db->update_foodsaver($_GET['id'],$g_data))
