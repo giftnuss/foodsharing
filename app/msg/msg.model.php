@@ -115,7 +115,7 @@ class MsgModel extends Model
 
 
 		// for orga and bot-welcome team, allow to contact everyone who is foodsaver
-		if(S::may('orgateam') || (is_array($_SESSION['client']['bezirke']) && in_array(813, $_SESSION['client']['bezirke'])))
+		if(S::may('orga') || (is_array($_SESSION['client']['bezirke']) && in_array(813, $_SESSION['client']['bezirke'])))
 		{
 			$sql = '
 				SELECT fs.id AS id,
