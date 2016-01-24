@@ -113,10 +113,30 @@ class MsgModel extends Model
 	{
 		$out = array();
 
-		// add user in bezirk and groups
 
-		if(isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke']) && count($_SESSION['client']['bezirke'] > 0))
+		// for orga and bot-welcome team, allow to contact everyone who is foodsaver
+		if(S::may('orgateam') || (is_array($_SESSION['client']['bezirke']) && in_array(813, $_SESSION['client']['bezirke'])))
 		{
+			$sql = '
+				SELECT fs.id AS id,
+						CONCAT(fs.name," ",fs.nachname ) as value
+				FROM
+					'.PREFIX.'foodsaver fs
+				WHERE
+					fs.rolle >= 1
+				AND
+					CONCAT(fs.name," ",fs.nachname ) LIKE "%'.$this->safe($term).'%"
+				GROUP BY
+					fs.id
+				';
+			if($user = $this->q($sql))
+			{
+				$out = array_merge($out,$user);
+			}
+
+		} elseif(isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke']) && count($_SESSION['client']['bezirke'] > 0))
+		{
+		// add user in bezirk and groups
 			$ids = array();
 			foreach ($_SESSION['client']['bezirke'] as $i => $bezirk)
 			{
