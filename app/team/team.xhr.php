@@ -28,11 +28,11 @@ class TeamXhr extends Control
 				
 				if(validEmail($_POST['email']))
 				{
-					$mail->setFromEmail($_POST['email']);
+					$mail->setFrom($_POST['email']);
 				}
 				else
 				{
-					$mail->setFromEmail(DEFAULT_EMAIL);
+					$mail->setFrom(DEFAULT_EMAIL);
 				}
 				
 				$msg = strip_tags($_POST['message']);
