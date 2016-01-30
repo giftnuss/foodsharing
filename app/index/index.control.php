@@ -32,6 +32,8 @@ class IndexControl extends Control
 			$page_content = $db->getContent(37);
 		} elseif(strpos($_SERVER['HTTP_HOST'], 'foodsharingschweiz.ch') !== false) {
 			$page_content = $db->getContent(47);
+		} elseif(strpos($_SERVER['HTTP_HOST'], 'beta.foodsharing.de') !== false) {
+			$page_content = $db->getContent(48);
 		} else {
 			$page_content = $db->getContent(38);
 		}
