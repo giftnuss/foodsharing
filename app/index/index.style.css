@@ -23,6 +23,11 @@
 	margin-top:0px;
 	font-size:29px;
 }
+.biglogo p.tiny
+{
+	margin-top:0px;
+	font-size:25px;
+}
 .biglogo h1
 {
 	color:#5ab946;
@@ -112,6 +117,10 @@
 	.biglogo p.small
 	{
 		font-size:22px;
+	}
+	.biglogo p.tiny
+	{
+		font-size:19px;
 	}
 	.section .inside
 	{
