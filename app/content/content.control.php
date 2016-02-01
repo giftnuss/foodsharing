@@ -155,7 +155,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function fair-teiler-rettung()
+	public function fairteilerrettung()
 	{
 		if($cnt = $this->model->getContent(49))
 		{
