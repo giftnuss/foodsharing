@@ -881,7 +881,7 @@ function getMenu()
 					<li><a class="fNiv" href="/leeretonne">Aktionen</a>
 						<ul>
 							<li><a href="/leeretonne">Leere Tonne</a></li>
-							<li><a href="/aktion-fairteiler">Fair-Teiler Politik</a></li>
+							<li><a href="/fair-teiler-rettung">Rette die Fair-Teiler</a></li>
 						</ul>
 					</li>
 					<li><a onclick="ajreq(\'join\',{app:\'login\'});return false;" class="fNiv" href="/?page=join">Mach-Mit!</a></li>
@@ -894,7 +894,7 @@ function getMenu()
 					<option value="/karte">Karte</option>
 					<option value="/ratgeber">Ratgeber</option>
 					<option value="/leeretonne">Leere Tonne</option>
-					<option value="/aktion-fairteiler">Fair-Teiler Politik</option>
+					<option value="/fair-teiler-rettung">Rette die Fair-Teiler</option>
 					<option value="/unterstuetzung">Unterstützung</option>
 					<option value="/mach-mit">Mach-Mit!</option>
 					<option value="/login">Login</option>
