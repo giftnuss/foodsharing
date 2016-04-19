@@ -17,7 +17,7 @@ class LoginControl extends Control
 		addBread('Newsletter Abmeldung');
 		if(isset($_GET['e']) && validEmail($_GET['e']))
 		{
-			$this->model->update("UPDATE `".PREFIX."_foodsaver` SET newsletter=0 WHERE email='".$this->model->safe($_GET['e'])."'");
+			$this->model->update("UPDATE `".PREFIX."foodsaver` SET newsletter=0 WHERE email='".$this->model->safe($_GET['e'])."'");
 			addContent(v_info('Du wirst nun keine weiteren Newsletter von uns erhalten','Erfolg!'));
 			file_put_contents('../unsubscribe.txt',$_GET['e']."\n",FILE_APPEND);
 		}
