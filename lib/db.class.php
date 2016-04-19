@@ -965,7 +965,6 @@ class Db
 		{
 			$this->initSessionData($client['id']);
 			
-			$this->updateMumble($pass);
 			$this->update('
 				UPDATE '.PREFIX.'foodsaver
 				SET 	last_login = NOW()
