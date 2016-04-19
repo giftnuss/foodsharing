@@ -1036,7 +1036,6 @@ class Db
 	public function checkClient($email,$pass = false)
 	{
 		$email = $this->safe(trim($email));
-		$pass = $this->safe($pass);
     if(strlen($email) < 2 || strlen($pass) < 1)
     {
       return false;
