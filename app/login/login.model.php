@@ -77,7 +77,7 @@ class LoginModel extends Model
 	
 	public function newPassword($data)
 	{
-		if((int)strlen($data['pass1']) > 4 && strlen($data['pass1']) < 30)
+		if((int)strlen($data['pass1']) > 4)
 		{
 				
 			if($fsid = $this->qOne('SELECT `foodsaver_id` FROM `'.PREFIX.'pass_request` WHERE `name` = '.$this->strval($data['k'])))

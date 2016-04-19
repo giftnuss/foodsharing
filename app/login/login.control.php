@@ -167,11 +167,6 @@ class LoginControl extends Control
 							$check = false;
 							error('Sorry, Dein gewähltes Passwort ist zu kurz!');
 						}
-						elseif(strlen($_POST['pass1']) >= 30)
-						{
-							$check = false;
-							error('Sorry, Dein gewähltes Passwort ist zu lang!');
-						}
 						elseif(!$this->model->checkResetKey($_POST['k']))
 						{
 							$check = false;
