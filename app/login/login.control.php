@@ -43,7 +43,10 @@ class LoginControl extends Control
 		}
 		else
 		{
-			go('/?page=dashboard');
+			if(!isset($_GET['sub']) || $_GET['sub'] != 'unsubscribe')
+			{
+				go('/?page=dashboard');
+			}
 		}
 	}
 	
