@@ -971,7 +971,7 @@ class fMailbox
 		$context = stream_context_create($contextOptions);
 
 		$this->connection = stream_socket_client(
-			($this->secure ? 'tls://' . $this->host : $this->host) . $this->port,
+			($this->secure ? 'tls://' . $this->host : $this->host) .":". $this->port,
 			$error_number,
 			$error_string,
 			$this->timeout,
