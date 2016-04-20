@@ -984,7 +984,7 @@ class fMailbox
 		}
 
 		if (!$this->connection) {
-			throw new fConnectivityException('There was an error connecting to the server');
+			throw new fConnectivityException('There was an error connecting to the server (%1$s, %2$s)', $error_number, $error_string);
 		}
 
 		stream_set_timeout($this->connection, $this->timeout);
