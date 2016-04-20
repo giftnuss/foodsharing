@@ -13,10 +13,6 @@ var client_port = 1337
 
 sendtoclient = function(client,a,m,o){
 	if(connected_clients[client]) {
-		console.log(client);
-		console.log(a);
-		console.log(m);
-		console.log(o);
 		for(var i=0; i<connected_clients[client].length; i++) {
 			connected_clients[client][i].emit(a, {"m":m,"o":o});
 		}
@@ -49,7 +45,6 @@ var app = http.createServer(function  (req, res) {
 	var success = true;
 	if(client) {
 		success = sendtoclient(client,app,method,options);
-		console.log("send");
 	} else if(clients) {
 		for(var i = 0, l = client.length; i < l; i++) {
 			success = success && sendtoclient(clients[i],app,method,options);
@@ -86,7 +81,6 @@ io.on('connection', function (socket) {
 	ccc++;
 	socket.on('register', function (id) {
 		sid = id;
-		console.log("client", id, "registered");
 		if(!connected_clients[id]) connected_clients[id] = new Array();
 		connected_clients[id].push(socket);
 	});
@@ -94,7 +88,6 @@ io.on('connection', function (socket) {
 		//delete connected_clients[sid];
 		if( connected_clients[sid]) connected_clients[sid].remove(socket);
 		if(!connected_clients[sid]) delete connected_clients[sid];
-		console.log(sid, "disconncted");
 		ccc--;
 	});
 });
