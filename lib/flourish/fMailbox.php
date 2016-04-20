@@ -964,13 +964,20 @@ class fMailbox
 		}
 
 		fCore::startErrorCapture(E_WARNING);
+		$contextOptions = ['ssl' => [
+			'verify_peer' => false,
+			'verify_peer_name' => false,
+		]];
+		$context = stream_context_create($contextOptions);
 
-		$this->connection = fsockopen(
-			$this->secure ? 'tls://' . $this->host : $this->host,
+		$this->connection = stream_socket_client(
+			($this->secure ? 'tls://' . $this->host : $this->host) . $this->port,
 			$this->port,
 			$error_number,
 			$error_string,
-			$this->timeout
+			$this->timeout,
+			STREAM_CLIENT_CONNECT,
+			$context
 		);
 
 		foreach (fCore::stopErrorCapture('#ssl#i') as $error) {
