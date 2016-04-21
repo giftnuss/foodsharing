@@ -101,7 +101,7 @@ class Xhr
   			$out['msg'] = $this->messages;
   		}
   		
-  		echo json_encode($out);
+  		echo json_encode($out, JSON_PARTIAL_OUTPUT_ON_ERROR);
   		exit();
   	}
   	
