@@ -713,7 +713,7 @@ GROUP BY foodsaver_id'));
 		return $this->q('
 				SELECT 	`id`,`email`
 				FROM `'.PREFIX.'foodsaver`
-				'.$where.'
+				'.$where.' AND active = 1
 		');
 	}
 
