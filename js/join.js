@@ -103,7 +103,8 @@ var join = {
 					plz:$('#join_plz').val(),
 					city:$('#join_ort').val(),
 					gender:$('#login_gender').val(),
-					country:$('#join_country').val()
+					country:$('#join_country').val(),
+					newsletter:$('#newsletter').val()
 				},
 				success: function(ret){
 					if(ret.status != undefined && ret.status == 1)

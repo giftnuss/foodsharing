@@ -133,7 +133,7 @@ class LoginView extends View
 								<a href="http://wiki.lebensmittelretten.de/Rechtsvereinbarung" target="_blank">Hier klicken</a> um unsere <a href="http://wiki.lebensmittelretten.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> in einem neuen Fenster zu &ouml;ffen
 							</div>
 							<label><input id="join_legal1" type="checkbox" name="join_legal1" value="1" /> '.s('have_read_the_legal_stuff1').'</label><br />
-							<label><input id="join_legal2" type="checkbox" name="join_legal2" value="1" /> '.s('have_read_the_legal_stuff2').'</label>
+							<label><input id="join_legal2" type="checkbox" name="join_legal2" value="1" /> '.s('have_read_the_legal_stuff2').'</label><br />
 							<label><input id="newsletter" type="checkbox" name="newsletter" value="1" /> Ich möchte ca. 1x im Monat den foodsharing Newsletter erhalten</label>
 						</div>
 						<div class="bottom">
