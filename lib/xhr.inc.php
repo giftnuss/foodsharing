@@ -2444,6 +2444,11 @@ function xhr_addFetcher($data)
 			
 			$from = strtotime($data['from']);
 			$to = strtotime($data['to']);
+			if($to > time() + 86400*7*3)
+			{
+				info('Das Datum liegt zu weit in der Zukunft!');
+				return 0;
+			}
 			
 			$start = strtotime($data['date']);
 			
