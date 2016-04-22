@@ -540,18 +540,18 @@ class View
 		');
 		
 		
-		$hsnr = v_form_text('anschrift');
+		$hsnr = v_form_text('anschrift', array('disabled' => '1'));
 		if(isset($options['hsnr']))
 		{
 			$hsnr = v_form_text('str').v_form_text('hsnr');
 		}
 		
 		return v_input_wrapper(s('position_search'), '
-		<input placeholder="Staße, Ort..." type="text" value="" id="addresspicker_map" name="addresspicker_map" class="input text value ui-corner-top" />
+		<input placeholder="Straße, Ort..." type="text" value="" id="addresspicker_map" name="addresspicker_map" class="input text value ui-corner-top" />
 		<div id="map" class="pickermap"></div>').
 		$hsnr.
-		v_form_text('plz').
-		v_form_text('ort').
+		v_form_text('plz', array('disabled' => '1')).
+		v_form_text('ort', array('disabled' => '1')).
 		v_form_text('lat').
 		v_form_text('lon').
 		'';
