@@ -1561,7 +1561,7 @@ GROUP BY foodsaver_id'));
 
 			ORDER BY a.`date`
 
-			LIMIT 5
+			LIMIT 10
 		');
 	}
 
