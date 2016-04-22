@@ -442,7 +442,7 @@ class LoginXhr extends Control
 			return s('email_exists');
 		}
 		
-		if(strlen($data['pw']) < 3 && strlen($data['pw']) > 30)
+		if(strlen($data['pw']) < 5 && strlen($data['pw']) > 30)
 		{
 			return s('error_password');
 		}
