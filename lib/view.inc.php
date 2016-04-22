@@ -2449,6 +2449,11 @@ function v_form_text($id,$option = array())
 	$label = s($id);
 	
 	$value = getValue($id);
+	$disabled == ""
+	if($option['disabled'])
+	{
+		$disabled = "disabled";
+	}
 	
 	$pl = '';
 	if(isset($option['placeholder']))
@@ -2458,7 +2463,7 @@ function v_form_text($id,$option = array())
 	
 	return v_input_wrapper(
 			$label, 
-			'<input'.$pl.' class="input text value" type="text" name="'.$id.'" id="'.$id.'" value="'.$value.'" />', 
+			'<input'.$pl.' class="input text value" type="text" name="'.$id.'" id="'.$id.'" value="'.$value.'" '.$disabled.'/>',
 			$id,
 			$option
 	);
