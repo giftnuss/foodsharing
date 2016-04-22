@@ -2449,7 +2449,7 @@ function v_form_text($id,$option = array())
 	$label = s($id);
 	
 	$value = getValue($id);
-	$disabled == ""
+	$disabled == "";
 	if($option['disabled'])
 	{
 		$disabled = "disabled";
