@@ -2447,7 +2447,7 @@ function xhr_addFetcher($data)
 			if($to > time() + 86400*7*3)
 			{
 				info('Das Datum liegt zu weit in der Zukunft!');
-				return xhr_out();
+				return 0;
 			}
 			
 			$start = strtotime($data['date']);
@@ -2632,7 +2632,6 @@ function xhr_becomeBezirk($data)
 						}
 					}
 				}
-					
 					
 				if($botschafter = $db->getBotschafter($bezirk_id))
 				{
