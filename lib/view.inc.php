@@ -2452,7 +2452,7 @@ function v_form_text($id,$option = array())
 	$disabled == "";
 	if($option['disabled'])
 	{
-		$disabled = "disabled";
+		$disabled = 'readonly="readonly"';
 	}
 	
 	$pl = '';
