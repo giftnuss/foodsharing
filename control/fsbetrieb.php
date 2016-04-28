@@ -847,10 +847,17 @@ else if(isset($_GET['id']))
 			else
 			{
 				$bt = '';
+				$betriebsStatusName = '';
+				$betriebStatusList = $db->q('SELECT id, name FROM fs_betrieb_status');
+				foreach ($betriebStatusList as $betriebStatus) {
+					if ($betriebStatus['id'] == $betrieb['betrieb_status_id']) {
+						$betriebsStatusName = $betriebStatus['name'];
+					}
+				}
 				if($betrieb['verantwortlich'])
 				{
 					addHidden('<div id="changeStatus-hidden">'.v_form('changeStatusForm', array(
-					v_form_select('betrieb_status_id',array('value'=>$betrieb['betrieb_status_id'],'values' => $db->q('SELECT id, name FROM fs_betrieb_status')))
+					v_form_select('betrieb_status_id',array('value'=>$betrieb['betrieb_status_id'],'values'=>$betriebStatusList))
 					)).'</div>');
 				
 				
@@ -863,7 +870,7 @@ else if(isset($_GET['id']))
 				});');
 					$bt = '<p><span id="changeStatus">'.s('change_status').'</a></p>';
 				}
-				addContent(v_field('<p>'.s('not_ready').'</p>'.$bt,s('status'),array('class'=>'ui-padding')),CNT_RIGHT);
+				addContent(v_field('<p>'.v_getStatusAmpel($betrieb['betrieb_status_id']).$betriebsStatusName.'</p>'.$bt,s('status'),array('class'=>'ui-padding')),CNT_RIGHT);
 			}
 			
 		}	
