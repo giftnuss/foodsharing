@@ -2770,8 +2770,8 @@ function v_getStatusAmpel($status)
 		case 3 : $out = '<span class="hidden">3</span><a href="#" onclick="return false;" title="Betrieb kooperiert bereits" class="ampel ampel-gruen"><span>&nbsp;</span></a>'; break;
 		case 5 : $out = '<span class="hidden">3</span><a href="#" onclick="return false;" title="Betrieb kooperiert bereits" class="ampel ampel-gruen"><span>&nbsp;</span></a>'; break;
 		case 4 : $out = '<span class="hidden">4</span><a href="#" onclick="return false;" title="Will nicht kooperieren" class="ampel ampel-rot"><span>&nbsp;</span></a>'; break;
+		case 6 : $out = '<span class="hidden">4</span><a href="#" onclick="return false;" title="spendet an Tafel etc. & wirft nichts weg" class="ampel ampel-blau"><span>&nbsp;</span></a>'; break;
 	}
-	
 	return $out;
 }
 

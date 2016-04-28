@@ -369,6 +369,10 @@ div.head a.ampel
 {
 	background-position:-51px 0px;
 }
+.ampel-blau span
+{
+	background-position:-68px 0px;
+}
 ul.toolbar
 {
 	margin:0 !important;
