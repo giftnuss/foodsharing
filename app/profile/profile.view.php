@@ -112,15 +112,6 @@ class ProfileView extends View
 			);
 		}
 		
-		if($this->foodsaver['stat_fetchcount'] > 0)
-		{
-			$infos[] = array(
-					'name' => 'Abholquote',
-					'val' => ''.round($this->foodsaver['stat_fetchrate'],2).' %'
-			);
-		}
-		
-		
 		$out = '';
 		foreach ($infos as $key => $info)
 		{
@@ -690,14 +681,6 @@ class ProfileView extends View
 			);
 		}
 		
-		$fetchquote = '';
-		if($this->foodsaver['stat_fetchcount'] > 0)
-		{
-			$topinfos[] = array(
-				'name' => 'Abholquote',
-				'val' => ''.round($this->foodsaver['stat_fetchrate'],2).' %'
-			);
-		}
 		if($this->foodsaver['stat_buddycount'] > 0)
 		{
 			$topinfos[] = array(
