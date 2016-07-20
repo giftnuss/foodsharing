@@ -25,4 +25,6 @@ function recreatedb() {
 
 function migratedb() {
   sql-file foodsharing $dir/../migrations/initial.sql
+  sql-file foodsharing $dir/../migrations/static.sql
+}
 }
