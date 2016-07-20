@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -e
+
+# directories used by the application
+
+mkdir -p \
+  images/basket \
+  data/attach \
+  data/mailattach \
+  data/pass \
+  data/visite \
+  cache/searchindex \
+  css/gen \
+  js/gen \
+  tmp
