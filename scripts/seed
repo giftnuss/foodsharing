@@ -2,4 +2,10 @@
 
 set -e
 
-echo "seeding the database"
+dir=$(dirname "$0")
+
+. $dir/inc.sh
+
+for file in $dir/seeds/*.sql; do
+  sql-file foodsharing "$file"
+done
