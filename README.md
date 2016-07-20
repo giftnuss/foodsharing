@@ -6,6 +6,8 @@
 git clone git@gitlab.lebensmittelretten.de:raphael_w/lmr-v1-1.git foodsharing
 cd foodsharing
 git checkout dev-setup
+npm install
+(cd chat && npm install)
 ```
 
 ### Docker setup
