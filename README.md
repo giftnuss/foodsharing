@@ -1,0 +1,95 @@
+# foodsharing
+
+
+## Getting started
+```
+git clone git@gitlab.lebensmittelretten.de:raphael_w/lmr-v1-1.git foodsharing
+cd foodsharing
+git checkout dev-setup
+```
+
+### Docker setup
+
+This is the recommended approach, as we can ensure the correct versions of
+everything are available.
+
+Make sure you have installed
+[docker-compose](https://docs.docker.com/compose/install/) first.
+
+Make yourself a config file:
+```
+cp config.inc.php.txt config.inc.php
+```
+
+Ensure you have these bits:
+```
+define('DB_HOST','db');
+define('DB_USER','root');
+define('DB_PASS','root');
+define('DB_DB','foodsharing');
+
+define('REDIS_HOST', 'redis');
+define('REDIS_PORT', 6379);
+```
+
+Then run:
+
+```
+./scripts/setup
+docker-compose up
+./scripts/initdb
+./scripts/seed
+```
+
+It'll take some time to fetch all the docker images, so go and make a cup of tea.
+
+### Local setup
+
+Install a bunch of stuff on your machine:
+
+* mysql / mariadb
+* redis
+* php
+* php extensions:
+  * gd
+  * phpredis
+  * iconv
+  * mcrypt
+  * curl
+  * zip
+
+Make yourself a config file:
+```
+cp config.inc.php.txt config.inc.php
+```
+
+Ensure you have these bits:
+```
+define('DB_HOST','localhost');
+define('DB_USER','root');
+define('DB_PASS','root');
+define('DB_DB','foodsharing');
+```
+(currently the scripts assume `root:root` for mysql)
+
+
+Make sure mysql and redis are running, then run:
+
+```
+./scripts/setup
+./scripts/initdb
+./scripts/seed
+npm start
+```
+
+### Up and Running
+
+Now go and visit [localhost:8080](http://localhost:8080).
+
+There should be two users you can log in as:
+
+
+| email             | password |
+|-------------------|----------|
+| usera@example.com | usera    |
+| userb@example.com | userb    |
