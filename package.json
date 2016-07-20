@@ -1,0 +1,23 @@
+{
+  "name": "foodsharing.de",
+  "version": "1.0.0",
+  "description": "npm helper tools/commands",
+  "dependencies": {
+    "foreman": "^1.4.1"
+  },
+  "devDependencies": {
+    "http-proxy": "^1.14.0",
+    "watch": "^0.19.1"
+  },
+  "scripts": {
+    "start": "nf start",
+    "watch": "watch 'npm run build-js' --filter=scripts/watch-filter.js .",
+    "build-js": "echo -n 'building js... ' && curl -s localhost:9000/?nocache>/dev/null && echo 'done'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.lebensmittelretten.de:raphael_w/lmr-v1-1.git"
+  },
+  "keywords": [],
+  "author": ""
+}
