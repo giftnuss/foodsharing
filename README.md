@@ -36,12 +36,18 @@ Then run:
 
 ```
 ./scripts/setup
-docker-compose up
-./scripts/initdb
-./scripts/seed
+docker-compose up --build
 ```
 
 It'll take some time to fetch all the docker images, so go and make a cup of tea.
+
+Then in another terminal:
+
+```
+./scripts/initdb
+./scripts/seed
+npm run build-js
+```
 
 ### Local setup
 
@@ -79,6 +85,7 @@ Make sure mysql and redis are running, then run:
 ./scripts/setup
 ./scripts/initdb
 ./scripts/seed
+npm run build-js
 npm start
 ```
 
@@ -93,3 +100,13 @@ There should be two users you can log in as:
 |-------------------|----------|
 | usera@example.com | usera    |
 | userb@example.com | userb    |
+
+### Asset watching / building
+
+To rebuild assets on change, run:
+
+```
+npm run watch
+```
+
+(note: currently only watches javascript files, but builds everything)
