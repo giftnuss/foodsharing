@@ -12,3 +12,5 @@ css/gen/style.css
 config.inc.php
 cache
 tmp
+vendor
+tests/_output/*vendor

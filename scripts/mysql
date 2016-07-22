@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e
+
+. $(dirname "$0")/inc.sh
+
+run-in-container db mysql -p$MYSQL_PASSWORD foodsharing "$@"

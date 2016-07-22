@@ -1,29 +1,60 @@
 #!/bin/bash
 
+set -e
+
+export FS_ENV=${FS_ENV:-dev}
+
+MYSQL_USERNAME=${MYSQL_USERNAME:-root}
+MYSQL_PASSWORD=${MYSQL_PASSWORD:-root}
+
 dir=$(dirname "$0")
 
+function dc() {
+  $dir/docker-compose "$@"
+}
+
 function sql-query() {
-  mysql -h 127.0.0.1 -u root -proot "$1" -e "$2"
+  local database=$1 query=$2;
+  dc exec db sh -c "mysql -p$MYSQL_PASSWORD $database -e \"$query\""
 }
 
 function sql-file() {
-  mysql -h 127.0.0.1 -u root -proot "$1" < "$2"
+  local database=$1 filename=$2;
+  echo "Executing sql file $FS_ENV/$database $filename"
+  dc exec db sh -c "mysql -p$MYSQL_PASSWORD $database < /app/$filename"
+}
+
+function run-in-container() {
+  local container=$1; shift;
+  local command=$@;
+  dc exec $container sh -c "$command"
 }
 
 function dropdb() {
-  sql-query mysql 'drop database if exists foodsharing'
+  local database=$1;
+  echo "Dropping database $FS_ENV/$database"
+  sql-query mysql "drop database if exists $database"
 }
 
 function createdb() {
-  sql-query mysql 'create database if not exists foodsharing'
+  local database=$1;
+  echo "Creating database $FS_ENV/$database"
+  sql-query mysql "create database if not exists $database"
 }
 
 function recreatedb() {
-  dropdb
-  createdb
+  local database=$1;
+  dropdb "$database"
+  createdb "$database"
 }
 
 function migratedb() {
-  sql-file foodsharing $dir/../migrations/initial.sql
-  sql-file foodsharing $dir/../migrations/static.sql
+  local database=$1;
+  echo "Migrating database $FS_ENV/$database"
+  sql-file $database migrations/initial.sql
+  sql-file $database migrations/static.sql
+}
+
+function wait-for-mysql() {
+  run-in-container db "while ! mysql -p$MYSQL_PASSWORD --silent -e 'select 1' >/dev/null 2>&1; do sleep 1; done"
 }

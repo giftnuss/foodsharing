@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+. $(dirname "$0")/inc.sh
+
+echo "Building assets"
+run-in-container app 'curl -s localhost:9000?nocache >/dev/null'
+echo "Done"

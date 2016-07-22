@@ -7,9 +7,10 @@ services:
   # proxies connections to app/chat
 
   web:
+    container_name: foodsharing_dev_web
     build: ./docker-images/web
     ports:
-      - 8080:8080
+      - 18080:8080
     depends_on:
       - app
       - chat
@@ -20,24 +21,29 @@ services:
   #------------------------------------
 
   app:
-    build: ./docker-images/app
-    ports:
-      - 9000:9000
+    container_name: foodsharing_dev_app
+    command: php -S 0.0.0.0:9000
+    build: ./docker-images/php
+    expose:
+      - 9000
     links:
       - redis:redis
       - db:db
       - chat:chat
     volumes:
       - ./:/app
+    environment:
+      FS_ENV: dev
 
   # nodejs socket.io server
   #------------------------------------
 
   chat:
+    container_name: foodsharing_dev_chat
     build: ./docker-images/chat
-    ports:
-      - 1337:1337
-      - 1338:1338
+    expose:
+      - 1337
+      - 1338
     volumes:
       - ./:/app
 
@@ -45,17 +51,22 @@ services:
   #------------------------------------
 
   db:
+    container_name: foodsharing_dev_db
     image: orchardup/mysql
+    expose:
+      - 3306
     ports:
-      - 3306:3306
+      - 13306:3306
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: foodsharing
+    volumes:
+      - ./:/app
 
   # redis
   #------------------------------------
 
   redis:
+    container_name: foodsharing_dev_redis
     image: redis
-    ports:
-      - 6379:6379
+    expose:
+      - 6379

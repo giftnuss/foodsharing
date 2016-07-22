@@ -1,0 +1,24 @@
+#!/bin/bash
+
+export FS_ENV=dev
+
+set -e
+
+. $(dirname "$0")/inc.sh
+
+dc up --build -d
+wait-for-mysql
+createdb foodsharing
+migratedb foodsharing
+
+echo
+echo "  Go visit http://localhost:18080 now :)"
+echo
+echo "  Or view logs with:"
+echo
+echo "    ./scripts/docker-compose logs -f"
+echo
+echo "  Or seed the db with some data:"
+echo
+echo "    ./scripts/seed"
+echo

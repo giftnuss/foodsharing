@@ -4,5 +4,5 @@ set -e
 
 . $(dirname "$0")/inc.sh
 
-createdb
-migratedb
+createdb foodsharing
+migratedb foodsharing

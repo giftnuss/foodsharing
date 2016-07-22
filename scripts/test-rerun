@@ -1,0 +1,17 @@
+#!/bin/bash
+
+export FS_ENV=test
+
+# does not build the environment
+# assumes all the tests are idempotent
+# the db does not get recreated between runs
+
+set -e
+
+. $(dirname "$0")/inc.sh
+
+echo "Running tests"
+run-in-container app vendor/bin/codecept run
+
+echo "Done!"
+

@@ -1,18 +1,18 @@
 {
   "name": "foodsharing.de",
   "version": "1.0.0",
-  "description": "npm helper tools/commands",
+  "description": "",
   "dependencies": {
-    "foreman": "^1.4.1"
+    "socket.io" : "1.2.0",
+    "url" : "0.10.1"
   },
   "devDependencies": {
-    "http-proxy": "^1.14.0",
     "watch": "^0.19.1"
   },
   "scripts": {
     "start": "nf start",
-    "watch": "watch 'npm run build-js' --filter=scripts/watch-filter.js .",
-    "build-js": "echo -n 'building js... ' && curl -s localhost:9000/?nocache>/dev/null && echo 'done'"
+    "watch": "watch 'npm run build-assets' --filter=scripts/watch-filter.js .",
+    "build-assets": "./scripts/build-assets"
   },
   "repository": {
     "type": "git",

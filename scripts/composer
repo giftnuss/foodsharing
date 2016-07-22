@@ -1,7 +1,6 @@
 #!/bin/bash
 
-set -e
-
 . $(dirname "$0")/inc.sh
 
-dropdb foodsharing
+run-in-container app composer "$@"
+
