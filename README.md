@@ -5,6 +5,7 @@
 git clone git@gitlab.lebensmittelretten.de:raphael_w/lmr-v1-1.git foodsharing
 cd foodsharing
 git checkout dev-setup
+npm install
 ```
 
 ### Docker setup
@@ -19,10 +20,23 @@ Make sure you have installed
 ./scripts/mkdirs
 ./scripts/start
 ./scripts/composer install
-./scripts/npm install
+./scripts/build-assets
 ```
 
 It'll take some time to fetch all the docker images, so go and make a cup of tea.
+
+The ordering is not quite right yet. You might need to restart the containers at some point during setup, you can do that with:
+
+```
+./scripts/docker-compose restart
+```
+
+Or destroy and recreate:
+
+```
+./scripts/rm
+./scripts/start
+```
 
 ### Up and Running
 
