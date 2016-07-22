@@ -70,7 +70,7 @@ npm run watch
 There are a number of helper scripts available. Most of them obey the `FS_INT` variable. Default is `dev`, you can also set it to `test`.
 
 | script | purpose |
-|-|-|
+|--------|---------|
 | ./scripts/build-assets | builds the static assets |
 | ./scripts/composer | run php composer |
 | ./scripts/docker-compose | docker-compose with the correct options set for the env |
