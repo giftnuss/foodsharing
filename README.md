@@ -1,21 +1,28 @@
 # foodsharing
 
+This `dev-setup` branch makes it easy for people to setup foodsharing on their computer
+for development purposes.
+
+It runs everything inside docker containers to have minimal impact on the local system and
+allow precise versions of software to be defined to match production setup closely.
+
+The intention would be to merge it into master, a few things should be checked/solved first
+though:
+
+* it includes `config.inc.php` in the repo now, to switch between configs based on env var, the live site would have to create a `config.inc.prod.php` file and set env var `FS_ENV=prod`
+* there is a change that might only because because the nginx config is different to prod, see `git diff f1e2b5be43ec57eb022d655a909ac33d1a6f5d31..HEAD -- app/basket/basket.control.php`
+* there are many more files in the base directory that should not served up publically, perhaps all the public files can be moved into a `public` directory and nginx root changed?
+* it should be checked by someone familiar with the foodsharing.de codebase/infrastructure
+
 ## Getting started
+
+Make sure you have installed
+[docker-compose](https://docs.docker.com/compose/install/) and node/npm first.
+
 ```
 git clone git@gitlab.lebensmittelretten.de:raphael_w/lmr-v1-1.git foodsharing
 cd foodsharing
 git checkout dev-setup
-```
-
-### Docker setup
-
-This is the only supported approach, as we can ensure the correct versions of
-everything are available.
-
-Make sure you have installed
-[docker-compose](https://docs.docker.com/compose/install/) first.
-
-```
 ./scripts/start
 ```
 
@@ -67,7 +74,7 @@ To rebuild assets on change, run:
 
 # Helper scripts
 
-There are a number of helper scripts available. Most of them obey the `FS_INT` variable. Default is `dev`, you can also set it to `test`.
+There are a number of helper scripts available. Most of them obey the `FS_INT` env var. Default is `dev`, you can also set it to `test`.
 
 | script | purpose |
 |--------|---------|
