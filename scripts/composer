@@ -3,4 +3,3 @@
 . $(dirname "$0")/inc.sh
 
 run-in-container app composer "$@"
-

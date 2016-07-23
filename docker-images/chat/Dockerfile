@@ -2,6 +2,6 @@ from node:6
 
 RUN apt-get update
 
-WORKDIR /app
+WORKDIR /app/chat
 
-CMD ["node", "chat/server.js"]
+CMD ["node", "server.js"]

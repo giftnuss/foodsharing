@@ -1,6 +1,0 @@
-#!/bin/bash
-
-. $(dirname "$0")/inc.sh
-
-run-in-container chat npm "$@"
-

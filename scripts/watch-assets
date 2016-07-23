@@ -1,0 +1,15 @@
+#!/bin/bash
+
+
+set -e
+
+dir=$(dirname "$0")
+
+export PATH=$dir/node_modules/.bin:$PATH
+
+. $dir/inc.sh
+
+watch_dir=$(readlink -f "$dir/..")
+
+echo "Watching assets"
+watch $dir/build-assets --filter=$dir/watch-filter.js $watch_dir

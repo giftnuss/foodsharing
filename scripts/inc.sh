@@ -24,10 +24,16 @@ function sql-file() {
   dc exec db sh -c "mysql -p$MYSQL_PASSWORD $database < /app/$filename"
 }
 
-function run-in-container() {
+function exec-in-container() {
   local container=$1; shift;
   local command=$@;
   dc exec $container sh -c "$command"
+}
+
+function run-in-container() {
+  local container=$1; shift;
+  local command=$@;
+  dc run $container sh -c "$command"
 }
 
 function dropdb() {
@@ -56,5 +62,5 @@ function migratedb() {
 }
 
 function wait-for-mysql() {
-  run-in-container db "while ! mysql -p$MYSQL_PASSWORD --silent -e 'select 1' >/dev/null 2>&1; do sleep 1; done"
+  exec-in-container db "while ! mysql -p$MYSQL_PASSWORD --silent -e 'select 1' >/dev/null 2>&1; do sleep 1; done"
 }

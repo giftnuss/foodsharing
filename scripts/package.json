@@ -1,0 +1,11 @@
+{
+  "name": "foodsharing.de-dev",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {},
+  "devDependencies": {
+    "watch": "^0.19.1"
+  },
+  "keywords": [],
+  "author": ""
+}

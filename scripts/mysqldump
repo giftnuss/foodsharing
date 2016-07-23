@@ -4,4 +4,4 @@ set -e
 
 . $(dirname "$0")/inc.sh
 
-run-in-container db mysqldump -p$MYSQL_PASSWORD foodsharing "$@"
+exec-in-container db mysqldump -p$MYSQL_PASSWORD foodsharing "$@"

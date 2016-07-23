@@ -7,5 +7,5 @@ dir=$(dirname "$0")
 . $dir/inc.sh
 
 for file in $dir/seeds/*.sql; do
-  sql-file foodsharing "$file"
+  sql-file foodsharing scripts/seeds/$(basename "$file")
 done

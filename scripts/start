@@ -4,12 +4,39 @@ export FS_ENV=dev
 
 set -e
 
-. $(dirname "$0")/inc.sh
+dir=$(dirname "$0")
 
-dc up --build -d
+. $dir/inc.sh
+
+echo "Running local npm install"
+(cd $dir && npm install)
+
+echo "Creating directories"
+$dir/mkdirs
+
+echo "Building containers"
+dc build
+
+echo "Running composer install"
+run-in-container app composer install
+
+echo "Running npm install for chat"
+run-in-container chat npm install
+
+echo "Bring up containers"
+dc up -d
+
+echo "Waiting for mysql"
 wait-for-mysql
+
+# Creating db
 createdb foodsharing
-migratedb foodsharing
+
+# Migrating db
+migratedb foodsharing || true
+
+# Building assets
+$dir/build-assets
 
 echo
 echo "  Go visit http://localhost:18080 now :)"
