@@ -103,12 +103,14 @@ class BasketXhr extends Control
 		
 		$dia->addButton('Essenskorb veröffentlichen', 'ajreq(\'publish\',{appost:0,app:\'basket\',data:$(\'#'.$dia->getId().' .input\').serialize(),description:$(\'#description\').val(),picture:$(\'#'.$dia->getId().'-picture-filename\').val(),weight:$(\'#weight\').val()});');
 		
+		/*
 		$dia->addJsAfter('
 			$("#'.$dia->getId().'").resize(function(){
 				alert("resize");
 			});	
 		');
-		
+		*/
+	
 		return $dia->xhrout();
 	}
 	
