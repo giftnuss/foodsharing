@@ -91,7 +91,7 @@ There are a number of helper scripts available. Most of them obey the `FS_INT` e
 | ./scripts/rebuild-container [name] | rebuilds and restarts a single container, useful if changing nginx config for example |
 | ./scripts/rm | shutdown and cleanup all containers |
 | ./scripts/seed | run seed scripts in `scripts/seeds/*.sql` |
-| ./scripts/start| start everything! initialing anything if needed |
+| ./scripts/start| start everything! initializing anything if needed |
 | ./scripts/stop | stop everything, but leave it configured |
 | ./scripts/test | run tests |
 | ./scripts/test-rerun | run tests without recreating db |
