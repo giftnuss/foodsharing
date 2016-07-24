@@ -5,5 +5,5 @@ set -e
 . $(dirname "$0")/inc.sh
 
 echo "Building assets"
-exec-in-container app 'curl -s localhost:9000?nocache >/dev/null'
+exec-in-container web 'curl -s localhost:8080?nocache >/dev/null'
 echo "Done"

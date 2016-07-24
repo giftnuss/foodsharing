@@ -15,7 +15,7 @@ class BasketControl extends Control
 	
 	public function index()
 	{
-		if($id = $this->uriInt(3))
+		if($id = $this->uriInt(2))
 		{
 			if($basket = $this->model->getBasket($id))
 			{
@@ -24,7 +24,7 @@ class BasketControl extends Control
 		}
 		else 
 		{
-			if($m = $this->uriStr(3))
+			if($m = $this->uriStr(2))
 			{
 				if(method_exists($this,$m))
 				{

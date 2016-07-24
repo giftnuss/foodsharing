@@ -22,7 +22,6 @@ services:
 
   app:
     container_name: foodsharing_dev_app
-    command: php -S 0.0.0.0:9000
     build: ./docker-images/php
     expose:
       - 9000

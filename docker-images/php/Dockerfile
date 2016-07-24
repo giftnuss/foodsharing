@@ -1,4 +1,4 @@
-from php:5.6.23
+from php:5.6-fpm
 
 RUN apt-get update
 
@@ -13,28 +13,36 @@ RUN apt-get install -y \
 
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
 RUN docker-php-ext-install -j$(nproc) iconv mcrypt mysqli gd curl zip
-#RUN pecl install redis
-#RUN docker-php-ext-enable redis
 
 # phpredis
 
+# pecl version only supports newer php versions
+#RUN pecl install redis
+#RUN docker-php-ext-enable redis
+
 RUN curl -L -o \
-  /tmp/redis.tar.gz \
+  /tmp/phpredis.tar.gz \
   https://github.com/phpredis/phpredis/archive/2.2.7.tar.gz
 
-RUN tar xf /tmp/redis.tar.gz -C /tmp
+RUN tar xf /tmp/phpredis.tar.gz -C /tmp
 RUN mkdir -p /usr/src/php/ext
 RUN mv /tmp/phpredis-2.2.7 /usr/src/php/ext/redis
 RUN echo redis >> /usr/src/php-available-exts
 RUN docker-php-ext-install redis
 
-RUN rm -r /tmp/redis.tar.gz
+RUN rm /tmp/phpredis.tar.gz
 
 RUN \
   curl -sS https://getcomposer.org/installer | \
   php -- --install-dir=/usr/local/bin --filename=composer
 
 WORKDIR /app
+
+RUN apt-get install -y vim
+
+RUN rm /usr/local/etc/php-fpm.d/*
+
 COPY php.ini /usr/local/etc/php/
+COPY fpm.conf /usr/local/etc/php-fpm.d/fpm.conf
 
 EXPOSE 9000
