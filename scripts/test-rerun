@@ -11,7 +11,7 @@ set -e
 . $(dirname "$0")/inc.sh
 
 echo "Running tests"
-exec-in-container app vendor/bin/codecept run
+exec-in-container app vendor/bin/codecept run "$@"
 
 echo "Done!"
 
