@@ -10,7 +10,6 @@ The intention would be to merge it into master, a few things should be checked/s
 though:
 
 * it includes `config.inc.php` in the repo now, to switch between configs based on env var, the live site would have to create a `config.inc.prod.php` file and set env var `FS_ENV=prod`
-* there is a change that might only because because the nginx config is different to prod, see `git diff f1e2b5be43ec57eb022d655a909ac33d1a6f5d31..HEAD -- app/basket/basket.control.php`
 * there are many more files in the base directory that should not served up publically, perhaps all the public files can be moved into a `public` directory and nginx root changed?
 * it should be checked by someone familiar with the foodsharing.de codebase/infrastructure
 
