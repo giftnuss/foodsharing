@@ -90,7 +90,7 @@ There are a number of helper scripts available. Most of them obey the `FS_INT` e
 | ./scripts/composer | run php composer |
 | ./scripts/docker-compose | docker-compose with the correct options set for the env |
 | ./scripts/dropdb | drop the database |
-| ./scripts/clean | opposite of start, remove everything that was installed |
+| ./scripts/clean | remove anything add by start/test commands |
 | ./scripts/initdb | create the database and run migrations |
 | ./scripts/mkdirs | create directories that need to be present |
 | ./scripts/mysql | run mysql command in correct context |
