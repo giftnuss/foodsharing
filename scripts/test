@@ -20,6 +20,6 @@ sql-file foodsharing migrations/static.sql
 sql-file foodsharing tests/seed.sql
 
 echo "Running tests"
-exec-in-container app vendor/bin/codecept run
+exec-in-container app vendor/bin/codecept run "$@"
 
 echo "Done!"
