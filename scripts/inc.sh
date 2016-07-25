@@ -33,7 +33,7 @@ function exec-in-container() {
 function run-in-container() {
   local container=$1; shift;
   local command=$@;
-  dc run $container sh -c "$command"
+  dc run --rm $container sh -c "$command"
 }
 
 function dropdb() {
