@@ -51,8 +51,13 @@ To stop everything again just run:
 ./scripts/stop
 ```
 
-PHPMyAdmin is also included: [localhost:18081](http://localhost:18081).
-Take the login from `config.inc.dev.php`, the default is `root:root`.
+PHPMyAdmin is also included: [localhost:18081](http://localhost:18081). Log in with:
+
+| field | value |
+|-------|-------|
+| Server | db |
+| Username | root |
+| Password | root |
 
 ### Testing
 
