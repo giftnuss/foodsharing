@@ -69,3 +69,17 @@ services:
     image: redis
     expose:
       - 6379
+
+  # phpmyadmin
+  #------------------------------------
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: foodsharing_dev_phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+    restart: always
+    ports:
+      - 18081:80
+    volumes:
+      - /sessions

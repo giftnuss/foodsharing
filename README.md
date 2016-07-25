@@ -51,6 +51,9 @@ To stop everything again just run:
 ./scripts/stop
 ```
 
+PHPMyAdmin is also included: [localhost:18081](http://localhost:18081).
+Take the login from `config.inc.dev.php`, the default is `root:root`.
+
 ### Testing
 
 Run the tests with:
