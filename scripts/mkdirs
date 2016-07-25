@@ -4,7 +4,7 @@ set -e
 
 # directories used by the application
 
-mkdir -p \
+dirs="\
   images/basket \
   data/attach \
   data/mailattach \
@@ -13,4 +13,8 @@ mkdir -p \
   cache/searchindex \
   css/gen \
   js/gen \
-  tmp
+  tmp \
+"
+
+mkdir -p $dirs
+chmod 777 $dirs
