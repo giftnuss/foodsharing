@@ -25,6 +25,7 @@ fi
 
 echo "Removing containers"
 $dir/rm
+FS_ENV=test $dir/rm
 
 echo "Removing generated assets"
 rm -f $base_dir/js/gen/script.js
