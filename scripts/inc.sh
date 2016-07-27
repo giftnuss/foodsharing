@@ -33,7 +33,7 @@ function exec-in-container() {
 function run-in-container() {
   local container=$1; shift;
   local command=$@;
-  dc run --rm -u $(id -u):$(id -g) $container sh -c "HOME=./ $command"
+  dc run --rm --user $(id -u):$(id -g) $container sh -c "HOME=./ $command"
 }
 
 function exec-in-container-asroot() {
