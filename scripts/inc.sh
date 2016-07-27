@@ -27,10 +27,22 @@ function sql-file() {
 function exec-in-container() {
   local container=$1; shift;
   local command=$@;
-  dc exec $container sh -c "$command"
+  dc exec --user $(id -u):$(id -g) $container sh -c "HOME=./ $command"
 }
 
 function run-in-container() {
+  local container=$1; shift;
+  local command=$@;
+  dc run --rm -u $(id -u):$(id -g) $container sh -c "HOME=./ $command"
+}
+
+function exec-in-container-asroot() {
+  local container=$1; shift;
+  local command=$@;
+  dc exec $container sh -c "$command"
+}
+
+function run-in-container-asroot() {
   local container=$1; shift;
   local command=$@;
   dc run --rm $container sh -c "$command"
@@ -62,5 +74,5 @@ function migratedb() {
 }
 
 function wait-for-mysql() {
-  exec-in-container db "while ! mysql -p$MYSQL_PASSWORD --silent -e 'select 1' >/dev/null 2>&1; do sleep 1; done"
+  exec-in-container-asroot db "while ! mysql -p$MYSQL_PASSWORD --silent -e 'select 1' >/dev/null 2>&1; do sleep 1; done"
 }

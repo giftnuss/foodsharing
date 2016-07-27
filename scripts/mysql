@@ -4,4 +4,4 @@ set -e
 
 . $(dirname "$0")/inc.sh
 
-exec-in-container db mysql -p$MYSQL_PASSWORD foodsharing "$@"
+exec-in-container-asroot db mysql -p$MYSQL_PASSWORD foodsharing "$@"
