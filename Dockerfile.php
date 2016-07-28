@@ -38,11 +38,15 @@ RUN \
 
 WORKDIR /app
 
+COPY composer.json .
+COPY composer.lock .
+
+RUN composer install
+
 RUN apt-get install -y vim
 
 RUN rm /usr/local/etc/php-fpm.d/*
 
-COPY php.ini /usr/local/etc/php/
-COPY fpm.conf /usr/local/etc/php-fpm.d/fpm.conf
+COPY docker-conf/php/php.ini /usr/local/etc/php/
+COPY docker-conf/php/fpm.conf /usr/local/etc/php-fpm.d/fpm.conf
 
-EXPOSE 9000

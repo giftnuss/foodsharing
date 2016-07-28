@@ -13,16 +13,6 @@ base_dir=$(readlink -f "$dir/..")
 echo "Removing local node_modules"
 (cd $dir && rm -rf node_modules)
 
-if [ -d vendor ]; then
-  echo "Removing composer deps"
-  run-in-container app rm -r vendor
-fi
-
-if [ -d chat/node_modules ]; then
-  echo "Removing chat node_modules"
-  run-in-container chat rm -r node_modules
-fi
-
 echo "Removing containers"
 $dir/rm
 FS_ENV=test $dir/rm

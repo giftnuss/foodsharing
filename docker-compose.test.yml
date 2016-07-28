@@ -8,7 +8,10 @@ services:
 
   web:
     container_name: foodsharing_test_web
-    build: ./docker-images/web
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    image: registry.gitlab.com/foodsharing-dev/foodsharing:web
     ports:
       - 28080:8080
     expose:
@@ -24,7 +27,10 @@ services:
 
   app:
     container_name: foodsharing_test_app
-    build: ./docker-images/php
+    build:
+      context: .
+      dockerfile: Dockerfile.php
+    image: registry.gitlab.com/foodsharing-dev/foodsharing:php
     expose:
       - 9000
     links:
@@ -33,17 +39,22 @@ services:
       - chat:chat
     volumes:
       - ./:/app
+      - /app/vendor
     environment:
       FS_ENV: test
 
   chat:
     container_name: foodsharing_test_chat
-    build: ./docker-images/chat
+    build:
+      context: chat
+      dockerfile: Dockerfile.chat
+    image: registry.gitlab.com/foodsharing-dev/foodsharing:chat
     expose:
       - 1337
       - 1338
     volumes:
       - ./:/app
+      - /app/chat/node_modules
 
   # mysql
   #------------------------------------

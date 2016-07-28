@@ -4,4 +4,8 @@ RUN apt-get update
 
 WORKDIR /app/chat
 
+COPY package.json .
+
+RUN npm install
+
 CMD ["node", "server.js"]

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+
+dir=$(dirname "$0")
+
+. $dir/inc.sh
+
+if [ "x" != "x$CI_BUILD_TOKEN" ]; then
+  docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+fi
+
+base=registry.gitlab.com/foodsharing-dev/foodsharing
+
+$dir/docker-compose build
+
+for name in php chat web; do
+  echo "Pushing image $name"
+  docker push $base:$name
+done
