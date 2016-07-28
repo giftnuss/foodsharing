@@ -20,7 +20,7 @@ Make sure you have installed
 [docker-compose](https://docs.docker.com/compose/install/) and node/npm first.
 
 ```
-git clone git@gitlab.lebensmittelretten.de:raphael_w/lmr-v1-1.git foodsharing
+git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
 cd foodsharing
 git checkout dev-setup
 ./scripts/start
