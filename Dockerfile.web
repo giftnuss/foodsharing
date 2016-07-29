@@ -1,8 +1,0 @@
-FROM nginx:latest
-
-RUN apt-get update
-
-RUN apt-get install -y curl
-
-COPY docker-conf/web/app.conf /etc/nginx/conf.d/default.conf
-COPY docker-conf/web/foodsharing.conf /etc/nginx/includes/foodsharing.conf

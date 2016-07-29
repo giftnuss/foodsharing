@@ -9,16 +9,15 @@ services:
   web:
     container_name: foodsharing_dev_web
     build:
-      context: .
-      dockerfile: Dockerfile.web
-    image: registry.gitlab.com/foodsharing-dev/foodsharing:web
+      context: ..
+      dockerfile: docker/Dockerfile.web
     ports:
       - 18080:8080
     depends_on:
       - app
       - chat
     volumes:
-      - ./:/app
+      - ../:/app
 
   # main php app
   #------------------------------------
@@ -26,9 +25,8 @@ services:
   app:
     container_name: foodsharing_dev_app
     build:
-      context: .
-      dockerfile: Dockerfile.php
-    image: registry.gitlab.com/foodsharing-dev/foodsharing:php
+      context: ..
+      dockerfile: docker/Dockerfile.php
     expose:
       - 9000
     links:
@@ -36,7 +34,7 @@ services:
       - db:db
       - chat:chat
     volumes:
-      - ./:/app
+      - ../:/app
       - /app/vendor
     environment:
       FS_ENV: dev
@@ -48,14 +46,13 @@ services:
     container_name: foodsharing_dev_chat
     command: node server.js 0.0.0.0
     build:
-      context: chat
-      dockerfile: Dockerfile.chat
-    image: registry.gitlab.com/foodsharing-dev/foodsharing:chat
+      context: ../chat
+      dockerfile: docker/Dockerfile.chat
     expose:
       - 1337
       - 1338
     volumes:
-      - ./:/app
+      - ../:/app
       - /app/chat/node_modules
 
   # mysql
@@ -71,7 +68,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
     volumes:
-      - ./:/app
+      - ../:/app
 
   # redis
   #------------------------------------

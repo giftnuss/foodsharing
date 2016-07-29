@@ -1,0 +1,41 @@
+image: alpine
+
+cache:
+  paths:
+    - vendor/
+    - chat/node_modules/
+    - .pip-cache
+
+services:
+- docker:dind
+
+test:
+  script:
+
+  # setup tools
+  - apk add -U docker bash py-pip
+  - mkdir -p .pip-cache
+  - pip install --cache-dir=.pip-cache docker-compose
+  
+  # make cache dirs
+  - mkdir -p vendor chat/node_modules/
+
+  # run the actual tests
+  - ./scripts/ci.test
+
+  # collect the contents to cache
+  - rm -rf vendor chat/node_modules/
+  - docker cp foodsharing_ci_app:/app/vendor vendor
+  - docker cp foodsharing_ci_chat:/app/chat/node_modules chat/node_modules
+
+  # stop/kill all the containers
+  - FS_ENV=ci ./scripts/rm
+
+  tags:
+  - shared
+
+variables:
+  DOCKER_HOST: docker:2375
+  # https://docs.docker.com/engine/userguide/storagedriver/selectadriver/
+  # https://gitlab.com/gitlab-org/gitlab-ce/issues/19971
+  DOCKER_DRIVER: overlay

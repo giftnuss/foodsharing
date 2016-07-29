@@ -15,19 +15,19 @@ function dc() {
 
 function sql-query() {
   local database=$1 query=$2;
-  dc exec db sh -c "mysql -p$MYSQL_PASSWORD $database -e \"$query\""
+  dc exec -T db sh -c "mysql -p$MYSQL_PASSWORD $database -e \"$query\""
 }
 
 function sql-file() {
   local database=$1 filename=$2;
   echo "Executing sql file $FS_ENV/$database $filename"
-  dc exec db sh -c "mysql -p$MYSQL_PASSWORD $database < /app/$filename"
+  dc exec -T db sh -c "mysql -p$MYSQL_PASSWORD $database < /app/$filename"
 }
 
 function exec-in-container() {
   local container=$1; shift;
   local command=$@;
-  dc exec --user $(id -u):$(id -g) $container sh -c "HOME=./ $command"
+  dc exec -T --user $(id -u):$(id -g) $container sh -c "HOME=./ $command"
 }
 
 function run-in-container() {
@@ -39,7 +39,7 @@ function run-in-container() {
 function exec-in-container-asroot() {
   local container=$1; shift;
   local command=$@;
-  dc exec $container sh -c "$command"
+  dc exec -T $container sh -c "$command"
 }
 
 function run-in-container-asroot() {

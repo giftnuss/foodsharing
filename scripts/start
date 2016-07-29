@@ -15,7 +15,10 @@ echo "Creating directories"
 $dir/mkdirs
 
 echo "Building containers"
-dc build
+for name in web app chat; do
+  dc build --pull &
+done
+wait
 
 echo "Bring up containers"
 dc up -d
