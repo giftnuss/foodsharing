@@ -46,6 +46,7 @@ services:
 
   chat:
     container_name: foodsharing_dev_chat
+    command: node server.js 0.0.0.0
     build:
       context: chat
       dockerfile: Dockerfile.chat
