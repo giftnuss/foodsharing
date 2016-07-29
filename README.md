@@ -10,9 +10,8 @@ The intention would be to merge it into master, a few things should be checked/s
 though:
 
 * it includes `config.inc.php` in the repo now, to switch between configs based on env var, the live site would have to create a `config.inc.prod.php` file and set env var `FS_ENV=prod`
-* there are many more files in the base directory that should not served up publically, perhaps all the public files can be moved into a `public` directory and nginx root changed?
 * it should be checked by someone familiar with the foodsharing.de codebase/infrastructure
-* the chat server listens on all ports now, should default to previous behaviour (localhost only) but provide configuration option
+* see https://gitlab.com/foodsharing-dev/foodsharing/milestones/3 for other outstanding issues
 
 ## Getting started
 
