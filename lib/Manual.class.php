@@ -828,13 +828,23 @@ GROUP BY foodsaver_id'));
 
 	public function addTeamMessage($bid,$message)
 	{
-		if($team = $this->getBetriebTeam($bid))
+		if($betrieb = $this->getMyBetrieb($bid))
 		{
-			foreach ($team as $t)
+			
+			if(!is_null($betrieb['team_conversation_id'])) 
 			{
-				if($t['id'] != fsId())
+				$msg = loadModel('msg');
+				$msg->sendMessage($betrieb['team_conversation_id'],$message);
+
+			}
+			elseif($team = $this->getBetriebTeam($bid))
+			{
+				foreach ($team as $t)
 				{
+					if($t['id'] != fsId())
+					{
 					$this->addMessage(fsId(), $t['id'], substr($message, 0,50).'...', $message, '');
+					}
 				}
 			}
 		}
