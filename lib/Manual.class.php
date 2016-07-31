@@ -836,7 +836,13 @@ GROUP BY foodsaver_id'));
 				$msg = loadModel('msg');
 				$msg->sendMessage($betrieb['team_conversation_id'],$message);
 
+			}elseif(is_null($betrieb['team_conversation_id']))
+			{
+				$tcid = $this->createTeamConversation($bid);
+				$msg = loadModel('msg');
+				$msg->sendMessage($tcid,$message);
 			}
+			/* Out-Comment due better solution, un-comment if needed
 			elseif($team = $this->getBetriebTeam($bid))
 			{
 				foreach ($team as $t)
@@ -846,7 +852,7 @@ GROUP BY foodsaver_id'));
 					$this->addMessage(fsId(), $t['id'], substr($message, 0,50).'...', $message, '');
 					}
 				}
-			}
+			}*/
 		}
 	}
 
@@ -3755,6 +3761,47 @@ GROUP BY foodsaver_id'));
 				0,
 				0
 			)');
+	}
+
+	public function createTeamConversation($bid)
+	{
+		$msg = loadModel('msg');
+		$tcid = $msg->insertConversation(array(), true);
+		$betrieb = $this->getMyBetrieb($bid);
+		$msg->renameConversation($tcid, "Team ".$betrieb['name']);
+
+		$this->update('
+				UPDATE	`'.PREFIX.'betrieb` SET team_conversation_id = '.$this->intval($tcid).' WHERE id = '.$this->intval($bid).'
+			');
+
+		$teamMembers = $this->getBetriebTeam($bid);
+		foreach($springerMembers['id'] as $fs_id)
+		{
+			$msg->addUserToConversation($tcid, $fs_id);
+		}
+
+		return $tcid;
+
+	}
+
+	public function createSpringerConversation($bid)
+	{
+		$msg = loadModel('msg');
+		$scid = $msg->insertConversation(array(), true);
+		$betrieb = $this->getMyBetrieb($bid);
+		$msg->renameConversation($scid, "Springer ".$betrieb['name']);
+		$this->update('
+				UPDATE	`'.PREFIX.'betrieb` SET springer_conversation_id = '.$this->intval($scid).' WHERE id = '.$this->intval($bid).'
+			');
+
+
+		
+		$springerMembers = $this->getBetriebSpringer($bid);
+		foreach($springerMembers['id'] as $fs_id)
+		{
+			$msg->addUserToConversation($scid, $fs_id);
+		}
+		return $scid;
 	}
 
 	public function add_betrieb($data)
