@@ -316,7 +316,7 @@ class ProfileView extends View
 				$banana = $bval.'<span class="vouch-banana" title="Das sind Deine Bananen"><span>&nbsp;</span></span>';
 					
 			}
-			elseif(!$this->foodsaver['bouched'])
+			elseif(!$this->foodsaver['bouched'] && ($this->foodsaver['id'] != fsId()))
 			{
 				$banana = $bval.'<a onclick="addbanana('.$this->foodsaver['id'].');return false;" href="#" title="'.$this->foodsaver['name'].' eine Vertrauensbanane schenken" class="vouch-banana"><span>&nbsp;</span></a>';
 					
