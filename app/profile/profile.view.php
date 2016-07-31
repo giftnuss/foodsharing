@@ -249,7 +249,7 @@ class ProfileView extends View
 			$givebanana = '';
 			
 			// if current user has give the pfofile user an banana
-			if(!$this->foodsaver['bouched'])
+			if(!$this->foodsaver['bouched'] && ($this->foodsaver['id'] != fsId()))
 			{
 				$banana_button_class = '';
 				$givebanana = '
