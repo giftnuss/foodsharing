@@ -94,6 +94,7 @@ class BasketModel extends Model
 
 			SELECT
 				b.id,
+				b.status,
 				b.description,
 				b.picture,
 				b.contact_type,

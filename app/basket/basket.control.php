@@ -72,7 +72,14 @@ class BasketControl extends Control
 				$requests = $this->model->listRequests($basket['id']);
 			}
 		}
-		$this->view->basket($basket,$wallposts,$requests);
+		if($basket['until_ts'] >= time() && $basket['status'] == 1)
+		{
+			$this->view->basket($basket,$wallposts,$requests);
+		}elseif($basket['until_ts'] <= time() || $basket['status'] == 3)
+		{
+			$this->view->basketTaken($basket);
+		}
+		
 		
 	}
 }

@@ -134,6 +134,19 @@ class BasketView extends View
 		
 		$page->render();
 	}
+
+	public function basketTaken($basket)
+	{
+		$page = new vPage('Essenskorb #'.$basket['id'], '
+		
+		<div class="pure-g">
+		    <div class="pure-u-1 pure-u-md-2-3">
+				<p>Dieser Essenskorb wurde bereits abgeholt</p>
+			</div>
+		</div>
+		');
+		$page->render();
+	}
 	
 	public function requests($requests)
 	{
