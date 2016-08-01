@@ -2,9 +2,6 @@
 (119683,0,0,'',0,NOW(),'',0,0,0,0,'10178','Berlin',0,'52.5237395','13.3986951','',0,'usera@example.com','57a3f6208150a254d23930eee7643dd2','User',NULL,'A',' ','','','','','',NULL,0,NULL,0,STR_TO_DATE('2016-07-19 23:38:57','%Y-%m-%d %H:%i:%s'),0,0,'','',1,'578eba117b5ea7.27477801',1,STR_TO_DATE('2016-07-19 23:39:10','%Y-%m-%d %H:%i:%s'),0.00,0,0,0.00,0,0,0,100.00,0,NULL,NULL,'','','',NULL,'',0,NULL,0,0)
 ,(119684,0,903,'',0,NOW(),'',0,0,1,0,'13351','Berlin',0,'52.547566','13.3382749','',4,'userb@example.com','50f8479d1398f30f909e7abf8ad460e1','User',NULL,'B','Senegalstraße ','','','','','',NULL,0,NULL,0,STR_TO_DATE('2016-07-19 23:40:00','%Y-%m-%d %H:%i:%s'),0,0,'','',1,'578eba5091f372.53823386',1,STR_TO_DATE('2016-07-19 23:40:06','%Y-%m-%d %H:%i:%s'),0.00,0,0,0.00,0,0,0,100.00,0,NULL,NULL,'','','',NULL,'',0,NULL,0,0)
 ;
-<<<<<<< HEAD
-=======
 INSERT INTO `fs_basket` (`id`, `foodsaver_id`, `status`, `time`, `until`, `fetchtime`, `description`, `picture`, `tel`, `handy`, `contact_type`, `location_type`, `weight`, `lat`, `lon`, `bezirk_id`, `fs_id`, `appost`) VALUES
 (1, 119683, 1, '2016-04-04 11:47:52', '2016-05-16', NULL, 'ICH BIN ABGELAUFEN', '', '', '', '1', 0, 3, 50.067001, 8.238220, 39, 0, 0),
 (2, 119683, 1, '2016-08-01 11:47:43', '2016-08-15', NULL, '###TEST###', '', '', '', '1', 0, 3, 50.067001, 8.238220, 39, 0, 0);
->>>>>>> create Test for expired Foodbasket
