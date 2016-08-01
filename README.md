@@ -17,6 +17,9 @@ though:
 
 Make sure you have installed
 [docker-compose](https://docs.docker.com/compose/install/) and node/npm first.
+If you're [using OSX](https://docs.docker.com/engine/installation/mac/)
+you'll have a better experience with Docker for Mac rather than Docker Toolbox 
+(files won't update properly if using Toolbox).
 
 ```
 git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
