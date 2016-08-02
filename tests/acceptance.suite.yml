@@ -7,12 +7,11 @@
 class_name: AcceptanceTester
 modules:
     enabled:
-        #- PhpBrowser:
-        #    url: http://web:8080/
         - WebDriver:
             url: 'http://web:8080/'
-            host: phantomjs
+            host: selenium
             port: 4444
-            browser: phantomjs
+            browser: firefox
             window_size: 1920x1080
-        - \Helper\Acceptance
+
+        - \Helper\Acceptance      

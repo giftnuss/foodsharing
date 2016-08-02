@@ -12,11 +12,6 @@ $password = uniqid();
 $I->wantTo('ensure I can register');
 $I->amOnPage('/');
 
-// disable popups, as they are not supported in PhantomJS
-// if they were could use seeInPopup/acceptPopup
-$I->executeJS("window.confirm = function(){return true;};");
-$I->executeJS("window.alert = function(){return true;};");
-
 // click signup, then press next on the first dialog
 
 $I->click('Mach-Mit!');
@@ -33,6 +28,12 @@ $I->fillField('login_email', $email);
 $I->fillField('#login_passwd1', $password);
 $I->fillField('#login_passwd2', $password);
 $I->click('weiter', '.step.step1');
+
+// it gives us an alert to complain we did not upload a photo
+// whatever, I'm in a hurry
+
+$I->seeInPopup('Du hast kein Foto hochgeladen.');
+$I->acceptPopup();
 
 // skip the step with the address map, it is optional
 
@@ -53,6 +54,15 @@ $I->click('Anmeldung absenden', '.step.step3');
 
 $I->waitForElementVisible('#joinready', 4);
 $I->see('Deine Anmeldung war erfolgreich!');
+
+// close the dialog
+
+// this is kind of crazy selector, I got it from firefoxes "get unique selector" right click menu
+// ... maybe should just put a more unique id/class in there... will do for now
+$closeButtonSelector = 'div.ui-dialog:nth-child(16) > div:nth-child(1) > button:nth-child(2)';
+
+$I->waitForElementVisible($closeButtonSelector, 2);
+$I->click($closeButtonSelector);
 
 // now login as that user
 

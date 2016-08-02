@@ -83,11 +83,11 @@ services:
 
   # for running browser-based tests
 
-  phantomjs:
-    container_name: foodsharing_test_phantomjs
-    command: phantomjs --webdriver=4444
-    image: wernight/phantomjs
+  selenium:
+    container_name: foodsharing_test_selenium
+    image: selenium/standalone-firefox
     links:
       - web:web
     expose:
       - 4444
+
