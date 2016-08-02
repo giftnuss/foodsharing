@@ -1,6 +1,8 @@
 image: alpine
 
 cache:
+  # shared cache for all branches
+  key: "$CI_PROJECT_NAME"
   paths:
     - vendor/
     - chat/node_modules/
