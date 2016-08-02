@@ -13,11 +13,9 @@ $I->amOnPage('/?page=dashboard');
 $I->see('Hallo');
 $I->amOnPage('/profile/119684');
 $I->see('Status updates von User');
+
+/*
+$I->waitForElementVisible('#bananas', 4);
 $I->click('#bananas');
 $I->dontSee('Schenke User eine Banane');
-
-
-// disable popups, as they are not supported in PhantomJS
-// if they were could use seeInPopup/acceptPopup
-$I->executeJS("window.confirm = function(){return true;};");
-$I->executeJS("window.alert = function(){return true;};");
+*/
