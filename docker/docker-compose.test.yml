@@ -78,7 +78,7 @@ services:
     expose:
       - 6379
 
-  # phantomjs
+  # selenium
   #------------------------------------
 
   # for running browser-based tests
