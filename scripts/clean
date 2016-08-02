@@ -17,10 +17,6 @@ echo "Removing containers"
 $dir/rm
 FS_ENV=test $dir/rm
 
-echo "Removing generated assets"
-rm -f $base_dir/js/gen/script.js
-rm -f $base_dir/css/gen/style.css
-
 echo "Removing directories"
 
 rm -rf \
@@ -30,8 +26,6 @@ rm -rf \
   $base_dir/data/pass \
   $base_dir/data/visite \
   $base_dir/cache/searchindex \
-  $base_dir/css/gen \
-  $base_dir/js/gen \
   $base_dir/tmp
 
 echo "All clean!"
