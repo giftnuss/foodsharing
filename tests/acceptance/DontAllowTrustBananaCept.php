@@ -14,6 +14,6 @@ $I->see('Hallo');
 $I->amOnPage('/profile/119684');
 $I->see('Status updates von User');
 
-$I->waitForElementVisible('#bananas', 4);
-$I->click('#bananas');
+$I->waitForElementVisible('a.item.stat_bananacount.bouched', 4);
+$I->click('a.item.stat_bananacount.bouched');
 $I->dontSee('Schenke User eine Banane');
