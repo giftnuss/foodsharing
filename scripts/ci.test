@@ -1,0 +1,38 @@
+#!/bin/bash
+
+export FS_ENV=ci
+
+set -e
+
+. $(dirname "$0")/inc.sh
+
+if [ "x" != "x$CI_BUILD_TOKEN" ]; then
+  echo "Logging into docker registry"
+  docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+fi
+
+echo "Building images"
+
+for name in web app chat db; do
+  dc build --pull $name &
+done
+
+wait
+
+echo "Bring up containers"
+dc up -d --no-build
+
+echo "Waiting for mysql to start"
+wait-for-mysql
+
+echo "Initializing database"
+sql-query mysql 'drop database if exists foodsharing'
+sql-query mysql 'create database foodsharing'
+sql-file foodsharing migrations/initial.sql
+sql-file foodsharing migrations/static.sql
+sql-file foodsharing tests/seed.sql
+
+echo "Running tests"
+exec-in-container app vendor/bin/codecept run "$@"
+
+echo "Done!"

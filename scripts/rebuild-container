@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# rebuilds just one container
+# useful if you change the nginx config for example
+
+set -e
+
+. $(dirname "$0")/inc.sh
+
+container=${1:-web}
+
+dc stop $container
+dc build $container
+dc up -d --no-deps $container

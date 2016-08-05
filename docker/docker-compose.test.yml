@@ -1,0 +1,93 @@
+version: '2'
+services:
+
+  # nginx
+  #------------------------------------
+
+  # proxies connections to app/chat
+
+  web:
+    container_name: foodsharing_test_web
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.web
+    ports:
+      - 28080:8080
+    expose:
+      - 8080
+    depends_on:
+      - app
+      - chat
+    volumes:
+      - ../:/app
+
+  # main php app
+  #------------------------------------
+
+  app:
+    container_name: foodsharing_test_app
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.php
+    expose:
+      - 9000
+    links:
+      - redis:redis
+      - db:db
+      - chat:chat
+    volumes:
+      - ../:/app
+      - /app/vendor
+    environment:
+      FS_ENV: test
+
+  chat:
+    container_name: foodsharing_test_chat
+    command: node server.js 0.0.0.0
+    build:
+      context: ../chat
+      dockerfile: docker/Dockerfile.chat
+    expose:
+      - 1337
+      - 1338
+    volumes:
+      - ../:/app
+      - /app/chat/node_modules
+
+  # mysql
+  #------------------------------------
+
+  db:
+    container_name: foodsharing_test_db
+    image: orchardup/mysql
+    expose:
+      - 3306
+    ports:
+      - 23306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ../:/app
+
+  # redis
+  #------------------------------------
+
+  redis:
+    container_name: foodsharing_test_redis
+    image: redis
+    expose:
+      - 6379
+
+  # selenium
+  #------------------------------------
+
+  # for running browser-based tests
+
+  selenium:
+    container_name: foodsharing_test_selenium
+    image: selenium/standalone-firefox
+    links:
+      - web:web
+    expose:
+      - 4444
+

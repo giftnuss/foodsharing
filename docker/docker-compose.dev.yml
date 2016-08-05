@@ -1,0 +1,94 @@
+version: '2'
+services:
+
+  # nginx
+  #------------------------------------
+
+  # proxies connections to app/chat
+
+  web:
+    container_name: foodsharing_dev_web
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.web
+    ports:
+      - 18080:8080
+    depends_on:
+      - app
+      - chat
+    volumes:
+      - ../:/app
+
+  # main php app
+  #------------------------------------
+
+  app:
+    container_name: foodsharing_dev_app
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.php
+    expose:
+      - 9000
+    links:
+      - redis:redis
+      - db:db
+      - chat:chat
+    volumes:
+      - ../:/app
+      - /app/vendor
+    environment:
+      FS_ENV: dev
+
+  # nodejs socket.io server
+  #------------------------------------
+
+  chat:
+    container_name: foodsharing_dev_chat
+    command: node server.js 0.0.0.0
+    build:
+      context: ../chat
+      dockerfile: docker/Dockerfile.chat
+    expose:
+      - 1337
+      - 1338
+    volumes:
+      - ../:/app
+      - /app/chat/node_modules
+
+  # mysql
+  #------------------------------------
+
+  db:
+    container_name: foodsharing_dev_db
+    image: orchardup/mysql
+    expose:
+      - 3306
+    ports:
+      - 13306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ../:/app
+
+  # redis
+  #------------------------------------
+
+  redis:
+    container_name: foodsharing_dev_redis
+    image: redis
+    expose:
+      - 6379
+
+  # phpmyadmin
+  #------------------------------------
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: foodsharing_dev_phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+    restart: always
+    ports:
+      - 18081:80
+    volumes:
+      - /sessions

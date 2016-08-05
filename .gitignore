@@ -10,3 +10,7 @@ node_modules
 js/gen/script.js
 css/gen/style.css
 config.inc.php
+cache
+tmp
+vendor
+tests/_output/*vendor

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+export FS_ENV=test
+
+set -e
+
+. $(dirname "$0")/inc.sh
+
+echo "Bring up containers"
+dc up --build -d
+
+echo "Waiting for mysql to start"
+wait-for-mysql
+
+echo "Initializing database"
+sql-query mysql 'drop database if exists foodsharing'
+sql-query mysql 'create database foodsharing'
+sql-file foodsharing migrations/initial.sql
+sql-file foodsharing migrations/static.sql
+sql-file foodsharing tests/seed.sql
+
+echo "Running tests"
+exec-in-container app vendor/bin/codecept run "$@"
+
+echo "Done!"

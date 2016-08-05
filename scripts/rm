@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -e
+
+. $(dirname "$0")/inc.sh
+
+dc kill
+
+name=foodsharing_$FS_ENV
+
+echo "Removing $name containers"
+containers=$(docker ps -aq -f name=$name)
+if [ "x" != "x$containers" ]; then
+  docker rm $containers
+else
+  echo "... there are none!"
+fi

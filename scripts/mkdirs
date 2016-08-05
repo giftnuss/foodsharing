@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+
+# directories used by the application
+
+dirs="\
+  images/basket \
+  data/attach \
+  data/mailattach \
+  data/pass \
+  data/visite \
+  cache/searchindex \
+  css/gen \
+  js/gen \
+  tmp \
+"
+
+mkdir -p $dirs
+chmod 777 $dirs

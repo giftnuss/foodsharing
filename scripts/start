@@ -1,0 +1,48 @@
+#!/bin/bash
+
+export FS_ENV=dev
+
+set -e
+
+dir=$(dirname "$0")
+
+. $dir/inc.sh
+
+echo "Running local npm install"
+(cd $dir && npm install)
+
+echo "Creating directories"
+$dir/mkdirs
+
+echo "Building containers"
+for name in web app chat; do
+  dc build --pull &
+done
+wait
+
+echo "Bring up containers"
+dc up -d
+
+echo "Waiting for mysql"
+wait-for-mysql
+
+# Creating db
+createdb foodsharing
+
+# Migrating db
+migratedb foodsharing || true
+
+# Building assets
+$dir/build-assets
+
+echo
+echo "  Go visit http://localhost:18080 now :)"
+echo
+echo "  Or view logs with:"
+echo
+echo "    ./scripts/docker-compose logs -f"
+echo
+echo "  Or seed the db with some data:"
+echo
+echo "    ./scripts/seed"
+echo

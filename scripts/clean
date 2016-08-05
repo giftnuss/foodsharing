@@ -1,0 +1,31 @@
+#!/bin/bash
+
+export FS_ENV=dev
+
+set -e
+
+dir=$(dirname "$0")
+
+base_dir=$(readlink -f "$dir/..")
+
+. $dir/inc.sh
+
+echo "Removing local node_modules"
+(cd $dir && rm -rf node_modules)
+
+echo "Removing containers"
+$dir/rm
+FS_ENV=test $dir/rm
+
+echo "Removing directories"
+
+rm -rf \
+  $base_dir/images/basket \
+  $base_dir/data/attach \
+  $base_dir/data/mailattach \
+  $base_dir/data/pass \
+  $base_dir/data/visite \
+  $base_dir/cache/searchindex \
+  $base_dir/tmp
+
+echo "All clean!"

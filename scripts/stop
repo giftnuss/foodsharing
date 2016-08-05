@@ -1,0 +1,14 @@
+#!/bin/bash
+
+export FS_ENV=dev
+
+set -e
+
+dir=$(dirname "$0")
+
+. $dir/inc.sh
+
+echo "Stopping containers"
+dc stop
+
+echo "All stopped!"
