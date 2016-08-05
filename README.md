@@ -1,17 +1,9 @@
 # foodsharing
 
-This `dev-setup` branch makes it easy for people to setup foodsharing on their computer
-for development purposes.
-
-It runs everything inside docker containers to have minimal impact on the local system and
+This runs everything inside docker containers to have minimal impact on the local system and
 allow precise versions of software to be defined to match production setup closely.
 
-The intention would be to merge it into master, a few things should be checked/solved first
-though:
-
-* it includes `config.inc.php` in the repo now, to switch between configs based on env var, the live site would have to create a `config.inc.prod.php` file and set env var `FS_ENV=prod`
-* it should be checked by someone familiar with the foodsharing.de codebase/infrastructure
-* see https://gitlab.com/foodsharing-dev/foodsharing/milestones/3 for other outstanding issues
+* it includes `config.inc.php` in the repo now, to switch between configs based on env var, the live site would have to create a `config.inc.prod.php` file and set env var `FS_ENV=prod` (e.g. in php-fpm pool definition)
 
 ## Getting started
 
