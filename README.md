@@ -3,8 +3,6 @@
 This runs everything inside docker containers to have minimal impact on the local system and
 allow precise versions of software to be defined to match production setup closely.
 
-* it includes `config.inc.php` in the repo now, to switch between configs based on env var, the live site would have to create a `config.inc.prod.php` file and set env var `FS_ENV=prod` (e.g. in php-fpm pool definition)
-
 ## Getting started
 
 Make sure you have installed
@@ -97,3 +95,8 @@ There are a number of helper scripts available. Most of them obey the `FS_INT` e
 | ./scripts/stop | stop everything, but leave it configured |
 | ./scripts/test | run tests |
 | ./scripts/test-rerun | run tests without recreating db |
+
+## Deployment
+
+Ensure you set env var `FS_ENV=prod` (e.g. in php-fpm pool defintion)
+and create a `config.inc.prod.php` file.
