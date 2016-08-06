@@ -33,8 +33,14 @@ test:
   # stop/kill all the containers
   - FS_ENV=ci ./scripts/rm
 
+  # run it on gitlab's free ci runners
   tags:
   - shared
+
+  # collect any test output
+  artifacts:
+    paths:
+    - tests/_output
 
 variables:
   DOCKER_HOST: docker:2375
