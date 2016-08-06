@@ -26,10 +26,12 @@ define('DEFAULT_HOST', 'lebensmittelretten.de');
 define('MAPZEN_API_KEY', 'mapzen-RaXru7A');
 define('GOOGLE_API_KEY', 'AIzaSyCkFfCoOnj8ZjGGcApHS1rX6Rt6OxrW6hQ');
 
-define('SMTP_HOST', '');
-define('SMTP_USER', '');
-define('SMTP_PASS', '');
-define('SMTP_PORT', 25);
+
+define('SMTP_HOST','maildev');
+define('SMTP_USER','maildevuser');
+define('SMTP_PASS','maildevpass');
+define('SMTP_PORT',25);
+
 define('MEM_ENABLED', true);
 
 define('SOCK_URL', 'http://chat:1338/');

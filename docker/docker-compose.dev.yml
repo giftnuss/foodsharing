@@ -151,6 +151,22 @@ services:
       - 18081:80
     volumes:
       - /sessions
+  # maildev
+  #------------------------------------
+
+  maildev:
+    command: >
+      bin/maildev
+        --web 80
+        --smtp 25
+        --incoming-user maildevuser
+        --incoming-pass maildevpass
+    image: djfarrelly/maildev
+    container_name: foodsharing_dev_maildev
+    ports:
+      - 10025:25
+      - 18082:80
+
 
 volumes:
   light-node-modules:
