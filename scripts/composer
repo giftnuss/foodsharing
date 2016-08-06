@@ -2,4 +2,4 @@
 
 . $(dirname "$0")/inc.sh
 
-run-in-container app composer "$@"
+run-in-container-asroot app composer "$@"
