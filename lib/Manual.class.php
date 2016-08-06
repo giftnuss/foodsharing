@@ -842,17 +842,6 @@ GROUP BY foodsaver_id'));
 				$msg = loadModel('msg');
 				$msg->sendMessage($tcid,$message);
 			}
-			/* Out-Comment due better solution, un-comment if needed
-			elseif($team = $this->getBetriebTeam($bid))
-			{
-				foreach ($team as $t)
-				{
-					if($t['id'] != fsId())
-					{
-					$this->addMessage(fsId(), $t['id'], substr($message, 0,50).'...', $message, '');
-					}
-				}
-			}*/
 		}
 	}
 
@@ -3806,11 +3795,6 @@ GROUP BY foodsaver_id'));
 
 	public function add_betrieb($data)
 	{
-		$msg = loadModel('msg');
-		$tcid = $msg->insertConversation(array(), true);
-		$scid = $msg->insertConversation(array(), true);
-		$msg->renameConversation($tcid, "Team ".$this->strval($data['name']));
-		$msg->renameConversation($scid, "Springer ".$this->strval($data['name']));
 		$id = $this->insert('
 			INSERT INTO 	`'.PREFIX.'betrieb`
 			(
@@ -3839,9 +3823,7 @@ GROUP BY foodsaver_id'));
 			`ueberzeugungsarbeit`,
 			`presse`,
 			`sticker`,
-      `abholmenge`,
-      `team_conversation_id`,
-      `springer_conversation_id`
+      `abholmenge`
 			)
 			VALUES
 			(
@@ -3870,10 +3852,11 @@ GROUP BY foodsaver_id'));
 			'.$this->intval($data['ueberzeugungsarbeit']).',
 			'.$this->intval($data['presse']).',
 			'.$this->intval($data['sticker']).',
-      '.$this->intval($data['abholmenge']).',
-      '.$tcid.',
-      '.$scid.'
+      '.$this->intval($data['abholmenge']).'
 			)');
+		
+		$this->createTeamConversation($id);
+		$this->createSpringerConversation($id);
 
 		if(isset($data['lebensmittel']) && is_array($data['lebensmittel']))
 		{
