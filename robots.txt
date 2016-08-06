@@ -1,6 +1,4 @@
 User-agent: *
-Allow: /
-Allow: /essenskoerbe/find$
 Disallow: /essenskoerbe/0*
 Disallow: /essenskoerbe/1*
 Disallow: /essenskoerbe/2*
