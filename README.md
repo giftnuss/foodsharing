@@ -16,7 +16,6 @@ you'll have a better experience with Docker for Mac rather than Docker Toolbox
 ```
 git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
 cd foodsharing
-git checkout dev-setup
 ./scripts/start
 ```
 
