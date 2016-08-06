@@ -16,7 +16,7 @@ $dir/mkdirs
 
 echo "Building containers"
 for name in web app chat; do
-  dc build --pull &
+  dc build --pull $name &
 done
 wait
 
