@@ -75,7 +75,7 @@ services:
 
   redis:
     container_name: foodsharing_dev_redis
-    image: redis
+    image: redis:alpine
     expose:
       - 6379
 
