@@ -4,6 +4,21 @@
     letter-spacing: normal;
     margin: 0 0 10px;
 }
+
+.verify
+{
+	color:#ffffff;
+	font-weight:bold;
+	background-color:#46891b;
+}
+
+.unverify
+{
+	color:#ffffff;
+	font-weight:bold;
+	background-color:red;
+}
+
 .profile.statdisplay {
 	position: relative;
 	top: -50px;

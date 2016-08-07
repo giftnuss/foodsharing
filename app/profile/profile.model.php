@@ -206,7 +206,7 @@ class ProfileModel extends Model
 		
 		return $data;
 	}
-	
+
 	public function getNotesCount($fsid)
 	{
 		return (int)$this->qOne('
@@ -249,6 +249,61 @@ class ProfileModel extends Model
 			FROM 	'.PREFIX.'foodsaver fs
 				
 			WHERE 	fs.id = '.(int)$this->fs_id.'
+				
+		');
+	}
+
+	public function getPassHistory($fsid)
+	{
+		return $this->q('
+
+			SELECT
+			  pg.foodsaver_id,
+			  pg.date,
+			  UNIX_TIMESTAMP(pg.date) AS date_ts,
+			  pg.bot_id,
+			  fs.nachname,
+			  fs.name
+			FROM
+			  '.PREFIX.'pass_gen pg
+			LEFT JOIN
+			  '.PREFIX.'foodsaver fs
+			ON
+			  pg.bot_id = fs.id
+			WHERE
+			  pg.foodsaver_id = '.(int)$fsid.'
+			ORDER BY
+			  pg.date
+			DESC
+
+				
+		');
+	}
+
+	public function getVerifyHistory($fsid)
+	{
+		return $this->q('
+
+			SELECT
+			  vh.fs_id,
+			  vh.date,
+			  UNIX_TIMESTAMP(vh.date) AS date_ts,
+			  vh.change_status,
+			  vh.bot_id,
+			  fs.nachname,
+			  fs.name
+			FROM
+			  '.PREFIX.'verify_history vh
+			LEFT JOIN
+			  '.PREFIX.'foodsaver fs
+			ON
+			  vh.bot_id = fs.id
+			WHERE
+			  vh.fs_id = '.(int)$fsid.'
+			ORDER BY
+			  vh.date
+			DESC
+
 				
 		');
 	}

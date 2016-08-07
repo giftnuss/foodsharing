@@ -11,6 +11,23 @@ function xhr_verify($data)
 		global $db;
 		if($db->update('UPDATE `'.PREFIX.'foodsaver` SET `verified` = '.(int)$data['v'].' WHERE `id` = '.(int)$data['fid']))
 		{
+			
+			$db->insert('
+			INSERT INTO 	`'.PREFIX.'verify_history`
+			(
+				`fs_id`,
+				`date`,
+				`bot_id`,
+				`change_status`
+			)
+			VALUES
+			(
+				'.(int)$data['fid'].',
+				NOW(),
+				'.fsId().',
+				'.(int)$data['v'].'
+			)
+		');
 			$model = loadModel();
 			$model->delBells('new-fs-'.(int)$data['fid']);
 			return json_encode(array(

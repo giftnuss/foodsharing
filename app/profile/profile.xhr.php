@@ -96,6 +96,37 @@ class ProfileXhr extends Control
 			);
 		}
 	}
+
+	public function history()
+	{
+		if(S::may() && (isBotForA($bids,false,true)|| S::may('orga')))
+		{
+			$dia = new XhrDialog();
+			if($_GET['type'] == 0)
+			{
+				$history = $this->model->getVerifyHistory($_GET['fsid']);
+				$dia->setTitle('Verifizierungshistorie');
+				$dia->addContent($this->view->getHistory($history,$_GET['type']));
+			}
+			if($_GET['type'] == 1)
+			{
+				$history = $this->model->getPassHistory($_GET['fsid']);
+
+				$dia->setTitle('Passhistorie');
+				
+				$dia->addContent($this->view->getHistory($history,$_GET['type']));
+			}
+
+			
+			
+			$dia->addOpt('width','400px');
+			$dia->addOpt('height','($(window).height()-100)',false);
+			
+			
+			return $dia->xhrout();
+		}
+	}
+
 	
 	public function quickprofile()
 	{

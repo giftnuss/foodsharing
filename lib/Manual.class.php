@@ -501,7 +501,7 @@ GROUP BY foodsaver_id'));
 
 	public function passGen($fsid)
 	{
-		return $this->sql('INSERT INTO `'.PREFIX.'pass_gen`(`foodsaver_id`,`date`)VALUES('.$this->intval($fsid).',NOW())');
+		return $this->sql('INSERT INTO `'.PREFIX.'pass_gen`(`foodsaver_id`,`date`,`bot_id`)VALUES('.$this->intval($fsid).',NOW(),'.fsId().')');
 	}
 
 	public function getFsBasicsReq($bezirk_id)

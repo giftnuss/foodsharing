@@ -340,6 +340,71 @@ class ProfileView extends View
 			</div>';
 		
 	}
+
+	public function getHistory($history,$changetype)
+	{
+		$out = '
+			<ul class="linklist history">';
+		
+		$curdate = 0;
+		foreach ($history as $h)
+		{
+			if($curdate != $h['date'])
+			{
+				if($changetype == 0)
+				{
+					$typeofchange = '';
+					if($h['change_status'] == 0)
+					{
+						$class = 'unverify';
+						$typeofchange = 'Entverifiziert';
+					}
+					if($h['change_status'] == 1)
+					{
+						$class = 'verify';
+						$typeofchange = 'Verifiziert';
+					}
+					$out .= '<li class="title"><span class="'.$class.'">'.$typeofchange.'</span> am '.niceDate($h['date_ts']).' durch:</li>';
+				}
+				if($changetype == 1)
+				{
+					if(!is_null($h['bot_id']))
+					{
+						$out .= '<li class="title">'.niceDate($h['date_ts']).' durch:</li>';
+					}else
+					{
+						$out .= '<li class="title">'.niceDate($h['date_ts']).'</li>';
+					}
+					
+				}
+					
+				$curdate = $h['date'];
+			}
+			if(!is_null($h['bot_id']))
+			{
+			$out .= '
+				<li>
+					<a class="corner-all" href="#" onclick="profile('.(int)$h['bot_id'].');return false;">
+						<span class="n">'.$h['name'].' '.$h['nachname'].'</span>
+						<span class="t"></span>
+						<span class="c"></span>
+					</a>
+				</li>';
+			}else{
+				$out .= '
+				<li>
+					Es liegt keine Information &uuml;ber den Ersteller vor
+				</li>';
+			}
+		}
+		$out .= '
+		</ul>';
+		if($curdate == 0)
+		{
+			$out = 'Es liegen keine Daten vor'; 
+		}
+	return $out;
+	}
 	
 	public function photo()
 	{
@@ -374,6 +439,9 @@ class ProfileView extends View
 	private function profileMenu()
 	{
 		$opt = '';
+		$fsModel = loadModel('foodsaver');
+
+		$bids = $fsModel->getFsBezirkIds($this->foodsaver['id']);
 		if($this->foodsaver['buddy'] === -1 && $this->foodsaver['id'] != fsId())
 		//if(true)
 		{
@@ -382,9 +450,17 @@ class ProfileView extends View
 			$opt .= '<li class="buddyRequest"><a onclick="ajreq(\'request\',{app:\'buddy\',id:'.(int)$this->foodsaver['id'].'});return false;" href="#"><i class="fa fa-user"></i>Ich kenne '.$name.'</a></li>';
 		}
 
-		if(isOrgaTeam() || isBotschafter())
+		if(isOrgaTeam() || isBotForA($bids,false,true))
 		{
 			$opt .= '<li><a href="/?page=foodsaver&a=edit&id='.$this->foodsaver['id'].'"><i class="fa fa-pencil"></i>bearbeiten</a></li>';
+		}
+		if(isOrgaTeam() || isBotForA($bids,false,true))
+		{
+			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:'.(int)$this->foodsaver['id'].',type:0});"><i class="fa fa-file-text"></i>Verifizierungshistorie</a></li>';
+		}
+		if(isOrgaTeam() || isBotForA($bids,false,true))
+		{
+			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:'.(int)$this->foodsaver['id'].',type:1});"><i class="fa fa-file-text"></i>Passhistorie</a></li>';
 		}
 		
 		if(mayHandleReports())
