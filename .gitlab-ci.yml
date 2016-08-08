@@ -39,6 +39,7 @@ test:
 
   # collect any test output
   artifacts:
+    when: always
     paths:
     - tests/_output
 
