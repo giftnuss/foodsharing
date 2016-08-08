@@ -538,8 +538,6 @@ class SettingsControl extends Control
 		
 		$data = $this->model->getOne_foodsaver(fsId());
 		
-		
-		
 		setEditData($data);
 			
 		addContent($this->view->foodsaver_form());
@@ -696,8 +694,26 @@ class SettingsControl extends Control
 			
 			if($check)
 			{
+				if($oldData = $this->model->getOne_foodsaver(fsId()))
+				{
+					$arraysKeysFromData = array_keys($oldData);
+					foreach($arraysKeysFromData as $key)
+					{
+						if($oldData[$key] != $data[$key])
+						{
+							if($key != 'name' && $key != 'nachname' && $key != 'vorname' && $key != 'email' && $key != 'autokennzeichen_id' && $key != 'fs_id' && $key != 'geschlecht' && $key != 'rolle' && $key != 'orgateam' && $key != 'anmeldedatum' && $key != 'lat' && $key != 'lon' && $key != 'fs_id' && $key != 'photo_public' && $key != 'id' && $key != 'bezirk_id')
+							{
+								$this->model->logChangedSetting(fsId(), $key, $oldData[$key], $data[$key]);
+							}
+						
+						}
+					}
+				}
+
 				if($this->model->updateProfile(fsId(),$data))
 				{
+					
+
 					info(s('foodsaver_edit_success'));
 				}
 				else
