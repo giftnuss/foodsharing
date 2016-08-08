@@ -185,6 +185,7 @@ class GroupsModel extends Model
 				b.`week_num`,
 				b.`fetch_count`,
 				b.`report_num`,
+				b.`type`,
 				CONCAT(m.name,"@'.DEFAULT_HOST.'") AS email
 				
 			FROM 	

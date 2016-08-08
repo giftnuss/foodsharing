@@ -57,9 +57,22 @@ class GroupsControl extends Control
 	
 	public function edit()
 	{
+		$fsModel = loadModel('foodsaver');
+ 
+ 		$bids = $fsModel->getFsBezirkIds(fsId());
+
+ 		if(!isOrgaTeam() && !isBotForA($bids,true,true))
+ 		{
+ 			go('/?page=dashboard');
+ 		}
+
 		if($group = $this->model->getGroup($_GET['id']))
 		{
 			
+			if($group['type'] != 7)
+ 			{
+ 				go('/?page=dashboard');
+ 			}
 			if($this->isSubmitted())
 			{
 				$data = array();
@@ -130,7 +143,6 @@ class GroupsControl extends Control
 			}
 			
 			addBread($group['name'].' bearbeiten','/?page=groups&sub=edit&id='.(int)$group['id']);
-			
 			addContent($this->view->editGroup($group));
 		}
 	}
