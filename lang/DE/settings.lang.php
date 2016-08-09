@@ -61,7 +61,6 @@ $g_lang['sleepmode'] = 'Schlafmützen-Funktion';
 $g_lang['sleepmode_info'] = 'Mit der Schlafmützen-Funktion ist es Dir möglich der Community mitzuteilen, dass Du z.Z. verreist bist oder aus anderen Gründen keine Zeit für das Retten von Lebensmitteln hast.';
 $g_lang['sleep_msg'] = 'Hier kannst Du eine kurze Nachricht hinterlassen, warum Du gerade keine Zeit hast.';
 
-$g_lang['geb_datum'] = 'Geburtsdatum';
 $g_lang['twitter'] = 'Twitter';
 $g_lang['homepage'] = 'Deine Webseite';
 

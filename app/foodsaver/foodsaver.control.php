@@ -116,22 +116,6 @@ function handle_edit()
 			unset($g_data['rolle']);
 		}
 
-		$settings = loadModel('settings');
-		if($oldData = $settings->getOne_foodsaver($_GET['id']))
-		{
-			$arraysKeysFromData = array_keys($oldData);
-			foreach($arraysKeysFromData as $key)
-			{
-				if($oldData[$key] != $g_data[$key])
-				{
-					if($key != 'orgateam' && $key != 'email' && $key != 'photo' && $key != 'about_me_public' && $key != 'autokennzeichen_id' && $key != 'fs_id' && $key != 'anmeldedatum' && $key != 'lat' && $key != 'lon' && $key != 'fs_id' && $key != 'photo_public' && $key != 'id' && $key != 'bezirk_id')
-					{			
-						$settings->logChangedSetting(fsId(), $key, $oldData[$key], $g_data[$key]);
-					}
-					
-				}
-			}
-		}
 		if($db->update_foodsaver($_GET['id'],$g_data))
 		{
 			info(s('foodsaver_edit_success'));
@@ -253,7 +237,7 @@ function foodsaver_form($title = 'Foodsaver')
 			v_form_text('anschrift',array('required' => true)),
 			v_form_text('lat'),
 			v_form_text('lon'),
-			v_form_text('email',array('required'=>true, 'disabled'=>true)),
+			v_form_text('email',array('required'=>true)),
 			v_form_text('telefon'),
 			v_form_text('handy'),
 			v_form_select('geschlecht',array('values'=> array(
