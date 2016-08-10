@@ -146,6 +146,7 @@ addHidden('<div id="fs-profile"></div>');
 
 $user = '';
 $g_body_class = '';
+$g_broadcast_message = $db->qOne('SELECT `body` FROM '.PREFIX.'content WHERE `id` = 51');
 if(S::may())
 {
 	if(isset($_GET['uc']))

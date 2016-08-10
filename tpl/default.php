@@ -93,6 +93,9 @@ if(!empty($content_left) && !empty($content_right))
 				</div>
 			</div>
 		</div>
+<?php if(!empty($g_broadcast_message)) {?>
+<div class="inner inside msg-inside info"><?php echo $g_broadcast_message;?></div>
+<?php }?>
 	</div>
 	<?php echo $content_overtop; ?>
 	<div id="main"<?php if(isMob()) { ?> class="mobile"<?php } ?>>
