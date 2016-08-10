@@ -72,6 +72,7 @@ function migratedb() {
   sql-file $database migrations/initial.sql
   sql-file $database migrations/static.sql
   sql-file $database migrations/27-profilchange.sql
+  sql-file $database migrations/27-verify.sql
 }
 
 function wait-for-mysql() {

@@ -18,6 +18,7 @@ sql-query mysql 'create database foodsharing'
 sql-file foodsharing migrations/initial.sql
 sql-file foodsharing migrations/static.sql
 sql-file foodsharing migrations/27-profilchange.sql
+sql-file foodsharing migrations/27-verify.sql
 sql-file foodsharing tests/seed.sql
 
 echo "Running tests"
