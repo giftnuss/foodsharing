@@ -15,6 +15,34 @@ class SettingsModel extends Model
 	{
 		return $this->qOne('SELECT name FROM '.PREFIX.'mumbleuser WHERE foodsaver_id = '.(int)fsId());
 	}
+
+	public function logChangedSetting($fsid, $old, $new, $logChangedKeys)
+	{
+		/* the logic is not exactly matching the update mechanism but should be close enough to get all changes... */
+		foreach($logChangedKeys as $k)
+		{
+			if(array_key_exists($k, $new) && $new[$k] != $old[$k])
+			{
+				$this->insert('INSERT INTO
+									  '.PREFIX.'foodsaver_change_history(
+										`date`,
+										`fs_id`,
+										`changer_id`,
+										`object_name`,
+										`old_value`,
+										`new_value`
+									  )
+									VALUES(
+									  NOW(),
+									  '.$this->intval($fsid).',
+									  '.$this->intval(fsId()).',
+									  \''.$k.'\',
+									  \''.$old[$k].'\',
+									  \''.$new[$k].'\'
+									  )');
+			}
+		}
+	}
 	
 	public function getSleepData()
 	{
@@ -253,6 +281,9 @@ class SettingsModel extends Model
 	public function changeMail($email,$crypt)
 	{
 		$this->del('DELETE FROM `'.PREFIX.'mailchange` WHERE foodsaver_id = '.(int)fsid().'');
+		$currentMail = $this->qOne('SELECT `email` FROM '.PREFIX.'foodsaver WHERE id = '.(int)fsid());
+		$this->logChangedSetting(fsId(), 'email', $currentMail, $email);
+		
 		if($this->update('
 			UPDATE `'.PREFIX.'foodsaver`
 			SET `email` = '.$this->strval($email).',

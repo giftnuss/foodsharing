@@ -116,7 +116,13 @@ function handle_edit()
 			unset($g_data['rolle']);
 		}
 
-		if($db->update_foodsaver($_GET['id'],$g_data))
+		$settings_model = loadModel('settings');
+		if($oldFs = $settings_model->getOne_foodsaver($_GET['id']))
+		{
+      $logChangedFields = array('name', 'nachname', 'stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum', 'rolle', 'orgateam');
+			$settings_model->logChangedSetting($_GET['id'], $oldFs, $g_data, $logChangedFields);
+		}
+		if($db->update_foodsaver($_GET['id'], $g_data))
 		{
 			info(s('foodsaver_edit_success'));
 		}
@@ -237,7 +243,7 @@ function foodsaver_form($title = 'Foodsaver')
 			v_form_text('anschrift',array('required' => true)),
 			v_form_text('lat'),
 			v_form_text('lon'),
-			v_form_text('email',array('required'=>true)),
+			v_form_text('email',array('required'=>true, 'disabled'=>true)),
 			v_form_text('telefon'),
 			v_form_text('handy'),
 			v_form_select('geschlecht',array('values'=> array(

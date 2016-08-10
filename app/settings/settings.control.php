@@ -538,8 +538,6 @@ class SettingsControl extends Control
 		
 		$data = $this->model->getOne_foodsaver(fsId());
 		
-		
-		
 		setEditData($data);
 			
 		addContent($this->view->foodsaver_form());
@@ -696,6 +694,12 @@ class SettingsControl extends Control
 			
 			if($check)
 			{
+				if($oldFs = $this->model->getOne_foodsaver(fsId()))
+				{
+					$logChangedFields = array('stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum');
+					$this->model->logChangedSetting(fsId(), $oldFs, $data, $logChangedFields);
+				}
+
 				if($this->model->updateProfile(fsId(),$data))
 				{
 					info(s('foodsaver_edit_success'));
