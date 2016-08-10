@@ -116,23 +116,13 @@ function handle_edit()
 			unset($g_data['rolle']);
 		}
 
-		$settings = loadModel('settings');
-		if($oldData = $settings->getOne_foodsaver($_GET['id']))
+		$settings_model = loadModel('settings');
+		if($oldFs = $settings_model->getOne_foodsaver($_GET['id']))
 		{
-			$arraysKeysFromData = array_keys($oldData);
-			foreach($arraysKeysFromData as $key)
-			{
-				if($oldData[$key] != $g_data[$key])
-				{
-					if($key != 'orgateam' && $key != 'email' && $key != 'photo' && $key != 'about_me_public' && $key != 'autokennzeichen_id' && $key != 'fs_id' && $key != 'anmeldedatum' && $key != 'lat' && $key != 'lon' && $key != 'fs_id' && $key != 'photo_public' && $key != 'id' && $key != 'bezirk_id')
-					{			
-						$settings->logChangedSetting(fsId(), $key, $oldData[$key], $g_data[$key]);
-					}
-					
-				}
-			}
+      $logChangedFields = array('name', 'nachname', 'stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum', 'rolle', 'orgateam');
+			$settings_model->logChangedSetting($_GET['id'], $oldFs, $g_data, $logChangedFields);
 		}
-		if($db->update_foodsaver($_GET['id'],$g_data))
+		if($db->update_foodsaver($_GET['id'], $g_data))
 		{
 			info(s('foodsaver_edit_success'));
 		}
