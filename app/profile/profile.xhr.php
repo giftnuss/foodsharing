@@ -99,7 +99,8 @@ class ProfileXhr extends Control
 
 	public function history()
 	{
-		if(S::may() && (isBotForA($bids,false,true)|| S::may('orga')))
+		$bids = $this->model->getFsBezirkIds($_GET['fsid']);
+		if(S::may() && (S::may('orga') || isBotForA($bids,false,false)))
 		{
 			$dia = new XhrDialog();
 			if($_GET['type'] == 0)
@@ -117,11 +118,8 @@ class ProfileXhr extends Control
 				$dia->addContent($this->view->getHistory($history,$_GET['type']));
 			}
 
-			
-			
 			$dia->addOpt('width','400px');
 			$dia->addOpt('height','($(window).height()-100)',false);
-			
 			
 			return $dia->xhrout();
 		}
