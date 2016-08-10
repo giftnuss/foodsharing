@@ -71,6 +71,7 @@ function migratedb() {
   echo "Migrating database $FS_ENV/$database"
   sql-file $database migrations/initial.sql
   sql-file $database migrations/static.sql
+  sql-file $database migrations/27-profilchange.sql
 }
 
 function wait-for-mysql() {
