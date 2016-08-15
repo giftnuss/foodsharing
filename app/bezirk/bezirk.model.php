@@ -430,6 +430,36 @@ class BezirkModel extends Model
 			foodsaver_id = '.(int)fsId().'
 		');
 	}
+
+	public function stickTheme($theme_id)
+	{
+		return $this->update('
+			UPDATE `'.PREFIX.'theme` SET `sticky` = 1
+			WHERE id = '.(int)$theme_id.'
+		');
+	}
+
+	public function unstickTheme($theme_id)
+	{
+		return $this->update('
+			UPDATE `'.PREFIX.'theme` SET `sticky` = 0
+			WHERE id = '.(int)$theme_id.'
+		');
+	}
+
+	public function getStickStatus($theme_id)
+	{
+		return (int)$this->qOne('
+			SELECT
+				`sticky`
+				
+			FROM
+				'.PREFIX.'theme
+				
+			WHERE
+				id = '.(int)$theme_id.'
+		');
+	}
 	
 	public function addThemePost($theme_id,$body,$reply = 0,$bezirk = false)
 	{

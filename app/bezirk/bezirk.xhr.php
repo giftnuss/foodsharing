@@ -64,6 +64,26 @@ class BezirkXhr extends Control
 		
 	}
 
+	public function stickTheme()
+	{
+		if(!S::may() && (isOrgaTeam() || isBotFor($_GET['bid'])))
+		{
+			go('/?page=dashboard');
+		}
+
+		$this->model->stickTheme($_GET['tid']);	
+	}
+
+	public function unstickTheme()
+	{
+		if(!S::may() && (isOrgaTeam() || isBotFor($_GET['bid'])))
+		{
+			go('/?page=dashboard');
+		}
+
+		$this->model->unstickTheme($_GET['tid']);
+		
+	}
 	public function morethemes()
 	{
 		if(isset($_GET['page']) && mayBezirk($_GET['bid']))

@@ -149,7 +149,7 @@ class BezirkView extends View
 			);
 	}
 	
-	public function thread($thread,$posts,$followCounter)
+	public function thread($thread,$posts,$followCounter,$stickStatus)
 	{
 		addHidden('
 			<div id="delete_shure" title="'.s('delete_sure_title').'">
@@ -184,14 +184,46 @@ class BezirkView extends View
 						complete:function(){hideLoader();}
 					});
 				}');
+		addJsFunc('
+				function unstickTheme(tid,bid,fsid){
+					showLoader();
+					$.ajax({
+						url:"xhrapp.php?app=bezirk&m=unstickTheme",
+		    			data: "tid="+tid+"&bid="+bid+"&fsid="+fsid+"",
+						success : function(data){
+							reload();
+								
+						},
+						complete:function(){hideLoader();}
+					});
+				}
+				function stickTheme(tid,bid,fsid){
+					showLoader();
+					$.ajax({
+						url:"xhrapp.php?app=bezirk&m=stickTheme",
+		    			data: "tid="+tid+"&bid="+bid+"&fsid="+fsid+"",
+						success : function(data){
+								reload();
+						},
+						complete:function(){hideLoader();}
+					});
+				}');
 
 		$follow = '';
+		$sticky = '';
 		if($followCounter == 1)
 		{
 			$follow = '<a class="button bt_unfollow" onclick="unfollowTheme('.$thread['id'].', '.$this->bezirk_id.', '.fsId().')" href="#">Thema entfolgen</a>';
 		} else
 		{
 			$follow = '<a class="button bt_follow" onclick="follow('.$thread['id'].', '.$this->bezirk_id.', '.fsId().')" href="#">Thema folgen</a>';
+		}
+		if($stickStatus == 1 && (isOrgaTeam() || isBotFor($this->bezirk_id)))
+		{
+			$sticky = '<a class="button bt_unstick" onclick="unstickTheme('.$thread['id'].', '.$this->bezirk_id.', '.fsId().')" href="#">Fixierung aufheben </a>';
+		} elseif($stickStatus == 0 && (isOrgaTeam() || isBotFor($this->bezirk_id)))
+		{
+			$sticky = '<a class="button bt_stick" onclick="stickTheme('.$thread['id'].', '.$this->bezirk_id.', '.fsId().')" href="#">Thema fixieren</a>';
 		}
 
 		if($posts)
@@ -249,6 +281,7 @@ class BezirkView extends View
 									'.$follow.'
 									'.$delete.'
 									'.$edit.'
+									'.$sticky.'
 									<a class="button bt_answer" href="#p'.$p['id'].'">Antworten</a>
 								</div>
 								<div style="clear:both;"></div>
