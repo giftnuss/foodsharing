@@ -165,7 +165,7 @@ function xhr_getPinPost($data)
 					$delete = '<span class="dot">·</span><a class="pdelete light" href="#p'.$o['id'].'" onclick="u_delPost('.(int)$o['id'].');return false;">'.s('delete').'</a>';
 				}
 				
-				$msg = '<span class="msg">'.$o['text'].'</span>
+				$msg = '<span class="msg">'.nl2br($o['text']).'</span>
 						<div class="foot">
 							<span class="time">'.format_dt($o['zeit']).' von '.$o['name'].'</span>'.$delete.'
 						</div>';
