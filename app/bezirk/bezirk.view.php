@@ -149,7 +149,7 @@ class BezirkView extends View
 			);
 	}
 	
-	public function thread($thread,$posts,$followCounter,$stickStatus)
+	public function thread($thread,$posts,$followCounter,$bezirkType,$stickStatus)
 	{
 		addHidden('
 			<div id="delete_shure" title="'.s('delete_sure_title').'">
@@ -239,8 +239,8 @@ class BezirkView extends View
 				
 				$edit = '';
 				$delete = '';
-				
-				if(isOrgaTeam()|| $p['fs_id'] == fsId() || ($this->mode == 'orgateam' && isBotFor($this->bezirk_id)))
+
+				if(isOrgaTeam()|| $p['fs_id'] == fsId() || ($this->mode == 'orgateam' || (isBotFor($this->bezirk_id) && $bezirkType == 7)))
 				{
 					$delete = '<a class="button bt_delete" href="#p'.$p['id'].'">'.s('delete_post').'</a>';
 				}

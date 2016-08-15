@@ -385,6 +385,20 @@ class BezirkModel extends Model
 		');
 	}
 
+	public function getBezirkForPost($post_id)
+	{
+		return $this->qOne('
+			SELECT 	bt.bezirk_id
+
+			FROM 	'.PREFIX.'bezirk_has_theme bt,
+					'.PREFIX.'theme_post tp,
+					'.PREFIX.'theme t
+			WHERE 	t.id = tp.theme_id
+			AND 	t.id = bt.theme_id
+			AND 	tp.id = '.(int)$post_id.'
+		');
+	}
+
 	/*Does Foodsaver Follow Topic*/
 	public function getFollowingCounter($theme_id)
 	{
@@ -612,6 +626,20 @@ class BezirkModel extends Model
 		');
 		
 		return $bezirk;
+	}
+
+	public function getBezirkType($id = false)
+	{
+		$bezirkType = $this->qOne('
+			SELECT 	
+				`type`
+			FROM 	`'.PREFIX.'bezirk`
+				
+			WHERE 	`id` = '.(int)$id.'	
+			LIMIT 1
+		');
+		
+		return $bezirkType;
 	}
 	
 	public function listEvents($bot = 0)

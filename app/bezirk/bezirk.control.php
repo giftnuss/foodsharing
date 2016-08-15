@@ -537,8 +537,9 @@ class BezirkControl extends Control
 			{
 				$posts = $this->model->getPosts($thread_id);
 				$followCounter = $this->model->getFollowingCounter($thread_id);
+				$bezirkType = $this->model->getBezirkType($this->bezirk_id);
 				$stickStatus = $this->model->getStickStatus($thread_id);
-				addContent($this->view->thread($thread,$posts,$followCounter,$stickStatus));
+				addContent($this->view->thread($thread,$posts,$followCounter,$stickStatus,$bezirkType));
 			}
 			else 
 			{

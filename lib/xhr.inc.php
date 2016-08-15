@@ -2714,10 +2714,10 @@ function xhr_delPost($data)
 {
 	$db = loadModel('bezirk');
 	
-	$fsid = $db->getVal('foodsaver_id', 'theme_post', $data['pid']);
-	$bezirkId = $db->getVal('bezirk_id', 'bezirk_has_wallpost', $data['pid']);
+	$bezirkId = $db->getBezirkForPost($data['pid']);
+	$bezirkType = $db->getBezirkType($bezirkId);
 
-	if(isOrgaTeam() || $fsid == fsId() || ($bezirkId && isBotFor($bezirkId)))
+	if(isOrgaTeam() || $fsid == fsId() || (isBotFor($bezirkId) && $bezirkType==7))
 	{
 		$db->deletePost($data['pid']);
 		return 1;
