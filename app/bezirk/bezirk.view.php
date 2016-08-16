@@ -329,6 +329,11 @@ class BezirkView extends View
 					'photo' => $t['foodsaver_photo']
 				);
 				$link = '/?page=bezirk&bid='.$this->bezirk_id.'&sub='.$sub.'&tid='.$t['id'].'&pid='.$t['last_post_id'].'#post'.$t['last_post_id'];
+				if($t['sticky'] == 1)
+				{
+					$t['name'] = '<b>'.$t['name'].'</b>';
+				}
+
 				$out .= '
 				<li class="thread" id="thread-'.$t['id'].'">
 					<a class="ui-corner-all" href="'.$link.'">

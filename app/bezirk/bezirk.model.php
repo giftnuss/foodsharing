@@ -188,7 +188,8 @@ class BezirkModel extends Model
 						p.body AS post_body,
 						p.`time` AS post_time,
 						UNIX_TIMESTAMP(p.`time`) AS post_time_ts,
-						t.last_post_id
+						t.last_post_id,
+						t.sticky
 				
 			FROM 		'.PREFIX.'theme t
 						INNER JOIN
