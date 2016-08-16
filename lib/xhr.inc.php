@@ -5,8 +5,10 @@ $xhr_script = '';
 
 function xhr_verify($data)
 {
-	
-	if(isBotschafter())
+	$fsmodel = loadModel('foodsaver');
+	$bids = $fsmodel->getFsBezirkIds((int)$data['fid']);
+
+	if(isBotForA($bids, false, true) || isOrgateam())
 	{
 		global $db;
 		if($db->update('UPDATE `'.PREFIX.'foodsaver` SET `verified` = '.(int)$data['v'].' WHERE `id` = '.(int)$data['fid']))
@@ -34,6 +36,10 @@ function xhr_verify($data)
 				'status' => 1
 			));
 		}
+	}else{
+		return json_encode(array(
+				'status' => 0
+			));
 	}
 }
 
