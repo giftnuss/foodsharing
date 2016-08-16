@@ -2235,8 +2235,15 @@ function xhr_betriebRequest($data)
 	{
 		$msg = 'Der Verartwortliche wurde über Deine Anfrage informiert und wird sich bei Dir melden!';
 		
-		
-		$db->addGlocke(array($fsid), $foodsaver.' möchte ins Team!',$betrieb,'/?page=fsbetrieb&id='.(int)$data['id'].'&request='.(int)fsId());
+		$biebs = $db->getBiebsForStore($data['id']);
+
+		$model = loadModel('betrieb');
+		$model->addBell($biebs, 'store_new_request_title', 'store_new_request', 'img img-store brown', array(
+				'href' => '/?page=fsbetrieb&id='.(int)$data['id']
+			), array(
+				'user' => S::user('name'),
+				'name' => $betrieb
+			), 'store-request-'.(int)$data['id']);
 	}
 	else
 	{

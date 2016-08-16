@@ -12,6 +12,8 @@ $g_lang['passgen_failed_title'] = 'Dein Ausweis konnte nicht erstellt werden';
 $g_lang['passgen_failed'] = 'Bitte lade ein Foto, dann wirds klappen';
 $g_lang['store_new_title'] = 'Neuer Betrieb';
 $g_lang['store_new'] = '{name} wurde eingetragen';
+$g_lang['store_new_request_title'] = 'Neue Teamanfrage';
+$g_lang['store_new_request'] = 'Anfrage für {name}';
 
 $g_lang['fs_sleepmode_title'] = 'Neue Schlafmütze';
 $g_lang['fs_sleepmode'] = '{name} {nachname} ist jetzt inaktiv';
