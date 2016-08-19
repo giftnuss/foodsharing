@@ -545,6 +545,28 @@ class Control
 	  			{
 	  				$sessdata[$recipient['id']] = time();
 	  				
+	  				$msgDB = loadModel('msg');
+            if($betriebName = $msgDB->getBetriebname($conversation_id))
+            {
+                tplMail(30, $recipient['email'],array(
+                'anrede' => genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+                'sender' => S::user('name'),
+                'name' => $recipient['name'],
+                'chatname' => $betriebName,
+                'message' => $msg,
+                'link' => BASE_URL.'/?page=msg&uc='.(int)fsId().'cid='.(int)$conversation_id
+              ));
+            }elseif($memberNames = $msgDB->getChatMembers($conversation_id))
+            {
+                tplMail(30, $recipient['email'],array(
+                'anrede' => genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+                'sender' => S::user('name'),
+                'name' => $recipient['name'],
+                'chatname' => implode(', ', $memberNames),
+                'message' => $msg,
+                'link' => BASE_URL.'/?page=msg&uc='.(int)fsId().'cid='.(int)$conversation_id
+              ));
+            }else
 	  				tplMail($tpl_id, $recipient['email'],array(
 	  					'anrede' => genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 	  					'sender' => S::user('name'),

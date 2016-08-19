@@ -8,6 +8,20 @@ class MsgModel extends Model
 		');
 	}
 
+	public function getBetriebname($cid)
+	{
+		return $this->qCol('
+			SELECT name FROM '.PREFIX.'betrieb WHERE team_conversation_id = '.$cid.' or springer_conversation_id = '.$cid.'
+		');
+	}
+
+	public function getChatMembers($cid)
+	{
+		return $this->q('
+			SELECT fs.name FROM '.PREFIX.'foodsaver_has_conversation fc, '.PREFIX.'foodsaver fs WHERE fs.id = fc.foodsaver_id AND fc.conversation_id = '.$cid.'
+		');
+	}
+
 	public function user2conv($fsid)
 	{
 		return $this->addConversation(array($fsid=> $fsid),false);
