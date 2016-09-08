@@ -11,17 +11,6 @@ function xhr_verify($data)
 	if(isBotForA($bids, false, true) || isOrgateam())
 	{
 		global $db;
-		
-		if($countver = $db->qOne('SELECT COUNT(`change_id`) FROM '.PREFIX.'verify_history WHERE date between NOW()- INTERVAL 20 SECOND and now() and bot_id = '.fsid().''))
-		{
-			if($countver>10)
-			{
-				return json_encode(array(
-				'status' => 0
-			));
-			}
-		}
-
 		if($db->update('UPDATE `'.PREFIX.'foodsaver` SET `verified` = '.(int)$data['v'].' WHERE `id` = '.(int)$data['fid']))
 		{
 			
