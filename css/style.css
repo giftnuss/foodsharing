@@ -1187,11 +1187,7 @@ ul.imglist
 	padding:0;
 	margin-bottom:5px;
 	float:left;
-}
-ul.imglist, ul.imglist li
-{
 	list-style:none;
-	display:block;
 }
 ul.imglist li
 {
@@ -1201,10 +1197,6 @@ ul.imglist li
 	height:45px;
 	overflow:hidden;
 	
-}
-ul.imglist li a img
-{
-		
 }
 ul.imglist li a
 {
@@ -1218,10 +1210,9 @@ ul.imglist li a
 	border-radius: 3px;
 	text-decoration:none;
 }
-ul.imglist li.unconfirmed a img
+ul.imglist li a:hover
 {
-	opacity:0.4;
-	filter:alpha(opacity=40);
+	background-color:#4A3520;
 }
 
 ul.imglist li a img
@@ -1230,15 +1221,17 @@ ul.imglist li a img
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 }
-ul.imglist li.filled a:hover img
+ul.imglist li.unconfirmed a img
+{
+	opacity:0.4;
+	filter:alpha(opacity=40);
+}
+ul.imglist li.unconfirmed a:hover img
 {
 	opacity:1;
 	filter:alpha(opacity=100);
 }
-ul.imglist li.filled a:hover
-{
-	background-color:#4A3520;
-}
+
 ul.imglist li a span
 {
 	display:block;
@@ -1269,9 +1262,9 @@ div.input-wrapper.today ul.imglist li a
 {
 	background-color:#FFFFFE;
 }
-div.input-wrapper.today ul.imglist li.filled a:hover
+div.input-wrapper.today ul.imglist li a:hover
 {
-	background-color:#4A3520;
+	background-color:#4A3520; /* The same as ul.imglist li a:hover */
 }
 li.nohover a, li.nohover
 {
