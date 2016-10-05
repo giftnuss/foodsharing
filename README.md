@@ -6,7 +6,7 @@ allow precise versions of software to be defined to match production setup close
 ## Getting started
 
 Make sure you have installed
-[docker-compose](https://docs.docker.com/compose/install/) and node/npm first.
+[docker-compose](https://docs.docker.com/compose/install/) (at least version 1.6.0) and node/npm first.
 If you're [using OSX](https://docs.docker.com/engine/installation/mac/)
 you'll have a better experience with Docker for Mac rather than Docker Toolbox 
 (files won't update properly if using Toolbox).
