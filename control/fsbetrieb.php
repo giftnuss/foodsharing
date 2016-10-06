@@ -274,7 +274,7 @@ else if(isset($_GET['id']))
 		addStyle('#team_msg{width:358px;}');
 		addHidden('
 			<div id="u_undate">
-				<strong>'.v_info(s('attention').'</strong> '.s('shure_of_backup')).'
+				'.v_info(s('shure_of_backup'), s('attention')).'
 				<input type="hidden" name="undate-date" id="undate-date" value="" />
 				
 				'.v_form_textarea('team_msg').'
