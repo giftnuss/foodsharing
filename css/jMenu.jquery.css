@@ -72,6 +72,11 @@
 	-moz-box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.3);
 	box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.3);
 }
+
+.jMenu li:hover > ul {
+    display: block;
+}
+
 .jMenu li ul.bigmenu, .jMenu li ul.bigmenu > li
 {
 	width:300px !important;
