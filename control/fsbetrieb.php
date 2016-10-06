@@ -1782,12 +1782,12 @@ function u_form_abhol_table($zeiten = false,$option = array())
 		icons: {
 		 	primary: "ui-icon-minus"
 		 }
-		}).click(function(){
-			$this = $(this);
-			$this.parent().parent().remove();
+	}).click(function(){
+		$this = $(this);
+		$this.parent().parent().remove();
 	});
 			
-	$(".fetchercount").bind("keyup",function(){
+	$(".timetable").on("keyup", ".fetchercount", function(){
 		if(this.value != "")
 		{
 			val = parseInt("0"+this.value,10);
@@ -1811,23 +1811,6 @@ function u_form_abhol_table($zeiten = false,$option = array())
 		 }
 	}).click(function(){
 		$("table.timetable tbody").append($("table#nft-hidden-row tbody").html());
-		$(".fetchercount").bind("keyup",function(){
-			if(this.value != "")
-			{
-				val = parseInt("0"+this.value,10);
-				if(val == 0 )
-				{
-					val = 1;
-				}
-				else if(val > 2)
-				{
-					pulseError("Du hast mehr als 2 Leute zum abholen angegeben.<br />In der Regel sollten <strong>nicht mehr als 2 Leute</strong> zu einem Betrieb gehen. Zu viele Abholer führten schon oft zum Ende einer Koorperation. <br />Zur Not geht einer von euch mit Auto oder Anhänger vor und ihr trefft euch außer Reichweite vom Betrieb.",{
-						sticky:true
-					});
-				}
-				this.value = val;
-			}
-		});
 		clname = "odd";
 		$("table.timetable tbody tr").each(function(){
 			if(clname == "odd")
@@ -1845,15 +1828,15 @@ function u_form_abhol_table($zeiten = false,$option = array())
 			
 		});
 		$(".nft-remove").button({
-		text: false,
-		icons: {
-		 	primary: "ui-icon-minus"
-		 }
+			text: false,
+			icons: {
+				primary: "ui-icon-minus"
+			}
 		}).click(function(){
 			$this = $(this);
 			$this.parent().parent().remove();
 		});
-	});		
+	});
 	');
 	$out = '
 		<table class="timetable">
