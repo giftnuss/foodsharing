@@ -1842,7 +1842,7 @@ function u_form_abhol_table($zeiten = false,$option = array())
 		<table class="timetable">
 			
 			<thead>
-				<tr class="milestone">
+				<tr>
 					<th class="ui-padding">'.s('day').'</th>
 					<th class="ui-padding">'.s('time').'</th>
 					<th class="ui-padding">'.s('fetcher_count').'</th>
