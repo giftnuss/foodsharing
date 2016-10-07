@@ -292,33 +292,6 @@ $(document).ready(function(){
 		}
 	});
 	
-	$("#sendMail").dialog({
-		autoOpen:false,
-		modal:true,
-		buttons:
-		{
-			"Senden":function()
-			{
-				$.ajax({
-					dataType:"json",
-					url:"/xhr.php?f=sendmail&sub="+$("#sendMail input:first").val()+"&msg=" + encodeURIComponent($("#sendMail textarea").val() + '&fs=' + $('#sendmail-fs-id').val()),
-					success : function(data){
-						if(data.status == 1)
-						{
-							$("#sendMail").dialog('close');
-							$("#sendMail textarea").val('');
-							info(data.msg);
-						}
-						else
-						{
-							alert(data);
-						}
-					}
-				});
-			}
-		}
-	});
-	
 	$("#uploadPhoto").dialog({
 		autoOpen:false,
 		modal:true,
@@ -1196,13 +1169,6 @@ function openPhotoDialog(fs_id)
 	$("#uploadPhoto-fs_id").val(fs_id);
 	$("#uploadPhoto").dialog('open');
 }
- 
-function sendMail(fs_id)
-{
-	$('#sendmail-fs-id').val(fs_id);
-	$("#sendMail").dialog("open");
-}
-
 
 function info(txt)
 {
