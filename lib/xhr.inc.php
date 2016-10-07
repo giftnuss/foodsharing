@@ -2193,19 +2193,6 @@ function xhr_denyRequest($data)
 	}
 }
 
-function xhr_signoutBezirk($data)
-{
-	$db = loadModel('bezirk');
-	if($db->mayBezirk($data['bid']))
-	{
-		$db->del('DELETE FROM `'.PREFIX.'foodsaver_has_bezirk` WHERE `bezirk_id` = '.(int)$data['bid'].' AND `foodsaver_id` = '.(int)fsId().' ');
-		$db->del('DELETE FROM `'.PREFIX.'botschafter` WHERE `bezirk_id` = '.(int)$data['bid'].' AND `foodsaver_id` = '.(int)fsId().' ');
-		return 1;
-	}
-	
-	return 0;
-}
-
 function xhr_acceptRequest($data)
 {
 	global $db;

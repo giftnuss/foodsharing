@@ -37,32 +37,23 @@ $(document).ready(function(){
 		autoOpen:false,
 		modal:true,
 		buttons :[
-		    {
-		    	text: $('#signout_shure .sure').text(),
-		    	click:function(){
-		    		showLoader();
-		    		$.ajax({
-		    			url:'xhr.php?f=signoutBezirk',
-		    			data:{'bid':$('#signout_shure input.bid').val()},
-		    			success:function(ret){
-		    				if(ret == 1)
-		    				{
-		    					goTo('/?page=relogin&url='+encodeURIComponent('/?page=dashboard'));
-		    					
-		    				}
-		    			},
-		    			complete:function(){
-		    				hideLoader();
-		    			}
-		    		});
-		    	}
-		    },
-		    {
-		    	text: $('#signout_shure .abort').text(),
-		    	click: function(){
-		    		$('#signout_shure').dialog('close');
-		    	}
-		    }
+			{
+				text: $('#signout_shure .sure').text(),
+				click:function(){
+					ajax.req('bezirk', 'signout', {
+						data: $('input', this).serialize(),
+						success:function(){
+							goTo('/?page=relogin&url='+encodeURIComponent('/?page=dashboard'));
+						}
+					});
+				}
+			},
+			{
+				text: $('#signout_shure .abort').text(),
+				click: function(){
+					$(this).dialog('close');
+				}
+			}
 		]
 	});
 	
