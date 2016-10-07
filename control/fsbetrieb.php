@@ -389,7 +389,6 @@ else if(isset($_GET['id']))
 
 		/*Infos*/
 
-		$infos = '';
 		$betrieb['menge'] = '';
 		if($menge = abhm($betrieb['abholmenge']))
 		{
