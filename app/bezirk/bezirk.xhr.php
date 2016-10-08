@@ -15,37 +15,31 @@ class BezirkXhr extends Control
 		parent::__construct();
 	}
 	
+	private function hasThemeAccess($BotThemeStatus)
+	{
+		return ($BotThemeStatus['bot_theme']==0 && mayBezirk($bot_theme['bezirk_id']))
+			|| ($BotThemeStatus['bot_theme']==1 && isBotFor($bot_theme['bezirk_id']))
+	    || isOrgaTeam();
+	}
+
 	public function followTheme()
 	{
-		if(!S::may())
-		{
-			return $this->responses->fail_permissions();
-		}
-
 		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
-
-		if(!($bot_theme['bot_theme']==0 && mayBezirk($bot_theme['bezirk_id'])) &&
-			!($bot_theme['bot_theme']==1 && isBotFor($bot_theme['bezirk_id'])))
+		if(!S::may() || !$this->hasThemeAccess($bot_theme))
 		{
 			return $this->responses->fail_generic();
 		}
+
 		$this->model->followTheme($_GET['tid']);
 		return $this->responses->success();
 	}
 
 	public function unfollowTheme()
 	{
-		if(!S::may())
+		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
+		if(!S::may() || !$this->hasThemeAccess($bot_theme))
 		{
 			return $this->responses->fail_permissions();
-		}
-
-		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
-
-		if(!($bot_theme['bot_theme']==0 && mayBezirk($bot_theme['bezirk_id'])) &&
-			!($bot_theme['bot_theme']==1 && isBotFor($bot_theme['bezirk_id'])))
-		{
-			return $this->responses->fail_generic();
 		}
 
 		$this->model->unfollowTheme($_GET['tid']);
@@ -54,8 +48,8 @@ class BezirkXhr extends Control
 
 	public function stickTheme()
 	{
-		$topic_count = $this->model->checkTopicArea($_GET['bid'],$_GET['tid']);
-		if($topic_count == 0 || !S::may() || (!isOrgaTeam() && !isBotFor($_GET['bid']))
+		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
+		if(!S::may() || !$this->hasThemeAccess($bot_theme))
 		{
 			return $this->responses->fail_permissions();
 		}
@@ -66,8 +60,8 @@ class BezirkXhr extends Control
 
 	public function unstickTheme()
 	{
-		$topic_count = $this->model->checkTopicArea($_GET['bid'],$_GET['tid']);
-		if($topic_count == 0 || !S::may() || (!isOrgaTeam() && !isBotFor($_GET['bid']))
+		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
+		if(!S::may() || !$this->hasThemeAccess($bot_theme))
 		{
 			return $this->responses->fail_permissions();
 		}
