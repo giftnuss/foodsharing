@@ -150,16 +150,16 @@ class PassgenControl extends Control
 		
 				$pdf->SetFont('Ubuntu-L','',10);
 				
-				$pdf->Text(41.8+$x, 34.7+$y, utf8_decode($fs['name'].' '.$fs['nachname']));
-				$pdf->Text(41.8+$x, 41.9+$y, utf8_decode($this->getRolle($fs['geschlecht'], $fs['rolle'])));
+				$pdf->Text(41.8+$x, 34.5+$y, utf8_decode($fs['name'].' '.$fs['nachname']));
+				$pdf->Text(41.8+$x, 42.3+$y, utf8_decode($this->getRolle($fs['geschlecht'], $fs['rolle'])));
 				$pdf->Text(41.8+$x, 50.1+$y, utf8_decode(date('d. m. Y',time()-1814400)));
-				$pdf->Text(41.8+$x, 58.3+$y, utf8_decode(date('d. m. Y',time()+94608000)));
+				$pdf->Text(41.8+$x, 57.9+$y, utf8_decode(date('d. m. Y',time()+94608000)));
 				
 				$pdf->SetFont('Ubuntu-L','',6);
-				$pdf->Text(41.8+$x, 31.4+$y, utf8_decode('Name'));
-				$pdf->Text(41.8+$x, 38.6+$y, utf8_decode('Rolle'));
+				$pdf->Text(41.8+$x, 31.2+$y, utf8_decode('Name'));
+				$pdf->Text(41.8+$x, 39.0+$y, utf8_decode('Rolle'));
 				$pdf->Text(41.8+$x, 46.8+$y, utf8_decode('Gültig ab'));
-				$pdf->Text(41.8+$x, 55+$y, utf8_decode('Gültig bis'));
+				$pdf->Text(41.8+$x, 54.6+$y, utf8_decode('Gültig bis'));
 				//$pdf->Text(15+$x, 52+$y, utf8_decode('ID: '.$this->model->getKfz($fs['autokennzeichen_id']).'-'.$fs['fs_id'].'-'.$fs['id']));
 		
 				$pdf->SetFont('Ubuntu-L','',9);
@@ -177,7 +177,7 @@ class PassgenControl extends Control
 		
 				//$pdf->Text(67+$x, 63+$y, utf8_decode('gültig ab '.date('d.m.Y')));
 		
-				$pdf->Image('tmp/qr_'.$fs_id.'.png',70+$x,43.0+$y);
+				$pdf->Image('tmp/qr_'.$fs_id.'.png',70+$x,42.0+$y);
 				
 				if($photo = $this->model->getPhoto($fs_id))
 				{
