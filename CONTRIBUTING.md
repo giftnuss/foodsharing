@@ -29,10 +29,20 @@ If you feel comfortable submitting a fix too, follow the next section.
 ## Testing
 
 You can run the tests with `./scripts/test`,
-once you have run them once you can use `./scripts/test-rerun` which runs much quicker, so long as the tests
-remain idempotent.
+once you have run them once you can use `./scripts/test-rerun` which runs much quicker
+(so long as we keep writing the tests to run idempotently, please do!).
 
 So far end to end testing is working nicely (called acceptance tests in codeception).
 They run with a headless firefox and selenium inside the docker setup, they are run on CI build too.
 
-We are working on [restructing the code](https://gitlab.com/foodsharing-dev/issues/issues/63) to enable unit testing.
+We are working on [restructing the code](https://gitlab.com/foodsharing-dev/issues/issues/63)
+to enable unit testing.
+
+The test contains stay around after running, and you can visit the test app
+[in your browser](http://localhost:28080/), and it has
+[it's own phpmyadmin](http://localhost:28081/).
+
+If you want to run with debug mode turned on use: `./scripts/test --debug`.
+
+If you just want to run one test pass the path to that test as an argument,
+e.g. `./scripts/test tests/acceptance/LoginCept.php`
