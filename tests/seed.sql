@@ -2,8 +2,3 @@
 (119683,0,0,'',0,NOW(),'',0,0,0,0,'10178','Berlin',0,'52.5237395','13.3986951','',0,'usera@example.com','57a3f6208150a254d23930eee7643dd2','User',NULL,'A',' ','','','','','',NULL,0,NULL,0,STR_TO_DATE('2016-07-19 23:38:57','%Y-%m-%d %H:%i:%s'),0,0,'','',1,'578eba117b5ea7.27477801',1,STR_TO_DATE('2016-07-19 23:39:10','%Y-%m-%d %H:%i:%s'),0.00,0,0,0.00,0,0,0,100.00,0,NULL,NULL,'','','',NULL,'',0,NULL,0,0)
 ,(119684,0,903,'',0,NOW(),'',0,0,1,0,'13351','Berlin',0,'52.547566','13.3382749','',4,'userb@example.com','50f8479d1398f30f909e7abf8ad460e1','User',NULL,'B','Senegalstraße ','','','','','',NULL,0,NULL,0,STR_TO_DATE('2016-07-19 23:40:00','%Y-%m-%d %H:%i:%s'),0,0,'','',1,'578eba5091f372.53823386',1,STR_TO_DATE('2016-07-19 23:40:06','%Y-%m-%d %H:%i:%s'),0.00,0,0,0.00,0,0,0,100.00,0,NULL,NULL,'','','',NULL,'',0,NULL,0,0)
 ;
-SET FOREIGN_KEY_CHECKS=0;
-INSERT INTO `fs_bezirk` (`id`, `parent_id`, `has_children`, `type`, `teaser`, `desc`, `photo`, `master`, `mailbox_id`, `name`, `email`, `email_pass`, `email_name`, `apply_type`, `banana_count`, `fetch_count`, `week_num`, `report_num`, `stat_last_update`, `stat_fetchweight`, `stat_fetchcount`, `stat_postcount`, `stat_betriebcount`, `stat_korpcount`, `stat_botcount`, `stat_fscount`, `stat_fairteilercount`, `conversation_id`, `moderated`) VALUES
-(1, 0, 1, 0, 'Root', 'Root', '', 0, 0, '', '', '', '', 2, 0, 0, 0, 0, '2015-06-05 02:30:01', '702651.00', 48754, 179, 18, 2, 0, 0, 0, 0, 0)
-,(903, 1, 0, 1, '', '', '', 0, 0, 'Testbezirk', 'Testbezirk@example.de', '', 'Foodsharing Testbezirk', 2, 0, 0, 0, 0, '0000-00-00 00:00:00', '0.00', 0, 0, 0, 0, 0, 0, 0, 0, 0);
-SET FOREIGN_KEY_CHECKS=1;
