@@ -82,48 +82,33 @@ class BezirkView extends View
 		addJs('
 			var loadedPages = [];
 			$(window).scroll(function () {
-			   if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
-			      
-				  var page = $("#morebutton").val();
-				
-				  page = (parseInt(page));
-				  if(page == 0)
-				  {
-					 page = 1;
-				  }
-	
-				  check = true;
-				  for(i=0;i<loadedPages.length;i++)
-				  {
-					  if(parseInt(loadedPages[i]) == page)
-					  {
-						  check = false;
-					  }
-				  }
-				  
-				  if(check)
-				  {
-					  showLoader();
-					  loadedPages[loadedPages.length] = page;
-					  $.ajax({
-							url: "/xhrapp.php?app=bezirk&m=morethemes&bid='.(int)$this->bezirk_id.'&page=" + page + "&bot='.$bot.'&last=" + $(".thread:last").attr("id").split("-")[1],
-							dataType: "json",
-							success: function(data){
-								if(data.status == 1)
-								{
-									$("#morebutton").val((page+1));
-									$(".forum_threads.linklist").append(data.html);	
-								}
-							},
-							complete:function(){hideLoader();}
-					  });
-				  }
-			   }
+				if ($(window).scrollTop() < $(document).height() - $(window).height() - 10) {
+					return;
+				}
+
+				var page = parseInt($("#morebutton").val()) || 1;
+				for(i=0;i<loadedPages.length;i++)
+				{
+					if(loadedPages[i] == page)
+					{
+						return;
+					}
+				}
+
+				ajax.req("bezirk", "morethemes", {
+					data: {
+						bid: '.(int)$this->bezirk_id.',
+						bot: '.$bot.',
+						page: page,
+						last: $(".thread:last").attr("id").split("-")[1]
+					},
+					success: function(data){
+						loadedPages.push(page);
+						$("#morebutton").val(page+1);
+						$(".forum_threads.linklist").append(data.html);
+					}
+				});
 			});
-				
-			$("#morebutton").click(function(ev){
-				
-			});	
 		');
 		return '
 		<div class="ui-widget ui-widget-content ui-corner-all margin-bottom ui-padding">
