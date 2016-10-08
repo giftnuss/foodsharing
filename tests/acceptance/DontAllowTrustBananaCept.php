@@ -9,7 +9,7 @@ $I->amOnPage('/');
 $I->fillField('email_adress', 'userB@example.com');
 $I->fillField('password', 'userb');
 $I->click('#loginbar input[type=submit]');
-$I->amOnPage('/?page=dashboard');
+$I->seeCurrentUrlEquals('/?page=dashboard'); // it redirects
 $I->see('Hallo');
 $I->amOnPage('/profile/119684');
 $I->see('Status updates von User');
