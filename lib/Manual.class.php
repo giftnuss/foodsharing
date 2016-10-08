@@ -650,14 +650,14 @@ GROUP BY foodsaver_id'));
 
 	public function getBiebsForStore($bid)
 	{
-
 		return $this->q('
 			SELECT 		bt.foodsaver_id as id
 
 			FROM 		'.PREFIX.'betrieb_team bt
 
 			WHERE 	bt.verantwortlich = 1 AND	
-			bt.betrieb_id = '.$bid.'
+			active = 1 AND
+			bt.betrieb_id = '.$this->intval($bid).'
 		');
 	}
 
