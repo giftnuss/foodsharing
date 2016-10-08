@@ -147,26 +147,15 @@ class BezirkView extends View
 
 		addJsFunc('
 				function unfollowTheme(tid,bid,fsid){
-					showLoader();
-					$.ajax({
-						url:"xhrapp.php?app=bezirk&m=unfollowTheme",
-		    			data: "tid="+tid+"&bid="+bid+"&fsid="+fsid+"",
-						success : function(data){
-							reload();
-								
-						},
-						complete:function(){hideLoader();}
+					ajax.req('bezirk', 'unfollowTheme', {
+						data: { tid: tid, bid: bid, fsid: fsid },
+						success: reload
 					});
 				}
 				function follow(tid,bid,fsid){
-					showLoader();
-					$.ajax({
-						url:"xhrapp.php?app=bezirk&m=followTheme",
-		    			data: "tid="+tid+"&bid="+bid+"&fsid="+fsid+"",
-						success : function(data){
-								reload();
-						},
-						complete:function(){hideLoader();}
+					ajax.req('bezirk', 'followTheme', {
+						data: { tid: tid, bid: bid, fsid: fsid },
+						success: reload
 					});
 				}');
 		addJsFunc('

@@ -15,53 +15,37 @@ class BezirkXhr extends Control
 	{
 		if(!S::may())
 		{
-			goLogin();
+			return array('status' => 0);
 		}
 
 		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
 
-
-		if($bot_theme['bot_theme']==0 && mayBezirk($bot_theme['bezirk_id']))
+		if(!($bot_theme['bot_theme']==0 && mayBezirk($bot_theme['bezirk_id'])) &&
+			!($bot_theme['bot_theme']==1 && isBotFor($bot_theme['bezirk_id'])))
 		{
-			$this->model->followTheme($_GET['tid']);
+			return array('status' => 0);
 		}
-		elseif($bot_theme['bot_theme']==1 && isBotFor($bot_theme['bezirk_id']))
-		{
-			$this->model->followTheme($_GET['tid']);
-		}
-		else
-		{
-			go('/?page=dashboard');
-		}
-
-		
-
-		
+		$this->model->followTheme($_GET['tid']);
+		return array('status' => 1);
 	}
 
 	public function unfollowTheme()
 	{
 		if(!S::may())
 		{
-			goLogin();
+			return array('status' => 0);
 		}
 
 		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
 
+		if(!($bot_theme['bot_theme']==0 && mayBezirk($bot_theme['bezirk_id'])) &&
+			!($bot_theme['bot_theme']==1 && isBotFor($bot_theme['bezirk_id'])))
+		{
+			return array('status' => 0);
+		}
 
-		if($bot_theme['bot_theme']==0 && mayBezirk($bot_theme['bezirk_id']))
-		{
-			$this->model->unfollowTheme($_GET['tid']);
-		}
-		elseif($bot_theme['bot_theme']==1 && isBotFor($bot_theme['bezirk_id']))
-		{
-			$this->model->unfollowTheme($_GET['tid']);
-		}
-		else
-		{
-			go('/?page=dashboard');
-		}
-		
+		$this->model->unfollowTheme($_GET['tid']);
+		return array('status' => 1);
 	}
 
 	public function stickTheme()
