@@ -469,7 +469,7 @@ class Control
 			return false;
 		}
 
-		public function getPostInt($name)===
+		public function getPostInt($name)
 		{
 			if($val = $this->getPost($name))
 			{
