@@ -598,13 +598,13 @@ var ajax = {
 			dataType:'json',
 			method:opt.method,
 			success:function(ret){
+				if(ret.msg != undefined)
+				{
+					ajax.msg(ret.msg);
+				}
+
 				if(ret.status == 1)
 				{
-					if(ret.msg != undefined)
-					{
-						ajax.msg(ret.msg);
-					}
-					
 					if(ret.append != undefined)
 					{
 						$(ret.append).html(data.html);

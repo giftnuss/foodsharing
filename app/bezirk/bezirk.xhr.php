@@ -1,9 +1,13 @@
 <?php 
+
+include '../../lib/XhrResponses.php';
+
 class BezirkXhr extends Control
 {
 	
 	public function __construct()
 	{
+		$this->responses = new XhrResponses;
 		$this->model = new BezirkModel(15);
 		$this->view = new BezirkView();
 		
@@ -15,7 +19,7 @@ class BezirkXhr extends Control
 	{
 		if(!S::may())
 		{
-			return array('status' => 0);
+			return $this->responses->fail_permissions();
 		}
 
 		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
@@ -23,17 +27,17 @@ class BezirkXhr extends Control
 		if(!($bot_theme['bot_theme']==0 && mayBezirk($bot_theme['bezirk_id'])) &&
 			!($bot_theme['bot_theme']==1 && isBotFor($bot_theme['bezirk_id'])))
 		{
-			return array('status' => 0);
+			return $this->responses->fail_generic();
 		}
 		$this->model->followTheme($_GET['tid']);
-		return array('status' => 1);
+		return $this->responses->success();
 	}
 
 	public function unfollowTheme()
 	{
 		if(!S::may())
 		{
-			return array('status' => 0);
+			return $this->responses->fail_permissions();
 		}
 
 		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
@@ -41,33 +45,33 @@ class BezirkXhr extends Control
 		if(!($bot_theme['bot_theme']==0 && mayBezirk($bot_theme['bezirk_id'])) &&
 			!($bot_theme['bot_theme']==1 && isBotFor($bot_theme['bezirk_id'])))
 		{
-			return array('status' => 0);
+			return $this->responses->fail_generic();
 		}
 
 		$this->model->unfollowTheme($_GET['tid']);
-		return array('status' => 1);
+		return $this->responses->success();
 	}
 
 	public function stickTheme()
 	{
 		if(!S::may() || (!isOrgaTeam() && !isBotFor($_GET['bid'])))
 		{
-			return fail_permissions();
+			return $this->responses->fail_permissions();
 		}
 
-		$this->model->stickTheme($_GET['tid']);	
-		return success();
+		$this->model->stickTheme($_GET['tid']);
+		return $this->responses->success();
 	}
 
 	public function unstickTheme()
 	{
 		if(!S::may() || (!isOrgaTeam() && !isBotFor($_GET['bid'])))
 		{
-			return fail_permissions();
+			return $this->responses->fail_permissions();
 		}
 
 		$this->model->unstickTheme($_GET['tid']);
-		return success();
+		return $this->responses->success();
 	}
 
 	public function morethemes()
