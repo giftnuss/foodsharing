@@ -27,18 +27,26 @@ else
 }
 if(getAction('new'))
 {	
-	handle_add($bezirk_id);
+	if(S::may('bieb'))
+	{
+		handle_add($bezirk_id);
 	
-	addBread(s('bread_betrieb'),'/?page='.$page);
-	addBread(s('bread_new_betrieb'));
+		addBread(s('bread_betrieb'),'/?page='.$page);
+		addBread(s('bread_new_betrieb'));
 			
-	addContent(betrieb_form($bezirk,$page));
+		addContent(betrieb_form($bezirk,$page));
 
 	
 	
-	addContent(v_field(v_menu(array(
+		addContent(v_field(v_menu(array(
 		array('name'=>s('back_to_overview'),'href'=>'/?page=fsbetrieb&bid='.$bezirk_id)
-	)),s('actions')),CNT_RIGHT);
+		)),s('actions')),CNT_RIGHT);
+	}elseif(!S::may('bieb'))
+	{
+		info('Zum Anlegen eines Betriebes musst du Betriebsverantwortlicher sein');
+		go('?page=settings&sub=upgrade/up_bip');
+	}
+
 }
 elseif($id = getActionId('delete'))
 {
@@ -143,9 +151,13 @@ else
 {
 	addBread(s('betrieb_bread'),'/?page=betrieb');
 	
-	addContent(v_menu(array(
-			array('href' => '/?page=betrieb&a=new&bid='.(int)$bezirk_id,'name' => 'Neuen Betrieb eintragen')
-	),'Aktionen'),CNT_RIGHT);
+
+	if(S::may('bieb'))
+	{
+		addContent(v_menu(array(
+				array('href' => '/?page=betrieb&a=new&bid='.(int)$bezirk_id,'name' => 'Neuen Betrieb eintragen')
+		),'Aktionen'),CNT_RIGHT);
+	}
 	
 	if($betriebe = $db->listBetriebReq($bezirk_id))
 	{
