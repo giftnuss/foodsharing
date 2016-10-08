@@ -58,14 +58,16 @@ class BasketControl extends Control
 		if(S::may())
 		{
 			
-			addJsFunc('
-			function u_wallpostReady(postid)
+			if($basket['fs_id'] != fsId())
 			{
-				ajax.req("basket","follow",{
-					data:{bid:'.(int)$basket['id'].'}
-				});
-			}');
-			
+				addJsFunc('
+				function u_wallpostReady(postid)
+				{
+					ajax.req("basket","follow",{
+						data:{bid:'.(int)$basket['id'].'}
+					});
+				}');
+			}
 			$wallposts = $this->wallposts('basket', $basket['id']);
 			if($basket['fs_id'] == fsId())
 			{
