@@ -54,7 +54,8 @@ class BezirkXhr extends Control
 
 	public function stickTheme()
 	{
-		if(!S::may() || (!isOrgaTeam() && !isBotFor($_GET['bid'])))
+		$topic_count = $this->model->checkTopicArea($_GET['bid'],$_GET['tid']);
+		if($topic_count == 0 || !S::may() || (!isOrgaTeam() && !isBotFor($_GET['bid']))
 		{
 			return $this->responses->fail_permissions();
 		}
@@ -65,7 +66,8 @@ class BezirkXhr extends Control
 
 	public function unstickTheme()
 	{
-		if(!S::may() || (!isOrgaTeam() && !isBotFor($_GET['bid'])))
+		$topic_count = $this->model->checkTopicArea($_GET['bid'],$_GET['tid']);
+		if($topic_count == 0 || !S::may() || (!isOrgaTeam() && !isBotFor($_GET['bid']))
 		{
 			return $this->responses->fail_permissions();
 		}
