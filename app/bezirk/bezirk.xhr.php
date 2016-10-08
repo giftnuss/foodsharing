@@ -66,7 +66,7 @@ class BezirkXhr extends Control
 
 	public function stickTheme()
 	{
-		if(!S::may() && (isOrgaTeam() || isBotFor($_GET['bid'])))
+		if(!S::may() || (!isOrgaTeam() && !isBotFor($_GET['bid'])))
 		{
 			go('/?page=dashboard');
 		}
@@ -76,7 +76,7 @@ class BezirkXhr extends Control
 
 	public function unstickTheme()
 	{
-		if(!S::may() && (isOrgaTeam() || isBotFor($_GET['bid'])))
+		if(!S::may() || (!isOrgaTeam() && !isBotFor($_GET['bid'])))
 		{
 			go('/?page=dashboard');
 		}
@@ -84,6 +84,7 @@ class BezirkXhr extends Control
 		$this->model->unstickTheme($_GET['tid']);
 		
 	}
+
 	public function morethemes()
 	{
 		if(isset($_GET['page']) && mayBezirk($_GET['bid']))
