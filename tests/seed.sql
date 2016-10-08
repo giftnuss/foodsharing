@@ -4,4 +4,4 @@
 ;
 INSERT INTO `fs_basket` (`id`, `foodsaver_id`, `status`, `time`, `until`, `fetchtime`, `description`, `picture`, `tel`, `handy`, `contact_type`, `location_type`, `weight`, `lat`, `lon`, `bezirk_id`, `fs_id`, `appost`) VALUES
 (1, 119683, 1, '2016-04-04 11:47:52', '2016-05-16', NULL, 'ICH BIN ABGELAUFEN', '', '', '', '1', 0, 3, 50.067001, 8.238220, 39, 0, 0),
-(2, 119683, 1, '2016-08-01 11:47:43', '5030-08-15', NULL, '###TEST###', '', '', '', '1', 0, 3, 50.067001, 8.238220, 39, 0, 0);
+(2, 119683, 1, '2016-08-01 11:47:43', '2030-08-15', NULL, '###TEST###', '', '', '', '1', 0, 3, 50.067001, 8.238220, 39, 0, 0);
