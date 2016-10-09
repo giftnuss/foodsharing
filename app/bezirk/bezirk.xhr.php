@@ -1,6 +1,6 @@
 <?php 
 
-include '../../lib/XhrResponses.php';
+include 'lib/XhrResponses.php';
 
 class BezirkXhr extends Control
 {
