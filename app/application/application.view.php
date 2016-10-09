@@ -24,12 +24,9 @@ class ApplicationView extends View
 		
 		$out = $this->headline('Bewerbung für '.$this->bezirk['name'].' von '.$application['name'],img($application['photo']),'profile('.$application['id'].');');
 		
-		//$cnt = '<a style="float:right;" href="#" onclick="profile('.$application['id'].');return false;"><img src="'.img($application['photo']).'"></a>';
-			
 		$cnt = nl2br($application['application']);
 			
 		$cnt = v_input_wrapper($application['name'], $cnt);
-		//$cnt .= '<a inclick="ajreq(\'saverequestnote\',{fid:'.(int)$application['id'].',bid:'.(int)$this->bezirk_id.',note:$(\'#notes\').val()});return false;" class="button" href="#">Speichern</a>';
 		$cnt .= '<div class="clear"></div>';
 			
 		$out .= v_field($cnt, 'Motivations-Text',array('class' => 'ui-padding'));
