@@ -114,9 +114,6 @@ class View
 	
 	public function location($location)
 	{
-		//$map = new vMap();
-		//$map->setLocation($location['lat'], $location['lon']);
-		
 		$out = v_field('
 		<p>'.$location['name'].'</p>
 		<p>
@@ -222,9 +219,6 @@ class View
 		foreach ($foodsaver as $fs)
 		{
 			$jssaver[] = (int)$fs['id'];
-			
-			$title = $fs['name'].' ist offline';
-			$ampel = 'ampel-grau';
 
 			$photo = avatar($fs);
 			
@@ -274,8 +268,6 @@ class View
 		}
 		
 		$id = id('vmenu');
-	
-	//addJs('$("#'.$id.'").menu();');
 	
 	$out = '';
 	
@@ -355,8 +347,6 @@ class View
 						autocompleteOptions: {
 							delay: 0,
 							source: function(request, response) { 
-							
-								//response(localsource);
 					            /* Remote results only if string > 3: */
 								
 								if(request.term.length > 3)
@@ -397,20 +387,6 @@ class View
 			});
 				
 				var localsource = [{"id":"56","value":"Raphael Wintrich"},{"id":"62","value":"Raphael"}];
-				/*
-				for(i=0;i<data.length;i++)
-				{
-					//console.log(data[i]);
-				}
-				*/
-				
-				
-			/*
-			$.getJSON( "/cache/searchindex/'.S::user('token').'.json?t=" + tstring, function( data ) {
-				
-				
-			});
-			*/
 		');
 		
 		$input = '<input type="text" name="'.$id.'[]" value="" class="tag input text value" />';
@@ -423,7 +399,6 @@ class View
 		addHead('<script src="https://maps.google.com/maps/api/js?sensor=false"></script>');
 		addScript('/js/jquery.ui.addresspicker.js');
 		
-		$data = array();
 		global $g_data;
 		if(isset($g_data['lat']) && isset($g_data['lon']) && !empty($g_data['lat']) && !empty($g_data['lon']))
 		{

@@ -388,16 +388,12 @@ class ApiXhr extends Control
 	{		
 		if($ret = $this->model->checkClient($_GET['user'],$_GET['pass']))
 		{
-			$values = $this->model->getValues(array('id','orgateam','name','email','photo','geschlecht'), 'foodsaver', $ret['id']);
+			$values = $this->model->getValues(array('id','orgateam','name','email','photo','geschlecht','rolle'), 'foodsaver', $ret['id']);
 			
-			$values['bot'] = $this->model->isBotschafter($ret['id']);
+			$values['bot'] = $values['rolle'] >= 3;
 			
 			$values['menu'] = false;
-			if(file_exists('menus/'.$ret['id'].'_menu.html'))
-			{
-				$values['menu'] = file_get_contents('menus/'.$ret['id'].'_menu.html');
-			}
-			
+
 			$this->out(array(
 				'status' => 1,
 				'data' => $values

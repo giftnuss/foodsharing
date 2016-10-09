@@ -133,7 +133,6 @@ class WallpostXhr extends Control
 			}
 			if($post_id = $this->model->post($message,$attach))
 			{
-				$this->wallpostsAfterPost($post_id);
 				return array(
 					'status' => 1,
 					'html' => $this->view->posts($this->model->getLastPosts()),

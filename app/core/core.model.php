@@ -1,60 +1,9 @@
 <?php
 class Model extends ManualDb
 {
-	public function addPushQueue($sender_id,$recip_id,$title,$message,$ids = false,$data = array('t'=>0),$message_id = 0, $status = 0)
-	{
-		if($ids === false)
-		{
-			$ids = $this->getValues(array('gcm','iosid'), 'foodsaver', $recip_id);
-		}
-		
-		$data['i'] = (int)fsId();
-		
-		if($ids['gcm'] != '' || $ids['iosid'] != '')
-		{
-			$this->insert('
-				INSERT INTO `fs_pushqueue`
-				(
-					`sender_id`, 
-					`recip_id`, 
-					`time`, 
-					`message_id`, 
-					`title`, 
-					`message`, 
-					`data`, 
-					`status`,
-					`id_gcm`,
-					`id_apn`
-				) 
-				VALUES 
-				(
-					'.(int)$sender_id.',
-					'.(int)$recip_id.',
-					NOW(),
-					'.(int)$message_id.',
-					'.$this->strval($title).',
-					'.$this->strval($message).',
-					'.$this->strval(serialize($data)).',
-					'.(int)$status.',
-					'.$this->strval($ids['gcm']).',
-					'.$this->strval($ids['iosid']).'
-				)		
-			');
-		}
-	}
-	
 	public function mayBezirk($bid)
 	{
 		if(isset($_SESSION['client']['bezirke'][$bid]) || isBotschafter() || isOrgaTeam())
-		{
-			return true;
-		}
-		return false;
-	}
-	
-	public function isBotschafter($fsid)
-	{
-		if($this->q('SELECT foodsaver_id FROM '.PREFIX.'botschafter WHERE foodsaver_id = '.(int)$fsid.' LIMIT 1'))
 		{
 			return true;
 		}
@@ -111,36 +60,12 @@ class Model extends ManualDb
 		');
 	}
 	
-	public function removeBuddy($fsid)
-	{
-		$this->del('
-			DELETE FROM `'.PREFIX.'buddy`
-			WHERE 	`foodsaver_id` = '.(int)fsId().'
-			AND 	`buddy_id` = '.$fsid.'
-		');
-		$this->del('
-			DELETE FROM `'.PREFIX.'buddy`
-			WHERE 	`foodsaver_id` = '.(int)$fsid.'
-			AND 	`buddy_id` = '.fsId().'
-		');
-	}
-	
 	public function getLocation($id)
 	{
 		return $this->qRow('
 			SELECT id, name, lat, lon, zip, city, street
 			FROM  '.PREFIX.'location
 			WHERE 	id = '.$this->intval($id).'
-		');
-	}
-	
-	public function getLocationByLatLon($lat,$lon)
-	{
-		return $this->qRow('
-			SELECT (id, name, lat, lon, zip, city, street)
-			FROM  '.PREFIX.'location
-			WHERE 	lat = '.$this->floatval($lat).'
-			AND 	lon = '.$this->floatval($lon).'
 		');
 	}
 	
@@ -171,40 +96,6 @@ class Model extends ManualDb
  				'.$this->strval($ort).',
  				'.$this->strval($anschrift).'
  			)
- 		');
- 	}
- 	
- 	public function getCache($id)
- 	{
- 		if($value = $this->qOne('
- 			SELECT `value` FROM `fs_cache` 
- 			WHERE `id` = '.$this->strval($id).'
- 		'))
- 		{
- 			return unserialize($value);
- 		}
- 		
- 		return false;
- 	}
- 	
- 	public function replaceCache($id,$value)
- 	{
- 		$value = serialize($value);
- 		return $this->insert('
- 				REPLACE INTO `fs_cache`
- 				(`id`,`value`)
- 				VALUES('.$this->strval($id).','.$this->strval($value).')
- 		');
- 	}
- 	
- 	public function setCache($id,$value)
- 	{
- 		$value = serialize($value);
- 		return $this->insert('
- 			INSERT INTO `fs_cache`
- 			(`id`,`value`)
- 			VALUES('.$this->strval($id).','.$this->strval($value).')
- 			
  		');
  	}
  	
@@ -282,19 +173,6 @@ class Model extends ManualDb
  			}
  		}
  	
- 		/*
- 			if($time = $this->qOne('SELECT UNIX_TIMESTAMP(`zeit`) FROM `'.PREFIX.'activity` WHERE `foodsaver_id` = '.$this->intval($fs_id)))
- 			{
- 		if((time()-$time) > 600)
- 		{
- 		return false;
- 		}
- 		else
- 		{
- 		return true;
- 		}
- 		}
- 		*/
  		return false;
  	}
  	
@@ -328,8 +206,6 @@ class Model extends ManualDb
  		{
  			$unread = 1;
  		}
- 		
- 		$this->addPushQueue(fsId(), $recip_id, S::user('name').' hat Dir eine Nachricht geschrieben', $message,false,array('t'=>0,'i'=>fsId(),'t'=>time()));
  		
  		if($conversation_id = $model->user2conv($recip_id))
 		{
