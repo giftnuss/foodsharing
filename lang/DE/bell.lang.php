@@ -14,6 +14,18 @@ $g_lang['store_new_title'] = 'Neuer Betrieb';
 $g_lang['store_new'] = '{name} wurde eingetragen';
 $g_lang['store_new_request_title'] = 'Neue Teamanfrage';
 $g_lang['store_new_request'] = 'Anfrage für {name}';
+$g_lang['store_request_accept_title'] = '{name}';
+$g_lang['store_request_accept'] = 'Du wurdest in das Team aufgenommen';
+$g_lang['store_request_accept_wait_title'] = '{name}';
+$g_lang['store_request_accept_wait'] = 'Du bist nun auf der Springer- / Warteliste!';
+$g_lang['store_request_deny_title'] = '{name}';
+$g_lang['store_request_deny'] = 'Das Team ist leider schon zu voll!';
+
+$g_lang['store_wallpost_title'] = '{name}';
+$g_lang['store_wallpost'] = 'Neuen Eintrag auf der Pinnwand!';
+
+$g_lang['store_cr_times_title'] = '{name}';
+$g_lang['store_cr_times'] = 'Abholzeiten haben sich geändert';
 
 $g_lang['fs_sleepmode_title'] = 'Neue Schlafmütze';
 $g_lang['fs_sleepmode'] = '{name} {nachname} ist jetzt inaktiv';
