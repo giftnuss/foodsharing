@@ -145,7 +145,7 @@ class BezirkView extends View
 		');
 		$out = '<div class="head ui-widget-header ui-corner-top">'.$thread['name'].'</div>';
 
-		addJsFunc('
+		addJsFunc("
 				function unfollowTheme(tid,bid,fsid){
 					ajax.req('bezirk', 'unfollowTheme', {
 						data: { tid: tid, bid: bid, fsid: fsid },
@@ -169,7 +169,7 @@ class BezirkView extends View
 						data: { tid: tid, bid: bid, fsid: fsid },
 						success: reload
 					});
-				}');
+				}");
 
 		$follow = '';
 		$sticky = '';
