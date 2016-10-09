@@ -438,7 +438,7 @@ class SettingsView extends View
 			}
 				
 
-			$cnt .= '<div id="qcomment-'.(int)$r['id'].'">'.v_input_wrapper('Kommentar zu dieser Frage Schreiben', '<textarea style="height:50px;" id="comment-'.$r['id'].'" name="desc" class="input textarea value"></textarea><br /><a class="button" href="#" onclick="ajreq(\'addcomment\',{app:\'quiz\',comment:$(\'#comment-'.(int)$r['id'].'\').val(),id:'.(int)$r['id'].'});return false;">Absenden</a>',false,array('collapse' => true)).'</div>';
+			$cnt .= '<div id="qcomment-'.(int)$r['id'].'">'.v_input_wrapper('Kommentar zu dieser Frage schreiben', '<textarea style="height:50px;" id="comment-'.$r['id'].'" name="desc" class="input textarea value"></textarea><br /><a class="button" href="#" onclick="ajreq(\'addcomment\',{app:\'quiz\',comment:$(\'#comment-'.(int)$r['id'].'\').val(),id:'.(int)$r['id'].'});return false;">Absenden</a>',false,array('collapse' => true)).'</div>';
 				
 			
 			/*
