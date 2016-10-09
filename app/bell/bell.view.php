@@ -47,13 +47,6 @@ class BellView extends View
 				}
 				
 				$icon = '<i class="fa fa-bullhorn"></i>';
-				/*
-				if(strpos($b['icon'], '/') !== false)
-				{
-					$icon = '<img src="'.$b['icon'].'" />';
-				}
-				else 
-				*/
 				if(!empty($b['icon']))
 				{
 					if(substr($b['icon'],0,1) == '/')
