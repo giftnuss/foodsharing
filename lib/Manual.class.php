@@ -769,68 +769,6 @@ class ManualDb extends Db
 
 	}
 
-	public function readGlocke($gid)
-	{
-		$gid = (int)$gid;
-		if($gid > 0)
-		{
-			$this->update('UPDATE '.PREFIX.'glocke_read SET unread = 0 WHERE glocke_id = '.(int)$gid.' AND foodsaver_id = '.(int)fsId());
-		}
-	}
-
-	public function addGlocke($foodsaver,$msg,$title='',$url = '')
-	{
-		$id = $this->insert('
-			INSERT INTO 	`'.PREFIX.'glocke`
-			(
-			`name`,
-			`msg`,
-			`url`,
-			`time`
-			)
-			VALUES
-			(
-			'.$this->strval($title).',
-			'.$this->strval($msg).',
-			'.$this->strval($url).',
-			NOW()
-			)');
-		if(!is_array($foodsaver))
-		{
-			$foodsaver = array($foodsaver);
-		}
-		elseif(is_array($foodsaver[0]))
-		{
-			$tmp = $foodsaver;
-			$foodsaver = array();
-			foreach ($tmp as $t)
-			{
-				$foodsaver[] = $t['id'];
-			}
-		}
-
-		foreach ($foodsaver as $fsid)
-		{
-			if($fsid == fsId())
-			{
-				continue;
-			}
-			$this->insert('
-			INSERT INTO 	`'.PREFIX.'glocke_read`
-			(
-			`glocke_id`,
-			`foodsaver_id`,
-			`unread`
-			)
-			VALUES
-			(
-			'.$this->intval($id).',
-			'.$this->intval($fsid).',
-			1
-			)');
-		}
-	}
-
 	public function xhrGetFoodsaver($data)
 	{
 		$term = $data['term'];
@@ -3063,7 +3001,6 @@ class ManualDb extends Db
 	public function acceptBezirkRequest($fsid,$bid)
 	{
 		$bezirk = $this->getVal('name', 'bezirk', $bid);
-		$this->addGlocke(array($fsid), 'Du bist dabei, Deine Anfrage wurde angenommen!',$bezirk,'/?page=bezirk&bid='.(int)$bid);
 		return $this->update('
 					UPDATE 	 	`'.PREFIX.'foodsaver_has_bezirk`
 					SET 		`active` = 1,
@@ -3108,7 +3045,15 @@ class ManualDb extends Db
 	public function acceptRequest($fsid,$bid)
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $bid);
-		$this->addGlocke(array($fsid), 'Du bist dabei, Deine Anfrage wurde angenommen!',$betrieb,'/?page=fsbetrieb&id='.(int)$bid);
+
+		$model = loadModel('betrieb');
+		$model->addBell((int)$fsid, 'store_request_accept_title', 'store_request_accept', 'img img-store brown', array(
+				'href' => '/?page=fsbetrieb&id='.(int)$bid
+			), array(
+				'user' => S::user('name'),
+				'name' => $betrieb
+			), 'store-arequest-'.(int)$fsid);
+
 		$msg = loadModel('msg');
 
 		if($scid = $msg->getBetriebConversation($bid, true))
@@ -3133,7 +3078,13 @@ class ManualDb extends Db
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $bid);
 
-		$this->addGlocke(array($fsid), 'Du bist auf der Springer- / Warteliste, Bei bedarf wirst Du kontaktiert!',$betrieb,'/?page=fsbetrieb&id='.(int)$bid);
+		$model = loadModel('betrieb');
+		$model->addBell((int)$fsid, 'store_request_accept_wait_title', 'store_request_accept_wait', 'img img-store brown', array(
+				'href' => '/?page=fsbetrieb&id='.(int)$bid
+			), array(
+				'user' => S::user('name'),
+				'name' => $betrieb
+			), 'store-wrequest-'.(int)$fsid);
 
 		$msg = loadModel('msg');
 	    if($scid = $this->getBetriebConversation($bid, true))
@@ -3152,7 +3103,15 @@ class ManualDb extends Db
 	public function denyRequest($fsid,$bid)
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $bid);
-		$this->addGlocke(array($fsid), 'Das Team ist leider schon zu voll!',$betrieb,'/?page=fsbetrieb&id='.(int)$bid);
+
+		$model = loadModel('betrieb');
+		$model->addBell((int)$fsid, 'store_request_deny_title', 'store_request_deny', 'img img-store brown', array(
+				'href' => '/?page=fsbetrieb&id='.(int)$bid
+			), array(
+				'user' => S::user('name'),
+				'name' => $betrieb
+			), 'store-drequest-'.(int)$fsid);
+
 		return $this->update('
 					DELETE FROM 	`fs_betrieb_team`
 					WHERE 		`betrieb_id` = '.$this->intval($bid).'
