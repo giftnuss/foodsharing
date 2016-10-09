@@ -2701,6 +2701,7 @@ function xhr_delPost($data)
 {
 	$db = loadModel('bezirk');
 	
+	$fsid = $db->getVal('foodsaver_id', 'theme_post', $data['pid']);
 	$bezirkId = $db->getBezirkForPost($data['pid']);
 	$bezirkType = $db->getBezirkType($bezirkId);
 
