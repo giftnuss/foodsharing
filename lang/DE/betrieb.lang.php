@@ -1,6 +1,7 @@
 <?php 
 global $g_lang;
 $g_lang['betrieb_status_id'] = 'Status';
+$g_lang['betrieb'] = 'Betrieb';
 $g_lang['plz_id'] = 'plz';
 $g_lang['bezirk_id'] = 'Bezirk';
 $g_lang['kette_id'] = 'Betriebs-Kette';
@@ -20,9 +21,9 @@ $g_lang['betrieb_edit_success'] = 'Änderungen wurden gespeichert';
 $g_lang['betrieb_add_success'] = 'Lebensmittel-Spender Betrieb wurde gespeichert';
 $g_lang['betrieb_bread'] = 'Spender-Betriebe';
 $g_lang['lebensmittel'] = 'Welche Lebensmittel dürfen abgeholt werden?';
-$g_lang['ueberzeugungsarbeit'] = 'War es einfach, eine/n Verantwortliche/n zu überzeugen, bei den LebensmittelretterInnen mitzumachen?';
-$g_lang['presse'] = 'Ist der Betrieb/Laden/Verein bereit, dass er/sie bei der Presse und lebensmittelretten.de genannt werden darf?';
-$g_lang['sticker'] = 'Ist der Betrieb/Laden/Verein etc. gewillt, einen Sticker beim Eingang oder anderswo sichtbar aufzuhängen, dass sie/er keine Lebensmittel wegschmeißen und so bei foodsharing.de mitmachen?';
+$g_lang['ueberzeugungsarbeit'] = 'War es einfach, eine/n Verantwortliche/n zu überzeugen, mit foodsharing zu kooperieren?';
+$g_lang['presse'] = 'Ist der Betrieb/Laden/Verein bereit, bei der Presse und foodsharing.de genannt zu werden?';
+$g_lang['sticker'] = 'Ist der Betrieb/Laden/Verein etc. gewillt, einen Sticker beim Eingang oder anderswo sichtbar aufzuhängen?';
 $g_lang['abholmenge'] = 'Wie viel Kilo werden pro Abholung ungefähr mitgenommen?';
 $g_lang['besonderheiten'] = 'Besonderheiten';
 $g_lang['begin'] = 'Beginn der Kooperation';
