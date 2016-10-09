@@ -60,8 +60,6 @@ class BetriebXhr extends Control
 		{
 			if($history = $this->model->getFetchHistory($_GET['bid'],$_GET['from'],$_GET['to']))
 			{
-				//print_r($history);
-				//die();
 				return array(
 					'status' => 1,
 					'script' => '
@@ -323,7 +321,6 @@ class BetriebXhr extends Control
 		}
 		else
 		{
-			//$xhr->setStatus(0);
 			$xhr->addMessage(s('no_member'),'error');
 		}
 	

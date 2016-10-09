@@ -110,35 +110,6 @@ class BezirkModel extends Model
 		');
 	}
 	
-	public function getReports()
-	{
-		$ret = $this->q('
-			SELECT 	DISTINCT
-				r.`time`,
-				UNIX_TIMESTAMP(r.`time`) AS time_ts,
-				r.`msg`,
-				r.`tvalue`,
-				r.`reporttype`,
-				r.foodsaver_id AS fs_id,
-				CONCAT(fs.name," ",fs.nachname)	AS `name`
-			FROM 
-				`'.PREFIX.'report` r,
-				`'.PREFIX.'foodsaver_has_bezirk` hb,
-				`'.PREFIX.'foodsaver` fs
-				
-			WHERE
-				r.foodsaver_id = hb.foodsaver_id
-			AND
-				r.foodsaver_id = fs.id
-			AND
-				hb.bezirk_id IN('.implode(',',$this->getChildBezirke($this->bezirk['id'])).')
-			AND
-				r.foodsaver_id != '.(int)fsid().'
-		');
-		
-		return $ret;
-	}
-	
 	public function addEvent($event)
 	{
 		$location_id = 0;
@@ -498,7 +469,6 @@ class BezirkModel extends Model
 		if($reply > 0)
 		{
 			$fs_id = $this->getVal('foodsaver_id', 'theme_post', $reply);
-			//$this->addGlocke($fs_id, $this->getVal('name', 'foodsaver', fsId()).' hat Dir geantwortet','Forum '.$bezirk['name'],');
 			if($fs_id != fsId())
 			{
 				$this->addBell(
@@ -710,14 +680,6 @@ class BezirkModel extends Model
 
 			WHERE
 				b.bezirk_id = '.(int)$bid.'
-		');
-	}
-	
-	public function updateRequestNote($bid,$fid,$note)
-	{
-		return $this->update('
-			UPDATE 	'.PREFIX.'foodsaver_has_bezirk
-			SET 	`note` = '.$this->strval($note).'		
 		');
 	}
 }

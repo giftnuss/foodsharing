@@ -89,10 +89,6 @@ class BezirkControl extends Control
 				return $this->normal();
 			}
 		}
-		else
-		{
-			$this->becomeBezirkMember();
-		}
 	}
 	
 	public function normal()
@@ -123,12 +119,7 @@ class BezirkControl extends Control
 		}
 			
 		$menu[] =  array('name'=>'Fair-Teiler', 'href'=>'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=fairteiler');
-		//$menu[] = array('name'=>'Termine','href'=>'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=termine');
-		if($this->mode == 'normal')
-		{
-			$menu[] = array('name'=>'Mailing-Liste', 'href'=>'/?page=message&a=neu&list&bid='.(int)$this->bezirk_id);
-		}
-		
+
 		$menu[] = array('name' => 'Arbeitsgruppen', 'href' => '/?page=groups&p='.(int)$this->bezirk_id);
 			
 		addContent($this->view->menu($menu,array('active'=>$this->getSub())),CNT_LEFT);
@@ -175,19 +166,15 @@ class BezirkControl extends Control
 		
 		if(isBotFor($this->bezirk_id) || isOrgaTeam())
 		{
-			//$this->bezirkRequests();
-			
 			if($requests = $this->model->getBezirkRequests($this->bezirk_id))
 			{
 				$menu[] = array('name'=>'Bewerbungen <strong>('.count($requests).')</strong>', 'href'=>'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=applications');
 			}
-			
 		}
 		addBread($bezirk['name'],'/?page=bezirk&bid='.(int)$this->bezirk_id);
 		addContent($this->view->topOrga(),CNT_TOP);
 		
 		
-			
 		$menu[] = array('name'=>'Pinnwand', 'href'=>'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=wall');
 		$menu[] = array('name'=>'Forum', 'href'=>'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=forum');
 		$menu[] = array('name'=>'Termine', 'href'=>'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=events');
@@ -357,7 +344,7 @@ class BezirkControl extends Control
 			addJs('$("#dialog_requests").dialog("open");');
 		}
 	}
-	
+
 	public function forum()
 	{
 		return $this->_forum(false);
