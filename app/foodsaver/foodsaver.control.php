@@ -104,7 +104,6 @@ function handle_edit()
 			if(isset($g_data['orgateam']) && is_array($g_data['orgateam']) && $g_data['orgateam'][0] == 1)
 			{
 				$g_data['orgateam'] = 1;
-				$db->addGlocke($_GET['id'], 'Du bist jetzt im Bundesweiten Orgateam','Willkommen','/?page=relogin');
 			}
 		}
 		else
