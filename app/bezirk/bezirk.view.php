@@ -94,7 +94,7 @@ class BezirkView extends View
 						return;
 					}
 				}
-
+				loadedPages.push(page);
 				ajax.req("bezirk", "morethemes", {
 					data: {
 						bid: '.(int)$this->bezirk_id.',
@@ -103,7 +103,6 @@ class BezirkView extends View
 						last: $(".thread:last").attr("id").split("-")[1]
 					},
 					success: function(data){
-						loadedPages.push(page);
 						$("#morebutton").val(page+1);
 						$(".forum_threads.linklist").append(data.html);
 					}

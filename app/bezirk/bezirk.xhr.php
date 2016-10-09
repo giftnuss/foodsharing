@@ -85,7 +85,9 @@ class BezirkXhr extends Control
 			$themes = $this->model->getThemes($_GET['bid'],(int)$_GET['bot'],(int)$_GET['page'],(int)$_GET['last']);
 			return array(
 				'status' => 1,
-				'html' => $this->view->forum_index($themes,true,$sub)
+				'data' => array(
+					'html' => $this->view->forum_index($themes,true,$sub)
+				)
 			);
 		}
 	}
