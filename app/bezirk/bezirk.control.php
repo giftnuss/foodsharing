@@ -387,71 +387,79 @@ class BezirkControl extends Control
 	
 	public function forum()
 	{
-		addBread(s('forum'),'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=forum');
-		
-		addTitle(s('forum'));
-		
+		return $this->_forum(false);
+	}
+
+	public function botforum()
+	{
+		return $this->_forum(true);
+	}
+
+	private function _forum($botForum)
+	{
+		addBread(s('forum'),'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=' . $botForum ? 'botforum' : 'forum');
+
+		addTitle(s($botForum ? 'bot_forum' : 'forum'));
+
 		if(isset($_POST['submitted']))
 		{
-			$sub = 'forum';
-			if($_GET['sub'] != 'forum')
-			{
-				$sub = 'botforum';
-			}
-			
 			$body = strip_tags($_POST['body']);
 			$body = nl2br($body);
 			$body = autolink($body);
-			
+
 			if($post_id = $this->model->addThemePost($_POST['thread'], $body,$_POST['post'],$this->bezirk))
 			{
-				if($_POST['follow'] == 1)
+				// Dunno why this is only done for non-bot-posts
+				if(!$botForum)
 				{
-					$this->model->followTheme($_POST['thread']);
-				}
-				elseif($_POST['follow'] == 0)
-				{
-					$this->model->unfollowTheme($_POST['thread']);
-				}
-				
-				if($follower = $this->model->getThreadFollower($_POST['thread']))
-				{
-					
-					$theme = $this->model->getVal('name','theme',$_POST['thread']);
-					$poster = $this->model->getVal('name','foodsaver',fsId());
-					foreach ($follower as $f)
+					if($_POST['follow'] == 1)
 					{
-						tplMail(19, $f['email'],array(
-							'anrede' => genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-							'name' => $f['name'],
-							'link' => 'http://www.'.DEFAULT_HOST.'/?page=bezirk&bid='.$this->bezirk_id.'&sub='.$sub.'&tid='.(int)$_POST['thread'].'&pid='.$post_id.'#post'.$post_id,
-							'theme' => $theme,
-							'post' => $body,
-							'poster' => $poster
-						));
+						$this->model->followTheme($_POST['thread']);
+					}
+					elseif($_POST['follow'] == 0)
+					{
+						$this->model->unfollowTheme($_POST['thread']);
+					}
+
+					if($follower = $this->model->getThreadFollower($_POST['thread']))
+					{
+
+						$theme = $this->model->getVal('name','theme',$_POST['thread']);
+						$poster = $this->model->getVal('name','foodsaver',fsId());
+						foreach ($follower as $f)
+						{
+							tplMail(19, $f['email'],array(
+								'anrede' => genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+								'name' => $f['name'],
+								'link' => 'http://www.'.DEFAULT_HOST.'/?page=bezirk&bid='.$this->bezirk_id.'&sub='.$this->getSub().'&tid='.(int)$_POST['thread'].'&pid='.$post_id.'#post'.$post_id,
+								'theme' => $theme,
+								'post' => $body,
+								'poster' => $poster
+							));
+						}
 					}
 				}
-				
-				go('/?page=bezirk&bid='.$this->bezirk_id.'&sub='.$sub.'&tid='.(int)$_POST['thread'].'&pid='.$post_id.'#post'.$post_id);
+
+				go('/?page=bezirk&bid='.$this->bezirk_id.'&sub='.$this->getSub().'&tid='.(int)$_POST['thread'].'&pid='.$post_id.'#post'.$post_id);
 			}
 			else
 			{
 				error(s('post_could_not_saved'));
-				go('/?page=bezirk&bid='.$this->bezirk_id.'&sub='.$sub.'&tid='.(int)$_POST['thread'].'&pid='.(int)$_POST['post'].'#post'.(int)$_POST['post']);
+				go('/?page=bezirk&bid='.$this->bezirk_id.'&sub='.$this->getSub().'&tid='.(int)$_POST['thread'].'&pid='.(int)$_POST['post'].'#post'.(int)$_POST['post']);
 			}
 		}
-		
+
 		if(isset($_GET['tid']))
 		{
 			return $this->forum_thread($_GET['tid']);
 		}
-		
+
 		addContent($this->view->forum_top());
-		
-		if($themes = $this->model->getThemes($this->bezirk_id))
+
+		if($themes = $this->model->getThemes($this->bezirk_id, $botForum ? 1 : 0))
 		{
 			addContent(
-				$this->view->forum_index($themes)
+				$this->view->forum_index($themes, false, $botForum ? 'botforum' : 'forum')
 			);
 		}
 		else
@@ -460,56 +468,10 @@ class BezirkControl extends Control
 				$this->view->forum_empty()
 			);
 		}
-		
-		addContent($this->view->forum_bottom(0));
+
+		addContent($this->view->forum_bottom($botForum ? 1 : 0));
 	}
-	
-	public function botforum()
-	{
-		
-			addBread(s('forum'),'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=botforum');
-			addTitle(s('bot_forum'));
-			
-			
-			if(isset($_POST['submitted']))
-			{
-				$body = strip_tags($_POST['body']);
-				$body = nl2br($body);
-				$body = autolink($body);
-				if($post_id = $this->model->addThemePost($_POST['thread'], $body,$_POST['post'],$this->bezirk))
-				{
-					go('/?page=bezirk&bid='.$this->bezirk_id.'&sub='.$this->getSub().'&tid='.(int)$_POST['thread'].'&pid='.$post_id.'#post'.$post_id);
-				}
-				else
-				{
-					error(s('post_could_not_saved'));
-					go('/?page=bezirk&bid='.$this->bezirk_id.'&sub='.$this->getSub().'&tid='.(int)$_POST['thread'].'&pid='.(int)$_POST['post'].'#post'.(int)$_POST['post']);
-				}
-			}
-			
-			if(isset($_GET['tid']))
-			{
-				return $this->forum_thread($_GET['tid']);
-			}
-			
-			addContent($this->view->forum_top());
-			
-			if($themes = $this->model->getThemes($this->bezirk_id,1))
-			{
-				addContent(
-				$this->view->forum_index($themes,false,'botforum')
-				);
-			}
-			else
-			{
-				addContent(
-				$this->view->forum_empty()
-				);
-			}
-			
-			addContent($this->view->forum_bottom(1));
-	}
-	
+
 	public function forum_thread($thread_id)
 	{
 		if($thread = $this->model->getThread($this->bezirk_id,$thread_id,$this->bot_theme))
