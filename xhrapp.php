@@ -21,6 +21,7 @@ if(isset($_GET['app']) && isset($_GET['m']))
 	require_once 'lib/func.inc.php';
 	require_once 'lib/view.inc.php';
 	require_once 'lib/Manual.class.php';
+	require_once 'lib/XhrResponses.php';
 	
 	require_once ROOT_DIR.'app/core/core.control.php';
 	require_once ROOT_DIR.'app/core/core.model.php';
@@ -40,7 +41,12 @@ if(isset($_GET['app']) && isset($_GET['m']))
 	if(method_exists($obj, $meth))
 	{
 		$out = $obj->$meth();
-		
+
+		if($out === XhrResponse::PERMISSION_DENIED) {
+			header("HTTP/1.1 403 Forbidden" );
+			exit();
+		}
+
 		if(isset($_GET['format']) && $_GET['format'] == 'jsonp')
 		{
 			echo $_GET['callback'] . '(' . json_encode($out) . ');';

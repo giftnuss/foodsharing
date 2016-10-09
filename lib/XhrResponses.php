@@ -1,15 +1,11 @@
 <?php
 class XhrResponses
 {
+	public const PERMISSION_DENIED = 'permission_denied';
+
 	public function fail_permissions()
 	{
-		return array(
-			'status' => 0,
-			'msg' => array(
-				'text' => 'Du hast leider nicht die notwendigen Berechtigungen für diesen Vorgang.',
-				'type' => 'error'
-			)
-		);
+		return XhrResponses::PERMISSION_DENIED;
 	}
 
 	public function fail_generic()

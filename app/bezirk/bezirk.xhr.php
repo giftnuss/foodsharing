@@ -1,6 +1,4 @@
-<?php 
-
-include 'lib/XhrResponses.php';
+<?php
 
 class BezirkXhr extends Control
 {
@@ -27,7 +25,7 @@ class BezirkXhr extends Control
 		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
 		if(!S::may() || !$this->hasThemeAccess($bot_theme))
 		{
-			return $this->responses->fail_generic();
+			return $this->responses->fail_permissions();
 		}
 
 		$this->model->followTheme($_GET['tid']);
