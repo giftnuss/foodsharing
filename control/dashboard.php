@@ -101,7 +101,7 @@ else if(S::may('fs'))
 	
 		addJs('
 	
-		$.fancybox(\'<div class="popbox"><h3>Willkommen, bitte Wähle die Region aus, in der Du aktiv werden möchtest!</h3><p class="subtitle">Deine Region sollte nicht weiter als 10km von Deinem Lebensraum entfernt sein, es besteht auch die Möglichkeit eine neue Region/Bezirk zu gründen, sollte es in Deinen Lebensräumen noch keine Region geben.</p><p>Es muss nicht Deine Meldeadresse, sondern sollte Deine aktuelle Wohnandresse sein.</p><div style="height:260px;">'.v_bezirkChildChooser($id).'<span id="'.$id.'-btna">Meine Region ist nicht dabei</span><div class="middle" id="'.$id.'-notAvail"><h3>Dein/e Stadt / Region / Bezirk ist nicht dabei?</h3>'.$swap.'</div></div><p class="bottom"><span id="'.$id.'-button">Speichern</span></p></div>\',{
+		$.fancybox(\'<div class="popbox"><h3>Willkommen, bitte Wähle die Region aus, in der Du aktiv werden möchtest!</h3><p class="subtitle">Deine Region sollte nicht weiter als 10km von Deinem Lebensraum entfernt sein. Es besteht auch die Möglichkeit, eine/n neue/n Region/Bezirk zu gründen, sollte es in Deinen Lebensräumen noch keine Region geben.</p><p>Es muss nicht Deine Meldeadresse, sondern sollte Deine aktuelle Wohnandresse sein.</p><div style="height:260px;">'.v_bezirkChildChooser($id).'<span id="'.$id.'-btna">Meine Region ist nicht dabei</span><div class="middle" id="'.$id.'-notAvail"><h3>Dein/e Stadt / Region / Bezirk ist nicht dabei?</h3>'.$swap.'</div></div><p class="bottom"><span id="'.$id.'-button">Speichern</span></p></div>\',{
 			minWidth : 390,
 			maxWidth : 400,
 			closeClick:false,
@@ -152,7 +152,7 @@ else if(S::may('fs'))
 			}
 			else
 			{
-				pulseError(\'<p><strong>Du musst eine Auswahl treffen</strong></p><p>Gibt es Deine Stadt, Deinen Bezirk oder Deine region noch nicht, dann treffe die passende übergeordnete Auswahl</p><p>Also für Köln-Ehrenfeld z.B. Köln</p><p>Und schreibe die Region die neu angelegt werden soll in das Feld unten</p>\');
+				pulseError(\'<p><strong>Du musst eine Auswahl treffen</strong></p><p>Gibt es deine Stadt, deinen Bezirk oder deine Region noch nicht, dann treffe die passende übergeordnete Auswahl</p><p>Also für Köln-Ehrenfeld z.B. Köln</p><p>Und schreibe die Region die neu angelegt werden soll in das Feld unten.</p>\');
 			}
 		});');
 	}
@@ -202,7 +202,7 @@ else if(S::may('fs'))
 		}
 		else
 		{
-			$msg = 'Jemand aus dem Bundesweiten Orgateam wird sich bei Dir melden, bei Fragen wende Dich an info@lebensmittelretten.de';
+			$msg = 'Jemand aus dem Bundesweiten Orgateam wird sich bei Dir melden, bei Fragen wende Dich an info@foodsharing.de';
 		}
 	
 		addJs('
@@ -574,7 +574,7 @@ else if(S::may('fs'))
 	
 	if($gerettet > 0)
 	{
-		$gerettet = ', Du hast <strong>'.number_format($gerettet,2,",",".").' KG</strong> gerettet';
+		$gerettet = ', Du hast <strong>'.number_format($gerettet,2,",",".").' kg</strong> gerettet';
 	}
 	else
 	{
