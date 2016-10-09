@@ -552,7 +552,7 @@ class Control
 								'anrede' => genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 								'sender' => S::user('name'),
 								'name' => $recipient['name'],
-								'chatname' => $betriebName,
+								'chatname' => "Betrieb ".$betriebName,
 								'message' => $msg,
 								'link' => BASE_URL.'/?page=msg&uc='.(int)fsId().'cid='.(int)$conversation_id
 							));
