@@ -209,7 +209,7 @@ class FairteilerControl extends Control
 					if($_GET['agree'] == 1)
 					{
 						$this->model->acceptFairteiler($_GET['id']);
-						info('Fair-Teiler ist jetzt Aktiv');
+						info('Fair-Teiler ist jetzt aktiv');
 						go('/?page=fairteiler&sub=ft&id='.(int)$_GET['id']);
 					}
 					else if($_GET['agree'] == 0)
@@ -222,8 +222,8 @@ class FairteilerControl extends Control
 					
 				addContent($this->view->checkFairteiler($ft));
 				addContent($this->view->menu(array(
-				array('href' => '/?page=fairteiler&sub=check&id='.(int)$ft['id'].'&agree=1','name' => 'Fair-Teiler Freischalten'),
-				array('click' => 'if(confirm(\'Achtung! Wenn Du den Fair-Teiler löschst wird er gelöscht. Fortfahren?\')){goTo(this.href);}else{return false;}','href'=>'/?page=fairteiler&sub=check&id='.(int)$ft['id'].'&agree=0','name' => 'Fair-Teiler Ablehnen')
+				array('href' => '/?page=fairteiler&sub=check&id='.(int)$ft['id'].'&agree=1','name' => 'Fair-Teiler freischalten'),
+				array('click' => 'if(confirm(\'Achtung! Wenn Du den Fair-Teiler löschst kannst du dies nicht mehr rückgängig machen. Fortfahren?\')){goTo(this.href);}else{return false;}','href'=>'/?page=fairteiler&sub=check&id='.(int)$ft['id'].'&agree=0','name' => 'Fair-Teiler ablehnen')
 				),array('title' => 'Optionen')),CNT_RIGHT);
 			}
 			else
