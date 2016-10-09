@@ -15,10 +15,10 @@ class BezirkXhr extends Control
 		parent::__construct();
 	}
 	
-	private function hasThemeAccess($BotThemeStatus)
+	private function hasThemeAccess($BotThemestatus)
 	{
-		return ($BotThemeStatus['bot_theme']==0 && mayBezirk($bot_theme['bezirk_id']))
-			|| ($BotThemeStatus['bot_theme']==1 && isBotFor($bot_theme['bezirk_id']))
+		return ($BotThemestatus['bot_theme']==0 && mayBezirk($BotThemestatus['bezirk_id']))
+			|| ($BotThemestatus['bot_theme']==1 && isBotFor($BotThemestatus['bezirk_id']))
 	    || isOrgaTeam();
 	}
 
