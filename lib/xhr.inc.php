@@ -228,7 +228,14 @@ function xhr_addPinPost($data)
 		{
 			$poster = $db->getVal('name','foodsaver',fsId());
 			$betrieb = $db->getVal('name', 'betrieb', (int)$data['bid']);
-			//$db->addGlocke(explode(',', $data['team']), $betrieb, 'Neuer Pinnwandeintrag von '.$poster,'/?page=fsbetrieb&id='.(int)$data['bid']);
+
+			$model = loadModel('betrieb');
+			$model->addBell($data['team'], 'store_wallpost_title', 'store_wallpost', 'img img-store brown', array(
+				'href' => '/?page=fsbetrieb&id='.(int)$data['bid']
+			), array(
+				'user' => S::user('name'),
+				'name' => $betrieb
+			), 'store-wallpost-'.(int)$data['bid']);
 			$_SESSION['last_pinPost'] = time();
 			return xhr_getPinPost($data);
 		}
@@ -1528,7 +1535,7 @@ function xhr_betriebRequest($data)
 	}
 	else
 	{
-		$msg = 'Für Diesen Betrieb gibt es noch keinen verantwortlichen, Der Botschafter wurde informiert';
+		$msg = 'Für Diesen Betrieb gibt es noch keinen Verantwortlichen, Der Botschafter wurde informiert';
 		
 		
 		$botsch = array();
@@ -1547,7 +1554,13 @@ function xhr_betriebRequest($data)
 			$add = ' Es gibt aber keinen Botschafter';
 		}
 		
-		$db->addGlocke($botsch, $foodsaver.' möchte ins Team!'.$add,$betrieb,'/?page=fsbetrieb&id='.(int)$data['id'].'&request='.(int)fsId());
+		$model = loadModel('betrieb');
+		$model->addBell($botsch, 'store_new_request_title', 'store_new_request', 'img img-store brown', array(
+				'href' => '/?page=fsbetrieb&id='.(int)$data['id']
+			), array(
+				'user' => S::user('name'),
+				'name' => $betrieb
+			), 'store-request-'.(int)$data['id']);
 	}
 	
 	$db->teamRequest(fsId(), $data['id']);
