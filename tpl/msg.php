@@ -23,20 +23,6 @@ if(!empty($content_right))
 			</div>
 		</div>';
 }
-if(!empty($content_top))
-{
-	//$content_top = '';
-	/*
-	$content_top = '
-		<div class="pure-g">
-			<div id="content_top" class="pure-u-1">
-				<div class="inside">
-					'.$content_top.'
-				</div>
-			</div>
-		</div>';
-		*/
-}
 
 if(!empty($content_bottom))
 {
@@ -59,10 +45,6 @@ if(!empty($content_main))
 		</div>
 	</div>';
 }
-if(!empty($content_left) && !empty($content_right))
-{
-	//addStyle('div#content{width:513px;}');
-}
 ?><!DOCTYPE html>
 <html lang="de">
   <head>
@@ -77,7 +59,7 @@ if(!empty($content_left) && !empty($content_right))
 	<script type="text/javascript">
 	<?php echo JSMin::minify($g_js_func); ?>
 	$(document).ready(function(){
-		<?php echo $js; /*JSMin::minify($js);*/ ?>
+		<?php echo $js; ?>
 	});
 	
 	</script>
@@ -103,7 +85,6 @@ if(!empty($content_left) && !empty($content_right))
 	<?php echo $content_overtop; ?>
 	<div id="main"<?php if(isMob()) { ?> class="mobile"<?php } ?>>
 		<?php echo getBread(); ?>
-		<?php //if(!isMob()){echo $content_top;} ?>
 		<div class="pure-g mainpure">
 			<?php 
 			if(isMob())
