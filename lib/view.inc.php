@@ -2449,8 +2449,8 @@ function v_form_text($id,$option = array())
 	$label = s($id);
 	
 	$value = getValue($id);
-	$disabled == "";
-	if($option['disabled'])
+	$disabled = "";
+	if(isset($option['disabled']) && $option['disabled'])
 	{
 		$disabled = 'readonly="readonly"';
 	}
