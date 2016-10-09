@@ -9,7 +9,7 @@ $g_lang['food_art'] = 'Was trifft auf die Lebensmittel zu?';
 $g_lang['contactmessage'] = 'Per Nachricht';
 $g_lang['fetchstate'] = 'Hat alles gut geklappt?';
 $g_lang['contact_type'] = 'Wie möchtest Du kontaktiert werden?';
-$g_lang['tel'] = 'Festnetz-Telefon';
+$g_lang['tel'] = 'Festnetztelefon';
 
 $g_lang['no_requests'] = 'bisher keine Anfragen';
 $g_lang['one_request'] = 'eine Anfrage';

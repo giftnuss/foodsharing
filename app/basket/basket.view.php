@@ -127,7 +127,7 @@ class BasketView extends View
 		}
 		else
 		{
-			$page->addSectionRight(v_info('Für Detailierte Infos darfst Du Dich einloggen!','Hinweis!').'<div>
+			$page->addSectionRight(v_info('Für detailierte Infos musst Du Dich einloggen!','Hinweis!').'<div>
 				<a class="button button-big" href="#"onclick="ajreq(\'login\',{app:\'login\'});return false;">Einloggen</a>
 			</div>',false,array('wrapper' => false));
 		}		
@@ -242,7 +242,7 @@ class BasketView extends View
 		$out .= v_form_checkbox('contact_type',array(
 			'values' => array(
 				array('id' => 1, 'name' => 'Per Nachricht'),
-				array('id' => 2, 'name' => 'Per Telefon-Anruf')
+				array('id' => 2, 'name' => 'Per Telefonanruf')
 			)
 		));
 		
