@@ -398,7 +398,7 @@ else if(isset($_GET['id']))
 		$info = '';
 		if(!empty($betrieb['besonderheiten']))
 		{
-			$info .= v_input_wrapper(s('besonderheiten'), $betrieb['besonderheiten']);
+			$info .= v_input_wrapper(s('besonderheiten'), nl2br($betrieb['besonderheiten']));
 		}
 		if($betrieb['menge'] > 0)
 		{
