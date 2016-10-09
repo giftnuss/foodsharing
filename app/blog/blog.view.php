@@ -8,9 +8,6 @@ class BlogView extends View
 		{
 			$row_tmp = array();
 			
-			// http://lebensmittelretten.local/freiwillige/xhr.php?f=activeSwitch&t=blog_entry&id=47&value=0
-			//$row_tmp[] = array('cnt' => v_activeSwitcher('blog_entry',$d['id'],$d['active']));
-
 			if(isOrgateam() || isBotFor($d['bezirk_id']))
 			{
 				$row_tmp[] = array('cnt' => v_activeSwitcher('blog_entry',$d['id'],$d['active']));

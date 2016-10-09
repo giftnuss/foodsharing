@@ -34,6 +34,8 @@ class BlogModel extends Model
 		return false;
 	}
 
+	/**
+	 * checks if foodsaver is admin of a working group and returns that working group */
 	public function getBezID($fsId)
 	{
 		return $this->qRow('
@@ -162,9 +164,7 @@ class BlogModel extends Model
 			FROM 		`'.PREFIX.'blog_entry`
 			
 			WHERE 		`id` = ' . $this->intval($id));
-	
-	
-	
+
 		return $out;
 	}
 	
@@ -218,8 +218,6 @@ class BlogModel extends Model
 			$foodsaver[$b['id']] = $b;
 		}
 		
-		//$this->addGlocke($foodsaver,$data['name'],'Neuer Blog Artikel',);
-		
 		$this->addBell(
 			$foodsaver,
 			'blog_new_check_title',
@@ -234,8 +232,6 @@ class BlogModel extends Model
 			'blog-check-'.$id
 		);
 
-		
-	
 		return $id;
 	}
 }
