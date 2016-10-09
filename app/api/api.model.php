@@ -5,47 +5,7 @@ class ApiModel extends Model
 	{
 		return $this->q('SELECT id, name, parent_id FROM '.PREFIX.'bezirk WHERE type = 7 ORDER BY parent_id');
 	}
-	
-	public function getMumbleUsers()
-	{
-		return $this->q('SELECT foodsaver_id, `name`, `sha` FROM '.PREFIX.'mumbleuser');
-	}
-	
-	public function chatHistory($id)
-	{
-		return $this->q('
-		SELECT 	
-			fs.name AS `n`,
-			c.msg AS `m`,
-			UNIX_TIMESTAMP(c.time) AS t,
-			fs.photo AS p
-			
-		FROM 	
-			fs_message c,
-			fs_foodsaver fs
-			
-			
-		WHERE 
-			c.sender_id = fs.id
-		
-		AND
-		(
-			(	c.sender_id = '.(int)$id.'
-				AND
-				c.recip_id = '.(int)fsId().'
-			)
-			OR
-			(
-				c.sender_id = '.(int)fsId().'
-				AND
-				c.recip_id = '.(int)$id.'
-			)
-		)
-			
-		ORDER BY c.`time` DESC
-		LIMIT 20');
-	}
-	
+
 	public function allBaskets()
 	{
 		return $this->q('
@@ -85,36 +45,6 @@ class ApiModel extends Model
 				
 			HAVING 
 				d <='.(int)$distance.'
-		');
-	}
-	
-	public function setiosid($regid)
-	{
-		return $this->update('
-				UPDATE
-				'.PREFIX.'foodsaver
-	
-				SET
-					`iosid` = '.$this->strval($regid).',
-					`last_mid` = NOW()
-	
-				WHERE
-				`id` = '.(int)fsId().'
-				');
-	}
-	
-	public function setgcm($regid)
-	{
-		return $this->update('
-			UPDATE 
-				'.PREFIX.'foodsaver
-				
-			SET
-				`gcm` = '.$this->strval($regid).',
-				`last_mid` = NOW()
-
-			WHERE
-				`id` = '.(int)fsId().'
 		');
 	}
 	

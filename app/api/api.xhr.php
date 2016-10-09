@@ -384,14 +384,6 @@ class ApiXhr extends Control
 		}
 	}
 	
-	public function mumbleusers()
-	{
-		if($users = $this->model->getMumbleUsers())
-		{
-			$this->out($users);
-		}
-	}
-	
 	public function auth()
 	{		
 		if($ret = $this->model->checkClient($_GET['user'],$_GET['pass']))
@@ -484,9 +476,6 @@ class ApiXhr extends Control
 	
 	public function loadrequests()
 	{
-		//$model = loadModel('basket');
-		//if($baskets = $model->listUpdates())
-
 		$model = loadModel('msg');
 		
 		if($convs = $model->listConversations())
@@ -512,57 +501,5 @@ class ApiXhr extends Control
 				'status' => 0
 		));
 		
-		/*
-		if($conv = $this->model->getConversations())
-		{
-			$out = array();
-			foreach ($conv as $b)
-			{
-				$out[] = array(
-					't' => niceDateShort($b['time_ts']),
-					'n' => $b['name'],
-					'id' => $b['sender_id'],
-					'p' => $b['photo'],
-					'm' => ''
-				);
-			}
-			
-			return $this->appout(array(
-				'status' => 1,
-				'requests' => $out
-			));
-		}
-		return $this->appout(array(
-			'status' => 0
-		));
-		*/
-	}
-	
-	public function setiosid()
-	{
-		if(S::may() && isset($_GET['i']) && !empty($_GET['i']))
-		{
-			$this->model->setiosid($_GET['i']);
-			return $this->appout(array(
-				'status' => 1
-			));
-		}
-		return $this->appout(array(
-				'status' => 0
-		));
-	}
-	
-	public function setgcm()
-	{
-		if(S::may() && isset($_GET['i']) && !empty($_GET['i']))
-		{
-			$this->model->setgcm($_GET['i']);
-			return $this->appout(array(
-				'status' => 1		
-			));
-		}
-		return $this->appout(array(
-			'status' => 0
-		));
 	}
 }
