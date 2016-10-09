@@ -70,17 +70,22 @@ class BezirkXhr extends Control
 
 	public function morethemes()
 	{
-		if(isset($_GET['page']) && mayBezirk($_GET['bid']))
+		$bezirk_id = (int)$_GET['bid'];
+		if(isset($_GET['page']) && mayBezirk($bezirk_id))
 		{
 			$sub = 'forum';
 			
 			if((int)$_GET['bot'] == 1)
 			{
+				if(!isBotFor($bezirk_id))
+				{
+					return $this->responses->fail_permissions();
+				}
 				$sub = 'botforum';
 			}
 			
-			$this->view->bezirk_id = (int)$_GET['bid'];
-			$themes = $this->model->getThemes($_GET['bid'],(int)$_GET['bot'],(int)$_GET['page'],(int)$_GET['last']);
+			$this->view->bezirk_id = $bezirk_id;
+			$themes = $this->model->getThemes($bezirk_id,(int)$_GET['bot'],(int)$_GET['page'],(int)$_GET['last']);
 			return array(
 				'status' => 1,
 				'data' => array(
