@@ -42,7 +42,7 @@ if(isset($_GET['app']) && isset($_GET['m']))
 	{
 		$out = $obj->$meth();
 
-		if($out === XhrResponse::PERMISSION_DENIED) {
+		if($out === XhrResponses::PERMISSION_DENIED) {
 			header("HTTP/1.1 403 Forbidden" );
 			exit();
 		}
