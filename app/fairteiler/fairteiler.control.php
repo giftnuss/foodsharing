@@ -110,14 +110,6 @@ class FairteilerControl extends Control
 				}
 			}
 		}
-		
-/*		addHidden('
-				<div id="fbshare-dialog">
-				
-				<a href="https://www.facebook.com/sharer/sharer.php?u='.urlencode('http://www.'.DEFAULT_HOST.'/'.$this->bezirk['urlname'].'/fairteiler/'.$this->fairteiler['id'].'_'.$this->fairteiler['urlname']).'" id="ft-public-link" target="_blank"><img src="img/facebook_share.png" alt="Auf Facebook teilen" /></a>
-				
-				</div>');
-*/		
 	}
 	
 	public function index()
@@ -129,8 +121,6 @@ class FairteilerControl extends Control
 		}
 		if(!isset($_GET['sub']))
 		{
-			//addContent($this->view->changeBezirk($this->model->getBezirke()),CNT_RIGHT);
-			
 			$items = array();
 			if($bezirke = $this->model->getBezirke())
 			{
@@ -139,8 +129,6 @@ class FairteilerControl extends Control
 					$items[] = array('name'=>$b['name'],'href'=>'/?page=fairteiler&bid='.$b['id']);
 				}
 			}
-			
-			//addContent(v_menu($items,s('bezirk_chooser')),CNT_RIGHT);
 			
 			if($fairteiler = $this->model->listFairteiler($this->bezirk_id))
 			{
@@ -286,7 +274,6 @@ class FairteilerControl extends Control
 	
 	public function addFt()
 	{
-		//addBread(s('fairteiler'),'/?page=fairteiler&bid='.(int)$this->bezirk_id);
 		addBread(s('add_fairteiler'));
 	
 		if(isset($_POST['form_submit']) && $_POST['form_submit'] == 'fairteiler')
@@ -299,7 +286,6 @@ class FairteilerControl extends Control
 				}
 				else
 				{
-					//tplMailList($tpl_id, $to)
 					info(s('fairteiler_prepare_success'));
 				}
 				go('/?page=fairteiler&bid='.(int)$this->bezirk_id);
@@ -399,5 +385,4 @@ class FairteilerControl extends Control
 		}
 		return false;
 	}
-	
 }

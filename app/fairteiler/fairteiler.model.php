@@ -120,9 +120,6 @@ class FairteilerModel extends Model
 			
 		}
 		
-		//ksort($bezirk_ids);
-		
-		
 		if(!empty($bezirk_ids) && ($fairteiler = $this->q('
 	
 			SELECT 	ft.`id`,

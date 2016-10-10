@@ -45,8 +45,7 @@ class FairteilerXhr extends Control
 				$post = $this->model->getLastFtPost($_GET['fid']);
 				
 				$body = nl2br($post['body']);
-				// http://lebensmittelretten.local/freiwillige/images/wallpost/medium_531d9a4e5788d.png
-				
+
 				if(!empty($post['attach']))
 				{
 					$attach = json_decode($post['attach'],true);
@@ -85,13 +84,11 @@ class FairteilerXhr extends Control
 					array('name' => $ft['name'],'user'=>S::user('name'),'teaser'=>tt($post['body'],100)),
 					'fairteiler-'.(int)$_GET['fid']
 				);
-				//$this->model->addGlocke($follower, 'Updates im '.$ft['name'].' Fair-Teiler','Fair-Teiler Update',);
 			}
 		}
 		
 		return array(
-			'status' => 1 //,
-//			'script' => 'u_fbshare('.(int)$_GET['pid'].');'
+			'status' => 1
 		);
 	}
 	
