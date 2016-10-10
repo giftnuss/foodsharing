@@ -38,7 +38,6 @@ test:
     - tests/_output
 
 variables:
-  DOCKER_HOST: docker:2375
   # https://docs.docker.com/engine/userguide/storagedriver/selectadriver/
   # https://gitlab.com/gitlab-org/gitlab-ce/issues/19971
   DOCKER_DRIVER: overlay
