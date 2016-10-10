@@ -96,8 +96,6 @@ function handle_edit()
 	global $db;
 	global $g_data;
 	
-	$bid = $db->getVal('bezirk_id', 'foodsaver', $_GET['id']);
-	
 	if(submitted())
 	{
 		
@@ -119,7 +117,7 @@ function handle_edit()
 		$settings_model = loadModel('settings');
 		if($oldFs = $settings_model->getOne_foodsaver($_GET['id']))
 		{
-      $logChangedFields = array('name', 'nachname', 'stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum', 'rolle', 'orgateam');
+			$logChangedFields = array('name', 'nachname', 'stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum', 'rolle', 'orgateam');
 			$settings_model->logChangedSetting($_GET['id'], $oldFs, $g_data, $logChangedFields);
 		}
 		if($db->update_foodsaver($_GET['id'], $g_data))
@@ -137,21 +135,6 @@ function handle_edit()
 function foodsaver_form($title = 'Foodsaver')
 {
 	global $db;
-
-	/*
-	 $abholmoeglichkeit_values = $db->getBasics_abholmoeglichkeit();
-	$beteiligung_values = $db->getBasics_beteiligung();
-	$bezirk_values = $db->getBasics_bezirk();
-	$ernaehrung_values = $db->getBasics_ernaehrung();
-	$flatrate_values = $db->getBasics_flatrate();
-	$heard_about_values = $db->getBasics_heard_about();
-	$kontakte_werbung_values = $db->getBasics_kontakte_werbung();
-	$lagerraum_values = $db->getBasics_lagerraum();
-	$medienarbeit_values = $db->getBasics_medienarbeit();
-	$sharing_netzwerk_values = $db->getBasics_sharing_netzwerk();
-	$betrieb_values = $db->getBasics_betrieb();
-	*/
-	
 	global $g_data;
 
 	$orga = '';
@@ -256,71 +239,11 @@ function foodsaver_form($title = 'Foodsaver')
 			)),
 
 			v_form_date('geb_datum',array('required' => true, 'yearRangeFrom' => (date('Y')-111), 'yearRangeTo' => date('Y')))
-		
-			/*
-			 * v_form_select('autokennzeichen_id',array('required' => true)
-			v_form_select('zuverlassig_id'),
-			v_form_select('wohnung_id'),
-			v_form_select('containert_id'),
-			v_form_select('aktivbeifoodsharing_id'),
-			v_form_select('promotionarbeit_id'),
-			v_form_select('hotline_id'),
-			v_form_select('zeitaufwand_id'),
-			v_form_select('wohndauer_id'),
-			v_form_select('pfand_id'),
-			v_form_select('fleisch_abholen_id'),
-			v_form_select('abholen_id'),
-			v_form_select('foodsavertyp_id'),
-			v_form_select('abholen_und_kuehlen_id'),
-			v_form_select('autokennzeichen_id'),
-			v_form_select('land_id'),
-			v_form_select('bezirk_id'),
-			v_form_select('plz_id'),
-			v_form_text('email'),
-			v_form_text('passwd'),
-			v_form_text('name'),
-			v_form_select('admin'),
-			v_form_text('nachname'),
-			v_form_text('anschrift'),
-			v_form_text('telefon'),
-			v_form_text('handy'),
-			v_form_select('geschlecht'),
-			v_form_text('geb_datum'),
-			v_form_text('fs_id'),
-			v_form_textarea('radius'),
-			v_form_textarea('kontakte_betriebe'),
-			v_form_textarea('raumlichkeit'),
-			v_form_text('fs_international'),
-			v_form_textarea('fs_orga'),
-			v_form_textarea('talente'),
-			v_form_text('anbau'),
-			v_form_textarea('timetable'),
-			v_form_textarea('legal_gerettet'),
-			v_form_textarea('motivation'),
-			v_form_textarea('about_me'),
-			v_form_textarea('kommentar'),
-			v_form_select('datenschutz'),
-			v_form_select('haftungsausschluss'),
-			v_form_text('anmeldedatum'),
-			v_form_checkbox('abholmoeglichkeit',array('values' => $abholmoeglichkeit_values)),
-			v_form_checkbox('beteiligung',array('values' => $beteiligung_values)),
-			v_form_checkbox('bezirk',array('values' => $bezirk_values)),
-			v_form_checkbox('ernaehrung',array('values' => $ernaehrung_values)),
-			v_form_checkbox('flatrate',array('values' => $flatrate_values)),
-			v_form_checkbox('heard_about',array('values' => $heard_about_values)),
-			v_form_checkbox('kontakte_werbung',array('values' => $kontakte_werbung_values)),
-			v_form_checkbox('lagerraum',array('values' => $lagerraum_values)),
-			v_form_checkbox('medienarbeit',array('values' => $medienarbeit_values)),
-			v_form_checkbox('sharing_netzwerk',array('values' => $sharing_netzwerk_values)),
-			v_form_checkbox('betrieb',array('values' => $betrieb_values))
-			*/
-
 		));
 }
 
 function picture_box()
 {
-	global $g_data;
 	global $db;
 
 	$photo = $db->getPhoto($_GET['id']);

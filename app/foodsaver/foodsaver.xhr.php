@@ -36,13 +36,13 @@ class FoodsaverXhr extends Control
 		$foodsaver = $this->model->listFoodsaver($_GET['bid']);
 		$bezirk = $this->model->getBezirk($_GET['bid']);
 		$html = jsSafe($this->view->foodsaverList($foodsaver,$bezirk),"'");
-		
+
 		return array(
 			'status' => 1,
 			'script' => '$("#foodsaverlist").replaceWith(\''.$html.'\');fsapp.init();'
 		);
 	}
-	
+
 	/**
 	 * Method to delete an foodsaver from an bezirk
 	 */
