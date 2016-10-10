@@ -29,7 +29,7 @@ test:
 
   # run it on gitlab's free ci runners
   tags:
-  - shared
+  - non-shared
 
   # collect any test output
   artifacts:
