@@ -1,7 +1,7 @@
 <?php
 class XhrResponses
 {
-	public const PERMISSION_DENIED = 'permission_denied';
+	const PERMISSION_DENIED = 'permission_denied';
 
 	public function fail_permissions()
 	{
