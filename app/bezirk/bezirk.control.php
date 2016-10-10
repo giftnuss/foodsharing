@@ -302,7 +302,7 @@ class BezirkControl extends Control
 		}
 	}
 	
-	public function bezirkRequests()
+	private function bezirkRequests()
 	{
 		if($requests = $this->model->getBezirkRequests($this->bezirk_id))
 		{
@@ -397,6 +397,7 @@ class BezirkControl extends Control
 
 	private function _forum($botForum)
 	{
+		$botForum = $botForum && ($this->bot_theme == 1);
 		addBread(s('forum'),'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=' . $botForum ? 'botforum' : 'forum');
 
 		addTitle(s($botForum ? 'bot_forum' : 'forum'));
@@ -472,7 +473,7 @@ class BezirkControl extends Control
 		addContent($this->view->forum_bottom($botForum ? 1 : 0));
 	}
 
-	public function forum_thread($thread_id)
+	private function forum_thread($thread_id)
 	{
 		if($thread = $this->model->getThread($this->bezirk_id,$thread_id,$this->bot_theme))
 		{
@@ -528,7 +529,7 @@ class BezirkControl extends Control
 		addContent($this->view->newThemeForm());
 	}
 	
-	public function themeInfoBotschafter($theme_id)
+	private function themeInfoBotschafter($theme_id)
 	{
 		$theme = $this->model->getValues(array('foodsaver_id','name'), 'theme', $theme_id);
 		$poster = $this->model->getVal('name', 'foodsaver', $theme['foodsaver_id']);
@@ -556,7 +557,7 @@ class BezirkControl extends Control
 		
 	}
 	
-	public function themeInfoMail($theme_id)
+	private function themeInfoMail($theme_id)
 	{
 		$theme = $this->model->getValues(array('foodsaver_id','name','last_post_id'), 'theme', $theme_id);
 		$body = $this->model->getVal('body', 'theme_post', $theme['last_post_id']);
@@ -619,7 +620,7 @@ class BezirkControl extends Control
 		}
 	}
 	
-	public function handleNtheme()
+	private function handleNtheme()
 	{
 		if(isset($_POST['form_submit']))
 		{
