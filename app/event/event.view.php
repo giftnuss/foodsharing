@@ -124,11 +124,9 @@ class EventView extends View
 			});		
 		');
 		
-		$hidden = '';
 		$delinvites = '';
 		if(isset($_GET['id']))
 		{
-			$hidden = 'display:none;';
 			$delinvites = '<br /><label><input type="checkbox" name="delinvites" id="delinvites" value="1" /> Vorhandene Einladungen löschen?</label>';
 		}
 		
@@ -167,7 +165,6 @@ class EventView extends View
 				v_input_wrapper('Uhrzeit Beginn', v_form_time('time_start',$start_time)),
 				v_input_wrapper('Uhrzeit Ende', v_form_time('time_end',$end_time)),
 				v_form_textarea('description',array('desc'=>s('desc_desc'),'required'=>true)),
-				//v_form_picture('picture',array('resize'=>array(528,60),'crop'=>array((528/170),1))),
 				v_form_select('online_type',array('values' => array(
 						array('id'=>1,'name' => s('offline')),
 						array('id'=>0,'name'=> s('online'))
@@ -179,8 +176,6 @@ class EventView extends View
 	
 	public function statusMenu($event,$user_status)
 	{
-		$btns = '';
-		
 		$menu = array();
 		
 		if($event['fs_id'] == fsid() || isOrgaTeam())
@@ -189,7 +184,6 @@ class EventView extends View
 				'name' => 'Event bearbeiten',
 				'href' => '/?page=event&sub=edit&id='.(int)$event['id']
 			);
-			//$btns .= ' <a style="color:#FFF;font-size:12px;" class="button" href=""></a>';
 		}
 		
 		if($user_status != -1)
@@ -200,7 +194,6 @@ class EventView extends View
 					'name' => 'Ich kann doch nicht',
 					'click' => 'ajreq(\'ustat\',{id:'.(int)$event['id'].',s:3});return false;'
 				);
-				//$btns .= ' <a style="color:#FFF;font-size:12px;" class="button" href="#" onclick=""></a>';
 			}
 				
 			if($user_status == 0)
@@ -209,7 +202,6 @@ class EventView extends View
 						'name' => 'Einladung annehmen',
 						'click' => 'ajreq(\'ustat\',{id:'.(int)$event['id'].',s:1});return false;'
 				);
-				//$btns .= ' <a style="color:#FFF;font-size:12px;" class="button" href="#" onclick=""></a>';
 			}
 				
 			if($user_status != 0 && $user_status != 1)
@@ -218,7 +210,6 @@ class EventView extends View
 					'name' => 'Ich kann doch',
 					'click' => 'ajreq(\'ustat\',{id:'.(int)$event['id'].',s:1});return false;'
 				);
-				//$btns .= ' <a style="color:#FFF;font-size:12px;" class="button" href="#" onclick=""></a>';
 			}
 				
 			if($user_status != 2)
@@ -227,7 +218,6 @@ class EventView extends View
 					'name' => 'Ich kann vielleicht',
 					'click' => 'ajreq(\'ustat\',{id:'.(int)$event['id'].',s:2});return false;'
 				);
-				//$btns .= ' <a style="color:#FFF;font-size:12px;" class="button" href="#" onclick=""></a>';
 			}
 		}
 		else
