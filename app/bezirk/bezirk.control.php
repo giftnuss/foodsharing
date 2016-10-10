@@ -114,18 +114,6 @@ class BezirkControl extends Control
 		
 		$menu = array();
 		
-		/*
-		 * Meldungen
-		 */
-		/*
-		if(isBotFor($this->bezirk_id) || isOrgaTeam())
-		{
-			if($reports = $this->model->getReports())
-			{
-				$menu[] = array('name'=>'Meldungen <strong>('.count($reports).')</strong>', 'href'=>'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=reports');
-			}
-		}
-		*/
 		$menu[] = array('name'=>'Forum', 'href'=>'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=forum');
 		$menu[] = array('name'=>'Termine', 'href'=>'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=events');
 		
@@ -367,21 +355,6 @@ class BezirkControl extends Control
 			addJs('$("#dialog_requests").dialog("option","title","Anfragen für '.$this->bezirk['name'].'");');
 			addJs('$("#dialog_requests").dialog("option","buttons",{});');
 			addJs('$("#dialog_requests").dialog("open");');
-		}
-	}
-	
-	public function blog()
-	{
-		addContent(v_field('hier kommt bald was ;)', 'Blog',array('class'=>'ui-padding')));
-	}
-	
-	public function reports()
-	{
-		addBread(s('reports'),'/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=reports');
-		
-		if($reports = $this->model->getReports())
-		{
-			addContent($this->view->reports($reports));
 		}
 	}
 	
@@ -662,26 +635,6 @@ class BezirkControl extends Control
 		return false;
 	}
 	
-	public function termine()
-	{
-		addContent(v_field('hier kommt bald was ;)', 'Termine',array('class'=>'ui-padding')));
-	}
-	
-	public function isBezirkMember()
-	{
-		if(isset($_SESSION['client']['bezirke'][$this->bezirk_id]))
-		{
-			return true;
-		}
-		
-		return false;
-	}
-	
-	public function becomeBezirkMember()
-	{
-		
-	}
-	
 	public function events()
 	{
 		addBread('Termine','/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=events');
@@ -700,41 +653,15 @@ class BezirkControl extends Control
 		addContent($this->view->addEvent(),CNT_RIGHT);
 	}
 	
-	public function newevent()
-	{
-		addBread('Termine','/?page=bezirk&bid='.(int)$this->bezirk_id.'&sub=events');
-		addBread('Neuer Termin');
-		
-		if($this->isSubmitted())
-		{
-			if($data = $this->validateEvent())
-			{
-				if($id = $this->model->addEvent($data))
-				{
-					info('Event wurde erfolgreich eingetragen!');
-					go('/?page=bezirk&bid='.$this->bezirk_id.'&sub=events/show&id='.(int)$id);
-				}
-			}
-		}
-		else
-		{
-			addContent($this->view->eventForm());
-		}
-	}
-	
 	public function applications()
 	{
+		if(!(isBotFor($this->bezirk_id) || isOrgaTeam()))
+		{
+			return;
+		}
 		if($requests = $this->model->getBezirkRequests($this->bezirk_id))
 		{
 			addContent($this->view->applications($requests));
-		}
-	}
-	
-	public function application()
-	{
-		if($apply = $this->getApplication($_GET['fid']))
-		{
-			
 		}
 	}
 	
@@ -759,74 +686,5 @@ class BezirkControl extends Control
 		{
 			go('/?page=bezirk&bid='.$this->bezirk_id.'&sub=events');
 		}
-	}
-	
-	public function validateEvent()
-	{
-		$out = array(
-			'name' => '',
-			'description' => '',
-			'online_type' => 0,
-			'location_id' => 0,
-			'start' => date('Y-m-d').' 15:00:00',
-			'end' => date('Y-m-d').' 16:00:00'
-		);
-		
-		if($start_date = $this->getPostDate('date'))
-		{
-			if($start_time = $this->getPostTime('time_start'))
-			{
-				if($end_time = $this->getPostTime('time_end'))
-				{
-					$out['start'] = date('Y-m-d',$start_date).' '.preZero($start_time['hour']).':'.preZero($start_time['min']).':00';
-					$out['end'] = date('Y-m-d',$start_date).' '.preZero($end_time['hour']).':'.preZero($end_time['min']).':00';
-					
-					if((int)$this->getPostInt('addend') == 1 && ($ed = $this->getPostDate('dateend')))
-					{
-						$out['end'] = date('Y-m-d',$ed).' '.preZero($end_time['hour']).':'.preZero($end_time['min']).':00';
-					}
-				}
-				
-			}
-		}
-		
-		if($name = $this->getPostString('name'))
-		{
-			$out['name'] = $name;
- 		}
- 		
- 		if($description = $this->getPostString('description'))
- 		{
- 			$out['description'] = $description;
- 		}
- 		
- 		$out['online_type'] = (int)$this->getPostInt('online_type');
- 		
- 		if($out['online_type'] == 1)
- 		{
- 			$lat = $this->getPost('lat');
- 			$lon = $this->getPost('lon');
- 				
- 			$id = $this->model->getLocationIdByLatLon($lat,$lon);
- 			
- 			if(!$id)
- 			{
- 				$id = $this->model->addLocation(
-					$this->getPostString('location_name'),
- 					$lat,
- 					$lon,
- 					$this->getPostString('anschrift'),
- 					$this->getPostString('plz'),
- 					$this->getPostString('ort')
- 				);
- 			}
- 				
- 			$out['location_id'] = $id;
- 		}
- 		else
- 		{
- 			$out['location_id'] = 0;
- 		}
- 		return $out;
 	}
 }
