@@ -48,8 +48,6 @@ $I->checkOption('input[name=join_legal2]');
 $I->checkOption('input[name=newsletter]');
 $I->click('Anmeldung absenden', '.step.step3');
 
-// codecept_debug($I->grabTextFrom('#joinready'));
-
 // we are signed up!
 
 $I->waitForElementVisible('#joinready', 4);
@@ -69,4 +67,5 @@ $I->click($closeButtonSelector);
 $I->fillField('email_adress', $email);
 $I->fillField('password', $password);
 $I->click('#loginbar input[type=submit]');
+$I->waitForPageBody();
 $I->see('Willkommen '.$first_name.'!');
