@@ -23,4 +23,8 @@ class AcceptanceTester extends \Codeception\Actor
    /**
     * Define custom actions here
     */
+	public function waitForPageBody()
+	{
+		return $this->waitForElement(['css' => 'body']);
+	}
 }
