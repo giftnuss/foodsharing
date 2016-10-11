@@ -59,7 +59,9 @@ services:
 
   db:
     container_name: foodsharing_test_db
-    image: orchardup/mysql
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.db.test
     expose:
       - 3306
     ports:

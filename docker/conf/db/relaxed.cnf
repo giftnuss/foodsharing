@@ -1,0 +1,63 @@
+# relaxed fsync mysql config, use for testing only
+#
+# this is the contents of these files from orchardup/mysql config
+#   /etc/my.cnf
+#   /etc/mysql/conf.d/*.cnf
+#
+# but with same changes from here:
+#   http://www.tocker.ca/2013/11/04/reducing-mysql-durability-for-testing.html
+# to speed up execution for tests
+
+[client]
+port		= 3306
+socket		= /var/run/mysqld/mysqld.sock
+
+[mysqld_safe]
+socket		= /var/run/mysqld/mysqld.sock
+nice		= 0
+
+[mysqld]
+user		= mysql
+pid-file	= /var/run/mysqld/mysqld.pid
+socket		= /var/run/mysqld/mysqld.sock
+port		= 3306
+basedir		= /usr
+datadir		= /var/lib/mysql
+tmpdir		= /tmp
+lc-messages-dir	= /usr/share/mysql
+skip-external-locking
+key_buffer		= 16M
+max_allowed_packet	= 16M
+thread_stack		= 192K
+thread_cache_size       = 8
+myisam-recover         = BACKUP
+query_cache_limit	= 1M
+query_cache_size        = 16M
+expire_logs_days	= 10
+
+bind-address=0.0.0.0
+console=1
+general_log=1
+general_log_file=/dev/stdout
+log_error=/dev/stderr
+collation-server=utf8_unicode_ci
+character-set-server=utf8
+
+sync_frm=0
+innodb-flush-log-at-trx-commit=0
+innodb-doublewrite=0
+innodb-checksums=0
+innodb_support_xa=0
+
+[mysqldump]
+quick
+quote-names
+max_allowed_packet	= 16M
+
+[mysql]
+
+[isamchk]
+key_buffer		= 16M
+
+[mysqld_safe]
+syslog
