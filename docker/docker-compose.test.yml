@@ -62,6 +62,8 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile.db.test
+    # so we can mount tmpfs inside container
+    privileged: true
     expose:
       - 3306
     ports:
