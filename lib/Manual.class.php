@@ -1110,7 +1110,7 @@ class ManualDb extends Db
 							fd.fetchercount AS fetchercount
 					FROM   `'.PREFIX.'fetchdate` fd
 					WHERE fd.betrieb_id = '.(int)$c['betrieb_id'].'
-					and time between now() and now() + INTERVAL 3 DAY
+					and time between now() and now() + INTERVAL 2 DAY
 				');
 
 				$dows = $this->q('
