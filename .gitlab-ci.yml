@@ -7,9 +7,6 @@ cache:
     - vendor/
     - chat/node_modules/
 
-services:
-- docker:dind
-
 test:
   script:
   
@@ -27,7 +24,7 @@ test:
   # stop/kill all the containers
   - FS_ENV=ci ./scripts/rm
 
-  # run it on gitlab's free ci runners
+  # run it on our foodsharing ci server
   tags:
   - non-shared
 
