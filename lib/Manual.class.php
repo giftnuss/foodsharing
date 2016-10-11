@@ -1159,10 +1159,6 @@ class ManualDb extends Db
 				foreach($dows as $dowsVar)
 				{
 
-						info(date('w'));
-						info(date('w', strtotime(' +1 day')));
-						info(date('w', strtotime(' +2 day')));
-
 						if((int)$dowsVar['dow'] == date('w') || (int)$dowsVar['dow'] == date('w', strtotime(' +1 day')) || (int)$dowsVar['dow'] == date('w', strtotime(' +2 day')))
 						{
 							$flist = $this->qOne('
