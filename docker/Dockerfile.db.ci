@@ -1,3 +1,4 @@
 FROM orchardup/mysql
 
+COPY docker/conf/db/relaxed.cnf /etc/mysql/my.cnf
 COPY . /app
