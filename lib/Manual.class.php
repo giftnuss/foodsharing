@@ -1152,7 +1152,7 @@ class ManualDb extends Db
 							SELECT 	count(foodsaver_id) as fscount
 							FROM   `'.PREFIX.'abholer` fa
 							WHERE fa.betrieb_id ='.(int)$c['betrieb_id'].'
-							AND   fa.date between now() and now() + INTERVAL 3 DAY
+							AND   fa.date between now() and now() + INTERVAL 2 DAY
 							and   fa.foodsaver_id = '.fsId().'
 						');
 				
@@ -1165,7 +1165,7 @@ class ManualDb extends Db
 							SELECT 	count(foodsaver_id) as fscount
 							FROM   `'.PREFIX.'abholer` fa
 							WHERE fa.betrieb_id ='.(int)$c['betrieb_id'].'
-							AND   fa.date between now() and now() + INTERVAL 3 DAY
+							AND   fa.date between now() and now() + INTERVAL 2 DAY
 							and    WEEKDAY(date) = '.$this->getMySQLWeekday((int)$dowsVar['dow']).'
 							group by WEEKDAY(date) 
 						');
