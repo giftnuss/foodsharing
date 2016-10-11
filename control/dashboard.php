@@ -446,6 +446,14 @@ else if(S::may('fs'))
 	{
 		addContent(u_nextDates($dates),CNT_RIGHT);
 	}
+
+		/*
+	 * Nächste freie Termine
+	*/
+	if($edates = $db->getCompaniesWithEmptySlots(fsId()))
+	{
+		addContent(u_nextEmptySlots($edates),CNT_RIGHT);
+	}
 	
 	/*
 	 * Deine Bezirke
@@ -576,6 +584,26 @@ function u_nextDates($dates)
 		</ul>
 	</div>';
 	return v_field($out, s('next_dates'));
+}
+
+function u_nextEmptySlots($eslots)
+{
+	$out ='
+	<div class="ui-padding">
+		<ul class="datelist linklist">';
+	foreach ($eslots as $es)
+	{
+		$out .= '
+			<li>
+				<a href="/?page=fsbetrieb&id='.$es['betrieb_id'].'" class="ui-corner-all">
+					<span class="title">'.$es['betrieb_name'].'</span>
+				</a>
+			</li>';
+	}
+	$out .= '
+		</ul>
+	</div>';
+	return v_field($out, s('next_edates'));
 }
 
 function u_myBetriebe($betriebe)

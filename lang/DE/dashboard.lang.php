@@ -15,6 +15,7 @@ $g_lang['pubbtime_2'] = 'mittags/nachmittags';
 $g_lang['pubbtime_3'] = 'abends';
 $g_lang['pubbtime_4'] = 'nachts';
 $g_lang['next_dates'] = 'nächste Abholtermine';
+$g_lang['next_edates'] = 'noch freie Termine';
 $g_lang['updates'] = 'Letzte Aktivitäten';
 $g_lang['bot_partners'] = 'Deine Botschafter-Patenkinder';
 $g_lang['fs_partners'] = 'Deine Patenkinder';

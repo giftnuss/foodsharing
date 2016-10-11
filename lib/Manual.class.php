@@ -1064,6 +1064,185 @@ class ManualDb extends Db
 		');
 	}
 
+	public function getNextDates($fsid)
+	{
+		return $this->q('
+			SELECT 	a.`date`,
+					UNIX_TIMESTAMP(a.`date`) AS date_ts,
+					b.name AS betrieb_name,
+					b.id AS betrieb_id
+
+			FROM   `'.PREFIX.'abholer` a,
+			       `'.PREFIX.'betrieb` b
+
+			WHERE a.betrieb_id =b.id
+			AND   a.foodsaver_id = '.(int)$fsid.'
+			AND   a.`date` > NOW()
+
+			ORDER BY a.`date`
+
+			LIMIT 10
+		');
+	}
+
+	public function getCompaniesWithEmptySlots($fsid)
+	{
+		$companies = $this->q('
+			SELECT 	b.name AS betrieb_name,
+					b.id AS betrieb_id
+
+			FROM   `'.PREFIX.'betrieb_team` bt,
+			       `'.PREFIX.'betrieb` b
+
+			WHERE bt.betrieb_id =b.id
+			AND   bt.foodsaver_id = '.(int)$fsid.'
+			AND   bt.`active` = 1
+			order by betrieb_name
+		');
+
+		if(is_array($companies))
+		{
+			$companiesWithFreeSlots = Array();
+			foreach ($companies as $c)
+			{
+				$fetchdates = $this->q('
+					SELECT 	TIMESTAMP(fd.time) AS fetchtime,
+							fd.fetchercount AS fetchercount
+					FROM   `'.PREFIX.'fetchdate` fd
+					WHERE fd.betrieb_id = '.(int)$c['betrieb_id'].'
+					and time between now() and now() + INTERVAL 3 DAY
+				');
+
+				$dows = $this->q('
+					SELECT 	az.dow AS dow,
+							az.fetcher AS fetcher,
+							az.time AS fetchTime
+					FROM   `'.PREFIX.'abholzeiten` az
+					WHERE az.betrieb_id = '.(int)$c['betrieb_id'].'
+				');
+
+				foreach($fetchdates as $fetchdate)
+				{
+					$countfetchdate = $this->qOne('
+						SELECT 	count(foodsaver_id) as fscount
+						FROM   `'.PREFIX.'abholer` fa
+						WHERE fa.betrieb_id ='.(int)$c['betrieb_id'].'
+						AND   fa.date = TIMESTAMP("'.$fetchdate['fetchtime'].'")
+						and   fa.foodsaver_id <> '.fsId().'
+					');
+					$isFoodsaverInSlot = $this->qOne('
+						SELECT 	count(foodsaver_id) as fscount
+						FROM   `'.PREFIX.'abholer` fa
+						WHERE fa.betrieb_id ='.(int)$c['betrieb_id'].'
+						AND   fa.date = TIMESTAMP("'.$fetchdate['fetchtime'].'")
+						and   fa.foodsaver_id = '.fsId().'
+					');
+					if(($countfetchdate != $fetchdate['fetchercount']) && $isFoodsaverInSlot != 1)
+					{
+						if(!in_array($c, $companiesWithFreeSlots, true))
+						{
+							array_push($companiesWithFreeSlots, $c);
+						}
+						
+					}
+
+				}
+
+				$isFoodsaverInDowSlot = $this->qOne('
+							SELECT 	count(foodsaver_id) as fscount
+							FROM   `'.PREFIX.'abholer` fa
+							WHERE fa.betrieb_id ='.(int)$c['betrieb_id'].'
+							AND   fa.date between now() and now() + INTERVAL 3 DAY
+							and   fa.foodsaver_id = '.fsId().'
+						');
+				
+				foreach($dows as $dowsVar)
+				{
+
+						info(date('w'));
+						info(date('w', strtotime(' +1 day')));
+						info(date('w', strtotime(' +2 day')));
+
+						if((int)$dowsVar['dow'] == date('w') || (int)$dowsVar['dow'] == date('w', strtotime(' +1 day')) || (int)$dowsVar['dow'] == date('w', strtotime(' +2 day')))
+						{
+							$flist = $this->qOne('
+							SELECT 	count(foodsaver_id) as fscount
+							FROM   `'.PREFIX.'abholer` fa
+							WHERE fa.betrieb_id ='.(int)$c['betrieb_id'].'
+							AND   fa.date between now() and now() + INTERVAL 3 DAY
+							and    WEEKDAY(date) = '.$this->getMySQLWeekday((int)$dowsVar['dow']).'
+							group by WEEKDAY(date) 
+						');
+
+
+						if($flist != $dowsVar['fetcher'] && $isFoodsaverInDowSlot != 1)
+						{
+							if(!in_array($c, $companiesWithFreeSlots, true))
+							{
+								array_push($companiesWithFreeSlots, $c);
+							}
+						}
+						}
+						
+					}	
+			}
+			return $companiesWithFreeSlots;			
+		}else
+		{
+			return 0;
+		}
+	}
+
+	private function getMySQLWeekday($dow)
+	{
+		switch($dow){
+			case 0:
+	        	return 6;
+	        	break;
+	    	case 1:
+	        	return 0;
+	        	break;
+	    	case 2:
+		        return 1;
+		        break;
+	        case 3:
+		        return 2;
+		        break;
+	        case 4:
+		        return 3;
+		        break;
+	        case 5:
+		        return 4;
+		        break;
+	        case 6:
+	        	return 5;
+	        	break;
+		}
+	}
+
+	public function getAllGerettet()
+	{
+		$out = 0;
+		if($res = $this->q('
+			SELECT COUNT(a.`betrieb_id`) AS anz, a.betrieb_id, b.abholmenge
+			FROM   `'.PREFIX.'abholer` a,
+			       `'.PREFIX.'betrieb` b
+			WHERE a.betrieb_id =b.id
+			AND   a.`date` < NOW()
+			GROUP BY a.`betrieb_id`
+
+
+		'))
+		{
+			foreach ($res as $r)
+			{
+				$out += $this->gerettet_wrapper($r['abholmenge'])*$r['anz'];
+			}
+		}
+
+		return $out;
+	}
+
 	public function getFoodsaverBasics($fsid)
 	{
 		if($fs = $this->qRow('
