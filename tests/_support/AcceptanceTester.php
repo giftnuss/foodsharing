@@ -18,13 +18,25 @@
 */
 class AcceptanceTester extends \Codeception\Actor
 {
-    use _generated\AcceptanceTesterActions;
+		use _generated\AcceptanceTesterActions;
 
-   /**
-    * Define custom actions here
-    */
-	public function waitForPageBody()
-	{
-		return $this->waitForElement(['css' => 'body']);
-	}
+		/**
+		* Define custom actions here
+		*/
+
+		public function waitForPageBody()
+		{
+			return $this->waitForElement(['css' => 'body']);
+		}
+
+		public function login($email, $password)
+		{
+			$I = $this;
+			$I->amOnPage('/');
+			$I->fillField('email_adress', $email);
+			$I->fillField('password', $password);
+			$I->click('#loginbar input[type=submit]');
+			$I->waitForPageBody();
+			$I->see('Willkommen');
+		}
 }
