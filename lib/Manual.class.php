@@ -1194,29 +1194,7 @@ class ManualDb extends Db
 	*/
 	private function convertFoodsharingIndexToMysqlIndex($dow)
 	{
-		switch($dow){
-			case 0:
-	        	return 6;
-	        	break;
-	    	case 1:
-	        	return 0;
-	        	break;
-	    	case 2:
-		        return 1;
-		        break;
-	        case 3:
-		        return 2;
-		        break;
-	        case 4:
-		        return 3;
-		        break;
-	        case 5:
-		        return 4;
-		        break;
-	        case 6:
-	        	return 5;
-	        	break;
-		}
+		return ($dow-1)%7;
 	}
 
 	public function getAllGerettet()
