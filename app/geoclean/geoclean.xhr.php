@@ -19,7 +19,6 @@ class GeocleanXhr extends Control
 	{
 		if($bezirke = $this->model->getChildBezirke($_GET['id'],true))
 		{
-			print_r($bezirke);
 			$this->model->update('UPDATE '.PREFIX.'bezirk SET `master` = '.$_GET['id'].' WHERE id IN('.implode(',', $bezirke).')');
 		}
 	}
