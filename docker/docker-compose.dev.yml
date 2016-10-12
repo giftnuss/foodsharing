@@ -60,7 +60,11 @@ services:
 
   db:
     container_name: foodsharing_dev_db
-    image: orchardup/mysql
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.db.dev
+    # so we can mount tmpfs inside container
+    privileged: true
     expose:
       - 3306
     ports:
@@ -81,7 +85,7 @@ services:
 
   # phpmyadmin
   #------------------------------------
-  
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: foodsharing_dev_phpmyadmin
