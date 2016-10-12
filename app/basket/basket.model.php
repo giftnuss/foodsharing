@@ -1,31 +1,6 @@
 <?php
 class BasketModel extends Model
 {
-	public function getTodayFsBaskets()
-	{
-		if($col = $this->q('
-			SELECT
-			 	fs_id
-			FROM
-			 	'.PREFIX.'basket
-			WHERE
-				fs_id > 0
-			AND
-				status = 1
-			AND
-				DATE(`time`) = DATE(NOW())
-		'))
-		{
-			$out = array();
-			foreach ($col as $c)
-			{
-				$out[$c['fs_id']] = $c['fs_id'];
-			}
-			return $out;
-		}
-		return array();
-	}
-	
 	public function getBasketChoords()
 	{
 		return $this->q('SELECT id,lat,lon FROM fs_basket WHERE status = 1');
@@ -375,8 +350,6 @@ class BasketModel extends Model
 	
 	public function setStatus($basket_id,$status,$fsid = false)
 	{
-		//$this->del('DELETE FROM `'.PREFIX.'basket_anfrage` WHERE `foodsaver_id` = '.(int)$fsid.' AND `basket_id` = '.(int)$basket_id);
-		
 		if(!$fsid)
 		{
 			$fsid = fsId();
@@ -399,5 +372,4 @@ class BasketModel extends Model
 			)	
 		');
 	}
-	
 }

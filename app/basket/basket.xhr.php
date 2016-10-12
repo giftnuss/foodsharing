@@ -52,14 +52,6 @@ class BasketXhr extends Control
 		$xhr->send();
 	}
 	
-	public function getnear()
-	{
-		if(S::may())
-		{
-			
-		}
-	}
-	
 	public function newbasket()
 	{
 		$dia = new XhrDialog();
@@ -103,14 +95,6 @@ class BasketXhr extends Control
 		
 		$dia->addButton('Essenskorb veröffentlichen', 'ajreq(\'publish\',{appost:0,app:\'basket\',data:$(\'#'.$dia->getId().' .input\').serialize(),description:$(\'#description\').val(),picture:$(\'#'.$dia->getId().'-picture-filename\').val(),weight:$(\'#weight\').val()});');
 		
-		/*
-		$dia->addJsAfter('
-			$("#'.$dia->getId().'").resize(function(){
-				alert("resize");
-			});	
-		');
-		*/
-	
 		return $dia->xhrout();
 	}
 	
@@ -358,9 +342,7 @@ class BasketXhr extends Control
 		}
 		$dia->addOpt('modal', 'false',$modal);
 		$dia->addOpt('resizeable', 'false',false);
-		
-		//$dia->addButton('Essenskorb anfragen auf foodsharing.de', 'ajreq(\'request\',{app:\'basket\',id:'.(int)$basket['id'].'});');
-		
+
 		$dia->addOpt('width', 400);
 		$dia->noOverflow();
 		
@@ -547,80 +529,7 @@ class BasketXhr extends Control
 			'script' => '$(".basket-'.(int)$_GET['id'].'").remove();pulseInfo("Essenskorb ist jetzt nicht mehr aktiv!");'		
 		);
 	}
-	
-	public function syncFoodsharing()
-	{
-		$plzs = array('90','80','70','60','50','40','30','20','10','00');
-		$baskets = $this->model->getTodayFsBaskets();
-		$sql = array();
-		$delids = array();
-		foreach ($plzs as $plz)
-		{
-			sleep(1);
-			$json = file_get_contents('http://foodsharing.de/api/foodcarts.json?app_id='.API_ID.'&zipcode='.$plz.'&_limit=1&status=1&release_date='.date('Y-m-d'));
-			
-			
-			$main = json_decode($json,true);
-			
-			if($main['result'] == 'SUCCESS')
-			{
-				$json = file_get_contents('http://foodsharing.de/api/foodcarts.json?app_id='.API_ID.'&zipcode='.$plz.'&_limit=' . $main['overall_count'] . '&status=1&release_date='.date('Y-m-d'));
-				
-				$data = json_decode($json,true);
-				
-				if($data['result'] == 'SUCCESS')
-				{
-					foreach ($data['foodcarts'] as $d)
-					{
-						if(isset($d['Foodcart']) && !isset($baskets[$d['Foodcart']['id']]))
-						{
-							unset($baskets[$d['Foodcart']['id']]);
-							$desc = '';
-							$img = '';
-							foreach ($d['Item'] as $item)
-							{
-								$desc .= $item['name']."\n";
-								if(!empty($item['picture']))
-								{
-									$img =  $item['picture'];
-								}
-							}
-							
-							$desc .= $d['Foodcart']['description'];
-							
-							$delids[] = (int)$d['Foodcart']['id'];
-							$sql[(int)$d['Foodcart']['id']] = '(1,'.$this->model->floatval($d['Foodcart']['lat']).','.$this->model->floatval($d['Foodcart']['lng']).','.$this->model->strval($desc).','.(int)$d['Foodcart']['id'].','.$this->model->dateval($d['Foodcart']['created']).','.$this->model->strval($img).')';
-						}
-					}
-				}
-			}
-			else
-			{
-				return false;
-			}
-		}
-		if(!empty($sql))
-		{
-			$this->model->del('
-				DELETE FROM '.PREFIX.'basket
-				WHERE `fs_id` IN('.implode(',', $delids).')		
-			');
-			$this->model->insert('
-					INSERT INTO `'.PREFIX.'basket`
-					(`status`,`lat`,`lon`,`description`,`fs_id`,`time`,`picture`)
-					VALUES
-					'.implode(',', $sql).'
-					');
-		
-			if(!empty($baskets))
-			{
-				$this->model->del('DELETE FROM `'.PREFIX.'basket` WHERE `fs_id` IN('.implode(',', $baskets).')');
-			}
-		}
-		//
-		
-	}
-	
+
 	public function follow()
 	{
 		if(isset($_GET['bid']) && (int)$_GET['bid'] > 0)

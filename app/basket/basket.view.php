@@ -78,11 +78,6 @@ class BasketView extends View
 	
 	public function basket($basket,$wallposts,$requests)
 	{
-		/*
-		 * <div style="float: right;font-size: 12px;margin-top: -56px;width: 200px;font-size:12px !important;">
-			'.v_info('Veröffentlicht am <strong>'.niceDate($basket['time_ts']).'</strong><br />Gültig bis <strong>'.niceDate($basket['until_ts']).'</strong>').'
-		</div>
-		 */
 		$page = new vPage('Essenskorb #'.$basket['id'], '
 		
 		<div class="pure-g">
@@ -410,50 +405,5 @@ class BasketView extends View
 		'.v_input_wrapper('Einstelldatum', niceDate($basket['time_ts'])).'
 		'.v_input_wrapper('Beschreibung', nl2br(autolink($basket['description']))).'
 		';
-	}
-	
-	public function basketInfoList($conversations,$click = 'msg.loadConversation')
-	{
-		$list = '';
-	
-		if(!empty($conversations))
-		{
-			foreach ($conversations as $c)
-			{
-				$pics = '';
-				$names = '';
-				if(!empty($c['member']))
-				{
-					$picwidth = 50;
-					$size = 'med';
-						
-					if(count($c['member']) > 2)
-					{
-						$picwidth = 25;
-						$size = 'mini';
-						shuffle($c['member']);
-					}
-						
-					foreach($c['member'] as $m)
-					{
-						if($m['id'] == fsId())
-						{
-							continue;
-						}
-						$pics .= '<img src="'.img($m['photo'],$size).'" width="'.$picwidth.'" />';
-						$names .= ', '.$m['name'];
-					}
-					$names = substr($names, 2);
-					$list .= '<li id="convlist-'.$c['id'].'"><a href="#" onclick="'.$click.'('.$c['id'].');return false;"><span class="pics">'.$pics.'</span><span class="names">'.$names.'</span><span class="msg">'.$c['last_message'].'</span><span class="time">'.niceDate($c['last_ts']).'</span><span class="clear"></span></a></li>';
-				}
-			}
-		}
-		else
-		{
-			$list = '<li class="noconv">'.v_info(s('no_conversations')).'</li>';
-		}
-	
-		return $list;
-	
 	}
 }
