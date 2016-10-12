@@ -15,7 +15,7 @@ extensions:
 modules:
     config:
         Db:
-            dsn: ''
-            user: ''
-            password: ''
-            dump: tests/_data/dump.sql
+            # http://codeception.com/docs/modules/Db
+            dsn: mysql:host=db;dbname=foodsharing
+            user: root
+            password: root
