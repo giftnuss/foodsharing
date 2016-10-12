@@ -448,11 +448,11 @@ else if(S::may('fs'))
 	}
 
 		/*
-	 * Nächste freie Termine
+	 * Next the slots
 	*/
-	if($edates = $db->getCompaniesWithEmptySlots(fsId()))
+	if($emptySlots = $db->getCompaniesWithEmptySlots(fsId()))
 	{
-		addContent(u_nextEmptySlots($edates),CNT_RIGHT);
+		addContent(u_nextEmptySlots($emptySlots),CNT_RIGHT);
 	}
 	
 	/*
@@ -586,12 +586,12 @@ function u_nextDates($dates)
 	return v_field($out, s('next_dates'));
 }
 
-function u_nextEmptySlots($eslots)
+function u_nextEmptySlots($emptySlots)
 {
 	$out ='
 	<div class="ui-padding">
 		<ul class="datelist linklist">';
-	foreach ($eslots as $es)
+	foreach ($emptySlots as $es)
 	{
 		$out .= '
 			<li>
@@ -603,7 +603,7 @@ function u_nextEmptySlots($eslots)
 	$out .= '
 		</ul>
 	</div>';
-	return v_field($out, s('next_edates'));
+	return v_field($out, s('next_empty_slots'));
 }
 
 function u_myBetriebe($betriebe)

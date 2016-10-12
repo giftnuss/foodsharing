@@ -1166,7 +1166,7 @@ class ManualDb extends Db
 							FROM   `'.PREFIX.'abholer` fa
 							WHERE fa.betrieb_id ='.(int)$c['betrieb_id'].'
 							AND   fa.date between now() and now() + INTERVAL 2 DAY
-							and    WEEKDAY(date) = '.$this->getMySQLWeekday((int)$dowsVar['dow']).'
+							and    WEEKDAY(date) = '.$this->convertFoodsharingIndexToMysqlIndex((int)$dowsVar['dow']).'
 							group by WEEKDAY(date) 
 						');
 
@@ -1185,11 +1185,14 @@ class ManualDb extends Db
 			return $companiesWithFreeSlots;			
 		}else
 		{
-			return 0;
+			return false;
 		}
 	}
 
-	private function getMySQLWeekday($dow)
+	/*This function have as input the foodsharing day of week (index) 
+	and return the equal one for mysql, cause the week in php starts at sunday and on mysql at monday
+	*/
+	private function convertFoodsharingIndexToMysqlIndex($dow)
 	{
 		switch($dow){
 			case 0:
