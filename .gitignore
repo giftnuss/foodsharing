@@ -1,5 +1,6 @@
 *~
-.*
+am_cache
+.idea
 *.swp
 *.swo
 node_modules
