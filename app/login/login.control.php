@@ -75,8 +75,7 @@ class LoginControl extends Control
 				'time' => date('Y-m-d H:i:s'),
 				'agent' => $_SERVER['HTTP_USER_AGENT']
 			));
-			//info(s('login_success'));
-			
+
 			if(isset($_POST['ismob']))
 			{
 				$_SESSION['mob'] = (int)$_POST['ismob'];
@@ -142,7 +141,6 @@ class LoginControl extends Control
 				if($this->model->addPassRequest($mail))
 				{
 					info('Alles klar!, Dir wurde ein Link zum Passwort ändern per E-Mail zugeschickt<br />');
-						
 				}
 				else
 				{
@@ -150,8 +148,6 @@ class LoginControl extends Control
 				}
 			}
 		}
-		
-		//$this->template->addRight($this->getOrgaTeam());
 		
 		if($k !== false && $this->model->checkResetKey($k))
 		{

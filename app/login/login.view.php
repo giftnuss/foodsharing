@@ -9,13 +9,11 @@ class LoginView extends View
 				'<p>
 					<a id="forgotpasswordlink" href="/?page=login&sub=passwordReset">Passwort vergessen?</a>
 				</p>';
-							
 	}
 	
 	public function join($email='',$pass='',$datenschutz,$rechtsvereinbarung)
 	{
 		return '
-				
 		<div id="joinform">
 				<div class="left corner-all">
 					<ul class="linklist join">
@@ -25,7 +23,6 @@ class LoginView extends View
 						<li class="step3 hidden"><a class="corner-all" href="#" onclick="if(!$(this).parent().hasClass(\'hidden\')){join.step(3);}return false;">'.s('legal_stuff').'</a></li>
 					</ul>
 					<div class="bottom">
-						
 					</div>
 				</div>
 				<div class="right">
@@ -41,9 +38,8 @@ class LoginView extends View
 								<span class="peer"></span>
 							</div>
 							<input type="hidden" name="iam" id="join_iam" value="human" />
-							
 							<div style="display:none;" class="humanshow msg-inside success">
-									<i class="fa fa-info-circle"></i> Melde Dich als Foodsharer an, um als Privatperson Lebensmittel zu teilen und zu retten.
+									<i class="fa fa-info-circle"></i>Melde Dich als Foodsharer an, um als Privatperson Lebensmittel zu teilen und zu retten.
 							</div>
 						</div>
 						<div class="bottom">
@@ -171,36 +167,12 @@ class LoginView extends View
 		{
 			return v_field(v_info('Du bist angemeldet als '.S::user('name'),'Du bist angemeldet'),array('class' => 'ui-padding'));
 		}
-		/*
-		'
-		<div class="post">
-			<p>
-				
-			</p>
-			<form name="passReset" method="post" class="contact-form" action="'.$_SERVER['REQUEST_URI'].'">
-				<table>
-					<tbody>
-					<tr>
-						<td class="label">Deine E-Mail Adresse:</td>
-						<td><p><input type="text" class="input-text-1" name="email" value="'.$mail.'" /></p></td>
-					</tr>
-	
-					<tr><td colspan="2" class="comment-spacer-1"></td></tr>
-					<tr>
-						<td></td>
-						<td><p class="show-all"><a onclick="document.forms.passReset.submit();return false;" class="btn-1 btn-1-color-default" href="#"><span>Absenden</span></a></p></td>
-					</tr>
-				</tbody></table>
-			</form>
-		</div>';*/
 	}
 	
 	public function newPasswordForm($key)
 	{
 		$key = preg_replace('/[^0-9a-zA-Z]/', '', $key);
-		
 		$cnt = v_info('Jetzt kannst Du Dein Passwort ändern.');
-		
 		$cnt .= '
 			<form name="newPass" method="post" class="contact-form">
 				<input type="hidden" name="k" value="'.$key.'" />
@@ -208,8 +180,6 @@ class LoginView extends View
 				'.v_form_passwd('pass2').'
 				'.v_form_submit(s('save'), 'submitted').'
 			</form>';
-		
 		return v_field($cnt,'Neues Passwort setzen',array('class' => 'ui-padding'));
-		
 	}
 }

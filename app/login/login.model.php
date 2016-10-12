@@ -86,10 +86,8 @@ class LoginModel extends Model
 	{
 		if((int)strlen($data['pass1']) > 4)
 		{
-				
 			if($fsid = $this->qOne('SELECT `foodsaver_id` FROM `'.PREFIX.'pass_request` WHERE `name` = '.$this->strval($data['k'])))
 			{
-	
 				if($fs = $this->qRow('SELECT `id`,`email` FROM `'.PREFIX.'foodsaver` WHERE `id` = '.$this->intval($fsid)))
 				{
 					$this->del('DELETE FROM `'.PREFIX.'pass_request` WHERE `foodsaver_id` = '.(int)$fs['id']);
@@ -118,9 +116,6 @@ class LoginModel extends Model
 			'.$this->strval($data['agent']).',
 			'.$this->dateval($data['time']).'
 			)');
-	
-	
-	
 		return $id;
 	}
 }

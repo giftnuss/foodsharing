@@ -1,14 +1,12 @@
 <?php 
 class LoginXhr extends Control
 {
-	
 	public function __construct()
 	{
 		$this->model = new LoginModel();
 		$this->view = new LoginView();
 
 		parent::__construct();
-		
 	}
 	
 	/**
@@ -196,47 +194,6 @@ class LoginXhr extends Control
 		}
 	}
 	
-	public function loginphpbb()
-	{
-		if($u = $this->model->checkClient($_GET['u'],$_GET['p']))
-		{
-			$user = $this->model->qRow('
-				SELECT 
-					id,
-					name,
-					photo,
-					email	
-
-				FROM 
-					'.PREFIX.'foodsaver 
-					
-				WHERE 
-					id = '.(int)$u['id'].'
-			');
-			
-			if(!empty($user['photo']))
-			{
-				$user['photo'] = img($user['photo']);
-			}
-			
-			echo json_encode(array(
-				'status' => 1,
-				'id' => $user['id'],
-				'name' => $user['name'],
-				'email' => $user['email'],
-				'photo' => $user['photo']
-			));
-			exit();
-		}
-		else 
-		{
-			echo json_encode(array(
-					'status' => 0
-			));
-			exit();
-		}
-	}
-	
 	public function loginsubmit()
 	{
 		if($this->model->login($_GET['u'],$_GET['p']))
@@ -257,26 +214,6 @@ class LoginXhr extends Control
 					'.$token_js.'
 					pulseSuccess("'.s('login_success').'");
 					reload();'
-					/*
-					 * no reload page works not so fince later ;)
-					 * 
-					  	dialogs.closeAll();
-					  	$("#layout_logo").after(\''.jsSafe($msgbar).'\');
-						$("#mainMenu").replaceWith(\''.jsSafe($menu['default']).'\');
-						$("#mainMenu").jMenu({
-							ulWidth:200,
-							absoluteTop:37,
-							TimeBeforeClosing : 0,
-							TimeBeforeOpening : 0,
-					        effects : {
-					          effectSpeedOpen : 0,
-					          effectSpeedClose : 0
-					      	},
-						});
-						infoMenu();
-						$("#layout_logo a").attr("href","/?page=dashboard");
-						search.addEvents();
-					 */
 			);
 		}
 		else 
@@ -293,7 +230,6 @@ class LoginXhr extends Control
 	 */
 	public function photoupload()
 	{
-		$func = '';
 		try {
 			
 			$uploader = new fUpload();
