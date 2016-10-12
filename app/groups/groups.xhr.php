@@ -108,15 +108,7 @@ class GroupsXhr extends Control
 				tplMail(24, $group['email'],array(
 					'gruppenname' => $group['name'],
 					'message' => $message
-				),false,S::user('email'));
-				/*
-				foreach ($group['leader'] as $l)
-				{
-					
-					//$this->model->addMessage(fsid(), $l['id'], '', $message, false);
-					//$this->mailMessage(fsid(), $l['id'], nl2br($message));
-				}
-				*/
+				),S::user('email'));
 				return array(
 					'status' => 1,
 					'script' => 'pulseInfo("Nachricht wurde versendet!");'		
