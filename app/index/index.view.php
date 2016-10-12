@@ -1,8 +1,7 @@
 <?php
 class IndexView extends View
 {
-	
-	public function index($first_content, $gerettet, $fairteiler, $baskets)
+	public function index($first_content, $gerettet)
 	{
 		$ps = new vPageslider();
 

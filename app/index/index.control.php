@@ -16,7 +16,6 @@ class IndexControl extends Control
 		$db = loadModel('content');
 		addTitle('Restlos glücklich!');
 		
-		//$this->setTemplate('home');
 		addScript('/js/jquery.animatenumber.min.js');
 		
 		$gerettet = (int)$this->model->getGerettet();
@@ -40,12 +39,7 @@ class IndexControl extends Control
 		
 		addContent($this->view->index(
 			$page_content['body'],
-			$gerettet,
-			$this->model->getNewestFairteilerPosts(5),
-			$this->model->getNewestFoodbaskets(5)
-
+			$gerettet
 		),CNT_OVERTOP);
-		
-		//addContent('Hallo Foodsharing-Welt');
 	}
 }
