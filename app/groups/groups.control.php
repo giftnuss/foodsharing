@@ -1,5 +1,4 @@
 <?php
-
 class GroupsControl extends Control
 {	
 	private $ag_id;
@@ -21,7 +20,7 @@ class GroupsControl extends Control
 		
 		$this->setAgId(392);
 		
-		addBread('Arbeitsgruppen','/?page=groups');		
+		addBread('Arbeitsgruppen','/?page=groups');
 		
 		if(isset($_GET['p']) && (int)$_GET['p'] > 0)
 		{
@@ -29,7 +28,7 @@ class GroupsControl extends Control
 		}
 		
 		$this->my_applications = $this->model->getMyApplications();
-		$this->my_stats = $this->model->getMyStats();		
+		$this->my_stats = $this->model->getMyStats();
 	}
 	
 	public function index()
@@ -122,9 +121,7 @@ class GroupsControl extends Control
 				{
 			
 				}
-				
-				
-				
+
 				/*
 				 * Handle Member and Group-Admin Fields
 				 */
@@ -145,21 +142,6 @@ class GroupsControl extends Control
 			addBread($group['name'].' bearbeiten','/?page=groups&sub=edit&id='.(int)$group['id']);
 			addContent($this->view->editGroup($group));
 		}
-	}
-	
-	private function generatePageTree($datas, $parent = 0, $depth = 0)
-	{
-   		if($depth > 1000) return ''; // Make sure not to have an endless recursion
-		$tree = '';
-		for($i=0, $ni=count($datas); $i < $ni; $i++)
-		{
-	        if($datas[$i]['parent_id'] == $parent){
-	            $tree .= str_repeat('-', $depth);
-	            $tree .= $datas[$i]['name'] . '<br/>';
-	            $tree .= $this->generatePageTree($datas, $datas[$i]['id'], $depth+1);
-	        }
-	    }
-	    return $tree;
 	}
 	
 	private function setAgId($id)

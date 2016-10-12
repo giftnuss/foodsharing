@@ -99,7 +99,6 @@ class GroupsXhr extends Control
 	 */
 	public function sendtogroup()
 	{
-		//echo S::user('email');
 		if($group = $this->model->getGroup($_GET['id']))
 		{
 			$message = strip_tags($_GET['msg']);

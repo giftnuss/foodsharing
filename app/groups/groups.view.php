@@ -236,14 +236,6 @@ class GroupsView extends View
 	
 	public function applyForm($group)
 	{
-		/*
-		
-	    Was ist Deine Motivation in der Gruppe xxx mitzuwirken?
-	    Was sind Deine Fähigkeiten die Du in dem Bereich hast?
-	    Kannst Du in der Gruppe auf Erfahrungen die Du woanders gemacht hast zurückgreifen, wenn ja wo bzw. was
-	    Wie viel Stunden hast Du pro Woche Zeit und Lust dafür aufzuwenden? (1-2, 2-3,3-4 etc.)
-
-		 */
 		return v_form('apply', array(
 			v_form_textarea('motivation',array('label' => 'Was ist Deine Motivation, in der Gruppe '.$group['name'].' mitzuwirken?')),
 			v_form_textarea('faehigkeit',array('label' => 'Was sind Deine Fähigkeiten, die Du in diesem Bereich hast?')),
@@ -286,8 +278,6 @@ class GroupsView extends View
 			v_form_textarea('teaser') .
 			v_form_picture('photo',array('resize'=>array(528,60,128),'crop'=>array((528/350),1)));
 		
-		$desc = v_form_tinymce('desc',array('nowrapper' => true));
-		
 		$apply = v_form_select('apply_type',array(
 			'values' => array(
 				array('id' => 0, 'name' => 'Niemand (geschlossene Gruppe)'),
@@ -310,12 +300,8 @@ class GroupsView extends View
 			v_field($apply, 'Bewerbungen',array('class' => 'ui-padding')),
 			v_field(v_form_tagselect('member',array('xhr' => 'recip')), s('member'),array('class' => 'ui-padding')),
 			v_field(v_form_tagselect('leader',array('xhr' => 'recip')), s('leader'),array('class' => 'ui-padding'))
-			//v_field($desc, 'Beschreibung')
-				
-			
 		),array('submit' => 'Änderungen speichern'));
-		
-		
+
 		return $out;
 	}
 	

@@ -47,8 +47,6 @@ class GroupsModel extends Model
 		// check is there some team data? otherwise empty team
 		if(isset($g_data['member']) && is_array($g_data['member']) && count($g_data['member']) > 0)
 		{
-			//print_r($g_data['member']);die();
-			
 			// delete all members they're not in the submitted array
 			$this->del('
 				DELETE FROM 
@@ -126,19 +124,6 @@ class GroupsModel extends Model
 		{
 			$this->emptyLeader($group_id);
 		}
-	}
-	
-	/**
-	 * Delete all Members from a group
-	 * 
-	 * @param Integer $group_id
-	 */
-	public function emptyTeam($group_id)
-	{
-		return $this->del('
-			DELETE FROM `'.PREFIX.'foodsaver_has_bezirk`
-			WHERE bezirk_id = '.(int)$group_id.'		
-		');
 	}
 	
 	/**
