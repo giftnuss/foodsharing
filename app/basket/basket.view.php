@@ -42,21 +42,8 @@ class BasketView extends View
 				$img = '/images/basket/thumb-'.$b['picture'];
 			}
 			
-			$distance = round($b['distance'],1);
-			
-			if($distance == 1.0)
-			{
-				$distance = '1 km';
-			}
-			else if($distance < 1)
-			{
-				$distance = ($distance*1000).' m';
-			}
-			else
-			{
-				$distance = number_format($distance,1,',','.').' km';
-			}
-			
+			$distance = $this->distance($b['distance']);
+
 			$out .= '
 				<li>
 					<a class="ui-corner-all" onclick="ajreq(\'bubble\',{app:\'basket\',id:'.(int)$b['id'].',modal:1});return false;" href="#">
