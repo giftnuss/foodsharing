@@ -6,12 +6,8 @@ class ProfileView extends View
 	public function profile($wallposts,$userCompanies, $userCompaniesCount)
 	{
 		$page = new vPage($this->foodsaver['name'], $this->infos());
-		
 		$page->addSection($wallposts,'Statusupdates von ' . $this->foodsaver['name']);
-		
-		
-		//echo fsId() . ' == ' . $this->foodsaver['id'];die();
-		
+
 		if(fsId() != $this->foodsaver['id'])
 		{
 			addStyle('#wallposts .tools{display:none;}');
@@ -34,18 +30,6 @@ class ProfileView extends View
 		{
 			
 			$out .= '<p><a class="light" href="/?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].'</a></p>';
-
-			/*Comment out, maybe if orgs want to see if fs is bieb for company in profile view		
-			if($b['verantwortlich'] == 0)
-			{
-				$out .= '<p><a class="light" href="/?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].'</a></p>';
-			}
-			if($b['verantwortlich'] == 1)
-			{
-				$out .= '<p><a class="light" href="/?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].' (Verantwortlich)</a></p>';
-			}*/
-				
-		
 		}
 
 		return '
@@ -57,11 +41,9 @@ class ProfileView extends View
 	public function usernotes($notes,$userCompanies, $userCompaniesCount)
 	{
 		$page = new vPage($this->foodsaver['name'].' Notizen', v_info(s('user_notes_info')) . $notes);
-	
 		$page->setBread('Notizen');
-	
+
 		$page->addSectionLeft($this->photo());
-	
 		$page->addSectionLeft($this->sideInfos(),'Infos');
 
 		if(S::may('orga'))
@@ -85,12 +67,10 @@ class ProfileView extends View
 					'name' => s('last_login'),
 					'val' => $last_login->format('d.m.Y')
 			);
-
 			$infos[] = array(
 					'name' => s('registration_date'),
 					'val' => $registration_date->format('d.m.Y')
 			);
-			
 			$infos[] = array(
 					'name' => s('private_mail'),
 					'val' => '<a href="/?page=mailbox&mailto='.urlencode($this->foodsaver['email']).'">'.$this->foodsaver['email'].'</a>'
@@ -101,7 +81,7 @@ class ProfileView extends View
 						'name' => s('mailbox'),
 						'val' => '<a href="/?page=mailbox&mailto='.urlencode($this->foodsaver['mailbox']).'">'.$this->foodsaver['mailbox'].'</a>'
 				);
-			}			
+			}
 		}
 		
 		if($this->foodsaver['stat_buddycount'] > 0)
@@ -183,16 +163,11 @@ class ProfileView extends View
 					'val' => implode(', ', $bot)
 			);
 		}
-		
-	
-			
+
 		$out = '';
 		foreach ($infos as $key => $info)
 		{
-
-		
 			$out .= '<p><strong>'.$info['name'].'</strong><br />'.$info['val'].'</p>';
-
 		}
 		
 		/*
@@ -201,7 +176,6 @@ class ProfileView extends View
 		$fetchweight = '';
 		if($this->foodsaver['stat_fetchweight'] > 0)
 		{
-			$ginfo = true;
 			$fetchweight = '
 				<span class="item stat_fetchweight">
 					<span class="val">'.number_format($this->foodsaver['stat_fetchweight'], 0, ",", ".").'kg</span>
@@ -212,7 +186,6 @@ class ProfileView extends View
 		$fetchcount = '';
 		if($this->foodsaver['stat_fetchcount'] > 0)
 		{
-			$ginfo = true;
 			$fetchcount = '
 				<span class="item stat_fetchcount">
 					<span class="val">'.number_format($this->foodsaver['stat_fetchcount'], 0, ",", ".").'x</span>
@@ -223,7 +196,6 @@ class ProfileView extends View
 		$postcount = '';
 		if($this->foodsaver['stat_postcount'] > 0)
 		{
-			$ginfo = true;
 			$postcount = '
 				<span class="item stat_postcount">
 					<span class="val">'.number_format($this->foodsaver['stat_postcount'], 0, ",", ".").'</span>
@@ -238,7 +210,6 @@ class ProfileView extends View
 		*/
 		if(S::may('fs'))
 		{
-			$bval = '- noch keine -';
 			$count_banana = count($this->foodsaver['bananen']);
 			if($count_banana == 0)
 			{
@@ -248,7 +219,6 @@ class ProfileView extends View
 			$banana_button_class = ' bouched';
 			$givebanana = '';
 			
-			// if current user has give the pfofile user an banana
 			if(!$this->foodsaver['bouched'] && ($this->foodsaver['id'] != fsId()))
 			{
 				$banana_button_class = '';
@@ -265,8 +235,6 @@ class ProfileView extends View
 				</div>';
 			}
 			
-			//if((int)$this->foodsaver['stat_bananacount'] > 0)
-		
 			addJs('
 			$(".stat_bananacount").magnificPopup({
 				type:"inline"
@@ -308,23 +276,6 @@ class ProfileView extends View
 					</tbody>
 				</table>
 			</div>';
-			
-			
-			
-			if($this->foodsaver['id'] == fsId())
-			{
-				$banana = $bval.'<span class="vouch-banana" title="Das sind Deine Bananen"><span>&nbsp;</span></span>';
-					
-			}
-			elseif(!$this->foodsaver['bouched'] && ($this->foodsaver['id'] != fsId()))
-			{
-				$banana = $bval.'<a onclick="addbanana('.$this->foodsaver['id'].');return false;" href="#" title="'.$this->foodsaver['name'].' eine Vertrauensbanane schenken" class="vouch-banana"><span>&nbsp;</span></a>';
-					
-			}
-			else
-			{
-				$banana = $bval.'<span class="vouch-banana" title="Du hast '.$this->foodsaver['name'].' schon eine Banane geschenkt"><span>&nbsp;</span></span>';
-			}
 		}
 		
 			
@@ -412,16 +363,7 @@ class ProfileView extends View
 		$menu = $this->profileMenu();
 		
 		$sleep_info = '';
-		/*
-		if($this->foodsaver['sleep_status'] > 0)
-		{		
-			if($this->foodsaver['sleep_msg'] != '')
-			{
-				$sleep_info .= '<br />'.v_info($this->foodsaver['sleep_msg']);
-			}
-		}
-		*/
-		
+
 		$online = '';
 		
 		if($this->foodsaver['online'])
@@ -443,7 +385,6 @@ class ProfileView extends View
 
 		$bids = $fsModel->getFsBezirkIds($this->foodsaver['id']);
 		if($this->foodsaver['buddy'] === -1 && $this->foodsaver['id'] != fsId())
-		//if(true)
 		{
 			$name = explode(' ', $this->foodsaver['name']);
 			$name = $name[0];
@@ -766,16 +707,6 @@ class ProfileView extends View
 		}
 		
 		$photo = avatar($this->foodsaver,'130');
-		/*
-		if(!empty($this->foodsaver['photo']))
-		{
-			$photo = '<img src="'.img($this->foodsaver['photo'],130,'q').'" alt="'.$this->foodsaver['name'].' '.$this->foodsaver['nachname'].'" />';
-		}
-		else
-		{
-			$photo = '<img src="img/130_q_avatar.png" alt="'.$this->foodsaver['name'].' '.$this->foodsaver['nachname'].'" />';
-		}
-		*/
 		if(isOrgaTeam())
 		{
 			$data = array();

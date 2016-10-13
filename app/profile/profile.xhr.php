@@ -136,9 +136,6 @@ class ProfileXhr extends Control
 		
 		$bezirk = $this->model->getBezirk($this->foodsaver['bezirk_id']);
 		
-		//print_r($this->foodsaver);
-		
-		$subtitle = '';
 		if($this->foodsaver['botschafter'])
 		{
 			$subtitle = 'ist '.genderWord($this->foodsaver['geschlecht'], 'Botschafter', 'Botschafterin', 'Botschafter/in').' f&uuml;r ';
