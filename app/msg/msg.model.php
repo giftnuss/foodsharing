@@ -127,7 +127,6 @@ class MsgModel extends Model
 	{
 		$out = array();
 
-
 		// for orga and bot-welcome team, allow to contact everyone who is foodsaver
 		if(S::may('orga') || (is_array($_SESSION['client']['bezirke']) && in_array(813, $_SESSION['client']['bezirke'])))
 		{
@@ -175,8 +174,6 @@ class MsgModel extends Model
 				AND
 					CONCAT(fs.name," ",fs.nachname ) LIKE "%'.$this->safe($term).'%"
 			';
-
-
 
 			if($user = $this->q($sql))
 			{
@@ -318,11 +315,6 @@ class MsgModel extends Model
 	public function getUpdatedConversationIds()
 	{
 		return $this->qCol('SELECT conversation_id FROM '.PREFIX.'foodsaver_has_conversation WHERE foodsaver_id = '.(int)fsId().' AND unread = 1');
-	}
-
-	public function checkChatUpdates($ids)
-	{
-		return $this->qColKey('SELECT conversation_id FROM '.PREFIX.'foodsaver_has_conversation WHERE foodsaver_id = '.(int)fsId().' AND unread = 1 AND conversation_id IN('.implode(',', $ids).')');
 	}
 
 	public function chatHistory($conversation_id)
@@ -563,7 +555,6 @@ class MsgModel extends Model
 			$this->updateDenormalizedConversationData($cid);
 		}
 	}
-
 
 	public function addUserToConversation($cid,$fsid,$unread = False)
 	{

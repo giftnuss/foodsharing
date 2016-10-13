@@ -1,7 +1,6 @@
 <?php
 class MsgXhr extends Control
 {
-
 	public function __construct()
 	{
 		$this->model = new MsgModel();
@@ -21,7 +20,6 @@ class MsgXhr extends Control
 	 */
 	public function rename()
 	{
-		$cid = (int)$_GET['cid'];
 		if($this->mayConversation($_GET['cid']) && !$this->model->conversationLocked($_GET))
 		{
 			$xhr = new Xhr();
@@ -38,7 +36,6 @@ class MsgXhr extends Control
 			}
 
 			$xhr->send();
-
 		}
 	}
 
@@ -163,23 +160,6 @@ class MsgXhr extends Control
 										'time' => date('Y-m-d H:i:s')
 									));
 									/*
-									if(!empty($m['gcm']) || !empty($m['iosid']))
-									{
-										$this->model->addPushQueue(
-												fsId(),
-												$m['id'],
-												S::user('name').' hat Dir eine Nachricht geschrieben',
-												$body,
-												array(
-														'gcm' => $m['gcm'],
-														'iosid' => $m['iosid']
-												),
-												array('t' => 0,'i'=>(int)fsId(),'c' => time()),
-												$message_id
-										);
-									}
-									+/
-									/*
 									 * send an E-Mail if the user is not online
 									*/
 									if($this->model->wantMsgEmailInfo($m['id']))
@@ -229,8 +209,6 @@ class MsgXhr extends Control
 	 */
 	private function mayConversation($conversation_id)
 	{
-		$ids = array();
-
 		// first get the session array
 		if(!($ids = S::get('msg_conversations')))
 		{
@@ -259,7 +237,6 @@ class MsgXhr extends Control
 		if(isset($_GET['fsid']) && (int)$_GET['fsid'] > 0)
 		{
 
-			//if($cid = $this->model->addConversation(array((int)$_GET['fsid']=>(int)$_GET['fsid']),false))
 			if($cid = $this->model->user2conv($_GET['fsid']))
 			{
 				$xhr->setStatus(1);
@@ -385,74 +362,6 @@ class MsgXhr extends Control
 		}
 
 		return false;
-	}
-
-	/**
-	 * polling call for retrieving new chat messages to given conversations
-	 */
-	public function chat($opt)
-	{
-		if($conv_ids = $this->model->checkChatUpdates($opt['ids']))
-		{
-			$this->model->setAsRead($conv_ids);
-
-			/*
-			 * check is a new message there for active conversations?
-			*/
-
-			$out = array(
-				'chats' => array()
-			);
-			foreach ($opt['infos'] as $i)
-			{
-				if(isset($conv_ids[$i['id']]))
-				{
-					if($messages = $this->model->getLastMessages($i['id'],$i['lmid']))
-					{
-						$out['chats'][] = array(
-							'cid' => $i['id'],
-							'msg' => $messages
-						);
-					}
-				}
-
-			}
-
-			if(!empty($out))
-			{
-				return array(
-					'data' => $out,
-					'script' => 'conv.push(ajax.data);'
-				);
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Method to store actually opened chat windows in the session
-	 *
-	 * @param array $opt
-	 */
-	public function setSessionInfo($opt)
-	{
-		if(isset($opt['infos']))
-		{
-			S::set('activechats', $opt['infos']);
-		}
-	}
-
-	/**
-	 * Method to remove open chatboxes from the session
-	 *
-	 * @param array $opt
-	 */
-	public function removeSessionInfo($opt)
-	{
-		if(isset($opt['infos']))
-		{
-			S::set('activechats', array());
-		}
 	}
 
 	public function people()

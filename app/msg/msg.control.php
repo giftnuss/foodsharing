@@ -1,6 +1,6 @@
 <?php
 class MsgControl extends Control
-{	
+{
 	public function __construct()
 	{
 		
@@ -13,7 +13,6 @@ class MsgControl extends Control
 		{
 			goLogin();
 		}
-		
 	}
 	
 	public function index()
@@ -21,20 +20,13 @@ class MsgControl extends Control
 		$this->setTemplate('msg');
 		
 		addJs('msg.fsid = '.(int)fsId().';');
-		/*
-		 * later:
-		 * // list Conversations
-		 */
 		addBread(s('messages'));
 		addTitle(s('messages'));
-		
-		//addContent($this->view->top());
 		
 		addContent($this->view->compose());
 		addContent($this->view->conversation());
 		addContent($this->view->leftMenu(),CNT_RIGHT);
 		
-		$conversations = false;
 		if($conversations = $this->model->listConversations())
 		{
 			$ids = array();
@@ -45,11 +37,5 @@ class MsgControl extends Control
 			S::set('msg_conversations', $ids);
 		}
 		addContent($this->view->convListWrapper($this->view->conversationList($conversations)),CNT_RIGHT);
-		
-	}
-	
-	public function test()
-	{
-		sendSock();
 	}
 }
