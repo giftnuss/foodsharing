@@ -18,16 +18,16 @@
 */
 class ApiTester extends \Codeception\Actor
 {
-    use _generated\ApiTesterActions;
+	use _generated\ApiTesterActions;
 
-   /**
-    * Define custom actions here
-    */
-		public function seeHtml()
-		{
-			$I = $this;
-			$I->seeHttpHeader('Content-Type', 'text/html; charset=UTF-8');
-			$I->seeResponseIsHtml();
-		}
+	/**
+	* Checks the content type is html, and the content contains html
+	*/
+	public function seeHtml()
+	{
+		$I = $this;
+		$I->seeHttpHeader('Content-Type', 'text/html; charset=UTF-8');
+		$I->seeResponseIsHtml();
+	}
 
 }
