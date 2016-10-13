@@ -223,9 +223,7 @@ class ReportView extends View
 	}
 	
 	public function listReports($reports)
-	{		
-		$out = '';
-		
+	{
 		addStyle('#table td{ cursor:pointer; }');
 		
 		addJs('
@@ -248,7 +246,6 @@ class ReportView extends View
 		}
 		
 		$table = v_tablesorter(array(
-				//array('name' => s('picture'),'sort'=> false, 'width' => 45),
 				array('name' => 'An', 'width' => 50),
 				array('name' => 'Von', 'width' => 50),
 				array('name' => s('message')),

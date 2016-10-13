@@ -243,31 +243,6 @@ class ReportModel extends Model
           	ORDER BY 
 				r.`time` DESC
 		');
-		/*
-		$ret = $this->q('
-				SELECT 	DISTINCT
-				r.`time`,
-				UNIX_TIMESTAMP(r.`time`) AS time_ts,
-				r.`msg`,
-				r.`tvalue`,
-				r.`reporttype`,
-				r.foodsaver_id AS fs_id,
-				CONCAT(fs.name," ",fs.nachname)	AS `name`
-				FROM
-				`'.PREFIX.'report` r,
-				`'.PREFIX.'foodsaver_has_bezirk` hb,
-				`'.PREFIX.'foodsaver` fs
-	
-				WHERE
-				r.foodsaver_id = hb.foodsaver_id
-				AND
-				r.foodsaver_id = fs.id
-				AND
-				hb.bezirk_id IN('.implode(',',$this->getChildBezirke($this->bezirk['id'])).')
-				AND
-				r.foodsaver_id != '.(int)fsid().'
-				');
-		*/
 		return $ret;
 	}
 }

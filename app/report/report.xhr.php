@@ -53,9 +53,6 @@ class ReportXhr extends Control
 				}
 				
 				$content .= v_input_wrapper('Gemeldet von', '<a href="#" onclick="profile('.(int)$report['rp_id'].');">'.$report['rp_name'].' '.$report['rp_nachname'].'</a>');
-				
-				
-				
 				$dialog->addContent($content);
 				$dialog->addOpt('width', '600px');
 				
@@ -94,7 +91,6 @@ class ReportXhr extends Control
 			return array(
 				'status' => 1,
 				'script' => 'reload();'
-			//	'script' => '$("input.rid[value=\''.(int)$_GET['id'].'\']").parent().parent().remove();pulseInfo("Report wurde gelöscht!");'	
 			);
 		}
 	}
@@ -184,16 +180,7 @@ class ReportXhr extends Control
 	}
 	
 	public function betriebreport()
-	{		
-		/*
-		if(!$this->model->isInTeam((int)$_GET['bid']))
-		{
-			return array(
-				'status' => 1,
-				'script' => 'pulseError("'.s('access_error').'");'
-			);
-		}*/
-		
+	{
 		$reason_id = 1;
 		if($_GET['reason_id'] == 2)
 		{
