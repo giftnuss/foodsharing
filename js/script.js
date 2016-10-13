@@ -809,18 +809,6 @@ function aNotify()
 	//$('#xhr-chat-notify')[0].play();
 }
 
-function chatIsOpen()
-{
-	if($(".fancybox-opened input#xhr_sender_id").length > 0)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
 function checkEmail(email) {
 
     var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -887,17 +875,6 @@ function updateChat()
 	});
 }
 
-function startChat(fsid)
-{
-	xhr_chat = setInterval(function(){
-		alert('get ');
-	},1000);
-}
-function stopChat()
-{
-	alert('stoppe');
-	clearInterval(xhr_chat);
-}
 function fancy_xhr(func,loader)
 {
 	if(loader == undefined)
@@ -967,53 +944,6 @@ function isMob()
 	}
 	
 	return false;
-}
-
-function checkNewMsg(sound)
-{
-	if(sound == undefined)
-	{
-		sound = true;
-	}
-	mob = 0;
-	if(isMob())
-	{
-		mob = 1;
-	}
-	
-	$.ajax({
-		dataType:"json",
-		url:"/xhr.php?f=getNewMsg&mob="+mob,
-		success : function(data){
-			if(data.status == 1)
-			{
-				if(data.script != undefined)
-				{
-					if(sound)
-					{
-						$.globalEval(data.script);
-					}
-				}
-				$("#msgbar-messages ul").html(data.html);
-				$("#msgBar-badge span.bar-msg").html(data.count);
-				$("#msgBar-badge span.bar-msg").css({opacity:1});
-				/*
-				$("#msgbar-messages ul li.msg a").click(function(ev){
-					showLoader();
-					fancy_xhr("getMsg&id=" + parseInt($(this).attr('href').replace('#','')),false);
-					ev.preventDefault();
-				});
-				*/
-				
-			}
-			else if(data.status == 0)
-			{
-				$("#msgBar-badge span.bar-msg").css({opacity:0});
-				$("#msgbar-messages ul").html(data.html);
-			}
-			$(".ui-delbuddyreq").click(function(ev){ev.stopPropagation();});
-		}
-	});
 }
 
 function xhrf(func)
@@ -1129,16 +1059,6 @@ function ucfirst (str) {
 	  str += '';
 	  var f = str.charAt(0).toUpperCase();
 	  return f + str.substr(1);
-}
-
-function accordionNext(id,max)
-{
-	current = $('#' + id).accordion( "option", "active" );
-	if(current < max)
-	{
-		$('#' + id).accordion("option","active",(current+1));
-	}
-	
 }
 
 function showComment(id)
@@ -1464,22 +1384,6 @@ function merge(firstArray, secondArray, keyProperty, objectPropertiesToMerge) {
     }
 
     return firstArray;
-}
-
-function strip_tags(input, allowed) {
-{
-	  allowed = (((allowed || '') + '')
-			    .toLowerCase()
-			    .match(/<[a-z][a-z0-9]*>/g) || [])
-			    .join(''); // making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)
-			  var tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
-			    commentsAndPhpTags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi;
-			  return input.replace(commentsAndPhpTags, '')
-			    .replace(tags, function($0, $1) {
-			      return allowed.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : '';
-			    });
-			}
-
 }
 
 function session_id() {
