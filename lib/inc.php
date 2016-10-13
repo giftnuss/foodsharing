@@ -136,7 +136,6 @@ addHidden('<div id="'.id('fancy').'"></div>');
 addHidden('<div id="u-profile"></div>');
 addHidden('<ul id="hidden-info"></ul>');
 addHidden('<ul id="hidden-error"></ul>');
-addHidden('<div id="sendMail">'.v_form_text('Betreff').''.v_form_textarea('Nachricht').'<input type="hidden" id="sendmail-fs-id" value="0" />		</div>');
 addHidden('<div id="comment">'.v_form_textarea('Kommentar').'<input type="hidden" id="comment-id" name="comment-id" value="0" /><input type="hidden" id="comment-name" name="comment-name" value="0" /></div>');
 addHidden('<div id="dialog-confirm" title="Wirklich l&ouml;schen?"><p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><span id="dialog-confirm-msg"></span><input type="hidden" value="" id="dialog-confirm-url" /></p></div>');
 addHidden('<div id="uploadPhoto"><form method="post" enctype="multipart/form-data" target="upload" action="xhr.php?f=addPhoto"><input type="file" name="photo" onchange="uploadPhoto();" /> <input type="hidden" id="uploadPhoto-fs_id" name="fs_id" value="" /></form><div id="uploadPhoto-preview"></div><iframe name="upload" width="1" height="1" src=""></iframe></div>');
