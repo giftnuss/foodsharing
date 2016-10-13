@@ -1,28 +1,20 @@
 <?php
 $I = new AcceptanceTester($scenario);
 
-// http://codeception.com/docs/modules/WebDriver
-
-
 $I->wantTo('try to create a new company as foodsaver');
-$I->amOnPage('/');
-$I->fillField('email_adress', 'userB@example.com');
-$I->fillField('password', 'userb');
-$I->click('#loginbar input[type=submit]');
-$I->seeCurrentUrlEquals('/?page=dashboard');
-$I->waitForPageBody();
-$I->see('Hallo');
+
+$pass = sq('pass');
+
+$foodsaver = $I->createFoodsaver($pass, [
+	'rolle' => 1,
+	'admin' => 1
+]);
+
+$I->login($foodsaver['email'], $pass);
+
 $I->dontSee('Neuen Betrieb eintragen');
 
-
-
-// disable popups, as they are not supported in PhantomJS
-// if they were could use seeInPopup/acceptPopup
-$I->executeJS("window.confirm = function(){return true;};");
-$I->executeJS("window.alert = function(){return true;};");
-
 // check if user see Link to "Neuen Betrieb eintragen"
-
 $I->amOnPage('/?page=betrieb&bid=903');
 $I->dontSee('Neuen Betrieb eintragen');
 
