@@ -15,6 +15,4 @@ modules:
             window_size: 1920x1080
         - Sequence
         - Db
-        #:
-          #    dsn: mysql:host=db;dbname=foodsharing
         - \Helper\Acceptance
