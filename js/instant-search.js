@@ -157,13 +157,13 @@ var search = {
 		{
 			this.isSearching = true;
 			this.lastSearch = search.$input.val();
-			$.ajax({
-				url: '/xhrapp.php?app=search&m=search&s=' + encodeURIComponent(this.lastSearch),
-				dataType: 'json',
+			ajax.req('search', 'search', {
+				loader: false,
+				data: { s: this.lastSearch },
 				success: function(data){
-					if(data.result != undefined && data.result.length > 0)
+					if(data != undefined && data.length > 0)
 					{
-						search.showResult(data.result);
+						search.showResult(data);
 					}
 					else
 					{

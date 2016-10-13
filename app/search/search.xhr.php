@@ -31,7 +31,8 @@ class SearchXhr extends Control
 				}
 
 				return array(
-					'result' => $out
+					'data' => $out,
+					'status' => 1
 				);
 			}
 		}
