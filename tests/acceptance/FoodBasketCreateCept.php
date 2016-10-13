@@ -16,7 +16,7 @@ $I->click('#infobar .basket a');
 $I->see('Neuen Essenskorb anlegen');
 
 $I->click('Neuen Essenskorb anlegen');
-$I->see('Essenskorb anbieten');
+$I->waitForText('Essenskorb anbieten');
 
 $I->fillField('description', $description);
 
