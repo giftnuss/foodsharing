@@ -49,26 +49,15 @@ class SettingsControl extends Control
 			array('name' => s('settings_info'), 'href' => '/?page=settings&sub=info')
 			
 		);
-		
-		if($this->model->getMumbleName())
-		{
-			$menu[] = array('name' => s('settings_mumble'), 'href' => '/?page=settings&sub=mumble');
-		}
-		
-		$menu[] = array('name' => s('bcard'), 'href' => '/?page=bcard');
 
+		$menu[] = array('name' => s('bcard'), 'href' => '/?page=bcard');
 		//$menu[] = array('name' => s('calendar'), 'href' => '/?page=settings&sub=calendar');
 				
 		addContent($this->view->menu($menu,array('title'=>s('settings'),'active'=>$this->getSub())),CNT_LEFT);
 		
 		$menu = array();
-		
 		$menu[] = array('name' => s('sleeping_user'), 'href' => '/?page=settings&sub=sleeping');
-		
 		$menu[] = array('name' => 'E-Mail Adresse ändern', 'click' => 'ajreq(\'changemail\');return false;');
-		
-		//$menu[] = array();
-		
 		
 		if($this->foodsaver['rolle'] == 0)
 		{
@@ -78,37 +67,18 @@ class SettingsControl extends Control
 		{
 			$menu[] = array('name'=>'Werde '.s('rolle_2_' . $this->foodsaver['geschlecht']),'href'=> '/?page=settings&sub=upgrade/up_bip');
 		}
-		/*
-		else if($this->foodsaver['rolle'] == 2)
-		{
-			$menu[] = array('name'=>'Werde '.getRolle($this->foodsaver['geschlecht'], 3),'href'=> '/?page=settings&sub=upgrade/up_bot');
-		}
-		*/
 		$menu[] = array('name' => s('delete_account'), 'href' => '/?page=settings&sub=deleteaccount');
-		
-		
-		
 		addContent($this->view->menu($menu,array('title'=>s('account_option'),'active'=>$this->getSub())),CNT_LEFT);
-		
 	}
 	
 	public function sleeping()
 	{
-		if(submitted())
-		{
-			print_r($_POST);
-		}
 		if($sleep = $this->model->getSleepData())
 		{
 			addContent($this->view->sleepMode($sleep));
 		}
 	}
-	
-	public function upgrade()
-	{
-		
-	}
-	
+
 	public function up_bip()
 	{
 		if(S::may() && $this->foodsaver['rolle'] > 0)
@@ -248,16 +218,6 @@ class SettingsControl extends Control
 	{
 		if(S::may() && $this->foodsaver['rolle'] >= 2)
 		{
-			/*
-			 * Array
-				(
-				    [cleared] => 1
-				    [running] => 1
-				    [failed] => 5
-				    [last_try] => 1404564730
-				    [times] => 7
-				)
-			 */
 			$model = loadModel('quiz');
 			
 			if(($status = $model->getQuizStatus(3)) && ($quiz = $model->getQuiz(3)))
@@ -546,15 +506,6 @@ class SettingsControl extends Control
 
 	}
 	
-	public function mumble()
-	{
-		addBread(s('settings_mumble'));
-		
-		$mumblename = $this->model->getMumbleName();
-		
-		addContent($this->view->settingsMumble($mumblename));
-	}
-	
 	public function calendar()
 	{
 		addBread(s('calendar'));
@@ -714,8 +665,6 @@ class SettingsControl extends Control
 	
 	public function picture_box()
 	{
-		global $g_data;
-		
 		$photo = $this->model->getPhoto(fsId());
 		
 		if(!(file_exists('images/thumb_crop_'.$photo)))
@@ -725,7 +674,6 @@ class SettingsControl extends Control
 		else
 		{
 			$p_cnt = v_photo_edit('images/thumb_crop_'.$photo);
-			//$p_cnt = v_photo_edit('img/portrait.png');
 		}
 		
 		return v_field($p_cnt, 'Dein Foto');
@@ -735,10 +683,6 @@ class SettingsControl extends Control
 	{
 		if($email = $this->model->getNewMail($_GET['newmail']))
 		{
-			/*
-			$this->model->changeEmail($email);
-			$this->model->deleteChangeMail();
-			*/
 			addJs("ajreq('changemail3');");
 		}
 	}

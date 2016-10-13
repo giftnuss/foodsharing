@@ -42,7 +42,7 @@ class SettingsXhr extends Control
 			{
 				return array(
 					'status' => 1,
-					'script' => 'pulseError("Diese E-Mail Adresse benutzt bereits jemand anderes.");'		
+					'script' => 'pulseError("Diese E-Mail Adresse benutzt bereits jemand anderes.");'
 				);
 			}
 			$token = md5(uniqid(mt_rand(), true));
@@ -54,7 +54,7 @@ class SettingsXhr extends Control
 				tplMail(21, $_GET['email'],array(
 					'anrede' => genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 					'name' => $fs['name'],
-					'link' => 'http://www.'.DEFAULT_HOST.'/?page=settings&sub=general&newmail='.$token		
+					'link' => 'http://www.'.DEFAULT_HOST.'/?page=settings&sub=general&newmail='.$token
 				));
 				
 				return array(
@@ -62,8 +62,6 @@ class SettingsXhr extends Control
 						'script' => 'pulseInfo(\'Gehe jetzt zu Deinem <strong>Neuen</strong> E-Mail Postfach um Die Adresse zu bestätigen\',{sticky:true});'
 				);
 			}
-			
-			
 		}
 		else
 		{
@@ -85,9 +83,7 @@ class SettingsXhr extends Control
 			
 			$dia->addButton('Abbrechen', 'ajreq(\'abortchangemail\');$(\'#'.$dia->getId().'\').dialog(\'close\');');
 			$dia->addButton('Bestätigen', 'ajreq(\'changemail4\',{pw:$(\'#passcheck\').val(),did:\''.$dia->getId().'\'});');
-			
-			
-			
+
 			return $dia->xhrout();
 		}
 	}
@@ -146,8 +142,7 @@ class SettingsXhr extends Control
 		$from = '';
 		$to = '';
 		$msg = '';
-		$status = 0;
-		
+
 		$states = array(
 			0 => true, // normal available
 			1 => true, // not available for a while

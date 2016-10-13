@@ -498,32 +498,6 @@ class SettingsView extends View
 				', 'Dein Abholkalender',array('class'=>'ui-padding'));
 	}
 
-	public function settingsMumble($name)
-	{
-		return v_field('
-				
-				<table style="border-spacing: 10px;border-collapse: separate;">
-				<tr>
-					<td style="width:75px;">Server:</td>
-					<td><strong>mumble.lebensmittelretten.de</strong></td>
-				</tr>
-				<tr>
-					<td style="width:75px;">Port:</td>
-					<td><strong>64738</strong></td>
-				</tr>
-				<tr>
-					<td>Benutzer:</td>
-					<td><strong>'.$name.'</strong></td>
-				</tr>
-				<tr>
-					<td>Passwort:</td>
-					<td><i>Dein lebensmittelretten.de Passwort</i></td>
-				</tr>
-				</table>
-				
-				', 'Deine Mumble Zugangsdaten',array('class'=>'ui-padding'));
-	}
-	
 	public function delete_account()
 	{
 		addJs('
@@ -647,25 +621,6 @@ class SettingsView extends View
 	
 		return v_quickform(s('settings'),array(
 				$bezirkchoose,
-				
-				//v_form_text('name'),
-				//v_form_text('nachname'),
-				/*
-		v_form_select('geschlecht',array('values' => array(
-				array(
-						'name' => 'Frau',
-						'id' => 2
-				),
-				array(
-						'name' => 'Mann',
-						'id' => 1
-				),
-				array(
-						'name' => 'Sonstiges oder Beides',
-						'id' => 3
-				)
-		))),
-		*/
 				$this->latLonPicker('LatLng'),
 				v_form_text('telefon'),
 				v_form_text('handy'),

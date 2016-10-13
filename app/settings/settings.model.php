@@ -11,11 +11,6 @@ class SettingsModel extends Model
 		');
 	}
 	
-	public function getMumbleName()
-	{
-		return $this->qOne('SELECT name FROM '.PREFIX.'mumbleuser WHERE foodsaver_id = '.(int)fsId());
-	}
-
 	public function logChangedSetting($fsid, $old, $new, $logChangedKeys)
 	{
 		/* the logic is not exactly matching the update mechanism but should be close enough to get all changes... */
@@ -94,8 +89,6 @@ class SettingsModel extends Model
 			{
 				$session['quiz_questions'] = unserialize($session['quiz_questions']);
 				
-				//print_r($session['quiz_questions']);die();
-				
 				foreach ($session['quiz_questions'] as $q)
 				{
 					$tmp[$q['id']] = $q;
@@ -120,13 +113,9 @@ class SettingsModel extends Model
 			{
 				$session['quiz_result'] = unserialize($session['quiz_result']);
 				
-				//print_r($session['quiz_result']);
-				
 				foreach ($session['quiz_result'] as $k => $r)
 				{
 					$session['quiz_result'][$k]['user'] = $tmp[$r['id']];
-					
-					//print_r($session['quiz_result'][$k]);
 					
 					foreach ($r['answers'] as $k2 => $v2)
 					{
@@ -168,7 +157,6 @@ class SettingsModel extends Model
 				{
 					$session = array_merge($quiz,$session);
 					unset($session['quiz_questions']);
-					
 					
 					/*
 					 * Add questions they're complete right answered
@@ -375,30 +363,6 @@ class SettingsModel extends Model
 		');
 	}
 	
-	public function checkQuizBip()
-	{
-		if($res = $this->q('
-					
-		'))
-		{
-			
-		}
-	}
-	
-	public function getBotCount($bid)
-	{
-		return (int)$this->qOne('
-			SELECT
-				COUNT(b.foodsaver_id)
-	
-			FROM
-				'.PREFIX.'botschafter b
-	
-			WHERE
-				b.bezirk_id = '.(int)$bid.'
-		');
-	}
-	
 	public function getNewMail($token)
 	{
 		return $this->qOne('SELECT newmail FROM '.PREFIX.'mailchange WHERE `token` = '.$this->strval($token).' AND foodsaver_id = '.(int)fsid());
@@ -427,7 +391,6 @@ class SettingsModel extends Model
 				return true;
 			}
 		}
-	
 		return false;
 	}
 }
