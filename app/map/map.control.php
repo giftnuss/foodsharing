@@ -15,12 +15,8 @@ class MapControl extends Control
 		$this->setTemplate('map');
 		
 		$center = $this->model->getValues(array('lat','lon'), 'foodsaver', fsId());
-
-		
-		
 		addContent($this->view->mapControl(),CNT_TOP);
-		
-		
+
 		$jsarr = '';
 		if(isset($_GET['load']) && $_GET['load'] == 'baskets')
 		{
@@ -30,28 +26,13 @@ class MapControl extends Control
 		{
 			$jsarr = '["fairteiler"]';
 		}
-		/*
-		else
-		{
-			if(S::may('fs'))
-			{
-				$jsarr = '["betriebe"]';
-			}
-			else
-			{
-				addStyle('#map-control-wrapper > .ui-widget-content{height:93px;}');
-				$jsarr = '["baskets"]';
-			}
-		}
-		*/
-		
+
 		if(!S::may('fs'))
 		{
 			addStyle('#map-control-wrapper > .ui-widget-content{height:93px;}');
 		}
 		
 		addContent(
-		//$this->view->map($center)
 			$this->view->lMap($center)
 		);
 
@@ -72,12 +53,5 @@ class MapControl extends Control
 		}
 		
 		addJs('map.initMarker('.$jsarr.');');
-		
-		
-		if(isMob())
-		{
-			//addStyle('.leaflet-bottom{display:none;} .ui-dialog .ui-dialog-content{padding:0 !important;}#map-control-wrapper{right:-115px !important}');
-		}
-		
 	}
 }

@@ -11,10 +11,6 @@ class MapView extends View
 	
 	public function lMap()
 	{
-		//addJs('u_init_map('.$center['lat'].','.$center['lon'].','.$zoom.');');
-		
-		
-		
 		addHidden('
 			<div id="b_content" class="loading">
 				<div class="inner">
@@ -77,20 +73,5 @@ class MapView extends View
 				'.$additional.'
 				
 			</div>';
-		/*
-		 
-		return ('
-		
-			<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-draggable ui-resizable" tabindex="-1" role="dialog" aria-describedby="map-control" aria-labelledby="ui-id-4"><div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><span id="ui-id-4" class="ui-dialog-title">'.s('map_control_title').'???</span><button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" role="button" aria-disabled="false" title="Schließen"><span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span><span class="ui-button-text">Schließen</span></button></div><div id="map-control" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 98px; max-height: none; height: auto;">
-				<ul class="linklist">
-					<li><a class="ui-corner-all foodsaver">Foodsaver</a></li>
-					<li><a class="ui-corner-all botschafter">Botschafter</a></li>
-					<li><a class="ui-corner-all betriebe">Betriebe</a></li>
-					<li><a class="ui-corner-all fairteiler">Fair-Teiler</a></li>
-				</ul>
-			</div><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-e" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-s" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-sw" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-ne" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90;"></div></div>
-		');
-		* 
-		 */
 	}
 }

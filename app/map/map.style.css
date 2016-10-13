@@ -136,28 +136,6 @@ div#top
     font-size: 11px;
     font-weight: lighter;
 }
-/*
-a.baskets span.icon
-{
-	background-image:url(img/marker-baskets.png);
-}
-a.foodsaver span.icon
-{
-	background-image:url(img/marker-foodsaver.png);
-}
-a.botschafter span.icon
-{
-	background-image:url(img/marker-botschafter.png);
-}
-a.betriebe span.icon
-{
-	background-image:url(img/marker-supermarket.png);
-}
-a.fairteiler span.icon
-{
-	background-image:url(img/marker-fairteiler.png);
-}
-*/
 #map-control-wrapper
 {
 	display: block;

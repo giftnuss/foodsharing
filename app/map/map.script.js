@@ -6,86 +6,26 @@ var fsIcon = L.AwesomeMarkers.icon({
     markerColor: 'orange',
     prefix: 'img'
 });
-/*
-var fsIcon = L.icon({
-    iconUrl: 'img/marker-foodsaver.png',
-    shadowUrl: 'img/shadow-marker.png',
-
-    iconSize:     [36, 50], // size of the icon
-    shadowSize:   [62, 50], // size of the shadow
-    iconAnchor:   [36, 50], // point of the icon which will correspond to marker's location
-    shadowAnchor: [36, 50],  // the same for the shadow
-    popupAnchor:  [-18, -52] // point from which the popup should open relative to the iconAnchor
-});
-*/
 var bkIcon = L.AwesomeMarkers.icon({
     icon: 'basket',
     markerColor: 'green',
     prefix: 'img'
 });
-/*
-var bkIcon = L.icon({
-    iconUrl: 'img/marker-baskets.png',
-    shadowUrl: 'img/shadow-marker.png',
-
-    iconSize:     [36, 50], // size of the icon
-    shadowSize:   [62, 50], // size of the shadow
-    iconAnchor:   [36, 50], // point of the icon which will correspond to marker's location
-    shadowAnchor: [36, 50],  // the same for the shadow
-    popupAnchor:  [-18, -52] // point from which the popup should open relative to the iconAnchor
-});
-*/
 var botIcon = L.AwesomeMarkers.icon({
     icon: 'smile',
     markerColor: 'red',
     prefix: 'img'
 });
-/*
-var botIcon = L.icon({
-    iconUrl: 'img/marker-botschafter.png',
-    shadowUrl: 'img/shadow-marker.png',
-
-    iconSize:     [36, 50], // size of the icon
-    shadowSize:   [62, 50], // size of the shadow
-    iconAnchor:   [36, 50], // point of the icon which will correspond to marker's location
-    shadowAnchor: [36, 50],  // the same for the shadow
-    popupAnchor:  [-18, -52] // point from which the popup should open relative to the iconAnchor
-});
-*/
 var bIcon = L.AwesomeMarkers.icon({
     icon: 'store',
     markerColor: 'brown',
     prefix: 'img'
 });
-/*
-var bIcon = L.icon({
-    iconUrl: 'img/marker-supermarket.png',
-    shadowUrl: 'img/shadow-marker.png',
-
-    iconSize:     [36, 50], 
-    shadowSize:   [62, 50], 
-    iconAnchor:   [36, 50], 
-    shadowAnchor: [36, 50],  
-    popupAnchor:  [-18, -52]
-});
-*/
 var fIcon = L.AwesomeMarkers.icon({
     icon: 'recycle',
     markerColor: 'yellow',
     prefix: 'img'
 });
-/*
-var fIcon = L.icon({
-    iconUrl: 'img/marker-fairteiler.png',
-    shadowUrl: 'img/shadow-marker.png',
-
-    iconSize:     [36, 50], 
-    shadowSize:   [62, 50], 
-    iconAnchor:   [36, 50], 
-    shadowAnchor: [36, 50],  
-    popupAnchor:  [-18, -52]
-});
-*/
 var map = {
 	initiated:false,
 	init: function()
@@ -188,34 +128,6 @@ function u_init_map(lat,lon,zoom)
 			map.setView(pos.lat, pos.lon, 12);
 		});
 	}
-	
-	/*
-	u_map = L.map('map').setView([lat, lon], zoom);
-	
-	L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-		attribution: 'Tiles &copy; Esri 2014'
-	}).addTo(u_map);
-	*/
-	/*
-	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(u_map);
-    */
-	/*
-	L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/vy/map/{z}/{x}/{y}.png', {
-	    attribution: ' Tiles by <a target="_blank" href="http://mapquest.com">MapQuest</a>. Map data © <a target="_blank" href="http://openstreetmap.org">OpenStreetMap</a> and contributors',
-	    maxZoom: 18,
-	    subdomains: ['mtile01','mtile02','mtile03','mtile04']
-	}).addTo(u_map);
-	*/
-	/*
-	L.tileLayer(\'http://{s}.tile.cloudmade.com/1c62b0ec78ee4aa2b85d9fdffe670b33/113144/256/{z}/{x}/{y}.png\', {
-		attribution: ' Tiles by <a target="_blank" href="http://mapquest.com">MapQuest</a>. Map data © <a target="_blank" href="http://openstreetmap.org">OpenStreetMap</a> and contributors',
-		maxZoom: 18,
-	}).addTo(u_map);
-	*/
-	//loadMarker(['foodsaver','betriebe']);
-
 }
 
 function u_loadDialog(purl)
@@ -260,8 +172,6 @@ function u_setDialogData(data)
 
 function init_bDialog()
 {
-	//alert(pos.left);
-	
 	$('#b_content').dialog({
 		autoOpen:false,
 		modal :false,
@@ -444,10 +354,6 @@ function loadMarker(types,loader)
 	});
 }
 
-
-
-
-	
 function print_r(arr, level) {
 		 
 		var dumped_text = "";
@@ -630,53 +536,9 @@ $(document).ready(function(){
 		},100);
 	});
 	
-	//initSlide();
-	
-	
 	init_bDialog();
-	/*
-	if(isMob())
-	{
-		$('#map-control-wrapper div:first').css({
-			'overflow':'hidden',
-			'margin-left':'142px',
-			'padding':'0'
-		});
-		$('#map-control-wrapper div:first div:first').css({
-			'padding':'2px'
-		});
-		setTimeout(function(){
-			$('.leaflet-bottom.leaflet-right, #g-texter').hide();
-		},200);
-		
-	}
-	
-	$(window).resize(function(){
-		if(isMob())
-		{
-			$('#map-control-wrapper div:first').css({
-				'overflow':'hidden',
-				'margin-left':'142px',
-				'padding':'0'
-			});
-			$('#map-control-wrapper div:first div:first').css({
-				'padding':'2px'
-			});
-			$('.leaflet-bottom.leaflet-right, #g-texter').hide();
-		}
-	});
-	*/
 });
-
-
 
 $(window).load(function(){
 	
 });
-	/*
-	$("div.map-wrapper").fadeTo( 1, 0 );
-	
-	$(window).load(function(){
-		$(".ajax-loader").fadeOut(100);
-		$("div.map-wrapper").fadeTo( 300, 1);
-	});*/
