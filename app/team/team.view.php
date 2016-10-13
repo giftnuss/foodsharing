@@ -9,7 +9,6 @@ class TeamView extends View
 		{
 			foreach ($user['groups'] as $g)
 			{
-				//$subtitle .= ', ' . '<a href="/arbeitsgruppe/' . $g['id'] . '">'.$g['name'].'</a>';
 				$subtitle .= ', ' . $g['name'];
 			}
 			
