@@ -1,2 +1,0 @@
-INSERT INTO `fs_message_tpl` (`id`, `language_id`, `name`, `subject`, `body`) VALUES
-(30, 1, 'Neue Gruppen-Nachricht', '{SENDER} hat an {CHATNAME} eine Nachricht geschrieben', '<p>{ANREDE} {NAME},</p><p>{SENDER} hat an {CHATNAME} eine Nachricht geschrieben.</p><p>Gehe auf den folgendem Link um Deine Nachricht zu lesen.,<br /> Dein Lebensmittelretten.de Team</p><p></p><div class="border">{MESSAGE}<p><a href="{LINK}" target="_blank" class="button">Antworten</a></p></div>');
