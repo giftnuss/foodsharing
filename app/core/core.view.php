@@ -251,8 +251,6 @@ class View
 			<div style="clear:both"></div>
 		</div>';
 		
-		//addJs('setInterval(function(){checkOnline("'.implode(',', $jssaver).'")},10000);');
-		
 		if($option['scroller'])
 		{
 			$out = v_scroller($out,$height);

@@ -1435,39 +1435,6 @@ function nl2br (str, is_xhtml) {
 	var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br ' + '/>' : '<br>'; // Adjust comment to avoid issue on phpjs.org display
 	return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
 }
-function checkOnline(saver)
-{
-	$.ajax({
-		dataType:"json",
-		url:"/xhr.php?f=checkOnline",
-		data: "saver="+saver,
-		success : function(data){
-			
-			if(data.status == 1)
-			{
-				for(i=0;i<data.saver.length;i++)
-				{
-					$(".saver-ampel-"+data.saver[i].id).removeClass("ampel-grau ampel-gruen");
-					
-					if(data.saver[i].online)
-					{
-						$(".saver-ampel-"+data.saver[i].id).addClass("ampel-gruen");
-						if($(".saver-ampel-"+data.saver[i].id).length > 0  && $(".saver-ampel-"+data.saver[i].id).prev().attr('title') != undefined)
-						{
-							$(".saver-ampel-"+data.saver[i].id).prev().attr('title',$(".saver-ampel-"+data.saver[i].id).prev().attr('title').replace('offline','online'));
-						}
-					}
-					else if($(".saver-ampel-"+data.saver[i].id).length > 0)
-					{
-						$(".saver-ampel-"+data.saver[i].id).addClass("ampel-grau");
-						$(".saver-ampel-"+data.saver[i].id).prev().attr('title',$(".saver-ampel-"+data.saver[i].id).prev().attr('title').replace('online','offline'));
-					}
-					$(".saver-ampel-"+data.saver[i].id).prev().tooltip();
-				}
-			}
-		}
-	});
-}
 
 function u_loadCoords(addressdata,func)
 {

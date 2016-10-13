@@ -1244,8 +1244,6 @@ function u_team($betrieb)
 	');
 	
 	addJs('
-		//setInterval(function(){checkOnline("'.implode(',', $jssaver).'")},10000);
-				
 		function createJumperMenu() {
 	        return {
 	            callback: function(key, options) {

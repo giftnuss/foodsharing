@@ -1107,30 +1107,6 @@ function xhr_getFoodsaver($data)
 	return xhr_getRecip($data);
 }
 
-function xhr_checkOnline($data)
-{
-	global $db;
-	if(isset($data['saver']))
-	{
-		$saver = explode(',', $data['saver']);
-		if(count($saver) > 0)
-		{
-			$out = array();
-			foreach ($saver as $s)
-			{
-				$on = false;
-				if($db->isActive((int)$s))
-				{
-					$on = true;
-				}
-				$out[] = array('id'=>$s,'online'=>$on);
-			}
-			return json_encode(array('status'=>1,'saver'=>$out));
-		}
-	}
-	
-	return json_encode(array('status'=>0));
-}
 function xhr_getRecip($data)
 {
 	if(may())
