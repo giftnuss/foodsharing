@@ -585,114 +585,6 @@ function isOrgaTeam()
 	}
 }
 
-function getMobileMenu()
-{	
-	addJs('
-		$("#mobilemenu").bind("change",function(){
-			if($(this).val() != "")
-			{
-				showLoader();
-				goTo($(this).val());
-				
-			}
-		});		
-	');
-	
-	
-	
-	$out = '
-			<select id="mobilemenu">
-				<option class="famenu" value="dashboard" selected="selected">&#xf0c9;</option>
-				<option value="/">Home</option>
-				<option value="/karte">Karte</option>';
-	
-	$out .= '
-				<option value="/?page=fairteiler">Fair-Teiler</option>
-				<option value="/?page=message">Interne Nachrichten</option>
-				<option value="/?page=mailbox">E-Mail Postfächer</option>
-				<option value="/news">Blog</option>
-				<option value="/?page=listDocument">Dokumente</option>
-				<option value="/?page=bcard">Persönliche Visitenkarte</option>
-				<option value="/?page=listFaq">FAQs</option>
-	
-						';
-	if(isBotschafter())
-	{
-		$out .= '
-				<option value="/?page=email">E-Mail Verteiler</option>';
-	}
-	
-	$bez = '';
-	$ag = '';
-	if(isset($_SESSION['client']['bezirke']) && !empty($_SESSION['client']['bezirke']))
-	{
-		foreach ($_SESSION['client']['bezirke'] as $i => $bezirk)
-		{
-			if(($bezirk['type'] != 7))
-			{
-				$bez .= '<option value="/?page=bezirk&bid='.$bezirk['id'].'&sub=forum">'.$bezirk['name'].'</option>';
-			}
-			else
-			{
-				$ag .= '<option value="/?page=bezirk&bid='.$bezirk['id'].'&sub=forum">'.$bezirk['name'].'</option>';
-			}
-		}
-	}
-	if(isset($_SESSION['client']['betriebe']) && !empty($_SESSION['client']['betriebe']))
-	{
-		$out .= '
-		<optgroup label="Deine Betriebe">';
-		foreach ($_SESSION['client']['betriebe'] as $cb)
-		{
-			$out .= '
-				<option value="/?page=fsbetrieb&id='.$cb['id'].'">'.$cb['name'].'</option>';
-		}
-		$out .= '
-		</optgroup>';
-	
-	}
-	
-	if(!empty($bez))
-	{
-		$out .= '
-		<optgroup label="Deine Bezirke">
-			'.$bez.'
-		</optgroup>';
-	}
-	if(!empty($ag))
-	{
-		$out .= '
-		<optgroup label="Deine Gruppen">
-			'.$ag.'
-		</optgroup>';
-	}
-	
-	if(isOrgateam())
-	{
-		$out .= '
-			<optgroup label="Orga">
-				<option value="/?page=region">Regionen verwalten</option>
-				<option value="/?page=newarea">Regionswünsche von Foodsavern</option>
-				<option value="/?page=foodsaver&bid=0">Alle Foodsaver</option>
-				<option value="/?page=betrieb&bid=0">Alle Betriebe</option>
-				<option value="/?page=email">E-Mail Verteiler</option>
-				<option value="/?page=kette">Unternehmens-Ketten</option>
-				<option value="/?page=faq">FAQ\'s verwalten</option>
-				<option value="/?page=document">Dokumente verwalten</option>
-				<option value="/?page=lebensmittel">Lebensmittel-Typen verwalten</option>
-				<option value="/?page=content">Inhalte/Texte bearbeiten</option>
-				<option value="/?page=mailbox&a=manage">Mailboxen</option>
-				<option value="/?page=message_tpl">E-Mail Vorlagen</option>
-			</optgroup>';
-	}
-	
-	$out .= '
-			<option value="logout">Logout</option>
-			</select>';
-	
-	return $out;
-}
-
 function getMenu()
 {
 	addJs('$("#top .menu").css("display","block");');
@@ -722,141 +614,128 @@ function getMenu()
 	
 	if(S::may())
 	{
-		
-		if(false)
+		global $db;
+
+		$out = array(
+			'default' => '',
+			'mobile' => ''
+		);
+
+		$bezirke = '
+				<li><a>Bezirke</a>
+					<ul class="jmenu-bezirke">';
+
+		$bezirke_mob = '
+				<optgroup label="Bezirke">';
+
+		$ags = '
+				<li><a href="/?page=groups"><i class="fa fa-group"></i> GRUPPEN-ÜBERSICHT</a></li>
+				<li class="break"><span></span></li>';
+
+		$ags_mob = '
+				<option value="/?page=groups">GRUPPEN-ÜBERSICHT</option>';
+
+		if(isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke']))
 		{
-			//return getMobileMenu();
-			return '';
-		}
-		else
-		{
-			
-			global $db;
-			//$bezirk = $db->getBezirk();
-			
-			$out = array(
-				'default' => '',
-				'mobile' => ''
-			);
-			
-			$bezirke = '
-					<li><a>Bezirke</a>
-						<ul class="jmenu-bezirke">';
-			
-			$bezirke_mob = '
-					<optgroup label="Bezirke">';
-			
-			$ags = '
-					<li><a href="/?page=groups"><i class="fa fa-group"></i> GRUPPEN-ÜBERSICHT</a></li>
-					<li class="break"><span></span></li>';
-			
-			$ags_mob = '
-					<option value="/?page=groups">GRUPPEN-ÜBERSICHT</option>';
-			
-			if(isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke']))
+			foreach ($_SESSION['client']['bezirke'] as $i => $bezirk)
 			{
-				foreach ($_SESSION['client']['bezirke'] as $i => $bezirk)
+				if(($bezirk['type'] != 7))
 				{
-					if(($bezirk['type'] != 7))
-					{
-						$bezirke_a = getBezirkMenu($bezirk);
-						
-						$bezirke .= $bezirke_a['default'];
-						$bezirke_mob .= $bezirke_a['mobile'];
-					}
-					else
-					{
-						$ags_a = getAgMenu($bezirk);
-						
-						$ags .= $ags_a['default'];
-						$ags_mob .= $ags_a['mobile'];
-					}
+					$bezirke_a = getBezirkMenu($bezirk);
+
+					$bezirke .= $bezirke_a['default'];
+					$bezirke_mob .= $bezirke_a['mobile'];
+				}
+				else
+				{
+					$ags_a = getAgMenu($bezirk);
+
+					$ags .= $ags_a['default'];
+					$ags_mob .= $ags_a['mobile'];
 				}
 			}
-			if(!empty($ags))
+		}
+		if(!empty($ags))
+		{
+			$ags = '<ul class="bigmenu">'.$ags.'</ul>';
+		}
+
+		$ags = '<li><a href="/?page=groups">Gruppen</a>'.$ags.'</li>';
+		$ags_mob = '
+				<optgroup label="Gruppen">
+					'.$ags_mob.'
+				</optgroup>';
+
+		$foodsaver_mob = '';
+
+		if(S::may('fs'))
+		{
+			if(S::may('bieb'))
 			{
-				$ags = '<ul class="bigmenu">'.$ags.'</ul>';
+
 			}
-			
-			$ags = '<li><a href="/?page=groups">Gruppen</a>'.$ags.'</li>';
-			$ags_mob = '
-					<optgroup label="Gruppen">
+
+			if(S::may('bot'))
+			{
+
+			}
+
+		}
+		$bezirke .= '
+			<li class="break"><span></span></li>
+			<li><a href="#" onclick="becomeBezirk();return false;"><i class="fa fa-plus-circle"></i> Bezirk beitreten</a></li>
+		</ul>
+	</li>';
+
+		$bezirke_mob .= '	
+	</optgroup>';
+
+		$orgamenu = getOrgaMenu();
+		$betriebe = getBetriebeMenu();
+		$settings = getSettingsMenu();
+
+		if(!S::may('fs'))
+		{
+			$bezirke = '';
+			$ags = '';
+		}
+
+		return array(
+			'default' => '
+					<ul id="mainMenu" class="jMenu">
+						<li><a href="/essenskoerbe/find">Essenskörbe</a></li>
+						'.$orgamenu['default'].'
+						<li><a href="/"><i class="fa fa-home"></i></a></li>
+						<li><a class="fNiv" href="/karte"><i class="fa fa-map-marker"></i></a></li>
+						<li><a><i class="fa fa-question-circle"></i></a>
+													<ul>
+															<li><a href="/?page=listFaq">F.A.Q.</a></li>
+															<li><a href="http://wiki.lebensmittelretten.de/">Wiki</a></li>
+													</ul>
+						</li>
+						'.$ags.'
+						'.$betriebe['default'].'
+						'.$bezirke.'
+						'.$settings['default'].'
+					</ul>',
+
+			'mobile' => '
+					<select id="mobilemenu">
+						<option class="famenu" value="dashboard" selected="selected">&#xf0c9;</option>
+						<option value="/">Home</option>
+						<option value="/?page=dashboard">Dashboard</option>
+						<option value="/karte">Karte</option>
+						<option value="/?page=listFaq">F.A.Q.</option>
+						<option value="http://wiki.lebensmittelretten.de">Wiki</option>
+						'.$settings['mobile'].'
 						'.$ags_mob.'
-					</optgroup>';
-
-			$foodsaver_mob = '';
-			
-			if(S::may('fs'))
-			{
-				if(S::may('bieb'))
-				{
-					
-				}
-				
-				if(S::may('bot'))
-				{
-					
-				}
-			
-			}
-			$bezirke .= '
-				<li class="break"><span></span></li>
-				<li><a href="#" onclick="becomeBezirk();return false;"><i class="fa fa-plus-circle"></i> Bezirk beitreten</a></li>
-			</ul>
-		</li>';
-			
-			$bezirke_mob .= '	
-		</optgroup>';
-			
-			$orgamenu = getOrgaMenu();
-			$betriebe = getBetriebeMenu();
-			$settings = getSettingsMenu();
-			
-			if(!S::may('fs'))
-			{
-				$bezirke = '';
-				$ags = '';
-			}
-			
-			return array(
-				'default' => '
-						<ul id="mainMenu" class="jMenu">
-							<li><a href="/essenskoerbe/find">Essenskörbe</a></li>
-							'.$orgamenu['default'].'
-							<li><a href="/"><i class="fa fa-home"></i></a></li>
-							<li><a class="fNiv" href="/karte"><i class="fa fa-map-marker"></i></a></li>
-							<li><a><i class="fa fa-question-circle"></i></a>
-                                                       	<ul>
-                                                                <li><a href="/?page=listFaq">F.A.Q.</a></li>
-                                                                <li><a href="http://wiki.lebensmittelretten.de/">Wiki</a></li>
-                                                        </ul>
-							</li>
-							'.$ags.'
-							'.$betriebe['default'].'
-							'.$bezirke.'
-							'.$settings['default'].'
-						</ul>',
-					
-				'mobile' => '
-						<select id="mobilemenu">
-							<option class="famenu" value="dashboard" selected="selected">&#xf0c9;</option>
-							<option value="/">Home</option>
-							<option value="/?page=dashboard">Dashboard</option>
-							<option value="/karte">Karte</option>
-							<option value="/?page=listFaq">F.A.Q.</option>
-							<option value="http://wiki.lebensmittelretten.de">Wiki</option>
-							'.$settings['mobile'].'
-							'.$ags_mob.'
-							'.$foodsaver_mob.'
-							'.$betriebe['mobile'].'
-							'.$bezirke_mob.'
-							
-							'.$orgamenu['mobile'].'
-						</select>'
-
-			);
-		}
-		
+						'.$foodsaver_mob.'
+						'.$betriebe['mobile'].'
+						'.$bezirke_mob.'
+						
+						'.$orgamenu['mobile'].'
+					</select>'
+		);
 	}
 	else
 	{
@@ -1097,20 +976,6 @@ function getBetriebeMenu()
 		'default' => $out,
 		'mobile' => $out_mob
 	);
-	/*
-	return '
-			<li class="jmenu-foodsaver"><a class="fNiv">Foodsaver</a>
-				<ul>
-					<li class="arrow"></li>
-					<li><a href="/?page=blog_entry">Blog</a></li>
-					<li><a href="/?page=fsbetrieb">Deine Betriebe</a></li>
-					<li><a href=".">Übersichts-Karte</a></li>
-					<li><a href="/?page=message&a=neu&list">Mailing-Liste</a></li>
-					<li><a href="/?page=listDocument">Dokumente</a></li>
-					<li class="menu-bottom"><a class="menu-bottom" href="/?page=listFaq">FAQs</a></li>
-				</ul>
-			</li>';
-			*/
 }
 
 function gAnrede($gender)
