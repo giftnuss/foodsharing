@@ -34,9 +34,6 @@ sql-file foodsharing migrations/27-profilchange.sql
 sql-file foodsharing migrations/27-verify.sql
 sql-file foodsharing tests/seed.sql
 
-echo "Running composer install"
-exec-in-container-asroot app composer install
-
 echo "Running tests"
 exec-in-container app vendor/bin/codecept run "$@"
 

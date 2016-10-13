@@ -1,6 +1,6 @@
 FROM registry.gitlab.com/foodsharing-dev/images:chat
 
-COPY . /app
+COPY . /app/chat
 
 WORKDIR /app/chat
 
