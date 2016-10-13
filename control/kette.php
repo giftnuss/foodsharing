@@ -72,12 +72,10 @@ else
 	addContent(v_field(v_menu(array(
 		array('href' => '/?page=kette&a=neu','name' => s('neu_kette'))
 	)),'Aktionen'),CNT_RIGHT);
-}					
+}
+
 function kette_form()
 {
-	global $db;
-	
-			
 	return v_quickform('kette',array(
 		
 		v_form_text('name'),
@@ -120,5 +118,4 @@ function handle_add()
 		}
 	}
 }
-				
 ?>
