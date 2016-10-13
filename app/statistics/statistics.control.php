@@ -35,26 +35,8 @@ class StatisticsControl extends Control
 		
 		addContent($this->view->getStatCities($stat_cities),CNT_LEFT);
 		addContent($this->view->getStatFoodsaver($stat_fs),CNT_RIGHT);
-		
-		
+
 		$this->setContentWidth(12,12);
-		/*
-		echo '<pre>';
-		print_r($stat_gesamt);
-		print_r($content);
-		die();
-		
-		$content = str_replace(
-				'{STAT_GESAMT}', 
-				$stat_gesamt, 
-				$content['body']
-		);
-		*/
-		//print_r($content);die();
-		
-		//addContent($content);
-		
-		
 	}
 	
 	private function getPercent($gesamt,$teil)
