@@ -2,6 +2,9 @@ class_name: ApiTester
 modules:
     enabled:
         - \Helper\Api
+        - \Helper\Foodsharing
+        - Sequence
+        - Db
         - REST:
               url: 'http://web:8080/'
               depends: PhpBrowser

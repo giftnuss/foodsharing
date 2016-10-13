@@ -16,3 +16,4 @@ modules:
         - Sequence
         - Db
         - \Helper\Acceptance
+        - \Helper\Foodsharing
