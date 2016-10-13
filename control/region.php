@@ -372,8 +372,6 @@ function handle_edit()
 	
 	if(submitted())
 	{
-		
-		$plz = str_replace("\r", '', $g_data['plz']);
 		$plz = explode("\n", $g_data['plz']);
 		
 		$g_data['plz'] = array();
@@ -391,7 +389,6 @@ function handle_edit()
 		{
 			$db->resortFoodsaver();
 			info(s('bezirk_edit_success'));
-			//goPage();
 		}
 		else
 		{
@@ -419,5 +416,4 @@ function handle_add()
 		}
 	}
 }
-				
 ?>
