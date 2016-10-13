@@ -243,52 +243,7 @@ class MailsControl extends ConsoleControl
 		return false;
 	}
 	
-	public static function handlePush($sd)
-	{
-		try {
-			$data = $sd->getData();
-			$count = 0;
-			if($data['gcm'] !== false)
-			{
-				info('to: '.implode(',',$data['gcm']));
-				$count += count($data['gcm']);
-				MailsControl::sendGcmNotification(
-					$data['gcm'],
-					array(
-						'title' => $data['title'],
-						'message' => $data['message'],
-						'd' => array(
-							'i' => $data['cid']
-						)
-					)
-				);
-			}
-			
-			if($data['ios'] !== false)
-			{
-				$count += count($data['ios']);
-				foreach ($data['ios'] as $id)
-				{
-					MailsControl::sendIosNotification(
-					$id,
-					array(
-					'title' => $data['title'],
-					'message' => $data['message']
-					),
-					array(
-					'i' => $data['cid']
-					)
-					);
-				}
-			}
-			
-			success($count.' push messages send!');
-		} catch (Exception $e) {
-			error('push not send...');
-		}
-		
-	}
-	
+
 	public static function handleEmail($data)
 	{
 		info('mail arrived ...: ' . $data['from'][0] . '@' . $data['from'][1]);
@@ -496,25 +451,5 @@ class MailsControl extends ConsoleControl
 		curl_close($ch);
 	
 		return $response;
-	}
-	
-	public static function sendIosNotification($deviceToken, $messageData, $data)
-	{
-	
-		// set enovirnment and cretificate path
-		$push = new PushNotification('production','/var/www/lmr-prod/ck.pem');
-		// set device token
-		$push->setDeviceToken($deviceToken);
-		// Set pass phrase if any
-		$push->setPassPhrase('FcY9Rkvk');
-		// Set badge
-		$push->setBadge(1);
-		// Set message body
-		$push->setMessageBody($messageData['title']);
-	
-		$push->setData($data);
-	
-		$push->sendNotification();
-	
 	}
 }
