@@ -69,3 +69,9 @@ $I->fillField('password', $password);
 $I->click('#loginbar input[type=submit]');
 $I->waitForPageBody();
 $I->see('Willkommen '.$first_name.'!');
+
+$I->seeInDatabase('fs_foodsaver', [
+	'email' => $email,
+	'name' => $first_name,
+	'nachname' => $last_name
+]);
