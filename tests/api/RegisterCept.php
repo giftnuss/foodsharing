@@ -1,7 +1,7 @@
 <?php
 $I = new ApiTester($scenario);
 
-$I->wantTo('login');
+$I->wantTo('Register a new user');
 
 $email = sq('email').'@test.com';
 $first_name = sq('first_name');

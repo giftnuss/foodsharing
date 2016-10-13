@@ -1,7 +1,7 @@
 <?php
 $I = new ApiTester($scenario);
 
-$I->wantTo('login');
+$I->wantTo('Login as an existing user');
 
 $pass = sq('pass');
 $foodsaver = $I->createFoodsaver($pass);
