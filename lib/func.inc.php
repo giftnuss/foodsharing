@@ -1423,8 +1423,7 @@ function getAgMenu($ag)
 	if(isBotFor($ag['id']))
 	{
 		$out .= '
-			<li><a href="/?page=groups&sub=edit&id='.(int)$ag['id'].'">Gruppe/Mitglieder verwalten</a></li>
-			<li><a href="/?page=message&a=neu&list&bid='.$ag['id'].'">Mailing-Liste</a></li>';
+			<li><a href="/?page=groups&sub=edit&id='.(int)$ag['id'].'">Gruppe/Mitglieder verwalten</a></li>';
 	}
 	
 	$out .= '
@@ -1458,7 +1457,6 @@ function getBezirkMenu($bezirk)
 	{	
 		$out .= '
 			<li><a href="/?page=foodsaver&bid='.$bezirk['id'].'">Foodsaver</a></li>
-			<li><a href="/?page=message&a=neu&list&bid='.$bezirk['id'].'">Mailing-Liste</a></li>
 			<li class="menu-bottom"><a class="menu-bottom" href="/?page=passgen&bid='.$bezirk['id'].'">Ausweise / Verifizierungen</a></li>';
 	}
 	
