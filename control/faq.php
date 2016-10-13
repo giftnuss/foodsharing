@@ -1,5 +1,4 @@
 <?php
-
 if(getAction('neu'))
 {
 	handle_add();
@@ -24,7 +23,6 @@ elseif($id = getActionId('delete'))
 elseif($id = getActionId('edit'))
 {
 	handle_edit();
-	
 	addBread(s('bread_faq'),'/?page=faq');
 	addBread(s('bread_edit_faq'));
 	
@@ -142,5 +140,4 @@ function handle_add()
 		}
 	}
 }
-				
 ?>

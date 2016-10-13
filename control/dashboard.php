@@ -1,7 +1,4 @@
 <?php
-
-//debug($_SESSION);
-
 if(S::may())
 {
 	$db =loadModel('content');
@@ -75,8 +72,6 @@ if(S::may())
 		{
 			$cnt['body'] = $cnt['body'].'<p><a href="#" onclick="ajreq(\'quizpopup\',{app:\'quiz\'});return false;">Weiter zum Quiz</a></p><p><a href="#"onclick="$(this).parent().parent().hide();ajax.req(\'quiz\',\'hideinfo\');return false;"><i class="fa fa-check-square-o"></i> Hinweis gelesen und nicht mehr anzeigen</a></p>';
 		}
-			
-			
 		addContent(v_info($cnt['body'],$cnt['title']));
 	}
 }
@@ -90,269 +85,120 @@ else if(S::may('fs'))
 	addBread('Dashboard');
 	addTitle('Dashboard');
 	$bid = getBezirkId();
-	
-	//if($bid == 0)
-	if($bid == 0 && false)
-	{
-		$id = id('bezCho');
-		$swap_msg = 'Welche Gegend soll neu angelegt werden ? ...';
-		$swap = v_swapText($id.'-neu',$swap_msg);
-		$swap = str_replace("'", "\\'", $swap);
-	
-		addJs('
-	
-		$.fancybox(\'<div class="popbox"><h3>Willkommen, bitte Wähle die Region aus, in der Du aktiv werden möchtest!</h3><p class="subtitle">Deine Region sollte nicht weiter als 10km von Deinem Lebensraum entfernt sein. Es besteht auch die Möglichkeit, eine/n neue/n Region/Bezirk zu gründen, sollte es in Deinen Lebensräumen noch keine Region geben.</p><p>Es muss nicht Deine Meldeadresse, sondern sollte Deine aktuelle Wohnandresse sein.</p><div style="height:260px;">'.v_bezirkChildChooser($id).'<span id="'.$id.'-btna">Meine Region ist nicht dabei</span><div class="middle" id="'.$id.'-notAvail"><h3>Dein/e Stadt / Region / Bezirk ist nicht dabei?</h3>'.$swap.'</div></div><p class="bottom"><span id="'.$id.'-button">Speichern</span></p></div>\',{
-			minWidth : 390,
-			maxWidth : 400,
-			closeClick:false,
-			closeBtn:false,
-			helpers:{
-				overlay : {
-					closeClick : false
-				}
-			}
-		});
-	
-		$("#'.$id.'-notAvail").hide();
-	
-		$("#'.$id.'-btna").button().click(function(){
-		
-			$("#'.$id.'-btna").fadeOut(200,function(){
-				$("#'.$id.'-notAvail").fadeIn();
-			});
-		});
-	
-		$("#'.$id.'-button").button().click(function(){
-			if(parseInt($("#'.$id.'").val()) > 0)
-			{
-				showLoader();
-				neu = "";
-				if($("#'.$id.'-neu").val() != "'.$swap_msg.'")
-				{
-					neu = $("#'.$id.'-neu").val();
-				}
-				$.ajax({
-					dataType:"json",
-					url:"xhr.php?f=myRegion",
-					data: "b=" + $("#'.$id.'").val() + "&new=" + neu,
-					success : function(data){
-						if(data.status == 1)
-						{
-							reload();
-						}
-						else
-						{
-							pulseError(data.msg);
-						}
-					},
-					complete:function(){
-						hideLoader();
-					}
-				});
-			}
-			else
-			{
-				pulseError(\'<p><strong>Du musst eine Auswahl treffen</strong></p><p>Gibt es deine Stadt, deinen Bezirk oder deine Region noch nicht, dann treffe die passende übergeordnete Auswahl</p><p>Also für Köln-Ehrenfeld z.B. Köln</p><p>Und schreibe die Region die neu angelegt werden soll in das Feld unten.</p>\');
-			}
-		});');
-	}
-	elseif(false /*$new = $db->getVal('new_bezirk','foodsaver',fsId())*/)
-	{
-	
-		$fs = $db->getOne_foodsaver(fsId());
-		$anrede = genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r');
-	
-		$parent_bezirk = $db->getBezirk($fs['bezirk_id']);
-	
-		$msg = '';
-	
-		if($botschafter = $db->getBotschafter($fs['bezirk_id']))
-		{
-			if(count($botschafter) == 1)
-			{
-				$botschafter = $botschafter[0];
-				$msg = $botschafter['name']. ' der Botschafter aus '.$parent_bezirk['name'].' hält euch auf dem laufenden, bei Fragen wende Dich an ihn. <p><a class="button" href="#" onclick="chat('.$botschafter['id'].');">'.$botschafter['name'].' eine Nachricht schreiben</a></p>';
-			}
-			else
-			{
-				$msg .= '';
-				$anz = count($botschafter);
-				$i=0;
-				$mails = array();
-				foreach ($botschafter as $b)
-				{
-					$mails[] = '<p><a class="button" href="#" onclick="chat('.$b['id'].');">'.$b['name'].' eine Nachricht schreiben</a></p>';
-					
-					$i++;
-					if($i== $anz)
-					{
-						$msg .= $b['name'].' ';
-					}
-					elseif ($i==($anz-1))
-					{
-						$msg .= $b['name'].' und ';
-					}
-					else
-					{
-						$msg .= $b['name'].', ';
-					}
-				}
-				$msg .= ' die Botschafter aus '.$parent_bezirk['name'].' halten euch auf dem laufenden, bei Fragen wendet euch an Sie. '.implode('', $mails).'';
-			}
-		}
-		else
-		{
-			$msg = 'Jemand aus dem Bundesweiten Orgateam wird sich bei Dir melden, bei Fragen wende Dich an info@foodsharing.de';
-		}
-	
-		addJs('
-		$.fancybox(\'<div class="popbox"><h3>'.$anrede.' '.$fs['name'].'</h3><p class="subtitle">Bald könnt ihr auch in '.strip_tags($new).' loslegen.</p><p>Ihr braucht mindestens 5 Leute die mitmachen wollen und einen der die Botschafter-Rolle übernimmt.</p><p>'.$msg.'</p>\',{
-				minWidth : 370,
-				closeClick:false,
-				closeBtn:true,
-				helpers:{
-					overlay : {
-						closeClick : false
-					}
-				}
-		});
-				$(".button").button();
-			');
-	}
-	elseif (false && empty($_SESSION['client']['photo']))
-	{
-		addJs('
-		$.fancybox(\'<div class="popbox"><h3>Foto</h3><p class="subtitle">Du hast noch kein Foto hochgeladen</p><p>Wir entschuldigen uns falls Du Dein Foto schon per E-Mail gesendet hast und bitten Dich dennoch es noch einmal direkt hier in der Plattform hochzuladen</p><p>Das erspart uns sehr viel Arbeit, <br />vielen Lieben Dank!</p><p><a href="/?page=settings&pinit" class="button">Jetzt Foto hochladen</a></p>\',{
-				minWidth : 370,
-				closeClick:false,
-				closeBtn:false,
-				helpers:{
-					overlay : {
-						closeClick : false
-					}
-				}
-		});
-		
-		$(".button").button();
-			');
-	}
+
 	else
 	{
-		$val = $db->getValues(array('photo_public','bundesland_id','anschrift','plz','lat','lon','stadt'), 'foodsaver', fsId());
-		
-		if(empty($val['lat']) || empty($val['lon']) ||
-				
-		($val['lat']) == '50.05478727164819' && $val['lon'] == '10.3271484375')
-		{
-			info('Bitte überprüfe Deine Adresse, die Koordinaten konnten nicht ermittelt werden.');
-			go('/?page=settings&sub=general&');
-		}
-		
-		global $g_data;
-		$g_data = $val;
-		$elements = array();
-	
-		if($val['photo_public'] == 0)
-		{
-			$g_data['photo_public'] = 1;
-			$elements[] = v_form_radio('photo_public',array('desc'=>'Du solltest zumindest intern den Menschen in Deiner Umgebung ermöglichen Dich zu kontaktieren. So kannst Du von anderen Foodsavern eingeladen werden, Lebensmittel zu retten und ihr Euch einander kennen lernen.','values' => array(
-					array('name' => 'Ja ich bin einverstanden, dass mein Name und mein Foto veröffentlicht werden','id' => 1),
-					array('name' => 'Bitte nur meinen Namen veröffentlichen','id' => 2),
-					array('name' => 'Meinen Daten nur intern anzeigen','id' => 3),
-					array('name' => 'Meine Daten niemandem zeigen','id' => 4)
-			)));
-		}
-	
-		if(empty($val['lat']) || empty($val['lon']))
-		{
-			addJs('
-		$("#plz, #stadt, #anschrift, #hsnr").bind("blur",function(){
-			if($("#plz").val() != "" && $("#stadt").val() != "" && $("#anschrift").val() != "")
-			{
-				u_loadCoords({
-					plz: $("#plz").val(),
-					stadt: $("#stadt").val(),
-					anschrift: $("#anschrift").val(),
-					complete: function()
-					{
-						hideLoader();
-					}
-				},function(lat,lon){
-					$("#lat").val(lat);
-					$("#lon").val(lon);
-				});
-			}
-		});
-	
-		$("#lat-wrapper").hide();
-		$("#lon-wrapper").hide();
-	');
-			$elements[] = v_form_text('anschrift');
-			$elements[] = v_form_text('plz');
-			$elements[] = v_form_text('stadt');
-			//$elements[] = v_form_select('bundesland_id',array('values'=>$db->getBasics_bundesland()));
-			$elements[] = v_form_text('lat');
-			$elements[] = v_form_text('lon');
-		}
-	
-		if(!empty($elements))
-		{
-	
-			$out = v_form('grabInfo', $elements,array('submit'=>'Speichern'));
-	
-	
-			addJs('
-		$("#grab-info-link").fancybox({
-			closeClick:false,
-			closeBtn:true,
-		});
-		$("#grab-info-link").trigger("click");
-		
-		$("#grabinfo-form").submit(function(e){
-			e.preventDefault();
-			check = true;
-	
-			if($("input[name=\'photo_public\']:checked").val()==4)
-			{
-				$("input[name=\'photo_public\']")[0].focus();
-				check = false;
-				if(confirm("Sicher das Du Deine Daten nicht anzeigen lassen möchstest? So kann Dich kein Foodsaver finden"))
-				{
-					check = true;
-				}
-			}
-			if(check)
-			{
-				showLoader();
-				$.ajax({
-					url:"xhr.php?f=grabInfo",
-					data: $("#grabinfo-form").serialize(),
-					dataType: "json",
-					complete:function(){hideLoader();},
-					success: function(){
-						pulseInfo("Danke Dir!");
-						$.fancybox.close();
-					}
-				});
-			}
-		});
-		
-		');
-	
-			addHidden('
-			<div id="grab-info">
-				<div class="popbox">
-					<h3>Bitte noch ein paar Daten vervollständigen bzw. überprüfen</h3>
-					<p class="subtitle">Damit Dein Profil voll funktionsfähig ist benötigen Wir noch folgende Angaben von Dir. Herzigen Dank!</p>
-					'.$out.'
-				</div>
-			</div><a id="grab-info-link" href="#grab-info">&nbsp;</a>');
-		}
-	
-	
-	
+	$val = $db->getValues(array('photo_public','bundesland_id','anschrift','plz','lat','lon','stadt'), 'foodsaver', fsId());
+
+	if(empty($val['lat']) || empty($val['lon']) ||
+
+	($val['lat']) == '50.05478727164819' && $val['lon'] == '10.3271484375')
+	{
+		info('Bitte überprüfe Deine Adresse, die Koordinaten konnten nicht ermittelt werden.');
+		go('/?page=settings&sub=general&');
 	}
+
+	global $g_data;
+	$g_data = $val;
+	$elements = array();
+
+	if($val['photo_public'] == 0)
+	{
+		$g_data['photo_public'] = 1;
+		$elements[] = v_form_radio('photo_public',array('desc'=>'Du solltest zumindest intern den Menschen in Deiner Umgebung ermöglichen Dich zu kontaktieren. So kannst Du von anderen Foodsavern eingeladen werden, Lebensmittel zu retten und ihr Euch einander kennen lernen.','values' => array(
+				array('name' => 'Ja ich bin einverstanden, dass mein Name und mein Foto veröffentlicht werden','id' => 1),
+				array('name' => 'Bitte nur meinen Namen veröffentlichen','id' => 2),
+				array('name' => 'Meinen Daten nur intern anzeigen','id' => 3),
+				array('name' => 'Meine Daten niemandem zeigen','id' => 4)
+		)));
+	}
+
+	if(empty($val['lat']) || empty($val['lon']))
+	{
+		addJs('
+	$("#plz, #stadt, #anschrift, #hsnr").bind("blur",function(){
+		if($("#plz").val() != "" && $("#stadt").val() != "" && $("#anschrift").val() != "")
+		{
+			u_loadCoords({
+				plz: $("#plz").val(),
+				stadt: $("#stadt").val(),
+				anschrift: $("#anschrift").val(),
+				complete: function()
+				{
+					hideLoader();
+				}
+			},function(lat,lon){
+				$("#lat").val(lat);
+				$("#lon").val(lon);
+			});
+		}
+	});
+
+	$("#lat-wrapper").hide();
+	$("#lon-wrapper").hide();
+');
+		$elements[] = v_form_text('anschrift');
+		$elements[] = v_form_text('plz');
+		$elements[] = v_form_text('stadt');
+		//$elements[] = v_form_select('bundesland_id',array('values'=>$db->getBasics_bundesland()));
+		$elements[] = v_form_text('lat');
+		$elements[] = v_form_text('lon');
+	}
+
+	if(!empty($elements))
+	{
+
+		$out = v_form('grabInfo', $elements,array('submit'=>'Speichern'));
+
+
+		addJs('
+	$("#grab-info-link").fancybox({
+		closeClick:false,
+		closeBtn:true,
+	});
+	$("#grab-info-link").trigger("click");
 	
+	$("#grabinfo-form").submit(function(e){
+		e.preventDefault();
+		check = true;
+
+		if($("input[name=\'photo_public\']:checked").val()==4)
+		{
+			$("input[name=\'photo_public\']")[0].focus();
+			check = false;
+			if(confirm("Sicher das Du Deine Daten nicht anzeigen lassen möchstest? So kann Dich kein Foodsaver finden"))
+			{
+				check = true;
+			}
+		}
+		if(check)
+		{
+			showLoader();
+			$.ajax({
+				url:"xhr.php?f=grabInfo",
+				data: $("#grabinfo-form").serialize(),
+				dataType: "json",
+				complete:function(){hideLoader();},
+				success: function(){
+					pulseInfo("Danke Dir!");
+					$.fancybox.close();
+				}
+			});
+		}
+	});
+	
+	');
+
+		addHidden('
+		<div id="grab-info">
+			<div class="popbox">
+				<h3>Bitte noch ein paar Daten vervollständigen bzw. überprüfen</h3>
+				<p class="subtitle">Damit Dein Profil voll funktionsfähig ist benötigen Wir noch folgende Angaben von Dir. Herzigen Dank!</p>
+				'.$out.'
+			</div>
+		</div><a id="grab-info-link" href="#grab-info">&nbsp;</a>');
+	}
+
 	// quiz popup
 	//addJs('ajreq("quizpopup",{app:"quiz",loader:false});');
 	
