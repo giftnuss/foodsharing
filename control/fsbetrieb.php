@@ -176,11 +176,6 @@ else if(isset($_GET['id']))
 			});	
 			');
 			
-			/*
-			$edit_team = '<div class="ui-padding-left ui-padding-right ui-padding-bottom">'.v_accordion(array(
-				array('name'=>'Team bearbeiten','cnt'=>$edit_team)
-			)).'</div>';
-			*/
 			addJsFunc('
 				function u_fetchconfirm(fsid,date,el)
 				{
@@ -388,7 +383,6 @@ else if(isset($_GET['id']))
 	');
 
 		/*Infos*/
-
 		$betrieb['menge'] = '';
 		if($menge = abhm($betrieb['abholmenge']))
 		{
@@ -585,10 +579,8 @@ else if(isset($_GET['id']))
 		{
 			//If Bieb did not set the option "how many weeks in advance can a foodsaver apply" an alternative value
 			$days = 7;
-
 		}
 
-		
 		addJs('
 		
 		$("#signout_shure").dialog({
@@ -801,28 +793,6 @@ else if(isset($_GET['id']))
 			
 			$zeit_cnt .= v_scroller($scroller,200);
 			
-			/*
-			foreach ($zeiten as $dow => $z)
-			{
-				$values = false;
-					
-				//array()
-				if($betrieb['verantwortlich'])
-				{
-					$zeit_cnt .= v_form_tagselect('dow'.$dow,array('data'=>$betrieb['team'],'url'=>'jsonTeam&bid='.(int)$betrieb['id'],'label'=> $days[$dow].'s, '.format_time($z)));
-				}
-				else
-				{
-					addJs('$("#dow6-wrapper").next().hide();');
-					$zeit_cnt .= v_form_checkboxTagAlt('dow'.$dow,array('data'=>$betrieb['team'],'url'=>'jsonTeam&bid='.(int)$betrieb['id'],'label'=> $days[$dow].'s, '.format_time($z)));
-				}
-			}*/
-		
-			//$zeit_cnt = v_form('zeiten',array($zeit_cnt),array('submit'=>s('save'),'buttons'=>array($zeiten_button)));
-			
-			
-			
-		
 		if($betrieb['verantwortlich'] && empty($next_dates))
 		{
 		
@@ -837,9 +807,7 @@ else if(isset($_GET['id']))
 		{
 			hiddenDialog('abholen', array(u_form_abhol_table($zeiten),v_form_hidden('bid', 0),'<input type="hidden" name="team" value="'.$betrieb['team_js'].'" />'),s('add_fetchtime'),array('reload'=>true,'width'=>500));
 		}
-		//hiddenDialog('abholer', array(v_form_hidden('bbdow', 0),v_form_hidden('bbid', 0),v_form_desc('abholerdesc', ''),v_form_select_foodsaver(array('nolabel'=>true))),'Abholer auswählen',array('reload' => true));
-		
-		
+
 		if(!$betrieb['jumper'])
 		{
 			if(($betrieb['betrieb_status_id'] == 3 || $betrieb['betrieb_status_id'] == 5))
@@ -874,11 +842,7 @@ else if(isset($_GET['id']))
 				}
 				addContent(v_field('<p>'.v_getStatusAmpel($betrieb['betrieb_status_id']).$betriebsStatusName.'</p>'.$bt,s('status'),array('class'=>'ui-padding')),CNT_RIGHT);
 			}
-			
-		}	
-
-		
-		
+		}
 	}
 	else
 	{
@@ -892,21 +856,16 @@ else if(isset($_GET['id']))
 		{
 			go('/karte');
 		}
-		
-		//addStyle('div.map {height: 400px;width: 980px;}');
-		//addContent(v_clustermap('foodsaver',array('center'=>$betrieb)));
 	}
 }
 else
 {
 	addBread('Deine Betriebe');
-	
 	addContent(v_menu(array(
 			array('href' => '/?page=betrieb&a=new','name' => s('add_new'))
 	),'Aktionen'),CNT_RIGHT);
 	
 	$bezirk = getBezirk();
-	
 	$betriebe = $db->getMyBetriebe();
 	addContent(u_betriebList($betriebe['verantwortlich'],s('you_responsible'),true));
 	addContent(u_betriebList($betriebe['team'],s('you_fetcher'),false));
@@ -928,21 +887,6 @@ function u_getVerantwortlicher($betrieb)
 
 function handleRequests($betrieb)
 {
-	/*
-	 * <table class="pintable">
-					<tbody><tr class="even">
-						<td class="img"><img src="images/mini_q_7aaad3eca0b5ed0484a509588878618d.jpg"></td>
-						<td><span class="msg">dlkjfh djöosdj fs</span><span class="time">28.08.2013 12:29 Uhr</span></td>
-					</tr>
-					<tr class="odd">
-						<td class="img"><img src="images/mini_q_3bb6c18170002870ae99f0ace537ce61.jpg"></td>
-						<td><span class="msg">dffg</span><span class="time">28.08.2013 12:34 Uhr</span></td>
-					</tr>
-					<tr class="even">
-						<td class="img"><img src="images/mini_q_7aaad3eca0b5ed0484a509588878618d.jpg"></td>
-						<td><span class="msg">sdgfggs</span><span class="time">28.08.2013 14:35 Uhr</span></td>
-					</tr></tbody></table>
-	 */
 	$out = '<table class="pintable">';
 	$odd = 'odd';
 	addJs('$("table.pintable tr td ul li").tooltip();');
@@ -1036,12 +980,9 @@ function u_innerRow($id,$betrieb)
 
 function u_team($betrieb)
 {
-	global $db;
 	$id = id('team');
 	$out = '<ul id="'.$id.'" class="team">';
 	$jssaver = array();
-	$first_n = true;
-	
 	$sleeper = '';
 	
 	foreach ($betrieb['foodsaver'] as $fs)
@@ -1053,7 +994,6 @@ function u_team($betrieb)
 		if($fs['verantwortlich'] == 1)
 		{
 			$class .= ' verantwortlich';
-			
 		}
 		elseif ($betrieb['verantwortlich'] || isBotFor($betrieb['bezirk_id']) || isOrgaTeam())
 		{
@@ -1066,8 +1006,6 @@ function u_team($betrieb)
 			$class .= ' notVerified';
 		}
 
-		$ampel = 'ampel-gruen';
-		
 		$tel = '';
 		$number = false;
 		if(!empty($fs['handy']))
@@ -1080,14 +1018,7 @@ function u_team($betrieb)
 			$tel .= '<span class="item phone">'.((isMob()) ? '<a href="tel:'.$fs['telefon'].'"><span>'.$fs['telefon'].'</span></a>' : $fs['telefon']).'</span>';
 		}
 		
-		$since = '';
-		if((int)$fs['add_date'] > 0)
-		{
-			$since = 'ist im Team seit '.date('j.n.Y', $fs['add_date']);
-		}
-		
-		$last = '';
-		if((int)$fs['last_fetch'] > 0) 
+		if((int)$fs['last_fetch'] > 0)
 		{
 			$last = sv('stat_fetchcount', array(
 				'date' =>  date('d.m.Y', $fs['last_fetch'])
@@ -1133,15 +1064,10 @@ function u_team($betrieb)
 	
 	if($betrieb['springer'])
 	{
-		//$out .= '<li class="breaker"><span>&nbsp;</span></li><li class="breakline"><span>&nbsp;</span></li>';
 		foreach ($betrieb['springer'] as $fs)
 		{
 			$jssaver[] = (int)$fs['id'];
-			
-			$title = $fs['vorname'].' *Springer* ';
-			$ampel = 'ampel-grau';
-			
-			
+
 			$class = '';
 			$click = 'profile('.(int)$fs['id'].');';
 			if ($betrieb['verantwortlich'] || isBotFor($betrieb['bezirk_id']) || isOrgaTeam())
@@ -1195,8 +1121,6 @@ function u_team($betrieb)
 	}
 	
 	$out .= $sleeper . '</ul><div style="clear:both"></div>';
-	
-	
 	
 	addJsFunc('
 		function u_contextAction(action,fsid)
@@ -1409,7 +1333,6 @@ function betrieb_form()
 	$foodsaver_values = $db->getBasics_foodsaver();
 
 	return v_quickform('betrieb',array(
-	
 			v_form_text('name'),
 			v_form_text('plz'),
 			v_form_text('str'),
@@ -1469,8 +1392,6 @@ function u_getNextDates($fetch_dow,$betrieb)
 		$cur_month = date('m',$start_days[0]['ts']);
 		$i=0;
 		
-		//$date = new DateTime(date('Y-m-d',$start_days[0]['ts']).' '.$start_days[0]['time'], new DateTimeZone('Europe/Berlin'));
-		//$last_day = $date->add(new DateInterval('P60D'));
 		while($i<=35)
 		{
 			foreach ($start_days as $sd)
@@ -1700,7 +1621,6 @@ function u_form_checkboxTagAlt($date,$option=array())
 			
 			if(!$ago && $option['verantwortlich'] && $fs['confirmed'] == 0)
 			{
-				//$click = 'u_fetchconfirm('.(int)$fs['id'].',\''.$date.'\',this);return false;';
 				$aclass = 'context-unconfirmed';
 				$click = '';
 			}
@@ -1916,6 +1836,5 @@ function u_form_abhol_table($zeiten = false,$option = array())
 			    </tr>
 				</tbody>
 			</table>';
-	
 	return $out;
 }
