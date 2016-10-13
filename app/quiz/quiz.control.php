@@ -1,7 +1,6 @@
 <?php
 class QuizControl extends Control
 {	
-
 	public function __construct()
 	{
 		
@@ -164,22 +163,6 @@ class QuizControl extends Control
 			$slogan = 'Klausurfragen für '.$quiz['name'];
 			
 			addContent($this->view->topbar('Auswertung für '.$quiz['name'].' Quiz', $slogan, 'img/quiz.png'),CNT_TOP);
-		}
-	}
-	
-	public function failover()
-	{
-		if(S::may('orga'))
-		{
-			if($bots = $this->model->listFailoverBots())
-			{
-				addContent(v_info('Folgende Botschafter haben ihr Quiz noch nicht gemacht'));
-				addContent($this->view->failoverList($bots));
-			}
-			else
-			{
-				addContent(v_info('Alle Botschafter haben ihre Quizze bestanden.'));
-			}
 		}
 	}
 	

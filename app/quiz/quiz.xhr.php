@@ -301,7 +301,6 @@ class QuizXhr extends Control
 	
 	private function replaceDoubles($questions)
 	{
-		//print_r($questions);
 		return $questions;
 	}
 	
@@ -340,10 +339,7 @@ class QuizXhr extends Control
 			$dia->setTitle('Quiz fortführen');
 			
 			$dia->addContent( '<h1>Du hast Dein Quiz nicht beendet</h1><p>Aber keine Sorge Du kannst einfach jetzt das Quiz zum Ende bringen.</p><p>Also viel Spaß beim weiterquizzen.</p>');
-			
-			//$dia->addButton('Quiz Abbrechen', 'if(confirm(\'Möchtest Du das laufende Quiz wirklich beenden? Leider müssten wir das als Fehlversuch bewerten.\')){ajreq(\'abort\',{app:\'quiz\',sid:'.(int)$session['id'].'});}');
 			$dia->addButton('Quiz fortführen', 'ajreq(\'next\',{app:\'quiz\'});');
-			
 			$return = $dia->xhrout();
 			
 			$return['script'] .= $this->abortOrOpenDialog($session['id']);
@@ -392,14 +388,11 @@ class QuizXhr extends Control
 				S::set('quiz-questions', $questions);
 				S::set('quiz-index', 0);
 				
-				
-				
 				/*
 				 * Make a litte output for the user that he/she cat just start the quiz now
 				 */
 				$dia = new XhrDialog();
 				$dia->addOpt('width', 600);
-				//$dia->addOpt('height', 480);
 				$dia->setTitle($quiz['name'].'-Quiz');
 				$dia->addContent($this->view->initQuiz($quiz,$content));
 				$dia->addAbortButton();
@@ -426,14 +419,11 @@ class QuizXhr extends Control
 	public function endpopup()
 	{
 		$dia = new XhrDialog();
-		
-		
-		
-			
+
 		$dia->addOpt('width', 720);
-			
+
 		$content_id = 36;
-			
+
 		$dia->addAbortButton();
 		
 		if(S::get('hastodoquiz-id') == 1)
@@ -464,14 +454,8 @@ class QuizXhr extends Control
 			if($count == 0)
 			{
 				$dia = new XhrDialog();
-				
-				
-				
-					
 				$dia->addOpt('width', 720);
-					
 				$content_id = 18;
-					
 				$dia->addAbortButton();
 				
 				if(S::get('hastodoquiz-id') == 1)
@@ -672,9 +656,6 @@ class QuizXhr extends Control
 						/*
 						 * let's prepare the output dialog
 						 */
-						
-						//$dia->noClose();
-						//$dia->addOpt('beforeClose', 'function(ev){abortOrPause();return false;}',false);
 						$dia->addOpt('width', 1000);
 						$dia->addOpt('height', '($(window).height()-40)',false);
 						$dia->addOpt('position', 'center');
@@ -684,18 +665,6 @@ class QuizXhr extends Control
 						
 						$dia->addContent($this->view->quizQuestion($question,$answers));
 						$dia->addContent($this->view->quizComment());
-						
-						/*
-						 * show the pause button only if there are more questions
-						 */
-						/*
-						if($i < count($quiz))
-						{
-							$dia->addButton('Abschicken & Pause', 'breaknext();');
-						}
-						*/
-						// add comment button
-						//$dia->addButton('Kommentar abgeben & Weiter', 'questcomment(this);');
 						
 						/*
 						 * for later function is not ready yet :)
@@ -708,8 +677,7 @@ class QuizXhr extends Control
 						/*
 						 * add next() Button
 						 */
-						//$dia->addButton('Abssenden & Weiter', 'questionnext();');
-						
+
 						$dia->addOpt('open','
 						function(){
 							setTimeout(function(){
@@ -743,21 +711,16 @@ class QuizXhr extends Control
 							$(\'#quizwrapper\').show();
 							$(\'#quizbreath\').hide();
 							var count = '.(int)$question['duration'].';
-
 							var counter = null;
-		
 						';
 						
 						if($easymode == 0)
 						{
-							
 							$quizbreath = '
-				
 							$(\'#quizwrapper\').hide();
 							$(\'#quizbreath\').show();
 							$("#'.$dia->getId().'").next(".ui-dialog-buttonpane").css("visibility","hidden");
 							var count = '.(int)$question['duration'].';
-
 							var counter = null;
 									
 							function timer()
@@ -811,7 +774,6 @@ class QuizXhr extends Control
 								{
 									clearInterval(counter);
 									$(".ui-dialog-buttonpane button:contains(\'Kommentar\')").hide();
-									//$("#quizwrapper").hide();
 									$("#quizwrapper input, #countdown").hide();
 									$("#quizwrapper").css({
 										"height":"50%",
@@ -839,7 +801,6 @@ class QuizXhr extends Control
 							{
 								if($(\'#qanswers input:checked\').length > 0)
 								{
-									//ajreq(\'pause\',{app:\'quiz\'});
 									questgonext("pause");
 								}
 								else
@@ -868,7 +829,6 @@ class QuizXhr extends Control
 								}
 								if(nowait || $(\'#qanswers input:checked\').length > 0)
 								{
-									//ajreq(\'pause\',{app:\'quiz\'});
 									questgonext("result");
 								}
 								else
@@ -944,27 +904,6 @@ class QuizXhr extends Control
 							
 							
 						' . $quizbreath;
-						/*
-						if(!S::get('quiz-easymode'))
-						{
-							$return['script'] .= '
-							
-							
-							function timer()
-							{
-							  count--;
-					          $("#countdown").progressbar("value",count);
-							  //$("#countdown").text((count)+"");
-							  if (count <= 0)
-							  {
-							     questcheckresult(true);
-							     return;
-							  }
-							}
-									';
-						}
-						*/
-						
 						return $return;
 					}
 					else
@@ -1037,8 +976,6 @@ class QuizXhr extends Control
 					'script' => 'goTo("/?page=settings&sub=quizsession&sid='.(int)S::get('quiz-session').'");'
 				);
 				
-				//$this->model->updateQuizSession(S::get('quiz-id'), $questions, $explains, $fp, $quiz['maxfp']);
-				
 				$dia = new XhrDialog();
 				$dia->setTitle('Ergebnis');
 				
@@ -1084,149 +1021,11 @@ class QuizXhr extends Control
 			}
 		}
 	}
-	
-	private function result($question)
-	{
-		$answers = array();
-		$joke = false;
-		
-		//if()
-		
-		foreach ($question['answers'] as $a)
-		{
-			$answers[$a] = $a;
-		}
-		// get the question
-		if($quest = $this->model->getQuestion($question['id']))
-		{		
-					// get possible answers			
-			if($answers = $this->model->getAnswers($question['id']))
-			{
-				/*
-				print_r($question);
-				print_r($answers);
-				die();
-				*/
-				$joke = false;
-				if($question['fp'] == 0)
-				{
-					$joke = true;
-				}
-				
-				$out = '';
-				foreach ($answers as $a)
-				{
-					$bg = '#F5F5B5';
-					$atext = '';
-					$color = '#4A3520';
-					
-					if($joke)
-					{
-						$bg = '#F5F5B5';
-						$atext = '';
-						$color = '#4A3520';
-					}
-					// Antwort richtig angeklickt
-					else if((isset($answers[$a['id']]) && $a['right'] == 1) || (!isset($answers[$a['id']]) && $a['right'] == 0))
-					{
-						if($a['right'] == 0)
-						{
-							$atext = 'Diese Antwort war natürlich falsch, das hast Du richtig erkannt';
-						}
-						else
-						{
-							$atext = 'Richtig! Diese Antwort stimmt.';
-						}
-						$bg = '#599022';
-						$color = '#ffffff';
-					}
-					// Antwort richtig weil nicht angeklickt
-					else 
-					{
-						if($a['right'] == 0)
-						{
-							$atext = 'Falsch, Diese Antwort stimmt nicht.';
-						}
-						else
-						{
-							$atext = 'Auch diese Antwort wäre richtig gewesen.';
-						}
-						$bg = '#E74955';
-						$color = '#ffffff';
-					}
-					
-					if(!empty($atext))
-					{
-						$atext = '<strong>'.$atext.'</strong><br />';
-					}
-					
-					$out .= '
-					<li class="answer" style="color:#fff ;cursor: pointer; border-radius: 10px; display: block; list-style: outside none none; padding: 10px; font-size: 14px; background-color: '.$bg.';">
-						'.$atext.'	
-						<p>'.nl2br($a['text']).'</p>
-						<p>
-							<strong>Erklärung</strong><br />
-							'.nl2br($a['explanation']).'
-						</p>
-					</li>';
-					
-				}
-			}
-		}
-		
-		$out = '
-			<div id="quizwrapper">
-				<div style="border-radius:10px;font-size:14px;color:#000;padding:10px;background:#FFFFFF;margin-bottom:15px;line-height:20px;">'.nl2br($quest['text']).'</div>
-				<ul style="display:block;list-style:none;">'.$out.'</ul>
-		</div>';
-		
-		$dia = new XhrDialog();
-		$dia->addOpt('height', '($(window).height()-40)',false);
-		$dia->addOpt('position', 'center');
-		
-		$dia->setTitle('Zwischenauswertung Frage '.(S::get('quiz-index')));
-		$dia->addContent($out);
-		
-		$dia->addContent($this->view->quizComment());
-		
-		//$dia->addButton('nächste Frage','ajreq(\'next\',{app:\'quiz\'});');
-		
-		$dia->addButton('nächste Frage','ajreq(\'next\',{app:\'quiz\',comment:$(\'#quizusercomment\').val(),qid:'.(int)$question['id'].'});');
-		
-		$dia->addJsAfter('
-			var width = 1000;
-			if($(window).width() < 1000)
-			{
-				width = ($(window).width()-40);
-			}
-			$("#'.$dia->getId().'").dialog("option",{
-				width:width,
-				height:($(window).height()-40)
-			});
-			$(window).resize(function(){
-				var width = 1000;
-				if($(window).width() < 1000)
-				{
-					width = ($(window).width()-40);
-				}
-				$("#'.$dia->getId().'").dialog("option",{
-					width:width,
-					height:($(window).height()-40)
-				});
-			});		
-				
-			$("#'.$dia->getId().'").scrollTop($("#'.$dia->getId().'").height());
-		');
-		
-		
-		return $dia->xhrout();
-	}
-	
+
 	private function resultNew($question,$diaId)
 	{
 		$uanswers = array();
-		$joke = false;
-	
+
 		if(isset($question['answers']) && is_array($question['answers']))
 		{
 			foreach ($question['answers'] as $a)
@@ -1240,11 +1039,6 @@ class QuizXhr extends Control
 			// get possible answers
 			if($answers = $this->model->getAnswers($question['id']))
 			{
-				/*
-					print_r($question);
-				print_r($answers);
-				die();
-				*/
 				$joke = false;
 				if($question['fp'] == 0)
 				{
@@ -1254,10 +1048,6 @@ class QuizXhr extends Control
 				$out = array();
 				foreach ($answers as $a)
 				{
-					$bg = '#F5F5B5';
-					$atext = '';
-					$color = '#4A3520';
-					
 					// schwerzfrageoder
 					if($joke)
 					{
@@ -1308,18 +1098,6 @@ class QuizXhr extends Control
 						'atext' => $atext,
 						'color'=> $color
 					);
-					/*
-					$out .= '
-					<li class="answer" style="color:#fff ;cursor: pointer; border-radius: 10px; display: block; list-style: outside none none; padding: 10px; font-size: 14px; background-color: '.$bg.';">
-						'.$atext.'
-						<p>'.nl2br($a['text']).'</p>
-						<p>
-							<strong>Erklärung</strong><br />
-							'.nl2br($a['explanation']).'
-						</p>
-					</li>';
-					*/
-						
 				}
 			}
 		}
@@ -1354,61 +1132,12 @@ class QuizXhr extends Control
 			'
 		);
 		
-		/*
-		$out = '
-			<div id="quizwrapper">
-				<div style="border-radius:10px;font-size:14px;color:#000;padding:10px;background:#FFFFFF;margin-bottom:15px;line-height:20px;">'.nl2br($quest['text']).'</div>
-				<ul style="display:block;list-style:none;">'.$out.'</ul>
-		</div>';
-
-		$dia = new XhrDialog();
-		$dia->addOpt('height', '($(window).height()-40)',false);
-		$dia->addOpt('position', 'center');
-	
-		$dia->setTitle('Zwischenauswertung Frage '.(S::get('quiz-index')));
-		$dia->addContent($out);
-	
-		$dia->addContent($this->view->quizComment());
-	
-		//$dia->addButton('nächste Frage','ajreq(\'next\',{app:\'quiz\'});');
-	
-		$dia->addButton('nächste Frage','ajreq(\'next\',{app:\'quiz\',comment:$(\'#quizusercomment\').val(),qid:'.(int)$question['id'].'});');
-	
-		$dia->addJsAfter('
-			var width = 1000;
-			if($(window).width() < 1000)
-			{
-				width = ($(window).width()-40);
-			}
-			$("#'.$dia->getId().'").dialog("option",{
-				width:width,
-				height:($(window).height()-40)
-			});
-			$(window).resize(function(){
-				var width = 1000;
-				if($(window).width() < 1000)
-				{
-					width = ($(window).width()-40);
-				}
-				$("#'.$dia->getId().'").dialog("option",{
-					width:width,
-					height:($(window).height()-40)
-				});
-			});
-	
-			$("#'.$dia->getId().'").scrollTop($("#'.$dia->getId().'").height());
-		');
-	
-	
-		return $dia->xhrout();
-		*/
 	}
 	
 	public function pause()
 	{
 		$dia = new XhrDialog();
 		$dia->setTitle('Pause');
-		//$dia->removeTitlebar();
 		$dia->addContent($this->view->pause());
 		$dia->addJsBefore('
 			
@@ -1430,22 +1159,6 @@ class QuizXhr extends Control
 		
 		$dia->addButton('Später weitermachen','$(this).dialog("close");');
 		$dia->addButton('weiter gehts!','ajreq(\'next\',{app:\'quiz\'});');
-		
-		/*
-		 * $("#'.$dia->getId().' .ui-dialog-titlebar-close").click(function(ev){
-				ev.preventDefault();
-			});
-		$dia->addJs('
-			var isCloseClicker = false;
-			$(".ui-dialog-titlebar-close").click(function(ev){
-				ev.preventDefault();
-				if(confirm(\'Möchtest Du aufhören? Du kannst auch zu jedem späteren Zeitpunkt weitermachen.\'))
-				{
-					$("#'.$dia->getId().'").dialog("close");
-				}
-			});
-		');
-		*/
 		
 		return $dia->xhrout();
 	
@@ -1509,12 +1222,7 @@ class QuizXhr extends Control
 		{
 			$wrongAnswers = count($rightQuestions[$question['id']]['answers']);
 		}
-		
-		//print_r($rightQuestions[$question['id']]['answers']);
-		//print_r($useranswers);
-		
-		
-		
+
 		// wie viel prozent sind falsch?
 		$percent = $this->percentFrom($checkCount, $wrongAnswers);
 		
@@ -1548,8 +1256,7 @@ class QuizXhr extends Control
 	private function getRandomQuestions($quiz_id, $count = 6)
 	{
 		$count_questions = $count;
-		$random_questions = array();
-		
+
 		if($questions = $this->model->getQuestionMetas($quiz_id))
 		{
 			// Wie viele Fragen gibt es insgesamt?
