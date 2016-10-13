@@ -10,7 +10,6 @@ require_once 'lib/db.class.php';
 require_once 'lib/Caching.php';
 require_once 'lang/DE/de.php';
 require_once 'lib/Manual.class.php';
-require_once 'lib/handle.inc.php';
 require_once 'lib/xhr.inc.php';
 require_once 'lib/xhr.view.inc.php';
 require_once 'lib/view.inc.php';
