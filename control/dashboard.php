@@ -86,8 +86,6 @@ else if(S::may('fs'))
 	addTitle('Dashboard');
 	$bid = getBezirkId();
 
-	else
-	{
 	$val = $db->getValues(array('photo_public','bundesland_id','anschrift','plz','lat','lon','stadt'), 'foodsaver', fsId());
 
 	if(empty($val['lat']) || empty($val['lon']) ||
