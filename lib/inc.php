@@ -82,15 +82,6 @@ addCss('/css/jquery.switchButton.css',true);
 addCss('/css/info.css',true);
 addCss('/css/icons.css',true);
 addCss('/css/popup.css',true);
-if (isMob())
-{
-	 addCss('css/style_mobile.css',true);
-}
-
-//addHead('<script src="'.PROTOCOL.'://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>');
-//addHead('<script src="'.PROTOCOL.'://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>');
-//addHead('<script src="/js/jquery.1.11.0.js"></script>');
-//addHead('<script src="/js/jquery-ui-1.10.4.js" /></script>');
 
 addScript('/js/jquery.1.11.0.js',true);
 addScript('/js/jquery-ui-1.10.4.js',true);
