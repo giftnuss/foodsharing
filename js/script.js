@@ -812,67 +812,11 @@ function infoMenu()
 	$('#msgBar .bar-item').on("touchend", function(ev) {
 		$(this).removeClass('hover');
 	});
-	
-	//init_chat();
-	//chat.init();
-	//init_infos();
-	
+
 	$('.msgbar-dropdown-menu.extended').slimScroll();
-}
-function init_infos()
-{
-	$.ajax({
-		dataType:"json",
-		url:"/xhr.php?f=getGlocke",
-		success : function(data){
-			hideLoader();
-			if(data.status == 1)
-			{
-				//alert(data.count);
-				$("#msgbar-infos ul").html(data.html);
-				if(data.count > 0)
-				{
-					$('#msgBar-badge .bar-info').html(data.count);
-					$('#msgBar-badge .bar-info').css({opacity:1});
-				}
-			}
-			else if(data.status == 0)
-			{
-				$('#msgBar-badge .bar-info').html('0');
-				$("#msgbar-infos ul").html(data.html);
-				$('#msgBar-badge .bar-info').css({opacity:0});
-			}
-		}
-	});
 }
 var g_interval_newMsg = null;
 var g_interval_newBasket = null;
-function init_chat()
-{    
-	/*
-	g_interval_newMsg = checkNewMsg(false);
-	ajreq('update',{app:'basket',loader:false});
-	g_interval_newBasket = setInterval(function(){
-		ajreq('update',{app:'basket',loader:false});
-	},10000);
-	*/
-	/*
-	setInterval(function(){
-		//http://localhost/xhr.php?f=getNewMsg
-		checkNewMsg();
-		
-	},10000);
-	*/
-	/*
-	setInterval(function(){
-		if(chatIsOpen())
-		{
-			updateChat();
-		}
-	},2000);*/
-    
-}
-
 function aNotify()
 {
 	//$('#xhr-chat-notify')[0].play();
