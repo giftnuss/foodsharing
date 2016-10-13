@@ -37,7 +37,6 @@ services:
       - chat:chat
     volumes:
       - ../:/app
-      - /app/vendor
     environment:
       FS_ENV: test
 

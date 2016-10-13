@@ -10,7 +10,7 @@ services:
     container_name: foodsharing_ci_web
     build:
       context: ..
-      dockerfile: docker/Dockerfile.web.ci
+      dockerfile: docker/Dockerfile.web
     ports:
       - 38080:8080
     expose:
@@ -18,6 +18,8 @@ services:
     depends_on:
       - app
       - chat
+    volumes:
+      - ../:/app
 
   # main php app
   #------------------------------------
@@ -26,7 +28,7 @@ services:
     container_name: foodsharing_ci_app
     build:
       context: ..
-      dockerfile: docker/Dockerfile.php.ci
+      dockerfile: docker/Dockerfile.php
     expose:
       - 9000
     links:
@@ -35,16 +37,21 @@ services:
       - chat:chat
     environment:
       FS_ENV: test
+    volumes:
+      - ../:/app
 
   chat:
     container_name: foodsharing_ci_chat
     command: node server.js 0.0.0.0
     build:
       context: ../chat
-      dockerfile: docker/Dockerfile.chat.ci
+      dockerfile: docker/Dockerfile.chat
     expose:
       - 1337
       - 1338
+    volumes:
+      - ../:/app
+      - /app/chat/node_modules
 
   # mysql
   #------------------------------------
@@ -62,6 +69,8 @@ services:
       - 33306:3306
     environment:
       MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ../:/app
 
   # redis
   #------------------------------------
