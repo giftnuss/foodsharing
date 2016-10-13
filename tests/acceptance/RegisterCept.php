@@ -53,16 +53,9 @@ $I->click('Anmeldung absenden', '.step.step3');
 $I->waitForElementVisible('#joinready', 4);
 $I->see('Deine Anmeldung war erfolgreich!');
 
-// close the dialog
-
-// this is kind of crazy selector, I got it from firefoxes "get unique selector" right click menu
-// ... maybe should just put a more unique id/class in there... will do for now
-$closeButtonSelector = 'div.ui-dialog:nth-child(16) > div:nth-child(1) > button:nth-child(2)';
-
-$I->waitForElementVisible($closeButtonSelector, 2);
-$I->click($closeButtonSelector);
-
 // now login as that user
+
+$I->amOnPage('/');
 
 $I->fillField('email_adress', $email);
 $I->fillField('password', $password);
