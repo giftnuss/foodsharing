@@ -68,9 +68,6 @@ var app2 = http.createServer(function  (req, res) {
 	res.end("Hello, nothing to see here ;)");
 });
 var io = require('socket.io')(app2);
-//var io = require('socket.io').listen(app);
-//io.set("transports", ['websocket', 'xhr-polling', 'htmlfile']);
-//io.set("polling duration", 10);
 
 app2.listen(client_port, listenHost);
 console.log("socket.io started on port", listenHost + ':' + client_port);
