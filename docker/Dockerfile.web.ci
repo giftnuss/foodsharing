@@ -1,0 +1,3 @@
+FROM registry.gitlab.com/foodsharing-dev/images:web
+
+COPY . /app

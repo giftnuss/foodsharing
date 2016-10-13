@@ -1,0 +1,5 @@
+FROM registry.gitlab.com/foodsharing-dev/images:php
+
+COPY . /app
+
+WORKDIR /app
