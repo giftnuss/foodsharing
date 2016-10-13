@@ -1,20 +1,18 @@
 <?php
 $I = new AcceptanceTester($scenario);
 
-// http://codeception.com/docs/modules/WebDriver
-
-
 $I->wantTo('Check if people can give self banana');
-$I->amOnPage('/');
-$I->fillField('email_adress', 'userB@example.com');
-$I->fillField('password', 'userb');
-$I->click('#loginbar input[type=submit]');
-$I->seeCurrentUrlEquals('/?page=dashboard'); // it redirects
-$I->waitForPageBody();
-$I->see('Hallo');
+$pass = sq('pass');
 
-$I->amOnPage('/profile/119684');
-$I->see('Statusupdates von User');
+$foodsaver = $I->createFoodsaver($pass, [
+	'rolle' => 1,
+	'admin' => 1
+]);
+
+$I->login($foodsaver['email'], $pass);
+
+$I->amOnPage('/profile/'.$foodsaver['id']);
+$I->see('Statusupdates von '.$foodsaver['name']);
 
 $I->waitForElementVisible('a.item.stat_bananacount.bouched', 4);
 $I->click('a.item.stat_bananacount.bouched');

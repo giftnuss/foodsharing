@@ -66,7 +66,19 @@ class AcceptanceTester extends \Codeception\Actor
 		$I->fillField('password', $password);
 		$I->click('#loginbar input[type=submit]');
 		$I->waitForPageBody();
-		$I->see('Willkommen');
+		$I->seeMatches('/Willkommen|Hallo/'); // depends on user type
+	}
+
+	/**
+	* Assert if a regexp is on the text content of the page
+	*
+	* @param regexp to check
+	* @param string selector to check in, default 'html'
+	*/
+	public function seeMatches($regexp, $selector = 'html')
+	{
+		$text = $this->grabTextFrom($selector);
+		$this->doAssertRegExp($regexp, $text);
 	}
 
 	// copied from elsewhere....
