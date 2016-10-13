@@ -1,9 +1,14 @@
 <?php
 $I = new AcceptanceTester($scenario);
+
+$pass = sq('pass');
+
+$foodsaver = $I->createFoodsaver($pass);
+
 $I->wantTo('ensure you can login');
 $I->amOnPage('/');
-$I->fillField('email_adress', 'usera@example.com');
-$I->fillField('password', 'usera');
+$I->fillField('email_adress', $foodsaver['email']);
+$I->fillField('password', $pass);
 $I->click('#loginbar input[type=submit]');
 $I->waitForPageBody();
-$I->see('Willkommen User!');
+$I->see('Willkommen '.$foodsaver['name'].'!');

@@ -4,10 +4,10 @@ $I = new AcceptanceTester($scenario);
 // http://codeception.com/docs/modules/WebDriver
 
 // create some unique values for our new user
-$email = 'test-'.round(microtime(true) * 1000).'@test.com';
-$first_name = uniqid();
-$last_name = uniqid();
-$password = uniqid();
+$email = sq('email').'@test.com';
+$first_name = sq('first_name');
+$last_name = sq('last_name');
+$password = sq('password');
 
 $I->wantTo('ensure I can register');
 $I->amOnPage('/');

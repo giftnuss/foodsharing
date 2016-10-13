@@ -31,26 +31,31 @@ class AcceptanceTester extends \Codeception\Actor
 	/**
 	* Insert a new foodsaver into the database.
 	*
-	* @param array params with at least email, name, bezirk_id, name, nachname
 	* @param string pass to set as foodsaver password
+	* @param array extra_params override params
 	*
 	* @return an array with all the foodsaver fields
 	*/
-	public function createFoodsaver($params, $pass)
+	public function createFoodsaver($pass, $extra_params = [])
 	{
+		$email = sq('email').'@test.com';
 		$I = $this;
-		$foodsaver_params = array_merge([
+		$params = array_merge([
+			'email' => $email,
+			'bezirk_id' => 1, // Deutschland
+			'name' => sq('name'),
+			'nachname' => sq('nachname'),
 			'verified' => 0,
 			'rolle' => 0,
 			'plz' => '10178',
 			'stadt' => 'Berlin',
 			'lat' => '52.5237395',
 			'lon' => '13.3986951',
-			'passwd' => $this->encryptMd5($params['email'], $pass),
-		], $params);
-		$id = $I->haveInDatabase('fs_foodsaver', $foodsaver_params);
-		$foodsaver_params['id'] = $id;
-		return $foodsaver_params;
+			'passwd' => $this->encryptMd5($email, $pass),
+		], $extra_params);
+		$id = $I->haveInDatabase('fs_foodsaver', $params);
+		$params['id'] = $id;
+		return $params;
 	}
 
 	public function login($email, $password)
