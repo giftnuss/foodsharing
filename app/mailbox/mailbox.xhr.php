@@ -41,9 +41,7 @@ class MailboxXhr extends Control
 	}
 	
 	public function attach()
-	{		
-		$init = '';
-		
+	{
 		// is filesize (10MB) and filetype allowed?
 		if(isset($_FILES['etattach']['size']) && $_FILES['etattach']['size'] < 1310720 && $this->attach_allow($_FILES['etattach']['name'], $_FILES['etattach']['type']))
 		{
@@ -170,7 +168,6 @@ class MailboxXhr extends Control
 		{
 			$folder = $this->model->getVal('folder', 'mailbox_message', $_GET['mid']);
 			
-			$new_folder = 3;
 			if($folder == 3)
 			{
 				$this->model->deleteMessage($_GET['mid']);
@@ -239,11 +236,7 @@ class MailboxXhr extends Control
 			mb		1
 			sub		betr
 		 */
-		
-		/*
-		 * security only 1 email per minute
-		*/
-		
+
 		if($last = (int)Mem::user(fsId(), 'mailbox-last'))
 		{
 			if((time() - $last) < 15)
@@ -275,22 +268,8 @@ class MailboxXhr extends Control
 						'script' => 'pulseError("Zu viele Empfänger");'
 					);
 				}
-					
-					/*
-					$smtp = new fSMTP('kunden.greensta.de');
-					$smtp->authenticate('admin@lebensmittelretten.de', 'passwort123');
-					$email = new fEmail();
-					$email->addRecipient($_POST['an']);
-					$email->setBody($_POST['body']);
-					$email->setSubject($_POST['sub']);
-					$email->setFromEmail($mailbox.'@'.DEFAULT_HOST);
-					$email->send($smtp);
-					*/
-					
 					$attach = false;
-					
-					
-					
+
 					if(isset($_POST['attach']) && is_array($_POST['attach']))
 					{
 						$attach = array();
@@ -315,9 +294,7 @@ class MailboxXhr extends Control
 							}
 						}
 					}
-					
-					
-					
+
 					$this->libPlainMail(
 						$an,
 						array(
@@ -328,16 +305,6 @@ class MailboxXhr extends Control
 						$_POST['body'],
 						$attach
 					);
-					
-					/*
-					if(!empty($attach))
-					{
-						foreach ($attach as $a)
-						{
-							@unlink($a['path']);
-						}
-					}
-					*/
 					
 					$to = array();
 					foreach ($an as $a)
@@ -382,7 +349,6 @@ class MailboxXhr extends Control
 					}
 			}
 		}
-		
 	}
 	
 	public function fmail()
@@ -403,50 +369,8 @@ class MailboxXhr extends Control
 			
 			$html = str_replace('href="mailto:', 'onclick="parent.mb_new_message(this.href.replace(\'mailto:\',\'\'));return false;" href="mailto:', $html);
 			
-			/*
-			$html = tidy_get_output($tidy);
-				
-			$doc = new DOMDocument();
-			$doc->loadHTML($html);
-				
-			$node = $dom->getElementsByTagName('body')->item(0);
-			$node->setAttribute('onload','parent.u_readyBody();');
-				
-			echo $doc->saveHTML();
-			*/
 			echo $html;
 			exit();
-			
-			//$tidy = tidy_parse_string($html);
-			//$tidy->cleanRepair();
-			
-			//$html = tidy_get_output($tidy);
-			//str_replace(array('<body'), '<body onload="parent.u_readyBody();"', $html);
-			/*
-			$dom = new DOMDocument();
-			// we want nice output
-			$dom->preserveWhiteSpace = false;
-			$dom->loadHTML($html);
-			$dom->formatOutput = true;
-			
-			$dom->getElementsByTagName('body')->item(0)
-				->setAttribute('onload','parent.u_readyBody();');
-			
-			$style = $dom->createElement('style','body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}');
-			$style->setAttribute('type', 'text/css');
-			
-			$head = $dom->getElementsByTagName('head')->item(0);
-			$head->appendChild($style);
-			
-			$script_tags = $dom->getElementsByTagName('script');
-
-			for ($i = 0; $i < $script_tags->length; $i++) {
-				$script_tags->item($i)->parentNode->removeChild($script_tags->item($i));
-			}
-			
-			echo $dom->saveHTML();
-			exit;
-			*/
 		}
 	}
 	
@@ -505,7 +429,6 @@ class MailboxXhr extends Control
 	
 	public function libPlainMail($to,$from,$subject,$message,$attach = false)
 	{
-		$email = false;
 		if(is_array($to) && !isset($to['name']))
 		{
 			$email = $to;
@@ -550,10 +473,8 @@ class MailboxXhr extends Control
 			$mail->addRecipient($email);
 		}
 	
-		//Set the subject line
 		$mail->setSubject($subject);
-		
-		
+
 		$message = str_replace(array('<br>','<br/>','<br />','<p>','</p>','</p>'),"\r\n",$message);
 		$message = strip_tags($message);
 		
@@ -595,11 +516,9 @@ class MailboxXhr extends Control
 			{
 				return true;
 			}
-			
 		}
 		
 		return false;
 	}
-	
 }
 

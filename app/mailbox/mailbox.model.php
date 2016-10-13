@@ -1,12 +1,10 @@
 <?php
-use Zend\Http\Header\RetryAfter;
 class MailboxModel extends Model
 {
-	
 	public function getMailboxId($mb_name)
 	{
 		return $this->qOne('
-			SELECT id FROM '.PREFIX.'mailbox WHERE `name` = '.$this->strval($mb_name).'		
+			SELECT id FROM '.PREFIX.'mailbox WHERE `name` = '.$this->strval($mb_name).'	
 		');
 	}
 	
@@ -44,18 +42,6 @@ class MailboxModel extends Model
 		{
 			return false;
 		}
-	}
-	
-	public function getMailboxIds($mb_names)
-	{
-		$where = array();
-		foreach ($mb_names as $n)
-		{
-			$where[] = $this->strval($n);
-		}
-		return $this->qCol('
-			SELECT id FROM '.PREFIX.'mailbox WHERE `name` IN('.implode(',', $where).')
-		');
 	}
 	
 	public function getMailAdresses()
@@ -126,7 +112,7 @@ class MailboxModel extends Model
 				return $this->update('
 					UPDATE 	`'.PREFIX.'mailbox_message`
 					SET `answer` = 1
-					WHERE `id` = '.(int)$message_id.'	
+					WHERE `id` = '.(int)$message_id.'
 				');
 			}
 		}
@@ -138,7 +124,7 @@ class MailboxModel extends Model
 	{
 		if($mailbox_id = $this->getVal('mailbox_id', 'mailbox_message', $mid))
 		{
-			return $this->mayMailbox($mailbox_id);			
+			return $this->mayMailbox($mailbox_id);
 		}
 		return false;
 	}
@@ -183,49 +169,6 @@ class MailboxModel extends Model
 			}
 		}
 		return false;
-		/*
-		if($type == 'fs' || $type == false)
-		{
-			if($mb_id = $this->getVal('mailbox_id', 'foodsaver', fsId()))
-			{
-				return true;
-			}
-		}
-		elseif($type == 'bot' || $type == false)
-		{
-			if($botmbs = $this->getBotMailboxes())
-			{
-				foreach ($botmbs as $b)
-				{
-					if($b['mailbox_id'] == $mb_id)
-					{
-						return true;
-					}
-				}
-			}
-		}
-		elseif($ret = $this->qOne('SELECT `mailbox_id` FROM '.PREFIX.'mailbox_member WHERE foodsaver_id = '.(int)fsid().' AND mailbox_id = '.(int)$mb_id))
-		{
-			if((int)$ret > 0)
-			{
-				return true;
-			}
-		}
-		
-		return false;
-		*/
-	}
-	
-	public function getBotMailboxes()
-	{
-		return $this->q('
-			SELECT 	bz.mailbox_id,
-					bz.id AS bezirk_id
-			FROM  	`'.PREFIX.'botschafter` b,
-					'.PREFIX.'bezirk bz
-			WHERE 	b.bezirk_id = bz.id
-			AND 	b.foodsaver_id = '.(int)fsId().'		
-		');
 	}
 	
 	public function getlastMessages()
@@ -440,7 +383,6 @@ class MailboxModel extends Model
 			WHERE 	member = 1
 		'))
 		{
-			$email_name = '';
 			foreach ($boxes as $key => $b)
 			{
 				$boxes[$key]['email_name'] = '';
@@ -537,27 +479,6 @@ class MailboxModel extends Model
 				
 		');
 		
-		// get the bezirk ids where the bezirk is an group and the user is member
-		/*
-		$bids2 = $this->qCol('
-			SELECT
-				hb.bezirk_id
-
-			FROM
-				'.PREFIX.'foodsaver_has_bezirk hb,
-				'.PREFIX.'bezirk b
-				
-			WHERE
-				hb.bezirk_id = b.id
-				
-			AND
-				hb.foodsaver_id = '.(int)fsid().'
-				
-			AND
-				b.type = 7
-		');
-		*/
-		//return array_merge($bids,$bids2);
 		return $bids;
 	}
 	
@@ -732,14 +653,11 @@ class MailboxModel extends Model
 			);
 		}
 		
-		
-			
 		if(empty($mboxes))
 		{
 			return false;
 		}
-			
+
 		return $mboxes;
-		
 	}
 }

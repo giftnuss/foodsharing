@@ -43,8 +43,7 @@ class MailboxControl extends Control
 	}
 	
 	public function index()
-	{		
-		//addScript('js/tinymce/jquery.tinymce.min.js');
+	{
 		addScript('/js/typeahead.min.js');
 		addScript('/js/dynatree/jquery.dynatree.js');
 		addScript('/js/jquery.cookie.js');
@@ -53,7 +52,7 @@ class MailboxControl extends Control
 		addBread('Mailboxen');
 		
 		if($boxes = $this->model->getBoxes())
-		{			
+		{
 			if(isset($_GET['show']) && (int)$_GET['show'])
 			{
 				if($this->model->mayMessage($_GET['show']))
