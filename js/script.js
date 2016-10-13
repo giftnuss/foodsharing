@@ -607,7 +607,7 @@ var ajax = {
 
 					if(ret.append != undefined)
 					{
-						$(ret.append).html(data.html);
+						$(ret.append).html(ret.html);
 					}
 					
 					if(ret.script != undefined)
@@ -646,59 +646,11 @@ var ajax = {
 };
 function ajreq(name,options,method,app)
 {
-	opt = {};
-	if(options != undefined)
-	{
-		opt = options;
-	}
-	
-	if(method == undefined)
-	{
-		method = "get";
-	}
-	
-	if(app == undefined)
-	{
-		app = GET('page');
-	}
-	
-	if(opt.app != undefined)
-	{
-		app = options.app;
-	}
-	
-	if(opt.loader == undefined || opt.loader == true)
-	{
-		opt.loader = true;
-		showLoader();
-	}
-	
-	$.ajax({
-		url:"/xhrapp.php?app="+app+"&m=" + name,
-		data: opt,
-		dataType:'json',
-		method:method,
-		success:function(data){
-			if(data.status == 1)
-			{
-				if(data.append != undefined)
-				{
-					$(data.append).html(data.html);
-				}
-				
-				if(data.script != undefined)
-				{
-					$.globalEval( data.script );
-				}				
-			}
-		},
-		complete:function(){
-			if(opt.loader === true)
-			{
-				hideLoader();
-			}
-		}
-	});
+	return ajax.req(options.app || app || GET('page'), name, {
+		method: method,
+		data: options,
+		loader: options.loader
+	} );
 }
 var u_pulse_error_to = null;
 var u_pulse_info_to = null;
