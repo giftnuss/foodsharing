@@ -6,4 +6,4 @@ RUN chmod 644 /etc/mysql/my.cnf
 COPY docker/conf/db/run-tmpfs /mysql/run-tmpfs
 CMD ["/mysql/run-tmpfs"]
 
-#COPY . /app
+COPY . /app
