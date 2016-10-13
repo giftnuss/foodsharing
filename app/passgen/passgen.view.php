@@ -19,8 +19,6 @@ class PassgenView extends View
 				$verified = '<span style="display:none">a</span><a href="#" title="'.s('click_to_unverify').'" class="verify verify-y"><span></span></a>';
 			}
 			
-			//$verified .= '<input type="hidden" name="fsid[]" value="'.(int)$fs['id'].'" />';
-			
 			if(!empty($fs['photo']))
 			{
 				$img = 'images/thumb_crop_'.$fs['photo'];
@@ -71,6 +69,5 @@ class PassgenView extends View
 	public function tips()
 	{
 		return v_info(s('tips_content'),s('tips'));
-		//return v_field(s('tips_content'), s('tips'),array('class'=>'ui-padding'));
 	}
 }

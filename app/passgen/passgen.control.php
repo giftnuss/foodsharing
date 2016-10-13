@@ -66,7 +66,7 @@ class PassgenControl extends Control
 		
 		if(isset($_GET['dl1']))
 		{
-			$this->download1();	
+			$this->download1();
 		}
 		if(isset($_GET['dl2']))
 		{
@@ -84,14 +84,6 @@ class PassgenControl extends Control
 		$foodsaver = $tmp;
 		$is_generated = array();
 		
-		if(!validEmail($this->bezirk['email']))
-		{
-			//orgaGlocke('Bezirk hat noch keine E-Mail Adresse',$bezirk['name'],'/?page=region');
-			//error('Dein Bezirk hat noch keine E-Mail Adresse');
-			//return false;
-		}
-		
-		$email = $this->bezirk['email'];
 		include('lib/phpqrcode/qrlib.php');
 		
 		require_once('lib/fpdf.php');
@@ -109,11 +101,10 @@ class PassgenControl extends Control
 		
 		$left = 0;
 		$nophoto = array();
-		$nofsid = array();
+
+		end($foodsaver);
 		
-		$last = end($foodsaver);
-		
-		$pageCount = $pdf->setSourceFile('img/foodsharing_logo.pdf');
+		$pdf->setSourceFile('img/foodsharing_logo.pdf');
 		$fs_logo = $pdf->importPage(1);
 		
 		foreach ($foodsaver as $i => $fs_id)
@@ -160,8 +151,7 @@ class PassgenControl extends Control
 				$pdf->Text(41.8+$x, 38.9+$y, utf8_decode('Rolle'));
 				$pdf->Text(41.8+$x, 46.6+$y, utf8_decode('Gültig ab'));
 				$pdf->Text(41.8+$x, 54.3+$y, utf8_decode('Gültig bis'));
-				//$pdf->Text(15+$x, 52+$y, utf8_decode('ID: '.$this->model->getKfz($fs['autokennzeichen_id']).'-'.$fs['fs_id'].'-'.$fs['id']));
-		
+
 				$pdf->SetFont('Ubuntu-L','',9);
 				$pdf->SetTextColor(255,255,255);
 				$pdf->SetXY(40+$x, 13.2+$y);
@@ -172,11 +162,6 @@ class PassgenControl extends Control
 				
 				$pdf->useTemplate($fs_logo, 13.5+$x, 13.6+$y, 29.8);
 				
-				//$pdf->Text(15+$x, 59+$y, utf8_decode('Essen teilen, statt wegwerfen'));
-				//$pdf->Text(15+$x, 63+$y, utf8_decode('www.lebensmittelretten.de'));
-		
-				//$pdf->Text(67+$x, 63+$y, utf8_decode('gültig ab '.date('d.m.Y')));
-		
 				$pdf->Image('tmp/qr_'.$fs_id.'.png',70+$x,42.1+$y);
 				
 				if($photo = $this->model->getPhoto($fs_id))
@@ -210,52 +195,22 @@ class PassgenControl extends Control
 				}
 				
 				$is_generated[] = $fs['id'];
-				//$x += 95;
-					
 			}
-			//$pdf->SetFont('Arial','',13);
-			//$pdf->Cell(40,10,utf8_decode($fs['name'].' '.$fs['nachname']));
-			//$pdf->Image('img/foodsaver_pass_bg.png');
 		}
 		if(!empty($nophoto))
 		{
 			$last = array_pop($nophoto);
 			info(implode(', ', $nophoto).' und '.$last.' haben noch kein Photo hochgeladen und ihr Ausweis konnte nicht erstellt werden');
 		}
-		if(!empty($nofsid))
-		{
-			$last = array_pop($nofsid);
-			info(implode(', ', $nofsid).' und '.$last.' haben eine ungültige Foodsharing ID, ihr Ausweis wurde nicht erstellt');
-		}
-		
+
 		$this->model->updateLastGen($is_generated);
-		
-		//$bezirk = $db->getBezirkName();
 		
 		$bez = strtolower($this->bezirk['name']);
 		
 		$bez = str_replace(array('ä','ö','ü','ß'), array('ae','oe','ue','ss'), $bez);
 		$bez = preg_replace('/[^a-zA-Z]/', '', $bez);
 		
-		//Header('Content-Type: application/pdf');
-		//Header('Content-Length: ' . strlen($pdf->buffer));
-		//Header('Content-disposition: attachment; filename=foodsaver_pass_'.$bezirk.'.pdf');
-		//echo $pdf->buffer;
-		$file = 'data/pass/foodsaver_pass_'.$bez.'.pdf';
-		
 		$pdf->Output('data/pass/foodsaver_pass_'.$bez.'.pdf');
-		//go('data/pass/foodsaver_pass_'.$bezirk.'.pdf');
-		
-		/*
-		$Dateiname = basename($file);
-		$size = filesize($file);
-		header('Content-Type: application/pdf');
-		header("Content-Disposition: attachment; filename=".$Dateiname."");
-		header("Content-Length: $size");
-		readfile($file);
-		
-		exit();
-		*/
 		go(getSelf().'&dl1');
 	}
 	
