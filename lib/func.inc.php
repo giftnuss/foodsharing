@@ -1158,15 +1158,7 @@ function getOrgaMenu()
 		$mob = '<optgroup label="Orga">';
 		foreach($menu as $lang_id => $link)
 		{
-			if($i == $len-1)
-			{
-				$default_style = ' class="menu-bottom"';
-			} else
-			{
-				$default_style = '';
-			}
-
-			$default .= '<li'.$default_style.'><a'.$default_style.' href="/?page='.$link.'">'.s('menu_'.$lang_id).'</a></li>';
+			$default .= '<li><a href="/?page='.$link.'">'.s('menu_'.$lang_id).'</a></li>';
 			$mob .= '<option value="/?page'.$link.'">'.s('menu_'.$lang_id).'</option>';
 			$i++;
 		}
@@ -1248,7 +1240,7 @@ function getSettingsMenu()
 				    <ul class="jmenu-settings">
 					  <li><a href="/?page=settings"><i class="fa fa-gear"></i> Einstellungen</a></li>
 					  '.$mailbox.'
-				      <li class="menu-bottom"><a class="menu-bottom" href="/?page=logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+				      <li><a href="/?page=logout"><i class="fa fa-sign-out"></i> Logout</a></li>
 				    </ul>
 				  </li>';
 	
@@ -1321,7 +1313,7 @@ function getBezirkMenu($bezirk)
 	{	
 		$out .= '
 			<li><a href="/?page=foodsaver&bid='.$bezirk['id'].'">Foodsaver</a></li>
-			<li class="menu-bottom"><a class="menu-bottom" href="/?page=passgen&bid='.$bezirk['id'].'">Ausweise / Verifizierungen</a></li>';
+			<li><a href="/?page=passgen&bid='.$bezirk['id'].'">Ausweise / Verifizierungen</a></li>';
 	}
 	
 	$out .= '

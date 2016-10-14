@@ -1,67 +1,87 @@
 .jMenu {
-    display: table;
-    margin: 0;
-    padding: 0;
-    list-style: none;
+	margin: 0;
+	padding: 0;
+	list-style: none;
 }
 
-/* First level */
+/* General */
 .jMenu li {
-    display: table-cell;
-    margin: 0;
-    list-style: none;
+		list-style: none;
+		margin: 0;
 }
 
 .jMenu li a {
-    background-color: transparent;
-    border-radius: 6px;
-    color: #fff;
-    cursor: pointer;
-    display: block;
-    font-family:"Helvetica Neue",Helvetica,Arial,"lucida grande",tahoma,verdana,arial,sans-serif;
-    
-    margin-top: 4px;
-    padding: 7px;
-    text-decoration: none;
+	border-radius: 6px;
+	display: block;
+	font-family:"Helvetica Neue",Helvetica,Arial,"lucida grande",tahoma,verdana,arial,sans-serif;
+	text-decoration: none;
+}
+
+/* First level */
+.jMenu > li {
+	float: left;
+}
+.jMenu > li > a {
+	color: #fff;
+	cursor: pointer;
+	margin-top: 4px;
+	padding: 7px;
 }
 
 .jMenu > li > a > .fa {
-    font-size: 17px;
-    width:17;
-    display:inline-block;
-    text-align: center;
-}
-
-.jMenu li:hover a.fNiv
-{
-	background-color:#FFFFFF;
-    color: #4A3520;
+	font-size: 17px;
+	width:17;
+	display:inline-block;
+	text-align: center;
 }
 
 /* Lower levels */
 .jMenu li ul {
-    display: none;
-    position: absolute;
+	display: none;
+	position: absolute;
 	z-index:10;
-    padding: 4px;
-    margin: 0;
-    background-color: #FFFFFF;
-    -webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
+	padding: 4px;
+	margin: 0;
+	background-color: #FFFFFF;
 	border-radius: 6px;
 	
-	-webkit-box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.3);
-	-moz-box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.3);
 	box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.3);
 }
 
-.jMenu li:hover > ul {
-    display: block;
+.jMenu li ul li {
+	background-color:#FFFFFF;
+	color: #4A3522;
+	display: block;
+	padding: 0;
+	position: relative;
 }
 
+.jMenu li ul li a {
+	font-size: 13px;
+	font-weight:bold;
+	text-transform: none;
+	padding: 5px ;
+	display: block;
+	color:#4A3520;
+	border:0 none;
+	margin:0;
+}
+
+.jMenu li ul li > ul
+{
+	left: 100%;
+	top: 0;
+	margin-left: -4px;
+}
+
+.jMenu > li > ul {
+  width: 200px;
+}
+
+/* Big menu is 300px wide and items are cut off instead of wrapping */
 .jMenu li ul.bigmenu, .jMenu li ul.bigmenu > li
 {
-	width:300px !important;
+	width:300px;
 }
 .jMenu li ul.bigmenu > li > a
 {
@@ -69,71 +89,27 @@
 	white-space: nowrap !important;
 	  text-overflow: ellipsis;
 	  -o-text-overflow: ellipsis;
-	  padding-right: 21px;
-	  width:274px;
-}
-.jMenu li ul li > ul
-{
-	left: 100% !important;
-	top: 0;
-	margin-left: -4px;
 }
 
-.jMenu li ul li {
-    background-color:#FFFFFF;
-    color: #4A3522;
-    display: block;
-    padding: 0;
-    list-style: none;
-	position: relative;
-}
-
-.jMenu li ul li a {
-    font-size: 13px;
-    font-weight:bold;
-    text-transform: none;
-    text-decoration:none;
-    padding: 5px 5px;
-    display: block;
-    color:#4A3520;
-    border:0 none;
-    margin:0;
-}
+/* Icons */
 .jMenu li ul li a i
 {
 	display:inline-block;
 	width:18px;
 }
-.jMenu li ul li.menu-bottom
-{
-	-webkit-border-bottom-right-radius: 4px;
--webkit-border-bottom-left-radius: 4px;
--moz-border-radius-bottomright: 4px;
--moz-border-radius-bottomleft: 4px;
-border-bottom-right-radius: 4px;
-border-bottom-left-radius: 4px;
-}
 
-.jMenu li ul li.menu-bottom a
-{
--webkit-border-bottom-right-radius: 4px;
--webkit-border-bottom-left-radius: 4px;
--moz-border-radius-bottomright: 4px;
--moz-border-radius-bottomleft: 4px;
-border-bottom-right-radius: 4px;
-border-bottom-left-radius: 4px;
-}
-
+/* Sub menu items with sub sub menus have an arrow icon */
 .jMenu li ul li a:not(:last-child) {
-    background-image: url('/img/arrow_right.png');
-    background-repeat: no-repeat;
-    background-position: right center;
+	background-image: url('/img/arrow_right.png');
+	background-repeat: no-repeat;
+	background-position: right center;
+	padding-right: 18px;
 }
 
-.jMenu li ul li:hover > a {
-	color:#FFFFFF;
-    background-color: #4a911c;
-}
+/**
+ * Position sub menus for last three menu items at the right edge so that they
+ * are still visible on smaller screens
+ **/
 .jMenu > li {
 	position: relative;
 }
@@ -141,6 +117,8 @@ border-bottom-left-radius: 4px;
 {
 	right: 0;
 }
+
+/* Style profile picture */
 li.g_settings a.fNiv
 {
 	background-position:center;
@@ -148,19 +126,26 @@ li.g_settings a.fNiv
 	width:35px;
 }
 
-li.break
+/* Horizontal line in sub menus */
+.jMenu .break
 {
 	display:block;
 	background:none;
 	border:0;
 	border-bottom:1px solid #E3DED3 !important;
 }
-.jMenu > li > a:hover
-{
-	background-color:#967d61 !important;
-	color:#ffffff !important;
+
+/* Hovering */
+.jMenu li:hover > ul {
+	display: block;
 }
 
-.jMenu > li > ul {
-  width: 200px;
+.jMenu li ul li:hover > a {
+	color:#FFFFFF;
+	background-color: #4a911c;
+}
+
+.jMenu > li > a:hover
+{
+	background-color:#967d61;
 }
