@@ -1271,7 +1271,7 @@ function xhr_updateChat($data)
 		
 		ksort($out);
 		
-		addXhJs('/*xhr_chat_scroll();*/hideLoader();');
+		addXhJs('hideLoader();');
 		
 		return xhr_out(xv_msgLi($out));
 	}

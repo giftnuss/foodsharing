@@ -1,6 +1,5 @@
 HTTP_GET_VARS=new Array();
 strGET=document.location.search.substr(1,document.location.search.length);
-var data = null;
 var user = {
 	token: ''
 };
@@ -35,15 +34,6 @@ if(strGET!='')
         if(vArr.length>1){v=vArr[1];}
         HTTP_GET_VARS[unescape(vArr[0])]=unescape(v);
     }
-}
-function isMobile()
-{
-	width = $( window ).width();
-	if(width < 480)
-	{
-		return true;
-	}
-	return false;
 }
 
 function GET(v)
@@ -815,7 +805,6 @@ function infoMenu()
 
 	$('.msgbar-dropdown-menu.extended').slimScroll();
 }
-var g_interval_newMsg = null;
 var g_interval_newBasket = null;
 function aNotify()
 {
@@ -863,10 +852,6 @@ function img(photo,size)
 	}
 }
 
-function xhr_chat_scroll()
-{
-	setTimeout(function(){$("#xhr-chat-focus").focus();$('#msganswer').focus();},100);
-}
 var g_firstChatUpdate=true;
 function updateChat()
 {
@@ -1033,15 +1018,6 @@ function checkNewMsg(sound)
 	});
 }
 
-function hideBadge()
-{
-	$('#msgBar-badge').hide();
-}
-function showBadge()
-{
-	$('#msgBar-badge').show();
-}
-
 function xhrf(func)
 {
 	showLoader();
@@ -1071,43 +1047,6 @@ function v_field(content,title,id)
 	return '<div id="'+id+'"><div class="head ui-widget-header ui-corner-top">'+title+'</div><div class="ui-widget ui-widget-content ui-corner-bottom margin-bottom ui-padding">'+content+'</div></div>';
 }
 
-function v_hidden(name,val)
-{
-	return '<input type="hidden" name="'+name+'" class="'+name+'" value="'+val+'" />';
-}
-
-function hiddenDialog(id,table,title)
-{
-	$("#" + id).dialog({
-		autoOpen:false,
-		modal:true,
-		title:title,
-		buttons:
-		{
-			"Speichern":function()
-			{
-				showLoader();
-				$.ajax({
-					dataType:"json",
-					url:"/xhr.php?f=update_"+table+"&" + $('#' + id + ' form').serialize(),
-					success : function(data){
-						$("#" + id).dialog('close');
-						
-						if(data.script != undefined)
-						{
-							$.globalEval(data.script);
-						}
-						
-					},
-					complete : function(){
-						hideLoader();
-					}
-				});
-			}
-		}
-	});
-}
- 
 function openPhotoDialog(fs_id)
 {
 	$("#uploadPhoto-fs_id").val(fs_id);
@@ -1211,27 +1150,6 @@ function showComment(id)
 	$("#dialog-comment").dialog('option', 'title', $("#comment-title-" + id).val());
 	$("#dialog-comment").dialog('open');
 	
-}
-
-function ajaxconfirm(url,question,title)
-{
-	if(question != undefined)
-	{
-		$('#dialog-confirm-msg').html(question);
-	}
-	if(title != undefined)
-	{
-		$('#dialog-confirm').dialog('option','title',title);
-	}
-	
-	$('#dialog-confirm-url').val(url);
-	$('#dialog-confirm').dialog('open');
-	/*
-	if(confirm(question))
-	{
-		goTo(url);
-	}
-	*/
 }
 
 function ifconfirm(url,question,title)
