@@ -6,13 +6,6 @@ class ManualDb extends Db
 		parent::__construct($host, $user, $pass, $db);
 	}
 
-	public function quizSessionTestCount()
-	{
-		return (int)count($this->q('SELECT COUNT( foodsaver_id )
-FROM fs_quiz_session
-GROUP BY foodsaver_id'));
-	}
-
 	public function getBasics_content()
 	{
 		return $this->q('
@@ -84,7 +77,7 @@ GROUP BY foodsaver_id'));
 		}
 	}
 
-	public function betriebPinUpdates($bids)
+	private function betriebPinUpdates($bids)
 	{
 		if($ret = $this->q('
 
@@ -143,7 +136,7 @@ GROUP BY foodsaver_id'));
 		');
 	}
 
-	public function forumUpdates($bids)
+	private function forumUpdates($bids)
 	{
 		return $this->q('
 
@@ -180,7 +173,7 @@ GROUP BY foodsaver_id'));
 		');
 	}
 
-	public function botForumUpdates($bids)
+	private function botForumUpdates($bids)
 	{
 		return $this->q('
 
@@ -303,36 +296,6 @@ GROUP BY foodsaver_id'));
 		return $id;
 	}
 
-	public function getNextActiveBezirk($plz)
-	{
-		if($id = $this->qCol('SELECT stadt_id FROM '.PREFIX.'plz WHERE plz = '.$this->strval($plz).' '))
-		{
-			$plz = $this->qCol(' SELECT `plz` FROM '.PREFIX.'plz WHERE stadt_id = '.$this->intval($id));
-			$out = array();
-			foreach ($plz as $p)
-			{
-				if($bezirk_id = $this->qOne('SELECT bezirk_id FROM '.PREFIX.'foodsaver WHERE `plz` = '.$this->strval($p).' '))
-				{
-					$out[$bezirk_id] = $this->getBezirk($bezirk_id);
-					$out[$bezirk_id]['botschafter'] = $this->getBotschafter($bezirk_id);
-				}
-			}
-
-			return $out;
-		}
-		return false;
-	}
-
-	public function getPlzByCityName($name)
-	{
-		if($id = $this->qOne('SELECT `id` FROM `'.PREFIX.'stadt` WHERE `name` LIKE '.$this->strval($name)))
-		{
-			return $this->qCol(' SELECT `plz` FROM '.PREFIX.'plz WHERE stadt_id = '.$this->intval($id));
-		}
-
-		return false;
-	}
-
 	public function getAbholzeiten($betrieb_id)
 	{
 
@@ -360,11 +323,6 @@ GROUP BY foodsaver_id'));
 	public function getFaqIntern()
 	{
 		return $this->q('SELECT `id`, `answer`, `name` FROM `'.PREFIX.'faq`');
-	}
-
-	public function getDocuments($rolle)
-	{
-		return $this->q('SELECT `id`, `file`, `name` FROM `'.PREFIX.'document` WHERE `rolle` <= '.(int)$rolle);
 	}
 
 	public function getFsMap($bezirk_id)
@@ -502,82 +460,6 @@ GROUP BY foodsaver_id'));
 	public function passGen($fsid)
 	{
 		return $this->sql('INSERT INTO `'.PREFIX.'pass_gen`(`foodsaver_id`,`date`,`bot_id`)VALUES('.$this->intval($fsid).',NOW(),'.fsId().')');
-	}
-
-	public function getFsBasicsReq($bezirk_id)
-	{
-		return $this->q('
-
-				SELECT 	fs.`id`,
-						CONCAT(fs.`name`," ",fs.`nachname`," (",b.name,")") AS `name`
-
-				FROM 	'.PREFIX.'foodsaver_has_bezirk fb,
-						'.PREFIX.'foodsaver fs,
-						'.PREFIX.'bezirk b
-
-				WHERE 	fb.foodsaver_id = fs.id
-				AND 	fb.bezirk_id = b.id
-				AND 	fb.`bezirk_id` IN('.implode(',',$this->getChildBezirke($bezirk_id)).')
-
-				ORDER BY b.name,fs.name
-		');
-	}
-
-	public function getPassGenReq($bezirk_id)
-	{
-
-		$req = $this->q('
-				SELECT 	fs.`id`,
-						CONCAT(fs.`name`," ",fs.`nachname`) AS `name`,
-						b.name AS bezirk_name,
-						b.id AS bezirk_id
-
-				FROM 	'.PREFIX.'foodsaver_has_bezirk fb,
-						'.PREFIX.'foodsaver fs,
-						'.PREFIX.'bezirk b
-
-				WHERE 	fb.foodsaver_id = fs.id
-				AND 	fb.bezirk_id = b.id
-				AND 	fb.`bezirk_id` IN('.implode(',',$this->getChildBezirke($bezirk_id)).')
-
-				ORDER BY bezirk_name
-		');
-
-		$out = array();
-		foreach($req as $r)
-		{
-			if(!isset($out[$r['bezirk_id']]))
-			{
-				$out[$r['bezirk_id']] = array
-				(
-					'id' => $r['bezirk_id'],
-					'bezirk' => $r['bezirk_name'],
-					'foodsaver' => array()
-				);
-			}
-			$out[$r['bezirk_id']]['foodsaver'][] = $r;
-		}
-		return $out;
-	}
-
-	public function getPassGen($bezirk_id)
-	{
-		if($fs = $this->getFoodsaver($bezirk_id))
-		{
-			foreach ($fs as $i => $f)
-			{
-				if($gen = $this->qOne('SELECT MAX(`time`) FROM `'.PREFIX.'pass_gen` WHERE foodsaver_id = '.(int)$f['id']))
-				{
-					$fs[$i]['pass_gen'] = $gen;
-				}
-				else
-				{
-					$fs[$i]['pass_gen'] = false;
-				}
-			}
-			return $fs;
-		}
-		return false;
 	}
 
 	public function getFsAutocomplete($bezirk_id)
@@ -730,102 +612,6 @@ GROUP BY foodsaver_id'));
 		');
 	}
 
-	public function getConversations($limit = '')
-	{
-
-		if($limit != '')
-		{
-			$limit = ' LIMIT 0,'.(int)$limit;
-		}
-
-		$out = array();
-		if($conversations = $this->q('
-				SELECT
-					c.id,
-					UNIX_TIMESTAMP(c.last) AS time_ts,
-					c.last
-
-				FROM
-					`'.PREFIX.'conversation` c,
-					`'.PREFIX.'foodsaver_has_conversation` hc
-
-				WHERE
-					hc.conversation_id = c.id
-				AND
-					hc.foodsaver_id = '.(int)fsId().'
-
-				ORDER by c.last DESC
-				LIMIT 20')
-		)
-		{
-			foreach ($conversations as $conv)
-			{
-				if($member = $this->q('
-					SELECT
-						fs.id,
-						fs.name,
-						fs.photo
-
-					FROM
-						`'.PREFIX.'foodsaver_has_conversation` hc,
-						`'.PREFIX.'foodsaver` fs
-
-					WHERE
-						hc.foodsaver_id = fs.id
-
-					AND
-						hc.conversation_id = '.(int)$conv['id'].'
-
-					AND
-						hc.foodsaver_id != '.(int)fsId().'
-				'))
-				{
-					if(count($member) == 1)
-					{
-						$out[] = array(
-							'time_ts' => $conv['time_ts'],
-							'sender_id' => $member[0]['id'],
-							'name' => $member[0]['name'],
-							'photo' => $member[0]['photo']
-						);
-					}
-				}
-			}
-
-			if(!empty($out))
-			{
-				return $out;
-			}
-		}
-
-		return false;
-
-		/*
-		$sql = 'SELECT
-
-			MAX(UNIX_TIMESTAMP(time)) AS time_ts,
-			`sender_id`,
-			`'.PREFIX.'foodsaver`.`name`,
-			`'.PREFIX.'foodsaver`.`photo`
-
-		FROM 	`'.PREFIX.'message`,
-				`'.PREFIX.'foodsaver`
-		WHERE 	`'.PREFIX.'message`.`sender_id` = `'.PREFIX.'foodsaver`.`id`
-		AND (
-				`'.PREFIX.'message`.`recip_id` = '.$this->intval(fsId()).'
-				OR
-				`'.PREFIX.'message`.`sender_id` = '.$this->intval(fsId()).'
-			)
-		AND sender_id != '.(int)fsId().'
-		GROUP BY `sender_id`
-		ORDER BY time_ts DESC';
-
-		return $this->q($sql);
-		*/
-	}
-
-
-
 	public function addTeamMessage($bid,$message)
 	{
 		if($betrieb = $this->getMyBetrieb($bid))
@@ -950,44 +736,6 @@ GROUP BY foodsaver_id'));
 		WHERE 	`id` = '.$this->intval($id));
 	}
 
-	public function update_document($id,$data)
-	{
-
-
-		return $this->update('
-		UPDATE 	`'.PREFIX.'document`
-
-		SET 	`name` =  '.$this->strval($data['name']).',
-				`file` =  '.$this->strval($data['file']).',
-				`body` =  '.$this->strval($data['body'],'<br><p><ul><li><ol><strong><b><i>').',
-				`rolle` =  '.$this->intval($data['rolle']).'
-
-		WHERE 	`id` = '.$this->intval($id));
-	}
-
-	public function add_document($data)
-	{
-		$id = $this->insert('
-			INSERT INTO 	`'.PREFIX.'document`
-			(
-			`name`,
-			`file`,
-			`body`,
-			`rolle`
-			)
-			VALUES
-			(
-			'.$this->strval($data['name']).',
-			'.$this->strval($data['file']).',
-			'.$this->strval($data['body'],true).',
-			'.$this->intval($data['rolle']).'
-			)');
-
-
-
-		return $id;
-	}
-
 	public function xhrGetTagFs($bezirk_id)
 	{
 		$parent = (int)$this->getVal('parent_id', 'bezirk', $bezirk_id);
@@ -1028,20 +776,6 @@ GROUP BY foodsaver_id'));
 		{
 			$this->update('UPDATE '.PREFIX.'glocke_read SET unread = 0 WHERE glocke_id = '.(int)$gid.' AND foodsaver_id = '.(int)fsId());
 		}
-	}
-
-	public function getMyGlocke()
-	{
-		return $this->q('
-			SELECT 		g.id,g.`name`,g.`msg`,g.`url`,UNIX_TIMESTAMP(g.`time`) AS time
-
-			FROM 	'.PREFIX.'glocke g,
-					'.PREFIX.'glocke_read gr
-
-			WHERE gr.glocke_id = g.id
-			AND gr.foodsaver_id = '.(int)fsId().'
-			AND gr.unread = 1
-		');
 	}
 
 	public function addGlocke($foodsaver,$msg,$title='',$url = '')
@@ -1139,50 +873,7 @@ GROUP BY foodsaver_id'));
 		}
 	}
 
-	public function getNeuanmeldungen($bezirk_id)
-	{
-		return $this->q('
-				SELECT 	`id` ,
-						CONCAT_WS(" ", `name`, `nachname` ) AS name,
-						`geschlecht`,
-						`photo`,
-						`rolle`,
-						UNIX_TIMESTAMP(`anmeldedatum`) AS anmeldedatum
-
-				FROM `'.PREFIX.'foodsaver`
-				WHERE `bezirk_id` = '.$this->intval($bezirk_id).'
-				AND `active` = 0
-		');
-	}
-
-	public function getNeuanmeldungenOhneBotschafter()
-	{
-		$bezirk_ids_ohne_botschafter = $this->qCol('
-			SELECT '.PREFIX.'bezirk.id
-			FROM '.PREFIX.'bezirk
-			LEFT JOIN '.PREFIX.'botschafter
-			ON '.PREFIX.'bezirk.id = '.PREFIX.'botschafter.bezirk_id
-			WHERE '.PREFIX.'botschafter.foodsaver_id IS NULL
-		');
-
-		$out = array();
-
-		foreach ($bezirk_ids_ohne_botschafter as $bezirk_id)
-		{
-			if($r = $this->getNeuanmeldungen($bezirk_id))
-			{
-				foreach ($r as $rr)
-				{
-					$out[] = $rr;
-				}
-			}
-		}
-
-		return $out;
-
-	}
-
-	public function updatePassword($fs_id, $new_pass)
+	private function updatePassword($fs_id, $new_pass)
 	{
 
 		if($fs = $this->qRow('SELECT `id`, `email` FROM `'.PREFIX.'foodsaver` WHERE `id` = '.$this->intval($fs_id)))
@@ -1197,41 +888,6 @@ GROUP BY foodsaver_id'));
 			return true;
 		}
 		return false;
-	}
-
-	public function activateUser($fs_id,$rolle = 0)
-	{
-		$new_pass = genPassword(7);
-
-		//$new_pass = 'VHhCYar';
-		$this->updatePassword($fs_id,$new_pass);
-
-		$this->update('
-			UPDATE 	`'.PREFIX.'foodsaver`
-			SET 	`active` = 1
-			WHERE 	`id` = '.$this->intval($fs_id).'
-		');
-
-		$fs = $this->getOne_foodsaver($fs_id);
-
-		$key = $this->addPassRequest($fs['email'],false);
-
-		$bezirk = $this->getBezirkMail($fs['bezirk_id']);
-
-		// Botschafter Anmeldung
-		if($rolle == 2)
-		{
-			$this->sql('INSERT INTO `'.PREFIX.'botschafter`(`foodsaver_id`,`bezirk_id`)VALUES('.(int)$fs_id.','.(int)$fs['bezirk_id'].')');
-		}
-
-		//libmail($bezirk, $fs['email'], 'Du bist jetzt dabei!', 'jetzt kannst Du Dich einloggen, Dein Passwort lautet: '.$new_pass);
-
-		tplMail(7, $fs['email'],array(
-			'link'=>BASE_URL.'/?p=passwordReset&k='.$key,
-			'pass'=>$new_pass,
-			'anrede' => genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-			'name' => $fs['name']
-		),$fs['bezirk_id']);
 	}
 
 	public function getReg($id)
@@ -1275,111 +931,7 @@ GROUP BY foodsaver_id'));
 		');
 	}
 
-	public function getOne_betriebNo($id)
-	{
-		$out = $this->qRow('
-			SELECT
-			`betrieb_status_id`,
-			`plz`,
-			`stadt`,
-			`lat`,
-			`lon`,
-			`bezirk_id`,
-			`kette_id`,
-			`betrieb_kategorie_id`,
-			`name`,
-			`str`,
-			`hsnr`,
-			`status_date`,
-			`ansprechpartner`,
-			`telefon`,
-			`fax`,
-			`email`,
-			`public_info`
-
-			FROM 		`'.PREFIX.'betrieb`
-
-			WHERE 		`id` = ' . $this->intval($id));
-
-		$out['foodsaver'] = $this->getVerantwortlicher($id);
-
-		return $out;
-	}
-
-	public function update_betriebNo($id,$data)
-	{
-		if(isset($data['foodsaver']) && is_array($data['foodsaver']))
-		{
-
-			$this->del('
-					DELETE FROM 	`fs_verantwortlicher`
-					WHERE 			`betrieb_id` = '.$this->intval($id).'
-				');
-
-			foreach($data['foodsaver'] as $foodsaver_id)
-			{
-				$this->insert('
-						INSERT INTO `'.PREFIX.'verantwortlicher`
-						(
-							`betrieb_id`,
-							`foodsaver_id`
-						)
-						VALUES
-						(
-							'.$this->intval($id).',
-							'.$this->intval($foodsaver_id).'
-						)
-					');
-			}
-		}
-
-		$data['status_date'] = date('Y-m-d H:i:s');
-
-
-		if(!isset($data['bezirk_id']))
-		{
-			$data['bezirk_id'] = getBezirkId();
-		}
-
-
-		return $this->update('
-		UPDATE 	`'.PREFIX.'betrieb`
-
-		SET 	`betrieb_status_id` =  '.$this->intval($data['betrieb_status_id']).',
-				`plz` =  '.$this->strval(trim($data['plz'])).',
-				`stadt` =  '.$this->strval(trim($data['stadt'])).',
-				`lat` =  '.$this->strval($data['lat']).',
-				`lon` =  '.$this->strval($data['lon']).',
-				`bezirk_id` =  '.$this->intval($data['bezirk_id']).',
-				`kette_id` =  '.$this->intval($data['kette_id']).',
-				`betrieb_kategorie_id` =  '.$this->intval($data['betrieb_kategorie_id']).',
-				`name` =  '.$this->strval($data['name']).',
-				`str` =  '.$this->strval($data['str']).',
-				`hsnr` =  '.$this->strval($data['hsnr']).',
-				`status_date` =  '.$this->dateval($data['status_date']).',
-				`ansprechpartner` =  '.$this->strval($data['ansprechpartner']).',
-				`telefon` =  '.$this->strval($data['telefon']).',
-				`fax` =  '.$this->strval($data['fax']).',
-				`email` =  '.$this->strval($data['email']).'
-
-		WHERE 	`id` = '.$this->intval($id));
-	}
-
-	public function bezirkHasChildren($id)
-	{
-		$count = $this->qOne('SELECT COUNT(`id`) FROM '.PREFIX.'bezirk WHERE `parent_id` = '.$id.' ');
-
-		if($count == 0)
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-	}
-
-	public function updateHasChildren($bezirk_id)
+	private function updateHasChildren($bezirk_id)
 	{
 		$count = $this->qOne('SELECT COUNT(`id`) FROM '.PREFIX.'bezirk WHERE `parent_id` = '.$this->intval($bezirk_id).' ');
 
@@ -1425,11 +977,6 @@ GROUP BY foodsaver_id'));
 		}
 
 		return false;
-	}
-
-	public function getKfz($id)
-	{
-		return $this->qOne('SELECT `name` FROM `'.PREFIX.'autokennzeichen` WHERE `id` = '.$this->intval($id));
 	}
 
 	public function getOne_foodsaver($id)
@@ -1491,52 +1038,7 @@ GROUP BY foodsaver_id'));
 		}
 	}
 
-	public function getOldBetrieb($id)
-	{
-		$sql = '
-		SELECT		`'.PREFIX.'betrieb`.plz,
-					`'.PREFIX.'betrieb`.betrieb_status_id,
-					`'.PREFIX.'betrieb`.bezirk_id,
-					`'.PREFIX.'betrieb`.kette_id,
-					`'.PREFIX.'betrieb`.betrieb_kategorie_id,
-					`'.PREFIX.'betrieb`.name,
-					CONCAT('.PREFIX.'betrieb.str," ",'.PREFIX.'betrieb.hsnr) AS anschrift,
-					`'.PREFIX.'betrieb`.str,
-					`'.PREFIX.'betrieb`.hsnr,
-					`'.PREFIX.'betrieb`.`status`,
-					`'.PREFIX.'betrieb`.status_date,
-					`'.PREFIX.'betrieb`.ansprechpartner,
-					`'.PREFIX.'betrieb`.telefon,
-					`'.PREFIX.'betrieb`.email,
-					`'.PREFIX.'betrieb`.fax
-
-		FROM 		`'.PREFIX.'betrieb`
-
-		WHERE 		`'.PREFIX.'betrieb`.`id` = '.$this->intval($id).'';
-
-		$out = false;
-		if($out =  $this->qRow($sql))
-		{
-			$out['verantwortlicher'] = '';
-			if($bezirk = $this->getBezirkName($out['bezirk_id']))
-			{
-				$out['bezirk'] = $bezirk;
-			}
-			if($verantwortlich = $this->getVerantwortlicher($id))
-			{
-				$out['verantwortlicher'] = $verantwortlich;
-			}
-			$out['notitzen'] = array();
-			if($notizen = $this->getBetriebNotiz($id))
-			{
-				$out['notitzen'] = $notizen;
-			}
-		}
-
-		return $out;
-	}
-
-	public function getBetriebNotiz($id)
+	private function getBetriebNotiz($id)
 	{
 		$out = $this->q('
 			SELECT
@@ -1581,29 +1083,6 @@ GROUP BY foodsaver_id'));
 
 			LIMIT 10
 		');
-	}
-
-	public function getAllGerettet()
-	{
-		$out = 0;
-		if($res = $this->q('
-			SELECT COUNT(a.`betrieb_id`) AS anz, a.betrieb_id, b.abholmenge
-			FROM   `'.PREFIX.'abholer` a,
-			       `'.PREFIX.'betrieb` b
-			WHERE a.betrieb_id =b.id
-			AND   a.`date` < NOW()
-			GROUP BY a.`betrieb_id`
-
-
-		'))
-		{
-			foreach ($res as $r)
-			{
-				$out += $this->gerettet_wrapper($r['abholmenge'])*$r['anz'];
-			}
-		}
-
-		return $out;
 	}
 
 	public function getFoodsaverBasics($fsid)
@@ -1740,105 +1219,6 @@ GROUP BY foodsaver_id'));
 		return $out;
 	}
 
-	public function getFsBetriebe($bezirk_id = false)
-	{
-		if(!$bezirk_id)
-		{
-			$bezirk_id = $this->getCurrentBezirkId();
-		}
-		$new = array();
-
-		if($out = $this->q('
-				SELECT 	'.PREFIX.'betrieb.id,
-						`'.PREFIX.'betrieb`.betrieb_status_id,
-						'.PREFIX.'betrieb.plz,
-						'.PREFIX.'betrieb.kette_id,
-
-						'.PREFIX.'betrieb.ansprechpartner,
-						'.PREFIX.'betrieb.fax,
-						'.PREFIX.'betrieb.telefon,
-						'.PREFIX.'betrieb.email,
-
-						'.PREFIX.'betrieb.betrieb_kategorie_id,
-						'.PREFIX.'betrieb.name,
-						CONCAT('.PREFIX.'betrieb.str," ",'.PREFIX.'betrieb.hsnr) AS anschrift,
-						'.PREFIX.'betrieb.str,
-						'.PREFIX.'betrieb.hsnr,
-						'.PREFIX.'betrieb.`betrieb_status_id`,
-						'.PREFIX.'verantwortlicher.foodsaver_id AS verantwortlicher_id
-
-				FROM 	'.PREFIX.'betrieb,
-						'.PREFIX.'verantwortlicher
-
-				WHERE 	'.PREFIX.'betrieb.id = '.PREFIX.'verantwortlicher.betrieb_id
-
-				AND 	'.PREFIX.'verantwortlicher.foodsaver_id = '.$this->intval(fsId()).'
-
-
-		'))
-		{
-			foreach ($out as $key => $o)
-			{
-				$out[$key]['abholen'] = $this->getAbholen($o['id']);
-			}
-			foreach ($out as $o)
-			{
-				$new[$o['id']] = $o;
-				$new[$o['id']]['own'] = true;
-			}
-		}
-
-		if($out2 = $this->q('
-				SELECT 	'.PREFIX.'betrieb.id,
-						`'.PREFIX.'betrieb`.betrieb_status_id,
-						'.PREFIX.'betrieb.plz,
-						'.PREFIX.'betrieb.kette_id,
-						'.PREFIX.'betrieb.betrieb_kategorie_id,
-						'.PREFIX.'betrieb.name,
-
-						'.PREFIX.'betrieb.ansprechpartner,
-						'.PREFIX.'betrieb.fax,
-						'.PREFIX.'betrieb.telefon,
-						'.PREFIX.'betrieb.email,
-
-						CONCAT('.PREFIX.'betrieb.str," ",'.PREFIX.'betrieb.hsnr) AS anschrift,
-						'.PREFIX.'betrieb.str,
-						'.PREFIX.'betrieb.hsnr,
-						'.PREFIX.'betrieb.`betrieb_status_id`,
-						'.PREFIX.'verantwortlicher.foodsaver_id AS verantwortlicher_id
-
-				FROM 	'.PREFIX.'betrieb,
-						'.PREFIX.'verantwortlicher,
-						'.PREFIX.'abholen
-
-				WHERE 	'.PREFIX.'betrieb.id = '.PREFIX.'verantwortlicher.betrieb_id
-
-				AND 	'.PREFIX.'betrieb.id = '.PREFIX.'abholen.betrieb_id
-
-				AND 	'.PREFIX.'abholen.foodsaver_id = '.$this->intval(fsId()).'
-
-
-		'))
-		{
-			foreach ($out2 as $key => $o)
-			{
-				if(!isset($new[$o['id']]))
-				{
-					$new[$o['id']] = $o;
-					$new[$o['id']]['abholen'] = $this->getAbholen($o['id']);
-					$new[$o['id']]['own'] = false;
-				}
-
-
-			}
-		}
-
-		unset($out);
-		unset($out2);
-		return $new;
-
-	}
-
 	public function isVerantwortlich($betrieb_id)
 	{
 		if(isOrgaTeam())
@@ -1856,46 +1236,6 @@ GROUP BY foodsaver_id'));
 				AND 	verantwortlich = 1
 				AND 	active = 1
 		');
-	}
-
-	public function getAbholen($betrieb_id)
-	{
-		if($out = $this->q('
-			SELECT 	`'.PREFIX.'abholen`.`foodsaver_id`,
-					`'.PREFIX.'abholen`.`dow`,
-					`'.PREFIX.'abholen`.`time`
-
-			FROM 	`'.PREFIX.'abholen`
-
-			WHERE 	`'.PREFIX.'abholen`.`betrieb_id` = '.$this->intval($betrieb_id).'
-		'))
-		{
-			$saver = array();
-			foreach ($out as $key => $o)
-			{
-				$out[$key]['foodsaver'] = false;
-				if($out[$key]['foodsaver_id'] != 0)
-				{
-					if(isset($saver[$o['foodsaver_id']]))
-					{
-						$out[$key]['foodsaver'] = $saver[$o['foodsaver_id']];
-					}
-					else
-					{
-						$out[$key]['foodsaver'] = $this->qRow('
-						SELECT 	`id`,`name`,`nachname`,`email`,`geschlecht`
-						FROM 	`'.PREFIX.'foodsaver`
-						WHERE 	`id` = '.$this->intval($o['foodsaver_id']).'');
-
-						$saver[$o['foodsaver_id']] = $out[$key]['foodsaver'];
-
-					}
-				}
-			}
-		}
-
-
-		return $out;
 	}
 
 	public function getParentBezirke($bid)
@@ -2008,24 +1348,6 @@ GROUP BY foodsaver_id'));
 		$out['notitzen'] = $this->getBetriebNotiz($id);
 
 		return $out;
-	}
-
-	public function deleteBetrieb($id)
-	{
-		return false;//$this->del('DELETE FROM '.PREFIX.'betrieb WHERE `id` = '.$id);
-	}
-
-	public function getAbholmengen()
-	{
-		return array(
-				1 => '1-3kg',
-				2 => '3-5kg',
-				3 => '5-10kg',
-				4 => '10-20kg',
-				5 => '20-30kg',
-				6 => '40-50kg',
-				7 => 'mehr als 50kg'
-		);
 	}
 
 	public function getMapsBetriebe($bezirk_id = false)
@@ -2187,87 +1509,6 @@ GROUP BY foodsaver_id'));
 
 		return $id;
 	}
-	public function add_betriebNo($data)
-	{
-		$data['status_date'] = date('Y-m-d H:i:s');
-
-		if(!isset($data['bezirk_id']))
-		{
-			$data['bezirk_id'] = getBezirkId();
-		}
-
-		$data['lat'] = '';
-		$data['lon'] = '';
-		if($ll = getLatLon($data['str'].' '.$data['hsnr'], $data['plz'],$data['stadt']))
-		{
-			$data['lat'] = $ll['lat'];
-			$data['lon'] = $ll['lng'];
-		}
-
-		$id = $this->insert('
-			INSERT INTO 	`'.PREFIX.'betrieb`
-			(
-			`betrieb_status_id`,
-			`plz`,
-			`stadt`,
-			`lat`,
-			`lon`,
-			`bezirk_id`,
-			`kette_id`,
-			`betrieb_kategorie_id`,
-			`name`,
-			`str`,
-			`hsnr`,
-			`status_date`,
-			`ansprechpartner`,
-			`telefon`,
-			`fax`,
-			`email`,
-			`prefetchtime`
-			)
-			VALUES
-			(
-			'.$this->intval($data['betrieb_status_id']).',
-			'.$this->strval(trim($data['plz'])).',
-			'.$this->strval(trim($data['stadt'])).',
-			'.$this->strval($data['lat']).',
-			'.$this->strval($data['lon']).',
-			'.$this->intval($data['bezirk_id']).',
-			'.$this->intval($data['kette_id']).',
-			'.$this->intval($data['betrieb_kategorie_id']).',
-			'.$this->strval($data['name']).',
-			'.$this->strval($data['str']).',
-			'.$this->strval($data['hsnr']).',
-			'.$this->dateval($data['status_date']).',
-			'.$this->strval($data['ansprechpartner']).',
-			'.$this->strval($data['telefon']).',
-			'.$this->strval($data['fax']).',
-			'.$this->strval($data['email']).',
-			'.(int)$data['prefetchtime'].'
-			)');
-
-
-		if(isset($data['foodsaver']) && is_array($data['foodsaver']))
-		{
-			foreach($data['foodsaver'] as $foodsaver_id)
-			{
-				$this->insert('
-						INSERT INTO `'.PREFIX.'verantwortlicher`
-						(
-							`betrieb_id`,
-							`foodsaver_id`
-						)
-						VALUES
-						(
-							'.$this->intval($id).',
-							'.$this->intval($foodsaver_id).'
-						)
-					');
-			}
-		}
-
-		return $id;
-	}
 
 	public function getSendMails()
 	{
@@ -2280,7 +1521,7 @@ GROUP BY foodsaver_id'));
 		');
 	}
 
-	public function getBezirkMail($bezirk_id = false)
+	private function getBezirkMail($bezirk_id = false)
 	{
 		if($bezirk_id == false)
 		{
@@ -2337,19 +1578,6 @@ GROUP BY foodsaver_id'));
 			FROM 	`'.PREFIX.'bezirk`
 			WHERE 	`id` = '.$this->intval($id));
 
-	}
-
-	public function getBezirkEmail()
-	{
-		$out = $this->qOne('
-			SELECT
-			`email`
-
-			FROM 		`'.PREFIX.'bezirk`
-
-			WHERE `bezirk_id` = '.$this->intval($this->getCurrentbezirkId()));
-
-		return $out;
 	}
 
 	public function getEmailsToSend()
@@ -2639,7 +1867,7 @@ GROUP BY foodsaver_id'));
 		return $out;
 	}
 
-	public function add_sendMail($data)
+	private function add_sendMail($data)
 	{
 		if(!isset($data['mode']))
 		{
@@ -2736,46 +1964,6 @@ GROUP BY foodsaver_id'));
 			');
 
 		return $out;
-	}
-
-	public function listFoodsaverReq($bezirk_id)
-	{
-		if($bezirk_id > 0)
-		{
-			return $this->q('
-				SELECT 	 	fs.`id`,
-							CONCAT(fs.`name`," ",fs.`nachname`) AS `name`,
-							fs.`anschrift`,
-							b.name AS bezirk_name,
-							fs.photo,
-							fs.last_login,
-							UNIX_TIMESTAMP(fs.last_login) AS last_login_ts
-
-				FROM 		`'.PREFIX.'foodsaver` fs,
-							`'.PREFIX.'bezirk` b
-
-				WHERE 	fs.bezirk_id = b.id
-
-				AND 	`bezirk_id` IN('.implode(',', $this->getChildBezirke($bezirk_id)).')
-
-				ORDER BY bezirk_name,name');
-		}
-		else
-		{
-			return $this->q('
-				SELECT 	 	fs.`id`,
-							CONCAT(fs.`name`," ",fs.`nachname`) AS `name`,
-							fs.`anschrift`,
-							b.name AS bezirk_name,
-							fs.photo,
-							fs.last_login,
-							UNIX_TIMESTAMP(fs.last_login) AS last_login_ts
-
-				FROM '.PREFIX.'foodsaver fs LEFT JOIN '.PREFIX.'bezirk b ON fs.bezirk_id = b.id
-
-
-				ORDER BY bezirk_name,name');
-		}
 	}
 
 	public function getBasics_foodsaver($bezirk_id = false)
@@ -3230,7 +2418,7 @@ GROUP BY foodsaver_id'));
 
 	}
 
-	public function regUser($data)
+	private function regUser($data)
 	{
 		/*
 		 * Array
@@ -3752,7 +2940,7 @@ GROUP BY foodsaver_id'));
 			)');
 	}
 
-	public function createTeamConversation($bid)
+	private function createTeamConversation($bid)
 	{
 		$msg = loadModel('msg');
 		$tcid = $msg->insertConversation(array(), true);
@@ -3773,7 +2961,7 @@ GROUP BY foodsaver_id'));
 
 	}
 
-	public function createSpringerConversation($bid)
+	private function createSpringerConversation($bid)
 	{
 		$msg = loadModel('msg');
 		$scid = $msg->insertConversation(array(), true);
@@ -4247,18 +3435,6 @@ GROUP BY foodsaver_id'));
 		return $this->qOne('SELECT 	`foodsaver_id`  FROM '.PREFIX.'betrieb_team WHERE `betrieb_id` = '.$this->intval($betrieb_id).' AND verantwortlich = 1 AND `active` = 1');
 	}
 
-	public function removeVerantwortlicher($fs_id,$betrieb_id)
-	{
-		return $this->del('
-			DELETE FROM '.PREFIX.'betrieb_team
-
-				WHERE 	foodsaver_id = '.$this->intval($fs_id).'
-				AND 	betrieb_id = '.$this->intval($betrieb_id).'
-				AND 	verantwortlich = 1
-				AND 	active = 1
-		');
-	}
-
 	public function removeAllVerantwortlicher($betrieb_id)
 	{
 		return $this->del('
@@ -4276,33 +3452,6 @@ GROUP BY foodsaver_id'));
 			INSERT INTO '.PREFIX.'betrieb_team (foodsaver_id, betrieb_id, verantwortlich,active)
 			VALUES('.$this->intval($fs_id).','.$this->intval($betrieb_id).',1,1)
 		');
-	}
-
-	public function getMyUnconfirmedFetchRequests()
-	{
-		if($res = $this->q('
-				SELECT 	DISTINCT b.id,
-				b.name
-
-				FROM 	'.PREFIX.'betrieb b,
-						'.PREFIX.'betrieb_team v,
-						'.PREFIX.'abholer a
-
-				WHERE 	a.betrieb_id = b.id
-				AND 	v.betrieb_id = a.betrieb_id
-				AND 	v.foodsaver_id = '.(int)fsId().'
-				AND 	v.verantwortlich = 1
-				AND 	a.confirmed = 0
-		'));
-
-		if(count($res) > 0)
-		{
-			return $res;
-		}
-		else
-		{
-			return false;
-		}
 	}
 
 	public function getAbholdates($bid,$dates)
@@ -4642,64 +3791,6 @@ GROUP BY foodsaver_id'));
 
 		SET 	`name` =  '.$this->strval($data['name']).',
 				`logo` =  '.$this->strval($data['logo']).'
-
-		WHERE 	`id` = '.$this->intval($id));
-	}
-
-	public function getOne_lebensmittel($id)
-	{
-		$out = $this->qRow('
-			SELECT
-			`id`,
-			`name`
-
-			FROM 		`'.PREFIX.'lebensmittel`
-
-			WHERE 		`id` = ' . $this->intval($id));
-
-
-		$out['betrieb'] = $this->qCol('
-				SELECT 		`betrieb_id`
-
-				FROM 		`'.PREFIX.'betrieb_has_lebensmittel`
-				WHERE 		`lebensmittel_id` = '.$this->intval($id).'
-			');
-
-		return $out;
-	}
-
-	public function update_lebensmittel($id,$data)
-	{
-
-		if(isset($data['betrieb']) && is_array($data['betrieb']))
-		{
-
-			$this->del('
-					DELETE FROM 	`fs_betrieb_has_lebensmittel`
-					WHERE 			`lebensmittel_id` = '.$this->intval($id).'
-				');
-
-			foreach($data['betrieb'] as $betrieb_id)
-			{
-				$this->insert('
-						INSERT INTO `'.PREFIX.'betrieb_has_lebensmittel`
-						(
-							`lebensmittel_id`,
-							`betrieb_id`
-						)
-						VALUES
-						(
-							'.$this->intval($id).',
-							'.$this->intval($betrieb_id).'
-						)
-					');
-			}
-		}
-
-		return $this->update('
-		UPDATE 	`'.PREFIX.'lebensmittel`
-
-		SET 	`name` =  '.$this->strval($data['name']).'
 
 		WHERE 	`id` = '.$this->intval($id));
 	}
