@@ -130,8 +130,7 @@ border-bottom-left-radius: 4px;
     background-position: right center;
 }
 
-
-.jMenu li ul li a:hover {
+.jMenu li ul li:hover > a {
 	color:#FFFFFF;
     background-color: #4a911c;
 }
