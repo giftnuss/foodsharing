@@ -135,25 +135,12 @@ border-bottom-left-radius: 4px;
 	color:#FFFFFF;
     background-color: #4a911c;
 }
-ul.jmenu-bezirke
-{
-	left:50% !important;
-	margin-left:242px !important;
+.jMenu > li {
+	position: relative;
 }
-ul.jmenu-settings
+.jmenu-settings, .jmenu-bezirke, .jmenu-foodsaver
 {
-	left:50% !important;
-	margin-left:291px !important;
-}
-li.jmenu-foodsaver ul
-{
-	left:50% !important;
-	margin-left:181px !important;
-}
-li.jmenu-foodsaver ul li ul.sub
-{
-	left:50% !important;
-	margin-left:100px !important;
+	right: 0;
 }
 li.g_settings a.fNiv
 {

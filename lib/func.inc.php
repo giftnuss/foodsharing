@@ -744,8 +744,8 @@ function getBetriebeMenu()
 	if(isset($_SESSION['client']['betriebe']) && !empty($_SESSION['client']['betriebe']))
 	{
 		$out = '
-		<li class="jmenu-foodsaver"><a onclick="return false" class="fNiv">Betriebe</a>
-			<ul>';
+		<li><a onclick="return false" class="fNiv">Betriebe</a>
+			<ul class="jmenu-foodsaver">';
 		$out_mob = '
 		<optgroup label="Betriebe">';
 		
