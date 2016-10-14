@@ -90,9 +90,11 @@
 	  padding-right: 21px;
 	  width:274px;
 }
-.jMenu li ul.bigmenu > li > ul
+.jMenu li ul li > ul
 {
-	left:304px !important;
+	left: 100% !important;
+	top: 0;
+	margin-left: -4px;
 }
 
 .jMenu li ul li {
@@ -104,6 +106,7 @@
     border-right: 1px solid #251e15;*/
     padding: 0;
     list-style: none;
+	position: relative;
 }
 
 .jMenu li ul li.arrow {
@@ -157,8 +160,7 @@ border-bottom-left-radius: 4px;
 	/*border-top: 1px solid #251e15;*/
 }
 
-.jMenu li ul li a.isParent {
-    background-color: #FFFFFF;
+.jMenu li ul li a:not(:last-child) {
     background-image: url('/img/arrow_right.png');
     background-repeat: no-repeat;
     background-position: right center;
@@ -221,4 +223,8 @@ li.break
 {
 	background-color:#967d61 !important;
 	color:#ffffff !important;
+}
+
+.jMenu > li > ul {
+  width: 200px;
 }

@@ -534,18 +534,6 @@ function isOrgaTeam()
 function getMenu()
 {
 	addJs('$("#top .menu").css("display","block");');
-	addJs('
-			$("#mainMenu").jMenu({
-				ulWidth:200,
-				absoluteTop:37,
-				TimeBeforeClosing : 0,
-				TimeBeforeOpening : 0,
-		        effects : {
-		          effectSpeedOpen : 0,
-		          effectSpeedClose : 0
-		      	},
-			});
-	');
 	
 	addJs('
 		$("#mobilemenu").bind("change",function(){
