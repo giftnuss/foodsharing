@@ -252,8 +252,6 @@ $(document).ready(function(){
 	$('#topmenu').buttonset();
 	$('#topmenu').first().click();
 	
-	addHover('#mainMenu li');
-	
 	$( "ul.toolbar li" ).hover(
 			function() {
 				$( this ).addClass( "ui-state-hover" );
