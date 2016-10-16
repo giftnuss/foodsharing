@@ -24,17 +24,6 @@ define('CNT_OVERTOP',5);
 $g_debug = array();
 $g_user_menu = array();
 
-function getfSMTP()
-{
-	static $smtp = false;
-	if($smtp === false)
-	{
-		$smtp = new fSMTP(SMTP_HOST, SMTP_PORT);
-			//MailsControl::$smtp->authenticate(SMTP_USER, SMTP_PASS);
-	}
-	return $smtp;
-}
-
 function jsonSafe($str)
 {
 	if((string)$str == '' || !is_string($str))
@@ -174,16 +163,6 @@ function incLang($id)
 	include ROOT_DIR.'lang/DE/'.$id.'.lang.php';
 }
 
-function orgaGlocke($msg,$title,$url = '')
-{
-	global $db;
-	$fs = $db->getOrgateam();
-	$db->addGlocke($fs, $msg,$title,$url);
-}
-function glocke($msg)
-{
-	
-}
 function s($id)
 {
 	global $g_lang;
@@ -290,27 +269,6 @@ function getLatLon($anschrift,$plz,$stadt = '',$curl = false)
 	return false;
 }
 
-function domainAvailable ( $strDomain )
-{
-	$rCurlHandle = curl_init ( $strDomain );
-
-	curl_setopt ( $rCurlHandle, CURLOPT_CONNECTTIMEOUT, 4 );
-	curl_setopt ( $rCurlHandle, CURLOPT_HEADER, TRUE );
-	curl_setopt ( $rCurlHandle, CURLOPT_NOBODY, TRUE );
-	curl_setopt ( $rCurlHandle, CURLOPT_RETURNTRANSFER, TRUE );
-
-	$strResponse = curl_exec ( $rCurlHandle );
-
-	curl_close ( $rCurlHandle );
-
-	if ( !$strResponse )
-	{
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
 function ts_day($ts)
 {
 	$days = getDow();
@@ -391,11 +349,6 @@ function handleTagselect($id)
 function format_dt($ts)
 {
 	return date('d.m.Y H:i',$ts).' Uhr';
-}
-function format_day($dow)
-{
-	$days = getDow();
-	return $days[$dow];
 }
 function sv($id,$var)
 {
@@ -575,14 +528,7 @@ function isBotschafter()
 
 function isOrgaTeam()
 {
-	if(isset($_SESSION['client']['group']['orgateam']))
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return mayGroup('orgateam');
 }
 
 function getMenu()
@@ -668,19 +614,6 @@ function getMenu()
 
 		$foodsaver_mob = '';
 
-		if(S::may('fs'))
-		{
-			if(S::may('bieb'))
-			{
-
-			}
-
-			if(S::may('bot'))
-			{
-
-			}
-
-		}
 		$bezirke .= '
 			<li class="break"><span></span></li>
 			<li><a href="#" onclick="becomeBezirk();return false;"><i class="fa fa-plus-circle"></i> Bezirk beitreten</a></li>
@@ -807,25 +740,6 @@ function getDow()
 		6 => s('saturday'),
 		0 => s('sunday')
 	);
-}
-
-function getBetriebeMenuOld()
-{
-	$out = '';
-	if($_SESSION['client']['betriebe'])
-	{
-		$out = '
-		<ul class="sub">';
-		foreach ($_SESSION['client']['betriebe'] as $b)
-		{
-			$out .= '
-			<li><a href="/?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].'</a></li>';
-		}
-		$out .= '
-		</ul>';
-	}
-	
-	return $out;
 }
 
 function getBetriebeMenu()
@@ -976,16 +890,6 @@ function getBetriebeMenu()
 		'default' => $out,
 		'mobile' => $out_mob
 	);
-}
-
-function gAnrede($gender)
-{
-	return genderWord($gender, 'Lieber', 'Liebe', 'Liebe/r');
-}
-
-function logDel($data)
-{
-	file_put_contents(ROOT_DIR.'data/del.txt', json_encode($data)."\n<!-#-!-#-!-#-!-#-!-#-!-#-!>\n",FILE_APPEND);
 }
 
 function tplMailList($tpl_id, $to, $from = false,$attach = false)
@@ -1222,14 +1126,6 @@ function tplMail($tpl_id,$to,$var = array(),$from_email = false)
 	$mail->send();
 }
 
-function getSearchMenu()
-{
-	if(isBotschafter() || isOrgaTeam())
-	{
-		return '<li class="searchIcon"><a class="fNiv" href="/?page=suche">&nbsp</a></li>';
-	}
-}
-
 function getOrgaMenu()
 {
 	$menu = array();
@@ -1308,26 +1204,6 @@ function dt($ts)
 function makeUnique()
 {
 	return md5(date('Y-m-d H:i:s').':'.uniqid());
-}
-
-function imgMini($file = false)
-{
-	return img($file);
-}
-
-function imgPortait($photo)
-{
-
-	if(!(file_exists('images/thumb_crop_'.$photo)))
-	{
-		return('img/portrait.png');
-	}
-	else
-	{
-		return('images/thumb_crop_'.$photo);
-	}
-
-	return v_field($p_cnt, 'Dein Foto');
 }
 
 function idimg($file = false,$size)
@@ -1487,11 +1363,7 @@ function jsValidate($option,$id,$name)
 	if(isset($option['required']))
 	{
 		$out['class'] .= ' required';
-		if(isset($option['required']['msg']))
-		{
-			
-		}
-		else
+		if(!isset($option['required']['msg']))
 		{
 			$out['msg']['required'] = $name.' darf nciht leer sein';
 		}
@@ -1632,16 +1504,6 @@ function goBack()
 {
 	header('Location: '.$_SERVER['HTTP_REFERER']);
 	exit();
-}
-
-function setConfirmMsg($msg)
-{
-	addJs('$("#dialog-confirm-msg").html("'.$msg.'")');
-}
-
-function getBotschafterBezirk()
-{
-	return $_SESSION['client']['botschafter'];
 }
 
 function getBezirkId()
@@ -1836,38 +1698,6 @@ function session_init()
 		$_SESSION['msg']['error'] = array();
 		$_SESSION['msg']['success'] = array();
 	}
-	/*
-	if(!isset($_SESSION['geo']) || $_SESSION['geo'] == false)
-	{
-		if($_SERVER['HTTP_HOST'] == 'localhost')
-		{
-			$geo = json_decode(file_get_contents('http://www.geoplugin.net/json.gp?ip=87.79.104.108'),true);
-		}
-		else
-		{
-			$geo = json_decode(file_get_contents('http://www.geoplugin.net/json.gp?ip='.$_SERVER['REMOTE_ADDR']),true);
-		}
-		
-		//$geo = json_decode(file_get_contents('http://www.geoplugin.net/json.gp?ip=78.35.240.57'),true);
-		if(isset($geo['geoplugin_status']) && $geo['geoplugin_status'] == 200)
-		{
-	
-			$geo['plz'] = json_decode(file_get_contents('http://www.geoplugin.net/extras/postalcode.gp?lat='.$geo['geoplugin_latitude'].'&long='.$geo['geoplugin_longitude'].'&format=json'),true);
-	
-			if(isset($geo['plz']['geoplugin_place']))
-			{
-				$_SESSION['geo'] = array
-				(
-						'lat' => $geo['geoplugin_latitude'],
-						'lon' => $geo['geoplugin_longitude'],
-						'region' => $geo['geoplugin_region'],
-						'city' => $geo['plz']['geoplugin_place'],
-						'plz' => $geo['plz']['geoplugin_postCode']
-				);
-			}
-		}
-	}
-	*/
 }
 
 function getMessages()
@@ -1913,11 +1743,6 @@ function getMessages()
 	//return v_getMessages($g_error,$g_info);
 }
 
-function text_save($txt)
-{
-	return strip_tags($txt);
-}
-
 function save($txt)
 {
 	return preg_replace('/[^a-zA-Z0-9]/','',$txt);
@@ -1952,12 +1777,6 @@ function getCurrent($page = false)
 	{
 		$page = $p;
 	}
-		/*
-		if(file_exists('control/'.$page.'.php'))
-		{
-			include 'control/'.$page.'.php';
-		}
-		*/
 		if(file_exists('control/'.$page.'.php'))
 		{
 			$lang = 'DE';
@@ -2064,17 +1883,12 @@ function addJsFunc($nfunc)
 	$g_js_func .= $nfunc;
 }
 
+// $js is echoed in tpl/default.php
 function addJs($njs)
 {
 	global $js;
 
 	$js .= $njs;
-}
-
-function getJs()
-{
-	global $js;
-	return $js;
 }
 
 function addCssTop($src)
@@ -2173,37 +1987,9 @@ function isVerified()
 	return false;
 }
 
-function br2nl($str)
-{
-	$str = str_replace("\r\n", "\n", $str);
-	$str = str_replace(array('<br>','<br />','<br/>','<br >'), "\n", $str);
-	$str = str_replace("\n\n", "\n", $str);
-	
-	$str = str_replace(array('</p>','</ p>'), "\n\n", $str);
-	$str = str_replace("\n\n\n", "\n\n", $str);
-	
-	return strip_tags($str);
-}
-
 function validEmail($email)
 {
 	if (filter_var($email, FILTER_VALIDATE_EMAIL))
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-function validPlz($plz)
-{
-	$plz = preg_replace('/[^0-9]/', '', $plz);
-
-
-
-	if(strlen($plz) == 5)
 	{
 		return true;
 	}
@@ -2225,11 +2011,7 @@ function validUrl($url)
 
 function isAdmin()
 {
-	if(isset($_SESSION['client']['group']['admin']) && $_SESSION['client']['group']['admin'] === true)
-	{
-		return true;
-	}
-	return false;
+	return mayGroup('admin') && $_SESSION['client']['group']['admin'] === true;
 }
 
 function debug($arg)
@@ -2253,11 +2035,6 @@ function getDebugging()
 	{
 		//echo '<div class="g_debug"><pre>'.print_r($g_debug,true).'</pre></div>';
 	}
-}
-
-function libmailList()
-{
-	
 }
 
 function libmail($bezirk, $email, $subject, $message, $attach = false, $token = false)
@@ -2533,22 +2310,6 @@ function may()
 	}
 }
 
-function genPassword($length = 5)
-{
-	$pool = "qwertzupasdfghkyxcvbnm";
-	$pool .= "1234567890";
-	$pool .= "WERTZUPLKJHGFDSAYXCVBNM";
-
-	srand ((double)microtime()*1000000);
-	$pass_word = '';
-	for($index = 0; $index < $length; $index++)
-	{
-		$pass_word .= substr($pool,(rand()%(strlen ($pool))), 1);
-	}
-	
-	return $pass_word;
-}
-
 function getRolle($gender_id,$rolle_id)
 {
 	return s('rolle_'.$rolle_id.'_'.$gender_id);
@@ -2694,15 +2455,6 @@ function clearPost()
 
 function getSelf()
 {
-	/*
-	$pageURL = 'http';
-	if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
-	$pageURL .= "://";
-	if ($_SERVER["SERVER_PORT"] != "80") {
-		$pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
-	} else {
-		$pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
-	}*/
 	return $_SERVER['REQUEST_URI'];
 }
 
@@ -2737,56 +2489,8 @@ function is_allowed($img)
 	{
 		return true;
 	}
-	/*
-	else if (isset($allowed_mime[$img['type']]))
-	{
-
-		return true;
-	}
-	*/
 
 	return false;
-}
-
-function deleteFilesFromDirectory($ordnername){
-	//überprüfen ob das Verzeichnis überhaupt existiert
-	if (is_dir($ordnername)) {
-		//Ordner öffnen zur weiteren Bearbeitung
-		if ($dh = opendir($ordnername)) {
-			//Schleife, bis alle Files im Verzeichnis ausgelesen wurden
-			while (($file = readdir($dh)) !== false) {
-				//Oft werden auch die Standardordner . und .. ausgelesen, diese sollen ignoriert werden
-				if ($file!="." AND $file !="..") {
-					//Files vom Server entfernen
-					unlink("".$ordnername."".$file."");
-				}
-			}
-			//geöffnetes Verzeichnis wieder schließen
-			closedir($dh);
-		}
-	}
-}
-
-function cleanPhone($number)
-{
-	$number = preg_replace('/[^0-9+]/','',$number);
-
-	if(substr($number,0,3) == '+49')
-	{
-		$number = '+'.str_replace('+','',$number);
-	}
-
-	if(substr($number,0,4) == '0049')
-	{
-		$number = '+49'.substr($number,4);
-	}
-
-	if(substr($number,0,1) == '0')
-	{
-		$number = '+49'.substr($number,1);
-	}
-
-	return $number;
 }
 
 function tt($str,$length = 160)
@@ -2832,10 +2536,7 @@ function avatar($foodsaver,$size = 'mini',$altimg = false)
 				break;
 		}
 	}
-	/*
-	echo '<pre>';
-	print_r($foodsaver);die();*/
-	
+
 	return '<span style="'.$bg.'background-image:url('.img($foodsaver['photo'],$size,'q',$altimg).');" class="avatar size-'.$size.' sleepmode-'.$foodsaver['sleep_status'].'"><i>'.$foodsaver['name'].'</i></span>';
 }
 
@@ -2867,17 +2568,6 @@ function rolleWrap($roleStr)
 	return $roles[$roleStr];
 }
 
-function convertKbSize($size)
-{
-	$unit=array('b','kb','mb','gb','tb','pb');
-	return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
-}
-
-function forceLogin()
-{
-	go('/?page=login&ref='.urlencode($_SERVER['REQUEST_URI']));
-}
-
 function sendSock($fsid,$app,$method,$options)
 {
 	if($sid = Mem::user($fsid, 'sid'))
@@ -2888,17 +2578,7 @@ function sendSock($fsid,$app,$method,$options)
 			'm' => $method, // method
 			'o' => json_encode($options) // options
 		));
-		
-		//$fp = fopen ('http://127.0.0.1:1338/?' . $query , 'r');
-		
 		file_get_contents(SOCK_URL . '?' . $query);
-		
-		/*
-		if($fp)
-		{
-			fclose($fp);
-		}
-		*/
 	}
 }
 
