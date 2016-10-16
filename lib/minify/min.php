@@ -10,7 +10,6 @@ $js_files = [
 	'/js/jquery-ui-1.10.4.js',
 	'/js/jquery-ui-addons.js',
 	'/js/tablesorter/jquery.tablesorter.min.js',
-	'/js/jMenu.jquery.js',
 	'/js/fancybox/jquery.fancybox.pack.js',
 	'/js/jquery.Jcrop.min.js',
 	'/js/tagedit/js/jquery.autoGrowInput.js',
