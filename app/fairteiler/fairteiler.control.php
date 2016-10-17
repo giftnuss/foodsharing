@@ -302,7 +302,7 @@ class FairteilerControl extends Control
 		),s('options')),CNT_RIGHT);
 	}
 	
-	public function handleEditFt()
+	private function handleEditFt()
 	{
 		if($this->mayEdit())
 		{			
@@ -359,7 +359,7 @@ class FairteilerControl extends Control
 		}
 	}
 	
-	public function isFollower()
+	private function isFollower()
 	{
 		if(isset($this->follower['all'][fsId()]))
 		{

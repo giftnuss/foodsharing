@@ -75,7 +75,7 @@ class BcardXhr extends Control
 		}
 	}
 	
-	public function generatePdf($data,$type = 'fs')
+	private function generatePdf($data,$type = 'fs')
 	{
 		require_once('lib/fpdf.php');
 		require_once('lib/fpdi/fpdi.php');

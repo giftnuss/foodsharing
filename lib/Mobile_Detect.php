@@ -943,7 +943,7 @@ class Mobile_Detect
      *
      * @return bool
      */
-    public function checkHttpHeadersForMobile()
+    private function checkHttpHeadersForMobile()
     {
 
         foreach ($this->getMobileHeaders() as $mobileHeader => $matchType) {

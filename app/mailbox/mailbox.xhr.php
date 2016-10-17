@@ -427,7 +427,7 @@ class MailboxXhr extends Control
 		);
 	}
 	
-	public function libPlainMail($to,$from,$subject,$message,$attach = false)
+	private function libPlainMail($to,$from,$subject,$message,$attach = false)
 	{
 		if(is_array($to) && !isset($to['name']))
 		{

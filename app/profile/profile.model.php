@@ -207,7 +207,7 @@ class ProfileModel extends Model
 		return $data;
 	}
 
-	public function getNotesCount($fsid)
+	private function getNotesCount($fsid)
 	{
 		return (int)$this->qOne('
 			SELECT
@@ -219,7 +219,7 @@ class ProfileModel extends Model
 		');
 	}
 	
-	public function getViolationCount($fsid)
+	private function getViolationCount($fsid)
 	{
 		return (int)$this->qOne('
 			SELECT 
@@ -231,25 +231,6 @@ class ProfileModel extends Model
 				
 				WHERE
 					r.foodsaver_id = '.(int)$fsid.'
-		');
-	}
-	
-	public function getProfile()
-	{
-		return $this->qRow('
-
-			SELECT 	fs.id,
-					fs.name,
-					fs.nachname,
-					fs.geschlecht,
-					fs.photo,
-					fs.sleep_status,
-					fs.quiz_rolle
-				
-			FROM 	'.PREFIX.'foodsaver fs
-				
-			WHERE 	fs.id = '.(int)$this->fs_id.'
-				
 		');
 	}
 
@@ -343,10 +324,5 @@ class ProfileModel extends Model
 
 				
 		');
-	}
-	
-	public function getStats()
-	{
-		
 	}
 }

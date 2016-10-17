@@ -653,22 +653,6 @@ class BezirkModel extends Model
 		');
 	}
 	
-	public function checkTopicArea($bid, $tid)
-	{
-		return (int)$this->qOne('
-			SELECT 	
-				COUNT(bt.theme_id)
-				
-			FROM
-				'.PREFIX.'bezirk_has_theme bt
-
-			WHERE
-				bt.theme_id = '.(int)$tid.'
-			AND
-				bt.bezirk_id = '.(int)$bid.'
-		');
-	}
-
 	public function getBotCount($bid)
 	{
 		return (int)$this->qOne('

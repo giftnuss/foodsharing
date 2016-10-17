@@ -98,7 +98,7 @@ class BellModel extends Model
 		return $this->del('DELETE FROM `'.PREFIX.'foodsaver_has_bell` WHERE `bell_id` = '.(int)$id.' AND foodsaver_id = '.(int)fsId());
 	}
 	
-	public function setBellsAsSeen($bids)
+	private function setBellsAsSeen($bids)
 	{
 		$this->update('UPDATE `'.PREFIX.'foodsaver_has_bell` SET `seen` = 1 WHERE `bell_id` IN('.implode(',', $bids).')');
 	}

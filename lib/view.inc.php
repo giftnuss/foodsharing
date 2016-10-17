@@ -6,19 +6,6 @@ function v_quickform($titel,$elements,$option=array())
 	return v_field('<div class="v-form">'.v_form($titel,$elements,$option).'</div>',$titel);
 }
 
-function addMapApi()
-{
-	addHead('
-		<script src="http://www.google.com/jsapi"></script>
-		<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclusterer/1.0/src/markerclusterer.js"></script>
-		<script type="text/javascript">
-			google.load(\'maps\', \'3\', {
-				other_params: \'sensor=false\'
-			});
-		</script>
-	');
-}
-
 function v_scroller($content,$width='232')
 {
 	if(isMob())
@@ -469,32 +456,6 @@ function v_clustermap($id,$option = array())
     
 }
 
-function v_messageList($conversation)
-{
-	$id = id('messagelist');
-	$out = '<ul id="messagelist" class="msgbar-dropdown-menu noxhr extended inbox">';
-	$class = 'odd';
-	
-	foreach ($conversation as $m)
-	{
-		if($class == 'odd')
-		{
-			$class = 'even';
-		}
-		else
-		{
-			$class = 'odd';
-		}
-		
-		$m['time'] = msgTime($m['time_ts']);
-		$out .= '<li class="msg"><a class="'.$class.'" href="#'.$m['sender_id'].'"><span class="photo"><img alt="avatar" src="'.img($m['photo']).'"></span><span class="subject"><span class="from">'.$m['name'].'</span><span class="time">'.$m['time'].'</span></span><span class="message">&nbsp;</span><span style="display:block;clear:both;"></span></a></li>';
-	}
-	
-	$out .= '</ul>';
-	
-	return $out;
-}
-
 function v_swapText($id,$value)
 {
 	return '<input class="swapText swap" onblur="if(this.value==\'\'){this.value=\''.$value.'\';$(this).addClass(\'swap\')}" onfocus="if(this.value==\''.$value.'\'){this.value=\'\';$(this).removeClass(\'swap\');}" onclick="if(this.value==\''.$value.'\'){this.value=\'\';$(this).removeClass(\'swap\');}" id="'.$id.'" type="text" name="'.$id.'" value="'.$value.'" />';
@@ -651,11 +612,6 @@ function v_msgBar()
 				</ul>
 			</div>
 		</div>';
-}
-
-function v_form_photo($id)
-{
-	
 }
 
 function v_success($msg,$title =false)
@@ -855,24 +811,10 @@ function v_form_tinymce($id,$option = array())
 	return v_input_wrapper($label, '<textarea name="'.$id.'" id="'.$id.'">'.$value.'</textarea>',$id,$option);
 }
 
-function v_form_desc($id,$text,$option = array())
-{
-	$id = id($id);
-	return '<div id="'.$id.'">'.$text.'</div>';
-}
-
 function v_form_hidden($name,$value)
 {
 	$id = id($name);
 	return '<input type="hidden" id="'.$id.'" name="'.$name.'" value="'.$value.'" />';
-}
-
-function v_form_select_foodsaver($option = array())
-{
-	global $db;
-	$foodsaver = $db->getBasics_foodsaver();
-	
-	return v_form_select('foodsaver',array('values' => $foodsaver),$option);
 }
 
 function v_form_recip_chooser_mini()
@@ -1138,145 +1080,10 @@ function v_photo_edit($src,$fsid = false)
 		<div style="visibility:hidden"><img src="/images/'.$original.'" /></div>';
 }
 
-function v_accordion($sections)
-{
-	$id = id('accordion');
-	$out = '
-	<div id="'.$id.'">';
-	foreach($sections as $s)
-	{
-		$out .= '
-		<h3>'.$s['name'].'</h3>
-		<div>
-			'.$s['cnt'].'
-		</div>';
-	}
-	
-	$out .= '
-	</div>';
-	
-	addJs('$("#'.$id.'").accordion({
-			active: "false",
-			collapsible: true
-	});');
-	
-	return $out;
-}
-
-function v_form_accordion($sections)
-{
-	$id = id('form_accordion');
-	$out = '
-	<div id="'.$id.'">';
-	foreach ($sections as $i => $section)
-	{
-		$i++;
-		$out .= '
-		<h3>'.$section['title'].'</h3>
-		<div>'.v_form_section($i,$section['elements'],$id).'</div>';
-	}
-	$out .= '
-	</div>';
-	
-	addJs('$("#'.$id.'").accordion({
-			heightStyle: "content",
-			animate: {duration:0}
-		});');
-	
-	return $out;
-}
-
 function v_form_info($msg,$label = false)
 {
 	return '<div class="input-wrapper">'.v_info($msg,$label).'</div>';
 }
-
-function v_wizardform($title,$sections,$option = array())
-{
-	$id = id('wizard');
-	$stepmenu = '<ul>';
-	$out = '';
-	foreach ($sections as $i => $section)
-	{
-		$i++;
-		$stepmenu .=  '
-		<li><a href="#step-'.$i.'">
-                <label class="stepNumber">'.$i.'</label>
-                <span class="stepDesc">
-                   '.$section['title'].'<br />
-                   <small>'.$section['desc'].'</small>
-                </span>
-			</a></li>';
-		$out .= v_field(v_form_section($i,$section['elements']),$section['title']);
-	}
-	$stepmenu .= '
-		</ul>';
-	
-	addJs('$("#'.$id.'").smartWizard({transitionEffect:"slide"});');
-	
-	return v_form('',array('<div id="'.$id.'">'.$stepmenu . $out.'</div>'),$option);
-}
-
-function v_statusbox()
-{
-	global $db;
-	$out = '';
-	
-	if($bezirk = $db->getBezirk($_SESSION['client']['bezirk_id']))
-	{
-		$out .= v_menu(array(
-					
-				array
-				(
-						'href' => '/?page=foodsaver',
-						'name' => 'Foodsaver aus '.$bezirk['name']
-				),
-				array
-				(
-						'href' => '/?page=betrieb',
-						'name' => 'Zu den Betrieben'
-				)
-					
-		),'Foodsaver-Bezirk '.$bezirk['name']);
-	}
-	
-	if($rolle = $db->getRolle())
-	{
-		if(isset($rolle['botschafter']))
-		{
-			$out .= v_menu(array(
-					
-					array
-					(
-						'href' => '/?page=email',
-						'name' => 'E-Mail an alle foodsaver'		
-					)
-					
-			),'Botschafter '.$rolle['botschafter']['bezirk_name']);
-		}
-		
-		if(isset($rolle['verantwortlich']))
-		{
-			$menu = array();
-			
-			foreach($rolle['verantwortlich'] as $v)
-			{
-				$menu[] = array
-				(
-					'href' => '/?page=betrieb&id='.(int)$v['betrieb_id'],
-					'name' => $v['betrieb_name']
-				);
-			}
-			if(!empty($menu))
-			{
-				$out .= v_menu($menu,'Deine Lebensmittel-Spender');
-			}
-		}
-	}
-	return $out;
-}
-
-
 
 function v_form($name,$elements,$option=array())
 {
@@ -1367,11 +1174,6 @@ function v_form($name,$elements,$option=array())
 	$v_id[$id] = true;
 	
 	return $out;
-}
-
-function v_getElement($el)
-{
-	
 }
 
 function v_menu($items,$title = false,$option = array())
@@ -1700,73 +1502,6 @@ function v_form_textarea($id,$option = array())
 			$option);
 }
 
-function v_form_str_hsnr($name,$option = array())
-{
-	$str_id = id('str');
-	$hsnr_id = id('hsnr');
-	
-	if(!isset($option['str']))
-	{
-		$option['str'] = array();
-	}
-	if(!isset($option['hsnr']))
-	{
-		$option['hsnr'] = array();
-	}
-	
-	$str_val = getValue($str_id);
-	$hsnr_val = getValue($hsnr_id);
-	
-	$str_check = checkInput($option['str'], $str_id, $str_val);
-	$hsnr_check = checkInput($option['hsnr'], $str_id, $hsnr_val);
-	
-	$class = '';
-	if(strpos($str_check.$hsnr_check, 'empty') !== false)
-	{
-		$class .= ' empty';
-	}
-	if(strpos($str_check.$hsnr_check, 'required') !== false)
-	{
-		$class .= ' required';
-	}
-
-	return v_input_wrapper(
-			$name, 
-			'<input class="input text input_str" type="text" name="'.$str_id.'" value="'.$str_val.'" id="'.$str_id.'" /><input class="input text input_hsnr" type="text" name="'.$hsnr_id.'" value="'.$hsnr_val.'" id="'.$hsnr_id.'" />', 
-			$str_id,
-			array('class' => $class)
-	);
-	/*
-	return '
-	<div class="input-wrapper'.$class.'" id="'.$str_id.'-wrapper">
-	<label class="ui-widget" for="'.$str_id.'">'.$name.':</label>
-	
-	<div style="clear:both;"></div>
-	</div>';
-	*/
-}
-
-function v_form_combobox($name,$cats,$option = array())
-{
-	$id = id($name);
-	$out = '
-	<select name="'.$id.'" id="'.$id.'">
-				<option></option>';
-
-	foreach ($cats as $c)
-	{
-		$out .= '
-		<option>'.$c['name'].'</option>';
-	}
-
-	$out .= '
-	</select>';
-
-	addJs('$("#'.$id.'").combobox()');
-
-	return v_input_wrapper($name,$out,$id);
-}
-
 function v_form_checkbox($id,$option = array())
 {
 	$id = id($id);
@@ -1826,109 +1561,6 @@ function v_form_checkbox($id,$option = array())
 	}
 	
 	return v_input_wrapper($label, $out, $id, $option);
-}
-
-function v_form_checkboxTagAlt($id,$option=array())
-{
-	$id = id($id);
-	$out = '';
-	
-	$bindabei = false;
-	
-	$out .= '
-		<ul class="tagedit-list tagAltlist" id="'.$id.'-tagAltlist">';
-	if($values = getValue($id))
-	{
-		foreach ($values as $v)
-		{
-			$name = $v['name'];
-			$class = 'tagedit-listelement tagedit-listelement-old';
-			if(fsId() == $v['id'])
-			{
-				$class = 'dasbistDu tagedit-listelement tagedit-listelement-old';
-				$name = 'Du';
-				$bindabei = true;
-			}
-			$out .= '
-			<li class="'.$class.'" onclick="profile('.(int)$v['id'].');">
-				<input type="hidden" name="'.$id.'['.$v['id'].'-a]" value="'.$v['name'].'" />
-				<span class="name">'.$name.'</span>
-			</li>';
-		}
-	}
-	$out .= '
-		</ul>';
-	
-	if(!$bindabei)
-	{
-		$out .= '
-			<span id="'.$id.'-button">Mich hier eintragen</span>';
-	}
-	else
-	{
-		$out .= '
-			<span id="'.$id.'-buttonOut">Abmelden</span>';
-	}
-	
-	
-	addHidden('
-	<div id="'.$id.'-timedialogOut">
-		'.v_info('<strong>Achtung!</strong> Es darf '.$option['label'].' keine Lücke entstehen achte darauf das andere abholen.</span>').'
-	</div>
-	<div id="'.$id.'-timedialog">
-		'.v_info('Möchtest Du Dich wirklich verbindlich für <strong>'.$option['label'].'</strong> eintragen?</span>').'
-	</div>');
-	
-	addJs('
-			
-			$("#'.$id.'-timedialog").dialog({
-				title:"Sicher?",
-				resizable: false,
-				modal: true,
-				autoOpen:false,
-				buttons: {
-					"Ja ich bin mir sicher": function() {
-						$("#'.$id.'-button").last().remove();
-						$("#'.$id.'-tagAltlist").append(\'<li><input type="hidden" name="'.$id.'['.(int)fsId().'-a]" value="'.(int)fsId().'" /><span class="notConfirmed">Du</span></li>\');
-						$( this ).dialog( "close" );
-						$("#zeiten-form").submit();
-					},
-					"Nein doch nicht": function() {
-						$( this ).dialog( "close" );
-					}
-				}
-			});
-			
-	$("#'.$id.'-button").button().click(function(){
-		$("#'.$id.'-timedialog").dialog("open");
-	});
-				
-	$("#'.$id.'-timedialogOut").dialog({
-				title:"Denke an Nachfolger",
-				resizable: false,
-				modal: true,
-				autoOpen:false,
-				buttons: {
-					"Mach Ich!": function() {
-						$("#'.$id.'-buttonOut").last().remove();
-						$("#'.$id.'-tagAltlist li.dasbistDu").remove();
-						$( this ).dialog( "close" );
-						$("#zeiten-form").submit();
-					},
-					"Abbrechen": function() {
-						$( this ).dialog( "close" );
-					}
-				}
-			});
-			
-	$("#'.$id.'-buttonOut").button().click(function(){
-		$("#'.$id.'-timedialogOut").dialog("open");
-	});
-		
-	');
-	
-	return v_input_wrapper(s($id),$out ,$id, $option);
-	
 }
 
 function v_form_tagselect($id,$option=array())
@@ -2165,17 +1797,6 @@ function v_form_radio($id,$option = array())
 	
 }
 
-function v_form_land()
-{
-	global $db;
-	$values = $db->get_land();
-	
-	$out = v_form_select('land_id',array('values'=>$values));
-	
-	return $out;
-	
-}
-
 function v_form_select($id,$option = array())
 {
 	$id = id($id);
@@ -2262,31 +1883,6 @@ function v_form_select($id,$option = array())
 	}
 	
 	return v_input_wrapper($label,$out,$id,$option);
-}
-
-function v_form_plz_ort($name,$option = array())
-{
-	
-	$plz_id = id('plz');
-	$ort_id = id('ort');
-	
-	$plz_value = getValue($plz_id);
-	$ort_value = getValue($ort_id);
-	
-	return v_input_wrapper(
-			$name, 
-			'<input class="input text input_plz value" type="text" name="'.$plz_id.'" id="'.$plz_id.'" value="'.$plz_value.'" /><input class="input text input_ort" type="text" name="'.$ort_id.'" value="'.$ort_value.'" id="'.$ort_id.'" />', 
-			$plz_id,
-			$option
-	);
-	/*
-	return '
-	<div class="input-wrapper" id="'.$plz_id.'-wrapper">
-	<label class="ui-widget" for="'.$plz_id.'">'.$name.':</label>
-	
-	<div style="clear:both;"></div>
-	</div>';
-	*/
 }
 
 function v_input_wrapper($label,$content,$id = false,$option = array())
@@ -2494,14 +2090,6 @@ function v_field($content,$title = false,$option = array())
 	</div>';
 }
 
-function v_blankfield($content)
-{
-	return '
-	<div class="ui-widget ui-widget-content ui-corner-all margin-bottom ui-padding">
-		'.$content.'
-	</div>';
-}
-
 function v_form_passwd($id,$option = array())
 {
 	$id = id($id);
@@ -2557,28 +2145,6 @@ function v_getMessages($error,$info)
 	return $out;
 }
 
-
-
-function v_linkrow($href,$rows = array())
-{
-	$out = '
-	<a class="linkrow ui-corner-all" href="'.$href.'">';
-
-	
-	foreach ($rows as $r)
-	{
-		$style = '';
-		if(isset($r['width']))
-		{
-			$style = ' style="width:'.$r['width'].'px;"';
-		}
-		$out .= '<span class="item" '.$style.'>'.qs($r['name']).'</span>';
-	}
-	$out .= '<span style="clear:both;display:block;"></span></a>';
-	
-	return $out;
-}
-
 function v_map($adress,$option = array())
 {
 	addScript('http://maps.google.com/maps/api/js?sensor=false&amp;language=de');
@@ -2613,13 +2179,6 @@ function v_map($adress,$option = array())
 	}
 	
 	return '<div'.$width.' class="map" id="'.$id.'"></div>';
-}
-
-function v_header($title)
-{
-	return '
-	<div class="head ui-widget-header ui-corner-all">'.qs($title).'</div>';
-	// 
 }
 
 function buttonset($buttons = array())
@@ -2661,101 +2220,6 @@ function v_switch($views = array())
 	return $out.'
 			</select>';
 }
-
-function v_sortswitch($fields = array())
-{
-	$out = '<select class="v-switch"  onchange="goTo(this.value);">
-				<!--<option value="#">Ansicht:</option>-->';
-
-	foreach ($fields as $f)
-	{
-		$id = makeId($v);
-		$sel = '';
-		if(isset($_GET['sort']) && $id == $_GET['v'])
-		{
-			$sel = ' selected="selected"';
-		}
-		$out .= '
-				<option value="'.addGet('v',$id).'"'.$sel.'>'.$v.'</option>';
-	}
-
-	return $out.'
-			</select>';
-}
-
-function v_tabs($content = array())
-{
-	
-	$id = id('tabs');
-	
-	addJs('
-	$("#'.$id.'").tabs();');
-	
-	$ul = '';
-	$cnt = '';
-	
-	$i=0;
-	foreach ($content as $c)
-	{
-		$i++;
-		$ul .= '
-		<li><a href="#'.$id.'-'.$i.'">'.$c['title'].'</a></li>';
-		
-		$cnt .= '
-		<div id="'.$id.'-'.$i.'">
-			'.$c['content'].'
-		</div>';
-	}
-	
-	$out = '
-	<div id="'.$id.'" class="margin-bottom">
-		<ul>'.$ul.'
-		</ul>
-		'.$cnt.'
-	</div>';
-	
-	return $out;
-}
-
-
-
-function v_form_section_start($steps)
-{
-	$out = '
-	<ul>';
-	foreach ($steps as $i => $s)
-	{
-		$out .= '
-		<li><a href="#step-'.$i.'">
-                <label class="stepNumber">'.$i.'</label>
-                <span class="stepDesc">
-                   '.$s['title'].'<br />
-                   <small>'.$s['desc'].'</small>
-                </span>
-			</a></li>';
-	}
-	$out .= '
-	</ul>';
-}
-
-function v_form_section($step,$elements = array(),$id)
-{
-	$out = '
-	<div id="step-'.$step.'" class="v-form">';
-	foreach ($elements as $e)
-	{
-		$out .= $e;
-	}
-	
-	$out .= '<input onclick="accordionNext(\''.$id.'\','.count($elements).');" type="button" value="'.s('continue').'" class="button ui-button ui-widget ui-state-default ui-corner-all" role="button" aria-disabled="false" />';
-	
-	$out .= '
-	</div>';
-	
-	return $out;
-}
-
-
 
 function v_getStatusAmpel($status)
 {

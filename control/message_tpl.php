@@ -124,26 +124,6 @@ function handle_add()
 	}
 }
 
-function get_message_tpl()
-{
-	global $db;
-	$out = $db->q('
-		SELECT
-			`id`,
-			`language_id`,
-			`name`,
-			`subject`,
-			`body`
-			
-		FROM 		
-			`'.PREFIX.'message_tpl`
-		
-		ORDER BY 
-			`name`');
-
-	return $out;
-}
-	
 function getBasics_message_tpl()
 {
 	global $db;

@@ -128,14 +128,6 @@ class Mem
 		Mem::userDel($fs_id, 'active');
 		return false;
 	}
-	
-	/**
-	 * update user activity to show user is online
-	 */
-	public static function userUpdate()
-	{
-		Mem::userSet(fsId(), 'active', time());
-	}
 }
 
 Mem::connect();
@@ -206,20 +198,7 @@ class Db
 	
 		return false;
 	}
-	
-	public function emailExsists($email)
-	{
-		$count = $this->qOne('SELECT COUNT(`id`) FROM '.PREFIX.'foodsaver WHERE email = '.$this->strval($email));
-		$count = (int)$count;
-		
-		if($count > 0)
-		{
-			return true;
-		}
-		
-		return false;
-	}
-	
+
 	public function addComment($data)
 	{
 		$out = false;
@@ -242,7 +221,7 @@ class Db
 		}
 	}
 	
-	public function addCommentBetrieb($data)
+	private function addCommentBetrieb($data)
 	{
 		if((int)$data['id'] > 0 && strlen($data['comment']) > 0)
 		{
@@ -331,65 +310,11 @@ class Db
 		return $this->qOne('SELECT `name` FROM `'.PREFIX.'bezirk` WHERE `id` = '.$this->intval($bezirk_id));
 	}
 	
-	public function getBetriebName($betrieb_id)
+	private function getBetriebName($betrieb_id)
 	{
 		return $this->qOne('SELECT `name` FROM `'.PREFIX.'betrieb` WHERE `id` = '.$this->intval($betrieb_id));
 	}
-	
-	
 
-	public function editBetrieb($data,$id)
-	{
-		/*
-		 * 
-		 *     Array
-(
-    [form_submit] => editbetrieb
-    [bezeichnung] => Praxis
-    [str] => Bauerbankstraße
-    [hsnr] => 9
-    [plz] => 50969
-    [ort] => Köln
-    [kategorie] => 1
-    [status] => 2
-    [betreibskette] => 4
-)
-		 */
-		
-		
-
-		if(true)
-		{
-			$this->removeAllVerantwortlicher($id);
-			
-			if(!empty($data['verantwortlicherfoodsaver']))
-			{
-				$this->addVerantwortlicher($data['verantwortlicherfoodsaver'], $id);
-			}
-			
-			$bezirk_id = $this->getBezirkIdByPlz($plz_id);
-			return $this->update('
-				UPDATE '.PREFIX.'betrieb
-				
-				SET	plz = '.$this->strval(trim($data['plz'])).',
-					bezirk_id = '.$this->intval($bezirk_id).',
-					kette_id = '.$this->intval($data['betreibskette']).',
-					betrieb_kategorie_id = '.$this->intval($data['kategorie']).',
-					name = '.$this->strval($data['bezeichnung']).',
-					str = '.$this->strval($data['str']).',
-					hsnr = '.$this->strval($data['hsnr']).',
-					`status` = '.$this->intval($data['status']).',
-					status_date = '.$this->dateval(date('Y-m-d H:i:s')).',
-					ansprechpartner = '.$this->strval($data['ansprechpartner']).', 
-					telefon = '.$this->strval($data['telefon']).', 
-					email = '.$this->strval($data['emailadresse']).', 
-					fax = '.$this->strval($data['fax']).'
-			
-				WHERE `'.PREFIX.'betrieb`.`id` = '.$this->intval($id).'
-		');
-		}
-	}
-	
 	public function addBetrieb($data)
 	{
 		/*
@@ -460,22 +385,8 @@ class Db
 		
 		return false;
 	}
-	
-	
-	
-	public function addBetreibskette($data)
-	{
-		$neu = urldecode($data['neu']);
-		$id = $this->insert('
-				INSERT INTO '.PREFIX.'kette(`name`)VALUES('.$this->strval($neu).')
-		');
-		
-		$name = safe_html($neu);
-		
-		return json_encode(array('id'=>$id,'name'=>$name));
-	}
-	
-	public function addOrGetStadtId($stadt,$bundesland)
+
+	private function addOrGetStadtId($stadt,$bundesland)
 	{
 		$bundesland_id = $this->getBundeslandId($bundesland);
 
@@ -490,7 +401,7 @@ class Db
 		}
 	}
 	
-	public function getBundeslandId($name)
+	private function getBundeslandId($name)
 	{
 		if($id = $this->qOne('SELECT `id` FROM `'.PREFIX.'bundesland` WHERE `name` = '.$this->strval($name)))
 		{
@@ -513,73 +424,7 @@ class Db
 			return $this->insert('INSERT INTO `'.PREFIX.'bezirk`(`name`)VALUES('.$this->strval($name).')');
 		}
 	}
-	
-	public function importCities()
-	{
-	
-		$fp = fopen('data/DE_NEU.txt','r');
-		$i = 0;
-		while (($data = fgetcsv($fp, 1000)) !== FALSE)
-		{
-			if(strlen($data[1]) == 5)
-			{
-				if($stadt_id = $this->addOrGetStadtId($data[2],$data[3]))
-				{
-					if($bezirk_id = $this->getBezirkId($data[7]))
-					{
-						echo('('.$this->strval($data[1]).','.$this->intval($stadt_id).','.$this->intval($bezirk_id).'),'."\n");
-					}
-				}
-			}
-		}
-	
-	
-		fclose($fp);
-		die();
-	}
-	
-	public function importCitiesOld()
-	{
-		$fp = fopen('data/DE.txt','r');
-		
-		$fpo = fopen('data/DE_NEU.txt','w');
-		
-		$i = 0;
-		$cur_plz = '0';
-		$plz = array();
-		while (($data = fgetcsv($fp, 1000, "\t")) !== FALSE)
-		{
-			$plz[$data[1]] = $data;
-			
-			if(strlen($data[1]) == 5)
-			{
-				//$this->insert('INSERT INTO `fs_plz`(`name`,`stadt_id`,`bezirk_id`) VALUES()');
-			}
-			
-		}
-		
-		foreach($plz as $p)
-		{
-		
-			
-			fputcsv($fpo,$p);
-			
-		}
-		
-		fclose($fpo);
-		fclose($fp);
-	}
-	
-	public function getKetten()
-	{
-		return $this->q('SELECT `id`,`name` FROM '.PREFIX.'kette');
-	}
-	
-	public function getBetriebKategorien()
-	{
-		return $this->q('SELECT `id`,`name` FROM '.PREFIX.'betrieb_kategorie');
-	}
-	
+
 	public function getAllFoodsaver()
 	{
 		return $this->q('
@@ -763,18 +608,6 @@ class Db
 		}
 	}
 	
-	public function boolval($val)
-	{
-		if($val == 0)
-		{
-			return 'FALSE';
-		}
-		else
-		{
-			return 'TRUE';
-		}
-	}
-	
 	public function intval($val)
 	{
 		return (int)$val;
@@ -796,12 +629,7 @@ class Db
 	{
 		return '"'.$this->safe($val).'"';
 	}
-	
-	public function timeval($val)
-	{
-		return '"'.$this->safe($val).'"';
-	}
-	
+
 	public function floatval($val)
 	{
 		return floatval($val);
@@ -904,60 +732,7 @@ class Db
 		Mem::userDel(fsId(), 'lastMailMessage');
 		
 	}
-	
-	public function updateMumble($pass)
-	{
-		$check = false;
-		if(isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke']))
-		{
-			foreach ($_SESSION['client']['bezirke'] as $b)
-			{
-				if($b['type'] == 7)
-				{
-					$check = true;
-					break;
-				}
-			}
-		}
-		
-		if($check)
-		{
-			$data = $this->getValues(array('name','nachname'),'foodsaver',fsId());
-			
-			$name = trim($data['name']);
-			$name = explode(' ', $name);
-			$name = $name[0];
-			$name = preg_replace('/[^a-zA-ZäöüÄÖÜß]/', '', $name);
-			
-			$lastname = trim($data['nachname']);
-			$lastname = str_replace(' ', '_', $lastname);
-			$lastname = preg_replace('/[^a-zA-ZäöüÄÖÜß_]/', '', $lastname);
-			
-			$tmpname = $name;
-			
-			$i=0;			
-			while($this->qOne('SELECT COUNT(foodsaver_id) FROM '.PREFIX.'mumbleuser WHERE name = '.$this->strval($tmpname).' AND foodsaver_id != '.(int)fsId()))
-			{
-				$i++;
-				if($i > strlen($lastname))
-				{
-					$tmpname = $name.'_'.$i;
-				}
-				else
-				{
-					$tmpname = $name.'_'.substr($lastname, 0,$i);
-				}
-				
-			}
-			
-			$this->insert('
-					REPLACE INTO `'.PREFIX.'mumbleuser`(`foodsaver_id`, `name`, `sha`) 
-					VALUES 
-					('.(int)fsId().','.$this->strval($tmpname).','.$this->strval(sha1($pass)).')
-			');
-		}
-	}
-	
+
 	public function login($email,$pass)
 	{
 		$email = trim($email);
@@ -1138,7 +913,7 @@ class Db
 		return $this->initSessionData($fs_id);
 	}
 	
-	public function initSessionData($fs_id)
+	private function initSessionData($fs_id)
 	{
 		$this->insert('INSERT IGNORE INTO '.PREFIX.'activity(`foodsaver_id`,`zeit`)VALUE('.$this->intval($fs_id).',NOW()) ');
 		$this->updateActivity($fs_id);
@@ -1476,29 +1251,7 @@ class Db
 		}
 		return $out;
 	}
-	
-	public function addClient($email,$pass)
-	{
-		$email = strtolower($email);
-		//$email = trim($email);
-	
-		$md5 = $this->encryptMd5($email, $pass);
-	
-		$sql = '
-		INSERT INTO `'.PREFIX.'foodsaver`	(`email`, `passwd`)
-		VALUES					('.$this->strval($email).','.$this->strval($md5).')
-		';
-	
-		if($id = $this->insert($sql))
-		{
-			return $id;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
+
 	public function getValues($fields,$table,$id)
 	{
 		$fields = implode('`,`', $fields);

@@ -131,7 +131,7 @@ class GroupsModel extends Model
 	 *
 	 * @param Integer $group_id
 	 */
-	public function emptyLeader($group_id)
+	private function emptyLeader($group_id)
 	{
 		return $this->del('
 			DELETE FROM `'.PREFIX.'botschafter`
@@ -144,7 +144,7 @@ class GroupsModel extends Model
 	 *
 	 * @param Integer $group_id
 	 */
-	public function emptyMember($group_id)
+	private function emptyMember($group_id)
 	{
 		return $this->del('
 			DELETE FROM `'.PREFIX.'foodsaver_has_bezirk`

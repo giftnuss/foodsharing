@@ -177,7 +177,7 @@ class SettingsModel extends Model
 	/*
 	 * in the session are only the failired answeres stored in so now we get all the right answers an fill out the array
 	 */
-	public function addRightAnswers($indexList,$fullList)
+	private function addRightAnswers($indexList,$fullList)
 	{
 		$out = array();
 		

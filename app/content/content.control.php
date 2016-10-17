@@ -122,17 +122,6 @@ class ContentControl extends Control
 		}
 	}
 
-	public function fuer_unternehmen()
-	{
-		if($cnt = $this->model->getContent(4))
-		{
-			addBread($cnt['title']);
-			addTitle($cnt['title']);
-			
-			addContent($this->view->partner($cnt));
-		}
-	}
-
 	public function unterstuetzung()
 	{
 		if($cnt = $this->model->getContent(42))
@@ -222,7 +211,7 @@ class ContentControl extends Control
 	}
 }
 
-function content_form($title = 'Content Management')
+private function content_form($title = 'Content Management')
 {
 	global $db;
 

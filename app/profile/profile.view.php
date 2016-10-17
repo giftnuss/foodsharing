@@ -23,7 +23,7 @@ class ProfileView extends View
 		$page->render();
 	}
 	
-	public function sideInfosCompanies($userCompanies)
+	private function sideInfosCompanies($userCompanies)
 	{
 		$out = '';
 		foreach ($userCompanies as $b)
@@ -54,7 +54,7 @@ class ProfileView extends View
 		$page->render();
 	}
 	
-	public function sideInfos()
+	private function sideInfos()
 	{
 		$infos = array();
 		

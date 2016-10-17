@@ -258,7 +258,7 @@ class MailboxView extends View
 			</div>';
 	}	
 	
-	public function mailAnswer($plain,$ts,$sign = '')
+	private function mailAnswer($plain,$ts,$sign = '')
 	{
 		return PHP_EOL.PHP_EOL.PHP_EOL.
 				'-- '.

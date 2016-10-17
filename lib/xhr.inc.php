@@ -54,69 +54,6 @@ function xhr_verify($data)
 	}
 }
 
-function xhr_stringEditor($data)
-{
-	if(isOrgateam())
-	{
-		$page = preg_replace('/[^a-zA-Z0-9_]/', '', $data['page']);
-		
-		$lang = 'DE';
-
-		$out = array();
-		$script = '';
-		if(file_exists('lang/'.$lang.'/'.$page.'.lang.php'))
-		{
-			if(isset($_POST['form_submit']) && isset($_POST['string']) && !empty($_POST['string']))
-			{
-				$code = "<?php \n";
-				$code .= 'global $g_lang;'."\n";
-				foreach($_POST['string'] as $name => $text)
-				{
-					$code .= '$g_lang[\''.$name.'\'] = \''.$text.'\';'."\n";
-				}
-				
-				$code .= "\n ?>";
-				
-				file_put_contents('lang/'.$lang.'/'.$page.'.lang.php', $code);
-				
-				info('Texte gespeichert');
-				go($_SERVER['HTTP_REFERER']);
-			}
-			
-			include 'lang/'.$lang.'/'.$page.'.lang.php';
-			
-			$after_general = false;
-			
-			foreach ($g_lang as $name => $text)
-			{
-				
-				
-				if($after_general)
-				{
-					$out[] = v_input_wrapper($name, '<textarea id="string-'.$name.'" name="string['.$name.']" class="input text value">'.$text.'</textarea>');
-				}
-				if($name == '||ENDE||')
-				{
-					$after_general = true;
-				}
-			}
-			
-		}
-
-		
-		return json_encode(array(
-				'script' => $script,
-				'html' => '
-					<div class="popbox">
-						<h3>Texte aus dem Modul "'.$page.'"</h3>
-						<p class="subtitle">Tip: zum Text Suchen die Browser Suche (STRG+F) benutzen :)</p>
-						'.v_form('string-edit-form',$out,array('submit'=>'Speichern')).'
-					</div>'
-		));
-	}
-	
-}
-
 function xhr_getPinPost($data)
 {
 	global $db;
@@ -493,18 +430,6 @@ function xhr_jsonTeam($data)
 	return 'var foodsaver = '.json_encode($fs);
 }
 
-function xhr_jsonFsMaps($data)
-{
-	global $db;
-	$fs = '';
-	if((isBotschafter() || isOrgaTeam() || S::may('fs') ||isset($foodsaver['botschafter'])))
-	{
-	$fs = $db->q(' SELECT `id`,lat,lon FROM '.PREFIX.'foodsaver WHERE `active` = 1 AND lat != "" ');
-	}
-
-	return 'var fsMaps = '.json_encode($fs);
-}
-
 function xhr_jsonBetriebe($data)
 {
 	global $db;
@@ -667,18 +592,6 @@ function xhr_loadMarker($data)
 	return json_encode($out);
 }
 
-function xhr_addKette_id($data)
-{
-	global $db;
-	return $db->addBetreibskette($data);
-}
-
-function xhr_addBetrieb_kategorie_id($data)
-{
-	global $db;
-	return $db->xhr_add_betrieb_kategorie($data);
-}
-
 function xhr_addComment($data)
 {
 	global $db;
@@ -719,7 +632,7 @@ function xhr_uploadPicture($data)
 			}
 			elseif(isset($_POST['resize']))
 			{
-				return xhr_pictureResize(array(
+				return pictureResize(array(
 					'img' => $newname,
 					'id' => $id,
 					'resize' => $_POST['resize']
@@ -830,7 +743,7 @@ function xhr_pictureCrop($data)
 	}
 }
 
-function xhr_pictureResize($data)
+function pictureResize($data)
 {
 	$id = $data['id'];
 	$img = $data['img'];
@@ -1060,35 +973,6 @@ function xhr_getNewMsg($data)
 	}
 }
 
-function xhr_update_newbezirk($data)
-{
-	if(isOrgaTeam())
-	{
-		global $db;
-		$data['name'] = strip_tags($data['name']);
-		$data['name'] = str_replace(array('/','"',"'",'.',';'), '', $data['name']);
-		$data['has_children'] = 0;
-		$data['email_pass'] = '';
-		$data['email_name'] = 'Foodsharing '.$data['name'];
-	
-		if(!empty($data['name']))
-		{
-			if($out = $db->add_bezirk($data))
-			{
-				$db->update('UPDATE '.PREFIX.'bezirk SET has_children = 1 WHERE `id` = '.$db->intval($data['parent_id']));
-				return json_encode(array(
-					'status' => 1,
-					'script' => '$("#tree").dynatree("getTree").reload();pulseInfo("'.$data['name'].' wurde angelegt");'
-				));
-			}
-			
-			
-			
-		}
-		
-	}
-}
-
 function xhr_out($html = '')
 {
 	global $xhr_script;
@@ -1117,27 +1001,6 @@ function xhr_getRecip($data)
 		
 }
 
-function xhr_getBfoodsaver($data)
-{
-	if(may())
-	{
-		global $db;
-		
-		if(isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke']))
-		{
-			$data['bid'] = array();
-			foreach($_SESSION['client']['bezirke'] as $b);
-			{
-				$data['bid'][] = $b['id'];
-			}
-		}
-		
-		$fs = $db->xhrGetFoodsaver($data);
-		
-		return json_encode($fs);
-	}
-}
-
 function xhr_sendMsg($data)
 {
 	global $db;
@@ -1154,56 +1017,6 @@ function xhr_sendMsg($data)
 	');
 	
 	return xhr_out();
-}
-
-function xhr_orderWantNew($data)
-{
-	if(isBotschafter())
-	{
-		global $db;
-		$new_id = $db->insert('
-			INSERT INTO `'.PREFIX.'bezirk`
-			(parent_id,`name`)
-			VALUES
-			('.$db->intval($data['parent_id']).','.$db->strval($data['new_bezirk']).')
-		');
-		
-		$fs = explode(';', $data['fs']);
-		foreach ($fs as $f)
-		{
-			$db->update('
-				UPDATE `'.PREFIX.'foodsaver`
-				SET 	`want_new`	= 0,
-						`new_bezirk` = "",
-						`bezirk_id` = '.(int)$new_id.'
-				WHERE `id` = '.(int)$f.'
-					
-			');
-			
-			$saver = $db->getOne_foodsaver($f);
-			
-			tplMail(6, $saver['email'],array(
-				'name' => $saver['name'],
-				'anrede' => genderWord($saver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-				'region' => $data['new_bezirk']
-			));
-		}
-		
-		return json_encode(array(
-			'status' => 1
-		));
-		
-	}
-	/*
-	 *  Array
-		(
-		    [f] => orderWantNew
-		    [new_bezirk] => Gummersbach
-		    [parent_id] => 45
-		    [fs] => 259
-		)
-	 */
-	
 }
 
 function xhr_updateChat($data)
@@ -1605,117 +1418,6 @@ function xhr_update_bezirk($data)
 		'));
 }
 
-function xhr_update_abholer($data)
-{
-	global $db;
-	if($db->update('
-				UPDATE 	`'.PREFIX.'abholen`
-				SET 	`foodsaver_id` = '.$db->intval($data['foodsaver']).' 
-				WHERE 	`betrieb_id` = '.$db->intval($data['bbid']).'
-				AND 	`dow` = '.$db->intval($data['bbdow']).'
-	'))
-	{
-		return json_encode(array('status' => 1));
-	}
-	else
-	{
-		return json_encode(array('status' => 0));
-	}
-}
-
-function xhr_update_abholen($data)
-{
-	global $db;
-	
-	if($db->isVerantwortlich($data['bid']) || isBotschafter())
-	{
-		$db->del('DELETE FROM 	`'.PREFIX.'abholzeiten` WHERE `betrieb_id` = '.$db->intval($data['bid']));
-		
-		if(is_array($data['newfetchtime']))
-		{
-			/*
-			 * bid	11
-			f	update_abholen
-			id	11
-			newfetchtime[]	1
-			newfetchtime[]	2
-			newfetchtime[]	0
-			nft-count[]	2
-			nft-count[]	2
-			nft-count[]	2
-			nfttime[hour][]	20
-			nfttime[hour][]	20
-			nfttime[hour][]	20
-			nfttime[min][]	0
-			nfttime[min][]	0
-			nfttime[min][]	0
-			 */
-			for($i=0;$i<(count($data['newfetchtime'])-1);$i++)
-			{
-				$db->sql('
-				REPLACE INTO 	`'.PREFIX.'abholzeiten`
-				(
-						`betrieb_id`,
-						`dow`,
-						`time`,
-						`fetcher`
-				)
-				VALUES
-				(
-					'.$db->intval($data['bid']).',
-					'.$db->intval($data['newfetchtime'][$i]).',
-					'.$db->strval(preZero($data['nfttime']['hour'][$i]).':'.preZero($data['nfttime']['min'][$i]).':00').',
-					'.$db->intval($data['nft-count'][$i]).'
-				)
-			');
-			}
-		}
-		/*
-		foreach ($data['dow'] as $dow)
-		{
-			$db->sql('
-				REPLACE INTO 	`'.PREFIX.'abholzeiten`		
-				(
-						`betrieb_id`,
-						`dow`,
-						`time`,
-						`fetcher`
-				)
-				VALUES
-				(
-					'.$db->intval($data['bid']).',
-					'.$db->intval($dow).',
-					'.$db->strval(preZero($data['day'.$dow]['hour']).':'.preZero($data['day'.$dow]['min']).':00').',
-					'.$db->intval($data['fetcher'.$dow]).'
-				)
-			');
-		}
-		*/
-		$betrieb = $db->getVal('name', 'betrieb', $data['bid']);
-		$db->addGlocke(explode(',',$data['team']), 'Die Abholzeiten wurden geändert!',$betrieb,'/?page=fsbetrieb&id='.(int)$data['bid']);
-		
-		return json_encode(array('status' => 1));
-	}
-
-	
-	/*
-	return $db->update('
-		UPDATE `abholen`
-		SET 	`f` = $db->strval('.$data['f'].'),
-			`dow` = $db->strval('.$data['dow'].'),
-			`dow1` = $db->strval('.$data['dow1'].'),
-			`dow2` = $db->strval('.$data['dow2'].'),
-			`dow3` = $db->strval('.$data['dow3'].'),
-			`dow4` = $db->strval('.$data['dow4'].'),
-			`dow5` = $db->strval('.$data['dow5'].'),
-			`dow6` = $db->strval('.$data['dow6'].'),
-			`dow0` = $db->strval('.$data['dow0'].'),
-		
-				WHERE 	`id` = '.$this->intval().'
-		');
-		*/
-}
-
 function xhr_bezirkTree($data)
 {
 	global $db;
@@ -2029,147 +1731,6 @@ function xhr_betriebRequest($data)
 	$db->teamRequest(fsId(), $data['id']);
 	
 	return json_encode(array('status' => $status,'msg' => $msg));
-}
-
-function xhr_getBezirkChildren($data)
-{
-	global $db;
-	if($bezirke = $db->getBezirkByParent($data['p']))
-	{
-		$region_html = '
-		<div>
-			<select name="bezirk_id" onchange="nextChildren(this);">';
-		foreach ($bezirke as $b)
-		{
-			$region_html .= '
-					<option value="'.$b['id'].'">'.$b['name'].'</option>';
-		}
-		
-		$region_html .= '
-			</select>
-		</div>';
-		
-		return json_encode(array(
-			'html' => $region_html,
-			'status' => 1
-		));
-		
-	}
-	else 
-	{
-		return json_encode(array('status' => 0));
-	}
-}
-
-function xhr_checkNewBezirk()
-{
-	global $db;
-	$new = $db->qRow('
-			SELECT `new_bezirk`,`bezirk_id`
-			FROM `'.PREFIX.'foodsaver`
-			WHERE `id` = '.(int)fsId().'
-	');
-	
-	$new['botschafter'] = $db->getBotschafter($new['bezirk_id']);
-	
-	print_r($new);
-	
-	if(!empty($new))
-	{
-		return json_encode(array(
-			'status' => 0,
-			'data' => $new
-		));
-	}
-	else
-	{
-		return json_encode(array(
-			'status' => 1
-		));
-	}
-}
-
-function xhr_myRegion($data)
-{
-	global $db;
-	$bezirk_id = (int)$data['b'];
-	$new = strip_tags($data['new']);
-	$new = trim($new);
-	$want_new = 0;
-	if(!empty($new))
-	{
-		$want_new = 1;
-	}
-	if($bezirk_id > 0)
-	{
-		
-		$db->update('
-			UPDATE `'.PREFIX.'foodsaver`
-			SET 	`bezirk_id` = '.(int)$bezirk_id.',
-					`new_bezirk` = '.$db->strval($new).',
-					`want_new` = '.$want_new.'
-			WHERE 	`id` = '.(int)fsId().'		
-		');
-		
-		$db->relogin();
-		
-		$fs = $db->getOne_foodsaver(fsId());
-		
-		tplMail(5, $fs['email'],array(
-			'anrede' => genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-			'name' => $fs['name'].' '.$fs['nachname']
-		));
-		
-		return json_encode(array(
-			'status' => 1,
-			'msg' => s('edit_success')
-		));
-	}
-	else
-	{
-		return json_encode(array(
-				'status' => 0,
-				'msg' => s('error_default')
-		));
-	}
-}
-
-function xhr_addFaq_kategorie_id($data)
-{
-	if(isOrgaTeam())
-	{
-		global $db;
-	
-		$name = trim($data['neu']);
-		$name = strip_tags($name);
-
-		if(!empty($name))
-		{
-			if($id = $db->insert('INSERT INTO '.PREFIX.'faq_category(`name`)VALUES('.$db->strval($name).')'))
-			{
-				return json_encode(array('id'=>$id,'name'=>$name));
-			}
-		}
-	}
-	return 0;
-}
-
-function xhr_checkmail($data)
-{
-	if(validEmail($data['email']))
-	{
-		global $db;
-		if($id = $db->qOne('SELECT `id` FROM `'.PREFIX.'foodsaver` WHERE `email` = '.$db->strval($data['email'])))
-		{
-			if((int)$id > 0)
-			{
-				return json_encode(array('status'=>0));
-			}
-		}
-		return json_encode(array('status'=>1));
-	}
-	
-	return json_encode(array('status'=>0));
 }
 
 function xhr_saveBezirk($data)
@@ -2511,7 +2072,7 @@ function xhr_bcontext($data)
             if($scid = $msg->getBetriebConversation((int)$data['bid'], true))
             {
               $msg->deleteUserFromConversation($scid, (int)$data['fsid'], true);
-         	}                       
+         	}
 		}
 		
 		if($check)
@@ -2520,20 +2081,5 @@ function xhr_bcontext($data)
 				'status' => 1
 			));
 		}
-	}
-}
-
-function xhr_geoip($data)
-{
-	if(isset($data['lat']))
-	{
-		$_SESSION['geo'] = array
-		(
-				'lat' => $data['lat'],
-				'lon' => $data['lon'],
-				'region' => $data['region'],
-				'city' => $data['city'],
-				'plz' => $data['plz']
-		);
 	}
 }

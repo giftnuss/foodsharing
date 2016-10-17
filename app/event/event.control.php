@@ -156,7 +156,7 @@ class EventControl extends Control
 		}
 	}
 	
-	public function validateEvent()
+	private function validateEvent()
 	{
 		$out = array(
 			'name' => '',

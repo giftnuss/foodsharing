@@ -69,18 +69,6 @@ class Model extends ManualDb
 		');
 	}
 	
-	public function getLocationIdByLatLon($lat,$lon)
-	{
-		$lat = round($lat,8);
-		$lon = round($lon,8);
-		return $this->qOne('
-			SELECT (id)
-			FROM  '.PREFIX.'location
-			WHERE 	lat = '.$this->floatval($lat).'
-			AND 	lon = '.$this->floatval($lon).'
-		');
-	}
-	
 	public function addLocation($location_name, $lat, $lon, $anschrift, $plz, $ort)
  	{
  		$lat = round($lat,8);

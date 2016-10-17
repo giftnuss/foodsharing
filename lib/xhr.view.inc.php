@@ -255,46 +255,6 @@ function xv_msgAppend($msg,$name,$time,$img)
 	return '<li class="msg"><span href="#57" class="msg"><span class="photo"><img src="'.$img.'" alt="avatar"></span><span class="subject"><span class="from">'.$name.'</span><span class="time">'.$time.'</span></span><span class="message">'.$msg.'</span><span style="display:block;clear:both;"></span></span></li>';
 }
 
-function xv_button($id,$click = false)
-{
-	$label = s($id);
-	$id = id($id);
-	$js = '$("#'.$id.'").button()';
-	if($click !== false)
-	{
-		$js .= '.click(function(){'.$click.'})';
-	}
-	
-	$js .= ';';
-	
-	addXhJs($js);
-	return '<span id="'.$id.'">'.$label.'</span>';
-}
-$g_oddeven = 'odd';
-function xv_glockeMsg($msg, $title = '', $href = '#', $time = '', $pic = false, $click = false)
-{
-	if($pic === false)
-	{
-		$pic = 'img/star_yellow.png';
-	}
-	if($click !== false)
-	{
-		$click = ' onclick="'.$click.';return false;"';
-	}
-	return '<li class="msg">
-			<a href="'.$href.'"'.$click.'>
-				<span class="photo">
-					<img alt="avatar" src="'.$pic.'">
-				</span>
-				<span class="subject">
-					<span class="from">'.$title.'</span>
-					<span class="time">'.$time.'</span>
-				</span>
-				<span class="message">'.$msg.'</span>
-				<span style="display:block;clear:both;"></span>
-			</a></li>';
-}
-
 function xv_textarea($id)
 {
 	$id = id($id);

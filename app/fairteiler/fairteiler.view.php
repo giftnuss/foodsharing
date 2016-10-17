@@ -210,35 +210,6 @@ class FairteilerView extends View
 		return v_field('<p>'.nl2br($this->fairteiler['desc'].'</p>'), s('desc'),array('class'=>'ui-padding'));
 	}
 	
-	public function changeBezirk($bezirke)
-	{
-		
-		if(is_array($bezirke))
-		{			
-			$select = '
-			<select name="bezirkswitcher" id="bezirkswitcher" onchange="goTo(\'/?page=fairteiler&bid=\'+this.value);">
-				<option value="0">Bitte auswählen...</option>';
-			foreach ($bezirke as $b)
-			{
-				$sel = '';
-				if($b['id'] == $this->bezirk_id)
-				{
-					$sel = ' selected="selected"';
-				}
-				$select .= '
-				<option value="'.$b['id'].'"'.$sel.'>'.$b['name'].'</option>';
-			}
-			$select .= '
-			</select>';
-			
-			return v_field($select, s('select_bezirk'));
-		}
-		else
-		{
-			return '';
-		}
-	}
-	
 	public function listFairteiler($bezirke)
 	{
 		$content = '';

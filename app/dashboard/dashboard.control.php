@@ -36,7 +36,7 @@ class DashboardControl extends Control
 		
 	}
 	
-	public function dashFs()
+	private function dashFs()
 	{
 		
 		$this->setContentWidth(8, 8);

@@ -294,7 +294,7 @@ class SettingsControl extends Control
 		}
 	}
 	
-	public function confirm_fs()
+	private function confirm_fs()
 	{
 		if($this->model->hasQuizCleared(1))
 		{
@@ -323,7 +323,7 @@ class SettingsControl extends Control
 		}
 	}
 	
-	public function confirm_bip()
+	private function confirm_bip()
 	{
 		if($this->model->hasQuizCleared(2))
 		{
@@ -347,7 +347,7 @@ class SettingsControl extends Control
 		}
 	}
 	
-	public function confirm_bot()
+	private function confirm_bot()
 	{
 
 		addBread('Botschafter werden');
@@ -679,7 +679,7 @@ class SettingsControl extends Control
 		return v_field($p_cnt, 'Dein Foto');
 	}
 	
-	public function handle_newmail()
+	private function handle_newmail()
 	{
 		if($email = $this->model->getNewMail($_GET['newmail']))
 		{

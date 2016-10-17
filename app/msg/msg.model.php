@@ -1,13 +1,6 @@
 <?php
 class MsgModel extends Model
 {
-	public function listPeople()
-	{
-		return $this->q('
-			SELECT id, name AS value FROM '.PREFIX.'foodsaver LIMIT 10
-		');
-	}
-
 	public function getBetriebname($cid)
 	{
 		return $this->qOne('
@@ -312,7 +305,7 @@ class MsgModel extends Model
 		}
 	}
 
-	public function getUpdatedConversationIds()
+	private function getUpdatedConversationIds()
 	{
 		return $this->qCol('SELECT conversation_id FROM '.PREFIX.'foodsaver_has_conversation WHERE foodsaver_id = '.(int)fsId().' AND unread = 1');
 	}
@@ -501,7 +494,7 @@ class MsgModel extends Model
 		return false;
 	}
 
-	public function updateDenormalizedConversationData($cids = false)
+	private function updateDenormalizedConversationData($cids = false)
 	{
 		if($cids === false)
 		{

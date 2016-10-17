@@ -464,7 +464,7 @@ class MailboxModel extends Model
 	/**
 	 * Get Bezirk ids from all Member-Groups and Beziks where the user is admin
 	 */
-	public function getMailboxBezirkIds()
+	private function getMailboxBezirkIds()
 	{
 		// get bezirk ids where the user is botschafter
 		$bids = $this->qCol('

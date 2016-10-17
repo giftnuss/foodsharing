@@ -114,17 +114,6 @@ class EventModel extends Model
 		return true;
 	}
 	
-	public function inviteAccept($id)
-	{
-		$this->update('
-			UPDATE 	'.PREFIX.'foodsaver_has_event
-			SET 	`status` = 1
-			WHERE 	foodsaver_id = '.(int)fsId().'
-			AND 	event_id = '.(int)$id.'	
-		');
-		return true;
-	}
-	
 	public function inviteBezirk($bezirk_id,$event_id,$invite_subs = false)
 	{
 		$b_sql = '= '.(int)$bezirk_id;
@@ -225,7 +214,7 @@ class EventModel extends Model
 		return false;
 	}
 	
-	public function getEventInvites($event_id)
+	private function getEventInvites($event_id)
 	{
 		if($invites = $this->q('
 			SELECT 	fs.id,

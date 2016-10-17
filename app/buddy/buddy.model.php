@@ -1,22 +1,6 @@
 <?php
 class BuddyModel extends Model
 {
-	public function getBuddyRequests()
-	{
-		return $this->q('
-			SELECT 	fs.`id`,
-					fs.name,
-					fs.photo
-				 
-			FROM 	'.PREFIX.'foodsaver fs,
-					'.PREFIX.'buddy b
-				
-			WHERE 	b.foodsaver_id = fs.id
-			AND 	b.buddy_id = '.(int)fsId().'
-			AND 	b.confirmed = 0
-		');
-	}
-	
 	public function listBuddies()
 	{
 		return $this->q('

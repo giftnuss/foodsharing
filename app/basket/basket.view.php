@@ -14,7 +14,7 @@ class BasketView extends View
 		$page->render();
 	}
 	
-	public function findMap()
+	private function findMap()
 	{
 		$map = new vMap();
 		
@@ -147,7 +147,7 @@ class BasketView extends View
 		return $out;
 	}
 	
-	public function userBox($basket)
+	private function userBox($basket)
 	{
 		$request = '';
 		

@@ -326,7 +326,7 @@ class LoginXhr extends Control
 	 * @param array $data
 	 * @return array || string error
 	 */
-	public function joinValidate($data)
+	private function joinValidate($data)
 	{
 		/*
 		 [iam] => org

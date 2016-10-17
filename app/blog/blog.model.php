@@ -36,7 +36,7 @@ class BlogModel extends Model
 
 	/**
 	 * checks if foodsaver is admin of a working group and returns that working group */
-	public function getBezID($fsId)
+	private function getBezID($fsId)
 	{
 		return $this->qRow('
 			SELECT
