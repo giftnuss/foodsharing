@@ -71,7 +71,6 @@ io.on('connection', function (socket) {
 		num_connections--;
 		if( connected_clients[sid]) connected_clients[sid].remove(socket);
 		if(connected_clients[sid].length === 0) {
-			num_sessions--;
 			delete connected_clients[sid];
 		}
 	});
