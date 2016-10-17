@@ -69,9 +69,11 @@ io.on('connection', function (socket) {
 	socket.on('disconnect',function(){
 		num_registrations--;
 		num_connections--;
-		if( connected_clients[sid]) connected_clients[sid].remove(socket);
-		if(connected_clients[sid].length === 0) {
-			delete connected_clients[sid];
+		if( connected_clients[sid]) {
+			connected_clients[sid].remove(socket);
+			if (connected_clients[sid].length === 0) {
+				delete connected_clients[sid];
+			}
 		}
 	});
 });
