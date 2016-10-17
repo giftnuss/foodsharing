@@ -67,9 +67,9 @@ io.on('connection', function (socket) {
 		connected_clients[id].push(socket);
 	});
 	socket.on('disconnect',function(){
-		num_registrations--;
 		num_connections--;
-		if( connected_clients[sid]) {
+		if(sid && connected_clients[sid]) {
+			num_registrations--;
 			connected_clients[sid].remove(socket);
 			if (connected_clients[sid].length === 0) {
 				delete connected_clients[sid];
