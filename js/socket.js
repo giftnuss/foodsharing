@@ -31,14 +31,5 @@ var sock = {
 					break;
 			}
 		});
-		
-		socket.on('basket', function(data) {
-			switch(data.m)
-			{
-				case 'badge':
-					info.badge('basket',data.o.count);
-					break;
-			}
-		});
 	}
 };

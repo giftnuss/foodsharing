@@ -1,15 +1,17 @@
 Array.prototype.remove = function(e) {
-	for (var i = 0; i < this.length; i++) {
-		if (e == this[i]) { return this.splice(i, 1); }
+	i = this.indexOf(e);
+	if(i !== -1) {
+		return this.splice(i, 1);
 	}
 };
 
-
 var http = require('http');
-var input_port = 1338
-var client_port = 1337
-
+var input_port = 1338;
+var client_port = 1337;
+var connected_clients = {};
 var listenHost = process.argv[2] || '127.0.0.1';
+var num_registrations = 0;
+var num_connections = 0;
 
 sendtoclient = function(client,a,m,o){
 	if(connected_clients[client]) {
@@ -22,69 +24,55 @@ sendtoclient = function(client,a,m,o){
 	}
 }
 
-var ccc = 0;
 var app = http.createServer(function  (req, res) {
 	if(req.url == "/stats") {
-		var count = 0;
-		Object.keys(connected_clients).forEach(function(key){
-			count += connected_clients[key].length;
-		});
+		var num_sessions = 0;
 		res.writeHead(200);
-		res.end('{"registered":'+count+',"connected":'+ccc+'}');
+		res.end('{"connections":'+num_connections+',"registrations":'+num_registrations+',"sessions":'+Object.keys(connected_clients).length+'}');
 		return;
 	}
-	var client,app,module,options;
+	var client,app,options,method;
 	var query = require('url').parse(req.url,true).query;
 
 	client = 	query.c;
-	clients = 	query.clients ? JSON.parse(query.clients) : undefined;
 	app = 		query.a;
 	method = 	query.m;
 	options = 	query.o;
 	
-	var success = true;
 	if(client) {
-		success = sendtoclient(client,app,method,options);
-	} else if(clients) {
-		for(var i = 0, l = client.length; i < l; i++) {
-			success = success && sendtoclient(clients[i],app,method,options);
-		}	
+		sendtoclient(client,app,method,options);
 	}
-	if(success) {
-		res.writeHead(200);
-		res.end("send!\n\n\n"+client+"\n"+app+"\n"+method+"\n"+options+"\n");
-	} else {
-		res.writeHead(200);
-		res.end("one or more clients not found!\n\n\n"+client+"\n"+app+"\n"+method+"\n"+options+"\n");
-	}	
-	///// http://127.0.0.1:1338/?c=123456&a=msg&m=module&o=[aaa,bbb,ccc]
+	res.writeHead(200);
+	res.end("\n");
 });
 app.listen(input_port, listenHost);
 console.log("http server started on", listenHost + ':' + input_port);
 
-
 var app2 = http.createServer(function  (req, res) {
 	res.writeHead(200);
-	res.end("Hello, nothing to see here ;)");
+	res.end("\n");
 });
 var io = require('socket.io')(app2);
 
 app2.listen(client_port, listenHost);
 console.log("socket.io started on port", listenHost + ':' + client_port);
 
-var connected_clients = {};
 io.on('connection', function (socket) {
 	var sid;
-	ccc++;
+	num_connections++;
 	socket.on('register', function (id) {
+		num_registrations++;
 		sid = id;
-		if(!connected_clients[id]) connected_clients[id] = new Array();
+		if(!connected_clients[id]) connected_clients[id] = [];
 		connected_clients[id].push(socket);
 	});
 	socket.on('disconnect',function(){
-		//delete connected_clients[sid];
+		num_registrations--;
+		num_connections--;
 		if( connected_clients[sid]) connected_clients[sid].remove(socket);
-		if(!connected_clients[sid]) delete connected_clients[sid];
-		ccc--;
+		if(connected_clients[sid].length === 0) {
+			num_sessions--;
+			delete connected_clients[sid];
+		}
 	});
 });
