@@ -22,8 +22,8 @@ if(isset($_GET['g_path']))
 */
 
 require_once 'lib/inc.php';
-addCss('css/gen/style.css?v='.VERSION);
-addJs('/js/gen/script.js?v='.VERSION);
+addCss('/css/gen/style.css?v='.VERSION);
+addScript('/js/gen/script.js?v='.VERSION);
 
 //importUsers();
 
