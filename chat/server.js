@@ -1,11 +1,5 @@
-Array.prototype.remove = function(e) {
-	i = this.indexOf(e);
-	if(i !== -1) {
-		return this.splice(i, 1);
-	}
-};
-
 var http = require('http');
+var cookie = require('cookie');
 var input_port = 1338;
 var client_port = 1337;
 var connected_clients = {};
@@ -53,25 +47,35 @@ var app2 = http.createServer(function  (req, res) {
 	res.end("\n");
 });
 var io = require('socket.io')(app2);
+io.use(function(socket, next){
+	var cookieVal = socket.request.headers.cookie;
+	if(cookieVal) {
+		socket.sid = cookie.parse(cookieVal).PHPSESSID;
+		console.log(socket.sid);
+	}
+	next();
+});
 
 app2.listen(client_port, listenHost);
 console.log("socket.io started on port", listenHost + ':' + client_port);
 
 io.on('connection', function (socket) {
-	var sid;
+	var sid = socket.sid;
 	num_connections++;
-	socket.on('register', function (id) {
+	socket.on('register', function () {
 		num_registrations++;
-		sid = id;
-		if(!connected_clients[id]) connected_clients[id] = [];
-		connected_clients[id].push(socket);
+		if(!connected_clients[sid]) connected_clients[sid] = [];
+		connected_clients[sid].push(socket);
 	});
+
 	socket.on('disconnect',function(){
 		num_connections--;
-		if(sid && connected_clients[sid]) {
+		var connections = connected_clients[sid];
+		if(sid && connections) {
 			num_registrations--;
-			connected_clients[sid].remove(socket);
-			if (connected_clients[sid].length === 0) {
+			var i = connections.indexOf(socket);
+			if(i !== -1) connections.splice(i, 1);
+			if (connections.length === 0) {
 				delete connected_clients[sid];
 			}
 		}

@@ -2,7 +2,8 @@
   "name": "lmr-socket-server",
   "version": "0.0.1",
   "dependencies": {
-    "socket.io" : "1.2.0",
-    "url" : "0.10.1"
+    "cookie": "^0.3.1",
+    "socket.io": "^1.5.0",
+    "url": "0.10.1"
   }
 }

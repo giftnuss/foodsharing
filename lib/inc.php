@@ -114,7 +114,7 @@ addScript('/js/conv.js',true);
 addScript('/js/info.js',true);
 addScript('/js/storage.js',true);
 addScript('/js/jquery.popup.min.js',true);
-addScript('/js/socket.io-1.2.0.js',true);
+addScript('/js/socket.io-1.5.0.min.js',true);
 addScript('/js/socket.js',true);
 addScript('/js/popup.js',true);
 
