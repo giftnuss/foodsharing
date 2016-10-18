@@ -54,9 +54,9 @@ io.use(function(socket, next){
 	var cookieVal = socket.request.headers.cookie;
 	if(cookieVal) {
 		socket.sid = cookie.parse(cookieVal).PHPSESSID;
-		console.log(socket.sid);
+		if (socket.sid) next();
 	}
-	next();
+	next(new Error('not authorized'));
 });
 
 app2.listen(client_port, listenHost);
