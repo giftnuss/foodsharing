@@ -72,4 +72,3 @@ else
 {
 	include 'tpl/'.$g_template.'.php';
 }
-?>

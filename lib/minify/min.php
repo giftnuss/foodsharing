@@ -5,7 +5,8 @@ require_once (__DIR__.'/JSMin.php');
 require_once (__DIR__.'/cssmin.php');
 $js_out = ROOT_DIR.'/js/gen/script.js';
 $css_out = ROOT_DIR.'/css/gen/style.css';
-$js_files = ['/js/jquery.1.11.0.js',
+$js_files = [
+	'/js/jquery.1.11.0.js',
 	'/js/jquery-ui-1.10.4.js',
 	'/js/jquery-ui-addons.js',
 	'/js/tablesorter/jquery.tablesorter.min.js',
@@ -29,20 +30,21 @@ $js_files = ['/js/jquery.1.11.0.js',
 	'/js/socket.io-1.5.0.min.js',
 	'/js/socket.js'
 ];
-$css_files = ['/fonts/alfaslabone/stylesheet.css',
-'/css/font-awesome.min.css',
-'/css/jquery-ui.css',
-'/css/jMenu.jquery.css',
-'/js/fancybox/jquery.fancybox.css',
-'/css/style.css',
-'/css/content.css',
-'/css/jquery.Jcrop.min.css',
-'/js/tagedit/css/jquery.tagedit.css',
-'/css/chat.css',
-'/css/jquery.switchButton.css',
-'/css/info.css',
-'/css/icons.css',
-'/css/popup.css'
+$css_files = [
+	'/fonts/alfaslabone/stylesheet.css',
+	'/css/font-awesome.min.css',
+	'/css/jquery-ui.css',
+	'/css/jMenu.jquery.css',
+	'/js/fancybox/jquery.fancybox.css',
+	'/css/style.css',
+	'/css/content.css',
+	'/css/jquery.Jcrop.min.css',
+	'/js/tagedit/css/jquery.tagedit.css',
+	'/css/chat.css',
+	'/css/jquery.switchButton.css',
+	'/css/info.css',
+	'/css/icons.css',
+	'/css/popup.css'
 ];
 @file_put_contents($js_out, '');
 foreach ($js_files as $f) {
