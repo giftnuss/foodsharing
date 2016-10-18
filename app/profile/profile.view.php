@@ -3,7 +3,7 @@ class ProfileView extends View
 {
 	private $foodsaver;
 	
-	public function profile($wallposts,$userCompanies, $userCompaniesCount)
+	public function profile($wallposts,$userCompanies, $userCompaniesCount, $fetchDates)
 	{
 		$page = new vPage($this->foodsaver['name'], $this->infos());
 		$page->addSection($wallposts,'Statusupdates von ' . $this->foodsaver['name']);
@@ -13,17 +13,69 @@ class ProfileView extends View
 			addStyle('#wallposts .tools{display:none;}');
 		}
 		
+		if($fetchDates)
+		{
+			$page->addSection($this->fetchDates($fetchDates),'Nächste Abholtermine');
+		}
+		
 		$page->addSectionLeft($this->photo());
 		
 		$page->addSectionLeft($this->sideInfos(),'Infos');
-		if(S::may('orga'))
+
+		$fsModel = loadModel('foodsaver');
+ 		$bids = $fsModel->getFsBezirkIds($this->foodsaver['id']);
+
+		if(isOrgaTeam() || isBotForA($bids,false,true))
 		{
 			$page->addSectionLeft($this->sideInfosCompanies($userCompanies),'Betriebe ('.$userCompaniesCount.')');
 		}
 		$page->render();
 	}
 	
-	private function sideInfosCompanies($userCompanies)
+	public function fetchDates($fetchDates)
+	{
+			
+			$out ='
+				<div class="ui-padding" id="double">
+				<a class="button button-big" href="#"onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:'.$this->foodsaver['id'].',bid:0,date:0});return false;">Aus allen austragen</a>
+					<ul class="datelist linklist" id="double">';
+				foreach ($fetchDates as $d)
+				{
+ 					$out .= '
+						<li>
+							<a href="/?page=fsbetrieb&id='.$d['betrieb_id'].'" class="ui-corner-all">
+								<span class="title">'.niceDate($d['date_ts']).'</span>
+							</a>
+						</li>
+						<li>
+							<a href="/?page=fsbetrieb&id='.$d['betrieb_id'].'" class="ui-corner-all">
+								<span class="title">'.$d['betrieb_name'].'</span>
+							</a>
+						</li>';
+
+						if(isOrgateam() || isBotFor($d['bezirk_id']))
+						{
+							$out .= '<li>
+							<a class="button button-big" href="#"onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:'.$this->foodsaver['id'].',deleteAll:false,bid:'.$d['betrieb_id'].',date:'.$d['date_ts'].'});return false;">austragen</a>
+							</li>';
+						}
+						else
+						{
+							$out .= '<li>
+							<a class="button button-big disabled" disabled=disabled href="#">austragen</a>
+							</li>';
+						}
+						
+					
+				}
+				$out .= '
+					</ul>
+				</div>';
+
+			return $out;
+	}
+
+	public function sideInfosCompanies($userCompanies)
 	{
 		$out = '';
 		foreach ($userCompanies as $b)
@@ -54,7 +106,7 @@ class ProfileView extends View
 		$page->render();
 	}
 	
-	private function sideInfos()
+	public function sideInfos()
 	{
 		$infos = array();
 		

@@ -54,13 +54,13 @@ class ProfileControl extends Control
 	{
 		
 	}
-	
-	private function organotes()
+
+	public function organotes()
 	{
 		addBread($this->foodsaver['name'],'/profile/' . $this->foodsaver['id']);
 		if(S::may('orga'))
 		{
-			$this->view->usernotes($this->wallposts('usernotes',$this->foodsaver['id']), $this->model->getCompanies($this->foodsaver['id']), $this->model->getCompaniesCount($this->foodsaver['id']));
+			$this->view->usernotes($this->wallposts('usernotes',$this->foodsaver['id']), $this->model->getCompanies($this->foodsaver['id']), $this->model->getCompaniesCount($this->foodsaver['id']), $this->model->getNextDates($this->foodsaver['id'], 50));
 		}
 		else
 		{
@@ -70,11 +70,13 @@ class ProfileControl extends Control
 	
 	public function profile()
 	{
-		if(S::may('orga'))
+ 		$bids = $this->model->getFsBezirkIds($this->foodsaver['id']);
+
+		if(isOrgaTeam() || isBotForA($bids,false,true))
 		{
-			$this->view->profile($this->wallposts('foodsaver',$this->foodsaver['id']), $this->model->getCompanies($this->foodsaver['id']), $this->model->getCompaniesCount($this->foodsaver['id']));		
-					
-		}else
+			$this->view->profile($this->wallposts('foodsaver',$this->foodsaver['id']), $this->model->getCompanies($this->foodsaver['id']), $this->model->getCompaniesCount($this->foodsaver['id']), $this->model->getNextDates($this->foodsaver['id'], 50));		
+		}
+		else
 		{
 			$this->view->profile($this->wallposts('foodsaver',$this->foodsaver['id']), null,null);	
 		}

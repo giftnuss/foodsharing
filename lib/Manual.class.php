@@ -101,6 +101,19 @@ class ManualDb extends Db
 		return false;
 	}
 
+	public function getBetriebBezirkID($id)
+	{
+		$out = $this->qRow('
+			SELECT
+			`bezirk_id`
+
+			FROM 		`'.PREFIX.'betrieb`
+
+			WHERE 		`id` = ' . $this->intval($id));
+
+		return $out;
+	}
+
 	public function closeBaskets($distance = 50,$loc = false)
 	{
 		if($loc === false)
@@ -1061,27 +1074,6 @@ class ManualDb extends Db
 		return $this->del('
 			DELETE FROM 	`'.PREFIX.'betrieb_notiz`
 			WHERE `id` = '.(int)$id.'
-		');
-	}
-
-	public function getNextDates($fsid)
-	{
-		return $this->q('
-			SELECT 	a.`date`,
-					UNIX_TIMESTAMP(a.`date`) AS date_ts,
-					b.name AS betrieb_name,
-					b.id AS betrieb_id
-
-			FROM   `'.PREFIX.'abholer` a,
-			       `'.PREFIX.'betrieb` b
-
-			WHERE a.betrieb_id =b.id
-			AND   a.foodsaver_id = '.(int)$fsid.'
-			AND   a.`date` > NOW()
-
-			ORDER BY a.`date`
-
-			LIMIT 10
 		');
 	}
 

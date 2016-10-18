@@ -41,6 +41,39 @@ class ProfileModel extends Model
 			AND 	`rater_id` = '.(int)fsId().'
 		');
 	}
+
+	public function getNextDates($fsid,$LIMIT=10)
+	{
+		return $this->q('
+			SELECT 	a.`date`,
+					UNIX_TIMESTAMP(a.`date`) AS date_ts,
+					b.name AS betrieb_name,
+					b.id AS betrieb_id,
+					b.bezirk_id AS bezirk_id
+			FROM   `'.PREFIX.'abholer` a,
+			       `'.PREFIX.'betrieb` b
+
+			WHERE a.betrieb_id =b.id
+			AND   a.foodsaver_id = '.(int)$fsid.'
+			AND   a.`date` > NOW()
+
+			ORDER BY a.`date`
+
+			LIMIT '.$LIMIT.'
+		');
+	}
+
+	public function deleteSlot($fsid,$bid,$date)
+	{
+		if($date == 0 && $bid == 0)
+		{
+			return $this->del('DELETE FROM `'.PREFIX.'abholer` WHERE `foodsaver_id` = '.(int)$fsid.' AND `date` > now()');
+		}
+		else
+		{
+			return $this->del('DELETE FROM `'.PREFIX.'abholer` WHERE `betrieb_id` = '.(int)$bid.' AND `foodsaver_id` = '.(int)$fsid.' AND `date` = FROM_UNIXTIME("'.$date.'")');
+		}
+	}
 	
 	public function getData()
 	{

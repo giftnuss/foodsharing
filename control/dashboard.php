@@ -441,7 +441,8 @@ else if(S::may('fs'))
 	/*
 	 * Nächste Termine
 	*/
-	if($dates = $db->getNextDates(fsId()))
+	$profileModel = loadModel('profile');
+	if($dates = $profileModel->getNextDates(fsId(),10))
 	{
 		addContent(u_nextDates($dates),CNT_RIGHT);
 	}

@@ -125,6 +125,39 @@ class ProfileXhr extends Control
 		}
 	}
 
+	public function deleteFromSlot()
+	{
+		$fsModel = loadModel('profile');
+		$betrieb = $fsModel->getBetriebBezirkID($_GET['bid']);
+
+		if(isOrgaTeam() || isBotFor($betrieb['bezirk_id']))
+		{
+			if($this->model->deleteSlot($_GET['fsid'],$_GET['bid'],$_GET['date']))
+			{
+				return array(
+				'status' => 1,
+				'script' => '
+					pulseSuccess("Termin gelöscht");
+					reload();'
+				);
+			}
+			else
+			{
+				return array(
+					'status' => 1,
+					'script' => 'pulseError("Es ist ein Fehler aufgetreten!");'
+				);
+			}
+			
+		}
+		else 
+		{
+			return array(
+					'status' => 1,
+					'script' => 'pulseError("Du kannst nur Termine aus deinem eigenen Bezirk löschen.");'
+			);
+		}
+	}
 	
 	public function quickprofile()
 	{

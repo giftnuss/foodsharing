@@ -55,3 +55,26 @@ div.statdisplay .item
 {
 	border-radius:40px;
 }
+
+#double li  
+{ 
+	width:33.333%;
+}
+
+#double ul{
+  width:95%;
+  margin-bottom:20px;
+  overflow:hidden;
+  border-top:1px solid #ccc;
+}
+#double ul li{
+  line-height:1.5em;
+  border-bottom:1px solid #ccc;
+  float:left;
+  display:inline;
+}
+a.disabled {
+    pointer-events: none;
+    background-color:  #858789;
+}
+
