@@ -1132,7 +1132,8 @@ class ManualDb extends Db
 						'.PREFIX.'betrieb.str,
 						'.PREFIX.'betrieb.hsnr,
 						'.PREFIX.'betrieb.`betrieb_status_id`,
-						'.PREFIX.'betrieb_team.verantwortlich
+						'.PREFIX.'betrieb_team.verantwortlich,
+						'.PREFIX.'betrieb_team.active
 
 				FROM 	'.PREFIX.'betrieb,
 						'.PREFIX.'betrieb_team
@@ -1146,7 +1147,8 @@ class ManualDb extends Db
 		$out = array();
 		$out['verantwortlich'] = array();
 		$out['team'] = array();
-
+		$out['waitspringer'] = array();
+		$out['anfrage'] = array();
 
 		$already_in = array();
 
@@ -1157,7 +1159,18 @@ class ManualDb extends Db
 				$already_in[$b['id']] = true;
 				if($b['verantwortlich'] == 0)
 				{
-					$out['team'][] = $b;
+					if($b['active'] == 0)
+					{
+						$out['anfrage'][] = $b;
+					}
+					elseif($b['active'] == 1)
+					{
+						$out['team'][] = $b;
+					}
+					elseif($b['active'] == 2)
+					{
+						$out['waitspringer'][] = $b;
+					}
 				}
 				else
 				{
@@ -1236,6 +1249,61 @@ class ManualDb extends Db
 				AND 	verantwortlich = 1
 				AND 	active = 1
 		');
+	}
+
+	public function hasAnfrageAtStore($betrieb_id)
+	{
+		return $this->qOne('
+
+				SELECT 	betrieb_id
+
+				FROM 	'.PREFIX.'betrieb_team
+
+				WHERE 	betrieb_id = '.$this->intval($betrieb_id).'
+				AND 	foodsaver_id = '.$this->intval(fsId()).'
+				AND 	verantwortlich = 0
+				AND 	active = 0
+		');
+	}
+
+	public function getAbholen($betrieb_id)
+	{
+		if($out = $this->q('
+			SELECT 	`'.PREFIX.'abholen`.`foodsaver_id`,
+					`'.PREFIX.'abholen`.`dow`,
+					`'.PREFIX.'abholen`.`time`
+
+			FROM 	`'.PREFIX.'abholen`
+
+			WHERE 	`'.PREFIX.'abholen`.`betrieb_id` = '.$this->intval($betrieb_id).'
+		'))
+		{
+			$saver = array();
+			foreach ($out as $key => $o)
+			{
+				$out[$key]['foodsaver'] = false;
+				if($out[$key]['foodsaver_id'] != 0)
+				{
+					if(isset($saver[$o['foodsaver_id']]))
+					{
+						$out[$key]['foodsaver'] = $saver[$o['foodsaver_id']];
+					}
+					else
+					{
+						$out[$key]['foodsaver'] = $this->qRow('
+						SELECT 	`id`,`name`,`nachname`,`email`,`geschlecht`
+						FROM 	`'.PREFIX.'foodsaver`
+						WHERE 	`id` = '.$this->intval($o['foodsaver_id']).'');
+
+						$saver[$o['foodsaver_id']] = $out[$key]['foodsaver'];
+
+					}
+				}
+			}
+		}
+
+
+		return $out;
 	}
 
 	public function getParentBezirke($bid)

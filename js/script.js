@@ -1378,6 +1378,26 @@ function betriebRequest(id)
 	
 }
 
+function rejectBetriebRequest(fsid,bid)
+{
+	showLoader();
+	$.ajax({
+		dataType:"json",
+		data: "fsid="+fsid+"&bid="+bid,
+		url:"/xhr.php?f=denyRequest",
+		success : function(data){
+			if(data.status == 1)
+			{
+				pulseSuccess(data.msg);
+			}else{
+				pulseError(data.msg);
+			}
+		},
+		complete:function(){hideLoader();}
+	});	
+	
+}
+
 function checkAllCb(sel)
 {
 	$("input[type=\'checkbox\']").prop("checked", sel);

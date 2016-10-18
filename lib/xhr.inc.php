@@ -449,9 +449,14 @@ function xhr_bBubble($data)
 		if($b = $db->getMyBetrieb($data['id']))
 		{
 			$b['inTeam'] = false;
+			$b['pendingRequest'] = false;
 			if($db->isInTeam($b['id']))
 			{
 				$b['inTeam'] = true;
+			}
+			if($db->hasAnfrageAtStore($b['id']))
+			{
+				$b['pendingRequest'] = true;
 			}
 			return json_encode(array(
 					'status' => 1,
@@ -1641,10 +1646,15 @@ function xhr_denyBezirkRequest($data)
 function xhr_denyRequest($data)
 {
 	global $db;
-	if($db->isVerantwortlich($data['bid']))
+	if(fsId() == $data['fsid'] || $db->isVerantwortlich($data['bid']))
 	{
 		$db->denyRequest($data['fsid'],$data['bid']);
-		return json_encode(array('status'=>1));
+
+		$msg = 'Deine Anfrage wurde erfolgreich zur&uuml;ckgezogen!';
+		return json_encode(array('status'=>1,'msg' => $msg));
+	}else{
+		$msg = 'Es ist ein Fehler aufgetreten!';
+		return json_encode(array('status'=>0,'msg' => $msg));
 	}
 }
 

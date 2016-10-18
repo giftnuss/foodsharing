@@ -61,9 +61,12 @@ function xv_bBubble($b)
 	{
 		$button .= '<div class="buttonrow"><a class="lbutton" href="/?page=fsbetrieb&id='.(int)$b['id'].'">'.s('to_team_page').'</a></div>';
 	}
-	if($b['team_status'] != 0 && (!$b['inTeam']))
+	if($b['team_status'] != 0 && (!$b['inTeam'] && (!$b['pendingRequest'])))
 	{
 		$button .= '<div class="buttonrow"><a class="lbutton" href="#" onclick="betriebRequest('.(int)$b['id'].');return false;">'.s('want_to_fetch').'</a></div>';
+	}elseif($b['team_status'] != 0 && (!$b['inTeam'] && ($b['pendingRequest'])))
+	{
+		$button .= '<div class="buttonrow"><a class="lbutton" href="#" onclick="rejectBetriebRequest('.(int)fsId().','.(int)$b['id'].');return false;">Anfrage zur&uuml;ckziehen </a></div>';
 	}
 	
 	$verantwortlich = '<ul class="linklist">';
