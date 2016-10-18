@@ -20,9 +20,12 @@ sendtoclient = function(client,a,m,o){
 
 var app = http.createServer(function  (req, res) {
 	if(req.url == "/stats") {
-		var num_sessions = 0;
 		res.writeHead(200);
-		res.end('{"connections":'+num_connections+',"registrations":'+num_registrations+',"sessions":'+Object.keys(connected_clients).length+'}');
+		res.end(JSON.stringify({
+			connections: num_connections,
+			registrations: num_registrations,
+			sessions: Object.keys(connected_clients).length
+		});
 		return;
 	}
 	var client,app,options,method;
