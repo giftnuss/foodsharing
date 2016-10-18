@@ -2973,7 +2973,7 @@ function sendSock($fsid,$app,$method,$options)
 		
 		//$fp = fopen ('http://127.0.0.1:1338/?' . $query , 'r');
 		
-		file_get_contents('http://127.0.0.1:1338/?' . $query);
+		file_get_contents(SOCK_URL . '?' . $query);
 		
 		/*
 		if($fp)
