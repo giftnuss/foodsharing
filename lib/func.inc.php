@@ -1982,23 +1982,16 @@ function getCurrent($page = false)
 
 }
 
-function addScript($src,$global = false)
+function addScript($src)
 {
 	global $g_script;
-	$g_script[$src] = array('global'=>$global);
+	$g_script[] = $src;
 }
 
 function addScriptTop($src)
 {
 	global $g_script;
-	$tmp = array();
-	$tmp[$src] = array('global'=> false);
-	foreach ($g_script as $k => $v)
-	{
-		$tmp[$k] = $v;
-	}
-	
-	$g_script = $tmp;
+	array_unshift($g_script, $src);
 }
 
 function loadModel($model = 'api')
@@ -2065,72 +2058,6 @@ function loadApp($app)
 	}
 }
 
-function cssCompress()
-{
-	global $g_css;
-	$genf = ROOT_DIR.'css/gen/style.css';
-	$md5 = '';
-	
-	$write_new = false;
-	if(isset($_GET['nocache']))
-	{
-		@file_put_contents($genf, '');
-		$write_new = true;
-	}
-	
-	if($write_new)
-	{
-		include_once 'lib/cssmin.php';
-	}
-	
-	foreach ($g_css as $src => $i)
-	{
-		if($i['global'])
-		{
-			if($write_new)
-			{
-				if(strpos($src,'awesome') !== false)
-				{
-					file_put_contents($genf, (file_get_contents(ROOT_DIR.$src))."\n",FILE_APPEND);
-				}
-				else 
-				{
-					file_put_contents($genf, CssMin::minify(file_get_contents(ROOT_DIR.$src))."\n",FILE_APPEND);
-				}
-			}
-			unset($g_css[$src]);
-		}
-	}
-	$g_css = array_merge(array('/css/gen/style.css?v='.VERSION=>true),$g_css);
-}
-
-function scriptCompress()
-{
-	global $g_script;
-	$genf = ROOT_DIR.'js/gen/script.js';
-	$md5 = '';
-	
-	$write_new = false;
-	if(isset($_GET['nocache']))
-	{
-		@file_put_contents($genf, '');
-		$write_new = true;
-	}
-	
-	foreach ($g_script as $script => $i)
-	{
-		if($i['global'])
-		{
-			if($write_new)
-			{
-				file_put_contents($genf, JSMin::minify(file_get_contents(ROOT_DIR.$script))."\n",FILE_APPEND);
-			}
-			unset($g_script[$script]);
-		}
-	}
-	$g_script = array_merge(array('/js/gen/script.js?v='.VERSION=>true),$g_script);
-}
-
 function addJsFunc($nfunc)
 {
 	global $g_js_func;
@@ -2153,34 +2080,25 @@ function getJs()
 function addCssTop($src)
 {
 	global $g_css;
-	$tmp = array();
-	$tmp[$src] = array('global'=> false);
-	foreach ($g_css as $k => $v)
-	{
-		$tmp[$k] = $v;
-	}
-	
-	$g_css = $tmp;
+	array_unshift($g_css, $src);
 }
 
-function addCss($src,$global = false)
+function addCss($src)
 {
 	global $g_css;
-	$g_css[$src] = array('global'=>$global);
+	$g_css[] = $src;
 }
 
 function makeHead()
 {
-	scriptCompress();
-	cssCompress();
 	global $g_script;
 	global $g_css;
 	global $g_head;
-	foreach ($g_css as $src => $s)
+	foreach ($g_css as $src)
 	{
 		$g_head .= '<link rel="stylesheet" type="text/css" href="'.$src.'" />'."\n";
 	}
-	foreach ($g_script as $src => $s)
+	foreach ($g_script as $src)
 	{
 		$g_head .= '<script type="text/javascript" src="'.$src.'"></script>'."\n";
 	}

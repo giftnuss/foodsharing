@@ -68,24 +68,6 @@ $g_meta = array(
 
 $db = new ManualDb();
 
-addCss('/fonts/alfaslabone/stylesheet.css',true);
-addCss('/css/font-awesome.min.css',true);
-addCss('/css/jquery-ui.css',true);
-addCss('/css/jMenu.jquery.css',true);
-addCss('/js/fancybox/jquery.fancybox.css',true);
-addCss('/css/style.css',true);
-addCss('/css/content.css',true);
-addCss('/css/jquery.Jcrop.min.css',true);
-addCss('/js/tagedit/css/jquery.tagedit.css',true);
-addCss('/css/chat.css',true);
-addCss('/css/jquery.switchButton.css',true);
-addCss('/css/info.css',true);
-addCss('/css/icons.css',true);
-addCss('/css/popup.css',true);
-
-addScript('/js/jquery.1.11.0.js',true);
-addScript('/js/jquery-ui-1.10.4.js',true);
-
 addHead('<link rel="stylesheet" href="/css/pure/pure.min.css">
     <!--[if lte IE 8]>
         <link rel="stylesheet" href="/css/pure/grids-responsive-old-ie-min.css">
@@ -93,33 +75,6 @@ addHead('<link rel="stylesheet" href="/css/pure/pure.min.css">
     <!--[if gt IE 8]><!-->
         <link rel="stylesheet" href="/css/pure/grids-responsive-min.css">
     <!--<![endif]-->');
-
-addScript('/js/jquery-ui-addons.js',true);
-addScript('/js/tablesorter/jquery.tablesorter.min.js',true);
-addScript('/js/jMenu.jquery.js',true);
-addScript('/js/fancybox/jquery.fancybox.pack.js',true);
-addScript('/js/jquery.Jcrop.min.js',true);
-addScript('/js/tagedit/js/jquery.autoGrowInput.js',true);
-addScript('/js/tagedit/js/jquery.tagedit.js',true);
-addScript('/js/timeago.js',true);
-addScript('/js/autolink.js',true);
-addScript('/js/js-time-format.js',true);
-addScript('/js/jquery.slimscroll.min.js',true);
-//addScript('js/typeahead.js',true);
-addScript('/js/underscore.js',true);
-addScript('/js/underscore.string.js',true);
-addScript('/js/script.js',true);
-addScript('/js/instant-search.js',true);
-addScript('/js/conv.js',true);
-addScript('/js/info.js',true);
-addScript('/js/storage.js',true);
-addScript('/js/jquery.popup.min.js',true);
-addScript('/js/socket.io-1.5.0.min.js',true);
-addScript('/js/socket.js',true);
-addScript('/js/popup.js',true);
-
-//scriptCompress();
-//cssCompress();
 
 addHidden('<a id="'.id('fancylink').'" href="#fancy">&nbsp;</a>');
 addHidden('<div id="'.id('fancy').'"></div>');

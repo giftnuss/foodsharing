@@ -682,4 +682,3 @@ else
 {conv.push(JSON.parse(data.o));}
 break;}});socket.on('info',function(data){switch(data.m)
 {case'badge':info.badge('info',data.o.count);break;}});}};
-
