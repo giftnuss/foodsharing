@@ -72,9 +72,11 @@ io.on('connection', function (socket) {
 		num_connections--;
 		var connections = connected_clients[sid];
 		if(sid && connections) {
-			num_registrations--;
 			var i = connections.indexOf(socket);
-			if(i !== -1) connections.splice(i, 1);
+			if(i !== -1) {
+				connections.splice(i, 1);
+				num_registrations--;
+			}
 			if (connections.length === 0) {
 				delete connected_clients[sid];
 			}
