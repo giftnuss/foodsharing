@@ -24,12 +24,12 @@ class ContentControl extends Control
 			
 			if(getAction('neu'))
 			{
-				handle_add();
+				$this->handle_add();
 			
 				addBread(s('bread_content'),'/?page=content');
 				addBread(s('bread_new_content'));
 			
-				addContent(content_form());
+				addContent($this->content_form());
 			
 				addContent(v_field(v_menu(array(
 				pageLink('content','back_to_overview')
@@ -45,7 +45,7 @@ class ContentControl extends Control
 			}
 			elseif($id = getActionId('edit'))
 			{
-				handle_edit();
+				$this->handle_edit();
 			
 				addBread(s('bread_content'),'/?page=content');
 				addBread(s('bread_edit_content'));
@@ -53,7 +53,7 @@ class ContentControl extends Control
 				$data = $db->getOne_content($id);
 				setEditData($data);
 			
-				addContent(content_form());
+				addContent($this->content_form());
 			
 				addContent(v_field(v_menu(array(
 				pageLink('content','back_to_overview')
@@ -209,173 +209,67 @@ class ContentControl extends Control
 		
 		addContent($this->view->ratgeberRight(),CNT_RIGHT);
 	}
-}
 
-private function content_form($title = 'Content Management')
-{
-	global $db;
+	public function fuer_unternehmen()
+	{
+		if($cnt = $this->model->getContent(4))
+		{
+			addBread($cnt['title']);
+			addTitle($cnt['title']);
 
-	return v_form('faq', array(
+			addContent($this->view->partner($cnt));
+		}
+	}
+
+	private function content_form($title = 'Content Management')
+	{
+		return v_form('faq', array(
 			v_field(
-					v_form_text('name',array('required'=>true)).
-					v_form_text('title',array('required'=>true)),
+				v_form_text('name',array('required'=>true)).
+				v_form_text('title',array('required'=>true)),
 
-					$title,
-					array('class'=>'ui-padding')
+				$title,
+				array('class'=>'ui-padding')
 			),
 			v_field(v_form_tinymce('body',array('filemanager' => true,'public_content'=>true,'nowrapper'=>true)), 'Inhalt')
-	),array('submit'=>s('save')));
-}
-
-function handle_edit()
-{
-	global $db;
-	global $g_data;
-
-
-
-	if(submitted())
-	{
-		$g_data['last_mod'] = date('Y-m-d H:i:s');
-		$g_data['body'] = handleImages($g_data['body']);
-
-		if($db->update_content($_GET['id'],$g_data))
-		{
-			info(s('content_edit_success'));
-			go('/?page=content&a=edit&id='.(int)$_GET['id']);
-		}
-		else
-		{
-			error(s('error'));
-		}
-	}
-}
-function handle_add()
-{
-	global $db;
-	global $g_data;
-	if(submitted())
-	{
-		$g_data['last_mod'] = date('Y-m-d H:i:s');
-		$g_data['body'] = handleImages($g_data['body']);
-		if($db->add_content($g_data))
-		{
-			info(s('content_add_success'));
-			goPage();
-		}
-		else
-		{
-			error(s('error'));
-		}
-	}
-}
-
-function handleImages($body)
-{
-  /* temporarily disable this as it produces broken links */
-  return $body;
-
-	if(strpos($body,'<') === false)
-	{
-		return $body;
+		),array('submit'=>s('save')));
 	}
 
-	$doc = new DOMDocument();
-	$doc->loadHTML($body);
-
-	$tags = $doc->getElementsByTagName('img');
-
-	try
+	private function handle_edit()
 	{
-		foreach($tags as $tag)
+		global $db;
+		global $g_data;
+		if(submitted())
 		{
-			$src = $tag->getAttribute('src');
-				
-			$wwith = $tag->getAttribute('width');
-			$hheight = $tag->getAttribute('height');
-			$iname = $tag->getAttribute('name');
-				
-			if(!empty($wwith) || !empty($hheight))
+			$g_data['last_mod'] = date('Y-m-d H:i:s');
+			if($db->update_content($_GET['id'],$g_data))
 			{
-				$old_filepath = '';
-
-				$file = explode('/', $src);
-				$filename = end($file);
-
-				if(strpos($src,'images/upload/') !== false)
-				{
-					$old_filepath = explode('images/upload', $src);
-					$old_filepath = end($old_filepath);
-				}
-				elseif(!empty($iname) && strpos($iname,'/') !== false)
-				{
-					$old_filepath = $iname;
-				}
-
-
-
-				$file = 'images/upload'.$old_filepath;
-
-				if(file_exists($file) && !is_dir($file))
-				{
-						
-					$ffile = explode('/', $old_filepath);
-					$filename = end($ffile);
-						
-					$new_path = 'images/content/';
-					$new_filename = $filename;
-					$y = 1;
-						
-						
-						
-					while (file_exists($new_path.$new_filename))
-					{
-						$new_filename = $y.'-'.$filename;
-						$y++;
-					}
-					
-					copy($file, $new_path.$new_filename);
-					chmod($new_path.$new_filename, 0777);
-					
-					$fimage = new fImage($new_path.$new_filename);
-					if(!empty($src) && $width = $tag->getAttribute('width'))
-					{
-						$fimage->resize($width, 0);
-					}
-					else if(!empty($src) && $height = $tag->getAttribute('height'))
-					{
-						$fimage->resize(0, $height);
-					}
-					$fimage->saveChanges();
-					$tag->setAttribute('src', 'https://foodsharing.de/'.$new_path.$new_filename);
-					$tag->setAttribute('name', $old_filepath);
-					$tag->removeAttribute('width');
-					$tag->removeAttribute('height');
-				}
+				info(s('content_edit_success'));
+				go('/?page=content&a=edit&id='.(int)$_GET['id']);
 			}
-			elseif (substr($src, 0,7) != 'http://' && substr($src, 0,8) != 'https://')
+			else
 			{
-				$tag->setAttribute('src','https://foodsharing.de/'.$src);
+				error(s('error'));
 			}
 		}
-
-
-
-		$html = $doc->saveHTML();
-		$html = explode('<body>', $html);
-		$html = end($html);
-		$html = explode('</body>', $html);
-		$html = $html[0];
-		return $html;
 	}
-	catch(Exception $e)
-	{
-		if(isAdmin())
-		{
-			echo($e->getMessage());
-			die();
-		}
 
-		return $body;
+	private function handle_add()
+	{
+		global $db;
+		global $g_data;
+		if(submitted())
+		{
+			$g_data['last_mod'] = date('Y-m-d H:i:s');
+			if($db->add_content($g_data))
+			{
+				info(s('content_add_success'));
+				goPage();
+			}
+			else
+			{
+				error(s('error'));
+			}
+		}
 	}
 }
