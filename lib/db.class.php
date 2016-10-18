@@ -299,8 +299,6 @@ class Db
 		}
 	}
 	
-	
-	
 	public function getBezirkName($bezirk_id = false)
 	{
 		if($bezirk_id === false)
@@ -386,33 +384,6 @@ class Db
 		return false;
 	}
 
-	private function addOrGetStadtId($stadt,$bundesland)
-	{
-		$bundesland_id = $this->getBundeslandId($bundesland);
-
-		
-		if($id = $this->qone('SELECT `id` FROM `'.PREFIX.'stadt` WHERE `name` = '.$this->strval($stadt).' AND `bundesland_id` = '.$this->intval($bundesland_id)))
-		{
-			return $id;
-		}
-		else
-		{
-			return $this->insert('INSERT INTO `'.PREFIX.'stadt`(`name`,`bundesland_id`)VALUES('.$this->strval($stadt).','.$this->intval($bundesland_id).')');
-		}
-	}
-	
-	private function getBundeslandId($name)
-	{
-		if($id = $this->qOne('SELECT `id` FROM `'.PREFIX.'bundesland` WHERE `name` = '.$this->strval($name)))
-		{
-			return $id;
-		}
-		else
-		{
-			return $this->insert('INSERT INTO `'.PREFIX.'bundesland`(`name`)VALUES('.$this->strval($name).')');
-		}
-	}
-			
 	public function getBezirkId($name)
 	{
 		if($id = $this->qOne('SELECT `id` FROM `'.PREFIX.'bezirk` WHERE `name` = '.$this->strval($name)))
