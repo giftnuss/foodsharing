@@ -25,7 +25,7 @@ var app = http.createServer(function  (req, res) {
 			connections: num_connections,
 			registrations: num_registrations,
 			sessions: Object.keys(connected_clients).length
-		});
+		}));
 		return;
 	}
 	var client,app,options,method;
