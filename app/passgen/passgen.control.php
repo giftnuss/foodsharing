@@ -52,6 +52,13 @@ class PassgenControl extends Control
 				<span class="button_confirm" style="display:none">'.s('verify_confirm_button').'</span>
 				<span class="button_abort" style="display:none">'.s('abort').'</span>
 			</div>');
+
+			addHidden('
+			<div id="unverifyconfirm-dialog" title="Es ist ein Problem aufgetreten">
+				'.v_info('<p>'.s('unverify_confirm').'</p>',s('unverify_confirm_title')).'
+				<span class="button_confirm" style="display:none">'.s('unverify_confirm_button').'</span>
+				<span class="button_abort" style="display:none">'.s('abort').'</span>
+			</div>');
 			
 			addContent('<form id="generate" method="post">');
 			foreach ($bezirke as $b)

@@ -22,6 +22,21 @@ function xhr_verify($data)
 			}
 		}
 
+		$countFetch = $db->qOne('
+			SELECT 	count(a.`date`)
+			FROM   `'.PREFIX.'abholer` a
+
+			WHERE a.foodsaver_id = '.(int)$data['fid'].'
+			AND   a.`date` > NOW()
+		');
+
+		if($countFetch > 0)
+		{
+			return json_encode(array(
+				'status' => 0
+			));
+		}
+
 		if($db->update('UPDATE `'.PREFIX.'foodsaver` SET `verified` = '.(int)$data['v'].' WHERE `id` = '.(int)$data['fid']))
 		{
 			
