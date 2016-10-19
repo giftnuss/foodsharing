@@ -1492,9 +1492,83 @@ class ManualDb extends Db
 		}
 
 		$rolle = '';
+		$quiz_rolle = '';
+		$verified = '';
 		if(isset($data['rolle']))
 		{
 			$rolle = '`rolle` =  ' . $this->intval($data['rolle']) . ',';
+			if($data['rolle']==0 && isOrgaTeam())
+			{
+				$data['bezirk_id'] = 0;
+				$quiz_rolle = '`quiz_rolle` = 0,';
+				$verified = '`verified` = 0,';
+				
+				// Delete from Future Fetching Slots
+				$this->del('DELETE FROM `'.PREFIX.'abholer` WHERE `foodsaver_id` = '.$this->intval($id).' AND `date` > now()');
+
+				$bids = $this->q('
+
+					SELECT 	bt.betrieb_id as id	
+					FROM 	'.PREFIX.'betrieb_team bt
+					WHERE 	bt.foodsaver_id = '.$this->intval($id).'	
+				');
+				$msg = loadModel('msg');
+
+				//Delete from Company Conversations
+				foreach($bids as $b)
+				{
+					
+
+					if($scid = $msg->getBetriebConversation($b['id'], true))
+					{
+						$msg->deleteUserFromConversation($scid, $this->intval($id), true);
+					}
+
+					if($tcid = $msg->getBetriebConversation($b['id'], false))
+					{
+						$msg->deleteUserFromConversation($tcid, $this->intval($id), true);
+					}
+				}
+				//Delete from Teams
+				$this->del('
+					DELETE FROM  `'.PREFIX.'betrieb_team`
+					WHERE 		`foodsaver_id` = '.$this->intval($id).'
+				');
+				//Delete Bells for Foodsaver
+				$this->del('
+					DELETE FROM  `'.PREFIX.'foodsaver_has_bell`
+					WHERE 		`foodsaver_id` = '.$this->intval($id).'
+				');
+				// Delete from Bezirke and Working Groups
+				$this->del('
+					DELETE FROM  `'.PREFIX.'foodsaver_has_bezirk`
+					WHERE 		`foodsaver_id` = '.$this->intval($id).'
+				');
+				//Delete from Bezirke and Working Groups (when Admin)
+				$this->del('
+					DELETE FROM  `'.PREFIX.'botschafter`
+					WHERE 		`foodsaver_id` = '.$this->intval($id).'
+				');
+
+				//Block Person for Quiz
+				for ($i = 1; $i <= 7; $i++) {
+				    $this->insert('
+					INSERT INTO '.PREFIX.'quiz_session (
+						foodsaver_id, 
+						quiz_id, 
+						`status`,
+						time_start
+					) 
+					VALUES
+					(
+						'.$this->intval($id).',
+						1,
+						2,
+						now()
+					)
+				');
+				}
+			}
 		}
 
 		$position = '';
@@ -1529,6 +1603,8 @@ class ManualDb extends Db
 				'.$rolle.'
 				' . $orga . '
 				' . $email . '
+				' .$quiz_rolle. '
+				' .$verified. '
 				`geb_datum` =  ' . $this->dateval($data['geb_datum']) . '
 
 		WHERE 	`id` = '.$this->intval($id));

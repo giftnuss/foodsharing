@@ -261,7 +261,7 @@ function picture_box()
 	return v_field($p_cnt, 'Dein Foto');
 }
 
-private function u_delete_account()
+function u_delete_account()
 {
 	addJs('
 		$("#delete-account-confirm").dialog({
