@@ -35,43 +35,35 @@ class MapView extends View
 		
 		if(S::may('fs'))
 		{
-			$foodsaver = '<li><a name="foodsaver" class="ui-corner-all foodsaver"><span class="icon orange"><i class="img img-smile"></i></span><span>Foodsaver</span><span style="clear:both;float:none;"></span></a></li>';
-			$betriebe = '<li><a name="betriebe" class="ui-corner-all betriebe"><span class="icon brown"><i class="img img-store"></i></span><span>Betriebe</span><span style="clear:both;float:none;"></span></a></li>';
-			$botschafter = '<li><a name="botschafter" class="ui-corner-all botschafter"><span class="icon red"><i class="img img-smile"></i></span><span>Botschafter</span><span style="clear:both;float:none;"></span></a></li>';
-			$additional = '
-				<div id="map-option-wrapper" class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front">
-					<div class="ui-dialog-content ui-widget-content">
-						<div id="map-options">
-							<h3>Betrieb Anzeigeoptionen</h3>
-							<label><input type="checkbox" name="viewopt[]" value="allebetriebe" /> Alle Betriebe</label>
-							<label><input checked="checked" type="checkbox" name="viewopt[]" value="needhelp" /> HelferInnen gesucht</label>
-							<label><input checked="checked" type="checkbox" name="viewopt[]" value="needhelpinstant" /> HelferInnen dringend gesucht</label>
-							<label><input type="checkbox" name="viewopt" value="nkoorp" /> in Verhandlung</label>
-						</div>
-					</div>
+			$foodsaver = '<li><a name="foodsaver" class="ui-corner-all foodsaver"><span class="icon orange"><i class="img img-smile"></i></span><span>Foodsaver</span></a></li>';
+			$betriebe = '<li><a name="betriebe" class="ui-corner-all betriebe"><span class="icon brown"><i class="img img-store"></i></span><span>Betriebe</span></a>
+				<div id="map-options">
+					<label><input type="checkbox" name="viewopt[]" value="allebetriebe" /> Alle Betriebe</label>
+					<label><input checked="checked" type="checkbox" name="viewopt[]" value="needhelp" /> HelferInnen gesucht</label>
+					<label><input checked="checked" type="checkbox" name="viewopt[]" value="needhelpinstant" /> HelferInnen dringend gesucht</label>
+					<label><input type="checkbox" name="viewopt" value="nkoorp" /> in Verhandlung</label>
 				</div>
-			';
+			</li>';
+			$botschafter = '<li><a name="botschafter" class="ui-corner-all botschafter"><span class="icon red"><i class="img img-smile"></i></span><span>Botschafter</span></a></li>';
 		}
 		
-		return '				
+		return '
 			<div id="map-control-wrapper">
 				<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front" tabindex="-1">
-					<div class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 98px; max-height: none; height: auto;">
+					<div class="ui-dialog-content ui-widget-content">
 						<div id="map-control">
 							<ul class="linklist">
-								<li><a name="baskets" class="ui-corner-all baskets"><span class="icon green"><i class="img img-basket"></i></span><span>Essenskörbe</span><span style="clear:both;float:none;"></span></a></li>
+								<li><a name="baskets" class="ui-corner-all baskets"><span class="icon green"><i class="img img-basket"></i></span><span>Essenskörbe</span></a></li>
 								'.$foodsaver.'
 								'.$botschafter.'
 								'.$betriebe.'
 								
-								<li><a name="fairteiler" class="ui-corner-all fairteiler"><span class="icon yellow"><i class="img img-recycle"></i></span><span>Fair-Teiler</span><span style="clear:both;float:none;"></span></a></li>
+								<li><a name="fairteiler" class="ui-corner-all fairteiler"><span class="icon yellow"><i class="img img-recycle"></i></span><span>Fair-Teiler</span></a></li>
 							</ul>	
 						</div>	
 					</div>
 				</div>
-				
-				'.$additional.'
-				
+
 			</div>';
 	}
 }

@@ -182,7 +182,7 @@ function init_bDialog()
 
 function loadMarker(types,loader)
 {
-	$('#map-option-wrapper').hide();
+	$('#map-options').hide();
 	var options = [];
 	for(i=0;i<types.length;i++)
 	{
@@ -191,7 +191,7 @@ function loadMarker(types,loader)
 			$('#map-options input:checked').each(function(){
 				options[options.length] = $(this).val();
 			});
-			$('#map-option-wrapper').show();
+			$('#map-options').show();
 		}
 	}
 	
@@ -354,145 +354,6 @@ function loadMarker(types,loader)
 	});
 }
 
-function print_r(arr, level) {
-		 
-		var dumped_text = "";
-		if (!level) level = 0;
-	 
-		//The padding given at the beginning of the line.
-		var level_padding = "";
-		var bracket_level_padding = "";
-	 
-		for (var j = 0; j < level + 1; j++) level_padding += "    ";
-		for (var b = 0; b < level; b++) bracket_level_padding += "    ";
-	 
-		if (typeof(arr) == 'object') { //Array/Hashes/Objects 
-			dumped_text += "Array\n";
-			dumped_text += bracket_level_padding + "(\n";
-			for (var item in arr) {
-	 
-				var value = arr[item];
-	 
-				if (typeof(value) == 'object') { //If it is an array,
-					dumped_text += level_padding + "[" + item + "] => ";
-					dumped_text += print_r(value, level + 2);
-				} else {
-					dumped_text += level_padding + "[" + item + "] => " + value + "\n";
-				}
-	 
-			}
-			dumped_text += bracket_level_padding + ")\n\n";
-		} else { //Stings/Chars/Numbers etc.
-			dumped_text = "===>" + arr + "<===(" + typeof(arr) + ")";
-		}
-	 
-		return dumped_text;
-	 
-}
-var topSliderIsMoving = false;
-var toolSliderIsMoving = false;
-var topSliderAni = null;
-var toolSliderAni = null;
-var ani_tempo = 100;
-function initSlide()
-{
-	$(document).click(function() {
-		topSlideOut();
-		toolSlideOut();
-	});
-	
-	$('#map-control-wrapper').mouseover(function(){
-		toolSlideIn();
-	});
-	$('#map-control-wrapper').mouseleave(function(){
-		toolSlideOut();
-	});
-	
-	$('#main').mouseover(function(){
-		topSlideIn();
-	});
-	$('#main').mouseleave(function(){
-		topSlideOut();
-	});
-
-}
-
-function stopTopAnimation()
-{
-	for(i=0;i<topSliderAni.length;i++)
-	{
-		topSliderAni[i].stop();
-	}
-}
-function stopToolAnimation()
-{
-	toolSliderAni.stop();
-}
-
-function toolSlideOut()
-{
-	if(toolSliderAni != null)
-	{
-		stopToolAnimation();
-	}
-	
-	toolSliderAni = null;
-	toolSliderAni = $('#map-control-wrapper').animate({
-		right : '-93px'
-	},ani_tempo);
-}
-function toolSlideIn()
-{
-	if(toolSliderAni != null)
-	{
-		stopToolAnimation();
-	}
-	
-	toolSliderAni = null;
-	toolSliderAni = $('#map-control-wrapper').animate({
-		right : '25px'
-	},ani_tempo);
-}
-
-function topSlideIn()
-{	
-	if(topSliderAni != null)
-	{
-		stopTopAnimation();
-	}
-	topSliderAni = [];
-	topSliderAni[0] = $('#main').animate({
-		top : '0px'
-	},ani_tempo);
-	topSliderAni[1] = $('#msgBar-badge').animate({
-		top : '0px'
-	},ani_tempo);
-	topSliderAni[2] = $('#msgBar').animate({
-		top : '14px'
-	},ani_tempo);
-}
-
-function topSlideOut()
-{
-	if(topSliderAni != null)
-	{
-		stopTopAnimation();
-	}
-	
-	topSliderIsMoving = true;
-	topSliderAni = [];
-	topSliderAni[0] = $('#main').animate({
-		top : '-40px'
-	},ani_tempo);
-	
-	topSliderAni[1] = $('#msgBar-badge').animate({
-		top : '-40px'
-	},ani_tempo);
-	topSliderAni[2] = $('#msgBar').animate({
-		top : '-40px'
-	},ani_tempo);
-}
-
 $(document).ready(function(){
 	showLoader();
 	$('#map-control li a').click(function(){
@@ -537,8 +398,4 @@ $(document).ready(function(){
 	});
 	
 	init_bDialog();
-});
-
-$(window).load(function(){
-	
 });

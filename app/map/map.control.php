@@ -26,11 +26,6 @@ class MapControl extends Control
 		{
 			$jsarr = '["fairteiler"]';
 		}
-
-		if(!S::may('fs'))
-		{
-			addStyle('#map-control-wrapper > .ui-widget-content{height:93px;}');
-		}
 		
 		addContent(
 			$this->view->lMap($center)
