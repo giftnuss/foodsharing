@@ -30,12 +30,13 @@ If you want a bit of seed data to play with, run:
 ./scripts/seed
 ```
 
-It will give you two users you can sign in as:
+It will give you three users you can sign in as:
 
-| email             | password |
-|-------------------|----------|
-| user1@example.com | user1    |
-| user2@example.com | user2    |
+| email               | password |
+|---------------------|----------|
+| user1@example.com   | user1    |
+| user2@example.com   | user2    |
+| userbot@example.com | userbot  |
 
 To stop everything again just run:
 
