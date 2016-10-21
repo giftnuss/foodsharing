@@ -304,26 +304,13 @@ class BetriebXhr extends Control
 		}
 		else if($this->model->isInTeam($_GET['id']))
 		{
-			$this->model->del('DELETE FROM `'.PREFIX.'betrieb_team` WHERE `betrieb_id` = '.(int)$_GET['id'].' AND `foodsaver_id` = '.fsId().' ');
-			$this->model->del('DELETE FROM `'.PREFIX.'abholer` WHERE `betrieb_id` = '.(int)$_GET['id'].' AND `foodsaver_id` = '.fsId().' AND `date` > NOW()');
-	
-			$msg = loadModel('msg');
-	
-			if($tcid = $msg->getBetriebConversation($_GET['id']))
-			{
-				$msg->deleteUserFromConversation($tcid, fsId(), true);
-			}
-			if($scid = $msg->getBetriebConversation($_GET['id'], true))
-			{
-				$msg->deleteUserFromConversation($scid, fsId(), true);
-			}
+			$this->model->signout($_GET['id'], fsId());
 			$xhr->addScript('goTo("/?page=relogin&url=" + encodeURIComponent("/?page=dashboard") );');
 		}
 		else
 		{
 			$xhr->addMessage(s('no_member'),'error');
 		}
-	
 		$xhr->send();
 	}
 }

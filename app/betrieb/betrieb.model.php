@@ -115,4 +115,23 @@ class BetriebModel extends Model
 		
 		return false;
 	}
+
+	public function signout($bid, $fsid)
+	{
+		$bid = $this->intval($bid);
+		$fsid = $this->intval($fsid);
+		$this->model->del('DELETE FROM `'.PREFIX.'betrieb_team` WHERE `betrieb_id` = '.$bid.' AND `foodsaver_id` = '.$fsid.' ');
+		$this->model->del('DELETE FROM `'.PREFIX.'abholer` WHERE `betrieb_id` = '.$bid.' AND `foodsaver_id` = '.$fsid.' AND `date` > NOW()');
+
+		$msg = loadModel('msg');
+
+		if($tcid = $msg->getBetriebConversation($bid))
+		{
+			$msg->deleteUserFromConversation($tcid, $fsid, true);
+		}
+		if($scid = $msg->getBetriebConversation($bid, true))
+		{
+			$msg->deleteUserFromConversation($scid, $fsid, true);
+		}
+	}
 }

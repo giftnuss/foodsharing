@@ -1502,38 +1502,19 @@ class ManualDb extends Db
 				$data['bezirk_id'] = 0;
 				$quiz_rolle = '`quiz_rolle` = 0,';
 				$verified = '`verified` = 0,';
-				
-				// Delete from Future Fetching Slots
-				$this->del('DELETE FROM `'.PREFIX.'abholer` WHERE `foodsaver_id` = '.$this->intval($id).' AND `date` > now()');
 
 				$bids = $this->q('
-
 					SELECT 	bt.betrieb_id as id	
 					FROM 	'.PREFIX.'betrieb_team bt
 					WHERE 	bt.foodsaver_id = '.$this->intval($id).'	
 				');
-				$msg = loadModel('msg');
-
-				//Delete from Company Conversations
+				$betrieb = loadModel('betrieb');
+				//Delete from Companies
 				foreach($bids as $b)
 				{
-					
-
-					if($scid = $msg->getBetriebConversation($b['id'], true))
-					{
-						$msg->deleteUserFromConversation($scid, $this->intval($id), true);
-					}
-
-					if($tcid = $msg->getBetriebConversation($b['id'], false))
-					{
-						$msg->deleteUserFromConversation($tcid, $this->intval($id), true);
-					}
+					$betrieb->signout($b, $id);
 				}
-				//Delete from Teams
-				$this->del('
-					DELETE FROM  `'.PREFIX.'betrieb_team`
-					WHERE 		`foodsaver_id` = '.$this->intval($id).'
-				');
+
 				//Delete Bells for Foodsaver
 				$this->del('
 					DELETE FROM  `'.PREFIX.'foodsaver_has_bell`
