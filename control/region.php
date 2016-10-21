@@ -186,16 +186,13 @@ function v_bezirk_tree($id)
 						$.globalEval(data.script);
 					}
 					'.$id.'_clearMarkers();
-					image = new google.maps.MarkerImage("img/foodsaver.png",
-						        new google.maps.Size(32.0, 37.0),
-						        new google.maps.Point(0, 0),
-						        new google.maps.Point(16.0, 18.0)
-					);
-					shadow = new google.maps.MarkerImage("img/shadow-foodsaver.png",
-						         new google.maps.Size(51.0, 37.0),
-						         new google.maps.Point(0, 0),
-						         new google.maps.Point(16.0, 18.0)
-					);
+					image = L.icon({iconUrl: "img/foodsaver.png",
+						        iconSize: [32.0, 37.0],
+						        iconAnchor: [16.0, 18.0],
+										shadowIconUrl: "img/shadow-foodsaver.png",
+						        shadowIconSize: [51.0, 37.0],
+						        shadowIconAnchor: [16.0, 18.0]
+					});
 						
 					if(data.foodsaver != undefined && data.foodsaver.length > 0)
 					{
@@ -203,24 +200,21 @@ function v_bezirk_tree($id)
 						
 						for(i=0;i<data.foodsaver.length;i++)
 						{
-							loc = new google.maps.LatLng(data.foodsaver[i].lat,data.foodsaver[i].lon);
+							loc = L.latLng(data.foodsaver[i].lat,data.foodsaver[i].lon);
     						'.$id.'_bounds.extend(loc);
 							
-							'.$id.'_markers[i] = new google.maps.Marker({
-						      position: loc,
-						      map: '.$id.'_map,
+							'.$id.'_markers[i] = L.marker(loc, {
 						      title:data.foodsaver[i].name,
 						      icon: image,
-							  shadow:shadow,
-						      content: \'<div style="height:80px;overflow:hidden;"><div style="margin-right:10px;float:left;"><a onclick="profile(\'+ data.foodsaver[i].id +\');return false;" href="#"><img src="\'+img(data.foodsaver[i].photo)+\'" /></a></div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a onclick="profile(\'+ data.foodsaver[i].id +\');return false;" href="#">\' + data.foodsaver[i].name + "</a></h1><p>" + data.foodsaver[i].anschrift + "</p><p>" + data.foodsaver[i].plz + " " + data.foodsaver[i].stadt + \'</p><div style="clear:both;"></div></div>\'
-						  });
+						  }).addTo('.$id.'_map);
+						  '.$id.'_markers[i].content = \'<div style="height:80px;overflow:hidden;"><div style="margin-right:10px;float:left;"><a onclick="profile(\'+ data.foodsaver[i].id +\');return false;" href="#"><img src="\'+img(data.foodsaver[i].photo)+\'" /></a></div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a onclick="profile(\'+ data.foodsaver[i].id +\');return false;" href="#">\' + data.foodsaver[i].name + "</a></h1><p>" + data.foodsaver[i].anschrift + "</p><p>" + data.foodsaver[i].plz + " " + data.foodsaver[i].stadt + \'</p><div style="clear:both;"></div></div>\';
 						      		
-						  google.maps.event.addListener('.$id.'_markers[i], \'click\', function(e,ii) {
+						  '.$id.'_markers[i].on( \'click\', function(e,ii) {
 						    '.$id.'_infowindow.setContent(""+this.content);
-						    '.$id.'_infowindow.open('.$id.'_map, this);
+						    '.$id.'_infowindow.setLatLng(this.getLatLng());
+						    '.$id.'_infowindow.openOn('.$id.'_map);
 						  });
 						  '.$id.'_map.fitBounds('.$id.'_bounds);
-    					  '.$id.'_map.panToBounds('.$id.'_bounds); 
 						}
     				}
     				if(data.betriebe != undefined && data.betriebe.length > 0)
@@ -235,29 +229,28 @@ function v_bezirk_tree($id)
     					  	{
     					  		y = i;	
     					  	}
-							loc = new google.maps.LatLng(data.betriebe[i].lat,data.betriebe[i].lon);
+							loc = L.latLng(data.betriebe[i].lat,data.betriebe[i].lon);
     						'.$id.'_bounds.extend(loc);
 							
-							'.$id.'_markers[y] = new google.maps.Marker({
-						      position: loc,
-						      map: '.$id.'_map,
+							'.$id.'_markers[y] = L.marker(loc, {
 						      title:data.betriebe[i].name,
-						      icon:   new google.maps.MarkerImage(
-							  "img/supermarkt.png",
-						        	new google.maps.Size(32.0, 37.0),
-						        	new google.maps.Point(0, 0),
-						        	new google.maps.Point(16.0, 18.0)
-							  ),
-							  shadow:shadow,
-						      content: data.betriebe[i].bubble
-						  });
+						      icon:   L.icon( {
+							  			iconUrl: "img/supermarkt.png",
+						        	iconSize: [32.0, 37.0],
+						        	iconAnchor: [16.0, 18.0],
+										shadowIconUrl: "img/shadow-foodsaver.png",
+						        shadowIconSize: [51.0, 37.0],
+						        shadowIconAnchor: [16.0, 18.0]
+							  } )
+						  }).addTo('.$id.'_map);
+						  '.$id.'_markers[y].content = data.betriebe[i].bubble;
 						      		
-						  google.maps.event.addListener('.$id.'_markers[y], \'click\', function(e,ii) {
+						  '.$id.'_markers[y].on( \'click\', function(e,ii) {
 						    '.$id.'_infowindow.setContent(""+this.content);
-						    '.$id.'_infowindow.open('.$id.'_map, this);
+						    '.$id.'_infowindow.setLatLng(this.getLatLng());
+						    '.$id.'_infowindow.openOn('.$id.'_map);
 						  });
 						  '.$id.'_map.fitBounds('.$id.'_bounds);
-    					  '.$id.'_map.panToBounds('.$id.'_bounds); 
 						}
 					}
 			
@@ -289,28 +282,22 @@ function v_bezirk_tree($id)
 
 function i_map($id)
 {
-	addHead('
-		<script src="https://www.google.com/jsapi"></script>
-		<script type="text/javascript" src="https://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclusterer/1.0/src/markerclusterer.js"></script>
-		<script type="text/javascript">
-			
-			google.load(\'maps\', \'3\', {
-				other_params: \'sensor=false\'
-			});
-		</script>
-	');
+	addScript('/js/leaflet/leaflet.js');
+	addCss('/js/leaflet/leaflet.css');
+
 	
 	addJsFunc('
 	var '.$id.'_markers = [];
-	var '.$id.'_bounds = new google.maps.LatLngBounds();
-	var '.$id.'_infowindow = new google.maps.InfoWindow({content: \'Information!\'});
+	var '.$id.'_bounds = L.latLngBounds([]);
+	var '.$id.'_infowindow = L.popup();
+	'.$id.'_infowindow.setContent( \'Information!\' );
 	function '.$id.'_clearMarkers()
 	{
 		for(i=0; i < '.$id.'_markers.length; i++)
 		{
 			'.$id.'_markers[i].setMap(null);
 		}
-		'.$id.'_bounds = new google.maps.LatLngBounds();
+		'.$id.'_bounds = L.latLngBounds([]);
 		'.$id.'_markers = [];
 	}');
 	
@@ -322,14 +309,16 @@ function i_map($id)
 	$lon = '10.235595';
 	
 	addJs('
-	 	var '.$id.'_center = new google.maps.LatLng('.$lat.','.$lon.');
+	 	var '.$id.'_center = L.latLng('.$lat.','.$lon.');
 		var '.$id.'_options = {
 		  \'zoom\': '.$zoom.',
 		  \'center\': '.$id.'_center,
-		  \'mapTypeId\': google.maps.MapTypeId.ROADMAP
 		};
 		
-		var '.$id.'_map = new google.maps.Map(document.getElementById("'.$id.'_map"), '.$id.'_options);
+		var '.$id.'_map = L.map(document.getElementById("'.$id.'_map"), '.$id.'_options);
+    L.tileLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
+      attribution: "Tiles &copy; Esri 2014"
+    }).addTo('.$id.'_map);
 	');
 	
 	
