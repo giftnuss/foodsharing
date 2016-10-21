@@ -22,6 +22,7 @@ define('EMAIL_PUBLIC', 'info@lebensmittelretten.de');
 define('EMAIL_PUBLIC_NAME','Foodsharing Freiwillige');
 define('DEFAULT_HOST','lebensmittelretten.de');
 define('API_ID','c1d9a69515d63194b4329a5359a4c40a'); // foodsharing api key
+define('MAPZEN_API_KEY', '');
 
 define('SMTP_HOST','');
 define('SMTP_USER','');

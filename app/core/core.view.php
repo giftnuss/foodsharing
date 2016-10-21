@@ -396,8 +396,10 @@ class View
 	
 	public function latLonPicker($id,$options = array())
 	{
-		addHead('<script src="https://maps.google.com/maps/api/js?sensor=false"></script>');
-		addScript('/js/jquery.ui.addresspicker.js');
+		addScript('/js/addresspicker.js');
+		addScript('/js/leaflet/leaflet.js');
+		addCss('/js/leaflet/leaflet.css');
+		addCss('/js/leaflet/leaflet.awesome-markers.css');
 		
 		global $g_data;
 		if(isset($g_data['lat']) && isset($g_data['lon']) && !empty($g_data['lat']) && !empty($g_data['lon']))
@@ -415,33 +417,28 @@ class View
 		
 		
 		addJs('
-			$("#lat-wrapper,#lon-wrapper").hide();
-		    var addresspickerMap = $( "#addresspicker_map" ).addresspicker({
-		      regionBias: "de",
-		      updateCallback: showCallback,
-			  reverseGeocode: true,
-		      mapOptions: {
-		        zoom: 14,
-		        center: new google.maps.LatLng('.floatval($data['lat']).', '.floatval($data['lon']).'),
-		        scrollwheel: false,
-		        mapTypeId: google.maps.MapTypeId.ROADMAP
-		      },
-		      elements: {
-		        map:      "#map",
-		        lat:      "#lat",
-		        lng:      "#lon",
-		        locality: "#ort",
-		        postal_code: "#plz"
-		      }
-		    });
-		
-		    var gmarker = addresspickerMap.addresspicker( "marker");
-		    gmarker.setVisible(true);
-		    addresspickerMap.addresspicker( "updatePosition");
-		
-		   
-		
-		    function showCallback(geocodeResult, parsedGeocodeResult){
+			function initPicker() {
+				$("#lat-wrapper,#lon-wrapper").hide();
+				var setMarker = addresspicker.initMap( document.getElementbyId( "map" ) );
+
+				setMarker( [ ' . floatval( $data['lat'] ) . ', ' . floatval( $data['lon'] ) . ' ] );
+
+				var picker = addresspicker.init(
+					document.getElementById( "addresspicker_map" ),
+					new addresspicker.MapZenSearch( "' . MAPZEN_API_KEY . '" ),
+					function( coords, address ) {
+						setMarker( coords );
+						document.getElementById( "lat" ).value = coords[0];
+						document.getElementById( "lon" ).value = coords[1];
+						document.getElementById( "plz" ).value = address.postalcode;
+						document.getElementById( "ort" ).value = address.locality;
+						showCallback( null, address );
+					}
+				);
+			}
+			initPicker();
+
+			function showCallback(geocodeResult, parsedGeocodeResult){
 				if(parsedGeocodeResult.street_number != false)
 				{
 		        	if($("#anschrift").length > 0)
@@ -505,11 +502,6 @@ class View
 		        	}
 				}
 		    }
-		    // Update zoom field
-		    var map = $("#addresspicker_map").addresspicker("map");
-		    google.maps.event.addListener(map, "idle", function(){
-		      $("#zoom").val(map.getZoom());
-		    });		
 		');
 		
 		
