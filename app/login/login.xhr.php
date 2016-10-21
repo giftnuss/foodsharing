@@ -447,41 +447,14 @@ class LoginXhr extends Control
 			');
 			
 			$dia->addJsAfter('
-
-			function initialize()
-			{
-				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/fonts/octicons/octicons.css").appendTo("head");
-				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/css/join.css?" + date.getTime()).appendTo("head");
-				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/js/leaflet/leaflet.css?" + date.getTime()).appendTo("head");
-				$.getScript("/js/jquery.geocomplete.js",function(){
-					$.getScript("/js/leaflet/leaflet.js",function(){
-						$.getScript("/js/join.js",function(){
-							join.init();
-							hideLoader();
-						});	
-					});
-				});
-			}
-					
-			if(typeof join === "object")
-			{
-				join.init();
-			}
-			else if(typeof L === "object")
-			{
-				$.getScript("/js/join.js",function(){
-					join.init();
-				});	
-			}
-			else
-			{
-				$.getScript(\'https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&callback=initialize\',function(){
-		        	
-		        });	
-			}
-			
-				
-					
+				( typeof L !== "undefined" ? $.Deferred().resolve() : $.getScript( "/js/leaflet/leaflet.js" ) )
+				.then( function() {
+					return typeof addresspicker !== "undefined" ? $.Deferred().resolve() : $.getScript( "/js/addresspicker.js" );
+				} ).then( function() {
+					return typeof join !== "undefined" ? $.Deferred().resolve() : $.getScript( "/js/join.js" );
+				} ).then( function() {
+					join.init( "' . MAPZEN_API_KEY . '" );
+				} );
 			');
 			
 			return $dia->xhrout();

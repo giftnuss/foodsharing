@@ -1,20 +1,12 @@
 var join = {
 	currentStep:0,
-	map:null,
+	mapzenApiKey:null,
 	markerIcon:null,
 	marker:null,
 	isLoading:false,
-	init: function()
+	init: function( mapzenApiKey )
 	{
-		join.map = false;
-		$("#login_location").geocomplete({
-			details: 'form.join_geo_data'
-		}).bind("geocode:result", function(event, result){
-			latLng = [result.geometry.location.lat(),result.geometry.location.lng()];
-			console.log(result);
-			join.marker.setLatLng(latLng);
-			join.map.setView(latLng,14);
-		});
+		this.mapzenApiKey = mapzenApiKey;
 	},
 	photoUploadError: function(error){
 		pulseError(error);
@@ -38,34 +30,22 @@ var join = {
 	},
 	loadMap: function()
 	{
-		if(join.map === false)
-		{
-			join.map = L.map('join_mapview').setView([50.89, 10.13], 3);
-			
-			L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-				attribution: 'OpenStreetMap'
-			}).addTo(join.map);
-			
-			
-			
-			setTimeout(function(){ 
-				join.map.invalidateSize();
-				
-				join.markerIcon = L.AwesomeMarkers.icon({
-				    icon: 'fa-home',
-				    markerColor: 'green',
-				    prefix: 'fa'
-				});
-				
-				join.marker = L.marker(new L.LatLng(50.89, 10.13), { icon: join.markerIcon });
-				join.marker.addTo(join.map);
-				
-			}, 50);
-		}
-		else
-		{
-			setTimeout(function(){ join.map.invalidateSize()}, 50);
-		}
+		var setMarker = addresspicker.initMap( document.getElementById( "join_mapview" ) );
+
+		addresspicker.init(
+			document.getElementById( "login_location" ),
+			new addresspicker.MapZenSearch( this.mapzenApiKey ),
+			function( coords, address ) {
+				setMarker( coords );
+				document.getElementById( "join_lat" ).value = coords[0];
+				document.getElementById( "join_lon" ).value = coords[1];
+				document.getElementById( "join_plz" ).value = address.postalcode;
+				document.getElementById( "join_ort" ).value = address.locality;
+				document.getElementById( "join_str" ).value = address.route;
+				document.getElementById( "join_hsnr" ).value = address.street_number;
+				document.getElementById( "join_country" ).value = address.country;
+			}
+		);
 	},
 	finish: function(){
 		
