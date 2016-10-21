@@ -3,7 +3,7 @@ class ProfileView extends View
 {
 	private $foodsaver;
 	
-	public function profile($wallposts,$userCompanies, $userCompaniesCount, $fetchDates)
+	public function profile($wallposts,$userCompanies = null, $userCompaniesCount = null, $fetchDates = null)
 	{
 		$page = new vPage($this->foodsaver['name'], $this->infos());
 		$page->addSection($wallposts,'Statusupdates von ' . $this->foodsaver['name']);
@@ -25,7 +25,7 @@ class ProfileView extends View
 		$fsModel = loadModel('foodsaver');
  		$bids = $fsModel->getFsBezirkIds($this->foodsaver['id']);
 
-		if(isOrgaTeam() || isBotForA($bids,false,true))
+		if((isOrgaTeam() || isBotForA($bids,false,true)) && $userCompanies)
 		{
 			$page->addSectionLeft($this->sideInfosCompanies($userCompanies),'Betriebe ('.$userCompaniesCount.')');
 		}
