@@ -90,62 +90,6 @@ elseif($id = getActionId('edit'))
 else if(isset($_GET['id']))
 {
 	go('/?page=fsbetrieb&id='.(int)$_GET['id']);
-	//$data = $db->getOne_betrieb($_GET['id']);	
-	//addHead('<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&amp;language=de"></script>');
-	//addHead('<script type="text/javascript" src="js/gmap/gmap.js"></script>');
-	
-	$betrieb = $db->getBetrieb((int)$_GET['id']);
-	
-	addBread(s('bread_betrieb'),'/?page=betrieb');
-	addBread($betrieb['name']);
-	
-	//$content = v_field(v_map($betrieb),v_getStatusAmpel($betrieb['betrieb_status_id']).' '.$betrieb['name']);
-	
-	
-	
-	addContent(v_field(v_clustermap('foodsaver',array(
-		'center' => $betrieb
-	)), v_getStatusAmpel($betrieb['betrieb_status_id']).' '.$betrieb['name']));
-	
-	
-	addContent(v_field('
-	<div class="ui-padding">
-		<p>'.$betrieb['ansprechpartner'].'</p>
-		
-		<p>'.$betrieb['str'].' '.$betrieb['hsnr'].'<br />
-			DE '.$betrieb['plz'].' <br />
-		</p>
-		<p>
-			<a href="mailto:'.$betrieb['email'].'">'.$betrieb['email'].'</a><br />
-			'.$betrieb['telefon'].'<br />
-			'.$betrieb['fax'].'
-		</p>
-	</div>
-	', 'Ansprechpartner & Adresse'),CNT_RIGHT);
-	
-	addHidden('<div id="dialog-comment"></div>');
-	addJs('
-	$("#dialog-comment").dialog({
-		autoOpen:false,
-		modal:true
-	});');
-	
-	$items = array();
-	$menu = '';
-	if(is_array($betrieb['notitzen']))
-	{
-		foreach ($betrieb['notitzen'] as $n)
-		{
-			$items[] = array(
-				'name' => dt($n['zeit_ts']),
-				'click' => "showComment('".$n['id']."');"
-			);
-			addHidden('<input type="hidden" id="comment-title-'.$n['id'].'" value="'.dt($n['zeit_ts']).'" />');
-			addHidden('<textarea id="comment-'.$n['id'].'" />'.nl2br($n['text']).'</textarea>');
-		}
-		$menu = v_menu($items);
-	}
-	addContent(v_field($menu, 'Notizen'),CNT_RIGHT);
 }
 else
 {

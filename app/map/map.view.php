@@ -1,14 +1,6 @@
 <?php
 class MapView extends View
 {
-	public function map($center)
-	{
-		return '
-			<div class="map-wrapper">
-				'.v_clustermap('foodsaver',array('latLng'=>$center)).'
-			</div>';
-	}
-	
 	public function lMap()
 	{
 		addHidden('
