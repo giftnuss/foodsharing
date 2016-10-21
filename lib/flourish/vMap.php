@@ -132,7 +132,7 @@ class vMap extends vCore
 		elseif ($this->searchpanel !== false)
 		{
 			addScriptTop('https://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places');
-			addScript('/js/jquery.geocomplete.js');
+			addScript('/js/addresspicker.js');
 			
 			$hm = '';
 			if($this->home_marker)
@@ -141,13 +141,16 @@ class vMap extends vCore
 			}
 			
 			addJs('
-			$("#'.$this->searchpanel.'").geocomplete().bind("geocode:result", function(event, result){
-				latLng = [result.geometry.location.lat(),result.geometry.location.lng()];
-				'.$this->id.'_latLng = latLng;
-				$("#'.$this->id.'-latLng").val(JSON.stringify(latLng)).change();
-			    '.$this->id.'.setView(latLng,'.(int)$this->zoom.');
-			    '.$hm.'
-			 });
+				addresspicker.init(
+					document.getElementById( "'.$this->searchpanel.'" ),
+					new addresspicker.MapZenSearch( "' . MAPZEN_API_KEY . '" ),
+					function( latLng, address ) {
+						'.$this->id.'_latLng = latLng;
+						$("#'.$this->id.'-latLng").val(JSON.stringify(latLng)).change();
+						'.$this->id.'.setView(latLng,'.(int)$this->zoom.');
+						'.$hm.'
+					}
+				);
 			');
 		}
 		
