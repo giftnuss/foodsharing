@@ -186,10 +186,6 @@ function foodsaver_form($title = 'Foodsaver')
 							plz: $("#plz").val(),
 							stadt: $("#stadt").val(),
 							anschrift: $("#anschrift").val(),
-							complete: function()
-							{
-							hideLoader();
-							}
 							},function(lat,lon){
 							$("#lat").val(lat);
 							$("#lon").val(lon);
