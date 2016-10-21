@@ -1,7 +1,6 @@
 <?php
 addScript('/js/contextmenu/jquery.contextMenu.js');
 addCss('/js/contextmenu/jquery.contextMenu.css');
-//debug($_SESSION);
 
 if(S::may())
 {
