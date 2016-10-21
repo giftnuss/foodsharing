@@ -1862,28 +1862,32 @@ function xhr_addFetcher($data)
 
 function xhr_delDate($data)
 {
-	global $db;
-	if($db->isInTeam($data['bid']))
+	$status = 0;
+	$betriebModel = loadModel('betrieb');
+	if($betriebModel->isInTeam($data['bid']) && isset($data['date']))
 	{
-		$db->delFetchDate($data['date'],$data['bid'],fsId());
+		if($betriebModel->deleteFetchDate(fsId(), $data['bid'], $data['date']))
+		{
+			$status = 1;
+		}
 		
 		if(isset($data['msg']))
 		{
-			$db->addTeamMessage($data['bid'],$data['msg']);
+			$betriebModel->addTeamMessage($data['bid'],$data['msg']);
 		}
 		
-		return json_encode(array(
-			'status' => 1
-		));
 	}
+	return json_encode(array(
+		'status' => $status
+	));
 }
 
 function xhr_fetchDeny($data)
 {
-	global $db;
-	if($db->isVerantwortlich($data['bid']) || isOrgaTeam())
+	$betriebModel = loadModel('betrieb');
+	if($betriebModel->isVerantwortlich($data['bid']) || isOrgaTeam() && isset($data['date']))
 	{
-		$db->denyFetcher($data['fsid'], $data['bid'], date('Y-m-d H:i:s',strtotime($data['date'])));
+		$betriebModel->deleteFetchDate($data['fsid'], $data['bid'], date('Y-m-d H:i:s',strtotime($data['date'])));
 		return 1;
 	}
 }

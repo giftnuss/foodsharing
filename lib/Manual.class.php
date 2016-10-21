@@ -3600,16 +3600,6 @@ class ManualDb extends Db
 		return false;
 	}
 
-	public function denyFetcher($fsid,$bid,$date)
-	{
-		return $this->del('
-			DELETE FROM 	`'.PREFIX.'abholer`
-				WHERE 	`foodsaver_id` = '.(int)$fsid.'
-				AND 	`betrieb_id`= '.(int)$bid.'
-				AND 	`date` = '.$this->dateval($date).'
-		');
-	}
-
 	public function confirmFetcher($fsid,$bid,$date)
 	{
 		return $this->update('
@@ -3634,17 +3624,6 @@ class ManualDb extends Db
 			(`foodsaver_id`,`betrieb_id`,`date`,`confirmed`)
 			VALUES
 			('.(int)$fsid.','.(int)$bid.','.$this->dateval($date).','.$confirm.')
-		');
-	}
-
-	public function delFetchDate($date,$bid,$fsid)
-	{
-		return $this->del('
-			DELETE FROM `'.PREFIX.'abholer`
-
-			WHERE 	foodsaver_id = '.(int)$fsid.'
-			AND 	betrieb_id = '.(int)$bid.'
-			AND 	`date` = '.$this->dateval($date).'
 		');
 	}
 
