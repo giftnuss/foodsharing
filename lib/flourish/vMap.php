@@ -37,7 +37,7 @@ class vMap extends vCore
 		$this->home_marker = false;
 	}
 	
-	public function setSearchPanel($val = true)
+	public function setSearchPanel($val)
 	{
 		$this->searchpanel = $val;
 	}
@@ -124,14 +124,8 @@ class vMap extends vCore
 			var '.$this->id.'_homeIcon = L.icon({   iconUrl: "/css/img/marker-home.png",shadowUrl: \'/css/img/default-shadow.png\',iconSize: [25, 41],	iconAnchor: [12, 41],popupAnchor: [1, -34],shadowSize: [46, 41],shadowAnchor: [12, 41]});
 			');	
 		}
-		if($this->searchpanel === true)
+		if ($this->searchpanel !== false)
 		{
-			addScriptTop('/js/leaflet.search.min.js');
-			addScriptTop('https://maps.googleapis.com/maps/api/js?v=3&sensor=false');
-		}
-		elseif ($this->searchpanel !== false)
-		{
-			addScriptTop('https://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places');
 			addScript('/js/addresspicker.js');
 			
 			$hm = '';
@@ -272,45 +266,6 @@ class vMap extends vCore
 			{
 				L.marker([lat, lng]).addTo('.$this->id.');	
 			}	
-			');
-		}
-		
-		if($this->searchpanel === true)
-		{
-			addJs('
-				'.$this->id.'_geocoder = new google.maps.Geocoder();
-				'.$this->id.'.addControl( new L.Control.Search({
-					callData: '.$this->id.'_googleGeocoding,
-					filterJSON: '.$this->id.'_filterJSONCall,
-					markerLocation: true,
-					autoType: false,
-					autoCollapse: false,
-					zoom: '.$this->zoom.',
-					text: "'.jsSafe(s('search')).'"
-				}) );
-			');
-			addJsFunc('
-				function '.$this->id.'_googleGeocoding(text, callResponse)
-				{
-					'.$this->id.'_geocoder.geocode({address: text}, callResponse);
-				}
-			
-				function '.$this->id.'_filterJSONCall(rawjson)
-				{
-					var json = {},
-						key, loc, disp = [];
-			
-					for(var i in rawjson)
-					{
-						key = rawjson[i].formatted_address;
-						
-						loc = L.latLng( rawjson[i].geometry.location.lat(), rawjson[i].geometry.location.lng() );
-						
-						json[ key ]= loc;	//key,value format
-					}
-			
-					return json;
-				}		
 			');
 		}
 		
