@@ -55,7 +55,7 @@ class ProfileControl extends Control
 		
 	}
 
-	public function organotes()
+	private function organotes()
 	{
 		addBread($this->foodsaver['name'],'/profile/' . $this->foodsaver['id']);
 		if(S::may('orga'))
