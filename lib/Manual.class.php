@@ -1064,27 +1064,6 @@ class ManualDb extends Db
 		');
 	}
 
-	public function getNextDates($fsid)
-	{
-		return $this->q('
-			SELECT 	a.`date`,
-					UNIX_TIMESTAMP(a.`date`) AS date_ts,
-					b.name AS betrieb_name,
-					b.id AS betrieb_id
-
-			FROM   `'.PREFIX.'abholer` a,
-			       `'.PREFIX.'betrieb` b
-
-			WHERE a.betrieb_id =b.id
-			AND   a.foodsaver_id = '.(int)$fsid.'
-			AND   a.`date` > NOW()
-
-			ORDER BY a.`date`
-
-			LIMIT 10
-		');
-	}
-
 	public function getCompaniesWithEmptySlots($fsid)
 	{
 		$companies = $this->q('
