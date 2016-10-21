@@ -419,7 +419,7 @@ class View
 		addJs('
 			function initPicker() {
 				$("#lat-wrapper,#lon-wrapper").hide();
-				var setMarker = addresspicker.initMap( document.getElementbyId( "map" ) );
+				var setMarker = addresspicker.initMap( document.getElementById( "map" ) );
 
 				setMarker( [ ' . floatval( $data['lat'] ) . ', ' . floatval( $data['lon'] ) . ' ] );
 
