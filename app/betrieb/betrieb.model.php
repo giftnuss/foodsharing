@@ -116,6 +116,26 @@ class BetriebModel extends Model
 		return false;
 	}
 
+	/* delete fetch dates a user signed up for.
+	 * Either a specific fetch date (fsid, bid and date set)
+	 * or all fetch dates for a store (only fsid, bid set)
+	 * or all fetch dates for a user (only fsid set)
+	 */
+	public function deleteFetchDate($fsid,$bid = null,$date = null)
+	{
+		if($date !== null && $bid !== null)
+		{
+			return $this->del('DELETE FROM `'.PREFIX.'abholer` WHERE `betrieb_id` = '.(int)$bid.' AND `foodsaver_id` = '.(int)$fsid.' AND `date` = '.$this->dateval($date));
+		}
+		elseif($bid !== null)
+		{
+			return $this->del('DELETE FROM `' . PREFIX . 'abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` = > now()');
+		} else
+		{
+			return $this->del('DELETE FROM `'.PREFIX.'abholer` WHERE `foodsaver_id` = '.(int)$fsid.' AND `date` > now()');
+		}
+	}
+
 	public function signout($bid, $fsid)
 	{
 		$bid = $this->intval($bid);
@@ -134,4 +154,18 @@ class BetriebModel extends Model
 			$msg->deleteUserFromConversation($scid, $fsid, true);
 		}
 	}
+
+	public function getBetriebBezirkID($id)
+	{
+		$out = $this->qRow('
+			SELECT
+			`bezirk_id`
+
+			FROM 		`'.PREFIX.'betrieb`
+
+			WHERE 		`id` = ' . $this->intval($id));
+
+		return $out;
+	}
+
 }

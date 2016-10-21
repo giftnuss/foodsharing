@@ -127,12 +127,12 @@ class ProfileXhr extends Control
 
 	public function deleteFromSlot()
 	{
-		$fsModel = loadModel('profile');
-		$betrieb = $fsModel->getBetriebBezirkID($_GET['bid']);
+		$betriebModel = loadModel('betrieb');
+		$betrieb = $betriebModel->getBetriebBezirkID($_GET['bid']);
 
 		if(isOrgaTeam() || isBotFor($betrieb['bezirk_id']))
 		{
-			if($this->model->deleteSlot($_GET['fsid'],$_GET['bid'],$_GET['date']))
+			if($betriebModel->deleteFetchDate($_GET['fsid'],$_GET['bid'],$_GET['date']))
 			{
 				return array(
 				'status' => 1,

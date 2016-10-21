@@ -32,7 +32,7 @@ class ProfileView extends View
 		$page->render();
 	}
 	
-	public function fetchDates($fetchDates)
+	private function fetchDates($fetchDates)
 	{
 			
 			$out ='
@@ -56,7 +56,7 @@ class ProfileView extends View
 						if(isOrgateam() || isBotFor($d['bezirk_id']))
 						{
 							$out .= '<li>
-							<a class="button button-big" href="#"onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:'.$this->foodsaver['id'].',deleteAll:false,bid:'.$d['betrieb_id'].',date:'.$d['date_ts'].'});return false;">austragen</a>
+							<a class="button button-big" href="#"onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:'.$this->foodsaver['id'].',deleteAll:false,bid:'.$d['betrieb_id'].',date:'.format_db_date($d['date_ts']).'});return false;">austragen</a>
 							</li>';
 						}
 						else
@@ -75,7 +75,7 @@ class ProfileView extends View
 			return $out;
 	}
 
-	public function sideInfosCompanies($userCompanies)
+	private function sideInfosCompanies($userCompanies)
 	{
 		$out = '';
 		foreach ($userCompanies as $b)
@@ -106,7 +106,7 @@ class ProfileView extends View
 		$page->render();
 	}
 	
-	public function sideInfos()
+	private function sideInfos()
 	{
 		$infos = array();
 		

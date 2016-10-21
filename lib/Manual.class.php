@@ -101,19 +101,6 @@ class ManualDb extends Db
 		return false;
 	}
 
-	public function getBetriebBezirkID($id)
-	{
-		$out = $this->qRow('
-			SELECT
-			`bezirk_id`
-
-			FROM 		`'.PREFIX.'betrieb`
-
-			WHERE 		`id` = ' . $this->intval($id));
-
-		return $out;
-	}
-
 	public function closeBaskets($distance = 50,$loc = false)
 	{
 		if($loc === false)

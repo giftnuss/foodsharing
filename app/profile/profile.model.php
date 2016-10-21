@@ -63,18 +63,7 @@ class ProfileModel extends Model
 		');
 	}
 
-	public function deleteSlot($fsid,$bid,$date)
-	{
-		if($date == 0 && $bid == 0)
-		{
-			return $this->del('DELETE FROM `'.PREFIX.'abholer` WHERE `foodsaver_id` = '.(int)$fsid.' AND `date` > now()');
-		}
-		else
-		{
-			return $this->del('DELETE FROM `'.PREFIX.'abholer` WHERE `betrieb_id` = '.(int)$bid.' AND `foodsaver_id` = '.(int)$fsid.' AND `date` = FROM_UNIXTIME("'.$date.'")');
-		}
-	}
-	
+
 	public function getData()
 	{
 		if(($data = $this->qRow('
