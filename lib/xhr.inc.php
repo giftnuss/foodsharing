@@ -1232,6 +1232,72 @@ function xhr_uploadPhoto($data)
 	</html>';
 }
 
+function xhr_update_newbezirk($data)
+{
+	if(isOrgaTeam())
+	{
+		global $db;
+		$data['name'] = strip_tags($data['name']);
+		$data['name'] = str_replace(array('/','"',"'",'.',';'), '', $data['name']);
+		$data['has_children'] = 0;
+		$data['email_pass'] = '';
+		$data['email_name'] = 'Foodsharing '.$data['name'];
+
+		if(!empty($data['name']))
+		{
+			if($out = $db->add_bezirk($data))
+			{
+				$db->update('UPDATE '.PREFIX.'bezirk SET has_children = 1 WHERE `id` = '.$db->intval($data['parent_id']));
+				return json_encode(array(
+					'status' => 1,
+					'script' => '$("#tree").dynatree("getTree").reload();pulseInfo("'.$data['name'].' wurde angelegt");'
+				));
+			}
+
+
+
+		}
+
+	}
+}
+
+function xhr_update_abholen($data)
+{
+	global $db;
+
+	if($db->isVerantwortlich($data['bid']) || isBotschafter())
+	{
+		$db->del('DELETE FROM 	`'.PREFIX.'abholzeiten` WHERE `betrieb_id` = '.$db->intval($data['bid']));
+
+		if(is_array($data['newfetchtime']))
+		{
+			for($i=0;$i<(count($data['newfetchtime'])-1);$i++)
+			{
+				$db->sql('
+				REPLACE INTO 	`'.PREFIX.'abholzeiten`
+				(
+						`betrieb_id`,
+						`dow`,
+						`time`,
+						`fetcher`
+				)
+				VALUES
+				(
+					'.$db->intval($data['bid']).',
+					'.$db->intval($data['newfetchtime'][$i]).',
+					'.$db->strval(preZero($data['nfttime']['hour'][$i]).':'.preZero($data['nfttime']['min'][$i]).':00').',
+					'.$db->intval($data['nft-count'][$i]).'
+				)
+			');
+			}
+		}
+		$betrieb = $db->getVal('name', 'betrieb', $data['bid']);
+		$db->addGlocke(explode(',',$data['team']), 'Die Abholzeiten wurden geändert!',$betrieb,'/?page=fsbetrieb&id='.(int)$data['bid']);
+
+		return json_encode(array('status' => 1));
+	}
+}
+
 function xhr_update_bezirk($data)
 {
 	global $db;
