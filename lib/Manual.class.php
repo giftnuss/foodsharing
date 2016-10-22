@@ -1029,6 +1029,10 @@ class ManualDb extends Db
 					WHERE fd.betrieb_id = '.(int)$c['betrieb_id'].'
 					and time between now() and now() + INTERVAL 2 DAY
 				');
+				if(!$fetchdates)
+				{
+					$fetchdates = array();
+				}
 
 				$dows = $this->q('
 					SELECT 	az.dow AS dow,
@@ -1037,6 +1041,10 @@ class ManualDb extends Db
 					FROM   `'.PREFIX.'abholzeiten` az
 					WHERE az.betrieb_id = '.(int)$c['betrieb_id'].'
 				');
+				if(!$dows)
+				{
+					$dows = array();
+				}
 
 				foreach($fetchdates as $fetchdate)
 				{
