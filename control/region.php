@@ -293,10 +293,6 @@ function i_map($id)
 	'.$id.'_infowindow.setContent( \'Information!\' );
 	function '.$id.'_clearMarkers()
 	{
-		for(i=0; i < '.$id.'_markers.length; i++)
-		{
-			'.$id.'_markers[i].setMap(null);
-		}
 		'.$id.'_bounds = L.latLngBounds([]);
 		'.$id.'_markers = [];
 	}');
