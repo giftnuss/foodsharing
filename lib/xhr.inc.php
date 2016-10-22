@@ -72,6 +72,8 @@ function xhr_verify($data)
 function xhr_getPinPost($data)
 {
 	global $db;
+	incLang('betrieb');
+-	incLang('fsbetrieb');
 
 	if($db->isInTeam($data['bid']) || isBotschafter() || isOrgaTeam())
 	{
