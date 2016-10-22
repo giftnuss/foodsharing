@@ -140,8 +140,8 @@ class BetriebModel extends Model
 	{
 		$bid = $this->intval($bid);
 		$fsid = $this->intval($fsid);
-		$this->model->del('DELETE FROM `'.PREFIX.'betrieb_team` WHERE `betrieb_id` = '.$bid.' AND `foodsaver_id` = '.$fsid.' ');
-		$this->model->del('DELETE FROM `'.PREFIX.'abholer` WHERE `betrieb_id` = '.$bid.' AND `foodsaver_id` = '.$fsid.' AND `date` > NOW()');
+		$this->del('DELETE FROM `'.PREFIX.'betrieb_team` WHERE `betrieb_id` = '.$bid.' AND `foodsaver_id` = '.$fsid.' ');
+		$this->del('DELETE FROM `'.PREFIX.'abholer` WHERE `betrieb_id` = '.$bid.' AND `foodsaver_id` = '.$fsid.' AND `date` > NOW()');
 
 		$msg = loadModel('msg');
 

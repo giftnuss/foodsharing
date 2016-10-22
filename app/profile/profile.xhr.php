@@ -132,7 +132,7 @@ class ProfileXhr extends Control
 
 		if(isOrgaTeam() || isBotFor($betrieb['bezirk_id']))
 		{
-			if($betriebModel->deleteFetchDate($_GET['fsid'],$_GET['bid'],$_GET['date']))
+			if($betriebModel->deleteFetchDate($_GET['fsid'],$_GET['bid'],date('Y-m-d H:i:s', $_GET['date'])))
 			{
 				return array(
 				'status' => 1,
