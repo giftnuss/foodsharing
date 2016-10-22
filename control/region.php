@@ -312,7 +312,7 @@ function i_map($id)
 		};
 		
 		var '.$id.'_map = L.map(document.getElementById("'.$id.'_map"), '.$id.'_options);
-    L.tileLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
+    L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
       attribution: "Tiles &copy; Esri 2014"
     }).addTo('.$id.'_map);
 	');

@@ -41,7 +41,7 @@ var addresspicker = {
 
 	initMap: function( mapDom ) {
 		var map = L.map( mapDom );
-		L.tileLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
+		L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
 			attribution: "Geocoding by <a href=\"https://mapzen.com/projects/search/\">Mapzen</a>, Tiles &copy; Esri 2014"
 		}).addTo(map);
 
