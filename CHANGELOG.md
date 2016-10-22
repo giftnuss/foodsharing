@@ -1,5 +1,7 @@
 # UNRELEASED [release date]
 
+## Releases notes
+
 ## Breaking changes
 
 ## Features
