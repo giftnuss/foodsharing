@@ -1126,61 +1126,6 @@ ul.cblist
 	list-style-type:none;
 }
 
-.ur-btn-left .icon {
-    float: right;
-}
-.ur-feedback-btn .icon {
-    background: url("http://cdn.userreport.com/survey4/images/sprites.png") no-repeat scroll 4px -206px transparent;
-    height: 30px;
-    margin: 5px;
-    width: 36px;
-}
-
-.ur-feedback-btn.ur-btn-left {
-    border-bottom-right-radius: 5px;
-    border-top-right-radius: 5px;
-}
-.ur-feedback-btn {
-    background:url("img/bt_bg.png") repeat-x scroll 50% 50% #46891B;
-    background-position:top;
-}
-.ur-feedback-btn {
-    color: #FFFFFF;
-    direction: ltr;
-    font-size-adjust: none;
-    font-style: normal;
-    font-weight: bold;
-    letter-spacing: normal;
-    line-height: 18px;
-    text-align: left;
-    text-decoration: none;
-    text-transform: none;
-    vertical-align: baseline;
-    white-space: nowrap;
-    word-spacing: 0;
-    width:124px;
-    position:fixed;
-    top:50%;
-    left:-78px;
-    margin-top:-50px;
-}
-.ur-feedback-btn {
-    cursor: pointer;
-    height: 40px;
-}
-
-.ur-btn-left .intext {
-    margin: 0 35px 0 5px;
-}
-.ur-feedback-btn .intext {
-    color: #FFFFFF;
-    font-size: 14px;
-    font-weight: bold;
-    height: 40px;
-    line-height: 40px;
-    text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.2);
-    white-space: nowrap;
-}
 ul.imglist
 {
 	margin:0;
