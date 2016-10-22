@@ -1091,8 +1091,8 @@ class ManualDb extends Db
 							FROM   `'.PREFIX.'abholer` fa
 							WHERE fa.betrieb_id ='.(int)$c['betrieb_id'].'
 							AND   fa.date between now() and now() + INTERVAL 2 DAY
-							and    WEEKDAY(date) = '.$this->convertFoodsharingIndexToMysqlIndex((int)$dowsVar['dow']).'
-							group by WEEKDAY(date) 
+							and    DAYOFWEEK(date) = '.$this->convertFoodsharingIndexToMysqlIndex((int)$dowsVar['dow']).'
+							group by DAYOFWEEK(date) 
 						');
 
 
@@ -1119,7 +1119,7 @@ class ManualDb extends Db
 	*/
 	private function convertFoodsharingIndexToMysqlIndex($dow)
 	{
-		return ($dow-1)%7;
+ 		return $dow+1;
 	}
 
 	public function getAllGerettet()
