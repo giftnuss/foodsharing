@@ -412,7 +412,7 @@ function u_loadCoords(addressdata,func)
 {anschrift=addressdata.str+' '+addressdata.hsnr;}
 else
 {tmp=addressdata.anschrift.split("/");anschrift=tmp[0];}
-address=encodeURIComponent(anschrift+', '+addressdata.plz+', '+addressdata.stadt+', Germany');url="https://maps.google.com/maps/api/geocode/json?address="+address+"&sensor=false&region=DE&language=de";url="https://search.mapzen.com/v1/search?text="+address;showLoader();$(document).ready(function(){$.getJSON(url,function(data){if(data.features)
+address=encodeURIComponent(anschrift+', '+addressdata.plz+', '+addressdata.stadt+', Germany');url="https://search.mapzen.com/v1/search?text="+address;showLoader();$(document).ready(function(){$.getJSON(url,function(data){if(data.features)
 {for(i=0;i<data.features.length;i++)
 {if(data.features[i].properties.postalcode==addressdata.plz)
 {$("#pulse-error").hide();hideLoader();func(data.features[i].geometry.coordinates[0],data.features[i].geometry.coordinates[1]);return true;}}}

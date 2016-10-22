@@ -1231,7 +1231,6 @@ function u_loadCoords(addressdata,func)
 	}
 	address = encodeURIComponent(anschrift +', '+ addressdata.plz+', '+addressdata.stadt+', Germany');
 	
-	url = "https://maps.google.com/maps/api/geocode/json?address="+address+"&sensor=false&region=DE&language=de";
 	url = "https://search.mapzen.com/v1/search?text=" + address;
 	
 	showLoader();
