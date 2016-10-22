@@ -12,6 +12,6 @@ if (file_exists($env_filename)) {
 } else {
 	die('no config found for env ['.$FS_ENV.']');
 }
-if(!defined(SOCK_URL)) {
-	define(SOCK_URL, 'http://127.0.0.1:1338/');
+if(!defined('SOCK_URL')) {
+	define('SOCK_URL', 'http://127.0.0.1:1338/');
 }
