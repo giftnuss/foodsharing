@@ -1077,20 +1077,20 @@ class ManualDb extends Db
 							SELECT 	count(foodsaver_id) as fscount
 							FROM   `'.PREFIX.'abholer` fa
 							WHERE fa.betrieb_id ='.(int)$c['betrieb_id'].'
-							AND   fa.date between now() and now() + INTERVAL 2 DAY
+							AND   fa.date between CURDATE() and CURDATE() + INTERVAL 2 DAY
 							and   fa.foodsaver_id = '.fsId().'
 						');
 				
 				foreach($dows as $dowsVar)
 				{
 
-						if((int)$dowsVar['dow'] == date('w') || (int)$dowsVar['dow'] == date('w', strtotime(' +1 day')) || (int)$dowsVar['dow'] == date('w', strtotime(' +2 day')))
+						if(((int)$dowsVar['dow'] == date('w') && time() < strtotime($dowsVar['fetchTime'])) || (int)$dowsVar['dow'] == date('w', strtotime(' +1 day')) || (int)$dowsVar['dow'] == date('w', strtotime(' +2 day')))
 						{
 							$flist = $this->qOne('
 							SELECT 	count(foodsaver_id) as fscount
 							FROM   `'.PREFIX.'abholer` fa
 							WHERE fa.betrieb_id ='.(int)$c['betrieb_id'].'
-							AND   fa.date between now() and now() + INTERVAL 2 DAY
+							AND   fa.date between CURDATE() and CURDATE() + INTERVAL 2 DAY
 							and    DAYOFWEEK(date) = '.$this->convertFoodsharingIndexToMysqlIndex((int)$dowsVar['dow']).'
 							group by DAYOFWEEK(date) 
 						');
