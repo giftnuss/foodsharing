@@ -12,7 +12,7 @@ function xhr_verify($data)
 	{
 		global $db;
 		
-		if($countver = $db->qOne('SELECT COUNT(`*`) FROM '.PREFIX.'verify_history WHERE date between NOW()- INTERVAL 20 SECOND and now() and bot_id = '.fsid().''))
+		if($countver = $db->qOne('SELECT COUNT(*) FROM '.PREFIX.'verify_history WHERE date between NOW()- INTERVAL 20 SECOND and now() and bot_id = '.fsid().''))
 		{
 			if($countver>10)
 			{
