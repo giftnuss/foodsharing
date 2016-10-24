@@ -8,9 +8,6 @@ dir=$(dirname "$0")
 
 . $dir/inc.sh
 
-echo "Creating directories"
-$dir/mkdirs
-
 echo "Building containers"
 for name in web app chat; do
   dc build --pull $name &
@@ -34,6 +31,8 @@ migratedb foodsharing || true
 
 # Building assets
 $dir/build-assets
+
+$dir/mkdirs
 
 echo
 echo "  Go visit http://localhost:18080 now :)"

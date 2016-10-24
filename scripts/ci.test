@@ -4,7 +4,9 @@ export FS_ENV=ci
 
 set -e
 
-. $(dirname "$0")/inc.sh
+dir=$(dirname "$0")
+
+. $dir/inc.sh
 
 if [ "x" != "x$CI_BUILD_TOKEN" ]; then
   echo "Logging into docker registry"
@@ -21,6 +23,8 @@ wait
 
 echo "Bring up containers"
 dc up -d --no-build
+
+$dir/mkdirs
 
 echo "Waiting for mysql to start"
 wait-for-mysql
