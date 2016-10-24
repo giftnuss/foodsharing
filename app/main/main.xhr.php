@@ -62,7 +62,7 @@ class MainXhr extends Control
 			{
 				window.parent.$(".ui-dialog-buttonpane .ui-button").button( "option", "disabled", false );
 				window.parent.$(\'#'.$inid.'-filename\').val(\''.$newname.'\');
-				window.parent.$(\'.attach-preview\').html(\'<a href="#" onclick="return false;" class="preview-thumb" rel="wallpost-gallery"><img height="60" src="tmp/thumb-' . $newname . '">&nbsp;</a><div style="clear:both"></div>\');
+				window.parent.$(\'.attach-preview\').html(\'<a href="#" onclick="return false;" class="preview-thumb" rel="wallpost-gallery"><img height="60" src="/tmp/thumb-' . $newname . '">&nbsp;</a><div style="clear:both"></div>\');
 			}
 		</script>
 		</head><body onload="'.$function.'"></body></html>';
