@@ -13,6 +13,8 @@ modules:
             port: 4444
             browser: firefox
             window_size: 1920x1080
+            connection_timeout: 5
+            request_timeout: 5
         - Sequence
         - Db
         - \Helper\Acceptance
