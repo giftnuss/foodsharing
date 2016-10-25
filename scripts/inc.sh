@@ -82,7 +82,7 @@ function wait-for-mysql() {
 function chat-npm-install() {
   # TODO: move this into scripts/mkdirs when MR#97 is merged
   run-in-container-asroot chat \
-    'mkdir -p node_modules && chown -R $(id -u):$(id -g) node_modules'
+    "mkdir -p node_modules && chown -R $(id -u):$(id -g) node_modules"
 
   # have to do run, not exec, as container will not start until
   # node_modules is installed, this will run up a fresh container and

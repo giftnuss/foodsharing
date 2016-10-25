@@ -6,6 +6,9 @@ set -e
 
 . $(dirname "$0")/inc.sh
 
+echo "Running npm install"
+chat-npm-install
+
 echo "Bring up containers"
 dc up --build -d
 
@@ -23,9 +26,6 @@ sql-file foodsharing tests/seed.sql
 
 echo "Running composer install"
 exec-in-container app composer install
-
-echo "Running npm install"
-chat-npm-install
 
 echo "Running tests"
 exec-in-container app vendor/bin/codecept run "$@"

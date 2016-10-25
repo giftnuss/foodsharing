@@ -17,14 +17,14 @@ for name in web app chat; do
 done
 wait
 
+echo "Running npm install"
+chat-npm-install
+
 echo "Bring up containers"
 dc up -d
 
 echo "Running composer install"
 exec-in-container app composer install
-
-echo "Running npm install"
-chat-npm-install
 
 echo "Waiting for mysql"
 wait-for-mysql
