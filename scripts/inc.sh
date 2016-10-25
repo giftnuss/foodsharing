@@ -7,7 +7,7 @@ export FS_ENV=${FS_ENV:-dev}
 MYSQL_USERNAME=${MYSQL_USERNAME:-root}
 MYSQL_PASSWORD=${MYSQL_PASSWORD:-root}
 
-dir=$(dirname "$0")
+dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
 
 function dc() {
   $dir/docker-compose "$@"
@@ -77,4 +77,15 @@ function migratedb() {
 
 function wait-for-mysql() {
   exec-in-container-asroot db "while ! mysql -p$MYSQL_PASSWORD --silent -e 'select 1' >/dev/null 2>&1; do sleep 1; done"
+}
+
+function chat-npm-install() {
+  # TODO: move this into scripts/mkdirs when MR#97 is merged
+  run-in-container-asroot chat \
+    'mkdir -p node_modules && chown -R $(id -u):$(id -g) node_modules'
+
+  # have to do run, not exec, as container will not start until
+  # node_modules is installed, this will run up a fresh container and
+  # just run npm install
+  run-in-container chat npm install
 }

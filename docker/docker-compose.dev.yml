@@ -52,7 +52,6 @@ services:
       - 1338
     volumes:
       - ../:/app
-      - /app/chat/node_modules
 
   # mysql
   #------------------------------------

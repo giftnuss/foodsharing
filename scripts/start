@@ -23,6 +23,9 @@ dc up -d
 echo "Running composer install"
 exec-in-container app composer install
 
+echo "Running npm install"
+chat-npm-install
+
 echo "Waiting for mysql"
 wait-for-mysql
 
