@@ -14,6 +14,8 @@ for name in web app chat; do
 done
 wait
 
+$dir/mkdirs
+
 echo "Bring up containers"
 dc up -d
 
@@ -31,8 +33,6 @@ migratedb foodsharing || true
 
 # Building assets
 $dir/build-assets
-
-$dir/mkdirs
 
 echo
 echo "  Go visit http://localhost:18080 now :)"

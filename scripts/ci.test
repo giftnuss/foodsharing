@@ -21,10 +21,10 @@ done
 
 wait
 
+$dir/mkdirs
+
 echo "Bring up containers"
 dc up -d --no-build
-
-$dir/mkdirs
 
 echo "Waiting for mysql to start"
 wait-for-mysql
