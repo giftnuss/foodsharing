@@ -1,5 +1,8 @@
 {
   "name": "lmr-socket-server",
+  "description": "foodsharing socket.io chat server",
+  "repository": "git@gitlab.com:foodsharing-dev/foodsharing.git",
+  "private": true,
   "version": "0.0.1",
   "dependencies": {
     "cookie": "^0.3.1",
