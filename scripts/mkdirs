@@ -24,7 +24,7 @@ dirs="\
 
 echo "Creating directories"
 
-exec-in-container-asroot app \
+run-in-container-asroot app \
   "mkdir -p $dirs && chmod 777 $dirs && chown -R www-data:www-data $dirs"
 
 echo "Done"
