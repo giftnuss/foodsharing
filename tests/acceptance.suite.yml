@@ -11,7 +11,7 @@ modules:
             url: 'http://web:8080/'
             host: selenium
             port: 4444
-            browser: firefox
+            browser: chrome
             window_size: 1920x1080
         - Sequence
         - Db
