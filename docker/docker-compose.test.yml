@@ -87,7 +87,7 @@ services:
 
   selenium:
     container_name: foodsharing_test_selenium
-    image: selenium/standalone-firefox
+    image: selenium/standalone-chrome
     links:
       - web:web
     expose:

@@ -1,20 +1,30 @@
 #!/bin/bash
 
+export FS_ENV=dev
+
 set -e
+
+dir=$(dirname "$0")
+
+. $dir/inc.sh
 
 # directories used by the application
 
 dirs="\
   images/basket \
+  images/wallpost \
+  images/picture \
   data/attach \
   data/mailattach \
   data/pass \
   data/visite \
   cache/searchindex \
-  css/gen \
-  js/gen \
   tmp \
 "
 
-mkdir -p $dirs
-chmod 777 $dirs
+echo "Creating directories"
+
+run-in-container-asroot app \
+  "mkdir -p $dirs && chmod 777 $dirs && chown -R www-data:www-data $dirs"
+
+echo "Done"

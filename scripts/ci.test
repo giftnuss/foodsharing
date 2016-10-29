@@ -4,7 +4,9 @@ export FS_ENV=ci
 
 set -e
 
-. $(dirname "$0")/inc.sh
+dir=$(dirname "$0")
+
+. $dir/inc.sh
 
 if [ "x" != "x$CI_BUILD_TOKEN" ]; then
   echo "Logging into docker registry"
@@ -18,6 +20,8 @@ for name in web app chat db; do
 done
 
 wait
+
+$dir/mkdirs
 
 echo "Bring up containers"
 dc up -d --no-build

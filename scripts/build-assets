@@ -5,5 +5,5 @@ set -e
 . $(dirname "$0")/inc.sh
 
 echo "Building assets"
-exec-in-container app lib/minify/min.php
+exec-in-container app 'mkdir -p js/gen css/gen && lib/minify/min.php'
 echo "Done"

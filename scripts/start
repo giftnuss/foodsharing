@@ -8,9 +8,6 @@ dir=$(dirname "$0")
 
 . $dir/inc.sh
 
-echo "Creating directories"
-$dir/mkdirs
-
 echo "Building containers"
 for name in web app chat; do
   dc build --pull $name &
@@ -19,6 +16,7 @@ wait
 
 echo "Running npm install"
 chat-npm-install
+$dir/mkdirs
 
 echo "Bring up containers"
 dc up -d
