@@ -5,10 +5,7 @@ $I->wantTo('try to create a new company as foodsaver');
 
 $pass = sq('pass');
 
-$foodsaver = $I->createFoodsaver($pass, [
-	'rolle' => 1,
-	'admin' => 1
-]);
+$foodsaver = $I->createFoodsaver($pass);
 
 $I->login($foodsaver['email'], $pass);
 

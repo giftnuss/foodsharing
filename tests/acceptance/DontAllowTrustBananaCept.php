@@ -4,10 +4,7 @@ $I = new AcceptanceTester($scenario);
 $I->wantTo('Check if people can give self banana');
 $pass = sq('pass');
 
-$foodsaver = $I->createFoodsaver($pass, [
-	'rolle' => 1,
-	'admin' => 1
-]);
+$foodsaver = $I->createFoodsaver($pass);
 
 $I->login($foodsaver['email'], $pass);
 
