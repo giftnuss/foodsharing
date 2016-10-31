@@ -10,7 +10,6 @@ class LoginCest
 	 */
 	public function checkLogin(\ApiTester $I, \Codeception\Example $example)
 	{
-		$I->wantToTest('if logging in with test helper accounts is possible and choses the right codepath in the application');
 		$pass = sq('pass');
 		$user = $I->$example[0]($pass);
 
