@@ -2,12 +2,15 @@
 class LoginCest
 {
 	/**
-	 * @example ["createFoodsaver", "Hallo "]
+	 * @example ["createFoodsaver", "Hallo ", "Foodsaver für"]
 	 * @example ["createFoodsharer", "Willkommen "]
-	 * @example ["createStoreCoordinator", "Hallo "]
+	 * @example ["createStoreCoordinator", "Hallo ", "Betriebsverantwortlich"]
+	 * @example ["createAmbassador", "Hallo ", "Botschafter/In für"]
+	 * @example ["createOrga", "Hallo ", "Orgamensch für"]
 	 */
 	public function checkLogin(\ApiTester $I, \Codeception\Example $example)
 	{
+		$I->wantToTest('if logging in with test helper accounts is possible and choses the right codepath in the application');
 		$pass = sq('pass');
 		$user = $I->$example[0]($pass);
 
@@ -19,7 +22,11 @@ class LoginCest
 		]);
 
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
-		$I->seeRegExp('~.*'.$example[1].$user['name'].'.*~i');
 		$I->seeHtml();
+		$I->seeRegExp('~.*'.$example[1].$user['name'].'.*~i');
+		if(isset($example[2]))
+		{
+			$I->seeRegExp('~.*'.$example[2].'.*~i');
+		}
 	}
 }
