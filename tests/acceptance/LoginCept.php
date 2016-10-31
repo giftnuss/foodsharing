@@ -3,7 +3,7 @@ $I = new AcceptanceTester($scenario);
 
 $pass = sq('pass');
 
-$foodsaver = $I->createFoodsaver($pass);
+$foodsaver = $I->createFoodsharer($pass);
 
 $I->wantTo('ensure you can login');
 $I->amOnPage('/');
