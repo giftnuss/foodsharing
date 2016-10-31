@@ -15,12 +15,29 @@ class Api extends \Codeception\Module
 
 	/**
 	 * Checks is a regular expression is found in response content
-	 * @param $raw
+	 * @param $pattern
 	 */
-	public function seeRegExp($raw)
+	public function seeRegExp($pattern)
 	{
 		$response = $this->getModule('REST')->response;
-		$this->assertRegExp($raw, $response);
+		$this->assertRegExp($pattern, $response);
+	}
+
+	public function dontSeeRegExp($pattern)
+	{
+		$response = $this->getModule('REST')->response;
+		$this->assertNotRegExp($pattern, $response);
+	}
+
+	public function login($email, $pass)
+	{
+		$rest = $this->getModule('REST');
+		$rest->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+		$rest->sendPOST('/?page=login', [
+			'email_adress' => $email,
+			'password' => $pass
+		]);
 	}
 
 }
