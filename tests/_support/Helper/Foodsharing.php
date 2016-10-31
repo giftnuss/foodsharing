@@ -73,6 +73,29 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
+	public function createAmbassador($pass = null, $extra_params = [])
+	{
+		$params = array_merge([
+			'rolle' => 3,
+			'quiz_rolle' => 3,
+		], $extra_params);
+		$params = $this->createStoreCoordinator($pass, $params);
+		$this->createQuizTry($params['id'], 3, 1);
+		return $params;
+	}
+
+	public function createOrga($pass = null, $is_admin = false, $extra_params = [])
+	{
+		$params = array_merge([
+			'rolle' => ($is_admin ? 5 : 4),
+			'orgateam' => 1,
+			'admin' => ($is_admin ? 1 : 0),
+		]);
+
+		$params = $this->createAmbassador($pass, $params);
+		return $params;
+	}
+
 	/** creates a store in given bezirk.
 	 * Does not care about handling anything related like conversations etc.
 	 * @param $bezirk_id
