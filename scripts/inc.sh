@@ -73,6 +73,9 @@ function migratedb() {
   sql-file $database migrations/static.sql
   sql-file $database migrations/27-profilchange.sql
   sql-file $database migrations/27-verify.sql
+  for f in migrations/incremental-*; do
+    sql-file $database $f
+  done
 }
 
 function wait-for-mysql() {

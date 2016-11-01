@@ -696,12 +696,8 @@ class Db
 	
 	public function logout()
 	{
-		//$this->update('UPDATE '.PREFIX.'foodsaver SET `gcm` = "" WHERE id = '.(int)fsId());
-		$this->del('DELETE FROM '.PREFIX.'activity WHERE `foodsaver_id` = '.(int)fsId());
-		
 		Mem::userDel(fsId(), 'active');
 		Mem::userDel(fsId(), 'lastMailMessage');
-		
 	}
 
 	public function login($email,$pass)
@@ -841,29 +837,8 @@ class Db
 	{
 		if($time = Mem::user($fs_id, 'active'))
 		{
-			if((time()-$time) > 600)
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
+			return !((time()-$time) > 600);
 		}
-		
-		/*
-		if($time = $this->qOne('SELECT UNIX_TIMESTAMP(`zeit`) FROM `'.PREFIX.'activity` WHERE `foodsaver_id` = '.$this->intval($fs_id)))
-		{
-			if((time()-$time) > 600)
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
-		}
-		*/
 		return false;
 	}
 	
@@ -875,8 +850,6 @@ class Db
 		}
 		Mem::userSet($fs_id, 'active', time());
 		Mem::userSet($fs_id, 'sid', session_id());
-		
-		$this->update('UPDATE `'.PREFIX.'activity` SET `zeit` = NOW() WHERE `foodsaver_id` = '.$this->intval($fs_id));
 	}
 	
 	public function dbLoginAs($fs_id)
@@ -886,7 +859,6 @@ class Db
 	
 	private function initSessionData($fs_id)
 	{
-		$this->insert('INSERT IGNORE INTO '.PREFIX.'activity(`foodsaver_id`,`zeit`)VALUE('.$this->intval($fs_id).',NOW()) ');
 		$this->updateActivity($fs_id);
 		if($fs = $this->qRow('
 				SELECT 		`id`,

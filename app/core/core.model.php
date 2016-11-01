@@ -141,29 +141,6 @@ class Model extends ManualDb
  		return false;
  	}
  	
- 	/**
- 	 * Method to check users online status by checking timestamp from memcahce
- 	 *
- 	 * @param integer $fs_id
- 	 * @return boolean
- 	 */
- 	public function isActive($fs_id)
- 	{
- 		if($time = Mem::get('activity_'.$fs_id))
- 		{
- 			if((time()-$time) > 600)
- 			{
- 				return false;
- 			}
- 			else
- 			{
- 				return true;
- 			}
- 		}
- 	
- 		return false;
- 	}
- 	
  	public function updateSleepMode($status,$from,$to,$msg)
  	{
  		return $this->update('

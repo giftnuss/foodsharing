@@ -107,15 +107,10 @@ class ProfileModel extends Model
 					fs.rolle,
 					UNIX_TIMESTAMP(fs.sleep_from) AS sleep_from_ts,
 					UNIX_TIMESTAMP(fs.sleep_until) AS sleep_until_ts,
-					fs.mailbox_id,
-					UNIX_TIMESTAMP(a.zeit) AS last_activity
+					fs.mailbox_id
 		
 			FROM 	'.PREFIX.'foodsaver fs
 				
-			LEFT JOIN '.PREFIX.'activity a
-				
-			ON fs.id = a.foodsaver_id
-		
 			WHERE 	fs.id = '.(int)$this->fs_id.'
 		
 			')) == false)
@@ -130,13 +125,8 @@ class ProfileModel extends Model
 		{
 			$data['bouched'] = true;
 		}
-		$data['online'] = false;
-		
-		if( (time()-(int)$data['last_activity']) <  1800)
-		{
-			$data['online'] = true;
-		}
-		
+		$data['online'] = $this->isActive((int)$this->fs_id);
+
 		$data['bananen'] = $this->q('
 				SELECT 	fs.id,
 						fs.name,
