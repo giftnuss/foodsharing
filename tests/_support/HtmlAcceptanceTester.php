@@ -16,9 +16,9 @@
  *
  * @SuppressWarnings(PHPMD)
 */
-class HtmlacceptanceTester extends \Codeception\Actor
+class HtmlAcceptanceTester extends \Codeception\Actor
 {
-    use _generated\HtmlacceptanceTesterActions;
+    use _generated\HtmlAcceptanceTesterActions;
 
    /**
     * Define custom actions here
