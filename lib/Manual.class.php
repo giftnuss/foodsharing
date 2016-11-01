@@ -2366,7 +2366,6 @@ class ManualDb extends Db
 
 	public function addFoodsaver($data)
 	{
-		$data['bundesland_id'] = 0;
 		$data['new_bezirk'] = trim($data['stadtteil']);
 
 		$data['want_new'] = 0;

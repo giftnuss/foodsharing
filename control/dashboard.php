@@ -89,7 +89,7 @@ else if(S::may('fs'))
 	addTitle('Dashboard');
 	$bid = getBezirkId();
 
-	$val = $db->getValues(array('photo_public','bundesland_id','anschrift','plz','lat','lon','stadt'), 'foodsaver', fsId());
+	$val = $db->getValues(array('photo_public','anschrift','plz','lat','lon','stadt'), 'foodsaver', fsId());
 
 	if(empty($val['lat']) || empty($val['lon']) ||
 
@@ -141,7 +141,6 @@ else if(S::may('fs'))
 		$elements[] = v_form_text('anschrift');
 		$elements[] = v_form_text('plz');
 		$elements[] = v_form_text('stadt');
-		//$elements[] = v_form_select('bundesland_id',array('values'=>$db->getBasics_bundesland()));
 		$elements[] = v_form_text('lat');
 		$elements[] = v_form_text('lon');
 	}

@@ -199,7 +199,7 @@ function xhr_grabInfo($data)
 	{
 		Mem::delPageCache('/?page=dashboard');
 		global $db;
-		$fields = unsetAll($data, array('photo_public','bundesland_id','lat','lon','stadt','plz','anschrift'));
+		$fields = unsetAll($data, array('photo_public','lat','lon','stadt','plz','anschrift'));
 		
 		if($db->updateFields($fields, 'foodsaver', fsId()))
 		{
