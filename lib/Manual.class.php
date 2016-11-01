@@ -922,7 +922,6 @@ class ManualDb extends Db
 		$out = $this->qRow('
 			SELECT
 				`id`,
-				`autokennzeichen_id`,
 				`fs_id`,
 				`bezirk_id`,
 				`plz`,
@@ -1663,7 +1662,6 @@ class ManualDb extends Db
 		$id = $this->insert('
 			INSERT INTO 	`'.PREFIX.'foodsaver`
 			(
-				`autokennzeichen_id`,
 				`bezirk_id`,
 				`plz`,
 				`email`,
@@ -1678,7 +1676,6 @@ class ManualDb extends Db
 			)
 			VALUES
 			(
-			'.$this->intval($data['autokennzeichen_id']).',
 			'.$this->intval($data['bezirk_id']).',
 			'.$this->strval($data['plz']).',
 			'.$this->strval($data['email']).',
@@ -2621,7 +2618,6 @@ class ManualDb extends Db
 				[land_anders_value] =>
 				[geb_datum] => 2013-08-22
 				[fs_id] => 4565
-				[autokennzeichen_id] => 13
 				[email] =>
 				[festnetz] =>
 				[handy] =>
@@ -2715,7 +2711,6 @@ class ManualDb extends Db
 				`rolle`,
 				`active`,
 				`data`,
-				`autokennzeichen_id`,
 				`bezirk_id`,
 				`plz`,
 				`email`,
@@ -2743,7 +2738,6 @@ class ManualDb extends Db
 				1,
 				0,
 				'.$this->strval(json_encode($data)).',
-				'.$this->intval($data['autokennzeichen_id']).',
 				'.$this->intval($data['bezirk_id']).',
 				'.$this->strval($data['plz']).',
 				'.$this->strval($data['email']).',
