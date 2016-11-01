@@ -4,3 +4,6 @@ DROP TABLE fs_event_registration;
 DROP TABLE fs_event_workshops;
 DROP TABLE fs_event_workshop_registration;
 DROP TABLE fs_foodsaver_stats;
+DROP TABLE fs_geoRegion;
+DROP TABLE fs_glocke;
+DROP TABLE fs_glocke_read;
