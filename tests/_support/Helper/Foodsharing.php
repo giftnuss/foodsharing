@@ -32,7 +32,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'lat' => '52.5237395',
 			'lon' => '13.3986951',
 			'passwd' => $this->encryptMd5($email, $pass),
-			'anmeldedatum' => $this->to_datetime(),
+			'anmeldedatum' => $this->toDateTime(),
 			'active' => 1,
 		], $extra_params);
 		$id = $this->haveInDatabase('fs_foodsaver', $params);
@@ -169,7 +169,7 @@ class Foodsharing extends \Codeception\Module\Db
 		return md5($email.'-lz%&lk4-'.$pass);
 	}
 
-	private function to_datetime($date = null)
+	private function toDateTime($date = null)
 	{
 		$dt = new DateTime($date);
 		return $dt->format('Y-m-d H:i:s');
