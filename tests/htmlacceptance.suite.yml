@@ -1,0 +1,10 @@
+class_name: HtmlacceptanceTester
+modules:
+    enabled:
+        - PhpBrowser:
+            url: http://web:8080/
+        - Sequence
+        - Db
+        - \Helper\Htmlacceptance
+        - \Helper\Foodsharing
+        - \Helper\FoodsharingUrl
