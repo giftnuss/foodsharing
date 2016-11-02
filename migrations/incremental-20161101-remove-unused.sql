@@ -14,3 +14,4 @@ DROP TABLE fs_item_track;
 DROP TABLE fs_item_type;
 DROP TABLE fs_land;
 DROP TABLE fs_language;
+DROP TABLE fs_login;
