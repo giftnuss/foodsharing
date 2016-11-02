@@ -7,3 +7,8 @@ DROP TABLE fs_foodsaver_stats;
 DROP TABLE fs_geoRegion;
 DROP TABLE fs_glocke;
 DROP TABLE fs_glocke_read;
+DROP TABLE fs_item;
+DROP TABLE fs_item_class;
+DROP TABLE fs_item_request;
+DROP TABLE fs_item_track;
+DROP TABLE fs_item_type;
