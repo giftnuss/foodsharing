@@ -19,3 +19,4 @@ DROP TABLE fs_mail_error;
 DROP TABLE fs_message;
 DROP TABLE fs_mumbleuser;
 DROP TABLE fs_partnerschaft;
+DROP TABLE fs_plz;
