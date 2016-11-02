@@ -13,9 +13,6 @@ class SocketPush
 		$this->data = new SocketData();
 		
 		$this->data->setType('push');
-		
-		$this->data->set('gcm', false);
-		$this->data->set('ios', false);
 	}
 	
 	public function setMessage($message)
@@ -31,16 +28,6 @@ class SocketPush
 	public function setConversationId($id)
 	{
 		$this->data->set('cid', $id);
-	}
-	
-	public function addGcm($gcm)
-	{
-		$this->data->append('gcm', $gcm);
-	}
-	
-	public function addIos($ios)
-	{
-		$this->data->append('ios', $ios);
 	}
 	
 	public function toArray()

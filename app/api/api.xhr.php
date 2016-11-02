@@ -146,10 +146,6 @@ class ApiXhr extends Control
 		{
 			if($this->model->login($_GET['e'], $_GET['p']))
 			{
-				if(isset($_GET['g']) && strlen($_GET['g']) > 3)
-				{
-					$this->model->setgcm($_GET['g']);
-				}
 				$fs = $this->model->getValues(array('telefon','handy','geschlecht','name','lat','lon','photo'), 'foodsaver', fsId());
 
 				$this->appout(array(
