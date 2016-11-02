@@ -12,3 +12,4 @@ DROP TABLE fs_item_class;
 DROP TABLE fs_item_request;
 DROP TABLE fs_item_track;
 DROP TABLE fs_item_type;
+DROP TABLE fs_land;
