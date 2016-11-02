@@ -334,25 +334,6 @@ class ManualDb extends Db
 		}
 	}
 
-	public function isNewInConversation($recip_id)
-	{
-		$count = $this->qOne('
-				SELECT COUNT(`unread`)
-				FROM `'.PREFIX.'message`
-				WHERE `unread` = 1
-				AND `recip_id` = '.(int)fsId().'
-				AND `sender_id` = '.(int)$recip_id);
-
-		if($count > 0)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
 	/**
 	 * Searches the given term in the database of regions, foodsavers and companies
 	 *
@@ -633,11 +614,6 @@ class ManualDb extends Db
 
 	public function addMessage($sender_id,$recip_id,$name,$message,$attach)
 	{
-		$id = $this->insert('
-			INSERT INTO `'.PREFIX.'message` ( sender_id, recip_id, unread, name, msg, time, attach)
-			VALUES('.$this->intval($sender_id).','.$this->intval($recip_id).',1,'.$this->strval($name).','.$this->strval($message).',"'.date('Y-m-d H:i:s').'",'.$this->strval($attach).' )
-		');
-
 		$model = loadModel('msg');
 		if($cid = $model->addConversation(array($sender_id=> $sender_id,$recip_id=>$recip_id),false,false))
 		{
@@ -650,30 +626,6 @@ class ManualDb extends Db
 
 	public function add_message($data)
 	{
-		/*
-		$id = $this->insert('
-			INSERT INTO 	`'.PREFIX.'message`
-			(
-			`sender_id`,
-			`recip_id`,
-			`unread`,
-			`name`,
-			`msg`,
-			`time`,
-			`attach`
-			)
-			VALUES
-			(
-			'.$this->intval($data['sender_id']).',
-			'.$this->intval($data['recip_id']).',
-			'.$this->intval($data['unread']).',
-			'.$this->strval($data['name']).',
-			'.$this->strval($data['msg'],'<br><p>').',
-			'.$this->dateval($data['time']).',
-			'.$this->strval($data['attach']).'
-			)');
-		*/
-
 		$model = loadModel('msg');
 		if($cid = $model->addConversation(array($data['sender_id']=> $data['sender_id'],$data['recip_id']=>$data['recip_id']),false,false))
 		{
