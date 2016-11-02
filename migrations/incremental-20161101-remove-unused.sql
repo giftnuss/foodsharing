@@ -17,3 +17,4 @@ DROP TABLE fs_language;
 DROP TABLE fs_login;
 DROP TABLE fs_mail_error;
 DROP TABLE fs_message;
+DROP TABLE fs_mumbleuser;
