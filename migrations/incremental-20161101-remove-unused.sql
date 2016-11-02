@@ -20,3 +20,4 @@ DROP TABLE fs_message;
 DROP TABLE fs_mumbleuser;
 DROP TABLE fs_partnerschaft;
 DROP TABLE fs_plz;
+DROP TABLE fs_region;
