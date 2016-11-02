@@ -98,24 +98,4 @@ class LoginModel extends Model
 	
 		return false;
 	}
-	
-	public function add_login($data)
-	{
-		$id = $this->insert('
-			INSERT INTO 	`'.PREFIX.'login`
-			(
-			`foodsaver_id`,
-			`ip`,
-			`agent`,
-			`time`
-			)
-			VALUES
-			(
-			'.$this->intval($data['foodsaver_id']).',
-			'.$this->strval($data['ip']).',
-			'.$this->strval($data['agent']).',
-			'.$this->dateval($data['time']).'
-			)');
-		return $id;
-	}
 }

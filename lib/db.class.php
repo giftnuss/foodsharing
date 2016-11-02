@@ -712,21 +712,6 @@ class Db
 				SET 	last_login = NOW()
 				WHERE 	id = '.(int)fsId().'		
 			');
-			$this->insert('
-			INSERT INTO 	`'.PREFIX.'login`
-			(
-			`foodsaver_id`,
-			`ip`,
-			`agent`,
-			`time`
-			)
-			VALUES
-			(
-			'.$this->intval(fsId()).',
-			'.$this->strval($_SERVER['REMOTE_ADDR']).',
-			'.$this->strval($_SERVER['HTTP_USER_AGENT']).',
-			'.$this->dateval(date('Y-m-d H:i:s')).'
-			)');
 
 			$blocked = $this->qOne('
 			SELECT email FROM `'.PREFIX.'email_blacklist`
@@ -778,11 +763,11 @@ class Db
 	public function checkClient($email,$pass = false)
 	{
 		$email = $this->safe(trim($email));
-    if(strlen($email) < 2 || strlen($pass) < 1)
-    {
-      return false;
-    }
-    $hashed = $this->encryptMd5($email, $pass);
+		if(strlen($email) < 2 || strlen($pass) < 1)
+		{
+			return false;
+		}
+		$hashed = $this->encryptMd5($email, $pass);
 		
 		$user = false;
 		$sql = '
@@ -801,10 +786,10 @@ class Db
 		{
 			return $user;
 		}
-    else
+		else
 		{
-      $old_fs_hash = $this->fs_sha1hash($pass);
-      $sql = '
+			$old_fs_hash = $this->fs_sha1hash($pass);
+			$sql = '
         SELECT 	`id`,
             `bezirk_id`,
             `admin`,
@@ -815,11 +800,11 @@ class Db
         WHERE 	`email` = '.$this->strval($email).'
         AND 	`fs_password` 	= "'.$old_fs_hash.'"
       ';
-      if($user = $this->qRow($sql))
-      {
-        $this->update("UPDATE `".PREFIX."foodsaver` SET `fs_password` = NULL, `passwd` = '".$hashed."' WHERE `id` = ".$user['id']);
-        return $user;
-      }
+			if($user = $this->qRow($sql))
+			{
+				$this->update("UPDATE `".PREFIX."foodsaver` SET `fs_password` = NULL, `passwd` = '".$hashed."' WHERE `id` = ".$user['id']);
+				return $user;
+			}
 
 			return false;
 		}

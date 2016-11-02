@@ -69,12 +69,6 @@ class LoginControl extends Control
 		if($this->model->login($_POST['email_adress'],$_POST['password']))
 		{
 			$this->genSearchIndex();
-			$this->model->add_login(array(
-				'foodsaver_id' => fsId(),
-				'ip' => $_SERVER['REMOTE_ADDR'],
-				'time' => date('Y-m-d H:i:s'),
-				'agent' => $_SERVER['HTTP_USER_AGENT']
-			));
 
 			if(isset($_POST['ismob']))
 			{
