@@ -1081,7 +1081,6 @@ class Db
 					'))
 				{
 					$_SESSION['client']['bezirke'] = array();
-					$mastercheck = array();
 					foreach ($r as $rr)
 					{
 						$_SESSION['client']['bezirke'][$rr['id']] = array(
@@ -1089,31 +1088,6 @@ class Db
 							'name' => $rr['name'],
 							'type' => $rr['type']
 						);
-						$mastercheck[$rr['master']] = $rr['master'];
-					}
-					foreach ($mastercheck as $m)
-					{
-						/*
-						if(!isset($_SESSION['client']['bezirke'][$m]) && (int)$m > 0)
-						{
-							$this->insert('
-								INSERT INTO `'.PREFIX.'foodsaver_has_bezirk`
-								(
-									`foodsaver_id`,
-									`bezirk_id`,
-									`active`,
-									`added`
-								)
-								VALUES
-								(
-									'.(int)$fs['id'].',
-									'.(int)$m.',
-									1,
-									NOW()
-								)
-							');
-							$_SESSION['client']['bezirke'][$m] = $this->getValues(array('id','name','type'), 'bezirk', $m);
-						}*/
 					}
 				}
 			}
