@@ -2118,25 +2118,6 @@ class ManualDb extends Db
 			ORDER BY `name`');
 	}
 
-	public function getBezirkByRegionId($region_id)
-	{
-		$out = $this->q('
-			SELECT
-				`id`,
-				`region_id`,
-				`name`,
-				`has_children`,
-				`parent_id`
-
-			FROM 		`'.PREFIX.'bezirk`
-
-			WHERE 		`region_id` = '.$region_id.'
-
-			ORDER BY 	`name`');
-
-		return $out;
-	}
-
 	public function update_bezirkNew($id,$data)
 	{
 
@@ -2260,60 +2241,9 @@ class ManualDb extends Db
 		return $this->update('
 		UPDATE 	`'.PREFIX.'bezirk`
 
-		SET 	`region_id` =  '.$this->intval($data['region_id']).',
-				`name` =  '.$this->strval($data['name']).'
+		SET 	`name` =  '.$this->strval($data['name']).'
 
 		WHERE 	`id` = '.$this->intval($id));
-	}
-
-	public function getAllBezirke($region_id = false)
-	{
-		$where = '';
-		if($region_id !== false)
-		{
-			$where = 'WHERE `region_id` = '.(int)$region_id;
-		}
-		if($bezirke = $this->q('
-			SELECT `id`,`name`,`region_id` FROM '.PREFIX.'bezirk '.$where.'
-		'))
-		{
-			if($anz = $this->q('SELECT COUNT(`id`) AS `anz`, `bezirk_id` FROM `'.PREFIX.'betrieb` GROUP BY `bezirk_id`'))
-			{
-				$anz_b = array();
-				foreach ($anz as $a)
-				{
-					$anz_b[$a['bezirk_id']] = $a['anz'];
-				}
-			}
-
-			if($anz = $this->q('SELECT COUNT(`id`) AS `anz`, `bezirk_id` FROM `'.PREFIX.'foodsaver` GROUP BY `bezirk_id`'))
-			{
-				$anz_fs = array();
-				foreach ($anz as $a)
-				{
-					$anz_fs[$a['bezirk_id']] = $a['anz'];
-				}
-			}
-
-
-			foreach ($bezirke as $key => $b)
-			{
-				$bezirke[$key]['anz_betriebe'] = 0;
-				$bezirke[$key]['anz_fs'] = 0;
-				if(isset($anz_b[$b['id']]))
-				{
-					$bezirke[$key]['anz_betriebe'] = $anz_b[$b['id']];
-				}
-				if(isset($anz_fs[$b['id']]))
-				{
-					$bezirke[$key]['anz_fs'] = $anz_fs[$b['id']];
-				}
-			}
-
-			return $bezirke;
-		}
-
-		return false;
 	}
 
 	public function addFoodsaver($data)

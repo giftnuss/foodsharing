@@ -9,154 +9,47 @@ if(isOrgaTeam() && isset($_GET['delete']) && (int)$_GET['delete'] > 0)
 	goPage('region');
 }
 
-if(getAction('neu'))
-{
-	handle_add();
-	
-	addBread(s('bread_bezirk'),'/?page=region');
-	addBread(s('bread_new_bezirk'));
-			
-	addContent(bezirk_form());
+$id = id('tree');
+addBread(s('bezirk_bread'),'/?page=region');
+addTitle(s('bezirk_bread'));
+$cnt = '
+<div>
+    <div style="float:left;width:150px;" id="'.'..'.'"></div>
+    <div style="float:right;width:250px;"></div>
+    <div style="clear:both;"></div>		
+</div>';
 
-	addContent(v_field(v_menu(array(
-		pageLink('region','back_to_overview')
-	)),s('actions')),CNT_RIGHT);
-}
-elseif($id = getActionId('delete'))
-{
-	if($db->del_bezirk($id))
-	{
-		info(s('bezirk_deleted'));
-		goPage();
-	}
-}
-elseif($id = getActionId('edit'))
-{
-	handle_edit();
-	
-	addBread(s('bread_bezirk'),'/?page=bezirk');
-	addBread(s('bread_edit_bezirk'));
-	
-	$data = $db->getOne_bezirk($id);
-	
-	setEditData($data);
-			
-	addContent(bezirk_form());
-			
-	addContent(v_field(v_menu(array(
-		pageLink('region','back_to_overview')
-	)),s('actions')));
-}
-else if(isset($_GET['id']))
-{
-	$data = $db->getOne_region($_GET['id']);	
-	print_r($data);	
-	
-}
-else if(false)
-{
-	addBread(s('region_bread'),'/?page=region');
-	
-	if($data = $db->getBasics_region())
-	{
-		foreach ($data as $region)
-		{
-			
-			
-			$table = 'Noch keine Bezirke angelegt';
-			
-			if(/*$bezirk = $db->getBezirkByRegionId($region['id'])*/$bezirk = $db->getAllBezirke($region['id']))
-			{
-				
-				$rows = array();
-				foreach ($bezirk as $b)
-				{
-					
-					$rows[] = array(
-							array('cnt' => '<a href="/?page=region&id='.$b['id'].'">'.$b['name'].'</a>'),
-						array('cnt' => $b['anz_betriebe']),
-						array('cnt' => $b['anz_fs']),
-						array('cnt' => v_toolbar(array('id'=>$b['id'],'types' => array('comment','edit','delete'),'confirmMsg'=>'Soll '.$b['name'].' wirklich unwideruflich gel&ouml;scht werden?'))
-					));
-				}
-				
-				$table = v_tablesorter(array(
-						array('name' => 'Name'),
-						array('name' => 'Betriebe','width' => 75),
-						array('name' => 'Aktive Foodsaver','width' => 120),
-						array('name' => 'Aktionen','sort' => false,'width' => 75)
-				),$rows);
-					
-				addContent(v_field($table,$region['name']));
-			}
-			else 
-			{
-				addContent(v_field($region['name'].' hat noch keine Bezirke',$region['name']));
-			}
-			
-		}
-	}
-	else
-	{
-		info(s('region_empty'));		
-	}
-			
-	addContent(v_field(v_menu(array(
-		array('href' => '/?page=region&a=neu','name' => s('neu_region'))
-	)),'Aktionen'));
-}		
-else
-{
-	$id = id('tree');
-	addBread(s('bezirk_bread'),'/?page=region');
-	addTitle(s('bezirk_bread'));
-	$cnt = '
-	<div>
-		<div style="float:left;width:150px;" id="'.'..'.'"></div>
-		<div style="float:right;width:250px;"></div>
-		<div style="clear:both;"></div>		
-	</div>';
-	
-	addStyle('#bezirk-buttons {left: 50%; margin-left: 5px;position: absolute;top: 77px;}');
-	
-	addJs('
-	$("#deletebezirk").button().click(function(){
-		if(confirm($("#tree-hidden-name").val()+\' wirklich löschen?\'))
-		{
-			goTo(\'/?page=region&delete=\'+$("#tree-hidden").val());
-		}
-	});');
-	
-	/*
-	 * ifconfirm("/?page=region&delete="+$("#tree-hidden").val(),"Soll "+$("#tree-hidden-name").val()+" wirklich gelöscht werden?","Bezirk löschen");
-	 * 
-	 */
-	$bezirke = $db->getBasics_bezirk();
-	
-	array_unshift($bezirke,array('id'=>'0','name'=>'Ohne `Eltern` Bezirk'));
-	
-	hiddenDialog('newbezirk', array(
-		v_form_text('Name'),
-		v_form_text('email'),
-		v_form_select('parent_id',array('values'=>$bezirke))
-	),'Neuer Bezirk');
-	
-	addContent(v_field('<div><div id="'.id('bezirk_form').'"></div></div>','Bezirk bearbeiten',array('class' => 'ui-padding')),CNT_LEFT);
-	addContent(v_field(v_bezirk_tree($id).'
-			<div id="bezirk-buttons">
-				<span id="deletebezirk" style="visibility:hidden;">Bezirk Löschen</span>	
-				'.v_dialog_button('newbezirk', 'Neuer Bezirk').'	
-			</div>', 'Bezirke'),CNT_RIGHT);
+addStyle('#bezirk-buttons {left: 50%; margin-left: 5px;position: absolute;top: 77px;}');
 
-	//$content = v_field($cnt,'Bezirke verwalten',array('class'=> 'ui-padding'));
-	
-	i_map($id);
-	
-}		
+addJs('
+$("#deletebezirk").button().click(function(){
+    if(confirm($("#tree-hidden-name").val()+\' wirklich löschen?\'))
+    {
+        goTo(\'/?page=region&delete=\'+$("#tree-hidden").val());
+    }
+});');
+
+$bezirke = $db->getBasics_bezirk();
+
+array_unshift($bezirke,array('id'=>'0','name'=>'Ohne `Eltern` Bezirk'));
+
+hiddenDialog('newbezirk', array(
+    v_form_text('Name'),
+    v_form_text('email'),
+    v_form_select('parent_id',array('values'=>$bezirke))
+),'Neuer Bezirk');
+
+addContent(v_field('<div><div id="'.id('bezirk_form').'"></div></div>','Bezirk bearbeiten',array('class' => 'ui-padding')),CNT_LEFT);
+addContent(v_field(v_bezirk_tree($id).'
+        <div id="bezirk-buttons">
+            <span id="deletebezirk" style="visibility:hidden;">Bezirk Löschen</span>	
+            '.v_dialog_button('newbezirk', 'Neuer Bezirk').'	
+        </div>', 'Bezirke'),CNT_RIGHT);
+
+i_map($id);
 
 function v_bezirk_tree($id)
 {
-	
 	addScript('/js/dynatree/jquery.dynatree.js');
 	addScript('/js/jquery.cookie.js');
 	addCss('/js/dynatree/skin/ui.dynatree.css');
@@ -318,87 +211,5 @@ function i_map($id)
 	');
 	
 	
-}
-
-function bezirk_form()
-{
-	global $db;
-	
-	
-	
-	$elements = array(
-		
-		v_form_select('region_id',array('required'=>true)),
-		v_form_text('name',array('required'=>true)),
-		v_form_list('plz')
-	);
-	
-	global $g_data;
-	
-	if(empty($g_data['plz']))
-	{
-		$elements[] = v_form_info('Du musst diesem Bezirk erst Postleitzahlen zuordnen damit Du einen Botschafter ausw&auml;hlen kannst.');
-	}
-	else
-	{
-		$foodsaver_values = $db->getBasics_foodsaver($_GET['id']);
-		$elements[] = v_form_checkbox('foodsaver',array('values' => $foodsaver_values));
-	}
-	
-	
-	return v_quickform('bezirk',$elements);
-}
-
-function handle_edit()
-{
-	global $db;
-	global $g_data;
-	
-	
-	if(submitted())
-	{
-		$plz = explode("\n", $g_data['plz']);
-		
-		$g_data['plz'] = array();
-		
-		foreach ($plz as $p)
-		{
-			$p = trim($p);
-			if(!empty($p))
-			{
-				$g_data['plz'][] = $db->getPlzId($p);
-			}
-		}
-		
-		if($db->update_bezirk($_GET['id'],$g_data))
-		{
-			$db->resortFoodsaver();
-			info(s('bezirk_edit_success'));
-		}
-		else
-		{
-			error(s('error'));
-		}
-	}
-}
-function handle_add()
-{
-	global $db;
-	global $g_data;
-	if(submitted())
-	{
-		if($db->add_bezirk($g_data))
-		{
-			Mem::del('cb-'.$g_data['parent_id']);
-			Mem::set('cb-'.$g_data['parent_id'], $db->getChildBezirke($g_data['parent_id']));
-			
-			info(s('bezirk_add_success'));
-			goPage();
-		}
-		else
-		{
-			error(s('error'));
-		}
-	}
 }
 ?>

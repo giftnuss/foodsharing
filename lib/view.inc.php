@@ -568,29 +568,6 @@ function v_form_recip_chooser()
 	global $db;
 	
 	$bezirk = $db->getBezirk();
-	/*
-	$regionen = $db->getBasics_region();
-
-	$items = array();
-	if(is_array($regionen))
-	{
-		foreach ($regionen as $r)
-		{
-			$bezirke = $db->getBezirkByRegionId($r['id']);
-			
-			$bitems = array();
-			foreach ($bezirke as $b)
-			{
-				$bitems[] = '{title: "'.str_replace(array(',',"'",'"'),'',$b['name']).'","ident":'.(int)$b['id'].',"ttype":"bezirk"}';
-			}
-			$items[] = '{title: "'.str_replace(array(',',"'",'"'),'',$r['name']).'", isFolder: true, "ttype": "region",
-	                    children: [
-	                        '.implode(',', $bitems).'
-	                    ]}';
-		}
-	}
-	$items = implode(',', $items);
-	*/
 	$id = 'recip_choose';
 	$out = '
 		<select class="select" name="'.$id.'" id="'.$id.'">
