@@ -21,3 +21,6 @@ DROP TABLE fs_mumbleuser;
 DROP TABLE fs_partnerschaft;
 DROP TABLE fs_plz;
 DROP TABLE fs_region;
+DROP TABLE fs_stadt;
+DROP TABLE fs_stadtteil;
+DROP TABLE fs_stadt_kennzeichen;
