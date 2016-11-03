@@ -27,3 +27,5 @@ DROP TABLE fs_stadt_kennzeichen;
 DROP TABLE fs_upgrade_request;
 DROP TABLE fs_user;
 DROP TABLE fs_user_type;
+DROP TABLE basket_has_types;
+DROP TABLE basket_has_art;
