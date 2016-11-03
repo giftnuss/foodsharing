@@ -163,6 +163,48 @@ class Foodsharing extends \Codeception\Module\Db
 		}
 	}
 
+	public function addForumTheme($bezirk_id, $fs_id, $title, $text, $date = null, $bot_theme = false)
+	{
+		$v = [
+			'foodsaver_id' => $fs_id,
+			'name' => $title,
+			'time' => $this->toDateTime($date),
+			'active' => '1',
+		];
+		$theme_id = $this->haveInDatabase('fs_theme', $v);
+		$v = [
+			'theme_id' => $theme_id,
+			'bezirk_id' => $bezirk_id,
+			'bot_theme' => ($bot_theme ? 1 : 0),
+		];
+		$this->haveInDatabase('fs_bezirk_has_theme', $v);
+		$this->addForumThemePost($theme_id, $fs_id, $text, $date);
+		return $theme_id;
+	}
+
+	public function addForumThemePost($theme_id, $fs_id, $text, $date = null)
+	{
+		$v = [
+			'theme_id' => $theme_id,
+			'foodsaver_id' => $fs_id,
+			'body' => $text,
+			'time' => $this->toDateTime($date),
+		];
+		$v['id'] = $this->haveInDatabase('fs_theme_post', $v);
+		$this->updateForumThemeWithPost($theme_id, $v);
+	}
+
+	private function updateForumThemeWithPost($theme_id, $post)
+	{
+		$last_post_id = $this->grabFromDatabase('fs_theme', 'last_post_id', ['id' => $theme_id]);
+		$last_post_date = new DateTime($this->grabFromDatabase('fs_theme_post', 'time', ['id' => $last_post_id]));
+		$this_post_date = new DateTime($post['time']);
+		if($last_post_date >= $this_post_date)
+		{
+			$this->driver->executeQuery('UPDATE fs_theme SET last_post_id = ? WHERE id = ?', [$post['id'], $theme_id]);
+		}
+	}
+
 	// copied from elsewhere....
 	private function encryptMd5($email,$pass)
 	{
