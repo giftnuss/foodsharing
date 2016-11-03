@@ -3740,25 +3740,6 @@ class ManualDb extends Db
 						');
 			}
 		}
-		if(isset($data['foodsaver']) && is_array($data['foodsaver']))
-		{
-			foreach($data['foodsaver'] as $foodsaver_id)
-			{
-				$this->insert('
-						INSERT INTO `'.PREFIX.'upgrade_request`
-						(
-						`bezirk_id`,
-						`foodsaver_id`
-				)
-						VALUES
-						(
-						'.$this->intval($id).',
-						'.$this->intval($foodsaver_id).'
-				)
-						');
-			}
-		}
-
 		return $id;
 	}
 

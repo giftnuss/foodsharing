@@ -24,3 +24,4 @@ DROP TABLE fs_region;
 DROP TABLE fs_stadt;
 DROP TABLE fs_stadtteil;
 DROP TABLE fs_stadt_kennzeichen;
+DROP TABLE fs_upgrade_request;
