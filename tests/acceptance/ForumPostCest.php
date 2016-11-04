@@ -46,7 +46,7 @@ class ForumPostCest
 		$I->waitForPageBody();
 		$this->expectPostButtons($I, true, $example[2]);
 
-		$I->click('a.button.bt_follow');
+		$I->click('.button.bt_follow');
 		/* currently, this does a XHR request after which a full page reload is done. Click does not wait for the XHR
 		   to be completed so we need some additional wait before we can detect a page reload...
 		*/
@@ -54,7 +54,7 @@ class ForumPostCest
 		$I->waitForPageBody();
 		$this->expectPostButtons($I, false, $example[2]);
 
-		$I->click('a.button.bt_unfollow');
+		$I->click('.button.bt_unfollow');
 		$I->wait(1);
 		$I->waitForPageBody();
 		$this->expectPostButtons($I, true, $example[2]);
@@ -64,17 +64,17 @@ class ForumPostCest
 	{
 		if($follow)
 		{
-			$I->see("folgen", 'a.button.bt_follow');
-			$I->dontSee("entfolgen", 'a.button.bt_unfollow');
+			$I->see("folgen", '.button.bt_follow');
+			$I->dontSee("entfolgen", '.button.bt_unfollow');
 		} else {
-			$I->see("entfolgen", 'a.button.bt_unfollow');
-			$I->dontSee("folgen", 'a.button.bt_follow');
+			$I->see("entfolgen", '.button.bt_unfollow');
+			$I->dontSee("folgen", '.button.bt_follow');
 		}
 		if($stick)
 		{
-			$I->see("fixieren", 'a.button.bt_stick');
+			$I->see("fixieren", '.button.bt_stick');
 		} else {
-			$I->dontSee("fixieren", 'a.button.bt_stick');
+			$I->dontSee("fixieren", '.button.bt_stick');
 		}
 	}
 
@@ -91,7 +91,7 @@ class ForumPostCest
 			$I->see("Theme B", '#thread-'.$this->thread_ambassador_user_id.' + #thread-'.$this->thread_user_ambassador_id);
 		});
 
-		$I->click('a.button.bt_stick');
+		$I->click('.button.bt_stick');
 		$I->wait(1);
 		$nick->does(function(AcceptanceTester $I)
 		{
@@ -101,7 +101,7 @@ class ForumPostCest
 
 		$I->waitForPageBody();
 
-		$I->click('a.button.bt_unstick');
+		$I->click('.button.bt_unstick');
 		$I->wait(1);
 		$nick->does(function(AcceptanceTester $I)
 		{
