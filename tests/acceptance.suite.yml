@@ -19,3 +19,4 @@ modules:
         - Db
         - \Helper\Acceptance
         - \Helper\Foodsharing
+        - \Helper\FoodsharingUrl
