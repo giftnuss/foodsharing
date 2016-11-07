@@ -1277,46 +1277,6 @@ class ManualDb extends Db
 		');
 	}
 
-	public function getAbholen($betrieb_id)
-	{
-		if($out = $this->q('
-			SELECT 	`'.PREFIX.'abholen`.`foodsaver_id`,
-					`'.PREFIX.'abholen`.`dow`,
-					`'.PREFIX.'abholen`.`time`
-
-			FROM 	`'.PREFIX.'abholen`
-
-			WHERE 	`'.PREFIX.'abholen`.`betrieb_id` = '.$this->intval($betrieb_id).'
-		'))
-		{
-			$saver = array();
-			foreach ($out as $key => $o)
-			{
-				$out[$key]['foodsaver'] = false;
-				if($out[$key]['foodsaver_id'] != 0)
-				{
-					if(isset($saver[$o['foodsaver_id']]))
-					{
-						$out[$key]['foodsaver'] = $saver[$o['foodsaver_id']];
-					}
-					else
-					{
-						$out[$key]['foodsaver'] = $this->qRow('
-						SELECT 	`id`,`name`,`nachname`,`email`,`geschlecht`
-						FROM 	`'.PREFIX.'foodsaver`
-						WHERE 	`id` = '.$this->intval($o['foodsaver_id']).'');
-
-						$saver[$o['foodsaver_id']] = $out[$key]['foodsaver'];
-
-					}
-				}
-			}
-		}
-
-
-		return $out;
-	}
-
 	public function getParentBezirke($bid)
 	{
 		if(is_array($bid))
