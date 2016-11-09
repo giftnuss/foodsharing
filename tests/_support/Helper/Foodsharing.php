@@ -53,6 +53,7 @@ class Foodsharing extends \Codeception\Module\Db
 	public function createFoodsaver($pass = null, $extra_params = [])
 	{
 		$params = array_merge([
+			'verified' => 1,
 			'rolle' => 1,
 			'quiz_rolle' => 1,
 			'anschrift' => sq(),
