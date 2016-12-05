@@ -1135,7 +1135,7 @@ function xhr_update_abholen($data)
 
 		if(is_array($data['newfetchtime']))
 		{
-			for($i=0;$i<(count($data['newfetchtime'])-1);$i++)
+			for($i = 0; $i<(count($data['newfetchtime'])-1); $i++)
 			{
 				$db->sql('
 				REPLACE INTO 	`'.PREFIX.'abholzeiten`
@@ -1156,8 +1156,13 @@ function xhr_update_abholen($data)
 			}
 		}
 		$betrieb = $db->getVal('name', 'betrieb', $data['bid']);
-		$db->addGlocke(explode(',',$data['team']), 'Die Abholzeiten wurden geändert!',$betrieb,'/?page=fsbetrieb&id='.(int)$data['bid']);
-
+		$model = loadModel('betrieb');
+		$model->addBell($data['team'], 'store_cr_times_title', 'store_cr_times', 'img img-store brown', array(
+			'href' => '/?page=fsbetrieb&id='.(int)$data['bid']
+		), array(
+			'user' => S::user('name'),
+			'name' => $betrieb
+		), 'store-time-'.(int)$data['bid']);
 		return json_encode(array('status' => 1));
 	}
 }
