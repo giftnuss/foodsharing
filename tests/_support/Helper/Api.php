@@ -29,7 +29,7 @@ class Api extends \Codeception\Module
 		$this->assertNotRegExp($pattern, $response);
 	}
 
-	public function login($email, $pass)
+	public function login($email, $pass = 'password')
 	{
 		$rest = $this->getModule('REST');
 		$rest->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
