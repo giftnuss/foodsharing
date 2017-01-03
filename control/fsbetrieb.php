@@ -1767,7 +1767,7 @@ function u_form_abhol_table($zeiten = false,$option = array())
 			</thead>
 			<tfoot>
 			    <tr>
-					<td colspan="3"><span id="nft-add">'.s('add').'</span></td>		
+					<td colspan="3"><span id="nft-add">'.s('add').'</span></td>
 				</tr>
 			</tfoot>
 			<tbody>';
