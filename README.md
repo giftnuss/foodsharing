@@ -11,6 +11,8 @@ Make sure you have installed
 If you're [using OSX](https://docs.docker.com/engine/installation/mac/)
 you'll have a better experience with Docker for Mac rather than Docker Toolbox 
 (files won't update properly if using Toolbox).
+There is no _official_ support for running under Windows at this time, but if
+you'd like to help out getting that to work, please do!
 
 ```
 git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
