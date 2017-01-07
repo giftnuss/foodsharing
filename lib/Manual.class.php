@@ -1241,7 +1241,7 @@ class ManualDb extends Db
 			}
 		}
 
-		$out['notitzen'] = $this->getBetriebNotiz($id);
+		$out['notizen'] = $this->getBetriebNotiz($id);
 
 		return $out;
 	}
