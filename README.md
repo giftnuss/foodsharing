@@ -6,7 +6,8 @@ allow precise versions of software to be defined to match production setup close
 ## Getting started
 
 Make sure you have installed
-[docker-compose](https://docs.docker.com/compose/install/) (at least version 1.6.0) and node/npm first.
+[docker](https://docs.docker.com/engine/getstarted/step_one/#step-1-get-docker) and 
+[docker-compose](https://docs.docker.com/compose/install/) (at least version 1.6.0).
 If you're [using OSX](https://docs.docker.com/engine/installation/mac/)
 you'll have a better experience with Docker for Mac rather than Docker Toolbox 
 (files won't update properly if using Toolbox).
@@ -136,7 +137,7 @@ There are a number of helper scripts available. Most of them obey the `FS_INT` e
 | script | purpose |
 |--------|---------|
 | ./scripts/build-assets | builds the static assets |
-| ./scripts/watch-assets | builds the static assets on change |
+| ./scripts/watch-assets | builds the static assets on change (you will need nodejs installed locally) |
 | ./scripts/composer | run php composer |
 | ./scripts/docker-compose | docker-compose with the correct options set for the env |
 | ./scripts/dropdb | drop the database |
