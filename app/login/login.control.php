@@ -128,7 +128,7 @@ class LoginControl extends Control
 			}
 			if(!validEmail($mail))
 			{
-				error('Sorry','Hast Du Dich vielleicht bei Deiner E-Mail Adresse vertippt?');
+				error('Sorry','Hast Du Dich vielleicht bei Deiner E-Mail-Adresse vertippt?');
 			}
 			else
 			{
@@ -138,7 +138,7 @@ class LoginControl extends Control
 				}
 				else
 				{
-					error('Sorry, Diese E-Mail Adresse ist uns nicht bekannt');
+					error('Sorry, Diese E-Mail-Adresse ist uns nicht bekannt');
 				}
 			}
 		}

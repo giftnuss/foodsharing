@@ -422,7 +422,7 @@ function handleEmail()
 					}
 				}
 				
-				info('Die E-Mail wurde erfolgreich an '.$count.' E-Mail Adressen gesendet');
+				info('Die E-Mail wurde erfolgreich an '.$count.' E-Mail-Adressen gesendet');
 				
 				$foodsaver = array();
 			}

@@ -476,7 +476,7 @@ class SettingsView extends View
 	public function changemail3($email)
 	{
 		return 
-			v_info('E-Mail Adresse wirklich zu <strong>'.$email.'</strong> ändern?') . 
+			v_info('E-Mail-Adresse wirklich zu <strong>'.$email.'</strong> ändern?') .
 			v_form_passwd('passcheck');
 	}
 	
