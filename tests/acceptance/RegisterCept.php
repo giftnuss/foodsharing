@@ -14,7 +14,7 @@ $I->amOnPage('/');
 
 // click signup, then press next on the first dialog
 
-$I->click('Mach-Mit!');
+$I->click('Mach mit!');
 $I->waitForElementVisible('#joinform', 4);
 $I->waitForElementVisible('#joinform .step.step0', 4);
 $I->click('weiter', '.step.step0');
