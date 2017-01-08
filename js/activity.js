@@ -234,7 +234,7 @@ var activity = {
 				html += this.initOptionListing(listings[i]);
 			}
 			
-			html += '<legend><a href="#" id="activity-save-option" class="button" style="float:right;">Einstellungen Speichern</a></legend></fieldset></form>'
+			html += '<legend><a href="#" id="activity-save-option" class="button" style="float:right;">Einstellungen speichern</a></legend></fieldset></form>'
 			
 			$('body').append('<div id="activity-listings" class="corner-all white-popup mfp-hide">'+html+'</div>');
 			

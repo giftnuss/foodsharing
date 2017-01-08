@@ -174,7 +174,7 @@ class DashboardView extends View
 	</div>
 	<div id="activity">
 		<div class="loader" style="padding:40px;background-image:url(/img/469.gif);background-repeat:no-repeat;background-position:center;"></div>
-		<div style="display:none" id="activity-info">'.v_info('Es gibt gerade nichts neues').'</div>
+		<div style="display:none" id="activity-info">'.v_info('Es gibt gerade nichts Neues').'</div>
 	</div>');
 		
 	}

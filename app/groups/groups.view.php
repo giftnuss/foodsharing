@@ -14,7 +14,7 @@ class GroupsView extends View
 		
 		// Überregionale
 		$items = array();
-		$items[] = array('name' => 'Alle Anzeigen','href' => '/?page=groups');
+		$items[] = array('name' => 'Alle anzeigen','href' => '/?page=groups');
 		$out .= v_field(v_menu($items), 'Überregionale Gruppen');
 		
 		
@@ -118,7 +118,7 @@ class GroupsView extends View
 				}
 				
 				$member .= '
-				<div><strong>'.count($g['leader']).' Admin</strong></div>
+				<div><strong>'.count($g['leader']).' Admin/s</strong></div>
 				<div>'.count($g['member']).' Mitwirkende</div>
 				
 			</div>';

@@ -778,7 +778,7 @@ function getBetriebeMenu()
 			<div class="popbox">
 				<h3>Wähle die Region aus, in der Du aktiv werden möchtest!</h3>
 				<p class="subtitle">
-					Es besteht auch die Möglichkeit eine neue Region/Bezirk zu gründen, wähle bitte dennoch die enspechende übergeordnete Region (Land / Bundesland Stadt etc.) aus.
+					Es besteht auch die Möglichkeit, eine/n neue/n Region/Bezirk zu gründen. Wähle bitte dennoch die entsprechende übergeordnete Region (Land, Bundeslan, Stadt etc.) aus!
 				</p>
 				<div style="height:260px;">
 					'.v_bezirkChildChooser($id).'
