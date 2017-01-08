@@ -72,7 +72,7 @@ class IndexView extends View
 					<div class="inside">
 						<h3>Wie funktioniert&#39;s?</h3>
 						<p>Was ist Foodsharing und wie funktioniert es?</p>
-						<p>Was steckt hinter der Organisation und wie kannst du dich dort einbringen?</p>
+						<p>Was steckt hinter der Organisation und wie kannst Du Dich dort einbringen?</p>
 						<p>Diese und weitere Fragen beantworten wir in diesem Video.</p>
 					</div>
 				</div>

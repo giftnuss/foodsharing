@@ -111,7 +111,7 @@ var activity = {
 					+ '</div>'
 				+ '</div>'
 				+ '<div class="activity_feed_content_link">'
-					+ 'Tragt euch fließig ein, die nächsten Tage gibt es noch viele freie Kästchen hier ;-)'
+					+ 'Tragt Euch fließig ein, die nächsten Tage gibt es noch viele freie Kästchen hier ;-)'
 				+ '</div>'
 			+ '</div>'
 			+ '<div class="js_feed_comment_border">'

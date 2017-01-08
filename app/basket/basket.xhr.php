@@ -145,7 +145,7 @@ class BasketXhr extends Control
 		{
 			return array(
 				'status' => 1,
-				'script' => 'pulseInfo("Bitte gib in deinem Profil eine Adresse ein!");'
+				'script' => 'pulseInfo("Bitte gib in Deinem Profil eine Adresse ein!");'
 			);
 		}
 		

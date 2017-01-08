@@ -484,8 +484,8 @@ class SettingsView extends View
 	{
 		$url = BASE_URL.'/api.php?f=cal&fs='.fsId().'&key='.$token.'&opts=s';
 		return v_field('
-<p>Du kannst Deinen Abholkalender auch mit einem Kalenderprogramm deiner Wahl ansehen. Dazu abboniere folgenden Kalender.</p>
-<p>Hinweis: Halte den Link unbedingt geheim, er enthält einen Schlüssel, um ohne Passwort auf deinen Account zuzugreifen.</p>
+<p>Du kannst Deinen Abholkalender auch mit einem Kalenderprogramm Deiner Wahl ansehen. Dazu abboniere folgenden Kalender.</p>
+<p>Hinweis: Halte den Link unbedingt geheim, er enthält einen Schlüssel, um ohne Passwort auf Deinen Account zuzugreifen.</p>
 <p>Hinweis: Dein Kalenderprogramm muss den Kalender regelmäßig neu synchronisieren. Nur dann tauchen neue Abholtermine auf!</p>
 
 				<table style="border-spacing: 10px;border-collapse: separate;">
@@ -556,7 +556,7 @@ class SettingsView extends View
 	
 	});');
 	
-		$oeff = v_form_radio('photo_public',array('desc'=>'Du solltest zumindest intern den Menschen in Deiner Umgebung ermöglichen Dich zu kontaktieren. So kannst Du von anderen Foodsavern eingeladen werden, Lebensmittel zu retten und ihr Euch einander kennen lernen.','values' => array(
+		$oeff = v_form_radio('photo_public',array('desc'=>'Du solltest zumindest intern den Menschen in Deiner Umgebung ermöglichen Dich zu kontaktieren. So kannst Du von anderen Foodsavern eingeladen werden, Lebensmittel zu retten und Ihr Euch einander kennen lernen.','values' => array(
 				array('name' => 'Ja, ich bin einverstanden, dass mein Name und mein Foto veröffentlicht werden','id' => 1),
 				array('name' => 'Bitte nur meinen Namen veröffentlichen','id' => 2),
 				array('name' => 'Meinen Daten nur intern anzeigen','id' => 3),
@@ -627,7 +627,7 @@ class SettingsView extends View
 				v_form_date('geb_datum',array('required' => true, 'yearRangeFrom' => date('Y')-120, 'yearRangeTo' => date('Y') - 8)),
 				$communications,
 				$position,
-				v_form_textarea('about_me_public',array('desc'=>'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz, hier unsere Vorlage: http://foodsharing.de/ueber-uns Gerne kannst du auch Deine Website, Projekt oder sonstiges erwähnen, was Du öffentlich an Informationen teilen möchtest, die vorteilhaft sind.')),
+				v_form_textarea('about_me_public',array('desc'=>'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz, hier unsere Vorlage: http://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du öffentlich an Informationen teilen möchtest, die vorteilhaft sind.')),
 				$oeff
 		),array('submit'=>s('save')));
 	}

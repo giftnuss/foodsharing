@@ -1925,7 +1925,7 @@ function getHead()
 			$g_head.'
 
 <meta property="og:title" content="Lebensmittel teilen, statt wegwerfen - foodsharing Deutschland" />
-<meta property="og:description" content="Auf foodsharing kannst Du deine Lebensmitteln vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben" />
+<meta property="og:description" content="Auf foodsharing kannst Du Deine Lebensmitteln vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben" />
 <meta property="og:image" content="http://foodsharing.de/img/foodsharinglogo_200px.png" />
 <meta property="og:url" content="http://foodsharing.de" />';
 }

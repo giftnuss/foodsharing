@@ -106,7 +106,7 @@ else if(S::may('fs'))
 	if($val['photo_public'] == 0)
 	{
 		$g_data['photo_public'] = 1;
-		$elements[] = v_form_radio('photo_public',array('desc'=>'Du solltest zumindest intern den Menschen in Deiner Umgebung ermöglichen Dich zu kontaktieren. So kannst Du von anderen Foodsavern eingeladen werden, Lebensmittel zu retten und ihr Euch einander kennen lernen.','values' => array(
+		$elements[] = v_form_radio('photo_public',array('desc'=>'Du solltest zumindest intern den Menschen in Deiner Umgebung ermöglichen Dich zu kontaktieren. So kannst Du von anderen Foodsavern eingeladen werden, Lebensmittel zu retten und Ihr Euch einander kennen lernen.','values' => array(
 				array('name' => 'Ja, ich bin einverstanden, dass mein Name und mein Foto veröffentlicht werden','id' => 1),
 				array('name' => 'Bitte nur meinen Namen veröffentlichen','id' => 2),
 				array('name' => 'Meinen Daten nur intern anzeigen','id' => 3),

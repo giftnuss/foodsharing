@@ -175,7 +175,7 @@ var join = {
 				
 				if($('#join_avatar_error').val() == '0' && $('#join_avatar').val() == '')
 				{
-					if(!confirm('Du hast kein Foto hochgeladen. Beachte, dass ein passbildähnliches Foto benötigt wird, wenn du später auch als Foodsaver aktiv werden möchtest. Ohne Foto fortfahren?'))
+					if(!confirm('Du hast kein Foto hochgeladen. Beachte, dass ein passbildähnliches Foto benötigt wird, wenn Du später auch als Foodsaver aktiv werden möchtest. Ohne Foto fortfahren?'))
 					{
 						return false;
 						check = false;

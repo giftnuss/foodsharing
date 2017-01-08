@@ -154,7 +154,7 @@ class ProfileXhr extends Control
 		{
 			return array(
 					'status' => 1,
-					'script' => 'pulseError("Du kannst nur Termine aus deinem eigenen Bezirk löschen.");'
+					'script' => 'pulseError("Du kannst nur Termine aus Deinem eigenen Bezirk löschen.");'
 			);
 		}
 	}
