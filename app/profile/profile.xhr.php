@@ -76,7 +76,7 @@ class ProfileXhr extends Control
 			{
 				return array(
 					'status' => 1,
-					'script' => 'pulseError("Bitte gebe mindestens einen 100 Zeichen langen Text zu Deiner Banane ein.");'
+					'script' => 'pulseError("Bitte gib mindestens einen 100 Zeichen langen Text zu Deiner Banane ein.");'
 				);
 			}
 			

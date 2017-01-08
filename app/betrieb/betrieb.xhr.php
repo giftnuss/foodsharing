@@ -229,7 +229,7 @@ class BetriebXhr extends Control
 					$dia = new XhrDialog();
 				
 					$dia->setTitle('Fehlende Zuordnung');
-					$dia->addContent(v_info('Für folgende Betriebe wurde noch kein Bezirk zugeordnet, bitte gebe einen Bezirk an.'));
+					$dia->addContent(v_info('Für folgende Betriebe wurde noch kein Bezirk zugeordnet. Bitte gib einen Bezirk an!'));
 					$dia->addOpt('width', '650px');
 					$dia->noOverflow();
 					
