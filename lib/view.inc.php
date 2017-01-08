@@ -1525,7 +1525,7 @@ function v_form_select($id,$option = array())
 
 	$out = '
 	<select class="input select value" name="'.$id.'" id="'.$id.'">
-		<option value="">Bitte Ausw&auml;hlen...</option>';
+		<option value="">Bitte ausw&auml;hlen...</option>';
 	if(!empty($values))
 	{
 		foreach ($values as $v)

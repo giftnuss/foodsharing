@@ -48,7 +48,7 @@ class EventXhr extends Control
 		{
 			$dialog = new XhrDialog();
 			$dialog->setTitle('Einladung');
-			$dialog->addContent(v_info('Lieben Dank! Schön, dass du vielleicht dabei bist.'));
+			$dialog->addContent(v_info('Lieben Dank! Schön, dass Du vielleicht dabei bist.'));
 			$dialog->addButton('Zum Event', 'goTo(\'/?page=event&id='.(int)$_GET['id'].'\');');
 			$dialog->addAbortButton();
 				
