@@ -21,9 +21,9 @@ $g_lang['fs_partners'] = 'Deine Patenkinder';
 $g_lang['welcome'] = 'Willkommen {name}! Schön, dass Du da bist!';
 $g_lang['no_saved_food'] = 'Viel Spaß beim Retten!';
 $g_lang['saved_food'] = 'Du hast schon {weight} Kilos gerettet!';
-$g_lang['new_foodbaskets'] = 'Neuste Essenkörbe';
-$g_lang['close_foodbaskets'] = 'Essenkörbe in Deiner Nähe';
+$g_lang['new_foodbaskets'] = 'Neueste Essenskörbe';
+$g_lang['close_foodbaskets'] = 'Essenskörbe in Deiner Nähe';
 $g_lang['more_baskets'] = 'Alle Körbe auf der Karte';
-$g_lang['new_basket'] = 'Neuer Essenkorb';
+$g_lang['new_basket'] = 'Neuer Essenskorb';
 $g_lang['all_baskets'] ='Alle Körbe auf der Karte';
  ?>

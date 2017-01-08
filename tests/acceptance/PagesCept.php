@@ -7,7 +7,7 @@ $I->see('Die Berliner');
 
 $I->amOnPage('/essenskoerbe');
 $I->seeCurrentUrlEquals('/essenskoerbe/find'); // it redirects
-$I->see('Essenkörbe');
+$I->see('Essenskörbe');
 
 $I->amOnPage('/faq');
 $I->see('1. Ist es kostenlos, sich bei foodsharing.de anzumelden?');

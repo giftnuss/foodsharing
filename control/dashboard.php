@@ -488,7 +488,7 @@ else if(S::may('fs'))
 	}
 	
 	/*
-	 * Essenkörbe
+	 * Essenskörbe
 	 */
 	
 	if($baskets = $db->closeBaskets())
