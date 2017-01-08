@@ -48,7 +48,7 @@ class GroupsControl extends Control
 			}
 			else
 			{
-				addContent( v_info('Hier gibts noch keine Arbeitsgruppen'));
+				addContent( v_info('Hier gibt es noch keine Arbeitsgruppen'));
 			}
 		}
 		
