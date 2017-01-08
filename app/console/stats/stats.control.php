@@ -141,7 +141,7 @@ class StatsControl extends ConsoleControl
 					$fetchcount = $this->model->getBetriebFetchCount($bid,$fs['foodsaver_id'],$fs['stat_last_update'],$fs['stat_fetchcount']);
 						
 					$this->model->updateBetriebStat(
-							$bid, // betrieb id
+							$bid, // Betrieb id
 							$fs['foodsaver_id'], // foodsaver_id
 							$newdata['stat_add_date'], // add date
 							$newdata['stat_first_fetch'], // erste mal abholen

@@ -207,7 +207,7 @@ else if(S::may('fs'))
 		addJs('becomeBezirk();');
 	}
 	/*
-	 * check is there are betrieb not ordered to an bezirk
+	 * check is there are Betrieb not ordered to an bezirk
 	 */
 	else if (isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich']) )
 	{
