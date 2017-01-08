@@ -46,10 +46,10 @@ $g_lang['find_representation'] = 'Vertretung finden';
 $g_lang['choose_fetcher'] = 'Abholer auswählen';
 $g_lang['add_new'] = 'Neuen Betrieb eintragen';
 $g_lang['you_responsible'] = 'Betriebe für die Du verantwortlich bist';
-$g_lang['you_fetcher'] = 'Betriebe bei denen Du Essen abholst';
+$g_lang['you_fetcher'] = 'Betriebe bei denen Du Lebensmittel abholst';
 $g_lang['more_stores'] = 'Weitere Betriebe aus {name}';
 $g_lang['your_store'] = 'Für Diesen Betrieb bist Du verantwortlich';
-$g_lang['not_fetching'] = 'Du holst noch kein Essen ab.';
+$g_lang['not_fetching'] = 'Du holst noch keine Lebensmittel ab.';
 $g_lang['change_times'] = 'Abholzeiten ändern';
 $g_lang['change_fetcher'] = 'Abholer ändern';
 $g_lang['verantwortlicher'] = 'Verantwortliche Mitglieder';
@@ -77,7 +77,7 @@ $g_lang['date_add_successful'] = '<p><b>Termine wurden erfolgreich hinzugefügt<
 $g_lang['del_and_send'] = 'Termin löschen und Nachricht senden';
 $g_lang['tpl_msg_to_team'] = 'Liebes {BETRIEB} Team, 
 
-am {DATE} kann ich leider doch kein Essen abholen. Daher suche ich dringend eine Vertretung. Kannst Du für mich einspringen?
+am {DATE} kann ich leider doch keine Lebensmittel abholen. Daher suche ich dringend eine Vertretung. Kannst Du für mich einspringen?
 
 Liebe Grüße';
 $g_lang['team_msg'] = 'Nachricht ans ganze Team';

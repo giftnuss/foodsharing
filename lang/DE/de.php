@@ -172,7 +172,7 @@ $g_lang['betrieb_status_0'] = $g_lang['betrieb_status_2'];
 $g_lang['specials'] = 'Besonderheiten';
 
 $g_lang['photo_public'] = 'Kontaktaufnahme durch andere Foodsaver';
-$g_lang['want_to_fetch'] = 'Hier würde ich gerne Essen abholen';
+$g_lang['want_to_fetch'] = 'Hier würde ich gerne Lebensmittel abholen';
 $g_lang['to_team_page'] = 'Zur Teamseite';
 $g_lang['status'] = 'Aktueller Status';
 $g_lang['new_theme'] = 'Neues Thema';

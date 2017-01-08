@@ -609,7 +609,7 @@ function u_myBetriebe($betriebe)
 		}
 		$list .= '
 		</ul>';
-		$out .= v_field($list, 'Du holst Essen ab bei',array('class'=>'ui-padding'));
+		$out .= v_field($list, 'Du holst Lebensmittel ab bei',array('class'=>'ui-padding'));
 	}
 
 	if(!empty($betriebe['waitspringer']))
