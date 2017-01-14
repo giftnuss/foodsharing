@@ -1477,7 +1477,7 @@ class ManualDb extends Db
 		if($bezirk_id == false)
 		{
 			return array(
-				'name' => 'Foodsharing e.V.',
+				'name' => 'Foodsharing e.<span style="white-space:nowrap">&thinsp;</span>V.',
 				'email' => DEFAULT_EMAIL,
 				'email_name' => DEFAULT_EMAIL_NAME
 			);

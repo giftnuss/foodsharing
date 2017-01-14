@@ -170,7 +170,7 @@ class DashboardView extends View
 		addJs('activity.init();');
 		addContent('
 	<div class="head ui-widget-header ui-corner-top">
-		Updates Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>
+		Updates-Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>
 	</div>
 	<div id="activity">
 		<div class="loader" style="padding:40px;background-image:url(/img/469.gif);background-repeat:no-repeat;background-position:center;"></div>
