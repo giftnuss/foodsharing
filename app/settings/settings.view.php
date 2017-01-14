@@ -163,7 +163,7 @@ class SettingsView extends View
 	
 	public function quizSession($session,$try_count,$model)
 	{
-		$infotext = v_error('mit '.$session['fp'].' von maximal '.$session['maxfp'].' Fehlerpunkten leider nicht bestanden. <a href="http://wiki.lebensmittelretten.de/" target="_blank">Informiere Dich im Wiki</a> für den nächsten Versuch.<p>Lese Dir hier noch mal in Ruhe die Fragen und die dazugehörigen Antworten durch, damit es beim nächsten Mal besser klappt</p>');
+		$infotext = v_error('mit '.$session['fp'].' von maximal '.$session['maxfp'].' Fehlerpunkten leider nicht bestanden. <a href="http://wiki.lebensmittelretten.de/" target="_blank">Informiere Dich im Wiki</a> für den nächsten Versuch.<p>Lies Dir hier noch mal in Ruhe die Fragen und die dazugehörigen Antworten durch, damit es beim nächsten Mal besser klappt</p>');
 		$subtitle = 'Leider nicht bestanden';
 		if($session['fp'] < $session['maxfp'])
 		{
