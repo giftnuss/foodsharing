@@ -281,9 +281,9 @@ class GroupsView extends View
 		$apply = v_form_select('apply_type',array(
 			'values' => array(
 				array('id' => 0, 'name' => 'Niemand (geschlossene Gruppe)'),
-				array('id' => 1, 'name' => 'jeder der bestimmte Vertrauenspunkte erfüllt'),
-				array('id' => 2, 'name' => 'jeder darf sich bewerben'),
-				array('id' => 3, 'name' => 'jeder kann sich ohne Bewerbung einklinken')	
+				array('id' => 1, 'name' => 'Jeder, der bestimmte Vertrauenspunkte erfüllt'),
+				array('id' => 2, 'name' => 'Jeder darf sich bewerben'),
+				array('id' => 3, 'name' => 'Jeder kann sich ohne Bewerbung einklinken')
 			)		
 		)) . 
 		'<div id="addapply">' .
