@@ -162,12 +162,12 @@ $g_lang['rolle_4_0'] = 'Orgamensch';
 $g_lang['rolle_4_1'] = 'Orgamensch';
 $g_lang['rolle_4_2'] = 'Orgamensch';
 
-$g_lang['betrieb_status_6'] = 'Spendet an Tafel etc. und wirft nichts weg';
-$g_lang['betrieb_status_5'] = 'Betrieb spendet bereits';
-$g_lang['betrieb_status_4'] = 'Betrieb will nicht kooperieren';
-$g_lang['betrieb_status_3'] = 'Betrieb ist bereit zu spenden :)';
-$g_lang['betrieb_status_2'] = 'Verhandlungen laufen';
-$g_lang['betrieb_status_1'] = 'Es besteht noch kein Kontakt';
+$g_lang['betrieb_status_6'] = 'Spendet an Tafel etc. und wirft nichts weg.';
+$g_lang['betrieb_status_5'] = 'Betrieb spendet bereits.';
+$g_lang['betrieb_status_4'] = 'Betrieb will nicht kooperieren.';
+$g_lang['betrieb_status_3'] = 'Betrieb ist bereit zu spenden.';
+$g_lang['betrieb_status_2'] = 'Verhandlungen laufen.';
+$g_lang['betrieb_status_1'] = 'Es besteht noch kein Kontakt.';
 $g_lang['betrieb_status_0'] = $g_lang['betrieb_status_2'];
 $g_lang['specials'] = 'Besonderheiten';
 

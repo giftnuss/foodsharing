@@ -37,7 +37,7 @@ migratedb foodsharing || true
 $dir/build-assets
 
 echo
-echo "  Go visit http://localhost:18080 now :)"
+echo "  Go visit http://localhost:18080 now!"
 echo
 echo "  Or view logs with:"
 echo
