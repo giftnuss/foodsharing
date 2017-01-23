@@ -1234,7 +1234,7 @@ function getSettingsMenu()
 	$mailbox = '';
 	if(S::get('mailbox'))
 	{
-		$mailbox = '<li><a href="/?page=mailbox"><i class="fa fa-envelope"></i> E-Mail Postfach</a></li>';
+		$mailbox = '<li><a href="/?page=mailbox"><i class="fa fa-envelope"></i> E-Mail-Postfach</a></li>';
 	}
 	$default = '<li class="g_settings"><a href="/profile/'.fsId().'" class="fNiv corner-all" style="background-image:url('.img().');"><span>&nbsp;</span></a>
 				    <ul class="jmenu-settings">
