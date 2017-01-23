@@ -47,7 +47,7 @@ class QuizXhr extends Control
 				{
 					return array(
 						'status' => 1,
-						'script' => 'pulseError("Du solltest Eine Frage angeben ;)");'
+						'script' => 'pulseError("Du solltest eine Frage angeben ;)");'
 					);
 				}
 			}
@@ -110,7 +110,7 @@ class QuizXhr extends Control
 				{
 					return array(
 							'status' => 1,
-							'script' => 'pulseError("Du solltest Einen Text angeben ;)");'
+							'script' => 'pulseError("Du solltest einen Text angeben ;)");'
 					);
 				}
 			}
@@ -145,7 +145,7 @@ class QuizXhr extends Control
 				{
 					return array(
 							'status' => 1,
-							'script' => 'pulseError("Du solltest Einen Text angeben ;)");'
+							'script' => 'pulseError("Du solltest einen Text angeben ;)");'
 					);
 				}
 			}
