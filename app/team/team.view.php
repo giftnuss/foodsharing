@@ -74,14 +74,6 @@ class TeamView extends View
 	
 	public function teamlist($team, $header)
 	{
-		$firsts = array(
-			56 => true,
-			37 => true,
-			913 => true
-		);
-		
-		shuffle($team);
-		
 		foreach ($team as $key => $t)
 		{
 			if(isset($firsts[(int)$t['id']]))
