@@ -35,7 +35,8 @@ class TeamModel extends Model
 					fs.mailbox_id = mb.id
 
 				WHERE 
-					hb.bezirk_id = 258
+					hb.bezirk_id = 1373
+				ORDER BY fs.name
 		'))
 		{
 			foreach ($orgas as $o)
