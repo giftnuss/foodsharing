@@ -21,7 +21,21 @@
 					</ul>
 				</div>
 		    </div>
-		    <div class="pure-u-1 pure-u-md-16-24">
+			<div class="pure-u-1 pure-u-md-4-24" style="padding-top:30px">
+				<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+
+					<input type="hidden" name="cmd" value="_s-xclick">
+
+					<input type="hidden" name="hosted_button_id" value="CLPZCSCKGNXE4">
+
+					<input type="image" src="https://www.paypalobjects.com/de_DE/DE/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="Jetzt einfach, schnell und sicher online spenden – mit PayPal.">
+
+					<img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1">
+
+				</form>
+			</div>
+
+		    <div class="pure-u-1 pure-u-md-12-24">
 		    	<div class="inside">
 <?php
 		if(strpos($_SERVER['HTTP_HOST'], 'foodsharing.at') !== false) {
