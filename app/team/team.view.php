@@ -88,13 +88,7 @@ class TeamView extends View
 		
 		foreach ($team as $t)
 		{
-			if($t['contact_public'])
-			{
-				$socials = '<i class="fa fa-envelope"></i>';
-			} else {
-				$socials = '';
-			}
-			
+			$socials = '&nbsp;';
 			if($t['homepage'] != '')
 			{
 				$socials .= '<i class="fa fa-globe"><span>' . $t['homepage'] . '</span></i>';
