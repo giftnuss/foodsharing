@@ -207,7 +207,7 @@ class PassgenControl extends Control
 		if(!empty($nophoto))
 		{
 			$last = array_pop($nophoto);
-			info(implode(', ', $nophoto).' und '.$last.' haben noch kein Foto hochgeladen und ihr Ausweis konnte nicht erstellt werden');
+			info(implode(', ', $nophoto).' und '.$last.' haben noch kein Photo hochgeladen und Ihr Ausweis konnte nicht erstellt werden');
 		}
 
 		$this->model->updateLastGen($is_generated);
