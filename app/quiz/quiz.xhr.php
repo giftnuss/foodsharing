@@ -1223,12 +1223,12 @@ class QuizXhr extends Control
 			$wrongAnswers = count($rightQuestions[$question['id']]['answers']);
 		}
 
-		// wie viel Prozent sind falsch?
+		// wie viel prozent sind falsch?
 		$percent = $this->percentFrom($checkCount, $wrongAnswers);
 		
 		$fp = $this->percentTo($question['fp'], $percent);
 		
-		// wenn alles falsch angeklickt wurde, das aber nicht stimmt, gibt's die volle Fehlerpunktezahl
+		// wenn alles falsch angeklickt wurde das aber nciht stimmt gibts die volle fehlerpunkt zahl
 		if(
 			(!$everything_false && !isset($question['noco']))
 			||
