@@ -89,7 +89,7 @@ class IndexView extends View
 	{
 		return '
 		<div class="countnumber">
-			<p>Schon</p>
+			<p>schon</p>
 			<p class="number"><span id="stat-count-number">0</span><span style="white-space:nowrap">&thinsp;</span>kg</p>
 			<p>gerettet!</p>
 		</div>';

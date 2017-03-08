@@ -6,7 +6,7 @@ class ProfileView extends View
 	public function profile($wallposts,$userCompanies = null, $userCompaniesCount = null, $fetchDates = null)
 	{
 		$page = new vPage($this->foodsaver['name'], $this->infos());
-		$page->addSection($wallposts,'Status-Updates von ' . $this->foodsaver['name']);
+		$page->addSection($wallposts,'Statusupdates von ' . $this->foodsaver['name']);
 
 		if(fsId() != $this->foodsaver['id'])
 		{
