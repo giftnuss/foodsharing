@@ -304,7 +304,7 @@
 .ui-autocomplete { position: absolute; cursor: default; }	
 
 /* workarounds */
-* html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100 % in IE6 */
+* html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */
 
 /*
  * jQuery UI Menu 1.8.6

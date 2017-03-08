@@ -411,7 +411,7 @@ class SettingsView extends View
 				}
 				else
 				{
-					$ftext = ' hast Du leider nur zu '.(100-$r['percent']).' % richtig beantwortet.';
+					$ftext = ' hast Du leider nur zu '.(100-$r['percent']).'% richtig beantwortet.';
 				}
 			}
 			

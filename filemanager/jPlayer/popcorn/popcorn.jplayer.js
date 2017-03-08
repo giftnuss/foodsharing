@@ -451,7 +451,7 @@
 					 *  videoDurationPlus = Number.MAX_VALUE; // Who cares if the padding is close to the real duration?
 					 * So if you trigger loadeddata before the duration is correct, the track event padding is screwed up. (It pads the start, not the end... Well, duration+1 = 0+1 = 1s)
 					 * That line makes the MP3 Flash fallback difficult to setup. The whole MP3 will need to load before the duration is known.
-					 * Planning on using a NaN for duration until a >0 value is found... Except with MP3, where seekPercent must be 100 % before setting the duration.
+					 * Planning on using a NaN for duration until a >0 value is found... Except with MP3, where seekPercent must be 100% before setting the duration.
 					 * Why not just use a NaN during init... And then correct the duration later?
 					 */
 

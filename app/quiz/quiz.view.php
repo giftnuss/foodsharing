@@ -350,7 +350,7 @@ class QuizView extends View
 			}
 			
 			$out .= '
-				 <h3><strong>Frage '.(int)$e['number'].' '.(100-$e['percent']).' % richtig</strong> - '.$e['userfp'].'/'.$e['fp'].' Fehlerpunkten</h3>
+				 <h3><strong>Frage '.(int)$e['number'].' '.(100-$e['percent']).'% richtig</strong> - '.$e['userfp'].'/'.$e['fp'].' Fehlerpunkten</h3>
 				 <div style="background-color:#FFFFFF;">
 				 	<p style="font-style:italic;padding:15px;">&bdquo;'.($e['text']).'&ldquo;</p>
 				 	'.$exp.'

@@ -139,22 +139,22 @@ if (!defined('QRCODEDEFS')) {
 	// Error correcting is defined in 4 level as below.
 
 	/**
-	 * Error correction level L : About 7 % or less errors can be corrected.
+	 * Error correction level L : About 7% or less errors can be corrected.
 	 */
 	define('QR_ECLEVEL_L', 0);
 
 	/**
-	 * Error correction level M : About 15 % or less errors can be corrected.
+	 * Error correction level M : About 15% or less errors can be corrected.
 	 */
 	define('QR_ECLEVEL_M', 1);
 
 	/**
-	 * Error correction level Q : About 25 % or less errors can be corrected.
+	 * Error correction level Q : About 25% or less errors can be corrected.
 	 */
 	define('QR_ECLEVEL_Q', 2);
 
 	/**
-	 * Error correction level H : About 30 % or less errors can be corrected.
+	 * Error correction level H : About 30% or less errors can be corrected.
 	 */
 	define('QR_ECLEVEL_H', 3);
 
