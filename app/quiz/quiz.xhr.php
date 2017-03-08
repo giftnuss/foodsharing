@@ -428,7 +428,7 @@ class QuizXhr extends Control
 		
 		if(S::get('hastodoquiz-id') == 1)
 		{
-			$dia->addButton('jetzt mit dem Quiz meine Rolle als Foodsaver bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
+			$dia->addButton('jetzt mit dem Quiz meine Foodsaver-Rolle bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
 		}
 		else if(S::get('hastodoquiz-id') == 2)
 		{
@@ -460,7 +460,7 @@ class QuizXhr extends Control
 				
 				if(S::get('hastodoquiz-id') == 1)
 				{
-					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Foodsaver bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
+					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Foodsaver-Rolle bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
 				}
 				else if(S::get('hastodoquiz-id') == 2)
 				{
