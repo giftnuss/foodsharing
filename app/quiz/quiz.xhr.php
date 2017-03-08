@@ -460,17 +460,17 @@ class QuizXhr extends Control
 				
 				if(S::get('hastodoquiz-id') == 1)
 				{
-					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Foodsaver Rolle bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
+					$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Foodsaver Rolle bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
 				}
 				else if(S::get('hastodoquiz-id') == 2)
 				{
 					$content_id = 34;
-					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche/r Rolle bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bip\');');
+					$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche/r Rolle bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bip\');');
 				}
 				else if(S::get('hastodoquiz-id') == 3)
 				{
 					$content_id = 35;
-					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Botschafter bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
+					$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Rolle als Botschafter bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
 				}
 				
 				$content = $this->model->getContent($content_id);
