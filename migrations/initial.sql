@@ -1902,7 +1902,7 @@ ALTER TABLE `fs_betrieb_kategorie`
 -- Indexes for table `fs_betrieb_notiz`
 --
 ALTER TABLE `fs_betrieb_notiz`
- ADD PRIMARY KEY (`id`), ADD KEY `betrieb_notitz_FKIndex1` (`betrieb_id`), ADD KEY `betrieb_notiz_FKIndex2` (`foodsaver_id`);
+ ADD PRIMARY KEY (`id`), ADD KEY `betrieb_notiz_FKIndex1` (`betrieb_id`), ADD KEY `betrieb_notiz_FKIndex2` (`foodsaver_id`);
 
 --
 -- Indexes for table `fs_betrieb_status`
