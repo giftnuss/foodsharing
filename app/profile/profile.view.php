@@ -774,7 +774,7 @@ class ProfileView extends View
 							array('name' => 'Anschrift','val'=>$this->foodsaver['anschrift']),
 							array('name' => 'PLZ / Ort','val'=>$this->foodsaver['plz'].' '.$this->foodsaver['stadt']),
 							array('name' => 'Telefon','val' => $this->foodsaver['telefon'].'<br />'.$this->foodsaver['handy']),
-							array('name' => 'E-Mail-Adresse', 'val' => '<a href="mailto:'.$this->foodsaver['email'].'">'.$this->foodsaver['email'].'</a>')
+							array('name' => 'E-Mail Adresse', 'val' => '<a href="mailto:'.$this->foodsaver['email'].'">'.$this->foodsaver['email'].'</a>')
 						)).'
 					</div>
 				</div>';

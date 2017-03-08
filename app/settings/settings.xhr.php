@@ -20,11 +20,11 @@ class SettingsXhr extends Control
 		if(may())
 		{
 			$dia = new XhrDialog();
-			$dia->setTitle('E-Mail-Adresse ändern');
+			$dia->setTitle('E-Mail Adresse ändern');
 			
 			$dia->addContent($this->view->changeMail());
 			
-			$dia->addButton('E-Mail-Adresse ändern', 'ajreq(\'changemail2\',{email:$(\'#newmail\').val()});');
+			$dia->addButton('E-Mail Adresse ändern', 'ajreq(\'changemail2\',{email:$(\'#newmail\').val()});');
 			
 			return $dia->xhrout();
 		}
@@ -42,7 +42,7 @@ class SettingsXhr extends Control
 			{
 				return array(
 					'status' => 1,
-					'script' => 'pulseError("Diese E-Mail-Adresse benutzt bereits jemand anderes.");'
+					'script' => 'pulseError("Diese E-Mail Adresse benutzt bereits jemand anderes.");'
 				);
 			}
 			$token = md5(uniqid(mt_rand(), true));
@@ -67,7 +67,7 @@ class SettingsXhr extends Control
 		{
 			return array(
 				'status' => 1,
-				'script' => 'pulseInfo(\'Mit der eingegebenen E-Mail-Adresse stimmt etwas nicht.\');'
+				'script' => 'pulseInfo(\'Mit der eingegebenen E-Mail Adresse stimmt etwas nicht.\');'		
 			);
 		}
 	}
@@ -77,7 +77,7 @@ class SettingsXhr extends Control
 		if($email = $this->model->getMailchange())
 		{
 			$dia = new XhrDialog();
-			$dia->setTitle('E-Mail-Adresse ändern');
+			$dia->setTitle('E-Mail Adresse ändern');
 
 			$dia->addContent($this->view->changemail3($email));
 			
@@ -108,14 +108,14 @@ class SettingsXhr extends Control
 						{
 							return array(
 								'status' => 1,
-								'script' => 'pulseInfo("Deine E-Mail-Adresse wurde geändert!");$("#'.$did.'").dialog("close");'
+								'script' => 'pulseInfo("Deine E-Mail Adresse wurde geändert!");$("#'.$did.'").dialog("close");'
 							);
 						}
 						else
 						{
 							return array(
 								'status' => 1,
-								'script' => 'pulseInfo(\'Die E-Mail-Adresse konnte nicht geändert werden, jemand anderes benutzt sie schon!\');'
+								'script' => 'pulseInfo(\'Die E-Mail Adresse konnte nicht geändert werden, jemand anderes benutzt sie schon!\');'		
 							);
 						}
 					}

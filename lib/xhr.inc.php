@@ -328,7 +328,7 @@ function xhr_profile($data)
 		}
 		if(isOrgaTeam())
 		{
-			$data[] = array('name' => 'E-Mail-Adresse', 'val' => $foodsaver['email']);
+			$data[] = array('name' => 'E-Mail Adresse', 'val' => $foodsaver['email']);
 			$data[] = array('name' => 'Adresse', 'val' => $foodsaver['anschrift'].'<br />'.$foodsaver['plz'].' '.$foodsaver['stadt']);
 		}
 	}
@@ -1013,7 +1013,7 @@ function xhr_continueMail($data)
 			sleep(2);
 		}
 		
-		return json_encode(array('left' => $mails_left,'status' => 1,'comment'=>'Versende E-Mails ... (aktuelle E-Mail-Adresse: '.$fs['email'].')'));
+		return json_encode(array('left' => $mails_left,'status' => 1,'comment'=>'Versende E-Mails ... (aktuelle E-Mail Adresse: '.$fs['email'].')'));
 	}
 	else
 	{

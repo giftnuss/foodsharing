@@ -57,7 +57,7 @@ class SettingsControl extends Control
 		
 		$menu = array();
 		$menu[] = array('name' => s('sleeping_user'), 'href' => '/?page=settings&sub=sleeping');
-		$menu[] = array('name' => 'E-Mail-Adresse ändern', 'click' => 'ajreq(\'changemail\');return false;');
+		$menu[] = array('name' => 'E-Mail Adresse ändern', 'click' => 'ajreq(\'changemail\');return false;');
 		
 		if($this->foodsaver['rolle'] == 0)
 		{

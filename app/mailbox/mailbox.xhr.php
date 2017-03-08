@@ -27,7 +27,7 @@ class MailboxXhr extends Control
 		{
 			return array(
 				'status' => 1,
-				'script' => 'pulseError("Mit der E-Mail-Adresse stimmt etwas nicht!");'
+				'script' => 'pulseError("Mit der E-Mail Adresse stimmt etwas nicht!");'
 			);
 		}
 		else

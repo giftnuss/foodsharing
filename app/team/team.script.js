@@ -27,7 +27,7 @@ $(function(){
 			{
 				$email.select();
 				$email.addClass('input-error');
-				pulseError('Bitte gib eine gültige E-Mail-Adresse ein damit wir Dir antworten können ;)');
+				pulseError('Bitte gib eine gültige E-Mail Adresse ein damit wir Dir antworten können ;)');
 			}
 			else
 			{

@@ -144,7 +144,7 @@ var join = {
 				
 				if(!checkEmail($('#login_email').val()))
 				{
-					pulseError('Mit Deiner E-Mail-Adresse stimmt etwas nicht');
+					pulseError('Mit Deiner E-Mail Adresse stimmt etwas nicht');
 					$('#login_email').select();
 					return false;
 					check = false;

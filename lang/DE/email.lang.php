@@ -7,7 +7,7 @@ $g_lang['personal_styling_desc'] = 'Um die Mail pers&ouml;nlicher zu gestalten k
 $g_lang['personal_styling'] = 'Persönliche Anrede';
 
 $g_lang['mode'] = 'Wie soll die Nachricht versendet werden?';
-$g_lang['recip_choosemanual'] = 'Eine E-Mail-Adresse pro Zeile, Name nach Semikolon (z. B. bli@blubb.de;Peter)';
+$g_lang['recip_choosemanual'] = 'Eine E-Mail Adresse pro Zeile, Name nach Semikolon (z.B. bli@blubb.de;Peter)';
 $g_lang['shure'] = 'Alles gechecked? Soll die E-Mail an alle foodsaver gesendet werden?';
-$g_lang['testemail'] = 'Test E-Mail-Adresse';
-$g_lang['mailbox_id'] = 'Absender E-Mail-Adresse';
+$g_lang['testemail'] = 'Test E-Mail Adresse';
+$g_lang['mailbox_id'] = 'Absender E-Mail Adresse';

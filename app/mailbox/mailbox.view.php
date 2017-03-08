@@ -368,7 +368,7 @@ class MailboxView extends View
 				$this = this;
 				if($this.value != "" && !checkEmail($this.value))
 				{
-					pulseError("Diese E-Mail-Adresse ist nicht korrekt");
+					pulseError("Diese E-Mail Adresse ist nicht korrekt");
 					$this.focus();	
 				}
 				else
