@@ -3713,7 +3713,7 @@ class ManualDb extends Db
 		WHERE 	`id` = '.$this->intval($id));
 	}
 
-	/* retrieves all biebs that are biebs for a given bezirk (by being bieb in a Betrieb that is part of that bezirk, which is semantically not the same we use on platform) */
+	/* retrieves all biebs that are biebs for a given bezirk (by being bieb in a betrieb that is part of that bezirk, which is semantically not the same we use on platform) */
 	public function getBiebIds($bezirk)
 	{
 		return $this->qCol('SELECT DISTINCT bt.foodsaver_id FROM `'.PREFIX.'bezirk_closure` c

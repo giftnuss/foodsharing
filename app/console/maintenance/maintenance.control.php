@@ -42,7 +42,7 @@ class MaintenanceControl extends ConsoleControl
 		$this->deleteImages();
 
 		/*
-		 * delete unconfirmed Betrieb dates in the past
+		 * delete unconfirmed betrieb dates in the past
 		 */
 		$this->deleteUnconformedFetchDates();
 
