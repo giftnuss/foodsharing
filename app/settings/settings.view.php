@@ -484,7 +484,7 @@ class SettingsView extends View
 	{
 		$url = BASE_URL.'/api.php?f=cal&fs='.fsId().'&key='.$token.'&opts=s';
 		return v_field('
-<p>Du kannst Deinen Abholkalender auch mit einem Kalenderprogramm Deiner Wahl ansehen. Abonniere Dir dazu folgenden Kalender!</p>
+<p>Du kannst Deinen Abholkalender auch mit einem Kalenderprogramm Deiner Wahl ansehen. Dazu abboniere folgenden Kalender.</p>
 <p>Hinweis: Halte den Link unbedingt geheim, er enthält einen Schlüssel, um ohne Passwort auf Deinen Account zuzugreifen.</p>
 <p>Hinweis: Dein Kalenderprogramm muss den Kalender regelmäßig neu synchronisieren. Nur dann tauchen neue Abholtermine auf!</p>
 
