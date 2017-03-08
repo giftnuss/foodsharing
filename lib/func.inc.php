@@ -684,7 +684,7 @@ function getMenu()
 							<li><a href="/fairteilerrettung">Rette die Fair-Teiler</a></li>
 						</ul>
 					</li>
-					<li><a onclick="ajreq(\'join\',{app:\'login\'});return false;" class="fNiv" href="/?page=join">Mach mit!</a></li>
+					<li><a onclick="ajreq(\'join\',{app:\'login\'});return false;" class="fNiv" href="/?page=join">Mach-Mit!</a></li>
 					<!-- <li><a class="fNiv" href="/?page=login" onclick="ajreq(\'login\',{app:\'login\'});return false;">Login</a></li> -->
 				</ul>',
 			'mobile' => '
@@ -696,7 +696,7 @@ function getMenu()
 					<option value="/leeretonne">Leere Tonne</option>
 					<option value="/fairteilerrettung">Rette die Fair-Teiler</option>
 					<option value="/unterstuetzung">Unterstützung</option>
-					<option value="/mach-mit">Mach mit!</option>
+					<option value="/mach-mit">Mach-Mit!</option>
 					<option value="/login">Login</option>
 				</select>'
 		
