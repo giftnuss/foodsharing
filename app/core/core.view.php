@@ -105,7 +105,7 @@ class View
 		<p>
 			Online-Sprachkonferenzen machen wir mit Mumble	
 		</p>
-		<p>Unser Mumble-Server:<br />mumble.lebensmittelretten.de</p>
+		<p>Unser Mumble Server:<br />mumble.lebensmittelretten.de</p>
 		<p>Anleitung unter: <a target="_blank" href="http://wiki.lebensmittelretten.de/Mumble">wiki.lebensmittelretten.de/Mumble</a></p>
 		', 'Ort',array('class' => 'ui-padding'));
 		
