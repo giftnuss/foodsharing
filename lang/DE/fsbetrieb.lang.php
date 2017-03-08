@@ -77,7 +77,7 @@ $g_lang['date_add_successful'] = '<p><b>Termine wurden erfolgreich hinzugefügt<
 $g_lang['del_and_send'] = 'Termin löschen und Nachricht senden';
 $g_lang['tpl_msg_to_team'] = 'Liebes {BETRIEB} Team, 
 
-am {DATE} kann ich leider doch kein Essen abholen. Daher suche ich dringend eine Vertretung. Kannst Du für mich einspringen?
+am {DATE} kann ich leider doch kein Essen abholen. Daher suche ich dringend eine Vertretung, kannst Du für mich einspringen?
 
 Liebe Grüße';
 $g_lang['team_msg'] = 'Nachricht ans ganze Team';
@@ -99,6 +99,6 @@ $g_lang['not_verified'] = 'Dein Account wurde noch nicht von einem Botschafter v
 $g_lang['team_status'] = 'Teamstatus';
 $g_lang['reportreason'] = 'Aus welchem grun möchtest Du den Foodsaver melden?';
 $g_lang['reportmessage'] = 'Beschreibe den Vorfall noch etwas genauer';
-$g_lang['fetch_history'] = 'Abholungshistorie';
+$g_lang['fetch_history'] = 'Abholungs-History';
 $g_lang['stat_fetchcount'] = 'Letzte Abholung am {date}';
 $g_lang['stat_fetchcount_none'] = 'Noch keine Lebensmittel abgeholt';

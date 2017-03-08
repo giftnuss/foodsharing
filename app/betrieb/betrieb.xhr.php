@@ -78,7 +78,7 @@ class BetriebXhr extends Control
 		if(S::may() && ($this->model->isVerantwortlich($_GET['bid']) || S::may('orga')))
 		{
 			$dia = new XhrDialog();
-			$dia->setTitle('Abholungshistorie');
+			$dia->setTitle('Abholungs-History');
 			
 			$id = 'daterange';
 			
