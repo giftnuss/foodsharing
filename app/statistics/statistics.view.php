@@ -20,7 +20,7 @@ class StatisticsView extends View
 					</td>
 					<td class="city">
 						<h4>'.$c['name'].'</h4>
-						<p>'.str_replace(',00', '', number_format($c['fetchweight'], 2, ',', '.')).' kg ('.$c['percent'].'%)</p>
+						<p>'.str_replace(',00', '', number_format($c['fetchweight'], 2, ',', '.')).' KG ('.$c['percent'].'%)</p>
 						<div class="percentbar">
 							<div class="inner" style="width:'.$c['percent'].'%;"></div>
 						</div>
