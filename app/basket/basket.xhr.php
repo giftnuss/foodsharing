@@ -112,7 +112,7 @@ class BasketXhr extends Control
 		{
 			return array(
 				'status' => 1,
-				'script' => 'pulseInfo("Bitte gib eine Beschreibung ein!");'
+				'script' => 'pulseInfo("Bitte gib eine Beschreibung Ein!");'		
 			);
 		}
 		
