@@ -225,7 +225,7 @@ class DashboardView extends View
 	{
 		return '
 	   <div class="msg-inside info">
-			   <i class="fa fa-info-circle"></i> <strong><a href="/?page=settings&sub=upgrade/up_fs">Möchtest Du auch Lebensmittel bei Betrieben retten und fair-teilen?<br />Werde Foodsaver!</a></strong>
+			   <i class="fa fa-info-circle"></i> <strong><a href="/?page=settings&sub=upgrade/up_fs">Möchtest Du auch Lebensmittel bei Betrieben retten und fairteilen?<br />Werde Foodsaver!</a></strong>
 	   </div>';
 	}
 }

@@ -989,7 +989,7 @@ function v_toolbar($option = array())
 				$out .= '<li onclick="goTo(\'/?page='.$page.'&id='.$id.'&a=new\');" title="neu" class="ui-state-default'.$corner.'"><span class="ui-icon ui-icon-document"></span></li>';
 				break;
 			case 'comment' :
-				$out .= '<li attr="'.$page.':'.$id.'" title="Notiz hinzuf&uuml;gen" class="toolbar-comment ui-state-default'.$corner.'"><span class="ui-icon ui-icon-comment"></span></li>';
+				$out .= '<li attr="'.$page.':'.$id.'" title="Notitz hinzuf&uuml;gen" class="toolbar-comment ui-state-default'.$corner.'"><span class="ui-icon ui-icon-comment"></span></li>';
 				break;
 	
 			case 'edit' :
