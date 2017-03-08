@@ -456,11 +456,11 @@ class SettingsControl extends Control
 				v_form_checkbox('tel_public',array('desc'=>'Neben Deinem vollem Namen (und eventuell Foto) ist es für
 										Händler, Foodsharing-Freiwillge, Interessierte und die Presse
 										einfacher und direkter, Dich neben der für Deine
-										Region/Stadt/Bezirk zugewiesenen Botschafter-E-Mail-Adresse (z. B. mainz@lebensmittelretten.de)
-										über Deine Festnetz- bzw. Handynummer zu erreichen. Bitte gib
+										Region/Stadt/Bezirk zugewiesenen Botschafter-Emailadresse (z.B. mainz@lebensmittelretten.de)
+										über Deine Festnetz- bzw. Handynummer zu erreichen. Bitte gebe
 										hier alle Nummern an, die wir veröffentlichen dürfen und am
 										besten noch gewünschte Anrufzeiten.','required'=>true,'values' => array(
-												array('id'=>1,'name'=>'Ich bin einverstanden, dass meine Telefonnummer veröffentlicht wird.')
+												array('id'=>1,'name'=>'Ich bin einverstanden das Meine Telefonnummer veröffentlicht wird.')
 				))).
 				v_form_textarea('about_me_public',array('desc'=>'Um möglichst transparent, aber auch offen, freundlich, seriös
 										und einladend gegenüber den Lebensmittelbetrieben, den
