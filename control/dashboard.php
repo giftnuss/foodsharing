@@ -106,11 +106,11 @@ else if(S::may('fs'))
 	if($val['photo_public'] == 0)
 	{
 		$g_data['photo_public'] = 1;
-		$elements[] = v_form_radio('photo_public',array('desc'=>'Du solltest zumindest intern den Menschen in Deiner Umgebung ermöglichen, Dich zu kontaktieren. So kannst Du von anderen Foodsavern eingeladen werden, Lebensmittel zu retten und Ihr könnt Euch einander kennen lernen.','values' => array(
-				array('name' => 'Ja, ich bin einverstanden, dass mein Name und mein Foto veröffentlicht werden.','id' => 1),
-				array('name' => 'Bitte nur meinen Namen veröffentlichen.','id' => 2),
-				array('name' => 'Meine Daten nur intern anzeigen.','id' => 3),
-				array('name' => 'Meine Daten niemandem zeigen.','id' => 4)
+		$elements[] = v_form_radio('photo_public',array('desc'=>'Du solltest zumindest intern den Menschen in Deiner Umgebung ermöglichen Dich zu kontaktieren. So kannst Du von anderen Foodsavern eingeladen werden, Lebensmittel zu retten und Ihr Euch einander kennen lernen.','values' => array(
+				array('name' => 'Ja, ich bin einverstanden, dass mein Name und mein Foto veröffentlicht werden','id' => 1),
+				array('name' => 'Bitte nur meinen Namen veröffentlichen','id' => 2),
+				array('name' => 'Meinen Daten nur intern anzeigen','id' => 3),
+				array('name' => 'Meine Daten niemandem zeigen','id' => 4)
 		)));
 	}
 
@@ -192,8 +192,8 @@ else if(S::may('fs'))
 		addHidden('
 		<div id="grab-info">
 			<div class="popbox">
-				<h3>Bitte noch ein paar Daten vervollständigen bzw. überprüfen!</h3>
-				<p class="subtitle">Damit Dein Profil voll funktionsfähig ist, benötigen wir noch folgende Angaben von Dir. Herzlichen Dank!</p>
+				<h3>Bitte noch ein paar Daten vervollständigen bzw. überprüfen</h3>
+				<p class="subtitle">Damit Dein Profil voll funktionsfähig ist benötigen Wir noch folgende Angaben von Dir. Herzigen Dank!</p>
 				'.$out.'
 			</div>
 		</div><a id="grab-info-link" href="#grab-info">&nbsp;</a>');
