@@ -25,7 +25,7 @@ $g_lang['prev'] = 'zur&uuml;ck';
 $g_lang['next'] = 'weiter';
 $g_lang['finish'] = 'Anmeldung absenden';
 $g_lang['join_success'] = 'Deine Anmeldung war erfolgreich!';
-$g_lang['check_mail'] = 'Schau jetzt in Dein E-Mail Postfach, um die Anmeldung abzuschließen.';
+$g_lang['check_mail'] = 'Schau jetzt in Dein E-Mail Postfach um die Anmeldung abzuschließen';
 
 $g_lang['select_your_gender'] = 'Für die Anrede...';
 $g_lang['woman'] = 'weiblich';

@@ -570,7 +570,7 @@ class MaintenanceControl extends ConsoleControl
 
 
 					/*
-					 * Betrieb Status-Update
+					 * Betrieb status update
 					*/
 
 					if($betriebe = $this->model->q('SELECT betrieb_id FROM fs_betrieb_team WHERE foodsaver_id = '.(int)$fs['id']))
@@ -647,7 +647,7 @@ class MaintenanceControl extends ConsoleControl
 			{
 				$tmp[] = $fs['id'];
 				/*
-				 * Betrieb Status-Update
+				 * Betrieb status update
 				 */
 
 				if($betriebe = $this->model->q('SELECT betrieb_id FROM fs_betrieb_team WHERE foodsaver_id = '.(int)$fs['id']))
