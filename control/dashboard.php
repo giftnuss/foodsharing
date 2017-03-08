@@ -547,7 +547,7 @@ else if(S::may('fs'))
 	}
 	else
 	{
-		addContent(v_info('Du bist bis jetzt in keinem Filial-Team.'),CNT_LEFT);
+		addContent(v_info('Du bist bis jetzt in keinem Fillialteam'),CNT_LEFT);
 	}
 }
 else
@@ -727,7 +727,7 @@ function u_myBetriebe($betriebe)
 
 	if(empty($out))
 	{
-		$out = v_info('Du bist bis jetzt in keinem Filial-Team.');
+		$out = v_info('Du bist bis jetzt in keinem Fillial-Team');
 	}
 
 	if(S::may('bieb'))
