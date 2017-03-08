@@ -174,7 +174,7 @@ class StatsControl extends ConsoleControl
 			
 			$kilo = $this->calcBezirk($b);
 			
-			success($kilo.'<span style="white-space:nowrap">&thinsp;</span>kg fetched :) ');
+			success($kilo.' kg fetched :) ');
 			
 			info($this->calcDuration($start_ts,($i+1),$count));
 			

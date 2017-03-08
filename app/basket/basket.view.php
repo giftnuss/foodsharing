@@ -204,7 +204,7 @@ class BasketView extends View
 		{
 			$values[] = array(
 				'id' => $i,
-				'name' => number_format($i,2, ",", "."). '<span style="white-space:nowrap">&thinsp;</span>kg'
+				'name' => number_format($i,2, ",", "."). ' kg'
 			);
 		}
 		
@@ -213,7 +213,7 @@ class BasketView extends View
 			$val = ($i*10);
 			$values[] = array(
 				'id' => $val,
-				'name' => number_format($val,2, ",", "."). '<span style="white-space:nowrap">&thinsp;</span>kg'
+				'name' => number_format($val,2, ",", "."). ' kg'
 			);
 		}
 		

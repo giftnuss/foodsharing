@@ -420,7 +420,7 @@ else if(S::may('fs'))
 	
 	if($gerettet > 0)
 	{
-		$gerettet = ', Du hast <strong>'.number_format($gerettet,2,",",".").'<span style="white-space:nowrap">&thinsp;</span>kg</strong> gerettet';
+		$gerettet = ', Du hast <strong>'.number_format($gerettet,2,",",".").' kg</strong> gerettet';
 	}
 	else
 	{
