@@ -198,7 +198,7 @@ $g_lang['join'] = 'Anmelden';
 $g_lang['datetime'] = 'Zeitpunkt';
 
 $g_lang['deutschlandtour_desc'] = 'dann schreibe uns hier eine kurze Nachricht';
-$g_lang['deutschlandtour_message'] = 'Ja, ich möchte einen Besuch von Euch bekommen!';
+$g_lang['deutschlandtour_message'] = 'Ja, ich möchte einen Besuch von euch bekommen!';
 $g_lang['search'] = 'Suchen';
 $g_lang['no_result'] = 'Kein Ergebnis';
 $g_lang['email_exists'] = 'Mit dieser E-Mail-Adresse ist bereits ein Benutzer registriert.';

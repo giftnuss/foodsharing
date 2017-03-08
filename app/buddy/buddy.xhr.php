@@ -31,7 +31,7 @@ class BuddyXhr extends Control
 			
 			return array(
 					'status' => 1,
-					'script' => '$(".buddyRequest").remove();pulseInfo("Jetzt kennt Ihr Euch!");'
+					'script' => '$(".buddyRequest").remove();pulseInfo("Jetzt kennt ihr euch!");'
 			);
 		}
 		elseif($this->model->buddyRequest($_GET['id']))

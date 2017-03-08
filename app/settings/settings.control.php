@@ -469,7 +469,7 @@ class SettingsControl extends Control
 										Telefonnummer auch eine Beschreibung Deiner Person als Teil von
 										foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz,
 										hier unsere Vorlage: <a target="_blank"	href="http://www.lebensmittelretten.de/?p=botschafter">http://www.lebensmittelretten.de/botschafter</a>
-										Gerne kannst Du auch Deine Website, Projekt oder sonstiges
+										Gerne kannst du auch Deine Website, Projekt oder sonstiges
 										erwähnen, was Du öffentlich an Informationen teilen möchtest,
 										die vorteilhaft sind.'))
 												,'Botschafter werden',array('class'=>'ui-padding')),
