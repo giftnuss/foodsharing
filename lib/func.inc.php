@@ -1016,7 +1016,7 @@ function emailBodyTpl($message, $email = false, $token = false)
 				</div>
 <p style="font-size:11px;"><strong>Impressum</strong><br />
 Angaben gemäß § 5 TMG:<br />
-<br />Foodsharing e.<span style="white-space:nowrap">&thinsp;</span>V.<br/>
+<br />Foodsharing e.V.<br/>
 Marsiliusstr 36<br />
 50937 Köln<br />
 Vertreten durch:<br /><br />
