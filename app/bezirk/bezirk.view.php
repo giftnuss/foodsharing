@@ -123,7 +123,7 @@ class BezirkView extends View
 	public function activateTheme($theme)
 	{
 		return v_field(
-			v_info('Dieses Thema ist noch nicht aktiv. Hier hast Du die Möglichkeit das Thema zu akzeptieren und alle Foodsaver darüber zu informieren.').'
+			v_info('Dieses Thema ist noch nicht Aktiv, hier hast Du die Möglichkeit das Thema zu akzeptieren und Alle Foodsaver darüber zu informieren.').'
 				<div class="ui-padding" style="text-align:center;">
 					<a class="button" href="/?page=bezirk&bid='.$this->bezirk_id.'&sub=forum&tid='.$theme['id'].'&activate=1">Thema jetzt aktivieren</a>
 					<a class="button" href="/?page=bezirk&bid='.$this->bezirk_id.'&sub=forum&tid='.$theme['id'].'&delete=1" onclick="if(!confirm(\'Thema wirklich löschen?\')){return false;}">Thema löschen</a>
