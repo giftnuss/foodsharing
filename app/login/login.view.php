@@ -153,7 +153,7 @@ class LoginView extends View
 				$mail = $_GET['m'];
 			}
 			
-			$cnt = v_info('Bitte trage hier Deine E-Mail-Adresse ein, mit welcher Du auf foodsharing.de angemeldet bist!');
+			$cnt = v_info('Bitte trage hier Deine E-Mail-Adresse ein mit der Du auf Lebensmittelretten.de angemeldet bist.');
 			
 			$cnt .= '
 			<form name="passReset" method="post" class="contact-form" action="'.$_SERVER['REQUEST_URI'].'">
