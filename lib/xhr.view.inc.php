@@ -107,7 +107,7 @@ function xv_bBubble($b)
 	$time = strtotime($b['begin']);
 	if($time > 0)
 	{
-		$count_info .= '<div>Kooperation seit '.s('month_'.(int)date('m',$time)).' '.date('Y',$time).'</div>';
+		$count_info .= '<div>Koorperation seit '.s('month_'.(int)date('m',$time)).' '.date('Y',$time).'</div>';
 	}
 	
 	if((int)$b['public_time'] != 0)

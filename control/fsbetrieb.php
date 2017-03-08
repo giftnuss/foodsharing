@@ -1717,7 +1717,7 @@ function u_form_abhol_table($zeiten = false,$option = array())
 			}
 			else if(val > 2)
 			{
-				pulseError("Du hast mehr als 2 Leute zum abholen angegeben.<br />In der Regel sollten <strong>nicht mehr als 2 Leute</strong> zu einem Betrieb gehen. Zu viele Abholer führten schon oft zum Ende einer Kooperation. <br />Zur Not geht einer von euch mit Auto oder Anhänger vor und ihr trefft euch außer Reichweite vom Betrieb.",{
+				pulseError("Du hast mehr als 2 Leute zum abholen angegeben.<br />In der Regel sollten <strong>nicht mehr als 2 Leute</strong> zu einem Betrieb gehen. Zu viele Abholer führten schon oft zum Ende einer Koorperation. <br />Zur Not geht einer von euch mit Auto oder Anhänger vor und ihr trefft euch außer Reichweite vom Betrieb.",{
 					sticky:true
 				});
 			}
