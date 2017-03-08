@@ -4,7 +4,7 @@ class BasketView extends View
 	
 	public function find($baskets)
 	{
-		$page = new vPage('Essenskörbe', $this->findMap());
+		$page = new vPage('Essenkörbe', $this->findMap());
 		
 		if($baskets)
 		{

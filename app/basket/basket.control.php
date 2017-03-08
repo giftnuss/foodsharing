@@ -9,7 +9,7 @@ class BasketControl extends Control
 		
 		parent::__construct();
 		
-		addBread('Essenskörbe');
+		addBread('Essenkörbe');
 		
 	}
 	
