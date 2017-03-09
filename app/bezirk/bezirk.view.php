@@ -20,7 +20,7 @@ class BezirkView extends View
 				</div>
 				<div class="welcome_quick_link">
 					<ul>
-						<li>'.$this->bezirk['stat_fscount'].' Foodsaver, '.$this->bezirk['stat_botcount'].' Botschafter, '.$this->bezirk['stat_betriebcount'].' Betriebe '.$this->bezirk['stat_korpcount'].' laufende Kooperationen</li>
+						<li>'.$this->bezirk['stat_fscount'].' Foodsaver, '.$this->bezirk['stat_botcount'].' Botschafter, '.$this->bezirk['stat_betriebcount'].' Betriebe, '.$this->bezirk['stat_korpcount'].' laufende Kooperationen</li>
 					</ul>
 					<div class="clear"></div>
 				</div>
@@ -29,7 +29,7 @@ class BezirkView extends View
 				<a href="#" onclick="u_toggleStat();return false;"><img height="50" width="50" class="image_online" alt="" src="img/gerettet_icon.png" /></a>
 			</div>
 			<div class="user_display_name" style="float:right;margin:5px 10px 0 0;">
-				'.number_format($this->bezirk['stat_fetchweight'],2,",",".").' KG Lebensmittel gerettet<br />
+				'.number_format($this->bezirk['stat_fetchweight'],2,",",".").'<span style="white-space:nowrap">&thinsp;</span>kg Lebensmittel gerettet<br />
 				<span style="font-size:13px;line-height:25px;font-weight:normal;">Bei '.$this->bezirk['stat_fetchcount'].' Rettungs-Einsätzen</span>
 			</div>
 		
@@ -123,7 +123,7 @@ class BezirkView extends View
 	public function activateTheme($theme)
 	{
 		return v_field(
-			v_info('Dieses Thema ist noch nicht Aktiv, hier hast Du die Möglichkeit das Thema zu akzeptieren und Alle Foodsaver darüber zu informieren.').'
+			v_info('Dieses Thema ist noch nicht aktiv. Hier hast Du die Möglichkeit das Thema zu akzeptieren und alle Foodsaver darüber zu informieren.').'
 				<div class="ui-padding" style="text-align:center;">
 					<a class="button" href="/?page=bezirk&bid='.$this->bezirk_id.'&sub=forum&tid='.$theme['id'].'&activate=1">Thema jetzt aktivieren</a>
 					<a class="button" href="/?page=bezirk&bid='.$this->bezirk_id.'&sub=forum&tid='.$theme['id'].'&delete=1" onclick="if(!confirm(\'Thema wirklich löschen?\')){return false;}">Thema löschen</a>

@@ -6,7 +6,7 @@ class ProfileView extends View
 	public function profile($wallposts,$userCompanies = null, $userCompaniesCount = null, $fetchDates = null)
 	{
 		$page = new vPage($this->foodsaver['name'], $this->infos());
-		$page->addSection($wallposts,'Statusupdates von ' . $this->foodsaver['name']);
+		$page->addSection($wallposts,'Status-Updates von ' . $this->foodsaver['name']);
 
 		if(fsId() != $this->foodsaver['id'])
 		{
@@ -278,9 +278,9 @@ class ProfileView extends View
 				<a onclick="$(this).hide().next().show().children(\'textarea\').autosize();return false;" href="#">Schenke '.$this->foodsaver['name'].' eine Banane</a>
 				<div class="vouch-banana-wrapper" style="display:none;">
 					<div class="vouch-banana-desc">		
-						Hier kannst du etwas dazu schreiben, warum du '.$this->foodsaver['name'].' gerne eine Banane schenken möchtest. Du kannst jedem Foodsaver nur eine Banane schenken!<br />
-						Bitte gib die Vertrauensbanane nur an Foodsaver, die du persönlich kennst und bei denen du weißt, dass sie zuverlässig und engagiert sind und du sicher bist, dass sie die Verhaltensregeln und die Rechtsvereinbarung einhalten.
-						<p><strong>Vertrauensbananen können nicht zurückgenommen werden, sei bitte deswegen besonders achtsam, wem du eine schenkst.</strong></p>
+						Hier kannst Du etwas dazu schreiben, warum Du '.$this->foodsaver['name'].' gerne eine Banane schenken möchtest. Du kannst jedem Foodsaver nur eine Banane schenken!<br />
+						Bitte gib die Vertrauensbanane nur an Foodsaver, die Du persönlich kennst und bei denen Du weißt, dass sie zuverlässig und engagiert sind und Du sicher bist, dass sie die Verhaltensregeln und die Rechtsvereinbarung einhalten.
+						<p><strong>Vertrauensbananen können nicht zurückgenommen werden. Sei bitte deswegen besonders achtsam, wem Du eine schenkst.</strong></p>
 						<a href="#" style="float:right;" onclick="ajreq(\'rate\',{app:\'profile\',type:2,id:'.(int)$this->foodsaver['id'].',message:$(\'#bouch-ta\').val()});return false;"><img src="/img/banana.png" /></a>
 					</div>
 					<textarea id="bouch-ta" class="textarea" placeholder="min. 100 Zeichen..." style="height:50px;"></textarea>
@@ -774,7 +774,7 @@ class ProfileView extends View
 							array('name' => 'Anschrift','val'=>$this->foodsaver['anschrift']),
 							array('name' => 'PLZ / Ort','val'=>$this->foodsaver['plz'].' '.$this->foodsaver['stadt']),
 							array('name' => 'Telefon','val' => $this->foodsaver['telefon'].'<br />'.$this->foodsaver['handy']),
-							array('name' => 'E-Mail Adresse', 'val' => '<a href="mailto:'.$this->foodsaver['email'].'">'.$this->foodsaver['email'].'</a>')
+							array('name' => 'E-Mail-Adresse', 'val' => '<a href="mailto:'.$this->foodsaver['email'].'">'.$this->foodsaver['email'].'</a>')
 						)).'
 					</div>
 				</div>';
@@ -833,9 +833,9 @@ class ProfileView extends View
 							</div>
 							<div class="vouch-banana-desc">
 								
-								Hier kannst Du etwas dazu schreiben, warum Du gerne '.$this->foodsaver['name'].' eine Banane schenken möchtest. Du kannst jedem Foodsaver nur eine Banane schenken!<br />
-								Bitte gebe die Vertrauensbanane nur an Foodsaver die Du persönlich kennst und bei denen Du für Zuverlässigkeit, Vertrauen und Engagement gegen die Verschwendung von Lebensmitteln Deine Hand für ins Feuer legen würdest, also Du 100% sicher bist, dass die Verhaltensregeln und die Rechtsvereinbarung ordnungsgemäß eingehalten werden
-								<p><strong>Vertrauensbananen können nicht zurückgenommen werden, sei bitte deswegen besonders achtsam wem Du eine schenkst</strong></p>
+								Hier kannst Du etwas dazu schreiben, warum Du '.$this->foodsaver['name'].' gerne eine Banane schenken möchtest. Du kannst jedem Foodsaver nur eine Banane schenken!<br />
+								Bitte gib die Vertrauensbanane nur an Foodsaver, die Du persönlich kennst und bei denen Du weißt, dass sie zuverlässig und engagiert sind und Du sicher bist, dass sie die Verhaltensregeln und die Rechtsvereinbarung einhalten.
+								<p><strong>Vertrauensbananen können nicht zurückgenommen werden. Sei bitte deswegen besonders achtsam, wem Du eine schenkst.</strong></p>
 								<img src="/img/banana.png" style="float:right;" />
 							</div>
 						</div>

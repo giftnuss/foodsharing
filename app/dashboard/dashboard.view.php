@@ -10,7 +10,7 @@ class DashboardView extends View
 			<li>
 				<a onclick="ajreq(\'bubble\',{app:\'basket\',id:'.(int)$b['id'].'});return false;" href="#" class="corner-all">
 					<span class="i">'.$this->img($b).'</span>
-					<span class="n">Essenkorb von '.$b['fs_name'].'</span>
+					<span class="n">Essenskorb von '.$b['fs_name'].'</span>
 					<span class="t">veröffentlicht am '.niceDate($b['time_ts']).'</span>
 					<span class="d">'.$b['description'].'</span>
 					<span class="c"></span>
@@ -170,11 +170,11 @@ class DashboardView extends View
 		addJs('activity.init();');
 		addContent('
 	<div class="head ui-widget-header ui-corner-top">
-		Updates Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>
+		Updates-Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>
 	</div>
 	<div id="activity">
 		<div class="loader" style="padding:40px;background-image:url(/img/469.gif);background-repeat:no-repeat;background-position:center;"></div>
-		<div style="display:none" id="activity-info">'.v_info('Es gibt gerade nichts neues').'</div>
+		<div style="display:none" id="activity-info">'.v_info('Es gibt gerade nichts Neues').'</div>
 	</div>');
 		
 	}
@@ -196,7 +196,7 @@ class DashboardView extends View
 			<li>
 				<a onclick="ajreq(\'bubble\',{app:\'basket\',id:'.(int)$b['id'].'});return false;" href="#" class="corner-all">
 					<span class="i">'.$this->img($b).'</span>
-					<span class="n">Essenkorb von '.$b['fs_name'].' ('.$this->distance($b['distance']).')</span>
+					<span class="n">Essenskorb von '.$b['fs_name'].' ('.$this->distance($b['distance']).')</span>
 					<span class="t">'.niceDate($b['time_ts']).'</span>
 					<span class="d">'.$b['description'].'</span>
 					<span class="c"></span>
@@ -225,7 +225,7 @@ class DashboardView extends View
 	{
 		return '
 	   <div class="msg-inside info">
-			   <i class="fa fa-info-circle"></i> <strong><a href="/?page=settings&sub=upgrade/up_fs">Möchtest du auch Lebensmittel bei Betrieben retten und fairteilen?<br />Werde Foodsaver!</a></strong>
+			   <i class="fa fa-info-circle"></i> <strong><a href="/?page=settings&sub=upgrade/up_fs">Möchtest Du auch Lebensmittel bei Betrieben retten und fair-teilen?<br />Werde Foodsaver!</a></strong>
 	   </div>';
 	}
 }

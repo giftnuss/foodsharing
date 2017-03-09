@@ -286,7 +286,7 @@ function v_bezirkChooser($id = 'bezirk_id',$bezirk = false,$option = array())
 function v_login()
 {
 	return '<form id="loginbar" action="/?page=login&ref=%2F%3Fpage%3Ddashboard" method="post">
-				<input style="margin-right:4px;" class="input corner-all" type="email" name="email_adress" value="" placeholder="E-Mail Adresse" /><input class="input corner-all" type="password" name="password" value="" placeholder="Passwort" /><input class="submit corner-right" type="submit" value="&#xf0a9;" />
+				<input style="margin-right:4px;" class="input corner-all" type="email" name="email_adress" value="" placeholder="E-Mail-Adresse" /><input class="input corner-all" type="password" name="password" value="" placeholder="Passwort" /><input class="submit corner-right" type="submit" value="&#xf0a9;" />
 			</form>';
 }
 
@@ -989,7 +989,7 @@ function v_toolbar($option = array())
 				$out .= '<li onclick="goTo(\'/?page='.$page.'&id='.$id.'&a=new\');" title="neu" class="ui-state-default'.$corner.'"><span class="ui-icon ui-icon-document"></span></li>';
 				break;
 			case 'comment' :
-				$out .= '<li attr="'.$page.':'.$id.'" title="Notitz hinzuf&uuml;gen" class="toolbar-comment ui-state-default'.$corner.'"><span class="ui-icon ui-icon-comment"></span></li>';
+				$out .= '<li attr="'.$page.':'.$id.'" title="Notiz hinzuf&uuml;gen" class="toolbar-comment ui-state-default'.$corner.'"><span class="ui-icon ui-icon-comment"></span></li>';
 				break;
 	
 			case 'edit' :
@@ -1525,7 +1525,7 @@ function v_form_select($id,$option = array())
 
 	$out = '
 	<select class="input select value" name="'.$id.'" id="'.$id.'">
-		<option value="">Bitte Ausw&auml;hlen...</option>';
+		<option value="">Bitte ausw&auml;hlen...</option>';
 	if(!empty($values))
 	{
 		foreach ($values as $v)

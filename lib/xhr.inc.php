@@ -328,7 +328,7 @@ function xhr_profile($data)
 		}
 		if(isOrgaTeam())
 		{
-			$data[] = array('name' => 'E-Mail Adresse', 'val' => $foodsaver['email']);
+			$data[] = array('name' => 'E-Mail-Adresse', 'val' => $foodsaver['email']);
 			$data[] = array('name' => 'Adresse', 'val' => $foodsaver['anschrift'].'<br />'.$foodsaver['plz'].' '.$foodsaver['stadt']);
 		}
 	}
@@ -1013,7 +1013,7 @@ function xhr_continueMail($data)
 			sleep(2);
 		}
 		
-		return json_encode(array('left' => $mails_left,'status' => 1,'comment'=>'Versende E-Mails ... (aktuelle E-Mail Adresse: '.$fs['email'].')'));
+		return json_encode(array('left' => $mails_left,'status' => 1,'comment'=>'Versende E-Mails ... (aktuelle E-Mail-Adresse: '.$fs['email'].')'));
 	}
 	else
 	{
@@ -1362,7 +1362,7 @@ function xhr_getBezirk($data)
 			}
 			else
 			{
-				$button = '<div style="text-align:center;padding:top:8px;"><span onclick="betriebRequest('.(int)$b['id'].');" class="bigbutton cardbutton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><div style="text-align:center;padding:top:8px;"><span class="ui-button-text">Ich möchte hier Essen abholen</span></span></div>';
+				$button = '<div style="text-align:center;padding:top:8px;"><span onclick="betriebRequest('.(int)$b['id'].');" class="bigbutton cardbutton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><div style="text-align:center;padding:top:8px;"><span class="ui-button-text">Ich möchte hier Lebensmittel abholen</span></span></div>';
 			}
 			
 			$verantwortlicher = '';

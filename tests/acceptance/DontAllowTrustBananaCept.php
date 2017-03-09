@@ -9,7 +9,7 @@ $foodsaver = $I->createFoodsaver($pass);
 $I->login($foodsaver['email'], $pass);
 
 $I->amOnPage('/profile/'.$foodsaver['id']);
-$I->see('Statusupdates von '.$foodsaver['name']);
+$I->see('Status-Updates von '.$foodsaver['name']);
 
 $I->waitForElementVisible('a.item.stat_bananacount.bouched', 4);
 $I->click('a.item.stat_bananacount.bouched');

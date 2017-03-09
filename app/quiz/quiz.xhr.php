@@ -47,7 +47,7 @@ class QuizXhr extends Control
 				{
 					return array(
 						'status' => 1,
-						'script' => 'pulseError("Du solltest Eine Frage angeben ;)");'
+						'script' => 'pulseError("Du solltest eine Frage angeben ;)");'
 					);
 				}
 			}
@@ -110,7 +110,7 @@ class QuizXhr extends Control
 				{
 					return array(
 							'status' => 1,
-							'script' => 'pulseError("Du solltest Einen Text angeben ;)");'
+							'script' => 'pulseError("Du solltest einen Text angeben ;)");'
 					);
 				}
 			}
@@ -145,7 +145,7 @@ class QuizXhr extends Control
 				{
 					return array(
 							'status' => 1,
-							'script' => 'pulseError("Du solltest Einen Text angeben ;)");'
+							'script' => 'pulseError("Du solltest einen Text angeben ;)");'
 					);
 				}
 			}
@@ -428,15 +428,15 @@ class QuizXhr extends Control
 		
 		if(S::get('hastodoquiz-id') == 1)
 		{
-			$dia->addButton('jetzt mit dem Quiz meine Foodsaver Rolle bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
+			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Foodsaver bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
 		}
 		else if(S::get('hastodoquiz-id') == 2)
 		{
-			$dia->addButton('jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche*r bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bip\');');
+			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche*r bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bip\');');
 		}
 		else if(S::get('hastodoquiz-id') == 3)
 		{
-			$dia->addButton('jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
+			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
 		}
 		
 		$content = $this->model->getContent($content_id);
@@ -460,17 +460,17 @@ class QuizXhr extends Control
 				
 				if(S::get('hastodoquiz-id') == 1)
 				{
-					$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Foodsaver Rolle bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
+					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Foodsaver bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
 				}
 				else if(S::get('hastodoquiz-id') == 2)
 				{
 					$content_id = 34;
-					$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche/r Rolle bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bip\');');
+					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche/r bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bip\');');
 				}
 				else if(S::get('hastodoquiz-id') == 3)
 				{
 					$content_id = 35;
-					$dia->addButton('Ja Ich möchte jetzt mit dem Quiz meine Rolle als Botschafter bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
+					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Botschafter bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
 				}
 				
 				$content = $this->model->getContent($content_id);
@@ -1223,12 +1223,12 @@ class QuizXhr extends Control
 			$wrongAnswers = count($rightQuestions[$question['id']]['answers']);
 		}
 
-		// wie viel prozent sind falsch?
+		// wie viel Prozent sind falsch?
 		$percent = $this->percentFrom($checkCount, $wrongAnswers);
 		
 		$fp = $this->percentTo($question['fp'], $percent);
 		
-		// wenn alles falsch angeklickt wurde das aber nciht stimmt gibts die volle fehlerpunkt zahl
+		// wenn alles falsch angeklickt wurde, das aber nicht stimmt, gibt's die volle Fehlerpunktezahl
 		if(
 			(!$everything_false && !isset($question['noco']))
 			||

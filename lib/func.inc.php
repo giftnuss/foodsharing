@@ -684,7 +684,7 @@ function getMenu()
 							<li><a href="/fairteilerrettung">Rette die Fair-Teiler</a></li>
 						</ul>
 					</li>
-					<li><a onclick="ajreq(\'join\',{app:\'login\'});return false;" class="fNiv" href="/?page=join">Mach-Mit!</a></li>
+					<li><a onclick="ajreq(\'join\',{app:\'login\'});return false;" class="fNiv" href="/?page=join">Mach mit!</a></li>
 					<!-- <li><a class="fNiv" href="/?page=login" onclick="ajreq(\'login\',{app:\'login\'});return false;">Login</a></li> -->
 				</ul>',
 			'mobile' => '
@@ -696,7 +696,7 @@ function getMenu()
 					<option value="/leeretonne">Leere Tonne</option>
 					<option value="/fairteilerrettung">Rette die Fair-Teiler</option>
 					<option value="/unterstuetzung">Unterstützung</option>
-					<option value="/mach-mit">Mach-Mit!</option>
+					<option value="/mach-mit">Mach mit!</option>
 					<option value="/login">Login</option>
 				</select>'
 		
@@ -778,7 +778,7 @@ function getBetriebeMenu()
 			<div class="popbox">
 				<h3>Wähle die Region aus, in der Du aktiv werden möchtest!</h3>
 				<p class="subtitle">
-					Es besteht auch die Möglichkeit eine neue Region/Bezirk zu gründen, wähle bitte dennoch die enspechende übergeordnete Region (Land / Bundesland Stadt etc.) aus.
+					Es besteht auch die Möglichkeit, eine/n neue/n Region/Bezirk zu gründen. Wähle bitte dennoch die entsprechende übergeordnete Region (Land, Bundeslan, Stadt etc.) aus!
 				</p>
 				<div style="height:260px;">
 					'.v_bezirkChildChooser($id).'
@@ -869,7 +869,7 @@ function getBetriebeMenu()
 			}
 			else
 			{
-				pulseError(\'<p><strong>Du musst eine Auswahl treffen</strong></p><p>Gibt es Deine Stadt, Deinen Bezirk oder Deine region noch nicht, dann treffe die passende übergeordnete Auswahl</p><p>Also für Köln-Ehrenfeld z.B. Köln</p><p>Und schreibe die Region die neu angelegt werden soll in das Feld unten</p>\');		
+				pulseError(\'<p><strong>Du musst eine Auswahl treffen</strong></p><p>Gibt es Deine Stadt, Deinen Bezirk oder Deine Region noch nicht, dann triff die passende übergeordnete Auswahl</p><p>Also für Köln-Ehrenfeld z. B. Köln</p><p>Und schreibe die Region die neu angelegt werden soll in das Feld unten</p>\');		
 			}
 		});		
 	');
@@ -1016,7 +1016,7 @@ function emailBodyTpl($message, $email = false, $token = false)
 				</div>
 <p style="font-size:11px;"><strong>Impressum</strong><br />
 Angaben gemäß § 5 TMG:<br />
-<br />Foodsharing e.V.<br/>
+<br />Foodsharing e.<span style="white-space:nowrap">&thinsp;</span>V.<br/>
 Marsiliusstr 36<br />
 50937 Köln<br />
 Vertreten durch:<br /><br />
@@ -1234,7 +1234,7 @@ function getSettingsMenu()
 	$mailbox = '';
 	if(S::get('mailbox'))
 	{
-		$mailbox = '<li><a href="/?page=mailbox"><i class="fa fa-envelope"></i> E-Mail Postfach</a></li>';
+		$mailbox = '<li><a href="/?page=mailbox"><i class="fa fa-envelope"></i> E-Mail-Postfach</a></li>';
 	}
 	$default = '<li class="g_settings"><a href="/profile/'.fsId().'" class="fNiv corner-all" style="background-image:url('.img().');"><span>&nbsp;</span></a>
 				    <ul class="jmenu-settings">
@@ -1925,7 +1925,7 @@ function getHead()
 			$g_head.'
 
 <meta property="og:title" content="Lebensmittel teilen, statt wegwerfen - foodsharing Deutschland" />
-<meta property="og:description" content="Auf foodsharing kannst Du deine Lebensmitteln vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben" />
+<meta property="og:description" content="Auf foodsharing kannst Du Deine Lebensmitteln vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben" />
 <meta property="og:image" content="http://foodsharing.de/img/foodsharinglogo_200px.png" />
 <meta property="og:url" content="http://foodsharing.de" />';
 }

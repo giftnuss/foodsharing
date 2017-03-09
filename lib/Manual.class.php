@@ -1241,7 +1241,7 @@ class ManualDb extends Db
 			}
 		}
 
-		$out['notitzen'] = $this->getBetriebNotiz($id);
+		$out['notizen'] = $this->getBetriebNotiz($id);
 
 		return $out;
 	}
@@ -1477,7 +1477,7 @@ class ManualDb extends Db
 		if($bezirk_id == false)
 		{
 			return array(
-				'name' => 'Foodsharing e.V.',
+				'name' => 'Foodsharing e.<span style="white-space:nowrap">&thinsp;</span>V.',
 				'email' => DEFAULT_EMAIL,
 				'email_name' => DEFAULT_EMAIL_NAME
 			);
@@ -3713,7 +3713,7 @@ class ManualDb extends Db
 		WHERE 	`id` = '.$this->intval($id));
 	}
 
-	/* retrieves all biebs that are biebs for a given bezirk (by being bieb in a betrieb that is part of that bezirk, which is semantically not the same we use on platform) */
+	/* retrieves all biebs that are biebs for a given bezirk (by being bieb in a Betrieb that is part of that bezirk, which is semantically not the same we use on platform) */
 	public function getBiebIds($bezirk)
 	{
 		return $this->qCol('SELECT DISTINCT bt.foodsaver_id FROM `'.PREFIX.'bezirk_closure` c

@@ -78,7 +78,7 @@ class BetriebXhr extends Control
 		if(S::may() && ($this->model->isVerantwortlich($_GET['bid']) || S::may('orga')))
 		{
 			$dia = new XhrDialog();
-			$dia->setTitle('Abholungs-History');
+			$dia->setTitle('Abholungshistorie');
 			
 			$id = 'daterange';
 			
@@ -229,7 +229,7 @@ class BetriebXhr extends Control
 					$dia = new XhrDialog();
 				
 					$dia->setTitle('Fehlende Zuordnung');
-					$dia->addContent(v_info('Für folgende Betriebe wurde noch kein Bezirk zugeordnet, bitte gebe einen Bezirk an.'));
+					$dia->addContent(v_info('Für folgende Betriebe wurde noch kein Bezirk zugeordnet. Bitte gib einen Bezirk an!'));
 					$dia->addOpt('width', '650px');
 					$dia->noOverflow();
 					

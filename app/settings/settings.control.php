@@ -57,7 +57,7 @@ class SettingsControl extends Control
 		
 		$menu = array();
 		$menu[] = array('name' => s('sleeping_user'), 'href' => '/?page=settings&sub=sleeping');
-		$menu[] = array('name' => 'E-Mail Adresse ändern', 'click' => 'ajreq(\'changemail\');return false;');
+		$menu[] = array('name' => 'E-Mail-Adresse ändern', 'click' => 'ajreq(\'changemail\');return false;');
 		
 		if($this->foodsaver['rolle'] == 0)
 		{
@@ -456,11 +456,11 @@ class SettingsControl extends Control
 				v_form_checkbox('tel_public',array('desc'=>'Neben Deinem vollem Namen (und eventuell Foto) ist es für
 										Händler, Foodsharing-Freiwillge, Interessierte und die Presse
 										einfacher und direkter, Dich neben der für Deine
-										Region/Stadt/Bezirk zugewiesenen Botschafter-Emailadresse (z.B. mainz@lebensmittelretten.de)
-										über Deine Festnetz- bzw. Handynummer zu erreichen. Bitte gebe
+										Region/Stadt/Bezirk zugewiesenen Botschafter-E-Mail-Adresse (z. B. mainz@lebensmittelretten.de)
+										über Deine Festnetz- bzw. Handynummer zu erreichen. Bitte gib
 										hier alle Nummern an, die wir veröffentlichen dürfen und am
 										besten noch gewünschte Anrufzeiten.','required'=>true,'values' => array(
-												array('id'=>1,'name'=>'Ich bin einverstanden das Meine Telefonnummer veröffentlicht wird.')
+												array('id'=>1,'name'=>'Ich bin einverstanden, dass meine Telefonnummer veröffentlicht wird.')
 				))).
 				v_form_textarea('about_me_public',array('desc'=>'Um möglichst transparent, aber auch offen, freundlich, seriös
 										und einladend gegenüber den Lebensmittelbetrieben, den
@@ -469,7 +469,7 @@ class SettingsControl extends Control
 										Telefonnummer auch eine Beschreibung Deiner Person als Teil von
 										foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz,
 										hier unsere Vorlage: <a target="_blank"	href="http://www.lebensmittelretten.de/?p=botschafter">http://www.lebensmittelretten.de/botschafter</a>
-										Gerne kannst du auch Deine Website, Projekt oder sonstiges
+										Gerne kannst Du auch Deine Website, Projekt oder sonstiges
 										erwähnen, was Du öffentlich an Informationen teilen möchtest,
 										die vorteilhaft sind.'))
 												,'Botschafter werden',array('class'=>'ui-padding')),

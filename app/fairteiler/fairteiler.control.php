@@ -211,7 +211,7 @@ class FairteilerControl extends Control
 				addContent($this->view->checkFairteiler($ft));
 				addContent($this->view->menu(array(
 				array('href' => '/?page=fairteiler&sub=check&id='.(int)$ft['id'].'&agree=1','name' => 'Fair-Teiler freischalten'),
-				array('click' => 'if(confirm(\'Achtung! Wenn Du den Fair-Teiler löschst kannst du dies nicht mehr rückgängig machen. Fortfahren?\')){goTo(this.href);}else{return false;}','href'=>'/?page=fairteiler&sub=check&id='.(int)$ft['id'].'&agree=0','name' => 'Fair-Teiler ablehnen')
+				array('click' => 'if(confirm(\'Achtung! Wenn Du den Fair-Teiler löschst kannst Du dies nicht mehr rückgängig machen. Fortfahren?\')){goTo(this.href);}else{return false;}','href'=>'/?page=fairteiler&sub=check&id='.(int)$ft['id'].'&agree=0','name' => 'Fair-Teiler ablehnen')
 				),array('title' => 'Optionen')),CNT_RIGHT);
 			}
 			else

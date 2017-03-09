@@ -33,7 +33,7 @@ class BellXhr extends Control
 			}
 		}
 		
-		// additionall add bell for betrieb verantwortliche
+		// additionall add bell for BIEB
 		if(isset($_SESSION['client']['verantwortlich']))
 		{
 			$ids = array();

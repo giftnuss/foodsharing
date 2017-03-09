@@ -42,7 +42,7 @@ class MaintenanceControl extends ConsoleControl
 		$this->deleteImages();
 
 		/*
-		 * delete unconfirmed betrieb dates in the past
+		 * delete unconfirmed Betrieb dates in the past
 		 */
 		$this->deleteUnconformedFetchDates();
 
@@ -570,7 +570,7 @@ class MaintenanceControl extends ConsoleControl
 
 
 					/*
-					 * Betrieb status update
+					 * Betrieb Status-Update
 					*/
 
 					if($betriebe = $this->model->q('SELECT betrieb_id FROM fs_betrieb_team WHERE foodsaver_id = '.(int)$fs['id']))
@@ -647,7 +647,7 @@ class MaintenanceControl extends ConsoleControl
 			{
 				$tmp[] = $fs['id'];
 				/*
-				 * Betrieb status update
+				 * Betrieb Status-Update
 				 */
 
 				if($betriebe = $this->model->q('SELECT betrieb_id FROM fs_betrieb_team WHERE foodsaver_id = '.(int)$fs['id']))

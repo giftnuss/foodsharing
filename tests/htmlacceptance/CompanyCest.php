@@ -39,7 +39,7 @@ class CompanyCest
 
 	public function MemberCanSeeCompanyOnDashboard(\HtmlAcceptanceTester $I) {
 		$this->loginAsMember();
-		$I->see('Du holst Essen ab bei', 'div.head.ui-widget-header.ui-corner-top');
+		$I->see('Du holst Lebensmittel ab bei', 'div.head.ui-widget-header.ui-corner-top');
 		$I->see($this->store['name'], 'a.ui-corner-all');
 	}
 

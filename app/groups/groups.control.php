@@ -41,14 +41,14 @@ class GroupsControl extends Control
 		if(!isset($_GET['sub']))
 		{
 			addTitle(s('groups'));
-			addContent($this->view->topbar('foodsharing Arbeitsgruppen','hier findest Du Hilfe und viel zu tun ..','<img src="/img/groups.png" />'),CNT_TOP);
+			addContent($this->view->topbar('foodsharing Arbeitsgruppen','hier findest Du Hilfe und viel zu tun...','<img src="/img/groups.png" />'),CNT_TOP);
 			if($groups = $this->model->listGroups())
 			{
 				addContent($this->view->listGroups($groups,$this->my_applications,$this->my_stats));
 			}
 			else
 			{
-				addContent( v_info('Hier gibts noch keine Arbeitsgruppen'));
+				addContent( v_info('Hier gibt es noch keine Arbeitsgruppen'));
 			}
 		}
 		

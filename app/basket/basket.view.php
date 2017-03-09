@@ -4,7 +4,7 @@ class BasketView extends View
 	
 	public function find($baskets)
 	{
-		$page = new vPage('Essenkörbe', $this->findMap());
+		$page = new vPage('Essenskörbe', $this->findMap());
 		
 		if($baskets)
 		{
@@ -27,7 +27,7 @@ class BasketView extends View
 		$map->setMarkerCluster();
 		$map->setDefaultMarker('basket', 'green');
 		
-		return '<input id="mapsearch" type="text" name="mapsearch" value="" placeholder="Adress-Suche..." /><div class="findmap">'.$map->render().'</div>';
+		return '<input id="mapsearch" type="text" name="mapsearch" value="" placeholder="Adresssuche..." /><div class="findmap">'.$map->render().'</div>';
 	}
 	
 	public function closeBaskets($baskets)
@@ -204,7 +204,7 @@ class BasketView extends View
 		{
 			$values[] = array(
 				'id' => $i,
-				'name' => number_format($i,2, ",", "."). ' kg'
+				'name' => number_format($i,2, ",", "."). '<span style="white-space:nowrap">&thinsp;</span>kg'
 			);
 		}
 		
@@ -213,7 +213,7 @@ class BasketView extends View
 			$val = ($i*10);
 			$values[] = array(
 				'id' => $val,
-				'name' => number_format($val,2, ",", "."). ' kg'
+				'name' => number_format($val,2, ",", "."). '<span style="white-space:nowrap">&thinsp;</span>kg'
 			);
 		}
 		

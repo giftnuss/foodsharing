@@ -3,9 +3,9 @@ global $g_lang;
 $g_lang['already_in_bezirk'] = 'In diesem Bezirk bist Du schon aktiv';
 $g_lang['request_already_send'] = 'An diesen Bezirk hast Du schon eine Anfrage gesendet.';
 $g_lang['bezirk_request_successfull'] = 'Die Anfrage wurde erfolgreich versendet, Du wirst benachrichtigt sobald Du freigeschaltet bist.';
-$g_lang['position_search'] = 'Positions Suche';
+$g_lang['position_search'] = 'Positionssuche';
 $g_lang['ort'] = 'Stadt/Gemeinde';
-$g_lang['team_status_0'] = 'Dieses Team ist voll, daher werden z.Z. keine weiteren Helfer gesucht.';
+$g_lang['team_status_0'] = 'Dieses Team ist voll. Daher werden z.<span style="white-space:nowrap">&thinsp;</span>Z. keine weiteren Helfer gesucht.';
 $g_lang['team_status_1'] = '<strong>Es werden noch Helfer gesucht</strong>';
 $g_lang['team_status_2'] = '<strong>Es werden dringend noch Helfer gesucht</strong>';
 $g_lang['attach_image'] = 'Bild anhängen';
@@ -46,10 +46,10 @@ $g_lang['find_representation'] = 'Vertretung finden';
 $g_lang['choose_fetcher'] = 'Abholer auswählen';
 $g_lang['add_new'] = 'Neuen Betrieb eintragen';
 $g_lang['you_responsible'] = 'Betriebe für die Du verantwortlich bist';
-$g_lang['you_fetcher'] = 'Betriebe bei denen Du Essen abholst';
+$g_lang['you_fetcher'] = 'Betriebe bei denen Du Lebensmittel abholst';
 $g_lang['more_stores'] = 'Weitere Betriebe aus {name}';
 $g_lang['your_store'] = 'Für Diesen Betrieb bist Du verantwortlich';
-$g_lang['not_fetching'] = 'Du holst noch kein Essen ab.';
+$g_lang['not_fetching'] = 'Du holst noch keine Lebensmittel ab.';
 $g_lang['change_times'] = 'Abholzeiten ändern';
 $g_lang['change_fetcher'] = 'Abholer ändern';
 $g_lang['verantwortlicher'] = 'Verantwortliche Mitglieder';
@@ -77,7 +77,7 @@ $g_lang['date_add_successful'] = '<p><b>Termine wurden erfolgreich hinzugefügt<
 $g_lang['del_and_send'] = 'Termin löschen und Nachricht senden';
 $g_lang['tpl_msg_to_team'] = 'Liebes {BETRIEB} Team, 
 
-am {DATE} kann ich leider doch kein Essen abholen. Daher suche ich dringend eine Vertretung, kannst Du für mich einspringen?
+am {DATE} kann ich leider doch keine Lebensmittel abholen. Daher suche ich dringend eine Vertretung. Kannst Du für mich einspringen?
 
 Liebe Grüße';
 $g_lang['team_msg'] = 'Nachricht ans ganze Team';
@@ -87,7 +87,7 @@ $g_lang['have_backup'] = 'Ich habe schon eine Vertretung';
 $g_lang['del_date_for'] = 'Austragen für';
 $g_lang['fetcher'] = 'Abholer';
 $g_lang['fetcher_count'] = 'Anzahl Abholer';
-$g_lang['max_3_leader'] = 'Es darf maximal 3 Verantwortliche für diese Filliale geben';
+$g_lang['max_3_leader'] = 'Es darf maximal 3 Verantwortliche für diese Filiale geben.';
 $g_lang['menge'] = 'Abholmenge im Schnitt';
 $g_lang['verantwortlicher_must_be'] = 'Es muss mindestens einen Verantworklichen für jeden Betrieb geben!';
 $g_lang['edit_betrieb'] = 'Betrieb bearbeiten';
@@ -95,10 +95,10 @@ $g_lang['besonderheiten'] = 'Besonderheiten';
 $g_lang['signout_sure'] = '<strong>Möchtest Du Dich austragen?</strong><p>Sämtliche Abholtermine werden gelöscht.</p>';
 $g_lang['signout_sure_title'] = 'Bist Du Dir sicher?';
 $g_lang['betrieb_sign_out'] = 'Mich hier austragen';
-$g_lang['not_verified'] = 'Dein Account wurde noch nicht von einem Botschafter verifiziert, erst dann kannst Du Dich zum Essen abholen eintragen';
+$g_lang['not_verified'] = 'Dein Account wurde noch nicht von einem Botschafter verifiziert. Erst dann kannst Du Dich zum Essenabholen eintragen';
 $g_lang['team_status'] = 'Teamstatus';
 $g_lang['reportreason'] = 'Aus welchem grun möchtest Du den Foodsaver melden?';
 $g_lang['reportmessage'] = 'Beschreibe den Vorfall noch etwas genauer';
-$g_lang['fetch_history'] = 'Abholungs-History';
+$g_lang['fetch_history'] = 'Abholungshistorie';
 $g_lang['stat_fetchcount'] = 'Letzte Abholung am {date}';
 $g_lang['stat_fetchcount_none'] = 'Noch keine Lebensmittel abgeholt';

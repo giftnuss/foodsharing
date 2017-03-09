@@ -106,11 +106,11 @@ else if(S::may('fs'))
 	if($val['photo_public'] == 0)
 	{
 		$g_data['photo_public'] = 1;
-		$elements[] = v_form_radio('photo_public',array('desc'=>'Du solltest zumindest intern den Menschen in Deiner Umgebung ermöglichen Dich zu kontaktieren. So kannst Du von anderen Foodsavern eingeladen werden, Lebensmittel zu retten und ihr Euch einander kennen lernen.','values' => array(
-				array('name' => 'Ja ich bin einverstanden, dass mein Name und mein Foto veröffentlicht werden','id' => 1),
-				array('name' => 'Bitte nur meinen Namen veröffentlichen','id' => 2),
-				array('name' => 'Meinen Daten nur intern anzeigen','id' => 3),
-				array('name' => 'Meine Daten niemandem zeigen','id' => 4)
+		$elements[] = v_form_radio('photo_public',array('desc'=>'Du solltest zumindest intern den Menschen in Deiner Umgebung ermöglichen, Dich zu kontaktieren. So kannst Du von anderen Foodsavern eingeladen werden, Lebensmittel zu retten und Ihr könnt Euch einander kennen lernen.','values' => array(
+				array('name' => 'Ja, ich bin einverstanden, dass mein Name und mein Foto veröffentlicht werden.','id' => 1),
+				array('name' => 'Bitte nur meinen Namen veröffentlichen.','id' => 2),
+				array('name' => 'Meine Daten nur intern anzeigen.','id' => 3),
+				array('name' => 'Meine Daten niemandem zeigen.','id' => 4)
 		)));
 	}
 
@@ -192,8 +192,8 @@ else if(S::may('fs'))
 		addHidden('
 		<div id="grab-info">
 			<div class="popbox">
-				<h3>Bitte noch ein paar Daten vervollständigen bzw. überprüfen</h3>
-				<p class="subtitle">Damit Dein Profil voll funktionsfähig ist benötigen Wir noch folgende Angaben von Dir. Herzigen Dank!</p>
+				<h3>Bitte noch ein paar Daten vervollständigen bzw. überprüfen!</h3>
+				<p class="subtitle">Damit Dein Profil voll funktionsfähig ist, benötigen wir noch folgende Angaben von Dir. Herzlichen Dank!</p>
 				'.$out.'
 			</div>
 		</div><a id="grab-info-link" href="#grab-info">&nbsp;</a>');
@@ -207,7 +207,7 @@ else if(S::may('fs'))
 		addJs('becomeBezirk();');
 	}
 	/*
-	 * check is there are betrieb not ordered to an bezirk
+	 * check is there are Betrieb not ordered to an bezirk
 	 */
 	else if (isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich']) )
 	{
@@ -230,8 +230,8 @@ else if(S::may('fs'))
 	/*
 	addContent(v_field('<p>
 		Hallo Ihr Lieben,<br />
-		Wir sind letzte Nacht auf unseren Neuen Öko-Webhoster von Manitu umgezogen, es kann im laufe des Tages noch zu kleinen Fehlern auf der Seite kommen (z.B. das keine Bilder zu sehen sind ;)<br />
-		Bis heute Abend sollten sich solche Phänomene gelegt haben.<br><br>Alles Liebe euer Lebensmittelretten.de Team	</p>	
+		Wir sind letzte Nacht auf unseren Neuen Öko-Webhoster von Manitu umgezogen. Es kann im Laufe des Tages noch zu kleinen Fehlern auf der Seite kommen (z. B., dass keine Bilder zu sehen sind ;)<br />
+		Bis heute Abend sollten sich solche Phänomene gelegt haben.<br><br>Alles Liebe, Euer Lebensmittelretten.de Team	</p>
 	','Umzug auf neuen Server',array('class'=>'ui-padding')));
 	*/
 	
@@ -396,11 +396,11 @@ else if(S::may('fs'))
 	addJs('activity.init();');
 	addContent('
 	<div class="head ui-widget-header ui-corner-top">
-		Updates Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>
+		Updates-Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>
 	</div>
 	<div id="activity">
 		<div class="loader" style="padding:40px;background-image:url(/img/469.gif);background-repeat:no-repeat;background-position:center;"></div>
-		<div style="display:none" id="activity-info">'.v_info('Es gibt gerade nichts neues').'</div>
+		<div style="display:none" id="activity-info">'.v_info('Es gibt gerade nichts Neues').'</div>
 	</div>');
 	
 	/*
@@ -420,7 +420,7 @@ else if(S::may('fs'))
 	
 	if($gerettet > 0)
 	{
-		$gerettet = ', Du hast <strong>'.number_format($gerettet,2,",",".").' kg</strong> gerettet';
+		$gerettet = ', Du hast <strong>'.number_format($gerettet,2,",",".").'<span style="white-space:nowrap">&thinsp;</span>kg</strong> gerettet';
 	}
 	else
 	{
@@ -488,7 +488,7 @@ else if(S::may('fs'))
 	}
 	
 	/*
-	 * Essenkörbe
+	 * Essenskörbe
 	 */
 	
 	if($baskets = $db->closeBaskets())
@@ -547,7 +547,7 @@ else if(S::may('fs'))
 	}
 	else
 	{
-		addContent(v_info('Du bist bis jetzt in keinem Fillialteam'),CNT_LEFT);
+		addContent(v_info('Du bist bis jetzt in keinem Filial-Team.'),CNT_LEFT);
 	}
 }
 else
@@ -609,7 +609,7 @@ function u_myBetriebe($betriebe)
 		}
 		$list .= '
 		</ul>';
-		$out .= v_field($list, 'Du holst Essen ab bei',array('class'=>'ui-padding'));
+		$out .= v_field($list, 'Du holst Lebensmittel ab bei',array('class'=>'ui-padding'));
 	}
 
 	if(!empty($betriebe['waitspringer']))
@@ -727,7 +727,7 @@ function u_myBetriebe($betriebe)
 
 	if(empty($out))
 	{
-		$out = v_info('Du bist bis jetzt in keinem Fillial-Team');
+		$out = v_info('Du bist bis jetzt in keinem Filial-Team.');
 	}
 
 	if(S::may('bieb'))
@@ -807,7 +807,7 @@ function u_update_type($u)
 			<div class="activity_feed_content">
 				<div class="activity_feed_content_text">
 					<div class="activity_feed_content_info">
-						<a href="#" onclick="profile('.(int)$u['foodsaver_id'].');">'.$u['foodsaver_name'].'</a> hat etwas zum Thema "<a href="/?page=bezirk&bid='.$u['bezirk_id'].'&sub=botforum&tid='.$u['id'].'&pid='.$u['last_post_id'].'#post'.$u['last_post_id'].'">'.$u['name'].'</a>" ins Botschafter-Forum geschrieben.
+						<a href="#" onclick="profile('.(int)$u['foodsaver_id'].');">'.$u['foodsaver_name'].'</a> hat etwas zum Thema "<a href="/?page=bezirk&bid='.$u['bezirk_id'].'&sub=botforum&tid='.$u['id'].'&pid='.$u['last_post_id'].'#post'.$u['last_post_id'].'">'.$u['name'].'</a>" ins Botschafterforum geschrieben.
 					</div>
 				</div>
 
