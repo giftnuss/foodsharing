@@ -6,10 +6,10 @@ allow precise versions of software to be defined to match production setup close
 ## Getting started
 
 Make sure you have installed
-[docker](https://docs.docker.com/engine/getstarted/step_one/#step-1-get-docker) and 
+[docker](https://docs.docker.com/engine/getstarted/step_one/#step-1-get-docker) and
 [docker-compose](https://docs.docker.com/compose/install/) (at least version 1.6.0).
 If you're [using OSX](https://docs.docker.com/engine/installation/mac/)
-you'll have a better experience with Docker for Mac rather than Docker Toolbox 
+you'll have a better experience with Docker for Mac rather than Docker Toolbox
 (files won't update properly if using Toolbox).
 There is no _official_ support for running under Windows at this time, but if
 you'd like to help out getting that to work, please do!
@@ -20,7 +20,7 @@ cd foodsharing
 ./scripts/start
 ```
 
-It'll take some time the first time you run it to fetch all the docker images and 
+It'll take some time the first time you run it to fetch all the docker images and
 install composer/npm etc, so go and make a cup of tea.
 
 ### Up and Running
@@ -146,7 +146,7 @@ There are a number of helper scripts available. Most of them obey the `FS_INT` e
 | ./scripts/clean | remove anything add by start/test commands |
 | ./scripts/initdb | create the database and run migrations |
 | ./scripts/mkdirs | create directories that need to be present |
-| ./scripts/mysql | run mysql command in correct context |
+| ./scripts/mysql | run mysql command in correct context: ./scripts/mysql foodsharing "select * from fs_foodsaver" |
 | ./scripts/mysqldump | run mysqldump command in correct context |
 | ./scripts/npm | run npm in the chat server context |
 | ./scripts/rebuild-container [name] | rebuilds and restarts a single container, useful if changing nginx config for example |
