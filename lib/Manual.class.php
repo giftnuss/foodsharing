@@ -1519,11 +1519,6 @@ class ManualDb extends Db
         ');
 
         $this->del('
-            DELETE FROM '.PREFIX.'basket
-            WHERE foodsaver_id = '.(int)$id.'
-        ');
-
-        $this->del('
             DELETE FROM '.PREFIX.'botschafter 
             WHERE foodsaver_id = '.(int)$id.'
         ');
@@ -1531,11 +1526,6 @@ class ManualDb extends Db
         $this->del('
             DELETE FROM '.PREFIX.'buddy  
             WHERE foodsaver_id = '.(int)$id.' OR buddy_id = '.(int)$id.'
-        ');
-
-        $this->del('
-            DELETE FROM '.PREFIX.'wallpost 
-            WHERE foodsaver_id = '.(int)$id.'
         ');
 
         $this->del('
@@ -1610,6 +1600,7 @@ class ManualDb extends Db
 		    
 		    SET 
 		    `deleted` = 1,
+		    `deleted_at` = NOW(),
 		    `position` = "",
 		    `verified` = 0,
 		    `rolle` = 0,
