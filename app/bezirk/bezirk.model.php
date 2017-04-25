@@ -107,6 +107,7 @@ class BezirkModel extends Model
 			WHERE 	fb.foodsaver_id = fs.id
 			AND 	fb.bezirk_id = '.(int)$bezirk_id.'
 			AND 	fb.`active` = 1
+			AND     fs.deleted = 0
 		');
 	}
 	
@@ -203,10 +204,10 @@ class BezirkModel extends Model
 		return $this->q('
 
 			SELECT 		fs.id AS fs_id,
-						IFNULL(fs.name,"abgemeldeter Benutzer") AS fs_name,
+						IF(fs.deleted = 1,"abgemeldeter Benutzer", fs.name) AS fs_name,
 						fs.photo AS fs_photo,
 						fs.sleep_status AS fs_sleep_status,
-						IF(fs.id IS NULL, "Beitrag von nicht mehr angemeldetem Benutzer", p.body) as body,
+						IF(fs.deleted = 1, "Beitrag von nicht mehr angemeldetem Benutzer", p.body) as body,
 						p.`time`,
 						p.id,
 						UNIX_TIMESTAMP(p.`time`) AS time_ts
@@ -554,6 +555,7 @@ class BezirkModel extends Model
 					`'.PREFIX.'foodsaver_has_bezirk` c
 				
 			WHERE 	c.`foodsaver_id` = fs.id
+			AND     fs.deleted = 0
 			AND 	c.bezirk_id = '.(int)$id.'
 			AND 	c.active = 1
 			AND 	fs.sleep_status = 0
@@ -572,6 +574,7 @@ class BezirkModel extends Model
 					`'.PREFIX.'foodsaver_has_bezirk` c
 		
 			WHERE 	c.`foodsaver_id` = fs.id
+			AND     fs.deleted = 0
 			AND 	c.bezirk_id = '.(int)$id.'
 			AND 	c.active = 1
 			AND 	fs.sleep_status > 0
@@ -592,6 +595,7 @@ class BezirkModel extends Model
 					`'.PREFIX.'botschafter` c
 				
 			WHERE 	c.`foodsaver_id` = fs.id
+			AND     fs.deleted = 0
 			AND 	c.bezirk_id = '.(int)$id.'
 		');
 		

@@ -778,8 +778,9 @@ class Db
 						`photo`
 			
 				FROM 	`'.PREFIX.'foodsaver`
-				WHERE 	`email` = "'.$email.'"
-				AND 	`passwd` 	= "'.$hashed.'"
+				WHERE 	`email`     = "'.$email.'"
+				AND 	`passwd` 	= "'.$hashed.'" 
+				AND     `deleted`   = 0
 		';
 		
 		if($user = $this->qRow($sql))

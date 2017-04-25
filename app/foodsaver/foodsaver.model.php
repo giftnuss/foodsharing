@@ -24,6 +24,9 @@ class FoodsaverModel extends Model
 			WHERE
 				fs.id = hb.foodsaver_id
 				
+            AND 
+                fs.deleted = 0
+				
 			AND
 				hb.bezirk_id = '.(int)$bezirk_id.'
 			
@@ -100,7 +103,10 @@ class FoodsaverModel extends Model
 				'.PREFIX.'foodsaver
 				
 			WHERE
-				id = '.(int)$fsid.'
+				id = '.(int)$fsid.' 
+				
+            AND 
+                deleted = 0
 		');
 	}
 }

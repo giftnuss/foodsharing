@@ -1502,7 +1502,169 @@ class ManualDb extends Db
 			)
 		');
 
-		return $this->del('DELETE FROM '.PREFIX.'foodsaver WHERE id = '.(int)$id);
+
+        $this->del('
+            DELETE FROM '.PREFIX.'betrieb_team 
+            WHERE foodsaver_id = '.(int)$id.'
+        ');
+
+        $this->del('
+            DELETE FROM '.PREFIX.'apitoken 
+            WHERE foodsaver_id = '.(int)$id.'
+        ');
+
+        $this->del('
+            DELETE FROM '.PREFIX.'basket_anfrage 
+            WHERE foodsaver_id = '.(int)$id.'
+        ');
+
+        $this->del('
+            DELETE FROM '.PREFIX.'basket
+            WHERE foodsaver_id = '.(int)$id.'
+        ');
+
+        $this->del('
+            DELETE FROM '.PREFIX.'botschafter 
+            WHERE foodsaver_id = '.(int)$id.'
+        ');
+
+        $this->del('
+            DELETE FROM '.PREFIX.'buddy  
+            WHERE foodsaver_id = '.(int)$id.' OR buddy_id = '.(int)$id.'
+        ');
+
+        $this->del('
+            DELETE FROM '.PREFIX.'wallpost 
+            WHERE foodsaver_id = '.(int)$id.'
+        ');
+
+        $this->del('
+            DELETE FROM '.PREFIX.'event 
+            WHERE foodsaver_id = '.(int)$id.'
+        ');
+
+        $this->del('
+            DELETE FROM '.PREFIX.'fairteiler_follower 
+            WHERE foodsaver_id = '.(int)$id.'
+        ');
+
+        $this->del('
+            DELETE FROM '.PREFIX.'foodsaver_has_bell
+            WHERE foodsaver_id = '.(int)$id.'
+        ');
+
+        $this->del('
+            DELETE FROM '.PREFIX.'foodsaver_has_contact
+            WHERE foodsaver_id = '.(int)$id.'
+        ');
+
+        $this->del('
+            DELETE FROM '.PREFIX.'foodsaver_has_event
+            WHERE foodsaver_id = '.(int)$id.'
+        ');
+
+        $this->del('
+            DELETE FROM '.PREFIX.'foodsaver_has_fairteiler
+            WHERE foodsaver_id = '.(int)$id.'
+        ');
+
+        $this->del('
+            DELETE FROM '.PREFIX.'foodsaver_has_wallpost
+            WHERE foodsaver_id = '.(int)$id.'
+        ');
+
+        $this->del('
+            DELETE FROM '.PREFIX.'mailbox_member
+            WHERE foodsaver_id = '.(int)$id.'
+        ');
+
+        $this->del('
+            DELETE FROM '.PREFIX.'fs_mailchange
+            WHERE foodsaver_id = '.(int)$id.'
+        ');
+
+        $this->del('
+            DELETE FROM '.PREFIX.'pass_gen
+            WHERE foodsaver_id = '.(int)$id.' OR bot_id = '.(int)$id.'
+        ');
+
+        $this->del('
+            DELETE FROM '.PREFIX.'pass_request
+            WHERE foodsaver_id = '.(int)$id.' OR bot_id = '.(int)$id.'
+        ');
+
+        $this->del('
+            DELETE FROM '.PREFIX.'quiz_session
+            WHERE foodsaver_id = '.(int)$id.' OR bot_id = '.(int)$id.'
+        ');
+
+        $this->del('
+            DELETE FROM '.PREFIX.'theme_follower
+            WHERE foodsaver_id = '.(int)$id.' OR bot_id = '.(int)$id.'
+        ');
+
+		return $this->update('
+		
+		
+		    UPDATE `'.PREFIX.'foodsaver` 
+		    
+		    SET 
+		    `deleted` = 1,
+		    `position` = "",
+		    `verified` = 0,
+		    `rolle` = 0,
+		    `type` = 0,
+		    `plz` = "",
+		    `stadt`= "", 
+		    `lat`= "", 
+		    `lon` = "",
+		    `photo` = "",
+		    `photo_public` = 0,
+		    `email` = NULL,
+		    `passwd` = "",
+		    `name`= "", 
+		    `admin` = 0,
+		    `nachname` = "",
+		    `anschrift` = "",
+		    `telefon`="", 
+		    `tox`="", 
+		    `homepage` = "", 
+		    `github` = "", 
+		    `twitter` = "", 
+		    `handy` = "", 
+		    `geschlecht` = NULL, 
+		    `geb_datum` = NULL, 
+		    `fs_id` = NULL, 
+		    `orgateam`= 0,
+		    `active` = 0, 
+		    `data`="",
+		    `about_me_public` = "",
+		    `newsletter` = 0,
+		    `token` = "", 
+		    `infomail_message` = ", 
+		    `last_login` = NULL, 
+		    `stat_fetchweight` = 0,
+		    `stat_fetchcount` = 0, 
+		    `stat_ratecount` = 0, 
+		    `stat_rating` = 0,
+		    `stat_postcount` = 0, 
+		    `stat_buddycount` = 0,
+		    `stat_bananacount` = 0,
+		    `stat_fetchrate` = 0,
+		    `sleep_status` = 0, 
+		    `sleep_from` = NULL,`sleep_until`= NULL,
+		    `sleep_msg`= "",
+		    `last_mid` = NULL,
+		    `option` = "", 
+		    `beta` = 0,
+		    `fs_password` = "",
+		    `quiz_rolle`=0,
+		    `contact_public` = 0
+		     
+		    
+		    WHERE 
+		        id = '.(int)$id
+        );
 	}
 
 	public function getBezirk($id = false)
