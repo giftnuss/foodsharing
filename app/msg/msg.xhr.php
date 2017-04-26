@@ -44,7 +44,7 @@ class MsgXhr extends Control
 	 */
 	public function leave()
 	{
-		if($this->mayConversation($_GET['cid']) && !$this->model->conversationLocked($_GET))
+		if($this->mayConversation($_GET['cid']) && !$this->model->conversationLocked($_GET['cid']))
 		{
 			if($this->model->deleteUserFromConversation($_GET['cid'],fsId()))
 			{
