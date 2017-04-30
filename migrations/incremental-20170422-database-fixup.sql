@@ -192,8 +192,6 @@ ALTER TABLE fs_rating ADD CONSTRAINT FOREIGN KEY (rater_id) REFERENCES fs_foodsa
 
 ALTER TABLE fs_stat_abholmengen ADD CONSTRAINT FOREIGN KEY (betrieb_id) REFERENCES fs_betrieb(id) ON DELETE CASCADE;
 
-ALTER TABLE fs_theme ADD CONSTRAINT FOREIGN KEY (foodsaver_id) REFERENCES fs_foodsaver(id) ON DELETE CASCADE;
-
 DELETE FROM fs_theme_follower WHERE theme_id NOT IN (SELECT id FROM fs_theme);
 ALTER TABLE fs_theme_follower ADD CONSTRAINT FOREIGN KEY (theme_id) REFERENCES fs_theme(id) ON DELETE CASCADE;
 

@@ -400,4 +400,45 @@ Each try (by users) of a quiz ("session")
 
 ### todo
 remove broken data
-FK to *fs_foodsaver*, `ON DELETE CASCADE`
+
+## fs_rating
+Stores trust bananas
+
+### todo
+remove broken data (as we don't want to have trust bananas from/for deleted users)
+Add FK
+
+## fs_stat_abholmengen
+Stores statistics per store (maybe broken implementation?)
+
+### todo
+add FK to store
+
+## fs_theme
+forum themes
+
+### todo
+nothing as threads from deleted users should be kept
+
+## fs_theme_follower
+stores who follows themes
+
+### todo
+remove broken data (as follower information is irrelevant for broken XY)
+Add FK
+
+## fs_theme_post
+Stores posts in themes
+
+### todo
+Recreate users
+Remove broken data (for themes, not users)
+
+Add FK to themes
+
+## fs_usernotes_has_wallpost
+connects organotes on users with wallposts
+
+### todo
+recreate missing users
+remove broken entries (for wallposts)
