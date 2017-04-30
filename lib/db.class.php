@@ -3,7 +3,7 @@ class Mem
 {
 	public static $cache;
 	public static $connected;
-	
+
 	public static function connect()
 	{
 		if(MEM_ENABLED)
@@ -13,7 +13,7 @@ class Mem
 			Mem::$cache->connect(REDIS_HOST, REDIS_PORT);
 		}
 	}
-	
+
 	// Set a key to a value, ttl in seconds
 	public static function set($key,$data,$ttl = 0)
 	{
@@ -50,7 +50,7 @@ class Mem
 		}
 		return false;
 	}
-	
+
 	public static function del($key)
 	{
 		if(MEM_ENABLED)
@@ -59,17 +59,17 @@ class Mem
 		}
 		return false;
 	}
-	
+
 	public static function user($id,$key)
 	{
 		return Mem::get('user-'.$key.'-'.$id);
 	}
-	
+
 	public static function userSet($id,$key,$value)
 	{
 		return Mem::set('user-'.$key.'-'.$id, $value);
 	}
-	
+
 	public static function userAppend($id,$key,$value)
 	{
 		$out = array();
@@ -83,28 +83,28 @@ class Mem
 		$out[] = $value;
 		return Mem::set('user-'.$key.'-'.$id, $out);
 	}
-	
+
 	public static function userDel($id,$key)
 	{
 		return Mem::del('user-'.$key.'-'.$id);
 	}
-	
+
 	public static function getPageCache()
 	{
 		global $g_page_cache_suffix;
 		return Mem::get('pc-'.$_SERVER['REQUEST_URI'] . ':' . fsId());
 	}
-	
+
 	public static function setPageCache($page,$ttl)
 	{
 		return Mem::set('pc-'.$_SERVER['REQUEST_URI'] . ':' . fsId(), $page, $ttl);
 	}
-	
+
 	public static function delPageCache($page)
 	{
 		return Mem::del('pc-'. $page . ':' . fsId());
 	}
-	
+
 	/**
 	 * Method to check users online status by checking timestamp from memcahce
 	 *
@@ -117,7 +117,7 @@ class Mem
 		{
 			if((time()-$time) < 600)
 			{
-				
+
 				return true;
 			}
 		}
@@ -144,26 +144,26 @@ class Db
 	private $mysqli;
 	private $is_connected;
 	private $values;
-	
+
 	public function __construct()
 	{
 		$this->values = array();
-		
+
 		global $g_dbclean;
 		$this->mysqli = new mysqli();
 		$this->mysqli->connect(DB_HOST, DB_USER, DB_PASS, DB_DB);
 		$this->sql("SET NAMES 'utf8'");
 		$g_dbclean['mysqli'] = $this->mysqli;
 	}
-	
+
 	public function addPassRequest($email,$mail = true)
 	{
 		if($fs = $this->qRow('SELECT `id`,`email`,`name`,`geschlecht` FROM `'.PREFIX.'foodsaver` WHERE `email` = '.$this->strval($email)))
 		{
-			
+
 			$k = uniqid();
 			$key = md5($k);
-				
+
 			$id = $this->insert('
 			REPLACE INTO 	`'.PREFIX.'pass_request`
 			(
@@ -177,7 +177,7 @@ class Db
 				'.$this->strval($key).',
 				NOW()
 			)');
-			
+
 			if($mail)
 			{
 				$vars = array(
@@ -188,14 +188,14 @@ class Db
 
 				tplMail(10, $fs['email'],$vars);
 				return true;
-				
+
 			}
 			else
 			{
 				return $key;
-			}	
+			}
 		}
-	
+
 		return false;
 	}
 
@@ -210,7 +210,7 @@ class Db
 				default:return false; break;
 			}
 		}
-		
+
 		if($out !== false)
 		{
 			return $out;
@@ -220,7 +220,7 @@ class Db
 			return '0';
 		}
 	}
-	
+
 	private function addCommentBetrieb($data)
 	{
 		if((int)$data['id'] > 0 && strlen($data['comment']) > 0)
@@ -232,7 +232,7 @@ class Db
 				`betrieb_id`,
 				`text`,
 				`zeit`
-			) 
+			)
 			VALUES
 			(
 				'.$this->getFoodsaverId().',
@@ -240,17 +240,17 @@ class Db
 				'.$this->strval(urldecode($data['comment'])).',
 				'.$this->dateval(date('Y-m-d H:i:s')).'
 			)');
-			
+
 			return json_encode(array(
 				'status' => 1,
 				'msg' => 'Notiz wurde gespeichert!'
 			));
-			
+
 		}
-		
+
 		return false;
 	}
-	
+
 	public function getRolle()
 	{
 		$out = array();
@@ -265,11 +265,11 @@ class Db
 				);
 			}
 		}
-		
+
 		if(isset($_SESSION['client']['verantwortlich']))
 		{
 			$out['verantwortlich'] = array();
-			
+
 			$i=0;
 			foreach ($_SESSION['client']['verantwortlich'] as $v)
 			{
@@ -288,7 +288,7 @@ class Db
 				}
 			}
 		}
-		
+
 		if(empty($out))
 		{
 			return false;
@@ -298,7 +298,7 @@ class Db
 			return $out;
 		}
 	}
-	
+
 	public function getBezirkName($bezirk_id = false)
 	{
 		if($bezirk_id === false)
@@ -307,7 +307,7 @@ class Db
 		}
 		return $this->qOne('SELECT `name` FROM `'.PREFIX.'bezirk` WHERE `id` = '.$this->intval($bezirk_id));
 	}
-	
+
 	private function getBetriebName($betrieb_id)
 	{
 		return $this->qOne('SELECT `name` FROM `'.PREFIX.'betrieb` WHERE `id` = '.$this->intval($betrieb_id));
@@ -320,38 +320,38 @@ class Db
 (
     [form_submit] => newbetrieb
     [bezeichnung] => kjl
-    [str] => 
-    [hsnr] => 
+    [str] =>
+    [hsnr] =>
     [plz] => 123
-    [ort] => 
+    [ort] =>
     [kategorie] => 2
     [status] => 2
     [betreibskette] => 3
-    [ansprechpartner] => 
-    [emailadresse] => 
-    [telefon] => 
-    [fax] => 
-    [verantwortlicherfoodsaver] => 
+    [ansprechpartner] =>
+    [emailadresse] =>
+    [telefon] =>
+    [fax] =>
+    [verantwortlicherfoodsaver] =>
 )
 		 */
-		
-		
-		
+
+
+
 		if($betrieb_id = $this->insert('
 				INSERT INTO '.PREFIX.'betrieb
 				(
-					plz, 
-					bezirk_id, 
-					kette_id, 
-					betrieb_kategorie_id, 
-					name, 
-					str, 
-					hsnr, 
-					`status`, 
+					plz,
+					bezirk_id,
+					kette_id,
+					betrieb_kategorie_id,
+					name,
+					str,
+					hsnr,
+					`status`,
 					status_date,
-					ansprechpartner, 
-					telefon, 
-					email, 
+					ansprechpartner,
+					telefon,
+					email,
 					fax
 				)
 				VALUES
@@ -369,7 +369,7 @@ class Db
 					'.$this->strval($data['telefon']).',
 					'.$this->strval($data['emailadresse']).',
 					'.$this->strval($data['fax']).'
-					
+
 				)
 		'))
 		{
@@ -377,10 +377,10 @@ class Db
 			{
 				$this->addVerantwortlicher($data['verantwortlicherfoodsaver'],$betrieb_id);
 			}
-			
+
 			return $betrieb_id;
 		}
-		
+
 		return false;
 	}
 
@@ -406,13 +406,13 @@ class Db
 						`'.PREFIX.'foodsaver`.`telefon`,
 						`'.PREFIX.'foodsaver`.`handy`,
 						plz
-		
+
 			FROM 		`'.PREFIX.'foodsaver`
 		');
 	}
-	
-	
-	
+
+
+
 	public function getBetriebe($bezirk_id = false)
 	{
 		if(!$bezirk_id)
@@ -420,23 +420,23 @@ class Db
 			$bezirk_id = $this->getCurrentBezirkId();
 		}
 		return $this->q('
-				SELECT 	'.PREFIX.'betrieb.id, 
-						'.PREFIX.'betrieb.plz,  
-						'.PREFIX.'betrieb.kette_id, 
-						'.PREFIX.'betrieb.betrieb_kategorie_id, 
-						'.PREFIX.'betrieb.name, 
-						'.PREFIX.'betrieb.str, 
+				SELECT 	'.PREFIX.'betrieb.id,
+						'.PREFIX.'betrieb.plz,
+						'.PREFIX.'betrieb.kette_id,
+						'.PREFIX.'betrieb.betrieb_kategorie_id,
+						'.PREFIX.'betrieb.name,
+						'.PREFIX.'betrieb.str,
 						'.PREFIX.'betrieb.hsnr,
 						'.PREFIX.'betrieb.`betrieb_status_id`
-				
+
 				FROM 	'.PREFIX.'betrieb
-				
+
 				WHERE 	'.PREFIX.'betrieb.bezirk_id = '.$this->intval($bezirk_id).'
-				
-				
+
+
 				');// -- AND 	'.PREFIX.'betrieb.bezirk_id = '.$this->intval(1).'
 	}
-	
+
 	public function may()
 	{
 		if(isset($_SESSION) && isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0)
@@ -460,7 +460,7 @@ class Db
   public function rollback() {
     $this->mysqli->rollback();
   }
-	
+
 	public function sql($query)
 	{
 		$res = $this->mysqli->query($query);
@@ -469,7 +469,7 @@ class Db
 		}
 		return $res;
 	}
-	
+
 	public function qOne($sql)
 	{
 		if($res = $this->sql($sql))
@@ -484,7 +484,7 @@ class Db
 		}
 		return false;
 	}
-	
+
 	public function qCol($sql)
 	{
 		$out = array();
@@ -495,7 +495,7 @@ class Db
 				$out[] = qs($row[0]);
 			}
 		}
-		
+
 		if(count($out) > 0)
 		{
 			return $out;
@@ -505,11 +505,11 @@ class Db
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Method to get an asoc array insted the colums are the keys
 	 * so aftter all we can check like this if(isset($test[$key])) ...
-	 * 
+	 *
 	 * @param string $sql
 	 * @return multitype:array |boolean
 	 */
@@ -524,7 +524,7 @@ class Db
 				$out[$val] = $val;
 			}
 		}
-	
+
 		if(count($out) > 0)
 		{
 			return $out;
@@ -534,13 +534,13 @@ class Db
 			return false;
 		}
 	}
-	
+
 	public function qRow($sql)
 	{
-		
+
 		try {
 			$res = $this->sql($sql);
-			
+
 			if(is_object($res) && ($row = $res->fetch_assoc()))
 			{
 				foreach ($row as $i => $r)
@@ -556,17 +556,17 @@ class Db
 		}
 		return false;
 	}
-	
+
 	public function del($sql)
 	{
 		if($res = $this->sql($sql))
 		{
 			return $this->mysqli->affected_rows;
 		}
-		
+
 		return false;
 	}
-	
+
 	public function insert($sql)
 	{
 		if($res = $this->sql($sql))
@@ -578,12 +578,12 @@ class Db
 			return false;
 		}
 	}
-	
+
 	public function intval($val)
 	{
 		return (int)$val;
 	}
-	
+
 	public function update($sql)
 	{
 		if($this->sql($sql))
@@ -595,7 +595,7 @@ class Db
 			return false;
 		}
 	}
-	
+
 	public function dateval($val)
 	{
 		return '"'.$this->safe($val).'"';
@@ -605,7 +605,7 @@ class Db
 	{
 		return floatval($val);
 	}
-	
+
 	public function strval($val,$html = false)
 	{
 		if(is_string($html) || $html === false)
@@ -621,7 +621,7 @@ class Db
 		}
 		return '"'.$this->safe($val).'"';
 	}
-	
+
 	public function q($sql)
 	{
 		$out = array();
@@ -636,7 +636,7 @@ class Db
 				$out[] = $row;
 			}
 		}
-		
+
 		if(count($out) > 0)
 		{
 			return $out;
@@ -646,54 +646,54 @@ class Db
 			return false;
 		}
 	}
-	
+
 	public function resetPassword($fs_id,$email)
 	{
 		/*
 		$password = nettesPasswort();
-		
+
 		$crypt = $this->encryptMd5($email, $password);
-		
+
 		$this->update('UPDATE '.PREFIX.'foodsaver SET `passwd` = "'.$crypt.'" WHERE `id` = '.$this->intval($fs_id));
-		
+
 		return $password;
 		*/
 	}
-	
+
 	public function encryptMd5($email,$pass)
 	{
 		$email = strtolower($email);
-		
+
 		return md5($email.'-lz%&lk4-'.$pass);
 	}
-	
+
 	public function __destruct()
 	{
 		@$this->mysqli->close();
 	}
-	
+
 	public function close()
 	{
 		@$this->mysqli->close();
 	}
-	
+
 	public function safe($str)
 	{
 		return $this->mysqli->escape_string($str);
 	}
-	
+
 	public function getFoodsaverId()
 	{
 		return (int)$_SESSION['client']['id'];
 	}
-	
+
 	public function relogin()
 	{
 		$this->initSessionData($_SESSION['client']['id']);
-		
+
 		return true;
 	}
-	
+
 	public function logout()
 	{
 		Mem::userDel(fsId(), 'active');
@@ -706,11 +706,11 @@ class Db
 		if($client = $this->checkClient($email, $pass))
 		{
 			$this->initSessionData($client['id']);
-			
+
 			$this->update('
 				UPDATE '.PREFIX.'foodsaver
 				SET 	last_login = NOW()
-				WHERE 	id = '.(int)fsId().'		
+				WHERE 	id = '.(int)fsId().'
 			');
 
 			$blocked = $this->qOne('
@@ -724,7 +724,7 @@ class Db
 			return false;
 		}
 	}
-	
+
 	public function gerettet_wrapper($id)
 	{
 		$ger = array(
@@ -736,12 +736,12 @@ class Db
 				6 => 45,
 				7 => 64
 		);
-	
+
 		if(!isset($ger[$id]))
 		{
 			return 1.5;
 		}
-	
+
 		return $ger[$id];
 	}
 
@@ -755,7 +755,7 @@ class Db
     $salt='DYZG93b04yJfIxfs2guV3Uub5wv7iR2G0FgaC9mi';
     return sha1($salt.$pass);
   }
-	
+
   /**
    * Check given email and password combination,
    * update password if old-style one is detected.
@@ -768,7 +768,7 @@ class Db
 			return false;
 		}
 		$hashed = $this->encryptMd5($email, $pass);
-		
+
 		$user = false;
 		$sql = '
 				SELECT 	`id`,
@@ -776,13 +776,13 @@ class Db
 						`admin`,
 						`orgateam`,
 						`photo`
-			
+
 				FROM 	`'.PREFIX.'foodsaver`
 				WHERE 	`email`     = "'.$email.'"
-				AND 	`passwd` 	= "'.$hashed.'" 
-				AND     `deleted`   = 0
+				AND 	`passwd` 	= "'.$hashed.'"
+				AND     `deleted_at`   IS NULL
 		';
-		
+
 		if($user = $this->qRow($sql))
 		{
 			return $user;
@@ -809,13 +809,13 @@ class Db
 
 			return false;
 		}
-		
-		
+
+
 	}
-	
+
 	/**
 	 * Method to check users online status by checking timestamp from memcahce
-	 * 
+	 *
 	 * @param integer $fs_id
 	 * @return boolean
 	 */
@@ -827,7 +827,7 @@ class Db
 		}
 		return false;
 	}
-	
+
 	public function updateActivity($fs_id = false)
 	{
 		if($fs_id === false)
@@ -837,12 +837,12 @@ class Db
 		Mem::userSet($fs_id, 'active', time());
 		Mem::userSet($fs_id, 'sid', session_id());
 	}
-	
+
 	public function dbLoginAs($fs_id)
 	{
 		return $this->initSessionData($fs_id);
 	}
-	
+
 	private function initSessionData($fs_id)
 	{
 		$this->updateActivity($fs_id);
@@ -864,7 +864,7 @@ class Db
 							`mailbox_id`,
 							`option`,
 							`geschlecht`
-				
+
 				FROM 		`'.PREFIX.'foodsaver`
 
 				WHERE 		`id` = '.$this->intval($fs_id).'
@@ -872,19 +872,19 @@ class Db
 		{
 			S::set('g_location', array(
 				'lat' => $fs['lat'],
-				'lon' => $fs['lon']		
+				'lon' => $fs['lon']
 			));
-			
+
 			/*
 			 * temporary special stuff for quiz
 			 */
 			$hastodo = false;
 			$hastodo_id = 0;
-			
+
 			$count_fs_quiz = (int)$this->qOne('SELECT COUNT(id) FROM '.PREFIX.'quiz_session WHERE foodsaver_id = '.(int)$fs_id.' AND quiz_id = 1 AND `status` = 1');
 			$count_bib_quiz = (int)$this->qOne('SELECT COUNT(id) FROM '.PREFIX.'quiz_session WHERE foodsaver_id = '.(int)$fs_id.' AND quiz_id = 2 AND `status` = 1');
 			$count_bot_quiz = (int)$this->qOne('SELECT COUNT(id) FROM '.PREFIX.'quiz_session WHERE foodsaver_id = '.(int)$fs_id.' AND quiz_id = 3 AND `status` = 1');
-			
+
 			$count_verantwortlich = (int)$this->qOne('SELECT COUNT(betrieb_id) FROM '.PREFIX.'betrieb_team WHERE foodsaver_id = '.(int)$fs_id.' AND verantwortlich = 1');
 			$count_botschafter = (int)$this->qOne('SELECT COUNT( bezirk_id )FROM '.PREFIX.'botschafter WHERE foodsaver_id = ' . (int)$fs_id);
 
@@ -901,7 +901,7 @@ class Db
 			{
 				$quiz_rolle = 3;
 			}
-			
+
 			$this->update('UPDATE '.PREFIX.'foodsaver SET quiz_rolle = '.(int)$quiz_rolle.' WHERE id = '.(int)$fs['id']);
 			/*
 			echo '<pre>';
@@ -909,7 +909,7 @@ class Db
 			echo $count_fs_quiz;
 			die();
 			*/
-			
+
 			if((int)$fs['rolle'] == 1 && $count_fs_quiz == 0)
 			{
 				$hastodo = true;
@@ -927,7 +927,7 @@ class Db
 
 				$hastodo = true;
 				$hastodo_id = 2;
-				
+
 			}
 			else if
 			(
@@ -941,14 +941,14 @@ class Db
 				$hastodo = true;
 				$hastodo_id = 3;
 			}
-			
+
 			S::set('hastodoquiz', $hastodo);
 			S::set('hastodoquiz-id', $hastodo_id);
-			
+
 			/*
 			 * temp quiz stuff end...
 			 */
-			
+
 			$mailbox = false;
 			if((int)$fs['mailbox_id'] > 0)
 			{
@@ -957,11 +957,11 @@ class Db
 			if((int)$fs['bezirk_id'] > 0 && $fs['rolle'] > 0)
 			{
 				$this->insert('
-					INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_bezirk`(`foodsaver_id`, `bezirk_id`, `active`, `added`) VALUES 
+					INSERT IGNORE INTO `'.PREFIX.'foodsaver_has_bezirk`(`foodsaver_id`, `bezirk_id`, `active`, `added`) VALUES
 					('.(int)$fs['id'].','.(int)$fs['bezirk_id'].',1,NOW())
 				');
 			}
-			
+
 			if($master = $this->getVal('master','bezirk',$fs['bezirk_id']))
 			{
 				$this->insert('
@@ -969,7 +969,7 @@ class Db
 					('.(int)$fs['id'].','.(int)$master.',1,NOW())
 				');
 			}
-			
+
 			if($fs['photo'] != '' && file_exists('images/mini_q_'.$fs['photo']))
 			{
 				$image1 = new fImage('images/mini_q_'.$fs['photo']);
@@ -980,18 +980,18 @@ class Db
 					$image1->saveChanges();
 				}
 			}
-			
+
 			$fs['buddys'] = $this->qColKey('SELECT buddy_id FROM '.PREFIX.'buddy WHERE foodsaver_id = '.(int)$fs_id.' AND confirmed = 1');
-			
+
 			/*
 			 * New Session Management
-			 */ 
+			 */
 			S::login($fs);
-			
+
 			/*
 			 * store all options in the session
 			*/
-				
+
 			if(!empty($fs['option']))
 			{
 				$options = unserialize($fs['option']);
@@ -1000,7 +1000,7 @@ class Db
 					S::setOption($key, $val);
 				}
 			}
-			
+
 			$_SESSION['login'] = true;
 			$_SESSION['client'] = array
 			(
@@ -1028,12 +1028,12 @@ class Db
 								`'.PREFIX.'bezirk`.name,
 								`'.PREFIX.'bezirk`.id,
 								`'.PREFIX.'bezirk`.type
-			
+
 						FROM 	`'.PREFIX.'botschafter`,
 								`'.PREFIX.'bezirk`
-			
+
 						WHERE 	`'.PREFIX.'bezirk`.`id` = `'.PREFIX.'botschafter`.`bezirk_id`
-			
+
 						AND 	`'.PREFIX.'botschafter`.`foodsaver_id` = '.$this->intval($fs['id']).'
 				'))
 				{
@@ -1061,23 +1061,23 @@ class Db
 							)
 						');
 						}
-						
+
 					}
 				}
-				
+
 				if($r = $this->q('
 							SELECT 	b.`id`,
 									b.name,
 									b.type,
 									b.`master`
-					
+
 							FROM 	`'.PREFIX.'foodsaver_has_bezirk` hb,
 									`'.PREFIX.'bezirk` b
-					
-							WHERE 	hb.bezirk_id = b.id 	
+
+							WHERE 	hb.bezirk_id = b.id
 							AND 	`foodsaver_id` = '.$this->intval($fs['id']).'
 							AND 	hb.active = 1
-						
+
 							ORDER BY b.name
 					'))
 				{
@@ -1096,10 +1096,10 @@ class Db
 			if($r = $this->q('
 						SELECT 	b.`id`,
 								b.name
-			
+
 						FROM 	`'.PREFIX.'betrieb_team` bt,
 								`'.PREFIX.'betrieb` b
-			
+
 						WHERE 	bt.betrieb_id = b.id
 						AND 	bt.`foodsaver_id` = '.$this->intval($fs['id']).'
 						AND 	bt.active = 1
@@ -1112,15 +1112,15 @@ class Db
 					$_SESSION['client']['betriebe'][$rr['id']] = $rr;
 				}
 			}
-			
-			
-			
+
+
+
 			if($r = $this->q
 			('
 						SELECT 	`betrieb_id`
-				
+
 						FROM 	`'.PREFIX.'betrieb_team`
-				
+
 						WHERE 	`foodsaver_id` = '.$this->intval($fs['id']).'
 						AND 	`verantwortlich` = 1
 			'))
@@ -1129,24 +1129,24 @@ class Db
 				$_SESSION['client']['group']['verantwortlich'] = true;
 				$mailbox = true;
 			}
-			S::set('mailbox', $mailbox);	
+			S::set('mailbox', $mailbox);
 		}
 		else
 		{
 			goPage('logout');
 		}
 	}
-	
+
 	public function getTables()
 	{
 		$out = $this->q('SHOW TABLES');
-		
+
 		$tables = array();
 		foreach ($out as $t)
 		{
 			$tables[] = end($t);
 		}
-		
+
 		$out = array();
 		foreach ($tables as $key => $t)
 		{
@@ -1158,14 +1158,14 @@ class Db
 	public function getValues($fields,$table,$id)
 	{
 		$fields = implode('`,`', $fields);
-		
+
 		return $this->qRow('
 			SELECT 	`'.$fields.'`
 			FROM 	`'.PREFIX.$table.'`
-			WHERE 	`id` = '.$this->intval($id).'		
+			WHERE 	`id` = '.$this->intval($id).'
 		');
 	}
-	
+
 	public function getVal($field,$table,$id)
 	{
 		if(!isset($this->values[$field.'-'.$table.'-'.$id]))
@@ -1173,13 +1173,13 @@ class Db
 			$this->values[$field.'-'.$table.'-'.$id] = $this->qOne('
 			SELECT 	`'.$field.'`
 			FROM 	`'.PREFIX.$table.'`
-			WHERE 	`id` = '.$this->intval($id).'		
+			WHERE 	`id` = '.$this->intval($id).'
 		');
 		}
-		
+
 		return $this->values[$field.'-'.$table.'-'.$id];
 	}
-	
+
 	public function updateFields($fields,$table,$id)
 	{
 		global $db;
@@ -1197,19 +1197,19 @@ class Db
 		}
 		return  $this->update('UPDATE `'.PREFIX.$table.'` SET '.implode(',',$sql).' WHERE `id` = '.(int)$id);
 	}
-	
+
 	public function getTable($fields,$table,$where = '')
-	{		
+	{
 		return $this->q('
 			SELECT 	`'.implode('`,`', $fields).'`
 			FROM 	`'.PREFIX.$table.'`
 			'.$where.'
 		');
 	}
-	
+
 	/**
 	 * set option is an key value store each var is avalable in the user session
-	 * 
+	 *
 	 * @param string $key
 	 * @param var $val
 	 */
@@ -1220,7 +1220,7 @@ class Db
 		{
 			$options = unserialize($opt);
 		}
-		
+
 		$options[$key] = $val;
 		return $this->update('UPDATE '.PREFIX.'foodsaver SET `option` = '.$this->strval(serialize($options)).' WHERE id = '.(int)fsId());
 	}

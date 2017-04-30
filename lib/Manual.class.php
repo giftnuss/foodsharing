@@ -518,7 +518,7 @@ class ManualDb extends Db
 
 			FROM 		'.PREFIX.'betrieb_team bt
 
-			WHERE 	bt.verantwortlich = 1 AND	
+			WHERE 	bt.verantwortlich = 1 AND
 			active = 1 AND
 			bt.betrieb_id = '.$this->intval($bid).'
 		');
@@ -597,8 +597,8 @@ class ManualDb extends Db
 	{
 		if($betrieb = $this->getMyBetrieb($bid))
 		{
-			
-			if(!is_null($betrieb['team_conversation_id'])) 
+
+			if(!is_null($betrieb['team_conversation_id']))
 			{
 				$msg = loadModel('msg');
 				$msg->sendMessage($betrieb['team_conversation_id'],$message);
@@ -1332,9 +1332,9 @@ class ManualDb extends Db
 				$verified = '`verified` = 0,';
 
 				$bids = $this->q('
-					SELECT 	bt.betrieb_id as id	
+					SELECT 	bt.betrieb_id as id
 					FROM 	'.PREFIX.'betrieb_team bt
-					WHERE 	bt.foodsaver_id = '.$this->intval($id).'	
+					WHERE 	bt.foodsaver_id = '.$this->intval($id).'
 				');
 				$betrieb = loadModel('betrieb');
 				//Delete from Companies
@@ -1363,11 +1363,11 @@ class ManualDb extends Db
 				for ($i = 1; $i <= 7; $i++) {
 				    $this->insert('
 					INSERT INTO '.PREFIX.'quiz_session (
-						foodsaver_id, 
-						quiz_id, 
+						foodsaver_id,
+						quiz_id,
 						`status`,
 						time_start
-					) 
+					)
 					VALUES
 					(
 						'.$this->intval($id).',
@@ -1504,37 +1504,37 @@ class ManualDb extends Db
 
 
         $this->del('
-            DELETE FROM '.PREFIX.'betrieb_team 
+            DELETE FROM '.PREFIX.'betrieb_team
             WHERE foodsaver_id = '.(int)$id.'
         ');
 
         $this->del('
-            DELETE FROM '.PREFIX.'apitoken 
+            DELETE FROM '.PREFIX.'apitoken
             WHERE foodsaver_id = '.(int)$id.'
         ');
 
         $this->del('
-            DELETE FROM '.PREFIX.'basket_anfrage 
+            DELETE FROM '.PREFIX.'basket_anfrage
             WHERE foodsaver_id = '.(int)$id.'
         ');
 
         $this->del('
-            DELETE FROM '.PREFIX.'botschafter 
+            DELETE FROM '.PREFIX.'botschafter
             WHERE foodsaver_id = '.(int)$id.'
         ');
 
         $this->del('
-            DELETE FROM '.PREFIX.'buddy  
+            DELETE FROM '.PREFIX.'buddy
             WHERE foodsaver_id = '.(int)$id.' OR buddy_id = '.(int)$id.'
         ');
 
         $this->del('
-            DELETE FROM '.PREFIX.'event 
+            DELETE FROM '.PREFIX.'event
             WHERE foodsaver_id = '.(int)$id.'
         ');
 
         $this->del('
-            DELETE FROM '.PREFIX.'fairteiler_follower 
+            DELETE FROM '.PREFIX.'fairteiler_follower
             WHERE foodsaver_id = '.(int)$id.'
         ');
 
@@ -1593,69 +1593,9 @@ class ManualDb extends Db
             WHERE foodsaver_id = '.(int)$id.' OR bot_id = '.(int)$id.'
         ');
 
-		return $this->update('
-		
-		
-		    UPDATE `'.PREFIX.'foodsaver` 
-		    
-		    SET 
-		    `deleted` = 1,
-		    `deleted_at` = NOW(),
-		    `position` = "",
-		    `verified` = 0,
-		    `rolle` = 0,
-		    `type` = 0,
-		    `plz` = "",
-		    `stadt`= "", 
-		    `lat`= "", 
-		    `lon` = "",
-		    `photo` = "",
-		    `photo_public` = 0,
-		    `email` = NULL,
-		    `passwd` = "",
-		    `name`= "", 
-		    `admin` = 0,
-		    `nachname` = "",
-		    `anschrift` = "",
-		    `telefon`="", 
-		    `tox`="", 
-		    `homepage` = "", 
-		    `github` = "", 
-		    `twitter` = "", 
-		    `handy` = "", 
-		    `geschlecht` = NULL, 
-		    `geb_datum` = NULL, 
-		    `fs_id` = NULL, 
-		    `orgateam`= 0,
-		    `active` = 0, 
-		    `data`="",
-		    `about_me_public` = "",
-		    `newsletter` = 0,
-		    `token` = "", 
-		    `infomail_message` = ", 
-		    `last_login` = NULL, 
-		    `stat_fetchweight` = 0,
-		    `stat_fetchcount` = 0, 
-		    `stat_ratecount` = 0, 
-		    `stat_rating` = 0,
-		    `stat_postcount` = 0, 
-		    `stat_buddycount` = 0,
-		    `stat_bananacount` = 0,
-		    `stat_fetchrate` = 0,
-		    `sleep_status` = 0, 
-		    `sleep_from` = NULL,`sleep_until`= NULL,
-		    `sleep_msg`= "",
-		    `last_mid` = NULL,
-		    `option` = "", 
-		    `beta` = 0,
-		    `fs_password` = "",
-		    `quiz_rolle`=0,
-		    `contact_public` = 0
-		     
-		    
-		    WHERE 
-		        id = '.(int)$id
-        );
+
+				$this->del('DELETE FROM '.PREFIX.'foodsaver WHERE foodsaver_id = '.(int)$id);
+				return $this->q('INSERT INTO fs_foodsaver(id, deleted_at) VALUES ('.(int)$id.', NOW())');
 	}
 
 	public function getBezirk($id = false)
@@ -3023,7 +2963,7 @@ class ManualDb extends Db
 			');
 
 
-		
+
 		$springerMembers = $this->getBetriebSpringer($bid);
 		foreach($springerMembers['id'] as $fs_id)
 		{
@@ -3093,7 +3033,7 @@ class ManualDb extends Db
 			'.$this->intval($data['sticker']).',
       '.$this->intval($data['abholmenge']).'
 			)');
-		
+
 		$this->createTeamConversation($id);
 		$this->createSpringerConversation($id);
 
