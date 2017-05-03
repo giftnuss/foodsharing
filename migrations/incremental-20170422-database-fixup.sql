@@ -113,7 +113,7 @@ ALTER TABLE fs_fairteiler_has_wallpost ADD CONSTRAINT FOREIGN KEY (fairteiler_id
 ALTER TABLE fs_fairteiler_has_wallpost ADD CONSTRAINT FOREIGN KEY (wallpost_id) REFERENCES fs_wallpost(id) ON DELETE CASCADE;
 
 
-RENAME TABLE fs_foodsaver_archive TO fs_foodsaver_archive3;
+RENAME TABLE fs_foodsaver_archive TO fs_foodsaver_archive4;
 CREATE TABLE fs_foodsaver_archive LIKE fs_foodsaver;
 
 DELETE FROM fs_foodsaver_has_bell WHERE foodsaver_id NOT IN (SELECT id FROM fs_foodsaver);
