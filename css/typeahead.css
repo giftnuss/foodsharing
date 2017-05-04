@@ -1,8 +1,11 @@
 /*typahead*/
+.twitter-typeahead {
+    width: 100%;
+}
+
 .typeahead,
 .tt-query,
 .tt-hint {
-    width: 480px;
     height: 11px;
     padding: 8px 6px;
     font-size: 24px;
@@ -32,11 +35,9 @@
 
 .tt-hint {
     color: #999;
-    width: 430px;
 }
 
 .tt-dropdown-menu {
-    width: 422px;
     margin-top: 12px;
     padding: 8px 0;
     background-color: #fff;

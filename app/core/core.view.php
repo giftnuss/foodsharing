@@ -417,9 +417,12 @@ class View
 			
 			var addressPicker = new AddressPicker({
 				map: {
-					id: \'#map\',
-					center: new google.maps.LatLng('.$data['lat'].','.$data['lon'].'),
+					id: \'map\',
+					center: L.latLng('.$data['lat'].','.$data['lon'].'),
 					zoom: 8
+				},
+				autocompleteService: {
+					types: ["geocode", "establishment"]
 				},
 				placeDetails: true
 			});

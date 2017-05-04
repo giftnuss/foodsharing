@@ -112,29 +112,24 @@
       };
 
       AddressPicker.prototype.initMap = function() {
-        var markerOptions, _ref, _ref1;
-        if ((_ref = this.options) != null ? (_ref1 = _ref.map) != null ? _ref1.gmap : void 0 : void 0) {
-          this.map = this.options.map.gmap;
-        } else {
-          this.mapOptions = $.extend({
-            zoom: 3,
-            center: new google.maps.LatLng(0, 0),
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            boundsForLocation: this.updateBoundsForPlace
-          }, this.options.map);
-          this.map = new google.maps.Map($(this.mapOptions.id)[0], this.mapOptions);
-        }
+        var _ref, _ref1;
+		this.mapOptions = $.extend({
+			zoom: 3,
+			center: L.latLng(0, 0),
+			boundsForLocation: this.updateBoundsForPlace
+		  }, this.options.map);
+		  this.map = L.map(this.mapOptions.id, this.mapOptions);
+		  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
+				attribution: "Geocoding by <a href=\"https://google.com\">Google</a>, Tiles &copy; Esri 2014"
+		  }).addTo(this.map);
+
         this.lastResult = null;
-        markerOptions = $.extend({
-          draggable: true,
-          visible: false,
-          position: this.map.getCenter(),
-          map: this.map
-        }, this.options.marker || {});
-        this.marker = new google.maps.Marker(markerOptions);
-        if (markerOptions.draggable) {
-          return google.maps.event.addListener(this.marker, 'dragend', this.markerDragged);
-        }
+        var fsIcon = L.AwesomeMarkers.icon({
+			  icon: "smile",
+			  markerColor: "orange",
+			  prefix: "img"
+		});
+        this.marker = L.marker(this.mapOptions.center, {icon: fsIcon}).addTo(this.map);
       };
 
       AddressPicker.prototype.get = function(query, cb) {
@@ -156,8 +151,7 @@
               var _ref;
               _this.lastResult = new AddressPickerResult(response);
               if (_this.marker) {
-                _this.marker.setPosition(response.geometry.location);
-                _this.marker.setVisible(true);
+                _this.marker.setLatLng(L.latLng(response.geometry.location.lat(), response.geometry.location.lng()));
               }
               if (_this.map) {
                 if ((_ref = _this.mapOptions) != null) {
@@ -174,9 +168,10 @@
 
       AddressPicker.prototype.updateBoundsForPlace = function(response) {
         if (response.geometry.viewport) {
-          return this.map.fitBounds(response.geometry.viewport);
+          return this.map.fitBounds(L.latLngBounds(L.latLng(response.geometry.viewport.getNorthEast().lat(), response.geometry.viewport.getNorthEast().lng()),
+			  L.latLng(response.geometry.viewport.getSouthWest().lat(), response.geometry.viewport.getSouthWest().lng())));
         } else {
-          this.map.setCenter(response.geometry.location);
+          this.map.setCenter(L.latLng(response.geometry.location.lat(), response.geometry.location.lng()));
           return this.map.setZoom(this.options.zoomForLocation);
         }
       };
