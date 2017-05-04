@@ -396,10 +396,12 @@ class View
 	
 	public function latLonPicker($id,$options = array())
 	{
-		addScript('/js/addresspicker.js');
-		addScript('/js/leaflet/leaflet.js');
-		addCss('/js/leaflet/leaflet.css');
-		addCss('/js/leaflet/leaflet.awesome-markers.css');
+		//addScript('/js/leaflet/leaflet.js');
+		addScript('/js/typeahead.bundle.js');
+		addScript('/js/typeahead-addresspicker.js');
+		//addCss('/js/leaflet/leaflet.css');
+		//addCss('/js/leaflet/leaflet.awesome-markers.css');
+		addHead('<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key='.GOOGLE_API_KEY.'"></script>');
 		
 		global $g_data;
 		if(isset($g_data['lat']) && isset($g_data['lon']) && !empty($g_data['lat']) && !empty($g_data['lon']))
@@ -417,106 +419,54 @@ class View
 		
 		
 		addJs('
-			function initPicker() {
-				$("#lat-wrapper,#lon-wrapper").hide();
-				var setMarker = addresspicker.initMap( document.getElementById( "map" ) );
+			
+			var addressPicker = new AddressPicker({
+				map: {
+					id: \'#map\',
+					center: new google.maps.LatLng('.$data['lat'].','.$data['lon'].'),
+					zoom: 8
+				},
+				placeDetails: true
+			});
 
-				setMarker( [ ' . floatval( $data['lat'] ) . ', ' . floatval( $data['lon'] ) . ' ] );
-
-				var picker = addresspicker.init(
-					document.getElementById( "addresspicker_map" ),
-					new addresspicker.MapZenSearch( "' . MAPZEN_API_KEY . '" ),
-					function( coords, address ) {
-						setMarker( coords );
-						document.getElementById( "lat" ).value = coords[0];
-						document.getElementById( "lon" ).value = coords[1];
-						document.getElementById( "plz" ).value = address.postalcode;
-						document.getElementById( "ort" ).value = address.locality;
-						showCallback( null, address );
-					}
-				);
-			}
-			initPicker();
-
-			function showCallback(geocodeResult, parsedGeocodeResult){
-				if(parsedGeocodeResult.street_number != false)
-				{
-		        	if($("#anschrift").length > 0)
-		        	{
-						var val = "";
-						if(parsedGeocodeResult.route != false)
-						{
-							val += parsedGeocodeResult.route;
-						}
-						if(parsedGeocodeResult.street_number != false)
-						{
-							val +=  " " + parsedGeocodeResult.street_number;
-						}
-		        		$("#anschrift").val(val);
-		        	}
-		        	else
-		        	{
-						if(parsedGeocodeResult.route != false)
-						{
-		        			$("#str").val(parsedGeocodeResult.route);
-						}
-						else
-						{
-							$("#str").val("");
-						}
-						if(parsedGeocodeResult.street_number != false)
-						{
-							$("#hsnr").val(parsedGeocodeResult.street_number);
-						}
-						else
-						{
-							$("#hsnr").val("");
-						}
-		        	}
+			$(\'#addresspicker\').typeahead(null, {
+				displayKey: \'description\',
+				source: addressPicker.ttAdapter()
+			});
+			$(\'#addresspicker\').bind(\'typeahead:selected\', addressPicker.updateMap)
+			$(\'#addresspicker\').bind(\'typeahead:cursorchanged\', addressPicker.updateMap)
+			addressPicker.bindDefaultTypeaheadEvent($(\'#addresspicker\'))
+			$(addressPicker).on(\'addresspicker:selected\', function (event, result) {
+				var number = result.nameForType(\'street_number\') || \'\'
+				var address = result.nameForType(\'route\') || \'\'
+				$(\'#lat\').val(result.lat());
+				$(\'#lon\').val(result.lng());
+				$(\'#plz\').val(result.nameForType(\'postal_code\'));
+				$(\'#ort\').val(result.nameForType(\'locality\'));
+				if($(\'#anschrift\').length) {
+					$(\'#anschrift\').val(address + (number ? (\' \' + number):\'\')) 
 				}
-				else
-				{
-					if($("#anschrift").length > 0)
-		        	{
-						if(parsedGeocodeResult.route != false)
-						{
-							$("#anschrift").val(parsedGeocodeResult.route);
-						}
-						else
-						{
-							$("#anschrift").val("");
-						}
-		        		
-		        	}
-		        	else
-		        	{
-						if(parsedGeocodeResult.route != false)
-						{
-		        			$("#str").val(parsedGeocodeResult.route);
-						}
-						else
-						{
-							$("#str").val("");
-						}
-		        		$("#hsnr").val("");
-		        	}
+				else {
+					$(\'#str\').val(address)
+					$(\'#hsnr\').val(number)
 				}
-		    }
+			});
+			$("#lat-wrapper,#lon-wrapper").hide();
 		');
 		
 		
-		$hsnr = v_form_text('anschrift', array('disabled' => '1'));
+		$hsnr = v_form_text('anschrift', array('disabled' => '1', 'required' => '1'));
 		if(isset($options['hsnr']))
 		{
-			$hsnr = v_form_text('str').v_form_text('hsnr');
+			$hsnr = v_form_text('str', array('required' => '1')).v_form_text('hsnr');
 		}
 		
 		return v_input_wrapper(s('position_search'), '
-		<input placeholder="Straße, Ort..." type="text" value="" id="addresspicker_map" name="addresspicker_map" class="input text value ui-corner-top" />
+		<input placeholder="Straße, Ort..." type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
 		<div id="map" class="pickermap"></div>').
 		$hsnr.
-		v_form_text('plz', array('disabled' => '1')).
-		v_form_text('ort', array('disabled' => '1')).
+		v_form_text('plz', array('disabled' => '1', 'required' => '1')).
+		v_form_text('ort', array('disabled' => '1', 'required' => '1')).
 		v_form_text('lat').
 		v_form_text('lon').
 		'';

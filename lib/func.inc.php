@@ -1345,7 +1345,7 @@ function jsValidate($option,$id,$name)
 		$out['class'] .= ' required';
 		if(!isset($option['required']['msg']))
 		{
-			$out['msg']['required'] = $name.' darf nciht leer sein';
+			$out['msg']['required'] = $name.' darf nicht leer sein';
 		}
 	}
 	
