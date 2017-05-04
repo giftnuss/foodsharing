@@ -155,10 +155,7 @@ class vMap extends vCore
 			addCss('/js/markercluster/dist/MarkerCluster.Default.css');
 		}
 		
-		addScriptTop('/js/leaflet/leaflet.js');
-		addCssTop('/js/leaflet/leaflet.css');
-		addCss('/js/leaflet/leaflet.awesome-markers.css');
-		
+
 		addJsFunc('
 			var '.$this->id.' = null;
 			var '.$this->id.'_markers = null;	

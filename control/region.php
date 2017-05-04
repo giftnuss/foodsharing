@@ -175,10 +175,6 @@ function v_bezirk_tree($id)
 
 function i_map($id)
 {
-	addScript('/js/leaflet/leaflet.js');
-	addCss('/js/leaflet/leaflet.css');
-
-	
 	addJsFunc('
 	var '.$id.'_markers = [];
 	var '.$id.'_bounds = L.latLngBounds([]);

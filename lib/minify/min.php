@@ -29,7 +29,8 @@ $js_files = [
 	'/js/socket.io-1.5.0.min.js',
 	'/js/socket.js',
 	'/js/typeahead.bundle.js',
-	'/js/typeahead-addresspicker.js'
+	'/js/typeahead-addresspicker.js',
+	'/js/leaflet/leaflet.js'
 ];
 $css_files = [
 	'/fonts/alfaslabone/stylesheet.css',
@@ -46,7 +47,9 @@ $css_files = [
 	'/css/info.css',
 	'/css/icons.css',
 	'/css/popup.css',
-	'/css/typeahead.css'
+	'/css/typeahead.css',
+	'/js/leaflet/leaflet.css',
+	'/js/leaflet/leaflet.awesome-markers.css'
 ];
 @file_put_contents($js_out, '');
 foreach ($js_files as $f) {

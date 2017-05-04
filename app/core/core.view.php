@@ -396,11 +396,6 @@ class View
 	
 	public function latLonPicker($id,$options = array())
 	{
-		//addScript('/js/leaflet/leaflet.js');
-		addScript('/js/typeahead.bundle.js');
-		addScript('/js/typeahead-addresspicker.js');
-		//addCss('/js/leaflet/leaflet.css');
-		//addCss('/js/leaflet/leaflet.awesome-markers.css');
 		addHead('<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key='.GOOGLE_API_KEY.'"></script>');
 		
 		global $g_data;

@@ -278,12 +278,12 @@
 	border-radius: 5px;
 	}
 .leaflet-control-layers-toggle {
-	background-image: url(images/layers.png);
+	background-image: url(/img/layers.png);
 	width: 36px;
 	height: 36px;
 	}
 .leaflet-retina .leaflet-control-layers-toggle {
-	background-image: url(images/layers-2x.png);
+	background-image: url(/img/layers-2x.png);
 	background-size: 26px 26px;
 	}
 .leaflet-touch .leaflet-control-layers-toggle {
@@ -487,7 +487,7 @@ Version: 1.0
 
 /* Marker setup */
 .awesome-marker {
-  background: url('images/markers-soft.png') no-repeat 0 0;
+  background: url('/img/markers-soft.png') no-repeat 0 0;
   width: 35px;
   height: 46px;
   position:absolute;
@@ -498,7 +498,7 @@ Version: 1.0
 }
 
 .awesome-marker-shadow {
-  background: url('images/markers-shadow.png') no-repeat 0 0;
+  background: url('/img/markers-shadow.png') no-repeat 0 0;
   width: 36px;
   height: 16px;
 }
@@ -507,11 +507,11 @@ Version: 1.0
 @media (min--moz-device-pixel-ratio: 1.5),(-o-min-device-pixel-ratio: 3/2),
 (-webkit-min-device-pixel-ratio: 1.5),(min-device-pixel-ratio: 1.5),(min-resolution: 1.5dppx) {
  .awesome-marker {
-  background-image: url('images/markers-soft@2x.png');
+  background-image: url('/img/markers-soft@2x.png');
   background-size: 720px 46px;
  }
  .awesome-marker-shadow {
-  background-image: url('images/markers-shadow@2x.png');
+  background-image: url('/img/markers-shadow@2x.png');
   background-size: 35px 16px;
  }
 }
@@ -650,7 +650,7 @@ Version: 1.0
 }
 
 .leaflet-control-search.search-load .search-input {
-	background: url('img/search-loader.gif') no-repeat center right #fff;
+	background: url('/img/search-loader.gif') no-repeat center right #fff;
 }
 
 .leaflet-control-search.search-load .search-cancel {
