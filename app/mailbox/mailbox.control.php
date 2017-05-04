@@ -44,7 +44,6 @@ class MailboxControl extends Control
 	
 	public function index()
 	{
-		addScript('/js/typeahead.min.js');
 		addScript('/js/dynatree/jquery.dynatree.js');
 		addScript('/js/jquery.cookie.js');
 		addCss('/js/dynatree/skin/ui.dynatree.css');

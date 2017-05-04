@@ -27,7 +27,9 @@ $js_files = [
 	'/js/storage.js',
 	'/js/jquery.popup.min.js',
 	'/js/socket.io-1.5.0.min.js',
-	'/js/socket.js'
+	'/js/socket.js',
+	'/js/typeahead.bundle.js',
+	'/js/typeahead-addresspicker.js'
 ];
 $css_files = [
 	'/fonts/alfaslabone/stylesheet.css',
@@ -43,7 +45,8 @@ $css_files = [
 	'/css/jquery.switchButton.css',
 	'/css/info.css',
 	'/css/icons.css',
-	'/css/popup.css'
+	'/css/popup.css',
+	'/css/typeahead.css'
 ];
 @file_put_contents($js_out, '');
 foreach ($js_files as $f) {
