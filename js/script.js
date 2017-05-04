@@ -605,7 +605,7 @@ var ajax = {
 		
 	}
 };
-function ajreq(name,options,method,app)
+function ajreq(name,options = {},method,app)
 {
 	return ajax.req(options.app || app || GET('page'), name, {
 		method: method,
