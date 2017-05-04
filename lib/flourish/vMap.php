@@ -126,8 +126,6 @@ class vMap extends vCore
 		}
 		if ($this->searchpanel !== false)
 		{
-			addScript('/js/addresspicker.js');
-			
 			$hm = '';
 			if($this->home_marker)
 			{
@@ -135,16 +133,18 @@ class vMap extends vCore
 			}
 			
 			addJs('
-				addresspicker.init(
-					document.getElementById( "'.$this->searchpanel.'" ),
-					new addresspicker.MapZenSearch( "' . MAPZEN_API_KEY . '" ),
-					function( latLng, address ) {
-						'.$this->id.'_latLng = latLng;
-						$("#'.$this->id.'-latLng").val(JSON.stringify(latLng)).change();
-						'.$this->id.'.setView(latLng,'.(int)$this->zoom.');
-						'.$hm.'
-					}
-				);
+				$.getScript( "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key='.GOOGLE_API_KEY.'", function() {
+					var addressPicker = new AddressPicker();
+		
+					$(\'#'.$this->searchpanel.'\').typeahead(null, {
+					  displayKey: \'description\',
+					  source: addressPicker.ttAdapter()
+					});
+					addressPicker.bindDefaultTypeaheadEvent($(\'#'.$this->searchpanel.'\'))
+					$(addressPicker).on(\'addresspicker:selected\', function (event, result) {
+						'.$this->id.'.setView(L.latLng(result.lat(), result.lng()), 10)
+					});
+				});
 			');
 		}
 		

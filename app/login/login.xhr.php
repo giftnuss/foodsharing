@@ -449,11 +449,9 @@ class LoginXhr extends Control
 			$dia->addJsAfter('
 				( typeof L !== "undefined" ? $.Deferred().resolve() : $.getScript( "/js/leaflet/leaflet.js" ) )
 				.then( function() {
-					return typeof addresspicker !== "undefined" ? $.Deferred().resolve() : $.getScript( "/js/addresspicker.js" );
-				} ).then( function() {
 					return typeof join !== "undefined" ? $.Deferred().resolve() : $.getScript( "/js/join.js" );
 				} ).then( function() {
-					join.init( "' . MAPZEN_API_KEY . '" );
+					join.init( "' . GOOGLE_API_KEY . '" );
 				} );
 			');
 			

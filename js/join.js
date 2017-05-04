@@ -1,12 +1,12 @@
 var join = {
 	currentStep:0,
-	mapzenApiKey:null,
+	googleApiKey:null,
 	markerIcon:null,
 	marker:null,
 	isLoading:false,
-	init: function( mapzenApiKey )
+	init: function( googleApiKey )
 	{
-		this.mapzenApiKey = mapzenApiKey;
+		this.googleApiKey = googleApiKey;
 	},
 	photoUploadError: function(error){
 		pulseError(error);
@@ -30,22 +30,36 @@ var join = {
 	},
 	loadMap: function()
 	{
-		var setMarker = addresspicker.initMap( document.getElementById( "join_mapview" ) );
+		$.getScript( "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=" + this.googleApiKey, function() {
+			var addressPicker = new AddressPicker({
+				map: {
+					id: 'join_mapview'
+				},
+				autocompleteService: {
+					types: ["geocode", "establishment"]
+				},
+				placeDetails: true
+			});
 
-		addresspicker.init(
-			document.getElementById( "login_location" ),
-			new addresspicker.MapZenSearch( this.mapzenApiKey ),
-			function( coords, address ) {
-				setMarker( coords );
-				document.getElementById( "join_lat" ).value = coords[0];
-				document.getElementById( "join_lon" ).value = coords[1];
-				document.getElementById( "join_plz" ).value = address.postalcode;
-				document.getElementById( "join_ort" ).value = address.locality;
-				document.getElementById( "join_str" ).value = address.route;
-				document.getElementById( "join_hsnr" ).value = address.street_number;
-				document.getElementById( "join_country" ).value = address.country;
-			}
-		);
+			$('#login_location').typeahead(null, {
+				displayKey: 'description',
+				source: addressPicker.ttAdapter()
+			});
+			$('#login_location').bind('typeahead:selected', addressPicker.updateMap)
+			$('#login_location').bind('typeahead:cursorchanged', addressPicker.updateMap)
+			addressPicker.bindDefaultTypeaheadEvent($('#login_location'))
+			$(addressPicker).on('addresspicker:selected', function (event, result) {
+				var number = result.nameForType('street_number') || ''
+				var address = result.nameForType('route') || ''
+				$('#join_lat').val(result.lat());
+				$('#join_lon').val(result.lng());
+				$('#join_plz').val(result.nameForType('postal_code'));
+				$('#join_ort').val(result.nameForType('locality'));
+				$('#join_str').val(address);
+				$('#join_hsnr').val(number);
+				$('#join_country').val(result.nameForType('country'));
+			});
+		})
 	},
 	finish: function(){
 		
