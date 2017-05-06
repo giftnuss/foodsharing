@@ -23,18 +23,25 @@ class ProfileControl extends Control
 			$this->fs_id = (int)$id;
 			if($data = $this->model->getData())
 			{
-				$this->foodsaver = $data;
-				$this->foodsaver['buddy'] = $this->model->buddyStatus($this->foodsaver['id']);
-				
-				$this->view->setData($this->foodsaver);
-				
-				if($this->uriStr(3) == 'notes')
+				if(is_null($data['deleted_at']) || S::may('orga'))
 				{
-					$this->organotes();
+					$this->foodsaver = $data;
+					$this->foodsaver['buddy'] = $this->model->buddyStatus($this->foodsaver['id']);
+
+					$this->view->setData($this->foodsaver);
+
+					if($this->uriStr(3) == 'notes')
+					{
+						$this->organotes();
+					}
+					else
+					{
+						$this->profile();
+					}
 				}
 				else
 				{
-					$this->profile();
+					goPage('dashboard');
 				}
 				
 			}

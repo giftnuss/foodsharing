@@ -106,7 +106,8 @@ class ProfileModel extends Model
 					fs.rolle,
 					UNIX_TIMESTAMP(fs.sleep_from) AS sleep_from_ts,
 					UNIX_TIMESTAMP(fs.sleep_until) AS sleep_until_ts,
-					fs.mailbox_id
+					fs.mailbox_id,
+					fs.deleted_at
 		
 			FROM 	'.PREFIX.'foodsaver fs
 				
