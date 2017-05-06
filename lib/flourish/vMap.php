@@ -177,7 +177,7 @@ class vMap extends vCore
 			case 'esri' :
 				addJs('
 					L.tileLayer(\'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}\', {
-						attribution: \'Tiles &copy; Esri 2012\'
+						attribution: \'Geocoding by <a href=\"https://google.com\">Google</a>, Tiles &copy; Esri 2014\'
 					}).addTo('.$this->id.');
 				');
 				break;
