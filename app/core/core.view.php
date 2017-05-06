@@ -403,15 +403,25 @@ class View
 		{
 			$data = array(
 				'lat' => $g_data['lat'],
-				'lon' => $g_data['lon']
+				'lon' => $g_data['lon'],
+				'zoom' => 14
 			);
 		}
 		else
 		{
 			global $db;
-			$data = $db->getValues(array('lat','lon'), 'foodsaver', fsId());	
+			$data = $db->getValues(array('lat','lon'), 'foodsaver', fsId());
+			$data['zoom'] = 14;
 		}
-		
+
+		if(empty($data['lat']) || empty($data['lon']) )
+		{
+			/* set empty coordinates somewhere in germany */
+			$data['lat'] = 51;
+			$data['lon'] = 10;
+			$data['zoom'] = 5;
+
+		}
 		
 		addJs('
 			
@@ -419,7 +429,7 @@ class View
 				map: {
 					id: \'map\',
 					center: L.latLng('.$data['lat'].','.$data['lon'].'),
-					zoom: 8
+					zoom: '.$data['zoom'].'
 				},
 				autocompleteService: {
 					types: ["geocode", "establishment"]

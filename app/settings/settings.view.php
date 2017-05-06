@@ -589,31 +589,6 @@ class SettingsView extends View
 				v_form_text('twitter').
 				v_form_text('github');
 		}
-	
-		addJs('
-		$("#plz, #stadt, #anschrift").bind("blur",function(){
-	
-	
-			if($("#plz").val() != "" && $("#stadt").val() != "" && $("#anschrift").val() != "")
-			{
-				u_loadCoords({
-					plz: $("#plz").val(),
-					stadt: $("#stadt").val(),
-					anschrift: $("#anschrift").val(),
-					complete: function()
-					{
-						hideLoader();
-					}
-				},function(lat,lon){
-					$("#lat").val(lat);
-					$("#lon").val(lon);
-				});
-			}
-		});
-	
-		$("#lat-wrapper").hide();
-		$("#lon-wrapper").hide();
-	');
 		
 		$g_data['ort'] = $g_data['stadt'];
 		
