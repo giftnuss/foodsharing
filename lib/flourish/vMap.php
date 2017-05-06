@@ -124,29 +124,6 @@ class vMap extends vCore
 			var '.$this->id.'_homeIcon = L.icon({   iconUrl: "/css/img/marker-home.png",shadowUrl: \'/css/img/default-shadow.png\',iconSize: [25, 41],	iconAnchor: [12, 41],popupAnchor: [1, -34],shadowSize: [46, 41],shadowAnchor: [12, 41]});
 			');	
 		}
-		if ($this->searchpanel !== false)
-		{
-			$hm = '';
-			if($this->home_marker)
-			{
-				$hm = $this->id.'_home_marker.setLatLng(new L.LatLng(latLng[0], latLng[1])).update();';
-			}
-			
-			addJs('
-				$.getScript( "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key='.GOOGLE_API_KEY.'", function() {
-					var addressPicker = new AddressPicker();
-		
-					$(\'#'.$this->searchpanel.'\').typeahead(null, {
-					  displayKey: \'description\',
-					  source: addressPicker.ttAdapter()
-					});
-					addressPicker.bindDefaultTypeaheadEvent($(\'#'.$this->searchpanel.'\'))
-					$(addressPicker).on(\'addresspicker:selected\', function (event, result) {
-						'.$this->id.'.setView(L.latLng(result.lat(), result.lng()), 10)
-					});
-				});
-			');
-		}
 		
 		if($this->markercluster)
 		{
@@ -163,7 +140,30 @@ class vMap extends vCore
 		');		
 		
 		addJs(''.$this->id.' = L.map("'.$this->id.'").setView(['.$this->location[0].', '.$this->location[1].'], '.$this->zoom.');');
-	
+		if ($this->searchpanel !== false)
+		{
+			$hm = '';
+			if($this->home_marker)
+			{
+				$hm = $this->id.'_home_marker.setLatLng(new L.LatLng(latLng[0], latLng[1])).update();';
+			}
+
+			addJs('
+				$.getScript( "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key='.GOOGLE_API_KEY.'", function() {
+					var addressPicker = new AddressPicker({
+						map: {
+							map: '.$this->id.'
+						}
+					});
+		
+					$(\'#'.$this->searchpanel.'\').typeahead(null, {
+					  displayKey: \'description\',
+					  source: addressPicker.ttAdapter()
+					});
+					addressPicker.bindDefaultTypeaheadEvent($(\'#'.$this->searchpanel.'\'))
+				});
+			');
+		}
 		switch ($this->provider)
 		{
 			case 'osm' :

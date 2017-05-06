@@ -11,15 +11,3 @@
 {
 	height:400px;
 }
-#mapsearch
-{
-	border: 1px solid #4a3520;
-    border-radius: 4px;
-    color: #4a3520;
-    float: right;
-    height: 24px;
-    line-height: 24px;
-    padding: 0 6px;
-    position: relative;
-    top: -50px;
-}

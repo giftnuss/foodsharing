@@ -116,12 +116,17 @@
 		this.mapOptions = $.extend({
 			zoom: 3,
 			center: L.latLng(0, 0),
-			boundsForLocation: this.updateBoundsForPlace
+			boundsForLocation: this.updateBoundsForPlace,
 		  }, this.options.map);
-		  this.map = L.map(this.mapOptions.id, this.mapOptions);
-		  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
-				attribution: "Geocoding by <a href=\"https://google.com\">Google</a>, Tiles &copy; Esri 2014"
-		  }).addTo(this.map);
+		  if(this.mapOptions.map) {
+		  	this.map = this.mapOptions.map
+		  }
+		  else {
+			  this.map = L.map(this.mapOptions.id, this.mapOptions);
+			  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
+				  attribution: "Geocoding by <a href=\"https://google.com\">Google</a>, Tiles &copy; Esri 2014"
+			  }).addTo(this.map);
+		  }
 
         this.lastResult = null;
         var fsIcon = L.AwesomeMarkers.icon({

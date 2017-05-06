@@ -27,7 +27,7 @@ class BasketView extends View
 		$map->setMarkerCluster();
 		$map->setDefaultMarker('basket', 'green');
 		
-		return '<input id="mapsearch" type="text" name="mapsearch" value="" placeholder="Adresssuche..." /><div class="findmap">'.$map->render().'</div>';
+		return '<div class="ui-widget"><input id="mapsearch" type="text" name="mapsearch" value="" placeholder="Adresssuche..." class="input text value ui-corner-top"/><div class="findmap">'.$map->render().'</div></div>';
 	}
 	
 	public function closeBaskets($baskets)
