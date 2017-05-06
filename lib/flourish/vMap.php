@@ -233,7 +233,6 @@ class vMap extends vCore
 				
 			function '.$this->id.'_addMarker(options)
 			{
-				console.log(options);
 				if(options.icon == undefined)
 				{
 					options.icon = '.$this->id.'_defaultIcon;
