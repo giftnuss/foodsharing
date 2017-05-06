@@ -107,7 +107,7 @@ class BezirkModel extends Model
 			WHERE 	fb.foodsaver_id = fs.id
 			AND 	fb.bezirk_id = '.(int)$bezirk_id.'
 			AND 	fb.`active` = 1
-			AND   fs.deleted_at IS NULL
+			AND		fs.deleted_at IS NULL
 		');
 	}
 

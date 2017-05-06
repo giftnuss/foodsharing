@@ -29,7 +29,8 @@ class PassgenModel extends Model
 				
 				WHERE 	fb.foodsaver_id = fs.id
 				AND 	fb.bezirk_id = b.id
-				AND 	fb.`bezirk_id` IN('.implode(',',$this->getChildBezirke($bezirk_id)).') 
+				AND 	fb.`bezirk_id` IN('.implode(',',$this->getChildBezirke($bezirk_id)).')
+				AND		fs.deleted_at IS NOT NULL
 				
 				ORDER BY bezirk_name
 		');
