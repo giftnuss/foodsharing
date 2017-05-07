@@ -11,7 +11,7 @@ class MsgModel extends Model
 	public function getChatMembers($cid)
 	{
 		return $this->qCol('
-			SELECT fs.name FROM '.PREFIX.'foodsaver_has_conversation fc, '.PREFIX.'foodsaver fs WHERE fs.id = fc.foodsaver_id AND fc.conversation_id = '.$cid.' AND fs.deleted_at IS NOT NULL
+			SELECT fs.name FROM '.PREFIX.'foodsaver_has_conversation fc, '.PREFIX.'foodsaver fs WHERE fs.id = fc.foodsaver_id AND fc.conversation_id = '.$cid.' AND fs.deleted_at IS NULL
 		');
 	}
 
@@ -167,7 +167,7 @@ class MsgModel extends Model
 				AND
 					CONCAT(fs.name," ",fs.nachname ) LIKE "%'.$this->safe($term).'%"
 				AND
-					fs.deleted_at IS NOT NULL
+					fs.deleted_at IS NULL
 			';
 
 			if($user = $this->q($sql))
@@ -196,7 +196,7 @@ class MsgModel extends Model
 
 			WHERE
 				hc.conversation_id = '.(int)$conversation_id.' AND
-				fs.deleted_at IS NOT NULL
+				fs.deleted_at IS NULL
 		');
 	}
 
