@@ -170,7 +170,7 @@ class BezirkModel extends Model
 						LEFT JOIN
 						'.PREFIX.'theme_post p
 						ON p.id = t.last_post_id
-						LEFT JOIN
+						INNER JOIN
 						'.PREFIX.'foodsaver fs
 						ON  fs.id = p.foodsaver_id
 
@@ -213,7 +213,7 @@ class BezirkModel extends Model
 						UNIX_TIMESTAMP(p.`time`) AS time_ts
 
 			FROM 		'.PREFIX.'theme_post p
-			LEFT JOIN   '.PREFIX.'foodsaver fs
+			INNER JOIN   '.PREFIX.'foodsaver fs
 				ON 		p.foodsaver_id = fs.id
 			WHERE 		p.theme_id = '.(int)$thread_id.'
 
@@ -265,9 +265,9 @@ class BezirkModel extends Model
 						t.`time`,
 						UNIX_TIMESTAMP(t.`time`) AS time_ts,
 						fs.id AS foodsaver_id,
-						fs.name AS foodsaver_name,
+						IF(fs.deleted_at IS NOT NULL,"abgemeldeter Benutzer", fs.name) AS foodsaver_name,
 						fs.photo AS foodsaver_photo,
-						p.body AS post_body,
+						IF(fs.deleted_at IS NOT NULL, "Beitrag von nicht mehr angemeldetem Benutzer", p.body) as post_body,
 						p.`time` AS post_time,
 						UNIX_TIMESTAMP(p.`time`) AS post_time_ts,
 						t.last_post_id,
@@ -280,7 +280,7 @@ class BezirkModel extends Model
 						INNER JOIN
 						'.PREFIX.'bezirk_has_theme bt
 						ON bt.theme_id = t.id
-						LEFT JOIN
+						INNER JOIN
 						'.PREFIX.'foodsaver fs
 						ON p.foodsaver_id = fs.id
 
