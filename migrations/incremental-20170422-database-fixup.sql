@@ -1,5 +1,16 @@
 DROP TABLE IF EXISTS fs_abholen;
 ALTER TABLE fs_foodsaver MODIFY COLUMN last_login datetime NULL;
+ALTER TABLE fs_foodsaver MODIFY COLUMN plz varchar(10) NULL;
+ALTER TABLE fs_foodsaver MODIFY COLUMN stadt varchar(100) NULL;
+ALTER TABLE fs_foodsaver MODIFY COLUMN lat varchar(20) NULL;
+ALTER TABLE fs_foodsaver MODIFY COLUMN lon varchar(20) NULL;
+ALTER TABLE fs_foodsaver MODIFY COLUMN photo varchar(50) NULL;
+ALTER TABLE fs_foodsaver MODIFY COLUMN tox varchar(255) NULL;
+ALTER TABLE fs_foodsaver MODIFY COLUMN homepage varchar(255) NULL;
+ALTER TABLE fs_foodsaver MODIFY COLUMN github varchar(255) NULL;
+ALTER TABLE fs_foodsaver MODIFY COLUMN twitter varchar(255) NULL;
+ALTER TABLE fs_foodsaver DROP COLUMN fs_id;
+ALTER TABLE fs_foodsaver MODIFY COLUMN newsletter tinyint(1) DEFAULT 0;
 ALTER TABLE fs_conversation MODIFY COLUMN `name` varchar(40) NULL, MODIFY COLUMN `start_foodsaver_id` int unsigned NULL;
 ALTER TABLE fs_betrieb MODIFY COLUMN lat varchar(20) NULL, MODIFY COLUMN lon varchar(20) NULL;
 ALTER TABLE fs_betrieb MODIFY COLUMN kette_id int unsigned NULL, MODIFY COLUMN betrieb_kategorie_id int NULL;
@@ -81,6 +92,11 @@ DELETE FROM fs_botschafter WHERE foodsaver_id NOT IN (SELECT id FROM fs_foodsave
 DELETE FROM fs_botschafter WHERE bezirk_id NOT IN (SELECT id FROM fs_bezirk);
 ALTER TABLE fs_botschafter ADD CONSTRAINT FOREIGN KEY (foodsaver_id) REFERENCES fs_foodsaver(id) ON DELETE CASCADE;
 ALTER TABLE fs_botschafter ADD CONSTRAINT FOREIGN KEY (bezirk_id) REFERENCES fs_bezirk(id) ON DELETE CASCADE;
+
+DELETE FROM fs_buddy WHERE foodsaver_id NOT IN (SELECT id FROM fs_foodsaver);
+DELETE FROM fs_buddy WHERE buddy_id NOT IN (SELECT id FROM fs_foodsaver);
+ALTER TABLE fs_buddy ADD CONSTRAINT FOREIGN KEY (foodsaver_id) REFERENCES fs_foodsaver(id) ON DELETE CASCADE;
+ALTER TABLE fs_buddy ADD CONSTRAINT FOREIGN KEY (buddy_id) REFERENCES fs_foodsaver(id) ON DELETE CASCADE;
 
 DELETE FROM fs_email_status WHERE foodsaver_id NOT IN (SELECT id FROM fs_foodsaver);
 DELETE FROM fs_email_status WHERE email_id NOT IN (SELECT id FROM fs_send_email);
@@ -167,7 +183,9 @@ DELETE FROM fs_msg WHERE conversation_id NOT IN (SELECT ID FROM fs_conversation)
 ALTER TABLE fs_msg ADD CONSTRAINT FOREIGN KEY (conversation_id) REFERENCES fs_conversation(id) ON DELETE CASCADE;
 
 DELETE FROM fs_pass_gen WHERE foodsaver_id NOT IN (SELECT id FROM fs_foodsaver);
+DELETE FROM fs_pass_gen WHERE bot_id NOT IN (SELECT id FROM fs_foodsaver);
 ALTER TABLE fs_pass_gen ADD CONSTRAINT FOREIGN KEY (foodsaver_id) REFERENCES fs_foodsaver(id) ON DELETE CASCADE;
+ALTER TABLE fs_pass_gen ADD CONSTRAINT FOREIGN KEY (bot_id) REFERENCES fs_foodsaver(id) ON DELETE CASCADE;
 
 DELETE FROM fs_pass_request WHERE foodsaver_id NOT IN (SELECT id FROM fs_foodsaver) OR `time` < '2017-04-01 00:00:00';
 ALTER TABLE fs_pass_request ADD CONSTRAINT FOREIGN KEY (foodsaver_id) REFERENCES fs_foodsaver(id) ON DELETE CASCADE;
@@ -193,7 +211,9 @@ ALTER TABLE fs_rating ADD CONSTRAINT FOREIGN KEY (rater_id) REFERENCES fs_foodsa
 ALTER TABLE fs_stat_abholmengen ADD CONSTRAINT FOREIGN KEY (betrieb_id) REFERENCES fs_betrieb(id) ON DELETE CASCADE;
 
 DELETE FROM fs_theme_follower WHERE theme_id NOT IN (SELECT id FROM fs_theme);
+DELETE FROM fs_theme_follower WHERE foodsaver_id NOT IN (SELECT id FROM fs_foodsaver);
 ALTER TABLE fs_theme_follower ADD CONSTRAINT FOREIGN KEY (theme_id) REFERENCES fs_theme(id) ON DELETE CASCADE;
+ALTER TABLE fs_theme_follower ADD CONSTRAINT FOREIGN KEY (foodsaver_id) REFERENCES fs_foodsaver(id) ON DELETE CASCADE;
 
 DELETE FROM fs_theme_post WHERE theme_id NOT IN (SELECT id FROM fs_theme);
 ALTER TABLE fs_theme_post ADD CONSTRAINT FOREIGN KEY (theme_id) REFERENCES fs_theme(id) ON DELETE CASCADE;

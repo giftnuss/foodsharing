@@ -1502,100 +1502,103 @@ class ManualDb extends Db
 			)
 		');
 
-
-        $this->del('
-            DELETE FROM '.PREFIX.'betrieb_team
-            WHERE foodsaver_id = '.(int)$id.'
-        ');
-
-        $this->del('
+		$this->del('
             DELETE FROM '.PREFIX.'apitoken
             WHERE foodsaver_id = '.(int)$id.'
         ');
-
-        $this->del('
+		$this->del('
+            DELETE FROM '.PREFIX.'application_has_wallpost
+            WHERE application_id = '.(int)$id.'
+        ');
+		$this->del('
             DELETE FROM '.PREFIX.'basket_anfrage
             WHERE foodsaver_id = '.(int)$id.'
         ');
-
         $this->del('
             DELETE FROM '.PREFIX.'botschafter
             WHERE foodsaver_id = '.(int)$id.'
         ');
-
         $this->del('
             DELETE FROM '.PREFIX.'buddy
             WHERE foodsaver_id = '.(int)$id.' OR buddy_id = '.(int)$id.'
         ');
-
-        $this->del('
-            DELETE FROM '.PREFIX.'event
+		$this->del('
+            DELETE FROM '.PREFIX.'email_status
             WHERE foodsaver_id = '.(int)$id.'
         ');
-
         $this->del('
             DELETE FROM '.PREFIX.'fairteiler_follower
             WHERE foodsaver_id = '.(int)$id.'
         ');
-
         $this->del('
             DELETE FROM '.PREFIX.'foodsaver_has_bell
             WHERE foodsaver_id = '.(int)$id.'
         ');
-
+		$this->del('
+            DELETE FROM '.PREFIX.'foodsaver_has_bezirk
+            WHERE foodsaver_id = '.(int)$id.'
+        ');
         $this->del('
             DELETE FROM '.PREFIX.'foodsaver_has_contact
             WHERE foodsaver_id = '.(int)$id.'
         ');
-
         $this->del('
             DELETE FROM '.PREFIX.'foodsaver_has_event
             WHERE foodsaver_id = '.(int)$id.'
         ');
-
-        $this->del('
-            DELETE FROM '.PREFIX.'foodsaver_has_fairteiler
-            WHERE foodsaver_id = '.(int)$id.'
-        ');
-
         $this->del('
             DELETE FROM '.PREFIX.'foodsaver_has_wallpost
             WHERE foodsaver_id = '.(int)$id.'
         ');
-
         $this->del('
             DELETE FROM '.PREFIX.'mailbox_member
             WHERE foodsaver_id = '.(int)$id.'
         ');
-
         $this->del('
             DELETE FROM '.PREFIX.'fs_mailchange
             WHERE foodsaver_id = '.(int)$id.'
         ');
-
         $this->del('
             DELETE FROM '.PREFIX.'pass_gen
             WHERE foodsaver_id = '.(int)$id.' OR bot_id = '.(int)$id.'
         ');
-
         $this->del('
             DELETE FROM '.PREFIX.'pass_request
-            WHERE foodsaver_id = '.(int)$id.' OR bot_id = '.(int)$id.'
+            WHERE foodsaver_id = '.(int)$id.'
         ');
-
         $this->del('
             DELETE FROM '.PREFIX.'quiz_session
-            WHERE foodsaver_id = '.(int)$id.' OR bot_id = '.(int)$id.'
+            WHERE foodsaver_id = '.(int)$id.'
         ');
-
+        $this->del('
+            DELETE FROM '.PREFIX.'rating
+            WHERE foodsaver_id = '.(int)$id.'
+        ');
         $this->del('
             DELETE FROM '.PREFIX.'theme_follower
-            WHERE foodsaver_id = '.(int)$id.' OR bot_id = '.(int)$id.'
+            WHERE foodsaver_id = '.(int)$id.'
         ');
 
-
-				$this->del('DELETE FROM '.PREFIX.'foodsaver WHERE foodsaver_id = '.(int)$id);
-				return $this->q('INSERT INTO fs_foodsaver(id, deleted_at) VALUES ('.(int)$id.', NOW())');
+		$this->update('UPDATE '.PREFIX.'foodsaver SET verified = 0,
+			rolle = 0,
+			plz = NULL,
+			stadt = NULL,
+			lat = NULL,
+			lon = NULL,
+			photo = NULL,
+			email = NULL,
+			passwd = NULL,
+			name = NULL,
+			nachname = NULL,
+			anschrift = NULL,
+			telefon = NULL,
+			tox = NULL,
+			github = NULL,
+			twitter = NULL,
+			handy = NULL,
+			geb_datum = NULL,
+			deleted_at = NOW()
+			WHERE foodsaver_id = '.(int)$id);
 	}
 
 	public function getBezirk($id = false)
