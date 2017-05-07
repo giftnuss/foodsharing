@@ -18,7 +18,6 @@ class PassgenModel extends Model
 						fs.verified,
 						fs.last_pass,
 						fs.photo,
-						fs.fs_id,
 						UNIX_TIMESTAMP(fs.last_pass) AS last_pass_ts,
 						b.name AS bezirk_name,
 						b.id AS bezirk_id
