@@ -2488,12 +2488,6 @@ class ManualDb extends Db
 			$data['bot_kurzbeschreibung'] = '';
 		}
 
-		if(!isset($data['fs_id']))
-		{
-			$data['fs_id'] = '0';
-		}
-		$data['fs_id'] = (int)$data['fs_id'];
-
 		if(!isset($data['stadt']))
 		{
 			$data['stadt'] = '';
@@ -2533,7 +2527,6 @@ class ManualDb extends Db
 				`anmeldedatum`,
 				`photo_public`,
 				`about_me_public`,
-				`fs_id`,
 				`stadt`,
 				`lat`,
 				`lon`,
@@ -2560,7 +2553,6 @@ class ManualDb extends Db
 				'.$this->dateval($data['anmeldedatum']).',
 				'.$this->intval($data['photo_public']).',
 				'.$this->strval(strip_tags($data['bot_kurzbeschreibung'])).',
-				'.(int)$data['fs_id'].',
 				'.$this->strval($data['stadt']).',
 				'.$this->strval($lat).',
 				'.$this->strval($lon).',
