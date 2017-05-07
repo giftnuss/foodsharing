@@ -883,7 +883,6 @@ class ManualDb extends Db
 		$out = $this->qRow('
 			SELECT
 				`id`,
-				`fs_id`,
 				`bezirk_id`,
 				`plz`,
 				`stadt`,
