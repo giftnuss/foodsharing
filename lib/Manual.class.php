@@ -3168,6 +3168,7 @@ class ManualDb extends Db
 				WHERE 		fs.id = t.foodsaver_id
 				AND 		`betrieb_id` = '.$this->intval($id).'
 				AND 		t.active = 0
+				AND			fs.deleted_at IS NULL
 		');
 
 		$out['verantwortlich'] = false;
@@ -3238,10 +3239,12 @@ class ManualDb extends Db
 							t.`verantwortlich`
 
 				FROM 		`'.PREFIX.'betrieb_team` t
+				INNER JOIN  `'.PREFIX.'foodsaver` fs ON fs.id = t.foodsaver_id
 
 				WHERE 		t.`betrieb_id` = '.$this->intval($bid).'
 				AND 		t.active = 1
 				AND 		t.verantwortlich = 1
+				AND			fs.deleted_at IS NULL
 		');
 	}
 
@@ -3273,6 +3276,7 @@ class ManualDb extends Db
 				WHERE 		fs.id = t.foodsaver_id
 				AND 		`betrieb_id` = '.$this->intval($bid).'
 				AND 		t.active  = 1
+				AND			fs.deleted_at IS NULL
 				ORDER BY 	t.`stat_fetchcount` DESC
 		');
 	}
@@ -3301,6 +3305,7 @@ class ManualDb extends Db
 				WHERE 		fs.id = t.foodsaver_id
 				AND 		`betrieb_id` = '.$this->intval($bid).'
 				AND 		t.active  = 2
+				AND			fs.deleted_at IS NULL
 		');
 	}
 
