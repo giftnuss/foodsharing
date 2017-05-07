@@ -165,6 +165,7 @@ class ManualDb extends Db
 			AND 		bt.bezirk_id IN('.implode(',', $bids).')
 			AND 		bt.bot_theme = 0
 			AND 		t.active = 1
+			AND			fs.deleted_at IS NULL
 
 			ORDER BY t.last_post_id DESC
 
@@ -201,6 +202,7 @@ class ManualDb extends Db
 			AND 		bt.theme_id = t.id
 			AND 		bt.bezirk_id IN('.implode(',', $bids).')
 			AND 		bt.bot_theme = 1
+			AND			fs.deleted_at IS NULL
 
 			ORDER BY t.last_post_id DESC
 
@@ -469,6 +471,7 @@ class ManualDb extends Db
 						`'.PREFIX.'foodsaver` fs
 
 			WHERE 		fb.foodsaver_id = fs.id
+			AND			fs.deleted_at IS NULL
 			'.$and.'
 		');
 	}
@@ -507,6 +510,7 @@ class ManualDb extends Db
 						`'.PREFIX.'foodsaver` fs
 
 			WHERE 		fb.foodsaver_id = fs.id
+			AND			fs.deleted_at IS NULL
 			'.$and.'
 		');
 	}
@@ -561,6 +565,7 @@ class ManualDb extends Db
 			WHERE 	bt.foodsaver_id = fs.id
 
 			AND 	bt.verantwortlich = 1
+			AND		fs.deleted_at IS NULL
 		'))
 		{
 			$out = array();
@@ -590,6 +595,7 @@ class ManualDb extends Db
 				SELECT 	`id`,`email`
 				FROM `'.PREFIX.'foodsaver`
 				'.$where.' AND active = 1
+				AND	deleted_at IS NULL
 		');
 	}
 
@@ -694,7 +700,7 @@ class ManualDb extends Db
 		return $this->q('
 				SELECT	`id`,CONCAT(`name`," ",`nachname` ) AS value
 				FROM 	'.PREFIX.'foodsaver
-				WHERE 	`bezirk_id` IN('.implode(',', $this->getChildBezirke($bezirk_id)).')');
+				WHERE 	`bezirk_id` IN('.implode(',', $this->getChildBezirke($bezirk_id)).') AND deleted_at IS NULL');
 	}
 
 	public function xhrGetTagFsAll()
@@ -707,6 +713,7 @@ class ManualDb extends Db
 						'.PREFIX.'foodsaver_has_bezirk hb
 				WHERE 	hb.foodsaver_id = fs.id
 				AND 	hb.bezirk_id IN('.implode(',', $this->getBezirkIds()).')
+				AND		fs.deleted_at IS NULL
 		');
 	}
 
@@ -749,8 +756,9 @@ class ManualDb extends Db
 
 				FROM 		'.PREFIX.'foodsaver
 
-				WHERE 		(`name` LIKE "'.$term.'%"
-				OR 			`nachname` LIKE "'.$term.'%")
+				WHERE 		((`name` LIKE "'.$term.'%"
+				OR 			`nachname` LIKE "'.$term.'%"))
+				AND			deleted_at IS NULL
 				'.$bezirk.'
 			');
 
@@ -818,6 +826,7 @@ class ManualDb extends Db
 				FROM 	`'.PREFIX.'foodsaver`
 
 				WHERE 	`bezirk_id` IN('.implode(',',$this->getChildBezirke($bezirk_id)).')
+				AND		deleted_at IS NULL
 		');
 	}
 
@@ -1742,7 +1751,8 @@ class ManualDb extends Db
 					`'.PREFIX.'botschafter` b
 
 			WHERE 	b.foodsaver_id = fs.id
-			AND		b.`bezirk_id`  IN('.implode(',', $query).');
+			AND		b.`bezirk_id`  IN('.implode(',', $query).')
+			AND		fs.deleted_at IS NULL;
 		');
 
 		$out = array();
@@ -1784,6 +1794,7 @@ class ManualDb extends Db
 			AND 	bt.foodsaver_id = b.foodsaver_id
 			AND 	bt.verantwortlich = 1
 			AND		b.`bezirk_id` IN('.implode(',', $query).')
+			AND		fs.deleted_at IS NULL
 		'))
 		{
 			$out = array();
@@ -1825,7 +1836,8 @@ class ManualDb extends Db
 					`'.PREFIX.'foodsaver_has_bezirk` b
 
 			WHERE 	b.foodsaver_id = fs.id
-			AND		b.`bezirk_id` IN('.implode(',', $query).');
+			AND		b.`bezirk_id` IN('.implode(',', $query).')
+			AND		fs.deleted_at IS NULL;
 		');
 
 		$out = array();
@@ -2027,6 +2039,7 @@ class ManualDb extends Db
 			FROM 		`'.PREFIX.'foodsaver`
 
 			WHERE 		`bezirk_id` = '.$this->intval($bezirk_id).'
+			AND			deleted_at IS NULL
 
 			ORDER BY `name`');
 	}
@@ -2270,12 +2283,13 @@ class ManualDb extends Db
 						`photo`,
 						`geschlecht`
 
-				FROM `'.PREFIX.'foodsaver`,
+				FROM `'.PREFIX.'foodsaver` fs,
 				`'.PREFIX.'botschafter`
 
 				WHERE `'.PREFIX.'foodsaver`.`id` = `'.PREFIX.'botschafter`.`foodsaver_id`
 
 				AND `'.PREFIX.'botschafter`.`bezirk_id` = '.$this->intval($bezirk_id).'
+				AND		fs.deleted_at IS NULL
 		');
 	}
 
@@ -2297,6 +2311,7 @@ class ManualDb extends Db
 							ON b.bezirk_id = bz.id
 							WHERE bz.type != 7
 							)
+				AND		fs.deleted_at IS NULL
 				');
 	}
 
@@ -3405,12 +3420,13 @@ class ManualDb extends Db
 					`'.PREFIX.'foodsaver`.`new_bezirk`,
 					`'.PREFIX.'foodsaver`.`bezirk_id`,
 					`'.PREFIX.'bezirk`.`name` AS bezirk_name
-			FROM 	`'.PREFIX.'foodsaver`,
+			FROM 	`'.PREFIX.'foodsaver` fs,
 					`'.PREFIX.'bezirk`
 
 			WHERE 	`'.PREFIX.'foodsaver`.`bezirk_id` = `'.PREFIX.'bezirk`.`id`
 
 			AND 	`want_new` = 1
+			AND		fs.deleted_at IS NULL
 
 			'.$onlybot.'
 
@@ -3420,7 +3436,7 @@ class ManualDb extends Db
 
 	public function getTeamleader($betrieb_id)
 	{
-		return $this->qRow('SELECT 	fs.`id`,CONCAT(fs.name," ",nachname) AS name  FROM '.PREFIX.'betrieb_team t, '.PREFIX.'foodsaver fs WHERE t.foodsaver_id = fs.id AND `betrieb_id` = '.$this->intval($betrieb_id).' AND t.verantwortlich = 1 AND fs.`active` = 1');
+		return $this->qRow('SELECT 	fs.`id`,CONCAT(fs.name," ",nachname) AS name  FROM '.PREFIX.'betrieb_team t, '.PREFIX.'foodsaver fs WHERE t.foodsaver_id = fs.id AND `betrieb_id` = '.$this->intval($betrieb_id).' AND t.verantwortlich = 1 AND fs.`active` = 1 AND	fs.deleted_at IS NULL');
 	}
 
 
@@ -3471,6 +3487,7 @@ class ManualDb extends Db
 			WHERE 	a.foodsaver_id = fs.id
 			AND 	a.betrieb_id = '.(int)$bid.'
 			AND  	a.date IN('.implode(',', $dsql).')
+			AND		fs.deleted_at IS NULL
 		'))
 			{
 				//print_r($res);
@@ -3815,7 +3832,8 @@ class ManualDb extends Db
 		return $this->qCol('SELECT DISTINCT bt.foodsaver_id FROM `'.PREFIX.'bezirk_closure` c
 			INNER JOIN `'.PREFIX.'betrieb` b ON c.bezirk_id = b.bezirk_id
 			INNER JOIN `'.PREFIX.'betrieb_team` bt ON bt.betrieb_id = b.id
-			WHERE c.ancestor_id = '.$this->intval($bezirk).' AND bt.verantwortlich = 1');
+			INNER JOIN `'.PREFIX.'foodsaver` fs ON fs.id = bt.foodsaver_id
+			WHERE c.ancestor_id = '.$this->intval($bezirk).' AND bt.verantwortlich = 1 AND fs.deleted_at IS NULL');
 	}
 
 	/* retrieves the list of all bots for given bezirk or sub bezirk */
@@ -3832,7 +3850,8 @@ class ManualDb extends Db
 		return $this->qCol('SELECT DISTINCT bot.foodsaver_id FROM `'.PREFIX.'bezirk_closure` c
 			LEFT JOIN `'.PREFIX.'bezirk` bz ON bz.id = c.bezirk_id
 			INNER JOIN `'.PREFIX.'botschafter` bot ON bot.bezirk_id = c.bezirk_id
-			WHERE c.ancestor_id = '.$this->intval($bezirk).' AND '.$where_type);
+			INNER JOIN `'.PREFIX.'foodsaver` fs ON fs.id = bot.foodsaver_id
+			WHERE c.ancestor_id = '.$this->intval($bezirk).' AND fs.deleted_at IS NULL AND '.$where_type);
 	}
 
 	/* updates the member list to given list of IDs, optionally leaving admins

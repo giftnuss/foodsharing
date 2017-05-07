@@ -59,6 +59,8 @@ class StatisticsModel extends Model
 				`stat_fetchcount` AS fetchcount
 			FROM
 				'.PREFIX.'foodsaver
+			WHERE
+				deleted_at IS NULL
 	
 			ORDER BY fetchweight DESC
 			LIMIT 10

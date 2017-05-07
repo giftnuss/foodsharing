@@ -158,7 +158,7 @@ class Db
 
 	public function addPassRequest($email,$mail = true)
 	{
-		if($fs = $this->qRow('SELECT `id`,`email`,`name`,`geschlecht` FROM `'.PREFIX.'foodsaver` WHERE `email` = '.$this->strval($email)))
+		if($fs = $this->qRow('SELECT `id`,`email`,`name`,`geschlecht` FROM `'.PREFIX.'foodsaver` fs WHERE fs.deleted_at IS NULL AND `email` = '.$this->strval($email)))
 		{
 
 			$k = uniqid();
@@ -407,7 +407,8 @@ class Db
 						`'.PREFIX.'foodsaver`.`handy`,
 						plz
 
-			FROM 		`'.PREFIX.'foodsaver`
+			FROM 		`'.PREFIX.'foodsaver` fs
+			WHERE		fs.deleted_at IS NULL AND fs.`active` = 1
 		');
 	}
 
