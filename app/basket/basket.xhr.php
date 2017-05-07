@@ -397,8 +397,6 @@ class BasketXhr extends Control
 				$this->mailMessage(fsId(), $fs_id, $msg,22);
 				$this->model->setStatus($_GET['id'], 0);
 				
-				$this->pushMessage($fs_id,$msg,'Dein Essenskorb wurde angefragt');
-				
 				return array(
 					'status' => 1,
 					'script' => 'if($(".xhrDialog").length > 0){$(".xhrDialog").dialog("close");}pulseInfo("Anfrage wurde versendet.");'		
