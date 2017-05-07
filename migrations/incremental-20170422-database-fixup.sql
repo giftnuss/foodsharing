@@ -146,6 +146,7 @@ ALTER TABLE fs_email_status ADD CONSTRAINT FOREIGN KEY (email_id) REFERENCES fs_
 ALTER TABLE fs_event MODIFY COLUMN bezirk_id int unsigned NULL;
 ALTER TABLE fs_event MODIFY COLUMN location_id int unsigned NULL;
 UPDATE fs_event SET bezirk_id = NULL WHERE bezirk_id NOT IN (SELECT id FROM fs_bezirk);
+UPDATE fs_event SET location_id = NULL WHERE location_id NOT IN (SELECT id FROM fs_location);
 ALTER TABLE fs_event ADD CONSTRAINT FOREIGN KEY (bezirk_id) REFERENCES fs_bezirk(id) ON DELETE SET NULL;
 ALTER TABLE fs_event ADD CONSTRAINT FOREIGN KEY (location_id) REFERENCES fs_location(id) ON DELETE CASCADE;
 
