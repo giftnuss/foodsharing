@@ -1607,7 +1607,7 @@ class ManualDb extends Db
 			handy = NULL,
 			geb_datum = NULL,
 			deleted_at = NOW()
-			WHERE foodsaver_id = '.(int)$id);
+			WHERE id = '.(int)$id);
 	}
 
 	public function getBezirk($id = false)

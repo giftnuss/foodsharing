@@ -69,7 +69,6 @@ class ProfileModel extends Model
 		if(($data = $this->qRow('
 		
 			SELECT 	fs.`id`,
-					fs.`fs_id`,
 					fs.`bezirk_id`,
 					fs.`plz`,
 					fs.`stadt`,
