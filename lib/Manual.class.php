@@ -2274,18 +2274,18 @@ class ManualDb extends Db
 	{
 		return $this->q('
 
-				SELECT 	`id`,
-						`email`,
-						`name`,
-						`name` AS `vorname`,
-						`nachname`,
-						`photo`,
-						`geschlecht`
+				SELECT 	fs.`id`,
+						fs.`email`,
+						fs.`name`,
+						fs.`name` AS `vorname`,
+						fs.`nachname`,
+						fs.`photo`,
+						fs.`geschlecht`
 
 				FROM `'.PREFIX.'foodsaver` fs,
 				`'.PREFIX.'botschafter`
 
-				WHERE `'.PREFIX.'foodsaver`.`id` = `'.PREFIX.'botschafter`.`foodsaver_id`
+				WHERE fs.id = `'.PREFIX.'botschafter`.`foodsaver_id`
 
 				AND `'.PREFIX.'botschafter`.`bezirk_id` = '.$this->intval($bezirk_id).'
 				AND		fs.deleted_at IS NULL
