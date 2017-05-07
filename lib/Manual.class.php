@@ -1563,7 +1563,7 @@ class ManualDb extends Db
             WHERE foodsaver_id = '.(int)$id.'
         ');
         $this->del('
-            DELETE FROM '.PREFIX.'fs_mailchange
+            DELETE FROM '.PREFIX.'mailchange
             WHERE foodsaver_id = '.(int)$id.'
         ');
         $this->del('
