@@ -24,6 +24,8 @@ ALTER TABLE fs_verify_history MODIFY COLUMN bot_id int unsigned;
 ALTER TABLE fs_verify_history MODIFY COLUMN change_status tinyint(1);
 ALTER TABLE fs_foodsaver ADD COLUMN deleted_at datetime NULL;
 ALTER TABLE fs_betrieb ADD COLUMN deleted_at datetime NULL;
+ALTER TABLE fs_pass_gen MODIFY COLUMN bot_id int unsigned;
+ALTER TABLE fs_pass_gen ADD INDEX(bot_id);
 
 
 -- following SQL implements suggestions from database_fixup.md
