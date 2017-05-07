@@ -838,7 +838,7 @@ class ManualDb extends Db
 		{
 			$parent_id = $this->getVal('parent_id', 'bezirk', $id);
 
-			$this->update('UPDATE `'.PREFIX.'foodsaver` SET `bezirk_id` = 0 WHERE `bezirk_id` = '.(int)$id);
+			$this->update('UPDATE `'.PREFIX.'foodsaver` SET `bezirk_id` = NULL WHERE `bezirk_id` = '.(int)$id);
 			$this->update('UPDATE `'.PREFIX.'bezirk` SET `parent_id` = 0 WHERE `parent_id` = '.(int)$id);
 
 			$this->del('DELETE FROM `'.PREFIX.'bezirk` WHERE `id` = '.(int)$id);
