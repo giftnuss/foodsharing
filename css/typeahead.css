@@ -22,7 +22,8 @@
 }
 
 .typeahead:focus {
-    border: 2px solid #0097cf;
+    border: 2px solid #46891b;
+    color: #fff !important;
 }
 .typeahead.empty {
     border: 2px solid red;
@@ -58,8 +59,8 @@
 }
 
 .tt-suggestion.tt-cursor {
-    color: #fff;
-    background-color: #0097cf;
+    color: #fff !important;
+    background-color: #46891b;
 }
 
 .tt-suggestion p {
