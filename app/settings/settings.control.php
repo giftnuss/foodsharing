@@ -38,27 +38,6 @@ class SettingsControl extends Control
 		}
 		
 		addTitle(s('settings'));
-
-        /*
-         * ISSUE 192 quick fix
-         * https://gitlab.com/foodsharing-dev/issues0/issues/192
-         */
-        if(isset($_GET['sub'])) {
-
-            switch ($_GET['sub']) {
-                case 'upgrade/up_fs':
-                    $this->up_fs();
-                    break;
-                case 'upgrade/up_bip':
-                    $this->up_bip();
-                    break;
-                case 'upgrade/up_bot':
-                    $this->up_bot();
-                    break;
-                default :
-                    break;
-            }
-        }
 	}
 	
 	public function index()
@@ -182,7 +161,7 @@ class SettingsControl extends Control
 		if(S::may())
 		{
 			$model = loadModel('quiz');
-
+				
 			if(($status = $model->getQuizStatus(1)) && ($quiz = $model->getQuiz(1)))
 			{
 	
