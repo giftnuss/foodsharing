@@ -707,4 +707,9 @@ class SettingsControl extends Control
 			addJs("ajreq('changemail3');");
 		}
 	}
+
+	private function upgrade()
+	{
+		/* This needs to be here for routing of upgrade/ to work. Do not remove! */
+	}
 }
