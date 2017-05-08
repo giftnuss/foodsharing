@@ -279,7 +279,7 @@ if(opt.success!=undefined)
 {hideLoader();}
 if(opt.complete!=undefined)
 {opt.complete();}}});}};function ajreq(name,options={},method,app)
-{return ajax.req(options.app||app||GET('page'),name,{method:method,data:options,loader:options.loader});}
+{var options=typeof options!=='undefined'?options:{};return ajax.req(options.app||app||GET('page'),name,{method:method,data:options,loader:options.loader});}
 var u_pulse_error_to=null;var u_pulse_info_to=null;function pulseError(msg,opt)
 {if(opt==undefined)
 {opt={sticky:false};}

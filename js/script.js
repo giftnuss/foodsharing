@@ -607,6 +607,7 @@ var ajax = {
 };
 function ajreq(name,options = {},method,app)
 {
+	var options = typeof options !== 'undefined' ? options : {};
 	return ajax.req(options.app || app || GET('page'), name, {
 		method: method,
 		data: options,
