@@ -278,7 +278,7 @@ if(opt.success!=undefined)
 {opt.success(ret.data);}}},fail:function(request){if(request.status===403){pulseError('Du hast leider nicht die notwendigen Berechtigungen für diesen Vorgang.');}},complete:function(){if(opt.loader===true)
 {hideLoader();}
 if(opt.complete!=undefined)
-{opt.complete();}}});}};function ajreq(name,options={},method,app)
+{opt.complete();}}});}};function ajreq(name,options,method,app)
 {var options=typeof options!=='undefined'?options:{};return ajax.req(options.app||app||GET('page'),name,{method:method,data:options,loader:options.loader});}
 var u_pulse_error_to=null;var u_pulse_info_to=null;function pulseError(msg,opt)
 {if(opt==undefined)
