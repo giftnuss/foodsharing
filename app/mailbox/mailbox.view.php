@@ -330,6 +330,8 @@ class MailboxView extends View
 							"height" : height+"px"
 					});
 				}
+				u_addTypeHead();
+				
 		  	}
 		});
 		$("#etattach").change(function(){
@@ -346,37 +348,61 @@ class MailboxView extends View
 				pulseError("'.s('file_to_big').'");
 			}
 		});
-		u_addTypeHead();
 		');
 		
 		addJsFunc('
 		
-		var mail_to_data = '.json_encode($mailadresses).';
+		var addresses = '.json_encode($mailadresses).';
+			
+		var substringMatcher = function (strs) {
+     		return function findMatches(q, cb) {         
+            // regex used to determine if a string contains the substring `q`
+            var substringRegex = new RegExp(q, \'i\');
+
+            // an array that will be populated with substring matches
+            var matches = [];
+
+            // iterate through the pool of strings and for any string that
+            // contains the substring `q`, add it to the `matches` array
+            $.each(strs, function (i, str) {
+                if (substringRegex.test(str)) {
+                    matches.push({value: str});
+                }
+            });
+
+            cb(matches);
+        };        
+			};
 					
 		function u_addTypeHead()
-		{
-			$(".edit-an").typeahead("destroy");
-			$(".edit-an").typeahead({
-				name: "'.s('recip').'",
-				local: mail_to_data,
-				limit: 10
+        {
+        	$(".edit-an").typeahead("destroy");
+            $(".edit-an").typeahead({
+				hint: true,
+  				highlight: true,
+  				minLength: 2
+  				}, {
+  				name: \'addresses\',
+				source: substringMatcher(addresses),
+				limit: 15
 			});
-						
-			$(".edit-an").on("typeahead:selected typeahead:autocompleted", function (e, datum) {
-			    u_handleNewEmail(this.value, $(this));
-			}).on("blur",function(){
-				$this = this;
-				if($this.value != "" && !checkEmail($this.value))
-				{
-					pulseError("Diese E-Mail-Adresse ist nicht korrekt");
-					$this.focus();	
-				}
-				else
-				{
-					u_handleNewEmail($this.value, $($this));
-				}
-			});
-		}
+                            
+            $(".edit-an").on("typeahead:selected typeahead:autocompleted", function (e, datum) {
+            	u_handleNewEmail(this.value, $(this));
+            }).on("blur",function(){
+            	$this = this;
+                if($this.value != "" && !checkEmail($this.value))
+                {
+                	pulseError("Diese E-Mail-Adresse ist nicht korrekt");
+                    $this.focus();  
+                }
+                else if($this.value != "")
+                {
+                	u_handleNewEmail($this.value, $($this));
+                }
+            });
+        }
+
 		var mailcheck = "";
 		function u_handleNewEmail(email,el)
 		{
@@ -388,7 +414,7 @@ class MailboxView extends View
 					$this = $(this);
 					if(!checkEmail($this.val()) || (availmail[$this.val()] != undefined))
 					{
-						$this.parent().parent().parent().remove();
+						//$this.parent().parent().parent().remove();
 					}
 					else
 					{

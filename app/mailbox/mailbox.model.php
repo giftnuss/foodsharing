@@ -64,7 +64,7 @@ class MailboxModel extends Model
 			$mails = array_merge($mails,$contacts);
 		}
 		
-		return $mails;
+		return $mails ? $mails : array();
 	}
 	
 	public function addMailbox($name,$member = 0)
