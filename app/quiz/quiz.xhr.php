@@ -664,7 +664,6 @@ class QuizXhr extends Control
 						
 						
 						$dia->addContent($this->view->quizQuestion($question,$answers));
-						$dia->addContent($this->view->quizComment());
 						
 						/*
 						 * for later function is not ready yet :)
@@ -672,7 +671,7 @@ class QuizXhr extends Control
 						$dia->addButton('Weiter', 'questcheckresult();return false;');
 						$dia->addButton('Pause', 'ajreq(\'pause\',{app:\'quiz\',sid:\''.$session_id.'\'});');
 
-						$dia->addButton('nächste Frage','ajreq(\'next\',{app:\'quiz\',comment:$(\'#quizusercomment\').val(),qid:'.(int)$question['id'].',commentanswers:"'.jsSafe($comment_aswers).'"});$(".quiz-questiondialog .ui-dialog-buttonset .ui-button").button( "option", "disabled", true );$(".quiz-questiondialog .ui-dialog-buttonset .ui-button span").prepend(\'<i class="fa fa-spinner fa-spin"></i> \')');
+						$dia->addButton('nächste Frage','ajreq(\'next\',{app:\'quiz\',qid:'.(int)$question['id'].',commentanswers:"'.jsSafe($comment_aswers).'"});$(".quiz-questiondialog .ui-dialog-buttonset .ui-button").button( "option", "disabled", true );$(".quiz-questiondialog .ui-dialog-buttonset .ui-button span").prepend(\'<i class="fa fa-spinner fa-spin"></i> \')');
 
 						/*
 						 * add next() Button
