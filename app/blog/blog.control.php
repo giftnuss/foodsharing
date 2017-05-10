@@ -118,13 +118,18 @@ class BlogControl extends Control
 	
 	public function add()
 	{
-		if(mayEditBlog() && $this->model->canAdd((int)fsId()))
+		if(mayEditBlog())
 		{
 			$this->handle_add();
 		
 			addBread(s('bread_new_blog_entry'));
-		
-			$bezirke = $this->model->getBezirke();
+
+			if(S::may('orga'))
+			{
+				$bezirke = $this->model->getBezirke();
+			} else {
+				$bezirke = $this->model->getBotBezirkIds();
+			}
 		
 			addContent($this->view->blog_entry_form($bezirke,true));
 		
@@ -139,7 +144,7 @@ class BlogControl extends Control
 		
 	}
 	
-	public function handle_add()
+	private function handle_add()
 	{
 		global $g_data;
 		
@@ -148,7 +153,7 @@ class BlogControl extends Control
 			$g_data['foodsaver_id'] = fsId();
 			$g_data['time'] = date('Y-m-d H:i:s');
 			
-			if($this->model->add_blog_entry($g_data))
+			if($this->model->canAdd((int)fsId(), $g_data['bezirk_id']) && $this->model->add_blog_entry($g_data))
 			{
 				info(s('blog_entry_add_success'));
 				goPage();

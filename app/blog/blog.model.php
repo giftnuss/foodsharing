@@ -3,10 +3,6 @@ class BlogModel extends Model
 {
 	public function canEdit($article_id)
 	{
-		if(isOrgaTeam())
-		{
-			return true;
-		}
 		if($val = $this->getValues(array('bezirk_id','foodsaver_id'), 'blog_entry', $article_id))
 		{
 			if(fsId() == $val['foodsaver_id'] || isBotFor($val['bezirk_id']))
@@ -17,46 +13,21 @@ class BlogModel extends Model
 		return false;
 	}
 
-	public function canAdd($fsId)
+	public function canAdd($fsId, $bezirkId)
 	{
-		
 		if(isOrgaTeam())
 		{
 			return true;
 		}
-		if($val = $this->getBezID($fsId))
+
+		if(isBotFor($bezirkId))
 		{
-			if(isBotFor($val['bezirk_id']))
-			{
-				return true;
-			}
+			return true;
 		}
+
 		return false;
 	}
 
-	/**
-	 * checks if foodsaver is admin of a working group and returns that working group */
-	private function getBezID($fsId)
-	{
-		return $this->qRow('
-			SELECT
-				b.`bezirk_id`
-	
-			FROM
-				`'.PREFIX.'botschafter` b,
-				`'.PREFIX.'bezirk` bz
-	
-			WHERE
-				bz.parent_id = 392
-				AND
-				bz.type = 7
-				AND
-				b.bezirk_id = bz.id
-				AND
-				b.foodsaver_id = '.(int)$fsId.'
-				LIMIT 1');
-	}
-	
 	public function getPost($id)
 	{
 		return $this->qRow('
