@@ -316,10 +316,12 @@ class MaintenanceControl extends ConsoleControl
 			info('memcache userinfo updated');
 		}
 
-		if($groups = $this->model->getBotIds(392, false, true))
-		{
-			Mem::set('all_global_groups', serialize($groups));
+		$admins = $this->model->getBotIds(0, false, true);
+		if(!$admins) {
+			$admins = array();
 		}
+		Mem::set('all_global_group_admins', serialize($admins));
+
 	}
 
 	private function updateBezirkIds()

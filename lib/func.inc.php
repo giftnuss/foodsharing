@@ -2275,7 +2275,7 @@ function mayEditQuiz()
 
 function mayEditBlog()
 {
-	return S::may('orga') || isBotForA(unserialize(Mem::get('all_global_groups')));
+	return S::may('orga') || in_array(fsId(), Mem::get('all_global_group_admins'));
 }
 
 function may()
