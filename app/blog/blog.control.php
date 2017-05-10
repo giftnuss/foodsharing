@@ -124,11 +124,15 @@ class BlogControl extends Control
 		
 			addBread(s('bread_new_blog_entry'));
 
-			if(S::may('orga'))
+			$bezirke = $this->model->getBezirke();
+			if(!S::may('orga'))
 			{
-				$bezirke = $this->model->getBezirke();
-			} else {
-				$bezirke = $this->model->getBotBezirkIds();
+				$bot_ids = $this->model->getBotBezirkIds();
+				foreach($bezirke as $k=>$v)
+				{
+					if($v['type'] != 7 || !in_array($v['id'], $bot_ids))
+						unset($bezirke[$k]);
+				}
 			}
 		
 			addContent($this->view->blog_entry_form($bezirke,true));
