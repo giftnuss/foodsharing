@@ -1015,6 +1015,7 @@ table.pintable tr td span.msg
 	display:block;
 	padding-right:8px;
 	padding-left:8px;
+	word-break: break-word;
 }
 table.pintable tr td.img
 {
