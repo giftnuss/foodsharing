@@ -35,7 +35,6 @@ DELETE FROM fs_foodsaver_has_event WHERE foodsaver_id NOT IN (SELECT id FROM fs_
 DELETE FROM fs_foodsaver_has_event WHERE event_id NOT IN (SELECT id FROM fs_event);
 DELETE FROM fs_foodsaver_has_wallpost WHERE foodsaver_id NOT IN (SELECT id FROM fs_foodsaver);
 DELETE FROM fs_foodsaver_has_wallpost WHERE wallpost_id NOT IN (SELECT id FROM fs_wallpost);
-DELETE FROM fs_fsreport_has_wallpost WHERE fsreport_id NOT IN (SELECT id FROM fs_report);
 DELETE FROM fs_fsreport_has_wallpost WHERE wallpost_id NOT IN (SELECT id FROM fs_wallpost);
 DELETE FROM fs_mailbox_member WHERE foodsaver_id NOT IN (SELECT id FROM fs_foodsaver);
 DELETE FROM fs_mailbox_member WHERE mailbox_id NOT IN (SELECT id FROM fs_mailbox);
@@ -183,7 +182,7 @@ DROP TABLE fs_foodsaver_has_fetchdate;
 ALTER TABLE fs_foodsaver_has_wallpost ADD CONSTRAINT FOREIGN KEY (foodsaver_id) REFERENCES fs_foodsaver(id) ON DELETE CASCADE;
 ALTER TABLE fs_foodsaver_has_wallpost ADD CONSTRAINT FOREIGN KEY (wallpost_id) REFERENCES fs_wallpost(id) ON DELETE CASCADE;
 
-ALTER TABLE fs_fsreport_has_wallpost ADD CONSTRAINT FOREIGN KEY (fsreport_id) REFERENCES fs_report(id) ON DELETE CASCADE;
+ALTER TABLE fs_fsreport_has_wallpost ADD CONSTRAINT FOREIGN KEY (fsreport_id) REFERENCES fs_foodsaver(id) ON DELETE CASCADE;
 ALTER TABLE fs_fsreport_has_wallpost ADD CONSTRAINT FOREIGN KEY (wallpost_id) REFERENCES fs_wallpost(id) ON DELETE CASCADE;
 
 ALTER TABLE fs_mailbox_member ADD CONSTRAINT FOREIGN KEY (foodsaver_id) REFERENCES fs_foodsaver(id) ON DELETE CASCADE;
