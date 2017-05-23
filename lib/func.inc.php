@@ -338,8 +338,11 @@ function handleTagselect($id)
 	{		
 		foreach ($g_data[$id] as $key => $r)
 		{
-			$part = explode('-', $key);
-			$recip[$part[0]] = $part[0];
+			if($key != "")
+			{
+				$part = explode('-', $key);
+				$recip[$part[0]] = $part[0];
+			}
 		}
 	}
 	
