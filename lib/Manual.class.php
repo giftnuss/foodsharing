@@ -2952,7 +2952,7 @@ class ManualDb extends Db
 			');
 
 		$teamMembers = $this->getBetriebTeam($bid);
-		foreach($springerMembers['id'] as $fs_id)
+		foreach($teamMembers['id'] as $fs_id)
 		{
 			$msg->addUserToConversation($tcid, $fs_id);
 		}
