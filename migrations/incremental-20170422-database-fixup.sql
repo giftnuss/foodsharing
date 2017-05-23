@@ -73,7 +73,7 @@ ALTER TABLE fs_betrieb MODIFY COLUMN lat varchar(20) NULL, MODIFY COLUMN lon var
 ALTER TABLE fs_betrieb MODIFY COLUMN kette_id int unsigned NULL, MODIFY COLUMN betrieb_kategorie_id int NULL;
 ALTER TABLE fs_betrieb MODIFY COLUMN `name` varchar(120), MODIFY COLUMN str varchar(120);
 ALTER TABLE fs_betrieb MODIFY COLUMN `begin` date NULL, MODIFY COLUMN besonderheiten text NULL, MODIFY COLUMN public_info varchar(200) NULL;
-ALTER TABLE fs_contact MODIFY COLUMN id int unsigned;
+ALTER TABLE fs_contact MODIFY COLUMN id int unsigned AUTO_INCREMENT;
 ALTER TABLE fs_foodsaver_has_contact MODIFY COLUMN foodsaver_id int unsigned;
 ALTER TABLE fs_foodsaver_has_contact MODIFY COLUMN contact_id int unsigned;
 ALTER TABLE fs_verify_history MODIFY COLUMN fs_id int unsigned;
