@@ -421,7 +421,7 @@ var conv = {
 				 */
 				
 				title = ret.conversation.name;
-				if(ret.conversation.name == '')
+				if(ret.conversation.name === null)
 				{
 					title = new Array();
 					for(var i=0;i<ret.member.length;i++)

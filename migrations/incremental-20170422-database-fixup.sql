@@ -221,3 +221,5 @@ ALTER TABLE fs_usernotes_has_wallpost ADD CONSTRAINT FOREIGN KEY (wallpost_id) R
 
 RENAME TABLE fs_foodsaver_archive TO fs_foodsaver_archive4;
 CREATE TABLE fs_foodsaver_archive LIKE fs_foodsaver;
+
+UPDATE fs_conversation SET `name` = NULL WHERE `name` = '';

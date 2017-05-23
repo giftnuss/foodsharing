@@ -490,7 +490,7 @@ var msg = {
 				}
 				
 				str_title = data.conversation.name;
-				if(str_title == '')
+				if(str_title === null)
 				{
 					str_title = 'Unterhaltung mit ' + names.join(', ');
 				}

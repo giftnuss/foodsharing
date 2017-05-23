@@ -79,7 +79,7 @@ class MsgView extends View
 						$title .= ', '.$m['name'];
 					}
 
-					if($c['name'] == '')
+					if(is_null($c['name']))
 					{
 						$title = substr($title, 2);
 					}

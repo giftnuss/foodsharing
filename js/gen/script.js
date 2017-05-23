@@ -548,7 +548,7 @@ return tmp;},settings:function(cid)
 {conv.chatboxes[key].last_mid=parseInt(message.id);conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append('<div title="'+message.time+'" class="chatboxmessage"><span class="chatboxmessagefrom"><a href="#" class="photo" onclick="profile('+message.fs_id+');return false;"><img src="'+conv.img(message.fs_photo+'','mini')+'"></a></span><span class="chatboxmessagecontent">'+nl2br(message.body.autoLink())+'<span class="time">'+timeformat.nice(message.time)+'</span></span><div style="clear:both;"></div></div>');},initChat:function(cid)
 {conv.showLoader(cid);var key=this.getKey(cid);var cid=cid;ajax.req('msg','loadconversation',{loader:false,data:{id:cid},success:function(ret){if(ret.member.length>2)
 {conv.addChatOption(cid,'<a href="#" onclick="if(confirm(\'Bist Du Dir Sicher das Du den Chat verlassen möchtest?\')){ajax.req(\'msg\',\'leave\',{data:{cid:'+cid+'}});}return false;">Chat verlassen</a>');conv.addChatOption(cid,'<span class="optinput"><input placeholder="Chat umbenennen..." type="text" name="chatname" value="" maxlength="30" /><i onclick="var val=$(this).prev().val();ajax.req(\'msg\',\'rename\',{data:{cid:'+cid+',name:val}});return false;" class="fa fa-arrow-circle-right"></i></span>');}
-title=ret.conversation.name;if(ret.conversation.name=='')
+title=ret.conversation.name;if(ret.conversation.name===null)
 {title=new Array();for(var i=0;i<ret.member.length;i++)
 {if(ret.member[i]!=undefined&&ret.member[i].id!=user.id)
 {title.push(ret.member[i].name);}}
