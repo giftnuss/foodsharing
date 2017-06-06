@@ -16,31 +16,53 @@ class TeamControl extends Control
 	{
 		addBread(s('team'),'/team');
 		addTitle(s('team'));
-		
-		
-		
-		if($id = $this->uriInt(2))
-		{
-			if($user = $this->model->getUser($id))
-			{
-				addTitle($user['name']);
-				addBread($user['name']);
-				addContent($this->view->user($user));
-				
-				if($user['contact_public'])
-				{
-					addContent($this->view->contactForm($user));
-				}
-			}
-			else
-			{
-				go('/team');
-			}
-		}
-		else if($team = $this->model->getTeam())
-		{
-			$db = loadModel('content');
-			addContent($this->view->teamlist($team, $db->getContent(39)));
-		}
+                
+                # Three types of pages:
+                # a) /team - displays vorstand
+                # b) /team/ehemalige - displays Ehemalige
+                # c) /team/{:id} - displays specific user
+                
+                if($id = $this->uriInt(2)){
+                    # Type c, display user
+                    if($user = $this->model->getUser($id))
+                    {
+                        addTitle($user['name']);
+                        addBread($user['name']);
+                        addContent($this->view->user($user));
+
+                        if($user['contact_public'])
+                        {
+                                addContent($this->view->contactForm($user));
+                        }
+                    }
+                    else
+                    {
+                        go('/team');
+                    }
+                } else {                
+                    if ($teamType = $this->uriStr(2)){
+                        if ($teamType == "ehemalige"){
+                            # Type b, display "Ehemalige"
+                            addBread(s('Ehemalige'),'/team/ehemalige');
+                            addTitle(s('Ehemalige'));
+                            $this->displayTeamContent(1564, 54);
+                        } else {
+                            addContent("Page not found");
+                        } 
+                    }
+                    else {
+                        # Type a, display "Vorstand" and "Aktive" 
+                        $this->displayTeamContent(1373, 39);
+                        $this->displayTeamContent(1565, 53);
+                    }                    
+                }
 	}
+        
+        private function displayTeamContent($bezirkId, $contentId){
+            if($team = $this->model->getTeam($bezirkId))
+            {
+                $db = loadModel('content');
+                addContent($this->view->teamlist($team, $db->getContent($contentId)));
+            }
+        }
 }

@@ -1,7 +1,7 @@
 <?php
 class TeamModel extends Model
 {
-	public function getTeam()
+	public function getTeam($bezirkId = 1373)
 	{
 		$out = array();
 		if($orgas =  $this->q('
@@ -35,7 +35,7 @@ class TeamModel extends Model
 					fs.mailbox_id = mb.id
 
 				WHERE 
-					hb.bezirk_id = 1373
+					hb.bezirk_id = '.$bezirkId.'
 				ORDER BY fs.name
 		'))
 		{
