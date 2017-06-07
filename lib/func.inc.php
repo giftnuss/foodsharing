@@ -672,7 +672,13 @@ function getMenu()
 					<li><a class="fNiv" href="/news">News</a></li>
 					<li><a class="fNiv" href="/ueber-uns">Über uns</a>
 						<ul>
-							<li><a href="/team">Team</a></li>
+                                                        <li><a href="/team">Team</a>
+                                                            <ul>
+                                                                <li><a href="/team#vorstand">Vorstand</a></li>
+                                                                <li><a href="/team#aktive">Aktive</a></li>
+                                                                <li><a href="/team/ehemalige">Ehemalige</a></li>
+                                                            </ul>
+                                                        </li>
 							<li><a href="/partner">Partner</a></li>
 							<li><a href="/statistik">Statistik</a></li>
 							<li><a href="/faq">F.A.Q.</a></li>
