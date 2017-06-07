@@ -53,29 +53,29 @@ class TeamModel extends Model
 	public function getUser($id)
 	{
 		if($user = $this->qRow('
-			SELECT 
-				fs.id,
+                    SELECT
+                        fs.id,
 				CONCAT(fs.name," ",fs.nachname) AS name,
-				fs.about_me_public AS `desc`,
-				fs.rolle,
-				fs.geschlecht,
-				fs.photo,
-				fs.twitter,
-				fs.tox,
-				fs.homepage,
-				fs.github,
-				fs.position,
-				fs.email,
-				fs.contact_public
-				
-			FROM 
-				'.PREFIX.'foodsaver fs
-				
-			WHERE 
-				fs.id = '.(int)$id.'
-				
-			AND 
-				fs.rolle >= 3
+                        fs.about_me_public AS `desc`,
+                        fs.rolle,
+                        fs.geschlecht,
+                        fs.photo,
+                        fs.twitter,
+                        fs.tox,
+                        fs.homepage,
+                        fs.github,
+                        fs.position,
+                        fs.email,
+                        fs.contact_public
+                    FROM
+                        '.PREFIX.'foodsaver_has_bezirk fb
+                    INNER JOIN '.PREFIX.'foodsaver fs ON
+                        fb.foodsaver_id = fs.id
+                    WHERE
+                        fb.foodsaver_id = '.(int)$id.' AND(
+                            fb.bezirk_id = 1564 OR fb.bezirk_id = 1565 OR fb.bezirk_id = 1373
+                        )
+                    LIMIT 1
 		'))
 		{
 			$user['groups'] = $this->q('
@@ -96,7 +96,6 @@ class TeamModel extends Model
 					
 				AND 
 					b.type = 7');
-			
 			return $user;
 		}
 	}
