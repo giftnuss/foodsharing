@@ -839,11 +839,6 @@ class Db
 		Mem::userSet($fs_id, 'sid', session_id());
 	}
 
-	public function dbLoginAs($fs_id)
-	{
-		return $this->initSessionData($fs_id);
-	}
-
 	private function initSessionData($fs_id)
 	{
 		$this->updateActivity($fs_id);

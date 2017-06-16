@@ -469,11 +469,6 @@ class ProfileView extends View
 			}
 		}
 		
-		if(isAdmin())
-		{
-			$opt .= '<li><a href="/?page=merge&fsid='.$this->foodsaver['id'].'&rurl='.urlencode(getSelf()).'"><i class="fa fa-magic"></i>verwandeln</a></li>';
-		}
-		
 		return '
 		<ul class="linklist">
 			<li><a href="#" onclick="chat('.$this->foodsaver['id'].');return false;"><i class="fa fa-comment"></i>Nachricht schreiben</a></li>
@@ -643,11 +638,6 @@ class ProfileView extends View
 			$name = explode(' ', $this->foodsaver['name']);
 			$name = $name[0];
 			$opt .= '<li class="buddyRequest"><a onclick="ajreq(\'request\',{app:\'buddy\',id:'.(int)$this->foodsaver['id'].'});return false;" href="#">Ich kenne '.$name.'</a></li>';
-		}
-		
-		if(isAdmin())
-		{
-			$opt .= '<li><a href="/?page=merge&fsid='.$this->foodsaver['id'].'&rurl='.urlencode(getSelf()).'">*verwandeln*</a></li>';
 		}
 		
 		if($this->foodsaver['sleep_status'] == 0)
