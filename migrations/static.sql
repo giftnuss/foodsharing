@@ -10175,8 +10175,8 @@ REPLACE INTO `fs_bezirk` (`id`, `parent_id`, `has_children`, `type`, `teaser`, `
 REPLACE INTO `fs_bezirk` (`id`, `parent_id`, `has_children`, `type`, `teaser`, `desc`, `photo`, `master`, `mailbox_id`, `name`, `email`, `email_pass`, `email_name`, `apply_type`, `banana_count`, `fetch_count`, `week_num`, `report_num`, `stat_last_update`, `stat_fetchweight`, `stat_fetchcount`, `stat_postcount`, `stat_betriebcount`, `stat_korpcount`, `stat_botcount`, `stat_fscount`, `stat_fairteilercount`, `conversation_id`, `moderated`) VALUES ('1564', '0', '', '1', 'Ehemalige', 'Ehemalige (Vorstand oder Orga)', '', '0', '0', 'Ehemalige (Vorstand oder Orga)', '', '', '', '2', '0', '0', '0', '', '', '', '', '', '', '', '', '', '', '0', '0');
 REPLACE INTO `fs_bezirk` (`id`, `parent_id`, `has_children`, `type`, `teaser`, `desc`, `photo`, `master`, `mailbox_id`, `name`, `email`, `email_pass`, `email_name`, `apply_type`, `banana_count`, `fetch_count`, `week_num`, `report_num`, `stat_last_update`, `stat_fetchweight`, `stat_fetchcount`, `stat_postcount`, `stat_betriebcount`, `stat_korpcount`, `stat_botcount`, `stat_fscount`, `stat_fairteilercount`, `conversation_id`, `moderated`) VALUES ('1373', '0', '', '1', 'Vorstand', 'Vorstand', '', '0', '0', 'Vorstand', '', '', '', '2', '0', '0', '0', '', '', '', '', '', '', '', '', '', '', '0', '0');
 REPLACE INTO `fs_content` (`id`, `name`, `title`, `body`, `last_mod`) VALUES
-(53, 'team-aktive-header', 'Aktive', '<div id="aktive">Hier koennte ihr Text ueber Aktive stehen!</div>', '2017-05-10 12:39:44'),
-(54, 'team-ehemalige-header', 'Ehemalige', '<div id="ehemalige">Hier koennte ihr Text ueber Ehemalige stehen!</div>', '2017-05-10 12:39:44');
+(53, 'team-aktive-header', 'Aktive', '<div>Hier koennte ihr Text ueber Aktive stehen!</div>', '2017-05-10 12:39:44'),
+(54, 'team-ehemalige-header', 'Ehemalige', '<div>Hier koennte ihr Text ueber Ehemalige stehen!</div>', '2017-05-10 12:39:44');
 
 SET FOREIGN_KEY_CHECKS=1;
 COMMIT;

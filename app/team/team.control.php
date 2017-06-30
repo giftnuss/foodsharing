@@ -52,8 +52,11 @@ class TeamControl extends Control
                     }
                     else {
                         # Type a, display "Vorstand" and "Aktive" 
+                        addContent("<div id='vorstand'>");
                         $this->displayTeamContent(1373, 39);
+                        addContent("</div><div id='aktive'>");
                         $this->displayTeamContent(1565, 53);
+                        addContent("</div>");
                     }                    
                 }
 	}
