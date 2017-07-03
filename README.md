@@ -14,6 +14,20 @@ you'll have a better experience with Docker for Mac rather than Docker Toolbox
 There is no _official_ support for running under Windows at this time, but if
 you'd like to help out getting that to work, please do!
 
+If you can't connect to docker with your local user, you may want to add yourself
+to the docker group:
+
+```
+sudo usermod -aG docker $USER
+
+# then either login again to reload the groups
+# or run (for each shell...)
+su - $USER
+
+# should now be able to connect without errors
+docker info
+```
+
 ```
 git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
 cd foodsharing
