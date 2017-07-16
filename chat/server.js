@@ -1,7 +1,7 @@
 'use strict'
 
 const http = require('http');
-const cookie = require('cookie');
+const {parse: parseCookie} = require('cookie');
 const url = require('url');
 const connectSocketIO = require('socket.io');
 
@@ -13,14 +13,11 @@ const connected_clients = {};
 let num_registrations = 0;
 let num_connections = 0;
 
-const sendToClient = (client, a, m, o) => {
+const sendToClient = (client, channel, method, payload) => {
 	if(connected_clients[client]) {
-		for(var i=0; i<connected_clients[client].length; i++) {
-			connected_clients[client][i].emit(a, {m: m, o: o});
+		for (let connection of connected_clients[client]) {
+			connection.emit(channel, {m: method, o: payload});
 		}
-		return true;
-	} else {
-		return false;
 	}
 }
 
@@ -35,13 +32,11 @@ const inputServer = http.createServer((req, res) => {
 		return;
 	}
 
-	var client, app, options, method;
-	var query = url.parse(req.url, true).query;
-
-	client = 	query.c;
-	app = 		query.a;
-	method = 	query.m;
-	options = 	query.o;
+	const query = url.parse(req.url, true).query;
+	const client = query.c;
+	const app = query.a;
+	const method = query.m;
+	const options = query.o;
 
 	if(client) {
 		sendToClient(client,app,method,options);
@@ -66,25 +61,24 @@ io.use((socket, next) => {
 });
 
 io.on('connection', (socket) => {
-	const sid = socket.sid;
+	const userId = socket.sid;
 	num_connections++;
 	socket.on('register', () => {
 		num_registrations++;
-		if(!connected_clients[sid]) connected_clients[sid] = [];
-		connected_clients[sid].push(socket);
+		if(!connected_clients[userId]) connected_clients[userId] = [];
+		connected_clients[userId].push(socket);
 	});
 
 	socket.on('disconnect', () => {
 		num_connections--;
-		const connections = connected_clients[sid];
-		if(sid && connections) {
-			const i = connections.indexOf(socket);
-			if(i !== -1) {
-				connections.splice(i, 1);
+		const connections = connected_clients[userId];
+		if(userId && connections) {
+			if(connections.includes(socket)) {
+				connections.splice(connections.indexOf(socket), 1);
 				num_registrations--;
 			}
 			if (connections.length === 0) {
-				delete connected_clients[sid];
+				delete connected_clients[userId];
 			}
 		}
 	});

@@ -4,6 +4,9 @@
   "repository": "git@gitlab.com:foodsharing-dev/foodsharing.git",
   "private": true,
   "version": "0.1.0",
+  "engines": {
+    "node": ">=6.5.0"
+  },
   "dependencies": {
     "cookie": "^0.3.1",
     "socket.io": "^1.5.0",
