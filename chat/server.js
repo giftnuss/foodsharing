@@ -9,13 +9,13 @@ const inputPort = 1338;
 const chatPort = 1337;
 const listenHost = process.argv[2] || '127.0.0.1';
 
-const connected_clients = {};
-let num_registrations = 0;
-let num_connections = 0;
+const connectedClients = {};
+let numRegistrations = 0;
+let numConnections = 0;
 
 const sendToClient = (client, channel, method, payload) => {
-	if(connected_clients[client]) {
-		for (let connection of connected_clients[client]) {
+	if (connectedClients[client]) {
+		for (let connection of connectedClients[client]) {
 			connection.emit(channel, {m: method, o: payload});
 		}
 	}
@@ -25,9 +25,9 @@ const inputServer = http.createServer((req, res) => {
 	if (req.url == '/stats') {
 		res.writeHead(200);
 		res.end(JSON.stringify({
-			connections: num_connections,
-			registrations: num_registrations,
-			sessions: Object.keys(connected_clients).length
+			connections: numConnections,
+			registrations: numRegistrations,
+			sessions: Object.keys(connectedClients).length
 		}));
 		return;
 	}
@@ -38,7 +38,7 @@ const inputServer = http.createServer((req, res) => {
 	const method = query.m;
 	const options = query.o;
 
-	if(client) {
+	if (client) {
 		sendToClient(client,app,method,options);
 	}
 	res.writeHead(200);
@@ -53,7 +53,7 @@ const io = connectSocketIO(chatServer);
 
 io.use((socket, next) => {
 	const cookie = socket.request.headers.cookie;
-	if(cookie) {
+	if (cookie) {
 		socket.sid = parseCookie(cookie).PHPSESSID;
 		if (socket.sid) next();
 	}
@@ -62,23 +62,23 @@ io.use((socket, next) => {
 
 io.on('connection', (socket) => {
 	const userId = socket.sid;
-	num_connections++;
+	numConnections++;
 	socket.on('register', () => {
-		num_registrations++;
-		if(!connected_clients[userId]) connected_clients[userId] = [];
-		connected_clients[userId].push(socket);
+		numRegistrations++;
+		if (!connectedClients[userId]) connectedClients[userId] = [];
+		connectedClients[userId].push(socket);
 	});
 
 	socket.on('disconnect', () => {
-		num_connections--;
-		const connections = connected_clients[userId];
-		if(userId && connections) {
-			if(connections.includes(socket)) {
+		numConnections--;
+		const connections = connectedClients[userId];
+		if (userId && connections) {
+			if (connections.includes(socket)) {
 				connections.splice(connections.indexOf(socket), 1);
-				num_registrations--;
+				numRegistrations--;
 			}
 			if (connections.length === 0) {
-				delete connected_clients[userId];
+				delete connectedClients[userId];
 			}
 		}
 	});
