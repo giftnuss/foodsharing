@@ -1,16 +1,22 @@
-var http = require('http');
-var cookie = require('cookie');
-var input_port = 1338;
-var chat_port = 1337;
-var connected_clients = {};
-var listenHost = process.argv[2] || '127.0.0.1';
-var num_registrations = 0;
-var num_connections = 0;
+'use strict'
 
-sendtoclient = function(client,a,m,o){
+const http = require('http');
+const cookie = require('cookie');
+const url = require('url');
+const connectSocketIO = require('socket.io');
+
+const inputPort = 1338;
+const chatPort = 1337;
+const listenHost = process.argv[2] || '127.0.0.1';
+
+const connected_clients = {};
+let num_registrations = 0;
+let num_connections = 0;
+
+const sendToClient = (client, a, m, o) => {
 	if(connected_clients[client]) {
 		for(var i=0; i<connected_clients[client].length; i++) {
-			connected_clients[client][i].emit(a, {"m":m,"o":o});
+			connected_clients[client][i].emit(a, {m: m, o: o});
 		}
 		return true;
 	} else {
@@ -18,8 +24,8 @@ sendtoclient = function(client,a,m,o){
 	}
 }
 
-var inputServer = http.createServer(function  (req, res) {
-	if(req.url == "/stats") {
+const inputServer = http.createServer((req, res) => {
+	if (req.url == '/stats') {
 		res.writeHead(200);
 		res.end(JSON.stringify({
 			connections: num_connections,
@@ -28,8 +34,9 @@ var inputServer = http.createServer(function  (req, res) {
 		}));
 		return;
 	}
-	var client,app,options,method;
-	var query = require('url').parse(req.url,true).query;
+
+	var client, app, options, method;
+	var query = url.parse(req.url, true).query;
 
 	client = 	query.c;
 	app = 		query.a;
@@ -37,45 +44,41 @@ var inputServer = http.createServer(function  (req, res) {
 	options = 	query.o;
 
 	if(client) {
-		sendtoclient(client,app,method,options);
+		sendToClient(client,app,method,options);
 	}
 	res.writeHead(200);
-	res.end("\n");
+	res.end('\n');
 });
-inputServer.listen(input_port, listenHost);
-console.log("http server started on", listenHost + ':' + input_port);
 
-var chatServer = http.createServer(function  (req, res) {
+const chatServer = http.createServer((req, res) => {
 	res.writeHead(200);
-	res.end("\n");
+	res.end('\n');
 });
-var io = require('socket.io')(chatServer);
-io.use(function(socket, next){
-	var cookieVal = socket.request.headers.cookie;
-	if(cookieVal) {
-		socket.sid = cookie.parse(cookieVal).PHPSESSID;
+const io = connectSocketIO(chatServer);
+
+io.use((socket, next) => {
+	const cookie = socket.request.headers.cookie;
+	if(cookie) {
+		socket.sid = parseCookie(cookie).PHPSESSID;
 		if (socket.sid) next();
 	}
 	next(new Error('not authorized'));
 });
 
-chatServer.listen(chat_port, listenHost);
-console.log("socket.io started on port", listenHost + ':' + chat_port);
-
-io.on('connection', function (socket) {
-	var sid = socket.sid;
+io.on('connection', (socket) => {
+	const sid = socket.sid;
 	num_connections++;
-	socket.on('register', function () {
+	socket.on('register', () => {
 		num_registrations++;
 		if(!connected_clients[sid]) connected_clients[sid] = [];
 		connected_clients[sid].push(socket);
 	});
 
-	socket.on('disconnect',function(){
+	socket.on('disconnect', () => {
 		num_connections--;
-		var connections = connected_clients[sid];
+		const connections = connected_clients[sid];
 		if(sid && connections) {
-			var i = connections.indexOf(socket);
+			const i = connections.indexOf(socket);
 			if(i !== -1) {
 				connections.splice(i, 1);
 				num_registrations--;
@@ -86,6 +89,12 @@ io.on('connection', function (socket) {
 		}
 	});
 });
+
+inputServer.listen(inputPort, listenHost);
+console.log('http server started on', listenHost + ':' + inputPort);
+
+chatServer.listen(chatPort, listenHost);
+console.log('socket.io started on port', listenHost + ':' + chatPort);
 
 module.exports = {
 	inputServer: inputServer,
