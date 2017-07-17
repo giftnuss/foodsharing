@@ -61,24 +61,24 @@ io.use((socket, next) => {
 });
 
 io.on('connection', (socket) => {
-	const userId = socket.sid;
+	const sessionId = socket.sid;
 	numConnections++;
 	socket.on('register', () => {
 		numRegistrations++;
-		if (!connectedClients[userId]) connectedClients[userId] = [];
-		connectedClients[userId].push(socket);
+		if (!connectedClients[sessionId]) connectedClients[sessionId] = [];
+		connectedClients[sessionId].push(socket);
 	});
 
 	socket.on('disconnect', () => {
 		numConnections--;
-		const connections = connectedClients[userId];
-		if (userId && connections) {
+		const connections = connectedClients[sessionId];
+		if (sessionId && connections) {
 			if (connections.includes(socket)) {
 				connections.splice(connections.indexOf(socket), 1);
 				numRegistrations--;
 			}
 			if (connections.length === 0) {
-				delete connectedClients[userId];
+				delete connectedClients[sessionId];
 			}
 		}
 	});
