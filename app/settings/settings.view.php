@@ -18,9 +18,17 @@ class SettingsView extends View
 		if($sleep['sleep_status'] == 1)
 		{
 			$date = DateTime::createFromFormat('Y-m-d', $sleep['sleep_from']);
+			if($date === false)
+			{
+				$date = new DateTime();
+			}
 			$from = $date->format('d.m.Y');
 
 			$date = DateTime::createFromFormat('Y-m-d', $sleep['sleep_until']);
+			if($date === false)
+			{
+				$date = new DateTime();
+			}
 			$to = $date->format('d.m.Y');
 
 			addJs("
