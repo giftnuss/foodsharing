@@ -19,3 +19,5 @@ ALTER TABLE fs_foodsaver_has_conversation ADD UNIQUE KEY (foodsaver_id, conversa
 ALTER TABLE fs_abholer DROP PRIMARY KEY;
 ALTER TABLE fs_abholer ADD COLUMN id INT unsigned AUTO_INCREMENT PRIMARY KEY;
 ALTER TABLE fs_abholer ADD UNIQUE KEY (foodsaver_id, betrieb_id, `date`);
+RENAME TABLE fs_foodsaver_archive TO fs_foodsaver_archive5;
+CREATE TABLE fs_foodsaver_archive LIKE fs_foodsaver;
