@@ -1,7 +1,7 @@
 ALTER TABLE fs_foodsaver MODIFY COLUMN last_pass datetime NULL;
 ALTER TABLE fs_foodsaver MODIFY COLUMN mailbox_id INT unsigned NULL;
-ALTER TABLE fs_foodsaver MODIFY COLUMN sleep_from datetime NULL;
-ALTER TABLE fs_foodsaver MODIFY COLUMN sleep_until datetime NULL;
+ALTER TABLE fs_foodsaver MODIFY COLUMN sleep_from date NULL;
+ALTER TABLE fs_foodsaver MODIFY COLUMN sleep_until date NULL;
 ALTER TABLE fs_foodsaver MODIFY COLUMN sleep_msg TEXT NULL;
 ALTER TABLE fs_foodsaver DROP COLUMN last_mid;
 ALTER TABLE fs_betrieb_team MODIFY COLUMN stat_last_update datetime NULL;
