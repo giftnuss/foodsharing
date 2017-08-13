@@ -13,5 +13,8 @@ set -e
 echo "Running tests"
 exec-in-container app vendor/bin/codecept run "$@"
 
+echo "Running chat tests"
+run-in-container chat npm test
+
 echo "Done!"
 

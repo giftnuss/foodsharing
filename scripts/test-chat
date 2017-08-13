@@ -1,0 +1,13 @@
+#!/bin/bash
+
+export FS_ENV=test
+
+set -e
+
+. $(dirname "$0")/inc.sh
+
+echo "Running chat tests"
+run-in-container chat npm test
+
+echo "Done!"
+
