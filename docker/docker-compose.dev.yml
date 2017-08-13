@@ -38,6 +38,31 @@ services:
     environment:
       FS_ENV: dev
 
+  # django api backend
+  #------------------------------------
+
+  api:
+    container_name: foodsharing_dev_api
+    image: python:3.5.3
+    command: >
+      sh -c "
+      (test -f manage.py || git clone https://github.com/foodsharing-dev/foodsharing-django-api.git .) &&
+      (command -v virtualenv || /usr/local/bin/pip install virtualenv) &&
+      (test -d env/bin || virtualenv --no-site-packages env) &&
+      (test -f env/bin/pip-sync || env/bin/pip install pip-tools) &&
+      env/bin/pip-sync &&
+      env/bin/python manage.py runserver 0.0.0.0:8000
+      "
+    volumes:
+      - ../:/app
+      - ../docker/conf/api/local_settings.py:/app/api/config/local_settings.py
+      - /app/api/env
+      - /root/.cache/pip
+    environment:
+      # TODO: I don't think the backend supports this as of now
+      REDIS_HOST: redis
+    working_dir: /app/api
+
   # nodejs socket.io server
   #------------------------------------
 
