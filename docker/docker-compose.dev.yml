@@ -46,7 +46,7 @@ services:
     image: node:8.1.2
     command: >
       sh -c "
-      (test -f package.json || (echo 'Please clone https://github.com/foodsharing-dev/foodsharing-light.git into ./light/' && exit 1)) &&
+      (test -f package.json || (echo 'If you want fslight run \"git clone https://github.com/foodsharing-dev/foodsharing-light.git light\"' && exit 1)) &&
       yarn &&
       yarn dev
       "
@@ -70,7 +70,7 @@ services:
     image: python:3.5.3
     command: >
       sh -c "
-      (test -f manage.py || (echo 'Please clone https://github.com/foodsharing-dev/foodsharing-django-api.git into ./api/' && exit 1)) &&
+      (test -f manage.py || (echo 'If you want the api run \"git clone https://github.com/foodsharing-dev/foodsharing-django-api.git api\"' && exit 1)) &&
       (command -v virtualenv || /usr/local/bin/pip install virtualenv) &&
       (test -d env/bin || virtualenv --no-site-packages env) &&
       (test -f env/bin/pip-sync || env/bin/pip install pip-tools) &&
