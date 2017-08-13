@@ -37,6 +37,20 @@ cd foodsharing
 It'll take some time the first time you run it to fetch all the docker images and
 install composer/npm etc, so go and make a cup of tea.
 
+### Foodsharing Light and API
+
+If you want to include the new Django API and the Foodsharing Light frontend, then:
+
+```
+# you may have "api" and "light" directories already present, if so remove them first
+git clone https://github.com/foodsharing-dev/foodsharing-light.git light
+git clone https://github.com/foodsharing-dev/foodsharing-django-api.git api
+./scripts/docker-compose up -d
+```
+
+Then visit [localhost:18082](http://localhost:18082) for fs light frontend and
+[localhost:18000/docs/](http://localhost:18000/docs/) for the API swagger view.
+
 ### Up and Running
 
 Now go and visit [localhost:18080](http://localhost:18080).
