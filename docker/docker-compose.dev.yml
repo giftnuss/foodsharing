@@ -43,7 +43,7 @@ services:
 
   light:
     container_name: foodsharing_dev_light
-    image: node:8.1.2
+    image: registry.gitlab.com/foodsharing-dev/images:light
     command: >
       sh -c "
       (test -f package.json || (echo 'If you want fslight run \"git clone https://github.com/foodsharing-dev/foodsharing-light.git light\"' && exit 1)) &&
@@ -57,8 +57,8 @@ services:
       API_BACKEND: http://api:8000
     volumes:
       - ../:/app
-      - /app/light/node_modules
-      - /usr/local/share/.cache/yarn
+      - light-node-modules:/app/light/node_modules
+      - light-yarn-cache:/usr/local/share/.cache/yarn
     working_dir: /app/light
 
   # django api
@@ -80,8 +80,8 @@ services:
     volumes:
       - ../:/app
       - ../docker/conf/api/local_settings.py:/app/api/foodsharing_api/local_settings.py
-      - /app/api/env
-      - /root/.cache/pip
+      - api-virtualenv:/app/api/env
+      - api-pip-cache:/root/.cache/pip
     ports:
       - 18000:8000
     working_dir: /app/api
@@ -91,7 +91,7 @@ services:
 
   chat:
     container_name: foodsharing_dev_chat
-    command: node server.js 0.0.0.0
+    command: sh -c "npm install && node server.js 0.0.0.0"
     build:
       context: ../chat
       dockerfile: docker/Dockerfile.chat
@@ -100,6 +100,7 @@ services:
       - 1338
     volumes:
       - ../:/app
+      - chat-node-modules:/app/node_modules
 
   # mysql
   #------------------------------------
@@ -144,3 +145,10 @@ services:
       - 18081:80
     volumes:
       - /sessions
+
+volumes:
+  light-node-modules:
+  light-yarn-cache:
+  api-virtualenv:
+  api-pip-cache:
+  chat-node-modules:
