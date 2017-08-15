@@ -95,6 +95,12 @@ You will need to have initialized everything once (with `./scripts/start`),
 but you do not need to have the main containers running to run the tests
 as it uses it's own cluster of docker containers.
 
+You can run the foodsharing light frontend tests and run tests on change with:
+
+```
+./scripts/docker-compose run light sh -c "xvfb-run npm run test:watch -- --browsers Firefox"
+```
+
 #### Writing acceptance tests
 
 The `tests` directory has much stuff in it.
