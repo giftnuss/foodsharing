@@ -89,6 +89,19 @@ class Mem
 		return Mem::del('user-'.$key.'-'.$id);
 	}
 
+	/*
+	 * Add entry to the redis set that stores user -> session mappings.
+	 * e.g. for user=20 and sessionid=mysessionid it would run the redis command:
+	 *   > SADD php:user:20:sessions mysessionid
+	 *
+	 * This then provides a way to get all the active sessions for a user and expire old ones.
+	 * See `chat/session-ids.lua` for a redis lua script that does this.
+	 */
+	public static function userAddSession($fs_id,$session_id)
+	{
+		return Mem::$cache->sAdd(join(':', array('php', 'user', $fs_id, 'sessions')), session_id());
+	}
+
 	public static function getPageCache()
 	{
 		global $g_page_cache_suffix;
@@ -983,6 +996,11 @@ class Db
 			 * New Session Management
 			 */
 			S::login($fs);
+
+			/*
+			 * Add entry into user -> session set
+			 */
+			Mem::userAddSession($fs_id, session_id());
 
 			/*
 			 * store all options in the session
