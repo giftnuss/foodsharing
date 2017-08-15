@@ -84,6 +84,8 @@ services:
       - ../docker/wait-for-it:/usr/local/bin/wait-for-it
       - api-virtualenv:/app/api/env
       - api-pip-cache:/root/.cache/pip
+    environment:
+      REDIS_HOST: redis
     ports:
       - 18000:8000
     working_dir: /app/api
