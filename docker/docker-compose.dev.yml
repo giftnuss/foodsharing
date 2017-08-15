@@ -74,12 +74,14 @@ services:
       (test -d env/bin || virtualenv --no-site-packages env) &&
       (test -f env/bin/pip-sync || env/bin/pip install pip-tools) &&
       env/bin/pip-sync &&
+      wait-for-it db:3306 &&
       env/bin/python manage.py migrate &&
       env/bin/python manage.py runserver 0.0.0.0:8000
       "
     volumes:
       - ../:/app
       - ../docker/conf/api/local_settings.py:/app/api/foodsharing_api/local_settings.py
+      - ../docker/wait-for-it:/usr/local/bin/wait-for-it
       - api-virtualenv:/app/api/env
       - api-pip-cache:/root/.cache/pip
     ports:
