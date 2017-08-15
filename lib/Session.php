@@ -3,8 +3,8 @@ class S
 {
 	public static function init()
 	{
-		session_set_save_handler('redis');
-		session_save_path('tcp://redis:6379');
+		ini_set('session.save_handler', 'redis');
+		ini_set('session.save_path', 'tcp://redis:6379');
 
 		fSession::setLength('24 hours', '1 week');
 		//fSession::enablePersistence();
