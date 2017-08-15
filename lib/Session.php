@@ -4,7 +4,7 @@ class S
 	public static function init()
 	{
 		ini_set('session.save_handler', 'redis');
-		ini_set('session.save_path', 'tcp://redis:6379');
+		ini_set('session.save_path', 'tcp://'.REDIS_HOST.':'.REDIS_PORT);
 
 		fSession::setLength('24 hours', '1 week');
 		//fSession::enablePersistence();
