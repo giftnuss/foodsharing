@@ -3,13 +3,12 @@ class S
 {
 	public static function init()
 	{
-		if(defined('SESSION_DIR'))
-		{
-			fSession::setPath(SESSION_DIR);
-		}
+		session_set_save_handler('redis');
+		session_save_path('tcp://redis:6379');
+
 		fSession::setLength('24 hours', '1 week');
 		//fSession::enablePersistence();
-		
+
 		fAuthorization::setAuthLevels(
 			array(
 				'admin' => 100,
