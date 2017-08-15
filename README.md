@@ -37,9 +37,9 @@ cd foodsharing
 It'll take some time the first time you run it to fetch all the docker images and
 install composer/npm etc, so go and make a cup of tea.
 
-### Foodsharing Light and API
+### foodsharing light and API
 
-If you want to include the new Django API and the Foodsharing Light frontend, then:
+If you want to include the new Django API and the foodsharing light frontend, then:
 
 ```
 # you may have "api" and "light" directories already present, if so remove them first
@@ -50,6 +50,18 @@ git clone https://github.com/foodsharing-dev/foodsharing-django-api.git api
 
 Then visit [localhost:18082](http://localhost:18082) for fs light frontend and
 [localhost:18000/docs/](http://localhost:18000/docs/) for the API swagger view.
+
+You can run the foodsharing light frontend tests and run tests on change with:
+
+```
+./scripts/docker-compose run light sh -c "xvfb-run npm run test:watch -- --browsers Firefox"
+```
+
+You can run the api tests with:
+
+```
+./scripts/docker-compose run api env/bin/python manage.py test
+```
 
 ### Up and Running
 
@@ -94,12 +106,6 @@ Run the tests with:
 You will need to have initialized everything once (with `./scripts/start`),
 but you do not need to have the main containers running to run the tests
 as it uses it's own cluster of docker containers.
-
-You can run the foodsharing light frontend tests and run tests on change with:
-
-```
-./scripts/docker-compose run light sh -c "xvfb-run npm run test:watch -- --browsers Firefox"
-```
 
 #### Writing acceptance tests
 
