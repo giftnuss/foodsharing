@@ -1749,7 +1749,7 @@ function v_form_text($id,$option = array())
 	
 	$value = getValue($id);
 
-	$value = htmlentities($value);
+	$value = htmlspecialchars($value);
 
 	$disabled = "";
 	if(isset($option['disabled']) && $option['disabled'])
