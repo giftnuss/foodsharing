@@ -1177,6 +1177,9 @@ function v_form_textarea($id,$option = array())
 {
 	$id = id($id);
 	$value = getValue($id);
+
+	$value = htmlspecialchars($value);
+
 	$label = s($id);
 	
 	$style = '';
