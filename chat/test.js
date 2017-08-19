@@ -1,19 +1,18 @@
 'use strict'
 
+require('browser-env')();
+const request = require('request');
+const test = require('tape');
+const {spawn} = require('child_process');
 const {serialize} = require('cookie')
-const http = require('http');
+const {request: httpRequest} = require('http');
 const {stringify} = require('querystring')
 
-require('browser-env')();
-var request = require('request');
-var test = require('tape');
-var spawn = require('child_process').spawn;
-
-var HTTP_URL = "http://127.0.0.1:1338";
-var WS_URL = "http://127.0.0.1:1337";
+const HTTP_URL = "http://127.0.0.1:1338";
+const WS_URL = "http://127.0.0.1:1337";
 
 // Start the server in a child process ...
-var server = spawn(process.execPath, ['server']);
+const server = spawn(process.execPath, ['server']);
 
 // ... kill it after the tests are done
 test.onFinish(function(){
@@ -253,7 +252,7 @@ test('works with two connections per user', (t) => {
 			m: 'some-method', // method
 			o: 'some-payload', // options a.k.a payload
 		})
-		http.request(HTTP_URL + '?' + query, (res) => {
+		httpRequest(HTTP_URL + '?' + query, (res) => {
 			t.equal(res.statusCode, 200)
 
 			t.end()
@@ -288,7 +287,7 @@ test('does not send to other users', (t) => {
 			m: 'some-method', // method
 			o: 'some-payload', // options a.k.a payload
 		})
-		http.request('http://localhost:1338/?' + query, (res) => {
+		httpRequest('http://localhost:1338/?' + query, (res) => {
 			t.equal(res.statusCode, 200)
 
 			t.end()
