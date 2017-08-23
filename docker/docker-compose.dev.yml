@@ -99,6 +99,8 @@ services:
     build:
       context: ../chat
       dockerfile: docker/Dockerfile.chat
+    environment:
+      REDIS_HOST: redis
     expose:
       - 1337
       - 1338
