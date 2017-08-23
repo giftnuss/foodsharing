@@ -63,6 +63,13 @@ You can run the api tests with:
 ./scripts/docker-compose run api env/bin/python manage.py test
 ```
 
+When you update or change the Django API so that it would need to run `pip-sync` or apply migrations,
+this can be done with:
+
+```
+./scripts/docker-compose restart api
+```
+
 ### Up and Running
 
 Now go and visit [localhost:18080](http://localhost:18080).
