@@ -42,13 +42,11 @@ const fetchSessionIdsForUser = (userId, callback) => {
 }
 
 const connectionsForSession = (sessionId) => {
-	let connections = [];
 	if (connectedClients[sessionId]) {
-		for (let connection of connectedClients[sessionId]) {
-			connections.push(connection);
-		}
+		return connectedClients[sessionId];
+	} else {
+		return [];
 	}
-	return connections;
 }
 
 const inputServer = http.createServer((req, res) => {
