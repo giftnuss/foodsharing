@@ -2,27 +2,58 @@
 
 const http = require('http');
 const {parse: parseCookie} = require('cookie');
+const {readFileSync} = require('fs');
 const url = require('url');
 const connectSocketIO = require('socket.io');
+const redis = require('redis');
 
 const inputPort = 1338;
 const chatPort = 1337;
 const listenHost = process.argv[2] || '127.0.0.1';
 
+const redisClient = redis.createClient({
+	host: process.env.REDIS_HOST || '127.0.0.1',
+	port: process.env.REDIS_PORT || 6379
+});
+
+const sessionIdsScript = readFileSync(__dirname + '/session-ids.lua', 'utf8');
+
 const connectedClients = {};
 let numRegistrations = 0;
 let numConnections = 0;
 
-const sendToClient = (client, channel, method, payload) => {
-	if (connectedClients[client]) {
-		for (let connection of connectedClients[client]) {
-			connection.emit(channel, {m: method, o: payload});
+const sendToUser = (userId, channel, method, payload) => {
+	fetchSessionIdsForUser(userId, function (err, sessionIds) {
+		if (err) return console.error('could not get session ids for', userId, err);
+		for (let sessionId of sessionIds) {
+			sendToSession(sessionId, channel, method, payload);
 		}
+	});
+}
+
+const sendToSession = (sessionId, channel, method, payload) => {
+	for (let connection of connectionsForSession(sessionId)) {
+		connection.emit(channel, {m: method, o: payload});
 	}
 }
 
+const fetchSessionIdsForUser = (userId, callback) => {
+	redisClient.eval(sessionIdsScript, 0, userId, callback);
+}
+
+const connectionsForSession = (sessionId) => {
+	let connections = [];
+	if (connectedClients[sessionId]) {
+		for (let connection of connectedClients[sessionId]) {
+			connections.push(connection);
+		}
+	}
+	return connections;
+}
+
 const inputServer = http.createServer((req, res) => {
-	if (req.url == '/stats') {
+	let url = require('url').parse(req.url,true);
+	if (url.pathname == '/stats') {
 		res.writeHead(200);
 		res.end(JSON.stringify({
 			connections: numConnections,
@@ -32,15 +63,21 @@ const inputServer = http.createServer((req, res) => {
 		return;
 	}
 
-	const query = url.parse(req.url, true).query;
-	const client = query.c;
+	const query = url.query;
+	const sessionId = query.c;
 	const app = query.a;
 	const method = query.m;
 	const options = query.o;
+	const userId = query.u;
 
-	if (client) {
-		sendToClient(client,app,method,options);
+	if (sessionId) {
+		sendToSession(sessionId,app,method,options);
 	}
+
+	if (userId) {
+		sendToUser(userId,app,method,options);
+	}
+
 	res.writeHead(200);
 	res.end('\n');
 });

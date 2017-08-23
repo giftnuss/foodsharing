@@ -2,6 +2,8 @@
 
 require('browser-env')();
 const request = require('request');
+const redis = require('redis');
+const randomstring = require('randomstring');
 const test = require('tape');
 const {spawn} = require('child_process');
 const {serialize} = require('cookie')
@@ -11,11 +13,18 @@ const {stringify} = require('querystring')
 const HTTP_URL = "http://127.0.0.1:1338";
 const WS_URL = "http://127.0.0.1:1337";
 
+const redisClient = redis.createClient({
+	host: process.env.REDIS_HOST || '127.0.0.1',
+	port: process.env.REDIS_PORT || 6379
+});
+
 // Start the server in a child process ...
-const server = spawn(process.execPath, ['server']);
+const server = spawn(process.execPath, ['server'], { stdio: 'inherit' });
 
 // ... kill it after the tests are done
 test.onFinish(function(){
+	redisClient.flushdb();
+	redisClient.end(true);
 	server.kill();
 });
 
@@ -227,7 +236,77 @@ test('can send and receive a message for multiple clients', function(t){
 	});
 });
 
+test('can send to php users', (t) => {
+	t.plan(4);
+	let sessionId = randomstring.generate();
+	let userId = 1;
+	addPHPSessionToRedis(userId, sessionId, err => {
+		t.error(err)
+		let socket = connect(sessionId);
+		socket.on("someapp", function(data){
+			socket.disconnect();
+			t.equal(data.m, 'foo', 'passed m param');
+			t.equal(data.o, 'bar', 'passed o param');
+		});
+		register(socket, () => {
+			sendMessage({
+				u: userId,
+				// used as channel to recv on
+				a: 'someapp',
+				// m and o passed as payload
+				m: 'foo',
+				o: 'bar'
+			}, (err) => {
+				t.error(err, 'does not error');
+			});
+		});
+	});
+});
 
+test('can send to api users', (t) => {
+	t.plan(4);
+	let sessionId = randomstring.generate();
+	let userId = 2;
+	addAPISessionToRedis(userId, sessionId, err => {
+		t.error(err)
+		let socket = connect(sessionId);
+		socket.on("someapp", function(data){
+			socket.disconnect();
+			t.equal(data.m, 'foo', 'passed m param');
+			t.equal(data.o, 'bar', 'passed o param');
+		});
+		register(socket, () => {
+			sendMessage({
+				u: userId,
+				// used as channel to recv on
+				a: 'someapp',
+				// m and o passed as payload
+				m: 'foo',
+				o: 'bar'
+			}, (err) => {
+				t.error(err, 'does not error');
+			});
+		});
+	});
+});
+
+function addPHPSessionToRedis(userId, sessionId, callback) {
+	redisClient.multi()
+		.set(`PHPREDIS_SESSION:${sessionId}`, 'foo')
+		.sadd(`php:user:${userId}:sessions`, sessionId)
+		.exec(err => {
+			callback(err);
+		});
+}
+
+function addAPISessionToRedis(userId, sessionId, callback) {
+	redisClient.multi()
+		.set(`:1:django.contrib.sessions.cache${sessionId}`, 'foo')
+		.sadd(`api:user:${userId}:sessions`, sessionId)
+		.exec(err => {
+			callback(err);
+		});
+}
 
 test('works with two connections per user', (t) => {
 	const opt = {extraHeaders: {Cookie: serialize('PHPSESSID', 'test-1-user-1')}}
