@@ -87,9 +87,10 @@ const chatServer = http.createServer((req, res) => {
 const io = connectSocketIO(chatServer);
 
 io.use((socket, next) => {
-	const cookie = socket.request.headers.cookie;
-	if (cookie) {
-		socket.sid = parseCookie(cookie).PHPSESSID;
+	const cookieVal = socket.request.headers.cookie;
+	if (cookieVal) {
+		let cookie = parseCookie(cookieVal);
+		socket.sid = cookie.PHPSESSID || cookie.sessionid;
 		if (socket.sid) next();
 	}
 	next(new Error('not authorized'));
