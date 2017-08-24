@@ -282,24 +282,6 @@ test('can send to api users', (t) => {
 	});
 });
 
-function addPHPSessionToRedis(userId, sessionId, callback) {
-	redisClient.multi()
-		.set(`PHPREDIS_SESSION:${sessionId}`, 'foo')
-		.sadd(`php:user:${userId}:sessions`, sessionId)
-		.exec(err => {
-			callback(err);
-		});
-}
-
-function addAPISessionToRedis(userId, sessionId, callback) {
-	redisClient.multi()
-		.set(`:1:django.contrib.sessions.cache${sessionId}`, 'foo')
-		.sadd(`api:user:${userId}:sessions`, sessionId)
-		.exec(err => {
-			callback(err);
-		});
-}
-
 test('works with two connections per user', (t) => {
 	t.timeoutAfter(1000);
 
@@ -398,6 +380,24 @@ function fetchStats(callback) {
 			callback(err);
 		}
 	});
+}
+
+function addPHPSessionToRedis(userId, sessionId, callback) {
+	redisClient.multi()
+		.set(`PHPREDIS_SESSION:${sessionId}`, 'foo')
+		.sadd(`php:user:${userId}:sessions`, sessionId)
+		.exec(err => {
+			callback(err);
+		});
+}
+
+function addAPISessionToRedis(userId, sessionId, callback) {
+	redisClient.multi()
+		.set(`:1:django.contrib.sessions.cache${sessionId}`, 'foo')
+		.sadd(`api:user:${userId}:sessions`, sessionId)
+		.exec(err => {
+			callback(err);
+		});
 }
 
 function assertStats(t, connections, registrations, sessions, callback){
