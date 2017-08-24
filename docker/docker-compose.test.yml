@@ -39,6 +39,7 @@ services:
       - ../:/app
     environment:
       FS_ENV: test
+      REDIS_HOST: redis
 
   chat:
     container_name: foodsharing_test_chat
