@@ -99,7 +99,12 @@ class Mem
 	 */
 	public static function userAddSession($fs_id,$session_id)
 	{
-		return Mem::$cache->sAdd(join(':', array('php', 'user', $fs_id, 'sessions')), session_id());
+		return Mem::$cache->sAdd(join(':', array('php', 'user', $fs_id, 'sessions')), $session_id);
+	}
+
+	public static function userRemoveSession($fs_id,$session_id)
+	{
+		return Mem::$cache->sRem(join(':', array('php', 'user', $fs_id, 'sessions')), $session_id);
 	}
 
 	public static function getPageCache()
@@ -712,6 +717,7 @@ class Db
 	{
 		Mem::userDel(fsId(), 'active');
 		Mem::userDel(fsId(), 'lastMailMessage');
+		Mem::userRemoveSession(fsId(), session_id());
 	}
 
 	public function login($email,$pass)
