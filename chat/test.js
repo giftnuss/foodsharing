@@ -33,35 +33,33 @@ test.onFinish(function(){
 var io = require('socket.io-client');
 
 test('simple connection', function(t){
+	t.timeoutAfter(3000); // first one can be a bit slower as waiting for server to start...
 	t.plan(1);
-	var socket = connect('somesessionid');
+	var socket = connect(t, 'somesessionid');
 	socket.on("connect",function() {
 		t.pass('connected to socket.io server');
-		socket.disconnect();
-		socket.emit('end');
 	});
 });
 
 test('multiple connections', function(t){
+	t.timeoutAfter(1000);
 	t.plan(3);
-	var socket1 = connect('somesessionid1');
-	var socket2 = connect('somesessionid2');
-	var socket3 = connect('somesessionid3');
+	var socket1 = connect(t, 'somesessionid1');
+	var socket2 = connect(t, 'somesessionid2');
+	var socket3 = connect(t, 'somesessionid3');
 	socket1.on("connect",function() {
 		t.pass('connected to socket.io server');
-		socket1.disconnect();
 	});
 	socket2.on("connect",function() {
 		t.pass('connected to socket.io server');
-		socket2.disconnect();
 	});
 	socket3.on("connect",function() {
 		t.pass('connected to socket.io server');
-		socket3.disconnect();
 	});
 });
 
 test('requesting stats', function(t){
+	t.timeoutAfter(1000);
 	t.plan(2);
 	fetchStats(function(err, stats){
 		t.error(err, 'does not error');
@@ -74,30 +72,28 @@ test('requesting stats', function(t){
 });
 
 test('registering', function(t){
+	t.timeoutAfter(1000);
 	t.plan(4);
-	var socket = connect('somesessionid');
+	var socket = connect(t, 'somesessionid');
 	socket.on("connect",function() {
 		socket.emit("register");
 		assertStats(t, 1, 1, 1, function(err){
-			socket.disconnect();
 			t.error(err, 'does not error');
 		});
 	});
 });
 
 test('multiple registrations for one session', function(t){
+	t.timeoutAfter(1000);
 	t.plan(4);
 	var sessionId = 'sharedsessionid'
-	var socket1 = connect(sessionId);
-	var socket2 = connect(sessionId);
-	var socket3 = connect(sessionId);
+	var socket1 = connect(t, sessionId);
+	var socket2 = connect(t, sessionId);
+	var socket3 = connect(t, sessionId);
 	register(socket1, function(){
 		register(socket2, function(){
 			register(socket3, function(){
 				assertStats(t, 3, 3, 1, function(err){
-					socket1.disconnect();
-					socket2.disconnect();
-					socket3.disconnect();
 					t.error(err, 'does not error');
 				});
 			});
@@ -106,17 +102,15 @@ test('multiple registrations for one session', function(t){
 });
 
 test('multiple registrations with unique sessions', function(t){
+	t.timeoutAfter(1000);
 	t.plan(4);
-	var socket1 = connect('myownsession1');
-	var socket2 = connect('myownsession2');
-	var socket3 = connect('myownsession3');
+	var socket1 = connect(t, 'myownsession1');
+	var socket2 = connect(t, 'myownsession2');
+	var socket3 = connect(t, 'myownsession3');
 	register(socket1, function(){
 		register(socket2, function(){
 			register(socket3, function(){
 				assertStats(t, 3, 3, 3, function(err){
-					socket1.disconnect();
-					socket2.disconnect();
-					socket3.disconnect();
 					t.error(err, 'does not error');
 				});
 			});
@@ -125,18 +119,16 @@ test('multiple registrations with unique sessions', function(t){
 });
 
 test('3 connections, 2 registrations, 1 session', function(t){
+	t.timeoutAfter(1000);
 	t.plan(4);
 	var sessionId = 'sharedsessionid2';
-	var socket1 = connect(sessionId);
-	var socket2 = connect(sessionId);
-	var socket3 = connect(sessionId);
+	var socket1 = connect(t, sessionId);
+	var socket2 = connect(t, sessionId);
+	var socket3 = connect(t, sessionId);
 	register(socket1, function(){
 		register(socket2, function(){
 			// NOT registering socket3
 			assertStats(t, 3, 2, 1, function(err){
-				socket1.disconnect();
-				socket2.disconnect();
-				socket3.disconnect();
 				t.error(err, 'does not error');
 			});
 		});
@@ -144,13 +136,14 @@ test('3 connections, 2 registrations, 1 session', function(t){
 });
 
 test('unregistering', function(t){
+	t.timeoutAfter(1000);
 	t.plan(5);
-	var socket = connect('somesessionid');
+	var socket = connect(t, 'somesessionid');
 	socket.on("connect",function() {
 		socket.emit("register");
 		fetchStats(function(err, stats){
-			t.error(err, 'does not error');
 			socket.disconnect();
+			t.error(err, 'does not error');
 			fetchStats(function(err, stats){
 				t.error(err, 'does not error');
 				t.equal(stats.connections, 0, 'correct connection count');
@@ -162,6 +155,7 @@ test('unregistering', function(t){
 });
 
 test('can send a message', function(t){
+	t.timeoutAfter(1000);
 	t.plan(1);
 	sendMessage({
 		c: 'ignored',
@@ -174,13 +168,13 @@ test('can send a message', function(t){
 });
 
 test('can send and receive a message', function(t){
+	t.timeoutAfter(1000);
 	t.plan(3);
 	var sessionId = 'somesessionid';
-	var socket = connect(sessionId);
+	var socket = connect(t, sessionId);
 	socket.on("connect",function() {
 		socket.emit("register");
 		socket.on("someapp", function(data){
-			socket.disconnect();
 			t.equal(data.m, 'foo', 'passed m param');
 			t.equal(data.o, 'bar', 'passed o param');
 		});
@@ -198,26 +192,24 @@ test('can send and receive a message', function(t){
 });
 
 test('can send and receive a message for multiple clients', function(t){
+	t.timeoutAfter(1000);
 	t.plan(7);
 	var sessionId = 'somesessionid';
-	var socket1 = connect(sessionId);
-	var socket2 = connect(sessionId);
-	var socket3 = connect(sessionId);
+	var socket1 = connect(t, sessionId);
+	var socket2 = connect(t, sessionId);
+	var socket3 = connect(t, sessionId);
 	register(socket1, function(){
 		register(socket2, function(){
 			register(socket3, function(){
 				socket1.on("someapp", function(data){
-					socket1.disconnect();
 					t.equal(data.m, 'foo', 'passed m param');
 					t.equal(data.o, 'bar', 'passed o param');
 				});
 				socket2.on("someapp", function(data){
-					socket2.disconnect();
 					t.equal(data.m, 'foo', 'passed m param');
 					t.equal(data.o, 'bar', 'passed o param');
 				});
 				socket3.on("someapp", function(data){
-					socket3.disconnect();
 					t.equal(data.m, 'foo', 'passed m param');
 					t.equal(data.o, 'bar', 'passed o param');
 				});
@@ -237,14 +229,14 @@ test('can send and receive a message for multiple clients', function(t){
 });
 
 test('can send to php users', (t) => {
+	t.timeoutAfter(1000);
 	t.plan(4);
 	let sessionId = randomstring.generate();
 	let userId = 1;
 	addPHPSessionToRedis(userId, sessionId, err => {
 		t.error(err)
-		let socket = connect(sessionId);
+		let socket = connect(t, sessionId);
 		socket.on("someapp", function(data){
-			socket.disconnect();
 			t.equal(data.m, 'foo', 'passed m param');
 			t.equal(data.o, 'bar', 'passed o param');
 		});
@@ -264,14 +256,14 @@ test('can send to php users', (t) => {
 });
 
 test('can send to api users', (t) => {
+	t.timeoutAfter(1000);
 	t.plan(4);
 	let sessionId = randomstring.generate();
 	let userId = 2;
 	addAPISessionToRedis(userId, sessionId, err => {
 		t.error(err)
-		let socket = connect(sessionId);
+		let socket = connect(t, sessionId);
 		socket.on("someapp", function(data){
-			socket.disconnect();
 			t.equal(data.m, 'foo', 'passed m param');
 			t.equal(data.o, 'bar', 'passed o param');
 		});
@@ -309,9 +301,10 @@ function addAPISessionToRedis(userId, sessionId, callback) {
 }
 
 test('works with two connections per user', (t) => {
-	const opt = {extraHeaders: {Cookie: serialize('PHPSESSID', 'test-1-user-1')}}
-	const client1 = io.connect(WS_URL, opt)
-	const client2 = io.connect(WS_URL, opt)
+	t.timeoutAfter(1000);
+
+	const client1 = connect(t, 'test-1-user-1')
+	const client2 = connect(t, 'test-1-user-1')
 
 	t.plan(2 * 2 + 1)
 	const checkEvent = (ev) => {
@@ -335,8 +328,6 @@ test('works with two connections per user', (t) => {
 			t.equal(res.statusCode, 200)
 
 			t.end()
-			client1.close()
-			client2.close()
 		})
 		.on('error', t.error)
 		.end()
@@ -344,13 +335,11 @@ test('works with two connections per user', (t) => {
 })
 
 test('does not send to other users', (t) => {
+	t.timeoutAfter(1000);
 
 	// two users
-	const opt1 = {extraHeaders: {Cookie: serialize('PHPSESSID', 'test-2-user-1')}}
-	const user1 = io.connect(WS_URL, opt1)
-
-	const opt2 = {extraHeaders: {Cookie: serialize('PHPSESSID', 'test-2-user-2')}}
-	const user2 = io.connect(WS_URL, opt2)
+	const user1 = connect(t, 'test-2-user-1');
+	const user2 = connect(t, 'test-2-user-2');
 
 	t.plan(1 + 1)
 	user1.on('some-event', () => t.pass('user 1 has received `some-event`'))
@@ -370,20 +359,20 @@ test('does not send to other users', (t) => {
 			t.equal(res.statusCode, 200)
 
 			t.end()
-			user1.close()
-			user2.close()
 		})
 		.on('error', t.error)
 		.end()
 	}, 100)
 })
 
-function connect(sessionId) {
-	return io.connect(WS_URL, {
+function connect(t, sessionId) {
+	let socket = io.connect(WS_URL, {
 		extraHeaders: {
-			cookie: 'PHPSESSID=' + sessionId
+			cookie: serialize('PHPSESSID', sessionId)
 		}
 	});
+	t.on('end', () => socket.disconnect());
+	return socket;
 }
 
 function register(socket, callback) {
