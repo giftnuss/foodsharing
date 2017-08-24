@@ -241,12 +241,6 @@ var conv = {
 					c:cid,
 					b:val	
 				},
-				success: function(data)
-				{
-					conv.append(key,data.msg);
-					
-					conv.scrollBottom(cid);	
-				},
 				complete: function(){
 					conv.hideLoader(cid);
 				}

@@ -54,6 +54,7 @@ services:
       - 18082:8080
     environment:
       FOODSHARING_BACKEND: http://web:8080
+      CHAT_BACKEND: http://chat:1337
       API_BACKEND: http://api:8000
     volumes:
       - ../:/app
@@ -104,6 +105,9 @@ services:
     expose:
       - 1337
       - 1338
+    ports:
+      - 11337:1337
+      - 11338:1338
     volumes:
       - ../:/app
       - chat-node-modules:/app/node_modules

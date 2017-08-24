@@ -123,13 +123,6 @@ var msg = {
 						c:msg.conversation_id,
 						b:val	
 					},
-					success: function(data)
-					{
-						msg.appendMsg(data.msg);
-						msg.hideLoader();
-						msg.scrollBottom();
-						
-					},
 					complete: function(){
 						msg.hideLoader();
 						setTimeout(function(){

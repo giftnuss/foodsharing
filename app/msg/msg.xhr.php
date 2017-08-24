@@ -145,10 +145,6 @@ class MsgXhr extends Control
 						if($member = $this->model->listConversationMembers($_POST['c']))
 						{
 							$user_ids = array_column($member, 'id');
-							$index = array_search(fsId(), $user_ids);
-							if ( $index !== false ) {
-								unset( $user_ids[$index] );
-							}
 
 							sendSockMulti($user_ids, 'conv', 'push', array(
 								'id' => $message_id,
