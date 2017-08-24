@@ -262,7 +262,7 @@ test('can send to api users', (t) => {
 	let userId = 2;
 	addAPISessionToRedis(userId, sessionId, err => {
 		t.error(err)
-		let socket = connect(t, sessionId);
+		let socket = connect(t, sessionId, 'sessionid'); // django session cookie name
 		socket.on("someapp", function(data){
 			t.equal(data.m, 'foo', 'passed m param');
 			t.equal(data.o, 'bar', 'passed o param');
@@ -347,10 +347,10 @@ test('does not send to other users', (t) => {
 	}, 100)
 })
 
-function connect(t, sessionId) {
+function connect(t, sessionId, cookieName = 'PHPSESSID') {
 	let socket = io.connect(WS_URL, {
 		extraHeaders: {
-			cookie: serialize('PHPSESSID', sessionId)
+			cookie: serialize(cookieName, sessionId)
 		}
 	});
 	t.on('end', () => socket.disconnect());
