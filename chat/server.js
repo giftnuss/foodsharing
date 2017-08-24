@@ -24,7 +24,7 @@ let numRegistrations = 0;
 let numConnections = 0;
 
 const sendToUser = (userId, channel, method, payload) => {
-	fetchSessionIdsForUser(userId, function (err, sessionIds) {
+	fetchSessionIdsForUser(userId, (err, sessionIds) => {
 		if (err) return console.error('could not get session ids for', userId, err);
 		for (let sessionId of sessionIds) {
 			sendToSession(sessionId, channel, method, payload);
