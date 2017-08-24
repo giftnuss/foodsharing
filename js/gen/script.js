@@ -518,7 +518,7 @@ conv.registerPollingService();},maxbox:function(cid)
 {key=conv.getKey(cid);conv.chatboxes[key].el.children('.slimScrollDiv, .chatboxinput').hide();conv.chatboxes[key].minimized=true;},checkInputKey:function(event,chatboxtextarea,cid)
 {var $ta=$(chatboxtextarea);var val=$ta.val().trim();var key=this.getKey(cid);if(event.keyCode==13&&event.shiftKey==0&&val!='')
 {conv.showLoader(cid);setTimeout(function(){$ta.val('');$ta.css('height','40px');$ta[0].focus();},100);val=val.replace(new RegExp('(\n){3,}','gim'),'\n\n');ajax.req('msg','sendmsg',{loader:false,method:'post',data:{c:cid,b:val},success:function(data)
-{conv.append(key,data.msg);conv.scrollBottom(cid);},complete:function(){conv.hideLoader(cid);}});}},scrollBottom:function(cid)
+{conv.scrollBottom(cid);},complete:function(){conv.hideLoader(cid);}});}},scrollBottom:function(cid)
 {$('#chat-'+cid+' .chatboxcontent').slimScroll({scrollTo:$('#chat-'+cid+' .chatboxcontent').prop('scrollHeight')+'px'});},img:function(photo,size)
 {if(size==undefined)
 {size='med';}
