@@ -2,7 +2,7 @@
 
 const http = require('http');
 const {parse: parseCookie} = require('cookie');
-const {readFileSync} = require('fs');
+const {readFile} = require('fs');
 const url = require('url');
 const connectSocketIO = require('socket.io');
 const redis = require('redis');
@@ -16,7 +16,8 @@ const redisClient = redis.createClient({
 	port: process.env.REDIS_PORT || 6379
 });
 
-const sessionIdsScript = readFileSync(__dirname + '/session-ids.lua', 'utf8');
+const sessionIdsScriptFilename = __dirname + '/session-ids.lua';
+let sessionIdsScriptSHA;
 
 const connectedClients = {};
 let numRegistrations = 0;
@@ -37,8 +38,43 @@ const sendToSession = (sessionId, channel, method, payload) => {
 	}
 }
 
+const loadSessionIdsScript = callback => {
+	readFile(sessionIdsScriptFilename, 'utf8', (err, contents) => {
+		if (err) return callback(err);
+		redisClient.script('LOAD', contents, (err, sha) => {
+			if (err) return callback(err);
+			console.log('loaded session ids script', sha);
+			sessionIdsScriptSHA = sha;
+			callback(null, sha);
+		});
+	});
+}
+
+const getSessionIdsScriptSHA = callback => {
+	if (sessionIdsScriptSHA) {
+		callback(null, sessionIdsScriptSHA);
+	} else {
+		loadSessionIdsScript(err => {
+			callback(err, sessionIdsScriptSHA);
+		});
+	}
+}
+
 const fetchSessionIdsForUser = (userId, callback) => {
-	redisClient.eval(sessionIdsScript, 0, userId, callback);
+	getSessionIdsScriptSHA((err, sha) => {
+		if (err) return callback(err);
+		redisClient.evalsha(sha, 0, userId, (err, res) => {
+			if (err && err.code === 'NOSCRIPT') {
+				sessionIdsScriptSHA = null;
+				loadSessionIdsScript(err => {
+					if (err) return callback(err);
+					fetchSessionIdsForUser(userId, callback);
+				});
+			} else {
+				callback(err, res);
+			}
+		});
+	});
 }
 
 const connectionsForSession = (sessionId) => {
@@ -118,6 +154,10 @@ io.on('connection', (socket) => {
 			}
 		}
 	});
+});
+
+loadSessionIdsScript((err, sha) => {
+	if (err) return console.error('failed to load session ids script', err);
 });
 
 inputServer.listen(inputPort, listenHost, () => {
