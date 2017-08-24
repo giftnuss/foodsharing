@@ -42,7 +42,7 @@ test('simple connection', function(t){
 });
 
 test('multiple connections', function(t){
-	t.timeoutAfter(1000);
+	t.timeoutAfter(2000);
 	t.plan(3);
 	var socket1 = connect(t, 'somesessionid1');
 	var socket2 = connect(t, 'somesessionid2');
@@ -59,7 +59,7 @@ test('multiple connections', function(t){
 });
 
 test('requesting stats', function(t){
-	t.timeoutAfter(1000);
+	t.timeoutAfter(2000);
 	t.plan(2);
 	fetchStats(function(err, stats){
 		t.error(err, 'does not error');
@@ -72,7 +72,7 @@ test('requesting stats', function(t){
 });
 
 test('registering', function(t){
-	t.timeoutAfter(1000);
+	t.timeoutAfter(2000);
 	t.plan(4);
 	var socket = connect(t, 'somesessionid');
 	socket.on("connect",function() {
@@ -84,7 +84,7 @@ test('registering', function(t){
 });
 
 test('multiple registrations for one session', function(t){
-	t.timeoutAfter(1000);
+	t.timeoutAfter(2000);
 	t.plan(4);
 	var sessionId = 'sharedsessionid'
 	var socket1 = connect(t, sessionId);
@@ -102,7 +102,7 @@ test('multiple registrations for one session', function(t){
 });
 
 test('multiple registrations with unique sessions', function(t){
-	t.timeoutAfter(1000);
+	t.timeoutAfter(2000);
 	t.plan(4);
 	var socket1 = connect(t, 'myownsession1');
 	var socket2 = connect(t, 'myownsession2');
@@ -119,7 +119,7 @@ test('multiple registrations with unique sessions', function(t){
 });
 
 test('3 connections, 2 registrations, 1 session', function(t){
-	t.timeoutAfter(1000);
+	t.timeoutAfter(2000);
 	t.plan(4);
 	var sessionId = 'sharedsessionid2';
 	var socket1 = connect(t, sessionId);
@@ -136,7 +136,7 @@ test('3 connections, 2 registrations, 1 session', function(t){
 });
 
 test('unregistering', function(t){
-	t.timeoutAfter(1000);
+	t.timeoutAfter(2000);
 	t.plan(5);
 	var socket = connect(t, 'somesessionid');
 	socket.on("connect",function() {
@@ -155,7 +155,7 @@ test('unregistering', function(t){
 });
 
 test('can send a message', function(t){
-	t.timeoutAfter(1000);
+	t.timeoutAfter(2000);
 	t.plan(1);
 	sendMessage({
 		c: 'ignored',
@@ -168,7 +168,7 @@ test('can send a message', function(t){
 });
 
 test('can send and receive a message', function(t){
-	t.timeoutAfter(1000);
+	t.timeoutAfter(2000);
 	t.plan(3);
 	var sessionId = 'somesessionid';
 	var socket = connect(t, sessionId);
@@ -192,7 +192,7 @@ test('can send and receive a message', function(t){
 });
 
 test('can send and receive a message for multiple clients', function(t){
-	t.timeoutAfter(1000);
+	t.timeoutAfter(2000);
 	t.plan(7);
 	var sessionId = 'somesessionid';
 	var socket1 = connect(t, sessionId);
@@ -229,7 +229,7 @@ test('can send and receive a message for multiple clients', function(t){
 });
 
 test('can send to php users', (t) => {
-	t.timeoutAfter(1000);
+	t.timeoutAfter(2000);
 	t.plan(4);
 	let sessionId = randomstring.generate();
 	let userId = 1;
@@ -256,7 +256,7 @@ test('can send to php users', (t) => {
 });
 
 test('can send to api users', (t) => {
-	t.timeoutAfter(1000);
+	t.timeoutAfter(2000);
 	t.plan(4);
 	let sessionId = randomstring.generate();
 	let userId = 2;
@@ -283,7 +283,7 @@ test('can send to api users', (t) => {
 });
 
 test('works with two connections per user', (t) => {
-	t.timeoutAfter(1000);
+	t.timeoutAfter(2000);
 
 	const client1 = connect(t, 'test-1-user-1')
 	const client2 = connect(t, 'test-1-user-1')
@@ -317,7 +317,7 @@ test('works with two connections per user', (t) => {
 })
 
 test('does not send to other users', (t) => {
-	t.timeoutAfter(1000);
+	t.timeoutAfter(2000);
 
 	// two users
 	const user1 = connect(t, 'test-2-user-1');
