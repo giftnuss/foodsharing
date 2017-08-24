@@ -120,11 +120,13 @@ io.on('connection', (socket) => {
 	});
 });
 
-inputServer.listen(inputPort, listenHost);
-console.log('http server started on', listenHost + ':' + inputPort);
+inputServer.listen(inputPort, listenHost, () => {
+	console.log('http server started on', listenHost + ':' + inputPort);
+});
 
-chatServer.listen(chatPort, listenHost);
-console.log('socket.io started on port', listenHost + ':' + chatPort);
+chatServer.listen(chatPort, listenHost, () => {
+	console.log('socket.io started on port', listenHost + ':' + chatPort);
+});
 
 module.exports = {
 	inputServer: inputServer,
