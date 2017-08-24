@@ -103,6 +103,7 @@ const inputServer = http.createServer((req, res) => {
 	const method = query.m;
 	const options = query.o;
 	const userId = query.u;
+	const userIds = query.us;
 
 	if (sessionId) {
 		sendToSession(sessionId,app,method,options);
@@ -110,6 +111,12 @@ const inputServer = http.createServer((req, res) => {
 
 	if (userId) {
 		sendToUser(userId,app,method,options);
+	}
+
+	if (userIds) {
+		for (let userId of userIds.split(',')) {
+			sendToUser(userId,app,method,options);
+		}
 	}
 
 	res.writeHead(200);

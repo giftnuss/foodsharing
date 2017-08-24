@@ -144,21 +144,28 @@ class MsgXhr extends Control
 						*/
 						if($member = $this->model->listConversationMembers($_POST['c']))
 						{
+							$user_ids = array_column($member, 'id');
+							$index = array_search(fsId(), $user_ids);
+							if ( $index !== false ) {
+								unset( $user_ids[$index] );
+							}
+
+							sendSockMulti($user_ids, 'conv', 'push', array(
+								'id' => $message_id,
+								'cid' => (int)$_POST['c'],
+								'fs_id' => fsId(),
+								'fs_name' => S::user('name'),
+								'fs_photo' => S::user('photo'),
+								'body' => $body,
+								'time' => date('Y-m-d H:i:s')
+							));
+
 							foreach ($member as $m)
 							{
 								if($m['id'] != fsId())
 								{
 									Mem::userAppend($m['id'], 'msg-update', (int)$_POST['c']);
 
-									sendSock($m['id'],'conv', 'push', array(
-										'id' => $message_id,
-										'cid' => (int)$_POST['c'],
-										'fs_id' => fsId(),
-										'fs_name' => S::user('name'),
-										'fs_photo' => S::user('photo'),
-										'body' => $body,
-										'time' => date('Y-m-d H:i:s')
-									));
 									/*
 									 * send an E-Mail if the user is not online
 									*/

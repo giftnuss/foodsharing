@@ -2568,6 +2568,17 @@ function sendSock($fsid,$app,$method,$options)
 	file_get_contents(SOCK_URL . '?' . $query);
 }
 
+function sendSockMulti($fsids,$app,$method,$options)
+{
+	$query = http_build_query(array(
+		'us' => join(',', $fsids), // user ids
+		'a' => $app, // app
+		'm' => $method, // method
+		'o' => json_encode($options) // options
+	));
+	file_get_contents(SOCK_URL . '?' . $query);
+}
+
 function getTemplate($tpl)
 {
 	include 'tpl/' . $tpl . '.php';
