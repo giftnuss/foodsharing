@@ -849,7 +849,6 @@ class Db
 			$fs_id = fsId();
 		}
 		Mem::userSet($fs_id, 'active', time());
-		Mem::userSet($fs_id, 'sid', session_id());
 	}
 
 	private function initSessionData($fs_id)

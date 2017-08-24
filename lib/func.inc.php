@@ -2559,16 +2559,13 @@ function rolleWrap($roleStr)
 
 function sendSock($fsid,$app,$method,$options)
 {
-	if($sid = Mem::user($fsid, 'sid'))
-	{
-		$query = http_build_query(array(
-			'c' => $sid, // client session id
-			'a' => $app, // app
-			'm' => $method, // method
-			'o' => json_encode($options) // options
-		));
-		file_get_contents(SOCK_URL . '?' . $query);
-	}
+	$query = http_build_query(array(
+		'u' => $fsid, // user id
+		'a' => $app, // app
+		'm' => $method, // method
+		'o' => json_encode($options) // options
+	));
+	file_get_contents(SOCK_URL . '?' . $query);
 }
 
 function getTemplate($tpl)
