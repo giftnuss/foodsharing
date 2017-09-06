@@ -224,9 +224,9 @@ var activity = {
 		
 		initOption: function(listings)
 		{
-			var html = '<form id="activity-option-form" class="pure-form pure-form-stacked"><fieldset><legend>Updates-Anzeige Optionen</legend>'
+			var html = '<form id="activity-option-form" class="pure-form pure-form-stacked"><fieldset><legend>Updates-Anzeige-Optionen</legend>'
 				+ '<div class="msg-inside info">'
-				+ '<i class="fa fa-info-circle"></i> Hier kannst Du einstellen welche Updates auf Deiner Startseite angezeigt werden.'
+				+ '<i class="fa fa-info-circle"></i> Hier kannst Du einstellen, welche Updates auf Deiner Startseite angezeigt werden.'
 				+ '</div>';
 				
 			for(var i=0;i<listings.length;i++)
@@ -234,7 +234,7 @@ var activity = {
 				html += this.initOptionListing(listings[i]);
 			}
 			
-			html += '<legend><a href="#" id="activity-save-option" class="button" style="float:right;">Einstellungen Speichern</a></legend></fieldset></form>'
+			html += '<legend><a href="#" id="activity-save-option" class="button" style="float:right;">Einstellungen speichern</a></legend></fieldset></form>'
 			
 			$('body').append('<div id="activity-listings" class="corner-all white-popup mfp-hide">'+html+'</div>');
 			

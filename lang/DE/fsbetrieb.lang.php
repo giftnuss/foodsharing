@@ -75,7 +75,7 @@ $g_lang['shure_range_date'] = '<strong>Verbindlich {label}s</strong> im gewählt
 $g_lang['zeitraum'] = 'Zeitraum';
 $g_lang['date_add_successful'] = '<p><b>Termine wurden erfolgreich hinzugefügt</b><br>Müssen nur noch vom Filialverantwortlichen bestätigt werden</p>';
 $g_lang['del_and_send'] = 'Termin löschen und Nachricht senden';
-$g_lang['tpl_msg_to_team'] = 'Liebes {BETRIEB} Team, 
+$g_lang['tpl_msg_to_team'] = 'Liebes {BETRIEB}-Team, 
 
 am {DATE} kann ich leider doch keine Lebensmittel abholen. Daher suche ich dringend eine Vertretung. Kannst Du für mich einspringen?
 
