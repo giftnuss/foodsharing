@@ -68,7 +68,7 @@ class ReportView extends View
 				),
 				array(
 					'id' => 13,
-					'name' => 'Nimmt nicht alle zur Abholung vorgesehenen Lebensmitteln mit'
+					'name' => 'Nimmt nicht alle zur Abholung vorgesehenen Lebensmittel mit'
 				),
 				array(
 					'id' => 14,
@@ -114,7 +114,7 @@ class ReportView extends View
 				),
 				array(
 					'id' => 5,
-					'name' => 'Gewaltätigkeit und Drohung'
+					'name' => 'Gewalttätigkeit und Drohung'
 				),
 				array(
 					'id' => 6,
@@ -246,11 +246,11 @@ class ReportView extends View
 		}
 		
 		$table = v_tablesorter(array(
-				array('name' => 'An', 'width' => 50),
+				array('name' => 'Über', 'width' => 50),
 				array('name' => 'Von', 'width' => 50),
 				array('name' => s('message')),
 				array('name' => s('datetime'),'width' => 80),
-				array('name' => 'FS Wohnort', 'width' => 25)
+				array('name' => 'FS Wohnort', 'width' => 50)
 		),$rows,array('pager'=>true));
 		
 		return $table;

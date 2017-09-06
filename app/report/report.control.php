@@ -38,7 +38,7 @@ class ReportControl extends Control
 			{
 				addContent($this->view->listReports($reports));
 			}
-			addContent($this->view->topbar('Neue Verstoßmeldungen', count($reports).' gesamt', '<img src="/img/shit.png" />'),CNT_TOP);
+			addContent($this->view->topbar('Neue Verstoßmeldungen', count($reports).' insgesamt', '<img src="/img/shit.png" />'),CNT_TOP);
 		}
 	}
 	
@@ -54,7 +54,7 @@ class ReportControl extends Control
 			{
 				addContent($this->view->listReports($reports));
 			}
-			addContent($this->view->topbar('Bestätigte Verstoßmeldungen', count($reports).' gesamt', '/img/shit.png'),CNT_TOP);
+			addContent($this->view->topbar('Bestätigte Verstoßmeldungen', count($reports).' insgesamt', '<img src="/img/shit.png" />'),CNT_TOP);
 		}
 	}
 	

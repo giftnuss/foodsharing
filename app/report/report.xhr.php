@@ -25,7 +25,7 @@ class ReportXhr extends Control
 				$reason = explode('=>', $report['tvalue']);
 				
 				$dialog = new XhrDialog();
-				$dialog->setTitle('Report an '.$report['fs_name'].' '.$report['fs_nachname']);
+				$dialog->setTitle('Meldung über '.$report['fs_name'].' '.$report['fs_nachname']);
 				
 				$content = v_input_wrapper('Zeitpunkt', niceDate($report['time_ts']));
 				
@@ -56,13 +56,13 @@ class ReportXhr extends Control
 				$dialog->addContent($content);
 				$dialog->addOpt('width', '600px');
 				
-				$dialog->addButton('Alle Meldungen von '.$report['fs_name'], 'goTo(\'/?page=report&sub=foodsaver&id='.$report['fs_id'].'\');');
+				$dialog->addButton('Alle Meldungen über '.$report['fs_name'], 'goTo(\'/?page=report&sub=foodsaver&id='.$report['fs_id'].'\');');
 				
 				if($report['committed'] == 0)
 				{
 					$dialog->addButton('Report bestätigen','ajreq(\'comreport\',{\'id\':'.(int)$_GET['id'].'});');
 				}
-				$dialog->addButton('Löschen', 'if(confirm(\'Diesen report wirklich löschen?\')){ajreq(\'delreport\',{id:'.$report['id'].'});$(\'#'.$dialog->getId().'\').dialog(\'close\');}');
+				$dialog->addButton('Löschen', 'if(confirm(\'Diese Meldung wirklich löschen?\')){ajreq(\'delreport\',{id:'.$report['id'].'});$(\'#'.$dialog->getId().'\').dialog(\'close\');}');
 				
 				return $dialog->xhrout();
 			}
@@ -74,7 +74,7 @@ class ReportXhr extends Control
 		if(mayHandleReports())
 		{
 			$this->model->confirmReport($_GET['id']);
-			info('Report wurde bestätigt!');
+			info('Meldung wurde bestätigt!');
 			return array(
 				'status' => 1,
 				'script' => 'reload();'
@@ -87,7 +87,7 @@ class ReportXhr extends Control
 		if(mayHandleReports())
 		{
 			$this->model->delReport($_GET['id']);
-			info('Report wurde gelöscht!');
+			info('Meldung wurde gelöscht!');
 			return array(
 				'status' => 1,
 				'script' => 'reload();'
@@ -97,7 +97,6 @@ class ReportXhr extends Control
 	
 	public function reportDialog()
 	{
-		
 		$dialog = new XhrDialog();
 		$dialog->setTitle($this->foodsaver['name'].' melden');
 		
@@ -195,7 +194,7 @@ class ReportXhr extends Control
 				$(".xhrDialog").dialog("destroy");
 				$(".xhrDialog").remove();
 				
-				pulseInfo("Danke Dir, Der Report wird an die Verantwortlichen Personen weitergeleitet.");
+				pulseInfo("Danke Dir! Die Meldung wird an die verantwortlichen Personen weitergeleitet.");
 				$("#reportmessage").val("");
 				$("#reportreason ~ select").hide();
 				$("#reportreason ~ div.cb").hide();'
