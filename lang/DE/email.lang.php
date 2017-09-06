@@ -2,7 +2,7 @@
 global $g_lang;
 $g_lang['send_as_pm'] = 'Als interne Nachricht versenden';
 $g_lang['send_as_email'] = 'Als E-Mail versenden';
-$g_lang['mailing_list'] = 'E-Mail Verteiler';
+$g_lang['mailing_list'] = 'E-Mail-Verteiler';
 $g_lang['personal_styling_desc'] = 'Um die Mail pers&ouml;nlicher zu gestalten kannst Du <strong>{NAME}</strong> anstelle des Namens einf&uuml;gen und <strong>{ANREDE}</strong> f&uuml;r die Anrede.<p>{ANREDE} {NAME} ergibt z.<span style="white-space:nowrap">&thinsp;</span>B. Lieber Peter';
 $g_lang['personal_styling'] = 'Persönliche Anrede';
 

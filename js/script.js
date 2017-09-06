@@ -235,7 +235,7 @@ $(document).ready(function(){
 				modal: true,
 				autoOpen:false,
 				buttons: {
-					"unwideruflich löschen": function() {
+					"unwiderruflich löschen": function() {
 						goTo($('#dialog-confirm-url').val());
 						$( this ).dialog( "close" );
 					},
