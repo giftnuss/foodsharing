@@ -28,8 +28,13 @@ class BcardControl extends Control
 			{
 				error('Du musst eine gültige Telefonnummer angegeben haben um Deine Visitenkarte zu generieren');
 				go('/?page=settings');
-			}
-			$sel_data = array();
+            }
+            if ($data[`verfified`] == 0) {
+                // you have to be a verified user to generate your business card.
+                error('Du musst verifiziert sein, um Deine Visitenkarte generieren zu können.');
+                go('/?page=settings');
+            }
+            $sel_data = array();
 			if($data['bot'])
 			{
 				foreach ($data['bot'] as $b)
