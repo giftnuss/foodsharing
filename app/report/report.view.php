@@ -255,12 +255,4 @@ class ReportView extends View
 		
 		return $table;
 	}
-	
-/*	public function listReportedSavers($foodsaver)
-	{
-		if(is_array($foodsaver))
-		{
-			return v_field($this->fsAvatarList($foodsaver,array('noshuffle' => true)),'Alle gemeldeten Foodsaver');
-		}
-	}*/
 }

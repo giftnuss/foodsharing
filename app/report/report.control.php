@@ -31,7 +31,6 @@ class ReportControl extends Control
 		if(mayHandleReports())
 		{
 			addContent($this->view->statsMenu($this->model->getReportStats()),CNT_LEFT);
-			//addContent($this->view->listReportedSavers($this->model->getReportedSavers()),CNT_LEFT);
 
 			$reports = array();
 			if($reports = $this->model->getReports(0))
@@ -47,7 +46,6 @@ class ReportControl extends Control
 		if(mayHandleReports())
 		{
 			addContent($this->view->statsMenu($this->model->getReportStats()),CNT_LEFT);
-			//addContent($this->view->listReportedSavers($this->model->getReportedSavers()),CNT_LEFT);
 
 			$reports = array();
 			if($reports = $this->model->getReports(1))
