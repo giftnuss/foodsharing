@@ -13,14 +13,14 @@ $g_lang['delete_sure_title'] = 'Wirklich löschen?';
 $g_lang['sure'] = 'Ja, ich bin mir sicher.';
 $g_lang['signout'] = 'Austragen';
 $g_lang['bezirk_signout'] = '{var} Gruppe verlassen';
-$g_lang['signout_sure'] = 'Möchtest Du Dich wirklich die Gruppe "{var}" verlassen?'; 
+$g_lang['signout_sure'] = 'Möchtest Du Dich wirklich die Gruppe "{var}" verlassen?';
 $g_lang['signout_sure_title'] = 'Bist Du sicher?';
 $g_lang['new_fairteiler'] = 'Neuer Fair-Teiler';
 $g_lang['list_fairteiler'] = 'Alle Fair-Teiler in {var}';
 $g_lang['no_fairteiler_available'] = 'Noch keine Fair-Teiler eingetragen';
 
 $g_lang['older_themes'] = 'ältere Themen';
-$g_lang['no_events_posted'] = 'Noch keine Events vorhanden'; 
+$g_lang['no_events_posted'] = 'Noch keine Events vorhanden';
 $g_lang['new_event'] = 'Neue/n Termin/Veranstaltung eintragen';
 $g_lang['description'] = 'Beschreibung';
 $g_lang['desc_desc'] = 'Was ist das für ein Event?';

@@ -1,8 +1,9 @@
 <?php
+
 class ContentModel extends Model
 {
 	public function listFaq($cat_ids)
-	{	
+	{
 		return $this->q('
 			SELECT 
 				`id`,
@@ -10,10 +11,10 @@ class ContentModel extends Model
 				`answer`
 
 			FROM 
-				'.PREFIX.'faq
+				' . PREFIX . 'faq
 				
 			WHERE 
-				`faq_kategorie_id` IN('.implode(',',$cat_ids).')
+				`faq_kategorie_id` IN(' . implode(',', $cat_ids) . ')
 		');
 	}
 }

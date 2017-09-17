@@ -1,4 +1,5 @@
 <?php
+
 $I = new AcceptanceTester($scenario);
 
 $I->wantTo('delete my account (being a foodsaver)');
@@ -19,9 +20,9 @@ $I->waitForPageBody();
 
 $I->seeInDatabase('fs_foodsaver', [
 	'id' => $foodsaver['id'],
-	'name' => NULL,
-	'email' => NULL,
-	'nachname' => NULL
+	'name' => null,
+	'email' => null,
+	'nachname' => null
 ]);
 
 $I->seeInDatabase('fs_foodsaver_archive', [

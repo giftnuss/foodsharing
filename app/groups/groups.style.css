@@ -1,22 +1,21 @@
-.members
-{
-	width:18%;
-	float:left;
+.members {
+    width: 18%;
+    float: left;
 }
-.groups .photo
-{
-	float:right;
-	margin-left:10px;
+
+.groups .photo {
+    float: right;
+    margin-left: 10px;
 }
-.groups .bottom_bar
-{
-	margin-top:15px;
+
+.groups .bottom_bar {
+    margin-top: 15px;
 }
-.groups .teaser
-{
-	margin-left:18%;
+
+.groups .teaser {
+    margin-left: 18%;
 }
-#apply-form textarea
-{
-	width:97%;
+
+#apply-form textarea {
+    width: 97%;
 }

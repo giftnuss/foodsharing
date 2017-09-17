@@ -1,7 +1,7 @@
-<?php 
+<?php
+
 class IndexXhr extends Control
 {
-	
 	public function __construct()
 	{
 		$this->model = new IndexModel();

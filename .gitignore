@@ -20,3 +20,4 @@ tests/_support/_generated/
 chat/.npm
 api
 light
+.php_cs.cache

@@ -12,5 +12,3 @@ $g_lang['delete_sure'] = 'Soll {var} wirklich unwideruflich gel&ouml;scht werden
 $g_lang['faq_edit_success'] = 'FAQ wurde bearbeitet';
 $g_lang['faq_kategorie_id'] = 'FAQ Kategorie';
 $g_lang['faq_add_success'] = 'Frage wurde gespeichert!';
-
-?>
