@@ -220,14 +220,13 @@ class ReportModel extends Model
 				fs.photo AS fs_photo,
 				fs.stadt AS fs_stadt,
 
-
-				
 				rp.id AS rp_id,
 				rp.name AS rp_name,
 				rp.nachname AS rp_nachname,
-				rp.photo AS rp_photo
+				rp.photo AS rp_photo,
 				
-          
+                b.name as heimatbezirk
+                          
 			FROM
             	`'.PREFIX.'report` r
 				
@@ -236,6 +235,10 @@ class ReportModel extends Model
 				
 			LEFT JOIN
             	`'.PREFIX.'foodsaver` rp ON r.reporter_id = rp.id 
+
+			LEFT JOIN
+ 				`'.PREFIX.'bezirk` b on fs.bezirk_id=b.id
+
 			
 			WHERE
 				r.committed = '.$committed.'

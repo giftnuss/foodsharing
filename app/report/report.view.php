@@ -134,7 +134,8 @@ class ReportView extends View
                 ['cnt' => tt($r['msg'], 50)],
                 ['cnt' => '<span style="display:none;">a' . $r['time_ts'] . ' </span>' . niceDateShort($r['time_ts']) . ' Uhr'],
                 ['cnt' => $r['fs_stadt']],
-			);
+                ['cnt' => $r['heimatbezirk']],
+            );
 		}
 		
 		$table = v_tablesorter(array(
@@ -142,7 +143,8 @@ class ReportView extends View
 				array('name' => 'Von', 'width' => 50),
 				array('name' => s('message')),
 				array('name' => s('datetime'),'width' => 80),
-				array('name' => 'FS Wohnort', 'width' => 25)
+				array('name' => 'FS Wohnort', 'width' => 25),
+				array('name' => 'Heimatbezirk', 'width' => 25)
 		),$rows,array('pager'=>true));
 		
 		return $table;
