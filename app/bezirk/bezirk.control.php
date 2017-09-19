@@ -310,7 +310,7 @@ class BezirkControl extends Control
 	private function _forum($botForum)
 	{
 		$botForum = $botForum && ($this->bot_theme == 1);
-		addBread(s('forum'), '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=' . $botForum ? 'botforum' : 'forum');
+		addBread(s('forum'), '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=' . ($botForum ? 'botforum' : 'forum'));
 
 		addTitle(s($botForum ? 'bot_forum' : 'forum'));
 
