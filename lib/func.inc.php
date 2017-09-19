@@ -1,7 +1,9 @@
 <?php
 
-function __autoload($class_name)
+// TODO(tiltec) according to MLAPHP chapter 3, this should go into a setup.php file
+spl_autoload_register(function ($class_name)
 {
+
 	$first = substr($class_name, 0, 1);
 
 	$file = ROOT_DIR . '/lib/flourish/' . $class_name . '.php';
@@ -13,7 +15,7 @@ function __autoload($class_name)
 	} else {
 		debug('file not loadable: ' . $file);
 	}
-}
+});
 
 define('CNT_MAIN', 0);
 define('CNT_RIGHT', 1);

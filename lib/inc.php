@@ -7,7 +7,21 @@
  *
  * @param  string $class_name  Name of the class to load
  */
+
 require_once 'config.inc.php';
+
+/*
+ * Configure Raven (sentry.io client) for remote error reporting
+ */
+
+if (defined('SENTRY_URL')) {
+	require_once 'vendor/sentry/sentry/lib/Raven/Autoloader.php';
+	Raven_Autoloader::register();
+	$client = new Raven_Client(SENTRY_URL);
+	$client->install();
+	$client->tags_context(array('FS_ENV' => $FS_ENV));
+}
+
 require_once 'lib/func.inc.php';
 require_once 'lib/Session.php';
 

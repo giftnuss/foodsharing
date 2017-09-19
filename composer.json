@@ -2,5 +2,8 @@
   "require-dev": {
     "codeception/codeception": "^2.2",
     "friendsofphp/php-cs-fixer": "2.*"
+  },
+  "require": {
+    "sentry/sentry": "^1.7"
   }
 }
