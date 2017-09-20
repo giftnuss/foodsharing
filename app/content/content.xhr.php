@@ -1,7 +1,7 @@
-<?php 
+<?php
+
 class ContentXhr extends Control
 {
-	
 	public function __construct()
 	{
 		$this->model = new ContentModel();

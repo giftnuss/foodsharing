@@ -1,4 +1,5 @@
 <?php
+
 namespace Helper;
 
 // here you can define custom actions
@@ -7,12 +8,11 @@ namespace Helper;
 class Acceptance extends \Codeception\Module
 {
 	/**
-	* Same as assertRegExp but makes it available inside AcceptanceTester
-	* (not sure why it isn't anyway... there might be a better way)
-	*/
+	 * Same as assertRegExp but makes it available inside AcceptanceTester
+	 * (not sure why it isn't anyway... there might be a better way).
+	 */
 	public function doAssertRegExp($regexp, $text)
 	{
 		return $this->assertRegExp($regexp, $text);
 	}
-
 }

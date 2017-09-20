@@ -1,4 +1,5 @@
 <?php
+
 class StatisticsModel extends Model
 {
 	public function getStatGesamt()
@@ -16,13 +17,13 @@ class StatisticsModel extends Model
 					SUM(`stat_fairteilercount`) AS fairteilercount
 	
 				FROM
-					'.PREFIX.'bezirk
+					' . PREFIX . 'bezirk
 	
 				WHERE
 					`id` = 741
 		');
 	}
-	
+
 	public function getStatCities()
 	{
 		return $this->q('
@@ -38,7 +39,7 @@ class StatisticsModel extends Model
 				`stat_fscount` AS fscount,
 				`stat_fairteilercount` AS fairteilercount
 			FROM
-				'.PREFIX.'bezirk
+				' . PREFIX . 'bezirk
 	
 			WHERE
 				`type` IN(1,8)
@@ -47,7 +48,7 @@ class StatisticsModel extends Model
 			LIMIT 10
 		');
 	}
-	
+
 	public function getStatFoodsaver()
 	{
 		return $this->q('
@@ -58,7 +59,7 @@ class StatisticsModel extends Model
 				`stat_fetchweight` AS fetchweight,
 				`stat_fetchcount` AS fetchcount
 			FROM
-				'.PREFIX.'foodsaver
+				' . PREFIX . 'foodsaver
 			WHERE
 				deleted_at IS NULL
 	

@@ -1,23 +1,23 @@
 <?php
+
 namespace Helper;
+
 use DateTime;
 
 class Foodsharing extends \Codeception\Module\Db
 {
-
 	/**
-	* Insert a new foodsharer into the database.
-	*
-	* @param string pass to set as foodsharer password
-	* @param array extra_params override params
-	*
-	* @return an array with all the foodsaver fields
-	*/
+	 * Insert a new foodsharer into the database.
+	 *
+	 * @param string pass to set as foodsharer password
+	 * @param array extra_params override params
+	 *
+	 * @return an array with all the foodsaver fields
+	 */
 	public function createFoodsharer($pass = null, $extra_params = [])
 	{
-		$email = sq().'@test.com';
-		if(!isset($pass))
-		{
+		$email = sq() . '@test.com';
+		if (!isset($pass)) {
 			$pass = 'password';
 		}
 		$params = array_merge([
@@ -37,6 +37,7 @@ class Foodsharing extends \Codeception\Module\Db
 		], $extra_params);
 		$id = $this->haveInDatabase('fs_foodsaver', $params);
 		$params['id'] = $id;
+
 		return $params;
 	}
 
@@ -60,6 +61,7 @@ class Foodsharing extends \Codeception\Module\Db
 		], $extra_params);
 		$params = $this->createFoodsharer($pass, $params);
 		$this->createQuizTry($params['id'], 1, 1);
+
 		return $params;
 	}
 
@@ -71,6 +73,7 @@ class Foodsharing extends \Codeception\Module\Db
 		], $extra_params);
 		$params = $this->createFoodsaver($pass, $params);
 		$this->createQuizTry($params['id'], 2, 1);
+
 		return $params;
 	}
 
@@ -82,6 +85,7 @@ class Foodsharing extends \Codeception\Module\Db
 		], $extra_params);
 		$params = $this->createStoreCoordinator($pass, $params);
 		$this->createQuizTry($params['id'], 3, 1);
+
 		return $params;
 	}
 
@@ -94,13 +98,16 @@ class Foodsharing extends \Codeception\Module\Db
 		]);
 
 		$params = $this->createAmbassador($pass, $params);
+
 		return $params;
 	}
 
 	/** creates a store in given bezirk.
 	 * Does not care about handling anything related like conversations etc.
+	 *
 	 * @param $bezirk_id
 	 * @param array $extra_params
+	 *
 	 * @return array
 	 */
 	public function createStore($bezirk_id, $extra_params = [])
@@ -108,10 +115,11 @@ class Foodsharing extends \Codeception\Module\Db
 		$params = array_merge([
 			'betrieb_status_id' => 1,
 			'bezirk_id' => $bezirk_id,
-			'name' => 'betrieb_'.sq(),
+			'name' => 'betrieb_' . sq(),
 			'status' => 1, // same as betrieb_status_id
 		], $extra_params);
 		$params['id'] = $this->haveInDatabase('fs_betrieb', $params);
+
 		return $params;
 	}
 
@@ -122,10 +130,8 @@ class Foodsharing extends \Codeception\Module\Db
 	 */
 	public function addStoreTeam($store_id, $fs_id, $is_coordinator = false, $is_waiting = false, $is_confirmed = true)
 	{
-		if(is_array($fs_id))
-		{
-			foreach($fs_id as $fs)
-			{
+		if (is_array($fs_id)) {
+			foreach ($fs_id as $fs) {
 				$this->addStoreTeam($store_id, $fs, $is_coordinator, $is_waiting, $is_confirmed);
 			}
 		} else {
@@ -142,7 +148,7 @@ class Foodsharing extends \Codeception\Module\Db
 	public function addBezirkMember($bezirk_id, $fs_id, $is_admin = false, $is_active = true)
 	{
 		if (is_array($fs_id)) {
-			array_map(function ($x) use ($bezirk_id, $is_admin){
+			array_map(function ($x) use ($bezirk_id, $is_admin) {
 				$this->addBezirkMember($bezirk_id, $x, $is_admin);
 			}, $fs_id);
 		} else {
@@ -150,7 +156,6 @@ class Foodsharing extends \Codeception\Module\Db
 				'bezirk_id' => $bezirk_id,
 				'foodsaver_id' => $fs_id,
 				'active' => $is_active ? 1 : 0,
-
 			];
 			$this->haveInDatabase('fs_foodsaver_has_bezirk', $v);
 			if ($is_admin) {
@@ -179,6 +184,7 @@ class Foodsharing extends \Codeception\Module\Db
 		];
 		$this->haveInDatabase('fs_bezirk_has_theme', $v);
 		$this->addForumThemePost($theme_id, $fs_id, $text, $date);
+
 		return $theme_id;
 	}
 
@@ -199,23 +205,23 @@ class Foodsharing extends \Codeception\Module\Db
 		$last_post_id = $this->grabFromDatabase('fs_theme', 'last_post_id', ['id' => $theme_id]);
 		$last_post_date = new DateTime($this->grabFromDatabase('fs_theme_post', 'time', ['id' => $last_post_id]));
 		$this_post_date = new DateTime($post['time']);
-		if($last_post_date >= $this_post_date)
-		{
+		if ($last_post_date >= $this_post_date) {
 			$this->driver->executeQuery('UPDATE fs_theme SET last_post_id = ? WHERE id = ?', [$post['id'], $theme_id]);
 		}
 	}
 
 	// copied from elsewhere....
-	private function encryptMd5($email,$pass)
+	private function encryptMd5($email, $pass)
 	{
 		$email = strtolower($email);
-		return md5($email.'-lz%&lk4-'.$pass);
+
+		return md5($email . '-lz%&lk4-' . $pass);
 	}
 
 	private function toDateTime($date = null)
 	{
 		$dt = new DateTime($date);
+
 		return $dt->format('Y-m-d H:i:s');
 	}
-
 }

@@ -1,17 +1,18 @@
 <?php
+
 class ProfileModel extends Model
 {
 	private $fs_id;
-	
+
 	public function setFsId($id)
 	{
 		$this->fs_id = $this->intval($id);
 	}
-	
-	public function rate($fsid,$rate,$type = 1,$message = '')
+
+	public function rate($fsid, $rate, $type = 1, $message = '')
 	{
 		return $this->insert('
-			REPLACE INTO `'.PREFIX.'rating`
+			REPLACE INTO `' . PREFIX . 'rating`
 			(
 				`foodsaver_id`,
 				`rater_id`,
@@ -22,27 +23,27 @@ class ProfileModel extends Model
 			)		
 			VALUES
 			(
-				'.(int)$fsid.',
-				'.(int)fsId().',
-				'.(int)$rate.',
-				'.(int)$type.',
-				'.$this->strval($message).',
+				' . (int)$fsid . ',
+				' . (int)fsId() . ',
+				' . (int)$rate . ',
+				' . (int)$type . ',
+				' . $this->strval($message) . ',
 				NOW()
 			)
 		');
 	}
-	
+
 	public function getRateMessage($fsid)
 	{
 		return $this->qOne('
 			SELECT 	`msg` 
-			FROM	`'.PREFIX.'rating`
-			WHERE 	`foodsaver_id` = '.(int)$fsid.'
-			AND 	`rater_id` = '.(int)fsId().'
+			FROM	`' . PREFIX . 'rating`
+			WHERE 	`foodsaver_id` = ' . (int)$fsid . '
+			AND 	`rater_id` = ' . (int)fsId() . '
 		');
 	}
 
-	public function getNextDates($fsid,$LIMIT=10)
+	public function getNextDates($fsid, $LIMIT = 10)
 	{
 		return $this->q('
 			SELECT 	a.`date`,
@@ -50,23 +51,22 @@ class ProfileModel extends Model
 					b.name AS betrieb_name,
 					b.id AS betrieb_id,
 					b.bezirk_id AS bezirk_id
-			FROM   `'.PREFIX.'abholer` a,
-			       `'.PREFIX.'betrieb` b
+			FROM   `' . PREFIX . 'abholer` a,
+			       `' . PREFIX . 'betrieb` b
 
 			WHERE a.betrieb_id =b.id
-			AND   a.foodsaver_id = '.(int)$fsid.'
+			AND   a.foodsaver_id = ' . (int)$fsid . '
 			AND   a.`date` > NOW()
 
 			ORDER BY a.`date`
 
-			LIMIT '.$LIMIT.'
+			LIMIT ' . $LIMIT . '
 		');
 	}
 
-
 	public function getData()
 	{
-		if(($data = $this->qRow('
+		if (($data = $this->qRow('
 		
 			SELECT 	fs.`id`,
 					fs.`bezirk_id`,
@@ -108,20 +108,18 @@ class ProfileModel extends Model
 					fs.mailbox_id,
 					fs.deleted_at
 		
-			FROM 	'.PREFIX.'foodsaver fs
+			FROM 	' . PREFIX . 'foodsaver fs
 				
-			WHERE 	fs.id = '.(int)$this->fs_id.'
+			WHERE 	fs.id = ' . (int)$this->fs_id . '
 		
-			')) == false)
-		{
+			')) == false) {
 			return false;
 		}
 
 		//echo 'SELECT COUNT(rater_id) FROM `fs_rating` WHERE rater_id = '.(int)fsId().' AND foodsaver_id = '.(int)$this->fs_id.' AND ratingtype = 2';
 		$data['bouched'] = false;
 		$data['bananen'] = false;
-		if($this->qOne('SELECT 1 FROM `fs_rating` WHERE rater_id = '.(int)fsId().' AND foodsaver_id = '.(int)$this->fs_id.' AND ratingtype = 2'))
-		{
+		if ($this->qOne('SELECT 1 FROM `fs_rating` WHERE rater_id = ' . (int)fsId() . ' AND foodsaver_id = ' . (int)$this->fs_id . ' AND ratingtype = 2')) {
 			$data['bouched'] = true;
 		}
 		$data['online'] = $this->isActive((int)$this->fs_id);
@@ -134,87 +132,80 @@ class ProfileModel extends Model
 						r.`time`,
 						UNIX_TIMESTAMP(r.`time`) AS time_ts
 		
-				FROM 	`'.PREFIX.'foodsaver` fs,
-						 `'.PREFIX.'rating` r
+				FROM 	`' . PREFIX . 'foodsaver` fs,
+						 `' . PREFIX . 'rating` r
 				WHERE 	r.rater_id = fs.id
-				AND 	r.foodsaver_id = '.(int)$this->fs_id.'
+				AND 	r.foodsaver_id = ' . (int)$this->fs_id . '
 				AND 	r.ratingtype = 2
 		');
-		
-		if(!$data['bananen'])
-		{
+
+		if (!$data['bananen']) {
 			$data['bananen'] = array();
 		}
-		
+
 		//echo((int)$data['bananen']);echo'<<<';die();
-		
-		$this->update('UPDATE '.PREFIX.'foodsaver SET stat_bananacount = '.(int)count($data['bananen']).' WHERE id = '.(int)$this->fs_id);
+
+		$this->update('UPDATE ' . PREFIX . 'foodsaver SET stat_bananacount = ' . (int)count($data['bananen']) . ' WHERE id = ' . (int)$this->fs_id);
 		$data['stat_bananacount'] = (int)count($data['bananen']);
-		
+
 		$data['botschafter'] = false;
 		$data['foodsaver'] = false;
 		$data['orga'] = false;
-		
-		if(mayHandleReports())
-		{
+
+		if (mayHandleReports()) {
 			$data['violation_count'] = (int)$this->getViolationCount($this->fs_id);
 			$data['note_count'] = (int)$this->getNotesCount($this->fs_id);
 		}
-		
-		
-		if($bot = $this->q('
+
+		if ($bot = $this->q('
 			SELECT 	bz.`name`,
 					bz.`id` 
 				
-			FROM 	`'.PREFIX.'bezirk` bz,
-					'.PREFIX.'botschafter b 
+			FROM 	`' . PREFIX . 'bezirk` bz,
+					' . PREFIX . 'botschafter b 
 				
 			WHERE 	b.`bezirk_id` = bz.`id` 
-			AND 	b.foodsaver_id = '.$this->intval($this->fs_id).'
+			AND 	b.foodsaver_id = ' . $this->intval($this->fs_id) . '
 			AND 	bz.type != 7
-		'))
-		{
+		')) {
 			$data['botschafter'] = $bot;
 		}
-		if($fs = $this->q('
+		if ($fs = $this->q('
 			SELECT 	bz.`name`,
 					bz.`id`
 		
-			FROM 	`'.PREFIX.'bezirk` bz,
-					'.PREFIX.'foodsaver_has_bezirk b
+			FROM 	`' . PREFIX . 'bezirk` bz,
+					' . PREFIX . 'foodsaver_has_bezirk b
 		
 			WHERE 	b.`bezirk_id` = bz.`id`
-			AND 	b.foodsaver_id = '.$this->intval($this->fs_id).'
+			AND 	b.foodsaver_id = ' . $this->intval($this->fs_id) . '
 			AND 	bz.type != 7
-		'))
-		{
+		')) {
 			$data['foodsaver'] = $fs;
 		}
-		if($orga = $this->q('
+		if ($orga = $this->q('
 			SELECT 	bz.`name`,
 					bz.`id`
 		
-			FROM 	`'.PREFIX.'bezirk` bz,
-					'.PREFIX.'botschafter b
+			FROM 	`' . PREFIX . 'bezirk` bz,
+					' . PREFIX . 'botschafter b
 		
 			WHERE 	b.`bezirk_id` = bz.`id`
-			AND 	b.foodsaver_id = '.$this->intval($this->fs_id).'
+			AND 	b.foodsaver_id = ' . $this->intval($this->fs_id) . '
 			AND 	bz.type = 7
-		'))
-		{
+		')) {
 			$data['orga'] = $orga;
 		}
-		
+
 		$data['pic'] = false;
-		if(!empty($data['photo']) && file_exists('images/'.$data['photo']))
-		{
+		if (!empty($data['photo']) && file_exists('images/' . $data['photo'])) {
 			$data['pic'] = array(
-				'original' => 'images/'.$data['photo'],
-				'medium' => 'images/130_q_'.$data['photo'],
-				'mini' => 'images/50_q_'.$data['photo']
+				'original' => 'images/' . $data['photo'],
+				'medium' => 'images/130_q_' . $data['photo'],
+				'mini' => 'images/50_q_' . $data['photo']
 			);
 		}
-		
+
 		return $data;
 	}
 
@@ -224,12 +215,12 @@ class ProfileModel extends Model
 			SELECT
 				COUNT(wallpost_id)
 			FROM
-	           	`'.PREFIX.'usernotes_has_wallpost`
+	           	`' . PREFIX . 'usernotes_has_wallpost`
 			WHERE
-				usernotes_id = '.(int)$fsid.'
+				usernotes_id = ' . (int)$fsid . '
 		');
 	}
-	
+
 	private function getViolationCount($fsid)
 	{
 		return (int)$this->qOne('
@@ -238,10 +229,10 @@ class ProfileModel extends Model
 					
           
 				FROM
-	            	`'.PREFIX.'report` r
+	            	`' . PREFIX . 'report` r
 				
 				WHERE
-					r.foodsaver_id = '.(int)$fsid.'
+					r.foodsaver_id = ' . (int)$fsid . '
 		');
 	}
 
@@ -257,13 +248,13 @@ class ProfileModel extends Model
 			  fs.nachname,
 			  fs.name
 			FROM
-			  '.PREFIX.'pass_gen pg
+			  ' . PREFIX . 'pass_gen pg
 			LEFT JOIN
-			  '.PREFIX.'foodsaver fs
+			  ' . PREFIX . 'foodsaver fs
 			ON
 			  pg.bot_id = fs.id
 			WHERE
-			  pg.foodsaver_id = '.(int)$fsid.'
+			  pg.foodsaver_id = ' . (int)$fsid . '
 			ORDER BY
 			  pg.date
 			DESC
@@ -285,13 +276,13 @@ class ProfileModel extends Model
 			  fs.nachname,
 			  fs.name
 			FROM
-			  '.PREFIX.'verify_history vh
+			  ' . PREFIX . 'verify_history vh
 			LEFT JOIN
-			  '.PREFIX.'foodsaver fs
+			  ' . PREFIX . 'foodsaver fs
 			ON
 			  vh.bot_id = fs.id
 			WHERE
-			  vh.fs_id = '.(int)$fsid.'
+			  vh.fs_id = ' . (int)$fsid . '
 			ORDER BY
 			  vh.date
 			DESC
@@ -308,13 +299,13 @@ class ProfileModel extends Model
 					b.name,
 					bt.verantwortlich
 				
-			FROM 	'.PREFIX.'betrieb_team bt,
-					'.PREFIX.'betrieb b
+			FROM 	' . PREFIX . 'betrieb_team bt,
+					' . PREFIX . 'betrieb b
 				
 			WHERE 	bt.betrieb_id = b.id
 			AND
-					bt.foodsaver_id = '.(int)$fsid.'
-			order by b.name asc
+					bt.foodsaver_id = ' . (int)$fsid . '
+			ORDER BY b.name ASC
 
 				
 		');
@@ -326,12 +317,12 @@ class ProfileModel extends Model
 
 			SELECT 	count(b.id)
 				
-			FROM 	'.PREFIX.'betrieb_team bt,
-					'.PREFIX.'betrieb b
+			FROM 	' . PREFIX . 'betrieb_team bt,
+					' . PREFIX . 'betrieb b
 				
 			WHERE 	bt.betrieb_id = b.id
 			AND
-					bt.foodsaver_id = '.(int)$fsid.'
+					bt.foodsaver_id = ' . (int)$fsid . '
 
 				
 		');

@@ -1,4 +1,5 @@
 <?php
+
 $I = new AcceptanceTester($scenario);
 
 $I->wantTo('try to create a new company as foodsaver');

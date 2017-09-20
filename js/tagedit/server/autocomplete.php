@@ -34,14 +34,13 @@ $autocompletiondata = array(
     29 => 'Goldcrest',
 );
 
-if(isset($_GET['term'])) {
+if (isset($_GET['term'])) {
     $result = array();
-    foreach($autocompletiondata as $key => $value) {
-        if(strlen($_GET['term']) == 0 || strpos(strtolower($value), strtolower($_GET['term'])) !== false) {
+    foreach ($autocompletiondata as $key => $value) {
+        if (strlen($_GET['term']) == 0 || strpos(strtolower($value), strtolower($_GET['term'])) !== false) {
             $result[] = '{"id":"'.$key.'","label":"'.$value.'","value":"'.$value.'"}';
         }
     }
     
     echo "[".implode(',', $result)."]";
 }
-?>

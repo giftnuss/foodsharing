@@ -10,7 +10,7 @@ class CompanyCest
 		$this->storeCoordinator = $I->createStoreCoordinator('pw');
 		$this->participatorA = $I->createFoodsaver('pw');
 		$this->participatorB = $I->createFoodsaver('pw');
-		$I->addStoreTeam($this->store['id'], $this->storeCoordinator['id'], True);
+		$I->addStoreTeam($this->store['id'], $this->storeCoordinator['id'], true);
 		$I->addStoreTeam($this->store['id'], $this->participatorA['id']);
 		$I->addStoreTeam($this->store['id'], $this->participatorB['id']);
 
@@ -31,13 +31,15 @@ class CompanyCest
 		$I->login($this->participatorA['email'], 'pw');
 	}
 
-	public function CoordinatorCanSeeCompanyOnDashboard(\HtmlAcceptanceTester $I) {
+	public function CoordinatorCanSeeCompanyOnDashboard(\HtmlAcceptanceTester $I)
+	{
 		$this->loginAsCoordinator();
 		$I->see('Du bist verantwortlich', 'div.head.ui-widget-header.ui-corner-top');
 		$I->see($this->store['name'], 'a.ui-corner-all');
 	}
 
-	public function MemberCanSeeCompanyOnDashboard(\HtmlAcceptanceTester $I) {
+	public function MemberCanSeeCompanyOnDashboard(\HtmlAcceptanceTester $I)
+	{
 		$this->loginAsMember();
 		$I->see('Du holst Lebensmittel ab bei', 'div.head.ui-widget-header.ui-corner-top');
 		$I->see($this->store['name'], 'a.ui-corner-all');
@@ -48,20 +50,20 @@ class CompanyCest
 	 * @example["loginAsCoordinator"]
 	 * @example["loginAsMember"]
 	 */
-	public function CanAccessCompanyPage(\HtmlAcceptanceTester $I, \Codeception\Example $example) {
+	public function CanAccessCompanyPage(\HtmlAcceptanceTester $I, \Codeception\Example $example)
+	{
 		$this->$example[0]();
 		$I->amOnPage($I->StoreUrl($this->store['id']));
-		$I->see($this->store['name'].'-Team', 'div.head.ui-widget-header.ui-corner-top');
+		$I->see($this->store['name'] . '-Team', 'div.head.ui-widget-header.ui-corner-top');
 	}
 
-    public function _before(HtmlAcceptanceTester $I)
-    {
+	public function _before(HtmlAcceptanceTester $I)
+	{
 		$this->tester = $I;
 		$this->createStoreAndUsers();
-    }
+	}
 
-    public function _after(HtmlAcceptanceTester $I)
-    {
-    }
-
+	public function _after(HtmlAcceptanceTester $I)
+	{
+	}
 }

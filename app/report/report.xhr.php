@@ -1,129 +1,117 @@
-<?php 
+<?php
+
 class ReportXhr extends Control
 {
 	private $foodsaver;
+
 	public function __construct()
 	{
 		$this->model = new ReportModel();
 		$this->view = new ReportView();
 
 		parent::__construct();
-		
-		if(isset($_GET['fsid']))
-		{
+
+		if (isset($_GET['fsid'])) {
 			$this->foodsaver = $this->model->getOne_foodsaver($_GET['fsid']);
 			$this->view->setFoodsaver($this->foodsaver);
 		}
 	}
-	
+
 	public function loadreport()
 	{
-		if(mayHandleReports())
-		{
-			if($report = $this->model->getReport($_GET['id']))
-			{				
+		if (mayHandleReports()) {
+			if ($report = $this->model->getReport($_GET['id'])) {
 				$reason = explode('=>', $report['tvalue']);
-				
+
 				$dialog = new XhrDialog();
-				$dialog->setTitle('Report an '.$report['fs_name'].' '.$report['fs_nachname']);
-				
+				$dialog->setTitle('Meldung über ' . $report['fs_name'] . ' ' . $report['fs_nachname']);
+
 				$content = v_input_wrapper('Zeitpunkt', niceDate($report['time_ts']));
-				
-				if(isset($report['betrieb']))
-				{
-					$content .= v_input_wrapper('Zugeordneter Betrieb', '<a href="/?page=fsbetrieb&id='.$report['betrieb']['id'].'">'.$report['betrieb']['name'].'</a>');
+
+				if (isset($report['betrieb'])) {
+					$content .= v_input_wrapper('Zugeordneter Betrieb', '<a href="/?page=fsbetrieb&id=' . $report['betrieb']['id'] . '">' . $report['betrieb']['name'] . '</a>');
 				}
-				
-				if(is_array($reason))
-				{
+
+				if (is_array($reason)) {
 					$out = '<ul>';
-					foreach ($reason as $r)
-					{
-						$out .= '<li>'.trim($r).'</li>';
+					foreach ($reason as $r) {
+						$out .= '<li>' . trim($r) . '</li>';
 					}
 					$out .= '</ul>';
-					
+
 					$content .= v_input_wrapper('Grund', $out);
-					
 				}
-				
-				if(!empty($report['msg']))
-				{
+
+				if (!empty($report['msg'])) {
 					$content .= v_input_wrapper('Beschreibung', nl2br($report['msg']));
 				}
-				
-				$content .= v_input_wrapper('Gemeldet von', '<a href="#" onclick="profile('.(int)$report['rp_id'].');">'.$report['rp_name'].' '.$report['rp_nachname'].'</a>');
+
+				$content .= v_input_wrapper('Gemeldet von', '<a href="#" onclick="profile(' . (int)$report['rp_id'] . ');">' . $report['rp_name'] . ' ' . $report['rp_nachname'] . '</a>');
 				$dialog->addContent($content);
 				$dialog->addOpt('width', '600px');
-				
-				$dialog->addButton('Alle Meldungen von '.$report['fs_name'], 'goTo(\'/?page=report&sub=foodsaver&id='.$report['fs_id'].'\');');
-				
-				if($report['committed'] == 0)
-				{
-					$dialog->addButton('Report bestätigen','ajreq(\'comreport\',{\'id\':'.(int)$_GET['id'].'});');
+
+				$dialog->addButton('Alle Meldungen über ' . $report['fs_name'], 'goTo(\'/?page=report&sub=foodsaver&id=' . $report['fs_id'] . '\');');
+
+				if ($report['committed'] == 0) {
+					$dialog->addButton('Report bestätigen', 'ajreq(\'comreport\',{\'id\':' . (int)$_GET['id'] . '});');
 				}
-				$dialog->addButton('Löschen', 'if(confirm(\'Diesen report wirklich löschen?\')){ajreq(\'delreport\',{id:'.$report['id'].'});$(\'#'.$dialog->getId().'\').dialog(\'close\');}');
-				
+				$dialog->addButton('Löschen', 'if(confirm(\'Diese Meldung wirklich löschen?\')){ajreq(\'delreport\',{id:' . $report['id'] . '});$(\'#' . $dialog->getId() . '\').dialog(\'close\');}');
+
 				return $dialog->xhrout();
 			}
 		}
 	}
-	
+
 	public function comreport()
 	{
-		if(mayHandleReports())
-		{
+		if (mayHandleReports()) {
 			$this->model->confirmReport($_GET['id']);
-			info('Report wurde bestätigt!');
+			info('Meldung wurde bestätigt!');
+
 			return array(
 				'status' => 1,
 				'script' => 'reload();'
 			);
 		}
 	}
-	
+
 	public function delreport()
 	{
-		if(mayHandleReports())
-		{
+		if (mayHandleReports()) {
 			$this->model->delReport($_GET['id']);
-			info('Report wurde gelöscht!');
+			info('Meldung wurde gelöscht!');
+
 			return array(
 				'status' => 1,
 				'script' => 'reload();'
 			);
 		}
 	}
-	
+
 	public function reportDialog()
 	{
-		
 		$dialog = new XhrDialog();
-		$dialog->setTitle($this->foodsaver['name'].' melden');
-		
+		$dialog->setTitle($this->foodsaver['name'] . ' melden');
+
 		global $g_data;
 		$g_data['reportreason'] = 0;
 		$dialog->addContent($this->view->reportDialog());
 		$bid = 0;
-		if(!isset($_GET['bid']) || (int)$_GET['bid'] == 0)
-		{
-			if($betriebe = $this->model->getFoodsaverBetriebe($_GET['fsid']))
-			{
+		if (!isset($_GET['bid']) || (int)$_GET['bid'] == 0) {
+			if ($betriebe = $this->model->getFoodsaverBetriebe($_GET['fsid'])) {
 				$dialog->addContent($this->view->betriebList($betriebe));
 			}
-		}
-		else
-		{
+		} else {
 			$bid = $_GET['bid'];
 		}
-		
-		$dialog->addContent(v_form_textarea('reportmessage',array('desc'=>s('reportmessage_desc'))));
+
+		$dialog->addContent(v_form_textarea('reportmessage', array('desc' => s('reportmessage_desc'))));
 		$dialog->addContent(v_form_hidden('reportfsid', (int)$_GET['fsid']));
 		$dialog->addContent(v_form_hidden('reportbid', (int)$bid));
-		
-		$dialog->addOpt('width','600',false);
+
+		$dialog->addOpt('width', '600', false);
 		$dialog->addAbortButton();
-		
+
 		$dialog->addJs('
 			$("#betrieb_id").change(function(){
 				$("#reportbid").val($(this).val());
@@ -137,7 +125,7 @@ class ReportXhr extends Control
 		});	
 		$("#reportreason ~ select").hide();
 		$("#reportreason ~ div.cb").hide();');
-		
+
 		$dialog->addJs('$("#reportmessage").css("width","555px");');
 		$dialog->addButton('Meldung senden', '
 				
@@ -175,19 +163,18 @@ class ReportXhr extends Control
 			});	
 		}
 		');
-		
+
 		return $dialog->xhrout();
 	}
-	
+
 	public function betriebreport()
 	{
 		$reason_id = 1;
-		if($_GET['reason_id'] == 2)
-		{
+		if ($_GET['reason_id'] == 2) {
 			$reason_id = 2;
 		}
-		$this->model->addBetriebReport($_GET['fsid'],$reason_id, $_GET['reason'], $_GET['msg'], (int)$_GET['bid']);
-		
+		$this->model->addBetriebReport($_GET['fsid'], $reason_id, $_GET['reason'], $_GET['msg'], (int)$_GET['bid']);
+
 		return array(
 			'status' => 1,
 			'script' => '
@@ -195,7 +182,7 @@ class ReportXhr extends Control
 				$(".xhrDialog").dialog("destroy");
 				$(".xhrDialog").remove();
 				
-				pulseInfo("Danke Dir, Der Report wird an die Verantwortlichen Personen weitergeleitet.");
+				pulseInfo("Danke Dir! Die Meldung wird an die verantwortlichen Personen weitergeleitet.");
 				$("#reportmessage").val("");
 				$("#reportreason ~ select").hide();
 				$("#reportreason ~ div.cb").hide();'

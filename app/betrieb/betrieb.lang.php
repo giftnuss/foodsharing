@@ -1,3 +1,3 @@
 <?php
-global $g_lang;
 
+global $g_lang;

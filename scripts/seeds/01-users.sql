@@ -18,7 +18,8 @@ REPLACE INTO `fs_foodsaver` (
   active,
   newsletter,
   token,
-  last_login
+  last_login,
+  orgateam
 ) VALUES
 (
   151030, -- id
@@ -40,7 +41,8 @@ REPLACE INTO `fs_foodsaver` (
   1, -- active
   1, -- newsletter
   '57927ba974bc07.93176475', -- token
-  '2016-07-22 20:14:18' -- last_login
+  '2016-07-22 20:14:18', -- last_login
+  0
 ),
 (
   151031, -- id
@@ -62,7 +64,8 @@ REPLACE INTO `fs_foodsaver` (
   1, -- active
   1, -- newsletter
   '57927ba974bc07.93176475', -- token
-  '2016-07-22 20:14:18' -- last_login
+  '2016-07-22 20:14:18', -- last_login
+  0
 ),
 (
   151032, -- id
@@ -84,7 +87,31 @@ REPLACE INTO `fs_foodsaver` (
   1, -- active
   1, -- newsletter
   '57927ba974bc07.93176475', -- token
-  '2016-07-22 20:14:18' -- last_login
+  '2016-07-22 20:14:18', -- last_login
+  0
+),
+(
+  151033, -- id
+  241, -- bezirk_id
+  1, -- verified
+  '0000-00-00 00:00:00', -- last_pass
+  4, -- rolle
+  '10557', -- plz
+  'Berlin', -- stadt
+  '52.5250839', -- lat
+  '13.369402', -- lon
+  'userorga@example.com', -- email
+  '7c8a4e4fcf07150c5afe439887b4e091', -- passwd
+  'User', -- name
+  'Orga', -- nachname
+  'Europaplatz 1', -- anschrift
+  '+49132414', -- handy
+  '2016-07-22 20:01:45', -- anmeldedatum
+  1, -- active
+  1, -- newsletter
+  '57927ba974bc07.93176475', -- token
+  '2016-07-22 20:14:18', -- last_login
+  1
 );
 
 REPLACE INTO `fs_botschafter` (`foodsaver_id`, `bezirk_id`) VALUES ('151032', '241');

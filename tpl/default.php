@@ -2,63 +2,56 @@
 
 $mainwidth = 24;
 
-if(!empty($content_left))
-{
+if (!empty($content_left)) {
 	$mainwidth -= $content_left_width;
 	$content_left = '
-		<div class="pure-u-1 pure-u-md-'.$content_left_width.'-24" id="left">
+		<div class="pure-u-1 pure-u-md-' . $content_left_width . '-24" id="left">
 			<div class="inside">
-				'.$content_left.'
+				' . $content_left . '
 			</div>
 		</div>';
 }
-if(!empty($content_right))
-{
+if (!empty($content_right)) {
 	$mainwidth -= $content_right_width;
 	$content_right = '
-		<div class="pure-u-1 pure-u-md-'.$content_right_width.'-24" id="right">
+		<div class="pure-u-1 pure-u-md-' . $content_right_width . '-24" id="right">
 			<div class="inside">
-				'.$content_right.'
+				' . $content_right . '
 			</div>
 		</div>';
 }
-if(!empty($content_top))
-{
+if (!empty($content_top)) {
 	//$content_top = '';
-	
+
 	$content_top = '
 		<div class="pure-g">
 			<div id="content_top" class="pure-u-1">
 				<div class="inside">
-					'.$content_top.'
+					' . $content_top . '
 				</div>
 			</div>
 		</div>';
-		
 }
 
-if(!empty($content_bottom))
-{
+if (!empty($content_bottom)) {
 	$content_bottom = '
 		<div class="pure-g">
 			<div class="pure-u-1" id="content_bottom">
 				<div class="inside">
-					'.$content_bottom.'
+					' . $content_bottom . '
 				</div>
 			</div>
 		</div>';
 }
-if(!empty($content_main))
-{
+if (!empty($content_main)) {
 	$content_main = '
-	<div class="pure-u-1 pure-u-md-'.$mainwidth.'-24">
+	<div class="pure-u-1 pure-u-md-' . $mainwidth . '-24">
 		<div class="inside">
-			'.$content_main.'
+			' . $content_main . '
 		</div>
 	</div>';
 }
-if(!empty($content_left) && !empty($content_right))
-{
+if (!empty($content_left) && !empty($content_right)) {
 	//addStyle('div#content{width:513px;}');
 }
 
@@ -69,9 +62,9 @@ if(!empty($content_left) && !empty($content_right))
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="favicon" href="/favicon.ico" type="image/x-icon" />
 	<?php echo getHead(); ?>
-	<style type="text/css">#deutschlandtour_message{width:97%;height:50px;}<?php echo str_replace(array("\r","\n"),'',$g_add_css); ?></style>
+	<style type="text/css">#deutschlandtour_message{width:97%;height:50px;}<?php echo str_replace(array("\r", "\n"), '', $g_add_css); ?></style>
 	<script type="text/javascript">
-		var _gaq = _gaq || [];  _gaq.push(['_setAccount', 'UA-43313114-1']);  _gaq.push(['_setDomainName', '<?php echo $_SERVER['HTTP_HOST'];?>']);  _gaq.push(['_trackPageview']); (function() {var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);  })();
+		var _gaq = _gaq || [];  _gaq.push(['_setAccount', 'UA-43313114-1']);  _gaq.push(['_setDomainName', '<?php echo $_SERVER['HTTP_HOST']; ?>']);  _gaq.push(['_trackPageview']); (function() {var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);  })();
 	</script>
 	<script type="text/javascript"><?php 
 	echo JSMin::minify($g_js_func); ?>	$(document).ready(function(){<?php echo JSMin::minify($js); ?>});</script>
@@ -93,29 +86,30 @@ if(!empty($content_left) && !empty($content_right))
 				</div>
 			</div>
 		</div>
-<?php if(!empty($g_broadcast_message)) {?>
-<div class="inner inside msg-inside info"><?php echo $g_broadcast_message;?></div>
-<?php }?>
+<?php if (!empty($g_broadcast_message)) {
+		?>
+<div class="inner inside msg-inside info"><?php echo $g_broadcast_message; ?></div>
+<?php
+	}?>
 	</div>
 	<?php echo $content_overtop; ?>
-	<div id="main"<?php if(isMob()) { ?> class="mobile"<?php } ?>>
+	<div id="main"<?php if (isMob()) {
+		?> class="mobile"<?php
+	} ?>>
 		<?php echo getBread(); ?>
 		<?php echo $content_top; ?>
 		<div class="pure-g mainpure">
 			<?php 
-			if(isMob())
-			{
+			if (isMob()) {
 				echo $content_main;
 				echo $content_right;
 				echo $content_left;
-			}
-			else
-			{
+			} else {
 				echo $content_left;
 				echo $content_main;
 				echo $content_right;
 			}
-				
+
 			?>
 		</div>
 

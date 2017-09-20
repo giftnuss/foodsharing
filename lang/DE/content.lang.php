@@ -13,4 +13,3 @@ $g_lang['delete_sure'] = 'Soll {var} wirklich gel&ouml;scht werden?';
 $g_lang['content_add_success'] = 'Seite wurde angelegt';
 $g_lang['content_edit_success'] = 'Seite wurde gespeichert!';
 $g_lang['content_bread'] = 'Öffentliche Seiten';
-?>
