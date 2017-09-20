@@ -18,11 +18,11 @@ class BcardControl extends Control
 
 		if ($data = $this->model->getMyData()) {
 			if (strlen($data['anschrift'] . ', ' . $data['plz'] . ' ' . $data['stadt']) >= 49) {
-				error('Deine Anschrift ist zu lang, Anschrift Postleitzahl und Stadt dürfen zusammen maximal 49 Zeichen haben.');
+				error('Deine Anschrift ist zu lang! Anschrift, Postleitzahl und Stadt dürfen zusammen maximal 49 Zeichen haben.');
 				go('/?page=settings');
 			}
 			if (strlen($data['telefon'] . $data['handy']) <= 3) {
-				error('Du musst eine gültige Telefonnummer angegeben haben um Deine Visitenkarte zu generieren');
+				error('Du musst eine gültige Telefonnummer angegeben haben, um Deine Visitenkarte zu generieren');
 				go('/?page=settings');
             }
             if ($data['verified'] == 0) {
