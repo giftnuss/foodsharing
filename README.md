@@ -179,6 +179,17 @@ To rebuild assets on change, run:
 ./scripts/watch-assets
 ```
 
+# Code style
+
+We use php-cs-fixer to format the code style. The aim is to make it use the same style as phpstorm does by default.
+It is based on the @Symfony ruleset, with a few changes.
+
+To format all files you can run:
+
+```
+vendor/bin/php-cs-fixer fix --show-progress=estimating --verbose
+```
+
 # Helper scripts
 
 There are a number of helper scripts available. Most of them obey the `FS_INT` env var. Default is `dev`, you can also set it to `test`.

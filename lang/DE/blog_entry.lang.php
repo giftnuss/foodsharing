@@ -16,4 +16,3 @@ $g_lang['delete_sure'] = 'Soll {var} wirklich unwiderruflich gel&ouml;scht werde
 $g_lang['blog_entry_add_success'] = 'Artikel wurde gespeichert';
 $g_lang['blog_entry_deleted'] = 'Artikel gel&ouml;scht!';
 $g_lang['blog_entry_edit_success'] = '&Auml;nderungen wurden gespeichert!';
-?>

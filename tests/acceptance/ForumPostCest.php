@@ -3,18 +3,18 @@
 
 class ForumPostCest
 {
-    public function _before(AcceptanceTester $I)
-    {
+	public function _before(AcceptanceTester $I)
+	{
 		$this->testBezirk = 241;
 		$this->createUsers($I);
 		$this->createPosts($I);
-    }
+	}
 
-    public function _after(AcceptanceTester $I)
-    {
-    }
+	public function _after(AcceptanceTester $I)
+	{
+	}
 
-    private function createUsers($I)
+	private function createUsers($I)
 	{
 		$this->ambassador = $I->createAmbassador('pw', ['bezirk_id' => $this->testBezirk]);
 		$this->foodsaver = $I->createFoodsaver('pw', ['bezirk_id' => $this->testBezirk]);
@@ -30,7 +30,8 @@ class ForumPostCest
 		$I->addForumThemePost($this->thread_ambassador_user_id, $this->foodsaver['id'], 'Text A2', '45 minutes ago');
 	}
 
-    // tests
+	// tests
+
 	/**
 	 * @param AcceptanceTester $I
 	 * @param \Codeception\Example $example
@@ -39,17 +40,17 @@ class ForumPostCest
 	 * @example["ambassador", "thread_user_ambassador_id", true]
 	 * @example["foodsaver", "thread_user_ambassador_id", false]
 	 */
-    public function SeePostButtonsAndClickFollowUnfollow(AcceptanceTester $I, \Codeception\Example $example)
-    {
-    	$I->login($this->{$example[0]}['email'], 'pw');
-    	$I->amOnPage($I->forumThemeUrl($this->{$example[1]}, null));
+	public function SeePostButtonsAndClickFollowUnfollow(AcceptanceTester $I, \Codeception\Example $example)
+	{
+		$I->login($this->{$example[0]}['email'], 'pw');
+		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}, null));
 		$I->waitForPageBody();
 		$this->expectPostButtons($I, true, $example[2]);
 
 		$I->click('.button.bt_follow');
 		/* currently, this does a XHR request after which a full page reload is done. Click does not wait for the XHR
-		   to be completed so we need some additional wait before we can detect a page reload...
-		*/
+	       to be completed so we need some additional wait before we can detect a page reload...
+	    */
 		$I->wait(1);
 		$I->waitForPageBody();
 		$this->expectPostButtons($I, false, $example[2]);
@@ -58,23 +59,21 @@ class ForumPostCest
 		$I->wait(1);
 		$I->waitForPageBody();
 		$this->expectPostButtons($I, true, $example[2]);
-    }
+	}
 
-    private function expectPostButtons($I, $follow, $stick)
+	private function expectPostButtons($I, $follow, $stick)
 	{
-		if($follow)
-		{
-			$I->see("folgen", '.button.bt_follow');
-			$I->dontSee("entfolgen", '.button.bt_unfollow');
+		if ($follow) {
+			$I->see('folgen', '.button.bt_follow');
+			$I->dontSee('entfolgen', '.button.bt_unfollow');
 		} else {
-			$I->see("entfolgen", '.button.bt_unfollow');
-			$I->dontSee("folgen", '.button.bt_follow');
+			$I->see('entfolgen', '.button.bt_unfollow');
+			$I->dontSee('folgen', '.button.bt_follow');
 		}
-		if($stick)
-		{
-			$I->see("fixieren", '.button.bt_stick');
+		if ($stick) {
+			$I->see('fixieren', '.button.bt_stick');
 		} else {
-			$I->dontSee("fixieren", '.button.bt_stick');
+			$I->dontSee('fixieren', '.button.bt_stick');
 		}
 	}
 
@@ -83,30 +82,27 @@ class ForumPostCest
 		$I->login($this->ambassador['email'], 'pw');
 		$I->amOnPage($I->forumThemeUrl($this->thread_user_ambassador_id, null));
 		$nick = $I->haveFriend('nick');
-		$nick->does(function(AcceptanceTester $I)
-		{
+		$nick->does(function (AcceptanceTester $I) {
 			$I->login($this->foodsaver['email'], 'pw');
 			$I->amOnPage($I->forumUrl($this->testBezirk));
 			/* selector matches Theme B after Theme A */
-			$I->see("Theme B", '#thread-'.$this->thread_ambassador_user_id.' + #thread-'.$this->thread_user_ambassador_id);
+			$I->see('Theme B', '#thread-' . $this->thread_ambassador_user_id . ' + #thread-' . $this->thread_user_ambassador_id);
 		});
 
 		$I->click('.button.bt_stick');
 		$I->wait(1);
-		$nick->does(function(AcceptanceTester $I)
-		{
+		$nick->does(function (AcceptanceTester $I) {
 			$I->amOnPage($I->forumUrl($this->testBezirk));
-			$I->see("Theme A", '#thread-'.$this->thread_user_ambassador_id.' + #thread-'.$this->thread_ambassador_user_id);
+			$I->see('Theme A', '#thread-' . $this->thread_user_ambassador_id . ' + #thread-' . $this->thread_ambassador_user_id);
 		});
 
 		$I->waitForPageBody();
 
 		$I->click('.button.bt_unstick');
 		$I->wait(1);
-		$nick->does(function(AcceptanceTester $I)
-		{
+		$nick->does(function (AcceptanceTester $I) {
 			$I->amOnPage($I->forumUrl($this->testBezirk));
-			$I->see("Theme B", '#thread-'.$this->thread_ambassador_user_id.' + #thread-'.$this->thread_user_ambassador_id);
+			$I->see('Theme B', '#thread-' . $this->thread_ambassador_user_id . ' + #thread-' . $this->thread_user_ambassador_id);
 		});
 	}
 }

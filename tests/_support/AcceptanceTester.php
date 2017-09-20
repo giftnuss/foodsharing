@@ -2,7 +2,8 @@
 
 
 /**
- * Inherited Methods
+ * Inherited Methods.
+ *
  * @method void wantToTest($text)
  * @method void wantTo($text)
  * @method void execute($callable)
@@ -15,14 +16,14 @@
  * @method \Codeception\Lib\Friend haveFriend($name, $actorClass = NULL)
  *
  * @SuppressWarnings(PHPMD)
-*/
+ */
 class AcceptanceTester extends \Codeception\Actor
 {
 	use _generated\AcceptanceTesterActions;
 
 	/**
-	* Wait to see the body element
-	*/
+	 * Wait to see the body element.
+	 */
 	public function waitForPageBody()
 	{
 		return $this->waitForElement(['css' => 'body']);
@@ -40,15 +41,14 @@ class AcceptanceTester extends \Codeception\Actor
 	}
 
 	/**
-	* Assert if a regexp is on the text content of the page
-	*
-	* @param regexp to check
-	* @param string selector to check in, default 'html'
-	*/
+	 * Assert if a regexp is on the text content of the page.
+	 *
+	 * @param regexp to check
+	 * @param string selector to check in, default 'html'
+	 */
 	public function seeMatches($regexp, $selector = 'html')
 	{
 		$text = $this->grabTextFrom($selector);
 		$this->doAssertRegExp($regexp, $text);
 	}
-
 }

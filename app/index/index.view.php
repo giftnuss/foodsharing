@@ -1,47 +1,46 @@
 <?php
+
 class IndexView extends View
 {
 	public function index($first_content, $gerettet)
 	{
 		$ps = new vPageslider();
 
-		$ps->addSection($first_content,array(
+		$ps->addSection($first_content, array(
 			'color' => '#4A3520',
 			'anchor' => 'home'
 		));
-		
-		$ps->addSection($this->countNumber(),array(
+
+		$ps->addSection($this->countNumber(), array(
 			'color' => '#ffffff',
 			'anchor' => 'gerettet',
-			'onload' => '$("#stat-count-number").animateNumber({ number: '.(int)$gerettet.',numberStep:$.animateNumber.numberStepFactories.separator(".") });',
+			'onload' => '$("#stat-count-number").animateNumber({ number: ' . (int)$gerettet . ',numberStep:$.animateNumber.numberStepFactories.separator(".") });',
 			'onleave' => '$("#stat-count-number").animateNumber({ number: 0});'
 		));
-		
-		$ps->addSection($this->howto(),array(
+
+		$ps->addSection($this->howto(), array(
 			'anchor' => 'howto'
 		));
-		
-		$ps->addSection($this->map(),array(
+
+		$ps->addSection($this->map(), array(
 			'anchor' => 'map',
 			'color' => '#ffffff',
 			'onload' => 'indexmap.init();',
 			'wrapper' => false
 		));
-		
-		
-		
-		$ps->addSection($this->machMit(),array(
+
+		$ps->addSection($this->machMit(), array(
 			'anchor' => 'mach-mit'
 		));
-		
+
 		return $ps->render();
 	}
-	
+
 	private function map()
 	{
 		return '<div id="indexmap_mapview" style="width:100%;height:100%;"></div>';
 	}
-	
+
 	private function machMit()
 	{
 		return '
@@ -57,7 +56,7 @@ class IndexView extends View
 		</div>
 		';
 	}
-	
+
 	private function howto()
 	{
 		addJs('$(".vidlink").click(function(ev){
@@ -65,6 +64,7 @@ class IndexView extends View
 			$vid = $(this);
 			$vid.parent().html(\'<iframe width="420" height="315" src="\'+$vid.attr(\'href\')+\'" frameborder="0" allowfullscreen></iframe>\');
 		});');
+
 		return '
 		<div class="howto">
 			<div class="pure-g">
@@ -84,7 +84,7 @@ class IndexView extends View
 			</div>
 		</div>';
 	}
-	
+
 	private function countNumber()
 	{
 		return '

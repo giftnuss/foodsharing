@@ -13,4 +13,3 @@ $g_lang['message_tpl_add_success'] = 'Vorlage wurde hinzugef&uuml;gt';
 $g_lang['message_tpl'] = 'E-Mail-Vorlagen';
 $g_lang['message_tpl_bread'] = 'E-Mail-Vorlagen';
 $g_lang['message_tpl_edit_success'] = 'Vorlage wurde bearbeitet';
-?>

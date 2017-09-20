@@ -1,342 +1,278 @@
 <?php
+
 class LoginControl extends Control
-{	
+{
 	public function __construct()
 	{
-		
 		$this->model = new LoginModel();
 		$this->view = new LoginView();
-		
+
 		parent::__construct();
-		
 	}
-	
+
 	public function unsubscribe()
 	{
 		addTitle('Newsletter Abmeldung');
 		addBread('Newsletter Abmeldung');
-		if(isset($_GET['e']) && validEmail($_GET['e']))
-		{
-			$this->model->update("UPDATE `".PREFIX."foodsaver` SET newsletter=0 WHERE email='".$this->model->safe($_GET['e'])."'");
-			addContent(v_info('Du wirst nun keine weiteren Newsletter von uns erhalten','Erfolg!'));
-			file_put_contents('../unsubscribe.txt',$_GET['e']."\n",FILE_APPEND);
+		if (isset($_GET['e']) && validEmail($_GET['e'])) {
+			$this->model->update('UPDATE `' . PREFIX . "foodsaver` SET newsletter=0 WHERE email='" . $this->model->safe($_GET['e']) . "'");
+			addContent(v_info('Du wirst nun keine weiteren Newsletter von uns erhalten', 'Erfolg!'));
+			file_put_contents('../unsubscribe.txt', $_GET['e'] . "\n", FILE_APPEND);
 		}
 	}
-	
+
 	public function index()
 	{
-		if(!S::may())
-		{
-			if(!isset($_GET['sub']))
-			{
-				if(isset($_POST['email_adress']))
-				{
+		if (!S::may()) {
+			if (!isset($_GET['sub'])) {
+				if (isset($_POST['email_adress'])) {
 					$this->handleLogin();
 				}
 				$ref = false;
-				if(isset($_GET['ref']))
-				{
+				if (isset($_GET['ref'])) {
 					$ref = urldecode($_GET['ref']);
 				}
 				addContent($this->view->login($ref));
 			}
-		}
-		else
-		{
-			if(!isset($_GET['sub']) || $_GET['sub'] != 'unsubscribe')
-			{
+		} else {
+			if (!isset($_GET['sub']) || $_GET['sub'] != 'unsubscribe') {
 				go('/?page=dashboard');
 			}
 		}
 	}
-	
+
 	public function activate()
 	{
-		if($this->model->activate($_GET['e'],$_GET['t']))
-		{
+		if ($this->model->activate($_GET['e'], $_GET['t'])) {
 			info(s('activation_success'));
 			goPage('login');
-		}
-		else 
-		{
+		} else {
 			error(s('activation_failed'));
 			goPage('login');
 		}
 	}
-	
+
 	private function handleLogin()
 	{
-		if($this->model->login($_POST['email_adress'],$_POST['password']))
-		{
+		if ($this->model->login($_POST['email_adress'], $_POST['password'])) {
 			$this->genSearchIndex();
 
-			if(isset($_POST['ismob']))
-			{
+			if (isset($_POST['ismob'])) {
 				$_SESSION['mob'] = (int)$_POST['ismob'];
 			}
-			
+
 			require_once 'lib/Mobile_Detect.php';
 			$mobdet = new Mobile_Detect();
-			if($mobdet->isMobile())
-			{
+			if ($mobdet->isMobile()) {
 				$_SESSION['mob'] = 1;
 			}
-			
-			if((isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'],URL_INTERN) !== false) || isset($_GET['logout']))
-			{
-				if(isset($_GET['ref']))
-				{
+
+			if ((isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], URL_INTERN) !== false) || isset($_GET['logout'])) {
+				if (isset($_GET['ref'])) {
 					go(urldecode($_GET['ref']));
 				}
-				go(str_replace('/?page=login&logout','/?page=dashboard',$_SERVER['HTTP_REFERER']));
-			}
-			else
-			{
+				go(str_replace('/?page=login&logout', '/?page=dashboard', $_SERVER['HTTP_REFERER']));
+			} else {
 				go('/?page=dashboard');
 			}
-			
-			
-		}
-		else
-		{
+		} else {
 			error('Falsche Zugangsdaten');
 		}
 	}
-	
+
 	public function passwordReset()
 	{
 		$k = false;
-		
-		if(isset($_GET['k']))
-		{
+
+		if (isset($_GET['k'])) {
 			$k = strip_tags($_GET['k']);
 		}
-		
+
 		addTitle('Password zurücksetzen');
 		addBread('Passwort zurücksetzen');
-		
-		if(isset($_POST['email']) || isset($_GET['m']))
-		{
+
+		if (isset($_POST['email']) || isset($_GET['m'])) {
 			$mail = '';
-			if(isset($_GET['m']))
-			{
+			if (isset($_GET['m'])) {
 				$mail = $_GET['m'];
-			}
-			else
-			{
+			} else {
 				$mail = $_POST['email'];
 			}
-			if(!validEmail($mail))
-			{
+			if (!validEmail($mail)) {
 				error('Sorry! Hast Du Dich vielleicht bei Deiner E-Mail-Adresse vertippt?');
-			}
-			else
-			{
-				if($this->model->addPassRequest($mail))
-				{
+			} else {
+				if ($this->model->addPassRequest($mail)) {
 					info('Alles klar! Dir wurde ein Link zum Passwortändern per E-Mail zugeschickt.');
-				}
-				else
-				{
+				} else {
 					error('Sorry, diese E-Mail-Adresse ist uns nicht bekannt.');
 				}
 			}
 		}
-		
-		if($k !== false && $this->model->checkResetKey($k))
-		{
-			if($this->model->checkResetKey($k))
-			{
-				if(isset($_POST['pass1']) && isset($_POST['pass2']))
-				{
-					if($_POST['pass1'] == $_POST['pass2'])
-					{
+
+		if ($k !== false && $this->model->checkResetKey($k)) {
+			if ($this->model->checkResetKey($k)) {
+				if (isset($_POST['pass1']) && isset($_POST['pass2'])) {
+					if ($_POST['pass1'] == $_POST['pass2']) {
 						$check = true;
-						if($this->model->newPassword($_POST))
-						{
+						if ($this->model->newPassword($_POST)) {
 							success('Prima, Dein Passwort wurde erfolgreich geändert. Du kannst Dich jetzt Dich einloggen.');
-						}
-						elseif(strlen($_POST['pass1']) < 5)
-						{
+						} elseif (strlen($_POST['pass1']) < 5) {
 							$check = false;
 							error('Sorry, Dein gewähltes Passwort ist zu kurz.');
-						}
-						elseif(!$this->model->checkResetKey($_POST['k']))
-						{
+						} elseif (!$this->model->checkResetKey($_POST['k'])) {
 							$check = false;
 							error('Sorry, Du hast zu lang gewartet. Bitte beantrage noch einmal ein neues Passwort!');
-						}
-						else
-						{
+						} else {
 							$check = false;
 							error('Sorry, es gibt ein Problem mir Deinen Daten. Ein Administrator wurde informiert.');
 							/*
-							tplMail(11, 'kontakt@prographix.de',array(
-								'data' => '<pre>'.print_r($_POST,true).'</pre>'
-							));
-							*/
+	                        tplMail(11, 'kontakt@prographix.de',array(
+	                            'data' => '<pre>'.print_r($_POST,true).'</pre>'
+	                        ));
+	                        */
 						}
-						
-						if($check)
-						{
+
+						if ($check) {
 							go('/?page=login');
 						}
-					}
-					else
-					{
+					} else {
 						error('Sorry, die Passwörter stimmen nicht überein.');
 					}
 				}
 				addJs('$("#pass1").val("");');
 				addContent($this->view->newPasswordForm($k));
-			}
-			else
-			{
-		
+			} else {
 				$this->template->addLeft($this->view->error('Sorry, Du hast ein bisschen zu lange gewartet. Bitte beantrage ein neues Passwort!'));
 				$this->template->addLeft($this->view->passwordRequest());
 			}
-		}
-		else
-		{
+		} else {
 			addContent($this->view->passwordRequest());
 		}
 	}
-	
+
 	/**
-	 * Method to generate search Index for instant seach
+	 * Method to generate search Index for instant seach.
 	 */
 	private function genSearchIndex()
 	{
 		/*
-		 * The big array we want to fill ;)
-		*/
+	     * The big array we want to fill ;)
+	    */
 		$index = array();
-	
+
 		/*
-		 * Buddies Load persons in the index array that connected with the user
-		*/
-	
+	     * Buddies Load persons in the index array that connected with the user
+	    */
+
 		$model = loadModel('buddy');
-		if($buddies = $model->listBuddies())
-		{
+		if ($buddies = $model->listBuddies()) {
 			$result = array();
-			foreach ($buddies as $b)
-			{
+			foreach ($buddies as $b) {
 				$img = '/img/avatar-mini.png';
-	
-				if(!empty($b['photo']))
-				{
+
+				if (!empty($b['photo'])) {
 					$img = img($b['photo']);
 				}
-	
+
 				$result[] = array(
-						'name' => $b['name'].' '.$b['nachname'],
-						'teaser' => '',
-						'img' => $img,
-						'click' => 'chat(\''.$b['id'].'\');',
-						'id' => $b['id'],
-						'search' => array(
-								$b['name'],$b['nachname']
-						)
+					'name' => $b['name'] . ' ' . $b['nachname'],
+					'teaser' => '',
+					'img' => $img,
+					'click' => 'chat(\'' . $b['id'] . '\');',
+					'id' => $b['id'],
+					'search' => array(
+						$b['name'], $b['nachname']
+					)
 				);
 			}
 			$index[] = array(
-					'title' => 'Menschen die Du kennst',
-					'key' => 'buddies',
-					'result' => $result
+				'title' => 'Menschen die Du kennst',
+				'key' => 'buddies',
+				'result' => $result
 			);
 		}
-	
+
 		/*
-		 * Groups load Groups connected to the user in the array
-		*/
+	     * Groups load Groups connected to the user in the array
+	    */
 		$model = loadModel('groups');
-		if($groups = $model->listMyGroups())
-		{
+		if ($groups = $model->listMyGroups()) {
 			$result = array();
-			foreach ($groups as $b)
-			{
+			foreach ($groups as $b) {
 				$img = '/img/groups.png';
-				if(!empty($b['photo']))
-				{
-					$img = 'images/' . str_replace('photo/','photo/thumb_',$b['photo']);
+				if (!empty($b['photo'])) {
+					$img = 'images/' . str_replace('photo/', 'photo/thumb_', $b['photo']);
 				}
 				$result[] = array(
-						'name' => $b['name'],
-						'teaser' => tt($b['teaser'],65),
-						'img' => $img,
-						'href' => '/?page=bezirk&bid='.$b['id'].'&sub=forum',
-						'search' => array(
-								$b['name']
-						)
+					'name' => $b['name'],
+					'teaser' => tt($b['teaser'], 65),
+					'img' => $img,
+					'href' => '/?page=bezirk&bid=' . $b['id'] . '&sub=forum',
+					'search' => array(
+						$b['name']
+					)
 				);
 			}
 			$index[] = array(
-					'title' => 'Deine Gruppen',
-					'result' => $result
+				'title' => 'Deine Gruppen',
+				'result' => $result
 			);
 		}
-	
+
 		/*
-		 * Betriebe load food stores connected to the user in the array
-		*/
+	     * Betriebe load food stores connected to the user in the array
+	    */
 		$model = loadModel('betrieb');
-		if($betriebe = $model->listMyBetriebe())
-		{
+		if ($betriebe = $model->listMyBetriebe()) {
 			$result = array();
-			foreach ($betriebe as $b)
-			{
+			foreach ($betriebe as $b) {
 				$result[] = array(
-						'name' => $b['name'],
-						'teaser' => $b['str'].' '.$b['hsnr'].', '.$b['plz'].' '.$b['stadt'],
-						'href' => '/?page=fsbetrieb&id='.$b['id'],
-						'search' => array(
-								$b['name'],$b['str']
-						)
+					'name' => $b['name'],
+					'teaser' => $b['str'] . ' ' . $b['hsnr'] . ', ' . $b['plz'] . ' ' . $b['stadt'],
+					'href' => '/?page=fsbetrieb&id=' . $b['id'],
+					'search' => array(
+						$b['name'], $b['str']
+					)
 				);
 			}
 			$index[] = array(
-					'title' => 'Deine Betriebe',
-					'result' => $result
+				'title' => 'Deine Betriebe',
+				'result' => $result
 			);
 		}
-	
+
 		/*
-		 * Bezirke load Bezirke connected to the user in the array
-		*/
+	     * Bezirke load Bezirke connected to the user in the array
+	    */
 		$model = loadModel('bezirk');
-		if($bezirke = $model->listMyBezirke())
-		{
+		if ($bezirke = $model->listMyBezirke()) {
 			$result = array();
-			foreach ($bezirke as $b)
-			{
+			foreach ($bezirke as $b) {
 				$result[] = array(
-						'name' => $b['name'],
-						'teaser' => '',
-						'img' => false,
-						'href' => '/?page=bezirk&bid='.$b['id'].'&sub=forum',
-						'search' => array(
-								$b['name']
-						)
+					'name' => $b['name'],
+					'teaser' => '',
+					'img' => false,
+					'href' => '/?page=bezirk&bid=' . $b['id'] . '&sub=forum',
+					'search' => array(
+						$b['name']
+					)
 				);
 			}
 			$index[] = array(
-					'title' => 'Deine Bezirke',
-					'result' => $result
+				'title' => 'Deine Bezirke',
+				'result' => $result
 			);
 		}
-	
+
 		/*
-		 * Get or set an individual token as filename for the public json file
-		*/
-		if($token = S::user('token'))
-		{
-			file_put_contents('cache/searchindex/' . $token . '.json',json_encode($index));
+	     * Get or set an individual token as filename for the public json file
+	    */
+		if ($token = S::user('token')) {
+			file_put_contents('cache/searchindex/' . $token . '.json', json_encode($index));
+
 			return $token;
 		}
-	
-	
+
 		return false;
 	}
 }

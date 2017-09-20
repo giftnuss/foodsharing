@@ -26,4 +26,3 @@ $g_lang['close_foodbaskets'] = 'Essenskörbe in Deiner Nähe';
 $g_lang['more_baskets'] = 'Alle Körbe auf der Karte';
 $g_lang['new_basket'] = 'Neuer Essenskorb';
 $g_lang['all_baskets'] ='Alle Körbe auf der Karte';
- ?>

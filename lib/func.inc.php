@@ -1,56 +1,54 @@
-<?php 
-function __autoload($class_name)
+<?php
+
+// TODO(tiltec) according to MLAPHP chapter 3, this should go into a setup.php file
+spl_autoload_register(function ($class_name)
 {
-	$first = substr($class_name,0,1);
+
+	$first = substr($class_name, 0, 1);
 
 	$file = ROOT_DIR . '/lib/flourish/' . $class_name . '.php';
-	
+
 	if (file_exists($file)) {
 		include $file;
-		return;
-	}
-	else
-	{
-		debug('file not loadable: '.$file);
-	}
-}
 
-define('CNT_MAIN',0);
-define('CNT_RIGHT',1);
-define('CNT_TOP',2);
-define('CNT_BOTTOM',3);
-define('CNT_LEFT',4);
-define('CNT_OVERTOP',5);
+		return;
+	} else {
+		debug('file not loadable: ' . $file);
+	}
+});
+
+define('CNT_MAIN', 0);
+define('CNT_RIGHT', 1);
+define('CNT_TOP', 2);
+define('CNT_BOTTOM', 3);
+define('CNT_LEFT', 4);
+define('CNT_OVERTOP', 5);
 $g_debug = array();
 $g_user_menu = array();
 
 function jsonSafe($str)
 {
-	if((string)$str == '' || !is_string($str))
-	{
+	if ((string)$str == '' || !is_string($str)) {
 		return '';
 	}
-	return htmlentities( (string)$str.'', ENT_QUOTES, 'utf-8', FALSE);
+
+	return htmlentities((string)$str . '', ENT_QUOTES, 'utf-8', false);
 }
 
 function loadView($view = 'core')
 {
-	require_once 'app/'.$view.'/'.$view.'.view.php';
-	
-	if($view = 'core')
-	{
+	require_once 'app/' . $view . '/' . $view . '.view.php';
+
+	if ($view = 'core') {
 		$view = 'View';
+	} else {
+		$view = ucfirst($view) . 'View';
 	}
-	else
-	{
-		$view = ucfirst($view).'View';
-	}
-	
+
 	return new $view();
-	
 }
 
-function addContent($new_content,$place = CNT_MAIN)
+function addContent($new_content, $place = CNT_MAIN)
 {
 	global $content_main;
 	global $content_right;
@@ -58,37 +56,36 @@ function addContent($new_content,$place = CNT_MAIN)
 	global $content_bottom;
 	global $content_top;
 	global $content_overtop;
-	
-	switch($place)
-	{
-		case CNT_MAIN :
-			
+
+	switch ($place) {
+		case CNT_MAIN:
+
 			$content_main .= $new_content;
 			break;
-		case CNT_RIGHT :
-			
+		case CNT_RIGHT:
+
 			$content_right .= $new_content;
 			break;
-			
-		case CNT_TOP :
+
+		case CNT_TOP:
 			$content_top .= $new_content;
 			break;
-			
-		case CNT_BOTTOM :
-			
+
+		case CNT_BOTTOM:
+
 			$content_bottom .= $new_content;
 			break;
-			
-		case CNT_LEFT :
-					
+
+		case CNT_LEFT:
+
 			$content_left .= $new_content;
 			break;
-			
-		case CNT_OVERTOP :
-					
+
+		case CNT_OVERTOP:
+
 			$content_overtop .= $new_content;
 			break;
-		
+
 		default:
 			break;
 	}
@@ -97,32 +94,28 @@ function addContent($new_content,$place = CNT_MAIN)
 function abhm($id)
 {
 	$arr = array(
-				1 => array('id'=>1,'name'=> '1-3kg'),
-				2 => array('id'=>2,'name'=> '3-5kg'),
-				3 => array('id'=>3,'name'=> '5-10kg'),
-				4 => array('id'=>4,'name'=> '10-20kg'),
-				5 => array('id'=>5,'name'=> '20-30kg'),
-				6 => array('id'=>6,'name'=> '40-50kg'),
-				7 => array('id'=>7,'name'=> 'mehr als 50kg')
-			);
-	
-	if(isset($arr[$id]))
-	{
+		1 => array('id' => 1, 'name' => '1-3kg'),
+		2 => array('id' => 2, 'name' => '3-5kg'),
+		3 => array('id' => 3, 'name' => '5-10kg'),
+		4 => array('id' => 4, 'name' => '10-20kg'),
+		5 => array('id' => 5, 'name' => '20-30kg'),
+		6 => array('id' => 6, 'name' => '40-50kg'),
+		7 => array('id' => 7, 'name' => 'mehr als 50kg')
+	);
+
+	if (isset($arr[$id])) {
 		return $arr[$id]['name'];
 	}
-	
+
 	return false;
 }
 
 function niceDateShort($ts)
 {
-	if(date('Y-m-d',$ts) == date('Y-m-d'))
-	{
-		return s('today').' '.date('H:i',$ts);
-	}
-	else
-	{
-		return date('j.m.Y. H:i',$ts);
+	if (date('Y-m-d', $ts) == date('Y-m-d')) {
+		return s('today') . ' ' . date('H:i', $ts);
+	} else {
+		return date('j.m.Y. H:i', $ts);
 	}
 }
 
@@ -130,132 +123,113 @@ function niceDate($ts)
 {
 	$pre = '';
 	$date = new fDate($ts);
-	
-	if($date->eq('today'))
-	{
+
+	if ($date->eq('today')) {
 		$pre = s('today');
-	}
-	else if($date->eq('tomorrow'))
-	{
+	} elseif ($date->eq('tomorrow')) {
 		$pre = s('tomorrow');
-	}
-	else if($date->eq('-1 day'))
-	{
+	} elseif ($date->eq('-1 day')) {
 		$pre = s('yesterday');
-	}
-	else
-	{
+	} else {
 		$days = getDow();
-		$pre = $days[date('w',$ts)].', '.(int)date('d',$ts).'. '.s('smonth_'.date('n',$ts));
+		$pre = $days[date('w', $ts)] . ', ' . (int)date('d', $ts) . '. ' . s('smonth_' . date('n', $ts));
 		$year = date('Y', $ts);
-		if($year != date('Y'))
-		{
-			$pre = $pre.' '.$year;
+		if ($year != date('Y')) {
+			$pre = $pre . ' ' . $year;
 		}
 	}
-	
-	return $pre.', '.date('H:i',$ts).' '.s('clock');
+
+	return $pre . ', ' . date('H:i', $ts) . ' ' . s('clock');
 }
 
 function incLang($id)
 {
 	global $g_lang;
-	include ROOT_DIR.'lang/DE/'.$id.'.lang.php';
+	include ROOT_DIR . 'lang/DE/' . $id . '.lang.php';
 }
 
 function s($id)
 {
 	global $g_lang;
-	
-	if(isset($g_lang[$id])) return $g_lang[$id];
-	else return $id;
+
+	if (isset($g_lang[$id])) {
+		return $g_lang[$id];
+	} else {
+		return $id;
+	}
 }
+
 function format_d($ts)
 {
-	return date('d.m.Y',$ts);
+	return date('d.m.Y', $ts);
 }
 
 function format_db_date($date)
 {
 	$part = explode('-', $date);
-	
-	return (int)$part[2].'. '.niceMonth((int)$part[1]);
+
+	return (int)$part[2] . '. ' . niceMonth((int)$part[1]);
 }
 
 function niceMonth($month)
 {
-
-	return s('month_'.$month);
+	return s('month_' . $month);
 }
 
 function format_time($time)
 {
 	$p = explode(':', $time);
-	if(count($p) >= 2)
-	{
-		return (int)$p[0].'.'.$p[1].' Uhr';
-	}
-	else
-	{
+	if (count($p) >= 2) {
+		return (int)$p[0] . '.' . $p[1] . ' Uhr';
+	} else {
 		return '';
 	}
 }
 
 $g_has_reconnected = false;
 
-function getLatLon($anschrift,$plz,$stadt = '',$curl = false)
+function getLatLon($anschrift, $plz, $stadt = '', $curl = false)
 {
 	global $g_has_reconnected;
-	$address = urlencode($anschrift.', '.$plz.', '.$stadt.', Deutschland');
-	
-	$region = "DE";
-	
+	$address = urlencode($anschrift . ', ' . $plz . ', ' . $stadt . ', Deutschland');
+
+	$region = 'DE';
+
 	$url = "http://maps.google.com/maps/api/geocode/json?address=$address&sensor=false&region=DE&language=de";
-	
-	if(!$curl)
-	{
+
+	if (!$curl) {
 		$json = file_get_contents($url);
-	}
-	else
-	{
+	} else {
 		$bot = new Bot();
 		$bot->go($url);
 		$json = $bot->getHtml();
 	}
 	//echo $json;
-	
-	$decoded = json_decode($json,true);
-	
-	if(isset($decoded['status']) && $decoded['status'] == 'OVER_QUERY_LIMIT')
-	{
-		if(!$g_has_reconnected)
-		{
+
+	$decoded = json_decode($json, true);
+
+	if (isset($decoded['status']) && $decoded['status'] == 'OVER_QUERY_LIMIT') {
+		if (!$g_has_reconnected) {
 			$g_has_reconnected = true;
 			//reconnect();
 			sleep(2);
-		}
-		else
-		{
+		} else {
 			sleep(2);
 		}
 	}
-	
+
 	$lat = '';
 	$lon = '';
-	
-	foreach ($decoded['results'] as $d)
-	{
+
+	foreach ($decoded['results'] as $d) {
 		$check = false;
-		foreach ($d['address_components'] as $c)
-		{
-			if($c['long_name'] == $plz)
-			{
-					$check = true;
+		foreach ($d['address_components'] as $c) {
+			if ($c['long_name'] == $plz) {
+				$check = true;
 			}
 		}
-		
-		if($check)
-		{
+
+		if ($check) {
 			return $d['geometry']['location'];
 			break;
 		}
@@ -272,58 +246,52 @@ function getLatLon($anschrift,$plz,$stadt = '',$curl = false)
 function ts_day($ts)
 {
 	$days = getDow();
+
 	return $days[date('w')];
 }
+
 function ts_time($ts)
 {
-	return date('H:i',$ts).' Uhr';
+	return date('H:i', $ts) . ' Uhr';
 }
 
 function msgTime($ts)
 {
 	$cur = time();
 	$diff = $cur - $ts;
-	
-	if($diff < 600)
-	{
+
+	if ($diff < 600) {
 		// letzte 10 minuten
 		return s('currently');
-	}
-	elseif($diff < 86400)
-	{
+	} elseif ($diff < 86400) {
 		// heute noch
-		return sv('today_time',ts_time($ts));
-	}
-	elseif($diff < 604800)
-	{
+		return sv('today_time', ts_time($ts));
+	} elseif ($diff < 604800) {
 		// diese woche noch
-		return ts_day($ts).', '.ts_time($ts);
-	}
-	else
-	{
+		return ts_day($ts) . ', ' . ts_time($ts);
+	} else {
 		return s('before_one_week');
 	}
 }
 
 function makeThumbs($pic)
 {
-	if(!file_exists(ROOT_DIR.'images/mini_q_'.$pic) && file_exists(ROOT_DIR.'images/'.$pic))
-	{
-		copy(ROOT_DIR.'images/'.$pic, ROOT_DIR.'images/mini_q_'.$pic);
-		copy(ROOT_DIR.'images/'.$pic, ROOT_DIR.'images/med_q_'.$pic);
-		copy(ROOT_DIR.'images/'.$pic, ROOT_DIR.'images/q_'.$pic);
-		
-		$image = new fImage(ROOT_DIR.'images/mini_q_'.$pic);
+	if (!file_exists(ROOT_DIR . 'images/mini_q_' . $pic) && file_exists(ROOT_DIR . 'images/' . $pic)) {
+		copy(ROOT_DIR . 'images/' . $pic, ROOT_DIR . 'images/mini_q_' . $pic);
+		copy(ROOT_DIR . 'images/' . $pic, ROOT_DIR . 'images/med_q_' . $pic);
+		copy(ROOT_DIR . 'images/' . $pic, ROOT_DIR . 'images/q_' . $pic);
+
+		$image = new fImage(ROOT_DIR . 'images/mini_q_' . $pic);
 		$image->cropToRatio(1, 1);
 		$image->resize(35, 35);
 		$image->saveChanges();
-		
-		$image = new fImage(ROOT_DIR.'images/med_q_'.$pic);
+
+		$image = new fImage(ROOT_DIR . 'images/med_q_' . $pic);
 		$image->cropToRatio(1, 1);
-		$image->resize(75, 75);	
+		$image->resize(75, 75);
 		$image->saveChanges();
-		
-		$image = new fImage(ROOT_DIR.'images/q_'.$pic);
+
+		$image = new fImage(ROOT_DIR . 'images/q_' . $pic);
 		$image->cropToRatio(1, 1);
 		$image->resize(150, 150);
 		$image->saveChanges();
@@ -334,72 +302,63 @@ function handleTagselect($id)
 {
 	global $g_data;
 	$recip = array();
-	if(isset($g_data[$id]) && is_array($g_data[$id]))
-	{		
-		foreach ($g_data[$id] as $key => $r)
-		{
-			if($key != "")
-			{
+	if (isset($g_data[$id]) && is_array($g_data[$id])) {
+		foreach ($g_data[$id] as $key => $r) {
+			if ($key != '') {
 				$part = explode('-', $key);
 				$recip[$part[0]] = $part[0];
 			}
 		}
 	}
-	
+
 	$g_data[$id] = $recip;
 }
 
 function format_dt($ts)
 {
-	return date('d.m.Y H:i',$ts).' Uhr';
+	return date('d.m.Y H:i', $ts) . ' Uhr';
 }
-function sv($id,$var)
+
+function sv($id, $var)
 {
 	global $g_lang;
-	if(is_array($var))
-	{
+	if (is_array($var)) {
 		$search = array();
 		$replace = array();
-		foreach ($var as $key => $value)
-		{
-			$search[] = '{'.$key.'}';
+		foreach ($var as $key => $value) {
+			$search[] = '{' . $key . '}';
 			$replace[] = $value;
 		}
+
 		return str_replace($search, $replace, $g_lang[$id]);
-	}
-	else 
-	{
+	} else {
 		return str_replace('{var}', $var, $g_lang[$id]);
 	}
-	
 }
-function addBread($name,$href = '')
+
+function addBread($name, $href = '')
 {
 	global $g_bread;
-	$g_bread[] = array('name' => $name,'href'=>$href);
+	$g_bread[] = array('name' => $name, 'href' => $href);
 }
+
 function getBread()
 {
 	global $g_bread;
 	$out = '';
-	if(!empty($g_bread))
-	{
-		$last_key = (count($g_bread)-1);
+	if (!empty($g_bread)) {
+		$last_key = (count($g_bread) - 1);
 		$out = '
 	<div class="pure-g">
 		<div class="pure-u-1">
 			<ul class="bread inside">';
-		foreach ($g_bread as $key => $p)
-		{
-			if($key == $last_key)
-			{
+		foreach ($g_bread as $key => $p) {
+			if ($key == $last_key) {
 				$out .= '
-				<li class="last">'.$p['name'].'</li>';
-			}
-			else
-			{
+				<li class="last">' . $p['name'] . '</li>';
+			} else {
 				$out .= '
-				<li><a href="'.$p['href'].'">'.$p['name'].'</a></li>';
+				<li><a href="' . $p['href'] . '">' . $p['name'] . '</a></li>';
 			}
 		}
 		$out .= '
@@ -408,7 +367,7 @@ function getBread()
 		</div>
 	</div>';
 	}
-	
+
 	return $out;
 }
 
@@ -420,34 +379,27 @@ function setEditData($data)
 
 function getAction($a)
 {
-	if(isset($_GET['a']) && $_GET['a'] == $a)
-	{
+	if (isset($_GET['a']) && $_GET['a'] == $a) {
 		return true;
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }
 
-function pageLink($page,$id, $action = '')
+function pageLink($page, $id, $action = '')
 {
-
-	if(!empty($action))
-	{
-		$action = '&a='.$action;
+	if (!empty($action)) {
+		$action = '&a=' . $action;
 	}
-	return array('href' => '/?page='.$page.$action,'name' => s($id));
+
+	return array('href' => '/?page=' . $page . $action, 'name' => s($id));
 }
 
 function getActionId($a)
 {
-	if(isset($_GET['a']) && $_GET['a'] == $a && isset($_GET['id']) && (int)$_GET['id'] > 0)
-	{		
+	if (isset($_GET['a']) && $_GET['a'] == $a && isset($_GET['id']) && (int)$_GET['id'] > 0) {
 		return (int)$_GET['id'];
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }
@@ -455,13 +407,10 @@ function getActionId($a)
 function getDbValues($id)
 {
 	global $db;
-	$func = 'get_'.str_replace('_id', '', $id);
-	if(method_exists($db, $func))
-	{
+	$func = 'get_' . str_replace('_id', '', $id);
+	if (method_exists($db, $func)) {
 		return $db->$func();
-	}
-	else 
-	{
+	} else {
 		return false;
 	}
 }
@@ -470,32 +419,26 @@ function getContent($name)
 {
 	global $content;
 	global $right;
-	global $js; 
+	global $js;
 	global $db;
-	
-	include 'control/'.$name.'.php';
+
+	include 'control/' . $name . '.php';
 }
 
 function isBotForA($bezirk_ids, $include_groups = true, $include_parent_bezirke = false)
 {
-	if(isBotschafter() && is_array($bezirk_ids))
-	{
-		if($include_parent_bezirke)
-		{
+	if (isBotschafter() && is_array($bezirk_ids)) {
+		if ($include_parent_bezirke) {
 			global $db;
 			$bezirk_ids = $db->getParentBezirke($bezirk_ids);
 		}
-		foreach ($_SESSION['client']['botschafter'] as $b)
-		{
-			foreach ($bezirk_ids as $bid)
-			{
-				if($b['bezirk_id'] == $bid && ($include_groups || $b['type'] != 7))
-				{
+		foreach ($_SESSION['client']['botschafter'] as $b) {
+			foreach ($bezirk_ids as $bid) {
+				if ($b['bezirk_id'] == $bid && ($include_groups || $b['type'] != 7)) {
 					return true;
 					break;
 				}
 			}
-			
 		}
 	}
 
@@ -504,28 +447,24 @@ function isBotForA($bezirk_ids, $include_groups = true, $include_parent_bezirke 
 
 function isBotFor($bezirk_id)
 {
-	if(isBotschafter())
-	{
-		foreach ($_SESSION['client']['botschafter'] as $b)
-		{
-			if($b['bezirk_id'] == $bezirk_id)
-			{
+	if (isBotschafter()) {
+		foreach ($_SESSION['client']['botschafter'] as $b) {
+			if ($b['bezirk_id'] == $bezirk_id) {
 				return true;
 				break;
 			}
 		}
 	}
-	
+
 	return false;
 }
 
 function isBotschafter()
 {
-
-	if(isset($_SESSION['client']['botschafter']))
-	{
+	if (isset($_SESSION['client']['botschafter'])) {
 		return true;
 	}
+
 	return false;
 }
 
@@ -537,7 +476,7 @@ function isOrgaTeam()
 function getMenu()
 {
 	addJs('$("#top .menu").css("display","block");');
-	
+
 	addJs('
 		$("#mobilemenu").bind("change",function(){
 			if($(this).val() != "")
@@ -548,9 +487,8 @@ function getMenu()
 			}
 		});
 	');
-	
-	if(S::may())
-	{
+
+	if (S::may()) {
 		global $db;
 
 		$out = array(
@@ -572,19 +510,14 @@ function getMenu()
 		$ags_mob = '
 				<option value="/?page=groups">GRUPPEN-ÜBERSICHT</option>';
 
-		if(isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke']))
-		{
-			foreach ($_SESSION['client']['bezirke'] as $i => $bezirk)
-			{
-				if(($bezirk['type'] != 7))
-				{
+		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
+			foreach ($_SESSION['client']['bezirke'] as $i => $bezirk) {
+				if (($bezirk['type'] != 7)) {
 					$bezirke_a = getBezirkMenu($bezirk);
 
 					$bezirke .= $bezirke_a['default'];
 					$bezirke_mob .= $bezirke_a['mobile'];
-				}
-				else
-				{
+				} else {
 					$ags_a = getAgMenu($bezirk);
 
 					$ags .= $ags_a['default'];
@@ -592,15 +525,14 @@ function getMenu()
 				}
 			}
 		}
-		if(!empty($ags))
-		{
-			$ags = '<ul class="bigmenu">'.$ags.'</ul>';
+		if (!empty($ags)) {
+			$ags = '<ul class="bigmenu">' . $ags . '</ul>';
 		}
 
-		$ags = '<li><a href="/?page=groups">Gruppen</a>'.$ags.'</li>';
+		$ags = '<li><a href="/?page=groups">Gruppen</a>' . $ags . '</li>';
 		$ags_mob = '
 				<optgroup label="Gruppen">
-					'.$ags_mob.'
+					' . $ags_mob . '
 				</optgroup>';
 
 		$foodsaver_mob = '';
@@ -618,8 +550,7 @@ function getMenu()
 		$betriebe = getBetriebeMenu();
 		$settings = getSettingsMenu();
 
-		if(!S::may('fs'))
-		{
+		if (!S::may('fs')) {
 			$bezirke = '';
 			$ags = '';
 		}
@@ -628,7 +559,7 @@ function getMenu()
 			'default' => '
 					<ul id="mainMenu" class="jMenu">
 						<li><a href="/essenskoerbe/find">Essenskörbe</a></li>
-						'.$orgamenu['default'].'
+						' . $orgamenu['default'] . '
 						<li><a href="/"><i class="fa fa-home"></i></a></li>
 						<li><a class="fNiv" href="/karte"><i class="fa fa-map-marker"></i></a></li>
 						<li><a><i class="fa fa-question-circle"></i></a>
@@ -637,10 +568,10 @@ function getMenu()
 															<li><a href="http://wiki.lebensmittelretten.de/">Wiki</a></li>
 													</ul>
 						</li>
-						'.$ags.'
-						'.$betriebe['default'].'
-						'.$bezirke.'
-						'.$settings['default'].'
+						' . $ags . '
+						' . $betriebe['default'] . '
+						' . $bezirke . '
+						' . $settings['default'] . '
 					</ul>',
 
 			'mobile' => '
@@ -651,18 +582,16 @@ function getMenu()
 						<option value="/karte">Karte</option>
 						<option value="/?page=listFaq">F.A.Q.</option>
 						<option value="http://wiki.lebensmittelretten.de">Wiki</option>
-						'.$settings['mobile'].'
-						'.$ags_mob.'
-						'.$foodsaver_mob.'
-						'.$betriebe['mobile'].'
-						'.$bezirke_mob.'
+						' . $settings['mobile'] . '
+						' . $ags_mob . '
+						' . $foodsaver_mob . '
+						' . $betriebe['mobile'] . '
+						' . $bezirke_mob . '
 						
-						'.$orgamenu['mobile'].'
+						' . $orgamenu['mobile'] . '
 					</select>'
 		);
-	}
-	else
-	{
+	} else {
 		return array(
 			'default' => '
 				<ul id="mainMenu" class="jMenu">
@@ -708,27 +637,22 @@ function getMenu()
 					<option value="/mach-mit">Mach mit!</option>
 					<option value="/login">Login</option>
 				</select>'
-		
-			);
+		);
 	}
 }
 
 function preZero($i)
 {
-	if($i<10)
-	{
-		return '0'.$i;
-	}
-	else
-	{
+	if ($i < 10) {
+		return '0' . $i;
+	} else {
 		return $i;
 	}
 }
 
 function getDow()
 {
-	return  array
-	(
+	return array(
 		1 => s('monday'),
 		2 => s('tuesday'),
 		3 => s('wednesday'),
@@ -741,8 +665,7 @@ function getDow()
 
 function getBetriebeMenu()
 {
-	if(!S::may('fs'))
-	{
+	if (!S::may('fs')) {
 		return array(
 			'mobile' => '',
 			'default' => ''
@@ -750,77 +673,72 @@ function getBetriebeMenu()
 	}
 	$out = '';
 	$out_mob = '';
-	if(isset($_SESSION['client']['betriebe']) && !empty($_SESSION['client']['betriebe']))
-	{
+	if (isset($_SESSION['client']['betriebe']) && !empty($_SESSION['client']['betriebe'])) {
 		$out = '
 		<li><a onclick="return false" class="fNiv">Betriebe</a>
 			<ul class="jmenu-foodsaver">';
 		$out_mob = '
 		<optgroup label="Betriebe">';
-		
-		foreach ($_SESSION['client']['betriebe'] as $cb)
-		{
+
+		foreach ($_SESSION['client']['betriebe'] as $cb) {
 			$out .= '
-				<li><a href="/?page=fsbetrieb&id='.$cb['id'].'&sub=forum">'.$cb['name'].'</a></li>';
-			
+				<li><a href="/?page=fsbetrieb&id=' . $cb['id'] . '&sub=forum">' . $cb['name'] . '</a></li>';
+
 			$out_mob .= '
-				<option value="/?page=fsbetrieb&id='.$cb['id'].'&sub=forum">'.$cb['name'].'</option>';
+				<option value="/?page=fsbetrieb&id=' . $cb['id'] . '&sub=forum">' . $cb['name'] . '</option>';
 		}
 		$out .= '
 			</ul>
 		</li>';
-		
+
 		$out_mob .= '
 		</optgroup>';
-		
 	}
-	
-	
+
 	$id = id('becomeBezirkChooser');
-	
-	$swap_msg = 'Welche Gegend soll neu angelegt werden ? ...';
-	$swap = v_swapText($id.'-neu',$swap_msg);
-	
-	
+
+	$swap_msg = 'Welcher Bezirk soll neu angelegt werden?';
+	$swap = v_swapText($id . '-neu', $swap_msg);
+
 	addHidden('
 		<div id="becomeBezirk">
 			<div class="popbox">
-				<h3>Wähle die Region aus, in der Du aktiv werden möchtest!</h3>
+				<h3>Wähle den Bezirk aus, in dem Du aktiv werden möchtest!</h3>
 				<p class="subtitle">
-					Es besteht auch die Möglichkeit, eine/n neue/n Region/Bezirk zu gründen. Wähle bitte dennoch die entsprechende übergeordnete Region (Land, Bundeslan, Stadt etc.) aus!
+					Es besteht auch die Möglichkeit, einen neuen Bezirk zu gründen. Wähle bitte dennoch den entsprechenden übergeordneten Bezirk (Land, Bundeslan, Stadt etc.) aus!
 				</p>
 				<div style="height:260px;">
-					'.v_bezirkChildChooser($id).'
-					<span id="'.$id.'-btna">Gesuchte Region ist nicht dabei</span>
-					<div class="middle" id="'.$id.'-notAvail">
-						<h3>Dein/e Stadt / Region / Bezirk ist nicht dabei?</h3>
-						'.$swap.'
+					' . v_bezirkChildChooser($id) . '
+					<span id="' . $id . '-btna">Gesuchter Bezirk ist nicht dabei</span>
+					<div class="middle" id="' . $id . '-notAvail">
+						<h3>Deine Stadt oder Region ist nicht dabei?</h3>
+						' . $swap . '
 					</div>
 				</div>
 				<p class="bottom">
-					<span id="'.$id.'-button">Speichern</span>
+					<span id="' . $id . '-button">Speichern</span>
 				</p>
 			</div>
 		</div>
 		<a id="becomeBezirk-link" href="#becomeBezirk">&nbsp;</a>
 		
 	');
-	
+
 	addJs('
-		$("#'.$id.'-notAvail").hide();
+		$("#' . $id . '-notAvail").hide();
 				
-		$("#'.$id.'-btna").button().click(function(){
+		$("#' . $id . '-btna").button().click(function(){
 			
-			$("#'.$id.'-btna").fadeOut(200,function(){
-				$("#'.$id.'-notAvail").fadeIn();
+			$("#' . $id . '-btna").fadeOut(200,function(){
+				$("#' . $id . '-notAvail").fadeIn();
 			});
 		});
 				
-		$("#'.$id.'-button").button().click(function(){
-			if(parseInt($("#'.$id.'").val()) > 0)
+		$("#' . $id . '-button").button().click(function(){
+			if(parseInt($("#' . $id . '").val()) > 0)
 			{
 				
-				part = $("#'.$id.'").val().split(":");
+				part = $("#' . $id . '").val().split(":");
 				
 				if(part[1] == 5)
 				{
@@ -842,9 +760,9 @@ function getBetriebeMenu()
 					bid = part[0];
 					showLoader();
 					neu = "";
-					if($("#'.$id.'-neu").val() != "'.$swap_msg.'")
+					if($("#' . $id . '-neu").val() != "' . $swap_msg . '")
 					{
-						neu = $("#'.$id.'-neu").val();
+						neu = $("#' . $id . '-neu").val();
 					}
 					$.ajax({
 						dataType:"json",
@@ -855,9 +773,9 @@ function getBetriebeMenu()
 							{
 								//if(data.active == 1)
 								//{
-									goTo( "/?page=relogin&url=" + encodeURIComponent("/?page=bezirk&bid=" +$("#'.$id.'").val()) );
+									goTo( "/?page=relogin&url=" + encodeURIComponent("/?page=bezirk&bid=" +$("#' . $id . '").val()) );
 								//}
-								//pulseInfo(\''.jsSafe(s('bezirk_request_successfull')).'\');
+								//pulseInfo(\'' . jsSafe(s('bezirk_request_successfull')) . '\');
 								$.fancybox.close();
 							}
 							if(data.script != undefined)
@@ -872,7 +790,7 @@ function getBetriebeMenu()
 				}
 				else
 				{
-					pulseError(\'In diesen Bezirk kanndst Du Dich nicht eintragen.\');	
+					pulseError(\'In diesen Bezirk kannst Du Dich nicht eintragen.\');	
 					return false;		
 				}
 			}
@@ -882,85 +800,73 @@ function getBetriebeMenu()
 			}
 		});		
 	');
-	
+
 	return array(
 		'default' => $out,
 		'mobile' => $out_mob
 	);
 }
 
-function tplMailList($tpl_id, $to, $from = false,$attach = false)
+function tplMailList($tpl_id, $to, $from = false, $attach = false)
 {
-	
-	if(!is_array($from) && validEmail($from))
-	{
+	if (!is_array($from) && validEmail($from)) {
 		$from = array(
 			'email' => $from,
 			'email_name' => $from
 		);
-	}
-	else if($from === false)
-	{
+	} elseif ($from === false) {
 		$from = array(
-				'email' => DEFAULT_EMAIL,
-				'email_name' => DEFAULT_EMAIL_NAME
+			'email' => DEFAULT_EMAIL,
+			'email_name' => DEFAULT_EMAIL_NAME
 		);
 	}
-	
+
 	global $db;
-	
-	if(!is_object($db))
-	{
+
+	if (!is_object($db)) {
 		$db = new ManualDb();
 	}
-	
+
 	$tpl_message = $db->getOne_message_tpl($tpl_id);
-	
-	foreach ($to as $t)
-	{	
-		if(!validEmail($t['email']))
-		{
+
+	foreach ($to as $t) {
+		if (!validEmail($t['email'])) {
 			continue;
 		}
-		
+
 		$mail = new AsyncMail();
 		$mail->setFrom($from['email'], $from['email_name']);
 
-		
 		$search = array();
 		$replace = array();
-		foreach ($t['var'] as $key => $v)
-		{
-			$search[] = '{'.strtoupper($key).'}';
+		foreach ($t['var'] as $key => $v) {
+			$search[] = '{' . strtoupper($key) . '}';
 			$replace[] = $v;
 		}
-		
+
 		$message = str_replace($search, $replace, $tpl_message['body']);
 		$subject = str_replace($search, $replace, $tpl_message['subject']);
-		
+
 		$mail->addRecipient($t['email']);
-		
-		if(!$subject)
-		{
-			$subject = "Foodsharing Mail";
+
+		if (!$subject) {
+			$subject = 'Foodsharing Mail';
 		}
 		$mail->setSubject($subject);
 		//Read an HTML message body from an external file, convert referenced images to embedded, convert HTML into a basic plain-text alternative body
-		
-		if(!isset($t['token']))
-		{
+
+		if (!isset($t['token'])) {
 			$t['token'] = false;
 		}
-		
-		$mail->setHTMLBody(emailBodyTpl($message,$t['email'],$t['token']));
-		
+
+		$mail->setHTMLBody(emailBodyTpl($message, $t['email'], $t['token']));
+
 		// playintext body
 		$message = str_replace('<br />', "\r\n", $message);
 		$message = strip_tags($message);
 		$mail->setBody($message);
-		
-		if(isAdmin())
-		{
+
+		if (isAdmin()) {
 			debug(array(
 				'bezirk' => $from,
 				'email' => $t['email'],
@@ -969,23 +875,22 @@ function tplMailList($tpl_id, $to, $from = false,$attach = false)
 				'attach' => $attach
 			));
 		}
-		
+
 		/*
-		 *  todo: implement logic that we dont have to send one attachment multiple time to the slave db ...
-		*/
-		
-		if($attach !== false)
-		{
-			foreach ($attach as $a)
-			{
-				$mail->addAttachment(new fFile($a['path']),$a['name']);
+	     *  todo: implement logic that we dont have to send one attachment multiple time to the slave db ...
+	    */
+
+		if ($attach !== false) {
+			foreach ($attach as $a) {
+				$mail->addAttachment(new fFile($a['path']), $a['name']);
 			}
 		}
 		$mail->send();
 	}
 }
 
-function autolink($str, $attributes=array()) {
+function autolink($str, $attributes = array())
+{
 	$attributes['target'] = '_blank';
 	$attrs = '';
 	foreach ($attributes as $attribute => $value) {
@@ -993,35 +898,33 @@ function autolink($str, $attributes=array()) {
 	}
 	$str = ' ' . $str;
 	$str = preg_replace(
-			'`([^"=\'>])(((http|https|ftp)://|www.)[^\s<]+[^\s<\.)])`i',
-			'$1<a href="$2"'.$attrs.'>$2</a>',
-			$str
+		'`([^"=\'>])(((http|https|ftp)://|www.)[^\s<]+[^\s<\.)])`i',
+		'$1<a href="$2"' . $attrs . '>$2</a>',
+		$str
 	);
 	$str = substr($str, 1);
-	$str = preg_replace('`href=\"www`','href="http://www',$str);
+	$str = preg_replace('`href=\"www`', 'href="http://www', $str);
 	// fügt http:// hinzu, wenn nicht vorhanden
 	return $str;
 }
 
 function emailBodyTpl($message, $email = false, $token = false)
 {
-	
 	$unsubscribe = '
 	<tr>
 		<td height="20" valign="top" style="background-color:#FAF7E5">
 			<div style="text-align:center;padding-top:10px;font-size:11px;font-family:Arial;padding:15px;color:#594129;">
-				Willst Du Keine Nachrichten mehr bekommen? Du kannst Deinen unter <a style="color:#F36933" href="'.BASE_URL.'/?page=settings&sub=info" target="_blank">Deinen Einstellungen</a> einstellen, welche Mails Du bekommst.
+				Willst Du Keine Nachrichten mehr bekommen? Du kannst Deinen unter <a style="color:#F36933" href="' . BASE_URL . '/?page=settings&sub=info" target="_blank">Deinen Einstellungen</a> einstellen, welche Mails Du bekommst.
 			</div>
 		</td>
 	</tr>';
-	
-	if($email !== false && $token !== false)
-	{
+
+	if ($email !== false && $token !== false) {
 		$unsubscribe = '
 		<tr>
 			<td height="20" valign="top" style="background-color:#FAF7E5">
 				<div style="text-align:center;padding-top:10px;font-size:11px;font-family:Arial;padding:15px;color:#594129;">
-					Möchtest Du keinen Newsletter mehr erhalten? <a style="color:#F36933" href="https://www.foodsharing.de/?page=login&sub=unsubscribe&t='.$token.'&e='.$email.'" target="_blank">Klicke hier zum Abbestellen.</a> Du kannst Deinen unter <a style="color:#F36933" href="https://www.foodsharing.de/?page=settings&sub=info" target="_blank">Deinen Einstellungen</a> einstellen, welche Mails Du bekommst.
+					Möchtest Du keinen Newsletter mehr erhalten? <a style="color:#F36933" href="https://www.foodsharing.de/?page=login&sub=unsubscribe&t=' . $token . '&e=' . $email . '" target="_blank">Klicke hier zum Abbestellen.</a> Du kannst Deinen unter <a style="color:#F36933" href="https://www.foodsharing.de/?page=settings&sub=info" target="_blank">Deinen Einstellungen</a> einstellen, welche Mails Du bekommst.
 				</div>
 <p style="font-size:11px;"><strong>Impressum</strong><br />
 Angaben gemäß § 5 TMG:<br />
@@ -1039,12 +942,12 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			</td>
 		</tr>';
 	}
-	
+
 	$message = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $message);
-	
-	$search = array('<a','<td','<li');
-	$replace = array('<a style="color:#F36933"','<td style="font-size:13px;font-family:Arial;color:#31210C;"','<li style="margin-bottom:11px"');
-	
+
+	$search = array('<a', '<td', '<li');
+	$replace = array('<a style="color:#F36933"', '<td style="font-size:13px;font-family:Arial;color:#31210C;"', '<li style="margin-bottom:11px"');
+
 	return '<html><head><style type="text/css">a{text-decoration:none;}a:hover{text-decoration:underline;}a.button{display:inline-block;padding:6px 16px;border:1px solid #FFFFFF;background-color:#4A3520;color:#FFFFFF !important;font-weight:bold;border-radius:8px;}a.button:hover{border:1px solid #4A3520;background-color:#ffffff;color:#4A3520 !important;text-decoration:none !important;}.border{padding:10px;border-top:1px solid #4A3520;border-bottom:1px solid #4A3520;background-color:#FFFFFF;}</style></head>
 	<body style="margin:0;padding:0;">
 		<div style="background-color:#F1E7C9;border:1px solid #628043;border-top:0px;padding:2%;padding-top:0;margin-top:0px;">
@@ -1063,62 +966,56 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 				<tr>
 				<td valign="top" style="background-color:#FAF7E5">
 					<div style="padding:5px;font-size:13px;font-family:Arial;padding:15px;color:#31210C;">
-						'.str_replace($search,$replace,$message).'
+						' . str_replace($search, $replace, $message) . '
 					</div>
 				</td>
 				</tr>
-				'.$unsubscribe.'
+				' . $unsubscribe . '
 			</table>
 		</div>
 	</body>
 </html>';
 }
 
-function tplMail($tpl_id,$to,$var = array(),$from_email = false)
+function tplMail($tpl_id, $to, $var = array(), $from_email = false)
 {
 	global $db;
 	$mail = new AsyncMail();
-	
-	if(!is_object($db))
-	{
+
+	if (!is_object($db)) {
 		$db = new ManualDb();
 	}
-	
-	if($from_email !== false && validEmail($from_email))
-	{
+
+	if ($from_email !== false && validEmail($from_email)) {
 		$mail->setFrom($from_email);
+	} else {
+		$mail->setFrom(DEFAULT_EMAIL, DEFAULT_EMAIL_NAME);
 	}
-	else
-	{
-		$mail->setFrom(DEFAULT_EMAIL,DEFAULT_EMAIL_NAME);
-	}
-	
+
 	$message = $db->getOne_message_tpl($tpl_id);
-	
+
 	$search = array();
 	$replace = array();
-	foreach ($var as $key => $v)
-	{
-		$search[] = '{'.strtoupper($key).'}';
+	foreach ($var as $key => $v) {
+		$search[] = '{' . strtoupper($key) . '}';
 		$replace[] = $v;
 	}
-	
+
 	$message['body'] = str_replace($search, $replace, $message['body']);
-	
+
 	$message['subject'] = str_replace($search, $replace, $message['subject']);
-	if(!$message['subject'])
-	{
-		$message['subject'] = "Foodsharing mail";
+	if (!$message['subject']) {
+		$message['subject'] = 'Foodsharing mail';
 	}
-	
+
 	$mail->setSubject($message['subject']);
 	$mail->setHTMLBody(emailBodyTpl($message['body']));
-	
+
 	// playintext body
-	$body = str_replace(array('<br />','<br>','<br/>','<p>','</p>'), "\r\n", $message['body']);
+	$body = str_replace(array('<br />', '<br>', '<br/>', '<p>', '</p>'), "\r\n", $message['body']);
 	$body = strip_tags($body);
 	$mail->setBody($body);
-	
+
 	$mail->addRecipient($to);
 	$mail->send();
 }
@@ -1126,8 +1023,7 @@ function tplMail($tpl_id,$to,$var = array(),$from_email = false)
 function getOrgaMenu()
 {
 	$menu = array();
-	if(isOrgaTeam())
-	{
+	if (isOrgaTeam()) {
 		$menu = array('manage_regions' => 'region',
 			'newarea' => 'newarea',
 			'all_fs' => 'foodsaver&bid=0',
@@ -1144,40 +1040,35 @@ function getOrgaMenu()
 		);
 	}
 
-	if(mayHandleReports())
-	{
+	if (mayHandleReports()) {
 		$menu['reports'] = 'report&sub=uncom';
 	}
 
-	if(mayEditQuiz())
-	{
+	if (mayEditQuiz()) {
 		$menu['quiz'] = 'quiz';
 	}
 
-	if(mayEditBlog())
-	{
+	if (mayEditBlog()) {
 		$menu['blog'] = 'blog&sub=manage';
 	}
 
 	$len = count($menu);
-	if($len)
-	{
+	if ($len) {
 		$i = 0;
 		$default = '<li><a class="fNiv"><i class="fa fa-gear"></i></a><ul class="bigmenu">';
 		$mob = '<optgroup label="Orga">';
-		foreach($menu as $lang_id => $link)
-		{
-			$default .= '<li><a href="/?page='.$link.'">'.s('menu_'.$lang_id).'</a></li>';
-			$mob .= '<option value="/?page'.$link.'">'.s('menu_'.$lang_id).'</option>';
-			$i++;
+		foreach ($menu as $lang_id => $link) {
+			$default .= '<li><a href="/?page=' . $link . '">' . s('menu_' . $lang_id) . '</a></li>';
+			$mob .= '<option value="/?page' . $link . '">' . s('menu_' . $lang_id) . '</option>';
+			++$i;
 		}
 		$default .= '</ul></li>';
 		$mob .= '</optgroup>';
-	} else
-	{
+	} else {
 		$default = '';
 		$mob = '';
 	}
+
 	return
 		array(
 			'default' => $default,
@@ -1187,72 +1078,59 @@ function getOrgaMenu()
 
 function dt($ts)
 {
-	return date('n. M. Y H:i',$ts).' Uhr';
+	return date('n. M. Y H:i', $ts) . ' Uhr';
 }
 
 function makeUnique()
 {
-	return md5(date('Y-m-d H:i:s').':'.uniqid());
+	return md5(date('Y-m-d H:i:s') . ':' . uniqid());
 }
 
-function idimg($file = false,$size)
+function idimg($file = false, $size)
 {
-	if(!empty($file))
-	{
-		return 'images/'.str_replace('/', '/'.$size.'_', $file);
-	}
-	else
-	{
+	if (!empty($file)) {
+		return 'images/' . str_replace('/', '/' . $size . '_', $file);
+	} else {
 		return false;
 	}
 }
 
-function img($file = false,$size = 'mini',$format = 'q',$altimg = false)
+function img($file = false, $size = 'mini', $format = 'q', $altimg = false)
 {
-	
-	if($file === false)
-	{
+	if ($file === false) {
 		$file = $_SESSION['client']['photo'];
 	}
-	
+
 	//if(!empty($file) && substr($file,0,1) != '.')
-	if(!empty($file) && file_exists('images/'.$file))
-	{
-		if(!file_exists('images/'.$size.'_'.$format.'_'.$file))
-		{
-			resizeImg('images/'.$file,$size,$format);
+	if (!empty($file) && file_exists('images/' . $file)) {
+		if (!file_exists('images/' . $size . '_' . $format . '_' . $file)) {
+			resizeImg('images/' . $file, $size, $format);
 		}
-		return '/images/'.$size.'_'.$format.'_'.$file;
-	}
-	else
-	{
-		if($altimg === false)
-		{
-			return '/img/'.$size.'_'.$format.'_avatar.png';
-		}
-		else
-		{
+
+		return '/images/' . $size . '_' . $format . '_' . $file;
+	} else {
+		if ($altimg === false) {
+			return '/img/' . $size . '_' . $format . '_avatar.png';
+		} else {
 			return $altimg;
 		}
 	}
-
 }
 
 function getSettingsMenu()
 {
 	$mailbox = '';
-	if(S::get('mailbox'))
-	{
+	if (S::get('mailbox')) {
 		$mailbox = '<li><a href="/?page=mailbox"><i class="fa fa-envelope"></i> E-Mail-Postfach</a></li>';
 	}
-	$default = '<li class="g_settings"><a href="/profile/'.fsId().'" class="fNiv corner-all" style="background-image:url('.img().');"><span>&nbsp;</span></a>
+	$default = '<li class="g_settings"><a href="/profile/' . fsId() . '" class="fNiv corner-all" style="background-image:url(' . img() . ');"><span>&nbsp;</span></a>
 				    <ul class="jmenu-settings">
 					  <li><a href="/?page=settings"><i class="fa fa-gear"></i> Einstellungen</a></li>
-					  '.$mailbox.'
+					  ' . $mailbox . '
 				      <li><a href="/?page=logout"><i class="fa fa-sign-out"></i> Logout</a></li>
 				    </ul>
 				  </li>';
-	
+
 	return array(
 		'default' => $default,
 		'mobile' => '
@@ -1263,37 +1141,32 @@ function getSettingsMenu()
 
 function isMob()
 {
-	if(isset($_SESSION['mob']) && $_SESSION['mob'] == 1)
-	{
+	if (isset($_SESSION['mob']) && $_SESSION['mob'] == 1) {
 		return true;
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }
 
 function getAgMenu($ag)
 {
-	
 	$out_mob = '
-		<option value="/?page=bezirk&bid='.$ag['id'].'&sub=forum">'.$ag['name'].'</option>';
+		<option value="/?page=bezirk&bid=' . $ag['id'] . '&sub=forum">' . $ag['name'] . '</option>';
 
 	$out = '
-		<li><a href="/?page=bezirk&bid='.$ag['id'].'&sub=forum">'.$ag['name'].'</a>
+		<li><a href="/?page=bezirk&bid=' . $ag['id'] . '&sub=forum">' . $ag['name'] . '</a>
 			<ul>
-				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid='.$ag['id'].'&sub=forum">Forum</a></li>
-				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid='.$ag['id'].'&sub=events">Termine</a></li>';
-	
-	if(isBotFor($ag['id']))
-	{
+				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid=' . $ag['id'] . '&sub=forum">Forum</a></li>
+				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid=' . $ag['id'] . '&sub=events">Termine</a></li>';
+
+	if (isBotFor($ag['id'])) {
 		$out .= '
-			<li><a href="/?page=groups&sub=edit&id='.(int)$ag['id'].'">Gruppe/Mitglieder verwalten</a></li>';
+			<li><a href="/?page=groups&sub=edit&id=' . (int)$ag['id'] . '">Gruppe/Mitglieder verwalten</a></li>';
 	}
-	
+
 	$out .= '
 			</ul>';
-	
+
 	return array(
 		'default' => $out . '</li>',
 		'mobile' => $out_mob
@@ -1303,31 +1176,29 @@ function getAgMenu($ag)
 function getBezirkMenu($bezirk)
 {
 	global $db;
-	
-	$out = '<li><a href="/?page=bezirk&bid='.$bezirk['id'].'&sub=forum">'.$bezirk['name'].'</a>
+
+	$out = '<li><a href="/?page=bezirk&bid=' . $bezirk['id'] . '&sub=forum">' . $bezirk['name'] . '</a>
 			<ul>
-				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid='.$bezirk['id'].'&sub=forum">Forum</a></li>
-				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid='.$bezirk['id'].'&sub=fairteiler">Fair-Teiler</a></li>
-				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid='.$bezirk['id'].'&sub=events">Termine</a></li>';
-	
-	$out_mob = '<option value="/?page=bezirk&bid='.$bezirk['id'].'&sub=forum">'.$bezirk['name'].'</option>';
-	
-	if(S::may('fs'))
-	{
+				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid=' . $bezirk['id'] . '&sub=forum">Forum</a></li>
+				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid=' . $bezirk['id'] . '&sub=fairteiler">Fair-Teiler</a></li>
+				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid=' . $bezirk['id'] . '&sub=events">Termine</a></li>';
+
+	$out_mob = '<option value="/?page=bezirk&bid=' . $bezirk['id'] . '&sub=forum">' . $bezirk['name'] . '</option>';
+
+	if (S::may('fs')) {
 		$out .= '
-				<li class="menu-top"><a class="menu-top" href="/?page=betrieb&bid='.$bezirk['id'].'">Betriebe</a></li>';
+				<li class="menu-top"><a class="menu-top" href="/?page=betrieb&bid=' . $bezirk['id'] . '">Betriebe</a></li>';
 	}
-	
-	if(isBotFor($bezirk['id']))
-	{	
+
+	if (isBotFor($bezirk['id'])) {
 		$out .= '
-			<li><a href="/?page=foodsaver&bid='.$bezirk['id'].'">Foodsaver</a></li>
-			<li><a href="/?page=passgen&bid='.$bezirk['id'].'">Ausweise / Verifizierungen</a></li>';
+			<li><a href="/?page=foodsaver&bid=' . $bezirk['id'] . '">Foodsaver</a></li>
+			<li><a href="/?page=passgen&bid=' . $bezirk['id'] . '">Ausweise / Verifizierungen</a></li>';
 	}
-	
+
 	$out .= '
 			</ul>';
-	
+
 	return array(
 		'default' => $out . '</li>',
 		'mobile' => $out_mob
@@ -1337,95 +1208,81 @@ function getBezirkMenu($bezirk)
 function id($name)
 {
 	global $g_ids;
-	
-	$id = makeId($name,$g_ids);
-	
+
+	$id = makeId($name, $g_ids);
+
 	$g_ids[$id] = true;
-	
+
 	return $id;
 }
 
-function jsValidate($option,$id,$name)
+function jsValidate($option, $id, $name)
 {
-	$out = array('class'=>'','msg' => array());
-	
-	if(isset($option['required']))
-	{
+	$out = array('class' => '', 'msg' => array());
+
+	if (isset($option['required'])) {
 		$out['class'] .= ' required';
-		if(!isset($option['required']['msg']))
-		{
-			$out['msg']['required'] = $name.' darf nicht leer sein';
+		if (!isset($option['required']['msg'])) {
+			$out['msg']['required'] = $name . ' darf nicht leer sein';
 		}
 	}
-	
+
 	return $out;
 }
 
 function handleAttach($name)
 {
-	if(isset($_FILES[$name]) && $_FILES[$name]['size'] > 0)
-	{
+	if (isset($_FILES[$name]) && $_FILES[$name]['size'] > 0) {
 		$error = 0;
 		$datei = $_FILES[$name]['tmp_name'];
 		$size = $_FILES[$name]['size'];
 		$datein = $_FILES[$name]['name'];
 		$datein = strtolower($datein);
 		$datein = str_replace('.jpeg', '.jpg', $datein);
-		$dateiendung = strtolower(substr($datein, strlen($datein)-4, 4));
-		
-		$new_name = uniqid().$dateiendung;
-		move_uploaded_file($datei, './data/attach/'.$new_name);
-		
-		return array
-		(
+		$dateiendung = strtolower(substr($datein, strlen($datein) - 4, 4));
+
+		$new_name = uniqid() . $dateiendung;
+		move_uploaded_file($datei, './data/attach/' . $new_name);
+
+		return array(
 			'name' => $datein,
-			'path' => './data/attach/'.$new_name,
+			'path' => './data/attach/' . $new_name,
 			'uname' => $new_name,
-			'mime' => mime_content_type('./data/attach/'.$new_name),
+			'mime' => mime_content_type('./data/attach/' . $new_name),
 			'size' => $size
 		);
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }
 
-function checkInput($option,$name)
+function checkInput($option, $name)
 {
-	
 	$class = '';
-	if(isset($option['required']))
-	{
+	if (isset($option['required'])) {
 		$class .= ' required';
 	}
-	if(isset($option['required']) || isset($option['validate']))
-	{
-		if(isset($_POST) && !empty($_POST))
-		{
-			if(isset($option['required']) && empty($value))
-			{
+	if (isset($option['required']) || isset($option['validate'])) {
+		if (isset($_POST) && !empty($_POST)) {
+			if (isset($option['required']) && empty($value)) {
 				error($option['required']);
 				$class .= ' empty';
 			}
-			if(isset($option['validate']))
-			{
-				foreach ($option['validate'] as $v)
-				{
-					$func = 'valid'.ucfirst($v);
-					if(!$func($value))
-					{
-						$class .= ' error-'.$v;
+			if (isset($option['validate'])) {
+				foreach ($option['validate'] as $v) {
+					$func = 'valid' . ucfirst($v);
+					if (!$func($value)) {
+						$class .= ' error-' . $v;
 					}
 				}
 			}
 		}
 	}
-	
-	if(!empty($class))
-	{
+
+	if (!empty($class)) {
 		$class .= ' input-error';
-	}	
+	}
+
 	return $class;
 }
 
@@ -1436,12 +1293,9 @@ function getPost($id)
 
 function getPostData()
 {
-	if(isset($_POST))
-	{
+	if (isset($_POST)) {
 		return $_POST;
-	}
-	else
-	{
+	} else {
 		return array();
 	}
 }
@@ -1449,38 +1303,33 @@ function getPostData()
 function getValue($id)
 {
 	global $g_data;
-	
-	if(isset($g_data[$id]))
-	{
+
+	if (isset($g_data[$id])) {
 		return $g_data[$id];
-	}
-	else
-	{
+	} else {
 		return '';
 	}
 }
 
-function jsSafe($str,$quote = "'")
+function jsSafe($str, $quote = "'")
 {
-	return str_replace(array($quote,"\n","\r"), array("\\".$quote."",'\\n',''), $str);
+	return str_replace(array($quote, "\n", "\r"), array('\\' . $quote . '', '\\n', ''), $str);
 }
 
 function goPage($page = false)
 {
-	if(!$page)
-	{
+	if (!$page) {
 		$page = getPage();
-		if(isset($_GET['bid']))
-		{
-			$page .= '&bid='.(int)$_GET['bid'];
+		if (isset($_GET['bid'])) {
+			$page .= '&bid=' . (int)$_GET['bid'];
 		}
 	}
-	go('/?page='.$page);
+	go('/?page=' . $page);
 }
 
 function go($url)
 {
-	header('Location: '.$url);
+	header('Location: ' . $url);
 	exit();
 }
 
@@ -1491,13 +1340,14 @@ function goLogin()
 
 function goBack()
 {
-	header('Location: '.$_SERVER['HTTP_REFERER']);
+	header('Location: ' . $_SERVER['HTTP_REFERER']);
 	exit();
 }
 
 function getBezirkId()
-{	
+{
 	global $db;
+
 	return $db->getCurrentBezirkId();
 }
 
@@ -1508,48 +1358,38 @@ function getPage()
 
 function getGetId($name)
 {
-	if(isset($_GET[$name]) && (int)$_GET[$name] > 0)
-	{
+	if (isset($_GET[$name]) && (int)$_GET[$name] > 0) {
 		return (int)$_GET[$name];
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }
 
 function getGet($name)
 {
-	if(isset($_GET[$name]))
-	{
+	if (isset($_GET[$name])) {
 		return $_GET[$name];
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }
 
-function addGet($name,$val)
+function addGet($name, $val)
 {
 	$url = '';
-	
+
 	$vars = explode('&', $_SERVER['QUERY_STRING']);
-	
-	$i=0;
-	foreach ($vars as $v)
-	{
-		$i++;
+
+	$i = 0;
+	foreach ($vars as $v) {
+		++$i;
 		$ex = explode('=', $v);
-		if($ex[0] != $name)
-		{
-			$url .= '&'.$v;
+		if ($ex[0] != $name) {
+			$url .= '&' . $v;
 		}
 	}
-	
-	return $_SERVER['PHP_SELF'].'?'.substr($url, 1).'&'.$name.'='.$val;
-	
-	
+
+	return $_SERVER['PHP_SELF'] . '?' . substr($url, 1) . '&' . $name . '=' . $val;
 }
 
 function qs($txt)
@@ -1565,9 +1405,8 @@ function safe_html($txt)
 function printHidden()
 {
 	global $hidden;
-	if(!empty($hidden))
-	{
-		echo '<div style="display:none;">'.$hidden.'</div>';
+	if (!empty($hidden)) {
+		echo '<div style="display:none;">' . $hidden . '</div>';
 	}
 }
 
@@ -1577,87 +1416,77 @@ function addHidden($html)
 	$hidden .= $html;
 }
 
-function makeId($text,$ids = false)
+function makeId($text, $ids = false)
 {
 	$text = strtolower($text);
 	str_replace(
-			array('ä','ö','ü','ß',' '),
-			array('ae','oe','ue','ss','_'),
-			$text
+		array('ä', 'ö', 'ü', 'ß', ' '),
+		array('ae', 'oe', 'ue', 'ss', '_'),
+		$text
 	);
-	$out = preg_replace('/[^a-z0-9_]/','',$text);
-	
-	if($ids!==false && isset($ids[$out]))
-	{
+	$out = preg_replace('/[^a-z0-9_]/', '', $text);
+
+	if ($ids !== false && isset($ids[$out])) {
 		$id = $out;
-		$i=0;
-		while (isset($ids[$id]))
-		{
-			$i++;
-			$id = $out.'-'.$i;
+		$i = 0;
+		while (isset($ids[$id])) {
+			++$i;
+			$id = $out . '-' . $i;
 		}
 		$out = $id;
 	}
-	
+
 	return $out;
 }
 
 function submitted()
 {
-	if(isset($_POST) && !empty($_POST))
-	{
+	if (isset($_POST) && !empty($_POST)) {
 		return true;
 	}
-	
+
 	return false;
 }
 
 function handleForm($name)
 {
 	global $g_form_valid;
-	$func = 'handle'.ucfirst($name);
-	
-	if($g_form_valid)
-	{
-		if(function_exists($func))
-		{
+	$func = 'handle' . ucfirst($name);
+
+	if ($g_form_valid) {
+		if (function_exists($func)) {
 			return $func();
 		}
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }
 
-function info($msg,$title = false)
+function info($msg, $title = false)
 {
 	$t = '';
-	if($title !== false)
-	{
-		$t = '<strong>'.$title.'</strong> ';
+	if ($title !== false) {
+		$t = '<strong>' . $title . '</strong> ';
 	}
 	$_SESSION['msg']['info'][] = $msg;
 }
 
-function success($msg,$title = false)
+function success($msg, $title = false)
 {
 	$t = '';
-	if($title !== false)
-	{
-		$t = '<strong>'.$title.'</strong> ';
+	if ($title !== false) {
+		$t = '<strong>' . $title . '</strong> ';
 	}
-	$_SESSION['msg']['success'][] = $t.$msg;
+	$_SESSION['msg']['success'][] = $t . $msg;
 }
 
-function error($msg,$title = false)
+function error($msg, $title = false)
 {
 	$t = '';
-	if($title !== false)
-	{
-		$t = '<strong>'.$title.'</strong> ';
+	if ($title !== false) {
+		$t = '<strong>' . $title . '</strong> ';
 	}
-	$_SESSION['msg']['error'][] = $t.$msg;
+	$_SESSION['msg']['error'][] = $t . $msg;
 }
 
 function session_init()
@@ -1666,22 +1495,20 @@ function session_init()
 	//ini_set("session.cookie_lifetime","86400");
 	//@session_name('fs_session');
 	@session_start();
-	if(false)
-	{
+	if (false) {
 		$session_name = 'fs_session'; // Set a custom session name
 		$secure = false; // Set to true if using https.
 		$httponly = true; // This stops javascript being able to access the session id.
-		
+
 		ini_set('session.use_only_cookies', 1); // Forces sessions to only use cookies.
 		$cookieParams = session_get_cookie_params(); // Gets current cookies params.
-		session_set_cookie_params($cookieParams["lifetime"], $cookieParams["path"], $cookieParams["domain"], $secure, $httponly);
+		session_set_cookie_params($cookieParams['lifetime'], $cookieParams['path'], $cookieParams['domain'], $secure, $httponly);
 		session_name($session_name); // Sets the session name to the one set above.
 		session_start(); // Start the php session
 		session_regenerate_id(true); // regenerated the session, delete the old one.
 	}
 
-	if(!isset($_SESSION['msg']))
-	{
+	if (!isset($_SESSION['msg'])) {
 		$_SESSION['msg'] = array();
 		$_SESSION['msg']['info'] = array();
 		$_SESSION['msg']['error'] = array();
@@ -1693,38 +1520,31 @@ function getMessages()
 {
 	global $g_error;
 	global $g_info;
-	if(!isset($_SESSION['msg']))
-	{
+	if (!isset($_SESSION['msg'])) {
 		$_SESSION['msg'] = array();
 	}
-	if(isset($_SESSION['msg']['error']) && !empty($_SESSION['msg']['error']))
-	{
+	if (isset($_SESSION['msg']['error']) && !empty($_SESSION['msg']['error'])) {
 		$msg = '';
-		foreach ($_SESSION['msg']['error'] as $e)
-		{
-			$msg .= '<div class="item">'.$e.'</div>';
+		foreach ($_SESSION['msg']['error'] as $e) {
+			$msg .= '<div class="item">' . $e . '</div>';
 			//addJs('error("'.$e.'");');
 		}
-		addJs('pulseError("'.jsSafe($msg,'"').'");');
+		addJs('pulseError("' . jsSafe($msg, '"') . '");');
 	}
-	if(isset($_SESSION['msg']['info']) && !empty($_SESSION['msg']['info']))
-	{
+	if (isset($_SESSION['msg']['info']) && !empty($_SESSION['msg']['info'])) {
 		$msg = '';
-		foreach ($_SESSION['msg']['info'] as $i)
-		{
-			$msg .= '<p>'.$i.'</p>';
+		foreach ($_SESSION['msg']['info'] as $i) {
+			$msg .= '<p>' . $i . '</p>';
 			//addJs('info("'.$i.'");');
 		}
-		addJs('pulseInfo("'.jsSafe($msg,'"').'");');
+		addJs('pulseInfo("' . jsSafe($msg, '"') . '");');
 	}
-	if(isset($_SESSION['msg']['info']) && !empty($_SESSION['msg']['info']))
-	{
+	if (isset($_SESSION['msg']['info']) && !empty($_SESSION['msg']['info'])) {
 		$msg = '';
-		foreach ($_SESSION['msg']['info'] as $i)
-		{
-			$msg .= '<p>'.$i.'</p>';
+		foreach ($_SESSION['msg']['info'] as $i) {
+			$msg .= '<p>' . $i . '</p>';
 		}
-		addJs('pulseSuccess("'.jsSafe($msg,'"').'");');
+		addJs('pulseSuccess("' . jsSafe($msg, '"') . '");');
 	}
 	$_SESSION['msg']['info'] = array();
 	$_SESSION['msg']['success'] = array();
@@ -1734,17 +1554,14 @@ function getMessages()
 
 function save($txt)
 {
-	return preg_replace('/[^a-zA-Z0-9]/','',$txt);
+	return preg_replace('/[^a-zA-Z0-9]/', '', $txt);
 }
 
 function loggedIn()
 {
-	if(isset($_SESSION['client']) && $_SESSION['client']['id'] > 0)
-	{
+	if (isset($_SESSION['client']) && $_SESSION['client']['id'] > 0) {
 		return true;
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }
@@ -1753,41 +1570,34 @@ function getCurrent($page = false)
 {
 	global $content;
 	global $right;
-	global $js; 
+	global $js;
 	global $db;
-	
-	if(S::may())
-	{
+
+	if (S::may()) {
 		$db->updateActivity();
 	}
-	
+
 	$page = 'index';
-	if($p = getPage())
-	{
+	if ($p = getPage()) {
 		$page = $p;
 	}
-		if(file_exists('control/'.$page.'.php'))
-		{
-			$lang = 'DE';
-			if(file_exists('lang/'.$lang.'/'.$page.'.lang.php'))
-			{
-				include 'lang/'.$lang.'/'.$page.'.lang.php';
-			}
-			
-			if(file_exists('model/'.$page.'.model.php'))
-			{
-				include 'model/'.$page.'.model.php';
-				$mod = ucfirst($page).'Model';
-				$db = new $mod();
-			}
-			
-			if(isset($_GET['gid']))
-			{
-				$db->readGlocke($_GET['gid']);
-			}
-			include 'control/'.$page.'.php';
+	if (file_exists('control/' . $page . '.php')) {
+		$lang = 'DE';
+		if (file_exists('lang/' . $lang . '/' . $page . '.lang.php')) {
+			include 'lang/' . $lang . '/' . $page . '.lang.php';
 		}
 
+		if (file_exists('model/' . $page . '.model.php')) {
+			include 'model/' . $page . '.model.php';
+			$mod = ucfirst($page) . 'Model';
+			$db = new $mod();
+		}
+
+		if (isset($_GET['gid'])) {
+			$db->readGlocke($_GET['gid']);
+		}
+		include 'control/' . $page . '.php';
+	}
 }
 
 function addScript($src)
@@ -1804,64 +1614,59 @@ function addScriptTop($src)
 
 function loadModel($model = 'api')
 {
-	require_once ROOT_DIR.'app/core/core.model.php';
-	require_once ROOT_DIR.'app/'.$model.'/'.$model.'.model.php';
-	$mod = ucfirst($model).'Model';
+	require_once ROOT_DIR . 'app/core/core.model.php';
+	require_once ROOT_DIR . 'app/' . $model . '/' . $model . '.model.php';
+	$mod = ucfirst($model) . 'Model';
+
 	return new $mod();
 }
 
 function loadXhr($app)
 {
-	require_once ROOT_DIR.'app/core/core.model.php';
-	require_once ROOT_DIR.'app/core/core.view.php';
-	require_once ROOT_DIR.'app/core/core.control.php';
-	require_once ROOT_DIR.'app/'.$app.'/'.$app.'.model.php';
-	require_once ROOT_DIR.'app/'.$app.'/'.$app.'.view.php';
-	require_once ROOT_DIR.'app/'.$app.'/'.$app.'.xhr.php';
-	$mod = ucfirst($app).'Xhr';
+	require_once ROOT_DIR . 'app/core/core.model.php';
+	require_once ROOT_DIR . 'app/core/core.view.php';
+	require_once ROOT_DIR . 'app/core/core.control.php';
+	require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.model.php';
+	require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.view.php';
+	require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.xhr.php';
+	$mod = ucfirst($app) . 'Xhr';
+
 	return new $mod();
 }
 
 function loadApp($app)
-{	
-	require_once ROOT_DIR.'app/core/core.control.php';
-	require_once ROOT_DIR.'app/core/core.model.php';
-	require_once ROOT_DIR.'app/core/core.view.php';
-	
-	require_once ROOT_DIR.'app/'.$app.'/'.$app.'.control.php';
-	require_once ROOT_DIR.'app/'.$app.'/'.$app.'.model.php';
-	require_once ROOT_DIR.'app/'.$app.'/'.$app.'.view.php';
-	require_once ROOT_DIR.'lang/DE/'.$app.'.lang.php';
-	if(isset($_GET['lang']) && $_GET['lang'] == 'en')
-	{
-		$fn = ROOT_DIR.'lang/EN/'.$app.'.lang.php';
-		if(file_exists($fn))
-		{
+{
+	require_once ROOT_DIR . 'app/core/core.control.php';
+	require_once ROOT_DIR . 'app/core/core.model.php';
+	require_once ROOT_DIR . 'app/core/core.view.php';
+
+	require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.control.php';
+	require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.model.php';
+	require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.view.php';
+	require_once ROOT_DIR . 'lang/DE/' . $app . '.lang.php';
+	if (isset($_GET['lang']) && $_GET['lang'] == 'en') {
+		$fn = ROOT_DIR . 'lang/EN/' . $app . '.lang.php';
+		if (file_exists($fn)) {
 			require_once $fn;
 		}
 	}
-	addJsFunc(file_get_contents(ROOT_DIR.'app/'.$app.'/'.$app.'.script.js'));
-	addStyle(file_get_contents(ROOT_DIR.'app/'.$app.'/'.$app.'.style.css'));
-	
-	$appUc = ucfirst($app);
-	
-	$appClass = $appUc.'Control';
-	
-	$app = new $appClass($appUc);
-	
+	addJsFunc(file_get_contents(ROOT_DIR . 'app/' . $app . '/' . $app . '.script.js'));
+	addStyle(file_get_contents(ROOT_DIR . 'app/' . $app . '/' . $app . '.style.css'));
 
-	if(isset($_GET['a']) && method_exists($app, $_GET['a']))
-	{
+	$appUc = ucfirst($app);
+
+	$appClass = $appUc . 'Control';
+
+	$app = new $appClass($appUc);
+
+	if (isset($_GET['a']) && method_exists($app, $_GET['a'])) {
 		$meth = $_GET['a'];
 		$app->$meth();
-	}
-	else
-	{
+	} else {
 		$app->index();
 	}
-	
-	if(($sub = $app->getSubFunc()) !== false)
-	{
+
+	if (($sub = $app->getSubFunc()) !== false) {
 		$app->$sub();
 	}
 }
@@ -1897,13 +1702,11 @@ function makeHead()
 	global $g_script;
 	global $g_css;
 	global $g_head;
-	foreach ($g_css as $src)
-	{
-		$g_head .= '<link rel="stylesheet" type="text/css" href="'.$src.'" />'."\n";
+	foreach ($g_css as $src) {
+		$g_head .= '<link rel="stylesheet" type="text/css" href="' . $src . '" />' . "\n";
 	}
-	foreach ($g_script as $src)
-	{
-		$g_head .= '<script type="text/javascript" src="'.$src.'"></script>'."\n";
+	foreach ($g_script as $src) {
+		$g_head .= '<script type="text/javascript" src="' . $src . '"></script>' . "\n";
 	}
 }
 
@@ -1924,14 +1727,13 @@ function getHead()
 	global $g_head;
 	global $g_title;
 	global $g_meta;
-	
-	foreach ($g_meta as $name => $content)
-	{
-		$g_head .= "\n" . '<meta name="'.$name.'" content="'.$content.'" />';
+
+	foreach ($g_meta as $name => $content) {
+		$g_head .= "\n" . '<meta name="' . $name . '" content="' . $content . '" />';
 	}
-	
-	return '<title>'.implode(' | ',$g_title).'</title>'.
-			$g_head.'
+
+	return '<title>' . implode(' | ', $g_title) . '</title>' .
+		$g_head . '
 
 <meta property="og:title" content="Lebensmittel teilen, statt wegwerfen - foodsharing Deutschland" />
 <meta property="og:description" content="Auf foodsharing kannst Du Deine Lebensmitteln vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben" />
@@ -1952,49 +1754,39 @@ function pv($el)
 
 function fsId()
 {
-	if(loggedIn())
-	{
+	if (loggedIn()) {
 		return $_SESSION['client']['id'];
-	}
-	else
-	{
+	} else {
 		return 0;
 	}
 }
 
 function isVerified()
 {
-	if(isOrgaTeam())
-	{
+	if (isOrgaTeam()) {
+		return true;
+	} elseif (isset($_SESSION['client']['verified']) && $_SESSION['client']['verified'] == 1) {
 		return true;
 	}
-	else if(isset($_SESSION['client']['verified']) && $_SESSION['client']['verified'] == 1)
-	{
-		return true;
-	}
-	
+
 	return false;
 }
 
 function validEmail($email)
 {
-	if (filter_var($email, FILTER_VALIDATE_EMAIL))
-	{
+	if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 		return true;
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }
 
 function validUrl($url)
 {
-	if(!filter_var($url, FILTER_VALIDATE_URL))
-	{
+	if (!filter_var($url, FILTER_VALIDATE_URL)) {
 		return false;
 	}
-	
+
 	return true;
 }
 
@@ -2005,8 +1797,7 @@ function isAdmin()
 
 function debug($arg)
 {
-	if(isAdmin())
-	{
+	if (isAdmin()) {
 		global $g_debug;
 		$g_debug[] = $arg;
 	}
@@ -2014,53 +1805,43 @@ function debug($arg)
 
 function logg($arg)
 {
-	file_put_contents(ROOT_DIR.'data/logg.txt', json_encode(array('date'=>date('Y-m-d H:i:s'),'session'=>$_SESSION,'data'=>$arg,'add'=>array($_GET))).'-|||-',FILE_APPEND);
+	file_put_contents(ROOT_DIR . 'data/logg.txt', json_encode(array('date' => date('Y-m-d H:i:s'), 'session' => $_SESSION, 'data' => $arg, 'add' => array($_GET))) . '-|||-', FILE_APPEND);
 }
 
 function getDebugging()
 {
 	global $g_debug;
-	if(!empty($g_debug))
-	{
+	if (!empty($g_debug)) {
 		//echo '<div class="g_debug"><pre>'.print_r($g_debug,true).'</pre></div>';
 	}
 }
 
 function libmail($bezirk, $email, $subject, $message, $attach = false, $token = false)
-{	
-	if($bezirk === false)
-	{
+{
+	if ($bezirk === false) {
 		$bezirk = array(
 			'email' => DEFAULT_EMAIL,
 			'email_name' => DEFAULT_EMAIL_NAME
 		);
-	}
-	else if(!is_array($bezirk))
-	{
+	} elseif (!is_array($bezirk)) {
 		$bezirk = array(
 			'email' => $bezirk,
 			'email_name' => $bezirk
 		);
-	}
-	else
-	{
-		if(!validEmail($bezirk['email']))
-		{
+	} else {
+		if (!validEmail($bezirk['email'])) {
 			$bezirk['email'] = EMAIL_PUBLIC;
 		}
-		if(empty($bezirk['email_name']))
-		{
+		if (empty($bezirk['email_name'])) {
 			$bezirk['email_name'] = EMAIL_PUBLIC_NAME;
 		}
 	}
-	
-	if(!validEmail($email))
-	{
+
+	if (!validEmail($email)) {
 		return false;
 	}
-	
-	if($_SERVER['SERVER_NAME'] == 'localhost')
-	{
+
+	if ($_SERVER['SERVER_NAME'] == 'localhost') {
 		logg(array(
 			'bezirk' => $bezirk,
 			'email' => $email,
@@ -2068,10 +1849,9 @@ function libmail($bezirk, $email, $subject, $message, $attach = false, $token = 
 			'msg' => $message,
 			'attach' => $attach
 		));
+
 		return true;
-	}
-	elseif (isAdmin()) 
-	{
+	} elseif (isAdmin()) {
 		debug(array(
 			'bezirk' => $bezirk,
 			'email' => $email,
@@ -2080,68 +1860,58 @@ function libmail($bezirk, $email, $subject, $message, $attach = false, $token = 
 			'attach' => $attach
 		));
 	}
-	
+
 	$mail = new AsyncMail();
 	$mail->setFrom($bezirk['email'], $bezirk['email_name']);
 	$mail->addRecipient($email);
-	if(!$subject)
-	{
-		$subject = "Foodsharing Mail";
+	if (!$subject) {
+		$subject = 'Foodsharing Mail';
 	}
 	$mail->setSubject($subject);
-	$mail->setHTMLBody(emailBodyTpl($message,$email,$token));	
-	
+	$mail->setHTMLBody(emailBodyTpl($message, $email, $token));
+
 	//Replace the plain text body with one created manually
 	$message = str_replace('<br />', "\r\n", $message);
 	$message = strip_tags($message);
 	$mail->setBody($message);
-	
-	
-	if($attach !== false)
-	{
-		foreach ($attach as $a)
-		{
-			$mail->addAttachment(new fFile($a['path']),$a['name']);
+
+	if ($attach !== false) {
+		foreach ($attach as $a) {
+			$mail->addAttachment(new fFile($a['path']), $a['name']);
 		}
 	}
-	
+
 	$mail->send();
 }
 
-function mailMessage($sender_id,$recip_id,$msg=NULL)
+function mailMessage($sender_id, $recip_id, $msg = null)
 {
 	// FIXME this function is pretty much a copy of Model::mailMessage() and should probably replaced
 	$db = loadModel('mailbox');
-	
+
 	$info = $db->getVal('infomail_message', 'foodsaver', $recip_id);
-	if((int)$info > 0)
-	{
-		if(!isset($_SESSION['lastMailMessage']))
-		{
+	if ((int)$info > 0) {
+		if (!isset($_SESSION['lastMailMessage'])) {
 			$_SESSION['lastMailMessage'] = array();
 		}
-		if(!$db->isActive($recip_id))
-		{
-			if(!isset($_SESSION['lastMailMessage'][$recip_id]) || (time() - $_SESSION['lastMailMessage'][$recip_id]) > 600)
-			{
+		if (!$db->isActive($recip_id)) {
+			if (!isset($_SESSION['lastMailMessage'][$recip_id]) || (time() - $_SESSION['lastMailMessage'][$recip_id]) > 600) {
 				$_SESSION['lastMailMessage'][$recip_id] = time();
 				$foodsaver = $db->getOne_foodsaver($recip_id);
 				$sender = $db->getOne_foodsaver($sender_id);
-				if (!isset($msg))
-				{
+				if (!isset($msg)) {
 					// FIXME this is error-prone;
 					$msg = '';
 				}
-				
-				tplMail(9, $foodsaver['email'],array(
+
+				tplMail(9, $foodsaver['email'], array(
 					'anrede' => genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 					'sender' => $sender['name'],
 					'name' => $foodsaver['name'],
 					'message' => $msg,
-					'link' => BASE_URL.'/?page=msg&u2c='.(int)$sender_id
+					'link' => BASE_URL . '/?page=msg&u2c=' . (int)$sender_id
 				));
 			}
-			
 		}
 	}
 }
@@ -2149,67 +1919,58 @@ function mailMessage($sender_id,$recip_id,$msg=NULL)
 function getBezirk()
 {
 	global $db;
+
 	return $db->getBezirk();
 }
 
-function genderWord($gender,$m,$w,$other)
+function genderWord($gender, $m, $w, $other)
 {
 	$out = $other;
-	if($gender == 1)
-	{
+	if ($gender == 1) {
 		$out = $m;
-	}
-	elseif ($gender == 2)
-	{
+	} elseif ($gender == 2) {
 		$out = $w;
 	}
-	
+
 	return $out;
 }
 
-function hiddenDialog($table,$fields,$title = '',$option = array())
+function hiddenDialog($table, $fields, $title = '', $option = array())
 {
 	$width = '';
-	if(isset($option['width']))
-	{
-		$width = 'width:'.$option['width'].',';
+	if (isset($option['width'])) {
+		$width = 'width:' . $option['width'] . ',';
 	}
-	$id = id('dialog_'.$table);
-	
+	$id = id('dialog_' . $table);
+
 	$form = '';
-	foreach ($fields as $f)
-	{
+	foreach ($fields as $f) {
 		$form .= $f;
 	}
-	
+
 	$get = '';
-	if(isset($_GET['id']))
-	{
-		$get = '<input type="hidden" name="id" value="'.(int)$_GET['id'].'" />';
+	if (isset($_GET['id'])) {
+		$get = '<input type="hidden" name="id" value="' . (int)$_GET['id'] . '" />';
 	}
-	
-	addHidden('<div id="'.$id.'"><form>'.$form.$get.'</form></div>');
+
+	addHidden('<div id="' . $id . '"><form>' . $form . $get . '</form></div>');
 	//addJs('hiddenDialog("'.$id.'","'.$table.'","'.$title.'");');
-	
-	
-	
+
 	$success = '';
-	if(isset($option['success']))
-	{
+	if (isset($option['success'])) {
 		$success = $option['success'];
 	}
-	
-	if(isset($option['reload']))
-	{
+
+	if (isset($option['reload'])) {
 		$success .= 'reload();';
 	}
-	
+
 	addJs('
-		$("#'.$id.'").dialog({
-		'.$width.'
+		$("#' . $id . '").dialog({
+		' . $width . '
 		autoOpen:false,
 		modal:true,
-		title:"'.$title.'",
+		title:"' . $title . '",
 		buttons:
 		{
 			"Speichern":function()
@@ -2218,10 +1979,10 @@ function hiddenDialog($table,$fields,$title = '',$option = array())
 				$.ajax({
 					
 					dataType:"json",
-					url:"xhr.php?f=update_'.$table.'&" + $("#'.$id.' form").serialize(),
+					url:"xhr.php?f=update_' . $table . '&" + $("#' . $id . ' form").serialize(),
 					success : function(data){
-						$("#'.$id.'").dialog(\'close\');
-						'.$success.'
+						$("#' . $id . '").dialog(\'close\');
+						' . $success . '
 						if(data.script != undefined)
 						{
 							$.globalEval(data.script);
@@ -2235,7 +1996,6 @@ function hiddenDialog($table,$fields,$title = '',$option = array())
 		}
 	});	
 	');
-	
 }
 
 function compress($buffer)
@@ -2245,29 +2005,28 @@ function compress($buffer)
 
 function hasBezirk($bid)
 {
-	if(isset($_SESSION['client']['bezirke'][$bid]) || isBotFor($bid))
-	{
+	if (isset($_SESSION['client']['bezirke'][$bid]) || isBotFor($bid)) {
 		return true;
 	}
+
 	return false;
 }
 
 function mayBezirk($bid)
 {
-	if(isset($_SESSION['client']['bezirke'][$bid]) || isBotFor($bid) || isOrgaTeam())
-	{
+	if (isset($_SESSION['client']['bezirke'][$bid]) || isBotFor($bid) || isOrgaTeam()) {
 		return true;
 	}
+
 	return false;
 }
 
 function mayGroup($group)
 {
-	if(isset($_SESSION) && isset($_SESSION['client']['group'][$group]))
-	{
+	if (isset($_SESSION) && isset($_SESSION['client']['group'][$group])) {
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -2289,145 +2048,150 @@ function mayEditBlog()
 
 function may()
 {
-	if(isset($_SESSION) && isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0)
-	{
+	if (isset($_SESSION) && isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0) {
 		return true;
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }
 
-function getRolle($gender_id,$rolle_id)
+function getRolle($gender_id, $rolle_id)
 {
-	return s('rolle_'.$rolle_id.'_'.$gender_id);
+	return s('rolle_' . $rolle_id . '_' . $gender_id);
 }
 
-function cropImg($path,$img,$i,$x,$y,$w,$h)
+function cropImg($path, $img, $i, $x, $y, $w, $h)
 {
 	$targ_w = $w;
 	$targ_h = $h;
 	$jpeg_quality = 100;
 
-	$ext = explode('.',$img);
+	$ext = explode('.', $img);
 	$ext = end($ext);
 	$ext = strtolower($ext);
-	
-	switch($ext)
-	{
-		case 'gif' : $img_r = imagecreatefromgif($path.'/'.$img); ;break;
-		case 'jpg' : $img_r = imagecreatefromjpeg($path.'/'.$img); ;break;
-		case 'png' : $img_r = imagecreatefrompng($path.'/'.$img); ;break;
+
+	switch ($ext) {
+		case 'gif':
+			$img_r = imagecreatefromgif($path . '/' . $img);
+			break;
+		case 'jpg':
+			$img_r = imagecreatefromjpeg($path . '/' . $img);
+			break;
+		case 'png':
+			$img_r = imagecreatefrompng($path . '/' . $img);
+			break;
 	}
 
+	$dst_r = imagecreatetruecolor($targ_w, $targ_h);
 
-	$dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
+	imagecopyresampled($dst_r, $img_r, 0, 0, $x, $y, $targ_w, $targ_h, $w, $h);
 
-	imagecopyresampled($dst_r,$img_r,0,0,$x,$y,$targ_w,$targ_h,$w,$h);
+	$new_path = $path . '/crop_' . $i . '_' . $img;
 
-	$new_path = $path.'/crop_'.$i.'_'.$img;
-	
 	@unlink($new_path);
 
-	switch($ext)
-	{
-		case 'gif' : imagegif($dst_r, $new_path ); break;
-		case 'jpg' : imagejpeg($dst_r, $new_path, $jpeg_quality ); break;
-		case 'png' : imagepng($dst_r, $new_path, 0 ); break;
+	switch ($ext) {
+		case 'gif':
+			imagegif($dst_r, $new_path);
+			break;
+		case 'jpg':
+			imagejpeg($dst_r, $new_path, $jpeg_quality);
+			break;
+		case 'png':
+			imagepng($dst_r, $new_path, 0);
+			break;
 	}
 }
 
-function cropImage($bild,$x,$y,$w,$h)
+function cropImage($bild, $x, $y, $w, $h)
 {
-
 	$targ_w = 467;
 	$targ_h = 600;
 	$jpeg_quality = 100;
 
-	$ext = explode('.',$bild);
+	$ext = explode('.', $bild);
 	$ext = end($ext);
 	$ext = strtolower($ext);
-	
+
 	$img_r = null;
-	
-	switch($ext)
-	{
-		case 'gif' : $img_r = imagecreatefromgif('./tmp/'.$bild); ;break;
-		case 'jpg' : $img_r = imagecreatefromjpeg('./tmp/'.$bild); ;break;
-		case 'png' : $img_r = imagecreatefrompng('./tmp/'.$bild); ;break;
+
+	switch ($ext) {
+		case 'gif':
+			$img_r = imagecreatefromgif('./tmp/' . $bild);
+			break;
+		case 'jpg':
+			$img_r = imagecreatefromjpeg('./tmp/' . $bild);
+			break;
+		case 'png':
+			$img_r = imagecreatefrompng('./tmp/' . $bild);
+			break;
 	}
 
-	if($img_r === null)
-	{
+	if ($img_r === null) {
 		return false;
 	}
 
-	$dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
+	$dst_r = imagecreatetruecolor($targ_w, $targ_h);
 
-	imagecopyresampled($dst_r,$img_r,0,0,$x,$y,$targ_w,$targ_h,$w,$h);
+	imagecopyresampled($dst_r, $img_r, 0, 0, $x, $y, $targ_w, $targ_h, $w, $h);
 
-	@unlink('../tmp/crop_'.$bild);
+	@unlink('../tmp/crop_' . $bild);
 
-	switch($ext)
-	{
-		case 'gif' : imagegif($dst_r, './tmp/crop_'.$bild ); break;
-		case 'jpg' : imagejpeg($dst_r, './tmp/crop_'.$bild, $jpeg_quality ); break;
-		case 'png' : imagepng($dst_r, './tmp/crop_'.$bild, 0 ); break;
+	switch ($ext) {
+		case 'gif':
+			imagegif($dst_r, './tmp/crop_' . $bild);
+			break;
+		case 'jpg':
+			imagejpeg($dst_r, './tmp/crop_' . $bild, $jpeg_quality);
+			break;
+		case 'png':
+			imagepng($dst_r, './tmp/crop_' . $bild, 0);
+			break;
 	}
 
-	if(file_exists('./tmp/crop_'.$bild))
-	{
+	if (file_exists('./tmp/crop_' . $bild)) {
 		try {
-			
-			copy('./tmp/crop_'.$bild, './tmp/thumb_crop_'.$bild);
-			$img = new fImage('./tmp/thumb_crop_'.$bild);
+			copy('./tmp/crop_' . $bild, './tmp/thumb_crop_' . $bild);
+			$img = new fImage('./tmp/thumb_crop_' . $bild);
 			$img->resize(200, 0);
 			$img->saveChanges();
-			
-			return 'thumb_crop_'.$bild;
-		}
-		catch (Exception $e)
-		{
+
+			return 'thumb_crop_' . $bild;
+		} catch (Exception $e) {
 			return false;
 		}
 	}
+
 	return false;
 }
 
-function resizeImg($img,$width,$format)
+function resizeImg($img, $width, $format)
 {
-	if(file_exists($img))
-	{
+	if (file_exists($img)) {
 		$opt = 'auto';
-		if($format == 'q')
-		{
+		if ($format == 'q') {
 			$opt = 'crop';
 		}
-		
+
 		try {
 			$newimg = str_replace('/', '/' . $width . '_' . $format . '_', $img);
 			copy($img, $newimg);
 			$img = new fImage($newimg);
-			
-			if($opt == 'crop')
-			{
+
+			if ($opt == 'crop') {
 				$img->cropToRatio(1, 1);
 				$img->resize($width, $width);
-			}
-			else
-			{
+			} else {
 				$img->resize($width, 0);
 			}
-			
+
 			$img->saveChanges();
+
 			return true;
-		}
-		catch (Exception $e)
-		{
-			
+		} catch (Exception $e) {
 		}
 	}
+
 	return false;
 }
 
@@ -2447,17 +2211,15 @@ function getSelf()
 	return $_SERVER['REQUEST_URI'];
 }
 
-function unsetAll($array,$fields)
+function unsetAll($array, $fields)
 {
 	$out = array();
-	foreach ($fields as $f)
-	{
-		if(isset($array[$f]))
-		{
+	foreach ($fields as $f) {
+		if (isset($array[$f])) {
 			$out[$f] = $array[$f];
 		}
 	}
-	
+
 	return $out;
 }
 
@@ -2466,59 +2228,57 @@ function is_allowed($img)
 	$img['name'] = strtolower($img['name']);
 	$img['type'] = strtolower($img['type']);
 
-	$allowed = array("jpg" => true, "jpeg" => true, "png" => true,'gif' => true);
+	$allowed = array('jpg' => true, 'jpeg' => true, 'png' => true, 'gif' => true);
 
-	$filename  = $img['name'];
+	$filename = $img['name'];
 	$parts = explode('.', $filename);
 	$ext = end($parts);
 
-	$allowed_mime = array('image/gif'=>true,'image/jpeg'=>true,'image/png'=>true);
+	$allowed_mime = array('image/gif' => true, 'image/jpeg' => true, 'image/png' => true);
 
-	if(isset($allowed[$ext]))
-	{
+	if (isset($allowed[$ext])) {
 		return true;
 	}
 
 	return false;
 }
 
-function tt($str,$length = 160)
+function tt($str, $length = 160)
 {
-	if(strlen($str) > $length)
-	{
-		$str = preg_replace("/[^ ]*$/", '', substr($str, 0, $length)).' ...';
+	if (strlen($str) > $length) {
+		$str = preg_replace('/[^ ]*$/', '', substr($str, 0, $length)) . ' ...';
 	}
-	return $str;
-}
-function ttt($str,$length = 160)
-{
-	if(strlen($str) > $length)
-	{
-		$str = substr($str,0,($length-4)).'...';
-	}
+
 	return $str;
 }
 
-function avatar($foodsaver,$size = 'mini',$altimg = false)
+function ttt($str, $length = 160)
+{
+	if (strlen($str) > $length) {
+		$str = substr($str, 0, ($length - 4)) . '...';
+	}
+
+	return $str;
+}
+
+function avatar($foodsaver, $size = 'mini', $altimg = false)
 {
 	/*
 	 * temporary for quiz
 	 */
 	$bg = '';
-	if(isset($foodsaver['quiz_rolle']))
-	{
-		switch ($foodsaver['quiz_rolle'])
-		{
-			case 1 : 
+	if (isset($foodsaver['quiz_rolle'])) {
+		switch ($foodsaver['quiz_rolle']) {
+			case 1:
 				$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #4A3520;';
 				break;
-			case 2 :
+			case 2:
 				$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #599022;';
 				break;
-			case 3 :
+			case 3:
 				$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #FFBB00;';
 				break;
-			case 4 :
+			case 4:
 				$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #FF4800;';
 				break;
 			default:
@@ -2526,7 +2286,7 @@ function avatar($foodsaver,$size = 'mini',$altimg = false)
 		}
 	}
 
-	return '<span style="'.$bg.'background-image:url('.img($foodsaver['photo'],$size,'q',$altimg).');" class="avatar size-'.$size.' sleepmode-'.$foodsaver['sleep_status'].'"><i>'.$foodsaver['name'].'</i></span>';
+	return '<span style="' . $bg . 'background-image:url(' . img($foodsaver['photo'], $size, 'q', $altimg) . ');" class="avatar size-' . $size . ' sleepmode-' . $foodsaver['sleep_status'] . '"><i>' . $foodsaver['name'] . '</i></span>';
 }
 
 function rolleWrapInt($roleInt)
@@ -2553,11 +2313,11 @@ function rolleWrap($roleStr)
 		'orga' => 4,
 		'admin' => 5
 	);
-	
+
 	return $roles[$roleStr];
 }
 
-function sendSock($fsid,$app,$method,$options)
+function sendSock($fsid, $app, $method, $options)
 {
 	$query = http_build_query(array(
 		'u' => $fsid, // user id
@@ -2568,7 +2328,7 @@ function sendSock($fsid,$app,$method,$options)
 	file_get_contents(SOCK_URL . '?' . $query);
 }
 
-function sendSockMulti($fsids,$app,$method,$options)
+function sendSockMulti($fsids, $app, $method, $options)
 {
 	$query = http_build_query(array(
 		'us' => join(',', $fsids), // user ids
@@ -2584,61 +2344,60 @@ function getTemplate($tpl)
 	include 'tpl/' . $tpl . '.php';
 }
 
-function getIp() 
+function getIp()
 {
-	if (! isset ( $_SERVER ['HTTP_X_FORWARDED_FOR'] )) 
-	{
-		return $_SERVER ['REMOTE_ADDR'];
-	} 
-	else 
-	{
-		return $_SERVER ['HTTP_X_FORWARDED_FOR'];
+	if (!isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+		return $_SERVER['REMOTE_ADDR'];
+	} else {
+		return $_SERVER['HTTP_X_FORWARDED_FOR'];
 	}
-	
+
 	return false;
 }
 
 /**
- * Function to check and block an ip address
- * @param integer $duration
+ * Function to check and block an ip address.
+ *
+ * @param int $duration
  * @param string $context
- * @return boolean
+ *
+ * @return bool
  */
-function ipIsBlocked ($duration = 60, $context = 'default') 
+function ipIsBlocked($duration = 60, $context = 'default')
 {
 	$db = loadModel('team');
 	$ip = getIp();
-	
-	if($block = $db->qRow('SELECT UNIX_TIMESTAMP(`start`) AS `start`,`duration` FROM '.PREFIX.'ipblock WHERE ip = '.$db->strval(getIp()).' AND context = '.$db->strval($context) ))
-	{
-		if(time() < ((int)$block['start'] + (int)$block['duration']))
-		{
+
+	if ($block = $db->qRow('SELECT UNIX_TIMESTAMP(`start`) AS `start`,`duration` FROM ' . PREFIX . 'ipblock WHERE ip = ' . $db->strval(getIp()) . ' AND context = ' . $db->strval($context))) {
+		if (time() < ((int)$block['start'] + (int)$block['duration'])) {
 			return true;
 		}
 	}
-	
+
 	$db->insert('
-	REPLACE INTO '.PREFIX.'ipblock
+	REPLACE INTO ' . PREFIX . 'ipblock
 	(`ip`,`context`,`start`,`duration`)
 	VALUES
-	('.$db->strval($ip).','.$db->strval($context).',NOW(),'.(int)$duration.')');
-	
+	(' . $db->strval($ip) . ',' . $db->strval($context) . ',NOW(),' . (int)$duration . ')');
+
 	return false;
 }
 
 /** Creates and saves a new API token for given user
-	@param $fs Foodsaver ID
-	@return false in case of error or weak algorithm, generated token otherwise
+ * @param $fs Foodsaver ID
+ *
+ * @return false in case of error or weak algorithm, generated token otherwise
  */
 function generate_api_token($fs)
 {
 	global $db;
 
 	$token = bin2hex(openssl_random_pseudo_bytes(10, $strong));
-	if(!$strong || $token === false) {
+	if (!$strong || $token === false) {
 		return false;
 	}
 
-	$db->insert('INSERT INTO '.PREFIX.'apitoken (foodsaver_id, token) VALUES ('.(int)$fs.', "'.$token.'")');
+	$db->insert('INSERT INTO ' . PREFIX . 'apitoken (foodsaver_id, token) VALUES (' . (int)$fs . ', "' . $token . '")');
+
 	return $token;
 }

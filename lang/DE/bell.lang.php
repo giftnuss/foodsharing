@@ -38,7 +38,7 @@ $g_lang['new_foodsaver'] = 'Braucht Einführungsabholungen.';
 $g_lang['betrieb_fetch_title'] = '{betrieb}';
 $g_lang['betrieb_fetch'] = '{count} Unbestätigte Abholzeiten';
 
-$g_lang['buddy_request_title'] = 'Kennst Du {name}?';	
+$g_lang['buddy_request_title'] = 'Kennst Du {name}?';
 $g_lang['buddy_request'] = '{name} kennt Dich!';
 $g_lang['sharepoint_activate_title'] = 'Neuer Fair-Teiler in {bezirk}';
 $g_lang['sharepoint_activate'] = '{name} wurde eingetragen';

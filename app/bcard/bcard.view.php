@@ -1,12 +1,12 @@
 <?php
+
 class BcardView extends View
 {
-	
 	public function top()
 	{
-		return $this->topbar('Deine foodsharing Visitenkarte','hier easy generieren, ausdrucken und ausschneiden...','<img src="/img/bcard.png" />');
+		return $this->topbar('Deine foodsharing Visitenkarte', 'hier easy generieren, ausdrucken und ausschneiden...', '<img src="/img/bcard.png" />');
 	}
-	
+
 	public function optionform($seldata)
 	{
 		addJs('
@@ -20,7 +20,7 @@ class BcardView extends View
 				ev.preventDefault();
 				if($("#opt").val() == "")
 				{
-					pulseError(\''.jsSafe(s('should_choose_option')).'\');
+					pulseError(\'' . jsSafe(s('should_choose_option')) . '\');
 				}
 				else
 				{
@@ -29,12 +29,13 @@ class BcardView extends View
 				
 			});		
 		');
+
 		return v_quickform(s('options'), array(
-			v_form_select('opt',array('desc'=>s('opt_desc'),'values' => $seldata))
-		),array('submit'=>'Visitenkarten erstellen')).'
+				v_form_select('opt', array('desc' => s('opt_desc'), 'values' => $seldata))
+			), array('submit' => 'Visitenkarten erstellen')) . '
 				
 		<div class="input-wrapper" id="dlbox" style="display:none;">
-			<a href="#" target="_blank" class="button">'.s('download_card').'</a>		
+			<a href="#" target="_blank" class="button">' . s('download_card') . '</a>		
 		</div>';
 	}
 }

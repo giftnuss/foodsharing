@@ -1,4 +1,5 @@
 <?php
+
 class DashboardModel extends Model
 {
 	public function getUser()
@@ -16,13 +17,13 @@ class DashboardModel extends Model
 				lon
 				
 			FROM
-				'.PREFIX.'foodsaver 
+				' . PREFIX . 'foodsaver 
 				
 			WHERE 
-				id = '.(int)fsId().'
+				id = ' . (int)fsId() . '
 		');
 	}
-	
+
 	public function getNewestFoodbaskets($limit = 10)
 	{
 		return $this->q('
@@ -42,8 +43,8 @@ class DashboardModel extends Model
 				fs.photo AS fs_photo
 	
 			FROM
-				'.PREFIX.'basket b,
-				'.PREFIX.'foodsaver fs
+				' . PREFIX . 'basket b,
+				' . PREFIX . 'foodsaver fs
 	
 			WHERE
 				b.foodsaver_id = fs.id
@@ -54,14 +55,15 @@ class DashboardModel extends Model
 				id DESC
 	
 			LIMIT
-				0,'.$limit.'
+				0,' . $limit . '
 	
 		');
 	}
-	
+
 	public function listCloseBaskets($distance = 50)
 	{
 		$loc = S::getLocation();
+
 		return $this->q('
 			SELECT
 				b.id,
@@ -71,12 +73,12 @@ class DashboardModel extends Model
 				b.description,
 				b.lat,
 				b.lon,
-				(6371 * acos( cos( radians( '.$this->floatval($loc['lat']).' ) ) * cos( radians( b.lat ) ) * cos( radians( b.lon ) - radians( '.$this->floatval($loc['lon']).' ) ) + sin( radians( '.$this->floatval($loc['lat']).' ) ) * sin( radians( b.lat ) ) ))
+				(6371 * acos( cos( radians( ' . $this->floatval($loc['lat']) . ' ) ) * cos( radians( b.lat ) ) * cos( radians( b.lon ) - radians( ' . $this->floatval($loc['lon']) . ' ) ) + sin( radians( ' . $this->floatval($loc['lat']) . ' ) ) * sin( radians( b.lat ) ) ))
 				AS distance,
 				fs.name AS fs_name
 			FROM
 				fs_basket b,
-				'.PREFIX.'foodsaver fs
+				' . PREFIX . 'foodsaver fs
 	
 			WHERE
 				b.foodsaver_id = fs.id
@@ -85,10 +87,10 @@ class DashboardModel extends Model
 				b.status = 1
 	
 			AND
-				foodsaver_id != '.(int)fsId().'
+				foodsaver_id != ' . (int)fsId() . '
 		
 			HAVING
-				distance <='.(int)$distance.'
+				distance <=' . (int)$distance . '
 	
 			ORDER BY
 				distance ASC

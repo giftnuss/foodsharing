@@ -2,7 +2,8 @@
 
 
 /**
- * Inherited Methods
+ * Inherited Methods.
+ *
  * @method void wantToTest($text)
  * @method void wantTo($text)
  * @method void execute($callable)
@@ -15,21 +16,22 @@
  * @method \Codeception\Lib\Friend haveFriend($name, $actorClass = NULL)
  *
  * @SuppressWarnings(PHPMD)
-*/
+ */
 class HtmlAcceptanceTester extends \Codeception\Actor
 {
-    use _generated\HtmlAcceptanceTesterActions;
+	use _generated\HtmlAcceptanceTesterActions;
 
-   /**
-    * Define custom actions here
-    */
 	/**
-	 * Wait to see the body element
+	 * Define custom actions here.
+	 */
+
+	/**
+	 * Wait to see the body element.
 	 */
 	public function waitForPageBody()
 	{
 		/* This is not needed and not even compatible with PHP Browser but should
-		be available so tests can be switched to another backend anytime */
+	    be available so tests can be switched to another backend anytime */
 	}
 
 	public function login($email, $password)

@@ -1,14 +1,27 @@
-<?php 
+<?php
+
 /**
- * Automatically includes classes
-*
-* @throws Exception
-*
-* @param  string $class_name  Name of the class to load
-* @return void
-*/
+ * Automatically includes classes.
+ *
+ * @throws Exception
+ *
+ * @param  string $class_name  Name of the class to load
+ */
 
 require_once 'config.inc.php';
+
+/*
+ * Configure Raven (sentry.io client) for remote error reporting
+ */
+
+if (defined('SENTRY_URL')) {
+	require_once 'vendor/sentry/sentry/lib/Raven/Autoloader.php';
+	Raven_Autoloader::register();
+	$client = new Raven_Client(SENTRY_URL);
+	$client->install();
+	$client->tags_context(array('FS_ENV' => $FS_ENV));
+}
+
 require_once 'lib/func.inc.php';
 require_once 'lib/Session.php';
 
@@ -24,15 +37,14 @@ require_once 'lib/minify/JSMin.php';
 
 error_reporting(E_ALL);
 
-if(isset($_GET['logout']))
-{
+if (isset($_GET['logout'])) {
 	$_SESSION['client'] = array();
 	unset($_SESSION['client']);
 }
 
 $content_main = '';
 $content_right = '';
-$content_left = '';;
+$content_left = '';
 $content_top = '';
 $content_bottom = '';
 
@@ -76,13 +88,13 @@ addHead('<link rel="stylesheet" href="/css/pure/pure.min.css">
         <link rel="stylesheet" href="/css/pure/grids-responsive-min.css">
     <!--<![endif]-->');
 
-addHidden('<a id="'.id('fancylink').'" href="#fancy">&nbsp;</a>');
-addHidden('<div id="'.id('fancy').'"></div>');
+addHidden('<a id="' . id('fancylink') . '" href="#fancy">&nbsp;</a>');
+addHidden('<div id="' . id('fancy') . '"></div>');
 
 addHidden('<div id="u-profile"></div>');
 addHidden('<ul id="hidden-info"></ul>');
 addHidden('<ul id="hidden-error"></ul>');
-addHidden('<div id="comment">'.v_form_textarea('Kommentar').'<input type="hidden" id="comment-id" name="comment-id" value="0" /><input type="hidden" id="comment-name" name="comment-name" value="0" /></div>');
+addHidden('<div id="comment">' . v_form_textarea('Kommentar') . '<input type="hidden" id="comment-id" name="comment-id" value="0" /><input type="hidden" id="comment-name" name="comment-name" value="0" /></div>');
 addHidden('<div id="dialog-confirm" title="Wirklich l&ouml;schen?"><p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><span id="dialog-confirm-msg"></span><input type="hidden" value="" id="dialog-confirm-url" /></p></div>');
 addHidden('<div id="uploadPhoto"><form method="post" enctype="multipart/form-data" target="upload" action="xhr.php?f=addPhoto"><input type="file" name="photo" onchange="uploadPhoto();" /> <input type="hidden" id="uploadPhoto-fs_id" name="fs_id" value="" /></form><div id="uploadPhoto-preview"></div><iframe name="upload" width="1" height="1" src=""></iframe></div>');
 //addHidden('<audio id="xhr-chat-notify"><source src="img/notify.ogg" type="audio/ogg"><source src="img/notify.mp3" type="audio/mpeg"><source src="img/notify.wav" type="audio/wav"></audio>');
@@ -91,31 +103,27 @@ addHidden('<div id="fs-profile"></div>');
 
 $user = '';
 $g_body_class = '';
-$g_broadcast_message = $db->qOne('SELECT `body` FROM '.PREFIX.'content WHERE `id` = 51');
-if(S::may())
-{
-	if(isset($_GET['uc']))
-	{
-		if(fsId() != $_GET['uc'])
-		{
+$g_broadcast_message = $db->qOne('SELECT `body` FROM ' . PREFIX . 'content WHERE `id` = 51');
+if (S::may()) {
+	if (isset($_GET['uc'])) {
+		if (fsId() != $_GET['uc']) {
 			$db->logout();
 			goLogin();
 		}
 	}
-	
+
 	$g_body_class = ' class="loggedin"';
-	$user = 'user = {id:'.(int)fsId().'};';
-	
+	$user = 'user = {id:' . (int)fsId() . '};';
+
 	/*
 	 * little check for chat messages
 	 */
 }
 
-
 addJs('
-	'.$user.'
+	' . $user . '
 	$("#mainMenu > li > a").each(function(){
-		if(parseInt(this.href.length) > 2 && this.href.indexOf("'.getPage().'") > 0)
+		if(parseInt(this.href.length) > 2 && this.href.indexOf("' . getPage() . '") > 0)
 		{
 			$(this).parent().addClass("active").click(function(ev){
 				//ev.preventDefault();
@@ -144,37 +152,31 @@ addJs('
 		]
 	}).siblings(".ui-dialog-titlebar").remove();
 ');
-addHidden('<div id="fs-profile-rate-comment">'.v_form_textarea('fs-profile-rate-msg',array('desc'=>'...')).'</div>');
+addHidden('<div id="fs-profile-rate-comment">' . v_form_textarea('fs-profile-rate-msg', array('desc' => '...')) . '</div>');
 
-if(!S::may())
-{
+if (!S::may()) {
 	addJs('clearInterval(g_interval_newBasket);');
-}
-else
-{
+} else {
 	addJs('
 		sock.connect();
-		user.token = "'.S::user('token').'";
+		user.token = "' . S::user('token') . '";
 		info.init();
 	');
 }
 /*
  * Browser location abfrage nur einmal dann in session speichern
  */
-if($pos = S::get('blocation'))
-{
+if ($pos = S::get('blocation')) {
 	addJsFunc('
 		function getBrowserLocation(success)
 		{
 			success({
-				lat:'.floatval($pos['lat']).',
-				lon:'.floatval($pos['lon']).'
+				lat:' . floatval($pos['lat']) . ',
+				lon:' . floatval($pos['lon']) . '
 			});
 		}
 	');
-}
-else
-{
+} else {
 	addJsFunc('
 		function getBrowserLocation(success)
 		{
@@ -199,8 +201,7 @@ $quizinfo = '';
 
 //echo S::get('hastodoquiz').' => ' . S::get('hastodoquiz-id');die();
 
-if(S::get('hastodoquiz') === true)
-{
+if (S::get('hastodoquiz') === true) {
 	addJs('			
 		$(window).resize(function(){
 			if($(window).width() < 990)
@@ -217,13 +218,12 @@ if(S::get('hastodoquiz') === true)
 			$("#quizinfobadge").hide();
 		}
 	');
-	
+
 	$date = '12/12/2014';
-	if(S::get('hastodoquiz-id') > 1)
-	{
+	if (S::get('hastodoquiz-id') > 1) {
 		$date = '12/01/2015';
 	}
-	
+
 	$quizinfo = '
 	<a onmouseout="$(this).css({opacity:1});" onmouseover="$(this).css({opacity:0.8});" id="quizinfobadge" href="#" onclick="ajreq(\'quizpopup\',{app:\'quiz\'});$(this).css({left:\'-300px\'});return false;" style="padding:8px;display:block;text-align:center;position:fixed;left:0px;top:50%;height:93px;width:100px;margin-top:-50px;background-color:#46891b;" class="ui-shadow corner-right">
 		<i style="color:#fff;font-size:30px;" class="fa fa-bullhorn"></i>
@@ -231,7 +231,6 @@ if(S::get('hastodoquiz') === true)
 		<span style="font-size:11px;color:#fff;">(bis ' . $date . ')</span>
 	</a>';
 }
-
 
 /*
 addHead('
@@ -243,12 +242,12 @@ addHead('
   _gaq.push([\'_trackPageview\']);
 
   (function() {
-    var ga = document.createElement(\'script\'); ga.type = \'text/javascript\'; ga.async = true;
-    ga.src = (\'https:\' == document.location.protocol ? \'https://ssl\' : \'http://www\') + \'.google-analytics.com/ga.js\';
-    var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(ga, s);
+	var ga = document.createElement(\'script\'); ga.type = \'text/javascript\'; ga.async = true;
+	ga.src = (\'https:\' == document.location.protocol ? \'https://ssl\' : \'http://www\') + \'.google-analytics.com/ga.js\';
+	var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(ga, s);
   })();
 
-</script>		
+</script>
 ');
 */
 /*
@@ -270,11 +269,10 @@ tab_hover_color:\'#F4A631\'
 };
 
 (function() {
-    var _ue = document.createElement(\'script\'); _ue.type = \'text/javascript\'; _ue.async = true;
-    _ue.src = (\'https:\' == document.location.protocol ? \'https://\' : \'http://\') + \'cdn.userecho.com/js/widget-1.4.gz.js\';
-    var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(_ue, s);
+	var _ue = document.createElement(\'script\'); _ue.type = \'text/javascript\'; _ue.async = true;
+	_ue.src = (\'https:\' == document.location.protocol ? \'https://\' : \'http://\') + \'cdn.userecho.com/js/widget-1.4.gz.js\';
+	var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(_ue, s);
   })();
 
 </script>');
 */
-?>

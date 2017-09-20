@@ -1,4 +1,5 @@
 <?php
+
 $I = new AcceptanceTester($scenario);
 
 $pass = sq('pass');
@@ -21,9 +22,9 @@ $not_expired_id = $I->haveInDatabase('fs_basket', [
 ]);
 
 $I->wantTo('Ensure that the expired Foodbasket show another text');
-$I->amOnPage('/essenskoerbe/'.$expired_id);
+$I->amOnPage('/essenskoerbe/' . $expired_id);
 $I->see('Dieser Essenskorb wurde bereits abgeholt');
 
 $I->wantTo('Ensure that the not expired Foodbasket show the Basket');
-$I->amOnPage('/essenskoerbe/'.$not_expired_id);
+$I->amOnPage('/essenskoerbe/' . $not_expired_id);
 $I->see('###TEST###');
