@@ -41,7 +41,7 @@ hiddenDialog('newbezirk', array(
 addContent(v_field('<div><div id="' . id('bezirk_form') . '"></div></div>', 'Bezirk bearbeiten', array('class' => 'ui-padding')), CNT_LEFT);
 addContent(v_field(v_bezirk_tree($id) . '
         <div id="bezirk-buttons">
-            <span id="deletebezirk" style="visibility:hidden;">Bezirk Löschen</span>	
+            <span id="deletebezirk" style="visibility:hidden;">Bezirk löschen</span>	
             ' . v_dialog_button('newbezirk', 'Neuer Bezirk') . '	
         </div>', 'Bezirke'), CNT_RIGHT);
 

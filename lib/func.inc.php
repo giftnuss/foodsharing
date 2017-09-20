@@ -697,21 +697,21 @@ function getBetriebeMenu()
 
 	$id = id('becomeBezirkChooser');
 
-	$swap_msg = 'Welche Gegend soll neu angelegt werden ? ...';
+	$swap_msg = 'Welcher Bezirk soll neu angelegt werden?';
 	$swap = v_swapText($id . '-neu', $swap_msg);
 
 	addHidden('
 		<div id="becomeBezirk">
 			<div class="popbox">
-				<h3>Wähle die Region aus, in der Du aktiv werden möchtest!</h3>
+				<h3>Wähle den Bezirk aus, in dem Du aktiv werden möchtest!</h3>
 				<p class="subtitle">
-					Es besteht auch die Möglichkeit, eine/n neue/n Region/Bezirk zu gründen. Wähle bitte dennoch die entsprechende übergeordnete Region (Land, Bundeslan, Stadt etc.) aus!
+					Es besteht auch die Möglichkeit, einen neuen Bezirk zu gründen. Wähle bitte dennoch den entsprechenden übergeordneten Bezirk (Land, Bundeslan, Stadt etc.) aus!
 				</p>
 				<div style="height:260px;">
 					' . v_bezirkChildChooser($id) . '
-					<span id="' . $id . '-btna">Gesuchte Region ist nicht dabei</span>
+					<span id="' . $id . '-btna">Gesuchter Bezirk ist nicht dabei</span>
 					<div class="middle" id="' . $id . '-notAvail">
-						<h3>Dein/e Stadt / Region / Bezirk ist nicht dabei?</h3>
+						<h3>Deine Stadt oder Region ist nicht dabei?</h3>
 						' . $swap . '
 					</div>
 				</div>
@@ -790,7 +790,7 @@ function getBetriebeMenu()
 				}
 				else
 				{
-					pulseError(\'In diesen Bezirk kanndst Du Dich nicht eintragen.\');	
+					pulseError(\'In diesen Bezirk kannst Du Dich nicht eintragen.\');	
 					return false;		
 				}
 			}

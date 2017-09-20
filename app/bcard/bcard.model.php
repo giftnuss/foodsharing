@@ -14,6 +14,7 @@ class BcardModel extends Model
 					fs.`anschrift`,
 					fs.`telefon`,
 					fs.`handy`,
+					fs.`verified`,
 					fs.email
 				
 			FROM 	' . PREFIX . 'foodsaver fs

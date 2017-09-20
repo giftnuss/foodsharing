@@ -16,7 +16,7 @@ class GeocleanControl extends Control
 
 	public function lostregion()
 	{
-		addBread('Regionen ohne Botschafter');
+		addBread('Bezirke ohne Botschafter');
 		if ($regions = $this->model->q('
 			SELECT 
 				
