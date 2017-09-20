@@ -1134,7 +1134,7 @@ function xhr_getBezirk($data)
 			))),
 			v_input_wrapper(s($id), $inputs, $id)
 		), array('submit' => s('save'))) .
-		v_input_wrapper('Master-Update', '<a class="button" href="#" class="button" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'geoclean\',id:' . (int)$data['id'] . '});}return false;">Master-Update Starten</a>', 'masterupdate', array('desc' => 'Bei allen Kind Regionen ' . $g_data['name'] . ' als Master eintragen'));
+		v_input_wrapper('Master-Update', '<a class="button" href="#" class="button" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'geoclean\',id:' . (int)$data['id'] . '});}return false;">Master-Update starten</a>', 'masterupdate', array('desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen'));
 
 	$out['script'] = '
 		$("#bezirkform-form").unbind("submit");	
