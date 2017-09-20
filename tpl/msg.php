@@ -2,46 +2,41 @@
 
 $mainwidth = 24;
 
-
-if(!empty($content_left))
-{
+if (!empty($content_left)) {
 	$mainwidth -= 5;
 	$content_left = '
 		<div class="pure-u-1 pure-u-md-5-24" id="left">
 			<div class="inside">
-				'.$content_left.'
+				' . $content_left . '
 			</div>
 		</div>';
 }
-if(!empty($content_right))
-{
+if (!empty($content_right)) {
 	$mainwidth -= 8;
 	$content_right = '
 		<div class="pure-u-1 pure-u-md-8-24" id="right">
 			<div class="inside">
-				'.$content_right.'
+				' . $content_right . '
 			</div>
 		</div>';
 }
 
-if(!empty($content_bottom))
-{
+if (!empty($content_bottom)) {
 	$content_bottom = '
 		<div class="pure-g">
 			<div class="pure-u-1" id="content_bottom">
 				<div class="inside">
-					'.$content_bottom.'
+					' . $content_bottom . '
 				</div>
 			</div>
 		</div>';
 }
-if(!empty($content_main))
-{
+if (!empty($content_main)) {
 	$content_main = '
-	<div class="pure-u-1 pure-u-md-'.$mainwidth.'-24">
+	<div class="pure-u-1 pure-u-md-' . $mainwidth . '-24">
 		<div class="inside">
-			'.$content_top.'
-			'.$content_main.'
+			' . $content_top . '
+			' . $content_main . '
 		</div>
 	</div>';
 }
@@ -83,23 +78,22 @@ if(!empty($content_main))
 		</div>
 	</div>
 	<?php echo $content_overtop; ?>
-	<div id="main"<?php if(isMob()) { ?> class="mobile"<?php } ?>>
+	<div id="main"<?php if (isMob()) {
+	?> class="mobile"<?php
+} ?>>
 		<?php echo getBread(); ?>
 		<div class="pure-g mainpure">
 			<?php 
-			if(isMob())
-			{
+			if (isMob()) {
 				echo $content_main;
 				echo $content_right;
 				echo $content_left;
-			}
-			else
-			{
+			} else {
 				echo $content_left;
 				echo $content_main;
 				echo $content_right;
 			}
-				
+
 			?>
 		</div>
 

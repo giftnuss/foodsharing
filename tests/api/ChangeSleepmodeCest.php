@@ -1,6 +1,6 @@
 <?php
-namespace api;
 
+namespace api;
 
 class ChangeSleepmodeCest
 {
@@ -14,5 +14,4 @@ class ChangeSleepmodeCest
 		$I->sendGET('/', $request);
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 	}
-
 }

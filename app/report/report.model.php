@@ -1,7 +1,8 @@
 <?php
+
 class ReportModel extends Model
 {
-	public function addBetriebReport($fsid,$reason_id,$reason,$message,$betrieb_id = 0)
+	public function addBetriebReport($fsid, $reason_id, $reason, $message, $betrieb_id = 0)
 	{
 		return $this->insert('
 			INSERT INTO `fs_report`
@@ -17,43 +18,43 @@ class ReportModel extends Model
 			) 
 			VALUES 
 			(
-				'.$this->intval($fsid).',
-				'.$this->intval(fsId()).',
-				'.$this->intval($reason_id).',
-				'.$this->intval($betrieb_id).',
+				' . $this->intval($fsid) . ',
+				' . $this->intval(fsId()) . ',
+				' . $this->intval($reason_id) . ',
+				' . $this->intval($betrieb_id) . ',
 				NOW(),
 				0,
-				'.$this->strval($message).',
-				'.$this->strval($reason).'
+				' . $this->strval($message) . ',
+				' . $this->strval($reason) . '
 			)
 		');
 	}
-	
+
 	public function getFoodsaverBetriebe($fsid)
 	{
 		return $this->q('
 
 			SELECT 	b.id, b.name
-			FROM 	'.PREFIX.'betrieb_team t,
-					'.PREFIX.'betrieb b
+			FROM 	' . PREFIX . 'betrieb_team t,
+					' . PREFIX . 'betrieb b
 			WHERE 	t.betrieb_id = b.id
-			AND 	t.foodsaver_id = '.(int)$fsid.'
+			AND 	t.foodsaver_id = ' . (int)$fsid . '
 				
 		');
 	}
-	
+
 	public function delReport($id)
 	{
-		return $this->del('DELETE FROM `'.PREFIX.'report` WHERE id = '.(int)$id.' ');
+		return $this->del('DELETE FROM `' . PREFIX . 'report` WHERE id = ' . (int)$id . ' ');
 	}
-	
+
 	public function confirmReport($id)
 	{
 		return $this->update('
-			UPDATE `'.PREFIX.'report` SET  committed = 1 WHERE id = '.(int)$id.' 
+			UPDATE `' . PREFIX . 'report` SET  committed = 1 WHERE id = ' . (int)$id . ' 
 		');
 	}
-	
+
 	public function getReportedSavers()
 	{
 		return $this->q('
@@ -65,8 +66,8 @@ class ReportModel extends Model
 					COUNT(rp.foodsaver_id) AS count,
 					CONCAT("/?page=report&sub=foodsaver&id=",fs.id) AS `href`
 				
-			FROM 	'.PREFIX.'foodsaver fs,
-					'.PREFIX.'report rp
+			FROM 	' . PREFIX . 'foodsaver fs,
+					' . PREFIX . 'report rp
 				
 			WHERE 	rp.foodsaver_id = fs.id
 				
@@ -75,46 +76,43 @@ class ReportModel extends Model
 			ORDER BY count DESC, fs.name
 		');
 	}
-	
+
 	public function getReportStats()
 	{
 		$ret = $this->qCol('
 			SELECT 	COUNT(`id`)
-			FROM 	'.PREFIX.'report
+			FROM 	' . PREFIX . 'report
 			GROUP BY `committed`
 		');
-		
+
 		$new = 0;
 		$com = 0;
-		if(isset($ret[0]))
-		{
+		if (isset($ret[0])) {
 			$new = $ret[0];
 		}
-		if(isset($ret[1]))
-		{
+		if (isset($ret[1])) {
 			$com = $ret[1];
 		}
-		
+
 		return array(
 			'com' => $com,
-			'new' => $new		
+			'new' => $new
 		);
 	}
-	
+
 	public function getReportedSaver($id)
 	{
-		if($fs = $this->qRow('
+		if ($fs = $this->qRow('
 			SELECT 	`id`,
 					`name`,
 					`nachname`,
 					`photo`,
 					sleep_status
 
-			FROM 	`'.PREFIX.'foodsaver`
+			FROM 	`' . PREFIX . 'foodsaver`
 				
-			WHERE 	id = '.(int)$id.'
-		'))
-		{
+			WHERE 	id = ' . (int)$id . '
+		')) {
 			$fs['reports'] = $this->q('
 
 				SELECT 
@@ -133,26 +131,26 @@ class ReportModel extends Model
 					
           
 				FROM
-	            	`'.PREFIX.'report` r
+	            	`' . PREFIX . 'report` r
 					
 	         	LEFT JOIN
-	            	`'.PREFIX.'foodsaver` fs ON r.foodsaver_id = fs.id 
+	            	`' . PREFIX . 'foodsaver` fs ON r.foodsaver_id = fs.id 
 					
 				LEFT JOIN
-	            	`'.PREFIX.'foodsaver` rp ON r.reporter_id = rp.id 
+	            	`' . PREFIX . 'foodsaver` rp ON r.reporter_id = rp.id 
 				
 				WHERE
-					r.foodsaver_id = '.(int)$id.'
+					r.foodsaver_id = ' . (int)$id . '
 					
 	          	ORDER BY 
 					r.`time` DESC
 					
 			');
-			
+
 			return $fs;
 		}
 	}
-	
+
 	public function getReport($id)
 	{
 		$report = $this->qRow('
@@ -179,29 +177,27 @@ class ReportModel extends Model
 				
           
 			FROM
-            	`'.PREFIX.'report` r
+            	`' . PREFIX . 'report` r
 				
          	LEFT JOIN
-            	`'.PREFIX.'foodsaver` fs ON r.foodsaver_id = fs.id 
+            	`' . PREFIX . 'foodsaver` fs ON r.foodsaver_id = fs.id 
 				
 			LEFT JOIN
-            	`'.PREFIX.'foodsaver` rp ON r.reporter_id = rp.id 
+            	`' . PREFIX . 'foodsaver` rp ON r.reporter_id = rp.id 
 
 			WHERE
-				r.`id` = '.(int)$id.'
+				r.`id` = ' . (int)$id . '
 		');
-		
-		if($report['betrieb_id'] > 0)
-		{
-			if($betrieb = $this->qRow('SELECT id, name FROM '.PREFIX.'betrieb WHERE id = '.(int)$report['betrieb_id']))
-			{
+
+		if ($report['betrieb_id'] > 0) {
+			if ($betrieb = $this->qRow('SELECT id, name FROM ' . PREFIX . 'betrieb WHERE id = ' . (int)$report['betrieb_id'])) {
 				$report['betrieb'] = $betrieb;
 			}
 		}
-		
+
 		return $report;
 	}
-	
+
 	public function getReports($committed = '0')
 	{
 		$ret = $this->q('
@@ -228,24 +224,24 @@ class ReportModel extends Model
                 b.name as heimatbezirk
                           
 			FROM
-            	`'.PREFIX.'report` r
+            	`' . PREFIX . 'report` r
 				
          	LEFT JOIN
-            	`'.PREFIX.'foodsaver` fs ON r.foodsaver_id = fs.id 
+            	`' . PREFIX . 'foodsaver` fs ON r.foodsaver_id = fs.id 
 				
 			LEFT JOIN
-            	`'.PREFIX.'foodsaver` rp ON r.reporter_id = rp.id 
+            	`' . PREFIX . 'foodsaver` rp ON r.reporter_id = rp.id 
 
 			LEFT JOIN
  				`'.PREFIX.'bezirk` b on fs.bezirk_id=b.id
-
 			
 			WHERE
-				r.committed = '.$committed.'
+				r.committed = ' . $committed . '
 				
           	ORDER BY 
 				r.`time` DESC
 		');
+
 		return $ret;
 	}
 }

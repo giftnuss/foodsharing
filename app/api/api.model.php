@@ -1,9 +1,10 @@
 <?php
+
 class ApiModel extends Model
 {
 	public function getOrgaGroups()
 	{
-		return $this->q('SELECT id, name, parent_id FROM '.PREFIX.'bezirk WHERE type = 7 ORDER BY parent_id');
+		return $this->q('SELECT id, name, parent_id FROM ' . PREFIX . 'bezirk WHERE type = 7 ORDER BY parent_id');
 	}
 
 	public function allBaskets()
@@ -24,15 +25,15 @@ class ApiModel extends Model
 
 		');
 	}
-	
-	public function nearBaskets($lat,$lon,$distance = 50)
+
+	public function nearBaskets($lat, $lon, $distance = 50)
 	{
 		return $this->q('
 			SELECT 	
 				b.id AS i,
 				b.lat AS a, 
 				b.lon AS o, 
-				(6371 * acos( cos( radians( '.$this->floatval($lat).' ) ) * cos( radians( b.lat ) ) * cos( radians( b.lon ) - radians( '.$this->floatval($lon).' ) ) + sin( radians( '.$this->floatval($lat).' ) ) * sin( radians( b.lat ) ) ))
+				(6371 * acos( cos( radians( ' . $this->floatval($lat) . ' ) ) * cos( radians( b.lat ) ) * cos( radians( b.lon ) - radians( ' . $this->floatval($lon) . ' ) ) + sin( radians( ' . $this->floatval($lat) . ' ) ) * sin( radians( b.lat ) ) ))
 				AS d
 			FROM 	
 				fs_basket b
@@ -44,10 +45,10 @@ class ApiModel extends Model
 				b.fs_id = 0
 				
 			HAVING 
-				d <='.(int)$distance.'
+				d <=' . (int)$distance . '
 		');
 	}
-	
+
 	public function getBasket($id)
 	{
 		$basket = $this->qRow('
@@ -64,32 +65,30 @@ class ApiModel extends Model
 					b.lon
 	
 				FROM
-					'.PREFIX.'basket b
+					' . PREFIX . 'basket b
 	
 				WHERE
-					b.id = '.(int)$id.'
+					b.id = ' . (int)$id . '
 		');
-	
-		if($basket['fsf_id'] == 0)
-		{
-			if($fs = $this->qRow('
+
+		if ($basket['fsf_id'] == 0) {
+			if ($fs = $this->qRow('
 				SELECT
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,
 				fs.id AS fs_id
 						
 				FROM
-				'.PREFIX.'foodsaver fs
+				' . PREFIX . 'foodsaver fs
 						
 				WHERE
-				fs.id = '.(int)$basket['foodsaver_id'].'
+				fs.id = ' . (int)$basket['foodsaver_id'] . '
 						
-			'))
-			{
-				$basket = array_merge($basket,$fs);
+			')) {
+				$basket = array_merge($basket, $fs);
 			}
 		}
-	
+
 		return $basket;
 	}
 }

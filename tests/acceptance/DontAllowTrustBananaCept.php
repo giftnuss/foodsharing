@@ -1,4 +1,5 @@
 <?php
+
 $I = new AcceptanceTester($scenario);
 
 $I->wantTo('Check if people can give self banana');
@@ -8,8 +9,8 @@ $foodsaver = $I->createFoodsaver($pass);
 
 $I->login($foodsaver['email'], $pass);
 
-$I->amOnPage('/profile/'.$foodsaver['id']);
-$I->see('Status-Updates von '.$foodsaver['name']);
+$I->amOnPage('/profile/' . $foodsaver['id']);
+$I->see('Status-Updates von ' . $foodsaver['name']);
 
 $I->waitForElementVisible('a.item.stat_bananacount.bouched', 4);
 $I->click('a.item.stat_bananacount.bouched');

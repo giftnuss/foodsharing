@@ -1,10 +1,11 @@
 <?php
+
 $I = new AcceptanceTester($scenario);
 
 // http://codeception.com/docs/modules/WebDriver
 
 // create some unique values for our new user
-$email = sq('email').'@test.com';
+$email = sq('email') . '@test.com';
 $first_name = sq('first_name');
 $last_name = sq('last_name');
 $password = sq('password');
@@ -61,7 +62,7 @@ $I->fillField('email_adress', $email);
 $I->fillField('password', $password);
 $I->click('#loginbar input[type=submit]');
 $I->waitForPageBody();
-$I->see('Willkommen '.$first_name.'!');
+$I->see('Willkommen ' . $first_name . '!');
 
 $I->seeInDatabase('fs_foodsaver', [
 	'email' => $email,

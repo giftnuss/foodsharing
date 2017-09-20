@@ -2,7 +2,8 @@
 
 
 /**
- * Inherited Methods
+ * Inherited Methods.
+ *
  * @method void wantToTest($text)
  * @method void wantTo($text)
  * @method void execute($callable)
@@ -15,19 +16,18 @@
  * @method \Codeception\Lib\Friend haveFriend($name, $actorClass = NULL)
  *
  * @SuppressWarnings(PHPMD)
-*/
+ */
 class ApiTester extends \Codeception\Actor
 {
 	use _generated\ApiTesterActions;
 
 	/**
-	* Checks the content type is html, and the content contains html
-	*/
+	 * Checks the content type is html, and the content contains html.
+	 */
 	public function seeHtml()
 	{
 		$I = $this;
 		$I->seeHttpHeader('Content-Type', 'text/html; charset=UTF-8');
 		$I->seeResponseIsHtml();
 	}
-
 }

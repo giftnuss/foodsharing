@@ -24,13 +24,13 @@ class ChatCest
 		$I->login($this->foodsaver1['email'], 'pw');
 
 		// view the other users profile and start a chat
-		$I->amOnPage('/profile/'.$this->foodsaver2['id']);
+		$I->amOnPage('/profile/' . $this->foodsaver2['id']);
 		$I->click('Nachricht schreiben');
 		$I->waitForElementVisible('.chatboxtextarea', 4);
 
 		// write a message to them
 		$I->fillField('.chatboxtextarea', 'is anyone there?');
-		$I->pressKey('.chatboxtextarea',WebDriverKeys::ENTER);
+		$I->pressKey('.chatboxtextarea', WebDriverKeys::ENTER);
 		$I->wait(1);
 
 		$I->see('is anyone there?', '.chatboxcontent');
@@ -41,8 +41,7 @@ class ChatCest
 		]);
 
 		$matthias = $I->haveFriend('matthias');
-		$matthias->does(function(AcceptanceTester $I)
-		{
+		$matthias->does(function (AcceptanceTester $I) {
 			$I->login($this->foodsaver2['email'], 'pw');
 			$I->amOnPage('/');
 
@@ -57,10 +56,9 @@ class ChatCest
 
 			// write a nice reply
 			$I->fillField('.chatboxtextarea', 'yes! I am here!');
-			$I->pressKey('.chatboxtextarea',WebDriverKeys::ENTER);
+			$I->pressKey('.chatboxtextarea', WebDriverKeys::ENTER);
 			$I->wait(1);
 		});
-
 
 		$I->see('yes! I am here!', '.chatboxcontent');
 

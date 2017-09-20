@@ -1,7 +1,7 @@
-<?php 
+<?php
+
 class ApplicationXhr extends Control
 {
-	
 	public function __construct()
 	{
 		$this->model = new ApplicationModel();
@@ -9,47 +9,45 @@ class ApplicationXhr extends Control
 
 		parent::__construct();
 	}
-	
+
 	public function apply()
 	{
-		if(isBotFor($_GET['bid']) || isOrgaTeam())
-		{
-			if($this->model->apply($_GET['bid'],$_GET['fid']))
-			{
-				info("Bewerbung angenommen");
+		if (isBotFor($_GET['bid']) || isOrgaTeam()) {
+			if ($this->model->apply($_GET['bid'], $_GET['fid'])) {
+				info('Bewerbung angenommen');
+
 				return array(
 					'status' => 1,
-					'script' => 'goTo("/?page=bezirk&bid='.(int)$_GET['bid'].'");'
+					'script' => 'goTo("/?page=bezirk&bid=' . (int)$_GET['bid'] . '");'
 				);
 			}
 		}
 	}
-	
+
 	public function maybe()
 	{
-		if(isBotFor($_GET['bid']) || isOrgaTeam())
-		{
-			if($this->model->maybe($_GET['bid'],$_GET['fid']))
-			{
-				info("Bewerbungs Status geändert");
+		if (isBotFor($_GET['bid']) || isOrgaTeam()) {
+			if ($this->model->maybe($_GET['bid'], $_GET['fid'])) {
+				info('Bewerbungs Status geändert');
+
 				return array(
-						'status' => 1,
-						'script' => 'goTo("/?page=bezirk&bid='.(int)$_GET['bid'].'");'
+					'status' => 1,
+					'script' => 'goTo("/?page=bezirk&bid=' . (int)$_GET['bid'] . '");'
 				);
 			}
 		}
 	}
-	
+
 	public function noapply()
 	{
-		if(isBotFor($_GET['bid']) || isOrgaTeam())
-		{
-			$this->model->noapply($_GET['bid'],$_GET['fid']);
+		if (isBotFor($_GET['bid']) || isOrgaTeam()) {
+			$this->model->noapply($_GET['bid'], $_GET['fid']);
 
-			info("Bewerbung abgelehnt");
+			info('Bewerbung abgelehnt');
+
 			return array(
-						'status' => 1,
-						'script' => 'goTo("/?page=bezirk&bid='.(int)$_GET['bid'].'");'
+				'status' => 1,
+				'script' => 'goTo("/?page=bezirk&bid=' . (int)$_GET['bid'] . '");'
 			);
 		}
 	}

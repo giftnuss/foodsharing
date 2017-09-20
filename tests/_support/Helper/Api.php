@@ -1,12 +1,12 @@
 <?php
+
 namespace Helper;
 
 class Api extends \Codeception\Module
 {
-
 	/**
-	* Checks the response content is html
-	*/
+	 * Checks the response content is html.
+	 */
 	public function seeResponseIsHtml()
 	{
 		$response = $this->getModule('REST')->response;
@@ -14,7 +14,8 @@ class Api extends \Codeception\Module
 	}
 
 	/**
-	 * Checks is a regular expression is found in response content
+	 * Checks is a regular expression is found in response content.
+	 *
 	 * @param $pattern
 	 */
 	public function seeRegExp($pattern)
@@ -39,5 +40,4 @@ class Api extends \Codeception\Module
 			'password' => $pass
 		]);
 	}
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 class LoginCest
 {
 	/**
@@ -22,10 +23,9 @@ class LoginCest
 
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeHtml();
-		$I->seeRegExp('~.*'.$example[1].$user['name'].'.*~i');
-		if(isset($example[2]))
-		{
-			$I->seeRegExp('~.*'.$example[2].'.*~i');
+		$I->seeRegExp('~.*' . $example[1] . $user['name'] . '.*~i');
+		if (isset($example[2])) {
+			$I->seeRegExp('~.*' . $example[2] . '.*~i');
 		}
 	}
 }

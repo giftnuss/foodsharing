@@ -1,4 +1,5 @@
 <?php
+
 class NewareaModel extends Model
 {
 	public function getWantNews()
@@ -14,33 +15,32 @@ class NewareaModel extends Model
 					`stadt`,
 					`new_bezirk`,
 					`want_new`
-			FROM 	`'.PREFIX.'foodsaver`
+			FROM 	`' . PREFIX . 'foodsaver`
 			WHERE 	`want_new` = 1		
 		');
-		
-		foreach ($fs as $key => $f)
-		{
+
+		foreach ($fs as $key => $f) {
 			$fs[$key]['bezirke'] = $this->q('
 				SELECT	b.`name`,
 						b.`id`
-				FROM 	`'.PREFIX.'foodsaver_has_bezirk` bh,
-						`'.PREFIX.'bezirk` b
+				FROM 	`' . PREFIX . 'foodsaver_has_bezirk` bh,
+						`' . PREFIX . 'bezirk` b
 						
 				WHERE 	bh.bezirk_id = b.id 
-				AND bh.foodsaver_id = '.$f['id'].'
+				AND bh.foodsaver_id = ' . $f['id'] . '
 			');
 		}
-		
+
 		return $fs;
 	}
-	
+
 	public function clearWantNew($fsid)
 	{
 		$this->update('
-			UPDATE 	`'.PREFIX.'foodsaver`
+			UPDATE 	`' . PREFIX . 'foodsaver`
 			SET 	`want_new` = 0,
 					`new_bezirk` = ""
-			WHERE 	`id` = '.(int)$fsid.'		
+			WHERE 	`id` = ' . (int)$fsid . '		
 		');
 	}
 }

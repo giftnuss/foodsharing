@@ -38,13 +38,13 @@
 		    <div class="pure-u-1 pure-u-md-12-24">
 		    	<div class="inside">
 <?php
-		if(strpos($_SERVER['HTTP_HOST'], 'foodsharing.at') !== false) {
-?>
+		if (strpos($_SERVER['HTTP_HOST'], 'foodsharing.at') !== false) {
+			?>
 							<a class="corner-all" href="http://www.bmlfuw.gv.at/" target="_blank"><img src="/img/mfelo.png" alt="Lebensministerium" /></a>
 							<a class="corner-all" href="http://www.wienertafel.at/" target="_blank"><img src="/img/wien_tafel.png" alt="Wiener Tafel" /></a>
 							<a class="corner-all" href="http://www.denns-biomarkt.at/" target="_blank"><img src="/img/denns_logo_100.png" alt="Denn's Biomarkt" /></a>
 <?php
-			}
+		}
 ?>
 
 							<h6>Vielen Dank an unseren Öko-Hoster</h6>
