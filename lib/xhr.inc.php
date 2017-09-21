@@ -1114,27 +1114,27 @@ function xhr_getBezirk($data)
 
 	$inputs = '<div id="' . $id . '">' . $inputs . '</div>';
 
-	$cats = $db->getBasics_bezirk();
-	$out['html'] = v_form('bezirkForm', array(
-		v_form_hidden('bezirk_id', (int)$data['id']),
-		v_form_select('parent_id', array('values' => $cats)),
-		v_form_select('master', array('label' => 'Master-Bezirk','desc'=>'Alle Foodsaver sind automatisch mit im Master-Bezirk, sofern einer angegeben wurde', 'values' => $cats)),
-		v_form_text('name'),
-		v_form_text('mailbox_name', array('desc' => 'Achtung! Nicht willkürlich ändern! Auch darauf achten, dass unter Mailboxen die Mailbox noch nciht existiert.')),
-		v_form_text('email_name', array('label' => 'Absendername')),
-		v_form_select('type', array('label'=>'Bezirkstyp','values' => array(
-			array('id' => '1', 'name' => 'Stadt'),
-			array('id' => '8', 'name' => 'Großstadt (ohne Anmeldemöglichkeit)'),
-			array('id' => '9', 'name' => 'Stadtteil'),
-			array('id' => '2', 'name' => 'Bezirk'),
-			array('id' => '3', 'name' => 'Region'),
-			array('id' => '5', 'name' => 'Bundesland'),
-			array('id' => '6', 'name' => 'Land'),
-			array('id' => '7', 'name' => 'Orgateam')
-		))),
-		v_input_wrapper(s($id), $inputs,$id)
-	), array('submit' => s('save'))) .
-	v_input_wrapper('Master-Update', '<a class="button" href="#" class="button" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'geoclean\',id:' . (int)$data['id'] . '});}return false;">Master-Update starten</a>','masterupdate',array('desc'=>'Bei allen Kindbezirken '.$g_data['name'] . ' als Master eintragen'));
+    $cats = $db->getBasics_bezirk();
+    $out['html'] = v_form('bezirkForm', array(
+            v_form_hidden('bezirk_id', (int)$data['id']),
+            v_form_select('parent_id', array('values' => $cats)),
+            v_form_select('master', array('label' => 'Master-Bezirk', 'desc' => 'Alle Foodsaver sind automatisch mit im Master-Bezirk, sofern einer angegeben wurde', 'values' => $cats)),
+            v_form_text('name'),
+            v_form_text('mailbox_name', array('desc' => 'Achtung! Nicht willkürlich ändern! Auch darauf achten, dass unter Mailboxen die Mailbox noch nciht existiert.')),
+            v_form_text('email_name', array('label' => 'Absendername')),
+            v_form_select('type', array('label' => 'Bezirkstyp', 'values' => array(
+                array('id' => '1', 'name' => 'Stadt'),
+                array('id' => '8', 'name' => 'Großstadt (ohne Anmeldemöglichkeit)'),
+                array('id' => '9', 'name' => 'Stadtteil'),
+                array('id' => '2', 'name' => 'Bezirk'),
+                array('id' => '3', 'name' => 'Region'),
+                array('id' => '5', 'name' => 'Bundesland'),
+                array('id' => '6', 'name' => 'Land'),
+                array('id' => '7', 'name' => 'Orgateam')
+            ))),
+            v_input_wrapper(s($id), $inputs, $id)
+        ), array('submit' => s('save'))) .
+        v_input_wrapper('Master-Update', '<a class="button" href="#" class="button" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'geoclean\',id:' . (int)$data['id'] . '});}return false;">Master-Update starten</a>', 'masterupdate', array('desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen'));
 
 	$out['script'] = '
 		$("#bezirkform-form").unbind("submit");	
