@@ -28,7 +28,8 @@ return PhpCsFixer\Config::create()
         'concat_space' => ['spacing' => 'one'],
         'cast_spaces' => ['space' => 'none'],
         'phpdoc_align' => ['tags' => []],
-        'trailing_comma_in_multiline_array' => false
+        'trailing_comma_in_multiline_array' => false,
+        'yoda_style' => null
     ])
     ->setIndent("\t")
     ->setFinder($finder)
