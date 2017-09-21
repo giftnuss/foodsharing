@@ -21,6 +21,8 @@ if(isset($_GET['g_path']))
 }
 */
 
+require __DIR__ . '/includes/setup.php';
+
 require_once 'lib/inc.php';
 addCss('/css/gen/style.css?v=' . VERSION);
 addScript('/js/gen/script.js?v=' . VERSION);
