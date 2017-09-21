@@ -265,7 +265,7 @@ function v_bezirkChooser($id = 'bezirk_id', $bezirk = false, $option = array())
         });');
 	addHidden('<div id="' . $id . '-dialog"><div id="' . $id . '-tree"></div></div>');
 
-	$label = s('bezirk');
+	$label = s('Stammbezirk');
 	if (isset($option['label'])) {
 		$label = $option['label'];
 	}
