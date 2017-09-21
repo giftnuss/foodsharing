@@ -8,7 +8,10 @@
 
 ## Bugfixes
 - Foodsharers and unverified Foodsavers are no longer able to create business cards. !145 by @k.miklobusec and @peter.toennies
-- Breadcrump links in forum view are working now. !142 by @raphaelw and @NerdyProjects
+- Breadcrumb links in forum view are working now. !142 by @raphaelw and @NerdyProjects
+
+## Refactoring
+- Enable composer autoloader and initial src folder. !157 by @tiltec
 
 # v1.0.0 [date?]
 
