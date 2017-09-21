@@ -18,14 +18,19 @@ class BcardControl extends Control
 
 		if ($data = $this->model->getMyData()) {
 			if (strlen($data['anschrift'] . ', ' . $data['plz'] . ' ' . $data['stadt']) >= 49) {
-				error('Deine Anschrift ist zu lang, Anschrift Postleitzahl und Stadt dürfen zusammen maximal 49 Zeichen haben.');
+				error('Deine Anschrift ist zu lang! Anschrift, Postleitzahl und Stadt dürfen zusammen maximal 49 Zeichen haben.');
 				go('/?page=settings');
 			}
 			if (strlen($data['telefon'] . $data['handy']) <= 3) {
-				error('Du musst eine gültige Telefonnummer angegeben haben um Deine Visitenkarte zu generieren');
+				error('Du musst eine gültige Telefonnummer angegeben haben, um Deine Visitenkarte zu generieren');
 				go('/?page=settings');
-			}
-			$sel_data = array();
+            }
+            if ($data['verified'] == 0) {
+                // you have to be a verified user to generate your business card.
+                error('Du musst verifiziert sein, um Deine Visitenkarte generieren zu können.');
+                go('/?page=settings');
+            }
+            $sel_data = array();
 			if ($data['bot']) {
 				foreach ($data['bot'] as $b) {
 					$sel_data[] = array(

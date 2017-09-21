@@ -7,6 +7,8 @@
 ## Features
 
 ## Bugfixes
+- Foodsharers and unverified Foodsavers are no longer able to create business cards. !145 by @k.miklobusec and @peter.toennies
+- Breadcrump links in forum view are working now. !142 by @raphaelw and @NerdyProjects
 
 # v1.0.0 [date?]
 
