@@ -61,7 +61,6 @@ class LoginControl extends Control
 				$_SESSION['mob'] = (int)$_POST['ismob'];
 			}
 
-			require_once 'lib/Mobile_Detect.php';
 			$mobdet = new Mobile_Detect();
 			if ($mobdet->isMobile()) {
 				$_SESSION['mob'] = 1;

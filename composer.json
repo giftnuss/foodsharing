@@ -4,7 +4,8 @@
     "friendsofphp/php-cs-fixer": "2.*"
   },
   "require": {
-    "sentry/sentry": "^1.7"
+    "sentry/sentry": "^1.7",
+    "mobiledetect/mobiledetectlib": "^2.8"
   },
   "autoload": {
     "psr-4": {"Foodsharing\\": "src/"}
