@@ -91,6 +91,7 @@ services:
   selenium:
     container_name: foodsharing_test_selenium
     image: selenium/standalone-chrome
+    shm_size: 256M
     links:
       - web:web
     expose:
