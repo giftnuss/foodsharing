@@ -15,3 +15,16 @@ if (file_exists($env_filename)) {
 if (!defined('SOCK_URL')) {
 	define('SOCK_URL', 'http://127.0.0.1:1338/');
 }
+
+
+/*
+ * Configure Raven (sentry.io client) for remote error reporting
+ */
+
+if (defined('SENTRY_URL')) {
+	require_once 'vendor/sentry/sentry/lib/Raven/Autoloader.php';
+	Raven_Autoloader::register();
+	$client = new Raven_Client(SENTRY_URL);
+	$client->install();
+	$client->tags_context(array('FS_ENV' => $FS_ENV));
+}
