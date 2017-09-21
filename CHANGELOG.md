@@ -5,6 +5,8 @@
 ## Breaking changes
 
 ## Features
+- Show current source code revision in footer
+- Track source code revision with errors
 
 ## Bugfixes
 - Set the pages timezone globally to Europe/Berlin to not having to rely on server settings. !256 by @NerdyProjects
@@ -15,6 +17,7 @@
 
 ## Refactoring
 - Enable composer autoloader and initial src folder. !157 by @tiltec
+
 
 # v1.0.0 [date?]
 
