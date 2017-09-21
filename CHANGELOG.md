@@ -5,8 +5,8 @@
 ## Breaking changes
 
 ## Features
-- Show current source code revision in footer
-- Track source code revision with errors
+- Show current source code revision in footer (https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/153) by @NerdyProjects
+- Track source code revision with errors (https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/153) by @NerdyProjects
 
 ## Bugfixes
 - Set the pages timezone globally to Europe/Berlin to not having to rely on server settings. !256 by @NerdyProjects
