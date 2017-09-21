@@ -54,7 +54,7 @@
 		</div>
 		<div class="inside">
 			<?php if (defined('SRC_REVISION')) {
-				echo '<a href="https://gitlab.com/foodsharing-dev/foodsharing/commit/'.SRC_REVISION.'">';
+				echo '<a href="https://gitlab.com/foodsharing-dev/foodsharing/tree/'.SRC_REVISION.'">';
 				echo "Version: ".SRC_REVISION."</a>";
 			}
 			?>
