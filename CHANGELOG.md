@@ -7,6 +7,7 @@
 ## Features
 
 ## Bugfixes
+- Set the pages timezone globally to Europe/Berlin to not having to rely on server settings. !256 by @NerdyProjects
 - Foodsharers and unverified Foodsavers are no longer able to create business cards. !145 by @k.miklobusec and @peter.toennies
 - Breadcrumb links in forum view are working now. !142 by @raphaelw and @NerdyProjects
 - Lots of corrections in spelling and grammar. !140, !118 by @peter.toennies

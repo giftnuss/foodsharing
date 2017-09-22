@@ -17,6 +17,7 @@ if (!defined('SOCK_URL')) {
 	define('SOCK_URL', 'http://127.0.0.1:1338/');
 }
 
+date_default_timezone_set("Europe/Berlin");
 
 /*
  * Configure Raven (sentry.io client) for remote error reporting
@@ -27,3 +28,4 @@ if (defined('SENTRY_URL')) {
 	$client->install();
 	$client->tags_context(array('FS_ENV' => $FS_ENV));
 }
+
