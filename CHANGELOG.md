@@ -5,6 +5,7 @@
 ## Breaking changes
 
 ## Features
+- Show current commit in footer as well as use it in sentry if errors occur !153 @NerdyProjects
 
 ## Bugfixes
 - Set the pages timezone globally to Europe/Berlin to not having to rely on server settings. !256 by @NerdyProjects

@@ -58,7 +58,9 @@ deploy:
     # instead.
     # - mkdir -p ~/.ssh
     # - '[[ -f /.dockerenv ]] && echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts'
-    - ssh gitolite@banana.foodsharing.de 'cd /var/www/lmr-beta/www; git fetch gitlab && git checkout gitlab/master && composer install --no-dev'
+    - scp scripts/deploy.sh gitolite@banana.foodsharing.de:/var/www/lmr-beta
+    - ssh gitolite@banana.foodsharing.de 'cd /var/www/lmr-beta/www; ../deploy.sh'
+
   only:
     - master
 
