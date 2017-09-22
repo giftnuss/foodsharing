@@ -1007,32 +1007,38 @@ function getOrgaMenu()
 {
 	$menu = array();
 	if (isOrgaTeam()) {
-		$menu = array('manage_regions' => 'region',
-			'newarea' => 'newarea',
-			'all_fs' => 'foodsaver&bid=0',
+		$menu = [
 			'all_store' => 'betrieb&bid=0',
-			'email' => 'email',
+			'all_fs' => 'foodsaver&bid=0',
 			'chain' => 'kette',
-			'faq' => 'faq',
-			'foodtypes' => 'lebensmittel',
-			'content' => 'content',
-			'mailbox_manage' => 'mailbox&a=manage',
 			'regions_without_bots' => 'geoclean&sub=lostregion',
-			'foodsaver_without_region' => 'geoclean',
-			'email_tpl' => 'message_tpl'
-		);
+			'manage_regions' => 'region',
+			'newarea' => 'newarea'
+		];
 	}
 
-	if (mayHandleReports()) {
-		$menu['reports'] = 'report&sub=uncom';
+	if (mayEditBlog()) {
+		$menu['blog'] = 'blog&sub=manage';
+	}
+
+	if (isOrgaTeam()) {
+		$menu = [
+			'email' => 'email',
+			'email_tpl' => 'message_tpl',
+			'faq' => 'faq',
+			'foodsaver_without_region' => 'geoclean',
+			'content' => 'content',
+			'foodtypes' => 'lebensmittel',
+			'mailbox_manage' => 'mailbox&a=manage'
+		];
 	}
 
 	if (mayEditQuiz()) {
 		$menu['quiz'] = 'quiz';
 	}
 
-	if (mayEditBlog()) {
-		$menu['blog'] = 'blog&sub=manage';
+	if (mayHandleReports()) {
+		$menu['reports'] = 'report&sub=uncom';
 	}
 
 	$len = count($menu);
