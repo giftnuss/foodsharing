@@ -215,12 +215,12 @@ class ReportView extends View
 		}
 
 		$table = v_tablesorter(array(
-				array('name' => 'Über', 'width' => 50),
-				array('name' => 'Von', 'width' => 50),
+				array('name' => 'Über', 'width' => 40),
+				array('name' => 'Von', 'width' => 40),
 				array('name' => s('message')),
 				array('name' => s('datetime'), 'width' => 80),
-				array('name' => 'FS Wohnort', 'width' => 60),
-				array('name' => 'Stammbezirk', 'width' => 25)
+				array('name' => 'FS Wohnort', 'width' => 80),
+				array('name' => 'Stammbezirk', 'width' => 40)
 		), $rows, array('pager' => true));
 		return $table;
 	}
