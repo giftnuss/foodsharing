@@ -221,8 +221,8 @@ class ReportModel extends Model
 				rp.nachname AS rp_nachname,
 				rp.photo AS rp_photo,
 				
-                b.name AS b_name
-                          
+				b.name AS b_name
+				
 			FROM
             	`' . PREFIX . 'report` r
 				
