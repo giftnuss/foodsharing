@@ -18,7 +18,6 @@
 ## Refactoring
 - Enable composer autoloader and initial src folder. !157 by @tiltec
 
-
 # v1.0.0 [date?]
 
 * everything so far
