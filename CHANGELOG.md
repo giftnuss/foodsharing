@@ -14,6 +14,7 @@
 - Breadcrumb links in forum view are working now. !142 by @raphaelw and @NerdyProjects
 - Lots of corrections in spelling and grammar. !140, !118 by @peter.toennies
 - Consistancy in naming: All uses of "Region" are now called "Bezirk". !141 by @peter.toennies
+- Alphabetical order in the orga-menu. !160 by @peter.toennies
 
 ## Refactoring
 - Enable composer autoloader and initial src folder. !157 by @tiltec
