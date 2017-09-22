@@ -17,13 +17,23 @@ if (!defined('SOCK_URL')) {
 	define('SOCK_URL', 'http://127.0.0.1:1338/');
 }
 
+date_default_timezone_set("Europe/Berlin");
+/*
+ * Read revision from revision file.
+ * It is supposed to define SRC_REVISION.
+ */
+if (file_exists('revision.inc.php')) {
+	require_once('revision.inc.php');
+}
 
 /*
  * Configure Raven (sentry.io client) for remote error reporting
  */
-
 if (defined('SENTRY_URL')) {
 	$client = new Raven_Client(SENTRY_URL);
 	$client->install();
 	$client->tags_context(array('FS_ENV' => $FS_ENV));
+	if (defined('SRC_REVISION')) {
+		$client->setRelease(SRC_REVISION);
+	}
 }
