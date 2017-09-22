@@ -93,7 +93,7 @@ if (getAction('new')) {
 						array('cnt' => ($b['added'])),
 						array('cnt' => $b['bezirk_name']),
 						array('cnt' => $status),
-						array('cnt' => v_toolbar(array('id' => $b['id'], 'types' => array('comment', 'edit', 'delete'), 'confirmMsg' => 'Soll ' . $b['name'] . ' wirklich unwideruflich gel&ouml;scht werden?'))
+						array('cnt' => v_toolbar(array('id' => $b['id'], 'types' => array('comment', 'edit', 'delete'), 'confirmMsg' => 'Soll ' . $b['name'] . ' wirklich unwiderruflich gel&ouml;scht werden?'))
 				));
 			}
 

@@ -28,7 +28,7 @@ $g_lang['bread_edit_betrieb'] = 'Betrieb bearbeiten';
 $g_lang['bread_new_betrieb'] = 'neuen Betrieb eintragen';
 $g_lang['betrieb_empty'] = 'Bisher wurde kein Betrieb eingetragen.';
 $g_lang['neu_betrieb'] = 'Neuen Betrieb eintragen';
-$g_lang['delete_sure'] = 'Soll {var} wirklich unwideruflich gelöscht werden?';
+$g_lang['delete_sure'] = 'Soll {var} wirklich unwiderruflich gelöscht werden?';
 $g_lang['ansprechpartner'] = 'Ansprechpartner';
 $g_lang['fax'] = 'Fax';
 $g_lang['betrieb_edit_success'] = 'Änderungen wurden gespeichert';
@@ -75,7 +75,7 @@ $g_lang['shure_range_date'] = '<strong>Verbindlich {label}s</strong> im gewählt
 $g_lang['zeitraum'] = 'Zeitraum';
 $g_lang['date_add_successful'] = '<p><b>Termine wurden erfolgreich hinzugefügt</b><br>Müssen nur noch vom Filialverantwortlichen bestätigt werden</p>';
 $g_lang['del_and_send'] = 'Termin löschen und Nachricht senden';
-$g_lang['tpl_msg_to_team'] = 'Liebes {BETRIEB} Team, 
+$g_lang['tpl_msg_to_team'] = 'Liebes {BETRIEB}-Team, 
 
 am {DATE} kann ich leider doch keine Lebensmittel abholen. Daher suche ich dringend eine Vertretung. Kannst Du für mich einspringen?
 

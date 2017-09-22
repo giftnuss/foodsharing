@@ -580,7 +580,7 @@ function v_form_recip_chooser()
 			' . v_form_textarea($id . 'manual') . '
 		</div>
 		<div id="' . $id . '-tree-wrapper" style="display:none;">
-			' . v_info('<strong>Hinweis</strong> Um untergeordnete Bezirke zu makrieren musst Du den Ordner erst öffnen! sonst, alle nciht sichtbaren Bezirke bekommen keine Mail.') . '
+			' . v_info('<strong>Hinweis</strong> Um untergeordnete Bezirke zu makrieren musst Du den Ordner erst öffnen! sonst, alle nicht sichtbaren Bezirke bekommen keine Mail.') . '
 			<div id="' . $id . '-tree">
 				
 			</div>

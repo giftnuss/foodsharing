@@ -51,7 +51,7 @@ if (getAction('neu')) {
 			array('name' => s('name'))
 		), $rows);
 
-		addContent(v_field($table, 'Alle E-Mail Vorlagen'));
+		addContent(v_field($table, 'Alle E-Mail-Vorlagen'));
 	} else {
 		info(s('message_tpl_empty'));
 	}
@@ -72,7 +72,7 @@ function message_tpl_form()
 					v_form_text('name', array('required' => true)) .
 					v_form_text('subject', array('required' => array())) .
 					v_form_file('attachement'),
-					'E-Mail Vorlage',
+					'E-Mail-Vorlage',
 					array('class' => 'ui-padding')
 			),
 			v_field(v_form_tinymce('body', array('nowrapper' => true)), s('message'))

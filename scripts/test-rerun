@@ -13,7 +13,7 @@ set -e
 echo "Running tests"
 exec-in-container app vendor/bin/codecept run "$@"
 
-if [ -z "$@" ]; then
+if [ $# -eq 0 ]; then
   echo "Running chat tests"
   run-in-container chat npm test
 fi

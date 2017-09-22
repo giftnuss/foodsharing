@@ -1192,7 +1192,7 @@ function u_betriebList($betriebe, $title, $verantwortlich)
 			}
 
 			if ($verantwortlich) {
-				$betriebrows[$i][] = array('cnt' => v_toolbar(array('id' => $b['id'], 'types' => array('edit'), 'confirmMsg' => 'Soll ' . $b['name'] . ' wirklich unwideruflich gel&ouml;scht werden?')));
+				$betriebrows[$i][] = array('cnt' => v_toolbar(array('id' => $b['id'], 'types' => array('edit'), 'confirmMsg' => 'Soll ' . $b['name'] . ' wirklich unwiderruflich gel&ouml;scht werden?')));
 			}
 		}
 
