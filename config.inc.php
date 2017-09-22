@@ -1,5 +1,6 @@
 <?php
 
+
 // TODO: sanitize env name
 // TODO: maybe have a default env?
 // TODO: check if there is not already a concept of app environment elsewhere
@@ -22,8 +23,6 @@ if (!defined('SOCK_URL')) {
  */
 
 if (defined('SENTRY_URL')) {
-	require_once 'vendor/sentry/sentry/lib/Raven/Autoloader.php';
-	Raven_Autoloader::register();
 	$client = new Raven_Client(SENTRY_URL);
 	$client->install();
 	$client->tags_context(array('FS_ENV' => $FS_ENV));

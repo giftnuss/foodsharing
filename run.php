@@ -1,4 +1,6 @@
 <?php
+
+require __DIR__ . '/includes/setup.php';
 /*
  * force only executing on commandline
 */
