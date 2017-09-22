@@ -28,4 +28,3 @@ if (defined('SENTRY_URL')) {
 	$client->install();
 	$client->tags_context(array('FS_ENV' => $FS_ENV));
 }
-

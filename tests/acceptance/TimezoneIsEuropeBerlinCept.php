@@ -33,6 +33,5 @@ $I->formattedDateInRange($min_time, $max_time, 'Y-m-d H:i:s', $time);
 
 $time_hm = substr(explode(' ', $time)[1], 0, 5);
 
-$I->amOnPage('/essenskoerbe/'.$id);
-$I->see($time_hm." Uhr");
-
+$I->amOnPage('/essenskoerbe/' . $id);
+$I->see($time_hm . " Uhr");
