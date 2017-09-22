@@ -15,4 +15,11 @@ class Acceptance extends \Codeception\Module
 	{
 		return $this->assertRegExp($regexp, $text);
 	}
+
+	public function formattedDateInRange($min, $max, $format, $actual)
+	{
+		$date = \DateTime::createFromFormat($format, $actual, new \DateTimeZone("Europe/Berlin"));
+		$this->assertGreaterThan($min, $date, 'Date is in past');
+		$this->assertLessThan($max, $date, 'Date is in future');
+	}
 }
