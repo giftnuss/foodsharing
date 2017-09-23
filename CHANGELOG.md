@@ -8,6 +8,7 @@
 - Show current commit in footer as well as use it in sentry if errors occur !153 @NerdyProjects
 
 ## Bugfixes
+- Move login button in navigation a bit to the right to be always clickable. !162 by @NerdyProjects
 - Set the pages timezone globally to Europe/Berlin to not having to rely on server settings. !256 by @NerdyProjects
 - Foodsharers and unverified Foodsavers are no longer able to create business cards. !145 by @k.miklobusec and @peter.toennies
 - Breadcrumb links in forum view are working now. !142 by @raphaelw and @NerdyProjects
