@@ -2403,7 +2403,8 @@ class ManualDb extends Db
 			`sticker`,
 			`abholmenge`,
 			`prefetchtime`,
-			`public_info`
+			`public_info`,
+			`public_time`
 
 			FROM 		`' . PREFIX . 'betrieb`
 
