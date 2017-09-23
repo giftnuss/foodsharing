@@ -12,9 +12,5 @@ spl_autoload_register(function ($class_name)
 
 	if (file_exists($file)) {
 		include $file;
-
-		return;
-	} else {
-		debug('file not loadable: ' . $file);
 	}
 });
