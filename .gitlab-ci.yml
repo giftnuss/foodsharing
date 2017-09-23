@@ -20,10 +20,15 @@ test:
   # run the actual tests
   - ./scripts/ci.test
 
+  after_script:
   # collect the contents to cache
   - rm -rf vendor chat/node_modules/
   - docker cp foodsharing_ci_app:/app/vendor vendor
   - docker cp foodsharing_ci_chat:/app/chat/node_modules chat/node_modules
+
+  # collect artifacts
+  - docker cp foodsharing_ci_selenium:/home/seluser/Downloads tests/_output/
+  - docker cp foodsharing_ci_app:/app/tests/_output/ tests/_output
 
   # stop/kill all the containers
   - FS_ENV=ci ./scripts/rm
