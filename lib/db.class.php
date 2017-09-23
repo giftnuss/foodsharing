@@ -451,7 +451,12 @@ class Db
 
 	public function sql($query)
 	{
+		$start = microtime();
+
 		$res = $this->mysqli->query($query);
+
+		\Foodsharing\Debug\DebugBar::addQuery($query, microtime() - $start);
+
 		if ($res == false) {
 			error_log('SQL QUERY ERROR URL ' . $_SERVER['REQUEST_URI'] . ' IN ' . $query . ' : ' . $this->mysqli->error);
 		}

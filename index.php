@@ -34,6 +34,7 @@ $menu = getMenu();
 
 getMessages();
 makeHead();
+addHead(Foodsharing\Debug\DebugBar::renderHead());
 
 if (isset($_POST['form_submit'])) {
 	if (handleForm($_POST['form_submit'])) {
@@ -48,6 +49,9 @@ if (S::may()) {
 } else {
 	$msgbar = v_login();
 }
+
+addContent(Foodsharing\Debug\DebugBar::renderContent(), CNT_BOTTOM);
+
 /*
  * check for page caching
  */
@@ -65,3 +69,5 @@ if (isset($g_page_cache[$_SERVER['REQUEST_URI']][$g_page_cache_mode])) {
 } else {
 	include 'tpl/' . $g_template . '.php';
 }
+
+
