@@ -1022,15 +1022,13 @@ function getOrgaMenu()
 	}
 
 	if (isOrgaTeam()) {
-		$menu = [
-			'email' => 'email',
-			'email_tpl' => 'message_tpl',
-			'faq' => 'faq',
-			'foodsaver_without_region' => 'geoclean',
-			'content' => 'content',
-			'foodtypes' => 'lebensmittel',
-			'mailbox_manage' => 'mailbox&a=manage'
-		];
+		$menu['email'] = 'email';
+		$menu['email_tpl'] = 'message_tpl';
+		$menu['faq'] = 'faq';
+		$menu['foodsaver_without_region'] = 'geoclean';
+		$menu['content'] = 'content';
+		$menu['foodtypes'] = 'lebensmittel';
+		$menu['mailbox_manage'] = 'mailbox&a=manage';
 	}
 
 	if (mayEditQuiz()) {
