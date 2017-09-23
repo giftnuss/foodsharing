@@ -11,6 +11,7 @@ set -e
 . $(dirname "$0")/inc.sh
 
 echo "Running tests"
+exec-in-container selenium "find /home/seluser/Downloads -type f -print0 | xargs -n 1 -0 rm"
 exec-in-container app vendor/bin/codecept run "$@"
 
 if [ $# -eq 0 ]; then
