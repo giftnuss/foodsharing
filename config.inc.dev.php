@@ -1,5 +1,7 @@
 <?php
 
+Foodsharing\Debug\Whoops::register();
+
 $protocol = 'http';
 if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
 	$protocol = 'https';
@@ -36,3 +38,4 @@ define('REDIS_PORT', 6379);
 if (!defined('ROOT_DIR')) {
 	define('ROOT_DIR', './');
 }
+
