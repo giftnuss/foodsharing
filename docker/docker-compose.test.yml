@@ -37,6 +37,7 @@ services:
       - chat:chat
     volumes:
       - ../:/app
+      - selenium_downloads:/selenium_downloads
     environment:
       FS_ENV: test
       REDIS_HOST: redis
@@ -96,6 +97,8 @@ services:
       - web:web
     expose:
       - 4444
+    volumes:
+      - selenium_downloads:/home/seluser/Downloads
 
   # phpmyadmin
   #------------------------------------
@@ -110,3 +113,6 @@ services:
       - 28081:80
     volumes:
       - /sessions
+
+volumes:
+  selenium_downloads:
