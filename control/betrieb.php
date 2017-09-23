@@ -212,13 +212,13 @@ function betrieb_form($bezirk = false, $page = '')
 			v_form_date('begin'),
 			v_form_textarea('besonderheiten'),
 			v_form_textarea('public_info', array('maxlength' => 180, 'desc' => 'Hier kannst Du einige Infos für die Foodsaver angeben, die sich für das Team bewerben möchten. <br />(max. 180 Zeichen)<div>' . v_info('<strong>Wichtig</strong> Gib hier keine genauen Abholzeiten an.<br />Es ist öfters vorgekommen, dass Leute unabgesprochen zum Laden gegangen sind.') . '</div>')),
-			v_form_select('public_time', array('values' => array(
-					array('id' => 0, 'name' => 'Keine Angabe'),
-					array('id' => 1, 'name' => 'morgens'),
-					array('id' => 2, 'name' => 'mittags/nachmittags'),
-					array('id' => 3, 'name' => 'abends'),
-					array('id' => 4, 'name' => 'nachts')
-			))),
+			v_form_select('public_time', ['values' => [
+					['id' => 0, 'name' => 'Keine Angabe'],
+					['id' => 1, 'name' => 'morgens'],
+					['id' => 2, 'name' => 'mittags/nachmittags'],
+					['id' => 3, 'name' => 'abends'],
+					['id' => 4, 'name' => 'nachts']
+			]]),
 			$first_post,
 			v_form_select('ueberzeugungsarbeit', array('values' => array(
 				array('id' => 1, 'name' => 'Überhaupt kein Problem, er/sie war/en sofort begeistert!'),
