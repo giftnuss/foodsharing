@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export FS_ENV=dev
+export FS_ENV=${FS_ENV:-dev}
 
 set -e
 
