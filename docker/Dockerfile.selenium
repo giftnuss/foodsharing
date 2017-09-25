@@ -1,0 +1,4 @@
+FROM selenium/standalone-chrome
+
+RUN mkdir /home/seluser/Downloads
+RUN chown seluser:seluser /home/seluser/Downloads

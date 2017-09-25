@@ -37,6 +37,7 @@ services:
       - chat:chat
     volumes:
       - ../:/app
+      - selenium_downloads:/downloads
     environment:
       FS_ENV: test
       REDIS_HOST: redis
@@ -90,12 +91,16 @@ services:
 
   selenium:
     container_name: foodsharing_test_selenium
-    image: selenium/standalone-chrome
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.selenium
     shm_size: 256M
     links:
       - web:web
     expose:
       - 4444
+    volumes:
+      - selenium_downloads:/home/seluser/Downloads
 
   # phpmyadmin
   #------------------------------------
@@ -110,3 +115,6 @@ services:
       - 28081:80
     volumes:
       - /sessions
+
+volumes:
+  selenium_downloads:

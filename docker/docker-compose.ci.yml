@@ -35,6 +35,8 @@ services:
       - chat:chat
     environment:
       FS_ENV: test
+    volumes:
+      - selenium_downloads:/downloads
 
   chat:
     container_name: foodsharing_ci_chat
@@ -81,10 +83,16 @@ services:
 
   selenium:
     container_name: foodsharing_ci_selenium
-    image: selenium/standalone-chrome
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.selenium
     shm_size: 256M
     links:
       - web:web
     expose:
       - 4444
+    volumes:
+      - selenium_downloads:/home/seluser/Downloads
 
+volumes:
+  selenium_downloads:

@@ -31,6 +31,7 @@ echo "Running composer install"
 exec-in-container app composer install
 
 echo "Running tests"
+exec-in-container selenium "find /home/seluser/Downloads -type f -print0 | xargs -n 1 -0 rm"
 exec-in-container app vendor/bin/codecept run "$@"
 
 echo "Running chat tests"

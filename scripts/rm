@@ -15,3 +15,13 @@ if [ "x" != "x$containers" ]; then
 else
   echo "... there are none!"
 fi
+
+volume_name=foodsharing$FS_ENV
+
+echo "Removing $volume_name volumes"
+volumes=$(docker volume ls -q -f name=$volume_name)
+if [ "x" != "x$volumes" ]; then
+  docker volume rm $volumes
+else
+  echo "... there are none!"
+fi
