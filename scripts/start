@@ -16,10 +16,10 @@ wait
 
 echo "Running npm install"
 chat-npm-install
-$dir/mkdirs
 
 echo "Bring up containers"
 dc up -d
+$dir/mkdirs
 
 echo "Running composer install"
 exec-in-container app composer install
