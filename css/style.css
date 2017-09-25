@@ -2556,7 +2556,8 @@ footer .linklist li a:hover {
     height: 23px;
     text-align: center;
     width: 23px;
-    margin-left: -23px;
+    padding-left: 5px;
+    margin-left: -12px;
 }
 
 .vmap {
