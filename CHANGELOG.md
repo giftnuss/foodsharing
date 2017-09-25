@@ -19,6 +19,9 @@
 ## Refactoring
 - Enable composer autoloader and initial src folder. !157 by @tiltec
 
+## Docker environment
+- Run mkdirs using exec so it works in CI !164 @NerdyProjects
+
 # v1.0.0 [date?]
 
 * everything so far
