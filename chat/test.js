@@ -33,7 +33,7 @@ test.onFinish(() => {
 const io = require('socket.io-client');
 
 test('simple connection', t => {
-	t.timeoutAfter(5000);
+	t.timeoutAfter(10000);
 	t.plan(1);
 	const socket = connect(t, 'somesessionid');
 	socket.on("connect",() => {
@@ -42,7 +42,7 @@ test('simple connection', t => {
 });
 
 test('multiple connections', t => {
-	t.timeoutAfter(5000);
+	t.timeoutAfter(10000);
 	t.plan(3);
 	const socket1 = connect(t, 'somesessionid1');
 	const socket2 = connect(t, 'somesessionid2');
@@ -59,7 +59,7 @@ test('multiple connections', t => {
 });
 
 test('requesting stats', t => {
-	t.timeoutAfter(5000);
+	t.timeoutAfter(10000);
 	t.plan(2);
 	fetchStats((err, stats) => {
 		t.error(err, 'does not error');
@@ -72,7 +72,7 @@ test('requesting stats', t => {
 });
 
 test('registering', t => {
-	t.timeoutAfter(5000);
+	t.timeoutAfter(10000);
 	t.plan(4);
 	const socket = connect(t, 'somesessionid');
 	socket.on("connect",() => {
@@ -84,7 +84,7 @@ test('registering', t => {
 });
 
 test('multiple registrations for one session', t => {
-	t.timeoutAfter(5000);
+	t.timeoutAfter(10000);
 	t.plan(4);
 	const sessionId = 'sharedsessionid'
 	const socket1 = connect(t, sessionId);
@@ -102,7 +102,7 @@ test('multiple registrations for one session', t => {
 });
 
 test('multiple registrations with unique sessions', t => {
-	t.timeoutAfter(5000);
+	t.timeoutAfter(10000);
 	t.plan(4);
 	const socket1 = connect(t, 'myownsession1');
 	const socket2 = connect(t, 'myownsession2');
@@ -119,7 +119,7 @@ test('multiple registrations with unique sessions', t => {
 });
 
 test('3 connections, 2 registrations, 1 session', t => {
-	t.timeoutAfter(5000);
+	t.timeoutAfter(10000);
 	t.plan(4);
 	const sessionId = 'sharedsessionid2';
 	const socket1 = connect(t, sessionId);
@@ -136,7 +136,7 @@ test('3 connections, 2 registrations, 1 session', t => {
 });
 
 test('unregistering', t => {
-	t.timeoutAfter(5000);
+	t.timeoutAfter(10000);
 	t.plan(5);
 	const socket = connect(t, 'somesessionid');
 	socket.on("connect",() => {
@@ -155,7 +155,7 @@ test('unregistering', t => {
 });
 
 test('can send a message', t => {
-	t.timeoutAfter(5000);
+	t.timeoutAfter(10000);
 	t.plan(1);
 	sendMessage({
 		c: 'ignored',
@@ -168,7 +168,7 @@ test('can send a message', t => {
 });
 
 test('can send and receive a message', t => {
-	t.timeoutAfter(5000);
+	t.timeoutAfter(10000);
 	t.plan(3);
 	const sessionId = 'somesessionid';
 	const socket = connect(t, sessionId);
@@ -192,7 +192,7 @@ test('can send and receive a message', t => {
 });
 
 test('can send and receive a message for multiple clients', t => {
-	t.timeoutAfter(5000);
+	t.timeoutAfter(10000);
 	t.plan(7);
 	const sessionId = 'somesessionid';
 	const socket1 = connect(t, sessionId);
@@ -229,7 +229,7 @@ test('can send and receive a message for multiple clients', t => {
 });
 
 test('can send to php users', t => {
-	t.timeoutAfter(5000);
+	t.timeoutAfter(10000);
 	t.plan(4);
 	let sessionId = randomstring.generate();
 	let userId = 1;
@@ -256,7 +256,7 @@ test('can send to php users', t => {
 });
 
 test('can send to api users', t => {
-	t.timeoutAfter(5000);
+	t.timeoutAfter(10000);
 	t.plan(4);
 	let sessionId = randomstring.generate();
 	let userId = 2;
@@ -283,7 +283,7 @@ test('can send to api users', t => {
 });
 
 test('works with two connections per user', t => {
-	t.timeoutAfter(5000);
+	t.timeoutAfter(10000);
 
 	const client1 = connect(t, 'test-1-user-1')
 	const client2 = connect(t, 'test-1-user-1')
@@ -317,7 +317,7 @@ test('works with two connections per user', t => {
 })
 
 test('does not send to other users', t => {
-	t.timeoutAfter(5000);
+	t.timeoutAfter(10000);
 
 	// two users
 	const user1 = connect(t, 'test-2-user-1');
