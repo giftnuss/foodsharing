@@ -37,7 +37,6 @@ class DebugBar
 		self::$debugbar->addCollector(new PhpInfoCollector());
 		self::$debugbar->addCollector(new MessagesCollector());
 		self::$debugbar->addCollector(new RequestDataCollector());
-		self::$debugbar->addCollector(new TimeDataCollector());
 		self::$debugbar->addCollector(new MemoryCollector());
 
 		self::$queryCollector = new DatabaseQueryCollector();
@@ -46,16 +45,21 @@ class DebugBar
 		self::$initialized = true;
 	}
 
+	public static function isEnabled()
+	{
+		return self::$initialized;
+	}
+
 	public static function addMessage($message)
 	{
 		if (!self::$initialized) return;
 		self::$debugbar['messages']->info($message);
 	}
 
-	public static function addQuery($query, $duration)
+	public static function addQuery($sql, $duration, $success, $error_code = NULL, $error_message = NULL)
 	{
 		if (!self::$initialized) return;
-		self::$queryCollector->addQuery($query, $duration);
+		self::$queryCollector->addQuery([$sql, $duration, $success, $error_code, $error_message]);
 	}
 
 	public static function renderHead()

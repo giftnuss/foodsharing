@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Debug\DebugBar;
+
 class IndexControl extends Control
 {
 	public function __construct()

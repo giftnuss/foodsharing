@@ -19,30 +19,34 @@ class DatabaseQueryCollector extends DataCollector implements Renderable, AssetP
 {
 	private $queries = [];
 
-	public function addQuery($query, $duration)
+	public function addQuery($query)
 	{
-		$this->queries[] = ['query' => self::formatQueryStr($query), 'duration' => $duration];
+		$this->queries[] = $query;
 	}
 
 	public function collect()
 	{
-		$queries = array();
+		$queries = [];
 		$totalExecTime = 0;
 		foreach ($this->queries as $q) {
-			$queries[] = array(
-				'sql' => $q['query'],
-				'duration' => $q['duration'],
-				'duration_str' => $this->formatDuration($q['duration'])
-			);
-			$totalExecTime += $q['duration'];
+			list($sql, $duration, $success, $error_code, $error_message) = $q;
+			$queries[] = [
+				'sql' => self::formatQueryStr($sql),
+				'duration' => $duration,
+				'duration_str' => $this->formatDuration($duration),
+				'is_success' => $success,
+				'error_code' => $error_code,
+				'error_message' => $error_message
+			];
+			$totalExecTime += $duration;
 		}
 
-		return array(
+		return [
 			'nb_statements' => count($queries),
 			'accumulated_duration' => $totalExecTime,
 			'accumulated_duration_str' => $this->formatDuration($totalExecTime),
 			'statements' => $queries
-		);
+		];
 	}
 
 	public function getName()
@@ -52,18 +56,18 @@ class DatabaseQueryCollector extends DataCollector implements Renderable, AssetP
 
 	public function getWidgets()
 	{
-		return array(
-			"database" => array(
+		return [
+			"database" => [
 				"icon" => "arrow-right",
 				"widget" => "PhpDebugBar.Widgets.SQLQueriesWidget",
 				"map" => "db",
 				"default" => "[]"
-			),
-			"database:badge" => array(
+			],
+			"database:badge" => [
 				"map" => "db.nb_statements",
 				"default" => 0
-			)
-		);
+			]
+		];
 	}
 
 	public function getAssets()

@@ -21,6 +21,8 @@ if(isset($_GET['g_path']))
 }
 */
 
+use Foodsharing\Debug\DebugBar;
+
 require __DIR__ . '/includes/setup.php';
 
 require_once 'lib/inc.php';
@@ -34,7 +36,10 @@ $menu = getMenu();
 
 getMessages();
 makeHead();
-addHead(Foodsharing\Debug\DebugBar::renderHead());
+
+if (DebugBar::isEnabled()) {
+	addHead(DebugBar::renderHead());
+}
 
 if (isset($_POST['form_submit'])) {
 	if (handleForm($_POST['form_submit'])) {
@@ -50,7 +55,9 @@ if (S::may()) {
 	$msgbar = v_login();
 }
 
-addContent(Foodsharing\Debug\DebugBar::renderContent(), CNT_BOTTOM);
+if (DebugBar::isEnabled()) {
+	addContent(DebugBar::renderContent(), CNT_BOTTOM);
+}
 
 /*
  * check for page caching
