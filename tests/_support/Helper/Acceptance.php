@@ -22,4 +22,9 @@ class Acceptance extends \Codeception\Module
 		$this->assertGreaterThan($min, $date, 'Date is in past');
 		$this->assertLessThan($max, $date, 'Date is in future');
 	}
+
+	public function seeFileExists($filename)
+	{
+		\PHPUnit_Framework_Assert::assertTrue( file_exists($filename) );
+	}
 }
