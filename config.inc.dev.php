@@ -1,6 +1,7 @@
 <?php
 
 Foodsharing\Debug\Whoops::register();
+Foodsharing\Debug\DebugBar::register();
 
 $protocol = 'http';
 if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {

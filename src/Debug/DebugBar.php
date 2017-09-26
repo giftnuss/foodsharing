@@ -30,7 +30,7 @@ class DebugBar
 	/* @var $debugbar \DebugBar\StandardDebugBar */
 	private static $debugbar;
 
-	private static function initialize()
+	public static function register()
 	{
 		self::$debugbar = new \DebugBar\DebugBar();
 
@@ -48,35 +48,25 @@ class DebugBar
 
 	public static function addMessage($message)
 	{
-		if (!self::$initialized) {
-			self::initialize();
-		}
+		if (!self::$initialized) return;
 		self::$debugbar['messages']->info($message);
 	}
 
 	public static function addQuery($query, $duration)
 	{
-		if (!self::$initialized) {
-			self::initialize();
-		}
+		if (!self::$initialized) return;
 		self::$queryCollector->addQuery($query, $duration);
 	}
 
 	public static function renderHead()
 	{
-		if (self::$initialized) {
-			return self::$debugbar->getJavascriptRenderer()->renderHead();
-		} else {
-			return '';
-		}
+		if (!self::$initialized) return '';
+		return self::$debugbar->getJavascriptRenderer()->renderHead();
 	}
 
 	public static function renderContent()
 	{
-		if (self::$initialized) {
-			return self::$debugbar->getJavascriptRenderer()->render();
-		} else {
-			return '';
-		}
+		if (!self::$initialized) return '';
+		return self::$debugbar->getJavascriptRenderer()->render();
 	}
 }
