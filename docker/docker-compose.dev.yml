@@ -43,7 +43,7 @@ services:
 
   light:
     container_name: foodsharing_dev_light
-    image: registry.gitlab.com/foodsharing-dev/images:light
+    image: registry.gitlab.com/foodsharing-dev/images/light:1.0
     command: >
       sh -c "
       (test -f package.json || (echo 'If you want fslight run \"git clone https://github.com/foodsharing-dev/foodsharing-light.git light\"' && exit 1)) &&

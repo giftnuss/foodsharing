@@ -1,4 +1,4 @@
-FROM registry.gitlab.com/foodsharing-dev/images:chat
+FROM registry.gitlab.com/foodsharing-dev/images/chat:1.1
 
 COPY . /app/chat
 
