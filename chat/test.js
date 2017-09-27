@@ -358,10 +358,15 @@ function connect(t, sessionId, cookieName = 'PHPSESSID') {
 }
 
 function register(socket, callback) {
-	socket.on("connect", () => {
+	if (socket.connected) {
+		setTimeout(handler, 0);
+	} else {
+		socket.on("connect", handler);
+	}
+	function handler() {
 		socket.emit("register");
 		callback();
-	});
+	}
 }
 
 function sendMessage(params, callback){
