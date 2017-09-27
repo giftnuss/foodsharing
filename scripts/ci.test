@@ -15,8 +15,8 @@ fi
 
 echo "Building images"
 
-for name in web app chat db selenium; do
-  dc build --pull $name &
+for name in app chat; do
+  dc build $name &
 done
 
 wait
