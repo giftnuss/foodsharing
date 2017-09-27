@@ -76,5 +76,3 @@ if (isset($g_page_cache[$_SERVER['REQUEST_URI']][$g_page_cache_mode])) {
 } else {
 	include 'tpl/' . $g_template . '.php';
 }
-
-
