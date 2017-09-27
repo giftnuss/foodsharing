@@ -25,6 +25,7 @@
 - Test environment allows testing of file downloads as well !165 @NerdyProjects
 - Output from failed tests is now collected with the test job. !165 @NerdyProjects
 - Increase chat test timeout to 10s !167 @nicksellen
+- Add debug tools in dev: Whoops for nice error pages and DebugBar showing sql queries !163 @nicksellen
 
 # The wilderness months
 
