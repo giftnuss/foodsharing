@@ -48,6 +48,8 @@ services:
     build:
       context: ../chat
       dockerfile: docker/Dockerfile.chat
+    depends_on:
+      - redis
     environment:
       REDIS_HOST: redis
     expose:
