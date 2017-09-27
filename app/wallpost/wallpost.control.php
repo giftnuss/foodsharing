@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Control;
+
 class WallpostControl extends Control
 {
 	public function __construct()

@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class FoodsaverModel extends Model
 {
 	public function listFoodsaver($bezirk_id, $showOnlyInactive = false)

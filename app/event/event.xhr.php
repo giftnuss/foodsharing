@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Control;
+
 class EventXhr extends Control
 {
 	private $stats;

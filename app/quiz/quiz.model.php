@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class QuizModel extends Model
 {
 	public function listQuiz()

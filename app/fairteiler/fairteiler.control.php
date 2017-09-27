@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Control;
+
 class FairteilerControl extends Control
 {
 	private $bezirk_id;

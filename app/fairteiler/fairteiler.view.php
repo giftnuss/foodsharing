@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class FairteilerView extends View
 {
 	private $bezirk_id;

@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class NewareaView extends View
 {
 	public function listWantNews($foodsaver)

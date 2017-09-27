@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class NewareaModel extends Model
 {
 	public function getWantNews()

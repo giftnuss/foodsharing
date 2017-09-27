@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class MsgModel extends Model
 {
 	public function getBetriebname($cid)

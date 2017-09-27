@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Control;
+
 class IndexXhr extends Control
 {
 	public function __construct()

@@ -1,5 +1,8 @@
 <?php
 
+namespace Foodsharing\Modules\Core;
+use S;
+
 class View
 {
 	private $sub;

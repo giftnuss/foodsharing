@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class BcardModel extends Model
 {
 	public function getMyData()

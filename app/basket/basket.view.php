@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class BasketView extends View
 {
 	public function find($baskets)

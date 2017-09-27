@@ -1,5 +1,8 @@
 <?php
 
+namespace Foodsharing\Modules\Core;
+use ManualDb;
+
 class Model extends ManualDb
 {
 	public function mayBezirk($bid)

@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class ReportView extends View
 {
 	private $foodsaver;

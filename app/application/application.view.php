@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class ApplicationView extends View
 {
 	private $bezirk;

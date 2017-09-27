@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class GroupsView extends View
 {
 	private $ag_id;

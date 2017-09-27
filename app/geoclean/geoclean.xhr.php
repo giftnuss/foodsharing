@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Control;
+
 class GeocleanXhr extends Control
 {
 	public function __construct()

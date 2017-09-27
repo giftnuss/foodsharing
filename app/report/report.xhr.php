@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Control;
+
 class ReportXhr extends Control
 {
 	private $foodsaver;

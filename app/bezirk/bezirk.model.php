@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class BezirkModel extends Model
 {
 	private $themes_per_page;

@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class StatisticsModel extends Model
 {
 	public function getStatGesamt()

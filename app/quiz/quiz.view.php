@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class QuizView extends View
 {
 	public function abortOrPause()

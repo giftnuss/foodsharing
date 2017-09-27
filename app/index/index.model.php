@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class IndexModel extends Model
 {
 	public function getGerettet()

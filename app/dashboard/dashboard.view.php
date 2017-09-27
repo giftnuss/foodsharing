@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class DashboardView extends View
 {
 	public function newBaskets($baskets)

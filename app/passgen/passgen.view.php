@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class PassgenView extends View
 {
 	public function passTable($bezirk)

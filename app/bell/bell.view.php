@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class BellView extends View
 {
 	public function bellList($bells)

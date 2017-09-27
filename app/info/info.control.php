@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Control;
+
 class InfoControl extends Control
 {
 	public function __construct()

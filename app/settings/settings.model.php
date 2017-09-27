@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class SettingsModel extends Model
 {
 	public function saveInfoSettings($newsletter, $infomail)

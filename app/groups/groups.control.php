@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Control;
+
 class GroupsControl extends Control
 {
 	private $ag_id;

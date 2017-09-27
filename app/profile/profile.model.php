@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class ProfileModel extends Model
 {
 	private $fs_id;

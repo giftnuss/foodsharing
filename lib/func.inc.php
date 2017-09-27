@@ -23,7 +23,7 @@ function loadView($view = 'core')
 	require_once 'app/' . $view . '/' . $view . '.view.php';
 
 	if ($view = 'core') {
-		$view = 'View';
+		$view = 'Foodsharing\Modules\Core\View';
 	} else {
 		$view = ucfirst($view) . 'View';
 	}
@@ -1603,7 +1603,6 @@ function addScriptTop($src)
 
 function loadModel($model = 'api')
 {
-	require_once ROOT_DIR . 'app/core/core.model.php';
 	require_once ROOT_DIR . 'app/' . $model . '/' . $model . '.model.php';
 	$mod = ucfirst($model) . 'Model';
 
@@ -1612,9 +1611,6 @@ function loadModel($model = 'api')
 
 function loadXhr($app)
 {
-	require_once ROOT_DIR . 'app/core/core.model.php';
-	require_once ROOT_DIR . 'app/core/core.view.php';
-	require_once ROOT_DIR . 'app/core/core.control.php';
 	require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.model.php';
 	require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.view.php';
 	require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.xhr.php';
@@ -1625,10 +1621,6 @@ function loadXhr($app)
 
 function loadApp($app)
 {
-	require_once ROOT_DIR . 'app/core/core.control.php';
-	require_once ROOT_DIR . 'app/core/core.model.php';
-	require_once ROOT_DIR . 'app/core/core.view.php';
-
 	require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.control.php';
 	require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.model.php';
 	require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.view.php';

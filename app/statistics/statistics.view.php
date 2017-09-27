@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class StatisticsView extends View
 {
 	public function getStatCities($cities)

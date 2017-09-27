@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class FairteilerModel extends Model
 {
 	public function getEmailFollower($fid)

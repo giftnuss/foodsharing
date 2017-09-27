@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Control;
+
 class BasketXhr extends Control
 {
 	private $status;

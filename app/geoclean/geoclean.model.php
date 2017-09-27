@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class GeocleanModel extends Model
 {
 	public function getFsWithoutGeo()

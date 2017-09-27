@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class ProfileView extends View
 {
 	private $foodsaver;

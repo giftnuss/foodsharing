@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Control;
+
 class ProfileControl extends Control
 {
 	private $foodsaver;

@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class BetriebView extends View
 {
 	public function dateForm()

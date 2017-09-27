@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class ApplicationModel extends Model
 {
 	public function getApplication($bid, $fid)

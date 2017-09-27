@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class BasketModel extends Model
 {
 	public function getBasketChoords()

@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class FoodsaverView extends View
 {
 	public function addFoodsaver($bezirk)

@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class BuddyModel extends Model
 {
 	public function listBuddies()

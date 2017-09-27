@@ -130,9 +130,8 @@ function rolleWrap($roleStr)
 
 function loadModel($model = 'api')
 {
-	require_once ROOT_DIR . 'app/core/core.model.php';
 	require_once ROOT_DIR . 'app/' . $model . '/' . $model . '.model.php';
-	$mod = ucfirst($model) . 'Model';
+	$mod = ucfirst($model) . 'Foodsharing\Modules\Core\Model';
 
 	return new $mod();
 }
@@ -145,7 +144,7 @@ function loadApp($app)
 		require_once ROOT_DIR . 'app/console/' . $app . '/' . $app . '.control.php';
 		require_once ROOT_DIR . 'app/console/' . $app . '/' . $app . '.model.php';
 
-		$mod = ucfirst($app) . 'Control';
+		$mod = ucfirst($app) . 'Foodsharing\Modules\Core\Control';
 
 		return new $mod();
 	}

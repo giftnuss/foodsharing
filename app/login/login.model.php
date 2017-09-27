@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class LoginModel extends Model
 {
 	public function activate($email, $token)

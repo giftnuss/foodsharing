@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class BlogView extends View
 {
 	public function listArticle($data)

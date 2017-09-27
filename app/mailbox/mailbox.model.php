@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class MailboxModel extends Model
 {
 	public function getMailboxId($mb_name)

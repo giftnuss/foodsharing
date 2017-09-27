@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class EventView extends View
 {
 	public function eventForm($bezirke)

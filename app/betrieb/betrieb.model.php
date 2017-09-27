@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class BetriebModel extends Model
 {
 	public function addFetchDate($bid, $time, $fetchercount)

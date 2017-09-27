@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class IndexView extends View
 {
 	public function index($first_content, $gerettet)

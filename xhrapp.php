@@ -23,10 +23,6 @@ if (isset($_GET['app']) && isset($_GET['m'])) {
 	require_once 'lib/Manual.class.php';
 	require_once 'lib/XhrResponses.php';
 
-	require_once ROOT_DIR . 'app/core/core.control.php';
-	require_once ROOT_DIR . 'app/core/core.model.php';
-	require_once ROOT_DIR . 'app/core/core.view.php';
-
 	require_once 'app/' . $app . '/' . $app . '.xhr.php';
 	require_once 'app/' . $app . '/' . $app . '.model.php';
 	require_once 'app/' . $app . '/' . $app . '.view.php';

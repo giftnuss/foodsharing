@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class LoginView extends View
 {
 	public function loginForm()

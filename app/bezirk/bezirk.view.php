@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class BezirkView extends View
 {
 	public $bezirk_id;

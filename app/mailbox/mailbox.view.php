@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class MailboxView extends View
 {
 	public function folder($boxes)

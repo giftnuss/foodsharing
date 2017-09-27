@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Control;
+
 class ApplicationControl extends Control
 {
 	private $bezirk;

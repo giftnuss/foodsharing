@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class GroupsModel extends Model
 {
 	private $ag_id;

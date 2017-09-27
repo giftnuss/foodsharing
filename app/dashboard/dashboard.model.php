@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class DashboardModel extends Model
 {
 	public function getUser()

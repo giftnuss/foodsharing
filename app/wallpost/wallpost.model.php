@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class WallpostModel extends Model
 {
 	private $table;

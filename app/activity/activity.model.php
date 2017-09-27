@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class ActivityModel extends Model
 {
 	private $items_per_page = 10;

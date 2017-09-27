@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class ContentModel extends Model
 {
 	public function listFaq($cat_ids)

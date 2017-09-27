@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class ApiModel extends Model
 {
 	public function getOrgaGroups()

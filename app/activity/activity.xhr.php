@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Control;
+
 class ActivityXhr extends Control
 {
 	public function __construct()

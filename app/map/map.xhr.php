@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Control;
+
 class MapXhr extends Control
 {
 	public function __construct()

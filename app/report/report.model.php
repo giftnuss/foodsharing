@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class ReportModel extends Model
 {
 	public function addBetriebReport($fsid, $reason_id, $reason, $message, $betrieb_id = 0)

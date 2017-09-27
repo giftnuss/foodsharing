@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Control;
+
 class LoginXhr extends Control
 {
 	public function __construct()

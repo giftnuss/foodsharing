@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class SettingsView extends View
 {
 	public function sleepMode($sleep)

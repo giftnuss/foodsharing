@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class GeocleanView extends View
 {
 	public function rightmenu()

@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 class ContentView extends View
 {
 	public function simple($cnt)

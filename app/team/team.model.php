@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class TeamModel extends Model
 {
 	public function getTeam($bezirkId = 1373)

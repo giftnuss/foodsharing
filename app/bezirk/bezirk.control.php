@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Control;
+
 class BezirkControl extends Control
 {
 	private $bezirk_id;

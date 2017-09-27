@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class PassgenModel extends Model
 {
 	public function updateLastGen($foodsaver)

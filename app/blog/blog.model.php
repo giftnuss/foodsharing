@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+
 class BlogModel extends Model
 {
 	public function canEdit($article_id)
