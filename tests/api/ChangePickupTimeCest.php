@@ -16,7 +16,7 @@ class ChangePickupTimeCest
 	public function createRequestSucceeds(\ApiTester $I, \Codeception\Example $example)
 	{
 		$store = $I->createStore(1);
-		$user = $I->$example[0]();
+		$user = call_user_func(array($I, $example[0]));
 		$I->addStoreTeam($store['id'], $user['id'], true);
 
 		$I->login($user['email']);

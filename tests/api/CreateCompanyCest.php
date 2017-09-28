@@ -14,7 +14,7 @@ class CreateCompanyCest
 	public function seeCreateCompanyLink(\ApiTester $I, \Codeception\Example $example)
 	{
 		$pass = sq('pass');
-		$user = $I->$example[0]($pass);
+		$user = call_user_func(array($I, $example[0]), $pass);
 
 		$I->login($user['email'], $pass);
 
