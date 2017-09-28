@@ -316,7 +316,7 @@ else
 function img(photo,size)
 {if(size==undefined)
 {size='med';}
-if(photo.length>3)
+if(photo&&photo.length>3)
 {return'/images/'+size+'_q_'+photo;}
 else
 {return'/img/'+size+'_q_avatar.png';}}
@@ -521,7 +521,7 @@ conv.registerPollingService();},maxbox:function(cid)
 {$('#chat-'+cid+' .chatboxcontent').slimScroll({scrollTo:$('#chat-'+cid+' .chatboxcontent').prop('scrollHeight')+'px'});},img:function(photo,size)
 {if(size==undefined)
 {size='med';}
-if(photo.length>3)
+if(photo&&photo.length>3)
 {return'/images/'+size+'_q_'+photo;}
 else
 {return'/img/'+size+'_q_avatar.png';}},close:function(cid)

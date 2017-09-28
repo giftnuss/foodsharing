@@ -829,7 +829,7 @@ function img(photo,size)
 	{
 		size = 'med';
 	}
-	if(photo.length > 3)
+	if(photo && photo.length > 3)
 	{
 		return '/images/'+size+'_q_'+photo;
 	}
