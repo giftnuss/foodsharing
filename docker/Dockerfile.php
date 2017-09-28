@@ -1,3 +1,3 @@
-FROM registry.gitlab.com/foodsharing-dev/images/php:1.0
+FROM registry.gitlab.com/foodsharing-dev/images/php:2.0
 
 WORKDIR /app
