@@ -453,9 +453,9 @@ class Db
 
 	public function sql($query)
 	{
-		$start = microtime();
+		$start = microtime(true);
 		$res = $this->mysqli->query($query);
-		$duration = microtime() - $start;
+		$duration = microtime(true) - $start;
 
 		if ($res == false) {
 			error_log('SQL QUERY ERROR URL ' . $_SERVER['REQUEST_URI'] . ' IN ' . $query . ' : ' . $this->mysqli->error);
