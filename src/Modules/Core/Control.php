@@ -6,8 +6,8 @@ use S;
 
 class Control
 {
-	private $model;
-	private $view;
+	protected $model;
+	protected $view;
 	private $sub;
 	private $sub_func;
 
