@@ -8,12 +8,6 @@ dir=$(dirname "$0")
 
 . $dir/inc.sh
 
-echo "Building containers"
-for name in web app chat; do
-  dc build --pull $name &
-done
-wait
-
 echo "Bring up containers"
 dc up -d
 $dir/mkdirs
