@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+. $(dirname "$0")/inc.sh
+
+FS_ENV=dev dc build
+FS_ENV=test dc build
