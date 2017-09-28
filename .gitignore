@@ -22,3 +22,4 @@ api
 light
 .php_cs.cache
 revision.inc.php
+migrations/_all.sql

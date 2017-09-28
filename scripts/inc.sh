@@ -69,20 +69,32 @@ function recreatedb() {
 function migratedb() {
   local database=$1;
   echo "Migrating database $FS_ENV/$database"
-  sql-file $database migrations/initial.sql
-  sql-file $database migrations/static.sql
-  sql-file $database migrations/27-profilchange.sql
-  sql-file $database migrations/27-verify.sql
-  for f in migrations/incremental-*; do
-    sql-file $database $f
+  dest=migrations/_all.sql
+  migration_files="\
+      migrations/initial.sql \
+      migrations/static.sql \
+      migrations/27-profilchange.sql \
+      migrations/27-verify.sql \
+      migrations/incremental-* \
+  "
+  echo "" > $dest
+  for f in $migration_files; do
+    cat $f >> $dest
+    echo ';' >> $dest
   done
+
+  # if running in ci we do not have a mounted folder so we need to
+  # manually copy the generated migration file into the container
+  docker cp $dest $(dc ps -q db):/app/$dest
+
+  sql-file $database $dest
 }
 
 function wait-for-mysql() {
   exec-in-container-asroot db "while ! mysql -p$MYSQL_PASSWORD --silent -e 'select 1' >/dev/null 2>&1; do sleep 1; done"
 }
 
-function chat-npm-install() {
+function install-chat-dependencies() {
   # TODO: move this into scripts/mkdirs when MR#97 is merged
   run-in-container-asroot chat \
     "mkdir -p node_modules && chown -R $(id -u):$(id -g) node_modules"
@@ -90,5 +102,5 @@ function chat-npm-install() {
   # have to do run, not exec, as container will not start until
   # node_modules is installed, this will run up a fresh container and
   # just run npm install
-  run-in-container chat npm install
+  run-in-container chat yarn
 }
