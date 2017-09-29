@@ -19,6 +19,7 @@
 - Consistancy in naming: All uses of "Region" are now called "Bezirk". !141 by @peter.toennies
 - Alphabetical order in the orga-menu. !160 by @peter.toennies
 - Aproximate time of pickup stays in shop settings. !161 by @peter.toennies
+- Fixed spelling in footer of automatic emails. !174 by @peter.toennies
 
 ## Refactoring
 - Enable composer autoloader and initial src folder. !157 by @tiltec
