@@ -19,8 +19,8 @@ class InfoXhr extends Control
 		$this->check = false;
 
 		/*
-	     * here we define all apps and methods which can be used by polling service syntax is => app:method
-	     */
+		 * here we define all apps and methods which can be used by polling service syntax is => app:method
+		 */
 		$this->allowed = array(
 			'msg:chat' => true,
 			'msg:setSessionInfo' => true,
@@ -65,8 +65,8 @@ class InfoXhr extends Control
 		$duration = array('start' => microtime());
 
 		/*
-	     * check for additional polling services
-	     */
+		 * check for additional polling services
+		 */
 		$services = array(
 			'fast' => array(),
 			'slow' => array()
@@ -99,8 +99,8 @@ class InfoXhr extends Control
 					// check is the a method defined to execute before polling?
 					if (isset($s['o']['premethod']) && isset($this->allowed[$s['a'] . ':' . $s['o']['premethod']])) {
 						/*
-	                     * PHP is crazy :o)
-	                     */
+						 * PHP is crazy :o)
+						 */
 						$apps[$s['a']]->$s['o']['premethod']($s['o']);
 					}
 				}
@@ -112,50 +112,50 @@ class InfoXhr extends Control
 		if (isset($_GET['c']) && $_GET['c'] == 0) {
 			$this->updateChecker();
 			/*
-	         * if there are any updates $check will be true and we can send the request
-	        */
+			 * if there are any updates $check will be true and we can send the request
+			*/
 			if ($this->check) {
 				$xhr->addData('info', $this->info);
 				$xhr->send();
 			}
 		}
 		/*
-	     * 200 OK
+		 * 200 OK
 Array
 (
 	[app] => info
 	[m] => heartbeat
 	[c] => 0
 	[s] => Array
-	    (
-	        [0] => Array
-	            (
-	                [a] => msg
-	                [m] => chat
-	                [o] => Array
-	                    (
-	                        [speed] => fast
-	                        [premethod] => setSessionInfo
-	                        [ids] => Array
-	                            (
-	                                [0] => 1
-	                            )
+		(
+			[0] => Array
+				(
+					[a] => msg
+					[m] => chat
+					[o] => Array
+						(
+							[speed] => fast
+							[premethod] => setSessionInfo
+							[ids] => Array
+								(
+									[0] => 1
+								)
 
-	                        [infos] => Array
-	                            (
-	                                [0] => Array
-	                                    (
-	                                        [id] => 1
-	                                    )
+							[infos] => Array
+								(
+									[0] => Array
+										(
+											[id] => 1
+										)
 
-	                            )
+								)
 
-	                    )
+						)
 
-	            )
+				)
 
-	    )
-	     */
+		)
+		 */
 		// no session writing for no socket blocking
 		S::noWrite();
 
@@ -163,8 +163,8 @@ Array
 		$xhr->keepAlive(300);
 
 		/*
-	     * check if its the first heartbeat give me direct an output
-	     */
+		 * check if its the first heartbeat give me direct an output
+		 */
 
 		if (isset($_GET['c']) && (int)$_GET['c'] == 0) {
 			$this->updateChecker();
@@ -181,8 +181,8 @@ Array
 
 		for ($i = 0; $i < 6; ++$i) {
 			/*
-	         * fast polling calls
-	         */
+			 * fast polling calls
+			 */
 			if (!empty($services['fast'])) {
 				for ($y = 0; $y < 20; ++$y) {
 					foreach ($services['fast'] as $app => $methods) {
@@ -206,8 +206,8 @@ Array
 				sleep(10);
 			}
 			/*
-	         * slow polling services
-	         */
+			 * slow polling services
+			 */
 			foreach ($services['slow'] as $app => $methods) {
 				foreach ($methods as $method => $options) {
 					if ($ret = $apps[$app]->$method($options)) {
@@ -221,8 +221,8 @@ Array
 			$this->updateChecker();
 
 			/*
-	         * if there are any updates $check will be true and we can send the request
-	        */
+			 * if there are any updates $check will be true and we can send the request
+			*/
 			if ($this->check) {
 				$xhr->addData('info', $this->info);
 				$xhr->send();
@@ -237,8 +237,8 @@ Array
 	private function updateChecker()
 	{
 		/*
-	     * check for conversation updates only ifnot on big message page
-	    */
+		 * check for conversation updates only ifnot on big message page
+		*/
 
 		if ((!isset($_GET['p']) || $_GET['p'] != 'msg') && ($conv_ids = $this->model->checkConversationUpdates())) {
 			$this->check = true;

@@ -38,8 +38,8 @@ class GroupsView extends View
 		$out .= v_field(v_menu($items), 'Länderspezifische Gruppen');
 
 		/*
-	     * Deine Bezirke
-	    */
+		 * Deine Bezirke
+		*/
 		$orgacheck = false;
 		$orga = '';
 		if (isset($_SESSION['client']['bezirke'])) {

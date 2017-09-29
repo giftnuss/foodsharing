@@ -14,8 +14,8 @@ class ActivityXhr extends Control
 	{
 		$mailbox = loadModel('mailbox');
 		/*
-	     * get ids to not display from options
-	     */
+		 * get ids to not display from options
+		 */
 		$hidden_ids = array(
 			'bezirk' => array(),
 			'mailbox' => array(),
@@ -33,8 +33,8 @@ class ActivityXhr extends Control
 		$xhr = new Xhr();
 
 		/*
-	     * get FOrum updates
-	    */
+		 * get FOrum updates
+		*/
 
 		$updates = array();
 		if ($up = $this->model->loadForumUpdates($_GET['page'], $hidden_ids['bezirk'])) {
@@ -61,8 +61,8 @@ class ActivityXhr extends Control
 	public function load()
 	{
 		/*
-	     * get Forum updates
-	     */
+		 * get Forum updates
+		 */
 
 		$mailbox = loadModel('mailbox');
 
@@ -141,8 +141,8 @@ class ActivityXhr extends Control
 			}
 
 			/*
-	         * listings bezirke
-	        */
+			 * listings bezirke
+			*/
 			if ($bezirke = $this->model->getBezirke()) {
 				foreach ($bezirke as $b) {
 					$checked = true;
@@ -163,8 +163,8 @@ class ActivityXhr extends Control
 			}
 
 			/*
-	         * listings buddywalls
-	         */
+			 * listings buddywalls
+			 */
 			if ($buddys = $this->model->getBuddys()) {
 				foreach ($buddys as $b) {
 					$checked = true;
@@ -180,8 +180,8 @@ class ActivityXhr extends Control
 			}
 
 			/*
-	         * listings mailboxes
-	        */
+			 * listings mailboxes
+			*/
 			if ($boxes = $mailbox->getBoxes()) {
 				foreach ($boxes as $b) {
 					$checked = true;

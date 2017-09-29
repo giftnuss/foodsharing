@@ -31,15 +31,15 @@ class MsgModel extends Model
 	public function addConversation($recips, $body = false, $own = true)
 	{
 		/*
-	     * add the current user to the recipients
-	     */
+		 * add the current user to the recipients
+		 */
 		if ($own) {
 			$recips[(int)fsId()] = (int)fsId();
 		}
 
 		/*
-	     * make sure the order of this array
-	     */
+		 * make sure the order of this array
+		 */
 		ksort($recips);
 
 		$conversation_id = false;
@@ -68,8 +68,8 @@ class MsgModel extends Model
 		}
 
 		/*
-	     * If we dont have an existing conversation create a new one
-	    */
+		 * If we dont have an existing conversation create a new one
+		*/
 		if (!$conversation_id) {
 			$conversation_id = $this->insertConversation($recips, false, $body !== false);
 		}
@@ -194,8 +194,8 @@ class MsgModel extends Model
 	public function wantMsgEmailInfo($foodsaver_id)
 	{
 		/*
-	     * only send email if the user is not online
-	     */
+		 * only send email if the user is not online
+		 */
 		if (!$this->isActive($foodsaver_id)) {
 			if (Mem::get('infomail_message_' . $foodsaver_id)) {
 				return true;
@@ -265,12 +265,12 @@ class MsgModel extends Model
 	public function checkConversationUpdates()
 	{
 		/*
-	     * for more speed check the memcache first
-	     */
+		 * for more speed check the memcache first
+		 */
 
 		/*
-	     * Memcache var is settet but no updates
-	     */
+		 * Memcache var is settet but no updates
+		 */
 		$cache = Mem::user(fsId(), 'msg-update');
 
 		if ($cache === 0) {
@@ -280,8 +280,8 @@ class MsgModel extends Model
 
 			return $cache;
 		} /*
-	     * Memcache is not settedso get coonversation ids direct fromdm
-	     */
+		 * Memcache is not settedso get coonversation ids direct fromdm
+		 */
 		else {
 			Mem::userSet(fsId(), 'msg-update', 0);
 
@@ -486,8 +486,8 @@ class MsgModel extends Model
 			$member = $this->listConversationMembers($id);
 
 			/*
-	         * UPDATE conversation
-	         */
+			 * UPDATE conversation
+			 */
 			$this->update('
 				UPDATE
 					`' . PREFIX . 'conversation`
@@ -541,8 +541,8 @@ class MsgModel extends Model
 	public function deleteUserFromConversation($cid, $fsid, $deleteAlways = false)
 	{
 		/*
-	     * delete only users from non 1:1 conversations
-	     */
+		 * delete only users from non 1:1 conversations
+		 */
 		if ($deleteAlways || ((int)$this->qOne('SELECT COUNT(foodsaver_id) FROM `' . PREFIX . 'foodsaver_has_conversation` WHERE conversation_id = ' . (int)$cid) > 2)) {
 			$this->del('DELETE FROM `' . PREFIX . 'foodsaver_has_conversation` WHERE conversation_id = ' . (int)$cid . ' AND foodsaver_id = ' . (int)$fsid);
 			$this->updateDenormalizedConversationData($cid);
@@ -554,8 +554,8 @@ class MsgModel extends Model
 	public function insertConversation($recipients, $locked = false, $unread = true)
 	{
 		/*
-	     * first get one new conversation
-	     */
+		 * first get one new conversation
+		 */
 		$lock = 0;
 		if ($locked) {
 			$lock = 1;
@@ -575,8 +575,8 @@ class MsgModel extends Model
 
 		if (($cid = $this->insert($sql)) > 0) {
 			/*
-	         * last add all recipients to this conversation
-	         */
+			 * last add all recipients to this conversation
+			 */
 			$values = array();
 			unset($recipients[(int)fsId()]);
 			foreach ($recipients as $r) {

@@ -88,35 +88,35 @@ class MaintenanceModel extends ConsoleModel
 	/*
 	public function getBotschafterIds()
 	{
-	    return $this->qCol('
-	            SELECT DISTINCT bot.foodsaver_id AS id
+		return $this->qCol('
+				SELECT DISTINCT bot.foodsaver_id AS id
 
-	            FROM
-	                `'.PREFIX.'botschafter` bot,
-	                `'.PREFIX.'bezirk` b
+				FROM
+					`'.PREFIX.'botschafter` bot,
+					`'.PREFIX.'bezirk` b
 
-	            WHERE
-	                bot.bezirk_id = b.id
+				WHERE
+					bot.bezirk_id = b.id
 
-	            AND
-	                b.`type` != 7
-	        ');
+				AND
+					b.`type` != 7
+			');
 	}
 
 	public function updateRolle($fsids,$rolle_id)
 	{
-	    return $this->update('
-	        UPDATE `'.PREFIX.'foodsaver`
+		return $this->update('
+			UPDATE `'.PREFIX.'foodsaver`
 
-	        SET
-	            `rolle` = '.(int)$rolle_id.'
+			SET
+				`rolle` = '.(int)$rolle_id.'
 
-	        WHERE
-	            `rolle` != '.(int)$rolle_id.'
+			WHERE
+				`rolle` != '.(int)$rolle_id.'
 
-	        AND
-	            `id` IN('.implode(',', $botsch).')
-	    ');
+			AND
+				`id` IN('.implode(',', $botsch).')
+		');
 	}
 	*/
 

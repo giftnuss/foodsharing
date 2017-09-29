@@ -12,19 +12,19 @@ class WallpostView extends View
 	public function posts($posts)
 	{
 		/*
-	     [0] => Array
-	    (
-	        [id] => 1
-	        [body] => dfghfgh
-	        [time] => 2014-01-25 22:27:13
-	        [time_ts] => 1390685233
-	        [attach] =>
-	        [foodsaver_id] => 56
-	        [name] => Raphael
-	        [nachname] => Wintrich
-	        [photo] => 2cb1258a658ed46e0704764e1a2f491d.png
-	    )
-	     */
+		 [0] => Array
+		(
+			[id] => 1
+			[body] => dfghfgh
+			[time] => 2014-01-25 22:27:13
+			[time_ts] => 1390685233
+			[attach] =>
+			[foodsaver_id] => 56
+			[name] => Raphael
+			[nachname] => Wintrich
+			[photo] => 2cb1258a658ed46e0704764e1a2f491d.png
+		)
+		 */
 		$out = '
 		<table class="pintable">
 			<tbody>';

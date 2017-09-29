@@ -81,8 +81,8 @@ class SettingsModel extends Model
 			$session['try_count'] = $this->qOne('SELECT COUNT(quiz_id) FROM ' . PREFIX . 'quiz_session WHERE foodsaver_id = ' . (int)fsId() . ' AND `quiz_id` = ' . (int)$session['quiz_id']);
 
 			/*
-	         * First of all sort the question array and get al questions_ids etc to calculate the result
-	         */
+			 * First of all sort the question array and get al questions_ids etc to calculate the result
+			 */
 			if (!empty($session['quiz_questions'])) {
 				$session['quiz_questions'] = unserialize($session['quiz_questions']);
 
@@ -137,8 +137,8 @@ class SettingsModel extends Model
 					unset($session['quiz_questions']);
 
 					/*
-	                 * Add questions they're complete right answered
-	                 */
+					 * Add questions they're complete right answered
+					 */
 					$session['quiz_result'] = $this->addRightAnswers($tmp, $session['quiz_result']);
 
 					return $session;

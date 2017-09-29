@@ -63,8 +63,8 @@ class ApiXhr extends Control
 							));
 
 							/*
-	                         * send an E-Mail if the user is not online
-	                        */
+							 * send an E-Mail if the user is not online
+							*/
 							if ($model->wantMsgEmailInfo($m['id'])) {
 								$this->convMessage($m, $conversation_id, $message);
 							}
@@ -167,16 +167,16 @@ class ApiXhr extends Control
 	{
 		if (S::may()) {
 			/*
-	         * Array
-	        (
-	            [desc] => g
-	            [art] => 2,4
-	            [types] => 2,4
-	            [fetchart] => loc
-	            [lat] =>
-	            [lon] =>
-	        )
-	         */
+			 * Array
+			(
+				[desc] => g
+				[art] => 2,4
+				[types] => 2,4
+				[fetchart] => loc
+				[lat] =>
+				[lon] =>
+			)
+			 */
 
 			$desc = strip_tags($_GET['desc']);
 			$tmp = array();

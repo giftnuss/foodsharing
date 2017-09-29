@@ -6,8 +6,6 @@ use DebugBar\DataCollector\MemoryCollector;
 use DebugBar\DataCollector\MessagesCollector;
 use DebugBar\DataCollector\PhpInfoCollector;
 use DebugBar\DataCollector\RequestDataCollector;
-use DebugBar\DataCollector\TimeDataCollector;
-
 use Foodsharing\Debug\Collectors\DatabaseQueryCollector;
 
 /**
@@ -18,7 +16,6 @@ use Foodsharing\Debug\Collectors\DatabaseQueryCollector;
  * Call DebugBar::addQuery() whenever you have an SQL query to add
  *
  * Call DebugBar::render*() methods as late as possible. If nothing was added it will render an empty string.
- *
  */
 class DebugBar
 {
@@ -52,25 +49,35 @@ class DebugBar
 
 	public static function addMessage($message)
 	{
-		if (!self::$initialized) return;
+		if (!self::$initialized) {
+			return;
+		}
 		self::$debugbar['messages']->info($message);
 	}
 
-	public static function addQuery($sql, $duration, $success, $error_code = NULL, $error_message = NULL)
+	public static function addQuery($sql, $duration, $success, $error_code = null, $error_message = null)
 	{
-		if (!self::$initialized) return;
+		if (!self::$initialized) {
+			return;
+		}
 		self::$queryCollector->addQuery([$sql, $duration, $success, $error_code, $error_message]);
 	}
 
 	public static function renderHead()
 	{
-		if (!self::$initialized) return '';
+		if (!self::$initialized) {
+			return '';
+		}
+
 		return self::$debugbar->getJavascriptRenderer()->renderHead();
 	}
 
 	public static function renderContent()
 	{
-		if (!self::$initialized) return '';
+		if (!self::$initialized) {
+			return '';
+		}
+
 		return self::$debugbar->getJavascriptRenderer()->render();
 	}
 }

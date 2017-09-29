@@ -17,13 +17,13 @@ if (!defined('SOCK_URL')) {
 	define('SOCK_URL', 'http://127.0.0.1:1338/');
 }
 
-date_default_timezone_set("Europe/Berlin");
+date_default_timezone_set('Europe/Berlin');
 /*
  * Read revision from revision file.
  * It is supposed to define SRC_REVISION.
  */
 if (file_exists('revision.inc.php')) {
-	require_once('revision.inc.php');
+	require_once 'revision.inc.php';
 }
 
 /*

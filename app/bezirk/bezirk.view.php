@@ -469,34 +469,34 @@ class BezirkView extends View
 	public function eventTop($event)
 	{
 		/*
-	    Array
-	    (
-	        [fs_id] => 56
-	        [fs_name] => Raphael
-	        [fs_photo] =>
-	        [bezirk_id] => 12
-	        [location_id] => 1
-	        [name] => Testevent
-	        [start] => 2014-04-18 08:00:00
-	        [start_ts] => 1397800800
-	        [end] => 2014-05-16 16:00:00
-	        [end_ts] => 1400248800
-	        [description] => Lorem ipsum
-	        [bot] => 0
-	        [online] => 1
-	        [location] => Array
-	            (
-	                [id] => 1
-	                [name] => Allerweltshaus
-	                [lat] => 50.95021050
-	                [lon] => 6.92368500
-	                [zip] => 50823
-	                [city] => Köln
-	                [street] => Körnerstraße 77
-	            )
+		Array
+		(
+			[fs_id] => 56
+			[fs_name] => Raphael
+			[fs_photo] =>
+			[bezirk_id] => 12
+			[location_id] => 1
+			[name] => Testevent
+			[start] => 2014-04-18 08:00:00
+			[start_ts] => 1397800800
+			[end] => 2014-05-16 16:00:00
+			[end_ts] => 1400248800
+			[description] => Lorem ipsum
+			[bot] => 0
+			[online] => 1
+			[location] => Array
+				(
+					[id] => 1
+					[name] => Allerweltshaus
+					[lat] => 50.95021050
+					[lon] => 6.92368500
+					[zip] => 50823
+					[city] => Köln
+					[street] => Körnerstraße 77
+				)
 
-	    )
-	     */
+		)
+		 */
 
 		$end = '';
 

@@ -54,27 +54,27 @@ class QuizView extends View
 		$out = '';
 
 		/*
-	     * [0] => Array
-	        (
-	            [id] => 9
-	            [fp] => 0.00
-	            [status] => 1
-	            [time_start] => 2014-07-05 18:14:02
-	            [time_start_ts] => 1404576842
-	            [name] => Foodsaver
-	        )
+		 * [0] => Array
+			(
+				[id] => 9
+				[fp] => 0.00
+				[status] => 1
+				[time_start] => 2014-07-05 18:14:02
+				[time_start_ts] => 1404576842
+				[name] => Foodsaver
+			)
 
-	        [1] => Array
-	        (
-	            [id] => 10
-	            [fp] => 5.50
-	            [status] => 2
-	            [time_start] => 2014-07-07 09:06:33
-	            [time_start_ts] => 1404716793
-	            [name] => Foodsaver
-	        )
+			[1] => Array
+			(
+				[id] => 10
+				[fp] => 5.50
+				[status] => 2
+				[time_start] => 2014-07-07 09:06:33
+				[time_start_ts] => 1404716793
+				[name] => Foodsaver
+			)
 
-	     */
+		 */
 
 		$cur_qid = $sessions[0]['quiz_id'];
 		$rows = array();

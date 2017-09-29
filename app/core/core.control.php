@@ -315,13 +315,13 @@ class Control
 	public function convMessage($recipient, $conversation_id, $msg, $tpl_id = 9)
 	{
 		/*
-	     * only send email if the user is not online
-	     */
+		 * only send email if the user is not online
+		 */
 
 		if (!Mem::userOnline($recipient['id'])) {
 			/*
-	         * only send email if the user want to retrieve emails
-	         */
+			 * only send email if the user want to retrieve emails
+			 */
 			if (Mem::user($recipient['id'], 'infomail')) {
 				$sessdata = Mem::user(fsId(), 'lastMailMessage');
 

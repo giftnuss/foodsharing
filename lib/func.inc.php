@@ -860,8 +860,8 @@ function tplMailList($tpl_id, $to, $from = false, $attach = false)
 		}
 
 		/*
-	     *  todo: implement logic that we dont have to send one attachment multiple time to the slave db ...
-	    */
+		 *  todo: implement logic that we dont have to send one attachment multiple time to the slave db ...
+		*/
 
 		if ($attach !== false) {
 			foreach ($attach as $a) {
@@ -2030,12 +2030,11 @@ function mayEditQuiz()
 
 function mayEditBlog()
 {
+	if ($all_group_admins = Mem::get('all_global_group_admins')) {
+		return S::may('orga') || in_array(fsId(), unserialize($all_group_admins));
+	}
 
-    if($all_group_admins = Mem::get('all_global_group_admins'))
-    {
-        return S::may('orga') || in_array(fsId(), unserialize($all_group_admins));
-    }
-    return S::may('orga');
+	return S::may('orga');
 }
 
 function may()

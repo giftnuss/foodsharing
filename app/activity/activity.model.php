@@ -107,8 +107,8 @@ class ActivityModel extends Model
 
 			foreach ($updates as $u) {
 				/*
-	             * quick fix later list all comments in a package
-	            */
+				 * quick fix later list all comments in a package
+				*/
 				if (isset($hb[$u['basket_id']])) {
 					continue;
 				}
@@ -194,15 +194,15 @@ class ActivityModel extends Model
 
 		')) {
 			/*
-	         * AND
-	            poster_id != '.(int)fsId().'
-	         */
+			 * AND
+				poster_id != '.(int)fsId().'
+			 */
 			$out = array();
 			$hb = array();
 			foreach ($updates as $u) {
 				/*
-	             * quick fix later list all comments in a package
-	            */
+				 * quick fix later list all comments in a package
+				*/
 				if (isset($hb[$u['fs_id']])) {
 					continue;
 				}

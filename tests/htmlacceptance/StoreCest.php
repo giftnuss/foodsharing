@@ -26,7 +26,7 @@ class StoreCest
 		$I->see('Keine Angabe', '#public_time option[selected]');
 
 		// Change option and save the page
-		$I->selectOption('public_time','morgens');
+		$I->selectOption('public_time', 'morgens');
 		$I->click('Senden');
 
 		// Check the page again to make sure our option was saved
@@ -39,5 +39,4 @@ class StoreCest
 		$this->tester = $I;
 		$this->createStoreAndUsers();
 	}
-
 }

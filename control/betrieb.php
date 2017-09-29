@@ -39,8 +39,8 @@ if (getAction('new')) {
 	/*
 	if($db->del_betrieb($id))
 	{
-	    info(s('betrieb_deleted'));
-	    goPage();
+		info(s('betrieb_deleted'));
+		goPage();
 	}
 	*/
 } elseif ($id = getActionId('edit')) {
@@ -117,30 +117,30 @@ if (getAction('new')) {
 	/*
 	if($data = $db->getBasics_betrieb())
 	{
-	    $rows = array();
-	    foreach ($data as $d)
-	    {
+		$rows = array();
+		foreach ($data as $d)
+		{
 
-	        $rows[] = array(
-	            array('cnt' => '<a href="/?page=betrieb&id='.$d['id'].'">'.$d['name'].'</a>'),
-	            array('cnt' => v_toolbar(array('id'=>$d['id'],'types' => array('edit','delete'),'confirmMsg'=>sv('delete_sure',$d['name'])))
-	        ));
-	    }
+			$rows[] = array(
+				array('cnt' => '<a href="/?page=betrieb&id='.$d['id'].'">'.$d['name'].'</a>'),
+				array('cnt' => v_toolbar(array('id'=>$d['id'],'types' => array('edit','delete'),'confirmMsg'=>sv('delete_sure',$d['name'])))
+			));
+		}
 
-	    $table = v_tablesorter(array(
-	        array('name' => s('name')),
-	        array('name' => s('actions'),'sort' => false,'width' => 50)
-	    ),$rows);
+		$table = v_tablesorter(array(
+			array('name' => s('name')),
+			array('name' => s('actions'),'sort' => false,'width' => 50)
+		),$rows);
 
-	    $content = v_field($table,'Alle betrieb');
+		$content = v_field($table,'Alle betrieb');
 	}
 	else
 	{
-	    info(s('betrieb_empty'));
+		info(s('betrieb_empty'));
 	}
 
 	$right = v_field(v_menu(array(
-	    array('href' => '/?page=betrieb&a=neu','name' => s('neu_betrieb'))
+		array('href' => '/?page=betrieb&a=neu','name' => s('neu_betrieb'))
 	)),'Aktionen');
 	*/
 }
@@ -259,14 +259,14 @@ function handle_edit()
 	global $g_data;
 	if (submitted()) {
 		/*
-	    $g_data['lat'] = '';
-	    $g_data['lon'] = '';
-	    if($ll = getLatLon($g_data['str'].' '.$g_data['hsnr'], $g_data['plz'],$g_data['stadt']))
-	    {
-	        $g_data['lat'] = $ll['lat'];
-	        $g_data['lon'] = $ll['lng'];
-	    }
-	    */
+		$g_data['lat'] = '';
+		$g_data['lon'] = '';
+		if($ll = getLatLon($g_data['str'].' '.$g_data['hsnr'], $g_data['plz'],$g_data['stadt']))
+		{
+			$g_data['lat'] = $ll['lat'];
+			$g_data['lon'] = $ll['lng'];
+		}
+		*/
 		//$g_data['foodsaver'] = array($g_data['foodsaver']);
 
 		$g_data['stadt'] = $g_data['ort'];

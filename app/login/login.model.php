@@ -14,19 +14,19 @@ class LoginModel extends Model
 	public function insertNewUser($data, $token)
 	{
 		/*
-	             [iam] => org
-	            [name] => Peter
-	            [email] => peter@pan.de
-	            [pw] => 12345
-	            [avatar] => 5427fb55f3a5d.jpg
-	            [phone] => 02261889971
-	            [lat] => 48.0649838
-	            [lon] => 7.885475300000053
-	            [str] => Bauerngasse
-	            [nr] => 6
-	            [plz] => 79211
-	            [country] => DE
-	    */
+				 [iam] => org
+				[name] => Peter
+				[email] => peter@pan.de
+				[pw] => 12345
+				[avatar] => 5427fb55f3a5d.jpg
+				[phone] => 02261889971
+				[lat] => 48.0649838
+				[lon] => 7.885475300000053
+				[str] => Bauerngasse
+				[nr] => 6
+				[plz] => 79211
+				[country] => DE
+		*/
 		$newsletter = 0;
 		if ($data['newsletter']) {
 			$newsletter = 1;

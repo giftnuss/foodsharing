@@ -9,25 +9,25 @@ class BellView extends View
 		if (!empty($bells)) {
 			foreach ($bells as $b) {
 				/*
-	             *  [id] => 1
-	                [name] => forum_answer_title
-	                [name_var] => a:1:{s:9:"forumname";s:7:"Raphael";}
-	                [body] => forum_answer
-	                [body_var] => Array
-	                    (
-	                        [name] => Orgateam
-	                    )
+				 *  [id] => 1
+					[name] => forum_answer_title
+					[name_var] => a:1:{s:9:"forumname";s:7:"Raphael";}
+					[body] => forum_answer
+					[body_var] => Array
+						(
+							[name] => Orgateam
+						)
 
-	                [attr] => Array
-	                    (
-	                        [href] => ?page=bezirk&bid=258&sub=forum&tid=707&pid=12835#post12835
-	                    )
+					[attr] => Array
+						(
+							[href] => ?page=bezirk&bid=258&sub=forum&tid=707&pid=12835#post12835
+						)
 
-	                [icon] => fa fa-comment
-	                [identifier] => forum-post-12835
-	                [time] => 0000-00-00 00:00:00
-	                [seen] => 0
-	             */
+					[icon] => fa fa-comment
+					[identifier] => forum-post-12835
+					[time] => 0000-00-00 00:00:00
+					[seen] => 0
+				 */
 				$unread = 0;
 
 				if ($b['seen'] == 0) {

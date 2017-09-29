@@ -51,7 +51,7 @@ class FairteilerView extends View
 	public function checkFairteiler($ft)
 	{
 		/*
-	     * Array
+		 * Array
 (
 	[id] => 1
 	[bezirk_id] => 4
@@ -71,14 +71,14 @@ class FairteilerView extends View
 	[fs_nachname] => Wintrich
 	[fs_id] => 56
 	[pic] => Array
-	    (
-	        [thumb] => images/picture/crop_1_60_52e3fed700753.png
-	        [head] => images/picture/crop_0_528_52e3fed700753.png
-	        [orig] => images/picture/52e3fed700753.png
-	    )
+		(
+			[thumb] => images/picture/crop_1_60_52e3fed700753.png
+			[head] => images/picture/crop_0_528_52e3fed700753.png
+			[orig] => images/picture/52e3fed700753.png
+		)
 
 )
-	     */
+		 */
 		$content = '';
 		if ($ft['pic']) {
 			$content .= v_input_wrapper('Foto', '<img src="' . $ft['pic']['head'] . '" alt="' . $ft['name'] . '" />');

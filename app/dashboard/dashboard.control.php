@@ -23,8 +23,8 @@ class DashboardControl extends Control
 		addBread(s('dashboard'));
 		addTitle(s('dashboard'));
 		/*
-	     * User is foodsaver
-	     */
+		 * User is foodsaver
+		 */
 
 		if ($this->user['rolle'] > 0 && !getBezirkId()) {
 			addJs('becomeBezirk();');

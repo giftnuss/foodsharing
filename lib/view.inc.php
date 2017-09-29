@@ -21,16 +21,16 @@ function v_scroller($content, $width = '232')
 			</div>';
 
 		/*
-	    return '
-	        <div id="'.$id.'" class="scroller">
-	            <div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
-	            <div class="viewport">
-	                <div class="overview" style="width:'.$width.'px">
-	                    '.$content.'
-	                </div>
-	            </div>
-	        </div>';
-	    */
+		return '
+			<div id="'.$id.'" class="scroller">
+				<div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
+				<div class="viewport">
+					<div class="overview" style="width:'.$width.'px">
+						'.$content.'
+					</div>
+				</div>
+			</div>';
+		*/
 	}
 }
 
@@ -40,17 +40,17 @@ function v_activeSwitcher($table, $field_id, $active)
 
 	/*
 	addJs('
-	    $("#'.$id.'").buttonset().change(function(){
-	        showLoader();
-	        $.ajax({
-	            url: "xhr.php?f=activeSwitch",
-	            data:{t:"'.$table.'",id:"'.$field_id.'",value:$("#'.$id.' input:checked").attr("value")},
-	            method:"get",
-	            complete:function(){
-	                hideLoader();
-	            }
-	        });
-	    });
+		$("#'.$id.'").buttonset().change(function(){
+			showLoader();
+			$.ajax({
+				url: "xhr.php?f=activeSwitch",
+				data:{t:"'.$table.'",id:"'.$field_id.'",value:$("#'.$id.' input:checked").attr("value")},
+				method:"get",
+				complete:function(){
+					hideLoader();
+				}
+			});
+		});
 	');
 	*/
 
@@ -471,23 +471,23 @@ function v_form_tinymce($id, $option = array())
 			$css = 'css/email.css';
 			$class = '';
 			/*
-	        $js = '
-	            $("#'.$id.'").tinymce({
-	              script_url : "./js/tinymce//tinymce.min.js",
-	              theme : "modern",
-	              language : "de",
-	              content_css : "'.$css.'",
-	              menubar: false,
-	              statusbar: false,
-	              body_class: "'.$class.'",
-	              valid_elements : "a[href|target=_blank],strong,b,div[align],br,p,ul,li,ol,table,tr,td[valign=top|align|style|width],th,tbody,thead,tfoot",
-	              plugins: "autoresize link image media table contextmenu image link code paste",
-	              toolbar: "bold italic alignleft aligncenter alignright bullist code link",
-	              relative_urls: true,
-	              convert_urls: false
-	           });
-	        ';
-	        */
+			$js = '
+				$("#'.$id.'").tinymce({
+				  script_url : "./js/tinymce//tinymce.min.js",
+				  theme : "modern",
+				  language : "de",
+				  content_css : "'.$css.'",
+				  menubar: false,
+				  statusbar: false,
+				  body_class: "'.$class.'",
+				  valid_elements : "a[href|target=_blank],strong,b,div[align],br,p,ul,li,ol,table,tr,td[valign=top|align|style|width],th,tbody,thead,tfoot",
+				  plugins: "autoresize link image media table contextmenu image link code paste",
+				  toolbar: "bold italic alignleft aligncenter alignright bullist code link",
+				  relative_urls: true,
+				  convert_urls: false
+			   });
+			';
+			*/
 		}
 	}
 

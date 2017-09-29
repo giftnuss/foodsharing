@@ -20,8 +20,8 @@ class FairteilerControl extends Control
 		parent::__construct();
 
 		/*
-	     * allowed only for logged in users
-	     */
+		 * allowed only for logged in users
+		 */
 		if (!S::may() && isset($_GET['sub']) && $_GET['sub'] != 'ft') {
 			goLogin();
 		}

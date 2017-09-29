@@ -97,20 +97,20 @@ class MailboxView extends View
 
 		foreach ($messages as $m) {
 			/*
-	         * (
-	                 [mailbox_id] => 5
-	                 [folder] => 1
-	                 [sender] => {"personal":"Raphael Wintrich","mailbox":"raphi","host":"waldorfweb.net"}
-	                 [to] => [{"mailbox":"r.wintrich","host":"lebensmittelretten.de"}]
-	                 [subject] => Fwd: Newsletter ProVegan: Ausgabe 50/2013
-	                 [time] => 2013-12-14 00:01:45
-	                 [time_fs] => 1386975705
-	                 [attach] =>
-	                 [read] => 0
-	                 [answer] => 0
-	         )
+			 * (
+					 [mailbox_id] => 5
+					 [folder] => 1
+					 [sender] => {"personal":"Raphael Wintrich","mailbox":"raphi","host":"waldorfweb.net"}
+					 [to] => [{"mailbox":"r.wintrich","host":"lebensmittelretten.de"}]
+					 [subject] => Fwd: Newsletter ProVegan: Ausgabe 50/2013
+					 [time] => 2013-12-14 00:01:45
+					 [time_fs] => 1386975705
+					 [attach] =>
+					 [read] => 0
+					 [answer] => 0
+			 )
 
-	        */
+			*/
 
 			$von = json_decode($m['sender'], true);
 
@@ -154,23 +154,23 @@ class MailboxView extends View
 	{
 		$mail['body'] = trim($mail['body']);
 		/*
-	     * 		/*
-	     * Array
-	    (
-	        [id] => 1
-	        [folder] => 1
-	        [sender] => {"personal":"Raphael Wintrich","mailbox":"raphael","host":"waldorfweb.net"}
-	        [to] => [{"mailbox":"r.wintrich","host":"lebensmittelretten.de"}]
-	        [subject] => Test
-	        [time] => 2013-12-13 23:42:20
-	        [time_ts] => 1386974540
-	        [attach] =>
-	        [read] => 0
-	        [answer] => 0
-	        [body] => sldjkfhl ksdflkj sldfs df
-	        [mailbox_id] => 5
-	    )
-	     */
+		 * 		/*
+		 * Array
+		(
+			[id] => 1
+			[folder] => 1
+			[sender] => {"personal":"Raphael Wintrich","mailbox":"raphael","host":"waldorfweb.net"}
+			[to] => [{"mailbox":"r.wintrich","host":"lebensmittelretten.de"}]
+			[subject] => Test
+			[time] => 2013-12-13 23:42:20
+			[time_ts] => 1386974540
+			[attach] =>
+			[read] => 0
+			[answer] => 0
+			[body] => sldjkfhl ksdflkj sldfs df
+			[mailbox_id] => 5
+		)
+		 */
 
 		$von = json_decode($mail['sender'], true);
 
@@ -272,10 +272,10 @@ class MailboxView extends View
 		');
 
 		/*
-	     * [id] => 1
-	        [name] => deutschland
-	        [type] => bot
-	     */
+		 * [id] => 1
+			[name] => deutschland
+			[type] => bot
+		 */
 		if (count($mailboxes) == 1) {
 			$von = $mailboxes[0]['email_name'] . ' (' . $mailboxes[0]['name'] . '@' . DEFAULT_HOST . ')<input type="hidden" id="h-edit-von" value="' . $mailboxes[0]['id'] . '" />';
 		} else {

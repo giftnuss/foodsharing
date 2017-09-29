@@ -1739,12 +1739,12 @@ class ManualDb extends Db
 		if (isAdmin()) {
 		}
 		/*
-	     * Array
-	    (
-	        [0] => (33,56,0)
-	        [1] => (33,146,0)
-	    )
-	     */
+		 * Array
+		(
+			[0] => (33,56,0)
+			[1] => (33,146,0)
+		)
+		 */
 		$this->sql('
 			INSERT INTO `' . PREFIX . 'email_status` (`email_id`,`foodsaver_id`,`status`)
 			VALUES
@@ -2213,49 +2213,49 @@ class ManualDb extends Db
 	private function regUser($data)
 	{
 		/*
-	     * Array
-	    (
-	            [geschlecht] =>
-	            [name] => Raphael
-	            [nachname] => Wintrich
-	            [anschrift] => Bauer 9
-	            [plz] => 50969
-	            [stadt] => Köln
-	            [region] => 9
-	            [nix] => 60
-	            [bezirk] => 43
-	            [stadtteil] => Zollstock
-	            [land_anders_value] =>
-	            [geb_datum] => 2013-08-22
-	            [fs_id] => 4565
-	            [email] =>
-	            [festnetz] =>
-	            [handy] =>
-	            [freiwilliger_foodsaver_oder_botschafter] =>
-	            [ansprechen_und_abholen] =>
-	            [wie_weit_reicht_dein_radius] =>
-	            [kuehlen_beim_abholen] =>
-	            [kontakte_betriebe] =>
-	            [werbung_fur_fs_sonstiges] =>
-	            [raumlichkeit] =>
-	            [programmierhilfe_sonstiges] =>
-	            [ausland_sprache_auf_mutterniveau] =>
-	            [aktiv_im_ausland] =>
-	            [unterstuetzung_orgateam] =>
-	            [talente_und_ressourcen] =>
-	            [fs_hotline] =>
-	            [anbaumoeglichkeiten] =>
-	            [wann_hast_du_zeit] =>
-	            [sharing_netzwerke_sonstiges] =>
-	            [erfahrung_essenretten] =>
-	            [containererfahrung] =>
-	            [wie_gehort_von_fs_sonstiges] =>
-	            [motivation] =>
-	            [berufung] =>
-	            [kommentare] =>
-	            [submit] => Anmeldung Absenden
-	            [submitted] => 1
-	    ) */
+		 * Array
+		(
+				[geschlecht] =>
+				[name] => Raphael
+				[nachname] => Wintrich
+				[anschrift] => Bauer 9
+				[plz] => 50969
+				[stadt] => Köln
+				[region] => 9
+				[nix] => 60
+				[bezirk] => 43
+				[stadtteil] => Zollstock
+				[land_anders_value] =>
+				[geb_datum] => 2013-08-22
+				[fs_id] => 4565
+				[email] =>
+				[festnetz] =>
+				[handy] =>
+				[freiwilliger_foodsaver_oder_botschafter] =>
+				[ansprechen_und_abholen] =>
+				[wie_weit_reicht_dein_radius] =>
+				[kuehlen_beim_abholen] =>
+				[kontakte_betriebe] =>
+				[werbung_fur_fs_sonstiges] =>
+				[raumlichkeit] =>
+				[programmierhilfe_sonstiges] =>
+				[ausland_sprache_auf_mutterniveau] =>
+				[aktiv_im_ausland] =>
+				[unterstuetzung_orgateam] =>
+				[talente_und_ressourcen] =>
+				[fs_hotline] =>
+				[anbaumoeglichkeiten] =>
+				[wann_hast_du_zeit] =>
+				[sharing_netzwerke_sonstiges] =>
+				[erfahrung_essenretten] =>
+				[containererfahrung] =>
+				[wie_gehort_von_fs_sonstiges] =>
+				[motivation] =>
+				[berufung] =>
+				[kommentare] =>
+				[submit] => Anmeldung Absenden
+				[submitted] => 1
+		) */
 
 		if ($data['geschlecht'] == 'Frau') {
 			$data['geschlecht'] = 2;
@@ -3564,7 +3564,7 @@ class ManualDb extends Db
 	}
 
 	/* updates the member list to given list of IDs, optionally leaving admins
-	    that are not in the list in place */
+		that are not in the list in place */
 	public function updateGroupMembers($bezirk, $foodsaver_ids, $leave_admins)
 	{
 		$rows_ins = 0;

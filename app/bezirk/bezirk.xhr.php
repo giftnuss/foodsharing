@@ -129,8 +129,8 @@ class BezirkXhr extends Control
 			}
 
 			/*
-	         * end add post
-	         */
+			 * end add post
+			 */
 		}
 
 		echo json_encode(array(

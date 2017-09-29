@@ -101,8 +101,8 @@ class GroupsControl extends Control
 				}
 
 				/*
-	             * Handle Member and Group-Admin Fields
-	             */
+				 * Handle Member and Group-Admin Fields
+				 */
 				handleTagselect('member');
 				handleTagselect('leader');
 

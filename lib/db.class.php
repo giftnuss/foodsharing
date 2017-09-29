@@ -142,8 +142,8 @@ class Mem
 			}
 		}
 		/*
-	     * free memcache from userdata
-	     */
+		 * free memcache from userdata
+		 */
 		self::userDel($fs_id, 'lastMailMessage');
 		self::userDel($fs_id, 'active');
 
@@ -314,7 +314,7 @@ class Db
 	public function addBetrieb($data)
 	{
 		/*
-	     * Array
+		 * Array
 (
 	[form_submit] => newbetrieb
 	[bezeichnung] => kjl
@@ -331,7 +331,7 @@ class Db
 	[fax] =>
 	[verantwortlicherfoodsaver] =>
 )
-	     */
+		 */
 
 		if ($betrieb_id = $this->insert('
 				INSERT INTO ' . PREFIX . 'betrieb
@@ -617,14 +617,14 @@ class Db
 	public function resetPassword($fs_id, $email)
 	{
 		/*
-	    $password = nettesPasswort();
+		$password = nettesPasswort();
 
-	    $crypt = $this->encryptMd5($email, $password);
+		$crypt = $this->encryptMd5($email, $password);
 
-	    $this->update('UPDATE '.PREFIX.'foodsaver SET `passwd` = "'.$crypt.'" WHERE `id` = '.$this->intval($fs_id));
+		$this->update('UPDATE '.PREFIX.'foodsaver SET `passwd` = "'.$crypt.'" WHERE `id` = '.$this->intval($fs_id));
 
-	    return $password;
-	    */
+		return $password;
+		*/
 	}
 
 	public function encryptMd5($email, $pass)
@@ -828,8 +828,8 @@ class Db
 			));
 
 			/*
-	         * temporary special stuff for quiz
-	         */
+			 * temporary special stuff for quiz
+			 */
 			$hastodo = false;
 			$hastodo_id = 0;
 
@@ -853,11 +853,11 @@ class Db
 
 			$this->update('UPDATE ' . PREFIX . 'foodsaver SET quiz_rolle = ' . (int)$quiz_rolle . ' WHERE id = ' . (int)$fs['id']);
 			/*
-	        echo '<pre>';
-	        echo $count_verantwortlich."\n";
-	        echo $count_fs_quiz;
-	        die();
-	        */
+			echo '<pre>';
+			echo $count_verantwortlich."\n";
+			echo $count_fs_quiz;
+			die();
+			*/
 
 			if ((int)$fs['rolle'] == 1 && $count_fs_quiz == 0) {
 				$hastodo = true;
@@ -886,8 +886,8 @@ class Db
 			S::set('hastodoquiz-id', $hastodo_id);
 
 			/*
-	         * temp quiz stuff end...
-	         */
+			 * temp quiz stuff end...
+			 */
 
 			$mailbox = false;
 			if ((int)$fs['mailbox_id'] > 0) {
@@ -919,18 +919,18 @@ class Db
 			$fs['buddys'] = $this->qColKey('SELECT buddy_id FROM ' . PREFIX . 'buddy WHERE foodsaver_id = ' . (int)$fs_id . ' AND confirmed = 1');
 
 			/*
-	         * New Session Management
-	         */
+			 * New Session Management
+			 */
 			S::login($fs);
 
 			/*
-	         * Add entry into user -> session set
-	         */
+			 * Add entry into user -> session set
+			 */
 			Mem::userAddSession($fs_id, session_id());
 
 			/*
-	         * store all options in the session
-	        */
+			 * store all options in the session
+			*/
 
 			if (!empty($fs['option'])) {
 				$options = unserialize($fs['option']);

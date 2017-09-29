@@ -233,7 +233,7 @@ class ReportModel extends Model
             	`' . PREFIX . 'foodsaver` rp ON r.reporter_id = rp.id 
 
 			LEFT JOIN
- 				`'.PREFIX.'bezirk` b on fs.bezirk_id=b.id
+ 				`' . PREFIX . 'bezirk` b on fs.bezirk_id=b.id
 			
 			WHERE
 				r.committed = ' . $committed . '

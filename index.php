@@ -8,14 +8,14 @@ if(isset($_GET['g_path']))
 
 	switch ($path[0])
 	{
-	    case 'group' :
-	        $_GET['page'] = 'bezirk';
-	        $_GET['bid'] = $path[1];
-	        $_GET['sub'] = $path[2];
-	        break;
+		case 'group' :
+			$_GET['page'] = 'bezirk';
+			$_GET['bid'] = $path[1];
+			$_GET['sub'] = $path[2];
+			break;
 
-	    default:
-	        break;
+		default:
+			break;
 	}
 
 }

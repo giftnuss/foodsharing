@@ -68,8 +68,8 @@ class BellXhr extends Control
 		}
 
 		/*
-	     * additional bells for new fairteiler
-	     */
+		 * additional bells for new fairteiler
+		 */
 		if (S::may('bot')) {
 			if ($fbells = $this->model->getFairteilerBells()) {
 				$bbells = array();

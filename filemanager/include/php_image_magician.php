@@ -235,14 +235,14 @@ class imageLib
 			$this->heightOriginal = imagesy($this->image);
 
 			/*  Added 15-09-08
-	         *  Get the filesize using this build in method.
-	         *  Stores an array of size
-	         *
-	         *  $this->imageSize[1] = width
-	         *  $this->imageSize[2] = height
-	         *  $this->imageSize[3] = width x height
-	         *
-	         */
+			 *  Get the filesize using this build in method.
+			 *  Stores an array of size
+			 *
+			 *  $this->imageSize[1] = width
+			 *  $this->imageSize[2] = height
+			 *  $this->imageSize[3] = width x height
+			 *
+			 */
 			$this->imageSize = getimagesize($this->fileName);
 		} else {
 			$this->errorArray[] = 'File is not an image';
@@ -3121,16 +3121,16 @@ class imageLib
 					$COLOR = unpack('V', substr($IMG, $P, 3) . $VIDE);
 				} elseif ($BMP['bits_per_pixel'] == 16) {
 					/*
-	       * BMP 16bit fix
-	       * =================
-	       *
-	       * Ref: http://us3.php.net/manual/en/function.imagecreate.php#81604
-	       *
-	       * Notes:
-	       * "don't work with bmp 16 bits_per_pixel. change pixel
-	       * generator for this."
-	       *
-	       */
+		   * BMP 16bit fix
+		   * =================
+		   *
+		   * Ref: http://us3.php.net/manual/en/function.imagecreate.php#81604
+		   *
+		   * Notes:
+		   * "don't work with bmp 16 bits_per_pixel. change pixel
+		   * generator for this."
+		   *
+		   */
 
 					// *** Original code (don't work)
 					//$COLOR = unpack("n",substr($IMG,$P,2));

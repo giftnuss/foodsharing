@@ -36,15 +36,15 @@ class StatisticsView extends View
 	public function getStatGesamt($stat)
 	{
 		/*
-	     *  fetchweight,
-	    fetchcount,
-	    postcount,
-	    betriebcount,
-	    korpcount,
-	    botcount,
-	    fscount,
-	    fairteilercount
-	    */
+		 *  fetchweight,
+		fetchcount,
+		postcount,
+		betriebcount,
+		korpcount,
+		botcount,
+		fscount,
+		fairteilercount
+		*/
 		return v_field('
 		<div id="stat_whole">
 			<div class="stat_item">

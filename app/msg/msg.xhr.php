@@ -124,8 +124,8 @@ class MsgXhr extends Control
 						$xhr->setStatus(1);
 
 						/*
-	                     * for not so db intensive polling store updates in memcache if the recipients are online
-	                    */
+						 * for not so db intensive polling store updates in memcache if the recipients are online
+						*/
 						if ($member = $this->model->listConversationMembers($_POST['c'])) {
 							$user_ids = array_column($member, 'id');
 
@@ -144,8 +144,8 @@ class MsgXhr extends Control
 									Mem::userAppend($m['id'], 'msg-update', (int)$_POST['c']);
 
 									/*
-	                                 * send an E-Mail if the user is not online
-	                                */
+									 * send an E-Mail if the user is not online
+									*/
 									if ($this->model->wantMsgEmailInfo($m['id'])) {
 										$this->convMessage($m, $_POST['c'], $body);
 									}
@@ -231,23 +231,23 @@ class MsgXhr extends Control
 	public function newconversation()
 	{
 		/*
-	     *  body	asd
-	        recip[]	56
-	        recip[]	58
-	     */
+		 *  body	asd
+			recip[]	56
+			recip[]	58
+		 */
 
 		/*
-	     * Check is there are correct post data sendet?
-	     */
+		 * Check is there are correct post data sendet?
+		 */
 		if (isset($_POST['recip']) && isset($_POST['body'])) {
 			/*
-	         * initiate an xhr object
-	         */
+			 * initiate an xhr object
+			 */
 			$xhr = new Xhr();
 
 			/*
-	         * Make all ids to int and remove doubles check its not 0
-	         */
+			 * Make all ids to int and remove doubles check its not 0
+			 */
 			$recip = array();
 			foreach ($_POST['recip'] as $r) {
 				if ((int)$r > 0) {
@@ -256,18 +256,18 @@ class MsgXhr extends Control
 			}
 
 			/*
-	         * quick body text preparing
-	         */
+			 * quick body text preparing
+			 */
 			$body = htmlentities(trim($_POST['body']));
 
 			if (!empty($recip) && $body != '') {
 				/*
-	             * add conversation if successfull send an success message otherwise error
-	             */
+				 * add conversation if successfull send an success message otherwise error
+				 */
 				if ($cid = $this->model->addConversation($recip, $body)) {
 					/*
-	                 * add the conversation id to ajax output
-	                 */
+					 * add the conversation id to ajax output
+					 */
 					$xhr->addData('cid', $cid);
 				} else {
 					$xhr->addMessage(s('error'), 'error');
@@ -277,8 +277,8 @@ class MsgXhr extends Control
 			}
 
 			/*
-	         * send all ajax stuff to the client
-	         */
+			 * send all ajax stuff to the client
+			 */
 			$xhr->send();
 		}
 	}
@@ -303,8 +303,8 @@ class MsgXhr extends Control
 			$this->model->setAsRead($convids);
 			$return = array();
 			/*
-	         * check is a new message there for active conversation?
-	         */
+			 * check is a new message there for active conversation?
+			 */
 
 			if ($cid && isset($conv_keys[$cid])) {
 				if ($messages = $this->model->getLastMessages($cid, $lmid)) {

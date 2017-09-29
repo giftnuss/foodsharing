@@ -18,13 +18,13 @@ class Acceptance extends \Codeception\Module
 
 	public function formattedDateInRange($min, $max, $format, $actual)
 	{
-		$date = \DateTime::createFromFormat($format, $actual, new \DateTimeZone("Europe/Berlin"));
+		$date = \DateTime::createFromFormat($format, $actual, new \DateTimeZone('Europe/Berlin'));
 		$this->assertGreaterThan($min, $date, 'Date is in past');
 		$this->assertLessThan($max, $date, 'Date is in future');
 	}
 
 	public function seeFileExists($filename)
 	{
-		\PHPUnit_Framework_Assert::assertTrue( file_exists($filename) );
+		\PHPUnit_Framework_Assert::assertTrue(file_exists($filename));
 	}
 }

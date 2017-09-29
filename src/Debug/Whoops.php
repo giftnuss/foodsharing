@@ -11,20 +11,18 @@ use Whoops\Handler\PrettyPageHandler;
  */
 class Whoops
 {
-
 	public static function register()
 	{
-		$run     = new \Whoops\Run;
-		$handler = new PrettyPageHandler;
-		$handler->setPageTitle("Whoops! There was a problem.");
+		$run = new \Whoops\Run();
+		$handler = new PrettyPageHandler();
+		$handler->setPageTitle('Whoops! There was a problem.');
 
 		$run->pushHandler($handler);
 
 		if (\Whoops\Util\Misc::isAjaxRequest()) {
-			$run->pushHandler(new JsonResponseHandler);
+			$run->pushHandler(new JsonResponseHandler());
 		}
 
 		$run->register();
 	}
-
 }

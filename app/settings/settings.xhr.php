@@ -116,12 +116,12 @@ class SettingsXhr extends Control
 	public function sleepmode()
 	{
 		/*
-	     * from
-	     * until
-	        msg
-	        status	2
+		 * from
+		 * until
+			msg
+			status	2
 
-	     */
+		 */
 
 		$from = '';
 		$to = '';

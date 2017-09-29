@@ -17,82 +17,82 @@ class MaintenanceControl extends ConsoleControl
 	public function daily()
 	{
 		/*
-	     * warn food store manager if there are no fetching people
-	     */
+		 * warn food store manager if there are no fetching people
+		 */
 		$this->betriebFetchWarning();
 
 		/*
-	     * update bezirk ids
-	     * there is this old 1:n relation foodsaver <=> bezirk we just check in one step the relation table
-	     */
+		 * update bezirk ids
+		 * there is this old 1:n relation foodsaver <=> bezirk we just check in one step the relation table
+		 */
 		//$this->updateBezirkIds();
 
 		/*
-	     * fill memcache with info about users if they want information mails etc..
-	     */
+		 * fill memcache with info about users if they want information mails etc..
+		 */
 		$this->memcacheUserInfo();
 
 		/*
-	     * delete old bells
-	     */
+		 * delete old bells
+		 */
 		$this->deleteBells();
 
 		/*
-	     * delete unuser images
-	     */
+		 * delete unuser images
+		 */
 		$this->deleteImages();
 
 		/*
-	     * delete unconfirmed Betrieb dates in the past
-	     */
+		 * delete unconfirmed Betrieb dates in the past
+		 */
 		$this->deleteUnconformedFetchDates();
 
 		/*
-	     * deactivate too old food baskets
-	     */
+		 * deactivate too old food baskets
+		 */
 		$this->deactivateBaskets();
 
 		/*
-	     * Update Bezirk closure table
-	     *
-	     * it gets crashed by some updates sometimes, workaround: Rebuild every day
-	     */
+		 * Update Bezirk closure table
+		 *
+		 * it gets crashed by some updates sometimes, workaround: Rebuild every day
+		 */
 		$this->rebuildBezirkClosure();
 
 		/*
-	     * Master Bezirk Update
-	     *
-	     * we have master bezirk that mean any user hierarchical under this bezirk have to be also in master self
-	     */
+		 * Master Bezirk Update
+		 *
+		 * we have master bezirk that mean any user hierarchical under this bezirk have to be also in master self
+		 */
 		$this->masterBezirkUpdate();
 
 		/*
-	     * Delete old blocked ips
-	     */
+		 * Delete old blocked ips
+		 */
 		$this->model->deleteOldIpBlocks();
 
 		/*
-	     * check inactive users and send wake up emails or set in sleeping mode
-	     */
+		 * check inactive users and send wake up emails or set in sleeping mode
+		 */
 		//$this->sleepingMode();
 
 		/*
-	     * There may be some groups where people should automatically be added
-	     * (e.g. Hamburgs BIEB group)
-	     */
+		 * There may be some groups where people should automatically be added
+		 * (e.g. Hamburgs BIEB group)
+		 */
 		$this->updateSpecialGroupMemberships();
 
 		/*
-	     * sleeping users, where the time period of sleepiness ended
-	     */
+		 * sleeping users, where the time period of sleepiness ended
+		 */
 		$this->wakeupSleepingUsers();
 	}
 
 	public function hourly()
 	{
 		/*
-	     * some updates for new user management
-	    */
+		 * some updates for new user management
+		*/
 		//$this->model->updateRolle();
 	}
 
@@ -130,8 +130,8 @@ class MaintenanceControl extends ConsoleControl
 	private function sleepingMode()
 	{
 		/*
-	     * get foodsaver more than 30 days inactive set to sleeping mode and send email
-	     */
+		 * get foodsaver more than 30 days inactive set to sleeping mode and send email
+		 */
 
 		info('sleeping mode');
 
@@ -152,8 +152,8 @@ class MaintenanceControl extends ConsoleControl
 		}
 
 		/*
-	     * get all foodasver theyre dont login since 14 days and send an wake up email
-	     */
+		 * get all foodasver theyre dont login since 14 days and send an wake up email
+		 */
 		if ($foodsaver = $this->model->listFoodsaverInactiveSince(14)) {
 			foreach ($foodsaver as $fs) {
 				$this->tplMail(26, $fs['email'], array(
@@ -513,8 +513,8 @@ class MaintenanceControl extends ConsoleControl
 		')) {
 			foreach ($foodsaver as $fs) {
 				/*
-	             * Betrieb Status-Update
-	            */
+				 * Betrieb Status-Update
+				*/
 
 				if ($betriebe = $this->model->q('SELECT betrieb_id FROM fs_betrieb_team WHERE foodsaver_id = ' . (int)$fs['id'])) {
 					foreach ($betriebe as $b) {
@@ -529,8 +529,8 @@ class MaintenanceControl extends ConsoleControl
 					');
 
 				/*
-	             * DELETE BEZIRKE
-	            */
+				 * DELETE BEZIRKE
+				*/
 				$this->model->del('
 						DELETE FROM fs_foodsaver_has_bezirk WHERE foodsaver_id = ' . (int)$fs['id'] . '
 					');
@@ -585,8 +585,8 @@ class MaintenanceControl extends ConsoleControl
 			foreach ($foodsaver as $fs) {
 				$tmp[] = $fs['id'];
 				/*
-	             * Betrieb Status-Update
-	             */
+				 * Betrieb Status-Update
+				 */
 
 				if ($betriebe = $this->model->q('SELECT betrieb_id FROM fs_betrieb_team WHERE foodsaver_id = ' . (int)$fs['id'])) {
 					foreach ($betriebe as $b) {
@@ -601,8 +601,8 @@ class MaintenanceControl extends ConsoleControl
 				');
 
 				/*
-	             * DELETE BEZIRKE
-	             */
+				 * DELETE BEZIRKE
+				 */
 				$this->model->del('
 					DELETE FROM fs_foodsaver_has_bezirk WHERE foodsaver_id = ' . (int)$fs['id'] . '
 				');

@@ -193,14 +193,14 @@ class SettingsView extends View
 			$out .= v_field('<p>Herzlichen Glückwunsch, Du hast es geschafft!</p><p>Die Auswertung findest Du unten.</p><p style="padding:15px;text-align:center;">' . $btn . '</p>', 'Geschafft!', array('class' => 'ui-padding'));
 		} else {
 			/*
-	         * get the specific text from content table
-	         */
+			 * get the specific text from content table
+			 */
 			$content_id = false;
 
 			switch ($session['quiz_id']) {
 				/*
-	             * failed Foodsaver
-	             */
+				 * failed Foodsaver
+				 */
 				case 1:
 					if ($try_count == 1) {
 						$content_id = 19;
@@ -212,8 +212,8 @@ class SettingsView extends View
 					break;
 
 				/*
-	             * failed Bieb
-	            */
+				 * failed Bieb
+				*/
 				case 2:
 					if ($try_count == 1) {
 						$content_id = 22;
@@ -226,8 +226,8 @@ class SettingsView extends View
 					break;
 
 				/*
-	             * failed Bot
-	            */
+				 * failed Bot
+				*/
 				case 3:
 					if ($try_count == 1) {
 						$content_id = 25;
@@ -251,16 +251,16 @@ class SettingsView extends View
 		$i = 0;
 		foreach ($session['quiz_result'] as $r) {
 			/*
-	         * If the question has no error points its a joke question lets store in clear in a variable
-	         */
+			 * If the question has no error points its a joke question lets store in clear in a variable
+			 */
 			$was_a_joke = false;
 			if ($r['fp'] == 0) {
 				$was_a_joke = true;
 			}
 
 			/*
-	         * If the question has more than 10 error point its a k.o. question
-	        */
+			 * If the question has more than 10 error point its a k.o. question
+			*/
 			$was_a_ko_question = false;
 			if ($r['fp'] > 10) {
 				$was_a_ko_question = true;
@@ -379,15 +379,15 @@ class SettingsView extends View
 			$cnt .= '<div id="qcomment-' . (int)$r['id'] . '">' . v_input_wrapper('Kommentar zu dieser Frage schreiben', '<textarea style="height:50px;" id="comment-' . $r['id'] . '" name="desc" class="input textarea value"></textarea><br /><a class="button" href="#" onclick="ajreq(\'addcomment\',{app:\'quiz\',comment:$(\'#comment-' . (int)$r['id'] . '\').val(),id:' . (int)$r['id'] . '});return false;">Absenden</a>', false, array('collapse' => true)) . '</div>';
 
 			/*
-	         * If the question was a joke question lets diplay it to the user!
-	         */
+			 * If the question was a joke question lets diplay it to the user!
+			 */
 			if ($was_a_joke) {
 				$ftext = 'war nur eine Scherzfrage und wird natürlich nicht bewertet <i class="fa fa-smile-o"></i>';
 			}
 
 			/*
-	         * If the question is k.o. quetsion and the user has error display a message to the user
-	         */
+			 * If the question is k.o. quetsion and the user has error display a message to the user
+			 */
 			if ($was_a_ko_question && $r['userfp'] > 0) {
 				$ftext = 'Diese Frage war leider besonders wichtig und Du hast sie nicht korrekt beantwortet';
 				$cnt = v_info('Fragen wie diese sind besonders hoch gewichtet und führen leider zum nicht bestehen wenn Du sie falsch beantwortest.');

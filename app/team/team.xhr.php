@@ -36,8 +36,8 @@ class TeamXhr extends Control
 
 				$mail->setBody($msg);
 				$mail->setHTMLBody(nl2br($msg));
-				$mail->setSubject("foodsharing.de Kontaktformular Anfrage von ".$name);
-				
+				$mail->setSubject('foodsharing.de Kontaktformular Anfrage von ' . $name);
+
 				$mail->addRecipient($user['email']);
 
 				$mail->send();

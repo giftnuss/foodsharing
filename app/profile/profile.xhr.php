@@ -31,10 +31,10 @@ class ProfileXhr extends Control
 				}
 
 				/*
-	                * -1: no buddy
-	                *  0: requested
-	                *  1: buddy
-	            */
+					* -1: no buddy
+					*  0: requested
+					*  1: buddy
+				*/
 				$this->foodsaver['buddy'] = $this->model->buddyStatus($this->foodsaver['id']);
 
 				$this->view->setData($this->foodsaver);

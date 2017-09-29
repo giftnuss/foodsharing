@@ -115,15 +115,15 @@ class MigrateModel extends ConsoleModel
 		);
 
 		/*
-	     * make sure the order of this array
-	    */
+		 * make sure the order of this array
+		*/
 		ksort($recips);
 
 		$conversation_id = false;
 
 		/*
-	     * First we want to check is there allready an conversation with exacly those user_ids stored in $recips array
-	    */
+		 * First we want to check is there allready an conversation with exacly those user_ids stored in $recips array
+		*/
 		if ($conv = $this->qRow('
 			SELECT
 				conversation_id,
@@ -142,8 +142,8 @@ class MigrateModel extends ConsoleModel
 		}
 
 		/*
-	     * If we dont have an existing conversation create a new one
-	    */
+		 * If we dont have an existing conversation create a new one
+		*/
 		if (!$conversation_id) {
 			$conversation_id = $this->insertConversation($recips);
 		}
@@ -153,8 +153,8 @@ class MigrateModel extends ConsoleModel
 		$member = $this->listConversationMembers($conversation_id);
 
 		/*
-	     * UPDATE conversation
-	    */
+		 * UPDATE conversation
+		*/
 		$this->update('
 			UPDATE
 				`' . PREFIX . 'conversation`
@@ -211,8 +211,8 @@ class MigrateModel extends ConsoleModel
 	public function insertConversation($recipients)
 	{
 		/*
-	     * first get one new conversation
-	    */
+		 * first get one new conversation
+		*/
 
 		$sql = 'INSERT INTO `' . PREFIX . 'conversation`
 			(
@@ -225,8 +225,8 @@ class MigrateModel extends ConsoleModel
 
 		if (($cid = $this->insert($sql)) > 0) {
 			/*
-	         * last add all recipients to this conversation
-	        */
+			 * last add all recipients to this conversation
+			*/
 			$values = array();
 			foreach ($recipients as $r) {
 				$values[] = '(' . (int)$r . ',' . (int)$cid . ',1)';

@@ -459,8 +459,8 @@ if (getAction('new') && (S::may('orga') || isBotFor($g_data['bezirk_id']))) {
 		}
 
 		/*
-	     * Abholzeiten
-	     */
+		 * Abholzeiten
+		 */
 
 		$click = '';
 		$click = 'profile(' . (int)fsId() . ');return false;';
@@ -741,8 +741,8 @@ if (getAction('new') && (S::may('orga') || isBotFor($g_data['bezirk_id']))) {
 		}
 
 		/*
-	     * Abholzeiten ändern
-	     */
+		 * Abholzeiten ändern
+		 */
 		if ($betrieb['verantwortlich'] || S::may('orga')) {
 			hiddenDialog('abholen', array(u_form_abhol_table($zeiten), v_form_hidden('bid', 0), '<input type="hidden" name="team" value="' . $betrieb['team_js'] . '" />'), s('add_fetchtime'), array('reload' => true, 'width' => 500));
 		}

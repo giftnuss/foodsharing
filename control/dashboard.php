@@ -204,9 +204,9 @@ if (!may()) {
 
 	/*
 	addContent(v_field('<p>
-	    Hallo Ihr Lieben,<br />
-	    Wir sind letzte Nacht auf unseren Neuen Öko-Webhoster von Manitu umgezogen. Es kann im Laufe des Tages noch zu kleinen Fehlern auf der Seite kommen (z. B., dass keine Bilder zu sehen sind ;)<br />
-	    Bis heute Abend sollten sich solche Phänomene gelegt haben.<br><br>Alles Liebe, Euer Lebensmittelretten.de Team	</p>
+		Hallo Ihr Lieben,<br />
+		Wir sind letzte Nacht auf unseren Neuen Öko-Webhoster von Manitu umgezogen. Es kann im Laufe des Tages noch zu kleinen Fehlern auf der Seite kommen (z. B., dass keine Bilder zu sehen sind ;)<br />
+		Bis heute Abend sollten sich solche Phänomene gelegt haben.<br><br>Alles Liebe, Euer Lebensmittelretten.de Team	</p>
 	','Umzug auf neuen Server',array('class'=>'ui-padding')));
 	*/
 
@@ -224,7 +224,7 @@ if (!may()) {
 	/*
 	if($updates = $db->updates())
 	{
-	    addContent(u_updates($updates));
+		addContent(u_updates($updates));
 	}
 	*/
 	addStyle('

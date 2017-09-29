@@ -123,25 +123,25 @@ function xv_bBubble($b)
 	$img = '';
 	if($b['kette_id'] != 0)
 	{
-	    if($img = $db->getVal('logo', 'kette', $b['kette_id']))
-	    {
-	        $img = '<a href="/?page=betrieb&id='.(int)$b['id'].'"><img style="float:right;margin-left:10px;" src="'.idimg($img,100).'" /></a>';
-	    }
+		if($img = $db->getVal('logo', 'kette', $b['kette_id']))
+		{
+			$img = '<a href="/?page=betrieb&id='.(int)$b['id'].'"><img style="float:right;margin-left:10px;" src="'.idimg($img,100).'" /></a>';
+		}
 	}
 	$button = '';
 	if($b['inTeam'])
 	{
-	    $button = '<div style="text-align:center;padding:top:8px;"><span onclick="goTo(\'/?page=fsbetrieb&id='.(int)$b['id'].'\');" class="bigbutton cardbutton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Zur Teamseite</span></span></div>';
+		$button = '<div style="text-align:center;padding:top:8px;"><span onclick="goTo(\'/?page=fsbetrieb&id='.(int)$b['id'].'\');" class="bigbutton cardbutton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Zur Teamseite</span></span></div>';
 	}
 	else
 	{
-	    $button = '<div style="text-align:center;padding:top:8px;"><span onclick="betriebRequest('.(int)$b['id'].');" class="bigbutton cardbutton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><div style="text-align:center;padding:top:8px;"><span class="ui-button-text">Ich möchte hier Lebensmittel abholen</span></span></div>';
+		$button = '<div style="text-align:center;padding:top:8px;"><span onclick="betriebRequest('.(int)$b['id'].');" class="bigbutton cardbutton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><div style="text-align:center;padding:top:8px;"><span class="ui-button-text">Ich möchte hier Lebensmittel abholen</span></span></div>';
 	}
 
 	$verantwortlicher = '';
 	if($v = $db->getTeamleader($b['id']))
 	{
-	    $verantwortlicher = '<p><a href="#" onclick="profile('.(int)$v['id'].');return false;"><img src="'.img().'" /></a><a href="#" onclick="profile('.(int)$v['id'].');return false;">'.$v['name'].'</a> ist verantwortlich</p>';
+		$verantwortlicher = '<p><a href="#" onclick="profile('.(int)$v['id'].');return false;"><img src="'.img().'" /></a><a href="#" onclick="profile('.(int)$v['id'].');return false;">'.$v['name'].'</a> ist verantwortlich</p>';
 	}
 
 	return '<div style="height:130px;overflow:hidden;width:270px;"><div style="margin-right:5px;float:right;">'.$img.'</div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a onclick="betrieb('.(int)$b['id'].');return false;" href="#">'.jsSafe($b['name']).'</a></h1><p>'.jsSafe($b['str'].' '.$b['hsnr']).'</p><p>'.jsSafe($b['plz']).' '.jsSafe($b['stadt']).'</p>'.$button.'</div><div style="clear:both;"></div>';

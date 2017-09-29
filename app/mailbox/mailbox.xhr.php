@@ -199,11 +199,11 @@ class MailboxXhr extends Control
 	public function send_message()
 	{
 		/*
-	     *  an		an
-	        body	body
-	        mb		1
-	        sub		betr
-	     */
+		 *  an		an
+			body	body
+			mb		1
+			sub		betr
+		 */
 
 		if ($last = (int)Mem::user(fsId(), 'mailbox-last')) {
 			if ((time() - $last) < 15) {

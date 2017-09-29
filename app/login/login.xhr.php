@@ -32,13 +32,13 @@ class LoginXhr extends Control
 	private function genSearchIndex()
 	{
 		/*
-	     * The big array we want to fill ;)
-	     */
+		 * The big array we want to fill ;)
+		 */
 		$index = array();
 
 		/*
-	     * Buddies Load persons in the index array that connected with the user
-	     */
+		 * Buddies Load persons in the index array that connected with the user
+		 */
 
 		$model = loadModel('buddy');
 		if ($buddies = $model->listBuddies()) {
@@ -69,8 +69,8 @@ class LoginXhr extends Control
 		}
 
 		/*
-	     * Groups load Groups connected to the user in the array
-	    */
+		 * Groups load Groups connected to the user in the array
+		*/
 		$model = loadModel('groups');
 		if ($groups = $model->listMyGroups()) {
 			$result = array();
@@ -96,8 +96,8 @@ class LoginXhr extends Control
 		}
 
 		/*
-	     * Betriebe load food stores connected to the user in the array
-	     */
+		 * Betriebe load food stores connected to the user in the array
+		 */
 		$model = loadModel('betrieb');
 		if ($betriebe = $model->listMyBetriebe()) {
 			$result = array();
@@ -118,8 +118,8 @@ class LoginXhr extends Control
 		}
 
 		/*
-	     * Bezirke load Bezirke connected to the user in the array
-	    */
+		 * Bezirke load Bezirke connected to the user in the array
+		*/
 		$model = loadModel('bezirk');
 		if ($bezirke = $model->listMyBezirke()) {
 			$result = array();
@@ -141,8 +141,8 @@ class LoginXhr extends Control
 		}
 
 		/*
-	     * Get or set an individual token as filename for the public json file
-	    */
+		 * Get or set an individual token as filename for the public json file
+		*/
 		if ($token = S::user('token')) {
 			file_put_contents('cache/searchindex/' . $token . '.json', json_encode($index));
 
@@ -301,19 +301,19 @@ class LoginXhr extends Control
 	private function joinValidate($data)
 	{
 		/*
-	     [iam] => org
-	    [name] => Peter
-	    [email] => peter@pan.de
-	    [pw] => 12345
-	    [avatar] => 5427fb55f3a5d.jpg
-	    [phone] => 02261889971
-	    [lat] => 48.0649838
-	    [lon] => 7.885475300000053
-	    [str] => Bauerngasse
-	    [nr] => 6
-	    [plz] => 79211
-	    [country] => DE
-	    */
+		 [iam] => org
+		[name] => Peter
+		[email] => peter@pan.de
+		[pw] => 12345
+		[avatar] => 5427fb55f3a5d.jpg
+		[phone] => 02261889971
+		[lat] => 48.0649838
+		[lon] => 7.885475300000053
+		[str] => Bauerngasse
+		[nr] => 6
+		[plz] => 79211
+		[country] => DE
+		*/
 
 		$check = true;
 

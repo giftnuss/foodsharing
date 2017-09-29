@@ -225,8 +225,8 @@ if (isset($_POST['submit'])) {
 	<script src="js/jquery.contextMenu.min.js" type="text/javascript"></script>    
 	
 	<script>
-	    var ext_img=new Array('<?php echo implode("','", $ext_img)?>');
-	    var allowed_ext=new Array('<?php echo implode("','", $ext)?>');
+	    var ext_img=new Array('<?php echo implode("','", $ext_img); ?>');
+	    var allowed_ext=new Array('<?php echo implode("','", $ext); ?>');
 	    var loading_bar=<?php echo $loading_bar ? 'true' : 'false'; ?>;
 	    var image_editor=<?php echo $aviary_active ? 'true' : 'false'; ?>;
 	    //dropzone config
@@ -299,7 +299,7 @@ if (isset($_POST['submit'])) {
 	} else {
 		echo 0;
 	} ?>" />
-	<input type="hidden" id="base_url" value="<?php echo $base_url?>"/>
+	<input type="hidden" id="base_url" value="<?php echo $base_url; ?>"/>
 	<input type="hidden" id="base_url_true" value="<?php echo base_url(); ?>"/>
 	<input type="hidden" id="fldr_value" value="<?php echo $subdir; ?>"/>
 	<input type="hidden" id="sub_folder" value="<?php echo $subfolder; ?>"/>
@@ -317,7 +317,7 @@ if (isset($_POST['submit'])) {
 <!----- uploader div start ------->
 
 <div class="uploader">
-    <center><button class="btn btn-inverse close-uploader"><i class="icon-backward icon-white"></i> <?php echo lang_Return_Files_List?></button></center>
+    <center><button class="btn btn-inverse close-uploader"><i class="icon-backward icon-white"></i> <?php echo lang_Return_Files_List; ?></button></center>
 	<div class="space10"></div><div class="space10"></div>
 	<?php if ($java_upload) {
 			?>
@@ -331,10 +331,10 @@ if (isset($_POST['submit'])) {
 		    <?php
 		} ?>
 		<form action="dialog.php" method="post" enctype="multipart/form-data" id="myAwesomeDropzone" class="dropzone">
-		    <input type="hidden" name="path" value="<?php echo $cur_path?>"/>
-		    <input type="hidden" name="path_thumb" value="<?php echo $thumbs_path . $subdir?>"/>
+		    <input type="hidden" name="path" value="<?php echo $cur_path; ?>"/>
+		    <input type="hidden" name="path_thumb" value="<?php echo $thumbs_path . $subdir; ?>"/>
 		    <div class="fallback">
-			<?php echo  lang_Upload_file?>:<br/>
+			<?php echo  lang_Upload_file; ?>:<br/>
 			<input name="file" type="file" />
 			<input type="hidden" name="fldr" value="<?php echo $subdir; ?>"/>
 			<input type="hidden" name="view" value="<?php echo $view; ?>"/>
@@ -343,7 +343,7 @@ if (isset($_POST['submit'])) {
 			<input type="hidden" name="popup" value="<?php echo $popup; ?>"/>
 			<input type="hidden" name="lang" value="<?php echo $lang; ?>"/>
 			<input type="hidden" name="filter" value="<?php echo $filter; ?>"/>
-			<input type="submit" name="submit" value="<?php echo lang_OK?>" />
+			<input type="submit" name="submit" value="<?php echo lang_OK; ?>" />
 		    </div>
 		</form>
 		    <div class="upload-help"><?php echo lang_Upload_base_help; ?></div>
@@ -472,7 +472,7 @@ $class_ext = '';
 	} ?>
 			    <?php if ($create_folders) {
 		?>
-						    <button class="tip btn new-folder" title="<?php echo  lang_New_Folder?>"><i class="icon-plus"></i><i class="icon-folder-open"></i></button> 
+						    <button class="tip btn new-folder" title="<?php echo  lang_New_Folder; ?>"><i class="icon-plus"></i><i class="icon-folder-open"></i></button> 
 			    <?php
 	} ?>
 			</div>
@@ -535,7 +535,7 @@ $class_ext = '';
 	<?php	
 	$link = 'dialog.php?' . $get_params; ?>
 	<ul class="breadcrumb">	
-	<li class="pull-left"><a href="<?php echo $link?>/"><i class="icon-home"></i></a></li>
+	<li class="pull-left"><a href="<?php echo $link; ?>/"><i class="icon-home"></i></a></li>
 	<li><span class="divider">/</span></li>
 	<?php
 	$bc = explode('/', $subdir);
@@ -544,16 +544,16 @@ $class_ext = '';
 		foreach ($bc as $k => $b) {
 			$tmp_path .= $b . '/';
 			if ($k == count($bc) - 2) {
-				?> <li class="active"><?php echo $b?></li><?php
+				?> <li class="active"><?php echo $b; ?></li><?php
 			} elseif ($b != '') {
 				?>
-		<li><a href="<?php echo $link . $tmp_path?>"><?php echo $b?></a></li><li><span class="divider"><?php echo '/'; ?></span></li>
+		<li><a href="<?php echo $link . $tmp_path; ?>"><?php echo $b; ?></a></li><li><span class="divider"><?php echo '/'; ?></span></li>
 	<?php
 			}
 		}
 	} ?>
 	<li class="pull-right"><a class="btn-small" href="javascript:void('')" id="info"><i class="icon-question-sign"></i></a></li>
-	<li class="pull-right"><a id="refresh" class="btn-small" href="dialog.php?<?php echo $get_params . $subdir . '&' . uniqid() ?>"><i class="icon-refresh"></i></a></li>
+	<li class="pull-right"><a id="refresh" class="btn-small" href="dialog.php?<?php echo $get_params . $subdir . '&' . uniqid(); ?>"><i class="icon-refresh"></i></a></li>
 	
 	<li class="pull-right">
 	    <div class="btn-group">
@@ -562,7 +562,7 @@ $class_ext = '';
 		  <span class="caret"></span>
 		</a>
 		<ul class="dropdown-menu pull-left sorting">
-		    <li><center><strong><?php echo lang_Sorting ?></strong></center></li>
+		    <li><center><strong><?php echo lang_Sorting; ?></strong></center></li>
 		<li><a class="sorter sort-name <?php if ($sort_by == 'name') {
 		echo ($descending) ? 'descending' : 'ascending';
 	} ?>" href="javascript:void('')" data-sort="name"><?php echo lang_Filename; ?></a></li>
@@ -650,7 +650,7 @@ $class_ext = '';
 			} elseif ($file != '..') {
 				$src = $subdir . $file . '/';
 			} ?>
-			<li data-name="<?php echo $file ?>" <?php if ($file == '..') {
+			<li data-name="<?php echo $file; ?>" <?php if ($file == '..') {
 				echo 'class="back"';
 			} else {
 				echo 'class="dir"';
@@ -660,12 +660,12 @@ $class_ext = '';
 			if (isset($filePermissions[$file])) {
 				$file_prevent_rename = isset($filePermissions[$file]['prevent_rename']) && $filePermissions[$file]['prevent_rename'];
 				$file_prevent_delete = isset($filePermissions[$file]['prevent_delete']) && $filePermissions[$file]['prevent_delete'];
-			} ?><figure data-name="<?php echo $file ?>" class="<?php if ($file == '..') {
+			} ?><figure data-name="<?php echo $file; ?>" class="<?php if ($file == '..') {
 				echo 'back-';
 			} ?>directory" data-type="<?php if ($file != '..') {
 				echo 'dir';
 			} ?>">
-				    <a class="folder-link" href="dialog.php?<?php echo $get_params . rawurlencode($src) . '&' . uniqid() ?>">
+				    <a class="folder-link" href="dialog.php?<?php echo $get_params . rawurlencode($src) . '&' . uniqid(); ?>">
 				    <div class="img-precontainer">
 					<div class="img-container directory"><span></span>
 					<img class="directory-img"  src="img/<?php echo $icon_theme; ?>/folder<?php if ($file == '..') {
@@ -684,7 +684,7 @@ $class_ext = '';
 			<?php if ($file == '..') {
 				?>
 				    <div class="box no-effect">
-					<h4><?php echo lang_Back ?></h4>
+					<h4><?php echo lang_Back; ?></h4>
 				    </div>
 				    </a>
 				    
@@ -695,27 +695,27 @@ $class_ext = '';
 				    <div class="box">
 					<h4 class="<?php if ($ellipsis_title_after_first_row) {
 					echo 'ellipsis';
-				} ?>"><a class="folder-link" data-file="<?php echo $file ?>" href="dialog.php?<?php echo $get_params . rawurlencode($src) . '&' . uniqid() ?>"><?php echo $file; ?></a></h4>
+				} ?>"><a class="folder-link" data-file="<?php echo $file; ?>" href="dialog.php?<?php echo $get_params . rawurlencode($src) . '&' . uniqid(); ?>"><?php echo $file; ?></a></h4>
 				    </div>
 				    <input type="hidden" class="name" value=""/>
 				    <input type="hidden" class="date" value="<?php echo $file_array['date']; ?>"/>
 				    <input type="hidden" class="size" value="<?php echo $file_array['size']; ?>"/>
 				    <input type="hidden" class="extension" value="<?php echo lang_Type_dir; ?>"/>
-				    <div class="file-date"><?php echo date(lang_Date_type, $file_array['date'])?></div>
+				    <div class="file-date"><?php echo date(lang_Date_type, $file_array['date']); ?></div>
 				    <?php if ($show_folder_size) {
-					?><div class="file-size"><?php echo makeSize($file_array['size'])?></div><?php
+					?><div class="file-size"><?php echo makeSize($file_array['size']); ?></div><?php
 				} ?>
 				    <div class='file-extension'><?php echo lang_Type_dir; ?></div>
 				    <figcaption>
 					    <a href="javascript:void('')" class="tip-left edit-button rename-file-paths <?php if ($rename_folders && !$file_prevent_rename) {
 					echo 'rename-folder';
-				} ?>" title="<?php echo lang_Rename?>" data-path="<?php echo $subfolder . $subdir . $file; ?>" data-thumb="<?php echo $thumbs_path . $subdir . $file; ?>">
+				} ?>" title="<?php echo lang_Rename; ?>" data-path="<?php echo $subfolder . $subdir . $file; ?>" data-thumb="<?php echo $thumbs_path . $subdir . $file; ?>">
 					    <i class="icon-pencil <?php if (!$rename_folders || $file_prevent_rename) {
 					echo 'icon-white';
 				} ?>"></i></a>
 					    <a href="javascript:void('')" class="tip-left erase-button <?php if ($delete_folders && !$file_prevent_delete) {
 					echo 'delete-folder';
-				} ?>" title="<?php echo lang_Erase?>" data-confirm="<?php echo lang_Confirm_Folder_del; ?>" data-path="<?php echo $subfolder . $subdir . $file; ?>"  data-thumb="<?php echo $thumbs_path . $subdir . $file; ?>">
+				} ?>" title="<?php echo lang_Erase; ?>" data-confirm="<?php echo lang_Confirm_Folder_del; ?>" data-path="<?php echo $subfolder . $subdir . $file; ?>"  data-thumb="<?php echo $thumbs_path . $subdir . $file; ?>">
 					    <i class="icon-trash <?php if (!$delete_folders || $file_prevent_delete) {
 					echo 'icon-white';
 				} ?>"></i>
@@ -836,7 +836,7 @@ $class_ext = '';
 					}
 					$file_prevent_rename = isset($filePermissions[$file]['prevent_rename']) && $filePermissions[$file]['prevent_rename'];
 					$file_prevent_delete = isset($filePermissions[$file]['prevent_delete']) && $filePermissions[$file]['prevent_delete'];
-				} ?><figure data-name="<?php echo $file ?>" data-type="<?php if ($is_img) {
+				} ?><figure data-name="<?php echo $file; ?>" data-type="<?php if ($is_img) {
 					echo 'img';
 				} else {
 					echo 'file';
@@ -844,24 +844,24 @@ $class_ext = '';
 				<a href="javascript:void('')" class="link" data-file="<?php echo $file; ?>" data-field_id="<?php echo $_GET['field_id']; ?>" data-function="<?php echo $apply; ?>">
 				<div class="img-precontainer">
 				    <?php if ($is_icon_thumb) {
-					?><div class="filetype"><?php echo $extension_lower ?></div><?php
+					?><div class="filetype"><?php echo $extension_lower; ?></div><?php
 				} ?>
 				    <div class="img-container">
 					    <span></span>
-					    <img alt="<?php echo $filename . ' thumbnails'; ?>" class="<?php echo $show_original ? 'original' : '' ?> <?php echo $is_icon_thumb ? 'icon' : '' ?>" src="<?php echo $src_thumb; ?>">
+					    <img alt="<?php echo $filename . ' thumbnails'; ?>" class="<?php echo $show_original ? 'original' : ''; ?> <?php echo $is_icon_thumb ? 'icon' : ''; ?>" src="<?php echo $src_thumb; ?>">
 				    </div>
 				</div>
 				<div class="img-precontainer-mini <?php if ($is_img) {
 					echo 'original-thumb';
 				} ?>">
-				    <div class="filetype <?php echo $extension_lower ?> <?php if (!$is_icon_thumb) {
+				    <div class="filetype <?php echo $extension_lower; ?> <?php if (!$is_icon_thumb) {
 					echo 'hide';
-				} ?>"><?php echo $extension_lower ?></div>
+				} ?>"><?php echo $extension_lower; ?></div>
 				    <div class="img-container-mini">
 					<span></span>
 					<?php if ($mini_src != '') {
 					?>
-					<img alt="<?php echo $filename . ' thumbnails'; ?>" class="<?php echo $show_original_mini ? 'original' : '' ?> <?php echo $is_icon_thumb_mini ? 'icon' : '' ?>" src="<?php echo $mini_src; ?>">
+					<img alt="<?php echo $filename . ' thumbnails'; ?>" class="<?php echo $show_original_mini ? 'original' : ''; ?> <?php echo $is_icon_thumb_mini ? 'icon' : ''; ?>" src="<?php echo $mini_src; ?>">
 					<?php
 				} ?>
 				    </div>
@@ -879,24 +879,24 @@ $class_ext = '';
 				<?php echo $filename; ?></a> </h4>
 				</div>
 				<input type="hidden" class="date" value="<?php echo $file_array['date']; ?>"/>
-				<input type="hidden" class="size" value="<?php echo $file_array['size'] ?>"/>
+				<input type="hidden" class="size" value="<?php echo $file_array['size']; ?>"/>
 				<input type="hidden" class="extension" value="<?php echo $extension_lower; ?>"/>
 				<input type="hidden" class="name" value=""/>
-				<div class="file-date"><?php echo date(lang_Date_type, $file_array['date'])?></div>
-				<div class="file-size"><?php echo makeSize($file_array['size'])?></div>
+				<div class="file-date"><?php echo date(lang_Date_type, $file_array['date']); ?></div>
+				<div class="file-size"><?php echo makeSize($file_array['size']); ?></div>
 				<div class='img-dimension'><?php if ($is_img) {
 					echo $img_width . 'x' . $img_height;
 				} ?></div>
 				<div class='file-extension'><?php echo $extension_lower; ?></div>
 				<figcaption>
 				    <form action="force_download.php" method="post" class="download-form" id="form<?php echo $nu; ?>">
-					<input type="hidden" name="path" value="<?php echo $subfolder . $subdir?>"/>
-					<input type="hidden" class="name_download" name="name" value="<?php echo $file?>"/>
+					<input type="hidden" name="path" value="<?php echo $subfolder . $subdir; ?>"/>
+					<input type="hidden" class="name_download" name="name" value="<?php echo $file; ?>"/>
 					
-				    <a title="<?php echo lang_Download?>" class="tip-right" href="javascript:void('')" onclick="$('#form<?php echo $nu; ?>').submit();"><i class="icon-download"></i></a>
+				    <a title="<?php echo lang_Download; ?>" class="tip-right" href="javascript:void('')" onclick="$('#form<?php echo $nu; ?>').submit();"><i class="icon-download"></i></a>
 				    <?php if ($is_img && $src_thumb != '') {
 					?>
-				    <a class="tip-right preview" title="<?php echo lang_Preview?>" data-url="<?php echo $src; ?>" data-toggle="lightbox" href="#previewLightbox"><i class=" icon-eye-open"></i></a>
+				    <a class="tip-right preview" title="<?php echo lang_Preview; ?>" data-url="<?php echo $src; ?>" data-toggle="lightbox" href="#previewLightbox"><i class=" icon-eye-open"></i></a>
 				    <?php
 				} elseif (($is_video || $is_audio) && in_array($extension_lower, $jplayer_ext)) {
 					?>
@@ -905,7 +905,7 @@ $class_ext = '';
 					} else {
 						echo 'video';
 					} ?>"
-					title="<?php echo lang_Preview?>" data-url="ajax_calls.php?action=media_preview&title=<?php echo $filename; ?>&file=<?php echo $current_path . $subfolder . $subdir . $file; ?>"
+					title="<?php echo lang_Preview; ?>" data-url="ajax_calls.php?action=media_preview&title=<?php echo $filename; ?>&file=<?php echo $current_path . $subfolder . $subdir . $file; ?>"
 					href="javascript:void('');" ><i class=" icon-eye-open"></i></a>
 				    <?php
 				} else {
@@ -915,14 +915,14 @@ $class_ext = '';
 				} ?>
 				    <a href="javascript:void('')" class="tip-left edit-button rename-file-paths <?php if ($rename_files && !$file_prevent_rename) {
 					echo 'rename-file';
-				} ?>" title="<?php echo lang_Rename?>" data-path="<?php echo $subfolder . $subdir . $file; ?>" data-thumb="<?php echo $thumbs_path . $subdir . $file; ?>">
+				} ?>" title="<?php echo lang_Rename; ?>" data-path="<?php echo $subfolder . $subdir . $file; ?>" data-thumb="<?php echo $thumbs_path . $subdir . $file; ?>">
 				    <i class="icon-pencil <?php if (!$rename_files || $file_prevent_rename) {
 					echo 'icon-white';
 				} ?>"></i></a>
 					    
 				    <a href="javascript:void('')" class="tip-left erase-button <?php if ($delete_files && !$file_prevent_delete) {
 					echo 'delete-file';
-				} ?>" title="<?php echo lang_Erase?>" data-confirm="<?php echo lang_Confirm_del; ?>" data-path="<?php echo $subfolder . $subdir . $file; ?>" data-thumb="<?php echo $thumbs_path . $subdir . $file; ?>">
+				} ?>" title="<?php echo lang_Erase; ?>" data-confirm="<?php echo lang_Confirm_del; ?>" data-path="<?php echo $subfolder . $subdir . $file; ?>" data-thumb="<?php echo $thumbs_path . $subdir . $file; ?>">
 				    <i class="icon-trash <?php if (!$delete_files || $file_prevent_delete) {
 					echo 'icon-white';
 				} ?>"></i>

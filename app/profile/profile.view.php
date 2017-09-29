@@ -190,8 +190,8 @@ class ProfileView extends View
 		}
 
 		/*
-	     * Statistics
-	     */
+		 * Statistics
+		 */
 		$fetchweight = '';
 		if ($this->foodsaver['stat_fetchweight'] > 0) {
 			$fetchweight = '
@@ -222,8 +222,8 @@ class ProfileView extends View
 		$bananacount = '';
 
 		/*
-	     * Banana
-	    */
+		 * Banana
+		*/
 		if (S::may('fs')) {
 			$count_banana = count($this->foodsaver['bananen']);
 			if ($count_banana == 0) {

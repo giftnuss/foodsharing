@@ -385,16 +385,16 @@ function handleEmail()
 				$foodsaver[] = $o;
 			}
 			/*
-	         * Array
-	        (
-	            [form_submit] => nachrichtenverteiler
-	            [recip_choose] => bezirk
-	            [mode] => 1
-	            [subject] => asdasdasd
-	            [message] => <p>asdasdafds</p>
-	        )
+			 * Array
+			(
+				[form_submit] => nachrichtenverteiler
+				[recip_choose] => bezirk
+				[mode] => 1
+				[subject] => asdasdasd
+				[message] => <p>asdasdafds</p>
+			)
 
-	         */
+			 */
 			$db->initEmail($mailbox_id, $foodsaver, $nachricht, $betreff, $attach, $data['mode']);
 			goPage();
 		} elseif ($data['recip_choose'] != 'manual') {
@@ -411,11 +411,11 @@ function v_email_statusbox($mail)
 	/*
 	 *  [0] => Array
 	(
-	        [id] => 4
-	        [name] => asdas
-	        [message] => <p>asdasf</p>
-	        [zeit] => 2013-09-03 22:12:59
-	        [anz] => 1
+			[id] => 4
+			[name] => asdas
+			[message] => <p>asdasf</p>
+			[zeit] => 2013-09-03 22:12:59
+			[anz] => 1
 	)
 	*/
 	$recip = $db->qCol('

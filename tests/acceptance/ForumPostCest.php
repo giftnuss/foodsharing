@@ -49,8 +49,8 @@ class ForumPostCest
 
 		$I->click('.button.bt_follow');
 		/* currently, this does a XHR request after which a full page reload is done. Click does not wait for the XHR
-	       to be completed so we need some additional wait before we can detect a page reload...
-	    */
+		   to be completed so we need some additional wait before we can detect a page reload...
+		*/
 		$I->wait(1);
 		$I->waitForPageBody();
 		$this->expectPostButtons($I, false, $example[2]);

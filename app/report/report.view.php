@@ -18,7 +18,7 @@ class ReportView extends View
 	{
 		return v_input_wrapper('Warum möchtest Du ' . $this->foodsaver['name'] . ' melden?', '
 
-			'.v_form_select('reportreason',array('required'=>true,'nowrapper' => true,'value' => 1,'values'=>array(
+			' . v_form_select('reportreason', array('required' => true, 'nowrapper' => true, 'value' => 1, 'values' => array(
 				[
 					'id' => 1,
 					'name' => 'Ist zu spät zum Abholen gekommen'],
@@ -68,9 +68,9 @@ class ReportView extends View
 					'id' => 16,
 					'name' => 'Hat gegen andere Verhaltensregeln verstoßen (alles andere)']
 				)
-			)).'<br />
+			)) . '<br />
 			<div id="reportreason_3" class="cb" style="margin:5px 0;">
-			'.v_form_checkbox('reportreason_3',array('nowrapper' => true,'value' => 1,'values'=>array(
+			' . v_form_checkbox('reportreason_3', array('nowrapper' => true, 'value' => 1, 'values' => array(
 				[
 					'id' => 1,
 					'name' => 'gegenüber Foodsavern'],
@@ -78,9 +78,9 @@ class ReportView extends View
 					'id' => 2,
 					'name' => 'gegenüber BetriebsmitarbeiterInnen']
 				)
-			)).'
+			)) . '
 			</div>
-			'.v_form_select('reportreason_3_sub',array('nowrapper' => true,'value' => 1,'values'=>array(
+			' . v_form_select('reportreason_3_sub', array('nowrapper' => true, 'value' => 1, 'values' => array(
 				[
 					'id' => 1,
 					'name' => 'beleidigende Äußerungen'],
@@ -100,9 +100,9 @@ class ReportView extends View
 					'id' => 6,
 					'name' => 'Andere unangebrachte Äußerungen und Verhalten']
 				)
-			)).'
+			)) . '
 			<div id="reportreason_6" class="cb">
-			'.v_form_checkbox('reportreason_6',array('nowrapper' => true,'value' => 1,'values'=>array(
+			' . v_form_checkbox('reportreason_6', array('nowrapper' => true, 'value' => 1, 'values' => array(
 				[
 					'id' => 1,
 					'name' => 'gegenüber BetriebsmitarbeiterInnen'],
@@ -113,10 +113,10 @@ class ReportView extends View
 					'id' => 3,
 					'name' => 'gegenüber Kunden']
 				)
-			)).'
+			)) . '
 			</div>
 			<div id="reportreason_5" class="cb">
-			'.v_form_checkbox('reportreason_5',array('nowrapper' => true,'value' => 1,'values'=>array(
+			' . v_form_checkbox('reportreason_5', array('nowrapper' => true, 'value' => 1, 'values' => array(
 				[
 					'id' => 1,
 					'name' => 'vor BetriebsmitarbeiterInnen'],
@@ -127,10 +127,10 @@ class ReportView extends View
 					'id' => 3,
 					'name' => 'vor Kunden']
 				)
-			)).'
+			)) . '
 			</div>
 			<div id="reportreason_7" class="cb">
-			'.v_form_checkbox('reportreason_7',array('nowrapper' => true,'value' => 1,'values'=>array(
+			' . v_form_checkbox('reportreason_7', array('nowrapper' => true, 'value' => 1, 'values' => array(
 				[
 					'id' => 1,
 					'name' => 'gegenüber BetriebsmitarbeiterInnen'],
@@ -141,10 +141,10 @@ class ReportView extends View
 					'id' => 3,
 					'name' => 'gegenüber Kunden']
 				)
-			)).'
+			)) . '
 			</div>
 			<div id="reportreason_8" class="cb">
-			'.v_form_checkbox('reportreason_8',array('nowrapper' => true,'value' => 1,'values'=>array(
+			' . v_form_checkbox('reportreason_8', array('nowrapper' => true, 'value' => 1, 'values' => array(
 				[
 					'id' => 1,
 					'name' => 'von BetriebsmitarbeiterInnen'],
@@ -155,7 +155,7 @@ class ReportView extends View
 					'id' => 3,
 					'name' => 'von Kunden']
 				)
-			)).'
+			)) . '
 			</div>');
 	}
 
@@ -205,13 +205,13 @@ class ReportView extends View
 		$rows = array();
 		foreach ($reports as $r) {
 			$rows[] = array(
-                ['cnt' => '<input type="hidden" class="rid" name="rid" value="' . $r['id'] . '"><span class="photo"><a title="' . $r['fs_name'] . ' ' . $r['fs_nachname'] . '" href="#" onclick="profile(' . (int)$r['fs_id'] . ');return false;"><img id="miniq-' . $r['fs_id'] . '" src="' . img($r['fs_photo']) . '" /></a></span>'],
-                ['cnt' => '<span class="photo"><a title="' . $r['rp_name'] . ' ' . $r['rp_nachname'] . '" href="#" onclick="profile(' . (int)$r['rp_id'] . ');return false;"><img id="miniq-' . $r['rp_id'] . '" src="' . img($r['rp_photo']) . '" /></a></span>'],
-                ['cnt' => tt($r['msg'], 50)],
-                ['cnt' => '<span style="display:none;">a' . $r['time_ts'] . ' </span>' . niceDateShort($r['time_ts']) . ' Uhr'],
-                ['cnt' => $r['fs_stadt']],
-                ['cnt' => $r['b_name']],
-            );
+				['cnt' => '<input type="hidden" class="rid" name="rid" value="' . $r['id'] . '"><span class="photo"><a title="' . $r['fs_name'] . ' ' . $r['fs_nachname'] . '" href="#" onclick="profile(' . (int)$r['fs_id'] . ');return false;"><img id="miniq-' . $r['fs_id'] . '" src="' . img($r['fs_photo']) . '" /></a></span>'],
+				['cnt' => '<span class="photo"><a title="' . $r['rp_name'] . ' ' . $r['rp_nachname'] . '" href="#" onclick="profile(' . (int)$r['rp_id'] . ');return false;"><img id="miniq-' . $r['rp_id'] . '" src="' . img($r['rp_photo']) . '" /></a></span>'],
+				['cnt' => tt($r['msg'], 50)],
+				['cnt' => '<span style="display:none;">a' . $r['time_ts'] . ' </span>' . niceDateShort($r['time_ts']) . ' Uhr'],
+				['cnt' => $r['fs_stadt']],
+				['cnt' => $r['b_name']],
+			);
 		}
 
 		$table = v_tablesorter(array(
@@ -222,6 +222,7 @@ class ReportView extends View
 				array('name' => 'FS Wohnort', 'width' => 80),
 				array('name' => 'Stammbezirk', 'width' => 40)
 		), $rows, array('pager' => true));
+
 		return $table;
 	}
 }

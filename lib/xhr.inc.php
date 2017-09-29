@@ -362,25 +362,25 @@ function xhr_profile($data)
 /*
  *
 
-	            <ul>
-	                <li><a href="#ptab-'.(int)$foodsaver['id'].'-1">Profil</a></li>
-	                '.$thead.'
-	                <li class="ui-tab-dialog-close"></li>
-	            </ul>
-	            <div id="ptab-'.(int)$foodsaver['id'].'-1">
-	                <div class="xv_left">
-	                    <img src="'.$photo.'" alt="'.$foodsaver['name'].' '.$foodsaver['nachname'].'" />
-	                    <ul>
-	                        <li><a onclick="chat('.(int)$foodsaver['id'].');return false;" href="#">Nachricht schreiben</a></li>
-	                        '.$edit.'
-	                    </ul>
-	                </div>
+				<ul>
+					<li><a href="#ptab-'.(int)$foodsaver['id'].'-1">Profil</a></li>
+					'.$thead.'
+					<li class="ui-tab-dialog-close"></li>
+				</ul>
+				<div id="ptab-'.(int)$foodsaver['id'].'-1">
+					<div class="xv_left">
+						<img src="'.$photo.'" alt="'.$foodsaver['name'].' '.$foodsaver['nachname'].'" />
+						<ul>
+							<li><a onclick="chat('.(int)$foodsaver['id'].');return false;" href="#">Nachricht schreiben</a></li>
+							'.$edit.'
+						</ul>
+					</div>
 
-	                '.xv_set($data,'Kontaktdaten').'
-	                <div style="clear:both;"></div>'.
-	                $pers.'
-	            </div>
-	            '.$tbody.'
+					'.xv_set($data,'Kontaktdaten').'
+					<div style="clear:both;"></div>'.
+					$pers.'
+				</div>
+				'.$tbody.'
  */
 
 function addXhJs($js)
@@ -520,14 +520,14 @@ function xhr_loadMarker($data)
 					
 				')) {
 					/*
-	                foreach ($baskets as $key => $b)
-	                {
-	                    if($b['location_type'] !== 0)
-	                    {
-	                        //
-	                    }
-	                }
-	                */
+					foreach ($baskets as $key => $b)
+					{
+						if($b['location_type'] !== 0)
+						{
+							//
+						}
+					}
+					*/
 					$out['baskets'] = $baskets;
 				}
 			}
@@ -841,15 +841,15 @@ function xhr_continueMail($data)
 			}
 
 			/*
-	         *  [id] => 1
-	            [foodsaver_id] => 57
-	            [complete] => 0
-	            [name] => sdf
-	            [message] => sdf
-	            [zeit] => 2013-08-11 09:34:34
-	            [recip] =>
-	            [attach] =>
-	         */
+			 *  [id] => 1
+				[foodsaver_id] => 57
+				[complete] => 0
+				[name] => sdf
+				[message] => sdf
+				[zeit] => 2013-08-11 09:34:34
+				[recip] =>
+				[attach] =>
+			 */
 
 			$attach = false;
 			if (!empty($mail['attach'])) {
@@ -1114,27 +1114,27 @@ function xhr_getBezirk($data)
 
 	$inputs = '<div id="' . $id . '">' . $inputs . '</div>';
 
-    $cats = $db->getBasics_bezirk();
-    $out['html'] = v_form('bezirkForm', array(
-            v_form_hidden('bezirk_id', (int)$data['id']),
-            v_form_select('parent_id', array('values' => $cats)),
-            v_form_select('master', array('label' => 'Master-Bezirk', 'desc' => 'Alle Foodsaver sind automatisch mit im Master-Bezirk, sofern einer angegeben wurde', 'values' => $cats)),
-            v_form_text('name'),
-            v_form_text('mailbox_name', array('desc' => 'Achtung! Nicht willkürlich ändern! Auch darauf achten, dass unter Mailboxen die Mailbox noch nciht existiert.')),
-            v_form_text('email_name', array('label' => 'Absendername')),
-            v_form_select('type', array('label' => 'Bezirkstyp', 'values' => array(
-                array('id' => '1', 'name' => 'Stadt'),
-                array('id' => '8', 'name' => 'Großstadt (ohne Anmeldemöglichkeit)'),
-                array('id' => '9', 'name' => 'Stadtteil'),
-                array('id' => '2', 'name' => 'Bezirk'),
-                array('id' => '3', 'name' => 'Region'),
-                array('id' => '5', 'name' => 'Bundesland'),
-                array('id' => '6', 'name' => 'Land'),
-                array('id' => '7', 'name' => 'Orgateam')
-            ))),
-            v_input_wrapper(s($id), $inputs, $id)
-        ), array('submit' => s('save'))) .
-        v_input_wrapper('Master-Update', '<a class="button" href="#" class="button" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'geoclean\',id:' . (int)$data['id'] . '});}return false;">Master-Update starten</a>', 'masterupdate', array('desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen'));
+	$cats = $db->getBasics_bezirk();
+	$out['html'] = v_form('bezirkForm', array(
+			v_form_hidden('bezirk_id', (int)$data['id']),
+			v_form_select('parent_id', array('values' => $cats)),
+			v_form_select('master', array('label' => 'Master-Bezirk', 'desc' => 'Alle Foodsaver sind automatisch mit im Master-Bezirk, sofern einer angegeben wurde', 'values' => $cats)),
+			v_form_text('name'),
+			v_form_text('mailbox_name', array('desc' => 'Achtung! Nicht willkürlich ändern! Auch darauf achten, dass unter Mailboxen die Mailbox noch nciht existiert.')),
+			v_form_text('email_name', array('label' => 'Absendername')),
+			v_form_select('type', array('label' => 'Bezirkstyp', 'values' => array(
+				array('id' => '1', 'name' => 'Stadt'),
+				array('id' => '8', 'name' => 'Großstadt (ohne Anmeldemöglichkeit)'),
+				array('id' => '9', 'name' => 'Stadtteil'),
+				array('id' => '2', 'name' => 'Bezirk'),
+				array('id' => '3', 'name' => 'Region'),
+				array('id' => '5', 'name' => 'Bundesland'),
+				array('id' => '6', 'name' => 'Land'),
+				array('id' => '7', 'name' => 'Orgateam')
+			))),
+			v_input_wrapper(s($id), $inputs, $id)
+		), array('submit' => s('save'))) .
+		v_input_wrapper('Master-Update', '<a class="button" href="#" class="button" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'geoclean\',id:' . (int)$data['id'] . '});}return false;">Master-Update starten</a>', 'masterupdate', array('desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen'));
 
 	$out['script'] = '
 		$("#bezirkform-form").unbind("submit");	
@@ -1366,10 +1366,10 @@ function xhr_addFetcher($data)
 	global $db;
 	if (($db->isInTeam($data['bid']) || isBotschafter() || isOrgaTeam()) && isVerified()) {
 		/*
-	     * 	[f] => addFetcher
-	        [date] => 2013-09-23 20:00:00
-	        [bid] => 1
-	     */
+		 * 	[f] => addFetcher
+			[date] => 2013-09-23 20:00:00
+			[bid] => 1
+		 */
 
 		if (!empty($data['to'])) {
 			incLang('fsbetrieb');
@@ -1472,37 +1472,37 @@ function xhr_becomeBezirk($data)
 
 		if (empty($new) && $bezirk_id > 0) {
 			/*
-	        if(($active = $db->qOne('SELECT `active` FROM `'.PREFIX.'foodsaver_has_bezirk` WHERE `bezirk_id` = '.(int)$bezirk_id.' AND `foodsaver_id` = '.(int)fsId().' ')) !== false)
-	        {
-	            if($active == 1)
-	            {
-	                return json_encode(array(
-	                        'script' => 'pulseInfo(\''.jsSafe(s('already_in_bezirk')).'\');',
-	                        'status' => 2
-	                ));
-	            }
-	        }
-	        */
+			if(($active = $db->qOne('SELECT `active` FROM `'.PREFIX.'foodsaver_has_bezirk` WHERE `bezirk_id` = '.(int)$bezirk_id.' AND `foodsaver_id` = '.(int)fsId().' ')) !== false)
+			{
+				if($active == 1)
+				{
+					return json_encode(array(
+							'script' => 'pulseInfo(\''.jsSafe(s('already_in_bezirk')).'\');',
+							'status' => 2
+					));
+				}
+			}
+			*/
 			/*
-	            // schon im bezirk
-	            if($active == 1)
-	            {
-	                return json_encode(array(
-	                    'script' => 'pulseInfo(\''.jsSafe(s('already_in_bezirk')).'\');',
-	                    'status' => 2
-	                ));
-	            }
-	            else
-	            {
-	                return json_encode(array(
-	                    'script' => 'pulseInfo(\''.jsSafe(s('request_already_send')).'\');',
-	                    'status' => 2
-	                ));
-	            }
-	        }
-	        else
-	        {
-	        */
+				// schon im bezirk
+				if($active == 1)
+				{
+					return json_encode(array(
+						'script' => 'pulseInfo(\''.jsSafe(s('already_in_bezirk')).'\');',
+						'status' => 2
+					));
+				}
+				else
+				{
+					return json_encode(array(
+						'script' => 'pulseInfo(\''.jsSafe(s('request_already_send')).'\');',
+						'status' => 2
+					));
+				}
+			}
+			else
+			{
+			*/
 			$active = 1;
 			$db->insert('
 					REPLACE INTO  `' . PREFIX . 'foodsaver_has_bezirk` (`bezirk_id`,`foodsaver_id`,`active`)

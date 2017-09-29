@@ -22,8 +22,8 @@ class BasketXhr extends Control
 		parent::__construct();
 
 		/*
-	     * allowed method for not logged in users
-	     */
+		 * allowed method for not logged in users
+		 */
 		$allowed = array(
 			'bubble' => true,
 			'login' => true,
@@ -256,8 +256,8 @@ class BasketXhr extends Control
 				$dia = new XhrDialog();
 
 				/*
-	             * What see the user if not logged in?
-	             */
+				 * What see the user if not logged in?
+				 */
 				if (!S::may()) {
 					$dia->setTitle('Essenskorb');
 					$dia->addContent($this->view->bubbleNoUser($basket));
@@ -432,15 +432,15 @@ class BasketXhr extends Control
 			global $g_data;
 			$g_data['fetchstate'] = 3;
 			/*
-	         * Array
-	            (
-	                [time_ts] => 1402149037
-	                [fs_name] => Luisa
-	                [fs_photo] => 530c93a86a9f8.jpg
-	                [fs_id] => 3542
-	                [id] => 20
-	            )
-	         */
+			 * Array
+				(
+					[time_ts] => 1402149037
+					[fs_name] => Luisa
+					[fs_photo] => 530c93a86a9f8.jpg
+					[fs_id] => 3542
+					[id] => 20
+				)
+			 */
 
 			$dia = new XhrDialog();
 			$dia->addOpt('width', '400');

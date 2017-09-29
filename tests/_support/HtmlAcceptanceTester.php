@@ -31,7 +31,7 @@ class HtmlAcceptanceTester extends \Codeception\Actor
 	public function waitForPageBody()
 	{
 		/* This is not needed and not even compatible with PHP Browser but should
-	    be available so tests can be switched to another backend anytime */
+		be available so tests can be switched to another backend anytime */
 	}
 
 	public function login($email, $password)

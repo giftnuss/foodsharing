@@ -125,10 +125,10 @@ class LoginControl extends Control
 							$check = false;
 							error('Sorry, es gibt ein Problem mir Deinen Daten. Ein Administrator wurde informiert.');
 							/*
-	                        tplMail(11, 'kontakt@prographix.de',array(
-	                            'data' => '<pre>'.print_r($_POST,true).'</pre>'
-	                        ));
-	                        */
+							tplMail(11, 'kontakt@prographix.de',array(
+								'data' => '<pre>'.print_r($_POST,true).'</pre>'
+							));
+							*/
 						}
 
 						if ($check) {
@@ -155,13 +155,13 @@ class LoginControl extends Control
 	private function genSearchIndex()
 	{
 		/*
-	     * The big array we want to fill ;)
-	    */
+		 * The big array we want to fill ;)
+		*/
 		$index = array();
 
 		/*
-	     * Buddies Load persons in the index array that connected with the user
-	    */
+		 * Buddies Load persons in the index array that connected with the user
+		*/
 
 		$model = loadModel('buddy');
 		if ($buddies = $model->listBuddies()) {
@@ -192,8 +192,8 @@ class LoginControl extends Control
 		}
 
 		/*
-	     * Groups load Groups connected to the user in the array
-	    */
+		 * Groups load Groups connected to the user in the array
+		*/
 		$model = loadModel('groups');
 		if ($groups = $model->listMyGroups()) {
 			$result = array();
@@ -219,8 +219,8 @@ class LoginControl extends Control
 		}
 
 		/*
-	     * Betriebe load food stores connected to the user in the array
-	    */
+		 * Betriebe load food stores connected to the user in the array
+		*/
 		$model = loadModel('betrieb');
 		if ($betriebe = $model->listMyBetriebe()) {
 			$result = array();
@@ -241,8 +241,8 @@ class LoginControl extends Control
 		}
 
 		/*
-	     * Bezirke load Bezirke connected to the user in the array
-	    */
+		 * Bezirke load Bezirke connected to the user in the array
+		*/
 		$model = loadModel('bezirk');
 		if ($bezirke = $model->listMyBezirke()) {
 			$result = array();
@@ -264,8 +264,8 @@ class LoginControl extends Control
 		}
 
 		/*
-	     * Get or set an individual token as filename for the public json file
-	    */
+		 * Get or set an individual token as filename for the public json file
+		*/
 		if ($token = S::user('token')) {
 			file_put_contents('cache/searchindex/' . $token . '.json', json_encode($index));
 

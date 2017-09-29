@@ -7,13 +7,11 @@ use DebugBar\DataCollector\DataCollector;
 use DebugBar\DataCollector\Renderable;
 
 /**
- *
  * A DebugBar collector to allow queries with timings to be registered manually.
- * Will render as a standard SQLQueriesWidget
+ * Will render as a standard SQLQueriesWidget.
  *
  * Based on https://github.com/maximebf/php-debugbar/issues/213#issuecomment-97033694
  * But We have to implement the query collecting ourselves.
- *
  */
 class DatabaseQueryCollector extends DataCollector implements Renderable, AssetProvider
 {
@@ -57,15 +55,15 @@ class DatabaseQueryCollector extends DataCollector implements Renderable, AssetP
 	public function getWidgets()
 	{
 		return [
-			"database" => [
-				"icon" => "arrow-right",
-				"widget" => "PhpDebugBar.Widgets.SQLQueriesWidget",
-				"map" => "db",
-				"default" => "[]"
+			'database' => [
+				'icon' => 'arrow-right',
+				'widget' => 'PhpDebugBar.Widgets.SQLQueriesWidget',
+				'map' => 'db',
+				'default' => '[]'
 			],
-			"database:badge" => [
-				"map" => "db.nb_statements",
-				"default" => 0
+			'database:badge' => [
+				'map' => 'db.nb_statements',
+				'default' => 0
 			]
 		];
 	}
@@ -80,7 +78,6 @@ class DatabaseQueryCollector extends DataCollector implements Renderable, AssetP
 
 	private function formatQueryStr($str)
 	{
-		return strtr(preg_replace("/^\W+/", "", $str), ["\t" => '', "\r" => '', "\n" => ' ']);
+		return strtr(preg_replace("/^\W+/", '', $str), ["\t" => '', "\r" => '', "\n" => ' ']);
 	}
-
 }

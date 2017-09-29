@@ -24,8 +24,8 @@ if (isset($_GET['f'])) {
 	$func = 'xhr_' . $action;
 	if (function_exists($func)) {
 		/*
-	     * check for page caching
-	    */
+		 * check for page caching
+		*/
 		if (isset($g_page_cache[$_SERVER['REQUEST_URI']][$g_page_cache_mode])) {
 			ob_start();
 			echo $func($_GET);

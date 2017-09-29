@@ -18,12 +18,12 @@ class QuizXhr extends Control
 	public function addquest()
 	{
 		/*
-	     *  [app] => quiz
+		 *  [app] => quiz
 	[m] => addquest
 	[text] => rgds
 	[fp] => fdgh
 )
-	     */
+		 */
 		if (mayEditQuiz()) {
 			if (isset($_GET['text']) && isset($_GET['fp']) && isset($_GET['qid'])) {
 				$fp = (int)$_GET['fp'];
@@ -76,11 +76,11 @@ class QuizXhr extends Control
 	public function addansw()
 	{
 		/*
-	     *
-	    qid		1
-	    right	1
-	    text	458
-	     */
+		 *
+		qid		1
+		right	1
+		text	458
+		 */
 
 		if (mayEditQuiz()) {
 			if (isset($_GET['text']) && isset($_GET['right']) && isset($_GET['qid'])) {
@@ -289,8 +289,8 @@ class QuizXhr extends Control
 			return false;
 		}
 		/*
-	     * First we want to check is there an quiz session what the user have lost?
-	     */
+		 * First we want to check is there an quiz session what the user have lost?
+		 */
 		if ($session = $this->model->getExsistingSession($_GET['qid'])) {
 			// if yes reinitiate the running quiz session
 			S::set('quiz-id', (int)$_GET['qid']);
@@ -304,8 +304,8 @@ class QuizXhr extends Control
 			S::set('quiz-easymode', $easymode);
 
 			/*
-	         * Make a little output that the user can continue the quiz
-	         */
+			 * Make a little output that the user can continue the quiz
+			 */
 			$dia = new XhrDialog();
 
 			$dia->setTitle('Quiz fortführen');
@@ -318,12 +318,12 @@ class QuizXhr extends Control
 
 			return $return;
 		} /*
-	     * Otherwiser we start a new quiz session
-	     */
+		 * Otherwiser we start a new quiz session
+		 */
 		elseif ($quiz = $this->model->getQuiz($_GET['qid'])) {
 			/*
-	         * if foodsaver quiz user can choose between easy and quick mode
-	        */
+			 * if foodsaver quiz user can choose between easy and quick mode
+			*/
 
 			if ($_GET['qid'] == 1 && isset($_GET['easymode']) && $_GET['easymode'] == 1) {
 				S::set('quiz-easymode', true);
@@ -333,8 +333,8 @@ class QuizXhr extends Control
 			}
 
 			/*
-	         * first get random sorted quiz questions
-	         */
+			 * first get random sorted quiz questions
+			 */
 			if ($questions = $this->getRandomQuestions($_GET['qid'], $quiz['questcount'])) {
 				//Get the description how the quiz works
 				$content = $this->model->getContent(17);
@@ -346,15 +346,15 @@ class QuizXhr extends Control
 				$questions = $this->replaceDoubles($questions);
 
 				/*
-	             * Store quiz data in the users session
-	             */
+				 * Store quiz data in the users session
+				 */
 				S::set('quiz-id', (int)$_GET['qid']);
 				S::set('quiz-questions', $questions);
 				S::set('quiz-index', 0);
 
 				/*
-	             * Make a litte output for the user that he/she cat just start the quiz now
-	             */
+				 * Make a litte output for the user that he/she cat just start the quiz now
+				 */
 				$dia = new XhrDialog();
 				$dia->addOpt('width', 600);
 				$dia->setTitle($quiz['name'] . '-Quiz');
@@ -371,8 +371,8 @@ class QuizXhr extends Control
 		}
 
 		/*
-	     * If we cant get an quiz from the db send an error
-	     */
+		 * If we cant get an quiz from the db send an error
+		 */
 		return array(
 			'status' => 1,
 			'script' => 'pulseError("Quiz konnte nicht gestartet werden...");'
@@ -460,8 +460,8 @@ class QuizXhr extends Control
 			return false;
 		}
 		/*
-	     * Try to find a current quiz session ant retrieve the questions
-	     */
+		 * Try to find a current quiz session ant retrieve the questions
+		 */
 		if ($quiz = S::get('quiz-questions')) {
 			$dia = new XhrDialog();
 			$dia->addClass('quiz-questiondialog');
@@ -469,8 +469,8 @@ class QuizXhr extends Control
 			$i = S::get('quiz-index');
 
 			/*
-	         * If the quiz index is 0 we have to start a new quiz session
-	         */
+			 * If the quiz index is 0 we have to start a new quiz session
+			 */
 
 			$easymode = 0;
 			if (S::get('quiz-easymode')) {
@@ -489,49 +489,49 @@ class QuizXhr extends Control
 			$was_a_joke = false;
 
 			/*
-	         *  check if an answered quiz question is arrived
-	         */
+			 *  check if an answered quiz question is arrived
+			 */
 			if (isset($_GET['answer'])) {
 				/*
-	             * parse the anser parameter
-	             */
+				 * parse the anser parameter
+				 */
 				$answers = urldecode($_GET['answer']);
 				$params = array();
 				parse_str($_GET['answer'], $params);
 
 				/*
-	             * store params in the quiz array to save users answers
-	             */
+				 * store params in the quiz array to save users answers
+				 */
 				if (isset($params['qanswers'])) {
 					$quiz[($i - 1)]['answers'] = $params['qanswers'];
 				}
 
 				/*
-	             * check if there are 0 point for the questions its a joke
-	             */
+				 * check if there are 0 point for the questions its a joke
+				 */
 				if ($quiz[($i - 1)]['fp'] == 0) {
 					$was_a_joke = true;
 				}
 
 				/*
-	             * store the time how much time has the user need
-	             */
+				 * store the time how much time has the user need
+				 */
 				$quiz[($i - 1)]['userduration'] = (time() - (int)S::get('quiz-quest-start'));
 
 				/*
-	             * has store noco ;) its the value when the user marked that no answer is correct
-	             */
+				 * has store noco ;) its the value when the user marked that no answer is correct
+				 */
 				$quiz[($i - 1)]['noco'] = (int)$_GET['noco'];
 
 				/*
-	             * And store it all back to the session
-	             */
+				 * And store it all back to the session
+				 */
 				S::set('quiz-questions', $quiz);
 			}
 
 			/*
-	         * Have a look has the user entered an comment for this question?
-	        */
+			 * Have a look has the user entered an comment for this question?
+			*/
 			if (isset($_GET['comment']) && !empty($_GET['comment'])) {
 				$comment = strip_tags($_GET['comment']);
 
@@ -542,8 +542,8 @@ class QuizXhr extends Control
 			}
 
 			/*
-	         * Check the special param if the next question should not be displayed
-	         */
+			 * Check the special param if the next question should not be displayed
+			 */
 			if (isset($_GET['special'])) {
 				// make a break
 				if ($_GET['special'] == 'pause') {
@@ -560,9 +560,9 @@ class QuizXhr extends Control
 			}
 
 			/*
-	         * check if there is a next question in quiz array push it to the user
-	         * othwise forward to the result of the quiz
-	         */
+			 * check if there is a next question in quiz array push it to the user
+			 * othwise forward to the result of the quiz
+			 */
 			if (isset($quiz[$i])) {
 				// get the question
 				if ($question = $this->model->getQuestion($quiz[$i]['id'])) {
@@ -579,8 +579,8 @@ class QuizXhr extends Control
 						}
 
 						/*
-	                     * increase the question index so we are at the next question ;)
-	                     */
+						 * increase the question index so we are at the next question ;)
+						 */
 						++$i;
 						S::set('quiz-index', $i);
 
@@ -590,8 +590,8 @@ class QuizXhr extends Control
 						S::set('quiz-quest-start', time());
 
 						/*
-	                     * let's prepare the output dialog
-	                     */
+						 * let's prepare the output dialog
+						 */
 						$dia->addOpt('width', 1000);
 						$dia->addOpt('height', '($(window).height()-40)', false);
 						$dia->addOpt('position', 'center');
@@ -600,16 +600,16 @@ class QuizXhr extends Control
 						$dia->addContent($this->view->quizQuestion($question, $answers));
 
 						/*
-	                     * for later function is not ready yet :)
-	                     */
+						 * for later function is not ready yet :)
+						 */
 						$dia->addButton('Weiter', 'questcheckresult();return false;');
 						$dia->addButton('Pause', 'ajreq(\'pause\',{app:\'quiz\',sid:\'' . $session_id . '\'});');
 
 						$dia->addButton('nächste Frage', 'ajreq(\'next\',{app:\'quiz\',qid:' . (int)$question['id'] . ',commentanswers:"' . jsSafe($comment_aswers) . '"});$(".quiz-questiondialog .ui-dialog-buttonset .ui-button").button( "option", "disabled", true );$(".quiz-questiondialog .ui-dialog-buttonset .ui-button span").prepend(\'<i class="fa fa-spinner fa-spin"></i> \')');
 
 						/*
-	                     * add next() Button
-	                     */
+						 * add next() Button
+						 */
 
 						$dia->addOpt('open', '
 						function(){
@@ -635,8 +635,8 @@ class QuizXhr extends Control
 						}
 
 						/*
-	                     * strange but it works ;) generate the js code and send is to the client for execute
-	                     */
+						 * strange but it works ;) generate the js code and send is to the client for execute
+						 */
 
 						$quizbreath = '
 							$(\'#quizwrapper\').show();
@@ -1190,10 +1190,10 @@ class QuizXhr extends Control
 	{
 		if (mayEditQuiz()) {
 			/*
-	         *   [id] => 10
-	             [text] => test
-	             [fp] => 3
-	         */
+			 *   [id] => 10
+				 [text] => test
+				 [fp] => 3
+			 */
 			if (isset($_GET['text']) && isset($_GET['fp']) && isset($_GET['id'])) {
 				$fp = (int)$_GET['fp'];
 				$text = strip_tags($_GET['text']);
