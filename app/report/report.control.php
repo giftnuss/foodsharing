@@ -60,9 +60,7 @@ class ReportControl extends Control
 						});
 				');
 				addContent($this->view->topbar('Meldungen von <a href="#" onclick="profile(' . (int)$foodsaver['id'] . ');return false;">' . $foodsaver['name'] . ' ' . $foodsaver['nachname'] . '</a>', count($foodsaver['reports']) . ' gesamt', avatar($foodsaver, 50)), CNT_TOP);
-				addContent(
-						v_field($this->wallposts('fsreport', (int)$_GET['id']), 'Notizen')
-					);
+				addContent(v_field($this->wallposts('fsreport', (int)$_GET['id']), 'Notizen'));
 				addContent($this->view->listReportsTiny($foodsaver['reports']), CNT_RIGHT);
 			}
 		} else {

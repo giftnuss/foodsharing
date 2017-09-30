@@ -87,8 +87,8 @@ class StatsModel extends ConsoleModel
 		$add_date,
 		$first_fetch,
 		$fetchcount,
-		$last_fetch
-	) {
+		$last_fetch)
+	{
 		$this->update('
 			UPDATE 	`fs_betrieb_team` 
 				

@@ -377,8 +377,8 @@ class FairteilerModel extends Model
 		$lat,
 		$lon,
 		$picture = '',
-		$status = 1
-	) {
+		$status = 1)
+	{
 		if ($ftid = $this->insert('
 			INSERT INTO 	`' . PREFIX . 'fairteiler`
 			(

@@ -519,7 +519,7 @@ class LoginXhr extends Control
 
 			return $phone;
 		}   // end if $mask == 8
-		return false;	   // Returns false if no conditions meet or input
+		return false; // Returns false if no conditions meet or input
 	}
 
 	private function resizeAvatar($img)

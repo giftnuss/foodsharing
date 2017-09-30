@@ -13,8 +13,8 @@ class MailsModel extends ConsoleModel
 		$time, // time,
 		$attach = '', // attachements
 		$read = 0,
-		$answer = 0
-	) {
+		$answer = 0)
+	{
 		return $this->insert('
 			INSERT INTO `' . PREFIX . 'mailbox_message`
 			(
