@@ -66,8 +66,7 @@ class ReportView extends View
 					'name' => 'Verkauft gerettete Lebensmittel'],
 				[
 					'id' => 16,
-					'name' => 'Hat gegen andere Verhaltensregeln verstoßen (alles andere)']
-				)
+					'name' => 'Hat gegen andere Verhaltensregeln verstoßen (alles andere)'])
 			)) . '<br />
 			<div id="reportreason_3" class="cb" style="margin:5px 0;">
 			' . v_form_checkbox('reportreason_3', array('nowrapper' => true, 'value' => 1, 'values' => array(
@@ -77,7 +76,7 @@ class ReportView extends View
 				[
 					'id' => 2,
 					'name' => 'gegenüber BetriebsmitarbeiterInnen']
-				)
+			)
 			)) . '
 			</div>
 			' . v_form_select('reportreason_3_sub', array('nowrapper' => true, 'value' => 1, 'values' => array(
@@ -98,8 +97,7 @@ class ReportView extends View
 					'name' => 'Gewalttätigkeit und Drohung'],
 				[
 					'id' => 6,
-					'name' => 'Andere unangebrachte Äußerungen und Verhalten']
-				)
+					'name' => 'Andere unangebrachte Äußerungen und Verhalten'])
 			)) . '
 			<div id="reportreason_6" class="cb">
 			' . v_form_checkbox('reportreason_6', array('nowrapper' => true, 'value' => 1, 'values' => array(
@@ -111,8 +109,7 @@ class ReportView extends View
 					'name' => 'gegenüber Foodsavern'],
 				[
 					'id' => 3,
-					'name' => 'gegenüber Kunden']
-				)
+					'name' => 'gegenüber Kunden'])
 			)) . '
 			</div>
 			<div id="reportreason_5" class="cb">
@@ -125,8 +122,7 @@ class ReportView extends View
 					'name' => 'vor Foodsavern'],
 				[
 					'id' => 3,
-					'name' => 'vor Kunden']
-				)
+					'name' => 'vor Kunden'])
 			)) . '
 			</div>
 			<div id="reportreason_7" class="cb">
@@ -139,8 +135,7 @@ class ReportView extends View
 					'name' => 'gegenüber Foodsavern'],
 				[
 					'id' => 3,
-					'name' => 'gegenüber Kunden']
-				)
+					'name' => 'gegenüber Kunden'])
 			)) . '
 			</div>
 			<div id="reportreason_8" class="cb">
@@ -153,8 +148,7 @@ class ReportView extends View
 					'name' => 'von Foodsavern'],
 				[
 					'id' => 3,
-					'name' => 'von Kunden']
-				)
+					'name' => 'von Kunden'])
 			)) . '
 			</div>');
 	}
