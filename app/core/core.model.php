@@ -15,7 +15,8 @@ class Model extends ManualDb
 	{
 		if ($cnt = $this->qRow('
 			SELECT 	`title`,`body` FROM ' . PREFIX . 'content WHERE `id` = ' . (int)$id . '		
-		')) {
+		')
+		) {
 			return $cnt;
 		}
 

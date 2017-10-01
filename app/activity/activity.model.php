@@ -48,7 +48,8 @@ class ActivityModel extends Model
 		
 			LIMIT ' . ((int)$page * $this->items_per_page) . ', ' . $this->items_per_page . '
 		
-		')) {
+		')
+		) {
 			$updates = $up;
 		}
 
@@ -98,7 +99,8 @@ class ActivityModel extends Model
 		
 				LIMIT ' . ((int)$page * $this->items_per_page) . ', ' . $this->items_per_page . '
 			
-			')) {
+			')
+		) {
 			$updates = array_merge($updates, $up);
 		}
 
@@ -192,7 +194,8 @@ class ActivityModel extends Model
 		
 			LIMIT ' . ((int)$page * $this->items_per_page) . ', ' . $this->items_per_page . '
 
-		')) {
+		')
+		) {
 			/*
 			 * AND
 				poster_id != '.(int)fsId().'
@@ -275,7 +278,8 @@ class ActivityModel extends Model
 				ORDER BY m.id DESC
 		
 				LIMIT ' . ((int)$page * $this->items_per_page) . ', ' . $this->items_per_page . '
-			')) {
+			')
+			) {
 				$out = array();
 				foreach ($updates as $u) {
 					$sender = @json_decode($u['sender'], true);
@@ -374,7 +378,8 @@ class ActivityModel extends Model
 		
 			LIMIT ' . ((int)$page * $this->items_per_page) . ', ' . $this->items_per_page . '
 		
-		')) {
+		')
+		) {
 			$out = array();
 			foreach ($updates as $u) {
 				$check = true;
@@ -427,7 +432,8 @@ class ActivityModel extends Model
 			ORDER BY n.id DESC
 			LIMIT ' . ((int)$page * $this->items_per_page) . ', ' . $this->items_per_page . '
 			
-		')) {
+		')
+			) {
 				$out = array();
 				foreach ($ret as $r) {
 					$out[] = array(

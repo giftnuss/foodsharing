@@ -76,7 +76,8 @@ class BezirkModel extends Model
 
 			AND
 				e.id = ' . (int)$id . '
-		')) {
+		')
+		) {
 			$event['location'] = false;
 			if ($event['location_id'] > 0) {
 				$event['location'] = $this->getLocation($event['location_id']);
@@ -183,7 +184,8 @@ class BezirkModel extends Model
 
 			LIMIT ' . (int)($page * $this->themes_per_page) . ', ' . (int)$this->themes_per_page . '
 
-		')) {
+		')
+		) {
 			if ($last > 0) {
 				$ll = end($ret);
 				if ($ll['id'] == $last) {
@@ -491,7 +493,8 @@ class BezirkModel extends Model
 				FROM 	`' . PREFIX . 'fairteiler`
 				WHERE 	`bezirk_id` IN( ' . implode(',', $bids) . ' )
 				AND 	`status` = 1
-			')) {
+			')
+			) {
 				foreach ($fairteiler as $key => $ft) {
 					$fairteiler[$key]['pic'] = false;
 					if (!empty($ft['picture'])) {

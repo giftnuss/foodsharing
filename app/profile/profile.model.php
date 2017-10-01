@@ -112,7 +112,8 @@ class ProfileModel extends Model
 				
 			WHERE 	fs.id = ' . (int)$this->fs_id . '
 		
-			')) == false) {
+			')) == false
+		) {
 			return false;
 		}
 
@@ -167,7 +168,8 @@ class ProfileModel extends Model
 			WHERE 	b.`bezirk_id` = bz.`id` 
 			AND 	b.foodsaver_id = ' . $this->intval($this->fs_id) . '
 			AND 	bz.type != 7
-		')) {
+		')
+		) {
 			$data['botschafter'] = $bot;
 		}
 		if ($fs = $this->q('
@@ -180,7 +182,8 @@ class ProfileModel extends Model
 			WHERE 	b.`bezirk_id` = bz.`id`
 			AND 	b.foodsaver_id = ' . $this->intval($this->fs_id) . '
 			AND 	bz.type != 7
-		')) {
+		')
+		) {
 			$data['foodsaver'] = $fs;
 		}
 		if ($orga = $this->q('
@@ -193,7 +196,8 @@ class ProfileModel extends Model
 			WHERE 	b.`bezirk_id` = bz.`id`
 			AND 	b.foodsaver_id = ' . $this->intval($this->fs_id) . '
 			AND 	bz.type = 7
-		')) {
+		')
+		) {
 			$data['orga'] = $orga;
 		}
 

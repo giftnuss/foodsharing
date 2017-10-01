@@ -49,7 +49,8 @@ class WallpostModel extends Model
 			ORDER BY p.time DESC
 				
 			LIMIT 30
-		')) {
+		')
+		) {
 			foreach ($wp as $key => $w) {
 				if (!empty($w['attach'])) {
 					$data = json_decode($w['attach'], true);

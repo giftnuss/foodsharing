@@ -24,7 +24,8 @@ class GroupsModel extends Model
 			FROM 	`' . PREFIX . 'foodsaver_has_bezirk`	
 			WHERE 	`active` != 1	
 			AND 	foodsaver_id = ' . (int)fsId() . '
-		')) {
+		')
+		) {
 			$out = array();
 			foreach ($ret as $gid) {
 				$out[$gid] = $gid;
@@ -173,7 +174,8 @@ class GroupsModel extends Model
 				
 			AND
 				b.`id` = ' . (int)$id . '
-		')) {
+		')
+		) {
 			$group['member'] = $this->q('
 					SELECT 
 						`id`, 
@@ -285,7 +287,8 @@ class GroupsModel extends Model
 				
 			ORDER BY
 				`name`
-		')) {
+		')
+		) {
 			foreach ($groups as $i => $g) {
 				$groups[$i]['member'] = $this->q('
 					SELECT 

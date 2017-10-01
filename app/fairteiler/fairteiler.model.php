@@ -123,7 +123,8 @@ class FairteilerModel extends Model
 			WHERE 	ft.bezirk_id = bz.id
 			AND 	ft.`bezirk_id` IN(' . implode(',', $bezirk_ids) . ')
 			AND 	ft.`status` = 1
-		'))) {
+		'))
+		) {
 			$out = array();
 
 			foreach ($fairteiler as $key => $ft) {
@@ -206,7 +207,8 @@ class FairteilerModel extends Model
 			WHERE 	ff.foodsaver_id = fs.id
 			AND 	ff.fairteiler_id = ' . (int)$fairteiler_id . '
 				
-		')) {
+		')
+		) {
 			$normal = array();
 			$verantwortliche = array();
 			$all = array();
@@ -299,7 +301,8 @@ class FairteilerModel extends Model
 			ORDER BY 	time_ts DESC
 			LIMIT ' . $count . '
 	
-		')) {
+		')
+		) {
 			foreach ($update as $key => $u) {
 				$update[$key]['images'] = false;
 				if (!empty($u['attach'])) {
@@ -351,7 +354,8 @@ class FairteilerModel extends Model
 				
 			ON 	ft.add_foodsaver = fs.id
 			WHERE 	ft.id = ' . (int)$id . '
-		')) {
+		')
+		) {
 			$ft['pic'] = false;
 			if (!empty($ft['picture'])) {
 				$ft['pic'] = array(
@@ -410,7 +414,8 @@ class FairteilerModel extends Model
 				NOW(),
 				' . $this->intval(fsId()) . '
 			)
-		')) {
+		')
+		) {
 			$this->insert('
 				REPLACE INTO `' . PREFIX . 'fairteiler_follower`
 				(

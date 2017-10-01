@@ -40,7 +40,8 @@ class GeocleanControl extends Control
 				
 			ORDER BY 
 				b.name
-		')) {
+		')
+		) {
 			$tmp = array();
 			foreach ($regions as $r) {
 				if ($count = $this->model->qRow('SELECT COUNT(foodsaver_id) AS count, bezirk_id FROM fs_foodsaver_has_bezirk WHERE bezirk_id = ' . (int)$r['id'])) {

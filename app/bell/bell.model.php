@@ -39,7 +39,8 @@ class BellModel extends Model
 	
 			ORDER BY b.`time` DESC
 			' . $limit . '
-		')) {
+		')
+		) {
 			$ids = array();
 			for ($i = 0; $i < count($bells); ++$i) {
 				$ids[] = (int)$bells[$i]['id'];

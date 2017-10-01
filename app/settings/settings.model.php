@@ -246,7 +246,8 @@ class SettingsModel extends Model
 				`passwd` = ' . $this->strval($crypt) . '	
 
 			WHERE `id` = ' . (int)fsid() . '
-		')) {
+		')
+		) {
 			return true;
 		} else {
 			return false;
@@ -348,7 +349,8 @@ class SettingsModel extends Model
 				WHERE foodsaver_id =' . (int)fsId() . '
 				AND quiz_id = ' . (int)$quiz_id . '
 				AND `status` = 1
-			')) {
+			')
+		) {
 			if ($res > 0) {
 				return true;
 			}

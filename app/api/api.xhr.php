@@ -268,7 +268,8 @@ class ApiXhr extends Control
 					$lat, // lat
 					$lon, // lon
 					S::user('bezirk_id')
-				)) {
+				)
+				) {
 					if (!empty($art)) {
 						$model->addArt($id, $art);
 					}

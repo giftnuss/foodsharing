@@ -112,7 +112,8 @@ class ReportModel extends Model
 			FROM 	`' . PREFIX . 'foodsaver`
 				
 			WHERE 	id = ' . (int)$id . '
-		')) {
+		')
+		) {
 			$fs['reports'] = $this->q('
 
 				SELECT 

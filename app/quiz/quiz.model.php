@@ -127,7 +127,8 @@ class QuizModel extends Model
 	{
 		if ($id = $this->insert('
 			INSERT INTO `fs_question`(`text`,`duration`) VALUES (' . $this->strval($text) . ',' . (int)$duration . ')
-		')) {
+		')
+		) {
 			$this->insert('
 				INSERT INTO `fs_question_has_quiz`(`question_id`, `quiz_id`, `fp`) VALUES (' . (int)$id . ',' . (int)$qid . ',' . (int)$fp . ')		
 			');
@@ -203,7 +204,8 @@ class QuizModel extends Model
 		
 			AND
 				hq.quiz_id = ' . (int)$quiz_id . '
-		')) {
+		')
+		) {
 			$outmeta = array();
 			if ($meta = $this->q('
 				SELECT 	hq.fp, COUNT(q.id) AS `count`
@@ -219,7 +221,8 @@ class QuizModel extends Model
 					
 				GROUP BY 
 					hq.fp
-			')) {
+			')
+			) {
 				foreach ($meta as $m) {
 					if (!isset($outmeta[$m['fp']])) {
 						$outmeta[$m['fp']] = $m['count'];
@@ -268,7 +271,8 @@ class QuizModel extends Model
 				' . $this->strval($comment) . ',
 				NOW()
 			)		
-		')) {
+		')
+		) {
 			if ($orgateam = $this->getOrgateam()) {
 				$this->addBell($orgateam, 'new_quiz_comment_title', 'new_quiz_comment', 'fa fa-question-circle', array('href' => '/?page=quiz&sub=wall&id=' . (int)$question_id), array(
 					'comment' => $comment
@@ -311,14 +315,16 @@ class QuizModel extends Model
 		
 				AND
 				hq.quiz_id = ' . (int)$quiz_id . '
-				')) {
+				')
+		) {
 			foreach ($questions as $key => $q) {
 				$out[$q['id']] = $q;
 				if ($answers = $this->q('
 						SELECT 	`id`, `text`,`explanation`, `right`
 						FROM	' . PREFIX . 'answer
 						WHERE 	question_id = ' . (int)$q['id'] . '
-				')) {
+				')
+				) {
 					$out[$q['id']]['answers'] = array();
 					foreach ($answers as $a) {
 						$out[$q['id']]['answers'][$a['id']] = $a;
@@ -351,7 +357,8 @@ class QuizModel extends Model
 				
 				AND
 					hq.quiz_id = ' . (int)$quiz_id . '
-		')) {
+		')
+		) {
 			foreach ($questions as $key => $q) {
 				$questions[$key]['answers'] = $this->q('
 					SELECT 	`id`, `text`,`explanation`, `right`
@@ -404,7 +411,8 @@ class QuizModel extends Model
 				
 			AND
 				`status` = 0
-		')) {
+		')
+		) {
 			$session['quiz_questions'] = unserialize($session['quiz_questions']);
 
 			return $session;
@@ -428,7 +436,8 @@ class QuizModel extends Model
 				FROM ' . PREFIX . 'quiz_session
 				WHERE foodsaver_id =' . (int)fsId() . '
 				AND quiz_id = ' . (int)$quiz_id . '
-				')) {
+				')
+		) {
 			foreach ($res as $r) {
 				++$out['times'];
 				if ($r['time_ts'] > $out['last_try']) {

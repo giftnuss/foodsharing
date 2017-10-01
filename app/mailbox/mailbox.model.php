@@ -57,7 +57,8 @@ class MailboxModel extends Model
 					' . PREFIX . 'foodsaver_has_contact fc
 			WHERE 	fc.contact_id = c.id
 			AND 	fc.foodsaver_id = ' . (int)fsId() . '
-		')) {
+		')
+		) {
 			$mails = array_merge($mails, $contacts);
 		}
 
@@ -352,7 +353,8 @@ class MailboxModel extends Model
 			FROM 	`' . PREFIX . 'mailbox` 
 
 			WHERE 	member = 1
-		')) {
+		')
+		) {
 			foreach ($boxes as $key => $b) {
 				$boxes[$key]['email_name'] = '';
 				if ($boxes[$key]['member'] = $this->q('
@@ -365,7 +367,8 @@ class MailboxModel extends Model
 				
 					WHERE 	mm.foodsaver_id = fs.id
 					AND 	mm.mailbox_id = ' . (int)$b['id'] . '
-				')) {
+				')
+				) {
 					foreach ($boxes[$key]['member'] as $mm) {
 						if (!empty($mm['email_name'])) {
 							$boxes[$key]['email_name'] = $mm['email_name'];
@@ -458,7 +461,8 @@ class MailboxModel extends Model
 				FROM 	`' . PREFIX . 'bezirk`
 				WHERE 	`id` IN(' . implode(',', $bids) . ')
 				AND 	`mailbox_id` = 0
-			')) {
+			')
+			) {
 				foreach ($bezirke as $b) {
 					if ($b['mailbox_id'] == 0) {
 						$mb_name = strtolower($b['name']);
@@ -497,7 +501,8 @@ class MailboxModel extends Model
 				WHERE 	b.mailbox_id = m.id
 				AND 	b.`id` IN(' . implode(',', $bids) . ')
 				
-			')) {
+			')
+			) {
 				foreach ($bezirke as $b) {
 					if (empty($b['email_name'])) {
 						$b['email_name'] = 'Foodsharing ' . $b['name'];
@@ -559,7 +564,8 @@ class MailboxModel extends Model
 		
 			WHERE 	mm.mailbox_id = mb.id
 			AND 	mm.foodsaver_id = ' . (int)fsid() . '
-		')) {
+		')
+		) {
 			foreach ($memberb as $m) {
 				if (empty($m['email_name'])) {
 					$m['email_name'] = $m['name'] . '@' . DEFAULT_HOST;
@@ -584,7 +590,8 @@ class MailboxModel extends Model
 				
 				WHERE 		fs.mailbox_id = m.id
 				AND 		fs.id = ' . (int)fsId() . '
-			')) {
+			')
+		) {
 			$mboxes[] = array(
 				'id' => $mebox['id'],
 				'name' => $mebox['name'],

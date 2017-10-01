@@ -91,7 +91,8 @@ class MigrateModel extends ConsoleModel
 				
 			ORDER BY 
 				sender_id, recip_id		
-		')) {
+		')
+		) {
 			$out = array();
 			foreach ($convs as $c) {
 				$recip = array(
@@ -137,7 +138,8 @@ class MigrateModel extends ConsoleModel
 	
 			HAVING
 	
-				idstring = "' . implode(':', $recips) . '"')) {
+				idstring = "' . implode(':', $recips) . '"')
+		) {
 			$conversation_id = $conv['conversation_id'];
 		}
 

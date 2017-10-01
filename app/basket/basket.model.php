@@ -111,7 +111,8 @@ class BasketModel extends Model
 				WHERE
 					fs.id = ' . (int)$basket['foodsaver_id'] . '
 					
-			')) {
+			')
+			) {
 				$basket = array_merge($basket, $fs);
 			}
 		}
@@ -310,7 +311,8 @@ class BasketModel extends Model
 			AND 
 				`status` = 1
 				
-		')) {
+		')
+		) {
 			foreach ($baskets as $key => $b) {
 				$baskets[$key]['req_count'] = $this->qOne('SELECT COUNT(foodsaver_id) FROM ' . PREFIX . 'basket_anfrage WHERE basket_id = ' . (int)$b['id'] . ' AND status < 10');
 			}

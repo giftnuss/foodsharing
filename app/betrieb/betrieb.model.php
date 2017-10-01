@@ -99,7 +99,8 @@ class BetriebModel extends Model
 			FROM 	' . PREFIX . 'fetchdate
 			WHERE 	`betrieb_id` = ' . (int)$bid . '
 			AND 	`time` > NOW()
-		')) {
+		')
+		) {
 			$out = array();
 			foreach ($dates as $d) {
 				$out[date('Y-m-d H-i', $d['time_ts'])] = array(

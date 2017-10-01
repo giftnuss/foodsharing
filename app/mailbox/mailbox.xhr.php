@@ -290,7 +290,8 @@ class MailboxXhr extends Control
 					date('Y-m-d H:i:s'),
 					'',
 					1
-				)) {
+				)
+				) {
 					$this->model->setAnswered($_POST['reply']);
 
 					return array(

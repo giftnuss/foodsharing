@@ -127,13 +127,15 @@ class EventModel extends Model
 			FROM	' . PREFIX . 'foodsaver_has_bezirk
 			WHERE 	bezirk_id ' . $b_sql . ' 
 			AND 	`active` = 1
-		')) {
+		')
+		) {
 			$invited = array();
 			if ($inv = $this->qCol(
 				'
 				SELECT foodsaver_id FROM ' . PREFIX . 'foodsaver_has_event
 				WHERE event_id = ' . (int)$event_id
-			)) {
+			)
+			) {
 				foreach ($inv as $i) {
 					$invited[$i] = true;
 				}
@@ -188,7 +190,8 @@ class EventModel extends Model
 	
 			AND
 				e.id = ' . (int)$id . '
-		')) {
+		')
+		) {
 			$event['location'] = false;
 			$event['invites'] = $this->getEventInvites($id);
 
@@ -219,7 +222,8 @@ class EventModel extends Model
 				
 			AND 
 				fe.event_id = ' . (int)$event_id . '
-		')) {
+		')
+		) {
 			$out = array(
 				'invited' => array(),
 				'accepted' => array(),

@@ -321,7 +321,8 @@ class MaintenanceControl extends ConsoleControl
 				AND 	b.`master` != 0
 				AND 	hb.active = 1
 
-		')) {
+		')
+		) {
 			foreach ($foodasver as $fs) {
 				if (!$this->model->qRow('SELECT bezirk_id FROM `' . PREFIX . 'foodsaver_has_bezirk` WHERE foodsaver_id = ' . (int)$fs['foodsaver_id'] . ' AND bezirk_id = ' . $fs['master'])) {
 					if ((int)$fs['master'] > 0) {
@@ -441,7 +442,8 @@ class MaintenanceControl extends ConsoleControl
 						SELECT 	fs.id, fs.name
 						FROM fs_foodsaver fs, fs_botschafter b
 						WHERE b.foodsaver_id = fs.id
-						AND b.bezirk_id = ' . $b['bezirk_id'])) {
+						AND b.bezirk_id = ' . $b['bezirk_id'])
+					) {
 						foreach ($foodsaver as $fs) {
 							echo $b['id'] . ',';
 							$this->model->insert('INSERT IGNORE INTO `fs_betrieb_team`(`foodsaver_id`, `betrieb_id`, `verantwortlich`, `active`) VALUES (' . $fs['id'] . ',' . $b['id'] . ',1,1)');
@@ -460,7 +462,8 @@ class MaintenanceControl extends ConsoleControl
 			WHERE rolle = 3
 			AND quiz_rolle < 3
 			AND id NOT IN(4890,5766,4112,5448)
-		')) {
+		')
+		) {
 			foreach ($foodsaver as $fs) {
 				$this->model->update('
 					UPDATE fs_foodsaver
@@ -485,7 +488,8 @@ class MaintenanceControl extends ConsoleControl
 			AND fs.quiz_rolle < 2
 			AND t.verantwortlich = 1
 			AND fs.id NOT IN(4890,5766,4112,5448)
-		')) {
+		')
+		) {
 			foreach ($foodsaver as $fs) {
 				$this->model->update('
 					UPDATE fs_foodsaver
@@ -510,7 +514,8 @@ class MaintenanceControl extends ConsoleControl
 			WHERE rolle = 1
 			AND quiz_rolle = 0
 			AND id NOT IN(4890,5766,4112,5448)
-		')) {
+		')
+		) {
 			foreach ($foodsaver as $fs) {
 				/*
 				 * Betrieb Status-Update
@@ -580,7 +585,8 @@ class MaintenanceControl extends ConsoleControl
 			)
 			AND fs.quiz_rolle = 0
 			AND rolle = 1
-		')) {
+		')
+		) {
 			$tmp = array();
 			foreach ($foodsaver as $fs) {
 				$tmp[] = $fs['id'];

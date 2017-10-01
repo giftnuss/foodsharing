@@ -45,7 +45,8 @@ class StatsModel extends ConsoleModel
 			GROUP BY a.`betrieb_id`
 	
 	
-		')) {
+		')
+		) {
 			foreach ($res as $r) {
 				$out += $this->gerettet_wrapper($r['abholmenge']) * $r['anz'];
 			}
@@ -237,7 +238,8 @@ class StatsModel extends ConsoleModel
 			SELECT 	fb.foodsaver_id AS id
 			FROM 	' . PREFIX . 'botschafter fb
 			WHERE 	fb.bezirk_id IN(' . implode(',', $child_ids) . ')
-		')) {
+		')
+		) {
 			foreach ($foodsaver as $fs) {
 				$out[$fs['id']] = true;
 			}
@@ -254,7 +256,8 @@ class StatsModel extends ConsoleModel
 			SELECT 	fb.foodsaver_id AS id
 			FROM 	' . PREFIX . 'foodsaver_has_bezirk fb
 			WHERE 	fb.bezirk_id IN(' . implode(',', $child_ids) . ')
-		')) {
+		')
+		) {
 			foreach ($foodsaver as $fs) {
 				$out[$fs['id']] = true;
 			}
@@ -284,7 +287,8 @@ class StatsModel extends ConsoleModel
 				
 			AND 	b.bezirk_id IN(' . implode(',', $child_ids) . ')
 		
-		')) {
+		')
+		) {
 			foreach ($res as $r) {
 				$dat[$r['betrieb_id'] . '-' . $r['date']] = $r;
 			}

@@ -38,7 +38,8 @@ class TeamModel extends Model
 				WHERE 
 					hb.bezirk_id = ' . $bezirkId . '
 				ORDER BY fs.name
-		')) {
+		')
+		) {
 			foreach ($orgas as $o) {
 				$out[(int)$o['id']] = $o;
 			}
@@ -73,7 +74,8 @@ class TeamModel extends Model
                             fb.bezirk_id = 1564 OR fb.bezirk_id = 1565 OR fb.bezirk_id = 1373
                         )
                     LIMIT 1
-		')) {
+		')
+		) {
 			$user['groups'] = $this->q('
 				SELECT 
 					b.id,

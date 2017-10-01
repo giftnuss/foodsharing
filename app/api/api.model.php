@@ -84,7 +84,8 @@ class ApiModel extends Model
 				WHERE
 				fs.id = ' . (int)$basket['foodsaver_id'] . '
 						
-			')) {
+			')
+			) {
 				$basket = array_merge($basket, $fs);
 			}
 		}

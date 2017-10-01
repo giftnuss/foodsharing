@@ -241,7 +241,8 @@ class MsgModel extends Model
 				hc.unread DESC,
 				c.`last` DESC
 			' . $limit . '
-		')) {
+		')
+		) {
 			for ($i = 0; $i < count($convs); ++$i) {
 				$member = @unserialize($convs[$i]['member']);
 				// unserialize error handling
@@ -410,7 +411,8 @@ class MsgModel extends Model
 
 			WHERE
 				`id` IN(' . implode(',', $conv_ids) . ')
-		')) {
+		')
+		) {
 			for ($i = 0; $i < count($return); ++$i) {
 				$return[$i]['member'] = unserialize($return[$i]['member']);
 			}

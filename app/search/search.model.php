@@ -26,7 +26,8 @@ class SearchModel extends Model
 			'name' => 'CONCAT(`name`," ",`nachname`)',
 			'click' => 'CONCAT("profile(",`id`,");")',
 			'teaser' => $teaser
-		), $children)) {
+		), $children)
+		) {
 			$out['foodsaver'] = $res;
 		}
 
@@ -34,7 +35,8 @@ class SearchModel extends Model
 			'name' => '`name`',
 			'click' => 'CONCAT("goTo(\'/?page=bezirk&bid=",`id`,"\');")',
 			'teaser' => 'CONCAT("")'
-		))) {
+		))
+		) {
 			$out['bezirk'] = $res;
 		}
 
@@ -42,7 +44,8 @@ class SearchModel extends Model
 			'name' => '`name`',
 			'click' => 'CONCAT("betrieb(",`id`,");")',
 			'teaser' => 'CONCAT(`str`,", ",`plz`," ",`stadt`)'
-		), $children)) {
+		), $children)
+		) {
 			$out['betrieb'] = $res;
 		}
 

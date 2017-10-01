@@ -61,7 +61,8 @@ class StatsmanControl extends ConsoleControl
 			$all_yw[$line['yw']] = true;
 			foreach ($bezirk_parents[$line['id']] as $bzid) {
 				if (!array_key_exists($bzid, $bezirk_yw_sum)
-					|| !array_key_exists($line['yw'], $bezirk_yw_sum[$bzid])) {
+					|| !array_key_exists($line['yw'], $bezirk_yw_sum[$bzid])
+				) {
 					$bezirk_yw_sum[$bzid][$line['yw']] = 0.0;
 					$bezirk_yw_cnt[$bzid][$line['yw']] = 0;
 				}
@@ -101,7 +102,8 @@ class StatsmanControl extends ConsoleControl
 				$cnt = 0;
 				$sum = 0;
 				if (array_key_exists($line['id'], $bezirk_yw_sum)
-					&& array_key_exists($yw, $bezirk_yw_sum[$line['id']])) {
+					&& array_key_exists($yw, $bezirk_yw_sum[$line['id']])
+				) {
 					$sum = $bezirk_yw_sum[$line['id']][$yw];
 					$cnt = $bezirk_yw_cnt[$line['id']][$yw];
 				}
@@ -232,7 +234,8 @@ class StatsmanControl extends ConsoleControl
 			foreach ($yws as $yw) {
 				$sum = 0;
 				if (array_key_exists($line['id'], $ages)
-					&& array_key_exists($yw, $ages[$line['id']])) {
+					&& array_key_exists($yw, $ages[$line['id']])
+				) {
 					$sum = $ages[$line['id']][$yw];
 				}
 				fwrite($fp, ",$sum");
@@ -258,7 +261,8 @@ class StatsmanControl extends ConsoleControl
 			$all_yw[$line['yw']] = true;
 			foreach ($bezirk_parents[$line['id']] as $bzid) {
 				if (!array_key_exists($bzid, $bezirk_yw_cnt)
-					|| !array_key_exists($line['yw'], $bezirk_yw_cnt[$bzid])) {
+					|| !array_key_exists($line['yw'], $bezirk_yw_cnt[$bzid])
+				) {
 					$bezirk_yw_cnt[$bzid][$line['yw']] = 0;
 				}
 				$bezirk_yw_cnt[$bzid][$line['yw']] += $line['cnt'];
@@ -290,7 +294,8 @@ class StatsmanControl extends ConsoleControl
 			foreach ($yws as $yw) {
 				$cnt = 0;
 				if (array_key_exists($line['id'], $bezirk_yw_cnt)
-					&& array_key_exists($yw, $bezirk_yw_cnt[$line['id']])) {
+					&& array_key_exists($yw, $bezirk_yw_cnt[$line['id']])
+				) {
 					$cnt = $bezirk_yw_cnt[$line['id']][$yw];
 				}
 				fwrite($fp, ",$cnt");
