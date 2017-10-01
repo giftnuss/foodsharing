@@ -3,24 +3,24 @@
 class XhrDialogConsole extends XhrDialog
 {
 	private $app;
-	
+
 	public function __construct($app, $title = false)
 	{
 		parent::__construct($title);
-		
+
 		$this->app = $app;
-		
-		$this->addOpt('width', 440,false);
+
+		$this->addOpt('width', 440, false);
 		$this->setResizeable(false);
-		
+
 		$this->addContent('<div style="width:400px;height:180px;background-color:#000000;color:#6AFF38;overflow:auto;padding:6px 6px 16px 6px;font-family:monospace, prestige;" class="console"></div>');
-		
-		$this->onOpen('$("#'.$this->getId().' .console").html("");');
+
+		$this->onOpen('$("#' . $this->getId() . ' .console").html("");');
 		$this->onClose('u_item_i = u_items.length+1;');
 		$this->addAbortButton();
 		$this->addJs('
 				
-			$("#'.$this->getId().' .console").attr("unselectable","on")
+			$("#' . $this->getId() . ' .console").attr("unselectable","on")
 		     .css({"cursor":"default",
 				   "-moz-user-select":"-moz-none",
 		           "-moz-user-select":"none",
@@ -33,7 +33,7 @@ class XhrDialogConsole extends XhrDialog
 				
 			function u_logConsole(msg,stat)
 				{
-					var $box = $("#'.$this->getId().' .console");
+					var $box = $("#' . $this->getId() . ' .console");
 					$box.append(\'<div class="line"># \'+msg+\' <span class="stat"></span> <span style="float:right" class="status"></status></div>\');	
 					if(stat != undefined)
 					{
@@ -62,16 +62,16 @@ class XhrDialogConsole extends XhrDialog
 					}
 					if(color != undefined)
 					{
-						$("#'.$this->getId().' .console .line:last .status").css("color",color);	
+						$("#' . $this->getId() . ' .console .line:last .status").css("color",color);	
 					}
 					
 					stat = "["+stat+"]";
-					$("#'.$this->getId().' .console .line:last .status").html(stat);	
+					$("#' . $this->getId() . ' .console .line:last .status").html(stat);	
 				}		
 		');
 	}
-	
-	public function xhrLoop($items,$options = array())
+
+	public function xhrLoop($items, $options = array())
 	{
 		$default = array(
 			'action' => 'calc',
@@ -79,45 +79,37 @@ class XhrDialogConsole extends XhrDialog
 			'timeout' => '10',
 			'tries' => '3'
 		);
-		$options = array_merge($default,$options);
-		
-		if(!isset($options['url']))
-		{
-			$options['url'] = '/xhrapp.php?app='.$options['app'].'&m='.$options['action'];
+		$options = array_merge($default, $options);
+
+		if (!isset($options['url'])) {
+			$options['url'] = '/xhrapp.php?app=' . $options['app'] . '&m=' . $options['action'];
 		}
-		
+
 		$params = array();
-		if(isset($options['params']))
-		{
-			foreach ($options['params'] as $p)
-			{
-				$params[] = $p.':u_items[u_item_i].'.$p;
+		if (isset($options['params'])) {
+			foreach ($options['params'] as $p) {
+				$params[] = $p . ':u_items[u_item_i].' . $p;
 			}
 		}
-		
+
 		$logmsg = '"';
 		$lorparams = array();
-		if(isset($options['logPrefix']))
-		{
-			$logmsg .= $options['logPrefix'].' ';
+		if (isset($options['logPrefix'])) {
+			$logmsg .= $options['logPrefix'] . ' ';
 		}
-		if(isset($options['logParams']))
-		{
-			
-			foreach ($options['logParams'] as $lp)
-			{
-				$lorparams[] = 'item.'.$lp;
+		if (isset($options['logParams'])) {
+			foreach ($options['logParams'] as $lp) {
+				$lorparams[] = 'item.' . $lp;
 			}
 		}
 		$logmsg .= '"';
-		if(!empty($lorparams))
-		{
-			$logmsg .= ' + '.implode('+" "+', $lorparams);
+		if (!empty($lorparams)) {
+			$logmsg .= ' + ' . implode('+" "+', $lorparams);
 		}
 
 		$this->addJs('
 		
-				var u_items = '.json_encode($items).';
+				var u_items = ' . json_encode($items) . ';
 				var u_item_i = 0;
 				var u_item_xhr = false;
 				var u_timeout = false;
@@ -131,7 +123,7 @@ class XhrDialogConsole extends XhrDialog
 					{
 						u_error[u_item_i] = 1;
 					}
-					else if(u_error[u_item_i] < '.(int)$options['tries'].')
+					else if(u_error[u_item_i] < ' . (int)$options['tries'] . ')
 					{
 						u_error[u_item_i]++;
 					}
@@ -144,7 +136,7 @@ class XhrDialogConsole extends XhrDialog
 					{
 						var item = u_items[u_item_i];
 		
-						u_logConsole('.$logmsg.' ,0);
+						u_logConsole(' . $logmsg . ' ,0);
 		
 						u_item_xhr = u_startRequest();
 						u_timeout = setTimeout(function(){
@@ -152,7 +144,7 @@ class XhrDialogConsole extends XhrDialog
 							u_updateStat(-1);
 							u_logConsole("lets retry");
 							u_calcItem();
-						},'.((int)$options['timeout']*1000).');
+						},' . ((int)$options['timeout'] * 1000) . ');
 					}
 					else
 					{
@@ -163,8 +155,8 @@ class XhrDialogConsole extends XhrDialog
 				function u_startRequest()
 				{
 					return $.ajax({
-						url: "'.$options['url'].'",
-						data: {'.implode(',', $params).'},
+						url: "' . $options['url'] . '",
+						data: {' . implode(',', $params) . '},
 						dataType: "json",
 						success: function(data){
 							if(u_timeout != false)
@@ -181,5 +173,4 @@ class XhrDialogConsole extends XhrDialog
 			
 			');
 	}
-	
 }

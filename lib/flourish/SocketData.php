@@ -1,7 +1,7 @@
 <?php
 /**
- * Data to sockets can only send as one byte-string this class will help to have all time the same data structure sending to socket server
- * 
+ * Data to sockets can only send as one byte-string this class will help to have all time the same data structure sending to socket server.
+ *
  * @author ra
  */
 class SocketData
@@ -11,11 +11,11 @@ class SocketData
 	private $status;
 
 	/**
-	 * constructor
-	 * 
+	 * constructor.
+	 *
 	 * @param string serialized $data | array $data
-	 * 
-	 * @return boolean
+	 *
+	 * @return bool
 	 */
 	public function __construct($data = false)
 	{
@@ -23,12 +23,11 @@ class SocketData
 		$this->data = array();
 		$this->status = 1;
 
-		if($data !== false)
-		{
+		if ($data !== false) {
 			$this->type = $data['type'];
 			$this->data = $data['data'];
 			$this->status = $data['status'];
-			
+
 			return true;
 		}
 
@@ -36,8 +35,8 @@ class SocketData
 	}
 
 	/**
-	 * Get an stored data value by key
-	 * 
+	 * Get an stored data value by key.
+	 *
 	 * @param string $key
 	 */
 	public function get($key)
@@ -46,35 +45,34 @@ class SocketData
 	}
 
 	/**
-	 * Add or update an associatet data value
-	 * 
+	 * Add or update an associatet data value.
+	 *
 	 * @param string $key
 	 * @param mixed $value
 	 */
-	public function set($key,$value)
+	public function set($key, $value)
 	{
 		$this->data[$key] = $value;
 	}
-	
+
 	/**
-	 * Will append an value to a data-list if the value of specific key is not defined this method will do it for you
-	 * 
+	 * Will append an value to a data-list if the value of specific key is not defined this method will do it for you.
+	 *
 	 * @param string $key
 	 * @param mixed $value
 	 */
-	public function append($key,$value)
+	public function append($key, $value)
 	{
-		if(!isset($this->data[$key]))
-		{
+		if (!isset($this->data[$key])) {
 			$this->data[$key] = array();
 		}
 		$this->data[$key][] = $value;
 	}
 
 	/**
-	 * each data socket data handlich request and response will have an status
-	 * 
-	 * @param integer $status
+	 * each data socket data handlich request and response will have an status.
+	 *
+	 * @param int $status
 	 */
 	public function setStatus($status)
 	{
@@ -82,9 +80,9 @@ class SocketData
 	}
 
 	/**
-	 * get the status of response
-	 * 
-	 * @return integer
+	 * get the status of response.
+	 *
+	 * @return int
 	 */
 	public function getStatus()
 	{
@@ -92,18 +90,18 @@ class SocketData
 	}
 
 	/**
-	 * will set the whole data array in one step
-	 * 
+	 * will set the whole data array in one step.
+	 *
 	 * @param array $data
 	 */
 	public function setData($data)
 	{
 		$this->data = $data;
 	}
-	
+
 	/**
-	 * get the whole data array
-	 * 
+	 * get the whole data array.
+	 *
 	 * @return array
 	 */
 	public function getData()
@@ -113,7 +111,8 @@ class SocketData
 
 	/**
 	 * to know how to hande an request each socketData item will have defined an type
-	 * here to get the current
+	 * here to get the current.
+	 *
 	 * @return string
 	 */
 	public function getType()
@@ -123,7 +122,8 @@ class SocketData
 
 	/**
 	 * to know how to hande an request each socketData item will have defined an type
-	 * here we can set the type, the server class have to know how to handle the type you specify
+	 * here we can set the type, the server class have to know how to handle the type you specify.
+	 *
 	 * @param string
 	 */
 	public function setType($type)
@@ -132,8 +132,8 @@ class SocketData
 	}
 
 	/**
-	 * serialize the data object to give it to the server
-	 * 
+	 * serialize the data object to give it to the server.
+	 *
 	 * @return string
 	 */
 	public function toString()
@@ -144,10 +144,10 @@ class SocketData
 			'data' => $this->data
 		));
 	}
-	
+
 	/**
-	 * convert object to normal php array
-	 * 
+	 * convert object to normal php array.
+	 *
 	 * @return array
 	 */
 	public function toArray()
@@ -160,21 +160,20 @@ class SocketData
 	}
 
 	/**
-	 * convert serialized data to socketData object
-	 * 
+	 * convert serialized data to socketData object.
+	 *
 	 * @param string $string
-	 * 
-	 * @return boolean
+	 *
+	 * @return bool
 	 */
 	public function fromString($string)
 	{
 		$ret = @unserialize($string);
-		if($ret !== null)
-		{
+		if ($ret !== null) {
 			$this->setType($ret['type']);
 			$this->setData($ret['data']);
 			$this->setStatus($ret['status']);
-				
+
 			return true;
 		}
 
