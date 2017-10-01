@@ -1,9 +1,0 @@
-FROM registry.gitlab.com/foodsharing-dev/images/chat:1.1
-
-WORKDIR /app/chat
-
-COPY package.json .
-
-# this will fail unless you have mounted the app into /app/chat
-# and already installed the npm deps into /app/chat/node_modules
-CMD ["node", "server.js"]

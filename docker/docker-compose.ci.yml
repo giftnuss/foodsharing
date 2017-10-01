@@ -85,9 +85,7 @@ services:
 
   selenium:
     container_name: foodsharing_ci_selenium
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile.selenium
+    image: registry.gitlab.com/foodsharing-dev/images/selenium:1.0
     shm_size: 256M
     links:
       - web:web

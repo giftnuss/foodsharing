@@ -8,9 +8,7 @@ services:
 
   web:
     container_name: foodsharing_test_web
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile.web
+    image: registry.gitlab.com/foodsharing-dev/images/web:1.0
     ports:
       - 28080:8080
     expose:
@@ -26,9 +24,8 @@ services:
 
   app:
     container_name: foodsharing_test_app
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile.php
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.1
+    working_dir: /app
     expose:
       - 9000
     links:
@@ -44,10 +41,9 @@ services:
 
   chat:
     container_name: foodsharing_test_chat
+    image: registry.gitlab.com/foodsharing-dev/images/chat:1.1
     command: sh -c "yarn && node server.js 0.0.0.0"
-    build:
-      context: ../chat
-      dockerfile: docker/Dockerfile.chat
+    working_dir: /app/chat
     depends_on:
       - redis
     environment:
@@ -63,9 +59,7 @@ services:
 
   db:
     container_name: foodsharing_test_db
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile.db.test
+    image: registry.gitlab.com/foodsharing-dev/images/db/test:1.0
     # so we can mount tmpfs inside container
     privileged: true
     expose:
@@ -93,9 +87,7 @@ services:
 
   selenium:
     container_name: foodsharing_test_selenium
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile.selenium
+    image: registry.gitlab.com/foodsharing-dev/images/selenium:1.0
     shm_size: 256M
     links:
       - web:web

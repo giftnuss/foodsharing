@@ -31,6 +31,7 @@
 - Increase chat test timeout to 10s !167 @nicksellen
 - Add debug tools in dev: Whoops for nice error pages and DebugBar showing sql queries !163 @nicksellen
 - reduce number of merge conflicts due to changelog. !169 @peter.toennies
+- move dev/test Dockerfile's into foodsharing-dev/images to remove build step !175 @nicksellen
 
 # The wilderness months
 
