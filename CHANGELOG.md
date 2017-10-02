@@ -26,6 +26,7 @@
 - Enable composer autoloader and initial src folder. !157 by @tiltec
 
 ## Dev/Test/CI stuff
+- Add CLI Test suite and ensure commands executed via cron at least exist. !176 @NerdyProjects
 - Run mkdirs using exec so it works in CI !164 @NerdyProjects
 - Test environment allows testing of file downloads as well !165 @NerdyProjects
 - Output from failed tests is now collected with the test job. !165 @NerdyProjects
