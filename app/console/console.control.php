@@ -1,31 +1,4 @@
 <?php
-
-function __autoload($class_name)
-{
-	$first = substr($class_name, 0, 1);
-
-	$folder = 'flourish';
-
-	switch ($first) {
-		case 'f':
-			$folder = 'flourish';
-			break;
-		case 'v':
-			$folder = 'views';
-			break;
-	}
-
-	$file = ROOT_DIR . 'lib/' . $folder . '/' . $class_name . '.php';
-
-	if (file_exists($file)) {
-		include $file;
-
-		return;
-	} else {
-		error('file not loadable: ' . $file);
-	}
-}
-
 class ConsoleControl
 {
 	public function __construct()
