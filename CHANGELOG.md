@@ -23,6 +23,7 @@
 
 ## Refactoring
 - Remove internal progressbar library in favor of a composer one. !181 @NerdyProjects
+- Remove custom autoloader in CLI environment as well. !177 @NerdyProjects
 - Enable composer autoloader and initial src folder. !157 by @tiltec
 
 ## Dev/Test/CI stuff
