@@ -9,7 +9,6 @@ test:
   - ./scripts/ci.test
 
   after_script:
-
   # collect artifacts
   - docker cp foodsharing_ci_selenium:/home/seluser/Downloads tests/_output/
   - docker cp foodsharing_ci_app:/app/tests/_output/ tests/_output

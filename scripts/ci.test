@@ -43,4 +43,7 @@ exec-in-container app vendor/bin/codecept run "$@"
 echo "Running chat tests"
 run-in-container chat npm test
 
+echo "Checking code style"
+exec-in-container app vendor/bin/php-cs-fixer --dry-run --cache-file vendor/php-cs-cache fix
+
 echo "Done!"
