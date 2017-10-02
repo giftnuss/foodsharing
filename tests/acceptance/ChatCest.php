@@ -50,7 +50,7 @@ class ChatCest
 
 			// open the conversation menu and open the new conversation
 			$I->click('.msg a');
-			$I->waitForElementVisible('.conversation-list', 4);
+			$I->waitForElementVisible('.unread-1', 4);
 			$I->click('.unread-1 a');
 			$I->waitForElementVisible('.chatboxtextarea', 4);
 
