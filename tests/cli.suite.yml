@@ -1,0 +1,10 @@
+# Codeception Test Suite Configuration
+
+
+class_name: CliTester
+modules:
+    enabled:
+        - Filesystem
+        - Cli
+        - Db
+        - \Helper\Foodsharing
