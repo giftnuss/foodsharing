@@ -9,7 +9,7 @@ class vCore
 		$tmp_id = $id;
 		$i = 0;
 		while (isset(self::$ids[$tmp_id])) {
-			++$i ;
+			++$i;
 			$tmp_id = $id . '_' . $i;
 		}
 		self::$ids[$tmp_id] = true;
