@@ -19,6 +19,7 @@ $finder = PhpCsFixer\Finder::create()
     ->notPath('lib/fpdf.php')
     ->notPath('lib/minify')
     ->notPath('lib/font')
+    ->notPath('tests/_support/_generated')
     ->in(__DIR__)
 ;
 
