@@ -30,6 +30,6 @@ $I->waitForPageBody();
 $I->seeCurrentUrlEquals('/?page=passgen&bid='.$testRegion.'&dl1');
 $I->dontSee('noch nicht erstellt');
 
-$I->wait(4);
+$I->wait(10);
 
 $I->seeFileExists('/downloads/foodsaver_pass_' . convertRegionName($regionName ). '.pdf');
