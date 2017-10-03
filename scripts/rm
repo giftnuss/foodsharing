@@ -26,6 +26,8 @@ if [ "x" != "x$volumes" ]; then
     if [[ $V != *"_cache" ]]; then
       remove="$V $remove"
     fi
+  done
+  echo "Removing volumes: $remove"
   docker volume rm $remove
 else
   echo "... there are none!"
