@@ -34,7 +34,7 @@ class ConsoleControl
 
 	public function progressbar($count)
 	{
-		return new Console_ProgressBar('[%bar%] %percent% ETA:%estimate%', '=>', '-', 80, $count);
+		return new \ProgressBar\Manager(0, $count);
 	}
 
 	public function calcDuration($start_ts, $current_item, $total_count)
