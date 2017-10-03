@@ -37,6 +37,7 @@ services:
       FS_ENV: test
     volumes:
       - selenium_downloads:/downloads
+      - vendor_cache:/app/vendor
 
   chat:
     container_name: foodsharing_ci_chat
@@ -96,3 +97,4 @@ services:
 
 volumes:
   selenium_downloads:
+  vendor_cache:
