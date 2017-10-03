@@ -296,24 +296,21 @@ test('works with two connections per user', t => {
 	client1.on('some-event', checkEvent)
 	client2.on('some-event', checkEvent)
 
-	client1.emit('register')
-	client2.emit('register')
-
-	setTimeout(() => {
-		const query = stringify({
-			c: 'test-1-user-1', // client
-			a: 'some-event', // app a.k.a channel/event
-			m: 'some-method', // method
-			o: 'some-payload', // options a.k.a payload
+	register(client1, () => {
+		register(client2, () => {
+			const query = stringify({
+				c: 'test-1-user-1', // client
+				a: 'some-event', // app a.k.a channel/event
+				m: 'some-method', // method
+				o: 'some-payload', // options a.k.a payload
+			})
+			httpRequest(HTTP_URL + '?' + query, (res) => {
+				t.equal(res.statusCode, 200)
+			})
+			.on('error', t.error)
+			.end()
 		})
-		httpRequest(HTTP_URL + '?' + query, (res) => {
-			t.equal(res.statusCode, 200)
-
-			t.end()
-		})
-		.on('error', t.error)
-		.end()
-	}, 100)
+	})
 })
 
 test('does not send to other users', t => {
@@ -327,24 +324,22 @@ test('does not send to other users', t => {
 	user1.on('some-event', () => t.pass('user 1 has received `some-event`'))
 	user2.on('some-event', () => t.fail('user 2 has received `some-event`'))
 
-	user1.emit('register')
-	user2.emit('register')
-
-	setTimeout(() => {
-		const query = stringify({
-			c: 'test-2-user-1', // client
-			a: 'some-event', // app a.k.a channel/event
-			m: 'some-method', // method
-			o: 'some-payload', // options a.k.a payload
+	register(user1, () => {
+		register(user2, () => {
+			const query = stringify({
+				c: 'test-2-user-1', // client
+				a: 'some-event', // app a.k.a channel/event
+				m: 'some-method', // method
+				o: 'some-payload', // options a.k.a payload
+			})
+			httpRequest('http://localhost:1338/?' + query, (res) => {
+				t.equal(res.statusCode, 200)
+				setTimeout(() => t.end(), 100) // 100ms window to see if user2 receives event...
+			})
+			.on('error', t.error)
+			.end()
 		})
-		httpRequest('http://localhost:1338/?' + query, (res) => {
-			t.equal(res.statusCode, 200)
-
-			t.end()
-		})
-		.on('error', t.error)
-		.end()
-	}, 100)
+	})
 })
 
 function connect(t, sessionId, cookieName = 'PHPSESSID') {
