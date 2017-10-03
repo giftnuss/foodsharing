@@ -5,8 +5,3 @@ COPY . /app
 RUN chmod 777 -R /app
 
 WORKDIR /app
-
-COPY composer.json .
-COPY composer.lock .
-
-RUN composer install
