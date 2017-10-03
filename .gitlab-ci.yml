@@ -22,8 +22,7 @@ test:
 
   after_script:
   # collect the contents to cache
-  - rm -rf vendor chat/node_modules/
-  - docker cp foodsharing_ci_app:/app/vendor vendor
+  - rm -rf chat/node_modules/
   - docker cp foodsharing_ci_chat:/app/chat/node_modules chat/node_modules
 
   # collect artifacts
