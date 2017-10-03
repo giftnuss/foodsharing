@@ -22,6 +22,7 @@
 - Fixed spelling in footer of automatic emails. !174 by @peter.toennies
 
 ## Refactoring
+- Remove internal progressbar library in favor of a composer one. !181 @NerdyProjects
 - Enable composer autoloader and initial src folder. !157 by @tiltec
 
 ## Dev/Test/CI stuff
