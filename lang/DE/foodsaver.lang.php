@@ -56,5 +56,5 @@ $g_lang['foodsaver_bread'] = 'Foodsaver';
 $g_lang['last_login'] = 'Letzter Login';
 $g_lang['search_name'] = 'nach foodsaver suchen';
 $g_lang['position'] = 'Position bei foodsharing (öffentlich)';
-$g_lang['fs_at'] = 'Foodsaver in ';
-$g_lang['inactive'] = ', die sich 1 Jahr lang nicht eingeloggt haben.'; 
+$g_lang['fs_in'] = 'Foodsaver in ';
+$g_lang['fs_list_not_logged_in_1_year'] = ', die sich 1 Jahr lang nicht eingeloggt haben.';

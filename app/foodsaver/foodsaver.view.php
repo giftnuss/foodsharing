@@ -40,23 +40,14 @@ class FoodsaverView extends View
 		}
 	}
 
-	public function foodsaverList($foodsaver, $bezirk, $inactive)
+	public function foodsaverList($foodsaver, $bezirk, $inactive = 0)
 	{
-		if($inactive == 1) {
-		    return
+		return
 			'<div id="foodsaverlist">' .
 			v_field(
-			    $this->fsAvatarList($foodsaver, array('id' => 'fslist', 'shuffle' => false)), 
-			    s('fs_at') . $bezirk['name'] .  s('inactive') ) . 
-		    '</div>';
-		}
-		else {
-		    return
-			'<div id="foodsaverlist">' .
-			    v_field(
-				$this->fsAvatarList($foodsaver, array('id' => 'fslist', 'shuffle' => false)), s('fs_at') . $bezirk['name']                     
+				$this->fsAvatarList($foodsaver, array('id' => 'fslist', 'shuffle' => false)),
+				s('fs_in') . $bezirk['name'].($inactive ? s('fs_list_not_logged_in_1_year'):'')
 			) . '
-		    </div>';
-		}
-	  }   
+		</div>';
+	}
 }
