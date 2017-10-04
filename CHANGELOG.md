@@ -5,7 +5,7 @@
 ## Breaking changes
 
 ## Features
-- Added a list of inactive foodsavers to the foodsavers page
+- Added a list of inactive foodsavers to the foodsavers page !183 by @valentin.unicorn
 - Ensure PHP7 compatibility and upgrade environment to PHP7 !171 by @nicksellen
 - Show current commit in footer as well as use it in sentry if errors occur !153 @NerdyProjects
 - Reports list can be sorted by main region of the FS. !151 by @k.miklobusec and @peter.toennies 
