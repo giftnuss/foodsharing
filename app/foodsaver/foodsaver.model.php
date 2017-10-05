@@ -2,48 +2,13 @@
 
 class FoodsaverModel extends Model
 {
-	/**
-	 * Lists foodsaver having a bezirk.
-	 *
-	 * @param int $bezirk_id
-	 */
-	public function listFoodsaver($bezirk_id)
+	public function listFoodsaver($bezirk_id, $inactive = 0)
 	{
-		return $this->q('
-			SELECT
-				fs.id,
-				fs.name,
-				fs.nachname,
-				fs.photo,
-				fs.sleep_status,
-				CONCAT("#",fs.id) AS href
-
-			FROM
-				' . PREFIX . 'foodsaver fs,
-				' . PREFIX . 'foodsaver_has_bezirk hb
-
-			WHERE
-				fs.id = hb.foodsaver_id
-
-            AND
-                fs.deleted_at IS NULL
-
-			AND
-				hb.bezirk_id = ' . (int)$bezirk_id . '
-
-			ORDER BY
-				fs.last_login DESC
-		');
-	}
-
-	/**
-	 * Lists foodsaver having a bezirk and did not log in for a year
-	 *
-	 * @param int $bezirk_id
-	 */
-	public function listInactiveFoodsaver($bezirk_id)
-	{
-		$date = new DateTime('NOW -1 YEAR');
+		$date = new DateTime('NOW');
+		
+		if ($inactive == 1) {
+			$date = new DateTime('NOW -1 YEAR');
+		}
 
 		return $this->q('
 		    SELECT
@@ -66,9 +31,9 @@ class FoodsaverModel extends Model
 
 		    AND
 			hb.bezirk_id = ' . (int)$bezirk_id . '
-			 
+
 		    AND 
-			fs.last_login <  "' . $date->format("Y-m-d H:i:s") . '"
+			    fs.last_login <  "' . $date->format("Y-m-d H:i:s") . '"
 
 		    ORDER BY
 			fs.last_login DESC
