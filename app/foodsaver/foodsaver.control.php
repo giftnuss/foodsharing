@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 class FoodsaverControl extends Control
 {
@@ -29,16 +29,16 @@ class FoodsaverControl extends Control
 
 				// list fooodsaver
 				addContent(
-					$this->view->foodsaverList($foodsaver, $bezirk, $inactive = '0'),
+					$this->view->foodsaverList($foodsaver, $bezirk, $inactive = 0),
 					CNT_LEFT
 				);
 
 				// list inactive foodsaver
-				if($foodsaverInactive = $this->model->listInactiveFoodsaver($_GET['bid'])) {
+				if($foodsaverInactive = $this->model->listFoodsaver($_GET['bid'],$inactive = 1 )) {echo($inactive);
 				    addContent(
-				        $this->view->foodsaverList($foodsaverInactive, $bezirk, $inactive = '1'),
+				        $this->view->foodsaverList($foodsaverInactive, $bezirk, $inactive = 1),
 				        CNT_LEFT
-				    );
+				    );echo($inactive);
 				}
 
 				addContent($this->view->foodsaverForm());
