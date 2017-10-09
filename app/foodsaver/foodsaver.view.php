@@ -46,7 +46,7 @@ class FoodsaverView extends View
 			'<div id="foodsaverlist">' .
 			v_field(
 				$this->fsAvatarList($foodsaver, array('id' => 'fslist', 'shuffle' => false)),
-				s('fs_in') . $bezirk['name'].($inactive ? s('fs_list_not_logged_in_1_year'):'')
+				($inactive ? s('inactive'):'') . s('fs_in') . $bezirk['name'] . ($inactive ? s('fs_list_not_logged_for_6_months'):'')
 			) . '
 		</div>';
 	}

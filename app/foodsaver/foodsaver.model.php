@@ -5,7 +5,6 @@ class FoodsaverModel extends Model
 	public function listFoodsaver($bezirk_id, $inactive = 0)
 	{
 		$date = new DateTime('NOW');
-		echo($inactive);
 		if ($inactive == 1) {
 			$date = new DateTime('NOW -6 MONTH');
 		}

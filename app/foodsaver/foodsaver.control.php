@@ -34,11 +34,11 @@ class FoodsaverControl extends Control
 				);
 
 				// list inactive foodsaver
-				if($foodsaverInactive = $this->model->listFoodsaver($_GET['bid'],$inactive = 1 )) {echo($inactive);
+				if($foodsaverInactive = $this->model->listFoodsaver($_GET['bid'],$inactive = 1 )) {
 				    addContent(
 				        $this->view->foodsaverList($foodsaverInactive, $bezirk, $inactive = 1),
 				        CNT_LEFT
-				    );echo($inactive);
+				    );
 				}
 
 				addContent($this->view->foodsaverForm());
