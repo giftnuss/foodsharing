@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "00fd0d5e4eba2b338ca5c9f97cfdd29e",
+    "content-hash": "95129d837676a9c0b472bc324101ecc4",
     "packages": [
         {
             "name": "guiguiboy/php-cli-progress-bar",
@@ -49,6 +49,43 @@
                 "progress"
             ],
             "time": "2014-11-19T13:12:00+00:00"
+        },
+        {
+            "name": "html2text/html2text",
+            "version": "4.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mtibben/html2text.git",
+                "reference": "bf613dc8d3389d70c891cd847954346acab16574"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mtibben/html2text/zipball/bf613dc8d3389d70c891cd847954346acab16574",
+                "reference": "bf613dc8d3389d70c891cd847954346acab16574",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4"
+            },
+            "suggest": {
+                "ext-mbstring": "For best performance",
+                "symfony/polyfill-mbstring": "If you can't install ext-mbstring"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Html2Text\\": [
+                        "src/",
+                        "test/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPLv2"
+            ],
+            "description": "Converts HTML to formatted plain text",
+            "time": "2017-05-15T01:50:59+00:00"
         },
         {
             "name": "maximebf/debugbar",

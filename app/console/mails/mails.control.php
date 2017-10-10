@@ -115,8 +115,7 @@ class MailsControl extends ConsoleControl
 							$body = '';
 							$html = '';
 							if (isset($message['html'])) {
-								require_once 'lib/Html2Text.php';
-								$h2t = new Html2Text($message['html']);
+								$h2t = new \Html2Text\Html2Text($message['html']);
 								$body = $h2t->get_text();
 								$html = $message['html'];
 								$html = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $html);

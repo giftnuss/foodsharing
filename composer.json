@@ -8,7 +8,8 @@
     "sentry/sentry": "^1.7",
     "mobiledetect/mobiledetectlib": "^2.8",
     "maximebf/debugbar": "^1.14",
-    "guiguiboy/php-cli-progress-bar": "*"
+    "guiguiboy/php-cli-progress-bar": "*",
+    "html2text/html2text": "^4.1"
   },
   "autoload": {
     "psr-4": {"Foodsharing\\": "src/"}
