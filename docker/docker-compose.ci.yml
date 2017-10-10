@@ -52,6 +52,8 @@ services:
     expose:
       - 1337
       - 1338
+    volumes:
+      - node_modules_cache:/app/chat/node_modules
 
   # mysql
   #------------------------------------
@@ -98,3 +100,4 @@ services:
 volumes:
   selenium_downloads:
   vendor_cache:
+  node_modules_cache:

@@ -4,26 +4,11 @@ stages:
   - test
   - deploy
 
-cache:
-  # shared cache for all branches
-  key: "$CI_PROJECT_NAME"
-  paths:
-    - vendor/
-    - chat/node_modules/
-
 test:
   script:
-  
-  # make cache dirs
-  - mkdir -p vendor chat/node_modules/
-
-  # run the actual tests
   - ./scripts/ci.test
 
   after_script:
-  # collect the contents to cache
-  - rm -rf chat/node_modules/
-  - docker cp foodsharing_ci_chat:/app/chat/node_modules chat/node_modules
 
   # collect artifacts
   - docker cp foodsharing_ci_selenium:/home/seluser/Downloads tests/_output/
