@@ -35,7 +35,7 @@ migratedb foodsharing
 $dir/mkdirs
 
 echo "Installing composer deps"
-exec-in-container app composer install
+exec-in-container-asroot app composer install
 
 echo "Running tests"
 exec-in-container app vendor/bin/codecept run "$@"
