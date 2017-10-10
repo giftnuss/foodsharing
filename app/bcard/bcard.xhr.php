@@ -57,9 +57,6 @@ class BcardXhr extends Control
 
 	private function generatePdf($data, $type = 'fs')
 	{
-		require_once 'lib/fpdf.php';
-		require_once 'lib/fpdi/fpdi.php';
-
 		$pdf = new FPDI();
 		$pdf->AddPage();
 		$pdf->SetTextColor(0, 0, 0);
@@ -113,7 +110,7 @@ class BcardXhr extends Control
 
 		$file = 'data/visite/' . $data['id'] . '_' . $type . '.pdf';
 		@unlink($file);
-		$pdf->Output($file);
+		$pdf->Output('F', $file);
 
 		return array(
 			'status' => 1,
