@@ -22,6 +22,7 @@
 - Fixed spelling in footer of automatic emails. !174 by @peter.toennies
 
 ## Refactoring
+- Remove internal Html2Text library and use it via composer. !185 @NerdyProjects
 - Remove internal progressbar library in favor of a composer one. !181 @NerdyProjects
 - Remove custom autoloader in CLI environment as well. !177 @NerdyProjects
 - Enable composer autoloader and initial src folder. !157 by @tiltec
