@@ -42,8 +42,9 @@ class FoodsaverView extends View
 
 	public function foodsaverList($foodsaver, $bezirk, $inactive = 0)
 	{
+		$name = $inactive ? 'inactive' : '';
 		return
-			'<div id="foodsaverlist">' .
+			'<div id="'.$name.'foodsaverlist">' .
 			v_field(
 				$this->fsAvatarList($foodsaver, array('id' => 'fslist', 'shuffle' => false)),
 				($inactive ? s('inactive'):'') . s('fs_in') . $bezirk['name'] . ($inactive ? s('fs_list_not_logged_for_6_months'):'')
