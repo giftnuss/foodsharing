@@ -37,3 +37,5 @@ if (defined('SENTRY_URL')) {
 		$client->setRelease(SRC_REVISION);
 	}
 }
+
+define('FPDF_FONTPATH', __DIR__ . '/lib/font/');

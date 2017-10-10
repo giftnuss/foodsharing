@@ -83,9 +83,6 @@ class PassgenControl extends Control
 
 		include 'lib/phpqrcode/qrlib.php';
 
-		require_once 'lib/fpdf.php';
-		require_once 'lib/fpdi/fpdi.php';
-
 		$pdf = new FPDI();
 		$pdf->AddPage();
 		$pdf->SetTextColor(0, 0, 0);
@@ -195,8 +192,8 @@ class PassgenControl extends Control
 		$bez = str_replace(array('ä', 'ö', 'ü', 'ß'), array('ae', 'oe', 'ue', 'ss'), $bez);
 		$bez = preg_replace('/[^a-zA-Z]/', '', $bez);
 
-		$pdf->Output('data/pass/foodsaver_pass_' . $bez . '.pdf');
-		go(getSelf() . '&dl1');
+		$pdf->Output('D', 'foodsaver_pass_' . $bez . '.pdf');
+		exit();
 	}
 
 	public function getRolle($gender_id, $rolle_id)

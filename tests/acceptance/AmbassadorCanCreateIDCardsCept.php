@@ -26,10 +26,6 @@ $I->click('Alle markieren');
 $I->wait(1);
 $I->click('markierte Ausweise generieren');
 
-$I->waitForPageBody();
-$I->seeCurrentUrlEquals('/?page=passgen&bid='.$testRegion.'&dl1');
-$I->dontSee('noch nicht erstellt');
-
 $I->wait(10);
 
 $I->seeFileExists('/downloads/foodsaver_pass_' . convertRegionName($regionName ). '.pdf');
