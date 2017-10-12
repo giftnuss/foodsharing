@@ -81,30 +81,30 @@ if (getAction('new')) {
 	}
 
 	if ($betriebe = $db->listBetriebReq($bezirk_id)) {
-			$betriebrows = array();
-			foreach ($betriebe as $b) {
-				$status = v_getStatusAmpel($b['betrieb_status_id']);
+		$betriebrows = array();
+		foreach ($betriebe as $b) {
+			$status = v_getStatusAmpel($b['betrieb_status_id']);
 
-				$betriebrows[] = array(
-					array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=betrieb&id=' . $b['id'] . '">' . $b['name'] . '</a>'),
-					array('cnt' => $b['str'] . ' ' . $b['hsnr']),
-					array('cnt' => ($b['added'])),
-					array('cnt' => $b['bezirk_name']),
-					array('cnt' => $status),
-					array('cnt' => v_toolbar(array('id' => $b['id'], 'types' => array('comment', 'edit', 'delete'), 'confirmMsg' => 'Soll ' . $b['name'] . ' wirklich unwiderruflich gel&ouml;scht werden?'))
-					));
-			}
+			$betriebrows[] = [
+				['cnt' => '<a class="linkrow ui-corner-all" href="/?page=betrieb&id=' . $b['id'] . '">' . $b['name'] . '</a>'],
+				['cnt' => $b['str'] . ' ' . $b['hsnr']],
+				['cnt' => ($b['added'])],
+				['cnt' => $b['bezirk_name']],
+				['cnt' => $status],
+				['cnt' => v_toolbar(['id' => $b['id'], 'types' => ['comment', 'edit', 'delete'], 'confirmMsg' => 'Soll ' . $b['name'] . ' wirklich unwiderruflich gel&ouml;scht werden?'])
+				]];
+		}
 
-			$table = v_tablesorter(array(
-				array('name' => 'Name'),
-				array('name' => 'Anschrift'),
-				array('name' => 'eingetragen'),
-				array('name' => s('bezirk')),
-				array('name' => 'Status', 'width' => 50),
-				array('name' => 'Aktionen', 'sort' => false, 'width' => 75)
-			), $betriebrows, array('pager' => true));
+		$table = v_tablesorter([
+			['name' => 'Name'],
+			['name' => 'Anschrift'],
+			['name' => 'eingetragen'],
+			['name' => s('bezirk')],
+			['name' => 'Status', 'width' => 50],
+			['name' => 'Aktionen', 'sort' => false, 'width' => 75]
+		], $betriebrows, ['pager' => true]);
 
-			addJs('$("#comment").dialog({title:"Kommentar zum Betrieb"});');
+		addJs('$("#comment").dialog({title:"Kommentar zum Betrieb"});');
 
 		addContent(v_field($table, 'Alle Betriebe aus dem Bezirk ' . $bezirk['name']));
 	} else {
