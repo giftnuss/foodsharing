@@ -15,7 +15,7 @@ $I = new AcceptanceTester($scenario);
 $I->wantTo('create a business card as a foodsaver');
 
 $regionName = $I->grabFromDatabase('fs_bezirk', 'name', ['id' => $testRegion]);
-$foodsaver = $I->createFoodsaver(null, ['name' => 'fs1', 'nachname' => 'saver1', 'photo' => 'does-not-exist.jpg', 'mobile' => '+4966669999']);
+$foodsaver = $I->createFoodsaver(null, ['name' => 'fs1', 'nachname' => 'saver1', 'photo' => 'does-not-exist.jpg', 'handy' => '+4966669999']);
 $I->addBezirkMember($testRegion, $foodsaver['id']);
 
 $I->login($foodsaver['email']);
