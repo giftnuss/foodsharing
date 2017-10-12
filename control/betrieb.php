@@ -80,12 +80,12 @@ if (getAction('new')) {
 		), 'Aktionen'), CNT_RIGHT);
 	}
 
-	if ($betriebe = $db->listBetriebReq($bezirk_id)) {
-		$betriebrows = array();
-		foreach ($betriebe as $b) {
+	if ($stores = $db->listBetriebReq($bezirk_id)) {
+		$storesRows = array();
+		foreach ($stores as $b) {
 			$status = v_getStatusAmpel($b['betrieb_status_id']);
 
-			$betriebrows[] = [
+			$storesRows[] = [
 				['cnt' => '<a class="linkrow ui-corner-all" href="/?page=betrieb&id=' . $b['id'] . '">' . $b['name'] . '</a>'],
 				['cnt' => $b['str'] . ' ' . $b['hsnr']],
 				['cnt' => ($b['added'])],
@@ -102,7 +102,7 @@ if (getAction('new')) {
 			['name' => s('bezirk')],
 			['name' => 'Status', 'width' => 50],
 			['name' => 'Aktionen', 'sort' => false, 'width' => 75]
-		], $betriebrows, ['pager' => true]);
+		], $storesRows, ['pager' => true]);
 
 		addJs('$("#comment").dialog({title:"Kommentar zum Betrieb"});');
 
