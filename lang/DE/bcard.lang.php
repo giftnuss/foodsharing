@@ -8,6 +8,6 @@ $g_lang['bot_for_w'] = 'Botschafterin für {var}';
 $g_lang['fs_for_w'] = 'Foodsaverin für {var}';
 $g_lang['opt'] = 'Optionen';
 $g_lang['should_choose_option'] = 'Du musst eine Option wählen';
-$g_lang['download_card'] = 'Visitenkarten Herunterladen';
+$g_lang['download_card'] = 'Visitenkarten herunterladen';
 $g_lang['generation_success'] = 'Visitenkarten erfolgreich generiert';
 $g_lang['opt_desc'] = 'Wähle hier für welchen Bezirk bzw. für welche Rolle Du Deine Visitenkarte erstellen möchtest.';
