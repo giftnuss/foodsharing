@@ -34,8 +34,6 @@ class Foodsharing extends \Codeception\Module\Db
 			'passwd' => $this->encryptMd5($email, $pass),
 			'anmeldedatum' => $this->toDateTime(),
 			'active' => 1,
-			'handy' => '1234',
-			'anschrift' => sq(),
 		], $extra_params);
 		$id = $this->haveInDatabase('fs_foodsaver', $params);
 		$params['id'] = $id;
@@ -59,6 +57,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'verified' => 1,
 			'rolle' => 1,
 			'quiz_rolle' => 1,
+			'anschrift' => sq(),
 		], $extra_params);
 		$params = $this->createFoodsharer($pass, $params);
 		$this->createQuizTry($params['id'], 1, 1);
