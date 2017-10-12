@@ -1,7 +1,6 @@
 FROM registry.gitlab.com/foodsharing-dev/images/php:2.1
 
-COPY . /app
-
-RUN chmod 777 -R /app
-
 WORKDIR /app
+
+COPY . /app
+RUN chmod 777 -R /app
