@@ -53,19 +53,19 @@ class GeoCleanView extends View
 
 	public function regionlist($regions)
 	{
-		$rows = array();
+		$rows = [];
 
 		foreach ($regions as $r) {
-			$rows[] = array(
-				array('cnt' => '<a class="linkrow ui-corner-all" href="?page=bezirk&bid=' . $r['id'] . '&sub=forum">' . $r['name'] . '</a>'),
-				array('cnt' => $r['fscount'] . ' Foodsaver')
-			);
+			$rows = [
+				['cnt' => '<a class="linkrow ui-corner-all" href="?page=bezirk&bid=' . $r['id'] . '&sub=forum">' . $r['name'] . '</a>'],
+				['cnt' => $r['fscount'] . ' Foodsaver']
+			];
 		}
 
-		$out = v_tablesorter(array(
-			array('name' => 'Name'),
-			array('name' => 'Anzahl Foodsaver', 'width' => 120)
-		), $rows, array('pager' => true));
+		$out .= v_tablesorter([
+			['name' => 'Name'],
+			['name' => 'Anzahl Foodsaver', 'width' => 120]
+		], $rows, ['pager' => true]);
 
 		return $out;
 	}
