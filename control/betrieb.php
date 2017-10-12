@@ -106,7 +106,7 @@ if (getAction('new')) {
 
 			addJs('$("#comment").dialog({title:"Kommentar zum Betrieb"});');
 
-			addContent(v_field($table, v_toolbar(array('types' => array('new'))) . 'Alle Betriebe aus dem Bezirk ' . $bezirk['name']));
+		addContent(v_field($table, 'Alle Betriebe aus dem Bezirk ' . $bezirk['name']));
 	} else {
 		info('Es sind noch keine Betriebe eingetragen');
 	}
