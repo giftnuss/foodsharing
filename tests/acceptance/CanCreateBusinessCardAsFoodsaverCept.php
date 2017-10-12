@@ -5,7 +5,7 @@ $I->wantTo('create a businesscard being a foodsaver');
 
 $pass = sq('pass');
 
-$foodsaver = $I->createFoodsaver($pass);
+$foodsaver = $I->createFoodsaver($pass, array('handy' => '+4915100000'));
 
 $I->login($foodsaver['email'], $pass);
 
