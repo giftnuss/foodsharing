@@ -58,7 +58,7 @@ class GeoCleanView extends View
 		foreach ($regions as $r) {
 			$rows = [
 				['cnt' => '<a class="linkrow ui-corner-all" href="?page=bezirk&bid=' . $r['id'] . '&sub=forum">' . $r['name'] . '</a>'],
-				['cnt' => $r['fscount'] . ' Foodsaver']
+				['cnt' => $r['fscount']]
 			];
 		}
 
