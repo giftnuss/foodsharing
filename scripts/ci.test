@@ -38,7 +38,7 @@ echo "Installing composer deps"
 exec-in-container-asroot app composer install
 
 echo "Checking code style"
-exec-in-container-asroot app scripts/php-cs-fixer.ci.sh --dry-run --cache-file=vendor/php-cs-cache fix
+exec-in-container-asroot app scripts/php-cs-fixer.ci.sh --cache-file=vendor/php-cs-cache fix
 
 echo "Running tests"
 exec-in-container app vendor/bin/codecept run "$@"
