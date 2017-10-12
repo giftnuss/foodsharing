@@ -116,7 +116,7 @@ if (getAction('new') && (S::may('orga') || isBotFor($g_data['bezirk_id']))) {
 				array(
 					v_form_tagselect('foodsaver', array('data' => $db->xhrGetTagFsAll())),
 					$verantwortlich_select),
-					array('submit' => s('save'))
+				array('submit' => s('save'))
 			);
 
 			addHidden('<div id="teamEditor">' . $edit_team . '</div>');
@@ -403,10 +403,10 @@ if (getAction('new') && (S::may('orga') || isBotFor($g_data['bezirk_id']))) {
 
 		addContent(
 			v_field(
-			u_team($betrieb) . '',
+				u_team($betrieb) . '',
 
-			$betrieb['name'] . '-Team'
-		),
+				$betrieb['name'] . '-Team'
+			),
 			CNT_LEFT
 		);
 
@@ -719,18 +719,18 @@ if (getAction('new') && (S::may('orga') || isBotFor($g_data['bezirk_id']))) {
 			$part = explode(' ', $date);
 			$date = $part[0];
 			$scroller .= u_form_checkboxTagAlt(
-					$date . ' ' . $time['time'],
-					array(
-						'data' => $betrieb['team'],
-						'url' => 'jsonTeam&bid=' . (int)$betrieb['id'],
-						'label' => $days[date('w', strtotime($date))] . ' ' . format_db_date($date) . ', ' . format_time($time['time']),
-						'betrieb_id' => $betrieb['id'],
-						'verantwortlich' => $betrieb['verantwortlich'],
-						'fetcher_count' => $time['fetcher'],
-						'bezirk_id' => $betrieb['bezirk_id'],
-						'field' => $time
-					)
-				);
+				$date . ' ' . $time['time'],
+				array(
+					'data' => $betrieb['team'],
+					'url' => 'jsonTeam&bid=' . (int)$betrieb['id'],
+					'label' => $days[date('w', strtotime($date))] . ' ' . format_db_date($date) . ', ' . format_time($time['time']),
+					'betrieb_id' => $betrieb['id'],
+					'verantwortlich' => $betrieb['verantwortlich'],
+					'fetcher_count' => $time['fetcher'],
+					'bezirk_id' => $betrieb['bezirk_id'],
+					'field' => $time
+				)
+			);
 		}
 
 		$zeit_cnt .= v_scroller($scroller, 200);
@@ -761,8 +761,8 @@ if (getAction('new') && (S::may('orga') || isBotFor($g_data['bezirk_id']))) {
 				}
 				if ($betrieb['verantwortlich']) {
 					addHidden('<div id="changeStatus-hidden">' . v_form('changeStatusForm', array(
-					v_form_select('betrieb_status_id', array('value' => $betrieb['betrieb_status_id'], 'values' => $betriebStatusList))
-					)) . '</div>');
+							v_form_select('betrieb_status_id', array('value' => $betrieb['betrieb_status_id'], 'values' => $betriebStatusList))
+						)) . '</div>');
 
 					addJs('$("#changeStatus").button().click(function(){
 					$("#changeStatus-hidden").dialog({
@@ -787,7 +787,7 @@ if (getAction('new') && (S::may('orga') || isBotFor($g_data['bezirk_id']))) {
 } else {
 	addBread('Deine Betriebe');
 	addContent(v_menu(array(
-			array('href' => '/?page=betrieb&a=new', 'name' => s('add_new'))
+		array('href' => '/?page=betrieb&a=new', 'name' => s('add_new'))
 	), 'Aktionen'), CNT_RIGHT);
 
 	$bezirk = getBezirk();
@@ -1158,12 +1158,12 @@ function u_team($betrieb)
 		$out .= '
 			<div class="ui-padding">' .
 			v_form_select('team_status', array(
-			'values' => array(
-				array('id' => 0, 'name' => 'Team ist voll'),
-				array('id' => 1, 'name' => 'HelferInnen gesucht'),
-				array('id' => 2, 'name' => 'Es werden dringend HelferInnen gesucht!')
-			)
-		)) . '</div>';
+				'values' => array(
+					array('id' => 0, 'name' => 'Team ist voll'),
+					array('id' => 1, 'name' => 'HelferInnen gesucht'),
+					array('id' => 2, 'name' => 'Es werden dringend HelferInnen gesucht!')
+				)
+			)) . '</div>';
 	}
 
 	return $out;
@@ -1180,10 +1180,10 @@ function u_betriebList($betriebe, $title, $verantwortlich)
 			$status = v_getStatusAmpel($b['betrieb_status_id']);
 
 			$betriebrows[$i] = array(
-					array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $b['name'] . '</a>'),
-					array('cnt' => $b['str'] . ' ' . $b['hsnr']),
-					array('cnt' => $b['plz']),
-					array('cnt' => $status)
+				array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $b['name'] . '</a>'),
+				array('cnt' => $b['str'] . ' ' . $b['hsnr']),
+				array('cnt' => $b['plz']),
+				array('cnt' => $status)
 			);
 
 			if (isset($b['bezirk_name'])) {
@@ -1197,10 +1197,10 @@ function u_betriebList($betriebe, $title, $verantwortlich)
 		}
 
 		$head = array(
-				array('name' => 'Name', 'width' => 180),
-				array('name' => 'Anschrift'),
-				array('name' => 'Postleitzahl', 'width' => 90),
-				array('name' => 'Status', 'width' => 50));
+			array('name' => 'Name', 'width' => 180),
+			array('name' => 'Anschrift'),
+			array('name' => 'Postleitzahl', 'width' => 90),
+			array('name' => 'Status', 'width' => 50));
 		if ($bezirk) {
 			$head[] = array('name' => 'Region');
 		}
@@ -1221,21 +1221,21 @@ function betrieb_form()
 	$foodsaver_values = $db->getBasics_foodsaver();
 
 	return v_quickform('betrieb', array(
-			v_form_text('name'),
-			v_form_text('plz'),
-			v_form_text('str'),
-			v_form_text('hsnr'),
+		v_form_text('name'),
+		v_form_text('plz'),
+		v_form_text('str'),
+		v_form_text('hsnr'),
 
-			v_form_select('kette_id', array('add' => true)),
-			v_form_select('betrieb_kategorie_id', array('add' => true)),
+		v_form_select('kette_id', array('add' => true)),
+		v_form_select('betrieb_kategorie_id', array('add' => true)),
 
-			v_form_select('betrieb_status_id'),
+		v_form_select('betrieb_status_id'),
 
-			v_form_text('ansprechpartner'),
-			v_form_text('telefon'),
-			v_form_text('fax'),
-			v_form_text('email'),
-			v_form_select('foodsaver', array('values' => $foodsaver_values))
+		v_form_text('ansprechpartner'),
+		v_form_text('telefon'),
+		v_form_text('fax'),
+		v_form_text('email'),
+		v_form_select('foodsaver', array('values' => $foodsaver_values))
 	));
 }
 
@@ -1353,6 +1353,7 @@ function handle_edit()
 		}
 	}
 }
+
 function handle_add()
 {
 	global $db;
@@ -1533,6 +1534,7 @@ function u_form_checkboxTagAlt($date, $option = array())
 
 	return v_input_wrapper(s($id), $out . $dellink, $id, $option);
 }
+
 function u_form_abhol_table($zeiten = false, $option = array())
 {
 	addJs('

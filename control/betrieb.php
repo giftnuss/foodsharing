@@ -29,7 +29,7 @@ if (getAction('new')) {
 		addContent(betrieb_form($bezirk, $page));
 
 		addContent(v_field(v_menu(array(
-		array('name' => s('back_to_overview'), 'href' => '/?page=fsbetrieb&bid=' . $bezirk_id)
+			array('name' => s('back_to_overview'), 'href' => '/?page=fsbetrieb&bid=' . $bezirk_id)
 		)), s('actions')), CNT_RIGHT);
 	} elseif (!S::may('bieb')) {
 		info('Zum Anlegen eines Betriebes musst Du Betriebsverantwortlicher sein');
@@ -73,7 +73,7 @@ if (getAction('new')) {
 
 	if (S::may('bieb')) {
 		addContent(v_menu(array(
-				array('href' => '/?page=betrieb&a=new&bid=' . (int)$bezirk_id, 'name' => 'Neuen Betrieb eintragen')
+			array('href' => '/?page=betrieb&a=new&bid=' . (int)$bezirk_id, 'name' => 'Neuen Betrieb eintragen')
 		), 'Aktionen'), CNT_RIGHT);
 	}
 
@@ -88,22 +88,22 @@ if (getAction('new')) {
 				$status = v_getStatusAmpel($b['betrieb_status_id']);
 
 				$betriebrows[] = array(
-						array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=betrieb&id=' . $b['id'] . '">' . $b['name'] . '</a>'),
-						array('cnt' => $b['str'] . ' ' . $b['hsnr']),
-						array('cnt' => ($b['added'])),
-						array('cnt' => $b['bezirk_name']),
-						array('cnt' => $status),
-						array('cnt' => v_toolbar(array('id' => $b['id'], 'types' => array('comment', 'edit', 'delete'), 'confirmMsg' => 'Soll ' . $b['name'] . ' wirklich unwiderruflich gel&ouml;scht werden?'))
-				));
+					array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=betrieb&id=' . $b['id'] . '">' . $b['name'] . '</a>'),
+					array('cnt' => $b['str'] . ' ' . $b['hsnr']),
+					array('cnt' => ($b['added'])),
+					array('cnt' => $b['bezirk_name']),
+					array('cnt' => $status),
+					array('cnt' => v_toolbar(array('id' => $b['id'], 'types' => array('comment', 'edit', 'delete'), 'confirmMsg' => 'Soll ' . $b['name'] . ' wirklich unwiderruflich gel&ouml;scht werden?'))
+					));
 			}
 
 			$table = v_tablesorter(array(
-					array('name' => 'Name'),
-					array('name' => 'Anschrift'),
-					array('name' => 'eingetragen'),
-					array('name' => s('bezirk')),
-					array('name' => 'Status', 'width' => 50),
-					array('name' => 'Aktionen', 'sort' => false, 'width' => 75)
+				array('name' => 'Name'),
+				array('name' => 'Anschrift'),
+				array('name' => 'eingetragen'),
+				array('name' => s('bezirk')),
+				array('name' => 'Status', 'width' => 50),
+				array('name' => 'Aktionen', 'sort' => false, 'width' => 75)
 			), $betriebrows, array('pager' => true));
 
 			addJs('$("#comment").dialog({title:"Kommentar zum Betrieb"});');
@@ -193,63 +193,63 @@ function betrieb_form($bezirk = false, $page = '')
 	addJs('$("textarea").css("height","70px");$("textarea").autosize();');
 
 	return v_quickform('betrieb', array(
-			$bc,
-			v_form_hidden('page', $page),
-			v_form_text('name'),
-			$view->latLonPicker('LatLng', array('hsnr' => true)),
+		$bc,
+		v_form_hidden('page', $page),
+		v_form_text('name'),
+		$view->latLonPicker('LatLng', array('hsnr' => true)),
 
-			v_form_select('kette_id', array('add' => true, 'values' => db_get_kette(), 'desc' => 'Bitte nur inhabergeführte Betriebe selbstständig ansprechen, niemals Betriebe einer Kette anfragen!')),
-			v_form_select('betrieb_kategorie_id', array('add' => true, 'values' => db_get_betrieb_kategorie())),
+		v_form_select('kette_id', array('add' => true, 'values' => db_get_kette(), 'desc' => 'Bitte nur inhabergeführte Betriebe selbstständig ansprechen, niemals Betriebe einer Kette anfragen!')),
+		v_form_select('betrieb_kategorie_id', array('add' => true, 'values' => db_get_betrieb_kategorie())),
 
-			v_form_select('betrieb_status_id', array('values' => db_get_betrieb_status())),
+		v_form_select('betrieb_status_id', array('values' => db_get_betrieb_status())),
 
-			v_form_text('ansprechpartner'),
-			v_form_text('telefon'),
-			v_form_text('fax'),
-			v_form_text('email'),
+		v_form_text('ansprechpartner'),
+		v_form_text('telefon'),
+		v_form_text('fax'),
+		v_form_text('email'),
 
-			v_form_checkbox('lebensmittel', array('values' => $lebensmittel_values)),
-			v_form_date('begin'),
-			v_form_textarea('besonderheiten'),
-			v_form_textarea('public_info', array('maxlength' => 180, 'desc' => 'Hier kannst Du einige Infos für die Foodsaver angeben, die sich für das Team bewerben möchten. <br />(max. 180 Zeichen)<div>' . v_info('<strong>Wichtig</strong> Gib hier keine genauen Abholzeiten an.<br />Es ist öfters vorgekommen, dass Leute unabgesprochen zum Laden gegangen sind.') . '</div>')),
-			v_form_select('public_time', ['values' => [
-					['id' => 0, 'name' => 'Keine Angabe'],
-					['id' => 1, 'name' => 'morgens'],
-					['id' => 2, 'name' => 'mittags/nachmittags'],
-					['id' => 3, 'name' => 'abends'],
-					['id' => 4, 'name' => 'nachts']
-			]]),
-			$first_post,
-			v_form_select('ueberzeugungsarbeit', array('values' => array(
-				array('id' => 1, 'name' => 'Überhaupt kein Problem, er/sie war/en sofort begeistert!'),
-				array('id' => 2, 'name' => 'Nach einiger Überzeugungsarbeit erklärte er/sie sich bereit mitzumachen '),
-				array('id' => 3, 'name' => 'Ganz schwierig, aber am Ende hat er/sie eingewilligt'),
-				array('id' => 4, 'name' => 'Zuerst sah es so aus, als ob er/sie nicht mitmachen wollte, aber dann hat sie/er sich doch bei mir gemeldet')
-			))),
-			v_form_select('presse', array('values' => array(
-				array('id' => 1, 'name' => 'Ja'),
-				array('id' => 0, 'name' => 'Nein')
-			))),
-			v_form_select('sticker', array('values' => array(
-				array('id' => 1, 'name' => 'Ja'),
-				array('id' => 0, 'name' => 'Nein')
-			))),
-			v_form_select('prefetchtime', array('values' => array(
-				array('id' => 1209600, 'name' => '2 Wochen'),
-				array('id' => 1814400, 'name' => '3 Wochen'),
-				array('id' => 2419200, 'name' => '4 Wochen')
-			))),
-			v_form_select('abholmenge', array('values' => array(
-				array('id' => 1, 'name' => '1-3kg'),
-				array('id' => 2, 'name' => '3-5kg'),
-				array('id' => 3, 'name' => '5-10kg'),
-				array('id' => 4, 'name' => '10-20kg'),
-				array('id' => 5, 'name' => '20-30kg'),
-				array('id' => 6, 'name' => '40-50kg'),
-				array('id' => 7, 'name' => 'mehr als 50kg')
-			))),
+		v_form_checkbox('lebensmittel', array('values' => $lebensmittel_values)),
+		v_form_date('begin'),
+		v_form_textarea('besonderheiten'),
+		v_form_textarea('public_info', array('maxlength' => 180, 'desc' => 'Hier kannst Du einige Infos für die Foodsaver angeben, die sich für das Team bewerben möchten. <br />(max. 180 Zeichen)<div>' . v_info('<strong>Wichtig</strong> Gib hier keine genauen Abholzeiten an.<br />Es ist öfters vorgekommen, dass Leute unabgesprochen zum Laden gegangen sind.') . '</div>')),
+		v_form_select('public_time', ['values' => [
+			['id' => 0, 'name' => 'Keine Angabe'],
+			['id' => 1, 'name' => 'morgens'],
+			['id' => 2, 'name' => 'mittags/nachmittags'],
+			['id' => 3, 'name' => 'abends'],
+			['id' => 4, 'name' => 'nachts']
+		]]),
+		$first_post,
+		v_form_select('ueberzeugungsarbeit', array('values' => array(
+			array('id' => 1, 'name' => 'Überhaupt kein Problem, er/sie war/en sofort begeistert!'),
+			array('id' => 2, 'name' => 'Nach einiger Überzeugungsarbeit erklärte er/sie sich bereit mitzumachen '),
+			array('id' => 3, 'name' => 'Ganz schwierig, aber am Ende hat er/sie eingewilligt'),
+			array('id' => 4, 'name' => 'Zuerst sah es so aus, als ob er/sie nicht mitmachen wollte, aber dann hat sie/er sich doch bei mir gemeldet')
+		))),
+		v_form_select('presse', array('values' => array(
+			array('id' => 1, 'name' => 'Ja'),
+			array('id' => 0, 'name' => 'Nein')
+		))),
+		v_form_select('sticker', array('values' => array(
+			array('id' => 1, 'name' => 'Ja'),
+			array('id' => 0, 'name' => 'Nein')
+		))),
+		v_form_select('prefetchtime', array('values' => array(
+			array('id' => 1209600, 'name' => '2 Wochen'),
+			array('id' => 1814400, 'name' => '3 Wochen'),
+			array('id' => 2419200, 'name' => '4 Wochen')
+		))),
+		v_form_select('abholmenge', array('values' => array(
+			array('id' => 1, 'name' => '1-3kg'),
+			array('id' => 2, 'name' => '3-5kg'),
+			array('id' => 3, 'name' => '5-10kg'),
+			array('id' => 4, 'name' => '10-20kg'),
+			array('id' => 5, 'name' => '20-30kg'),
+			array('id' => 6, 'name' => '40-50kg'),
+			array('id' => 7, 'name' => 'mehr als 50kg')
+		))),
 
-			$verantwortlich_select
+		$verantwortlich_select
 	));
 }
 
@@ -295,20 +295,20 @@ function handle_add($bezirk_id)
 
 		if ($id = $db->add_betrieb($g_data)) {
 			$db->add_betrieb_notiz(array(
-					'foodsaver_id' => fsId(),
-					'betrieb_id' => $id,
-					'text' => '{BETRIEB_ADDED}',
-					'zeit' => date('Y-m-d H:i:s', (time() - 10)),
-					'milestone' => 1
+				'foodsaver_id' => fsId(),
+				'betrieb_id' => $id,
+				'text' => '{BETRIEB_ADDED}',
+				'zeit' => date('Y-m-d H:i:s', (time() - 10)),
+				'milestone' => 1
 			));
 
 			if (isset($g_data['first_post']) && !empty($g_data['first_post'])) {
 				$db->add_betrieb_notiz(array(
-						'foodsaver_id' => fsId(),
-						'betrieb_id' => $id,
-						'text' => $g_data['first_post'],
-						'zeit' => date('Y-m-d H:i:s'),
-						'milestone' => 0
+					'foodsaver_id' => fsId(),
+					'betrieb_id' => $id,
+					'text' => $g_data['first_post'],
+					'zeit' => date('Y-m-d H:i:s'),
+					'milestone' => 0
 				));
 			}
 
@@ -345,6 +345,7 @@ function db_get_kette()
 
 	return $out;
 }
+
 function db_get_betrieb_kategorie()
 {
 	global $db;
@@ -358,6 +359,7 @@ function db_get_betrieb_kategorie()
 
 	return $out;
 }
+
 function db_get_betrieb_status()
 {
 	global $db;

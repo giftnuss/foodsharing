@@ -41,7 +41,7 @@ if (getAction('neu')) {
 			$rows[] = array(
 				array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=kette&id=' . $d['id'] . '">' . $d['name'] . '</a>'),
 				array('cnt' => v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => sv('delete_sure', $d['name'])))
-			));
+				));
 		}
 
 		$table = v_tablesorter(array(
@@ -81,6 +81,7 @@ function handle_edit()
 		}
 	}
 }
+
 function handle_add()
 {
 	global $db;

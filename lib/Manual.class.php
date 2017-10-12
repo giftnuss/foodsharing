@@ -84,7 +84,8 @@ class ManualDb extends Db
 			ORDER BY n.id DESC
 			LIMIT 0 , 4
 
-		')) {
+		')
+		) {
 			return $ret;
 		}
 
@@ -284,9 +285,9 @@ class ManualDb extends Db
 			$out = array();
 			foreach ($res as $r) {
 				$out[$r['dow'] . '-' . $r['time']] = array(
-						'dow' => $r['dow'],
-						'time' => $r['time'],
-						'fetcher' => $r['fetcher']
+					'dow' => $r['dow'],
+					'time' => $r['time'],
+					'fetcher' => $r['fetcher']
 				);
 			}
 
@@ -330,29 +331,32 @@ class ManualDb extends Db
 
 		if (S::may('fs')) {
 			if ($res = $this->searchTable('bezirk', array('name'), $q, array(
-					'name' => '`name`',
-					'click' => 'CONCAT("goTo(\'/?page=bezirk&bid=",`id`,"\');")',
-					'teaser' => 'CONCAT("")'
-			))) {
+				'name' => '`name`',
+				'click' => 'CONCAT("goTo(\'/?page=bezirk&bid=",`id`,"\');")',
+				'teaser' => 'CONCAT("")'
+			))
+			) {
 				$out['bezirk'] = $res;
 			}
 		}
 
 		if (S::may('fs')) {
 			if ($res = $this->searchTable('foodsaver', array('name', 'nachname', 'plz', 'stadt'), $q, array(
-					'name' => 'CONCAT(`name`," ",`nachname`)',
-					'click' => 'CONCAT("profile(",`id`,");")',
-					'teaser' => 'stadt'
-			), $children)) {
+				'name' => 'CONCAT(`name`," ",`nachname`)',
+				'click' => 'CONCAT("profile(",`id`,");")',
+				'teaser' => 'stadt'
+			), $children)
+			) {
 				$out['foodsaver'] = $res;
 			}
 		}
 		if (S::may('fs')) {
 			if ($res = $this->searchTable('betrieb', array('name', 'stadt', 'plz'), $q, array(
-					'name' => '`name`',
-					'click' => 'CONCAT("betrieb(",`id`,");")',
-					'teaser' => 'CONCAT(`str`,", ",`plz`," ",`stadt`)'
-			), $children)) {
+				'name' => '`name`',
+				'click' => 'CONCAT("betrieb(",`id`,");")',
+				'teaser' => 'CONCAT(`str`,", ",`plz`," ",`stadt`)'
+			), $children)
+			) {
 				$out['betrieb'] = $res;
 			}
 		}
@@ -518,7 +522,8 @@ class ManualDb extends Db
 
 			AND 	bt.verantwortlich = 1
 			AND		fs.deleted_at IS NULL
-		')) {
+		')
+		) {
 			$out = array();
 			foreach ($verant as $v) {
 				$out[$v['id']] = $v;
@@ -894,7 +899,8 @@ class ManualDb extends Db
 			FROM 	`' . PREFIX . 'foodsaver` fs
 
 			WHERE fs.id = ' . (int)$fsid . '
-		')) {
+		')
+		) {
 			$fs['bezirk_name'] = '';
 			if ($fs['bezirk_id'] > 0) {
 				$fs['bezirk_name'] = $this->getVal('name', 'bezirk', $fs['bezirk_id']);
@@ -1658,7 +1664,8 @@ class ManualDb extends Db
 			AND 	bt.verantwortlich = 1
 			AND		b.`bezirk_id` IN(' . implode(',', $query) . ')
 			AND		fs.deleted_at IS NULL
-		')) {
+		')
+		) {
 			$out = array();
 			foreach ($verant as $v) {
 				$out[$v['id']] = $v;
@@ -1928,7 +1935,8 @@ class ManualDb extends Db
 		$has_children = 0;
 		if ($this->q('
 			SELECT	id FROM ' . PREFIX . 'bezirk WHERE parent_id = ' . (int)$id . '
-		')) {
+		')
+		) {
 			$has_children = 1;
 		}
 
@@ -2439,11 +2447,11 @@ class ManualDb extends Db
 		}
 
 		$this->add_betrieb_notiz(array(
-				'foodsaver_id' => fsId(),
-				'betrieb_id' => $bid,
-				'text' => 'status_msg_' . (int)$status,
-				'zeit' => date('Y-m-d H:i:s'),
-				'milestone' => 3
+			'foodsaver_id' => fsId(),
+			'betrieb_id' => $bid,
+			'text' => 'status_msg_' . (int)$status,
+			'zeit' => date('Y-m-d H:i:s'),
+			'milestone' => 3
 		));
 
 		return $this->update('
@@ -2628,11 +2636,11 @@ class ManualDb extends Db
 
 		$model = loadModel('betrieb');
 		$model->addBell((int)$fsid, 'store_request_accept_title', 'store_request_accept', 'img img-store brown', array(
-				'href' => '/?page=fsbetrieb&id=' . (int)$bid
-			), array(
-				'user' => S::user('name'),
-				'name' => $betrieb
-			), 'store-arequest-' . (int)$fsid);
+			'href' => '/?page=fsbetrieb&id=' . (int)$bid
+		), array(
+			'user' => S::user('name'),
+			'name' => $betrieb
+		), 'store-arequest-' . (int)$fsid);
 
 		$msg = loadModel('msg');
 
@@ -2658,11 +2666,11 @@ class ManualDb extends Db
 
 		$model = loadModel('betrieb');
 		$model->addBell((int)$fsid, 'store_request_accept_wait_title', 'store_request_accept_wait', 'img img-store brown', array(
-				'href' => '/?page=fsbetrieb&id=' . (int)$bid
-			), array(
-				'user' => S::user('name'),
-				'name' => $betrieb
-			), 'store-wrequest-' . (int)$fsid);
+			'href' => '/?page=fsbetrieb&id=' . (int)$bid
+		), array(
+			'user' => S::user('name'),
+			'name' => $betrieb
+		), 'store-wrequest-' . (int)$fsid);
 
 		$msg = loadModel('msg');
 		if ($scid = $this->getBetriebConversation($bid, true)) {
@@ -2683,11 +2691,11 @@ class ManualDb extends Db
 
 		$model = loadModel('betrieb');
 		$model->addBell((int)$fsid, 'store_request_deny_title', 'store_request_deny', 'img img-store brown', array(
-				'href' => '/?page=fsbetrieb&id=' . (int)$bid
-			), array(
-				'user' => S::user('name'),
-				'name' => $betrieb
-			), 'store-drequest-' . (int)$fsid);
+			'href' => '/?page=fsbetrieb&id=' . (int)$bid
+		), array(
+			'user' => S::user('name'),
+			'name' => $betrieb
+		), 'store-drequest-' . (int)$fsid);
 
 		return $this->update('
 					DELETE FROM 	`fs_betrieb_team`
@@ -3217,7 +3225,8 @@ class ManualDb extends Db
 			AND 	a.betrieb_id = ' . (int)$bid . '
 			AND  	a.date IN(' . implode(',', $dsql) . ')
 			AND		fs.deleted_at IS NULL
-		')) {
+		')
+			) {
 				//print_r($res);
 				global $g_data;
 				foreach ($res as $r) {
@@ -3578,7 +3587,9 @@ class ManualDb extends Db
 		$ids = implode(',', array_map(array($this, 'intval'), $foodsaver_ids));
 		if ($ids) {
 			$rows_del = $this->del('DELETE FROM `' . PREFIX . 'foodsaver_has_bezirk` WHERE bezirk_id = ' . $this->intval($bezirk) . ' AND foodsaver_id NOT IN (' . $ids . ')');
-			$insert_strings = array_map(function ($id) use ($bezirk) { return '(' . $id . ',' . $bezirk . ',1,NOW())'; }, $foodsaver_ids);
+			$insert_strings = array_map(function ($id) use ($bezirk) {
+				return '(' . $id . ',' . $bezirk . ',1,NOW())';
+			}, $foodsaver_ids);
 			$insert_values = implode(',', $insert_strings);
 			$rows_ins = $this->del('INSERT IGNORE INTO `' . PREFIX . 'foodsaver_has_bezirk` (foodsaver_id, bezirk_id, active, added) VALUES ' . $insert_values);
 		} else {

@@ -1,4 +1,5 @@
 <?php
+
 class ConsoleControl
 {
 	public function __construct()

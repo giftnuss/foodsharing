@@ -50,12 +50,12 @@ if (getAction('neu')) {
 				$rows[] = array(
 					array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=faq&a=edit&id=' . $d['id'] . '">' . $d['name'] . '</a>'),
 					array('cnt' => v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => sv('delete_sure', $d['name'])))
-				));
+					));
 			}
 
 			$table = v_tablesorter(array(
-					array('name' => s('name')),
-					array('name' => s('actions'), 'sort' => false, 'width' => 50)
+				array('name' => s('name')),
+				array('name' => s('actions'), 'sort' => false, 'width' => 50)
 			), $rows);
 
 			addContent(v_field($table, $db->getVal('name', 'faq_category', $key)));
@@ -74,14 +74,14 @@ function faq_form()
 	$cats = $db->getBasics_faq_category();
 
 	return v_form('faq', array(
-			v_field(
-				v_form_select('faq_kategorie_id', array('add' => true, 'required' => true, 'values' => $cats)) .
-				v_form_textarea('name', array('style' => 'height:75px;', 'required' => true)),
+		v_field(
+			v_form_select('faq_kategorie_id', array('add' => true, 'required' => true, 'values' => $cats)) .
+			v_form_textarea('name', array('style' => 'height:75px;', 'required' => true)),
 
-				s('neu_faq'),
-				array('class' => 'ui-padding')
-			),
-			v_field(v_form_tinymce('answer', array('nowrapper' => true)), s('answer'))
+			s('neu_faq'),
+			array('class' => 'ui-padding')
+		),
+		v_field(v_form_tinymce('answer', array('nowrapper' => true)), s('answer'))
 	));
 }
 
@@ -100,6 +100,7 @@ function handle_edit()
 		}
 	}
 }
+
 function handle_add()
 {
 	global $db;

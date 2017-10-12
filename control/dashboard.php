@@ -24,23 +24,23 @@ if (S::may()) {
 	}
 
 	if (
-			(
-					$is_fs
-					&&
-					(int)$db->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)fsId()) == 0
-			)
-			||
-			(
-					$is_bieb
-					&&
-					(int)$db->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 2 AND status = 1 AND foodsaver_id = ' . (int)fsId()) == 0
-			)
-			||
-			(
-					$is_bot
-					&&
-					(int)$db->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 3 AND status = 1 AND foodsaver_id = ' . (int)fsId()) == 0
-			)
+		(
+			$is_fs
+			&&
+			(int)$db->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)fsId()) == 0
+		)
+		||
+		(
+			$is_bieb
+			&&
+			(int)$db->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 2 AND status = 1 AND foodsaver_id = ' . (int)fsId()) == 0
+		)
+		||
+		(
+			$is_bot
+			&&
+			(int)$db->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 3 AND status = 1 AND foodsaver_id = ' . (int)fsId()) == 0
+		)
 	) {
 		$check = true;
 
@@ -53,11 +53,11 @@ if (S::may()) {
 		$cnt = $db->getContent(33);
 
 		$cnt['body'] = str_replace(array(
-				'{NAME}',
-				'{ANREDE}'
+			'{NAME}',
+			'{ANREDE}'
 		), array(
-				S::user('name'),
-				s('anrede_' . S::user('gender'))
+			S::user('name'),
+			s('anrede_' . S::user('gender'))
 		), $cnt['body']);
 
 		if (S::option('quiz-infobox-seen')) {
@@ -79,7 +79,8 @@ if (!may()) {
 	$val = $db->getValues(array('photo_public', 'anschrift', 'plz', 'lat', 'lon', 'stadt'), 'foodsaver', fsId());
 
 	if (empty($val['lat']) || empty($val['lon']) ||
-	($val['lat']) == '50.05478727164819' && $val['lon'] == '10.3271484375') {
+		($val['lat']) == '50.05478727164819' && $val['lon'] == '10.3271484375'
+	) {
 		info('Bitte überprüfe Deine Adresse, die Koordinaten konnten nicht ermittelt werden.');
 		go('/?page=settings&sub=general&');
 	}
@@ -91,10 +92,10 @@ if (!may()) {
 	if ($val['photo_public'] == 0) {
 		$g_data['photo_public'] = 1;
 		$elements[] = v_form_radio('photo_public', array('desc' => 'Du solltest zumindest intern den Menschen in Deiner Umgebung ermöglichen, Dich zu kontaktieren. So kannst Du von anderen Foodsavern eingeladen werden, Lebensmittel zu retten und Ihr könnt Euch einander kennen lernen.', 'values' => array(
-				array('name' => 'Ja, ich bin einverstanden, dass mein Name und mein Foto veröffentlicht werden.', 'id' => 1),
-				array('name' => 'Bitte nur meinen Namen veröffentlichen.', 'id' => 2),
-				array('name' => 'Meine Daten nur intern anzeigen.', 'id' => 3),
-				array('name' => 'Meine Daten niemandem zeigen.', 'id' => 4)
+			array('name' => 'Ja, ich bin einverstanden, dass mein Name und mein Foto veröffentlicht werden.', 'id' => 1),
+			array('name' => 'Bitte nur meinen Namen veröffentlichen.', 'id' => 2),
+			array('name' => 'Meine Daten nur intern anzeigen.', 'id' => 3),
+			array('name' => 'Meine Daten niemandem zeigen.', 'id' => 4)
 		)));
 	}
 
@@ -184,8 +185,7 @@ if (!may()) {
 
 	if (!getBezirkId()) {
 		addJs('becomeBezirk();');
-	}
-	/*
+	} /*
 	 * check is there are Betrieb not ordered to an bezirk
 	 */
 	elseif (isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich'])) {
@@ -396,7 +396,7 @@ if (!may()) {
 	}
 
 	addContent(
-	'
+		'
 	<div class="top corner-all">
 		<div class="img">' . avatar($me, 50) . '</div>
 			<h3>Hallo ' . $me['name'] . '</h3>

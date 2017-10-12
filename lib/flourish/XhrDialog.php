@@ -103,8 +103,8 @@ class XhrDialog
 	public function addButton($text, $click)
 	{
 		$this->buttons[] = array(
-				'text' => $text,
-				'click' => $click
+			'text' => $text,
+			'click' => $click
 		);
 	}
 

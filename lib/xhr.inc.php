@@ -89,7 +89,8 @@ function xhr_getPinPost($data)
 				
 				ORDER BY n.zeit DESC
 				
-				LIMIT 50')) {
+				LIMIT 50')
+		) {
 			//$out = array_reverse($out);
 			$html = '<table class="pintable">';
 			$odd = 'odd';
@@ -198,7 +199,8 @@ function xhr_addPinPost($data)
 			'zeit' => date('Y-m-d H:i:s'),
 			'milestone' => 0,
 			'last' => 1
-		))) {
+		))
+		) {
 			$poster = $db->getVal('name', 'foodsaver', fsId());
 			$betrieb = $db->getVal('name', 'betrieb', (int)$data['bid']);
 
@@ -518,7 +520,8 @@ function xhr_loadMarker($data)
 					FROM ' . PREFIX . 'basket
 					WHERE `status` = 1
 					
-				')) {
+				')
+				) {
 					/*
 					foreach ($baskets as $key => $b)
 					{
@@ -874,7 +877,8 @@ function xhr_continueMail($data)
 					'msg' => $message,
 					'time' => date('Y-m-d H:i:s'),
 					'attach' => $mail['attach']
-				))) {
+				))
+				) {
 					tplMail(9, $fs['email'], array(
 						'name' => $fs['name'],
 						'sender' => $sender['name'],

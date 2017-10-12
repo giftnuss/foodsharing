@@ -17,8 +17,8 @@ $mode = '';
 if (isOrgaTeam()) {
 	$recip = v_form_recip_chooser();
 	$mode = v_form_select('mode', array('required' => true, 'values' => array(
-			array('id' => 1, 'name' => s('send_as_pm')),
-			array('id' => 2, 'name' => s('send_as_email'))
+		array('id' => 1, 'name' => s('send_as_pm')),
+		array('id' => 2, 'name' => s('send_as_email'))
 	)));
 } elseif (isBotschafter()) {
 	$recip = v_form_recip_chooser_mini();
@@ -35,16 +35,16 @@ foreach ($boxes as $key => $b) {
 	$boxes[$key]['name'] = $b['name'] . '@' . DEFAULT_HOST;
 }
 addContent(v_form('Nachrichten Verteiler', array(
-		v_field(
-				$recip . $mode .
-				v_form_select('mailbox_id', array('values' => $boxes, 'required' => true)) .
-				v_form_text('subject', array('required' => true)) .
-				v_form_file('attachement'),
+	v_field(
+		$recip . $mode .
+		v_form_select('mailbox_id', array('values' => $boxes, 'required' => true)) .
+		v_form_text('subject', array('required' => true)) .
+		v_form_file('attachement'),
 
-				s('mailing_list'),
-				array('class' => 'ui-padding')
-		),
-		v_field(v_form_tinymce('message', array('nowrapper' => true, 'type' => 'email', 'filemanager' => true)), s('message'))
+		s('mailing_list'),
+		array('class' => 'ui-padding')
+	),
+	v_field(v_form_tinymce('message', array('nowrapper' => true, 'type' => 'email', 'filemanager' => true)), s('message'))
 ), array('submit' => 'Zum Senden Vorbereiten')));
 
 addStyle('#testemail{width:91%;}');

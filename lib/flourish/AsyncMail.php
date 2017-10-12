@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Data structure to store mail data for asynchronous queue.
  *

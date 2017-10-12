@@ -199,9 +199,9 @@ class Db
 
 			if ($mail) {
 				$vars = array(
-						'link' => BASE_URL . '/?page=login&sub=passwordReset&k=' . $key,
-						'name' => $fs['name'],
-						'anrede' => genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r')
+					'link' => BASE_URL . '/?page=login&sub=passwordReset&k=' . $key,
+					'name' => $fs['name'],
+					'anrede' => genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r')
 				);
 
 				tplMail(10, $fs['email'], $vars);
@@ -220,8 +220,12 @@ class Db
 		$out = false;
 		if (isset($data['name'])) {
 			switch ($data['name']) {
-				case 'betrieb': $out = $this->addCommentBetrieb($data); break;
-				default:return false; break;
+				case 'betrieb':
+					$out = $this->addCommentBetrieb($data);
+					break;
+				default:
+					return false;
+					break;
 			}
 		}
 
@@ -279,8 +283,8 @@ class Db
 			foreach ($_SESSION['client']['verantwortlich'] as $v) {
 				if ($name = $this->getBetriebName($v['betrieb_id'])) {
 					$out['verantwortlich'][] = array(
-							'betrieb_id' => (int)$v['betrieb_id'],
-							'betrieb_name' => $name
+						'betrieb_id' => (int)$v['betrieb_id'],
+						'betrieb_name' => $name
 					);
 				}
 				++$i;
@@ -367,7 +371,8 @@ class Db
 					' . $this->strval($data['fax']) . '
 
 				)
-		')) {
+		')
+		) {
 			if (!empty($data['verantwortlicherfoodsaver'])) {
 				$this->addVerantwortlicher($data['verantwortlicherfoodsaver'], $betrieb_id);
 			}
@@ -693,13 +698,13 @@ class Db
 	public function gerettet_wrapper($id)
 	{
 		$ger = array(
-				1 => 2,
-				2 => 4,
-				3 => 7.5,
-				4 => 15,
-				5 => 25,
-				6 => 45,
-				7 => 64
+			1 => 2,
+			2 => 4,
+			3 => 7.5,
+			4 => 15,
+			5 => 25,
+			6 => 45,
+			7 => 64
 		);
 
 		if (!isset($ger[$id])) {
@@ -821,7 +826,8 @@ class Db
 				FROM 		`' . PREFIX . 'foodsaver`
 
 				WHERE 		`id` = ' . $this->intval($fs_id) . '
-		')) {
+		')
+		) {
 			S::set('g_location', array(
 				'lat' => $fs['lat'],
 				'lon' => $fs['lon']
@@ -969,7 +975,8 @@ class Db
 						WHERE 	`' . PREFIX . 'bezirk`.`id` = `' . PREFIX . 'botschafter`.`bezirk_id`
 
 						AND 	`' . PREFIX . 'botschafter`.`foodsaver_id` = ' . $this->intval($fs['id']) . '
-				')) {
+				')
+				) {
 					$_SESSION['client']['botschafter'] = $r;
 					$_SESSION['client']['group']['botschafter'] = true;
 					$mailbox = true;
@@ -1009,7 +1016,8 @@ class Db
 							AND 	hb.active = 1
 
 							ORDER BY b.name
-					')) {
+					')
+				) {
 					$_SESSION['client']['bezirke'] = array();
 					foreach ($r as $rr) {
 						$_SESSION['client']['bezirke'][$rr['id']] = array(
@@ -1032,7 +1040,8 @@ class Db
 						AND 	bt.`foodsaver_id` = ' . $this->intval($fs['id']) . '
 						AND 	bt.active = 1
 						ORDER BY b.name
-				')) {
+				')
+			) {
 				$_SESSION['client']['betriebe'] = array();
 				foreach ($r as $rr) {
 					$_SESSION['client']['betriebe'][$rr['id']] = $rr;
@@ -1046,7 +1055,8 @@ class Db
 
 						WHERE 	`foodsaver_id` = ' . $this->intval($fs['id']) . '
 						AND 	`verantwortlich` = 1
-			')) {
+			')
+			) {
 				$_SESSION['client']['verantwortlich'] = $r;
 				$_SESSION['client']['group']['verantwortlich'] = true;
 				$mailbox = true;
@@ -1110,7 +1120,7 @@ class Db
 			}
 		}
 
-		return  $this->update('UPDATE `' . PREFIX . $table . '` SET ' . implode(',', $sql) . ' WHERE `id` = ' . (int)$id);
+		return $this->update('UPDATE `' . PREFIX . $table . '` SET ' . implode(',', $sql) . ' WHERE `id` = ' . (int)$id);
 	}
 
 	public function getTable($fields, $table, $where = '')

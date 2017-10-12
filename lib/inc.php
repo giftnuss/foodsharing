@@ -48,13 +48,13 @@ $g_add_css = '';
 $hidden = '';
 
 $g_meta = array(
-		'description' => 'Auf foodsharing.de kannst Du Deine Lebensmittel vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben',
-		'keywords' => 'foodsharing, essen, lebensmittel, ablaufdatum, Lebensmittelverschwendung, essen wegschmeissen, spenden, lebensmitteltausch',
-		'author' => 'foodsharing',
-		'robots' => 'all',
-		'allow-search' => 'yes',
-		'revisit-after' => '1 days',
-		'google-site-verification' => 'pZxwmxz2YMVLCW0aGaS5gFsCJRh-fivMv1afrDYFrks'
+	'description' => 'Auf foodsharing.de kannst Du Deine Lebensmittel vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben',
+	'keywords' => 'foodsharing, essen, lebensmittel, ablaufdatum, Lebensmittelverschwendung, essen wegschmeissen, spenden, lebensmitteltausch',
+	'author' => 'foodsharing',
+	'robots' => 'all',
+	'allow-search' => 'yes',
+	'revisit-after' => '1 days',
+	'google-site-verification' => 'pZxwmxz2YMVLCW0aGaS5gFsCJRh-fivMv1afrDYFrks'
 );
 
 $db = new ManualDb();

@@ -67,15 +67,15 @@ function message_tpl_form()
 	$g_data['language_id'] = 1;
 
 	return v_form('E-Mail Vorlage', array(
-			v_field(
-					v_form_select('language_id') .
-					v_form_text('name', array('required' => true)) .
-					v_form_text('subject', array('required' => array())) .
-					v_form_file('attachement'),
-					'E-Mail-Vorlage',
-					array('class' => 'ui-padding')
-			),
-			v_field(v_form_tinymce('body', array('nowrapper' => true)), s('message'))
+		v_field(
+			v_form_select('language_id') .
+			v_form_text('name', array('required' => true)) .
+			v_form_text('subject', array('required' => array())) .
+			v_form_file('attachement'),
+			'E-Mail-Vorlage',
+			array('class' => 'ui-padding')
+		),
+		v_field(v_form_tinymce('body', array('nowrapper' => true)), s('message'))
 	), array('submit' => 'Speichern'));
 }
 
@@ -91,6 +91,7 @@ function handle_edit()
 		}
 	}
 }
+
 function handle_add()
 {
 	global $db;

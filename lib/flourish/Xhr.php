@@ -1,4 +1,5 @@
 <?php
+
 /**
  * class give you methods to send data to the client for nice outputs.
  *
@@ -48,9 +49,9 @@ class Xhr
 	/**
 	 * Add data accecable by client side js code
 	 * example:
-	 * 	$xhr->addData('tree_id',1);
-	 * 	is accesable in global Javascript with:
-	 * 	alert(ajax.data.tree_id); => output is "1".
+	 *    $xhr->addData('tree_id',1);
+	 *    is accesable in global Javascript with:
+	 *    alert(ajax.data.tree_id); => output is "1".
 	 *
 	 * @param string $key
 	 * @param $value

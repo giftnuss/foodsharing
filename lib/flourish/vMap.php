@@ -184,7 +184,7 @@ class vMap extends vCore
 				break;
 
 			case 'mapbox':
-					addJs('
+				addJs('
 					L.tileLayer(\'http://{s}.tiles.mapbox.com/v3/' . $this->provider_options['user'] . '.' . $this->provider_options['map'] . '/{z}/{x}/{y}.png\', {
 					    attributionControl: false
 					}).addTo(' . $this->id . ');
@@ -192,7 +192,7 @@ class vMap extends vCore
 				break;
 
 			case 'cloudmade':
-					addJs('
+				addJs('
 					L.tileLayer(\'http://{s}.tile.cloudmade.com/' . $this->provider_options['key'] . '/' . $this->provider_options['styleId'] . '/256/{z}/{x}/{y}.png\', {
 					    attributionControl: false
 					}).addTo(' . $this->id . ');
