@@ -51,20 +51,20 @@ class GeoCleanView extends View
 			);
 	}
 
-	public function regionlist($regions)
+	public function regionList($regions)
 	{
 		$rows = [];
 
 		foreach ($regions as $r) {
-			$rows = [
+			$rows[] = [
 				['cnt' => '<a class="linkrow ui-corner-all" href="?page=bezirk&bid=' . $r['id'] . '&sub=forum">' . $r['name'] . '</a>'],
 				['cnt' => $r['fscount']]
 			];
 		}
 
 		$out = v_tablesorter([
-			['name' => 'Name'],
-			['name' => 'Anzahl Foodsaver', 'width' => 120]
+			['name' => s('name')],
+			['name' => s('fs_count'), 'width' => 120]
 		], $rows, ['pager' => true]);
 
 		return $out;

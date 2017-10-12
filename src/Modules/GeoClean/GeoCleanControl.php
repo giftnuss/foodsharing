@@ -19,9 +19,9 @@ class GeoCleanControl extends Control
 		}
 	}
 
-	public function lostregion()
+	public function lostRegion()
 	{
-		addBread('Bezirke ohne Botschafter');
+		addBread(s('lost_regions'));
 		if ($regions = $this->model->q('
 			SELECT 
 				
@@ -56,7 +56,7 @@ class GeoCleanControl extends Control
 					}
 				}
 			}
-			addContent($this->view->regionlist($tmp));
+			addContent($this->view->regionList($tmp));
 		}
 	}
 
