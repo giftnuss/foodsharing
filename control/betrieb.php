@@ -81,11 +81,6 @@ if (getAction('new')) {
 	}
 
 	if ($betriebe = $db->listBetriebReq($bezirk_id)) {
-		if (isset($_GET['v']) && $_GET['v'] == 'karte') {
-			echo 'map';
-			die();
-			//addContent(v_field(v_multimap($betriebe),'Alle Betriebe aus '.$bezirk['name'].v_switch(array('Liste','Karte'))));
-		} else {
 			$betriebrows = array();
 			foreach ($betriebe as $b) {
 				$status = v_getStatusAmpel($b['betrieb_status_id']);
@@ -111,8 +106,7 @@ if (getAction('new')) {
 
 			addJs('$("#comment").dialog({title:"Kommentar zum Betrieb"});');
 
-			addContent(v_field($table, v_toolbar(array('types' => array('new'))) . 'Alle Betriebe aus dem Bezirk ' . $bezirk['name'] . v_switch(array('Liste', 'Karte'))));
-		}
+			addContent(v_field($table, v_toolbar(array('types' => array('new'))) . 'Alle Betriebe aus dem Bezirk ' . $bezirk['name']));
 	} else {
 		info('Es sind noch keine Betriebe eingetragen');
 	}
