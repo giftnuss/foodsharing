@@ -15,7 +15,7 @@ fi
 
 echo "Building images"
 
-for name in app chat; do
+for name in app chat web; do
   dc build $name &
 done
 
