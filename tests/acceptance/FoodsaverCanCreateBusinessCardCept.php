@@ -1,12 +1,14 @@
 <?php
 
-function convertId($text) {
+function convertId($text)
+{
 	$text = strtolower($text);
 	str_replace(
 		array('ä', 'ö', 'ü', 'ß', ' '),
 		array('ae', 'oe', 'ue', 'ss', '_'),
 		$text
 	);
+
 	return preg_replace('/[^a-z0-9_]/', '', $text);
 }
 
@@ -21,10 +23,10 @@ $I->addBezirkMember($testRegion, $foodsaver['id']);
 $I->login($foodsaver['email']);
 
 $I->amOnPage('/?page=bcard');
-$I->selectOption('Optionen', 'Foodsaver für '. $regionName);
+$I->selectOption('Optionen', 'Foodsaver für ' . $regionName);
 $I->waitForElementVisible('#pulse-info');
 $I->click('Visitenkarten herunterladen');
 
 $I->wait(4);
 
-$I->seeFileExists('/downloads/bcard-fs-'. convertId($foodsaver['name']).'-'.convertId($foodsaver['nachname']).'.pdf');
+$I->seeFileExists('/downloads/bcard-fs-' . convertId($foodsaver['name']) . '-' . convertId($foodsaver['nachname']) . '.pdf');

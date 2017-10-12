@@ -1,4 +1,5 @@
 <?php
+
 $I = new CliTester($scenario);
 $I->am('Cron');
 $I->wantTo('see that stat generation jobs do execute');
