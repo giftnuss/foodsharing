@@ -29,6 +29,7 @@
 - Enable composer autoloader and initial src folder. !157 by @tiltec
 
 ## Dev/Test/CI stuff
+- Enforce php cs fixer style checks in CI tests. !173 @NerdyProjects
 - Add CLI Test suite and ensure commands executed via cron at least exist. !176 @NerdyProjects
 - Cache vendor folder by using a distinct volume in CI !182 @NerdyProjects
 - Run mkdirs using exec so it works in CI !164 @NerdyProjects
