@@ -1,7 +1,7 @@
 <?php
 $I = new AcceptanceTester($scenario);
 
-$I->wantTo('create a businesscard being a foodsharer');
+$I->wantTo('create a businesscard being a foodsaver');
 
 $pass = sq('pass');
 
