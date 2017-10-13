@@ -2910,6 +2910,9 @@ class ManualDb extends Db
 			FROM 		`' . PREFIX . 'betrieb`
 
 			WHERE 		`id` = ' . $this->intval($id));
+		if(!$out) {
+			return $out;
+		}
 
 		$out['lebensmittel'] = $this->q('
 				SELECT 		l.`id`,
