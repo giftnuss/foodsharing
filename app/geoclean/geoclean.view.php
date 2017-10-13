@@ -15,8 +15,6 @@ class GeocleanView extends View
 	public function listFs($foodsaver)
 	{
 		$js = array();
-		$out = '
-		<ul class="linklist">';
 
 		foreach ($foodsaver as $fs) {
 			$js[] = (int)$fs['id'];
