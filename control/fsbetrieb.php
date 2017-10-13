@@ -38,7 +38,7 @@ if (getAction('new') && (S::may('orga') || isBotFor($g_data['bezirk_id']))) {
 	$betrieb = $db->getMyBetrieb($_GET['id']);
 
 	if (!$betrieb) {
-		goLogin();
+		goPage();
 	}
 
 	if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && ($db->isVerantwortlich($_GET['id']) || isOrgaTeam() || isBotFor($betrieb['bezirk_id']))) {
