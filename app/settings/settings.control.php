@@ -472,7 +472,7 @@ class SettingsControl extends Control
 			$data['stadt'] = $data['ort'];
 			$check = true;
 
-			if ($data['homepage'] != '') {
+			if (!empty($data['homepage'])) {
 				if (substr($data['homepage'], 0, 4) != 'http') {
 					$data['homepage'] = 'http://' . $data['homepage'];
 				}
@@ -483,7 +483,7 @@ class SettingsControl extends Control
 				}
 			}
 
-			if ($data['github'] != '') {
+			if (!empty($data['github'])) {
 				if (substr($data['github'], 0, 19) != 'https://github.com/') {
 					$data['github'] = 'https://github.com/' . $data['github'];
 				}
@@ -494,7 +494,7 @@ class SettingsControl extends Control
 				}
 			}
 
-			if ($data['twitter'] != '') {
+			if (!empty($data['twitter'])) {
 				if (substr($data['twitter'], 0, 20) != 'https://twitter.com/') {
 					$data['twitter'] = 'https://twitter.com/' . $data['twitter'];
 				}
@@ -505,7 +505,7 @@ class SettingsControl extends Control
 				}
 			}
 
-			if ($data['tox'] != '') {
+			if (!empty($data['tox'])) {
 				$data['tox'] = preg_replace('/[^0-9A-Z]/', '', $data['tox']);
 			}
 

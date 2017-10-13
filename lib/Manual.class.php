@@ -2201,11 +2201,17 @@ class ManualDb extends Db
 
 				`about_me_public` =  ' . $this->strval($data['about_me_public']) . ',
 				`photo_public` = ' . $this->intval($data['photo_public']) . ',
-				`homepage` = ' . $this->strval($data['homepage']) . ',
-				`twitter` = ' . $this->strval($data['twitter']) . ',
-				`tox` = ' . $this->strval($data['tox']) . ',
-				`position` = ' . $this->strval($data['position']) . ',
-				`github` = ' . $this->strval($data['github']) . '
+				`homepage` = ' . $this->strval($data['homepage']) . ',';
+		if (isset($data['twitter'])) {
+			$sql .= '`twitter` = ' . $this->strval($data['twitter']) . ',';
+		}
+		if (isset($data['github'])) {
+			$sql .= '`github` = ' . $this->strval($data['github']) . ',';
+		}
+		if (isset($data['position'])) {
+			$sql .= '`position` = ' . $this->strval($data['position']) . ',';
+		}
+		$sql .= '`tox` = ' . $this->strval($data['tox']) . '
 
 		WHERE 	`id` = ' . $this->intval($fs_id);
 
