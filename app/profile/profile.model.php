@@ -269,7 +269,7 @@ class ProfileModel extends Model
 
 	public function getVerifyHistory($fsid)
 	{
-		return $this->q('
+		$ret = $this->q('
 
 			SELECT
 			  vh.fs_id,
@@ -293,6 +293,7 @@ class ProfileModel extends Model
 
 				
 		');
+		return ($ret === false) ? array() : $ret;
 	}
 
 	public function getCompanies($fsid)
