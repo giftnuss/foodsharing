@@ -1,5 +1,7 @@
 <?php
-
+if (!S::may('orga')) {
+	goLogin();
+}
 if (getAction('neu')) {
 	handle_add();
 
