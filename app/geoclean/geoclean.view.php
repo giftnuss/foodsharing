@@ -57,7 +57,7 @@ class GeocleanView extends View
 			);
 		}
 
-		$out .= v_tablesorter(array(
+		$out = v_tablesorter(array(
 			array('name' => 'Name'),
 			array('name' => 'Anzahl Foodsaver', 'width' => 120)
 		), $rows, array('pager' => true));
