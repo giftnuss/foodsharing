@@ -148,6 +148,10 @@ class ReportModel extends Model
 					
 			');
 
+			if($fs['reports'] === false) {
+				$fs['reports'] = array();
+			}
+
 			return $fs;
 		}
 	}
