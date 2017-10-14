@@ -53,7 +53,7 @@ class CompanyCest
 	public function CanAccessCompanyPage(\HtmlAcceptanceTester $I, \Codeception\Example $example)
 	{
 		call_user_func(array($this, $example[0]));
-		$I->amOnPage($I->StoreUrl($this->store['id']));
+		$I->amOnPage($I->storeUrl($this->store['id']));
 		$I->see($this->store['name'] . '-Team', 'div.head.ui-widget-header.ui-corner-top');
 	}
 

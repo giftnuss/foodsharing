@@ -7,7 +7,7 @@ namespace Helper;
 
 class FoodsharingUrl extends \Codeception\Module\Db
 {
-	public function StoreUrl($id)
+	public function storeUrl($id)
 	{
 		return '/?page=fsbetrieb&id=' . (int)$id;
 	}
