@@ -293,6 +293,7 @@ class ProfileModel extends Model
 
 				
 		');
+
 		return ($ret === false) ? array() : $ret;
 	}
 

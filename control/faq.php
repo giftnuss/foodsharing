@@ -1,4 +1,5 @@
 <?php
+
 if (!S::may('orga')) {
 	goLogin();
 }

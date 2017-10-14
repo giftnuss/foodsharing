@@ -1,4 +1,5 @@
 <?php
+
 $phonenumber = '+49483123213';
 $mobilenumber = '+491518417482';
 $I = new AcceptanceTester($scenario);
@@ -43,7 +44,7 @@ $I->seeInField('#telefon', $phonenumber);
 $I->seeInField('#handy', $mobilenumber);
 $I->seeInField('#geb_datum', '1988-05-31');
 $I->seeInField('#homepage', 'http://www.matthias-larisch.de');
-$I->seeInField('#about_me_public','Ich mag foodsharing.');
+$I->seeInField('#about_me_public', 'Ich mag foodsharing.');
 $I->seeOptionIsSelected('#photo_public-wrapper', 'Meine Daten niemandem zeigen.');
 
 $I->fillField('#homepage', 'https://www.matthias-larisch.de');
