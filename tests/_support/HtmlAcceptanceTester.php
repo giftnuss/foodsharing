@@ -34,7 +34,7 @@ class HtmlAcceptanceTester extends \Codeception\Actor
 		be available so tests can be switched to another backend anytime */
 	}
 
-	public function login($email, $password)
+	public function login($email, $password = 'password')
 	{
 		$I = $this;
 		$I->amOnPage('/');
