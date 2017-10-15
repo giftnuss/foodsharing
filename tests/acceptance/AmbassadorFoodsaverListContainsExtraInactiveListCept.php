@@ -8,7 +8,7 @@ $regionName = $I->grabFromDatabase('fs_bezirk', 'name', ['id' => $testRegion]);
 $foodsaver = $I->createFoodsaver(null, ['name' => 'fs1', 'nachname' => 'saver1', 'photo' => 'does-not-exist.jpg']);
 $inactiveFoodsaver = $I->createFoodsaver(null, ['name' => 'fs-i', 'nachname' => 'saver2', 'photo' => 'does-not-exist.jpg', 'last_login' => '2017-01-01 00:00:00']);
 $activeFoodsaver =  $I->createFoodsaver(null, ['name' => 'fs-a', 'nachname' => 'saver3', 'photo' => 'does-not-exist.jpg', 'last_login' => (new \DateTime())->format('Y-m-d H:i:s')]);
-$ambassador = $I->createAmbassador(null, ['photo' => 'does-not-exist.jpg']);
+$ambassador = $I->createAmbassador(null, ['name' => 'ambassador-a', 'photo' => 'does-not-exist.jpg', 'last_login' => (new \DateTime())->format('Y-m-d H:i:s')]);
 $I->addBezirkMember($testRegion, $ambassador['id'], true);
 $I->addBezirkMember($testRegion, $foodsaver['id']);
 $I->addBezirkMember($testRegion, $activeFoodsaver['id']);
@@ -19,13 +19,13 @@ $I->login($ambassador['email']);
 $I->amOnPage('/?page=foodsaver&bid=' . $testRegion);
 $I->see('Foodsaver in Göttingen', '#foodsaverlist');
 $I->see('fs-a', '#foodsaverlist');
-$I->see('fs-i', '#inactivefoodsaverlist');
+$I->see('fs-i', '#foodsaverlist');
+$I->see('fs1', '#foodsaverlist');
+$I->see('ambassador-a', '#foodsaverlist');
+
 $I->see('Inaktive Foodsaver', '#inactivefoodsaverlist');
 $I->see('fs-i', '#inactivefoodsaverlist');
 // That foodsaver never logged in, so is inactive as well. Actually this situation is hard to happen in real life as a not-logged-in user cannot have a region...
 $I->see('fs1', '#inactivefoodsaverlist');
 $I->dontSee('fs-a', '#inactivefoodsaverlist');
-
-
-$I->wait(2);
-
+$I->dontSee('ambassador-a', '#inactivefoodsaverlist');
