@@ -24,6 +24,8 @@ $I->see('Inaktive Foodsaver', '#inactivefoodsaverlist');
 $I->see('fs-i', '#inactivefoodsaverlist');
 // That foodsaver never logged in, so is inactive as well. Actually this situation is hard to happen in real life as a not-logged-in user cannot have a region...
 $I->see('fs1', '#inactivefoodsaverlist');
+$I->dontSee('fs-a', '#inactivefoodsaverlist');
+
 
 $I->wait(2);
 

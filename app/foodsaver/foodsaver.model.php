@@ -32,7 +32,9 @@ class FoodsaverModel extends Model
 			hb.bezirk_id = ' . (int)$bezirk_id . '
 
 		    AND 
-			    fs.last_login <  "' . $date->format("Y-m-d H:i:s") . '"
+			fs.last_login <  "' . $date->format("Y-m-d H:i:s") . '"
+		    OR
+			fs.last_login IS NULL
 
 		    ORDER BY
 			fs.last_login DESC
