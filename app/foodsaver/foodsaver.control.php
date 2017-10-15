@@ -27,16 +27,16 @@ class FoodsaverControl extends Control
 				addBread('Foodsaver', '/?page=foodsaver&bid=' . $bezirk['id']);
 				addBread($bezirk['name'], '/?page=foodsaver&bid=' . $bezirk['id']);
 
-				// list fooodsaver
+				// list fooodsaver ($inactive can be 1 or 0, 1 means that it shows only the inactive ones and not all) 
 				addContent(
-					$this->view->foodsaverList($foodsaver, $bezirk, $inactive = 0),
+					$this->view->foodsaverList($foodsaver, $bezirk),
 					CNT_LEFT
 				);
 
-				// list inactive foodsaver
-				if($foodsaverInactive = $this->model->listFoodsaver($_GET['bid'],$inactive = 1 )) {
+				// list inactive foodsaver 
+				if($foodsaverInactive = $this->model->listFoodsaver($_GET['bid'],$inactive = TRUE )) {
 				    addContent(
-				        $this->view->foodsaverList($foodsaverInactive, $bezirk, $inactive = 1),
+				        $this->view->foodsaverList($foodsaverInactive, $bezirk, $inactive = TRUE),
 				        CNT_LEFT
 				    );
 				}

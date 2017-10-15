@@ -40,7 +40,7 @@ class FoodsaverView extends View
 		}
 	}
 
-	public function foodsaverList($foodsaver, $bezirk, $inactive = 0)
+	public function foodsaverList($foodsaver, $bezirk, $inactive = FALSE)
 	{
 		$name = $inactive ? 'inactive' : '';
 		return
