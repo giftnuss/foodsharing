@@ -1,7 +1,7 @@
 <?php
 
 $testRegion = 241;
-$I = new AcceptanceTester($scenario);
+$I = new HtmlAcceptanceTester($scenario);
 $I->wantTo('see that the foodsaver list for a bezirk contains a second list with inactive foodsavers');
 
 $regionName = $I->grabFromDatabase('fs_bezirk', 'name', ['id' => $testRegion]);
