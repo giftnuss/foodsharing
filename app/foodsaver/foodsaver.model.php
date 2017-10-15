@@ -4,12 +4,6 @@ class FoodsaverModel extends Model
 {
 	public function listFoodsaver($bezirk_id, $showOnlyInactive = FALSE)
 	{
-		if ($showOnlyInactive) {
-			$date = new DateTime('NOW -6 MONTH');
-		} else {
-			$date = new DateTime('NOW');
-		}
-
 		return $this->q('
 		    SELECT
 			fs.id,
@@ -30,13 +24,12 @@ class FoodsaverModel extends Model
 			fs.deleted_at IS NULL
 
 		    AND
-			hb.bezirk_id = ' . (int)$bezirk_id . '
-
+			hb.bezirk_id = ' . (int)$bezirk_id .
+			($showOnlyInactive ? '
 		    AND 
-			fs.last_login <  "' . $date->format("Y-m-d H:i:s") . '"
+			fs.last_login <  "' . (new DateTime('NOW -6 MONTH'))->format("Y-m-d H:i:s") . '"
 		    OR
-			fs.last_login IS NULL
-
+			fs.last_login IS NULL' : '') . '
 		    ORDER BY
 			fs.last_login DESC
 		');
