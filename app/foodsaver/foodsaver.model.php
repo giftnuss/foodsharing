@@ -2,11 +2,12 @@
 
 class FoodsaverModel extends Model
 {
-	public function listFoodsaver($bezirk_id, $inactive = FALSE)
+	public function listFoodsaver($bezirk_id, $showOnlyInactive = FALSE)
 	{
-		$date = new DateTime('NOW');
-		if ($inactive == TRUE) {
+		if ($showOnlyInactive) {
 			$date = new DateTime('NOW -6 MONTH');
+		} else {
+			$date = new DateTime('NOW');
 		}
 
 		return $this->q('
