@@ -2,7 +2,7 @@
 
 class FoodsaverModel extends Model
 {
-	public function listFoodsaver($bezirk_id, $showOnlyInactive = FALSE)
+	public function listFoodsaver($bezirk_id, $showOnlyInactive = false)
 	{
 		return $this->q('
 		    SELECT
@@ -27,7 +27,7 @@ class FoodsaverModel extends Model
 			hb.bezirk_id = ' . (int)$bezirk_id .
 			($showOnlyInactive ? '
 		    AND 
-			fs.last_login <  "' . (new DateTime('NOW -6 MONTH'))->format("Y-m-d H:i:s") . '"
+			fs.last_login <  "' . (new DateTime('NOW -6 MONTH'))->format('Y-m-d H:i:s') . '"
 		    OR
 			fs.last_login IS NULL' : '') . '
 		    ORDER BY

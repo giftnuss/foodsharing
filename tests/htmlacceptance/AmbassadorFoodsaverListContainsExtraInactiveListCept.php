@@ -7,7 +7,7 @@ $I->wantTo('see that the foodsaver list for a bezirk contains a second list with
 $regionName = $I->grabFromDatabase('fs_bezirk', 'name', ['id' => $testRegion]);
 $foodsaver = $I->createFoodsaver(null, ['name' => 'fs1', 'nachname' => 'saver1', 'photo' => 'does-not-exist.jpg']);
 $inactiveFoodsaver = $I->createFoodsaver(null, ['name' => 'fs-i', 'nachname' => 'saver2', 'photo' => 'does-not-exist.jpg', 'last_login' => '2017-01-01 00:00:00']);
-$activeFoodsaver =  $I->createFoodsaver(null, ['name' => 'fs-a', 'nachname' => 'saver3', 'photo' => 'does-not-exist.jpg', 'last_login' => (new \DateTime())->format('Y-m-d H:i:s')]);
+$activeFoodsaver = $I->createFoodsaver(null, ['name' => 'fs-a', 'nachname' => 'saver3', 'photo' => 'does-not-exist.jpg', 'last_login' => (new \DateTime())->format('Y-m-d H:i:s')]);
 $ambassador = $I->createAmbassador(null, ['name' => 'ambassador-a', 'photo' => 'does-not-exist.jpg', 'last_login' => (new \DateTime())->format('Y-m-d H:i:s')]);
 $I->addBezirkMember($testRegion, $ambassador['id'], true);
 $I->addBezirkMember($testRegion, $foodsaver['id']);
