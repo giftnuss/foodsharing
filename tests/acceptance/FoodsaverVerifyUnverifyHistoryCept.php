@@ -1,6 +1,6 @@
 <?php
 
-$testRegion = 241;
+$testRegion = 253;
 $I = new AcceptanceTester($scenario);
 $I->wantTo('Verify, unverify and see verification history of a foodsaver');
 
