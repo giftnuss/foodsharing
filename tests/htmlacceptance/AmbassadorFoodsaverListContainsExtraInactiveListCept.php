@@ -9,6 +9,7 @@ $foodsaver = $I->createFoodsaver(null, ['name' => 'fs1', 'nachname' => 'saver1',
 $inactiveFoodsaver = $I->createFoodsaver(null, ['name' => 'fs-i', 'nachname' => 'saver2', 'photo' => 'does-not-exist.jpg', 'last_login' => '2017-01-01 00:00:00']);
 $activeFoodsaver = $I->createFoodsaver(null, ['name' => 'fs-a', 'nachname' => 'saver3', 'photo' => 'does-not-exist.jpg', 'last_login' => (new \DateTime())->format('Y-m-d H:i:s')]);
 $ambassador = $I->createAmbassador(null, ['name' => 'ambassador-a', 'photo' => 'does-not-exist.jpg', 'last_login' => (new \DateTime())->format('Y-m-d H:i:s')]);
+$unrelatedFoodsaver = $I->createFoodsaver(null, ['name' => 'unrelated-fs']);
 $I->addBezirkMember($testRegion, $ambassador['id'], true);
 $I->addBezirkMember($testRegion, $foodsaver['id']);
 $I->addBezirkMember($testRegion, $activeFoodsaver['id']);
@@ -22,6 +23,9 @@ $I->see('fs-a', '#foodsaverlist');
 $I->see('fs-i', '#foodsaverlist');
 $I->see('fs1', '#foodsaverlist');
 $I->see('ambassador-a', '#foodsaverlist');
+
+// This one should show nowhere
+$I->dontSee('unrelated-fs');
 
 $I->see('die sich 6 Monate', '#inactivefoodsaverlist');
 $I->see('fs-i', '#inactivefoodsaverlist');

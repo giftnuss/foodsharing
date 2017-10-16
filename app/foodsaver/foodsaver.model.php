@@ -26,10 +26,10 @@ class FoodsaverModel extends Model
 		    AND
 			hb.bezirk_id = ' . (int)$bezirk_id .
 			($showOnlyInactive ? '
-		    AND 
+		    AND (
 			fs.last_login <  "' . (new DateTime('NOW -6 MONTH'))->format('Y-m-d H:i:s') . '"
 		    OR
-			fs.last_login IS NULL' : '') . '
+			fs.last_login IS NULL)' : '') . '
 		    ORDER BY
 			fs.last_login DESC
 		');
