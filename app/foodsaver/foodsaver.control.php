@@ -33,14 +33,13 @@ class FoodsaverControl extends Control
 					CNT_LEFT
 				);
 
-
-
 				addContent($this->view->foodsaverForm());
 
 				addContent(
 					$this->view->addFoodsaver($bezirk),
 					CNT_RIGHT
 				);
+
 				// list inactive foodsaver
 				if ($foodsaverInactive = $this->model->listFoodsaver($_GET['bid'], true)) {
 					addContent(
