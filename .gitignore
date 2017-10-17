@@ -24,3 +24,4 @@ light/**
 .php_cs_cache_local
 revision.inc.php
 migrations/_all.sql
+.vagrant
