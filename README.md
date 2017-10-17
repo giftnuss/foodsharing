@@ -68,15 +68,15 @@ cd foodsharing
 ./scripts/start
 ```
 
-### None of the above
+### Vagrant
 
-You can try using vagrant with docker-compose:
+This works with all common operation systems.
 
 1. install
 [Virtualbox](https://www.virtualbox.org/wiki/Downloads) and
 [Vagrant](https://www.vagrantup.com/downloads.html)
-1. clone the repo with `git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing`
-2. install vagrant-docker-compose with `vagrant plugin install vagrant-docker-compose` 
+2. clone the repo with `git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing`
+3. install vagrant-docker-compose with `vagrant plugin install vagrant-docker-compose` 
 
 All commands in Unix (macOS / Linux / BSD) after step 1:
 ```
@@ -95,7 +95,7 @@ vagrant up
 `vagrant ssh` connects to the virtual machine.
 
 You can change the folder directly with `cd /vagrant`.
-From there on you can use the helper scripts. 
+From there on you can use all scripts with `./scripts/NAME` 
 
 Note:
 `./scripts/start` will always be executed, when you start the virtual machine with `vagrant up`
