@@ -75,24 +75,17 @@ You can try using vagrant with docker-compose:
 1. install
 [Virtualbox](https://www.virtualbox.org/wiki/Downloads) and
 [Vagrant](https://www.vagrantup.com/downloads.html)
-2. create directory where you store your vagrant data, e.g. `~/Docker`
-4. change into the `~/Docker` folder, e.g. `cd ~/Docker` 
-4. clone the repo with `git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing` (you can also locate the foodsharing folder somewhere else, then change line 1 in the Vagrantfile)
-3. copy `foodsharing/Vagrantfile` to `~/Docker/Vagrantfile`
-4. run `vagrant up`, the first time you need to do it twice, because it's installing an extension
+1. clone the repo with `git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing`
 
 All commands in Unix (macOS / Linux / BSD) after step 1:
 ```
-mkdir ~/Docker && cd ~/Docker
 git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
-cp foodsharing/Vagrantfile ./
+cd foodsharing
 vagrant up
 vagrant up
 ```
 
 #### Daily work
-
-Everything is done in the `~/Docker` folder.
 
 `vagrant up` starts the machine and foodsharing project.
 
@@ -100,7 +93,7 @@ Everything is done in the `~/Docker` folder.
 
 `vagrant ssh` connects to the virtual machine.
 
-You can change the folder directly with `cd foodsharing`.
+You can change the folder directly with `cd /vagrant`.
 From there on you can use the helper scripts. 
 
 Note:
