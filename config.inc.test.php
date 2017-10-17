@@ -23,9 +23,7 @@ define('DEFAULT_HOST', 'lebensmittelretten.de');
 define('MAPZEN_API_KEY', 'mapzen-RaXru7A');
 define('GOOGLE_API_KEY', '');
 
-define('SMTP_HOST', '');
-define('SMTP_USER', '');
-define('SMTP_PASS', '');
+define('SMTP_HOST', 'maildev');
 define('SMTP_PORT', 25);
 define('MEM_ENABLED', true);
 
