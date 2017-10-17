@@ -72,22 +72,29 @@ cd foodsharing
 
 You can try using vagrant with docker-compose:
 
-_TODO: I guess they need to git clone the repo somewhere between step 1 and 3?_
-
 1. install
 [Virtualbox](https://www.virtualbox.org/wiki/Downloads) and
 [Vagrant](https://www.vagrantup.com/downloads.html)
 2. create directory where you store your vagrant data, e.g. `~/Docker`
-3. copy `Vagrantfile.example` to `Vagrantfile` and update the `config.vm.synced_folder` option to point to your foodsharing code folder
-4. run 'vagrant up' in this folder
+3. copy `Vagrantfile` to `~/Docker/Vagrantfile`
+4. change into the `~/Docker` folder, e.g. `cd ~/Docker` 
+4. copy repo with `git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing` (you can also locate the foodsharing folder somewhere else, then change line 4 in the Vagrantfile)
+4. run 'vagrant up', the first time you need to do it twice, because it's installing an extension
 
-Then you can ssh to the vagrant machine to run the scripts:
+#### Daily work
 
-```
-vagrant ssh
-cd foodsharing
-./scripts/start
-```
+All is be done in the `~/Docker` folder
+
+`vagrant up` starts the machine and foodsharing projects.
+
+`vagrant halt` stops the virtual machine
+
+`vagrant ssh` to access the virtual machine.
+You can change the folder directly with `cd foodsharing`.
+From there on you can use the helper scripts. 
+
+Note:
+`./scripts/start` will always be executed, when you start the virtual machine with `vagrant up`
 
 ### foodsharing light and API
 
