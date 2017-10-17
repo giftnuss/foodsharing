@@ -53,7 +53,6 @@ services:
       - redis:redis
       - db:db
     volumes:
-      - ../:/app
       - selenium_downloads:/downloads
       - vendor_cache:/app/vendor
     environment:
