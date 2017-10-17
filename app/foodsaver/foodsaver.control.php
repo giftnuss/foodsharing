@@ -33,13 +33,7 @@ class FoodsaverControl extends Control
 					CNT_LEFT
 				);
 
-				// list inactive foodsaver
-				if ($foodsaverInactive = $this->model->listFoodsaver($_GET['bid'], true)) {
-					addContent(
-						$this->view->foodsaverList($foodsaverInactive, $bezirk, true),
-						CNT_LEFT
-					);
-				}
+
 
 				addContent($this->view->foodsaverForm());
 
@@ -47,6 +41,13 @@ class FoodsaverControl extends Control
 					$this->view->addFoodsaver($bezirk),
 					CNT_RIGHT
 				);
+				// list inactive foodsaver
+				if ($foodsaverInactive = $this->model->listFoodsaver($_GET['bid'], true)) {
+					addContent(
+						$this->view->foodsaverList($foodsaverInactive, $bezirk, true),
+						CNT_RIGHT
+					);
+				}
 			}
 		} elseif (($id = getActionId('edit')) && (isBotschafter() || isOrgaTeam())) {
 			$data = $this->model->getOne_foodsaver($id);
