@@ -78,7 +78,7 @@ You can try using vagrant with docker-compose:
 2. create directory where you store your vagrant data, e.g. `~/Docker`
 3. copy `Vagrantfile` to `~/Docker/Vagrantfile`
 4. change into the `~/Docker` folder, e.g. `cd ~/Docker` 
-4. copy repo with `git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing` (you can also locate the foodsharing folder somewhere else, then change line 4 in the Vagrantfile)
+4. copy repo with `git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing` (you can also locate the foodsharing folder somewhere else, then change line 1 in the Vagrantfile)
 4. run 'vagrant up', the first time you need to do it twice, because it's installing an extension
 
 #### Daily work
