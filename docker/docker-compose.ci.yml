@@ -24,6 +24,7 @@ services:
 
   app:
     container_name: foodsharing_ci_app
+    image: foodsharing_ci_app
     build:
       context: ..
       dockerfile: docker/Dockerfile.php.ci
@@ -38,6 +39,24 @@ services:
     volumes:
       - selenium_downloads:/downloads
       - vendor_cache:/app/vendor
+
+  # php mail queue runner
+  #------------------------------------
+
+  mailqueuerunner:
+    container_name: foodsharing_ci_mailqueuerunner
+    image: foodsharing_ci_app
+    command: php run.php mails index
+    working_dir: /app
+    links:
+      - maildev
+      - redis:redis
+      - db:db
+    volumes:
+      - selenium_downloads:/downloads
+      - vendor_cache:/app/vendor
+    environment:
+      FS_ENV: test
 
   chat:
     container_name: foodsharing_ci_chat
@@ -96,6 +115,18 @@ services:
       - 4444
     volumes:
       - selenium_downloads:/home/seluser/Downloads
+
+  # maildev
+  #------------------------------------
+
+  maildev:
+    command: >
+      bin/maildev
+        --web 80
+        --smtp 25
+        --hide-extensions STARTTLS
+    image: djfarrelly/maildev
+    container_name: foodsharing_ci_maildev
 
 volumes:
   selenium_downloads:

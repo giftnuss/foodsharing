@@ -54,6 +54,8 @@ $I->click('Anmeldung absenden', '.step.step3');
 $I->waitForElementVisible('#joinready', 4);
 $I->see('Deine Anmeldung war erfolgreich!');
 
+$I->expectNumMails(1, 1);
+
 // now login as that user
 
 $I->amOnPage('/');

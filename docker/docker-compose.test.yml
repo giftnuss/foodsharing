@@ -39,6 +39,24 @@ services:
       FS_ENV: test
       REDIS_HOST: redis
 
+  # php mail queue runner
+  #------------------------------------
+
+  mailqueuerunner:
+    container_name: foodsharing_test_mailqueuerunner
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.1
+    command: php run.php mails index
+    working_dir: /app
+    links:
+      - maildev
+      - redis:redis
+      - db:db
+    volumes:
+      - ../:/app
+    environment:
+      FS_ENV: test
+      REDIS_HOST: redis
+
   chat:
     container_name: foodsharing_test_chat
     image: registry.gitlab.com/foodsharing-dev/images/chat:1.1
@@ -109,6 +127,21 @@ services:
       - 28081:80
     volumes:
       - /sessions
+
+  # maildev
+  #------------------------------------
+
+  maildev:
+    command: >
+      bin/maildev
+        --web 80
+        --smtp 25
+        --hide-extensions STARTTLS
+    image: djfarrelly/maildev
+    container_name: foodsharing_test_maildev
+    ports:
+      - 28083:80
+
 
 volumes:
   selenium_downloads:

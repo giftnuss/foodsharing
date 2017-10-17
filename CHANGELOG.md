@@ -31,6 +31,7 @@
 - Enable composer autoloader and initial src folder. !157 by @tiltec
 
 ## Dev/Test/CI stuff
+- Add maildev to support testing outgoing mails. !12 @NerdyProjects @nicksellen
 - Change default gender from NULL to other to follow production behaviour. !190 @NerdyProjects
 - Make php cs fixer output in CI nice. !191 @NerdyProjects
 - Enforce php cs fixer style checks in CI tests. !173 @NerdyProjects

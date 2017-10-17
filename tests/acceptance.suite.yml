@@ -20,3 +20,4 @@ modules:
         - \Helper\Acceptance
         - \Helper\Foodsharing
         - \Helper\FoodsharingUrl
+        - \Helper\Maildev
