@@ -1,18 +1,25 @@
 # foodsharing
 
-This runs everything inside docker containers to have minimal impact on the local system and
-allow precise versions of software to be defined to match production setup closely.
+Welcome to the foodsharing code!
 
 ## Getting started
 
-Make sure you have installed
-[docker](https://docs.docker.com/engine/getstarted/step_one/#step-1-get-docker) and
-[docker-compose](https://docs.docker.com/compose/install/) (at least version 1.6.0).
-If you're [using OSX](https://docs.docker.com/engine/installation/mac/)
-you'll have a better experience with Docker for Mac rather than Docker Toolbox
-(files won't update properly if using Toolbox).
-There is no _official_ support for running under Windows at this time, but if
-you'd like to help out getting that to work, please do!
+You can use the docker-compose setup if you are using one of:
+
+- Linux
+- OSX Yosemite 10.10.3 or higher
+- Windows 10 Pro or higher
+
+If you are not using one of those, then try the vagrant + docker-compose setup.
+
+### Linux
+
+Install
+[docker CE](https://docs.docker.com/engine/installation/).
+
+And ensure you have 
+[docker-compose](https://docs.docker.com/compose/install/) (at least version 1.6.0)
+installed too (often comes with docker).
 
 If you can't connect to docker with your local user, you may want to add yourself
 to the docker group:
@@ -34,8 +41,53 @@ cd foodsharing
 ./scripts/start
 ```
 
-It'll take some time the first time you run it to fetch all the docker images and
-install composer/npm etc, so go and make a cup of tea.
+### OSX Yosemite 10.10.3 or higher
+
+Install [Docker for Mac](https://docs.docker.com/engine/installation/mac/).
+
+```
+git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
+cd foodsharing
+./scripts/start
+```
+
+### Windows 10 Pro or higher
+
+Install [Docker for Windows](https://docs.docker.com/docker-for-windows/install/).
+
+Our scripts are written in bash, but you should be able to get something working by
+installing/enabling
+[Windows Subsystem for Linux](https://msdn.microsoft.com/en-gb/commandline/wsl/install_guide)
+
+_We do not generally use Windows, so I cannot say it works out of the box.
+If you can help here please do!_
+
+```
+git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
+cd foodsharing
+./scripts/start
+```
+
+### None of the above
+
+You can try using vagrant with docker-compose:
+
+_TODO: I guess they need to git clone the repo somewhere between step 1 and 3?_
+
+1. install
+[Virtualbox](https://www.virtualbox.org/wiki/Downloads) and
+[Vagrant](https://www.vagrantup.com/downloads.html)
+2. create directory where you store your vagrant data, e.g. `~/Docker`
+3. copy `Vagrantfile.example` to `Vagrantfile` and update the `config.vm.synced_folder` option to point to your foodsharing code folder
+4. run 'vagrant up' in this folder
+
+Then you can ssh to the vagrant machine to run the scripts:
+
+```
+vagrant ssh
+cd foodsharing
+./scripts/start
+```
 
 ### foodsharing light and API
 
@@ -45,7 +97,7 @@ If you want to include the new Django API and the foodsharing light frontend, th
 # you may have "api" and "light" directories already present, if so remove them first
 git clone https://github.com/foodsharing-dev/foodsharing-light.git light
 git clone https://github.com/foodsharing-dev/foodsharing-django-api.git api
-./scripts/docker-compose up -d
+./scripts/start
 ```
 
 Then visit [localhost:18082](http://localhost:18082) for fs light frontend and
