@@ -24,6 +24,7 @@ services:
 
   app:
     container_name: foodsharing_ci_app
+    image: foodsharing_ci_app
     build:
       context: ..
       dockerfile: docker/Dockerfile.php.ci
@@ -44,7 +45,7 @@ services:
 
   mailqueuerunner:
     container_name: foodsharing_ci_mailqueuerunner
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.1
+    image: foodsharing_ci_app
     command: php run.php mails index
     working_dir: /app
     links:
@@ -53,8 +54,10 @@ services:
       - db:db
     volumes:
       - ../:/app
+      - selenium_downloads:/downloads
+      - vendor_cache:/app/vendor
     environment:
-      FS_ENV: dev
+      FS_ENV: test
 
   chat:
     container_name: foodsharing_ci_chat
