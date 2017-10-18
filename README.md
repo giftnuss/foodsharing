@@ -190,6 +190,41 @@ To format all files you can run:
 vendor/bin/php-cs-fixer fix --show-progress=estimating --verbose
 ```
 
+For convenience, you can and should add the code style fix as a pre-commit hook, so you will never commit/push any PHP code that does not
+follow the code style rules.
+
+There are two possibilities:
+
+## Using local PHP
+
+When PHP >= 7.0 is installed locally and the vendor folder is in place (by having used the automated tests or the dev environment), you can use
+your computers PHP to check/fix the codestyle, as this is the fastest option:
+
+```
+./scripts/fix-codestyle-local
+```
+
+Adding this to `.git/hooks/pre-commit` could look like that:
+
+```
+#!/bin/sh
+HASH_BEFORE=`git diff | sha1sum`
+./scripts/fix-codestyle-local
+HASH_AFTER=`git diff | sha1sum`
+
+if [ "$HASH_AFTER" != "$HASH_BEFORE" ]; then
+  echo "PHP Codestyle was fixed. Please readd your changes and retry commit."
+  exit 1;
+fi
+```
+
+## Using docker PHP
+Executing the following script will use the dev environment to run the codestyle check. As it currently always runs a new container using docker-compose, it will take some seconds to execute:
+
+```
+./scripts/fix-codestyle
+```
+
 # Helper scripts
 
 There are a number of helper scripts available. Most of them obey the `FS_INT` env var. Default is `dev`, you can also set it to `test`.
