@@ -12,13 +12,13 @@ a few new features too.
 
 Many many thanks to all the contributors that made this possible (in order of appearance in this list):
 
-@valentin.unicorn
-@nicksellen
-@NerdyProjects
-@k.miklobusec
-@peter.toennies
-@raphaelw
-@tiltec
+* @valentin.unicorn
+* @nicksellen
+* @NerdyProjects
+* @k.miklobusec
+* @peter.toennies
+* @raphaelw
+* @tiltec
 
 ## Breaking changes
 
