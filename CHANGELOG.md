@@ -1,17 +1,3 @@
-# UNRELEASED [release date]
-
-## Releases notes
-
-## Breaking changes
-
-## Features
-
-## Bugfixes
-
-## Refactoring
-
-## Dev/Test/CI stuff
-
 # 2017-10-18
 
 ## Releases notes
