@@ -96,6 +96,9 @@ Many many thanks to all the contributors that made this possible (in order of ap
 
 ## Features
 
+- Added a list of inactive foodsavers to the foodsavers page !183 @valentin.unicorn
+- Ensure PHP7 compatibility and upgrade environment to PHP7 !171 @nicksellen
+- Added the changelog into the page and link inside the '?' menu !199 @NerdyProjects
 - Added a list of inactive foodsavers to the foodsavers page !183 by @valentin.unicorn
 - Ensure PHP7 compatibility and upgrade environment to PHP7 !171 by @nicksellen
 - Show current commit in footer as well as use it in sentry if errors occur !153 @NerdyProjects
