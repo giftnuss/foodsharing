@@ -5,12 +5,46 @@
 ## Breaking changes
 
 ## Features
+
+## Bugfixes
+
+## Refactoring
+
+## Dev/Test/CI stuff
+
+# 2017-10-18
+
+## Releases notes
+
+Our first release using the new approach, yay!
+
+This release contains some important structural improvements, perhaps most significantly,
+we are now using composer for dependencies where possible, and running on php7.
+
+There are also a good number of smaller, but visible changes to the site, mostly bugfixes, but
+a few new features too.
+
+Many many thanks to all the contributors that made this possible (in order of appearance in this list):
+
+@valentin.unicorn
+@nicksellen
+@NerdyProjects
+@k.miklobusec
+@peter.toennies
+@raphaelw
+@tiltec
+
+## Breaking changes
+
+## Features
+
 - Added a list of inactive foodsavers to the foodsavers page !183 by @valentin.unicorn
 - Ensure PHP7 compatibility and upgrade environment to PHP7 !171 by @nicksellen
 - Show current commit in footer as well as use it in sentry if errors occur !153 @NerdyProjects
 - Reports list can be sorted by main region of the FS. !151 by @k.miklobusec and @peter.toennies 
 
 ## Bugfixes
+
 - Fix multiple warnings/notices regarding accessing undefined variables. !192 @NerdyProjects
 - Fix spinning apple when in profile/conversation with a user without a profile picture. !172 by @NerdyProjects
 - Move login button in navigation a bit to the right to be always clickable. !162 by @NerdyProjects
@@ -24,6 +58,7 @@
 - Fixed spelling in footer of automatic emails. !174 by @peter.toennies
 
 ## Refactoring
+
 - Remove internal FPDI/FPDF library and use it via composer. !186 @NerdyProjects
 - Remove internal Html2Text library and use it via composer. !185 @NerdyProjects
 - Remove internal progressbar library in favor of a composer one. !181 @NerdyProjects
@@ -31,6 +66,7 @@
 - Enable composer autoloader and initial src folder. !157 by @tiltec
 
 ## Dev/Test/CI stuff
+
 - Add maildev to support testing outgoing mails. !12 @NerdyProjects @nicksellen
 - Change default gender from NULL to other to follow production behaviour. !190 @NerdyProjects
 - Make php cs fixer output in CI nice. !191 @NerdyProjects
