@@ -72,6 +72,11 @@ Many many thanks to all the contributors that made this possible (in order of ap
 - Make php cs fixer output in CI nice !191 @NerdyProjects
 - Enforce php cs fixer style checks in CI tests !173 @NerdyProjects
 - Add CLI Test suite and ensure commands executed via cron at least exist !176 @NerdyProjects
+- Example of git pre-commit hook for codestyle checks. !196 @NerdyProjects
+- Change default gender from NULL to other to follow production behaviour. !190 @NerdyProjects
+- Make php cs fixer output in CI nice. !191 @NerdyProjects
+- Enforce php cs fixer style checks in CI tests. !173 @NerdyProjects
+- Add CLI Test suite and ensure commands executed via cron at least exist. !176 @NerdyProjects
 - Cache vendor folder by using a distinct volume in CI !182 @NerdyProjects
 - Run mkdirs using exec so it works in CI !164 @NerdyProjects
 - Test environment allows testing of file downloads as well !165 @NerdyProjects
