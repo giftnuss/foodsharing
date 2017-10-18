@@ -1,0 +1,2 @@
+#!/bin/sh
+php -n -f vendor/bin/php-cs-fixer fix --cache-file .php_cs_cache_local 
