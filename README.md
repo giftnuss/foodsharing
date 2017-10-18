@@ -75,13 +75,12 @@ then this should work with all common operation systems.
 
 We are less familiar with this solution so may be less able to support you.
 
-1. install
+Install
 [Virtualbox](https://www.virtualbox.org/wiki/Downloads) and
-[Vagrant](https://www.vagrantup.com/downloads.html)
-2. clone the repo with `git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing`
-3. install vagrant-docker-compose with `vagrant plugin install vagrant-docker-compose` 
+[Vagrant](https://www.vagrantup.com/downloads.html).
 
-All commands in Unix (macOS / Linux / BSD) after step 1:
+Then:
+
 ```
 git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
 cd foodsharing
