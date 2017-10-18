@@ -35,6 +35,8 @@ su - $USER
 docker info
 ```
 
+Then:
+
 ```
 git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
 cd foodsharing
@@ -44,6 +46,8 @@ cd foodsharing
 ### OSX Yosemite 10.10.3 or higher
 
 Install [Docker for Mac](https://docs.docker.com/engine/installation/mac/).
+
+Then:
 
 ```
 git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
@@ -59,8 +63,7 @@ Our scripts are written in bash, but you should be able to get something working
 installing/enabling
 [Windows Subsystem for Linux](https://msdn.microsoft.com/en-gb/commandline/wsl/install_guide)
 
-_We do not generally use Windows, so I cannot say it works out of the box.
-If you can help here please do!_
+Then:
 
 ```
 git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
@@ -68,12 +71,15 @@ cd foodsharing
 ./scripts/start
 ```
 
+_We do not generally use Windows, so I cannot say it works out of the box.
+If you can help here please do!_
+
 ### Vagrant
 
 If you cannot use any of the above methods,
 then this should work with all common operation systems.
 
-We are less familiar with this solution so may be less able to support you.
+However, we are less familiar with this solution so may be less able to support you.
 
 Install
 [Virtualbox](https://www.virtualbox.org/wiki/Downloads) and
