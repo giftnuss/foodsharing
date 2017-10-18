@@ -63,6 +63,39 @@ Many many thanks to all the contributors that made this possible (in order of ap
 - Added a list of inactive foodsavers to the foodsavers page !183 @valentin.unicorn
 - Ensure PHP7 compatibility and upgrade environment to PHP7 !171 @nicksellen
 - Added the changelog into the page and link inside the '?' menu !199 @NerdyProjects
+
+## Bugfixes
+
+## Refactoring
+
+## Dev/Test/CI stuff
+
+# 2017-10-18
+
+## Releases notes
+
+Our first release using the new approach, yay!
+
+This release contains some important structural improvements, perhaps most significantly,
+we are now using composer for dependencies where possible, and running on php7.
+
+There are also a good number of smaller, but visible changes to the site, mostly bugfixes, but
+a few new features too.
+
+Many many thanks to all the contributors that made this possible (in order of appearance in this list):
+
+@valentin.unicorn
+@nicksellen
+@NerdyProjects
+@k.miklobusec
+@peter.toennies
+@raphaelw
+@tiltec
+
+## Breaking changes
+
+## Features
+
 - Added a list of inactive foodsavers to the foodsavers page !183 by @valentin.unicorn
 - Ensure PHP7 compatibility and upgrade environment to PHP7 !171 by @nicksellen
 - Show current commit in footer as well as use it in sentry if errors occur !153 @NerdyProjects
