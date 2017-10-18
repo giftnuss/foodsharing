@@ -70,7 +70,10 @@ cd foodsharing
 
 ### Vagrant
 
-This works with all common operation systems.
+If you cannot use any of the above methods,
+then this should work with all common operation systems.
+
+We are less familiar with this solution so may be less able to support you.
 
 1. install
 [Virtualbox](https://www.virtualbox.org/wiki/Downloads) and
