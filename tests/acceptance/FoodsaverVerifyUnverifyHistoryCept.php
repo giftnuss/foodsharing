@@ -4,8 +4,8 @@ $testRegion = 253;
 $I = new AcceptanceTester($scenario);
 $I->wantTo('Verify, unverify and see verification history of a foodsaver');
 
-$foodsaver = $I->createFoodsaver();
-$ambassador = $I->createAmbassador();
+$foodsaver = $I->createFoodsaver(null, ['name' => 'a']);
+$ambassador = $I->createAmbassador(null, ['name' => 'b']);
 $I->addBezirkMember($testRegion, $ambassador['id'], true);
 $I->addBezirkMember($testRegion, $foodsaver['id']);
 
@@ -17,11 +17,12 @@ $I->waitForText('Es liegen keine Daten vor');
 
 $I->amOnPage('/?page=passgen&bid=' . $testRegion);
 $I->seeElement('.verify-y');
-$unverifyTime = new DateTime();
+
 $I->clickWithLeftButton('.verify-y');
 $I->waitForElementVisible('.verify-n');
 $I->amOnPage('/?page=passgen&bid=' . $testRegion);
-$verifyTime = new DateTime();
+$I->seeElement('.verify-n');
+
 $I->clickWithLeftButton('.verify-n');
 $I->waitForText('Ausweis übergeben?');
 $I->click('Verifizieren');
