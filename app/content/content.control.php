@@ -188,6 +188,16 @@ class ContentControl extends Control
 		}
 	}
 
+	public function changelog()
+	{
+		addBread('Changelog');
+		addTitle('Changelog');
+		$Parsedown = new Parsedown();
+		$cl['body'] = $Parsedown->parse(file_get_contents('CHANGELOG.md'));
+		$cl['title'] = 'Changelog';
+		addContent($this->view->simple($cl));
+	}
+
 	private function content_form($title = 'Content Management')
 	{
 		return v_form('faq', array(

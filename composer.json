@@ -11,7 +11,8 @@
     "maximebf/debugbar": "^1.14",
     "guiguiboy/php-cli-progress-bar": "*",
     "html2text/html2text": "^4.1",
-    "setasign/fpdi-fpdf": "^1.6"
+    "setasign/fpdi-fpdf": "^1.6",
+    "erusev/parsedown": "^1.6"
   },
   "autoload": {
     "psr-4": {"Foodsharing\\": "src/"}

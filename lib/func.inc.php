@@ -548,7 +548,8 @@ function getMenu()
 						<li><a><i class="fa fa-question-circle"></i></a>
 													<ul>
 															<li><a href="/?page=listFaq">F.A.Q.</a></li>
-															<li><a href="http://wiki.lebensmittelretten.de/">Wiki</a></li>
+															<li><a href="https://wiki.foodsharing.de/">Wiki</a></li>
+															<li><a href="/?page=content&sub=changelog">' . s('changelog') . '</a></li>
 													</ul>
 						</li>
 						' . $ags . '
@@ -564,7 +565,8 @@ function getMenu()
 						<option value="/?page=dashboard">Dashboard</option>
 						<option value="/karte">Karte</option>
 						<option value="/?page=listFaq">F.A.Q.</option>
-						<option value="http://wiki.lebensmittelretten.de">Wiki</option>
+						<option value="https://wiki.foodsharing.de">Wiki</option>
+						<option value="/?page=content&sub=changelog">' . s('changelog') . '</option>
 						' . $settings['mobile'] . '
 						' . $ags_mob . '
 						' . $foodsaver_mob . '
