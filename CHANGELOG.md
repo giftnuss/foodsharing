@@ -10,7 +10,7 @@ we are now using composer for dependencies where possible, and running on php7.
 There are also a good number of smaller, but visible changes to the site, mostly bugfixes, but
 a few new features too.
 
-Many many thanks to all the contributors that made this possible (in order of appearance in this list):
+Many many thanks to all the contributors that made this possible (in order of appearance in the changelog):
 
 * @valentin.unicorn
 * @nicksellen
