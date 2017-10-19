@@ -4,13 +4,25 @@ unless Vagrant.has_plugin?("vagrant-docker-compose")
   exit
 end
 
+ports = [
+  18080, # main website
+  18081, # phpmyadmin
+  18083, # maildev
+
+  # these two are not available for a default setup
+  # check the README for instructions on setting them
+  # if you want, they are optional
+  18082, # foodsharing light
+  18000  # django api
+]
+
 Vagrant.configure("2") do |config|
   
   config.vm.box = "ubuntu/trusty64"
 
-  config.vm.network(:forwarded_port, guest: 18080, host: 18080)
-  config.vm.network(:forwarded_port, guest: 18081, host: 18081)
-  config.vm.network(:forwarded_port, guest: 18082, host: 18082)
+  ports.each do |port|
+    config.vm.network(:forwarded_port, guest: port, host: port)
+  end
 
   config.vm.provision :shell, inline: "apt-get update"
   
