@@ -90,7 +90,6 @@ Then:
 ```
 git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
 cd foodsharing
-vagrant plugin install vagrant-docker-compose
 vagrant up
 ```
 

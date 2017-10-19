@@ -1,7 +1,6 @@
-unless Vagrant.has_plugin?("vagrant-docker-compose")
-  system("vagrant plugin install vagrant-docker-compose")
-  puts "Dependencies installed, please try the command again."
-  exit
+required_plugins = %w(vagrant-docker-compose)
+required_plugins.each do |plugin|
+    exec "vagrant plugin install #{plugin}; vagrant #{ARGV.join(" ")}" unless Vagrant.has_plugin? plugin || ARGV[0] == 'plugin'
 end
 
 ports = [
