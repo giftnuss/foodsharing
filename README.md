@@ -102,8 +102,9 @@ vagrant up
 
 `vagrant ssh` connects to the virtual machine.
 
-You can change the folder directly with `cd /vagrant`.
-From there on you can use all scripts with `./scripts/NAME` 
+Once connected to the virtual machine go to /vagrant with `cd /vagrant` 
+This is where you find all the files of the foodsharing repository in the VM. 
+From there on you can run all scripts with `./scripts/NAME` 
 
 Note:
 `./scripts/start` will always be executed, when you start the virtual machine with `vagrant up`
