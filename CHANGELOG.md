@@ -8,7 +8,7 @@
 
 ## Bugfixes
 
-- Moved the list of inactive Foodsavers of !183 from the left to the right, because it was impractical in large regions. !194 by valentin.unicorn
+- Moved the list of inactive Foodsavers of !183 from the left to the right, because it was impractical in larger regions. !194 by valentin.unicorn
 
 ## Refactoring
 
