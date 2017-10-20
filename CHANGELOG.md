@@ -8,6 +8,8 @@
 
 ## Bugfixes
 
+- Moved the list of inactive Foodsavers of !183 from the left to the right, because it was impractical in large regions. !194 by valentin.unicorn
+
 ## Refactoring
 
 ## Dev/Test/CI stuff
