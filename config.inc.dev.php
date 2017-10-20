@@ -15,8 +15,9 @@ define('DB_PASS', 'root');
 define('DB_DB', 'foodsharing');
 define('PREFIX', 'fs_');
 define('ERROR_REPORT', E_ALL);
-define('BASE_URL', $protocol . '//lmr.local/');
-define('URL_INTERN', $protocol . '://lmr.local/freiwillige/');
+define('BASE_URL', $protocol . '://localhost:18080');
+define('URL_INTERN', $protocol . '://localhost:18080');
+
 define('DEFAULT_EMAIL', 'noreply@lebensmittelretten.de');
 define('DEFAULT_EMAIL_NAME', 'Foodsharing Freiwillige');
 define('VERSION', '0.8.1');
@@ -26,10 +27,9 @@ define('DEFAULT_HOST', 'lebensmittelretten.de');
 define('MAPZEN_API_KEY', 'mapzen-RaXru7A');
 define('GOOGLE_API_KEY', 'AIzaSyCkFfCoOnj8ZjGGcApHS1rX6Rt6OxrW6hQ');
 
-define('SMTP_HOST', '');
-define('SMTP_USER', '');
-define('SMTP_PASS', '');
+define('SMTP_HOST', 'maildev');
 define('SMTP_PORT', 25);
+
 define('MEM_ENABLED', true);
 
 define('SOCK_URL', 'http://chat:1338/');

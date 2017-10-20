@@ -21,17 +21,6 @@ class MailsControl extends ConsoleControl
 		$this->queueWorker();
 	}
 
-	/**
-	 * public method to stop socket server friendly
-	 * accessable over commandline with: php run.php mails stop.
-	 */
-	public function stop()
-	{
-		$client = new SocketClient();
-
-		$client->serverSignal('close');
-	}
-
 	public function queueWorker()
 	{
 		while (1) {

@@ -188,6 +188,19 @@ class ContentControl extends Control
 		}
 	}
 
+	public function changelog()
+	{
+		addBread('Changelog');
+		addTitle('Changelog');
+		$markdown = file_get_contents('CHANGELOG.md');
+		$markdown = preg_replace('/\@(\S+)/', '[@\1](https://gitlab.com/\1)', $markdown);
+		$markdown = preg_replace('/!([0-9]+)/', '[!\1](https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/\1)', $markdown);
+		$Parsedown = new Parsedown();
+		$cl['body'] = $Parsedown->parse($markdown);
+		$cl['title'] = 'Changelog';
+		addContent($this->view->simple($cl));
+	}
+
 	private function content_form($title = 'Content Management')
 	{
 		return v_form('faq', array(

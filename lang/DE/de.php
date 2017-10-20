@@ -232,3 +232,5 @@ $g_lang['menu_regions_without_bots'] = 'Bezirke ohne Botschafter';
 $g_lang['menu_foodsaver_without_region'] = 'Foodsaver ohne Koordinaten';
 $g_lang['menu_email_tpl'] = 'E-Mail-Vorlagen';
 $g_lang['menu_blog'] = 'Blogbeiträge bearbeiten';
+
+$g_lang['changelog'] = 'Changelog';

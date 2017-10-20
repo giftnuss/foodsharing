@@ -1,0 +1,9 @@
+#!/bin/bash
+
+export FS_ENV=dev
+
+set -e
+
+. $(dirname "$0")/inc.sh
+
+run-in-container app vendor/bin/php-cs-fixer fix
