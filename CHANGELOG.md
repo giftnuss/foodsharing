@@ -11,7 +11,7 @@
 - Reports list can be sorted by main region of the FS. !151 by @k.miklobusec and @peter.toennies 
 
 ## Bugfixes
-- Fix the issue that the inactiveFoodsaverList !183 is impractical to use in large Bezirke by moving it from left to right by @valentin.unicorn
+- Fix the issue that the inactiveFoodsaverList !183 is impractical to use in large Bezirke by moving it from left to right !194 by @valentin.unicorn
 - Fix multiple warnings/notices regarding accessing undefined variables. !192 @NerdyProjects
 - Fix spinning apple when in profile/conversation with a user without a profile picture. !172 by @NerdyProjects
 - Move login button in navigation a bit to the right to be always clickable. !162 by @NerdyProjects
