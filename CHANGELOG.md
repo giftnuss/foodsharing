@@ -47,18 +47,6 @@ Many many thanks to all the contributors that made this possible (in order of ap
 - Reports list can be sorted by main region of the FS !151 @k.miklobusec @peter.toennies 
 
 ## Bugfixes
-- Fix the issue that the inactiveFoodsaverList !183 is impractical to use in large Bezirke by moving it from left to right !194 by @valentin.unicorn
-- Fix multiple warnings/notices regarding accessing undefined variables. !192 @NerdyProjects
-- Fix spinning apple when in profile/conversation with a user without a profile picture. !172 by @NerdyProjects
-- Move login button in navigation a bit to the right to be always clickable. !162 by @NerdyProjects
-- Set the pages timezone globally to Europe/Berlin to not having to rely on server settings. !256 by @NerdyProjects
-- Foodsharers and unverified Foodsavers are no longer able to create business cards. !145 by @k.miklobusec and @peter.toennies
-- Breadcrumb links in forum view are working now. !142 by @raphaelw and @NerdyProjects
-- Lots of corrections in spelling and grammar. !140, !118 by @peter.toennies
-- Consistancy in naming: All uses of "Region" are now called "Bezirk". !141 by @peter.toennies
-- Alphabetical order in the orga-menu. !160 by @peter.toennies
-- Aproximate time of pickup stays in shop settings. !161 by @peter.toennies
-- Fixed spelling in footer of automatic emails. !174 by @peter.toennies
 
 - Fix multiple warnings/notices regarding accessing undefined variables !192 @NerdyProjects
 - Fix spinning apple when in profile/conversation with a user without a profile picture !172 @NerdyProjects
