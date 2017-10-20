@@ -25,3 +25,4 @@ light/**
 revision.inc.php
 migrations/_all.sql
 .vagrant
+.DS_Store
