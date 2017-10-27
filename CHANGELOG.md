@@ -14,6 +14,7 @@
 - Corrected certain errors in spelling, phrasing, and grammar for all pages treating our stores. !208 by @peter.toennies
 - Same for statistics. !211 by @peter.toennies
 
+- Removed not working store creation button and map view selector from the list of stores. !188 by peter.toennies
 ## Refactoring
 
 - Harden routing by adding a table lookup layer to get class view from module name !209 @NerdyProjects
