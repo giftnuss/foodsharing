@@ -240,13 +240,13 @@ function betrieb_form($bezirk = false, $page = '')
 			array('id' => 2419200, 'name' => '4 Wochen')
 		))),
 		v_form_select('abholmenge', array('values' => array(
-			array('id' => 1, 'name' => '1-3kg'),
-			array('id' => 2, 'name' => '3-5kg'),
-			array('id' => 3, 'name' => '5-10kg'),
-			array('id' => 4, 'name' => '10-20kg'),
-			array('id' => 5, 'name' => '20-30kg'),
-			array('id' => 6, 'name' => '40-50kg'),
-			array('id' => 7, 'name' => 'mehr als 50kg')
+			array('id' => 1, 'name' => '1-3 kg'),
+			array('id' => 2, 'name' => '3-5 kg'),
+			array('id' => 3, 'name' => '5-10 kg'),
+			array('id' => 4, 'name' => '10-20 kg'),
+			array('id' => 5, 'name' => '20-30 kg'),
+			array('id' => 6, 'name' => '40-50 kg'),
+			array('id' => 7, 'name' => 'mehr als 50 kg')
 		))),
 
 		$verantwortlich_select
