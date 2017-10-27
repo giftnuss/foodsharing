@@ -13,6 +13,7 @@
 - More consistent use of SI units. !204 by @peter.toennies
 - Corrected certain errors in spelling, phrasing, and grammar for all pages treating our stores. !208 by @peter.toennies
 - Same for statistics. !211 by @peter.toennies
+- fixed the wrong order of foodsaver counts in the lost region list. !187 by peter.toennies
 
 - Removed not working store creation button and map view selector from the list of stores. !188 by peter.toennies
 ## Refactoring
