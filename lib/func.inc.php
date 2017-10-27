@@ -76,15 +76,15 @@ function addContent($new_content, $place = CNT_MAIN)
 
 function abhm($id)
 {
-	$arr = array(
-		1 => array('id' => 1, 'name' => '1-3 kg'),
-		2 => array('id' => 2, 'name' => '3-5 kg'),
-		3 => array('id' => 3, 'name' => '5-10 kg'),
-		4 => array('id' => 4, 'name' => '10-20 kg'),
-		5 => array('id' => 5, 'name' => '20-30 kg'),
-		6 => array('id' => 6, 'name' => '40-50 kg'),
-		7 => array('id' => 7, 'name' => 'mehr als 50 kg')
-	);
+	$arr = [
+		1 => ['id' => 1, 'name' => '1-3 kg'],
+		2 => ['id' => 2, 'name' => '3-5 kg'],
+		3 => ['id' => 3, 'name' => '5-10 kg'],
+		4 => ['id' => 4, 'name' => '10-20 kg'],
+		5 => ['id' => 5, 'name' => '20-30 kg'],
+		6 => ['id' => 6, 'name' => '40-50 kg'],
+		7 => ['id' => 7, 'name' => 'mehr als 50 kg']
+	];
 
 	if (isset($arr[$id])) {
 		return $arr[$id]['name'];
