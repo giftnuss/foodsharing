@@ -9,6 +9,7 @@
 ## Bugfixes
 
 - Moved the list of inactive Foodsavers of !183 from the left to the right, because it was impractical in larger regions. !194 by valentin.unicorn
+- More consistent use of SI units. !204 by @peter.toennies
 
 ## Refactoring
 
