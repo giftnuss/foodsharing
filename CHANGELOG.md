@@ -15,6 +15,7 @@
 
 ## Dev/Test/CI stuff
 
+- Move app/Core module into PSR4 compliant Modules/Core structure !168 @nicksellen @NerdyProjects
 - Add vagrant docker-compose dev environment option !195 @TimFoe @nicksellen
 
 # 2017-10-18
