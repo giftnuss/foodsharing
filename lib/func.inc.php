@@ -1590,27 +1590,56 @@ function addScriptTop($src)
 
 function loadModel($model = 'api')
 {
-	require_once ROOT_DIR . 'app/' . $model . '/' . $model . '.model.php';
-	$mod = ucfirst($model) . 'Model';
+	$moduleName = ucfirst($model);
+	$className = $moduleName . 'Model';
+	$fqcn = '\\Foodsharing\\Modules\\' . $moduleName . '\\' . $className;
+	if (class_exists($fqcn)) {
+		return new $fqcn();
+	} else {
+		require_once ROOT_DIR . 'app/' . $model . '/' . $model . '.model.php';
 
-	return new $mod();
+		return new $className();
+	}
 }
 
 function loadXhr($app)
 {
-	require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.model.php';
-	require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.view.php';
-	require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.xhr.php';
-	$mod = ucfirst($app) . 'Xhr';
+	$moduleName = ucfirst($app);
+	$className = $moduleName . 'Xhr';
+	$fqcn = 'Foodsharing\\Modules\\' . $moduleName . '\\' . $className;
+	if (class_exists($fqcn)) {
+		return new $fqcn();
+	} else {
+		require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.model.php';
+		require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.view.php';
+		require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.xhr.php';
 
-	return new $mod();
+		return new $className();
+	}
 }
 
 function loadApp($app)
 {
-	require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.control.php';
-	require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.model.php';
-	require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.view.php';
+	$appRoot = ROOT_DIR . 'app/' . $app . '/';
+
+	if (file_exists($appRoot . $app . '.script.js')) {
+		addJsFunc(file_get_contents(ROOT_DIR . 'app/' . $app . '/' . $app . '.script.js'));
+	}
+	if (file_exists($appRoot . $app . '.script.css')) {
+		addStyle(file_get_contents(ROOT_DIR . 'app/' . $app . '/' . $app . '.script.css'));
+	}
+
+	$appUc = ucfirst($app);
+	$appClass = $appUc . 'Control';
+
+	if (!class_exists('Foodsharing\\Modules\\' . $appUc . '\\' . $appClass)) {
+		require_once $appRoot . $app . '.control.php';
+		require_once $appRoot . $app . '.model.php';
+		require_once $appRoot . $app . '.view.php';
+	} else {
+		// Auto-loadable module
+		$appClass = 'Foodsharing\\Modules\\' . $appUc . '\\' . $appClass;
+	}
 	require_once ROOT_DIR . 'lang/DE/' . $app . '.lang.php';
 	if (isset($_GET['lang']) && $_GET['lang'] == 'en') {
 		$fn = ROOT_DIR . 'lang/EN/' . $app . '.lang.php';
@@ -1618,12 +1647,6 @@ function loadApp($app)
 			require_once $fn;
 		}
 	}
-	addJsFunc(file_get_contents(ROOT_DIR . 'app/' . $app . '/' . $app . '.script.js'));
-	addStyle(file_get_contents(ROOT_DIR . 'app/' . $app . '/' . $app . '.style.css'));
-
-	$appUc = ucfirst($app);
-
-	$appClass = $appUc . 'Control';
 
 	$app = new $appClass($appUc);
 
