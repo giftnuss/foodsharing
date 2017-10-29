@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Content;
+
 use Foodsharing\Modules\Core\View;
 
 class ContentView extends View

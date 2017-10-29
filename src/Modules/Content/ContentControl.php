@@ -1,6 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Content;
+
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class ContentControl extends Control
 {
