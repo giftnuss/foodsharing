@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\View;
+
 $bezirk_id = getGet('bid');
 if (!S::may()) {
 	goLogin();
@@ -188,7 +190,7 @@ function betrieb_form($bezirk = false, $page = '')
 	if (isset($g_data['stadt'])) {
 		$g_data['ort'] = $g_data['stadt'];
 	}
-	$view = new Foodsharing\Modules\Core\View();
+	$view = new View();
 
 	addJs('$("textarea").css("height","70px");$("textarea").autosize();');
 
