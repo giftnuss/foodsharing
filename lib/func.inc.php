@@ -18,16 +18,8 @@ function jsonSafe($str)
 	return htmlentities((string)$str . '', ENT_QUOTES, 'utf-8', false);
 }
 
-function loadView($view = 'core')
+function loadView($view = 'Foodsharing\Modules\Core\View')
 {
-	require_once 'app/' . $view . '/' . $view . '.view.php';
-
-	if ($view = 'core') {
-		$view = 'Foodsharing\Modules\Core\View';
-	} else {
-		$view = ucfirst($view) . 'View';
-	}
-
 	return new $view();
 }
 
