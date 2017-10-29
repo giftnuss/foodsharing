@@ -1,6 +1,7 @@
 <?php
 
 namespace Foodsharing\Modules\Core;
+
 use Mem;
 use S;
 
