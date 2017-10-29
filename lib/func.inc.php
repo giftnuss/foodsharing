@@ -1625,8 +1625,8 @@ function loadApp($app)
 	if (file_exists($appRoot . $app . '.script.js')) {
 		addJsFunc(file_get_contents(ROOT_DIR . 'app/' . $app . '/' . $app . '.script.js'));
 	}
-	if (file_exists($appRoot . $app . '.script.css')) {
-		addStyle(file_get_contents(ROOT_DIR . 'app/' . $app . '/' . $app . '.script.css'));
+	if (file_exists($appRoot . $app . '.style.css')) {
+		addStyle(file_get_contents(ROOT_DIR . 'app/' . $app . '/' . $app . '.style.css'));
 	}
 
 	$appUc = ucfirst($app);

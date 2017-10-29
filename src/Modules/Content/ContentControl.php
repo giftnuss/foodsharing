@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Content;
 
 use Foodsharing\Modules\Core\Control;
+use Parsedown;
 use S;
 
 class ContentControl extends Control

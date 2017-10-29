@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Content;
 
 use Foodsharing\Modules\Core\View;
+use vAccordion;
 
 class ContentView extends View
 {
