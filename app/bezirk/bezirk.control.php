@@ -9,8 +9,6 @@ class BezirkControl extends Control
 	private $bot_theme;
 	private $mode;
 	private $themes_per_page;
-	private $model;
-	private $view;
 
 	public function __construct()
 	{

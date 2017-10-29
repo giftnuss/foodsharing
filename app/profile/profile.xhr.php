@@ -5,8 +5,6 @@ use Foodsharing\Modules\Core\Control;
 class ProfileXhr extends Control
 {
 	private $foodsaver;
-	private $model;
-	private $view;
 
 	public function __construct()
 	{
