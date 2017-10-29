@@ -18,11 +18,6 @@ function jsonSafe($str)
 	return htmlentities((string)$str . '', ENT_QUOTES, 'utf-8', false);
 }
 
-function loadView($view = 'Foodsharing\Modules\Core\View')
-{
-	return new $view();
-}
-
 function addContent($new_content, $place = CNT_MAIN)
 {
 	global $content_main;

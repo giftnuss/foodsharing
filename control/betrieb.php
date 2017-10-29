@@ -188,7 +188,7 @@ function betrieb_form($bezirk = false, $page = '')
 	if (isset($g_data['stadt'])) {
 		$g_data['ort'] = $g_data['stadt'];
 	}
-	$view = loadView();
+	$view = new Foodsharing\Modules\Core\View();
 
 	addJs('$("textarea").css("height","70px");$("textarea").autosize();');
 
