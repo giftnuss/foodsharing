@@ -11,6 +11,8 @@ use Whoops\Handler\PrettyPageHandler;
  */
 class Whoops
 {
+	public static $handler;
+
 	public static function register()
 	{
 		$run = new \Whoops\Run();
@@ -24,5 +26,6 @@ class Whoops
 		}
 
 		$run->register();
+		self::$handler = $handler;
 	}
 }
