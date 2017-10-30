@@ -1650,15 +1650,6 @@ function loadApp($app)
 	}
 
 	$appInstance = new $appClass();
-
-	require_once ROOT_DIR . 'lang/DE/' . $app . '.lang.php';
-	if (isset($_GET['lang']) && $_GET['lang'] == 'en') {
-		$fn = ROOT_DIR . 'lang/EN/' . $app . '.lang.php';
-		if (file_exists($fn)) {
-			require_once $fn;
-		}
-	}
-
 	if (isset($_GET['a']) && method_exists($appInstance, $_GET['a'])) {
 		$meth = $_GET['a'];
 		$appInstance->$meth();

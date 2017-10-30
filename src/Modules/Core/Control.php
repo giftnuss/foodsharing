@@ -18,22 +18,6 @@ abstract class Control
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;
 		$className = $reflection->getShortName();
-		if (($pos = strpos($className, 'Control')) !== false) {
-			$moduleName = substr($className, 0, $pos);
-			$moduleFilePrefix = strtolower($moduleName);
-			if (file_exists($dir . $moduleFilePrefix . '.script.js')) {
-				addJsFunc(file_get_contents($dir . $moduleFilePrefix . '.script.js'));
-			}
-			if (file_exists($dir . $moduleFilePrefix . '.js')) {
-				addJsFunc(file_get_contents($dir . $moduleFilePrefix . '.js'));
-			}
-			if (file_exists($dir . $moduleFilePrefix . '.style.css')) {
-				addStyle(file_get_contents($dir . $moduleFilePrefix . '.style.css'));
-			}
-			if (file_exists($dir . $moduleFilePrefix . '.css')) {
-				addStyle(file_get_contents($dir . $moduleFilePrefix . '.css'));
-			}
-		}
 
 		$this->sub = false;
 		$this->sub_func = false;
@@ -50,6 +34,30 @@ abstract class Control
 			if (method_exists($this, $sub) && method_exists($this, $sub_func)) {
 				$this->sub = $sub;
 				$this->sub_func = $sub_func;
+			}
+		}
+
+		if (($pos = strpos($className, 'Control')) !== false) {
+			$moduleName = substr($className, 0, $pos);
+			$moduleFilePrefix = strtolower($moduleName);
+			if (file_exists($dir . $moduleFilePrefix . '.script.js')) {
+				addJsFunc(file_get_contents($dir . $moduleFilePrefix . '.script.js'));
+			}
+			if (file_exists($dir . $moduleFilePrefix . '.js')) {
+				addJsFunc(file_get_contents($dir . $moduleFilePrefix . '.js'));
+			}
+			if (file_exists($dir . $moduleFilePrefix . '.style.css')) {
+				addStyle(file_get_contents($dir . $moduleFilePrefix . '.style.css'));
+			}
+			if (file_exists($dir . $moduleFilePrefix . '.css')) {
+				addStyle(file_get_contents($dir . $moduleFilePrefix . '.css'));
+			}
+			require_once ROOT_DIR . 'lang/DE/' . $moduleFilePrefix . '.lang.php';
+			if (isset($_GET['lang']) && $_GET['lang'] == 'en') {
+				$fn = ROOT_DIR . 'lang/EN/' . $moduleFilePrefix . '.lang.php';
+				if (file_exists($fn)) {
+					require_once $fn;
+				}
 			}
 		}
 	}
