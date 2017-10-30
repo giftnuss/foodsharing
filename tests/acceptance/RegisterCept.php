@@ -10,7 +10,7 @@ $first_name = sq('first_name');
 $last_name = sq('last_name');
 $password = sq('password');
 
-$I->wantTo('ensure I can register');
+$I->wantTo('ensure I can register and will not receive newsletter by default');
 $I->amOnPage('/');
 
 // click signup, then press next on the first dialog
@@ -46,7 +46,6 @@ $I->click('weiter', '.step.step2');
 $I->waitForElementVisible('#joinform .step.step3', 4);
 $I->checkOption('input[name=join_legal1]');
 $I->checkOption('input[name=join_legal2]');
-$I->checkOption('input[name=newsletter]');
 $I->click('Anmeldung absenden', '.step.step3');
 
 // we are signed up!
@@ -69,5 +68,6 @@ $I->see('Willkommen ' . $first_name . '!');
 $I->seeInDatabase('fs_foodsaver', [
 	'email' => $email,
 	'name' => $first_name,
-	'nachname' => $last_name
+	'nachname' => $last_name,
+	'newsletter' => 0
 ]);

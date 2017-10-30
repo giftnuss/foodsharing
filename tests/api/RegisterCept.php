@@ -29,5 +29,6 @@ $I->seeResponseContainsJson(['status' => 1]);
 $I->seeInDatabase('fs_foodsaver', [
 	'email' => $email,
 	'name' => $first_name,
-	'nachname' => $last_name
+	'nachname' => $last_name,
+	'newsletter' => 1
 ]);
