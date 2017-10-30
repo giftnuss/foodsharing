@@ -1588,15 +1588,30 @@ function addScriptTop($src)
 	array_unshift($g_script, $src);
 }
 
+function getAppRoot($app)
+{
+	return ROOT_DIR . 'app/' . $app . '/' . $app;
+}
+
+function getModuleName($app)
+{
+	return	ucfirst($app);
+}
+
+function getFqcnPrefix($module)
+{
+	return '\\Foodsharing\\Modules\\' . $module . '\\';
+}
+
 function loadModel($model = 'api')
 {
-	$moduleName = ucfirst($model);
+	$moduleName = getModuleName($model);
 	$className = $moduleName . 'Model';
-	$fqcn = '\\Foodsharing\\Modules\\' . $moduleName . '\\' . $className;
+	$fqcn = getFqcnPrefix($moduleName) . $className;
 	if (class_exists($fqcn)) {
 		return new $fqcn();
 	} else {
-		require_once ROOT_DIR . 'app/' . $model . '/' . $model . '.model.php';
+		require_once getAppRoot($model) . '.model.php';
 
 		return new $className();
 	}
@@ -1604,15 +1619,15 @@ function loadModel($model = 'api')
 
 function loadXhr($app)
 {
-	$moduleName = ucfirst($app);
+	$moduleName = getModuleName($model);
 	$className = $moduleName . 'Xhr';
-	$fqcn = 'Foodsharing\\Modules\\' . $moduleName . '\\' . $className;
+	$fqcn = getFqcnPrefix($moduleName) . $className;
 	if (class_exists($fqcn)) {
 		return new $fqcn();
 	} else {
-		require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.model.php';
-		require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.view.php';
-		require_once ROOT_DIR . 'app/' . $app . '/' . $app . '.xhr.php';
+		require_once getAppRoot($app) . '.model.php';
+		require_once getAppRoot($app) . '.view.php';
+		require_once getAppRoot($app) . '.xhr.php';
 
 		return new $className();
 	}
@@ -1620,26 +1635,22 @@ function loadXhr($app)
 
 function loadApp($app)
 {
-	$appRoot = ROOT_DIR . 'app/' . $app . '/';
+	$moduleName = getModuleName($app);
+	$className = $moduleName . 'Control';
+	$fqcn = getFqcnPrefix($moduleName) . $className;
 
-	if (file_exists($appRoot . $app . '.script.js')) {
-		addJsFunc(file_get_contents(ROOT_DIR . 'app/' . $app . '/' . $app . '.script.js'));
-	}
-	if (file_exists($appRoot . $app . '.style.css')) {
-		addStyle(file_get_contents(ROOT_DIR . 'app/' . $app . '/' . $app . '.style.css'));
-	}
-
-	$appUc = ucfirst($app);
-	$appClass = $appUc . 'Control';
-
-	if (!class_exists('Foodsharing\\Modules\\' . $appUc . '\\' . $appClass)) {
-		require_once $appRoot . $app . '.control.php';
-		require_once $appRoot . $app . '.model.php';
-		require_once $appRoot . $app . '.view.php';
+	if (class_exists($fqcn)) {
+		$appClass = $fqcn;
 	} else {
-		// Auto-loadable module
-		$appClass = 'Foodsharing\\Modules\\' . $appUc . '\\' . $appClass;
+		require_once getAppRoot($app) . '.control.php';
+		require_once getAppRoot($app) . '.model.php';
+		require_once getAppRoot($app) . '.view.php';
+
+		$appClass = $className;
 	}
+
+	$appInstance = new $appClass();
+
 	require_once ROOT_DIR . 'lang/DE/' . $app . '.lang.php';
 	if (isset($_GET['lang']) && $_GET['lang'] == 'en') {
 		$fn = ROOT_DIR . 'lang/EN/' . $app . '.lang.php';
@@ -1648,17 +1659,15 @@ function loadApp($app)
 		}
 	}
 
-	$app = new $appClass($appUc);
-
-	if (isset($_GET['a']) && method_exists($app, $_GET['a'])) {
+	if (isset($_GET['a']) && method_exists($appInstance, $_GET['a'])) {
 		$meth = $_GET['a'];
-		$app->$meth();
+		$appInstance->$meth();
 	} else {
-		$app->index();
+		$appInstance->index();
 	}
 
-	if (($sub = $app->getSubFunc()) !== false) {
-		$app->$sub();
+	if (($sub = $appInstance->getSubFunc()) !== false) {
+		$appInstance->$sub();
 	}
 }
 

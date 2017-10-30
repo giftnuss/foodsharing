@@ -3,9 +3,10 @@
 namespace Foodsharing\Modules\Core;
 
 use Mem;
+use ReflectionClass;
 use S;
 
-class Control
+abstract class Control
 {
 	protected $model;
 	protected $view;
@@ -14,6 +15,26 @@ class Control
 
 	public function __construct()
 	{
+		$reflection = new ReflectionClass($this);
+		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;
+		$className = $reflection->getShortName();
+		if (($pos = strpos($className, 'Control')) !== false) {
+			$moduleName = substr($className, 0, $pos);
+			$moduleFilePrefix = strtolower($moduleName);
+			if (file_exists($dir . $moduleFilePrefix . '.script.js')) {
+				addJsFunc(file_get_contents($dir . $moduleFilePrefix . '.script.js'));
+			}
+			if (file_exists($dir . $moduleFilePrefix . '.js')) {
+				addJsFunc(file_get_contents($dir . $moduleFilePrefix . '.js'));
+			}
+			if (file_exists($dir . $moduleFilePrefix . '.style.css')) {
+				addStyle(file_get_contents($dir . $moduleFilePrefix . '.style.css'));
+			}
+			if (file_exists($dir . $moduleFilePrefix . '.css')) {
+				addStyle(file_get_contents($dir . $moduleFilePrefix . '.css'));
+			}
+		}
+
 		$this->sub = false;
 		$this->sub_func = false;
 		if (isset($_GET['sub'])) {
