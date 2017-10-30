@@ -14,9 +14,11 @@
 
 ## Refactoring
 
+- Prepare module loader for PSR4 compliant paths, starting with app/content being moved !206 @NerdyProjects
+- Move app/Core module into PSR4 compliant Modules/Core structure !168 @nicksellen @NerdyProjects
+
 ## Dev/Test/CI stuff
 
-- Move app/Core module into PSR4 compliant Modules/Core structure !168 @nicksellen @NerdyProjects
 - Add vagrant docker-compose dev environment option !195 @TimFoe @nicksellen
 
 # 2017-10-18
