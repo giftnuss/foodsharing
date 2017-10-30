@@ -29,10 +29,6 @@ class LoginModel extends Model
 				[plz] => 79211
 				[country] => DE
 		*/
-		$newsletter = 0;
-		if ($data['newsletter']) {
-			$newsletter = 1;
-		}
 
 		return $this->insert('
 			INSERT INTO 	`' . PREFIX . 'foodsaver`
@@ -68,7 +64,7 @@ class LoginModel extends Model
 				' . $this->strval($data['surname']) . ',
 				' . $this->strval($data['str'] . ' ' . trim($data['nr'])) . ',
 				' . $this->strval($data['phone']) . ',
-				' . $this->intval($newsletter) . ',
+				' . $this->intval($data['newsletter']) . ',
 				' . $this->intval($data['gender']) . ',
 				NOW(),
 				' . $this->strval($data['city']) . ',

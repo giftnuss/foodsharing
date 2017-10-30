@@ -20,7 +20,7 @@ define('URL_INTERN', $protocol . '://localhost:18080');
 
 define('DEFAULT_EMAIL', 'noreply@lebensmittelretten.de');
 define('DEFAULT_EMAIL_NAME', 'Foodsharing Freiwillige');
-define('VERSION', '0.8.1');
+define('VERSION', '0.8.2');
 define('EMAIL_PUBLIC', 'info@lebensmittelretten.de');
 define('EMAIL_PUBLIC_NAME', 'Foodsharing Freiwillige');
 define('DEFAULT_HOST', 'lebensmittelretten.de');

@@ -98,7 +98,7 @@ var join = {
 					city:$('#join_ort').val(),
 					gender:$('#login_gender').val(),
 					country:$('#join_country').val(),
-					newsletter:$('#newsletter').val()
+					newsletter:($('#newsletter').prop("checked")) ? 1 : 0
 				},
 				success: function(ret){
 					if(ret.status != undefined && ret.status == 1)

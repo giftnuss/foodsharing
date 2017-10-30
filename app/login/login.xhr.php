@@ -368,6 +368,11 @@ class LoginXhr extends Control
 		$data['country'] = strtolower($data['country']);
 		$data['country'] = trim($data['country']);
 
+		$data['newsletter'] = (int)$data['newsletter'];
+		if (!in_array($data['newsletter'], array(0, 1), true)) {
+			$data['newsletter'] = 0;
+		}
+
 		return $data;
 	}
 
