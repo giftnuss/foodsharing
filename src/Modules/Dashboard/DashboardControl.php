@@ -1,6 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Dashboard;
+
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class DashboardControl extends Control
 {

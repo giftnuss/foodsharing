@@ -1,6 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Dashboard;
+
 use Foodsharing\Modules\Core\Model;
+use S;
 
 class DashboardModel extends Model
 {

@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Dashboard;
+
 use Foodsharing\Modules\Core\View;
 
 class DashboardView extends View
