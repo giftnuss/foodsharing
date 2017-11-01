@@ -1,6 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\PassGen;
+
 use Foodsharing\Modules\Core\Control;
+use FPDI;
 
 class PassgenControl extends Control
 {

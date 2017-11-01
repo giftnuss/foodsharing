@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\PassGen;
+
 use Foodsharing\Modules\Core\View;
 
 class PassgenView extends View
