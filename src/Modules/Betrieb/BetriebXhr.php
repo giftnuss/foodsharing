@@ -1,6 +1,10 @@
 <?php
 
+namespace Foodsharing\Modules\Betrieb;
+
 use Foodsharing\Modules\Core\Control;
+use S;
+use XhrDialog;
 
 class BetriebXhr extends Control
 {

@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Betrieb;
+
 use Foodsharing\Modules\Core\Model;
 
 class BetriebModel extends Model

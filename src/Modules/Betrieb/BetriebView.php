@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Betrieb;
+
 use Foodsharing\Modules\Core\View;
 
 class BetriebView extends View
