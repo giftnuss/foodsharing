@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Mailbox;
+
 use Foodsharing\Modules\Core\Model;
 
 class MailboxModel extends Model
