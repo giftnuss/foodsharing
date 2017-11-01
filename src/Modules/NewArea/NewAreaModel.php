@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\NewArea;
+
 use Foodsharing\Modules\Core\Model;
 
 class NewareaModel extends Model
