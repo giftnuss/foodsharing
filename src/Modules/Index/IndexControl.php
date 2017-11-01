@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Index;
+
 use Foodsharing\Modules\Core\Control;
 
 class IndexControl extends Control

@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Index;
+
 use Foodsharing\Modules\Core\Model;
 
 class IndexModel extends Model

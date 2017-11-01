@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Index;
+
 use Foodsharing\Modules\Core\View;
 
 class IndexView extends View
