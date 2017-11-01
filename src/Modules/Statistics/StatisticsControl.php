@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Statistics;
+
 use Foodsharing\Modules\Core\Control;
 
 class StatisticsControl extends Control

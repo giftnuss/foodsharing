@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Settings;
+
 use Foodsharing\Modules\Core\View;
 
 class SettingsView extends View

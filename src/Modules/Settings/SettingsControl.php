@@ -1,6 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Settings;
+
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class SettingsControl extends Control
 {

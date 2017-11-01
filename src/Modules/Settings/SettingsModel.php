@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Settings;
+
 use Foodsharing\Modules\Core\Model;
 
 class SettingsModel extends Model
