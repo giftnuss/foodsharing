@@ -194,49 +194,6 @@ class BezirkControl extends Control
 		}
 	}
 
-	public function addFt()
-	{
-		addBread(s('fairteiler'), '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=fairteiler');
-		addBread(s('add_fairteiler'));
-
-		if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'fairteiler') {
-			if ($this->handleAddFt()) {
-				info(s('fairteiler_add_success'));
-				go('/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=fairteiler');
-			} else {
-				error(s('fairteiler_add_fail'));
-			}
-		}
-
-		addContent($this->view->fairteilerForm());
-		addContent(v_menu(array(
-			array('name' => s('back'), 'href' => '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=fairteiler')
-		), s('options')), CNT_RIGHT);
-	}
-
-	public function handleAddFt()
-	{
-		$name = strip_tags($_POST['name']);
-		$desc = strip_tags($_POST['desc']);
-		$anschrift = strip_tags($_POST['anschrift']);
-		$plz = preg_replace('[^0-9]', '', $_POST['plz']);
-		$ort = strip_tags($_POST['ort']);
-		$picture = strip_tags($_POST['picture']);
-		if (!empty($_POST['lat']) && !empty($_POST['lon'])) {
-			$lat = $_POST['lat'];
-			$lon = $_POST['lon'];
-
-			$status = 0;
-			if (isBotFor($this->bezirk_id) || isOrgaTeam()) {
-				$status = 1;
-			}
-
-			return $this->model->addFairteiler($this->bezirk_id, $name, $desc, $anschrift, $plz, $ort, $lat, $lon, $picture, $status);
-		} else {
-			return false;
-		}
-	}
-
 	private function bezirkRequests()
 	{
 		if ($requests = $this->model->getBezirkRequests($this->bezirk_id)) {
