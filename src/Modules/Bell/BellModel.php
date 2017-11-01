@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Bell;
+
 use Foodsharing\Modules\Core\Model;
 
 class BellModel extends Model
