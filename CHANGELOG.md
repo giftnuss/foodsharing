@@ -16,6 +16,7 @@
 
 ## Refactoring
 
+- Move all remaining modules into PSR4 compliant Modules structure !209 @NerdyProjects
 - Prepare module loader for PSR4 compliant paths, starting with app/content being moved !206 @NerdyProjects
 - Move app/Core module into PSR4 compliant Modules/Core structure !168 @nicksellen @NerdyProjects
 
