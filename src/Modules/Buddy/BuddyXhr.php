@@ -1,13 +1,15 @@
 <?php
 
+namespace Foodsharing\Modules\Buddy;
+
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class BuddyXhr extends Control
 {
 	public function __construct()
 	{
 		$this->model = new BuddyModel();
-		$this->view = new BuddyView();
 
 		parent::__construct();
 	}

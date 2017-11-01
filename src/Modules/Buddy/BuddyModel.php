@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Buddy;
+
 use Foodsharing\Modules\Core\Model;
 
 class BuddyModel extends Model
