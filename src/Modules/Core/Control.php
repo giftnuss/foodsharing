@@ -70,6 +70,9 @@ abstract class Control
 				addStyle(file_get_contents($dir . $moduleFilePrefix . '.css'));
 			}
 		}
+		if (is_null($this->model)) {
+			$this->model = new Model();
+		}
 	}
 
 	public function setTemplate($template)
