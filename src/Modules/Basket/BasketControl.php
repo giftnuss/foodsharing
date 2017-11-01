@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Basket;
 
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class BasketControl extends Control
 {

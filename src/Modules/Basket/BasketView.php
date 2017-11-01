@@ -2,7 +2,11 @@
 
 namespace Foodsharing\Modules\Basket;
 
+use fImage;
 use Foodsharing\Modules\Core\View;
+use S;
+use vMap;
+use vPage;
 
 class BasketView extends View
 {
@@ -103,7 +107,7 @@ class BasketView extends View
 			}
 		} else {
 			$page->addSectionRight(v_info('Für detailierte Infos musst Du Dich einloggen!', 'Hinweis!') . '<div>
-				<a class="button button-big" href="#"onclick="ajreq(\'login\',{app:\'login\'});return false;">Einloggen</a>
+				<a class="button button-big" href="#" onclick="ajreq(\'login\',{app:\'login\'});return false;">Einloggen</a>
 			</div>', false, array('wrapper' => false));
 		}
 

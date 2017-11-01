@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Bcard;
 
 use Foodsharing\Modules\Core\Model;
+use S;
 
 class BcardModel extends Model
 {

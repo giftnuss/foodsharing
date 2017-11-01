@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Bcard;
 
 use Foodsharing\Modules\Core\Control;
+use FPDI;
 
 class BcardXhr extends Control
 {

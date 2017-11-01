@@ -2,7 +2,11 @@
 
 namespace Foodsharing\Modules\Basket;
 
+use fImage;
 use Foodsharing\Modules\Core\Control;
+use S;
+use Xhr;
+use XhrDialog;
 
 class BasketXhr extends Control
 {
