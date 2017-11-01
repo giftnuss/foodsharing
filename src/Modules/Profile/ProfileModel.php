@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Profile;
+
 use Foodsharing\Modules\Core\Model;
 
 class ProfileModel extends Model

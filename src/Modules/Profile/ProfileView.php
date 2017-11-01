@@ -1,6 +1,10 @@
 <?php
 
+namespace Foodsharing\Modules\Profile;
+
 use Foodsharing\Modules\Core\View;
+use S;
+use vPage;
 
 class ProfileView extends View
 {

@@ -1,6 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Profile;
+
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class ProfileXhr extends Control
 {
