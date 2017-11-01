@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Info;
+
 use Foodsharing\Modules\Core\Control;
 
 class InfoXhr extends Control
