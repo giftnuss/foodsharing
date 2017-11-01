@@ -7,11 +7,6 @@ class ApiXhr extends Control
 	public function __construct()
 	{
 		$this->model = new ApiModel();
-		$this->view = new ApiView();
-
-		if (isset($_POST['token'])) {
-			//session_id($_POST['token']);
-		}
 
 		parent::__construct();
 
