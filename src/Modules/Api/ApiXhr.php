@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Api;
+
 use Foodsharing\Modules\Core\Control;
 
 class ApiXhr extends Control

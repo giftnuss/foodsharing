@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Activity;
+
 use Foodsharing\Modules\Core\Control;
 
 class ActivityXhr extends Control

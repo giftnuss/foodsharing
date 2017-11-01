@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Application;
+
 use Foodsharing\Modules\Core\Control;
 
 class ApplicationControl extends Control

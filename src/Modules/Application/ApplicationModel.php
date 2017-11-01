@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Application;
+
 use Foodsharing\Modules\Core\Model;
 
 class ApplicationModel extends Model
