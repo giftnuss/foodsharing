@@ -1,6 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Bezirk;
+
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class BezirkControl extends Control
 {
@@ -15,7 +18,7 @@ class BezirkControl extends Control
 		$this->themes_per_page = 15;
 		$this->mode = 'normal';
 		$this->model = new BezirkModel($this->themes_per_page);
-		$this->view = new BezirkView($this->themes_per_page);
+		$this->view = new BezirkView();
 		$this->view->setMode($this->mode);
 		parent::__construct();
 

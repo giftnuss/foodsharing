@@ -1,6 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Bezirk;
+
 use Foodsharing\Modules\Core\Control;
+use XhrResponses;
 
 class BezirkXhr extends Control
 {

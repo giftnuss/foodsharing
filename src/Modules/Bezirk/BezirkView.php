@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Bezirk;
+
 use Foodsharing\Modules\Core\View;
 
 class BezirkView extends View
