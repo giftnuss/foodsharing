@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Search;
+
 use Foodsharing\Modules\Core\View;
 
 class SearchView extends View

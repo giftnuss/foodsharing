@@ -1,6 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Search;
+
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class SearchControl extends Control
 {
