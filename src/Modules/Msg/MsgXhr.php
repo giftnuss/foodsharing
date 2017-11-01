@@ -1,6 +1,12 @@
 <?php
 
+namespace Foodsharing\Modules\Msg;
+
+namespace Foodsharing\Modules\Msg;
+
 use Foodsharing\Modules\Core\Control;
+use S;
+use Xhr;
 
 class MsgXhr extends Control
 {

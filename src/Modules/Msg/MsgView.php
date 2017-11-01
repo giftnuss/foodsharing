@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Msg;
+
 use Foodsharing\Modules\Core\View;
 
 class MsgView extends View

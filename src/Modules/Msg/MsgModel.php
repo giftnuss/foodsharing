@@ -1,6 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Msg;
+
 use Foodsharing\Modules\Core\Model;
+use Mem;
 
 class MsgModel extends Model
 {

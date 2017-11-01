@@ -1,6 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Msg;
+
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class MsgControl extends Control
 {
