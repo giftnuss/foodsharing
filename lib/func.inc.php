@@ -1619,7 +1619,7 @@ function loadModel($model = 'api')
 
 function loadXhr($app)
 {
-	$moduleName = getModuleName($model);
+	$moduleName = getModuleName($app);
 	$className = $moduleName . 'Xhr';
 	$fqcn = getFqcnPrefix($moduleName) . $className;
 	if (class_exists($fqcn)) {

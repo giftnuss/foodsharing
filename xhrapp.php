@@ -7,14 +7,9 @@ if (isset($_GET['app']) && isset($_GET['m'])) {
 	$app = str_replace('/', '', $_GET['app']);
 	$meth = str_replace('/', '', $_GET['m']);
 
-	if (!file_exists('app/' . $app . '/' . $app . '.xhr.php')) {
-		exit();
-	}
-
 	require_once 'config.inc.php';
 	require_once 'lib/Session.php';
 	require_once 'lang/DE/de.php';
-	require_once 'lang/DE/' . $app . '.lang.php';
 
 	require_once 'lib/db.class.php';
 	require_once 'lib/Manual.class.php';
@@ -23,15 +18,9 @@ if (isset($_GET['app']) && isset($_GET['m'])) {
 	require_once 'lib/Manual.class.php';
 	require_once 'lib/XhrResponses.php';
 
-	require_once 'app/' . $app . '/' . $app . '.xhr.php';
-	require_once 'app/' . $app . '/' . $app . '.model.php';
-	require_once 'app/' . $app . '/' . $app . '.view.php';
-
 	S::init();
 
-	$class = ucfirst($app) . 'Xhr';
-
-	$obj = new $class();
+	$obj = loadXhr($app);
 
 	if (method_exists($obj, $meth)) {
 		$out = $obj->$meth();
