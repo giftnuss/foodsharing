@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Blog;
+
 use Foodsharing\Modules\Core\Model;
 
 class BlogModel extends Model

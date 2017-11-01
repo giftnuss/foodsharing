@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Blog;
+
 use Foodsharing\Modules\Core\Control;
 
 class BlogControl extends Control

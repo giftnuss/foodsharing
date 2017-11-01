@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Blog;
+
 use Foodsharing\Modules\Core\View;
 
 class BlogView extends View
