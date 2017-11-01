@@ -1,12 +1,14 @@
 <?php
 
+namespace Foodsharing\Modules\Map;
+
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class MapControl extends Control
 {
 	public function __construct()
 	{
-		$this->model = new MapModel();
 		$this->view = new MapView();
 
 		parent::__construct();
