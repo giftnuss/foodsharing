@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Quiz;
+
 use Foodsharing\Modules\Core\Model;
 
 class QuizModel extends Model

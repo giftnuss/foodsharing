@@ -1,6 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Quiz;
+
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class QuizControl extends Control
 {

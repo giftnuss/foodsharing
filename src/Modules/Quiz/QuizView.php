@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Quiz;
+
 use Foodsharing\Modules\Core\View;
 
 class QuizView extends View
