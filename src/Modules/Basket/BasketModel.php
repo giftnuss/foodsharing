@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Basket;
+
 use Foodsharing\Modules\Core\Model;
 
 class BasketModel extends Model

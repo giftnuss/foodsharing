@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Basket;
+
 use Foodsharing\Modules\Core\Control;
 
 class BasketXhr extends Control

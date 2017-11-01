@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Basket;
+
 use Foodsharing\Modules\Core\View;
 
 class BasketView extends View
