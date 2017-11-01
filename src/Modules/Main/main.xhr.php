@@ -1,6 +1,10 @@
 <?php
 
+namespace Foodsharing\Modules\Main;
+
+use fImage;
 use Foodsharing\Modules\Core\Control;
+use fUpload;
 
 class MainXhr extends Control
 {
