@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Bcard;
+
 use Foodsharing\Modules\Core\Control;
 
 class BcardControl extends Control

@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Bcard;
+
 use Foodsharing\Modules\Core\Control;
 
 class BcardXhr extends Control
@@ -7,7 +9,6 @@ class BcardXhr extends Control
 	public function __construct()
 	{
 		$this->model = new BcardModel();
-		$this->view = new BcardView();
 
 		parent::__construct();
 	}

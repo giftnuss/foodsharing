@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Bcard;
+
 use Foodsharing\Modules\Core\Model;
 
 class BcardModel extends Model
