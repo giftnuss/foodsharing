@@ -1,5 +1,8 @@
 <?php
 
+namespace Foodsharing\Modules\WallPost;
+
+use fImage;
 use Foodsharing\Modules\Core\Control;
 
 class WallpostXhr extends Control
@@ -207,8 +210,7 @@ class WallpostXhr extends Control
 				'jpg' => true,
 				'jpeg' => true,
 				'png' => true,
-				'gif' => true,
-				'png' => true
+				'gif' => true
 			);
 			$notallowed_mime = array();
 

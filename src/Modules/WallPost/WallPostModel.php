@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\WallPost;
+
 use Foodsharing\Modules\Core\Model;
 
 class WallpostModel extends Model
