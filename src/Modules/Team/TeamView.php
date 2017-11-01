@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Team;
+
 use Foodsharing\Modules\Core\View;
 
 class TeamView extends View

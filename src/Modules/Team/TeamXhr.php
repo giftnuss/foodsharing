@@ -1,6 +1,10 @@
 <?php
 
+namespace Foodsharing\Modules\Team;
+
+use AsyncMail;
 use Foodsharing\Modules\Core\Control;
+use Xhr;
 
 class TeamXhr extends Control
 {

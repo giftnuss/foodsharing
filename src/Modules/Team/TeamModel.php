@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Team;
+
 use Foodsharing\Modules\Core\Model;
 
 class TeamModel extends Model

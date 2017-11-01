@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Team;
+
 use Foodsharing\Modules\Core\Control;
 
 class TeamControl extends Control
