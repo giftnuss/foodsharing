@@ -1,6 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Event;
+
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class EventControl extends Control
 {

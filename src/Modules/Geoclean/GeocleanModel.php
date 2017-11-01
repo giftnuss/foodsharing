@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Geoclean;
+
 use Foodsharing\Modules\Core\Model;
 
 class GeocleanModel extends Model

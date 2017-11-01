@@ -1,6 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Groups;
+
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class GroupsControl extends Control
 {

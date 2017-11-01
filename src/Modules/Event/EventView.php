@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Event;
+
 use Foodsharing\Modules\Core\View;
 
 class EventView extends View

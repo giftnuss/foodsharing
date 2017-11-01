@@ -1,6 +1,9 @@
- <?php
+<?php
+
+namespace Foodsharing\Modules\Foodsaver;
 
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class FoodsaverControl extends Control
 {

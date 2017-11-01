@@ -1,6 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Fairteiler;
+
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class FairteilerControl extends Control
 {

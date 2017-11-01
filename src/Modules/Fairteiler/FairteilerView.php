@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Fairteiler;
+
 use Foodsharing\Modules\Core\View;
 
 class FairteilerView extends View

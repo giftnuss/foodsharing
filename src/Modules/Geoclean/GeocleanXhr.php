@@ -1,13 +1,15 @@
 <?php
 
+namespace Foodsharing\Modules\Geoclean;
+
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class GeocleanXhr extends Control
 {
 	public function __construct()
 	{
 		$this->model = new GeocleanModel();
-		$this->view = new GeocleanView();
 
 		parent::__construct();
 

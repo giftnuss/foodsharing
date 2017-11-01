@@ -1,6 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Groups;
+
 use Foodsharing\Modules\Core\Control;
+use XhrDialog;
 
 class GroupsXhr extends Control
 {

@@ -1,6 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Geoclean;
+
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class GeocleanControl extends Control
 {

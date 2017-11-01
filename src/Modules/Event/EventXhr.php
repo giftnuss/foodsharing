@@ -1,6 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Event;
+
 use Foodsharing\Modules\Core\Control;
+use XhrDialog;
 
 class EventXhr extends Control
 {
@@ -10,7 +13,6 @@ class EventXhr extends Control
 	public function __construct()
 	{
 		$this->model = new EventModel();
-		$this->view = new EventView();
 
 		parent::__construct();
 

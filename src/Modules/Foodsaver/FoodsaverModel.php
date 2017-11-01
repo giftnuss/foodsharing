@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Foodsaver;
+
 use Foodsharing\Modules\Core\Model;
 
 class FoodsaverModel extends Model

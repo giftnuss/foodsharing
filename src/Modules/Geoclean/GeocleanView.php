@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Geoclean;
+
 use Foodsharing\Modules\Core\View;
 
 class GeocleanView extends View
@@ -17,6 +19,7 @@ class GeocleanView extends View
 	public function listFs($foodsaver)
 	{
 		$js = array();
+		$data = array();
 
 		foreach ($foodsaver as $fs) {
 			$js[] = (int)$fs['id'];

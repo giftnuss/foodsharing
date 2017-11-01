@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Groups;
+
 use Foodsharing\Modules\Core\View;
 
 class GroupsView extends View
