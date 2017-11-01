@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Msg;
 namespace Foodsharing\Modules\Msg;
 
 use Foodsharing\Modules\Core\Control;
+use Mem;
 use S;
 use Xhr;
 

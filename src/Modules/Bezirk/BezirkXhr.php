@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Bezirk;
 
 use Foodsharing\Modules\Core\Control;
+use S;
 use XhrResponses;
 
 class BezirkXhr extends Control

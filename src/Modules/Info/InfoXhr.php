@@ -3,6 +3,8 @@
 namespace Foodsharing\Modules\Info;
 
 use Foodsharing\Modules\Core\Control;
+use S;
+use Xhr;
 
 class InfoXhr extends Control
 {

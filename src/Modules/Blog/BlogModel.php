@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Blog;
 
 use Foodsharing\Modules\Core\Model;
+use S;
 
 class BlogModel extends Model
 {

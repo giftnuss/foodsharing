@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Foodsaver;
 
+use DateTime;
 use Foodsharing\Modules\Core\Model;
 
 class FoodsaverModel extends Model

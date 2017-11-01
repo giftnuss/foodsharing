@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Msg;
 
 use Foodsharing\Modules\Core\Model;
 use Mem;
+use S;
 
 class MsgModel extends Model
 {

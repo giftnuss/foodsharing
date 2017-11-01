@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Quiz;
 
 use Foodsharing\Modules\Core\View;
+use S;
 
 class QuizView extends View
 {

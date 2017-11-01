@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Application;
 
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class ApplicationControl extends Control
 {

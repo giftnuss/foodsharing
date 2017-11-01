@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Statistics;
+
 use Foodsharing\Modules\Core\Model;
 
 class StatisticsModel extends Model

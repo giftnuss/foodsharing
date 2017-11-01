@@ -2,7 +2,10 @@
 
 namespace Foodsharing\Modules\Api;
 
+use fImage;
 use Foodsharing\Modules\Core\Control;
+use Mem;
+use S;
 
 class ApiXhr extends Control
 {

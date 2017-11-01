@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Report;
+
 use Foodsharing\Modules\Core\View;
 
 class ReportView extends View

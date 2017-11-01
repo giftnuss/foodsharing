@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\NewArea;
 
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class NewareaControl extends Control
 {

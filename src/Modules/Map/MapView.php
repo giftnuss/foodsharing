@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Map;
 
 use Foodsharing\Modules\Core\View;
+use S;
 
 class MapView extends View
 {

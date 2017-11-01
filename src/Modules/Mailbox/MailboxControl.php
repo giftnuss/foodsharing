@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Mailbox;
+
 use Foodsharing\Modules\Core\Control;
 
 class MailboxControl extends Control

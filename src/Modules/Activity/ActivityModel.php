@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Activity;
 
 use Foodsharing\Modules\Core\Model;
+use S;
 
 class ActivityModel extends Model
 {

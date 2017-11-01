@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Mailbox;
 
 use Foodsharing\Modules\Core\Model;
+use S;
 
 class MailboxModel extends Model
 {

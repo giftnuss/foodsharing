@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Settings;
 
 use Foodsharing\Modules\Core\Control;
+use Mem;
 use S;
 
 class SettingsControl extends Control

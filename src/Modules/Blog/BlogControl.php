@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Blog;
 
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class BlogControl extends Control
 {

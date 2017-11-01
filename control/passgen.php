@@ -1,3 +1,3 @@
 <?php
 
-loadApp('passgen');
+loadApp('PassGen');

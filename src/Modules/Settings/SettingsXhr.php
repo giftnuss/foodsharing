@@ -2,8 +2,10 @@
 
 namespace Foodsharing\Modules\Settings;
 
+use DateTime;
 use Foodsharing\Modules\Core\Control;
 use S;
+use Xhr;
 use XhrDialog;
 
 class SettingsXhr extends Control

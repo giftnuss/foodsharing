@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Login;
 
 use Foodsharing\Modules\Core\View;
+use S;
 
 class LoginView extends View
 {

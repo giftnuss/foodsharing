@@ -8,8 +8,6 @@ class BellModel extends Model
 {
 	/**
 	 * Method returns an array of all conversation from the user.
-	 *
-	 * @return Ambigous <boolean, array >
 	 */
 	public function listBells($limit = '')
 	{

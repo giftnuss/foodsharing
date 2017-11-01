@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Fairteiler;
 
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class FairteilerXhr extends Control
 {

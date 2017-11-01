@@ -1,6 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Mailbox;
+
 use Foodsharing\Modules\Core\Control;
+use S;
 
 class MailboxXhr extends Control
 {

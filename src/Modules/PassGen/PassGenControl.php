@@ -4,16 +4,17 @@ namespace Foodsharing\Modules\PassGen;
 
 use Foodsharing\Modules\Core\Control;
 use FPDI;
+use S;
 
-class PassgenControl extends Control
+class PassGenControl extends Control
 {
 	private $bezirk_id;
 	private $bezirk;
 
 	public function __construct()
 	{
-		$this->model = new PassgenModel();
-		$this->view = new PassgenView();
+		$this->model = new PassGenModel();
+		$this->view = new PassGenView();
 
 		parent::__construct();
 
@@ -127,7 +128,7 @@ class PassgenControl extends Control
 				$pdf->AddFont('Ubuntu-L', '', 'Ubuntu-L.php');
 
 				@unlink('tmp/qr_' . $fs_id . '.png');
-				QRcode::png($fs_id, 'tmp/qr_' . $fs_id . '.png', QR_ECLEVEL_L, 3.4, 0);
+				\QRcode::png($fs_id, 'tmp/qr_' . $fs_id . '.png', QR_ECLEVEL_L, 3.4, 0);
 
 				++$card;
 

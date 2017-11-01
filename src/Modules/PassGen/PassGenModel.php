@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\PassGen;
 
 use Foodsharing\Modules\Core\Model;
 
-class PassgenModel extends Model
+class PassGenModel extends Model
 {
 	public function updateLastGen($foodsaver)
 	{

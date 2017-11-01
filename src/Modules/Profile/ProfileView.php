@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Profile;
 
+use fDate;
 use Foodsharing\Modules\Core\View;
 use S;
 use vPage;

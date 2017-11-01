@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Event;
 
 use Foodsharing\Modules\Core\Control;
+use S;
 use XhrDialog;
 
 class EventXhr extends Control

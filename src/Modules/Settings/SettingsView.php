@@ -2,7 +2,9 @@
 
 namespace Foodsharing\Modules\Settings;
 
+use DateTime;
 use Foodsharing\Modules\Core\View;
+use S;
 
 class SettingsView extends View
 {

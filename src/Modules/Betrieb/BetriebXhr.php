@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Betrieb;
 
 use Foodsharing\Modules\Core\Control;
 use S;
+use Xhr;
 use XhrDialog;
 
 class BetriebXhr extends Control

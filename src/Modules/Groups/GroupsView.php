@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Groups;
 
 use Foodsharing\Modules\Core\View;
+use S;
 
 class GroupsView extends View
 {
