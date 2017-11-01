@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Modules\Login;
+
 use Foodsharing\Modules\Core\Model;
 
 class LoginModel extends Model

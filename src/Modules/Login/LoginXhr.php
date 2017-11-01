@@ -1,6 +1,13 @@
 <?php
 
+namespace Foodsharing\Modules\Login;
+
+use fImage;
 use Foodsharing\Modules\Core\Control;
+use fUpload;
+use Mem;
+use S;
+use XhrDialog;
 
 class LoginXhr extends Control
 {

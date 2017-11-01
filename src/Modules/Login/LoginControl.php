@@ -1,6 +1,10 @@
 <?php
 
+namespace Foodsharing\Modules\Login;
+
 use Foodsharing\Modules\Core\Control;
+use Mobile_Detect;
+use S;
 
 class LoginControl extends Control
 {
