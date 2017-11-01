@@ -8,6 +8,8 @@ use S;
 
 abstract class Control
 {
+	protected $isControl = false;
+	protected $isXhrControl = false;
 	protected $model;
 	protected $view;
 	private $sub;
@@ -38,8 +40,23 @@ abstract class Control
 		}
 
 		if (($pos = strpos($className, 'Control')) !== false) {
-			$moduleName = substr($className, 0, $pos);
-			$moduleFilePrefix = strtolower($moduleName);
+			$this->isControl = true;
+		} elseif (($pos = strpos($className, 'Xhr')) !== false) {
+			$this->isXhrControl = true;
+		}
+		$moduleName = substr($className, 0, $pos);
+		$moduleFilePrefix = strtolower($moduleName);
+
+		if (file_exists(ROOT_DIR . 'lang/DE/' . $moduleFilePrefix . '.lang.php')) {
+			require_once ROOT_DIR . 'lang/DE/' . $moduleFilePrefix . '.lang.php';
+		}
+		if (isset($_GET['lang']) && $_GET['lang'] == 'en') {
+			$fn = ROOT_DIR . 'lang/EN/' . $moduleFilePrefix . '.lang.php';
+			if (file_exists($fn)) {
+				require_once $fn;
+			}
+		}
+		if ($this->isControl) {
 			if (file_exists($dir . $moduleFilePrefix . '.script.js')) {
 				addJsFunc(file_get_contents($dir . $moduleFilePrefix . '.script.js'));
 			}
@@ -51,13 +68,6 @@ abstract class Control
 			}
 			if (file_exists($dir . $moduleFilePrefix . '.css')) {
 				addStyle(file_get_contents($dir . $moduleFilePrefix . '.css'));
-			}
-			require_once ROOT_DIR . 'lang/DE/' . $moduleFilePrefix . '.lang.php';
-			if (isset($_GET['lang']) && $_GET['lang'] == 'en') {
-				$fn = ROOT_DIR . 'lang/EN/' . $moduleFilePrefix . '.lang.php';
-				if (file_exists($fn)) {
-					require_once $fn;
-				}
 			}
 		}
 	}
