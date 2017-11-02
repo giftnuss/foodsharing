@@ -1588,68 +1588,17 @@ function addScriptTop($src)
 	array_unshift($g_script, $src);
 }
 
-function getAppRoot($app)
-{
-	return ROOT_DIR . 'app/' . $app . '/' . $app;
-}
-
-function getModuleName($app)
-{
-	return	ucfirst($app);
-}
-
 function getFqcnPrefix($module)
 {
 	return '\\Foodsharing\\Modules\\' . $module . '\\';
 }
 
-function loadModel($model = 'api')
-{
-	$moduleName = getModuleName($model);
-	$className = $moduleName . 'Model';
-	$fqcn = getFqcnPrefix($moduleName) . $className;
-	if (class_exists($fqcn)) {
-		return new $fqcn();
-	} else {
-		require_once getAppRoot($model) . '.model.php';
-
-		return new $className();
-	}
-}
-
-function loadXhr($app)
-{
-	$moduleName = getModuleName($app);
-	$className = $moduleName . 'Xhr';
-	$fqcn = getFqcnPrefix($moduleName) . $className;
-	if (class_exists($fqcn)) {
-		return new $fqcn();
-	} else {
-		require_once getAppRoot($app) . '.model.php';
-		require_once getAppRoot($app) . '.view.php';
-		require_once getAppRoot($app) . '.xhr.php';
-
-		return new $className();
-	}
-}
-
 function loadApp($app)
 {
-	$moduleName = getModuleName($app);
-	$className = $moduleName . 'Control';
-	$fqcn = getFqcnPrefix($moduleName) . $className;
+	$className = $app . 'Control';
+	$fqcn = getFqcnPrefix($app) . $className;
 
-	if (class_exists($fqcn)) {
-		$appClass = $fqcn;
-	} else {
-		require_once getAppRoot($app) . '.control.php';
-		require_once getAppRoot($app) . '.model.php';
-		require_once getAppRoot($app) . '.view.php';
-
-		$appClass = $className;
-	}
-
-	$appInstance = new $appClass();
+	$appInstance = new $fqcn();
 	if (isset($_GET['a']) && method_exists($appInstance, $_GET['a'])) {
 		$meth = $_GET['a'];
 		$appInstance->$meth();
