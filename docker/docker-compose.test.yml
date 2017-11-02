@@ -24,7 +24,7 @@ services:
 
   app:
     container_name: foodsharing_test_app
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.1
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.5
     working_dir: /app
     expose:
       - 9000
@@ -44,7 +44,7 @@ services:
 
   mailqueuerunner:
     container_name: foodsharing_test_mailqueuerunner
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.1
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.5
     command: php run.php mails index
     working_dir: /app
     links:

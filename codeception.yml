@@ -19,6 +19,7 @@ modules:
             dsn: mysql:host=db;dbname=foodsharing
             user: root
             password: root
+            populator: 'mysql -uroot -hdb -proot foodsharing < migrations/_reload_data.sql'
         \Helper\Foodsharing:
             # custom module that inherits from Db so also needs db config
             dsn: mysql:host=db;dbname=foodsharing

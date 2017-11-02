@@ -16,7 +16,9 @@ modules:
             connection_timeout: 20
             request_timeout: 20
         - Sequence
-        - Db
+        - Db:
+            populate: true
+            cleanup: true
         - \Helper\Acceptance
         - \Helper\Foodsharing
         - \Helper\FoodsharingUrl

@@ -6,5 +6,7 @@ modules:
     enabled:
         - Filesystem
         - Cli
-        - Db
+        - Db:
+            populate: true
+            cleanup: true
         - \Helper\Foodsharing
