@@ -24,6 +24,10 @@ function sql-file() {
   dc exec -T db sh -c "mysql -p$MYSQL_PASSWORD $database < /app/$filename"
 }
 
+function sql-dump() {
+  dc exec -T db mysqldump -p$MYSQL_PASSWORD foodsharing "$@"
+}
+
 function exec-in-container() {
   local container=$1; shift;
   local command=$@;
@@ -87,7 +91,18 @@ function migratedb() {
   # manually copy the generated migration file into the container
   docker cp $dest $(dc ps -q db):/app/$dest
 
-  sql-file $database $dest
+  time sql-file $database $dest
+
+  echo "set foreign_key_checks=0;" > migrations/_reload_data.sql
+  for T in `sql-query foodsharing "SHOW TABLES;" | tail -n+2`; do
+    echo "TRUNCATE TABLE $T;" >> migrations/_reload_data.sql
+  done
+  sql-dump --extended-insert --quick --no-create-info --single-transaction --disable-keys --no-autocommit --skip-add-locks >> migrations/_reload_data.sql
+  echo "set foreign_key_checks=1;" >> migrations/_reload_data.sql
+}
+
+function purge-db() {
+  time sql-file foodsharing migrations/_reload_data.sql
 }
 
 function wait-for-mysql() {
