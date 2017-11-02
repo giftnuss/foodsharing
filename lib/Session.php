@@ -1,5 +1,8 @@
 <?php
 
+use Foodsharing\Modules\Basket\BasketModel;
+use Foodsharing\Modules\Content\ContentModel;
+
 class S
 {
 	public static function init()
@@ -100,7 +103,7 @@ class S
 	{
 		$loc = fSession::get('g_location', false);
 		if (!$loc) {
-			$db = loadModel('basket');
+			$db = new BasketModel();
 			$loc = $db->getValues(array('lat', 'lon'), 'foodsaver', fsId());
 			self::set('g_location', $loc);
 		}
@@ -144,7 +147,7 @@ class S
 	public static function setOption($key, $val, $db = false)
 	{
 		if (!$db) {
-			$db = loadModel('content');
+			$db = new ContentModel();
 		}
 
 		$db->setOption($key, $val);

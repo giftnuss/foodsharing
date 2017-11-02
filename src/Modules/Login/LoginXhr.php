@@ -3,7 +3,11 @@
 namespace Foodsharing\Modules\Login;
 
 use fImage;
+use Foodsharing\Modules\Buddy\BuddyModel;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Region\RegionModel;
+use Foodsharing\Modules\Store\StoreModel;
+use Foodsharing\Modules\WorkGroup\WorkGroupModel;
 use fUpload;
 use Mem;
 use S;
@@ -49,7 +53,7 @@ class LoginXhr extends Control
 		 * Buddies Load persons in the index array that connected with the user
 		 */
 
-		$model = loadModel('buddy');
+		$model = new BuddyModel();
 		if ($buddies = $model->listBuddies()) {
 			$result = array();
 			foreach ($buddies as $b) {
@@ -80,7 +84,7 @@ class LoginXhr extends Control
 		/*
 		 * Groups load Groups connected to the user in the array
 		*/
-		$model = loadModel('groups');
+		$model = new WorkGroupModel();
 		if ($groups = $model->listMyGroups()) {
 			$result = array();
 			foreach ($groups as $b) {
@@ -107,7 +111,7 @@ class LoginXhr extends Control
 		/*
 		 * Betriebe load food stores connected to the user in the array
 		 */
-		$model = loadModel('betrieb');
+		$model = new StoreModel();
 		if ($betriebe = $model->listMyBetriebe()) {
 			$result = array();
 			foreach ($betriebe as $b) {
@@ -129,7 +133,7 @@ class LoginXhr extends Control
 		/*
 		 * Bezirke load Bezirke connected to the user in the array
 		*/
-		$model = loadModel('bezirk');
+		$model = new RegionModel();
 		if ($bezirke = $model->listMyBezirke()) {
 			$result = array();
 			foreach ($bezirke as $b) {

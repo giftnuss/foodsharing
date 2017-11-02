@@ -1,3 +1,3 @@
 <?php
 
-loadApp('settings');
+loadApp('Settings');

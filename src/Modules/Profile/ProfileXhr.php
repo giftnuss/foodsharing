@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Profile;
 
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Store\StoreModel;
 use S;
 use XhrDialog;
 
@@ -119,7 +120,7 @@ class ProfileXhr extends Control
 
 	public function deleteFromSlot()
 	{
-		$betriebModel = loadModel('betrieb');
+		$betriebModel = new StoreModel();
 		$betrieb = $betriebModel->getBetriebBezirkID($_GET['bid']);
 
 		if (isOrgaTeam() || isBotFor($betrieb['bezirk_id'])) {

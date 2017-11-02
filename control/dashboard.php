@@ -1,10 +1,13 @@
 <?php
 
+use Foodsharing\Modules\Content\ContentModel;
+use Foodsharing\Modules\Profile\ProfileModel;
+
 addScript('/js/contextmenu/jquery.contextMenu.js');
 addCss('/js/contextmenu/jquery.contextMenu.css');
 
 if (S::may()) {
-	$db = loadModel('content');
+	$db = new ContentModel();
 	$check = false;
 
 	$is_bieb = S::may('bieb');
@@ -410,7 +413,7 @@ if (!may()) {
 	/*
 	 * Nächste Termine
 	*/
-	$profileModel = loadModel('profile');
+	$profileModel = new ProfileModel();
 	if ($dates = $profileModel->getNextDates(fsId(), 10)) {
 		addContent(u_nextDates($dates), CNT_RIGHT);
 	}
@@ -499,7 +502,7 @@ if (!may()) {
 		addContent(v_info('Du bist bis jetzt in keinem Filial-Team.'), CNT_LEFT);
 	}
 } else {
-	loadApp('dashboard');
+	loadApp('Dashboard');
 }
 
 function u_nextDates($dates)

@@ -2,6 +2,8 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Foodsharing\Modules\Mailbox\MailboxModel;
+use Foodsharing\Modules\Message\MessageModel;
 use Mem;
 use ReflectionClass;
 use S;
@@ -45,29 +47,22 @@ abstract class Control
 			$this->isXhrControl = true;
 		}
 		$moduleName = substr($className, 0, $pos);
-		$moduleFilePrefix = strtolower($moduleName);
 
-		if (file_exists(ROOT_DIR . 'lang/DE/' . $moduleFilePrefix . '.lang.php')) {
-			require_once ROOT_DIR . 'lang/DE/' . $moduleFilePrefix . '.lang.php';
+		if (file_exists(ROOT_DIR . 'lang/DE/' . $moduleName . '.lang.php')) {
+			require_once ROOT_DIR . 'lang/DE/' . $moduleName . '.lang.php';
 		}
 		if (isset($_GET['lang']) && $_GET['lang'] == 'en') {
-			$fn = ROOT_DIR . 'lang/EN/' . $moduleFilePrefix . '.lang.php';
+			$fn = ROOT_DIR . 'lang/EN/' . $moduleName . '.lang.php';
 			if (file_exists($fn)) {
 				require_once $fn;
 			}
 		}
 		if ($this->isControl) {
-			if (file_exists($dir . $moduleFilePrefix . '.script.js')) {
-				addJsFunc(file_get_contents($dir . $moduleFilePrefix . '.script.js'));
+			if (file_exists($dir . $moduleName . '.js')) {
+				addJsFunc(file_get_contents($dir . $moduleName . '.js'));
 			}
-			if (file_exists($dir . $moduleFilePrefix . '.js')) {
-				addJsFunc(file_get_contents($dir . $moduleFilePrefix . '.js'));
-			}
-			if (file_exists($dir . $moduleFilePrefix . '.style.css')) {
-				addStyle(file_get_contents($dir . $moduleFilePrefix . '.style.css'));
-			}
-			if (file_exists($dir . $moduleFilePrefix . '.css')) {
-				addStyle(file_get_contents($dir . $moduleFilePrefix . '.css'));
+			if (file_exists($dir . $moduleName . '.css')) {
+				addStyle(file_get_contents($dir . $moduleName . '.css'));
 			}
 		}
 		if (is_null($this->model)) {
@@ -379,7 +374,7 @@ abstract class Control
 				if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
 					$sessdata[$recipient['id']] = time();
 
-					$msgDB = loadModel('msg');
+					$msgDB = new MessageModel();
 					if ($betriebName = $msgDB->getBetriebname($conversation_id)) {
 						tplMail(30, $recipient['email'], array(
 							'anrede' => genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
@@ -416,7 +411,7 @@ abstract class Control
 
 	public function mailMessage($sender_id, $recip_id, $msg, $tpl_id = 9)
 	{
-		$db = loadModel('mailbox');
+		$db = new MailboxModel();
 
 		$info = $db->getVal('infomail_message', 'foodsaver', $recip_id);
 		if ((int)$info > 0) {

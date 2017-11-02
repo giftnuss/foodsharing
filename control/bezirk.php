@@ -1,3 +1,3 @@
 <?php
 
-loadApp($_GET['page']);
+loadApp('Region');

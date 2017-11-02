@@ -1,3 +1,3 @@
 <?php
 
-loadApp('geoclean');
+loadApp('GeoClean');

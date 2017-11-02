@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Mailbox\MailboxModel;
+
 if (!S::may('orga')) {
 	go('/');
 }
@@ -28,7 +30,7 @@ if (!isset($g_data['message'])) {
 	$g_data['message'] = '<p><strong>{ANREDE} {NAME}</strong><br /><br /><br />';
 }
 
-$mbmodel = loadModel('mailbox');
+$mbmodel = new MailboxModel();
 
 $boxes = $mbmodel->getBoxes();
 foreach ($boxes as $key => $b) {

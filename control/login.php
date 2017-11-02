@@ -1,3 +1,3 @@
 <?php
 
-loadApp('login');
+loadApp('Login');

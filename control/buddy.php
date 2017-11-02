@@ -1,3 +1,3 @@
 <?php
 
-loadApp('buddy');
+loadApp('Buddy');

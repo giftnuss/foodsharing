@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Settings;
 
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Quiz\QuizModel;
 use Mem;
 use S;
 
@@ -83,7 +84,7 @@ class SettingsControl extends Control
 			if (!$this->foodsaver['verified']) {
 				addContent($this->view->simpleContent($this->model->getContent(45)));
 			} else {
-				$model = loadModel('quiz');
+				$model = new QuizModel();
 
 				if (($status = $model->getQuizStatus(2)) && ($quiz = $model->getQuiz(2))) {
 					if ((int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)fsId()) == 0) {
@@ -131,7 +132,7 @@ class SettingsControl extends Control
 	public function up_fs()
 	{
 		if (S::may()) {
-			$model = loadModel('quiz');
+			$model = new QuizModel();
 
 			if (($status = $model->getQuizStatus(1)) && ($quiz = $model->getQuiz(1))) {
 				$desc = $this->model->getContent(12);
@@ -168,7 +169,7 @@ class SettingsControl extends Control
 	public function up_bot()
 	{
 		if (S::may() && $this->foodsaver['rolle'] >= 2) {
-			$model = loadModel('quiz');
+			$model = new QuizModel();
 
 			if (($status = $model->getQuizStatus(3)) && ($quiz = $model->getQuiz(3))) {
 				$desc = $this->model->getContent(12);

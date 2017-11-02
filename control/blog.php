@@ -1,3 +1,3 @@
 <?php
 
-loadApp('blog');
+loadApp('Blog');

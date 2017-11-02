@@ -1,5 +1,8 @@
 <?php
 
+use Foodsharing\Modules\Message\MessageModel;
+use Foodsharing\Modules\Store\StoreModel;
+
 class ManualDb extends Db
 {
 	public function getBasics_content()
@@ -552,11 +555,11 @@ class ManualDb extends Db
 	{
 		if ($betrieb = $this->getMyBetrieb($bid)) {
 			if (!is_null($betrieb['team_conversation_id'])) {
-				$msg = loadModel('msg');
+				$msg = new MessageModel();
 				$msg->sendMessage($betrieb['team_conversation_id'], $message);
 			} elseif (is_null($betrieb['team_conversation_id'])) {
 				$tcid = $this->createTeamConversation($bid);
-				$msg = loadModel('msg');
+				$msg = new MessageModel();
 				$msg->sendMessage($tcid, $message);
 			}
 		}
@@ -564,7 +567,7 @@ class ManualDb extends Db
 
 	public function addMessage($sender_id, $recip_id, $name, $message, $attach)
 	{
-		$model = loadModel('msg');
+		$model = new MessageModel();
 		if ($cid = $model->addConversation(array($sender_id => $sender_id, $recip_id => $recip_id), false, false)) {
 			$model->sendMessage($cid, $message, $sender_id);
 			mailMessage($sender_id, $recip_id, $message);
@@ -575,7 +578,7 @@ class ManualDb extends Db
 
 	public function add_message($data)
 	{
-		$model = loadModel('msg');
+		$model = new MessageModel();
 		if ($cid = $model->addConversation(array($data['sender_id'] => $data['sender_id'], $data['recip_id'] => $data['recip_id']), false, false)) {
 			$model->sendMessage($cid, $data['msg'], $data['sender_id']);
 		}
@@ -1233,7 +1236,7 @@ class ManualDb extends Db
 					FROM 	' . PREFIX . 'betrieb_team bt
 					WHERE 	bt.foodsaver_id = ' . $this->intval($id) . '
 				');
-				$betrieb = loadModel('betrieb');
+				$betrieb = new StoreModel();
 				//Delete from Companies
 				foreach ($bids as $b) {
 					$betrieb->signout($b, $id);
@@ -2635,7 +2638,7 @@ class ManualDb extends Db
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $bid);
 
-		$model = loadModel('betrieb');
+		$model = new StoreModel();
 		$model->addBell((int)$fsid, 'store_request_accept_title', 'store_request_accept', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$bid
 		), array(
@@ -2643,7 +2646,7 @@ class ManualDb extends Db
 			'name' => $betrieb
 		), 'store-arequest-' . (int)$fsid);
 
-		$msg = loadModel('msg');
+		$msg = new MessageModel();
 
 		if ($scid = $msg->getBetriebConversation($bid, true)) {
 			$msg->deleteUserFromConversation($scid, $fsid, true);
@@ -2665,7 +2668,7 @@ class ManualDb extends Db
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $bid);
 
-		$model = loadModel('betrieb');
+		$model = new StoreModel();
 		$model->addBell((int)$fsid, 'store_request_accept_wait_title', 'store_request_accept_wait', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$bid
 		), array(
@@ -2673,7 +2676,7 @@ class ManualDb extends Db
 			'name' => $betrieb
 		), 'store-wrequest-' . (int)$fsid);
 
-		$msg = loadModel('msg');
+		$msg = new MessageModel();
 		if ($scid = $this->getBetriebConversation($bid, true)) {
 			$msg->addUserToConversation($scid, $fsid, true);
 		}
@@ -2690,7 +2693,7 @@ class ManualDb extends Db
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $bid);
 
-		$model = loadModel('betrieb');
+		$model = new StoreModel();
 		$model->addBell((int)$fsid, 'store_request_deny_title', 'store_request_deny', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$bid
 		), array(
@@ -2726,7 +2729,7 @@ class ManualDb extends Db
 
 	private function createTeamConversation($bid)
 	{
-		$msg = loadModel('msg');
+		$msg = new MessageModel();
 		$tcid = $msg->insertConversation(array(), true);
 		$betrieb = $this->getMyBetrieb($bid);
 		$msg->renameConversation($tcid, 'Team ' . $betrieb['name']);
@@ -2745,7 +2748,7 @@ class ManualDb extends Db
 
 	private function createSpringerConversation($bid)
 	{
-		$msg = loadModel('msg');
+		$msg = new MessageModel();
 		$scid = $msg->insertConversation(array(), true);
 		$betrieb = $this->getMyBetrieb($bid);
 		$msg->renameConversation($scid, 'Springer ' . $betrieb['name']);
@@ -3118,7 +3121,7 @@ class ManualDb extends Db
 
 		$sql = 'INSERT IGNORE INTO `' . PREFIX . 'betrieb_team` (`betrieb_id`,`foodsaver_id`,`verantwortlich`,`active`)VALUES' . implode(',', $values);
 
-		$msg = loadModel('msg');
+		$msg = new MessageModel();
 
 		if ($cid = $this->getBetriebConversation($bid)) {
 			$msg->setConversationMembers($cid, $member_ids);

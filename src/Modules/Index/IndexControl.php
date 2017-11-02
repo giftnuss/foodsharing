@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Index;
 
+use Foodsharing\Modules\Content\ContentModel;
 use Foodsharing\Modules\Core\Control;
 
 class IndexControl extends Control
@@ -16,7 +17,7 @@ class IndexControl extends Control
 
 	public function index()
 	{
-		$db = loadModel('content');
+		$db = new ContentModel();
 		addTitle('Restlos glücklich!');
 
 		addScript('/js/jquery.animatenumber.min.js');

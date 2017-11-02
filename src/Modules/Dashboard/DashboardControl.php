@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Dashboard;
 
+use Foodsharing\Modules\Content\ContentModel;
 use Foodsharing\Modules\Core\Control;
 use S;
 
@@ -61,7 +62,7 @@ class DashboardControl extends Control
 
 		addContent($this->view->foodsharerMenu(), CNT_LEFT);
 
-		$db = loadModel('content');
+		$db = new ContentModel();
 
 		$cnt = $db->getContent(33);
 

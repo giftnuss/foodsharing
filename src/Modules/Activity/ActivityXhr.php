@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Activity;
 
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Mailbox\MailboxModel;
 use S;
 use Xhr;
 
@@ -17,7 +18,7 @@ class ActivityXhr extends Control
 
 	public function loadmore()
 	{
-		$mailbox = loadModel('mailbox');
+		$mailbox = new MailboxModel();
 		/*
 		 * get ids to not display from options
 		 */
@@ -69,7 +70,7 @@ class ActivityXhr extends Control
 		 * get Forum updates
 		 */
 
-		$mailbox = loadModel('mailbox');
+		$mailbox = new MailboxModel();
 
 		if (isset($_GET['options'])) {
 			$options = array();

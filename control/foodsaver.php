@@ -1,3 +1,3 @@
 <?php
 
-loadApp('foodsaver');
+loadApp('Foodsaver');

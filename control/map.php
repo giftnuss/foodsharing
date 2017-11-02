@@ -1,3 +1,3 @@
 <?php
 
-loadApp('map');
+loadApp('Map');

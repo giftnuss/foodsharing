@@ -1,3 +1,3 @@
 <?php
 
-loadApp('team');
+loadApp('Team');

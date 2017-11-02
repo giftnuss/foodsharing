@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Store\StoreModel;
+
 addScript('/js/contextmenu/jquery.contextMenu.js');
 addCss('/js/contextmenu/jquery.contextMenu.css');
 
@@ -1239,6 +1241,12 @@ function betrieb_form()
 	));
 }
 
+/**
+ * @param $fetch_dow
+ * @param $betrieb
+ *
+ * @return array
+ */
 function u_getNextDates($fetch_dow, $betrieb)
 {
 	$out = array();
@@ -1295,7 +1303,7 @@ function u_getNextDates($fetch_dow, $betrieb)
 			++$y;
 		}
 	}
-	$db = loadModel('betrieb');
+	$db = new StoreModel();
 	if ($adddates = $db->listUpcommingFetchDates($_GET['id'])) {
 		$out = array_merge($out, $adddates);
 	}

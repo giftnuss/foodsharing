@@ -1,3 +1,3 @@
 <?php
 
-loadApp('groups');
+loadApp('WorkGroup');

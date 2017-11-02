@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Foodsaver;
 
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Settings\SettingsModel;
 use S;
 
 class FoodsaverControl extends Control
@@ -109,7 +110,7 @@ function handle_edit()
 			unset($g_data['rolle']);
 		}
 
-		$settings_model = loadModel('settings');
+		$settings_model = new SettingsModel();
 		if ($oldFs = $settings_model->getOne_foodsaver($_GET['id'])) {
 			$logChangedFields = array('name', 'nachname', 'stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum', 'rolle', 'orgateam');
 			$settings_model->logChangedSetting($_GET['id'], $oldFs, $g_data, $logChangedFields);

@@ -1,3 +1,3 @@
 <?php
 
-loadApp('bcard');
+loadApp('BusinessCard');

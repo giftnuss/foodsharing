@@ -1,5 +1,8 @@
 <?php
 
+use Foodsharing\Modules\Mailbox\MailboxModel;
+use Foodsharing\Modules\Team\TeamModel;
+
 define('CNT_MAIN', 0);
 define('CNT_RIGHT', 1);
 define('CNT_TOP', 2);
@@ -1824,10 +1827,15 @@ function libmail($bezirk, $email, $subject, $message, $attach = false, $token = 
 	$mail->send();
 }
 
+/**
+ * @param $sender_id
+ * @param $recip_id
+ * @param null $msg
+ */
 function mailMessage($sender_id, $recip_id, $msg = null)
 {
 	// FIXME this function is pretty much a copy of Model::mailMessage() and should probably replaced
-	$db = loadModel('mailbox');
+	$db = new MailboxModel();
 
 	$info = $db->getVal('infomail_message', 'foodsaver', $recip_id);
 	if ((int)$info > 0) {
@@ -2309,7 +2317,7 @@ function getIp()
  */
 function ipIsBlocked($duration = 60, $context = 'default')
 {
-	$db = loadModel('team');
+	$db = new TeamModel();
 	$ip = getIp();
 
 	if ($block = $db->qRow('SELECT UNIX_TIMESTAMP(`start`) AS `start`,`duration` FROM ' . PREFIX . 'ipblock WHERE ip = ' . $db->strval(getIp()) . ' AND context = ' . $db->strval($context))) {

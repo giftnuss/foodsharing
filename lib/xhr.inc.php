@@ -1,12 +1,19 @@
 <?php
 
+use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Foodsaver\FoodsaverModel;
+use Foodsharing\Modules\Mailbox\MailboxModel;
+use Foodsharing\Modules\Message\MessageModel;
+use Foodsharing\Modules\Region\RegionModel;
+use Foodsharing\Modules\Store\StoreModel;
+
 $db = new ManualDb();
 
 $xhr_script = '';
 
 function xhr_verify($data)
 {
-	$fsmodel = loadModel('foodsaver');
+	$fsmodel = new FoodsaverModel();
 	$bids = $fsmodel->getFsBezirkIds((int)$data['fid']);
 
 	if (isBotForA($bids, false, true) || isOrgateam()) {
@@ -51,7 +58,7 @@ function xhr_verify($data)
 				' . (int)$data['v'] . '
 			)
 		');
-			$model = loadModel();
+			$model = new Model();
 			$model->delBells('new-fs-' . (int)$data['fid']);
 
 			return json_encode(array(
@@ -204,7 +211,7 @@ function xhr_addPinPost($data)
 			$poster = $db->getVal('name', 'foodsaver', fsId());
 			$betrieb = $db->getVal('name', 'betrieb', (int)$data['bid']);
 
-			$model = loadModel('betrieb');
+			$model = new StoreModel();
 			$model->addBell($data['team'], 'store_wallpost_title', 'store_wallpost', 'img img-store brown', array(
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
 			), array(
@@ -809,7 +816,7 @@ function xhr_continueMail($data)
 		$bezirk['email_name'] = EMAIL_PUBLIC_NAME;
 		$recip = $db->getMailNext($mail_id);
 
-		$mbmodel = loadModel('mailbox');
+		$mbmodel = new MailboxModel();
 		$mailbox = $mbmodel->getMailbox((int)$mail['mailbox_id']);
 		$mailbox['email'] = $mailbox['name'] . '@' . DEFAULT_HOST;
 
@@ -1021,7 +1028,7 @@ function xhr_update_abholen($data)
 			}
 		}
 		$betrieb = $db->getVal('name', 'betrieb', $data['bid']);
-		$model = loadModel('betrieb');
+		$model = new StoreModel();
 		$model->addBell($data['team'], 'store_cr_times_title', 'store_cr_times', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
 		), array(
@@ -1304,7 +1311,7 @@ function xhr_betriebRequest($data)
 
 		$biebs = $db->getBiebsForStore($data['id']);
 
-		$model = loadModel('betrieb');
+		$model = new StoreModel();
 		$model->addBell($biebs, 'store_new_request_title', 'store_new_request', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$data['id']
 		), array(
@@ -1325,7 +1332,7 @@ function xhr_betriebRequest($data)
 			$add = ' Es gibt aber keinen Botschafter';
 		}
 
-		$model = loadModel('betrieb');
+		$model = new StoreModel();
 		$model->addBell($botsch, 'store_new_request_title', 'store_new_request', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$data['id']
 		), array(
@@ -1427,7 +1434,7 @@ function xhr_addFetcher($data)
 function xhr_delDate($data)
 {
 	$status = 0;
-	$betriebModel = loadModel('betrieb');
+	$betriebModel = new StoreModel();
 	if ($betriebModel->isInTeam($data['bid']) && isset($data['date'])) {
 		if ($betriebModel->deleteFetchDate(fsId(), $data['bid'], $data['date'])) {
 			$status = 1;
@@ -1445,7 +1452,7 @@ function xhr_delDate($data)
 
 function xhr_fetchDeny($data)
 {
-	$betriebModel = loadModel('betrieb');
+	$betriebModel = new StoreModel();
 	if ($betriebModel->isVerantwortlich($data['bid']) || isOrgaTeam() && isset($data['date'])) {
 		$betriebModel->deleteFetchDate($data['fsid'], $data['bid'], date('Y-m-d H:i:s', strtotime($data['date'])));
 
@@ -1463,6 +1470,11 @@ function xhr_fetchConfirm($data)
 	}
 }
 
+/**
+ * @param $data
+ *
+ * @return string
+ */
 function xhr_becomeBezirk($data)
 {
 	if (may()) {
@@ -1518,7 +1530,7 @@ function xhr_becomeBezirk($data)
 			}
 
 			if ($bots = $db->getBotschafter($bezirk_id)) {
-				$model = loadModel();
+				$model = new Model();
 
 				if (
 					($foodsaver = $db->getValues(array('verified', 'name', 'nachname', 'photo'), 'foodsaver', fsId())) &&
@@ -1588,7 +1600,7 @@ function xhr_delBPost($data)
 
 function xhr_delPost($data)
 {
-	$db = loadModel('bezirk');
+	$db = new RegionModel();
 
 	$fsid = $db->getVal('foodsaver_id', 'theme_post', $data['pid']);
 	$bezirkId = $db->getBezirkForPost($data['pid']);
@@ -1628,7 +1640,7 @@ function xhr_bcontext($data)
 			$db->del('DELETE FROM `' . PREFIX . 'betrieb_team` WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . (int)$data['bid']);
 			$db->del('DELETE FROM `' . PREFIX . 'abholer` WHERE `betrieb_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$data['fsid'] . ' AND `date` > NOW()');
 
-			$msg = loadModel('msg');
+			$msg = new MessageModel();
 
 			if ($tcid = $msg->getBetriebConversation((int)$data['bid'])) {
 				$msg->deleteUserFromConversation($tcid, (int)$data['fsid'], true);

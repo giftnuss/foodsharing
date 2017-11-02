@@ -1,3 +1,3 @@
 <?php
 
-loadApp('event');
+loadApp('Event');

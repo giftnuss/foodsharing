@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Activity;
 
 use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Mailbox\MailboxModel;
 use S;
 
 class ActivityModel extends Model
@@ -246,7 +247,7 @@ class ActivityModel extends Model
 	public function loadMailboxUpdates($page = 0, $model = false, $hidden_ids = false)
 	{
 		if ($model === false) {
-			$model = loadModel('mailbox');
+			$model = new MailboxModel();
 		}
 
 		if ($boxes = $model->getBoxes()) {

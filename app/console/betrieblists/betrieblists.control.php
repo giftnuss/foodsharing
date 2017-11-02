@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Message\MessageModel;
+
 class BetrieblistsControl extends ConsoleControl
 {
 	private $model;
@@ -65,7 +67,7 @@ class BetrieblistsControl extends ConsoleControl
 	{
 		$betriebe = $this->model->q('SELECT id, `name`, team_conversation_id, springer_conversation_id FROM fs_betrieb');
 
-		$msg = loadModel('msg');
+		$msg = new MessageModel();
 
 		foreach ($betriebe as $betrieb) {
 			$cid = $betrieb['team_conversation_id'];

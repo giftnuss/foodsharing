@@ -1,6 +1,7 @@
 <?php
 
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Modules\Store\StoreModel;
 
 $bezirk_id = getGet('bid');
 if (!S::may()) {
@@ -316,7 +317,7 @@ function handle_add($bezirk_id)
 
 			$foodsaver = $db->getFoodsaver($g_data['bezirk_id']);
 
-			$model = loadModel('betrieb');
+			$model = new StoreModel();
 			$model->addBell($foodsaver, 'store_new_title', 'store_new', 'img img-store brown', array(
 				'href' => '/?page=fsbetrieb&id=' . (int)$id
 			), array(

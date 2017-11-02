@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Settings;
 
 use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Quiz\QuizModel;
 
 class SettingsModel extends Model
 {
@@ -160,7 +161,7 @@ class SettingsModel extends Model
 	{
 		$out = array();
 
-		$model = loadModel('quiz');
+		$model = new QuizModel();
 
 		$number = 0;
 

@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Profile;
 
 use fDate;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Modules\Foodsaver\FoodsaverModel;
 use S;
 use vPage;
 
@@ -28,7 +29,7 @@ class ProfileView extends View
 
 		$page->addSectionLeft($this->sideInfos(), 'Infos');
 
-		$fsModel = loadModel('foodsaver');
+		$fsModel = new FoodsaverModel();
 		$bids = $fsModel->getFsBezirkIds($this->foodsaver['id']);
 
 		if ((isOrgaTeam() || isBotForA($bids, false, true)) && $userCompanies) {
@@ -383,7 +384,7 @@ class ProfileView extends View
 	private function profileMenu()
 	{
 		$opt = '';
-		$fsModel = loadModel('foodsaver');
+		$fsModel = new FoodsaverModel();
 
 		$bids = $fsModel->getFsBezirkIds($this->foodsaver['id']);
 		if ($this->foodsaver['buddy'] === -1 && $this->foodsaver['id'] != fsId()) {

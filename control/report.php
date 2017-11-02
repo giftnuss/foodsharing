@@ -1,3 +1,3 @@
 <?php
 
-loadApp('report');
+loadApp('Report');

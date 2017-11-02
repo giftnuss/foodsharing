@@ -1,3 +1,3 @@
 <?php
 
-loadApp('quiz');
+loadApp('Quiz');

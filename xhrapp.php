@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Lib\Routing;
+
 require __DIR__ . '/includes/setup.php';
 
 $js = '';
@@ -20,7 +22,8 @@ if (isset($_GET['app']) && isset($_GET['m'])) {
 
 	S::init();
 
-	$obj = loadXhr($app);
+	$class = Routing::getClassName($app, 'Xhr');
+	$obj = new $class();
 
 	if (method_exists($obj, $meth)) {
 		$out = $obj->$meth();

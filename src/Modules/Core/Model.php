@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Foodsharing\Modules\Message\MessageModel;
 use ManualDb;
 
 class Model extends ManualDb
@@ -157,7 +158,7 @@ class Model extends ManualDb
 
 	public function message($recip_id, $foodsaver_id, $message, $unread = 1)
 	{
-		$model = loadModel('msg');
+		$model = new MessageModel();
 
 		$recd = 0;
 		if ($unread == 0) {
