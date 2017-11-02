@@ -2,11 +2,6 @@
 
 class ManualDb extends Db
 {
-	public function __construct($host = 'localhost', $user = 'root', $pass = '', $db = 'foodsaver')
-	{
-		parent::__construct($host, $user, $pass, $db);
-	}
-
 	public function getBasics_content()
 	{
 		return $this->q('
