@@ -91,14 +91,16 @@ function migratedb() {
   # manually copy the generated migration file into the container
   docker cp $dest $(dc ps -q db):/app/$dest
 
-  time sql-file $database $dest
+  sql-file $database $dest
 
-  echo "set foreign_key_checks=0;" > migrations/_reload_data.sql
+  dest=migrations/_reload_data.sql
+  echo "set foreign_key_checks=0;" > $dest
   for T in `sql-query foodsharing "SHOW TABLES;" | tail -n+2`; do
-    echo "TRUNCATE TABLE $T;" >> migrations/_reload_data.sql
+    echo "TRUNCATE TABLE $T;" >> $dest
   done
-  sql-dump --extended-insert --quick --no-create-info --single-transaction --disable-keys --no-autocommit --skip-add-locks >> migrations/_reload_data.sql
-  echo "set foreign_key_checks=1;" >> migrations/_reload_data.sql
+  sql-dump --extended-insert --quick --no-create-info --single-transaction --disable-keys --no-autocommit --skip-add-locks >> $dest
+  echo "set foreign_key_checks=1;" >> $dest
+  docker cp $dest $(dc ps -q app):/app/$dest
 }
 
 function purge-db() {
