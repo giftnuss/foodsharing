@@ -20,6 +20,7 @@
 
 ## Dev/Test/CI stuff
 
+- Use cleanly populated database between each test !210 @NerdyProjects
 - Add vagrant docker-compose dev environment option !195 @TimFoe @nicksellen
 
 # 2017-10-18
