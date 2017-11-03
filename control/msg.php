@@ -1,3 +1,3 @@
 <?php
 
-loadApp('Msg');
+loadApp('Message');
