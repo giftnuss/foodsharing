@@ -900,48 +900,6 @@ class QuizXhr extends Control
 					'status' => 1,
 					'script' => 'goTo("/?page=settings&sub=quizsession&sid=' . (int)S::get('quiz-session') . '");'
 				);
-
-				$dia = new XhrDialog();
-				$dia->setTitle('Ergebnis');
-
-				$dia->addOpt('width', 600);
-				$dia->addOpt('height', '($(window).height()-60)', false);
-
-				$dia->addContent($this->view->result($explains, $fp, $quiz['maxfp']));
-
-				$return = $dia->xhrout();
-				$return['script'] .= '
-				
-				$("#explains").accordion({
-						heightStyle: "content",
-						animate: 200,
-						collapsible: true,
-						autoHeight: false, 
-	    				active: false 
-					});
-					
-					var width = 1000;
-					if($(window).width() < 1000)
-					{
-						width = ($(window).width()-40);
-					}
-					$("#' . $dia->getId() . '").dialog("option",{
-						width:width,
-						height:($(window).height()-40)
-					});
-					$(window).resize(function(){
-						var width = 1000;
-						if($(window).width() < 1000)
-						{
-							width = ($(window).width()-40);
-						}
-						$("#' . $dia->getId() . '").dialog("option",{
-							width:width,
-							height:($(window).height()-40)
-						});
-					});';
-
-				return $return;
 			}
 		}
 	}

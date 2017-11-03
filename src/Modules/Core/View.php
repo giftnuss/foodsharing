@@ -294,8 +294,6 @@ class View
 				</ul>
 			</div>';
 		}
-
-		return $out;
 	}
 
 	public function peopleChooser($id, $option = array())
