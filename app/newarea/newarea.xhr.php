@@ -18,7 +18,7 @@ class NewareaXhr extends Control
 			if ((int)$_GET['bid'] == 0) {
 				return array(
 					'status' => 1,
-					'script' => 'error("Du musst noch einen Bezirk auswählen. in den Die Foodsaver sortiert werden.");'
+					'script' => 'error("Du musst noch einen Bezirk auswählen in den die Foodsaver sortiert werden.");'
 				);
 			} else {
 				$bezirk_id = (int)$_GET['bid'];
@@ -50,7 +50,7 @@ class NewareaXhr extends Control
 
 					return array(
 						'status' => 1,
-						'script' => 'pulseInfo("' . $count . ' E-Mails wurden versendet");' . $js
+						'script' => 'pulseInfo("' . $count . ' E-Mails wurden versandt.");' . $js
 					);
 				}
 			}

@@ -474,11 +474,11 @@ function getMenu()
 				<optgroup label="Bezirke">';
 
 		$ags = '
-				<li><a href="/?page=groups"><i class="fa fa-group"></i> GRUPPEN-ÜBERSICHT</a></li>
+				<li><a href="/?page=groups"><i class="fa fa-group"></i> GRUPPENÜBERSICHT</a></li>
 				<li class="break"><span></span></li>';
 
 		$ags_mob = '
-				<option value="/?page=groups">GRUPPEN-ÜBERSICHT</option>';
+				<option value="/?page=groups">GRUPPENÜBERSICHT</option>';
 
 		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
 			foreach ($_SESSION['client']['bezirke'] as $i => $bezirk) {
@@ -822,7 +822,7 @@ function tplMailList($tpl_id, $to, $from = false, $attach = false)
 		$mail->addRecipient($t['email']);
 
 		if (!$subject) {
-			$subject = 'Foodsharing Mail';
+			$subject = 'Foodsharing-Mail';
 		}
 		$mail->setSubject($subject);
 		//Read an HTML message body from an external file, convert referenced images to embedded, convert HTML into a basic plain-text alternative body
@@ -900,7 +900,7 @@ function emailBodyTpl($message, $email = false, $token = false)
 				</div>
 <p style="font-size:11px;"><strong>Impressum</strong><br />
 Angaben gemäß § 5 TMG:<br />
-<br />Foodsharing e.<span style="white-space:nowrap">&thinsp;</span>V.<br/>
+<br />foodsharing e.<span style="white-space:nowrap">&thinsp;</span>V.<br/>
 Marsiliusstr 36<br />
 50937 Köln<br />
 Vertreten durch:<br /><br />
@@ -977,7 +977,7 @@ function tplMail($tpl_id, $to, $var = array(), $from_email = false)
 
 	$message['subject'] = str_replace($search, $replace, $message['subject']);
 	if (!$message['subject']) {
-		$message['subject'] = 'Foodsharing mail';
+		$message['subject'] = 'Foodsharing-Mail';
 	}
 
 	$mail->setSubject($message['subject']);
@@ -1856,7 +1856,7 @@ function libmail($bezirk, $email, $subject, $message, $attach = false, $token = 
 	$mail->setFrom($bezirk['email'], $bezirk['email_name']);
 	$mail->addRecipient($email);
 	if (!$subject) {
-		$subject = 'Foodsharing Mail';
+		$subject = 'Foodsharing-Mail';
 	}
 	$mail->setSubject($subject);
 	$mail->setHTMLBody(emailBodyTpl($message, $email, $token));
