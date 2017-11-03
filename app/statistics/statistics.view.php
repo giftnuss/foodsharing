@@ -21,7 +21,7 @@ class StatisticsView extends View
 					</td>
 					<td class="city">
 						<h4>' . $c['name'] . '</h4>
-						<p>' . str_replace(',00', '', number_format($c['fetchweight'], 2, ',', '.')) . '<span style="white-space:nowrap">&thinsp;</span>kg (' . $c['percent'] . '%)</p>
+						<p>' . str_replace(',00', '', number_format($c['fetchweight'], 2, ',', '.')) . '<span style="white-space:nowrap">&thinsp;</span>kg (' . $c['percent'] . '<span style="white-space:nowrap">&thinsp;</span>%)</p>
 						<div class="percentbar">
 							<div class="inner" style="width:' . $c['percent'] . '%;"></div>
 						</div>
@@ -64,7 +64,7 @@ class StatisticsView extends View
 					</div>
 					<div class="stat_text">
 						<h4>' . number_format($stat['fetchcount'], 0, ',', '.') . '</h4>
-						<p>Rettungs-Einsätze haben unsere Foodsaver gemeistert.</p>
+						<p>Rettungseinsätze haben unsere Foodsaver gemeistert.</p>
 					</div>
 			</div><br />
 			<div class="stat_item">
@@ -82,7 +82,7 @@ class StatisticsView extends View
 					</div>
 					<div class="stat_text">
 						<h4>' . number_format($stat['fscount'], 0, ',', '.') . '</h4>
-						<p>Foodsaver engagieren sich ehrenamtlich für eine Welt ohne Verschwendung von Lebensmitteln</p>
+						<p>Foodsaver engagieren sich ehrenamtlich für eine Welt ohne Lebensmittelverschwendung.</p>
 					</div>
 			</div><br />
 		</div>', s('stat_whole'));
@@ -106,7 +106,7 @@ class StatisticsView extends View
 					<td class="city">
 						<h4>' . $fs['name'] . '</h4>
 						<p>' . str_replace(',00', '', number_format($fs['fetchweight'], 2, ',', '.')) . '<span style="white-space:nowrap">&thinsp;</span>kg</p>
-						<p>' . number_format($fs['fetchcount'], 0, ',', '.') . 'x abgeholt</p>
+						<p>' . number_format($fs['fetchcount'], 0, ',', '.') . ' x abgeholt</p>
 					</td>
 				</tr>';
 			}
@@ -114,6 +114,6 @@ class StatisticsView extends View
 		$out .= '
 		</table>';
 
-		return v_field($out, 'unsere Foodsaver', array('class' => 'ui-padding'));
+		return v_field($out, 'Unsere Foodsaver', array('class' => 'ui-padding'));
 	}
 }
