@@ -48,7 +48,7 @@ $g_lang['follow_thread_mail'] = 'Ja, ich möchte per Mail über neue Posts infor
 $g_lang['follow_thread_none'] = 'Bitte nicht mehr über neue Posts informieren.';
 $g_lang['follow_thread_desc'] = '';
 
-$g_lang['newmail'] = 'Gib hier Deine neue E-Mail Adresse ein';
+$g_lang['newmail'] = 'Gib hier Deine neue E-Mail-Adresse ein';
 $g_lang['passcheck'] = 'Bestätige die Änderung bitte mit Deinem Passwort';
 $g_lang['sleep_mode_saved'] = 'Die Einstellungen wurden gespeichert';
 $g_lang['sleeping_user'] = 'Schlafmütze';

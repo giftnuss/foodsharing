@@ -14,7 +14,7 @@ $(function () {
             var $el = $(this);
             if (!checkEmail($el.val())) {
                 $email.addClass('input-error');
-                pulseError('Mit Deiner E-Mail Adressse stimmt etwas nicht.');
+                pulseError('Mit Deiner E-Mail-Adressse stimmt etwas nicht.');
             }
         });
 
