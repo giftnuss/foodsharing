@@ -35,7 +35,7 @@ class StatisticsView extends View
 		return v_field($out, s('active_cities'), array('class' => 'ui-padding'));
 	}
 
-	public function getStatGesamt($stat)
+	public function getStatTotal($stat)
 	{
 		/*
 		 *  fetchweight,

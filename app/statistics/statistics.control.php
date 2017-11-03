@@ -30,7 +30,7 @@ class StatisticsControl extends Control
 
 		$stat_fs = $this->model->getStatFoodsaver();
 
-		addContent($this->view->getStatGesamt($stat_gesamt), CNT_TOP);
+		addContent($this->view->getStatTotal($stat_gesamt), CNT_TOP);
 
 		addContent($this->view->getStatCities($stat_cities), CNT_LEFT);
 		addContent($this->view->getStatFoodsaver($stat_fs), CNT_RIGHT);
