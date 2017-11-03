@@ -21,7 +21,7 @@ class StatisticsView extends View
 					</td>
 					<td class="city">
 						<h4>' . $c['name'] . '</h4>
-						<p>' . str_replace(',00', '', number_format($c['fetchweight'], 2, ',', '.')) . '<span style="white-space:nowrap">&thinsp;</span>kg (' . $c['percent'] . '<span style="white-space:nowrap">&thinsp;</span>%)</p>
+						<p>' . number_format($c['fetchweight'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg (' . $c['percent'] . '<span style="white-space:nowrap">&thinsp;</span>%)</p>
 						<div class="percentbar">
 							<div class="inner" style="width:' . $c['percent'] . '%;"></div>
 						</div>
@@ -54,7 +54,7 @@ class StatisticsView extends View
 						<div class="stat_icon fetchweight"></div>
 					</div>
 					<div class="stat_text">
-						<h4>' . str_replace(',00', '', number_format($stat['fetchweight'], 2, ',', '.')) . '<span style="white-space:nowrap">&thinsp;</span>kg</h4>
+						<h4>' . number_format($stat['fetchweight'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg</h4>
 						<p>Lebensmittel erfolgreich vor der Tonne gerettet.</p>
 					</div>
 			</div>
@@ -105,7 +105,7 @@ class StatisticsView extends View
 					</td>
 					<td class="city">
 						<h4>' . $fs['name'] . '</h4>
-						<p>' . str_replace(',00', '', number_format($fs['fetchweight'], 2, ',', '.')) . '<span style="white-space:nowrap">&thinsp;</span>kg</p>
+						<p>' . number_format($fs['fetchweight'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg</p>
 						<p>' . number_format($fs['fetchcount'], 0, ',', '.') . ' x abgeholt</p>
 					</td>
 				</tr>';
