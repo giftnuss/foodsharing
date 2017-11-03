@@ -46,10 +46,10 @@ $g_lang['fs_id'] = 'Foodsharing-ID';
 $g_lang['upload_new_photo'] = 'neues Foto hochladen';
 $g_lang['edit_photo'] = 'Foto bearbeiten';
 
-$g_lang['posible_restore_account'] = 'Der Account kann nach dem löschen widerhergestellt werden';
+$g_lang['posible_restore_account'] = 'Der Account kann nach dem Löschen wieder hergestellt werden.';
 $g_lang['delete_now'] = 'Account jetzt löschen';
 $g_lang['delete_account'] = 'Account löschen';
-$g_lang['delete_account_confirm_msg'] = 'Du bist dabei Diesen Account zu löschen, bist Du Dir ganz sicher?';
+$g_lang['delete_account_confirm_msg'] = 'Du bist dabei diesen Account zu löschen. Bist Du Dir ganz sicher?';
 $g_lang['delete_account_confirm_title'] = 'Account wirklich löschen?';
 $g_lang['delete_account_confirm_bt'] = 'Ja, Account jetzt löschen';
 $g_lang['foodsaver_bread'] = 'Foodsaver';

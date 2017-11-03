@@ -4,7 +4,7 @@ global $g_lang;
 $g_lang['title'] = 'Titel';
 $g_lang['body'] = 'Nachricht';
 $g_lang['forum'] = 'Forum';
-$g_lang['bot_forum'] = 'Botschafterforum';
+$g_lang['bot_forum'] = 'BotschafterInnenforum';
 $g_lang['compose_new_theme'] = 'Neues Thema verfassen';
 $g_lang['empty_forum'] = 'Noch keine Themen gepostet';
 $g_lang['delete_post'] = 'Beitrag löschen';
