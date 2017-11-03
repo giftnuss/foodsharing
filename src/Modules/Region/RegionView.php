@@ -541,10 +541,6 @@ class RegionView extends View
 
 	public function applications($requests)
 	{
-		foreach ($requests as $i => $r) {
-		}
-		//$cnt =  $this->fsAvatarList($requests);
-
 		$out = '
 		<div class="requests">';
 

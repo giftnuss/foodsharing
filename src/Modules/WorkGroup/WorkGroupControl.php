@@ -103,9 +103,6 @@ class WorkGroupControl extends Control
 					$data['apply_type'] = (int)$_POST['apply_type'];
 				}
 
-				if (!empty($data)) {
-				}
-
 				/*
 				 * Handle Member and Group-Admin Fields
 				 */

@@ -153,6 +153,7 @@ class ProfileView extends View
 		$infos = array();
 
 		if ($this->foodsaver['botschafter']) {
+			$bot = array();
 			foreach ($this->foodsaver['botschafter'] as $b) {
 				$bot[$b['id']] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
 			}

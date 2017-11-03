@@ -8,7 +8,6 @@ use S;
 class ProfileControl extends Control
 {
 	private $foodsaver;
-	private $stats;
 
 	public function __construct()
 	{
