@@ -3,7 +3,7 @@ global $g_lang;
 $g_lang['picture-desc'] = 'Füge dem Essenskorb ein Foto hinzu';
 $g_lang['picture-choose'] = 'Datei wählen';
 $g_lang['description'] = 'Beschreibung';
-$g_lang['weight'] = 'geschätztes Gewicht';
+$g_lang['weight'] = 'Geschätztes Gewicht';
 $g_lang['food_type'] = 'Welche Arten von Lebensmitteln sind dabei?';
 $g_lang['food_art'] = 'Was trifft auf die Lebensmittel zu?';
 $g_lang['contactmessage'] = 'Per Nachricht';

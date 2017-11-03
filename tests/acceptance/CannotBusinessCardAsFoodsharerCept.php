@@ -14,4 +14,4 @@ $I->amOnPage('/?page=bcard');
 
 $I->seeCurrentUrlEquals('/?page=settings&sub=general'); // it redirects
 
-$I->see('persönliche Visitenkarte');
+$I->see('Persönliche Visitenkarte');

@@ -219,7 +219,7 @@ class BasketView extends View
 				array('id' => 3, 'name' => 'Molkereiprodukte'),
 				array('id' => 4, 'name' => 'Trockenware'),
 				array('id' => 5, 'name' => 'Tiefkühlware'),
-				array('id' => 6, 'name' => 'Zubreitetete Speisen'),
+				array('id' => 6, 'name' => 'Zubereitete Speisen'),
 				array('id' => 7, 'name' => 'Tierfutter')
 			)
 		));
