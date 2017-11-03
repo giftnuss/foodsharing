@@ -114,6 +114,6 @@ class StatisticsView extends View
 		$out .= '
 		</table>';
 
-		return v_field($out, 'Unsere Foodsaver', array('class' => 'ui-padding'));
+		return v_field($out, s('our_foodsavers'), array('class' => 'ui-padding'));
 	}
 }
