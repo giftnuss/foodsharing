@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Report;
 
 use Foodsharing\Modules\Core\Control;
+use XhrDialog;
 
 class ReportXhr extends Control
 {

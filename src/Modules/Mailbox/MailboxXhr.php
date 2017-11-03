@@ -2,7 +2,9 @@
 
 namespace Foodsharing\Modules\Mailbox;
 
+use AsyncMail;
 use Foodsharing\Modules\Core\Control;
+use Mem;
 use S;
 
 class MailboxXhr extends Control
