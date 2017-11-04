@@ -15,7 +15,7 @@ class BasketView extends View
 		$page = new vPage('Essenskörbe', $this->findMap());
 
 		if ($baskets) {
-			$page->addSectionRight($this->closeBaskets($baskets), 'in Deiner Nähe');
+			$page->addSectionRight($this->closeBaskets($baskets), 'In Deiner Nähe');
 		}
 
 		$page->render();

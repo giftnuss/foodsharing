@@ -205,7 +205,7 @@ class ProfileView extends View
 		if ($this->foodsaver['stat_fetchweight'] > 0) {
 			$fetchweight = '
 				<span class="item stat_fetchweight">
-					<span class="val">' . number_format($this->foodsaver['stat_fetchweight'], 0, ',', '.') . 'kg</span>
+					<span class="val">' . number_format($this->foodsaver['stat_fetchweight'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg</span>
 					<span class="name">gerettet</span>
 				</span>';
 		}
@@ -214,7 +214,7 @@ class ProfileView extends View
 		if ($this->foodsaver['stat_fetchcount'] > 0) {
 			$fetchcount = '
 				<span class="item stat_fetchcount">
-					<span class="val">' . number_format($this->foodsaver['stat_fetchcount'], 0, ',', '.') . 'x</span>
+					<span class="val">' . number_format($this->foodsaver['stat_fetchcount'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x</span>
 					<span class="name">abgeholt</span>
 				</span>';
 		}
@@ -388,29 +388,28 @@ class ProfileView extends View
 		$fsModel = new FoodsaverModel();
 
 		$bids = $fsModel->getFsBezirkIds($this->foodsaver['id']);
+
+		if (isOrgaTeam() || isBotForA($bids, false, true)) {
+			$opt .= '<li><a href="/?page=foodsaver&a=edit&id=' . $this->foodsaver['id'] . '"><i class="fa fa-pencil"></i>Profil bearbeiten</a></li>';
+		}
 		if ($this->foodsaver['buddy'] === -1 && $this->foodsaver['id'] != fsId()) {
 			$name = explode(' ', $this->foodsaver['name']);
 			$name = $name[0];
 			$opt .= '<li class="buddyRequest"><a onclick="ajreq(\'request\',{app:\'buddy\',id:' . (int)$this->foodsaver['id'] . '});return false;" href="#"><i class="fa fa-user"></i>Ich kenne ' . $name . '</a></li>';
 		}
-
 		if (isOrgaTeam() || isBotForA($bids, false, true)) {
-			$opt .= '<li><a href="/?page=foodsaver&a=edit&id=' . $this->foodsaver['id'] . '"><i class="fa fa-pencil"></i>bearbeiten</a></li>';
+			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:1});"><i class="fa fa-file-text"></i>Passhistorie</a></li>';
 		}
 		if (isOrgaTeam() || isBotForA($bids, false, true)) {
 			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:0});"><i class="fa fa-file-text"></i>Verifizierungshistorie</a></li>';
 		}
-		if (isOrgaTeam() || isBotForA($bids, false, true)) {
-			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:1});"><i class="fa fa-file-text"></i>Passhistorie</a></li>';
-		}
 
 		if (mayHandleReports()) {
-			if (isset($this->foodsaver['violation_count']) && $this->foodsaver['violation_count'] > 0) {
-				$opt .= '<li><a href="/?page=report&sub=foodsaver&id=' . (int)$this->foodsaver['id'] . '"><i class="fa fa-meh-o"></i>' . sv('violation_count', array('count' => $this->foodsaver['violation_count'])) . '</a></li>';
-			}
-
 			if (isset($this->foodsaver['note_count'])) {
 				$opt .= '<li><a href="/profile/' . (int)$this->foodsaver['id'] . '/notes/"><i class="fa fa-file-text-o"></i>' . sv('notes_count', array('count' => $this->foodsaver['note_count'])) . '</a></li>';
+			}
+			if (isset($this->foodsaver['violation_count']) && $this->foodsaver['violation_count'] > 0) {
+				$opt .= '<li><a href="/?page=report&sub=foodsaver&id=' . (int)$this->foodsaver['id'] . '"><i class="fa fa-meh-o"></i>' . sv('violation_count', array('count' => $this->foodsaver['violation_count'])) . '</a></li>';
 			}
 		}
 

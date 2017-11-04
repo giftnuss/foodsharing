@@ -88,10 +88,10 @@ function xv_bBubble($b)
 		if ($count > 0) {
 			$fetch_times = (int)($count / count($b['foodsaver']));
 			$fetch_weight = round(floatval(($fetch_times * $db->gerettet_wrapper($b['abholmenge']))), 2);
-			$count_info = '<div>Bei diesem Betrieb wurde <strong>' . $fetch_times . 'x</strong> abgeholt</div>';
+			$count_info = '<div>Bei diesem Betrieb wurde <strong>' . $fetch_times . '<span style="white-space:nowrap">&thinsp;</span>x</strong> abgeholt</div>';
 
 			// gerettet_wrapper
-			$count_info .= '<div">Es wurden <strong>' . $fetch_weight . ' Kg</strong> gerettet</div>';
+			$count_info .= '<div">Es wurden <strong>' . $fetch_weight . '<span style="white-space:nowrap">&thinsp;</span>kg</strong> gerettet</div>';
 		}
 	}
 

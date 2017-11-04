@@ -43,7 +43,7 @@ $g_lang['delete_sure'] = 'Soll {var} wirklich unwiderruflich gelöscht werden?';
 $g_lang['orgateam'] = 'Bundesweite Orga';
 $g_lang['foodsaver_deleted'] = 'Foodsaver gelöscht';
 $g_lang['fs_id'] = 'Foodsharing-ID';
-$g_lang['upload_new_photo'] = 'neues Foto hochladen';
+$g_lang['upload_new_photo'] = 'Neues Foto hochladen';
 $g_lang['edit_photo'] = 'Foto bearbeiten';
 
 $g_lang['posible_restore_account'] = 'Der Account kann nach dem Löschen wieder hergestellt werden.';

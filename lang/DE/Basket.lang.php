@@ -1,6 +1,6 @@
 <?php
 global $g_lang;
-$g_lang['picture-desc'] = 'Füge dem Essenskorb ein Foto hinzu';
+$g_lang['picture-desc'] = 'Füge dem Essenskorb ein Foto hinzu!';
 $g_lang['picture-choose'] = 'Datei wählen';
 $g_lang['description'] = 'Beschreibung';
 $g_lang['weight'] = 'Geschätztes Gewicht';

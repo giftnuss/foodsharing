@@ -108,7 +108,7 @@ class StatisticsView extends View
 					<td class="city">
 						<h4>' . $fs['name'] . '</h4>
 						<p>' . number_format($fs['fetchweight'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg</p>
-						<p>' . number_format($fs['fetchcount'], 0, ',', '.') . ' x abgeholt</p>
+						<p>' . number_format($fs['fetchcount'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x abgeholt</p>
 					</td>
 				</tr>';
 			}

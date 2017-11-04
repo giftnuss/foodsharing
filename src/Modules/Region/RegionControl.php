@@ -96,7 +96,7 @@ class RegionControl extends Control
 		$menu[] = array('name' => 'Termine', 'href' => '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=events');
 
 		if (isBotFor($this->bezirk_id) || isOrgaTeam()) {
-			$menu[] = array('name' => 'Botschafter Forum', 'href' => '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=botforum');
+			$menu[] = array('name' => 'BotschafterInnenforum', 'href' => '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=botforum');
 		}
 
 		$menu[] = array('name' => 'Fair-Teiler', 'href' => '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=fairteiler');

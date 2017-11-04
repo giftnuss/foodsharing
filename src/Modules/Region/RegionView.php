@@ -35,7 +35,7 @@ class RegionView extends View
 			</div>
 			<div class="user_display_name" style="float:right;margin:5px 10px 0 0;">
 				' . number_format($this->bezirk['stat_fetchweight'], 2, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg Lebensmittel gerettet<br />
-				<span style="font-size:13px;line-height:25px;font-weight:normal;">Bei ' . $this->bezirk['stat_fetchcount'] . ' Rettungs-Einsätzen</span>
+				<span style="font-size:13px;line-height:25px;font-weight:normal;">Bei ' . $this->bezirk['stat_fetchcount'] . ' Rettungseinsätzen</span>
 			</div>
 		
 			<div class="clear"></div>

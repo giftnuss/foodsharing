@@ -1,7 +1,7 @@
 <?php
 global $g_lang;
 $g_lang['photo_public'] = 'Veröffentlichung Deines Namens und Deines Fotos';
-$g_lang['upload_new_photo'] = 'neues Foto hochladen';
+$g_lang['upload_new_photo'] = 'Neues Foto hochladen';
 $g_lang['edit_photo'] = 'Foto bearbeiten';
 $g_lang['posible_restore_account'] = 'Dein Account kann nach dem Löschen wieder hergestellt werden';
 $g_lang['delete_now'] = 'Account jetzt löschen';
