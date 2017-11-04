@@ -1753,7 +1753,7 @@ function v_getStatusAmpel($status)
 			$out = '<span class="hidden">4</span><a href="#" onclick="return false;" title="Will nicht kooperieren" class="ampel ampel-rot"><span>&nbsp;</span></a>';
 			break;
 		case 6:
-			$out = '<span class="hidden">4</span><a href="#" onclick="return false;" title="spendet an Tafel etc. & wirft nichts weg" class="ampel ampel-blau"><span>&nbsp;</span></a>';
+			$out = '<span class="hidden">4</span><a href="#" onclick="return false;" title="Spendet an Tafel etc. und wirft nichts weg" class="ampel ampel-blau"><span>&nbsp;</span></a>';
 			break;
 	}
 
