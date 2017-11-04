@@ -51,7 +51,7 @@ $I->click('Anmeldung absenden', '.step.step3');
 // we are signed up!
 
 $I->waitForElementVisible('#joinready', 4);
-$I->see('Deine Anmeldung war erfolgreich!');
+$I->see('Deine Anmeldung war erfolgreich.');
 
 $I->expectNumMails(1, 1);
 
