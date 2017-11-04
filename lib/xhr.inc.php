@@ -76,7 +76,7 @@ function xhr_getPinPost($data)
 {
 	global $db;
 	incLang('betrieb');
-	-incLang('fsbetrieb');
+	incLang('fsbetrieb');
 
 	if ($db->isInTeam($data['bid']) || isBotschafter() || isOrgaTeam()) {
 		if ($out = $db->q('
