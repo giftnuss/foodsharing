@@ -5,7 +5,7 @@ namespace Foodsharing\Modules\WallPost;
 use fImage;
 use Foodsharing\Modules\Core\Control;
 
-class WallpostXhr extends Control
+class WallPostXhr extends Control
 {
 	private $tables;
 	private $table;
@@ -13,8 +13,8 @@ class WallpostXhr extends Control
 
 	public function __construct()
 	{
-		$this->model = new WallpostModel();
-		$this->view = new WallpostView();
+		$this->model = new WallPostModel();
+		$this->view = new WallPostView();
 
 		parent::__construct();
 

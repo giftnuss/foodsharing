@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\WallPost;
 
 use Foodsharing\Modules\Core\Model;
 
-class WallpostModel extends Model
+class WallPostModel extends Model
 {
 	private $table;
 	private $id;

@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\WallPost;
 
 use Foodsharing\Modules\Core\View;
 
-class WallpostView extends View
+class WallPostView extends View
 {
 	private $table;
 
