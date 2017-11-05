@@ -5,6 +5,7 @@
 ## Breaking changes
 
 ## Features
+- When users are added to a region or a working group, their ID is shown next to their name. !214 @NerdyProjects
 
 ## Bugfixes
 
