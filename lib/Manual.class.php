@@ -684,7 +684,7 @@ class ManualDb extends Db
 		if (strlen($term) > 2) {
 			$out = $this->q('
 				SELECT		`id`,
-							CONCAT_WS(" ", `name`, `nachname` ) AS value
+							CONCAT_WS(" ", `name`, `nachname`, CONCAT("(", `id`, ")")) AS value
 
 				FROM 		' . PREFIX . 'foodsaver
 
