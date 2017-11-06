@@ -1,3 +1,3 @@
 <?php
 
-loadApp('Fairteiler');
+loadApp('FairTeiler');
