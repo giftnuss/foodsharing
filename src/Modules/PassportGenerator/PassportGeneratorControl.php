@@ -206,10 +206,10 @@ class PassportGeneratorControl extends Control
 	{
 		$role = [
 			0 => [
-				0 => 'Freiwilliger',
+				0 => 'Freiwillige/r',
 				1 => 'Foodsaver',
 				2 => 'Betriebsverantwortliche/r',
-				3 => 'Botschafter'
+				3 => 'BotschafterIn'
 			],
 			1 => [
 				0 => 'Freiwilliger',
@@ -222,12 +222,6 @@ class PassportGeneratorControl extends Control
 				1 => 'Foodsaver',
 				2 => 'Betriebsverantwortliche',
 				3 => 'Botschafterin'
-			],
-			3 => [
-				0 => 'Freiwillige/r',
-				1 => 'Foodsaver',
-				2 => 'Betriebsverantwortliche/r',
-				3 => 'Botschafte/r'
 			]
 		];
 
