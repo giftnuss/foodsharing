@@ -139,7 +139,7 @@ class PassportGeneratorControl extends Control
 				$pdf->SetFont('Ubuntu-L', '', 10);
 
 				$pdf->Text(41.8 + $x, 34.4 + $y, utf8_decode($fs['name'] . ' ' . $fs['nachname']));
-				$pdf->Text(41.8 + $x, 42.1 + $y, utf8_decode($this->getRolle($fs['geschlecht'], $fs['rolle'])));
+				$pdf->Text(41.8 + $x, 42.1 + $y, utf8_decode($this->getRole($fs['geschlecht'], $fs['rolle'])));
 				$pdf->Text(41.8 + $x, 49.8 + $y, utf8_decode(date('d. m. Y', time() - 1814400)));
 				$pdf->Text(41.8 + $x, 57.3 + $y, utf8_decode(date('d. m. Y', time() + 94608000)));
 
@@ -202,9 +202,9 @@ class PassportGeneratorControl extends Control
 		exit();
 	}
 
-	public function getRolle($gender_id, $rolle_id)
+	public function getRole($gender_id, $role_id)
 	{
-		$rolle = array(
+		$role = array(
 			0 => array(
 				0 => 'Freiwilliger',
 				1 => 'Foodsaver',
@@ -231,7 +231,7 @@ class PassportGeneratorControl extends Control
 			)
 		);
 
-		return $rolle[$gender_id][$rolle_id];
+		return $role[$gender_id][$role_id];
 	}
 
 	private function download1()
