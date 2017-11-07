@@ -110,36 +110,6 @@ if (getAction('new')) {
 	} else {
 		info('Es sind noch keine Betriebe eingetragen');
 	}
-
-	/*
-	if($data = $db->getBasics_betrieb())
-	{
-		$rows = array();
-		foreach ($data as $d)
-		{
-
-			$rows[] = array(
-				array('cnt' => '<a href="/?page=betrieb&id='.$d['id'].'">'.$d['name'].'</a>'),
-				array('cnt' => v_toolbar(array('id'=>$d['id'],'types' => array('edit','delete'),'confirmMsg'=>sv('delete_sure',$d['name'])))
-			));
-		}
-
-		$table = v_tablesorter(array(
-			array('name' => s('name')),
-			array('name' => s('actions'),'sort' => false,'width' => 50)
-		),$rows);
-
-		$content = v_field($table,'Alle betrieb');
-	}
-	else
-	{
-		info(s('betrieb_empty'));
-	}
-
-	$right = v_field(v_menu(array(
-		array('href' => '/?page=betrieb&a=neu','name' => s('neu_betrieb'))
-	)),'Aktionen');
-	*/
 }
 function betrieb_form($bezirk = false, $page = '')
 {
