@@ -205,23 +205,26 @@ class PassportGeneratorControl extends Control
 	public function getRole($gender_id, $role_id)
 	{
 		$role = [
-			0 => [
+			0 => [ // not defined
 				0 => 'Freiwillige/r',
 				1 => 'Foodsaver',
 				2 => 'Betriebsverantwortliche/r',
-				3 => 'BotschafterIn'
+				3 => 'BotschafterIn',
+				4 => 'BotschafterIn' // role 4 stands for Orga but is referred to an AMB for the business card
 			],
-			1 => [
+			1 => [ // male
 				0 => 'Freiwilliger',
 				1 => 'Foodsaver',
 				2 => 'Betriebsverantwortlicher',
-				3 => 'Botschafter'
+				3 => 'Botschafter',
+				4 => 'Botschafter'
 			],
-			2 => [
+			2 => [ // female
 				0 => 'Freiwillige',
-				1 => 'Foodsaver',
+				1 => 'Foodsaverin',
 				2 => 'Betriebsverantwortliche',
-				3 => 'Botschafterin'
+				3 => 'Botschafterin',
+				4 => 'Botschafterin'
 			]
 		];
 
