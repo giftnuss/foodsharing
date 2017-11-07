@@ -204,32 +204,32 @@ class PassportGeneratorControl extends Control
 
 	public function getRole($gender_id, $role_id)
 	{
-		$role = array(
-			0 => array(
+		$role = [
+			0 => [
 				0 => 'Freiwilliger',
 				1 => 'Foodsaver',
 				2 => 'Betriebsverantwortliche/r',
 				3 => 'Botschafter'
-			),
-			1 => array(
+			],
+			1 => [
 				0 => 'Freiwilliger',
 				1 => 'Foodsaver',
 				2 => 'Betriebsverantwortlicher',
 				3 => 'Botschafter'
-			),
-			2 => array(
+			],
+			2 => [
 				0 => 'Freiwillige',
 				1 => 'Foodsaver',
 				2 => 'Betriebsverantwortliche',
 				3 => 'Botschafterin'
-			),
-			3 => array(
+			],
+			3 => [
 				0 => 'Freiwillige/r',
 				1 => 'Foodsaver',
 				2 => 'Betriebsverantwortliche/r',
 				3 => 'Botschafte/r'
-			)
-		);
+			]
+		];
 
 		return $role[$gender_id][$role_id];
 	}
