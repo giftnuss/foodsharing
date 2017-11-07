@@ -209,8 +209,8 @@ class PassportGeneratorControl extends Control
 				0 => 'Freiwillige/r',
 				1 => 'Foodsaver',
 				2 => 'Betriebsverantwortliche/r',
-				3 => 'BotschafterIn',
-				4 => 'BotschafterIn' // role 4 stands for Orga but is referred to an AMB for the business card
+				3 => 'Botschafter/in',
+				4 => 'Botschafter/in' // role 4 stands for Orga but is referred to an AMB for the business card
 			],
 			1 => [ // male
 				0 => 'Freiwilliger',
