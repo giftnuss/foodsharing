@@ -14,6 +14,8 @@
 - Corrected certain errors in spelling, phrasing, and grammar for all pages treating our stores. !208 by @peter.toennies
 - Same for statistics. !211 by @peter.toennies
 - Fixed the wrong order of foodsaver counts in the lost region list. !187 by peter.toennies
+- fixed the wrong order of foodsaver counts in the lost region list. !187 by peter.toennies
+- It is now possible to create correct passports for Orga members. !217 by @peter.toennies
 - Removed not working store creation button and map view selector from the list of stores. !188 by peter.toennies
 
 ## Refactoring
