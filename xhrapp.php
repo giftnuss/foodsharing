@@ -13,11 +13,8 @@ if (isset($_GET['app']) && isset($_GET['m'])) {
 	require_once 'lib/Session.php';
 	require_once 'lang/DE/de.php';
 
-	require_once 'lib/db.class.php';
-	require_once 'lib/Manual.class.php';
 	require_once 'lib/func.inc.php';
 	require_once 'lib/view.inc.php';
-	require_once 'lib/Manual.class.php';
 	require_once 'lib/XhrResponses.php';
 
 	S::init();

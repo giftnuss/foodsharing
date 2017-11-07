@@ -7,9 +7,7 @@ require_once 'lib/Session.php';
 //session_init();
 S::init();
 
-require_once 'lib/db.class.php';
 require_once 'lib/Caching.php';
-require_once 'lib/Manual.class.php';
 require_once 'lang/DE/de.php';
 require_once 'lib/view.inc.php';
 require_once 'lib/minify/JSMin.php';

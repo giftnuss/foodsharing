@@ -5,9 +5,7 @@ require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';
 require_once 'lib/func.inc.php';
 
-require_once 'lib/db.class.php';
 require_once 'lang/DE/de.php';
-require_once 'lib/Manual.class.php';
 
 /** Checks the validity of an API token
  * @param $fs Foodsaver ID
