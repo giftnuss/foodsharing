@@ -181,7 +181,7 @@ services:
     image: djfarrelly/maildev
     container_name: foodsharing_dev_maildev
     ports:
-      - 18083:80
+      - 18084:80
 
 
 volumes:

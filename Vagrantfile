@@ -6,7 +6,7 @@ end
 ports = [
   18080, # main website
   18081, # phpmyadmin
-  18083, # maildev
+  18084, # maildev
 
   # these two are not available for a default setup
   # check the README for instructions on setting them
