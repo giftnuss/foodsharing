@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Modules\Event;
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
-use S;
 
 class EventControl extends Control
 {

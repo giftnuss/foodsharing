@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Content;
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Parsedown;
-use S;
 
 class ContentControl extends Control
 {

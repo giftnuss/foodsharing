@@ -1,7 +1,12 @@
 <?php
 
-use Foodsharing\Modules\Mailbox\MailboxModel;
-use Foodsharing\Modules\Team\TeamModel;
+use Flourish\fDate;
+use Flourish\fFile;
+use Flourish\fImage;
+use Foodsharing\Lib\Db\ManualDb;
+use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\Mail\AsyncMail;
+use Foodsharing\Lib\Session\S;
 
 define('CNT_MAIN', 0);
 define('CNT_RIGHT', 1);
@@ -157,63 +162,6 @@ function format_time($time)
 	} else {
 		return '';
 	}
-}
-
-$g_has_reconnected = false;
-
-function getLatLon($anschrift, $plz, $stadt = '', $curl = false)
-{
-	global $g_has_reconnected;
-	$address = urlencode($anschrift . ', ' . $plz . ', ' . $stadt . ', Deutschland');
-
-	$region = 'DE';
-
-	$url = "http://maps.google.com/maps/api/geocode/json?address=$address&sensor=false&region=DE&language=de";
-
-	if (!$curl) {
-		$json = file_get_contents($url);
-	} else {
-		$bot = new Bot();
-		$bot->go($url);
-		$json = $bot->getHtml();
-	}
-	//echo $json;
-
-	$decoded = json_decode($json, true);
-
-	if (isset($decoded['status']) && $decoded['status'] == 'OVER_QUERY_LIMIT') {
-		if (!$g_has_reconnected) {
-			$g_has_reconnected = true;
-			//reconnect();
-			sleep(2);
-		} else {
-			sleep(2);
-		}
-	}
-
-	$lat = '';
-	$lon = '';
-
-	foreach ($decoded['results'] as $d) {
-		$check = false;
-		foreach ($d['address_components'] as $c) {
-			if ($c['long_name'] == $plz) {
-				$check = true;
-			}
-		}
-
-		if ($check) {
-			return $d['geometry']['location'];
-			break;
-		}
-	}
-	/*
-	echo $plz.' '.$anschrift;
-	echo '<pre>';
-	print_r($decoded);
-	echo '</pre>';
-	*/
-	return false;
 }
 
 function ts_day($ts)
@@ -1835,7 +1783,7 @@ function libmail($bezirk, $email, $subject, $message, $attach = false, $token = 
 function mailMessage($sender_id, $recip_id, $msg = null)
 {
 	// FIXME this function is pretty much a copy of Model::mailMessage() and should probably replaced
-	$db = new MailboxModel();
+	$db = new ManualDb();
 
 	$info = $db->getVal('infomail_message', 'foodsaver', $recip_id);
 	if ((int)$info > 0) {
@@ -2317,7 +2265,7 @@ function getIp()
  */
 function ipIsBlocked($duration = 60, $context = 'default')
 {
-	$db = new TeamModel();
+	$db = new ManualDb();
 	$ip = getIp();
 
 	if ($block = $db->qRow('SELECT UNIX_TIMESTAMP(`start`) AS `start`,`duration` FROM ' . PREFIX . 'ipblock WHERE ip = ' . $db->strval(getIp()) . ' AND context = ' . $db->strval($context))) {

@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Lib\Session\S;
+
 $v_id = array();
 $v_form_steps = 0;
 function v_quickform($titel, $elements, $option = array())

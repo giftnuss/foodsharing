@@ -1,5 +1,6 @@
 <?php
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Store\StoreModel;
 
 addScript('/js/contextmenu/jquery.contextMenu.js');

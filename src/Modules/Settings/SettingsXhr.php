@@ -4,9 +4,9 @@ namespace Foodsharing\Modules\Settings;
 
 use DateTime;
 use Foodsharing\Modules\Core\Control;
-use S;
-use Xhr;
-use XhrDialog;
+use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Xhr\Xhr;
+use Foodsharing\Lib\Xhr\XhrDialog;
 
 class SettingsXhr extends Control
 {

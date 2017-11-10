@@ -15,6 +15,7 @@
     "erusev/parsedown": "^1.6"
   },
   "autoload": {
-    "psr-4": {"Foodsharing\\": "src/"}
+    "psr-4": {"Foodsharing\\": "src/",
+    "Flourish\\": "src/Lib/Flourish"}
   }
 }

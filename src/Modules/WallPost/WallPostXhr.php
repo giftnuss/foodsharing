@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\WallPost;
 
-use fImage;
+use Flourish\fImage;
 use Foodsharing\Modules\Core\Control;
 
 class WallPostXhr extends Control

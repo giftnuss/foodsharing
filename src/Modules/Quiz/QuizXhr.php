@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Quiz;
 
+use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
-use S;
-use XhrDialog;
 
 class QuizXhr extends Control
 {

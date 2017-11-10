@@ -2,10 +2,10 @@
 
 namespace Foodsharing\Modules\Store;
 
+use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Xhr\Xhr;
+use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
-use S;
-use Xhr;
-use XhrDialog;
 
 class StoreXhr extends Control
 {

@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Lib\Xhr;
+
 class XhrResponses
 {
 	const PERMISSION_DENIED = 'permission_denied';

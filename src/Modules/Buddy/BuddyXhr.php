@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Modules\Buddy;
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
-use S;
 
 class BuddyXhr extends Control
 {

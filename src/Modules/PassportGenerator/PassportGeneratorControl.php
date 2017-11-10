@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\PassportGenerator;
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use FPDI;
-use S;
 
 class PassportGeneratorControl extends Control
 {

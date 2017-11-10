@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\WorkGroup;
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverModel;
-use S;
 
 class WorkGroupControl extends Control
 {

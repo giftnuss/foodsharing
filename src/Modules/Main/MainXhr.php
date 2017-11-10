@@ -2,9 +2,10 @@
 
 namespace Foodsharing\Modules\Main;
 
-use fImage;
+use Exception;
+use Flourish\fImage;
+use Flourish\fUpload;
 use Foodsharing\Modules\Core\Control;
-use fUpload;
 
 class MainXhr extends Control
 {

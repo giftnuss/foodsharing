@@ -1,4 +1,9 @@
 <?php
+
+namespace Foodsharing\Lib\Db;
+
+use Redis;
+
 class Mem
 {
 	public static $cache;

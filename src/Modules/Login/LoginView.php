@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Modules\Login;
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\View;
-use S;
 
 class LoginView extends View
 {

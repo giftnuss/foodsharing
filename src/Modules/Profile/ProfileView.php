@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Modules\Profile;
 
-use fDate;
+use Flourish\fDate;
+use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\View;
 use Foodsharing\Modules\Foodsaver\FoodsaverModel;
-use S;
-use vPage;
 
 class ProfileView extends View
 {

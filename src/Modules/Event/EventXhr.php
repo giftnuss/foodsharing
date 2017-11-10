@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Event;
 
+use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
-use S;
-use XhrDialog;
 
 class EventXhr extends Control
 {

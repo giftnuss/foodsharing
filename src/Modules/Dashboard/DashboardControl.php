@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\Dashboard;
 
 use Foodsharing\Modules\Content\ContentModel;
 use Foodsharing\Modules\Core\Control;
-use S;
+use Foodsharing\Lib\Session\S;
 
 class DashboardControl extends Control
 {

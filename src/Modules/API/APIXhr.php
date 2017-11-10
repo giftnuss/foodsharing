@@ -2,12 +2,12 @@
 
 namespace Foodsharing\Modules\API;
 
-use fImage;
+use Flourish\fImage;
+use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Basket\BasketModel;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Message\MessageModel;
-use Mem;
-use S;
 
 class APIXhr extends Control
 {

@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\Foodsaver;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Settings\SettingsModel;
-use S;
+use Foodsharing\Lib\Session\S;
 
 class FoodsaverControl extends Control
 {

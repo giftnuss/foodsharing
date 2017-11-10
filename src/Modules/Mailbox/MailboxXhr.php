@@ -2,10 +2,10 @@
 
 namespace Foodsharing\Modules\Mailbox;
 
-use AsyncMail;
+use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\Mail\AsyncMail;
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
-use Mem;
-use S;
 
 class MailboxXhr extends Control
 {

@@ -1,15 +1,20 @@
 <?php
 
+use Foodsharing\Lib\Cache\Caching;
+use Foodsharing\Lib\Session\S;
+
 require __DIR__ . '/includes/setup.php';
 
 require_once 'config.inc.php';
-require_once 'lib/Session.php';
 require_once 'lib/func.inc.php';
 
 //session_init();
 S::init();
+if (isset($g_page_cache)) {
+	$cache = new Caching($g_page_cache);
+	$cache->lookup();
+}
 
-require_once 'lib/Caching.php';
 require_once 'lang/DE/de.php';
 require_once 'lib/xhr.inc.php';
 require_once 'lib/xhr.view.inc.php';
@@ -24,11 +29,11 @@ if (isset($_GET['f'])) {
 		/*
 		 * check for page caching
 		*/
-		if (isset($g_page_cache[$_SERVER['REQUEST_URI']][$g_page_cache_mode])) {
+		if (isset($cache) && $cache->shouldCache()) {
 			ob_start();
 			echo $func($_GET);
 			$page = ob_get_contents();
-			Mem::setPageCache($page, $g_page_cache[$_SERVER['REQUEST_URI']][$g_page_cache_mode]);
+			$cache->cache($page);
 
 			ob_end_clean();
 

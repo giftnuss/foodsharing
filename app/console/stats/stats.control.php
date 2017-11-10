@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Lib\Db\Mem;
+
 class StatsControl extends ConsoleControl
 {
 	private $model;

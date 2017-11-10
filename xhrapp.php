@@ -1,6 +1,8 @@
 <?php
 
 use Foodsharing\Lib\Routing;
+use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Xhr\XhrResponses;
 
 require __DIR__ . '/includes/setup.php';
 
@@ -10,12 +12,10 @@ if (isset($_GET['app']) && isset($_GET['m'])) {
 	$meth = str_replace('/', '', $_GET['m']);
 
 	require_once 'config.inc.php';
-	require_once 'lib/Session.php';
 	require_once 'lang/DE/de.php';
 
 	require_once 'lib/func.inc.php';
 	require_once 'lib/view.inc.php';
-	require_once 'lib/XhrResponses.php';
 
 	S::init();
 

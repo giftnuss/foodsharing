@@ -3,8 +3,8 @@
 namespace Foodsharing\Modules\WorkGroup;
 
 use Foodsharing\Modules\Core\Control;
-use S;
-use XhrDialog;
+use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Xhr\XhrDialog;
 
 class WorkGroupXhr extends Control
 {

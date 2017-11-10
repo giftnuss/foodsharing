@@ -1,6 +1,8 @@
 <?php
 
 
+use Flourish\fImage;
+
 class MigrateControl extends ConsoleControl
 {
 	private $model;

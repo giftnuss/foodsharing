@@ -4,8 +4,8 @@ namespace Foodsharing\Modules\Profile;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Store\StoreModel;
-use S;
-use XhrDialog;
+use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Xhr\XhrDialog;
 
 class ProfileXhr extends Control
 {

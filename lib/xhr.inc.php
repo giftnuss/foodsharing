@@ -1,5 +1,9 @@
 <?php
 
+use Flourish\fImage;
+use Foodsharing\Lib\Db\ManualDb;
+use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Foodsaver\FoodsaverModel;
 use Foodsharing\Modules\Mailbox\MailboxModel;

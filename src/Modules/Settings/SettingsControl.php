@@ -4,8 +4,8 @@ namespace Foodsharing\Modules\Settings;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Quiz\QuizModel;
-use Mem;
-use S;
+use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\Session\S;
 
 class SettingsControl extends Control
 {

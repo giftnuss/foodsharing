@@ -2,10 +2,10 @@
 
 namespace Foodsharing\Modules\Message;
 
+use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
-use Mem;
-use S;
-use Xhr;
 
 class MessageXhr extends Control
 {

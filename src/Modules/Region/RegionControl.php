@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Modules\Region;
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
-use S;
 
 class RegionControl extends Control
 {

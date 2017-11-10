@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Modules\Search;
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Model;
-use S;
 
 class SearchModel extends Model
 {

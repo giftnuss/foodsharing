@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 use Foodsharing\Modules\Message\MessageModel;
-use Mem;
 use ReflectionClass;
-use S;
 
 abstract class Control
 {

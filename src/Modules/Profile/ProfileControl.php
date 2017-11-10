@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Modules\Profile;
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
-use S;
 
 class ProfileControl extends Control
 {

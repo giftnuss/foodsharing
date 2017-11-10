@@ -1,7 +1,10 @@
 <?php
 
-use Foodsharing\Modules\Basket\BasketModel;
-use Foodsharing\Modules\Content\ContentModel;
+namespace Foodsharing\Lib\Session;
+
+use Flourish\fAuthorization;
+use Flourish\fSession;
+use Foodsharing\Lib\Db\ManualDb;
 
 class S
 {
@@ -103,7 +106,7 @@ class S
 	{
 		$loc = fSession::get('g_location', false);
 		if (!$loc) {
-			$db = new BasketModel();
+			$db = new ManualDb();
 			$loc = $db->getValues(array('lat', 'lon'), 'foodsaver', fsId());
 			self::set('g_location', $loc);
 		}
@@ -147,7 +150,7 @@ class S
 	public static function setOption($key, $val, $db = false)
 	{
 		if (!$db) {
-			$db = new ContentModel();
+			$db = new ManualDb();
 		}
 
 		$db->setOption($key, $val);

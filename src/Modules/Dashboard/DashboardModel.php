@@ -3,7 +3,7 @@
 namespace Foodsharing\Modules\Dashboard;
 
 use Foodsharing\Modules\Core\Model;
-use S;
+use Foodsharing\Lib\Session\S;
 
 class DashboardModel extends Model
 {

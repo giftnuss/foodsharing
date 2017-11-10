@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Lib\Session\S;
+
 if (!S::may('orga')) {
 	goLogin();
 }

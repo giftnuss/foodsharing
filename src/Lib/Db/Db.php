@@ -1,8 +1,14 @@
 <?php
 
-use Foodsharing\Debug\DebugBar;
+namespace Foodsharing\Lib\Db;
 
-class Db
+use Exception;
+use Flourish\fImage;
+use Foodsharing\Debug\DebugBar;
+use Foodsharing\Lib\Session\S;
+use mysqli;
+
+abstract class Db
 {
 	private static $mysqli = null;
 	private $values;

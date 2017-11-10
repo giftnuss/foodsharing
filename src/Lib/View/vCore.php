@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Lib\View;
+
 class vCore
 {
 	public static $ids = array();

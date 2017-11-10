@@ -1,5 +1,7 @@
 <?php
 
+use Flourish\fImage;
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 
 if (!S::may('orga')) {

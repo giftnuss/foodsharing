@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\Activity;
 
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Mailbox\MailboxModel;
-use S;
+use Foodsharing\Lib\Session\S;
 
 class ActivityModel extends Model
 {

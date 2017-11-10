@@ -3,7 +3,7 @@
 namespace Foodsharing\Modules\Map;
 
 use Foodsharing\Modules\Core\Control;
-use S;
+use Foodsharing\Lib\Session\S;
 
 class MapXhr extends Control
 {

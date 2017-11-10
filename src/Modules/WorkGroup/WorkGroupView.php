@@ -3,7 +3,7 @@
 namespace Foodsharing\Modules\WorkGroup;
 
 use Foodsharing\Modules\Core\View;
-use S;
+use Foodsharing\Lib\Session\S;
 
 class WorkGroupView extends View
 {

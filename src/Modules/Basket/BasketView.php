@@ -2,11 +2,12 @@
 
 namespace Foodsharing\Modules\Basket;
 
-use fImage;
+use Exception;
+use Flourish\fImage;
+use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\View\vMap;
+use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\View;
-use S;
-use vMap;
-use vPage;
 
 class BasketView extends View
 {

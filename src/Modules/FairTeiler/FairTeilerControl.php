@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Modules\FairTeiler;
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
-use S;
 
 class FairTeilerControl extends Control
 {

@@ -3,7 +3,7 @@
 namespace Foodsharing\Modules\GeoClean;
 
 use Foodsharing\Modules\Core\Control;
-use S;
+use Foodsharing\Lib\Session\S;
 
 class GeoCleanXhr extends Control
 {

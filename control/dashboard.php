@@ -1,5 +1,6 @@
 <?php
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Content\ContentModel;
 use Foodsharing\Modules\Profile\ProfileModel;
 

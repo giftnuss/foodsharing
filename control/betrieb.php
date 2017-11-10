@@ -1,5 +1,6 @@
 <?php
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\View;
 use Foodsharing\Modules\Store\StoreModel;
 

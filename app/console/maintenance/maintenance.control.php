@@ -1,5 +1,8 @@
 <?php
 
+use Flourish\fImage;
+use Foodsharing\Lib\Db\Mem;
+
 class MaintenanceControl extends ConsoleControl
 {
 	private $model;

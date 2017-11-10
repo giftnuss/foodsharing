@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\Core;
 
-use S;
+use Foodsharing\Lib\Session\S;
 
 class View
 {

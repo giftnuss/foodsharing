@@ -4,8 +4,8 @@ namespace Foodsharing\Modules\Activity;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Mailbox\MailboxModel;
-use S;
-use Xhr;
+use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Xhr\Xhr;
 
 class ActivityXhr extends Control
 {

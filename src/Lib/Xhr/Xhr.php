@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Lib\Xhr;
+
 /**
  * class give you methods to send data to the client for nice outputs.
  *

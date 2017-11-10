@@ -22,6 +22,7 @@ if(isset($_GET['g_path']))
 */
 
 use Foodsharing\Debug\DebugBar;
+use Foodsharing\Lib\Session\S;
 
 require __DIR__ . '/includes/setup.php';
 
@@ -62,14 +63,11 @@ if (DebugBar::isEnabled()) {
 /*
  * check for page caching
  */
-if (isset($g_page_cache[$_SERVER['REQUEST_URI']][$g_page_cache_mode])) {
+if (isset($cache) && $cache->shouldCache()) {
 	ob_start();
 	include 'tpl/' . $g_template . '.php';
 	$page = ob_get_contents();
-	Mem::setPageCache(
-		$page,
-		$g_page_cache[$_SERVER['REQUEST_URI']][$g_page_cache_mode]
-	);
+	$cache->cache($page);
 	ob_end_clean();
 
 	echo $page;

@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Bell;
 
+use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
-use S;
-use Xhr;
 
 class BellXhr extends Control
 {

@@ -3,7 +3,7 @@
 namespace Foodsharing\Modules\Foodsaver;
 
 use Foodsharing\Modules\Core\Control;
-use S;
+use Foodsharing\Lib\Session\S;
 
 class FoodsaverXhr extends Control
 {

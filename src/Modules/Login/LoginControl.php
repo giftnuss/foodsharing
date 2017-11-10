@@ -2,13 +2,13 @@
 
 namespace Foodsharing\Modules\Login;
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Buddy\BuddyModel;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionModel;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Modules\WorkGroup\WorkGroupModel;
 use Mobile_Detect;
-use S;
 
 class LoginControl extends Control
 {

@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Modules\Search;
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
-use S;
 
 class SearchControl extends Control
 {

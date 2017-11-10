@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Modules\BusinessCard;
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Model;
-use S;
 
 class BusinessCardModel extends Model
 {

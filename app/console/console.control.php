@@ -1,5 +1,8 @@
 <?php
 
+use Foodsharing\Lib\Db\ManualDb;
+use Foodsharing\Lib\Mail\AsyncMail;
+
 class ConsoleControl
 {
 	public function __construct()

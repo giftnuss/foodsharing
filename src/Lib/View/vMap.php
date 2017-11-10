@@ -1,5 +1,9 @@
 <?php
 
+namespace Foodsharing\Lib\View;
+
+use Foodsharing\Lib\Session\S;
+
 class vMap extends vCore
 {
 	private $id;

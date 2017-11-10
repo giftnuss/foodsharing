@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Region;
 
+use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
-use S;
-use XhrResponses;
 
 class RegionXhr extends Control
 {

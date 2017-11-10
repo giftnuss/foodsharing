@@ -1,5 +1,11 @@
 <?php
 
+use Flourish\fEmail;
+use Flourish\fFile;
+use Flourish\fMailbox;
+use Flourish\fSMTP;
+use Foodsharing\Lib\Db\Mem;
+
 class MailsControl extends ConsoleControl
 {
 	public static $smtp = false;

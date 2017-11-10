@@ -2,16 +2,17 @@
 
 namespace Foodsharing\Modules\Login;
 
-use fImage;
+use Exception;
+use Flourish\fImage;
+use Flourish\fUpload;
+use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Buddy\BuddyModel;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionModel;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Modules\WorkGroup\WorkGroupModel;
-use fUpload;
-use Mem;
-use S;
-use XhrDialog;
 
 class LoginXhr extends Control
 {

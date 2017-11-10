@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Modules\Index;
 
+use Foodsharing\Lib\View\vPageslider;
 use Foodsharing\Modules\Core\View;
-use vPageslider;
 
 class IndexView extends View
 {

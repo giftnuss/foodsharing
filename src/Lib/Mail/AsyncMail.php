@@ -1,5 +1,9 @@
 <?php
 
+namespace Foodsharing\Lib\Mail;
+
+use Foodsharing\Lib\Db\Mem;
+
 /**
  * Data structure to store mail data for asynchronous queue.
  *

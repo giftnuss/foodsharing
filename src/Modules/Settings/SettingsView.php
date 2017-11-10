@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\Settings;
 
 use DateTime;
 use Foodsharing\Modules\Core\View;
-use S;
+use Foodsharing\Lib\Session\S;
 
 class SettingsView extends View
 {

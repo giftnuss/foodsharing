@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Message;
 
+use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Model;
-use Mem;
-use S;
 
 class MessageModel extends Model
 {

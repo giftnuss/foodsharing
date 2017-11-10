@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Foodsharing\Lib\Db\ManualDb;
 use Foodsharing\Modules\Message\MessageModel;
-use ManualDb;
 
 class Model extends ManualDb
 {

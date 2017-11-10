@@ -1,5 +1,7 @@
 <?php
 
+namespace Foodsharing\Lib\Xhr;
+
 class XhrDialog
 {
 	private $id;

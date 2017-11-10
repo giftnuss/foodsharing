@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Team;
 
-use AsyncMail;
+use Foodsharing\Lib\Mail\AsyncMail;
+use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
-use Xhr;
 
 class TeamXhr extends Control
 {

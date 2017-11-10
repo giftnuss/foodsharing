@@ -1,5 +1,8 @@
 <?php
 
+namespace Foodsharing\Lib\Db;
+
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Message\MessageModel;
 use Foodsharing\Modules\Store\StoreModel;
 
