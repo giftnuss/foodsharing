@@ -20,6 +20,7 @@
 
 ## Refactoring
 
+- Move more libraries into PSR4 compliant paths and namespaces !220 @NerdyProjects
 - Harden routing by adding a table lookup layer to get class view from module name !209 @NerdyProjects
 - Move all remaining modules into PSR4 compliant Modules structure !209 @NerdyProjects
 - Prepare module loader for PSR4 compliant paths, starting with app/content being moved !206 @NerdyProjects
