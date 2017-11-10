@@ -170,6 +170,7 @@ services:
       - /sessions
 
   # maildev
+  # changed ports, since 18083 is used by virtualbox (vboxwebsrv)
   #------------------------------------
 
   maildev:

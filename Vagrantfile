@@ -6,7 +6,8 @@ end
 ports = [
   18080, # main website
   18081, # phpmyadmin
-  18084, # maildev
+  18084, # maildev. (changed, since 18083 is used by virtualbox (vboxwebsrv))
+
 
   # these two are not available for a default setup
   # check the README for instructions on setting them
