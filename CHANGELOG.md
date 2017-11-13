@@ -29,6 +29,8 @@
 ## Dev/Test/CI stuff
 
 - Changed maildev port to 18084, (18083 is used by virtualbox (vboxwebsrv)) !218 @inktrap
+- Added support to collect code coverage statistics in codeception !222 @NerdyProjects
+- Changed maildev port to 18084, (18083 is used by virtualbox (vboxwebsrv)) !304 @inktrap
 - Use cleanly populated database between each test !210 @NerdyProjects
 - Add vagrant docker-compose dev environment option !195 @TimFoe @nicksellen
 
