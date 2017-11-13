@@ -20,6 +20,7 @@ $I->seeElement('.verify-y');
 
 $I->clickWithLeftButton('.verify-y');
 $I->waitForElementVisible('.verify-n');
+$I->wait(1);
 $I->amOnPage('/?page=passgen&bid=' . $testRegion);
 $I->seeElement('.verify-n');
 
@@ -30,6 +31,7 @@ $I->waitForElementVisible('.verify-y');
 
 $I->amOnPage('/profile/' . $foodsaver['id']);
 $I->click('Verifizierungshistorie');
+$I->wait(1);
 
 $I->waitForElementVisible('.history .verify');
 $I->seeElement('.history .unverify');
