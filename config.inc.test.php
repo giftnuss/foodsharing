@@ -1,5 +1,9 @@
 <?php
 
+/* Codeception remote codecoverage - only used for testing */
+define('C3_CODECOVERAGE_ERROR_LOG_FILE', '/app/tests/_output/c3_error.log'); //Optional (if not set the default c3 output dir will be used)
+include __DIR__ . '/c3.php';
+
 $protocol = 'http';
 if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
 	$protocol = 'https';

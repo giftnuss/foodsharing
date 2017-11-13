@@ -8,7 +8,7 @@ services:
 
   web:
     container_name: foodsharing_test_web
-    image: registry.gitlab.com/foodsharing-dev/images/web:1.0
+    image: registry.gitlab.com/foodsharing-dev/images/web:1.1
     ports:
       - 28080:8080
     expose:
@@ -24,7 +24,7 @@ services:
 
   app:
     container_name: foodsharing_test_app
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.5
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.6
     working_dir: /app
     expose:
       - 9000
@@ -44,7 +44,7 @@ services:
 
   mailqueuerunner:
     container_name: foodsharing_test_mailqueuerunner
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.5
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.6
     command: php run.php mails index
     working_dir: /app
     links:
@@ -105,7 +105,7 @@ services:
 
   selenium:
     container_name: foodsharing_test_selenium
-    image: registry.gitlab.com/foodsharing-dev/images/selenium:1.0
+    image: registry.gitlab.com/foodsharing-dev/images/selenium:1.1
     shm_size: 256M
     links:
       - web:web
