@@ -10,14 +10,13 @@
 ## Bugfixes
 
 - Fix newsletter opt-in during signup !207 @NerdyProjects
-- Moved the list of inactive Foodsavers of !183 from the left to the right, because it was impractical in larger regions. !194 by valentin.unicorn
-- More consistent use of SI units. !204 by @peter.toennies
-- Corrected certain errors in spelling, phrasing, and grammar for all pages treating our stores. !208 by @peter.toennies
-- Same for statistics. !211 by @peter.toennies
-- Fixed the wrong order of foodsaver counts in the lost region list. !187 by peter.toennies
-- fixed the wrong order of foodsaver counts in the lost region list. !187 by peter.toennies
-- It is now possible to create correct passports for Orga members. !217 by @peter.toennies
-- Removed not working store creation button and map view selector from the list of stores. !188 by peter.toennies
+- Moved the list of inactive Foodsavers of !183 from the left to the right, because it was impractical in larger regions. !194 @valentin.unicorn
+- More consistent use of SI units. !204 @peter.toennies
+- Corrected certain errors in spelling, phrasing, and grammar for all pages treating our stores. !208 @peter.toennies
+- Same for statistics. !211 @peter.toennies
+- fixed the wrong order of foodsaver counts in the lost region list. !187 @peter.toennies
+- It is now possible to create correct passports for Orga members. !217 @peter.toennies
+- Removed not working store creation button and map view selector from the list of stores. !188 peter.toennies
 
 ## Refactoring
 
@@ -28,7 +27,7 @@
 
 ## Dev/Test/CI stuff
 
-- Changed maildev port to 18084, (18083 is used by virtualbox (vboxwebsrv)) !304 @inktrap
+- Changed maildev port to 18084, (18083 is used by virtualbox (vboxwebsrv)) !218 @inktrap
 - Use cleanly populated database between each test !210 @NerdyProjects
 - Add vagrant docker-compose dev environment option !195 @TimFoe @nicksellen
 
