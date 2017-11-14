@@ -33,3 +33,42 @@ if(!defined('ROOT_DIR'))
 {
 	define('ROOT_DIR','./');
 }
+
+/*
+ * the following cache settings are an _example_.
+ * Caching should have no or only minimum impact on the displayed content (e.g. some seconds delay/ttl is acceptable for most content, but should only be used when there is a reason).
+ * caching indexes:
+* u = cache page for logged in users
+* g = cache page for guest
+* value is time to live for the cache...
+*/
+$both = array('u' => 3600, 'g' => 3600);
+$user = array('u' => 3600);
+$guests = array('g' => 3600);
+$both_short = array('u' => 60, 'g' => 60);
+$user_short = array('u' => 60);
+
+$g_page_cache = array(
+    '/' => $both_short,
+		'/?page=map' => $user,
+		'/?page=map&load=baskets' => array('g' => 120, 'u' => 120),
+		'/?page=map$load=fairteiler' => $both,
+		//'/?page=dashboard' => $user,
+		'/xhr.php?f=loadMarker&types%5B%5D=baskets' => array('u' => 120, 'g' => 120),
+		'/xhr.php?f=loadMarker' => $both,
+		'/xhr.php?f=loadMarker&types%5B%5D=baskets&types%5B%5D=fairteiler' => array('u' => 120, 'g' => 120),
+		'/xhr.php?f=loadMarker&types%5B%5D=fairteiler' => $both,
+		'/xhr.php?f=loadMarker&types%5B%5D=betriebe&options%5B%5D=needhelp&options%5B%5D=needhelpinstant' => $user,
+		'/xhr.php?f=loadMarker&types%5B%5D=botschafter' => $user,
+		'/xhr.php?f=loadMarker&types%5B%5D=foodsaver' => $user,
+		'/xhr.php?f=loadMarker&types%5B%5D=foodsaver&types%5B%5D=botschafter' => $user,
+		'/xhr.php?f=loadMarker&types%5B%5D=botschafter&types%5B%5D=betriebe&options%5B%5D=needhelp&options%5B%5D=needhelpinstant' => $user,
+		'/xhr.php?f=loadMarker&types%5B%5D=foodsaver&types%5B%5D=betriebe&options%5B%5D=needhelp&options%5B%5D=needhelpinstant' => $user,
+		'/xhr.php?f=loadMarker&types%5B%5D=foodsaver&types%5B%5D=betriebe&options%5B%5D=allebetriebe' => $user,
+		'/xhr.php?f=loadMarker&types%5B%5D=foodsaver&types%5B%5D=botschafter&types%5B%5D=betriebe&options%5B%5D=allebetriebe' => $user,
+		'/xhr.php?f=loadMarker&types%5B%5D=foodsaver&types%5B%5D=botschafter&types%5B%5D=betriebe&types%5B%5D=fairteiler&options%5B%5D=allebetriebe' => $user,
+		'/xhr.php?f=loadMarker&types%5B%5D=betriebe&types%5B%5D=fairteiler&options%5B%5D=needhelp&options%5B%5D=needhelpinstant' => $user,
+		'/xhr.php?f=loadMarker&types%5B%5D=botschafter&types%5B%5D=fairteiler' => $user,
+		'/xhr.php?f=loadMarker&types%5B%5D=foodsaver&types%5B%5D=fairteiler' => $user
+);
+
