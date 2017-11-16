@@ -1,7 +1,5 @@
 #!/bin/bash
 
-export FS_ENV=dev
-
 set -e
 
 dir=$(dirname "$0")
