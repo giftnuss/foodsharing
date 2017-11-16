@@ -145,16 +145,25 @@ class Foodsharing extends \Codeception\Module\Db
 		}
 	}
 
-	public function createWorkingGroup($name, $parentId = 392)
+	public function createWorkingGroup($name, $extra_params = [])
 	{
 		/* 392 is global working groups */
-		return $this->createRegion($name, $parentId, 7);
+		$parentId = 392;
+		if (array_key_exists('parent_id', $extra_params)) {
+			$parentId = $extra_params[$parentId];
+		}
+
+		return $this->createRegion($name, $parentId, 7, $extra_params);
 	}
 
-	public function createRegion($name, $parentId = 741, $type = 8)
+	public function createRegion($name, $parentId = 741, $type = 8, $extra_params = [])
 	{
 		/* 741 is germany, so suitable for normal sub regions */
-		$v = array('parent_id' => $parentId, 'name' => $name, 'type' => $type);
+		$v = array_merge([
+			'parent_id' => $parentId,
+			'name' => $name,
+			'type' => $type],
+			$extra_params);
 		$v['id'] = $this->haveInDatabase('fs_bezirk', $v);
 		/* Add to closure table for hierarchies */
 		$this->driver->executeQuery('INSERT INTO `fs_bezirk_closure`
