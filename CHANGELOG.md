@@ -29,6 +29,7 @@
 
 ## Dev/Test/CI stuff
 
+- Fixed a relict that would only allow using scripts/stop for dev containers !225 @NerdyProjects
 - Changed maildev port to 18084, (18083 is used by virtualbox (vboxwebsrv)) !218 @inktrap
 - Added support to collect code coverage statistics in codeception !222 @NerdyProjects
 - Changed maildev port to 18084, (18083 is used by virtualbox (vboxwebsrv)) !304 @inktrap
