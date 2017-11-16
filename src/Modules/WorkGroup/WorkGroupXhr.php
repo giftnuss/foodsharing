@@ -96,7 +96,7 @@ class WorkGroupXhr extends Control
 	 */
 	public function sendtogroup()
 	{
-		if ($group = $this->model->getGroup($_GET['id'])) {
+		if ($group = $this->model->getGroup($_GET['id']) && !empty($group['email'])) {
 			$message = strip_tags($_GET['msg']);
 
 			if (!empty($message)) {
@@ -115,7 +115,7 @@ class WorkGroupXhr extends Control
 
 	public function contactgroup()
 	{
-		if ($group = $this->model->getGroup($_GET['id'])) {
+		if ($group = $this->model->getGroup($_GET['id']) && !empty($group['email'])) {
 			$dialog = new XhrDialog();
 			$dialog->setTitle($group['name'] . ' kontaktieren');
 

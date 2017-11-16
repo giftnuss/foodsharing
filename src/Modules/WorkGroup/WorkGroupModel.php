@@ -153,7 +153,7 @@ class WorkGroupModel extends Model
 	public function getGroup($id)
 	{
 		if ($group = $this->qRow('
-			SELECT 	
+			SELECT
 				b.`id`,
 				b.`name`,
 				b.`parent_id`,
@@ -168,15 +168,13 @@ class WorkGroupModel extends Model
 				b.`report_num`,
 				b.`type`,
 				CONCAT(m.name,"@' . DEFAULT_HOST . '") AS email
-				
-			FROM 	
-				' . PREFIX . 'bezirk b,
+			FROM
+				' . PREFIX . 'bezirk b
+			LEFT JOIN
 				' . PREFIX . 'mailbox m
-				
-			WHERE 	
+			ON
 				b.mailbox_id = m.id
-				
-			AND
+			WHERE
 				b.`id` = ' . (int)$id . '
 		')
 		) {
