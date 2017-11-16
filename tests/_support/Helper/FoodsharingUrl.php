@@ -37,4 +37,9 @@ class FoodsharingUrl extends \Codeception\Module\Db
 
 		return '/?page=bezirk&bid=' . (int)$id . '&sub=' . $sub;
 	}
+
+	public function regionWallUrl($id)
+	{
+		return '/?page=bezirk&bid=' . (int)$id . '&sub=wall';
+	}
 }
