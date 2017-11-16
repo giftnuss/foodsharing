@@ -22,6 +22,11 @@ class FoodsharingUrl extends \Codeception\Module\Db
 		return '/?page=groups&sub=edit&id=' . (int)$id;
 	}
 
+	public function groupListUrl()
+	{
+		return '/?page=groups';
+	}
+
 	public function forumThemeUrl($id, $bezirk_id = null)
 	{
 		if (!isset($bezirk_id)) {

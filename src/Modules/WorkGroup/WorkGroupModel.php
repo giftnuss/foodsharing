@@ -276,19 +276,16 @@ class WorkGroupModel extends Model
 				b.`report_num`,
 				CONCAT(m.name,"@' . DEFAULT_HOST . '") AS email
 				
-			FROM 	
-				' . PREFIX . 'bezirk b,
+			FROM
+				' . PREFIX . 'bezirk b
+			LEFT JOIN
 				' . PREFIX . 'mailbox m
-				
-			WHERE 	
+			ON
 				b.mailbox_id = m.id
-				
-			AND
+			WHERE
 				b.`parent_id` = ' . (int)$this->ag_id . '
-				
 			AND
-				`type` = 7
-				
+				b.`type` = 7
 			ORDER BY
 				`name`
 		')
