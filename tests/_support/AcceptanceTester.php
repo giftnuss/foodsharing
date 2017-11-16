@@ -40,6 +40,11 @@ class AcceptanceTester extends \Codeception\Actor
 		$I->seeMatches('/Willkommen|Hallo/'); // depends on user type
 	}
 
+	public function logout()
+	{
+		$this->amOnPage('/?page=logout');
+	}
+
 	/**
 	 * Assert if a regexp is on the text content of the page.
 	 *
