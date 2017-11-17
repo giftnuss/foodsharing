@@ -48,29 +48,29 @@ use Exception;
 class fCore
 {
 	// The following constants allow for nice looking callbacks to static methods
-	const backtrace = 'fCore::backtrace';
-	const call = 'fCore::call';
-	const callback = 'fCore::callback';
-	const checkOS = 'fCore::checkOS';
-	const checkVersion = 'fCore::checkVersion';
-	const configureSMTP = 'fCore::configureSMTP';
-	const debug = 'fCore::debug';
-	const disableContext = 'fCore::disableContext';
-	const dump = 'fCore::dump';
-	const enableDebugging = 'fCore::enableDebugging';
-	const enableDynamicConstants = 'fCore::enableDynamicConstants';
-	const enableErrorHandling = 'fCore::enableErrorHandling';
-	const enableExceptionHandling = 'fCore::enableExceptionHandling';
-	const expose = 'fCore::expose';
-	const getDebug = 'fCore::getDebug';
-	const handleError = 'fCore::handleError';
-	const handleFatalError = 'fCore::handleFatalError';
-	const handleException = 'fCore::handleException';
-	const registerDebugCallback = 'fCore::registerDebugCallback';
-	const reset = 'fCore::reset';
-	const sendMessagesOnShutdown = 'fCore::sendMessagesOnShutdown';
-	const startErrorCapture = 'fCore::startErrorCapture';
-	const stopErrorCapture = 'fCore::stopErrorCapture';
+	const backtrace = 'Flourish\\fCore::backtrace';
+	const call = 'Flourish\\fCore::call';
+	const callback = 'Flourish\\fCore::callback';
+	const checkOS = 'Flourish\\fCore::checkOS';
+	const checkVersion = 'Flourish\\fCore::checkVersion';
+	const configureSMTP = 'Flourish\\fCore::configureSMTP';
+	const debug = 'Flourish\\fCore::debug';
+	const disableContext = 'Flourish\\fCore::disableContext';
+	const dump = 'Flourish\\fCore::dump';
+	const enableDebugging = 'Flourish\\fCore::enableDebugging';
+	const enableDynamicConstants = 'Flourish\\fCore::enableDynamicConstants';
+	const enableErrorHandling = 'Flourish\\fCore::enableErrorHandling';
+	const enableExceptionHandling = 'Flourish\\fCore::enableExceptionHandling';
+	const expose = 'Flourish\\fCore::expose';
+	const getDebug = 'Flourish\\fCore::getDebug';
+	const handleError = 'Flourish\\fCore::handleError';
+	const handleFatalError = 'Flourish\\fCore::handleFatalError';
+	const handleException = 'Flourish\\fCore::handleException';
+	const registerDebugCallback = 'Flourish\\fCore::registerDebugCallback';
+	const reset = 'Flourish\\fCore::reset';
+	const sendMessagesOnShutdown = 'Flourish\\fCore::sendMessagesOnShutdown';
+	const startErrorCapture = 'Flourish\\fCore::startErrorCapture';
+	const stopErrorCapture = 'Flourish\\fCore::stopErrorCapture';
 
 	/**
 	 * The nesting level of error capturing.
