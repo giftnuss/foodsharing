@@ -9,6 +9,8 @@
 
 ## Bugfixes
 
+- Fix namespace error introduced in !220 that made image uploads fail !226 @NerdyProjects
+- Also show working groups that don't have an email set !226 @NerdyProjects
 - Fix bug introduced in !220 !223 @NerdyProjects
 - Fix newsletter opt-in during signup !207 @NerdyProjects
 - Moved the list of inactive Foodsavers of !183 from the left to the right, because it was impractical in larger regions. !194 @valentin.unicorn
@@ -29,6 +31,8 @@
 
 ## Dev/Test/CI stuff
 
+- Test posting to a working group wall !226 @NerdyProjects
+- Test uploading profile pictures !226 @NerdyProjects
 - Fixed a relict that would only allow using scripts/stop for dev containers !225 @NerdyProjects
 - Changed maildev port to 18084, (18083 is used by virtualbox (vboxwebsrv)) !218 @inktrap
 - Added support to collect code coverage statistics in codeception !222 @NerdyProjects
