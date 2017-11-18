@@ -11,6 +11,7 @@ dir=$(dirname "$0")
 # directories used by the application
 
 dirs="\
+  images \
   images/basket \
   images/wallpost \
   images/picture \
