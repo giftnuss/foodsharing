@@ -51,9 +51,9 @@ abstract class fException extends Exception
 		}
 
 		// If fText is loaded, use it
-		if (class_exists('fText', false)) {
+		if (class_exists('Flourish\\fText', false)) {
 			return call_user_func_array(
-				array('fText', 'compose'),
+				array('Flourish\\fText', 'compose'),
 				array($message, $components)
 			);
 		} else {
@@ -238,7 +238,7 @@ abstract class fException extends Exception
 			throw new Exception($message);
 		}
 
-		$args = array_map(array('fException', 'dump'), $args);
+		$args = array_map(array('Flourish\\fException', 'dump'), $args);
 
 		parent::__construct(self::compose($message, $args));
 		$this->code = $code;
