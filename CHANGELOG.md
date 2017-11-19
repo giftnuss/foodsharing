@@ -66,6 +66,7 @@ Many many thanks to all the contributors that made this possible (in order of ap
 
 ## Features
 
+- Upgraded fontawesome to version 4.7, adding 196 available icons !227 @thinkround
 - Added the changelog into the page and link inside the '?' menu !199 @NerdyProjects
 - Added a list of inactive foodsavers to the foodsavers page !183 @valentin.unicorn
 - Ensure PHP7 compatibility and upgrade environment to PHP7 !171 @nicksellen
