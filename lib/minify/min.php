@@ -34,7 +34,6 @@ $js_files = [
 ];
 $css_files = [
 	'/fonts/alfaslabone/stylesheet.css',
-	'/css/font-awesome.min.css',
 	'/css/jquery-ui.css',
 	'/css/jMenu.jquery.css',
 	'/js/fancybox/jquery.fancybox.css',

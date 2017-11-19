@@ -69,6 +69,7 @@ addHead('<link rel="stylesheet" href="/css/pure/pure.min.css">
     <!--[if gt IE 8]><!-->
         <link rel="stylesheet" href="/css/pure/grids-responsive-min.css">
     <!--<![endif]-->');
+addHead('<link rel="stylesheet" href="/fonts/font-awesome-4.7.0/css/font-awesome.min.css">');
 
 addHidden('<a id="' . id('fancylink') . '" href="#fancy">&nbsp;</a>');
 addHidden('<div id="' . id('fancy') . '"></div>');
