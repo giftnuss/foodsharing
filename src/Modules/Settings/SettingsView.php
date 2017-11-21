@@ -113,7 +113,7 @@ class SettingsView extends View
 
 				addJs('
 					$("input[disabled=\'disabled\']").parent().click(function(){
-						pulseInfo("Du bist verantwortlich für Diesen Fair-Teiler!");
+						pulseInfo("Du bist verantwortlich für diesen Fair-Teiler und somit verpflichtet, die Updates entgegenzunehmen!");
 					});
 				');
 
