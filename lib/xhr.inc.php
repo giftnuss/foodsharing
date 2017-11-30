@@ -1135,7 +1135,7 @@ function xhr_getBezirk($data)
 			v_form_select('parent_id', array('values' => $cats)),
 			v_form_select('master', array('label' => 'Master-Bezirk', 'desc' => 'Alle Foodsaver sind automatisch mit im Master-Bezirk, sofern einer angegeben wurde', 'values' => $cats)),
 			v_form_text('name'),
-			v_form_text('mailbox_name', array('desc' => 'Achtung! Nicht willkürlich ändern! Auch darauf achten, dass unter Mailboxen die Mailbox noch nciht existiert.')),
+			v_form_text('mailbox_name', ['desc' => 'Achtung! Nicht willkürlich ändern! Auch darauf achten, dass diese Adresse unter Mailboxen verwalten noch nicht existiert.']),
 			v_form_text('email_name', array('label' => 'Absendername')),
 			v_form_select('type', array('label' => 'Bezirkstyp', 'values' => array(
 				array('id' => '1', 'name' => 'Stadt'),
