@@ -115,6 +115,16 @@ class ContentControl extends Control
 		}
 	}
 
+	public function presse()
+	{
+		if ($cnt = $this->model->getContent(58)) {
+			addBread($cnt['title']);
+			addTitle($cnt['title']);
+
+			addContent($this->view->simple($cnt));
+		}
+	}
+
 	public function leeretonne()
 	{
 		if ($cnt = $this->model->getContent(46)) {
@@ -176,12 +186,16 @@ class ContentControl extends Control
 
 	public function ratgeber()
 	{
-		$this->setContentWidth(9, 7);
 		addBread('Ratgeber');
-		addTitle('Ratgeber');
+		addTitle('Ratgeber Lebensmittelsicherheit');
 		addContent($this->view->ratgeber());
+	}
 
-		addContent($this->view->ratgeberRight(), CNT_RIGHT);
+	public function joininfo()
+	{
+		addBread('Mitmachen');
+		addTitle('Mitmachen - Unsere Regeln');
+		addContent($this->view->joininfo());
 	}
 
 	public function fuer_unternehmen()
@@ -191,6 +205,16 @@ class ContentControl extends Control
 			addTitle($cnt['title']);
 
 			addContent($this->view->partner($cnt));
+		}
+	}
+
+	public function infohub()
+	{
+		if ($cnt = $this->model->getContent(59)) {
+			addBread($cnt['title']);
+			addTitle($cnt['title']);
+
+			addContent($this->view->simple($cnt));
 		}
 	}
 

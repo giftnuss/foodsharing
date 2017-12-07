@@ -18,7 +18,7 @@ class IndexControl extends Control
 	public function index()
 	{
 		$db = new ContentModel();
-		addTitle('Restlos glücklich!');
+		addTitle('Rette mit!');
 
 		addScript('/js/jquery.animatenumber.min.js');
 

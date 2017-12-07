@@ -84,6 +84,7 @@ class vPageslider
 		}
 
 		addJs('
+		$("#main").hide();
 		$("footer").hide();
 		$("#' . $this->id . '").fullpage({
 			anchors: [' . implode(',', $anchors) . '],

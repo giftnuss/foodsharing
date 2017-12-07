@@ -518,46 +518,36 @@ function getMenu()
 		return array(
 			'default' => '
 				<ul id="mainMenu" class="jMenu">
-					<li><a class="fNiv" href="/"><i class="fa fa-home"></i></a></li>
-					<li><a class="fNiv" href="/karte"><i class="fa fa-map-marker"></i></a></li>
-					<li><a class="fNiv" href="/essenskoerbe/find/">Essenskörbe</a></li>
-					<li><a class="fNiv" href="/news">News</a></li>
-					<li><a class="fNiv" href="/ueber-uns">Über uns</a>
+					<li><a class="fNiv" href="/karte"><i class="fa fa-map-marker"></i>Karte</a></li>
+					<li><a class="fNiv">Über uns</a>
 						<ul>
-                                                        <li><a href="/team">Team</a>
-                                                            <ul>
-                                                                <li><a href="/team#vorstand">Vorstand</a></li>
-                                                                <li><a href="/team#aktive">Aktive</a></li>
-                                                                <li><a href="/team/ehemalige">Ehemalige</a></li>
-                                                            </ul>
-                                                        </li>
+							<li><a href="/ueber-uns">Über uns</a>
+                                                        <li><a href="/team">Team</a></li>
 							<li><a href="/partner">Partner</a></li>
 							<li><a href="/statistik">Statistik</a></li>
-							<li><a href="/faq">F.A.Q.</a></li>
-							<li><a href="/unterstuetzung">Unterstützung</a></li>
+							<li><a href="/?page=content&sub=presse">Presse</a></li>
+							<li><a href="/unterstuetzung">Spendenaufruf</a></li>
 						</ul>
 					</li>
-					
-					<li><a class="fNiv" href="/ratgeber">Ratgeber</a></li>
-					<li><a class="fNiv" href="/leeretonne">Aktionen</a>
+					<li><a class="fNiv" href="/?page=content&sub=joininfo">Mach mit!</a></li>
+					<li><a class="fNiv"><i class="fa fa-info"></i></a>
 						<ul>
-							<li><a href="/leeretonne">Leere Tonne</a></li>
-							<li><a href="/fairteilerrettung">Rette die Fair-Teiler</a></li>
+							<li><a href="/?page=content&sub=infohub">Übersicht</a></li>
+							<li><a href="/news">News</a></li>
+							<li><a href="/faq">F.A.Q.</a></li>
+							<li><a href="/ratgeber">Ratgeber</a></li>
 						</ul>
 					</li>
-					<li><a onclick="ajreq(\'join\',{app:\'login\'});return false;" class="fNiv" href="/?page=join">Mach mit!</a></li>
-					<!-- <li><a class="fNiv" href="/?page=login" onclick="ajreq(\'login\',{app:\'login\'});return false;">Login</a></li> -->
+					<li><a class="fNiv" href="/login" title="User Login"><i class="fa fa-user-circle"></i></a></li>
 				</ul>',
 			'mobile' => '
 				<select id="mobilemenu">
 					<option class="famenu" value="dashboard" selected="selected">&#xf0c9;</option>
 					<option value="/">Home</option>
 					<option value="/karte">Karte</option>
-					<option value="/ratgeber">Ratgeber</option>
-					<option value="/leeretonne">Leere Tonne</option>
-					<option value="/fairteilerrettung">Rette die Fair-Teiler</option>
-					<option value="/unterstuetzung">Unterstützung</option>
-					<option value="/mach-mit">Mach mit!</option>
+					<option value="/ueber-uns">Über uns</option>
+					<option value="/?page=content&sub=infohub">News FAQ Ratgeber etc.</option>
+					<option value="/?page=content&sub=joininfo">Mach mit!</option>
 					<option value="/login">Login</option>
 				</select>'
 		);
