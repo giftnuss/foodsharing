@@ -33,6 +33,7 @@
 
 ## Dev/Test/CI stuff
 
+- Script to help working with email bounces !231 @NerdyProjects
 - Test posting to a working group wall !226 @NerdyProjects
 - Test uploading profile pictures !226 @NerdyProjects
 - Fixed a relict that would only allow using scripts/stop for dev containers !225 @NerdyProjects

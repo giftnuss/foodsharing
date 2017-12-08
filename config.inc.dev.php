@@ -1,6 +1,9 @@
 <?php
 
-Foodsharing\Debug\Whoops::register();
+if (php_sapi_name() != 'cli') {
+	/* Whoops catches all error messages in CLI mode as well :( */
+	Foodsharing\Debug\Whoops::register();
+}
 Foodsharing\Debug\DebugBar::register();
 
 $protocol = 'http';

@@ -6,6 +6,7 @@ modules:
     enabled:
         - Filesystem
         - Cli
+        - Sequence
         - Db:
             populate: true
             cleanup: true
