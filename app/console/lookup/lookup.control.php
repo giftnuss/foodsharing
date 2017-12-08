@@ -41,10 +41,14 @@ class LookupControl extends ConsoleControl
 		foreach ($csv as $row) {
 			$email = $row[0];
 			$fs = $this->model->getFoodsaverByEmail($email);
+			if (empty($fs)) {
+				continue;
+			}
 			$date = new DateTime($fs['last_login']);
 			$olderThan = new DateTime();
 			$olderThan->sub(new DateInterval('P6M'));
 			if ($date < $olderThan) {
+				info('Deleted user ' . $fs['id']);
 				$this->model->del_foodsaver($fs['id']);
 			}
 		}
