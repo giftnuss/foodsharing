@@ -8,7 +8,7 @@
 }
 
 #campaign .topbarpadding {
-    padding: 41px 0;
+    padding: 71px 0;
     width: 100%;
 }
 
@@ -141,7 +141,7 @@
 .carpetroll .button {
     font-size:150%;
     font-family: "Alfa Slab One";
-    font-weight: normal;
+    font-weight: normal !important;
 }
 
 .carpetroll .whatiswhaticons {
