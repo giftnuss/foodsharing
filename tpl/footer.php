@@ -58,7 +58,7 @@
 	echo 'Version: ' . SRC_REVISION . '</a>';
 } else {
 	echo '<a href="https://gitlab.com/foodsharing-dev/">';
-	echo 'Hello World! This is website is under active development!</a>';
+	echo 'Hello World! This website is under active development!</a>';
 }
 			?>
 		</div>
