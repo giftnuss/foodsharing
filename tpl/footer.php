@@ -21,7 +21,7 @@
 					</ul>
 				</div>
 		    </div>
-			<div class="pure-u-1 pure-u-md-4-24" style="padding-top:30px">
+			<div class="pure-u-1 pure-u-md-4-24" style="padding-top:30px;width:126px;margin:0 auto;">
 				<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 
 					<input type="hidden" name="cmd" value="_s-xclick">
@@ -52,10 +52,13 @@
 		    	</div>
 		    </div>
 		</div>
-		<div class="inside">
+		<div class="inside" style="margin-top:1em;">
 			<?php if (defined('SRC_REVISION')) {
 	echo '<a href="https://gitlab.com/foodsharing-dev/foodsharing/tree/' . SRC_REVISION . '">';
 	echo 'Version: ' . SRC_REVISION . '</a>';
+} else {
+	echo '<a href="https://gitlab.com/foodsharing-dev/">';
+	echo 'Hello World! This is website is under active development!</a>';
 }
 			?>
 		</div>

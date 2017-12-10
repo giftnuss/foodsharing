@@ -64,7 +64,7 @@ class ContentView extends View
 		return '
 		<div class="page ui-padding ui-widget-content corner-all">
 			<h1>Mitmachen - Unsere Regeln</h1>
-			<h3>Schön, dass Du bei FoodSharing mitmachen willst!</h3>
+			<h3>Schön, dass Du bei foodsharing mitmachen willst!</h3>
 			<p>Da Lebensmittel uns am Leben halten, wollen wir auch respektvoll mit ihnen umgehen. Damit bei uns alles optimal läuft, haben wir im Laufe der Jahre einige Verhaltensregeln definiert. Lebensmittel an andere weiterzugeben ist eine sehr menschliche aber auch verantwortungsvolle Sache. Grundsätzlich gilt wohl immer: „Nichts an andere weitergeben, was man selbst nicht mehr essen würde“.
 			Bitte lies nun die foodsharing Etikette einmal durch. <b>Am Ende dieser Seite kannst Du Dich als Foodsharer registrieren.</b>
 			<h3>Für Unternehmen und Betriebe</h3><p>Gemeinsam mit foodsharing können Sie sich dafür einsetzen, dass aussortierte und unverkäufliche Lebensmittel eine sinnvolle Verwendung anstelle der Entsorgung erfahren. Mehr Information dazu finden Sie <a href="/fuer-unternehmen">hier.</a> </p>'

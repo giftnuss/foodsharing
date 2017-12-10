@@ -522,20 +522,21 @@ function getMenu()
 					<li><a class="fNiv">Über uns</a>
 						<ul>
 							<li><a href="/ueber-uns">Über uns</a>
+							<li><a href="/?page=content&sub=forderungen">Forderungen</a></li>
                                                         <li><a href="/team">Team</a></li>
 							<li><a href="/partner">Partner</a></li>
 							<li><a href="/statistik">Statistik</a></li>
 							<li><a href="/?page=content&sub=presse">Presse</a></li>
-							<li><a href="/unterstuetzung">Spendenaufruf</a></li>
 						</ul>
 					</li>
 					<li><a class="fNiv" href="/?page=content&sub=joininfo">Mach mit!</a></li>
 					<li><a class="fNiv"><i class="fa fa-info"></i></a>
 						<ul>
-							<li><a href="/?page=content&sub=infohub">Übersicht</a></li>
+							<li><a href="/?page=content&sub=infohub">Infosammlung</a></li>
 							<li><a href="/news">News</a></li>
 							<li><a href="/faq">F.A.Q.</a></li>
 							<li><a href="/ratgeber">Ratgeber</a></li>
+							<li><a href="/unterstuetzung">Spendenaufruf</a></li>
 						</ul>
 					</li>
 					<li><a class="fNiv" href="/login" title="User Login"><i class="fa fa-user-circle"></i></a></li>
@@ -545,8 +546,12 @@ function getMenu()
 					<option class="famenu" value="dashboard" selected="selected">&#xf0c9;</option>
 					<option value="/">Home</option>
 					<option value="/karte">Karte</option>
-					<option value="/ueber-uns">Über uns</option>
-					<option value="/?page=content&sub=infohub">News FAQ Ratgeber etc.</option>
+					<option value="/ueber-uns">- Über uns</option>
+					<option value="/?page=content&sub=forderungen">- Forderungen</option>
+					<option value="/team">- Team und Kontaktdaten</option>
+					<option value="/partner">- Partner</option>
+					<option value="/?page=content&sub=presse">- Presse</option>
+					<option value="/?page=content&sub=infohub">Infosammlung FAQ Ratgeber etc.</option>
 					<option value="/?page=content&sub=joininfo">Mach mit!</option>
 					<option value="/login">Login</option>
 				</select>'

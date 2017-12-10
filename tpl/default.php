@@ -62,7 +62,7 @@ if (!empty($content_left) && !empty($content_right)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="favicon" href="/favicon.ico" type="image/x-icon" />
 	<?php echo getHead(); ?>
-	<style type="text/css">#deutschlandtour_message{width:97%;height:50px;}<?php echo str_replace(array("\r", "\n"), '', $g_add_css); ?></style>
+	<style type="text/css"><?php echo str_replace(array("\r", "\n"), '', $g_add_css); ?></style>
 	<script type="text/javascript">
 		var _gaq = _gaq || [];  _gaq.push(['_setAccount', 'UA-43313114-1']);  _gaq.push(['_setDomainName', '<?php echo $_SERVER['HTTP_HOST']; ?>']);  _gaq.push(['_trackPageview']); (function() {var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);  })();
 	</script>

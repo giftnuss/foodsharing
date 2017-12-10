@@ -12,31 +12,31 @@ class IndexView extends View
 		$ps = new vPageslider();
 
 		$ps->addSection($this->campaign($first_content), array(
-			'color' => '#48bac4', //pc_foodporn.png
-			'color' => '#eb7763', //pc_ei.png
-			'color' => '#7b4a94', //pc_bread.png
-			'color' => '#fbbd13', //pc_sauer.png
-			'color' => '#26ad91', //pc_dickmilch.png
+			'color' => '#48bac4', //foodporn
+			'color' => '#eb7763', //faulesei.png
+			'color' => '#7b4a94', //walkingbread.png
+			'color' => '#fbbd13', //sauregurken.png
+			'color' => '#26ad91', //dickmilch.png
 			'anchor' => 'kampagne'
 		));
 
-		// After the campaign is finished these lines will replace the campaign section again
+//		// After the campaign is finished these lines will replace the campaign section again
 //		$ps->addSection($first_content, array(
 //			'color' => '#4a3520',
 //			'anchor' => 'oben'
 //		));
 
 		$ps->addSection($this->welcome(), array(
+			'color' => '#F9F5E0',
 			'anchor' => 'wilkommen'
 		));
 
 		$ps->addSection($this->howto(), array(
-			'color' => '#ffffff',
 			'anchor' => 'video'
 		));
 
 		$ps->addSection($this->joinus(), array(
-			'color' => '#ffffff',
+			'color' => '#F9F5E0',
 			'anchor' => 'mach-mit',
 		));
 
@@ -45,6 +45,7 @@ class IndexView extends View
 		));
 
 		$ps->addSection($this->withfooter(), array(
+			'color' => '#F9F5E0',
 			'anchor' => 'unten',
 		));
 
@@ -54,15 +55,18 @@ class IndexView extends View
 	private function campaign($first_content)
 	{
 		return '
-		<div class="pure-g carpetroll">
-			<div class="pure-u-1 pure-u-sm-1-2" id="campaign">
-				<img src="/img/pc_text.png" id="campaigntext" alt="Don’t let good food go bad!">
-			</div>
-			<div class="pure-u-1 pure-u-sm-1-2">
-				<img src="/img/foodx.png" id="campaignimg">
+		<div id="campaign" class="pure-g dickmilchbeta ">
+			<div class="topbarpadding">
+				<div id="campaigntext" class="pure-u-1 pure-u-sm-1-2">
+					<h2>Don’t&nbsp;let good&nbsp;food&nbsp;go&nbsp;bad!</h2>
+					<div><img src="/img/gabel.png"></div>
+					<h4>Rette mit!</h4>
+					<h3>food<span>sharing</span></h3>
+				</div>
+				<div id="campaignimg" class="pure-u-1 pure-u-sm-1-2">
+				</div>
 			</div>
 		</div>
-		<div style="font-size:5px;position:absolute;bottom:0;right:0;color:#ffffff;">Pink Carrots</div>
 		';
 	}
 
@@ -76,9 +80,9 @@ class IndexView extends View
 			<div class="pure-u-1 pure-u-md-1-2">
 				<p>Wir sind eine Initiative, die sich gegen Lebensmittelverschwendung engagiert. Wir “retten” ungewollte und überproduzierte Lebensmittel in privaten Haushalten sowie von kleinen und großen Betrieben. </p>
 				<p>Darüber hinaus verstehen wir uns als bildungspolitische Bewegung und fühlen uns nachhaltigen Umwelt- und Konsumzielen verpflichtet. Wir setzen uns unter anderem für einen Wegwerf-Stopp und gegen den Verpackungs-Wahnsinn der Supermärkte ein. Mit diesen und anderen Themen sind wir auf Veranstaltungen oder in Medien präsent und starten eigene Aktionen.  </p>
-				<p>Die Organisation unserer foodsharing-Community und unserer Aktivitäten läuft in erster Linie über die Online-Plattform foodsharing.de. Hier vernetzen und koordinieren sich die Lebensmittelretter*innen (Foodsharer/Foodsaver) in den einzelnen Städten und Regionen. Über die Plattform werden überregionale Themen, Veranstaltungen und Informationen veröffentlicht.</p>
+				<p>Die Organisation unserer foodsharing-Community und unserer Aktivitäten läuft in erster Linie über die Online-Plattform foodsharing. Hier vernetzen und koordinieren sich die Lebensmittelretter*innen (Foodsharer/Foodsaver) in den einzelnen Städten und Regionen. Über die Plattform werden überregionale Themen, Veranstaltungen und Informationen veröffentlicht.</p>
 				<p>Unsere foodsharing-Initiative entstand 2012 in Berlin. Mittlerweile ist sie zu einer internationalen Bewegung herangewachsen mit über 200.000 registrierten Nutzern*innen in Deutschland, Österreich, der Schweiz und weiteren europäischen Städten. </p>
-				<p>Die Mitglieder der foodsharing-Community arbeiten ehrenamtlich und unentgeltlich. foodsharing.de ist und bleibt kostenlos, nicht kommerziell, unabhängig und werbefrei. Wir wollen die Plattform open source und weltweit leichter zugänglich machen – so wie es das foodsharing-Konzept des Lebensmittelretten bereits ist.</p>
+				<p>Die Mitglieder der foodsharing-Community arbeiten ehrenamtlich und unentgeltlich. foodsharing ist und bleibt kostenlos, nicht kommerziell, unabhängig und werbefrei. Wir wollen die Plattform open source und weltweit leichter zugänglich machen – so wie es das foodsharing-Konzept des Lebensmittelretten bereits ist.</p>
 			</div>
 		</div>
 		';
@@ -116,7 +120,7 @@ class IndexView extends View
 			</div>
 			<div class="pure-u-1 pure-u-md-1-2">
 				<p>Wir laden Dich ein, bei foodsharing aktiv zu werden und Dich gemeinsam mit tausenden Gleichgesinnten gegen Lebensmittelverschwendung zu engagieren. </p>
-				<p>Registriere Dich bei foodsharing.de und werde Teil unserer Community. Du kannst hier unsere Aktivitäten und Mitglieder in Deinem Bezirk kennenlernen und Dich gemeinsam mit ihnen für eine gute Sache einsetzen.</p>
+				<p>Registriere Dich bei foodsharing und werde Teil unserer Community. Du kannst hier unsere Aktivitäten und Mitglieder in Deinem Bezirk kennenlernen und Dich gemeinsam mit ihnen für eine gute Sache einsetzen.</p>
 				<p><a href="/?page=content&sub=joininfo" class="button" >Mitmachen</a></p>
 			</div>
 		</div>
@@ -162,7 +166,7 @@ class IndexView extends View
 	private function withfooter()
 	{
 		return '
-			<a href="/?page=content&sub=joininfo" id="joinbuttoninfootersection">Rette mit!</a>
+			<span class="carpetroll"><a href="/?page=content&sub=joininfo" id="joinbuttoninfootersection" class="clickable">Rette mit!</a></span>
 		';
 	}
 }

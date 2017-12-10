@@ -1,44 +1,122 @@
-#campaignimg {
-    width: auto;
-    max-width: 100%;
+#campaign {
     height: 100vh;
+    width: 150vh;
     position: absolute;
     top: 0;
+    left: 50%;
+    transform: translate(-50%,0);
+}
+
+#campaign .topbarpadding {
+    padding: 41px 0;
+    width: 100%;
+}
+
+#campaigntext, #campaignimg {
+    height: 100%;
+    width: 50%;
 }
 
 #campaigntext {
-    max-width: 100%;
-    max-height: 40vh;
-    float: right;
-    padding: 1em;
+    text-align: center;
+    font-size: 12px;
+    font-size: 2.5vh;
+    color: #F9F5E0;
+    text-shadow: 0 1px #555;    
+}
+
+#campaigntext h2 {
+    font-family: "Alfa Slab One";
+    font-size: 2.7em;
+    padding-top:2.7em;
+}
+
+#campaigntext h4 {
+    font-family: "Alfa Slab One";
+    font-size: 1.3em;
+}
+
+#campaigntext div img {
+    width:50px;
+    width:8.5vh;
+    margin: 0 auto;
 }
 
 #campaigntext h3 {
-    color: #ffffff;
-    border: none;
-    font-size: 28px;
-    text-shadow: 2px 2px #555;
-    margin: 0;
+    font-family: "Alfa Slab One";
+    font-size: 2em;
 }
 
-#campaigntext img {
-    height: 20vh;
+#campaigntext h3 span {
+    color: #59BA49;
 }
 
-@media (max-width: 568px) { #campaign {
-    margin-top: 85vh;
-}}
+.dickmilch #campaigntext h3 span {
+    color: #6DBA49;
+}
 
-@media (max-aspect-ratio: 1/1) and (min-width: 568px) { #campaignimg {
-    height: auto;
-    width: 50%;
-    top: 50%;
-    transform:translate(0,-50%) ;
-}}
+#campaignimg {
+    background-position: 0 0;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.dickmilchbeta #campaignimg { background-image: url('/img/pica_dickmilchbeta.png'); }
+.dickmilch #campaignimg { background-image: url('/img/pica_dickmilch.png'); }
+.walkingbread #campaignimg { background-image: url('/img/pica_walkingbread.png'); }
+.foodporn #campaignimg { background-image: url('/img/pica_foodporn.png'); }
+.faulesei #campaignimg { background-image: url('/img/pica_faulesei.png'); }
+.sauregurken #campaignimg { background-image: url('/img/pica_sauregurken.png'); }
+
+@media (max-aspect-ratio: 3/2) { 
+    #campaign {
+        width: 100vw;
+        height: 66vw;
+        top: 50%;
+        left: 0;
+        transform: translate(0,-50%);
+    }
+
+    #campaigntext {
+        font-size: 1.5vw;
+    }
+    #campaigntext div img {
+        width: 4.5vw;
+    }
+}
+
+@media (max-width: 567px) { 
+    #campaign {
+        width: 100%;
+        height: auto;
+        position: absolute;
+        top: 0px; left: 0;
+        transform: none;
+    }
+    #campaigntext {
+        width: 100%;
+        height: 16em;
+        font-size: 3vw;
+    }
+    #campaigntext h2 {
+        padding-top:0.8em;
+    }
+    #campaigntext div img{
+        display: none;
+    }
+    #campaignimg {
+        width: 100vw;
+        height: 50vh;
+        background-position: center;
+    }
+    .topbarpadding {
+        padding: 0;
+    }
+}
+
 
 .carpetroll {
-    text-align: justify;
-    color: #4A3520;
+    color: #533A20;
     padding: 41px 0;
 }
 
@@ -47,14 +125,14 @@
 }
 
 .carpetroll h3 {
-    color: #5AB946;
+    color: #64AE24;
     font-size:24px;
     font-weight: normal;
     font-family: "Alfa Slab One";
     letter-spacing: 0.4px;
-    border-bottom: 4px solid #5AB946 ;
+    border-bottom: 4px solid #64AE24 ;
     box-sizing: content-box;
-    padding-bottom: 1rem;
+    padding-bottom: 0.3rem;
     margin: 1rem 2rem 2rem 1rem;
     display: inline-block;
     text-align: left;
@@ -62,10 +140,12 @@
 
 .carpetroll .button {
     font-size:150%;
+    font-family: "Alfa Slab One";
+    font-weight: normal;
 }
 
 .carpetroll .whatiswhaticons {
-    background-color: #5AB946;
+    background-color: #64AE24;
     color: white;
     padding: 0.2em;
     font-size: 500%;
@@ -85,23 +165,31 @@
     font-size:120%;
 }
 
-.carpetroll .clickable {
+.carpetroll .clickable:hover {
     cursor: pointer;
+    opacity: 0.8;
 }
 
 #joinbuttoninfootersection {
     display: block;
+    position:absolute;
+    top: 50px;
+    left: 50%;
+    transform: translate(-50%,0);
     text-align: center;
-    transform: translate(0, -32vh);
-    font-size: 250%;
-    font-weight: bold;
-    background-color: #46891b;
+    font-size: 8vw;
+    font-weight: normal;
+    background-color: #64AE24;
     color: white;
     font-family: "Alfa Slab One";
     width: 8em;
-    margin: 0 auto;
     border-radius: 1em;
     text-decoration: none;
+    letter-spacing: 0.4px;
+}
+
+#joinbuttoninfootersection:hover {
+    opacity:0.8;
 }
 
 #theregistrationbutton {
@@ -193,14 +281,14 @@
 .top h3 {
     font-family: "Alfa Slab One";
     font-size: 20px;
-    color: #4a3520;
+    color: #533A20;
     font-weight: normal;
     padding: 0;
     margin: 0;
 }
 
 .top p {
-    color: #4a3520;
+    color: #533A20;
     margin: 2px 0 0 0;
 }
 
@@ -209,7 +297,7 @@
     padding: 8px !important;
     position: absolute !important;
     width: 250px !important;
-    color: #4A3520 !important;
+    color: #533A20 !important;
     font-size: 13px !important;
     font-weight: bold !important;
     z-index: 150;
@@ -250,12 +338,12 @@
 }
 
 .ui-widget-content a, a {
-    color: #46891b;
+    color: #64AE24;
     text-decoration: none;
 }
 
 .ui-widget-content a:hover, a:hover {
-    color: #46891b;
+    color: #64AE24;
     text-decoration: underline;
 }
 
@@ -356,7 +444,7 @@ body {
 }
 
 .input-wrapper label.wrapper-label {
-    color: #4a3522;
+    color: #533A22;
     display: block;
 
     font-weight: lighter;
@@ -365,7 +453,7 @@ body {
 
 .input-wrapper label.wrapper-label a {
     text-decoration: none;
-    color: #4A3522;
+    color: #533A22;
 }
 
 .input-wrapper label.wrapper-label a:hover {
@@ -448,7 +536,7 @@ div#main {
 .head .option a:hover {
     background-color: #fff;
     text-decoration: none;
-    color: #4A3520;
+    color: #533A20;
 }
 
 .clear {
@@ -506,7 +594,17 @@ ul.bread {
 }
 
 #layout_logo a span {
-    color: #5AB946 !important;
+    color: #64AE25 !important;
+}
+
+#layout_logo a:after {
+    content: "\f015";
+    color: #533A20;
+    font-family: "FontAwesome"; 
+}
+
+#layout_logo a:hover:after {
+    color: #ffffff;
 }
 
 #layout_logo a:after {
@@ -540,7 +638,7 @@ div.popbox h3 {
 }
 
 div.popbox a.link {
-    color: #4A3522;
+    color: #533A22;
     text-decoration: none;
 }
 
@@ -603,7 +701,7 @@ div.tree-scroller {
     font-size: 13px;
     border: 0 none;
     width: 227px;
-    color: #4a3520;
+    color: #533A20;
     margin: -2px 0 0 -15px;
     padding: 4px 3px 3px 27px;
     border-radius: 6px;
@@ -612,26 +710,26 @@ div.tree-scroller {
 }
 
 #searchbar input::-webkit-input-placeholder {
-    color: #4A3520;
+    color: #533A20;
 }
 
 #searchbar input:-moz-placeholder {
     /* FF 4-18 */
-    color: #4A3520;
+    color: #533A20;
 }
 
 #searchbar input::-moz-placeholder {
     /* FF 19+ */
-    color: #4A3520;
+    color: #533A20;
 }
 
 #searchbar input:-ms-input-placeholder {
     /* IE 10+ */
-    color: #4A3520;
+    color: #533A20;
 }
 
 #searchbar i {
-    color: #4a3520;
+    color: #533A20;
     display: inline-block;
     font-size: 15px;
     height: 14px;
@@ -671,7 +769,7 @@ div.tree-scroller {
     padding-top: 10px;
     padding-bottom: 5px;
     font-weight: lighter;
-    color: #4a3520;
+    color: #533A20;
 }
 
 #searchbar .t {
@@ -815,7 +913,7 @@ div.msg-inside.error a:hover {
 }
 
 div.msg-inside.success, div.msg-inside.success a {
-    background-color: #46891b !important;
+    background-color: #64AE24 !important;
     color: #fff !important;
 }
 
@@ -824,7 +922,7 @@ div.msg-inside.error i {
 }
 
 div#pulse-success {
-    background-color: #46891b !important;
+    background-color: #64AE24 !important;
     color: #ffffff !important;
 }
 
@@ -925,7 +1023,7 @@ div.xv_set {
 }
 
 div.xv_left ul li a:hover {
-    background-color: #4A3520;
+    background-color: #533A20;
     color: #fff;
 }
 
@@ -1024,7 +1122,7 @@ ul.team li.jumper {
 }
 
 ul.team li a:hover {
-    background-color: #4A3520;
+    background-color: #533A20;
 }
 
 ul.team li a.status {
@@ -1076,7 +1174,7 @@ ul.team li.breakline {
 }
 
 .innerRow .label {
-    color: #4A3522;
+    color: #533A22;
     width: 110px;
 
 }
@@ -1115,7 +1213,7 @@ a.light {
 }
 
 a.light:hover {
-    color: #4A3522;
+    color: #533A22;
 }
 
 table.pintable tr td span.msg {
@@ -1144,7 +1242,7 @@ table.pintable tr.milestone {
 table.pintable tr.milestone td {
     vertical-align: middle;
     text-align: center;
-    color: #4A3522;
+    color: #533A22;
     padding-top: 10px;
     padding-bottom: 10px;
 }
@@ -1265,7 +1363,7 @@ ul.imglist li a {
 }
 
 ul.imglist li a:hover {
-    background-color: #4A3520;
+    background-color: #533A20;
 }
 
 ul.imglist li a img {
@@ -1315,7 +1413,7 @@ div.input-wrapper.today ul.imglist li a {
 }
 
 div.input-wrapper.today ul.imglist li a:hover {
-    background-color: #4A3520; /* The same as ul.imglist li a:hover */
+    background-color: #533A20; /* The same as ul.imglist li a:hover */
 }
 
 li.nohover a, li.nohover {
@@ -1455,7 +1553,7 @@ div.welcome {
 }
 
 div.welcome a {
-    color: #4A3522;
+    color: #533A22;
     text-decoration: none;
 }
 
@@ -1490,7 +1588,7 @@ div.welcome .welcome_profile_name {
 
 div.welcome .user_display_name {
     padding-top: 6px;
-    color: #4A3520;
+    color: #533A20;
     font-weight: bold;
 }
 
@@ -1610,7 +1708,7 @@ ul.linklist li, ul.linklist li > a, ul.linklist li > a span {
 ul.linklist li > a {
     padding: 6px;
     text-decoration: none !important;
-    color: #4A3520;
+    color: #533A20;
     font-weight: lighter;
 }
 
@@ -1620,12 +1718,12 @@ ul.linklist li {
 
 ul.linklist li > a span.title {
     text-decoration: none !important;
-    color: #4A3522;
+    color: #533A22;
     font-weight: bold;
 }
 
 ul.linklist li > a.active {
-    color: #4A3522;
+    color: #533A22;
     font-weight: bold;
 }
 
@@ -1681,7 +1779,7 @@ ul.linklist li > a:hover, ul.linklist li > a:hover span {
 }
 
 .ui-widget-header {
-    background: none repeat scroll 0 0 #4A3520;
+    background: none repeat scroll 0 0 #533A20;
     color: #fff;
     font-weight: bold;
     border: 0;
@@ -1689,7 +1787,7 @@ ul.linklist li > a:hover, ul.linklist li > a:hover span {
 }
 
 div.toolmenu {
-    background-color: #4A3520;
+    background-color: #533A20;
 }
 
 .loading {
@@ -1841,7 +1939,7 @@ span.verified {
 
 .scroller .thumb .end,
 .scroller .thumb {
-    background-color: #4A3520;
+    background-color: #533A20;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
@@ -1898,7 +1996,7 @@ span.verified {
 /**Div containing the color of the stars */
 .jRatingAverage {
 
-    background-color: #4A3520;
+    background-color: #533A20;
     position: relative;
     top: 0;
     left: 0;
@@ -1934,7 +2032,7 @@ span.verified {
 p.jRatingInfos {
     position: absolute;
     z-index: 9999;
-    background-color: #4A3520;
+    background-color: #533A20;
     color: #FFF;
     font-weight: bold;
     display: none;
@@ -1954,7 +2052,7 @@ p.jRatingInfos span.maxRate {
 }
 
 .ui-tooltip, .arrow:after {
-    background: #4A3520;
+    background: #533A20;
     border: 2px solid white;
 }
 
@@ -2035,14 +2133,14 @@ span.vouch-banana span {
 }
 
 a.vouch-banana:hover {
-    background: #4A3520;
+    background: #533A20;
     padding: 4px;
     border: 2px solid white;
     box-shadow: 6px 5px 9px -9px black;
 }
 
 a.light {
-    color: #4A3520;
+    color: #533A20;
 }
 
 .leaflet-top, .leaflet-bottom {
@@ -2052,7 +2150,7 @@ a.light {
 }
 
 #top {
-    background-color: #4a3520;
+    background-color: #533A20;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     height: 41px;
     margin: 0 auto;
@@ -2065,7 +2163,7 @@ a.light {
 .quicks {
     background-color: #C2BAB4;
     border: 0 none;
-    color: #4A3520;
+    color: #533A20;
     display: none;
     font-size: 12px;
     height: 19px;
@@ -2075,7 +2173,7 @@ a.light {
 
 /*
 	width:128px;
-	color:#4A3520;
+	color:#533A20;
 	background-color: #C2BAB4;
 	margin: 0;
     border:0;
@@ -2084,9 +2182,9 @@ a.light {
     left: 76px;
     top: 2px;
     
-    -moz-box-shadow:    inset 0 0 1px #4A3520;
-   -webkit-box-shadow: inset 0 0 1px #4A3520;
-   box-shadow:         inset 0 0 1px #4A3520;
+    -moz-box-shadow:    inset 0 0 1px #533A20;
+   -webkit-box-shadow: inset 0 0 1px #533A20;
+   box-shadow:         inset 0 0 1px #533A20;
    -webkit-border-radius: 9px;
 	-moz-border-radius: 9px;
 	border-radius: 9px;
@@ -2133,7 +2231,7 @@ a.light {
 #mobilemenu option {
     cursor: pointer;
     background-color: #ffffff;
-    color: #4A3520;
+    color: #533A20;
     border: 0 none;
 }
 
@@ -2144,7 +2242,7 @@ a.light {
 }
 
 #mobilemenu option:hover {
-    background-color: #4A3520;
+    background-color: #533A20;
     color: #fff;
 }
 
@@ -2161,7 +2259,7 @@ a.light {
     display: block;
     width: 30px;
     height: 30px;
-    background-color: #4A3520;
+    background-color: #533A20;
     position: fixed;
     top: 3px;
     right: 10px;
@@ -2196,7 +2294,7 @@ a.light {
 
 .user_profile_link_span a {
     text-decoration: none;
-    color: #4A3522;
+    color: #533A22;
 }
 
 .bottom_time {
@@ -2304,7 +2402,7 @@ a.moreswaplink {
     text-align: center;
     color: #fff;
     font-weight: bold;
-    background-color: #46891b;
+    background-color: #64AE24;
     text-decoration: none;
 
     -webkit-border-bottom-right-radius: 6px;
@@ -2348,7 +2446,7 @@ a.preview-thumb {
 }
 
 a.preview-thumb:hover {
-    border: 3px solid #4A3520;
+    border: 3px solid #533A20;
 }
 
 .attach-load {
@@ -2411,7 +2509,7 @@ td.load {
 
 .ui-button, .button {
     color: #FFFFFF !important;
-    background-color: #46891B;
+    background-color: #64AE24;
 
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
@@ -2443,7 +2541,7 @@ td.load {
 }
 
 .ui-button:hover, .button:hover {
-    background-color: #46891B;
+    background-color: #64AE24;
     opacity: 0.8;
     text-decoration: none !important;
 }
@@ -2537,7 +2635,7 @@ ul.bread li a:hover {
 }
 
 .pac-item-selected {
-    background-color: #46891B;
+    background-color: #64AE24;
     color: #ffffff !important;
 }
 
@@ -2567,7 +2665,7 @@ ul.bread li a:hover {
 }
 
 .pac-item-query {
-    color: #4A3520 !important;
+    color: #533A20 !important;
 }
 
 .pac-item-selected .pac-item-query {
@@ -2585,7 +2683,7 @@ ul.bread li a:hover {
 ul.linklist li > a .avatar span.bubble, ul.linklist li > a:hover .avatar span.bubble {
     margin-left: 37px !important;
     margin-top: -40px !important;
-    color: #4A3520 !important;
+    color: #533A20 !important;
 }
 
 .slimScrollDiv .avatar .bubble {
@@ -2603,7 +2701,7 @@ footer .imglink {
 }
 
 footer {
-    background-color: #4A3520;
+    background-color: #533A20;
     -webkit-box-shadow: inset 0px 20px 20px -20px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: inset 0px 20px 20px -20px rgba(0, 0, 0, 0.75);
     box-shadow: inset 0px 20px 20px -20px rgba(0, 0, 0, 0.75);
@@ -2615,13 +2713,13 @@ footer .wrapper {
 }
 
 footer .linklist li a {
-    background-color: #4A3520;
+    background-color: #533A20;
     color: #F1E7C9 !important;
 }
 
 footer .linklist li a:hover {
     background-color: #fff;
-    color: #4A3520 !important;
+    color: #533A20 !important;
 }
 
 .vidlink {
@@ -2638,7 +2736,7 @@ footer .linklist li a:hover {
 }
 
 .vidlink:hover img {
-    border: 10px solid #46891B;
+    border: 10px solid #64AE24;
 }
 
 #loginbar input {
@@ -2672,7 +2770,7 @@ footer .linklist li a:hover {
 #loginbar .submit {
     font-family: 'FontAwesome';
     background-color: #ffffff;
-    color: #4a3520;
+    color: #533A20;
     font-size: 20px;
     height: 23px;
     text-align: center;
