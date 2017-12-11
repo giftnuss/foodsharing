@@ -1,6 +1,22 @@
-# UNRELEASED
+# 2017-12-11
 
 ## Release notes
+
+Happy Birthday, foodsharing!
+
+This release brings a new landing page as well as more spelling and grammar fixes.
+
+Otherwise, it removes some non-working UI elements.
+
+Thanks to all contributors who made this release possible (in alphabetical order):
+
+* @inktrap
+* @NerdyProjects
+* @nicksellen
+* @peter.toennies
+* @thinkround
+* @TimFoe
+* @valentin.unicorn
 
 ## Breaking changes
 
