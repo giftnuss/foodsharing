@@ -55,7 +55,7 @@ class IndexView extends View
 	private function campaign($first_content)
 	{
 		return '
-		<div id="campaign" class="pure-g dickmilchbeta ">
+		<div id="campaign" class="pure-g dickmilch ">
 			<div class="topbarpadding">
 				<div id="campaigntext" class="pure-u-1 pure-u-sm-1-2">
 					<h2>Don’t&nbsp;let good&nbsp;food&nbsp;go&nbsp;bad!</h2>
@@ -105,7 +105,7 @@ class IndexView extends View
 				<div class="pure-u-1 pure-u-md-1-2">
 					<p>Was steckt hinter unserer Initiative und wie kannst Du Dich einbringen?
 					Diese und weitere Fragen beantworten wir mit diesem Video.</p>
-					<p><a class="vidlink" href="https://www.youtube-nocookie.com/embed/dqsVjuK3rTc?rel=0"><img class="corner-all" src="/img/howto.jpg" /></a></p>
+					<p><a class="vidlink" href="https://www.youtube-nocookie.com/embed/6lJtk1XE148?rel=0"><img class="corner-all" src="/img/howto.jpg" /></a></p>
 				</div>
 			</div>
 		</div>';
