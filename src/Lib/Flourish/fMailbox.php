@@ -36,9 +36,9 @@ namespace Flourish;
  */
 class fMailbox
 {
-	const addSMIMEPair = 'fMailbox::addSMIMEPair';
-	const parseMessage = 'fMailbox::parseMessage';
-	const reset = 'fMailbox::reset';
+	const addSMIMEPair = 'Flourish\\fMailbox::addSMIMEPair';
+	const parseMessage = 'Flourish\\fMailbox::parseMessage';
+	const reset = 'Flourish\\fMailbox::reset';
 
 	/**
 	 * S/MIME certificates and private keys for verification and decryption.
@@ -572,7 +572,7 @@ class fMailbox
 					$headers[$header][] = self::parseEmail($email);
 				}
 			} elseif ($header == 'references') {
-				$headers[$header] = array_map(array('fMailbox', 'decodeHeader'), preg_split('#(?<=>)\s+(?=<)#', $value));
+				$headers[$header] = array_map(array('Flourish\\fMailbox', 'decodeHeader'), preg_split('#(?<=>)\s+(?=<)#', $value));
 			} elseif ($header == 'received') {
 				if (!isset($headers[$header])) {
 					$headers[$header] = array();
