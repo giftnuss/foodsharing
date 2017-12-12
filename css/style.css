@@ -8,8 +8,10 @@
 }
 
 #campaign .topbarpadding {
-    padding: 71px 0;
+    padding: 41px 0;
     width: 100%;
+    height: 100%;
+    box-sizing: border-box;
 }
 
 #campaigntext, #campaignimg {
@@ -22,18 +24,21 @@
     font-size: 12px;
     font-size: 2.5vh;
     color: #F9F5E0;
-    text-shadow: 0 1px #555;    
+    text-shadow: 0 1px #555;
+    -webkit-text-size-adjust: none;
 }
 
 #campaigntext h2 {
     font-family: "Alfa Slab One";
     font-size: 2.7em;
     padding-top:2.7em;
+    font-weight: normal;
 }
 
 #campaigntext h4 {
     font-family: "Alfa Slab One";
     font-size: 1.3em;
+    font-weight: normal;
 }
 
 #campaigntext div img {
@@ -45,6 +50,7 @@
 #campaigntext h3 {
     font-family: "Alfa Slab One";
     font-size: 2em;
+    font-weight: normal;
 }
 
 #campaigntext h3 span {
@@ -85,10 +91,10 @@
     }
 }
 
-@media (max-width: 567px) { 
+@media (max-aspect-ratio: 9/10) { 
     #campaign {
         width: 100%;
-        height: auto;
+        height: 120vh;
         position: absolute;
         top: 0px; left: 0;
         transform: none;
@@ -105,12 +111,9 @@
         display: none;
     }
     #campaignimg {
-        width: 100vw;
+        width: 100%;
         height: 50vh;
         background-position: center;
-    }
-    .topbarpadding {
-        padding: 0;
     }
 }
 
