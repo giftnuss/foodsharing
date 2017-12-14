@@ -1,3 +1,17 @@
+# Unreleased
+
+## Release notes
+
+## Breaking changes
+
+## Features
+
+## Bugfixes
+
+## Refactoring
+
+## Dev/Test/CI stuff
+
 # 2017-12-11
 
 ## Release notes
