@@ -126,7 +126,7 @@ function handleEmail()
 				$foodsaver = $db->q('
 					SELECT 	`id`,`email`
 					FROM `' . PREFIX . 'foodsaver`
-					WHERE newsletter = 1 AND rolle = 0		
+					WHERE newsletter = 1 AND rolle = 0 AND `active` = 1 AND deleted_at IS NULL
 				');
 			} elseif ($data['recip_choose'] == 'all_no_botschafter') {
 				$foodsaver = $db->getAllFoodsaverNoBotschafter();
