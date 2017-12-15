@@ -555,24 +555,10 @@ function v_form_recip_chooser()
 			<option value="botschafter">Alle Botschafter Weltweit</option>
 			<option value="filialverantwortlich">Alle Filialverantwortlichen Weltweit</option>
 			<option value="filialbot">Alle Filialverantwortlichen + Botscahfter</option>
-			<option value="filialbez">Alle Filialverantwortlichen in Bezirken...</option>
-					<option value="all_no_botschafter">Alle Foodsaver ohne Botschafter</option>
+			<option value="all_no_botschafter">Alle Foodsaver ohne Botschafter</option>
 			<option value="orgateam">Orgateam</option>
 			<option value="bezirk" selected="selected">' . sv('recip_all_bezirk', $bezirk['name']) . '</option>
-			<option value="choose">' . s('recip_choose_bezirk') . '</option>
-			<option value="choosebot">Botschafter in bestimmten Bezirken</option>
-			<option value="after_update">nach dickem update User</option>
-			<option value="noquizfinishall">Alle Quiz noch gar nicht gemacht</option>
-			<option value="noquizfinishbot">Bot Quiz noch gar nicht gemacht</option>
-			<option value="noquizfinishfs">FS Quiz noch gar nicht gemacht</option>
-			<option value="noquizfinishbip">BIEB Quiz noch gar nicht gemacht</option>
-			<option value="quizfinishallfs">Alle Foodsaver - Quiz bestanden</option>
-			<option value="allfs14dayslogin">Alle Foodsaver - in letzten 14 Tagen eingelogged</option>
-			<option value="noquizfinishall14">Alle Quiz nicht gemacht + in letzten 14 Tagen eingeloggt</option>
-			<option value="allnotberlin">(Special) Alle Foodsaver außer Berliner</option>
-			<option value="dropquiz01">Alle gedroppted Foodsaver vom 12.01.</option>
-			
-			<option value="dropquiz01">FS/BIB/BOT letzte chance bis 19.01.</option>		
+			<option value="choose">' . s('recip_choose_bezirk') . '</option>		
 			<option value="manual">Manuelle Eingabe</option>
 		</select>
 		<div id="' . $id . '-hidden" style="display:none">
