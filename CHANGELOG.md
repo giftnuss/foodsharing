@@ -7,6 +7,8 @@
 ## Features
 
 ## Bugfixes
+- Fix missing newsletter unsubscription links for pre-2014 foodsharing.de accounts @NerdyProjects
+- Fix newsletter should only be sent to activated accounts @NerdyProjects
 
 ## Refactoring
 
