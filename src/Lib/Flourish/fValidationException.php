@@ -154,7 +154,7 @@ class fValidationException extends fExpectedException
 		}
 
 		call_user_func_array(
-			array($this, 'fException::__construct'),
+			array($this, '\\Flourish\\fException::__construct'),
 			$params
 		);
 	}

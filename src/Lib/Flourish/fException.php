@@ -143,7 +143,7 @@ abstract class fException extends Exception
 	public static function registerCallback($callback, $exception_type = null)
 	{
 		if ($exception_type === null) {
-			$exception_type = 'fException';
+			$exception_type = '\\Flourish\\fException';
 		}
 
 		if (!isset(self::$callbacks[$exception_type])) {
