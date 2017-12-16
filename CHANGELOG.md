@@ -7,6 +7,8 @@
 ## Features
 
 ## Bugfixes
+- Change impressum to match current association status @NerdyProjects
+- Remove mass mail recipient options that are ambigous/irrelevant @NerdyProjects
 - Fix missing newsletter unsubscription links for pre-2014 foodsharing.de accounts @NerdyProjects
 - Fix newsletter should only be sent to activated accounts @NerdyProjects
 
