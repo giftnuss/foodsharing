@@ -13,6 +13,7 @@
 - Fix newsletter should only be sent to activated accounts @NerdyProjects
 
 ## Refactoring
+- Remove old user registration code !246 @NerdyProjects
 
 ## Dev/Test/CI stuff
 
