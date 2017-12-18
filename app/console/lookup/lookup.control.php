@@ -31,7 +31,7 @@ class LookupControl extends ConsoleControl
 		foreach ($csv as $row) {
 			$email = $row[0];
 			$fs = $this->model->getFoodsaverByEmail($email);
-			echo $fs['id'] . ',' . $fs['last_login'] . ',' . implode(',', $row) . "\n";
+			echo $fs['id'] . ',' . $fs['last_login'] . ',' . $fs['bezirk'] . ',' . $fs['name'] . ',' . $fs['nachname'] . implode(',', $row) . "\n";
 		}
 	}
 
