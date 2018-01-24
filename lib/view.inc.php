@@ -530,8 +530,8 @@ function v_form_recip_chooser_mini()
 
 	return v_input_wrapper(s('recip_chooser'), '
 		<select class="select" name="' . $id . '" id="' . $id . '">
-			<option value="botschafter">Alle Botschafter Bundesweit</option>
-			<option value="orgateam">Orgateam Bundesweit</option>
+			<option value="botschafter">Alle Botschafter bundesweit</option>
+			<option value="orgateam">Orgateam bundesweit</option>
 			<option value="bezirk" selected="selected">' . sv('recip_all_bezirk', $bezirk['name']) . '</option>
 		</select>');
 }
@@ -548,13 +548,13 @@ function v_form_recip_chooser()
 	$out = '
 		<select class="select" name="' . $id . '" id="' . $id . '">
 			<option value="all">' . s('recip_all') . '</option>
-			<option value="newsletter">Alle Newsletter Abonnenten (mindestens Foodsaver)</option>
-			<option value="newsletter_all">Alle Newsletter Abonnenten (Foodsharer, Foodsaver, alle)</option>
+			<option value="newsletter">Alle Newsletter-Abonnenten (mindestens Foodsaver)</option>
+			<option value="newsletter_all">Alle Newsletter-Abonnenten (Foodsharer, Foodsaver, alle)</option>
 			
 			<option value="newsletter_only_foodsharer">NL Abonnenten NUR Foodsharer</option>
-			<option value="botschafter">Alle Botschafter Weltweit</option>
-			<option value="filialverantwortlich">Alle Filialverantwortlichen Weltweit</option>
-			<option value="filialbot">Alle Filialverantwortlichen + Botscahfter</option>
+			<option value="botschafter">Alle Botschafter weltweit</option>
+			<option value="filialverantwortlich">Alle Filialverantwortlichen weltweit</option>
+			<option value="filialbot">Alle Filialverantwortlichen + Botschafter</option>
 			<option value="all_no_botschafter">Alle Foodsaver ohne Botschafter</option>
 			<option value="orgateam">Orgateam</option>
 			<option value="bezirk" selected="selected">' . sv('recip_all_bezirk', $bezirk['name']) . '</option>
@@ -568,7 +568,7 @@ function v_form_recip_chooser()
 			' . v_form_textarea($id . 'manual') . '
 		</div>
 		<div id="' . $id . '-tree-wrapper" style="display:none;">
-			' . v_info('<strong>Hinweis</strong> Um untergeordnete Bezirke zu makrieren musst Du den Ordner erst öffnen! sonst, alle nicht sichtbaren Bezirke bekommen keine Mail.') . '
+			' . v_info('<strong>Hinweis</strong> Um untergeordnete Bezirke zu markieren, musst Du den Ordner erst öffnen! Sonst: Alle nicht sichtbaren Bezirke bekommen keine Mail.') . '
 			<div id="' . $id . '-tree">
 				
 			</div>
