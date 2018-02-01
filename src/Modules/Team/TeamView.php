@@ -61,7 +61,7 @@ class TeamView extends View
 
 	public function contactForm($user)
 	{
-		return v_quickform('schreibe ' . $user['name'] . ' eine E-Mail', array(
+		return v_quickform('Schreibe ' . $user['name'] . ' eine E-Mail!', array(
 			v_form_text('name'),
 			v_form_text('email'),
 			v_form_textarea('message'),
