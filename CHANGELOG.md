@@ -16,6 +16,7 @@
 ## Refactoring
 - Consolidate remaining functions and modules !269 @NerdyProjects
 - Remove old user registration code !246 @NerdyProjects
+- Remove unused fpdf font data files !253 @NerdyProjects
 
 ## Dev/Test/CI stuff
 
