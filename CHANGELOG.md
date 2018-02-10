@@ -7,6 +7,7 @@
 ## Features
 
 ## Bugfixes
+- Reduce size of static images by lossless recompression with trimage !245 @NerdyProjects
 - Change impressum to match current association status @NerdyProjects
 - Remove mass mail recipient options that are ambigous/irrelevant @NerdyProjects
 - Fix missing newsletter unsubscription links for pre-2014 foodsharing.de accounts @NerdyProjects
