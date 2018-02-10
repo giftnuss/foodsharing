@@ -11,7 +11,7 @@ class Foodsharing extends \Codeception\Module\Db
 	public function __construct($moduleContainer, $config = null)
 	{
 		parent::__construct($moduleContainer, $config);
-		$this->faker = Faker\Factory::create();
+		$this->faker = Faker\Factory::create('de_DE');
 	}
 
 	public function clear ()
@@ -46,11 +46,14 @@ class Foodsharing extends \Codeception\Module\Db
 			'nachname' => $this->faker->lastName,
 			'verified' => 0,
 			'rolle' => 0,
-			'plz' => '10178',
-			'stadt' => 'Berlin',
-			'lat' => '52.5237395',
-			'lon' => '13.3986951',
+			'plz' => $this->faker->postcode,
+			'stadt' => $this->faker->city,
+			'lat' => $this->faker->latitude,
+			'lon' => $this->faker->longitude,
 			'anmeldedatum' => $this->toDateTime(),
+			'geb_datum' => $this->faker->date($format = 'Y-m-d', $max = '-18 years'),
+			'anschrift' => $this->faker->streetName,
+			'handy' => $this->faker->phoneNumber,
 			'active' => 1,
 		], $extra_params);
 		$params['passwd'] = $this->encryptMd5($params['email'], $pass);
@@ -76,7 +79,6 @@ class Foodsharing extends \Codeception\Module\Db
 			'verified' => 1,
 			'rolle' => 1,
 			'quiz_rolle' => 1,
-			'anschrift' => $this->faker->address,
 		], $extra_params);
 		$params = $this->createFoodsharer($pass, $params);
 		$this->createQuizTry($params['id'], 1, 1);
