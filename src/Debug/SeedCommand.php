@@ -4,14 +4,13 @@ namespace Foodsharing\Debug;
 
 use Codeception\Lib\Di;
 use Codeception\Lib\ModuleContainer;
-use \Symfony\Component\Console\Command\Command;
-use \Codeception\CustomCommandInterface;
-use \Symfony\Component\Console\Input\InputInterface;
-use \Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Command\Command;
+use Codeception\CustomCommandInterface;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class SeedCommand extends Command implements CustomCommandInterface
 {
-
 	use \Codeception\Command\Shared\FileSystem;
 	use \Codeception\Command\Shared\Config;
 
@@ -21,18 +20,18 @@ class SeedCommand extends Command implements CustomCommandInterface
 	protected $helper;
 
 	/**
-	 * returns the name of the command
+	 * returns the name of the command.
 	 *
 	 * @return string
 	 */
 	public static function getCommandName()
 	{
-		return "foodsharing:seed";
+		return 'foodsharing:seed';
 	}
 
 	public function getDescription()
 	{
-		return "seed the dev db";
+		return 'seed the dev db';
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output)

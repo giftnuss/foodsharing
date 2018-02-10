@@ -1,6 +1,7 @@
 <?php
 
 namespace Helper;
+
 use DateTime;
 use Faker;
 
@@ -14,7 +15,7 @@ class Foodsharing extends \Codeception\Module\Db
 		$this->faker = Faker\Factory::create('de_DE');
 	}
 
-	public function clear ()
+	public function clear()
 	{
 		$this->driver->executeQuery('
 			DELETE FROM fs_foodsaver;
@@ -26,6 +27,7 @@ class Foodsharing extends \Codeception\Module\Db
 			DELETE FROM fs_abholer;
 		', []);
 	}
+
 	/**
 	 * Insert a new foodsharer into the database.
 	 *
@@ -131,8 +133,6 @@ class Foodsharing extends \Codeception\Module\Db
 	 *
 	 * @return array
 	 */
-
-
 	public function createStore($bezirk_id, $extra_params = [])
 	{
 		$params = array_merge([
@@ -164,8 +164,8 @@ class Foodsharing extends \Codeception\Module\Db
 
 			// relations
 			'bezirk_id' => $bezirk_id,
-			'team_conversation_id' => NULL,
-			'springer_conversation_id' => NULL,
+			'team_conversation_id' => null,
+			'springer_conversation_id' => null,
 			'kette_id' => 0,
 			'betrieb_kategorie_id' => 0,
 		], $extra_params);
@@ -299,11 +299,11 @@ class Foodsharing extends \Codeception\Module\Db
 		$params = array_merge([
 			'locked' => 1,
 			'name' => 'betrieb_bla',
-			'start' => NULL,
-			'last' => NULL,
-			'last_foodsaver_id' => NULL,
-			'start_foodsaver_id' => NULL,
-			'last_message_id' => NULL,
+			'start' => null,
+			'last' => null,
+			'last_foodsaver_id' => null,
+			'start_foodsaver_id' => null,
+			'last_message_id' => null,
 			'last_message' => '',
 			'member' => '',
 		], $extra_params);
