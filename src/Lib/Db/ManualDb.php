@@ -1475,10 +1475,10 @@ class ManualDb extends Db
             WHERE foodsaver_id = ' . (int)$id . '
 		');
 
-		// remove bananas
+		// remove bananas given by this user
 		$this->del('
             DELETE FROM ' . PREFIX . 'rating
-            WHERE foodsaver_id = ' . (int)$id . '
+            WHERE rater_id = ' . (int)$id . '
 		');
 
 		$this->update('UPDATE ' . PREFIX . 'foodsaver SET verified = 0,
