@@ -11,7 +11,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class SeedCommand extends Command implements CustomCommandInterface
 {
-	use \Codeception\Command\Shared\FileSystem;
 	use \Codeception\Command\Shared\Config;
 
 	/**
