@@ -12,6 +12,8 @@ settings:
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
+    commands:
+        - Foodsharing\Debug\SeedCommand
 coverage:
   enabled: true
   remote: false

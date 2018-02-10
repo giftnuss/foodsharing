@@ -1,11 +1,31 @@
 <?php
 
 namespace Helper;
-
 use DateTime;
+use Faker;
 
 class Foodsharing extends \Codeception\Module\Db
 {
+	public $faker;
+
+	public function __construct($moduleContainer, $config = null)
+	{
+		parent::__construct($moduleContainer, $config);
+		$this->faker = Faker\Factory::create();
+	}
+
+	public function clear ()
+	{
+		$this->driver->executeQuery('
+			DELETE FROM fs_foodsaver;
+			DELETE FROM fs_foodsaver_has_bezirk;
+			DELETE FROM fs_foodsaver_has_conversation;
+			DELETE FROM fs_conversation;
+			DELETE FROM fs_betrieb_team;
+			DELETE FROM fs_betrieb;
+			DELETE FROM fs_abholer;
+		', []);
+	}
 	/**
 	 * Insert a new foodsharer into the database.
 	 *
@@ -16,25 +36,24 @@ class Foodsharing extends \Codeception\Module\Db
 	 */
 	public function createFoodsharer($pass = null, $extra_params = [])
 	{
-		$email = sq() . '@test.com';
 		if (!isset($pass)) {
 			$pass = 'password';
 		}
 		$params = array_merge([
-			'email' => $email,
+			'email' => $this->faker->email,
 			'bezirk_id' => 0,
-			'name' => sq(),
-			'nachname' => sq(),
+			'name' => $this->faker->firstName,
+			'nachname' => $this->faker->lastName,
 			'verified' => 0,
 			'rolle' => 0,
 			'plz' => '10178',
 			'stadt' => 'Berlin',
 			'lat' => '52.5237395',
 			'lon' => '13.3986951',
-			'passwd' => $this->encryptMd5($email, $pass),
 			'anmeldedatum' => $this->toDateTime(),
 			'active' => 1,
 		], $extra_params);
+		$params['passwd'] = $this->encryptMd5($params['email'], $pass);
 		$id = $this->haveInDatabase('fs_foodsaver', $params);
 		$params['id'] = $id;
 
@@ -57,7 +76,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'verified' => 1,
 			'rolle' => 1,
 			'quiz_rolle' => 1,
-			'anschrift' => sq(),
+			'anschrift' => $this->faker->address,
 		], $extra_params);
 		$params = $this->createFoodsharer($pass, $params);
 		$this->createQuizTry($params['id'], 1, 1);
@@ -95,7 +114,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'rolle' => ($is_admin ? 5 : 4),
 			'orgateam' => 1,
 			'admin' => ($is_admin ? 1 : 0),
-		]);
+		], $extra_params);
 
 		$params = $this->createAmbassador($pass, $params);
 
@@ -110,13 +129,43 @@ class Foodsharing extends \Codeception\Module\Db
 	 *
 	 * @return array
 	 */
+
+
 	public function createStore($bezirk_id, $extra_params = [])
 	{
 		$params = array_merge([
 			'betrieb_status_id' => 1,
-			'bezirk_id' => $bezirk_id,
-			'name' => 'betrieb_' . sq(),
 			'status' => 1, // same as betrieb_status_id
+			'added' => '2017-01-03',
+			'plz' => '',
+			'stadt' => '',
+			'str' => '',
+			'hsnr' => '',
+			'lat' => '',
+			'lon' => '',
+			'name' => 'betrieb_' . $this->faker->name,
+			'status_date' => '2017-01-03',
+			'ansprechpartner' => '',
+			'telefon' => '',
+			'fax' => '',
+			'email' => '',
+			'begin' => '0000-00-00',
+			'besonderheiten' => '',
+			'public_info' => '',
+			'public_time' => 0,
+			'ueberzeugungsarbeit' => 0,
+			'presse' => 0,
+			'sticker' => 0,
+			'abholmenge' => 0,
+			'team_status' => 1,
+			'prefetchtime' => 1209600,
+
+			// relations
+			'bezirk_id' => $bezirk_id,
+			'team_conversation_id' => NULL,
+			'springer_conversation_id' => NULL,
+			'kette_id' => 0,
+			'betrieb_kategorie_id' => 0,
 		], $extra_params);
 		$params['id'] = $this->haveInDatabase('fs_betrieb', $params);
 
@@ -143,6 +192,20 @@ class Foodsharing extends \Codeception\Module\Db
 			];
 			$this->haveInDatabase('fs_betrieb_team', $v);
 		}
+	}
+
+	public function addCollector($user, $store, $date, $extra_params = [])
+	{
+		$params = array_merge([
+			'foodsaver_id' => $user,
+			'betrieb_id' => $store,
+			'date' => $date,
+			'confirmed' => 1
+		], $extra_params);
+		$id = $this->haveInDatabase('fs_abholer', $params);
+		$params['id'] = $id;
+
+		return $params;
 	}
 
 	public function createWorkingGroup($name, $extra_params = [])
@@ -228,6 +291,43 @@ class Foodsharing extends \Codeception\Module\Db
 		$v['id'] = $this->haveInDatabase('fs_theme_post', $v);
 		$this->updateForumThemeWithPost($theme_id, $v);
 	}
+
+	public function createConversation($extra_params = [])
+	{
+		$params = array_merge([
+			'locked' => 1,
+			'name' => 'betrieb_bla',
+			'start' => NULL,
+			'last' => NULL,
+			'last_foodsaver_id' => NULL,
+			'start_foodsaver_id' => NULL,
+			'last_message_id' => NULL,
+			'last_message' => '',
+			'member' => '',
+		], $extra_params);
+		$id = $this->haveInDatabase('fs_conversation', $params);
+		$params['id'] = $id;
+
+		return $params;
+	}
+
+	public function addUserToConversation($user, $conversation, $extra_params = [])
+	{
+		$params = array_merge([
+			'foodsaver_id' => $user,
+			'conversation_id' => $conversation,
+			'unread' => 0,
+		], $extra_params);
+
+		$id = $this->haveInDatabase('fs_foodsaver_has_conversation', $params);
+		$params['id'] = $id;
+
+		return $params;
+	}
+
+	// =================================================================================================================
+	// private methods
+	// =================================================================================================================
 
 	private function updateForumThemeWithPost($theme_id, $post)
 	{
