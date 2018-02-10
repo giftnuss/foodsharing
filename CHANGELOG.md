@@ -100,6 +100,14 @@ Many many thanks to all the contributors that made this possible (in order of ap
 * @peter.toennies
 * @raphaelw
 * @tiltec
+@valentin.unicorn
+@nicksellen
+@NerdyProjects
+@k.miklobusec
+@peter.toennies
+@raphaelw
+@tiltec
+@alangecker
 
 ## Breaking changes
 
@@ -124,6 +132,7 @@ Many many thanks to all the contributors that made this possible (in order of ap
 - Alphabetical order in the orga-menu !160 @peter.toennies
 - Aproximate time of pickup stays in shop settings !161 @peter.toennies
 - Fixed spelling in footer of automatic emails !174 @peter.toennies
+- Remove bananas when a user gets deleted
 
 ## Refactoring
 
