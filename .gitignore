@@ -26,3 +26,4 @@ revision.inc.php
 migrations/_*
 .vagrant
 .DS_Store
+.vscode
