@@ -1473,7 +1473,13 @@ class ManualDb extends Db
 		$this->del('
             DELETE FROM ' . PREFIX . 'theme_follower
             WHERE foodsaver_id = ' . (int)$id . '
-        ');
+		');
+
+		// remove bananas
+		$this->del('
+            DELETE FROM ' . PREFIX . 'rating
+            WHERE foodsaver_id = ' . (int)$id . '
+		');
 
 		$this->update('UPDATE ' . PREFIX . 'foodsaver SET verified = 0,
 			rolle = 0,
