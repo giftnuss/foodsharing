@@ -8,6 +8,15 @@ class View
 {
 	private $sub;
 
+	/* @var \Foodsharing\Lib\View\Utils */
+	protected $v_utils;
+
+	public function __construct()
+	{
+		global $g_view_utils;
+		$this->v_utils = $g_view_utils;
+	}
+
 	public function setSub($sub)
 	{
 		$this->sub = $sub;
@@ -41,11 +50,11 @@ class View
 			');
 
 		return '
-			<div id="g_login">' . v_field(
-				v_form('Login', array(
-					v_form_text('email_adress', array('label' => false, 'placeholder' => s('email_adress'))),
-					v_form_passwd('password', array('label' => false, 'placeholder' => s('password'))),
-					v_form_hidden('ismob', '0') .
+			<div id="g_login">' . $this->v_utils->v_field(
+				$this->v_utils->v_form('Login', array(
+					$this->v_utils->v_form_text('email_adress', array('label' => false, 'placeholder' => s('email_adress'))),
+					$this->v_utils->v_form_passwd('password', array('label' => false, 'placeholder' => s('password'))),
+					$this->v_utils->v_form_hidden('ismob', '0') .
 					'<p>
 									<a href="/?page=login&sub=passwordReset">Passwort vergessen?</a>
 								</p>
@@ -97,7 +106,7 @@ class View
 
 	public function locationMumble()
 	{
-		$out = v_field('
+		$out = $this->v_utils->v_field('
 		<p>Online-Termin</p>
 		<p style="text-align:center;">
 			<a target="_blank" href="http://wiki.lebensmittelretten.de/Mumble"><img src="img/mlogo.png" alt="Mumble" /></a>
@@ -114,7 +123,7 @@ class View
 
 	public function location($location)
 	{
-		$out = v_field('
+		$out = $this->v_utils->v_field('
 		<p>' . $location['name'] . '</p>
 		<p>
 			' . $location['street'] . '<br />
@@ -234,7 +243,7 @@ class View
 		</div>';
 
 		if ($option['scroller']) {
-			$out = v_scroller($out, $height);
+			$out = $this->v_utils->v_scroller($out, $height);
 			addStyle('.scroller .overview{left:0;}.scroller{margin:0}');
 		}
 
@@ -367,7 +376,7 @@ class View
 
 		$input = '<input type="text" name="' . $id . '[]" value="" class="tag input text value" />';
 
-		return v_input_wrapper(s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
+		return $this->v_utils->v_input_wrapper(s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
 	}
 
 	public function latLonPicker($id, $options = array())
@@ -433,25 +442,25 @@ class View
 			$("#lat-wrapper,#lon-wrapper").hide();
 		');
 
-		$hsnr = v_form_text('anschrift', array('disabled' => '1', 'required' => '1'));
+		$hsnr = $this->v_utils->v_form_text('anschrift', array('disabled' => '1', 'required' => '1'));
 		if (isset($options['hsnr'])) {
-			$hsnr = v_form_text('str', array('required' => '1')) . v_form_text('hsnr');
+			$hsnr = $this->v_utils->v_form_text('str', array('required' => '1')) . $this->v_utils->v_form_text('hsnr');
 		}
 
-		return v_input_wrapper(s('position_search'), '
+		return $this->v_utils->v_input_wrapper(s('position_search'), '
 		<input placeholder="Straße, Ort..." type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
 		<div id="map" class="pickermap"></div>') .
 			$hsnr .
-			v_form_text('plz', array('disabled' => '1', 'required' => '1')) .
-			v_form_text('ort', array('disabled' => '1', 'required' => '1')) .
-			v_form_text('lat') .
-			v_form_text('lon') .
+			$this->v_utils->v_form_text('plz', array('disabled' => '1', 'required' => '1')) .
+			$this->v_utils->v_form_text('ort', array('disabled' => '1', 'required' => '1')) .
+			$this->v_utils->v_form_text('lat') .
+			$this->v_utils->v_form_text('lon') .
 			'';
 	}
 
 	public function simpleContent($content)
 	{
-		$out = v_field($content['body'], $content['title'], array('class' => 'ui-padding'));
+		$out = $this->v_utils->v_field($content['body'], $content['title'], array('class' => 'ui-padding'));
 
 		return $out;
 	}

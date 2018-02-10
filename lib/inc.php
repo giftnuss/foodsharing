@@ -6,7 +6,7 @@ use Foodsharing\Lib\Session\S;
 
 require_once 'config.inc.php';
 require_once 'lib/func.inc.php';
-
+global $g_view_utils;
 S::init();
 if (isset($g_page_cache)) {
 	$cache = new Caching($g_page_cache);
@@ -14,7 +14,6 @@ if (isset($g_page_cache)) {
 }
 
 require_once 'lang/DE/de.php';
-require_once 'lib/view.inc.php';
 require_once 'lib/minify/JSMin.php';
 
 error_reporting(E_ALL);
@@ -77,7 +76,7 @@ addHidden('<div id="' . id('fancy') . '"></div>');
 addHidden('<div id="u-profile"></div>');
 addHidden('<ul id="hidden-info"></ul>');
 addHidden('<ul id="hidden-error"></ul>');
-addHidden('<div id="comment">' . v_form_textarea('Kommentar') . '<input type="hidden" id="comment-id" name="comment-id" value="0" /><input type="hidden" id="comment-name" name="comment-name" value="0" /></div>');
+addHidden('<div id="comment">' . $g_view_utils->v_form_textarea('Kommentar') . '<input type="hidden" id="comment-id" name="comment-id" value="0" /><input type="hidden" id="comment-name" name="comment-name" value="0" /></div>');
 addHidden('<div id="dialog-confirm" title="Wirklich l&ouml;schen?"><p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><span id="dialog-confirm-msg"></span><input type="hidden" value="" id="dialog-confirm-url" /></p></div>');
 addHidden('<div id="uploadPhoto"><form method="post" enctype="multipart/form-data" target="upload" action="xhr.php?f=addPhoto"><input type="file" name="photo" onchange="uploadPhoto();" /> <input type="hidden" id="uploadPhoto-fs_id" name="fs_id" value="" /></form><div id="uploadPhoto-preview"></div><iframe name="upload" width="1" height="1" src=""></iframe></div>');
 //addHidden('<audio id="xhr-chat-notify"><source src="img/notify.ogg" type="audio/ogg"><source src="img/notify.mp3" type="audio/mpeg"><source src="img/notify.wav" type="audio/wav"></audio>');
@@ -135,7 +134,7 @@ addJs('
 		]
 	}).siblings(".ui-dialog-titlebar").remove();
 ');
-addHidden('<div id="fs-profile-rate-comment">' . v_form_textarea('fs-profile-rate-msg', array('desc' => '...')) . '</div>');
+addHidden('<div id="fs-profile-rate-comment">' . $g_view_utils->v_form_textarea('fs-profile-rate-msg', array('desc' => '...')) . '</div>');
 
 if (!S::may()) {
 	addJs('clearInterval(g_interval_newBasket);');

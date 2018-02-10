@@ -27,10 +27,9 @@ use Foodsharing\Lib\Session\S;
 require __DIR__ . '/includes/setup.php';
 
 require_once 'lib/inc.php';
+global $g_view_utils;
 addCss('/css/gen/style.css?v=' . VERSION);
 addScript('/js/gen/script.js?v=' . VERSION);
-
-//importUsers();
 
 getCurrent();
 $menu = getMenu();
@@ -50,10 +49,10 @@ if (isset($_POST['form_submit'])) {
 $msgbar = '';
 $logolink = '/';
 if (S::may()) {
-	$msgbar = v_msgBar();
+	$msgbar = $g_view_utils->v_msgBar();
 	$logolink = '/?page=dashboard';
 } else {
-	$msgbar = v_login();
+	$msgbar = $g_view_utils->v_login();
 }
 
 if (DebugBar::isEnabled()) {

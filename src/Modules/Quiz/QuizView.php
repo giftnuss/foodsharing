@@ -222,11 +222,11 @@ class QuizView extends View
 
 	public function quizForm()
 	{
-		return v_quickform('Neues Quiz', array(
-			v_form_text('name'),
-			v_form_tinymce('desc'),
-			v_form_text('maxfp'),
-			v_form_text('questcount')
+		return $this->v_utils->v_quickform('Neues Quiz', array(
+			$this->v_utils->v_form_text('name'),
+			$this->v_utils->v_form_tinymce('desc'),
+			$this->v_utils->v_form_text('maxfp'),
+			$this->v_utils->v_form_text('questcount')
 		));
 	}
 

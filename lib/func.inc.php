@@ -616,7 +616,8 @@ function getBetriebeMenu()
 	$id = id('becomeBezirkChooser');
 
 	$swap_msg = 'Welcher Bezirk soll neu angelegt werden?';
-	$swap = v_swapText($id . '-neu', $swap_msg);
+	global $g_view_utils;
+	$swap = $g_view_utils->v_swapText($id . '-neu', $swap_msg);
 
 	addHidden('
 		<div id="becomeBezirk">
@@ -626,7 +627,7 @@ function getBetriebeMenu()
 					Es besteht auch die Möglichkeit, einen neuen Bezirk zu gründen. Wähle bitte dennoch den entsprechenden übergeordneten Bezirk (Land, Bundeslan, Stadt etc.) aus!
 				</p>
 				<div style="height:260px;">
-					' . v_bezirkChildChooser($id) . '
+					' . $g_view_utils->v_bezirkChildChooser($id) . '
 					<span id="' . $id . '-btna">Gesuchter Bezirk ist nicht dabei</span>
 					<div class="middle" id="' . $id . '-notAvail">
 						<h3>Deine Stadt oder Region ist nicht dabei?</h3>
@@ -1471,7 +1472,6 @@ function getMessages()
 	$_SESSION['msg']['info'] = array();
 	$_SESSION['msg']['success'] = array();
 	$_SESSION['msg']['error'] = array();
-	//return v_getMessages($g_error,$g_info);
 }
 
 function save($txt)
