@@ -8,6 +8,7 @@ use Faker;
 class Foodsharing extends \Codeception\Module\Db
 {
 	public $faker;
+	private $email_counter = 1;
 
 	public function __construct($moduleContainer, $config = null)
 	{
@@ -25,6 +26,11 @@ class Foodsharing extends \Codeception\Module\Db
 			DELETE FROM fs_betrieb_team;
 			DELETE FROM fs_betrieb;
 			DELETE FROM fs_abholer;
+			DELETE FROM fs_botschafter;
+			DELETE FROM fs_theme_post;
+			DELETE FROM fs_bezirk_has_theme;
+			DELETE FROM fs_theme;
+			DELETE FROM fs_betrieb_notiz;
 		', []);
 	}
 
@@ -42,7 +48,7 @@ class Foodsharing extends \Codeception\Module\Db
 			$pass = 'password';
 		}
 		$params = array_merge([
-			'email' => $this->faker->email,
+			'email' => ($this->email_counter++) . '.' . $this->faker->email,
 			'bezirk_id' => 0,
 			'name' => $this->faker->firstName,
 			'nachname' => $this->faker->lastName,
@@ -56,6 +62,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'geb_datum' => $this->faker->date($format = 'Y-m-d', $max = '-18 years'),
 			'anschrift' => $this->faker->streetName,
 			'handy' => $this->faker->phoneNumber,
+			'photo_public' => 1,
 			'active' => 1,
 		], $extra_params);
 		$params['passwd'] = $this->encryptMd5($params['email'], $pass);
@@ -201,10 +208,26 @@ class Foodsharing extends \Codeception\Module\Db
 		$params = array_merge([
 			'foodsaver_id' => $user,
 			'betrieb_id' => $store,
-			'date' => $date,
+			'date' => $this->toDateTime($date),
 			'confirmed' => 1
 		], $extra_params);
 		$id = $this->haveInDatabase('fs_abholer', $params);
+		$params['id'] = $id;
+
+		return $params;
+	}
+
+	public function addStoreNotiz($user, $store, $text, $date, $extra_params = [])
+	{
+		$params = array_merge([
+			'foodsaver_id' => $user,
+			'betrieb_id' => $store,
+			'milestone' => 0,
+			'text' => $text,
+			'zeit' => $this->toDateTime($date),
+			'last' => 0, // should be 1 for newest entry
+			], $extra_params);
+		$id = $this->haveInDatabase('fs_betrieb_notiz', $params);
 		$params['id'] = $id;
 
 		return $params;
@@ -351,7 +374,11 @@ class Foodsharing extends \Codeception\Module\Db
 
 	private function toDateTime($date = null)
 	{
-		$dt = new DateTime($date);
+		if ($date instanceof DateTime) {
+			$dt = $date;
+		} else {
+			$dt = new DateTime($date);
+		}
 
 		return $dt->format('Y-m-d H:i:s');
 	}
