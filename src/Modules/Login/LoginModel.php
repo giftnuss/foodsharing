@@ -88,7 +88,7 @@ class LoginModel extends Model
 			if ($fsid = $this->qOne('SELECT `foodsaver_id` FROM `' . PREFIX . 'pass_request` WHERE `name` = ' . $this->strval($data['k']))) {
 				$this->del('DELETE FROM `' . PREFIX . 'pass_request` WHERE `foodsaver_id` = ' . $this->intval($fsid));
 
-				return $this->update('UPDATE `' . PREFIX . 'foodsaver` SET `password` = ' . $this->strval($this->password_hash($data['pass1'])) . ' WHERE `id` = ' . $this->intval($fsid));
+				return $this->update('UPDATE `' . PREFIX . 'foodsaver` SET `password` = ' . $this->strval($this->password_hash($data['pass1'])) . ',`passwd`=NULL,`fs_password`=NULL WHERE `id` = ' . $this->intval($fsid));
 			}
 		}
 
