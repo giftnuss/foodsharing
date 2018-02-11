@@ -1,3 +1,4 @@
 <?php
 
-loadApp('Logout');
+global $g_func;
+$g_func->loadApp('Logout');

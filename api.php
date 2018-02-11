@@ -5,7 +5,6 @@ use Foodsharing\Lib\Db\ManualDb;
 require __DIR__ . '/includes/setup.php';
 
 require_once 'config.inc.php';
-require_once 'lib/func.inc.php';
 
 require_once 'lang/DE/de.php';
 

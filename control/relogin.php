@@ -1,3 +1,4 @@
 <?php
 
-loadApp('Relogin');
+global $g_func;
+$g_func->loadApp('Relogin');

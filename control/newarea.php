@@ -1,3 +1,4 @@
 <?php
 
-loadApp('NewArea');
+global $g_func;
+$g_func->loadApp('NewArea');

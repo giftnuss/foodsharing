@@ -10,11 +10,14 @@ class View
 
 	/* @var \Foodsharing\Lib\View\Utils */
 	protected $v_utils;
+	protected $func;
 
 	public function __construct()
 	{
 		global $g_view_utils;
 		$this->v_utils = $g_view_utils;
+		global $g_func;
+		$this->func = $g_func;
 	}
 
 	public function setSub($sub)
@@ -31,7 +34,7 @@ class View
 			$action = '/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']);
 		}
 
-		addJs('
+		$this->func->addJs('
 				storage.reset();
 				if(isMob())
 				{
@@ -174,7 +177,7 @@ class View
 				--$i;
 				$out .= '
 				<li>
-					<a title="' . $fs['name'] . '" style="background-image:url(' . img($fs['photo']) . ');" href="#" onclick="profile(' . (int)$fs['id'] . ');return false;"><span></span></a>	
+					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->func->img($fs['photo']) . ');" href="#" onclick="profile(' . (int)$fs['id'] . ');return false;"><span></span></a>	
 				</li>';
 				if ($i <= 0) {
 					$out .= '<li class="row">...und ' . (count($foodsaver) - 52) . ' weitere</li>';
@@ -199,7 +202,7 @@ class View
 			$option['scroller'] = true;
 		}
 
-		$id = id('team');
+		$id = $this->func->id('team');
 		if (isset($option['id'])) {
 			$id = $option['id'];
 		}
@@ -218,7 +221,7 @@ class View
 		foreach ($foodsaver as $fs) {
 			$jssaver[] = (int)$fs['id'];
 
-			$photo = avatar($fs);
+			$photo = $this->func->avatar($fs);
 
 			$click = ' onclick="profile(' . (int)$fs['id'] . ');return false;"';
 
@@ -244,7 +247,7 @@ class View
 
 		if ($option['scroller']) {
 			$out = $this->v_utils->v_scroller($out, $height);
-			addStyle('.scroller .overview{left:0;}.scroller{margin:0}');
+			$this->func->addStyle('.scroller .overview{left:0;}.scroller{margin:0}');
 		}
 
 		return $out;
@@ -262,7 +265,7 @@ class View
 			$active = $option['active'];
 		}
 
-		$id = id('vmenu');
+		$id = $this->func->id('vmenu');
 
 		$out = '';
 
@@ -307,7 +310,7 @@ class View
 
 	public function peopleChooser($id, $option = array())
 	{
-		addJs('
+		$this->func->addJs('
 			var date = new Date(); 
 			tstring = ""+date.getYear() + ""+date.getMonth() + ""+date.getDate() + ""+date.getHours();
 			var localsource = [];
@@ -381,7 +384,7 @@ class View
 
 	public function latLonPicker($id, $options = array())
 	{
-		addHead('<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=' . GOOGLE_API_KEY . '"></script>');
+		$this->func->addHead('<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=' . GOOGLE_API_KEY . '"></script>');
 
 		global $g_data;
 		if (isset($g_data['lat']) && isset($g_data['lon']) && !empty($g_data['lat']) && !empty($g_data['lon'])) {
@@ -392,7 +395,7 @@ class View
 			);
 		} else {
 			global $db;
-			$data = $db->getValues(array('lat', 'lon'), 'foodsaver', fsId());
+			$data = $db->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
 			$data['zoom'] = 14;
 		}
 
@@ -403,7 +406,7 @@ class View
 			$data['zoom'] = 5;
 		}
 
-		addJs('
+		$this->func->addJs('
 			
 			var addressPicker = new AddressPicker({
 				map: {

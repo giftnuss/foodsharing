@@ -1,3 +1,4 @@
 <?php
 
-loadApp('Event');
+global $g_func;
+$g_func->loadApp('Event');

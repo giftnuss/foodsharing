@@ -81,129 +81,128 @@ class ConsoleControl
 			$email->send();
 		}
 	}
-}
 
-function validEmail($email)
-{
-	if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-		return true;
-	} else {
+	public function validEmail($email)
+	{
+		if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function s($id)
+	{
+		global $g_lang;
+
+		if (isset($g_lang[$id])) {
+			return $g_lang[$id];
+		} else {
+			return $id;
+		}
+	}
+
+	public function rolleWrapInt($roleInt)
+	{
+		$roles = array(
+			0 => 'user',
+			1 => 'fs',
+			2 => 'bieb',
+			3 => 'bot',
+			4 => 'orga',
+			5 => 'admin'
+		);
+
+		return $roles[$roleInt];
+	}
+
+	public function rolleWrap($roleStr)
+	{
+		$roles = array(
+			'user' => 0,
+			'fs' => 1,
+			'bieb' => 2,
+			'bot' => 3,
+			'orga' => 4,
+			'admin' => 5
+		);
+
+		return $roles[$roleStr];
+	}
+
+	public function loadApp($app)
+	{
+		$app = strtolower($app);
+
+		if (file_exists(ROOT_DIR . 'app/console/' . $app . '/' . $app . '.control.php') && file_exists(ROOT_DIR . 'app/console/' . $app . '/' . $app . '.model.php')) {
+			require_once ROOT_DIR . 'app/console/' . $app . '/' . $app . '.control.php';
+			require_once ROOT_DIR . 'app/console/' . $app . '/' . $app . '.model.php';
+
+			$mod = ucfirst($app) . 'Control';
+
+			return new $mod();
+		}
+
 		return false;
 	}
-}
 
-function s($id)
-{
-	global $g_lang;
-
-	if (isset($g_lang[$id])) {
-		return $g_lang[$id];
-	} else {
-		return $id;
-	}
-}
-
-function rolleWrapInt($roleInt)
-{
-	$roles = array(
-		0 => 'user',
-		1 => 'fs',
-		2 => 'bieb',
-		3 => 'bot',
-		4 => 'orga',
-		5 => 'admin'
-	);
-
-	return $roles[$roleInt];
-}
-
-function rolleWrap($roleStr)
-{
-	$roles = array(
-		'user' => 0,
-		'fs' => 1,
-		'bieb' => 2,
-		'bot' => 3,
-		'orga' => 4,
-		'admin' => 5
-	);
-
-	return $roles[$roleStr];
-}
-
-function loadApp($app)
-{
-	$app = strtolower($app);
-
-	if (file_exists(ROOT_DIR . 'app/console/' . $app . '/' . $app . '.control.php') && file_exists(ROOT_DIR . 'app/console/' . $app . '/' . $app . '.model.php')) {
-		require_once ROOT_DIR . 'app/console/' . $app . '/' . $app . '.control.php';
-		require_once ROOT_DIR . 'app/console/' . $app . '/' . $app . '.model.php';
-
-		$mod = ucfirst($app) . 'Control';
-
-		return new $mod();
+	public function error($msg)
+	{
+		if (QUIET) {
+			return false;
+		}
+		echo "\033[31m" . cliTime() . " [ERROR]\t" . $msg . " \033[0m\n";
 	}
 
-	return false;
-}
-
-function error($msg)
-{
-	if (QUIET) {
-		return false;
+	public function info($msg)
+	{
+		if (QUIET) {
+			return false;
+		}
+		//echo "\033[37m[INFO]\t" . $msg." \033[0m\n";
+		echo '' . cliTime() . " [INFO]\t" . $msg . "\n";
 	}
-	echo "\033[31m" . cliTime() . " [ERROR]\t" . $msg . " \033[0m\n";
-}
 
-function info($msg)
-{
-	if (QUIET) {
-		return false;
+	public function success($msg)
+	{
+		if (QUIET) {
+			return false;
+		}
+		echo "\033[32m" . cliTime() . " [INFO]\t" . $msg . " \033[0m\n";
 	}
-	//echo "\033[37m[INFO]\t" . $msg." \033[0m\n";
-	echo '' . cliTime() . " [INFO]\t" . $msg . "\n";
-}
 
-function success($msg)
-{
-	if (QUIET) {
-		return false;
+	public function cliTime()
+	{
+		return date('Y-m-d H:i:s');
 	}
-	echo "\033[32m" . cliTime() . " [INFO]\t" . $msg . " \033[0m\n";
-}
 
-function cliTime()
-{
-	return date('Y-m-d H:i:s');
-}
-
-function qs($str)
-{
-	return $str;
-}
-
-function autolink($str, $attributes = array())
-{
-	$attributes['target'] = '_blank';
-	$attrs = '';
-	foreach ($attributes as $attribute => $value) {
-		$attrs .= " {$attribute}=\"{$value}\"";
+	public function qs($str)
+	{
+		return $str;
 	}
-	$str = ' ' . $str;
-	$str = preg_replace(
-		'`([^"=\'>])(((http|https|ftp)://|www.)[^\s<]+[^\s<\.)])`i',
-		'$1<a href="$2"' . $attrs . '>$2</a>',
-		$str
-	);
-	$str = substr($str, 1);
-	$str = preg_replace('`href=\"www`', 'href="http://www', $str);
-	// fügt http:// hinzu, wenn nicht vorhanden
-	return $str;
-}
 
-function emailBodyTpl($message, $email = false, $token = false)
-{
-	$unsubscribe = '
+	public function autolink($str, $attributes = array())
+	{
+		$attributes['target'] = '_blank';
+		$attrs = '';
+		foreach ($attributes as $attribute => $value) {
+			$attrs .= " {$attribute}=\"{$value}\"";
+		}
+		$str = ' ' . $str;
+		$str = preg_replace(
+			'`([^"=\'>])(((http|https|ftp)://|www.)[^\s<]+[^\s<\.)])`i',
+			'$1<a href="$2"' . $attrs . '>$2</a>',
+			$str
+		);
+		$str = substr($str, 1);
+		$str = preg_replace('`href=\"www`', 'href="http://www', $str);
+		// fügt http:// hinzu, wenn nicht vorhanden
+		return $str;
+	}
+
+	public function emailBodyTpl($message, $email = false, $token = false)
+	{
+		$unsubscribe = '
 	<tr>
 		<td height="20" valign="top" style="background-color:#FAF7E5">
 			<div style="text-align:center;padding-top:10px;font-size:11px;font-family:Arial;padding:15px;color:#594129;">
@@ -212,8 +211,8 @@ function emailBodyTpl($message, $email = false, $token = false)
 		</td>
 	</tr>';
 
-	if ($email !== false && $token !== false) {
-		$unsubscribe = '
+		if ($email !== false && $token !== false) {
+			$unsubscribe = '
 		<tr>
 			<td height="20" valign="top" style="background-color:#FAF7E5">
 				<div style="text-align:center;padding-top:10px;font-size:11px;font-family:Arial;padding:15px;color:#594129;">
@@ -221,14 +220,14 @@ function emailBodyTpl($message, $email = false, $token = false)
 				</div>
 			</td>
 		</tr>';
-	}
+		}
 
-	$message = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $message);
+		$message = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $message);
 
-	$search = array('<a', '<td', '<li');
-	$replace = array('<a style="color:#F36933"', '<td style="font-size:13px;font-family:Arial;color:#31210C;"', '<li style="margin-bottom:11px"');
+		$search = array('<a', '<td', '<li');
+		$replace = array('<a style="color:#F36933"', '<td style="font-size:13px;font-family:Arial;color:#31210C;"', '<li style="margin-bottom:11px"');
 
-	return '<html><head><style type="text/css">a{text-decoration:none;}a:hover{text-decoration:underline;}a.button{display:inline-block;padding:6px 16px;border:1px solid #FFFFFF;background-color:#4A3520;color:#FFFFFF !important;font-weight:bold;border-radius:8px;}a.button:hover{border:1px solid #4A3520;background-color:#ffffff;color:#4A3520 !important;text-decoration:none !important;}.border{padding:10px;border-top:1px solid #4A3520;border-bottom:1px solid #4A3520;background-color:#FFFFFF;}</style></head>
+		return '<html><head><style type="text/css">a{text-decoration:none;}a:hover{text-decoration:underline;}a.button{display:inline-block;padding:6px 16px;border:1px solid #FFFFFF;background-color:#4A3520;color:#FFFFFF !important;font-weight:bold;border-radius:8px;}a.button:hover{border:1px solid #4A3520;background-color:#ffffff;color:#4A3520 !important;text-decoration:none !important;}.border{padding:10px;border-top:1px solid #4A3520;border-bottom:1px solid #4A3520;background-color:#FFFFFF;}</style></head>
 	<body style="margin:0;padding:0;">
 		<div style="background-color:#F1E7C9;border:1px solid #628043;border-top:0px;padding:2%;padding-top:0;margin-top:0px;">
 
@@ -255,4 +254,5 @@ function emailBodyTpl($message, $email = false, $token = false)
 		</div>
 	</body>
 </html>';
+	}
 }

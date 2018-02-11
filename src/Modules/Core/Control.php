@@ -16,9 +16,12 @@ abstract class Control
 	protected $view;
 	private $sub;
 	private $sub_func;
+	protected $func;
 
 	public function __construct()
 	{
+		global $g_func;
+		$this->func = $g_func;
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;
 		$className = $reflection->getShortName();
@@ -59,10 +62,10 @@ abstract class Control
 		}
 		if ($this->isControl) {
 			if (file_exists($dir . $moduleName . '.js')) {
-				addJsFunc(file_get_contents($dir . $moduleName . '.js'));
+				$this->func->addJsFunc(file_get_contents($dir . $moduleName . '.js'));
 			}
 			if (file_exists($dir . $moduleName . '.css')) {
-				addStyle(file_get_contents($dir . $moduleName . '.css'));
+				$this->func->addStyle(file_get_contents($dir . $moduleName . '.css'));
 			}
 		}
 		if (is_null($this->model)) {
@@ -108,7 +111,7 @@ abstract class Control
 
 	public function wallposts($table, $id)
 	{
-		addJsFunc('
+		$this->func->addJsFunc('
 			function u_delPost(id)
 				{
 					var id = id;
@@ -140,7 +143,7 @@ abstract class Control
 					$("a.attach-load").remove();
 				}
 			');
-		addJs('
+		$this->func->addJs('
 				$("#wallpost-text").autosize();
 			$("#wallpost-text").focus(function(){
 				$("#wallpost-submit").show();
@@ -165,7 +168,7 @@ abstract class Control
 			});
 				$("#wall-submit").button().click(function(ev){
 					ev.preventDefault();
-					if(($("#wallpost-text").val() != "" && $("#wallpost-text").val() != "' . s('write_teaser') . '") || $("#attach-preview a").length > 0)
+					if(($("#wallpost-text").val() != "" && $("#wallpost-text").val() != "' . $this->func->s('write_teaser') . '") || $("#attach-preview a").length > 0)
 					{
 						$(".wall-posts table tr:first").before(\'<tr><td colspan="2" class="load">&nbsp;</td></tr>\');
 
@@ -179,7 +182,7 @@ abstract class Control
 						}
 
 						text = $("#wallpost-text").val();
-						if(text == "' . s('write_teaser') . '")
+						if(text == "' . $this->func->s('write_teaser') . '")
 						{
 							text = "";
 						}
@@ -235,14 +238,14 @@ abstract class Control
 		if (S::may()) {
 			$posthtml = '
 				<div class="tools ui-padding">
-				<textarea id="wallpost-text" name="text" title="' . s('write_teaser') . '" class="comment textarea inlabel"></textarea>
+				<textarea id="wallpost-text" name="text" title="' . $this->func->s('write_teaser') . '" class="comment textarea inlabel"></textarea>
 				<div id="attach-preview"></div>
 				<div style="display:none;" id="wallpost-attach" /></div>
 
 				<div id="wallpost-submit" align="right">
 
-					<span id="wallpost-loader"></span><span id="wallpost-attach-image"><i class="fa fa-image"></i> ' . s('attach_image') . '</span>
-					<a href="#" id="wall-submit">' . s('send') . '</a>
+					<span id="wallpost-loader"></span><span id="wallpost-attach-image"><i class="fa fa-image"></i> ' . $this->func->s('attach_image') . '</span>
+					<a href="#" id="wall-submit">' . $this->func->s('send') . '</a>
 					<div style="overflow:hidden;height:1px;">
 						<form id="wallpost-attachimage-form" action="/xhrapp.php?app=wallpost&m=attachimage&table=' . $table . '&id=' . $id . '" method="post" enctype="multipart/form-data" target="wallpost-frame">
 							<input id="wallpost-attach-trigger" type="file" maxlength="100000" size="chars" name="etattach" />
@@ -365,7 +368,7 @@ abstract class Control
 			 * only send email if the user want to retrieve emails
 			 */
 			if (Mem::user($recipient['id'], 'infomail')) {
-				$sessdata = Mem::user(fsId(), 'lastMailMessage');
+				$sessdata = Mem::user($this->func->fsId(), 'lastMailMessage');
 
 				if (!$sessdata) {
 					$sessdata = array();
@@ -376,35 +379,35 @@ abstract class Control
 
 					$msgDB = new MessageModel();
 					if ($betriebName = $msgDB->getBetriebname($conversation_id)) {
-						tplMail(30, $recipient['email'], array(
-							'anrede' => genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						$this->func->tplMail(30, $recipient['email'], array(
+							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => S::user('name'),
 							'name' => $recipient['name'],
 							'chatname' => 'Betrieb ' . $betriebName,
 							'message' => $msg,
-							'link' => BASE_URL . '/?page=msg&uc=' . (int)fsId() . 'cid=' . (int)$conversation_id
+							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->func->fsId() . 'cid=' . (int)$conversation_id
 						));
 					} elseif ($memberNames = $msgDB->getChatMembers($conversation_id)) {
-						tplMail(30, $recipient['email'], array(
-							'anrede' => genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						$this->func->tplMail(30, $recipient['email'], array(
+							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => S::user('name'),
 							'name' => $recipient['name'],
 							'chatname' => implode(', ', $memberNames),
 							'message' => $msg,
-							'link' => BASE_URL . '/?page=msg&uc=' . (int)fsId() . 'cid=' . (int)$conversation_id
+							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->func->fsId() . 'cid=' . (int)$conversation_id
 						));
 					} else {
-						tplMail($tpl_id, $recipient['email'], array(
-							'anrede' => genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						$this->func->tplMail($tpl_id, $recipient['email'], array(
+							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => S::user('name'),
 							'name' => $recipient['name'],
 							'message' => $msg,
-							'link' => BASE_URL . '/?page=msg&uc=' . (int)fsId() . 'cid=' . (int)$conversation_id
+							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->func->fsId() . 'cid=' . (int)$conversation_id
 						));
 					}
 				}
 
-				Mem::userSet(fsId(), 'lastMailMessage', $sessdata);
+				Mem::userSet($this->func->fsId(), 'lastMailMessage', $sessdata);
 			}
 		}
 	}
@@ -425,8 +428,8 @@ abstract class Control
 					$foodsaver = $db->getOne_foodsaver($recip_id);
 					$sender = $db->getOne_foodsaver($sender_id);
 
-					tplMail($tpl_id, $foodsaver['email'], array(
-						'anrede' => genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+					$this->func->tplMail($tpl_id, $foodsaver['email'], array(
+						'anrede' => $this->func->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 						'sender' => $sender['name'],
 						'name' => $foodsaver['name'],
 						'message' => $msg,

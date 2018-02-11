@@ -1,3 +1,4 @@
 <?php
 
-loadApp('EmailTemplateAdmin');
+global $g_func;
+$g_func->loadApp('EmailTemplateAdmin');

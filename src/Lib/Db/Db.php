@@ -12,9 +12,12 @@ abstract class Db
 {
 	private static $mysqli = null;
 	private $values;
+	protected $func;
 
 	public function __construct()
 	{
+		global $g_func;
+		$this->func = $g_func;
 		$this->values = array();
 
 		if (is_null(self::$mysqli)) {
@@ -48,10 +51,10 @@ abstract class Db
 				$vars = array(
 					'link' => BASE_URL . '/?page=login&sub=passwordReset&k=' . $key,
 					'name' => $fs['name'],
-					'anrede' => genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r')
+					'anrede' => $this->func->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r')
 				);
 
-				tplMail(10, $fs['email'], $vars);
+				$this->func->tplMail(10, $fs['email'], $vars);
 
 				return true;
 			} else {
@@ -324,7 +327,7 @@ abstract class Db
 		if ($res = $this->sql($sql)) {
 			if ($row = $res->fetch_array()) {
 				if (isset($row[0])) {
-					return qs($row[0]);
+					return $this->func->qs($row[0]);
 				}
 			}
 		}
@@ -337,7 +340,7 @@ abstract class Db
 		$out = array();
 		if ($res = $this->sql($sql)) {
 			while ($row = $res->fetch_array()) {
-				$out[] = qs($row[0]);
+				$out[] = $this->func->qs($row[0]);
 			}
 		}
 
@@ -380,13 +383,12 @@ abstract class Db
 
 			if (is_object($res) && ($row = $res->fetch_assoc())) {
 				foreach ($row as $i => $r) {
-					$row[$i] = qs($r);
+					$row[$i] = $this->func->qs($r);
 				}
 
 				return $row;
 			}
 		} catch (Exception $e) {
-			debug('Error: ' . $sql . ' => ' . $e->getMessage());
 		}
 
 		return false;
@@ -453,7 +455,7 @@ abstract class Db
 		if ($res = $this->sql($sql)) {
 			while ($row = $res->fetch_assoc()) {
 				foreach ($row as $i => $r) {
-					$row[$i] = qs($r);
+					$row[$i] = $this->func->qs($r);
 				}
 				$out[] = $row;
 			}
@@ -515,9 +517,9 @@ abstract class Db
 
 	public function logout()
 	{
-		Mem::userDel(fsId(), 'active');
-		Mem::userDel(fsId(), 'lastMailMessage');
-		Mem::userRemoveSession(fsId(), session_id());
+		Mem::userDel($this->func->fsId(), 'active');
+		Mem::userDel($this->func->fsId(), 'lastMailMessage');
+		Mem::userRemoveSession($this->func->fsId(), session_id());
 	}
 
 	public function login($email, $pass)
@@ -529,7 +531,7 @@ abstract class Db
 			$this->update('
 				UPDATE ' . PREFIX . 'foodsaver
 				SET 	last_login = NOW()
-				WHERE 	id = ' . (int)fsId() . '
+				WHERE 	id = ' . (int)$this->func->fsId() . '
 			');
 
 			$blocked = $this->qOne('
@@ -643,7 +645,7 @@ abstract class Db
 	public function updateActivity($fs_id = false)
 	{
 		if ($fs_id === false) {
-			$fs_id = fsId();
+			$fs_id = $this->func->fsId();
 		}
 		Mem::userSet($fs_id, 'active', time());
 	}
@@ -910,7 +912,7 @@ abstract class Db
 			}
 			S::set('mailbox', $mailbox);
 		} else {
-			goPage('logout');
+			$this->func->goPage('logout');
 		}
 	}
 
@@ -988,12 +990,12 @@ abstract class Db
 	public function setOption($key, $val)
 	{
 		$options = array();
-		if ($opt = $this->getVal('option', 'foodsaver', fsId())) {
+		if ($opt = $this->getVal('option', 'foodsaver', $this->func->fsId())) {
 			$options = unserialize($opt);
 		}
 
 		$options[$key] = $val;
 
-		return $this->update('UPDATE ' . PREFIX . 'foodsaver SET `option` = ' . $this->strval(serialize($options)) . ' WHERE id = ' . (int)fsId());
+		return $this->update('UPDATE ' . PREFIX . 'foodsaver SET `option` = ' . $this->strval(serialize($options)) . ' WHERE id = ' . (int)$this->func->fsId());
 	}
 }

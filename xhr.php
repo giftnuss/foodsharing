@@ -8,7 +8,6 @@ use Foodsharing\Modules\Core\Model;
 require __DIR__ . '/includes/setup.php';
 
 require_once 'config.inc.php';
-require_once 'lib/func.inc.php';
 
 S::init();
 if (isset($g_page_cache)) {

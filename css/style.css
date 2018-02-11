@@ -1296,34 +1296,6 @@ select.childChanger {
     margin-bottom: 8px;
 }
 
-div.g_debug {
-    position: fixed;
-    width: 400px;
-    height: 800px;
-    bottom: 0px;
-    right: 0px;
-    margin-left: -400px;
-    font-size: 11px;
-    padding: 10px;
-    overflow: auto;
-    background-color: black;
-    color: #1AE000;
-    z-index: 5000;
-    border: 6px solid #FEFBEB;
-}
-
-.g_debug pre {
-    font-size: 11px;
-    background-color: black;
-    color: #1AE000;
-}
-
-.g_debug pre a {
-    color: green;
-    font-weight: bold;
-    text-decoration: underline;
-}
-
 div.popbox div.desc {
     color: #666666;
     font-size: 11px;

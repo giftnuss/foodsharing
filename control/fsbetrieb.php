@@ -1,3 +1,4 @@
 <?php
 
-loadApp('StoreUser');
+global $g_func;
+$g_func->loadApp('StoreUser');

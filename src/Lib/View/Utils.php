@@ -7,10 +7,13 @@ use Foodsharing\Lib\Session\S;
 class Utils
 {
 	private $id;
+	private $func;
 
 	public function __construct()
 	{
 		$this->id = array();
+		global $g_func;
+		$this->func = $g_func;
 	}
 
 	public function v_quickform($titel, $elements, $option = array())
@@ -20,11 +23,11 @@ class Utils
 
 	public function v_scroller($content, $width = '232')
 	{
-		if (isMob()) {
+		if ($this->func->isMob()) {
 			return $content;
 		} else {
-			$id = id('scroller');
-			addJs('$("#' . $id . '").slimScroll();');
+			$id = $this->func->id('scroller');
+			$this->func->addJs('$("#' . $id . '").slimScroll();');
 
 			return '
 				<div id="' . $id . '" class="scroller">
@@ -47,7 +50,7 @@ class Utils
 
 	public function v_activeSwitcher($table, $field_id, $active)
 	{
-		$id = id('activeSwitch');
+		$id = $this->func->id('activeSwitch');
 
 		/*
 		addJs('
@@ -65,11 +68,11 @@ class Utils
 		');
 		*/
 
-		addJs('
+		$this->func->addJs('
 			$("#' . $id . ' input").switchButton({
 				labels_placement: "right",
-				on_label: "' . s('on_label') . '",
-				off_label: "' . s('off_label') . '",
+				on_label: "' . $this->func->s('on_label') . '",
+				off_label: "' . $this->func->s('off_label') . '",
 				on_callback: function(){
 					showLoader();
 					$.ajax({
@@ -110,7 +113,7 @@ class Utils
 	{
 		global $db;
 
-		addJsFunc('
+		$this->func->addJsFunc('
 		var u_current_bezirk_type = 0;
 		function u_printChildBezirke(element)
 		{
@@ -187,7 +190,7 @@ class Utils
 				});
 		}');
 
-		addJs('u_printChildBezirke({value:"0:0"});');
+		$this->func->addJs('u_printChildBezirke({value:"0:0"});');
 
 		return '<div id="' . $id . '-wrapper"></div><input type="hidden" name="' . $id . '" id="' . $id . '" value="0" />';
 	}
@@ -199,23 +202,23 @@ class Utils
 
 	public function v_bezirkChooser($id = 'bezirk_id', $bezirk = false, $option = array())
 	{
-		addScript('/js/dynatree/jquery.dynatree.js');
-		addScript('/js/jquery.cookie.js');
-		addCss('/js/dynatree/skin/ui.dynatree.css');
+		$this->func->addScript('/js/dynatree/jquery.dynatree.js');
+		$this->func->addScript('/js/jquery.cookie.js');
+		$this->func->addCss('/js/dynatree/skin/ui.dynatree.css');
 
 		if (!$bezirk) {
 			//$bezirk = getBezirk();
 			$bezirk = array(
 				'id' => 0,
-				'name' => s('no_bezirk_choosen')
+				'name' => $this->func->s('no_bezirk_choosen')
 			);
 		}
-		$id = id($id);
+		$id = $this->func->id($id);
 
-		addJs('$("#' . $id . '-button").button().click(function(){
+		$this->func->addJs('$("#' . $id . '-button").button().click(function(){
 			$("#' . $id . '-dialog").dialog("open");
 		});');
-		addJs('$("#' . $id . '-dialog").dialog({
+		$this->func->addJs('$("#' . $id . '-dialog").dialog({
 			autoOpen:false,
 			modal:true,
 			title:"Bezirk ändern",
@@ -235,7 +238,7 @@ class Utils
 			$nodeselect = 'true';
 		}
 
-		addJs('$("#' . $id . '-tree").dynatree({
+		$this->func->addJs('$("#' . $id . '-tree").dynatree({
 				onSelect: function(select, node) {
 					$("#' . $id . '-hidden").html("");
 					$.map(node.tree.getSelectedNodes(), function(node){
@@ -274,9 +277,9 @@ class Utils
 					});
 				}
 			});');
-		addHidden('<div id="' . $id . '-dialog"><div id="' . $id . '-tree"></div></div>');
+		$this->func->addHidden('<div id="' . $id . '-dialog"><div id="' . $id . '-tree"></div></div>');
 
-		$label = s('Stammbezirk');
+		$label = $this->func->s('Stammbezirk');
 		if (isset($option['label'])) {
 			$label = $option['label'];
 		}
@@ -334,7 +337,7 @@ class Utils
 				</ul>
 				
 				<div id="searchbar">
-				<i class="fa fa-search"></i><input type="text" value="" placeholder="' . s('search') . '..." />
+				<i class="fa fa-search"></i><input type="text" value="" placeholder="' . $this->func->s('search') . '..." />
 				<div class="result-wrapper" style="display:none;">
 					<ul class="linklist index"></ul>
 					<ul class="linklist result"></ul>
@@ -391,7 +394,7 @@ class Utils
 			$v = explode(':', $value);
 			$value = array('hour' => $v[0], 'min' => $v[1]);
 		}
-		$id = id($id);
+		$id = $this->func->id($id);
 		$hours = range(0, 23);
 		$mins = array(0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55);
 
@@ -402,7 +405,7 @@ class Utils
 			if ($h == $value['hour']) {
 				$sel = ' selected="selected"';
 			}
-			$out .= '<option' . $sel . ' value="' . $h . '">' . preZero($h) . '</option>';
+			$out .= '<option' . $sel . ' value="' . $h . '">' . $this->func->preZero($h) . '</option>';
 		}
 		$out .= '</select>';
 
@@ -413,7 +416,7 @@ class Utils
 			if ($m == $value['min']) {
 				$sel = ' selected="selected"';
 			}
-			$out .= '<option' . $sel . ' value="' . $m . '">' . preZero($m) . '</option>';
+			$out .= '<option' . $sel . ' value="' . $m . '">' . $this->func->preZero($m) . '</option>';
 		}
 		$out .= '</select> Uhr';
 
@@ -422,7 +425,7 @@ class Utils
 
 	public function v_dialog_button($id, $label, $option = array())
 	{
-		$new_id = id($id);
+		$new_id = $this->func->id($id);
 		$click = '';
 		if (isset($option['click'])) {
 			$click = $option['click'] . ';';
@@ -440,19 +443,19 @@ class Utils
 			$btoption[] = 'text:false';
 		}
 
-		addJs('$("#' . $new_id . '-button").button({' . implode(',', $btoption) . '}).click(function(){' . $click . $tclick . '$("#dialog_' . $id . '").dialog("open");});');
+		$this->func->addJs('$("#' . $new_id . '-button").button({' . implode(',', $btoption) . '}).click(function(){' . $click . $tclick . '$("#dialog_' . $id . '").dialog("open");});');
 
 		return '<span id="' . $new_id . '-button">' . $label . '</span>';
 	}
 
 	public function v_form_tinymce($id, $option = array())
 	{
-		addScript('/js/tinymce/jquery.tinymce.min.js');
-		$id = id($id);
-		$label = s($id);
-		$value = getValue($id);
+		$this->func->addScript('/js/tinymce/jquery.tinymce.min.js');
+		$id = $this->func->id($id);
+		$label = $this->func->s($id);
+		$value = $this->func->getValue($id);
 
-		addStyle('div#content {width: 580px;}div#right{width:222px;}');
+		$this->func->addStyle('div#content {width: 580px;}div#right{width:222px;}');
 
 		$css = 'css/content.css,css/jquery-ui.css';
 		$class = 'ui-widget ui-widget-content ui-padding';
@@ -519,14 +522,14 @@ class Utils
 		 
 		});';
 
-		addJs($js);
+		$this->func->addJs($js);
 
 		return $this->v_input_wrapper($label, '<textarea name="' . $id . '" id="' . $id . '">' . $value . '</textarea>', $id, $option);
 	}
 
 	public function v_form_hidden($name, $value)
 	{
-		$id = id($name);
+		$id = $this->func->id($name);
 
 		return '<input type="hidden" id="' . $id . '" name="' . $name . '" value="' . $value . '" />';
 	}
@@ -537,26 +540,26 @@ class Utils
 		$id = 'recip_choose';
 		$bezirk = $db->getBezirk();
 
-		return $this->v_input_wrapper(s('recip_chooser'), '
+		return $this->v_input_wrapper($this->func->s('recip_chooser'), '
 			<select class="select" name="' . $id . '" id="' . $id . '">
 				<option value="botschafter">Alle Botschafter bundesweit</option>
 				<option value="orgateam">Orgateam bundesweit</option>
-				<option value="bezirk" selected="selected">' . sv('recip_all_bezirk', $bezirk['name']) . '</option>
+				<option value="bezirk" selected="selected">' . $this->func->sv('recip_all_bezirk', $bezirk['name']) . '</option>
 			</select>');
 	}
 
 	public function v_form_recip_chooser()
 	{
-		addScript('/js/dynatree/jquery.dynatree.js');
-		addScript('/js/jquery.cookie.js');
-		addCss('/js/dynatree/skin/ui.dynatree.css');
+		$this->func->addScript('/js/dynatree/jquery.dynatree.js');
+		$this->func->addScript('/js/jquery.cookie.js');
+		$this->func->addCss('/js/dynatree/skin/ui.dynatree.css');
 		global $db;
 
 		$bezirk = $db->getBezirk();
 		$id = 'recip_choose';
 		$out = '
 			<select class="select" name="' . $id . '" id="' . $id . '">
-				<option value="all">' . s('recip_all') . '</option>
+				<option value="all">' . $this->func->s('recip_all') . '</option>
 				<option value="newsletter">Alle Newsletter-Abonnenten (mindestens Foodsaver)</option>
 				<option value="newsletter_all">Alle Newsletter-Abonnenten (Foodsharer, Foodsaver, alle)</option>
 				
@@ -566,8 +569,8 @@ class Utils
 				<option value="filialbot">Alle Filialverantwortlichen + Botschafter</option>
 				<option value="all_no_botschafter">Alle Foodsaver ohne Botschafter</option>
 				<option value="orgateam">Orgateam</option>
-				<option value="bezirk" selected="selected">' . sv('recip_all_bezirk', $bezirk['name']) . '</option>
-				<option value="choose">' . s('recip_choose_bezirk') . '</option>		
+				<option value="bezirk" selected="selected">' . $this->func->sv('recip_all_bezirk', $bezirk['name']) . '</option>
+				<option value="choose">' . $this->func->s('recip_choose_bezirk') . '</option>		
 				<option value="manual">Manuelle Eingabe</option>
 			</select>
 			<div id="' . $id . '-hidden" style="display:none">
@@ -583,7 +586,7 @@ class Utils
 				</div>
 			</div>';
 
-		addJs('
+		$this->func->addJs('
 				$(\'#' . $id . '\').change(function(){
 					if($(this).val() == "choose" || $(this).val() == "choosebot" || $(this).val() == "filialbez")
 					{
@@ -634,20 +637,20 @@ class Utils
 				}
 			});');
 
-		return $this->v_input_wrapper(s('recip_chooser'), $out);
+		return $this->v_input_wrapper($this->func->s('recip_chooser'), $out);
 	}
 
 	public function v_photo_edit($src, $fsid = false)
 	{
 		if (!$fsid) {
-			$fsid = fsId();
+			$fsid = $this->func->fsId();
 		}
-		$id = id('fotoupload');
+		$id = $this->func->id('fotoupload');
 
 		$original = explode('_', $src);
 		$original = end($original);
 
-		addJs('
+		$this->func->addJs('
 				
 				$("#' . $id . '-link").fancybox({
 					minWidth : 600,
@@ -715,7 +718,7 @@ class Utils
 				});
 				');
 
-		addHidden('
+		$this->func->addHidden('
 				<div class="fotoupload popbox" style="display:none;" id="' . $id . '">
 					<h3>Fotoupload</h3>
 					<p class="subtitle">Hier kannst Du ein Foto von Deinem Computer ausw&auml;hlen</p>
@@ -737,14 +740,14 @@ class Utils
 				</div>');
 
 		if (isset($_GET['pinit'])) {
-			addJs('$("#' . $id . '-link").trigger("click");');
+			$this->func->addJs('$("#' . $id . '-link").trigger("click");');
 		}
 
-		addHidden('<a id="' . $id . '-link" href="#' . $id . '">&nbsp;</a>');
+		$this->func->addHidden('<a id="' . $id . '-link" href="#' . $id . '">&nbsp;</a>');
 
-		$menu = array(array('name' => s('edit_photo'), 'href' => '#edit'));
+		$menu = array(array('name' => $this->func->s('edit_photo'), 'href' => '#edit'));
 		if ($_GET['page'] == 'settings') {
-			$menu[] = array('name' => s('upload_new_photo'), 'href' => '#new');
+			$menu[] = array('name' => $this->func->s('upload_new_photo'), 'href' => '#new');
 		}
 
 		return '
@@ -764,9 +767,9 @@ class Utils
 	{
 		$js = '';
 		if (isset($option['id'])) {
-			$id = makeId($option['id']);
+			$id = $this->func->makeId($option['id']);
 		} else {
-			$id = makeId($name, $this->id);
+			$id = $this->func->makeId($name, $this->id);
 		}
 
 		if (isset($option['dialog'])) {
@@ -776,10 +779,10 @@ class Utils
 				closeOnEscape: false,
 				open: function(event, ui) {$(this).parent().children().children(".ui-dialog-titlebar-close").hide();}';
 			}
-			addJs('$("#' . $id . '").dialog({modal:true,title:"' . $name . '"' . $noclose . '});');
+			$this->func->addJs('$("#' . $id . '").dialog({modal:true,title:"' . $name . '"' . $noclose . '});');
 		}
 
-		$action = getSelf();
+		$action = $this->func->getSelf();
 		if (isset($option['action'])) {
 			$action = $option['action'];
 		}
@@ -803,7 +806,7 @@ class Utils
 		</form>
 		';
 
-		addJs('$("#' . $id . '-form").submit(function(ev){
+		$this->func->addJs('$("#' . $id . '-form").submit(function(ev){
 			
 			check = true;
 			$("#' . $id . '-form div.required .value").each(function(i,el){
@@ -839,7 +842,7 @@ class Utils
 
 	public function v_menu($items, $title = false, $option = array())
 	{
-		$id = id('vmenu');
+		$id = $this->func->id('vmenu');
 
 		//addJs('$("#'.$id.'").menu();');
 		$out = '
@@ -892,13 +895,13 @@ class Utils
 		if (isset($option['page'])) {
 			$page = $option['page'];
 		} else {
-			$page = getPage();
+			$page = $this->func->getPage();
 		}
 
 		if (isset($_GET['bid'])) {
 			$bid = '&bid=' . (int)$_GET['bid'];
 		} else {
-			$bid = getBezirkId();
+			$bid = $this->func->getBezirkId();
 		}
 
 		$out = '';
@@ -937,7 +940,7 @@ class Utils
 					} else {
 						$cmsg = 'Wirklich l&ouml;schen?';
 					}
-					$out .= '<li onclick="ifconfirm(\'/?page=' . $page . '&a=delete&id=' . $id . '\',\'' . jsSafe($cmsg) . '\');" title="l&ouml;schen" class="ui-state-default' . $corner . '"><span class="ui-icon ui-icon-trash"></span></li>';
+					$out .= '<li onclick="ifconfirm(\'/?page=' . $page . '&a=delete&id=' . $id . '\',\'' . $this->func->jsSafe($cmsg) . '\');" title="l&ouml;schen" class="ui-state-default' . $corner . '"><span class="ui-icon ui-icon-trash"></span></li>';
 					break;
 
 				default:
@@ -952,7 +955,7 @@ class Utils
 
 	public function v_tablesorter($head, $data, $option = array())
 	{
-		$id = id('table');
+		$id = $this->func->id('table');
 
 		$style = '';
 		if (isset($option['noHead'])) {
@@ -1004,7 +1007,7 @@ class Utils
 			</table>
 		</div>';
 
-		addJs('
+		$this->func->addJs('
 			$("table.tablesorter td ul.toolbar").css("visibility","hidden");
 	
 			$( "table.tablesorter tbody tr" ).hover(
@@ -1021,10 +1024,10 @@ class Utils
 
 		$pager_js = '';
 		if (isset($option['pager']) && count($data) > 14) {
-			addScript('/js/tablesorter/jquery.tablesorter.pager.js');
-			addStyle('div.pager{position:relative !important;}');
+			$this->func->addScript('/js/tablesorter/jquery.tablesorter.pager.js');
+			$this->func->addStyle('div.pager{position:relative !important;}');
 
-			addJs('
+			$this->func->addJs('
 				$(".prev").button({
 					icons: {
 						primary: "ui-icon-circle-arrow-w"
@@ -1068,12 +1071,12 @@ class Utils
 		if (!empty($jsoption)) {
 			$jsoption = 'headers:{' . substr($jsoption, 0, (strlen($jsoption) - 1)) . '}';
 
-			addJs('$("#' . $id . '").tablesorter({
+			$this->func->addJs('$("#' . $id . '").tablesorter({
 					' . $jsoption . ',
 					widgets: ["zebra"]
 				})' . $pager_js . ';');
 		} else {
-			addJs('$("#' . $id . '").tablesorter({widgets: ["zebra"]})' . $pager_js . ';');
+			$this->func->addJs('$("#' . $id . '").tablesorter({widgets: ["zebra"]})' . $pager_js . ';');
 		}
 
 		return $out;
@@ -1096,12 +1099,12 @@ class Utils
 
 	public function v_form_textarea($id, $option = array())
 	{
-		$id = id($id);
-		$value = getValue($id);
+		$id = $this->func->id($id);
+		$value = $this->func->getValue($id);
 
 		$value = htmlspecialchars($value);
 
-		$label = s($id);
+		$label = $this->func->s($id);
 
 		$style = '';
 		if (isset($option['style'])) {
@@ -1130,18 +1133,18 @@ class Utils
 
 	public function v_form_checkbox($id, $option = array())
 	{
-		$id = id($id);
+		$id = $this->func->id($id);
 
 		if (isset($option['checked'])) {
 			$value = $option['checked'];
 		} else {
-			$value = getValue($id);
+			$value = $this->func->getValue($id);
 		}
-		$label = s($id);
+		$label = $this->func->s($id);
 
 		if (isset($option['values'])) {
 			$values = $option['values'];
-		} elseif ($v = getDbValues($id)) {
+		} elseif ($v = $this->func->getDbValues($id)) {
 			$values = $v;
 		} else {
 			$values = array();
@@ -1196,7 +1199,7 @@ class Utils
 			$source = 'autocompleteOptions: {source: ' . json_encode($option['data']) . ',minLength: 0}';
 		}
 
-		addJs('
+		$this->func->addJs('
 			$("#' . $id . ' input.tag").tagedit({
 				' . $source . ',
 				allowEdit: false,
@@ -1213,21 +1216,21 @@ class Utils
 		');
 
 		$input = '<input type="text" name="' . $id . '[]" value="" class="tag input text value" />';
-		if ($values = getValue($id)) {
+		if ($values = $this->func->getValue($id)) {
 			$input = '';
 			foreach ($values as $v) {
 				$input .= '<input type="text" name="' . $id . '[' . $v['id'] . '-a]" value="' . $v['name'] . '" class="tag input text value" />';
 			}
 		}
 
-		return $this->v_input_wrapper(s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
+		return $this->v_input_wrapper($this->func->s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
 	}
 
 	public function v_form_picture($id, $option = array())
 	{
-		$id = id($id);
+		$id = $this->func->id($id);
 
-		addJs('
+		$this->func->addJs('
 			$("#' . $id . '-link").fancybox({
 				minWidth : 600,
 				scrolling :"auto",
@@ -1258,10 +1261,10 @@ class Utils
 			$options .= '<input type="hidden" id="' . $id . '-resize" name="resize" value="' . json_encode($option['resize']) . '" />';
 		}
 
-		addHidden('
+		$this->func->addHidden('
 		<div id="' . $id . '-fancy">
 			<div class="popbox">
-				<h3>' . s($id) . ' Upload</h3>
+				<h3>' . $this->func->s($id) . ' Upload</h3>
 				<p class="subtitle">W&auml;hle ein Bild von Deinem Rechner</p>
 				
 				<form id="' . $id . '-form" method="post" enctype="multipart/form-data" target="' . $id . '-iframe" action="xhr.php?f=uploadPicture&id=' . $id . '&crop=' . $crop . '">
@@ -1288,46 +1291,46 @@ class Utils
 
 		$thumb = '';
 
-		$pic = getValue($id);
+		$pic = $this->func->getValue($id);
 		if (!empty($pic)) {
 			$thumb = '<img src="images/' . str_replace('/', '/thumb_', $pic) . '" />';
 		}
 		$out = '
 			<input type="hidden" name="' . $id . '" id="' . $id . '" value="" /><div id="' . $id . '-preview">' . $thumb . '</div>
-			<span id="' . $id . '-opener">' . s('upload_picture') . '</span><span style="display:none;"><a href="#' . $id . '-fancy" id="' . $id . '-link">&nbsp;</a></span>';
+			<span id="' . $id . '-opener">' . $this->func->s('upload_picture') . '</span><span style="display:none;"><a href="#' . $id . '-fancy" id="' . $id . '-link">&nbsp;</a></span>';
 
-		return $this->v_input_wrapper(s($id), $out);
+		return $this->v_input_wrapper($this->func->s($id), $out);
 	}
 
 	public function v_form_file($id, $option = array())
 	{
-		$id = id($id);
+		$id = $this->func->id($id);
 
-		$val = getValue($id);
+		$val = $this->func->getValue($id);
 		if (!empty($val)) {
 			$val = json_decode($val, true);
 			$val = substr($val['name'], 0, 30);
 		}
 
-		addJs('
+		$this->func->addJs('
 		$("#' . $id . '-button").button().click(function(){$("#' . $id . '").click();});
 		$("#' . $id . '").change(function(){$("#' . $id . '-info").html($("#' . $id . '").val().split("\\\").pop());});');
 
-		$btlabel = s('choose_file');
+		$btlabel = $this->func->s('choose_file');
 		if (isset($option['btlabel'])) {
 			$btlabel = $option['btlabel'];
 		}
 
 		$out = '<input style="display:block;visibility:hidden;margin-bottom:-23px;" type="file" name="' . $id . '" id="' . $id . '" size="chars" maxlength="100000" /><span id="' . $id . '-button">' . $btlabel . '</span> <span id="' . $id . '-info">' . $val . '</span>';
 
-		return $this->v_input_wrapper(s($id), $out);
+		return $this->v_input_wrapper($this->func->s($id), $out);
 	}
 
 	public function v_form_list($id, $option = array())
 	{
-		$id = id($id);
-		$value = getValue($id);
-		$label = s($id);
+		$id = $this->func->id($id);
+		$value = $this->func->getValue($id);
+		$label = $this->func->s($id);
 
 		$out = '<textarea class="input textarea value" name="' . $id . '" id="' . $id . '">';
 
@@ -1345,15 +1348,15 @@ class Utils
 
 	public function v_form_radio($id, $option = array())
 	{
-		$id = id($id);
-		$value = getValue($id);
-		$label = s($id);
+		$id = $this->func->id($id);
+		$value = $this->func->getValue($id);
+		$label = $this->func->s($id);
 
-		$check = jsValidate($option, $id, $label);
+		$check = $this->func->jsValidate($option, $id, $label);
 
 		if (isset($option['values'])) {
 			$values = $option['values'];
-		} elseif ($v = getDbValues($id)) {
+		} elseif ($v = $this->func->getDbValues($id)) {
 			$values = $v;
 		} else {
 			$values = array();
@@ -1382,14 +1385,14 @@ class Utils
 
 	public function v_form_select($id, $option = array())
 	{
-		$id = id($id);
-		$value = getValue($id);
-		$label = s($id);
-		$check = jsValidate($option, $id, $label);
+		$id = $this->func->id($id);
+		$value = $this->func->getValue($id);
+		$label = $this->func->s($id);
+		$check = $this->func->jsValidate($option, $id, $label);
 
 		if (isset($option['values'])) {
 			$values = $option['values'];
-		} elseif ($v = getDbValues($id)) {
+		} elseif ($v = $this->func->getDbValues($id)) {
 			$values = $v;
 		} else {
 			$values = array();
@@ -1412,14 +1415,14 @@ class Utils
 		</select>';
 
 		if (isset($option['add'])) {
-			addHidden('
+			$this->func->addHidden('
 			<div id="' . $id . '-dialog" style="display:none;">
 				' . $this->v_form_text($id . ': NEU') . '
 			</div>');
 
 			$out .= '<a href="#" id="' . $id . '-add" class="select-add">&nbsp;</a>';
 
-			addJs('
+			$this->func->addJs('
 					
 					$("#' . $id . 'neu").keyup(function(e){
 						
@@ -1466,12 +1469,12 @@ class Utils
 		}
 
 		if ($id === false) {
-			$id = id('input');
+			$id = $this->func->id('input');
 		}
 		$class = '';
 		$star = '';
 		$error_msg = '';
-		$check = jsValidate($option, $id, $label);
+		$check = $this->func->jsValidate($option, $id, $label);
 
 		if (isset($option['required'])) {
 			$star = '<span class="req-star"> *</span>';
@@ -1488,7 +1491,7 @@ class Utils
 
 		if (isset($option['collapse'])) {
 			$label = '<i class="fa fa-caret-right"></i> ' . $label;
-			addJs('
+			$this->func->addJs('
 				$("#' . $id . '-wrapper .element-wrapper").hide();
 			');
 
@@ -1527,14 +1530,14 @@ class Utils
 
 	public function v_form_daterange($id = 'daterange', $option = array())
 	{
-		$label = s($id);
-		$id = id($id);
+		$label = $this->func->s($id);
+		$id = $this->func->id($id);
 
 		if (!isset($option['options'])) {
 			$option['options'] = array('from' => array(), 'to' => array());
 		}
 
-		addJs('
+		$this->func->addJs('
 			 $(function() {
 				$( "#' . $id . '_from" ).datepicker({
 					changeMonth: true,
@@ -1560,8 +1563,8 @@ class Utils
 		return $this->v_input_wrapper(
 			$label,
 			'
-			<input placeholder="' . s('from') . '" class="input text date value" type="text" id="' . $id . '_from" name="' . $id . '[from]">
-			<input placeholder="' . s('to') . '" class="input text date value" type="text" id="' . $id . '_to" name="' . $id . '[to]">' . $option['content_after'],
+			<input placeholder="' . $this->func->s('from') . '" class="input text date value" type="text" id="' . $id . '_from" name="' . $id . '[from]">
+			<input placeholder="' . $this->func->s('to') . '" class="input text date value" type="text" id="' . $id . '_to" name="' . $id . '[to]">' . $option['content_after'],
 			$id,
 			$option
 		);
@@ -1569,15 +1572,15 @@ class Utils
 
 	public function v_form_date($id, $option = array())
 	{
-		$id = id($id);
-		$label = s($id);
+		$id = $this->func->id($id);
+		$label = $this->func->s($id);
 
 		$yearRangeFrom = (isset($option['yearRangeFrom'])) ? $option['yearRangeFrom'] : (date('Y') - 60);
 		$yearRangeTo = (isset($option['yearRangeTo'])) ? $option['yearRangeTo'] : (date('Y') + 60);
 
-		$value = getValue($id);
+		$value = $this->func->getValue($id);
 
-		addJs('$("#' . $id . '").datepicker({
+		$this->func->addJs('$("#' . $id . '").datepicker({
 			changeYear: true,
 			changeMonth: true,
 			dateFormat: "yy-mm-dd",
@@ -1595,10 +1598,10 @@ class Utils
 
 	public function v_form_text($id, $option = array())
 	{
-		$id = id($id);
-		$label = s($id);
+		$id = $this->func->id($id);
+		$label = $this->func->s($id);
 
-		$value = getValue($id);
+		$value = $this->func->getValue($id);
 
 		$value = htmlspecialchars($value);
 
@@ -1646,14 +1649,14 @@ class Utils
 
 	public function v_form_passwd($id, $option = array())
 	{
-		$id = id($id);
+		$id = $this->func->id($id);
 
 		$pl = '';
 		if (isset($option['placeholder'])) {
 			$pl = ' placeholder="' . $option['placeholder'] . '"';
 		}
 
-		return $this->v_input_wrapper(s($id), '<input' . $pl . ' class="input text" type="password" name="' . $id . '" id="' . $id . '" />', $id, $option);
+		return $this->v_input_wrapper($this->func->s($id), '<input' . $pl . ' class="input text" type="password" name="' . $id . '" id="' . $id . '" />', $id, $option);
 	}
 
 	public function v_getMessages($error, $info)
@@ -1666,7 +1669,7 @@ class Utils
 			<p><span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-alert"></span>';
 
 			foreach ($error as $e) {
-				$out .= qs($e) . '<br />';
+				$out .= $this->func->qs($e) . '<br />';
 			}
 
 			$out .= '
@@ -1681,7 +1684,7 @@ class Utils
 			<p><span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-info"></span>';
 
 			foreach ($info as $i) {
-				$out .= qs($i) . '<br />';
+				$out .= $this->func->qs($i) . '<br />';
 			}
 
 			$out .= '
@@ -1694,14 +1697,14 @@ class Utils
 
 	public function buttonset($buttons = array())
 	{
-		$id = id('buttonset');
+		$id = $this->func->id('buttonset');
 		$out = '
 		<div id="' . $id . '">';
 
 		$i = 0;
 		foreach ($buttons as $b) {
 			++$i;
-			$bid = makeId($b['name']);
+			$bid = $this->func->makeId($b['name']);
 			$out .= '
 			<a href="#" id="' . $id . '-' . $bid . '">' . $b['name'] . '</a>';
 		}
@@ -1716,13 +1719,13 @@ class Utils
 					<!--<option value="#">Ansicht:</option>-->';
 
 		foreach ($views as $v) {
-			$id = makeId($v);
+			$id = $this->func->makeId($v);
 			$sel = '';
 			if (isset($_GET['v']) && $id == $_GET['v']) {
 				$sel = ' selected="selected"';
 			}
 			$out .= '
-					<option value="' . addGet('v', $id) . '"' . $sel . '>' . $v . '</option>';
+					<option value="' . $this->func->addGet('v', $id) . '"' . $sel . '>' . $v . '</option>';
 		}
 
 		return $out . '

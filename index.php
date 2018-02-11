@@ -28,24 +28,20 @@ require __DIR__ . '/includes/setup.php';
 
 require_once 'lib/inc.php';
 global $g_view_utils;
-addCss('/css/gen/style.css?v=' . VERSION);
-addScript('/js/gen/script.js?v=' . VERSION);
+global $g_func;
+$g_func->addCss('/css/gen/style.css?v=' . VERSION);
+$g_func->addScript('/js/gen/script.js?v=' . VERSION);
 
-getCurrent();
-$menu = getMenu();
+$g_func->getCurrent();
+$menu = $g_func->getMenu();
 
-getMessages();
-makeHead();
+$g_func->getMessages();
+$g_func->makeHead();
 
 if (DebugBar::isEnabled()) {
-	addHead(DebugBar::renderHead());
+	$g_func->addHead(DebugBar::renderHead());
 }
 
-if (isset($_POST['form_submit'])) {
-	if (handleForm($_POST['form_submit'])) {
-		go('/?page=' . getPage());
-	}
-}
 $msgbar = '';
 $logolink = '/';
 if (S::may()) {
@@ -56,7 +52,7 @@ if (S::may()) {
 }
 
 if (DebugBar::isEnabled()) {
-	addContent(DebugBar::renderContent(), CNT_BOTTOM);
+	$g_func->addContent(DebugBar::renderContent(), CNT_BOTTOM);
 }
 
 /*

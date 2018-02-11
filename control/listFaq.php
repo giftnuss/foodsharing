@@ -1,3 +1,4 @@
 <?php
 
-loadApp('FAQList');
+global $g_func;
+$g_func->loadApp('FAQList');

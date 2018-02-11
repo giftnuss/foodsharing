@@ -1,3 +1,4 @@
 <?php
 
-loadApp('Settings');
+global $g_func;
+$g_func->loadApp('Settings');

@@ -1,3 +1,4 @@
 <?php
 
-loadApp('Email');
+global $g_func;
+$g_func->loadApp('Email');

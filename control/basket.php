@@ -1,3 +1,4 @@
 <?php
 
-loadApp('Basket');
+global $g_func;
+$g_func->loadApp('Basket');
