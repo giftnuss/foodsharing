@@ -1,16 +1,11 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: matthias
- * Date: 10.02.18
- * Time: 22:31.
- */
 
 namespace Foodsharing\Modules\Store;
 
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Core\Control;
 
-class StoreControl
+class StoreControl extends Control
 {
 	public function __construct()
 	{
@@ -60,7 +55,7 @@ class StoreControl
 					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
 				}
 
-				addContent($this->view->betrieb_form($bezirk, $page, $this->model->getBasics_lebensmittel(), $this->model->getBasics_foodsaver(), db_get_betrieb_kategorie(), db_get_betrieb_status()));
+				addContent($this->view->betrieb_form($bezirk, $page, $this->model->getBasics_lebensmittel(), $this->model->getBasics_foodsaver(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
 
 				addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					array('name' => s('back_to_overview'), 'href' => '/?page=fsbetrieb&bid=' . $bezirk_id)
@@ -95,7 +90,7 @@ class StoreControl
 					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
 				}
 
-				addContent($this->view->betrieb_form($bezirk, '', $this->model->getBasics_lebensmittel(), $this->model->getBasics_foodsaver(), $this->model->get_kette(), db_get_betrieb_kategorie(), db_get_betrieb_status()));
+				addContent($this->view->betrieb_form($bezirk, '', $this->model->getBasics_lebensmittel(), $this->model->getBasics_foodsaver(), $this->model->get_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
 			} else {
 				info('Diesen Betrieb kannst Du nicht bearbeiten');
 			}
@@ -209,31 +204,5 @@ class StoreControl
 				error(s('error'));
 			}
 		}
-	}
-
-	private function db_get_betrieb_kategorie()
-	{
-		$out = $this->model->q('
-				SELECT
-				`id`,
-				`name`
-				
-				FROM 		`' . PREFIX . 'betrieb_kategorie`
-				ORDER BY `name`');
-
-		return $out;
-	}
-
-	private function db_get_betrieb_status()
-	{
-		$out = $this->model->q('
-				SELECT
-				`id`,
-				`name`
-				
-				FROM 		`' . PREFIX . 'betrieb_status`
-				ORDER BY `name`');
-
-		return $out;
 	}
 }

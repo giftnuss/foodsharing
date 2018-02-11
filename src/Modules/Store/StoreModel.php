@@ -167,4 +167,30 @@ class StoreModel extends Model
 
 		return $out;
 	}
+
+	public function get_betrieb_kategorie()
+	{
+		$out = $this->q('
+				SELECT
+				`id`,
+				`name`
+				
+				FROM 		`' . PREFIX . 'betrieb_kategorie`
+				ORDER BY `name`');
+
+		return $out;
+	}
+
+	public function get_betrieb_status()
+	{
+		$out = $this->q('
+				SELECT
+				`id`,
+				`name`
+				
+				FROM 		`' . PREFIX . 'betrieb_status`
+				ORDER BY `name`');
+
+		return $out;
+	}
 }

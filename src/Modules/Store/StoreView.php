@@ -117,7 +117,7 @@ class StoreView extends View
 			$this->v_utils->v_form_checkbox('lebensmittel', array('values' => $lebensmittel_values)),
 			$this->v_utils->v_form_date('begin'),
 			$this->v_utils->v_form_textarea('besonderheiten'),
-			$this->v_utils->v_form_textarea('public_info', array('maxlength' => 180, 'desc' => 'Hier kannst Du einige Infos für die Foodsaver angeben, die sich für das Team bewerben möchten. <br />(max. 180 Zeichen)<div>' . v_info('<strong>Wichtig</strong>: Gib hier keine genauen Abholzeiten an.<br />Es ist des Öfteren vorgekommen, dass Leute unabgesprochen zum Laden gegangen sind.') . '</div>')),
+			$this->v_utils->v_form_textarea('public_info', array('maxlength' => 180, 'desc' => 'Hier kannst Du einige Infos für die Foodsaver angeben, die sich für das Team bewerben möchten. <br />(max. 180 Zeichen)<div>' . $this->v_utils->v_info('<strong>Wichtig</strong>: Gib hier keine genauen Abholzeiten an.<br />Es ist des Öfteren vorgekommen, dass Leute unabgesprochen zum Laden gegangen sind.') . '</div>')),
 			$this->v_utils->v_form_select('public_time', ['values' => [
 				['id' => 0, 'name' => 'Keine Angabe'],
 				['id' => 1, 'name' => 'morgens'],
@@ -145,7 +145,7 @@ class StoreView extends View
 				array('id' => 1814400, 'name' => '3 Wochen'),
 				array('id' => 2419200, 'name' => '4 Wochen')
 			))),
-			$this->v_utils->$this->v_utils->v_form_select('abholmenge', ['values' => [
+			$this->v_utils->v_form_select('abholmenge', ['values' => [
 				['id' => 1, 'name' => '1-3 kg'],
 				['id' => 2, 'name' => '3-5 kg'],
 				['id' => 3, 'name' => '5-10 kg'],
