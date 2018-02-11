@@ -946,7 +946,6 @@ function getOrgaMenu()
 		$menu = [
 			'all_store' => 'betrieb&bid=0',
 			'all_fs' => 'foodsaver&bid=0',
-			'chain' => 'kette',
 			'regions_without_bots' => 'geoclean&sub=lostregion',
 			'manage_regions' => 'region',
 			'newarea' => 'newarea'
