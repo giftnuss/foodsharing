@@ -100,14 +100,7 @@ Many many thanks to all the contributors that made this possible (in order of ap
 * @peter.toennies
 * @raphaelw
 * @tiltec
-@valentin.unicorn
-@nicksellen
-@NerdyProjects
-@k.miklobusec
-@peter.toennies
-@raphaelw
-@tiltec
-@alangecker
+* @alangecker
 
 ## Breaking changes
 
