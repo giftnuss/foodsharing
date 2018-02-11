@@ -8,7 +8,6 @@ use Symfony\Component\Console\Command\Command;
 use Codeception\CustomCommandInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Faker;
 
 class SeedCommand extends Command implements CustomCommandInterface
 {
@@ -99,7 +98,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$I->addFairteilerPost($userbot['id'], $fairteiler['id']);
 
 		// load test
-		foreach(range(0, 200) as $number) {
+		foreach (range(0, 200) as $number) {
 			$saver = $I->createFoodsaver('user', ['bezirk_id' => $bezirk1]);
 			$I->addBezirkMember($bezirk1, $saver['id']);
 			$I->addStoreTeam($store['id'], $saver['id']);

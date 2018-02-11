@@ -5,7 +5,8 @@ namespace Helper;
 use DateTime;
 use Faker;
 
-function get(&$var, $default=null) {
+function get(&$var, $default = null)
+{
 	return isset($var) ? $var : $default;
 }
 
@@ -322,6 +323,7 @@ class Foodsharing extends \Codeception\Module\Db
 
 		$params['post'] = $post_params;
 		$params['id'] = $theme_id;
+
 		return $params;
 	}
 
@@ -359,11 +361,12 @@ class Foodsharing extends \Codeception\Module\Db
 		$params['last'] = $this->toDateTime(get($params['last']));
 		$id = $this->haveInDatabase('fs_conversation', $params);
 
-		foreach($users as $user) {
+		foreach ($users as $user) {
 			$this->addUserToConversation($user, $id);
 		}
 
 		$params['id'] = $id;
+
 		return $params;
 	}
 
@@ -378,9 +381,9 @@ class Foodsharing extends \Codeception\Module\Db
 		$id = $this->haveInDatabase('fs_foodsaver_has_conversation', $params);
 
 		$params['id'] = $id;
+
 		return $params;
 	}
-
 
 	public function addConversationMessage($user, $conversation, $extra_params = [])
 	{
@@ -402,6 +405,7 @@ class Foodsharing extends \Codeception\Module\Db
 		], ['id' => $conversation]);
 
 		$params['id'] = $id;
+
 		return $params;
 	}
 
@@ -426,6 +430,7 @@ class Foodsharing extends \Codeception\Module\Db
 		$this->addFairteilerAdmin($user, $id);
 
 		$params['id'] = $id;
+
 		return $params;
 	}
 
@@ -440,6 +445,7 @@ class Foodsharing extends \Codeception\Module\Db
 		$id = $this->haveInDatabase('fs_fairteiler_follower', $params);
 
 		$params['id'] = $id;
+
 		return $params;
 	}
 
@@ -471,6 +477,7 @@ class Foodsharing extends \Codeception\Module\Db
 		$id = $this->haveInDatabase('fs_wallpost', $params);
 
 		$params['id'] = $id;
+
 		return $params;
 	}
 
