@@ -618,7 +618,7 @@ class ManualDb extends Db
 		SET 	`language_id` =  ' . $this->intval($data['language_id']) . ',
 				`name` =  ' . $this->strval($data['name']) . ',
 				`subject` =  ' . $this->strval($data['subject']) . ',
-				`body` =  ' . $this->strval($data['body'], true) . '
+				`body` =  ' . $this->strval($data['body'], '<p><br><a><h1><h2><h3><ul><li><ol>') . '
 
 		WHERE 	`id` = ' . $this->intval($id));
 	}
