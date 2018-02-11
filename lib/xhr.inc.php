@@ -846,13 +846,6 @@ function xhr_continueMail($data)
 			$search = array('{NAME}', '{ANREDE}', '{EMAIL}');
 			$replace = array($fs['name'], $anrede, $fs['email']);
 			$internal_message = true;
-			if (strpos($mail['message'], '{PASSWORD}') !== false) {
-				$passwd = $db->resetPassword($fs['id'], $fs['email']);
-				$mail['message'] = str_replace('{EMAIL}', $fs['email'], $mail['message']);
-				$mail['message'] = str_replace('{PASSWORD}', $passwd, $mail['message']);
-
-				$internal_message = false;
-			}
 
 			/*
 			 *  [id] => 1

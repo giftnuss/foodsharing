@@ -466,19 +466,6 @@ abstract class Db
 		}
 	}
 
-	public function resetPassword($fs_id, $email)
-	{
-		/*
-		$password = nettesPasswort();
-
-		$crypt = $this->encryptMd5($email, $password);
-
-		$this->update('UPDATE '.PREFIX.'foodsaver SET `passwd` = "'.$crypt.'" WHERE `id` = '.$this->intval($fs_id));
-
-		return $password;
-		*/
-	}
-
 	public function encryptMd5($email, $pass)
 	{
 		$email = strtolower($email);
