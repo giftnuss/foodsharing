@@ -706,7 +706,7 @@ class ManualDb extends Db
 	/**
 	 * updates password for a given fs_id
 	 * seems used nowhere
-	 * TODO: decide whether to delete
+	 * TODO: decide whether to delete.
 	 */
 	private function updatePassword($fs_id, $new_pass)
 	{
