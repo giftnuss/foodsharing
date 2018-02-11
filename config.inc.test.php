@@ -16,7 +16,7 @@ define('DB_PASS', 'root');
 define('DB_DB', 'foodsharing');
 define('PREFIX', 'fs_');
 define('ERROR_REPORT', E_ALL);
-define('BASE_URL', $protocol . '//lmr.local/');
+define('BASE_URL', $protocol . '://lmr.local/');
 define('URL_INTERN', $protocol . '://lmr.local/freiwillige/');
 define('DEFAULT_EMAIL', 'noreply@lebensmittelretten.de');
 define('DEFAULT_EMAIL_NAME', 'Foodsharing Freiwillige');
