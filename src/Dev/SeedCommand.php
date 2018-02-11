@@ -1,6 +1,6 @@
 <?php
 
-namespace Foodsharing\Debug;
+namespace Foodsharing\Dev;
 
 use Codeception\Lib\Di;
 use Codeception\Lib\ModuleContainer;
