@@ -4,6 +4,7 @@ use Flourish\fImage;
 use Foodsharing\Lib\Db\ManualDb;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Xhr\ViewUtils;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Foodsaver\FoodsaverModel;
 use Foodsharing\Modules\Mailbox\MailboxModel;
@@ -240,7 +241,7 @@ function xhr_childBezirke($data)
 		if ($childs = $db->q('SELECT `id`,`parent_id`,`has_children`,`name`,`type` FROM `' . PREFIX . 'bezirk` WHERE `parent_id` = ' . $db->intval($data['parent']) . $sql)) {
 			return json_encode(array(
 				'status' => 1,
-				'html' => xv_childBezirke($childs, $data['parent'])
+				'html' => ViewUtils::childBezirke($childs, $data['parent'])
 			));
 		} else {
 			return json_encode(array(
@@ -306,7 +307,7 @@ function xhr_profile($data)
 		$about[] = array('name' => 'Über ' . $foodsaver['name'], 'val' => $foodsaver['about_me_public']);
 	}
 
-	$pers = xv_set($about, $foodsaver['name'] . ' ' . $foodsaver['nachname']);
+	$pers = ViewUtils::set($about, $foodsaver['name'] . ' ' . $foodsaver['nachname']);
 
 	$thead = '';
 	$tbody = '';
@@ -362,7 +363,7 @@ function xhr_profile($data)
 						</ul>
 					</div>
 					
-					' . xv_set($data, 'Kontaktdaten') . '
+					' . ViewUtils::set($data, 'Kontaktdaten') . '
 					<div style="clear:both;"></div>
 						' . $pers . '
 					</div>
@@ -437,7 +438,7 @@ function xhr_bBubble($data)
 
 			return json_encode(array(
 				'status' => 1,
-				'html' => xv_bBubble($b),
+				'html' => ViewUtils::bBubble($b),
 				'betrieb' => array(
 					'name' => $b['name']
 				)
@@ -454,7 +455,7 @@ function xhr_fsBubble($data)
 	if ($b = $db->getOne_foodsaver($data['id'])) {
 		return json_encode(array(
 			'status' => 1,
-			'html' => xv_fsBubble($b)
+			'html' => ViewUtils::fsBubble($b)
 		));
 	}
 
