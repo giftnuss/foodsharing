@@ -18,6 +18,8 @@
 
 ## Dev/Test/CI stuff
 
+- Add better seed data for use during development !263 @tiltec
+
 # 2017-12-11
 
 ## Release notes
