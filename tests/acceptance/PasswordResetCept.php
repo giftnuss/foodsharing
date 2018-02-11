@@ -7,7 +7,6 @@ $newpass = 'TEEEEST';
 
 $user = $I->createFoodsaver();
 
-
 $I->amOnPage('/?page=login');
 $I->click('Passwort vergessen?');
 
@@ -21,7 +20,7 @@ $I->see('Alles klar! Dir wurde ein Link zum Passwortändern per E-Mail zugeschic
 $I->expectNumMails(1, 5);
 $mail = $I->getMails()[0];
 
-$I->assertEquals($mail->headers->to, $user['email'], 'correct recipient'); 
+$I->assertEquals($mail->headers->to, $user['email'], 'correct recipient');
 
 $I->assertRegExp('/http:\/\/.*passwordReset.*&k=[a-f0-9]+/', $mail->html, 'mail should contain a link');
 preg_match('/http:\/\/.*?\/(.*?)"/', $mail->html, $matches);
@@ -31,7 +30,6 @@ $link = $matches[1];
 // the template got updated, but test may fail when there is still the old template in the database
 // -> see commit 84ea2f1868b91a0cfabd85caa31139364b93f7f7
 
-
 // go to link in the mail
 $I->amOnPage($link);
 $I->see('Jetzt kannst Du Dein Passwort ändern');
@@ -39,7 +37,6 @@ $I->fillField('#pass1', $newpass);
 $I->fillField('#pass2', 'INVALID');
 $I->click('Speichern');
 $I->see('die Passwörter stimmen nicht überein');
-
 
 $I->fillField('#pass1', $newpass);
 $I->fillField('#pass2', $newpass);
