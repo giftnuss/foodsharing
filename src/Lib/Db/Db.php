@@ -583,44 +583,51 @@ abstract class Db
 		if (strlen($email) < 2 || strlen($pass) < 1) {
 			return false;
 		}
-		$hashed = $this->encryptMd5($email, $pass);
 
-		$user = false;
-		$sql = '
-				SELECT 	`id`,
-						`bezirk_id`,
-						`admin`,
-						`orgateam`,
-						`photo`
+		$user = $this->qRow('
+			SELECT 	`id`,
+					`password`,
+					`passwd`,
+					`fs_password`,
+					`bezirk_id`,
+					`admin`,
+					`orgateam`,
+					`photo`
 
-				FROM 	`' . PREFIX . 'foodsaver`
-				WHERE 	`email`     = "' . $email . '"
-				AND 	`passwd` 	= "' . $hashed . '"
-				AND     `deleted_at`   IS NULL
-		';
+			FROM 	`' . PREFIX . 'foodsaver`
+			WHERE 	`email`     = "' . $email . '"
+			AND     `deleted_at`   IS NULL
+		');
 
-		if ($user = $this->qRow($sql)) {
-			return $user;
-		} else {
-			$old_fs_hash = $this->fs_sha1hash($pass);
-			$sql = '
-        SELECT 	`id`,
-            `bezirk_id`,
-            `admin`,
-            `orgateam`,
-            `photo`
+		// does the email exist?
+		if (!$user) {
+			return false;
+		}
 
-        FROM 	`' . PREFIX . 'foodsaver`
-        WHERE 	`email` = ' . $this->strval($email) . '
-        AND 	`fs_password` 	= "' . $old_fs_hash . '"
-      ';
-			if ($user = $this->qRow($sql)) {
-				$this->update('UPDATE `' . PREFIX . "foodsaver` SET `fs_password` = NULL, `passwd` = '" . $hashed . "' WHERE `id` = " . $user['id']);
-
+		// modern hasing algorithm
+		if ($user['password']) {
+			if (password_verify($pass, $user['password'])) {
 				return $user;
+			} else {
+				return false;
 			}
 
-			return false;
+			// old hashing algorithm
+		} else {
+			if (
+				($user['passwd'] && $user['passwd'] == $this->encryptMd5($email, $pass)) || // md5
+				($user['fs_password'] && $user['fs_password'] == $this->fs_sha1hash($pass))  // sha1
+			) {
+				// update stored password to modern
+				$this->update('UPDATE `' . PREFIX . "foodsaver` 
+					SET `fs_password` = NULL, `passwd` = NULL, `password` = '" . password_hash($pass, PASSWORD_BCRYPT) . "'
+					WHERE `id` = " . $user['id']
+				);
+
+				return $user;
+			} else {
+				return false;
+			}
 		}
 	}
 
