@@ -14,7 +14,9 @@
     "html2text/html2text": "^4.1",
     "setasign/fpdi-fpdf": "^1.6",
     "erusev/parsedown": "^1.6",
-    "fzaninotto/faker": "^1.7"
+    "fzaninotto/faker": "^1.7",
+    "symfony/dependency-injection": "^3.4",
+    "symfony/config": "^3.4"
   },
   "autoload": {
     "psr-4": {"Foodsharing\\": "src/",

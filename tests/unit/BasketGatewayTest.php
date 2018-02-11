@@ -15,8 +15,7 @@ class BasketGatewayTest extends \Codeception\Test\Unit
 
 	protected function _before()
 	{
-		$pdo = new PDO('mysql:host=db;dbname=foodsharing', 'root', 'root', []);
-		$this->gateway = new \Foodsharing\Modules\Basket\BasketGateway($pdo);
+		$this->gateway = $this->tester->container()->get(\Foodsharing\Modules\Basket\BasketGateway::class);
 		$this->foodsaver = $this->tester->createFoodsaver();
 	}
 

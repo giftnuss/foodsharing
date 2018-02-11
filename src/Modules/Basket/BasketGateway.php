@@ -3,14 +3,14 @@
 namespace Foodsharing\Modules\Basket;
 
 
-use Foodsharing\Modules\Core\Gateway;
+use Foodsharing\Modules\Core\BaseGateway;
 
-class BasketGateway extends Gateway
+class BasketGateway extends BaseGateway
 {
 
 	public function getUpdateCount($id)
 	{
-		return (int) $this->fetchFirstColumn('
+		return (int)$this->db->fetchFirstColumn('
 				SELECT COUNT(a.basket_id)
 				FROM fs_basket_anfrage a, fs_basket b
 				WHERE a.basket_id = b.id

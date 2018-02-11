@@ -1541,10 +1541,12 @@ function getFqcnPrefix($module)
 
 function loadApp($app)
 {
+	global $container;
 	$className = $app . 'Control';
 	$fqcn = getFqcnPrefix($app) . $className;
 
-	$appInstance = new $fqcn();
+	$appInstance = $container->get(ltrim($fqcn, '\\'));
+
 	if (isset($_GET['a']) && method_exists($appInstance, $_GET['a'])) {
 		$meth = $_GET['a'];
 		$appInstance->$meth();

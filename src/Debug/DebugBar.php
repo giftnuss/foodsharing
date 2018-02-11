@@ -39,6 +39,10 @@ class DebugBar
 		self::$queryCollector = new DatabaseQueryCollector();
 		self::$debugbar->addCollector(self::$queryCollector);
 
+		global $pdo;
+		$pdo = new \DebugBar\DataCollector\PDO\TraceablePDO($pdo);
+		self::$debugbar->addCollector(new \DebugBar\DataCollector\PDO\PDOCollector($pdo));
+
 		self::$initialized = true;
 	}
 

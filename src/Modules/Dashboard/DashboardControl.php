@@ -2,18 +2,24 @@
 
 namespace Foodsharing\Modules\Dashboard;
 
-use Foodsharing\Modules\Content\ContentModel;
-use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Content\ContentGateway;
+use Foodsharing\Modules\Core\Control;
 
 class DashboardControl extends Control
 {
 	private $user;
+	private $gateway;
+	private $contentGateway;
 
-	public function __construct()
+	public function __construct(
+		DashboardView $view,
+		DashboardGateway $gateway,
+		ContentGateway $contentGateway)
 	{
-		$this->model = new DashboardModel();
-		$this->view = new DashboardView();
+		$this->view = $view;
+		$this->gateway = $gateway;
+		$this->contentGateway = $contentGateway;
 
 		parent::__construct();
 
@@ -21,7 +27,7 @@ class DashboardControl extends Control
 			go('/');
 		}
 
-		$this->user = $this->model->getUser();
+		$this->user = $this->gateway->getUser(fsId());
 	}
 
 	public function index()
@@ -62,9 +68,7 @@ class DashboardControl extends Control
 
 		addContent($this->view->foodsharerMenu(), CNT_LEFT);
 
-		$db = new ContentModel();
-
-		$cnt = $db->getContent(33);
+		$cnt = $this->contentGateway->getContent(33);
 
 		$cnt['body'] = str_replace(array(
 			'{NAME}',
@@ -78,10 +82,10 @@ class DashboardControl extends Control
 
 		$this->view->updates();
 
-		if ($this->user['lat'] && ($baskets = $this->model->listCloseBaskets(50))) {
+		if ($this->user['lat'] && ($baskets = $this->gateway->listCloseBaskets(fsId(), S::getLocation(), 50))) {
 			addContent($this->view->closeBaskets($baskets), CNT_LEFT);
 		} else {
-			if ($baskets = $this->model->getNewestFoodbaskets()) {
+			if ($baskets = $this->gateway->getNewestFoodbaskets()) {
 				addContent($this->view->newBaskets($baskets), CNT_LEFT);
 			}
 		}
