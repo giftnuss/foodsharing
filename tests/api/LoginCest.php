@@ -27,5 +27,18 @@ class LoginCest
 		if (isset($example[2])) {
 			$I->seeRegExp('~.*' . $example[2] . '.*~i');
 		}
+
+		// initially old md5 password is stored
+		$I->assertNotEmpty($user['passwd']);
+
+		// password got replaced after login
+		$I->seeInDatabase('fs_foodsaver', [
+			'email'=>$user['email'],
+			'passwd'=>null, // md5
+			'fs_password'=>null // sha1
+		]);
+		// new hash is valid
+		$newHash = $I->grabFromDatabase('fs_foodsaver', 'password', ['email'=>$user['email']]);
+		$I->assertTrue(password_verify($pass, $newHash));
 	}
 }
