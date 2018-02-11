@@ -7,15 +7,19 @@ use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
+use PDO;
 
 class BasketXhr extends Control
 {
 	private $status;
+	private $gateway;
 
-	public function __construct()
+	public function __construct(PDO $pdo)
 	{
 		$this->model = new BasketModel();
 		$this->view = new BasketView();
+
+		$this->gateway = new BasketGateway($pdo);
 
 		$this->status = array(
 			'ungelesen' => 0,
@@ -403,6 +407,7 @@ class BasketXhr extends Control
 
 	public function update()
 	{
+		$count = $this->gateway->getUpdateCount(fsId());
 		$count = $this->model->getUpdateCount();
 		if ((int)$count > 0) {
 			return array(

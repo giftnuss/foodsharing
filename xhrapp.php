@@ -6,6 +6,8 @@ use Foodsharing\Lib\Xhr\XhrResponses;
 
 require __DIR__ . '/includes/setup.php';
 
+$pdo = new PDO('mysql:host=db;dbname=foodsharing', 'root', 'root', []);
+
 $js = '';
 if (isset($_GET['app']) && isset($_GET['m'])) {
 	$app = str_replace('/', '', $_GET['app']);
@@ -20,7 +22,7 @@ if (isset($_GET['app']) && isset($_GET['m'])) {
 	S::init();
 
 	$class = Routing::getClassName($app, 'Xhr');
-	$obj = new $class();
+	$obj = new $class($pdo);
 
 	if (method_exists($obj, $meth)) {
 		$out = $obj->$meth();
