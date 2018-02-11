@@ -58,7 +58,6 @@ class SeedCommand extends Command implements CustomCommandInterface
 	protected function seed()
 	{
 		$I = $this->helper;
-		$faker = Faker\Factory::create('de_DE');
 		$bezirk1 = '241'; // this is called 'Göttingen'
 		$bezirk_vorstand = '1373';
 		$ag_quiz = '341';
@@ -83,39 +82,30 @@ class SeedCommand extends Command implements CustomCommandInterface
 
 		$I->addBezirkMember('1564', $user2['id']);
 
-		$conv1 = $I->createConversation(['name' => 'betrieb_bla']);
-		$conv2 = $I->createConversation(['name' => 'springer_bla']);
+		$conv1 = $I->createConversation([$userbot['id'], $user2['id']], ['name' => 'betrieb_bla']);
+		$conv2 = $I->createConversation([$userbot['id']], ['name' => 'springer_bla']);
+		$I->addConversationMessage($userbot['id'], $conv1['id']);
+		$I->addConversationMessage($userbot['id'], $conv2['id']);
 
-		$I->addUserToConversation($user2['id'], $conv1['id']);
-		$I->addUserToConversation($userbot['id'], $conv1['id']);
-
-		$I->addUserToConversation($userbot['id'], $conv2['id']);
-
-		$store = $I->createStore($bezirk1, [
-			'name' => 'asd',
-			'status' => 0,
-			'springer_conversation_id' => $conv1['id'],
-			'team_conversation_id' => $conv2['id']
-		]);
+		$store = $I->createStore($bezirk1, $conv1['id'], $conv2['id']);
 		$I->addStoreTeam($store['id'], $user2['id']);
 		$I->addStoreTeam($store['id'], $userbot['id'], true);
 
-		$I->addCollector($userbot['id'], $store['id'], '2017-04-15 09:00:00');
-		$I->addCollector($userbot['id'], $store['id'], '2017-04-19 08:00:00');
-		$I->addCollector($userbot['id'], $store['id'], '2017-06-19 09:00:00');
-		$I->addCollector($userbot['id'], $store['id'], '2017-06-20 09:00:00');
+		$theme = $I->addForumTheme($bezirk1, $userbot['id']);
+		$I->addForumThemePost($theme['id'], $user2['id']);
 
-		$theme = $I->addForumTheme($bezirk1, $userbot['id'], $faker->jobTitle, $faker->realText(1000), $faker->dateTime());
-		$I->addForumThemePost($theme, $user2['id'], $faker->realText(100));
+		$fairteiler = $I->createFairteiler($userbot['id'], $bezirk1);
+		$I->addFairteilerFollower($user2['id'], $fairteiler['id']);
+		$I->addFairteilerPost($userbot['id'], $fairteiler['id']);
 
 		// load test
 		foreach(range(0, 200) as $number) {
 			$saver = $I->createFoodsaver('user', ['bezirk_id' => $bezirk1]);
 			$I->addBezirkMember($bezirk1, $saver['id']);
 			$I->addStoreTeam($store['id'], $saver['id']);
-			$I->addCollector($saver['id'], $store['id'], $faker->dateTime);
-			$I->addStoreNotiz($saver['id'], $store['id'], $faker->realText(50), $faker->dateTime());
-			$I->addForumThemePost($theme, $saver['id'], $faker->realText(100), $faker->dateTime());
+			$I->addCollector($saver['id'], $store['id']);
+			$I->addStoreNotiz($saver['id'], $store['id']);
+			$I->addForumThemePost($theme['id'], $saver['id']);
 
 			if ($number > 0 && $number % 100 == 0) {
 				$this->output->writeln($number);
