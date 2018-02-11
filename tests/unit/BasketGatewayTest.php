@@ -15,7 +15,7 @@ class BasketGatewayTest extends \Codeception\Test\Unit
 
 	protected function _before()
 	{
-		$this->gateway = $this->tester->container()->get(\Foodsharing\Modules\Basket\BasketGateway::class);
+		$this->gateway = $this->tester->get(\Foodsharing\Modules\Basket\BasketGateway::class);
 		$this->foodsaver = $this->tester->createFoodsaver();
 	}
 

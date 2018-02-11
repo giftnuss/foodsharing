@@ -15,12 +15,8 @@ class DashboardGatewayTest extends \Codeception\Test\Unit
 
 	protected function _before()
 	{
-		$this->gateway = $this->tester->container()->get(\Foodsharing\Modules\Dashboard\DashboardGateway::class);
+		$this->gateway = $this->tester->get(\Foodsharing\Modules\Dashboard\DashboardGateway::class);
 		$this->foodsaver = $this->tester->createFoodsaver();
-	}
-
-	protected function _after()
-	{
 	}
 
 	public function testGetNewestFoodBaskets()

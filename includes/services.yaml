@@ -4,14 +4,6 @@ services:
         autoconfigure: true
         public: true
 
-    # TODO: put this into code somewhere, so we can use the parameters from the config.inc.*.php files
-    pdo:
-        class: PDO
-        arguments:
-          - mysql:host=db;dbname=foodsharing
-          - root
-          - root
-
     Foodsharing\:
         resource: '../src/*'
         exclude: '../src/{Lib}'

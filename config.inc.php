@@ -5,6 +5,9 @@
 // TODO: maybe have a default env?
 // TODO: check if there is not already a concept of app environment elsewhere
 
+use DebugBar\DataCollector\PDO\TraceablePDO;
+use Foodsharing\DI;
+
 $FS_ENV = getenv('FS_ENV');
 $env_filename = 'config.inc.' . $FS_ENV . '.php';
 
@@ -39,3 +42,16 @@ if (defined('SENTRY_URL')) {
 }
 
 define('FPDF_FONTPATH', __DIR__ . '/lib/font/');
+
+if ($FS_ENV === 'dev') {
+	// In development we need to wrap the PDO instance for the DebugBar
+	$pdo = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_DB, DB_USER, DB_PASS);
+	$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+	$traceablePDO = new TraceablePDO($pdo);
+	DI::useTraceablePDO($traceablePDO);
+	Foodsharing\Debug\DebugBar::register($traceablePDO);
+} else {
+	DI::useDefaultPDO();
+}
+
+DI::compile();

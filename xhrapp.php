@@ -1,12 +1,11 @@
 <?php
 
+use Foodsharing\DI;
 use Foodsharing\Lib\Routing;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrResponses;
 
 require __DIR__ . '/includes/setup.php';
-
-global $container;
 
 $js = '';
 if (isset($_GET['app']) && isset($_GET['m'])) {
@@ -22,7 +21,7 @@ if (isset($_GET['app']) && isset($_GET['m'])) {
 	S::init();
 
 	$class = Routing::getClassName($app, 'Xhr');
-	$obj = $container->get(ltrim($class, '\\'));
+	$obj = DI::get(ltrim($class, '\\'));
 
 	if (method_exists($obj, $meth)) {
 		$out = $obj->$meth();

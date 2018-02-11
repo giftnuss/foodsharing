@@ -3,6 +3,7 @@
 use Flourish\fDate;
 use Flourish\fFile;
 use Flourish\fImage;
+use Foodsharing\DI;
 use Foodsharing\Lib\Db\ManualDb;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
@@ -1541,11 +1542,10 @@ function getFqcnPrefix($module)
 
 function loadApp($app)
 {
-	global $container;
 	$className = $app . 'Control';
 	$fqcn = getFqcnPrefix($app) . $className;
 
-	$appInstance = $container->get(ltrim($fqcn, '\\'));
+	$appInstance = DI::get(ltrim($fqcn, '\\'));
 
 	if (isset($_GET['a']) && method_exists($appInstance, $_GET['a'])) {
 		$meth = $_GET['a'];

@@ -15,7 +15,7 @@ class ContentGatewayTest extends \Codeception\Test\Unit
 
 	protected function _before()
 	{
-		$this->gateway = $this->tester->container()->get(\Foodsharing\Modules\Content\ContentGateway::class);
+		$this->gateway = $this->tester->get(\Foodsharing\Modules\Content\ContentGateway::class);
 	}
 
 	public function testGetContent()
