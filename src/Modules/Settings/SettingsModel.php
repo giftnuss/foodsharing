@@ -239,7 +239,7 @@ class SettingsModel extends Model
 		$this->del('DELETE FROM `' . PREFIX . 'mailchange` WHERE foodsaver_id = ' . (int)fsid() . '');
 	}
 
-	public function changeMail($email, $crypt)
+	public function changeMail($email)
 	{
 		$this->del('DELETE FROM `' . PREFIX . 'mailchange` WHERE foodsaver_id = ' . (int)fsid() . '');
 		$currentMail = $this->qOne('SELECT `email` FROM ' . PREFIX . 'foodsaver WHERE id = ' . (int)fsid());
@@ -247,9 +247,7 @@ class SettingsModel extends Model
 
 		if ($this->update('
 			UPDATE `' . PREFIX . 'foodsaver`
-			SET `email` = ' . $this->strval($email) . ',
-				`passwd` = ' . $this->strval($crypt) . '	
-
+			SET `email` = ' . $this->strval($email) . '
 			WHERE `id` = ' . (int)fsid() . '
 		')
 		) {

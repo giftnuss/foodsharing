@@ -98,18 +98,16 @@ class SettingsXhr extends Control
 			$did = strip_tags($_GET['did']);
 			if ($this->model->checkClient($fs['email'], $_GET['pw'])) {
 				if ($email = $this->model->getMailchange()) {
-					if ($crypt = $this->model->encryptMd5($email, $_GET['pw'])) {
-						if ($this->model->changeMail($email, $crypt)) {
-							return array(
-								'status' => 1,
-								'script' => 'pulseInfo("Deine E-Mail-Adresse wurde geändert!");$("#' . $did . '").dialog("close");'
-							);
-						} else {
-							return array(
-								'status' => 1,
-								'script' => 'pulseInfo(\'Die E-Mail-Adresse konnte nicht geändert werden, jemand anderes benutzt sie schon!\');'
-							);
-						}
+					if ($this->model->changeMail($email)) {
+						return array(
+							'status' => 1,
+							'script' => 'pulseInfo("Deine E-Mail-Adresse wurde geändert!");$("#' . $did . '").dialog("close");'
+						);
+					} else {
+						return array(
+							'status' => 1,
+							'script' => 'pulseInfo(\'Die E-Mail-Adresse konnte nicht geändert werden, jemand anderes benutzt sie schon!\');'
+						);
 					}
 				}
 			}

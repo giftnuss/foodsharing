@@ -619,7 +619,7 @@ abstract class Db
 			) {
 				// update stored password to modern
 				$this->update('UPDATE `' . PREFIX . "foodsaver` 
-					SET `fs_password` = NULL, `passwd` = NULL, `password` = '" . password_hash($pass, PASSWORD_BCRYPT) . "'
+					SET `fs_password` = NULL, `passwd` = NULL, `password` = '" . $this->password_hash($pass) . "'
 					WHERE `id` = " . $user['id']
 				);
 
