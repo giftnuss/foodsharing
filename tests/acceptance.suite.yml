@@ -23,3 +23,4 @@ modules:
         - \Helper\Foodsharing
         - \Helper\FoodsharingUrl
         - \Helper\Maildev
+        - Asserts
