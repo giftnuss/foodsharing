@@ -15,7 +15,6 @@ if (isset($_GET['app']) && isset($_GET['m'])) {
 	require_once 'lang/DE/de.php';
 
 	require_once 'lib/func.inc.php';
-	require_once 'lib/view.inc.php';
 
 	S::init();
 

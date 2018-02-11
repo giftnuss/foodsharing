@@ -19,10 +19,6 @@ class StoreControl extends Control
 		$this->view = new StoreView();
 		$this->v_utils = $g_view_utils;
 
-		if (!S::may()) {
-			goLogin();
-		}
-
 		parent::__construct();
 	}
 
@@ -48,14 +44,14 @@ class StoreControl extends Control
 			if (S::may('bieb')) {
 				$this->handle_add($bezirk_id);
 
-				addBread(s('bread_betrieb'), '/?page=' . $page);
+				addBread(s('bread_betrieb'), '/?page=betrieb');
 				addBread(s('bread_new_betrieb'));
 
 				if (isset($_GET['id'])) {
 					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
 				}
 
-				addContent($this->view->betrieb_form($bezirk, $page, $this->model->getBasics_lebensmittel(), $this->model->getBasics_foodsaver(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
+				addContent($this->view->betrieb_form($bezirk, 'betrieb', $this->model->getBasics_lebensmittel(), $this->model->getBasics_foodsaver(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
 
 				addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					array('name' => s('back_to_overview'), 'href' => '/?page=fsbetrieb&bid=' . $bezirk_id)
