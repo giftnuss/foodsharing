@@ -5,6 +5,7 @@
 ## Breaking changes
 
 ## Features
+- Use of bcrypt as hashing algorithm to store passwords
 
 ## Bugfixes
 - Reduce size of static images by lossless recompression with trimage !245 @NerdyProjects
@@ -12,6 +13,7 @@
 - Remove mass mail recipient options that are ambigous/irrelevant @NerdyProjects
 - Fix missing newsletter unsubscription links for pre-2014 foodsharing.de accounts @NerdyProjects
 - Fix newsletter should only be sent to activated accounts @NerdyProjects
+- Fixed a bug which throwed an error during mail change
 
 ## Refactoring
 - Remove old user registration code !246 @NerdyProjects
