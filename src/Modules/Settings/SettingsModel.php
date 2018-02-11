@@ -243,7 +243,7 @@ class SettingsModel extends Model
 	{
 		$this->del('DELETE FROM `' . PREFIX . 'mailchange` WHERE foodsaver_id = ' . (int)fsid() . '');
 		$currentMail = $this->qOne('SELECT `email` FROM ' . PREFIX . 'foodsaver WHERE id = ' . (int)fsid());
-		$this->logChangedSetting(fsId(), 'email', $currentMail, $email);
+		$this->logChangedSetting(fsId(), ['email' => $currentMail], ['email' => $email], ['email']);
 
 		if ($this->update('
 			UPDATE `' . PREFIX . 'foodsaver`
