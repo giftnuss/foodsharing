@@ -4,7 +4,7 @@ namespace Foodsharing\Lib\Xhr;
 
 class ViewUtils
 {
-	public static function xv_page($content, $title, $subtitle = '')
+	public static function page($content, $title, $subtitle = '')
 	{
 		if (!empty($subtitle)) {
 			$subtitle = '<p class="subtitle">' . $subtitle . '</p>';
@@ -20,7 +20,7 @@ class ViewUtils
 	</div>';
 	}
 
-	public static function xv_msgList()
+	public static function msgList()
 	{
 		$out = '
 		<div id="scrollbar1">
@@ -42,7 +42,7 @@ class ViewUtils
 	 * <p>'.$fs['anschrift'].'</p>
 	   <p>'.$fs['plz'].' '.$fs['stadt'].'</p>
 	 */
-	public static function xv_fsBubble($fs)
+	public static function fsBubble($fs)
 	{
 		return '<div style="height:80px;overflow:hidden;width:200px;">
 				<div style="margin-right:10px;float:left;margin-bottom:33px">
@@ -55,7 +55,7 @@ class ViewUtils
 			</div>';
 	}
 
-	public static function xv_bBubble($b)
+	public static function bBubble($b)
 	{
 		global $db;
 
@@ -123,7 +123,7 @@ class ViewUtils
 			' . $button;
 	}
 
-	public static function xv_childBezirke($childs, $parent_id)
+	public static function childBezirke($childs, $parent_id)
 	{
 		$out = '
 	<select class="select childChanger" id="xv-childbezirk-' . (int)$parent_id . '" onchange="u_printChildBezirke(this);">
@@ -138,7 +138,7 @@ class ViewUtils
 		return $out;
 	}
 
-	public static function xv_set($rows, $title = '')
+	public static function set($rows, $title = '')
 	{
 		$out = '
 	<div class="xv_set">
@@ -154,7 +154,7 @@ class ViewUtils
 	</div>';
 	}
 
-	public static function xv_msgLi($messages)
+	public static function msgLi($messages)
 	{
 		$out = '';
 		if (is_array($messages)) {
@@ -189,14 +189,14 @@ class ViewUtils
 		return $out;
 	}
 
-	public static function xv_hidden($id, $value)
+	public static function hidden($id, $value)
 	{
 		$id = id($id);
 
 		return '<input type="hidden" name="' . $id . '" id="' . $id . '" value="' . $value . '" />';
 	}
 
-	public static function xv_submit($id, $click = false)
+	public static function submit($id, $click = false)
 	{
 		$label = s($id);
 		$id = id($id);
@@ -212,12 +212,12 @@ class ViewUtils
 		return '<input type="submit" id="' . $id . '" name="' . $id . '" value="' . $label . '" />';
 	}
 
-	public static function xv_msgAppend($msg, $name, $time, $img)
+	public static function msgAppend($msg, $name, $time, $img)
 	{
 		return '<li class="msg"><span href="#57" class="msg"><span class="photo"><img src="' . $img . '" alt="avatar"></span><span class="subject"><span class="from">' . $name . '</span><span class="time">' . $time . '</span></span><span class="message">' . $msg . '</span><span style="display:block;clear:both;"></span></span></li>';
 	}
 
-	public static function xv_textarea($id)
+	public static function textarea($id)
 	{
 		$id = id($id);
 
