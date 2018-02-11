@@ -703,22 +703,6 @@ class ManualDb extends Db
 		}
 	}
 
-	/**
-	 * updates password for a given fs_id
-	 * seems used nowhere
-	 * TODO: decide whether to delete.
-	 */
-	private function updatePassword($fs_id, $new_pass)
-	{
-		$enc = $this->password_hash($new_pass);
-
-		return $this->update('
-			UPDATE 	`' . PREFIX . 'foodsaver`
-			SET 	`password` = ' . $this->strval($enc) . '
-			WHERE 	`id` = ' . $this->intval($fs_id) . '
-		');
-	}
-
 	public function getReg($id)
 	{
 		return $this->qRow('
