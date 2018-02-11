@@ -5,11 +5,6 @@ namespace Helper;
 use DateTime;
 use Faker;
 
-function get(&$var, $default = null)
-{
-	return isset($var) ? $var : $default;
-}
-
 class Foodsharing extends \Codeception\Module\Db
 {
 	public $faker;
@@ -68,7 +63,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'stadt' => $this->faker->city,
 			'lat' => $this->faker->latitude,
 			'lon' => $this->faker->longitude,
-			'anmeldedatum' => $this->toDateTime(),
+			'anmeldedatum' => $this->faker->dateTimeBetween('-5 years', '-5 days'),
 			'geb_datum' => $this->faker->dateTimeBetween('-80 years', '-18 years'),
 			'last_login' => $this->faker->dateTimeBetween('-1 years', '-1 hours'),
 			'anschrift' => $this->faker->streetName,
@@ -77,8 +72,9 @@ class Foodsharing extends \Codeception\Module\Db
 			'active' => 1,
 		], $extra_params);
 		$params['passwd'] = $this->encryptMd5($params['email'], $pass);
-		$params['geb_datum'] = $this->toDateTime(get($params['geb_datum']));
-		$params['last_login'] = $this->toDateTime(get($params['last_login']));
+		$params['geb_datum'] = $this->toDateTime($params['geb_datum']);
+		$params['last_login'] = $this->toDateTime($params['last_login']);
+		$params['anmeldedatum'] = $this->toDateTime($params['anmeldedatum']);
 		$id = $this->haveInDatabase('fs_foodsaver', $params);
 		$params['id'] = $id;
 
@@ -181,8 +177,8 @@ class Foodsharing extends \Codeception\Module\Db
 			'kette_id' => 0,
 			'betrieb_kategorie_id' => 0,
 		], $extra_params);
-		$params['status_date'] = $this->toDateTime(get($params['status_date']));
-		$params['added'] = $this->toDateTime(get($params['added']));
+		$params['status_date'] = $this->toDateTime($params['status_date']);
+		$params['added'] = $this->toDateTime($params['added']);
 
 		$params['id'] = $this->haveInDatabase('fs_betrieb', $params);
 
@@ -216,10 +212,10 @@ class Foodsharing extends \Codeception\Module\Db
 		$params = array_merge([
 			'foodsaver_id' => $user,
 			'betrieb_id' => $store,
-			'date' => $this->faker->dateTime,
+			'date' => $this->faker->dateTime(),
 			'confirmed' => 1
 		], $extra_params);
-		$params['date'] = $this->toDateTime(get($params['date']));
+		$params['date'] = $this->toDateTime($params['date']);
 
 		$id = $this->haveInDatabase('fs_abholer', $params);
 		$params['id'] = $id;
@@ -234,10 +230,10 @@ class Foodsharing extends \Codeception\Module\Db
 			'betrieb_id' => $store,
 			'milestone' => 0,
 			'text' => $this->faker->realText(100),
-			'zeit' => $this->faker->dateTime,
+			'zeit' => $this->faker->dateTime(),
 			'last' => 0, // should be 1 for newest entry, can't do that here though
 			], $extra_params);
-		$params['zeit'] = $this->toDateTime(get($params['zeit']));
+		$params['zeit'] = $this->toDateTime($params['zeit']);
 
 		$id = $this->haveInDatabase('fs_betrieb_notiz', $params);
 		$params['id'] = $id;
@@ -305,7 +301,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'time' => $this->faker->dateTime(),
 			'active' => '1',
 		], $extra_params);
-		$params['time'] = $this->toDateTime(get($params['time']));
+		$params['time'] = $this->toDateTime($params['time']);
 
 		$theme_id = $this->haveInDatabase('fs_theme', $params);
 
@@ -335,7 +331,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'body' => $this->faker->realText(200),
 			'time' => $this->faker->dateTime(),
 		], $extra_params);
-		$params['time'] = $this->toDateTime(get($params['time']));
+		$params['time'] = $this->toDateTime($params['time']);
 
 		$params['id'] = $this->haveInDatabase('fs_theme_post', $params);
 
@@ -357,8 +353,8 @@ class Foodsharing extends \Codeception\Module\Db
 			'last_message' => '',
 			'member' => '',
 		], $extra_params);
-		$params['start'] = $this->toDateTime(get($params['start']));
-		$params['last'] = $this->toDateTime(get($params['last']));
+		$params['start'] = $this->toDateTime($params['start']);
+		$params['last'] = $this->toDateTime($params['last']);
 		$id = $this->haveInDatabase('fs_conversation', $params);
 
 		foreach ($users as $user) {
@@ -393,7 +389,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'body' => $this->faker->realText(100),
 			'time' => $this->faker->dateTime()
 		], $extra_params);
-		$params['time'] = $this->toDateTime(get($params['time']));
+		$params['time'] = $this->toDateTime($params['time']);
 
 		$id = $this->haveInDatabase('fs_msg', $params);
 
@@ -413,17 +409,18 @@ class Foodsharing extends \Codeception\Module\Db
 	{
 		$params = array_merge([
 			'bezirk_id' => $bezirk,
-			'name' => $this->faker->city,
+			'name' => $this->faker->city(),
 			'desc' => $this->faker->text(200),
 			'status' => 1,
-			'anschrift' => $this->faker->address,
-			'plz' => $this->faker->postcode,
-			'ort' => $this->faker->city,
-			'lat' => $this->faker->latitude,
-			'lon' => $this->faker->longitude,
+			'anschrift' => $this->faker->address(),
+			'plz' => $this->faker->postcode(),
+			'ort' => $this->faker->city(),
+			'lat' => $this->faker->latitude(),
+			'lon' => $this->faker->longitude(),
+			'add_date' => $this->faker->dateTime(),
 			'add_foodsaver' => $user,
 		], $extra_params);
-		$params['add_date'] = $this->toDateTime(get($params['add_date']));
+		$params['add_date'] = $this->toDateTime($params['add_date']);
 
 		$id = $this->haveInDatabase('fs_fairteiler', $params);
 
@@ -470,9 +467,9 @@ class Foodsharing extends \Codeception\Module\Db
 		$params = array_merge([
 			'foodsaver_id' => $user,
 			'body' => $this->faker->realText(200),
-			'time' => $this->faker->dateTime,
+			'time' => $this->faker->dateTime(),
 		], $extra_params);
-		$params['time'] = $this->toDateTime(get($params['time']));
+		$params['time'] = $this->toDateTime($params['time']);
 
 		$id = $this->haveInDatabase('fs_wallpost', $params);
 
@@ -505,6 +502,7 @@ class Foodsharing extends \Codeception\Module\Db
 
 	private function toDateTime($date = null)
 	{
+		if ($date === null) return null;
 		if ($date instanceof DateTime) {
 			$dt = $date;
 		} else {
