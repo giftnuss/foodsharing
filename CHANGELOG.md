@@ -5,6 +5,7 @@
 ## Breaking changes
 
 ## Features
+- Removed the working groups from the team->teammember page !262 @BassTii
 
 ## Bugfixes
 - Reduce size of static images by lossless recompression with trimage !245 @NerdyProjects
