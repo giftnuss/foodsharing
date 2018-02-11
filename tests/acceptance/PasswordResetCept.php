@@ -18,7 +18,7 @@ $I->click('Senden');
 $I->see('Alles klar! Dir wurde ein Link zum Passwortändern per E-Mail zugeschickt');
 
 // recieve a mail
-$I->expectNumMails(1, 1000);
+$I->expectNumMails(1, 5);
 $mail = $I->getMails()[0];
 
 $I->assertEquals($mail->headers->to, $user['email'], 'correct recipient'); 
