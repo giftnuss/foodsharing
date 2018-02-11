@@ -445,7 +445,7 @@ class Foodsharing extends \Codeception\Module\Db
 
 	public function addFairteilerAdmin($user, $fairteiler, $extra_params = [])
 	{
-		return $this->addFairteilerFollower($user, $fairteiler, ['type' => 2]);
+		return $this->addFairteilerFollower($user, $fairteiler, array_merge($extra_params, ['type' => 2]));
 	}
 
 	public function addFairteilerPost($user, $fairteiler, $extra_params = [])
