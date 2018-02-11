@@ -603,7 +603,7 @@ abstract class Db
 			return false;
 		}
 
-		// modern hasing algorithm
+		// modern hashing algorithm
 		if ($user['password']) {
 			if (password_verify($pass, $user['password'])) {
 				return $user;
