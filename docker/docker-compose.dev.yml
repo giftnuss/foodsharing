@@ -167,6 +167,7 @@ services:
     ports:
       - 18081:80
     volumes:
+      - ${PWD}/docker/conf/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
       - /sessions
 
   # maildev
