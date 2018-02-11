@@ -2668,9 +2668,10 @@ class ManualDb extends Db
 			`sticker`,
 			`abholmenge`,
 			`team_status`,
-		      `prefetchtime`,
-		      `team_conversation_id`,
-		      `springer_conversation_id`
+			`prefetchtime`,
+			`team_conversation_id`,
+			`springer_conversation_id`,
+			(SELECT count(DISTINCT a.date) FROM fs_abholer AS a WHERE a.betrieb_id=fs_betrieb.id) AS pickup_count
 
 			FROM 		`' . PREFIX . 'betrieb`
 
