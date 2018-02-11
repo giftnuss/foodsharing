@@ -502,7 +502,9 @@ class Foodsharing extends \Codeception\Module\Db
 
 	private function toDateTime($date = null)
 	{
-		if ($date === null) return null;
+		if ($date === null) {
+			return null;
+		}
 		if ($date instanceof DateTime) {
 			$dt = $date;
 		} else {
