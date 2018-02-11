@@ -466,13 +466,6 @@ abstract class Db
 		}
 	}
 
-	public function encryptMd5($email, $pass)
-	{
-		$email = strtolower($email);
-
-		return md5($email . '-lz%&lk4-' . $pass);
-	}
-
 	public function __destruct()
 	{
 	}
@@ -546,6 +539,25 @@ abstract class Db
 		}
 
 		return $ger[$id];
+	}
+
+	/**
+	 * hashes password with modern hashing algorithmn.
+	 */
+	public function password_hash($password)
+	{
+		return password_hash($password, PASSWORD_BCRYPT);
+	}
+
+	/**
+	 * Generates md5 hash with email as salt. used before
+	 * xx.02.2018.
+	 */
+	public function encryptMd5($email, $pass)
+	{
+		$email = strtolower($email);
+
+		return md5($email . '-lz%&lk4-' . $pass);
 	}
 
 	/**
