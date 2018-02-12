@@ -8,7 +8,6 @@ use Foodsharing\Modules\Core\Model;
 require __DIR__ . '/includes/setup.php';
 
 require_once 'config.inc.php';
-require_once 'lib/func.inc.php';
 
 //session_init();
 S::init();
@@ -18,9 +17,6 @@ if (isset($g_page_cache)) {
 }
 
 require_once 'lang/DE/de.php';
-require_once 'lib/xhr.inc.php';
-require_once 'lib/xhr.view.inc.php';
-require_once 'lib/view.inc.php';
 
 $action = $_GET['f'];
 

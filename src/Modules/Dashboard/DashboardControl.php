@@ -2,11 +2,10 @@
 
 namespace Foodsharing\Modules\Dashboard;
 
-use Foodsharing\Modules\Content\ContentModel;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Content\ContentGateway;
-use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Profile\ProfileModel;
 
 class DashboardControl extends Control
 {
@@ -29,7 +28,7 @@ class DashboardControl extends Control
 			$this->func->go('/');
 		}
 
-		$this->user = $this->gateway->getUser(fsId());
+		$this->user = $this->gateway->getUser($this->func->fsId());
 	}
 
 	public function index()
@@ -82,7 +81,7 @@ class DashboardControl extends Control
 		}
 
 		if ($check) {
-			$cnt = $this->model->getContent(33);
+			$cnt = $this->contentGateway->getContent(33);
 
 			$cnt['body'] = str_replace(array(
 				'{NAME}',
@@ -147,14 +146,14 @@ class DashboardControl extends Control
 			'{ANREDE}'
 		), array(
 			S::user('name'),
-			s('anrede_' . S::user('gender'))
+			$this->func->s('anrede_' . S::user('gender'))
 		), $cnt['body']);
 
-		addContent(v_info($cnt['body'], $cnt['title']));
+		$this->func->addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
 
 		$this->view->updates();
 
-		if ($this->user['lat'] && ($baskets = $this->gateway->listCloseBaskets(fsId(), S::getLocation(), 50))) {
+		if ($this->user['lat'] && ($baskets = $this->gateway->listCloseBaskets($this->func->fsId(), S::getLocation(), 50))) {
 			$this->func->addContent($this->view->closeBaskets($baskets), CNT_LEFT);
 		} else {
 			if ($baskets = $this->gateway->getNewestFoodbaskets()) {
@@ -383,6 +382,192 @@ class DashboardControl extends Control
 				opacity:0.8;
 				font-size:12px;
 			}
+			#activity ul.linklist li span a:hover
+			{
+				text-decoration:underline !important;
+				color:#46891b !important;
+			}
+			
+			#activity ul.linklist li
+			{
+				margin-bottom:10px;
+				background-color:#ffffff;
+				padding:10px;
+				-webkit-border-radius: 6px;
+				-moz-border-radius: 6px;
+				border-radius: 6px;
+			}
+	
+			ul.linklist li span.n
+			{
+				font-weight:normal;
+				font-size:13px;	
+				margin-bottom:10px;
+				text-overflow: unset;
+				white-space: inherit;
+			}
+		
+			@media (max-width: 900px) 
+			{
+				#activity ul.linklist li span.qr textarea, #activity ul.linklist li span.qr .loader
+				{
+					width:74.6%;
+				}
+			}
+			@media (max-width: 400px) 
+			{
+				ul.linklist li span.n
+				{
+					height:55px;
+				}
+				#activity ul.linklist li span.qr textarea, #activity ul.linklist li span.qr .loader
+				{
+					width:82%;
+				}
+				#activity ul.linklist li span.time, #activity ul.linklist li span.qr
+				{
+					margin-left:0px;
+				}
+				#activity span.n small
+				{
+					float:none;
+					display:block;
+				}
+			}
+		');
+		$this->func->addScript('/js/jquery.tinysort.min.js');
+		$this->func->addScript('/js/activity.js');
+		$this->func->addJs('activity.init();');
+		$this->func->addContent('
+		<div class="head ui-widget-header ui-corner-top">
+			Updates-Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>
+		</div>
+		<div id="activity">
+			<div class="loader" style="padding:40px;background-image:url(/img/469.gif);background-repeat:no-repeat;background-position:center;"></div>
+			<div style="display:none" id="activity-info">' . $this->v_utils->v_info('Es gibt gerade nichts Neues') . '</div>
+		</div>');
+
+		/*
+		 * Top
+		*/
+		$me = $this->model->getFoodsaverBasics($this->func->fsId());
+		if ($me['rolle'] < 0 || $me['rolle'] > 4) {
+			$me['rolle'] = 0;
+		}
+		if ($me['geschlecht'] != 1 && $me['geschlecht'] != 2) {
+			$me['geschlecht'] = 0;
+		}
+
+		$gerettet = $me['stat_fetchweight'];
+
+		if ($gerettet > 0) {
+			$gerettet = '. Du hast <strong>' . number_format($gerettet, 2, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg</strong> gerettet.';
+		} else {
+			$gerettet = '';
+		}
+
+		$this->func->addContent(
+			'
+		<div class="top corner-all">
+			<div class="img">' . $this->func->avatar($me, 50) . '</div>
+				<h3>Hallo ' . $me['name'] . '</h3>
+				<p>' . $this->func->s('rolle_' . $me['rolle'] . '_' . $me['geschlecht']) . ' für ' . $me['bezirk_name'] . '</a>' . $gerettet . '</p>
+			<div style="clear:both;"></div>		
+		</div>',
+
+			CNT_TOP
+		);
+
+		/*
+		 * Nächste Termine
+		*/
+		$profileModel = new ProfileModel();
+		if ($dates = $profileModel->getNextDates($this->func->fsId(), 10)) {
+			$this->func->addContent($this->view->u_nextDates($dates), CNT_RIGHT);
+		}
+
+		/*
+		 * Deine Bezirke
+		*/
+		if (isset($_SESSION['client']['bezirke'])) {
+			$orga = '
+		<ul class="linklist">';
+			$out = '
+		<ul class="linklist">';
+			$orgacheck = false;
+			foreach ($_SESSION['client']['bezirke'] as $b) {
+				if ($b['type'] != 7) {
+					$out .= '
+			<li><a class="ui-corner-all" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a></li>';
+				} else {
+					$orgacheck = true;
+					$orga .= '
+			<li><a class="ui-corner-all" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a></li>';
+				}
+			}
+			$out .= '
+		</ul>';
+			$orga .= '
+		</ul>';
+
+			$out = $this->v_utils->v_field($out, 'Deine Bezirke', array('class' => 'ui-padding'));
+
+			if ($orgacheck) {
+				$out .= $this->v_utils->v_field($orga, 'Deine Gruppen', array('class' => 'ui-padding'));
+			}
+
+			$this->func->addContent($out, CNT_RIGHT);
+		}
+
+		/*
+		 * Essenskörbe
+		 */
+
+		if ($baskets = $this->model->closeBaskets()) {
+			$out = '
+			<ul class="linklist">';
+			foreach ($baskets as $b) {
+				$img = 'img/basket.png';
+				if (!empty($b['picture'])) {
+					$img = 'images/basket/thumb-' . $b['picture'];
+				}
+
+				$distance = round($b['distance'], 1);
+
+				if ($distance == 1.0) {
+					$distance = '1 km';
+				} elseif ($distance < 1) {
+					$distance = ($distance * 1000) . ' m';
+				} else {
+					$distance = number_format($distance, 1, ',', '.') . ' km';
+				}
+
+				$out .= '
+					<li>
+						<a class="ui-corner-all" onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . ',modal:1});return false;" href="#">
+							<span style="float:left;margin-right:7px;"><img width="35px" alt="Maike" src="' . $img . '" class="ui-corner-all"></span>
+							<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' . $distance . ')</strong>' . $this->func->tt($b['description'], 50) . '</span>
+							
+							<span style="clear:both;"></span>
+						</a>
+					</li>';
+			}
+			$out .= '
+			</ul>
+			<div style="text-align:center;">
+				<a class="button" href="/essenskoerbe/find/">Alle Essenskörbe</a>
+			</div>';
+
+			$this->func->addContent($this->v_utils->v_field($out, 'Essenskörbe in Deiner Nähe'), CNT_LEFT);
+		}
+
+		/*
+		 * Deine Betriebe
+		*/
+		if ($betriebe = $this->model->getMyBetriebe(array('sonstige' => false))) {
+			$this->func->addContent($this->view->u_myBetriebe($betriebe), CNT_LEFT);
+		} else {
+			$this->func->addContent($this->v_utils->v_info('Du bist bis jetzt in keinem Filial-Team.'), CNT_LEFT);
 		}
 	}
 }

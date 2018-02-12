@@ -6,6 +6,7 @@ use Exception;
 use Flourish\fDate;
 use Flourish\fFile;
 use Flourish\fImage;
+use Foodsharing\DI;
 use Foodsharing\Lib\Db\ManualDb;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
@@ -1563,7 +1564,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$className = $app . 'Control';
 		$fqcn = $this->getFqcnPrefix($app) . $className;
 
-		$appInstance = new $fqcn();
+		$appInstance = DI::$shared->get(ltrim($fqcn, '\\'));
+
 		if (isset($_GET['a']) && method_exists($appInstance, $_GET['a'])) {
 			$meth = $_GET['a'];
 			$appInstance->$meth();
