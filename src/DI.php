@@ -6,50 +6,66 @@ use DebugBar\DataCollector\PDO\TraceablePDO;
 use PDO;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 class DI
 {
 	/**
-	 * @var \Symfony\Component\DependencyInjection\ContainerBuilder
+	 * @var \Foodsharing\DI
 	 */
-	private static $container;
+	public static $shared;
 
-	public static function init()
+	private $container;
+
+	public static function initShared()
 	{
-		self::$container = new ContainerBuilder();
-		$loader = new YamlFileLoader(self::$container, new FileLocator(__DIR__));
-		$loader->load('../includes/services.yaml');
+		self::$shared = new DI();
 	}
 
-	public static function useTraceablePDO($traceablePDO)
+	public function __construct()
 	{
-		self::$container->set(PDO::class, $traceablePDO);
-		self::$container->register(PDO::class, TraceablePDO::class);
+		$this->container = new ContainerBuilder();
+		$loader = new YamlFileLoader($this->container, new FileLocator(__DIR__));
+
+		$definition = new Definition();
+		$definition
+			->setAutowired(true)
+			->setAutoconfigured(true)
+			->setPublic(true);
+
+		$loader->registerClasses($definition, 'Foodsharing\\', '*', '{Lib}');
+
 	}
 
-	public static function useDefaultPDO()
+	public function useTraceablePDO($traceablePDO)
 	{
-		self::$container
+		$this->container->set(PDO::class, $traceablePDO);
+		$this->container->register(PDO::class, TraceablePDO::class);
+	}
+
+	public function usePDO($dsn, $user, $password)
+	{
+		$this->container
 			->register(\PDO::class, \PDO::class)
-			->addArgument('mysql:host=' . DB_HOST . ';dbname=' . DB_DB)
-			->addArgument(DB_USER)
-			->addArgument(DB_PASS)
+			->addArgument($dsn)
+			->addArgument($user)
+			->addArgument($password)
 			->addMethodCall('setAttribute', [PDO::ATTR_EMULATE_PREPARES, false]);
 	}
 
-	public static function compile()
+	public function compile()
 	{
-		self::$container->compile();
+		$this->container->compile();
 	}
 
 	/**
 	 * @throws \Exception
 	 */
-	public static function get($id)
+	public function get($id)
 	{
-		return self::$container->get($id);
+		return $this->container->get($id);
 	}
 }
 
-DI::init();
+DI::initShared();

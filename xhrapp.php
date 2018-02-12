@@ -21,7 +21,7 @@ if (isset($_GET['app']) && isset($_GET['m'])) {
 	S::init();
 
 	$class = Routing::getClassName($app, 'Xhr');
-	$obj = DI::get(ltrim($class, '\\'));
+	$obj = DI::$shared->get(ltrim($class, '\\'));
 
 	if (method_exists($obj, $meth)) {
 		$out = $obj->$meth();

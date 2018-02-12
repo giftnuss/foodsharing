@@ -1545,7 +1545,7 @@ function loadApp($app)
 	$className = $app . 'Control';
 	$fqcn = getFqcnPrefix($app) . $className;
 
-	$appInstance = DI::get(ltrim($fqcn, '\\'));
+	$appInstance = DI::$shared->get(ltrim($fqcn, '\\'));
 
 	if (isset($_GET['a']) && method_exists($appInstance, $_GET['a'])) {
 		$meth = $_GET['a'];
