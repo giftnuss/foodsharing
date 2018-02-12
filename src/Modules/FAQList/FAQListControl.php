@@ -9,9 +9,8 @@ class FAQListControl extends Control
 {
 	public function __construct()
 	{
-		parent::__construct();
-
 		$this->model = new Model();
+		parent::__construct();
 	}
 
 	public function index()

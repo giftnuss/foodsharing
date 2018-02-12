@@ -13,16 +13,17 @@ class ProfileXhr extends Control
 
 	public function __construct()
 	{
+		$this->model = new ProfileModel();
+		$this->view = new ProfileView();
+
+		parent::__construct();
+
 		if (!S::may()) {
 			return array(
 				'status' => 1,
 				'script' => 'login();'
 			);
 		}
-		$this->model = new ProfileModel();
-		$this->view = new ProfileView();
-
-		parent::__construct();
 
 		if (isset($_GET['id'])) {
 			$this->model->setFsId($_GET['id']);

@@ -16,9 +16,10 @@ class EmailControl extends Control
 
 	public function __construct()
 	{
-		parent::__construct();
 		$this->model = new Model();
 		$this->mbmodel = new MailboxModel();
+
+		parent::__construct();
 
 		if (!S::may('orga')) {
 			$this->func->go('/');

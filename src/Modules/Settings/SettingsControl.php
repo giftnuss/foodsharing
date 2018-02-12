@@ -13,14 +13,14 @@ class SettingsControl extends Control
 
 	public function __construct()
 	{
-		if (!S::may()) {
-			$this->func->goLogin();
-		}
-
 		$this->model = new SettingsModel();
 		$this->view = new SettingsView();
 
 		parent::__construct();
+
+		if (!S::may()) {
+			$this->func->goLogin();
+		}
 
 		if (isset($_GET['newmail'])) {
 			$this->handle_newmail();

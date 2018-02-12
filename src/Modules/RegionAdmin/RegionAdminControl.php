@@ -10,12 +10,13 @@ class RegionAdminControl extends Control
 {
 	public function __construct()
 	{
-		if (!S::may('orga')) {
-			$this->func->go('/');
-		}
 		$this->view = new RegionAdminView();
 		$this->model = new Model();
 		parent::__construct();
+
+		if (!S::may('orga')) {
+			$this->func->go('/');
+		}
 	}
 
 	public function index()

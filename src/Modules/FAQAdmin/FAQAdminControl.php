@@ -10,14 +10,14 @@ class FAQAdminControl extends Control
 {
 	public function __construct()
 	{
-		if (!S::may('orga')) {
-			$this->func->goLogin();
-		}
+		$this->view = new FAQAdminView();
+		$this->model = new Model();
 
 		parent::__construct();
 
-		$this->view = new FAQAdminView();
-		$this->model = new Model();
+		if (!S::may('orga')) {
+			$this->func->goLogin();
+		}
 	}
 
 	public function index()

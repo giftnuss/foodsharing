@@ -9,14 +9,14 @@ class StoreControl extends Control
 {
 	public function __construct()
 	{
-		if (!S::may()) {
-			$this->func->goLogin();
-		}
-
 		$this->model = new StoreModel();
 		$this->view = new StoreView();
 
 		parent::__construct();
+
+		if (!S::may()) {
+			$this->func->goLogin();
+		}
 	}
 
 	public function index()

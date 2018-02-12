@@ -15,14 +15,14 @@ class FairTeilerControl extends Control
 
 	public function __construct()
 	{
-		if (isset($_GET['uri']) && ($ftid = $this->uriInt(2))) {
-			$this->func->go('/?page=fairteiler&sub=ft&id=' . $ftid);
-		}
-
 		$this->model = new FairTeilerModel();
 		$this->view = new FairTeilerView();
 
 		parent::__construct();
+
+		if (isset($_GET['uri']) && ($ftid = $this->uriInt(2))) {
+			$this->func->go('/?page=fairteiler&sub=ft&id=' . $ftid);
+		}
 
 		/*
 		 * allowed only for logged in users

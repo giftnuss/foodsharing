@@ -12,10 +12,11 @@ class EmailTemplateAdminControl extends Control
 		$this->model = new EmailTemplateAdminModel();
 		$this->view = new EmailTemplateAdminView();
 
+		parent::__construct();
+
 		if (!S::may('orga')) {
 			$this->func->go('/');
 		}
-		parent::__construct();
 	}
 
 	public function index()

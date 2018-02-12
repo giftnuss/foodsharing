@@ -12,14 +12,14 @@ class ProfileControl extends Control
 
 	public function __construct()
 	{
-		if (!S::may()) {
-			$this->func->go('/');
-		}
-
 		$this->model = new ProfileModel();
 		$this->view = new ProfileView();
 
 		parent::__construct();
+
+		if (!S::may()) {
+			$this->func->go('/');
+		}
 
 		if ($id = $this->uriInt(2)) {
 			$this->model->setFsId((int)$id);

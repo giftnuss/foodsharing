@@ -9,15 +9,15 @@ class FoodsaverXhr extends Control
 {
 	public function __construct()
 	{
-		// permission check
-		if (!S::may('orga') && !$this->func->isBotFor($_GET['bid'])) {
-			return false;
-		}
-
 		$this->model = new FoodsaverModel();
 		$this->view = new FoodsaverView();
 
 		parent::__construct();
+
+		// permission check
+		if (!S::may('orga') && !$this->func->isBotFor($_GET['bid'])) {
+			return false;
+		}
 	}
 
 	public function loadFoodsaver()

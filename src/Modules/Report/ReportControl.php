@@ -8,13 +8,14 @@ class ReportControl extends Control
 {
 	public function __construct()
 	{
-		if (!isset($_GET['sub'])) {
-			$this->func->go('/?page=report&sub=uncom');
-		}
 		$this->model = new ReportModel();
 		$this->view = new ReportView();
 
 		parent::__construct();
+
+		if (!isset($_GET['sub'])) {
+			$this->func->go('/?page=report&sub=uncom');
+		}
 	}
 
 	public function index()
