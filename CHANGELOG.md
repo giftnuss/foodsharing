@@ -6,6 +6,7 @@
 
 ## Features
 - Removed the working groups from the team->teammember page !262 @BassTii
+- Changed way of gendering in passport from "/" to "_" !251 @D0nPiano
 
 ## Bugfixes
 - Reduce size of static images by lossless recompression with trimage !245 @NerdyProjects

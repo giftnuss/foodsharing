@@ -206,11 +206,11 @@ class PassportGeneratorControl extends Control
 	{
 		$role = [
 			0 => [ // not defined
-				0 => 'Freiwillige/r',
-				1 => 'Foodsaver',
-				2 => 'Betriebsverantwortliche/r',
-				3 => 'Botschafter/in',
-				4 => 'Botschafter/in' // role 4 stands for Orga but is referred to an AMB for the business card
+				0 => 'Freiwillige_r',
+				1 => 'Foodsaver_in',
+				2 => 'Betriebsverantwortliche_r',
+				3 => 'Botschafter_in',
+				4 => 'Botschafter_in' // role 4 stands for Orga but is referred to an AMB for the business card
 			],
 			1 => [ // male
 				0 => 'Freiwilliger',
