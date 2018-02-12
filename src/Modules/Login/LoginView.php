@@ -9,7 +9,7 @@ class LoginView extends View
 {
 	public function loginForm()
 	{
-		return v_form_text('email_adress') .
+		return $this->v_utils->v_form_text('email_adress') .
 			v_form_passwd('password') .
 			v_form_hidden('ismob', '0') .
 			'<p>
@@ -102,7 +102,7 @@ class LoginView extends View
 							<h3>' . $this->func->s('contact_info') . '</h3>
 							<div class="element-wrapper">
 								<input placeholder="' . $this->func->s('login_phone') . '" type="text" value="" id="login_phone" name="login_phone" class="input text value" />
-								' . v_info($this->func->s('login_phone_info')) . '
+								' . $this->v_utils->v_info($this->func->s('login_phone_info')) . '
 							</div>
 							<div class="element-wrapper">
 								<input placeholder="' . $this->func->s('login_location') . '" type="text" value="" id="login_location" name="login_location" class="input text value" />
@@ -146,7 +146,7 @@ class LoginView extends View
 				<div style="clear:both;"></div>
 		</div>
 		<div id="joinloader" style="display:none;"><span class="fa fa-circle-o-notch fa-spin"></span></div>
-		<div id="joinready" style="display:none">' . v_success($this->func->s('check_mail'), $this->func->s('join_success')) . '</div>';
+		<div id="joinready" style="display:none">' . $this->v_utils->v_success($this->func->s('check_mail'), $this->func->s('join_success')) . '</div>';
 	}
 
 	public function passwordRequest()
@@ -157,32 +157,32 @@ class LoginView extends View
 				$mail = $_GET['m'];
 			}
 
-			$cnt = v_info('Bitte trage hier Deine E-Mail-Adresse ein, mit welcher Du auf foodsharing.de angemeldet bist!');
+			$cnt = $this->v_utils->v_info('Bitte trage hier Deine E-Mail-Adresse ein, mit welcher Du auf foodsharing.de angemeldet bist!');
 
 			$cnt .= '
 			<form name="passReset" method="post" class="contact-form" action="' . $_SERVER['REQUEST_URI'] . '">
-					' . v_form_text('email', array('value' => $mail)) . '
-					' . v_form_submit($this->func->s('send'), 'submitted') . '
+					' . $this->v_utils->v_form_text('email', array('value' => $mail)) . '
+					' . $this->v_utils->v_form_submit($this->func->s('send'), 'submitted') . '
 			</form>';
 
-			return v_field($cnt, 'Passwort zurücksetzen', array('class' => 'ui-padding'));
+			return $this->v_utils->v_field($cnt, 'Passwort zurücksetzen', array('class' => 'ui-padding'));
 		} else {
-			return v_field(v_info('Du bist angemeldet als ' . S::user('name'), 'Du bist angemeldet'), array('class' => 'ui-padding'));
+			return $this->v_utils->v_field($this->v_utils->v_info('Du bist angemeldet als ' . S::user('name'), 'Du bist angemeldet'), array('class' => 'ui-padding'));
 		}
 	}
 
 	public function newPasswordForm($key)
 	{
 		$key = preg_replace('/[^0-9a-zA-Z]/', '', $key);
-		$cnt = v_info('Jetzt kannst Du Dein Passwort ändern.');
+		$cnt = $this->v_utils->v_info('Jetzt kannst Du Dein Passwort ändern.');
 		$cnt .= '
 			<form name="newPass" method="post" class="contact-form">
 				<input type="hidden" name="k" value="' . $key . '" />
-				' . v_form_passwd('pass1') . '
-				' . v_form_passwd('pass2') . '
-				' . v_form_submit($this->func->s('save'), 'submitted') . '
+				' . $this->v_utils->v_form_passwd('pass1') . '
+				' . $this->v_utils->v_form_passwd('pass2') . '
+				' . $this->v_utils->v_form_submit($this->func->s('save'), 'submitted') . '
 			</form>';
 
-		return v_field($cnt, 'Neues Passwort setzen', array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($cnt, 'Neues Passwort setzen', array('class' => 'ui-padding'));
 	}
 }

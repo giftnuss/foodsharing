@@ -199,7 +199,7 @@ class SettingsControl extends Control
 					return $this->view->quizFailed($this->model->getContent(13));
 				}
 			} else {
-				$this->func->addContent(v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:it@' . DEFAULT_HOST . '"">it@' . DEFAULT_HOST . '</a>'));
+				$this->func->addContent($this->v_utils->v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:it@' . DEFAULT_HOST . '"">it@' . DEFAULT_HOST . '</a>'));
 			}
 		} else {
 			switch ($this->foodsaver['rolle']) {
@@ -305,7 +305,7 @@ class SettingsControl extends Control
 					$data = $this->func->unsetAll($_POST, array('photo_public', 'new_bezirk'));
 					$this->model->updateFields($data, 'foodsaver', $this->func->fsId());
 
-					$this->func->addContent(v_field(
+					$this->func->addContent($this->v_utils->v_field(
 						v_info($this->func->s('upgrade_bot_success')),
 						$this->func->s('upgrade_request_send'),
 						array(
@@ -341,9 +341,9 @@ class SettingsControl extends Control
 				$this->func->addContent(
 					$this->view->confirmBot($this->model->getContent(16)) .
 
-					v_form('upBotsch', array(v_field(
+					v_form('upBotsch', array($this->v_utils->v_field(
 						v_bezirkChooser('bezirk', $this->func->getBezirk(), array('label' => 'In welcher Region möchtest Du Botschafter werden?')) .
-						'<div style="display:none" id="bezirk-notAvail">' . v_form_text('new_bezirk') . '</div>' .
+						'<div style="display:none" id="bezirk-notAvail">' . $this->v_utils->v_form_text('new_bezirk') . '</div>' .
 						v_form_select('time', array('values' => array(
 							array('id' => 1, 'name' => '3-5 Stunden'),
 							array('id' => 2, 'name' => '5-8 Stunden'),
@@ -380,7 +380,7 @@ class SettingsControl extends Control
 						array('class' => 'ui-padding')
 					),
 
-						v_field($rv['body'] . v_form_checkbox('rv_botschafter', array('required' => true, 'values' => array(
+						v_field($rv['body'] . $this->v_utils->v_form_checkbox('rv_botschafter', array('required' => true, 'values' => array(
 								array('id' => 1, 'name' => $this->func->s('rv_accept'))
 							))), $rv['title'], array('class' => 'ui-padding'))
 					), array('submit' => 'Antrag auf Botschafterrolle verbindlich absenden'))
@@ -536,12 +536,12 @@ class SettingsControl extends Control
 		$photo = $this->model->getPhoto($this->func->fsId());
 
 		if (!(file_exists('images/thumb_crop_' . $photo))) {
-			$p_cnt = v_photo_edit('img/portrait.png');
+			$p_cnt = $this->v_utils->v_photo_edit('img/portrait.png');
 		} else {
-			$p_cnt = v_photo_edit('images/thumb_crop_' . $photo);
+			$p_cnt = $this->v_utils->v_photo_edit('images/thumb_crop_' . $photo);
 		}
 
-		return v_field($p_cnt, 'Dein Foto');
+		return $this->v_utils->v_field($p_cnt, 'Dein Foto');
 	}
 
 	private function handle_newmail()

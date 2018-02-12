@@ -140,7 +140,7 @@ class EventView extends View
 			$public_el = $this->v_utils->v_input_wrapper('Ist die Veranstaltung öffentlich?', '<label><input id="public" type="checkbox" name="public" value="1"' . $chk . ' /> Ja die Veranstaltung ist Öffentlich</label>');
 		}
 
-		return $this->v_utils->v_field(v_form('eventsss', array(
+		return $this->v_utils->v_field($this->v_utils->v_form('eventsss', array(
 			$public_el,
 			$bezirkchoose,
 			v_form_text('name', array('required' => true)),
@@ -208,7 +208,7 @@ class EventView extends View
 			);
 		}
 
-		return v_field($this->menu($menu), '<i class="fa fa-gear"></i> ' . $this->func->s('event_options'));
+		return $this->v_utils->v_field($this->menu($menu), '<i class="fa fa-gear"></i> ' . $this->func->s('event_options'));
 	}
 
 	public function eventTop($event)
@@ -253,27 +253,27 @@ class EventView extends View
 			$icons = $this->fsIcons($invites['accepted']);
 
 			if (!$this->func->isMob() && count($invites['accepted']) > 20) {
-				$icons = v_scroller($icons, 200);
+				$icons = $this->v_utils->v_scroller($icons, 200);
 			}
-			$out .= v_field($icons, '' . count($invites['accepted']) . ' sind dabei');
+			$out .= $this->v_utils->v_field($icons, '' . count($invites['accepted']) . ' sind dabei');
 		}
 
 		if (!empty($invites['maybe'])) {
 			$icons = $this->fsIcons($invites['maybe']);
 
 			if (!$this->func->isMob() && count($invites['maybe']) > 20) {
-				$icons = v_scroller($icons, 200);
+				$icons = $this->v_utils->v_scroller($icons, 200);
 			}
-			$out .= v_field($icons, '' . count($invites['maybe']) . ' kommen vielleicht');
+			$out .= $this->v_utils->v_field($icons, '' . count($invites['maybe']) . ' kommen vielleicht');
 		}
 
 		if (!empty($invites['invited'])) {
 			$icons = $this->fsIcons($invites['invited']);
 
 			if (!$this->func->isMob() && count($invites['invited']) > 20) {
-				$icons = v_scroller($icons, 200);
+				$icons = $this->v_utils->v_scroller($icons, 200);
 			}
-			$out .= v_field($icons, '' . count($invites['invited']) . ' Einladungen');
+			$out .= $this->v_utils->v_field($icons, '' . count($invites['invited']) . ' Einladungen');
 		}
 
 		return $out;
@@ -281,6 +281,6 @@ class EventView extends View
 
 	public function event($event)
 	{
-		return v_field('<p>' . nl2br($this->func->autolink($event['description'])) . '</p>', 'Beschreibung', array('class' => 'ui-padding'));
+		return $this->v_utils->v_field('<p>' . nl2br($this->func->autolink($event['description'])) . '</p>', 'Beschreibung', array('class' => 'ui-padding'));
 	}
 }

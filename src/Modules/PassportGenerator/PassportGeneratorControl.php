@@ -48,14 +48,14 @@ class PassportGeneratorControl extends Control
 		if ($bezirke = $this->model->getPassFoodsaver($this->bezirk_id)) {
 			$this->func->addHidden('
 			<div id="verifyconfirm-dialog" title="' . $this->func->s('verify_confirm_title') . '">
-				' . v_info('<p>' . $this->func->s('verify_confirm') . '</p>', $this->func->s('verify_confirm_title')) . '
+				' . $this->v_utils->v_info('<p>' . $this->func->s('verify_confirm') . '</p>', $this->func->s('verify_confirm_title')) . '
 				<span class="button_confirm" style="display:none">' . $this->func->s('verify_confirm_button') . '</span>
 				<span class="button_abort" style="display:none">' . $this->func->s('abort') . '</span>
 			</div>');
 
 			$this->func->addHidden('
 			<div id="unverifyconfirm-dialog" title="Es ist ein Problem aufgetreten">
-				' . v_info('<p>' . $this->func->s('unverify_confirm') . '</p>', $this->func->s('unverify_confirm_title')) . '
+				' . $this->v_utils->v_info('<p>' . $this->func->s('unverify_confirm') . '</p>', $this->func->s('unverify_confirm_title')) . '
 				<span class="button_confirm" style="display:none">' . $this->func->s('unverify_confirm_button') . '</span>
 				<span class="button_abort" style="display:none">' . $this->func->s('abort') . '</span>
 			</div>');

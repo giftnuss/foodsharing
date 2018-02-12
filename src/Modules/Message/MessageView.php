@@ -44,11 +44,11 @@ class MessageView extends View
 	{
 		$content = $this->peopleChooser('compose_recipients');
 
-		$content .= v_form_textarea('compose_body');
+		$content .= $this->v_utils->v_form_textarea('compose_body');
 
-		$content .= v_input_wrapper(false, '<a class="button" id="compose_submit" href="#">' . $this->func->s('send') . '</a>');
+		$content .= $this->v_utils->v_input_wrapper(false, '<a class="button" id="compose_submit" href="#">' . $this->func->s('send') . '</a>');
 
-		return '<div id="compose">' . v_field($content, $this->func->s('new_message'), array('class' => 'ui-padding')) . '</div>';
+		return '<div id="compose">' . $this->v_utils->v_field($content, $this->func->s('new_message'), array('class' => 'ui-padding')) . '</div>';
 	}
 
 	public function conversationList($conversations, $click = 'msg.loadConversation')
@@ -88,7 +88,7 @@ class MessageView extends View
 				}
 			}
 		} else {
-			$list = '<li class="noconv">' . v_info($this->func->s('no_conversations')) . '</li>';
+			$list = '<li class="noconv">' . $this->v_utils->v_info($this->func->s('no_conversations')) . '</li>';
 		}
 
 		return $list;
@@ -96,7 +96,7 @@ class MessageView extends View
 
 	public function convListWrapper($list)
 	{
-		return v_field('<div id="conversation-list"><ul class="linklist conversation-list">' . $list . '</ul></div>', '<i class="fa fa-comments"></i> ' . $this->func->s('conversations'));
+		return $this->v_utils->v_field('<div id="conversation-list"><ul class="linklist conversation-list">' . $list . '</ul></div>', '<i class="fa fa-comments"></i> ' . $this->func->s('conversations'));
 	}
 
 	public function conversation()
@@ -108,10 +108,10 @@ class MessageView extends View
 		$out .= '
 			<div id="msg-control">
 				<form>
-					' . v_form_textarea('msg_answer', array('style' => 'width: 88%;', 'nolabel' => true, 'placeholder' => $this->func->s('write_something'))) . '<input id="conv_submit" type="submit" class="button" name="submit" value="&#xf0a9;" />
+					' . $this->v_utils->v_form_textarea('msg_answer', array('style' => 'width: 88%;', 'nolabel' => true, 'placeholder' => $this->func->s('write_something'))) . '<input id="conv_submit" type="submit" class="button" name="submit" value="&#xf0a9;" />
 				</form>
 			</div>';
 
-		return '<div id="msg-conversation-wrapper" style="display:none;">' . v_field($out, '<span id="msg-conversation-title"><i class="fa fa-comment"></i></span>', array('class' => 'ui-padding')) . '</div>';
+		return '<div id="msg-conversation-wrapper" style="display:none;">' . $this->v_utils->v_field($out, '<span id="msg-conversation-title"><i class="fa fa-comment"></i></span>', array('class' => 'ui-padding')) . '</div>';
 	}
 }

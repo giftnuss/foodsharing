@@ -69,7 +69,7 @@ class FoodsaverControl extends Control
 
 				$this->func->addContent(picture_box(), CNT_RIGHT);
 
-				$this->func->addContent(v_field(v_menu(array(
+				$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					$this->func->pageLink('foodsaver', 'back_to_overview')
 				)), $this->func->s('actions')), CNT_RIGHT);
 
@@ -78,7 +78,7 @@ class FoodsaverControl extends Control
 				}
 			}
 		} else {
-			$this->func->addContent(v_info('Du hast leider keine Berechtigung für diesen Bezirk'));
+			$this->func->addContent($this->v_utils->v_info('Du hast leider keine Berechtigung für diesen Bezirk'));
 		}
 	}
 
@@ -133,7 +133,7 @@ function foodsaver_form($title = 'Foodsaver')
 	$position = '';
 
 	if (S::may('orga')) {
-		$position = v_form_text('position');
+		$position = $this->v_utils->v_form_text('position');
 		$options = array(
 			'values' => array(
 				array('id' => 1, 'name' => 'ist im Bundesweiten Orgateam dabei')
@@ -144,8 +144,8 @@ function foodsaver_form($title = 'Foodsaver')
 			$options['checkall'] = true;
 		}
 
-		$orga = v_form_checkbox('orgateam', $options);
-		$orga .= v_form_select('rolle', array(
+		$orga = $this->v_utils->v_form_checkbox('orgateam', $options);
+		$orga .= $this->v_utils->v_form_select('rolle', array(
 			'values' => array(
 				array('id' => 0, 'name' => 'Foodsharer/in'),
 				array('id' => 1, 'name' => 'Foodsaver/in (FS)'),
@@ -193,9 +193,9 @@ function foodsaver_form($title = 'Foodsaver')
 		$bezirk = $db->getBezirk($g_data['bezirk_id']);
 	}
 
-	$bezirkchoose = v_bezirkChooser('bezirk_id', $bezirk);
+	$bezirkchoose = $this->v_utils->v_bezirkChooser('bezirk_id', $bezirk);
 
-	return v_quickform($title, array(
+	return $this->v_utils->v_quickform($title, array(
 		$bezirkchoose,
 		$orga,
 		v_form_text('name', array('required' => true)),
@@ -230,13 +230,13 @@ function picture_box()
 	$photo = $db->getPhoto($_GET['id']);
 
 	if (!(file_exists('images/thumb_crop_' . $photo))) {
-		$p_cnt = v_photo_edit('img/portrait.png', (int)$_GET['id']);
+		$p_cnt = $this->v_utils->v_photo_edit('img/portrait.png', (int)$_GET['id']);
 	} else {
-		$p_cnt = v_photo_edit('images/thumb_crop_' . $photo, (int)$_GET['id']);
-		//$p_cnt = v_photo_edit('img/portrait.png');
+		$p_cnt = $this->v_utils->v_photo_edit('images/thumb_crop_' . $photo, (int)$_GET['id']);
+		//$p_cnt = $this->v_utils->v_photo_edit('img/portrait.png');
 	}
 
-	return v_field($p_cnt, 'Dein Foto');
+	return $this->v_utils->v_field($p_cnt, 'Dein Foto');
 }
 
 function u_delete_account()
@@ -264,13 +264,13 @@ function u_delete_account()
 	<div style="text-align:center;margin-bottom:10px;">
 		<span id="delete-account">' . $this->func->s('delete_now') . '</span>
 	</div>
-	' . v_info($this->func->s('posible_restore_account'), $this->func->s('reference'));
+	' . $this->v_utils->v_info($this->func->s('posible_restore_account'), $this->func->s('reference'));
 
 	$this->func->addHidden('
 		<div id="delete-account-confirm">
-			' . v_info($this->func->s('delete_account_confirm_msg')) . '
+			' . $this->v_utils->v_info($this->func->s('delete_account_confirm_msg')) . '
 		</div>
 	');
 
-	return v_field($content, $this->func->s('delete_account'), array('class' => 'ui-padding'));
+	return $this->v_utils->v_field($content, $this->func->s('delete_account'), array('class' => 'ui-padding'));
 }

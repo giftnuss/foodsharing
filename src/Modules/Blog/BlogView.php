@@ -75,7 +75,7 @@ class BlogView extends View
 		} else {
 			$title = $this->func->s('edit_article');
 			global $g_data;
-			$this->func->addContent(v_field(
+			$this->func->addContent($this->v_utils->v_field(
 				v_activeSwitcher('blog_entry', $_GET['id'], $g_data['active']),
 				'Status',
 				array('class' => 'ui-padding')
@@ -98,7 +98,7 @@ class BlogView extends View
 				$title,
 				array('class' => 'ui-padding')
 			),
-			v_field(v_form_tinymce('body', array('nowrapper' => true, 'public_content' => true)), 'Inhalt')
+			v_field($this->v_utils->v_form_tinymce('body', array('nowrapper' => true, 'public_content' => true)), 'Inhalt')
 		));
 	}
 }

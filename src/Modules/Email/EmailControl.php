@@ -227,16 +227,6 @@ class EmailControl extends Control
 	{
 		$out = '';
 
-		/*
-		 *  [0] => Array
-		(
-				[id] => 4
-				[name] => asdas
-				[message] => <p>asdasf</p>
-				[zeit] => 2013-09-03 22:12:59
-				[anz] => 1
-		)
-		*/
 		$recip = $this->model->qCol('
 			SELECT 	CONCAT(fs.name," ",fs.nachname)
 			FROM 	`' . PREFIX . 'email_status` e,

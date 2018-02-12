@@ -48,7 +48,7 @@ class WorkGroupControl extends Control
 			if ($groups = $this->model->listGroups()) {
 				$this->func->addContent($this->view->listGroups($groups, $this->my_applications, $this->my_stats));
 			} else {
-				$this->func->addContent(v_info('Hier gibt es noch keine Arbeitsgruppen'));
+				$this->func->addContent($this->v_utils->v_info('Hier gibt es noch keine Arbeitsgruppen'));
 			}
 		}
 	}

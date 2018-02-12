@@ -114,7 +114,7 @@ class FairTeilerControl extends Control
 			if ($fairteiler = $this->model->listFairteiler($this->bezirk_id)) {
 				$this->func->addContent($this->view->listFairteiler($fairteiler));
 			} else {
-				$this->func->addContent(v_info($this->func->s('no_fairteiler_available')));
+				$this->func->addContent($this->v_utils->v_info($this->func->s('no_fairteiler_available')));
 			}
 			$this->func->addContent($this->view->ftOptions($this->bezirk_id), CNT_RIGHT);
 		}
@@ -191,7 +191,7 @@ class FairTeilerControl extends Control
 		$this->func->addContent(
 			$this->view->fairteilerHead() . '
 			<div>
-				' . v_info('Beachte, dass Deine Beiträge auf der Fair-Teiler Pinnwand öffentlich einsehbar sind.', 'Hinweis!') . '
+				' . $this->v_utils->v_info('Beachte, dass Deine Beiträge auf der Fair-Teiler Pinnwand öffentlich einsehbar sind.', 'Hinweis!') . '
 			</div>
 			<div class="ui-widget ui-widget-content ui-corner-all margin-bottom">
 				' . $this->wallposts('fairteiler', $this->fairteiler['id']) . '
@@ -240,7 +240,7 @@ class FairTeilerControl extends Control
 		}
 
 		$this->func->addContent($this->view->fairteilerForm());
-		$this->func->addContent(v_menu(array(
+		$this->func->addContent($this->v_utils->v_menu(array(
 			array('name' => $this->func->s('back'), 'href' => '/?page=fairteiler&bid=' . (int)$this->bezirk_id . '')
 		), $this->func->s('options')), CNT_RIGHT);
 	}

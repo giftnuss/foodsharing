@@ -219,7 +219,7 @@ class StoreXhr extends Control
 					$dia = new XhrDialog();
 
 					$dia->setTitle('Fehlende Zuordnung');
-					$dia->addContent(v_info('Für folgende Betriebe wurde noch kein Bezirk zugeordnet. Bitte gib einen Bezirk an!'));
+					$dia->addContent($this->v_utils->v_info('Für folgende Betriebe wurde noch kein Bezirk zugeordnet. Bitte gib einen Bezirk an!'));
 					$dia->addOpt('width', '650px');
 					$dia->noOverflow();
 
@@ -234,7 +234,7 @@ class StoreXhr extends Control
 					$cnt = '
 					<div id="betriebetoselect">';
 					foreach ($betriebe as $b) {
-						$cnt .= v_form_select('b_' . $b['id'], array(
+						$cnt .= $this->v_utils->v_form_select('b_' . $b['id'], array(
 							'label' => $b['name'] . ', ' . $b['str'] . ' ' . $b['hsnr'],
 							'values' => $bezirks
 						));
@@ -274,7 +274,7 @@ class StoreXhr extends Control
 						});		
 					');
 					$dia->addContent($cnt);
-					$dia->addContent(v_input_wrapper(false, '<a class="button" id="savebetriebetoselect" href="#">' . $this->func->s('save') . '</a>'));
+					$dia->addContent($this->v_utils->v_input_wrapper(false, '<a class="button" id="savebetriebetoselect" href="#">' . $this->func->s('save') . '</a>'));
 
 					return $dia->xhrout();
 				}

@@ -37,7 +37,7 @@ class EventXhr extends Control
 		if ($this->model->setInviteStatus($_GET['id'], 1)) {
 			$dialog = new XhrDialog();
 			$dialog->setTitle('Einladung');
-			$dialog->addContent(v_info('Lieben Dank! Du hast die Einladung angenommen.'));
+			$dialog->addContent($this->v_utils->v_info('Lieben Dank! Du hast die Einladung angenommen.'));
 			$dialog->addButton('Zum Event', 'goTo(\'/?page=event&id=' . (int)$_GET['id'] . '\');');
 			$dialog->addAbortButton();
 
@@ -50,7 +50,7 @@ class EventXhr extends Control
 		if ($this->model->setInviteStatus($_GET['id'], 2)) {
 			$dialog = new XhrDialog();
 			$dialog->setTitle('Einladung');
-			$dialog->addContent(v_info('Lieben Dank! Schön, dass Du vielleicht dabei bist.'));
+			$dialog->addContent($this->v_utils->v_info('Lieben Dank! Schön, dass Du vielleicht dabei bist.'));
 			$dialog->addButton('Zum Event', 'goTo(\'/?page=event&id=' . (int)$_GET['id'] . '\');');
 			$dialog->addAbortButton();
 

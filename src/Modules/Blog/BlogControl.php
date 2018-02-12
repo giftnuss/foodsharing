@@ -47,7 +47,7 @@ class BlogControl extends Control
 				$out .= $this->view->newsListItem($n);
 			}
 
-			$this->func->addContent(v_field($out, $this->func->s('news')));
+			$this->func->addContent($this->v_utils->v_field($out, $this->func->s('news')));
 			$this->func->addContent($this->view->pager($page));
 		} elseif ($page > 1) {
 			$this->func->go('/?page=blog');
@@ -76,7 +76,7 @@ class BlogControl extends Control
 				$this->func->info($this->func->s('blog_entry_empty'));
 			}
 
-			$this->func->addContent(v_field(v_menu(array(
+			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 				array(
 					'href' => '/?page=blog&sub=add',
 					'name' => $this->func->s('new_article')
@@ -94,7 +94,7 @@ class BlogControl extends Control
 						$this->func->addTitle($post['name']);
 						$this->func->addBread($post['name'], '/?page=blog&post=' . (int)$post['id']);
 						$this->func->addContent($this->view->topbar($post['name'], $this->func->niceDate($post['time_ts'])));
-						$this->func->addContent(v_field($post['body'], $post['name'], array('class' => 'ui-padding')));
+						$this->func->addContent($this->v_utils->v_field($post['body'], $post['name'], array('class' => 'ui-padding')));
 					}
 				}
 			}
@@ -120,7 +120,7 @@ class BlogControl extends Control
 
 			$this->func->addContent($this->view->blog_entry_form($bezirke, true));
 
-			$this->func->addContent(v_field(v_menu(array(
+			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 				$this->func->pageLink('blog', 'back_to_overview')
 			)), $this->func->s('actions')), CNT_LEFT);
 		} else {
@@ -159,7 +159,7 @@ class BlogControl extends Control
 
 			$this->func->addContent($this->view->blog_entry_form($bezirke));
 
-			$this->func->addContent(v_field(v_menu(array(
+			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 				$this->func->pageLink('blog', 'back_to_overview')
 			)), $this->func->s('actions')), CNT_LEFT);
 		} else {

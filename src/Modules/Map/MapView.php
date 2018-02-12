@@ -12,9 +12,9 @@ class MapView extends View
 		$this->func->addHidden('
 			<div id="b_content" class="loading">
 				<div class="inner">
-					' . v_input_wrapper($this->func->s('status'), 'Betrieb spendet', 'bcntstatus') . '
-					' . v_input_wrapper('Verantwortliche Foodsaver', '...', 'bcntverantwortlich') . '
-					' . v_input_wrapper($this->func->s('specials'), '...', 'bcntspecial') . '
+					' . $this->v_utils->v_input_wrapper($this->func->s('status'), 'Betrieb spendet', 'bcntstatus') . '
+					' . $this->v_utils->v_input_wrapper('Verantwortliche Foodsaver', '...', 'bcntverantwortlich') . '
+					' . $this->v_utils->v_input_wrapper($this->func->s('specials'), '...', 'bcntspecial') . '
 				</div>
 				<input type="hidden" class="fetchbtn" name="fetchbtn" value="' . $this->func->s('want_to_fetch') . '" />
 			</div>

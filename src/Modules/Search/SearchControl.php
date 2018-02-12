@@ -31,12 +31,12 @@ class SearchControl extends Control
 				foreach ($res as $key => $r) {
 					$cnt = '';
 					foreach ($r as $erg) {
-						$cnt .= v_input_wrapper($erg['name'], $erg['teaser'], 'search', array('click' => $erg['click']));
+						$cnt .= $this->v_utils->v_input_wrapper($erg['name'], $erg['teaser'], 'search', array('click' => $erg['click']));
 					}
-					$out .= v_field($cnt, count($r) . ' ' . $this->func->s($key) . ' gefunden', array('class' => 'ui-padding'));
+					$out .= $this->v_utils->v_field($cnt, count($r) . ' ' . $this->func->s($key) . ' gefunden', array('class' => 'ui-padding'));
 				}
 			} else {
-				$out .= v_field(v_info('Die Suche gab leider keine Treffer'), 'Ergebnis', array('class' => 'ui-padding'));
+				$out .= $this->v_utils->v_field($this->v_utils->v_info('Die Suche gab leider keine Treffer'), 'Ergebnis', array('class' => 'ui-padding'));
 			}
 		}
 

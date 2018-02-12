@@ -89,7 +89,7 @@ class ProfileView extends View
 
 	public function usernotes($notes, $userCompanies, $userCompaniesCount)
 	{
-		$page = new vPage($this->foodsaver['name'] . ' Notizen', v_info($this->func->s('user_notes_info')) . $notes);
+		$page = new vPage($this->foodsaver['name'] . ' Notizen', $this->v_utils->v_info($this->func->s('user_notes_info')) . $notes);
 		$page->setBread('Notizen');
 
 		$page->addSectionLeft($this->photo());
@@ -372,7 +372,7 @@ class ProfileView extends View
 		$online = '';
 
 		if ($this->foodsaver['online']) {
-			$online = '<div style="margin-top:10px;">' . v_info($this->foodsaver['name'] . ' ist online!', false, '<i class="fa fa-circle" style="color:#5ab946;"></i>') . '</div>';
+			$online = '<div style="margin-top:10px;">' . $this->v_utils->v_info($this->foodsaver['name'] . ' ist online!', false, '<i class="fa fa-circle" style="color:#5ab946;"></i>') . '</div>';
 		}
 
 		return '<div style="text-align:center;">
@@ -445,7 +445,7 @@ class ProfileView extends View
 			}
 
 			if ($this->foodsaver['sleep_msg'] != '') {
-				$value .= '<br />' . v_info($this->foodsaver['sleep_msg']);
+				$value .= '<br />' . $this->v_utils->v_info($this->foodsaver['sleep_msg']);
 			}
 
 			$infos[] = array(

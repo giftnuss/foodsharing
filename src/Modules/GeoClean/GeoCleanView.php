@@ -8,7 +8,7 @@ class GeoCleanView extends View
 {
 	public function rightmenu()
 	{
-		return v_menu(array(
+		return $this->v_utils->v_menu(array(
 			array(
 				'name' => 'Alle durchprobieren',
 				'click' => 'u_goAll();return false;'
@@ -30,9 +30,9 @@ class GeoCleanView extends View
 				array('cnt' => '<a href="/?page=foodsaver&a=edit&id=' . $fs['id'] . '" class="button">' . $this->func->s('edit') . '</a> <a href="#" onclick="u_getGeo(' . (int)$fs['id'] . ');return false;" class="button">Koordinaten ermitteln</a>')
 			);
 			$this->func->addHidden('
-				' . v_form_hidden('fs' . $fs['id'] . 'anschrift', $fs['anschrift']) . '
-				' . v_form_hidden('fs' . $fs['id'] . 'plz', $fs['plz']) . '	
-				' . v_form_hidden('fs' . $fs['id'] . 'stadt', $fs['stadt']) . '	
+				' . $this->v_utils->v_form_hidden('fs' . $fs['id'] . 'anschrift', $fs['anschrift']) . '
+				' . $this->v_utils->v_form_hidden('fs' . $fs['id'] . 'plz', $fs['plz']) . '	
+				' . $this->v_utils->v_form_hidden('fs' . $fs['id'] . 'stadt', $fs['stadt']) . '	
 			');
 		}
 
@@ -62,7 +62,7 @@ class GeoCleanView extends View
 			];
 		}
 
-		$out = v_tablesorter([
+		$out = $this->v_utils->v_tablesorter([
 			['name' => $this->func->s('name')],
 			['name' => $this->func->s('fs_count'), 'width' => 120]
 		], $rows, ['pager' => true]);

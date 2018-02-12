@@ -205,7 +205,7 @@ class LoginXhr extends Control
 			$this->fillMemcacheUserVars();
 
 			$menu = $this->func->getMenu();
-			$msgbar = v_msgBar();
+			$msgbar = $this->v_utils->v_msgBar();
 
 			return array(
 				'status' => 1,

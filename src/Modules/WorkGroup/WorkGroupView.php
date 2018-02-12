@@ -21,7 +21,7 @@ class WorkGroupView extends View
 		// Überregionale
 		$items = array();
 		$items[] = array('name' => 'Alle anzeigen', 'href' => '/?page=groups');
-		$out .= v_field(v_menu($items), 'Überregionale Gruppen');
+		$out .= $this->v_utils->v_field($this->v_utils->v_menu($items), 'Überregionale Gruppen');
 
 		// Lokale Gruppen
 		$items = array();
@@ -33,14 +33,14 @@ class WorkGroupView extends View
 			}
 		}
 
-		$out .= v_field(v_menu($items), 'Lokalgruppen');
+		$out .= $this->v_utils->v_field($this->v_utils->v_menu($items), 'Lokalgruppen');
 
 		// Ländegruppen
 		$items = array();
 		foreach ($countrys as $c) {
 			$items[] = array('name' => 'Gruppen für ' . $c['name'], 'href' => '/?page=groups&p=' . $c['id']);
 		}
-		$out .= v_field(v_menu($items), 'Länderspezifische Gruppen');
+		$out .= $this->v_utils->v_field($this->v_utils->v_menu($items), 'Länderspezifische Gruppen');
 
 		/*
 		 * Deine Bezirke
@@ -62,7 +62,7 @@ class WorkGroupView extends View
 		}
 
 		if ($orgacheck) {
-			$out .= v_field($orga, 'Deine Gruppen', array('class' => 'ui-padding'));
+			$out .= $this->v_utils->v_field($orga, 'Deine Gruppen', array('class' => 'ui-padding'));
 		}
 
 		return $out;
@@ -138,14 +138,14 @@ class WorkGroupView extends View
 			}
 
 			if (isset($myapps[$g['id']])) {
-				$info = '<div class="ui-padding">' . v_info('Für diese Gruppe hast Du Dich bereits beworben') . '</div>';
+				$info = '<div class="ui-padding">' . $this->v_utils->v_info('Für diese Gruppe hast Du Dich bereits beworben') . '</div>';
 			} elseif (!$this->func->hasBezirk($g['id'])) {
 				if ($this->canApply($g, $mystats)) {
 					$btn .= '<a class="button" href="#" onclick="ajreq(\'apply\',{id:' . $g['id'] . '});">Für diese Arbeitsgruppe bewerben</a>';
 				} elseif ($g['apply_type'] == 3) {
 					$btn .= '<a class="button" href="#" onclick="ajreq(\'addtogroup\',{id:' . $g['id'] . '});">Dieser Arbeitsgruppe beitreten</a>';
 				} elseif ($g['apply_type'] == 1 && !S::may('orga')) {
-					$info .= v_info('
+					$info .= $this->v_utils->v_info('
 						Für Diese Arbeitsgruppe kannst Du Dich mit ' . $g['banana_count'] . ' Vertrauensbananen und ' . $g['fetch_count'] . ' Abholungen bewerben sofern Du schon ' . $g['week_num'] . ' Wochen als Foodsaver dabei bist		
 					') . '<div style="margin-bottom:5px;"></div>';
 				}
@@ -166,7 +166,7 @@ class WorkGroupView extends View
 				<div class="clear"></div>
 			</div>';
 
-			$out .= v_field($group, $g['name'], array('class' => 'ui-padding'));
+			$out .= $this->v_utils->v_field($group, $g['name'], array('class' => 'ui-padding'));
 		}
 
 		$out .= '
@@ -204,7 +204,7 @@ class WorkGroupView extends View
 
 	public function applyForm($group)
 	{
-		return v_form('apply', array(
+		return $this->v_utils->v_form('apply', array(
 			v_form_textarea('motivation', array('label' => 'Was ist Deine Motivation, in der Gruppe ' . $group['name'] . ' mitzuwirken?')),
 			v_form_textarea('faehigkeit', array('label' => 'Was sind Deine Fähigkeiten, die Du in diesem Bereich hast?')),
 			v_form_textarea('erfahrung', array('label' => 'Kannst Du in der Gruppe auf Erfahrungen, die Du woanders gesammelt hast zurückgreifen? Wenn ja, wo bzw. was?')),
@@ -240,11 +240,11 @@ class WorkGroupView extends View
 
 		$this->func->setEditData($group);
 
-		$basics = v_form_text('name') .
+		$basics = $this->v_utils->v_form_text('name') .
 			v_form_textarea('teaser') .
 			v_form_picture('photo', array('resize' => array(528, 60, 128), 'crop' => array((528 / 350), 1)));
 
-		$apply = v_form_select('apply_type', array(
+		$apply = $this->v_utils->v_form_select('apply_type', array(
 				'values' => array(
 					array('id' => 0, 'name' => 'Niemand (geschlossene Gruppe)'),
 					array('id' => 1, 'name' => 'Jeder, der bestimmte Vertrauenspunkte erfüllt'),
@@ -261,11 +261,11 @@ class WorkGroupView extends View
 			))) .
 			'</div>';
 
-		$out .= v_form('editgroup', array(
+		$out .= $this->v_utils->v_form('editgroup', array(
 			v_field($basics, $group['name'] . ' bearbeiten', array('class' => 'ui-padding')),
 			v_field($apply, 'Bewerbungen', array('class' => 'ui-padding')),
-			v_field(v_form_tagselect('member', array('xhr' => 'recip')), $this->func->s('member'), array('class' => 'ui-padding')),
-			v_field(v_form_tagselect('leader', array('xhr' => 'recip')), $this->func->s('leader'), array('class' => 'ui-padding'))
+			v_field($this->v_utils->v_form_tagselect('member', array('xhr' => 'recip')), $this->func->s('member'), array('class' => 'ui-padding')),
+			v_field($this->v_utils->v_form_tagselect('leader', array('xhr' => 'recip')), $this->func->s('leader'), array('class' => 'ui-padding'))
 		), array('submit' => 'Änderungen speichern'));
 
 		return $out;
@@ -284,9 +284,9 @@ class WorkGroupView extends View
 			foreach ($group['leader'] as $gl) {
 				$head .= '<a style="margin:4px 4px 0 0;" onclick="profile(' . (int)$gl['id'] . ');return false;" href="#" class="member"><img alt="' . $gl['name'] . '" src="' . $this->func->img($gl['photo']) . '"></a>';
 			}
-			$head = v_input_wrapper(count($group['leader']) . ' Ansprechpartner', $head);
+			$head = $this->v_utils->v_input_wrapper(count($group['leader']) . ' Ansprechpartner', $head);
 		}
 
-		return $head . v_form_textarea('message');
+		return $head . $this->v_utils->v_form_textarea('message');
 	}
 }

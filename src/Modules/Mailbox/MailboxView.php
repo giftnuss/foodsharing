@@ -52,12 +52,12 @@ class MailboxView extends View
          ' . $lat_js . '	
 		');
 
-		return v_field('<div id="mailfolder"></div><input type="hidden" id="mbh-mailbox" value="" /><input type="hidden" id="mbh-folder" value="" /><input type="hidden" id="mbh-type" value="" />', 'Mailboxen');
+		return $this->v_utils->v_field('<div id="mailfolder"></div><input type="hidden" id="mbh-mailbox" value="" /><input type="hidden" id="mbh-folder" value="" /><input type="hidden" id="mbh-type" value="" />', 'Mailboxen');
 	}
 
 	public function manageMemberBox($box)
 	{
-		return v_quickform($box['name'] . '@' . DEFAULT_HOST, array(
+		return $this->v_utils->v_quickform($box['name'] . '@' . DEFAULT_HOST, array(
 			v_form_tagselect('foodsaver_' . $box['id'], array('label' => $this->func->s('mailbox_member'), 'xhr' => 'foodsaver')),
 			v_input_wrapper($this->func->s('email_name'), '<input type="text" value="' . $box['email_name'] . '" name="email_name" class="input text value">'),
 			v_form_hidden('mbid', $box['id'])
@@ -66,21 +66,21 @@ class MailboxView extends View
 
 	public function mailboxform()
 	{
-		return v_quickform($this->func->s('new_mailbox'), array(
+		return $this->v_utils->v_quickform($this->func->s('new_mailbox'), array(
 			v_form_text('name', array('desc' => $this->func->s('mailbox_name_desc')))
 		), array('submit' => $this->func->s('save')));
 	}
 
 	public function manageOpt()
 	{
-		return v_menu(array(
+		return $this->v_utils->v_menu(array(
 			array('name' => $this->func->s('new_mailbox'), 'href' => '/?page=mailbox&a=newbox')
 		), $this->func->s('options'));
 	}
 
 	public function options()
 	{
-		return v_menu(array(
+		return $this->v_utils->v_menu(array(
 			array('name' => $this->func->s('refresh'), 'click' => 'mb_refresh();return false;'),
 			array('name' => $this->func->s('new_message'), 'click' => 'mb_new_message();return false;')
 		), $this->func->s('options'));
@@ -90,7 +90,7 @@ class MailboxView extends View
 	{
 		return '
 			<tr class="message">
-				<td colspan="4" align="center"><div class="ui-padding">' . v_info($this->func->s('no_message')) . '</div></td>	
+				<td colspan="4" align="center"><div class="ui-padding">' . $this->v_utils->v_info($this->func->s('no_message')) . '</div></td>	
 			</tr>		
 		';
 	}
@@ -469,7 +469,7 @@ class MailboxView extends View
 								<div class="wrapper">
 									<div class="et-filebox">
 										<form method="post" target="et-upload" action="/xhrapp.php?app=mailbox&m=attach" enctype="multipart/form-data">
-											' . v_form_file('et-attach', array('btlabel' => $this->func->s('attach_file'))) . '
+											' . $this->v_utils->v_form_file('et-attach', array('btlabel' => $this->func->s('attach_file'))) . '
 										</form>
 									</div>
 	
@@ -486,7 +486,7 @@ class MailboxView extends View
 		</div>
 		');
 
-		return v_field('
+		return $this->v_utils->v_field('
 			<table id="messagelist" class="records-table">
 				<thead>
 					<tr>

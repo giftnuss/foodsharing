@@ -33,7 +33,7 @@ class ContentControl extends Control
 
 				$this->func->addContent($this->content_form());
 
-				$this->func->addContent(v_field(v_menu(array(
+				$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					$this->func->pageLink('content', 'back_to_overview')
 				)), $this->func->s('actions')), CNT_RIGHT);
 			} elseif ($id = $this->func->getActionId('delete')) {
@@ -52,7 +52,7 @@ class ContentControl extends Control
 
 				$this->func->addContent($this->content_form());
 
-				$this->func->addContent(v_field(v_menu(array(
+				$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					$this->func->pageLink('content', 'back_to_overview')
 				)), $this->func->s('actions')), CNT_RIGHT);
 			} elseif ($id = $this->func->getActionId('view')) {
@@ -83,12 +83,12 @@ class ContentControl extends Control
 						array('name' => $this->func->s('actions'), 'sort' => false, 'width' => 50)
 					), $rows);
 
-					$this->func->addContent(v_field($table, 'Öffentliche Webseiten bearbeiten'));
+					$this->func->addContent($this->v_utils->v_field($table, 'Öffentliche Webseiten bearbeiten'));
 				} else {
 					$this->func->info($this->func->s('content_empty'));
 				}
 
-				$this->func->addContent(v_field(v_menu(array(
+				$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					array('href' => '/?page=content&a=neu', 'name' => $this->func->s('neu_content'))
 				)), 'Aktionen'), CNT_RIGHT);
 			}
@@ -251,7 +251,7 @@ class ContentControl extends Control
 				$title,
 				array('class' => 'ui-padding')
 			),
-			v_field(v_form_tinymce('body', array('filemanager' => true, 'public_content' => true, 'nowrapper' => true)), 'Inhalt')
+			v_field($this->v_utils->v_form_tinymce('body', array('filemanager' => true, 'public_content' => true, 'nowrapper' => true)), 'Inhalt')
 		), array('submit' => $this->func->s('save')));
 	}
 

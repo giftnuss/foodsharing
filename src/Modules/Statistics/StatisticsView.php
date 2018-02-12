@@ -34,7 +34,7 @@ class StatisticsView extends View
 		$out .= '
 		</table>';
 
-		return v_field($out, $this->func->s('active_cities'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($out, $this->func->s('active_cities'), array('class' => 'ui-padding'));
 	}
 
 	public function getStatTotal($stat)
@@ -49,7 +49,7 @@ class StatisticsView extends View
 		fscount,
 		fairteilercount
 		*/
-		return v_field('
+		return $this->v_utils->v_field('
 		<div id="stat_whole">
 			<div class="stat_item">
 					<div class="stat_badge">
@@ -116,6 +116,6 @@ class StatisticsView extends View
 		$out .= '
 		</table>';
 
-		return v_field($out, $this->func->s('our_foodsavers'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($out, $this->func->s('our_foodsavers'), array('class' => 'ui-padding'));
 	}
 }

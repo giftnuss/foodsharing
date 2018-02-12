@@ -14,9 +14,15 @@ class XhrDialog
 	private $onclose;
 	private $onopen;
 	private $classnames;
+	private $v_utils;
+	private $func;
 
 	public function __construct($title = false)
 	{
+		global $g_view_utils;
+		$this->v_utils = $g_view_utils;
+		global $g_func;
+		$this->func = $g_func;
 		$this->id = 'd-' . uniqid();
 		$this->buttons = array();
 		$this->options = array();
@@ -135,7 +141,7 @@ class XhrDialog
 	{
 		$in_id = $this->id . '-' . $id;
 
-		$this->addContent(v_input_wrapper($this->func->s($id . '-desc'), '
+		$this->addContent($this->v_utils->v_input_wrapper($this->func->s($id . '-desc'), '
 				<span id="' . $in_id . '"><i class="fa fa-image"></i> ' . $this->func->s($id . '-choose') . '</span>
 				<input class="input" type="hidden" name="filename" id="' . $in_id . '-filename" value="" />
 				<div class="attach-preview" style="float:right;">

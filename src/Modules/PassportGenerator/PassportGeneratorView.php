@@ -52,7 +52,7 @@ class PassportGeneratorView extends View
 
 	public function menubar()
 	{
-		return v_menu(array(
+		return $this->v_utils->v_menu(array(
 			array('name' => 'Alle markieren', 'click' => 'checkAllCb(true);return false;'),
 			array('name' => 'Keine markieren', 'click' => 'checkAllCb(false);return false;')
 		), $this->func->s('options'));
@@ -60,13 +60,13 @@ class PassportGeneratorView extends View
 
 	public function start()
 	{
-		return v_menu(array(
+		return $this->v_utils->v_menu(array(
 			array('name' => 'markierte Ausweise generieren', 'href' => '#start')
 		), $this->func->s('start'));
 	}
 
 	public function tips()
 	{
-		return v_info($this->func->s('tips_content'), $this->func->s('tips'));
+		return $this->v_utils->v_info($this->func->s('tips_content'), $this->func->s('tips'));
 	}
 }

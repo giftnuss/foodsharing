@@ -48,7 +48,7 @@ class ApplicationControl extends Control
 			$this->func->addBread('Bewerbung von ' . $application['name'], '');
 			$this->func->addContent($this->view->application($application));
 
-			$this->func->addContent(v_field(
+			$this->func->addContent($this->v_utils->v_field(
 				$this->wallposts('application', $application['id']),
 				'Status-Notizen'
 			));

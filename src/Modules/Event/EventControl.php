@@ -40,7 +40,7 @@ class EventControl extends Control
 			if ($event['invites']) {
 				$this->func->addContent($this->view->invites($event['invites']), CNT_RIGHT);
 			}
-			$this->func->addContent(v_field($this->wallposts('event', $event['id']), 'Pinnwand'));
+			$this->func->addContent($this->v_utils->v_field($this->wallposts('event', $event['id']), 'Pinnwand'));
 		} elseif (!isset($_GET['sub'])) {
 			$this->func->go('/?page=dashboard');
 		}
