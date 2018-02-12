@@ -58,16 +58,16 @@ class MailboxView extends View
 	public function manageMemberBox($box)
 	{
 		return $this->v_utils->v_quickform($box['name'] . '@' . DEFAULT_HOST, array(
-			v_form_tagselect('foodsaver_' . $box['id'], array('label' => $this->func->s('mailbox_member'), 'xhr' => 'foodsaver')),
-			v_input_wrapper($this->func->s('email_name'), '<input type="text" value="' . $box['email_name'] . '" name="email_name" class="input text value">'),
-			v_form_hidden('mbid', $box['id'])
+			$this->v_utils->v_form_tagselect('foodsaver_' . $box['id'], array('label' => $this->func->s('mailbox_member'), 'xhr' => 'foodsaver')),
+			$this->v_utils->v_input_wrapper($this->func->s('email_name'), '<input type="text" value="' . $box['email_name'] . '" name="email_name" class="input text value">'),
+			$this->v_utils->v_form_hidden('mbid', $box['id'])
 		), array('submit' => $this->func->s('save')));
 	}
 
 	public function mailboxform()
 	{
 		return $this->v_utils->v_quickform($this->func->s('new_mailbox'), array(
-			v_form_text('name', array('desc' => $this->func->s('mailbox_name_desc')))
+			$this->v_utils->v_form_text('name', array('desc' => $this->func->s('mailbox_name_desc')))
 		), array('submit' => $this->func->s('save')));
 	}
 

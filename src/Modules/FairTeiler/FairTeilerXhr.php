@@ -38,6 +38,7 @@ class FairTeilerXhr extends Control
 		if (!$this->mayFairteiler($_GET['fid'])) {
 			return false;
 		}
+		$post = '';
 
 		if ($ft = $this->model->getFairteiler($_GET['fid'])) {
 			if ($follower = $this->model->getEmailFollower($_GET['fid'])) {

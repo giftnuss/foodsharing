@@ -104,21 +104,21 @@ class ViewUtils
 		}
 
 		if ((int)$b['public_time'] != 0) {
-			$b['public_info'] .= '<div>Es wird in etwa ' . $this->func->s('pubbtime_' . (int)$b['public_time']) . ' abgeholt</div><div class="ui-padding">' . v_info('Bitte niemals ohne Absprache zum Laden kommen!') . '</div>';
+			$b['public_info'] .= '<div>Es wird in etwa ' . $this->func->s('pubbtime_' . (int)$b['public_time']) . ' abgeholt</div><div class="ui-padding">' . $this->v_info('Bitte niemals ohne Absprache zum Laden kommen!') . '</div>';
 		}
 
 		if (!empty($b['public_info'])) {
-			$besonderheiten = v_input_wrapper($this->func->s('info'), $b['public_info'], 'bcntspecial');
+			$besonderheiten = $this->v_input_wrapper($this->func->s('info'), $b['public_info'], 'bcntspecial');
 		}
 
-		$status = v_getStatusAmpel($b['betrieb_status_id']);
+		$status = $this->v_getStatusAmpel($b['betrieb_status_id']);
 
 		return '
-			' . v_input_wrapper($this->func->s('status'), $status . '<span class="bstatus">' . s('betrieb_status_' . $b['betrieb_status_id']) . '</span>' . $count_info) . '
-			' . v_input_wrapper('Verantwortliche Foodsaver', $verantwortlich, 'bcntverantwortlich') . '
+			' . $this->v_input_wrapper($this->func->s('status'), $status . '<span class="bstatus">' . $this->func->s('betrieb_status_' . $b['betrieb_status_id']) . '</span>' . $count_info) . '
+			' . $this->v_input_wrapper('Verantwortliche Foodsaver', $verantwortlich, 'bcntverantwortlich') . '
 			' . $besonderheiten . '
 			<div class="ui-padding">
-				' . v_info('' . $this->func->s('team_status_' . $b['team_status']) . '') . '		
+				' . $this->v_info('' . $this->func->s('team_status_' . $b['team_status']) . '') . '		
 			</div>
 			' . $button;
 	}
@@ -207,7 +207,7 @@ class ViewUtils
 
 		$js .= ';';
 
-		addXhJs($js);
+		$this->func->addXhJs($js);
 
 		return '<input type="submit" id="' . $id . '" name="' . $id . '" value="' . $label . '" />';
 	}

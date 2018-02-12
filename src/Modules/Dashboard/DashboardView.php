@@ -507,8 +507,6 @@ class DashboardView extends View
 					</div>
 					<div class="clear"></div>
 				</div>';
-		} else {
-			debug($u);
 		}
 
 		return $out;

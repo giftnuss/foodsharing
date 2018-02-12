@@ -8,6 +8,7 @@ use Foodsharing\Modules\Core\Control;
 class ProfileControl extends Control
 {
 	private $foodsaver;
+	private $fs_id;
 
 	public function __construct()
 	{

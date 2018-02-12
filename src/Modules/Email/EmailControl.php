@@ -107,7 +107,7 @@ class EmailControl extends Control
 			$nachricht = $this->func->getPost('message');
 			$mailbox_id = $this->func->getPost('mailbox_id');
 
-			$nachricht = handleImages($nachricht);
+			$nachricht = $this->handleImages($nachricht);
 
 			$data = $this->func->getPostData();
 

@@ -159,8 +159,8 @@ class QuizView extends View
 	public function questionForm()
 	{
 		return
-			v_form_textarea('text') .
-			v_form_select('duration', array(
+			$this->v_utils->v_form_textarea('text') .
+			$this->v_utils->v_form_select('duration', array(
 				'values' => array(
 					array('id' => 10, 'name' => '10 Sekunden'),
 					array('id' => 20, 'name' => '20 Sekunden'),
@@ -184,7 +184,7 @@ class QuizView extends View
 					array('id' => 200, 'name' => '3 Min 20 Sekunden')
 				)
 			)) .
-			v_form_select('fp', array(
+			$this->v_utils->v_form_select('fp', array(
 				'values' => array(
 					array('id' => 1, 'name' => '1 Fehlerpunkt'),
 					array('id' => 2, 'name' => '2 Fehlerpunkte'),
@@ -193,15 +193,15 @@ class QuizView extends View
 					array('id' => 0, 'name' => 'keine Fehlerpunkte (Scherzfrage)')
 				)
 			)) .
-			v_form_text('wikilink');
+			$this->v_utils->v_form_text('wikilink');
 	}
 
 	public function answerForm()
 	{
 		return
-			v_form_textarea('text') .
-			v_form_textarea('explanation') .
-			v_form_select('isright', array('values' => array(
+			$this->v_utils->v_form_textarea('text') .
+			$this->v_utils->v_form_textarea('explanation') .
+			$this->v_utils->v_form_select('isright', array('values' => array(
 				array('id' => 1, 'name' => 'Richtig'),
 				array('id' => 0, 'name' => 'Falsch'),
 				array('id' => 2, 'name' => 'Neutral')

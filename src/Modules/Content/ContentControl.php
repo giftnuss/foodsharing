@@ -244,14 +244,14 @@ class ContentControl extends Control
 	private function content_form($title = 'Content Management')
 	{
 		return $this->v_utils->v_form('faq', array(
-			v_field(
-				v_form_text('name', array('required' => true)) .
-				v_form_text('title', array('required' => true)),
+			$this->v_utils->v_field(
+				$this->v_utils->v_form_text('name', array('required' => true)) .
+				$this->v_utils->v_form_text('title', array('required' => true)),
 
 				$title,
 				array('class' => 'ui-padding')
 			),
-			v_field($this->v_utils->v_form_tinymce('body', array('filemanager' => true, 'public_content' => true, 'nowrapper' => true)), 'Inhalt')
+			$this->v_utils->v_field($this->v_utils->v_form_tinymce('body', array('filemanager' => true, 'public_content' => true, 'nowrapper' => true)), 'Inhalt')
 		), array('submit' => $this->func->s('save')));
 	}
 

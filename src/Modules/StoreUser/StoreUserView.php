@@ -8,6 +8,7 @@
 
 namespace Foodsharing\Modules\StoreUser;
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\View;
 
 class StoreUserView extends View
@@ -476,7 +477,7 @@ class StoreUserView extends View
 					);
 				} else {
 					$start_days[] = array(
-						'ts' => strtotime('next ' . u_day($dow)),
+						'ts' => strtotime('next ' . $this->u_day($dow)),
 						'time' => $fd['time'],
 						'fetcher' => $fd['fetcher'],
 						'dow' => $dow

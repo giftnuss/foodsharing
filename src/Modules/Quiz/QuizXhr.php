@@ -907,6 +907,7 @@ class QuizXhr extends Control
 	private function resultNew($question, $diaId)
 	{
 		$uanswers = array();
+		$out = array();
 
 		if (isset($question['answers']) && is_array($question['answers'])) {
 			foreach ($question['answers'] as $a) {
@@ -922,7 +923,6 @@ class QuizXhr extends Control
 					$joke = true;
 				}
 
-				$out = array();
 				foreach ($answers as $a) {
 					// schwerzfrageoder
 					if ($joke) {

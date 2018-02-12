@@ -143,17 +143,17 @@ class EventView extends View
 		return $this->v_utils->v_field($this->v_utils->v_form('eventsss', array(
 			$public_el,
 			$bezirkchoose,
-			v_form_text('name', array('required' => true)),
-			v_form_date('date'),
-			v_form_date('dateend'),
-			v_input_wrapper('Uhrzeit Beginn', $this->v_utils->v_form_time('time_start', $start_time)),
-			v_input_wrapper('Uhrzeit Ende', $this->v_utils->v_form_time('time_end', $end_time)),
-			v_form_textarea('description', array('desc' => $this->func->s('desc_desc'), 'required' => true)),
-			v_form_select('online_type', array('values' => array(
+			$this->v_utils->v_form_text('name', array('required' => true)),
+			$this->v_utils->v_form_date('date'),
+			$this->v_utils->v_form_date('dateend'),
+			$this->v_utils->v_input_wrapper('Uhrzeit Beginn', $this->v_utils->v_form_time('time_start', $start_time)),
+			$this->v_utils->v_input_wrapper('Uhrzeit Ende', $this->v_utils->v_form_time('time_end', $end_time)),
+			$this->v_utils->v_form_textarea('description', array('desc' => $this->func->s('desc_desc'), 'required' => true)),
+			$this->v_utils->v_form_select('online_type', array('values' => array(
 				array('id' => 1, 'name' => $this->func->s('offline')),
 				array('id' => 0, 'name' => $this->func->s('online'))
 			))),
-			v_form_text('location_name', array('required' => true)),
+			$this->v_utils->v_form_text('location_name', array('required' => true)),
 			$this->latLonPicker('latLng')
 		), array('submit' => $this->func->s('save'))), $title, array('class' => 'ui-padding'));
 	}

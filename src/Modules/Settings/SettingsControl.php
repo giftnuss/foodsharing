@@ -306,7 +306,7 @@ class SettingsControl extends Control
 					$this->model->updateFields($data, 'foodsaver', $this->func->fsId());
 
 					$this->func->addContent($this->v_utils->v_field(
-						v_info($this->func->s('upgrade_bot_success')),
+						$this->v_utils->v_info($this->func->s('upgrade_bot_success')),
 						$this->func->s('upgrade_request_send'),
 						array(
 							'class' => 'ui-padding'
@@ -319,7 +319,7 @@ class SettingsControl extends Control
 			}
 
 			if ($showform) {
-				addJs('$("#upBotsch").submit(function(ev){
+				$this->func->addJs('$("#upBotsch").submit(function(ev){
 					check = true;
 					if($("#bezirk").val() == 0)
 					{
@@ -341,21 +341,21 @@ class SettingsControl extends Control
 				$this->func->addContent(
 					$this->view->confirmBot($this->model->getContent(16)) .
 
-					v_form('upBotsch', array($this->v_utils->v_field(
-						v_bezirkChooser('bezirk', $this->func->getBezirk(), array('label' => 'In welcher Region möchtest Du Botschafter werden?')) .
+					$this->v_utils->v_form('upBotsch', array($this->v_utils->v_field(
+						$this->v_utils->v_bezirkChooser('bezirk', $this->func->getBezirk(), array('label' => 'In welcher Region möchtest Du Botschafter werden?')) .
 						'<div style="display:none" id="bezirk-notAvail">' . $this->v_utils->v_form_text('new_bezirk') . '</div>' .
-						v_form_select('time', array('values' => array(
+						$this->v_utils->v_form_select('time', array('values' => array(
 							array('id' => 1, 'name' => '3-5 Stunden'),
 							array('id' => 2, 'name' => '5-8 Stunden'),
 							array('id' => 3, 'name' => '9-12 Stunden'),
 							array('id' => 4, 'name' => '13-15 Stunden'),
 							array('id' => 5, 'name' => '15-20 Stunden')
 						))) .
-						v_form_radio('photo_public', array('required' => true, 'values' => array(
+						$this->v_utils->v_form_radio('photo_public', array('required' => true, 'values' => array(
 							array('id' => 1, 'name' => 'Ich bin einverstanden das Mein Name und Mein Foto veröffentlicht werden'),
 							array('id' => 2, 'name' => 'Bitte NUR meinen Namen veröffentlichen')
 						))) .
-						v_form_checkbox('tel_public', array('desc' => 'Neben Deinem vollem Namen (und eventuell Foto) ist es für
+						$this->v_utils->v_form_checkbox('tel_public', array('desc' => 'Neben Deinem vollem Namen (und eventuell Foto) ist es für
 										Händler, Foodsharing-Freiwillge, Interessierte und die Presse
 										einfacher und direkter, Dich neben der für Deine
 										Region/Stadt/Bezirk zugewiesenen Botschafter-E-Mail-Adresse (z. B. mainz@lebensmittelretten.de)
@@ -364,7 +364,7 @@ class SettingsControl extends Control
 										besten noch gewünschte Anrufzeiten.', 'required' => true, 'values' => array(
 							array('id' => 1, 'name' => 'Ich bin einverstanden, dass meine Telefonnummer veröffentlicht wird.')
 						))) .
-						v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös
+						$this->v_utils->v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös
 										und einladend gegenüber den Lebensmittelbetrieben, den
 										Foodsavern sowie allen, die bei foodsharing mitmachen wollen,
 										aufzutreten, wollen wir neben Deinem Foto, Namen und
@@ -380,7 +380,7 @@ class SettingsControl extends Control
 						array('class' => 'ui-padding')
 					),
 
-						v_field($rv['body'] . $this->v_utils->v_form_checkbox('rv_botschafter', array('required' => true, 'values' => array(
+						$this->v_utils->v_field($rv['body'] . $this->v_utils->v_form_checkbox('rv_botschafter', array('required' => true, 'values' => array(
 								array('id' => 1, 'name' => $this->func->s('rv_accept'))
 							))), $rv['title'], array('class' => 'ui-padding'))
 					), array('submit' => 'Antrag auf Botschafterrolle verbindlich absenden'))

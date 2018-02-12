@@ -27,7 +27,7 @@ class FoodsaverXhr extends Control
 
 			return array(
 				'status' => 1,
-				'script' => '$("#fsform").html(\'' . jsSafe($html) . '\');$(".button").button();$(".avatarlink img").load(function(){$(".avatarlink img").fadeIn();});'
+				'script' => '$("#fsform").html(\'' . $this->func->jsSafe($html) . '\');$(".button").button();$(".avatarlink img").load(function(){$(".avatarlink img").fadeIn();});'
 			);
 		}
 	}

@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Settings;
 
 use DateTime;
+use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Core\View;
 use Foodsharing\Lib\Session\S;
 
@@ -81,16 +82,16 @@ class SettingsView extends View
 		');
 
 		$out = $this->v_utils->v_quickform($this->func->s('sleepmode'), array(
-			v_info($this->func->s('sleepmode_info')),
-			v_form_select('sleep_status', array(
+			$this->v_utils->v_info($this->func->s('sleepmode_info')),
+			$this->v_utils->v_form_select('sleep_status', array(
 				'values' => array(
 					array('id' => 0, 'name' => $this->func->s('no_sleepmode')),
 					array('id' => 1, 'name' => $this->func->s('temp_sleepmode')),
 					array('id' => 2, 'name' => $this->func->s('full_sleepmode'))
 				)
 			)),
-			v_form_daterange(),
-			v_form_textarea('sleep_msg', array(
+			$this->v_utils->v_form_daterange(),
+			$this->v_utils->v_form_textarea('sleep_msg', array(
 				'maxlength' => 150
 			))
 		), array('submit' => $this->func->s('save')));
@@ -147,14 +148,14 @@ class SettingsView extends View
 		}
 
 		return $this->v_utils->v_field($this->v_utils->v_form('settingsinfo', array(
-			v_form_radio('newsletter', array(
+			$this->v_utils->v_form_radio('newsletter', array(
 				'desc' => $this->func->s('newsletter_desc'),
 				'values' => array(
 					array('id' => 0, 'name' => $this->func->s('no')),
 					array('id' => 1, 'name' => $this->func->s('yes'))
 				)
 			)),
-			v_form_radio('infomail_message', array(
+			$this->v_utils->v_form_radio('infomail_message', array(
 				'desc' => $this->func->s('infomail_message_desc'),
 				'values' => array(
 					array('id' => 0, 'name' => $this->func->s('no')),
@@ -165,7 +166,7 @@ class SettingsView extends View
 		), array('submit' => $this->func->s('save'))), $this->func->s('settings_info'), array('class' => 'ui-padding'));
 	}
 
-	public function quizSession($session, $try_count, $model)
+	public function quizSession($session, $try_count, Model $model)
 	{
 		$infotext = $this->v_utils->v_error('mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten leider nicht bestanden. <a href="http://wiki.lebensmittelretten.de/" target="_blank">Informiere Dich im Wiki</a> für den nächsten Versuch.<p>Lies Dir hier noch mal in Ruhe die Fragen und die dazugehörigen Antworten durch, damit es beim nächsten Mal besser klappt</p>');
 		$subtitle = 'Leider nicht bestanden';
@@ -401,7 +402,7 @@ class SettingsView extends View
 
 			$out .= '
 					<div class="quizsession">' .
-				v_field($cnt, 'Frage ' . $i . ' ' . $ftext, array('class' => 'ui-padding')) . '
+				$this->v_utils->v_field($cnt, 'Frage ' . $i . ' ' . $ftext, array('class' => 'ui-padding')) . '
 					</div>';
 		}
 
@@ -416,8 +417,8 @@ class SettingsView extends View
 	public function changemail3($email)
 	{
 		return
-			v_info('E-Mail-Adresse wirklich zu <strong>' . $email . '</strong> ändern?') .
-			v_form_passwd('passcheck');
+			$this->v_utils->v_info('E-Mail-Adresse wirklich zu <strong>' . $email . '</strong> ändern?') .
+			$this->v_utils->v_form_passwd('passcheck');
 	}
 
 	public function settingsCalendar($token)
@@ -447,10 +448,10 @@ class SettingsView extends View
 			modal: true,
 			title: "' . $this->func->s('delete_account_confirm_title') . '",
 			buttons: {
-				"' . s('abort') . '" : function(){
+				"' . $this->func->s('abort') . '" : function(){
 					$("#delete-account-confirm").dialog("close");
 				},
-				"' . s('delete_account_confirm_bt') . '" : function(){
+				"' . $this->func->s('delete_account_confirm_bt') . '" : function(){
 					goTo("/?page=settings&deleteaccount=1&reason=" + encodeURIComponent($("#reason_to_delete").val()));
 				}
 			}
@@ -481,7 +482,7 @@ class SettingsView extends View
 		global $db;
 		global $g_data;
 
-		addJs('$("#foodsaver-form").submit(function(e){
+		$this->func->addJs('$("#foodsaver-form").submit(function(e){
 		if($("#photo_public").length > 0)
 		{
 			$e = e;
@@ -510,7 +511,7 @@ class SettingsView extends View
 		$bezirkchoose = '';
 		$position = '';
 		$communications = $this->v_utils->v_form_text('homepage') .
-			v_form_text('tox', array('desc' => $this->func->s('tox_desc')));
+			$this->v_utils->v_form_text('tox', array('desc' => $this->func->s('tox_desc')));
 
 		if (S::may('orga')) {
 			$bezirk = array('id' => 0, 'name' => false);
@@ -524,8 +525,8 @@ class SettingsView extends View
 			$position = $this->v_utils->v_form_text('position');
 
 			$communications .=
-				v_form_text('twitter') .
-				v_form_text('github');
+				$this->v_utils->v_form_text('twitter') .
+				$this->v_utils->v_form_text('github');
 		}
 
 		$g_data['ort'] = $g_data['stadt'];
@@ -533,12 +534,12 @@ class SettingsView extends View
 		return $this->v_utils->v_quickform($this->func->s('settings'), array(
 			$bezirkchoose,
 			$this->latLonPicker('LatLng'),
-			v_form_text('telefon'),
-			v_form_text('handy'),
-			v_form_date('geb_datum', array('required' => true, 'yearRangeFrom' => date('Y') - 120, 'yearRangeTo' => date('Y') - 8)),
+			$this->v_utils->v_form_text('telefon'),
+			$this->v_utils->v_form_text('handy'),
+			$this->v_utils->v_form_date('geb_datum', array('required' => true, 'yearRangeFrom' => date('Y') - 120, 'yearRangeTo' => date('Y') - 8)),
 			$communications,
 			$position,
-			v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz, hier unsere Vorlage: http://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du öffentlich an Informationen teilen möchtest, die vorteilhaft sind.')),
+			$this->v_utils->v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz, hier unsere Vorlage: http://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du öffentlich an Informationen teilen möchtest, die vorteilhaft sind.')),
 			$oeff
 		), array('submit' => $this->func->s('save')));
 	}

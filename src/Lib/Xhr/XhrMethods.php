@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Lib\Xhr;
 
+use Exception;
 use Flourish\fImage;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session\S;
@@ -16,6 +17,7 @@ class XhrMethods
 {
 	private $model;
 	private $func;
+	private $v_utils;
 
 	/**
 	 * XhrMethods constructor.
@@ -26,6 +28,8 @@ class XhrMethods
 	{
 		global $g_func;
 		$this->func = $g_func;
+		global $g_view_utils;
+		$this->v_utils = $g_view_utils;
 		$this->model = $model;
 	}
 
@@ -34,7 +38,7 @@ class XhrMethods
 		$fsmodel = new FoodsaverModel();
 		$bids = $fsmodel->getFsBezirkIds((int)$data['fid']);
 
-		if ($this->func->isBotForA($bids, false, true) || isOrgaTeam()) {
+		if ($this->func->isBotForA($bids, false, true) || $this->func->isOrgaTeam()) {
 			if ($countver = $this->model->qOne('SELECT COUNT(*) FROM ' . PREFIX . 'verify_history WHERE date BETWEEN NOW()- INTERVAL 20 SECOND AND now() AND bot_id = ' . $this->func->fsId() . '')) {
 				if ($countver > 10) {
 					return json_encode(array(
@@ -198,7 +202,7 @@ class XhrMethods
 			$fields = $this->func->unsetAll($data, array('photo_public', 'lat', 'lon', 'stadt', 'plz', 'anschrift'));
 
 			if ($this->model->updateFields($fields, 'foodsaver', $this->func->fsId())) {
-				return xhr_out();
+				return $this->xhr_out();
 			}
 		}
 	}
@@ -208,7 +212,7 @@ class XhrMethods
 		if ($this->model->isInTeam($data['bid']) || $this->func->isOrgaTeam() || $this->func->isBotschafter()) {
 			if (isset($_SESSION['last_pinPost'])) {
 				if ((time() - $_SESSION['last_pinPost']) < 2) {
-					return xhr_getPinPost($data);
+					return $this->xhr_getPinPost($data);
 				}
 			}
 			if ($this->model->add_betrieb_notiz(array(
@@ -232,7 +236,7 @@ class XhrMethods
 				), 'store-wallpost-' . (int)$data['bid']);
 				$_SESSION['last_pinPost'] = time();
 
-				return xhr_getPinPost($data);
+				return $this->xhr_getPinPost($data);
 			}
 		}
 	}
@@ -330,9 +334,9 @@ class XhrMethods
 					$detail .= '<p>' . $this->func->s($key) . ':<br />' . $v . '</p>';
 				}
 
-				$detail = v_input_wrapper('Daten vom Google-Formular', $detail);
+				$detail = $this->v_utils->v_input_wrapper('Daten vom Google-Formular', $detail);
 			} else {
-				$detail = v_input_wrapper('Daten aus Anmeldeformular', '<pre>' . print_r($fsdata, true) . '</pre>');
+				$detail = $this->v_utils->v_input_wrapper('Daten aus Anmeldeformular', '<pre>' . print_r($fsdata, true) . '</pre>');
 			}
 
 			$thead = '<li><a href="#ptab-' . (int)$foodsaver['id'] . '-2">Details</a></li>';
@@ -434,7 +438,7 @@ class XhrMethods
 
 	public function xhr_jsonBoth($data)
 	{
-		return xhr_jsonFoodsaver($data) . "\n" . xhr_jsonBetriebe($data);
+		return $this->xhr_jsonFoodsaver($data) . "\n" . $this->xhr_jsonBetriebe($data);
 	}
 
 	public function xhr_jsonFoodsaver($data)
@@ -527,6 +531,7 @@ class XhrMethods
 
 	public function xhr_uploadPicture($data)
 	{
+		$func = '';
 		$id = strtolower($data['id']);
 		$id = preg_replace('/[^a-z0-9_]/', '', $id);
 		if (isset($_FILES['uploadpic'])) {
@@ -591,6 +596,8 @@ class XhrMethods
 				case 'png':
 					$img_r = imagecreatefrompng($path . '/' . $img);
 					break;
+				default:
+					$img_r = null;
 			}
 
 			$dst_r = @imagecreatetruecolor($targ_w, $targ_h);
@@ -699,7 +706,7 @@ class XhrMethods
 
 	public function xhr_getFoodsaver($data)
 	{
-		return xhr_getRecip($data);
+		return $this->xhr_getRecip($data);
 	}
 
 	public function xhr_getRecip($data)
@@ -721,12 +728,8 @@ class XhrMethods
 			if (isset($_FILES['photo']) && (int)$_FILES['photo']['size'] > 0) {
 				$ext = explode('.', $_FILES['photo']['name']);
 				$ext = strtolower(end($ext));
-				//$bild = uploadPhoto();
-
-				//$new_filename =
 
 				@unlink('./images/' . $user_id . '.' . $ext);
-				@unlink('./images/' . $file);
 
 				$file = $this->func->makeUnique() . '.' . $ext;
 				if (move_uploaded_file($_FILES['photo']['tmp_name'], './images/' . $file)) {
@@ -982,7 +985,7 @@ class XhrMethods
 				(
 					' . $this->model->intval($data['bid']) . ',
 					' . $this->model->intval($data['newfetchtime'][$i]) . ',
-					' . $this->model->strval($this->func->preZero($data['nfttime']['hour'][$i]) . ':' . preZero($data['nfttime']['min'][$i]) . ':00') . ',
+					' . $this->model->strval($this->func->preZero($data['nfttime']['hour'][$i]) . ':' . $this->func->preZero($data['nfttime']['min'][$i]) . ':00') . ',
 					' . $this->model->intval($data['nft-count'][$i]) . '
 				)
 			');
@@ -1082,14 +1085,14 @@ class XhrMethods
 		$inputs = '<div id="' . $id . '">' . $inputs . '</div>';
 
 		$cats = $this->model->getBasics_bezirk();
-		$out['html'] = v_form('bezirkForm', array(
-				v_form_hidden('bezirk_id', (int)$data['id']),
-				v_form_select('parent_id', array('values' => $cats)),
-				v_form_select('master', array('label' => 'Master-Bezirk', 'desc' => 'Alle Foodsaver sind automatisch mit im Master-Bezirk, sofern einer angegeben wurde', 'values' => $cats)),
-				v_form_text('name'),
-				v_form_text('mailbox_name', ['desc' => 'Achtung! Nicht willkürlich ändern! Auch darauf achten, dass diese Adresse unter Mailboxen verwalten noch nicht existiert.']),
-				v_form_text('email_name', array('label' => 'Absendername')),
-				v_form_select('type', array('label' => 'Bezirkstyp', 'values' => array(
+		$out['html'] = $this->v_utils->v_form('bezirkForm', array(
+				$this->v_utils->v_form_hidden('bezirk_id', (int)$data['id']),
+				$this->v_utils->v_form_select('parent_id', array('values' => $cats)),
+				$this->v_utils->v_form_select('master', array('label' => 'Master-Bezirk', 'desc' => 'Alle Foodsaver sind automatisch mit im Master-Bezirk, sofern einer angegeben wurde', 'values' => $cats)),
+				$this->v_utils->v_form_text('name'),
+				$this->v_utils->v_form_text('mailbox_name', ['desc' => 'Achtung! Nicht willkürlich ändern! Auch darauf achten, dass diese Adresse unter Mailboxen verwalten noch nicht existiert.']),
+				$this->v_utils->v_form_text('email_name', array('label' => 'Absendername')),
+				$this->v_utils->v_form_select('type', array('label' => 'Bezirkstyp', 'values' => array(
 					array('id' => '1', 'name' => 'Stadt'),
 					array('id' => '8', 'name' => 'Großstadt (ohne Anmeldemöglichkeit)'),
 					array('id' => '9', 'name' => 'Stadtteil'),
@@ -1099,9 +1102,9 @@ class XhrMethods
 					array('id' => '6', 'name' => 'Land'),
 					array('id' => '7', 'name' => 'Orgateam')
 				))),
-				v_input_wrapper($this->func->s($id), $inputs, $id)
+				$this->v_utils->v_input_wrapper($this->func->s($id), $inputs, $id)
 			), array('submit' => $this->func->s('save'))) .
-			v_input_wrapper('Master-Update', '<a class="button" href="#" class="button" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'geoclean\',id:' . (int)$data['id'] . '});}return false;">Master-Update starten</a>', 'masterupdate', array('desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen'));
+			$this->v_utils->v_input_wrapper('Master-Update', '<a class="button" href="#" class="button" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'geoclean\',id:' . (int)$data['id'] . '});}return false;">Master-Update starten</a>', 'masterupdate', array('desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen'));
 
 		$out['script'] = '
 		$("#bezirkform-form").unbind("submit");	
@@ -1179,7 +1182,7 @@ class XhrMethods
 					$verantwortlicher = '<p><a href="#" onclick="profile(' . (int)$b['id'] . ');return false;"><img src="' . $this->func->img() . '" /></a><a href="#" onclick="profile(' . (int)$b['id'] . ');return false;">' . $v['name'] . '</a> ist verantwortlich</p>';
 				}
 
-				$out['betriebe'][$i]['bubble'] = '<div style="height:110px;overflow:hidden;width:270px;"><div style="margin-right:5px;float:right;">' . $img . '</div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a onclick="betrieb(' . (int)$b['id'] . ');return false;" href="#">' . $this->func->jsSafe($b['name']) . '</a></h1><p>' . jsSafe($b['str'] . ' ' . $b['hsnr']) . '</p><p>' . jsSafe($b['plz']) . ' ' . jsSafe($b['stadt']) . '</p>' . $button . '</div><div style="clear:both;"></div>';
+				$out['betriebe'][$i]['bubble'] = '<div style="height:110px;overflow:hidden;width:270px;"><div style="margin-right:5px;float:right;">' . $img . '</div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a onclick="betrieb(' . (int)$b['id'] . ');return false;" href="#">' . $this->func->jsSafe($b['name']) . '</a></h1><p>' . $this->func->jsSafe($b['str'] . ' ' . $b['hsnr']) . '</p><p>' . $this->func->jsSafe($b['plz']) . ' ' . $this->func->jsSafe($b['stadt']) . '</p>' . $button . '</div><div style="clear:both;"></div>';
 			}
 		}
 
@@ -1315,7 +1318,7 @@ class XhrMethods
 
 		$this->model->update_bezirkNew($data['bezirk_id'], $g_data);
 
-		return xhr_out('', 'pulseInfo("' . $this->func->s('edit_success') . '");');
+		return $this->xhr_out('', 'pulseInfo("' . $this->func->s('edit_success') . '");');
 	}
 
 	public function xhr_addFetcher($data)
@@ -1542,14 +1545,14 @@ class XhrMethods
 
 	public function xhr_delPost($data)
 	{
-		$db = new RegionModel();
+		$regionModel = new RegionModel();
 
 		$fsid = $this->model->getVal('foodsaver_id', 'theme_post', $data['pid']);
-		$bezirkId = $this->model->getBezirkForPost($data['pid']);
-		$bezirkType = $this->model->getBezirkType($bezirkId);
+		$bezirkId = $regionModel->getBezirkForPost($data['pid']);
+		$bezirkType = $regionModel->getBezirkType($bezirkId);
 
 		if ($this->func->isOrgaTeam() || $fsid == $this->func->fsId() || ($this->func->isBotFor($bezirkId) && $bezirkType == 7)) {
-			$this->model->deletePost($data['pid']);
+			$regionModel->deletePost($data['pid']);
 
 			return 1;
 		} else {

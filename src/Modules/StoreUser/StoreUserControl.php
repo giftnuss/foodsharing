@@ -77,7 +77,7 @@ class StoreUserControl extends Control
 				}
 				if ($betrieb['verantwortlich']) {
 					if (!empty($betrieb['requests'])) {
-						handleRequests($betrieb);
+						$this->view->handleRequests($betrieb);
 					}
 				}
 

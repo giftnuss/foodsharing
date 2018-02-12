@@ -205,10 +205,10 @@ class WorkGroupView extends View
 	public function applyForm($group)
 	{
 		return $this->v_utils->v_form('apply', array(
-			v_form_textarea('motivation', array('label' => 'Was ist Deine Motivation, in der Gruppe ' . $group['name'] . ' mitzuwirken?')),
-			v_form_textarea('faehigkeit', array('label' => 'Was sind Deine Fähigkeiten, die Du in diesem Bereich hast?')),
-			v_form_textarea('erfahrung', array('label' => 'Kannst Du in der Gruppe auf Erfahrungen, die Du woanders gesammelt hast zurückgreifen? Wenn ja, wo bzw. was?')),
-			v_form_select('zeit', array('label' => 'Wie viele Stunden hast Du pro Woche Zeit und Lust dafür aufzuwenden?', 'values' => array(
+			$this->v_utils->v_form_textarea('motivation', array('label' => 'Was ist Deine Motivation, in der Gruppe ' . $group['name'] . ' mitzuwirken?')),
+			$this->v_utils->v_form_textarea('faehigkeit', array('label' => 'Was sind Deine Fähigkeiten, die Du in diesem Bereich hast?')),
+			$this->v_utils->v_form_textarea('erfahrung', array('label' => 'Kannst Du in der Gruppe auf Erfahrungen, die Du woanders gesammelt hast zurückgreifen? Wenn ja, wo bzw. was?')),
+			$this->v_utils->v_form_select('zeit', array('label' => 'Wie viele Stunden hast Du pro Woche Zeit und Lust dafür aufzuwenden?', 'values' => array(
 				array('id' => '1-2 Stunden', 'name' => '1-2 Stunden'),
 				array('id' => '2-3 Stunden', 'name' => '2-3 Stunden'),
 				array('id' => '3-4 Stunden', 'name' => '3-4 Stunden'),
@@ -241,8 +241,8 @@ class WorkGroupView extends View
 		$this->func->setEditData($group);
 
 		$basics = $this->v_utils->v_form_text('name') .
-			v_form_textarea('teaser') .
-			v_form_picture('photo', array('resize' => array(528, 60, 128), 'crop' => array((528 / 350), 1)));
+			$this->v_utils->v_form_textarea('teaser') .
+			$this->v_utils->v_form_picture('photo', array('resize' => array(528, 60, 128), 'crop' => array((528 / 350), 1)));
 
 		$apply = $this->v_utils->v_form_select('apply_type', array(
 				'values' => array(
@@ -253,19 +253,19 @@ class WorkGroupView extends View
 				)
 			)) .
 			'<div id="addapply">' .
-			v_form_text('banana_count') .
-			v_form_text('fetch_count') .
-			v_form_text('week_num') .
-			v_form_checkbox('report_num', array('values' => array(
+			$this->v_utils->v_form_text('banana_count') .
+			$this->v_utils->v_form_text('fetch_count') .
+			$this->v_utils->v_form_text('week_num') .
+			$this->v_utils->v_form_checkbox('report_num', array('values' => array(
 				array('id' => 1, 'name' => 'Ja, auch Foodsaver mit Verstoßmeldungen können sich bewerben.')
 			))) .
 			'</div>';
 
 		$out .= $this->v_utils->v_form('editgroup', array(
-			v_field($basics, $group['name'] . ' bearbeiten', array('class' => 'ui-padding')),
-			v_field($apply, 'Bewerbungen', array('class' => 'ui-padding')),
-			v_field($this->v_utils->v_form_tagselect('member', array('xhr' => 'recip')), $this->func->s('member'), array('class' => 'ui-padding')),
-			v_field($this->v_utils->v_form_tagselect('leader', array('xhr' => 'recip')), $this->func->s('leader'), array('class' => 'ui-padding'))
+			$this->v_utils->v_field($basics, $group['name'] . ' bearbeiten', array('class' => 'ui-padding')),
+			$this->v_utils->v_field($apply, 'Bewerbungen', array('class' => 'ui-padding')),
+			$this->v_utils->v_field($this->v_utils->v_form_tagselect('member', array('xhr' => 'recip')), $this->func->s('member'), array('class' => 'ui-padding')),
+			$this->v_utils->v_field($this->v_utils->v_form_tagselect('leader', array('xhr' => 'recip')), $this->func->s('leader'), array('class' => 'ui-padding'))
 		), array('submit' => 'Änderungen speichern'));
 
 		return $out;

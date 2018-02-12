@@ -27,7 +27,7 @@ class FairTeilerView extends View
 	public function loginToFollow()
 	{
 		return $this->v_utils->v_field(
-			v_info('Wenn Du Dich einloggst kannst Du Dich benachrichtigen lassen bei Updates zu diesem FairTeiler')
+			$this->v_utils->v_info('Wenn Du Dich einloggst kannst Du Dich benachrichtigen lassen bei Updates zu diesem FairTeiler')
 			. $this->menu(array(array('name' => 'jetzt einloggen', 'click' => 'login();'))),
 			false
 		);
@@ -103,8 +103,8 @@ class FairTeilerView extends View
 	public function address()
 	{
 		return $this->v_utils->v_field(
-			v_input_wrapper('Anschrift', $this->fairteiler['anschrift']) .
-			v_input_wrapper('PLZ / Ort', $this->fairteiler['plz'] . ' ' . $this->fairteiler['ort']),
+			$this->v_utils->v_input_wrapper('Anschrift', $this->fairteiler['anschrift']) .
+			$this->v_utils->v_input_wrapper('PLZ / Ort', $this->fairteiler['plz'] . ' ' . $this->fairteiler['ort']),
 			'Adresse',
 			array('class' => 'ui-padding')
 		);
@@ -136,10 +136,10 @@ class FairTeilerView extends View
 		}
 
 		return $this->v_utils->v_field($this->v_utils->v_form('fairteiler', array(
-			v_form_select('bezirk_id', array('values' => $this->bezirke, 'required' => true)),
-			v_form_text('name', array('required' => true)),
-			v_form_textarea('desc', array('desc' => $this->func->s('desc_desc'), 'required' => true)),
-			v_form_picture('picture', array('resize' => array(528, 60), 'crop' => array((528 / 170), 1))),
+			$this->v_utils->v_form_select('bezirk_id', array('values' => $this->bezirke, 'required' => true)),
+			$this->v_utils->v_form_text('name', array('required' => true)),
+			$this->v_utils->v_form_textarea('desc', array('desc' => $this->func->s('desc_desc'), 'required' => true)),
+			$this->v_utils->v_form_picture('picture', array('resize' => array(528, 60), 'crop' => array((528 / 170), 1))),
 			$this->latLonPicker('latLng'),
 			$tagselect,
 		), array('submit' => $this->func->s('save'))), $title, array('class' => 'ui-padding'));
@@ -170,7 +170,7 @@ class FairTeilerView extends View
 				width: 500,
 				resizable: false,
 				buttons: {
-					"' . s('save') . '": function(){
+					"' . $this->func->s('save') . '": function(){
 						goTo("' . $this->func->getSelf() . '&follow=1&infotype=" + $("input[name=\'infotype\']:checked").val());
 					}
 				}

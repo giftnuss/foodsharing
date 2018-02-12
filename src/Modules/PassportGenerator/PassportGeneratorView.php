@@ -37,8 +37,8 @@ class PassportGeneratorView extends View
 		}
 
 		return
-			v_field(
-				v_tablesorter(array(
+			$this->v_utils->v_field(
+				$this->v_utils->v_tablesorter(array(
 					array('name' => '<input class="checker" type="checkbox" name="checker" value="' . $bezirk['id'] . '" />', 'sort' => false, 'width' => 20),
 					array('name' => $this->func->s('photo'), 'width' => 40),
 					array('name' => $this->func->s('name')),

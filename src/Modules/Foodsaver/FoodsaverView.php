@@ -50,7 +50,7 @@ class FoodsaverView extends View
 
 		return
 			'<div id="' . $name . 'foodsaverlist">' .
-			v_field(
+			$this->v_utils->v_field(
 				$this->fsAvatarList($foodsaver, array('id' => 'fslist', 'shuffle' => false)),
 				$this->func->s('fs_in') . $bezirk['name'] . ($inactive ? $this->func->s('fs_list_not_logged_for_6_months') : '')
 			) . '

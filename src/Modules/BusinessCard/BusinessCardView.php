@@ -35,7 +35,7 @@ class BusinessCardView extends View
 		');
 
 		return $this->v_utils->v_quickform($this->func->s('options'), array(
-				v_form_select('opt', array('desc' => $this->func->s('opt_desc'), 'values' => $seldata))
+				$this->v_utils->v_form_select('opt', array('desc' => $this->func->s('opt_desc'), 'values' => $seldata))
 			), array('submit' => 'Visitenkarten erstellen')) . '
 				
 		<div class="input-wrapper" id="dlbox" style="display:none;">

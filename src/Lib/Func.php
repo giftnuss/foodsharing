@@ -1539,9 +1539,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 				$db = new $mod();
 			}
 
-			if (isset($_GET['gid'])) {
-				$db->readGlocke($_GET['gid']);
-			}
 			include 'control/' . $page . '.php';
 		}
 	}
@@ -1962,6 +1959,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			case 'png':
 				$img_r = imagecreatefrompng($path . '/' . $img);
 				break;
+			default:
+				$img_r = null;
 		}
 
 		$dst_r = imagecreatetruecolor($targ_w, $targ_h);

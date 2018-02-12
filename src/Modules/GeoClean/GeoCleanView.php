@@ -41,8 +41,8 @@ class GeoCleanView extends View
 		');
 
 		return
-			v_field(
-				v_tablesorter(array(
+			$this->v_utils->v_field(
+				$this->v_utils->v_tablesorter(array(
 					array('name' => $this->func->s('name'), 'width' => 150),
 					array('name' => $this->func->s('address')),
 					array('name' => $this->func->s('options'), 'width' => 240)

@@ -76,7 +76,7 @@ class BlogView extends View
 			$title = $this->func->s('edit_article');
 			global $g_data;
 			$this->func->addContent($this->v_utils->v_field(
-				v_activeSwitcher('blog_entry', $_GET['id'], $g_data['active']),
+				$this->v_utils->v_activeSwitcher('blog_entry', $_GET['id'], $g_data['active']),
 				'Status',
 				array('class' => 'ui-padding')
 			), CNT_LEFT);
@@ -90,15 +90,15 @@ class BlogView extends View
 		}
 
 		return $this->v_utils->v_form('test', array(
-			v_field(
+			$this->v_utils->v_field(
 				$bezirkchoose .
-				v_form_text('name') . $this->v_utils->v_form_textarea('teaser', array('style' => 'height:75px;')) .
-				v_form_picture('picture', array('resize' => array(250, 528), 'crop' => array((250 / 135), (528 / 170)))),
+				$this->v_utils->v_form_text('name') . $this->v_utils->v_form_textarea('teaser', array('style' => 'height:75px;')) .
+				$this->v_utils->v_form_picture('picture', array('resize' => array(250, 528), 'crop' => array((250 / 135), (528 / 170)))),
 
 				$title,
 				array('class' => 'ui-padding')
 			),
-			v_field($this->v_utils->v_form_tinymce('body', array('nowrapper' => true, 'public_content' => true)), 'Inhalt')
+			$this->v_utils->v_field($this->v_utils->v_form_tinymce('body', array('nowrapper' => true, 'public_content' => true)), 'Inhalt')
 		));
 	}
 }

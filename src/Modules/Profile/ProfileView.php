@@ -312,6 +312,7 @@ class ProfileView extends View
 	{
 		$out = '
 			<ul class="linklist history">';
+		$class = '';
 
 		$curdate = 0;
 		foreach ($history as $h) {

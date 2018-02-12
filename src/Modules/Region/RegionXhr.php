@@ -8,6 +8,8 @@ use Foodsharing\Modules\Core\Control;
 
 class RegionXhr extends Control
 {
+	private $responses;
+
 	public function __construct()
 	{
 		$this->responses = new XhrResponses();

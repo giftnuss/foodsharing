@@ -151,8 +151,8 @@ class LoginControl extends Control
 				$this->func->addJs('$("#pass1").val("");');
 				$this->func->addContent($this->view->newPasswordForm($k));
 			} else {
-				$this->template->addLeft($this->view->error('Sorry, Du hast ein bisschen zu lange gewartet. Bitte beantrage ein neues Passwort!'));
-				$this->template->addLeft($this->view->passwordRequest());
+				$this->func->error('Sorry, Du hast ein bisschen zu lange gewartet. Bitte beantrage ein neues Passwort!');
+				$this->func->addContent($this->view->passwordRequest(), CNT_LEFT);
 			}
 		} else {
 			$this->func->addContent($this->view->passwordRequest());
