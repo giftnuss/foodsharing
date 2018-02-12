@@ -20,7 +20,7 @@ class NewareaXhr extends Control
 			if ((int)$_GET['bid'] == 0) {
 				return array(
 					'status' => 1,
-					'script' => '$this->func->error("Du musst noch einen Bezirk auswählen in den die Foodsaver sortiert werden.");'
+					'script' => 'error("Du musst noch einen Bezirk auswählen in den die Foodsaver sortiert werden.");'
 				);
 			} else {
 				$bezirk_id = (int)$_GET['bid'];

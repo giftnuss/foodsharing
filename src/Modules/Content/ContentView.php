@@ -68,7 +68,7 @@ class ContentView extends View
 			<p>Da Lebensmittel uns am Leben halten, wollen wir auch respektvoll mit ihnen umgehen. Damit bei uns alles optimal läuft, haben wir im Laufe der Jahre einige Verhaltensregeln definiert. Lebensmittel an andere weiterzugeben ist eine sehr menschliche aber auch verantwortungsvolle Sache. Grundsätzlich gilt wohl immer: „Nichts an andere weitergeben, was man selbst nicht mehr essen würde“.
 			Bitte lies nun die foodsharing Etikette einmal durch. <b>Am Ende dieser Seite kannst Du Dich als Foodsharer registrieren.</b>
 			<h3>Für Unternehmen und Betriebe</h3><p>Gemeinsam mit foodsharing können Sie sich dafür einsetzen, dass aussortierte und unverkäufliche Lebensmittel eine sinnvolle Verwendung anstelle der Entsorgung erfahren. Mehr Information dazu finden Sie <a href="/fuer-unternehmen">hier.</a> </p>'
-			. v_field('
+			. $this->v_utils->v_field('
 			<div class="reddot">
 			<h5><span>1</span>Sei ehrlich</h5>
 			<p>Wir alle, die wir Foodsharing entwickelt haben, nehmen unsere Aufgabe sehr ernst und befolgen Gesetze und Auflagen. Sei auch Du bitte ehrlich beim Ausfüllen Deiner Daten und bei der Beschreibung des Essenskorbes.</p>
@@ -84,7 +84,7 @@ class ContentView extends View
 			<p>Wir wollen uns weiterentwickeln, immer besser werden. Dazu brauchen wir Euch mit vielen guten Ideen und Tipps. Die schickt Ihr an <a href="mailto:ideen@foodsharing.de">ideen@foodsharing.de</a></p>
 			</div>', 'foodsharing Etikette', array('class' => 'ui-padding')) . '
 			<p class="buttons"><br><a href="#" id="theregistrationbutton" onclick="ajreq(\'join\',{app:\'login\'});return false;" class="button">Jetzt registrieren!</a><br></p>
-			' . v_info('
+			' . $this->v_utils->v_info('
 			Das Anbieten und Teilen hygienisch riskanter Lebensmittel ist bei foodsharing nicht erlaubt! Dazu gehören alle Lebensmittel, die ein Verbrauchsdatum tragen („zu verbrauchen bis…“), wie auch roher Fisch, Geflügel und anderes Fleisch, insbesondere Hackfleisch, rohe Eierspeisen und zubereitete Lebensmittel, die Fleisch oder Fisch enthalten, es sei denn es kann durch Lieferscheine sichergestellt werden, dass die Kühlkette lückenlos war. Unproblematisch sind hingegen Lebensmittel mit einem Mindesthaltbarkeitsdatum („mindestens haltbar bis…“), auch nach Ablauf dieses Datums. <b>Mehr Information zu diesem Thema findest Du im <a href="/ratgeber">Ratgeber</a></b>.', 'Wichtig:') . '
 		</div>
 		';
@@ -200,7 +200,7 @@ class ContentView extends View
 		<div class="page ui-padding ui-widget-content corner-all">
 			<h1>Ratgeber Lebensmittelsicherheit</h1>
 			<p>Da Lebensmittel uns am Leben erhalten, sollte man mit ihnen auch respektvoll umgehen. Gegen die Lebensmittelverschwendung etwas zu tun, ist eine Möglichkeit Respekt zu zeigen. Um den Lebensmitteltausch oder die Lebensmittelabgabe für alle Teilnehmer so sicher wie möglich zu gestalten, haben wir die wichtigsten Voraussetzungen im folgenden Leitfaden zusammengefasst. Lebensmittel an andere weiterzugeben ist eine sehr menschliche aber auch verantwortungsvolle Situation. Grundsätzlich gilt wohl immer: „Nichts an andere weitergeben, was man selbst nicht mehr essen würde“. Die nun aufgeführten Punkte, sollen die Entscheidung erleichtern. </p>
-			' . v_info('Nicht gestattet ist das Anbieten und Teilen hygienisch riskanter Lebensmittel. Dazu gehören alle Lebensmittel, die ein Verbrauchsdatum tragen („zu verbrauchen bis…“), wie auch roher Fisch, Geflügel und anderes Fleisch, insbesondere Hackfleisch, rohe Eierspeisen und zubereitete Lebensmittel, die Fleisch oder Fisch enthalten, es sei denn es kann durch Lieferscheine sichergestellt werden, dass die Kühlkette lückenlos war. Foodsharing.de behält sich vor, derartige Angebote zu löschen. Unproblematisch sind hingegen Lebensmittel mit einem Mindesthaltbarkeitsdatum („mindestens haltbar bis…“), auch nach Ablauf dieses Datums.', 'Das Wichtigste in Kürze!') . '
+			' . $this->v_utils->v_info('Nicht gestattet ist das Anbieten und Teilen hygienisch riskanter Lebensmittel. Dazu gehören alle Lebensmittel, die ein Verbrauchsdatum tragen („zu verbrauchen bis…“), wie auch roher Fisch, Geflügel und anderes Fleisch, insbesondere Hackfleisch, rohe Eierspeisen und zubereitete Lebensmittel, die Fleisch oder Fisch enthalten, es sei denn es kann durch Lieferscheine sichergestellt werden, dass die Kühlkette lückenlos war. Foodsharing.de behält sich vor, derartige Angebote zu löschen. Unproblematisch sind hingegen Lebensmittel mit einem Mindesthaltbarkeitsdatum („mindestens haltbar bis…“), auch nach Ablauf dieses Datums.', 'Das Wichtigste in Kürze!') . '
 			
 			' . $accordion->render() . '
 		</div>';

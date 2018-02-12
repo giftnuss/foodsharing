@@ -7,14 +7,10 @@ use Foodsharing\Modules\Core\Control;
 
 class EmailTemplateAdminControl extends Control
 {
-	private $v_utils;
-
 	public function __construct()
 	{
 		$this->model = new EmailTemplateAdminModel();
 		$this->view = new EmailTemplateAdminView();
-		global $g_view_utils;
-		$this->v_utils = $g_view_utils;
 
 		if (!S::may('orga')) {
 			$this->func->go('/');

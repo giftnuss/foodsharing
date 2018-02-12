@@ -324,7 +324,7 @@ class SettingsControl extends Control
 					if($("#bezirk").val() == 0)
 					{
 						check = false;
-						$this->func->error("Du musst einen bezirk ausw&auml;hlen");
+						error("Du musst einen bezirk ausw&auml;hlen");
 					}
 				
 					if(!check)

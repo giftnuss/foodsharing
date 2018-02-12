@@ -7,14 +7,10 @@ use Foodsharing\Modules\Core\Model;
 
 class FAQListControl extends Control
 {
-	private $v_utils;
-
 	public function __construct()
 	{
 		parent::__construct();
 
-		global $g_view_utils;
-		$this->v_utils = $g_view_utils;
 		$this->model = new Model();
 	}
 

@@ -8,8 +8,6 @@ use Foodsharing\Modules\Core\Model;
 
 class FAQAdminControl extends Control
 {
-	private $v_utils;
-
 	public function __construct()
 	{
 		if (!S::may('orga')) {
@@ -18,8 +16,6 @@ class FAQAdminControl extends Control
 
 		parent::__construct();
 
-		global $g_view_utils;
-		$this->v_utils = $g_view_utils;
 		$this->view = new FAQAdminView();
 		$this->model = new Model();
 	}

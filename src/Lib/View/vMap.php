@@ -16,9 +16,12 @@ class vMap extends vCore
 	private $provider_options;
 	private $marker;
 	private $home_marker;
+	private $func;
 
 	public function __construct($id = 'map')
 	{
+		global $g_func;
+		$this->func = $g_func;
 		$this->id = $this->id($id);
 
 		$this->location = array(50.89, 10.13);
@@ -112,7 +115,7 @@ class vMap extends vCore
 
 	public function render()
 	{
-		addJsFunc('
+		$this->func->addJsFunc('
 			var ' . $this->id . '_latLng = [' . $this->location[0] . ',' . $this->location[1] . '];
 			var ' . $this->id . '_defaultIcon = L.AwesomeMarkers.icon({
 			    icon: "' . $this->default_marker['icon'] . '",
@@ -121,32 +124,32 @@ class vMap extends vCore
 			});
 		');
 		if ($this->home_marker) {
-			addJsFunc('
+			$this->func->addJsFunc('
 			var ' . $this->id . '_home_marker = null;		
 			var ' . $this->id . '_homeIcon = L.icon({   iconUrl: "/css/img/marker-home.png",shadowUrl: \'/css/img/default-shadow.png\',iconSize: [25, 41],	iconAnchor: [12, 41],popupAnchor: [1, -34],shadowSize: [46, 41],shadowAnchor: [12, 41]});
 			');
 		}
 
 		if ($this->markercluster) {
-			//addScriptTop('/js/leaflet.markercluster.js');
-			addCss('/js/markercluster/dist/MarkerCluster.css');
-			addCss('/js/markercluster/dist/MarkerCluster.Default.css');
+			//$this->func->addScriptTop('/js/leaflet.markercluster.js');
+			$this->func->addCss('/js/markercluster/dist/MarkerCluster.css');
+			$this->func->addCss('/js/markercluster/dist/MarkerCluster.Default.css');
 		}
 
-		addJsFunc('
+		$this->func->addJsFunc('
 			var ' . $this->id . ' = null;
 			var ' . $this->id . '_markers = null;	
 			var ' . $this->id . '_geocoder = null;	
 		');
 
-		addJs('' . $this->id . ' = L.map("' . $this->id . '").setView([' . $this->location[0] . ', ' . $this->location[1] . '], ' . $this->zoom . ');');
+		$this->func->addJs('' . $this->id . ' = L.map("' . $this->id . '").setView([' . $this->location[0] . ', ' . $this->location[1] . '], ' . $this->zoom . ');');
 		if ($this->searchpanel !== false) {
 			$hm = '';
 			if ($this->home_marker) {
 				$hm = $this->id . '_home_marker.setLatLng(new L.LatLng(latLng[0], latLng[1])).update();';
 			}
 
-			addJs('
+			$this->func->addJs('
 				$.getScript( "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=' . GOOGLE_API_KEY . '", function() {
 					var addressPicker = new AddressPicker({
 						map: {
@@ -164,7 +167,7 @@ class vMap extends vCore
 		}
 		switch ($this->provider) {
 			case 'osm':
-				addJs('
+				$this->func->addJs('
 					L.tileLayer(\'http://{s}.tile.osm.org/{z}/{x}/{y}.png\', {
 						attribution: \'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors\'
 					}).addTo(' . $this->id . ');
@@ -172,14 +175,14 @@ class vMap extends vCore
 				break;
 
 			case 'esri':
-				addJs('
+				$this->func->addJs('
 					L.tileLayer(\'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}\', {
 						attribution: \'Geocoding by <a href=\"https://google.com\">Google</a>, Tiles &copy; Esri 2014\'
 					}).addTo(' . $this->id . ');
 				');
 				break;
 			case 'mapquest':
-				addJs('
+				$this->func->addJs('
 					L.tileLayer(\'http://{s}.mqcdn.com/tiles/1.0.0/vy/map/{z}/{x}/{y}.png\', {
 						subdomains:["mtile01","mtile02","mtile03","mtile04"],
 						attributionControl: false
@@ -188,7 +191,7 @@ class vMap extends vCore
 				break;
 
 			case 'mapbox':
-				addJs('
+				$this->func->addJs('
 					L.tileLayer(\'http://{s}.tiles.mapbox.com/v3/' . $this->provider_options['user'] . '.' . $this->provider_options['map'] . '/{z}/{x}/{y}.png\', {
 					    attributionControl: false
 					}).addTo(' . $this->id . ');
@@ -196,7 +199,7 @@ class vMap extends vCore
 				break;
 
 			case 'cloudmade':
-				addJs('
+				$this->func->addJs('
 					L.tileLayer(\'http://{s}.tile.cloudmade.com/' . $this->provider_options['key'] . '/' . $this->provider_options['styleId'] . '/256/{z}/{x}/{y}.png\', {
 					    attributionControl: false
 					}).addTo(' . $this->id . ');
@@ -205,16 +208,16 @@ class vMap extends vCore
 		}
 		if (!empty($this->marker)) {
 			foreach ($this->marker as $m) {
-				addJs('L.marker([' . $m['lat'] . ', ' . $m['lng'] . '],{icon:' . $this->id . '_defaultIcon}).addTo(' . $this->id . ');');
+				$this->func->addJs('L.marker([' . $m['lat'] . ', ' . $m['lng'] . '],{icon:' . $this->id . '_defaultIcon}).addTo(' . $this->id . ');');
 			}
 		}
 
 		if ($this->home_marker) {
-			addJs($this->id . '_home_marker = L.marker([' . $this->location[0] . ', ' . $this->location[1] . '],{icon:' . $this->id . '_homeIcon}).addTo(' . $this->id . ');');
+			$this->func->addJs($this->id . '_home_marker = L.marker([' . $this->location[0] . ', ' . $this->location[1] . '],{icon:' . $this->id . '_homeIcon}).addTo(' . $this->id . ');');
 		}
 
 		if ($this->markercluster) {
-			addJsFunc('
+			$this->func->addJsFunc('
 			function ' . $this->id . '_clearCluster()
 			{
 				if(' . $this->id . '_markers != null && ' . $this->id . '_markers != undefined)
@@ -248,7 +251,7 @@ class vMap extends vCore
 			}
 			');
 		} else {
-			addJsFunc('
+			$this->func->addJsFunc('
 			function ' . $this->id . '_addMarker(lat,lng,id)
 			{
 				L.marker([lat, lng]).addTo(' . $this->id . ');	
@@ -265,7 +268,7 @@ class vMap extends vCore
 	private function initLocation()
 	{
 		if (!S::getLocation()) {
-			addJs('
+			$this->func->addJs('
 			$.getJSON("http://www.geoplugin.net/json.gp?ip=' . $_SERVER['REMOTE_ADDR'] . '&jsoncallback=?", function(data) {
 			    if(data.geoplugin_status != undefined && data.geoplugin_status >= 200 && data.geoplugin_status < 300)
 				{

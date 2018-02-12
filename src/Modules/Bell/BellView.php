@@ -43,7 +43,7 @@ class BellView extends View
 				$list .= '<li id="belllist-' . $b['id'] . '" class="unread-' . $unread . '"><a' . $attr . '>' . $close . $icon . '<span class="names">' . $this->func->sv($b['name'], $b['vars']) . '</span><span class="msg">' . $this->func->sv($b['body'], $b['vars']) . '</span><span class="time">' . $this->func->niceDate($b['time_ts']) . '</span><span class="clear"></span></a></li>';
 			}
 		} else {
-			$list = '<li class="noconv">' . v_info($this->func->s('no_bells')) . '</li>';
+			$list = '<li class="noconv">' . $this->v_utils->v_info($this->func->s('no_bells')) . '</li>';
 		}
 
 		return $list;

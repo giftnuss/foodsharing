@@ -117,7 +117,7 @@ class EventView extends View
 			$delinvites = '<br /><label><input type="checkbox" name="delinvites" id="delinvites" value="1" /> Vorhandene Einladungen löschen?</label>';
 		}
 
-		$bezirkchoose = v_input_wrapper('Für welchen Bezirk oder welche AG ist das Event?', '
+		$bezirkchoose = $this->v_utils->v_input_wrapper('Für welchen Bezirk oder welche AG ist das Event?', '
 			<select class="input select value" name="bezirk_id" id="bezirk_id">
 				' . $ag . '
 				' . $bez . '
@@ -137,17 +137,17 @@ class EventView extends View
 				$chk = ' checked="checked"';
 				$this->func->addJs('$("#input-wrapper").hide();');
 			}
-			$public_el = v_input_wrapper('Ist die Veranstaltung öffentlich?', '<label><input id="public" type="checkbox" name="public" value="1"' . $chk . ' /> Ja die Veranstaltung ist Öffentlich</label>');
+			$public_el = $this->v_utils->v_input_wrapper('Ist die Veranstaltung öffentlich?', '<label><input id="public" type="checkbox" name="public" value="1"' . $chk . ' /> Ja die Veranstaltung ist Öffentlich</label>');
 		}
 
-		return v_field(v_form('eventsss', array(
+		return $this->v_utils->v_field(v_form('eventsss', array(
 			$public_el,
 			$bezirkchoose,
 			v_form_text('name', array('required' => true)),
 			v_form_date('date'),
 			v_form_date('dateend'),
-			v_input_wrapper('Uhrzeit Beginn', v_form_time('time_start', $start_time)),
-			v_input_wrapper('Uhrzeit Ende', v_form_time('time_end', $end_time)),
+			v_input_wrapper('Uhrzeit Beginn', $this->v_utils->v_form_time('time_start', $start_time)),
+			v_input_wrapper('Uhrzeit Ende', $this->v_utils->v_form_time('time_end', $end_time)),
 			v_form_textarea('description', array('desc' => $this->func->s('desc_desc'), 'required' => true)),
 			v_form_select('online_type', array('values' => array(
 				array('id' => 1, 'name' => $this->func->s('offline')),

@@ -36,12 +36,12 @@ class View
 
 		$this->func->addJs('
 				storage.reset();
-				if($this->func->isMob())
+				if(isMob())
 				{
 					$("#ismob").val("1");
 				}
 				$(window).resize(function(){
-					if($this->func->isMob())
+					if(isMob())
 					{
 						$("#ismob").val("1");
 					}

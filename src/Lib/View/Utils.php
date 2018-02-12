@@ -33,40 +33,12 @@ class Utils
 				<div id="' . $id . '" class="scroller">
 					' . $content . '
 				</div>';
-
-			/*
-			return '
-				<div id="'.$id.'" class="scroller">
-					<div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
-					<div class="viewport">
-						<div class="overview" style="width:'.$width.'px">
-							'.$content.'
-						</div>
-					</div>
-				</div>';
-			*/
 		}
 	}
 
 	public function v_activeSwitcher($table, $field_id, $active)
 	{
 		$id = $this->func->id('activeSwitch');
-
-		/*
-		addJs('
-			$("#'.$id.'").buttonset().change(function(){
-				showLoader();
-				$.ajax({
-					url: "xhr.php?f=activeSwitch",
-					data:{t:"'.$table.'",id:"'.$field_id.'",value:$("#'.$id.' input:checked").attr("value")},
-					method:"get",
-					complete:function(){
-						hideLoader();
-					}
-				});
-			});
-		');
-		*/
 
 		$this->func->addJs('
 			$("#' . $id . ' input").switchButton({
@@ -207,7 +179,7 @@ class Utils
 		$this->func->addCss('/js/dynatree/skin/ui.dynatree.css');
 
 		if (!$bezirk) {
-			//$bezirk = getBezirk();
+			//$bezirk = $this->func->getBezirk();
 			$bezirk = array(
 				'id' => 0,
 				'name' => $this->func->s('no_bezirk_choosen')
@@ -844,7 +816,7 @@ class Utils
 	{
 		$id = $this->func->id('vmenu');
 
-		//addJs('$("#'.$id.'").menu();');
+		//$this->func->addJs('$("#'.$id.'").menu();');
 		$out = '
 		<ul class="linklist">';
 

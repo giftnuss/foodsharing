@@ -461,7 +461,7 @@ class BasketXhr extends Control
 					<p>Anfragezeitpunkt: ' . $this->func->niceDate($request['time_ts']) . '</p>
 					<div style="clear:both;"></div>
 				</div>'
-				. v_form_radio('fetchstate', array(
+				. $this->v_utils->v_form_radio('fetchstate', array(
 					'values' => array(
 						array('id' => 3, 'name' => 'Ja, ' . $this->func->genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' hat den Korb abgeholt.'),
 						array('id' => 5, 'name' => 'Nein, ' . $this->func->genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' ist leider nicht wie verabredet erschienen.'),

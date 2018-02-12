@@ -90,7 +90,7 @@ class IndexView extends View
 
 	private function howto()
 	{
-		addJs('$(".vidlink").click(function(ev){
+		$this->func->addJs('$(".vidlink").click(function(ev){
 			ev.preventDefault();
 			$vid = $(this);
 			$vid.parent().html(\'<iframe width="420" height="315" src="\'+$vid.attr(\'href\')+\'" frameborder="0" allowfullscreen></iframe>\');

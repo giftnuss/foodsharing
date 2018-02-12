@@ -8,8 +8,6 @@ use Foodsharing\Modules\Core\Model;
 
 class RegionAdminControl extends Control
 {
-	private $v_utils;
-
 	public function __construct()
 	{
 		if (!S::may('orga')) {
@@ -17,8 +15,6 @@ class RegionAdminControl extends Control
 		}
 		$this->view = new RegionAdminView();
 		$this->model = new Model();
-		global $g_view_utils;
-		$this->v_utils = $g_view_utils;
 		parent::__construct();
 	}
 

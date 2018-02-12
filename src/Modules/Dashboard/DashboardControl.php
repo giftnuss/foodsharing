@@ -10,14 +10,11 @@ use Foodsharing\Modules\Profile\ProfileModel;
 class DashboardControl extends Control
 {
 	private $user;
-	private $v_utils;
 
 	public function __construct()
 	{
-		global $g_view_utils;
 		$this->model = new DashboardModel();
 		$this->view = new DashboardView();
-		$this->v_utils = $g_view_utils;
 
 		parent::__construct();
 

@@ -3,12 +3,14 @@
 namespace Foodsharing\Modules\Logout;
 
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\Model;
 
-class LogoutControl
+class LogoutControl extends Control
 {
 	public function __construct()
 	{
-		$this->model = new LoginModel();
+		$this->model = new Model();
 		parent::__construct();
 	}
 

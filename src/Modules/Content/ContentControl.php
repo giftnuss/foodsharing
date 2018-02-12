@@ -73,11 +73,11 @@ class ContentControl extends Control
 						$rows[] = array(
 							array('cnt' => $d['id']),
 							array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=content&id=' . $d['id'] . '">' . $d['name'] . '</a>'),
-							array('cnt' => v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => $this->func->sv('delete_sure', $d['name'])))
+							array('cnt' => $this->v_utils->v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => $this->func->sv('delete_sure', $d['name'])))
 							));
 					}
 
-					$table = v_tablesorter(array(
+					$table = $this->v_utils->v_tablesorter(array(
 						array('name' => 'ID', 'width' => 30),
 						array('name' => $this->func->s('name')),
 						array('name' => $this->func->s('actions'), 'sort' => false, 'width' => 50)
@@ -243,7 +243,7 @@ class ContentControl extends Control
 
 	private function content_form($title = 'Content Management')
 	{
-		return v_form('faq', array(
+		return $this->v_utils->v_form('faq', array(
 			v_field(
 				v_form_text('name', array('required' => true)) .
 				v_form_text('title', array('required' => true)),

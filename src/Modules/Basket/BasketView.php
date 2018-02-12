@@ -182,7 +182,7 @@ class BasketView extends View
 
 		$out = '';
 
-		$out .= v_form_textarea('description', array('maxlength' => 1705));
+		$out .= $this->v_utils->v_form_textarea('description', array('maxlength' => 1705));
 
 		$values = array(
 			array('id' => 0.25, 'name' => '250 g'),
@@ -205,21 +205,21 @@ class BasketView extends View
 			);
 		}
 
-		$out .= v_form_select('weight', array(
+		$out .= $this->v_utils->v_form_select('weight', array(
 			'values' => $values
 		));
 
-		$out .= v_form_checkbox('contact_type', array(
+		$out .= $this->v_utils->v_form_checkbox('contact_type', array(
 			'values' => array(
 				array('id' => 1, 'name' => 'Per Nachricht'),
 				array('id' => 2, 'name' => 'Per Telefonanruf')
 			)
 		));
 
-		$out .= v_form_text('tel');
-		$out .= v_form_text('handy');
+		$out .= $this->v_utils->v_form_text('tel');
+		$out .= $this->v_utils->v_form_text('handy');
 
-		$out .= v_form_checkbox('food_type', array(
+		$out .= $this->v_utils->v_form_checkbox('food_type', array(
 			'values' => array(
 				array('id' => 1, 'name' => 'Backwaren'),
 				array('id' => 2, 'name' => 'Obst & Gemüse'),
@@ -231,7 +231,7 @@ class BasketView extends View
 			)
 		));
 
-		$out .= v_form_checkbox('food_art', array(
+		$out .= $this->v_utils->v_form_checkbox('food_art', array(
 			'values' => array(
 				array('id' => 1, 'name' => 'sind Bio'),
 				array('id' => 2, 'name' => 'sind vegetarisch'),
@@ -245,7 +245,7 @@ class BasketView extends View
 
 	public function contactMsg($basket)
 	{
-		return v_form_textarea('contactmessage');
+		return $this->v_utils->v_form_textarea('contactmessage');
 	}
 
 	public function contactTitle($basket)
@@ -266,7 +266,7 @@ class BasketView extends View
 			$content .= ('<tr><td>Handy: &nbsp;</td><td>' . $basket['handy'] . '</td></tr>');
 		}
 		if (!empty($content)) {
-			$out .= v_input_wrapper('Telefonisch kontaktieren', '<table>' . $content . '</table>');
+			$out .= $this->v_utils->v_input_wrapper('Telefonisch kontaktieren', '<table>' . $content . '</table>');
 		}
 
 		return $out;
@@ -333,7 +333,7 @@ class BasketView extends View
 
 		return '
 		' . $img . '
-		' . v_input_wrapper('Beschreibung', nl2br($this->func->autolink($basket['description']))) . '
+		' . $this->v_utils->v_input_wrapper('Beschreibung', nl2br($this->func->autolink($basket['description']))) . '
 		' .
 			'<div style="text-align:center;"><a class="fsbutton" href="http://foodsharing.de/essenskoerbe/' . $basket['fsf_id'] . '" target="_blank">Essenskorb anfragen auf foodsharing.de</a></div>';
 	}
@@ -347,7 +347,7 @@ class BasketView extends View
 
 		return '
 		' . $img . '
-		' . v_input_wrapper('Beschreibung', nl2br($this->func->autolink($basket['description']))) . '
+		' . $this->v_utils->v_input_wrapper('Beschreibung', nl2br($this->func->autolink($basket['description']))) . '
 		';
 	}
 
@@ -360,8 +360,8 @@ class BasketView extends View
 
 		return '
 		' . $img . '
-		' . v_input_wrapper('Einstelldatum', $this->func->niceDate($basket['time_ts'])) . '
-		' . v_input_wrapper('Beschreibung', nl2br($this->func->autolink($basket['description']))) . '
+		' . $this->v_utils->v_input_wrapper('Einstelldatum', $this->func->niceDate($basket['time_ts'])) . '
+		' . $this->v_utils->v_input_wrapper('Beschreibung', nl2br($this->func->autolink($basket['description']))) . '
 		';
 	}
 }

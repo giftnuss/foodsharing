@@ -13,13 +13,13 @@ class BlogView extends View
 			$row_tmp = array();
 
 			if ($this->func->isOrgaTeam() || $this->func->isBotFor($d['bezirk_id'])) {
-				$row_tmp[] = array('cnt' => v_activeSwitcher('blog_entry', $d['id'], $d['active']));
+				$row_tmp[] = array('cnt' => $this->v_utils->v_activeSwitcher('blog_entry', $d['id'], $d['active']));
 			} else {
 				$row_tmp[] = array('cnt' => $this->func->s('status_' . $d['active']));
 			}
 			$row_tmp[] = array('cnt' => '<span style="display:none;">a' . $d['time_ts'] . '</span><a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id=' . $d['id'] . '">' . $this->func->format_d($d['time_ts']) . '</a>');
 			$row_tmp[] = array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id=' . $d['id'] . '">' . $d['name'] . '</a>');
-			$row_tmp[] = array('cnt' => v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => $this->func->sv('delete_sure', $d['name']))));
+			$row_tmp[] = array('cnt' => $this->v_utils->v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => $this->func->sv('delete_sure', $d['name']))));
 
 			$rows[] = $row_tmp;
 		}
@@ -31,14 +31,14 @@ class BlogView extends View
 		$theads[] = array('name' => $this->func->s('name'));
 		$theads[] = array('name' => $this->func->s('actions'), 'sort' => false, 'width' => 50);
 
-		$table = v_tablesorter($theads, $rows);
+		$table = $this->v_utils->v_tablesorter($theads, $rows);
 
-		return v_field($table, $this->func->s('article'));
+		return $this->v_utils->v_field($table, $this->func->s('article'));
 	}
 
 	public function newsPost($news)
 	{
-		return v_field('<div class="news-post full"><h2><a href="/?page=blog&sub=read&id=' . $news['id'] . '">' . $news['name'] . '</a></h2><p class="small"><span class="time">' . $this->func->niceDate($news['time_ts']) . '</span><span class="name"> von ' . $news['fs_name'] . '</span></p>' . $this->getImage($news, 'crop_0_528_') . '<p>' . $this->func->autolink($news['body']) . '</p><div style="clear:both;"></div></div>');
+		return $this->v_utils->v_field('<div class="news-post full"><h2><a href="/?page=blog&sub=read&id=' . $news['id'] . '">' . $news['name'] . '</a></h2><p class="small"><span class="time">' . $this->func->niceDate($news['time_ts']) . '</span><span class="name"> von ' . $news['fs_name'] . '</span></p>' . $this->getImage($news, 'crop_0_528_') . '<p>' . $this->func->autolink($news['body']) . '</p><div style="clear:both;"></div></div>');
 	}
 
 	public function newsListItem($news)
@@ -82,17 +82,17 @@ class BlogView extends View
 			), CNT_LEFT);
 		}
 		if (is_array($bezirke) && count($bezirke) > 1) {
-			$bezirkchoose = v_form_select('bezirk_id', array('values' => $bezirke));
+			$bezirkchoose = $this->v_utils->v_form_select('bezirk_id', array('values' => $bezirke));
 		} elseif (is_array($bezirke)) {
 			$bezirk = end($bezirke);
 			$title = 'Neuer Artikel für ' . $bezirk['name'];
-			$bezirkchoose = v_form_hidden('bezirk_id', $bezirk['id']);
+			$bezirkchoose = $this->v_utils->v_form_hidden('bezirk_id', $bezirk['id']);
 		}
 
-		return v_form('test', array(
+		return $this->v_utils->v_form('test', array(
 			v_field(
 				$bezirkchoose .
-				v_form_text('name') . v_form_textarea('teaser', array('style' => 'height:75px;')) .
+				v_form_text('name') . $this->v_utils->v_form_textarea('teaser', array('style' => 'height:75px;')) .
 				v_form_picture('picture', array('resize' => array(250, 528), 'crop' => array((250 / 135), (528 / 170)))),
 
 				$title,

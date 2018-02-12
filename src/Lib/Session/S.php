@@ -8,6 +8,8 @@ use Foodsharing\Lib\Db\ManualDb;
 
 class S
 {
+	private $func;
+
 	public static function init()
 	{
 		ini_set('session.save_handler', 'redis');
@@ -56,9 +58,10 @@ class S
 
 	public static function login($user)
 	{
+		global $g_func;
 		if (isset($user['id']) && !empty($user['id']) && isset($user['rolle'])) {
 			fAuthorization::setUserToken($user['id']);
-			self::setAuthLevel(rolleWrapInt($user['rolle']));
+			self::setAuthLevel($g_func->rolleWrapInt($user['rolle']));
 
 			self::set('user', array(
 				'name' => $user['name'],
@@ -104,10 +107,11 @@ class S
 
 	public static function getLocation()
 	{
+		global $g_func;
 		$loc = fSession::get('g_location', false);
 		if (!$loc) {
 			$db = new ManualDb();
-			$loc = $db->getValues(array('lat', 'lon'), 'foodsaver', fsId());
+			$loc = $db->getValues(array('lat', 'lon'), 'foodsaver', $g_func->fsId());
 			self::set('g_location', $loc);
 		}
 
@@ -159,6 +163,7 @@ class S
 
 	public static function addMsg($message, $type, $title = null)
 	{
+		global $g_func;
 		$msg = fSession::get('g_message', array());
 
 		if (!isset($msg[$type])) {
@@ -166,7 +171,7 @@ class S
 		}
 
 		if (!$title) {
-			$title = ' ' . s($type);
+			$title = ' ' . $g_func->s($type);
 		} else {
 			$title = ' ';
 		}

@@ -16,10 +16,6 @@ class StoreUserControl extends Control
 		$this->model = new StoreModel();
 		$this->view = new StoreUserView();
 
-		global $g_view_utils;
-
-		$this->v_utils = $g_view_utils;
-
 		parent::__construct();
 	}
 
