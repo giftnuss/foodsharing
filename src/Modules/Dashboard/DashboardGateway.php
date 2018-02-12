@@ -71,8 +71,12 @@ class DashboardGateway extends BaseGateway
 				b.description,
 				b.lat,
 				b.lon,
-				(6371 * acos( cos( radians(:lat) ) * cos( radians( b.lat ) ) * cos( radians( b.lon ) - radians(:lon) ) + sin( radians(:lat) ) * sin( radians( b.lat ) ) ))
-				AS distance,
+				(6371 * acos(
+					cos(radians(:lat)) *
+					cos(radians(b.lat)) *
+					cos(radians(b.lon) - radians(:lon)) +
+					sin(radians(:lat_dup)) *
+					sin(radians(b.lat)))) AS distance,
 				fs.name AS fs_name
 			FROM
 				fs_basket b,
@@ -94,6 +98,10 @@ class DashboardGateway extends BaseGateway
 				distance ASC
 	
 			LIMIT 6
-		', [':id' => $id, ':distance' => $distance, ':lat' => $loc['lat'], ':lon' => $loc['lon']]);
+		', [':id' => $id,
+			':distance' => $distance,
+			':lat' => $loc['lat'],
+			':lat_dup' => $loc['lat'],
+			':lon' => $loc['lon']]);
 	}
 }

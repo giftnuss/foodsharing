@@ -48,6 +48,7 @@ if ($FS_ENV === 'dev') {
 	// In development we need to wrap the PDO instance for the DebugBar
 	$pdo = new PDO($dsn, DB_USER, DB_PASS);
 	$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$traceablePDO = new TraceablePDO($pdo);
 	DI::$shared->useTraceablePDO($traceablePDO);
 	Foodsharing\Debug\DebugBar::register($traceablePDO);
