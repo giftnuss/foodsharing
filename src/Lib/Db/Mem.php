@@ -6,6 +6,9 @@ use Redis;
 
 class Mem
 {
+	/**
+	 * @var Redis
+	 */
 	public static $cache;
 	public static $connected;
 	private static $func;

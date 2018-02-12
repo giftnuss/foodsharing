@@ -11,6 +11,9 @@ use Foodsharing\Modules\Console\ConsoleControl;
 
 class MailsControl extends ConsoleControl
 {
+	/**
+	 * @var fSMTP
+	 */
 	public static $smtp = false;
 	public static $last_connect;
 
