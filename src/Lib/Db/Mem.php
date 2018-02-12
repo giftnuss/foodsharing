@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Lib\Db;
 
+use Foodsharing\Lib\Func;
 use Redis;
 
 class Mem
@@ -11,6 +12,9 @@ class Mem
 	 */
 	public static $cache;
 	public static $connected;
+	/**
+	 * @var Func
+	 */
 	private static $func;
 
 	public static function connect()

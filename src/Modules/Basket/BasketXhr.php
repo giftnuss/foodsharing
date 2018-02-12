@@ -406,8 +406,7 @@ class BasketXhr extends Control
 
 	public function update()
 	{
-		$count = $this->gateway->getUpdateCount(fsId());
-		$count = $this->model->getUpdateCount();
+		$count = $this->gateway->getUpdateCount($this->func->fsId());
 		if ((int)$count > 0) {
 			return array(
 				'status' => 1,

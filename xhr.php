@@ -9,7 +9,6 @@ require __DIR__ . '/includes/setup.php';
 
 require_once 'config.inc.php';
 
-//session_init();
 S::init();
 if (isset($g_page_cache)) {
 	$cache = new Caching($g_page_cache);
