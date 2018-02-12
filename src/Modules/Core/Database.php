@@ -23,7 +23,7 @@ class Database
 		return $this->preparedQuery($query, $params)->fetchAll();
 	}
 
-	public function fetchFirstColumn($query, $params = [])
+	public function fetchValue($query, $params = [])
 	{
 		return $this->preparedQuery($query, $params)->fetchColumn(0);
 	}
