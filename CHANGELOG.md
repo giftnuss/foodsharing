@@ -16,6 +16,8 @@
 ## Refactoring
 - Consolidate remaining functions and modules !269 @NerdyProjects
 - Remove old user registration code !246 @NerdyProjects
+- Add initial gateway database classes using PDO !264 @nicksellen
+- Add Symfony dependency injection container !264 @nicksellen
 
 ## Dev/Test/CI stuff
 
