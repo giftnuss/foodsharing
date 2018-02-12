@@ -10,7 +10,8 @@ import queue
 if 'GITLAB_TOKEN' in os.environ:
     token = os.environ['GITLAB_TOKEN']
 else:
-    print('Set GITLAB_TOKEN in env')
+    print('Get a personal access token from https://gitlab.com/profile/personal_access_tokens and then:')
+    print('GITLAB_TOKEN=<your token here> ' + ' '.join(sys.argv))
     sys.exit(1)
 
 number = sys.argv[1] if len(sys.argv) > 1 else 5
@@ -78,6 +79,8 @@ for test, values in test_overview.items():
     test_failure_summary[test] = sum([1 for v in values if v['result'] != 'success'])
 
 highest_failures = sorted(test_failure_summary.items(), key=lambda x: x[1], reverse=True)
+print()
+print('Tests with highest failure count:')
 for t in highest_failures:
     if t[1] > 0:
         print(t[1], t[0])
