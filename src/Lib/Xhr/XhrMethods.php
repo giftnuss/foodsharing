@@ -15,6 +15,7 @@ use Foodsharing\Modules\Store\StoreModel;
 class XhrMethods
 {
 	private $model;
+	private $func;
 
 	/**
 	 * XhrMethods constructor.
@@ -23,6 +24,8 @@ class XhrMethods
 	 */
 	public function __construct(Model $model)
 	{
+		global $g_func;
+		$this->func = $g_func;
 		$this->model = $model;
 	}
 
