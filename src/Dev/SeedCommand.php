@@ -61,15 +61,15 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$bezirk_vorstand = '1373';
 		$ag_quiz = '341';
 
-		$I->createFoodsharer('user1', ['email' => 'user1@example.com', 'name' => 'One', 'bezirk_id' => $bezirk1]);
-		$user2 = $I->createFoodsaver('user2', ['email' => 'user2@example.com', 'name' => 'Two', 'bezirk_id' => $bezirk1]);
-		$userbot = $I->createAmbassador('userbot', [
+		$I->createFoodsharer('user', ['email' => 'user1@example.com', 'name' => 'One', 'bezirk_id' => $bezirk1]);
+		$user2 = $I->createFoodsaver('user', ['email' => 'user2@example.com', 'name' => 'Two', 'bezirk_id' => $bezirk1]);
+		$userbot = $I->createAmbassador('user', [
 			'email' => 'userbot@example.com',
 			'name' => 'Bot',
 			'bezirk_id' => $bezirk1,
 			'about_me_public' => 'hello!'
 		]);
-		$I->createOrga('userbot', false, ['email' => 'userorga@example.com', 'name' => 'Orga', 'bezirk_id' => $bezirk1]);
+		$I->createOrga('user', false, ['email' => 'userorga@example.com', 'name' => 'Orga', 'bezirk_id' => $bezirk1]);
 
 		$I->addBezirkMember($bezirk1, $userbot['id'], true);
 		$I->addBezirkMember($bezirk1, $user2['id']);
