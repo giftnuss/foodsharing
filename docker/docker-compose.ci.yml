@@ -46,7 +46,7 @@ services:
   mailqueuerunner:
     container_name: foodsharing_ci_mailqueuerunner
     image: foodsharing_ci_app
-    command: php run.php mails index
+    command: php run.php Mails index
     working_dir: /app
     links:
       - maildev
