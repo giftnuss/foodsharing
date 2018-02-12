@@ -264,7 +264,7 @@ class QuizXhr extends Control
 	private function abortOrOpenDialog($session_id)
 	{
 		return '
-				$("body").append(\'<div id="abortOrPause">' . JsSafe($this->view->abortOrPause()) . '</div>\');
+				$("body").append(\'<div id="abortOrPause">' . $this->func->jsSafe($this->view->abortOrPause()) . '</div>\');
 				$("#abortOrPause").dialog({
 					autoOpen: false,
 					title: "Quiz wirklich abbrechen?",

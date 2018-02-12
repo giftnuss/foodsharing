@@ -17,11 +17,14 @@ abstract class Control
 	private $sub;
 	private $sub_func;
 	protected $func;
+	protected $v_utils;
 
 	public function __construct()
 	{
 		global $g_func;
 		$this->func = $g_func;
+		global $g_view_utils;
+		$this->v_utils = $g_view_utils;
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;
 		$className = $reflection->getShortName();
