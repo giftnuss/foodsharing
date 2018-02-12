@@ -877,7 +877,7 @@ class Func
 	<tr>
 		<td height="20" valign="top" style="background-color:#FAF7E5">
 			<div style="text-align:center;padding-top:10px;font-size:11px;font-family:Arial;padding:15px;color:#594129;">
-				Willst Du diese Art von Benachrichtigungen nicht mehr bekommen? Du kannst unter <a style="color:#F36933" href="' . BASE_URL . '/?page=settings&sub=info" target="_blank">Benachrichtigungen</a> einstellen, welche Mails Du erhätst.
+				Willst Du diese Art von Benachrichtigungen nicht mehr bekommen? Du kannst unter <a style="color:#F36933" href="' . BASE_URL . '/?page=settings&sub=info" target="_blank">Benachrichtigungen</a> einstellen, welche Mails Du erhälst.
 			</div>
 		</td>
 	</tr>';
@@ -1574,6 +1574,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		if (($sub = $appInstance->getSubFunc()) !== false) {
 			$appInstance->$sub();
 		}
+
+		return $appInstance;
 	}
 
 	public function addJsFunc($nfunc)

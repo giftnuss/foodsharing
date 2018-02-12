@@ -1,22 +1,26 @@
 <?php
 
+namespace Foodsharing\Modules\Mails;
+
 use Flourish\fEmail;
 use Flourish\fFile;
 use Flourish\fMailbox;
 use Flourish\fSMTP;
 use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Modules\Console\ConsoleControl;
 
 class MailsControl extends ConsoleControl
 {
 	public static $smtp = false;
 	public static $last_connect;
-	private $model;
 
 	public function __construct()
 	{
 		error_reporting(E_ALL);
 		ini_set('display_errors', '1');
 		self::$smtp = false;
+		$this->model = new MailsModel();
+		parent::__construct();
 	}
 
 	/**
@@ -34,7 +38,7 @@ class MailsControl extends ConsoleControl
 			if ($elem !== false && $e = unserialize($elem)) {
 				switch ($e['type']) {
 					case 'email':
-						$res = $this->handleEmail($e['data']);
+						$res = self::handleEmail($e['data']);
 						// very basic email rate limit
 						usleep(100000);
 						break;
@@ -56,13 +60,11 @@ class MailsControl extends ConsoleControl
 	 */
 	public function mailboxupdate()
 	{
-		$this->model = new MailsModel();
-
 		$mailbox = new fMailbox('imap', IMAP_HOST, IMAP_USER, IMAP_PASS);
 
 		$messages = $mailbox->listMessages();
 		if (is_array($messages) && count($messages) > 0) {
-			info(count($messages) . ' in Inbox');
+			self::info(count($messages) . ' in Inbox');
 
 			$progressbar = $this->progressbar(count($messages));
 
@@ -107,7 +109,6 @@ class MailsControl extends ConsoleControl
 						}
 
 						if ($mb_ids) {
-							$body = '';
 							$html = '';
 							if (isset($message['html'])) {
 								$h2t = new \Html2Text\Html2Text($message['html']);
@@ -116,7 +117,7 @@ class MailsControl extends ConsoleControl
 								$html = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $html);
 							} elseif (isset($message['text'])) {
 								$body = $message['text'];
-								$html = nl2br(autolink($message['text']));
+								$html = nl2br($this->func->autolink($message['text']));
 							} else {
 								$body = json_encode($message);
 							}
@@ -173,7 +174,7 @@ class MailsControl extends ConsoleControl
 				$mailbox->deleteMessages((int)$msg['uid']);
 			}
 			echo "\n";
-			success('ready :o)');
+			self::success('ready :o)');
 		}
 	}
 
@@ -205,7 +206,7 @@ class MailsControl extends ConsoleControl
 
 	public static function handleEmail($data)
 	{
-		info('mail arrived ...: ' . $data['from'][0] . '@' . $data['from'][1]);
+		self::info('mail arrived ...: ' . $data['from'][0] . '@' . $data['from'][1]);
 		$email = new fEmail();
 		$email->setFromEmail($data['from'][0], $data['from'][1]);
 		$email->setSubject($data['subject']);
@@ -227,7 +228,7 @@ class MailsControl extends ConsoleControl
 		foreach ($data['recipients'] as $r) {
 			// check is it own lmr email? put direct into db
 			$r[0] = strtolower($r[0]);
-			info(substr(
+			self::info(substr(
 				$r[0],
 				(strlen(DEFAULT_HOST) * -1),
 				strlen(DEFAULT_HOST)
@@ -239,7 +240,7 @@ class MailsControl extends ConsoleControl
 					strlen(DEFAULT_HOST)
 				) == DEFAULT_HOST
 			) {
-				info($r[0] . ' own host save direct into db');
+				self::info($r[0] . ' own host save direct into db');
 				if ($model === false) {
 					$model = new MailsModel();
 				}
@@ -291,9 +292,9 @@ class MailsControl extends ConsoleControl
 		while (!$sended) {
 			--$max_try;
 			try {
-				info('send email tries remaining ' . ($max_try));
+				self::info('send email tries remaining ' . ($max_try));
 				$email->send(self::$smtp);
-				success('email send OK');
+				self::success('email send OK');
 
 				// remove atachements from temp folder
 				if (!empty($data['attachments'])) {
@@ -305,7 +306,7 @@ class MailsControl extends ConsoleControl
 				return true;
 				$sended = true;
 				break;
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				self::smtpReconnect();
 				error('email send error: ' . $e->getMessage());
 				error(print_r($data, true));
@@ -340,23 +341,23 @@ class MailsControl extends ConsoleControl
 	 */
 	public static function smtpReconnect()
 	{
-		info('SMTP reconnect.. ');
+		self::info('SMTP reconnect.. ');
 		try {
 			if (self::$smtp !== false) {
-				info('close smtp and sleep 5 sec ...');
+				self::info('close smtp and sleep 5 sec ...');
 				@self::$smtp->close();
 				//sleep(5);
 			}
 
-			info('connect...');
+			self::info('connect...');
 			self::$smtp = new fSMTP(SMTP_HOST, SMTP_PORT);
 			//MailsControl::$smtp->authenticate(SMTP_USER, SMTP_PASS);
 			self::$last_connect = time();
 
-			success('reconnect OK');
+			self::success('reconnect OK');
 
 			return true;
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			error('reconnect failed: ' . $e->getMessage());
 
 			return false;

@@ -1,15 +1,17 @@
 <?php
 
+namespace Foodsharing\Modules\Maintenance;
+
 use Flourish\fImage;
 use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Modules\Console\ConsoleControl;
 
 class MaintenanceControl extends ConsoleControl
 {
-	private $model;
-
 	public function __construct()
 	{
 		$this->model = new MaintenanceModel();
+		parent::__construct();
 	}
 
 	public function warnings()
@@ -113,21 +115,21 @@ class MaintenanceControl extends ConsoleControl
 
 	private function updateSpecialGroupMemberships()
 	{
-		info('updating HH bieb austausch');
+		self::info('updating HH bieb austausch');
 		$hh_biebs = $this->model->getBiebIds(31);
 		$hh_biebs[] = 3166;   // Gerard Roscoe
 		$counts = $this->model->updateGroupMembers(826, $hh_biebs, true);
-		info('+' . $counts[0] . ', -' . $counts[1]);
+		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
-		info('updating DE Bot group');
+		self::info('updating DE Bot group');
 		$bots = $this->model->getBotIds(741);
 		$counts = $this->model->updateGroupMembers(881, $bots, true);
-		info('+' . $counts[0] . ', -' . $counts[1]);
+		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
-		info('updating berlin bieb austausch');
+		self::info('updating berlin bieb austausch');
 		$berlin_biebs = $this->model->getBiebIds(47);
 		$counts = $this->model->updateGroupMembers(1057, $berlin_biebs, true);
-		info('+' . $counts[0] . ', -' . $counts[1]);
+		self::info('+' . $counts[0] . ', -' . $counts[1]);
 	}
 
 	private function sleepingMode()
@@ -136,7 +138,7 @@ class MaintenanceControl extends ConsoleControl
 		 * get foodsaver more than 30 days inactive set to sleeping mode and send email
 		 */
 
-		info('sleeping mode');
+		self::info('sleeping mode');
 
 		$inactive_fsids = array();
 		if ($foodsaver = $this->model->listFoodsaverInactiveSince(30)) {
@@ -151,7 +153,7 @@ class MaintenanceControl extends ConsoleControl
 			}
 			$this->model->setFoodsaverInactive($inactive_fsids);
 
-			info(count($inactive_fsids) . ' user going to sleep..');
+			self::info(count($inactive_fsids) . ' user going to sleep..');
 		}
 
 		/*
@@ -165,7 +167,7 @@ class MaintenanceControl extends ConsoleControl
 				));
 			}
 
-			info(count($foodsaver) . ' get an wakeup email..');
+			self::info(count($foodsaver) . ' get an wakeup email..');
 		}
 	}
 
@@ -187,22 +189,22 @@ class MaintenanceControl extends ConsoleControl
 	private function deactivateBaskets()
 	{
 		$count = $this->model->deactivateOldBaskets();
-		info($count . ' old foodbaskets deactivated');
+		self::info($count . ' old foodbaskets deactivated');
 	}
 
 	private function deleteBells()
 	{
 		if ($ids = $this->model->listOldBellIds()) {
 			$this->model->deleteBells($ids);
-			info(count($ids) . ' old bells deleted');
+			self::info(count($ids) . ' old bells deleted');
 		}
 	}
 
 	private function deleteUnconformedFetchDates()
 	{
-		info('delete unfonfirmed fetchdates...');
+		self::info('delete unfonfirmed fetchdates...');
 		$count = $this->model->deleteUnconformedFetchDates();
-		success($count . ' deleted');
+		self::success($count . ' deleted');
 	}
 
 	private function deleteImages()
@@ -272,7 +274,7 @@ class MaintenanceControl extends ConsoleControl
 
 			if (!empty($nophoto)) {
 				$this->model->noAvatars($nophoto);
-				info(count($nophoto) . ' foodsaver noavatar updates');
+				self::info(count($nophoto) . ' foodsaver noavatar updates');
 			}
 		}
 	}
@@ -289,7 +291,7 @@ class MaintenanceControl extends ConsoleControl
 				Mem::userSet($fs['id'], 'infomail', $info);
 			}
 
-			info('memcache userinfo updated');
+			self::info('memcache userinfo updated');
 		}
 
 		$admins = $this->model->getBotIds(0, false, true);
@@ -302,12 +304,12 @@ class MaintenanceControl extends ConsoleControl
 	private function updateBezirkIds()
 	{
 		$this->model->updateBezirkIds();
-		info('bezirk_id relation update');
+		self::info('bezirk_id relation update');
 	}
 
 	private function masterBezirkUpdate()
 	{
-		info('master bezirk update');
+		self::info('master bezirk update');
 		/* Master Bezirke */
 		if ($foodasver = $this->model->q('
 				SELECT
@@ -350,12 +352,12 @@ class MaintenanceControl extends ConsoleControl
 			}
 		}
 
-		success('OK');
+		self::success('OK');
 	}
 
 	public function flushcache()
 	{
-		info('flush Page Cache...');
+		self::info('flush Page Cache...');
 
 		if ($keys = Mem::$cache->getAllKeys()) {
 			foreach ($keys as $key) {
@@ -365,12 +367,12 @@ class MaintenanceControl extends ConsoleControl
 			}
 		}
 
-		success('OK');
+		self::success('OK');
 	}
 
 	public function membackup()
 	{
-		info('backup memcache to file...');
+		self::info('backup memcache to file...');
 
 		if ($keys = Mem::$cache->getAllKeys()) {
 			$bar = $this->progressbar(count($keys));
@@ -387,12 +389,12 @@ class MaintenanceControl extends ConsoleControl
 		}
 
 		echo "\n";
-		success('OK');
+		self::success('OK');
 	}
 
 	public function memrestore()
 	{
-		info('backup memcache from file...');
+		self::info('backup memcache from file...');
 		if ($data = file_get_contents(ROOT_DIR . 'tmp/membackup.ser')) {
 			$data = unserialize($data);
 
@@ -412,7 +414,7 @@ class MaintenanceControl extends ConsoleControl
 		}
 
 		echo "\n";
-		success('OK');
+		self::success('OK');
 	}
 
 	public function compress()
@@ -423,7 +425,7 @@ class MaintenanceControl extends ConsoleControl
 	public function betriebFetchWarning()
 	{
 		if ($foodsaver = $this->model->getAlertBetriebeAdmins()) {
-			info('send ' . count($foodsaver) . ' warnings...');
+			self::info('send ' . count($foodsaver) . ' warnings...');
 			foreach ($foodsaver as $fs) {
 				$this->tplMail(28, $fs['fs_email'], array(
 					'anrede' => s('anrede_' . $fs['geschlecht']),
@@ -432,7 +434,7 @@ class MaintenanceControl extends ConsoleControl
 					'link' => URL_INTERN . '/?page=fsbetrieb&id=' . $fs['betrieb_id']
 				));
 			}
-			success('OK');
+			self::success('OK');
 		}
 	}
 
@@ -457,180 +459,10 @@ class MaintenanceControl extends ConsoleControl
 		}
 	}
 
-	public function dropbot()
-	{
-		if ($foodsaver = $this->model->q('
-			SELECT id, name, email
-			FROM fs_foodsaver
-			WHERE rolle = 3
-			AND quiz_rolle < 3
-			AND id NOT IN(4890,5766,4112,5448)
-		')
-		) {
-			foreach ($foodsaver as $fs) {
-				$this->model->update('
-					UPDATE fs_foodsaver
-					SET rolle = 2 WHERE id = ' . (int)$fs['id'] . '
-				');
-				$this->model->del('
-					DELETE FROM fs_botschafter WHERE foodsaver_id = ' . (int)$fs['id'] . '
-				');
-
-				echo $fs['id'] . ',';
-			}
-			info(count($foodsaver));
-		}
-	}
-
-	public function dropbib()
-	{
-		if ($foodsaver = $this->model->q('
-			SELECT DISTINCT fs.id, fs.name, fs.email
-			FROM fs_foodsaver fs, fs_betrieb_team t
-			WHERE t.foodsaver_id = fs.id
-			AND fs.quiz_rolle < 2
-			AND t.verantwortlich = 1
-			AND fs.id NOT IN(4890,5766,4112,5448)
-		')
-		) {
-			foreach ($foodsaver as $fs) {
-				$this->model->update('
-					UPDATE fs_foodsaver
-					SET rolle = 1 WHERE id = ' . (int)$fs['id'] . '
-				');
-				$this->model->del('
-					UPDATE fs_betrieb_team SET verantwortlich = 0 WHERE foodsaver_id = ' . (int)$fs['id'] . '
-				');
-
-				echo $fs['id'] . ',';
-			}
-
-			info(count($foodsaver));
-		}
-	}
-
-	public function dropfs()
-	{
-		if ($foodsaver = $this->model->q('
-			SELECT id, name, email
-			FROM fs_foodsaver
-			WHERE rolle = 1
-			AND quiz_rolle = 0
-			AND id NOT IN(4890,5766,4112,5448)
-		')
-		) {
-			foreach ($foodsaver as $fs) {
-				/*
-				 * Betrieb Status-Update
-				*/
-
-				if ($betriebe = $this->model->q('SELECT betrieb_id FROM fs_betrieb_team WHERE foodsaver_id = ' . (int)$fs['id'])) {
-					foreach ($betriebe as $b) {
-						$this->model->insert('
-								INSERT INTO fs_betrieb_notiz (foodsaver_id, betrieb_id, milestone,text,zeit)
-								VALUES(' . $fs['id'] . ',' . $b['betrieb_id'] . ',2,"{QUIZ_DROPPED}",NOW())');
-					}
-				}
-
-				$this->model->del('
-						DELETE FROM fs_betrieb_team WHERE foodsaver_id = ' . (int)$fs['id'] . '
-					');
-
-				/*
-				 * DELETE BEZIRKE
-				*/
-				$this->model->del('
-						DELETE FROM fs_foodsaver_has_bezirk WHERE foodsaver_id = ' . (int)$fs['id'] . '
-					');
-
-				$this->model->del('
-						DELETE FROM `fs_abholer` WHERE `date` > NOW() AND foodsaver_id = ' . $fs['id'] . '
-					');
-
-				$this->model->update('UPDATE fs_foodsaver SET rolle = 0 WHERE id = ' . $fs['id']);
-
-				echo $fs['id'] . ',';
-			}
-			info(count($foodsaver));
-		}
-	}
-
-	public function quizdrop()
-	{
-		if ($foodsaver = $this->model->q('
-			SELECT
-				fs.id, fs.name
-
-			FROM
-				fs_foodsaver fs
-
-			WHERE id NOT IN
-			(
-				SELECT
-				  fs.id
-
-				FROM
-				  `fs_abholer` a,
-				  fs_foodsaver fs
-
-				WHERE a.`foodsaver_id` = fs.id
-
-				AND a.`date` > NOW()
-				AND a.`date` < "2015-01-20"
-			)
-			AND fs.id NOT IN
-			(
-				SELECT foodsaver_id FROM fs_betrieb_team WHERE verantwortlich = 1
-			)
-			AND fs.id NOT IN
-			(
-				SELECT foodsaver_id FROM fs_botschafter
-			)
-			AND fs.quiz_rolle = 0
-			AND rolle = 1
-		')
-		) {
-			$tmp = array();
-			foreach ($foodsaver as $fs) {
-				$tmp[] = $fs['id'];
-				/*
-				 * Betrieb Status-Update
-				 */
-
-				if ($betriebe = $this->model->q('SELECT betrieb_id FROM fs_betrieb_team WHERE foodsaver_id = ' . (int)$fs['id'])) {
-					foreach ($betriebe as $b) {
-						$this->model->insert('
-								INSERT INTO fs_betrieb_notiz (foodsaver_id, betrieb_id, milestone,text,zeit)
-								VALUES(' . $fs['id'] . ',' . $b['betrieb_id'] . ',2,"{QUIZ_DROPPED}",NOW())');
-					}
-				}
-
-				$this->model->del('
-					DELETE FROM fs_betrieb_team WHERE foodsaver_id = ' . (int)$fs['id'] . '
-				');
-
-				/*
-				 * DELETE BEZIRKE
-				 */
-				$this->model->del('
-					DELETE FROM fs_foodsaver_has_bezirk WHERE foodsaver_id = ' . (int)$fs['id'] . '
-				');
-
-				$this->model->del('
-					DELETE FROM `fs_abholer` WHERE `date` > NOW() AND foodsaver_id = ' . $fs['id'] . '
-				');
-
-				$this->model->update('UPDATE fs_foodsaver SET rolle = 0 WHERE id = ' . $fs['id']);
-			}
-
-			echo implode(',', $tmp);
-		}
-	}
-
 	public function eqalrole()
 	{
 		$count = $this->model->update('UPDATE fs_foodsaver SET rolle = quiz_rolle WHERE quiz_rolle > rolle');
-		info($count . ' updates...');
+		self::info($count . ' updates...');
 	}
 
 	public function quizrole()

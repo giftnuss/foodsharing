@@ -1,12 +1,15 @@
 <?php
 
+namespace Foodsharing\Modules\Statsman;
+
+use Foodsharing\Modules\Console\ConsoleControl;
+
 class StatsmanControl extends ConsoleControl
 {
-	private $model;
-
 	public function __construct()
 	{
 		$this->model = new StatsmanModel();
+		parent::__construct();
 	}
 
 	public function gen_abholmengen()

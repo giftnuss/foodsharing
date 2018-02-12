@@ -1,5 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Maintenance;
+
+use Foodsharing\Modules\Console\ConsoleModel;
+
 class MaintenanceModel extends ConsoleModel
 {
 	public function __construct()
@@ -85,41 +89,6 @@ class MaintenanceModel extends ConsoleModel
 		$this->sql('UNLOCK TABLES');
 	}
 
-	/*
-	public function getBotschafterIds()
-	{
-		return $this->qCol('
-				SELECT DISTINCT bot.foodsaver_id AS id
-
-				FROM
-					`'.PREFIX.'botschafter` bot,
-					`'.PREFIX.'bezirk` b
-
-				WHERE
-					bot.bezirk_id = b.id
-
-				AND
-					b.`type` != 7
-			');
-	}
-
-	public function updateRolle($fsids,$rolle_id)
-	{
-		return $this->update('
-			UPDATE `'.PREFIX.'foodsaver`
-
-			SET
-				`rolle` = '.(int)$rolle_id.'
-
-			WHERE
-				`rolle` != '.(int)$rolle_id.'
-
-			AND
-				`id` IN('.implode(',', $botsch).')
-		');
-	}
-	*/
-
 	public function updateRolle()
 	{
 		if ($botschafter = $this->q('SELECT DISTINCT foodsaver_id FROM `' . PREFIX . 'botschafter` ')) {
@@ -148,15 +117,14 @@ class MaintenanceModel extends ConsoleModel
 					UPDATE `' . PREFIX . 'foodsaver`
 	
 					SET
-						`rolle` = ' . rolleWrap('bot') . '
+						`rolle` = ' . $this->func->rolleWrap('bot') . '
 	
 					WHERE
-						`rolle` < ' . rolleWrap('bot') . '
+						`rolle` < ' . $this->func->rolleWrap('bot') . '
 	
 					AND
 						`id` IN(' . implode(',', $botsch) . ')
 				');
-				info($count . ' botsch');
 			}
 
 			$nomore = array();
@@ -167,9 +135,8 @@ class MaintenanceModel extends ConsoleModel
 			}
 			if (!empty($nomore)) {
 				$count = $this->update('
-					UPDATE `' . PREFIX . 'foodsaver` SET `rolle` = ' . rolleWrap('fs') . ' WHERE `id` IN(' . implode(',', $nomore) . ')
+					UPDATE `' . PREFIX . 'foodsaver` SET `rolle` = ' . $this->func->rolleWrap('fs') . ' WHERE `id` IN(' . implode(',', $nomore) . ')
 				');
-				info($count . ' nomore');
 			}
 		}
 	}

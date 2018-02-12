@@ -1,5 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Mails;
+
+use Foodsharing\Modules\Console\ConsoleModel;
+
 class MailsModel extends ConsoleModel
 {
 	public function saveMessage(

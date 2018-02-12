@@ -10,11 +10,9 @@ if (!isset($argv)) {
 	exit();
 }
 
-require_once ROOT_DIR . 'app/console/console.control.php';
-require_once ROOT_DIR . 'app/console/console.model.php';
 require_once ROOT_DIR . 'lang/DE/de.php';
 
-$app = 'core';
+$app = 'Console';
 $method = 'index';
 
 if (isset($argv[3]) && $argv[3] == 'quiet') {
@@ -33,8 +31,8 @@ if (isset($argv) && is_array($argv)) {
 }
 
 echo "Starting $app::$method...\n";
-
-if ($obj = loadApp($app)) {
+global $g_func;
+if ($obj = $g_func->loadApp($app)) {
 	if (method_exists($obj, $method)) {
 		$obj->$method();
 
@@ -42,4 +40,4 @@ if ($obj = loadApp($app)) {
 	}
 }
 
-error('Modul ' . $app . ' konnte nicht geladen werden');
+echo 'Modul ' . $app . ' konnte nicht geladen werden';

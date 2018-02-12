@@ -1,5 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Lookup;
+
+use Foodsharing\Modules\Console\ConsoleModel;
+
 class LookupModel extends ConsoleModel
 {
 	public function getFoodsaverByEmail($email)

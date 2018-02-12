@@ -1,5 +1,9 @@
 <?php
 
+namespace Foodsharing\Modules\Stats;
+
+use Foodsharing\Modules\Console\ConsoleModel;
+
 class StatsModel extends ConsoleModel
 {
 	public function __construct()

@@ -1,28 +1,24 @@
 <?php
 
-use Foodsharing\Lib\Db\Mem;
+namespace Foodsharing\Modules\Stats;
+
+use Foodsharing\Modules\Console\ConsoleControl;
 
 class StatsControl extends ConsoleControl
 {
-	private $model;
-
 	public function __construct()
 	{
 		$this->model = new StatsModel();
+		parent::__construct();
 	}
 
-	public function test()
+	public function index()
 	{
-		$cnt = file_get_contents('./Hotspot_foodsharing.pdf');
-
-		Mem::set('test', $cnt);
-
-		echo Mem::get('test');
 	}
 
 	public function foodsaver()
 	{
-		info('Statistik Auswertung für Foodsaver');
+		self::info('Statistik Auswertung für Foodsaver');
 
 		if ($fsids = $this->model->getFoodsaverIds()) {
 			$bar = $this->progressbar(count($fsids));
@@ -65,12 +61,12 @@ class StatsControl extends ConsoleControl
 			}
 		}
 
-		success('OK');
+		self::success('OK');
 	}
 
 	public function betriebe()
 	{
-		info('Statistik Auswertung für Betriebe');
+		self::info('Statistik Auswertung für Betriebe');
 
 		$betriebe = $this->model->getBetriebe();
 
@@ -84,7 +80,7 @@ class StatsControl extends ConsoleControl
 			$this->calcBetrieb($b);
 		}
 
-		success('ready :o)');
+		self::success('ready :o)');
 	}
 
 	private function calcBetrieb($betrieb)
@@ -148,7 +144,7 @@ class StatsControl extends ConsoleControl
 	 */
 	public function bezirke()
 	{
-		info('Statistik Auswertung für Bezirke');
+		self::info('Statistik Auswertung für Bezirke');
 
 		// get all Bezirke non memcached
 		$bezirke = $this->model->getAllBezirke();
@@ -157,16 +153,16 @@ class StatsControl extends ConsoleControl
 
 		$count = count($bezirke);
 		foreach ($bezirke as $i => $b) {
-			info($b['id'] . ' ' . $b['name'] . ' (' . ($i + 1) . '/' . $count . ')');
+			$this->info($b['id'] . ' ' . $b['name'] . ' (' . ($i + 1) . '/' . $count . ')');
 
 			$kilo = $this->calcBezirk($b);
 
-			success($kilo . '<span style="white-space:nowrap">&thinsp;</span>kg fetched.');
+			$this->success($kilo . '<span style="white-space:nowrap">&thinsp;</span>kg fetched.');
 
-			info($this->calcDuration($start_ts, ($i + 1), $count));
+			$this->info($this->calcDuration($start_ts, ($i + 1), $count));
 		}
 
-		success('ready :o)');
+		self::success('ready :o)');
 	}
 
 	private function calcBezirk($bezirk)
