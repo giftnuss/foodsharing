@@ -20,7 +20,7 @@ class DI
 
 	public static function initShared()
 	{
-		self::$shared = new DI();
+		self::$shared = new self();
 	}
 
 	public function __construct()
@@ -35,7 +35,6 @@ class DI
 			->setPublic(true);
 
 		$loader->registerClasses($definition, 'Foodsharing\\', '*', '{Lib}');
-
 	}
 
 	public function useTraceablePDO($traceablePDO)

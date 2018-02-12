@@ -430,7 +430,7 @@ class StoreUserControl extends Control
 							
 								<div class="posts"></div>
 							</div>', 'Pinnwand', $opt));
-					/*pinnwand ende*/
+				/*pinnwand ende*/
 				} else {
 					$this->func->addContent($this->v_utils->v_info('Du bist momentan auf der Warteliste, sobald Hilfe benötigt wird wirst Du kontaktiert.'));
 				}

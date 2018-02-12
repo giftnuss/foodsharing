@@ -34,7 +34,6 @@ class DashboardGatewayTest extends \Codeception\Test\Unit
 				'lat' => 24.453884, 'lon' => 54.377344 // miles away from Berlin
 			]);
 		}
-
 	}
 
 	public function testGetNewestFoodBaskets()
