@@ -120,7 +120,7 @@ class StoreXhr extends Control
 						
 						if(date !== null)
 						{
-							from = date.getFullYear() + "-" + $this->func->preZero((date.getMonth()+1)) + "-" + $this->func->preZero(date.getDate());
+							from = date.getFullYear() + "-" + preZero((date.getMonth()+1)) + "-" + preZero(date.getDate());
 							date = $( "#' . $id . '_to" ).datepicker("getDate");
 						
 							if(date === null)
@@ -129,7 +129,7 @@ class StoreXhr extends Control
 							}
 							else
 							{
-								to = date.getFullYear() + "-" + $this->func->preZero((date.getMonth()+1)) + "-" + $this->func->preZero(date.getDate());
+								to = date.getFullYear() + "-" + preZero((date.getMonth()+1)) + "-" + preZero(date.getDate());
 							}
 					
 							ajreq("getfetchhistory",{app:"betrieb",from:from,to:to,bid:' . (int)$_GET['bid'] . '});

@@ -58,7 +58,7 @@ class RegionAdminView extends View
 						      title:data.foodsaver[i].name,
 						      icon: image,
 						  }).addTo(' . $id . '_map);
-						  ' . $id . '_markers[i].content = \'<div style="height:80px;overflow:hidden;"><div style="margin-right:10px;float:left;"><a onclick="profile(\'+ data.foodsaver[i].id +\');return false;" href="#"><img src="\'+$this->func->img(data.foodsaver[i].photo)+\'" /></a></div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a onclick="profile(\'+ data.foodsaver[i].id +\');return false;" href="#">\' + data.foodsaver[i].name + "</a></h1><p>" + data.foodsaver[i].anschrift + "</p><p>" + data.foodsaver[i].plz + " " + data.foodsaver[i].stadt + \'</p><div style="clear:both;"></div></div>\';
+						  ' . $id . '_markers[i].content = \'<div style="height:80px;overflow:hidden;"><div style="margin-right:10px;float:left;"><a onclick="profile(\'+ data.foodsaver[i].id +\');return false;" href="#"><img src="\'+img(data.foodsaver[i].photo)+\'" /></a></div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a onclick="profile(\'+ data.foodsaver[i].id +\');return false;" href="#">\' + data.foodsaver[i].name + "</a></h1><p>" + data.foodsaver[i].anschrift + "</p><p>" + data.foodsaver[i].plz + " " + data.foodsaver[i].stadt + \'</p><div style="clear:both;"></div></div>\';
 						      		
 						  ' . $id . '_markers[i].on( \'click\', function(e,ii) {
 						    ' . $id . '_infowindow.setContent(""+this.content);
