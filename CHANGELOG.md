@@ -26,6 +26,7 @@
 
 ## Dev/Test/CI stuff
 
+- Enable xdebug remote debugging for development !276 @NerdyProjects
 - Add better seed data for use during development !263 @tiltec
 
 # 2017-12-11
