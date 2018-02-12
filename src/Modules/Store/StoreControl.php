@@ -21,6 +21,8 @@ class StoreControl extends Control
 
 	public function index()
 	{
+		/* form methods below work with $g_data */
+		global $g_data;
 		$bezirk_id = $this->func->getGet('bid');
 
 		if (!isset($_GET['bid'])) {

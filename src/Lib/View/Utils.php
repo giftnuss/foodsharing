@@ -1103,6 +1103,14 @@ class Utils
 		);
 	}
 
+	/*
+	 * This method outputs a checkbox input with different possibilities on how to define values and checked values.
+	 *
+	 * for example:
+	 * $g_data[$id => ['list', 'of', 'checked', 'values']]
+	 *
+	 * $option = ['values' => ['list', 'of', 'possible', 'values']];
+	 */
 	public function v_form_checkbox($id, $option = array())
 	{
 		$id = $this->func->id($id);
