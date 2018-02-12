@@ -38,7 +38,7 @@ class MailboxModel extends Model
 				INSERT IGNORE INTO  `' . PREFIX . 'foodsaver_has_contact`
 				(`foodsaver_id`,`contact_id`)
 				VALUES
-				(' . (int)fsId() . ',' . (int)$id . ')
+				(' . (int)$this->func->fsId() . ',' . (int)$id . ')
 			');
 
 			return true;
@@ -61,7 +61,7 @@ class MailboxModel extends Model
 			FROM 	' . PREFIX . 'contact c,
 					' . PREFIX . 'foodsaver_has_contact fc
 			WHERE 	fc.contact_id = c.id
-			AND 	fc.foodsaver_id = ' . (int)fsId() . '
+			AND 	fc.foodsaver_id = ' . (int)$this->func->fsId() . '
 		')
 		) {
 			$mails = array_merge($mails, $contacts);
@@ -444,7 +444,7 @@ class MailboxModel extends Model
 				' . PREFIX . 'botschafter bot
 				
 			WHERE
-				bot.foodsaver_id = ' . (int)fsId() . '
+				bot.foodsaver_id = ' . (int)$this->func->fsId() . '
 				
 		');
 
@@ -453,7 +453,7 @@ class MailboxModel extends Model
 
 	public function getBoxes()
 	{
-		if (isBotschafter()) {
+		if ($this->func->isBotschafter()) {
 			$bezirke = $this->getMailboxBezirkIds();
 			$bids = array();
 			$mboxes = array();
@@ -528,7 +528,7 @@ class MailboxModel extends Model
 			}
 		}
 
-		if ($me = $this->getValues(array('mailbox_id', 'name', 'nachname'), 'foodsaver', fsId())) {
+		if ($me = $this->getValues(array('mailbox_id', 'name', 'nachname'), 'foodsaver', $this->func->fsId())) {
 			if ($me['mailbox_id'] == 0 && S::may('bieb')) {
 				$me['name'] = explode(' ', $me['name']);
 				$me['name'] = $me['name'][0];
@@ -553,7 +553,7 @@ class MailboxModel extends Model
 						$tmp_name = $mb_name . $i;
 					}
 
-					if ($this->update('UPDATE `' . PREFIX . 'foodsaver` SET mailbox_id = ' . (int)$mb_id . ' WHERE id = ' . (int)fsId())) {
+					if ($this->update('UPDATE `' . PREFIX . 'foodsaver` SET mailbox_id = ' . (int)$mb_id . ' WHERE id = ' . (int)$this->func->fsId())) {
 						$me['mailbox_id'] = $mb_id;
 					}
 				}
@@ -568,13 +568,13 @@ class MailboxModel extends Model
 					`' . PREFIX . 'mailbox_member` mm
 		
 			WHERE 	mm.mailbox_id = mb.id
-			AND 	mm.foodsaver_id = ' . (int)fsid() . '
+			AND 	mm.foodsaver_id = ' . (int)$this->func->fsId() . '
 		')
 		) {
 			foreach ($memberb as $m) {
 				if (empty($m['email_name'])) {
 					$m['email_name'] = $m['name'] . '@' . DEFAULT_HOST;
-					$this->update('UPDATE ' . PREFIX . 'mailbox_member SET email_name = ' . $this->strval($m['name'] . '@' . DEFAULT_HOST) . ' WHERE mailbox_id = ' . (int)$m['id'] . ' AND foodsaver_id = ' . (int)fsId());
+					$this->update('UPDATE ' . PREFIX . 'mailbox_member SET email_name = ' . $this->strval($m['name'] . '@' . DEFAULT_HOST) . ' WHERE mailbox_id = ' . (int)$m['id'] . ' AND foodsaver_id = ' . (int)$this->func->fsId());
 				}
 				$mboxes[] = array(
 					'id' => $m['id'],
@@ -594,7 +594,7 @@ class MailboxModel extends Model
 							`' . PREFIX . 'foodsaver` fs
 				
 				WHERE 		fs.mailbox_id = m.id
-				AND 		fs.id = ' . (int)fsId() . '
+				AND 		fs.id = ' . (int)$this->func->fsId() . '
 			')
 		) {
 			$mboxes[] = array(

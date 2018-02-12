@@ -27,37 +27,32 @@ use Foodsharing\Lib\Session\S;
 require __DIR__ . '/includes/setup.php';
 
 require_once 'lib/inc.php';
-addCss('/css/gen/style.css?v=' . VERSION);
-addScript('/js/gen/script.js?v=' . VERSION);
+global $g_view_utils;
+global $g_func;
+$g_func->addCss('/css/gen/style.css?v=' . VERSION);
+$g_func->addScript('/js/gen/script.js?v=' . VERSION);
 
-//importUsers();
+$g_func->getCurrent();
+$menu = $g_func->getMenu();
 
-getCurrent();
-$menu = getMenu();
-
-getMessages();
-makeHead();
+$g_func->getMessages();
+$g_func->makeHead();
 
 if (DebugBar::isEnabled()) {
-	addHead(DebugBar::renderHead());
+	$g_func->addHead(DebugBar::renderHead());
 }
 
-if (isset($_POST['form_submit'])) {
-	if (handleForm($_POST['form_submit'])) {
-		go('/?page=' . getPage());
-	}
-}
 $msgbar = '';
 $logolink = '/';
 if (S::may()) {
-	$msgbar = v_msgBar();
+	$msgbar = $g_view_utils->v_msgBar();
 	$logolink = '/?page=dashboard';
 } else {
-	$msgbar = v_login();
+	$msgbar = $g_view_utils->v_login();
 }
 
 if (DebugBar::isEnabled()) {
-	addContent(DebugBar::renderContent(), CNT_BOTTOM);
+	$g_func->addContent(DebugBar::renderContent(), CNT_BOTTOM);
 }
 
 /*

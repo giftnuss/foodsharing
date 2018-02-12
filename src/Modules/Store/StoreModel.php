@@ -88,7 +88,7 @@ class StoreModel extends Model
 				b.id = t.betrieb_id
 				
 			AND
-				t.foodsaver_id = ' . fsId() . '
+				t.foodsaver_id = ' . $this->func->fsId() . '
 				
 			AND
 				t.active = 1
@@ -164,6 +164,32 @@ class StoreModel extends Model
 			FROM 		`' . PREFIX . 'betrieb`
 
 			WHERE 		`id` = ' . $this->intval($id));
+
+		return $out;
+	}
+
+	public function get_betrieb_kategorie()
+	{
+		$out = $this->q('
+				SELECT
+				`id`,
+				`name`
+				
+				FROM 		`' . PREFIX . 'betrieb_kategorie`
+				ORDER BY `name`');
+
+		return $out;
+	}
+
+	public function get_betrieb_status()
+	{
+		$out = $this->q('
+				SELECT
+				`id`,
+				`name`
+				
+				FROM 		`' . PREFIX . 'betrieb_status`
+				ORDER BY `name`');
 
 		return $out;
 	}

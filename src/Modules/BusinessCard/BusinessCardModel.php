@@ -24,11 +24,11 @@ class BusinessCardModel extends Model
 				
 			FROM 	' . PREFIX . 'foodsaver fs
 
-			WHERE 	fs.id = ' . (int)fsId() . '
+			WHERE 	fs.id = ' . (int)$this->func->fsId() . '
 		');
 
 		if (S::may('bieb')) {
-			if ($mailbox = $this->qOne('SELECT mb.name FROM ' . PREFIX . 'mailbox mb, ' . PREFIX . 'foodsaver fs WHERE fs.mailbox_id = mb.id AND fs.id = ' . (int)fsId())) {
+			if ($mailbox = $this->qOne('SELECT mb.name FROM ' . PREFIX . 'mailbox mb, ' . PREFIX . 'foodsaver fs WHERE fs.mailbox_id = mb.id AND fs.id = ' . (int)$this->func->fsId())) {
 				$fs['email'] = $mailbox . '@' . DEFAULT_HOST;
 			}
 		}
@@ -45,7 +45,7 @@ class BusinessCardModel extends Model
 				
 			WHERE 	b.mailbox_id = mb.id
 			AND 	bot.bezirk_id = b.id
-			AND 	bot.foodsaver_id = ' . (int)fsId() . '
+			AND 	bot.foodsaver_id = ' . (int)$this->func->fsId() . '
 			AND 	b.type != 7
 		');
 
@@ -57,7 +57,7 @@ class BusinessCardModel extends Model
 					' . PREFIX . 'foodsaver_has_bezirk fhb
 		
 			WHERE 	fhb.bezirk_id = b.id
-			AND 	fhb.foodsaver_id = ' . (int)fsId() . '
+			AND 	fhb.foodsaver_id = ' . (int)$this->func->fsId() . '
 			AND 	b.type != 7
 		');
 

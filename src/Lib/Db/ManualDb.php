@@ -78,7 +78,7 @@ class ManualDb extends Db
 			WHERE 	n.foodsaver_id = fs.id
 			AND 	n.betrieb_id = b.id
 			AND 	bt.betrieb_id = n.betrieb_id
-			AND 	bt.foodsaver_id = ' . (int)fsId() . '
+			AND 	bt.foodsaver_id = ' . (int)$this->func->fsId() . '
 			AND 	n.milestone = 0
 			AND 	n.last = 1
 
@@ -115,7 +115,7 @@ class ManualDb extends Db
 				b.status = 1
 
 			AND
-				foodsaver_id != ' . (int)fsId() . '
+				foodsaver_id != ' . (int)$this->func->fsId() . '
 
 			HAVING
 				distance <=' . (int)$distance . '
@@ -406,7 +406,7 @@ class ManualDb extends Db
 
 	public function passGen($fsid)
 	{
-		return $this->sql('INSERT INTO `' . PREFIX . 'pass_gen`(`foodsaver_id`,`date`,`bot_id`)VALUES(' . $this->intval($fsid) . ',NOW(),' . fsId() . ')');
+		return $this->sql('INSERT INTO `' . PREFIX . 'pass_gen`(`foodsaver_id`,`date`,`bot_id`)VALUES(' . $this->intval($fsid) . ',NOW(),' . $this->func->fsId() . ')');
 	}
 
 	public function getFsAutocomplete($bezirk_id)
@@ -488,7 +488,7 @@ class ManualDb extends Db
 	public function getBezirkByParent($parent_id)
 	{
 		$sql = 'AND 		`type` != 7';
-		if (isOrgaTeam()) {
+		if ($this->func->isOrgaTeam()) {
 			$sql = '';
 		}
 
@@ -568,25 +568,16 @@ class ManualDb extends Db
 		}
 	}
 
-	public function addMessage($sender_id, $recip_id, $name, $message, $attach)
-	{
-		$model = new MessageModel();
-		if ($cid = $model->addConversation(array($sender_id => $sender_id, $recip_id => $recip_id), false, false)) {
-			$model->sendMessage($cid, $message, $sender_id);
-			mailMessage($sender_id, $recip_id, $message);
-		}
-
-		return $id;
-	}
-
 	public function add_message($data)
 	{
 		$model = new MessageModel();
 		if ($cid = $model->addConversation(array($data['sender_id'] => $data['sender_id'], $data['recip_id'] => $data['recip_id']), false, false)) {
 			$model->sendMessage($cid, $data['msg'], $data['sender_id']);
+
+			return true;
 		}
 
-		return $id;
+		return false;
 	}
 
 	public function add_content($data)
@@ -618,7 +609,7 @@ class ManualDb extends Db
 		SET 	`language_id` =  ' . $this->intval($data['language_id']) . ',
 				`name` =  ' . $this->strval($data['name']) . ',
 				`subject` =  ' . $this->strval($data['subject']) . ',
-				`body` =  ' . $this->strval($data['body'], true) . '
+				`body` =  ' . $this->strval($data['body'], '<p><br><a><h1><h2><h3><ul><li><ol>') . '
 
 		WHERE 	`id` = ' . $this->intval($id));
 	}
@@ -662,7 +653,7 @@ class ManualDb extends Db
 
 	public function isInTeam($bid)
 	{
-		if ($this->q('SELECT `foodsaver_id` FROM `' . PREFIX . 'betrieb_team` WHERE foodsaver_id = ' . $this->intval(fsId()) . ' AND betrieb_id = ' . (int)$bid . ' AND active IN(1,2)')) {
+		if ($this->q('SELECT `foodsaver_id` FROM `' . PREFIX . 'betrieb_team` WHERE foodsaver_id = ' . $this->intval($this->func->fsId()) . ' AND betrieb_id = ' . (int)$bid . ' AND active IN(1,2)')) {
 			return true;
 		}
 
@@ -772,7 +763,7 @@ class ManualDb extends Db
 
 	public function deleteBezirk($id)
 	{
-		if (isOrgaTeam()) {
+		if ($this->func->isOrgaTeam()) {
 			$parent_id = $this->getVal('parent_id', 'bezirk', $id);
 
 			$this->update('UPDATE `' . PREFIX . 'foodsaver` SET `bezirk_id` = NULL WHERE `bezirk_id` = ' . (int)$id);
@@ -940,7 +931,7 @@ class ManualDb extends Db
 
 				WHERE 	' . PREFIX . 'betrieb.id = ' . PREFIX . 'betrieb_team.betrieb_id
 
-				AND 	' . PREFIX . 'betrieb_team.foodsaver_id = ' . $this->intval(fsId()) . '
+				AND 	' . PREFIX . 'betrieb_team.foodsaver_id = ' . $this->intval($this->func->fsId()) . '
 
 				ORDER BY ' . PREFIX . 'betrieb_team.verantwortlich DESC, ' . PREFIX . 'betrieb.name ASC
 		');
@@ -999,7 +990,7 @@ class ManualDb extends Db
 							' . PREFIX . 'bezirk bz
 
 					WHERE 	b.bezirk_id = bz.id
-					AND 	bezirk_id IN(' . implode(',', $this->getChildBezirke(getBezirkId())) . ')
+					AND 	bezirk_id IN(' . implode(',', $this->getChildBezirke($this->func->getBezirkId())) . ')
 
 
 					ORDER BY bz.name DESC
@@ -1019,7 +1010,7 @@ class ManualDb extends Db
 
 	public function isVerantwortlich($betrieb_id)
 	{
-		if (isOrgaTeam()) {
+		if ($this->func->isOrgaTeam()) {
 			return true;
 		}
 
@@ -1030,7 +1021,7 @@ class ManualDb extends Db
 				FROM 	' . PREFIX . 'betrieb_team
 
 				WHERE 	betrieb_id = ' . $this->intval($betrieb_id) . '
-				AND 	foodsaver_id = ' . $this->intval(fsId()) . '
+				AND 	foodsaver_id = ' . $this->intval($this->func->fsId()) . '
 				AND 	verantwortlich = 1
 				AND 	active = 1
 		');
@@ -1045,7 +1036,7 @@ class ManualDb extends Db
 				FROM 	' . PREFIX . 'betrieb_team
 
 				WHERE 	betrieb_id = ' . $this->intval($betrieb_id) . '
-				AND 	foodsaver_id = ' . $this->intval(fsId()) . '
+				AND 	foodsaver_id = ' . $this->intval($this->func->fsId()) . '
 				AND 	verantwortlich = 0
 				AND 	active = 0
 		');
@@ -1216,7 +1207,7 @@ class ManualDb extends Db
 		$data['anmeldedatum'] = date('Y-m-d H:i:s');
 
 		if (!isset($data['bezirk_id'])) {
-			$data['bezirk_id'] = getBezirkId();
+			$data['bezirk_id'] = $this->func->getBezirkId();
 		}
 
 		$orga = '';
@@ -1229,7 +1220,7 @@ class ManualDb extends Db
 		$verified = '';
 		if (isset($data['rolle'])) {
 			$rolle = '`rolle` =  ' . $this->intval($data['rolle']) . ',';
-			if ($data['rolle'] == 0 && isOrgaTeam()) {
+			if ($data['rolle'] == 0 && $this->func->isOrgaTeam()) {
 				$data['bezirk_id'] = 0;
 				$quiz_rolle = '`quiz_rolle` = 0,';
 				$verified = '`verified` = 0,';
@@ -1324,7 +1315,7 @@ class ManualDb extends Db
 		$data['anmeldedatum'] = date('Y-m-d H:i:s');
 
 		if (!isset($data['bezirk_id'])) {
-			$data['bezirk_id'] = getBezirkId();
+			$data['bezirk_id'] = $this->func->getBezirkId();
 		}
 
 		$id = $this->insert('
@@ -1367,7 +1358,7 @@ class ManualDb extends Db
 					`message`,
 					`zeit`
 			FROM 	`' . PREFIX . 'send_email`
-			WHERE 	`foodsaver_id` = ' . (int)fsId() . '
+			WHERE 	`foodsaver_id` = ' . (int)$this->func->fsId() . '
 		');
 	}
 
@@ -1535,7 +1526,7 @@ class ManualDb extends Db
 
 				WHERE 	`' . PREFIX . 'email_status`.`email_id` =  `' . PREFIX . 'send_email`.`id`
 
-				AND 	`' . PREFIX . 'send_email`.`foodsaver_id` = ' . $this->intval(fsId()) . '
+				AND 	`' . PREFIX . 'send_email`.`foodsaver_id` = ' . $this->intval($this->func->fsId()) . '
 
 				AND 	`' . PREFIX . 'email_status`.`status` = 0
 
@@ -1725,7 +1716,7 @@ class ManualDb extends Db
 			$attach_db = json_encode(array($attach));
 		}
 
-		if (!isOrgateam()) {
+		if (!$this->func->isOrgaTeam()) {
 			$mode = 1;
 		}
 
@@ -1744,7 +1735,7 @@ class ManualDb extends Db
 			$query[] = '(' . $this->intval($email_id) . ',' . $this->intval($fs['id']) . ',0)';
 		}
 
-		if (isAdmin()) {
+		if ($this->func->isAdmin()) {
 		}
 		/*
 		 * Array
@@ -1792,7 +1783,7 @@ class ManualDb extends Db
 				INSERT INTO 	' . PREFIX . 'send_email (foodsaver_id, mailbox_id, name,`mode`, message, zeit, `attach`)
 
 				VALUES(
-					' . $this->intval(fsId()) . ',
+					' . $this->intval($this->func->fsId()) . ',
 					' . $this->intval($data['mailbox_id']) . ',
 					' . $this->strval($data['subject']) . ',
 					' . (int)$data['mode'] . ',
@@ -2107,7 +2098,7 @@ class ManualDb extends Db
 	public function updateProfile($fs_id, $data)
 	{
 		if (!isset($data['bezirk_id'])) {
-			$data['bezirk_id'] = getBezirkId();
+			$data['bezirk_id'] = $this->func->getBezirkId();
 		}
 		if (!isset($data['photo_public'])) {
 			$data['photo_public'] = 0;
@@ -2218,7 +2209,7 @@ class ManualDb extends Db
 		}
 
 		$this->add_betrieb_notiz(array(
-			'foodsaver_id' => fsId(),
+			'foodsaver_id' => $this->func->fsId(),
 			'betrieb_id' => $bid,
 			'text' => 'status_msg_' . (int)$status,
 			'zeit' => date('Y-m-d H:i:s'),
@@ -2717,7 +2708,7 @@ class ManualDb extends Db
 
 		if (!empty($out['springer'])) {
 			foreach ($out['springer'] as $v) {
-				if ($v['id'] == fsId()) {
+				if ($v['id'] == $this->func->fsId()) {
 					$out['jumper'] = true;
 				}
 			}
@@ -2731,7 +2722,7 @@ class ManualDb extends Db
 				$out['team'][] = array('id' => $v['id'], 'value' => $v['name']);
 				if ($v['verantwortlich'] == 1) {
 					$out['verantwortlicher'] = $v['id'];
-					if ($v['id'] == fsId()) {
+					if ($v['id'] == $this->func->fsId()) {
 						$out['verantwortlich'] = true;
 					}
 				}
@@ -2862,7 +2853,7 @@ class ManualDb extends Db
 		}
 		if (!$verantwortlicher) {
 			$verantwortlicher = array(
-				fsId() => true
+				$this->func->fsId() => true
 			);
 		}
 
@@ -2918,7 +2909,7 @@ class ManualDb extends Db
 	{
 		$onlybot = '';
 
-		if (!isOrgaTeam()) {
+		if (!$this->func->isOrgaTeam()) {
 			$bid = array();
 			foreach ($_SESSION['client']['botschafter'] as $bezirk) {
 				$bid[] = (int)$bezirk['bezirk_id'];
@@ -3061,7 +3052,7 @@ class ManualDb extends Db
 			LEFT JOIN
 				`' . PREFIX . 'foodsaver_has_event` fe
 			ON
-				e.id = fe.event_id AND fe.foodsaver_id = ' . (int)fsId() . '
+				e.id = fe.event_id AND fe.foodsaver_id = ' . (int)$this->func->fsId() . '
 
 			WHERE
 				e.start >= CURDATE()
@@ -3104,7 +3095,7 @@ class ManualDb extends Db
 				fe.event_id = e.id
 
 			AND
-				fe.foodsaver_id = ' . (int)fsId() . '
+				fe.foodsaver_id = ' . (int)$this->func->fsId() . '
 
 			AND
 				fe.`status` = 0

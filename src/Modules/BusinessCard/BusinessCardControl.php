@@ -16,30 +16,30 @@ class BusinessCardControl extends Control
 
 	public function index()
 	{
-		addBread(s('bcard_generator'));
+		$this->func->addBread($this->func->s('bcard_generator'));
 
-		addContent($this->view->top(), CNT_TOP);
+		$this->func->addContent($this->view->top(), CNT_TOP);
 
 		if ($data = $this->model->getMyData()) {
 			if (strlen($data['anschrift'] . ', ' . $data['plz'] . ' ' . $data['stadt']) >= 49) {
-				error('Deine Anschrift ist zu lang! Anschrift, Postleitzahl und Stadt dürfen zusammen maximal 49 Zeichen haben.');
-				go('/?page=settings');
+				$this->func->error('Deine Anschrift ist zu lang! Anschrift, Postleitzahl und Stadt dürfen zusammen maximal 49 Zeichen haben.');
+				$this->func->go('/?page=settings');
 			}
 			if (strlen($data['telefon'] . $data['handy']) <= 3) {
-				error('Du musst eine gültige Telefonnummer angegeben haben, um Deine Visitenkarte zu generieren');
-				go('/?page=settings');
+				$this->func->error('Du musst eine gültige Telefonnummer angegeben haben, um Deine Visitenkarte zu generieren');
+				$this->func->go('/?page=settings');
 			}
 			if ($data['verified'] == 0) {
 				// you have to be a verified user to generate your business card.
-				error('Du musst verifiziert sein, um Deine Visitenkarte generieren zu können.');
-				go('/?page=settings');
+				$this->func->error('Du musst verifiziert sein, um Deine Visitenkarte generieren zu können.');
+				$this->func->go('/?page=settings');
 			}
 			$sel_data = array();
 			if ($data['bot']) {
 				foreach ($data['bot'] as $b) {
 					$sel_data[] = array(
 						'id' => 'bot:' . $b['id'],
-						'name' => sv('bot_for', $b['name'])
+						'name' => $this->func->sv('bot_for', $b['name'])
 					);
 				}
 			}
@@ -47,12 +47,12 @@ class BusinessCardControl extends Control
 				foreach ($data['fs'] as $fs) {
 					$sel_data[] = array(
 						'id' => 'fs:' . $fs['id'],
-						'name' => sv('fs_for', $fs['name'])
+						'name' => $this->func->sv('fs_for', $fs['name'])
 					);
 				}
 			}
 
-			addContent($this->view->optionform($sel_data));
+			$this->func->addContent($this->view->optionform($sel_data));
 		}
 	}
 
@@ -63,7 +63,7 @@ class BusinessCardControl extends Control
 
 			$short[0] = str_replace(array('/', '\\'), '', $short[0]);
 
-			$foodsaver = $this->model->getValues(array('name', 'nachname'), 'foodsaver', fsid());
+			$foodsaver = $this->model->getValues(array('name', 'nachname'), 'foodsaver', $this->func->fsId());
 
 			$file = 'data/visite/' . (int)$short[1] . '_' . $short[0] . '.pdf';
 
@@ -71,13 +71,13 @@ class BusinessCardControl extends Control
 				$Dateiname = basename($file);
 				$size = filesize($file);
 				header('Content-Type: application/pdf');
-				header('Content-Disposition: attachment; filename=bcard-' . id($short[0]) . '-' . id($foodsaver['name']) . '-' . id($foodsaver['nachname']) . '.pdf');
+				header('Content-Disposition: attachment; filename=bcard-' . $this->func->id($short[0]) . '-' . $this->func->id($foodsaver['name']) . '-' . $this->func->id($foodsaver['nachname']) . '.pdf');
 				header("Content-Length: $size");
 				readfile($file);
 
 				exit();
 			} else {
-				goPage();
+				$this->func->goPage();
 			}
 		}
 	}

@@ -9,7 +9,7 @@ class SearchView extends View
 	public function searchBox($value = '')
 	{
 		$s_msg = 'Suche nach Namen, Adressen und Betrieben in Deiner Region...';
-		if (isOrgateam()) {
+		if ($this->func->isOrgaTeam()) {
 			$s_msg = 'Suche nach Namen, Bezirken oder Betrieben...';
 		}
 

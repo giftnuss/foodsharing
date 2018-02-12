@@ -18,7 +18,7 @@ class QuizView extends View
 	{
 		$rows = array();
 
-		addJs('
+		$this->func->addJs('
 			$(".usersessionlink").parent().parent().click(function(){
 				goTo($(this).children("td").children(".usersessionlink").attr("href"));
 			});		
@@ -33,7 +33,7 @@ class QuizView extends View
 			}
 
 			$rows[] = array(
-				array('cnt' => '<a style="margin-left:10px;" href="#"><img src="' . img($s['fs_photo']) . '" /></a>'),
+				array('cnt' => '<a style="margin-left:10px;" href="#"><img src="' . $this->func->img($s['fs_photo']) . '" /></a>'),
 				array('cnt' => '<a class="usersessionlink" href="/?page=quiz&sub=sessiondetail&fsid=' . $s['fs_id'] . '">' . $s['fs_name'] . '</a>'),
 				array('cnt' => $s['max_fp']),
 				array('cnt' => substr($s['time_start'], 0, -3)),
@@ -42,7 +42,7 @@ class QuizView extends View
 			);
 		}
 
-		$table = v_tablesorter(array(
+		$table = $this->v_utils->v_tablesorter(array(
 			array('name' => '&nbsp;', 'width' => 50, 'sort' => false),
 			array('name' => 'Name'),
 			array('name' => 'FP', 'width' => 40),
@@ -51,7 +51,7 @@ class QuizView extends View
 			array('name' => 'Status', 'width' => 75)
 		), $rows, array('pager' => true));
 
-		return v_field($table, $quiz['name']);
+		return $this->v_utils->v_field($table, $quiz['name']);
 	}
 
 	public function userSessions($sessions, $fs)
@@ -96,11 +96,11 @@ class QuizView extends View
 				array('cnt' => $s['fp']),
 				array('cnt' => $status),
 
-				array('cnt' => v_toolbar(array('id' => $s['id'], 'types' => array('delete'), 'confirmMsg' => 'Soll diese Quiz Session wirklich gel&ouml;scht werden?')))
+				array('cnt' => $this->v_utils->v_toolbar(array('id' => $s['id'], 'types' => array('delete'), 'confirmMsg' => 'Soll diese Quiz Session wirklich gel&ouml;scht werden?')))
 			);
 			if ($cur_qid != $s['quiz_id'] || $key == (count($sessions) - 1)) {
 				$cur_qid = $s['quiz_id'];
-				$out .= v_field(v_tablesorter(array(
+				$out .= $this->v_utils->v_field($this->v_utils->v_tablesorter(array(
 					array('name' => 'Datum'),
 					array('name' => 'FP', 'width' => 40),
 					array('name' => 'Status', 'width' => 75),
@@ -116,7 +116,7 @@ class QuizView extends View
 
 	public function noSessions($quiz)
 	{
-		return v_field(v_info('Dieses Quiz wurde noch nicht ausgeführt'), $quiz['name']);
+		return $this->v_utils->v_field($this->v_utils->v_info('Dieses Quiz wurde noch nicht ausgeführt'), $quiz['name']);
 	}
 
 	public function listQuiz($quizze)
@@ -132,12 +132,12 @@ class QuizView extends View
 			}
 		}
 		if (empty($menu)) {
-			$out = v_info('Es wurde noch kein Quiz angelegt');
+			$out = $this->v_utils->v_info('Es wurde noch kein Quiz angelegt');
 		} else {
 			$out = $this->menu($menu, array('active' => 'quiz&id=' . (int)$_GET['id']));
 		}
 
-		return v_field($out, ' Quizze');
+		return $this->v_utils->v_field($out, ' Quizze');
 	}
 
 	public function quizbuttons($quizid)
@@ -152,15 +152,15 @@ class QuizView extends View
 	{
 		return '
 		<div id="quizcomment">
-			' . v_form_textarea('quizusercomment', array('placeholder' => s('quizusercomment'), 'nolabel' => true)) . '
+			' . $this->v_utils->v_form_textarea('quizusercomment', array('placeholder' => $this->func->s('quizusercomment'), 'nolabel' => true)) . '
 		</div>';
 	}
 
 	public function questionForm()
 	{
 		return
-			v_form_textarea('text') .
-			v_form_select('duration', array(
+			$this->v_utils->v_form_textarea('text') .
+			$this->v_utils->v_form_select('duration', array(
 				'values' => array(
 					array('id' => 10, 'name' => '10 Sekunden'),
 					array('id' => 20, 'name' => '20 Sekunden'),
@@ -184,7 +184,7 @@ class QuizView extends View
 					array('id' => 200, 'name' => '3 Min 20 Sekunden')
 				)
 			)) .
-			v_form_select('fp', array(
+			$this->v_utils->v_form_select('fp', array(
 				'values' => array(
 					array('id' => 1, 'name' => '1 Fehlerpunkt'),
 					array('id' => 2, 'name' => '2 Fehlerpunkte'),
@@ -193,15 +193,15 @@ class QuizView extends View
 					array('id' => 0, 'name' => 'keine Fehlerpunkte (Scherzfrage)')
 				)
 			)) .
-			v_form_text('wikilink');
+			$this->v_utils->v_form_text('wikilink');
 	}
 
 	public function answerForm()
 	{
 		return
-			v_form_textarea('text') .
-			v_form_textarea('explanation') .
-			v_form_select('isright', array('values' => array(
+			$this->v_utils->v_form_textarea('text') .
+			$this->v_utils->v_form_textarea('explanation') .
+			$this->v_utils->v_form_select('isright', array('values' => array(
 				array('id' => 1, 'name' => 'Richtig'),
 				array('id' => 0, 'name' => 'Falsch'),
 				array('id' => 2, 'name' => 'Neutral')
@@ -222,11 +222,11 @@ class QuizView extends View
 
 	public function quizForm()
 	{
-		return v_quickform('Neues Quiz', array(
-			v_form_text('name'),
-			v_form_tinymce('desc'),
-			v_form_text('maxfp'),
-			v_form_text('questcount')
+		return $this->v_utils->v_quickform('Neues Quiz', array(
+			$this->v_utils->v_form_text('name'),
+			$this->v_utils->v_form_tinymce('desc'),
+			$this->v_utils->v_form_text('maxfp'),
+			$this->v_utils->v_form_text('questcount')
 		));
 	}
 
@@ -282,7 +282,7 @@ class QuizView extends View
 	{
 		$msg = '';
 		if (isset($_GET['timefail'])) {
-			$msg = v_info('Die Zeit ist abgelaufen, daher wird diese Frage leider als falsch bewertet');
+			$msg = $this->v_utils->v_info('Die Zeit ist abgelaufen, daher wird diese Frage leider als falsch bewertet');
 		}
 
 		return '
@@ -325,7 +325,7 @@ class QuizView extends View
 				} elseif ($ex['right'] != 1) {
 					$right = 'Diese Antwort wurde nicht gewertet.';
 				}
-				$exp .= v_input_wrapper(
+				$exp .= $this->v_utils->v_input_wrapper(
 					$right,
 					'<div style="margin:10px 0;">' . $ex['text'] . '</div>' .
 					'<div class="ui-state-highlight ui-corner-all" style="padding:15px"><p><strong>Erklärung:</strong> ' . $ex['explanation'] . '</p></div>'
@@ -376,7 +376,7 @@ class QuizView extends View
 	public function listQuestions($questions, $quiz_id)
 	{
 		if (is_array($questions)) {
-			addJs('
+			$this->func->addJs('
 				$("#questions").accordion({
 					heightStyle: "content",
 					animate: 200,
@@ -398,15 +398,15 @@ class QuizView extends View
 				}
 				$answers .= '</ul>';
 				$out .= '
-				 <h3 class="question-' . $q['id'] . '"><strong>#' . (int)$q['id'] . ' </strong> - <span class="teaser">' . tt($q['text'], 50) . ' ' . (int)$q['comment_count'] . ' Kommentare</span></h3>
+				 <h3 class="question-' . $q['id'] . '"><strong>#' . (int)$q['id'] . ' </strong> - <span class="teaser">' . $this->func->tt($q['text'], 50) . ' ' . (int)$q['comment_count'] . ' Kommentare</span></h3>
 				 <div class="question-' . $q['id'] . '">
-					' . v_input_wrapper('Frage', $q['text'] . '
+					' . $this->v_utils->v_input_wrapper('Frage', $q['text'] . '
 					<p><strong>' . $q['fp'] . ' Fehlerpunkte, ' . $q['duration'] . ' Sekunden zum Antworten</strong></p>
 					<p style="margin-top:15px;">
 						<a href="#" class="button" onclick="ajreq(\'addanswer\',{qid:' . (int)$q['id'] . '});return false;">Antwort hinzufügen</a> <a href="#" class="button" onclick="if(confirm(\'Wirklich die ganze Frage löschen?\')){ajreq(\'delquest\',{id:' . (int)$q['id'] . '});}return false;">Frage komplett löschen</a> <a href="#" class="button" onclick="ajreq(\'editquest\',{id:' . (int)$q['id'] . ',qid:' . (int)$quiz_id . '});return false;">Frage bearbeiten</a> <a class="button" href="/?page=quiz&sub=wall&id=' . (int)$q['id'] . '">Kommentare</a>
 					</p>') . '
 					
-					' . v_input_wrapper('Antworten', $answers) . '
+					' . $this->v_utils->v_input_wrapper('Antworten', $answers) . '
 
 					
 				 </div>';
@@ -416,7 +416,7 @@ class QuizView extends View
 
 			return $out;
 		} else {
-			return v_field(v_info('Noch keine Fragen zu diesem Quiz'), 'Fragen');
+			return $this->v_utils->v_field($this->v_utils->v_info('Noch keine Fragen zu diesem Quiz'), 'Fragen');
 		}
 	}
 
@@ -434,14 +434,14 @@ class QuizView extends View
 				$out .= '
 				<li>
 					<a href="#" onclick="ajreq(\'editanswer\',{app:\'quiz\',id:' . $a['id'] . '});return false;" class="ui-corner-all">
-						<span style="height:35px;overflow:hidden;font-size:11px;"><strong class="' . $ampel . '" style="float:right;margin:0 0 0 3px;"><span>&nbsp;</span></strong>' . tt($a['text'], 60) . '</span>
+						<span style="height:35px;overflow:hidden;font-size:11px;"><strong class="' . $ampel . '" style="float:right;margin:0 0 0 3px;"><span>&nbsp;</span></strong>' . $this->func->tt($a['text'], 60) . '</span>
 						<span style="clear:both;"></span>
 					</a>
 				</li>';
 			}
 			$out .= '</ul>';
 
-			return v_field($out, 'Antwortmöglichkeiten');
+			return $this->v_utils->v_field($out, 'Antwortmöglichkeiten');
 		}
 	}
 }

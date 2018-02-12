@@ -29,7 +29,7 @@ class EventModel extends Model
 			)
 			VALUES
 			(
-				' . (int)fsId() . ',
+				' . (int)$this->func->fsId() . ',
 				' . (int)$event['bezirk_id'] . ',
 				' . (int)$location_id . ',
 				' . (int)$event['public'] . ',
@@ -98,7 +98,7 @@ class EventModel extends Model
 		$this->update('
 			UPDATE 	' . PREFIX . 'foodsaver_has_event
 			SET 	`status` = ' . (int)$status . '
-			WHERE 	foodsaver_id = ' . (int)fsId() . '
+			WHERE 	foodsaver_id = ' . (int)$this->func->fsId() . '
 			AND 	event_id = ' . (int)$event_id . '
 		');
 
@@ -111,7 +111,7 @@ class EventModel extends Model
 			REPLACE INTO ' . PREFIX . 'foodsaver_has_event
 			(`status`, `foodsaver_id`, `event_id`)
 			VALUES
-			(' . (int)$status . ', ' . (int)fsId() . ', ' . (int)$event_id . ')
+			(' . (int)$status . ', ' . (int)$this->func->fsId() . ', ' . (int)$event_id . ')
 		');
 
 		return true;

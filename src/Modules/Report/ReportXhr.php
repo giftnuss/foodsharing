@@ -24,17 +24,17 @@ class ReportXhr extends Control
 
 	public function loadreport()
 	{
-		if (mayHandleReports()) {
+		if ($this->func->mayHandleReports()) {
 			if ($report = $this->model->getReport($_GET['id'])) {
 				$reason = explode('=>', $report['tvalue']);
 
 				$dialog = new XhrDialog();
 				$dialog->setTitle('Meldung über ' . $report['fs_name'] . ' ' . $report['fs_nachname']);
 
-				$content = v_input_wrapper('Zeitpunkt', niceDate($report['time_ts']));
+				$content = $this->v_utils->v_input_wrapper('Zeitpunkt', $this->func->niceDate($report['time_ts']));
 
 				if (isset($report['betrieb'])) {
-					$content .= v_input_wrapper('Zugeordneter Betrieb', '<a href="/?page=fsbetrieb&id=' . $report['betrieb']['id'] . '">' . $report['betrieb']['name'] . '</a>');
+					$content .= $this->v_utils->v_input_wrapper('Zugeordneter Betrieb', '<a href="/?page=fsbetrieb&id=' . $report['betrieb']['id'] . '">' . $report['betrieb']['name'] . '</a>');
 				}
 
 				if (is_array($reason)) {
@@ -44,14 +44,14 @@ class ReportXhr extends Control
 					}
 					$out .= '</ul>';
 
-					$content .= v_input_wrapper('Grund', $out);
+					$content .= $this->v_utils->v_input_wrapper('Grund', $out);
 				}
 
 				if (!empty($report['msg'])) {
-					$content .= v_input_wrapper('Beschreibung', nl2br($report['msg']));
+					$content .= $this->v_utils->v_input_wrapper('Beschreibung', nl2br($report['msg']));
 				}
 
-				$content .= v_input_wrapper('Gemeldet von', '<a href="#" onclick="profile(' . (int)$report['rp_id'] . ');">' . $report['rp_name'] . ' ' . $report['rp_nachname'] . '</a>');
+				$content .= $this->v_utils->v_input_wrapper('Gemeldet von', '<a href="#" onclick="profile(' . (int)$report['rp_id'] . ');">' . $report['rp_name'] . ' ' . $report['rp_nachname'] . '</a>');
 				$dialog->addContent($content);
 				$dialog->addOpt('width', '600px');
 
@@ -69,9 +69,9 @@ class ReportXhr extends Control
 
 	public function comreport()
 	{
-		if (mayHandleReports()) {
+		if ($this->func->mayHandleReports()) {
 			$this->model->confirmReport($_GET['id']);
-			info('Meldung wurde bestätigt!');
+			$this->func->info('Meldung wurde bestätigt!');
 
 			return array(
 				'status' => 1,
@@ -82,9 +82,9 @@ class ReportXhr extends Control
 
 	public function delreport()
 	{
-		if (mayHandleReports()) {
+		if ($this->func->mayHandleReports()) {
 			$this->model->delReport($_GET['id']);
-			info('Meldung wurde gelöscht!');
+			$this->func->info('Meldung wurde gelöscht!');
 
 			return array(
 				'status' => 1,
@@ -110,9 +110,9 @@ class ReportXhr extends Control
 			$bid = $_GET['bid'];
 		}
 
-		$dialog->addContent(v_form_textarea('reportmessage', array('desc' => s('reportmessage_desc'))));
-		$dialog->addContent(v_form_hidden('reportfsid', (int)$_GET['fsid']));
-		$dialog->addContent(v_form_hidden('reportbid', (int)$bid));
+		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', array('desc' => $this->func->s('reportmessage_desc'))));
+		$dialog->addContent($this->v_utils->v_form_hidden('reportfsid', (int)$_GET['fsid']));
+		$dialog->addContent($this->v_utils->v_form_hidden('reportbid', (int)$bid));
 
 		$dialog->addOpt('width', '600', false);
 		$dialog->addAbortButton();

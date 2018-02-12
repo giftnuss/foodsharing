@@ -99,7 +99,7 @@ class WallPostModel extends Model
 			) 
 			VALUES 
 			(
-				' . (int)fsId() . ',
+				' . (int)$this->func->fsId() . ',
 				' . $this->strval($message) . ',
 				NOW(),
 				' . $this->strval($attach) . '

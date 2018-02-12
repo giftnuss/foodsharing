@@ -19,8 +19,8 @@ class ApplicationControl extends Control
 		parent::__construct();
 
 		$this->bezirk_id = false;
-		if (($this->bezirk_id = getGetId('bid')) === false) {
-			$this->bezirk_id = getBezirkId();
+		if (($this->bezirk_id = $this->func->getGetId('bid')) === false) {
+			$this->bezirk_id = $this->func->getBezirkId();
 		}
 
 		$this->bezirk = false;
@@ -36,24 +36,24 @@ class ApplicationControl extends Control
 
 		$this->view->setBezirk($this->bezirk);
 
-		if (!(isBotFor($this->bezirk_id) || S::may('orga'))) {
-			go('/');
+		if (!($this->func->isBotFor($this->bezirk_id) || S::may('orga'))) {
+			$this->func->go('/');
 		}
 	}
 
 	public function index()
 	{
 		if ($application = $this->model->getApplication($this->bezirk_id, $_GET['fid'])) {
-			addBread($this->bezirk['name'], '/?page=bezirk&bid=' . $this->bezirk_id);
-			addBread('Bewerbung von ' . $application['name'], '');
-			addContent($this->view->application($application));
+			$this->func->addBread($this->bezirk['name'], '/?page=bezirk&bid=' . $this->bezirk_id);
+			$this->func->addBread('Bewerbung von ' . $application['name'], '');
+			$this->func->addContent($this->view->application($application));
 
-			addContent(v_field(
+			$this->func->addContent($this->v_utils->v_field(
 				$this->wallposts('application', $application['id']),
 				'Status-Notizen'
 			));
 
-			addContent($this->view->applicationMenu($application), CNT_LEFT);
+			$this->func->addContent($this->view->applicationMenu($application), CNT_LEFT);
 		}
 	}
 }

@@ -23,7 +23,7 @@ class SearchXhr extends Control
 				foreach ($res as $key => $value) {
 					if (count($value) > 0) {
 						$out[] = array(
-							'title' => s($key),
+							'title' => $this->func->s($key),
 							'result' => $value
 						);
 					}

@@ -11,9 +11,12 @@ class vPage
 	private $sections_right;
 	private $subtitle;
 	private $bread;
+	private $func;
 
 	public function __construct($title, $content)
 	{
+		global $g_func;
+		$this->func = $g_func;
 		$this->setTitle($title);
 		$this->setContent($content);
 
@@ -88,15 +91,15 @@ class vPage
 
 	public function render()
 	{
-		addBread($this->bread[0], $this->bread[1]);
-		addTitle($this->title);
+		$this->func->addBread($this->bread[0], $this->bread[1]);
+		$this->func->addTitle($this->title);
 
 		$subtitle = '';
 		if ($this->subtitle !== false) {
 			$subtitle = '<small>' . $this->subtitle . '</small>';
 		}
 
-		addContent('
+		$this->func->addContent('
 		<div class="page ui-padding ui-widget-content corner-all">
 			<div class="h1">
 				<h1>' . $this->title . '</h1>
@@ -111,7 +114,7 @@ class vPage
 				$title = '<h2>' . $s['title'] . '</h2>
 				';
 			}
-			addContent('
+			$this->func->addContent('
 		<div class="page page-section ui-padding ui-widget-content corner-all">
 			' . $title . $s['cnt'] . '
 		</div>');
@@ -139,7 +142,7 @@ class vPage
 				$s['cnt'] = $title . $s['cnt'];
 			}
 
-			addContent($s['cnt'], CNT_LEFT);
+			$this->func->addContent($s['cnt'], CNT_LEFT);
 		}
 
 		foreach ($this->sections_right as $i => $s) {
@@ -164,7 +167,7 @@ class vPage
 				$s['cnt'] = $title . $s['cnt'];
 			}
 
-			addContent($s['cnt'], CNT_RIGHT);
+			$this->func->addContent($s['cnt'], CNT_RIGHT);
 		}
 	}
 }

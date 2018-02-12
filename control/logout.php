@@ -1,10 +1,4 @@
 <?php
 
-use Foodsharing\Lib\Session\S;
-
-$db->logout();
-$_SESSION['login'] = false;
-$_SESSION = array();
-S::destroy();
-header('Location: /');
-exit();
+global $g_func;
+$g_func->loadApp('Logout');

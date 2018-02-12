@@ -23,7 +23,7 @@ class ReportModel extends Model
 			VALUES 
 			(
 				' . $this->intval($fsid) . ',
-				' . $this->intval(fsId()) . ',
+				' . $this->intval($this->func->fsId()) . ',
 				' . $this->intval($reason_id) . ',
 				' . $this->intval($betrieb_id) . ',
 				NOW(),
