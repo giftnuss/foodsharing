@@ -34,7 +34,7 @@ class DI
 			->setAutoconfigured(true)
 			->setPublic(true);
 
-		$loader->registerClasses($definition, 'Foodsharing\\', '*', '{Lib}');
+		$loader->registerClasses($definition, 'Foodsharing\\', '*', '{Lib,Dev,Debug}');
 	}
 
 	public function useTraceablePDO($traceablePDO)
