@@ -130,16 +130,16 @@ class MaintenanceControl extends ConsoleControl
 		$berlin_biebs = $this->model->getBiebIds(47);
 		$counts = $this->model->updateGroupMembers(1057, $berlin_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
-		
-        self::info('updating CH BOT group');
-        $chBots = $this->model->getBotIds(106);
-        $counts = $this->model->updateGroupMembers(1763, $chBots, true);
-        self::info('+' . $counts[0] . ', -' . $counts[1]);
 
-        self::info('updating Zürich BIEB austausch');
-        $zuerich_biebs = $this->model->getBiebIds(108);
-        $counts = $this->model->updateGroupMembers(1313, $zuerich_biebs, true);
-        self::info('+' . $counts[0] . ', -' . $counts[1]);
+		self::info('updating CH BOT group');
+		$chBots = $this->model->getBotIds(106);
+		$counts = $this->model->updateGroupMembers(1763, $chBots, true);
+		self::info('+' . $counts[0] . ', -' . $counts[1]);
+
+		self::info('updating Zürich BIEB austausch');
+		$zuerich_biebs = $this->model->getBiebIds(108);
+		$counts = $this->model->updateGroupMembers(1313, $zuerich_biebs, true);
+		self::info('+' . $counts[0] . ', -' . $counts[1]);
 	}
 
 	private function sleepingMode()
