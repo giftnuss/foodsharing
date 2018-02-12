@@ -15,19 +15,19 @@ class NewareaControl extends Control
 		parent::__construct();
 
 		if (!S::may('orga')) {
-			go('/?page=dashboard');
+			$this->func->go('/?page=dashboard');
 		}
 	}
 
 	public function index()
 	{
-		addBread('Anfragen für neue Bezirke');
+		$this->func->addBread('Anfragen für neue Bezirke');
 		if ($foodsaver = $this->model->getWantNews()) {
-			addContent($this->view->listWantNews($foodsaver));
+			$this->func->addContent($this->view->listWantNews($foodsaver));
 
-			addContent($this->view->orderToBezirk(), CNT_RIGHT);
+			$this->func->addContent($this->view->orderToBezirk(), CNT_RIGHT);
 
-			addContent($this->view->options(), CNT_RIGHT);
+			$this->func->addContent($this->view->options(), CNT_RIGHT);
 		}
 	}
 }

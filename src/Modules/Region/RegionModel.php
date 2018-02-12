@@ -43,7 +43,7 @@ class RegionModel extends Model
 				hb.bezirk_id = b.id
 
 			AND
-				hb.`foodsaver_id` = ' . (int)fsId() . '
+				hb.`foodsaver_id` = ' . (int)$this->func->fsId() . '
 
 			AND
 				b.`type` != 7
@@ -140,7 +140,7 @@ class RegionModel extends Model
 			)
 			VALUES
 			(
-				' . (int)fsId() . ',
+				' . (int)$this->func->fsId() . ',
 				' . (int)$this->bezirk_id . ',
 				' . (int)$location_id . ',
 				' . $this->strval($event['name']) . ',
@@ -320,7 +320,7 @@ class RegionModel extends Model
 		$theme_id = $this->insert('
 			INSERT INTO ' . PREFIX . 'theme (`foodsaver_id`, `name`, `time`,`active`)
 			VALUES(
-				' . (int)fsId() . ',
+				' . (int)$this->func->fsId() . ',
 				' . $this->strval($name) . ',
 				NOW(),
 				' . (int)$active . '
@@ -355,7 +355,7 @@ class RegionModel extends Model
 					' . PREFIX . 'theme_follower tf
 			WHERE 	tf.foodsaver_id = fs.id
 			AND 	tf.theme_id = ' . (int)$theme_id . '
-			AND 	tf.foodsaver_id != ' . (int)fsId() . '
+			AND 	tf.foodsaver_id != ' . (int)$this->func->fsId() . '
 		');
 	}
 
@@ -381,7 +381,7 @@ class RegionModel extends Model
 			FROM
 					' . PREFIX . 'theme_follower tf
 			WHERE   tf.theme_id = ' . (int)$theme_id . '
-			AND 	tf.foodsaver_id = ' . (int)fsId() . '
+			AND 	tf.foodsaver_id = ' . (int)$this->func->fsId() . '
 		');
 	}
 
@@ -402,7 +402,7 @@ class RegionModel extends Model
 			REPLACE INTO `' . PREFIX . 'theme_follower`(`foodsaver_id`, `theme_id`, `infotype`)
 			VALUES
 			(
-				' . (int)fsId() . ',
+				' . (int)$this->func->fsId() . ',
 				' . (int)$theme_id . ',
 				1
 			)
@@ -416,7 +416,7 @@ class RegionModel extends Model
 			WHERE
 			theme_id = ' . (int)$theme_id . '
 			AND
-			foodsaver_id = ' . (int)fsId() . '
+			foodsaver_id = ' . (int)$this->func->fsId() . '
 		');
 	}
 
@@ -456,7 +456,7 @@ class RegionModel extends Model
 			INSERT INTO ' . PREFIX . 'theme_post (`theme_id`, `foodsaver_id`, `reply_post`, `body`, `time`)
 			VALUES(
 				' . (int)$theme_id . ',
-				' . (int)fsId() . ',
+				' . (int)$this->func->fsId() . ',
 				' . $reply . ',
 				' . $this->strval($body, '<p><a><ul><strong><b><i><ol><li><br>') . ',
 				NOW()
@@ -471,7 +471,7 @@ class RegionModel extends Model
 
 		if ($reply > 0) {
 			$fs_id = $this->getVal('foodsaver_id', 'theme_post', $reply);
-			if ($fs_id != fsId()) {
+			if ($fs_id != $this->func->fsId()) {
 				$this->addBell(
 					$fs_id,
 					'forum_answer_title',

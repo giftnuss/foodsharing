@@ -19,7 +19,7 @@ class SearchModel extends Model
 		$out = array();
 
 		$children = false;
-		if (!isBotschafter() && !isOrgaTeam()) {
+		if (!$this->func->isBotschafter() && !$this->func->isOrgaTeam()) {
 			$children = $this->getChildBezirke($this->getCurrentBezirkId());
 		}
 

@@ -16,9 +16,12 @@
 - Fixed a bug which throwed an error during mail change
 
 ## Refactoring
+- Consolidate remaining functions and modules !269 @NerdyProjects
 - Remove old user registration code !246 @NerdyProjects
 
 ## Dev/Test/CI stuff
+
+- Add better seed data for use during development !263 @tiltec
 
 # 2017-12-11
 

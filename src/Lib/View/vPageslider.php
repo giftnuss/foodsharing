@@ -7,19 +7,22 @@ class vPageslider
 	private $sections;
 	private $id;
 	private $defaultBgColor;
+	private $func;
 
 	public static $pageslider_count = 0;
 
 	public function __construct()
 	{
+		global $g_func;
+		$this->func = $g_func;
 		$this->sections = array();
 		$this->defaultBgColor = '#F1E7C9';
 
 		$this->id = 'fullpage-' . self::$pageslider_count;
 		++self::$pageslider_count;
 
-		addScript('/js/jquery.fullPage.min.js');
-		addCss('/css/jquery.fullPage.css');
+		$this->func->addScript('/js/jquery.fullPage.min.js');
+		$this->func->addCss('/css/jquery.fullPage.css');
 	}
 
 	public function addSection($html, $option = array())
@@ -83,7 +86,7 @@ class vPageslider
 			</div>';
 		}
 
-		addJs('
+		$this->func->addJs('
 		$("#main").hide();
 		$("footer").hide();
 		$("#' . $this->id . '").fullpage({

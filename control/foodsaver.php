@@ -1,3 +1,4 @@
 <?php
 
-loadApp('Foodsaver');
+global $g_func;
+$g_func->loadApp('Foodsaver');

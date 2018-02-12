@@ -1,3 +1,4 @@
 <?php
 
-loadApp('WorkGroup');
+global $g_func;
+$g_func->loadApp('WorkGroup');

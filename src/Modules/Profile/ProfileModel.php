@@ -28,7 +28,7 @@ class ProfileModel extends Model
 			VALUES
 			(
 				' . (int)$fsid . ',
-				' . (int)fsId() . ',
+				' . (int)$this->func->fsId() . ',
 				' . (int)$rate . ',
 				' . (int)$type . ',
 				' . $this->strval($message) . ',
@@ -43,7 +43,7 @@ class ProfileModel extends Model
 			SELECT 	`msg` 
 			FROM	`' . PREFIX . 'rating`
 			WHERE 	`foodsaver_id` = ' . (int)$fsid . '
-			AND 	`rater_id` = ' . (int)fsId() . '
+			AND 	`rater_id` = ' . (int)$this->func->fsId() . '
 		');
 	}
 
@@ -121,10 +121,10 @@ class ProfileModel extends Model
 			return false;
 		}
 
-		//echo 'SELECT COUNT(rater_id) FROM `fs_rating` WHERE rater_id = '.(int)fsId().' AND foodsaver_id = '.(int)$this->fs_id.' AND ratingtype = 2';
+		//echo 'SELECT COUNT(rater_id) FROM `fs_rating` WHERE rater_id = '.(int)$this->func->fsId().' AND foodsaver_id = '.(int)$this->fs_id.' AND ratingtype = 2';
 		$data['bouched'] = false;
 		$data['bananen'] = false;
-		if ($this->qOne('SELECT 1 FROM `fs_rating` WHERE rater_id = ' . (int)fsId() . ' AND foodsaver_id = ' . (int)$this->fs_id . ' AND ratingtype = 2')) {
+		if ($this->qOne('SELECT 1 FROM `fs_rating` WHERE rater_id = ' . (int)$this->func->fsId() . ' AND foodsaver_id = ' . (int)$this->fs_id . ' AND ratingtype = 2')) {
 			$data['bouched'] = true;
 		}
 		$data['online'] = $this->isActive((int)$this->fs_id);
@@ -157,7 +157,7 @@ class ProfileModel extends Model
 		$data['foodsaver'] = false;
 		$data['orga'] = false;
 
-		if (mayHandleReports()) {
+		if ($this->func->mayHandleReports()) {
 			$data['violation_count'] = (int)$this->getViolationCount($this->fs_id);
 			$data['note_count'] = (int)$this->getNotesCount($this->fs_id);
 		}

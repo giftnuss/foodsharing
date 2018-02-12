@@ -55,10 +55,10 @@ class WallPostView extends View
 			}
 			$del = '';
 			if (
-				$p['foodsaver_id'] == fsId()
-				|| (!in_array($this->table, array('fairteiler', 'foodsaver')) && (isBotschafter() || isOrgateam()))
+				$p['foodsaver_id'] == $this->func->fsId()
+				|| (!in_array($this->table, array('fairteiler', 'foodsaver')) && ($this->func->isBotschafter() || $this->func->isOrgaTeam()))
 			) {
-				$del = '<span class="dot">·</span><a onclick="u_delPost(' . $p['id'] . ');return false;" href="#p' . $p['id'] . '" class="pdelete light">' . s('delete') . '</a>';
+				$del = '<span class="dot">·</span><a onclick="u_delPost(' . $p['id'] . ');return false;" href="#p' . $p['id'] . '" class="pdelete light">' . $this->func->s('delete') . '</a>';
 			}
 
 			$out .= '
@@ -66,7 +66,7 @@ class WallPostView extends View
 					<td class="img">
 						<input type="hidden" name="pid" class="pid" value="' . $p['id'] . '" />
 						<a href="#" onclick="profile(' . $p['foodsaver_id'] . ');return false;">
-							<img src="' . img($p['photo']) . '" />
+							<img src="' . $this->func->img($p['photo']) . '" />
 						</a>
 					</td>
 					<td' . $gal_col . '>

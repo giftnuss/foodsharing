@@ -6,16 +6,12 @@ use Foodsharing\Lib\Xhr\XhrResponses;
 
 require __DIR__ . '/includes/setup.php';
 
-$js = '';
 if (isset($_GET['app']) && isset($_GET['m'])) {
 	$app = str_replace('/', '', $_GET['app']);
 	$meth = str_replace('/', '', $_GET['m']);
 
 	require_once 'config.inc.php';
 	require_once 'lang/DE/de.php';
-
-	require_once 'lib/func.inc.php';
-	require_once 'lib/view.inc.php';
 
 	S::init();
 

@@ -163,7 +163,7 @@ class FairTeilerModel extends Model
 
 	public function getFairteilerIds()
 	{
-		return $this->qColKey('SELECT fairteiler_id FROM ' . PREFIX . 'fairteiler_follower WHERE foodsaver_id = ' . (int)fsId());
+		return $this->qColKey('SELECT fairteiler_id FROM ' . PREFIX . 'fairteiler_follower WHERE foodsaver_id = ' . (int)$this->func->fsId());
 	}
 
 	public function follow($ft_id, $infotype)
@@ -179,7 +179,7 @@ class FairTeilerModel extends Model
 				VALUES
 				(
 					' . (int)$ft_id . ',
-					' . (int)fsId() . ',
+					' . (int)$this->func->fsId() . ',
 					1,
 					' . $infotype . '
 				)
@@ -191,7 +191,7 @@ class FairTeilerModel extends Model
 		return $this->del('
 				DELETE FROM `' . PREFIX . 'fairteiler_follower`
 				WHERE 	fairteiler_id = ' . (int)$ft_id . '
-				AND 	foodsaver_id = ' . (int)fsId() . '
+				AND 	foodsaver_id = ' . (int)$this->func->fsId() . '
 		');
 	}
 
@@ -416,7 +416,7 @@ class FairTeilerModel extends Model
 				' . $this->strval($lat) . ',
 				' . $this->strval($lon) . ',
 				NOW(),
-				' . $this->intval(fsId()) . '
+				' . $this->intval($this->func->fsId()) . '
 			)
 		')
 		) {
@@ -430,7 +430,7 @@ class FairTeilerModel extends Model
 				VALUES
 				(
 					' . (int)$ftid . ',
-					' . (int)fsId() . ',
+					' . (int)$this->func->fsId() . ',
 					2
 				)
 			');

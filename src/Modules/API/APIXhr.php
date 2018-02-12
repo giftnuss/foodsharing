@@ -53,13 +53,13 @@ class APIXhr extends Control
 
 				if ($member = $model->listConversationMembers($conversation_id)) {
 					foreach ($member as $m) {
-						if ($m['id'] != fsId()) {
+						if ($m['id'] != $this->func->fsId()) {
 							Mem::userAppend($m['id'], 'msg-update', $conversation_id);
 
-							sendSock($m['id'], 'conv', 'push', array(
+							$this->func->sendSock($m['id'], 'conv', 'push', array(
 								'id' => $id,
 								'cid' => $conversation_id,
-								'fs_id' => fsId(),
+								'fs_id' => $this->func->fsId(),
 								'fs_name' => S::user('name'),
 								'fs_photo' => S::user('photo'),
 								'body' => $message,
@@ -138,7 +138,7 @@ class APIXhr extends Control
 	{
 		if (isset($_GET['e'])) {
 			if ($this->model->login($_GET['e'], $_GET['p'])) {
-				$fs = $this->model->getValues(array('telefon', 'handy', 'geschlecht', 'name', 'lat', 'lon', 'photo'), 'foodsaver', fsId());
+				$fs = $this->model->getValues(array('telefon', 'handy', 'geschlecht', 'name', 'lat', 'lon', 'photo'), 'foodsaver', $this->func->fsId());
 
 				$this->appout(array(
 					'status' => 1,
@@ -146,7 +146,7 @@ class APIXhr extends Control
 					'gender' => $fs['geschlecht'],
 					'phone' => $fs['telefon'],
 					'phone_mobile' => $fs['handy'],
-					'id' => fsId(),
+					'id' => $this->func->fsId(),
 					'name' => $fs['name'],
 					'lat' => $fs['lat'],
 					'lon' => $fs['lon'],
@@ -247,7 +247,7 @@ class APIXhr extends Control
 					}
 				}
 
-				$fs = $this->model->getValues(array('lat', 'lon'), 'foodsaver', fsId());
+				$fs = $this->model->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
 
 				$lat = $fs['lat'];
 				$lon = $fs['lon'];
@@ -433,7 +433,7 @@ class APIXhr extends Control
 			$out = array();
 			foreach ($convs as $c) {
 				$out[] = array(
-					't' => niceDateShort($c['last_ts']),
+					't' => $this->func->niceDateShort($c['last_ts']),
 					'n' => $c['name'],
 					'id' => $c['id'],
 					'u' => $c['member'],

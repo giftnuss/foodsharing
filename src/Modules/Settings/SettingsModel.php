@@ -13,7 +13,7 @@ class SettingsModel extends Model
 			UPDATE 	`' . PREFIX . 'foodsaver`
 			SET 	`newsletter` = ' . (int)$newsletter . ',
 					`infomail_message` = ' . (int)$infomail . '
-			WHERE 	`id` = ' . (int)fsId() . '		
+			WHERE 	`id` = ' . (int)$this->func->fsId() . '		
 		');
 	}
 
@@ -34,7 +34,7 @@ class SettingsModel extends Model
 									VALUES(
 									  NOW(),
 									  ' . $this->intval($fsid) . ',
-									  ' . $this->intval(fsId()) . ',
+									  ' . $this->intval($this->func->fsId()) . ',
 									  \'' . $k . '\',
 									  \'' . $old[$k] . '\',
 									  \'' . $new[$k] . '\'
@@ -56,7 +56,7 @@ class SettingsModel extends Model
 				' . PREFIX . 'foodsaver
 				
 			WHERE 
-				id = ' . (int)fsId() . '
+				id = ' . (int)$this->func->fsId() . '
 		');
 	}
 
@@ -79,11 +79,11 @@ class SettingsModel extends Model
 				`id` = ' . (int)$sid . '
 				
 			AND
-				`foodsaver_id` = ' . (int)fsId() . '
+				`foodsaver_id` = ' . (int)$this->func->fsId() . '
 		';
 		$tmp = array();
 		if ($session = $this->qRow($sql)) {
-			$session['try_count'] = $this->qOne('SELECT COUNT(quiz_id) FROM ' . PREFIX . 'quiz_session WHERE foodsaver_id = ' . (int)fsId() . ' AND `quiz_id` = ' . (int)$session['quiz_id']);
+			$session['try_count'] = $this->qOne('SELECT COUNT(quiz_id) FROM ' . PREFIX . 'quiz_session WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND `quiz_id` = ' . (int)$session['quiz_id']);
 
 			/*
 			 * First of all sort the question array and get al questions_ids etc to calculate the result
@@ -210,7 +210,7 @@ class SettingsModel extends Model
 					`' . PREFIX . 'fairteiler` ft
 				
 			WHERE 	ff.fairteiler_id = ft.id
-			AND 	ff.foodsaver_id = ' . (int)fsId() . '
+			AND 	ff.foodsaver_id = ' . (int)$this->func->fsId() . '
 		');
 	}
 
@@ -226,7 +226,7 @@ class SettingsModel extends Model
 			)
 			VALUES
 			(
-				' . (int)fsid() . ',
+				' . (int)$this->func->fsId() . ',
 				' . $this->strval($email) . ',
 				NOW(),
 				' . $this->strval($token) . '
@@ -236,19 +236,19 @@ class SettingsModel extends Model
 
 	public function abortChangemail()
 	{
-		$this->del('DELETE FROM `' . PREFIX . 'mailchange` WHERE foodsaver_id = ' . (int)fsid() . '');
+		$this->del('DELETE FROM `' . PREFIX . 'mailchange` WHERE foodsaver_id = ' . (int)$this->func->fsId());
 	}
 
 	public function changeMail($email)
 	{
-		$this->del('DELETE FROM `' . PREFIX . 'mailchange` WHERE foodsaver_id = ' . (int)fsid() . '');
-		$currentMail = $this->qOne('SELECT `email` FROM ' . PREFIX . 'foodsaver WHERE id = ' . (int)fsid());
-		$this->logChangedSetting(fsId(), ['email' => $currentMail], ['email' => $email], ['email']);
+		$this->del('DELETE FROM `' . PREFIX . 'mailchange` WHERE foodsaver_id = ' . (int)$this->func->fsId());
+		$currentMail = $this->qOne('SELECT `email` FROM ' . PREFIX . 'foodsaver WHERE id = ' . (int)$this->func->fsId());
+		$this->logChangedSetting($this->func->fsId(), ['email' => $currentMail], ['email' => $email], ['email']);
 
 		if ($this->update('
 			UPDATE `' . PREFIX . 'foodsaver`
 			SET `email` = ' . $this->strval($email) . '
-			WHERE `id` = ' . (int)fsid() . '
+			WHERE `id` = ' . (int)$this->func->fsId() . '
 		')
 		) {
 			return true;
@@ -259,7 +259,7 @@ class SettingsModel extends Model
 
 	public function getMailchange()
 	{
-		return $this->qOne('SELECT `newmail` FROM ' . PREFIX . 'mailchange WHERE foodsaver_id = ' . (int)fsid());
+		return $this->qOne('SELECT `newmail` FROM ' . PREFIX . 'mailchange WHERE foodsaver_id = ' . (int)$this->func->fsId());
 	}
 
 	public function getForumThreads()
@@ -273,7 +273,7 @@ class SettingsModel extends Model
 					`' . PREFIX . 'theme` th
 		
 			WHERE 	tf.theme_id = th.id
-			AND 	tf.foodsaver_id = ' . (int)fsId() . '
+			AND 	tf.foodsaver_id = ' . (int)$this->func->fsId() . '
 		');
 	}
 
@@ -283,7 +283,7 @@ class SettingsModel extends Model
 			UPDATE 		`' . PREFIX . 'fairteiler_follower`
 			SET 		`infotype` = ' . (int)$infotype . '
 			WHERE 		`fairteiler_id` = ' . (int)$fid . '
-			AND 		`foodsaver_id` = ' . (int)fsId() . '
+			AND 		`foodsaver_id` = ' . (int)$this->func->fsId() . '
 		');
 	}
 
@@ -293,7 +293,7 @@ class SettingsModel extends Model
 			UPDATE 		`' . PREFIX . 'theme_follower`
 			SET 		`infotype` = ' . (int)$infotype . '
 			WHERE 		`theme_id` = ' . (int)$tid . '
-			AND 		`foodsaver_id` = ' . (int)fsId() . '
+			AND 		`foodsaver_id` = ' . (int)$this->func->fsId() . '
 		');
 	}
 
@@ -301,7 +301,7 @@ class SettingsModel extends Model
 	{
 		return $this->del('
 			DELETE FROM 	`' . PREFIX . 'theme_follower`
-			WHERE 	foodsaver_id = ' . (int)fsId() . '
+			WHERE 	foodsaver_id = ' . (int)$this->func->fsId() . '
 			AND 	theme_id IN(' . implode(',', $unfollow) . ')
 		');
 	}
@@ -310,7 +310,7 @@ class SettingsModel extends Model
 	{
 		return $this->del('
 			DELETE FROM 	`' . PREFIX . 'fairteiler_follower`
-			WHERE 	foodsaver_id = ' . (int)fsId() . '
+			WHERE 	foodsaver_id = ' . (int)$this->func->fsId() . '
 			AND 	fairteiler_id IN(' . implode(',', $unfollow) . ')		
 		');
 	}
@@ -334,13 +334,13 @@ class SettingsModel extends Model
 
 	public function getNewMail($token)
 	{
-		return $this->qOne('SELECT newmail FROM ' . PREFIX . 'mailchange WHERE `token` = ' . $this->strval($token) . ' AND foodsaver_id = ' . (int)fsid());
+		return $this->qOne('SELECT newmail FROM ' . PREFIX . 'mailchange WHERE `token` = ' . $this->strval($token) . ' AND foodsaver_id = ' . (int)$this->func->fsId());
 	}
 
 	public function updateRole($role_id, $current_role)
 	{
 		if ($role_id > $current_role) {
-			$this->update('UPDATE ' . PREFIX . 'foodsaver SET `rolle` = ' . (int)$role_id . ' WHERE id = ' . (int)fsId());
+			$this->update('UPDATE ' . PREFIX . 'foodsaver SET `rolle` = ' . (int)$role_id . ' WHERE id = ' . (int)$this->func->fsId());
 		}
 	}
 
@@ -349,7 +349,7 @@ class SettingsModel extends Model
 		if ($res = $this->qOne('
 				SELECT COUNT(foodsaver_id) AS `count`
 				FROM ' . PREFIX . 'quiz_session
-				WHERE foodsaver_id =' . (int)fsId() . '
+				WHERE foodsaver_id =' . (int)$this->func->fsId() . '
 				AND quiz_id = ' . (int)$quiz_id . '
 				AND `status` = 1
 			')

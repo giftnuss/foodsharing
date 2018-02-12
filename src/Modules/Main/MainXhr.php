@@ -32,7 +32,7 @@ class MainXhr extends Control
 					'image/pjpeg',
 					'image/png'
 				),
-				s('no_image')
+				$this->func->s('no_image')
 			);
 			try {
 				$file = $upload->move('tmp', 'picture');

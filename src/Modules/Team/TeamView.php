@@ -61,11 +61,11 @@ class TeamView extends View
 
 	public function contactForm($user)
 	{
-		return v_quickform('Schreibe ' . $user['name'] . ' eine E-Mail!', array(
-			v_form_text('name'),
-			v_form_text('email'),
-			v_form_textarea('message'),
-			v_form_hidden('id', (int)$user['id'])
+		return $this->v_utils->v_quickform('Schreibe ' . $user['name'] . ' eine E-Mail!', array(
+			$this->v_utils->v_form_text('name'),
+			$this->v_utils->v_form_text('email'),
+			$this->v_utils->v_form_textarea('message'),
+			$this->v_utils->v_form_hidden('id', (int)$user['id'])
 		), array('id' => 'contactform'));
 	}
 
@@ -106,7 +106,7 @@ class TeamView extends View
 					<h3>' . $t['name'] . ' ' . $t['nachname'] . '</h3>
 					<span class="subtitle">' . $t['position'] . '</span>
 					<span class="desc">
-						' . tt($t['desc'], 240) . '
+						' . $this->func->tt($t['desc'], 240) . '
 					</span>
 					<span class="foot corner-bottom">
 						' . $socials . '	
@@ -129,7 +129,7 @@ class TeamView extends View
 		<div id="tox-pop-' . $user['id'] . '" class="white-popup mfp-hide tox-popup corner-all">
 			<div style="text-align:center">
 				<a href="https://tox.im/de" target="_blank"><img src="http://tox.im/assets/imgs/logo_head.png" /></a>
-				' . v_info('Tox ist eine sichere  OpenSource Alternative zu Skype oder WhatsApp. Mit der Tox-ID kannst Du ' . $user['name'] . ' Zu Deiner Kontaktliste hinzufügen.') . '
+				' . $this->v_utils->v_info('Tox ist eine sichere  OpenSource Alternative zu Skype oder WhatsApp. Mit der Tox-ID kannst Du ' . $user['name'] . ' Zu Deiner Kontaktliste hinzufügen.') . '
 				<h3>Tox-ID von ' . $user['name'] . '</h3>
 				<input type="text" class="tox-id" value="' . $user['tox'] . '" />
 				<div class="tox-qr"></div>

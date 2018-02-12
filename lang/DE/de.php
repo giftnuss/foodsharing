@@ -224,7 +224,6 @@ $g_lang['menu_newarea'] = 'Bezirkswünsche von Foodsavern';
 $g_lang['menu_all_fs'] = 'Alle Foodsaver';
 $g_lang['menu_all_store'] = 'Alle Betriebe';
 $g_lang['menu_email'] = 'E-Mail-Verteiler';
-$g_lang['menu_chain'] = 'Betriebsketten';
 $g_lang['menu_faq'] = 'FAQs verwalten';
 $g_lang['menu_foodtypes'] = 'Lebensmitteltypen verwalten';
 $g_lang['menu_content'] = 'Inhalte bearbeiten';

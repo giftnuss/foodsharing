@@ -45,8 +45,8 @@ class WallPostXhr extends Control
 	{
 		if ((int)$_GET['post'] > 0) {
 			$fs = $this->model->getFsByPost((int)$_GET['post']);
-			if ($fs == fsId()
-				|| (!in_array($this->table, array('fairteiler', 'foodsaver')) && (isBotschafter() || isOrgateam()))
+			if ($fs == $this->func->fsId()
+				|| (!in_array($this->table, array('fairteiler', 'foodsaver')) && ($this->func->isBotschafter() || $this->func->isOrgaTeam()))
 			) {
 				if ($this->model->delpost((int)$_GET['post'])) {
 					return array(
@@ -181,9 +181,9 @@ class WallPostXhr extends Control
 
 			$init = 'window.parent.mb_finishImage("' . $new_filename . '");';
 		} elseif (!$this->attach_allow($_FILES['etattach']['name'])) {
-			$init = 'window.parent.pulseInfo(\'' . jsSafe(s('wrong_file')) . '\');window.parent.mb_clear();';
+			$init = 'window.parent.pulseInfo(\'' . $this->func->jsSafe($this->func->s('wrong_file')) . '\');window.parent.mb_clear();';
 		} else {
-			$init = 'window.parent.pulseInfo(\'' . jsSafe(s('file_to_big')) . '\');window.parent.mb_clear();';
+			$init = 'window.parent.pulseInfo(\'' . $this->func->jsSafe($this->func->s('file_to_big')) . '\');window.parent.mb_clear();';
 		}
 
 		echo '<html><head>

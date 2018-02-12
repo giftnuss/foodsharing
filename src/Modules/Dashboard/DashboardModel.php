@@ -25,7 +25,7 @@ class DashboardModel extends Model
 				' . PREFIX . 'foodsaver 
 				
 			WHERE 
-				id = ' . (int)fsId() . '
+				id = ' . (int)$this->func->fsId() . '
 		');
 	}
 
@@ -92,7 +92,7 @@ class DashboardModel extends Model
 				b.status = 1
 	
 			AND
-				foodsaver_id != ' . (int)fsId() . '
+				foodsaver_id != ' . (int)$this->func->fsId() . '
 		
 			HAVING
 				distance <=' . (int)$distance . '
