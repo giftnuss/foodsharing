@@ -19,11 +19,11 @@ require_once 'lang/DE/de.php';
 
 $action = $_GET['f'];
 
-$model = new Model();
+$db = new Model();
 
-$model->updateActivity();
+$db->updateActivity();
 if (isset($_GET['f'])) {
-	$xhr = new XhrMethods($model);
+	$xhr = new XhrMethods($db);
 	$func = 'xhr_' . $action;
 	if (method_exists($xhr, $func)) {
 		/*

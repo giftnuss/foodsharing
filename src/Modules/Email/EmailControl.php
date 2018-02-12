@@ -13,15 +13,12 @@ use Foodsharing\Modules\Mailbox\MailboxModel;
 class EmailControl extends Control
 {
 	private $mbmodel;
-	private $v_utils;
 
 	public function __construct()
 	{
-		global $g_view_utils;
 		parent::__construct();
 		$this->model = new Model();
 		$this->mbmodel = new MailboxModel();
-		$this->v_utils = $g_view_utils;
 
 		if (!S::may('orga')) {
 			$this->func->go('/');

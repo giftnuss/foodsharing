@@ -23,14 +23,6 @@ class MailsControl extends ConsoleControl
 		parent::__construct();
 	}
 
-	/**
-	 * default method starts the server.
-	 */
-	public function index()
-	{
-		$this->queueWorker();
-	}
-
 	public function queueWorker()
 	{
 		while (1) {

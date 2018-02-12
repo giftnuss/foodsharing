@@ -48,3 +48,6 @@ define('CNT_TOP', 2);
 define('CNT_BOTTOM', 3);
 define('CNT_LEFT', 4);
 define('CNT_OVERTOP', 5);
+
+/* this initializes the static class - can be refactored when we have DI, should be fine for now */
+Foodsharing\Lib\Db\Mem::connect();

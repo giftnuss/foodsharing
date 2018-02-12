@@ -12,7 +12,6 @@ class RegionControl extends Control
 	private $bot_theme;
 	private $mode;
 	private $themes_per_page;
-	private $v_utils;
 
 	public function __construct()
 	{
@@ -21,8 +20,6 @@ class RegionControl extends Control
 		$this->model = new RegionModel($this->themes_per_page);
 		$this->view = new RegionView();
 		$this->view->setMode($this->mode);
-		global $g_view_utils;
-		$this->v_utils = $g_view_utils;
 		parent::__construct();
 
 		if (!S::may()) {

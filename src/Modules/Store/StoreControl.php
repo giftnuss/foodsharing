@@ -13,11 +13,8 @@ class StoreControl extends Control
 			$this->func->goLogin();
 		}
 
-		global $g_view_utils;
-
 		$this->model = new StoreModel();
 		$this->view = new StoreView();
-		$this->v_utils = $g_view_utils;
 
 		parent::__construct();
 	}

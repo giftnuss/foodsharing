@@ -8,6 +8,7 @@ class Mem
 {
 	public static $cache;
 	public static $connected;
+	private static $func;
 
 	public static function connect()
 	{
@@ -16,6 +17,8 @@ class Mem
 			self::$cache = new Redis();
 			self::$cache->connect(REDIS_HOST, REDIS_PORT);
 		}
+		global $g_func;
+		self::$func = $g_func;
 	}
 
 	// Set a key to a value, ttl in seconds
@@ -116,17 +119,17 @@ class Mem
 	{
 		global $g_page_cache_suffix;
 
-		return self::get('pc-' . $_SERVER['REQUEST_URI'] . ':' . $this->func->fsId());
+		return self::get('pc-' . $_SERVER['REQUEST_URI'] . ':' . self::$func->fsId());
 	}
 
 	public static function setPageCache($page, $ttl)
 	{
-		return self::set('pc-' . $_SERVER['REQUEST_URI'] . ':' . $this->func->fsId(), $page, $ttl);
+		return self::set('pc-' . $_SERVER['REQUEST_URI'] . ':' . self::$func->fsId(), $page, $ttl);
 	}
 
 	public static function delPageCache($page)
 	{
-		return self::del('pc-' . $page . ':' . $this->func->fsId());
+		return self::del('pc-' . $page . ':' . self::$func->fsId());
 	}
 
 	/**
@@ -152,6 +155,3 @@ class Mem
 		return false;
 	}
 }
-
-/* this initializes the static class - can be refactored when we have DI, should be fine for now */
-Mem::connect();

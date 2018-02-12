@@ -18,6 +18,10 @@ class ConsoleControl
 		}
 	}
 
+	public function index()
+	{
+	}
+
 	public function getSubFunc()
 	{
 		return false;
