@@ -60,8 +60,13 @@ class SeedCommand extends Command implements CustomCommandInterface
 	{
 		$rand = array_rand($this->foodsavers, $number);
 
-		if ($number === 1) return $this->foodsavers[$rand];
-		if (count($rand) > 0) return array_intersect_key($this->foodsavers, $rand);
+		if ($number === 1) {
+			return $this->foodsavers[$rand];
+		}
+		if (count($rand) > 0) {
+			return array_intersect_key($this->foodsavers, $rand);
+		}
+
 		return [];
 	}
 
@@ -108,7 +113,6 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$fairteiler = $I->createFairteiler($userbot['id'], $bezirk1);
 		$I->addFairteilerFollower($user2['id'], $fairteiler['id']);
 		$I->addFairteilerPost($userbot['id'], $fairteiler['id']);
-
 
 		// create users and collect their ids in a list
 		$this->foodsavers = [$user2['id'], $userbot['id'], $userorga['id']];
