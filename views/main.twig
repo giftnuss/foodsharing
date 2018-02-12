@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="de">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="favicon" href="/favicon.ico" type="image/x-icon" />
+        {{ head | raw }}
+        <style type="text/css">{{ css | raw }}</style>
+        <script type="text/javascript">
+            var _gaq = _gaq || [];  _gaq.push(['_setAccount', 'UA-43313114-1']);  _gaq.push(['_setDomainName', '{{ HTTP_HOST }}']);  _gaq.push(['_trackPageview']); (function() {var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);  })();
+        </script>
+
+        <script type="text/javascript">
+            {{ jsFunc | raw }}
+            $(document).ready(function(){
+                console.log('READY!');
+                {{ js | raw }}
+            });
+        </script>
+
+    </head>
+
+    <body {{ bodyClass | raw }}>
+
+        <div id="top">
+            <div class="inner">
+                <div class="pure-g">
+                    <div class="pure-u-1">
+                        <div id="layout_logo"><a href="{{ logolink }}" title="foodsharing home">food<span>sharing</span></a></div>
+                        {{ msgbar | raw }}
+                        {{ menu.mobile | raw }}
+                        <div class="menu">
+                            {{ menu.default | raw }}
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                </div>
+            </div>
+            {% if broadcast_message %}
+                <div class="inner inside msg-inside info">{{ broadcast_message }}</div>
+            {% endif %}
+        </div>
+
+        {{ content.overtop.html | raw }}
+
+        <div id="main" class="{{ isMob ? 'mobile' : '' }}">
+
+            {{ bread | raw }}
+
+            {% include 'partials/content-top-or-bottom.twig' with content.top only %}
+
+            <div class="pure-g mainpure">
+                {% if isMob %}
+                    {% include 'partials/content-main.twig' with content.main only %}
+                    {% include 'partials/content-main.twig' with content.right only %}
+                    {% include 'partials/content-main.twig' with content.left only %}
+                {% else %}
+                    {% include 'partials/content-main.twig' with content.left only %}
+                    {% include 'partials/content-main.twig' with content.main only %}
+                    {% include 'partials/content-main.twig' with content.right only %}
+                {% endif %}
+            </div>
+
+            {% include 'partials/content-top-or-bottom.twig' with content.bottom only %}
+
+        </div>
+
+        {% include 'partials/footer.twig' %}
+
+        <noscript>
+            <div id="nojs">Ohne Javascript l&auml;ft hier leider nix!</div>
+        </noscript>
+
+        {% if hidden %}
+            <div style="display:none;">{{ hidden | raw }}</div>
+        {% endif %}
+
+        <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-error" style="display:none;"></div>
+        <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-info" style="display:none;"></div>
+        <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-success" style="display:none;"></div>
+
+    </body>
+</html>

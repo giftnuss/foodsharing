@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Dashboard;
 
+use Foodsharing\Lib\Twig;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Content\ContentGateway;
@@ -12,15 +13,18 @@ class DashboardControl extends Control
 	private $user;
 	private $gateway;
 	private $contentGateway;
+	private $twig;
 
 	public function __construct(
 		DashboardView $view,
 		DashboardGateway $gateway,
-		ContentGateway $contentGateway)
+		ContentGateway $contentGateway,
+		Twig $twig)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->contentGateway = $contentGateway;
+		$this->twig = $twig;
 
 		parent::__construct();
 
@@ -127,11 +131,15 @@ class DashboardControl extends Control
 		}
 
 		$this->func->addContent(
-			$this->view->topbar(
-				$this->func->sv('welcome', array('name' => $this->user['name'])),
-				$subtitle,
-				$this->func->avatar($this->user, 50, '/img/fairteiler50x50.png')
-			),
+			$this->twig->render('partials/topbar.twig', [
+				'title' => $this->func->sv('welcome', ['name' => $this->user['name']]),
+				'subtitle' => $subtitle,
+				'avatar' => [
+					'user' => $this->user,
+					'size' => 50,
+					'imageUrl' => $this->func->img($this->user['photo'], 50, 'q', '/img/fairteiler50x50.png')
+				]
+			]),
 			CNT_TOP
 		);
 

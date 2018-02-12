@@ -10,6 +10,7 @@ use Foodsharing\DI;
 
 $FS_ENV = getenv('FS_ENV');
 $env_filename = 'config.inc.' . $FS_ENV . '.php';
+define('FS_ENV', $FS_ENV);
 
 if (file_exists($env_filename)) {
 	require_once $env_filename;
