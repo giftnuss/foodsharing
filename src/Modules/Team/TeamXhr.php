@@ -20,7 +20,7 @@ class TeamXhr extends Control
 	{
 		$xhr = new Xhr();
 
-		if (ipIsBlocked(120, 'contact')) {
+		if ($this->func->ipIsBlocked(120, 'contact')) {
 			$xhr->addMessage('Du hast zu viele Nachrichten versendet, bitte warte einen Moment', 'error');
 			$xhr->send();
 		}
@@ -29,7 +29,7 @@ class TeamXhr extends Control
 			if ($user = $this->model->getUser($id)) {
 				$mail = new AsyncMail();
 
-				if (validEmail($_POST['email'])) {
+				if ($this->func->validEmail($_POST['email'])) {
 					$mail->setFrom($_POST['email']);
 				} else {
 					$mail->setFrom(DEFAULT_EMAIL);
@@ -49,12 +49,12 @@ class TeamXhr extends Control
 				$mail->send();
 
 				$xhr->addScript('$("#contactform").parent().parent().parent().fadeOut();');
-				$xhr->addMessage(s('mail_send_success'), 'success');
+				$xhr->addMessage($this->func->s('mail_send_success'), 'success');
 				$xhr->send();
 			}
 		}
 
-		$xhr->addMessage(s('error'), 'error');
+		$xhr->addMessage($this->func->s('error'), 'error');
 		$xhr->send();
 	}
 }

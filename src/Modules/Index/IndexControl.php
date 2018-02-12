@@ -18,9 +18,9 @@ class IndexControl extends Control
 	public function index()
 	{
 		$db = new ContentModel();
-		addTitle('Rette mit!');
+		$this->func->addTitle('Rette mit!');
 
-		addScript('/js/jquery.animatenumber.min.js');
+		$this->func->addScript('/js/jquery.animatenumber.min.js');
 
 		$gerettet = (int)$this->model->getGerettet();
 
@@ -40,7 +40,7 @@ class IndexControl extends Control
 			$page_content = $db->getContent(38);
 		}
 
-		addContent($this->view->index(
+		$this->func->addContent($this->view->index(
 			$page_content['body'],
 			$gerettet
 		), CNT_OVERTOP);

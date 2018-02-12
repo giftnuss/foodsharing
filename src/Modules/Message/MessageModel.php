@@ -40,7 +40,7 @@ class MessageModel extends Model
 		 * add the current user to the recipients
 		 */
 		if ($own) {
-			$recips[(int)fsId()] = (int)fsId();
+			$recips[(int)$this->func->fsId()] = (int)$this->func->fsId();
 		}
 
 		/*
@@ -50,7 +50,7 @@ class MessageModel extends Model
 
 		$conversation_id = false;
 
-		if ($cids = $this->qCol('SELECT hc.conversation_id FROM `fs_foodsaver_has_conversation` hc LEFT JOIN `fs_conversation` c ON c.id = hc.conversation_id WHERE hc.`foodsaver_id` = ' . (int)fsId() . ' AND c.locked = 0')) {
+		if ($cids = $this->qCol('SELECT hc.conversation_id FROM `fs_foodsaver_has_conversation` hc LEFT JOIN `fs_conversation` c ON c.id = hc.conversation_id WHERE hc.`foodsaver_id` = ' . (int)$this->func->fsId() . ' AND c.locked = 0')) {
 			$sql = '
 		SELECT
 		  conversation_id,
@@ -81,7 +81,7 @@ class MessageModel extends Model
 		}
 
 		if ($body !== false) {
-			$this->sendMessage($conversation_id, $body, fsId());
+			$this->sendMessage($conversation_id, $body, $this->func->fsId());
 		}
 
 		return $conversation_id;
@@ -241,7 +241,7 @@ class MessageModel extends Model
 				hc.conversation_id = c.id
 
 			AND
-				hc.foodsaver_id = ' . (int)fsId() . '
+				hc.foodsaver_id = ' . (int)$this->func->fsId() . '
 
 			ORDER BY 
 				hc.unread DESC,
@@ -278,19 +278,19 @@ class MessageModel extends Model
 		/*
 		 * Memcache var is settet but no updates
 		 */
-		$cache = Mem::user(fsId(), 'msg-update');
+		$cache = Mem::user($this->func->fsId(), 'msg-update');
 
 		if ($cache === 0) {
 			return false;
 		} elseif (is_array($cache)) {
-			Mem::userSet(fsId(), 'msg-update', 0);
+			Mem::userSet($this->func->fsId(), 'msg-update', 0);
 
 			return $cache;
 		} /*
 		 * Memcache is not settedso get coonversation ids direct fromdm
 		 */
 		else {
-			Mem::userSet(fsId(), 'msg-update', 0);
+			Mem::userSet($this->func->fsId(), 'msg-update', 0);
 
 			return $this->getUpdatedConversationIds();
 		}
@@ -298,7 +298,7 @@ class MessageModel extends Model
 
 	private function getUpdatedConversationIds()
 	{
-		return $this->qCol('SELECT conversation_id FROM ' . PREFIX . 'foodsaver_has_conversation WHERE foodsaver_id = ' . (int)fsId() . ' AND unread = 1');
+		return $this->qCol('SELECT conversation_id FROM ' . PREFIX . 'foodsaver_has_conversation WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND unread = 1');
 	}
 
 	public function chatHistory($conversation_id)
@@ -398,9 +398,9 @@ class MessageModel extends Model
 	 */
 	public function setAsRead($conv_ids)
 	{
-		Mem::userDel(fsId(), 'msg-update');
+		Mem::userDel($this->func->fsId(), 'msg-update');
 
-		return $this->update('UPDATE ' . PREFIX . 'foodsaver_has_conversation SET unread = 0 WHERE foodsaver_id = ' . (int)fsId() . ' AND conversation_id IN(' . implode(',', $conv_ids) . ')');
+		return $this->update('UPDATE ' . PREFIX . 'foodsaver_has_conversation SET unread = 0 WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND conversation_id IN(' . implode(',', $conv_ids) . ')');
 	}
 
 	public function listConversationUpdates($conv_ids)
@@ -432,7 +432,7 @@ class MessageModel extends Model
 	public function sendMessage($cid, $body, $sender_id = false)
 	{
 		if (!$sender_id) {
-			$sender_id = fsId();
+			$sender_id = $this->func->fsId();
 		} else {
 			$sender_id = (int)$sender_id;
 		}
@@ -476,7 +476,7 @@ class MessageModel extends Model
 
 	public function mayConversation($conversation_id)
 	{
-		if ($this->q('SELECT foodsaver_id FROM `' . PREFIX . 'foodsaver_has_conversation` WHERE `foodsaver_id` = ' . (int)fsId() . ' AND conversation_id = ' . (int)$conversation_id)) {
+		if ($this->q('SELECT foodsaver_id FROM `' . PREFIX . 'foodsaver_has_conversation` WHERE `foodsaver_id` = ' . (int)$this->func->fsId() . ' AND conversation_id = ' . (int)$conversation_id)) {
 			return true;
 		}
 
@@ -579,20 +579,20 @@ class MessageModel extends Model
 				`start_foodsaver_id`,
 				`locked`
 			)
-			VALUES (NOW(),NOW(),' . (int)fsId() . ',' . (int)fsId() . ',' . (int)$lock . ')';
+			VALUES (NOW(),NOW(),' . (int)$this->func->fsId() . ',' . (int)$this->func->fsId() . ',' . (int)$lock . ')';
 
 		if (($cid = $this->insert($sql)) > 0) {
 			/*
 			 * last add all recipients to this conversation
 			 */
 			$values = array();
-			unset($recipients[(int)fsId()]);
+			unset($recipients[(int)$this->func->fsId()]);
 			foreach ($recipients as $r) {
 				$values[] = '(' . (int)$r . ',' . (int)$cid . ',' . $ur . ')';
 			}
 
 			// add current user extra to set unread = 0
-			$values[] = '(' . (int)fsId() . ',' . (int)$cid . ',0)';
+			$values[] = '(' . (int)$this->func->fsId() . ',' . (int)$cid . ',0)';
 
 			$this->insert('
 				INSERT INTO

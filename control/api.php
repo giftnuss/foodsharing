@@ -1,3 +1,4 @@
 <?php
 
-loadApp('API');
+global $g_func;
+$g_func->loadApp('API');

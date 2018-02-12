@@ -1,3 +1,4 @@
 <?php
 
-loadApp('Index');
+global $g_func;
+$g_func->loadApp('Index');

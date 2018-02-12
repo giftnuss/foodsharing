@@ -1,3 +1,4 @@
 <?php
 
-loadApp('FairTeiler');
+global $g_func;
+$g_func->loadApp('FairTeiler');

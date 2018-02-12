@@ -7,9 +7,12 @@ class vAccordion
 	private $panels;
 	private $id;
 	private $options;
+	private $g_func;
 
 	public function __construct($option = array())
 	{
+		global $g_func;
+		$this->func = $g_func;
 		$this->panels = array();
 
 		$this->id = 'acc-' . uniqid();
@@ -26,7 +29,7 @@ class vAccordion
 
 	public function render()
 	{
-		addJs('$("#' . $this->id . '").accordion(' . json_encode($this->options) . ');');
+		$this->func->addJs('$("#' . $this->id . '").accordion(' . json_encode($this->options) . ');');
 
 		$out = '
 		<div id="' . $this->id . '">';

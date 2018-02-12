@@ -1,3 +1,4 @@
 <?php
 
-loadApp('Region');
+global $g_func;
+$g_func->loadApp('Region');

@@ -15,14 +15,14 @@ class ReportView extends View
 
 	public function betriebList($betriebe)
 	{
-		return v_form_select('betrieb_id', array('label' => sv('betrieb_id', $this->foodsaver['name']), 'values' => $betriebe));
+		return $this->v_utils->v_form_select('betrieb_id', array('label' => $this->func->sv('betrieb_id', $this->foodsaver['name']), 'values' => $betriebe));
 	}
 
 	public function reportDialog()
 	{
-		return v_input_wrapper('Warum möchtest Du ' . $this->foodsaver['name'] . ' melden?', '
+		return $this->v_utils->v_input_wrapper('Warum möchtest Du ' . $this->foodsaver['name'] . ' melden?', '
 
-			' . v_form_select('reportreason', array('required' => true, 'nowrapper' => true, 'value' => 1, 'values' => array(
+			' . $this->v_utils->v_form_select('reportreason', array('required' => true, 'nowrapper' => true, 'value' => 1, 'values' => array(
 				[
 					'id' => 1,
 					'name' => 'Ist zu spät zum Abholen gekommen'],
@@ -73,7 +73,7 @@ class ReportView extends View
 					'name' => 'Hat gegen andere Verhaltensregeln verstoßen (alles andere)'])
 			)) . '<br />
 			<div id="reportreason_3" class="cb" style="margin:5px 0;">
-			' . v_form_checkbox('reportreason_3', array('nowrapper' => true, 'value' => 1, 'values' => array(
+			' . $this->v_utils->v_form_checkbox('reportreason_3', array('nowrapper' => true, 'value' => 1, 'values' => array(
 				[
 					'id' => 1,
 					'name' => 'gegenüber Foodsavern'],
@@ -83,7 +83,7 @@ class ReportView extends View
 			)
 			)) . '
 			</div>
-			' . v_form_select('reportreason_3_sub', array('nowrapper' => true, 'value' => 1, 'values' => array(
+			' . $this->v_utils->v_form_select('reportreason_3_sub', array('nowrapper' => true, 'value' => 1, 'values' => array(
 				[
 					'id' => 1,
 					'name' => 'beleidigende Äußerungen'],
@@ -104,7 +104,7 @@ class ReportView extends View
 					'name' => 'Andere unangebrachte Äußerungen und Verhalten'])
 			)) . '
 			<div id="reportreason_6" class="cb">
-			' . v_form_checkbox('reportreason_6', array('nowrapper' => true, 'value' => 1, 'values' => array(
+			' . $this->v_utils->v_form_checkbox('reportreason_6', array('nowrapper' => true, 'value' => 1, 'values' => array(
 				[
 					'id' => 1,
 					'name' => 'gegenüber BetriebsmitarbeiterInnen'],
@@ -117,7 +117,7 @@ class ReportView extends View
 			)) . '
 			</div>
 			<div id="reportreason_5" class="cb">
-			' . v_form_checkbox('reportreason_5', array('nowrapper' => true, 'value' => 1, 'values' => array(
+			' . $this->v_utils->v_form_checkbox('reportreason_5', array('nowrapper' => true, 'value' => 1, 'values' => array(
 				[
 					'id' => 1,
 					'name' => 'vor BetriebsmitarbeiterInnen'],
@@ -130,7 +130,7 @@ class ReportView extends View
 			)) . '
 			</div>
 			<div id="reportreason_7" class="cb">
-			' . v_form_checkbox('reportreason_7', array('nowrapper' => true, 'value' => 1, 'values' => array(
+			' . $this->v_utils->v_form_checkbox('reportreason_7', array('nowrapper' => true, 'value' => 1, 'values' => array(
 				[
 					'id' => 1,
 					'name' => 'gegenüber BetriebsmitarbeiterInnen'],
@@ -143,7 +143,7 @@ class ReportView extends View
 			)) . '
 			</div>
 			<div id="reportreason_8" class="cb">
-			' . v_form_checkbox('reportreason_8', array('nowrapper' => true, 'value' => 1, 'values' => array(
+			' . $this->v_utils->v_form_checkbox('reportreason_8', array('nowrapper' => true, 'value' => 1, 'values' => array(
 				[
 					'id' => 1,
 					'name' => 'von BetriebsmitarbeiterInnen'],
@@ -186,14 +186,14 @@ class ReportView extends View
 
 		$out .= '</ul>';
 
-		return v_field($out, 'Alle Meldungen');
+		return $this->v_utils->v_field($out, 'Alle Meldungen');
 	}
 
 	public function listReports($reports)
 	{
-		addStyle('#table td{ cursor:pointer; }');
+		$this->func->addStyle('#table td{ cursor:pointer; }');
 
-		addJs('
+		$this->func->addJs('
 			$("#table tr").click(function(){
 				rid = parseInt($(this).children("td:first").children("input:first").val());
 				ajreq("loadreport",{id:rid});
@@ -203,20 +203,20 @@ class ReportView extends View
 		$rows = array();
 		foreach ($reports as $r) {
 			$rows[] = array(
-				['cnt' => '<input type="hidden" class="rid" name="rid" value="' . $r['id'] . '"><span class="photo"><a title="' . $r['fs_name'] . ' ' . $r['fs_nachname'] . '" href="#" onclick="profile(' . (int)$r['fs_id'] . ');return false;"><img id="miniq-' . $r['fs_id'] . '" src="' . img($r['fs_photo']) . '" /></a></span>'],
-				['cnt' => '<span class="photo"><a title="' . $r['rp_name'] . ' ' . $r['rp_nachname'] . '" href="#" onclick="profile(' . (int)$r['rp_id'] . ');return false;"><img id="miniq-' . $r['rp_id'] . '" src="' . img($r['rp_photo']) . '" /></a></span>'],
-				['cnt' => tt($r['msg'], 50)],
-				['cnt' => '<span style="display:none;">a' . $r['time_ts'] . ' </span>' . niceDateShort($r['time_ts']) . ' Uhr'],
+				['cnt' => '<input type="hidden" class="rid" name="rid" value="' . $r['id'] . '"><span class="photo"><a title="' . $r['fs_name'] . ' ' . $r['fs_nachname'] . '" href="#" onclick="profile(' . (int)$r['fs_id'] . ');return false;"><img id="miniq-' . $r['fs_id'] . '" src="' . $this->func->img($r['fs_photo']) . '" /></a></span>'],
+				['cnt' => '<span class="photo"><a title="' . $r['rp_name'] . ' ' . $r['rp_nachname'] . '" href="#" onclick="profile(' . (int)$r['rp_id'] . ');return false;"><img id="miniq-' . $r['rp_id'] . '" src="' . $this->func->img($r['rp_photo']) . '" /></a></span>'],
+				['cnt' => $this->func->tt($r['msg'], 50)],
+				['cnt' => '<span style="display:none;">a' . $r['time_ts'] . ' </span>' . $this->func->niceDateShort($r['time_ts']) . ' Uhr'],
 				['cnt' => $r['fs_stadt']],
 				['cnt' => $r['b_name']],
 			);
 		}
 
-		$table = v_tablesorter(array(
+		$table = $this->v_utils->v_tablesorter(array(
 			array('name' => 'Über', 'width' => 40),
 			array('name' => 'Von', 'width' => 40),
-			array('name' => s('message')),
-			array('name' => s('datetime'), 'width' => 80),
+			array('name' => $this->func->s('message')),
+			array('name' => $this->func->s('datetime'), 'width' => 80),
 			array('name' => 'FS Wohnort', 'width' => 80),
 			array('name' => 'Stammbezirk', 'width' => 40)
 		), $rows, array('pager' => true));

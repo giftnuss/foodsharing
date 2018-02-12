@@ -37,7 +37,7 @@ class BellModel extends Model
 				hb.bell_id = b.id
 	
 			AND
-				hb.foodsaver_id = ' . (int)fsId() . '
+				hb.foodsaver_id = ' . (int)$this->func->fsId() . '
 	
 			ORDER BY b.`time` DESC
 			' . $limit . '
@@ -94,7 +94,7 @@ class BellModel extends Model
 
 	public function delbell($id)
 	{
-		return $this->del('DELETE FROM `' . PREFIX . 'foodsaver_has_bell` WHERE `bell_id` = ' . (int)$id . ' AND foodsaver_id = ' . (int)fsId());
+		return $this->del('DELETE FROM `' . PREFIX . 'foodsaver_has_bell` WHERE `bell_id` = ' . (int)$id . ' AND foodsaver_id = ' . (int)$this->func->fsId());
 	}
 
 	private function setBellsAsSeen($bids)

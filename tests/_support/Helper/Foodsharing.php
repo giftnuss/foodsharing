@@ -8,6 +8,7 @@ use Faker;
 class Foodsharing extends \Codeception\Module\Db
 {
 	public $faker;
+	private $email_counter = 1;
 
 	public function __construct($moduleContainer, $config = null)
 	{
@@ -22,9 +23,22 @@ class Foodsharing extends \Codeception\Module\Db
 			DELETE FROM fs_foodsaver_has_bezirk;
 			DELETE FROM fs_foodsaver_has_conversation;
 			DELETE FROM fs_conversation;
+			DELETE FROM fs_msg;
 			DELETE FROM fs_betrieb_team;
 			DELETE FROM fs_betrieb;
 			DELETE FROM fs_abholer;
+			DELETE FROM fs_abholzeiten;
+			DELETE FROM fs_botschafter;
+			DELETE FROM fs_theme_post;
+			DELETE FROM fs_bezirk_has_theme;
+			DELETE FROM fs_theme;
+			DELETE FROM fs_betrieb_notiz;
+			DELETE FROM fs_fairteiler;
+			DELETE FROM fs_fairteiler_follower;
+			DELETE FROM fs_fairteiler_has_wallpost;
+			DELETE FROM fs_wallpost;
+			DELETE FROM fs_basket;
+			DELETE FROM fs_basket_has_wallpost;
 		', []);
 	}
 
@@ -42,7 +56,7 @@ class Foodsharing extends \Codeception\Module\Db
 			$pass = 'password';
 		}
 		$params = array_merge([
-			'email' => $this->faker->email,
+			'email' => ($this->email_counter++) . '.' . $this->faker->email,
 			'bezirk_id' => 0,
 			'name' => $this->faker->firstName,
 			'nachname' => $this->faker->lastName,
@@ -52,13 +66,18 @@ class Foodsharing extends \Codeception\Module\Db
 			'stadt' => $this->faker->city,
 			'lat' => $this->faker->latitude,
 			'lon' => $this->faker->longitude,
-			'anmeldedatum' => $this->toDateTime(),
-			'geb_datum' => $this->faker->date($format = 'Y-m-d', $max = '-18 years'),
+			'anmeldedatum' => $this->faker->dateTimeBetween('-5 years', '-5 days'),
+			'geb_datum' => $this->faker->dateTimeBetween('-80 years', '-18 years'),
+			'last_login' => $this->faker->dateTimeBetween('-1 years', '-1 hours'),
 			'anschrift' => $this->faker->streetName,
 			'handy' => $this->faker->phoneNumber,
+			'photo_public' => 1,
 			'active' => 1,
 		], $extra_params);
 		$params['passwd'] = $this->encryptMd5($params['email'], $pass);
+		$params['geb_datum'] = $this->toDateTime($params['geb_datum']);
+		$params['last_login'] = $this->toDateTime($params['last_login']);
+		$params['anmeldedatum'] = $this->toDateTime($params['anmeldedatum']);
 		$id = $this->haveInDatabase('fs_foodsaver', $params);
 		$params['id'] = $id;
 
@@ -125,50 +144,45 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
-	/** creates a store in given bezirk.
-	 * Does not care about handling anything related like conversations etc.
-	 *
-	 * @param $bezirk_id
-	 * @param array $extra_params
-	 *
-	 * @return array
-	 */
-	public function createStore($bezirk_id, $extra_params = [])
+	public function createStore($bezirk_id, $team_conversation = null, $springer_conversation = null, $extra_params = [])
 	{
 		$params = array_merge([
-			'betrieb_status_id' => 1,
-			'status' => 1, // same as betrieb_status_id
-			'added' => '2017-01-03',
-			'plz' => '',
-			'stadt' => '',
-			'str' => '',
-			'hsnr' => '',
-			'lat' => '',
-			'lon' => '',
-			'name' => 'betrieb_' . $this->faker->name,
-			'status_date' => '2017-01-03',
-			'ansprechpartner' => '',
-			'telefon' => '',
-			'fax' => '',
-			'email' => '',
-			'begin' => '0000-00-00',
+			'betrieb_status_id' => $this->faker->numberBetween(0, 6),
+			'status' => 1,
+			'added' => $this->faker->dateTime(),
+			'plz' => $this->faker->postcode(),
+			'stadt' => $this->faker->city(),
+			'str' => $this->faker->streetAddress(),
+			'hsnr' => $this->faker->numberBetween(0, 1000),
+			'lat' => $this->faker->latitude(),
+			'lon' => $this->faker->longitude(),
+			'name' => 'betrieb_' . $this->faker->company(),
+			'status_date' => $this->faker->dateTime(),
+			'ansprechpartner' => $this->faker->name(),
+			'telefon' => $this->faker->phoneNumber(),
+			'fax' => $this->faker->phoneNumber(),
+			'email' => $this->faker->email(),
+			'begin' => $this->faker->date('Y-m-d'),
 			'besonderheiten' => '',
 			'public_info' => '',
 			'public_time' => 0,
 			'ueberzeugungsarbeit' => 0,
 			'presse' => 0,
 			'sticker' => 0,
-			'abholmenge' => 0,
+			'abholmenge' => $this->faker->numberBetween(0, 70),
 			'team_status' => 1,
 			'prefetchtime' => 1209600,
 
 			// relations
 			'bezirk_id' => $bezirk_id,
-			'team_conversation_id' => null,
-			'springer_conversation_id' => null,
+			'team_conversation_id' => $team_conversation,
+			'springer_conversation_id' => $springer_conversation,
 			'kette_id' => 0,
 			'betrieb_kategorie_id' => 0,
 		], $extra_params);
+		$params['status_date'] = $this->toDateTime($params['status_date']);
+		$params['added'] = $this->toDateTime($params['added']);
+
 		$params['id'] = $this->haveInDatabase('fs_betrieb', $params);
 
 		return $params;
@@ -196,15 +210,51 @@ class Foodsharing extends \Codeception\Module\Db
 		}
 	}
 
-	public function addCollector($user, $store, $date, $extra_params = [])
+	public function addCollector($user, $store, $extra_params = [])
 	{
 		$params = array_merge([
 			'foodsaver_id' => $user,
 			'betrieb_id' => $store,
-			'date' => $date,
+			'date' => $this->faker->dateTime(),
 			'confirmed' => 1
 		], $extra_params);
+		$params['date'] = $this->toDateTime($params['date']);
+
 		$id = $this->haveInDatabase('fs_abholer', $params);
+		$params['id'] = $id;
+
+		return $params;
+	}
+
+	public function addStoreNotiz($user, $store, $extra_params = [])
+	{
+		$params = array_merge([
+			'foodsaver_id' => $user,
+			'betrieb_id' => $store,
+			'milestone' => 0,
+			'text' => $this->faker->realText(100),
+			'zeit' => $this->faker->dateTime(),
+			'last' => 0, // should be 1 for newest entry, can't do that here though
+			], $extra_params);
+		$params['zeit'] = $this->toDateTime($params['zeit']);
+
+		$id = $this->haveInDatabase('fs_betrieb_notiz', $params);
+		$params['id'] = $id;
+
+		return $params;
+	}
+
+
+	public function addRecurringPickup($store, $extra_params = [])
+	{
+		$params = array_merge([
+			'betrieb_id' => $store,
+			'dow' => $this->faker->numberBetween(0,6),
+			'time' => $this->faker->date($format = 'H:i:s', $max = 'now'),
+			'fetcher' => $this->faker->numberBetween(1,8),
+		], $extra_params);
+
+		$id = $this->haveInDatabase('fs_abholzeiten', $params);
 		$params['id'] = $id;
 
 		return $params;
@@ -262,52 +312,74 @@ class Foodsharing extends \Codeception\Module\Db
 		}
 	}
 
-	public function addForumTheme($bezirk_id, $fs_id, $title, $text, $date = null, $bot_theme = false)
+	public function addForumTheme($bezirk_id, $fs_id, $bot_theme = false, $extra_params = [])
 	{
-		$v = [
+		$params = array_merge([
 			'foodsaver_id' => $fs_id,
-			'name' => $title,
-			'time' => $this->toDateTime($date),
+			'name' => $this->faker->sentence(),
+			'time' => $this->faker->dateTime(),
 			'active' => '1',
-		];
-		$theme_id = $this->haveInDatabase('fs_theme', $v);
-		$v = [
+		], $extra_params);
+		$params['time'] = $this->toDateTime($params['time']);
+
+		$theme_id = $this->haveInDatabase('fs_theme', $params);
+
+		$this->haveInDatabase('fs_bezirk_has_theme', [
 			'theme_id' => $theme_id,
 			'bezirk_id' => $bezirk_id,
 			'bot_theme' => ($bot_theme ? 1 : 0),
-		];
-		$this->haveInDatabase('fs_bezirk_has_theme', $v);
-		$this->addForumThemePost($theme_id, $fs_id, $text, $date);
+		]);
 
-		return $theme_id;
+		$post_params = [
+			'body' => $this->faker->realText(500),
+			'time' => $params['time'],
+		];
+		$this->addForumThemePost($theme_id, $fs_id, $post_params);
+
+		$params['post'] = $post_params;
+		$params['id'] = $theme_id;
+
+		return $params;
 	}
 
-	public function addForumThemePost($theme_id, $fs_id, $text, $date = null)
+	public function addForumThemePost($theme_id, $fs_id, $extra_params = [])
 	{
-		$v = [
+		$params = array_merge([
 			'theme_id' => $theme_id,
 			'foodsaver_id' => $fs_id,
-			'body' => $text,
-			'time' => $this->toDateTime($date),
-		];
-		$v['id'] = $this->haveInDatabase('fs_theme_post', $v);
-		$this->updateForumThemeWithPost($theme_id, $v);
+			'body' => $this->faker->realText(200),
+			'time' => $this->faker->dateTime(),
+		], $extra_params);
+		$params['time'] = $this->toDateTime($params['time']);
+
+		$params['id'] = $this->haveInDatabase('fs_theme_post', $params);
+
+		$this->updateForumThemeWithPost($theme_id, $params);
+
+		return $params;
 	}
 
-	public function createConversation($extra_params = [])
+	public function createConversation($users, $extra_params = [])
 	{
 		$params = array_merge([
 			'locked' => 1,
-			'name' => 'betrieb_bla',
-			'start' => null,
-			'last' => null,
-			'last_foodsaver_id' => null,
-			'start_foodsaver_id' => null,
+			'name' => null,
+			'start' => $this->faker->dateTime(),
+			'last' => $this->faker->dateTime(),
+			'last_foodsaver_id' => $users[0],
+			'start_foodsaver_id' => $users[0],
 			'last_message_id' => null,
 			'last_message' => '',
 			'member' => '',
 		], $extra_params);
+		$params['start'] = $this->toDateTime($params['start']);
+		$params['last'] = $this->toDateTime($params['last']);
 		$id = $this->haveInDatabase('fs_conversation', $params);
+
+		foreach ($users as $user) {
+			$this->addUserToConversation($user, $id);
+		}
+
 		$params['id'] = $id;
 
 		return $params;
@@ -322,9 +394,145 @@ class Foodsharing extends \Codeception\Module\Db
 		], $extra_params);
 
 		$id = $this->haveInDatabase('fs_foodsaver_has_conversation', $params);
+
 		$params['id'] = $id;
 
 		return $params;
+	}
+
+	public function addConversationMessage($user, $conversation, $extra_params = [])
+	{
+		$params = array_merge([
+			'foodsaver_id' => $user,
+			'conversation_id' => $conversation,
+			'body' => $this->faker->realText(100),
+			'time' => $this->faker->dateTime()
+		], $extra_params);
+		$params['time'] = $this->toDateTime($params['time']);
+
+		$id = $this->haveInDatabase('fs_msg', $params);
+
+		$this->updateInDatabase('fs_conversation', [
+			'last_message' => $params['body'],
+			'last_message_id' => $id,
+			'last_foodsaver_id' => $user,
+			'last' => $params['time']
+		], ['id' => $conversation]);
+
+		$params['id'] = $id;
+
+		return $params;
+	}
+
+	public function createFairteiler($user, $bezirk, $extra_params = [])
+	{
+		$params = array_merge([
+			'bezirk_id' => $bezirk,
+			'name' => $this->faker->city(),
+			'desc' => $this->faker->text(200),
+			'status' => 1,
+			'anschrift' => $this->faker->address(),
+			'plz' => $this->faker->postcode(),
+			'ort' => $this->faker->city(),
+			'lat' => $this->faker->latitude(),
+			'lon' => $this->faker->longitude(),
+			'add_date' => $this->faker->dateTime(),
+			'add_foodsaver' => $user,
+		], $extra_params);
+		$params['add_date'] = $this->toDateTime($params['add_date']);
+
+		$id = $this->haveInDatabase('fs_fairteiler', $params);
+
+		$this->addFairteilerAdmin($user, $id);
+
+		$params['id'] = $id;
+
+		return $params;
+	}
+
+	public function addFairteilerFollower($user, $fairteiler, $extra_params = [])
+	{
+		$params = array_merge([
+			'fairteiler_id' => $fairteiler,
+			'foodsaver_id' => $user,
+			'type' => 1,
+			'infotype' => 1,
+		], $extra_params);
+		$this->haveInDatabase('fs_fairteiler_follower', $params);
+
+		return $params;
+	}
+
+	public function addFairteilerAdmin($user, $fairteiler, $extra_params = [])
+	{
+		return $this->addFairteilerFollower($user, $fairteiler, array_merge($extra_params, ['type' => 2]));
+	}
+
+	public function addFairteilerPost($user, $fairteiler, $extra_params = [])
+	{
+		$post = $this->createWallpost($user, $extra_params);
+		$this->haveInDatabase('fs_fairteiler_has_wallpost', [
+			'fairteiler_id' => $fairteiler,
+			'wallpost_id' => $post['id'],
+		]);
+
+		return $post;
+	}
+
+	public function createWallpost($user, $extra_params = [])
+	{
+		$params = array_merge([
+			'foodsaver_id' => $user,
+			'body' => $this->faker->realText(200),
+			'time' => $this->faker->dateTime(),
+		], $extra_params);
+		$params['time'] = $this->toDateTime($params['time']);
+
+		$id = $this->haveInDatabase('fs_wallpost', $params);
+
+		$params['id'] = $id;
+
+		return $params;
+	}
+
+	public function createFoodbasket($user, $bezirk = 241, $extra_params = [])
+	{
+		$params = array_merge([
+			'foodsaver_id' => $user,
+			'status' => 1,
+			'time' => $this->faker->dateTime($max = 'now'),
+			'until' => $this->faker->dateTimeBetween('now', '+14 days'),
+			'fetchtime' => null,
+			'description' => $this->faker->realText(200),
+			'picture' => null,
+			'tel' => $this->faker->phoneNumber(),
+			'handy' => $this->faker->phoneNumber(),
+			'contact_type' => 1,
+			'location_type' => 0,
+			'weight' => $this->faker->numberBetween(1, 100),
+			'lat' => $this->faker->latitude,
+			'lon' => $this->faker->longitude,
+			'bezirk_id' => $bezirk,
+		], $extra_params);
+		$params['time'] = $this->toDateTime($params['time']);
+		$params['until'] = $this->toDateTime($params['until']);
+
+		$id = $this->haveInDatabase('fs_basket', $params);
+
+		$params['id'] = $id;
+
+		return $params;
+	}
+
+	public function addFoodbasketWallpost($user, $foodbasket, $extra_params = [])
+	{
+		$post = $this->createWallpost($user, $extra_params);
+		$this->haveInDatabase('fs_basket_has_wallpost', [
+			'basket_id' => $foodbasket,
+			'wallpost_id' => $post['id'],
+		]);
+
+		return $post;
 	}
 
 	// =================================================================================================================
@@ -351,7 +559,14 @@ class Foodsharing extends \Codeception\Module\Db
 
 	private function toDateTime($date = null)
 	{
-		$dt = new DateTime($date);
+		if ($date === null) {
+			return null;
+		}
+		if ($date instanceof DateTime) {
+			$dt = $date;
+		} else {
+			$dt = new DateTime($date);
+		}
 
 		return $dt->format('Y-m-d H:i:s');
 	}

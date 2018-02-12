@@ -27,13 +27,13 @@ class MailboxXhr extends Control
 			return false;
 		}
 
-		if (!validEmail($_POST['email'])) {
+		if (!$this->func->validEmail($_POST['email'])) {
 			return array(
 				'status' => 1,
 				'script' => 'pulseError("Mit der E-Mail-Adresse stimmt etwas nicht!");'
 			);
 		} else {
-			libmail(false, $_POST['email'], $_POST['subject'], $_POST['message']);
+			$this->func->libmail(false, $_POST['email'], $_POST['subject'], $_POST['message']);
 
 			return array(
 				'status' => 1,
@@ -64,9 +64,9 @@ class MailboxXhr extends Control
 
 			$init = 'window.parent.mb_finishFile("' . $new_filename . '");';
 		} elseif (!$this->attach_allow($_FILES['etattach']['name'])) {
-			$init = 'window.parent.pulseInfo(\'' . jsSafe(s('wrong_file')) . '\');window.parent.mb_removeLast();';
+			$init = 'window.parent.pulseInfo(\'' . $this->func->jsSafe($this->func->s('wrong_file')) . '\');window.parent.mb_removeLast();';
 		} else {
-			$init = 'window.parent.pulseInfo(\'' . jsSafe(s('file_to_big')) . '\');window.parent.mb_removeLast();';
+			$init = 'window.parent.pulseInfo(\'' . $this->func->jsSafe($this->func->s('file_to_big')) . '\');window.parent.mb_removeLast();';
 		}
 
 		echo '<html><head>
@@ -173,7 +173,7 @@ class MailboxXhr extends Control
 				if ($sender != null && isset($sender['mailbox']) && isset($sender['host'])) {
 					$subject = 'Re: ' . trim(str_replace(array('Re:', 'RE:', 're:', 'aw:', 'Aw:', 'AW:'), '', $message['subject']));
 
-					$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von " . niceDate($message['time_ts']) . " ---------\n\n>\t" . str_replace("\n", "\n>\t", $message['body']);
+					$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von " . $this->func->niceDate($message['time_ts']) . " ---------\n\n>\t" . str_replace("\n", "\n>\t", $message['body']);
 
 					$mail = new AsyncMail();
 					$mail->setFrom($message['mailbox'] . '@' . DEFAULT_HOST, S::user('name'));
@@ -212,7 +212,7 @@ class MailboxXhr extends Control
 			sub		betr
 		 */
 
-		if ($last = (int)Mem::user(fsId(), 'mailbox-last')) {
+		if ($last = (int)Mem::user($this->func->fsId(), 'mailbox-last')) {
 			if ((time() - $last) < 15) {
 				return array(
 					'status' => 1,
@@ -221,7 +221,7 @@ class MailboxXhr extends Control
 			}
 		}
 
-		Mem::userSet(fsId(), 'mailbox-last', time());
+		Mem::userSet($this->func->fsId(), 'mailbox-last', time());
 
 		if ($this->model->mayMailbox($_POST['mb'])) {
 			if ($mailbox = $this->model->getMailbox($_POST['mb'])) {
@@ -271,7 +271,7 @@ class MailboxXhr extends Control
 
 				$to = array();
 				foreach ($an as $a) {
-					if (validEmail($a)) {
+					if ($this->func->validEmail($a)) {
 						$t = explode('@', $a);
 
 						$to[] = array(
@@ -304,7 +304,7 @@ class MailboxXhr extends Control
 					return array(
 						'status' => 1,
 						'script' => '
-									pulseInfo("' . s('send_success') . '");
+									pulseInfo("' . $this->func->s('send_success') . '");
 									mb_clearEditor();
 									mb_closeEditor();'
 					);
@@ -355,7 +355,7 @@ class MailboxXhr extends Control
 					}
 			
 					$("#message-body").dialog("option",{
-						title: \'' . jsSafe($mail['subject']) . '\',
+						title: \'' . $this->func->jsSafe($mail['subject']) . '\',
 						height: ($( window ).height()-40)
 					});
 					$(".mailbox-body").css({
@@ -407,7 +407,7 @@ class MailboxXhr extends Control
 
 		if (is_array($email)) {
 			foreach ($email as $e) {
-				if (validEmail($e)) {
+				if ($this->func->validEmail($e)) {
 					$this->model->addContact($e);
 					$mail->addRecipient($e);
 				}

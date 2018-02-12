@@ -151,13 +151,16 @@ If you want a bit of seed data to play with, run:
 ./scripts/seed
 ```
 
-It will give you three users you can sign in as:
+It will give you some users you can sign in as:
 
-| email               | password |
-|---------------------|----------|
-| user1@example.com   | user1    |
-| user2@example.com   | user2    |
-| userbot@example.com | userbot  |
+| email                | password |
+|----------------------|----------|
+| user1@example.com    | user     |
+| user2@example.com    | user     |
+| userbot@example.com  | user     |
+| userorga@example.com | user     |
+
+It also generates more users and data to fill the page with life (a bit at least). If you want to modify it, look at the `SeedCommand.php` file.
 
 To stop everything again just run:
 

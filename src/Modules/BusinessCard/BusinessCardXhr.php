@@ -35,17 +35,17 @@ class BusinessCardXhr extends Control
 				if ($mailbox !== false) {
 					if ($type == 'fs') {
 						if ($data['geschlecht'] == 2) {
-							$data['subtitle'] = sv('fs_for_w', $mailbox['name']);
+							$data['subtitle'] = $this->func->sv('fs_for_w', $mailbox['name']);
 						} else {
-							$data['subtitle'] = sv('fs_for', $mailbox['name']);
+							$data['subtitle'] = $this->func->sv('fs_for', $mailbox['name']);
 						}
 
 						$data['web'] = 'www.' . DEFAULT_HOST;
 					} elseif ($type == 'bot') {
 						if ($data['geschlecht'] == 2) {
-							$data['subtitle'] = sv('bot_for_w', $mailbox['name']);
+							$data['subtitle'] = $this->func->sv('bot_for_w', $mailbox['name']);
 						} else {
-							$data['subtitle'] = sv('bot_for', $mailbox['name']);
+							$data['subtitle'] = $this->func->sv('bot_for', $mailbox['name']);
 						}
 						$data['email'] = $mailbox['email'];
 						$data['web'] = 'www.' . DEFAULT_HOST . '/' . $mailbox['mailbox'];
@@ -119,7 +119,7 @@ class BusinessCardXhr extends Control
 		return array(
 			'status' => 1,
 			'script' => '
-				pulseInfo(\'' . jsSafe(s('generation_success')) . '\');
+				pulseInfo(\'' . $this->func->jsSafe($this->func->s('generation_success')) . '\');
 				u_download("' . $type . ':' . $data['id'] . '");'
 		);
 	}

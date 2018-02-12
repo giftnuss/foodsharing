@@ -1,3 +1,4 @@
 <?php
 
-loadApp('Report');
+global $g_func;
+$g_func->loadApp('Report');

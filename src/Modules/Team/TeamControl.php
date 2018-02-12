@@ -14,13 +14,13 @@ class TeamControl extends Control
 
 		parent::__construct();
 
-		addScript('/js/jquery.qrcode.min.js');
+		$this->func->addScript('/js/jquery.qrcode.min.js');
 	}
 
 	public function index()
 	{
-		addBread(s('team'), '/team');
-		addTitle(s('team'));
+		$this->func->addBread($this->func->s('team'), '/team');
+		$this->func->addTitle($this->func->s('team'));
 
 		// Three types of pages:
 		// a) /team - displays vorstand
@@ -30,33 +30,33 @@ class TeamControl extends Control
 		if ($id = $this->uriInt(2)) {
 			// Type c, display user
 			if ($user = $this->model->getUser($id)) {
-				addTitle($user['name']);
-				addBread($user['name']);
-				addContent($this->view->user($user));
+				$this->func->addTitle($user['name']);
+				$this->func->addBread($user['name']);
+				$this->func->addContent($this->view->user($user));
 
 				if ($user['contact_public']) {
-					addContent($this->view->contactForm($user));
+					$this->func->addContent($this->view->contactForm($user));
 				}
 			} else {
-				go('/team');
+				$this->func->go('/team');
 			}
 		} else {
 			if ($teamType = $this->uriStr(2)) {
 				if ($teamType == 'ehemalige') {
 					// Type b, display "Ehemalige"
-					addBread(s('Ehemalige'), '/team/ehemalige');
-					addTitle(s('Ehemalige'));
+					$this->func->addBread($this->func->s('Ehemalige'), '/team/ehemalige');
+					$this->func->addTitle($this->func->s('Ehemalige'));
 					$this->displayTeamContent(1564, 54);
 				} else {
-					addContent('Page not found');
+					$this->func->addContent('Page not found');
 				}
 			} else {
 				// Type a, display "Vorstand" and "Aktive"
-				addContent("<div id='vorstand'>");
+				$this->func->addContent("<div id='vorstand'>");
 				$this->displayTeamContent(1373, 39);
-				addContent("</div><div id='aktive'>");
+				$this->func->addContent("</div><div id='aktive'>");
 				$this->displayTeamContent(1565, 53);
-				addContent('</div>');
+				$this->func->addContent('</div>');
 			}
 		}
 	}
@@ -65,7 +65,7 @@ class TeamControl extends Control
 	{
 		if ($team = $this->model->getTeam($bezirkId)) {
 			$db = new ContentModel();
-			addContent($this->view->teamlist($team, $db->getContent($contentId)));
+			$this->func->addContent($this->view->teamlist($team, $db->getContent($contentId)));
 		}
 	}
 }

@@ -18,6 +18,7 @@ $finder = PhpCsFixer\Finder::create()
     ->notPath('lib/minify')
     ->notPath('lib/font')
     ->notPath('tests/_support/_generated')
+    ->notPath('src/Lib/Flourish')
     ->in(__DIR__)
 ;
 

@@ -41,7 +41,7 @@ echo "Checking code style"
 exec-in-container-asroot app scripts/php-cs-fixer.ci.sh --cache-file=vendor/php-cs-cache fix
 
 echo "Running tests"
-exec-in-container app vendor/bin/codecept run "$@"
+exec-in-container app vendor/bin/codecept run --xml --html "$@"
 
 echo "Running chat tests"
 run-in-container chat npm test

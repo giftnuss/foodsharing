@@ -6,9 +6,6 @@ $I->wantTo('see that timezones match all to Europe/Berlin');
 
 $foodsaver = $I->createFoodsaver();
 $description = 'test foodbasket with bananas';
-$min_time = new DateTime('now', new DateTimeZone('Europe/Berlin'));
-$max_time = new DateTime('now', new DateTimeZone('Europe/Berlin'));
-$max_time->add(new DateInterval('PT5S'));
 
 $I->login($foodsaver['email'], 'password');
 $I->amOnPage('/');
@@ -20,6 +17,10 @@ $I->click('Neuen Essenskorb anlegen');
 $I->waitForText('Essenskorb anbieten');
 
 $I->fillField('description', $description);
+
+$min_time = new DateTime('now', new DateTimeZone('Europe/Berlin'));
+$max_time = new DateTime('now', new DateTimeZone('Europe/Berlin'));
+$max_time->add(new DateInterval('PT15S'));
 
 $I->click('Essenskorb veröffentlichen');
 

@@ -61,7 +61,7 @@ class WorkGroupXhr extends Control
 
 				if ($groupmail = $this->model->getGroupMail($_GET['id'])) {
 					if ($group = $this->model->getGroup($_GET['id'])) {
-						if ($fs = $this->model->getValues(array('id', 'name', 'email'), 'foodsaver', fsId())) {
+						if ($fs = $this->model->getValues(array('id', 'name', 'email'), 'foodsaver', $this->func->fsId())) {
 							if ($email = $this->model->getFsMail($fs['id'])) {
 								$fs['email'] = $email;
 							}
@@ -75,7 +75,7 @@ class WorkGroupXhr extends Control
 
 							$this->model->groupApply($group['id'], implode("\n\n", $content));
 
-							libmail(array(
+							$this->func->libmail(array(
 								'email' => $fs['email'],
 								'email_name' => $fs['name']
 							), $groupmail, 'Bewerbung für ' . $group['name'], nl2br($fs['name'] . ' möchte gerne in der Arbeitsgruppe ' . $group['name'] . ' mitmachen.' . "\n\n" . implode("\n\n", $content)));
@@ -100,7 +100,7 @@ class WorkGroupXhr extends Control
 			$message = strip_tags($_GET['msg']);
 
 			if (!empty($message)) {
-				tplMail(24, $group['email'], array(
+				$this->func->tplMail(24, $group['email'], array(
 					'gruppenname' => $group['name'],
 					'message' => $message
 				), S::user('email'));

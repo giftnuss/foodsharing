@@ -5,6 +5,9 @@
 // TODO: maybe have a default env?
 // TODO: check if there is not already a concept of app environment elsewhere
 
+use DebugBar\DataCollector\PDO\TraceablePDO;
+use Foodsharing\DI;
+
 $FS_ENV = getenv('FS_ENV');
 $env_filename = 'config.inc.' . $FS_ENV . '.php';
 
@@ -39,3 +42,30 @@ if (defined('SENTRY_URL')) {
 }
 
 define('FPDF_FONTPATH', __DIR__ . '/lib/font/');
+
+/* global definitions for Foodsharing\Lib\Func until they might
+go away or somewhere else :) */
+define('CNT_MAIN', 0);
+define('CNT_RIGHT', 1);
+define('CNT_TOP', 2);
+define('CNT_BOTTOM', 3);
+define('CNT_LEFT', 4);
+define('CNT_OVERTOP', 5);
+
+/* this initializes the static class - can be refactored when we have DI, should be fine for now */
+Foodsharing\Lib\Db\Mem::connect();
+
+$dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_DB;
+if ($FS_ENV === 'dev') {
+	// In development we need to wrap the PDO instance for the DebugBar
+	$pdo = new PDO($dsn, DB_USER, DB_PASS);
+	$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$traceablePDO = new TraceablePDO($pdo);
+	DI::$shared->useTraceablePDO($traceablePDO);
+	Foodsharing\Debug\DebugBar::register($traceablePDO);
+} else {
+	DI::$shared->usePDO($dsn, DB_USER, DB_PASS);
+}
+
+DI::$shared->compile();
