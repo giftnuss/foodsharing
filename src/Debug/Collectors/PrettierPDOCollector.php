@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Debug\Collectors;
 
-
 use DebugBar\DataCollector\PDO\PDOCollector;
 
 class PrettierPDOCollector extends PDOCollector
@@ -13,6 +12,7 @@ class PrettierPDOCollector extends PDOCollector
 		foreach ($data['statements'] as $i => $statement) {
 			$data['statements'][$i]['sql'] = $this->formatQueryStr($statement['sql']);
 		}
+
 		return $data;
 	}
 
@@ -20,5 +20,4 @@ class PrettierPDOCollector extends PDOCollector
 	{
 		return strtr(preg_replace("/^\W+/", '', $str), ["\t" => '', "\r" => '', "\n" => ' ']);
 	}
-
 }

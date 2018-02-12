@@ -10,5 +10,4 @@ abstract class BaseGateway
 	{
 		$this->db = $db;
 	}
-
 }

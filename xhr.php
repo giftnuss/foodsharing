@@ -38,7 +38,7 @@ if (isset($_GET['f'])) {
 			ob_end_clean();
 
 			echo $page;
-			//echo 'check';die();
+		//echo 'check';die();
 		} else {
 			echo $func($_GET);
 		}

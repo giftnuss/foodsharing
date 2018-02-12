@@ -2,7 +2,6 @@
 
 namespace Helper;
 
-use Foodsharing\DI;
 use PDO;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -10,7 +9,6 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 class Container extends \Codeception\Module\Db
 {
-
 	private $container;
 
 	public function __construct($moduleContainer, $config = null)

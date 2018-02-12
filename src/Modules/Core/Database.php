@@ -2,12 +2,10 @@
 
 namespace Foodsharing\Modules\Core;
 
-
 use PDO;
 
 class Database
 {
-
 	private $pdo;
 
 	public function __construct(PDO $pdo)
@@ -35,8 +33,7 @@ class Database
 		$statement = $this->pdo->prepare($query);
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		$statement->execute($params);
+
 		return $statement;
 	}
-
-
 }

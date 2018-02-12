@@ -2,12 +2,10 @@
 
 namespace Foodsharing\Modules\Dashboard;
 
-
 use Foodsharing\Modules\Core\BaseGateway;
 
 class DashboardGateway extends BaseGateway
 {
-
 	public function getUser($id)
 	{
 		return $this->db->fetch('
@@ -98,5 +96,4 @@ class DashboardGateway extends BaseGateway
 			LIMIT 6
 		', [':id' => $id, ':distance' => $distance, ':lat' => $loc['lat'], ':lon' => $loc['lon']]);
 	}
-
 }

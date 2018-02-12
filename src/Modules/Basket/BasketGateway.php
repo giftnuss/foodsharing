@@ -2,12 +2,10 @@
 
 namespace Foodsharing\Modules\Basket;
 
-
 use Foodsharing\Modules\Core\BaseGateway;
 
 class BasketGateway extends BaseGateway
 {
-
 	public function getUpdateCount($id)
 	{
 		return (int)$this->db->fetchFirstColumn('

@@ -6,7 +6,6 @@ use Foodsharing\Modules\Core\BaseGateway;
 
 class ContentGateway extends BaseGateway
 {
-
 	public function getContent($id)
 	{
 		return $this->db->fetch('
@@ -15,5 +14,4 @@ class ContentGateway extends BaseGateway
 				WHERE `id` = :id
 			', [':id' => $id]);
 	}
-
 }

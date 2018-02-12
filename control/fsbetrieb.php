@@ -438,7 +438,7 @@ if (getAction('new') && (S::may('orga') || isBotFor($g_data['bezirk_id']))) {
 				
 					<div class="posts"></div>
 				</div>', 'Pinnwand', $opt));
-			/*pinnwand ende*/
+		/*pinnwand ende*/
 		} else {
 			addContent(v_info('Du bist momentan auf der Warteliste, sobald Hilfe benötigt wird wirst Du kontaktiert.'));
 		}
