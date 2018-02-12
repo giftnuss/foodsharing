@@ -18,6 +18,7 @@
 - Remove old user registration code !246 @NerdyProjects
 - Add initial gateway database classes using PDO !264 @nicksellen
 - Add Symfony dependency injection container !264 @nicksellen
+- Remove unused fpdf font data files !253 @NerdyProjects
 
 ## Dev/Test/CI stuff
 
