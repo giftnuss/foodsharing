@@ -7,6 +7,7 @@
 ## Features
 - Removed the working groups from the team->teammember page !262 @BassTii
 - Changed way of gendering in passport from "/" to "_" !251 @D0nPiano
+- auto adding of CH-BOTs and ZH-BIEBs to their working groups. !271 by @peter.toennies
 
 ## Bugfixes
 - Reduce size of static images by lossless recompression with trimage !245 @NerdyProjects
