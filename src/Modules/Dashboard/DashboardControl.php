@@ -22,7 +22,7 @@ class DashboardControl extends Control
 		parent::__construct();
 
 		if (!S::may()) {
-			go('/');
+			$this->func->go('/');
 		}
 
 		$this->user = $this->model->getUser();
@@ -30,8 +30,8 @@ class DashboardControl extends Control
 
 	public function index()
 	{
-		addScript('/js/contextmenu/jquery.contextMenu.js');
-		addCss('/js/contextmenu/jquery.contextMenu.css');
+		$this->func->addScript('/js/contextmenu/jquery.contextMenu.js');
+		$this->func->addCss('/js/contextmenu/jquery.contextMenu.css');
 
 		$check = false;
 
@@ -55,25 +55,25 @@ class DashboardControl extends Control
 			(
 				$is_fs
 				&&
-				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)fsId()) == 0
+				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)$this->func->fsId()) == 0
 			)
 			||
 			(
 				$is_bieb
 				&&
-				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 2 AND status = 1 AND foodsaver_id = ' . (int)fsId()) == 0
+				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 2 AND status = 1 AND foodsaver_id = ' . (int)$this->func->fsId()) == 0
 			)
 			||
 			(
 				$is_bot
 				&&
-				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 3 AND status = 1 AND foodsaver_id = ' . (int)fsId()) == 0
+				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 3 AND status = 1 AND foodsaver_id = ' . (int)$this->func->fsId()) == 0
 			)
 		) {
 			$check = true;
 
 			if ($is_bot) {
-				addJs('ajreq("endpopup",{app:"quiz"});');
+				$this->func->addJs('ajreq("endpopup",{app:"quiz"});');
 			}
 		}
 
@@ -85,7 +85,7 @@ class DashboardControl extends Control
 				'{ANREDE}'
 			), array(
 				S::user('name'),
-				s('anrede_' . S::user('gender'))
+				$this->func->s('anrede_' . S::user('gender'))
 			), $cnt['body']);
 
 			if (S::option('quiz-infobox-seen')) {
@@ -93,17 +93,17 @@ class DashboardControl extends Control
 			} else {
 				$cnt['body'] = $cnt['body'] . '<p><a href="#" onclick="ajreq(\'quizpopup\',{app:\'quiz\'});return false;">Weiter zum Quiz</a></p><p><a href="#"onclick="$(this).parent().parent().hide();ajax.req(\'quiz\',\'hideinfo\');return false;"><i class="fa fa-check-square-o"></i> Hinweis gelesen und nicht mehr anzeigen</a></p>';
 			}
-			addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
+			$this->func->addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
 		}
 
-		addBread(s('dashboard'));
-		addTitle(s('dashboard'));
+		$this->func->addBread($this->func->s('dashboard'));
+		$this->func->addTitle($this->func->s('dashboard'));
 		/*
 		 * User is foodsaver
 		 */
 
-		if ($this->user['rolle'] > 0 && !getBezirkId()) {
-			addJs('becomeBezirk();');
+		if ($this->user['rolle'] > 0 && !$this->func->getBezirkId()) {
+			$this->func->addJs('becomeBezirk();');
 		}
 
 		if (S::may('fs')) {
@@ -117,24 +117,24 @@ class DashboardControl extends Control
 	private function dashFs()
 	{
 		$this->setContentWidth(8, 8);
-		$subtitle = s('no_saved_food');
+		$subtitle = $this->func->s('no_saved_food');
 
 		if ($this->user['stat_fetchweight'] > 0) {
-			$subtitle = sv('saved_food', array('weight' => $this->user['stat_fetchweight']));
+			$subtitle = $this->func->sv('saved_food', array('weight' => $this->user['stat_fetchweight']));
 		}
 
-		addContent(
+		$this->func->addContent(
 			$this->view->topbar(
-				sv('welcome', array('name' => $this->user['name'])),
+				$this->func->sv('welcome', array('name' => $this->user['name'])),
 				$subtitle,
-				avatar($this->user, 50, '/img/fairteiler50x50.png')
+				$this->func->avatar($this->user, 50, '/img/fairteiler50x50.png')
 			),
 			CNT_TOP
 		);
 
-		addContent($this->view->becomeFoodsaver());
+		$this->func->addContent($this->view->becomeFoodsaver());
 
-		addContent($this->view->foodsharerMenu(), CNT_LEFT);
+		$this->func->addContent($this->view->foodsharerMenu(), CNT_LEFT);
 
 		$db = new ContentModel();
 
@@ -145,34 +145,34 @@ class DashboardControl extends Control
 			'{ANREDE}'
 		), array(
 			S::user('name'),
-			s('anrede_' . S::user('gender'))
+			$this->func->s('anrede_' . S::user('gender'))
 		), $cnt['body']);
 
-		addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
+		$this->func->addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
 
 		$this->view->updates();
 
 		if ($this->user['lat'] && ($baskets = $this->model->listCloseBaskets(50))) {
-			addContent($this->view->closeBaskets($baskets), CNT_LEFT);
+			$this->func->addContent($this->view->closeBaskets($baskets), CNT_LEFT);
 		} else {
 			if ($baskets = $this->model->getNewestFoodbaskets()) {
-				addContent($this->view->newBaskets($baskets), CNT_LEFT);
+				$this->func->addContent($this->view->newBaskets($baskets), CNT_LEFT);
 			}
 		}
 	}
 
 	private function dashFoodsaver()
 	{
-		addBread('Dashboard');
-		addTitle('Dashboard');
+		$this->func->addBread('Dashboard');
+		$this->func->addTitle('Dashboard');
 
-		$val = $this->model->getValues(array('photo_public', 'anschrift', 'plz', 'lat', 'lon', 'stadt'), 'foodsaver', fsId());
+		$val = $this->model->getValues(array('photo_public', 'anschrift', 'plz', 'lat', 'lon', 'stadt'), 'foodsaver', $this->func->fsId());
 
 		if (empty($val['lat']) || empty($val['lon']) ||
 			($val['lat']) == '50.05478727164819' && $val['lon'] == '10.3271484375'
 		) {
-			info('Bitte überprüfe Deine Adresse, die Koordinaten konnten nicht ermittelt werden.');
-			go('/?page=settings&sub=general&');
+			$this->func->info('Bitte überprüfe Deine Adresse, die Koordinaten konnten nicht ermittelt werden.');
+			$this->func->go('/?page=settings&sub=general&');
 		}
 
 		global $g_data;
@@ -190,7 +190,7 @@ class DashboardControl extends Control
 		}
 
 		if (empty($val['lat']) || empty($val['lon'])) {
-			addJs('
+			$this->func->addJs('
 		$("#plz, #stadt, #anschrift, #hsnr").bind("blur",function(){
 			if($("#plz").val() != "" && $("#stadt").val() != "" && $("#anschrift").val() != "")
 			{
@@ -222,7 +222,7 @@ class DashboardControl extends Control
 		if (!empty($elements)) {
 			$out = $this->v_utils->v_form('grabInfo', $elements, array('submit' => 'Speichern'));
 
-			addJs('
+			$this->func->addJs('
 		$("#grab-info-link").fancybox({
 			closeClick:false,
 			closeBtn:true,
@@ -260,7 +260,7 @@ class DashboardControl extends Control
 		
 		');
 
-			addHidden('
+			$this->func->addHidden('
 			<div id="grab-info">
 				<div class="popbox">
 					<h3>Bitte noch ein paar Daten vervollständigen bzw. überprüfen!</h3>
@@ -270,8 +270,8 @@ class DashboardControl extends Control
 			</div><a id="grab-info-link" href="#grab-info">&nbsp;</a>');
 		}
 
-		if (!getBezirkId()) {
-			addJs('becomeBezirk();');
+		if (!$this->func->getBezirkId()) {
+			$this->func->addJs('becomeBezirk();');
 		} /*
 		 * check is there are Betrieb not ordered to an bezirk
 		 */
@@ -282,22 +282,22 @@ class DashboardControl extends Control
 			}
 			if (!empty($ids)) {
 				if ($bids = $this->model->q('SELECT id,name,bezirk_id,str,hsnr FROM fs_betrieb WHERE id IN(' . implode(',', $ids) . ') AND ( bezirk_id = 0 OR bezirk_id IS NULL)')) {
-					addJs('ajax.req("betrieb","setbezirkids");');
+					$this->func->addJs('ajax.req("betrieb","setbezirkids");');
 				}
 			}
 		}
 
 		/* Einladungen */
 		if ($invites = $this->model->getInvites()) {
-			addContent($this->view->u_invites($invites));
+			$this->func->addContent($this->view->u_invites($invites));
 		}
 
 		/* Events */
 		if ($events = $this->model->getNextEvents()) {
-			addContent($this->view->u_events($events));
+			$this->func->addContent($this->view->u_events($events));
 		}
 
-		addStyle('
+		$this->func->addStyle('
 			#activity ul.linklist li span.time{margin-left:58px;display:block;margin-top:10px;}
 	
 			#activity ul.linklist li span.qr
@@ -434,10 +434,10 @@ class DashboardControl extends Control
 				}
 			}
 		');
-		addScript('/js/jquery.tinysort.min.js');
-		addScript('/js/activity.js');
-		addJs('activity.init();');
-		addContent('
+		$this->func->addScript('/js/jquery.tinysort.min.js');
+		$this->func->addScript('/js/activity.js');
+		$this->func->addJs('activity.init();');
+		$this->func->addContent('
 		<div class="head ui-widget-header ui-corner-top">
 			Updates-Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>
 		</div>
@@ -449,7 +449,7 @@ class DashboardControl extends Control
 		/*
 		 * Top
 		*/
-		$me = $this->model->getFoodsaverBasics(fsId());
+		$me = $this->model->getFoodsaverBasics($this->func->fsId());
 		if ($me['rolle'] < 0 || $me['rolle'] > 4) {
 			$me['rolle'] = 0;
 		}
@@ -465,12 +465,12 @@ class DashboardControl extends Control
 			$gerettet = '';
 		}
 
-		addContent(
+		$this->func->addContent(
 			'
 		<div class="top corner-all">
-			<div class="img">' . avatar($me, 50) . '</div>
+			<div class="img">' . $this->func->avatar($me, 50) . '</div>
 				<h3>Hallo ' . $me['name'] . '</h3>
-				<p>' . s('rolle_' . $me['rolle'] . '_' . $me['geschlecht']) . ' für ' . $me['bezirk_name'] . '</a>' . $gerettet . '</p>
+				<p>' . $this->func->s('rolle_' . $me['rolle'] . '_' . $me['geschlecht']) . ' für ' . $me['bezirk_name'] . '</a>' . $gerettet . '</p>
 			<div style="clear:both;"></div>		
 		</div>',
 
@@ -481,8 +481,8 @@ class DashboardControl extends Control
 		 * Nächste Termine
 		*/
 		$profileModel = new ProfileModel();
-		if ($dates = $profileModel->getNextDates(fsId(), 10)) {
-			addContent($this->view->u_nextDates($dates), CNT_RIGHT);
+		if ($dates = $profileModel->getNextDates($this->func->fsId(), 10)) {
+			$this->func->addContent($this->view->u_nextDates($dates), CNT_RIGHT);
 		}
 
 		/*
@@ -515,7 +515,7 @@ class DashboardControl extends Control
 				$out .= $this->v_utils->v_field($orga, 'Deine Gruppen', array('class' => 'ui-padding'));
 			}
 
-			addContent($out, CNT_RIGHT);
+			$this->func->addContent($out, CNT_RIGHT);
 		}
 
 		/*
@@ -545,7 +545,7 @@ class DashboardControl extends Control
 					<li>
 						<a class="ui-corner-all" onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . ',modal:1});return false;" href="#">
 							<span style="float:left;margin-right:7px;"><img width="35px" alt="Maike" src="' . $img . '" class="ui-corner-all"></span>
-							<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' . $distance . ')</strong>' . tt($b['description'], 50) . '</span>
+							<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' . $distance . ')</strong>' . $this->func->tt($b['description'], 50) . '</span>
 							
 							<span style="clear:both;"></span>
 						</a>
@@ -557,16 +557,16 @@ class DashboardControl extends Control
 				<a class="button" href="/essenskoerbe/find/">Alle Essenskörbe</a>
 			</div>';
 
-			addContent($this->v_utils->v_field($out, 'Essenskörbe in Deiner Nähe'), CNT_LEFT);
+			$this->func->addContent($this->v_utils->v_field($out, 'Essenskörbe in Deiner Nähe'), CNT_LEFT);
 		}
 
 		/*
 		 * Deine Betriebe
 		*/
 		if ($betriebe = $this->model->getMyBetriebe(array('sonstige' => false))) {
-			addContent($this->view->u_myBetriebe($betriebe), CNT_LEFT);
+			$this->func->addContent($this->view->u_myBetriebe($betriebe), CNT_LEFT);
 		} else {
-			addContent($this->v_utils->v_info('Du bist bis jetzt in keinem Filial-Team.'), CNT_LEFT);
+			$this->func->addContent($this->v_utils->v_info('Du bist bis jetzt in keinem Filial-Team.'), CNT_LEFT);
 		}
 	}
 }

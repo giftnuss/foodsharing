@@ -13,7 +13,7 @@ class FAQAdminControl extends Control
 	public function __construct()
 	{
 		if (!S::may('orga')) {
-			goLogin();
+			$this->func->goLogin();
 		}
 
 		parent::__construct();
@@ -26,40 +26,40 @@ class FAQAdminControl extends Control
 
 	public function index()
 	{
-		if (getAction('neu')) {
+		if ($this->func->getAction('neu')) {
 			$this->handle_add();
 
-			addBread(s('bread_faq'), '/?page=faq');
-			addBread(s('bread_new_faq'));
+			$this->func->addBread($this->func->s('bread_faq'), '/?page=faq');
+			$this->func->addBread($this->func->s('bread_new_faq'));
 
-			addContent($this->view->faq_form($this->model->getBasics_faq_category()));
+			$this->func->addContent($this->view->faq_form($this->model->getBasics_faq_category()));
 
-			addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				pageLink('faq', 'back_to_overview')
-			)), s('actions')), CNT_RIGHT);
-		} elseif ($id = getActionId('delete')) {
+			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->func->pageLink('faq', 'back_to_overview')
+			)), $this->func->s('actions')), CNT_RIGHT);
+		} elseif ($id = $this->func->getActionId('delete')) {
 			if ($this->model->del_faq($id)) {
-				info(s('faq_deleted'));
-				goPage();
+				$this->func->info($this->func->s('faq_deleted'));
+				$this->func->goPage();
 			}
-		} elseif ($id = getActionId('edit')) {
+		} elseif ($id = $this->func->getActionId('edit')) {
 			$this->handle_edit();
-			addBread(s('bread_faq'), '/?page=faq');
-			addBread(s('bread_edit_faq'));
+			$this->func->addBread($this->func->s('bread_faq'), '/?page=faq');
+			$this->func->addBread($this->func->s('bread_edit_faq'));
 
 			$data = $this->model->getOne_faq($id);
-			setEditData($data);
+			$this->func->setEditData($data);
 
-			addContent($this->view->faq_form($this->model->getBasics_faq_category()));
+			$this->func->addContent($this->view->faq_form($this->model->getBasics_faq_category()));
 
-			addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				pageLink('faq', 'back_to_overview')
-			)), s('actions')), CNT_RIGHT);
+			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->func->pageLink('faq', 'back_to_overview')
+			)), $this->func->s('actions')), CNT_RIGHT);
 		} elseif (isset($_GET['id'])) {
 			$data = $this->model->getOne_faq($_GET['id']);
 			print_r($data);
 		} else {
-			addBread(s('faq_bread'), '/?page=faq');
+			$this->func->addBread($this->func->s('faq_bread'), '/?page=faq');
 
 			if ($data = $this->model->get_faq()) {
 				$sort = array();
@@ -75,23 +75,23 @@ class FAQAdminControl extends Control
 					foreach ($data as $d) {
 						$rows[] = array(
 							array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=faq&a=edit&id=' . $d['id'] . '">' . $d['name'] . '</a>'),
-							array('cnt' => $this->v_utils->v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => sv('delete_sure', $d['name'])))
+							array('cnt' => $this->v_utils->v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => $this->func->sv('delete_sure', $d['name'])))
 							));
 					}
 
 					$table = $this->v_utils->v_tablesorter(array(
-						array('name' => s('name')),
-						array('name' => s('actions'), 'sort' => false, 'width' => 50)
+						array('name' => $this->func->s('name')),
+						array('name' => $this->func->s('actions'), 'sort' => false, 'width' => 50)
 					), $rows);
 
-					addContent($this->v_utils->v_field($table, $this->model->getVal('name', 'faq_category', $key)));
+					$this->func->addContent($this->v_utils->v_field($table, $this->model->getVal('name', 'faq_category', $key)));
 				}
 			} else {
-				info(s('faq_empty'));
+				$this->func->info($this->func->s('faq_empty'));
 			}
 
-			addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				array('href' => '/?page=faq&a=neu', 'name' => s('neu_faq'))
+			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				array('href' => '/?page=faq&a=neu', 'name' => $this->func->s('neu_faq'))
 			)), 'Aktionen'), CNT_RIGHT);
 		}
 	}
@@ -101,13 +101,13 @@ class FAQAdminControl extends Control
 		global $db;
 		global $g_data;
 
-		if (submitted()) {
-			$g_data['foodsaver_id'] = fsId();
+		if ($this->func->submitted()) {
+			$g_data['foodsaver_id'] = $this->func->fsId();
 			if ($this->model->update_faq($_GET['id'], $g_data)) {
-				info(s('faq_edit_success'));
-				goPage();
+				$this->func->info($this->func->s('faq_edit_success'));
+				$this->func->goPage();
 			} else {
-				error(s('error'));
+				$this->func->error($this->func->s('error'));
 			}
 		}
 	}
@@ -117,13 +117,13 @@ class FAQAdminControl extends Control
 		global $db;
 		global $g_data;
 
-		if (submitted()) {
-			$g_data['foodsaver_id'] = fsId();
+		if ($this->func->submitted()) {
+			$g_data['foodsaver_id'] = $this->func->fsId();
 			if ($this->model->add_faq($g_data)) {
-				info(s('faq_add_success'));
-				goPage();
+				$this->func->info($this->func->s('faq_add_success'));
+				$this->func->goPage();
 			} else {
-				error(s('error'));
+				$this->func->error($this->func->s('error'));
 			}
 		}
 	}

@@ -16,7 +16,7 @@ class DashboardView extends View
 				<a onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . '});return false;" href="#" class="corner-all">
 					<span class="i">' . $this->img($b) . '</span>
 					<span class="n">Essenskorb von ' . $b['fs_name'] . '</span>
-					<span class="t">veröffentlicht am ' . niceDate($b['time_ts']) . '</span>
+					<span class="t">veröffentlicht am ' . $this->func->niceDate($b['time_ts']) . '</span>
 					<span class="d">' . $b['description'] . '</span>
 					<span class="c"></span>
 				</a>
@@ -27,12 +27,12 @@ class DashboardView extends View
 		$out .= '
 				</ul>';
 
-		return $this->v_utils->v_field($out, s('new_foodbaskets'));
+		return $this->v_utils->v_field($out, $this->func->s('new_foodbaskets'));
 	}
 
 	public function updates()
 	{
-		addStyle('
+		$this->func->addStyle('
 		#activity ul.linklist li span.time{margin-left:58px;display:block;margin-top:10px;}
 		
 		#activity ul.linklist li span.qr
@@ -169,10 +169,10 @@ class DashboardView extends View
 			}
 		}
 	');
-		addScript('/js/jquery.tinysort.min.js');
-		addScript('/js/activity.js');
-		addJs('activity.init();');
-		addContent('
+		$this->func->addScript('/js/jquery.tinysort.min.js');
+		$this->func->addScript('/js/activity.js');
+		$this->func->addJs('activity.init();');
+		$this->func->addContent('
 	<div class="head ui-widget-header ui-corner-top">
 		Updates-Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>
 	</div>
@@ -185,8 +185,8 @@ class DashboardView extends View
 	public function foodsharerMenu()
 	{
 		return $this->menu(array(
-			array('name' => s('new_basket'), 'click' => "ajreq('newbasket',{app:'basket'});return false;"),
-			array('name' => s('all_baskets'), 'href' => '/karte?load=baskets')
+			array('name' => $this->func->s('new_basket'), 'click' => "ajreq('newbasket',{app:'basket'});return false;"),
+			array('name' => $this->func->s('all_baskets'), 'href' => '/karte?load=baskets')
 		));
 	}
 
@@ -199,7 +199,7 @@ class DashboardView extends View
 				<a onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . '});return false;" href="#" class="corner-all">
 					<span class="i">' . $this->img($b) . '</span>
 					<span class="n">Essenskorb von ' . $b['fs_name'] . ' (' . $this->distance($b['distance']) . ')</span>
-					<span class="t">' . niceDate($b['time_ts']) . '</span>
+					<span class="t">' . $this->func->niceDate($b['time_ts']) . '</span>
 					<span class="d">' . $b['description'] . '</span>
 					<span class="c"></span>
 				</a>
@@ -210,7 +210,7 @@ class DashboardView extends View
 		$out .= '
 				</ul>';
 
-		return $this->v_utils->v_field($out, s('close_foodbaskets'));
+		return $this->v_utils->v_field($out, $this->func->s('close_foodbaskets'));
 	}
 
 	private function img($basket)
@@ -239,7 +239,7 @@ class DashboardView extends View
 			$out .= '
 				<li>
 					<a href="/?page=fsbetrieb&id=' . $d['betrieb_id'] . '" class="ui-corner-all">
-						<span class="title">' . niceDate($d['date_ts']) . '</span>
+						<span class="title">' . $this->func->niceDate($d['date_ts']) . '</span>
 						<span>' . $d['betrieb_name'] . '</span>
 					</a>
 				</li>';
@@ -248,7 +248,7 @@ class DashboardView extends View
 			</ul>
 		</div>';
 
-		return $this->v_utils->v_field($out, s('next_dates'));
+		return $this->v_utils->v_field($out, $this->func->s('next_dates'));
 	}
 
 	public function u_myBetriebe($betriebe)
@@ -297,7 +297,7 @@ class DashboardView extends View
 		}
 
 		if (!empty($betriebe['anfrage'])) {
-			addJsFunc('
+			$this->func->addJsFunc('
 				function u_anfrage_action(key,el)
 				{
 					val = $(el).children("input:first").val().split(":::");
@@ -343,7 +343,7 @@ class DashboardView extends View
 						
 					}	
 			');
-			addJs('
+			$this->func->addJs('
 				function createSignoutMenu() {
 					return {
 						callback: function(key, options) {
@@ -383,7 +383,7 @@ class DashboardView extends View
 				//<a id="anfrage-betrieb" class="ui-corner-all" href="/?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].'</a>
 				$list .= '
 				<li>
-					<a id="store-request" class="ui-corner-all" href="#" onclick="return false;">' . $b['name'] . '<input type="hidden" name="anfrage" value="' . fsId() . ':::' . $b['id'] . '" /></a>
+					<a id="store-request" class="ui-corner-all" href="#" onclick="return false;">' . $b['name'] . '<input type="hidden" name="anfrage" value="' . $this->func->fsId() . ':::' . $b['id'] . '" /></a>
 				</li>';
 			}
 			$list .= '
@@ -423,7 +423,7 @@ class DashboardView extends View
 			$out .= '
 			<div class="updatepost">
 					<a class="poster ui-corner-all" href="#" onclick="profile(' . (int)$u['foodsaver_id'] . ');return false;">
-						' . avatar($fs, 50) . '
+						' . $this->func->avatar($fs, 50) . '
 					</a>
 					<div class="post">
 						' . $this->u_update_type($u) . '
@@ -432,7 +432,7 @@ class DashboardView extends View
 			</div>';
 		}
 
-		return $this->v_utils->v_field($out, s('updates'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($out, $this->func->s('updates'), array('class' => 'ui-padding'));
 	}
 
 	public function u_update_type($u)
@@ -456,7 +456,7 @@ class DashboardView extends View
 				<div class="js_feed_comment_border">
 					<div class="comment_mini_link_like">
 						<div class="foot">
-							<span class="time">' . niceDate($u['update_time_ts']) . '</span>
+							<span class="time">' . $this->func->niceDate($u['update_time_ts']) . '</span>
 						</div>
 					</div>
 					<div class="clear"></div>
@@ -479,7 +479,7 @@ class DashboardView extends View
 				<div class="js_feed_comment_border">
 					<div class="comment_mini_link_like">
 						<div class="foot">
-							<span class="time">' . niceDate($u['update_time_ts']) . '</span>
+							<span class="time">' . $this->func->niceDate($u['update_time_ts']) . '</span>
 						</div>
 					</div>
 					<div class="clear"></div>
@@ -502,7 +502,7 @@ class DashboardView extends View
 				<div class="js_feed_comment_border">
 					<div class="comment_mini_link_like">
 						<div class="foot">
-							<span class="time">' . niceDate($u['update_time_ts']) . '</span>
+							<span class="time">' . $this->func->niceDate($u['update_time_ts']) . '</span>
 						</div>
 					</div>
 					<div class="clear"></div>
@@ -521,7 +521,7 @@ class DashboardView extends View
 			$out .= '
 			<div class="post event" style="border-bottom:1px solid #E3DED3; padding-bottom:15px;">
 				<a href="/?page=event&id=' . (int)$i['id'] . '" class="calendar">
-					<span class="month">' . s('month_' . (int)date('m', $i['start_ts'])) . '</span>
+					<span class="month">' . $this->func->s('month_' . (int)date('m', $i['start_ts'])) . '</span>
 					<span class="day">' . date('d', $i['start_ts']) . '</span>
 				</a>
 						
@@ -530,7 +530,7 @@ class DashboardView extends View
 					<div class="activity_feed_content_text">
 						<div class="activity_feed_content_info">
 							<p><a href="/?page=event&id=' . (int)$i['id'] . '">' . $i['name'] . '</a></p>
-							<p>' . niceDate($i['start_ts']) . '</p>
+							<p>' . $this->func->niceDate($i['start_ts']) . '</p>
 						</div>
 					</div>
 	
@@ -554,7 +554,7 @@ class DashboardView extends View
 			$out .= '
 			<div class="post event" style="border-bottom:1px solid #E3DED3; padding-bottom:15px;padding-top:15px;">
 				<a href="/?page=event&id=' . (int)$i['id'] . '" class="calendar">
-					<span class="month">' . s('month_' . (int)date('m', $i['start_ts'])) . '</span>
+					<span class="month">' . $this->func->s('month_' . (int)date('m', $i['start_ts'])) . '</span>
 					<span class="day">' . date('d', $i['start_ts']) . '</span>
 				</a>
 			
@@ -562,7 +562,7 @@ class DashboardView extends View
 					<div class="activity_feed_content_text">
 						<div class="activity_feed_content_info">
 							<p><a href="/?page=event&id=' . (int)$i['id'] . '">' . $i['name'] . '</a></p>
-							<p>' . niceDate($i['start_ts']) . '</p>
+							<p>' . $this->func->niceDate($i['start_ts']) . '</p>
 						</div>
 					</div>
 	

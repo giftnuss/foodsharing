@@ -8,11 +8,11 @@ class RegionAdminView extends View
 {
 	public function v_bezirk_tree($id)
 	{
-		addScript('/js/dynatree/jquery.dynatree.js');
-		addScript('/js/jquery.cookie.js');
-		addCss('/js/dynatree/skin/ui.dynatree.css');
+		$this->func->addScript('/js/dynatree/jquery.dynatree.js');
+		$this->func->addScript('/js/jquery.cookie.js');
+		$this->func->addCss('/js/dynatree/skin/ui.dynatree.css');
 
-		addJs('
+		$this->func->addJs('
 	$("#' . $id . '").dynatree({
 		onDblClick: function(node, event) {
 			alert(node.data.ident);
@@ -58,7 +58,7 @@ class RegionAdminView extends View
 						      title:data.foodsaver[i].name,
 						      icon: image,
 						  }).addTo(' . $id . '_map);
-						  ' . $id . '_markers[i].content = \'<div style="height:80px;overflow:hidden;"><div style="margin-right:10px;float:left;"><a onclick="profile(\'+ data.foodsaver[i].id +\');return false;" href="#"><img src="\'+img(data.foodsaver[i].photo)+\'" /></a></div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a onclick="profile(\'+ data.foodsaver[i].id +\');return false;" href="#">\' + data.foodsaver[i].name + "</a></h1><p>" + data.foodsaver[i].anschrift + "</p><p>" + data.foodsaver[i].plz + " " + data.foodsaver[i].stadt + \'</p><div style="clear:both;"></div></div>\';
+						  ' . $id . '_markers[i].content = \'<div style="height:80px;overflow:hidden;"><div style="margin-right:10px;float:left;"><a onclick="profile(\'+ data.foodsaver[i].id +\');return false;" href="#"><img src="\'+$this->func->img(data.foodsaver[i].photo)+\'" /></a></div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a onclick="profile(\'+ data.foodsaver[i].id +\');return false;" href="#">\' + data.foodsaver[i].name + "</a></h1><p>" + data.foodsaver[i].anschrift + "</p><p>" + data.foodsaver[i].plz + " " + data.foodsaver[i].stadt + \'</p><div style="clear:both;"></div></div>\';
 						      		
 						  ' . $id . '_markers[i].on( \'click\', function(e,ii) {
 						    ' . $id . '_infowindow.setContent(""+this.content);
@@ -133,7 +133,7 @@ class RegionAdminView extends View
 
 	public function i_map($id)
 	{
-		addJsFunc('
+		$this->func->addJsFunc('
 	var ' . $id . '_markers = [];
 	var ' . $id . '_bounds = L.latLngBounds([]);
 	var ' . $id . '_infowindow = L.popup();
@@ -144,14 +144,14 @@ class RegionAdminView extends View
 		' . $id . '_markers = [];
 	}');
 
-		addStyle('div.map{width:512px;}');
-		addContent($this->v_utils->v_field('<div class="map" id="' . $id . '_map"></div>', 'Karte'));
+		$this->func->addStyle('div.map{width:512px;}');
+		$this->func->addContent($this->v_utils->v_field('<div class="map" id="' . $id . '_map"></div>', 'Karte'));
 
 		$zoom = 6;
 		$lat = '51.303145';
 		$lon = '10.235595';
 
-		addJs('
+		$this->func->addJs('
 	 	var ' . $id . '_center = L.latLng(' . $lat . ',' . $lon . ');
 		var ' . $id . '_options = {
 		  \'zoom\': ' . $zoom . ',

@@ -20,12 +20,12 @@ class WorkGroupControl extends Control
 		parent::__construct();
 
 		if (!S::may()) {
-			goLogin();
+			$this->func->goLogin();
 		}
 
 		$this->setAgId(392);
 
-		addBread('Arbeitsgruppen', '/?page=groups');
+		$this->func->addBread('Arbeitsgruppen', '/?page=groups');
 
 		if (isset($_GET['p']) && (int)$_GET['p'] > 0) {
 			$this->setAgId((int)$_GET['p']);
@@ -40,15 +40,15 @@ class WorkGroupControl extends Control
 		$countrys = $this->model->getCountryGroups();
 		$bezirke = $this->model->getBezirke();
 
-		addContent($this->view->leftNavi($countrys, $bezirke), CNT_LEFT);
+		$this->func->addContent($this->view->leftNavi($countrys, $bezirke), CNT_LEFT);
 
 		if (!isset($_GET['sub'])) {
-			addTitle(s('groups'));
-			addContent($this->view->topbar('foodsharing Arbeitsgruppen', 'hier findest Du Hilfe und viel zu tun...', '<img src="/img/groups.png" />'), CNT_TOP);
+			$this->func->addTitle($this->func->s('groups'));
+			$this->func->addContent($this->view->topbar('foodsharing Arbeitsgruppen', 'hier findest Du Hilfe und viel zu tun...', '<img src="/img/groups.png" />'), CNT_TOP);
 			if ($groups = $this->model->listGroups()) {
-				addContent($this->view->listGroups($groups, $this->my_applications, $this->my_stats));
+				$this->func->addContent($this->view->listGroups($groups, $this->my_applications, $this->my_stats));
 			} else {
-				addContent(v_info('Hier gibt es noch keine Arbeitsgruppen'));
+				$this->func->addContent(v_info('Hier gibt es noch keine Arbeitsgruppen'));
 			}
 		}
 	}
@@ -57,15 +57,15 @@ class WorkGroupControl extends Control
 	{
 		$fsModel = new FoodsaverModel();
 
-		$bids = $fsModel->getFsBezirkIds(fsId());
+		$bids = $fsModel->getFsBezirkIds($this->func->fsId());
 
-		if (!isOrgaTeam() && !isBotForA($bids, true, true)) {
-			go('/?page=dashboard');
+		if (!$this->func->isOrgaTeam() && !$this->func->isBotForA($bids, true, true)) {
+			$this->func->go('/?page=dashboard');
 		}
 
 		if ($group = $this->model->getGroup($_GET['id'])) {
 			if ($group['type'] != 7) {
-				go('/?page=dashboard');
+				$this->func->go('/?page=dashboard');
 			}
 			if ($this->isSubmitted()) {
 				$data = array();
@@ -106,20 +106,20 @@ class WorkGroupControl extends Control
 				/*
 				 * Handle Member and Group-Admin Fields
 				 */
-				handleTagselect('member');
-				handleTagselect('leader');
+				$this->func->handleTagselect('member');
+				$this->func->handleTagselect('leader');
 
 				$data = array_merge($group, $data);
 
 				if ($this->model->updateGroup($group['id'], $data)) {
 					$this->model->updateTeam($group['id']);
-					info('Änderungen gespeichert!');
-					go('/?page=groups&sub=edit&id=' . (int)$group['id']);
+					$this->func->info('Änderungen gespeichert!');
+					$this->func->go('/?page=groups&sub=edit&id=' . (int)$group['id']);
 				}
 			}
 
-			addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
-			addContent($this->view->editGroup($group));
+			$this->func->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
+			$this->func->addContent($this->view->editGroup($group));
 		}
 	}
 

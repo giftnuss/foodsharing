@@ -10,7 +10,7 @@ class BlogModel extends Model
 	public function canEdit($article_id)
 	{
 		if ($val = $this->getValues(array('bezirk_id', 'foodsaver_id'), 'blog_entry', $article_id)) {
-			if (fsId() == $val['foodsaver_id'] || isBotFor($val['bezirk_id'])) {
+			if ($this->func->fsId() == $val['foodsaver_id'] || $this->func->isBotFor($val['bezirk_id'])) {
 				return true;
 			}
 		}
@@ -20,11 +20,11 @@ class BlogModel extends Model
 
 	public function canAdd($fsId, $bezirkId)
 	{
-		if (isOrgaTeam()) {
+		if ($this->func->isOrgaTeam()) {
 			return true;
 		}
 
-		if (isBotFor($bezirkId)) {
+		if ($this->func->isBotFor($bezirkId)) {
 			return true;
 		}
 
@@ -93,7 +93,7 @@ class BlogModel extends Model
 	public function listArticle()
 	{
 		$not = '';
-		if (!isOrgaTeam()) {
+		if (!$this->func->isOrgaTeam()) {
 			$not = 'WHERE 		`bezirk_id` IN (' . implode(',', $this->getBezirkIds()) . ')';
 		}
 
@@ -145,9 +145,9 @@ class BlogModel extends Model
 	public function add_blog_entry($data)
 	{
 		$active = 0;
-		if (isOrgateam()) {
+		if ($this->func->isOrgaTeam()) {
 			$active = 1;
-		} elseif (isBotFor($data['bezirk_id'])) {
+		} elseif ($this->func->isBotFor($data['bezirk_id'])) {
 			$active = 1;
 		}
 
@@ -194,7 +194,7 @@ class BlogModel extends Model
 			array('href' => '/?page=blog&sub=edit&id=' . $id),
 			array(
 				'user' => S::user('name'),
-				'teaser' => tt($data['teaser'], 100),
+				'teaser' => $this->func->tt($data['teaser'], 100),
 				'title' => $data['name']
 			),
 			'blog-check-' . $id

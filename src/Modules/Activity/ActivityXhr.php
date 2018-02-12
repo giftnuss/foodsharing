@@ -126,9 +126,9 @@ class ActivityXhr extends Control
 		$xhr->addData('updates', $updates);
 
 		$xhr->addData('user', array(
-			'id' => fsId(),
+			'id' => $this->func->fsId(),
 			'name' => S::user('name'),
-			'avatar' => img(S::user('photo'))
+			'avatar' => $this->func->img(S::user('photo'))
 		));
 
 		if (isset($_GET['listings'])) {
@@ -179,7 +179,7 @@ class ActivityXhr extends Control
 					}
 					$listings['buddywalls'][] = array(
 						'id' => $b['id'],
-						'name' => '<img style="border-radius:4px;position:relative;top:5px;" src="' . img($b['photo']) . '" height="24" /> ' . $b['name'],
+						'name' => '<img style="border-radius:4px;position:relative;top:5px;" src="' . $this->func->img($b['photo']) . '" height="24" /> ' . $b['name'],
 						'checked' => $checked
 					);
 				}
@@ -204,22 +204,22 @@ class ActivityXhr extends Control
 
 			$xhr->addData('listings', array(
 				0 => array(
-					'name' => s('groups'),
+					'name' => $this->func->s('groups'),
 					'index' => 'bezirk',
 					'items' => $listings['groups']
 				),
 				1 => array(
-					'name' => s('regions'),
+					'name' => $this->func->s('regions'),
 					'index' => 'bezirk',
 					'items' => $listings['regions']
 				),
 				2 => array(
-					'name' => s('mailboxes'),
+					'name' => $this->func->s('mailboxes'),
 					'index' => 'mailbox',
 					'items' => $listings['mailboxes']
 				),
 				3 => array(
-					'name' => s('buddywalls'),
+					'name' => $this->func->s('buddywalls'),
 					'index' => 'buddywall',
 					'items' => $listings['buddywalls']
 				),

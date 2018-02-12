@@ -116,17 +116,17 @@ class Mem
 	{
 		global $g_page_cache_suffix;
 
-		return self::get('pc-' . $_SERVER['REQUEST_URI'] . ':' . fsId());
+		return self::get('pc-' . $_SERVER['REQUEST_URI'] . ':' . $this->func->fsId());
 	}
 
 	public static function setPageCache($page, $ttl)
 	{
-		return self::set('pc-' . $_SERVER['REQUEST_URI'] . ':' . fsId(), $page, $ttl);
+		return self::set('pc-' . $_SERVER['REQUEST_URI'] . ':' . $this->func->fsId(), $page, $ttl);
 	}
 
 	public static function delPageCache($page)
 	{
-		return self::del('pc-' . $page . ':' . fsId());
+		return self::del('pc-' . $page . ':' . $this->func->fsId());
 	}
 
 	/**

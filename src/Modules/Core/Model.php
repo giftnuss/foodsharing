@@ -9,7 +9,7 @@ class Model extends ManualDb
 {
 	public function mayBezirk($bid)
 	{
-		if (isset($_SESSION['client']['bezirke'][$bid]) || isBotschafter() || isOrgaTeam()) {
+		if (isset($_SESSION['client']['bezirke'][$bid]) || $this->func->isBotschafter() || $this->func->isOrgaTeam()) {
 			return true;
 		}
 
@@ -37,7 +37,7 @@ class Model extends ManualDb
 
 	public function buddyStatus($fsid)
 	{
-		if (($status = $this->qOne('SELECT `confirmed` FROM ' . PREFIX . 'buddy WHERE `foodsaver_id` = ' . (int)fsId() . ' AND `buddy_id` = ' . (int)$fsid . '')) !== false) {
+		if (($status = $this->qOne('SELECT `confirmed` FROM ' . PREFIX . 'buddy WHERE `foodsaver_id` = ' . (int)$this->func->fsId() . ' AND `buddy_id` = ' . (int)$fsid . '')) !== false) {
 			return $status;
 		}
 
@@ -48,7 +48,7 @@ class Model extends ManualDb
 	{
 		$this->insert('
 			REPLACE INTO `' . PREFIX . 'buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
-			VALUES (' . (int)fsId() . ',' . (int)$fsid . ',0)
+			VALUES (' . (int)$this->func->fsId() . ',' . (int)$fsid . ',0)
 		');
 
 		return true;
@@ -58,11 +58,11 @@ class Model extends ManualDb
 	{
 		$this->insert('
 			REPLACE INTO `' . PREFIX . 'buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
-			VALUES (' . (int)fsId() . ',' . (int)$fsid . ',1)
+			VALUES (' . (int)$this->func->fsId() . ',' . (int)$fsid . ',1)
 		');
 		$this->insert('
 			REPLACE INTO `' . PREFIX . 'buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
-			VALUES (' . (int)$fsid . ',' . (int)fsid() . ',1)
+			VALUES (' . (int)$fsid . ',' . (int)$this->func->fsId() . ',1)
 		');
 	}
 
@@ -152,7 +152,7 @@ class Model extends ManualDb
  				`sleep_msg` = ' . $this->strval($msg) . '
 
  			WHERE 
- 				id = ' . (int)fsId() . '
+ 				id = ' . (int)$this->func->fsId() . '
  		');
 	}
 

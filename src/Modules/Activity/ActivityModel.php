@@ -42,10 +42,10 @@ class ActivityModel extends Model
 				hw.basket_id = b.id
 				
 			AND
-				b.foodsaver_id = ' . (int)fsId() . '
+				b.foodsaver_id = ' . (int)$this->func->fsId() . '
 					
 			AND 
-				w.foodsaver_id != ' . (int)fsId() . '
+				w.foodsaver_id != ' . (int)$this->func->fsId() . '
 
 			AND
 				b.status = 1
@@ -96,10 +96,10 @@ class ActivityModel extends Model
 					ba.status < 10
 				
 				AND 	
-					w.foodsaver_id != ' . (int)fsId() . '
+					w.foodsaver_id != ' . (int)$this->func->fsId() . '
 				
 				AND 
-					ba.foodsaver_id = ' . (int)fsId() . '
+					ba.foodsaver_id = ' . (int)$this->func->fsId() . '
 				
 				ORDER BY w.id DESC
 		
@@ -132,7 +132,7 @@ class ActivityModel extends Model
 					'title' => '<a href="/profile/' . $u['fs_id'] . '">' . $u['fs_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="/essenskoerbe/' . $u['basket_id'] . '">' . $title . '</a><small>' . $smtitle . '</small>',
 					'desc' => $this->textPrepare(nl2br($u['body'])),
 					'time' => $u['time'],
-					'icon' => img($u['fs_photo'], 50),
+					'icon' => $this->func->img($u['fs_photo'], 50),
 					'time_ts' => $u['time_ts'],
 					'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=basket&id=' . (int)$u['basket_id']
 				);
@@ -152,7 +152,7 @@ class ActivityModel extends Model
 			$buddy_ids = $b;
 		}
 
-		$buddy_ids[fsId()] = fsId();
+		$buddy_ids[$this->func->fsId()] = $this->func->fsId();
 
 		$bids = array();
 		foreach ($buddy_ids as $id) {
@@ -204,7 +204,7 @@ class ActivityModel extends Model
 		) {
 			/*
 			 * AND
-				poster_id != '.(int)fsId().'
+				poster_id != '.(int)$this->func->fsId().'
 			 */
 			$out = array();
 			$hb = array();
@@ -220,7 +220,7 @@ class ActivityModel extends Model
 				$smtitle = $u['fs_name'] . 's Status';
 				$title = $u['fs_name'];
 
-				if ($u['fs_id'] == fsId()) {
+				if ($u['fs_id'] == $this->func->fsId()) {
 					$smtitle = 'Deine Pinnwand';
 					$title = 'Deine Pinnwand';
 				}
@@ -232,7 +232,7 @@ class ActivityModel extends Model
 					'title' => '<a href="/profile/' . $u['poster_id'] . '">' . $u['poster_name'] . '</a> <small>' . $smtitle . '</small>',
 					'desc' => $this->textPrepare(nl2br($u['body'])),
 					'time' => $u['time'],
-					'icon' => img($u['fs_photo'], 50),
+					'icon' => $this->func->img($u['fs_photo'], 50),
 					'time_ts' => $u['time_ts']
 					//'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=foodsaver&id=' . (int)$u['fs_id']
 				);
@@ -294,9 +294,9 @@ class ActivityModel extends Model
 
 					if ($sender != null) {
 						if (isset($sender['from']) && !empty($sender['from'])) {
-							$from = '<a title="' . $sender['mailbox'] . '@' . $sender['host'] . '" href="/?page=mailbox&mailto=' . urlencode($sender['mailbox'] . '@' . $sender['host']) . '">' . ttt($sender['personal'], 22) . '</a>';
+							$from = '<a title="' . $sender['mailbox'] . '@' . $sender['host'] . '" href="/?page=mailbox&mailto=' . urlencode($sender['mailbox'] . '@' . $sender['host']) . '">' . $this->func->ttt($sender['personal'], 22) . '</a>';
 						} elseif (isset($sender['mailbox'])) {
-							$from = '<a title="' . $sender['mailbox'] . '@' . $sender['host'] . '" href="/?page=mailbox&mailto=' . urlencode($sender['mailbox'] . '@' . $sender['host']) . '">' . ttt($sender['mailbox'] . '@' . $sender['host'], 22) . '</a>';
+							$from = '<a title="' . $sender['mailbox'] . '@' . $sender['host'] . '" href="/?page=mailbox&mailto=' . urlencode($sender['mailbox'] . '@' . $sender['host']) . '">' . $this->func->ttt($sender['mailbox'] . '@' . $sender['host'], 22) . '</a>';
 						}
 					}
 
@@ -304,7 +304,7 @@ class ActivityModel extends Model
 						'attr' => array(
 							'href' => '/?page=mailbox&show=' . $u['id']
 						),
-						'title' => $from . ' <i class="fa fa-angle-right"></i> <a href="/?page=mailbox&show=' . $u['id'] . '">' . ttt($u['subject'], 30) . '</a><small>' . ttt($u['mb_name'] . '@' . DEFAULT_HOST, 19) . '</small>',
+						'title' => $from . ' <i class="fa fa-angle-right"></i> <a href="/?page=mailbox&show=' . $u['id'] . '">' . $this->func->ttt($u['subject'], 30) . '</a><small>' . $this->func->ttt($u['mb_name'] . '@' . DEFAULT_HOST, 19) . '</small>',
 						'desc' => $this->textPrepare(nl2br($u['body'])),
 						'time' => $u['time'],
 						'icon' => '/img/mailbox-50x50.png',
@@ -325,7 +325,7 @@ class ActivityModel extends Model
 		$txt = trim($txt);
 
 		if (strlen($txt) > 100) {
-			return '<span class="txt">' . tt(strip_tags($txt), 90) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fa fa-angle-down"></i></a></span><span class="txt" style="display:none;">' . strip_tags($txt, '<br>') . ' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fa fa-angle-up"></i></a></span>';
+			return '<span class="txt">' . $this->func->tt(strip_tags($txt), 90) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fa fa-angle-down"></i></a></span><span class="txt" style="display:none;">' . strip_tags($txt, '<br>') . ' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fa fa-angle-up"></i></a></span>';
 		} else {
 			return '<span class="txt">' . $txt . '</span>';
 		}
@@ -392,7 +392,7 @@ class ActivityModel extends Model
 				$sub = 'forum';
 				if ($u['bot_theme'] == 1) {
 					$sub = 'botforum';
-					if (!isBotFor($u['bezirk_id'])) {
+					if (!$this->func->isBotFor($u['bezirk_id'])) {
 						$check = false;
 					}
 				}
@@ -407,7 +407,7 @@ class ActivityModel extends Model
 						'title' => '<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="' . $url . '">' . $u['name'] . '</a> <small>' . $u['bezirk_name'] . '</small>',
 						'desc' => $this->textPrepare($u['post_body']),
 						'time' => $u['update_time'],
-						'icon' => img($u['foodsaver_photo'], 50),
+						'icon' => $this->func->img($u['foodsaver_photo'], 50),
 						'time_ts' => $u['update_time_ts'],
 						'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $sub
 					);
@@ -431,7 +431,7 @@ class ActivityModel extends Model
 			WHERE 	n.foodsaver_id = fs.id
 			AND 	n.betrieb_id = b.id
 			AND 	bt.betrieb_id = n.betrieb_id
-			AND 	bt.foodsaver_id = ' . (int)fsId() . '
+			AND 	bt.foodsaver_id = ' . (int)$this->func->fsId() . '
 			AND 	n.milestone = 0
 			AND 	n.last = 1
 			
@@ -449,7 +449,7 @@ class ActivityModel extends Model
 						'title' => '<a href="/profile/' . $r['foodsaver_id'] . '">' . $r['foodsaver_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="/?page=fsbetrieb&id=' . $r['betrieb_id'] . '">' . $r['betrieb_name'] . '</a>',
 						'desc' => $this->textPrepare($r['text']),
 						'time' => $r['update_time'],
-						'icon' => img($r['foodsaver_photo'], 50),
+						'icon' => $this->func->img($r['foodsaver_photo'], 50),
 						'time_ts' => $r['update_time_ts']
 					);
 				}

@@ -9,14 +9,14 @@ class MapView extends View
 {
 	public function lMap()
 	{
-		addHidden('
+		$this->func->addHidden('
 			<div id="b_content" class="loading">
 				<div class="inner">
-					' . v_input_wrapper(s('status'), 'Betrieb spendet', 'bcntstatus') . '
+					' . v_input_wrapper($this->func->s('status'), 'Betrieb spendet', 'bcntstatus') . '
 					' . v_input_wrapper('Verantwortliche Foodsaver', '...', 'bcntverantwortlich') . '
-					' . v_input_wrapper(s('specials'), '...', 'bcntspecial') . '
+					' . v_input_wrapper($this->func->s('specials'), '...', 'bcntspecial') . '
 				</div>
-				<input type="hidden" class="fetchbtn" name="fetchbtn" value="' . s('want_to_fetch') . '" />
+				<input type="hidden" class="fetchbtn" name="fetchbtn" value="' . $this->func->s('want_to_fetch') . '" />
 			</div>
 		');
 

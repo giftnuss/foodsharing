@@ -271,7 +271,7 @@ class QuizModel extends Model
 			(`foodsaver_id`, `body`, `time`) 
 			VALUES 
 			(
-				' . (int)fsId() . ',
+				' . (int)$this->func->fsId() . ',
 				' . $this->strval($comment) . ',
 				NOW()
 			)		
@@ -391,7 +391,7 @@ class QuizModel extends Model
 				id = ' . (int)$sid . '
 				
 			AND
-				foodsaver_id = ' . (int)fsId() . '
+				foodsaver_id = ' . (int)$this->func->fsId() . '
 		');
 	}
 
@@ -411,7 +411,7 @@ class QuizModel extends Model
 				`quiz_id` = ' . $quiz_id . '
 				
 			AND
-				foodsaver_id = ' . (int)fsId() . '
+				foodsaver_id = ' . (int)$this->func->fsId() . '
 				
 			AND
 				`status` = 0
@@ -438,7 +438,7 @@ class QuizModel extends Model
 		if ($res = $this->q('
 				SELECT foodsaver_id, `status`, UNIX_TIMESTAMP(`time_start`) AS time_ts
 				FROM ' . PREFIX . 'quiz_session
-				WHERE foodsaver_id =' . (int)fsId() . '
+				WHERE foodsaver_id =' . (int)$this->func->fsId() . '
 				AND quiz_id = ' . (int)$quiz_id . '
 				')
 		) {
@@ -480,7 +480,7 @@ class QuizModel extends Model
 			) 
 			VALUES
 			(
-				' . (int)fsId() . ',
+				' . (int)$this->func->fsId() . ',
 				' . (int)$quiz_id . ',
 				0,
 				0,

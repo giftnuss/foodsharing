@@ -34,7 +34,7 @@ class StatisticsView extends View
 		$out .= '
 		</table>';
 
-		return v_field($out, s('active_cities'), array('class' => 'ui-padding'));
+		return v_field($out, $this->func->s('active_cities'), array('class' => 'ui-padding'));
 	}
 
 	public function getStatTotal($stat)
@@ -87,7 +87,7 @@ class StatisticsView extends View
 						<p>Foodsaver engagieren sich ehrenamtlich für eine Welt ohne Lebensmittelverschwendung.</p>
 					</div>
 			</div><br />
-		</div>', s('stat_whole'));
+		</div>', $this->func->s('stat_whole'));
 	}
 
 	public function getStatFoodsaver($foodsaver)
@@ -116,6 +116,6 @@ class StatisticsView extends View
 		$out .= '
 		</table>';
 
-		return v_field($out, s('our_foodsavers'), array('class' => 'ui-padding'));
+		return v_field($out, $this->func->s('our_foodsavers'), array('class' => 'ui-padding'));
 	}
 }

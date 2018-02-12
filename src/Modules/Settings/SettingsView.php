@@ -10,14 +10,14 @@ class SettingsView extends View
 {
 	public function sleepMode($sleep)
 	{
-		setEditData($sleep);
+		$this->func->setEditData($sleep);
 
 		if ($sleep['sleep_status'] != 1) {
-			addJs('$("#daterange-wrapper").hide();');
+			$this->func->addJs('$("#daterange-wrapper").hide();');
 		}
 
 		if ($sleep['sleep_status'] == 0) {
-			addJs('$("#sleep_msg-wrapper").hide();');
+			$this->func->addJs('$("#sleep_msg-wrapper").hide();');
 		}
 
 		if ($sleep['sleep_status'] == 1) {
@@ -33,13 +33,13 @@ class SettingsView extends View
 			}
 			$to = $date->format('d.m.Y');
 
-			addJs("
+			$this->func->addJs("
 				$('#daterange_from').val('$from');
 				$('#daterange_to').val('$to');
 			");
 		}
 
-		addJs('
+		$this->func->addJs('
 			$("#sleep_status").change(function(){
 				var $this = $(this);
 				if($this.val() == 1)
@@ -73,27 +73,27 @@ class SettingsView extends View
 						msg: $("#sleep_msg").val()
 					},
 					success: function(){
-						pulseSuccess("' . s('sleep_mode_saved') . '");
+						pulseSuccess("' . $this->func->s('sleep_mode_saved') . '");
 					}
 				});
 			});
 			$("#formwrapper").show();
 		');
 
-		$out = v_quickform(s('sleepmode'), array(
-			v_info(s('sleepmode_info')),
+		$out = v_quickform($this->func->s('sleepmode'), array(
+			v_info($this->func->s('sleepmode_info')),
 			v_form_select('sleep_status', array(
 				'values' => array(
-					array('id' => 0, 'name' => s('no_sleepmode')),
-					array('id' => 1, 'name' => s('temp_sleepmode')),
-					array('id' => 2, 'name' => s('full_sleepmode'))
+					array('id' => 0, 'name' => $this->func->s('no_sleepmode')),
+					array('id' => 1, 'name' => $this->func->s('temp_sleepmode')),
+					array('id' => 2, 'name' => $this->func->s('full_sleepmode'))
 				)
 			)),
 			v_form_daterange(),
 			v_form_textarea('sleep_msg', array(
 				'maxlength' => 150
 			))
-		), array('submit' => s('save')));
+		), array('submit' => $this->func->s('save')));
 
 		return '<div id="formwrapper" style="display:none;">' . $out . '</div>';
 	}
@@ -111,7 +111,7 @@ class SettingsView extends View
 					$disabled = true;
 				}
 
-				addJs('
+				$this->func->addJs('
 					$("input[disabled=\'disabled\']").parent().click(function(){
 						pulseInfo("Du bist verantwortlich für diesen Fair-Teiler und somit verpflichtet, die Updates entgegenzunehmen!");
 					});
@@ -119,12 +119,12 @@ class SettingsView extends View
 
 				$g_data['fairteiler_' . $ft['id']] = $ft['infotype'];
 				$out .= v_form_radio('fairteiler_' . $ft['id'], array(
-					'label' => sv('follow_fairteiler', $ft['name']),
-					'desc' => sv('follow_fairteiler_desc', $ft['name']),
+					'label' => $this->func->sv('follow_fairteiler', $ft['name']),
+					'desc' => $this->func->sv('follow_fairteiler_desc', $ft['name']),
 					'values' => array(
-						array('id' => 1, 'name' => s('follow_fairteiler_mail')),
-						array('id' => 2, 'name' => s('follow_fairteiler_alert')),
-						array('id' => 0, 'name' => s('follow_fairteiler_none'))
+						array('id' => 1, 'name' => $this->func->s('follow_fairteiler_mail')),
+						array('id' => 2, 'name' => $this->func->s('follow_fairteiler_alert')),
+						array('id' => 0, 'name' => $this->func->s('follow_fairteiler_none'))
 					),
 					'disabled' => $disabled
 				));
@@ -135,11 +135,11 @@ class SettingsView extends View
 			foreach ($threads as $ft) {
 				$g_data['thread_' . $ft['id']] = $ft['infotype'];
 				$out .= v_form_radio('thread_' . $ft['id'], array(
-					'label' => sv('follow_thread', $ft['name']),
-					'desc' => sv('follow_thread_desc', $ft['name']),
+					'label' => $this->func->sv('follow_thread', $ft['name']),
+					'desc' => $this->func->sv('follow_thread_desc', $ft['name']),
 					'values' => array(
-						array('id' => 1, 'name' => s('follow_thread_mail')),
-						array('id' => 0, 'name' => s('follow_thread_none'))
+						array('id' => 1, 'name' => $this->func->s('follow_thread_mail')),
+						array('id' => 0, 'name' => $this->func->s('follow_thread_none'))
 					),
 					'disabled' => $disabled
 				));
@@ -148,21 +148,21 @@ class SettingsView extends View
 
 		return v_field(v_form('settingsinfo', array(
 			v_form_radio('newsletter', array(
-				'desc' => s('newsletter_desc'),
+				'desc' => $this->func->s('newsletter_desc'),
 				'values' => array(
-					array('id' => 0, 'name' => s('no')),
-					array('id' => 1, 'name' => s('yes'))
+					array('id' => 0, 'name' => $this->func->s('no')),
+					array('id' => 1, 'name' => $this->func->s('yes'))
 				)
 			)),
 			v_form_radio('infomail_message', array(
-				'desc' => s('infomail_message_desc'),
+				'desc' => $this->func->s('infomail_message_desc'),
 				'values' => array(
-					array('id' => 0, 'name' => s('no')),
-					array('id' => 1, 'name' => s('yes'))
+					array('id' => 0, 'name' => $this->func->s('no')),
+					array('id' => 1, 'name' => $this->func->s('yes'))
 				)
 			)),
 			$out
-		), array('submit' => s('save'))), s('settings_info'), array('class' => 'ui-padding'));
+		), array('submit' => $this->func->s('save'))), $this->func->s('settings_info'), array('class' => 'ui-padding'));
 	}
 
 	public function quizSession($session, $try_count, $model)
@@ -173,7 +173,7 @@ class SettingsView extends View
 			$subtitle = 'Bestanden!';
 			$infotext = v_success('Herzlichen Glückwunsch! mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten bestanden!');
 		}
-		addContent('<div class="quizsession">' . $this->topbar($session['name'] . ' Quiz', $subtitle, '<img src="/img/quiz.png" />') . '</div>');
+		$this->func->addContent('<div class="quizsession">' . $this->topbar($session['name'] . ' Quiz', $subtitle, '<img src="/img/quiz.png" />') . '</div>');
 		$out = '';
 
 		$out .= $infotext;
@@ -422,7 +422,7 @@ class SettingsView extends View
 
 	public function settingsCalendar($token)
 	{
-		$url = BASE_URL . '/api.php?f=cal&fs=' . fsId() . '&key=' . $token . '&opts=s';
+		$url = BASE_URL . '/api.php?f=cal&fs=' . $this->func->fsId() . '&key=' . $token . '&opts=s';
 
 		return v_field('
 <p>Du kannst Deinen Abholkalender auch mit einem Kalenderprogramm Deiner Wahl ansehen. Abonniere Dir dazu folgenden Kalender!</p>
@@ -441,11 +441,11 @@ class SettingsView extends View
 
 	public function delete_account()
 	{
-		addJs('
+		$this->func->addJs('
 		$("#delete-account-confirm").dialog({
 			autoOpen: false,
 			modal: true,
-			title: "' . s('delete_account_confirm_title') . '",
+			title: "' . $this->func->s('delete_account_confirm_title') . '",
 			buttons: {
 				"' . s('abort') . '" : function(){
 					$("#delete-account-confirm").dialog("close");
@@ -462,18 +462,18 @@ class SettingsView extends View
 	');
 		$content = '
 	<div style="margin:20px;text-align:center;">
-		<span id="delete-account">' . s('delete_now') . '</span>
+		<span id="delete-account">' . $this->func->s('delete_now') . '</span>
 	</div>
-	' . v_info('Du bist dabei Deinen Account zu löschen, bist Du Dir ganz sicher?', s('reference'));
+	' . v_info('Du bist dabei Deinen Account zu löschen, bist Du Dir ganz sicher?', $this->func->s('reference'));
 
-		addHidden('
+		$this->func->addHidden('
 		<div id="delete-account-confirm">
-			' . v_info(s('delete_account_confirm_msg')) . '
+			' . v_info($this->func->s('delete_account_confirm_msg')) . '
 			' . v_form_textarea('reason_to_delete') . '
 		</div>
 	');
 
-		return v_field($content, s('delete_account'), array('class' => 'ui-padding'));
+		return v_field($content, $this->func->s('delete_account'), array('class' => 'ui-padding'));
 	}
 
 	public function foodsaver_form()
@@ -510,11 +510,11 @@ class SettingsView extends View
 		$bezirkchoose = '';
 		$position = '';
 		$communications = v_form_text('homepage') .
-			v_form_text('tox', array('desc' => s('tox_desc')));
+			v_form_text('tox', array('desc' => $this->func->s('tox_desc')));
 
 		if (S::may('orga')) {
 			$bezirk = array('id' => 0, 'name' => false);
-			if ($b = getBezirk($g_data['bezirk_id'])) {
+			if ($b = $this->func->getBezirk($g_data['bezirk_id'])) {
 				$bezirk['id'] = $b['id'];
 				$bezirk['name'] = $b['name'];
 			}
@@ -530,7 +530,7 @@ class SettingsView extends View
 
 		$g_data['ort'] = $g_data['stadt'];
 
-		return v_quickform(s('settings'), array(
+		return v_quickform($this->func->s('settings'), array(
 			$bezirkchoose,
 			$this->latLonPicker('LatLng'),
 			v_form_text('telefon'),
@@ -540,7 +540,7 @@ class SettingsView extends View
 			$position,
 			v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz, hier unsere Vorlage: http://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du öffentlich an Informationen teilen möchtest, die vorteilhaft sind.')),
 			$oeff
-		), array('submit' => s('save')));
+		), array('submit' => $this->func->s('save')));
 	}
 
 	public function quizFailed($failed)
@@ -620,7 +620,7 @@ class SettingsView extends View
 		}
 		if ($rv) {
 			$rv['body'] .= '
-			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . s('rv_accept') . '</label>
+			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . $this->func->s('rv_accept') . '</label>
 			<div class="input-wrapper">
 				<p><input type="submit" value="Bestätigen" class="button"></p>
 			</div>';
@@ -645,7 +645,7 @@ class SettingsView extends View
 		}
 		if ($rv) {
 			$rv['body'] .= '
-			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . s('rv_accept') . '</label>
+			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . $this->func->s('rv_accept') . '</label>
 			<div class="input-wrapper">
 				<p><input type="submit" value="Bestätigen" class="button"></p>
 			</div>';

@@ -18,9 +18,9 @@ class StatisticsControl extends Control
 	{
 		$content = $this->model->getContent(11);
 
-		addTitle($content['title']);
+		$this->func->addTitle($content['title']);
 
-		addBread($content['title']);
+		$this->func->addBread($content['title']);
 
 		$stat_gesamt = $this->model->getStatGesamt();
 
@@ -32,10 +32,10 @@ class StatisticsControl extends Control
 
 		$stat_fs = $this->model->getStatFoodsaver();
 
-		addContent($this->view->getStatTotal($stat_gesamt), CNT_TOP);
+		$this->func->addContent($this->view->getStatTotal($stat_gesamt), CNT_TOP);
 
-		addContent($this->view->getStatCities($stat_cities), CNT_LEFT);
-		addContent($this->view->getStatFoodsaver($stat_fs), CNT_RIGHT);
+		$this->func->addContent($this->view->getStatCities($stat_cities), CNT_LEFT);
+		$this->func->addContent($this->view->getStatFoodsaver($stat_fs), CNT_RIGHT);
 
 		$this->setContentWidth(12, 12);
 	}

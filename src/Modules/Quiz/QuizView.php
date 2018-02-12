@@ -18,7 +18,7 @@ class QuizView extends View
 	{
 		$rows = array();
 
-		addJs('
+		$this->func->addJs('
 			$(".usersessionlink").parent().parent().click(function(){
 				goTo($(this).children("td").children(".usersessionlink").attr("href"));
 			});		
@@ -33,7 +33,7 @@ class QuizView extends View
 			}
 
 			$rows[] = array(
-				array('cnt' => '<a style="margin-left:10px;" href="#"><img src="' . img($s['fs_photo']) . '" /></a>'),
+				array('cnt' => '<a style="margin-left:10px;" href="#"><img src="' . $this->func->img($s['fs_photo']) . '" /></a>'),
 				array('cnt' => '<a class="usersessionlink" href="/?page=quiz&sub=sessiondetail&fsid=' . $s['fs_id'] . '">' . $s['fs_name'] . '</a>'),
 				array('cnt' => $s['max_fp']),
 				array('cnt' => substr($s['time_start'], 0, -3)),
@@ -152,7 +152,7 @@ class QuizView extends View
 	{
 		return '
 		<div id="quizcomment">
-			' . v_form_textarea('quizusercomment', array('placeholder' => s('quizusercomment'), 'nolabel' => true)) . '
+			' . v_form_textarea('quizusercomment', array('placeholder' => $this->func->s('quizusercomment'), 'nolabel' => true)) . '
 		</div>';
 	}
 
@@ -376,7 +376,7 @@ class QuizView extends View
 	public function listQuestions($questions, $quiz_id)
 	{
 		if (is_array($questions)) {
-			addJs('
+			$this->func->addJs('
 				$("#questions").accordion({
 					heightStyle: "content",
 					animate: 200,
@@ -398,7 +398,7 @@ class QuizView extends View
 				}
 				$answers .= '</ul>';
 				$out .= '
-				 <h3 class="question-' . $q['id'] . '"><strong>#' . (int)$q['id'] . ' </strong> - <span class="teaser">' . tt($q['text'], 50) . ' ' . (int)$q['comment_count'] . ' Kommentare</span></h3>
+				 <h3 class="question-' . $q['id'] . '"><strong>#' . (int)$q['id'] . ' </strong> - <span class="teaser">' . $this->func->tt($q['text'], 50) . ' ' . (int)$q['comment_count'] . ' Kommentare</span></h3>
 				 <div class="question-' . $q['id'] . '">
 					' . v_input_wrapper('Frage', $q['text'] . '
 					<p><strong>' . $q['fp'] . ' Fehlerpunkte, ' . $q['duration'] . ' Sekunden zum Antworten</strong></p>
@@ -434,7 +434,7 @@ class QuizView extends View
 				$out .= '
 				<li>
 					<a href="#" onclick="ajreq(\'editanswer\',{app:\'quiz\',id:' . $a['id'] . '});return false;" class="ui-corner-all">
-						<span style="height:35px;overflow:hidden;font-size:11px;"><strong class="' . $ampel . '" style="float:right;margin:0 0 0 3px;"><span>&nbsp;</span></strong>' . tt($a['text'], 60) . '</span>
+						<span style="height:35px;overflow:hidden;font-size:11px;"><strong class="' . $ampel . '" style="float:right;margin:0 0 0 3px;"><span>&nbsp;</span></strong>' . $this->func->tt($a['text'], 60) . '</span>
 						<span style="clear:both;"></span>
 					</a>
 				</li>';

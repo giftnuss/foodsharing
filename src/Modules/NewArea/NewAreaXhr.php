@@ -16,11 +16,11 @@ class NewareaXhr extends Control
 
 	public function orderFs()
 	{
-		if (isOrgaTeam()) {
+		if ($this->func->isOrgaTeam()) {
 			if ((int)$_GET['bid'] == 0) {
 				return array(
 					'status' => 1,
-					'script' => 'error("Du musst noch einen Bezirk auswählen in den die Foodsaver sortiert werden.");'
+					'script' => '$this->func->error("Du musst noch einen Bezirk auswählen in den die Foodsaver sortiert werden.");'
 				);
 			} else {
 				$bezirk_id = (int)$_GET['bid'];
@@ -35,12 +35,12 @@ class NewareaXhr extends Control
 							$this->model->linkBezirk($fid, $bezirk_id);
 
 							$foodsaver = $this->model->getValues(array('geschlecht', 'email', 'name', 'nachname'), 'foodsaver', $fid);
-							$anrede = genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r');
+							$anrede = $this->func->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r');
 							$name = $foodsaver['name'];
 
 							$message = str_replace(array('{ANREDE}', '{NAME}'), array($anrede, $name), $_GET['msg']);
 
-							libmail(array(
+							$this->func->libmail(array(
 								'email' => 'info@lebensmittelretten.de',
 								'email_name' => 'Foodsharing Freiwillige'
 							), $foodsaver['email'], $_GET['subject'], $message);
@@ -61,7 +61,7 @@ class NewareaXhr extends Control
 
 	public function deleteMarked()
 	{
-		if (isOrgaTeam()) {
+		if ($this->func->isOrgaTeam()) {
 			$parts = explode('-', $_GET['del']);
 			if (count($parts) > 0) {
 				foreach ($parts as $p) {

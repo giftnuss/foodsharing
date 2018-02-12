@@ -27,25 +27,25 @@ class GeoCleanView extends View
 			$data[] = array(
 				array('cnt' => '<input class="hiddenid" type="hidden" name="fs-' . $fs['id'] . '" id="fs-' . $fs['id'] . '" value="' . $fs['id'] . '" />' . $fs['name'] . ' ' . $fs['nachname']),
 				array('cnt' => $fs['anschrift'] . ', ' . $fs['plz'] . ' ' . $fs['stadt']),
-				array('cnt' => '<a href="/?page=foodsaver&a=edit&id=' . $fs['id'] . '" class="button">' . s('edit') . '</a> <a href="#" onclick="u_getGeo(' . (int)$fs['id'] . ');return false;" class="button">Koordinaten ermitteln</a>')
+				array('cnt' => '<a href="/?page=foodsaver&a=edit&id=' . $fs['id'] . '" class="button">' . $this->func->s('edit') . '</a> <a href="#" onclick="u_getGeo(' . (int)$fs['id'] . ');return false;" class="button">Koordinaten ermitteln</a>')
 			);
-			addHidden('
+			$this->func->addHidden('
 				' . v_form_hidden('fs' . $fs['id'] . 'anschrift', $fs['anschrift']) . '
 				' . v_form_hidden('fs' . $fs['id'] . 'plz', $fs['plz']) . '	
 				' . v_form_hidden('fs' . $fs['id'] . 'stadt', $fs['stadt']) . '	
 			');
 		}
 
-		addJsFunc('
+		$this->func->addJsFunc('
 			var u_fslist = [' . implode(',', $js) . '];	
 		');
 
 		return
 			v_field(
 				v_tablesorter(array(
-					array('name' => s('name'), 'width' => 150),
-					array('name' => s('address')),
-					array('name' => s('options'), 'width' => 240)
+					array('name' => $this->func->s('name'), 'width' => 150),
+					array('name' => $this->func->s('address')),
+					array('name' => $this->func->s('options'), 'width' => 240)
 				), $data),
 				'Foodsaver ohne Koordinaten'
 			);
@@ -63,8 +63,8 @@ class GeoCleanView extends View
 		}
 
 		$out = v_tablesorter([
-			['name' => s('name')],
-			['name' => s('fs_count'), 'width' => 120]
+			['name' => $this->func->s('name')],
+			['name' => $this->func->s('fs_count'), 'width' => 120]
 		], $rows, ['pager' => true]);
 
 		return $out;

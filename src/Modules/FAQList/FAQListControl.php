@@ -22,8 +22,8 @@ class FAQListControl extends Control
 	{
 		if (isset($_GET['id'])) {
 			if ($res = $this->model->getOne_faq($_GET['id'])) {
-				addBread('FAQ`s', '/?page=listFaq');
-				addBread(substr($res['name'], 0, 30));
+				$this->func->addBread('FAQ`s', '/?page=listFaq');
+				$this->func->addBread(substr($res['name'], 0, 30));
 
 				$cnt = '';
 
@@ -31,12 +31,12 @@ class FAQListControl extends Control
 					$cnt .= $res['answer'];
 				}
 
-				addContent($this->v_utils->v_field($cnt, $res['name'], array('class' => 'ui-padding')));
+				$this->func->addContent($this->v_utils->v_field($cnt, $res['name'], array('class' => 'ui-padding')));
 			} else {
-				goPage('listFaq');
+				$this->func->goPage('listFaq');
 			}
 		} else {
-			addBread('FAQ`s', '/?page=listFaq');
+			$this->func->addBread('FAQ`s', '/?page=listFaq');
 
 			$docs = $this->model->getFaqIntern();
 			$menu = array();
@@ -47,7 +47,7 @@ class FAQListControl extends Control
 				);
 			}
 
-			addContent($this->v_utils->v_menu($menu, 'FAQ'));
+			$this->func->addContent($this->v_utils->v_menu($menu, 'FAQ'));
 		}
 	}
 }

@@ -12,7 +12,7 @@ class ProfileControl extends Control
 	public function __construct()
 	{
 		if (!S::may()) {
-			go('/');
+			$this->func->go('/');
 		}
 
 		$this->model = new ProfileModel();
@@ -36,13 +36,13 @@ class ProfileControl extends Control
 						$this->profile();
 					}
 				} else {
-					goPage('dashboard');
+					$this->func->goPage('dashboard');
 				}
 			} else {
-				goPage('dashboard');
+				$this->func->goPage('dashboard');
 			}
 		} else {
-			goPage('dashboard');
+			$this->func->goPage('dashboard');
 		}
 	}
 
@@ -52,11 +52,11 @@ class ProfileControl extends Control
 
 	private function organotes()
 	{
-		addBread($this->foodsaver['name'], '/profile/' . $this->foodsaver['id']);
+		$this->func->addBread($this->foodsaver['name'], '/profile/' . $this->foodsaver['id']);
 		if (S::may('orga')) {
 			$this->view->usernotes($this->wallposts('usernotes', $this->foodsaver['id']), $this->model->getCompanies($this->foodsaver['id']), $this->model->getCompaniesCount($this->foodsaver['id']), $this->model->getNextDates($this->foodsaver['id'], 50));
 		} else {
-			go('/profile/' . $this->foodsaver['id']);
+			$this->func->go('/profile/' . $this->foodsaver['id']);
 		}
 	}
 
@@ -64,7 +64,7 @@ class ProfileControl extends Control
 	{
 		$bids = $this->model->getFsBezirkIds($this->foodsaver['id']);
 
-		if (isOrgaTeam() || isBotForA($bids, false, true)) {
+		if ($this->func->isOrgaTeam() || $this->func->isBotForA($bids, false, true)) {
 			$this->view->profile($this->wallposts('foodsaver', $this->foodsaver['id']), $this->model->getCompanies($this->foodsaver['id']), $this->model->getCompaniesCount($this->foodsaver['id']), $this->model->getNextDates($this->foodsaver['id'], 50));
 		} else {
 			$this->view->profile($this->wallposts('foodsaver', $this->foodsaver['id']), null, null);

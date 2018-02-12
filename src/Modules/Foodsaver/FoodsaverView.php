@@ -10,7 +10,7 @@ class FoodsaverView extends View
 	{
 		$cnt = v_form_tagselect('search_name', array('required' => true, 'xhr' => 'recip'));
 
-		$cnt .= v_input_wrapper('', '<span class="button" onclick="fsapp.addFoodsaver();">' . s('add') . '</span>');
+		$cnt .= v_input_wrapper('', '<span class="button" onclick="fsapp.addFoodsaver();">' . $this->func->s('add') . '</span>');
 
 		$cnt .= '
 			<div id="appdata" style="display:none">
@@ -30,9 +30,9 @@ class FoodsaverView extends View
 		if ($foodsaver === false) {
 			return '<div id="fsform"></div>';
 		} else {
-			$cnt = v_input_wrapper('Foto', '<a class="avatarlink corner-all" href="#" onclick="profile(' . (int)$foodsaver['id'] . ');return false;"><img style="display:none;" class="corner-all" src="' . img($foodsaver['photo'], 'med') . '" /></a>');
+			$cnt = v_input_wrapper('Foto', '<a class="avatarlink corner-all" href="#" onclick="profile(' . (int)$foodsaver['id'] . ');return false;"><img style="display:none;" class="corner-all" src="' . $this->func->img($foodsaver['photo'], 'med') . '" /></a>');
 			$cnt .= v_input_wrapper('Name', $foodsaver['name'] . ' ' . $foodsaver['nachname']);
-			$cnt .= v_input_wrapper('Rolle', s('rolle_' . $foodsaver['rolle'] . '_' . $foodsaver['geschlecht']));
+			$cnt .= v_input_wrapper('Rolle', $this->func->s('rolle_' . $foodsaver['rolle'] . '_' . $foodsaver['geschlecht']));
 
 			$cnt .= v_input_wrapper('Letzter Login', $foodsaver['last_login']);
 
@@ -52,7 +52,7 @@ class FoodsaverView extends View
 			'<div id="' . $name . 'foodsaverlist">' .
 			v_field(
 				$this->fsAvatarList($foodsaver, array('id' => 'fslist', 'shuffle' => false)),
-				s('fs_in') . $bezirk['name'] . ($inactive ? s('fs_list_not_logged_for_6_months') : '')
+				$this->func->s('fs_in') . $bezirk['name'] . ($inactive ? $this->func->s('fs_list_not_logged_for_6_months') : '')
 			) . '
 		</div>';
 	}

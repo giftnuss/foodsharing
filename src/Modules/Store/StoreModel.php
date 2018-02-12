@@ -88,7 +88,7 @@ class StoreModel extends Model
 				b.id = t.betrieb_id
 				
 			AND
-				t.foodsaver_id = ' . fsId() . '
+				t.foodsaver_id = ' . $this->func->fsId() . '
 				
 			AND
 				t.active = 1

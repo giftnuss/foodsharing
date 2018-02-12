@@ -94,7 +94,7 @@ class EventXhr extends Control
 
 	private function mayEvent()
 	{
-		if ($this->event['public'] == 1 || S::may('orga') || isBotFor($this->event['bezirk_id']) || isset($this->event['invites']['may'][fsId()])) {
+		if ($this->event['public'] == 1 || S::may('orga') || $this->func->isBotFor($this->event['bezirk_id']) || isset($this->event['invites']['may'][$this->func->fsId()])) {
 			return true;
 		}
 

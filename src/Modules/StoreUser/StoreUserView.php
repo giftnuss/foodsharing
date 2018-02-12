@@ -28,9 +28,9 @@ class StoreUserView extends View
 	{
 		$out = '<table class="pintable">';
 		$odd = 'odd';
-		addJs('$("table.pintable tr td ul li").tooltip();');
+		$this->func->addJs('$("table.pintable tr td ul li").tooltip();');
 
-		addJsFunc('
+		$this->func->addJsFunc('
 	function acceptRequest(fsid,bid){
 		showLoader();
 		$.ajax({
@@ -87,7 +87,7 @@ class StoreUserView extends View
 			}
 			$out .= '
 		<tr class="' . $odd . ' request-' . $r['id'] . '">
-			<td class="img" width="35px"><a href="#" onclick="profile(' . (int)$r['id'] . ');return false;"><img src="' . img($r['photo']) . '" /></a></td>
+			<td class="img" width="35px"><a href="#" onclick="profile(' . (int)$r['id'] . ');return false;"><img src="' . $this->func->img($r['photo']) . '" /></a></td>
 			<td style="padding-top:17px;"><span class="msg"><a href="#" onclick="profile(' . (int)$r['id'] . ');return false;">' . $r['name'] . '</a></span></td>
 			<td style="width:92px;padding-top:17px;"><span class="msg"><ul class="toolbar"><li class="ui-state-default ui-corner-left" title="Ablehnen" onclick="denyRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-closethick"></span></li><li class="ui-state-default" title="auf die Springer- / Warteliste setzen" onclick="warteRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-star"></span></li><li class="ui-state-default ui-corner-right" title="Akzeptieren" onclick="acceptRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-heart"></span></li></ul></span></td>
 		</tr>';
@@ -95,10 +95,10 @@ class StoreUserView extends View
 
 		$out .= '</table>';
 
-		hiddenDialog('requests', array($out));
-		addJs('$("#dialog_requests").dialog("option","title","Anfragen für ' . jsonSafe($betrieb['name'], '"') . '");');
-		addJs('$("#dialog_requests").dialog("option","buttons",{});');
-		addJs('$("#dialog_requests").dialog("open");');
+		$this->func->hiddenDialog('requests', array($out));
+		$this->func->addJs('$("#dialog_requests").dialog("option","title","Anfragen für ' . $this->func->jsonSafe($betrieb['name'], '"') . '");');
+		$this->func->addJs('$("#dialog_requests").dialog("option","buttons",{});');
+		$this->func->addJs('$("#dialog_requests").dialog("open");');
 	}
 
 	public function u_innerRow($id, $betrieb)
@@ -107,7 +107,7 @@ class StoreUserView extends View
 		if ($betrieb[$id] != '') {
 			$betrieb[$id] = trim($betrieb[$id]);
 			nl2br($betrieb[$id]);
-			$out = '<div class="innerRow"><span class="label">' . s($id) . '</span><span class="cnt">' . $betrieb[$id] . '</span></div><div style="clear:both"></div>';
+			$out = '<div class="innerRow"><span class="label">' . $this->func->s($id) . '</span><span class="cnt">' . $betrieb[$id] . '</span></div><div style="clear:both"></div>';
 		}
 
 		return $out;
@@ -115,7 +115,7 @@ class StoreUserView extends View
 
 	public function u_team($betrieb)
 	{
-		$id = id('team');
+		$id = $this->func->id('team');
 		$out = '<ul id="' . $id . '" class="team">';
 		$jssaver = array();
 		$sleeper = '';
@@ -127,7 +127,7 @@ class StoreUserView extends View
 			$click = 'profile(' . (int)$fs['id'] . ');';
 			if ($fs['verantwortlich'] == 1) {
 				$class .= ' verantwortlich';
-			} elseif ($betrieb['verantwortlich'] || isBotFor($betrieb['bezirk_id']) || isOrgaTeam()) {
+			} elseif ($betrieb['verantwortlich'] || $this->func->isBotFor($betrieb['bezirk_id']) || $this->func->isOrgaTeam()) {
 				$class .= ' context-team';
 				$click = '';
 			}
@@ -140,23 +140,23 @@ class StoreUserView extends View
 			$number = false;
 			if (!empty($fs['handy'])) {
 				$number = $fs['handy'];
-				$tel .= '<span class="item phone">' . ((isMob()) ? '<a href="tel:' . $fs['handy'] . '"><span>' . $fs['handy'] . '</span></a>' : $fs['handy']) . '</span>';
+				$tel .= '<span class="item phone">' . (($this->func->isMob()) ? '<a href="tel:' . $fs['handy'] . '"><span>' . $fs['handy'] . '</span></a>' : $fs['handy']) . '</span>';
 			}
 			if (!empty($fs['telefon'])) {
-				$tel .= '<span class="item phone">' . ((isMob()) ? '<a href="tel:' . $fs['telefon'] . '"><span>' . $fs['telefon'] . '</span></a>' : $fs['telefon']) . '</span>';
+				$tel .= '<span class="item phone">' . (($this->func->isMob()) ? '<a href="tel:' . $fs['telefon'] . '"><span>' . $fs['telefon'] . '</span></a>' : $fs['telefon']) . '</span>';
 			}
 
 			if ((int)$fs['last_fetch'] > 0) {
-				$last = sv('stat_fetchcount', array(
+				$last = $this->func->sv('stat_fetchcount', array(
 					'date' => date('d.m.Y', $fs['last_fetch'])
 				));
 			} else {
-				$last = sv('stat_fetchcount_none', array());
+				$last = $this->func->sv('stat_fetchcount_none', array());
 			}
 
 			$onclick = ' onclick="' . $click . 'return false;"';
 			$href = '#';
-			if ($number !== false && isMob()) {
+			if ($number !== false && $this->func->isMob()) {
 				$onclick = '';
 				$href = 'tel:' . preg_replace('/[^0-9\+]/', '', $number);
 			}
@@ -164,7 +164,7 @@ class StoreUserView extends View
 			$tmp = '
 				<li class="team fs-' . $fs['id'] . '">
 					<a class="ui-corner-all' . $class . '" title="#tt-tt-' . $fs['id'] . '" href="' . $href . '"' . $onclick . '>
-						' . avatar($fs) . '
+						' . $this->func->avatar($fs) . '
 						<span class="infos">
 							<span class="item"><strong>' . $fs['name'] . '</strong> <span style="float:right">(' . $fs['stat_fetchcount'] . ')</span></span>
 							' . $tel . '
@@ -188,7 +188,7 @@ class StoreUserView extends View
 
 				$class = '';
 				$click = 'profile(' . (int)$fs['id'] . ');';
-				if ($betrieb['verantwortlich'] || isBotFor($betrieb['bezirk_id']) || isOrgaTeam()) {
+				if ($betrieb['verantwortlich'] || $this->func->isBotFor($betrieb['bezirk_id']) || $this->func->isOrgaTeam()) {
 					$class .= ' context-jumper';
 					$click = '';
 				}
@@ -204,7 +204,7 @@ class StoreUserView extends View
 
 				$onclick = ' onclick="' . $click . 'return false;"';
 				$href = '#';
-				if (isMob() && $number !== false) {
+				if ($this->func->isMob() && $number !== false) {
 					$onclick = '';
 					$href = 'tel:' . preg_replace('/[^0-9\+]/', '', $number);
 				}
@@ -212,7 +212,7 @@ class StoreUserView extends View
 				$tmp = '
 					<li class="jumper fs-' . $fs['id'] . '">
 						<a class="ui-corner-all' . $class . '" title="#tt-tt-' . $fs['id'] . '" href="' . $href . '"' . $onclick . '>
-							' . avatar($fs) . '
+							' . $this->func->avatar($fs) . '
 							<span class="infos">
 								<span class="item"><strong>' . $fs['name'] . '</strong></span>
 								' . $tel . '
@@ -233,7 +233,7 @@ class StoreUserView extends View
 
 		$out .= $sleeper . '</ul><div style="clear:both"></div>';
 
-		addJsFunc('
+		$this->func->addJsFunc('
 		function u_contextAction(action,fsid)
 		{
 			if(action == "message")
@@ -278,7 +278,7 @@ class StoreUserView extends View
 		}
 	');
 
-		addJs('
+		$this->func->addJs('
 		function createJumperMenu() {
 	        return {
 	            callback: function(key, options) {
@@ -355,7 +355,7 @@ class StoreUserView extends View
 	');
 
 		if ($betrieb['verantwortlich']) {
-			addJs('
+			$this->func->addJs('
 			$("#team_status").change(function(){
 				var val = $(this).val();
 				showLoader();
@@ -563,8 +563,8 @@ class StoreUserView extends View
 			$ago = true;
 		}
 
-		if (!$ago && ($option['verantwortlich'] || S::may('orga') || isBotFor($option['bezirk_id']))) {
-			addJsFunc('
+		if (!$ago && ($option['verantwortlich'] || S::may('orga') || $this->func->isBotFor($option['bezirk_id']))) {
+			$this->func->addJsFunc('
 			function u_timetableAction(key,el)
 			{
 				val = $(el).children("input:first").val().split(":::");
@@ -583,7 +583,7 @@ class StoreUserView extends View
 				}
 			}
 		');
-			addJs('
+			$this->func->addJs('
 			function createConfirmedMenu() {
 		        return {
 		            callback: function(key, options) {
@@ -641,7 +641,7 @@ class StoreUserView extends View
 		    });		
 		');
 		}
-		$id = 'fetch-' . id($date);
+		$id = 'fetch-' . $this->func->id($date);
 		$out = '<input type="hidden" id="' . $id . '-date" name="' . $id . '-date" value="' . $date . '" />';
 
 		$bindabei = false;
@@ -651,9 +651,9 @@ class StoreUserView extends View
 
 		$i = 0;
 
-		if ($values = getValue($id)) {
+		if ($values = $this->func->getValue($id)) {
 			foreach ($values as $fs) {
-				if ($fs['id'] == fsId()) {
+				if ($fs['id'] == $this->func->fsId()) {
 					$bindabei = true;
 				}
 
@@ -664,23 +664,23 @@ class StoreUserView extends View
 				if (!$ago && $option['verantwortlich'] && $fs['confirmed'] == 0) {
 					$aclass = 'context-unconfirmed';
 					$click = '';
-				} elseif (!$ago && ($option['verantwortlich'] || isBotFor($option['bezirk_id']) || isOrgaTeam())) {
+				} elseif (!$ago && ($option['verantwortlich'] || $this->func->isBotFor($option['bezirk_id']) || $this->func->isOrgaTeam())) {
 					$aclass .= 'context-confirmed';
 					$click = '';
 				}
 
-				if ($fs['id'] == fsid() && !$ago) {
-					$click = 'u_undate(\'' . $date . '\',\'' . format_db_date($date) . '\');return false;';
+				if ($fs['id'] == $this->func->fsId() && !$ago) {
+					$click = 'u_undate(\'' . $date . '\',\'' . $this->func->format_db_date($date) . '\');return false;';
 					$aclass = '';
 				}
 
 				if ($fs['confirmed'] == 0) {
 					$class .= ' unconfirmed';
-					$fs['name'] = sv('not_confirmed', array('name' => $fs['name']));
+					$fs['name'] = $this->func->sv('not_confirmed', array('name' => $fs['name']));
 				}
 				$out .= '
 			<li class="filled ' . $class . '">
-				<a class="' . $aclass . '" href="#" onclick="' . $click . 'return false;" title="' . $fs['name'] . '"><input type="hidden" name="date" value="' . $fs['id'] . ':::' . $date . '" /><img src="' . img($fs['photo']) . '" alt="' . $fs['name'] . '" /><span>&nbsp;</span></a>
+				<a class="' . $aclass . '" href="#" onclick="' . $click . 'return false;" title="' . $fs['name'] . '"><input type="hidden" name="date" value="' . $fs['id'] . ':::' . $date . '" /><img src="' . $this->func->img($fs['photo']) . '" alt="' . $fs['name'] . '" /><span>&nbsp;</span></a>
 			</li>';
 				++$i;
 			}
@@ -691,8 +691,8 @@ class StoreUserView extends View
 				if (!$bindabei) {
 					$out .= '
 				<li class="filled empty timedialog-add-me">
-					<a href="#" onclick="return false;" title="' . s('add_me_here') . '"><img src="img/nobody.gif" alt="nobody" /></a>
-					<input type="hidden" name="' . $id . '-date" class="daydate" value="' . $date . '::' . format_db_date($date) . '::' . s('dow' . date('w', strtotime($date))) . '" />
+					<a href="#" onclick="return false;" title="' . $this->func->s('add_me_here') . '"><img src="img/nobody.gif" alt="nobody" /></a>
+					<input type="hidden" name="' . $id . '-date" class="daydate" value="' . $date . '::' . $this->func->format_db_date($date) . '::' . $this->func->s('dow' . date('w', strtotime($date))) . '" />
 					<input type="hidden" name="' . $id . '-dateid" class="dayid" value="' . $id . '" />
 				</li>';
 				} else {
@@ -715,16 +715,16 @@ class StoreUserView extends View
 
 		$dellink = '';
 
-		if (!$ago && isset($option['field']['additional']) && ($option['verantwortlich'] || isOrgaTeam() || isBotFor($option['bezirk_id']))) {
+		if (!$ago && isset($option['field']['additional']) && ($option['verantwortlich'] || $this->func->isOrgaTeam() || $this->func->isBotFor($option['bezirk_id']))) {
 			$dellink = '<br /><a class="button" href="#" onclick="if(confirm(\'Termin wirklich löschen?\')){ajreq(\'deldate\',{app:\'betrieb\',id:\'' . (int)$_GET['id'] . '\',time:\'' . $option['field']['datetime'] . '\'});}return false;">Termin löschen</a>';
 		}
 
-		return $this->v_utils->v_input_wrapper(s($id), $out . $dellink, $id, $option);
+		return $this->v_utils->v_input_wrapper($this->func->s($id), $out . $dellink, $id, $option);
 	}
 
 	public function u_form_abhol_table($zeiten = false, $option = array())
 	{
-		addJs('
+		$this->func->addJs('
 	$(".nft-remove").button({
 		text: false,
 		icons: {
@@ -788,14 +788,14 @@ class StoreUserView extends View
 			
 			<thead>
 				<tr>
-					<th class="ui-padding">' . s('day') . '</th>
-					<th class="ui-padding">' . s('time') . '</th>
-					<th class="ui-padding">' . s('fetcher_count') . '</th>
+					<th class="ui-padding">' . $this->func->s('day') . '</th>
+					<th class="ui-padding">' . $this->func->s('time') . '</th>
+					<th class="ui-padding">' . $this->func->s('fetcher_count') . '</th>
 				</tr>
 			</thead>
 			<tfoot>
 			    <tr>
-					<td colspan="3"><span id="nft-add">' . s('add') . '</span></td>
+					<td colspan="3"><span id="nft-add">' . $this->func->s('add') . '</span></td>
 				</tr>
 			</tfoot>
 			<tbody>';
@@ -816,7 +816,7 @@ class StoreUserView extends View
 					if ($d == $z['dow']) {
 						$sel = ' selected="selected"';
 					}
-					$day .= '<option' . $sel . ' value="' . $d . '">' . s('dow' . $d) . '</option>';
+					$day .= '<option' . $sel . ' value="' . $d . '">' . $this->func->s('dow' . $d) . '</option>';
 				}
 
 				$time = explode(':', $z['time']);
@@ -840,13 +840,13 @@ class StoreUserView extends View
 			<tr>
 			    <td class="ui-padding">
 					<select class="nft-row" style="width:100px;" name="newfetchtime[]" id="nft-dow">
-						<option value="0">' . s('dow0') . '</option>	
-						<option value="1">' . s('dow1') . '</option>	
-						<option value="2">' . s('dow2') . '</option>	
-						<option value="3">' . s('dow3') . '</option>	
-						<option value="4">' . s('dow4') . '</option>	
-						<option value="5">' . s('dow5') . '</option>	
-						<option value="6">' . s('dow6') . '</option>		
+						<option value="0">' . $this->func->s('dow0') . '</option>	
+						<option value="1">' . $this->func->s('dow1') . '</option>	
+						<option value="2">' . $this->func->s('dow2') . '</option>	
+						<option value="3">' . $this->func->s('dow3') . '</option>	
+						<option value="4">' . $this->func->s('dow4') . '</option>	
+						<option value="5">' . $this->func->s('dow5') . '</option>	
+						<option value="6">' . $this->func->s('dow6') . '</option>		
 					</select>
 				  </td>
 			      <td class="ui-padding"><select class="nfttime-hour" name="nfttime[hour][]"><option value="0">00</option><option value="1">01</option><option value="2">02</option><option value="3">03</option><option value="4">04</option><option value="5">05</option><option value="6">06</option><option value="7">07</option><option value="8">08</option><option value="9">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20" selected="selected">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option></select><select class="nfttime-min" name="nfttime[min][]"><option value="0" selected="selected">00</option><option value="5">05</option><option value="10">10</option><option value="15">15</option><option value="20">20</option><option value="25">25</option><option value="30">30</option><option value="35">35</option><option value="40">40</option><option value="45">45</option><option value="50">50</option><option value="55">55</option></select> Uhr</td>

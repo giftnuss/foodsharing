@@ -10,7 +10,7 @@ class StoreControl extends Control
 	public function __construct()
 	{
 		if (!S::may()) {
-			goLogin();
+			$this->func->goLogin();
 		}
 
 		global $g_view_utils;
@@ -24,83 +24,83 @@ class StoreControl extends Control
 
 	public function index()
 	{
-		$bezirk_id = getGet('bid');
+		$bezirk_id = $this->func->getGet('bid');
 
 		if (!isset($_GET['bid'])) {
-			$bezirk_id = getBezirkId();
+			$bezirk_id = $this->func->getBezirkId();
 		} else {
 			$bezirk_id = (int)$_GET['bid'];
 		}
 
-		if (!isOrgaTeam() && $bezirk_id == 0) {
-			$bezirk_id = getBezirkId();
+		if (!$this->func->isOrgaTeam() && $bezirk_id == 0) {
+			$bezirk_id = $this->func->getBezirkId();
 		}
 		if ($bezirk_id > 0) {
 			$bezirk = $this->model->getBezirk($bezirk_id);
 		} else {
 			$bezirk = array('name' => 'kompletter Datenbank');
 		}
-		if (getAction('new')) {
+		if ($this->func->getAction('new')) {
 			if (S::may('bieb')) {
 				$this->handle_add($bezirk_id);
 
-				addBread(s('bread_betrieb'), '/?page=betrieb');
-				addBread(s('bread_new_betrieb'));
+				$this->func->addBread($this->func->s('bread_betrieb'), '/?page=betrieb');
+				$this->func->addBread($this->func->s('bread_new_betrieb'));
 
 				if (isset($_GET['id'])) {
 					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
 				}
 
-				addContent($this->view->betrieb_form($bezirk, 'betrieb', $this->model->getBasics_lebensmittel(), $this->model->getBasics_foodsaver(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
+				$this->func->addContent($this->view->betrieb_form($bezirk, 'betrieb', $this->model->getBasics_lebensmittel(), $this->model->getBasics_foodsaver(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
 
-				addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-					array('name' => s('back_to_overview'), 'href' => '/?page=fsbetrieb&bid=' . $bezirk_id)
-				)), s('actions')), CNT_RIGHT);
+				$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+					array('name' => $this->func->s('back_to_overview'), 'href' => '/?page=fsbetrieb&bid=' . $bezirk_id)
+				)), $this->func->s('actions')), CNT_RIGHT);
 			} else {
-				info('Zum Anlegen eines Betriebes musst Du Betriebsverantwortlicher sein');
-				go('?page=settings&sub=upgrade/up_bip');
+				$this->func->info('Zum Anlegen eines Betriebes musst Du Betriebsverantwortlicher sein');
+				$this->func->go('?page=settings&sub=upgrade/up_bip');
 			}
-		} elseif ($id = getActionId('delete')) {
+		} elseif ($id = $this->func->getActionId('delete')) {
 			/*
 			if($this->model->del_betrieb($id))
 			{
-				info(s('betrieb_deleted'));
-				goPage();
+				$this->func->info($this->func->s('betrieb_deleted'));
+				$this->func->goPage();
 			}
 			*/
-		} elseif ($id = getActionId('edit')) {
-			addBread(s('bread_betrieb'), '/?page=betrieb');
-			addBread(s('bread_edit_betrieb'));
+		} elseif ($id = $this->func->getActionId('edit')) {
+			$this->func->addBread($this->func->s('bread_betrieb'), '/?page=betrieb');
+			$this->func->addBread($this->func->s('bread_edit_betrieb'));
 			$data = $this->model->getOne_betrieb($id);
 
-			addTitle($data['name']);
-			addTitle(s('edit'));
+			$this->func->addTitle($data['name']);
+			$this->func->addTitle($this->func->s('edit'));
 
-			if ((isOrgaTeam() || $this->model->isVerantwortlich($id)) || isBotFor($data['bezirk_id'])) {
+			if (($this->func->isOrgaTeam() || $this->model->isVerantwortlich($id)) || $this->func->isBotFor($data['bezirk_id'])) {
 				$this->handle_edit();
 
-				setEditData($data);
+				$this->func->setEditData($data);
 
 				$bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $data['bezirk_id']);
 				if (isset($_GET['id'])) {
 					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
 				}
 
-				addContent($this->view->betrieb_form($bezirk, '', $this->model->getBasics_lebensmittel(), $this->model->getBasics_foodsaver(), $this->model->get_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
+				$this->func->addContent($this->view->betrieb_form($bezirk, '', $this->model->getBasics_lebensmittel(), $this->model->getBasics_foodsaver(), $this->model->get_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
 			} else {
-				info('Diesen Betrieb kannst Du nicht bearbeiten');
+				$this->func->info('Diesen Betrieb kannst Du nicht bearbeiten');
 			}
 
-			addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				pageLink('betrieb', 'back_to_overview')
-			)), s('actions')), CNT_RIGHT);
+			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->func->pageLink('betrieb', 'back_to_overview')
+			)), $this->func->s('actions')), CNT_RIGHT);
 		} elseif (isset($_GET['id'])) {
-			go('/?page=fsbetrieb&id=' . (int)$_GET['id']);
+			$this->func->go('/?page=fsbetrieb&id=' . (int)$_GET['id']);
 		} else {
-			addBread(s('betrieb_bread'), '/?page=betrieb');
+			$this->func->addBread($this->func->s('betrieb_bread'), '/?page=betrieb');
 
 			if (S::may('bieb')) {
-				addContent($this->v_utils->v_menu(array(
+				$this->func->addContent($this->v_utils->v_menu(array(
 					array('href' => '/?page=betrieb&a=new&bid=' . (int)$bezirk_id, 'name' => 'Neuen Betrieb eintragen')
 				), 'Aktionen'), CNT_RIGHT);
 			}
@@ -124,16 +124,16 @@ class StoreControl extends Control
 					['name' => 'Name'],
 					['name' => 'Anschrift'],
 					['name' => 'eingetragen'],
-					['name' => s('bezirk')],
+					['name' => $this->func->s('bezirk')],
 					['name' => 'Status', 'width' => 50],
 					['name' => 'Aktionen', 'sort' => false, 'width' => 75]
 				], $storesRows, ['pager' => true]);
 
-				addJs('$("#comment").dialog({title:"Kommentar zum Betrieb"});');
+				$this->func->addJs('$("#comment").dialog({title:"Kommentar zum Betrieb"});');
 
-				addContent($this->v_utils->v_field($table, 'Alle Betriebe aus dem Bezirk ' . $bezirk['name']));
+				$this->func->addContent($this->v_utils->v_field($table, 'Alle Betriebe aus dem Bezirk ' . $bezirk['name']));
 			} else {
-				info('Es sind noch keine Betriebe eingetragen');
+				$this->func->info('Es sind noch keine Betriebe eingetragen');
 			}
 		}
 	}
@@ -141,14 +141,14 @@ class StoreControl extends Control
 	private function handle_edit()
 	{
 		global $g_data;
-		if (submitted()) {
+		if ($this->func->submitted()) {
 			$g_data['stadt'] = $g_data['ort'];
 
 			if ($this->model->update_betrieb($_GET['id'], $g_data)) {
-				info(s('betrieb_edit_success'));
-				go('/?page=fsbetrieb&id=' . (int)$_GET['id']);
+				$this->func->info($this->func->s('betrieb_edit_success'));
+				$this->func->go('/?page=fsbetrieb&id=' . (int)$_GET['id']);
 			} else {
-				error(s('error'));
+				$this->func->error($this->func->s('error'));
 			}
 		}
 	}
@@ -156,18 +156,18 @@ class StoreControl extends Control
 	private function handle_add($bezirk_id)
 	{
 		global $g_data;
-		if (submitted()) {
+		if ($this->func->submitted()) {
 			$g_data['status_date'] = date('Y-m-d H:i:s');
 
 			if (!isset($g_data['bezirk_id'])) {
-				$g_data['bezirk_id'] = getBezirkId();
+				$g_data['bezirk_id'] = $this->func->getBezirkId();
 			}
 
 			$g_data['stadt'] = $g_data['ort'];
 
 			if ($id = $this->model->add_betrieb($g_data)) {
 				$this->model->add_betrieb_notiz(array(
-					'foodsaver_id' => fsId(),
+					'foodsaver_id' => $this->func->fsId(),
 					'betrieb_id' => $id,
 					'text' => '{BETRIEB_ADDED}',
 					'zeit' => date('Y-m-d H:i:s', (time() - 10)),
@@ -176,7 +176,7 @@ class StoreControl extends Control
 
 				if (isset($g_data['first_post']) && !empty($g_data['first_post'])) {
 					$this->model->add_betrieb_notiz(array(
-						'foodsaver_id' => fsId(),
+						'foodsaver_id' => $this->func->fsId(),
 						'betrieb_id' => $id,
 						'text' => $g_data['first_post'],
 						'zeit' => date('Y-m-d H:i:s'),
@@ -193,11 +193,11 @@ class StoreControl extends Control
 					'name' => $g_data['name']
 				), 'store-new-' . (int)$id);
 
-				info(s('betrieb_add_success'));
+				$this->func->info($this->func->s('betrieb_add_success'));
 
-				go('/?page=fsbetrieb&id=' . (int)$id);
+				$this->func->go('/?page=fsbetrieb&id=' . (int)$id);
 			} else {
-				error(s('error'));
+				$this->func->error($this->func->s('error'));
 			}
 		}
 	}

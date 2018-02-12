@@ -10,7 +10,7 @@ class FoodsaverXhr extends Control
 	public function __construct()
 	{
 		// permission check
-		if (!S::may('orga') && !isBotFor($_GET['bid'])) {
+		if (!S::may('orga') && !$this->func->isBotFor($_GET['bid'])) {
 			return false;
 		}
 
@@ -39,7 +39,7 @@ class FoodsaverXhr extends Control
 	{
 		$foodsaver = $this->model->listFoodsaver($_GET['bid']);
 		$bezirk = $this->model->getBezirk($_GET['bid']);
-		$html = jsSafe($this->view->foodsaverList($foodsaver, $bezirk), "'");
+		$html = $this->func->jsSafe($this->view->foodsaverList($foodsaver, $bezirk), "'");
 
 		return array(
 			'status' => 1,

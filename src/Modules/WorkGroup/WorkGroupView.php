@@ -70,7 +70,7 @@ class WorkGroupView extends View
 
 	public function listGroups($groups, $myapps, $mystats)
 	{
-		addJs('
+		$this->func->addJs('
 				$(".fancybox").fancybox();
 				/*
 				$contents = $(".groups .field div.ui-widget.ui-widget-content");
@@ -100,7 +100,7 @@ class WorkGroupView extends View
 				foreach ($g['leader'] as $m) {
 					--$max;
 					$member .= '
-				<a class="member" href="#" onclick="profile(' . (int)$m['id'] . ');return false;"><img src="' . img($m['photo']) . '" alt="' . $m['name'] . '" /></a>';
+				<a class="member" href="#" onclick="profile(' . (int)$m['id'] . ');return false;"><img src="' . $this->func->img($m['photo']) . '" alt="' . $m['name'] . '" /></a>';
 					if ($max == 0) {
 						break;
 					}
@@ -129,17 +129,17 @@ class WorkGroupView extends View
 
 			$info = '';
 
-			if (isOrgaTeam() || isBotFor($g['id']) || isBotFor($g['parent_id'])) {
+			if ($this->func->isOrgaTeam() || $this->func->isBotFor($g['id']) || $this->func->isBotFor($g['parent_id'])) {
 				$btn .= '<a class="button" href="/?page=groups&sub=edit&id=' . $g['id'] . '">Gruppe bearbeiten</a>';
 			}
 
-			if (mayBezirk($g['id']) || isBotFor($g['parent_id'])) {
+			if ($this->func->mayBezirk($g['id']) || $this->func->isBotFor($g['parent_id'])) {
 				$btn .= '<a class="button" href="/?page=bezirk&bid=' . $g['id'] . '">Zur Gruppe</a>';
 			}
 
 			if (isset($myapps[$g['id']])) {
 				$info = '<div class="ui-padding">' . v_info('Für diese Gruppe hast Du Dich bereits beworben') . '</div>';
-			} elseif (!hasBezirk($g['id'])) {
+			} elseif (!$this->func->hasBezirk($g['id'])) {
 				if ($this->canApply($g, $mystats)) {
 					$btn .= '<a class="button" href="#" onclick="ajreq(\'apply\',{id:' . $g['id'] . '});">Für diese Arbeitsgruppe bewerben</a>';
 				} elseif ($g['apply_type'] == 3) {
@@ -220,10 +220,10 @@ class WorkGroupView extends View
 	public function editGroup($group)
 	{
 		if ($group['apply_type'] != 1) {
-			addJs('$("#addapply").hide();');
+			$this->func->addJs('$("#addapply").hide();');
 		}
 
-		addJs('
+		$this->func->addJs('
 			$("#apply_type").change(function(){
 				if($(this).val() == 1)
 				{
@@ -238,7 +238,7 @@ class WorkGroupView extends View
 
 		$out = '';
 
-		setEditData($group);
+		$this->func->setEditData($group);
 
 		$basics = v_form_text('name') .
 			v_form_textarea('teaser') .
@@ -264,8 +264,8 @@ class WorkGroupView extends View
 		$out .= v_form('editgroup', array(
 			v_field($basics, $group['name'] . ' bearbeiten', array('class' => 'ui-padding')),
 			v_field($apply, 'Bewerbungen', array('class' => 'ui-padding')),
-			v_field(v_form_tagselect('member', array('xhr' => 'recip')), s('member'), array('class' => 'ui-padding')),
-			v_field(v_form_tagselect('leader', array('xhr' => 'recip')), s('leader'), array('class' => 'ui-padding'))
+			v_field(v_form_tagselect('member', array('xhr' => 'recip')), $this->func->s('member'), array('class' => 'ui-padding')),
+			v_field(v_form_tagselect('leader', array('xhr' => 'recip')), $this->func->s('leader'), array('class' => 'ui-padding'))
 		), array('submit' => 'Änderungen speichern'));
 
 		return $out;
@@ -282,7 +282,7 @@ class WorkGroupView extends View
 
 		if ($group['leader']) {
 			foreach ($group['leader'] as $gl) {
-				$head .= '<a style="margin:4px 4px 0 0;" onclick="profile(' . (int)$gl['id'] . ');return false;" href="#" class="member"><img alt="' . $gl['name'] . '" src="' . img($gl['photo']) . '"></a>';
+				$head .= '<a style="margin:4px 4px 0 0;" onclick="profile(' . (int)$gl['id'] . ');return false;" href="#" class="member"><img alt="' . $gl['name'] . '" src="' . $this->func->img($gl['photo']) . '"></a>';
 			}
 			$head = v_input_wrapper(count($group['leader']) . ' Ansprechpartner', $head);
 		}

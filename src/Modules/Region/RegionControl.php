@@ -309,7 +309,7 @@ class RegionControl extends Control
 
 				$this->func->go('/?page=bezirk&bid=' . $this->bezirk_id . '&sub=' . $this->getSub() . '&tid=' . (int)$_POST['thread'] . '&pid=' . $post_id . '#post' . $post_id);
 			} else {
-				error($this->func->s('post_could_not_saved'));
+				$this->func->error($this->func->s('post_could_not_saved'));
 				$this->func->go('/?page=bezirk&bid=' . $this->bezirk_id . '&sub=' . $this->getSub() . '&tid=' . (int)$_POST['thread'] . '&pid=' . (int)$_POST['post'] . '#post' . (int)$_POST['post']);
 			}
 		}

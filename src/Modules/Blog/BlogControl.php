@@ -13,18 +13,18 @@ class BlogControl extends Control
 		$this->view = new BlogView();
 
 		parent::__construct();
-		if ($id = getActionId('delete')) {
+		if ($id = $this->func->getActionId('delete')) {
 			if ($this->model->canEdit($id)) {
 				if ($this->model->del_blog_entry($id)) {
-					info(s('blog_entry_deleted'));
+					$this->func->info($this->func->s('blog_entry_deleted'));
 				}
 			} else {
-				info('Diesen Artikel kannst Du nicht löschen');
+				$this->func->info('Diesen Artikel kannst Du nicht löschen');
 			}
-			goPage();
+			$this->func->goPage();
 		}
-		addBread(s('blog_bread'), '/?page=blog');
-		addTitle(s('blog_bread'));
+		$this->func->addBread($this->func->s('blog_bread'), '/?page=blog');
+		$this->func->addTitle($this->func->s('blog_bread'));
 	}
 
 	public function index()
@@ -47,54 +47,54 @@ class BlogControl extends Control
 				$out .= $this->view->newsListItem($n);
 			}
 
-			addContent(v_field($out, s('news')));
-			addContent($this->view->pager($page));
+			$this->func->addContent(v_field($out, $this->func->s('news')));
+			$this->func->addContent($this->view->pager($page));
 		} elseif ($page > 1) {
-			go('/?page=blog');
+			$this->func->go('/?page=blog');
 		}
 	}
 
 	public function read()
 	{
 		if ($news = $this->model->getPost($_GET['id'])) {
-			addBread($news['name']);
-			addContent($this->view->newsPost($news));
+			$this->func->addBread($news['name']);
+			$this->func->addContent($this->view->newsPost($news));
 		}
 	}
 
 	public function manage()
 	{
-		if (mayEditBlog()) {
-			addBread(s('manage_blog'));
+		if ($this->func->mayEditBlog()) {
+			$this->func->addBread($this->func->s('manage_blog'));
 			$title = 'Blog Artikel';
 
-			addContent($this->view->headline($title));
+			$this->func->addContent($this->view->headline($title));
 
 			if ($data = $this->model->listArticle()) {
-				addContent($this->view->listArticle($data));
+				$this->func->addContent($this->view->listArticle($data));
 			} else {
-				info(s('blog_entry_empty'));
+				$this->func->info($this->func->s('blog_entry_empty'));
 			}
 
-			addContent(v_field(v_menu(array(
+			$this->func->addContent(v_field(v_menu(array(
 				array(
 					'href' => '/?page=blog&sub=add',
-					'name' => s('new_article')
+					'name' => $this->func->s('new_article')
 				)
-			)), s('actions')), CNT_LEFT);
+			)), $this->func->s('actions')), CNT_LEFT);
 		}
 	}
 
 	public function post()
 	{
-		if (mayEditBlog()) {
+		if ($this->func->mayEditBlog()) {
 			if (isset($_GET['id'])) {
 				if ($post = $this->model->getOne_blog_entry($_GET['id'])) {
 					if ($post['active'] == 1) {
-						addTitle($post['name']);
-						addBread($post['name'], '/?page=blog&post=' . (int)$post['id']);
-						addContent($this->view->topbar($post['name'], niceDate($post['time_ts'])));
-						addContent(v_field($post['body'], $post['name'], array('class' => 'ui-padding')));
+						$this->func->addTitle($post['name']);
+						$this->func->addBread($post['name'], '/?page=blog&post=' . (int)$post['id']);
+						$this->func->addContent($this->view->topbar($post['name'], $this->func->niceDate($post['time_ts'])));
+						$this->func->addContent(v_field($post['body'], $post['name'], array('class' => 'ui-padding')));
 					}
 				}
 			}
@@ -103,10 +103,10 @@ class BlogControl extends Control
 
 	public function add()
 	{
-		if (mayEditBlog()) {
+		if ($this->func->mayEditBlog()) {
 			$this->handle_add();
 
-			addBread(s('bread_new_blog_entry'));
+			$this->func->addBread($this->func->s('bread_new_blog_entry'));
 
 			$bezirke = $this->model->getBezirke();
 			if (!S::may('orga')) {
@@ -118,14 +118,14 @@ class BlogControl extends Control
 				}
 			}
 
-			addContent($this->view->blog_entry_form($bezirke, true));
+			$this->func->addContent($this->view->blog_entry_form($bezirke, true));
 
-			addContent(v_field(v_menu(array(
-				pageLink('blog', 'back_to_overview')
-			)), s('actions')), CNT_LEFT);
+			$this->func->addContent(v_field(v_menu(array(
+				$this->func->pageLink('blog', 'back_to_overview')
+			)), $this->func->s('actions')), CNT_LEFT);
 		} else {
-			info('Du darfst keine Artikel erstellen!');
-			goPage();
+			$this->func->info('Du darfst keine Artikel erstellen!');
+			$this->func->goPage();
 		}
 	}
 
@@ -133,55 +133,55 @@ class BlogControl extends Control
 	{
 		global $g_data;
 
-		if (mayEditBlog() && submitted()) {
-			$g_data['foodsaver_id'] = fsId();
+		if ($this->func->mayEditBlog() && $this->func->submitted()) {
+			$g_data['foodsaver_id'] = $this->func->fsId();
 			$g_data['time'] = date('Y-m-d H:i:s');
 
-			if ($this->model->canAdd((int)fsId(), $g_data['bezirk_id']) && $this->model->add_blog_entry($g_data)) {
-				info(s('blog_entry_add_success'));
-				goPage();
+			if ($this->model->canAdd((int)$this->func->fsId(), $g_data['bezirk_id']) && $this->model->add_blog_entry($g_data)) {
+				$this->func->info($this->func->s('blog_entry_add_success'));
+				$this->func->goPage();
 			} else {
-				error(s('error'));
+				$this->func->error($this->func->s('error'));
 			}
 		}
 	}
 
 	public function edit()
 	{
-		if (mayEditBlog() && $this->model->canEdit($_GET['id']) && ($data = $this->model->getOne_blog_entry($_GET['id']))) {
+		if ($this->func->mayEditBlog() && $this->model->canEdit($_GET['id']) && ($data = $this->model->getOne_blog_entry($_GET['id']))) {
 			$this->handle_edit();
 
-			addBread(s('bread_blog_entry'), '/?page=blog&sub=manage');
-			addBread(s('bread_edit_blog_entry'));
+			$this->func->addBread($this->func->s('bread_blog_entry'), '/?page=blog&sub=manage');
+			$this->func->addBread($this->func->s('bread_edit_blog_entry'));
 
-			setEditData($data);
+			$this->func->setEditData($data);
 			$bezirke = $this->model->getBezirke();
 
-			addContent($this->view->blog_entry_form($bezirke));
+			$this->func->addContent($this->view->blog_entry_form($bezirke));
 
-			addContent(v_field(v_menu(array(
-				pageLink('blog', 'back_to_overview')
-			)), s('actions')), CNT_LEFT);
+			$this->func->addContent(v_field(v_menu(array(
+				$this->func->pageLink('blog', 'back_to_overview')
+			)), $this->func->s('actions')), CNT_LEFT);
 		} else {
-			info('Diesen Artikel kannst Du nicht bearbeiten');
-			goPage();
+			$this->func->info('Diesen Artikel kannst Du nicht bearbeiten');
+			$this->func->goPage();
 		}
 	}
 
 	private function handle_edit()
 	{
 		global $g_data;
-		if (mayEditBlog() && submitted()) {
+		if ($this->func->mayEditBlog() && $this->func->submitted()) {
 			$data = $this->model->getValues(array('time', 'foodsaver_id'), 'blog_entry', $_GET['id']);
 
 			$g_data['foodsaver_id'] = $data['foodsaver_id'];
 			$g_data['time'] = $data['time'];
 
 			if ($this->model->update_blog_entry($_GET['id'], $g_data)) {
-				info(s('blog_entry_edit_success'));
-				goPage();
+				$this->func->info($this->func->s('blog_entry_edit_success'));
+				$this->func->goPage();
 			} else {
-				error(s('error'));
+				$this->func->error($this->func->s('error'));
 			}
 		}
 	}

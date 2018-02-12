@@ -29,12 +29,12 @@ class LoginXhr extends Control
 	 */
 	private function fillMemcacheUserVars()
 	{
-		$info = $this->model->getVal('infomail_message', 'foodsaver', fsId());
+		$info = $this->model->getVal('infomail_message', 'foodsaver', $this->func->fsId());
 
 		if ((int)$info > 0) {
-			Mem::userSet(fsId(), 'infomail', true);
+			Mem::userSet($this->func->fsId(), 'infomail', true);
 		} else {
-			Mem::userSet(fsId(), 'infomail', false);
+			Mem::userSet($this->func->fsId(), 'infomail', false);
 		}
 
 		$this->model->updateActivity();
@@ -61,7 +61,7 @@ class LoginXhr extends Control
 				$img = '/img/avatar-mini.png';
 
 				if (!empty($b['photo'])) {
-					$img = img($b['photo']);
+					$img = $this->func->img($b['photo']);
 				}
 
 				$result[] = array(
@@ -95,7 +95,7 @@ class LoginXhr extends Control
 				}
 				$result[] = array(
 					'name' => $b['name'],
-					'teaser' => tt($b['teaser'], 65),
+					'teaser' => $this->func->tt($b['teaser'], 65),
 					'img' => $img,
 					'href' => '/?page=bezirk&bid=' . $b['id'] . '&sub=forum',
 					'search' => array(
@@ -171,7 +171,7 @@ class LoginXhr extends Control
 		if (!S::may()) {
 			$dia = new XhrDialog();
 
-			$dia->setTitle(s('login'));
+			$dia->setTitle($this->func->s('login'));
 
 			$dia->addContent($this->view->loginForm());
 
@@ -204,20 +204,20 @@ class LoginXhr extends Control
 
 			$this->fillMemcacheUserVars();
 
-			$menu = getMenu();
+			$menu = $this->func->getMenu();
 			$msgbar = v_msgBar();
 
 			return array(
 				'status' => 1,
 				'script' => '
 					' . $token_js . '
-					pulseSuccess("' . s('login_success') . '");
+					pulseSuccess("' . $this->func->s('login_success') . '");
 					reload();'
 			);
 		} else {
 			return array(
 				'status' => 1,
-				'script' => 'pulseError("' . s('login_failed') . '");'
+				'script' => 'pulseError("' . $this->func->s('login_failed') . '");'
 			);
 		}
 	}
@@ -236,7 +236,7 @@ class LoginXhr extends Control
 					'image/pjpeg',
 					'image/png'
 				),
-				s('upload_no_image')
+				$this->func->s('upload_no_image')
 			);
 			$uploader->setMaxSize('5MB');
 
@@ -259,7 +259,7 @@ class LoginXhr extends Control
 				$func = 'parent.join.readyUpload(\'' . $name . '\');';
 			}
 		} catch (Exception $e) {
-			$func = 'parent.join.photoUploadError(\'' . s('error_image') . '\');';
+			$func = 'parent.join.photoUploadError(\'' . $this->func->s('error_image') . '\');';
 		}
 
 		echo '<html>
@@ -285,10 +285,10 @@ class LoginXhr extends Control
 			if ($id = $this->model->insertNewUser($data, $token)) {
 				$activationUrl = 'http://' . DEFAULT_HOST . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
 
-				tplMail(25, $data['email'], array(
+				$this->func->tplMail(25, $data['email'], array(
 					'name' => $data['name'],
 					'link' => $activationUrl,
-					'anrede' => s('anrede_' . $data['gender'])
+					'anrede' => $this->func->s('anrede_' . $data['gender'])
 				));
 
 				echo json_encode(array(
@@ -300,7 +300,7 @@ class LoginXhr extends Control
 
 		echo json_encode(array(
 			'status' => 0,
-			'error' => s('error')
+			'error' => $this->func->s('error')
 		));
 		exit();
 	}
@@ -348,19 +348,19 @@ class LoginXhr extends Control
 		$data['surname'] = trim($data['surname']);
 
 		if ($data['name'] == '') {
-			return s('error_name');
+			return $this->func->s('error_name');
 		}
 
-		if (!validEmail($data['email'])) {
-			return s('error_email');
+		if (!$this->func->validEmail($data['email'])) {
+			return $this->func->s('error_email');
 		}
 
 		if ($this->model->emailExists($data['email'])) {
-			return s('email_exists');
+			return $this->func->s('email_exists');
 		}
 
 		if (strlen($data['pw']) < 5 && strlen($data['pw']) > 30) {
-			return s('error_password');
+			return $this->func->s('error_password');
 		}
 
 		$data['gender'] = (int)$data['gender'];
@@ -396,12 +396,12 @@ class LoginXhr extends Control
 		if (!S::may()) {
 			$dia = new XhrDialog();
 
-			$dia->setTitle(s('join'));
+			$dia->setTitle($this->func->s('join'));
 
 			$email = '';
 			$pass = '';
 			if (isset($_GET['p']) && isset($_GET['e'])) {
-				if (validEmail($_GET['e'])) {
+				if ($this->func->validEmail($_GET['e'])) {
 					$email = strip_tags($_GET['e']);
 				}
 				$pass = strip_tags($_GET['p']);
@@ -588,7 +588,7 @@ class LoginXhr extends Control
 
 				return $img;
 			} catch (Exception $e) {
-				info('Dein Foto konnte nicht gespeichert werden');
+				$this->func->info('Dein Foto konnte nicht gespeichert werden');
 
 				return '';
 			}

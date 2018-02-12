@@ -106,7 +106,7 @@ class TeamView extends View
 					<h3>' . $t['name'] . ' ' . $t['nachname'] . '</h3>
 					<span class="subtitle">' . $t['position'] . '</span>
 					<span class="desc">
-						' . tt($t['desc'], 240) . '
+						' . $this->func->tt($t['desc'], 240) . '
 					</span>
 					<span class="foot corner-bottom">
 						' . $socials . '	

@@ -112,7 +112,7 @@ class FairTeilerView extends View
 
 	public function fairteilerForm($data = false)
 	{
-		$title = s('new_fairteiler');
+		$title = $this->func->s('new_fairteiler');
 
 		$tagselect = '';
 		if ($data) {
@@ -120,11 +120,11 @@ class FairTeilerView extends View
 				global $db;
 				$this->bezirke[] = $db->getBezirk($data['bezirk_id']);
 			}
-			setEditData($data);
-			$title = sv('edit_fairteiler_name', $this->fairteiler['name']);
+			$this->func->setEditData($data);
+			$title = $this->func->sv('edit_fairteiler_name', $this->fairteiler['name']);
 
 			$tagselect = v_form_tagselect('bfoodsaver', array('data' => $data['bfoodsaver_values']));
-			addJs('
+			$this->func->addJs('
 			$("#fairteiler-form").submit(function(ev){
 				if($("#bfoodsaver input[type=\'hidden\']").length == 0)
 				{
@@ -138,11 +138,11 @@ class FairTeilerView extends View
 		return v_field(v_form('fairteiler', array(
 			v_form_select('bezirk_id', array('values' => $this->bezirke, 'required' => true)),
 			v_form_text('name', array('required' => true)),
-			v_form_textarea('desc', array('desc' => s('desc_desc'), 'required' => true)),
+			v_form_textarea('desc', array('desc' => $this->func->s('desc_desc'), 'required' => true)),
 			v_form_picture('picture', array('resize' => array(528, 60), 'crop' => array((528 / 170), 1))),
 			$this->latLonPicker('latLng'),
 			$tagselect,
-		), array('submit' => s('save'))), $title, array('class' => 'ui-padding'));
+		), array('submit' => $this->func->s('save'))), $title, array('class' => 'ui-padding'));
 	}
 
 	public function wallposts()
@@ -156,22 +156,22 @@ class FairTeilerView extends View
 
 	public function followHidden()
 	{
-		addJsFunc('
+		$this->func->addJsFunc('
 			function u_follow()
 			{
 				$("#follow-hidden").dialog("open");
 			}
 		');
-		addJs('
+		$this->func->addJs('
 			$("#follow-hidden").dialog({
 				modal: true,
-				title: "' . sv('infotype_title', jsSafe($this->fairteiler['name']), '"') . '",
+				title: "' . $this->func->sv('infotype_title', $this->func->jsSafe($this->fairteiler['name']), '"') . '",
 				autoOpen: false,
 				width: 500,
 				resizable: false,
 				buttons: {
 					"' . s('save') . '": function(){
-						goTo("' . getSelf() . '&follow=1&infotype=" + $("input[name=\'infotype\']:checked").val());
+						goTo("' . $this->func->getSelf() . '&follow=1&infotype=" + $("input[name=\'infotype\']:checked").val());
 					}
 				}
 			});		
@@ -182,9 +182,9 @@ class FairTeilerView extends View
 
 		return '
 			<div id="follow-hidden">
-				' . v_form_radio('infotype', array('desc' => s('infotype_desc'), 'values' => array(
-				array('id' => 1, 'name' => s('infotype_email')),
-				array('id' => 2, 'name' => s('infotype_alert'))
+				' . v_form_radio('infotype', array('desc' => $this->func->s('infotype_desc'), 'values' => array(
+				array('id' => 1, 'name' => $this->func->s('infotype_email')),
+				array('id' => 2, 'name' => $this->func->s('infotype_alert'))
 			))) . '
 			</div>
 		';
@@ -198,7 +198,7 @@ class FairTeilerView extends View
 			$out .= v_field($this->fsAvatarList($this->follower['verantwortlich'], array('scroller' => false)), 'verantwortliche Foodsaver');
 		}
 		if (!empty($this->follower['follow'])) {
-			$out .= v_field($this->fsAvatarList($this->follower['follow']), s('follower'));
+			$out .= v_field($this->fsAvatarList($this->follower['follow']), $this->func->s('follower'));
 		}
 
 		return $out;
@@ -206,7 +206,7 @@ class FairTeilerView extends View
 
 	public function desc()
 	{
-		return v_field('<p>' . nl2br($this->fairteiler['desc'] . '</p>'), s('desc'), array('class' => 'ui-padding'));
+		return v_field('<p>' . nl2br($this->fairteiler['desc'] . '</p>'), $this->func->s('desc'), array('class' => 'ui-padding'));
 	}
 
 	public function listFairteiler($bezirke)
@@ -238,9 +238,9 @@ class FairTeilerView extends View
 		}
 
 		if ($this->bezirk_id > 0) {
-			addContent($this->topbar(sv('list_fairteiler', $this->bezirk['name']), 'Es gibt ' . $count . ' Fair-Teiler in ' . $this->bezirk['name'] . ' und allen Unterbezirken', '<img src="img/fairteiler_thumb.png" />'), CNT_TOP);
+			$this->func->addContent($this->topbar($this->func->sv('list_fairteiler', $this->bezirk['name']), 'Es gibt ' . $count . ' Fair-Teiler in ' . $this->bezirk['name'] . ' und allen Unterbezirken', '<img src="img/fairteiler_thumb.png" />'), CNT_TOP);
 		} else {
-			addContent($this->topbar(s('your_fairteiler'), 'Es gibt ' . $count . ' Fair-Teiler in allen Bezirken in denen Du aktiv bist', '<img src="img/fairteiler_thumb.png" />'), CNT_TOP);
+			$this->func->addContent($this->topbar($this->func->s('your_fairteiler'), 'Es gibt ' . $count . ' Fair-Teiler in allen Bezirken in denen Du aktiv bist', '<img src="img/fairteiler_thumb.png" />'), CNT_TOP);
 		}
 
 		return $content;
@@ -249,7 +249,7 @@ class FairTeilerView extends View
 	public function ftOptions($bezirk_id)
 	{
 		$items = array();
-		if (isBotFor($bezirk_id) || isOrgaTeam()) {
+		if ($this->func->isBotFor($bezirk_id) || $this->func->isOrgaTeam()) {
 			$items[] = array('name' => 'Fair-Teiler eintragen', 'href' => '/?page=fairteiler&bid=' . (int)$bezirk_id . '&sub=addFt');
 		} else {
 			$items[] = array('name' => 'Fair-Teiler vorschlagen', 'href' => '/?page=fairteiler&bid=' . (int)$bezirk_id . '&sub=addFt');

@@ -22,33 +22,33 @@ class EventControl extends Control
 				return false;
 			}
 
-			addBread('Termine', '/?page=event');
-			addBread($event['name']);
+			$this->func->addBread('Termine', '/?page=event');
+			$this->func->addBread($event['name']);
 
-			$status = $this->model->getInviteStatus($event['id'], fsid());
+			$status = $this->model->getInviteStatus($event['id'], $this->func->fsId());
 
-			addContent($this->view->eventTop($event), CNT_TOP);
-			addContent($this->view->statusMenu($event, $status), CNT_LEFT);
-			addContent($this->view->event($event));
+			$this->func->addContent($this->view->eventTop($event), CNT_TOP);
+			$this->func->addContent($this->view->statusMenu($event, $status), CNT_LEFT);
+			$this->func->addContent($this->view->event($event));
 
 			if ($event['online'] == 0 && $event['location'] != false) {
-				addContent($this->view->location($event['location']), CNT_RIGHT);
+				$this->func->addContent($this->view->location($event['location']), CNT_RIGHT);
 			} elseif ($event['online'] == 1) {
-				addContent($this->view->locationMumble(), CNT_RIGHT);
+				$this->func->addContent($this->view->locationMumble(), CNT_RIGHT);
 			}
 
 			if ($event['invites']) {
-				addContent($this->view->invites($event['invites']), CNT_RIGHT);
+				$this->func->addContent($this->view->invites($event['invites']), CNT_RIGHT);
 			}
-			addContent(v_field($this->wallposts('event', $event['id']), 'Pinnwand'));
+			$this->func->addContent(v_field($this->wallposts('event', $event['id']), 'Pinnwand'));
 		} elseif (!isset($_GET['sub'])) {
-			go('/?page=dashboard');
+			$this->func->go('/?page=dashboard');
 		}
 	}
 
 	private function isEventAdmin($event)
 	{
-		if ($event['fs_id'] == fsId() || isBotFor($event['bezirk_id']) || S::may('orga')) {
+		if ($event['fs_id'] == $this->func->fsId() || $this->func->isBotFor($event['bezirk_id']) || S::may('orga')) {
 			return true;
 		}
 
@@ -57,7 +57,7 @@ class EventControl extends Control
 
 	private function mayEvent($event)
 	{
-		if ($event['public'] == 1 || S::may('orga') || isBotFor($event['bezirk_id']) || isset($event['invites']['may'][fsId()])) {
+		if ($event['public'] == 1 || S::may('orga') || $this->func->isBotFor($event['bezirk_id']) || isset($event['invites']['may'][$this->func->fsId()])) {
 			return true;
 		}
 
@@ -70,9 +70,9 @@ class EventControl extends Control
 			if (!$this->isEventAdmin($event)) {
 				return false;
 			}
-			if ($event['fs_id'] == fsId() || isOrgaTeam() || isBotFor($event['bezirk_id'])) {
-				addBread('Termine', '/?page=event');
-				addBread('Neuer Termin');
+			if ($event['fs_id'] == $this->func->fsId() || $this->func->isOrgaTeam() || $this->func->isBotFor($event['bezirk_id'])) {
+				$this->func->addBread('Termine', '/?page=event');
+				$this->func->addBread('Neuer Termin');
 
 				if ($this->isSubmitted()) {
 					if ($data = $this->validateEvent()) {
@@ -83,8 +83,8 @@ class EventControl extends Control
 							if ($data['invite']) {
 								$this->model->inviteBezirk($data['bezirk_id'], $_GET['id'], $data['invitesubs']);
 							}
-							info('Event wurde erfolgreich geändert!');
-							go('/?page=event&id=' . (int)$_GET['id']);
+							$this->func->info('Event wurde erfolgreich geändert!');
+							$this->func->go('/?page=event&id=' . (int)$_GET['id']);
 						}
 					}
 				}
@@ -102,19 +102,19 @@ class EventControl extends Control
 					}
 				}
 
-				setEditData($event);
+				$this->func->setEditData($event);
 
-				addContent($this->view->eventForm($bezirke));
+				$this->func->addContent($this->view->eventForm($bezirke));
 			} else {
-				go('/?page=event');
+				$this->func->go('/?page=event');
 			}
 		}
 	}
 
 	public function add()
 	{
-		addBread('Termine', '/?page=event');
-		addBread('Neuer Termin');
+		$this->func->addBread('Termine', '/?page=event');
+		$this->func->addBread('Neuer Termin');
 
 		if ($this->isSubmitted()) {
 			if ($data = $this->validateEvent()) {
@@ -122,14 +122,14 @@ class EventControl extends Control
 					if ($data['invite']) {
 						$this->model->inviteBezirk($data['bezirk_id'], $id, $data['invitesubs']);
 					}
-					info('Event wurde erfolgreich eingetragen!');
-					go('/?page=event&id=' . (int)$id);
+					$this->func->info('Event wurde erfolgreich eingetragen!');
+					$this->func->go('/?page=event&id=' . (int)$id);
 				}
 			}
 		} else {
 			$bezirke = $this->model->getBezirke();
 
-			addContent($this->view->eventForm($bezirke));
+			$this->func->addContent($this->view->eventForm($bezirke));
 		}
 	}
 
@@ -164,11 +164,11 @@ class EventControl extends Control
 		if ($start_date = $this->getPostDate('date')) {
 			if ($start_time = $this->getPostTime('time_start')) {
 				if ($end_time = $this->getPostTime('time_end')) {
-					$out['start'] = date('Y-m-d', $start_date) . ' ' . preZero($start_time['hour']) . ':' . preZero($start_time['min']) . ':00';
-					$out['end'] = date('Y-m-d', $start_date) . ' ' . preZero($end_time['hour']) . ':' . preZero($end_time['min']) . ':00';
+					$out['start'] = date('Y-m-d', $start_date) . ' ' . $this->func->preZero($start_time['hour']) . ':' . $this->func->preZero($start_time['min']) . ':00';
+					$out['end'] = date('Y-m-d', $start_date) . ' ' . $this->func->preZero($end_time['hour']) . ':' . $this->func->preZero($end_time['min']) . ':00';
 
 					if ((int)$this->getPostInt('addend') == 1 && ($ed = $this->getPostDate('dateend'))) {
-						$out['end'] = date('Y-m-d', $ed) . ' ' . preZero($end_time['hour']) . ':' . preZero($end_time['min']) . ':00';
+						$out['end'] = date('Y-m-d', $ed) . ' ' . $this->func->preZero($end_time['hour']) . ':' . $this->func->preZero($end_time['min']) . ':00';
 					}
 				}
 			}

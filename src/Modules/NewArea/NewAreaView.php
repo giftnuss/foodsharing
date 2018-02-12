@@ -20,7 +20,7 @@ class NewareaView extends View
 
 			$rows[] = array(
 				array('cnt' => '<input class="wantnewcheck" type="checkbox" name="ordersaver[]" value="' . $d['id'] . '" />'),
-				array('cnt' => '<span class="photo"><a href="#" onclick="profile(' . (int)$d['id'] . ');return false;"><img src="' . img($d['photo']) . '" /></a></span>'),
+				array('cnt' => '<span class="photo"><a href="#" onclick="profile(' . (int)$d['id'] . ');return false;"><img src="' . $this->func->img($d['photo']) . '" /></a></span>'),
 				array('cnt' => '<a class="linkrow ui-corner-all" href="#" onclick="profile(' . (int)$d['id'] . ');return false;">' . $d['name'] . '</a>'),
 				array('cnt' => $d['anschrift'] . ', ' . $d['plz'] . ' ' . $d['stadt']),
 				array('cnt' => $beziks),

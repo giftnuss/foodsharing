@@ -65,7 +65,7 @@ class BasketXhr extends Control
 
 		$dia->addPictureField('picture');
 
-		$foodsaver = $this->model->getValues(array('telefon', 'handy'), 'foodsaver', fsid());
+		$foodsaver = $this->model->getValues(array('telefon', 'handy'), 'foodsaver', $this->func->fsId());
 
 		$dia->addContent($this->view->basketForm($foodsaver));
 
@@ -137,7 +137,7 @@ class BasketXhr extends Control
 		$location_type = 0;
 
 		if ($location_type == 0) {
-			$fs = $this->model->getValues(array('lat', 'lon'), 'foodsaver', fsid());
+			$fs = $this->model->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
 			$lat = $fs['lat'];
 			$lon = $fs['lon'];
 		}
@@ -359,8 +359,8 @@ class BasketXhr extends Control
 			$msg = strip_tags($_GET['msg']);
 			$msg = trim($msg);
 			if (!empty($msg)) {
-				$this->model->message($fs_id, fsId(), $msg, 0);
-				$this->mailMessage(fsId(), $fs_id, $msg, 22);
+				$this->model->message($fs_id, $this->func->fsId(), $msg, 0);
+				$this->mailMessage($this->func->fsId(), $fs_id, $msg, 22);
 				$this->model->setStatus($_GET['id'], 0);
 
 				return array(
@@ -424,7 +424,7 @@ class BasketXhr extends Control
 	public function answer()
 	{
 		if ($id = $this->model->getVal('foodsaver_id', 'basket', $_GET['id'])) {
-			if ($id == fsid()) {
+			if ($id == $this->func->fsId()) {
 				$this->model->setStatus($_GET['id'], 1, $_GET['fid']);
 
 				return array(
@@ -457,14 +457,14 @@ class BasketXhr extends Control
 			$dia->setTitle('Essenskorbanfrage von ' . $request['fs_name'] . ' abschließen');
 			$dia->addContent(
 				'<div>
-					<img src="' . img($request['fs_photo']) . '" style="float:left;margin-right:10px;">
-					<p>Anfragezeitpunkt: ' . niceDate($request['time_ts']) . '</p>
+					<img src="' . $this->func->img($request['fs_photo']) . '" style="float:left;margin-right:10px;">
+					<p>Anfragezeitpunkt: ' . $this->func->niceDate($request['time_ts']) . '</p>
 					<div style="clear:both;"></div>
 				</div>'
 				. v_form_radio('fetchstate', array(
 					'values' => array(
-						array('id' => 3, 'name' => 'Ja, ' . genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' hat den Korb abgeholt.'),
-						array('id' => 5, 'name' => 'Nein, ' . genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' ist leider nicht wie verabredet erschienen.'),
+						array('id' => 3, 'name' => 'Ja, ' . $this->func->genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' hat den Korb abgeholt.'),
+						array('id' => 5, 'name' => 'Nein, ' . $this->func->genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' ist leider nicht wie verabredet erschienen.'),
 						array('id' => 5, 'name' => 'Die Lebensmittel wurden von jemand anderem abgeholt.'),
 					)
 				))

@@ -37,13 +37,13 @@ class StoreView extends View
 		$curdate = 0;
 		foreach ($history as $h) {
 			if ($curdate != $h['date']) {
-				$out .= '<li class="title">' . niceDate($h['date_ts']) . '</li>';
+				$out .= '<li class="title">' . $this->func->niceDate($h['date_ts']) . '</li>';
 				$curdate = $h['date'];
 			}
 			$out .= '
 				<li>
 					<a class="corner-all" href="#" onclick="profile(' . (int)$h['id'] . ');return false;">
-						<span class="i"><img src="' . img($h['photo']) . '" /></span>
+						<span class="i"><img src="' . $this->func->img($h['photo']) . '" /></span>
 						<span class="n">' . $h['name'] . ' ' . $h['nachname'] . '</span>
 						<span class="t"></span>
 						<span class="c"></span>
@@ -64,21 +64,21 @@ class StoreView extends View
 		$bc = $this->v_utils->v_bezirkChooser('bezirk_id', $bezirk);
 
 		if (!isset($g_data['foodsaver'])) {
-			$g_data['foodsaver'] = array(fsId());
+			$g_data['foodsaver'] = array($this->func->fsId());
 		}
 
 		$verantwortlich_select = '';
-		if (isOrgaTeam() || isBotschafter()) {
+		if ($this->func->isOrgaTeam() || $this->func->isBotschafter()) {
 			$verantwortlich_select = $this->v_utils->v_form_checkbox('foodsaver', array('values' => $foodsaver_values));
-		} elseif (getAction('new')) {
-			$verantwortlich_select = $this->v_utils->v_input_wrapper(s('foodsaver'), '<input type="hidden" name="foodsaver[]" value="' . fsId() . '" />Du wirst durch die Eintragrung vorerst verantwortlich für Diesen Betrieb');
+		} elseif ($this->func->getAction('new')) {
+			$verantwortlich_select = $this->v_utils->v_input_wrapper($this->func->s('foodsaver'), '<input type="hidden" name="foodsaver[]" value="' . $this->func->fsId() . '" />Du wirst durch die Eintragrung vorerst verantwortlich für Diesen Betrieb');
 		}
 
-		addJs('
+		$this->func->addJs('
 			$(".cb-foodsaver").click(function(){
 					if($(".cb-foodsaver:checked").length >= 4)
 					{
-						pulseError(\'' . jsSafe(s('max_3_leader')) . '\');
+						pulseError(\'' . $this->func->jsSafe($this->func->s('max_3_leader')) . '\');
 						return false;
 					}
 					
@@ -89,14 +89,14 @@ class StoreView extends View
 		');
 
 		$first_post = '';
-		if (getAction('new')) {
+		if ($this->func->getAction('new')) {
 			$first_post = $this->v_utils->v_form_textarea('first_post', array('required' => true));
 		}
 		if (isset($g_data['stadt'])) {
 			$g_data['ort'] = $g_data['stadt'];
 		}
 
-		addJs('$("textarea").css("height","70px");$("textarea").autosize();');
+		$this->func->addJs('$("textarea").css("height","70px");$("textarea").autosize();');
 
 		return $this->v_utils->v_quickform('betrieb', array(
 			$bc,

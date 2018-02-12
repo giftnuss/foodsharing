@@ -13,7 +13,7 @@ class BusinessCardView extends View
 
 	public function optionform($seldata)
 	{
-		addJs('
+		$this->func->addJs('
 			$("#optionen-form .input-wrapper:last").hide();
 			
 			$("#opt").change(function(){
@@ -24,7 +24,7 @@ class BusinessCardView extends View
 				ev.preventDefault();
 				if($("#opt").val() == "")
 				{
-					pulseError(\'' . jsSafe(s('should_choose_option')) . '\');
+					pulseError(\'' . $this->func->jsSafe($this->func->s('should_choose_option')) . '\');
 				}
 				else
 				{
@@ -34,12 +34,12 @@ class BusinessCardView extends View
 			});		
 		');
 
-		return v_quickform(s('options'), array(
-				v_form_select('opt', array('desc' => s('opt_desc'), 'values' => $seldata))
+		return v_quickform($this->func->s('options'), array(
+				v_form_select('opt', array('desc' => $this->func->s('opt_desc'), 'values' => $seldata))
 			), array('submit' => 'Visitenkarten erstellen')) . '
 				
 		<div class="input-wrapper" id="dlbox" style="display:none;">
-			<a href="#" target="_blank" class="button">' . s('download_card') . '</a>		
+			<a href="#" target="_blank" class="button">' . $this->func->s('download_card') . '</a>		
 		</div>';
 	}
 }

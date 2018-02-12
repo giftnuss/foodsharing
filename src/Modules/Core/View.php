@@ -36,12 +36,12 @@ class View
 
 		$this->func->addJs('
 				storage.reset();
-				if(isMob())
+				if($this->func->isMob())
 				{
 					$("#ismob").val("1");
 				}
 				$(window).resize(function(){
-					if(isMob())
+					if($this->func->isMob())
 					{
 						$("#ismob").val("1");
 					}
@@ -55,14 +55,14 @@ class View
 		return '
 			<div id="g_login">' . $this->v_utils->v_field(
 				$this->v_utils->v_form('Login', array(
-					$this->v_utils->v_form_text('email_adress', array('label' => false, 'placeholder' => s('email_adress'))),
-					$this->v_utils->v_form_passwd('password', array('label' => false, 'placeholder' => s('password'))),
+					$this->v_utils->v_form_text('email_adress', array('label' => false, 'placeholder' => $this->func->s('email_adress'))),
+					$this->v_utils->v_form_passwd('password', array('label' => false, 'placeholder' => $this->func->s('password'))),
 					$this->v_utils->v_form_hidden('ismob', '0') .
 					'<p>
 									<a href="/?page=login&sub=passwordReset">Passwort vergessen?</a>
 								</p>
 								<p class="buttons">
-									<input class="button" type="submit" value="' . s('login') . '" name="login" /> <a href="#" onclick="ajreq(\'join\',{app:\'login\'});return false;" class="button">' . s('register') . '</a>
+									<input class="button" type="submit" value="' . $this->func->s('login') . '" name="login" /> <a href="#" onclick="ajreq(\'join\',{app:\'login\'});return false;" class="button">' . $this->func->s('register') . '</a>
 								</p>'
 				), array('action' => $action, 'submit' => false)),
 
@@ -379,7 +379,7 @@ class View
 
 		$input = '<input type="text" name="' . $id . '[]" value="" class="tag input text value" />';
 
-		return $this->v_utils->v_input_wrapper(s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
+		return $this->v_utils->v_input_wrapper($this->func->s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
 	}
 
 	public function latLonPicker($id, $options = array())
@@ -450,7 +450,7 @@ class View
 			$hsnr = $this->v_utils->v_form_text('str', array('required' => '1')) . $this->v_utils->v_form_text('hsnr');
 		}
 
-		return $this->v_utils->v_input_wrapper(s('position_search'), '
+		return $this->v_utils->v_input_wrapper($this->func->s('position_search'), '
 		<input placeholder="Straße, Ort..." type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
 		<div id="map" class="pickermap"></div>') .
 			$hsnr .

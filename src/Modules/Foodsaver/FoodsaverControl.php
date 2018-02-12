@@ -26,59 +26,59 @@ class FoodsaverControl extends Control
 	public function index()
 	{
 		// check bezirk_id and permissions
-		if (isset($_GET['bid']) && ($bezirk = $this->model->getBezirk($_GET['bid'])) && (S::may('orga') || isBotForA(array($_GET['bid']), false, true))) {
+		if (isset($_GET['bid']) && ($bezirk = $this->model->getBezirk($_GET['bid'])) && (S::may('orga') || $this->func->isBotForA(array($_GET['bid']), false, true))) {
 			// permission granted so we can load the foodsavers
 			if ($foodsaver = $this->model->listFoodsaver($_GET['bid'])) {
 				// add breadcrumps
-				addBread('Foodsaver', '/?page=foodsaver&bid=' . $bezirk['id']);
-				addBread($bezirk['name'], '/?page=foodsaver&bid=' . $bezirk['id']);
+				$this->func->addBread('Foodsaver', '/?page=foodsaver&bid=' . $bezirk['id']);
+				$this->func->addBread($bezirk['name'], '/?page=foodsaver&bid=' . $bezirk['id']);
 
 				// list fooodsaver ($inactive can be 1 or 0, 1 means that it shows only the inactive ones and not all)
-				addContent(
+				$this->func->addContent(
 					$this->view->foodsaverList($foodsaver, $bezirk),
 					CNT_LEFT
 				);
 
-				addContent($this->view->foodsaverForm());
+				$this->func->addContent($this->view->foodsaverForm());
 
-				addContent(
+				$this->func->addContent(
 					$this->view->addFoodsaver($bezirk),
 					CNT_RIGHT
 				);
 
 				// list inactive foodsaver
 				if ($foodsaverInactive = $this->model->listFoodsaver($_GET['bid'], true)) {
-					addContent(
+					$this->func->addContent(
 						$this->view->foodsaverList($foodsaverInactive, $bezirk, true),
 						CNT_RIGHT
 					);
 				}
 			}
-		} elseif (($id = getActionId('edit')) && (isBotschafter() || isOrgaTeam())) {
+		} elseif (($id = $this->func->getActionId('edit')) && ($this->func->isBotschafter() || $this->func->isOrgaTeam())) {
 			$data = $this->model->getOne_foodsaver($id);
 			$bids = $this->model->getFsBezirkIds($id);
-			if ($data && (isOrgaTeam() || isBotForA($bids, false, true))) {
+			if ($data && ($this->func->isOrgaTeam() || $this->func->isBotForA($bids, false, true))) {
 				handle_edit();
 				$data = $this->model->getOne_foodsaver($id);
 
-				addBread(s('bread_foodsaver'), '/?page=foodsaver');
-				addBread(s('bread_edit_foodsaver'));
-				setEditData($data);
+				$this->func->addBread($this->func->s('bread_foodsaver'), '/?page=foodsaver');
+				$this->func->addBread($this->func->s('bread_edit_foodsaver'));
+				$this->func->setEditData($data);
 
-				addContent(foodsaver_form($data['name'] . ' ' . $data['nachname'] . ' bearbeiten'));
+				$this->func->addContent(foodsaver_form($data['name'] . ' ' . $data['nachname'] . ' bearbeiten'));
 
-				addContent(picture_box(), CNT_RIGHT);
+				$this->func->addContent(picture_box(), CNT_RIGHT);
 
-				addContent(v_field(v_menu(array(
-					pageLink('foodsaver', 'back_to_overview')
-				)), s('actions')), CNT_RIGHT);
+				$this->func->addContent(v_field(v_menu(array(
+					$this->func->pageLink('foodsaver', 'back_to_overview')
+				)), $this->func->s('actions')), CNT_RIGHT);
 
-				if (isOrgaTeam()) {
-					addContent(u_delete_account(), CNT_RIGHT);
+				if ($this->func->isOrgaTeam()) {
+					$this->func->addContent(u_delete_account(), CNT_RIGHT);
 				}
 			}
 		} else {
-			addContent(v_info('Du hast leider keine Berechtigung für diesen Bezirk'));
+			$this->func->addContent(v_info('Du hast leider keine Berechtigung für diesen Bezirk'));
 		}
 	}
 
@@ -88,8 +88,8 @@ class FoodsaverControl extends Control
 			$foodsaver = $this->model->getValues(array('email', 'name', 'nachname', 'bezirk_id'), 'foodsaver', $id);
 
 			$this->model->del_foodsaver($id);
-			info('Foodsaver ' . $foodsaver['name'] . ' ' . $foodsaver['nachname'] . ' wurde gelöscht, für die Wiederherstellung wende Dich an it@lebensmittelretten.de');
-			go('/?page=dashboard');
+			$this->func->info('Foodsaver ' . $foodsaver['name'] . ' ' . $foodsaver['nachname'] . ' wurde gelöscht, für die Wiederherstellung wende Dich an it@lebensmittelretten.de');
+			$this->func->go('/?page=dashboard');
 		}
 	}
 }
@@ -99,8 +99,8 @@ function handle_edit()
 	global $db;
 	global $g_data;
 
-	if (submitted()) {
-		if (isOrgateam()) {
+	if ($this->func->submitted()) {
+		if ($this->func->isOrgaTeam()) {
 			if (isset($g_data['orgateam']) && is_array($g_data['orgateam']) && $g_data['orgateam'][0] == 1) {
 				$g_data['orgateam'] = 1;
 			}
@@ -116,9 +116,9 @@ function handle_edit()
 			$settings_model->logChangedSetting($_GET['id'], $oldFs, $g_data, $logChangedFields);
 		}
 		if ($db->update_foodsaver($_GET['id'], $g_data)) {
-			info(s('foodsaver_edit_success'));
+			$this->func->info($this->func->s('foodsaver_edit_success'));
 		} else {
-			error(s('error'));
+			$this->func->error($this->func->s('error'));
 		}
 	}
 }
@@ -156,7 +156,7 @@ function foodsaver_form($title = 'Foodsaver')
 		));
 	}
 
-	addJs('
+	$this->func->addJs('
 			$("#rolle").change(function(){
 				if(this.value == 4)
 				{
@@ -241,11 +241,11 @@ function picture_box()
 
 function u_delete_account()
 {
-	addJs('
+	$this->func->addJs('
 		$("#delete-account-confirm").dialog({
 			autoOpen: false,
 			modal: true,
-			title: "' . s('delete_account_confirm_title') . '",
+			title: "' . $this->func->s('delete_account_confirm_title') . '",
 			buttons: {
 				"' . s('abort') . '" : function(){
 					$("#delete-account-confirm").dialog("close");
@@ -262,15 +262,15 @@ function u_delete_account()
 	');
 	$content = '
 	<div style="text-align:center;margin-bottom:10px;">
-		<span id="delete-account">' . s('delete_now') . '</span>
+		<span id="delete-account">' . $this->func->s('delete_now') . '</span>
 	</div>
-	' . v_info(s('posible_restore_account'), s('reference'));
+	' . v_info($this->func->s('posible_restore_account'), $this->func->s('reference'));
 
-	addHidden('
+	$this->func->addHidden('
 		<div id="delete-account-confirm">
-			' . v_info(s('delete_account_confirm_msg')) . '
+			' . v_info($this->func->s('delete_account_confirm_msg')) . '
 		</div>
 	');
 
-	return v_field($content, s('delete_account'), array('class' => 'ui-padding'));
+	return v_field($content, $this->func->s('delete_account'), array('class' => 'ui-padding'));
 }

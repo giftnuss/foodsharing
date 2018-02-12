@@ -15,13 +15,13 @@ class SearchControl extends Control
 		parent::__construct();
 
 		if (!S::may('fs')) {
-			go('/?page=dashboard');
+			$this->func->go('/?page=dashboard');
 		}
 	}
 
 	public function index()
 	{
-		addBread(s('search'));
+		$this->func->addBread($this->func->s('search'));
 		$value = '';
 		$out = '';
 
@@ -33,14 +33,14 @@ class SearchControl extends Control
 					foreach ($r as $erg) {
 						$cnt .= v_input_wrapper($erg['name'], $erg['teaser'], 'search', array('click' => $erg['click']));
 					}
-					$out .= v_field($cnt, count($r) . ' ' . s($key) . ' gefunden', array('class' => 'ui-padding'));
+					$out .= v_field($cnt, count($r) . ' ' . $this->func->s($key) . ' gefunden', array('class' => 'ui-padding'));
 				}
 			} else {
 				$out .= v_field(v_info('Die Suche gab leider keine Treffer'), 'Ergebnis', array('class' => 'ui-padding'));
 			}
 		}
 
-		addContent($this->view->searchBox($value));
-		addContent($out);
+		$this->func->addContent($this->view->searchBox($value));
+		$this->func->addContent($out);
 	}
 }

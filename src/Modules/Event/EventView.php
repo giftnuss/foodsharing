@@ -29,15 +29,15 @@ class EventView extends View
 			$g_data['dateend'] = $g_data['end'];
 		}
 
-		$title = s('new_event');
-		addStyle('
+		$title = $this->func->s('new_event');
+		$this->func->addStyle('
 			label.addend{
 				display:inline-block;
 				margin-left:15px;
 				cursor:pointer;
 			}
 		');
-		addJs('
+		$this->func->addJs('
 			$("#online_type").change(function(){
 				if($(this).val() == 0)
 				{
@@ -99,7 +99,7 @@ class EventView extends View
 			$bez = '<optgroup label="Deine Bezirke">' . $bez . '</optgroup>';
 		}
 
-		addJs('
+		$this->func->addJs('
 			$("#public").change(function(){
 				if($("#public:checked").length > 0)
 				{
@@ -131,11 +131,11 @@ class EventView extends View
 
 		$public_el = '';
 
-		if (isOrgaTeam()) {
+		if ($this->func->isOrgaTeam()) {
 			$chk = '';
 			if (isset($g_data['public']) && $g_data['public'] == 1) {
 				$chk = ' checked="checked"';
-				addJs('$("#input-wrapper").hide();');
+				$this->func->addJs('$("#input-wrapper").hide();');
 			}
 			$public_el = v_input_wrapper('Ist die Veranstaltung öffentlich?', '<label><input id="public" type="checkbox" name="public" value="1"' . $chk . ' /> Ja die Veranstaltung ist Öffentlich</label>');
 		}
@@ -148,21 +148,21 @@ class EventView extends View
 			v_form_date('dateend'),
 			v_input_wrapper('Uhrzeit Beginn', v_form_time('time_start', $start_time)),
 			v_input_wrapper('Uhrzeit Ende', v_form_time('time_end', $end_time)),
-			v_form_textarea('description', array('desc' => s('desc_desc'), 'required' => true)),
+			v_form_textarea('description', array('desc' => $this->func->s('desc_desc'), 'required' => true)),
 			v_form_select('online_type', array('values' => array(
-				array('id' => 1, 'name' => s('offline')),
-				array('id' => 0, 'name' => s('online'))
+				array('id' => 1, 'name' => $this->func->s('offline')),
+				array('id' => 0, 'name' => $this->func->s('online'))
 			))),
 			v_form_text('location_name', array('required' => true)),
 			$this->latLonPicker('latLng')
-		), array('submit' => s('save'))), $title, array('class' => 'ui-padding'));
+		), array('submit' => $this->func->s('save'))), $title, array('class' => 'ui-padding'));
 	}
 
 	public function statusMenu($event, $user_status)
 	{
 		$menu = array();
 
-		if ($event['fs_id'] == fsid() || isOrgaTeam()) {
+		if ($event['fs_id'] == $this->func->fsId() || $this->func->isOrgaTeam()) {
 			$menu[] = array(
 				'name' => 'Event bearbeiten',
 				'href' => '/?page=event&sub=edit&id=' . (int)$event['id']
@@ -208,7 +208,7 @@ class EventView extends View
 			);
 		}
 
-		return v_field($this->menu($menu), '<i class="fa fa-gear"></i> ' . s('event_options'));
+		return v_field($this->menu($menu), '<i class="fa fa-gear"></i> ' . $this->func->s('event_options'));
 	}
 
 	public function eventTop($event)
@@ -216,14 +216,14 @@ class EventView extends View
 		$end = '';
 
 		if (date('Y-m-d', $event['start_ts']) != date('Y-m-d', $event['end_ts'])) {
-			$end = ' bis ' . niceDate($event['end_ts']);
+			$end = ' bis ' . $this->func->niceDate($event['end_ts']);
 		}
 
 		$out = '
 		<div class="event welcome ui-padding margin-bottom ui-corner-all">
 			<div class="welcome_profile_image">
 				<span class="calendar">
-					<span class="month">' . s('month_' . (int)date('m', $event['start_ts'])) . '</span>
+					<span class="month">' . $this->func->s('month_' . (int)date('m', $event['start_ts'])) . '</span>
 					<span class="day">' . date('d', $event['start_ts']) . '</span>
 				</span>
 				<div class="clear"></div>
@@ -234,7 +234,7 @@ class EventView extends View
 				</div>
 				<div class="welcome_quick_link">
 					<ul>
-						<li>' . niceDate($event['start_ts']) . $end . '</li>
+						<li>' . $this->func->niceDate($event['start_ts']) . $end . '</li>
 					</ul>
 					<div class="clear"></div>
 				</div>
@@ -252,7 +252,7 @@ class EventView extends View
 		if (!empty($invites['accepted'])) {
 			$icons = $this->fsIcons($invites['accepted']);
 
-			if (!isMob() && count($invites['accepted']) > 20) {
+			if (!$this->func->isMob() && count($invites['accepted']) > 20) {
 				$icons = v_scroller($icons, 200);
 			}
 			$out .= v_field($icons, '' . count($invites['accepted']) . ' sind dabei');
@@ -261,7 +261,7 @@ class EventView extends View
 		if (!empty($invites['maybe'])) {
 			$icons = $this->fsIcons($invites['maybe']);
 
-			if (!isMob() && count($invites['maybe']) > 20) {
+			if (!$this->func->isMob() && count($invites['maybe']) > 20) {
 				$icons = v_scroller($icons, 200);
 			}
 			$out .= v_field($icons, '' . count($invites['maybe']) . ' kommen vielleicht');
@@ -270,7 +270,7 @@ class EventView extends View
 		if (!empty($invites['invited'])) {
 			$icons = $this->fsIcons($invites['invited']);
 
-			if (!isMob() && count($invites['invited']) > 20) {
+			if (!$this->func->isMob() && count($invites['invited']) > 20) {
 				$icons = v_scroller($icons, 200);
 			}
 			$out .= v_field($icons, '' . count($invites['invited']) . ' Einladungen');
@@ -281,6 +281,6 @@ class EventView extends View
 
 	public function event($event)
 	{
-		return v_field('<p>' . nl2br(autolink($event['description'])) . '</p>', 'Beschreibung', array('class' => 'ui-padding'));
+		return v_field('<p>' . nl2br($this->func->autolink($event['description'])) . '</p>', 'Beschreibung', array('class' => 'ui-padding'));
 	}
 }

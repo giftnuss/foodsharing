@@ -27,7 +27,7 @@ class WorkGroupModel extends Model
 			SELECT 	`bezirk_id`
 			FROM 	`' . PREFIX . 'foodsaver_has_bezirk`	
 			WHERE 	`active` != 1	
-			AND 	foodsaver_id = ' . (int)fsId() . '
+			AND 	foodsaver_id = ' . (int)$this->func->fsId() . '
 		')
 		) {
 			$out = array();
@@ -222,7 +222,7 @@ class WorkGroupModel extends Model
 		return $this->insert('
 			REPLACE INTO `' . PREFIX . 'foodsaver_has_bezirk`(`foodsaver_id`, `bezirk_id`, `active`, `added`) 
 			VALUES (
-				' . (int)fsid() . ',
+				' . (int)$this->func->fsId() . ',
 				' . (int)$group_id . ',
 				1,
 				NOW()
@@ -247,7 +247,7 @@ class WorkGroupModel extends Model
 				hb.bezirk_id = b.id
 		
 			AND
-				hb.`foodsaver_id` = ' . (int)fsId() . '
+				hb.`foodsaver_id` = ' . (int)$this->func->fsId() . '
 		
 			AND
 				b.`type` = 7
@@ -338,7 +338,7 @@ class WorkGroupModel extends Model
 				
 			(`foodsaver_id`, `bezirk_id`, `active`, `added`,`application`) 
 			VALUES 
-			(' . (int)fsId() . ',' . (int)$id . ',0,NOW(),' . $this->strval($application) . ')		
+			(' . (int)$this->func->fsId() . ',' . (int)$id . ',0,NOW(),' . $this->strval($application) . ')		
 		');
 	}
 
@@ -408,12 +408,12 @@ class WorkGroupModel extends Model
 
 	public function getMyStats()
 	{
-		if ($ret = $this->getValues(array('anmeldedatum', 'stat_fetchcount', 'stat_bananacount'), 'foodsaver', fsid())) {
+		if ($ret = $this->getValues(array('anmeldedatum', 'stat_fetchcount', 'stat_bananacount'), 'foodsaver', $this->func->fsId())) {
 			$time = strtotime($ret['anmeldedatum']);
 			// 604800 = sekunden pro woche
 			$weeks = (int)round((time() - $time) / 604800);
 
-			$reports = $this->qOne('SELECT COUNT(foodsaver_id) FROM ' . PREFIX . 'report WHERE foodsaver_id = ' . (int)fsid());
+			$reports = $this->qOne('SELECT COUNT(foodsaver_id) FROM ' . PREFIX . 'report WHERE foodsaver_id = ' . (int)$this->func->fsId());
 
 			return array(
 				'weeks' => (int)$weeks,

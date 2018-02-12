@@ -19,9 +19,9 @@ class RegionXhr extends Control
 
 	private function hasThemeAccess($BotThemestatus)
 	{
-		return ($BotThemestatus['bot_theme'] == 0 && mayBezirk($BotThemestatus['bezirk_id']))
-			|| ($BotThemestatus['bot_theme'] == 1 && isBotFor($BotThemestatus['bezirk_id']))
-			|| isOrgaTeam();
+		return ($BotThemestatus['bot_theme'] == 0 && $this->func->mayBezirk($BotThemestatus['bezirk_id']))
+			|| ($BotThemestatus['bot_theme'] == 1 && $this->func->isBotFor($BotThemestatus['bezirk_id']))
+			|| $this->func->isOrgaTeam();
 	}
 
 	public function followTheme()
@@ -75,11 +75,11 @@ class RegionXhr extends Control
 	public function morethemes()
 	{
 		$bezirk_id = (int)$_GET['bid'];
-		if (isset($_GET['page']) && mayBezirk($bezirk_id)) {
+		if (isset($_GET['page']) && $this->func->mayBezirk($bezirk_id)) {
 			$sub = 'forum';
 
 			if ((int)$_GET['bot'] == 1) {
-				if (!isBotFor($bezirk_id)) {
+				if (!$this->func->isBotFor($bezirk_id)) {
 					return $this->responses->fail_permissions();
 				}
 				$sub = 'botforum';
@@ -107,7 +107,7 @@ class RegionXhr extends Control
 
 			$body = strip_tags($_POST['msg']);
 			$body = nl2br($body);
-			$body = autolink($body);
+			$body = $this->func->autolink($body);
 
 			if ($bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid'])) {
 				if ($post_id = $this->model->addThemePost($_GET['tid'], $body, $_GET['pid'], $bezirk)) {
@@ -115,8 +115,8 @@ class RegionXhr extends Control
 						$theme = $this->model->getVal('name', 'theme', $_GET['tid']);
 
 						foreach ($follower as $f) {
-							tplMail(19, $f['email'], array(
-								'anrede' => genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+							$this->func->tplMail(19, $f['email'], array(
+								'anrede' => $this->func->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 								'name' => $f['name'],
 								'link' => 'http://www.' . DEFAULT_HOST . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,
 								'theme' => $theme,
@@ -141,7 +141,7 @@ class RegionXhr extends Control
 
 		echo json_encode(array(
 			'status' => 0,
-			'message' => s('post_could_not_saved')
+			'message' => $this->func->s('post_could_not_saved')
 		));
 		exit();
 	}
@@ -150,8 +150,8 @@ class RegionXhr extends Control
 	{
 		$data = $_GET;
 		if ($this->model->mayBezirk($data['bid'])) {
-			$this->model->del('DELETE FROM `' . PREFIX . 'foodsaver_has_bezirk` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)fsId() . ' ');
-			$this->model->del('DELETE FROM `' . PREFIX . 'botschafter` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)fsId() . ' ');
+			$this->model->del('DELETE FROM `' . PREFIX . 'foodsaver_has_bezirk` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->func->fsId() . ' ');
+			$this->model->del('DELETE FROM `' . PREFIX . 'botschafter` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->func->fsId() . ' ');
 
 			return array('status' => 1);
 		}

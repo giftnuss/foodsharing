@@ -15,7 +15,7 @@ class ReportView extends View
 
 	public function betriebList($betriebe)
 	{
-		return v_form_select('betrieb_id', array('label' => sv('betrieb_id', $this->foodsaver['name']), 'values' => $betriebe));
+		return v_form_select('betrieb_id', array('label' => $this->func->sv('betrieb_id', $this->foodsaver['name']), 'values' => $betriebe));
 	}
 
 	public function reportDialog()
@@ -191,9 +191,9 @@ class ReportView extends View
 
 	public function listReports($reports)
 	{
-		addStyle('#table td{ cursor:pointer; }');
+		$this->func->addStyle('#table td{ cursor:pointer; }');
 
-		addJs('
+		$this->func->addJs('
 			$("#table tr").click(function(){
 				rid = parseInt($(this).children("td:first").children("input:first").val());
 				ajreq("loadreport",{id:rid});
@@ -203,10 +203,10 @@ class ReportView extends View
 		$rows = array();
 		foreach ($reports as $r) {
 			$rows[] = array(
-				['cnt' => '<input type="hidden" class="rid" name="rid" value="' . $r['id'] . '"><span class="photo"><a title="' . $r['fs_name'] . ' ' . $r['fs_nachname'] . '" href="#" onclick="profile(' . (int)$r['fs_id'] . ');return false;"><img id="miniq-' . $r['fs_id'] . '" src="' . img($r['fs_photo']) . '" /></a></span>'],
-				['cnt' => '<span class="photo"><a title="' . $r['rp_name'] . ' ' . $r['rp_nachname'] . '" href="#" onclick="profile(' . (int)$r['rp_id'] . ');return false;"><img id="miniq-' . $r['rp_id'] . '" src="' . img($r['rp_photo']) . '" /></a></span>'],
-				['cnt' => tt($r['msg'], 50)],
-				['cnt' => '<span style="display:none;">a' . $r['time_ts'] . ' </span>' . niceDateShort($r['time_ts']) . ' Uhr'],
+				['cnt' => '<input type="hidden" class="rid" name="rid" value="' . $r['id'] . '"><span class="photo"><a title="' . $r['fs_name'] . ' ' . $r['fs_nachname'] . '" href="#" onclick="profile(' . (int)$r['fs_id'] . ');return false;"><img id="miniq-' . $r['fs_id'] . '" src="' . $this->func->img($r['fs_photo']) . '" /></a></span>'],
+				['cnt' => '<span class="photo"><a title="' . $r['rp_name'] . ' ' . $r['rp_nachname'] . '" href="#" onclick="profile(' . (int)$r['rp_id'] . ');return false;"><img id="miniq-' . $r['rp_id'] . '" src="' . $this->func->img($r['rp_photo']) . '" /></a></span>'],
+				['cnt' => $this->func->tt($r['msg'], 50)],
+				['cnt' => '<span style="display:none;">a' . $r['time_ts'] . ' </span>' . $this->func->niceDateShort($r['time_ts']) . ' Uhr'],
 				['cnt' => $r['fs_stadt']],
 				['cnt' => $r['b_name']],
 			);
@@ -215,8 +215,8 @@ class ReportView extends View
 		$table = v_tablesorter(array(
 			array('name' => 'Über', 'width' => 40),
 			array('name' => 'Von', 'width' => 40),
-			array('name' => s('message')),
-			array('name' => s('datetime'), 'width' => 80),
+			array('name' => $this->func->s('message')),
+			array('name' => $this->func->s('datetime'), 'width' => 80),
 			array('name' => 'FS Wohnort', 'width' => 80),
 			array('name' => 'Stammbezirk', 'width' => 40)
 		), $rows, array('pager' => true));

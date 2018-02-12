@@ -11,7 +11,7 @@ class StoreUserControl extends Control
 	public function __construct()
 	{
 		if (!S::may()) {
-			goLogin();
+			$this->func->goLogin();
 		}
 		$this->model = new StoreModel();
 		$this->view = new StoreUserView();
@@ -25,59 +25,59 @@ class StoreUserControl extends Control
 
 	public function index()
 	{
-		addScript('/js/contextmenu/jquery.contextMenu.js');
-		addCss('/js/contextmenu/jquery.contextMenu.css');
+		$this->func->addScript('/js/contextmenu/jquery.contextMenu.js');
+		$this->func->addCss('/js/contextmenu/jquery.contextMenu.css');
 
 		if (isset($_GET['id'])) {
-			addBread(s('betrieb_bread'), '/?page=fsbetrieb');
-			addTitle(s('betrieb_bread'));
-			addStyle('.button{margin-right:8px;}#right .tagedit-list{width:256px;}#foodsaver-wrapper{padding-top:0px;}');
+			$this->func->addBread($this->func->s('betrieb_bread'), '/?page=fsbetrieb');
+			$this->func->addTitle($this->func->s('betrieb_bread'));
+			$this->func->addStyle('.button{margin-right:8px;}#right .tagedit-list{width:256px;}#foodsaver-wrapper{padding-top:0px;}');
 			global $g_data;
 
 			$betrieb = $this->model->getMyBetrieb($_GET['id']);
 
 			if (!$betrieb) {
-				goPage();
+				$this->func->goPage();
 			}
 
-			if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && ($this->model->isVerantwortlich($_GET['id']) || isOrgaTeam() || isBotFor($betrieb['bezirk_id']))) {
+			if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && ($this->model->isVerantwortlich($_GET['id']) || $this->func->isOrgaTeam() || $this->func->isBotFor($betrieb['bezirk_id']))) {
 				if ($_POST['form_submit'] == 'zeiten') {
 					$range = range(0, 6);
 					global $g_data;
 					$this->model->clearAbholer($_GET['id']);
 					foreach ($range as $r) {
 						if (isset($_POST['dow' . $r])) {
-							handleTagselect('dow' . $r);
+							$this->func->handleTagselect('dow' . $r);
 							foreach ($g_data['dow' . $r] as $fs_id) {
 								$this->model->addAbholer($_GET['id'], $fs_id, $r);
 							}
 						}
 					}
 				} else {
-					handleTagselect('foodsaver');
+					$this->func->handleTagselect('foodsaver');
 
 					if (!empty($g_data['foodsaver'])) {
 						$this->model->addBetriebTeam($_GET['id'], $g_data['foodsaver'], $g_data['verantwortlicher']);
 					} else {
-						info(s('team_not_empty'));
+						$this->func->info($this->func->s('team_not_empty'));
 					}
 				}
-				info(s('changes_saved'));
-				clearPost();
-			} elseif (isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && ($this->model->isVerantwortlich($_GET['id']) || isOrgaTeam() || isBotFor($betrieb['bezirk_id']))) {
+				$this->func->info($this->func->s('changes_saved'));
+				$this->func->clearPost();
+			} elseif (isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && ($this->model->isVerantwortlich($_GET['id']) || $this->func->isOrgaTeam() || $this->func->isBotFor($betrieb['bezirk_id']))) {
 				$this->model->changeBetriebStatus($_GET['id'], $_POST['betrieb_status_id']);
-				go(getSelf());
+				$this->func->go($this->func->getSelf());
 			}
 
-			addTitle($betrieb['name']);
+			$this->func->addTitle($betrieb['name']);
 
-			if ($this->model->isInTeam($_GET['id']) || S::may('orga') || isBotFor($betrieb['bezirk_id'])) {
-				if ((!$betrieb['verantwortlich'] && isBotFor($betrieb['bezirk_id']))) {
+			if ($this->model->isInTeam($_GET['id']) || S::may('orga') || $this->func->isBotFor($betrieb['bezirk_id'])) {
+				if ((!$betrieb['verantwortlich'] && $this->func->isBotFor($betrieb['bezirk_id']))) {
 					$betrieb['verantwortlich'] = true;
-					info('<strong>' . s('reference') . ':</strong> ' . s('not_responsible_but_bot'));
-				} elseif (!$betrieb['verantwortlich'] && isOrgaTeam()) {
+					$this->func->info('<strong>' . $this->func->s('reference') . ':</strong> ' . $this->func->s('not_responsible_but_bot'));
+				} elseif (!$betrieb['verantwortlich'] && $this->func->isOrgaTeam()) {
 					$betrieb['verantwortlich'] = true;
-					info('<strong>' . s('reference') . ':</strong> ' . s('not_responsible_but_orga'));
+					$this->func->info('<strong>' . $this->func->s('reference') . ':</strong> ' . $this->func->s('not_responsible_but_orga'));
 				}
 				if ($betrieb['verantwortlich']) {
 					if (!empty($betrieb['requests'])) {
@@ -85,9 +85,9 @@ class StoreUserControl extends Control
 					}
 				}
 
-				setEditData($betrieb);
+				$this->func->setEditData($betrieb);
 
-				addBread($betrieb['name']);
+				$this->func->addBread($betrieb['name']);
 
 				$edit_team = '';
 
@@ -115,17 +115,17 @@ class StoreUserControl extends Control
 						array(
 							$this->v_utils->v_form_tagselect('foodsaver', array('data' => $this->model->xhrGetTagFsAll())),
 							$verantwortlich_select),
-						array('submit' => s('save'))
+						array('submit' => $this->func->s('save'))
 					);
 
-					addHidden('<div id="teamEditor">' . $edit_team . '</div>');
+					$this->func->addHidden('<div id="teamEditor">' . $edit_team . '</div>');
 
-					addJs('
+					$this->func->addJs('
 						
 						$(".cb-verantwortlicher").click(function(){
 							if($(".cb-verantwortlicher:checked").length >= 4)
 							{
-								pulseError(\'' . jsSafe(s('max_3_leader')) . '\');
+								pulseError(\'' . $this->func->jsSafe($this->func->s('max_3_leader')) . '\');
 								return false;
 							}
 							
@@ -133,14 +133,14 @@ class StoreUserControl extends Control
 						$("#team-form").submit(function(ev){
 							if($(".cb-verantwortlicher:checked").length == 0)
 							{
-								pulseError(\'' . jsSafe(s('verantwortlicher_must_be')) . '\');
+								pulseError(\'' . $this->func->jsSafe($this->func->s('verantwortlicher_must_be')) . '\');
 								ev.preventDefault();
 								return false;
 							}
 						});	
 						');
 
-					addJsFunc('
+					$this->func->addJsFunc('
 							function u_fetchconfirm(fsid,date,el)
 							{
 								var item = $(el);
@@ -190,7 +190,7 @@ class StoreUserControl extends Control
 				}
 
 				/*pinnwand*/
-				addJsFunc('
+				$this->func->addJsFunc('
 					function u_clearDialogs()
 					{
 						$(".datefetch").val("");		
@@ -216,7 +216,7 @@ class StoreUserControl extends Control
 					
 					function u_undate(date,date_format)
 					{
-						$("#u_undate").dialog("option","title","' . s('del_date_for') . ' " + date_format);
+						$("#u_undate").dialog("option","title","' . $this->func->s('del_date_for') . ' " + date_format);
 							
 						$("#team_msg-wrapper").hide();
 						$("#have_backup").show();
@@ -225,22 +225,22 @@ class StoreUserControl extends Control
 							
 						$("#undate-date").val(date);
 						$("#u_undate").dialog("open");
-						msg = "' . jsSafe(str_replace(array('{BETRIEB}'), array($betrieb['name']), s('tpl_msg_to_team')), '"') . '";
+						msg = "' . $this->func->jsSafe(str_replace(array('{BETRIEB}'), array($betrieb['name']), $this->func->s('tpl_msg_to_team')), '"') . '";
 						msg = msg.replace("{DATE}",date_format);
 						$("#team_msg").val(msg);
 					}
 					');
-				addStyle('#team_msg{width:358px;}');
-				addHidden('
+				$this->func->addStyle('#team_msg{width:358px;}');
+				$this->func->addHidden('
 						<div id="u_undate">
-							' . $this->v_utils->v_info(s('shure_of_backup'), s('attention')) . '
+							' . $this->v_utils->v_info($this->func->s('shure_of_backup'), $this->func->s('attention')) . '
 							<input type="hidden" name="undate-date" id="undate-date" value="" />
 							
 							' . $this->v_utils->v_form_textarea('team_msg') . '
 						</div>
 					');
 
-				addJs('
+				$this->func->addJs('
 					$("#team_msg-wrapper").hide();
 					$("#u_undate").dialog({
 						autoOpen: false,
@@ -248,7 +248,7 @@ class StoreUserControl extends Control
 						width:400,
 						buttons: [
 							{
-								text:"' . s('have_backup') . '",
+								text:"' . $this->func->s('have_backup') . '",
 								click:function(){
 									showLoader();
 									$.ajax({
@@ -258,7 +258,7 @@ class StoreUserControl extends Control
 										success: function(ret){
 											if(ret.status == 1)
 											{
-												$(".fetch-" + $("#undate-date").val().replace(/[^0-9]/g,"") + "-' . fsId() . '" ).hide();
+												$(".fetch-" + $("#undate-date").val().replace(/[^0-9]/g,"") + "-' . $this->func->fsId() . '" ).hide();
 											}
 											else
 											{
@@ -274,7 +274,7 @@ class StoreUserControl extends Control
 								id: "have_backup"
 							},
 							{
-								text:"' . s('msg_to_team') . '",
+								text:"' . $this->func->s('msg_to_team') . '",
 								click:function(){
 									$("#team_msg-wrapper").show();
 									//$("#u_undate").dialog("option","height",400);
@@ -285,7 +285,7 @@ class StoreUserControl extends Control
 								id: "msg_to_team"
 							},
 							{
-								text:"' . s('del_and_send') . '",
+								text:"' . $this->func->s('del_and_send') . '",
 								click:function(){
 									showLoader();
 									$.ajax({
@@ -295,7 +295,7 @@ class StoreUserControl extends Control
 										success: function(ret){
 											if(ret.status == 1)
 											{
-												$(".fetch-" + $("#undate-date").val().replace(/[^0-9]/g,"") + "-' . fsId() . '" ).hide();
+												$(".fetch-" + $("#undate-date").val().replace(/[^0-9]/g,"") + "-' . $this->func->fsId() . '" ).hide();
 											}
 											else
 											{
@@ -348,16 +348,16 @@ class StoreUserControl extends Control
 
 				/*Infos*/
 				$betrieb['menge'] = '';
-				if ($menge = abhm($betrieb['abholmenge'])) {
+				if ($menge = $this->func->abhm($betrieb['abholmenge'])) {
 					$betrieb['menge'] = $menge;
 				}
 
 				$info = '';
 				if (!empty($betrieb['besonderheiten'])) {
-					$info .= $this->v_utils->v_input_wrapper(s('besonderheiten'), nl2br($betrieb['besonderheiten']));
+					$info .= $this->v_utils->v_input_wrapper($this->func->s('besonderheiten'), nl2br($betrieb['besonderheiten']));
 				}
 				if ($betrieb['menge'] > 0) {
-					$info .= $this->v_utils->v_input_wrapper(s('menge'), $betrieb['menge']);
+					$info .= $this->v_utils->v_input_wrapper($this->func->s('menge'), $betrieb['menge']);
 				}
 				if ($betrieb['presse'] == 1) {
 					$info .= $this->v_utils->v_input_wrapper('Namensnennung', 'Dieser Betrieb darf &ouml;ffentlich genannt werden.');
@@ -365,8 +365,8 @@ class StoreUserControl extends Control
 					$info .= $this->v_utils->v_input_wrapper('Namensnennung', 'Bitte diesen Betrieb niemals &ouml;ffentlich (z.<span style="white-space:nowrap">&thinsp;</span>B. bei Essensk&ouml;rben, Facebook oder Presseanfragen) nennen!');
 				}
 
-				addContent($this->v_utils->v_field(
-					$this->v_utils->v_input_wrapper(s('address'), $betrieb['str'] . ' ' . $betrieb['hsnr'] . '<br />' . $betrieb['plz'] . ' ' . $betrieb['stadt']) .
+				$this->func->addContent($this->v_utils->v_field(
+					$this->v_utils->v_input_wrapper($this->func->s('address'), $betrieb['str'] . ' ' . $betrieb['hsnr'] . '<br />' . $betrieb['plz'] . ' ' . $betrieb['stadt']) .
 					$info,
 
 					$betrieb['name'],
@@ -387,20 +387,20 @@ class StoreUserControl extends Control
 					}
 				}
 				if ($betrieb['verantwortlich'] || S::may('orga')) {
-					$menu[] = array('name' => s('fetch_history'), 'click' => "ajreq('fetchhistory',{app:'betrieb',bid:" . (int)$betrieb['id'] . '});');
-					$menu[] = array('name' => s('edit_betrieb'), 'href' => '/?page=betrieb&a=edit&id=' . $betrieb['id']);
-					$menu[] = array('name' => s('edit_team'), 'click' => '$(\'#teamEditor\').dialog({modal:true,width:425,title:\'' . s('edit_team') . '\'});');
-					$menu[] = array('name' => s('edit_fetchtime'), 'click' => '$(\'#bid\').val(' . (int)$betrieb['id'] . ');$(\'#dialog_abholen\').dialog(\'open\');return false;');
+					$menu[] = array('name' => $this->func->s('fetch_history'), 'click' => "ajreq('fetchhistory',{app:'betrieb',bid:" . (int)$betrieb['id'] . '});');
+					$menu[] = array('name' => $this->func->s('edit_betrieb'), 'href' => '/?page=betrieb&a=edit&id=' . $betrieb['id']);
+					$menu[] = array('name' => $this->func->s('edit_team'), 'click' => '$(\'#teamEditor\').dialog({modal:true,width:425,title:\'' . $this->func->s('edit_team') . '\'});');
+					$menu[] = array('name' => $this->func->s('edit_fetchtime'), 'click' => '$(\'#bid\').val(' . (int)$betrieb['id'] . ');$(\'#dialog_abholen\').dialog(\'open\');return false;');
 				}
-				if (!$betrieb['verantwortlich'] || isOrgaTeam() || isBotschafter()) {
-					$menu[] = array('name' => s('betrieb_sign_out'), 'click' => 'u_betrieb_sign_out(' . (int)$betrieb['id'] . ');return false;');
+				if (!$betrieb['verantwortlich'] || $this->func->isOrgaTeam() || $this->func->isBotschafter()) {
+					$menu[] = array('name' => $this->func->s('betrieb_sign_out'), 'click' => 'u_betrieb_sign_out(' . (int)$betrieb['id'] . ');return false;');
 				}
 
 				if (!empty($menu)) {
-					addContent($this->v_utils->v_menu($menu, s('options')), CNT_LEFT);
+					$this->func->addContent($this->v_utils->v_menu($menu, $this->func->s('options')), CNT_LEFT);
 				}
 
-				addContent(
+				$this->func->addContent(
 					$this->v_utils->v_field(
 						$this->view->u_team($betrieb) . '',
 
@@ -410,23 +410,23 @@ class StoreUserControl extends Control
 				);
 
 				if (!$betrieb['jumper'] || S::may('orga')) {
-					addJs('
+					$this->func->addJs('
 							u_updatePosts();
 							//setInterval(u_updatePosts,5000);		
 						');
 
 					$opt = array();
-					if (isMob()) {
+					if ($this->func->isMob()) {
 						$opt = array('class' => 'moreswap moreswap-height-200');
 					}
-					addContent($this->v_utils->v_field('
+					$this->func->addContent($this->v_utils->v_field('
 							<div id="pinnwand">
 								
 								<div class="tools ui-padding">
-									<form method="get" action="' . getSelf() . '">
+									<form method="get" action="' . $this->func->getSelf() . '">
 										<textarea class="comment textarea inlabel" title="Nachricht schreiben..." name="text"></textarea>
 										<div align="right">
-											<input id="comment-post" type="submit" class="submit" name="msg" value="' . s('send') . '" />
+											<input id="comment-post" type="submit" class="submit" name="msg" value="' . $this->func->s('send') . '" />
 										</div>
 										<input type="hidden" name="bid" value="' . (int)$betrieb['id'] . '" />
 									</form>
@@ -436,7 +436,7 @@ class StoreUserControl extends Control
 							</div>', 'Pinnwand', $opt));
 					/*pinnwand ende*/
 				} else {
-					addContent($this->v_utils->v_info('Du bist momentan auf der Warteliste, sobald Hilfe benötigt wird wirst Du kontaktiert.'));
+					$this->func->addContent($this->v_utils->v_info('Du bist momentan auf der Warteliste, sobald Hilfe benötigt wird wirst Du kontaktiert.'));
 				}
 				$zeit_cnt = '';
 				if ($betrieb['verantwortlich']) {
@@ -453,7 +453,7 @@ class StoreUserControl extends Control
 						$cnt .= $this->v_utils->v_input_wrapper($v['name'], $tmp);
 					}
 
-					addContent($this->v_utils->v_field($cnt, s('responsible_foodsaver'), array('class' => 'ui-padding')), CNT_LEFT);
+					$this->func->addContent($this->v_utils->v_field($cnt, $this->func->s('responsible_foodsaver'), array('class' => 'ui-padding')), CNT_LEFT);
 				}
 
 				/*
@@ -461,40 +461,40 @@ class StoreUserControl extends Control
 				 */
 
 				$click = '';
-				$click = 'profile(' . (int)fsId() . ');return false;';
+				$click = 'profile(' . (int)$this->func->fsId() . ');return false;';
 				$confclass = 'unconfirmed';
-				$pulseconf = 'pulseInfo("' . jsSafe(s('wait_for_confirm')) . '");';
+				$pulseconf = 'pulseInfo("' . $this->func->jsSafe($this->func->s('wait_for_confirm')) . '");';
 				if ($betrieb['verantwortlich']) {
 					$confclass = 'confirmed';
 					$pulseconf = '';
 				}
 
-				addHidden('
+				$this->func->addHidden('
 					<div id="timedialog">
 						
 						<input type="hidden" name="timedialog-id" id="timedialog-id" value="" />
 						<input type="hidden" name="timedialog-date" id="timedialog-date" value="" />
 							
-						<span class="shure_date" id="shure_date">' . $this->v_utils->v_info(sv('shure_date', array('label' => '<span id="date-label"></span>'))) . '</span>
-						<span class="shure_range_date" id="shure_range_date" style="display:none;">' . $this->v_utils->v_info(sv('shure_range_date', array('label' => '<span id="range-day-label"></span>'))) . '</span>
+						<span class="shure_date" id="shure_date">' . $this->v_utils->v_info($this->func->sv('shure_date', array('label' => '<span id="date-label"></span>'))) . '</span>
+						<span class="shure_range_date" id="shure_range_date" style="display:none;">' . $this->v_utils->v_info($this->func->sv('shure_range_date', array('label' => '<span id="range-day-label"></span>'))) . '</span>
 						<div class="rangeFetch" id="rangeFetch" style="display:none;">
 						
-								' . $this->v_utils->v_input_wrapper(s('zeitraum'), '<input type="text" value="" id="timedialog-from" name="timedialog-from" class="datefetch input text value"> bis <input type="text" value="" id="timedialog-to" name="timedialog-to" class="datefetch input text value">') . '
+								' . $this->v_utils->v_input_wrapper($this->func->s('zeitraum'), '<input type="text" value="" id="timedialog-from" name="timedialog-from" class="datefetch input text value"> bis <input type="text" value="" id="timedialog-to" name="timedialog-to" class="datefetch input text value">') . '
 						
 						</div>
 					</div>
-					<div id="delete_shure" title="' . s('delete_sure_title') . '">
-						' . $this->v_utils->v_info(s('delete_post_sure')) . '
-						<span class="sure" style="display:none">' . s('sure') . '</span>
-						<span class="abort" style="display:none">' . s('abort') . '</span>
+					<div id="delete_shure" title="' . $this->func->s('delete_sure_title') . '">
+						' . $this->v_utils->v_info($this->func->s('delete_post_sure')) . '
+						<span class="sure" style="display:none">' . $this->func->s('sure') . '</span>
+						<span class="abort" style="display:none">' . $this->func->s('abort') . '</span>
 					</div>
-					<div id="signout_shure" title="' . s('signout_sure_title') . '">
-						' . $this->v_utils->v_info(s('signout_sure')) . '
-						<span class="sure" style="display:none">' . s('sure') . '</span>
-						<span class="abort" style="display:none">' . s('abort') . '</span>
+					<div id="signout_shure" title="' . $this->func->s('signout_sure_title') . '">
+						' . $this->v_utils->v_info($this->func->s('signout_sure')) . '
+						<span class="sure" style="display:none">' . $this->func->s('sure') . '</span>
+						<span class="abort" style="display:none">' . $this->func->s('abort') . '</span>
 					</div>');
 
-				addJsFunc('
+				$this->func->addJsFunc('
 						var clicked_pid = null;
 						function u_delPost(id)
 						{
@@ -510,7 +510,7 @@ class StoreUserControl extends Control
 					');
 
 				$verified = 0;
-				if (isVerified()) {
+				if ($this->func->isVerified()) {
 					$verified = 1;
 				}
 
@@ -523,7 +523,7 @@ class StoreUserControl extends Control
 					$days = 7;
 				}
 
-				addJs('
+				$this->func->addJs('
 					
 					$("#signout_shure").dialog({
 						autoOpen:false,
@@ -603,7 +603,7 @@ class StoreUserControl extends Control
 							}
 							else
 							{
-								pulseInfo(\'' . jsSafe(s('not_verified')) . '\');
+								pulseInfo(\'' . $this->func->jsSafe($this->func->s('not_verified')) . '\');
 							}
 						});
 						
@@ -707,7 +707,7 @@ class StoreUserControl extends Control
 
 				$abholer = $this->model->getAbholdates($betrieb['id'], $next_dates);
 
-				$days = getDow();
+				$days = $this->func->getDow();
 
 				$scroller = '';
 
@@ -719,7 +719,7 @@ class StoreUserControl extends Control
 						array(
 							'data' => $betrieb['team'],
 							'url' => 'jsonTeam&bid=' . (int)$betrieb['id'],
-							'label' => $days[date('w', strtotime($date))] . ' ' . format_db_date($date) . ', ' . format_time($time['time']),
+							'label' => $days[date('w', strtotime($date))] . ' ' . $this->func->format_db_date($date) . ', ' . $this->func->format_time($time['time']),
 							'betrieb_id' => $betrieb['id'],
 							'verantwortlich' => $betrieb['verantwortlich'],
 							'fetcher_count' => $time['fetcher'],
@@ -732,7 +732,7 @@ class StoreUserControl extends Control
 				$zeit_cnt .= $this->v_utils->v_scroller($scroller, 200);
 
 				if ($betrieb['verantwortlich'] && empty($next_dates)) {
-					$zeit_cnt = $this->v_utils->v_info(sv('no_fetchtime', array('name' => $betrieb['name'])), s('attention') . '!') .
+					$zeit_cnt = $this->v_utils->v_info($this->func->sv('no_fetchtime', array('name' => $betrieb['name'])), $this->func->s('attention') . '!') .
 						'<p style="margin-top:10px;text-align:center;"><a class="button" href="#" onclick="ajreq(\'adddate\',{app:\'betrieb\',id:' . (int)$_GET['id'] . '});return false;">einzelnen Termin eintragen</a></p>';
 				}
 
@@ -740,12 +740,12 @@ class StoreUserControl extends Control
 				 * Abholzeiten ändern
 				 */
 				if ($betrieb['verantwortlich'] || S::may('orga')) {
-					hiddenDialog('abholen', array($this->view->u_form_abhol_table($zeiten), $this->v_utils->v_form_hidden('bid', 0), '<input type="hidden" name="team" value="' . $betrieb['team_js'] . '" />'), s('add_fetchtime'), array('reload' => true, 'width' => 500));
+					$this->func->hiddenDialog('abholen', array($this->view->u_form_abhol_table($zeiten), $this->v_utils->v_form_hidden('bid', 0), '<input type="hidden" name="team" value="' . $betrieb['team_js'] . '" />'), $this->func->s('add_fetchtime'), array('reload' => true, 'width' => 500));
 				}
 
 				if (!$betrieb['jumper']) {
 					if (($betrieb['betrieb_status_id'] == 3 || $betrieb['betrieb_status_id'] == 5)) {
-						addContent($this->v_utils->v_field($zeit_cnt, s('next_fetch_dates'), array('class' => 'ui-padding')), CNT_RIGHT);
+						$this->func->addContent($this->v_utils->v_field($zeit_cnt, $this->func->s('next_fetch_dates'), array('class' => 'ui-padding')), CNT_RIGHT);
 					} else {
 						$bt = '';
 						$betriebsStatusName = '';
@@ -756,41 +756,41 @@ class StoreUserControl extends Control
 							}
 						}
 						if ($betrieb['verantwortlich']) {
-							addHidden('<div id="changeStatus-hidden">' . $this->v_utils->v_form('changeStatusForm', array(
+							$this->func->addHidden('<div id="changeStatus-hidden">' . $this->v_utils->v_form('changeStatusForm', array(
 									$this->v_utils->v_form_select('betrieb_status_id', array('value' => $betrieb['betrieb_status_id'], 'values' => $betriebStatusList))
 								)) . '</div>');
 
-							addJs('$("#changeStatus").button().click(function(){
+							$this->func->addJs('$("#changeStatus").button().click(function(){
 								$("#changeStatus-hidden").dialog({
-									title: "' . s('change_status') . '",
+									title: "' . $this->func->s('change_status') . '",
 									modal:true
 								});
 							});');
-							$bt = '<p><span id="changeStatus">' . s('change_status') . '</a></p>';
+							$bt = '<p><span id="changeStatus">' . $this->func->s('change_status') . '</a></p>';
 						}
-						addContent($this->v_utils->v_field('<p>' . $this->v_utils->v_getStatusAmpel($betrieb['betrieb_status_id']) . $betriebsStatusName . '</p>' . $bt, s('status'), array('class' => 'ui-padding')), CNT_RIGHT);
+						$this->func->addContent($this->v_utils->v_field('<p>' . $this->v_utils->v_getStatusAmpel($betrieb['betrieb_status_id']) . $betriebsStatusName . '</p>' . $bt, $this->func->s('status'), array('class' => 'ui-padding')), CNT_RIGHT);
 					}
 				}
 			} else {
 				if ($betrieb = $this->model->getBetrieb($_GET['id'])) {
-					addBread($betrieb['name']);
-					info(s('not_in_team'));
-					go('/?page=map&bid=' . $_GET['id']);
+					$this->func->addBread($betrieb['name']);
+					$this->func->info($this->func->s('not_in_team'));
+					$this->func->go('/?page=map&bid=' . $_GET['id']);
 				} else {
-					go('/karte');
+					$this->func->go('/karte');
 				}
 			}
 		} else {
-			addBread('Deine Betriebe');
-			addContent($this->v_utils->v_menu(array(
-				array('href' => '/?page=betrieb&a=new', 'name' => s('add_new'))
+			$this->func->addBread('Deine Betriebe');
+			$this->func->addContent($this->v_utils->v_menu(array(
+				array('href' => '/?page=betrieb&a=new', 'name' => $this->func->s('add_new'))
 			), 'Aktionen'), CNT_RIGHT);
 
-			$bezirk = getBezirk();
+			$bezirk = $this->func->getBezirk();
 			$betriebe = $this->model->getMyBetriebe();
-			addContent($this->view->u_betriebList($betriebe['verantwortlich'], s('you_responsible'), true));
-			addContent($this->view->u_betriebList($betriebe['team'], s('you_fetcher'), false));
-			addContent($this->view->u_betriebList($betriebe['sonstige'], sv('more_stores', array('name' => $bezirk['name'])), false));
+			$this->func->addContent($this->view->u_betriebList($betriebe['verantwortlich'], $this->func->s('you_responsible'), true));
+			$this->func->addContent($this->view->u_betriebList($betriebe['team'], $this->func->s('you_fetcher'), false));
+			$this->func->addContent($this->view->u_betriebList($betriebe['sonstige'], $this->func->sv('more_stores', array('name' => $bezirk['name'])), false));
 		}
 	}
 
@@ -798,13 +798,13 @@ class StoreUserControl extends Control
 	{
 		global $db;
 		global $g_data;
-		if (submitted()) {
+		if ($this->func->submitted()) {
 			$g_data['foodsaver'] = array($g_data['foodsaver']);
 			if ($this->model->update_betrieb($_GET['id'], $g_data)) {
-				info(s('betrieb_edit_success'));
-				goPage();
+				$this->func->info($this->func->s('betrieb_edit_success'));
+				$this->func->goPage();
 			} else {
-				error(s('error'));
+				$this->func->error($this->func->s('error'));
 			}
 		}
 	}
@@ -813,13 +813,13 @@ class StoreUserControl extends Control
 	{
 		global $db;
 		global $g_data;
-		if (submitted()) {
+		if ($this->func->submitted()) {
 			$g_data['foodsaver'] = array($g_data['foodsaver']);
 			if ($this->model->add_betrieb($g_data)) {
-				info(s('betrieb_add_success'));
-				goPage();
+				$this->func->info($this->func->s('betrieb_add_success'));
+				$this->func->goPage();
 			} else {
-				error(s('error'));
+				$this->func->error($this->func->s('error'));
 			}
 		}
 	}

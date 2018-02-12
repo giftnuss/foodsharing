@@ -19,8 +19,8 @@ class BuddyXhr extends Control
 		if ($this->model->buddyRequestedMe($_GET['id'])) {
 			$this->model->confirmBuddy($_GET['id']);
 
-			$this->model->delBells('buddy-' . fsId() . '-' . (int)$_GET['id']);
-			$this->model->delBells('buddy-' . (int)$_GET['id'] . fsId());
+			$this->model->delBells('buddy-' . $this->func->fsId() . '-' . (int)$_GET['id']);
+			$this->model->delBells('buddy-' . (int)$_GET['id'] . $this->func->fsId());
 
 			$buddy_ids = array();
 			if ($b = S::get('buddy-ids')) {
@@ -43,15 +43,15 @@ class BuddyXhr extends Control
 			$body = 'buddy_request';
 
 			// icon css class
-			$icon = img(S::user('photo'));
+			$icon = $this->func->img(S::user('photo'));
 
 			// whats happen when click on the bell content
-			$link_attributes = array('href' => '#', 'onclick' => 'profile(' . (int)fsId() . ');return false;');
+			$link_attributes = array('href' => '#', 'onclick' => 'profile(' . (int)$this->func->fsId() . ');return false;');
 
 			// variables for the language strings
 			$vars = array('name' => S::user('name'));
 
-			$identifier = 'buddy-' . fsId() . '-' . (int)$_GET['id'];
+			$identifier = 'buddy-' . $this->func->fsId() . '-' . (int)$_GET['id'];
 
 			$this->model->addBell($_GET['id'], $title, $body, $icon, $link_attributes, $vars, $identifier);
 

@@ -17,45 +17,45 @@ class EmailTemplateAdminControl extends Control
 		$this->v_utils = $g_view_utils;
 
 		if (!S::may('orga')) {
-			go('/');
+			$this->func->go('/');
 		}
 		parent::__construct();
 	}
 
 	public function index()
 	{
-		if (getAction('neu')) {
+		if ($this->func->getAction('neu')) {
 			$this->handle_add();
 
-			addBread(s('bread_message_tpl'), '/?page=message_tpl');
-			addBread(s('bread_new_message_tpl'));
+			$this->func->addBread($this->func->s('bread_message_tpl'), '/?page=message_tpl');
+			$this->func->addBread($this->func->s('bread_new_message_tpl'));
 
-			addContent($this->view->message_tpl_form());
+			$this->func->addContent($this->view->message_tpl_form());
 
-			addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				pageLink('message_tpl', 'back_to_overview')
-			)), s('actions')), CNT_RIGHT);
-		} elseif ($id = getActionId('delete')) {
+			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->func->pageLink('message_tpl', 'back_to_overview')
+			)), $this->func->s('actions')), CNT_RIGHT);
+		} elseif ($id = $this->func->getActionId('delete')) {
 			if ($this->model->del_message_tpl($id)) {
-				info(s('message_tpl_deleted'));
-				goPage();
+				$this->func->info($this->func->s('message_tpl_deleted'));
+				$this->func->goPage();
 			}
-		} elseif ($id = getActionId('edit')) {
+		} elseif ($id = $this->func->getActionId('edit')) {
 			$this->handle_edit();
 
-			addBread(s('bread_message_tpl'), '/?page=message_tpl');
-			addBread(s('bread_edit_message_tpl'));
+			$this->func->addBread($this->func->s('bread_message_tpl'), '/?page=message_tpl');
+			$this->func->addBread($this->func->s('bread_edit_message_tpl'));
 
 			$data = $this->model->getOne_message_tpl($id);
-			setEditData($data);
+			$this->func->setEditData($data);
 
-			addContent($this->view->message_tpl_form());
+			$this->func->addContent($this->view->message_tpl_form());
 
-			addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				pageLink('message_tpl', 'back_to_overview')
-			)), s('actions')), CNT_RIGHT);
+			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->func->pageLink('message_tpl', 'back_to_overview')
+			)), $this->func->s('actions')), CNT_RIGHT);
 		} else {
-			addBread(s('message_tpl_bread'), '/?page=message_tpl');
+			$this->func->addBread($this->func->s('message_tpl_bread'), '/?page=message_tpl');
 
 			if ($data = $this->model->getBasics_message_tpl()) {
 				$rows = array();
@@ -68,16 +68,16 @@ class EmailTemplateAdminControl extends Control
 
 				$table = $this->v_utils->v_tablesorter(array(
 					array('name' => 'ID', 'width' => 30),
-					array('name' => s('name'))
+					array('name' => $this->func->s('name'))
 				), $rows);
 
-				addContent($this->v_utils->v_field($table, 'Alle E-Mail-Vorlagen'));
+				$this->func->addContent($this->v_utils->v_field($table, 'Alle E-Mail-Vorlagen'));
 			} else {
-				info(s('message_tpl_empty'));
+				$this->func->info($this->func->s('message_tpl_empty'));
 			}
 
-			addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				array('href' => '/?page=message_tpl&a=neu', 'name' => s('neu_message_tpl'))
+			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				array('href' => '/?page=message_tpl&a=neu', 'name' => $this->func->s('neu_message_tpl'))
 			)), 'Aktionen'), CNT_RIGHT);
 		}
 	}
@@ -85,12 +85,12 @@ class EmailTemplateAdminControl extends Control
 	private function handle_edit()
 	{
 		global $g_data;
-		if (submitted()) {
+		if ($this->func->submitted()) {
 			if ($this->model->update_message_tpl($_GET['id'], $g_data)) {
-				info(s('message_tpl_edit_success'));
-				goPage();
+				$this->func->info($this->func->s('message_tpl_edit_success'));
+				$this->func->goPage();
 			} else {
-				error(s('error'));
+				$this->func->error($this->func->s('error'));
 			}
 		}
 	}
@@ -98,12 +98,12 @@ class EmailTemplateAdminControl extends Control
 	private function handle_add()
 	{
 		global $g_data;
-		if (submitted()) {
+		if ($this->func->submitted()) {
 			if ($this->model->add_message_tpl($g_data)) {
-				info(s('message_tpl_add_success'));
-				goPage();
+				$this->func->info($this->func->s('message_tpl_add_success'));
+				$this->func->goPage();
 			} else {
-				error(s('error'));
+				$this->func->error($this->func->s('error'));
 			}
 		}
 	}

@@ -58,10 +58,10 @@ class FairTeilerXhr extends Control
 				}
 
 				foreach ($follower as $f) {
-					tplMail(18, $f['email'], array(
+					$this->func->tplMail(18, $f['email'], array(
 						'link' => 'http://www.lebensmittelretten.de/?page=fairteiler&sub=ft&id=' . (int)$_GET['fid'],
 						'name' => $f['name'],
-						'anrede' => genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						'anrede' => $this->func->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 						'fairteiler' => $ft['name'],
 						'post' => $body
 					));
@@ -75,7 +75,7 @@ class FairTeilerXhr extends Control
 					'ft_update',
 					'img img-recycle yellow',
 					array('href' => '/?page=fairteiler&sub=ft&id=' . (int)$_GET['fid']),
-					array('name' => $ft['name'], 'user' => S::user('name'), 'teaser' => tt($post['body'], 100)),
+					array('name' => $ft['name'], 'user' => S::user('name'), 'teaser' => $this->func->tt($post['body'], 100)),
 					'fairteiler-' . (int)$_GET['fid']
 				);
 			}

@@ -19,10 +19,10 @@ class FAQAdminView extends View
 				$this->v_utils->v_form_select('faq_kategorie_id', array('add' => true, 'required' => true, 'values' => $categories)) .
 				$this->v_utils->v_form_textarea('name', array('style' => 'height:75px;', 'required' => true)),
 
-				s('neu_faq'),
+				$this->func->s('neu_faq'),
 				array('class' => 'ui-padding')
 			),
-			$this->v_utils->v_field($this->v_utils->v_form_tinymce('answer', array('nowrapper' => true)), s('answer'))
+			$this->v_utils->v_field($this->v_utils->v_form_tinymce('answer', array('nowrapper' => true)), $this->func->s('answer'))
 		));
 	}
 }

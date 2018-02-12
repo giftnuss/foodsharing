@@ -31,7 +31,7 @@ class StoreXhr extends Control
 			}
 
 			if ($this->model->addFetchDate($_GET['bid'], $time, $fetchercount)) {
-				info('Abholtermin wurde eingetragen!');
+				$this->func->info('Abholtermin wurde eingetragen!');
 
 				return array(
 					'status' => 1,
@@ -46,7 +46,7 @@ class StoreXhr extends Control
 		if (isset($_GET['id']) && isset($_GET['time']) && strtotime($_GET['time']) > 0) {
 			$this->model->deldate($_GET['id'], $_GET['time']);
 
-			info('Abholtermin wurde gelöscht.');
+			$this->func->info('Abholtermin wurde gelöscht.');
 
 			return array(
 				'status' => 1,
@@ -65,7 +65,7 @@ class StoreXhr extends Control
 					$("daterange_from").datepicker("close");
 					$("daterange_to").datepicker("close");
 						
-					$("#daterange_content").html(\'' . jsSafe($this->view->fetchlist($history)) . '\');
+					$("#daterange_content").html(\'' . $this->func->jsSafe($this->view->fetchlist($history)) . '\');
 						'
 				);
 			}
@@ -120,7 +120,7 @@ class StoreXhr extends Control
 						
 						if(date !== null)
 						{
-							from = date.getFullYear() + "-" + preZero((date.getMonth()+1)) + "-" + preZero(date.getDate());
+							from = date.getFullYear() + "-" + $this->func->preZero((date.getMonth()+1)) + "-" + $this->func->preZero(date.getDate());
 							date = $( "#' . $id . '_to" ).datepicker("getDate");
 						
 							if(date === null)
@@ -129,7 +129,7 @@ class StoreXhr extends Control
 							}
 							else
 							{
-								to = date.getFullYear() + "-" + preZero((date.getMonth()+1)) + "-" + preZero(date.getDate());
+								to = date.getFullYear() + "-" + $this->func->preZero((date.getMonth()+1)) + "-" + $this->func->preZero(date.getDate());
 							}
 					
 							ajreq("getfetchhistory",{app:"betrieb",from:from,to:to,bid:' . (int)$_GET['bid'] . '});
@@ -274,7 +274,7 @@ class StoreXhr extends Control
 						});		
 					');
 					$dia->addContent($cnt);
-					$dia->addContent(v_input_wrapper(false, '<a class="button" id="savebetriebetoselect" href="#">' . s('save') . '</a>'));
+					$dia->addContent(v_input_wrapper(false, '<a class="button" id="savebetriebetoselect" href="#">' . $this->func->s('save') . '</a>'));
 
 					return $dia->xhrout();
 				}
@@ -286,12 +286,12 @@ class StoreXhr extends Control
 	{
 		$xhr = new Xhr();
 		if ($this->model->isVerantwortlich($_GET['id'])) {
-			$xhr->addMessage(s('signout_error_admin'), 'error');
+			$xhr->addMessage($this->func->s('signout_error_admin'), 'error');
 		} elseif ($this->model->isInTeam($_GET['id'])) {
-			$this->model->signout($_GET['id'], fsId());
+			$this->model->signout($_GET['id'], $this->func->fsId());
 			$xhr->addScript('goTo("/?page=relogin&url=" + encodeURIComponent("/?page=dashboard") );');
 		} else {
-			$xhr->addMessage(s('no_member'), 'error');
+			$xhr->addMessage($this->func->s('no_member'), 'error');
 		}
 		$xhr->send();
 	}
