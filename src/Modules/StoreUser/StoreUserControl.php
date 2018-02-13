@@ -790,34 +790,4 @@ class StoreUserControl extends Control
 			$this->func->addContent($this->view->u_betriebList($betriebe['sonstige'], $this->func->sv('more_stores', array('name' => $bezirk['name'])), false));
 		}
 	}
-
-	public function handle_edit()
-	{
-		global $db;
-		global $g_data;
-		if ($this->func->submitted()) {
-			$g_data['foodsaver'] = array($g_data['foodsaver']);
-			if ($this->model->update_betrieb($_GET['id'], $g_data)) {
-				$this->func->info($this->func->s('betrieb_edit_success'));
-				$this->func->goPage();
-			} else {
-				$this->func->error($this->func->s('error'));
-			}
-		}
-	}
-
-	public function handle_add()
-	{
-		global $db;
-		global $g_data;
-		if ($this->func->submitted()) {
-			$g_data['foodsaver'] = array($g_data['foodsaver']);
-			if ($this->model->add_betrieb($g_data)) {
-				$this->func->info($this->func->s('betrieb_add_success'));
-				$this->func->goPage();
-			} else {
-				$this->func->error($this->func->s('error'));
-			}
-		}
-	}
 }
