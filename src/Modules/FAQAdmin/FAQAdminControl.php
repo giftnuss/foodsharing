@@ -11,6 +11,7 @@ class FAQAdminControl extends Control
 	public function __construct(Model $model, FAQAdminView $view)
 	{
 		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 
