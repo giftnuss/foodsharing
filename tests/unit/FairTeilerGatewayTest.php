@@ -37,8 +37,26 @@ class DashboardGatewayTest extends \Codeception\Test\Unit
 			$this->fairteiler['lon'],
 			null
 		);
-		$this->assertEquals(1, $response);
+		$this->assertEquals(true, $response);
 		$this->tester->seeInDatabase('fs_fairteiler', ['name' => 'asdf']);
+	}
+
+	public function testUpdateFairteilerReturnsTrueIfNothingChanged()
+	{
+		$response = $this->gateway->updateFairteiler(
+			$this->fairteiler['id'],
+			$this->bezirk['id'],
+			$this->fairteiler['name'],
+			$this->fairteiler['desc'],
+			$this->fairteiler['anschrift'],
+			$this->fairteiler['plz'],
+			$this->fairteiler['ort'],
+			$this->fairteiler['lat'],
+			$this->fairteiler['lon'],
+			null
+		);
+		$this->assertEquals(true, $response);
+		$this->tester->seeInDatabase('fs_fairteiler', ['name' => $this->fairteiler['name']]);
 	}
 
 	public function testUpdateFairteilerStripsTags()
@@ -57,8 +75,26 @@ class DashboardGatewayTest extends \Codeception\Test\Unit
 			$this->fairteiler['lon'],
 			null
 		);
-		$this->assertEquals(1, $response);
+		$this->assertEquals(true, $response);
 		$this->tester->dontSeeInDatabase('fs_fairteiler', ['name' => 'asdf<script>']);
 		$this->tester->seeInDatabase('fs_fairteiler', ['name' => 'asdf']);
+	}
+
+	public function testUpdateFairteilerThrowsIfIDNotFound()
+	{
+		$this->expectException(\Exception::class);
+		$this->gateway->updateFairteiler(
+			99999999,
+			$this->bezirk['id'],
+			'asdf',
+			$this->fairteiler['desc'],
+			$this->fairteiler['anschrift'],
+			$this->fairteiler['plz'],
+			$this->fairteiler['ort'],
+			$this->fairteiler['lat'],
+			$this->fairteiler['lon'],
+			null
+		);
+		$this->tester->dontSeeInDatabase('fs_fairteiler', ['name' => 'asdf']);
 	}
 }

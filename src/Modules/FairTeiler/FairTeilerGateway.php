@@ -245,6 +245,7 @@ class FairTeilerGateway extends BaseGateway
 
 	public function updateFairteiler($id, $bezirk_id, $name, $desc, $anschrift, $plz, $ort, $lat, $lon, $picture)
 	{
+		$this->db->requireExists('fs_fairteiler', ['id' => $id]);
 		$params = [
 			'bezirk_id' => $bezirk_id,
 			'name' => strip_tags($name),
@@ -260,7 +261,9 @@ class FairTeilerGateway extends BaseGateway
 			$params['picture'] = strip_tags($picture);
 		}
 
-		return $this->db->update('fs_fairteiler', $params, ['id' => $id]);
+		$this->db->update('fs_fairteiler', $params, ['id' => $id]);
+
+		return true;
 	}
 
 	public function deleteFairteiler($id)

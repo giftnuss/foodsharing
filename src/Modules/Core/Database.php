@@ -88,6 +88,21 @@ class Database
 		return $this->execute($query, array_values($criteria));
 	}
 
+	public function exists($table, array $criteria)
+	{
+		$where = $this->generateWhereClause($criteria);
+
+		$query = 'SELECT COUNT(*) FROM ' . $this->getQuotedName($table) . ' ' . $where;
+		return $this->fetchValue($query, array_values($criteria)) > 0;
+	}
+
+	public function requireExists($table, array $criteria)
+	{
+		if (!$this->exists($table, $criteria)) {
+			throw new \Exception('No matching records found for criteria ' . json_encode($criteria) . ' in table ' . $table);
+		}
+	}
+
 	// === private functions ===
 
 	private function preparedQuery($query, $params)
@@ -112,7 +127,6 @@ class Database
 
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		$statement->execute();
-
 		return $statement;
 	}
 
