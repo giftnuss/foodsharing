@@ -2577,9 +2577,6 @@ class ManualDb extends Db
       ' . $this->intval($data['abholmenge']) . '
 			)');
 
-		$this->createTeamConversation($id);
-		$this->createSpringerConversation($id);
-
 		if (isset($data['lebensmittel']) && is_array($data['lebensmittel'])) {
 			foreach ($data['lebensmittel'] as $lebensmittel_id) {
 				$this->insert('
@@ -2617,6 +2614,9 @@ class ManualDb extends Db
 					');
 			}
 		}
+
+		$this->createTeamConversation($id);
+		$this->createSpringerConversation($id);
 
 		return $id;
 	}
