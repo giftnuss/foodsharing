@@ -23,6 +23,12 @@ class Database
 		return $this->preparedQuery($query, $params)->fetchAll();
 	}
 
+	public function fetchAllValues($query, $params = [])
+	{
+		return $this->preparedQuery($query, $params)->fetchAll(\PDO::FETCH_COLUMN, 0);
+	}
+
+
 	public function fetchValue($query, $params = [])
 	{
 		return $this->preparedQuery($query, $params)->fetchColumn(0);
@@ -47,7 +53,10 @@ class Database
 			implode(', ', array_fill(0, count($data), '?'))
 		);
 
-		return $this->execute($query, array_values($data));
+		$this->execute($query, array_values($data));
+
+		$lastInsertId = (int)$this->pdo->lastInsertId();
+		return $lastInsertId;
 	}
 
 	public function update($table, array $data, array $criteria = [])
@@ -109,7 +118,7 @@ class Database
 
 	private function getQuotedName($name)
 	{
-		return '"' . str_replace('.', '"."', $name) . '"';
+		return '`' . str_replace('.', '`.`', $name) . '`';
 	}
 
 	private function generateWhereClause(array &$criteria)
@@ -148,5 +157,17 @@ class Database
 		}
 
 		return 'WHERE ' . implode('AND ', $params);
+	}
+
+	private function getSupportedOperators()
+	{
+		return [
+			'like',
+			'!=',
+			'<=',
+			'>=',
+			'<',
+			'>',
+		];
 	}
 }

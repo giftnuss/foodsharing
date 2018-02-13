@@ -7,10 +7,11 @@ use Foodsharing\Modules\Core\Control;
 
 class FairTeilerXhr extends Control
 {
-	public function __construct(FairTeilerModel $model, FairTeilerView $view)
+	public function __construct(FairTeilerModel $model, FairTeilerView $view, FairTeilerGateway $gateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->gateway = $gateway;
 
 		parent::__construct();
 	}
@@ -18,9 +19,9 @@ class FairTeilerXhr extends Control
 	public function load()
 	{
 		if (($id = (int)$_GET['id']) > 0) {
-			if ($fairteiler = $this->model->getFairteiler($id)) {
+			if ($fairteiler = $this->gateway->getFairteiler($id)) {
 				$fairteiler['updates'] = false;
-				if ($updates = $this->model->getLastUpdates($id)) {
+				if ($updates = $this->gateway->getLastUpdates($id)) {
 					$fairteiler['updates'] = $updates;
 				}
 
@@ -40,9 +41,9 @@ class FairTeilerXhr extends Control
 		}
 		$post = '';
 
-		if ($ft = $this->model->getFairteiler($_GET['fid'])) {
-			if ($follower = $this->model->getEmailFollower($_GET['fid'])) {
-				$post = $this->model->getLastFtPost($_GET['fid']);
+		if ($ft = $this->gateway->getFairteiler($_GET['fid'])) {
+			if ($follower = $this->gateway->getEmailFollower($_GET['fid'])) {
+				$post = $this->gateway->getLastFtPost($_GET['fid']);
 
 				$body = nl2br($post['body']);
 
@@ -69,7 +70,7 @@ class FairTeilerXhr extends Control
 				}
 			}
 
-			if ($follower = $this->model->getInfoFollower($_GET['fid'])) {
+			if ($follower = $this->gateway->getInfoFollower($_GET['fid'])) {
 				$this->model->addBell(
 					$follower,
 					'ft_update_title',
@@ -89,8 +90,8 @@ class FairTeilerXhr extends Control
 
 	private function mayFairteiler($fid)
 	{
-		if ($ids = $this->model->getFairteilerIds()) {
-			if (isset($ids[$fid])) {
+		if ($ids = $this->gateway->getFairteilerIds($this->func->fsId())) {
+			if (in_array($fid, $ids)) {
 				return true;
 			}
 		}
