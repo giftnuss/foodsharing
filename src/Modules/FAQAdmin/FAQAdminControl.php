@@ -12,7 +12,6 @@ class FAQAdminControl extends Control
 	{
 		$this->model = $model;
 
-
 		parent::__construct();
 
 		if (!S::may('orga')) {
