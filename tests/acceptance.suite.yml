@@ -20,7 +20,9 @@ modules:
         - Db:
             populate: true
             cleanup: true
+        - Asserts
         - \Helper\Acceptance
         - \Helper\Foodsharing
+        - \Helper\FoodsharingUI
         - \Helper\FoodsharingUrl
         - \Helper\Maildev

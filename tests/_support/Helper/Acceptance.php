@@ -41,4 +41,11 @@ class Acceptance extends \Codeception\Module
 		$condition = WebDriverExpectedCondition::urlIs($url);
 		$this->getModule('WebDriver')->webDriver->wait($timeout)->until($condition);
 	}
+
+	public function unlockAllInputFields()
+	{
+		$this->getModule('WebDriver')->executeJs(
+			'document.querySelectorAll(\'*[readOnly]\').forEach(el => el.readOnly = false)'
+		);
+	}
 }

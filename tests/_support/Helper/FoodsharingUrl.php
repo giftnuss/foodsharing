@@ -17,6 +17,11 @@ class FoodsharingUrl extends \Codeception\Module\Db
 		return '/?page=betrieb&id=' . (int)$id . '&a=edit';
 	}
 
+	public function storeNewUrl()
+	{
+		return '/?page=betrieb&&a=new';
+	}
+
 	public function groupEditUrl($id)
 	{
 		return '/?page=groups&sub=edit&id=' . (int)$id;

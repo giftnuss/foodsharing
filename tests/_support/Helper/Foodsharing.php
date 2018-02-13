@@ -79,6 +79,9 @@ class Foodsharing extends \Codeception\Module\Db
 		$params['last_login'] = $this->toDateTime($params['last_login']);
 		$params['anmeldedatum'] = $this->toDateTime($params['anmeldedatum']);
 		$id = $this->haveInDatabase('fs_foodsaver', $params);
+		if ($params['bezirk_id']) {
+			$this->addBezirkMember($params['bezirk_id'], $id);
+		}
 		$params['id'] = $id;
 
 		return $params;
