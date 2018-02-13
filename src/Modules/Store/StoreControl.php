@@ -41,7 +41,7 @@ class StoreControl extends Control
 		}
 		if ($this->func->getAction('new')) {
 			if (S::may('bieb')) {
-				$this->handle_add($bezirk_id);
+				$this->handle_add(S::id(), $bezirk_id);
 
 				$this->func->addBread($this->func->s('bread_betrieb'), '/?page=betrieb');
 				$this->func->addBread($this->func->s('bread_new_betrieb'));
@@ -152,7 +152,7 @@ class StoreControl extends Control
 		}
 	}
 
-	private function handle_add($bezirk_id)
+	private function handle_add($coordinator, $bezirk_id)
 	{
 		global $g_data;
 		if ($this->func->submitted()) {
@@ -163,6 +163,7 @@ class StoreControl extends Control
 			}
 
 			$g_data['stadt'] = $g_data['ort'];
+			$g_data['foodsaver'] = [$coordinator];
 
 			if ($id = $this->model->add_betrieb($g_data)) {
 				$this->model->add_betrieb_notiz(array(

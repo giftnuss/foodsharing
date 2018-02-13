@@ -57,7 +57,7 @@ class StoreView extends View
 		return $out;
 	}
 
-	public function betrieb_form($bezirk = false, $page = '', $lebensmittel_values, $foodsaver_values, $chains, $categories, $status)
+	public function betrieb_form($bezirk = false, $page = '', $lebensmittel_values, $chains, $categories, $status)
 	{
 		global $g_data;
 
@@ -67,23 +67,7 @@ class StoreView extends View
 			$g_data['foodsaver'] = array($this->func->fsId());
 		}
 
-		$verantwortlich_select = '';
-		if ($this->func->isOrgaTeam() || $this->func->isBotschafter()) {
-			$verantwortlich_select = $this->v_utils->v_form_checkbox('foodsaver', array('values' => $foodsaver_values));
-		} elseif ($this->func->getAction('new')) {
-			$verantwortlich_select = $this->v_utils->v_input_wrapper($this->func->s('foodsaver'), '<input type="hidden" name="foodsaver[]" value="' . $this->func->fsId() . '" />Du wirst durch die Eintragrung vorerst verantwortlich für Diesen Betrieb');
-		}
-
 		$this->func->addJs('
-			$(".cb-foodsaver").click(function(){
-					if($(".cb-foodsaver:checked").length >= 4)
-					{
-						pulseError(\'' . $this->func->jsSafe($this->func->s('max_3_leader')) . '\');
-						return false;
-					}
-					
-				});		
-				
 			$("#lat-wrapper").hide();
 			$("#lon-wrapper").hide();
 		');
@@ -153,9 +137,7 @@ class StoreView extends View
 				['id' => 5, 'name' => '20-30 kg'],
 				['id' => 6, 'name' => '40-50 kg'],
 				['id' => 7, 'name' => 'mehr als 50 kg']
-			]]),
-
-			$verantwortlich_select
+			]])
 		));
 	}
 }

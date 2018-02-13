@@ -2277,32 +2277,6 @@ class ManualDb extends Db
 					');
 			}
 		}
-		if (isset($data['foodsaver']) && is_array($data['foodsaver'])) {
-			$this->update('
-					UPDATE 	 		`fs_betrieb_team`
-					SET 			`verantwortlich` = 0
-					WHERE 			`betrieb_id` = ' . $this->intval($id) . '
-				');
-
-			foreach ($data['foodsaver'] as $foodsaver_id) {
-				$this->insert('
-						REPLACE INTO `' . PREFIX . 'betrieb_team`
-						(
-							`betrieb_id`,
-							`foodsaver_id`,
-							`verantwortlich`,
-							`active`
-						)
-						VALUES
-						(
-							' . $this->intval($id) . ',
-							' . $this->intval($foodsaver_id) . ',
-							1,
-							1
-						)
-					');
-			}
-		}
 
 		if (!isset($data['status_date'])) {
 			$data['status_date'] = date('Y-m-d H:i:s');
