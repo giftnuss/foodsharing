@@ -13,11 +13,10 @@ class BasketXhr extends Control
 	private $status;
 	private $gateway;
 
-	public function __construct(BasketGateway $gateway)
+	public function __construct(BasketModel $model, BasketView $view, BasketGateway $gateway)
 	{
-		$this->model = new BasketModel();
-		$this->view = new BasketView();
-
+		$this->model = $model;
+		$this->view = $view;
 		$this->gateway = $gateway;
 
 		$this->status = array(

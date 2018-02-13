@@ -8,10 +8,10 @@ use Parsedown;
 
 class ContentControl extends Control
 {
-	public function __construct()
+	public function __construct(ContentModel $model, ContentView $view)
 	{
-		$this->model = new ContentModel();
-		$this->view = new ContentView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}

@@ -9,12 +9,12 @@ class ConsoleControl
 	protected $model;
 	protected $func;
 
-	public function __construct()
+	public function __construct(ConsoleModel $model)
 	{
 		global $g_func;
 		$this->func = $g_func;
 		if (is_null($this->model)) {
-			$this->model = new ConsoleModel();
+			$this->model = $model;
 		}
 	}
 

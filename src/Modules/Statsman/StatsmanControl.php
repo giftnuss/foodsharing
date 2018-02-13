@@ -6,10 +6,10 @@ use Foodsharing\Modules\Console\ConsoleControl;
 
 class StatsmanControl extends ConsoleControl
 {
-	public function __construct()
+	public function __construct(StatsmanModel $model)
 	{
-		$this->model = new StatsmanModel();
-		parent::__construct();
+		$this->model = $model;
+		parent::__construct($model);
 	}
 
 	public function gen_abholmengen()

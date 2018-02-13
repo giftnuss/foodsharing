@@ -7,10 +7,10 @@ use Foodsharing\Modules\Core\Control;
 
 class QuizControl extends Control
 {
-	public function __construct()
+	public function __construct(QuizModel $model, QuizView $view)
 	{
-		$this->model = new QuizModel();
-		$this->view = new QuizView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 

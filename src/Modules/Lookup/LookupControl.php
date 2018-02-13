@@ -6,10 +6,10 @@ use Foodsharing\Modules\Console\ConsoleControl;
 
 class LookupControl extends ConsoleControl
 {
-	public function __construct()
+	public function __construct(LookupModel $model)
 	{
-		$this->model = new LookupModel();
-		parent::__construct();
+		$this->model = $model;
+		parent::__construct($model);
 	}
 
 	private function loadFile()

@@ -7,10 +7,10 @@ use Foodsharing\Modules\Core\Control;
 
 class SearchControl extends Control
 {
-	public function __construct()
+	public function __construct(SearchModel $model, SearchView $view)
 	{
-		$this->model = new SearchModel();
-		$this->view = new SearchView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 

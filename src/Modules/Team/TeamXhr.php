@@ -8,10 +8,10 @@ use Foodsharing\Modules\Core\Control;
 
 class TeamXhr extends Control
 {
-	public function __construct()
+	public function __construct(TeamModel $model, TeamView $view)
 	{
-		$this->model = new TeamModel();
-		$this->view = new TeamView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}

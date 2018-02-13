@@ -7,10 +7,10 @@ use Foodsharing\Modules\Core\Control;
 
 class IndexControl extends Control
 {
-	public function __construct()
+	public function __construct(IndexModel $model, IndexView $view)
 	{
-		$this->model = new IndexModel();
-		$this->view = new IndexView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}

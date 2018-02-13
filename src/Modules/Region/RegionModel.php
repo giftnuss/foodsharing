@@ -11,9 +11,9 @@ class RegionModel extends Model
 	private $bezirk_id;
 	private $bezirk;
 
-	public function __construct($tpp = 15)
+	public function __construct()
 	{
-		$this->themes_per_page = $tpp;
+		$this->themes_per_page = 15;
 		parent::__construct();
 
 		$this->bezirk = false;

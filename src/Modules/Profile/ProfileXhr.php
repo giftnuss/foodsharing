@@ -11,10 +11,10 @@ class ProfileXhr extends Control
 {
 	private $foodsaver;
 
-	public function __construct()
+	public function __construct(ProfileModel $model, ProfileView $view)
 	{
-		$this->model = new ProfileModel();
-		$this->view = new ProfileView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 

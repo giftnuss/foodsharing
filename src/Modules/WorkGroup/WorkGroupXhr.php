@@ -8,10 +8,10 @@ use Foodsharing\Lib\Xhr\XhrDialog;
 
 class WorkGroupXhr extends Control
 {
-	public function __construct()
+	public function __construct(WorkGroupModel $model, WorkGroupView $view)
 	{
-		$this->model = new WorkGroupModel();
-		$this->view = new WorkGroupView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}

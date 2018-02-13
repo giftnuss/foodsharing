@@ -12,10 +12,10 @@ use Mobile_Detect;
 
 class LoginControl extends Control
 {
-	public function __construct()
+	public function __construct(LoginModel $model, LoginView $view)
 	{
-		$this->model = new LoginModel();
-		$this->view = new LoginView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}

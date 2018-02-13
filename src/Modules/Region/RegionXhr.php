@@ -10,11 +10,11 @@ class RegionXhr extends Control
 {
 	private $responses;
 
-	public function __construct()
+	public function __construct(RegionModel $model, RegionView $view)
 	{
+		$this->model = $model;
+		$this->view = $view;
 		$this->responses = new XhrResponses();
-		$this->model = new RegionModel(15);
-		$this->view = new RegionView();
 
 		parent::__construct();
 	}

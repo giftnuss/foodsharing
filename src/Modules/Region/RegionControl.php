@@ -11,14 +11,12 @@ class RegionControl extends Control
 	private $bezirk;
 	private $bot_theme;
 	private $mode;
-	private $themes_per_page;
 
-	public function __construct()
+	public function __construct(RegionModel $model, RegionView $view)
 	{
-		$this->themes_per_page = 15;
 		$this->mode = 'normal';
-		$this->model = new RegionModel($this->themes_per_page);
-		$this->view = new RegionView();
+		$this->model = $model;
+		$this->view = $view;
 		$this->view->setMode($this->mode);
 		parent::__construct();
 

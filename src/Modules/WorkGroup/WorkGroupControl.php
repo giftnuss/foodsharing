@@ -12,10 +12,10 @@ class WorkGroupControl extends Control
 	private $my_applications;
 	private $my_stats;
 
-	public function __construct()
+	public function __construct(WorkGroupModel $model, WorkGroupView $view)
 	{
-		$this->model = new WorkGroupModel();
-		$this->view = new WorkGroupView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 

@@ -6,10 +6,10 @@ use Foodsharing\Modules\Console\ConsoleControl;
 
 class StatsControl extends ConsoleControl
 {
-	public function __construct()
+	public function __construct(StatsModel $model)
 	{
-		$this->model = new StatsModel();
-		parent::__construct();
+		$this->model = $model;
+		parent::__construct($model);
 	}
 
 	public function index()

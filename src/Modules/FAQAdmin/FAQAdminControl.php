@@ -8,10 +8,10 @@ use Foodsharing\Modules\Core\Model;
 
 class FAQAdminControl extends Control
 {
-	public function __construct()
+	public function __construct(Model $model, FAQAdminView $view)
 	{
-		$this->view = new FAQAdminView();
-		$this->model = new Model();
+		$this->model = $model;
+
 
 		parent::__construct();
 

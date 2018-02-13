@@ -11,9 +11,9 @@ use Foodsharing\Modules\Message\MessageModel;
 
 class APIXhr extends Control
 {
-	public function __construct()
+	public function __construct(APIModel $model)
 	{
-		$this->model = new APIModel();
+		$this->model = $model;
 
 		parent::__construct();
 

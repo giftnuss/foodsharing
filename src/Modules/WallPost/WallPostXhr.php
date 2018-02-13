@@ -11,10 +11,10 @@ class WallPostXhr extends Control
 	private $table;
 	private $id;
 
-	public function __construct()
+	public function __construct(WallPostModel $model, WallPostView $view)
 	{
-		$this->model = new WallPostModel();
-		$this->view = new WallPostView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 

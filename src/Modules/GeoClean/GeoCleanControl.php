@@ -7,10 +7,10 @@ use Foodsharing\Lib\Session\S;
 
 class GeoCleanControl extends Control
 {
-	public function __construct()
+	public function __construct(GeoCleanModel $model, GeoCleanView $view)
 	{
-		$this->model = new GeoCleanModel();
-		$this->view = new GeoCleanView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 

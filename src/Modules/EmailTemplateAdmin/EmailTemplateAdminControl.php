@@ -7,10 +7,10 @@ use Foodsharing\Modules\Core\Control;
 
 class EmailTemplateAdminControl extends Control
 {
-	public function __construct()
+	public function __construct(EmailTemplateAdminModel $model, EmailTemplateAdminView $view)
 	{
-		$this->model = new EmailTemplateAdminModel();
-		$this->view = new EmailTemplateAdminView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 

@@ -6,10 +6,10 @@ use Foodsharing\Modules\Core\Control;
 
 class NewareaXhr extends Control
 {
-	public function __construct()
+	public function __construct(NewareaModel $model, NewareaView $view)
 	{
-		$this->model = new NewareaModel();
-		$this->view = new NewareaView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}

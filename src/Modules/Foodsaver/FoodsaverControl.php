@@ -8,10 +8,10 @@ use Foodsharing\Lib\Session\S;
 
 class FoodsaverControl extends Control
 {
-	public function __construct()
+	public function __construct(FoodsaverModel $model, FoodsaverView $view)
 	{
-		$this->model = new FoodsaverModel();
-		$this->view = new FoodsaverView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 

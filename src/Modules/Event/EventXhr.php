@@ -11,9 +11,9 @@ class EventXhr extends Control
 	private $stats;
 	private $event;
 
-	public function __construct()
+	public function __construct(EventModel $model)
 	{
-		$this->model = new EventModel();
+		$this->model = $model;
 
 		parent::__construct();
 

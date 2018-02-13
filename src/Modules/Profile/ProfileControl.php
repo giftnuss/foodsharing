@@ -10,10 +10,10 @@ class ProfileControl extends Control
 	private $foodsaver;
 	private $fs_id;
 
-	public function __construct()
+	public function __construct(ProfileModel $model, ProfileView $view)
 	{
-		$this->model = new ProfileModel();
-		$this->view = new ProfileView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 

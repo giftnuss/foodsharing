@@ -7,9 +7,9 @@ use Foodsharing\Lib\Session\S;
 
 class GeoCleanXhr extends Control
 {
-	public function __construct()
+	public function __construct(GeoCleanModel $model)
 	{
-		$this->model = new GeoCleanModel();
+		$this->model = $model;
 
 		parent::__construct();
 

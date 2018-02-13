@@ -11,10 +11,10 @@ class PassportGeneratorControl extends Control
 	private $bezirk_id;
 	private $bezirk;
 
-	public function __construct()
+	public function __construct(PassportGeneratorModel $model, PassportGeneratorView $view)
 	{
-		$this->model = new PassportGeneratorModel();
-		$this->view = new PassportGeneratorView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 

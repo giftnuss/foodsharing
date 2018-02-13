@@ -8,10 +8,10 @@ use Foodsharing\Modules\Console\ConsoleControl;
 
 class MaintenanceControl extends ConsoleControl
 {
-	public function __construct()
+	public function __construct(MaintenanceModel $model)
 	{
-		$this->model = new MaintenanceModel();
-		parent::__construct();
+		$this->model = $model;
+		parent::__construct($model);
 	}
 
 	public function warnings()

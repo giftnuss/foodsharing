@@ -11,10 +11,10 @@ class SettingsControl extends Control
 {
 	private $foodsaver;
 
-	public function __construct()
+	public function __construct(SettingsModel $model, SettingsView $view)
 	{
-		$this->model = new SettingsModel();
-		$this->view = new SettingsView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 

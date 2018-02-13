@@ -9,9 +9,9 @@ use Foodsharing\Lib\Xhr\Xhr;
 
 class ActivityXhr extends Control
 {
-	public function __construct()
+	public function __construct(ActivityModel $model)
 	{
-		$this->model = new ActivityModel();
+		$this->model = $model;
 
 		parent::__construct();
 	}

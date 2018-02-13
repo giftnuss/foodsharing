@@ -17,13 +17,13 @@ class MailsControl extends ConsoleControl
 	public static $smtp = false;
 	public static $last_connect;
 
-	public function __construct()
+	public function __construct(MailsModel $model)
 	{
 		error_reporting(E_ALL);
 		ini_set('display_errors', '1');
 		self::$smtp = false;
-		$this->model = new MailsModel();
-		parent::__construct();
+		$this->model = $model;
+		parent::__construct($model);
 	}
 
 	public function queueWorker()

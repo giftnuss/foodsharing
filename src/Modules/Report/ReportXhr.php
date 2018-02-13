@@ -9,10 +9,10 @@ class ReportXhr extends Control
 {
 	private $foodsaver;
 
-	public function __construct()
+	public function __construct(ReportModel $model, ReportView $view)
 	{
-		$this->model = new ReportModel();
-		$this->view = new ReportView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 

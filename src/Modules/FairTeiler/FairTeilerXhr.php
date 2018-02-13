@@ -7,10 +7,10 @@ use Foodsharing\Modules\Core\Control;
 
 class FairTeilerXhr extends Control
 {
-	public function __construct()
+	public function __construct(FairTeilerModel $model, FairTeilerView $view)
 	{
-		$this->model = new FairTeilerModel();
-		$this->view = new FairTeilerView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}

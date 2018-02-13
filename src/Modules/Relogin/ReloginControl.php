@@ -7,9 +7,9 @@ use Foodsharing\Modules\Core\Model;
 
 class ReloginControl extends Control
 {
-	public function __construct()
+	public function __construct(Model $model)
 	{
-		$this->model = new Model();
+		$this->model = $model;
 		parent::__construct();
 	}
 

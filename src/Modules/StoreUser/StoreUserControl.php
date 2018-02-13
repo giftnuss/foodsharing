@@ -8,10 +8,10 @@ use Foodsharing\Modules\Store\StoreModel;
 
 class StoreUserControl extends Control
 {
-	public function __construct()
+	public function __construct(StoreModel $model, StoreUserView $view)
 	{
-		$this->model = new StoreModel();
-		$this->view = new StoreUserView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 

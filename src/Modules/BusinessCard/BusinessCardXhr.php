@@ -7,9 +7,9 @@ use FPDI;
 
 class BusinessCardXhr extends Control
 {
-	public function __construct()
+	public function __construct(BusinessCardModel $model)
 	{
-		$this->model = new BusinessCardModel();
+		$this->model = $model;
 
 		parent::__construct();
 	}

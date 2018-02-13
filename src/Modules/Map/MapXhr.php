@@ -7,9 +7,9 @@ use Foodsharing\Lib\Session\S;
 
 class MapXhr extends Control
 {
-	public function __construct()
+	public function __construct(MapView $view)
 	{
-		$this->view = new MapView();
+		$this->view = $view;
 
 		parent::__construct();
 	}

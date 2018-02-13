@@ -9,10 +9,10 @@ use Foodsharing\Modules\Core\Control;
 
 class MessageXhr extends Control
 {
-	public function __construct()
+	public function __construct(MessageModel $model, MessageView $view)
 	{
-		$this->model = new MessageModel();
-		$this->view = new MessageView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 

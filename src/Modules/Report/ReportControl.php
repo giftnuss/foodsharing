@@ -6,10 +6,10 @@ use Foodsharing\Modules\Core\Control;
 
 class ReportControl extends Control
 {
-	public function __construct()
+	public function __construct(ReportModel $model, ReportView $view)
 	{
-		$this->model = new ReportModel();
-		$this->view = new ReportView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 

@@ -14,10 +14,10 @@ class EmailControl extends Control
 {
 	private $mbmodel;
 
-	public function __construct()
+	public function __construct(Model $model, MailboxModel $mbmodel)
 	{
-		$this->model = new Model();
-		$this->mbmodel = new MailboxModel();
+		$this->model = $model;
+		$this->mbmodel = $mbmodel;
 
 		parent::__construct();
 

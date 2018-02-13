@@ -7,9 +7,9 @@ use Foodsharing\Modules\Core\Control;
 
 class BuddyXhr extends Control
 {
-	public function __construct()
+	public function __construct(BuddyModel $model)
 	{
-		$this->model = new BuddyModel();
+		$this->model = $model;
 
 		parent::__construct();
 	}

@@ -7,10 +7,10 @@ use Foodsharing\Modules\Core\Control;
 
 class EventControl extends Control
 {
-	public function __construct()
+	public function __construct(EventModel $model, EventView $view)
 	{
-		$this->model = new EventModel();
-		$this->view = new EventView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}

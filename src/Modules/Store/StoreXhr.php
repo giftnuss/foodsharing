@@ -9,10 +9,10 @@ use Foodsharing\Modules\Core\Control;
 
 class StoreXhr extends Control
 {
-	public function __construct()
+	public function __construct(StoreModel $model, StoreView $view)
 	{
-		$this->model = new StoreModel();
-		$this->view = new StoreView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 
