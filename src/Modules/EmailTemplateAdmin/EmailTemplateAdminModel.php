@@ -26,4 +26,17 @@ class EmailTemplateAdminModel extends Model
 			DELETE FROM 	`' . PREFIX . 'message_tpl`
 			WHERE 			`id` = ' . $db->intval($id));
 	}
+
+	public function update_message_tpl($id, $data)
+	{
+		return $this->update('
+		UPDATE 	`' . PREFIX . 'message_tpl`
+
+		SET 	`language_id` =  ' . $this->intval($data['language_id']) . ',
+				`name` =  ' . $this->strval($data['name']) . ',
+				`subject` =  ' . $this->strval($data['subject']) . ',
+				`body` =  "' . $this->safe($data['body']) . '"
+
+		WHERE 	`id` = ' . $this->intval($id));
+	}
 }

@@ -601,19 +601,6 @@ class ManualDb extends Db
 		return $id;
 	}
 
-	public function update_message_tpl($id, $data)
-	{
-		return $this->update('
-		UPDATE 	`' . PREFIX . 'message_tpl`
-
-		SET 	`language_id` =  ' . $this->intval($data['language_id']) . ',
-				`name` =  ' . $this->strval($data['name']) . ',
-				`subject` =  ' . $this->strval($data['subject']) . ',
-				`body` =  ' . $this->strval($data['body'], '<p><br><a><h1><h2><h3><ul><li><ol>') . '
-
-		WHERE 	`id` = ' . $this->intval($id));
-	}
-
 	public function update_content($id, $data)
 	{
 		return $this->update('
