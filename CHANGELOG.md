@@ -17,6 +17,7 @@
 - Remove mass mail recipient options that are ambigous/irrelevant @NerdyProjects
 - Fix missing newsletter unsubscription links for pre-2014 foodsharing.de accounts @NerdyProjects
 - Fix newsletter should only be sent to activated accounts @NerdyProjects
+- Show regions in alphabetical order in the region selector (Bezirk beitreten) !267 by @alangecker
 
 ## Refactoring
 - Consolidate remaining functions and modules !269 @NerdyProjects

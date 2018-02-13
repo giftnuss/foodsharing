@@ -248,7 +248,7 @@ class XhrMethods
 			if ($this->func->isOrgaTeam()) {
 				$sql = '';
 			}
-			if ($childs = $this->model->q('SELECT `id`,`parent_id`,`has_children`,`name`,`type` FROM `' . PREFIX . 'bezirk` WHERE `parent_id` = ' . $this->model->intval($data['parent']) . $sql)) {
+			if ($childs = $this->model->q('SELECT `id`,`parent_id`,`has_children`,`name`,`type` FROM `' . PREFIX . 'bezirk` WHERE `parent_id` = ' . $this->model->intval($data['parent']) . $sql . ' ORDER BY `name`')) {
 				return json_encode(array(
 					'status' => 1,
 					'html' => ViewUtils::childBezirke($childs, $data['parent'])
