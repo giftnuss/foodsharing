@@ -291,7 +291,16 @@ class Foodsharing extends \Codeception\Module\Db
 		return $v;
 	}
 
-	public function addBezirkMember($bezirk_id, $fs_id, $is_admin = false, $is_active = true)
+	public function addBezirkAdmin($bezirk_id, $fs_id)
+	{
+		$v = [
+			'bezirk_id' => $bezirk_id,
+			'foodsaver_id' => $fs_id,
+		];
+		$this->haveInDatabase('fs_botschafter', $v);
+	}
+
+	public function addBezirkMember($bezirk_id, $fs_id, $is_active = true)
 	{
 		if (is_array($fs_id)) {
 			array_map(function ($x) use ($bezirk_id, $is_admin) {
@@ -304,13 +313,6 @@ class Foodsharing extends \Codeception\Module\Db
 				'active' => $is_active ? 1 : 0,
 			];
 			$this->haveInDatabase('fs_foodsaver_has_bezirk', $v);
-			if ($is_admin) {
-				$v = [
-					'bezirk_id' => $bezirk_id,
-					'foodsaver_id' => $fs_id,
-				];
-				$this->haveInDatabase('fs_botschafter', $v);
-			}
 		}
 	}
 

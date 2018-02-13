@@ -15,10 +15,9 @@ $I = new AcceptanceTester($scenario);
 $I->wantTo('create an id card for a foodsaver');
 
 $regionName = $I->grabFromDatabase('fs_bezirk', 'name', ['id' => $testRegion]);
-$foodsaver = $I->createFoodsaver(null, ['name' => 'fs1', 'nachname' => 'saver1', 'photo' => 'does-not-exist.jpg']);
-$ambassador = $I->createAmbassador(null, ['photo' => 'does-not-exist.jpg']);
-$I->addBezirkMember($testRegion, $ambassador['id'], true);
-$I->addBezirkMember($testRegion, $foodsaver['id']);
+$foodsaver = $I->createFoodsaver(null, ['name' => 'fs1', 'nachname' => 'saver1', 'photo' => 'does-not-exist.jpg', 'bezirk_id' => $testRegion]);
+$ambassador = $I->createAmbassador(null, ['photo' => 'does-not-exist.jpg', 'bezirk_id' => $testRegion]);
+$I->addBezirkAdmin($testRegion, $ambassador['id']);
 
 $I->login($ambassador['email']);
 

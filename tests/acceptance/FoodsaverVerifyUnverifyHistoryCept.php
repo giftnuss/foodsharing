@@ -4,10 +4,9 @@ $testRegion = 253;
 $I = new AcceptanceTester($scenario);
 $I->wantTo('Verify, unverify and see verification history of a foodsaver');
 
-$foodsaver = $I->createFoodsaver(null);
-$ambassador = $I->createAmbassador(null, ['name' => 'Bot']);
-$I->addBezirkMember($testRegion, $ambassador['id'], true);
-$I->addBezirkMember($testRegion, $foodsaver['id']);
+$foodsaver = $I->createFoodsaver(null, ['bezirk_id' => $testRegion]);
+$ambassador = $I->createAmbassador(null, ['name' => 'Bot', 'bezirk_id' => $testRegion]);
+$I->addBezirkAdmin($testRegion, $ambassador['id']);
 
 /* define xpath locator
 1. //a[contains(text(), "%s")]     look a the link with the foodsavers' name:

@@ -18,8 +18,7 @@ class ForumPostCest
 	{
 		$this->ambassador = $I->createAmbassador('pw', ['bezirk_id' => $this->testBezirk]);
 		$this->foodsaver = $I->createFoodsaver('pw', ['bezirk_id' => $this->testBezirk]);
-		$I->addBezirkMember($this->testBezirk, $this->ambassador['id'], true);
-		$I->addBezirkMember($this->testBezirk, $this->foodsaver['id']);
+		$I->addBezirkAdmin($this->testBezirk, $this->ambassador['id']);
 	}
 
 	private function createPosts($I)
