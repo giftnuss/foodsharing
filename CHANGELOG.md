@@ -11,6 +11,7 @@
 - Renamed footer "Unterstützung" to "Spenden" !273 @BassTii
 
 ## Bugfixes
+- Allow using more HTML tags in email templates to not break layout !278 @NerdyProjects
 - Reduce size of static images by lossless recompression with trimage !245 @NerdyProjects
 - Change impressum to match current association status @NerdyProjects
 - Remove mass mail recipient options that are ambigous/irrelevant @NerdyProjects
