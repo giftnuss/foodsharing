@@ -15,6 +15,7 @@ modules:
             window_size: 1920x1080
             connection_timeout: 20
             request_timeout: 20
+            wait: 5
         - Sequence
         - Db:
             populate: true
