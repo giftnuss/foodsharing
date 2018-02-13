@@ -73,7 +73,7 @@ if (!array_key_exists('NOTWIG', $_GET)) {
 		$mainwidth -= $content_right_width;
 	}
 
-	$page = $twig->render('main.twig', [
+	$page = $twig->render('layouts/'. $g_template . '.twig', [
 		'head' => $g_func->getHead(),
 		'bread' => $g_func->getBread(),
 		'css' => str_replace(["\r", "\n"], '', $g_func->getAddCss()),

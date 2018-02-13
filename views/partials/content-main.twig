@@ -1,7 +1,0 @@
-{% if html %}
-    <div id="{{ id is defined ? id : '' }}" class="pure-u-1 {{ width is defined ? "pure-u-md-#{width}-24" : '' }}">
-        <div class="inside">
-            {{ html | raw }}
-        </div>
-    </div>
-{% endif %}
