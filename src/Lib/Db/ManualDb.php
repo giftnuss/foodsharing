@@ -2464,8 +2464,10 @@ class ManualDb extends Db
 			');
 
 		$teamMembers = $this->getBetriebTeam($bid);
-		foreach ($teamMembers['id'] as $fs_id) {
-			$msg->addUserToConversation($tcid, $fs_id);
+		if ($teamMembers) {
+			foreach ($teamMembers as $fs) {
+				$msg->addUserToConversation($tcid, $fs['id']);
+			}
 		}
 
 		return $tcid;
@@ -2482,8 +2484,10 @@ class ManualDb extends Db
 			');
 
 		$springerMembers = $this->getBetriebSpringer($bid);
-		foreach ($springerMembers['id'] as $fs_id) {
-			$msg->addUserToConversation($scid, $fs_id);
+		if ($springerMembers) {
+			foreach ($springerMembers as $fs) {
+				$msg->addUserToConversation($scid, $fs['id']);
+			}
 		}
 
 		return $scid;
