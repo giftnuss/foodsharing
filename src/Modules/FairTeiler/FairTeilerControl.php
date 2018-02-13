@@ -13,10 +13,11 @@ class FairTeilerControl extends Control
 	private $follower;
 	private $bezirke;
 
-	public function __construct(FairTeilerModel $model, FairTeilerView $view)
+	public function __construct(FairTeilerModel $model, FairTeilerView $view, FairTeilerGateway $gateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->gateway = $gateway;
 
 		parent::__construct();
 
@@ -53,7 +54,7 @@ class FairTeilerControl extends Control
 		$this->fairteiler = false;
 		$this->follower = false;
 		if (isset($_GET['id'])) {
-			$this->fairteiler = $this->model->getFairteiler($_GET['id']);
+			$this->fairteiler = $this->gateway->getFairteiler($_GET['id']);
 
 			if (!$this->fairteiler) {
 				$this->func->go('/?page=fairteiler');
@@ -64,15 +65,15 @@ class FairTeilerControl extends Control
 					if (isset($_GET['infotype']) && $_GET['infotype'] == 1) {
 						$info = 1;
 					}
-					$this->model->follow($_GET['id'], $info);
+					$this->gateway->follow($_GET['id'], $this->func->fsId(), $info);
 				} else {
-					$this->model->unfollow($_GET['id']);
+					$this->gateway->unfollow($_GET['id'], $this->func->fsId());
 				}
 				$url = explode('&follow=', $this->func->getSelf());
 				$this->func->go($url[0]);
 			}
 
-			$this->follower = $this->model->getFollower($_GET['id']);
+			$this->follower = $this->gateway->getFollower($_GET['id']);
 			$this->view->setFairteiler($this->fairteiler, $this->follower);
 
 			$this->fairteiler['urlname'] = str_replace(' ', '_', $this->fairteiler['name']);
@@ -89,7 +90,7 @@ class FairTeilerControl extends Control
 				');
 
 			if (isset($_GET['delete']) && ($this->func->isOrgaTeam() || $this->func->isBotFor($this->bezirk_id))) {
-				if ($this->model->deleteFairteiler($this->fairteiler['id'])) {
+				if ($this->gateway->deleteFairteiler($this->fairteiler['id'])) {
 					$this->func->info($this->func->s('delete_success'));
 					$this->func->go('/?page=fairteiler&bid=' . $this->bezirk_id);
 				}
@@ -111,7 +112,7 @@ class FairTeilerControl extends Control
 				}
 			}
 
-			if ($fairteiler = $this->model->listFairteiler($this->bezirk_id)) {
+			if ($fairteiler = $this->gateway->listFairteiler($this->bezirk_id)) {
 				$this->func->addContent($this->view->listFairteiler($fairteiler));
 			} else {
 				$this->func->addContent($this->v_utils->v_info($this->func->s('no_fairteiler_available')));
@@ -157,15 +158,15 @@ class FairTeilerControl extends Control
 
 	public function check()
 	{
-		if ($ft = $this->model->getFairteiler($_GET['id'])) {
+		if ($ft = $this->gateway->getFairteiler($_GET['id'])) {
 			if ($this->func->isOrgaTeam() || $this->func->isBotFor($ft['bezirk_id'])) {
 				if (isset($_GET['agree'])) {
 					if ($_GET['agree'] == 1) {
-						$this->model->acceptFairteiler($_GET['id']);
+						$this->gateway->acceptFairteiler($_GET['id']);
 						$this->func->info('Fair-Teiler ist jetzt aktiv');
 						$this->func->go('/?page=fairteiler&sub=ft&id=' . (int)$_GET['id']);
 					} elseif ($_GET['agree'] == 0) {
-						$this->model->deleteFairteiler($_GET['id']);
+						$this->gateway->deleteFairteiler($_GET['id']);
 						$this->func->info('Fair-Teiler wurde gelöscht');
 						$this->func->go('/?page=fairteiler');
 					}
@@ -261,9 +262,9 @@ class FairTeilerControl extends Control
 
 				$this->func->handleTagselect('bfoodsaver');
 
-				$this->model->updateVerantwortliche($this->fairteiler['id']);
+				$this->gateway->updateVerantwortliche($this->fairteiler['id']);
 
-				return $this->model->updateFairteiler($this->fairteiler['id'], $bezirk_id, $name, $desc, $anschrift, $plz, $ort, $lat, $lon, $picture);
+				return $this->gateway->updateFairteiler($this->fairteiler['id'], $bezirk_id, $name, $desc, $anschrift, $plz, $ort, $lat, $lon, $picture);
 			} else {
 				return false;
 			}
@@ -288,7 +289,7 @@ class FairTeilerControl extends Control
 				$status = 1;
 			}
 
-			return $this->model->addFairteiler($bezirk_id, $name, $desc, $anschrift, $plz, $ort, $lat, $lon, $picture, $status);
+			return $this->model->addFairteiler($this->func->fsId(), $bezirk_id, $name, $desc, $anschrift, $plz, $ort, $lat, $lon, $picture, $status);
 		} else {
 			return false;
 		}
