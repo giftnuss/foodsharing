@@ -26,6 +26,8 @@
 
 ## Dev/Test/CI stuff
 
+- Improve `FoodsaverVerifyUnverifyHistoryCept` test !279 @tiltec
+- Enable [smartWait](https://codeception.com/docs/03-AcceptanceTests#SmartWait) for acceptance tests !279 @tiltec
 - Enable xdebug remote debugging for development !276 @NerdyProjects
 - Add better seed data for use during development !263 @tiltec
 
