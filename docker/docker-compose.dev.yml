@@ -151,6 +151,8 @@ services:
   redis:
     container_name: foodsharing_dev_redis
     image: redis:alpine
+    ports:
+        - 6379:6379
     expose:
       - 6379
 
