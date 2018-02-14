@@ -11,6 +11,7 @@
 - Renamed footer "Unterstützung" to "Spenden" !273 @BassTii
 - Updates fullpage.js to 2.9.5 for fixing scrolling in firefox, general smoothness !244 @NerdyProjects
 - Page with list of communities for austria/germany/switzerland by @Kristijan
+- Page with list of communities for Austria/Germany/Switzerland. !286 by @Kristijan
 
 ## Bugfixes
 - Allow using more HTML tags in email templates to not break layout !278 @NerdyProjects
