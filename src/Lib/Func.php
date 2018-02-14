@@ -571,9 +571,9 @@ class Func
 							<li><a href="/team">Team</a></li>
 							<li><a href="/?page=content&sub=communitiesGermany">Communities</a>
 							<ul>
-							<li> <a href="/?page=content&sub=communitiesGermany">Deutschland </a></li>
-							<li> <a href="/?page=content&sub=communitiesAustria">Österreich </a> </li>
-							<li> <a href="/?page=content&sub=communitiesSwitzerland">Schweiz </a> </li>
+								<li><a href="/?page=content&sub=communitiesGermany">Deutschland</a></li>
+								<li><a href="/?page=content&sub=communitiesAustria">Österreich</a></li>
+								<li><a href="/?page=content&sub=communitiesSwitzerland">Schweiz</a></li>
 							</ul>
 							</li>
 							<li><a href="/partner">Partner</a></li>
