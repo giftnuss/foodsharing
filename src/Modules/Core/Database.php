@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Core;
 
 use PDO;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class Database
 {
@@ -13,29 +14,29 @@ class Database
 		$this->pdo = $pdo;
 	}
 
-	public function fetch($query, $params = [])
+	public function fetch($query, $params = [], $isNamed = true)
 	{
-		return $this->preparedQuery($query, $params)->fetch();
+		return $this->preparedQuery($query, $params, $isNamed)->fetch();
 	}
 
-	public function fetchAll($query, $params = [])
+	public function fetchAll($query, $params = [], $isNamed = true)
 	{
-		return $this->preparedQuery($query, $params)->fetchAll();
+		return $this->preparedQuery($query, $params, $isNamed)->fetchAll();
 	}
 
-	public function fetchAllValues($query, $params = [])
+	public function fetchAllValues($query, $params = [], $isNamed = true)
 	{
-		return $this->preparedQuery($query, $params)->fetchAll(\PDO::FETCH_COLUMN, 0);
+		return $this->preparedQuery($query, $params, $isNamed)->fetchAll(\PDO::FETCH_COLUMN, 0);
 	}
 
-	public function fetchValue($query, $params = [])
+	public function fetchValue($query, $params = [], $isNamed = true)
 	{
-		return $this->preparedQuery($query, $params)->fetchColumn(0);
+		return $this->preparedQuery($query, $params, $isNamed)->fetchColumn(0);
 	}
 
-	public function execute($query, $params = [])
+	public function execute($query, $params = [], $isNamed = true)
 	{
-		return $this->preparedQuery($query, $params)->rowCount();
+		return $this->preparedQuery($query, $params, $isNamed)->rowCount();
 	}
 
 	public function insert($table, array $data)
@@ -52,7 +53,7 @@ class Database
 			implode(', ', array_fill(0, count($data), '?'))
 		);
 
-		$this->execute($query, array_values($data));
+		$this->execute($query, array_values($data), false);
 
 		$lastInsertId = (int)$this->pdo->lastInsertId();
 
@@ -78,7 +79,7 @@ class Database
 
 		$params = array_merge(array_values($data), array_values($criteria));
 
-		return $this->execute($query, $params);
+		return $this->execute($query, $params, false);
 	}
 
 	public function delete($table, array $criteria)
@@ -87,7 +88,7 @@ class Database
 
 		$query = 'DELETE FROM ' . $this->getQuotedName($table) . ' ' . $where;
 
-		return $this->execute($query, array_values($criteria));
+		return $this->execute($query, array_values($criteria), false);
 	}
 
 	public function exists($table, array $criteria)
@@ -96,7 +97,7 @@ class Database
 
 		$query = 'SELECT COUNT(*) FROM ' . $this->getQuotedName($table) . ' ' . $where;
 
-		return $this->fetchValue($query, array_values($criteria)) > 0;
+		return $this->fetchValue($query, array_values($criteria), false) > 0;
 	}
 
 	public function requireExists($table, array $criteria)
@@ -108,7 +109,7 @@ class Database
 
 	// === private functions ===
 
-	private function preparedQuery($query, $params)
+	private function preparedQuery($query, $params, $isNamed)
 	{
 		$statement = $this->pdo->prepare($query);
 		if (!$statement) {
@@ -123,7 +124,10 @@ class Database
 			} else {
 				$type = \PDO::PARAM_STR;
 			}
-			$statement->bindValue($key, $value, $type);
+
+			// Positional arguments start with 1, not 0
+			$name = $isNamed === true ? $key : $key + 1;
+			$statement->bindValue($name, $value, $type);
 		}
 
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
