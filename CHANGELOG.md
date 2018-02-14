@@ -9,6 +9,7 @@
 - Changed way of gendering in passport from "/" to "_" !251 @D0nPiano
 - auto adding of CH-BOTs and ZH-BIEBs to their working groups. !271 by @peter.toennies
 - Renamed footer "Unterstützung" to "Spenden" !273 @BassTii
+- Updates fullpage.js to 2.9.5 for fixing scrolling in firefox, general smoothness !244 @NerdyProjects
 
 ## Bugfixes
 - Allow using more HTML tags in email templates to not break layout !278 @NerdyProjects
