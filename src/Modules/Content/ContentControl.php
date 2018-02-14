@@ -123,6 +123,7 @@ class ContentControl extends Control
 			$this->func->addContent($this->view->simple($cnt));
 		}
 	}
+
 	public function communitiesGermany()
 	{
 		if ($cnt = $this->model->getContent(52)) {
@@ -132,6 +133,7 @@ class ContentControl extends Control
 			$this->func->addContent($this->view->simple($cnt));
 		}
 	}
+
 	public function communitiesAustria()
 	{
 		if ($cnt = $this->model->getContent(61)) {
@@ -141,6 +143,7 @@ class ContentControl extends Control
 			$this->func->addContent($this->view->simple($cnt));
 		}
 	}
+
 	public function communitiesSwitzerland()
 	{
 		if ($cnt = $this->model->getContent(62)) {
