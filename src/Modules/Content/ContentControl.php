@@ -123,6 +123,33 @@ class ContentControl extends Control
 			$this->func->addContent($this->view->simple($cnt));
 		}
 	}
+	public function communitiesGermany()
+	{
+		if ($cnt = $this->model->getContent(52)) {
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
+
+			$this->func->addContent($this->view->simple($cnt));
+		}
+	}
+	public function communitiesAustria()
+	{
+		if ($cnt = $this->model->getContent(61)) {
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
+
+			$this->func->addContent($this->view->simple($cnt));
+		}
+	}
+	public function communitiesSwitzerland()
+	{
+		if ($cnt = $this->model->getContent(62)) {
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
+
+			$this->func->addContent($this->view->simple($cnt));
+		}
+	}
 
 	public function forderungen()
 	{

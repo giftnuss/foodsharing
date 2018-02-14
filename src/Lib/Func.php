@@ -568,7 +568,14 @@ class Func
 						<ul>
 							<li><a href="/ueber-uns">Über uns</a>
 							<li><a href="/?page=content&sub=forderungen">Forderungen</a></li>
-                                                        <li><a href="/team">Team</a></li>
+							<li><a href="/team">Team</a></li>
+							<li><a href="/?page=content&sub=communitiesGermany">Communities</a>
+							<ul>
+							<li> <a href="/?page=content&sub=communitiesGermany">Deutschland </a></li>
+							<li> <a href="/?page=content&sub=communitiesAustria">Österreich </a> </li>
+							<li> <a href="/?page=content&sub=communitiesSwitzerland">Schweiz </a> </li>
+							</ul>
+							</li>
 							<li><a href="/partner">Partner</a></li>
 							<li><a href="/statistik">Statistik</a></li>
 							<li><a href="/?page=content&sub=presse">Presse</a></li>
@@ -593,6 +600,9 @@ class Func
 					<option value="/karte">Karte</option>
 					<option value="/ueber-uns">- Über uns</option>
 					<option value="/?page=content&sub=forderungen">- Forderungen</option>
+					<option value="/?page=content&sub=communitiesGermany">- Community Deutschland</option>
+					<option value="/?page=content&sub=communitiesAustria">- Community Österreich</option>
+					<option value="/?page=content&sub=communitiesSwitzerland">- Community Schweiz</option>
 					<option value="/team">- Team und Kontaktdaten</option>
 					<option value="/partner">- Partner</option>
 					<option value="/?page=content&sub=presse">- Presse</option>
