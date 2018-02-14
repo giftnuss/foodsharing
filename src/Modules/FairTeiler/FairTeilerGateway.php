@@ -184,17 +184,12 @@ class FairTeilerGateway extends BaseGateway
 
 	public function unfollow($ft_id, $fs_id)
 	{
-		return $this->db->execute('
-				DELETE FROM `fs_fairteiler_follower`
-				WHERE 	fairteiler_id = :ft_id
-				AND 	foodsaver_id = :fs_id
-		', ['ft_id' => $ft_id, ':fs_id' => $fs_id]);
+		return $this->db->delete('fs_fairteiler_follower', ['fairteiler_id' => $ft_id, 'foodsaver_id' => $fs_id]);
 	}
 
 	public function getFollower($id)
 	{
 		if ($follower = $this->db->fetchAll('
-
 			SELECT 	fs.`name`,
 					fs.`nachname`,
 					fs.`id`,
@@ -234,13 +229,7 @@ class FairTeilerGateway extends BaseGateway
 
 	public function acceptFairteiler($id)
 	{
-		return $this->db->execute('
-			UPDATE 	`fs_fairteiler`
-		
-			SET 	`status` = 1
-		
-			WHERE 	`id` = ' . $this->intval($id) . '
-		');
+		return $this->db->update('fs_fairteiler', ['status' => 1], ['id' => $id]);
 	}
 
 	public function updateFairteiler($id, $bezirk_id, $name, $desc, $anschrift, $plz, $ort, $lat, $lon, $picture)
@@ -268,15 +257,8 @@ class FairTeilerGateway extends BaseGateway
 
 	public function deleteFairteiler($id)
 	{
-		$this->db->execute('
-			DELETE FROM 	`fs_fairteiler_follower`	
-			WHERE `fairteiler_id` = ' . (int)$id . '
-		');
-
-		return $this->db->execute('
-			DELETE FROM 	`fs_fairteiler`	
-			WHERE `id` = ' . (int)$id . '	
-		');
+		$this->db->delete('fs_fairteiler_follower', ['fairteiler_id' => $id]);
+		return $this->db->delete('fs_fairteiler', ['id' => $id]);
 	}
 
 	public function getFairteiler($id)
@@ -306,8 +288,8 @@ class FairTeilerGateway extends BaseGateway
 					
 				
 			ON 	ft.add_foodsaver = fs.id
-			WHERE 	ft.id = ' . (int)$id . '
-		')
+			WHERE 	ft.id = :id
+		', [':id' => $id])
 		) {
 			$ft['pic'] = false;
 			if (!empty($ft['picture'])) {
@@ -337,39 +319,21 @@ class FairTeilerGateway extends BaseGateway
 		$picture = '',
 		$status = 1)
 	{
-		if ($ftid = $this->db->execute('
-			INSERT INTO 	`fs_fairteiler`
-			(
-				`bezirk_id`,
-				`name`,
-				`picture`,
-				`status`,
-				`desc`,
-				`anschrift`,
-				`plz`,
-				`ort`,
-				`lat`,
-				`lon`,
-				`add_date`,
-				`add_foodsaver`
-			)
-			VALUES
-			(
-				' . $this->intval($bezirk_id) . ',
-				' . $this->strval($name) . ',
-				' . $this->strval($picture) . ',
-				' . $this->intval($status) . ',
-				' . $this->strval($desc) . ',
-				' . $this->strval($anschrift) . ',
-				' . $this->strval($plz) . ',
-				' . $this->strval($ort) . ',
-				' . $this->strval($lat) . ',
-				' . $this->strval($lon) . ',
-				NOW(),
-				:fs_id
-			)
-		', [':fs_id' => $fs_id])
-		) {
+		$ft_id = $this->db->insert('fs_fairteiler', [
+			'bezirk_id' => $bezirk_id,
+			'name' => strip_tags($name),
+			'picture' => strip_tags($picture),
+			'status' => strip_tags($status),
+			'desc' => strip_tags($desc),
+			'anschrift' =>strip_tags($anschrift),
+			'plz' => strip_tags($plz),
+			'ort' => strip_tags($ort),
+			'lat' => strip_tags($lat),
+			'lon' => strip_tags($lon),
+			'add_date' => NOW(),
+			'add_foodsaver' => $fs_id
+		]);
+		if ($ft_id) {
 			$this->db->execute('
 				REPLACE INTO `fs_fairteiler_follower`
 				(
@@ -379,13 +343,16 @@ class FairTeilerGateway extends BaseGateway
 				)
 				VALUES
 				(
-					' . (int)$ftid . ',
+					:ft_id,
 					:fs_id,
 					2
 				)
-			', [':fs_id' => $fs_id]);
+			', [
+				':ft_id' => $ft_id,
+				':fs_id' => $fs_id
+			]);
 
-			return $ftid;
+			return $ft_id;
 		}
 	}
 }
