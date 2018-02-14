@@ -115,9 +115,7 @@ class Database
 			throw new \Exception("Query '$query' can't be prepared.");
 		}
 
-		$i = 0;
-		foreach ($params as $value) {
-			++$i;
+		foreach ($params as $key => $value) {
 			if (is_bool($value)) {
 				$type = \PDO::PARAM_BOOL;
 			} elseif (is_int($value)) {
@@ -125,7 +123,7 @@ class Database
 			} else {
 				$type = \PDO::PARAM_STR;
 			}
-			$statement->bindValue($i, $value, $type);
+			$statement->bindValue($key, $value, $type);
 		}
 
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
