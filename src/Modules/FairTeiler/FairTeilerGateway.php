@@ -279,52 +279,6 @@ class FairTeilerGateway extends BaseGateway
 		');
 	}
 
-	public function getLastUpdates($id, $count = 3)
-	{
-		if ($update = $this->db->execute('
-			SELECT 		wp.id,
-						wp.time,
-						UNIX_TIMESTAMP(wp.time) AS time_ts,
-						wp.body,
-						wp.attach,
-						fs.name AS fs_name			
-					
-			FROM 		fs_fairteiler_has_wallpost hw 
-			LEFT JOIN 	fs_wallpost wp
-			ON 			hw.wallpost_id = wp.id
-				
-			LEFT JOIN 	fs_foodsaver fs ON wp.foodsaver_id = fs.id
-
-			WHERE 		hw.fairteiler_id = ' . (int)$id . '
-				
-			ORDER BY 	time_ts DESC
-			LIMIT ' . $count . '
-	
-		')
-		) {
-			foreach ($update as $key => $u) {
-				$update[$key]['images'] = false;
-				if (!empty($u['attach'])) {
-					$attach = json_decode($u['attach'], true);
-					if (isset($attach['image']) && !empty($attach['image'])) {
-						$update[$key]['images'] = array();
-						foreach ($attach['image'] as $img) {
-							$update[$key]['images'][] = array(
-								'image' => 'images/wallpost/' . $img['file'],
-								'medium' => 'images/wallpost/medium_' . $img['file'],
-								'thumb' => 'images/wallpost/thumb_' . $img['file']
-							);
-						}
-					}
-				}
-			}
-
-			return $update;
-		}
-
-		return false;
-	}
-
 	public function getFairteiler($id)
 	{
 		if ($ft = $this->db->fetch('

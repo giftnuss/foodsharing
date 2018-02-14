@@ -15,24 +15,6 @@ class FairTeilerXhr extends Control
 		parent::__construct();
 	}
 
-	public function load()
-	{
-		if (($id = (int)$_GET['id']) > 0) {
-			if ($fairteiler = $this->gateway->getFairteiler($id)) {
-				$fairteiler['updates'] = false;
-				if ($updates = $this->gateway->getLastUpdates($id)) {
-					$fairteiler['updates'] = $updates;
-				}
-
-				return array(
-					'status' => 1,
-					'html' => $this->view->publicFairteilerMap($fairteiler),
-					'name' => $fairteiler['name']
-				);
-			}
-		}
-	}
-
 	public function infofollower()
 	{
 		if (!$this->mayFairteiler($_GET['fid'])) {
