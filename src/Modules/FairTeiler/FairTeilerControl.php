@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\FairTeiler;
 
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class FairTeilerControl extends Control
 {
@@ -13,10 +14,14 @@ class FairTeilerControl extends Control
 	private $follower;
 	private $bezirke;
 
-	public function __construct(FairTeilerView $view, FairTeilerGateway $gateway)
+	private $gateway;
+	private $regionGateway;
+
+	public function __construct(FairTeilerView $view, FairTeilerGateway $gateway, RegionGateway $regionGateway)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;
+		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
 
@@ -111,7 +116,13 @@ class FairTeilerControl extends Control
 				}
 			}
 
-			if ($fairteiler = $this->gateway->listFairteiler($this->bezirk_id)) {
+			if ($this->bezirk_id === 0) {
+				$bezirk_ids = $this->regionGateway->getAllRegions($this->func->fsId());
+			} else {
+				$bezirk_ids = $this->regionGateway->getChildRegions($this->bezirk_id);
+			}
+
+			if ($fairteiler = $this->gateway->listFairteiler($bezirk_ids)) {
 				$this->func->addContent($this->view->listFairteiler($fairteiler));
 			} else {
 				$this->func->addContent($this->v_utils->v_info($this->func->s('no_fairteiler_available')));
