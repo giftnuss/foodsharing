@@ -28,6 +28,7 @@ class Model extends ManualDb
 		return false;
 	}
 
+	// DEPRECATED. Use the function from Region\RegionGateway instead
 	public function getBezirke()
 	{
 		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {

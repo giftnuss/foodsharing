@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\FairTeiler;
 
 use Foodsharing\Modules\Core\BaseGateway;
-use function GuzzleHttp\Psr7\str;
 
 class FairTeilerGateway extends BaseGateway
 {
@@ -89,27 +88,8 @@ class FairTeilerGateway extends BaseGateway
 		');
 	}
 
-	public function listFairteiler($bezirk_id)
+	public function listFairteiler($bezirk_ids = [])
 	{
-		$bezirk_ids = array();
-		if ($bezirk_id == 0) {
-			if ($bezike = $this->getBezirke()) {
-				foreach ($bezike as $b) {
-					if ($bb = $this->getChildBezirke($b['id'])) {
-						foreach ($bb as $c) {
-							$bezirk_ids[$c] = $c;
-						}
-					}
-				}
-			}
-		} else {
-			if ($bb = $this->getChildBezirke($bezirk_id)) {
-				foreach ($bb as $c) {
-					$bezirk_ids[$c] = $c;
-				}
-			}
-		}
-
 		if (!empty($bezirk_ids) && ($fairteiler = $this->db->fetchAll('
 			SELECT 	ft.`id`,
 					ft.`name`,
@@ -154,7 +134,7 @@ class FairTeilerGateway extends BaseGateway
 			return $out;
 		}
 
-		return false;
+		return [];
 	}
 
 	public function getFairteilerIds($fsId)
@@ -330,7 +310,7 @@ class FairTeilerGateway extends BaseGateway
 			'ort' => strip_tags($ort),
 			'lat' => strip_tags($lat),
 			'lon' => strip_tags($lon),
-			'add_date' => NOW(),
+			'add_date' => date('Y-m-d H:i:s'),
 			'add_foodsaver' => $fs_id
 		]);
 		if ($ft_id) {
