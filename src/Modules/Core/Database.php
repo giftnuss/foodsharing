@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Core;
 
 use PDO;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 class Database
 {
