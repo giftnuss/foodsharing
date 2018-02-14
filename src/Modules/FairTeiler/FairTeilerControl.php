@@ -13,9 +13,8 @@ class FairTeilerControl extends Control
 	private $follower;
 	private $bezirke;
 
-	public function __construct(FairTeilerModel $model, FairTeilerView $view, FairTeilerGateway $gateway)
+	public function __construct(FairTeilerView $view, FairTeilerGateway $gateway)
 	{
-		$this->model = $model;
 		$this->view = $view;
 		$this->gateway = $gateway;
 
@@ -289,7 +288,7 @@ class FairTeilerControl extends Control
 				$status = 1;
 			}
 
-			return $this->model->addFairteiler($this->func->fsId(), $bezirk_id, $name, $desc, $anschrift, $plz, $ort, $lat, $lon, $picture, $status);
+			return $this->gateway->addFairteiler($this->func->fsId(), $bezirk_id, $name, $desc, $anschrift, $plz, $ort, $lat, $lon, $picture, $status);
 		} else {
 			return false;
 		}
