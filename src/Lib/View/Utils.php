@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Lib\View;
 
+use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
 
 class Utils
@@ -12,8 +13,14 @@ class Utils
 	public function __construct()
 	{
 		$this->id = array();
-		global $g_func;
-		$this->func = $g_func;
+	}
+
+	/**
+	 * @required
+	 */
+	public function setFunc(Func $func)
+	{
+		$this->func = $func;
 	}
 
 	public function v_quickform($titel, $elements, $option = array())

@@ -11,6 +11,7 @@ use Foodsharing\Lib\Db\ManualDb;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\View\Utils;
 use JSMin;
 
 class Func
@@ -32,9 +33,11 @@ class Func
 	private $css;
 	private $add_css;
 	private $meta;
+	private $viewUtils;
 
-	public function __construct()
+	public function __construct(Utils $viewUtils)
 	{
+		$this->viewUtils = $viewUtils;
 		$this->content_main = '';
 		$this->content_right = '';
 		$this->content_left = '';
@@ -671,8 +674,7 @@ class Func
 		$id = $this->id('becomeBezirkChooser');
 
 		$swap_msg = 'Welcher Bezirk soll neu angelegt werden?';
-		global $g_view_utils;
-		$swap = $g_view_utils->v_swapText($id . '-neu', $swap_msg);
+		$swap = $this->viewUtils->v_swapText($id . '-neu', $swap_msg);
 
 		$this->addHidden('
 		<div id="becomeBezirk">
@@ -682,7 +684,7 @@ class Func
 					Es besteht auch die Möglichkeit, einen neuen Bezirk zu gründen. Wähle bitte dennoch den entsprechenden übergeordneten Bezirk (Land, Bundeslan, Stadt etc.) aus!
 				</p>
 				<div style="height:260px;">
-					' . $g_view_utils->v_bezirkChildChooser($id) . '
+					' . $this->viewUtils->v_bezirkChildChooser($id) . '
 					<span id="' . $id . '-btna">Gesuchter Bezirk ist nicht dabei</span>
 					<div class="middle" id="' . $id . '-notAvail">
 						<h3>Deine Stadt oder Region ist nicht dabei?</h3>

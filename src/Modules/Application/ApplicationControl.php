@@ -2,7 +2,9 @@
 
 namespace Foodsharing\Modules\Application;
 
+use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\Control;
 
 class ApplicationControl extends Control
@@ -11,12 +13,11 @@ class ApplicationControl extends Control
 	private $bezirk_id;
 	private $mode;
 
-	public function __construct(ApplicationModel $model, ApplicationView $view)
+	public function __construct(ApplicationModel $model, ApplicationView $view, Func $func, Utils $viewUtils)
 	{
-		$this->model = $model;
 		$this->view = $view;
 
-		parent::__construct();
+		parent::__construct($model, $func, $viewUtils);
 
 		$this->bezirk_id = false;
 		if (($this->bezirk_id = $this->func->getGetId('bid')) === false) {

@@ -4,18 +4,18 @@ namespace Foodsharing\Modules\API;
 
 use Flourish\fImage;
 use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Basket\BasketModel;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Message\MessageModel;
 
 class APIXhr extends Control
 {
-	public function __construct(APIModel $model)
+	public function __construct(APIModel $model, Func $func, Utils $viewUtils)
 	{
-		$this->model = $model;
-
-		parent::__construct();
+		parent::__construct($model, $func, $viewUtils);
 
 		if (!S::may() && $_GET['m'] != 'login') {
 			return $this->appout(array(

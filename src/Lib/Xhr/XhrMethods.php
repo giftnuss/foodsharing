@@ -5,7 +5,9 @@ namespace Foodsharing\Lib\Xhr;
 use Exception;
 use Flourish\fImage;
 use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Foodsaver\FoodsaverModel;
 use Foodsharing\Modules\Mailbox\MailboxModel;
@@ -18,19 +20,19 @@ class XhrMethods
 	private $model;
 	private $func;
 	private $v_utils;
+	private $xhrViewUtils;
 
 	/**
 	 * XhrMethods constructor.
 	 *
 	 * @param $model
 	 */
-	public function __construct(Model $model)
+	public function __construct(Func $func, Model $model, Utils $viewUtils, ViewUtils $xhrViewUtils)
 	{
-		global $g_func;
-		$this->func = $g_func;
-		global $g_view_utils;
-		$this->v_utils = $g_view_utils;
+		$this->func = $func;
 		$this->model = $model;
+		$this->v_utils = $viewUtils;
+		$this->xhrViewUtils = $xhrViewUtils;
 	}
 
 	public function xhr_verify($data)
@@ -251,7 +253,7 @@ class XhrMethods
 			if ($childs = $this->model->q('SELECT `id`,`parent_id`,`has_children`,`name`,`type` FROM `' . PREFIX . 'bezirk` WHERE `parent_id` = ' . $this->model->intval($data['parent']) . $sql . ' ORDER BY `name`')) {
 				return json_encode(array(
 					'status' => 1,
-					'html' => ViewUtils::childBezirke($childs, $data['parent'])
+					'html' => $this->xhrViewUtils->childBezirke($childs, $data['parent'])
 				));
 			} else {
 				return json_encode(array(
@@ -315,7 +317,7 @@ class XhrMethods
 			$about[] = array('name' => 'Über ' . $foodsaver['name'], 'val' => $foodsaver['about_me_public']);
 		}
 
-		$pers = ViewUtils::set($about, $foodsaver['name'] . ' ' . $foodsaver['nachname']);
+		$pers = $this->xhrViewUtils->set($about, $foodsaver['name'] . ' ' . $foodsaver['nachname']);
 
 		$thead = '';
 		$tbody = '';
@@ -371,7 +373,7 @@ class XhrMethods
 						</ul>
 					</div>
 					
-					' . ViewUtils::set($data, 'Kontaktdaten') . '
+					' . $this->xhrViewUtils->set($data, 'Kontaktdaten') . '
 					<div style="clear:both;"></div>
 						' . $pers . '
 					</div>
@@ -413,7 +415,7 @@ class XhrMethods
 
 				return json_encode(array(
 					'status' => 1,
-					'html' => ViewUtils::bBubble($b),
+					'html' => $this->xhrViewUtils->bBubble($b),
 					'betrieb' => array(
 						'name' => $b['name']
 					)
@@ -429,7 +431,7 @@ class XhrMethods
 		if ($b = $this->model->getOne_foodsaver($data['id'])) {
 			return json_encode(array(
 				'status' => 1,
-				'html' => ViewUtils::fsBubble($b)
+				'html' => $this->xhrViewUtils->fsBubble($b)
 			));
 		}
 

@@ -2,8 +2,11 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Foodsharing\DI;
 use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 use Foodsharing\Modules\Message\MessageModel;
 use ReflectionClass;
@@ -19,12 +22,12 @@ abstract class Control
 	protected $func;
 	protected $v_utils;
 
-	public function __construct()
+	public function __construct(Model $model)
 	{
-		global $g_func;
-		$this->func = $g_func;
-		global $g_view_utils;
-		$this->v_utils = $g_view_utils;
+		$this->func = DI::$shared->get(Func::class);
+		$this->v_utils = DI::$shared->get(Utils::class);
+		$this->model = $model;
+
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;
 		$className = $reflection->getShortName();
@@ -70,9 +73,6 @@ abstract class Control
 			if (file_exists($dir . $moduleName . '.css')) {
 				$this->func->addStyle(file_get_contents($dir . $moduleName . '.css'));
 			}
-		}
-		if (is_null($this->model)) {
-			$this->model = new Model();
 		}
 	}
 

@@ -5,6 +5,7 @@ namespace Foodsharing\Lib\Db;
 use Exception;
 use Flourish\fImage;
 use Foodsharing\Debug\DebugBar;
+use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
 use mysqli;
 
@@ -16,8 +17,6 @@ abstract class Db
 
 	public function __construct()
 	{
-		global $g_func;
-		$this->func = $g_func;
 		$this->values = array();
 
 		if (is_null(self::$mysqli)) {
@@ -25,6 +24,14 @@ abstract class Db
 			self::$mysqli->connect(DB_HOST, DB_USER, DB_PASS, DB_DB);
 			$this->sql("SET NAMES 'utf8'");
 		}
+	}
+
+	/**
+	 * @required
+	 */
+	public function setFunc(Func $func)
+	{
+		$this->func = $func;
 	}
 
 	public function addPassRequest($email, $mail = true)

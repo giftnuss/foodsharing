@@ -2,6 +2,8 @@
 
 namespace Foodsharing\Modules\Activity;
 
+use Foodsharing\Lib\Func;
+use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 use Foodsharing\Lib\Session\S;
@@ -9,11 +11,9 @@ use Foodsharing\Lib\Xhr\Xhr;
 
 class ActivityXhr extends Control
 {
-	public function __construct(ActivityModel $model)
+	public function __construct(ActivityModel $model, Func $func, Utils $viewUtils)
 	{
-		$this->model = $model;
-
-		parent::__construct();
+		parent::__construct($model, $func, $viewUtils);
 	}
 
 	public function loadmore()

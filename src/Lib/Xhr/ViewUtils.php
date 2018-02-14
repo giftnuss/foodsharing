@@ -10,26 +10,24 @@ class ViewUtils
 	/**
 	 * @var Func
 	 */
-	private static $func;
+	private $func;
 	/**
 	 * @var Utils
 	 */
-	private static $v_utils;
+	private $viewUtils;
 
-	public static function init()
+	public function __construct(Func $func, Utils $viewUtils)
 	{
-		global $g_func;
-		global $g_view_utils;
-		self::$func = $g_func;
-		self::$v_utils = $g_view_utils;
+		$this->func = $func;
+		$this->viewUtils = $viewUtils;
 	}
 
-	public static function fsBubble($fs)
+	public function fsBubble($fs)
 	{
 		return '<div style="height:80px;overflow:hidden;width:200px;">
 				<div style="margin-right:10px;float:left;margin-bottom:33px">
 					<a href="#" onclick="profile(' . (int)$fs['id'] . ');return false;">
-							<img src="' . self::$func->img($fs['photo']) . '">
+							<img src="' . $this->func->img($fs['photo']) . '">
 					</a>
 				</div>
 				<h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a href="#" onclick="profile(' . (int)$fs['id'] . ');return false;">' . $fs['name'] . '</a></h1>
@@ -37,25 +35,25 @@ class ViewUtils
 			</div>';
 	}
 
-	public static function bBubble($b)
+	public function bBubble($b)
 	{
 		global $db;
 
 		$button = '';
-		if (($b['inTeam']) || self::$func->isOrgaTeam()) {
-			$button .= '<div class="buttonrow"><a class="lbutton" href="/?page=fsbetrieb&id=' . (int)$b['id'] . '">' . self::$func->s('to_team_page') . '</a></div>';
+		if (($b['inTeam']) || $this->func->isOrgaTeam()) {
+			$button .= '<div class="buttonrow"><a class="lbutton" href="/?page=fsbetrieb&id=' . (int)$b['id'] . '">' . $this->func->s('to_team_page') . '</a></div>';
 		}
 		if ($b['team_status'] != 0 && (!$b['inTeam'] && (!$b['pendingRequest']))) {
-			$button .= '<div class="buttonrow"><a class="lbutton" href="#" onclick="betriebRequest(' . (int)$b['id'] . ');return false;">' . self::$func->s('want_to_fetch') . '</a></div>';
+			$button .= '<div class="buttonrow"><a class="lbutton" href="#" onclick="betriebRequest(' . (int)$b['id'] . ');return false;">' . $this->func->s('want_to_fetch') . '</a></div>';
 		} elseif ($b['team_status'] != 0 && (!$b['inTeam'] && ($b['pendingRequest']))) {
-			$button .= '<div class="buttonrow"><a class="lbutton" href="#" onclick="rejectBetriebRequest(' . (int)self::$func->fsId() . ',' . (int)$b['id'] . ');return false;">Anfrage zur&uuml;ckziehen </a></div>';
+			$button .= '<div class="buttonrow"><a class="lbutton" href="#" onclick="rejectBetriebRequest(' . (int)$this->func->fsId() . ',' . (int)$b['id'] . ');return false;">Anfrage zur&uuml;ckziehen </a></div>';
 		}
 
 		$verantwortlich = '<ul class="linklist">';
 		foreach ($b['foodsaver'] as $fs) {
 			if ($fs['verantwortlich'] == 1) {
 				$verantwortlich .= '
-			<li><a style="background-color:transparent !important;" href="#" onclick="profile(' . (int)$fs['id'] . ');return false;">' . self::$func->avatar($fs, 50) . '</a></li>';
+			<li><a style="background-color:transparent !important;" href="#" onclick="profile(' . (int)$fs['id'] . ');return false;">' . $this->func->avatar($fs, 50) . '</a></li>';
 			}
 		}
 		$verantwortlich .= '
@@ -82,30 +80,30 @@ class ViewUtils
 
 		$time = strtotime($b['begin']);
 		if ($time > 0) {
-			$count_info .= '<div>Kooperation seit ' . self::$func->s('month_' . (int)date('m', $time)) . ' ' . date('Y', $time) . '</div>';
+			$count_info .= '<div>Kooperation seit ' . $this->func->s('month_' . (int)date('m', $time)) . ' ' . date('Y', $time) . '</div>';
 		}
 
 		if ((int)$b['public_time'] != 0) {
-			$b['public_info'] .= '<div>Es wird in etwa ' . self::$func->s('pubbtime_' . (int)$b['public_time']) . ' abgeholt</div><div class="ui-padding">' . self::$v_utils->v_info('Bitte niemals ohne Absprache zum Laden kommen!') . '</div>';
+			$b['public_info'] .= '<div>Es wird in etwa ' . $this->func->s('pubbtime_' . (int)$b['public_time']) . ' abgeholt</div><div class="ui-padding">' . $this->viewUtils->v_info('Bitte niemals ohne Absprache zum Laden kommen!') . '</div>';
 		}
 
 		if (!empty($b['public_info'])) {
-			$besonderheiten = self::$v_utils->v_input_wrapper(self::$func->s('info'), $b['public_info'], 'bcntspecial');
+			$besonderheiten = $this->viewUtils->v_input_wrapper($this->func->s('info'), $b['public_info'], 'bcntspecial');
 		}
 
-		$status = self::$v_utils->v_getStatusAmpel($b['betrieb_status_id']);
+		$status = $this->viewUtils->v_getStatusAmpel($b['betrieb_status_id']);
 
 		return '
-			' . self::$v_utils->v_input_wrapper(self::$func->s('status'), $status . '<span class="bstatus">' . self::$func->s('betrieb_status_' . $b['betrieb_status_id']) . '</span>' . $count_info) . '
-			' . self::$v_utils->v_input_wrapper('Verantwortliche Foodsaver', $verantwortlich, 'bcntverantwortlich') . '
+			' . $this->viewUtils->v_input_wrapper($this->func->s('status'), $status . '<span class="bstatus">' . $this->func->s('betrieb_status_' . $b['betrieb_status_id']) . '</span>' . $count_info) . '
+			' . $this->viewUtils->v_input_wrapper('Verantwortliche Foodsaver', $verantwortlich, 'bcntverantwortlich') . '
 			' . $besonderheiten . '
 			<div class="ui-padding">
-				' . self::$v_utils->v_info('' . self::$func->s('team_status_' . $b['team_status']) . '') . '		
+				' . $this->viewUtils->v_info('' . $this->func->s('team_status_' . $b['team_status']) . '') . '		
 			</div>
 			' . $button;
 	}
 
-	public static function childBezirke($childs, $parent_id)
+	public function childBezirke($childs, $parent_id)
 	{
 		$out = '
 	<select class="select childChanger" id="xv-childbezirk-' . (int)$parent_id . '" onchange="u_printChildBezirke(this);">
@@ -120,7 +118,7 @@ class ViewUtils
 		return $out;
 	}
 
-	public static function set($rows, $title = '')
+	public function set($rows, $title = '')
 	{
 		$out = '
 	<div class="xv_set">
@@ -136,5 +134,3 @@ class ViewUtils
 	</div>';
 	}
 }
-
-ViewUtils::init();

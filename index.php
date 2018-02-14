@@ -23,37 +23,40 @@ if(isset($_GET['g_path']))
 
 use Foodsharing\Debug\DebugBar;
 use Foodsharing\DI;
+use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\View\Utils;
 
 require __DIR__ . '/includes/setup.php';
 
 require_once 'lib/inc.php';
-global $g_view_utils;
-global $g_func;
-$g_func->addCss('/css/gen/style.css?v=' . VERSION);
-$g_func->addScript('/js/gen/script.js?v=' . VERSION);
+$view_utils = DI::$shared->get(Utils::class);
+$func = DI::$shared->get(Func::class);
 
-$g_func->getCurrent();
-$menu = $g_func->getMenu();
+$func->addCss('/css/gen/style.css?v=' . VERSION);
+$func->addScript('/js/gen/script.js?v=' . VERSION);
 
-$g_func->getMessages();
-$g_func->makeHead();
+$func->getCurrent();
+$menu = $func->getMenu();
+
+$func->getMessages();
+$func->makeHead();
 
 if (DebugBar::isEnabled()) {
-	$g_func->addHead(DebugBar::renderHead());
+	$func->addHead(DebugBar::renderHead());
 }
 
 $msgbar = '';
 $logolink = '/';
 if (S::may()) {
-	$msgbar = $g_view_utils->v_msgBar();
+	$msgbar = $view_utils->v_msgBar();
 	$logolink = '/?page=dashboard';
 } else {
-	$msgbar = $g_view_utils->v_login();
+	$msgbar = $view_utils->v_login();
 }
 
 if (DebugBar::isEnabled()) {
-	$g_func->addContent(DebugBar::renderContent(), CNT_BOTTOM);
+	$func->addContent(DebugBar::renderContent(), CNT_BOTTOM);
 }
 
 if (!array_key_exists('NOTWIG', $_GET)) {

@@ -1,5 +1,6 @@
 <?php
 
+use Foodsharing\DI;
 use Foodsharing\Lib\Cache\Caching;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrMethods;
@@ -23,7 +24,7 @@ $db = new Model();
 
 $db->updateActivity();
 if (isset($_GET['f'])) {
-	$xhr = new XhrMethods($db);
+	$xhr = DI::$shared->get(XhrMethods::class);
 	$func = 'xhr_' . $action;
 	if (method_exists($xhr, $func)) {
 		/*

@@ -2,8 +2,10 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Twig;
+use Foodsharing\Lib\View\Utils;
 
 class View
 {
@@ -18,13 +20,11 @@ class View
 	 */
 	private $twig;
 
-	public function __construct(Twig $twig)
+	public function __construct(Twig $twig, Func $func, Utils $viewUtils)
 	{
 		$this->twig = $twig;
-		global $g_view_utils;
-		$this->v_utils = $g_view_utils;
-		global $g_func;
-		$this->func = $g_func;
+		$this->func = $func;
+		$this->v_utils = $viewUtils;
 	}
 
 	public function setSub($sub)
