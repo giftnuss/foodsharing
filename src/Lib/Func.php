@@ -1320,7 +1320,12 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function getPage()
 	{
-		return $this->getGet('page');
+		$page = $this->getGet('page');
+		if (!$page) {
+			$page = 'index';
+		}
+
+		return $page;
 	}
 
 	public function getGetId($name)

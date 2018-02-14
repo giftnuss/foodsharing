@@ -22,7 +22,7 @@ $action = $_GET['f'];
 
 $db = new Model();
 
-$db->updateActivity();
+$db->updateActivity(S::id());
 if (isset($_GET['f'])) {
 	$xhr = DI::$shared->get(XhrMethods::class);
 	$func = 'xhr_' . $action;

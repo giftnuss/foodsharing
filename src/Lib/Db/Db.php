@@ -649,12 +649,11 @@ abstract class Db
 		return false;
 	}
 
-	public function updateActivity($fs_id = false)
+	public function updateActivity($fs_id = null)
 	{
-		if ($fs_id === false) {
-			$fs_id = $this->func->fsId();
+		if ($fs_id) {
+			Mem::userSet($fs_id, 'active', time());
 		}
-		Mem::userSet($fs_id, 'active', time());
 	}
 
 	private function initSessionData($fs_id)

@@ -24,6 +24,7 @@ if(isset($_GET['g_path']))
 use Foodsharing\Debug\DebugBar;
 use Foodsharing\DI;
 use Foodsharing\Lib\Func;
+use Foodsharing\Lib\Routing;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\Utils;
 
@@ -35,6 +36,24 @@ $func = DI::$shared->get(Func::class);
 
 $func->addCss('/css/gen/style.css?v=' . VERSION);
 $func->addScript('/js/gen/script.js?v=' . VERSION);
+
+$app = $func->getPage();
+
+$class = Routing::getClassName($app, 'Control');
+if ($class) {
+	$obj = DI::$shared->get(ltrim($class, '\\'));
+
+	if (isset($_GET['a']) && is_callable(array($obj, $_GET['a']))) {
+		$meth = $_GET['a'];
+		$obj->$meth();
+	} else {
+		$obj->index();
+	}
+	$sub = $sub = $obj->getSubFunc();
+	if ($sub !== false && is_callable(array($obj, $sub))) {
+		$obj->$sub();
+	}
+}
 
 $func->getCurrent();
 $menu = $func->getMenu();

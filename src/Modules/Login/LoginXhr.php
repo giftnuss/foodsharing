@@ -36,8 +36,6 @@ class LoginXhr extends Control
 		} else {
 			Mem::userSet($this->func->fsId(), 'infomail', false);
 		}
-
-		$this->model->updateActivity();
 	}
 
 	/**

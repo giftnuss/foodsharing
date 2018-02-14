@@ -74,6 +74,7 @@ abstract class Control
 				$this->func->addStyle(file_get_contents($dir . $moduleName . '.css'));
 			}
 		}
+		$this->model->updateActivity(S::id());
 	}
 
 	public function setTemplate($template)
