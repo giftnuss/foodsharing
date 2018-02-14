@@ -370,7 +370,6 @@ class FairTeilerGateway extends BaseGateway
 		return false;
 	}
 
-	// TODO added arg fsid
 	public function addFairteiler(
 		$fs_id,
 		$bezirk_id,

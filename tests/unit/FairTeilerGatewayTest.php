@@ -3,7 +3,7 @@
 use \Foodsharing\Modules\FairTeiler\FairTeilerGateway;
 
 
-class DashboardGatewayTest extends \Codeception\Test\Unit
+class FairTeilerGatewayTest extends \Codeception\Test\Unit
 {
 	/**
 	 * @var \UnitTester
