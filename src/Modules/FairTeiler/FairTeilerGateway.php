@@ -238,6 +238,7 @@ class FairTeilerGateway extends BaseGateway
 	public function deleteFairteiler($id)
 	{
 		$this->db->delete('fs_fairteiler_follower', ['fairteiler_id' => $id]);
+
 		return $this->db->delete('fs_fairteiler', ['id' => $id]);
 	}
 
@@ -305,7 +306,7 @@ class FairTeilerGateway extends BaseGateway
 			'picture' => strip_tags($picture),
 			'status' => strip_tags($status),
 			'desc' => strip_tags($desc),
-			'anschrift' =>strip_tags($anschrift),
+			'anschrift' => strip_tags($anschrift),
 			'plz' => strip_tags($plz),
 			'ort' => strip_tags($ort),
 			'lat' => strip_tags($lat),
