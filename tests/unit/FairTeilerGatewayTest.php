@@ -1,7 +1,6 @@
 <?php
 
-use \Foodsharing\Modules\FairTeiler\FairTeilerGateway;
-
+use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
 
 class FairTeilerGatewayTest extends \Codeception\Test\Unit
 {

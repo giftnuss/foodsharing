@@ -14,6 +14,7 @@ class RegionGateway extends BaseGateway
 				$bezirk_ids[$child_id] = $child_id;
 			}
 		}
+
 		return $bezirk_ids;
 	}
 

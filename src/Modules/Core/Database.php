@@ -28,7 +28,6 @@ class Database
 		return $this->preparedQuery($query, $params)->fetchAll(\PDO::FETCH_COLUMN, 0);
 	}
 
-
 	public function fetchValue($query, $params = [])
 	{
 		return $this->preparedQuery($query, $params)->fetchColumn(0);
@@ -56,6 +55,7 @@ class Database
 		$this->execute($query, array_values($data));
 
 		$lastInsertId = (int)$this->pdo->lastInsertId();
+
 		return $lastInsertId;
 	}
 
@@ -69,7 +69,7 @@ class Database
 
 		$set = [];
 		foreach ($data as $column => $value) {
-			$set[] = $this->getQuotedName($column) . " = ?";
+			$set[] = $this->getQuotedName($column) . ' = ?';
 		}
 
 		$where = $this->generateWhereClause($criteria);
@@ -77,6 +77,7 @@ class Database
 		$query = sprintf('UPDATE %s SET %s %s', $this->getQuotedName($table), implode(', ', $set), $where);
 
 		$params = array_merge(array_values($data), array_values($criteria));
+
 		return $this->execute($query, $params);
 	}
 
@@ -85,6 +86,7 @@ class Database
 		$where = $this->generateWhereClause($criteria);
 
 		$query = 'DELETE FROM ' . $this->getQuotedName($table) . ' ' . $where;
+
 		return $this->execute($query, array_values($criteria));
 	}
 
@@ -93,6 +95,7 @@ class Database
 		$where = $this->generateWhereClause($criteria);
 
 		$query = 'SELECT COUNT(*) FROM ' . $this->getQuotedName($table) . ' ' . $where;
+
 		return $this->fetchValue($query, array_values($criteria)) > 0;
 	}
 
@@ -114,7 +117,7 @@ class Database
 
 		$i = 0;
 		foreach ($params as $value) {
-			$i++;
+			++$i;
 			if (is_bool($value)) {
 				$type = \PDO::PARAM_BOOL;
 			} elseif (is_int($value)) {
@@ -127,6 +130,7 @@ class Database
 
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		$statement->execute();
+
 		return $statement;
 	}
 
@@ -146,7 +150,7 @@ class Database
 		$params = [];
 		foreach ($criteria as $k => $v) {
 			if ($v === null) {
-				$params[] = $this->getQuotedName($k) . " IS NULL ";
+				$params[] = $this->getQuotedName($k) . ' IS NULL ';
 				unset($criteria[$k]);
 				continue;
 			}
@@ -166,7 +170,7 @@ class Database
 			}
 
 			if (!$hasOperand) {
-				$params[] = $this->getQuotedName($k) . " = ? ";
+				$params[] = $this->getQuotedName($k) . ' = ? ';
 			}
 		}
 
