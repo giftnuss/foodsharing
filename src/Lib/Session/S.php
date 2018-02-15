@@ -5,8 +5,8 @@ namespace Foodsharing\Lib\Session;
 use Flourish\fAuthorization;
 use Flourish\fSession;
 use Foodsharing\DI;
-use Foodsharing\Lib\Db\ManualDb;
 use Foodsharing\Lib\Func;
+use Foodsharing\Modules\Core\Model;
 
 class S
 {
@@ -107,12 +107,11 @@ class S
 		return false;
 	}
 
-	public static function getLocation()
+	public static function getLocation(Model $model)
 	{
 		$loc = fSession::get('g_location', false);
 		if (!$loc) {
-			$db = new ManualDb();
-			$loc = $db->getValues(array('lat', 'lon'), 'foodsaver', self::$func->fsId());
+			$loc = $model->getValues(array('lat', 'lon'), 'foodsaver', self::$func->fsId());
 			self::set('g_location', $loc);
 		}
 
@@ -152,13 +151,9 @@ class S
 		return self::get('useroption_' . $key);
 	}
 
-	public static function setOption($key, $val, $db = false)
+	public static function setOption($key, $val, Model $model)
 	{
-		if (!$db) {
-			$db = new ManualDb();
-		}
-
-		$db->setOption($key, $val);
+		$model->setOption($key, $val);
 		self::set('useroption_' . $key, $val);
 	}
 

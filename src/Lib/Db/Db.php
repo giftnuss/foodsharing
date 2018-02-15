@@ -804,7 +804,7 @@ abstract class Db
 			if (!empty($fs['option'])) {
 				$options = unserialize($fs['option']);
 				foreach ($options as $key => $val) {
-					S::setOption($key, $val);
+					S::setOption($key, $val, $this);
 				}
 			}
 

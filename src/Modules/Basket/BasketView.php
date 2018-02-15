@@ -11,9 +11,9 @@ use Foodsharing\Modules\Core\View;
 
 class BasketView extends View
 {
-	public function find($baskets)
+	public function find($baskets, $location)
 	{
-		$page = new vPage('Essenskörbe', $this->findMap());
+		$page = new vPage('Essenskörbe', $this->findMap($location));
 
 		if ($baskets) {
 			$page->addSectionRight($this->closeBaskets($baskets), 'In Deiner Nähe');
@@ -22,12 +22,12 @@ class BasketView extends View
 		$page->render();
 	}
 
-	private function findMap()
+	private function findMap($location)
 	{
-		$map = new vMap();
+		$map = new vMap('map', $location);
 
-		if ($loc = S::getLocation()) {
-			$map->setLocation($loc['lat'], $loc['lon']);
+		if (is_array($location)) {
+			$map->setLocation($location['lat'], $location['lon']);
 		}
 
 		$map->setSearchPanel('mapsearch');
@@ -91,7 +91,7 @@ class BasketView extends View
 			$page->addSectionRight($this->userBox($basket), 'AnbieterIn');
 
 			if ($basket['lat'] != 0 || $basket['lon'] != 0) {
-				$map = new vMap();
+				$map = new vMap('map', [$basket['lat'], $basket['lon']]);
 				$map->addMarker($basket['lat'], $basket['lon']);
 
 				$map->setDefaultMarker('basket', 'green');

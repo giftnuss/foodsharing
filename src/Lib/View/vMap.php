@@ -5,6 +5,7 @@ namespace Foodsharing\Lib\View;
 use Foodsharing\DI;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Core\Model;
 
 class vMap extends vCore
 {
@@ -19,17 +20,23 @@ class vMap extends vCore
 	private $marker;
 	private $home_marker;
 	private $func;
+	private $doGeoIPLookup = false;
+	/**
+	 * @var Model
+	 */
+	private $model;
 
-	public function __construct($id = 'map')
+	public function __construct($id = 'map', $center = false)
 	{
 		$this->func = DI::$shared->get(Func::class);
 		$this->id = $this->id($id);
+		$this->model = DI::$shared->get(Model::class);
 
-		$this->location = array(50.89, 10.13);
-
-		if ($loc = S::getLocation()) {
-			$this->location = array($loc['lat'], $loc['lon']);
+		if (!$center) {
+			$this->doGeoIPLookup = true;
+			$center = [50.89, 10.13];
 		}
+		$this->location = $center;
 
 		$this->zoom = 13;
 		$this->markercluster = false;
@@ -260,39 +267,40 @@ class vMap extends vCore
 			');
 		}
 
-		$this->initLocation();
+		if ($this->doGeoIPLookup) {
+			$this->addGeoIPLookup();
+			$this->doGeoIPLookup = false;
+		}
 
 		return '
 		<div class="vmap" id="' . $this->id . '"></div><input type="hidden" name="latlng" id="' . $this->id . '-latLng" value="" />';
 	}
 
-	private function initLocation()
+	private function addGeoIPLookup()
 	{
-		if (!S::getLocation()) {
-			$this->func->addJs('
-			$.getJSON("http://www.geoplugin.net/json.gp?ip=' . $_SERVER['REMOTE_ADDR'] . '&jsoncallback=?", function(data) {
-			    if(data.geoplugin_status != undefined && data.geoplugin_status >= 200 && data.geoplugin_status < 300)
-				{
-					$.getJSON("http://www.geoplugin.net/extras/postalcode.gp?lat="+data.geoplugin_latitude+"&long="+data.geoplugin_longitude+"&format=json&jsoncallback=?", function(plz){
-						if(plz.geoplugin_place != undefined)
-						{
-							' . $this->id . '_latLng = [data.geoplugin_latitude, data.geoplugin_longitude];
-							' . $this->id . '.setView([data.geoplugin_latitude, data.geoplugin_longitude],' . (int)$this->zoom . ');
-							ajreq({
-								app:"karte",
-								action:"setlocation",
-								data: {
-									lat: data.geoplugin_latitude,
-									lng: data.geoplugin_longitude,
-									city: plz.geoplugin_place,
-									zip: plz.geoplugin_postCode
-								}
-							});
-						}
-					});
-				}
-			});
-		');
-		}
+		$this->func->addJs('
+		$.getJSON("http://www.geoplugin.net/json.gp?ip=' . $_SERVER['REMOTE_ADDR'] . '&jsoncallback=?", function(data) {
+			if(data.geoplugin_status != undefined && data.geoplugin_status >= 200 && data.geoplugin_status < 300)
+			{
+				$.getJSON("http://www.geoplugin.net/extras/postalcode.gp?lat="+data.geoplugin_latitude+"&long="+data.geoplugin_longitude+"&format=json&jsoncallback=?", function(plz){
+					if(plz.geoplugin_place != undefined)
+					{
+						' . $this->id . '_latLng = [data.geoplugin_latitude, data.geoplugin_longitude];
+						' . $this->id . '.setView([data.geoplugin_latitude, data.geoplugin_longitude],' . (int)$this->zoom . ');
+						ajreq({
+							app:"karte",
+							action:"setlocation",
+							data: {
+								lat: data.geoplugin_latitude,
+								lng: data.geoplugin_longitude,
+								city: plz.geoplugin_place,
+								zip: plz.geoplugin_postCode
+							}
+						});
+					}
+				});
+			}
+		});
+	');
 	}
 }

@@ -18,7 +18,7 @@ class QuizXhr extends Control
 
 	public function hideinfo()
 	{
-		S::setOption('quiz-infobox-seen', true);
+		S::setOption('quiz-infobox-seen', true, $this->model);
 	}
 
 	public function addquest()
