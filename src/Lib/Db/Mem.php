@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Lib\Db;
 
+use Foodsharing\DI;
 use Foodsharing\Lib\Func;
 use Redis;
 
@@ -24,8 +25,7 @@ class Mem
 			self::$cache = new Redis();
 			self::$cache->connect(REDIS_HOST, REDIS_PORT);
 		}
-		global $g_func;
-		self::$func = $g_func;
+		self::$func = DI::$shared->get(Func::class);
 	}
 
 	// Set a key to a value, ttl in seconds

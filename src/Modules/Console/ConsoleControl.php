@@ -13,10 +13,12 @@ class ConsoleControl
 	 */
 	protected $func;
 
-	public function __construct()
+	/**
+	 * @required
+	 */
+	public function setFunc(Func $func)
 	{
-		global $g_func;
-		$this->func = $g_func;
+		$this->func = $func;
 	}
 
 	public function index()
