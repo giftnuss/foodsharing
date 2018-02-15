@@ -117,9 +117,9 @@ class FairTeilerControl extends Control
 			}
 
 			if ($this->bezirk_id === 0) {
-				$bezirk_ids = $this->regionGateway->getAllRegions($this->func->fsId());
+				$bezirk_ids = $this->regionGateway->listIdsForFoodsaverWithDescendants($this->func->fsId());
 			} else {
-				$bezirk_ids = $this->regionGateway->getChildRegions($this->bezirk_id);
+				$bezirk_ids = $this->regionGateway->listIdsForDescendantsAndSelf($this->bezirk_id);
 			}
 
 			if ($fairteiler = $this->gateway->listFairteiler($bezirk_ids)) {
@@ -272,7 +272,8 @@ class FairTeilerControl extends Control
 
 				$this->func->handleTagselect('bfoodsaver');
 
-				$this->gateway->updateVerantwortliche($this->fairteiler['id']);
+				global $g_data;
+				$this->gateway->updateVerantwortliche($this->fairteiler['id'], $g_data['bfoodsaver']);
 
 				return $this->gateway->updateFairteiler($this->fairteiler['id'], $bezirk_id, $name, $desc, $anschrift, $plz, $ort, $lat, $lon, $picture);
 			} else {

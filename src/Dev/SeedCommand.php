@@ -75,6 +75,8 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$I = $this->helper;
 		$bezirk1 = '241'; // this is called 'Göttingen'
 		$bezirk_vorstand = '1373';
+		$ag_aktive = '1565';
+		$ag_testimonials = '1564';
 		$ag_quiz = '341';
 
 		$I->createFoodsharer('user', ['email' => 'user1@example.com', 'name' => 'One', 'bezirk_id' => $bezirk1]);
@@ -87,15 +89,14 @@ class SeedCommand extends Command implements CustomCommandInterface
 		]);
 		$userorga = $I->createOrga('user', false, ['email' => 'userorga@example.com', 'name' => 'Orga', 'bezirk_id' => $bezirk1]);
 
-		$I->addBezirkMember($bezirk1, $userbot['id'], true);
-		$I->addBezirkMember($bezirk1, $user2['id']);
-
-		$I->addBezirkMember($ag_quiz, $userbot['id'], true);
+		$I->addBezirkAdmin($bezirk1, $userbot['id']);
+		$I->addBezirkMember($ag_quiz, $userbot['id']);
+		$I->addBezirkAdmin($ag_quiz, $userbot['id']);
 
 		$I->addBezirkMember($bezirk_vorstand, $userbot['id']);
-		$I->addBezirkMember('1565', $userbot['id']);
+		$I->addBezirkMember($ag_aktive, $userbot['id']);
 
-		$I->addBezirkMember('1564', $user2['id']);
+		$I->addBezirkMember($ag_testimonials, $user2['id']);
 
 		$conv1 = $I->createConversation([$userbot['id'], $user2['id']], ['name' => 'betrieb_bla']);
 		$conv2 = $I->createConversation([$userbot['id']], ['name' => 'springer_bla']);
@@ -119,7 +120,6 @@ class SeedCommand extends Command implements CustomCommandInterface
 		foreach (range(0, 100) as $_) {
 			$user = $I->createFoodsaver('user', ['bezirk_id' => $bezirk1]);
 			$this->foodsavers[] = $user['id'];
-			$I->addBezirkMember($bezirk1, $user['id']);
 			$I->addStoreTeam($store['id'], $user['id']);
 			$I->addCollector($user['id'], $store['id']);
 			$I->addStoreNotiz($user['id'], $store['id']);

@@ -19,11 +19,14 @@
 - Fix missing newsletter unsubscription links for pre-2014 foodsharing.de accounts @NerdyProjects
 - Fix newsletter should only be sent to activated accounts @NerdyProjects
 - Show regions in alphabetical order in the region selector (Bezirk beitreten) !267 by @alangecker
+- changed old foodsharing „Freiwilligenplattform“ mailfooter for outgoing replies via mail, which was based on lebensmittelretten !287 @irgendwer
 
 ## Refactoring
 - Consolidate remaining functions and modules !269 @NerdyProjects
 - Remove old user registration code !246 @NerdyProjects
 - Add initial gateway database classes using PDO !264 @nicksellen
+- Add insert/update/delete PDO helper methods !285 @tiltec
+- Implement FairTeiler and Region gateway classes !285  @tiltec @nicksellen
 - Add Symfony dependency injection container !264 @nicksellen
 - Remove unused fpdf font data files !253 @NerdyProjects
 
