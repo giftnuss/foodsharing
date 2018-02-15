@@ -29,6 +29,7 @@
 - Implement FairTeiler and Region gateway classes !285  @tiltec @nicksellen
 - Add Symfony dependency injection container !264 @nicksellen
 - Remove unused fpdf font data files !253 @NerdyProjects
+- Add twig templating engine !284 @nicksellen
 
 ## Dev/Test/CI stuff
 

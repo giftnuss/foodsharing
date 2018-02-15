@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Core;
 
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Twig;
 
 class View
 {
@@ -12,8 +13,14 @@ class View
 	protected $v_utils;
 	protected $func;
 
-	public function __construct()
+	/**
+	 * @var Twig
+	 */
+	private $twig;
+
+	public function __construct(Twig $twig)
 	{
+		$this->twig = $twig;
 		global $g_view_utils;
 		$this->v_utils = $g_view_utils;
 		global $g_func;

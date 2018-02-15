@@ -34,7 +34,7 @@ class DI
 			->setAutoconfigured(true)
 			->setPublic(true);
 
-		$loader->registerClasses($definition, 'Foodsharing\\', '*', '{Lib,Dev,Debug}');
+		$loader->registerClasses($definition, 'Foodsharing\\', '*', '{Lib/Flourish,Lib/Cache,Lib/View,Dev,Debug}');
 	}
 
 	public function useTraceablePDO($traceablePDO)

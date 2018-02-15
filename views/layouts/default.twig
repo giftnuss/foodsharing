@@ -1,0 +1,21 @@
+{% extends 'layouts/base.twig' %}
+
+{% block top %}
+    {{ content.top.html | raw }}
+{% endblock %}
+
+{% block left %}
+    {{ content.left.html | raw }}
+{% endblock %}
+
+{% block main %}
+    {{ content.main.html | raw }}
+{% endblock %}
+
+{% block right %}
+    {{ content.right.html | raw }}
+{% endblock %}
+
+{% block bottom %}
+    {{ content.bottom.html | raw }}
+{% endblock %}

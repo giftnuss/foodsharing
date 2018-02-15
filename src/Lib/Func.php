@@ -1374,6 +1374,11 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 	}
 
+	public function getHidden()
+	{
+		return $this->hidden;
+	}
+
 	public function addHidden($html)
 	{
 		$this->hidden .= $html;

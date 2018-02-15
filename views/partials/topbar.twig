@@ -1,0 +1,16 @@
+<div id="content_top" class="pure-u-1">
+    <div class="inside">
+        <div class="top corner-all">
+            {% if avatar %}
+                <div class="img">
+                    {% include 'partials/avatar.twig' with avatar only %}
+                </div>
+            {% endif %}
+            <h3>{{ title }}</h3>
+            {% if subtitle %}
+                <p>{{ subtitle }}</p>
+            {% endif %}
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+</div>
