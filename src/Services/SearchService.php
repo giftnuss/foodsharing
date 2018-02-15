@@ -1,0 +1,149 @@
+<?php
+
+namespace Foodsharing\Services;
+
+use Foodsharing\Lib\Func;
+use Foodsharing\Modules\Buddy\BuddyModel;
+use Foodsharing\Modules\Region\RegionModel;
+use Foodsharing\Modules\Store\StoreModel;
+use Foodsharing\Modules\WorkGroup\WorkGroupModel;
+
+class SearchService
+{
+	private $buddyModel;
+	private $workGroupModel;
+	private $storeModel;
+	private $regionModel;
+	private $func;
+
+	public function __construct(BuddyModel $buddyModel, WorkGroupModel $workGroupModel, StoreModel $storeModel, RegionModel $regionModel, Func $func)
+	{
+		$this->buddyModel = $buddyModel;
+		$this->workGroupModel = $workGroupModel;
+		$this->storeModel = $storeModel;
+		$this->regionModel = $regionModel;
+		$this->func = $func;
+	}
+
+	/**
+	 * Method to generate search Index for instant seach.
+	 */
+	public function generateIndex($token)
+	{
+		$index = [];
+
+		/*
+		 * Buddies Load persons in the index array that connected with the user
+		*/
+		if ($buddies = $this->buddyModel->listBuddies()) {
+			$result = [];
+			foreach ($buddies as $b) {
+				$img = '/img/avatar-mini.png';
+
+				if (!empty($b['photo'])) {
+					$img = $this->func->img($b['photo']);
+				}
+
+				$result[] = array(
+					'name' => $b['name'] . ' ' . $b['nachname'],
+					'teaser' => '',
+					'img' => $img,
+					'click' => 'chat(\'' . $b['id'] . '\');',
+					'id' => $b['id'],
+					'search' => array(
+						$b['name'], $b['nachname']
+					)
+				);
+			}
+			$index[] = array(
+				'title' => 'Menschen die Du kennst',
+				'key' => 'buddies',
+				'result' => $result
+			);
+		}
+
+		/*
+		 * Groups load Groups connected to the user in the array
+		*/
+		if ($groups = $this->workGroupModel->listMyGroups()) {
+			$result = [];
+			foreach ($groups as $b) {
+				$img = '/img/groups.png';
+				if (!empty($b['photo'])) {
+					$img = 'images/' . str_replace('photo/', 'photo/thumb_', $b['photo']);
+				}
+				$result[] = array(
+					'name' => $b['name'],
+					'teaser' => $this->func->tt($b['teaser'], 65),
+					'img' => $img,
+					'href' => '/?page=bezirk&bid=' . $b['id'] . '&sub=forum',
+					'search' => array(
+						$b['name']
+					)
+				);
+			}
+			$index[] = array(
+				'title' => 'Deine Gruppen',
+				'result' => $result
+			);
+		}
+
+		/*
+		 * Betriebe load food stores connected to the user in the array
+		*/
+		if ($betriebe = $this->storeModel->listMyBetriebe()) {
+			$result = [];
+			foreach ($betriebe as $b) {
+				$result[] = array(
+					'name' => $b['name'],
+					'teaser' => $b['str'] . ' ' . $b['hsnr'] . ', ' . $b['plz'] . ' ' . $b['stadt'],
+					'href' => '/?page=fsbetrieb&id=' . $b['id'],
+					'search' => array(
+						$b['name'], $b['str']
+					)
+				);
+			}
+			$index[] = array(
+				'title' => 'Deine Betriebe',
+				'result' => $result
+			);
+		}
+
+		/*
+		 * Bezirke load Bezirke connected to the user in the array
+		*/
+		if ($bezirke = $this->regionModel->listMyBezirke()) {
+			$result = [];
+			foreach ($bezirke as $b) {
+				$result[] = array(
+					'name' => $b['name'],
+					'teaser' => '',
+					'img' => false,
+					'href' => '/?page=bezirk&bid=' . $b['id'] . '&sub=forum',
+					'search' => array(
+						$b['name']
+					)
+				);
+			}
+			$index[] = array(
+				'title' => 'Deine Bezirke',
+				'result' => $result
+			);
+		}
+
+		/*
+		 * Get or set an individual token as filename for the public json file
+		*/
+		return $index;
+	}
+
+	public function writeSearchIndexToDisk($token)
+	{
+		if (!$token) {
+			return false;
+		}
+		file_put_contents('cache/searchindex/' . $token . '.json', json_encode($this->generateIndex($token)));
+
+		return $token;
+	}
+}

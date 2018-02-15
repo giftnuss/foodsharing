@@ -3,19 +3,19 @@
 namespace Foodsharing\Modules\Login;
 
 use Foodsharing\Lib\Session\S;
-use Foodsharing\Modules\Buddy\BuddyModel;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Region\RegionModel;
-use Foodsharing\Modules\Store\StoreModel;
-use Foodsharing\Modules\WorkGroup\WorkGroupModel;
+use Foodsharing\Services\SearchService;
 use Mobile_Detect;
 
 class LoginControl extends Control
 {
-	public function __construct(LoginModel $model, LoginView $view)
+	private $searchService;
+
+	public function __construct(LoginModel $model, LoginView $view, SearchService $searchService)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->searchService = $searchService;
 
 		parent::__construct();
 	}
@@ -65,7 +65,7 @@ class LoginControl extends Control
 	private function handleLogin()
 	{
 		if ($this->model->login($_POST['email_adress'], $_POST['password'])) {
-			$this->genSearchIndex();
+			$token = $this->searchService->writeSearchIndexToDisk(S::user('token'));
 
 			if (isset($_POST['ismob'])) {
 				$_SESSION['mob'] = (int)$_POST['ismob'];
@@ -157,131 +157,5 @@ class LoginControl extends Control
 		} else {
 			$this->func->addContent($this->view->passwordRequest());
 		}
-	}
-
-	/**
-	 * Method to generate search Index for instant seach.
-	 */
-	private function genSearchIndex()
-	{
-		/*
-		 * The big array we want to fill ;)
-		*/
-		$index = array();
-
-		/*
-		 * Buddies Load persons in the index array that connected with the user
-		*/
-
-		$model = new BuddyModel();
-		if ($buddies = $model->listBuddies()) {
-			$result = array();
-			foreach ($buddies as $b) {
-				$img = '/img/avatar-mini.png';
-
-				if (!empty($b['photo'])) {
-					$img = $this->func->img($b['photo']);
-				}
-
-				$result[] = array(
-					'name' => $b['name'] . ' ' . $b['nachname'],
-					'teaser' => '',
-					'img' => $img,
-					'click' => 'chat(\'' . $b['id'] . '\');',
-					'id' => $b['id'],
-					'search' => array(
-						$b['name'], $b['nachname']
-					)
-				);
-			}
-			$index[] = array(
-				'title' => 'Menschen die Du kennst',
-				'key' => 'buddies',
-				'result' => $result
-			);
-		}
-
-		/*
-		 * Groups load Groups connected to the user in the array
-		*/
-		$model = new WorkGroupModel();
-		if ($groups = $model->listMyGroups()) {
-			$result = array();
-			foreach ($groups as $b) {
-				$img = '/img/groups.png';
-				if (!empty($b['photo'])) {
-					$img = 'images/' . str_replace('photo/', 'photo/thumb_', $b['photo']);
-				}
-				$result[] = array(
-					'name' => $b['name'],
-					'teaser' => $this->func->tt($b['teaser'], 65),
-					'img' => $img,
-					'href' => '/?page=bezirk&bid=' . $b['id'] . '&sub=forum',
-					'search' => array(
-						$b['name']
-					)
-				);
-			}
-			$index[] = array(
-				'title' => 'Deine Gruppen',
-				'result' => $result
-			);
-		}
-
-		/*
-		 * Betriebe load food stores connected to the user in the array
-		*/
-		$model = new StoreModel();
-		if ($betriebe = $model->listMyBetriebe()) {
-			$result = array();
-			foreach ($betriebe as $b) {
-				$result[] = array(
-					'name' => $b['name'],
-					'teaser' => $b['str'] . ' ' . $b['hsnr'] . ', ' . $b['plz'] . ' ' . $b['stadt'],
-					'href' => '/?page=fsbetrieb&id=' . $b['id'],
-					'search' => array(
-						$b['name'], $b['str']
-					)
-				);
-			}
-			$index[] = array(
-				'title' => 'Deine Betriebe',
-				'result' => $result
-			);
-		}
-
-		/*
-		 * Bezirke load Bezirke connected to the user in the array
-		*/
-		$model = new RegionModel();
-		if ($bezirke = $model->listMyBezirke()) {
-			$result = array();
-			foreach ($bezirke as $b) {
-				$result[] = array(
-					'name' => $b['name'],
-					'teaser' => '',
-					'img' => false,
-					'href' => '/?page=bezirk&bid=' . $b['id'] . '&sub=forum',
-					'search' => array(
-						$b['name']
-					)
-				);
-			}
-			$index[] = array(
-				'title' => 'Deine Bezirke',
-				'result' => $result
-			);
-		}
-
-		/*
-		 * Get or set an individual token as filename for the public json file
-		*/
-		if ($token = S::user('token')) {
-			file_put_contents('cache/searchindex/' . $token . '.json', json_encode($index));
-
-			return $token;
-		}
-
-		return false;
 	}
 }
