@@ -1668,43 +1668,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$mail->send();
 	}
 
-	/**
-	 * @param $sender_id
-	 * @param $recip_id
-	 * @param null $msg
-	 */
-	public function mailMessage($sender_id, $recip_id, $msg = null)
-	{
-		// FIXME this function is pretty much a copy of Model::mailMessage() and should probably replaced
-		$db = new ManualDb();
-
-		$info = $db->getVal('infomail_message', 'foodsaver', $recip_id);
-		if ((int)$info > 0) {
-			if (!isset($_SESSION['lastMailMessage'])) {
-				$_SESSION['lastMailMessage'] = array();
-			}
-			if (!$db->isActive($recip_id)) {
-				if (!isset($_SESSION['lastMailMessage'][$recip_id]) || (time() - $_SESSION['lastMailMessage'][$recip_id]) > 600) {
-					$_SESSION['lastMailMessage'][$recip_id] = time();
-					$foodsaver = $db->getOne_foodsaver($recip_id);
-					$sender = $db->getOne_foodsaver($sender_id);
-					if (!isset($msg)) {
-						// FIXME this is error-prone;
-						$msg = '';
-					}
-
-					$this->tplMail(9, $foodsaver['email'], array(
-						'anrede' => $this->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-						'sender' => $sender['name'],
-						'name' => $foodsaver['name'],
-						'message' => $msg,
-						'link' => BASE_URL . '/?page=msg&u2c=' . (int)$sender_id
-					));
-				}
-			}
-		}
-	}
-
 	public function getBezirk()
 	{
 		global $db;
