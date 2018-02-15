@@ -21,7 +21,13 @@ abstract class Control
 	protected $view;
 	private $sub;
 	private $sub_func;
+	/**
+	 * @var Func
+	 */
 	protected $func;
+	/**
+	 * @var Utils
+	 */
 	protected $v_utils;
 
 	public function __construct()
