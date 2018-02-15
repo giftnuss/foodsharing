@@ -2101,45 +2101,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		include 'tpl/' . $tpl . '.php';
 	}
 
-	public function getIp()
-	{
-		if (!isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			return $_SERVER['REMOTE_ADDR'];
-		} else {
-			return $_SERVER['HTTP_X_FORWARDED_FOR'];
-		}
-
-		return false;
-	}
-
-	/**
-	 * Function to check and block an ip address.
-	 *
-	 * @param int $duration
-	 * @param string $context
-	 *
-	 * @return bool
-	 */
-	public function ipIsBlocked($duration = 60, $context = 'default')
-	{
-		$db = new ManualDb();
-		$ip = $this->getIp();
-
-		if ($block = $db->qRow('SELECT UNIX_TIMESTAMP(`start`) AS `start`,`duration` FROM ' . PREFIX . 'ipblock WHERE ip = ' . $db->strval($this->getIp()) . ' AND context = ' . $db->strval($context))) {
-			if (time() < ((int)$block['start'] + (int)$block['duration'])) {
-				return true;
-			}
-		}
-
-		$db->insert('
-	REPLACE INTO ' . PREFIX . 'ipblock
-	(`ip`,`context`,`start`,`duration`)
-	VALUES
-	(' . $db->strval($ip) . ',' . $db->strval($context) . ',NOW(),' . (int)$duration . ')');
-
-		return false;
-	}
-
 	/** Creates and saves a new API token for given user
 	 * @param $fs Foodsaver ID
 	 *
