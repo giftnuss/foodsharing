@@ -9,7 +9,7 @@ class LookupControl extends ConsoleControl
 	public function __construct(LookupModel $model)
 	{
 		$this->model = $model;
-		parent::__construct($model);
+		parent::__construct();
 	}
 
 	private function loadFile()

@@ -37,7 +37,7 @@ echo "Starting $app::$method...\n";
 
 $appInstance = DI::$shared->get(ltrim($app, '\\'));
 
-if (is_callable($appInstance, $method)) {
+if (is_callable([$appInstance, $method])) {
 	$appInstance->$method();
 	exit();
 }

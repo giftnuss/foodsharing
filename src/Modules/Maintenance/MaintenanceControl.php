@@ -11,7 +11,7 @@ class MaintenanceControl extends ConsoleControl
 	public function __construct(MaintenanceModel $model)
 	{
 		$this->model = $model;
-		parent::__construct($model);
+		parent::__construct();
 	}
 
 	public function warnings()

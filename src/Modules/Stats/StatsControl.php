@@ -9,7 +9,7 @@ class StatsControl extends ConsoleControl
 	public function __construct(StatsModel $model)
 	{
 		$this->model = $model;
-		parent::__construct($model);
+		parent::__construct();
 	}
 
 	public function foodsaver()

@@ -9,13 +9,10 @@ class ConsoleControl
 	protected $model;
 	protected $func;
 
-	public function __construct(ConsoleModel $model)
+	public function __construct()
 	{
 		global $g_func;
 		$this->func = $g_func;
-		if (is_null($this->model)) {
-			$this->model = $model;
-		}
 	}
 
 	public function index()

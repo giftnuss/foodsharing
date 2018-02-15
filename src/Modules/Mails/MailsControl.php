@@ -26,7 +26,7 @@ class MailsControl extends ConsoleControl
 		self::$smtp = false;
 		$this->model = $model;
 		$this->mailboxModel = $mailboxModel;
-		parent::__construct($model);
+		parent::__construct();
 	}
 
 	public function queueWorker()

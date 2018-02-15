@@ -9,7 +9,7 @@ class StatsmanControl extends ConsoleControl
 	public function __construct(StatsmanModel $model)
 	{
 		$this->model = $model;
-		parent::__construct($model);
+		parent::__construct();
 	}
 
 	public function gen_abholmengen()
