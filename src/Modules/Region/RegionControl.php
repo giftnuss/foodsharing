@@ -2,6 +2,8 @@
 
 namespace Foodsharing\Modules\Region;
 
+use Flourish\fFile;
+use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 
@@ -389,7 +391,7 @@ class RegionControl extends Control
 				);
 			}
 
-			$this->func->tplMailList(20, $foodsaver, array(
+			$this->tplMailList(20, $foodsaver, array(
 				'email' => EMAIL_PUBLIC,
 				'email_name' => EMAIL_PUBLIC_NAME
 			));
@@ -524,6 +526,72 @@ class RegionControl extends Control
 			$this->func->addContent($this->v_utils->v_field($this->wallposts('event', $event['id']), 'Pinnwand'));
 		} else {
 			$this->func->go('/?page=bezirk&bid=' . $this->bezirk_id . '&sub=events');
+		}
+	}
+
+	private function tplMailList($tpl_id, $to, $from = false, $attach = false)
+	{
+		if (!is_array($from) && $this->func->validEmail($from)) {
+			$from = array(
+				'email' => $from,
+				'email_name' => $from
+			);
+		} elseif ($from === false) {
+			$from = array(
+				'email' => DEFAULT_EMAIL,
+				'email_name' => DEFAULT_EMAIL_NAME
+			);
+		}
+
+		$tpl_message = $this->model->getOne_message_tpl($tpl_id);
+
+		foreach ($to as $t) {
+			if (!$this->func->validEmail($t['email'])) {
+				continue;
+			}
+
+			$mail = new AsyncMail();
+			$mail->setFrom($from['email'], $from['email_name']);
+
+			$search = array();
+			$replace = array();
+			foreach ($t['var'] as $key => $v) {
+				$search[] = '{' . strtoupper($key) . '}';
+				$replace[] = $v;
+			}
+
+			$message = str_replace($search, $replace, $tpl_message['body']);
+			$subject = str_replace($search, $replace, $tpl_message['subject']);
+
+			$mail->addRecipient($t['email']);
+
+			if (!$subject) {
+				$subject = 'Foodsharing-Mail';
+			}
+			$mail->setSubject($subject);
+			//Read an HTML message body from an external file, convert referenced images to embedded, convert HTML into a basic plain-text alternative body
+
+			if (!isset($t['token'])) {
+				$t['token'] = false;
+			}
+
+			$mail->setHTMLBody($this->func->emailBodyTpl($message, $t['email'], $t['token']));
+
+			// playintext body
+			$message = str_replace('<br />', "\r\n", $message);
+			$message = strip_tags($message);
+			$mail->setBody($message);
+
+			/*
+			 *  todo: implement logic that we dont have to send one attachment multiple time to the slave db ...
+			*/
+
+			if ($attach !== false) {
+				foreach ($attach as $a) {
+					$mail->addAttachment(new fFile($a['path']), $a['name']);
+				}
+			}
+			$mail->send();
 		}
 	}
 }
