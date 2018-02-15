@@ -73,7 +73,7 @@ if (!array_key_exists('NOTWIG', $_GET)) {
 		$mainwidth -= $content_right_width;
 	}
 
-	$page = $twig->render('layouts/'. $g_template . '.twig', [
+	echo $twig->render('layouts/'. $g_template . '.twig', [
 		'head' => $g_func->getHead(),
 		'bread' => $g_func->getBread(),
 		'css' => str_replace(["\r", "\n"], '', $g_func->getAddCss()),
@@ -118,30 +118,8 @@ if (!array_key_exists('NOTWIG', $_GET)) {
 		]
 	]);
 
-	/*
-	 * check for page caching
-	 */
-	if (isset($cache) && $cache->shouldCache()) {
-		$cache->cache($page);
-	}
-
-	echo $page;
-
 } else {
 
-	/*
-	 * check for page caching
-	 */
-	if (isset($cache) && $cache->shouldCache()) {
-		ob_start();
-		include 'tpl/' . $g_template . '.php';
-		$page = ob_get_contents();
-		$cache->cache($page);
-		ob_end_clean();
-
-		echo $page;
-	} else {
-		include 'tpl/' . $g_template . '.php';
-	}
+	include 'tpl/' . $g_template . '.php';
 
 }
