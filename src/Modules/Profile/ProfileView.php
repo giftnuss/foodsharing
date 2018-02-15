@@ -379,14 +379,6 @@ class ProfileView extends View
 				' . $menu;
 	}
 
-	/*
-	 * show edit button:
-	 * $this->func->isOrgaTeam() || $this->func->isBotForA($bids, false, true)
-	 * show passport generate history:
-	 * $this->func->isOrgaTeam() || $this->func->isBotForA($bids, false, true)
-	 * show verification history button
-	 * $this->func->isOrgaTeam() || $this->func->isBotForA($bids, false, true)
-	 */
 	private function profileMenu(bool $showEditButton, bool $showPassportGenerationHistoryButton, bool $showVerificationHistoryButton)
 	{
 		$opt = '';
