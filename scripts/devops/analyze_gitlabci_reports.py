@@ -24,7 +24,10 @@ def get_jobs():
 def get_report(job_id):
     r = requests.get(report_url.format(job=job_id), headers={'PRIVATE-TOKEN': token})
     if (r.status_code == 200):
-        return etree.fromstring(r.content)
+        try:
+            return etree.fromstring(r.content)
+        except:
+            return None
     return None
 
 def analyze_report(report):
