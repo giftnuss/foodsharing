@@ -1131,8 +1131,6 @@ class Utils
 
 		if (isset($option['values'])) {
 			$values = $option['values'];
-		} elseif ($v = $this->func->getDbValues($id)) {
-			$values = $v;
 		} else {
 			$values = array();
 		}
@@ -1343,8 +1341,6 @@ class Utils
 
 		if (isset($option['values'])) {
 			$values = $option['values'];
-		} elseif ($v = $this->func->getDbValues($id)) {
-			$values = $v;
 		} else {
 			$values = array();
 		}
@@ -1379,8 +1375,6 @@ class Utils
 
 		if (isset($option['values'])) {
 			$values = $option['values'];
-		} elseif ($v = $this->func->getDbValues($id)) {
-			$values = $v;
 		} else {
 			$values = array();
 		}

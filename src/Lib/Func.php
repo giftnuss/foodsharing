@@ -393,17 +393,6 @@ class Func
 		}
 	}
 
-	public function getDbValues($id)
-	{
-		global $db;
-		$func = 'get_' . str_replace('_id', '', $id);
-		if (method_exists($db, $func)) {
-			return $db->$func();
-		} else {
-			return false;
-		}
-	}
-
 	public function isBotForA($bezirk_ids, $include_groups = true, $include_parent_bezirke = false)
 	{
 		if ($this->isBotschafter() && is_array($bezirk_ids)) {
