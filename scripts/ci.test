@@ -7,43 +7,94 @@ set -e
 dir=$(dirname "$0")
 
 . $dir/inc.sh
+echo $SECONDS seconds elapsed
 
 if [ "x" != "x$CI_BUILD_TOKEN" ]; then
+  echo
+  echo "============================================"
   echo "Logging into docker registry"
+  echo "============================================"
+  SECONDS=0
   docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+  echo $SECONDS seconds elapsed
 fi
 
+echo
+echo "============================================"
 echo "Building images"
-
+echo "============================================"
+SECONDS=0
 for name in app chat web; do
   dc build $name &
 done
 
 wait
+echo $SECONDS seconds elapsed
 
+echo
+echo "============================================"
 echo "Bring up containers"
+echo "============================================"
+SECONDS=0
 dc up -d --no-build
 
 echo "Waiting for mysql to start"
 wait-for-mysql
+echo $SECONDS seconds elapsed
 
+echo
+echo "============================================"
 echo "Initializing database"
+echo "============================================"
+SECONDS=0
 sql-query mysql 'drop database if exists foodsharing; create database foodsharing'
 
 migratedb foodsharing
 
 $dir/mkdirs
+echo $SECONDS seconds elapsed
 
+echo
+echo "============================================"
 echo "Installing composer deps"
+echo "============================================"
+SECONDS=0
 exec-in-container-asroot app composer install
+echo $SECONDS seconds elapsed
 
+echo
+echo "============================================"
 echo "Checking code style"
+echo "============================================"
+SECONDS=0
 exec-in-container-asroot app scripts/php-cs-fixer.ci.sh --cache-file=vendor/php-cs-cache fix
+echo $SECONDS seconds elapsed
 
+echo
+echo "============================================"
 echo "Running tests"
-exec-in-container app vendor/bin/codecept run --xml --html "$@"
+echo "============================================"
+failed=0
+SECONDS=0
+exec-in-container app vendor/bin/codecept run --xml --html "$@" || failed=1
+echo $SECONDS seconds elapsed
 
+if [ $failed -eq 1 ]; then
+echo
+echo "============================================"
+echo "Rerunning failed tests"
+echo "============================================"
+SECONDS=0
+exec-in-container app vendor/bin/codecept run -g failed "$@"
+echo $SECONDS seconds elapsed
+endif
+
+echo
+echo "============================================"
 echo "Running chat tests"
+echo "============================================"
+SECONDS=0
 run-in-container chat npm test
+echo $SECONDS seconds elapsed
 
 echo "Done!"

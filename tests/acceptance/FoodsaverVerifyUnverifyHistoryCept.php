@@ -36,5 +36,5 @@ $I->seeElement($verify_y);
 $I->amOnPage('/profile/' . $foodsaver['id']);
 $I->click('Verifizierungshistorie');
 
-$I->waitForElementVisible('.history .verify');
+$I->waitForElement('.history .verify');
 $I->seeElement('.history .unverify');
