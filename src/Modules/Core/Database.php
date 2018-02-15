@@ -134,7 +134,9 @@ class Database
 			}
 
 			// Positional arguments start with 1, not 0
-			if (is_int($param)) $param++;
+			if (is_int($param)) {
+				$param++;
+			}
 			$statement->bindValue($param, $value, $type);
 		}
 

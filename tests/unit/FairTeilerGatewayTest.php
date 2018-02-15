@@ -135,14 +135,12 @@ class FairTeilerGatewayTest extends \Codeception\Test\Unit
 
 	public function testFollowDoesNotOverwriteExistingType()
 	{
-
 		$params = [
 			'fairteiler_id' => $this->fairteiler['id'],
 			'foodsaver_id' => $this->foodsaver['id'],
 			'infotype' => 1,
 			'type' => 2
 		];
-
 
 		// Our foodsaver is an admin of the fairteiler so already has a type 2 entry
 		$this->tester->seeInDatabase('fs_fairteiler_follower', $params);

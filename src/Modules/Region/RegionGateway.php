@@ -6,13 +6,13 @@ use Foodsharing\Modules\Core\BaseGateway;
 
 class RegionGateway extends BaseGateway
 {
-
 	public function listIdsForFoodsaverWithDescendants($fs_id)
 	{
 		$bezirk_ids = [];
 		foreach ($this->listForFoodsaver($fs_id) as $bezirk) {
 			$bezirk_ids += $this->listIdsForDescendantsAndSelf($bezirk['id']);
 		}
+
 		return $bezirk_ids;
 	}
 
