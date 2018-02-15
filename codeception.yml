@@ -44,5 +44,7 @@ modules:
             dsn: mysql:host=db;dbname=foodsharing
             user: root
             password: root
+            host: db
+            db: foodsharing
         \Helper\Maildev:
             url: http://maildev:80

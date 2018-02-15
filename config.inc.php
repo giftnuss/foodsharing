@@ -69,4 +69,5 @@ if ($FS_ENV === 'dev') {
 	DI::$shared->usePDO($dsn, DB_USER, DB_PASS);
 }
 
+DI::$shared->configureMysqli(DB_HOST, DB_USER, DB_PASS, DB_DB);
 DI::$shared->compile();

@@ -13,6 +13,7 @@ class Container extends \Codeception\Module\Db
 		parent::__construct($moduleContainer, $config);
 		$this->di = new DI();
 		$this->di->usePDO($this->config['dsn'], $this->config['user'], $this->config['password']);
+		$this->di->configureMysqli($this->config['host'], $this->config['user'], $this->config['password'], $this->config['db']);
 		$this->di->compile();
 	}
 

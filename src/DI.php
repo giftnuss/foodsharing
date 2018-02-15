@@ -35,13 +35,16 @@ class DI
 			->setPublic(true);
 
 		$loader->registerClasses($definition, 'Foodsharing\\', '*', '{Lib/Flourish,Lib/Cache,Lib/View/v*,Dev,Debug}');
+	}
 
+	public function configureMysqli($host, $user, $password, $db)
+	{
 		$this->container
 			->register(\mysqli::class, \mysqli::class)
-			->addArgument(DB_HOST)
-			->addArgument(DB_USER)
-			->addArgument(DB_PASS)
-			->addArgument(DB_DB)
+			->addArgument($host)
+			->addArgument($user)
+			->addArgument($password)
+			->addArgument($db)
 			->addMethodCall('query', ["SET NAMES 'utf8'"]);
 	}
 
