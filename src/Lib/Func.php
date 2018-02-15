@@ -1445,32 +1445,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		array_unshift($this->script, $src);
 	}
 
-	public function getFqcnPrefix($module)
-	{
-		return '\\Foodsharing\\Modules\\' . $module . '\\';
-	}
-
-	public function loadApp($app)
-	{
-		$className = $app . 'Control';
-		$fqcn = $this->getFqcnPrefix($app) . $className;
-
-		$appInstance = DI::$shared->get(ltrim($fqcn, '\\'));
-
-		if (isset($_GET['a']) && method_exists($appInstance, $_GET['a'])) {
-			$meth = $_GET['a'];
-			$appInstance->$meth();
-		} else {
-			$appInstance->index();
-		}
-
-		if (($sub = $appInstance->getSubFunc()) !== false) {
-			$appInstance->$sub();
-		}
-
-		return $appInstance;
-	}
-
 	public function addJsFunc($nfunc)
 	{
 		$this->js_func .= $nfunc;
