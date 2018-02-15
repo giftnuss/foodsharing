@@ -12,7 +12,7 @@ class FoodsharingUI extends \Codeception\Module
 {
 	private function getBrowser()
 	{
-		return $this->getModule('WebDriver');
+		return $this->getModule('\Helper\WebDriver');
 	}
 
 	/**

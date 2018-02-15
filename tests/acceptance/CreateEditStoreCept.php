@@ -62,6 +62,7 @@ $I->amOnPage($I->storeUrl($storeId));
 
 /* Add more Users */
 $I->click('Team bearbeiten');
+$I->waitForElement('.tagedit-list');
 $I->addInTagSelect($bibB['name'], '#foodsaver');
 $I->addInTagSelect($foodsaverA['name'], '#foodsaver');
 $I->addInTagSelect($foodsaverB['name'], '#foodsaver');
