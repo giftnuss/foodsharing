@@ -22,7 +22,7 @@ $I->addBezirkAdmin($testRegion, $ambassador['id']);
 $I->login($ambassador['email']);
 
 $I->amOnPage('/?page=passgen&bid=' . $testRegion);
-$I->see('fs1 saver1');
+$I->waitForText('fs1 saver1');
 $I->click('Alle markieren');
 $I->click('markierte Ausweise generieren');
 

@@ -29,14 +29,14 @@ class AcceptanceTester extends \Codeception\Actor
 		return $this->waitForElement(['css' => 'body']);
 	}
 
-	public function login($email, $password = 'password')
+	public function login($email, $password = 'user')
 	{
 		$I = $this;
 		$I->amOnPage('/');
 		$I->fillField('email_adress', $email);
 		$I->fillField('password', $password);
 		$I->click('#loginbar input[type=submit]');
-		$I->waitForPageBody();
+		$I->waitForText('dashboard');
 		$I->seeMatches('/Willkommen|Hallo/'); // depends on user type
 	}
 
