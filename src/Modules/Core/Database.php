@@ -33,9 +33,14 @@ class Database
 		return $this->preparedQuery($query, $params)->fetchColumn(0);
 	}
 
+	/**
+	 * @deprecated Use more specific methods if possible
+	 * @see Database::update()
+	 * @see Database::delete()
+	 */
 	public function execute($query, $params = [])
 	{
-		return $this->preparedQuery($query, $params)->rowCount();
+		$this->preparedQuery($query, $params);
 	}
 
 	public function insertIgnore(string $table, array $data, array $options = [])
@@ -58,7 +63,7 @@ class Database
 			implode(', ', array_fill(0, count($data), '?'))
 		);
 
-		$this->execute($query, array_values($data));
+		$this->preparedQuery($query, array_values($data));
 
 		$lastInsertId = (int)$this->pdo->lastInsertId();
 
@@ -84,7 +89,7 @@ class Database
 
 		$params = array_merge(array_values($data), array_values($criteria));
 
-		return $this->execute($query, $params);
+		return $this->preparedQuery($query, $params)->rowCount();
 	}
 
 	public function delete($table, array $criteria)
@@ -93,7 +98,7 @@ class Database
 
 		$query = 'DELETE FROM ' . $this->getQuotedName($table) . ' ' . $where;
 
-		return $this->execute($query, array_values($criteria));
+		return $this->preparedQuery($query, array_values($criteria))->rowCount();
 	}
 
 	public function exists($table, array $criteria)
@@ -135,7 +140,7 @@ class Database
 
 			// Positional arguments start with 1, not 0
 			if (is_int($param)) {
-				$param++;
+				++$param;
 			}
 			$statement->bindValue($param, $value, $type);
 		}

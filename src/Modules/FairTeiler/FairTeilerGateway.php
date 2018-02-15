@@ -57,7 +57,7 @@ class FairTeilerGateway extends BaseGateway
 
 		$this->db->update('fs_fairteiler_follower', ['type' => 1], ['fairteiler_id' => $id]);
 
-		return $this->db->execute('
+		$this->db->execute('
 				REPLACE INTO `fs_fairteiler_follower`
 				(
 					`fairteiler_id`,
