@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\NewArea;
 
 use Foodsharing\Modules\Core\Model;
 
-class NewareaModel extends Model
+class NewAreaModel extends Model
 {
 	public function getWantNews()
 	{

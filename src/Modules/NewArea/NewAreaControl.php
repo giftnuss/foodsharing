@@ -5,9 +5,9 @@ namespace Foodsharing\Modules\NewArea;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 
-class NewareaControl extends Control
+class NewAreaControl extends Control
 {
-	public function __construct(NewareaModel $model, NewareaView $view)
+	public function __construct(NewAreaModel $model, NewAreaView $view)
 	{
 		$this->model = $model;
 		$this->view = $view;

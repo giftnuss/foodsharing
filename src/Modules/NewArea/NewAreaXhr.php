@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\NewArea;
 
 use Foodsharing\Modules\Core\Control;
 
-class NewareaXhr extends Control
+class NewAreaXhr extends Control
 {
 	public function __construct(NewAreaModel $model, NewAreaView $view)
 	{
