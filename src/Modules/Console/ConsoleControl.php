@@ -2,11 +2,15 @@
 
 namespace Foodsharing\Modules\Console;
 
+use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Mail\AsyncMail;
 
 class ConsoleControl
 {
 	protected $model;
+	/**
+	 * @var Func
+	 */
 	protected $func;
 
 	public function __construct()

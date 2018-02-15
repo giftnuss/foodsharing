@@ -17,7 +17,7 @@ class LookupControl extends ConsoleControl
 		global $argv;
 		$filename = $argv[3];
 		if (!file_exists($filename)) {
-			error('Could not load file ' . $filename);
+			self::error('Could not load file ' . $filename);
 			die();
 		}
 
