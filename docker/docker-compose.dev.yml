@@ -32,7 +32,7 @@ services:
       - chat:chat
     volumes:
       - ../:/app
-      - ${PWD}/docker/conf/app/php.ini:/usr/local/etc/php/conf.d/dev-config.ini
+      - ${PWD}/docker/conf/app/php.dev.ini:/usr/local/etc/php/conf.d/dev-config.ini
     environment:
       FS_ENV: dev
 
