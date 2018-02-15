@@ -8,8 +8,8 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Modules\Bell\BellModel;
 use Foodsharing\Modules\Core\Model;
-use Foodsharing\Modules\Foodsaver\FoodsaverModel;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 use Foodsharing\Modules\Message\MessageModel;
 use Foodsharing\Modules\Region\RegionModel;
@@ -21,27 +21,36 @@ class XhrMethods
 	private $func;
 	private $v_utils;
 	private $xhrViewUtils;
+	private $storeModel;
+	private $mailboxModel;
+	private $messageModel;
+	private $bellModel;
+	private $regionModel;
 
 	/**
 	 * XhrMethods constructor.
 	 *
 	 * @param $model
 	 */
-	public function __construct(Func $func, Model $model, Utils $viewUtils, ViewUtils $xhrViewUtils)
+	public function __construct(Func $func, Model $model, Utils $viewUtils, ViewUtils $xhrViewUtils, StoreModel $storeModel, MailboxModel $mailboxModel, MessageModel $messageModel, BellModel $bellModel, RegionModel $regionModel)
 	{
 		$this->func = $func;
 		$this->model = $model;
 		$this->v_utils = $viewUtils;
 		$this->xhrViewUtils = $xhrViewUtils;
+		$this->storeModel = $storeModel;
+		$this->mailboxModel = $mailboxModel;
+		$this->messageModel = $messageModel;
+		$this->bellModel = $bellModel;
+		$this->regionModel = $regionModel;
 	}
 
 	public function xhr_verify($data)
 	{
-		$fsmodel = new FoodsaverModel();
-		$bids = $fsmodel->getFsBezirkIds((int)$data['fid']);
+		$bids = $this->regionModel->getFsBezirkIds((int)$data['fid']);
 
 		if ($this->func->isBotForA($bids, false, true) || $this->func->isOrgaTeam()) {
-			if ($countver = $this->model->qOne('SELECT COUNT(*) FROM ' . PREFIX . 'verify_history WHERE date BETWEEN NOW()- INTERVAL 20 SECOND AND now() AND bot_id = ' . $this->func->fsId() . '')) {
+			if ($countver = $this->model->qOne('SELECT COUNT(*) FROM ' . PREFIX . 'verify_history WHERE date BETWEEN NOW()- INTERVAL 20 SECOND AND now() AND bot_id = ' . $this->func->fsId())) {
 				if ($countver > 10) {
 					return json_encode(array(
 						'status' => 0
@@ -80,8 +89,7 @@ class XhrMethods
 				' . (int)$data['v'] . '
 			)
 		');
-				$model = new Model();
-				$model->delBells('new-fs-' . (int)$data['fid']);
+				$this->bellModel->delBells('new-fs-' . (int)$data['fid']);
 
 				return json_encode(array(
 					'status' => 1
@@ -229,8 +237,7 @@ class XhrMethods
 				$poster = $this->model->getVal('name', 'foodsaver', $this->func->fsId());
 				$betrieb = $this->model->getVal('name', 'betrieb', (int)$data['bid']);
 
-				$model = new StoreModel();
-				$model->addBell($data['team'], 'store_wallpost_title', 'store_wallpost', 'img img-store brown', array(
+				$this->bellModel->addBell($data['team'], 'store_wallpost_title', 'store_wallpost', 'img img-store brown', array(
 					'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
 				), array(
 					'user' => S::user('name'),
@@ -786,8 +793,7 @@ class XhrMethods
 			$bezirk['email_name'] = EMAIL_PUBLIC_NAME;
 			$recip = $this->model->getMailNext($mail_id);
 
-			$mbmodel = new MailboxModel();
-			$mailbox = $mbmodel->getMailbox((int)$mail['mailbox_id']);
+			$mailbox = $this->mailboxModel->getMailbox((int)$mail['mailbox_id']);
 			$mailbox['email'] = $mailbox['name'] . '@' . DEFAULT_HOST;
 
 			$sender = $this->model->getValues(array('geschlecht', 'name'), 'foodsaver', $this->func->fsId());
@@ -994,8 +1000,7 @@ class XhrMethods
 				}
 			}
 			$betrieb = $this->model->getVal('name', 'betrieb', $data['bid']);
-			$model = new StoreModel();
-			$model->addBell($data['team'], 'store_cr_times_title', 'store_cr_times', 'img img-store brown', array(
+			$this->bellModel->addBell($data['team'], 'store_cr_times_title', 'store_cr_times', 'img img-store brown', array(
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
 			), array(
 				'user' => S::user('name'),
@@ -1106,7 +1111,7 @@ class XhrMethods
 				))),
 				$this->v_utils->v_input_wrapper($this->func->s($id), $inputs, $id)
 			), array('submit' => $this->func->s('save'))) .
-			$this->v_utils->v_input_wrapper('Master-Update', '<a class="button" href="#" class="button" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'geoclean\',id:' . (int)$data['id'] . '});}return false;">Master-Update starten</a>', 'masterupdate', array('desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen'));
+			$this->v_utils->v_input_wrapper('Master-Update', '<a class="button" href="#" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'geoclean\',id:' . (int)$data['id'] . '});}return false;">Master-Update starten</a>', 'masterupdate', array('desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen'));
 
 		$out['script'] = '
 		$("#bezirkform-form").unbind("submit");	
@@ -1265,8 +1270,7 @@ class XhrMethods
 
 			$biebs = $this->model->getBiebsForStore($data['id']);
 
-			$model = new StoreModel();
-			$model->addBell($biebs, 'store_new_request_title', 'store_new_request', 'img img-store brown', array(
+			$this->bellModel->addBell($biebs, 'store_new_request_title', 'store_new_request', 'img img-store brown', array(
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['id']
 			), array(
 				'user' => S::user('name'),
@@ -1286,8 +1290,7 @@ class XhrMethods
 				$add = ' Es gibt aber keinen Botschafter';
 			}
 
-			$model = new StoreModel();
-			$model->addBell($botsch, 'store_new_request_title', 'store_new_request', 'img img-store brown', array(
+			$this->bellModel->addBell($botsch, 'store_new_request_title', 'store_new_request', 'img img-store brown', array(
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['id']
 			), array(
 				'user' => S::user('name'),
@@ -1384,14 +1387,13 @@ class XhrMethods
 	public function xhr_delDate($data)
 	{
 		$status = 0;
-		$betriebModel = new StoreModel();
-		if ($betriebModel->isInTeam($data['bid']) && isset($data['date'])) {
-			if ($betriebModel->deleteFetchDate($this->func->fsId(), $data['bid'], $data['date'])) {
+		if ($this->storeModel->isInTeam($data['bid']) && isset($data['date'])) {
+			if ($this->storeModel->deleteFetchDate($this->func->fsId(), $data['bid'], $data['date'])) {
 				$status = 1;
 			}
 
 			if (isset($data['msg'])) {
-				$betriebModel->addTeamMessage($data['bid'], $data['msg']);
+				$this->messageModel->addTeamMessage($data['bid'], $data['msg']);
 			}
 		}
 
@@ -1402,9 +1404,8 @@ class XhrMethods
 
 	public function xhr_fetchDeny($data)
 	{
-		$betriebModel = new StoreModel();
-		if ($betriebModel->isVerantwortlich($data['bid']) || $this->func->isOrgaTeam() && isset($data['date'])) {
-			$betriebModel->deleteFetchDate($data['fsid'], $data['bid'], date('Y-m-d H:i:s', strtotime($data['date'])));
+		if ($this->storeModel->isVerantwortlich($data['bid']) || $this->func->isOrgaTeam() && isset($data['date'])) {
+			$this->storeModel->deleteFetchDate($data['fsid'], $data['bid'], date('Y-m-d H:i:s', strtotime($data['date'])));
 
 			return 1;
 		}
@@ -1412,8 +1413,8 @@ class XhrMethods
 
 	public function xhr_fetchConfirm($data)
 	{
-		if ($this->model->isVerantwortlich($data['bid']) || $this->func->isOrgaTeam()) {
-			$this->model->confirmFetcher($data['fsid'], $data['bid'], date('Y-m-d H:i:s', strtotime($data['date'])));
+		if ($this->storeModel->isVerantwortlich($data['bid']) || $this->func->isOrgaTeam()) {
+			$this->storeModel->confirmFetcher($data['fsid'], $data['bid'], date('Y-m-d H:i:s', strtotime($data['date'])));
 
 			return 1;
 		}
@@ -1435,38 +1436,6 @@ class XhrMethods
 			}
 
 			if (empty($new) && $bezirk_id > 0) {
-				/*
-				if(($active = $db->qOne('SELECT `active` FROM `'.PREFIX.'foodsaver_has_bezirk` WHERE `bezirk_id` = '.(int)$bezirk_id.' AND `foodsaver_id` = '.(int)$this->func->fsId().' ')) !== false)
-				{
-					if($active == 1)
-					{
-						return json_encode(array(
-								'script' => 'pulseInfo(\''.$this->func->jsSafe($this->func->s('already_in_bezirk')).'\');',
-								'status' => 2
-						));
-					}
-				}
-				*/
-				/*
-					// schon im bezirk
-					if($active == 1)
-					{
-						return json_encode(array(
-							'script' => 'pulseInfo(\''.$this->func->jsSafe($this->func->s('already_in_bezirk')).'\');',
-							'status' => 2
-						));
-					}
-					else
-					{
-						return json_encode(array(
-							'script' => 'pulseInfo(\''.$this->func->jsSafe($this->func->s('request_already_send')).'\');',
-							'status' => 2
-						));
-					}
-				}
-				else
-				{
-				*/
 				$active = 1;
 				$this->model->insert('
 					REPLACE INTO  `' . PREFIX . 'foodsaver_has_bezirk` (`bezirk_id`,`foodsaver_id`,`active`)
@@ -1478,14 +1447,12 @@ class XhrMethods
 				}
 
 				if ($bots = $this->model->getBotschafter($bezirk_id)) {
-					$model = new Model();
-
 					if (
 						($foodsaver = $this->model->getValues(array('verified', 'name', 'nachname', 'photo'), 'foodsaver', $this->func->fsId())) &&
 						($bezirk = $this->model->getValues(array('name'), 'bezirk', $bezirk_id))
 					) {
 						if ($foodsaver['verified'] == 1) {
-							$model->addBell(
+							$this->bellModel->addBell(
 								$bots,
 								'new_foodsaver_title',
 								'new_foodsaver_verified',
@@ -1498,7 +1465,7 @@ class XhrMethods
 								'new-fs-' . $this->func->fsId()
 							);
 						} else {
-							$model->addBell(
+							$this->bellModel->addBell(
 								$bots,
 								'new_foodsaver_title',
 								'new_foodsaver',
@@ -1547,14 +1514,12 @@ class XhrMethods
 
 	public function xhr_delPost($data)
 	{
-		$regionModel = new RegionModel();
-
 		$fsid = $this->model->getVal('foodsaver_id', 'theme_post', $data['pid']);
-		$bezirkId = $regionModel->getBezirkForPost($data['pid']);
-		$bezirkType = $regionModel->getBezirkType($bezirkId);
+		$bezirkId = $this->regionModel->getBezirkForPost($data['pid']);
+		$bezirkType = $this->regionModel->getBezirkType($bezirkId);
 
 		if ($this->func->isOrgaTeam() || $fsid == $this->func->fsId() || ($this->func->isBotFor($bezirkId) && $bezirkType == 7)) {
-			$regionModel->deletePost($data['pid']);
+			$this->regionModel->deletePost($data['pid']);
 
 			return 1;
 		} else {
@@ -1584,13 +1549,11 @@ class XhrMethods
 				$this->model->del('DELETE FROM `' . PREFIX . 'betrieb_team` WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . (int)$data['bid']);
 				$this->model->del('DELETE FROM `' . PREFIX . 'abholer` WHERE `betrieb_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$data['fsid'] . ' AND `date` > NOW()');
 
-				$msg = new MessageModel();
-
-				if ($tcid = $msg->getBetriebConversation((int)$data['bid'])) {
-					$msg->deleteUserFromConversation($tcid, (int)$data['fsid'], true);
+				if ($tcid = $this->messageModel->getBetriebConversation((int)$data['bid'])) {
+					$this->messageModel->deleteUserFromConversation($tcid, (int)$data['fsid'], true);
 				}
-				if ($scid = $msg->getBetriebConversation((int)$data['bid'], true)) {
-					$msg->deleteUserFromConversation($scid, (int)$data['fsid'], true);
+				if ($scid = $this->messageModel->getBetriebConversation((int)$data['bid'], true)) {
+					$this->messageModel->deleteUserFromConversation($scid, (int)$data['fsid'], true);
 				}
 			}
 
