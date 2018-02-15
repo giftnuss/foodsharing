@@ -22,11 +22,10 @@ abstract class Control
 	protected $func;
 	protected $v_utils;
 
-	public function __construct(Model $model)
+	public function __construct()
 	{
 		$this->func = DI::$shared->get(Func::class);
 		$this->v_utils = DI::$shared->get(Utils::class);
-		$this->model = $model;
 
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;

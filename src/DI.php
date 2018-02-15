@@ -35,6 +35,14 @@ class DI
 			->setPublic(true);
 
 		$loader->registerClasses($definition, 'Foodsharing\\', '*', '{Lib/Flourish,Lib/Cache,Lib/View/v*,Dev,Debug}');
+
+		$this->container
+			->register(\mysqli::class, \mysqli::class)
+			->addArgument(DB_HOST)
+			->addArgument(DB_USER)
+			->addArgument(DB_PASS)
+			->addArgument(DB_DB)
+			->addMethodCall('query', ["SET NAMES 'utf8'"]);
 	}
 
 	public function useTraceablePDO($traceablePDO)

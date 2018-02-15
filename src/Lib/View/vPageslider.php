@@ -2,6 +2,9 @@
 
 namespace Foodsharing\Lib\View;
 
+use Foodsharing\DI;
+use Foodsharing\Lib\Func;
+
 class vPageslider
 {
 	private $sections;
@@ -13,8 +16,7 @@ class vPageslider
 
 	public function __construct()
 	{
-		global $g_func;
-		$this->func = $g_func;
+		$this->func = DI::$shared->get(Func::class);
 		$this->sections = array();
 		$this->defaultBgColor = '#F1E7C9';
 

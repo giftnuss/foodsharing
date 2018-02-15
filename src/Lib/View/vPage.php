@@ -15,8 +15,7 @@ class vPage
 
 	public function __construct($title, $content)
 	{
-		global $g_func;
-		$this->func = $g_func;
+		$this->func = DI::$shared->get(Func::class);
 		$this->setTitle($title);
 		$this->setContent($content);
 

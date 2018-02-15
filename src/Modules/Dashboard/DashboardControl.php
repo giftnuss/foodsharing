@@ -6,6 +6,7 @@ use Foodsharing\Lib\Twig;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Content\ContentGateway;
+use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Profile\ProfileModel;
 
 class DashboardControl extends Control
@@ -19,11 +20,13 @@ class DashboardControl extends Control
 		DashboardView $view,
 		DashboardGateway $gateway,
 		ContentGateway $contentGateway,
+		Model $model,
 		Twig $twig)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->contentGateway = $contentGateway;
+		$this->model = $model;
 		$this->twig = $twig;
 
 		parent::__construct();
@@ -98,7 +101,7 @@ class DashboardControl extends Control
 			if (S::option('quiz-infobox-seen')) {
 				$cnt['body'] = '<div>' . substr(strip_tags($cnt['body']), 0, 120) . ' ...<a href="#" onclick="$(this).parent().hide().next().show();return false;">weiterlesen</a></div><div style="display:none;">' . $cnt['body'] . '</div>';
 			} else {
-				$cnt['body'] = $cnt['body'] . '<p><a href="#" onclick="ajreq(\'quizpopup\',{app:\'quiz\'});return false;">Weiter zum Quiz</a></p><p><a href="#"onclick="$(this).parent().parent().hide();ajax.req(\'quiz\',\'hideinfo\');return false;"><i class="fa fa-check-square-o"></i> Hinweis gelesen und nicht mehr anzeigen</a></p>';
+				$cnt['body'] = $cnt['body'] . '<p><a href="#" onclick="ajreq(\'quizpopup\',{app:\'quiz\'});return false;">Weiter zum Quiz</a></p><p><a href="#" onclick="$(this).parent().parent().hide();ajax.req(\'quiz\',\'hideinfo\');return false;"><i class="fa fa-check-square-o"></i> Hinweis gelesen und nicht mehr anzeigen</a></p>';
 			}
 			$this->func->addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
 		}

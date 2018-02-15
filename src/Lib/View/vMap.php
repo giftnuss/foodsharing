@@ -20,8 +20,7 @@ class vMap extends vCore
 
 	public function __construct($id = 'map')
 	{
-		global $g_func;
-		$this->func = $g_func;
+		$this->func = DI::$shared->get(Func::class);
 		$this->id = $this->id($id);
 
 		$this->location = array(50.89, 10.13);

@@ -11,19 +11,19 @@ use mysqli;
 
 abstract class Db
 {
-	private static $mysqli = null;
+	/**
+	 * @var mysqli
+	 */
+	private $mysqli;
 	private $values;
+	/**
+	 * @var Func
+	 */
 	protected $func;
 
 	public function __construct()
 	{
 		$this->values = array();
-
-		if (is_null(self::$mysqli)) {
-			self::$mysqli = new mysqli();
-			self::$mysqli->connect(DB_HOST, DB_USER, DB_PASS, DB_DB);
-			$this->sql("SET NAMES 'utf8'");
-		}
 	}
 
 	/**
@@ -32,6 +32,14 @@ abstract class Db
 	public function setFunc(Func $func)
 	{
 		$this->func = $func;
+	}
+
+	/**
+	 * @required
+	 */
+	public function setMysqli(mysqli $mysqli)
+	{
+		$this->mysqli = $mysqli;
 	}
 
 	public function addPassRequest($email, $mail = true)
@@ -300,28 +308,28 @@ abstract class Db
 
 	public function begin_transaction()
 	{
-		self::$mysqli->query('BEGIN');
+		$this->mysqli->query('BEGIN');
 	}
 
 	public function commit()
 	{
-		self::$mysqli->commit();
+		$this->mysqli->commit();
 	}
 
 	public function rollback()
 	{
-		self::$mysqli->rollback();
+		$this->mysqli->rollback();
 	}
 
 	public function sql($query)
 	{
 		$start = microtime(true);
-		$res = self::$mysqli->query($query);
+		$res = $this->mysqli->query($query);
 		$duration = microtime(true) - $start;
 
 		if ($res == false) {
-			error_log('SQL QUERY ERROR URL ' . $_SERVER['REQUEST_URI'] . ' IN ' . $query . ' : ' . self::$mysqli->error);
-			DebugBar::addQuery($query, $duration, false, self::$mysqli->errno, self::$mysqli->error);
+			error_log('SQL QUERY ERROR URL ' . $_SERVER['REQUEST_URI'] . ' IN ' . $query . ' : ' . $this->mysqli->error);
+			DebugBar::addQuery($query, $duration, false, $this->mysqli->errno, $this->mysqli->error);
 		} else {
 			DebugBar::addQuery($query, $duration, true);
 		}
@@ -404,7 +412,7 @@ abstract class Db
 	public function del($sql)
 	{
 		if ($res = $this->sql($sql)) {
-			return self::$mysqli->affected_rows;
+			return $this->mysqli->affected_rows;
 		}
 
 		return false;
@@ -413,7 +421,7 @@ abstract class Db
 	public function insert($sql)
 	{
 		if ($res = $this->sql($sql)) {
-			return self::$mysqli->insert_id;
+			return $this->mysqli->insert_id;
 		} else {
 			return false;
 		}
@@ -501,13 +509,13 @@ abstract class Db
 
 	public function close()
 	{
-		@self::$mysqli->close();
-		self::$mysqli = null;
+		@$this->mysqli->close();
+		$this->mysqli = null;
 	}
 
 	public function safe($str)
 	{
-		return self::$mysqli->escape_string($str);
+		return $this->mysqli->escape_string($str);
 	}
 
 	public function getFoodsaverId()

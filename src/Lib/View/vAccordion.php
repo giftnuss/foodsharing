@@ -11,8 +11,7 @@ class vAccordion
 
 	public function __construct($option = array())
 	{
-		global $g_func;
-		$this->func = $g_func;
+		$this->func = DI::$shared->get(Func::class);
 		$this->panels = array();
 
 		$this->id = 'acc-' . uniqid();

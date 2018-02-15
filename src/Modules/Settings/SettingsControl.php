@@ -411,7 +411,7 @@ class SettingsControl extends Control
 	public function calendar()
 	{
 		$this->func->addBread($this->func->s('calendar'));
-		$token = $this->func->generate_api_token($this->func->fsId());
+		$token = $this->generate_api_token($this->func->fsId());
 		$this->func->addContent($this->view->settingsCalendar($token));
 	}
 
@@ -554,5 +554,22 @@ class SettingsControl extends Control
 	private function upgrade()
 	{
 		/* This needs to be here for routing of upgrade/ to work. Do not remove! */
+	}
+
+	/** Creates and saves a new API token for given user
+	 * @param $fs Foodsaver ID
+	 *
+	 * @return false in case of error or weak algorithm, generated token otherwise
+	 */
+	private function generate_api_token($fs)
+	{
+		$token = bin2hex(openssl_random_pseudo_bytes(10, $strong));
+		if (!$strong || $token === false) {
+			return false;
+		}
+
+		$this->model->insert('INSERT INTO ' . PREFIX . 'apitoken (foodsaver_id, token) VALUES (' . (int)$fs . ', "' . $token . '")');
+
+		return $token;
 	}
 }
