@@ -397,8 +397,8 @@ class Func
 	{
 		if ($this->isBotschafter() && is_array($bezirk_ids)) {
 			if ($include_parent_bezirke) {
-				global $db;
-				$bezirk_ids = $db->getParentBezirke($bezirk_ids);
+				$manualDb = DI::$shared->get(ManualDb::class);
+				$bezirk_ids = $manualDb->getParentBezirke($bezirk_ids);
 			}
 			foreach ($_SESSION['client']['botschafter'] as $b) {
 				foreach ($bezirk_ids as $bid) {
@@ -457,8 +457,6 @@ class Func
 	');
 
 		if (S::may()) {
-			global $db;
-
 			$out = array(
 				'default' => '',
 				'mobile' => ''
@@ -862,12 +860,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function tplMail($tpl_id, $to, $var = array(), $from_email = false)
 	{
-		global $db;
+		$manualDb = DI::$shared->get(ManualDb::class);
 		$mail = new AsyncMail();
-
-		if (!is_object($db)) {
-			$db = new ManualDb();
-		}
 
 		if ($from_email !== false && $this->validEmail($from_email)) {
 			$mail->setFrom($from_email);
@@ -875,7 +869,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$mail->setFrom(DEFAULT_EMAIL, DEFAULT_EMAIL_NAME);
 		}
 
-		$message = $db->getOne_message_tpl($tpl_id);
+		$message = $manualDb->getOne_message_tpl($tpl_id);
 
 		$search = array();
 		$replace = array();
@@ -1061,8 +1055,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function getBezirkMenu($bezirk)
 	{
-		global $db;
-
 		$out = '<li><a href="/?page=bezirk&bid=' . $bezirk['id'] . '&sub=forum">' . $bezirk['name'] . '</a>
 			<ul>
 				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid=' . $bezirk['id'] . '&sub=forum">Forum</a></li>
@@ -1230,9 +1222,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function getBezirkId()
 	{
-		global $db;
+		$manualDb = DI::$shared->get(ManualDb::class);
 
-		return $db->getCurrentBezirkId();
+		return $manualDb->getCurrentBezirkId();
 	}
 
 	public function getPage()
@@ -1659,9 +1651,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function getBezirk()
 	{
-		global $db;
+		$manualDb = DI::$shared->get(ManualDb::class);
 
-		return $db->getBezirk();
+		return $manualDb->getBezirk();
 	}
 
 	public function genderWord($gender, $m, $w, $other)
@@ -2088,24 +2080,5 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	public function getTemplate($tpl)
 	{
 		include 'tpl/' . $tpl . '.php';
-	}
-
-	/** Creates and saves a new API token for given user
-	 * @param $fs Foodsaver ID
-	 *
-	 * @return false in case of error or weak algorithm, generated token otherwise
-	 */
-	public function generate_api_token($fs)
-	{
-		global $db;
-
-		$token = bin2hex(openssl_random_pseudo_bytes(10, $strong));
-		if (!$strong || $token === false) {
-			return false;
-		}
-
-		$db->insert('INSERT INTO ' . PREFIX . 'apitoken (foodsaver_id, token) VALUES (' . (int)$fs . ', "' . $token . '")');
-
-		return $token;
 	}
 }
