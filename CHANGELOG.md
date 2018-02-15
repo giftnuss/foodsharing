@@ -33,6 +33,9 @@
 ## Dev/Test/CI stuff
 
 - Improve `FoodsaverVerifyUnverifyHistoryCept` test !279 @tiltec
+- Reduce flakyness of acceptance tests further !290 @tiltec
+- Disable xdebug in CI to increase test speed !290 @tiltec
+- Retry failed tests in CI !290 @tiltec
 - Enable [smartWait](https://codeception.com/docs/03-AcceptanceTests#SmartWait) for acceptance tests !279 @tiltec
 - Enable xdebug remote debugging for development !276 @NerdyProjects
 - Add better seed data for use during development !263 @tiltec
