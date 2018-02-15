@@ -80,14 +80,14 @@ exec-in-container app vendor/bin/codecept run --xml --html "$@" || failed=1
 echo $SECONDS seconds elapsed
 
 if [ $failed -eq 1 ]; then
-echo
-echo "============================================"
-echo "Rerunning failed tests"
-echo "============================================"
-SECONDS=0
-exec-in-container app vendor/bin/codecept run -g failed "$@"
-echo $SECONDS seconds elapsed
-endif
+  echo
+  echo "============================================"
+  echo "Rerunning failed tests"
+  echo "============================================"
+  SECONDS=0
+  exec-in-container app vendor/bin/codecept run -g failed "$@"
+  echo $SECONDS seconds elapsed
+fi
 
 echo
 echo "============================================"
