@@ -73,7 +73,6 @@ class FairTeilerControl extends Control
 				$this->func->go($url[0]);
 			}
 
-
 			$this->bezirke = $this->model->getRealBezirke();
 			if (!isset($this->bezirke[$this->fairteiler['bezirk_id']])) {
 				$this->bezirke[] = $this->model->getBezirk($this->fairteiler['bezirk_id']);

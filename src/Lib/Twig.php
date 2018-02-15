@@ -23,7 +23,7 @@ class Twig
 
 		$this->twig = new Twig_Environment($this->loader, [
 			'debug' => FS_ENV === 'dev',
-			'cache' => __DIR__ . '/../../.views-cache',
+			'cache' => __DIR__ . '/../../tmp/.views-cache',
 			'strict_variables' => true
 		]);
 

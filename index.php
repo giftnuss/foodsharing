@@ -82,8 +82,8 @@ if (!array_key_exists('NOTWIG', $_GET)) {
 
 	$mainwidth = 24;
 
-	$content_left = $g_func->getContent(CNT_LEFT);
-	$content_right = $g_func->getContent(CNT_RIGHT);
+	$content_left = $func->getContent(CNT_LEFT);
+	$content_right = $func->getContent(CNT_RIGHT);
 
 	if (!empty($content_left)) {
 		$mainwidth -= $content_left_width;
@@ -94,16 +94,16 @@ if (!array_key_exists('NOTWIG', $_GET)) {
 	}
 
 	echo $twig->render('layouts/' . $g_template . '.twig', [
-		'head' => $g_func->getHead(),
-		'bread' => $g_func->getBread(),
-		'css' => str_replace(["\r", "\n"], '', $g_func->getAddCss()),
-		'jsFunc' => $g_func->getJsFunc(),
-		'js' => $g_func->getJs(),
+		'head' => $func->getHead(),
+		'bread' => $func->getBread(),
+		'css' => str_replace(["\r", "\n"], '', $func->getAddCss()),
+		'jsFunc' => $func->getJsFunc(),
+		'js' => $func->getJs(),
 		'bodyClass' => $g_body_class,
 		'msgbar' => $msgbar,
 		'menu' => $menu,
-		'hidden' => $g_func->getHidden(),
-		'isMob' => $g_func->isMob(),
+		'hidden' => $func->getHidden(),
+		'isMob' => $func->isMob(),
 		'logolink' => $logolink,
 		'broadcast_message' => $g_broadcast_message,
 		'SRC_REVISION' => defined('SRC_REVISION') ? SRC_REVISION : null,
@@ -111,7 +111,7 @@ if (!array_key_exists('NOTWIG', $_GET)) {
 		'is_foodsharing_dot_at' => strpos($_SERVER['HTTP_HOST'], 'foodsharing.at') !== false,
 		'content' => [
 			'main' => [
-				'html' => $g_func->getContent(CNT_MAIN),
+				'html' => $func->getContent(CNT_MAIN),
 				'width' => $mainwidth
 			],
 			'left' => [
@@ -125,15 +125,15 @@ if (!array_key_exists('NOTWIG', $_GET)) {
 				'id' => 'right'
 			],
 			'top' => [
-				'html' => $g_func->getContent(CNT_TOP),
+				'html' => $func->getContent(CNT_TOP),
 				'id' => 'content_top'
 			],
 			'bottom' => [
-				'html' => $g_func->getContent(CNT_BOTTOM),
+				'html' => $func->getContent(CNT_BOTTOM),
 				'id' => 'content_bottom'
 			],
 			'overtop' => [
-				'html' => $g_func->getContent(CNT_OVERTOP)
+				'html' => $func->getContent(CNT_OVERTOP)
 			]
 		]
 	]);
