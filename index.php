@@ -57,7 +57,6 @@ if (DebugBar::isEnabled()) {
 }
 
 if (!array_key_exists('NOTWIG', $_GET)) {
-
 	$twig = DI::$shared->get(\Foodsharing\Lib\Twig::class);
 
 	$mainwidth = 24;
@@ -73,7 +72,7 @@ if (!array_key_exists('NOTWIG', $_GET)) {
 		$mainwidth -= $content_right_width;
 	}
 
-	echo $twig->render('layouts/'. $g_template . '.twig', [
+	echo $twig->render('layouts/' . $g_template . '.twig', [
 		'head' => $g_func->getHead(),
 		'bread' => $g_func->getBread(),
 		'css' => str_replace(["\r", "\n"], '', $g_func->getAddCss()),
@@ -117,9 +116,6 @@ if (!array_key_exists('NOTWIG', $_GET)) {
 			]
 		]
 	]);
-
 } else {
-
 	include 'tpl/' . $g_template . '.php';
-
 }
