@@ -2,12 +2,14 @@
 
 namespace Helper;
 
-// here you can define custom actions
+// here you can define custom WebDriver actions
 // all public methods declared in helper class will be available in $I
 
+use Codeception\Util\Locator;
 use Facebook\WebDriver\WebDriverExpectedCondition;
+use WebDriverBy;
 
-class Acceptance extends \Codeception\Module
+class WebDriver extends \Codeception\Module\WebDriver
 {
 	/**
 	 * Same as assertRegExp but makes it available inside AcceptanceTester
@@ -25,9 +27,31 @@ class Acceptance extends \Codeception\Module
 		$this->assertLessThanOrEqual($max, $date, 'Date is in future');
 	}
 
-	public function seeFileExists($filename)
+	public function waitForFileExists($filename, $timeout = 4)
 	{
-		\PHPUnit_Framework_Assert::assertTrue(file_exists($filename));
+		$condition = function () use ($filename) {
+			return file_exists($filename);
+		};
+		$this->waitFor($condition, $timeout);
+	}
+
+	public function waitForTextNotVisible($text, $timeout = 10, $selector = null)
+	{
+		if ($selector === null) {
+			$selector = WebDriverBy::xpath('//body');
+		} else {
+			$selector = $this->getLocator($selector);
+		}
+
+		$condition = WebDriverExpectedCondition::not(WebDriverExpectedCondition::elementTextContains($selector, $text));
+
+		$message = sprintf(
+			'Waited for %d secs but text %s still not found',
+			$timeout,
+			Locator::humanReadableString($text)
+		);
+
+		$this->webDriver->wait($timeout)->until($condition, $message);
 	}
 
 	/**
@@ -39,13 +63,18 @@ class Acceptance extends \Codeception\Module
 	public function waitUrlEquals($url, $timeout = 4)
 	{
 		$condition = WebDriverExpectedCondition::urlIs($url);
-		$this->getModule('WebDriver')->webDriver->wait($timeout)->until($condition);
+		$this->waitFor($condition, $timeout);
 	}
 
 	public function unlockAllInputFields()
 	{
-		$this->getModule('WebDriver')->executeJs(
+		$this->executeJs(
 			'document.querySelectorAll(\'*[readOnly]\').forEach(el => el.readOnly = false)'
 		);
+	}
+
+	private function waitFor($condition, $timeout)
+	{
+		$this->webDriver->wait($timeout)->until($condition);
 	}
 }

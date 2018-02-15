@@ -11,12 +11,11 @@ $I->addBezirkAdmin($group['id'], $admin['id']);
 
 $I->login($admin['email']);
 $I->amOnPage($I->groupEditUrl($group['id']));
-$I->waitForPageBody();
-$I->see('Mitglieder', '#member-wrapper');
+$I->waitForText('Mitglieder', 10,'#member-wrapper');
 $I->click('#member-wrapper .tagedit-list');
-$I->fillField('#member-wrapper #tagedit-input', 'WorkingGroupTest');
-$I->wait('3');
-$I->see('lastNameOfThat (' . $foodsaver['id'] . ')', '#ui-id-7');
+$I->addInTagSelect('WorkingGroupTest', '#member-wrapper');
+
+$I->waitForText('lastNameOfThat (' . $foodsaver['id'] . ')', 4,'#ui-id-7');
 $I->click('#ui-id-7');
 $I->click('Änderungen speichern');
 $I->seeInDatabase('fs_foodsaver_has_bezirk', array('bezirk_id' => $group['id'], 'foodsaver_id' => $foodsaver['id']));

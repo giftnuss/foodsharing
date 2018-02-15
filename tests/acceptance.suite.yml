@@ -7,7 +7,12 @@
 class_name: AcceptanceTester
 modules:
     enabled:
-        - WebDriver:
+        - Sequence
+        - Db:
+            populate: true
+            cleanup: true
+        - Asserts
+        - \Helper\WebDriver:
             url: 'http://web:8080/'
             host: selenium
             port: 4444
@@ -16,12 +21,6 @@ modules:
             connection_timeout: 20
             request_timeout: 20
             wait: 5
-        - Sequence
-        - Db:
-            populate: true
-            cleanup: true
-        - Asserts
-        - \Helper\Acceptance
         - \Helper\Foodsharing
         - \Helper\FoodsharingUI
         - \Helper\FoodsharingUrl

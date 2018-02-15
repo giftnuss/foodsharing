@@ -75,7 +75,7 @@ $I->click('Speichern', '#team-form');
 /* Edit the store to see that team does not change */
 $I->amOnPage($I->storeEditUrl($storeId));
 $I->click('Senden');
-$I->see('Änderungen wurden gespeichert');
+$I->waitForText('Änderungen wurden gespeichert');
 
 /* Reload to get rid of green overlay */
 $I->amOnPage($I->storeUrl($storeId));
@@ -88,7 +88,7 @@ $I->see($foodsaverB['name'] . ' ' . $foodsaverB['nachname'], '.team');
 $I->click('Team bearbeiten');
 $I->removeFromTagSelect($bibB['name'] . ' ' . $bibB['nachname']);
 $I->click('Speichern', '#team-form');
-$I->see('Änderungen wurden gespeichert.');
+$I->waitForText('Änderungen wurden gespeichert.');
 
 /* Reload to get rid of green overlay */
 $I->amOnPage($I->storeUrl($storeId));

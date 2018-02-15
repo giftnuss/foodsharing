@@ -35,7 +35,6 @@ class WallPostCest
 			$wallPostText = 'Hey there, this is my new wallpost!';
 			$I->fillField('#wallpost-text', $wallPostText);
 			$I->click('Senden');
-			$I->waitForPageBody();
 			$I->waitForElement('.bpost');
 			$I->see($wallPostText);
 			$I->seeInDatabase('fs_wallpost', array('body' => $wallPostText, 'foodsaver_id' => $this->{$example[0]}['id']));

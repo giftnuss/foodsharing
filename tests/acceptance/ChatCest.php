@@ -26,14 +26,12 @@ class ChatCest
 		// view the other users profile and start a chat
 		$I->amOnPage('/profile/' . $this->foodsaver2['id']);
 		$I->click('Nachricht schreiben');
-		$I->waitForElementVisible('.chatboxtextarea', 4);
+		$I->waitForElementVisible('.chatboxtextarea', 10);
 
 		// write a message to them
 		$I->fillField('.chatboxtextarea', 'is anyone there?');
 		$I->pressKey('.chatboxtextarea', WebDriverKeys::ENTER);
-		$I->wait(1);
-
-		$I->see('is anyone there?', '.chatboxcontent');
+		$I->waitForText('is anyone there?', 10, '.chatboxcontent');
 
 		$I->seeInDatabase('fs_msg', [
 			'foodsaver_id' => $this->foodsaver1['id'],
@@ -57,10 +55,9 @@ class ChatCest
 			// write a nice reply
 			$I->fillField('.chatboxtextarea', 'yes! I am here!');
 			$I->pressKey('.chatboxtextarea', WebDriverKeys::ENTER);
-			$I->wait(1);
 		});
 
-		$I->see('yes! I am here!', '.chatboxcontent');
+		$I->waitForText('yes! I am here!', 10, '.chatboxcontent');
 
 		$I->seeInDatabase('fs_msg', [
 			'foodsaver_id' => $this->foodsaver2['id'],

@@ -26,6 +26,4 @@ $I->selectOption('Optionen', 'Foodsaver für ' . $regionName);
 $I->waitForElementVisible('#pulse-info');
 $I->click('Visitenkarten herunterladen');
 
-$I->wait(4);
-
-$I->seeFileExists('/downloads/bcard-fs-' . convertId($foodsaver['name']) . '-' . convertId($foodsaver['nachname']) . '.pdf');
+$I->waitForFileExists('/downloads/bcard-fs-' . convertId($foodsaver['name']) . '-' . convertId($foodsaver['nachname']) . '.pdf');

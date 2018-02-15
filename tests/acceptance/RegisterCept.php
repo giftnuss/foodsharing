@@ -63,8 +63,7 @@ $I->amOnPage('/');
 $I->fillField('email_adress', $email);
 $I->fillField('password', $password);
 $I->click('#loginbar input[type=submit]');
-$I->waitForPageBody();
-$I->see('Willkommen ' . $first_name . '!');
+$I->waitForText('Willkommen ' . $first_name . '!');
 
 $I->seeInDatabase('fs_foodsaver', [
 	'email' => $email,
