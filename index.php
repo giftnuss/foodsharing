@@ -55,7 +55,6 @@ if ($class) {
 	}
 }
 
-$func->getCurrent();
 $menu = $func->getMenu();
 
 $func->getMessages();

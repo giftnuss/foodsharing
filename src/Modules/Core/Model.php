@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Core;
 
 use Foodsharing\Lib\Db\ManualDb;
-use Foodsharing\Modules\Message\MessageModel;
 
 class Model extends ManualDb
 {
@@ -158,24 +157,6 @@ class Model extends ManualDb
  			WHERE 
  				id = ' . (int)$this->func->fsId() . '
  		');
-	}
-
-	public function message($recip_id, $foodsaver_id, $message, $unread = 1)
-	{
-		$model = new MessageModel();
-
-		$recd = 0;
-		if ($unread == 0) {
-			$recd = 1;
-		} else {
-			$unread = 1;
-		}
-
-		if ($conversation_id = $model->user2conv($recip_id)) {
-			return $model->sendMessage($conversation_id, $message);
-		}
-
-		return false;
 	}
 
 	public function getRealBezirke()

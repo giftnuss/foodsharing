@@ -6,7 +6,6 @@ use Flourish\fDate;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\View;
-use Foodsharing\Modules\Foodsaver\FoodsaverModel;
 
 class ProfileView extends View
 {
@@ -28,9 +27,6 @@ class ProfileView extends View
 		$page->addSectionLeft($this->photo($showEditButton, $showPassportGenerationHistoryButton, $showVerificationHistoryButton));
 
 		$page->addSectionLeft($this->sideInfos(), 'Infos');
-
-		$fsModel = new FoodsaverModel();
-		$bids = $fsModel->getFsBezirkIds($this->foodsaver['id']);
 
 		if ($showSideInfoCompanies && $userCompanies) {
 			$page->addSectionLeft($this->sideInfosCompanies($userCompanies), 'Betriebe (' . $userCompaniesCount . ')');

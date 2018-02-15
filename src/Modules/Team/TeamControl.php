@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Team;
 
-use Foodsharing\Modules\Content\ContentModel;
 use Foodsharing\Modules\Core\Control;
 
 class TeamControl extends Control
@@ -64,8 +63,7 @@ class TeamControl extends Control
 	private function displayTeamContent($bezirkId, $contentId)
 	{
 		if ($team = $this->model->getTeam($bezirkId)) {
-			$db = new ContentModel();
-			$this->func->addContent($this->view->teamlist($team, $db->getContent($contentId)));
+			$this->func->addContent($this->view->teamlist($team, $this->model->getContent($contentId)));
 		}
 	}
 }

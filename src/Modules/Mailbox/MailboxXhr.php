@@ -9,10 +9,10 @@ use Foodsharing\Modules\Core\Control;
 
 class MailboxXhr extends Control
 {
-	public function __construct()
+	public function __construct(MailboxModel $model, MailboxView $view)
 	{
-		$this->model = new MailboxModel();
-		$this->view = new MailboxView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 

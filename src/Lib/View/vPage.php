@@ -2,6 +2,9 @@
 
 namespace Foodsharing\Lib\View;
 
+use Foodsharing\DI;
+use Foodsharing\Lib\Func;
+
 class vPage
 {
 	private $title;

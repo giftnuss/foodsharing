@@ -154,7 +154,7 @@ class MessageXhr extends Control
 									 * send an E-Mail if the user is not online
 									*/
 									if ($this->model->wantMsgEmailInfo($m['id'])) {
-										$this->convMessage($m, $_POST['c'], $body);
+										$this->convMessage($m, $_POST['c'], $body, $this->model);
 									}
 								}
 							}

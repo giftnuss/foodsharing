@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\WorkGroup;
 
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Foodsaver\FoodsaverModel;
 
 class WorkGroupControl extends Control
 {
@@ -55,9 +54,7 @@ class WorkGroupControl extends Control
 
 	public function edit()
 	{
-		$fsModel = new FoodsaverModel();
-
-		$bids = $fsModel->getFsBezirkIds($this->func->fsId());
+		$bids = $this->model->getFsBezirkIds($this->func->fsId());
 
 		if (!$this->func->isOrgaTeam() && !$this->func->isBotForA($bids, true, true)) {
 			$this->func->go('/?page=dashboard');

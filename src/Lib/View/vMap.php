@@ -2,6 +2,8 @@
 
 namespace Foodsharing\Lib\View;
 
+use Foodsharing\DI;
+use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
 
 class vMap extends vCore

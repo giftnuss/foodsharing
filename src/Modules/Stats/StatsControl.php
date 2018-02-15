@@ -12,10 +12,6 @@ class StatsControl extends ConsoleControl
 		parent::__construct($model);
 	}
 
-	public function index()
-	{
-	}
-
 	public function foodsaver()
 	{
 		self::info('Statistik Auswertung für Foodsaver');

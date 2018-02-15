@@ -2,12 +2,15 @@
 
 namespace Foodsharing\Lib\View;
 
+use Foodsharing\DI;
+use Foodsharing\Lib\Func;
+
 class vAccordion
 {
 	private $panels;
 	private $id;
 	private $options;
-	private $g_func;
+	private $func;
 
 	public function __construct($option = array())
 	{

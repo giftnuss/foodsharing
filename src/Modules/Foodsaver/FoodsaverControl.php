@@ -5,13 +5,19 @@ namespace Foodsharing\Modules\Foodsaver;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Settings\SettingsModel;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Store\StoreModel;
 
 class FoodsaverControl extends Control
 {
-	public function __construct(FoodsaverModel $model, FoodsaverView $view)
+	private $storeModel;
+	private $settingsModel;
+
+	public function __construct(FoodsaverModel $model, FoodsaverView $view, StoreModel $storeModel, SettingsModel $settingsModel)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->storeModel = $storeModel;
+		$this->settingsModel = $settingsModel;
 
 		parent::__construct();
 
@@ -95,7 +101,6 @@ class FoodsaverControl extends Control
 
 	private function handle_edit()
 	{
-		global $db;
 		global $g_data;
 
 		if ($this->func->submitted()) {
@@ -109,12 +114,11 @@ class FoodsaverControl extends Control
 				unset($g_data['rolle']);
 			}
 
-			$settings_model = new SettingsModel();
-			if ($oldFs = $settings_model->getOne_foodsaver($_GET['id'])) {
+			if ($oldFs = $this->settingsModel->getOne_foodsaver($_GET['id'])) {
 				$logChangedFields = array('name', 'nachname', 'stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum', 'rolle', 'orgateam');
-				$settings_model->logChangedSetting($_GET['id'], $oldFs, $g_data, $logChangedFields);
+				$this->settingsModel->logChangedSetting($_GET['id'], $oldFs, $g_data, $logChangedFields);
 			}
-			if ($db->update_foodsaver($_GET['id'], $g_data)) {
+			if ($this->model->update_foodsaver($_GET['id'], $g_data, $this->storeModel)) {
 				$this->func->info($this->func->s('foodsaver_edit_success'));
 			} else {
 				$this->func->error($this->func->s('error'));

@@ -607,4 +607,43 @@ class MessageModel extends Model
 			return $cid;
 		}
 	}
+
+	public function addTeamMessage($bid, $message)
+	{
+		if ($betrieb = $this->getMyBetrieb($bid)) {
+			if (!is_null($betrieb['team_conversation_id'])) {
+				$this->sendMessage($betrieb['team_conversation_id'], $message);
+			} elseif (is_null($betrieb['team_conversation_id'])) {
+				$tcid = $this->createTeamConversation($bid);
+				$this->sendMessage($tcid, $message);
+			}
+		}
+	}
+
+	public function add_message($data)
+	{
+		if ($cid = $this->addConversation(array($data['sender_id'] => $data['sender_id'], $data['recip_id'] => $data['recip_id']), false, false)) {
+			$this->sendMessage($cid, $data['msg'], $data['sender_id']);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public function message($recip_id, $foodsaver_id, $message, $unread = 1)
+	{
+		$recd = 0;
+		if ($unread == 0) {
+			$recd = 1;
+		} else {
+			$unread = 1;
+		}
+
+		if ($conversation_id = $this->user2conv($recip_id)) {
+			return $this->sendMessage($conversation_id, $message);
+		}
+
+		return false;
+	}
 }

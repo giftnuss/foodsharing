@@ -2,11 +2,20 @@
 
 namespace Foodsharing\Modules\Store;
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Message\MessageModel;
 
 class StoreModel extends Model
 {
+	private $messageModel;
+
+	public function __construct(MessageModel $messageModel)
+	{
+		$this->messageModel = $messageModel;
+		parent::__construct();
+	}
+
 	public function addFetchDate($bid, $time, $fetchercount)
 	{
 		return $this->insert('
@@ -145,13 +154,11 @@ class StoreModel extends Model
 		$this->del('DELETE FROM `' . PREFIX . 'betrieb_team` WHERE `betrieb_id` = ' . $bid . ' AND `foodsaver_id` = ' . $fsid . ' ');
 		$this->del('DELETE FROM `' . PREFIX . 'abholer` WHERE `betrieb_id` = ' . $bid . ' AND `foodsaver_id` = ' . $fsid . ' AND `date` > NOW()');
 
-		$msg = new MessageModel();
-
-		if ($tcid = $msg->getBetriebConversation($bid)) {
-			$msg->deleteUserFromConversation($tcid, $fsid, true);
+		if ($tcid = $this->messageModel->getBetriebConversation($bid)) {
+			$this->messageModel->deleteUserFromConversation($tcid, $fsid, true);
 		}
-		if ($scid = $msg->getBetriebConversation($bid, true)) {
-			$msg->deleteUserFromConversation($scid, $fsid, true);
+		if ($scid = $this->messageModel->getBetriebConversation($bid, true)) {
+			$this->messageModel->deleteUserFromConversation($scid, $fsid, true);
 		}
 	}
 
@@ -474,5 +481,188 @@ class StoreModel extends Model
 		$this->createSpringerConversation($id);
 
 		return $id;
+	}
+
+	public function acceptRequest($fsid, $bid)
+	{
+		$betrieb = $this->getVal('name', 'betrieb', $bid);
+
+		$this->addBell((int)$fsid, 'store_request_accept_title', 'store_request_accept', 'img img-store brown', array(
+			'href' => '/?page=fsbetrieb&id=' . (int)$bid
+		), array(
+			'user' => S::user('name'),
+			'name' => $betrieb
+		), 'store-arequest-' . (int)$fsid);
+
+		if ($scid = $this->messageModel->getBetriebConversation($bid, true)) {
+			$this->messageModel->deleteUserFromConversation($scid, $fsid, true);
+		}
+
+		if ($tcid = $this->messageModel->getBetriebConversation($bid, false)) {
+			$this->messageModel->addUserToConversation($tcid, $fsid, true);
+		}
+
+		return $this->update('
+					UPDATE 	 	`' . PREFIX . 'betrieb_team`
+					SET 		`active` = 1
+					WHERE 		`betrieb_id` = ' . $this->intval($bid) . '
+					AND 		`foodsaver_id` = ' . $this->intval($fsid) . '
+		');
+	}
+
+	public function warteRequest($fsid, $bid)
+	{
+		$betrieb = $this->getVal('name', 'betrieb', $bid);
+
+		$this->addBell((int)$fsid, 'store_request_accept_wait_title', 'store_request_accept_wait', 'img img-store brown', array(
+			'href' => '/?page=fsbetrieb&id=' . (int)$bid
+		), array(
+			'user' => S::user('name'),
+			'name' => $betrieb
+		), 'store-wrequest-' . (int)$fsid);
+
+		if ($scid = $this->getBetriebConversation($bid, true)) {
+			$this->messageModel->addUserToConversation($scid, $fsid, true);
+		}
+
+		return $this->update('
+					UPDATE 	 	`' . PREFIX . 'betrieb_team`
+					SET 		`active` = 2
+					WHERE 		`betrieb_id` = ' . $this->intval($bid) . '
+					AND 		`foodsaver_id` = ' . $this->intval($fsid) . '
+		');
+	}
+
+	public function denyRequest($fsid, $bid)
+	{
+		$betrieb = $this->getVal('name', 'betrieb', $bid);
+
+		$this->addBell((int)$fsid, 'store_request_deny_title', 'store_request_deny', 'img img-store brown', array(
+			'href' => '/?page=fsbetrieb&id=' . (int)$bid
+		), array(
+			'user' => S::user('name'),
+			'name' => $betrieb
+		), 'store-drequest-' . (int)$fsid);
+
+		return $this->update('
+					DELETE FROM 	`fs_betrieb_team`
+					WHERE 		`betrieb_id` = ' . $this->intval($bid) . '
+					AND 		`foodsaver_id` = ' . $this->intval($fsid) . '
+		');
+	}
+
+	public function teamRequest($fsid, $bid)
+	{
+		return $this->insert('
+			REPLACE INTO `' . PREFIX . 'betrieb_team`
+			(
+				`betrieb_id`,
+				`foodsaver_id`,
+				`verantwortlich`,
+				`active`
+			)
+			VALUES
+			(
+				' . $this->intval($bid) . ',
+				' . $this->intval($fsid) . ',
+				0,
+				0
+			)');
+	}
+
+	public function createTeamConversation($bid)
+	{
+		$tcid = $this->messageModel->insertConversation(array(), true);
+		$betrieb = $this->getMyBetrieb($bid);
+		$this->messageModel->renameConversation($tcid, 'Team ' . $betrieb['name']);
+
+		$this->update('
+				UPDATE	`' . PREFIX . 'betrieb` SET team_conversation_id = ' . $this->intval($tcid) . ' WHERE id = ' . $this->intval($bid) . '
+			');
+
+		$teamMembers = $this->getBetriebTeam($bid);
+		if ($teamMembers) {
+			foreach ($teamMembers as $fs) {
+				$this->messageModel->addUserToConversation($tcid, $fs['id']);
+			}
+		}
+
+		return $tcid;
+	}
+
+	public function createSpringerConversation($bid)
+	{
+		$scid = $this->messageModel->insertConversation(array(), true);
+		$betrieb = $this->getMyBetrieb($bid);
+		$this->messageModel->renameConversation($scid, 'Springer ' . $betrieb['name']);
+		$this->update('
+				UPDATE	`' . PREFIX . 'betrieb` SET springer_conversation_id = ' . $this->intval($scid) . ' WHERE id = ' . $this->intval($bid) . '
+			');
+
+		$springerMembers = $this->getBetriebSpringer($bid);
+		if ($springerMembers) {
+			foreach ($springerMembers as $fs) {
+				$this->messageModel->addUserToConversation($scid, $fs['id']);
+			}
+		}
+
+		return $scid;
+	}
+
+	public function addBetriebTeam($bid, $member, $verantwortlicher = false)
+	{
+		if (empty($member)) {
+			return false;
+		}
+		if (!$verantwortlicher) {
+			$verantwortlicher = array(
+				$this->func->fsId() => true
+			);
+		}
+
+		$tmp = array();
+		foreach ($verantwortlicher as $vv) {
+			$tmp[$vv] = $vv;
+		}
+		$verantwortlicher = $tmp;
+
+		$values = array();
+		$member_ids = array();
+
+		foreach ($member as $m) {
+			$v = 0;
+			if (isset($verantwortlicher[$m])) {
+				$v = 1;
+			}
+			$member_ids[] = (int)$m;
+			$values[] = '(' . $this->intval($bid) . ',' . $this->intval($m) . ',' . $v . ',1)';
+		}
+
+		$this->del('DELETE FROM `' . PREFIX . 'betrieb_team` WHERE `betrieb_id` = ' . $this->intval($bid) . ' AND active = 1 AND foodsaver_id NOT IN(' . implode(',', $member_ids) . ')');
+
+		$sql = 'INSERT IGNORE INTO `' . PREFIX . 'betrieb_team` (`betrieb_id`,`foodsaver_id`,`verantwortlich`,`active`)VALUES' . implode(',', $values);
+
+		if ($cid = $this->getBetriebConversation($bid)) {
+			$this->messageModel->setConversationMembers($cid, $member_ids);
+		}
+
+		if ($sid = $this->getBetriebConversation($bid, true)) {
+			foreach ($verantwortlicher as $user) {
+				$this->messageModel->addUserToConversation($sid, $user);
+			}
+		}
+
+		if ($this->sql($sql)) {
+			$this->update('
+				UPDATE	`' . PREFIX . 'betrieb_team` SET verantwortlich = 0 WHERE betrieb_id = ' . $this->intval($bid) . '
+			');
+			$this->update('
+				UPDATE	`' . PREFIX . 'betrieb_team` SET verantwortlich = 1 WHERE betrieb_id = ' . $this->intval($bid) . ' AND foodsaver_id IN(' . implode(',', $verantwortlicher) . ')
+			');
+
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

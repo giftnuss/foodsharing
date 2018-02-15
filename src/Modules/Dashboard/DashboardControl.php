@@ -15,12 +15,14 @@ class DashboardControl extends Control
 	private $gateway;
 	private $contentGateway;
 	private $twig;
+	private $profileModel;
 
 	public function __construct(
 		DashboardView $view,
 		DashboardGateway $gateway,
 		ContentGateway $contentGateway,
 		Model $model,
+		ProfileModel $profileModel,
 		Twig $twig)
 	{
 		$this->view = $view;
@@ -28,6 +30,7 @@ class DashboardControl extends Control
 		$this->contentGateway = $contentGateway;
 		$this->model = $model;
 		$this->twig = $twig;
+		$this->profileModel = $profileModel;
 
 		parent::__construct();
 
@@ -492,8 +495,7 @@ class DashboardControl extends Control
 		/*
 		 * Nächste Termine
 		*/
-		$profileModel = new ProfileModel();
-		if ($dates = $profileModel->getNextDates($this->func->fsId(), 10)) {
+		if ($dates = $this->profileModel->getNextDates($this->func->fsId(), 10)) {
 			$this->func->addContent($this->view->u_nextDates($dates), CNT_RIGHT);
 		}
 

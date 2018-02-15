@@ -7,7 +7,6 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\Utils;
-use Foodsharing\Modules\Mailbox\MailboxModel;
 use Foodsharing\Modules\Message\MessageModel;
 use ReflectionClass;
 
@@ -15,6 +14,9 @@ abstract class Control
 {
 	protected $isControl = false;
 	protected $isXhrControl = false;
+	/**
+	 * @var Model
+	 */
 	protected $model;
 	protected $view;
 	private $sub;
@@ -360,7 +362,7 @@ abstract class Control
 		return false;
 	}
 
-	public function convMessage($recipient, $conversation_id, $msg, $tpl_id = 9)
+	public function convMessage($recipient, $conversation_id, $msg, MessageModel $messageModel, $tpl_id = 9)
 	{
 		/*
 		 * only send email if the user is not online
@@ -380,8 +382,7 @@ abstract class Control
 				if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
 					$sessdata[$recipient['id']] = time();
 
-					$msgDB = new MessageModel();
-					if ($betriebName = $msgDB->getBetriebname($conversation_id)) {
+					if ($betriebName = $messageModel->getBetriebname($conversation_id)) {
 						$this->func->tplMail(30, $recipient['email'], array(
 							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => S::user('name'),
@@ -390,7 +391,7 @@ abstract class Control
 							'message' => $msg,
 							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->func->fsId() . 'cid=' . (int)$conversation_id
 						));
-					} elseif ($memberNames = $msgDB->getChatMembers($conversation_id)) {
+					} elseif ($memberNames = $messageModel->getChatMembers($conversation_id)) {
 						$this->func->tplMail(30, $recipient['email'], array(
 							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => S::user('name'),
@@ -417,19 +418,17 @@ abstract class Control
 
 	public function mailMessage($sender_id, $recip_id, $msg, $tpl_id = 9)
 	{
-		$db = new MailboxModel();
-
-		$info = $db->getVal('infomail_message', 'foodsaver', $recip_id);
+		$info = $this->model->getVal('infomail_message', 'foodsaver', $recip_id);
 		if ((int)$info > 0) {
 			if (!isset($_SESSION['lastMailMessage'])) {
 				$_SESSION['lastMailMessage'] = array();
 			}
 
-			if (!$db->isActive($recip_id)) {
+			if (!$this->model->isActive($recip_id)) {
 				if (!isset($_SESSION['lastMailMessage'][$recip_id]) || (time() - $_SESSION['lastMailMessage'][$recip_id]) > 600) {
 					$_SESSION['lastMailMessage'][$recip_id] = time();
-					$foodsaver = $db->getOne_foodsaver($recip_id);
-					$sender = $db->getOne_foodsaver($sender_id);
+					$foodsaver = $this->model->getOne_foodsaver($recip_id);
+					$sender = $this->model->getOne_foodsaver($sender_id);
 
 					$this->func->tplMail($tpl_id, $foodsaver['email'], array(
 						'anrede' => $this->func->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),

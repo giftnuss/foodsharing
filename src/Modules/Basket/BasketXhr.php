@@ -7,15 +7,18 @@ use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Message\MessageModel;
 
 class BasketXhr extends Control
 {
 	private $status;
 	private $gateway;
+	private $messageModel;
 
-	public function __construct(BasketModel $model, BasketView $view, BasketGateway $gateway)
+	public function __construct(BasketModel $model, BasketView $view, BasketGateway $gateway, MessageModel $messageModel)
 	{
 		$this->model = $model;
+		$this->messageModel = $messageModel;
 		$this->view = $view;
 		$this->gateway = $gateway;
 
@@ -361,7 +364,7 @@ class BasketXhr extends Control
 			$msg = strip_tags($_GET['msg']);
 			$msg = trim($msg);
 			if (!empty($msg)) {
-				$this->model->message($fs_id, $this->func->fsId(), $msg, 0);
+				$this->messageModel->message($fs_id, $this->func->fsId(), $msg, 0);
 				$this->mailMessage($this->func->fsId(), $fs_id, $msg, 22);
 				$this->model->setStatus($_GET['id'], 0);
 

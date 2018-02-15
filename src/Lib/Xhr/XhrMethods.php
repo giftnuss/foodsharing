@@ -852,7 +852,7 @@ class XhrMethods
 						$check = true;
 					}
 				} else {
-					if ($this->model->add_message(array(
+					if ($this->messageModel->add_message(array(
 						'sender_id' => $this->func->fsId(),
 						'recip_id' => $fs['id'],
 						'unread' => 1,

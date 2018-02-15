@@ -10,11 +10,13 @@ use Foodsharing\Lib\Xhr\XhrDialog;
 class ProfileXhr extends Control
 {
 	private $foodsaver;
+	private $storeModel;
 
-	public function __construct(ProfileModel $model, ProfileView $view)
+	public function __construct(ProfileModel $model, ProfileView $view, StoreModel $storeModel)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->storeModel = $storeModel;
 
 		parent::__construct();
 
@@ -121,11 +123,10 @@ class ProfileXhr extends Control
 
 	public function deleteFromSlot()
 	{
-		$betriebModel = new StoreModel();
-		$betrieb = $betriebModel->getBetriebBezirkID($_GET['bid']);
+		$betrieb = $this->storeModel->getBetriebBezirkID($_GET['bid']);
 
 		if ($this->func->isOrgaTeam() || $this->func->isBotFor($betrieb['bezirk_id'])) {
-			if ($betriebModel->deleteFetchDate($_GET['fsid'], $_GET['bid'], date('Y-m-d H:i:s', $_GET['date']))) {
+			if ($this->storeModel->deleteFetchDate($_GET['fsid'], $_GET['bid'], date('Y-m-d H:i:s', $_GET['date']))) {
 				return array(
 					'status' => 1,
 					'script' => '

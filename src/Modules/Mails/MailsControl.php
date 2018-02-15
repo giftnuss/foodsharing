@@ -8,6 +8,7 @@ use Flourish\fMailbox;
 use Flourish\fSMTP;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Console\ConsoleControl;
+use Foodsharing\Modules\Mailbox\MailboxModel;
 
 class MailsControl extends ConsoleControl
 {
@@ -16,13 +17,15 @@ class MailsControl extends ConsoleControl
 	 */
 	public static $smtp = false;
 	public static $last_connect;
+	private $mailboxModel;
 
-	public function __construct(MailsModel $model)
+	public function __construct(MailsModel $model, MailboxModel $mailboxModel)
 	{
 		error_reporting(E_ALL);
 		ini_set('display_errors', '1');
 		self::$smtp = false;
 		$this->model = $model;
+		$this->mailboxModel = $mailboxModel;
 		parent::__construct($model);
 	}
 
@@ -218,7 +221,6 @@ class MailsControl extends ConsoleControl
 				}
 			}
 		}
-		$model = false;
 		$has_recip = false;
 		foreach ($data['recipients'] as $r) {
 			// check is it own lmr email? put direct into db
@@ -236,9 +238,6 @@ class MailsControl extends ConsoleControl
 				) == DEFAULT_HOST
 			) {
 				self::info($r[0] . ' own host save direct into db');
-				if ($model === false) {
-					$model = new MailsModel();
-				}
 
 				$mailbox = str_replace('@' . DEFAULT_HOST, '', $r[0]);
 
@@ -268,13 +267,8 @@ class MailsControl extends ConsoleControl
 				$has_recip = true;
 			}
 		}
-
-		if ($model !== false) {
-			$model->close();
-			$model = false;
-			if (!$has_recip) {
-				return true;
-			}
+		if (!$has_recip) {
+			return true;
 		}
 
 		// reconnect first time and force after 60 seconds inactive

@@ -7,6 +7,21 @@ use Foodsharing\Modules\Quiz\QuizModel;
 
 class SettingsModel extends Model
 {
+	/**
+	 * @var QuizModel
+	 */
+	private $quizModel;
+
+	/**
+	 * SettingsModel constructor.
+	 *
+	 * @param QuizModel $quizModel
+	 */
+	public function __construct(QuizModel $quizModel)
+	{
+		$this->quizModel = $quizModel;
+	}
+
 	public function saveInfoSettings($newsletter, $infomail)
 	{
 		return $this->update('
@@ -161,16 +176,14 @@ class SettingsModel extends Model
 	{
 		$out = array();
 
-		$model = new QuizModel();
-
 		$number = 0;
 
 		foreach ($indexList as $id => $value) {
 			++$number;
 			if (!isset($fullList[$id])) {
-				if ($question = $model->getQuestion($id)) {
+				if ($question = $this->quizModel->getQuestion($id)) {
 					$answers = array();
-					if ($qanswers = $model->getAnswers($id)) {
+					if ($qanswers = $this->quizModel->getAnswers($id)) {
 						foreach ($qanswers as $a) {
 							$answers[$a['id']] = $a;
 							$answers[$a['id']]['user_say'] = $a['right'];
@@ -236,12 +249,12 @@ class SettingsModel extends Model
 
 	public function abortChangemail()
 	{
-		$this->del('DELETE FROM `' . PREFIX . 'mailchange` WHERE foodsaver_id = ' . (int)$this->func->fsId() . '');
+		$this->del('DELETE FROM `' . PREFIX . 'mailchange` WHERE foodsaver_id = ' . (int)$this->func->fsId());
 	}
 
 	public function changeMail($email, $crypt)
 	{
-		$this->del('DELETE FROM `' . PREFIX . 'mailchange` WHERE foodsaver_id = ' . (int)$this->func->fsId() . '');
+		$this->del('DELETE FROM `' . PREFIX . 'mailchange` WHERE foodsaver_id = ' . (int)$this->func->fsId());
 		$currentMail = $this->qOne('SELECT `email` FROM ' . PREFIX . 'foodsaver WHERE id = ' . (int)$this->func->fsId());
 		$this->logChangedSetting($this->func->fsId(), 'email', $currentMail, $email);
 
