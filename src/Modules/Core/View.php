@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Foodsharing\DI;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Twig;
@@ -401,7 +402,8 @@ class View
 				'zoom' => 14
 			);
 		} else {
-			global $db;
+			/* Todo: Remove when getting rid of $g_data */
+			$db = DI::$shared->get(Model::class);
 			$data = $db->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
 			$data['zoom'] = 14;
 		}

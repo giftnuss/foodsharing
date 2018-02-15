@@ -70,8 +70,11 @@ class FoodsaverControl extends Control
 				$this->func->addBread($this->func->s('bread_foodsaver'), '/?page=foodsaver');
 				$this->func->addBread($this->func->s('bread_edit_foodsaver'));
 				$this->func->setEditData($data);
-
-				$this->func->addContent($this->view->foodsaver_form($data['name'] . ' ' . $data['nachname'] . ' bearbeiten'));
+				$regionDetails = false;
+				if ($data['bezirk_id'] > 0) {
+					$regionDetails = $this->model->getBezirk($data['bezirk_id']);
+				}
+				$this->func->addContent($this->view->foodsaver_form($data['name'] . ' ' . $data['nachname'] . ' bearbeiten', $regionDetails));
 
 				$this->func->addContent($this->picture_box(), CNT_RIGHT);
 
@@ -128,9 +131,7 @@ class FoodsaverControl extends Control
 
 	private function picture_box()
 	{
-		global $db;
-
-		$photo = $db->getPhoto($_GET['id']);
+		$photo = $this->model->getPhoto($_GET['id']);
 
 		if (!(file_exists('images/thumb_crop_' . $photo))) {
 			$p_cnt = $this->v_utils->v_photo_edit('img/portrait.png', (int)$_GET['id']);

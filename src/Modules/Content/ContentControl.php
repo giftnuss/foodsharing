@@ -22,8 +22,7 @@ class ContentControl extends Control
 			if (!S::may('orga')) {
 				$this->func->go('/');
 			}
-
-			$db = $this->model;
+			$this->model;
 
 			if ($this->func->getAction('neu')) {
 				$this->handle_add();
@@ -37,7 +36,7 @@ class ContentControl extends Control
 					$this->func->pageLink('content', 'back_to_overview')
 				)), $this->func->s('actions')), CNT_RIGHT);
 			} elseif ($id = $this->func->getActionId('delete')) {
-				if ($db->del_content($id)) {
+				if ($this->model->del_content($id)) {
 					$this->func->info($this->func->s('content_deleted'));
 					$this->func->goPage();
 				}
@@ -47,7 +46,7 @@ class ContentControl extends Control
 				$this->func->addBread($this->func->s('bread_content'), '/?page=content');
 				$this->func->addBread($this->func->s('bread_edit_content'));
 
-				$data = $db->getOne_content($id);
+				$data = $this->model->getOne_content($id);
 				$this->func->setEditData($data);
 
 				$this->func->addContent($this->content_form());
@@ -67,7 +66,7 @@ class ContentControl extends Control
 			} else {
 				$this->func->addBread($this->func->s('content_bread'), '/?page=content');
 
-				if ($data = $db->getBasics_content()) {
+				if ($data = $this->model->getBasics_content()) {
 					$rows = array();
 					foreach ($data as $d) {
 						$rows[] = array(
@@ -257,11 +256,10 @@ class ContentControl extends Control
 
 	private function handle_edit()
 	{
-		global $db;
 		global $g_data;
 		if ($this->func->submitted()) {
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
-			if ($db->update_content($_GET['id'], $g_data)) {
+			if ($this->model->update_content($_GET['id'], $g_data)) {
 				$this->func->info($this->func->s('content_edit_success'));
 				$this->func->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
 			} else {
@@ -272,11 +270,10 @@ class ContentControl extends Control
 
 	private function handle_add()
 	{
-		global $db;
 		global $g_data;
 		if ($this->func->submitted()) {
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
-			if ($db->add_content($g_data)) {
+			if ($this->model->add_content($g_data)) {
 				$this->func->info($this->func->s('content_add_success'));
 				$this->func->goPage();
 			} else {

@@ -58,9 +58,8 @@ class FoodsaverView extends View
 		</div>';
 	}
 
-	public function foodsaver_form($title = 'Foodsaver')
+	public function foodsaver_form($title = 'Foodsaver', $regionDetails)
 	{
-		global $db;
 		global $g_data;
 
 		$orga = '';
@@ -122,13 +121,7 @@ class FoodsaverView extends View
 			$("#lon-wrapper").hide();
 			');
 
-		$bezirk = false;
-
-		if ((int)$g_data['bezirk_id'] > 0) {
-			$bezirk = $db->getBezirk($g_data['bezirk_id']);
-		}
-
-		$bezirkchoose = $this->v_utils->v_bezirkChooser('bezirk_id', $bezirk);
+		$bezirkchoose = $this->v_utils->v_bezirkChooser('bezirk_id', $regionDetails);
 
 		return $this->v_utils->v_quickform($title, array(
 			$bezirkchoose,

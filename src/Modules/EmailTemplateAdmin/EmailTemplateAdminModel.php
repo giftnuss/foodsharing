@@ -8,9 +8,7 @@ class EmailTemplateAdminModel extends Model
 {
 	public function getBasics_message_tpl()
 	{
-		global $db;
-
-		return $db->q('
+		return $this->q('
 			SELECT 	 	`id`,
 						`name`
 			
@@ -20,11 +18,9 @@ class EmailTemplateAdminModel extends Model
 
 	public function del_message_tpl($id)
 	{
-		global $db;
-
-		return $db->del('
+		return $this->del('
 			DELETE FROM 	`' . PREFIX . 'message_tpl`
-			WHERE 			`id` = ' . $db->intval($id));
+			WHERE 			`id` = ' . $this->intval($id));
 	}
 
 	public function update_message_tpl($id, $data)

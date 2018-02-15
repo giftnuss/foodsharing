@@ -4,6 +4,7 @@ namespace Foodsharing\Lib\Xhr;
 
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Modules\Core\Model;
 
 class ViewUtils
 {
@@ -16,10 +17,16 @@ class ViewUtils
 	 */
 	private $viewUtils;
 
-	public function __construct(Func $func, Utils $viewUtils)
+	/**
+	 * @var Model
+	 */
+	private $model;
+
+	public function __construct(Func $func, Utils $viewUtils, Model $model)
 	{
 		$this->func = $func;
 		$this->viewUtils = $viewUtils;
+		$this->model = $model;
 	}
 
 	public function fsBubble($fs)
@@ -37,8 +44,6 @@ class ViewUtils
 
 	public function bBubble($b)
 	{
-		global $db;
-
 		$button = '';
 		if (($b['inTeam']) || $this->func->isOrgaTeam()) {
 			$button .= '<div class="buttonrow"><a class="lbutton" href="/?page=fsbetrieb&id=' . (int)$b['id'] . '">' . $this->func->s('to_team_page') . '</a></div>';
@@ -70,7 +75,7 @@ class ViewUtils
 
 			if ($count > 0) {
 				$fetch_times = (int)($count / count($b['foodsaver']));
-				$fetch_weight = round(floatval(($fetch_times * $db->gerettet_wrapper($b['abholmenge']))), 2);
+				$fetch_weight = round(floatval(($fetch_times * $this->model->gerettet_wrapper($b['abholmenge']))), 2);
 				$count_info = '<div>Bei diesem Betrieb wurde <strong>' . $fetch_times . '<span style="white-space:nowrap">&thinsp;</span>x</strong> abgeholt</div>';
 
 				// gerettet_wrapper

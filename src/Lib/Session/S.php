@@ -10,6 +10,9 @@ use Foodsharing\Modules\Core\Model;
 
 class S
 {
+	/**
+	 * @var Func
+	 */
 	private static $func;
 
 	public static function init()

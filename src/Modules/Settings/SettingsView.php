@@ -479,7 +479,6 @@ class SettingsView extends View
 
 	public function foodsaver_form()
 	{
-		global $db;
 		global $g_data;
 
 		$this->func->addJs('$("#foodsaver-form").submit(function(e){

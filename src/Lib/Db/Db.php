@@ -973,13 +973,12 @@ abstract class Db
 
 	public function updateFields($fields, $table, $id)
 	{
-		global $db;
 		$sql = array();
 		foreach ($fields as $k => $f) {
 			if (preg_replace('/[^0-9]/', '', $f) == $f) {
-				$sql[] = '`' . $k . '`=' . $db->intval($f);
+				$sql[] = '`' . $k . '`=' . $this->intval($f);
 			} else {
-				$sql[] = '`' . $k . '`=' . $db->strval($f);
+				$sql[] = '`' . $k . '`=' . $this->strval($f);
 			}
 		}
 

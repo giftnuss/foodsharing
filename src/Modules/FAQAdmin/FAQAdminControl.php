@@ -94,7 +94,6 @@ class FAQAdminControl extends Control
 
 	private function handle_edit()
 	{
-		global $db;
 		global $g_data;
 
 		if ($this->func->submitted()) {
@@ -110,7 +109,6 @@ class FAQAdminControl extends Control
 
 	private function handle_add()
 	{
-		global $db;
 		global $g_data;
 
 		if ($this->func->submitted()) {

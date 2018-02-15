@@ -8,6 +8,9 @@ use Foodsharing\Lib\Session\S;
 class Utils
 {
 	private $id;
+	/**
+	 * @var Func
+	 */
 	private $func;
 
 	public function __construct()
@@ -90,8 +93,6 @@ class Utils
 
 	public function v_bezirkChildChooser($id, $options = array())
 	{
-		global $db;
-
 		$this->func->addJsFunc('
 		var u_current_bezirk_type = 0;
 		function u_printChildBezirke(element)
@@ -515,15 +516,12 @@ class Utils
 
 	public function v_form_recip_chooser_mini()
 	{
-		global $db;
 		$id = 'recip_choose';
-		$bezirk = $db->getBezirk();
 
 		return $this->v_input_wrapper($this->func->s('recip_chooser'), '
 			<select class="select" name="' . $id . '" id="' . $id . '">
 				<option value="botschafter">Alle Botschafter bundesweit</option>
 				<option value="orgateam">Orgateam bundesweit</option>
-				<option value="bezirk" selected="selected">' . $this->func->sv('recip_all_bezirk', $bezirk['name']) . '</option>
 			</select>');
 	}
 
@@ -532,9 +530,7 @@ class Utils
 		$this->func->addScript('/js/dynatree/jquery.dynatree.js');
 		$this->func->addScript('/js/jquery.cookie.js');
 		$this->func->addCss('/js/dynatree/skin/ui.dynatree.css');
-		global $db;
 
-		$bezirk = $db->getBezirk();
 		$id = 'recip_choose';
 		$out = '
 			<select class="select" name="' . $id . '" id="' . $id . '">
@@ -548,7 +544,6 @@ class Utils
 				<option value="filialbot">Alle Filialverantwortlichen + Botschafter</option>
 				<option value="all_no_botschafter">Alle Foodsaver ohne Botschafter</option>
 				<option value="orgateam">Orgateam</option>
-				<option value="bezirk" selected="selected">' . $this->func->sv('recip_all_bezirk', $bezirk['name']) . '</option>
 				<option value="choose">' . $this->func->s('recip_choose_bezirk') . '</option>		
 				<option value="manual">Manuelle Eingabe</option>
 			</select>
