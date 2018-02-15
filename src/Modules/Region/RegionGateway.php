@@ -6,19 +6,17 @@ use Foodsharing\Modules\Core\BaseGateway;
 
 class RegionGateway extends BaseGateway
 {
-	public function getAllRegions($fs_id)
+
+	public function listIdsForFoodsaverWithDescendants($fs_id)
 	{
 		$bezirk_ids = [];
-		foreach ($this->getRegions($fs_id) as $bezirk) {
-			foreach ($this->getChildRegions($bezirk['id']) as $child_id) {
-				$bezirk_ids[$child_id] = $child_id;
-			}
+		foreach ($this->listForFoodsaver($fs_id) as $bezirk) {
+			$bezirk_ids += $this->listIdsForDescendantsAndSelf($bezirk['id']);
 		}
-
 		return $bezirk_ids;
 	}
 
-	public function getRegions($fs_id)
+	public function listForFoodsaver($fs_id)
 	{
 		$values = $this->db->fetchAll(
 			'							
@@ -39,17 +37,13 @@ class RegionGateway extends BaseGateway
 
 		$output = [];
 		foreach ($values as $v) {
-			$output[$v['id']] = [
-				'id' => $v['id'],
-				'name' => $v['name'],
-				'type' => $v['type']
-			];
+			$output[$v['id']] = $v;
 		}
 
 		return $output;
 	}
 
-	public function getChildRegions($bid)
+	public function listIdsForDescendantsAndSelf($bid)
 	{
 		if ((int)$bid == 0) {
 			return [];

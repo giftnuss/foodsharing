@@ -13,32 +13,37 @@ class Database
 		$this->pdo = $pdo;
 	}
 
-	public function fetch($query, $params = [], $isNamed = true)
+	public function fetch($query, $params = [])
 	{
-		return $this->preparedQuery($query, $params, $isNamed)->fetch();
+		return $this->preparedQuery($query, $params)->fetch();
 	}
 
-	public function fetchAll($query, $params = [], $isNamed = true)
+	public function fetchAll($query, $params = [])
 	{
-		return $this->preparedQuery($query, $params, $isNamed)->fetchAll();
+		return $this->preparedQuery($query, $params)->fetchAll();
 	}
 
-	public function fetchAllValues($query, $params = [], $isNamed = true)
+	public function fetchAllValues($query, $params = [])
 	{
-		return $this->preparedQuery($query, $params, $isNamed)->fetchAll(\PDO::FETCH_COLUMN, 0);
+		return $this->preparedQuery($query, $params)->fetchAll(\PDO::FETCH_COLUMN, 0);
 	}
 
-	public function fetchValue($query, $params = [], $isNamed = true)
+	public function fetchValue($query, $params = [])
 	{
-		return $this->preparedQuery($query, $params, $isNamed)->fetchColumn(0);
+		return $this->preparedQuery($query, $params)->fetchColumn(0);
 	}
 
-	public function execute($query, $params = [], $isNamed = true)
+	public function execute($query, $params = [])
 	{
-		return $this->preparedQuery($query, $params, $isNamed)->rowCount();
+		return $this->preparedQuery($query, $params)->rowCount();
 	}
 
-	public function insert($table, array $data)
+	public function insertIgnore(string $table, array $data, array $options = [])
+	{
+		return $this->insert($table, $data, array_merge($options, ['ignore' => true]));
+	}
+
+	public function insert(string $table, array $data, array $options = [])
 	{
 		$columns = array_map(
 			[$this, 'getQuotedName'],
@@ -46,13 +51,14 @@ class Database
 		);
 
 		$query = sprintf(
-			'INSERT INTO %s (%s) VALUES (%s)',
+			'INSERT %s INTO %s (%s) VALUES (%s)',
+			array_key_exists('ignore', $options) && $options['ignore'] ? 'IGNORE' : '',
 			$this->getQuotedName($table),
 			implode(', ', $columns),
 			implode(', ', array_fill(0, count($data), '?'))
 		);
 
-		$this->execute($query, array_values($data), false);
+		$this->execute($query, array_values($data));
 
 		$lastInsertId = (int)$this->pdo->lastInsertId();
 
@@ -78,7 +84,7 @@ class Database
 
 		$params = array_merge(array_values($data), array_values($criteria));
 
-		return $this->execute($query, $params, false);
+		return $this->execute($query, $params);
 	}
 
 	public function delete($table, array $criteria)
@@ -87,7 +93,7 @@ class Database
 
 		$query = 'DELETE FROM ' . $this->getQuotedName($table) . ' ' . $where;
 
-		return $this->execute($query, array_values($criteria), false);
+		return $this->execute($query, array_values($criteria));
 	}
 
 	public function exists($table, array $criteria)
@@ -96,7 +102,7 @@ class Database
 
 		$query = 'SELECT COUNT(*) FROM ' . $this->getQuotedName($table) . ' ' . $where;
 
-		return $this->fetchValue($query, array_values($criteria), false) > 0;
+		return $this->fetchValue($query, array_values($criteria)) > 0;
 	}
 
 	public function requireExists($table, array $criteria)
@@ -108,14 +114,17 @@ class Database
 
 	// === private functions ===
 
-	private function preparedQuery($query, $params, $isNamed)
+	/**
+	 * @throws \Exception
+	 */
+	private function preparedQuery($query, $params)
 	{
 		$statement = $this->pdo->prepare($query);
 		if (!$statement) {
 			throw new \Exception("Query '$query' can't be prepared.");
 		}
 
-		foreach ($params as $key => $value) {
+		foreach ($params as $param => $value) {
 			if (is_bool($value)) {
 				$type = \PDO::PARAM_BOOL;
 			} elseif (is_int($value)) {
@@ -125,8 +134,8 @@ class Database
 			}
 
 			// Positional arguments start with 1, not 0
-			$name = $isNamed === true ? $key : $key + 1;
-			$statement->bindValue($name, $value, $type);
+			if (is_int($param)) $param++;
+			$statement->bindValue($param, $value, $type);
 		}
 
 		$statement->setFetchMode(PDO::FETCH_ASSOC);

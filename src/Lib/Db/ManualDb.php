@@ -1040,7 +1040,10 @@ class ManualDb extends Db
 		return $this->qCol('SELECT DISTINCT ancestor_id FROM `' . PREFIX . 'bezirk_closure` ' . $where);
 	}
 
-	// DEPRECATED. Use the function from Region\RegionGateway instead
+	/**
+	 * @deprecated
+	 * @see \Foodsharing\Modules\Region\RegionGateway::listIdsForDescendantsAndSelf()
+	 */
 	public function getChildBezirke($bid, $nocache = false)
 	{
 		if ((int)$bid == 0) {

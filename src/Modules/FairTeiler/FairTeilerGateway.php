@@ -47,12 +47,11 @@ class FairTeilerGateway extends BaseGateway
 		', [':id' => $id]);
 	}
 
-	public function updateVerantwortliche($id)
+	public function updateVerantwortliche($id, $bfoodsaver)
 	{
-		global $g_data;
 		$values = array();
 
-		foreach ($g_data['bfoodsaver'] as $fs) {
+		foreach ($bfoodsaver as $fs) {
 			$values[] = '(' . (int)$id . ',' . (int)$fs . ',2,1)';
 		}
 
@@ -144,22 +143,12 @@ class FairTeilerGateway extends BaseGateway
 
 	public function follow($ft_id, $fs_id, $infotype)
 	{
-		return $this->db->execute('
-				INSERT IGNORE INTO `fs_fairteiler_follower`
-				(
-					`fairteiler_id`,
-					`foodsaver_id`,
-					`type`,
-					`infotype`
-				)
-				VALUES
-				(
-					:ft_id,
-					:fs_id,
-					1,
-					:infotype
-				)
-		', ['ft_id' => $ft_id, ':fs_id' => $fs_id, ':infotype' => $infotype]);
+		$this->db->insertIgnore('fs_fairteiler_follower', [
+			'fairteiler_id' => $ft_id,
+			'foodsaver_id' => $fs_id,
+			'type' => 1,
+			'infotype' => $infotype
+		]);
 	}
 
 	public function unfollow($ft_id, $fs_id)
@@ -209,7 +198,7 @@ class FairTeilerGateway extends BaseGateway
 
 	public function acceptFairteiler($id)
 	{
-		return $this->db->update('fs_fairteiler', ['status' => 1], ['id' => $id]);
+		$this->db->update('fs_fairteiler', ['status' => 1], ['id' => $id]);
 	}
 
 	public function updateFairteiler($id, $bezirk_id, $name, $desc, $anschrift, $plz, $ort, $lat, $lon, $picture)
