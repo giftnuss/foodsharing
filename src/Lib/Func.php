@@ -1454,36 +1454,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 	}
 
-	public function getCurrent($page = false)
-	{
-		global $content;
-		global $right;
-		global $db;
-
-		if (S::may()) {
-			$db->updateActivity();
-		}
-
-		$page = 'index';
-		if ($p = $this->getPage()) {
-			$page = $p;
-		}
-		if (file_exists('control/' . $page . '.php')) {
-			$lang = 'DE';
-			if (file_exists('lang/' . $lang . '/' . $page . '.lang.php')) {
-				include 'lang/' . $lang . '/' . $page . '.lang.php';
-			}
-
-			if (file_exists('model/' . $page . '.model.php')) {
-				include 'model/' . $page . '.model.php';
-				$mod = ucfirst($page) . 'Model';
-				$db = new $mod();
-			}
-
-			include 'control/' . $page . '.php';
-		}
-	}
-
 	public function addScript($src)
 	{
 		$this->script[] = $src;
