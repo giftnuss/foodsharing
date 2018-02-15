@@ -116,10 +116,6 @@ class FairTeilerView extends View
 
 		$tagselect = '';
 		if ($data) {
-			if (!isset($this->bezirke[$data['bezirk_id']])) {
-				global $db;
-				$this->bezirke[] = $db->getBezirk($data['bezirk_id']);
-			}
 			$this->func->setEditData($data);
 			$title = $this->func->sv('edit_fairteiler_name', $this->fairteiler['name']);
 

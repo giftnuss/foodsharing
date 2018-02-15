@@ -50,10 +50,6 @@ class FairTeilerControl extends Control
 			$this->bezirk_id = 0;
 			$this->bezirk = false;
 		}
-		$this->bezirke = $this->model->getRealBezirke();
-		$this->view->setBezirke($this->bezirke);
-
-		$this->view->setBezirk($this->bezirk);
 
 		$this->fairteiler = false;
 		$this->follower = false;
@@ -77,7 +73,17 @@ class FairTeilerControl extends Control
 				$this->func->go($url[0]);
 			}
 
+
+			$this->bezirke = $this->model->getRealBezirke();
+			if (!isset($this->bezirke[$this->fairteiler['bezirk_id']])) {
+				$this->bezirke[] = $this->model->getBezirk($this->fairteiler['bezirk_id']);
+			}
+			$this->view->setBezirke($this->bezirke);
+
+			$this->view->setBezirk($this->bezirk);
+
 			$this->follower = $this->gateway->getFollower($_GET['id']);
+
 			$this->view->setFairteiler($this->fairteiler, $this->follower);
 
 			$this->fairteiler['urlname'] = str_replace(' ', '_', $this->fairteiler['name']);
@@ -145,6 +151,7 @@ class FairTeilerControl extends Control
 		}
 
 		$data = $this->fairteiler;
+
 		$items = array(
 			array('name' => $this->func->s('back'), 'href' => '/?page=fairteiler&sub=ft&bid=' . $this->bezirk_id . '&id=' . $this->fairteiler['id'])
 		);
