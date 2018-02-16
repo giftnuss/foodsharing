@@ -77,7 +77,7 @@ if (DebugBar::isEnabled()) {
 	$func->addContent(DebugBar::renderContent(), CNT_BOTTOM);
 }
 
-if (!array_key_exists('NOTWIG', $_GET)) {
+if (!array_key_exists('NO_TWIG', $_GET)) {
 	$twig = DI::$shared->get(\Foodsharing\Lib\Twig::class);
 
 	$mainwidth = 24;

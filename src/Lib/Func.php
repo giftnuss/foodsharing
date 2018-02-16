@@ -462,7 +462,9 @@ class Func
 
 		$loggedIn = S::may();
 
-		return $this->getMenuFn(
+		$getMenuFnName = array_key_exists('NO_TWIG', $_GET) ? 'getMenuOld' : 'getMenuTwig';
+
+		return $this->$getMenuFnName(
 			$loggedIn,
 			$regions,
 			S::may('fs'),
@@ -475,18 +477,6 @@ class Func
 			S::get('mailbox'),
 			$this->fsId(),
 			$loggedIn ? $this->img() : ''
-		);
-	}
-
-	public function getMenuFn(
-		bool $loggedIn, array $regions, bool $hasFsRole,
-		bool $isOrgaTeam, bool $mayEditBlog, bool $mayEditQuiz, bool $mayHandleReports,
-		array $stores, array $workingGroups,
-		$sessionMailbox, int $fsId, string $image)
-	{
-		return $this->getMenuTwig(
-			$loggedIn, $regions, $hasFsRole, $isOrgaTeam, $mayEditBlog, $mayEditQuiz, $mayHandleReports,
-			$stores, $workingGroups, $sessionMailbox, $fsId, $image
 		);
 	}
 
