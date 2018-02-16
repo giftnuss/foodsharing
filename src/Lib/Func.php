@@ -331,7 +331,9 @@ class Func
 
 	public function addBread($name, $href = '')
 	{
-		if ($name === 'dashboard') throw new Exception('aha');
+		if ($name === 'dashboard') {
+			throw new Exception('aha');
+		}
 		$this->bread[] = array('name' => $name, 'href' => $href);
 	}
 
@@ -1074,7 +1076,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->title[] = $name;
 	}
 
-	public function getHeadData() {
+	public function getHeadData()
+	{
 		return [
 			'stylesheets' => $this->stylesheets,
 			'scripts' => $this->scripts,

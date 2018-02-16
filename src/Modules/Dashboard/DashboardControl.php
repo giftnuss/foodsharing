@@ -178,7 +178,6 @@ class DashboardControl extends Control
 
 	private function dashFoodsaver()
 	{
-
 		$val = $this->model->getValues(array('photo_public', 'anschrift', 'plz', 'lat', 'lon', 'stadt'), 'foodsaver', $this->func->fsId());
 
 		if (empty($val['lat']) || empty($val['lon']) ||

@@ -36,7 +36,8 @@ $view_utils = DI::$shared->get(Utils::class);
 /**
  * @return Func
  */
-function getFunc() {
+function getFunc()
+{
 	return DI::$shared->get(Func::class);
 }
 
