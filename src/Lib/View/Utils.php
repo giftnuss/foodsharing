@@ -1355,11 +1355,15 @@ class Utils
 	public function v_form_radio($id, $option = array())
 	{
 		$id = $this->func->id($id);
-		$value = $this->func->getValue($id);
 		$label = $this->func->s($id);
 
 		$check = $this->func->jsValidate($option, $id, $label);
 
+		if (isset($option['selected'])) {
+			$selected = $option['selected'];
+		} else {
+			$selected = $this->func->getValue($id);
+		}
 		if (isset($option['values'])) {
 			$values = $option['values'];
 		} else {
@@ -1375,7 +1379,7 @@ class Utils
 		if (!empty($values)) {
 			foreach ($values as $v) {
 				$sel = '';
-				if ($value == $v['id']) {
+				if ($selected == $v['id']) {
 					$sel = ' checked="checked"';
 				}
 				$out .= '

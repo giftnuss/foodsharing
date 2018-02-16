@@ -57,4 +57,9 @@ class FoodsharingUrl extends \Codeception\Module\Db
 	{
 		return '/?page=fairteiler&bid=' . (int)$region_id;
 	}
+
+	public function foodBasketInfoUrl($basket_id)
+	{
+		return '/essenskoerbe/' . (int)$basket_id;
+	}
 }
