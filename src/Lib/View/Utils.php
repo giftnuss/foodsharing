@@ -1390,7 +1390,12 @@ class Utils
 	public function v_form_select($id, $option = array())
 	{
 		$id = $this->func->id($id);
-		$value = $this->func->getValue($id);
+		/* isset instead of array_key_exists does not matter here */
+		if (isset($option['selected'])) {
+			$selected = $option['selected'];
+		} else {
+			$selected = $this->func->getValue($id);
+		}
 		$label = $this->func->s($id);
 		$check = $this->func->jsValidate($option, $id, $label);
 
@@ -1406,7 +1411,7 @@ class Utils
 		if (!empty($values)) {
 			foreach ($values as $v) {
 				$sel = '';
-				if ($value == $v['id']) {
+				if ($selected == $v['id']) {
 					$sel = ' selected="selected"';
 				}
 				$out .= '

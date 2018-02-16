@@ -18,8 +18,13 @@ $I->see('Neuen Essenskorb anlegen');
 
 $I->click('Neuen Essenskorb anlegen');
 $I->waitForText('Essenskorb anbieten');
+/*
+ * Check for default options on the foodbasket create form.
+ * this was implemented mainly to check the v_components when refactoring default options.
+ */
 $I->canSeeCheckboxIsChecked('.input.cb-contact_type[value="1"]');
 $I->cantSeeCheckboxIsChecked('.input.cb-contact_type[value="2"]');
+$I->canSeeOptionIsSelected('#weight', '3,0');
 
 $I->fillField('description', $description);
 

@@ -175,7 +175,6 @@ class BasketView extends View
 	public function basketForm($foodsaver)
 	{
 		global $g_data;
-		$g_data['weight'] = '3';
 		$g_data['tel'] = $foodsaver['telefon'];
 		$g_data['handy'] = $foodsaver['handy'];
 
@@ -205,7 +204,8 @@ class BasketView extends View
 		}
 
 		$out .= $this->v_utils->v_form_select('weight', array(
-			'values' => $values
+			'values' => $values,
+			'selected' => 3
 		));
 
 		$out .= $this->v_utils->v_form_checkbox('contact_type', array(
