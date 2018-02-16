@@ -1,7 +1,6 @@
 <?php
 
 use Foodsharing\Lib\Func;
-use Foodsharing\Lib\View\Utils;
 use SebastianBergmann\Diff\Differ;
 use SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder;
 
@@ -39,12 +38,6 @@ class FuncMenuTest extends \Codeception\Test\Unit
 		$this->region = $this->tester->createRegion('some region');
 		$this->store = $this->tester->createStore($this->region['id']);
 		$this->tester->addBezirkMember($this->region['id'], $this->foodsaver['id']);
-
-		// TODO: remove these once globals are gone
-		global $g_view_utils;
-		global $g_func;
-		$g_func = $this->func;
-		$g_view_utils = new Utils();
 	}
 
 	public function testLoggedOutMenu()

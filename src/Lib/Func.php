@@ -331,9 +331,6 @@ class Func
 
 	public function addBread($name, $href = '')
 	{
-		if ($name === 'dashboard') {
-			throw new Exception('aha');
-		}
 		$this->bread[] = array('name' => $name, 'href' => $href);
 	}
 
