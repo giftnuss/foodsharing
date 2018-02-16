@@ -126,9 +126,7 @@
 }
 
 .mailbox-body-loader {
-    background-image: url(img/icon-mail/attach-loader.gif);
-    background-repeat: no-repeat;
-    background-position: center;
+    background: url(img/icon-mail/attach-loader.gif) no-repeat center;
     overflow: auto;
     margin-top: 10px;
     padding: 5px;
@@ -207,20 +205,15 @@ span.status.answer-1 {
     display: block;
     list-style: none;
     float: left;
-    margin: 0;
     padding: 0;
-    margin-right: 5px;
+    margin: 0 5px 0 0;
 }
 
 #mailattch ul li a {
     display: block;
     float: left;
-    padding: 3px;
-    padding-left: 20px;
-    padding-right: 6px;
-    background-image: url(img/icon-mail/attach.png);
-    background-repeat: no-repeat;
-    background-position: 2px 4px;
+    padding: 3px 6px 3px 20px;
+    background: url(img/icon-mail/attach.png) no-repeat 2px 4px;
     text-decoration: none;
     font-weight: bold;
 }
@@ -281,20 +274,16 @@ ul#et-file-list {
 }
 
 ul#et-file-list li {
-    margin: 0;
-    padding: 0;
     display: block;
     list-style: none;
     height: 16px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    background-image: url(img/icon-mail/attach-loader.gif);
-    background-repeat: no-repeat;
-    background-position: 0px 0px;
-    margin-bottom: 4px;
+    background: url(img/icon-mail/attach-loader.gif) no-repeat 0px 0px;
+    margin: 0 0 4px;
     width: 170px;
-    padding-left: 20px;
+    padding: 0 0 0 20px;
 }
 
 ul#et-file-list li.finish {

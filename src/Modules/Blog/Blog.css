@@ -1,6 +1,5 @@
 .news-post {
     padding: 20px;
-    padding-bottom: 20px;
     margin-bottom: 20px;
     border-bottom: 5px solid #F1E7C9;
 }
@@ -42,9 +41,8 @@
 .news-post .small {
     color: #4A3520;
     font-size: 12px;
-    margin: 0;
     padding: 0;
-    margin-bottom: 15px;
+    margin: 0 0 15px;
 }
 
 .pager {

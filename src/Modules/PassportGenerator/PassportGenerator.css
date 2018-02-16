@@ -11,8 +11,7 @@
 }
 
 .verify span {
-    background-image: url(img/verify.png);
-    background-repeat: no-repeat;
+    background: url(img/verify.png) no-repeat;
 }
 
 .verify-n span {

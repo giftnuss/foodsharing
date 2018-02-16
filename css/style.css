@@ -62,9 +62,8 @@
 }
 
 #campaignimg {
-    background-position: 0 0;
-    background-size: contain;
-    background-repeat: no-repeat;
+	background-size: contain;
+	background: no-repeat 0 0;
 }
 
 .dickmilchbeta #campaignimg { background-image: url('/img/pica_dickmilchbeta.png'); }
@@ -201,9 +200,8 @@
 
 .avatar, .avatar > i {
     display: inline-block;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin: 0;
+	background: no-repeat center;
+	margin: 0;
     padding: 0;
 }
 
@@ -996,9 +994,7 @@ li.searchIcon.hover a {
 li.searchIcon a {
     text-decoration: none;
     width: 36px;
-    background-image: url(img/sbt.png);
-    background-position: center 16px;
-    background-repeat: no-repeat;
+	background: url(img/sbt.png) no-repeat center 16px;
 }
 
 div.wrap .logo {
@@ -1313,15 +1309,9 @@ iframe.text {
     border-right: 1px solid #CCCCCC;
     padding: 7px;
     width: 563px;
-    -webkit-border-radius: 0px;
-    -webkit-border-bottom-right-radius: 6px;
-    -webkit-border-bottom-left-radius: 6px;
-    -moz-border-radius: 0px;
-    -moz-border-radius-bottomright: 6px;
-    -moz-border-radius-bottomleft: 6px;
-    border-radius: 0px;
-    border-bottom-right-radius: 6px;
-    border-bottom-left-radius: 6px;
+	-webkit-border-radius: 0px 0px 6px 6px;
+	-moz-border-radius: 0px 0px 6px 6px;
+	border-radius: 0px 0px 6px 6px;
 }
 
 .rte-toolbar a, .rte-toolbar a img {
@@ -1353,15 +1343,13 @@ iframe.text {
 }
 
 .rte-toolbar a span {
-    background-image: url("img/nicEditorIcons.gif");
-    background-repeat: no-repeat;
-    display: block;
+	display: block;
     float: left;
     height: 18px;
     overflow: hidden;
     width: 18px;
-    background-color: #EFEFEF;
-    -webkit-border-radius: 3px;
+	background: #EFEFEF url("img/nicEditorIcons.gif") no-repeat;
+	-webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
 }
@@ -1682,13 +1670,11 @@ div.statdisplay a.item:hover {
 }
 
 span.verified {
-    background-image: url(/img/verify.png);
-    display: block;
+	display: block;
     width: 36px;
     height: 36px;
-    background-repeat: no-repeat;
-    background-position: -36px -36px;
-    left: 127px;
+	background: url(/img/verify.png) no-repeat -36px -36px;
+	left: 127px;
     position: absolute;
     top: 155px;
 }
@@ -1961,10 +1947,8 @@ p.jRatingInfos span.maxRate {
 
 .vouch-banana span {
     display: block;
-    background-image: url(/img/banana.png);
-    background-repeat: no-repeat;
-    background-position: right;
-    text-decoration: none;
+	background: url(/img/banana.png) no-repeat right;
+	text-decoration: none;
     height: 44px;
     width: 44px;
 }
@@ -2080,9 +2064,7 @@ a.light {
     display: block;
     width: 30px;
     height: 30px;
-    background-image: url(img/mobmenu.png);
-    background-repeat: no-repeat;
-    background-position: center;
+	background: url(img/mobmenu.png) no-repeat center;
 }
 
 .bottom_bar {
@@ -2261,15 +2243,11 @@ a.preview-thumb:hover {
 }
 
 .attach-load {
-    background-repeat: no-repeat;
-    background-image: url("img/attach-loader.gif");
-    background-position: center;
+	background: url("img/attach-loader.gif") no-repeat center;
 }
 
 td.load {
-    background-repeat: no-repeat;
-    background-image: url("img/attach-loader.gif");
-    background-position: center;
+	background: url("img/attach-loader.gif") no-repeat center;
 }
 
 .xhrDialog .input.text, .xhrDialog .input.textarea, .xhrDialog select.input {
@@ -2320,15 +2298,13 @@ td.load {
 
 .ui-button, .button {
     color: #FFFFFF !important;
-    background-color: #64AE24;
-
-    -webkit-border-radius: 6px;
+	-webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     border-radius: 6px;
     border: 0 none;
     text-decoration: none;
-    background-image: none;
-    font-weight: bold !important;
+	background: #64AE24 none;
+	font-weight: bold !important;
 }
 
 .button, .ui-button {

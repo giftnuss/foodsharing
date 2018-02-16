@@ -454,7 +454,7 @@ class DashboardControl extends Control
 			Updates-Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>
 		</div>
 		<div id="activity">
-			<div class="loader" style="padding:40px;background-image:url(/img/469.gif);background-repeat:no-repeat;background-position:center;"></div>
+			<div class="loader" style="padding:40px;background: url(/img/469.gif) no-repeat center;"></div>
 			<div style="display:none" id="activity-info">' . $this->v_utils->v_info('Es gibt gerade nichts Neues') . '</div>
 		</div>');
 

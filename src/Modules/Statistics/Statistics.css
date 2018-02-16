@@ -21,8 +21,7 @@
 
 .stat_icon {
     display: inline-block;
-    background-image: url("/img/stat_badges.png");
-    background-repeat: no-repeat;
+    background: url("/img/stat_badges.png") no-repeat;
     height: 96px;
     margin: 0;
     overflow: hidden;
@@ -100,10 +99,9 @@ table.stat_cities .city {
 }
 
 table.stat_cities td p {
-    margin: 0;
     padding: 0;
     display: block;
-    margin-top: 3px;
+    margin: 3px 0 0;
 }
 
 table.stat_cities td h4 {

@@ -34,9 +34,7 @@
 }
 
 .stat_bananacount {
-    background-image: url("/img/banana.png");
-    background-position: center 22px;
-    background-repeat: no-repeat;
+    background: url("/img/banana.png") no-repeat center 22px;
 }
 
 .page ul.linklist {

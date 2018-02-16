@@ -532,7 +532,7 @@ class Func
 		$unsubscribe = '
 	<tr>
 		<td height="20" valign="top" style="background-color:#FAF7E5">
-			<div style="text-align:center;padding-top:10px;font-size:11px;font-family:Arial;padding:15px;color:#594129;">
+			<div style="text-align:center;font-size:11px;font-family:Arial;padding: 15px;color:#594129;">
 				Willst Du diese Art von Benachrichtigungen nicht mehr bekommen? Du kannst unter <a style="color:#F36933" href="' . BASE_URL . '/?page=settings&sub=info" target="_blank">Benachrichtigungen</a> einstellen, welche Mails Du erhälst.
 			</div>
 		</td>
@@ -542,7 +542,7 @@ class Func
 			$unsubscribe = '
 		<tr>
 			<td height="20" valign="top" style="background-color:#FAF7E5">
-				<div style="text-align:center;padding-top:10px;font-size:11px;font-family:Arial;padding:15px;color:#594129;">
+				<div style="text-align:center;font-size:11px;font-family:Arial;padding: 15px;color:#594129;">
 					Möchtest Du keinen Newsletter mehr erhalten? <a style="color:#F36933" href="https://www.foodsharing.de/?page=login&sub=unsubscribe&t=' . $token . '&e=' . $email . '" target="_blank">Klicke hier zum Abbestellen!</a> Du kannst unter <a style="color:#F36933" href="https://www.foodsharing.de/?page=settings&sub=info" target="_blank">Benachrichtigungen</a> einstellen, welche Mails Du erhältst.
 				</div>
 <p style="font-size:11px;"><strong>Impressum</strong><br />

@@ -87,8 +87,7 @@ ul.fairteilerlist li a span.image {
     height: 60px;
     float: left;
     margin-right: 10px;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: no-repeat center;
 }
 
 ul.fairteilerlist li a span.clear {

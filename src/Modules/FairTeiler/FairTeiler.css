@@ -1,9 +1,7 @@
 .ft-head {
     height: 80px;
     width: 100%;
-    background-image: url(img/fairteiler_head.jpg);
-    background-position: center;
-    background-repeat: no-repeat;
+    background: url(img/fairteiler_head.jpg) no-repeat center;
 
 }
 
@@ -14,8 +12,7 @@ ul.fairteilerlist li a span.image {
     height: 60px;
     float: left;
     margin-right: 10px;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: no-repeat center;
 }
 
 span.clear {

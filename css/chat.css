@@ -362,9 +362,8 @@
 #infobar li.title {
     color: #b4aba3;
     border-top: 1px solid #E4E1DE;
-    padding: 4px;
     font-size: 12px;
-    padding-top: 20px;
+    padding: 20px 4px 4px;
 }
 
 #infobar li.title:first-child {

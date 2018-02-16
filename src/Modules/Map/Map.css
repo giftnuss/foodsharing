@@ -68,8 +68,7 @@ div#top {
 
 #map-control ul.linklist a span.icon {
 
-    background-repeat: no-repeat;
-    background-position: 0px 0px;
+    background: no-repeat 0px 0px;
     padding: 3px;
     height: 17px;
     width: 17px;

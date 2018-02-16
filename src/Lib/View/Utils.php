@@ -732,7 +732,7 @@ class Utils
 						<input type="hidden" id="' . $id . '-file" name="file" value="0" />
 						<input type="hidden" name="pic_id" value="' . $id . '" />
 					</form>
-					<div id="' . $id . '-placeholder" style="margin-top:15px;margin-bottom:15px;background-repeat:no-repeat;background-position:center center;">
+					<div id="' . $id . '-placeholder" style="margin-top:15px;margin-bottom:15px;background: no-repeat center center;">
 						
 					</div>
 					<a href="#" style="display:none" id="' . $id . '-save">Speichern</a>

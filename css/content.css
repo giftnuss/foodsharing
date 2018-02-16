@@ -40,13 +40,12 @@ body {
 }
 
 ul, ol {
-    margin: 0;
     padding: 0;
     border: 0;
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
-    margin-left: 15px;
+    margin: 0 0 0 15px;
 }
 
 li {
@@ -145,9 +144,7 @@ table.tablesorter thead tr th, table.tablesorter tfoot tr th {
 }
 
 table.tablesorter thead tr .header {
-    background-image: url(img/bg.gif);
-    background-repeat: no-repeat;
-    background-position: center right;
+    background: url(img/bg.gif) no-repeat center right;
     cursor: pointer;
 }
 
@@ -228,9 +225,7 @@ p {
 }
 
 input.hasDatepicker {
-    background-image: url(/img/cal.png);
-    background-position: 175px 3px;
-    background-repeat: no-repeat;
+    background: url(/img/cal.png) no-repeat 175px 3px;
     cursor: pointer !important;
     width: 189px !important;
 }
@@ -345,8 +340,7 @@ select.v-switch {
     display: block;
     width: 17px;
     height: 17px;
-    background-image: url(/img/ampel.png);
-    background-repeat: no-repeat;
+    background: url(/img/ampel.png) no-repeat;
     text-decoration: none;
 }
 

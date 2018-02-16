@@ -1,6 +1,5 @@
 i.img {
-    background-image: url(/img/icon-img.png?v=1);
-    background-position: center;
+    background: url(/img/icon-img.png?v=1) center;
 }
 
 i.img-store {
@@ -24,9 +23,7 @@ i.img-basket {
 }
 
 i.img-fbasket {
-    background-image: url(/img/bicon.png);
-    background-position: 0px 0px;
-    background-repeat: no-repeat;
+    background: url(/img/bicon.png) no-repeat 0px 0px;
     display: inline-block;
     width: 23px;
     height: 22px;
