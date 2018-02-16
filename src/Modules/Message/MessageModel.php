@@ -608,18 +608,6 @@ class MessageModel extends Model
 		}
 	}
 
-	public function addTeamMessage($bid, $message)
-	{
-		if ($betrieb = $this->getMyBetrieb($bid)) {
-			if (!is_null($betrieb['team_conversation_id'])) {
-				$this->sendMessage($betrieb['team_conversation_id'], $message);
-			} elseif (is_null($betrieb['team_conversation_id'])) {
-				$tcid = $this->createTeamConversation($bid);
-				$this->sendMessage($tcid, $message);
-			}
-		}
-	}
-
 	public function add_message($data)
 	{
 		if ($cid = $this->addConversation(array($data['sender_id'] => $data['sender_id'], $data['recip_id'] => $data['recip_id']), false, false)) {

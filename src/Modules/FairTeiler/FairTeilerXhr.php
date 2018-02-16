@@ -7,6 +7,8 @@ use Foodsharing\Modules\Core\Control;
 
 class FairTeilerXhr extends Control
 {
+	private $gateway;
+
 	public function __construct(FairTeilerView $view, FairTeilerGateway $gateway)
 	{
 		$this->view = $view;

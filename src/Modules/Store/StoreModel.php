@@ -609,6 +609,18 @@ class StoreModel extends Model
 		return $scid;
 	}
 
+	public function addTeamMessage($bid, $message)
+	{
+		if ($betrieb = $this->getMyBetrieb($bid)) {
+			if (!is_null($betrieb['team_conversation_id'])) {
+				$this->messageModel->sendMessage($betrieb['team_conversation_id'], $message);
+			} elseif (is_null($betrieb['team_conversation_id'])) {
+				$tcid = $this->createTeamConversation($bid);
+				$this->messageModel->sendMessage($tcid, $message);
+			}
+		}
+	}
+
 	public function addBetriebTeam($bid, $member, $verantwortlicher = false)
 	{
 		if (empty($member)) {
