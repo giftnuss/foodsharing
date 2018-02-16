@@ -55,7 +55,19 @@ class FairTeilerControl extends Control
 			$this->func->goLogin();
 		}
 
-		if ($bid = $request->query->get('bid')) {
+		$this->fairteiler = false;
+		$this->follower = false;
+		$this->bezirke = $this->model->getRealBezirke();
+		if ($ftid = $request->query->get('id')) {
+			$this->fairteiler = $this->gateway->getFairteiler($ftid);
+
+			if (!$this->fairteiler) {
+				$this->func->go('/?page=fairteiler');
+			}
+			$bid = $this->fairteiler['bezirk_id'];
+		}
+
+		if ($bid || $bid = $request->query->get('bid')) {
 			if ($bezirk = $this->model->getBezirk($bid)) {
 				$this->bezirk_id = $bid;
 				$this->bezirk = $bezirk;
@@ -70,16 +82,7 @@ class FairTeilerControl extends Control
 			$this->bezirk = null;
 		}
 
-		$this->fairteiler = false;
-		$this->follower = false;
-		$this->bezirke = $this->model->getRealBezirke();
-		if ($ftid = $request->query->get('id')) {
-			$this->fairteiler = $this->gateway->getFairteiler($ftid);
-
-			if (!$this->fairteiler) {
-				$this->func->go('/?page=fairteiler');
-			}
-
+		if ($ftid) {
 			$follow = $request->query->get('follow');
 			$infotype = $request->query->get('infotype', 2);
 			if ($this->handleFollowUnfollow($ftid, S::id(), $follow, $infotype)) {
@@ -148,6 +151,9 @@ class FairTeilerControl extends Control
 
 	public function edit(Request $request)
 	{
+		if (!$this->mayEdit()) {
+			$this->func->go('/?page=fairteiler&sub=ft&id=' . $this->fairteiler['id']);
+		}
 		$this->func->addBread($this->fairteiler['name'], '/?page=fairteiler&sub=ft&bid=' . $this->bezirk_id . '&id=' . $this->fairteiler['id']);
 		$this->func->addBread($this->func->s('edit'));
 		if ($request->request->get('form_submit') == 'fairteiler') {

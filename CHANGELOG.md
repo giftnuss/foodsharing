@@ -25,6 +25,7 @@
 - changed old foodsharing „Freiwilligenplattform“ mailfooter for outgoing replies via mail, which was based on lebensmittelretten !287 @irgendwer
 - consistent use of jumper list (Springerliste) all over the page. !293 by @peter.toennies
 - fixed new fairteiler can not get a region set !294 @NerdyProjects
+- fixed ambassador of other region could edit fairteiler !294 @NerdyProjects
 
 ## Refactoring
 - Consolidate remaining functions and modules !269 @NerdyProjects

@@ -82,7 +82,7 @@ class FairTeilerCest
 	 * @param AcceptanceTester $I
 	 * @example["user", false]
 	 * @example["responsible", true]
-	 * @example["otherBot", false]
+	 * @example["otherBot", true]
 	 */
 	public function MayEditFairTeiler(AcceptanceTester $I, \Codeception\Example $example)
 	{
@@ -92,7 +92,19 @@ class FairTeilerCest
 		if ($example[1]) {
 			$I->waitForText('Schreibe hier ein paar');
 		} else {
-			$I->waitUrlEquals('/?page=login');
+			/* just see the fairteiler page if not enough permissions to edit */
+			$I->waitForText('Beachte, dass Deine Beiträge');
 		}
+	}
+
+	public function MayNotEditFairTeilerWrongBid(AcceptanceTester $I)
+	{
+		$region = $I->createRegion('another funny region');
+		$bot = $I->createAmbassador(null, ['bezirk_id' => $region['id']]);
+		$I->addBezirkAdmin($region['id'], $bot['id']);
+		$I->login($bot['email']);
+		$I->amOnPage($I->fairTeilerEditUrl($this->fairTeiler['id']) . '&bid=' . $region['id']);
+		/* does not get edit view although region admin of another region (regression) */
+		$I->waitForText('Beachte, dass Deine Beiträge');
 	}
 }
