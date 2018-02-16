@@ -4,7 +4,6 @@ namespace Foodsharing\Lib;
 
 use Twig_Extension;
 use Twig_Filter;
-use Twig_SimpleFunction;
 
 class TwigExtensions extends Twig_Extension
 {
