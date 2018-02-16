@@ -54,35 +54,6 @@ class FairTeilerView extends View
 
 	public function checkFairteiler($ft)
 	{
-		/*
-		 * Array
-(
-	[id] => 1
-	[bezirk_id] => 4
-	[name] => Neuland Garten
-	[picture] => picture/52e3fed700753.png
-	[status] => 1
-	[desc] => ......
-	[anschrift] => Alteburger StraÃŸe 146-150
-	[plz] => 50968
-	[ort] => KÃ¶ln
-	[lat] => 50.91374876646103
-	[lon] => 6.96526769416505
-	[add_date] => 2014-01-24
-	[time_ts] => 1390518000
-	[add_foodsaver] => 56
-	[fs_name] => Raphael
-	[fs_nachname] => Wintrich
-	[fs_id] => 56
-	[pic] => Array
-		(
-			[thumb] => images/picture/crop_1_60_52e3fed700753.png
-			[head] => images/picture/crop_0_528_52e3fed700753.png
-			[orig] => images/picture/52e3fed700753.png
-		)
-
-)
-		 */
 		$content = '';
 		if ($ft['pic']) {
 			$content .= $this->v_utils->v_input_wrapper('Foto', '<img src="' . $ft['pic']['head'] . '" alt="' . $ft['name'] . '" />');

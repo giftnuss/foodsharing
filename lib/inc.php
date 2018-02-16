@@ -6,6 +6,7 @@ use Foodsharing\Lib\Db\ManualDb;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\Utils;
+use Symfony\Component\HttpFoundation\Request;
 
 require_once 'config.inc.php';
 S::init();
@@ -27,6 +28,7 @@ if (isset($_GET['logout'])) {
 $content_left_width = 5;
 $content_right_width = 6;
 
+$request = Request::createFromGlobals();
 $func = DI::$shared->get(Func::class);
 $viewUtils = DI::$shared->get(Utils::class);
 

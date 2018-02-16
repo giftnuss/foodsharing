@@ -239,25 +239,10 @@ class FairTeilerGateway extends BaseGateway
 		$this->db->update('fs_fairteiler', ['status' => 1], ['id' => $id]);
 	}
 
-	public function updateFairteiler($id, $bezirk_id, $name, $desc, $anschrift, $plz, $ort, $lat, $lon, $picture)
+	public function updateFairteiler($id, $data)
 	{
 		$this->db->requireExists('fs_fairteiler', ['id' => $id]);
-		$params = [
-			'bezirk_id' => $bezirk_id,
-			'name' => strip_tags($name),
-			'desc' => strip_tags($desc),
-			'anschrift' => strip_tags($anschrift),
-			'plz' => strip_tags($plz),
-			'ort' => strip_tags($ort),
-			'lat' => strip_tags($lat),
-			'lon' => strip_tags($lon),
-		];
-
-		if (!empty($picture)) {
-			$params['picture'] = strip_tags($picture);
-		}
-
-		$this->db->update('fs_fairteiler', $params, ['id' => $id]);
+		$this->db->update('fs_fairteiler', $data, ['id' => $id]);
 
 		return true;
 	}
@@ -314,53 +299,17 @@ class FairTeilerGateway extends BaseGateway
 		return false;
 	}
 
-	public function addFairteiler(
-		$fs_id,
-		$bezirk_id,
-		$name,
-		$desc,
-		$anschrift,
-		$plz,
-		$ort,
-		$lat,
-		$lon,
-		$picture = '',
-		$status = 1)
+	public function addFairteiler($fs_id, $data)
 	{
-		$ft_id = $this->db->insert('fs_fairteiler', [
-			'bezirk_id' => $bezirk_id,
-			'name' => strip_tags($name),
-			'picture' => strip_tags($picture),
-			'status' => strip_tags($status),
-			'desc' => strip_tags($desc),
-			'anschrift' => strip_tags($anschrift),
-			'plz' => strip_tags($plz),
-			'ort' => strip_tags($ort),
-			'lat' => strip_tags($lat),
-			'lon' => strip_tags($lon),
+		$db_data = array_merge($data, [
 			'add_date' => date('Y-m-d H:i:s'),
 			'add_foodsaver' => $fs_id
 		]);
+		$ft_id = $this->db->insert('fs_fairteiler', $db_data);
 		if ($ft_id) {
-			$this->db->execute('
-				REPLACE INTO `fs_fairteiler_follower`
-				(
-					`fairteiler_id`,
-					`foodsaver_id`,
-					`type`
-				)
-				VALUES
-				(
-					:ft_id,
-					:fs_id,
-					2
-				)
-			', [
-				':ft_id' => $ft_id,
-				':fs_id' => $fs_id
-			]);
-
-			return $ft_id;
+			$this->db->insert('fs_fairteiler_follower', ['fairteiler_id' => $ft_id, 'foodsaver_id' => $fs_id, 'type' => 2]);
 		}
+
+		return $ft_id;
 	}
 }

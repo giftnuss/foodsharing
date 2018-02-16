@@ -24,6 +24,7 @@
 - Show regions in alphabetical order in the region selector (Bezirk beitreten) !267 by @alangecker
 - changed old foodsharing „Freiwilligenplattform“ mailfooter for outgoing replies via mail, which was based on lebensmittelretten !287 @irgendwer
 - consistent use of jumper list (Springerliste) all over the page. !293 by @peter.toennies
+- fixed new fairteiler can not get a region set !294 @NerdyProjects
 
 ## Refactoring
 - Consolidate remaining functions and modules !269 @NerdyProjects
@@ -38,6 +39,7 @@
 - Remove global usage of Func, DB and ViewUtils Helper classes !289 @NerdyProjects
 - Refactor router for HTML controller classes !289 @NerdyProjects
 - complete tidying up of all CSS files. !298 by @peter.toennies
+- Make components ready to be used without global data passing variable !294 @NerdyProjects
 
 ## Dev/Test/CI stuff
 

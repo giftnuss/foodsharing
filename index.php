@@ -54,13 +54,13 @@ if ($class) {
 
 	if (isset($_GET['a']) && is_callable(array($obj, $_GET['a']))) {
 		$meth = $_GET['a'];
-		$obj->$meth();
+		$obj->$meth($request);
 	} else {
-		$obj->index();
+		$obj->index($request);
 	}
 	$sub = $sub = $obj->getSubFunc();
 	if ($sub !== false && is_callable(array($obj, $sub))) {
-		$obj->$sub();
+		$obj->$sub($request);
 	}
 }
 
