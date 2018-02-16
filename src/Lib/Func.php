@@ -443,6 +443,87 @@ class Func
 
 	public function getMenu()
 	{
+		$regions = [];
+		$stores = [];
+		$workingGroups = [];
+		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
+			foreach ($_SESSION['client']['bezirke'] as $region) {
+				$region = array_merge($region, ['isBot' => $this->isBotFor($region['id'])]);
+				if ($region['type'] == 7) {
+					$workingGroups[] = $region;
+				} else {
+					$regions[] = $region;
+				}
+			}
+		}
+		if (isset($_SESSION['client']['betriebe']) && is_array($_SESSION['client']['betriebe'])) {
+			$stores = $_SESSION['client']['betriebe'];
+		}
+
+		$loggedIn = S::may();
+		return $this->getMenuFn(
+			$loggedIn,
+			$regions,
+			S::may('fs'),
+			$this->isOrgaTeam(),
+			$this->mayEditBlog(),
+			$this->mayEditQuiz(),
+			$this->mayHandleReports(),
+			$stores,
+			$workingGroups,
+			S::get('mailbox'),
+			$this->fsId(),
+			$loggedIn ? $this->img() : ''
+		);
+	}
+
+	public function getMenuFn(
+		bool $loggedIn, array $regions, bool $hasFsRole,
+		bool $isOrgaTeam, bool $mayEditBlog, bool $mayEditQuiz, bool $mayHandleReports,
+		array $stores, array $workingGroups,
+		$sessionMailbox, int $fsId, string $image)
+	{
+		return $this->getMenuTwig(
+			$loggedIn, $regions, $hasFsRole, $isOrgaTeam, $mayEditBlog, $mayEditQuiz, $mayHandleReports,
+			$stores, $workingGroups, $sessionMailbox, $fsId, $image
+		);
+	}
+
+	public function getMenuTwig(
+		bool $loggedIn, array $regions, bool $hasFsRole,
+		bool $isOrgaTeam, bool $mayEditBlog, bool $mayEditQuiz, bool $mayHandleReports,
+		array $stores, array $workingGroups,
+		$sessionMailbox, int $fsId, string $image)
+	{
+		$twig = DI::$shared->get(Twig::class);
+		$params = [
+			'loggedIn' => $loggedIn,
+			'fsId' => $fsId,
+			'image' => $image,
+			'mailbox' => $sessionMailbox,
+			'hasFsRole' => $hasFsRole,
+			'isOrgaTeam' => $isOrgaTeam,
+			'may' => [
+				'editBlog' => $mayEditBlog,
+				'editQuiz' => $mayEditQuiz,
+				'handleReports' => $mayHandleReports
+			],
+			'stores' => $stores,
+			'regions' => $regions,
+			'workingGroups' => $workingGroups
+		];
+		return [
+			'default' => $twig->render('partials/menu.default.twig', $params),
+			'mobile' => $twig->render('partials/menu.mobile.twig', $params)
+		];
+	}
+
+	public function getMenuOld(
+		bool $loggedIn, array $regions, bool $hasFsRole,
+		bool $isOrgaTeam, bool $mayEditBlog, bool $mayEditQuiz, bool $mayHandleReports,
+		array $stores, array $workingGroups,
+		$sessionMailbox, int $fsId, string $image) {
+
 		$this->addJs('$("#top .menu").css("display","block");');
 
 		$this->addJs('
@@ -456,7 +537,8 @@ class Func
 		});
 	');
 
-		if (S::may()) {
+		if ($loggedIn) {
+
 			$out = array(
 				'default' => '',
 				'mobile' => ''
@@ -476,19 +558,17 @@ class Func
 			$ags_mob = '
 				<option value="/?page=groups">GRUPPENÜBERSICHT</option>';
 
-			if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
-				foreach ($_SESSION['client']['bezirke'] as $i => $bezirk) {
-					if (($bezirk['type'] != 7)) {
-						$bezirke_a = $this->getBezirkMenu($bezirk);
+			foreach ($regions as $i => $bezirk) {
+				if (($bezirk['type'] != 7)) {
+					$bezirke_a = $this->getBezirkMenuFn($bezirk, $hasFsRole, $bezirk['isBot']);
 
-						$bezirke .= $bezirke_a['default'];
-						$bezirke_mob .= $bezirke_a['mobile'];
-					} else {
-						$ags_a = $this->getAgMenu($bezirk);
+					$bezirke .= $bezirke_a['default'];
+					$bezirke_mob .= $bezirke_a['mobile'];
+				} else {
+					$ags_a = $this->getAgMenuFn($bezirk, $bezirk['isBot']);
 
-						$ags .= $ags_a['default'];
-						$ags_mob .= $ags_a['mobile'];
-					}
+					$ags .= $ags_a['default'];
+					$ags_mob .= $ags_a['mobile'];
 				}
 			}
 			if (!empty($ags)) {
@@ -512,11 +592,11 @@ class Func
 			$bezirke_mob .= '	
 	</optgroup>';
 
-			$orgamenu = $this->getOrgaMenu();
-			$betriebe = $this->getBetriebeMenu();
-			$settings = $this->getSettingsMenu();
+			$orgamenu = $this->getOrgaMenuFn($isOrgaTeam, $mayEditBlog, $mayEditQuiz, $mayHandleReports);
+			$betriebe = $this->getBetriebeMenuFn($hasFsRole, $stores);
+			$settings = $this->getSettingsMenuFn($sessionMailbox, $fsId, $image);
 
-			if (!S::may('fs')) {
+			if (!$hasFsRole) {
 				$bezirke = '';
 				$ags = '';
 			}
@@ -628,7 +708,20 @@ class Func
 
 	public function getBetriebeMenu()
 	{
-		if (!S::may('fs')) {
+		if (isset($_SESSION['client']['betriebe'])) {
+			$stores = $_SESSION['client']['betriebe'];
+		} else {
+			$stores = [];
+		}
+		return $this->getBetriebeMenuFn(
+			S::may('fs'),
+			$stores
+		);
+	}
+
+	public function getBetriebeMenuFn(bool $hasFsRole, array $stores)
+	{
+		if (!$hasFsRole) {
 			return array(
 				'mobile' => '',
 				'default' => ''
@@ -636,14 +729,14 @@ class Func
 		}
 		$out = '';
 		$out_mob = '';
-		if (isset($_SESSION['client']['betriebe']) && !empty($_SESSION['client']['betriebe'])) {
+		if (!empty($stores)) {
 			$out = '
 		<li><a onclick="return false" class="fNiv">Betriebe</a>
 			<ul class="jmenu-foodsaver">';
 			$out_mob = '
 		<optgroup label="Betriebe">';
 
-			foreach ($_SESSION['client']['betriebe'] as $cb) {
+			foreach ($stores as $cb) {
 				$out .= '
 				<li><a href="/?page=fsbetrieb&id=' . $cb['id'] . '&sub=forum">' . $cb['name'] . '</a></li>';
 
@@ -899,8 +992,18 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function getOrgaMenu()
 	{
+		return $this->getOrgaMenuFn(
+			$this->isOrgaTeam(),
+			$this->mayEditBlog(),
+			$this->mayEditQuiz(),
+			$this->mayHandleReports()
+		);
+	}
+
+	public function getOrgaMenuFn(bool $isOrgaTeam, bool $mayEditBlog, bool $mayEditQuiz, bool $mayHandleReports)
+	{
 		$menu = array();
-		if ($this->isOrgaTeam()) {
+		if ($isOrgaTeam) {
 			$menu = [
 				'all_store' => 'betrieb&bid=0',
 				'all_fs' => 'foodsaver&bid=0',
@@ -910,11 +1013,11 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			];
 		}
 
-		if ($this->mayEditBlog()) {
+		if ($mayEditBlog) {
 			$menu['blog'] = 'blog&sub=manage';
 		}
 
-		if ($this->isOrgaTeam()) {
+		if ($isOrgaTeam) {
 			$menu['email'] = 'email';
 			$menu['email_tpl'] = 'message_tpl';
 			$menu['faq'] = 'faq';
@@ -924,11 +1027,11 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$menu['mailbox_manage'] = 'mailbox&a=manage';
 		}
 
-		if ($this->mayEditQuiz()) {
+		if ($mayEditQuiz) {
 			$menu['quiz'] = 'quiz';
 		}
 
-		if ($this->mayHandleReports()) {
+		if ($mayHandleReports) {
 			$menu['reports'] = 'report&sub=uncom';
 		}
 
@@ -999,11 +1102,16 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function getSettingsMenu()
 	{
+		return $this->getSettingsMenuFn(S::get('mailbox'), $this->fsId(), $this->img());
+	}
+
+	public function getSettingsMenuFn($sessionMailbox, int $fsId, string $image)
+	{
 		$mailbox = '';
-		if (S::get('mailbox')) {
+		if ($sessionMailbox) {
 			$mailbox = '<li><a href="/?page=mailbox"><i class="fa fa-envelope"></i> E-Mail-Postfach</a></li>';
 		}
-		$default = '<li class="g_settings"><a href="/profile/' . $this->fsId() . '" class="fNiv corner-all" style="background-image:url(' . $this->img() . ');"><span>&nbsp;</span></a>
+		$default = '<li class="g_settings"><a href="/profile/' . $fsId . '" class="fNiv corner-all" style="background-image:url(' . $image . ');"><span>&nbsp;</span></a>
 				    <ul class="jmenu-settings">
 					  <li><a href="/?page=settings"><i class="fa fa-gear"></i> Einstellungen</a></li>
 					  ' . $mailbox . '
@@ -1030,6 +1138,11 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function getAgMenu($ag)
 	{
+		return $this->getAgMenuFn($ag, $this->isBotFor($ag['id']));
+	}
+
+	public function getAgMenuFn($ag, bool $isBot)
+	{
 		$out_mob = '
 		<option value="/?page=bezirk&bid=' . $ag['id'] . '&sub=forum">' . $ag['name'] . '</option>';
 
@@ -1039,7 +1152,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid=' . $ag['id'] . '&sub=forum">Forum</a></li>
 				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid=' . $ag['id'] . '&sub=events">Termine</a></li>';
 
-		if ($this->isBotFor($ag['id'])) {
+		if ($isBot) {
 			$out .= '
 			<li><a href="/?page=groups&sub=edit&id=' . (int)$ag['id'] . '">Gruppe/Mitglieder verwalten</a></li>';
 		}
@@ -1055,6 +1168,11 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function getBezirkMenu($bezirk)
 	{
+		return $this->getBezirkMenuFn($bezirk, S::may('fs'), $this->isBotFor($bezirk['id']));
+	}
+
+	public function getBezirkMenuFn(array $bezirk, bool $hasFsRole, bool $isBot)
+	{
 		$out = '<li><a href="/?page=bezirk&bid=' . $bezirk['id'] . '&sub=forum">' . $bezirk['name'] . '</a>
 			<ul>
 				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid=' . $bezirk['id'] . '&sub=forum">Forum</a></li>
@@ -1063,12 +1181,12 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 		$out_mob = '<option value="/?page=bezirk&bid=' . $bezirk['id'] . '&sub=forum">' . $bezirk['name'] . '</option>';
 
-		if (S::may('fs')) {
+		if ($hasFsRole) {
 			$out .= '
 				<li class="menu-top"><a class="menu-top" href="/?page=betrieb&bid=' . $bezirk['id'] . '">Betriebe</a></li>';
 		}
 
-		if ($this->isBotFor($bezirk['id'])) {
+		if ($isBot) {
 			$out .= '
 			<li><a href="/?page=foodsaver&bid=' . $bezirk['id'] . '">Foodsaver</a></li>
 			<li><a href="/?page=passgen&bid=' . $bezirk['id'] . '">Ausweise / Verifizierungen</a></li>';

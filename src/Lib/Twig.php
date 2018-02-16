@@ -22,7 +22,7 @@ class Twig
 		$this->loader = new Twig_Loader_Filesystem(__DIR__ . '/../../views');
 
 		$this->twig = new Twig_Environment($this->loader, [
-			'debug' => FS_ENV === 'dev',
+			'debug' => defined('FS_ENV') && FS_ENV === 'dev',
 			'cache' => __DIR__ . '/../../tmp/.views-cache',
 			'strict_variables' => true
 		]);
