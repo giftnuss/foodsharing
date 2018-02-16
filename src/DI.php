@@ -18,6 +18,7 @@ class DI
 	public static $shared;
 
 	private $cacheFile = __DIR__ . '/../tmp/di-cache.php';
+	private $isDev;
 	private $useCached = false;
 	private $container;
 
@@ -28,9 +29,9 @@ class DI
 
 	public function __construct()
 	{
-		$isDev = defined('FS_ENV') && FS_ENV === 'dev';
+		$this->isDev = defined('FS_ENV') && FS_ENV === 'dev';
 
-		$this->useCached = !$isDev && file_exists($this->cacheFile);
+		$this->useCached = !$this->isDev && file_exists($this->cacheFile);
 
 		if ($this->useCached) {
 			$this->useCached = true;
@@ -55,6 +56,7 @@ class DI
 		if ($this->useCached) {
 			return;
 		}
+
 		$this->container
 			->register(\mysqli::class, \mysqli::class)
 			->addArgument($host)
@@ -67,9 +69,11 @@ class DI
 	public function useTraceablePDO($traceablePDO)
 	{
 		$this->container->set(PDO::class, $traceablePDO);
+
 		if ($this->useCached) {
 			return;
 		}
+
 		$this->container->register(PDO::class, TraceablePDO::class);
 	}
 
@@ -78,6 +82,7 @@ class DI
 		if ($this->useCached) {
 			return;
 		}
+
 		$this->container
 			->register(\PDO::class, \PDO::class)
 			->addArgument($dsn)
@@ -92,9 +97,13 @@ class DI
 		if ($this->useCached) {
 			return;
 		}
+
 		$this->container->compile();
-		$dumper = new PhpDumper($this->container);
-		file_put_contents($this->cacheFile, $dumper->dump(['class' => 'FoodsharingCachedContainer']));
+
+		if (!$this->isDev) {
+			$dumper = new PhpDumper($this->container);
+			file_put_contents($this->cacheFile, $dumper->dump(['class' => 'FoodsharingCachedContainer']));
+		}
 	}
 
 	public function isCompiled()
