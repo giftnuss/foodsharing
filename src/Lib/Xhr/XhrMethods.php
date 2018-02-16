@@ -104,8 +104,8 @@ class XhrMethods
 
 	public function xhr_getPinPost($data)
 	{
-		$this->func->incLang('betrieb');
-		$this->func->incLang('fsbetrieb');
+		$this->func->incLang('Store');
+		$this->func->incLang('StoreUser');
 
 		if ($this->model->isInTeam($data['bid']) || $this->func->isBotschafter() || $this->func->isOrgaTeam()) {
 			if ($out = $this->model->q('
@@ -1336,7 +1336,7 @@ class XhrMethods
 			 */
 
 			if (!empty($data['to'])) {
-				$this->func->incLang('fsbetrieb');
+				$this->func->incLang('StoreUser');
 				if (empty($data['from'])) {
 					$data['from'] = date('Y-m-d');
 				}
