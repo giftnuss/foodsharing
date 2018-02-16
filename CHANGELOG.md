@@ -44,6 +44,10 @@
 - Enable xdebug remote debugging for development !276 @NerdyProjects
 - Add better seed data for use during development !263 @tiltec
 
+## Other
+
+- Added caching for DI container !299 @nicksellen
+
 # 2017-12-11
 
 ## Release notes
