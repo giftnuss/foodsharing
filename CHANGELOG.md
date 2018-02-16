@@ -22,6 +22,7 @@
 - Fix newsletter should only be sent to activated accounts @NerdyProjects
 - Show regions in alphabetical order in the region selector (Bezirk beitreten) !267 by @alangecker
 - changed old foodsharing „Freiwilligenplattform“ mailfooter for outgoing replies via mail, which was based on lebensmittelretten !287 @irgendwer
+- consistent use of jumper list (Springerliste) all over the page. !293 by @peter.toennies
 
 ## Refactoring
 - Consolidate remaining functions and modules !269 @NerdyProjects
