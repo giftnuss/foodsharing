@@ -176,7 +176,6 @@ class BasketView extends View
 	{
 		global $g_data;
 		$g_data['weight'] = '3';
-		$g_data['contact_type'] = 1;
 		$g_data['tel'] = $foodsaver['telefon'];
 		$g_data['handy'] = $foodsaver['handy'];
 
@@ -213,7 +212,8 @@ class BasketView extends View
 			'values' => array(
 				array('id' => 1, 'name' => 'Per Nachricht'),
 				array('id' => 2, 'name' => 'Per Telefonanruf')
-			)
+			),
+			'checked' => [1]
 		));
 
 		$out .= $this->v_utils->v_form_text('tel');

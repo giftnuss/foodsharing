@@ -18,6 +18,8 @@ $I->see('Neuen Essenskorb anlegen');
 
 $I->click('Neuen Essenskorb anlegen');
 $I->waitForText('Essenskorb anbieten');
+$I->canSeeCheckboxIsChecked('.input.cb-contact_type[value="1"]');
+$I->cantSeeCheckboxIsChecked('.input.cb-contact_type[value="2"]');
 
 $I->fillField('description', $description);
 
