@@ -68,6 +68,11 @@ class FoodsharingUrl extends \Codeception\Module\Db
 		return '/?page=fairteiler&sub=ft&id=' . (int)$fairteiler_id;
 	}
 
+	public function fairTeilerEditUrl($fairteiler_id)
+	{
+		return '/?page=fairteiler&sub=ft&id=' . (int)$fairteiler_id . '&sub=edit';
+	}
+
 	public function foodBasketInfoUrl($basket_id)
 	{
 		return '/essenskoerbe/' . (int)$basket_id;

@@ -52,6 +52,13 @@ class WebDriver extends \Codeception\Module\WebDriver
 		);
 	}
 
+	public function fillFieldJs($selector, $value)
+	{
+		$this->executeJS(
+		'document.querySelectorAll(\'' . $selector . '\').forEach(el => el.value = \'' . $value . '\')'
+		);
+	}
+
 	private function waitFor($condition, $timeout)
 	{
 		$this->webDriver->wait($timeout)->until($condition);
