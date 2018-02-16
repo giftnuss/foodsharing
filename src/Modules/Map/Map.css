@@ -15,12 +15,6 @@ body {
     overflow: hidden;
 }
 
-#foodsaver_map {
-    width: 100%;
-    height: 100%;
-    background-color: #F1E7C9;
-}
-
 #map {
     position: absolute;
     top: 0px;
@@ -151,17 +145,6 @@ div#top {
 
 #b_content ul.linklist li {
     border: 0 !important;
-}
-
-#b_content a.ampel {
-    display: inline-block;
-    padding-left: 0;
-    margin-right: 5px;
-}
-
-#b_content .buttonrow {
-    text-align: center;
-    margin-top: 8px;
 }
 
 .leaflet-top {

@@ -79,16 +79,6 @@ table.stat_cities {
     vertical-align: top;
 }
 
-table.stat_cities td.city div.percentbar {
-    width: 200px;
-    background-color: #FFFFF;
-    border: 1px solid #B3AB9F;
-    height: 10px;
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-}
-
 table.stat_cities td.city div.percentbar div.inner {
     background: #598939;
     background: -moz-linear-gradient(left, #598939 0%, #a4bc71 100%, #a4bc71 100%);

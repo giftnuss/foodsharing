@@ -105,11 +105,6 @@
 
 }
 
-#msg_answer {
-    height: 40px;
-    width: 97%;
-}
-
 #msg-conversation-title .images {
     float: right;
     text-align: right;
@@ -172,12 +167,6 @@ li.unread-1 {
         display: none;
     }
 
-    #msg_answer-wrapper {
-        padding: 0;
-        border: 0;
-        margin: 0;
-    }
-
     #msg-conversation-wrapper .field {
         height: auto;
     }
@@ -210,23 +199,9 @@ li.unread-1 {
         color: #4A3520;
     }
 
-    #msg_answer-wrapper {
-
-    }
-
     #msg-conversation-wrapper {
         border-radius: 0;
         background-color: #DBD7D1;
-    }
-
-    #msg_answer {
-        position: fixed;
-        bottom: 0px;
-        left: 0px;
-        width: 97%;
-        height: 34px;
-        border-radius: 0px;
-        z-index: 10;
     }
 
     #conv_submit {

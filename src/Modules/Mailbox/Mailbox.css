@@ -268,10 +268,6 @@ div.et-filebox .input-wrapper label.wrapper-label {
     display: none;
 }
 
-#etattach-info {
-    display: none;
-}
-
 table.edit-table iframe {
     visibility: hidden;
 }

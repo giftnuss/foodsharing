@@ -39,10 +39,6 @@
     background-repeat: no-repeat;
 }
 
-.stat_bananacount.bouched {
-    background-image: url("/img/bananan.png");
-}
-
 .page ul.linklist {
     margin-top: 10px;
     margin-bottom: 0;

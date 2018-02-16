@@ -91,10 +91,6 @@ ul.fairteilerlist li a span.image {
     background-repeat: no-repeat;
 }
 
-ul.fairteilerlist li a span.image.noimage {
-    background-color: #FFFFFF;
-}
-
 ul.fairteilerlist li a span.clear {
     display: block;
     clear: both;

@@ -1,9 +1,4 @@
 
-.answers li .dellink {
-    visibility: hidden;
-    cursor: pointer;
-}
-
 .answers li .explanation {
     display: block;
     font-style: italic;
@@ -12,17 +7,6 @@
 
 .answers li:hover .explanation {
 
-}
-
-.answers li:hover .dellink {
-    visibility: visible;
-}
-
-ul.answers {
-    display: block;
-    list-style: none;
-    margin: 0;
-    padding: 0;
 }
 
 ul.answers li {
