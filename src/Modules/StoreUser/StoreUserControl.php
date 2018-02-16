@@ -433,7 +433,7 @@ class StoreUserControl extends Control
 							</div>', 'Pinnwand', $opt));
 				/*pinnwand ende*/
 				} else {
-					$this->func->addContent($this->v_utils->v_info('Du bist momentan auf der Warteliste, sobald Hilfe benötigt wird wirst Du kontaktiert.'));
+					$this->func->addContent($this->v_utils->v_info('Du bist momentan auf der Springerliste. Sobald Hilfe benötigt wird, wirst Du kontaktiert.'));
 				}
 				$zeit_cnt = '';
 				if ($betrieb['verantwortlich']) {
