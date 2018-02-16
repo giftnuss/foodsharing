@@ -35,6 +35,11 @@ class Func
 	private $meta;
 	private $viewUtils;
 
+	/**
+	 * @var Twig
+	 */
+	private $twig;
+
 	public function __construct(Utils $viewUtils)
 	{
 		$this->viewUtils = $viewUtils;
@@ -65,6 +70,14 @@ class Func
 			'revisit-after' => '1 days',
 			'google-site-verification' => 'pZxwmxz2YMVLCW0aGaS5gFsCJRh-fivMv1afrDYFrks'
 		);
+	}
+
+	/**
+	 * @required
+	 */
+	public function setTwig(Twig $twig)
+	{
+		$this->twig = $twig;
 	}
 
 	public function jsonSafe($str)
@@ -484,7 +497,6 @@ class Func
 		array $stores, array $workingGroups,
 		$sessionMailbox, int $fsId, string $image)
 	{
-		$twig = DI::$shared->get(Twig::class);
 		$params = [
 			'loggedIn' => $loggedIn,
 			'fsId' => $fsId,
@@ -503,8 +515,8 @@ class Func
 		];
 
 		return [
-			'default' => $twig->render('partials/menu.default.twig', $params),
-			'mobile' => $twig->render('partials/menu.mobile.twig', $params)
+			'default' => $this->twig->render('partials/menu.default.twig', $params),
+			'mobile' => $this->twig->render('partials/menu.mobile.twig', $params)
 		];
 	}
 
