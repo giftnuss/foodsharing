@@ -34,7 +34,6 @@ class DI
 		$this->useCached = !$this->isDev && file_exists($this->cacheFile);
 
 		if ($this->useCached) {
-			$this->useCached = true;
 			require_once $this->cacheFile;
 			$this->container = new \FoodsharingCachedContainer();
 		} else {
