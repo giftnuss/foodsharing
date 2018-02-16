@@ -174,10 +174,6 @@ class BasketView extends View
 
 	public function basketForm($foodsaver)
 	{
-		global $g_data;
-		$g_data['tel'] = $foodsaver['telefon'];
-		$g_data['handy'] = $foodsaver['handy'];
-
 		$out = '';
 
 		$out .= $this->v_utils->v_form_textarea('description', array('maxlength' => 1705));
@@ -216,8 +212,8 @@ class BasketView extends View
 			'checked' => [1]
 		));
 
-		$out .= $this->v_utils->v_form_text('tel');
-		$out .= $this->v_utils->v_form_text('handy');
+		$out .= $this->v_utils->v_form_text('tel', ['value' => $foodsaver['telefon']]);
+		$out .= $this->v_utils->v_form_text('handy', ['value' => $foodsaver['handy']]);
 
 		$out .= $this->v_utils->v_form_checkbox('food_type', array(
 			'values' => array(

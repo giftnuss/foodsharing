@@ -25,9 +25,15 @@ $I->waitForText('Essenskorb anbieten');
 $I->canSeeCheckboxIsChecked('.input.cb-contact_type[value="1"]');
 $I->cantSeeCheckboxIsChecked('.input.cb-contact_type[value="2"]');
 $I->canSeeOptionIsSelected('#weight', '3,0');
+$I->dontSeeElement('#handy');
+$I->checkOption('.input.cb-contact_type[value="2"]');
+$I->waitForElement('#handy');
+$I->seeInField('#handy', $foodsaver['handy']);
 
 $I->fillField('description', $description);
 
+/* This line should not be necessary - actually the window should not get too big! */
+$I->scrollTo('//*[contains(text(),"Essenskorb veröffentlichen")]');
 $I->click('Essenskorb veröffentlichen');
 
 $I->waitForElementVisible('#pulse-info', 4);

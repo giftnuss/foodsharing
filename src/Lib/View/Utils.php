@@ -1608,7 +1608,11 @@ class Utils
 		$id = $this->func->id($id);
 		$label = $this->func->s($id);
 
-		$value = $this->func->getValue($id);
+		if (isset($option['value'])) {
+			$value = $option['value'];
+		} else {
+			$value = $this->func->getValue($id);
+		}
 
 		$value = htmlspecialchars($value);
 
