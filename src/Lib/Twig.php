@@ -3,6 +3,7 @@
 namespace Foodsharing\Lib;
 
 use Twig_Environment;
+use Twig_Extension_Debug;
 use Twig_Loader_Filesystem;
 
 class Twig
@@ -28,6 +29,7 @@ class Twig
 		]);
 
 		$this->twig->addExtension($twigExtensions);
+		$this->twig->addExtension(new Twig_Extension_Debug());
 	}
 
 	public function render($view, $data)

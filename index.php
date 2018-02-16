@@ -32,6 +32,7 @@ require __DIR__ . '/includes/setup.php';
 
 require_once 'lib/inc.php';
 $view_utils = DI::$shared->get(Utils::class);
+
 $func = DI::$shared->get(Func::class);
 
 $func->addCss('/css/gen/style.css?v=' . VERSION);

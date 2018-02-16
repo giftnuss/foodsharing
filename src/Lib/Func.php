@@ -347,30 +347,7 @@ class Func
 
 	public function getBread()
 	{
-		$out = '';
-		if (!empty($this->bread)) {
-			$last_key = (count($this->bread) - 1);
-			$out = '
-	<div class="pure-g">
-		<div class="pure-u-1">
-			<ul class="bread inside">';
-			foreach ($this->bread as $key => $p) {
-				if ($key == $last_key) {
-					$out .= '
-				<li class="last">' . $p['name'] . '</li>';
-				} else {
-					$out .= '
-				<li><a href="' . $p['href'] . '">' . $p['name'] . '</a></li>';
-				}
-			}
-			$out .= '
-			</ul>
-			<div class="clear"></div>
-		</div>
-	</div>';
-		}
-
-		return $out;
+		return $this->bread;
 	}
 
 	public function setEditData($data)
