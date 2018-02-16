@@ -26,7 +26,7 @@ exec-in-container app composer install
 
 echo "Running tests"
 exec-in-container selenium "find /home/seluser/Downloads -type f -print0 | xargs -r -n 1 -0 rm"
-exec-in-container-asroot app rm -rf tmp/.views-cache
+exec-in-container-asroot app rm -rf tmp/.views-cache tmp/di-cache.php
 exec-in-container app vendor/bin/codecept run "$@"
 
 echo "Running chat tests"
