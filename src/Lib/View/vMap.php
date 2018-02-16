@@ -267,10 +267,17 @@ class vMap extends vCore
 			');
 		}
 
-		if ($this->doGeoIPLookup) {
+		/*
+		 * Disable GeoIPLookup as
+		 * * we are injecting external javascript
+		 * * the service seemed to be down breaking the page on 2018-02-16
+		 */
+		/*
+		 if ($this->doGeoIPLookup) {
 			$this->addGeoIPLookup();
 			$this->doGeoIPLookup = false;
 		}
+		*/
 
 		return '
 		<div class="vmap" id="' . $this->id . '"></div><input type="hidden" name="latlng" id="' . $this->id . '-latLng" value="" />';
