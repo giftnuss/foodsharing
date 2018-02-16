@@ -30,6 +30,7 @@
 - Add Symfony dependency injection container !264 @nicksellen
 - Remove unused fpdf font data files !253 @NerdyProjects
 - Add twig templating engine !284 @nicksellen
+- Add twig templating for main menu !292 @nicksellen
 - Remove global usage of Func, DB and ViewUtils Helper classes !289 @NerdyProjects
 - Refactor router for HTML controller classes !289 @NerdyProjects
 
