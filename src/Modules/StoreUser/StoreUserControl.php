@@ -23,7 +23,7 @@ class StoreUserControl extends Control
 	public function index()
 	{
 		$this->func->addScript('/js/contextmenu/jquery.contextMenu.js');
-		$this->func->addCss('/js/contextmenu/jquery.contextMenu.css');
+		$this->func->addStylesheet('/js/contextmenu/jquery.contextMenu.css');
 
 		if (isset($_GET['id'])) {
 			$this->func->addBread($this->func->s('betrieb_bread'), '/?page=fsbetrieb');

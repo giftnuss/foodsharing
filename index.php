@@ -33,9 +33,16 @@ require __DIR__ . '/includes/setup.php';
 require_once 'lib/inc.php';
 $view_utils = DI::$shared->get(Utils::class);
 
-$func = DI::$shared->get(Func::class);
+/**
+ * @return Func
+ */
+function getFunc() {
+	return DI::$shared->get(Func::class);
+}
 
-$func->addCss('/css/gen/style.css?v=' . VERSION);
+$func = getFunc();
+
+$func->addStylesheet('/css/gen/style.css?v=' . VERSION);
 $func->addScript('/js/gen/script.js?v=' . VERSION);
 
 $app = $func->getPage();
@@ -59,7 +66,6 @@ if ($class) {
 $menu = $func->getMenu();
 
 $func->getMessages();
-$func->makeHead();
 
 if (DebugBar::isEnabled()) {
 	$func->addHead(DebugBar::renderHead());
@@ -95,11 +101,8 @@ if (!array_key_exists('NO_TWIG', $_GET)) {
 	}
 
 	echo $twig->render('layouts/' . $g_template . '.twig', [
-		'head' => $func->getHead(),
+		'head' => $func->getHeadData(),
 		'bread' => $func->getBread(),
-		'css' => str_replace(["\r", "\n"], '', $func->getAddCss()),
-		'jsFunc' => $func->getJsFunc(),
-		'js' => $func->getJs(),
 		'bodyClass' => $g_body_class,
 		'msgbar' => $msgbar,
 		'menu' => $menu,

@@ -19,8 +19,13 @@ class vMap extends vCore
 	private $provider_options;
 	private $marker;
 	private $home_marker;
-	private $func;
 	private $doGeoIPLookup = false;
+
+	/**
+	 * @var Func
+	 */
+	private $func;
+
 	/**
 	 * @var Model
 	 */
@@ -140,8 +145,8 @@ class vMap extends vCore
 
 		if ($this->markercluster) {
 			//$this->func->addScriptTop('/js/leaflet.markercluster.js');
-			$this->func->addCss('/js/markercluster/dist/MarkerCluster.css');
-			$this->func->addCss('/js/markercluster/dist/MarkerCluster.Default.css');
+			$this->func->addStylesheet('/js/markercluster/dist/MarkerCluster.css');
+			$this->func->addStylesheet('/js/markercluster/dist/MarkerCluster.Default.css');
 		}
 
 		$this->func->addJsFunc('

@@ -29,10 +29,9 @@ class Func
 	private $head;
 	private $title;
 	private $ids;
-	private $script;
-	private $css;
+	private $scripts;
+	private $stylesheets;
 	private $add_css;
-	private $meta;
 	private $viewUtils;
 
 	/**
@@ -57,19 +56,9 @@ class Func
 		$this->title = array('foodsharing');
 
 		$this->ids = array();
-		$this->script = array();
-		$this->css = array();
+		$this->scripts = array();
+		$this->stylesheets = array();
 		$this->add_css = '';
-
-		$this->meta = array(
-			'description' => 'Auf foodsharing.de kannst Du Deine Lebensmittel vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben',
-			'keywords' => 'foodsharing, essen, lebensmittel, ablaufdatum, Lebensmittelverschwendung, essen wegschmeissen, spenden, lebensmitteltausch',
-			'author' => 'foodsharing',
-			'robots' => 'all',
-			'allow-search' => 'yes',
-			'revisit-after' => '1 days',
-			'google-site-verification' => 'pZxwmxz2YMVLCW0aGaS5gFsCJRh-fivMv1afrDYFrks'
-		);
 	}
 
 	/**
@@ -1051,12 +1040,12 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function addScript($src)
 	{
-		$this->script[] = $src;
+		$this->scripts[] = $src;
 	}
 
 	public function addScriptTop($src)
 	{
-		array_unshift($this->script, $src);
+		array_unshift($this->scripts, $src);
 	}
 
 	public function addJsFunc($nfunc)
@@ -1070,39 +1059,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->js .= $njs;
 	}
 
-	public function addCssTop($src)
+	public function addStylesheet($src)
 	{
-		array_unshift($this->css, $src);
-	}
-
-	public function addCss($src)
-	{
-		$this->css[] = $src;
-	}
-
-	public function getAddCss()
-	{
-		return $this->add_css;
-	}
-
-	public function getJsFunc()
-	{
-		return JSMin::minify($this->js_func);
-	}
-
-	public function getJs()
-	{
-		return JSMin::minify($this->js);
-	}
-
-	public function makeHead()
-	{
-		foreach ($this->css as $src) {
-			$this->head .= '<link rel="stylesheet" type="text/css" href="' . $src . '" />' . "\n";
-		}
-		foreach ($this->script as $src) {
-			$this->head .= '<script type="text/javascript" src="' . $src . '"></script>' . "\n";
-		}
+		$this->stylesheets[] = $src;
 	}
 
 	public function addHead($str)
@@ -1112,23 +1071,19 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function addTitle($name)
 	{
-		global $title;
 		$this->title[] = $name;
 	}
 
-	public function getHead()
-	{
-		foreach ($this->meta as $name => $content) {
-			$this->head .= "\n" . '<meta name="' . $name . '" content="' . $content . '" />';
-		}
-
-		return '<title>' . implode(' | ', $this->title) . '</title>' .
-			$this->head . '
-
-<meta property="og:title" content="Lebensmittel teilen, statt wegwerfen - foodsharing Deutschland" />
-<meta property="og:description" content="Auf foodsharing kannst Du Deine Lebensmitteln vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben" />
-<meta property="og:image" content="http://foodsharing.de/img/foodsharinglogo_200px.png" />
-<meta property="og:url" content="http://foodsharing.de" />';
+	public function getHeadData() {
+		return [
+			'stylesheets' => $this->stylesheets,
+			'scripts' => $this->scripts,
+			'title' => implode(' | ', $this->title),
+			'extra' => $this->head,
+			'css' => str_replace(["\r", "\n"], '', $this->add_css),
+			'jsFunc' => JSMin::minify($this->js_func),
+			'js' => JSMin::minify($this->js)
+		];
 	}
 
 	public function setTitle($name)
