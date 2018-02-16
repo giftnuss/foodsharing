@@ -3,14 +3,18 @@
 namespace Foodsharing\Modules\Store;
 
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 
 class StoreControl extends Control
 {
-	public function __construct(StoreModel $model, StoreView $view)
+	private $bellGateway;
+
+	public function __construct(StoreModel $model, StoreView $view, BellGateway $bellGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->bellGateway = $bellGateway;
 
 		parent::__construct();
 
@@ -186,7 +190,7 @@ class StoreControl extends Control
 
 				$foodsaver = $this->model->getFoodsaver($g_data['bezirk_id']);
 
-				$this->model->addBell($foodsaver, 'store_new_title', 'store_new', 'img img-store brown', array(
+				$this->bellGateway->addBell($foodsaver, 'store_new_title', 'store_new', 'img img-store brown', array(
 					'href' => '/?page=fsbetrieb&id=' . (int)$id
 				), array(
 					'user' => S::user('name'),

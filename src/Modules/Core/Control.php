@@ -457,15 +457,6 @@ abstract class Control
 		exit();
 	}
 
-	public function addBell($foodsaver_ids, $title, $body, $link_attributes = false)
-	{
-		if ($link_attributes !== false) {
-			$attr = serialize($link_attributes);
-		}
-
-		return $this->model->addBell($foodsaver_ids, $title, $body, $link_attributes);
-	}
-
 	public function setContentWidth($left, $right)
 	{
 		global $content_left_width;

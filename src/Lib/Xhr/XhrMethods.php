@@ -8,11 +8,13 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\BellModel;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 use Foodsharing\Modules\Message\MessageModel;
-use Foodsharing\Modules\Region\RegionModel;
+use Foodsharing\Modules\Region\ForumGateway;
+use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreModel;
 
 class XhrMethods
@@ -25,14 +27,27 @@ class XhrMethods
 	private $mailboxModel;
 	private $messageModel;
 	private $bellModel;
-	private $regionModel;
+	private $regionGateway;
+	private $forumGateway;
+	private $bellGateway;
 
 	/**
 	 * XhrMethods constructor.
 	 *
 	 * @param $model
 	 */
-	public function __construct(Func $func, Model $model, Utils $viewUtils, ViewUtils $xhrViewUtils, StoreModel $storeModel, MailboxModel $mailboxModel, MessageModel $messageModel, BellModel $bellModel, RegionModel $regionModel)
+	public function __construct(
+		Func $func,
+		Model $model,
+		Utils $viewUtils,
+		ViewUtils $xhrViewUtils,
+		StoreModel $storeModel,
+		MailboxModel $mailboxModel,
+		MessageModel $messageModel,
+		BellModel $bellModel,
+		RegionGateway $regionGateway,
+		ForumGateway $forumGateway,
+		BellGateway $bellGateway)
 	{
 		$this->func = $func;
 		$this->model = $model;
@@ -42,12 +57,14 @@ class XhrMethods
 		$this->mailboxModel = $mailboxModel;
 		$this->messageModel = $messageModel;
 		$this->bellModel = $bellModel;
-		$this->regionModel = $regionModel;
+		$this->regionGateway = $regionGateway;
+		$this->forumGateway = $forumGateway;
+		$this->bellGateway = $bellGateway;
 	}
 
 	public function xhr_verify($data)
 	{
-		$bids = $this->regionModel->getFsBezirkIds((int)$data['fid']);
+		$bids = $this->model->getFsBezirkIds((int)$data['fid']);
 
 		if ($this->func->isBotForA($bids, false, true) || $this->func->isOrgaTeam()) {
 			if ($countver = $this->model->qOne('SELECT COUNT(*) FROM ' . PREFIX . 'verify_history WHERE date BETWEEN NOW()- INTERVAL 20 SECOND AND now() AND bot_id = ' . $this->func->fsId())) {
@@ -234,10 +251,10 @@ class XhrMethods
 				'last' => 1
 			))
 			) {
-				$poster = $this->model->getVal('name', 'foodsaver', $this->func->fsId());
+				$this->model->getVal('name', 'foodsaver', $this->func->fsId());
 				$betrieb = $this->model->getVal('name', 'betrieb', (int)$data['bid']);
 
-				$this->bellModel->addBell($data['team'], 'store_wallpost_title', 'store_wallpost', 'img img-store brown', array(
+				$this->bellGateway->addBell($data['team'], 'store_wallpost_title', 'store_wallpost', 'img img-store brown', array(
 					'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
 				), array(
 					'user' => S::user('name'),
@@ -276,9 +293,6 @@ class XhrMethods
 
 		$bezirk = $this->model->getBezirk($foodsaver['bezirk_id']);
 
-		//print_r($foodsaver);
-
-		$subtitle = '';
 		if (isset($foodsaver['botschafter'])) {
 			$subtitle = 'ist ' . $this->func->genderWord($foodsaver['geschlecht'], 'Botschafter', 'Botschafterin', 'Botschafter/in') . ' f&uuml;r ';
 			foreach ($foodsaver['botschafter'] as $i => $b) {
@@ -1000,7 +1014,7 @@ class XhrMethods
 				}
 			}
 			$betrieb = $this->model->getVal('name', 'betrieb', $data['bid']);
-			$this->bellModel->addBell($data['team'], 'store_cr_times_title', 'store_cr_times', 'img img-store brown', array(
+			$this->bellGateway->addBell($data['team'], 'store_cr_times_title', 'store_cr_times', 'img img-store brown', array(
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
 			), array(
 				'user' => S::user('name'),
@@ -1270,7 +1284,7 @@ class XhrMethods
 
 			$biebs = $this->model->getBiebsForStore($data['id']);
 
-			$this->bellModel->addBell($biebs, 'store_new_request_title', 'store_new_request', 'img img-store brown', array(
+			$this->bellGateway->addBell($biebs, 'store_new_request_title', 'store_new_request', 'img img-store brown', array(
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['id']
 			), array(
 				'user' => S::user('name'),
@@ -1290,7 +1304,7 @@ class XhrMethods
 				$add = ' Es gibt aber keinen Botschafter';
 			}
 
-			$this->bellModel->addBell($botsch, 'store_new_request_title', 'store_new_request', 'img img-store brown', array(
+			$this->bellGateway->addBell($botsch, 'store_new_request_title', 'store_new_request', 'img img-store brown', array(
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['id']
 			), array(
 				'user' => S::user('name'),
@@ -1319,7 +1333,7 @@ class XhrMethods
 			}
 		}
 
-		$botschafter = $this->func->handleTagselect('botschafter');
+		$this->func->handleTagselect('botschafter');
 
 		$this->model->update_bezirkNew($data['bezirk_id'], $g_data);
 
@@ -1452,7 +1466,7 @@ class XhrMethods
 						($bezirk = $this->model->getValues(array('name'), 'bezirk', $bezirk_id))
 					) {
 						if ($foodsaver['verified'] == 1) {
-							$this->bellModel->addBell(
+							$this->bellGateway->addBell(
 								$bots,
 								'new_foodsaver_title',
 								'new_foodsaver_verified',
@@ -1465,7 +1479,7 @@ class XhrMethods
 								'new-fs-' . $this->func->fsId()
 							);
 						} else {
-							$this->bellModel->addBell(
+							$this->bellGateway->addBell(
 								$bots,
 								'new_foodsaver_title',
 								'new_foodsaver',
@@ -1515,11 +1529,11 @@ class XhrMethods
 	public function xhr_delPost($data)
 	{
 		$fsid = $this->model->getVal('foodsaver_id', 'theme_post', $data['pid']);
-		$bezirkId = $this->regionModel->getBezirkForPost($data['pid']);
-		$bezirkType = $this->regionModel->getBezirkType($bezirkId);
+		$bezirkId = $this->forumGateway->getBezirkForPost($data['pid']);
+		$bezirkType = $this->regionGateway->getType($bezirkId);
 
 		if ($this->func->isOrgaTeam() || $fsid == $this->func->fsId() || ($this->func->isBotFor($bezirkId) && $bezirkType == 7)) {
-			$this->regionModel->deletePost($data['pid']);
+			$this->forumGateway->deletePost($data['pid']);
 
 			return 1;
 		} else {

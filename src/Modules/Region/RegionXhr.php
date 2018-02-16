@@ -5,15 +5,18 @@ namespace Foodsharing\Modules\Region;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\Model;
 
 class RegionXhr extends Control
 {
 	private $responses;
+	private $forumGateway;
 
-	public function __construct(RegionModel $model, RegionView $view)
+	public function __construct(Model $model, RegionView $view, ForumGateway $forumGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->forumGateway = $forumGateway;
 		$this->responses = new XhrResponses();
 
 		parent::__construct();
@@ -28,48 +31,48 @@ class RegionXhr extends Control
 
 	public function followTheme()
 	{
-		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
+		$bot_theme = $this->forumGateway->getBotThemestatus($_GET['tid']);
 		if (!S::may() || !$this->hasThemeAccess($bot_theme)) {
 			return $this->responses->fail_permissions();
 		}
 
-		$this->model->followTheme($_GET['tid']);
+		$this->forumGateway->followTheme(S::id(), $_GET['tid']);
 
 		return $this->responses->success();
 	}
 
 	public function unfollowTheme()
 	{
-		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
+		$bot_theme = $this->forumGateway->getBotThemestatus($_GET['tid']);
 		if (!S::may() || !$this->hasThemeAccess($bot_theme)) {
 			return $this->responses->fail_permissions();
 		}
 
-		$this->model->unfollowTheme($_GET['tid']);
+		$this->forumGateway->unfollowTheme(S::id(), $_GET['tid']);
 
 		return $this->responses->success();
 	}
 
 	public function stickTheme()
 	{
-		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
+		$bot_theme = $this->forumGateway->getBotThemestatus($_GET['tid']);
 		if (!S::may() || !$this->hasThemeAccess($bot_theme)) {
 			return $this->responses->fail_permissions();
 		}
 
-		$this->model->stickTheme($_GET['tid']);
+		$this->forumGateway->stickTheme($_GET['tid']);
 
 		return $this->responses->success();
 	}
 
 	public function unstickTheme()
 	{
-		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
+		$bot_theme = $this->forumGateway->getBotThemestatus($_GET['tid']);
 		if (!S::may() || !$this->hasThemeAccess($bot_theme)) {
 			return $this->responses->fail_permissions();
 		}
 
-		$this->model->unstickTheme($_GET['tid']);
+		$this->forumGateway->unstickTheme($_GET['tid']);
 
 		return $this->responses->success();
 	}
@@ -88,7 +91,7 @@ class RegionXhr extends Control
 			}
 
 			$this->view->bezirk_id = $bezirk_id;
-			$themes = $this->model->getThemes($bezirk_id, (int)$_GET['bot'], (int)$_GET['page'], (int)$_GET['last']);
+			$themes = $this->forumGateway->listThemes($bezirk_id, (int)$_GET['bot'], (int)$_GET['page'], (int)$_GET['last']);
 
 			return array(
 				'status' => 1,
@@ -112,8 +115,8 @@ class RegionXhr extends Control
 			$body = $this->func->autolink($body);
 
 			if ($bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid'])) {
-				if ($post_id = $this->model->addThemePost($_GET['tid'], $body, $_GET['pid'], $bezirk)) {
-					if ($follower = $this->model->getThreadFollower($_GET['tid'])) {
+				if ($post_id = $this->forumGateway->addThemePost(S::id(), $_GET['tid'], $body, $_GET['pid'], $bezirk)) {
+					if ($follower = $this->forumGateway->getThreadFollower(S::id(), $_GET['tid'])) {
 						$theme = $this->model->getVal('name', 'theme', $_GET['tid']);
 
 						foreach ($follower as $f) {

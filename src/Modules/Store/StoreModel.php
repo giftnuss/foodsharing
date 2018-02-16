@@ -3,16 +3,19 @@
 namespace Foodsharing\Modules\Store;
 
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Message\MessageModel;
 
 class StoreModel extends Model
 {
 	private $messageModel;
+	private $bellGateway;
 
-	public function __construct(MessageModel $messageModel)
+	public function __construct(MessageModel $messageModel, BellGateway $bellGateway)
 	{
 		$this->messageModel = $messageModel;
+		$this->bellGateway = $bellGateway;
 		parent::__construct();
 	}
 
@@ -141,7 +144,7 @@ class StoreModel extends Model
 		if ($date !== null && $bid !== null) {
 			return $this->del('DELETE FROM `' . PREFIX . 'abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` = ' . $this->dateval($date));
 		} elseif ($bid !== null) {
-			return $this->del('DELETE FROM `' . PREFIX . 'abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` = > now()');
+			return $this->del('DELETE FROM `' . PREFIX . 'abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
 		} else {
 			return $this->del('DELETE FROM `' . PREFIX . 'abholer` WHERE `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
 		}
@@ -487,7 +490,7 @@ class StoreModel extends Model
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $bid);
 
-		$this->addBell((int)$fsid, 'store_request_accept_title', 'store_request_accept', 'img img-store brown', array(
+		$this->bellGateway->addBell((int)$fsid, 'store_request_accept_title', 'store_request_accept', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$bid
 		), array(
 			'user' => S::user('name'),
@@ -514,7 +517,7 @@ class StoreModel extends Model
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $bid);
 
-		$this->addBell((int)$fsid, 'store_request_accept_wait_title', 'store_request_accept_wait', 'img img-store brown', array(
+		$this->bellGateway->addBell((int)$fsid, 'store_request_accept_wait_title', 'store_request_accept_wait', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$bid
 		), array(
 			'user' => S::user('name'),
@@ -537,7 +540,7 @@ class StoreModel extends Model
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $bid);
 
-		$this->addBell((int)$fsid, 'store_request_deny_title', 'store_request_deny', 'img img-store brown', array(
+		$this->bellGateway->addBell((int)$fsid, 'store_request_deny_title', 'store_request_deny', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$bid
 		), array(
 			'user' => S::user('name'),
@@ -652,7 +655,7 @@ class StoreModel extends Model
 
 		$this->del('DELETE FROM `' . PREFIX . 'betrieb_team` WHERE `betrieb_id` = ' . $this->intval($bid) . ' AND active = 1 AND foodsaver_id NOT IN(' . implode(',', $member_ids) . ')');
 
-		$sql = 'INSERT IGNORE INTO `' . PREFIX . 'betrieb_team` (`betrieb_id`,`foodsaver_id`,`verantwortlich`,`active`)VALUES' . implode(',', $values);
+		$sql = 'INSERT IGNORE INTO `' . PREFIX . 'betrieb_team` (`betrieb_id`,`foodsaver_id`,`verantwortlich`,`active`) VALUES ' . implode(',', $values);
 
 		if ($cid = $this->getBetriebConversation($bid)) {
 			$this->messageModel->setConversationMembers($cid, $member_ids);

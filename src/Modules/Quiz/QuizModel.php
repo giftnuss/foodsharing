@@ -2,10 +2,19 @@
 
 namespace Foodsharing\Modules\Quiz;
 
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Model;
 
 class QuizModel extends Model
 {
+	private $bellGateway;
+
+	public function __construct(BellGateway $bellGateway)
+	{
+		parent::__construct();
+		$this->bellGateway = $bellGateway;
+	}
+
 	public function listQuiz()
 	{
 		return $this->q('SELECT id,name FROM ' . PREFIX . 'quiz ORDER BY id');
@@ -278,7 +287,7 @@ class QuizModel extends Model
 		')
 		) {
 			if ($orgateam = $this->getOrgateam()) {
-				$this->addBell($orgateam, 'new_quiz_comment_title', 'new_quiz_comment', 'fa fa-question-circle', array('href' => '/?page=quiz&sub=wall&id=' . (int)$question_id), array(
+				$this->bellGateway->addBell($orgateam, 'new_quiz_comment_title', 'new_quiz_comment', 'fa fa-question-circle', array('href' => '/?page=quiz&sub=wall&id=' . (int)$question_id), array(
 					'comment' => $comment
 				));
 			}

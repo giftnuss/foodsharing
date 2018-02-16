@@ -3,16 +3,19 @@
 namespace Foodsharing\Modules\FairTeiler;
 
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 
 class FairTeilerXhr extends Control
 {
 	private $gateway;
+	private $bellGateway;
 
-	public function __construct(FairTeilerView $view, FairTeilerGateway $gateway)
+	public function __construct(FairTeilerView $view, FairTeilerGateway $gateway, BellGateway $bellGateway)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;
+		$this->bellGateway = $bellGateway;
 
 		parent::__construct();
 	}
@@ -54,7 +57,7 @@ class FairTeilerXhr extends Control
 			}
 
 			if ($follower = $this->gateway->getInfoFollower($_GET['fid'])) {
-				$this->model->addBell(
+				$this->bellGateway->addBell(
 					$follower,
 					'ft_update_title',
 					'ft_update',

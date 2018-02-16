@@ -3,8 +3,9 @@
 namespace Foodsharing\Services;
 
 use Foodsharing\Lib\Func;
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Buddy\BuddyModel;
-use Foodsharing\Modules\Region\RegionModel;
+use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Modules\WorkGroup\WorkGroupModel;
 
@@ -13,15 +14,15 @@ class SearchService
 	private $buddyModel;
 	private $workGroupModel;
 	private $storeModel;
-	private $regionModel;
+	private $regionGateway;
 	private $func;
 
-	public function __construct(BuddyModel $buddyModel, WorkGroupModel $workGroupModel, StoreModel $storeModel, RegionModel $regionModel, Func $func)
+	public function __construct(BuddyModel $buddyModel, WorkGroupModel $workGroupModel, StoreModel $storeModel, regionGateway $regionGateway, Func $func)
 	{
 		$this->buddyModel = $buddyModel;
 		$this->workGroupModel = $workGroupModel;
 		$this->storeModel = $storeModel;
-		$this->regionModel = $regionModel;
+		$this->regionGateway = $regionGateway;
 		$this->func = $func;
 	}
 
@@ -112,24 +113,23 @@ class SearchService
 		/*
 		 * Bezirke load Bezirke connected to the user in the array
 		*/
-		if ($bezirke = $this->regionModel->listMyBezirke()) {
-			$result = [];
-			foreach ($bezirke as $b) {
-				$result[] = array(
-					'name' => $b['name'],
-					'teaser' => '',
-					'img' => false,
-					'href' => '/?page=bezirk&bid=' . $b['id'] . '&sub=forum',
-					'search' => array(
-						$b['name']
-					)
-				);
-			}
-			$index[] = array(
-				'title' => 'Deine Bezirke',
-				'result' => $result
+		$bezirke = $this->regionGateway->listForFoodsaverExceptWorkingGroups(S::id());
+		$result = [];
+		foreach ($bezirke as $b) {
+			$result[] = array(
+				'name' => $b['name'],
+				'teaser' => '',
+				'img' => false,
+				'href' => '/?page=bezirk&bid=' . $b['id'] . '&sub=forum',
+				'search' => array(
+					$b['name']
+				)
 			);
 		}
+		$index[] = array(
+			'title' => 'Deine Bezirke',
+			'result' => $result
+		);
 
 		/*
 		 * Get or set an individual token as filename for the public json file

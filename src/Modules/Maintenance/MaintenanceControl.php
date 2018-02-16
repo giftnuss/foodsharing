@@ -4,13 +4,17 @@ namespace Foodsharing\Modules\Maintenance;
 
 use Flourish\fImage;
 use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Console\ConsoleControl;
 
 class MaintenanceControl extends ConsoleControl
 {
-	public function __construct(MaintenanceModel $model)
+	private $bellGateway;
+
+	public function __construct(MaintenanceModel $model, BellGateway $bellGateway)
 	{
 		$this->model = $model;
+		$this->bellGateway = $bellGateway;
 		parent::__construct();
 	}
 
@@ -184,7 +188,7 @@ class MaintenanceControl extends ConsoleControl
 	private function infoToBotsUserDeactivated($foodsaver)
 	{
 		if ($botschafer = $this->model->getUserBotschafter($foodsaver['id'])) {
-			$this->model->addBell(
+			$this->bellGateway->addBell(
 				$botschafer,
 				'fs_sleepmode_title',
 				'fs_sleepmode',
@@ -425,11 +429,6 @@ class MaintenanceControl extends ConsoleControl
 
 		echo "\n";
 		self::success('OK');
-	}
-
-	public function compress()
-	{
-		require_once 'lib/inc.php';
 	}
 
 	public function betriebFetchWarning()

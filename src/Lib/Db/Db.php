@@ -48,7 +48,7 @@ abstract class Db
 			$k = uniqid();
 			$key = md5($k);
 
-			$id = $this->insert('
+			$this->insert('
 			REPLACE INTO 	`' . PREFIX . 'pass_request`
 			(
 				`foodsaver_id`,
@@ -337,6 +337,9 @@ abstract class Db
 		return $res;
 	}
 
+	/**
+	 * @deprecated use db->fetchValue
+	 */
 	public function qOne($sql)
 	{
 		if ($res = $this->sql($sql)) {
@@ -350,6 +353,9 @@ abstract class Db
 		return false;
 	}
 
+	/**
+	 * @deprecated use db->fetchAllValues
+	 */
 	public function qCol($sql)
 	{
 		$out = array();
@@ -372,7 +378,9 @@ abstract class Db
 	 *
 	 * @param string $sql
 	 *
-	 * @return multitype:array |boolean
+	 * @return array |boolean
+	 *
+	 * @deprecated use db->fetchAllValues and adapt code to not use indexed array
 	 */
 	public function qColKey($sql)
 	{
@@ -391,6 +399,9 @@ abstract class Db
 		}
 	}
 
+	/**
+	 * @deprecated use db->fetch
+	 */
 	public function qRow($sql)
 	{
 		try {
@@ -409,6 +420,9 @@ abstract class Db
 		return false;
 	}
 
+	/**
+	 * @deprecated use db->delete
+	 */
 	public function del($sql)
 	{
 		if ($res = $this->sql($sql)) {
@@ -418,6 +432,9 @@ abstract class Db
 		return false;
 	}
 
+	/**
+	 * @deprecated use db->insert
+	 */
 	public function insert($sql)
 	{
 		if ($res = $this->sql($sql)) {
@@ -427,11 +444,17 @@ abstract class Db
 		}
 	}
 
+	/**
+	 * @deprecated cast to int if necessary
+	 */
 	public function intval($val)
 	{
 		return (int)$val;
 	}
 
+	/**
+	 * @deprecated use db->update
+	 */
 	public function update($sql)
 	{
 		if ($this->sql($sql)) {
@@ -446,11 +469,18 @@ abstract class Db
 		return '"' . $this->safe($val) . '"';
 	}
 
+	/**
+	 * @deprecated use floatval() directly
+	 */
 	public function floatval($val)
 	{
 		return floatval($val);
 	}
 
+	/**
+	 * @deprecated use strip_tags() until the frontend can escape properly.
+	 * String escaping is not needed anymore with prepared statements
+	 */
 	public function strval($val, $html = false)
 	{
 		if (is_string($html) || $html === false) {
@@ -464,6 +494,9 @@ abstract class Db
 		return '"' . $this->safe($val) . '"';
 	}
 
+	/**
+	 * @deprecated use db->fetchAll
+	 */
 	public function q($sql)
 	{
 		$out = array();
@@ -602,7 +635,6 @@ abstract class Db
 		}
 		$hashed = $this->encryptMd5($email, $pass);
 
-		$user = false;
 		$sql = '
 				SELECT 	`id`,
 						`bezirk_id`,
@@ -998,7 +1030,7 @@ abstract class Db
 	 * set option is an key value store each var is avalable in the user session.
 	 *
 	 * @param string $key
-	 * @param var $val
+	 * @param $val
 	 */
 	public function setOption($key, $val)
 	{
