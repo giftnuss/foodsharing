@@ -21,8 +21,6 @@
 
 #campaigntext {
     text-align: center;
-    font-size: 12px;
-    font-size: 2.5vh;
     color: #F9F5E0;
     text-shadow: 0 1px #555;
     -webkit-text-size-adjust: none;
@@ -42,7 +40,6 @@
 }
 
 #campaigntext div img {
-    width:50px;
     width:8.5vh;
     margin: 0 auto;
 }
@@ -364,7 +361,6 @@ blockquote, q {
 
 blockquote:before, blockquote:after,
 q:before, q:after {
-    content: '';
     content: none;
 }
 
@@ -580,7 +576,6 @@ ul.bread {
     font-size: 19px;
     line-height: 30px;
     color: #FFFFFF;
-    text-decoration: none;
     float: left;
     font-weight: lighter;
 }
@@ -2477,10 +2472,8 @@ footer .linklist li a:hover {
 #loginbar input {
     border: 0 none;
     margin: 0;
-    padding: 0;
     line-height: 17px;
     display: inline-block;
-    margin: 0;
     font-size: 12px;
     height: 17px;
     padding: 3px 8px;
@@ -2550,8 +2543,6 @@ footer .linklist li a:hover {
     }
 
     div.forum_user_info_holder {
-        width: 45px !important;
-        float: left !important;
         float: left;
         margin: 0 10px 0 0;
         width: 160px;

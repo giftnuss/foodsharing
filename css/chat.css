@@ -50,15 +50,10 @@
 }
 
 .chatboxhead .linklist {
-    left: 68px;
     position: absolute;
-    top: 29px;
     width: 180px;
-    z-index: 11;
     left: 88px;
-    position: absolute;
     top: 30px;
-    width: 180px;
     z-index: 100;
 }
 
@@ -115,7 +110,6 @@
     height: 250px !important;
     width: 259px;
     overflow-y: auto;
-    overflow-x: auto;
     padding: 7px !important;
     border-left: 1px solid #cccccc;
     border-right: 1px solid #cccccc;
@@ -228,8 +222,6 @@
     font-size: 16px;
     font-weight: bold;
     height: 16px;
-    margin: 5px 5px 0 0;
-    outline: 0 none;
     padding: 3px;
     text-align: center;
     text-decoration: none;
@@ -248,7 +240,6 @@
     float: left;
     text-decoration: none;
     width: 205px;
-    text-decoration: none;
     font-size: 13px;
     font-weight: bold;
     outline: 0;
@@ -306,7 +297,6 @@
 
     -webkit-border-radius: 14px;
     -moz-border-radius: 14px;
-    border-radius: 14px;
 }
 
 .conversation-list .icon .img.yellow {

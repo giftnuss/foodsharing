@@ -16,7 +16,6 @@ time, mark, audio, video {
     padding: 0;
     border: 0;
     font-size: 100%;
-    font: inherit;
     vertical-align: baseline;
 }
 
@@ -44,7 +43,6 @@ blockquote, q {
 
 blockquote:before, blockquote:after,
 q:before, q:after {
-    content: '';
     content: none;
 }
 
@@ -350,7 +348,6 @@ div.fett {
     border-radius: 10px;
     padding: 15px;
     color: #D11111;
-    font-size: 14x;
     border: 5px solid #D11111;
     font-size: 15px;
     margin-bottom: 10px;

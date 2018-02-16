@@ -584,7 +584,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			<table height="100%" width="100%">
 				<tr>
 				<td valign="top" style="background-color:#FAF7E5">
-					<div style="padding:5px;font-size:13px;font-family:Arial;padding:15px;color:#31210C;">
+					<div style="font-size:13px;font-family:Arial;padding:15px;color:#31210C;">
 						' . str_replace($search, $replace, $message) . '
 					</div>
 				</td>
