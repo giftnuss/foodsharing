@@ -3,27 +3,27 @@ i.img {
 }
 
 i.img-store {
-    background-position: 0px 0px;
+    background-position: 0 0;
 }
 
 i.img-vegetables {
-    background-position: -17px 0px;
+    background-position: -17px 0;
 }
 
 i.img-smile {
-    background-position: -51px 0px;
+    background-position: -51px 0;
 }
 
 i.img-recycle {
-    background-position: -68px 0px;
+    background-position: -68px 0;
 }
 
 i.img-basket {
-    background-position: -34px 0px;
+    background-position: -34px 0;
 }
 
 i.img-fbasket {
-    background: url(/img/bicon.png) no-repeat 0px 0px;
+    background: url(/img/bicon.png) no-repeat 0 0;
     display: inline-block;
     width: 23px;
     height: 22px;

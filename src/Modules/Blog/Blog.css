@@ -11,7 +11,7 @@
 
 .news-post.full img {
     float: right;
-    margin-right: 0px;
+    margin-right: 0;
     margin-left: 15px;
 }
 
@@ -25,7 +25,7 @@
 }
 
 .news-post h2 a {
-    font-family: "Alfa Slab One";
+    font-family: "Alfa Slab One", serif;
     font-weight: normal;
     font-size: 25px;
     margin: 0;

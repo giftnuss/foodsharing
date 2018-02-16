@@ -27,14 +27,14 @@
 }
 
 #campaigntext h2 {
-    font-family: "Alfa Slab One";
+    font-family: "Alfa Slab One", serif;
     font-size: 2.7em;
     padding-top:2.7em;
     font-weight: normal;
 }
 
 #campaigntext h4 {
-    font-family: "Alfa Slab One";
+    font-family: "Alfa Slab One", serif;
     font-size: 1.3em;
     font-weight: normal;
 }
@@ -45,7 +45,7 @@
 }
 
 #campaigntext h3 {
-    font-family: "Alfa Slab One";
+    font-family: "Alfa Slab One", serif;
     font-size: 2em;
     font-weight: normal;
 }
@@ -92,7 +92,7 @@
         width: 100%;
         height: 120vh;
         position: absolute;
-        top: 0px; left: 0;
+        top: 0; left: 0;
         transform: none;
     }
     #campaigntext {
@@ -113,7 +113,6 @@
     }
 }
 
-
 .carpetroll {
     color: #533A24;
     padding: 41px 0;
@@ -127,7 +126,7 @@
     color: #64AE24;
     font-size:24px;
     font-weight: normal;
-    font-family: "Alfa Slab One";
+    font-family: "Alfa Slab One", serif;
     letter-spacing: 0.4px;
     border-bottom: 4px solid #64AE24 ;
     box-sizing: content-box;
@@ -139,7 +138,7 @@
 
 .carpetroll .button {
     font-size:150%;
-    font-family: "Alfa Slab One";
+    font-family: "Alfa Slab One", serif;
     font-weight: normal !important;
 }
 
@@ -160,7 +159,7 @@
     display: block;
     text-align: center;
     width: 100%;
-    font-family: "Alfa Slab One";
+    font-family: "Alfa Slab One", serif;
     font-size:120%;
 }
 
@@ -180,7 +179,7 @@
     font-weight: normal;
     background-color: #64AE24;
     color: white;
-    font-family: "Alfa Slab One";
+    font-family: "Alfa Slab One", serif;
     width: 8em;
     border-radius: 1em;
     text-decoration: none;
@@ -277,7 +276,7 @@
 }
 
 .top h3 {
-    font-family: "Alfa Slab One";
+    font-family: "Alfa Slab One", serif;
     font-size: 20px;
     color: #533A24;
     font-weight: normal;
@@ -342,9 +341,9 @@
 }
 
 .ui-dialog, .ui-shadow {
-    -moz-box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.3);
-    box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
 }
 
 textarea {
@@ -433,7 +432,7 @@ body {
     border-bottom: 1px solid #E3DED3;
     padding-bottom: 15px;
     padding-top: 15px;
-    margin-top: 0px;
+    margin-top: 0;
 }
 
 .input-wrapper label.wrapper-label {
@@ -572,7 +571,7 @@ ul.bread {
     text-decoration: none;
     border: 0;
     display: block;
-    font-family: 'Alfa Slab One';
+    font-family: 'Alfa Slab One', serif;
     font-size: 19px;
     line-height: 30px;
     color: #FFFFFF;
@@ -592,7 +591,7 @@ ul.bread {
 #layout_logo a:after {
     content: "\f015";
     color: #533A24;
-    font-family: "FontAwesome"; 
+    font-family: "FontAwesome";
 }
 
 #layout_logo a:hover:after {
@@ -602,7 +601,7 @@ ul.bread {
 #layout_logo a:after {
     content: "\f015";
     color: #4A3520;
-    font-family: "FontAwesome"; 
+    font-family: "FontAwesome";
 }
 
 #layout_logo a:hover:after {
@@ -719,9 +718,9 @@ div.mce-tinymce.mce-container.mce-panel {
     -moz-border-radius: 0 0 6px 6px;
     -webkit-border-radius: 0 0 6px 6px;
 
-    -moz-box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.3);
-    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
 }
 
 #searchbar ul {
@@ -833,7 +832,7 @@ div.pulse-msg {
     border-radius: 6px 6px 6px 6px;
     -moz-border-radius: 6px 6px 6px 6px;
     -webkit-border-radius: 6px 6px 6px 6px;
-    border: 0px solid #000000;
+    border: 0 solid #000000;
 }
 
 div.msg-inside {
@@ -932,7 +931,6 @@ div.xv_left {
     margin-right: 15px;
     -moz-border-radius: 6px; /* Firefox */
     -webkit-border-radius: 6px; /* Safari, Chrome */
-    -khtml-border-radius: 6px; /* Konqueror */
     border-radius: 6px; /* CSS3 */
     background-color: #BCB199;
     margin-bottom: 15px;
@@ -953,7 +951,6 @@ div.xv_left ul {
 div.xv_left img {
     -moz-border-radius: 6px; /* Firefox */
     -webkit-border-radius: 6px; /* Safari, Chrome */
-    -khtml-border-radius: 6px; /* Konqueror */
     border-radius: 6px; /* CSS3 */
 }
 
@@ -965,7 +962,6 @@ div.xv_left ul li a {
     font-size: 13px;
     -moz-border-radius: 6px; /* Firefox */
     -webkit-border-radius: 6px; /* Safari, Chrome */
-    -khtml-border-radius: 6px; /* Konqueror */
     border-radius: 6px; /* CSS3 */
     background-color: #FFF;
     text-align: center;
@@ -1001,7 +997,7 @@ div.wrap .logo {
 
 ul.team {
     padding: 0;
-    margin: 5px 0px 5px 0px;
+    margin: 5px 0 5px 0;
     float: left;
     width: 100%;
 }
@@ -1012,7 +1008,7 @@ ul.team, ul.team li {
 }
 
 ul.team li {
-    margin: 0px 0px 0px 3px;
+    margin: 0 0 0 3px;
     padding: 0;
     height: 49px;
     overflow: hidden;
@@ -1112,20 +1108,20 @@ table.pintable {
 
 table.pintable tr td {
     vertical-align: top;
-    padding: 12px 0px 12px 0px;
+    padding: 12px 0 12px 0;
 }
 
 div.foot {
     display: block;
     text-align: left;
     font-size: 11px;
-    padding: 12px 0px 5px 8px;
+    padding: 12px 0 5px 8px;
 
     color: #645242;
 }
 
 div.foot span.dot {
-    margin: 0px 5px 0px 5px;
+    margin: 0 5px 0 5px;
 }
 
 a.light {
@@ -1214,7 +1210,7 @@ div.popbox div.desc {
 
 ul.imglist li {
     float: left;
-    margin: 3px 0px 0px 3px;
+    margin: 3px 0 0 3px;
     padding: 0;
     height: 45px;
     overflow: hidden;
@@ -1304,9 +1300,9 @@ iframe.text {
     border-right: 1px solid #CCCCCC;
     padding: 7px;
     width: 563px;
-	-webkit-border-radius: 0px 0px 6px 6px;
-	-moz-border-radius: 0px 0px 6px 6px;
-	border-radius: 0px 0px 6px 6px;
+	-webkit-border-radius: 0 0 6px 6px;
+	-moz-border-radius: 0 0 6px 6px;
+	border-radius: 0 0 6px 6px;
 }
 
 .rte-toolbar a, .rte-toolbar a img {
@@ -1350,7 +1346,7 @@ iframe.text {
 }
 
 .rte-toolbar a.bold span {
-    background-position: -54px 0px;
+    background-position: -54px 0;
 }
 
 .rte-toolbar a.italic span {
@@ -1382,8 +1378,7 @@ table.tablesorter td span.photo a {
 div.welcome {
     min-height: 50px;
     position: relative;
-    backgground: none;
-    background-color: #FFFFFE;
+    background: #FFFFFE none;
 }
 
 div.welcome a {
@@ -1478,7 +1473,7 @@ ul.linklist li > a i.fa {
 
 .history li.title {
     font-size: 13px;
-    fon-weight: bold;
+    font-weight: bold;
     border-top: 1px solid #e3ded3;
     padding-top: 8px;
     margin-top: 8px;
@@ -1496,7 +1491,7 @@ ul.linklist li span.i {
     border-radius: 6px 6px 6px 6px;
     -moz-border-radius: 6px 6px 6px 6px;
     -webkit-border-radius: 6px 6px 6px 6px;
-    border: 0px solid #000000;
+    border: 0 solid #000000;
 }
 
 ul.linklist li span.t {
@@ -1515,7 +1510,7 @@ ul.linklist li span.i img {
     border-radius: 6px 6px 6px 6px;
     -moz-border-radius: 6px 6px 6px 6px;
     -webkit-border-radius: 6px 6px 6px 6px;
-    border: 0px solid #000000;
+    border: 0 solid #000000;
 }
 
 ul.linklist li > a.more {
@@ -1529,14 +1524,12 @@ ul.linklist li > a.more {
     line-height: 32px;
     text-align: center;
     margin-top: 15px;
-
 }
 
 ul.linklist li, ul.linklist li > a, ul.linklist li > a span {
     display: block;
     margin: 0;
     padding: 0;
-
 }
 
 ul.linklist li > a {
@@ -1595,7 +1588,7 @@ ul.linklist li > a:hover, ul.linklist li > a:hover span {
 }
 
 .post .foot {
-    padding: 12px 0 5px 0px;
+    padding: 12px 0 5px 0;
     margin-top: 5px;
 }
 
@@ -1631,7 +1624,7 @@ ul.linklist li > a:hover, ul.linklist li > a:hover span {
 div.statdisplay .item {
     display: block;
     float: left;
-    padding: 0px 5px 0px 5px;
+    padding: 0 5px 0 5px;
     margin-right: 8px;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
@@ -1740,9 +1733,7 @@ span.verified {
 
 .noSelect {
     user-select: none;
-    -o-user-select: none;
     -moz-user-select: none;
-    -khtml-user-select: none;
     -webkit-user-select: none;
 }
 
@@ -1805,9 +1796,7 @@ span.verified {
 
 .noSelect {
     user-select: none;
-    -o-user-select: none;
     -moz-user-select: none;
-    -khtml-user-select: none;
     -webkit-user-select: none;
 }
 
@@ -1917,7 +1906,7 @@ p.jRatingInfos span.maxRate {
     -moz-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     -o-transform: rotate(45deg);
-    tranform: rotate(45deg);
+    transform: rotate(45deg);
 }
 
 .arrow.top:after {
@@ -1966,7 +1955,7 @@ a.light {
 .leaflet-top, .leaflet-bottom {
     z-index: 25 !important;
     right: auto;
-    left: 0px;
+    left: 0;
 }
 
 #top {
@@ -2005,7 +1994,7 @@ a.light {
 */
 #top .inner {
     width: 980px;
-    margin: 0px auto 0px auto;
+    margin: 0 auto 0 auto;
 }
 
 #top .inner .menu {
@@ -2171,7 +2160,6 @@ ul.fsicons li a {
     height: 35px;
     -moz-border-radius: 6px; /* Firefox */
     -webkit-border-radius: 6px; /* Safari, Chrome */
-    -khtml-border-radius: 6px; /* Konqueror */
     border-radius: 6px; /* CSS3 */
     overflow: hidden;
 }
@@ -2432,9 +2420,9 @@ footer .imglink {
 
 footer {
     background-color: #533A24;
-    -webkit-box-shadow: inset 0px 20px 20px -20px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: inset 0px 20px 20px -20px rgba(0, 0, 0, 0.75);
-    box-shadow: inset 0px 20px 20px -20px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: inset 0 20px 20px -20px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: inset 0 20px 20px -20px rgba(0, 0, 0, 0.75);
+    box-shadow: inset 0 20px 20px -20px rgba(0, 0, 0, 0.75);
 }
 
 footer .wrapper {
@@ -2571,7 +2559,7 @@ footer .linklist li a:hover {
     }
 
     #msgbar-infos, #msgbar-basket, #msgbar-messages {
-        margin-left: 0px;
+        margin-left: 0;
     }
 
     #msgbar-basket .msgbar-dropdown-menu:after {
@@ -2596,14 +2584,14 @@ footer .linklist li a:hover {
     }
 
     .inside, .mainpure {
-        -webkit-border-radius: 0px;
-        -moz-border-radius: 0px;
-        border-radius: 0px;
+        -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+        border-radius: 0;
     }
 
     #top {
         position: fixed !important;
-        top: 0px !important;
+        top: 0 !important;
     }
 }
 
@@ -2644,7 +2632,7 @@ footer .linklist li a:hover {
     }
 
     #infobar > li:last-child {
-        margin-right: 0px !important;
+        margin-right: 0 !important;
     }
 
     #searchbar .result-wrapper {
@@ -2656,7 +2644,7 @@ footer .linklist li a:hover {
 
     #top {
         position: fixed !important;
-        top: 0px !important;
+        top: 0 !important;
     }
 
     .top .img {

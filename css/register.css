@@ -88,7 +88,7 @@ body {
 
 body, div, p {
     font-size: 14px;
-    font-family: Arial, Helvetica;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 p {
@@ -171,8 +171,6 @@ div.form-entry input.ss-q-short, div.ss-form-question textarea, div.form-entry i
     font-size: 16px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
     border-radius: 10px;
 }
 
@@ -183,7 +181,7 @@ div.form-entry input.ss-q-short, div.ss-form-question textarea, div.form-entry i
 
 div.form-entry input.focus {
     border: 4px solid #63AF25;
-    background-color: FFFFFF;
+    background-color: #FFFFFF;
 }
 
 div.form-entry select {
@@ -215,8 +213,6 @@ select {
     padding: 6px 5px 6px 6px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
     border-radius: 10px;
     cursor: pointer;
     width: 200px;
@@ -235,11 +231,9 @@ select {
 /* line 141, ../sass/style.scss */
 .customSelect.customSelectOpen {
     border-color: #63AF25;
-
 }
 
 .customSelectInner {
-
     padding: 0;
     margin: 0;
     width: 198px !important;
@@ -327,7 +321,7 @@ div.teaser {
 }
 
 div#fotoupload h3 {
-    fonz-size: 16px;
+    font-size: 16px;
     font-weight: bold;
 }
 
@@ -354,8 +348,8 @@ div.fett {
 }
 
 div.fett h3 {
-    bont-weight: bold;
-    font-size: 16x;
+    font-weight: bold;
+    font-size: 16px;
     margin-bottom: 4px;
 }
 

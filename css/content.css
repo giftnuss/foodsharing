@@ -137,7 +137,7 @@ table.tablesorter thead tr th, table.tablesorter tfoot tr th {
 
     background-color: #4A3520;
     color: #FFFFFF;
-    border: 0px solid #FFFFFE;
+    border: 0 solid #FFFFFE;
     padding: 8px;
 }
 
@@ -148,10 +148,7 @@ table.tablesorter thead tr .header {
 
 table.tablesorter tbody td {
     color: #3D3D3D;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    padding-left: 4px;
-    paddin-right: 4px;
+    padding: 12px 4px 12px 4px;
     background-color: #FFFFFE;
     vertical-align: middle;
     height: 50px;
@@ -218,7 +215,6 @@ p {
     padding: 7px;
     -moz-border-radius: 6px; /* Firefox */
     -webkit-border-radius: 6px; /* Safari, Chrome */
-    -khtml-border-radius: 6px; /* Konqueror */
     border-radius: 6px; /* CSS3 */
 }
 
@@ -232,7 +228,6 @@ input.hasDatepicker {
     border: 1px solid #C9BCAF;
     -moz-border-radius: 6px; /* Firefox */
     -webkit-border-radius: 6px; /* Safari, Chrome */
-    -khtml-border-radius: 6px; /* Konqueror */
     border-radius: 6px; /* CSS3 */
     margin-right: 7px;
 }
@@ -252,7 +247,6 @@ input.hasDatepicker {
     padding: 7px;
     -moz-border-radius: 6px; /* Firefox */
     -webkit-border-radius: 6px; /* Safari, Chrome */
-    -khtml-border-radius: 6px; /* Konqueror */
     border-radius: 6px; /* CSS3 */
 }
 
@@ -344,30 +338,30 @@ select.v-switch {
 
 div.head a.ampel {
     float: left;
-    padding-left: 0px;
+    padding-left: 0;
     padding-right: 8px;
     position: relative;
     top: -2px;
 }
 
 .ampel-gelb span {
-    background-position: -17px 0px;
+    background-position: -17px 0;
 }
 
 .ampel-rot span {
-    background-position: -34px 0px;
+    background-position: -34px 0;
 }
 
 .ampel-gruen span {
-    background-position: 0px 0px;
+    background-position: 0 0;
 }
 
 .ampel-grau span {
-    background-position: -51px 0px;
+    background-position: -51px 0;
 }
 
 .ampel-blau span {
-    background-position: -68px 0px;
+    background-position: -68px 0;
 }
 
 ul.toolbar {
@@ -429,7 +423,7 @@ div.ui-dialog label {
 
 table.timetable td {
     height: 20px;
-    vertival-align: middle;
+    vertical-align: middle;
 }
 
 table.timetable select {
@@ -452,11 +446,8 @@ i {
     color: #4A3520;
 }
 
-.page h1, .page h2,
-
-,
 .page h3 {
-    font-family: 'Alfa Slab One';
+    font-family: 'Alfa Slab One', serif;
     font-weight: normal;
     font-size: 20px;
     color: #4A3520;
@@ -464,7 +455,7 @@ i {
 }
 
 .page .h1 h1 {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .page .h1 small, .page .h1 small p {
@@ -504,7 +495,7 @@ i {
 }
 
 .reddot h5 {
-    font-family: 'Alfa Slab One';
+    font-family: 'Alfa Slab One', serif;
     font-weight: normal;
     font-size: 17px;
     color: #4A3520;
@@ -528,7 +519,7 @@ i {
 }
 
 .page .ui-accordion h3 {
-    font-family: 'Alfa Slab One';
+    font-family: 'Alfa Slab One', serif;
     font-weight: normal;
     font-size: 17px;
     color: #fff;
