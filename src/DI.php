@@ -70,6 +70,11 @@ class DI
 		$this->container->compile();
 	}
 
+	public function isCompiled()
+	{
+		return $this->container->isCompiled();
+	}
+
 	/**
 	 * @throws \Exception
 	 */
