@@ -2,6 +2,8 @@
     $("#top .menu").css("display", "block");
 </script>
 
+{% include 'partials/becomeBezirk.twig' only %}
+
 {% if loggedIn %}
     <ul id="mainMenu" class="jMenu">
         <li><a href="/essenskoerbe/find">Essenskörbe</a></li>

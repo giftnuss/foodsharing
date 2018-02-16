@@ -18,7 +18,8 @@ class TwigExtensions extends Twig_Extension
 	public function getFilters()
 	{
 		return [
-			new Twig_Filter('translate', array($this, 'translateFilter'))
+			new Twig_Filter('translate', array($this, 'translateFilter')),
+			new Twig_Filter('id', array($this, 'idFilter'))
 		];
 	}
 
@@ -31,31 +32,8 @@ class TwigExtensions extends Twig_Extension
 		}
 	}
 
-	public function getFunctions()
+	public function idFilter($name)
 	{
-		return [
-			new Twig_SimpleFunction('getImageUrl', array($this, 'getImageUrl')),
-		];
-	}
-
-	public function getImageUrl($file = false, $size = 'mini', $format = 'q', $altimg = false)
-	{
-		if ($file === false) {
-			$file = $_SESSION['client']['photo'];
-		}
-
-		if (!empty($file) && file_exists('images/' . $file)) {
-			if (!file_exists('images/' . $size . '_' . $format . '_' . $file)) {
-				$this->resizeImg('images/' . $file, $size, $format);
-			}
-
-			return '/images/' . $size . '_' . $format . '_' . $file;
-		} else {
-			if ($altimg === false) {
-				return '/img/' . $size . '_' . $format . '_avatar.png';
-			} else {
-				return $altimg;
-			}
-		}
+		return $this->func->id($name);
 	}
 }
