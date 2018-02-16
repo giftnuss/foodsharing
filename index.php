@@ -85,63 +85,67 @@ if (DebugBar::isEnabled()) {
 	$func->addContent(DebugBar::renderContent(), CNT_BOTTOM);
 }
 
-if (!array_key_exists('NO_TWIG', $_GET)) {
-	$twig = DI::$shared->get(\Foodsharing\Lib\Twig::class);
+$twig = DI::$shared->get(\Foodsharing\Lib\Twig::class);
 
-	$mainwidth = 24;
+$mainwidth = 24;
 
-	$content_left = $func->getContent(CNT_LEFT);
-	$content_right = $func->getContent(CNT_RIGHT);
+$content_left = $func->getContent(CNT_LEFT);
+$content_right = $func->getContent(CNT_RIGHT);
 
-	if (!empty($content_left)) {
-		$mainwidth -= $content_left_width;
-	}
-
-	if (!empty($content_right)) {
-		$mainwidth -= $content_right_width;
-	}
-
-	echo $twig->render('layouts/' . $g_template . '.twig', [
-		'head' => $func->getHeadData(),
-		'bread' => $func->getBread(),
-		'bodyClass' => $g_body_class,
-		'msgbar' => $msgbar,
-		'menu' => $menu,
-		'hidden' => $func->getHidden(),
-		'isMob' => $func->isMob(),
-		'logolink' => $logolink,
-		'broadcast_message' => $g_broadcast_message,
-		'SRC_REVISION' => defined('SRC_REVISION') ? SRC_REVISION : null,
-		'HTTP_HOST' => $_SERVER['HTTP_HOST'],
-		'is_foodsharing_dot_at' => strpos($_SERVER['HTTP_HOST'], 'foodsharing.at') !== false,
-		'content' => [
-			'main' => [
-				'html' => $func->getContent(CNT_MAIN),
-				'width' => $mainwidth
-			],
-			'left' => [
-				'html' => $content_left,
-				'width' => $content_left_width,
-				'id' => 'left'
-			],
-			'right' => [
-				'html' => $content_right,
-				'width' => $content_right_width,
-				'id' => 'right'
-			],
-			'top' => [
-				'html' => $func->getContent(CNT_TOP),
-				'id' => 'content_top'
-			],
-			'bottom' => [
-				'html' => $func->getContent(CNT_BOTTOM),
-				'id' => 'content_bottom'
-			],
-			'overtop' => [
-				'html' => $func->getContent(CNT_OVERTOP)
-			]
-		]
-	]);
-} else {
-	include 'tpl/' . $g_template . '.php';
+if (!empty($content_left)) {
+	$mainwidth -= $content_left_width;
 }
+
+if (!empty($content_right)) {
+	$mainwidth -= $content_right_width;
+}
+
+global $g_broadcast_message;
+
+$page = $twig->render('layouts/' . $g_template . '.twig', [
+	'head' => $func->getHeadData(),
+	'bread' => $func->getBread(),
+	'bodyClass' => $g_body_class,
+	'msgbar' => $msgbar,
+	'menu' => $menu,
+	'hidden' => $func->getHidden(),
+	'isMob' => $func->isMob(),
+	'logolink' => $logolink,
+	'broadcast_message' => $g_broadcast_message,
+	'SRC_REVISION' => defined('SRC_REVISION') ? SRC_REVISION : null,
+	'HTTP_HOST' => $_SERVER['HTTP_HOST'],
+	'is_foodsharing_dot_at' => strpos($_SERVER['HTTP_HOST'], 'foodsharing.at') !== false,
+	'content' => [
+		'main' => [
+			'html' => $func->getContent(CNT_MAIN),
+			'width' => $mainwidth
+		],
+		'left' => [
+			'html' => $content_left,
+			'width' => $content_left_width,
+			'id' => 'left'
+		],
+		'right' => [
+			'html' => $content_right,
+			'width' => $content_right_width,
+			'id' => 'right'
+		],
+		'top' => [
+			'html' => $func->getContent(CNT_TOP),
+			'id' => 'content_top'
+		],
+		'bottom' => [
+			'html' => $func->getContent(CNT_BOTTOM),
+			'id' => 'content_bottom'
+		],
+		'overtop' => [
+			'html' => $func->getContent(CNT_OVERTOP)
+		]
+	]
+]);
+
+if (isset($cache) && $cache->shouldCache()) {
+	$cache->cache($page);
+}
+
+echo $page;
