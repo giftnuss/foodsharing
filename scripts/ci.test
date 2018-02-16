@@ -10,19 +10,13 @@ dir=$(dirname "$0")
 echo $SECONDS seconds elapsed
 
 if [ "x" != "x$CI_BUILD_TOKEN" ]; then
-  echo
-  echo "============================================"
-  echo "Logging into docker registry"
-  echo "============================================"
+  log-header "Logging into docker registry"
   SECONDS=0
   docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
   echo $SECONDS seconds elapsed
 fi
 
-echo
-echo "============================================"
-echo "Building images"
-echo "============================================"
+log-header "Building images"
 SECONDS=0
 for name in app chat web; do
   dc build $name &
@@ -31,21 +25,15 @@ done
 wait
 echo $SECONDS seconds elapsed
 
-echo
-echo "============================================"
-echo "Bring up containers"
-echo "============================================"
+log-header "Bring up containers"
 SECONDS=0
 dc up -d --no-build
 
-echo "Waiting for mysql to start"
+log-header "Waiting for mysql to start"
 wait-for-mysql
 echo $SECONDS seconds elapsed
 
-echo
-echo "============================================"
-echo "Initializing database"
-echo "============================================"
+log-header "Initializing database"
 SECONDS=0
 sql-query mysql 'drop database if exists foodsharing; create database foodsharing'
 
@@ -54,45 +42,31 @@ migratedb foodsharing
 $dir/mkdirs
 echo $SECONDS seconds elapsed
 
-echo
-echo "============================================"
-echo "Installing composer deps"
-echo "============================================"
+log-header "Installing composer deps"
 SECONDS=0
 exec-in-container-asroot app composer install
 echo $SECONDS seconds elapsed
 
-echo
-echo "============================================"
-echo "Checking code style"
-echo "============================================"
+log-header "Checking code style"
 SECONDS=0
 exec-in-container-asroot app scripts/php-cs-fixer.ci.sh --cache-file=vendor/php-cs-cache fix
 echo $SECONDS seconds elapsed
 
-echo
-echo "============================================"
-echo "Running tests"
-echo "============================================"
+log-header "Running tests"
 failed=0
 SECONDS=0
+exec-in-container-asroot rm -r tmp/.views-cache
 exec-in-container app vendor/bin/codecept run --xml --html "$@" || failed=1
 echo $SECONDS seconds elapsed
 
 if [ $failed -eq 1 ]; then
-  echo
-  echo "============================================"
-  echo "Rerunning failed tests"
-  echo "============================================"
+  log-header "Rerunning failed tests"
   SECONDS=0
   exec-in-container app vendor/bin/codecept run -g failed "$@"
   echo $SECONDS seconds elapsed
 fi
 
-echo
-echo "============================================"
-echo "Running chat tests"
-echo "============================================"
+log-header "Running chat tests"
 SECONDS=0
 run-in-container chat npm test
 echo $SECONDS seconds elapsed

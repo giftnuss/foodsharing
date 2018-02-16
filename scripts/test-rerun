@@ -12,6 +12,7 @@ set -e
 
 echo "Running tests"
 exec-in-container selenium "find /home/seluser/Downloads -type f -print0 | xargs -r -n 1 -0 rm"
+exec-in-container-asroot app rm -r tmp/.views-cache
 exec-in-container app vendor/bin/codecept run "$@"
 
 if [ $# -eq 0 ]; then
