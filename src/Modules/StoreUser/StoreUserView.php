@@ -311,7 +311,7 @@ class StoreUserView extends View
 	            },
 	            items: {
 					"report": {name: "Melden",icon:"report"},
-	                "tojumper": {name: "Auf die Warteliste",icon:"wait"},
+	                "tojumper": {name: "Auf die Springerliste",icon:"wait"},
 	                "delete": {name: "Aus Team löschen",icon:"delete"},
 					"message":{name: "Nachricht schreiben",icon:"message"}
 	            }
