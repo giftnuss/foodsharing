@@ -1,6 +1,5 @@
 <?php
 
-use Foodsharing\DI;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\View\Utils;
 use SebastianBergmann\Diff\Differ;
@@ -194,7 +193,7 @@ class FuncMenuTest extends \Codeception\Test\Unit
 	{
 		$builder = new DiffOnlyOutputBuilder('');
 		$differ = new Differ($builder);
+
 		return $differ->diff($a, $b);
 	}
-
 }

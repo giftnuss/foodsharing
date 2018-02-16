@@ -461,6 +461,7 @@ class Func
 		}
 
 		$loggedIn = S::may();
+
 		return $this->getMenuFn(
 			$loggedIn,
 			$regions,
@@ -512,6 +513,7 @@ class Func
 			'regions' => $regions,
 			'workingGroups' => $workingGroups
 		];
+
 		return [
 			'default' => $twig->render('partials/menu.default.twig', $params),
 			'mobile' => $twig->render('partials/menu.mobile.twig', $params)
@@ -522,8 +524,8 @@ class Func
 		bool $loggedIn, array $regions, bool $hasFsRole,
 		bool $isOrgaTeam, bool $mayEditBlog, bool $mayEditQuiz, bool $mayHandleReports,
 		array $stores, array $workingGroups,
-		$sessionMailbox, int $fsId, string $image) {
-
+		$sessionMailbox, int $fsId, string $image)
+	{
 		$this->addJs('$("#top .menu").css("display","block");');
 
 		$this->addJs('
@@ -538,7 +540,6 @@ class Func
 	');
 
 		if ($loggedIn) {
-
 			$out = array(
 				'default' => '',
 				'mobile' => ''
@@ -713,6 +714,7 @@ class Func
 		} else {
 			$stores = [];
 		}
+
 		return $this->getBetriebeMenuFn(
 			S::may('fs'),
 			$stores
