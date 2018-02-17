@@ -53,6 +53,78 @@ class WorkGroupControl extends Control
 		}
 	}
 
+	private function filterFromRequest(Request $request, $spec)
+	{
+		$data = [];
+		foreach ($spec as $name => $s) {
+			$default = ['method' => 'get', 'required' => true, 'parameterName' => $name, 'default' => null];
+			$s = array_merge($default, $s);
+			$v = $request->request->{$s['method']}($s['parameterName']);
+			if (is_null($v)) {
+				if ($s['required']) {
+					throw new \Exception('Required parameter not set');
+				}
+				$v = $s['default'];
+			}
+			if (isset($s['filter'])) {
+				$v = $s['filter']($v);
+			}
+			$data[$name] = $v;
+		}
+
+		return $data;
+	}
+
+	private function prepareInput(Request $request)
+	{
+		$string_filter = function ($v) {
+			return trim(strip_tags($v));
+		};
+		$html_filter = function ($v) {
+			return trim(strip_tags($v,
+				'<p><ul><li><ol><strong><span><i><div><h1><h2><h3><h4><h5><br><img><table><thead><tbody><th><td><tr><i><a>'));
+		};
+		$array_has_element_filter = function ($v) {
+			return is_array($v) && count($v);
+		};
+		$get_tagselect_id_filter = \Closure::fromCallable([$this->func, 'getTagselectIds']);
+
+		$fields = [
+			'name' => ['filter' => $string_filter],
+			'teaser' => ['filter' => $string_filter],
+			'photo' => ['filter' => $string_filter, 'required' => false],
+			'apply_type' => ['method' => 'getInt'],
+			'banana_count' => ['method' => 'getInt'],
+			'fetch_count' => ['method' => 'getInt'],
+			'week_num' => ['method' => 'getInt'],
+			'report_num' => ['filter' => $array_has_element_filter, 'required' => false, 'default' => false],
+			'members' => ['filter' => $get_tagselect_id_filter, 'required' => false, 'default' => [], 'parameterName' => 'member'],
+			'leader' => ['filter' => $get_tagselect_id_filter, 'required' => false, 'default' => []],
+		];
+
+		$data = $this->filterFromRequest($request, $fields);
+
+		if ($data['apply_type'] != 1) {
+			$data['banana_count'] = 0;
+			$data['fetch_count'] = 0;
+			$data['week_num'] = 0;
+			$data['report_num'] = 0;
+		}
+
+		return $data;
+	}
+
+	private function handleEdit($group, $data)
+	{
+		if ($this->model->updateGroup($group['id'], $data)) {
+			$this->model->updateTeam($group['id'], $data['members'], $data['leader']);
+
+			return true;
+		}
+
+		return false;
+	}
+
 	public function edit(Request $request)
 	{
 		$bids = $this->model->getFsBezirkIds($this->func->fsId());
@@ -66,51 +138,8 @@ class WorkGroupControl extends Control
 				$this->func->go('/?page=dashboard');
 			}
 			if ($this->isSubmitted()) {
-				$data = array();
-				if ($name = ($this->getPostString('name'))) {
-					$data['name'] = $name;
-				}
-
-				if ($teaser = ($this->getPostString('teaser'))) {
-					$data['teaser'] = $teaser;
-				}
-
-				if ($desc = ($this->getPostHtml('desc'))) {
-					$data['desc'] = $desc;
-				}
-
-				if ($img = ($this->getPostString('photo'))) {
-					$data['photo'] = $img;
-				}
-
-				$data['apply_type'] = 1;
-				$data['banana_count'] = 0;
-				$data['fetch_count'] = 0;
-				$data['week_num'] = 0;
-				$data['report_num'] = 0;
-
-				if ($_POST['apply_type'] == 1) {
-					$data['banana_count'] = (int)$_POST['banana_count'];
-					$data['fetch_count'] = (int)$_POST['fetch_count'];
-					$data['week_num'] = (int)$_POST['week_num'];
-
-					if (isset($_POST['report_num']) && is_array($_POST['report_num']) && count($_POST['report_num']) > 0) {
-						$data['report_num'] = 1;
-					}
-				} else {
-					$data['apply_type'] = (int)$_POST['apply_type'];
-				}
-
-				/*
-				 * Handle Member and Group-Admin Fields
-				 */
-				$members = $this->func->getTagselectIds($request->request->get('member'));
-				$leader = $this->func->getTagselectIds($request->request->get('leader'));
-
-				$data = array_merge($group, $data);
-
-				if ($this->model->updateGroup($group['id'], $data)) {
-					$this->model->updateTeam($group['id'], $members, $leader);
+				$data = $this->prepareInput($request);
+				if ($this->handleEdit($group, $data)) {
 					$this->func->info('Änderungen gespeichert!');
 					$this->func->go('/?page=groups&sub=edit&id=' . (int)$group['id']);
 				}

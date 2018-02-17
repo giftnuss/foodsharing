@@ -205,10 +205,10 @@ class WorkGroupView extends View
 	public function applyForm($group)
 	{
 		return $this->v_utils->v_form('apply', array(
-			$this->v_utils->v_form_textarea('motivation', array('label' => 'Was ist Deine Motivation, in der Gruppe ' . $group['name'] . ' mitzuwirken?')),
-			$this->v_utils->v_form_textarea('faehigkeit', array('label' => 'Was sind Deine Fähigkeiten, die Du in diesem Bereich hast?')),
-			$this->v_utils->v_form_textarea('erfahrung', array('label' => 'Kannst Du in der Gruppe auf Erfahrungen, die Du woanders gesammelt hast zurückgreifen? Wenn ja, wo bzw. was?')),
-			$this->v_utils->v_form_select('zeit', array('label' => 'Wie viele Stunden hast Du pro Woche Zeit und Lust dafür aufzuwenden?', 'values' => array(
+			$this->v_utils->v_form_textarea('motivation', ['value' => '', 'label' => 'Was ist Deine Motivation, in der Gruppe ' . $group['name'] . ' mitzuwirken?']),
+			$this->v_utils->v_form_textarea('faehigkeit', ['value' => '', 'label' => 'Was sind Deine Fähigkeiten, die Du in diesem Bereich hast?']),
+			$this->v_utils->v_form_textarea('erfahrung', ['value' => '', 'label' => 'Kannst Du in der Gruppe auf Erfahrungen, die Du woanders gesammelt hast zurückgreifen? Wenn ja, wo bzw. was?']),
+			$this->v_utils->v_form_select('zeit', array('selected' => '', 'label' => 'Wie viele Stunden hast Du pro Woche Zeit und Lust dafür aufzuwenden?', 'values' => array(
 				array('id' => '1-2 Stunden', 'name' => '1-2 Stunden'),
 				array('id' => '2-3 Stunden', 'name' => '2-3 Stunden'),
 				array('id' => '3-4 Stunden', 'name' => '3-4 Stunden'),
