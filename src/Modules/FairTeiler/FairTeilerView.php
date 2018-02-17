@@ -100,13 +100,17 @@ class FairTeilerView extends View
 			});
 		');
 		}
+		foreach (['anschrift', 'plz', 'ort', 'lat', 'lon'] as $i) {
+			$latLonOptions[$i] = $data[$i];
+		}
+		$latLonOptions['location'] = ['lat' => $data['lat'], 'lon' => $data['lon']];
 
 		return $this->v_utils->v_field($this->v_utils->v_form('fairteiler', array(
 			$this->v_utils->v_form_select('bezirk_id', array('values' => $this->bezirke, 'selected' => $data['bezirk_id'], 'required' => true)),
 			$this->v_utils->v_form_text('name', array('value' => $data['name'], 'required' => true)),
 			$this->v_utils->v_form_textarea('desc', array('value' => $data['desc'], 'desc' => $this->func->s('desc_desc'), 'required' => true)),
 			$this->v_utils->v_form_picture('picture', array('pic' => $data['picture'], 'resize' => array(528, 60), 'crop' => array((528 / 170), 1))),
-			$this->latLonPicker('latLng', ['location' => ['lat' => $data['lat'], 'lon' => $data['lon']]]),
+			$this->latLonPicker('latLng', $latLonOptions),
 			$tagselect,
 		), array('submit' => $this->func->s('save'))), $title, array('class' => 'ui-padding'));
 	}

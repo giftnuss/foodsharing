@@ -141,6 +141,11 @@ class EventView extends View
 			$public_el = $this->v_utils->v_input_wrapper('Ist die Veranstaltung öffentlich?', '<label><input id="public" type="checkbox" name="public" value="1"' . $chk . ' /> Ja die Veranstaltung ist Öffentlich</label>');
 		}
 
+		foreach (['anschrift', 'plz', 'ort', 'lat', 'lon'] as $i) {
+			$latLonOptions[$i] = $g_data[$i];
+		}
+		$latLonOptions['location'] = ['lat' => $g_data['lat'], 'lon' => $g_data['lon']];
+
 		return $this->v_utils->v_field($this->v_utils->v_form('eventsss', array(
 			$public_el,
 			$bezirkchoose,
@@ -155,7 +160,7 @@ class EventView extends View
 				array('id' => 0, 'name' => $this->func->s('online'))
 			))),
 			$this->v_utils->v_form_text('location_name', array('required' => true)),
-			$this->latLonPicker('latLng')
+			$this->latLonPicker('latLng', $latLonOptions)
 		), array('submit' => $this->func->s('save'))), $title, array('class' => 'ui-padding'));
 	}
 

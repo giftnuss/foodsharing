@@ -398,12 +398,6 @@ class View
 
 		if (isset($options['location'])) {
 			$data = array_merge(['zoom' => 14], $options['location']);
-		} elseif (isset($g_data['lat']) && isset($g_data['lon']) && !empty($g_data['lat']) && !empty($g_data['lon'])) {
-			$data = array(
-				'lat' => $g_data['lat'],
-				'lon' => $g_data['lon'],
-				'zoom' => 14
-			);
 		} else {
 			/* Todo: Remove when getting rid of $g_data */
 			$db = DI::$shared->get(Model::class);
@@ -454,11 +448,11 @@ class View
 		return $this->v_utils->v_input_wrapper($this->func->s('position_search'), '
 		<input placeholder="Straße, Ort..." type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
 		<div id="map" class="pickermap"></div>') .
-			$this->v_utils->v_form_text('anschrift', array('disabled' => '1', 'required' => '1')) .
-			$this->v_utils->v_form_text('plz', array('disabled' => '1', 'required' => '1')) .
-			$this->v_utils->v_form_text('ort', array('disabled' => '1', 'required' => '1')) .
-			$this->v_utils->v_form_text('lat') .
-			$this->v_utils->v_form_text('lon') .
+			$this->v_utils->v_form_text('anschrift', ['value' => $options['anschrift'], 'disabled' => '1', 'required' => '1']) .
+			$this->v_utils->v_form_text('plz', ['value' => $options['plz'], 'disabled' => '1', 'required' => '1']) .
+			$this->v_utils->v_form_text('ort', ['value' => $options['ort'], 'disabled' => '1', 'required' => '1']) .
+			$this->v_utils->v_form_text('lat', ['value' => $options['lat']]) .
+			$this->v_utils->v_form_text('lon', ['value' => $options['lon']]) .
 			'';
 	}
 

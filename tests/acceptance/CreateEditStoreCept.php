@@ -68,6 +68,7 @@ $I->addInTagSelect($bibB['name'], '#foodsaver');
 $I->addInTagSelect($foodsaverA['name'], '#foodsaver');
 $I->addInTagSelect($foodsaverB['name'], '#foodsaver');
 $I->click('Speichern', '#team-form');
+$I->waitForElementNotVisible('#team-form');
 
 /* Mark another coordinator */
 $I->click('Team bearbeiten');

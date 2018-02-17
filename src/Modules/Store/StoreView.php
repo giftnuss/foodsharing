@@ -87,11 +87,16 @@ class StoreView extends View
 
 		$this->func->addJs('$("textarea").css("height","70px");$("textarea").autosize();');
 
+		foreach (['anschrift', 'plz', 'ort', 'lat', 'lon'] as $i) {
+			$latLonOptions[$i] = $g_data[$i];
+		}
+		$latLonOptions['location'] = ['lat' => $g_data['lat'], 'lon' => $g_data['lon']];
+
 		return $this->v_utils->v_quickform('betrieb', array(
 			$bc,
 			$this->v_utils->v_form_hidden('page', $page),
 			$this->v_utils->v_form_text('name'),
-			$this->latLonPicker('LatLng'),
+			$this->latLonPicker('LatLng', $latLonOptions),
 
 			$this->v_utils->v_form_select('kette_id', array('add' => true, 'values' => $chains, 'desc' => 'Bitte nur inhabergeführte Betriebe selbstständig ansprechen, niemals Betriebe einer Kette anfragen!')),
 			$this->v_utils->v_form_select('betrieb_kategorie_id', array('add' => true, 'values' => $categories)),
