@@ -305,16 +305,6 @@ class FairTeilerControl extends Control
 		return $data;
 	}
 
-	private function getTagselectIds($tagselectArray)
-	{
-		$result = [];
-		foreach ($tagselectArray as $idKey => $value) {
-			$result[] = explode('-', $idKey)[0];
-		}
-
-		return $result;
-	}
-
 	private function validateInput($data)
 	{
 		return $data['lat'] && $data['lon'] && $data['bezirk_id'];
@@ -325,7 +315,7 @@ class FairTeilerControl extends Control
 		if ($this->mayEdit()) {
 			$data = $this->prepareInput($request);
 			if ($this->validateInput($data)) {
-				$this->gateway->updateVerantwortliche($this->fairteiler['id'], $this->getTagselectIds($request->request->get('bfoodsaver')));
+				$this->gateway->updateVerantwortliche($this->fairteiler['id'], $this->func->getTagselectIds($request->request->get('bfoodsaver')));
 
 				return $this->gateway->updateFairteiler($this->fairteiler['id'], $data);
 			} else {

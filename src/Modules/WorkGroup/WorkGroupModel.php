@@ -44,13 +44,9 @@ class WorkGroupModel extends Model
 	/**
 	 * Updates Group Members and Group-Admins.
 	 */
-	public function updateTeam($group_id)
+	public function updateTeam($group_id, $memberIds, $leaderIds)
 	{
-		// get the lazy global g_data variable. there we find all submitted form data
-		global $g_data;
-
-		// check is there some team data? otherwise empty team
-		if (isset($g_data['member']) && is_array($g_data['member']) && count($g_data['member']) > 0) {
+		if ($memberIds) {
 			// delete all members they're not in the submitted array
 			$this->del('
 				DELETE FROM 
@@ -60,13 +56,13 @@ class WorkGroupModel extends Model
 					bezirk_id = ' . (int)$group_id . '
 					
 				AND
-					foodsaver_id NOT IN(' . implode(',', $g_data['member']) . ')
+					foodsaver_id NOT IN(' . implode(',', $memberIds) . ')
 				AND
 					`active` = 1
 			');
 
 			$values = array();
-			foreach ($g_data['member'] as $m) {
+			foreach ($memberIds as $m) {
 				$values[] = '(' . (int)$m . ',' . $group_id . ',1,NOW())';
 			}
 
@@ -88,7 +84,7 @@ class WorkGroupModel extends Model
 		}
 
 		// the same for the group admins
-		if (isset($g_data['leader']) && is_array($g_data['leader']) && count($g_data['leader']) > 0) {
+		if ($leaderIds) {
 			// delete all group-admins (botschafter) they're not in the submitted array
 			$this->del('
 				DELETE FROM
@@ -98,11 +94,11 @@ class WorkGroupModel extends Model
 					bezirk_id = ' . (int)$group_id . '
 			
 				AND
-					foodsaver_id NOT IN(' . implode(',', $g_data['leader']) . ')
+					foodsaver_id NOT IN(' . implode(',', $leaderIds) . ')
 			');
 
 			$values = array();
-			foreach ($g_data['leader'] as $m) {
+			foreach ($leaderIds as $m) {
 				$values[] = '(' . (int)$m . ',' . $group_id . ')';
 			}
 

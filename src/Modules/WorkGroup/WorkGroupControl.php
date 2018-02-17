@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\WorkGroup;
 
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
+use Symfony\Component\HttpFoundation\Request;
 
 class WorkGroupControl extends Control
 {
@@ -52,7 +53,7 @@ class WorkGroupControl extends Control
 		}
 	}
 
-	public function edit()
+	public function edit(Request $request)
 	{
 		$bids = $this->model->getFsBezirkIds($this->func->fsId());
 
@@ -103,13 +104,13 @@ class WorkGroupControl extends Control
 				/*
 				 * Handle Member and Group-Admin Fields
 				 */
-				$this->func->handleTagselect('member');
-				$this->func->handleTagselect('leader');
+				$members = $this->func->getTagselectIds($request->request->get('member'));
+				$leader = $this->func->getTagselectIds($request->request->get('leader'));
 
 				$data = array_merge($group, $data);
 
 				if ($this->model->updateGroup($group['id'], $data)) {
-					$this->model->updateTeam($group['id']);
+					$this->model->updateTeam($group['id'], $members, $leader);
 					$this->func->info('Änderungen gespeichert!');
 					$this->func->go('/?page=groups&sub=edit&id=' . (int)$group['id']);
 				}
