@@ -10,7 +10,7 @@ if [ ! -z "$SLACK_WEBHOOK_URL" ]; then
   COMMIT_MESSAGE=$(git log -1 --pretty="%s - %an")
   REF=$CI_COMMIT_REF_NAME;
   REF_URL="$REPO_URL/tree/$REF"
-  COMMIT_URL="$REPO_URL/commit/$COMMIT_SHA"
+  COMMIT_URL="$REPO_URL/tree/$COMMIT_SHA"
 
   URL="https://beta.foodsharing.de"
   DEPLOY_ENV="beta"
