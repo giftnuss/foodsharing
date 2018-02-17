@@ -251,7 +251,6 @@ class XhrMethods
 				'last' => 1
 			))
 			) {
-				$this->model->getVal('name', 'foodsaver', $this->func->fsId());
 				$betrieb = $this->model->getVal('name', 'betrieb', (int)$data['bid']);
 
 				$this->bellGateway->addBell($data['team'], 'store_wallpost_title', 'store_wallpost', 'img img-store brown', array(
