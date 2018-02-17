@@ -48,7 +48,7 @@ define('CNT_BOTTOM', 3);
 define('CNT_LEFT', 4);
 define('CNT_OVERTOP', 5);
 
-$dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_DB;
+$dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_DB . ';charset=utf8';
 if ($FS_ENV === 'dev') {
 	// In development we need to wrap the PDO instance for the DebugBar
 	$pdo = new PDO($dsn, DB_USER, DB_PASS);
