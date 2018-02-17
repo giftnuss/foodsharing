@@ -44,6 +44,7 @@
 - Enable [smartWait](https://codeception.com/docs/03-AcceptanceTests#SmartWait) for acceptance tests !279 @tiltec
 - Enable xdebug remote debugging for development !276 @NerdyProjects
 - Add better seed data for use during development !263 @tiltec
+- Enable xdebug profiler for dev environment !296 @NerdyProjects
 
 ## Other
 
