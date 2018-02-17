@@ -18,7 +18,7 @@ class WebDriver extends \Codeception\Module\WebDriver
 		return $this->assertRegExp($regexp, $text);
 	}
 
-	public function formattedDateInRange($min, $max, $format, $actual)
+	public function seeFormattedDateInRange($min, $max, $format, $actual)
 	{
 		$date = \DateTime::createFromFormat($format, $actual, new \DateTimeZone('Europe/Berlin'));
 		$this->assertGreaterOrEquals($min, $date, 'Date is in past');

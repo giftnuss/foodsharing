@@ -18,19 +18,18 @@ $I->waitForText('Essenskorb anbieten');
 
 $I->fillField('description', $description);
 
-$min_time = new DateTime('now', new DateTimeZone('Europe/Berlin'));
-$max_time = new DateTime('now', new DateTimeZone('Europe/Berlin'));
-$max_time->add(new DateInterval('PT15S'));
+$min_time = new DateTime('-1 second', new DateTimeZone('Europe/Berlin')); /* microsends in PHP7.1+ make it fail because of rounding otherwise */
 
 $I->click('Essenskorb veröffentlichen');
 
 $I->waitForElementVisible('#pulse-info', 4);
 $I->see('Danke Dir! Der Essenskorb wurde veröffentlicht!');
+$max_time = new DateTime('+1 second', new DateTimeZone('Europe/Berlin'));
 
 $id = $I->grabFromDatabase('fs_basket', 'id', ['foodsaver_id' => $foodsaver['id'], 'description' => $description]);
 $time = $I->grabFromDatabase('fs_basket', 'time', ['id' => $id]);
 
-$I->formattedDateInRange($min_time, $max_time, 'Y-m-d H:i:s', $time);
+$I->seeFormattedDateInRange($min_time, $max_time, 'Y-m-d H:i:s', $time);
 
 $time_hm = substr(explode(' ', $time)[1], 0, 5);
 

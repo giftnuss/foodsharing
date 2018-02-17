@@ -14,8 +14,8 @@ $I->addBezirkAdmin($testRegion, $ambassador['id']);
 3. //*[contains(...)]			   go down again and find the element that has the given class
 */
 $verify_xpath = '//a[contains(text(), "%s")]/ancestor::tr//*[contains(concat(" ", normalize-space(@class), " "), " %s ")]';
-$verify_y = ['xpath' => sprintf($verify_xpath, $foodsaver['nachname'], 'verify-y')];
-$verify_n = ['xpath' => sprintf($verify_xpath, $foodsaver['nachname'], 'verify-n')];
+$verify_y = ['xpath' => sprintf($verify_xpath, $foodsaver['name'] . ' ' . $foodsaver['nachname'], 'verify-y')];
+$verify_n = ['xpath' => sprintf($verify_xpath, $foodsaver['name'] . ' ' . $foodsaver['nachname'], 'verify-n')];
 
 $I->login($ambassador['email']);
 
