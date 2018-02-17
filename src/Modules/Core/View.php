@@ -446,26 +446,17 @@ class View
 				$(\'#lon\').val(result.lng());
 				$(\'#plz\').val(result.nameForType(\'postal_code\'));
 				$(\'#ort\').val(result.nameForType(\'locality\'));
-				if($(\'#anschrift\').length) {
-					$(\'#anschrift\').val(address + (number ? (\' \' + number):\'\')) 
-				}
-				else {
-					$(\'#str\').val(address)
-					$(\'#hsnr\').val(number)
-				}
+				$(\'#anschrift\').val(address + (number ? (\' \' + number):\'\'));
 			});
 			$("#lat-wrapper,#lon-wrapper").hide();
 		');
 
-		$hsnr = $this->v_utils->v_form_text('anschrift', array('disabled' => '1', 'required' => '1'));
-		if (isset($options['hsnr'])) {
-			$hsnr = $this->v_utils->v_form_text('str', array('required' => '1')) . $this->v_utils->v_form_text('hsnr');
-		}
+		$address = $this->v_utils->v_form_text('anschrift', array('disabled' => '1', 'required' => '1'));
 
 		return $this->v_utils->v_input_wrapper($this->func->s('position_search'), '
 		<input placeholder="Straße, Ort..." type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
 		<div id="map" class="pickermap"></div>') .
-			$hsnr .
+			$address .
 			$this->v_utils->v_form_text('plz', array('disabled' => '1', 'required' => '1')) .
 			$this->v_utils->v_form_text('ort', array('disabled' => '1', 'required' => '1')) .
 			$this->v_utils->v_form_text('lat') .

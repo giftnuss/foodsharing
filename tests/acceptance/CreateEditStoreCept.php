@@ -7,8 +7,7 @@ $I->wantTo('create a store and manage it and my team');
 $region = $I->createRegion('A region I test with');
 $storeName = 'Multistore 24';
 $newStoreName = 'Ex-Ultrastore';
-$storeStreet = 'Kantstraße';
-$storeHouseNumber = '20';
+$storeStreet = 'Kantstraße 20';
 $storePostcode = '04808';
 $storeCity = 'Wurzen';
 
@@ -31,8 +30,7 @@ $I->canSee($storeAddress, '.tt-suggestion');
 $I->click($storeAddress, '.tt-suggestion');
 */
 $I->unlockAllInputFields();
-$I->fillField('#str', $storeStreet);
-$I->fillField('#hsnr', $storeHouseNumber);
+$I->fillField('#anschrift', $storeStreet);
 $I->fillField('#plz', $storePostcode);
 $I->fillField('#ort', $storeCity);
 
@@ -41,6 +39,9 @@ $I->fillField('#first_post', 'A first wallpost entry on the store');
 $I->click('Senden');
 
 /* See my mobile number because I am responsible */
+$I->waitForText($storeStreet, null, '#input-1-wrapper');
+$I->waitForText($storePostcode, null, '#input-1-wrapper');
+$I->waitForText($storeCity, null, '#input-1-wrapper');
 $I->see($bibA['handy']);
 
 $teamConversationId = $I->grabFromDatabase('fs_betrieb', 'team_conversation_id', ['name' => $storeName]);

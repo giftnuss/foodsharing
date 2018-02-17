@@ -80,6 +80,10 @@ class StoreView extends View
 		if (isset($g_data['stadt'])) {
 			$g_data['ort'] = $g_data['stadt'];
 		}
+		$g_data['anschrift'] = $g_data['str'];
+		if (isset($g_data['hsnr'])) {
+			$g_data['anschrift'] .= ' ' . $g_data['hsnr'];
+		}
 
 		$this->func->addJs('$("textarea").css("height","70px");$("textarea").autosize();');
 
@@ -87,7 +91,7 @@ class StoreView extends View
 			$bc,
 			$this->v_utils->v_form_hidden('page', $page),
 			$this->v_utils->v_form_text('name'),
-			$this->latLonPicker('LatLng', array('hsnr' => true)),
+			$this->latLonPicker('LatLng'),
 
 			$this->v_utils->v_form_select('kette_id', array('add' => true, 'values' => $chains, 'desc' => 'Bitte nur inhabergeführte Betriebe selbstständig ansprechen, niemals Betriebe einer Kette anfragen!')),
 			$this->v_utils->v_form_select('betrieb_kategorie_id', array('add' => true, 'values' => $categories)),

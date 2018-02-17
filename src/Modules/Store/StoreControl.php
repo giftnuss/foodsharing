@@ -146,6 +146,8 @@ class StoreControl extends Control
 		global $g_data;
 		if ($this->func->submitted()) {
 			$g_data['stadt'] = $g_data['ort'];
+			$g_data['hsnr'] = '';
+			$g_data['str'] = $g_data['anschrift'];
 
 			if ($this->model->update_betrieb($_GET['id'], $g_data)) {
 				$this->func->info($this->func->s('betrieb_edit_success'));
@@ -168,6 +170,8 @@ class StoreControl extends Control
 
 			$g_data['stadt'] = $g_data['ort'];
 			$g_data['foodsaver'] = [$coordinator];
+			$g_data['str'] = $g_data['anschrift'];
+			$g_data['hsnr'] = '';
 
 			if ($id = $this->model->add_betrieb($g_data)) {
 				$this->model->add_betrieb_notiz(array(
