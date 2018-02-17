@@ -47,75 +47,72 @@ class FairTeilerGatewayTest extends \Codeception\Test\Unit
 
 	public function testUpdateFairteiler()
 	{
-		$response = $this->gateway->updateFairteiler(
-			$this->fairteiler['id'],
-			$this->bezirk['id'],
-			'asdf',
-			$this->fairteiler['desc'],
-			$this->fairteiler['anschrift'],
-			$this->fairteiler['plz'],
-			$this->fairteiler['ort'],
-			$this->fairteiler['lat'],
-			$this->fairteiler['lon'],
-			null
-		);
-		$this->assertEquals(true, $response);
+		$data = [
+			'bezirk_id' => $this->bezirk['id'],
+			'name' => 'asdf',
+			'desc' => $this->fairteiler['desc'],
+			'anschrift' => $this->fairteiler['anschrift'],
+			'plz' => $this->fairteiler['plz'],
+			'ort' => $this->fairteiler['ort'],
+			'lat' => $this->fairteiler['lat'],
+			'lon' => $this->fairteiler['lon'],
+			'picture' => null
+			];
+		$response = $this->gateway->updateFairteiler($this->fairteiler['id'], $data);
+		$this->assertTrue($response);
 		$this->tester->seeInDatabase('fs_fairteiler', ['name' => 'asdf']);
 	}
 
 	public function testUpdateFairteilerReturnsTrueIfNothingChanged()
 	{
+		$data = [
+			'bezirk_id' => $this->bezirk['id'],
+			'name' => $this->fairteiler['name'],
+			'desc' => $this->fairteiler['desc'],
+			'anschrift' => $this->fairteiler['anschrift'],
+			'plz' => $this->fairteiler['plz'],
+			'ort' => $this->fairteiler['ort'],
+			'lat' => $this->fairteiler['lat'],
+			'lon' => $this->fairteiler['lon'],
+			'picture' => null
+		];
 		$response = $this->gateway->updateFairteiler(
-			$this->fairteiler['id'],
-			$this->bezirk['id'],
-			$this->fairteiler['name'],
-			$this->fairteiler['desc'],
-			$this->fairteiler['anschrift'],
-			$this->fairteiler['plz'],
-			$this->fairteiler['ort'],
-			$this->fairteiler['lat'],
-			$this->fairteiler['lon'],
-			null
+			$this->fairteiler['id'], $data
 		);
-		$this->assertEquals(true, $response);
+		$this->assertTrue($response);
 		$this->tester->seeInDatabase('fs_fairteiler', ['name' => $this->fairteiler['name']]);
 	}
 
-	public function testUpdateFairteilerStripsTags()
+	public function testUpdateFairteilerDoesNotStripTags()
 	{
+		/* strip_tags happens in the controller in this case */
 		$this->tester->dontSeeInDatabase('fs_fairteiler', ['name' => 'asdf']);
+		$data = [
+			'bezirk_id' => $this->bezirk['id'],
+			'name' => 'asdf<script>',
+			'desc' => $this->fairteiler['desc'],
+			'anschrift' => $this->fairteiler['anschrift'],
+			'plz' => $this->fairteiler['plz'],
+			'ort' => $this->fairteiler['ort'],
+			'lat' => $this->fairteiler['lat'],
+			'lon' => $this->fairteiler['lon'],
+			'picture' => null
+		];
 
 		$response = $this->gateway->updateFairteiler(
 			$this->fairteiler['id'],
-			$this->bezirk['id'],
-			'asdf<script>',
-			$this->fairteiler['desc'],
-			$this->fairteiler['anschrift'],
-			$this->fairteiler['plz'],
-			$this->fairteiler['ort'],
-			$this->fairteiler['lat'],
-			$this->fairteiler['lon'],
-			null
+			$data
 		);
-		$this->assertEquals(true, $response);
-		$this->tester->dontSeeInDatabase('fs_fairteiler', ['name' => 'asdf<script>']);
-		$this->tester->seeInDatabase('fs_fairteiler', ['name' => 'asdf']);
+		$this->assertTrue($response);
+		$this->tester->seeInDatabase('fs_fairteiler', ['name' => 'asdf<script>']);
+		$this->tester->dontSeeInDatabase('fs_fairteiler', ['name' => 'asdf']);
 	}
 
 	public function testUpdateFairteilerThrowsIfIDNotFound()
 	{
 		$this->expectException(\Exception::class);
 		$this->gateway->updateFairteiler(
-			99999999,
-			$this->bezirk['id'],
-			'asdf',
-			$this->fairteiler['desc'],
-			$this->fairteiler['anschrift'],
-			$this->fairteiler['plz'],
-			$this->fairteiler['ort'],
-			$this->fairteiler['lat'],
-			$this->fairteiler['lon'],
-			null
+			99999999, []
 		);
 		$this->tester->dontSeeInDatabase('fs_fairteiler', ['name' => 'asdf']);
 	}
@@ -187,17 +184,20 @@ class FairTeilerGatewayTest extends \Codeception\Test\Unit
 
 	public function testAddFairTeiler()
 	{
+		$data = [
+			'bezirk_id' => $this->bezirk['id'],
+			'name' => 'my nice new fairteiler',
+			'desc' => $this->fairteiler['desc'],
+			'anschrift' => $this->fairteiler['anschrift'],
+			'plz' => $this->fairteiler['plz'],
+			'ort' => $this->fairteiler['ort'],
+			'lat' => $this->fairteiler['lat'],
+			'lon' => $this->fairteiler['lon'],
+			'picture' => 'picture/cat.jpg'
+		];
 		$id = $this->gateway->addFairteiler(
 			$this->foodsaver['id'],
-			$this->bezirk['id'],
-			'my nice new fairteiler',
-			$this->fairteiler['desc'],
-			$this->fairteiler['anschrift'],
-			$this->fairteiler['plz'],
-			$this->fairteiler['ort'],
-			$this->fairteiler['lat'],
-			$this->fairteiler['lon'],
-			'picture/cat.jpg'
+			$data
 		);
 
 		$this->assertGreaterThanOrEqual(0, $id);
