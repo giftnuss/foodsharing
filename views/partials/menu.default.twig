@@ -33,7 +33,7 @@
                         <li><a href="/?page=geoclean">{{ 'menu_foodsaver_without_region' | translate }}</a></li>
                         <li><a href="/?page=content">{{ 'menu_content' | translate }}</a></li>
                         <li><a href="/?page=lebensmittel">{{ 'menu_foodtypes' | translate }}</a></li>
-                        <li><a href="/?page=manage">{{ 'menu_mailbox_manage' | translate }}</a></li>
+                        <li><a href="/?page=mailbox&a=manage">{{ 'menu_mailbox_manage' | translate }}</a></li>
                     {% endif %}
 
                     {% if may.editQuiz %}
@@ -41,7 +41,7 @@
                     {% endif %}
 
                     {% if may.handleReports %}
-                        <li><a href="/?report&sub=uncom">{{ 'menu_reports' | translate }}</a></li>
+                        <li><a href="/?page=report&sub=uncom">{{ 'menu_reports' | translate }}</a></li>
                     {% endif %}
 
                 </ul>
