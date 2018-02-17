@@ -75,7 +75,7 @@ class FairTeilerCest
 		$I->addInTagSelect($user['name'], '#bfoodsaver');
 		$I->click('Speichern');
 		$I->waitForText('erfolgreich bearbeitet');
-		$I->see($user['name'] . ' ' . $user['nachname']);
+		$I->waitForText($user['name'] . ' ' . $user['nachname']);
 	}
 
 	/**
