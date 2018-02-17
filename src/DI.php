@@ -88,7 +88,8 @@ class DI
 			->addArgument($user)
 			->addArgument($password)
 			->addMethodCall('setAttribute', [PDO::ATTR_EMULATE_PREPARES, false])
-			->addMethodCall('setAttribute', [PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION]);
+			->addMethodCall('setAttribute', [PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION])
+			->addMethodCall('setAttribute', [PDO::MYSQL_ATTR_INIT_COMMAND, 'SET NAMES \'utf8\'']);
 	}
 
 	public function compile()

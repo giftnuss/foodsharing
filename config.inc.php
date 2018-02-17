@@ -54,6 +54,7 @@ if ($FS_ENV === 'dev') {
 	$pdo = new PDO($dsn, DB_USER, DB_PASS);
 	$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$pdo->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND, 'SET NAMES \'utf8\'');
 	$traceablePDO = new TraceablePDO($pdo);
 	DI::$shared->useTraceablePDO($traceablePDO);
 	Foodsharing\Debug\DebugBar::register($traceablePDO);
