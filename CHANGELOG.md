@@ -45,9 +45,11 @@
 - Enable xdebug remote debugging for development !276 @NerdyProjects
 - Add better seed data for use during development !263 @tiltec
 - Enable xdebug profiler for dev environment !296 @NerdyProjects
+- Use PHP7.2.2 in dev/test/ci to make it ready for production !301 @NerdyProjects
 
 ## Other
 
+- PHP 7.2 compatibility of the code !301 @NerdyProjects
 - Added caching for DI container !299 @nicksellen
 
 # 2017-12-11
