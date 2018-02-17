@@ -9,8 +9,6 @@ use Foodsharing\Modules\Core\Database;
 
 class ForumGateway extends BaseGateway
 {
-	private $themes_per_page = 15;
-
 	private $bellGateway;
 
 	public function __construct(Database $db, BellGateway $bellGateway)
@@ -19,10 +17,12 @@ class ForumGateway extends BaseGateway
 		$this->bellGateway = $bellGateway;
 	}
 
-	// Theme-related
+	// Thread-related
 
-	public function listThemes($bezirk_id, $bot_theme = 0, $page = 0, $last = 0)
+	public function listThreads($bezirk_id, $bot_theme = 0, $page = 0, $last = 0)
 	{
+		$threads_per_page = 15;
+
 		if ($ret = $this->db->fetchAll('
 			SELECT 		t.id,
 						t.name,
@@ -60,8 +60,8 @@ class ForumGateway extends BaseGateway
 		', [
 			'bezirk_id' => $bezirk_id,
 			'bot_theme' => $bot_theme,
-			'offset' => $page * $this->themes_per_page,
-			'size' => $this->themes_per_page
+			'offset' => $page * $threads_per_page,
+			'size' => $threads_per_page
 		])
 		) {
 			if ($last > 0) {
@@ -113,40 +113,40 @@ class ForumGateway extends BaseGateway
 		', ['bezirk_id' => $bezirk_id, 'thread_id' => $thread_id, 'bot_theme' => $bot_theme]);
 	}
 
-	public function addTheme($fs_id, $bezirk_id, $name, $body, $bot_theme = 0, $active)
+	public function addThread($fs_id, $bezirk_id, $name, $body, $bot_theme = 0, $active)
 	{
-		$theme_id = $this->db->insert('fs_theme', [
+		$thread_id = $this->db->insert('fs_theme', [
 			'foodsaver_id' => $fs_id,
 			'name' => strip_tags($name),
 			'time' => date('Y-m-d H:i:s'),
 			'active' => $active,
 		]);
 
-		$this->followTheme($fs_id, $theme_id);
+		$this->followThread($fs_id, $thread_id);
 
 		$this->db->insert('fs_bezirk_has_theme', [
 			'bezirk_id' => $bezirk_id,
-			'theme_id' => $theme_id,
+			'theme_id' => $thread_id,
 			'bot_theme' => $bot_theme
 		]);
 
-		$this->addThemePost($fs_id, $theme_id, $body);
+		$this->addPost($fs_id, $thread_id, $body);
 
-		return $theme_id;
+		return $thread_id;
 	}
 
-	public function activateTheme($theme_id)
+	public function activateThread($thread_id)
 	{
-		$this->db->update('fs_theme', ['active' => 1], ['id' => $theme_id]);
+		$this->db->update('fs_theme', ['active' => 1], ['id' => $thread_id]);
 	}
 
-	public function deleteTheme($theme_id)
+	public function deleteThread($thread_id)
 	{
-		$this->db->delete('fs_theme_post', ['theme_id' => $theme_id]);
-		$this->db->delete('fs_theme', ['id' => $theme_id]);
+		$this->db->delete('fs_theme_post', ['theme_id' => $thread_id]);
+		$this->db->delete('fs_theme', ['id' => $thread_id]);
 	}
 
-	public function getThreadFollower($fs_id, $theme_id)
+	public function getThreadFollower($fs_id, $thread_id)
 	{
 		return $this->db->fetchAll('
 			SELECT 	fs.name,
@@ -158,11 +158,10 @@ class ForumGateway extends BaseGateway
 			WHERE 	tf.foodsaver_id = fs.id
 			AND 	tf.theme_id = :theme_id
 			AND 	tf.foodsaver_id != :fs_id
-		', ['theme_id' => $theme_id, 'fs_id' => $fs_id]);
+		', ['theme_id' => $thread_id, 'fs_id' => $fs_id]);
 	}
 
-	/*Does Foodsaver Follow Topic -> followCounter*/
-	public function getFollowingCounter($fs_id, $theme_id)
+	public function getFollowCounter($fs_id, $thread_id)
 	{
 		return $this->db->fetchValue('
 			SELECT  count(DISTINCT tf.theme_id)
@@ -170,10 +169,10 @@ class ForumGateway extends BaseGateway
 					fs_theme_follower tf
 			WHERE   tf.theme_id = :theme_id
 			AND 	tf.foodsaver_id = :fs_id
-		', ['theme_id' => $theme_id, 'fs_id' => $fs_id]);
+		', ['theme_id' => $thread_id, 'fs_id' => $fs_id]);
 	}
 
-	public function getBotThemestatus($theme_id)
+	public function getBotThreadStatus($thread_id)
 	{
 		return $this->db->fetch('
 			SELECT  ht.bot_theme,
@@ -181,60 +180,60 @@ class ForumGateway extends BaseGateway
 			FROM
 					fs_bezirk_has_theme ht
 			WHERE   ht.theme_id = :theme_id
-		', ['theme_id' => $theme_id]);
+		', ['theme_id' => $thread_id]);
 	}
 
-	public function followTheme($fs_id, $theme_id)
+	public function followThread($fs_id, $thread_id)
 	{
 		return $this->db->insert(
 			'fs_theme_follower',
-			['foodsaver_id' => $fs_id, 'theme_id' => $theme_id, 'infotype' => 1]
+			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'infotype' => 1]
 		);
 	}
 
-	public function unfollowTheme($fs_id, $theme_id)
+	public function unfollowThread($fs_id, $thread_id)
 	{
 		return $this->db->delete(
 			'fs_theme_follower',
-			['theme_id' => $theme_id, 'foodsaver_id' => $fs_id]
+			['theme_id' => $thread_id, 'foodsaver_id' => $fs_id]
 		);
 	}
 
-	public function stickTheme($theme_id)
+	public function stickThread($thread_id)
 	{
 		return $this->db->update(
 			'fs_theme',
 			['sticky' => 1],
-			['id' => $theme_id]
+			['id' => $thread_id]
 		);
 	}
 
-	public function unstickTheme($theme_id)
+	public function unstickThread($thread_id)
 	{
 		$this->db->update(
 			'fs_theme',
 			['sticky' => 0],
-			['id' => $theme_id]
+			['id' => $thread_id]
 		);
 	}
 
-	public function getStickStatus($theme_id)
+	public function getStickStatus($thread_id)
 	{
 		return $this->db->fetchValue('
 			SELECT `sticky`
 			FROM fs_theme
 			WHERE id = :id
-		', ['id' => $theme_id]);
+		', ['id' => $thread_id]);
 	}
 
 	// Post-related
 
-	public function addThemePost($fs_id, $theme_id, $body, $reply = 0, $bezirk = false)
+	public function addPost($fs_id, $thread_id, $body, $reply = 0, $bezirk = false)
 	{
 		$post_id = $this->db->insert(
 			'fs_theme_post',
 			[
-				'theme_id' => $theme_id,
+				'theme_id' => $thread_id,
 				'foodsaver_id' => $fs_id,
 				'reply_post' => $reply,
 				'body' => strip_tags($body, '<p><a><ul><strong><b><i><ol><li><br>'),
@@ -242,7 +241,7 @@ class ForumGateway extends BaseGateway
 			]
 		);
 
-		$this->db->update('fs_theme', ['last_post_id' => $post_id], ['id' => $theme_id]);
+		$this->db->update('fs_theme', ['last_post_id' => $post_id], ['id' => $thread_id]);
 
 		if ($reply > 0) {
 			$post_fs_id = $this->db->fetchValue('SELECT `foodsaver_id` FROM `fs_theme_post` WHERE `id` = :id', ['id' => $reply]);
@@ -252,7 +251,7 @@ class ForumGateway extends BaseGateway
 					'forum_answer_title',
 					'forum_answer',
 					'fa fa-comments',
-					array('href' => '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=forum&tid=' . $theme_id . '&pid=' . $post_id . '#post' . $post_id),
+					array('href' => '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=forum&tid=' . $thread_id . '&pid=' . $post_id . '#post' . $post_id),
 					array('user' => S::user('name'), 'forum' => $bezirk['name']),
 					'forum-post-' . $post_id
 				);
@@ -285,19 +284,22 @@ class ForumGateway extends BaseGateway
 
 	public function deletePost($id)
 	{
-		$theme_id = $this->db->fetchValue('SELECT `theme_id` FROM `fs_theme_post` WHERE `id` = :id', ['id' => $id]);
+		$thread_id = $this->db->fetchValue('SELECT `theme_id` FROM `fs_theme_post` WHERE `id` = :id', ['id' => $id]);
 		$this->db->delete('fs_theme_post', ['id' => $id]);
 
-		if ($last_post_id = $this->db->fetchValue('SELECT MAX(`id`) FROM `fs_theme_post` WHERE `theme_id` = :theme_id', ['theme_id' => $theme_id])) {
-			$this->db->update('fs_theme', ['last_post_id' => $last_post_id], ['id' => $theme_id]);
+		if ($last_post_id = $this->db->fetchValue(
+			'SELECT MAX(`id`) FROM `fs_theme_post` WHERE `theme_id` = :theme_id',
+			['theme_id' => $thread_id]
+		)) {
+			$this->db->update('fs_theme', ['last_post_id' => $last_post_id], ['id' => $thread_id]);
 		} else {
-			$this->db->delete('fs_theme', ['id' => $theme_id]);
+			$this->db->delete('fs_theme', ['id' => $thread_id]);
 		}
 
 		return true;
 	}
 
-	public function getBezirkForPost($post_id)
+	public function getRegionForPost($post_id)
 	{
 		return $this->db->fetchValue('
 			SELECT 	bt.bezirk_id

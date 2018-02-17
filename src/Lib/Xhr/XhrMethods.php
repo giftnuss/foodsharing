@@ -1528,7 +1528,7 @@ class XhrMethods
 	public function xhr_delPost($data)
 	{
 		$fsid = $this->model->getVal('foodsaver_id', 'theme_post', $data['pid']);
-		$bezirkId = $this->forumGateway->getBezirkForPost($data['pid']);
+		$bezirkId = $this->forumGateway->getRegionForPost($data['pid']);
 		$bezirkType = $this->regionGateway->getType($bezirkId);
 
 		if ($this->func->isOrgaTeam() || $fsid == $this->func->fsId() || ($this->func->isBotFor($bezirkId) && $bezirkType == 7)) {

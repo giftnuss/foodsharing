@@ -31,48 +31,48 @@ class RegionXhr extends Control
 
 	public function followTheme()
 	{
-		$bot_theme = $this->forumGateway->getBotThemestatus($_GET['tid']);
+		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
 		if (!S::may() || !$this->hasThemeAccess($bot_theme)) {
 			return $this->responses->fail_permissions();
 		}
 
-		$this->forumGateway->followTheme(S::id(), $_GET['tid']);
+		$this->forumGateway->followThread(S::id(), $_GET['tid']);
 
 		return $this->responses->success();
 	}
 
 	public function unfollowTheme()
 	{
-		$bot_theme = $this->forumGateway->getBotThemestatus($_GET['tid']);
+		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
 		if (!S::may() || !$this->hasThemeAccess($bot_theme)) {
 			return $this->responses->fail_permissions();
 		}
 
-		$this->forumGateway->unfollowTheme(S::id(), $_GET['tid']);
+		$this->forumGateway->unfollowThread(S::id(), $_GET['tid']);
 
 		return $this->responses->success();
 	}
 
 	public function stickTheme()
 	{
-		$bot_theme = $this->forumGateway->getBotThemestatus($_GET['tid']);
+		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
 		if (!S::may() || !$this->hasThemeAccess($bot_theme)) {
 			return $this->responses->fail_permissions();
 		}
 
-		$this->forumGateway->stickTheme($_GET['tid']);
+		$this->forumGateway->stickThread($_GET['tid']);
 
 		return $this->responses->success();
 	}
 
 	public function unstickTheme()
 	{
-		$bot_theme = $this->forumGateway->getBotThemestatus($_GET['tid']);
+		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
 		if (!S::may() || !$this->hasThemeAccess($bot_theme)) {
 			return $this->responses->fail_permissions();
 		}
 
-		$this->forumGateway->unstickTheme($_GET['tid']);
+		$this->forumGateway->unstickThread($_GET['tid']);
 
 		return $this->responses->success();
 	}
@@ -91,7 +91,7 @@ class RegionXhr extends Control
 			}
 
 			$this->view->bezirk_id = $bezirk_id;
-			$themes = $this->forumGateway->listThemes($bezirk_id, (int)$_GET['bot'], (int)$_GET['page'], (int)$_GET['last']);
+			$themes = $this->forumGateway->listThreads($bezirk_id, (int)$_GET['bot'], (int)$_GET['page'], (int)$_GET['last']);
 
 			return array(
 				'status' => 1,
@@ -115,7 +115,7 @@ class RegionXhr extends Control
 			$body = $this->func->autolink($body);
 
 			if ($bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid'])) {
-				if ($post_id = $this->forumGateway->addThemePost(S::id(), $_GET['tid'], $body, $_GET['pid'], $bezirk)) {
+				if ($post_id = $this->forumGateway->addPost(S::id(), $_GET['tid'], $body, $_GET['pid'], $bezirk)) {
 					if ($follower = $this->forumGateway->getThreadFollower(S::id(), $_GET['tid'])) {
 						$theme = $this->model->getVal('name', 'theme', $_GET['tid']);
 

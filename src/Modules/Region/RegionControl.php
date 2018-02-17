@@ -292,13 +292,13 @@ class RegionControl extends Control
 			$body = nl2br($body);
 			$body = $this->func->autolink($body);
 
-			if ($post_id = $this->forumGateway->addThemePost(S::id(), $_POST['thread'], $body, $_POST['post'], $this->bezirk)) {
+			if ($post_id = $this->forumGateway->addPost(S::id(), $_POST['thread'], $body, $_POST['post'], $this->bezirk)) {
 				// Dunno why this is only done for non-bot-posts
 				if (!$botForum) {
 					if ($_POST['follow'] == 1) {
-						$this->forumGateway->followTheme(S::id(), $_POST['thread']);
+						$this->forumGateway->followThread(S::id(), $_POST['thread']);
 					} elseif ($_POST['follow'] == 0) {
-						$this->forumGateway->unfollowTheme(S::id(), $_POST['thread']);
+						$this->forumGateway->unfollowThread(S::id(), $_POST['thread']);
 					}
 
 					if ($follower = $this->forumGateway->getThreadFollower(S::id(), $_POST['thread'])) {
@@ -330,7 +330,7 @@ class RegionControl extends Control
 
 		$this->func->addContent($this->view->forum_top());
 
-		if ($themes = $this->forumGateway->listThemes($this->bezirk_id, $botForum ? 1 : 0)) {
+		if ($themes = $this->forumGateway->listThreads($this->bezirk_id, $botForum ? 1 : 0)) {
 			$this->func->addContent(
 				$this->view->forum_index($themes, false, $botForum ? 'botforum' : 'forum')
 			);
@@ -349,13 +349,13 @@ class RegionControl extends Control
 			$this->func->addBread($thread['name']);
 			if ($thread['active'] == 0 && ($this->func->isBotFor($this->bezirk_id) || $this->func->isOrgaTeam())) {
 				if (isset($_GET['activate'])) {
-					$this->forumGateway->activateTheme($thread_id);
+					$this->forumGateway->activateThread($thread_id);
 					$this->themeInfoMail($thread_id);
 					$this->func->info('Thema wurde aktiviert!');
 					$this->func->go('/?page=bezirk&bid=' . $this->bezirk_id . '&sub=forum&tid=' . (int)$thread_id);
 				} elseif (isset($_GET['delete'])) {
 					$this->func->info('Thema wurde gelöscht!');
-					$this->forumGateway->deleteTheme($thread_id);
+					$this->forumGateway->deleteThread($thread_id);
 					$this->func->go('/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=forum');
 				}
 				$this->func->addContent($this->view->activateTheme($thread), CNT_TOP);
@@ -363,7 +363,7 @@ class RegionControl extends Control
 
 			if ($thread['active'] == 1 || S::may('orga') || $this->func->isBotFor($this->bezirk_id)) {
 				$posts = $this->forumGateway->listPosts($thread_id);
-				$followCounter = $this->forumGateway->getFollowingCounter(S::id(), $thread_id);
+				$followCounter = $this->forumGateway->getFollowCounter(S::id(), $thread_id);
 				$bezirkType = $this->gateway->getType($this->bezirk_id);
 				$stickStatus = $this->forumGateway->getStickStatus($thread_id);
 				$this->func->addContent($this->view->thread($thread, $posts, $followCounter, $bezirkType, $stickStatus));
@@ -486,7 +486,7 @@ class RegionControl extends Control
 			$body = nl2br($body);
 			$body = $this->func->autolink($body);
 
-			if ($theme_id = $this->forumGateway->addTheme($this->func->fsId(), $this->bezirk_id, $_POST['title'], $body, $this->bot_theme, $active)) {
+			if ($theme_id = $this->forumGateway->addThread($this->func->fsId(), $this->bezirk_id, $_POST['title'], $body, $this->bot_theme, $active)) {
 				if ($active) {
 					$this->themeInfoMail($theme_id);
 				} else {
