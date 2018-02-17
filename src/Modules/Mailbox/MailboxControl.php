@@ -44,7 +44,7 @@ class MailboxControl extends Control
 	{
 		$this->func->addScript('/js/dynatree/jquery.dynatree.js');
 		$this->func->addScript('/js/jquery.cookie.js');
-		$this->func->addCss('/js/dynatree/skin/ui.dynatree.css');
+		$this->func->addStylesheet('/js/dynatree/skin/ui.dynatree.css');
 
 		$this->func->addBread('Mailboxen');
 

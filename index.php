@@ -32,9 +32,18 @@ require __DIR__ . '/includes/setup.php';
 
 require_once 'lib/inc.php';
 $view_utils = DI::$shared->get(Utils::class);
-$func = DI::$shared->get(Func::class);
 
-$func->addCss('/css/gen/style.css?v=' . VERSION);
+/**
+ * @return Func
+ */
+function getFunc()
+{
+	return DI::$shared->get(Func::class);
+}
+
+$func = getFunc();
+
+$func->addStylesheet('/css/gen/style.css?v=' . VERSION);
 $func->addScript('/js/gen/script.js?v=' . VERSION);
 
 $app = $func->getPage();
@@ -58,7 +67,6 @@ if ($class) {
 $menu = $func->getMenu();
 
 $func->getMessages();
-$func->makeHead();
 
 if (DebugBar::isEnabled()) {
 	$func->addHead(DebugBar::renderHead());
@@ -77,7 +85,7 @@ if (DebugBar::isEnabled()) {
 	$func->addContent(DebugBar::renderContent(), CNT_BOTTOM);
 }
 
-if (!array_key_exists('NOTWIG', $_GET)) {
+if (!array_key_exists('NO_TWIG', $_GET)) {
 	$twig = DI::$shared->get(\Foodsharing\Lib\Twig::class);
 
 	$mainwidth = 24;
@@ -94,11 +102,8 @@ if (!array_key_exists('NOTWIG', $_GET)) {
 	}
 
 	echo $twig->render('layouts/' . $g_template . '.twig', [
-		'head' => $func->getHead(),
+		'head' => $func->getHeadData(),
 		'bread' => $func->getBread(),
-		'css' => str_replace(["\r", "\n"], '', $func->getAddCss()),
-		'jsFunc' => $func->getJsFunc(),
-		'js' => $func->getJs(),
 		'bodyClass' => $g_body_class,
 		'msgbar' => $msgbar,
 		'menu' => $menu,

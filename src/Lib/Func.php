@@ -29,11 +29,15 @@ class Func
 	private $head;
 	private $title;
 	private $ids;
-	private $script;
-	private $css;
+	private $scripts;
+	private $stylesheets;
 	private $add_css;
-	private $meta;
 	private $viewUtils;
+
+	/**
+	 * @var Twig
+	 */
+	private $twig;
 
 	public function __construct(Utils $viewUtils)
 	{
@@ -52,19 +56,17 @@ class Func
 		$this->title = array('foodsharing');
 
 		$this->ids = array();
-		$this->script = array();
-		$this->css = array();
+		$this->scripts = array();
+		$this->stylesheets = array();
 		$this->add_css = '';
+	}
 
-		$this->meta = array(
-			'description' => 'Auf foodsharing.de kannst Du Deine Lebensmittel vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben',
-			'keywords' => 'foodsharing, essen, lebensmittel, ablaufdatum, Lebensmittelverschwendung, essen wegschmeissen, spenden, lebensmitteltausch',
-			'author' => 'foodsharing',
-			'robots' => 'all',
-			'allow-search' => 'yes',
-			'revisit-after' => '1 days',
-			'google-site-verification' => 'pZxwmxz2YMVLCW0aGaS5gFsCJRh-fivMv1afrDYFrks'
-		);
+	/**
+	 * @required
+	 */
+	public function setTwig(Twig $twig)
+	{
+		$this->twig = $twig;
 	}
 
 	public function jsonSafe($str)
@@ -334,30 +336,7 @@ class Func
 
 	public function getBread()
 	{
-		$out = '';
-		if (!empty($this->bread)) {
-			$last_key = (count($this->bread) - 1);
-			$out = '
-	<div class="pure-g">
-		<div class="pure-u-1">
-			<ul class="bread inside">';
-			foreach ($this->bread as $key => $p) {
-				if ($key == $last_key) {
-					$out .= '
-				<li class="last">' . $p['name'] . '</li>';
-				} else {
-					$out .= '
-				<li><a href="' . $p['href'] . '">' . $p['name'] . '</a></li>';
-				}
-			}
-			$out .= '
-			</ul>
-			<div class="clear"></div>
-		</div>
-	</div>';
-		}
-
-		return $out;
+		return $this->bread;
 	}
 
 	public function setEditData($data)
@@ -443,175 +422,68 @@ class Func
 
 	public function getMenu()
 	{
-		$this->addJs('$("#top .menu").css("display","block");');
-
-		$this->addJs('
-		$("#mobilemenu").bind("change",function(){
-			if($(this).val() != "")
-			{
-				showLoader();
-				goTo($(this).val());
-	
-			}
-		});
-	');
-
-		if (S::may()) {
-			$out = array(
-				'default' => '',
-				'mobile' => ''
-			);
-
-			$bezirke = '
-				<li><a>Bezirke</a>
-					<ul class="jmenu-bezirke">';
-
-			$bezirke_mob = '
-				<optgroup label="Bezirke">';
-
-			$ags = '
-				<li><a href="/?page=groups"><i class="fa fa-group"></i> GRUPPENÜBERSICHT</a></li>
-				<li class="break"><span></span></li>';
-
-			$ags_mob = '
-				<option value="/?page=groups">GRUPPENÜBERSICHT</option>';
-
-			if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
-				foreach ($_SESSION['client']['bezirke'] as $i => $bezirk) {
-					if (($bezirk['type'] != 7)) {
-						$bezirke_a = $this->getBezirkMenu($bezirk);
-
-						$bezirke .= $bezirke_a['default'];
-						$bezirke_mob .= $bezirke_a['mobile'];
-					} else {
-						$ags_a = $this->getAgMenu($bezirk);
-
-						$ags .= $ags_a['default'];
-						$ags_mob .= $ags_a['mobile'];
-					}
+		$regions = [];
+		$stores = [];
+		$workingGroups = [];
+		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
+			foreach ($_SESSION['client']['bezirke'] as $region) {
+				$region = array_merge($region, ['isBot' => $this->isBotFor($region['id'])]);
+				if ($region['type'] == 7) {
+					$workingGroups[] = $region;
+				} else {
+					$regions[] = $region;
 				}
 			}
-			if (!empty($ags)) {
-				$ags = '<ul class="bigmenu">' . $ags . '</ul>';
-			}
-
-			$ags = '<li><a href="/?page=groups">Gruppen</a>' . $ags . '</li>';
-			$ags_mob = '
-				<optgroup label="Gruppen">
-					' . $ags_mob . '
-				</optgroup>';
-
-			$foodsaver_mob = '';
-
-			$bezirke .= '
-			<li class="break"><span></span></li>
-			<li><a href="#" onclick="becomeBezirk();return false;"><i class="fa fa-plus-circle"></i> Bezirk beitreten</a></li>
-		</ul>
-	</li>';
-
-			$bezirke_mob .= '	
-	</optgroup>';
-
-			$orgamenu = $this->getOrgaMenu();
-			$betriebe = $this->getBetriebeMenu();
-			$settings = $this->getSettingsMenu();
-
-			if (!S::may('fs')) {
-				$bezirke = '';
-				$ags = '';
-			}
-
-			return array(
-				'default' => '
-					<ul id="mainMenu" class="jMenu">
-						<li><a href="/essenskoerbe/find">Essenskörbe</a></li>
-						' . $orgamenu['default'] . '
-						<li><a href="/"><i class="fa fa-home"></i></a></li>
-						<li><a class="fNiv" href="/karte"><i class="fa fa-map-marker"></i></a></li>
-						<li><a><i class="fa fa-question-circle"></i></a>
-													<ul>
-															<li><a href="/?page=listFaq">F.A.Q.</a></li>
-															<li><a href="https://wiki.foodsharing.de/">Wiki</a></li>
-															<li><a href="/?page=content&sub=changelog">' . $this->s('changelog') . '</a></li>
-													</ul>
-						</li>
-						' . $ags . '
-						' . $betriebe['default'] . '
-						' . $bezirke . '
-						' . $settings['default'] . '
-					</ul>',
-
-				'mobile' => '
-					<select id="mobilemenu">
-						<option class="famenu" value="dashboard" selected="selected">&#xf0c9;</option>
-						<option value="/">Home</option>
-						<option value="/?page=dashboard">Dashboard</option>
-						<option value="/karte">Karte</option>
-						<option value="/?page=listFaq">F.A.Q.</option>
-						<option value="https://wiki.foodsharing.de">Wiki</option>
-						<option value="/?page=content&sub=changelog">' . $this->s('changelog') . '</option>
-						' . $settings['mobile'] . '
-						' . $ags_mob . '
-						' . $foodsaver_mob . '
-						' . $betriebe['mobile'] . '
-						' . $bezirke_mob . '
-						
-						' . $orgamenu['mobile'] . '
-					</select>'
-			);
-		} else {
-			return array(
-				'default' => '
-				<ul id="mainMenu" class="jMenu">
-					<li><a class="fNiv" href="/karte"><i class="fa fa-map-marker"></i>Karte</a></li>
-					<li><a class="fNiv">Über uns</a>
-						<ul>
-							<li><a href="/ueber-uns">Über uns</a>
-							<li><a href="/?page=content&sub=forderungen">Forderungen</a></li>
-							<li><a href="/team">Team</a></li>
-							<li><a href="/?page=content&sub=communitiesGermany">Communities</a>
-							<ul>
-								<li><a href="/?page=content&sub=communitiesGermany">Deutschland</a></li>
-								<li><a href="/?page=content&sub=communitiesAustria">Österreich</a></li>
-								<li><a href="/?page=content&sub=communitiesSwitzerland">Schweiz</a></li>
-							</ul>
-							</li>
-							<li><a href="/partner">Partner</a></li>
-							<li><a href="/statistik">Statistik</a></li>
-							<li><a href="/?page=content&sub=presse">Presse</a></li>
-						</ul>
-					</li>
-					<li><a class="fNiv" href="/?page=content&sub=joininfo">Mach mit!</a></li>
-					<li><a class="fNiv"><i class="fa fa-info"></i></a>
-						<ul>
-							<li><a href="/?page=content&sub=infohub">Infosammlung</a></li>
-							<li><a href="/news">News</a></li>
-							<li><a href="/faq">F.A.Q.</a></li>
-							<li><a href="/ratgeber">Ratgeber</a></li>
-							<li><a href="/unterstuetzung">Spendenaufruf</a></li>
-						</ul>
-					</li>
-					<li><a class="fNiv" href="/login" title="User Login"><i class="fa fa-user-circle"></i></a></li>
-				</ul>',
-				'mobile' => '
-				<select id="mobilemenu">
-					<option class="famenu" value="dashboard" selected="selected">&#xf0c9;</option>
-					<option value="/">Home</option>
-					<option value="/karte">Karte</option>
-					<option value="/ueber-uns">- Über uns</option>
-					<option value="/?page=content&sub=forderungen">- Forderungen</option>
-					<option value="/?page=content&sub=communitiesGermany">- Community Deutschland</option>
-					<option value="/?page=content&sub=communitiesAustria">- Community Österreich</option>
-					<option value="/?page=content&sub=communitiesSwitzerland">- Community Schweiz</option>
-					<option value="/team">- Team und Kontaktdaten</option>
-					<option value="/partner">- Partner</option>
-					<option value="/?page=content&sub=presse">- Presse</option>
-					<option value="/?page=content&sub=infohub">Infosammlung FAQ Ratgeber etc.</option>
-					<option value="/?page=content&sub=joininfo">Mach mit!</option>
-					<option value="/login">Login</option>
-				</select>'
-			);
 		}
+		if (isset($_SESSION['client']['betriebe']) && is_array($_SESSION['client']['betriebe'])) {
+			$stores = $_SESSION['client']['betriebe'];
+		}
+
+		$loggedIn = S::may();
+
+		return $this->getMenuFn(
+			$loggedIn,
+			$regions,
+			S::may('fs'),
+			$this->isOrgaTeam(),
+			$this->mayEditBlog(),
+			$this->mayEditQuiz(),
+			$this->mayHandleReports(),
+			$stores,
+			$workingGroups,
+			S::get('mailbox'),
+			$this->fsId(),
+			$loggedIn ? $this->img() : ''
+		);
+	}
+
+	public function getMenuFn(
+		bool $loggedIn, array $regions, bool $hasFsRole,
+		bool $isOrgaTeam, bool $mayEditBlog, bool $mayEditQuiz, bool $mayHandleReports,
+		array $stores, array $workingGroups,
+		$sessionMailbox, int $fsId, string $image)
+	{
+		$params = [
+			'loggedIn' => $loggedIn,
+			'fsId' => $fsId,
+			'image' => $image,
+			'mailbox' => $sessionMailbox,
+			'hasFsRole' => $hasFsRole,
+			'isOrgaTeam' => $isOrgaTeam,
+			'may' => [
+				'editBlog' => $mayEditBlog,
+				'editQuiz' => $mayEditQuiz,
+				'handleReports' => $mayHandleReports
+			],
+			'stores' => $stores,
+			'regions' => $regions,
+			'workingGroups' => $workingGroups
+		];
+
+		return [
+			'default' => $this->twig->render('partials/menu.default.twig', $params),
+			'mobile' => $this->twig->render('partials/menu.mobile.twig', $params)
+		];
 	}
 
 	public function preZero($i)
@@ -633,150 +505,6 @@ class Func
 			5 => $this->s('friday'),
 			6 => $this->s('saturday'),
 			0 => $this->s('sunday')
-		);
-	}
-
-	public function getBetriebeMenu()
-	{
-		if (!S::may('fs')) {
-			return array(
-				'mobile' => '',
-				'default' => ''
-			);
-		}
-		$out = '';
-		$out_mob = '';
-		if (isset($_SESSION['client']['betriebe']) && !empty($_SESSION['client']['betriebe'])) {
-			$out = '
-		<li><a onclick="return false" class="fNiv">Betriebe</a>
-			<ul class="jmenu-foodsaver">';
-			$out_mob = '
-		<optgroup label="Betriebe">';
-
-			foreach ($_SESSION['client']['betriebe'] as $cb) {
-				$out .= '
-				<li><a href="/?page=fsbetrieb&id=' . $cb['id'] . '&sub=forum">' . $cb['name'] . '</a></li>';
-
-				$out_mob .= '
-				<option value="/?page=fsbetrieb&id=' . $cb['id'] . '&sub=forum">' . $cb['name'] . '</option>';
-			}
-			$out .= '
-			</ul>
-		</li>';
-
-			$out_mob .= '
-		</optgroup>';
-		}
-
-		$id = $this->id('becomeBezirkChooser');
-
-		$swap_msg = 'Welcher Bezirk soll neu angelegt werden?';
-		$swap = $this->viewUtils->v_swapText($id . '-neu', $swap_msg);
-
-		$this->addHidden('
-		<div id="becomeBezirk">
-			<div class="popbox">
-				<h3>Wähle den Bezirk aus, in dem Du aktiv werden möchtest!</h3>
-				<p class="subtitle">
-					Es besteht auch die Möglichkeit, einen neuen Bezirk zu gründen. Wähle bitte dennoch den entsprechenden übergeordneten Bezirk (Land, Bundeslan, Stadt etc.) aus!
-				</p>
-				<div style="height:260px;">
-					' . $this->viewUtils->v_bezirkChildChooser($id) . '
-					<span id="' . $id . '-btna">Gesuchter Bezirk ist nicht dabei</span>
-					<div class="middle" id="' . $id . '-notAvail">
-						<h3>Deine Stadt oder Region ist nicht dabei?</h3>
-						' . $swap . '
-					</div>
-				</div>
-				<p class="bottom">
-					<span id="' . $id . '-button">Speichern</span>
-				</p>
-			</div>
-		</div>
-		<a id="becomeBezirk-link" href="#becomeBezirk">&nbsp;</a>
-		
-	');
-
-		$this->addJs('
-		$("#' . $id . '-notAvail").hide();
-				
-		$("#' . $id . '-btna").button().click(function(){
-			
-			$("#' . $id . '-btna").fadeOut(200,function(){
-				$("#' . $id . '-notAvail").fadeIn();
-			});
-		});
-				
-		$("#' . $id . '-button").button().click(function(){
-			if(parseInt($("#' . $id . '").val()) > 0)
-			{
-				
-				part = $("#' . $id . '").val().split(":");
-				
-				if(part[1] == 5)
-				{
-					pulseError(\'Das ist ein Bundesland wähle bitte eine Stadt, eine Region, oder einen Bezirk aus.\');	
-					return false;	
-				}
-				else if(part[1] == 6)
-				{
-					pulseError(\'Das ist ein Land wähle bitte eine Stadt, eine Region, oder einen Bezirk aus.\');	
-					return false;		
-				}
-				else if(part[1] == 8)
-				{
-					pulseError(\'Das ist eine Großstadt wähle bitte eine Stadt, eine Region, oder einen Bezirk aus.\');	
-					return false;		
-				}
-				else if(part[1] == 1 || part[1] == 9 || part[1] == 2 || part[1] == 3)
-				{
-					bid = part[0];
-					showLoader();
-					neu = "";
-					if($("#' . $id . '-neu").val() != "' . $swap_msg . '")
-					{
-						neu = $("#' . $id . '-neu").val();
-					}
-					$.ajax({
-						dataType:"json",
-						url:"xhr.php?f=becomeBezirk",
-						data: "b=" + bid + "&new=" + neu,
-						success : function(data){
-							if(data.status == 1)
-							{
-								//if(data.active == 1)
-								//{
-									goTo( "/?page=relogin&url=" + encodeURIComponent("/?page=bezirk&bid=" +$("#' . $id . '").val()) );
-								//}
-								//pulseInfo(\'' . $this->jsSafe($this->s('bezirk_request_successfull')) . '\');
-								$.fancybox.close();
-							}
-							if(data.script != undefined)
-							{
-								$.globalEval(data.script);
-							}
-						},
-						complete:function(){
-							hideLoader();
-						}
-					});	
-				}
-				else
-				{
-					pulseError(\'In diesen Bezirk kannst Du Dich nicht eintragen.\');	
-					return false;		
-				}
-			}
-			else
-			{
-				pulseError(\'<p><strong>Du musst eine Auswahl treffen</strong></p><p>Gibt es Deine Stadt, Deinen Bezirk oder Deine Region noch nicht, dann triff die passende übergeordnete Auswahl</p><p>Also für Köln-Ehrenfeld z. B. Köln</p><p>Und schreibe die Region die neu angelegt werden soll in das Feld unten</p>\');		
-			}
-		});		
-	');
-
-		return array(
-			'default' => $out,
-			'mobile' => $out_mob
 		);
 	}
 
@@ -907,65 +635,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$mail->send();
 	}
 
-	public function getOrgaMenu()
-	{
-		$menu = array();
-		if ($this->isOrgaTeam()) {
-			$menu = [
-				'all_store' => 'betrieb&bid=0',
-				'all_fs' => 'foodsaver&bid=0',
-				'regions_without_bots' => 'geoclean&sub=lostregion',
-				'manage_regions' => 'region',
-				'newarea' => 'newarea'
-			];
-		}
-
-		if ($this->mayEditBlog()) {
-			$menu['blog'] = 'blog&sub=manage';
-		}
-
-		if ($this->isOrgaTeam()) {
-			$menu['email'] = 'email';
-			$menu['email_tpl'] = 'message_tpl';
-			$menu['faq'] = 'faq';
-			$menu['foodsaver_without_region'] = 'geoclean';
-			$menu['content'] = 'content';
-			$menu['foodtypes'] = 'lebensmittel';
-			$menu['mailbox_manage'] = 'mailbox&a=manage';
-		}
-
-		if ($this->mayEditQuiz()) {
-			$menu['quiz'] = 'quiz';
-		}
-
-		if ($this->mayHandleReports()) {
-			$menu['reports'] = 'report&sub=uncom';
-		}
-
-		$len = count($menu);
-		if ($len) {
-			$i = 0;
-			$default = '<li><a class="fNiv"><i class="fa fa-gear"></i></a><ul class="bigmenu">';
-			$mob = '<optgroup label="Orga">';
-			foreach ($menu as $lang_id => $link) {
-				$default .= '<li><a href="/?page=' . $link . '">' . $this->s('menu_' . $lang_id) . '</a></li>';
-				$mob .= '<option value="/?page' . $link . '">' . $this->s('menu_' . $lang_id) . '</option>';
-				++$i;
-			}
-			$default .= '</ul></li>';
-			$mob .= '</optgroup>';
-		} else {
-			$default = '';
-			$mob = '';
-		}
-
-		return
-			array(
-				'default' => $default,
-				'mobile' => $mob
-			);
-	}
-
 	public function dt($ts)
 	{
 		return date('n. M. Y H:i', $ts) . ' Uhr';
@@ -1007,28 +676,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 	}
 
-	public function getSettingsMenu()
-	{
-		$mailbox = '';
-		if (S::get('mailbox')) {
-			$mailbox = '<li><a href="/?page=mailbox"><i class="fa fa-envelope"></i> E-Mail-Postfach</a></li>';
-		}
-		$default = '<li class="g_settings"><a href="/profile/' . $this->fsId() . '" class="fNiv corner-all" style="background-image:url(' . $this->img() . ');"><span>&nbsp;</span></a>
-				    <ul class="jmenu-settings">
-					  <li><a href="/?page=settings"><i class="fa fa-gear"></i> Einstellungen</a></li>
-					  ' . $mailbox . '
-				      <li><a href="/?page=logout"><i class="fa fa-sign-out"></i> Logout</a></li>
-				    </ul>
-				  </li>';
-
-		return array(
-			'default' => $default,
-			'mobile' => '
-			<option value="/?page=settings">Einstellungen</option>
-			<option value="/?page=logout">Logout</option>'
-		);
-	}
-
 	public function isMob()
 	{
 		if (isset($_SESSION['mob']) && $_SESSION['mob'] == 1) {
@@ -1036,61 +683,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		} else {
 			return false;
 		}
-	}
-
-	public function getAgMenu($ag)
-	{
-		$out_mob = '
-		<option value="/?page=bezirk&bid=' . $ag['id'] . '&sub=forum">' . $ag['name'] . '</option>';
-
-		$out = '
-		<li><a href="/?page=bezirk&bid=' . $ag['id'] . '&sub=forum">' . $ag['name'] . '</a>
-			<ul>
-				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid=' . $ag['id'] . '&sub=forum">Forum</a></li>
-				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid=' . $ag['id'] . '&sub=events">Termine</a></li>';
-
-		if ($this->isBotFor($ag['id'])) {
-			$out .= '
-			<li><a href="/?page=groups&sub=edit&id=' . (int)$ag['id'] . '">Gruppe/Mitglieder verwalten</a></li>';
-		}
-
-		$out .= '
-			</ul>';
-
-		return array(
-			'default' => $out . '</li>',
-			'mobile' => $out_mob
-		);
-	}
-
-	public function getBezirkMenu($bezirk)
-	{
-		$out = '<li><a href="/?page=bezirk&bid=' . $bezirk['id'] . '&sub=forum">' . $bezirk['name'] . '</a>
-			<ul>
-				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid=' . $bezirk['id'] . '&sub=forum">Forum</a></li>
-				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid=' . $bezirk['id'] . '&sub=fairteiler">Fair-Teiler</a></li>
-				<li class="menu-top"><a class="menu-top" href="/?page=bezirk&bid=' . $bezirk['id'] . '&sub=events">Termine</a></li>';
-
-		$out_mob = '<option value="/?page=bezirk&bid=' . $bezirk['id'] . '&sub=forum">' . $bezirk['name'] . '</option>';
-
-		if (S::may('fs')) {
-			$out .= '
-				<li class="menu-top"><a class="menu-top" href="/?page=betrieb&bid=' . $bezirk['id'] . '">Betriebe</a></li>';
-		}
-
-		if ($this->isBotFor($bezirk['id'])) {
-			$out .= '
-			<li><a href="/?page=foodsaver&bid=' . $bezirk['id'] . '">Foodsaver</a></li>
-			<li><a href="/?page=passgen&bid=' . $bezirk['id'] . '">Ausweise / Verifizierungen</a></li>';
-		}
-
-		$out .= '
-			</ul>';
-
-		return array(
-			'default' => $out . '</li>',
-			'mobile' => $out_mob
-		);
 	}
 
 	public function id($name)
@@ -1447,12 +1039,12 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function addScript($src)
 	{
-		$this->script[] = $src;
+		$this->scripts[] = $src;
 	}
 
 	public function addScriptTop($src)
 	{
-		array_unshift($this->script, $src);
+		array_unshift($this->scripts, $src);
 	}
 
 	public function addJsFunc($nfunc)
@@ -1466,39 +1058,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->js .= $njs;
 	}
 
-	public function addCssTop($src)
+	public function addStylesheet($src)
 	{
-		array_unshift($this->css, $src);
-	}
-
-	public function addCss($src)
-	{
-		$this->css[] = $src;
-	}
-
-	public function getAddCss()
-	{
-		return $this->add_css;
-	}
-
-	public function getJsFunc()
-	{
-		return JSMin::minify($this->js_func);
-	}
-
-	public function getJs()
-	{
-		return JSMin::minify($this->js);
-	}
-
-	public function makeHead()
-	{
-		foreach ($this->css as $src) {
-			$this->head .= '<link rel="stylesheet" type="text/css" href="' . $src . '" />' . "\n";
-		}
-		foreach ($this->script as $src) {
-			$this->head .= '<script type="text/javascript" src="' . $src . '"></script>' . "\n";
-		}
+		$this->stylesheets[] = $src;
 	}
 
 	public function addHead($str)
@@ -1508,23 +1070,20 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function addTitle($name)
 	{
-		global $title;
 		$this->title[] = $name;
 	}
 
-	public function getHead()
+	public function getHeadData()
 	{
-		foreach ($this->meta as $name => $content) {
-			$this->head .= "\n" . '<meta name="' . $name . '" content="' . $content . '" />';
-		}
-
-		return '<title>' . implode(' | ', $this->title) . '</title>' .
-			$this->head . '
-
-<meta property="og:title" content="Lebensmittel teilen, statt wegwerfen - foodsharing Deutschland" />
-<meta property="og:description" content="Auf foodsharing kannst Du Deine Lebensmitteln vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben" />
-<meta property="og:image" content="http://foodsharing.de/img/foodsharinglogo_200px.png" />
-<meta property="og:url" content="http://foodsharing.de" />';
+		return [
+			'stylesheets' => $this->stylesheets,
+			'scripts' => $this->scripts,
+			'title' => implode(' | ', $this->title),
+			'extra' => $this->head,
+			'css' => str_replace(["\r", "\n"], '', $this->add_css),
+			'jsFunc' => JSMin::minify($this->js_func),
+			'js' => JSMin::minify($this->js)
+		];
 	}
 
 	public function setTitle($name)

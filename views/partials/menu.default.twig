@@ -1,0 +1,188 @@
+<script type="text/javascript">
+    $("#top .menu").css("display", "block");
+</script>
+
+{% include 'partials/becomeBezirk.twig' only %}
+
+{% if loggedIn %}
+    <ul id="mainMenu" class="jMenu">
+        <li><a href="/essenskoerbe/find">Essenskörbe</a></li>
+
+        {% if isOrgaTeam or may.editBlog or may.editQuiz or may.handleReports %}
+            <li>
+                <a class="fNiv"><i class="fa fa-gear"></i></a>
+                <ul class="bigmenu">
+
+                    {% if isOrgaTeam %}
+                        <li><a href="/?page=betrieb&bid=0">{{ 'menu_all_store' | translate }}</a></li>
+                        <li><a href="/?page=foodsaver&bid=0">{{ 'menu_all_fs' | translate }}</a></li>
+                        <li><a href="/?page=geoclean&sub=lostregion">{{ 'menu_regions_without_bots' | translate }}</a>
+                        </li>
+                        <li><a href="/?page=region">{{ 'menu_manage_regions' | translate }}</a></li>
+                        <li><a href="/?page=newarea">{{ 'menu_newarea' | translate }}</a></li>
+                    {% endif %}
+
+                    {% if may.editBlog %}
+                        <li><a href="/?page=blog&sub=manage">{{ 'menu_blog' | translate }}</a></li>
+                    {% endif %}
+
+                    {% if isOrgaTeam %}
+                        <li><a href="/?page=email">{{ 'menu_email' | translate }}</a></li>
+                        <li><a href="/?page=message_tpl">{{ 'menu_email_tpl' | translate }}</a></li>
+                        <li><a href="/?page=faq">{{ 'menu_faq' | translate }}</a></li>
+                        <li><a href="/?page=geoclean">{{ 'menu_foodsaver_without_region' | translate }}</a></li>
+                        <li><a href="/?page=content">{{ 'menu_content' | translate }}</a></li>
+                        <li><a href="/?page=lebensmittel">{{ 'menu_foodtypes' | translate }}</a></li>
+                        <li><a href="/?page=manage">{{ 'menu_mailbox_manage' | translate }}</a></li>
+                    {% endif %}
+
+                    {% if may.editQuiz %}
+                        <li><a href="/?page=quiz">{{ 'menu_quiz' | translate }}</a></li>
+                    {% endif %}
+
+                    {% if may.handleReports %}
+                        <li><a href="/?report&sub=uncom">{{ 'menu_reports' | translate }}</a></li>
+                    {% endif %}
+
+                </ul>
+            </li>
+        {% endif %}
+
+        <li><a href="/"><i class="fa fa-home"></i></a></li>
+        <li><a class="fNiv" href="/karte"><i class="fa fa-map-marker"></i></a></li>
+        <li>
+            <a><i class="fa fa-question-circle"></i></a>
+            <ul>
+                <li><a href="/?page=listFaq">F.A.Q.</a></li>
+                <li><a href="https://wiki.foodsharing.de/">Wiki</a></li>
+                <li><a href="/?page=content&sub=changelog">{{ 'changelog' | translate }}</a></li>
+            </ul>
+        </li>
+
+        {% if hasFsRole %}
+            <li>
+                <a href="/?page=groups">Gruppen</a>
+
+                <ul class="bigmenu">
+
+                    <li>
+                        <a href="/?page=groups"><i class="fa fa-group"></i> GRUPPENÜBERSICHT</a>
+                    </li>
+
+                    {% if workingGroups|length > 0 %}
+
+                        <li class="break"><span></span></li>
+
+                        {% for workingGroup in workingGroups %}
+                            <li>
+                                <a href="/?page=bezirk&bid={{ workingGroup.id }}&sub=forum">{{ workingGroup.name }}</a>
+                                <ul>
+                                    <li class="menu-top"><a class="menu-top"
+                                                            href="/?page=bezirk&bid={{ workingGroup.id }}&sub=forum">Forum</a>
+                                    </li>
+                                    <li class="menu-top"><a class="menu-top"
+                                                            href="/?page=bezirk&bid={{ workingGroup.id }}&sub=events">Termine</a>
+                                    </li>
+
+                                    {% if workingGroup.isBot %}
+                                        <li><a href="/?page=groups&sub=edit&id={{ workingGroup.id }}">Gruppe/Mitglieder
+                                                verwalten</a></li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+
+                    {% endif %}
+                </ul>
+            </li>
+        {% endif %}
+
+        {% if hasFsRole and stores|length > 0 %}
+            <li>
+                <a onclick="return false" class="fNiv">Betriebe</a>
+                <ul class="jmenu-foodsaver">
+                    {% for store in stores %}
+                        <li><a href="/?page=fsbetrieb&id={{ store.id }}&sub=forum">{{ store.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endif %}
+
+        {% if hasFsRole %}
+            <li>
+                <a>Bezirke</a>
+                <ul class="jmenu-bezirke">
+                    {% for region in regions %}
+
+                        <li>
+                            <a href="/?page=bezirk&bid={{ region.id }}&sub=forum">{{ region.name }}</a>
+                            <ul>
+                                <li class="menu-top"><a class="menu-top"
+                                                        href="/?page=bezirk&bid={{ region.id }}&sub=forum">Forum</a>
+                                </li>
+                                <li class="menu-top"><a class="menu-top"
+                                                        href="/?page=bezirk&bid={{ region.id }}&sub=fairteiler">Fair-Teiler</a>
+                                </li>
+                                <li class="menu-top"><a class="menu-top"
+                                                        href="/?page=bezirk&bid={{ region.id }}&sub=events">Termine</a>
+                                </li>
+
+                                {% if hasFsRole %}
+                                    <li class="menu-top"><a class="menu-top" href="/?page=betrieb&bid={{ region.id }}">Betriebe</a>
+                                    </li>
+                                {% endif %}
+
+                                {% if region.isBot %}
+                                    <li><a href="/?page=foodsaver&bid={{ region.id }}">Foodsaver</a></li>
+                                    <li><a href="/?page=passgen&bid={{ region.id }}">Ausweise / Verifizierungen</a></li>
+                                {% endif %}
+                            </ul>
+                        </li>
+
+                    {% endfor %}
+
+                    <li class="break"><span></span></li>
+                    <li><a href="#" onclick="becomeBezirk();return false;"><i class="fa fa-plus-circle"></i> Bezirk
+                            beitreten</a></li>
+                </ul>
+            </li>
+        {% endif %}
+
+        <li class="g_settings"><a href="/profile/{{ fsId }}" class="fNiv corner-all"
+                                  style="background-image:url({{ image }});"><span>&nbsp;</span></a>
+            <ul class="jmenu-settings">
+                <li><a href="/?page=settings"><i class="fa fa-gear"></i> Einstellungen</a></li>
+                {% if mailbox %}
+                    <li><a href="/?page=mailbox"><i class="fa fa-envelope"></i> E-Mail-Postfach</a></li>
+                {% endif %}
+                <li><a href="/?page=logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+            </ul>
+        </li>
+
+    </ul>
+{% else %}
+    <ul id="mainMenu" class="jMenu">
+        <li><a class="fNiv" href="/karte"><i class="fa fa-map-marker"></i>Karte</a></li>
+        <li><a class="fNiv">Über uns</a>
+            <ul>
+                <li><a href="/ueber-uns">Über uns</a>
+                <li><a href="/?page=content&sub=forderungen">Forderungen</a></li>
+                <li><a href="/team">Team</a></li>
+                <li><a href="/partner">Partner</a></li>
+                <li><a href="/statistik">Statistik</a></li>
+                <li><a href="/?page=content&sub=presse">Presse</a></li>
+            </ul>
+        </li>
+        <li><a class="fNiv" href="/?page=content&sub=joininfo">Mach mit!</a></li>
+        <li><a class="fNiv"><i class="fa fa-info"></i></a>
+            <ul>
+                <li><a href="/?page=content&sub=infohub">Infosammlung</a></li>
+                <li><a href="/news">News</a></li>
+                <li><a href="/faq">F.A.Q.</a></li>
+                <li><a href="/ratgeber">Ratgeber</a></li>
+                <li><a href="/unterstuetzung">Spendenaufruf</a></li>
+            </ul>
+        </li>
+        <li><a class="fNiv" href="/login" title="User Login"><i class="fa fa-user-circle"></i></a></li>
+    </ul>
+{% endif %}

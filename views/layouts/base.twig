@@ -5,17 +5,42 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="favicon" href="/favicon.ico" type="image/x-icon" />
-        {{ head | raw }}
-        <style type="text/css">{{ css | raw }}</style>
+
+        <title>{{ head.title }}</title>
+
+        {% for stylesheet in head.stylesheets %}
+            <link rel="stylesheet" type="text/css" href="{{ stylesheet }}" />
+        {% endfor %}
+
+        {% for script in head.scripts %}
+            <script type="text/javascript" src="{{ script }}"></script>
+        {% endfor %}
+
+        {{ head.extra | raw }}
+
+        <meta name="description" content="Auf foodsharing.de kannst Du Deine Lebensmittel vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben" />
+        <meta name="keywords" content="foodsharing, essen, lebensmittel, ablaufdatum, Lebensmittelverschwendung, essen wegschmeissen, spenden, lebensmitteltausch" />
+        <meta name="author" content="foodsharing" />
+        <meta name="robots" content="all" />
+        <meta name="allow-search" content="yes" />
+        <meta name="revisit-after" content="1 days" />
+        <meta name="google-site-verification" content="pZxwmxz2YMVLCW0aGaS5gFsCJRh-fivMv1afrDYFrks" />
+
+        <meta property="og:title" content="Lebensmittel teilen, statt wegwerfen - foodsharing Deutschland" />
+        <meta property="og:description" content="Auf foodsharing kannst Du Deine Lebensmitteln vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben" />
+        <meta property="og:image" content="http://foodsharing.de/img/foodsharinglogo_200px.png" />
+        <meta property="og:url" content="http://foodsharing.de" />
+
+        <style type="text/css">{{ head.css | raw }}</style>
+
         <script type="text/javascript">
             var _gaq = _gaq || [];  _gaq.push(['_setAccount', 'UA-43313114-1']);  _gaq.push(['_setDomainName', '{{ HTTP_HOST }}']);  _gaq.push(['_trackPageview']); (function() {var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);  })();
         </script>
 
         <script type="text/javascript">
-            {{ jsFunc | raw }}
+            {{ head.jsFunc | raw }}
             $(document).ready(function(){
-                console.log('READY!');
-                {{ js | raw }}
+                {{ head.js | raw }}
             });
         </script>
 
@@ -50,7 +75,7 @@
 
             <div id="main" class="{{ isMob ? 'mobile' : '' }}">
 
-                {{ bread | raw }}
+                {% include 'partials/breadcrumbs.twig' with { items: bread } %}
 
                 {% if content.top.html %}
                     <div class="pure-g">

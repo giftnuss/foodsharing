@@ -1,0 +1,100 @@
+{% set swapMsg = 'Welcher Bezirk soll neu angelegt werden?' %}
+
+<div style="display: none;">
+    <div id="becomeBezirk">
+        <div class="popbox">
+            <h3>Wähle den Bezirk aus, in dem Du aktiv werden möchtest!</h3>
+            <p class="subtitle">
+                Es besteht auch die Möglichkeit, einen neuen Bezirk zu gründen. Wähle bitte dennoch den entsprechenden
+                übergeordneten Bezirk (Land, Bundesland, Stadt etc.) aus!
+            </p>
+
+            {% set id = 'becomeBezirkChooser' | id %}
+
+            <div style="height:260px;">
+
+                {% include 'partials/bezirkChildChooser.twig' with { id: id } %}
+
+                <span id="{{ id }}-btna">Gesuchter Bezirk ist nicht dabei</span>
+                <div class="middle" id="{{ id }}-notAvail">
+                    <h3>Deine Stadt oder Region ist nicht dabei?</h3>
+                    {% include 'partials/swapText.twig' with { id: "#{id}-neu", value: swapMsg } %}
+                </div>
+            </div>
+            <p class="bottom">
+                <span id="{{ id }}-button">Speichern</span>
+            </p>
+        </div>
+    </div>
+    <a id="becomeBezirk-link" href="#becomeBezirk">&nbsp;</a>
+</div>
+
+
+<script type="text/javascript">
+
+    $(function () {
+
+        $("#{{ id }}-notAvail").hide();
+
+        $("#{{ id }}-btna").button().click(function () {
+
+            $("#{{ id }}-btna").fadeOut(200, function () {
+                $("#{{ id }}-notAvail").fadeIn();
+            });
+        });
+
+        $("#{{ id }}-button").button().click(function () {
+            if (parseInt($("#{{ id }}").val()) > 0) {
+
+                part = $("#{{ id }}").val().split(":");
+
+                if (part[1] == 5) {
+                    pulseError('Das ist ein Bundesland wähle bitte eine Stadt, eine Region, oder einen Bezirk aus.');
+                    return false;
+                }
+                else if (part[1] == 6) {
+                    pulseError('Das ist ein Land wähle bitte eine Stadt, eine Region, oder einen Bezirk aus.');
+                    return false;
+                }
+                else if (part[1] == 8) {
+                    pulseError('Das ist eine Großstadt wähle bitte eine Stadt, eine Region, oder einen Bezirk aus.');
+                    return false;
+                }
+                else if (part[1] == 1 || part[1] == 9 || part[1] == 2 || part[1] == 3) {
+                    bid = part[0];
+                    showLoader();
+
+                    neu = "";
+                    if ($("#{{ id }}-neu").val() != "{{ swapMsg }}") {
+                        neu = $("#{{ id }}-neu").val();
+                    }
+                    $.ajax({
+                        dataType: "json",
+                        url: "xhr.php?f=becomeBezirk",
+                        data: "b=" + bid + "&new=" + neu,
+                        success: function (data) {
+                            if (data.status == 1) {
+                                goTo("/?page=relogin&url=" + encodeURIComponent("/?page=bezirk&bid=" + $("#{{ id }}").val()));
+                                $.fancybox.close();
+                            }
+                            if (data.script != undefined) {
+                                $.globalEval(data.script);
+                            }
+                        },
+                        complete: function () {
+                            hideLoader();
+                        }
+                    });
+                }
+                else {
+                    pulseError('In diesen Bezirk kannst Du Dich nicht eintragen.');
+                    return false;
+                }
+            }
+            else {
+                pulseError('<p><strong>Du musst eine Auswahl treffen</strong></p><p>Gibt es Deine Stadt, Deinen Bezirk oder Deine Region noch nicht, dann triff die passende übergeordnete Auswahl</p><p>Also für Köln-Ehrenfeld z. B. Köln</p><p>Und schreibe die Region die neu angelegt werden soll in das Feld unten</p>');
+            }
+        });
+    });
+
+</script>

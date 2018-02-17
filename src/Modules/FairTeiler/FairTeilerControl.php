@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\FairTeiler;
 
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class FairTeilerControl extends Control
@@ -17,11 +18,12 @@ class FairTeilerControl extends Control
 	private $gateway;
 	private $regionGateway;
 
-	public function __construct(FairTeilerView $view, FairTeilerGateway $gateway, RegionGateway $regionGateway)
+	public function __construct(FairTeilerView $view, FairTeilerGateway $gateway, RegionGateway $regionGateway, Model $model)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->regionGateway = $regionGateway;
+		$this->model = $model;
 
 		parent::__construct();
 

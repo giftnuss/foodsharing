@@ -4,6 +4,7 @@ namespace Foodsharing\Lib\View;
 
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Twig;
 
 class Utils
 {
@@ -12,6 +13,11 @@ class Utils
 	 * @var Func
 	 */
 	private $func;
+
+	/**
+	 * @var Twig
+	 */
+	private $twig;
 
 	public function __construct()
 	{
@@ -24,6 +30,14 @@ class Utils
 	public function setFunc(Func $func)
 	{
 		$this->func = $func;
+	}
+
+	/**
+	 * @required
+	 */
+	public function setTwig(Twig $twig)
+	{
+		$this->twig = $twig;
 	}
 
 	public function v_quickform($titel, $elements, $option = array())
@@ -177,14 +191,17 @@ class Utils
 
 	public function v_swapText($id, $value)
 	{
-		return '<input class="swapText swap" onblur="if(this.value==\'\'){this.value=\'' . $value . '\';$(this).addClass(\'swap\')}" onfocus="if(this.value==\'' . $value . '\'){this.value=\'\';$(this).removeClass(\'swap\');}" onclick="if(this.value==\'' . $value . '\'){this.value=\'\';$(this).removeClass(\'swap\');}" id="' . $id . '" type="text" name="' . $id . '" value="' . $value . '" />';
+		return $this->twig->render('partials/swapText.twig', [
+			'id' => $id,
+			'value' => $value
+		]);
 	}
 
 	public function v_bezirkChooser($id = 'bezirk_id', $bezirk = false, $option = array())
 	{
 		$this->func->addScript('/js/dynatree/jquery.dynatree.js');
 		$this->func->addScript('/js/jquery.cookie.js');
-		$this->func->addCss('/js/dynatree/skin/ui.dynatree.css');
+		$this->func->addStylesheet('/js/dynatree/skin/ui.dynatree.css');
 
 		if (!$bezirk) {
 			//$bezirk = $this->func->getBezirk();
@@ -529,7 +546,7 @@ class Utils
 	{
 		$this->func->addScript('/js/dynatree/jquery.dynatree.js');
 		$this->func->addScript('/js/jquery.cookie.js');
-		$this->func->addCss('/js/dynatree/skin/ui.dynatree.css');
+		$this->func->addStylesheet('/js/dynatree/skin/ui.dynatree.css');
 
 		$id = 'recip_choose';
 		$out = '

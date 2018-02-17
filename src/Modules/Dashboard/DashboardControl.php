@@ -44,7 +44,7 @@ class DashboardControl extends Control
 	public function index()
 	{
 		$this->func->addScript('/js/contextmenu/jquery.contextMenu.js');
-		$this->func->addCss('/js/contextmenu/jquery.contextMenu.css');
+		$this->func->addStylesheet('/js/contextmenu/jquery.contextMenu.css');
 
 		$check = false;
 
@@ -109,8 +109,8 @@ class DashboardControl extends Control
 			$this->func->addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
 		}
 
-		$this->func->addBread($this->func->s('dashboard'));
-		$this->func->addTitle($this->func->s('dashboard'));
+		$this->func->addBread('Dashboard');
+		$this->func->addTitle('Dashboard');
 		/*
 		 * User is foodsaver
 		 */
@@ -178,9 +178,6 @@ class DashboardControl extends Control
 
 	private function dashFoodsaver()
 	{
-		$this->func->addBread('Dashboard');
-		$this->func->addTitle('Dashboard');
-
 		$val = $this->model->getValues(array('photo_public', 'anschrift', 'plz', 'lat', 'lon', 'stadt'), 'foodsaver', $this->func->fsId());
 
 		if (empty($val['lat']) || empty($val['lon']) ||

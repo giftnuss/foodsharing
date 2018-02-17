@@ -52,4 +52,9 @@ class FoodsharingUrl extends \Codeception\Module\Db
 	{
 		return '/?page=bezirk&bid=' . (int)$id . '&sub=wall';
 	}
+
+	public function fairTeilerRegionListUrl($region_id)
+	{
+		return '/?page=fairteiler&bid=' . (int)$region_id;
+	}
 }

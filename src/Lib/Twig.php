@@ -3,6 +3,7 @@
 namespace Foodsharing\Lib;
 
 use Twig_Environment;
+use Twig_Extension_Debug;
 use Twig_Loader_Filesystem;
 
 class Twig
@@ -22,12 +23,13 @@ class Twig
 		$this->loader = new Twig_Loader_Filesystem(__DIR__ . '/../../views');
 
 		$this->twig = new Twig_Environment($this->loader, [
-			'debug' => FS_ENV === 'dev',
+			'debug' => defined('FS_ENV') && FS_ENV === 'dev',
 			'cache' => __DIR__ . '/../../tmp/.views-cache',
 			'strict_variables' => true
 		]);
 
 		$this->twig->addExtension($twigExtensions);
+		$this->twig->addExtension(new Twig_Extension_Debug());
 	}
 
 	public function render($view, $data)

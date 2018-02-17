@@ -104,8 +104,8 @@ class XhrMethods
 
 	public function xhr_getPinPost($data)
 	{
-		$this->func->incLang('betrieb');
-		$this->func->incLang('fsbetrieb');
+		$this->func->incLang('Store');
+		$this->func->incLang('StoreUser');
 
 		if ($this->model->isInTeam($data['bid']) || $this->func->isBotschafter() || $this->func->isOrgaTeam()) {
 			if ($out = $this->model->q('
@@ -1217,7 +1217,7 @@ class XhrMethods
 	public function xhr_denyRequest($data)
 	{
 		if ($this->func->fsId() == $data['fsid'] || $this->model->isVerantwortlich($data['bid'])) {
-			$this->model->denyRequest($data['fsid'], $data['bid']);
+			$this->storeModel->denyRequest($data['fsid'], $data['bid']);
 
 			$msg = 'Deine Anfrage wurde erfolgreich zur&uuml;ckgezogen!';
 
@@ -1231,10 +1231,10 @@ class XhrMethods
 
 	public function xhr_acceptRequest($data)
 	{
-		if ($this->model->isVerantwortlich($data['bid']) || $this->func->isBotschafter()) {
-			$this->model->acceptRequest($data['fsid'], $data['bid']);
+		if ($this->storeModel->isVerantwortlich($data['bid']) || $this->func->isBotschafter()) {
+			$this->storeModel->acceptRequest($data['fsid'], $data['bid']);
 
-			$this->model->add_betrieb_notiz(array(
+			$this->storeModel->add_betrieb_notiz(array(
 				'foodsaver_id' => $data['fsid'],
 				'betrieb_id' => $data['bid'],
 				'text' => '{ACCEPT_REQUEST}',
@@ -1251,8 +1251,8 @@ class XhrMethods
 
 	public function xhr_warteRequest($data)
 	{
-		if ($this->model->isVerantwortlich($data['bid']) || $this->func->isBotschafter() || $this->func->isOrgaTeam()) {
-			$this->model->warteRequest($data['fsid'], $data['bid']);
+		if ($this->storeModel->isVerantwortlich($data['bid']) || $this->func->isBotschafter() || $this->func->isOrgaTeam()) {
+			$this->storeModel->warteRequest($data['fsid'], $data['bid']);
 
 			return json_encode(array('status' => 1));
 		}
@@ -1298,7 +1298,7 @@ class XhrMethods
 			), 'store-request-' . (int)$data['id']);
 		}
 
-		$this->model->teamRequest($this->func->fsId(), $data['id']);
+		$this->storeModel->teamRequest($this->func->fsId(), $data['id']);
 
 		return json_encode(array('status' => $status, 'msg' => $msg));
 	}
@@ -1336,7 +1336,7 @@ class XhrMethods
 			 */
 
 			if (!empty($data['to'])) {
-				$this->func->incLang('fsbetrieb');
+				$this->func->incLang('StoreUser');
 				if (empty($data['from'])) {
 					$data['from'] = date('Y-m-d');
 				}
@@ -1393,7 +1393,7 @@ class XhrMethods
 			}
 
 			if (isset($data['msg'])) {
-				$this->messageModel->addTeamMessage($data['bid'], $data['msg']);
+				$this->storeModel->addTeamMessage($data['bid'], $data['msg']);
 			}
 		}
 

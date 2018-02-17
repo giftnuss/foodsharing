@@ -7,6 +7,7 @@ use PDO;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 class DI
@@ -16,6 +17,9 @@ class DI
 	 */
 	public static $shared;
 
+	private $cacheFile = __DIR__ . '/../tmp/di-cache.php';
+	private $isDev;
+	private $useCached = false;
 	private $container;
 
 	public static function initShared()
@@ -25,20 +29,33 @@ class DI
 
 	public function __construct()
 	{
-		$this->container = new ContainerBuilder();
-		$loader = new YamlFileLoader($this->container, new FileLocator(__DIR__));
+		$this->isDev = defined('FS_ENV') && FS_ENV === 'dev';
 
-		$definition = new Definition();
-		$definition
-			->setAutowired(true)
-			->setAutoconfigured(true)
-			->setPublic(true);
+		$this->useCached = !$this->isDev && file_exists($this->cacheFile);
 
-		$loader->registerClasses($definition, 'Foodsharing\\', '*', '{Lib/Flourish,Lib/Cache,Lib/View/v*,Dev,Debug}');
+		if ($this->useCached) {
+			require_once $this->cacheFile;
+			$this->container = new \FoodsharingCachedContainer();
+		} else {
+			$this->container = new ContainerBuilder();
+			$loader = new YamlFileLoader($this->container, new FileLocator(__DIR__));
+
+			$definition = new Definition();
+			$definition
+				->setAutowired(true)
+				->setAutoconfigured(true)
+				->setPublic(true);
+
+			$loader->registerClasses($definition, 'Foodsharing\\', '*', '{Lib/Flourish,Lib/Cache,Lib/View/v*,Dev,Debug}');
+		}
 	}
 
 	public function configureMysqli($host, $user, $password, $db)
 	{
+		if ($this->useCached) {
+			return;
+		}
+
 		$this->container
 			->register(\mysqli::class, \mysqli::class)
 			->addArgument($host)
@@ -51,11 +68,20 @@ class DI
 	public function useTraceablePDO($traceablePDO)
 	{
 		$this->container->set(PDO::class, $traceablePDO);
+
+		if ($this->useCached) {
+			return;
+		}
+
 		$this->container->register(PDO::class, TraceablePDO::class);
 	}
 
 	public function usePDO($dsn, $user, $password)
 	{
+		if ($this->useCached) {
+			return;
+		}
+
 		$this->container
 			->register(\PDO::class, \PDO::class)
 			->addArgument($dsn)
@@ -67,7 +93,21 @@ class DI
 
 	public function compile()
 	{
+		if ($this->useCached) {
+			return;
+		}
+
 		$this->container->compile();
+
+		if (!$this->isDev) {
+			$dumper = new PhpDumper($this->container);
+			file_put_contents($this->cacheFile, $dumper->dump(['class' => 'FoodsharingCachedContainer']));
+		}
+	}
+
+	public function isCompiled()
+	{
+		return $this->container->isCompiled();
 	}
 
 	/**
