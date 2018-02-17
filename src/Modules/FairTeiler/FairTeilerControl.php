@@ -129,7 +129,7 @@ class FairTeilerControl extends Control
 				$bezirk_ids = $this->regionGateway->listIdsForDescendantsAndSelf($this->bezirk_id);
 			}
 
-			if ($fairteiler = $this->gateway->listFairteiler($bezirk_ids)) {
+			if ($fairteiler = $this->gateway->listFairteilerNested($bezirk_ids)) {
 				$this->func->addContent($this->view->listFairteiler($fairteiler));
 			} else {
 				$this->func->addContent($this->v_utils->v_info($this->func->s('no_fairteiler_available')));

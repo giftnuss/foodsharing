@@ -3,9 +3,18 @@
 namespace Foodsharing\Modules\FairTeiler;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class FairTeilerGateway extends BaseGateway
 {
+	private $regionGateway;
+	public function __construct(Database $db, RegionGateway $regionGateway)
+	{
+		parent::__construct($db);
+		$this->regionGateway = $regionGateway;
+	}
+
 	public function getEmailFollower($id)
 	{
 		return $this->db->fetchAll('
@@ -87,7 +96,36 @@ class FairTeilerGateway extends BaseGateway
 		');
 	}
 
-	public function listFairteiler($bezirk_ids = [])
+	public function listFairteiler($bezirk_ids)
+	{
+		if ($fairteiler = $this->db->fetchAll('
+			SELECT 	`id`,
+					`name`,
+					`picture`
+			FROM 	`fs_fairteiler`
+			WHERE 	`bezirk_id` IN( ' . implode(',', $bezirk_ids) . ' )
+			AND 	`status` = 1
+		', [])
+		) {
+			foreach ($fairteiler as $key => $ft) {
+				$fairteiler[$key]['pic'] = false;
+				if (!empty($ft['picture'])) {
+					$fairteiler[$key]['pic'] = array(
+						'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $ft['picture']),
+						'head' => 'images/' . str_replace('/', '/crop_0_528_', $ft['picture']),
+						'orig' => 'images/' . ($ft['picture'])
+					);
+				}
+			}
+
+			return $fairteiler;
+		}
+
+		return [];
+
+	}
+
+	public function listFairteilerNested($bezirk_ids = [])
 	{
 		if (!empty($bezirk_ids) && ($fairteiler = $this->db->fetchAll('
 			SELECT 	ft.`id`,

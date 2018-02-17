@@ -199,8 +199,8 @@ class RegionControl extends Control
 		$this->func->addBread($this->func->s('fairteiler'), '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=fairteiler');
 		$this->func->addContent($this->view->ftOptions($this->bezirk_id), CNT_RIGHT);
 		$this->func->addTitle($this->func->s('fairteiler'));
-		$child_regions = $this->gateway->listIdsForDescendantsAndSelf($this->bezirk_id);
-		if ($fairteiler = $this->fairteilerGateway->listFairteiler($child_regions)) {
+		$bezirk_ids = $this->gateway->listIdsForDescendantsAndSelf($this->bezirk_id);
+		if ($fairteiler = $this->fairteilerGateway->listFairteiler($bezirk_ids)) {
 			$this->func->addContent($this->view->listFairteiler($fairteiler));
 		} else {
 			$this->func->addContent($this->v_utils->v_info($this->func->s('no_fairteiler_available')));
