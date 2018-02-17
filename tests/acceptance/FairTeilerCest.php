@@ -27,7 +27,7 @@ class FairTeilerCest
 	 * @param AcceptanceTester $I
 	 *
 	 * */
-	public function CanSeeFairTeilerInList(AcceptanceTester $I)
+	public function canSeeFairTeilerInList(AcceptanceTester $I)
 	{
 		$I->amOnPage($I->fairTeilerRegionListUrl($this->testBezirk['id']));
 		$I->waitForText($this->fairTeiler['name']);
@@ -35,14 +35,14 @@ class FairTeilerCest
 		$I->waitForText(explode("\n", $this->fairTeiler['anschrift'])[0]);
 	}
 
-	public function RedirectForGetPage(AcceptanceTester $I)
+	public function redirectForGetPage(AcceptanceTester $I)
 	{
 		$I->amOnPage($I->fairTeilerGetUrlShort($this->fairTeiler['id']));
 		$I->waitForText(explode("\n", $this->fairTeiler['anschrift'])[0]);
 		$I->seeCurrentUrlEquals($I->fairTeilerGetUrl($this->fairTeiler['id']));
 	}
 
-	public function CreateFairTeiler(AcceptanceTester $I)
+	public function createFairTeiler(AcceptanceTester $I)
 	{
 		$I->login($this->responsible['email']);
 		$I->amOnPage($I->fairTeilerRegionListUrl($this->testBezirk['id']));
@@ -65,7 +65,7 @@ class FairTeilerCest
 		$I->waitForText('Kantstraße 20');
 	}
 
-	public function EditFairTeiler(AcceptanceTester $I)
+	public function editFairTeiler(AcceptanceTester $I)
 	{
 		$user = $I->createFoodsaver(null, ['bezirk_id' => $this->testBezirk['id']]);
 		$I->login($this->responsible['email']);
@@ -84,7 +84,7 @@ class FairTeilerCest
 	 * @example["responsible", true]
 	 * @example["otherBot", true]
 	 */
-	public function MayEditFairTeiler(AcceptanceTester $I, \Codeception\Example $example)
+	public function mayEditFairTeiler(AcceptanceTester $I, \Codeception\Example $example)
 	{
 		$user = $this->{$example[0]};
 		$I->login($user['email']);
@@ -97,7 +97,7 @@ class FairTeilerCest
 		}
 	}
 
-	public function MayNotEditFairTeilerWrongBid(AcceptanceTester $I)
+	public function mayNotEditFairTeilerWrongBid(AcceptanceTester $I)
 	{
 		$region = $I->createRegion('another funny region');
 		$bot = $I->createAmbassador(null, ['bezirk_id' => $region['id']]);
