@@ -48,6 +48,11 @@ deploy:
     # - '[[ -f /.dockerenv ]] && echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts'
     - scp scripts/deploy.sh gitolite@banana.foodsharing.de:/var/www/lmr-beta
     - ssh gitolite@banana.foodsharing.de 'cd /var/www/lmr-beta/www; ../deploy.sh'
+    - ./scripts/deploy.notifyslack.sh
+
+  environment:
+    name: beta
+    url: https://beta.foodsharing.de
 
   only:
     - master
