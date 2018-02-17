@@ -451,12 +451,10 @@ class View
 			$("#lat-wrapper,#lon-wrapper").hide();
 		');
 
-		$address = $this->v_utils->v_form_text('anschrift', array('disabled' => '1', 'required' => '1'));
-
 		return $this->v_utils->v_input_wrapper($this->func->s('position_search'), '
 		<input placeholder="Straße, Ort..." type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
 		<div id="map" class="pickermap"></div>') .
-			$address .
+			$this->v_utils->v_form_text('anschrift', array('disabled' => '1', 'required' => '1')) .
 			$this->v_utils->v_form_text('plz', array('disabled' => '1', 'required' => '1')) .
 			$this->v_utils->v_form_text('ort', array('disabled' => '1', 'required' => '1')) .
 			$this->v_utils->v_form_text('lat') .
