@@ -87,10 +87,9 @@ class FairTeilerView extends View
 
 		$tagselect = '';
 		if ($data) {
-			$this->func->setEditData($data);
 			$title = $this->func->sv('edit_fairteiler_name', $this->fairteiler['name']);
 
-			$tagselect = $this->v_utils->v_form_tagselect('bfoodsaver', array('data' => $data['bfoodsaver_values']));
+			$tagselect = $this->v_utils->v_form_tagselect('bfoodsaver', array('valueOptions' => $data['bfoodsaver_values'], 'values' => $data['bfoodsaver']));
 			$this->func->addJs('
 			$("#fairteiler-form").submit(function(ev){
 				if($("#bfoodsaver input[type=\'hidden\']").length == 0)
@@ -103,11 +102,11 @@ class FairTeilerView extends View
 		}
 
 		return $this->v_utils->v_field($this->v_utils->v_form('fairteiler', array(
-			$this->v_utils->v_form_select('bezirk_id', array('values' => $this->bezirke, 'required' => true)),
-			$this->v_utils->v_form_text('name', array('required' => true)),
-			$this->v_utils->v_form_textarea('desc', array('desc' => $this->func->s('desc_desc'), 'required' => true)),
-			$this->v_utils->v_form_picture('picture', array('resize' => array(528, 60), 'crop' => array((528 / 170), 1))),
-			$this->latLonPicker('latLng'),
+			$this->v_utils->v_form_select('bezirk_id', array('values' => $this->bezirke, 'selected' => $data['bezirk_id'], 'required' => true)),
+			$this->v_utils->v_form_text('name', array('value' => $data['name'], 'required' => true)),
+			$this->v_utils->v_form_textarea('desc', array('value' => $data['desc'], 'desc' => $this->func->s('desc_desc'), 'required' => true)),
+			$this->v_utils->v_form_picture('picture', array('pic' => $data['picture'], 'resize' => array(528, 60), 'crop' => array((528 / 170), 1))),
+			$this->latLonPicker('latLng', ['location' => ['lat' => $data['lat'], 'lon' => $data['lon']]]),
 			$tagselect,
 		), array('submit' => $this->func->s('save'))), $title, array('class' => 'ui-padding'));
 	}

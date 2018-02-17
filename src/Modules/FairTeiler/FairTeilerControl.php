@@ -170,8 +170,6 @@ class FairTeilerControl extends Control
 		$items = array(
 			array('name' => $this->func->s('back'), 'href' => '/?page=fairteiler&sub=ft&bid=' . $this->bezirk_id . '&id=' . $this->fairteiler['id'])
 		);
-		$data['bfoodsaver'] = array();
-		$data['bfoodsaver_values'] = array();
 
 		if ($this->func->isOrgaTeam() || $this->func->isBotFor($this->bezirk_id)) {
 			$items[] = array('name' => $this->func->s('delete'), 'click' => 'if(confirm(\'' . $this->func->sv('delete_sure', $this->fairteiler['name']) . '\')){goTo(\'/?page=fairteiler&sub=ft&bid=' . $this->bezirk_id . '&id=' . $this->fairteiler['id'] . '&delete=1\');}return false;');

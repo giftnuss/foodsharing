@@ -395,7 +395,10 @@ class View
 		$this->func->addHead('<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=' . GOOGLE_API_KEY . '"></script>');
 
 		global $g_data;
-		if (isset($g_data['lat']) && isset($g_data['lon']) && !empty($g_data['lat']) && !empty($g_data['lon'])) {
+
+		if (isset($options['location'])) {
+			$data = array_merge(['zoom' => 14], $options['location']);
+		} elseif (isset($g_data['lat']) && isset($g_data['lon']) && !empty($g_data['lat']) && !empty($g_data['lon'])) {
 			$data = array(
 				'lat' => $g_data['lat'],
 				'lon' => $g_data['lon'],
