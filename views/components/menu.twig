@@ -1,0 +1,16 @@
+{% if title is defined %}
+<h3 class="head ui-widget-header ui-corner-top">{{ title }}</h3>
+<div class="ui-widget ui-widget-content ui-corner-bottom margin-bottom ui-padding">
+    <div id="{{ id }}">
+        {% else %}
+<div class="ui-widget ui-widget-content ui-corner-all ui-padding">
+    {% endif %}
+    <ul class="linklist">
+        {% for item in items %}
+            <li><a class="ui-corner-all" href="{{ item.href }}">{{ item.name }}</a></li>
+        {% endfor %}
+    </ul>
+    {% if title is defined %}
+    </div>
+    {% endif %}
+</div>

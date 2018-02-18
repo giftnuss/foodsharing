@@ -7,9 +7,7 @@
 {% block left %}
     <h3>Gruppen aus deinen Bezirken</h3>
     <a href="/?page=groups">Alle anzeigen</a><br/>
-    {% for region in regions %}
-        <a href="{{ region.href }}">{{ region.name }}</a><br/>
-    {% endfor %}
+    {% include 'components/menu.twig' with {'items': regions, 'title': 'Überregionale Gruppen', 'id': 'menu-1'} %}
     <h3>Deine Gruppen</h3>
     {% for group in memberGroups %}
         <a href="{{ group.href }}">{{ group.name }}</a><br/>
