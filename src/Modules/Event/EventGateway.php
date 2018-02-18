@@ -47,7 +47,8 @@ class EventGateway extends BaseGateway
 				UNIX_TIMESTAMP(e.`end`) AS end_ts,
 				e.`description`,
 				e.`bot`,
-				e.`online`
+				e.`online`,
+				e.`public`
 
 			FROM
 				`fs_event` e,
