@@ -8,10 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class WorkGroupControl extends Control
 {
-	private $ag_id;
-	private $my_applications;
-	private $my_stats;
-
 	public function __construct(WorkGroupModel $model, WorkGroupView $view)
 	{
 		$this->model = $model;
@@ -29,7 +25,7 @@ class WorkGroupControl extends Control
 		$this->func->addBread('Arbeitsgruppen', '/?page=groups');
 
 		if (!$request->query->has('sub')) {
-			$this->list();
+			$this->list($request);
 		} elseif ($request->query->get('sub') == 'edit') {
 			$this->edit($request);
 		}

@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\FairTeiler;
 
+use Foodsharing\Lib\Sanitizer;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
@@ -315,7 +316,8 @@ class FairTeilerControl extends Control
 		if ($this->mayEdit()) {
 			$data = $this->prepareInput($request);
 			if ($this->validateInput($data)) {
-				$this->gateway->updateVerantwortliche($this->fairteiler['id'], $this->func->getTagselectIds($request->request->get('bfoodsaver')));
+				$responsible = Sanitizer::tagSelectIds($request->request->get('bfoodsaver'));
+				$this->gateway->updateVerantwortliche($this->fairteiler['id'], $responsible);
 
 				return $this->gateway->updateFairteiler($this->fairteiler['id'], $data);
 			} else {

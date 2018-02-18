@@ -263,7 +263,7 @@ class WorkGroupModel extends Model
 			ON
 				b.mailbox_id = m.id
 			WHERE
-				b.`parent_id` = ' . (int)$this->ag_id . '
+				b.`parent_id` = ' . (int)$parent . '
 			AND
 				b.`type` = 7
 			ORDER BY
