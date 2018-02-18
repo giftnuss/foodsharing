@@ -3,8 +3,10 @@
 namespace Foodsharing\Modules\WorkGroup;
 
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Twig;
 use Foodsharing\Modules\Core\Control;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class WorkGroupControl extends Control
 {
@@ -16,7 +18,7 @@ class WorkGroupControl extends Control
 		parent::__construct();
 	}
 
-	public function index(Request $request)
+	public function index(Request $request, Response $response)
 	{
 		if (!S::may()) {
 			$this->func->goLogin();
@@ -25,20 +27,103 @@ class WorkGroupControl extends Control
 		$this->func->addBread('Arbeitsgruppen', '/?page=groups');
 
 		if (!$request->query->has('sub')) {
-			$this->list($request);
+			$this->list($request, $response);
 		} elseif ($request->query->get('sub') == 'edit') {
-			$this->edit($request);
+			$this->edit($request, $response);
 		}
 	}
 
-	private function list(Request $request)
+	public function canApply($group, $mystats)
+	{
+		if ($group['apply_type'] == 0) {
+			return false;
+		}
+
+		// apply_type
+
+		if ($group['apply_type'] == 1) {
+			if (
+				$mystats['bananacount'] >= $group['banana_count'] &&
+				$mystats['fetchcount'] >= $group['fetch_count'] &&
+				$mystats['weeks'] >= $group['week_num']
+			) {
+				if ((int)$group['report_num'] == 0 && (int)$mystats['reports'] > 0) {
+					return false;
+				}
+
+				return true;
+			}
+		} elseif ($group['apply_type'] == 2) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private function fulfillApplicationRequirements($group, $stats)
+	{
+		return
+			($stats['reports'] == 0 || $group['report_num'] != 0)
+			&& $stats['bananacount'] >= $group['banana_count']
+			&& $stats['fetchcount'] >= $group['fetch_count']
+			&& $stats['weeks'] >= $group['week_num'];
+	}
+
+	private function mayEdit($group)
+	{
+		/* this actually only implements access for bots for _direct parents_, not all hierarchical parents */
+		return $this->func->isOrgaTeam() || $this->func->isBotFor($group['id']) || $this->func->isBotFor($group['parent_id']);
+	}
+
+	private function mayAccess($group)
+	{
+		return $this->func->mayBezirk($group['id']) || $this->func->isBotFor($group['parent_id']);
+	}
+
+	private function mayApply($group, $applications, $stats)
+	{
+		return
+			!$this->func->mayBezirk($group['id'])
+			&& !in_array($group['id'], $applications)
+			&& ($group['apply_type'] == 2
+			  || ($group['apply_type'] == 1 && $this->fulfillApplicationRequirements($group, $stats)));
+	}
+
+	private function mayJoin($group)
+	{
+		return
+			!$this->func->mayBezirk($group['id'])
+			&& $group['apply_type'] == 3;
+	}
+
+	private function list(Request $request, Response $response)
 	{
 		$parent = $request->query->getInt('p', 392);
-
+		$myApplications = $this->model->getApplications(S::id());
+		$myStats = $this->model->getStats(S::id());
 		$groups = $this->model->listGroups($parent);
 
+		$groups = array_map(
+			function ($group) use ($myApplications, $myStats) {
+				return array_merge($group, [
+					'leaders' => array_map(function ($leader) {return array_merge($leader, ['image' => $this->func->img($leader['photo'])]); }, $group['leaders']),
+					'image' => $group['photo'] ? 'images/' . $group['photo'] : null,
+					'appliedFor' => in_array($group['id'], $myApplications),
+					'applyMinBananaCount' => $group['banana_count'],
+					'applyMinFetchCount' => $group['fetch_count'],
+					'applyMinFoodsaverWeeks' => $group['week_num'],
+					'applicationRequirementsNotFulfilled' => ($group['apply_type'] == 1) && !$this->fulfillApplicationRequirements($group, $myStats),
+					'mayEdit' => $this->mayEdit($group),
+					'mayAccess' => $this->mayAccess($group),
+					'mayApply' => $this->mayApply($group, $myApplications, $myStats),
+					'mayJoin' => $this->mayJoin($group)
+				]);
+			}, $groups);
+
 		$this->func->addTitle($this->func->s('groups'));
+		/*
 		$this->func->addContent($this->view->topbar('foodsharing Arbeitsgruppen', 'hier findest Du Hilfe und viel zu tun...', '<img src="/img/groups.png" />'), CNT_TOP);
+
 		$this->addNav();
 		if ($groups) {
 			$my_applications = $this->model->getApplications(S::id());
@@ -46,7 +131,8 @@ class WorkGroupControl extends Control
 			$this->func->addContent($this->view->listGroups($groups, $my_applications, $my_stats));
 		} else {
 			$this->func->addContent($this->v_utils->v_info('Hier gibt es noch keine Arbeitsgruppen'));
-		}
+		}*/
+		$response->setContent($this->render('pages/WorkGroup/list.twig', ['groups' => $groups]));
 	}
 
 	private function edit(Request $request)

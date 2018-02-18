@@ -271,7 +271,7 @@ class WorkGroupModel extends Model
 		')
 		) {
 			foreach ($groups as $i => $g) {
-				$groups[$i]['member'] = $this->q('
+				$groups[$i]['members'] = $this->q('
 					SELECT 
 						`id`, 
 						`name`, 
@@ -289,7 +289,7 @@ class WorkGroupModel extends Model
 					AND
 						hb.`active` = 1
 				');
-				$groups[$i]['leader'] = $this->q('
+				$leader = $this->q('
 						SELECT
 						`id`,
 						`name`,
@@ -305,6 +305,7 @@ class WorkGroupModel extends Model
 						AND
 						hb.bezirk_id = ' . $g['id'] . '
 						');
+				$groups[$i]['leaders'] = $leader ? $leader : [];
 			}
 
 			return $groups;
