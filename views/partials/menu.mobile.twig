@@ -34,12 +34,11 @@
         {% endif %}
 
         {% if hasFsRole and stores|length > 0 %}
-            {% for store in stores %}
-                <optgroup label="Betriebe">
+            <optgroup label="Betriebe">
+                {% for store in stores %}
                     <option value="/?page=fsbetrieb&id={{ store.id }}&sub=forum">{{ store.name }}</option>
-                    ';
-                </optgroup>
-            {% endfor %}
+                {% endfor %}
+            </optgroup>
         {% endif %}
 
         <optgroup label="Bezirke">
