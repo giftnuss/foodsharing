@@ -7,9 +7,10 @@ use Foodsharing\Lib\Session\S;
 
 class MapXhr extends Control
 {
-	public function __construct(MapView $view)
+	public function __construct(Model $model, MapView $view)
 	{
 		$this->view = $view;
+		$this->model = $model;
 
 		parent::__construct();
 	}
