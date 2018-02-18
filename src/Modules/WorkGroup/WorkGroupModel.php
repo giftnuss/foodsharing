@@ -9,13 +9,13 @@ class WorkGroupModel extends Model
 	/*
 	 * Eigene Vorhandene Bewerbungen
 	 */
-	public function getMyApplications()
+	public function getApplications($fsId)
 	{
 		if ($ret = $this->qCol('
 			SELECT 	`bezirk_id`
 			FROM 	`' . PREFIX . 'foodsaver_has_bezirk`	
 			WHERE 	`active` != 1	
-			AND 	foodsaver_id = ' . (int)$this->func->fsId() . '
+			AND 	foodsaver_id = ' . (int)$fsId . '
 		')
 		) {
 			$out = array();
@@ -32,7 +32,7 @@ class WorkGroupModel extends Model
 	/**
 	 * Updates Group Members and Group-Admins.
 	 */
-	public function updateTeam($group_id, $memberIds, $leaderIds)
+	public function updateTeam($groupId, $memberIds, $leaderIds)
 	{
 		if ($memberIds) {
 			// delete all members they're not in the submitted array
@@ -41,7 +41,7 @@ class WorkGroupModel extends Model
 					`' . PREFIX . 'foodsaver_has_bezirk`
 				
 				WHERE 
-					bezirk_id = ' . (int)$group_id . '
+					bezirk_id = ' . (int)$groupId . '
 					
 				AND
 					foodsaver_id NOT IN(' . implode(',', $memberIds) . ')
@@ -51,7 +51,7 @@ class WorkGroupModel extends Model
 
 			$values = array();
 			foreach ($memberIds as $m) {
-				$values[] = '(' . (int)$m . ',' . $group_id . ',1,NOW())';
+				$values[] = '(' . (int)$m . ',' . $groupId . ',1,NOW())';
 			}
 
 			// insert new members
@@ -68,7 +68,7 @@ class WorkGroupModel extends Model
 				
 			');
 		} else {
-			$this->emptyMember($group_id);
+			$this->emptyMember($groupId);
 		}
 
 		// the same for the group admins
@@ -79,7 +79,7 @@ class WorkGroupModel extends Model
 					`' . PREFIX . 'botschafter`
 			
 				WHERE
-					bezirk_id = ' . (int)$group_id . '
+					bezirk_id = ' . (int)$groupId . '
 			
 				AND
 					foodsaver_id NOT IN(' . implode(',', $leaderIds) . ')
@@ -87,7 +87,7 @@ class WorkGroupModel extends Model
 
 			$values = array();
 			foreach ($leaderIds as $m) {
-				$values[] = '(' . (int)$m . ',' . $group_id . ')';
+				$values[] = '(' . (int)$m . ',' . $groupId . ')';
 			}
 
 			// insert new group-admins
@@ -102,33 +102,33 @@ class WorkGroupModel extends Model
 			
 			');
 		} else {
-			$this->emptyLeader($group_id);
+			$this->emptyLeader($groupId);
 		}
 	}
 
 	/**
 	 * Delete all Leaders from a group.
 	 *
-	 * @param int $group_id
+	 * @param int $groupId
 	 */
-	private function emptyLeader($group_id)
+	private function emptyLeader($groupId)
 	{
 		return $this->del('
 			DELETE FROM `' . PREFIX . 'botschafter`
-			WHERE bezirk_id = ' . (int)$group_id . '
+			WHERE bezirk_id = ' . (int)$groupId . '
 		');
 	}
 
 	/**
 	 * Delete all Leaders from a group.
 	 *
-	 * @param int $group_id
+	 * @param int $groupId
 	 */
-	private function emptyMember($group_id)
+	private function emptyMember($groupId)
 	{
 		return $this->del('
 			DELETE FROM `' . PREFIX . 'foodsaver_has_bezirk`
-			WHERE bezirk_id = ' . (int)$group_id . '
+			WHERE bezirk_id = ' . (int)$groupId . '
 			AND
 			`active` = 1
 		');
@@ -200,12 +200,12 @@ class WorkGroupModel extends Model
 		return $group;
 	}
 
-	public function addMeToGroup($group_id)
+	public function addToGroup($group_id, $fsId)
 	{
 		return $this->insert('
 			REPLACE INTO `' . PREFIX . 'foodsaver_has_bezirk`(`foodsaver_id`, `bezirk_id`, `active`, `added`) 
 			VALUES (
-				' . (int)$this->func->fsId() . ',
+				' . (int)$fsId . ',
 				' . (int)$group_id . ',
 				1,
 				NOW()
@@ -213,7 +213,7 @@ class WorkGroupModel extends Model
 		');
 	}
 
-	public function listMyGroups()
+	public function listMemberGroups($fsId)
 	{
 		return $this->q('
 			SELECT
@@ -230,7 +230,7 @@ class WorkGroupModel extends Model
 				hb.bezirk_id = b.id
 		
 			AND
-				hb.`foodsaver_id` = ' . (int)$this->func->fsId() . '
+				hb.`foodsaver_id` = ' . (int)$fsId . '
 		
 			AND
 				b.`type` = 7
@@ -313,18 +313,18 @@ class WorkGroupModel extends Model
 		return false;
 	}
 
-	public function groupApply($id, $application)
+	public function groupApply($groupId, $fsId, $application)
 	{
 		return $this->insert('
 			REPLACE INTO  `fs_foodsaver_has_bezirk`
 				
 			(`foodsaver_id`, `bezirk_id`, `active`, `added`,`application`) 
 			VALUES 
-			(' . (int)$this->func->fsId() . ',' . (int)$id . ',0,NOW(),' . $this->strval($application) . ')		
+			(' . (int)$fsId . ',' . (int)$groupId . ',0,NOW(),' . $this->strval($application) . ')		
 		');
 	}
 
-	public function getFsMail($fsid)
+	public function getFsMail($fsId)
 	{
 		return $this->qOne('
 		
@@ -339,7 +339,7 @@ class WorkGroupModel extends Model
 				fs.mailbox_id = mb.id
 		
 			AND
-				fs.id = ' . (int)$fsid . '
+				fs.id = ' . (int)$fsId . '
 		
 		');
 	}
@@ -387,14 +387,14 @@ class WorkGroupModel extends Model
 		');
 	}
 
-	public function getMyStats()
+	public function getStats($fsId)
 	{
-		if ($ret = $this->getValues(array('anmeldedatum', 'stat_fetchcount', 'stat_bananacount'), 'foodsaver', $this->func->fsId())) {
+		if ($ret = $this->getValues(array('anmeldedatum', 'stat_fetchcount', 'stat_bananacount'), 'foodsaver', $fsId)) {
 			$time = strtotime($ret['anmeldedatum']);
 			// 604800 = sekunden pro woche
 			$weeks = (int)round((time() - $time) / 604800);
 
-			$reports = $this->qOne('SELECT COUNT(foodsaver_id) FROM ' . PREFIX . 'report WHERE foodsaver_id = ' . (int)$this->func->fsId());
+			$reports = $this->qOne('SELECT COUNT(foodsaver_id) FROM ' . PREFIX . 'report WHERE foodsaver_id = ' . (int)$fsId);
 
 			return array(
 				'weeks' => (int)$weeks,

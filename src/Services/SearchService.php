@@ -29,7 +29,7 @@ class SearchService
 	/**
 	 * Method to generate search Index for instant seach.
 	 */
-	public function generateIndex($token)
+	public function generateIndex($fsId, $token)
 	{
 		$index = [];
 
@@ -66,7 +66,7 @@ class SearchService
 		/*
 		 * Groups load Groups connected to the user in the array
 		*/
-		if ($groups = $this->workGroupModel->listMyGroups()) {
+		if ($groups = $this->workGroupModel->listMemberGroups($fsId)) {
 			$result = [];
 			foreach ($groups as $b) {
 				$img = '/img/groups.png';
@@ -137,12 +137,12 @@ class SearchService
 		return $index;
 	}
 
-	public function writeSearchIndexToDisk($token)
+	public function writeSearchIndexToDisk($fsId, $token)
 	{
 		if (!$token) {
 			return false;
 		}
-		file_put_contents('cache/searchindex/' . $token . '.json', json_encode($this->generateIndex($token)));
+		file_put_contents('cache/searchindex/' . $token . '.json', json_encode($this->generateIndex($fsId, $token)));
 
 		return $token;
 	}

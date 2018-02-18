@@ -65,7 +65,7 @@ class LoginControl extends Control
 	private function handleLogin()
 	{
 		if ($this->model->login($_POST['email_adress'], $_POST['password'])) {
-			$token = $this->searchService->writeSearchIndexToDisk(S::user('token'));
+			$token = $this->searchService->writeSearchIndexToDisk(S::id(), S::user('token'));
 
 			if (isset($_POST['ismob'])) {
 				$_SESSION['mob'] = (int)$_POST['ismob'];
