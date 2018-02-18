@@ -70,7 +70,7 @@ if [ $failed -eq 1 ]; then
   log-header "Check for codeception errors"
   # check if codeception generated a report file that contains failed tests
   # Otherwise, codeception probably failed itself and the whole job should fail
-  dc exec app grep -E "<error|<failure" tests/_output/report.xml
+  exec-in-container app grep -E "<error|<failure" tests/_output/report.xml
 
   log-header "Rerunning failed tests"
   SECONDS=0
