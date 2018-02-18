@@ -18,11 +18,18 @@ fi
 
 log-header "Building images"
 SECONDS=0
+
+pids=()
+
 for name in app chat web; do
   dc build $name &
+  pids+=($!)
 done
 
-wait
+for pid in "${pids[@]}"; do
+  wait $pid
+done
+
 echo $SECONDS seconds elapsed
 
 log-header "Bring up containers"
