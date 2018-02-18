@@ -13,6 +13,7 @@
 - Page with list of communities for Austria/Germany/Switzerland. !286 by @k.miklobusec
 
 ## Bugfixes
+- Remove partly broken store coordinator management from store edit page (should happen with "manage team") !283 @NerdyProjects
 - Allow using more HTML tags in email templates to not break layout !278 @NerdyProjects
 - Reduce size of static images by lossless recompression with trimage !245 @NerdyProjects
 - Change impressum to match current association status @NerdyProjects
