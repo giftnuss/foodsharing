@@ -4,15 +4,14 @@
     {{ content.top.html | raw }}
 {% endblock %}
 
+{% import 'pages/WorkGroup/macros.twig' as macros %}
+
 {% block left %}
     <h3>Gruppen aus deinen Bezirken</h3>
     <a href="/?page=groups">Alle anzeigen</a><br/>
-    {% include 'components/menu.twig' with {'items': regions, 'title': 'Überregionale Gruppen', 'id': 'menu-1'} %}
-    <h3>Deine Gruppen</h3>
-    {% for group in memberGroups %}
-        <a href="{{ group.href }}">{{ group.name }}</a><br/>
-    {% endfor %}
-
+    {{ macros.menu_tree(regions, 'Überregionale Gruppen', 'menu-1') }}
+    {{ macros.menu_tree(countries, 'Ländergruppen', 'menu-2') }}
+    {{ macros.menu_tree(memberGroups, 'Deine Gruppen', 'menu-3') }}
 {% endblock %}
 
 {% block main %}

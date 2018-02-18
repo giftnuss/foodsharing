@@ -1,0 +1,7 @@
+{% macro menu_tree(items, title, id) %}
+    {% embed 'components/field.twig' %}
+        {% block content %}
+            {% include 'components/menu.twig' with {'items': items, 'title': title, 'id': id} %}
+        {% endblock %}
+    {% endembed %}
+{% endmacro %}
