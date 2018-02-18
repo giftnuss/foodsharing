@@ -25,10 +25,6 @@
     </script>
 
     <div class="groups">
-        {% if groups | length == 0 %}
-            <h3>Es gibt hier leider keine Gruppen</h3>
-        {% endif %}
-        
         {% for group in groups %}
             <!-- ToDo: Wrap group in a v_field($group, $g['name'], array('class' => 'ui-padding')); -->
             <div class="members">
@@ -96,6 +92,8 @@
                 </div>
                 <div class="clear"></div>
             </div>
+        {% else %}
+            <h3>Es gibt hier leider keine Gruppen</h3>
         {% endfor %}
     </div>
 
