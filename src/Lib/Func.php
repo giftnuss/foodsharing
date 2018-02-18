@@ -1086,6 +1086,82 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		];
 	}
 
+	public function generateAndGetGlobalViewData()
+	{
+		global $g_broadcast_message;
+		global $g_body_class;
+		global $content_left_width;
+		global $content_right_width;
+
+		$menu = $this->getMenu();
+
+		$this->getMessages();
+
+		$mainwidth = 24;
+
+		$content_left = $this->getContent(CNT_LEFT);
+		$content_right = $this->getContent(CNT_RIGHT);
+
+		if (!empty($content_left)) {
+			$mainwidth -= $content_left_width;
+		}
+
+		if (!empty($content_right)) {
+			$mainwidth -= $content_right_width;
+		}
+
+		$msgbar = '';
+		$logolink = '/';
+		if (S::may()) {
+			$msgbar = $this->viewUtils->v_msgBar();
+			$logolink = '/?page=dashboard';
+		} else {
+			$msgbar = $this->viewUtils->v_login();
+		}
+
+		return [
+			'head' => $this->getHeadData(),
+			'bread' => $this->getBread(),
+			'bodyClass' => $g_body_class,
+			'msgbar' => $msgbar,
+			'menu' => $menu,
+			'hidden' => $this->getHidden(),
+			'isMob' => $this->isMob(),
+			'logolink' => $logolink,
+			'broadcast_message' => $g_broadcast_message,
+			'SRC_REVISION' => defined('SRC_REVISION') ? SRC_REVISION : null,
+			'HTTP_HOST' => $_SERVER['HTTP_HOST'],
+			'is_foodsharing_dot_at' => strpos($_SERVER['HTTP_HOST'], 'foodsharing.at') !== false,
+			'content' => [
+				'main' => [
+					'html' => $this->getContent(CNT_MAIN),
+					'width' => $mainwidth
+				],
+				'left' => [
+					'html' => $content_left,
+					'width' => $content_left_width,
+					'id' => 'left'
+				],
+				'right' => [
+					'html' => $content_right,
+					'width' => $content_right_width,
+					'id' => 'right'
+				],
+				'top' => [
+					'html' => $this->getContent(CNT_TOP),
+					'id' => 'content_top'
+				],
+				'bottom' => [
+					'html' => $this->getContent(CNT_BOTTOM),
+					'id' => 'content_bottom'
+				],
+				'overtop' => [
+					'html' => $this->getContent(CNT_OVERTOP)
+				]
+			]
+		];
+	}
+
 	public function setTitle($name)
 	{
 		$this->title = array($name);

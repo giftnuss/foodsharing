@@ -32,6 +32,11 @@ class Twig
 		$this->twig->addExtension(new Twig_Extension_Debug());
 	}
 
+	public function addGlobal($name, $value)
+	{
+		$this->twig->addGlobal($name, $value);
+	}
+
 	public function render($view, $data)
 	{
 		return $this->twig->render($view, $data);

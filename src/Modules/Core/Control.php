@@ -7,6 +7,7 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Sanitizer;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Twig;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Message\MessageModel;
 use ReflectionClass;
@@ -31,6 +32,11 @@ abstract class Control
 	 * @var Utils
 	 */
 	protected $v_utils;
+
+	/**
+	 * @var Twig
+	 */
+	private $twig;
 
 	public function __construct()
 	{
@@ -84,6 +90,22 @@ abstract class Control
 			}
 		}
 		$this->model->updateActivity(S::id());
+	}
+
+	/**
+	 * @required
+	 */
+	public function setTwig(Twig $twig)
+	{
+		$this->twig = $twig;
+	}
+
+	protected function render($template, $data)
+	{
+		$global = $this->func->generateAndGetGlobalViewData();
+		$viewData = array_merge($global, $data);
+
+		return $this->twig->render($template, $viewData);
 	}
 
 	public function setTemplate($template)

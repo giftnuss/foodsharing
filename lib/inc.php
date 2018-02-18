@@ -7,6 +7,7 @@ use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\Utils;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 require_once 'config.inc.php';
 S::init();
@@ -29,6 +30,8 @@ $content_left_width = 5;
 $content_right_width = 6;
 
 $request = Request::createFromGlobals();
+$response = new Response('--');
+
 $func = DI::$shared->get(Func::class);
 $viewUtils = DI::$shared->get(Utils::class);
 
