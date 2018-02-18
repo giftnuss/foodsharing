@@ -5,6 +5,16 @@
 {% endblock %}
 
 {% block left %}
+    <h3>Gruppen aus deinen Bezirken</h3>
+    <a href="/?page=groups">Alle anzeigen</a><br/>
+    {% for region in regions %}
+        <a href="{{ region.href }}">{{ region.name }}</a><br/>
+    {% endfor %}
+    <h3>Deine Gruppen</h3>
+    {% for group in memberGroups %}
+        <a href="{{ group.href }}">{{ group.name }}</a><br/>
+    {% endfor %}
+
 {% endblock %}
 
 {% block main %}
@@ -15,6 +25,10 @@
     </script>
 
     <div class="groups">
+        {% if groups | length == 0 %}
+            <h3>Es gibt hier leider keine Gruppen</h3>
+        {% endif %}
+        
         {% for group in groups %}
             <!-- ToDo: Wrap group in a v_field($group, $g['name'], array('class' => 'ui-padding')); -->
             <div class="members">

@@ -271,7 +271,7 @@ class WorkGroupModel extends Model
 		')
 		) {
 			foreach ($groups as $i => $g) {
-				$groups[$i]['members'] = $this->q('
+				$members = $this->q('
 					SELECT 
 						`id`, 
 						`name`, 
@@ -289,7 +289,7 @@ class WorkGroupModel extends Model
 					AND
 						hb.`active` = 1
 				');
-				$leader = $this->q('
+				$leaders = $this->q('
 						SELECT
 						`id`,
 						`name`,
@@ -305,13 +305,14 @@ class WorkGroupModel extends Model
 						AND
 						hb.bezirk_id = ' . $g['id'] . '
 						');
-				$groups[$i]['leaders'] = $leader ? $leader : [];
+				$groups[$i]['members'] = $members ? $members : [];
+				$groups[$i]['leaders'] = $leaders ? $leaders : [];
 			}
 
 			return $groups;
 		}
 
-		return false;
+		return [];
 	}
 
 	public function groupApply($groupId, $fsId, $application)

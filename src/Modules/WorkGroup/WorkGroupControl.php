@@ -102,6 +102,32 @@ class WorkGroupControl extends Control
 		$myApplications = $this->model->getApplications(S::id());
 		$myStats = $this->model->getStats(S::id());
 		$groups = $this->model->listGroups($parent);
+		$countrys = $this->model->getCountryGroups();
+		$bezirke = $this->model->getBezirke();
+
+		$localRegions = array_filter($bezirke, function ($region) {
+			return !in_array($region['type'], [6, 7]);
+		});
+
+		$regionToMenuItem = function ($region) {
+			return [
+				'name' => $region['name'],
+				'href' => '/?page=groups&p=' . $region['id']
+			];
+		};
+		$regions = array_merge(array_map($regionToMenuItem, $localRegions), array_map($regionToMenuItem, $countrys));
+
+		$memberGroupList = array_filter(isset($_SESSION['client']['bezirke']) ? $_SESSION['client']['bezirke'] : [], function ($group) {
+			return $group['type'] == 7;
+		});
+		$memberGroups = array_map(
+			function ($group) {
+				return [
+					'name' => $group['name'],
+					'href' => '/?page=bezirk&bid=' . $group['id'] . '&sub=forum'
+				];
+			}, $memberGroupList
+		);
 
 		$groups = array_map(
 			function ($group) use ($myApplications, $myStats) {
@@ -132,7 +158,7 @@ class WorkGroupControl extends Control
 		} else {
 			$this->func->addContent($this->v_utils->v_info('Hier gibt es noch keine Arbeitsgruppen'));
 		}*/
-		$response->setContent($this->render('pages/WorkGroup/list.twig', ['groups' => $groups]));
+		$response->setContent($this->render('pages/WorkGroup/list.twig', ['groups' => $groups, 'regions' => $regions, 'memberGroups' => $memberGroups]));
 	}
 
 	private function edit(Request $request)
