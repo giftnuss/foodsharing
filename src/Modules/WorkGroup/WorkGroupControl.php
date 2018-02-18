@@ -18,39 +18,72 @@ class WorkGroupControl extends Control
 		$this->view = $view;
 
 		parent::__construct();
+	}
 
+	public function index(Request $request)
+	{
 		if (!S::may()) {
 			$this->func->goLogin();
 		}
 
-		$this->setAgId(392);
-
 		$this->func->addBread('Arbeitsgruppen', '/?page=groups');
 
-		if (isset($_GET['p']) && (int)$_GET['p'] > 0) {
-			$this->setAgId((int)$_GET['p']);
+		if (!$request->query->has('sub')) {
+			$this->list();
+		} elseif ($request->query->get('sub') == 'edit') {
+			$this->edit($request);
 		}
-
-		$this->my_applications = $this->model->getMyApplications();
-		$this->my_stats = $this->model->getMyStats();
 	}
 
-	public function index()
+	private function list(Request $request)
+	{
+		$parent = $request->query->getInt('p', 392);
+
+		$groups = $this->model->listGroups($parent);
+
+		$this->func->addTitle($this->func->s('groups'));
+		$this->func->addContent($this->view->topbar('foodsharing Arbeitsgruppen', 'hier findest Du Hilfe und viel zu tun...', '<img src="/img/groups.png" />'), CNT_TOP);
+		$this->addNav();
+		if ($groups) {
+			$my_applications = $this->model->getMyApplications();
+			$my_stats = $this->model->getMyStats();
+			$this->func->addContent($this->view->listGroups($groups, $my_applications, $my_stats));
+		} else {
+			$this->func->addContent($this->v_utils->v_info('Hier gibt es noch keine Arbeitsgruppen'));
+		}
+	}
+
+	private function edit(Request $request)
+	{
+		$bids = $this->model->getFsBezirkIds($this->func->fsId());
+
+		if (!$this->func->isOrgaTeam() && !$this->func->isBotForA($bids, true, true)) {
+			$this->func->go('/?page=dashboard');
+		}
+
+		if ($group = $this->model->getGroup($_GET['id'])) {
+			if ($group['type'] != 7) {
+				$this->func->go('/?page=dashboard');
+			}
+			if ($this->isSubmitted()) {
+				$data = $this->prepareEditInput($request);
+				if ($this->handleEdit($group, $data)) {
+					$this->func->info('Änderungen gespeichert!');
+					$this->func->go('/?page=groups&sub=edit&id=' . (int)$group['id']);
+				}
+			}
+			$this->addNav();
+			$this->func->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
+			$this->func->addContent($this->view->editGroup($group));
+		}
+	}
+
+	private function addNav()
 	{
 		$countrys = $this->model->getCountryGroups();
 		$bezirke = $this->model->getBezirke();
 
 		$this->func->addContent($this->view->leftNavi($countrys, $bezirke), CNT_LEFT);
-
-		if (!isset($_GET['sub'])) {
-			$this->func->addTitle($this->func->s('groups'));
-			$this->func->addContent($this->view->topbar('foodsharing Arbeitsgruppen', 'hier findest Du Hilfe und viel zu tun...', '<img src="/img/groups.png" />'), CNT_TOP);
-			if ($groups = $this->model->listGroups()) {
-				$this->func->addContent($this->view->listGroups($groups, $this->my_applications, $this->my_stats));
-			} else {
-				$this->func->addContent($this->v_utils->v_info('Hier gibt es noch keine Arbeitsgruppen'));
-			}
-		}
 	}
 
 	private function prepareEditInput(Request $request)
@@ -89,37 +122,5 @@ class WorkGroupControl extends Control
 		}
 
 		return false;
-	}
-
-	public function edit(Request $request)
-	{
-		$bids = $this->model->getFsBezirkIds($this->func->fsId());
-
-		if (!$this->func->isOrgaTeam() && !$this->func->isBotForA($bids, true, true)) {
-			$this->func->go('/?page=dashboard');
-		}
-
-		if ($group = $this->model->getGroup($_GET['id'])) {
-			if ($group['type'] != 7) {
-				$this->func->go('/?page=dashboard');
-			}
-			if ($this->isSubmitted()) {
-				$data = $this->prepareEditInput($request);
-				if ($this->handleEdit($group, $data)) {
-					$this->func->info('Änderungen gespeichert!');
-					$this->func->go('/?page=groups&sub=edit&id=' . (int)$group['id']);
-				}
-			}
-
-			$this->func->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
-			$this->func->addContent($this->view->editGroup($group));
-		}
-	}
-
-	private function setAgId($id)
-	{
-		$this->ag_id = $id;
-		$this->model->setAgId($id);
-		$this->view->setAgId($id);
 	}
 }

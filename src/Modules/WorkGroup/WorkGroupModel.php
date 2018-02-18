@@ -6,18 +6,6 @@ use Foodsharing\Modules\Core\Model;
 
 class WorkGroupModel extends Model
 {
-	private $ag_id;
-
-	public function __construct()
-	{
-		parent::__construct();
-	}
-
-	public function setAgId($id)
-	{
-		$this->ag_id = $id;
-	}
-
 	/*
 	 * Eigene Vorhandene Bewerbungen
 	 */
@@ -252,7 +240,7 @@ class WorkGroupModel extends Model
 		');
 	}
 
-	public function listGroups()
+	public function listGroups($parent)
 	{
 		if ($groups = $this->q('
 			SELECT 	

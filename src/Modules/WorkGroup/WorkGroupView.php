@@ -7,13 +7,6 @@ use Foodsharing\Lib\Session\S;
 
 class WorkGroupView extends View
 {
-	private $ag_id;
-
-	public function setAgId($id)
-	{
-		$this->ag_id = $id;
-	}
-
 	public function leftNavi($countrys, $bezirke)
 	{
 		$out = '';
