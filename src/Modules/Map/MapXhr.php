@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Map;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Core\Model;
 
 class MapXhr extends Control
 {
