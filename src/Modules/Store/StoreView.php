@@ -12,6 +12,7 @@ class StoreView extends View
 			'<div id="datepicker" style="height:195px;"></div>' .
 			$this->v_utils->v_input_wrapper('Uhrzeit', $this->v_utils->v_form_time('time')) .
 			$this->v_utils->v_form_select('fetchercount', array('values' => array(
+				array('id' => 0, 'name' => 'Termin fällt aus'),
 				array('id' => 1, 'name' => '1 Abholer/in'),
 				array('id' => 2, 'name' => '2 Abholer/innen'),
 				array('id' => 3, 'name' => '3 Abholer/innen'),

@@ -23,7 +23,7 @@ class StoreXhr extends Control
 
 	public function savedate()
 	{
-		if (strtotime($_GET['time']) > 0 && $_GET['fetchercount'] > 0) {
+		if (strtotime($_GET['time']) > 0 && $_GET['fetchercount'] >= 0) {
 			$fetchercount = (int)$_GET['fetchercount'];
 			$time = $_GET['time'];
 			if ($fetchercount > 8) {
@@ -171,7 +171,7 @@ class StoreXhr extends Control
 				    ("00" + $("select[name=\'time[hour]\']").val()).slice(-2) + ":" + 
 				    ("00" + $("select[name=\'time[min]\']").val()).slice(-2) + ":00";
 				
-				if($("#fetchercount").val() > 0)
+				if($("#fetchercount").val() >= 0)
 				{
 					ajreq("savedate",{
 						app:"betrieb",
