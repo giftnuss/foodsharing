@@ -9,6 +9,7 @@ use Foodsharing\Modules\Region\RegionGateway;
 class FairTeilerGateway extends BaseGateway
 {
 	private $regionGateway;
+
 	public function __construct(Database $db, RegionGateway $regionGateway)
 	{
 		parent::__construct($db);
@@ -122,7 +123,6 @@ class FairTeilerGateway extends BaseGateway
 		}
 
 		return [];
-
 	}
 
 	public function listFairteilerNested($bezirk_ids = [])
