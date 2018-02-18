@@ -53,56 +53,22 @@ class WorkGroupControl extends Control
 		}
 	}
 
-	private function filterFromRequest(Request $request, $spec)
+	private function prepareEditInput(Request $request)
 	{
-		$data = [];
-		foreach ($spec as $name => $s) {
-			$default = ['method' => 'get', 'required' => true, 'parameterName' => $name, 'default' => null];
-			$s = array_merge($default, $s);
-			$v = $request->request->{$s['method']}($s['parameterName']);
-			if (is_null($v)) {
-				if ($s['required']) {
-					throw new \Exception('Required parameter not set');
-				}
-				$v = $s['default'];
-			}
-			if (isset($s['filter'])) {
-				$v = $s['filter']($v);
-			}
-			$data[$name] = $v;
-		}
-
-		return $data;
-	}
-
-	private function prepareInput(Request $request)
-	{
-		$string_filter = function ($v) {
-			return trim(strip_tags($v));
-		};
-		$html_filter = function ($v) {
-			return trim(strip_tags($v,
-				'<p><ul><li><ol><strong><span><i><div><h1><h2><h3><h4><h5><br><img><table><thead><tbody><th><td><tr><i><a>'));
-		};
-		$array_has_element_filter = function ($v) {
-			return is_array($v) && count($v);
-		};
-		$get_tagselect_id_filter = \Closure::fromCallable([$this->func, 'getTagselectIds']);
-
 		$fields = [
-			'name' => ['filter' => $string_filter],
-			'teaser' => ['filter' => $string_filter],
-			'photo' => ['filter' => $string_filter, 'required' => false],
+			'name' => ['filter' => 'stripTagsAndTrim'],
+			'teaser' => ['filter' => 'stripTagsAndTrim'],
+			'photo' => ['filter' => 'stripTagsAndTrim', 'required' => false],
 			'apply_type' => ['method' => 'getInt'],
 			'banana_count' => ['method' => 'getInt'],
 			'fetch_count' => ['method' => 'getInt'],
 			'week_num' => ['method' => 'getInt'],
-			'report_num' => ['filter' => $array_has_element_filter, 'required' => false, 'default' => false],
-			'members' => ['filter' => $get_tagselect_id_filter, 'required' => false, 'default' => [], 'parameterName' => 'member'],
-			'leader' => ['filter' => $get_tagselect_id_filter, 'required' => false, 'default' => []],
+			'report_num' => ['filter' => 'isNonEmptyArray', 'required' => false, 'default' => false],
+			'members' => ['filter' => 'tagSelectIds', 'required' => false, 'default' => [], 'parameterName' => 'member'],
+			'leader' => ['filter' => 'tagSelectIds', 'required' => false, 'default' => []]
 		];
 
-		$data = $this->filterFromRequest($request, $fields);
+		$data = $this->sanitizeRequest($request, $fields);
 
 		if ($data['apply_type'] != 1) {
 			$data['banana_count'] = 0;
@@ -138,7 +104,7 @@ class WorkGroupControl extends Control
 				$this->func->go('/?page=dashboard');
 			}
 			if ($this->isSubmitted()) {
-				$data = $this->prepareInput($request);
+				$data = $this->prepareEditInput($request);
 				if ($this->handleEdit($group, $data)) {
 					$this->func->info('Änderungen gespeichert!');
 					$this->func->go('/?page=groups&sub=edit&id=' . (int)$group['id']);

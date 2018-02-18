@@ -5,10 +5,12 @@ namespace Foodsharing\Modules\Core;
 use Foodsharing\DI;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
+use Foodsharing\Lib\Sanitizer;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Message\MessageModel;
 use ReflectionClass;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class Control
 {
@@ -493,5 +495,27 @@ abstract class Control
 		}
 
 		return false;
+	}
+
+	protected function sanitizeRequest(Request $request, $spec)
+	{
+		$data = [];
+		foreach ($spec as $name => $s) {
+			$default = ['method' => 'get', 'required' => true, 'parameterName' => $name, 'default' => null];
+			$s = array_merge($default, $s);
+			$v = $request->request->{$s['method']}($s['parameterName']);
+			if (is_null($v)) {
+				if ($s['required']) {
+					throw new \Exception('Required parameter not set');
+				}
+				$v = $s['default'];
+			}
+			if (isset($s['filter'])) {
+				$v = call_user_func([Sanitizer::class, $s['filter']], $v);
+			}
+			$data[$name] = $v;
+		}
+
+		return $data;
 	}
 }

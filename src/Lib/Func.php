@@ -307,16 +307,6 @@ class Func
 		$g_data[$id] = $recip;
 	}
 
-	public function getTagselectIds($tagselectArray)
-	{
-		$result = [];
-		foreach ($tagselectArray as $idKey => $value) {
-			$result[] = explode('-', $idKey)[0];
-		}
-
-		return $result;
-	}
-
 	public function format_dt($ts)
 	{
 		return date('d.m.Y H:i', $ts) . ' Uhr';
