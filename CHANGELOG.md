@@ -11,6 +11,7 @@
 - Renamed footer "Unterstützung" to "Spenden" !273 @BassTii
 - Updates fullpage.js to 2.9.5 for fixing scrolling in firefox, general smoothness !244 @NerdyProjects
 - Page with list of communities for Austria/Germany/Switzerland. !286 by @k.miklobusec
+- Single appointment can be set to "appointment cancelled" (=0 Slots) !372 by @k.miklobusec
 
 ## Bugfixes
 - Remove partly broken store coordinator management from store edit page (should happen with "manage team") !283 @NerdyProjects
