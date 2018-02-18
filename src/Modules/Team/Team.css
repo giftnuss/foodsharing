@@ -6,7 +6,7 @@
 }
 
 #team-user h1 {
-    font-family: 'Alfa Slab One', serif;
+    font-family: 'Alfa Slab One';
     font-size: 23px;
     font-weight: normal;
     color: #4A3520;
@@ -111,9 +111,10 @@
 #teamlist .foot, #team-user .foot {
     background-color: #4A3520;
     display: block;
+    margin: -20px;
     line-height: 30px;
     text-align: center;
-    margin: 30px -20px -20px;
+    margin-top: 30px;
     color: #4A3520;
 }
 
@@ -176,7 +177,7 @@
 @media all and (max-width: 700px) {
     #teamlist li {
         width: 100%;
-        margin: 80px 0;
+        margin: 80px 0px;
         display: block;
     }
 }

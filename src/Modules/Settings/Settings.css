@@ -1,3 +1,4 @@
+
 .answer .element-wrapper {
     font-weight: lighter;
     font-size: 13px;
@@ -37,6 +38,11 @@
     color: #FFF !important;
 }
 
+.q-neutral {
+    background-color: #F5F5B5;
+    color: #4A3520;
+}
+
 .q-neutral label.wrapper-label {
     color: #4A3520 !important;
 }
@@ -46,6 +52,7 @@
     font-weight: bold;
     position: relative;
     width: 96%;
+    padding: 0px;
     background: #4A3520;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
@@ -57,7 +64,7 @@
     content: '';
     position: absolute;
     border-style: solid;
-    border-width: 10px 10px 10px 0;
+    border-width: 10px 10px 10px 0px;
     border-color: transparent #4A3520;
     display: block;
     width: 0;

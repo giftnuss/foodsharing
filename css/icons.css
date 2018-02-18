@@ -1,29 +1,32 @@
 i.img {
-    background: url(/img/icon-img.png?v=1) center;
+    background-image: url(/img/icon-img.png?v=1);
+    background-position: center;
 }
 
 i.img-store {
-    background-position: 0 0;
+    background-position: 0px 0px;
 }
 
 i.img-vegetables {
-    background-position: -17px 0;
+    background-position: -17px 0px;
 }
 
 i.img-smile {
-    background-position: -51px 0;
+    background-position: -51px 0px;
 }
 
 i.img-recycle {
-    background-position: -68px 0;
+    background-position: -68px 0px;
 }
 
 i.img-basket {
-    background-position: -34px 0;
+    background-position: -34px 0px;
 }
 
 i.img-fbasket {
-    background: url(/img/bicon.png) no-repeat 0 0;
+    background-image: url(/img/bicon.png);
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
     display: inline-block;
     width: 23px;
     height: 22px;

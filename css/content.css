@@ -15,6 +15,7 @@ time, mark, audio, video {
     margin: 0;
     padding: 0;
     border: 0;
+    font-size: 100%;
     font: inherit;
     vertical-align: baseline;
     /*color:#4A3520;*/
@@ -39,11 +40,13 @@ body {
 }
 
 ul, ol {
+    margin: 0;
     padding: 0;
     border: 0;
+    font-size: 100%;
     font: inherit;
     vertical-align: baseline;
-    margin: 0 0 0 15px;
+    margin-left: 15px;
 }
 
 li {
@@ -137,18 +140,23 @@ table.tablesorter thead tr th, table.tablesorter tfoot tr th {
 
     background-color: #4A3520;
     color: #FFFFFF;
-    border: 0 solid #FFFFFE;
+    border: 0px solid #FFFFFE;
     padding: 8px;
 }
 
 table.tablesorter thead tr .header {
-    background: url(img/bg.gif) no-repeat center right;
+    background-image: url(img/bg.gif);
+    background-repeat: no-repeat;
+    background-position: center right;
     cursor: pointer;
 }
 
 table.tablesorter tbody td {
     color: #3D3D3D;
-    padding: 12px 4px 12px 4px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 4px;
+    paddin-right: 4px;
     background-color: #FFFFFE;
     vertical-align: middle;
     height: 50px;
@@ -215,11 +223,14 @@ p {
     padding: 7px;
     -moz-border-radius: 6px; /* Firefox */
     -webkit-border-radius: 6px; /* Safari, Chrome */
+    -khtml-border-radius: 6px; /* Konqueror */
     border-radius: 6px; /* CSS3 */
 }
 
 input.hasDatepicker {
-    background: url(/img/cal.png) no-repeat 175px 3px;
+    background-image: url(/img/cal.png);
+    background-position: 175px 3px;
+    background-repeat: no-repeat;
     cursor: pointer !important;
     width: 189px !important;
 }
@@ -228,6 +239,7 @@ input.hasDatepicker {
     border: 1px solid #C9BCAF;
     -moz-border-radius: 6px; /* Firefox */
     -webkit-border-radius: 6px; /* Safari, Chrome */
+    -khtml-border-radius: 6px; /* Konqueror */
     border-radius: 6px; /* CSS3 */
     margin-right: 7px;
 }
@@ -247,6 +259,7 @@ input.hasDatepicker {
     padding: 7px;
     -moz-border-radius: 6px; /* Firefox */
     -webkit-border-radius: 6px; /* Safari, Chrome */
+    -khtml-border-radius: 6px; /* Konqueror */
     border-radius: 6px; /* CSS3 */
 }
 
@@ -332,36 +345,37 @@ select.v-switch {
     display: block;
     width: 17px;
     height: 17px;
-    background: url(/img/ampel.png) no-repeat;
+    background-image: url(/img/ampel.png);
+    background-repeat: no-repeat;
     text-decoration: none;
 }
 
 div.head a.ampel {
     float: left;
-    padding-left: 0;
+    padding-left: 0px;
     padding-right: 8px;
     position: relative;
     top: -2px;
 }
 
 .ampel-gelb span {
-    background-position: -17px 0;
+    background-position: -17px 0px;
 }
 
 .ampel-rot span {
-    background-position: -34px 0;
+    background-position: -34px 0px;
 }
 
 .ampel-gruen span {
-    background-position: 0 0;
+    background-position: 0px 0px;
 }
 
 .ampel-grau span {
-    background-position: -51px 0;
+    background-position: -51px 0px;
 }
 
 .ampel-blau span {
-    background-position: -68px 0;
+    background-position: -68px 0px;
 }
 
 ul.toolbar {
@@ -423,7 +437,7 @@ div.ui-dialog label {
 
 table.timetable td {
     height: 20px;
-    vertical-align: middle;
+    vertival-align: middle;
 }
 
 table.timetable select {
@@ -446,8 +460,11 @@ i {
     color: #4A3520;
 }
 
+.page h1, .page h2,
+
+,
 .page h3 {
-    font-family: 'Alfa Slab One', serif;
+    font-family: 'Alfa Slab One';
     font-weight: normal;
     font-size: 20px;
     color: #4A3520;
@@ -455,7 +472,7 @@ i {
 }
 
 .page .h1 h1 {
-    margin-bottom: 0;
+    margin-bottom: 0px;
 }
 
 .page .h1 small, .page .h1 small p {
@@ -495,7 +512,7 @@ i {
 }
 
 .reddot h5 {
-    font-family: 'Alfa Slab One', serif;
+    font-family: 'Alfa Slab One';
     font-weight: normal;
     font-size: 17px;
     color: #4A3520;
@@ -519,7 +536,7 @@ i {
 }
 
 .page .ui-accordion h3 {
-    font-family: 'Alfa Slab One', serif;
+    font-family: 'Alfa Slab One';
     font-weight: normal;
     font-size: 17px;
     color: #fff;

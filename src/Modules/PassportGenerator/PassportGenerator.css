@@ -11,19 +11,20 @@
 }
 
 .verify span {
-    background: url(img/verify.png) no-repeat;
+    background-image: url(img/verify.png);
+    background-repeat: no-repeat;
 }
 
 .verify-n span {
-    background-position: 0 0;
+    background-position: 0px 0px;
 }
 
 .verify-y span {
-    background-position: 0 -36px;
+    background-position: 0px -36px;
 }
 
 tr.hover td .verify-n span {
-    background-position: -36px 0;
+    background-position: -36px 0px;
 }
 
 tr.hover td .verify-y span {

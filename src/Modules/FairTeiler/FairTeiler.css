@@ -1,7 +1,9 @@
 .ft-head {
     height: 80px;
     width: 100%;
-    background: url(img/fairteiler_head.jpg) no-repeat center;
+    background-image: url(img/fairteiler_head.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
 
 }
 
@@ -12,7 +14,12 @@ ul.fairteilerlist li a span.image {
     height: 60px;
     float: left;
     margin-right: 10px;
-    background: no-repeat center;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+ul.fairteilerlist li a span.image.noimage {
+    background-color: #FFFFFF;
 }
 
 span.clear {
@@ -25,6 +32,9 @@ textarea.comment {
 }
 
 /*wallpost*/
+td.msgsm {
+    width: 312px;
+}
 
 span#wallpost-loader img {
     margin: 5px;
@@ -49,11 +59,18 @@ span#wallpost-loader img {
     overflow: hidden;
 }
 
+#fbshare-dialog {
+    text-align: center;
+}
+
 #fbshare-dialog a img {
     margin: 15px;
 }
 
 @media all and (max-width: 500px) {
+    #fbshare-wrapper {
+        display: none;
+    }
 
     textarea.comment {
         width: 94% !important;

@@ -16,6 +16,7 @@ time, mark, audio, video {
     padding: 0;
     border: 0;
     font-size: 100%;
+    font: inherit;
     vertical-align: baseline;
 }
 
@@ -43,6 +44,7 @@ blockquote, q {
 
 blockquote:before, blockquote:after,
 q:before, q:after {
+    content: '';
     content: none;
 }
 
@@ -88,7 +90,7 @@ body {
 
 body, div, p {
     font-size: 14px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, Helvetica;
 }
 
 p {
@@ -171,6 +173,8 @@ div.form-entry input.ss-q-short, div.ss-form-question textarea, div.form-entry i
     font-size: 16px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
     border-radius: 10px;
 }
 
@@ -181,7 +185,7 @@ div.form-entry input.ss-q-short, div.ss-form-question textarea, div.form-entry i
 
 div.form-entry input.focus {
     border: 4px solid #63AF25;
-    background-color: #FFFFFF;
+    background-color: FFFFFF;
 }
 
 div.form-entry select {
@@ -210,9 +214,14 @@ select {
 
     background: url("/img/select-arrow.gif") no-repeat scroll 187px 4px #FFFFFF;
     border: 4px solid #CADCBA;
-    padding: 6px 5px 6px 6px;
+    padding-right: 5px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 6px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
     border-radius: 10px;
     cursor: pointer;
     width: 200px;
@@ -231,9 +240,11 @@ select {
 /* line 141, ../sass/style.scss */
 .customSelect.customSelectOpen {
     border-color: #63AF25;
+
 }
 
 .customSelectInner {
+
     padding: 0;
     margin: 0;
     width: 198px !important;
@@ -321,7 +332,7 @@ div.teaser {
 }
 
 div#fotoupload h3 {
-    font-size: 16px;
+    fonz-size: 16px;
     font-weight: bold;
 }
 
@@ -342,14 +353,15 @@ div.fett {
     border-radius: 10px;
     padding: 15px;
     color: #D11111;
+    font-size: 14x;
     border: 5px solid #D11111;
     font-size: 15px;
     margin-bottom: 10px;
 }
 
 div.fett h3 {
-    font-weight: bold;
-    font-size: 16px;
+    bont-weight: bold;
+    font-size: 16x;
     margin-bottom: 4px;
 }
 

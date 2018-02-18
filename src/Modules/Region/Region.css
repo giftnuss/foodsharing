@@ -1,3 +1,4 @@
+
 .forum_threads {
 
 }
@@ -86,7 +87,12 @@ ul.fairteilerlist li a span.image {
     height: 60px;
     float: left;
     margin-right: 10px;
-    background: no-repeat center;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+ul.fairteilerlist li a span.image.noimage {
+    background-color: #FFFFFF;
 }
 
 ul.fairteilerlist li a span.clear {

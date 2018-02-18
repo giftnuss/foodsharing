@@ -34,7 +34,13 @@
 }
 
 .stat_bananacount {
-    background: url("/img/banana.png") no-repeat center 22px;
+    background-image: url("/img/banana.png");
+    background-position: center 22px;
+    background-repeat: no-repeat;
+}
+
+.stat_bananacount.bouched {
+    background-image: url("/img/bananan.png");
 }
 
 .page ul.linklist {
@@ -68,3 +74,4 @@ a.disabled {
     pointer-events: none;
     background-color: #858789;
 }
+

@@ -1,3 +1,4 @@
+
 .stat_item {
     display: inline-block;
     margin: 0;
@@ -20,7 +21,8 @@
 
 .stat_icon {
     display: inline-block;
-    background: url("/img/stat_badges.png") no-repeat;
+    background-image: url("/img/stat_badges.png");
+    background-repeat: no-repeat;
     height: 96px;
     margin: 0;
     overflow: hidden;
@@ -29,26 +31,26 @@
 }
 
 .stat_icon.fetchcount {
-    background-position: -96px 0;
+    background-position: -96px 0px;
 }
 
 .stat_icon.korpcount {
-    background-position: -192px 0;
+    background-position: -192px 0px;
 }
 
 .stat_icon.fscount {
-    background-position: -288px 0;
+    background-position: -288px 0px;
 }
 
 .stat_icon.fetchweight {
-    background-position: 0 0;
+    background-position: 0px 0px;
 }
 
 .stat_text h4 {
-    padding: 0;
+    paddin: 0;
     margin: 10px 0;
     font-size: 33px;
-    font-family: "Alfa Slab One", serif;
+    font-family: "Alfa Slab One";
     font-weight: normal;
 }
 
@@ -70,11 +72,21 @@
 table.stat_cities {
     border-collapse: inherit;
     width: 255px;
-    border-spacing: 0 10px;
+    border-spacing: 0px 10px;
 }
 
 table.stat_cities {
     vertical-align: top;
+}
+
+table.stat_cities td.city div.percentbar {
+    width: 200px;
+    background-color: #FFFFF;
+    border: 1px solid #B3AB9F;
+    height: 10px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
 }
 
 table.stat_cities td.city div.percentbar div.inner {
@@ -98,13 +110,14 @@ table.stat_cities .city {
 }
 
 table.stat_cities td p {
+    margin: 0;
     padding: 0;
     display: block;
-    margin: 3px 0 0;
+    margin-top: 3px;
 }
 
 table.stat_cities td h4 {
-    font-family: "Alfa Slab One", serif;
+    font-family: "Alfa Slab One";
     margin: 0;
     padding: 0;
     display: block;

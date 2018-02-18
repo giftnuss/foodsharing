@@ -205,8 +205,9 @@ button::-moz-focus-inner {
     position: absolute;
     opacity: 0.65;
     filter: alpha(opacity=65);
+    margin: 0;
     top: 50%;
-    margin: -55px 0 0;
+    margin-top: -55px;
     padding: 0;
     width: 90px;
     height: 110px;

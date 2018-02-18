@@ -6,3 +6,7 @@
     border: 1px solid #DEDEDE;
     margin-bottom: 10px;
 }
+
+.findmap .vmap {
+    height: 400px;
+}
