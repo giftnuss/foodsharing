@@ -115,19 +115,21 @@ class WorkGroupControl extends Control
 				'href' => '/?page=groups&p=' . $region['id']
 			];
 		};
-		$regions = array_map($regionToMenuItem, $localRegions);
-		$countries = array_map($regionToMenuItem, $countries);
 
-		$memberGroupList = array_filter(isset($_SESSION['client']['bezirke']) ? $_SESSION['client']['bezirke'] : [], function ($group) {
+		$menuGlobal = [['name' => 'Alle anzeigen', 'href' => '/?page=groups']];
+		$menuLocalRegions = array_map($regionToMenuItem, $localRegions);
+		$menuCountries = array_map($regionToMenuItem, $countries);
+
+		$myGroups = array_filter(isset($_SESSION['client']['bezirke']) ? $_SESSION['client']['bezirke'] : [], function ($group) {
 			return $group['type'] == 7;
 		});
-		$memberGroups = array_map(
+		$menuMyGroups = array_map(
 			function ($group) {
 				return [
 					'name' => $group['name'],
 					'href' => '/?page=bezirk&bid=' . $group['id'] . '&sub=forum'
 				];
-			}, $memberGroupList
+			}, $myGroups
 		);
 
 		$groups = array_map(
@@ -159,7 +161,13 @@ class WorkGroupControl extends Control
 		} else {
 			$this->func->addContent($this->v_utils->v_info('Hier gibt es noch keine Arbeitsgruppen'));
 		}*/
-		$response->setContent($this->render('pages/WorkGroup/list.twig', ['groups' => $groups, 'regions' => $regions, 'countries' => $countries, 'memberGroups' => $memberGroups]));
+		$response->setContent($this->render('pages/WorkGroup/list.twig',
+			['pagemenu' => ['global' => $menuGlobal,
+					'local' => $menuLocalRegions,
+					'countries' => $menuCountries,
+					'groups' => $menuMyGroups],
+				'groups' => $groups]
+		));
 	}
 
 	private function edit(Request $request)

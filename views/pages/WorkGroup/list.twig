@@ -7,11 +7,10 @@
 {% import 'pages/WorkGroup/macros.twig' as macros %}
 
 {% block left %}
-    <h3>Gruppen aus deinen Bezirken</h3>
-    <a href="/?page=groups">Alle anzeigen</a><br/>
-    {{ macros.menu_tree(regions, 'Überregionale Gruppen', 'menu-1') }}
-    {{ macros.menu_tree(countries, 'Ländergruppen', 'menu-2') }}
-    {{ macros.menu_tree(memberGroups, 'Deine Gruppen', 'menu-3') }}
+    {{ macros.menu_tree(pagemenu.global, 'Überregionale Gruppen') }}
+    {{ macros.menu_tree(pagemenu.local, 'Lokalgruppen') }}
+    {{ macros.menu_tree(pagemenu.countries, 'Länderspezifische Gruppen') }}
+    {{ macros.menu_tree(pagemenu.groups, 'Deine Gruppen') }}
 {% endblock %}
 
 {% block main %}
@@ -97,7 +96,6 @@
 {% endblock %}
 
 {% block right %}
-    <h3>on the right</h3>
 {% endblock %}
 
 {% block bottom %}

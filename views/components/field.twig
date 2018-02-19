@@ -1,4 +1,7 @@
 <div class="field">
+    {% if title %}
+        <div class="head ui-widget-header ui-corner-top">{{ title }}</div>
+    {% endif %}
     <div class="ui-widget ui-widget-content corner-all margin-bottom">
         {% block content %}{% endblock %}
     </div>
