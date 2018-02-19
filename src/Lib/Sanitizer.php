@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: matthias
- * Date: 18.02.18
- * Time: 00:45.
- */
 
 namespace Foodsharing\Lib;
 

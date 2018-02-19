@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: matthias
- * Date: 13.02.18
- * Time: 13:13.
- */
 
 namespace Helper;
 

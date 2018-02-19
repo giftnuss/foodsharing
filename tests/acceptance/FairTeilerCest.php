@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: matthias
- * Date: 16.02.18
- * Time: 10:06.
- */
+
 class FairTeilerCest
 {
 	private $testBezirk;

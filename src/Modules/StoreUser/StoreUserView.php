@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: matthias
- * Date: 11.02.18
- * Time: 14:30.
- */
 
 namespace Foodsharing\Modules\StoreUser;
 
