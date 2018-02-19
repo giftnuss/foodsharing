@@ -50,10 +50,10 @@ class APIXhr extends Control
 		if ((int)$_GET['id'] > 0 && $message != '') {
 			$conversation_id = (int)$_GET['id'];
 
-			if ($messageModel->mayConversation($conversation_id)) {
-				$id = $messageModel->sendMessage($conversation_id, $message);
+			if ($this->messageModel->mayConversation($conversation_id)) {
+				$id = $this->messageModel->sendMessage($conversation_id, $message);
 
-				if ($member = $messageModel->listConversationMembers($conversation_id)) {
+				if ($member = $this->messageModel->listConversationMembers($conversation_id)) {
 					foreach ($member as $m) {
 						if ($m['id'] != $this->func->fsId()) {
 							Mem::userAppend($m['id'], 'msg-update', $conversation_id);
@@ -71,7 +71,7 @@ class APIXhr extends Control
 							/*
 							 * send an E-Mail if the user is not online
 							*/
-							if ($messageModel->wantMsgEmailInfo($m['id'])) {
+							if ($this->messageModel->wantMsgEmailInfo($m['id'])) {
 								$this->convMessage($m, $conversation_id, $message, $this->messageModel);
 							}
 						}
