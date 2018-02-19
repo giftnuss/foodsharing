@@ -33,33 +33,6 @@ class WorkGroupControl extends Control
 		}
 	}
 
-	public function canApply($group, $mystats)
-	{
-		if ($group['apply_type'] == 0) {
-			return false;
-		}
-
-		// apply_type
-
-		if ($group['apply_type'] == 1) {
-			if (
-				$mystats['bananacount'] >= $group['banana_count'] &&
-				$mystats['fetchcount'] >= $group['fetch_count'] &&
-				$mystats['weeks'] >= $group['week_num']
-			) {
-				if ((int)$group['report_num'] == 0 && (int)$mystats['reports'] > 0) {
-					return false;
-				}
-
-				return true;
-			}
-		} elseif ($group['apply_type'] == 2) {
-			return true;
-		}
-
-		return false;
-	}
-
 	private function fulfillApplicationRequirements($group, $stats)
 	{
 		return
@@ -150,10 +123,7 @@ class WorkGroupControl extends Control
 			}, $groups);
 
 		$this->func->addTitle($this->func->s('groups'));
-		/*
-		$this->func->addContent($this->view->topbar('foodsharing Arbeitsgruppen', 'hier findest Du Hilfe und viel zu tun...', '<img src="/img/groups.png" />'), CNT_TOP);
 
-		}*/
 		$response->setContent($this->render('pages/WorkGroup/list.twig',
 			['pagemenu' => ['global' => $menuGlobal,
 					'local' => $menuLocalRegions,
