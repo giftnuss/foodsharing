@@ -69,12 +69,8 @@ class WorkGroupControl extends Control
 			&& $group['apply_type'] == 3;
 	}
 
-	private function list(Request $request, Response $response)
+	private function getSideMenuData()
 	{
-		$parent = $request->query->getInt('p', 392);
-		$myApplications = $this->model->getApplications(S::id());
-		$myStats = $this->model->getStats(S::id());
-		$groups = $this->model->listGroups($parent);
 		$countries = $this->model->getCountryGroups();
 		$bezirke = $this->model->getBezirke();
 
@@ -105,6 +101,19 @@ class WorkGroupControl extends Control
 			}, $myGroups
 		);
 
+		return ['global' => $menuGlobal,
+			'local' => $menuLocalRegions,
+			'countries' => $menuCountries,
+			'groups' => $menuMyGroups];
+	}
+
+	private function list(Request $request, Response $response)
+	{
+		$parent = $request->query->getInt('p', 392);
+		$myApplications = $this->model->getApplications(S::id());
+		$myStats = $this->model->getStats(S::id());
+		$groups = $this->model->listGroups($parent);
+
 		$groups = array_map(
 			function ($group) use ($myApplications, $myStats) {
 				return array_merge($group, [
@@ -125,11 +134,7 @@ class WorkGroupControl extends Control
 		$this->func->addTitle($this->func->s('groups'));
 
 		$response->setContent($this->render('pages/WorkGroup/list.twig',
-			['pagemenu' => ['global' => $menuGlobal,
-					'local' => $menuLocalRegions,
-					'countries' => $menuCountries,
-					'groups' => $menuMyGroups],
-				'groups' => $groups]
+			['nav' => $this->getSideMenuData(), 'groups' => $groups]
 		));
 	}
 

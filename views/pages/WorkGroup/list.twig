@@ -8,13 +8,8 @@
     } only %}
 {% endblock %}
 
-{% import 'pages/WorkGroup/macros.twig' as macros %}
-
 {% block left %}
-    {{ macros.menu_tree(pagemenu.global, 'Überregionale Gruppen') }}
-    {{ macros.menu_tree(pagemenu.local, 'Lokalgruppen') }}
-    {{ macros.menu_tree(pagemenu.countries, 'Länderspezifische Gruppen') }}
-    {{ macros.menu_tree(pagemenu.groups, 'Deine Gruppen') }}
+    {% include 'pages/WorkGroup/sidenav.twig' %}
 {% endblock %}
 
 {% block main %}
