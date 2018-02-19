@@ -79,7 +79,7 @@
 
                 {% include 'partials/breadcrumbs.twig' with { items: bread } %}
 
-                {% if content.top.html %}
+                {% if block('top') %}
                     <div class="pure-g">
                         <div id="content_top" class="pure-u-1">
                             <div class="inside">

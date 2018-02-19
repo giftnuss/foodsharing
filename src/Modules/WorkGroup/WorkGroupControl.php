@@ -153,13 +153,6 @@ class WorkGroupControl extends Control
 		/*
 		$this->func->addContent($this->view->topbar('foodsharing Arbeitsgruppen', 'hier findest Du Hilfe und viel zu tun...', '<img src="/img/groups.png" />'), CNT_TOP);
 
-		$this->addNav();
-		if ($groups) {
-			$my_applications = $this->model->getApplications(S::id());
-			$my_stats = $this->model->getStats(S::id());
-			$this->func->addContent($this->view->listGroups($groups, $my_applications, $my_stats));
-		} else {
-			$this->func->addContent($this->v_utils->v_info('Hier gibt es noch keine Arbeitsgruppen'));
 		}*/
 		$response->setContent($this->render('pages/WorkGroup/list.twig',
 			['pagemenu' => ['global' => $menuGlobal,

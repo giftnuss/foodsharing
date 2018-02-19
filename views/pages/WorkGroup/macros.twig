@@ -1,7 +1,7 @@
 {% macro menu_tree(items, title, id) %}
     {% embed 'components/field.twig' with {'title': title} %}
         {% block content %}
-            {% include 'components/menu.twig' with {'items': items} only %}
+            {% include 'partials/menu.twig' with {'items': items} only %}
         {% endblock %}
     {% endembed %}
 {% endmacro %}

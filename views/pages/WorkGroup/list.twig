@@ -1,7 +1,11 @@
 {% extends 'layouts/default.twig' %}
 
 {% block top %}
-    {{ content.top.html | raw }}
+    {% include 'partials/topbar.twig' with {
+        'title': 'foodsharing Arbeitsgruppen',
+        'subtitle': 'hier findest Du Hilfe und viel zu tun...',
+        'img': '/img/groups.png',
+    } only %}
 {% endblock %}
 
 {% import 'pages/WorkGroup/macros.twig' as macros %}
@@ -22,74 +26,78 @@
 
     <div class="groups">
         {% for group in groups %}
-            <!-- ToDo: Wrap group in a v_field($group, $g['name'], array('class' => 'ui-padding')); -->
-            <div class="members">
-                {% for leader in group.leaders %}
-                    <a class="member" href="#" onclick="profile({{ leader.id }});return false;">
-                        <img src="{{ leader.image }}" alt="{{ leader.name }}"/>
-                    </a>
-                {% endfor %}
-                <div><strong>{{ group.leaders | length }} Admin/s</strong></div>
-                <div>{{ group.members | length }} Mitwirkende</div>
-            </div>
-
-            {% if group.image %}
-                <div class="photo">
-                    <a class="fancybox" href="{{ group.image }}">
-                        <img src="{{ group.image }}" alt="{{ group.name }} Titelbild"/>
-                    </a>
-                </div>
-            {% endif %}
-
-            <div class="teaser">
-                {{ group.teaser | nl2br }}
-                <p style="margin-top:15px;"><strong>{{ group.email }}</strong></p>
-            </div>
-
-            <div class="clear"></div>
-            <div class="bottom_bar">
-                {% if group.appliedFor %}
-                    <div class="ui-padding">
-                        Für diese Gruppe hast Du Dich bereits beworben<!-- ToDo: put inside v_info -->
+            {% embed 'components/field.twig' with {'title': group.name, 'classes': ['ui-padding']} %}
+                {% block content %}
+                    <div class="members">
+                        {% for leader in group.leaders %}
+                            <a class="member" href="#" onclick="profile({{ leader.id }});return false;">
+                                <img src="{{ leader.image }}" alt="{{ leader.name }}"/>
+                            </a>
+                        {% endfor %}
+                        <div><strong>{{ group.leaders | length }} Admin/s</strong></div>
+                        <div>{{ group.members | length }} Mitwirkende</div>
                     </div>
-                {% elseif group.applicationRequirementsNotFulfilled %}
-                    Für Diese Arbeitsgruppe kannst Du Dich mit
-                    {{ group.applyMinBananaCount }} Vertrauensbananen und
-                    {{ group.applyMinFetchCount }} Abholungen bewerben sofern Du schon
-                    {{ group.applyMinFoodsaverWeeks }} Wochen als Foodsaver dabei bist
-                    <div style="margin-bottom:5px;"></div>
-                {% endif %}
 
-                <div class="float_right">
-                    <a class="button" href="#" onclick="ajreq('contactgroup',{id:{{ group.id }}});return false;">
-                        Gruppe kontaktieren
-                    </a>
-                    {% if group.mayEdit %}
-                        <a class="button" href="/?page=groups&sub=edit&id={{ group.id }}">
-                            Gruppe bearbeiten
-                        </a>
-                    {% endif %}
-                    {% if group.mayAccess %}
-                        <a class="button" href="/?page=bezirk&bid={{ group.id }}">
-                            Zur Gruppe
-                        </a>
-                    {% endif %}
-                    {% if group.mayApply %}
-                        <a class="button" href="#" onclick="ajreq('apply',{id:{{ group.id }}});">
-                            Für diese Arbeitsgruppe bewerben
-                        </a>
-                    {% endif %}
-                    {% if group.mayJoin %}
-                        <a class="button" href="#" onclick="ajreq('addtogroup',{id:{{ group.id }}});">
-                            Dieser Arbeitsgruppe beitreten
-                        </a>
+                    {% if group.image %}
+                        <div class="photo">
+                            <a class="fancybox" href="{{ group.image }}">
+                                <img src="{{ group.image }}" alt="{{ group.name }} Titelbild"/>
+                            </a>
+                        </div>
                     {% endif %}
 
-                </div>
-                <div class="clear"></div>
-            </div>
+                    <div class="teaser">
+                        {{ group.teaser | nl2br }}
+                        <p style="margin-top:15px;"><strong>{{ group.email }}</strong></p>
+                    </div>
+
+                    <div class="clear"></div>
+                    <div class="bottom_bar">
+                        {% if group.appliedFor %}
+                            <div class="ui-padding">
+                                {% include 'components/info.twig' with {'msg': 'Für diese Gruppe hast Du Dich bereits beworben'} only %}
+                            </div>
+                        {% elseif group.applicationRequirementsNotFulfilled %}
+                            Für Diese Arbeitsgruppe kannst Du Dich mit
+                            {{ group.applyMinBananaCount }} Vertrauensbananen und
+                            {{ group.applyMinFetchCount }} Abholungen bewerben sofern Du schon
+                            {{ group.applyMinFoodsaverWeeks }} Wochen als Foodsaver dabei bist
+                            <div style="margin-bottom:5px;"></div>
+                        {% endif %}
+
+                        <div class="float_right">
+                            <a class="button" href="#"
+                               onclick="ajreq('contactgroup',{id:{{ group.id }}});return false;">
+                                Gruppe kontaktieren
+                            </a>
+                            {% if group.mayEdit %}
+                                <a class="button" href="/?page=groups&sub=edit&id={{ group.id }}">
+                                    Gruppe bearbeiten
+                                </a>
+                            {% endif %}
+                            {% if group.mayAccess %}
+                                <a class="button" href="/?page=bezirk&bid={{ group.id }}">
+                                    Zur Gruppe
+                                </a>
+                            {% endif %}
+                            {% if group.mayApply %}
+                                <a class="button" href="#" onclick="ajreq('apply',{id:{{ group.id }}});">
+                                    Für diese Arbeitsgruppe bewerben
+                                </a>
+                            {% endif %}
+                            {% if group.mayJoin %}
+                                <a class="button" href="#" onclick="ajreq('addtogroup',{id:{{ group.id }}});">
+                                    Dieser Arbeitsgruppe beitreten
+                                </a>
+                            {% endif %}
+
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                {% endblock %}
+            {% endembed %}
         {% else %}
-            <h3>Es gibt hier leider keine Gruppen</h3>
+            {% include 'partials/info.twig' with {'msg': 'Hier gibt es noch keine Arbeitsgruppen'} only %}
         {% endfor %}
     </div>
 
