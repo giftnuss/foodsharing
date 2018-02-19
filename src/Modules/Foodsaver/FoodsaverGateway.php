@@ -54,7 +54,7 @@ class FoodsaverGateway extends BaseGateway
 
 	public function listInactiveByRegion($id)
 	{
-		$this->db->fetchAll('
+		return $this->db->fetchAll('
 			SELECT 	fs.`id`,
 					fs.`photo`,
 					fs.`name`,
@@ -76,7 +76,7 @@ class FoodsaverGateway extends BaseGateway
 
 	public function listAmbassadorsByRegion($id)
 	{
-		$this->db->fetchAll('
+		return $this->db->fetchAll('
 			SELECT 	fs.`id`,
 					fs.`photo`,
 					fs.`name`,
