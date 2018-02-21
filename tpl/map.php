@@ -54,7 +54,7 @@ header('Expires: 0');
 <?php echo $func->getContent(CNT_MAIN); ?>
 <?php echo $func->getContent(CNT_TOP); ?>
 <noscript>
-	<div id="nojs">Ohne Javascript l&auml;ft hier leider nix!</div>
+	<div id="nojs">Ohne JavaScript l&auml;uft hier leider nichts.</div>
 </noscript> 
 <?php $func->printHidden(); ?>
 <div class="pulse-msg ui-shadow" id="pulse-error" style="display:none;"></div>

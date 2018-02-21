@@ -126,7 +126,7 @@ if (!empty($content_left) && !empty($content_right)) {
 	</div>
 	<?php $func->getTemplate('footer'); ?>
 	<noscript>
-		<div id="nojs">Ohne Javascript l&auml;ft hier leider nix!</div>
+		<div id="nojs">Ohne JavaScript l&auml;uft hier leider nichts.</div>
 	</noscript> 
 	<?php $func->printHidden(); ?>
 
