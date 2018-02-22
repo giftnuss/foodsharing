@@ -185,7 +185,7 @@ class ForumGateway extends BaseGateway
 
 	public function followThread($fs_id, $thread_id)
 	{
-		return $this->db->insert(
+		return $this->db->insertIgnore(
 			'fs_theme_follower',
 			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'infotype' => 1]
 		);
