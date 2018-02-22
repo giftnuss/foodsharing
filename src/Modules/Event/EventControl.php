@@ -20,7 +20,7 @@ class EventControl extends Control
 
 	public function index()
 	{
-		if (!isset($_GET['sub']) && isset($_GET['id']) && ($event = $this->gateway->getEvent($_GET['id']))) {
+		if (!isset($_GET['sub']) && isset($_GET['id']) && ($event = $this->gateway->getEventWithInvites($_GET['id']))) {
 			if (!$this->mayEvent($event)) {
 				return false;
 			}
@@ -69,7 +69,7 @@ class EventControl extends Control
 
 	public function edit()
 	{
-		if ($event = $this->gateway->getEvent($_GET['id'])) {
+		if ($event = $this->gateway->getEventWithInvites($_GET['id'])) {
 			if (!$this->isEventAdmin($event)) {
 				return false;
 			}
