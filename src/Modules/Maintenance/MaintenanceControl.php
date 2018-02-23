@@ -144,6 +144,11 @@ class MaintenanceControl extends ConsoleControl
 		$zuerich_biebs = $this->model->getBiebIds(108);
 		$counts = $this->model->updateGroupMembers(1313, $zuerich_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
+
+		self::info('updating Wien BIEB austausch (Filialverantwortung)');
+		$wien_biebs = $this->model->getBiebIds(13);
+		$counts = $this->model->updateGroupMembers(707, $wien_biebs, true);
+		self::info('+' . $counts[0] . ', -' . $counts[1]);
 	}
 
 	private function sleepingMode()

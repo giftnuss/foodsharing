@@ -7,7 +7,7 @@
 ## Features
 - Removed the working groups from the team->teammember page !262 @BassTii
 - Changed way of gendering in passport from "/" to "_" !251 @D0nPiano
-- auto adding of CH-BOTs and ZH-BIEBs to their working groups. !271 by @peter.toennies
+- auto adding of CH-BOTs, Vienna-BIEBs, and ZH-BIEBs to their working groups. !271 by @peter.toennies
 - Renamed footer "Unterstützung" to "Spenden" !273 @BassTii
 - Updates fullpage.js to 2.9.5 for fixing scrolling in firefox, general smoothness !244 @NerdyProjects
 - Page with list of communities for Austria/Germany/Switzerland. !286 by @k.miklobusec
