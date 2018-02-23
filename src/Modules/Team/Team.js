@@ -34,7 +34,7 @@ $(function () {
         });
     }
 
-    $('#teamlist .foot i').mouseover(function () {
+    $('#teamList .foot i').mouseover(function () {
 
         var $this = $(this);
 
@@ -44,7 +44,7 @@ $(function () {
         }
     });
 
-    $('#teamlist .foot i').click(function (ev) {
+    $('#teamList .foot i').click(function (ev) {
 
         var $this = $(this);
         if ($this.hasClass('fa-lock')) {
@@ -60,7 +60,7 @@ $(function () {
     });
 
 
-    $('#teamlist .foot i').mouseout(function () {
+    $('#teamList .foot i').mouseout(function () {
         var $this = $(this).parent().parent();
 
         $this.attr('href', '/team/' + $this.attr('id').substring(2)).attr('target', '_self');

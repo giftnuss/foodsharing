@@ -69,7 +69,7 @@ class TeamView extends View
 		}
 
 		$out = '
-		<ul id="teamlist" class="linklist">';
+		<ul id="teamList" class="linklist">';
 
 		foreach ($team as $t) {
 			$socials = '&nbsp;';
