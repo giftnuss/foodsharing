@@ -12,6 +12,8 @@
 - Updates fullpage.js to 2.9.5 for fixing scrolling in firefox, general smoothness !244 @NerdyProjects
 - Page with list of communities for Austria/Germany/Switzerland. !286 by @k.miklobusec
 - Single appointment can be set to "appointment cancelled" (=0 Slots) !372 by @k.miklobusec
+- Changed the Store address format to not have a separate house number !294 @NerdyProjects
+
 
 ## Bugfixes
 - Remove partly broken store coordinator management from store edit page (should happen with "manage team") !283 @NerdyProjects
@@ -40,7 +42,10 @@
 - Remove global usage of Func, DB and ViewUtils Helper classes !289 @NerdyProjects
 - Refactor router for HTML controller classes !289 @NerdyProjects
 - complete tidying up of all CSS files. !298 by @peter.toennies
-- Make components ready to be used without global data passing variable !294 @NerdyProjects
+- Make some components ready to be used without global data passing variable !294 @NerdyProjects
+- Introduce Request and Response object and used it in WorkGroupControl !294 @NerdyProjects
+- Introduce input deserializer/sanitizer/validator component in WorkGroupControl !294 @NerdyProjects
+- Extract genSearchIndex to a service class !294 @NerdyProjects
 
 ## Dev/Test/CI stuff
 
@@ -53,6 +58,7 @@
 - Add better seed data for use during development !263 @tiltec
 - Enable xdebug profiler for dev environment !296 @NerdyProjects
 - Use PHP7.2.2 in dev/test/ci to make it ready for production !301 @NerdyProjects
+- More tests for FairTeiler and WorkGroup pages !294 @NerdyProjects
 
 ## Other
 
