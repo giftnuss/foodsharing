@@ -39,7 +39,7 @@ $(function () {
         var $this = $(this);
 
         var val = $this.children('span').text();
-        if (val != '') {
+        if (val !== '') {
             $this.parent().parent().attr('href', val).attr('target', '_blank');
         }
     });
@@ -59,17 +59,13 @@ $(function () {
         }
     });
 
-
     $('#teamList .foot i').mouseout(function () {
         var $this = $(this).parent().parent();
 
         $this.attr('href', '/team/' + $this.attr('id').substring(2)).attr('target', '_self');
 
     });
-
-
 });
-
 
 function u_tox(id) {
     var $pop = $('#tox-pop-' + id + '-opener');
@@ -80,7 +76,7 @@ function u_tox(id) {
 
     var $qr = $('#tox-pop-' + id + ' .tox-qr');
 
-    if ($qr.children().length == 0) {
+    if ($qr.children().length === 0) {
         var $input = $('#tox-pop-' + id + ' .tox-id');
         $('#tox-pop-' + id + ' .tox-qr').qrcode($input.val());
 
