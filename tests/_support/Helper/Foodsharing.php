@@ -251,7 +251,7 @@ class Foodsharing extends \Codeception\Module\Db
 	{
 		$hours = $this->faker->numberBetween(0, 23);
 		$minutes = $this->faker->randomElement($array = array('00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'));
-		
+
 		$params = array_merge([
 			'betrieb_id' => $store,
 			'dow' => $this->faker->numberBetween(0, 6),
