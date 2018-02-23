@@ -394,12 +394,9 @@ class View
 	{
 		$this->func->addHead('<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=' . GOOGLE_API_KEY . '"></script>');
 
-		global $g_data;
-
 		if (isset($options['location'])) {
 			$data = array_merge(['zoom' => 14], $options['location']);
 		} else {
-			/* Todo: Remove when getting rid of $g_data */
 			$db = DI::$shared->get(Model::class);
 			$data = $db->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
 			$data['zoom'] = 14;
