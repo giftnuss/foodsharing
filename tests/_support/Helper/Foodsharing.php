@@ -255,7 +255,7 @@ class Foodsharing extends \Codeception\Module\Db
 		$params = array_merge([
 			'betrieb_id' => $store,
 			'dow' => $this->faker->numberBetween(0, 6),
-			'time' => sprintf("%02d:%s:00", $hours, $minutes),
+			'time' => sprintf('%02d:%s:00', $hours, $minutes),
 			'fetcher' => $this->faker->numberBetween(1, 8),
 		], $extra_params);
 
