@@ -57,9 +57,8 @@ cd foodsharing
 
 ### Windows 10 Pro or higher
 
-You need Git for Windows(https://git-scm.com/download/win)
-
-Please make sure that you install the bash shell as well!
+Install [Docker for Windows](https://docs.docker.com/docker-for-windows/install/).
+Install Git for Windows: (https://git-scm.com/download/win)
 
 There is a GUI interface to administrate the repo, which is recommended for git-beginners
 
