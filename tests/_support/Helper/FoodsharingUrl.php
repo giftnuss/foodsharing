@@ -77,4 +77,9 @@ class FoodsharingUrl extends \Codeception\Module\Db
 	{
 		return '/essenskoerbe/' . (int)$basket_id;
 	}
+
+	public function settingsUrl()
+	{
+		return '/?page=settings&sub=general';
+	}
 }
