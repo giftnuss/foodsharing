@@ -37,7 +37,7 @@
 - Add twig templating for main menu and other things !292 @nicksellen
 - Remove global usage of Func, DB and ViewUtils Helper classes !289 @NerdyProjects
 - Refactor router for HTML controller classes !289 @NerdyProjects
-- complete tidying up of all CSS files. !298 by @peter.toennies
+- complete tidying up of all team related files by !321 by @peter.toennies
 
 ## Dev/Test/CI stuff
 
