@@ -62,20 +62,22 @@ Install Git for Windows: (https://git-scm.com/download/win)
 
 There is a GUI interface to administrate the repo, which is recommended for git-beginners
 
-But you can use the git cmd just like in Linux to clone it:
+But you can use the GIT bash shell just like in Linux to clone it:
 
 ```
 git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
+```
+
+To start the containers, use the GIT bash shell:
+```
 cd foodsharing
 ./scripts/start
 ```
 
-To execute scripts use the Git Bash Shell.
-
 ##For the Future
-Install [Docker for Windows](https://docs.docker.com/docker-for-windows/install/).
 
-Our scripts are written in bash, but you should be able to get something working by
+
+You should be able to get something working by
 installing/enabling
 [Windows Subsystem for Linux](https://msdn.microsoft.com/en-gb/commandline/wsl/install_guide)
 in the future, because their kernel is not good enough to support the docker daemon.
