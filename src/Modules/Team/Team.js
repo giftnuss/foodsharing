@@ -1,5 +1,5 @@
 $(function () {
-    var $form = $('#contactForm-form');
+    var $form = $('#contactform-form');
     if ($form.length > 0) {
         var $email = $('#email');
 

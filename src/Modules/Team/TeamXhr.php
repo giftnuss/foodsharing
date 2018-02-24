@@ -81,14 +81,14 @@ class TeamXhr extends Control
 	{
 		$ip = $this->getIp();
 
-		if ($block = $this->model->qRow('SELECT UNIX_TIMESTAMP(`start`) AS `start`,`duration` FROM ' . PREFIX . 'ipblock WHERE ip = ' . $this->model->strval($this->getIp()) . ' AND context = ' . $this->model->strval($context))) {
+		if ($block = $this->model->qRow('SELECT UNIX_TIMESTAMP(`start`) AS `start`,`duration` FROM fs_ipblock WHERE ip = ' . strip_tags($this->getIp()) . ' AND context = ' . strip_tags($context))) {
 			if (time() < ((int)$block['start'] + (int)$block['duration'])) {
 				return true;
 			}
 		}
 
 		$this->model->insert('
-	REPLACE INTO ' . PREFIX . 'ipblock
+	REPLACE INTO fs_ipblock
 	(`ip`,`context`,`start`,`duration`)
 	VALUES
 	(' . strip_tags($ip) . ',' . strip_tags($context) . ',NOW(),' . (int)$duration . ')');
