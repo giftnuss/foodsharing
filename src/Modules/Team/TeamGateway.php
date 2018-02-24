@@ -9,7 +9,7 @@ class TeamGateway extends BaseGateway
 	public function getTeam($bezirkId = 1373)
 	{
 		$out = array();
-		if ($orgas = $this->db->fetchAll('
+		$orgas = $this->db->fetchAll('
 				SELECT 
 					fs.id, 
 					CONCAT(mb.name,"@' . DEFAULT_HOST . '") AS email, 
@@ -42,11 +42,9 @@ class TeamGateway extends BaseGateway
 				WHERE 
 					hb.bezirk_id = ' . $bezirkId . '
 				ORDER BY fs.name
-		')
-		) {
-			foreach ($orgas as $o) {
-				$out[(int)$o['id']] = $o;
-			}
+		');
+		foreach ($orgas as $o) {
+			$out[(int)$o['id']] = $o;
 		}
 
 		return $out;
