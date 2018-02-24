@@ -17,8 +17,15 @@ class TwigExtensions extends Twig_Extension
 	public function getFilters()
 	{
 		return [
-			new Twig_Filter('translate', array($this, 'translateFilter')),
-			new Twig_Filter('id', array($this, 'idFilter'))
+			new Twig_Filter('translate', [$this, 'translateFilter']),
+			new Twig_Filter('id', [$this, 'idFilter'])
+		];
+	}
+
+	public function getFunctions()
+	{
+		return [
+			new \Twig_Function('contentMainWidth', [$this, 'contentMainWidthFunction'])
 		];
 	}
 
@@ -34,5 +41,17 @@ class TwigExtensions extends Twig_Extension
 	public function idFilter($name)
 	{
 		return $this->func->id($name);
+	}
+
+	public function contentMainWidthFunction($hasLeft, $hasRight, $leftWidth, $rightWidth, $baseWidth = 24)
+	{
+		if ($hasLeft) {
+			$baseWidth -= $leftWidth;
+		}
+		if ($hasRight) {
+			$baseWidth -= $rightWidth;
+		}
+
+		return $baseWidth;
 	}
 }

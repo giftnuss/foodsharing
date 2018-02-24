@@ -79,7 +79,7 @@
 
                 {% include 'partials/breadcrumbs.twig' with { items: bread } %}
 
-                {% if content.top.html %}
+                {% if block('top') %}
                     <div class="pure-g">
                         <div id="content_top" class="pure-u-1">
                             <div class="inside">
@@ -92,15 +92,15 @@
                 <div class="pure-g mainpure">
                     {% if isMob %}
 
-                        {% if content.main.html %}
-                            <div class="pure-u-1 pure-u-md-{{ content.main.width }}-24">
+                        {% if block('main') %}
+                            <div class="pure-u-1 pure-u-md-{{ contentMainWidth(block('left'), block('right'), content.left.width, content.right.width, 24) }}-24">
                                 <div class="inside">
                                     {% block main %}{% endblock %}
                                 </div>
                             </div>
                         {% endif %}
 
-                        {% if content.right.html %}
+                        {% if block('right') %}
                             <div class="pure-u-1 pure-u-md-{{ content.right.width }}-24" id="right">
                                 <div class="inside">
                                     {% block right %}{% endblock %}
@@ -108,7 +108,7 @@
                             </div>
                         {% endif %}
 
-                        {% if content.left.html %}
+                        {% if block('left') %}
                             <div class="pure-u-1 pure-u-md-{{ content.left.width }}-24" id="left">
                                 <div class="inside">
                                     {% block left %}{% endblock %}
@@ -118,7 +118,7 @@
 
                     {% else %}
 
-                        {% if content.left.html %}
+                        {% if block('left') %}
                             <div class="pure-u-1 pure-u-md-{{ content.left.width }}-24" id="left">
                                 <div class="inside">
                                     {{ block('left') }}
@@ -126,15 +126,15 @@
                             </div>
                         {% endif %}
 
-                        {% if content.main.html %}
-                            <div class="pure-u-1 pure-u-md-{{ content.main.width }}-24">
+                        {% if block('main') %}
+                            <div class="pure-u-1 pure-u-md-{{ contentMainWidth(block('left'), block('right'), content.left.width, content.right.width, 24) }}-24">
                                 <div class="inside">
                                     {{ block('main') }}
                                 </div>
                             </div>
                         {% endif %}
 
-                        {% if content.right.html %}
+                        {% if block('right') %}
                             <div class="pure-u-1 pure-u-md-{{ content.right.width }}-24" id="right">
                                 <div class="inside">
                                     {{ block('right') }}

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: matthias
- * Date: 11.02.18
- * Time: 14:30.
- */
 
 namespace Foodsharing\Modules\StoreUser;
 
@@ -428,27 +422,6 @@ class StoreUserView extends View
 
 			return $this->v_utils->v_field($table, $title);
 		}
-	}
-
-	public function betrieb_form($foodsaver)
-	{
-		return $this->v_utils->v_quickform('betrieb', array(
-			$this->v_utils->v_form_text('name'),
-			$this->v_utils->v_form_text('plz'),
-			$this->v_utils->v_form_text('str'),
-			$this->v_utils->v_form_text('hsnr'),
-
-			$this->v_utils->v_form_select('kette_id', array('add' => true)),
-			$this->v_utils->v_form_select('betrieb_kategorie_id', array('add' => true)),
-
-			$this->v_utils->v_form_select('betrieb_status_id'),
-
-			$this->v_utils->v_form_text('ansprechpartner'),
-			$this->v_utils->v_form_text('telefon'),
-			$this->v_utils->v_form_text('fax'),
-			$this->v_utils->v_form_text('email'),
-			$this->v_utils->v_form_select('foodsaver', array('values' => $foodsaver))
-		));
 	}
 
 	/**

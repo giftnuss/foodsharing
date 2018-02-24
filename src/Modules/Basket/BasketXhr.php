@@ -443,19 +443,6 @@ class BasketXhr extends Control
 	public function removeRequest()
 	{
 		if ($request = $this->model->getRequest($_GET['id'], $_GET['fid'])) {
-			global $g_data;
-			$g_data['fetchstate'] = 3;
-			/*
-			 * Array
-				(
-					[time_ts] => 1402149037
-					[fs_name] => Luisa
-					[fs_photo] => 530c93a86a9f8.jpg
-					[fs_id] => 3542
-					[id] => 20
-				)
-			 */
-
 			$dia = new XhrDialog();
 			$dia->addOpt('width', '400');
 			$dia->noOverflow();
@@ -470,8 +457,8 @@ class BasketXhr extends Control
 					'values' => array(
 						array('id' => 3, 'name' => 'Ja, ' . $this->func->genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' hat den Korb abgeholt.'),
 						array('id' => 5, 'name' => 'Nein, ' . $this->func->genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' ist leider nicht wie verabredet erschienen.'),
-						array('id' => 5, 'name' => 'Die Lebensmittel wurden von jemand anderem abgeholt.'),
-					)
+						array('id' => 5, 'name' => 'Die Lebensmittel wurden von jemand anderem abgeholt.')),
+					'selected' => 3
 				))
 			);
 			$dia->addAbortButton();

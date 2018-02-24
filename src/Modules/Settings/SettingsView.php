@@ -530,9 +530,14 @@ class SettingsView extends View
 
 		$g_data['ort'] = $g_data['stadt'];
 
+		foreach (['anschrift', 'plz', 'ort', 'lat', 'lon'] as $i) {
+			$latLonOptions[$i] = $g_data[$i];
+		}
+		$latLonOptions['location'] = ['lat' => $g_data['lat'], 'lon' => $g_data['lon']];
+
 		return $this->v_utils->v_quickform($this->func->s('settings'), array(
 			$bezirkchoose,
-			$this->latLonPicker('LatLng'),
+			$this->latLonPicker('LatLng', $latLonOptions),
 			$this->v_utils->v_form_text('telefon'),
 			$this->v_utils->v_form_text('handy'),
 			$this->v_utils->v_form_date('geb_datum', array('required' => true, 'yearRangeFrom' => date('Y') - 120, 'yearRangeTo' => date('Y') - 8)),

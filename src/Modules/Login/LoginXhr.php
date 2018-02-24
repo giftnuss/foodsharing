@@ -70,7 +70,7 @@ class LoginXhr extends Control
 	{
 		if ($this->model->login($_GET['u'], $_GET['p'])) {
 			$token_js = '';
-			if ($token = $this->searchService->writeSearchIndexToDisk(S::user('token'))) {
+			if ($token = $this->searchService->writeSearchIndexToDisk(S::id(), S::user('token'))) {
 				$token_js = 'user.token = "' . $token . '";';
 			}
 

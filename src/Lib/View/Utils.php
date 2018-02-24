@@ -1100,7 +1100,11 @@ class Utils
 	public function v_form_textarea($id, $option = array())
 	{
 		$id = $this->func->id($id);
-		$value = $this->func->getValue($id);
+		if (isset($option['value'])) {
+			$value = $option['value'];
+		} else {
+			$value = $this->func->getValue($id);
+		}
 
 		$value = htmlspecialchars($value);
 
@@ -1184,10 +1188,6 @@ class Utils
 
 	public function v_form_tagselect($id, $option = array())
 	{
-		// term=h
-
-		// [{"id":"3","label":"Hazel Grouse","value":"Hazel Grouse"},{"id":"5","label":"Common Pheasant","value":"Common Pheasant"},{"id":"6","label":"Northern Shoveler","value":"Northern Shoveler"},{"id":"20","label":"Bluethroat","value":"Bluethroat"},{"id":"22","label":"Wood Nuthatch","value":"Wood Nuthatch"},{"id":"26","label":"Chaffinch","value":"Chaffinch"},{"id":"28","label":"Hawfinch","value":"Hawfinch"}]
-
 		$xhr = $id;
 		if (isset($option['xhr'])) {
 			$xhr = $option['xhr'];
@@ -1201,8 +1201,8 @@ class Utils
 		$source = 'autocompleteURL: "xhr.php?f=' . $url . '"';
 		$post = '';
 
-		if (isset($option['data'])) {
-			$source = 'autocompleteOptions: {source: ' . json_encode($option['data']) . ',minLength: 0}';
+		if (isset($option['valueOptions'])) {
+			$source = 'autocompleteOptions: {source: ' . json_encode($option['valueOptions']) . ',minLength: 0}';
 		}
 
 		$this->func->addJs('
@@ -1222,7 +1222,12 @@ class Utils
 		');
 
 		$input = '<input type="text" name="' . $id . '[]" value="" class="tag input text value" />';
-		if ($values = $this->func->getValue($id)) {
+		if (isset($option['values'])) {
+			$values = $option['values'];
+		} else {
+			$values = $this->func->getValue($id);
+		}
+		if ($values) {
 			$input = '';
 			foreach ($values as $v) {
 				$input .= '<input type="text" name="' . $id . '[' . $v['id'] . '-a]" value="' . $v['name'] . '" class="tag input text value" />';
@@ -1297,7 +1302,7 @@ class Utils
 
 		$thumb = '';
 
-		$pic = $this->func->getValue($id);
+		$pic = (isset($option['pic']) ? $option['pic'] : $this->func->getValue($id));
 		if (!empty($pic)) {
 			$thumb = '<img src="images/' . str_replace('/', '/thumb_', $pic) . '" />';
 		}
@@ -1355,11 +1360,15 @@ class Utils
 	public function v_form_radio($id, $option = array())
 	{
 		$id = $this->func->id($id);
-		$value = $this->func->getValue($id);
 		$label = $this->func->s($id);
 
 		$check = $this->func->jsValidate($option, $id, $label);
 
+		if (isset($option['selected'])) {
+			$selected = $option['selected'];
+		} else {
+			$selected = $this->func->getValue($id);
+		}
 		if (isset($option['values'])) {
 			$values = $option['values'];
 		} else {
@@ -1375,7 +1384,7 @@ class Utils
 		if (!empty($values)) {
 			foreach ($values as $v) {
 				$sel = '';
-				if ($value == $v['id']) {
+				if ($selected == $v['id']) {
 					$sel = ' checked="checked"';
 				}
 				$out .= '
@@ -1390,7 +1399,12 @@ class Utils
 	public function v_form_select($id, $option = array())
 	{
 		$id = $this->func->id($id);
-		$value = $this->func->getValue($id);
+		/* isset instead of array_key_exists does not matter here */
+		if (isset($option['selected'])) {
+			$selected = $option['selected'];
+		} else {
+			$selected = $this->func->getValue($id);
+		}
 		$label = $this->func->s($id);
 		$check = $this->func->jsValidate($option, $id, $label);
 
@@ -1406,7 +1420,7 @@ class Utils
 		if (!empty($values)) {
 			foreach ($values as $v) {
 				$sel = '';
-				if ($value == $v['id']) {
+				if ($selected == $v['id']) {
 					$sel = ' selected="selected"';
 				}
 				$out .= '
@@ -1603,7 +1617,11 @@ class Utils
 		$id = $this->func->id($id);
 		$label = $this->func->s($id);
 
-		$value = $this->func->getValue($id);
+		if (isset($option['value'])) {
+			$value = $option['value'];
+		} else {
+			$value = $this->func->getValue($id);
+		}
 
 		$value = htmlspecialchars($value);
 

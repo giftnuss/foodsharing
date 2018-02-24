@@ -3,56 +3,142 @@
 namespace Foodsharing\Modules\WorkGroup;
 
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Twig;
 use Foodsharing\Modules\Core\Control;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class WorkGroupControl extends Control
 {
-	private $ag_id;
-	private $my_applications;
-	private $my_stats;
-
 	public function __construct(WorkGroupModel $model, WorkGroupView $view)
 	{
 		$this->model = $model;
 		$this->view = $view;
 
 		parent::__construct();
+	}
 
+	public function index(Request $request, Response $response)
+	{
 		if (!S::may()) {
 			$this->func->goLogin();
 		}
 
-		$this->setAgId(392);
-
 		$this->func->addBread('Arbeitsgruppen', '/?page=groups');
 
-		if (isset($_GET['p']) && (int)$_GET['p'] > 0) {
-			$this->setAgId((int)$_GET['p']);
+		if (!$request->query->has('sub')) {
+			$this->list($request, $response);
+		} elseif ($request->query->get('sub') == 'edit') {
+			$this->edit($request, $response);
 		}
-
-		$this->my_applications = $this->model->getMyApplications();
-		$this->my_stats = $this->model->getMyStats();
 	}
 
-	public function index()
+	private function fulfillApplicationRequirements($group, $stats)
 	{
-		$countrys = $this->model->getCountryGroups();
+		return
+			($stats['reports'] == 0 || $group['report_num'] != 0)
+			&& $stats['bananacount'] >= $group['banana_count']
+			&& $stats['fetchcount'] >= $group['fetch_count']
+			&& $stats['weeks'] >= $group['week_num'];
+	}
+
+	private function mayEdit($group)
+	{
+		/* this actually only implements access for bots for _direct parents_, not all hierarchical parents */
+		return $this->func->isOrgaTeam() || $this->func->isBotFor($group['id']) || $this->func->isBotFor($group['parent_id']);
+	}
+
+	private function mayAccess($group)
+	{
+		return $this->func->mayBezirk($group['id']) || $this->func->isBotFor($group['parent_id']);
+	}
+
+	private function mayApply($group, $applications, $stats)
+	{
+		return
+			!$this->func->mayBezirk($group['id'])
+			&& !in_array($group['id'], $applications)
+			&& ($group['apply_type'] == 2
+			  || ($group['apply_type'] == 1 && $this->fulfillApplicationRequirements($group, $stats)));
+	}
+
+	private function mayJoin($group)
+	{
+		return
+			!$this->func->mayBezirk($group['id'])
+			&& $group['apply_type'] == 3;
+	}
+
+	private function getSideMenuData()
+	{
+		$countries = $this->model->getCountryGroups();
 		$bezirke = $this->model->getBezirke();
 
-		$this->func->addContent($this->view->leftNavi($countrys, $bezirke), CNT_LEFT);
+		$localRegions = array_filter($bezirke, function ($region) {
+			return !in_array($region['type'], [6, 7]);
+		});
 
-		if (!isset($_GET['sub'])) {
-			$this->func->addTitle($this->func->s('groups'));
-			$this->func->addContent($this->view->topbar('foodsharing Arbeitsgruppen', 'hier findest Du Hilfe und viel zu tun...', '<img src="/img/groups.png" />'), CNT_TOP);
-			if ($groups = $this->model->listGroups()) {
-				$this->func->addContent($this->view->listGroups($groups, $this->my_applications, $this->my_stats));
-			} else {
-				$this->func->addContent($this->v_utils->v_info('Hier gibt es noch keine Arbeitsgruppen'));
-			}
-		}
+		$regionToMenuItem = function ($region) {
+			return [
+				'name' => $region['name'],
+				'href' => '/?page=groups&p=' . $region['id']
+			];
+		};
+
+		$menuGlobal = [['name' => 'Alle anzeigen', 'href' => '/?page=groups']];
+		$menuLocalRegions = array_map($regionToMenuItem, $localRegions);
+		$menuCountries = array_map($regionToMenuItem, $countries);
+
+		$myGroups = array_filter(isset($_SESSION['client']['bezirke']) ? $_SESSION['client']['bezirke'] : [], function ($group) {
+			return $group['type'] == 7;
+		});
+		$menuMyGroups = array_map(
+			function ($group) {
+				return [
+					'name' => $group['name'],
+					'href' => '/?page=bezirk&bid=' . $group['id'] . '&sub=forum'
+				];
+			}, $myGroups
+		);
+
+		return ['global' => $menuGlobal,
+			'local' => $menuLocalRegions,
+			'countries' => $menuCountries,
+			'groups' => $menuMyGroups];
 	}
 
-	public function edit()
+	private function list(Request $request, Response $response)
+	{
+		$parent = $request->query->getInt('p', 392);
+		$myApplications = $this->model->getApplications(S::id());
+		$myStats = $this->model->getStats(S::id());
+		$groups = $this->model->listGroups($parent);
+
+		$groups = array_map(
+			function ($group) use ($myApplications, $myStats) {
+				return array_merge($group, [
+					'leaders' => array_map(function ($leader) {return array_merge($leader, ['image' => $this->func->img($leader['photo'])]); }, $group['leaders']),
+					'image' => $group['photo'] ? 'images/' . $group['photo'] : null,
+					'appliedFor' => in_array($group['id'], $myApplications),
+					'applyMinBananaCount' => $group['banana_count'],
+					'applyMinFetchCount' => $group['fetch_count'],
+					'applyMinFoodsaverWeeks' => $group['week_num'],
+					'applicationRequirementsNotFulfilled' => ($group['apply_type'] == 1) && !$this->fulfillApplicationRequirements($group, $myStats),
+					'mayEdit' => $this->mayEdit($group),
+					'mayAccess' => $this->mayAccess($group),
+					'mayApply' => $this->mayApply($group, $myApplications, $myStats),
+					'mayJoin' => $this->mayJoin($group)
+				]);
+			}, $groups);
+
+		$this->func->addTitle($this->func->s('groups'));
+
+		$response->setContent($this->render('pages/WorkGroup/list.twig',
+			['nav' => $this->getSideMenuData(), 'groups' => $groups]
+		));
+	}
+
+	private function edit(Request $request)
 	{
 		$bids = $this->model->getFsBezirkIds($this->func->fsId());
 
@@ -65,65 +151,61 @@ class WorkGroupControl extends Control
 				$this->func->go('/?page=dashboard');
 			}
 			if ($this->isSubmitted()) {
-				$data = array();
-				if ($name = ($this->getPostString('name'))) {
-					$data['name'] = $name;
-				}
-
-				if ($teaser = ($this->getPostString('teaser'))) {
-					$data['teaser'] = $teaser;
-				}
-
-				if ($desc = ($this->getPostHtml('desc'))) {
-					$data['desc'] = $desc;
-				}
-
-				if ($img = ($this->getPostString('photo'))) {
-					$data['photo'] = $img;
-				}
-
-				$data['apply_type'] = 1;
-				$data['banana_count'] = 0;
-				$data['fetch_count'] = 0;
-				$data['week_num'] = 0;
-				$data['report_num'] = 0;
-
-				if ($_POST['apply_type'] == 1) {
-					$data['banana_count'] = (int)$_POST['banana_count'];
-					$data['fetch_count'] = (int)$_POST['fetch_count'];
-					$data['week_num'] = (int)$_POST['week_num'];
-
-					if (isset($_POST['report_num']) && is_array($_POST['report_num']) && count($_POST['report_num']) > 0) {
-						$data['report_num'] = 1;
-					}
-				} else {
-					$data['apply_type'] = (int)$_POST['apply_type'];
-				}
-
-				/*
-				 * Handle Member and Group-Admin Fields
-				 */
-				$this->func->handleTagselect('member');
-				$this->func->handleTagselect('leader');
-
-				$data = array_merge($group, $data);
-
-				if ($this->model->updateGroup($group['id'], $data)) {
-					$this->model->updateTeam($group['id']);
+				$data = $this->prepareEditInput($request);
+				if ($this->handleEdit($group, $data)) {
 					$this->func->info('Änderungen gespeichert!');
 					$this->func->go('/?page=groups&sub=edit&id=' . (int)$group['id']);
 				}
 			}
-
+			$this->addNav();
 			$this->func->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
 			$this->func->addContent($this->view->editGroup($group));
 		}
 	}
 
-	private function setAgId($id)
+	private function addNav()
 	{
-		$this->ag_id = $id;
-		$this->model->setAgId($id);
-		$this->view->setAgId($id);
+		$countrys = $this->model->getCountryGroups();
+		$bezirke = $this->model->getBezirke();
+
+		$this->func->addContent($this->view->leftNavi($countrys, $bezirke), CNT_LEFT);
+	}
+
+	private function prepareEditInput(Request $request)
+	{
+		$fields = [
+			'name' => ['filter' => 'stripTagsAndTrim'],
+			'teaser' => ['filter' => 'stripTagsAndTrim'],
+			'photo' => ['filter' => 'stripTagsAndTrim', 'required' => false],
+			'apply_type' => ['method' => 'getInt'],
+			'banana_count' => ['method' => 'getInt'],
+			'fetch_count' => ['method' => 'getInt'],
+			'week_num' => ['method' => 'getInt'],
+			'report_num' => ['filter' => 'isNonEmptyArray', 'required' => false, 'default' => false],
+			'members' => ['filter' => 'tagSelectIds', 'required' => false, 'default' => [], 'parameterName' => 'member'],
+			'leader' => ['filter' => 'tagSelectIds', 'required' => false, 'default' => []]
+		];
+
+		$data = $this->sanitizeRequest($request, $fields);
+
+		if ($data['apply_type'] != 1) {
+			$data['banana_count'] = 0;
+			$data['fetch_count'] = 0;
+			$data['week_num'] = 0;
+			$data['report_num'] = 0;
+		}
+
+		return $data;
+	}
+
+	private function handleEdit($group, $data)
+	{
+		if ($this->model->updateGroup($group['id'], $data)) {
+			$this->model->updateTeam($group['id'], $data['members'], $data['leader']);
+
+			return true;
+		}
+
+		return false;
 	}
 }

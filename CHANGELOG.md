@@ -12,6 +12,8 @@
 - Updates fullpage.js to 2.9.5 for fixing scrolling in firefox, general smoothness !244 @NerdyProjects
 - Page with list of communities for Austria/Germany/Switzerland. !286 by @k.miklobusec
 - Single appointment can be set to "appointment cancelled" (=0 Slots) !372 by @k.miklobusec
+- Changed the Store address format to not have a separate house number !294 @NerdyProjects
+
 
 ## Bugfixes
 - Remove partly broken store coordinator management from store edit page (should happen with "manage team") !283 @NerdyProjects
@@ -24,6 +26,8 @@
 - Show regions in alphabetical order in the region selector (Bezirk beitreten) !267 by @alangecker
 - changed old foodsharing „Freiwilligenplattform“ mailfooter for outgoing replies via mail, which was based on lebensmittelretten !287 @irgendwer
 - consistent use of jumper list (Springerliste) all over the page. !293 by @peter.toennies
+- fixed new fairteiler can not get a region set !294 @NerdyProjects
+- fixed ambassador of other region could edit fairteiler !294 @NerdyProjects
 
 ## Refactoring
 - Consolidate remaining functions and modules !269 @NerdyProjects
@@ -38,6 +42,11 @@
 - Remove global usage of Func, DB and ViewUtils Helper classes !289 @NerdyProjects
 - Refactor router for HTML controller classes !289 @NerdyProjects
 - complete tidying up of all team related files by !321 by @peter.toennies
+- complete tidying up of all CSS files. !298 by @peter.toennies
+- Make some components ready to be used without global data passing variable !294 @NerdyProjects
+- Introduce Request and Response object and used it in WorkGroupControl !294 @NerdyProjects
+- Introduce input deserializer/sanitizer/validator component in WorkGroupControl !294 @NerdyProjects
+- Extract genSearchIndex to a service class !294 @NerdyProjects
 
 ## Dev/Test/CI stuff
 
@@ -50,6 +59,7 @@
 - Add better seed data for use during development !263 @tiltec
 - Enable xdebug profiler for dev environment !296 @NerdyProjects
 - Use PHP7.2.2 in dev/test/ci to make it ready for production !301 @NerdyProjects
+- More tests for FairTeiler and WorkGroup pages !294 @NerdyProjects
 
 ## Other
 
