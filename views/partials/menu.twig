@@ -1,16 +1,20 @@
-{% if title is defined %}
-<h3 class="head ui-widget-header ui-corner-top">{{ title }}</h3>
-<div class="ui-widget ui-widget-content ui-corner-bottom margin-bottom ui-padding">
-    <div id="{{ id }}">
-        {% else %}
-<div class="ui-widget ui-widget-content ui-corner-all ui-padding">
-    {% endif %}
+{% macro linklist(items) %}
     <ul class="linklist">
         {% for item in items %}
             <li><a class="ui-corner-all" href="{{ item.href }}">{{ item.name }}</a></li>
         {% endfor %}
     </ul>
-    {% if title is defined %}
+{% endmacro %}
+{% import _self as menu %}
+{% if title is defined %}
+    <h3 class="head ui-widget-header ui-corner-top">{{ title }}</h3>
+    <div class="ui-widget ui-widget-content ui-corner-bottom margin-bottom ui-padding">
+        <div id="{{ id }}">
+            {{ menu.linklist(items) }}
+        </div>
     </div>
-    {% endif %}
-</div>
+{% else %}
+    <div class="ui-widget ui-widget-content ui-corner-all ui-padding">
+        {{ menu.linklist(items) }}
+    </div>
+{% endif %}
