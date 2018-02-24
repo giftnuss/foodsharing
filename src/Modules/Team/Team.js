@@ -34,7 +34,8 @@ $(function () {
         });
     }
 
-    $('#teamList .foot i').mouseover(function () {
+    var $teamList = $('#teamList');
+    $teamList.find('.foot i').mouseover(function () {
 
         var $this = $(this);
 
@@ -44,7 +45,7 @@ $(function () {
         }
     });
 
-    $('#teamList .foot i').click(function (ev) {
+	$teamList.find('.foot i').click(function (ev) {
 
         var $this = $(this);
         if ($this.hasClass('fa-lock')) {
@@ -59,7 +60,7 @@ $(function () {
         }
     });
 
-    $('#teamList .foot i').mouseout(function () {
+	$teamList.find('.foot i').mouseout(function () {
         var $this = $(this).parent().parent();
 
         $this.attr('href', '/team/' + $this.attr('id').substring(2)).attr('target', '_self');
@@ -78,7 +79,7 @@ function u_tox(id) {
 
     if ($qr.children().length === 0) {
         var $input = $('#tox-pop-' + id + ' .tox-id');
-        $('#tox-pop-' + id + ' .tox-qr').qrcode($input.val());
+        $qr.qrcode($input.val());
 
         $input.bind('focus click', function () {
             $(this).select();
