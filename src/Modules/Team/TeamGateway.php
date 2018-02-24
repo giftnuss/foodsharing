@@ -76,25 +76,6 @@ class TeamGateway extends BaseGateway
                     LIMIT 1
 		')
 		) {
-			$user['groups'] = $this->db->fetchAll('
-				SELECT 
-					b.id,
-					b.name,
-					b.type
-						
-				FROM 
-					fs_botschafter bot,
-					fs_bezirk b
-						
-				WHERE 
-					bot.bezirk_id = b.id
-						
-				AND 
-					bot.foodsaver_id = ' . (int)$id . '
-					
-				AND 
-					b.type = 7');
-
 			return $user;
 		}
 	}
