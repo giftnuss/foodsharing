@@ -59,7 +59,7 @@ class LoginXhr extends Control
 					{
 						ajreq("loginsubmit",{app:"login",u:$("#email_adress").val(),p:$("#password").val()});
 					}
-				});		
+				});
 			');
 
 			return $dia->xhrout();
@@ -247,7 +247,7 @@ class LoginXhr extends Control
 			return $this->func->s('error_birthdate');
 		}
 		$data['birthdate'] = $birthdate->format('Y-m-d');
-		$data['phone'] = $this->format_phone_number($data['phone']);
+		$data['mobile_phone'] = strip_tags($data['mobile_phone']);
 		$data['lat'] = floatval($data['lat']);
 		$data['lon'] = floatval($data['lon']);
 		$data['str'] = strip_tags($data['str']);
@@ -298,10 +298,10 @@ class LoginXhr extends Control
 			$dia->setResizeable(false);
 
 			$dia->addJsBefore('
-				
+
 				var date = new Date();
 				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/fonts/octicons/octicons.css").appendTo("head");
-				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/css/join.css?" + date.getTime()).appendTo("head");	
+				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/css/join.css?" + date.getTime()).appendTo("head");
 			');
 
 			$dia->addJsAfter('
@@ -315,108 +315,6 @@ class LoginXhr extends Control
 
 			return $dia->xhrout();
 		}
-	}
-
-	private function format_phone_number($mynum, $mask = 4)
-	{
-		/*********************************************************************/
-		/*   Purpose: Return either masked phone number or false             */
-		/*     Masks: Val=1 or xxx xxx xxxx                                             */
-		/*            Val=2 or xxx xxx.xxxx                                             */
-		/*            Val=3 or xxx.xxx.xxxx                                             */
-		/*            Val=4 or (xxx) xxx xxxx                                           */
-		/*            Val=5 or (xxx) xxx.xxxx                                           */
-		/*            Val=6 or (xxx).xxx.xxxx                                           */
-		/*            Val=7 or (xxx) xxx-xxxx                                           */
-		/*            Val=8 or (xxx)-xxx-xxxx                                           */
-		/*********************************************************************/
-		$val_num = $this->validate_phone_number($mynum);
-		if (!$val_num && !is_string($mynum)) {
-			echo "Number $mynum is not a valid phone number! \n";
-
-			return false;
-		}   // end if !$val_num
-		if (($mask == 1) || ($mask == 'xxx xxx xxxx')) {
-			$phone = preg_replace(
-				'~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~',
-				'$1 $2 $3' . " \n",
-
-				$mynum
-			);
-
-			return $phone;
-		}   // end if $mask == 1
-		if (($mask == 2) || ($mask == 'xxx xxx.xxxx')) {
-			$phone = preg_replace(
-				'~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~',
-				'$1 $2.$3' . " \n",
-
-				$mynum
-			);
-
-			return $phone;
-		}   // end if $mask == 2
-		if (($mask == 3) || ($mask == 'xxx.xxx.xxxx')) {
-			$phone = preg_replace(
-				'~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~',
-				'$1.$2.$3' . " \n",
-
-				$mynum
-			);
-
-			return $phone;
-		}   // end if $mask == 3
-		if (($mask == 4) || ($mask == '(xxx) xxx xxxx')) {
-			$phone = preg_replace(
-				'~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~',
-				'($1) $2 $3' . " \n",
-
-				$mynum
-			);
-
-			return $phone;
-		}   // end if $mask == 4
-		if (($mask == 5) || ($mask == '(xxx) xxx.xxxx')) {
-			$phone = preg_replace(
-				'~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~',
-				'($1) $2.$3' . " \n",
-
-				$mynum
-			);
-
-			return $phone;
-		}   // end if $mask == 5
-		if (($mask == 6) || ($mask == '(xxx).xxx.xxxx')) {
-			$phone = preg_replace(
-				'~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~',
-				'($1).$2.$3' . " \n",
-
-				$mynum
-			);
-
-			return $phone;
-		}   // end if $mask == 6
-		if (($mask == 7) || ($mask == '(xxx) xxx-xxxx')) {
-			$phone = preg_replace(
-				'~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~',
-				'($1) $2-$3' . " \n",
-
-				$mynum
-			);
-
-			return $phone;
-		}   // end if $mask == 7
-		if (($mask == 8) || ($mask == '(xxx)-xxx-xxxx')) {
-			$phone = preg_replace(
-				'~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~',
-				'($1)-$2-$3' . " \n",
-
-				$mynum
-			);
-
-			return $phone;
-		}   // end if $mask == 8
-		return false; // Returns false if no conditions meet or input
 	}
 
 	private function resizeAvatar($img)

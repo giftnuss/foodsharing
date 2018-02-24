@@ -104,7 +104,7 @@ class LoginView extends View
 						<div class="content">
 							<h3>' . $this->func->s('contact_info') . '</h3>
 							<div class="element-wrapper">
-								<input placeholder="' . $this->func->s('login_phone') . '" type="text" value="" id="login_phone" name="login_phone" class="input text value" />
+								<input placeholder="' . $this->func->s('login_mobile_phone') . '" type="text" value="" id="login_mobile_phone" name="login_mobile_phone" class="input text value" />
 								' . $this->v_utils->v_info($this->func->s('login_phone_info')) . '
 							</div>
 							<div class="element-wrapper">
