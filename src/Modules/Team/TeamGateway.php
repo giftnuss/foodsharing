@@ -27,15 +27,15 @@ class TeamGateway extends BaseGateway
 					fs.contact_public
 				
 				FROM 
-					' . PREFIX . 'foodsaver_has_bezirk hb
+					fs_foodsaver_has_bezirk hb
 
 				LEFT JOIN
-					' . PREFIX . 'foodsaver fs
+					fs_foodsaver fs
 				ON
 					hb.foodsaver_id = fs.id
 				
 				LEFT JOIN
-					' . PREFIX . 'mailbox mb 
+					fs_mailbox mb 
 				ON 
 					fs.mailbox_id = mb.id
 
@@ -68,8 +68,8 @@ class TeamGateway extends BaseGateway
                         fs.email,
                         fs.contact_public
                     FROM
-                        ' . PREFIX . 'foodsaver_has_bezirk fb
-                    INNER JOIN ' . PREFIX . 'foodsaver fs ON
+                        fs_foodsaver_has_bezirk fb
+                    INNER JOIN fs_foodsaver fs ON
                         fb.foodsaver_id = fs.id
                     WHERE
                         fb.foodsaver_id = ' . (int)$id . ' AND(
@@ -85,8 +85,8 @@ class TeamGateway extends BaseGateway
 					b.type
 						
 				FROM 
-					' . PREFIX . 'botschafter bot,
-					' . PREFIX . 'bezirk b
+					fs_botschafter bot,
+					fs_bezirk b
 						
 				WHERE 
 					bot.bezirk_id = b.id
@@ -98,8 +98,6 @@ class TeamGateway extends BaseGateway
 					b.type = 7');
 
 			return $user;
-		} else {
-			return false;
 		}
 	}
 }
