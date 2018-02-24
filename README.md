@@ -57,13 +57,13 @@ cd foodsharing
 
 ### Windows 10 Pro or higher
 
-Install [Docker for Windows](https://docs.docker.com/docker-for-windows/install/).
+You need Git for Windows(https://git-scm.com/download/win)
 
-Our scripts are written in bash, but you should be able to get something working by
-installing/enabling
-[Windows Subsystem for Linux](https://msdn.microsoft.com/en-gb/commandline/wsl/install_guide)
+Please make sure that you install the bash shell as well!
 
-Then:
+There is a GUI interface to administrate the repo, which is recommended for git-beginners
+
+But you can use the git cmd just like in Linux to clone it:
 
 ```
 git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
@@ -71,8 +71,15 @@ cd foodsharing
 ./scripts/start
 ```
 
-_We do not generally use Windows, so I cannot say it works out of the box.
-If you can help here please do!_
+To execute scripts use the Git Bash Shell.
+
+##For the Future
+Install [Docker for Windows](https://docs.docker.com/docker-for-windows/install/).
+
+Our scripts are written in bash, but you should be able to get something working by
+installing/enabling
+[Windows Subsystem for Linux](https://msdn.microsoft.com/en-gb/commandline/wsl/install_guide)
+in the future, because their kernel is not good enough to support the docker daemon.
 
 ### Vagrant
 
