@@ -100,6 +100,8 @@ class TeamModel extends Model
 					b.type = 7');
 
 			return $user;
+		} else {
+			return false;
 		}
 	}
 }
