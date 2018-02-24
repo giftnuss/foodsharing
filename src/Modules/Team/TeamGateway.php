@@ -2,14 +2,14 @@
 
 namespace Foodsharing\Modules\Team;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Core\BaseGateway;
 
-class TeamModel extends Model
+class TeamGateway extends BaseGateway
 {
 	public function getTeam($bezirkId = 1373)
 	{
 		$out = array();
-		if ($orgas = $this->q('
+		if ($orgas = $this->db->fetchAll('
 				SELECT 
 					fs.id, 
 					CONCAT(mb.name,"@' . DEFAULT_HOST . '") AS email, 
@@ -54,7 +54,7 @@ class TeamModel extends Model
 
 	public function getUser($id)
 	{
-		if ($user = $this->qRow('
+		if ($user = $this->db->fetch('
                     SELECT
                         fs.id,
 				CONCAT(fs.name," ",fs.nachname) AS name,
@@ -80,7 +80,7 @@ class TeamModel extends Model
                     LIMIT 1
 		')
 		) {
-			$user['groups'] = $this->q('
+			$user['groups'] = $this->db->fetchAll('
 				SELECT 
 					b.id,
 					b.name,

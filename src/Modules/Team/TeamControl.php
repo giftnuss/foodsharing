@@ -3,11 +3,15 @@
 namespace Foodsharing\Modules\Team;
 
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\Model;
 
 class TeamControl extends Control
 {
-	public function __construct(TeamModel $model, TeamView $view)
+	private $gateway;
+
+	public function __construct(Model $model, TeamGateway $gateway, TeamView $view)
 	{
+		$this->gateway = $gateway;
 		$this->model = $model;
 		$this->view = $view;
 
@@ -22,13 +26,13 @@ class TeamControl extends Control
 		$this->func->addTitle($this->func->s('team'));
 
 		// Three types of pages:
-		// a) /team - displays vorstand
-		// b) /team/ehemalige - displays Ehemalige
+		// a) /team - displays board
+		// b) /team/ehemalige - displays former active members
 		// c) /team/{:id} - displays specific user
 
 		if ($id = $this->uriInt(2)) {
 			// Type c, display user
-			if ($user = $this->model->getUser($id)) {
+			if ($user = $this->gateway->getUser($id)) {
 				$this->func->addTitle($user['name']);
 				$this->func->addBread($user['name']);
 				$this->func->addContent($this->view->user($user));
@@ -62,7 +66,7 @@ class TeamControl extends Control
 
 	private function displayTeamContent($bezirkId, $contentId)
 	{
-		if ($team = $this->model->getTeam($bezirkId)) {
+		if ($team = $this->gateway->getTeam($bezirkId)) {
 			$this->func->addContent($this->view->teamlist($team, $this->model->getContent($contentId)));
 		}
 	}

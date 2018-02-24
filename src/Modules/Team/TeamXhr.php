@@ -8,9 +8,11 @@ use Foodsharing\Modules\Core\Control;
 
 class TeamXhr extends Control
 {
-	public function __construct(TeamModel $model, TeamView $view)
+	private $gateway;
+
+	public function __construct(TeamGateway $gateway, TeamView $view)
 	{
-		$this->model = $model;
+		$this->gateway = $gateway;
 		$this->view = $view;
 
 		parent::__construct();
@@ -26,7 +28,7 @@ class TeamXhr extends Control
 		}
 
 		if ($id = $this->getPostInt('id')) {
-			if ($user = $this->model->getUser($id)) {
+			if ($user = $this->gateway->getUser($id)) {
 				$mail = new AsyncMail();
 
 				if ($this->func->validEmail($_POST['email'])) {
