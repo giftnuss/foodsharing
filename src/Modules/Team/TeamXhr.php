@@ -60,15 +60,6 @@ class TeamXhr extends Control
 		$xhr->send();
 	}
 
-	private function getIp()
-	{
-		if (!isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			return $_SERVER['REMOTE_ADDR'];
-		} else {
-			return $_SERVER['HTTP_X_FORWARDED_FOR'];
-		}
-	}
-
 	/**
 	 * Function to check and block an ip address.
 	 *
@@ -94,5 +85,14 @@ class TeamXhr extends Control
 	(' . strip_tags($ip) . ',' . strip_tags($context) . ',NOW(),' . (int)$duration . ')');
 
 		return false;
+	}
+
+	private function getIp()
+	{
+		if (!isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+			return $_SERVER['REMOTE_ADDR'];
+		} else {
+			return $_SERVER['HTTP_X_FORWARDED_FOR'];
+		}
 	}
 }

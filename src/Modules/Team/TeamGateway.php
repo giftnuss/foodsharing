@@ -24,8 +24,7 @@ class TeamGateway extends BaseGateway
 					fs.tox,
 					fs.twitter,
 					fs.position,
-					fs.contact_public
-				
+					fs.contact_public				
 				FROM 
 					fs_foodsaver_has_bezirk hb
 
@@ -38,7 +37,6 @@ class TeamGateway extends BaseGateway
 					fs_mailbox mb 
 				ON 
 					fs.mailbox_id = mb.id
-
 				WHERE 
 					hb.bezirk_id = ' . $bezirkId . '
 				ORDER BY fs.name
@@ -55,7 +53,7 @@ class TeamGateway extends BaseGateway
 		if ($user = $this->db->fetch('
                     SELECT
                         fs.id,
-				CONCAT(fs.name," ",fs.nachname) AS name,
+				CONCAT(fs.name, " ", fs.nachname) AS name,
                         fs.about_me_public AS `desc`,
                         fs.rolle,
                         fs.geschlecht,

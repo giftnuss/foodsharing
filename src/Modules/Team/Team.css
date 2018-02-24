@@ -1,128 +1,128 @@
 #team-user {
-    background-color: #FFFFFF;
-    padding: 30px;
-    margin-top: 50px;
-    margin-bottom: 50px;
+	background-color: #FFFFFF;
+	padding: 30px;
+	margin-top: 50px;
+	margin-bottom: 50px;
 }
 
 #team-user h1 {
-    font-family: 'Alfa Slab One', serif;
-    font-size: 23px;
-    font-weight: normal;
-    color: #533A24;
+	font-family: 'Alfa Slab One', serif;
+	font-size: 23px;
+	font-weight: normal;
+	color: #533A24;
 }
 
 #team-user small {
-    color: #533A24;
-    margin-bottom: 20px;
-    display: block;
+	color: #533A24;
+	margin-bottom: 20px;
+	display: block;
 }
 
 #team-user p {
-    color: #533A24;
+	color: #533A24;
 }
 
 #team-user .subtitle {
-    margin-bottom: 30px;
-    font-size: 12px;
+	margin-bottom: 30px;
+	font-size: 12px;
 }
 
 #team-socials li {
-    border-radius: 6px;
-    font-size: 16px;
-    display: inline-block;
+	border-radius: 6px;
+	font-size: 16px;
+	display: inline-block;
 }
 
 #teamList {
-    display: block;
-    text-align: center;
+	display: block;
+	text-align: center;
 }
 
 #teamList li {
-    width: 28%;
-    margin: 80px 24px;
-    display: inline-block;
+	width: 28%;
+	margin: 80px 24px;
+	display: inline-block;
 }
 
 #teamList li a {
-    background-color: #FFFFFF;
-    padding: 20px;
-    text-align: center;
+	background-color: #FFFFFF;
+	padding: 20px;
+	text-align: center;
 }
 
 #teamList li a:hover {
-    color: #533A24;
+	color: #533A24;
 
 }
 
 #teamList li a:hover span, #teamList li a:hover h3 {
-    background-color: transparent;
-    color: #533A24;
+	background-color: transparent;
+	color: #533A24;
 }
 
 #teamList .desc {
-    color: #533A24 !important;
-    display: block;
-    height: 160px;
-    line-height: 20px;
+	color: #533A24 !important;
+	display: block;
+	height: 160px;
+	line-height: 20px;
 }
 
 #teamList h3 {
-    font-size: 16px;
+	font-size: 16px;
 }
 
 #teamList .subtitle {
-    color: #533A24 !important;
-    margin-bottom: 30px;
-    display: inline-block;
-    height: 30px;
+	color: #533A24 !important;
+	margin-bottom: 30px;
+	display: inline-block;
+	height: 30px;
 }
 
 #teamList .img, #team-user .img {
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
 
-    border: 4px solid #533A24;
+	border: 4px solid #533A24;
 
-    display: inline-block;
-    height: 150px;
-    margin-bottom: 15px;
-    margin-top: -100px;
-    width: 150px;
+	display: inline-block;
+	height: 150px;
+	margin-bottom: 15px;
+	margin-top: -100px;
+	width: 150px;
 }
 
 #teamList .img {
-    border-radius: 150px;
+	border-radius: 150px;
 }
 
 #team-user .img {
-    border-radius: 50px;
-    float: right;
-    height: 250px;
-    width: 200px;
+	border-radius: 50px;
+	float: right;
+	height: 250px;
+	width: 200px;
 }
 
 #teamList a:hover .img {
-    background-color: #FFFFFF !important;
+	background-color: #FFFFFF !important;
 }
 
 #teamList .foot, #team-user .foot {
-    background-color: #533A24;
-    display: block;
-    line-height: 30px;
-    text-align: center;
-    margin: 30px -20px -20px;
-    color: #533A24;
+	background-color: #533A24;
+	display: block;
+	line-height: 30px;
+	text-align: center;
+	margin: 30px -20px -20px;
+	color: #533A24;
 }
 
 #team-user .foot {
-    margin: 30px -30px -30px -30px;
+	margin: 30px -30px -30px -30px;
 }
 
 #teamList a:hover .foot {
-    background-color: #533A24;
+	background-color: #533A24;
 	opacity: 0.8;
 }
 
@@ -131,54 +131,54 @@
 }
 
 #teamList a:hover .img {
-    border-color: #533A24;
+	border-color: #533A24;
 	opacity: 0.8;
 }
 
 #teamList a:hover .foot i:hover, #team-user .foot a:hover i {
-    opacity: 0.8;
+	opacity: 0.8;
 }
 
 .foot i > span {
-    display: none !important;
+	display: none !important;
 }
 
 .foot i {
-    color: #533A24;
-    background-color: #fff;
-    font-size: 17px;
-    padding: 8px;
-    border-radius: 20px;
-    margin: 14px;
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    line-height: 20px;
-    text-align: center;
+	color: #533A24;
+	background-color: #fff;
+	font-size: 17px;
+	padding: 8px;
+	border-radius: 20px;
+	margin: 14px;
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	text-align: center;
 }
 
 .tox-popup .tox-id {
-    width: 100%;
-    padding: 6px;
-    border: 1px solid #F5F5B5;
-    border-radius: 6px;
-    color: black;
-    text-align: center;
-    margin-bottom: 15px;
+	width: 100%;
+	padding: 6px;
+	border: 1px solid #F5F5B5;
+	border-radius: 6px;
+	color: black;
+	text-align: center;
+	margin-bottom: 15px;
 }
 
 @media all and (max-width: 980px) {
-    #teamList li {
-        width: 42%;
-        margin: 80px 24px;
-        display: inline-block;
-    }
+	#teamList li {
+		width: 42%;
+		margin: 80px 24px;
+		display: inline-block;
+	}
 }
 
 @media all and (max-width: 700px) {
-    #teamList li {
-        width: 100%;
-        margin: 80px 0;
-        display: block;
-    }
+	#teamList li {
+		width: 100%;
+		margin: 80px 0;
+		display: block;
+	}
 }
