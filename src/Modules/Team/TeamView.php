@@ -6,19 +6,19 @@ use Foodsharing\Modules\Core\View;
 
 class TeamView extends View
 {
-	public function user($user)
+	public function user($user): string
 	{
 		$socials = '';
 
-		if ($user['homepage'] != '') {
+		if ($user['homepage'] !== '') {
 			$socials .= '<li><a title="Homepage" href="' . $user['homepage'] . '" target="_blank"><i class="fa fa-globe"></i></a></li>';
 		}
 
-		if ($user['twitter'] != '') {
+		if ($user['twitter'] !== '') {
 			$socials .= '<li><a title="twitter" href="' . $user['twitter'] . '" target="_blank"><i class="fa fa-twitter"></i></a></li>';
 		}
 
-		if ($user['github'] != '') {
+		if ($user['github'] !== '') {
 			$socials .= '<li><a title="github" href="' . $user['github'] . '" target="_blank"><i class="fa fa-github"></i></a></li>';
 		}
 
@@ -49,7 +49,7 @@ class TeamView extends View
 		return $out;
 	}
 
-	private function toxPopTpl($user)
+	private function toxPopTpl($user): string
 	{
 		return '
 		<a style="display:none;overflow:hidden:width:1px;height:1px;" id="tox-pop-' . $user['id'] . '-opener" href="#tox-pop-' . $user['id'] . '">&nbsp;</a>
@@ -64,7 +64,7 @@ class TeamView extends View
 		</div>';
 	}
 
-	public function contactForm($user)
+	public function contactForm($user): string
 	{
 		return $this->v_utils->v_quickform('Schreibe ' . $user['name'] . ' eine E-Mail!', array(
 			$this->v_utils->v_form_text('name'),
@@ -74,7 +74,7 @@ class TeamView extends View
 		), array('id' => 'contactform'));
 	}
 
-	public function teamlist($team, $header)
+	public function teamlist($team, $header): string
 	{
 		foreach ($team as $key => $t) {
 			if (isset($firsts[(int)$t['id']])) {
@@ -88,19 +88,19 @@ class TeamView extends View
 
 		foreach ($team as $t) {
 			$socials = '&nbsp;';
-			if ($t['homepage'] != '') {
+			if ($t['homepage'] !== '') {
 				$socials .= '<i class="fa fa-globe"><span>' . $t['homepage'] . '</span></i>';
 			}
 
-			if ($t['twitter'] != '') {
+			if ($t['twitter'] !== '') {
 				$socials .= '<i class="fa fa-twitter"><span>' . $t['twitter'] . '</span></i>';
 			}
 
-			if ($t['github'] != '') {
+			if ($t['github'] !== '') {
 				$socials .= '<i class="fa fa-github"><span>' . $t['github'] . '</span></i>';
 			}
 
-			if ($t['tox'] != '') {
+			if ($t['tox'] !== '') {
 				$socials .= '<i class="fa fa-lock"><span>' . $t['id'] . '</span></i>';
 			}
 

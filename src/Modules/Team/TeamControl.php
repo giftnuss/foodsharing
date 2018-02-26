@@ -20,7 +20,7 @@ class TeamControl extends Control
 		$this->func->addScript('/js/jquery.qrcode.min.js');
 	}
 
-	public function index()
+	public function index(): void
 	{
 		$this->func->addBread($this->func->s('team'), '/team');
 		$this->func->addTitle($this->func->s('team'));
@@ -45,7 +45,7 @@ class TeamControl extends Control
 			}
 		} else {
 			if ($teamType = $this->uriStr(2)) {
-				if ($teamType == 'ehemalige') {
+				if ($teamType === 'ehemalige') {
 					// Type b, display "Ehemalige"
 					$this->func->addBread($this->func->s('Ehemalige'), '/team/ehemalige');
 					$this->func->addTitle($this->func->s('Ehemalige'));
@@ -64,7 +64,7 @@ class TeamControl extends Control
 		}
 	}
 
-	private function displayTeamContent($bezirkId, $contentId)
+	private function displayTeamContent($bezirkId, $contentId): void
 	{
 		if ($team = $this->gateway->getTeam($bezirkId)) {
 			$this->func->addContent($this->view->teamlist($team, $this->model->getContent($contentId)));

@@ -18,7 +18,7 @@ class TeamXhr extends Control
 		parent::__construct();
 	}
 
-	public function contact()
+	public function contact(): void
 	{
 		$xhr = new Xhr();
 
@@ -43,7 +43,7 @@ class TeamXhr extends Control
 				$msg = 'Name: ' . $name . "\n\n" . $msg;
 
 				$mail->setBody($msg);
-				$mail->setHTMLBody(nl2br($msg));
+				$mail->setHtmlBody(nl2br($msg));
 				$mail->setSubject('foodsharing.de Kontaktformular Anfrage von ' . $name);
 
 				$mail->addRecipient($user['email']);
@@ -68,7 +68,7 @@ class TeamXhr extends Control
 	 *
 	 * @return bool
 	 */
-	private function ipIsBlocked($duration = 60, $context = 'default')
+	private function ipIsBlocked($duration = 60, $context = 'default'): bool
 	{
 		$ip = $this->getIp();
 
@@ -91,8 +91,8 @@ class TeamXhr extends Control
 	{
 		if (!isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 			return $_SERVER['REMOTE_ADDR'];
-		} else {
-			return $_SERVER['HTTP_X_FORWARDED_FOR'];
 		}
+
+		return $_SERVER['HTTP_X_FORWARDED_FOR'];
 	}
 }

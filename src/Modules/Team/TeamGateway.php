@@ -6,7 +6,7 @@ use Foodsharing\Modules\Core\BaseGateway;
 
 class TeamGateway extends BaseGateway
 {
-	public function getTeam($bezirkId = 1373)
+	public function getTeam($bezirkId = 1373): array
 	{
 		$out = array();
 		$orgas = $this->db->fetchAll('
