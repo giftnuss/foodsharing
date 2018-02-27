@@ -1,3 +1,24 @@
+function u_tox(id) {
+	var $pop = $('#tox-pop-' + id + '-opener');
+
+	$pop.magnificPopup({
+		type: 'inline'
+	});
+
+	var $qr = $('#tox-pop-' + id + ' .tox-qr');
+
+	if ($qr.children().length === 0) {
+		var $input = $('#tox-pop-' + id + ' .tox-id');
+		$qr.qrcode($input.val());
+
+		$input.bind('focus click', function () {
+			$(this).select();
+		});
+	}
+
+	$pop.trigger('click');
+}
+
 $(function () {
 	var $form = $('#contactform-form');
 	if ($form.length > 0) {
@@ -67,24 +88,3 @@ $(function () {
 
 	});
 });
-
-function u_tox(id) {
-	var $pop = $('#tox-pop-' + id + '-opener');
-
-	$pop.magnificPopup({
-		type: 'inline'
-	});
-
-	var $qr = $('#tox-pop-' + id + ' .tox-qr');
-
-	if ($qr.children().length === 0) {
-		var $input = $('#tox-pop-' + id + ' .tox-id');
-		$qr.qrcode($input.val());
-
-		$input.bind('focus click', function () {
-			$(this).select();
-		});
-	}
-
-	$pop.trigger('click');
-}

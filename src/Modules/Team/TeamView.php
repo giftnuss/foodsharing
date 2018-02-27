@@ -22,7 +22,7 @@ class TeamView extends View
 			$socials .= '<li><a title="github" href="' . $user['github'] . '" target="_blank"><i class="fa fa-github"></i></a></li>';
 		}
 
-		if ($user['tox'] !== '') {
+		if ($user['tox'] != '') {
 			$socials .= '<li><a title="tox: sichere skype alternative" href="#" onclick="u_tox(\'' . $user['id'] . '\');return false;" target="_blank"><i class="fa fa-lock"></i></a></li>';
 		}
 
@@ -76,6 +76,7 @@ class TeamView extends View
 
 	public function teamList($team, $header): string
 	{
+		/** @var array $team */
 		foreach ($team as $key => $t) {
 			if (isset($firsts[(int)$t['id']])) {
 				unset($team[$key]);
