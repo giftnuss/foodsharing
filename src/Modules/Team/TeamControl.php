@@ -40,10 +40,12 @@ class TeamControl extends Control
 				if ($user['contact_public']) {
 					$this->func->addContent($this->view->contactForm($user));
 				}
+
 				return;
 			}
 
 			$this->func->go('/team');
+
 			return;
 		}
 
@@ -53,10 +55,12 @@ class TeamControl extends Control
 				$this->func->addBread($this->func->s('Ehemalige'), '/team/ehemalige');
 				$this->func->addTitle($this->func->s('Ehemalige'));
 				$this->displayTeamContent(1564, 54);
+
 				return;
 			}
 
 			$this->func->addContent('Page not found');
+
 			return;
 		}
 
