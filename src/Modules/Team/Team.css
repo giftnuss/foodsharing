@@ -61,7 +61,7 @@
 }
 
 #teamList .desc {
-	color: #533A24 !important;
+	color: #533A24;
 	display: block;
 	height: 160px;
 	line-height: 20px;
@@ -72,7 +72,7 @@
 }
 
 #teamList .subtitle {
-	color: #533A24 !important;
+	color: #533A24;
 	margin-bottom: 30px;
 	display: inline-block;
 	height: 30px;
@@ -105,7 +105,7 @@
 }
 
 #teamList a:hover .img {
-	background-color: #FFFFFF !important;
+	background-color: #FFFFFF;
 }
 
 #teamList .foot, #team-user .foot {
