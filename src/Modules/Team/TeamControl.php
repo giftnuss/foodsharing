@@ -67,7 +67,7 @@ class TeamControl extends Control
 	private function displayTeamContent($bezirkId, $contentId): void
 	{
 		if ($team = $this->gateway->getTeam($bezirkId)) {
-			$this->func->addContent($this->view->teamlist($team, $this->model->getContent($contentId)));
+			$this->func->addContent($this->view->teamList($team, $this->model->getContent($contentId)));
 		}
 	}
 }
