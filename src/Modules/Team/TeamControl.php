@@ -40,28 +40,32 @@ class TeamControl extends Control
 				if ($user['contact_public']) {
 					$this->func->addContent($this->view->contactForm($user));
 				}
-			} else {
-				$this->func->go('/team');
+				return;
 			}
-		} else {
-			if ($teamType = $this->uriStr(2)) {
-				if ($teamType === 'ehemalige') {
-					// Type b, display "Ehemalige"
-					$this->func->addBread($this->func->s('Ehemalige'), '/team/ehemalige');
-					$this->func->addTitle($this->func->s('Ehemalige'));
-					$this->displayTeamContent(1564, 54);
-				} else {
-					$this->func->addContent('Page not found');
-				}
-			} else {
-				// Type a, display "Vorstand" and "Aktive"
-				$this->func->addContent("<div id='vorstand'>");
-				$this->displayTeamContent(1373, 39);
-				$this->func->addContent("</div><div id='aktive'>");
-				$this->displayTeamContent(1565, 53);
-				$this->func->addContent('</div>');
-			}
+
+			$this->func->go('/team');
+			return;
 		}
+
+		if ($teamType = $this->uriStr(2)) {
+			if ($teamType === 'ehemalige') {
+				// Type b, display "Ehemalige"
+				$this->func->addBread($this->func->s('Ehemalige'), '/team/ehemalige');
+				$this->func->addTitle($this->func->s('Ehemalige'));
+				$this->displayTeamContent(1564, 54);
+				return;
+			}
+
+			$this->func->addContent('Page not found');
+			return;
+		}
+
+		// Type a, display "Vorstand" and "Aktive"
+		$this->func->addContent("<div id='vorstand'>");
+		$this->displayTeamContent(1373, 39);
+		$this->func->addContent("</div><div id='aktive'>");
+		$this->displayTeamContent(1565, 53);
+		$this->func->addContent('</div>');
 	}
 
 	private function displayTeamContent($bezirkId, $contentId): void
