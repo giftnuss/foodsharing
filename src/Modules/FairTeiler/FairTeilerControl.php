@@ -68,7 +68,7 @@ class FairTeilerControl extends Control
 			$bid = $this->fairteiler['bezirk_id'];
 		}
 
-		if ($bid || $bid = $request->query->get('bid')) {
+		if (isset($bid) || $bid = $request->query->get('bid')) {
 			if ($bezirk = $this->model->getBezirk($bid)) {
 				$this->bezirk_id = $bid;
 				$this->bezirk = $bezirk;
