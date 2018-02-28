@@ -1,8 +1,12 @@
-# Unreleased
+# 2018-02-28
 
 ## Release notes
 
-## Breaking changes
+Wuhay, this is the first release after our hackweek. Quite a lot has happened:
+Nearly 4000 lines of code have been changed, half of the files have been moved into
+a better structure and all pages are now served from a [twig](https://twig.symfony.com/doc/2.x/) base template.
+As a side change, we now run the latest PHP 7.2.2 and are updating more and more internals to more recent technologies
+as well as modern coding techniques.
 
 ## Features
 - Use of bcrypt as hashing algorithm to store passwords
