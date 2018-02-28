@@ -403,9 +403,7 @@ abstract class Control
 			 * only send email if the user want to retrieve emails
 			 */
 			if (Mem::user($recipient['id'], 'infomail')) {
-				$sessdata = $_SESSION['lastMailMessage'];
-
-				if (!$sessdata) {
+				if (!isset($_SESSION['lastMailMessage']) || !is_array($sessdata = $_SESSION['lastMailMessage'])) {
 					$sessdata = array();
 				}
 
