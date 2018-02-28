@@ -17,7 +17,7 @@ require_once 'lang/DE/de.php';
  */
 function check_api_token($fs, $key, Model $model)
 {
-	$res = $model->qOne('SELECT COUNT(foodsaver_id) FROM ' . PREFIX . 'apitoken WHERE foodsaver_id = ' . (int)$fs . ' AND token="' . $db->safe($key) . '"');
+	$res = $model->qOne('SELECT COUNT(foodsaver_id) FROM ' . PREFIX . 'apitoken WHERE foodsaver_id = ' . (int)$fs . ' AND token="' . $model->safe($key) . '"');
 
 	return $res == 1;
 }
