@@ -6,10 +6,10 @@ use Foodsharing\Modules\Core\Control;
 
 class StatisticsControl extends Control
 {
-	public function __construct()
+	public function __construct(StatisticsModel $model, StatisticsView $view)
 	{
-		$this->model = new StatisticsModel();
-		$this->view = new StatisticsView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}

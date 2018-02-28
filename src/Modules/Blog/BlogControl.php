@@ -7,10 +7,10 @@ use Foodsharing\Modules\Core\Control;
 
 class BlogControl extends Control
 {
-	public function __construct()
+	public function __construct(BlogModel $model, BlogView $view)
 	{
-		$this->model = new BlogModel();
-		$this->view = new BlogView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 		if ($id = $this->func->getActionId('delete')) {

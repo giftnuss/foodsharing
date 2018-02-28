@@ -6,10 +6,10 @@ use Foodsharing\Modules\Core\Control;
 
 class BusinessCardControl extends Control
 {
-	public function __construct()
+	public function __construct(BusinessCardModel $model, BusinessCardView $view)
 	{
-		$this->model = new BusinessCardModel();
-		$this->view = new BusinessCardView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}

@@ -7,43 +7,81 @@ set -e
 dir=$(dirname "$0")
 
 . $dir/inc.sh
+echo $SECONDS seconds elapsed
 
 if [ "x" != "x$CI_BUILD_TOKEN" ]; then
-  echo "Logging into docker registry"
+  log-header "Logging into docker registry"
+  SECONDS=0
   docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+  echo $SECONDS seconds elapsed
 fi
 
-echo "Building images"
+log-header "Building images"
+SECONDS=0
+
+pids=()
 
 for name in app chat web; do
   dc build $name &
+  pids+=($!)
 done
 
-wait
+for pid in "${pids[@]}"; do
+  wait $pid
+done
 
-echo "Bring up containers"
+echo $SECONDS seconds elapsed
+
+log-header "Bring up containers"
+SECONDS=0
 dc up -d --no-build
 
 echo "Waiting for mysql to start"
 wait-for-mysql
+echo $SECONDS seconds elapsed
 
-echo "Initializing database"
+log-header "Initializing database"
+SECONDS=0
 sql-query mysql 'drop database if exists foodsharing; create database foodsharing'
 
 migratedb foodsharing
 
 $dir/mkdirs
+echo $SECONDS seconds elapsed
 
-echo "Installing composer deps"
+log-header "Installing composer deps"
+SECONDS=0
 exec-in-container-asroot app composer install
+echo $SECONDS seconds elapsed
 
-echo "Checking code style"
+log-header "Checking code style"
+SECONDS=0
 exec-in-container-asroot app scripts/php-cs-fixer.ci.sh --cache-file=vendor/php-cs-cache fix
+echo $SECONDS seconds elapsed
 
-echo "Running tests"
-exec-in-container app vendor/bin/codecept run --xml --html "$@"
+log-header "Running tests"
+failed=0
+SECONDS=0
+exec-in-container-asroot app rm -rf tmp/.views-cache tmp/di-cache.php
+exec-in-container app vendor/bin/codecept run --xml --html || failed=1
+echo $SECONDS seconds elapsed
 
-echo "Running chat tests"
+if [ $failed -eq 1 ]; then
+  log-header "Check for codeception errors"
+  # check if codeception generated a report file that contains failed tests
+  # Otherwise, codeception probably failed itself and the whole job should fail
+  exec-in-container app "grep -E '<error|<failure' /app/tests/_output/report.xml" || \
+    (echo "report.xml is incomplete, aborting" && false)
+
+  log-header "Rerunning failed tests"
+  SECONDS=0
+  exec-in-container app vendor/bin/codecept run -g failed
+  echo $SECONDS seconds elapsed
+fi
+
+log-header "Running chat tests"
+SECONDS=0
 run-in-container chat npm test
+echo $SECONDS seconds elapsed
 
-echo "Done!"
+log-header "Done!"

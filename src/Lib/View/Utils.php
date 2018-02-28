@@ -2,18 +2,42 @@
 
 namespace Foodsharing\Lib\View;
 
+use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Twig;
 
 class Utils
 {
 	private $id;
+	/**
+	 * @var Func
+	 */
 	private $func;
+
+	/**
+	 * @var Twig
+	 */
+	private $twig;
 
 	public function __construct()
 	{
 		$this->id = array();
-		global $g_func;
-		$this->func = $g_func;
+	}
+
+	/**
+	 * @required
+	 */
+	public function setFunc(Func $func)
+	{
+		$this->func = $func;
+	}
+
+	/**
+	 * @required
+	 */
+	public function setTwig(Twig $twig)
+	{
+		$this->twig = $twig;
 	}
 
 	public function v_quickform($titel, $elements, $option = array())
@@ -83,8 +107,6 @@ class Utils
 
 	public function v_bezirkChildChooser($id, $options = array())
 	{
-		global $db;
-
 		$this->func->addJsFunc('
 		var u_current_bezirk_type = 0;
 		function u_printChildBezirke(element)
@@ -169,14 +191,17 @@ class Utils
 
 	public function v_swapText($id, $value)
 	{
-		return '<input class="swapText swap" onblur="if(this.value==\'\'){this.value=\'' . $value . '\';$(this).addClass(\'swap\')}" onfocus="if(this.value==\'' . $value . '\'){this.value=\'\';$(this).removeClass(\'swap\');}" onclick="if(this.value==\'' . $value . '\'){this.value=\'\';$(this).removeClass(\'swap\');}" id="' . $id . '" type="text" name="' . $id . '" value="' . $value . '" />';
+		return $this->twig->render('partials/swapText.twig', [
+			'id' => $id,
+			'value' => $value
+		]);
 	}
 
 	public function v_bezirkChooser($id = 'bezirk_id', $bezirk = false, $option = array())
 	{
 		$this->func->addScript('/js/dynatree/jquery.dynatree.js');
 		$this->func->addScript('/js/jquery.cookie.js');
-		$this->func->addCss('/js/dynatree/skin/ui.dynatree.css');
+		$this->func->addStylesheet('/js/dynatree/skin/ui.dynatree.css');
 
 		if (!$bezirk) {
 			//$bezirk = $this->func->getBezirk();
@@ -264,8 +289,17 @@ class Utils
 
 	public function v_login()
 	{
+		$username = '';
+		$password = '';
+		if (getenv('FS_ENV') === 'dev') {
+			$username = 'userbot@example.com';
+			$password = 'user';
+		}
+
 		return '<form id="loginbar" action="/?page=login&ref=%2F%3Fpage%3Ddashboard" method="post">
-					<input style="margin-right:4px;" class="input corner-all" type="email" name="email_adress" value="" placeholder="E-Mail-Adresse" /><input class="input corner-all" type="password" name="password" value="" placeholder="Passwort" /><input class="submit corner-right" type="submit" value="&#xf0a9;" />
+					<input style="margin-right:4px;" class="input corner-all" type="email" name="email_adress" value="' . $username . '" placeholder="E-Mail-Adresse" />
+					<input class="input corner-all" type="password" name="password" value="' . $password . '" placeholder="Passwort" />
+					<input class="submit corner-right" type="submit" value="&#xf0a9;" />
 				</form>';
 	}
 
@@ -508,15 +542,12 @@ class Utils
 
 	public function v_form_recip_chooser_mini()
 	{
-		global $db;
 		$id = 'recip_choose';
-		$bezirk = $db->getBezirk();
 
 		return $this->v_input_wrapper($this->func->s('recip_chooser'), '
 			<select class="select" name="' . $id . '" id="' . $id . '">
 				<option value="botschafter">Alle Botschafter bundesweit</option>
 				<option value="orgateam">Orgateam bundesweit</option>
-				<option value="bezirk" selected="selected">' . $this->func->sv('recip_all_bezirk', $bezirk['name']) . '</option>
 			</select>');
 	}
 
@@ -524,10 +555,8 @@ class Utils
 	{
 		$this->func->addScript('/js/dynatree/jquery.dynatree.js');
 		$this->func->addScript('/js/jquery.cookie.js');
-		$this->func->addCss('/js/dynatree/skin/ui.dynatree.css');
-		global $db;
+		$this->func->addStylesheet('/js/dynatree/skin/ui.dynatree.css');
 
-		$bezirk = $db->getBezirk();
 		$id = 'recip_choose';
 		$out = '
 			<select class="select" name="' . $id . '" id="' . $id . '">
@@ -541,7 +570,6 @@ class Utils
 				<option value="filialbot">Alle Filialverantwortlichen + Botschafter</option>
 				<option value="all_no_botschafter">Alle Foodsaver ohne Botschafter</option>
 				<option value="orgateam">Orgateam</option>
-				<option value="bezirk" selected="selected">' . $this->func->sv('recip_all_bezirk', $bezirk['name']) . '</option>
 				<option value="choose">' . $this->func->s('recip_choose_bezirk') . '</option>		
 				<option value="manual">Manuelle Eingabe</option>
 			</select>
@@ -1072,7 +1100,11 @@ class Utils
 	public function v_form_textarea($id, $option = array())
 	{
 		$id = $this->func->id($id);
-		$value = $this->func->getValue($id);
+		if (isset($option['value'])) {
+			$value = $option['value'];
+		} else {
+			$value = $this->func->getValue($id);
+		}
 
 		$value = htmlspecialchars($value);
 
@@ -1103,6 +1135,14 @@ class Utils
 		);
 	}
 
+	/*
+	 * This method outputs a checkbox input with different possibilities on how to define values and checked values.
+	 *
+	 * for example:
+	 * $g_data[$id => ['list', 'of', 'checked', 'values']]
+	 *
+	 * $option = ['values' => ['list', 'of', 'possible', 'values']];
+	 */
 	public function v_form_checkbox($id, $option = array())
 	{
 		$id = $this->func->id($id);
@@ -1116,8 +1156,6 @@ class Utils
 
 		if (isset($option['values'])) {
 			$values = $option['values'];
-		} elseif ($v = $this->func->getDbValues($id)) {
-			$values = $v;
 		} else {
 			$values = array();
 		}
@@ -1150,10 +1188,6 @@ class Utils
 
 	public function v_form_tagselect($id, $option = array())
 	{
-		// term=h
-
-		// [{"id":"3","label":"Hazel Grouse","value":"Hazel Grouse"},{"id":"5","label":"Common Pheasant","value":"Common Pheasant"},{"id":"6","label":"Northern Shoveler","value":"Northern Shoveler"},{"id":"20","label":"Bluethroat","value":"Bluethroat"},{"id":"22","label":"Wood Nuthatch","value":"Wood Nuthatch"},{"id":"26","label":"Chaffinch","value":"Chaffinch"},{"id":"28","label":"Hawfinch","value":"Hawfinch"}]
-
 		$xhr = $id;
 		if (isset($option['xhr'])) {
 			$xhr = $option['xhr'];
@@ -1167,8 +1201,8 @@ class Utils
 		$source = 'autocompleteURL: "xhr.php?f=' . $url . '"';
 		$post = '';
 
-		if (isset($option['data'])) {
-			$source = 'autocompleteOptions: {source: ' . json_encode($option['data']) . ',minLength: 0}';
+		if (isset($option['valueOptions'])) {
+			$source = 'autocompleteOptions: {source: ' . json_encode($option['valueOptions']) . ',minLength: 0}';
 		}
 
 		$this->func->addJs('
@@ -1188,7 +1222,12 @@ class Utils
 		');
 
 		$input = '<input type="text" name="' . $id . '[]" value="" class="tag input text value" />';
-		if ($values = $this->func->getValue($id)) {
+		if (isset($option['values'])) {
+			$values = $option['values'];
+		} else {
+			$values = $this->func->getValue($id);
+		}
+		if ($values) {
 			$input = '';
 			foreach ($values as $v) {
 				$input .= '<input type="text" name="' . $id . '[' . $v['id'] . '-a]" value="' . $v['name'] . '" class="tag input text value" />';
@@ -1263,7 +1302,7 @@ class Utils
 
 		$thumb = '';
 
-		$pic = $this->func->getValue($id);
+		$pic = (isset($option['pic']) ? $option['pic'] : $this->func->getValue($id));
 		if (!empty($pic)) {
 			$thumb = '<img src="images/' . str_replace('/', '/thumb_', $pic) . '" />';
 		}
@@ -1321,15 +1360,17 @@ class Utils
 	public function v_form_radio($id, $option = array())
 	{
 		$id = $this->func->id($id);
-		$value = $this->func->getValue($id);
 		$label = $this->func->s($id);
 
 		$check = $this->func->jsValidate($option, $id, $label);
 
+		if (isset($option['selected'])) {
+			$selected = $option['selected'];
+		} else {
+			$selected = $this->func->getValue($id);
+		}
 		if (isset($option['values'])) {
 			$values = $option['values'];
-		} elseif ($v = $this->func->getDbValues($id)) {
-			$values = $v;
 		} else {
 			$values = array();
 		}
@@ -1343,7 +1384,7 @@ class Utils
 		if (!empty($values)) {
 			foreach ($values as $v) {
 				$sel = '';
-				if ($value == $v['id']) {
+				if ($selected == $v['id']) {
 					$sel = ' checked="checked"';
 				}
 				$out .= '
@@ -1358,14 +1399,17 @@ class Utils
 	public function v_form_select($id, $option = array())
 	{
 		$id = $this->func->id($id);
-		$value = $this->func->getValue($id);
+		/* isset instead of array_key_exists does not matter here */
+		if (isset($option['selected'])) {
+			$selected = $option['selected'];
+		} else {
+			$selected = $this->func->getValue($id);
+		}
 		$label = $this->func->s($id);
 		$check = $this->func->jsValidate($option, $id, $label);
 
 		if (isset($option['values'])) {
 			$values = $option['values'];
-		} elseif ($v = $this->func->getDbValues($id)) {
-			$values = $v;
 		} else {
 			$values = array();
 		}
@@ -1376,7 +1420,7 @@ class Utils
 		if (!empty($values)) {
 			foreach ($values as $v) {
 				$sel = '';
-				if ($value == $v['id']) {
+				if ($selected == $v['id']) {
 					$sel = ' selected="selected"';
 				}
 				$out .= '
@@ -1573,7 +1617,11 @@ class Utils
 		$id = $this->func->id($id);
 		$label = $this->func->s($id);
 
-		$value = $this->func->getValue($id);
+		if (isset($option['value'])) {
+			$value = $option['value'];
+		} else {
+			$value = $this->func->getValue($id);
+		}
 
 		$value = htmlspecialchars($value);
 

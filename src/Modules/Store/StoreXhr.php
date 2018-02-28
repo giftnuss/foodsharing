@@ -9,10 +9,10 @@ use Foodsharing\Modules\Core\Control;
 
 class StoreXhr extends Control
 {
-	public function __construct()
+	public function __construct(StoreModel $model, StoreView $view)
 	{
-		$this->model = new StoreModel();
-		$this->view = new StoreView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 
@@ -23,7 +23,7 @@ class StoreXhr extends Control
 
 	public function savedate()
 	{
-		if (strtotime($_GET['time']) > 0 && $_GET['fetchercount'] > 0) {
+		if (strtotime($_GET['time']) > 0 && $_GET['fetchercount'] >= 0) {
 			$fetchercount = (int)$_GET['fetchercount'];
 			$time = $_GET['time'];
 			if ($fetchercount > 8) {
@@ -120,7 +120,7 @@ class StoreXhr extends Control
 						
 						if(date !== null)
 						{
-							from = date.getFullYear() + "-" + $this->func->preZero((date.getMonth()+1)) + "-" + $this->func->preZero(date.getDate());
+							from = date.getFullYear() + "-" + preZero((date.getMonth()+1)) + "-" + preZero(date.getDate());
 							date = $( "#' . $id . '_to" ).datepicker("getDate");
 						
 							if(date === null)
@@ -129,7 +129,7 @@ class StoreXhr extends Control
 							}
 							else
 							{
-								to = date.getFullYear() + "-" + $this->func->preZero((date.getMonth()+1)) + "-" + $this->func->preZero(date.getDate());
+								to = date.getFullYear() + "-" + preZero((date.getMonth()+1)) + "-" + preZero(date.getDate());
 							}
 					
 							ajreq("getfetchhistory",{app:"betrieb",from:from,to:to,bid:' . (int)$_GET['bid'] . '});
@@ -171,7 +171,7 @@ class StoreXhr extends Control
 				    ("00" + $("select[name=\'time[hour]\']").val()).slice(-2) + ":" + 
 				    ("00" + $("select[name=\'time[min]\']").val()).slice(-2) + ":00";
 				
-				if($("#fetchercount").val() > 0)
+				if($("#fetchercount").val() >= 0)
 				{
 					ajreq("savedate",{
 						app:"betrieb",

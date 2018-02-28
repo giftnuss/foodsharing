@@ -10,16 +10,16 @@ class ProfileControl extends Control
 	private $foodsaver;
 	private $fs_id;
 
-	public function __construct()
+	public function __construct(ProfileModel $model, ProfileView $view)
 	{
+		$this->model = $model;
+		$this->view = $view;
+
+		parent::__construct();
+
 		if (!S::may()) {
 			$this->func->go('/');
 		}
-
-		$this->model = new ProfileModel();
-		$this->view = new ProfileView();
-
-		parent::__construct();
 
 		if ($id = $this->uriInt(2)) {
 			$this->model->setFsId((int)$id);
@@ -55,7 +55,7 @@ class ProfileControl extends Control
 	{
 		$this->func->addBread($this->foodsaver['name'], '/profile/' . $this->foodsaver['id']);
 		if (S::may('orga')) {
-			$this->view->usernotes($this->wallposts('usernotes', $this->foodsaver['id']), $this->model->getCompanies($this->foodsaver['id']), $this->model->getCompaniesCount($this->foodsaver['id']), $this->model->getNextDates($this->foodsaver['id'], 50));
+			$this->view->usernotes($this->wallposts('usernotes', $this->foodsaver['id']), true, true, true, $this->model->getCompanies($this->foodsaver['id']), $this->model->getCompaniesCount($this->foodsaver['id']), $this->model->getNextDates($this->foodsaver['id'], 50));
 		} else {
 			$this->func->go('/profile/' . $this->foodsaver['id']);
 		}
@@ -64,11 +64,10 @@ class ProfileControl extends Control
 	public function profile()
 	{
 		$bids = $this->model->getFsBezirkIds($this->foodsaver['id']);
-
 		if ($this->func->isOrgaTeam() || $this->func->isBotForA($bids, false, true)) {
-			$this->view->profile($this->wallposts('foodsaver', $this->foodsaver['id']), $this->model->getCompanies($this->foodsaver['id']), $this->model->getCompaniesCount($this->foodsaver['id']), $this->model->getNextDates($this->foodsaver['id'], 50));
+			$this->view->profile($this->wallposts('foodsaver', $this->foodsaver['id']), true, true, true, true, $this->model->getCompanies($this->foodsaver['id']), $this->model->getCompaniesCount($this->foodsaver['id']), $this->model->getNextDates($this->foodsaver['id'], 50));
 		} else {
-			$this->view->profile($this->wallposts('foodsaver', $this->foodsaver['id']), null, null);
+			$this->view->profile($this->wallposts('foodsaver', $this->foodsaver['id']), false, false, false, false, null, null);
 		}
 	}
 }

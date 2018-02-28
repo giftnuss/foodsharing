@@ -6,22 +6,66 @@
 
 ## Features
 - Use of bcrypt as hashing algorithm to store passwords
+- Removed the working groups from the team->teammember page !262 @BassTii
+- Changed way of gendering in passport from "/" to "_" !251 @D0nPiano
+- auto adding of CH-BOTs, Vienna-BIEBs, and ZH-BIEBs to their working groups. !271 by @peter.toennies
+- Renamed footer "Unterstützung" to "Spenden" !273 @BassTii
+- Updates fullpage.js to 2.9.5 for fixing scrolling in firefox, general smoothness !244 @NerdyProjects
+- Page with list of communities for Austria/Germany/Switzerland. !286 by @k.miklobusec
+- Single appointment can be set to "appointment cancelled" (=0 Slots) !372 by @k.miklobusec
+- Changed the Store address format to not have a separate house number !294 @NerdyProjects
+
 
 ## Bugfixes
+- Remove partly broken store coordinator management from store edit page (should happen with "manage team") !283 @NerdyProjects
+- Allow using more HTML tags in email templates to not break layout !278 @NerdyProjects
 - Reduce size of static images by lossless recompression with trimage !245 @NerdyProjects
 - Change impressum to match current association status @NerdyProjects
 - Remove mass mail recipient options that are ambigous/irrelevant @NerdyProjects
 - Fix missing newsletter unsubscription links for pre-2014 foodsharing.de accounts @NerdyProjects
 - Fix newsletter should only be sent to activated accounts @NerdyProjects
 - Fixed a bug which throwed an error during mail change
+- Show regions in alphabetical order in the region selector (Bezirk beitreten) !267 by @alangecker
+- changed old foodsharing „Freiwilligenplattform“ mailfooter for outgoing replies via mail, which was based on lebensmittelretten !287 @irgendwer
+- consistent use of jumper list (Springerliste) all over the page. !293 by @peter.toennies
+- fixed new fairteiler can not get a region set !294 @NerdyProjects
+- fixed ambassador of other region could edit fairteiler !294 @NerdyProjects
 
 ## Refactoring
 - Consolidate remaining functions and modules !269 @NerdyProjects
 - Remove old user registration code !246 @NerdyProjects
+- Add initial gateway database classes using PDO !264 @nicksellen
+- Add insert/update/delete PDO helper methods !285 @tiltec
+- Implement FairTeiler and Region gateway classes !285  @tiltec @nicksellen
+- Add Symfony dependency injection container !264 @nicksellen
+- Remove unused fpdf font data files !253 @NerdyProjects
+- Add twig templating engine !284 @nicksellen
+- Add twig templating for main menu and other things !292 @nicksellen
+- Remove global usage of Func, DB and ViewUtils Helper classes !289 @NerdyProjects
+- Refactor router for HTML controller classes !289 @NerdyProjects
+- complete tidying up of all CSS files. !298 by @peter.toennies
+- Make some components ready to be used without global data passing variable !294 @NerdyProjects
+- Introduce Request and Response object and used it in WorkGroupControl !294 @NerdyProjects
+- Introduce input deserializer/sanitizer/validator component in WorkGroupControl !294 @NerdyProjects
+- Extract genSearchIndex to a service class !294 @NerdyProjects
 
 ## Dev/Test/CI stuff
 
+- Improve `FoodsaverVerifyUnverifyHistoryCept` test !279 @tiltec
+- Reduce flakyness of acceptance tests further !290 @tiltec
+- Disable xdebug in CI to increase test speed !290 @tiltec
+- Retry failed tests in CI !290 @tiltec
+- Enable [smartWait](https://codeception.com/docs/03-AcceptanceTests#SmartWait) for acceptance tests !279 @tiltec
+- Enable xdebug remote debugging for development !276 @NerdyProjects
 - Add better seed data for use during development !263 @tiltec
+- Enable xdebug profiler for dev environment !296 @NerdyProjects
+- Use PHP7.2.2 in dev/test/ci to make it ready for production !301 @NerdyProjects
+- More tests for FairTeiler and WorkGroup pages !294 @NerdyProjects
+
+## Other
+
+- PHP 7.2 compatibility of the code !301 @NerdyProjects
+- Added caching for DI container !299 @nicksellen
 
 # 2017-12-11
 
@@ -105,6 +149,7 @@ Many many thanks to all the contributors that made this possible (in order of ap
 * @peter.toennies
 * @raphaelw
 * @tiltec
+* @alangecker
 
 ## Breaking changes
 
@@ -129,6 +174,7 @@ Many many thanks to all the contributors that made this possible (in order of ap
 - Alphabetical order in the orga-menu !160 @peter.toennies
 - Aproximate time of pickup stays in shop settings !161 @peter.toennies
 - Fixed spelling in footer of automatic emails !174 @peter.toennies
+- Remove bananas when a user gets deleted
 
 ## Refactoring
 

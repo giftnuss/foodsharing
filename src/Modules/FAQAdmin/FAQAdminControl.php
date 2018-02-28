@@ -8,16 +8,16 @@ use Foodsharing\Modules\Core\Model;
 
 class FAQAdminControl extends Control
 {
-	public function __construct()
+	public function __construct(Model $model, FAQAdminView $view)
 	{
-		if (!S::may('orga')) {
-			$this->func->goLogin();
-		}
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 
-		$this->view = new FAQAdminView();
-		$this->model = new Model();
+		if (!S::may('orga')) {
+			$this->func->goLogin();
+		}
 	}
 
 	public function index()
@@ -94,7 +94,6 @@ class FAQAdminControl extends Control
 
 	private function handle_edit()
 	{
-		global $db;
 		global $g_data;
 
 		if ($this->func->submitted()) {
@@ -110,7 +109,6 @@ class FAQAdminControl extends Control
 
 	private function handle_add()
 	{
-		global $db;
 		global $g_data;
 
 		if ($this->func->submitted()) {

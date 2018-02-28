@@ -249,8 +249,6 @@ class MailboxView extends View
 			'-- ' .
 			PHP_EOL .
 			'foodsharing.de - verwenden statt verschwenden' .
-			PHP_EOL .
-			'www.foodsharing.de - die Freiwilligenplattform von foodsharing' .
 			PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL .
 			'----------- ' . $this->func->sv('message_from', date('j.m.Y H:i', $ts)) . ' Uhr -----------' .
 			PHP_EOL . PHP_EOL .

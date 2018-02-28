@@ -6,13 +6,12 @@ use Flourish\fDate;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\View;
-use Foodsharing\Modules\Foodsaver\FoodsaverModel;
 
 class ProfileView extends View
 {
 	private $foodsaver;
 
-	public function profile($wallposts, $userCompanies = null, $userCompaniesCount = null, $fetchDates = null)
+	public function profile($wallposts, bool $showEditButton = false, bool $showPassportGenerationHistoryButton = false, bool $showVerificationHistoryButton = false, bool $showSideInfoCompanies = false, $userCompanies = null, $userCompaniesCount = null, $fetchDates = null)
 	{
 		$page = new vPage($this->foodsaver['name'], $this->infos());
 		$page->addSection($wallposts, 'Status-Updates von ' . $this->foodsaver['name']);
@@ -25,14 +24,11 @@ class ProfileView extends View
 			$page->addSection($this->fetchDates($fetchDates), 'Nächste Abholtermine');
 		}
 
-		$page->addSectionLeft($this->photo());
+		$page->addSectionLeft($this->photo($showEditButton, $showPassportGenerationHistoryButton, $showVerificationHistoryButton));
 
 		$page->addSectionLeft($this->sideInfos(), 'Infos');
 
-		$fsModel = new FoodsaverModel();
-		$bids = $fsModel->getFsBezirkIds($this->foodsaver['id']);
-
-		if (($this->func->isOrgaTeam() || $this->func->isBotForA($bids, false, true)) && $userCompanies) {
+		if ($showSideInfoCompanies && $userCompanies) {
 			$page->addSectionLeft($this->sideInfosCompanies($userCompanies), 'Betriebe (' . $userCompaniesCount . ')');
 		}
 		$page->render();
@@ -42,7 +38,7 @@ class ProfileView extends View
 	{
 		$out = '
 				<div class="ui-padding" id="double">
-				<a class="button button-big" href="#"onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',bid:0,date:0});return false;">Aus allen austragen</a>
+				<a class="button button-big" href="#" onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',bid:0,date:0});return false;">Aus allen austragen</a>
 					<ul class="datelist linklist" id="double">';
 		foreach ($fetchDates as $d) {
 			$out .= '
@@ -59,7 +55,7 @@ class ProfileView extends View
 
 			if ($this->func->isOrgaTeam() || $this->func->isBotFor($d['bezirk_id'])) {
 				$out .= '<li>
-							<a class="button button-big" href="#"onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',deleteAll:false,bid:' . $d['betrieb_id'] . ',date:' . $d['date_ts'] . '});return false;">austragen</a>
+							<a class="button button-big" href="#" onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',deleteAll:false,bid:' . $d['betrieb_id'] . ',date:' . $d['date_ts'] . '});return false;">austragen</a>
 							</li>';
 			} else {
 				$out .= '<li>
@@ -87,12 +83,12 @@ class ProfileView extends View
 		</div>';
 	}
 
-	public function usernotes($notes, $userCompanies, $userCompaniesCount)
+	public function usernotes($notes, bool $showEditButton, bool $showPassportGenerationHistoryButton, bool $showVerificationHistoryButton, $userCompanies, $userCompaniesCount)
 	{
 		$page = new vPage($this->foodsaver['name'] . ' Notizen', $this->v_utils->v_info($this->func->s('user_notes_info')) . $notes);
 		$page->setBread('Notizen');
 
-		$page->addSectionLeft($this->photo());
+		$page->addSectionLeft($this->photo($showEditButton, $showPassportGenerationHistoryButton, $showVerificationHistoryButton));
 		$page->addSectionLeft($this->sideInfos(), 'Infos');
 
 		if (S::may('orga')) {
@@ -364,9 +360,9 @@ class ProfileView extends View
 		return $out;
 	}
 
-	public function photo()
+	private function photo(bool $showEditButton, bool $showPassportGenerationHistoryButton, bool $showVerificationHistoryButton)
 	{
-		$menu = $this->profileMenu();
+		$menu = $this->profileMenu($showEditButton, $showPassportGenerationHistoryButton, $showVerificationHistoryButton);
 
 		$sleep_info = '';
 
@@ -383,14 +379,11 @@ class ProfileView extends View
 				' . $menu;
 	}
 
-	private function profileMenu()
+	private function profileMenu(bool $showEditButton, bool $showPassportGenerationHistoryButton, bool $showVerificationHistoryButton)
 	{
 		$opt = '';
-		$fsModel = new FoodsaverModel();
 
-		$bids = $fsModel->getFsBezirkIds($this->foodsaver['id']);
-
-		if ($this->func->isOrgaTeam() || $this->func->isBotForA($bids, false, true)) {
+		if ($showEditButton) {
 			$opt .= '<li><a href="/?page=foodsaver&a=edit&id=' . $this->foodsaver['id'] . '"><i class="fa fa-pencil"></i>Profil bearbeiten</a></li>';
 		}
 		if ($this->foodsaver['buddy'] === -1 && $this->foodsaver['id'] != $this->func->fsId()) {
@@ -398,10 +391,10 @@ class ProfileView extends View
 			$name = $name[0];
 			$opt .= '<li class="buddyRequest"><a onclick="ajreq(\'request\',{app:\'buddy\',id:' . (int)$this->foodsaver['id'] . '});return false;" href="#"><i class="fa fa-user"></i>Ich kenne ' . $name . '</a></li>';
 		}
-		if ($this->func->isOrgaTeam() || $this->func->isBotForA($bids, false, true)) {
+		if ($showPassportGenerationHistoryButton) {
 			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:1});"><i class="fa fa-file-text"></i>Passhistorie</a></li>';
 		}
-		if ($this->func->isOrgaTeam() || $this->func->isBotForA($bids, false, true)) {
+		if ($showVerificationHistoryButton) {
 			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:0});"><i class="fa fa-file-text"></i>Verifizierungshistorie</a></li>';
 		}
 

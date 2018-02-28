@@ -2,20 +2,31 @@
 
 namespace Foodsharing\Modules\Console;
 
+use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Mail\AsyncMail;
+use Foodsharing\Modules\Core\Model;
 
 class ConsoleControl
 {
+	/**
+	 * @var Model
+	 */
 	protected $model;
+	/**
+	 * @var Func
+	 */
 	protected $func;
 
 	public function __construct()
 	{
-		global $g_func;
-		$this->func = $g_func;
-		if (is_null($this->model)) {
-			$this->model = new ConsoleModel();
-		}
+	}
+
+	/**
+	 * @required
+	 */
+	public function setFunc(Func $func)
+	{
+		$this->func = $func;
 	}
 
 	public function index()

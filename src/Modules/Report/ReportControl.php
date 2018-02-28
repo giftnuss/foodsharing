@@ -6,15 +6,16 @@ use Foodsharing\Modules\Core\Control;
 
 class ReportControl extends Control
 {
-	public function __construct()
+	public function __construct(ReportModel $model, ReportView $view)
 	{
+		$this->model = $model;
+		$this->view = $view;
+
+		parent::__construct();
+
 		if (!isset($_GET['sub'])) {
 			$this->func->go('/?page=report&sub=uncom');
 		}
-		$this->model = new ReportModel();
-		$this->view = new ReportView();
-
-		parent::__construct();
 	}
 
 	public function index()

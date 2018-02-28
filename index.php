@@ -22,50 +22,68 @@ if(isset($_GET['g_path']))
 */
 
 use Foodsharing\Debug\DebugBar;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\DI;
+use Foodsharing\Lib\Func;
+use Foodsharing\Lib\Routing;
+use Foodsharing\Lib\View\Utils;
 
 require __DIR__ . '/includes/setup.php';
 
 require_once 'lib/inc.php';
-global $g_view_utils;
-global $g_func;
-$g_func->addCss('/css/gen/style.css?v=' . VERSION);
-$g_func->addScript('/js/gen/script.js?v=' . VERSION);
+$view_utils = DI::$shared->get(Utils::class);
 
-$g_func->getCurrent();
-$menu = $g_func->getMenu();
-
-$g_func->getMessages();
-$g_func->makeHead();
-
-if (DebugBar::isEnabled()) {
-	$g_func->addHead(DebugBar::renderHead());
-}
-
-$msgbar = '';
-$logolink = '/';
-if (S::may()) {
-	$msgbar = $g_view_utils->v_msgBar();
-	$logolink = '/?page=dashboard';
-} else {
-	$msgbar = $g_view_utils->v_login();
-}
-
-if (DebugBar::isEnabled()) {
-	$g_func->addContent(DebugBar::renderContent(), CNT_BOTTOM);
-}
-
-/*
- * check for page caching
+/**
+ * @return Func
  */
-if (isset($cache) && $cache->shouldCache()) {
-	ob_start();
-	include 'tpl/' . $g_template . '.php';
-	$page = ob_get_contents();
-	$cache->cache($page);
-	ob_end_clean();
+function getFunc()
+{
+	return DI::$shared->get(Func::class);
+}
 
-	echo $page;
+$func = getFunc();
+
+$func->addStylesheet('/css/gen/style.css?v=' . VERSION);
+$func->addScript('/js/gen/script.js?v=' . VERSION);
+
+if (DebugBar::isEnabled()) {
+	$func->addHead(DebugBar::renderHead());
+}
+
+if (DebugBar::isEnabled()) {
+	$func->addContent(DebugBar::renderContent(), CNT_BOTTOM);
+}
+
+$app = $func->getPage();
+
+$class = Routing::getClassName($app, 'Control');
+if ($class) {
+	$obj = DI::$shared->get(ltrim($class, '\\'));
+
+	if (isset($_GET['a']) && is_callable(array($obj, $_GET['a']))) {
+		$meth = $_GET['a'];
+		$obj->$meth($request, $response);
+	} else {
+		$obj->index($request, $response);
+	}
+	$sub = $sub = $obj->getSubFunc();
+	if ($sub !== false && is_callable(array($obj, $sub))) {
+		$obj->$sub($request, $response);
+	}
+}
+
+$page = $response->getContent();
+$isUsingResponse = $page !== '--';
+if ($isUsingResponse) {
+	$response->send();
 } else {
-	include 'tpl/' . $g_template . '.php';
+	$twig = DI::$shared->get(\Foodsharing\Lib\Twig::class);
+	$page = $twig->render('layouts/' . $g_template . '.twig', $func->generateAndGetGlobalViewData());
+}
+
+if (isset($cache) && $cache->shouldCache()) {
+	$cache->cache($page);
+}
+
+if (!$isUsingResponse) {
+	echo $page;
 }

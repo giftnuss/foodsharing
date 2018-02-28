@@ -54,35 +54,6 @@ class FairTeilerView extends View
 
 	public function checkFairteiler($ft)
 	{
-		/*
-		 * Array
-(
-	[id] => 1
-	[bezirk_id] => 4
-	[name] => Neuland Garten
-	[picture] => picture/52e3fed700753.png
-	[status] => 1
-	[desc] => ......
-	[anschrift] => Alteburger StraÃŸe 146-150
-	[plz] => 50968
-	[ort] => KÃ¶ln
-	[lat] => 50.91374876646103
-	[lon] => 6.96526769416505
-	[add_date] => 2014-01-24
-	[time_ts] => 1390518000
-	[add_foodsaver] => 56
-	[fs_name] => Raphael
-	[fs_nachname] => Wintrich
-	[fs_id] => 56
-	[pic] => Array
-		(
-			[thumb] => images/picture/crop_1_60_52e3fed700753.png
-			[head] => images/picture/crop_0_528_52e3fed700753.png
-			[orig] => images/picture/52e3fed700753.png
-		)
-
-)
-		 */
 		$content = '';
 		if ($ft['pic']) {
 			$content .= $this->v_utils->v_input_wrapper('Foto', '<img src="' . $ft['pic']['head'] . '" alt="' . $ft['name'] . '" />');
@@ -116,14 +87,9 @@ class FairTeilerView extends View
 
 		$tagselect = '';
 		if ($data) {
-			if (!isset($this->bezirke[$data['bezirk_id']])) {
-				global $db;
-				$this->bezirke[] = $db->getBezirk($data['bezirk_id']);
-			}
-			$this->func->setEditData($data);
 			$title = $this->func->sv('edit_fairteiler_name', $this->fairteiler['name']);
 
-			$tagselect = $this->v_utils->v_form_tagselect('bfoodsaver', array('data' => $data['bfoodsaver_values']));
+			$tagselect = $this->v_utils->v_form_tagselect('bfoodsaver', array('valueOptions' => $data['bfoodsaver_values'], 'values' => $data['bfoodsaver']));
 			$this->func->addJs('
 			$("#fairteiler-form").submit(function(ev){
 				if($("#bfoodsaver input[type=\'hidden\']").length == 0)
@@ -134,13 +100,17 @@ class FairTeilerView extends View
 			});
 		');
 		}
+		foreach (['anschrift', 'plz', 'ort', 'lat', 'lon'] as $i) {
+			$latLonOptions[$i] = $data[$i];
+		}
+		$latLonOptions['location'] = ['lat' => $data['lat'], 'lon' => $data['lon']];
 
 		return $this->v_utils->v_field($this->v_utils->v_form('fairteiler', array(
-			$this->v_utils->v_form_select('bezirk_id', array('values' => $this->bezirke, 'required' => true)),
-			$this->v_utils->v_form_text('name', array('required' => true)),
-			$this->v_utils->v_form_textarea('desc', array('desc' => $this->func->s('desc_desc'), 'required' => true)),
-			$this->v_utils->v_form_picture('picture', array('resize' => array(528, 60), 'crop' => array((528 / 170), 1))),
-			$this->latLonPicker('latLng'),
+			$this->v_utils->v_form_select('bezirk_id', array('values' => $this->bezirke, 'selected' => $data['bezirk_id'], 'required' => true)),
+			$this->v_utils->v_form_text('name', array('value' => $data['name'], 'required' => true)),
+			$this->v_utils->v_form_textarea('desc', array('value' => $data['desc'], 'desc' => $this->func->s('desc_desc'), 'required' => true)),
+			$this->v_utils->v_form_picture('picture', array('pic' => $data['picture'], 'resize' => array(528, 60), 'crop' => array((528 / 170), 1))),
+			$this->latLonPicker('latLng', $latLonOptions),
 			$tagselect,
 		), array('submit' => $this->func->s('save'))), $title, array('class' => 'ui-padding'));
 	}
@@ -256,51 +226,5 @@ class FairTeilerView extends View
 		}
 
 		return $this->v_utils->v_menu($items, 'Optionen');
-	}
-
-	public function publicFairteilerMap($fairteiler)
-	{
-		$image = '';
-		$updates = '';
-		if ($fairteiler['updates']) {
-			$updates .= '
-			<div class="updates">';
-			foreach ($fairteiler['updates'] as $u) {
-				$images = '';
-				if ($u['images']) {
-					$images = '
-					<div class="sidebar-photos">
-						<div class="photos">';
-					foreach ($u['images'] as $i) {
-						$images .= '<a href="/' . $i['image'] . '" class="fancy" rel="wallpost-gallery"><img width="75" height="83" style="background: url(/' . $i['thumb'] . ') 0 0 no-repeat;" alt="" src="/images/image-overlay-75x75.png"></a>';
-					}
-					$images .= '
-						</div>
-					</div>';
-				}
-				$updates .= '
-					<div class="item">
-						<div class="info">
-							<span class="time">' . $u['fs_name'] . ' @ ' . date('d.m.Y', $u['time_ts']) . '</span>
-						</div>
-						<div class="upost">' . nl2br($u['body']) . '</div>
-						' . $images . '
-					</div>';
-			}
-			$updates .= '
-			</div>';
-		}
-		if ($fairteiler['pic']) {
-			$image = '<a href="#"><img width="528" height="181" style="background: url(/' . $fairteiler['pic']['head'] . ') 0 0 no-repeat;" alt="" src="/images/image-overlay-528x170.png"></a>';
-		}
-
-		return '
-		<div class="fairteiler blog-list">
-			<div class="item head">
-				' . $image . '
-				<p class="intro">' . nl2br($fairteiler['desc']) . '</p>
-			</div>
-			' . $updates . '
-		</div>';
 	}
 }

@@ -8,14 +8,15 @@ use Foodsharing\Modules\Core\Model;
 
 class RegionAdminControl extends Control
 {
-	public function __construct()
+	public function __construct(Model $model, RegionAdminView $view)
 	{
+		$this->model = $model;
+		$this->view = $view;
+		parent::__construct();
+
 		if (!S::may('orga')) {
 			$this->func->go('/');
 		}
-		$this->view = new RegionAdminView();
-		$this->model = new Model();
-		parent::__construct();
 	}
 
 	public function index()

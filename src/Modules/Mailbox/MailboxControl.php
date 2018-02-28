@@ -6,10 +6,10 @@ use Foodsharing\Modules\Core\Control;
 
 class MailboxControl extends Control
 {
-	public function __construct()
+	public function __construct(MailboxModel $model, MailboxView $view)
 	{
-		$this->model = new MailboxModel();
-		$this->view = new MailboxView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}
@@ -44,7 +44,7 @@ class MailboxControl extends Control
 	{
 		$this->func->addScript('/js/dynatree/jquery.dynatree.js');
 		$this->func->addScript('/js/jquery.cookie.js');
-		$this->func->addCss('/js/dynatree/skin/ui.dynatree.css');
+		$this->func->addStylesheet('/js/dynatree/skin/ui.dynatree.css');
 
 		$this->func->addBread('Mailboxen');
 

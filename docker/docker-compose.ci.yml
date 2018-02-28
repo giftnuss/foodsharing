@@ -39,6 +39,7 @@ services:
     volumes:
       - selenium_downloads:/downloads
       - vendor_cache:/app/vendor
+      - /dev/null:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
   # php mail queue runner
   #------------------------------------

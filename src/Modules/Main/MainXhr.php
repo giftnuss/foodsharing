@@ -6,11 +6,13 @@ use Exception;
 use Flourish\fImage;
 use Flourish\fUpload;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\Model;
 
 class MainXhr extends Control
 {
-	public function __construct()
+	public function __construct(Model $model)
 	{
+		$this->model = $model;
 		parent::__construct();
 	}
 

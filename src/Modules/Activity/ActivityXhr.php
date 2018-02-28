@@ -9,16 +9,17 @@ use Foodsharing\Lib\Xhr\Xhr;
 
 class ActivityXhr extends Control
 {
-	public function __construct()
-	{
-		$this->model = new ActivityModel();
+	private $mailboxModel;
 
+	public function __construct(ActivityModel $model, MailboxModel $mailboxModel)
+	{
+		$this->model = $model;
+		$this->mailboxModel = $mailboxModel;
 		parent::__construct();
 	}
 
 	public function loadmore()
 	{
-		$mailbox = new MailboxModel();
 		/*
 		 * get ids to not display from options
 		 */
@@ -49,7 +50,7 @@ class ActivityXhr extends Control
 		if ($up = $this->model->loadBetriebUpdates($_GET['page'])) {
 			$updates = array_merge($updates, $up);
 		}
-		if ($up = $this->model->loadMailboxUpdates($_GET['page'], $mailbox, $hidden_ids['mailbox'])) {
+		if ($up = $this->model->loadMailboxUpdates($_GET['page'], $this->mailboxModel, $hidden_ids['mailbox'])) {
 			$updates = array_merge($updates, $up);
 		}
 		if ($up = $this->model->loadFriendWallUpdates($_GET['page'], $hidden_ids['buddywall'])) {
@@ -69,9 +70,6 @@ class ActivityXhr extends Control
 		/*
 		 * get Forum updates
 		 */
-
-		$mailbox = new MailboxModel();
-
 		if (isset($_GET['options'])) {
 			$options = array();
 			foreach ($_GET['options'] as $o) {
@@ -113,7 +111,7 @@ class ActivityXhr extends Control
 		if ($up = $this->model->loadBetriebUpdates()) {
 			$updates = array_merge($updates, $up);
 		}
-		if ($up = $this->model->loadMailboxUpdates($page, $mailbox, $hidden_ids['mailbox'])) {
+		if ($up = $this->model->loadMailboxUpdates($page, $this->mailboxModel, $hidden_ids['mailbox'])) {
 			$updates = array_merge($updates, $up);
 		}
 		if ($up = $this->model->loadFriendWallUpdates($page, $hidden_ids['buddywall'])) {
@@ -188,7 +186,7 @@ class ActivityXhr extends Control
 			/*
 			 * listings mailboxes
 			*/
-			if ($boxes = $mailbox->getBoxes()) {
+			if ($boxes = $this->mailboxModel->getBoxes()) {
 				foreach ($boxes as $b) {
 					$checked = true;
 					if (isset($option['mailbox-' . $b['id']])) {

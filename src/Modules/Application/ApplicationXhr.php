@@ -6,10 +6,10 @@ use Foodsharing\Modules\Core\Control;
 
 class ApplicationXhr extends Control
 {
-	public function __construct()
+	public function __construct(ApplicationModel $model, ApplicationView $view)
 	{
-		$this->model = new ApplicationModel();
-		$this->view = new ApplicationView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}

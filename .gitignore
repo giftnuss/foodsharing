@@ -27,3 +27,4 @@ migrations/_*
 .vagrant
 .DS_Store
 .vscode
+.views-cache

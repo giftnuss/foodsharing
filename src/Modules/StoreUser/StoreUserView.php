@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: matthias
- * Date: 11.02.18
- * Time: 14:30.
- */
 
 namespace Foodsharing\Modules\StoreUser;
 
@@ -90,7 +84,7 @@ class StoreUserView extends View
 		<tr class="' . $odd . ' request-' . $r['id'] . '">
 			<td class="img" width="35px"><a href="#" onclick="profile(' . (int)$r['id'] . ');return false;"><img src="' . $this->func->img($r['photo']) . '" /></a></td>
 			<td style="padding-top:17px;"><span class="msg"><a href="#" onclick="profile(' . (int)$r['id'] . ');return false;">' . $r['name'] . '</a></span></td>
-			<td style="width:92px;padding-top:17px;"><span class="msg"><ul class="toolbar"><li class="ui-state-default ui-corner-left" title="Ablehnen" onclick="denyRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-closethick"></span></li><li class="ui-state-default" title="auf die Springer- / Warteliste setzen" onclick="warteRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-star"></span></li><li class="ui-state-default ui-corner-right" title="Akzeptieren" onclick="acceptRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-heart"></span></li></ul></span></td>
+			<td style="width:92px;padding-top:17px;"><span class="msg"><ul class="toolbar"><li class="ui-state-default ui-corner-left" title="Ablehnen" onclick="denyRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-closethick"></span></li><li class="ui-state-default" title="Auf die Springerliste setzen" onclick="warteRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-star"></span></li><li class="ui-state-default ui-corner-right" title="Akzeptieren" onclick="acceptRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-heart"></span></li></ul></span></td>
 		</tr>';
 		}
 
@@ -311,7 +305,7 @@ class StoreUserView extends View
 	            },
 	            items: {
 					"report": {name: "Melden",icon:"report"},
-	                "tojumper": {name: "Auf die Warteliste",icon:"wait"},
+	                "tojumper": {name: "Auf die Springerliste",icon:"wait"},
 	                "delete": {name: "Aus Team löschen",icon:"delete"},
 					"message":{name: "Nachricht schreiben",icon:"message"}
 	            }
@@ -428,27 +422,6 @@ class StoreUserView extends View
 
 			return $this->v_utils->v_field($table, $title);
 		}
-	}
-
-	public function betrieb_form($foodsaver)
-	{
-		return $this->v_utils->v_quickform('betrieb', array(
-			$this->v_utils->v_form_text('name'),
-			$this->v_utils->v_form_text('plz'),
-			$this->v_utils->v_form_text('str'),
-			$this->v_utils->v_form_text('hsnr'),
-
-			$this->v_utils->v_form_select('kette_id', array('add' => true)),
-			$this->v_utils->v_form_select('betrieb_kategorie_id', array('add' => true)),
-
-			$this->v_utils->v_form_select('betrieb_status_id'),
-
-			$this->v_utils->v_form_text('ansprechpartner'),
-			$this->v_utils->v_form_text('telefon'),
-			$this->v_utils->v_form_text('fax'),
-			$this->v_utils->v_form_text('email'),
-			$this->v_utils->v_form_select('foodsaver', array('values' => $foodsaver))
-		));
 	}
 
 	/**

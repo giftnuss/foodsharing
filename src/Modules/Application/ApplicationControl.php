@@ -11,10 +11,10 @@ class ApplicationControl extends Control
 	private $bezirk_id;
 	private $mode;
 
-	public function __construct()
+	public function __construct(ApplicationModel $model, ApplicationView $view)
 	{
-		$this->model = new ApplicationModel();
-		$this->view = new ApplicationView();
+		$this->view = $view;
+		$this->model = $model;
 
 		parent::__construct();
 

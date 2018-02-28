@@ -3,12 +3,18 @@
 namespace Foodsharing\Modules\Activity;
 
 use Foodsharing\Modules\Core\Model;
-use Foodsharing\Modules\Mailbox\MailboxModel;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Mailbox\MailboxModel;
 
 class ActivityModel extends Model
 {
 	private $items_per_page = 10;
+	private $mailboxModel;
+
+	public function __construct(MailboxModel $mailboxModel)
+	{
+		$this->mailboxModel = $mailboxModel;
+	}
 
 	public function loadBasketWallUpdates($page = 0)
 	{
@@ -244,13 +250,9 @@ class ActivityModel extends Model
 		return false;
 	}
 
-	public function loadMailboxUpdates($page = 0, $model = false, $hidden_ids = false)
+	public function loadMailboxUpdates($page = 0, $model, $hidden_ids = false)
 	{
-		if ($model === false) {
-			$model = new MailboxModel();
-		}
-
-		if ($boxes = $model->getBoxes()) {
+		if ($boxes = $this->mailboxModel->getBoxes()) {
 			$mb_ids = array();
 			foreach ($boxes as $b) {
 				if (!isset($hidden_ids[$b['id']])) {

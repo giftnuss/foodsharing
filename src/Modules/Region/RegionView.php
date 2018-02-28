@@ -340,18 +340,6 @@ class RegionView extends View
 		return $this->v_utils->v_field($out, $this->func->sv('list_fairteiler', $this->bezirk['name']));
 	}
 
-	public function fairteilerForm($data = false)
-	{
-		$title = $this->func->s('new_fairteiler');
-
-		return $this->v_utils->v_field($this->v_utils->v_form('fairteiler', array(
-			$this->v_utils->v_form_text('name', array('required' => true)),
-			$this->v_utils->v_form_textarea('desc', array('required' => true)),
-			$this->v_utils->v_form_picture('picture', array('resize' => array(250, 528, 60), 'crop' => array((250 / 135), (528 / 170), 1))),
-			$this->latLonPicker('latLng')
-		)), $title, array('class' => 'ui-padding'));
-	}
-
 	public function newThemeForm()
 	{
 		return $this->v_utils->v_quickform($this->func->s('compose_new_theme'), array(
@@ -419,6 +407,10 @@ class RegionView extends View
 			});
 				
 			');
+		foreach (['anschrift', 'plz', 'ort', 'lat', 'lon'] as $i) {
+			$latLonOptions[$i] = $g_data[$i];
+		}
+		$latLonOptions['location'] = ['lat' => $g_data['lat'], 'lon' => $g_data['lon']];
 
 		return $this->v_utils->v_field($this->v_utils->v_form('eventsss', array(
 			$this->v_utils->v_form_text('name', array('required' => true)),
@@ -433,7 +425,7 @@ class RegionView extends View
 				array('id' => 0, 'name' => $this->func->s('online'))
 			))),
 			$this->v_utils->v_form_text('location_name', array('required' => true)),
-			$this->latLonPicker('latLng')
+			$this->latLonPicker('latLng', $latLonOptions)
 		), array('submit' => $this->func->s('save'))), $title, array('class' => 'ui-padding'));
 	}
 

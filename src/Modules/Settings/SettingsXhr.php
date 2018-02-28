@@ -10,10 +10,10 @@ use Foodsharing\Lib\Xhr\XhrDialog;
 
 class SettingsXhr extends Control
 {
-	public function __construct()
+	public function __construct(SettingsModel $model, SettingsView $view)
 	{
-		$this->model = new SettingsModel();
-		$this->view = new SettingsView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 

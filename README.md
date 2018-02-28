@@ -58,21 +58,29 @@ cd foodsharing
 ### Windows 10 Pro or higher
 
 Install [Docker for Windows](https://docs.docker.com/docker-for-windows/install/).
+Install Git for Windows: (https://git-scm.com/download/win)
 
-Our scripts are written in bash, but you should be able to get something working by
-installing/enabling
-[Windows Subsystem for Linux](https://msdn.microsoft.com/en-gb/commandline/wsl/install_guide)
+There is a GUI interface to administrate the repo, which is recommended for git-beginners
 
-Then:
+But you can use the GIT bash shell just like in Linux to clone it:
 
 ```
 git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
+```
+
+To start the containers, use the GIT bash shell:
+```
 cd foodsharing
 ./scripts/start
 ```
 
-_We do not generally use Windows, so I cannot say it works out of the box.
-If you can help here please do!_
+##For the Future
+
+
+You should be able to get something working by
+installing/enabling
+[Windows Subsystem for Linux](https://msdn.microsoft.com/en-gb/commandline/wsl/install_guide)
+in the future, because their kernel is not good enough to support the docker daemon.
 
 ### Vagrant
 
@@ -151,13 +159,16 @@ If you want a bit of seed data to play with, run:
 ./scripts/seed
 ```
 
-It will give you three users you can sign in as:
+It will give you some users you can sign in as:
 
-| email               | password |
-|---------------------|----------|
-| user1@example.com   | user1    |
-| user2@example.com   | user2    |
-| userbot@example.com | userbot  |
+| email                | password |
+|----------------------|----------|
+| user1@example.com    | user     |
+| user2@example.com    | user     |
+| userbot@example.com  | user     |
+| userorga@example.com | user     |
+
+It also generates more users and data to fill the page with life (a bit at least). If you want to modify it, look at the `SeedCommand.php` file.
 
 To stop everything again just run:
 

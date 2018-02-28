@@ -8,7 +8,7 @@ services:
 
   web:
     container_name: foodsharing_test_web
-    image: registry.gitlab.com/foodsharing-dev/images/web:1.1
+    image: registry.gitlab.com/foodsharing-dev/images/web:1.2
     ports:
       - 28080:8080
     expose:
@@ -24,7 +24,7 @@ services:
 
   app:
     container_name: foodsharing_test_app
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.6
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.7
     working_dir: /app
     expose:
       - 9000
@@ -35,6 +35,7 @@ services:
     volumes:
       - ../:/app
       - selenium_downloads:/downloads
+      - /dev/null:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
     environment:
       FS_ENV: test
       REDIS_HOST: redis
@@ -44,7 +45,7 @@ services:
 
   mailqueuerunner:
     container_name: foodsharing_test_mailqueuerunner
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.6
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.7
     command: php run.php Mails queueWorker
     working_dir: /app
     links:

@@ -4,13 +4,17 @@ namespace Foodsharing\Modules\Maintenance;
 
 use Flourish\fImage;
 use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Console\ConsoleControl;
 
 class MaintenanceControl extends ConsoleControl
 {
-	public function __construct()
+	private $bellGateway;
+
+	public function __construct(MaintenanceModel $model, BellGateway $bellGateway)
 	{
-		$this->model = new MaintenanceModel();
+		$this->model = $model;
+		$this->bellGateway = $bellGateway;
 		parent::__construct();
 	}
 
@@ -121,7 +125,7 @@ class MaintenanceControl extends ConsoleControl
 		$counts = $this->model->updateGroupMembers(826, $hh_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
-		self::info('updating DE Bot group');
+		self::info('updating Europe Bot group');
 		$bots = $this->model->getBotIds(741);
 		$counts = $this->model->updateGroupMembers(881, $bots, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
@@ -129,6 +133,21 @@ class MaintenanceControl extends ConsoleControl
 		self::info('updating berlin bieb austausch');
 		$berlin_biebs = $this->model->getBiebIds(47);
 		$counts = $this->model->updateGroupMembers(1057, $berlin_biebs, true);
+		self::info('+' . $counts[0] . ', -' . $counts[1]);
+
+		self::info('updating CH BOT group');
+		$chBots = $this->model->getBotIds(106);
+		$counts = $this->model->updateGroupMembers(1763, $chBots, true);
+		self::info('+' . $counts[0] . ', -' . $counts[1]);
+
+		self::info('updating Zürich BIEB austausch');
+		$zuerich_biebs = $this->model->getBiebIds(108);
+		$counts = $this->model->updateGroupMembers(1313, $zuerich_biebs, true);
+		self::info('+' . $counts[0] . ', -' . $counts[1]);
+
+		self::info('updating Wien BIEB austausch (Filialverantwortung)');
+		$wien_biebs = $this->model->getBiebIds(13);
+		$counts = $this->model->updateGroupMembers(707, $wien_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 	}
 
@@ -174,7 +193,7 @@ class MaintenanceControl extends ConsoleControl
 	private function infoToBotsUserDeactivated($foodsaver)
 	{
 		if ($botschafer = $this->model->getUserBotschafter($foodsaver['id'])) {
-			$this->model->addBell(
+			$this->bellGateway->addBell(
 				$botschafer,
 				'fs_sleepmode_title',
 				'fs_sleepmode',
@@ -415,11 +434,6 @@ class MaintenanceControl extends ConsoleControl
 
 		echo "\n";
 		self::success('OK');
-	}
-
-	public function compress()
-	{
-		require_once 'lib/inc.php';
 	}
 
 	public function betriebFetchWarning()

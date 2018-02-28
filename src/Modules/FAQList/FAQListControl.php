@@ -7,11 +7,10 @@ use Foodsharing\Modules\Core\Model;
 
 class FAQListControl extends Control
 {
-	public function __construct()
+	public function __construct(Model $model)
 	{
+		$this->model = $model;
 		parent::__construct();
-
-		$this->model = new Model();
 	}
 
 	public function index()

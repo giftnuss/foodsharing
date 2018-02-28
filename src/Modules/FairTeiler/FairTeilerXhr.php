@@ -3,34 +3,23 @@
 namespace Foodsharing\Modules\FairTeiler;
 
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\Model;
 
 class FairTeilerXhr extends Control
 {
-	public function __construct()
+	private $gateway;
+	private $bellGateway;
+
+	public function __construct(Model $model, FairTeilerView $view, FairTeilerGateway $gateway, BellGateway $bellGateway)
 	{
-		$this->model = new FairTeilerModel();
-		$this->view = new FairTeilerView();
+		$this->view = $view;
+		$this->gateway = $gateway;
+		$this->bellGateway = $bellGateway;
+		$this->model = $model;
 
 		parent::__construct();
-	}
-
-	public function load()
-	{
-		if (($id = (int)$_GET['id']) > 0) {
-			if ($fairteiler = $this->model->getFairteiler($id)) {
-				$fairteiler['updates'] = false;
-				if ($updates = $this->model->getLastUpdates($id)) {
-					$fairteiler['updates'] = $updates;
-				}
-
-				return array(
-					'status' => 1,
-					'html' => $this->view->publicFairteilerMap($fairteiler),
-					'name' => $fairteiler['name']
-				);
-			}
-		}
 	}
 
 	public function infofollower()
@@ -40,9 +29,9 @@ class FairTeilerXhr extends Control
 		}
 		$post = '';
 
-		if ($ft = $this->model->getFairteiler($_GET['fid'])) {
-			if ($follower = $this->model->getEmailFollower($_GET['fid'])) {
-				$post = $this->model->getLastFtPost($_GET['fid']);
+		if ($ft = $this->gateway->getFairteiler($_GET['fid'])) {
+			if ($follower = $this->gateway->getEmailFollower($_GET['fid'])) {
+				$post = $this->gateway->getLastFtPost($_GET['fid']);
 
 				$body = nl2br($post['body']);
 
@@ -69,8 +58,8 @@ class FairTeilerXhr extends Control
 				}
 			}
 
-			if ($follower = $this->model->getInfoFollower($_GET['fid'])) {
-				$this->model->addBell(
+			if ($follower = $this->gateway->getInfoFollower($_GET['fid'])) {
+				$this->bellGateway->addBell(
 					$follower,
 					'ft_update_title',
 					'ft_update',
@@ -89,8 +78,8 @@ class FairTeilerXhr extends Control
 
 	private function mayFairteiler($fid)
 	{
-		if ($ids = $this->model->getFairteilerIds()) {
-			if (isset($ids[$fid])) {
+		if ($ids = $this->gateway->getFairteilerIds($this->func->fsId())) {
+			if (in_array($fid, $ids)) {
 				return true;
 			}
 		}

@@ -10,17 +10,19 @@ use Foodsharing\Lib\Session\S;
 class SettingsControl extends Control
 {
 	private $foodsaver;
+	private $quizModel;
 
-	public function __construct()
+	public function __construct(SettingsModel $model, SettingsView $view, QuizModel $quizModel)
 	{
+		$this->model = $model;
+		$this->view = $view;
+		$this->quizModel = $quizModel;
+
+		parent::__construct();
+
 		if (!S::may()) {
 			$this->func->goLogin();
 		}
-
-		$this->model = new SettingsModel();
-		$this->view = new SettingsView();
-
-		parent::__construct();
 
 		if (isset($_GET['newmail'])) {
 			$this->handle_newmail();
@@ -84,9 +86,7 @@ class SettingsControl extends Control
 			if (!$this->foodsaver['verified']) {
 				$this->func->addContent($this->view->simpleContent($this->model->getContent(45)));
 			} else {
-				$model = new QuizModel();
-
-				if (($status = $model->getQuizStatus(2)) && ($quiz = $model->getQuiz(2))) {
+				if (($status = $this->quizModel->getQuizStatus(2)) && ($quiz = $this->quizModel->getQuiz(2))) {
 					if ((int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)$this->func->fsId()) == 0) {
 						$this->func->info('Du darfst zunächst das Foodsaver Quiz machen');
 						$this->func->go('/?page=settings&sub=upgrade/up_fs');
@@ -132,9 +132,7 @@ class SettingsControl extends Control
 	public function up_fs()
 	{
 		if (S::may()) {
-			$model = new QuizModel();
-
-			if (($status = $model->getQuizStatus(1)) && ($quiz = $model->getQuiz(1))) {
+			if (($status = $this->quizModel->getQuizStatus(1)) && ($quiz = $this->quizModel->getQuiz(1))) {
 				$desc = $this->model->getContent(12);
 
 				// Quiz wurde noch gar nicht probiert
@@ -169,9 +167,7 @@ class SettingsControl extends Control
 	public function up_bot()
 	{
 		if (S::may() && $this->foodsaver['rolle'] >= 2) {
-			$model = new QuizModel();
-
-			if (($status = $model->getQuizStatus(3)) && ($quiz = $model->getQuiz(3))) {
+			if (($status = $this->quizModel->getQuizStatus(3)) && ($quiz = $this->quizModel->getQuiz(3))) {
 				$desc = $this->model->getContent(12);
 
 				// Quiz wurde noch gar nicht probiert
@@ -411,7 +407,7 @@ class SettingsControl extends Control
 	public function calendar()
 	{
 		$this->func->addBread($this->func->s('calendar'));
-		$token = $this->func->generate_api_token($this->func->fsId());
+		$token = $this->generate_api_token($this->func->fsId());
 		$this->func->addContent($this->view->settingsCalendar($token));
 	}
 
@@ -554,5 +550,22 @@ class SettingsControl extends Control
 	private function upgrade()
 	{
 		/* This needs to be here for routing of upgrade/ to work. Do not remove! */
+	}
+
+	/** Creates and saves a new API token for given user
+	 * @param $fs Foodsaver ID
+	 *
+	 * @return false in case of error or weak algorithm, generated token otherwise
+	 */
+	private function generate_api_token($fs)
+	{
+		$token = bin2hex(openssl_random_pseudo_bytes(10, $strong));
+		if (!$strong || $token === false) {
+			return false;
+		}
+
+		$this->model->insert('INSERT INTO ' . PREFIX . 'apitoken (foodsaver_id, token) VALUES (' . (int)$fs . ', "' . $token . '")');
+
+		return $token;
 	}
 }

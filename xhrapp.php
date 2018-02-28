@@ -1,5 +1,6 @@
 <?php
 
+use Foodsharing\DI;
 use Foodsharing\Lib\Routing;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrResponses;
@@ -14,12 +15,13 @@ if (isset($_GET['app']) && isset($_GET['m'])) {
 	require_once 'lang/DE/de.php';
 
 	S::init();
+	$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
 	$class = Routing::getClassName($app, 'Xhr');
-	$obj = new $class();
+	$obj = DI::$shared->get(ltrim($class, '\\'));
 
 	if (method_exists($obj, $meth)) {
-		$out = $obj->$meth();
+		$out = $obj->$meth($request);
 
 		if ($out === XhrResponses::PERMISSION_DENIED) {
 			header('HTTP/1.1 403 Forbidden');

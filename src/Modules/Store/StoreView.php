@@ -12,6 +12,7 @@ class StoreView extends View
 			'<div id="datepicker" style="height:195px;"></div>' .
 			$this->v_utils->v_input_wrapper('Uhrzeit', $this->v_utils->v_form_time('time')) .
 			$this->v_utils->v_form_select('fetchercount', array('values' => array(
+				array('id' => 0, 'name' => 'Termin fällt aus'),
 				array('id' => 1, 'name' => '1 Abholer/in'),
 				array('id' => 2, 'name' => '2 Abholer/innen'),
 				array('id' => 3, 'name' => '3 Abholer/innen'),
@@ -57,7 +58,7 @@ class StoreView extends View
 		return $out;
 	}
 
-	public function betrieb_form($bezirk = false, $page = '', $lebensmittel_values, $foodsaver_values, $chains, $categories, $status)
+	public function betrieb_form($bezirk = false, $page = '', $lebensmittel_values, $chains, $categories, $status)
 	{
 		global $g_data;
 
@@ -67,23 +68,7 @@ class StoreView extends View
 			$g_data['foodsaver'] = array($this->func->fsId());
 		}
 
-		$verantwortlich_select = '';
-		if ($this->func->isOrgaTeam() || $this->func->isBotschafter()) {
-			$verantwortlich_select = $this->v_utils->v_form_checkbox('foodsaver', array('values' => $foodsaver_values));
-		} elseif ($this->func->getAction('new')) {
-			$verantwortlich_select = $this->v_utils->v_input_wrapper($this->func->s('foodsaver'), '<input type="hidden" name="foodsaver[]" value="' . $this->func->fsId() . '" />Du wirst durch die Eintragrung vorerst verantwortlich für Diesen Betrieb');
-		}
-
 		$this->func->addJs('
-			$(".cb-foodsaver").click(function(){
-					if($(".cb-foodsaver:checked").length >= 4)
-					{
-						pulseError(\'' . $this->func->jsSafe($this->func->s('max_3_leader')) . '\');
-						return false;
-					}
-					
-				});		
-				
 			$("#lat-wrapper").hide();
 			$("#lon-wrapper").hide();
 		');
@@ -95,14 +80,23 @@ class StoreView extends View
 		if (isset($g_data['stadt'])) {
 			$g_data['ort'] = $g_data['stadt'];
 		}
+		$g_data['anschrift'] = $g_data['str'];
+		if (isset($g_data['hsnr'])) {
+			$g_data['anschrift'] .= ' ' . $g_data['hsnr'];
+		}
 
 		$this->func->addJs('$("textarea").css("height","70px");$("textarea").autosize();');
+
+		foreach (['anschrift', 'plz', 'ort', 'lat', 'lon'] as $i) {
+			$latLonOptions[$i] = $g_data[$i];
+		}
+		$latLonOptions['location'] = ['lat' => $g_data['lat'], 'lon' => $g_data['lon']];
 
 		return $this->v_utils->v_quickform('betrieb', array(
 			$bc,
 			$this->v_utils->v_form_hidden('page', $page),
 			$this->v_utils->v_form_text('name'),
-			$this->latLonPicker('LatLng', array('hsnr' => true)),
+			$this->latLonPicker('LatLng', $latLonOptions),
 
 			$this->v_utils->v_form_select('kette_id', array('add' => true, 'values' => $chains, 'desc' => 'Bitte nur inhabergeführte Betriebe selbstständig ansprechen, niemals Betriebe einer Kette anfragen!')),
 			$this->v_utils->v_form_select('betrieb_kategorie_id', array('add' => true, 'values' => $categories)),
@@ -153,9 +147,7 @@ class StoreView extends View
 				['id' => 5, 'name' => '20-30 kg'],
 				['id' => 6, 'name' => '40-50 kg'],
 				['id' => 7, 'name' => 'mehr als 50 kg']
-			]]),
-
-			$verantwortlich_select
+			]])
 		));
 	}
 }

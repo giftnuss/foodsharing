@@ -11,5 +11,4 @@ $I->amOnPage('/');
 $I->fillField('email_adress', $foodsaver['email']);
 $I->fillField('password', $pass);
 $I->click('#loginbar input[type=submit]');
-$I->waitForPageBody();
-$I->see('Willkommen ' . $foodsaver['name'] . '!');
+$I->waitForText('Willkommen ' . $foodsaver['name'] . '!');

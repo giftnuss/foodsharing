@@ -1,11 +1,14 @@
 <?php
-global $g_func;
-$content_left = $g_func->getContent(CNT_LEFT);
-$content_right = $g_func->getContent(CNT_RIGHT);
-$content_top = $g_func->getContent(CNT_TOP);
-$content_bottom = $g_func->getContent(CNT_BOTTOM);
-$content_main = $g_func->getContent(CNT_MAIN);
-$content_overtop = $g_func->getContent(CNT_OVERTOP);
+use Foodsharing\DI;
+use Foodsharing\Lib\Func;
+
+$func = DI::$shared->get(Func::class);
+$content_left = $func->getContent(CNT_LEFT);
+$content_right = $func->getContent(CNT_RIGHT);
+$content_top = $func->getContent(CNT_TOP);
+$content_bottom = $func->getContent(CNT_BOTTOM);
+$content_main = $func->getContent(CNT_MAIN);
+$content_overtop = $func->getContent(CNT_OVERTOP);
 
 $mainwidth = 24;
 
@@ -53,15 +56,15 @@ if (!empty($content_main)) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="favicon" href="favicon.ico" type="image/x-icon" />
-	<?php echo $g_func->getHead(); ?>
-	<style type="text/css"><?php echo $g_func->getAddCss(); ?></style>
+	<?php echo $func->getHead(); ?>
+	<style type="text/css"><?php echo $func->getAddCss(); ?></style>
 	<script type="text/javascript">
 		var _gaq = _gaq || [];  _gaq.push(['_setAccount', 'UA-43313114-1']);  _gaq.push(['_setDomainName', 'lebensmittelretten.de']);  _gaq.push(['_trackPageview']); (function() {var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);  })();
 	</script>
 	<script type="text/javascript">
-	<?php echo $g_func->getJsFunc(); ?>
+	<?php echo $func->getJsFunc(); ?>
 	$(document).ready(function(){
-		<?php echo $g_func->getJs(); ?>
+		<?php echo $func->getJs(); ?>
 	});
 	
 	</script>
@@ -83,13 +86,13 @@ if (!empty($content_main)) {
 		</div>
 	</div>
 	<?php echo $content_overtop; ?>
-	<div id="main"<?php if ($g_func->isMob()) {
+	<div id="main"<?php if ($func->isMob()) {
 	?> class="mobile"<?php
 } ?>>
-		<?php echo $g_func->getBread(); ?>
+		<?php echo $func->getBread(); ?>
 		<div class="pure-g mainpure">
 			<?php 
-			if ($g_func->isMob()) {
+			if ($func->isMob()) {
 				echo $content_main;
 				echo $content_right;
 				echo $content_left;
@@ -105,9 +108,9 @@ if (!empty($content_main)) {
 		<?php echo $content_bottom; ?>
 	</div>
 	<noscript>
-		<div id="nojs">Ohne Javascript l&auml;ft hier leider nix!</div>
+		<div id="nojs">Ohne JavaScript l&auml;uft hier leider nichts.</div>
 	</noscript> 
-	<?php $g_func->printHidden(); ?>
+	<?php $func->printHidden(); ?>
 
 	<div class="pulse-msg ui-shadow ui-corner-all" id="pulse-error" style="display:none;"></div>
 	<div class="pulse-msg ui-shadow ui-corner-all" id="pulse-info" style="display:none;"></div>

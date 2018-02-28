@@ -14,11 +14,12 @@ class EmailControl extends Control
 {
 	private $mbmodel;
 
-	public function __construct()
+	public function __construct(Model $model, MailboxModel $mbmodel)
 	{
+		$this->model = $model;
+		$this->mbmodel = $mbmodel;
+
 		parent::__construct();
-		$this->model = new Model();
-		$this->mbmodel = new MailboxModel();
 
 		if (!S::may('orga')) {
 			$this->func->go('/');
@@ -71,7 +72,7 @@ class EmailControl extends Control
 
 		$g_data['testemail'] = $this->model->getVal('email', 'foodsaver', $this->func->fsId());
 
-		$this->func->addContent($this->v_utils->v_field($this->v_utils->v_form_text('testemail') . $this->v_utils->v_input_wrapper('', '<a class="button" href="#" onclick="ajreq(\'testmail\',{email:$(\'#testemail\').val(),subject:$(\'#subject\').val(),message:$(\'#message\').tinymce().$this->func->getContent()},\'post\');return false;">Test-Mail senden</a>'), 'Newsletter Testen', array('class' => 'ui-padding')), CNT_RIGHT);
+		$this->func->addContent($this->v_utils->v_field($this->v_utils->v_form_text('testemail') . $this->v_utils->v_input_wrapper('', '<a class="button" href="#" onclick="ajreq(\'testmail\',{email:$(\'#testemail\').val(),subject:$(\'#subject\').val(),message:$(\'#message\').tinymce().getContent()},\'post\');return false;">Test-Mail senden</a>'), 'Newsletter Testen', array('class' => 'ui-padding')), CNT_RIGHT);
 
 		$this->func->addJs("$('#rightmenu').menu();");
 		$this->func->addContent($this->v_utils->v_field('<div class="ui-padding">' . $this->func->s('personal_styling_desc') . '</div>', $this->func->s('personal_styling')), CNT_RIGHT);

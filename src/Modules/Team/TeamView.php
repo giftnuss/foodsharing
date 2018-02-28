@@ -8,15 +8,6 @@ class TeamView extends View
 {
 	public function user($user)
 	{
-		$subtitle = '';
-		if ($user['groups']) {
-			foreach ($user['groups'] as $g) {
-				$subtitle .= ', ' . $g['name'];
-			}
-
-			$subtitle = '<p class="subtitle">' . substr($subtitle, 2) . '</p>';
-		}
-
 		$socials = '';
 
 		if ($user['homepage'] != '') {
@@ -48,7 +39,6 @@ class TeamView extends View
 			<span class="img" style="background-image:url(/images/' . $user['photo'] . ');"></span>
 			<h1>' . $user['name'] . '</h1>
 			<small>' . $user['position'] . '</small>
-			' . $subtitle . '
 			<p>' . nl2br($user['desc']) . '</p>
 					
 			<span class="foot corner-bottom">

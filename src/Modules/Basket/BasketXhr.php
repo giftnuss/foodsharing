@@ -7,15 +7,20 @@ use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Message\MessageModel;
 
 class BasketXhr extends Control
 {
 	private $status;
+	private $gateway;
+	private $messageModel;
 
-	public function __construct()
+	public function __construct(BasketModel $model, BasketView $view, BasketGateway $gateway, MessageModel $messageModel)
 	{
-		$this->model = new BasketModel();
-		$this->view = new BasketView();
+		$this->model = $model;
+		$this->messageModel = $messageModel;
+		$this->view = $view;
+		$this->gateway = $gateway;
 
 		$this->status = array(
 			'ungelesen' => 0,
@@ -359,7 +364,7 @@ class BasketXhr extends Control
 			$msg = strip_tags($_GET['msg']);
 			$msg = trim($msg);
 			if (!empty($msg)) {
-				$this->model->message($fs_id, $this->func->fsId(), $msg, 0);
+				$this->messageModel->message($fs_id, $this->func->fsId(), $msg, 0);
 				$this->mailMessage($this->func->fsId(), $fs_id, $msg, 22);
 				$this->model->setStatus($_GET['id'], 0);
 
@@ -403,7 +408,7 @@ class BasketXhr extends Control
 
 	public function update()
 	{
-		$count = $this->model->getUpdateCount();
+		$count = $this->gateway->getUpdateCount($this->func->fsId());
 		if ((int)$count > 0) {
 			return array(
 				'status' => 1,
@@ -438,19 +443,6 @@ class BasketXhr extends Control
 	public function removeRequest()
 	{
 		if ($request = $this->model->getRequest($_GET['id'], $_GET['fid'])) {
-			global $g_data;
-			$g_data['fetchstate'] = 3;
-			/*
-			 * Array
-				(
-					[time_ts] => 1402149037
-					[fs_name] => Luisa
-					[fs_photo] => 530c93a86a9f8.jpg
-					[fs_id] => 3542
-					[id] => 20
-				)
-			 */
-
 			$dia = new XhrDialog();
 			$dia->addOpt('width', '400');
 			$dia->noOverflow();
@@ -465,8 +457,8 @@ class BasketXhr extends Control
 					'values' => array(
 						array('id' => 3, 'name' => 'Ja, ' . $this->func->genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' hat den Korb abgeholt.'),
 						array('id' => 5, 'name' => 'Nein, ' . $this->func->genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' ist leider nicht wie verabredet erschienen.'),
-						array('id' => 5, 'name' => 'Die Lebensmittel wurden von jemand anderem abgeholt.'),
-					)
+						array('id' => 5, 'name' => 'Die Lebensmittel wurden von jemand anderem abgeholt.')),
+					'selected' => 3
 				))
 			);
 			$dia->addAbortButton();

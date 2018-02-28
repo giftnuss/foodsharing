@@ -8,21 +8,22 @@ use Foodsharing\Modules\Store\StoreModel;
 
 class StoreUserControl extends Control
 {
-	public function __construct()
+	public function __construct(StoreModel $model, StoreUserView $view)
 	{
+		$this->model = $model;
+		$this->view = $view;
+
+		parent::__construct();
+
 		if (!S::may()) {
 			$this->func->goLogin();
 		}
-		$this->model = new StoreModel();
-		$this->view = new StoreUserView();
-
-		parent::__construct();
 	}
 
 	public function index()
 	{
 		$this->func->addScript('/js/contextmenu/jquery.contextMenu.js');
-		$this->func->addCss('/js/contextmenu/jquery.contextMenu.css');
+		$this->func->addStylesheet('/js/contextmenu/jquery.contextMenu.css');
 
 		if (isset($_GET['id'])) {
 			$this->func->addBread($this->func->s('betrieb_bread'), '/?page=fsbetrieb');
@@ -109,7 +110,7 @@ class StoreUserControl extends Control
 						'team',
 
 						array(
-							$this->v_utils->v_form_tagselect('foodsaver', array('data' => $this->model->xhrGetTagFsAll())),
+							$this->v_utils->v_form_tagselect('foodsaver', array('valueOptions' => $this->model->xhrGetTagFsAll())),
 							$verantwortlich_select),
 						array('submit' => $this->func->s('save'))
 					);
@@ -430,9 +431,9 @@ class StoreUserControl extends Control
 							
 								<div class="posts"></div>
 							</div>', 'Pinnwand', $opt));
-					/*pinnwand ende*/
+				/*pinnwand ende*/
 				} else {
-					$this->func->addContent($this->v_utils->v_info('Du bist momentan auf der Warteliste, sobald Hilfe benötigt wird wirst Du kontaktiert.'));
+					$this->func->addContent($this->v_utils->v_info('Du bist momentan auf der Springerliste. Sobald Hilfe benötigt wird, wirst Du kontaktiert.'));
 				}
 				$zeit_cnt = '';
 				if ($betrieb['verantwortlich']) {
@@ -787,36 +788,6 @@ class StoreUserControl extends Control
 			$this->func->addContent($this->view->u_betriebList($betriebe['verantwortlich'], $this->func->s('you_responsible'), true));
 			$this->func->addContent($this->view->u_betriebList($betriebe['team'], $this->func->s('you_fetcher'), false));
 			$this->func->addContent($this->view->u_betriebList($betriebe['sonstige'], $this->func->sv('more_stores', array('name' => $bezirk['name'])), false));
-		}
-	}
-
-	public function handle_edit()
-	{
-		global $db;
-		global $g_data;
-		if ($this->func->submitted()) {
-			$g_data['foodsaver'] = array($g_data['foodsaver']);
-			if ($this->model->update_betrieb($_GET['id'], $g_data)) {
-				$this->func->info($this->func->s('betrieb_edit_success'));
-				$this->func->goPage();
-			} else {
-				$this->func->error($this->func->s('error'));
-			}
-		}
-	}
-
-	public function handle_add()
-	{
-		global $db;
-		global $g_data;
-		if ($this->func->submitted()) {
-			$g_data['foodsaver'] = array($g_data['foodsaver']);
-			if ($this->model->add_betrieb($g_data)) {
-				$this->func->info($this->func->s('betrieb_add_success'));
-				$this->func->goPage();
-			} else {
-				$this->func->error($this->func->s('error'));
-			}
 		}
 	}
 }

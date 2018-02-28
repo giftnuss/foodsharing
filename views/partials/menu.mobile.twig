@@ -1,0 +1,103 @@
+<script type="text/javascript">
+    $(function () {
+        $("#mobilemenu").bind("change", function () {
+            if ($(this).val() != "") {
+                showLoader();
+                goTo($(this).val());
+            }
+        });
+    });
+</script>
+
+{% if loggedIn %}
+    <select id="mobilemenu">
+        <option class="famenu" value="dashboard" selected="selected">&#xf0c9;</option>
+        <option value="/">Home</option>
+        <option value="/?page=dashboard">Dashboard</option>
+        <option value="/karte">Karte</option>
+        <option value="/?page=listFaq">F.A.Q.</option>
+        <option value="https://wiki.foodsharing.de">Wiki</option>
+        <option value="/?page=content&sub=changelog">{{ 'changelog' | translate }}</option>
+
+        <option value="/?page=settings">Einstellungen</option>
+        <option value="/?page=logout">Logout</option>
+
+        {% if hasFsRole %}
+            <optgroup label="Gruppen">
+                <option value="/?page=groups">GRUPPENÜBERSICHT</option>
+                {% if hasFsRole and workingGroups|length > 0 %}
+                    {% for workingGroup in workingGroups %}
+                        <option value="/?page=bezirk&bid={{ workingGroup.id }}&sub=forum">{{ workingGroup.name }}</option>
+                    {% endfor %}
+                {% endif %}
+            </optgroup>
+        {% endif %}
+
+        {% if hasFsRole and stores|length > 0 %}
+            <optgroup label="Betriebe">
+                {% for store in stores %}
+                    <option value="/?page=fsbetrieb&id={{ store.id }}&sub=forum">{{ store.name }}</option>
+                {% endfor %}
+            </optgroup>
+        {% endif %}
+
+        <optgroup label="Bezirke">
+            {% for region in regions %}
+                <option value="/?page=bezirk&bid={{ region.id }}&sub=forum">{{ region.name }}</option>
+            {% endfor %}
+        </optgroup>
+
+        {% if isOrgaTeam or may.editBlog or may.editQuiz or may.handleReports %}
+            <optgroup label="Orga">
+
+                {% if isOrgaTeam %}
+                    <option value="/?page=betrieb&bid=0">{{ 'menu_all_store' | translate }}</option>
+                    <option value="/?page=foodsaver&bid=0">{{ 'menu_all_fs' | translate }}</option>
+                    <option value="/?page=geoclean&sub=lostregion">{{ 'menu_regions_without_bots' | translate }}</option>
+                    <option value="/?page=region">{{ 'menu_manage_regions' | translate }}</option>
+                    <option value="/?page=newarea">{{ 'menu_newarea' | translate }}</option>
+                {% endif %}
+
+                {% if may.editBlog %}
+                    <option value="/?page=blog&sub=manage">{{ 'menu_blog' | translate }}</option>
+                {% endif %}
+
+                {% if isOrgaTeam %}
+                    <option value="/?page=email">{{ 'menu_email' | translate }}</option>
+                    <option value="/?page=message_tpl">{{ 'menu_email_tpl' | translate }}</option>
+                    <option value="/?page=faq">{{ 'menu_faq' | translate }}</option>
+                    <option value="/?page=geoclean">{{ 'menu_foodsaver_without_region' | translate }}</option>
+                    <option value="/?page=content">{{ 'menu_content' | translate }}</option>
+                    <option value="/?page=lebensmittel">{{ 'menu_foodtypes' | translate }}</option>
+                    <option value="/?page=mailbox&a=manage">{{ 'menu_mailbox_manage' | translate }}</option>
+                {% endif %}
+
+                {% if may.editQuiz %}
+                    <option value="/?page=quiz">{{ 'menu_quiz' | translate }}</option>
+                {% endif %}
+
+                {% if may.handleReports %}
+                    <option value="/?page=report&sub=uncom">{{ 'menu_reports' | translate }}</option>
+                {% endif %}
+
+            </optgroup>
+        {% endif %}
+    </select>
+{% else %}
+    <select id="mobilemenu">
+        <option class="famenu" value="dashboard" selected="selected">&#xf0c9;</option>
+        <option value="/">Home</option>
+        <option value="/karte">Karte</option>
+        <option value="/ueber-uns">- Über uns</option>
+        <option value="/?page=content&sub=forderungen">- Forderungen</option>
+        <option value="/?page=content&sub=communitiesGermany">- Community Deutschland</option>
+        <option value="/?page=content&sub=communitiesAustria">- Community Österreich</option>
+        <option value="/?page=content&sub=communitiesSwitzerland">- Community Schweiz</option>
+        <option value="/team">- Team und Kontaktdaten</option>
+        <option value="/partner">- Partner</option>
+        <option value="/?page=content&sub=presse">- Presse</option>
+        <option value="/?page=content&sub=infohub">Infosammlung FAQ Ratgeber etc.</option>
+        <option value="/?page=content&sub=joininfo">Mach mit!</option>
+        <option value="/login">Login</option>
+    </select>
+{% endif %}

@@ -3,36 +3,33 @@
 
 class CompanyCest
 {
+	private $bezirk_id = 241;
+
 	private function createStoreAndUsers()
 	{
 		$I = $this->tester;
-		$this->store = $I->createStore(241);
-		$this->storeCoordinator = $I->createStoreCoordinator('pw');
-		$this->participatorA = $I->createFoodsaver('pw');
-		$this->participatorB = $I->createFoodsaver('pw');
-		$this->sameRegionFoodsaver = $I->createFoodsaver();
+		$this->store = $I->createStore($this->bezirk_id);
+		$this->storeCoordinator = $I->createStoreCoordinator(null, ['bezirk_id' => $this->bezirk_id]);
+		$this->participatorA = $I->createFoodsaver(null, ['bezirk_id' => $this->bezirk_id]);
+		$this->participatorB = $I->createFoodsaver(null, ['bezirk_id' => $this->bezirk_id]);
+		$this->sameRegionFoodsaver = $I->createFoodsaver(null, ['bezirk_id' => $this->bezirk_id]);
 		$this->unconnectedFoodsaver = $I->createFoodsaver();
 		$this->unconnectedFoodsharer = $I->createFoodsharer();
 		$I->addStoreTeam($this->store['id'], $this->storeCoordinator['id'], true);
 		$I->addStoreTeam($this->store['id'], $this->participatorA['id']);
 		$I->addStoreTeam($this->store['id'], $this->participatorB['id']);
-
-		$I->addBezirkMember($this->store['bezirk_id'], $this->storeCoordinator['id']);
-		$I->addBezirkMember($this->store['bezirk_id'], $this->participatorA['id']);
-		$I->addBezirkMember($this->store['bezirk_id'], $this->participatorB['id']);
-		$I->addBezirkMember($this->store['bezirk_id'], $this->sameRegionFoodsaver['id']);
 	}
 
 	private function loginAsCoordinator()
 	{
 		$I = $this->tester;
-		$I->login($this->storeCoordinator['email'], 'pw');
+		$I->login($this->storeCoordinator['email']);
 	}
 
 	private function loginAsMember()
 	{
 		$I = $this->tester;
-		$I->login($this->participatorA['email'], 'pw');
+		$I->login($this->participatorA['email']);
 	}
 
 	private function loginAsFoodsharer()

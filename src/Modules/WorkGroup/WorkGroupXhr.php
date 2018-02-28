@@ -8,10 +8,10 @@ use Foodsharing\Lib\Xhr\XhrDialog;
 
 class WorkGroupXhr extends Control
 {
-	public function __construct()
+	public function __construct(WorkGroupModel $model, WorkGroupView $view)
 	{
-		$this->model = new WorkGroupModel();
-		$this->view = new WorkGroupView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}
@@ -37,7 +37,7 @@ class WorkGroupXhr extends Control
 	{
 		if ($group = $this->model->getGroup($_GET['id'])) {
 			if ($group['apply_type'] == 3) {
-				$this->model->addMeToGroup($_GET['id']);
+				$this->model->addToGroup($_GET['id'], S::id());
 
 				return array(
 					'status' => 1,
@@ -73,7 +73,7 @@ class WorkGroupXhr extends Control
 								'Zeit:' . "\n=====\n" . trim($zeit)
 							);
 
-							$this->model->groupApply($group['id'], implode("\n\n", $content));
+							$this->model->groupApply($group['id'], S::id(), implode("\n\n", $content));
 
 							$this->func->libmail(array(
 								'email' => $fs['email'],

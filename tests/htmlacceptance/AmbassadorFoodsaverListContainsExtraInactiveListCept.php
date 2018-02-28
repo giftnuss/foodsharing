@@ -5,15 +5,12 @@ $I = new HtmlAcceptanceTester($scenario);
 $I->wantTo('see that the foodsaver list for a bezirk contains a second list with inactive foodsavers');
 
 $regionName = $I->grabFromDatabase('fs_bezirk', 'name', ['id' => $testRegion]);
-$foodsaver = $I->createFoodsaver(null, ['name' => 'fs1', 'nachname' => 'saver1', 'photo' => 'does-not-exist.jpg', 'last_login' => null]);
-$inactiveFoodsaver = $I->createFoodsaver(null, ['name' => 'fs-i', 'nachname' => 'saver2', 'photo' => 'does-not-exist.jpg', 'last_login' => '2017-01-01 00:00:00']);
-$activeFoodsaver = $I->createFoodsaver(null, ['name' => 'fs-a', 'nachname' => 'saver3', 'photo' => 'does-not-exist.jpg', 'last_login' => (new \DateTime())->format('Y-m-d H:i:s')]);
-$ambassador = $I->createAmbassador(null, ['name' => 'ambassador-a', 'photo' => 'does-not-exist.jpg', 'last_login' => (new \DateTime())->format('Y-m-d H:i:s')]);
+$foodsaver = $I->createFoodsaver(null, ['name' => 'fs1', 'nachname' => 'saver1', 'photo' => 'does-not-exist.jpg', 'last_login' => null, 'bezirk_id' => $testRegion]);
+$inactiveFoodsaver = $I->createFoodsaver(null, ['name' => 'fs-i', 'nachname' => 'saver2', 'photo' => 'does-not-exist.jpg', 'last_login' => '2017-01-01 00:00:00', 'bezirk_id' => $testRegion]);
+$activeFoodsaver = $I->createFoodsaver(null, ['name' => 'fs-a', 'nachname' => 'saver3', 'photo' => 'does-not-exist.jpg', 'last_login' => (new \DateTime())->format('Y-m-d H:i:s'), 'bezirk_id' => $testRegion]);
+$ambassador = $I->createAmbassador(null, ['name' => 'ambassador-a', 'photo' => 'does-not-exist.jpg', 'last_login' => (new \DateTime())->format('Y-m-d H:i:s'), 'bezirk_id' => $testRegion]);
 $unrelatedFoodsaver = $I->createFoodsaver(null, ['name' => 'unrelated-fs']);
-$I->addBezirkMember($testRegion, $ambassador['id'], true);
-$I->addBezirkMember($testRegion, $foodsaver['id']);
-$I->addBezirkMember($testRegion, $activeFoodsaver['id']);
-$I->addBezirkMember($testRegion, $inactiveFoodsaver['id']);
+$I->addBezirkAdmin($testRegion, $ambassador['id']);
 
 $I->login($ambassador['email']);
 

@@ -10,15 +10,17 @@ class EventXhr extends Control
 {
 	private $stats;
 	private $event;
+	private $gateway;
 
-	public function __construct()
+	public function __construct(EventModel $model, EventGateway $gateway)
 	{
-		$this->model = new EventModel();
+		$this->model = $model;
+		$this->gateway = $gateway;
 
 		parent::__construct();
 
 		if (isset($_GET['id'])) {
-			$this->event = $this->model->getEvent($_GET['id']);
+			$this->event = $this->gateway->getEvent($_GET['id']);
 			if (!$this->mayEvent()) {
 				return false;
 			}

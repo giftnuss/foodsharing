@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: matthias
- * Date: 11.02.18
- * Time: 17:16.
- */
 
 namespace Foodsharing\Modules\FAQAdmin;
 

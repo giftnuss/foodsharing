@@ -2,19 +2,35 @@
 
 namespace Foodsharing\Modules\Dashboard;
 
-use Foodsharing\Modules\Content\ContentModel;
+use Foodsharing\Lib\Twig;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Content\ContentGateway;
+use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Profile\ProfileModel;
 
 class DashboardControl extends Control
 {
 	private $user;
+	private $gateway;
+	private $contentGateway;
+	private $twig;
+	private $profileModel;
 
-	public function __construct()
+	public function __construct(
+		DashboardView $view,
+		DashboardGateway $gateway,
+		ContentGateway $contentGateway,
+		Model $model,
+		ProfileModel $profileModel,
+		Twig $twig)
 	{
-		$this->model = new DashboardModel();
-		$this->view = new DashboardView();
+		$this->view = $view;
+		$this->gateway = $gateway;
+		$this->contentGateway = $contentGateway;
+		$this->model = $model;
+		$this->twig = $twig;
+		$this->profileModel = $profileModel;
 
 		parent::__construct();
 
@@ -22,13 +38,13 @@ class DashboardControl extends Control
 			$this->func->go('/');
 		}
 
-		$this->user = $this->model->getUser();
+		$this->user = $this->gateway->getUser($this->func->fsId());
 	}
 
 	public function index()
 	{
 		$this->func->addScript('/js/contextmenu/jquery.contextMenu.js');
-		$this->func->addCss('/js/contextmenu/jquery.contextMenu.css');
+		$this->func->addStylesheet('/js/contextmenu/jquery.contextMenu.css');
 
 		$check = false;
 
@@ -75,7 +91,7 @@ class DashboardControl extends Control
 		}
 
 		if ($check) {
-			$cnt = $this->model->getContent(33);
+			$cnt = $this->contentGateway->getContent(33);
 
 			$cnt['body'] = str_replace(array(
 				'{NAME}',
@@ -88,13 +104,13 @@ class DashboardControl extends Control
 			if (S::option('quiz-infobox-seen')) {
 				$cnt['body'] = '<div>' . substr(strip_tags($cnt['body']), 0, 120) . ' ...<a href="#" onclick="$(this).parent().hide().next().show();return false;">weiterlesen</a></div><div style="display:none;">' . $cnt['body'] . '</div>';
 			} else {
-				$cnt['body'] = $cnt['body'] . '<p><a href="#" onclick="ajreq(\'quizpopup\',{app:\'quiz\'});return false;">Weiter zum Quiz</a></p><p><a href="#"onclick="$(this).parent().parent().hide();ajax.req(\'quiz\',\'hideinfo\');return false;"><i class="fa fa-check-square-o"></i> Hinweis gelesen und nicht mehr anzeigen</a></p>';
+				$cnt['body'] = $cnt['body'] . '<p><a href="#" onclick="ajreq(\'quizpopup\',{app:\'quiz\'});return false;">Weiter zum Quiz</a></p><p><a href="#" onclick="$(this).parent().parent().hide();ajax.req(\'quiz\',\'hideinfo\');return false;"><i class="fa fa-check-square-o"></i> Hinweis gelesen und nicht mehr anzeigen</a></p>';
 			}
 			$this->func->addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
 		}
 
-		$this->func->addBread($this->func->s('dashboard'));
-		$this->func->addTitle($this->func->s('dashboard'));
+		$this->func->addBread('Dashboard');
+		$this->func->addTitle('Dashboard');
 		/*
 		 * User is foodsaver
 		 */
@@ -121,11 +137,15 @@ class DashboardControl extends Control
 		}
 
 		$this->func->addContent(
-			$this->view->topbar(
-				$this->func->sv('welcome', array('name' => $this->user['name'])),
-				$subtitle,
-				$this->func->avatar($this->user, 50, '/img/fairteiler50x50.png')
-			),
+			$this->twig->render('partials/topbar.twig', [
+				'title' => $this->func->sv('welcome', ['name' => $this->user['name']]),
+				'subtitle' => $subtitle,
+				'avatar' => [
+					'user' => $this->user,
+					'size' => 50,
+					'imageUrl' => $this->func->img($this->user['photo'], 50, 'q', '/img/fairteiler50x50.png')
+				]
+			]),
 			CNT_TOP
 		);
 
@@ -133,9 +153,7 @@ class DashboardControl extends Control
 
 		$this->func->addContent($this->view->foodsharerMenu(), CNT_LEFT);
 
-		$db = new ContentModel();
-
-		$cnt = $db->getContent(33);
+		$cnt = $this->contentGateway->getContent(33);
 
 		$cnt['body'] = str_replace(array(
 			'{NAME}',
@@ -149,10 +167,10 @@ class DashboardControl extends Control
 
 		$this->view->updates();
 
-		if ($this->user['lat'] && ($baskets = $this->model->listCloseBaskets(50))) {
+		if ($this->user['lat'] && ($baskets = $this->gateway->listCloseBaskets($this->func->fsId(), S::getLocation($this->model), 50))) {
 			$this->func->addContent($this->view->closeBaskets($baskets), CNT_LEFT);
 		} else {
-			if ($baskets = $this->model->getNewestFoodbaskets()) {
+			if ($baskets = $this->gateway->getNewestFoodbaskets()) {
 				$this->func->addContent($this->view->newBaskets($baskets), CNT_LEFT);
 			}
 		}
@@ -160,9 +178,6 @@ class DashboardControl extends Control
 
 	private function dashFoodsaver()
 	{
-		$this->func->addBread('Dashboard');
-		$this->func->addTitle('Dashboard');
-
 		$val = $this->model->getValues(array('photo_public', 'anschrift', 'plz', 'lat', 'lon', 'stadt'), 'foodsaver', $this->func->fsId());
 
 		if (empty($val['lat']) || empty($val['lon']) ||
@@ -477,8 +492,7 @@ class DashboardControl extends Control
 		/*
 		 * Nächste Termine
 		*/
-		$profileModel = new ProfileModel();
-		if ($dates = $profileModel->getNextDates($this->func->fsId(), 10)) {
+		if ($dates = $this->profileModel->getNextDates($this->func->fsId(), 10)) {
 			$this->func->addContent($this->view->u_nextDates($dates), CNT_RIGHT);
 		}
 

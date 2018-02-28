@@ -17,8 +17,7 @@ $I = new AcceptanceTester($scenario);
 $I->wantTo('create a business card as a foodsaver');
 
 $regionName = $I->grabFromDatabase('fs_bezirk', 'name', ['id' => $testRegion]);
-$foodsaver = $I->createFoodsaver(null, ['name' => 'fs1', 'nachname' => 'saver1', 'photo' => 'does-not-exist.jpg', 'handy' => '+4966669999']);
-$I->addBezirkMember($testRegion, $foodsaver['id']);
+$foodsaver = $I->createFoodsaver(null, ['name' => 'fs1', 'nachname' => 'saver1', 'photo' => 'does-not-exist.jpg', 'handy' => '+4966669999', 'bezirk_id' => $testRegion]);
 
 $I->login($foodsaver['email']);
 
@@ -27,6 +26,4 @@ $I->selectOption('Optionen', 'Foodsaver für ' . $regionName);
 $I->waitForElementVisible('#pulse-info');
 $I->click('Visitenkarten herunterladen');
 
-$I->wait(4);
-
-$I->seeFileExists('/downloads/bcard-fs-' . convertId($foodsaver['name']) . '-' . convertId($foodsaver['nachname']) . '.pdf');
+$I->waitForFileExists('/downloads/bcard-fs-' . convertId($foodsaver['name']) . '-' . convertId($foodsaver['nachname']) . '.pdf');

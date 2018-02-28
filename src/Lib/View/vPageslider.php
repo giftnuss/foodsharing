@@ -2,19 +2,25 @@
 
 namespace Foodsharing\Lib\View;
 
+use Foodsharing\DI;
+use Foodsharing\Lib\Func;
+
 class vPageslider
 {
 	private $sections;
 	private $id;
 	private $defaultBgColor;
+
+	/**
+	 * @var Func
+	 */
 	private $func;
 
 	public static $pageslider_count = 0;
 
 	public function __construct()
 	{
-		global $g_func;
-		$this->func = $g_func;
+		$this->func = DI::$shared->get(Func::class);
 		$this->sections = array();
 		$this->defaultBgColor = '#F1E7C9';
 
@@ -22,7 +28,7 @@ class vPageslider
 		++self::$pageslider_count;
 
 		$this->func->addScript('/js/jquery.fullPage.min.js');
-		$this->func->addCss('/css/jquery.fullPage.css');
+		$this->func->addStylesheet('/css/jquery.fullPage.css');
 	}
 
 	public function addSection($html, $option = array())

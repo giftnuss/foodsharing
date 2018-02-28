@@ -1,0 +1,17 @@
+<div class="top corner-all">
+    {% if avatar is defined and avatar %}
+        <div class="img">
+            {% include 'partials/avatar.twig' with avatar only %}
+        </div>
+    {% endif %}
+    {% if img is defined and img %}
+        <div class="img">
+            <img src="{{ img }}"/>
+        </div>
+    {% endif %}
+    <h3>{{ title }}</h3>
+    {% if subtitle %}
+        <p>{{ subtitle }}</p>
+    {% endif %}
+    <div style="clear:both;"></div>
+</div>

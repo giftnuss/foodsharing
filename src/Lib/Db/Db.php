@@ -5,26 +5,41 @@ namespace Foodsharing\Lib\Db;
 use Exception;
 use Flourish\fImage;
 use Foodsharing\Debug\DebugBar;
+use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
 use mysqli;
 
 abstract class Db
 {
-	private static $mysqli = null;
+	/**
+	 * @var mysqli
+	 */
+	private $mysqli;
 	private $values;
+	/**
+	 * @var Func
+	 */
 	protected $func;
 
 	public function __construct()
 	{
-		global $g_func;
-		$this->func = $g_func;
 		$this->values = array();
+	}
 
-		if (is_null(self::$mysqli)) {
-			self::$mysqli = new mysqli();
-			self::$mysqli->connect(DB_HOST, DB_USER, DB_PASS, DB_DB);
-			$this->sql("SET NAMES 'utf8'");
-		}
+	/**
+	 * @required
+	 */
+	public function setFunc(Func $func)
+	{
+		$this->func = $func;
+	}
+
+	/**
+	 * @required
+	 */
+	public function setMysqli(mysqli $mysqli)
+	{
+		$this->mysqli = $mysqli;
 	}
 
 	public function addPassRequest($email, $mail = true)
@@ -33,7 +48,7 @@ abstract class Db
 			$k = uniqid();
 			$key = md5($k);
 
-			$id = $this->insert('
+			$this->insert('
 			REPLACE INTO 	`' . PREFIX . 'pass_request`
 			(
 				`foodsaver_id`,
@@ -293,28 +308,28 @@ abstract class Db
 
 	public function begin_transaction()
 	{
-		self::$mysqli->query('BEGIN');
+		$this->mysqli->query('BEGIN');
 	}
 
 	public function commit()
 	{
-		self::$mysqli->commit();
+		$this->mysqli->commit();
 	}
 
 	public function rollback()
 	{
-		self::$mysqli->rollback();
+		$this->mysqli->rollback();
 	}
 
 	public function sql($query)
 	{
 		$start = microtime(true);
-		$res = self::$mysqli->query($query);
+		$res = $this->mysqli->query($query);
 		$duration = microtime(true) - $start;
 
 		if ($res == false) {
-			error_log('SQL QUERY ERROR URL ' . $_SERVER['REQUEST_URI'] . ' IN ' . $query . ' : ' . self::$mysqli->error);
-			DebugBar::addQuery($query, $duration, false, self::$mysqli->errno, self::$mysqli->error);
+			error_log('SQL QUERY ERROR URL ' . $_SERVER['REQUEST_URI'] . ' IN ' . $query . ' : ' . $this->mysqli->error);
+			DebugBar::addQuery($query, $duration, false, $this->mysqli->errno, $this->mysqli->error);
 		} else {
 			DebugBar::addQuery($query, $duration, true);
 		}
@@ -322,6 +337,9 @@ abstract class Db
 		return $res;
 	}
 
+	/**
+	 * @deprecated use db->fetchValue
+	 */
 	public function qOne($sql)
 	{
 		if ($res = $this->sql($sql)) {
@@ -335,6 +353,9 @@ abstract class Db
 		return false;
 	}
 
+	/**
+	 * @deprecated use db->fetchAllValues
+	 */
 	public function qCol($sql)
 	{
 		$out = array();
@@ -357,7 +378,9 @@ abstract class Db
 	 *
 	 * @param string $sql
 	 *
-	 * @return multitype:array |boolean
+	 * @return array |boolean
+	 *
+	 * @deprecated use db->fetchAllValues and adapt code to not use indexed array
 	 */
 	public function qColKey($sql)
 	{
@@ -376,6 +399,9 @@ abstract class Db
 		}
 	}
 
+	/**
+	 * @deprecated use db->fetch
+	 */
 	public function qRow($sql)
 	{
 		try {
@@ -394,29 +420,41 @@ abstract class Db
 		return false;
 	}
 
+	/**
+	 * @deprecated use db->delete
+	 */
 	public function del($sql)
 	{
 		if ($res = $this->sql($sql)) {
-			return self::$mysqli->affected_rows;
+			return $this->mysqli->affected_rows;
 		}
 
 		return false;
 	}
 
+	/**
+	 * @deprecated use db->insert
+	 */
 	public function insert($sql)
 	{
 		if ($res = $this->sql($sql)) {
-			return self::$mysqli->insert_id;
+			return $this->mysqli->insert_id;
 		} else {
 			return false;
 		}
 	}
 
+	/**
+	 * @deprecated cast to int if necessary
+	 */
 	public function intval($val)
 	{
 		return (int)$val;
 	}
 
+	/**
+	 * @deprecated use db->update
+	 */
 	public function update($sql)
 	{
 		if ($this->sql($sql)) {
@@ -431,11 +469,18 @@ abstract class Db
 		return '"' . $this->safe($val) . '"';
 	}
 
+	/**
+	 * @deprecated use floatval() directly
+	 */
 	public function floatval($val)
 	{
 		return floatval($val);
 	}
 
+	/**
+	 * @deprecated use strip_tags() until the frontend can escape properly.
+	 * String escaping is not needed anymore with prepared statements
+	 */
 	public function strval($val, $html = false)
 	{
 		if (is_string($html) || $html === false) {
@@ -449,6 +494,9 @@ abstract class Db
 		return '"' . $this->safe($val) . '"';
 	}
 
+	/**
+	 * @deprecated use db->fetchAll
+	 */
 	public function q($sql)
 	{
 		$out = array();
@@ -474,13 +522,13 @@ abstract class Db
 
 	public function close()
 	{
-		@self::$mysqli->close();
-		self::$mysqli = null;
+		@$this->mysqli->close();
+		$this->mysqli = null;
 	}
 
 	public function safe($str)
 	{
-		return self::$mysqli->escape_string($str);
+		return $this->mysqli->escape_string($str);
 	}
 
 	public function getFoodsaverId()
@@ -648,12 +696,11 @@ abstract class Db
 		return false;
 	}
 
-	public function updateActivity($fs_id = false)
+	public function updateActivity($fs_id = null)
 	{
-		if ($fs_id === false) {
-			$fs_id = $this->func->fsId();
+		if ($fs_id) {
+			Mem::userSet($fs_id, 'active', time());
 		}
-		Mem::userSet($fs_id, 'active', time());
 	}
 
 	private function initSessionData($fs_id)
@@ -796,7 +843,7 @@ abstract class Db
 			if (!empty($fs['option'])) {
 				$options = unserialize($fs['option']);
 				foreach ($options as $key => $val) {
-					S::setOption($key, $val);
+					S::setOption($key, $val, $this);
 				}
 			}
 
@@ -965,13 +1012,12 @@ abstract class Db
 
 	public function updateFields($fields, $table, $id)
 	{
-		global $db;
 		$sql = array();
 		foreach ($fields as $k => $f) {
 			if (preg_replace('/[^0-9]/', '', $f) == $f) {
-				$sql[] = '`' . $k . '`=' . $db->intval($f);
+				$sql[] = '`' . $k . '`=' . $this->intval($f);
 			} else {
-				$sql[] = '`' . $k . '`=' . $db->strval($f);
+				$sql[] = '`' . $k . '`=' . $this->strval($f);
 			}
 		}
 
@@ -991,7 +1037,7 @@ abstract class Db
 	 * set option is an key value store each var is avalable in the user session.
 	 *
 	 * @param string $key
-	 * @param var $val
+	 * @param $val
 	 */
 	public function setOption($key, $val)
 	{

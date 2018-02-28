@@ -6,9 +6,9 @@ use Foodsharing\Modules\Console\ConsoleControl;
 
 class LookupControl extends ConsoleControl
 {
-	public function __construct()
+	public function __construct(LookupModel $model)
 	{
-		$this->model = new LookupModel();
+		$this->model = $model;
 		parent::__construct();
 	}
 
@@ -17,7 +17,7 @@ class LookupControl extends ConsoleControl
 		global $argv;
 		$filename = $argv[3];
 		if (!file_exists($filename)) {
-			error('Could not load file ' . $filename);
+			self::error('Could not load file ' . $filename);
 			die();
 		}
 

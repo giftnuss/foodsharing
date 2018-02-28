@@ -10,9 +10,9 @@ class InfoXhr extends Control
 {
 	private $info;
 
-	public function __construct()
+	public function __construct(InfoModel $model)
 	{
-		$this->model = new InfoModel();
+		$this->model = $model;
 
 		$this->info = array();
 

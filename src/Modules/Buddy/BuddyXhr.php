@@ -3,13 +3,17 @@
 namespace Foodsharing\Modules\Buddy;
 
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 
 class BuddyXhr extends Control
 {
-	public function __construct()
+	private $bellGateway;
+
+	public function __construct(BuddyModel $model, BellGateway $bellGateway)
 	{
-		$this->model = new BuddyModel();
+		$this->model = $model;
+		$this->bellGateway = $bellGateway;
 
 		parent::__construct();
 	}
@@ -53,7 +57,7 @@ class BuddyXhr extends Control
 
 			$identifier = 'buddy-' . $this->func->fsId() . '-' . (int)$_GET['id'];
 
-			$this->model->addBell($_GET['id'], $title, $body, $icon, $link_attributes, $vars, $identifier);
+			$this->bellGateway->addBell($_GET['id'], $title, $body, $icon, $link_attributes, $vars, $identifier);
 
 			return array(
 				'status' => 1,

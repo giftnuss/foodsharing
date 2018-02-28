@@ -6,9 +6,9 @@ use Foodsharing\Modules\Console\ConsoleControl;
 
 class StatsmanControl extends ConsoleControl
 {
-	public function __construct()
+	public function __construct(StatsmanModel $model)
 	{
-		$this->model = new StatsmanModel();
+		$this->model = $model;
 		parent::__construct();
 	}
 

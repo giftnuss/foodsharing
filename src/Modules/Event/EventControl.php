@@ -7,17 +7,20 @@ use Foodsharing\Modules\Core\Control;
 
 class EventControl extends Control
 {
-	public function __construct()
+	private $gateway;
+
+	public function __construct(EventModel $model, EventView $view, EventGateway $gateway)
 	{
-		$this->model = new EventModel();
-		$this->view = new EventView();
+		$this->model = $model;
+		$this->view = $view;
+		$this->gateway = $gateway;
 
 		parent::__construct();
 	}
 
 	public function index()
 	{
-		if (!isset($_GET['sub']) && isset($_GET['id']) && ($event = $this->model->getEvent($_GET['id']))) {
+		if (!isset($_GET['sub']) && isset($_GET['id']) && ($event = $this->gateway->getEventWithInvites($_GET['id']))) {
 			if (!$this->mayEvent($event)) {
 				return false;
 			}
@@ -66,7 +69,7 @@ class EventControl extends Control
 
 	public function edit()
 	{
-		if ($event = $this->model->getEvent($_GET['id'])) {
+		if ($event = $this->gateway->getEventWithInvites($_GET['id'])) {
 			if (!$this->isEventAdmin($event)) {
 				return false;
 			}
@@ -92,7 +95,7 @@ class EventControl extends Control
 				$bezirke = $this->model->getBezirke();
 
 				if ($event['location_id'] > 0) {
-					if ($loc = $this->model->getLocation($event['location_id'])) {
+					if ($loc = $this->gateway->getLocation($event['location_id'])) {
 						$event['location_name'] = $loc['name'];
 						$event['lat'] = $loc['lat'];
 						$event['lon'] = $loc['lon'];
@@ -190,7 +193,7 @@ class EventControl extends Control
 			$lat = $this->getPost('lat');
 			$lon = $this->getPost('lon');
 
-			$id = $this->model->addLocation(
+			$id = $this->gateway->addLocation(
 				$this->getPostString('location_name'),
 				$lat,
 				$lon,

@@ -2,8 +2,12 @@
 
 namespace Foodsharing\Modules\FairTeiler;
 
+use Foodsharing\Lib\Sanitizer;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Region\RegionGateway;
+use Symfony\Component\HttpFoundation\Request;
 
 class FairTeilerControl extends Control
 {
@@ -13,27 +17,60 @@ class FairTeilerControl extends Control
 	private $follower;
 	private $bezirke;
 
-	public function __construct()
-	{
-		if (isset($_GET['uri']) && ($ftid = $this->uriInt(2))) {
-			$this->func->go('/?page=fairteiler&sub=ft&id=' . $ftid);
-		}
+	private $gateway;
+	private $regionGateway;
 
-		$this->model = new FairTeilerModel();
-		$this->view = new FairTeilerView();
+	public function __construct(FairTeilerView $view, FairTeilerGateway $gateway, RegionGateway $regionGateway, Model $model)
+	{
+		$this->view = $view;
+		$this->gateway = $gateway;
+		$this->regionGateway = $regionGateway;
+		$this->model = $model;
 
 		parent::__construct();
+	}
+
+	private function handleFollowUnfollow($ftid, $fsid, $follow, $infotype)
+	{
+		if (is_null($follow)) {
+			return false;
+		}
+
+		if ($follow == 1 && in_array($infotype, [1, 2])) {
+			$this->gateway->follow($ftid, $fsid, $infotype);
+		} else {
+			$this->gateway->unfollow($ftid, $fsid);
+		}
+	}
+
+	private function setup(Request $request)
+	{
+		if ($request->query->has('uri') && $ftid = $this->uriInt(2)) {
+			$this->func->go('/?page=fairteiler&sub=ft&id=' . $ftid);
+		}
 
 		/*
 		 * allowed only for logged in users
 		 */
-		if (!S::may() && isset($_GET['sub']) && $_GET['sub'] != 'ft') {
+		if (!S::may() && $request->query->has('sub') && $request->query->get('sub') != 'ft') {
 			$this->func->goLogin();
 		}
 
-		if (isset($_GET['bid']) && (int)$_GET['bid'] > 0) {
-			if ($bezirk = $this->model->getBezirk($_GET['bid'])) {
-				$this->bezirk_id = (int)$_GET['bid'];
+		$this->fairteiler = false;
+		$this->follower = false;
+		$this->bezirke = $this->model->getRealBezirke();
+		if ($ftid = $request->query->get('id')) {
+			$this->fairteiler = $this->gateway->getFairteiler($ftid);
+
+			if (!$this->fairteiler) {
+				$this->func->go('/?page=fairteiler');
+			}
+			$bid = $this->fairteiler['bezirk_id'];
+		}
+
+		if (isset($bid) || $bid = $request->query->get('bid')) {
+			if ($bezirk = $this->model->getBezirk($bid)) {
+				$this->bezirk_id = $bid;
 				$this->bezirk = $bezirk;
 				if ((int)$bezirk['mailbox_id'] > 0) {
 					$this->bezirk['urlname'] = $this->model->getVal('name', 'mailbox', $bezirk['mailbox_id']);
@@ -43,36 +80,23 @@ class FairTeilerControl extends Control
 			}
 		} else {
 			$this->bezirk_id = 0;
-			$this->bezirk = false;
+			$this->bezirk = null;
 		}
-		$this->bezirke = $this->model->getRealBezirke();
-		$this->view->setBezirke($this->bezirke);
 
-		$this->view->setBezirk($this->bezirk);
-
-		$this->fairteiler = false;
-		$this->follower = false;
-		if (isset($_GET['id'])) {
-			$this->fairteiler = $this->model->getFairteiler($_GET['id']);
-
-			if (!$this->fairteiler) {
-				$this->func->go('/?page=fairteiler');
-			}
-			if (isset($_GET['follow'])) {
-				if ($_GET['follow'] == 1) {
-					$info = 2;
-					if (isset($_GET['infotype']) && $_GET['infotype'] == 1) {
-						$info = 1;
-					}
-					$this->model->follow($_GET['id'], $info);
-				} else {
-					$this->model->unfollow($_GET['id']);
-				}
+		if ($ftid) {
+			$follow = $request->query->get('follow');
+			$infotype = $request->query->get('infotype', 2);
+			if ($this->handleFollowUnfollow($ftid, S::id(), $follow, $infotype)) {
 				$url = explode('&follow=', $this->func->getSelf());
 				$this->func->go($url[0]);
 			}
 
-			$this->follower = $this->model->getFollower($_GET['id']);
+			if (!isset($this->bezirke[$this->fairteiler['bezirk_id']])) {
+				$this->bezirke[] = $this->model->getBezirk($this->fairteiler['bezirk_id']);
+			}
+
+			$this->follower = $this->gateway->getFollower($ftid);
+
 			$this->view->setFairteiler($this->fairteiler, $this->follower);
 
 			$this->fairteiler['urlname'] = str_replace(' ', '_', $this->fairteiler['name']);
@@ -88,22 +112,22 @@ class FairTeilerControl extends Control
 				<input type="hidden" name="ft-publicurl" id="ft-publicurl" value="http://www.' . DEFAULT_HOST . '/' . $this->bezirk['urlname'] . '/fairteiler/' . $this->fairteiler['id'] . '_' . $this->fairteiler['urlname'] . '" />
 				');
 
-			if (isset($_GET['delete']) && ($this->func->isOrgaTeam() || $this->func->isBotFor($this->bezirk_id))) {
-				if ($this->model->deleteFairteiler($this->fairteiler['id'])) {
-					$this->func->info($this->func->s('delete_success'));
-					$this->func->go('/?page=fairteiler&bid=' . $this->bezirk_id);
-				}
+			if ($request->query->has('delete') && ($this->func->isOrgaTeam() || $this->func->isBotFor($this->bezirk_id))) {
+				$this->delete();
 			}
 		}
+		$this->view->setBezirke($this->bezirke);
+		$this->view->setBezirk($this->bezirk);
 	}
 
-	public function index()
+	public function index(Request $request)
 	{
+		$this->setup($request);
 		$this->func->addBread($this->func->s('your_fairteiler'), '/?page=fairteiler');
 		if ($this->bezirk_id > 0) {
 			$this->func->addBread($this->bezirk['name'], '/?page=fairteiler&bid=' . $this->bezirk_id);
 		}
-		if (!isset($_GET['sub'])) {
+		if (!$request->query->has('sub')) {
 			$items = array();
 			if ($bezirke = $this->model->getBezirke()) {
 				foreach ($bezirke as $b) {
@@ -111,7 +135,13 @@ class FairTeilerControl extends Control
 				}
 			}
 
-			if ($fairteiler = $this->model->listFairteiler($this->bezirk_id)) {
+			if ($this->bezirk_id === 0) {
+				$bezirk_ids = $this->regionGateway->listIdsForFoodsaverWithDescendants($this->func->fsId());
+			} else {
+				$bezirk_ids = $this->regionGateway->listIdsForDescendantsAndSelf($this->bezirk_id);
+			}
+
+			if ($fairteiler = $this->gateway->listFairteilerNested($bezirk_ids)) {
 				$this->func->addContent($this->view->listFairteiler($fairteiler));
 			} else {
 				$this->func->addContent($this->v_utils->v_info($this->func->s('no_fairteiler_available')));
@@ -120,12 +150,15 @@ class FairTeilerControl extends Control
 		}
 	}
 
-	public function edit()
+	public function edit(Request $request)
 	{
+		if (!$this->mayEdit()) {
+			$this->func->go('/?page=fairteiler&sub=ft&id=' . $this->fairteiler['id']);
+		}
 		$this->func->addBread($this->fairteiler['name'], '/?page=fairteiler&sub=ft&bid=' . $this->bezirk_id . '&id=' . $this->fairteiler['id']);
 		$this->func->addBread($this->func->s('edit'));
-		if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'fairteiler') {
-			if ($this->handleEditFt()) {
+		if ($request->request->get('form_submit') == 'fairteiler') {
+			if ($this->handleEditFt($request)) {
 				$this->func->info($this->func->s('fairteiler_edit_success'));
 				$this->func->go($this->func->getSelf());
 			} else {
@@ -134,6 +167,7 @@ class FairTeilerControl extends Control
 		}
 
 		$data = $this->fairteiler;
+
 		$items = array(
 			array('name' => $this->func->s('back'), 'href' => '/?page=fairteiler&sub=ft&bid=' . $this->bezirk_id . '&id=' . $this->fairteiler['id'])
 		);
@@ -155,22 +189,32 @@ class FairTeilerControl extends Control
 		$this->func->addContent($this->view->fairteilerForm($data));
 	}
 
-	public function check()
+	private function accept()
 	{
-		if ($ft = $this->model->getFairteiler($_GET['id'])) {
+		$this->gateway->acceptFairteiler($this->fairteiler['id']);
+		$this->func->info('Fair-Teiler ist jetzt aktiv');
+		$this->func->go('/?page=fairteiler&sub=ft&id=' . $this->fairteiler['id']);
+	}
+
+	private function delete()
+	{
+		if ($this->gateway->deleteFairteiler($this->fairteiler['id'])) {
+			$this->func->info($this->func->s('delete_success'));
+			$this->func->go('/?page=fairteiler&bid=' . $this->bezirk_id);
+		}
+	}
+
+	public function check(Request $request)
+	{
+		if ($ft = $this->fairteiler) {
 			if ($this->func->isOrgaTeam() || $this->func->isBotFor($ft['bezirk_id'])) {
-				if (isset($_GET['agree'])) {
-					if ($_GET['agree'] == 1) {
-						$this->model->acceptFairteiler($_GET['id']);
-						$this->func->info('Fair-Teiler ist jetzt aktiv');
-						$this->func->go('/?page=fairteiler&sub=ft&id=' . (int)$_GET['id']);
-					} elseif ($_GET['agree'] == 0) {
-						$this->model->deleteFairteiler($_GET['id']);
-						$this->func->info('Fair-Teiler wurde gelöscht');
-						$this->func->go('/?page=fairteiler');
+				if ($request->query->has('agree')) {
+					if ($request->query->get('agree')) {
+						$this->accept();
+					} else {
+						$this->delete();
 					}
 				}
-
 				$this->func->addContent($this->view->checkFairteiler($ft));
 				$this->func->addContent($this->view->menu(array(
 					array('href' => '/?page=fairteiler&sub=check&id=' . (int)$ft['id'] . '&agree=1', 'name' => 'Fair-Teiler freischalten'),
@@ -184,7 +228,7 @@ class FairTeilerControl extends Control
 		}
 	}
 
-	public function ft()
+	public function ft(Request $request)
 	{
 		$this->func->addBread($this->fairteiler['name']);
 		$this->func->addTitle($this->fairteiler['name']);
@@ -222,12 +266,12 @@ class FairTeilerControl extends Control
 		$this->func->addContent($this->view->address(), CNT_RIGHT);
 	}
 
-	public function addFt()
+	public function addFt(Request $request)
 	{
 		$this->func->addBread($this->func->s('add_fairteiler'));
 
-		if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'fairteiler') {
-			if ($this->handleAddFt()) {
+		if ($request->request->get('form_submit') == 'fairteiler') {
+			if ($this->handleAddFt($request)) {
 				if ($this->func->isBotFor($this->bezirk_id) || $this->func->isOrgaTeam()) {
 					$this->func->info($this->func->s('fairteiler_add_success'));
 				} else {
@@ -245,50 +289,54 @@ class FairTeilerControl extends Control
 		), $this->func->s('options')), CNT_RIGHT);
 	}
 
-	private function handleEditFt()
+	private function prepareInput(Request $request)
+	{
+		$data = [
+			'name' => strip_tags($request->request->get('name')),
+			'desc' => strip_tags($request->request->get('desc')),
+			'anschrift' => strip_tags($request->request->get('anschrift')),
+			'plz' => preg_replace('[^0-9]', '', $request->request->get('plz')),
+			'ort' => strip_tags($request->request->get('ort')),
+			'picture' => strip_tags($request->request->get('picture')),
+			'bezirk_id' => (int)$request->request->getDigits('bezirk_id'),
+			'lat' => $request->request->filter('lat', null, FILTER_SANITIZE_NUMBER_FLOAT, ['flags' => FILTER_FLAG_ALLOW_FRACTION]),
+			'lon' => $request->request->filter('lon', null, FILTER_SANITIZE_NUMBER_FLOAT, ['flags' => FILTER_FLAG_ALLOW_FRACTION])
+		];
+
+		return $data;
+	}
+
+	private function validateInput($data)
+	{
+		return $data['lat'] && $data['lon'] && $data['bezirk_id'];
+	}
+
+	private function handleEditFt(Request $request)
 	{
 		if ($this->mayEdit()) {
-			$name = strip_tags($_POST['name']);
-			$desc = strip_tags($_POST['desc']);
-			$anschrift = strip_tags($_POST['anschrift']);
-			$plz = preg_replace('[^0-9]', '', $_POST['plz']);
-			$ort = strip_tags($_POST['ort']);
-			$picture = strip_tags($_POST['picture']);
-			$bezirk_id = (int)$_POST['bezirk_id'];
-			if (!empty($_POST['lat']) && !empty($_POST['lon']) && $bezirk_id > 0) {
-				$lat = $_POST['lat'];
-				$lon = $_POST['lon'];
+			$data = $this->prepareInput($request);
+			if ($this->validateInput($data)) {
+				$responsible = Sanitizer::tagSelectIds($request->request->get('bfoodsaver'));
+				$this->gateway->updateVerantwortliche($this->fairteiler['id'], $responsible);
 
-				$this->func->handleTagselect('bfoodsaver');
-
-				$this->model->updateVerantwortliche($this->fairteiler['id']);
-
-				return $this->model->updateFairteiler($this->fairteiler['id'], $bezirk_id, $name, $desc, $anschrift, $plz, $ort, $lat, $lon, $picture);
+				return $this->gateway->updateFairteiler($this->fairteiler['id'], $data);
 			} else {
 				return false;
 			}
 		}
 	}
 
-	public function handleAddFt()
+	private function handleAddFt(Request $request)
 	{
-		$name = strip_tags($_POST['name']);
-		$desc = strip_tags($_POST['desc']);
-		$anschrift = strip_tags($_POST['anschrift']);
-		$plz = preg_replace('[^0-9]', '', $_POST['plz']);
-		$ort = strip_tags($_POST['ort']);
-		$picture = strip_tags($_POST['picture']);
-		$bezirk_id = (int)$_POST['bezirk_id'];
-		if (!empty($_POST['lat']) && !empty($_POST['lon']) && $bezirk_id > 0) {
-			$lat = $_POST['lat'];
-			$lon = $_POST['lon'];
-
+		$data = $this->prepareInput($request);
+		if ($this->validateInput($data)) {
 			$status = 0;
 			if ($this->func->isBotFor($this->bezirk_id) || $this->func->isOrgaTeam()) {
 				$status = 1;
 			}
+			$data['status'] = $status;
 
-			return $this->model->addFairteiler($bezirk_id, $name, $desc, $anschrift, $plz, $ort, $lat, $lon, $picture, $status);
+			return $this->gateway->addFairteiler($this->func->fsId(), $data);
 		} else {
 			return false;
 		}
@@ -296,14 +344,10 @@ class FairTeilerControl extends Control
 
 	private function isFollower()
 	{
-		if (isset($this->follower['all'][$this->func->fsId()])) {
-			return true;
-		} else {
-			return false;
-		}
+		return isset($this->follower['all'][$this->func->fsId()]);
 	}
 
-	public function mayEdit()
+	private function mayEdit()
 	{
 		if (
 			$this->func->isBotFor($this->bezirk_id) ||

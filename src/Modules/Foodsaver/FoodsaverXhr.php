@@ -7,17 +7,17 @@ use Foodsharing\Lib\Session\S;
 
 class FoodsaverXhr extends Control
 {
-	public function __construct()
+	public function __construct(FoodsaverModel $model, FoodsaverView $view)
 	{
+		$this->model = $model;
+		$this->view = $view;
+
+		parent::__construct();
+
 		// permission check
 		if (!S::may('orga') && !$this->func->isBotFor($_GET['bid'])) {
 			return false;
 		}
-
-		$this->model = new FoodsaverModel();
-		$this->view = new FoodsaverView();
-
-		parent::__construct();
 	}
 
 	public function loadFoodsaver()

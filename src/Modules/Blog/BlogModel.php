@@ -3,10 +3,19 @@
 namespace Foodsharing\Modules\Blog;
 
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Model;
 
 class BlogModel extends Model
 {
+	private $bellGateway;
+
+	public function __construct(BellGateway $bellGateway)
+	{
+		parent::__construct();
+		$this->bellGateway = $bellGateway;
+	}
+
 	public function canEdit($article_id)
 	{
 		if ($val = $this->getValues(array('bezirk_id', 'foodsaver_id'), 'blog_entry', $article_id)) {
@@ -186,7 +195,7 @@ class BlogModel extends Model
 			$foodsaver[$b['id']] = $b;
 		}
 
-		$this->addBell(
+		$this->bellGateway->addBell(
 			$foodsaver,
 			'blog_new_check_title',
 			'blog_new_check',

@@ -3,8 +3,6 @@
 namespace Foodsharing\Lib\Db;
 
 use Foodsharing\Lib\Session\S;
-use Foodsharing\Modules\Message\MessageModel;
-use Foodsharing\Modules\Store\StoreModel;
 
 class ManualDb extends Db
 {
@@ -96,7 +94,7 @@ class ManualDb extends Db
 	public function closeBaskets($distance = 50, $loc = false)
 	{
 		if ($loc === false) {
-			$loc = S::getLocation();
+			$loc = S::getLocation($this);
 		}
 
 		return $this->q('
@@ -554,32 +552,6 @@ class ManualDb extends Db
 		');
 	}
 
-	public function addTeamMessage($bid, $message)
-	{
-		if ($betrieb = $this->getMyBetrieb($bid)) {
-			if (!is_null($betrieb['team_conversation_id'])) {
-				$msg = new MessageModel();
-				$msg->sendMessage($betrieb['team_conversation_id'], $message);
-			} elseif (is_null($betrieb['team_conversation_id'])) {
-				$tcid = $this->createTeamConversation($bid);
-				$msg = new MessageModel();
-				$msg->sendMessage($tcid, $message);
-			}
-		}
-	}
-
-	public function add_message($data)
-	{
-		$model = new MessageModel();
-		if ($cid = $model->addConversation(array($data['sender_id'] => $data['sender_id'], $data['recip_id'] => $data['recip_id']), false, false)) {
-			$model->sendMessage($cid, $data['msg'], $data['sender_id']);
-
-			return true;
-		}
-
-		return false;
-	}
-
 	public function add_content($data)
 	{
 		$id = $this->insert('
@@ -599,19 +571,6 @@ class ManualDb extends Db
 			)');
 
 		return $id;
-	}
-
-	public function update_message_tpl($id, $data)
-	{
-		return $this->update('
-		UPDATE 	`' . PREFIX . 'message_tpl`
-
-		SET 	`language_id` =  ' . $this->intval($data['language_id']) . ',
-				`name` =  ' . $this->strval($data['name']) . ',
-				`subject` =  ' . $this->strval($data['subject']) . ',
-				`body` =  ' . $this->strval($data['body'], '<p><br><a><h1><h2><h3><ul><li><ol>') . '
-
-		WHERE 	`id` = ' . $this->intval($id));
 	}
 
 	public function update_content($id, $data)
@@ -1036,6 +995,10 @@ class ManualDb extends Db
 		return $this->qCol('SELECT DISTINCT ancestor_id FROM `' . PREFIX . 'bezirk_closure` ' . $where);
 	}
 
+	/**
+	 * @deprecated
+	 * @see \Foodsharing\Modules\Region\RegionGateway::listIdsForDescendantsAndSelf()
+	 */
 	public function getChildBezirke($bid, $nocache = false)
 	{
 		if ((int)$bid == 0) {
@@ -1052,33 +1015,6 @@ class ManualDb extends Db
 		}
 
 		return $ou;
-	}
-
-	public function listBetriebReq($bezirk_id)
-	{
-		return $this->q('
-				SELECT 	' . PREFIX . 'betrieb.id,
-						`' . PREFIX . 'betrieb`.betrieb_status_id,
-						' . PREFIX . 'betrieb.plz,
-						' . PREFIX . 'betrieb.added,
-						`stadt`,
-						' . PREFIX . 'betrieb.kette_id,
-						' . PREFIX . 'betrieb.betrieb_kategorie_id,
-						' . PREFIX . 'betrieb.name,
-						CONCAT(' . PREFIX . 'betrieb.str," ",' . PREFIX . 'betrieb.hsnr) AS anschrift,
-						' . PREFIX . 'betrieb.str,
-						' . PREFIX . 'betrieb.hsnr,
-						' . PREFIX . 'betrieb.`betrieb_status_id`,
-						' . PREFIX . 'bezirk.name AS bezirk_name
-
-				FROM 	' . PREFIX . 'betrieb,
-						' . PREFIX . 'bezirk
-
-				WHERE 	' . PREFIX . 'betrieb.bezirk_id = ' . PREFIX . 'bezirk.id
-				AND 	' . PREFIX . 'betrieb.bezirk_id IN(' . implode(',', $this->getChildBezirke($bezirk_id)) . ')
-
-
-		');
 	}
 
 	public function getBetrieb($id)
@@ -1183,114 +1119,6 @@ class ManualDb extends Db
 
 
 				'); // -- AND 	'.PREFIX.'betrieb.bezirk_id = '.$this->intval(1).'
-	}
-
-	public function update_foodsaver($id, $data)
-	{
-		$data['anmeldedatum'] = date('Y-m-d H:i:s');
-
-		if (!isset($data['bezirk_id'])) {
-			$data['bezirk_id'] = $this->func->getBezirkId();
-		}
-
-		$orga = '';
-		if (isset($data['orgateam'])) {
-			$orga = '`orgateam` = ' . $this->intval($data['orgateam']) . ',';
-		}
-
-		$rolle = '';
-		$quiz_rolle = '';
-		$verified = '';
-		if (isset($data['rolle'])) {
-			$rolle = '`rolle` =  ' . $this->intval($data['rolle']) . ',';
-			if ($data['rolle'] == 0 && $this->func->isOrgaTeam()) {
-				$data['bezirk_id'] = 0;
-				$quiz_rolle = '`quiz_rolle` = 0,';
-				$verified = '`verified` = 0,';
-
-				$bids = $this->q('
-					SELECT 	bt.betrieb_id as id
-					FROM 	' . PREFIX . 'betrieb_team bt
-					WHERE 	bt.foodsaver_id = ' . $this->intval($id) . '
-				');
-				$betrieb = new StoreModel();
-				//Delete from Companies
-				foreach ($bids as $b) {
-					$betrieb->signout($b, $id);
-				}
-
-				//Delete Bells for Foodsaver
-				$this->del('
-					DELETE FROM  `' . PREFIX . 'foodsaver_has_bell`
-					WHERE 		`foodsaver_id` = ' . $this->intval($id) . '
-				');
-				// Delete from Bezirke and Working Groups
-				$this->del('
-					DELETE FROM  `' . PREFIX . 'foodsaver_has_bezirk`
-					WHERE 		`foodsaver_id` = ' . $this->intval($id) . '
-				');
-				//Delete from Bezirke and Working Groups (when Admin)
-				$this->del('
-					DELETE FROM  `' . PREFIX . 'botschafter`
-					WHERE 		`foodsaver_id` = ' . $this->intval($id) . '
-				');
-
-				//Block Person for Quiz
-				for ($i = 1; $i <= 7; ++$i) {
-					$this->insert('
-					INSERT INTO ' . PREFIX . 'quiz_session (
-						foodsaver_id,
-						quiz_id,
-						`status`,
-						time_start
-					)
-					VALUES
-					(
-						' . $this->intval($id) . ',
-						1,
-						2,
-						now()
-					)
-				');
-				}
-			}
-		}
-
-		$position = '';
-		if (isset($data['position'])) {
-			$position = '`position` =  ' . $this->strval($data['position']) . ',';
-		}
-
-		$email = '';
-		if (isset($data['email'])) {
-			$email = '`email` = ' . $this->strval($data['email']) . ',';
-		}
-
-		return $this->update('
-
-		UPDATE 	`' . PREFIX . 'foodsaver`
-
-		SET
-				`bezirk_id` =  ' . $this->intval($data['bezirk_id']) . ',
-				`plz` =  ' . $this->strval(trim($data['plz'])) . ',
-				`stadt` =  ' . $this->strval(trim($data['stadt'])) . ',
-				`lat` =  ' . $this->strval(trim($data['lat'])) . ',
-				`lon` =  ' . $this->strval(trim($data['lon'])) . ',
-				`name` =  ' . $this->strval($data['name']) . ',
-				`nachname` =  ' . $this->strval($data['nachname']) . ',
-				`anschrift` =  ' . $this->strval($data['anschrift']) . ',
-				`telefon` =  ' . $this->strval($data['telefon']) . ',
-				`handy` =  ' . $this->strval($data['handy']) . ',
-				`geschlecht` =  ' . $this->intval($data['geschlecht']) . ',
-				' . $position . '
-				' . $rolle . '
-				' . $orga . '
-				' . $email . '
-				' . $quiz_rolle . '
-				' . $verified . '
-				`geb_datum` =  ' . $this->dateval($data['geb_datum']) . '
-
-		WHERE 	`id` = ' . $this->intval($id));
 	}
 
 	public function add_foodsaver($data)
@@ -1447,7 +1275,13 @@ class ManualDb extends Db
 		$this->del('
             DELETE FROM ' . PREFIX . 'theme_follower
             WHERE foodsaver_id = ' . (int)$id . '
-        ');
+		');
+
+		// remove bananas given by this user
+		$this->del('
+            DELETE FROM ' . PREFIX . 'rating
+            WHERE rater_id = ' . (int)$id . '
+		');
 
 		$this->update('UPDATE ' . PREFIX . 'foodsaver SET verified = 0,
 			rolle = 0,
@@ -2127,59 +1961,6 @@ class ManualDb extends Db
 		}
 	}
 
-	public function getOne_betrieb($id)
-	{
-		$out = $this->qRow('
-			SELECT
-			`id`,
-			`betrieb_status_id`,
-			`bezirk_id`,
-			`plz`,
-			`stadt`,
-			`lat`,
-			`lon`,
-			`kette_id`,
-			`betrieb_kategorie_id`,
-			`name`,
-			`str`,
-			`hsnr`,
-			`status_date`,
-			`status`,
-			`ansprechpartner`,
-			`telefon`,
-			`fax`,
-			`email`,
-			`begin`,
-			`besonderheiten`,
-			`ueberzeugungsarbeit`,
-			`presse`,
-			`sticker`,
-			`abholmenge`,
-			`prefetchtime`,
-			`public_info`,
-			`public_time`
-
-			FROM 		`' . PREFIX . 'betrieb`
-
-			WHERE 		`id` = ' . $this->intval($id));
-
-		$out['lebensmittel'] = $this->qCol('
-				SELECT 		`lebensmittel_id`
-
-				FROM 		`' . PREFIX . 'betrieb_has_lebensmittel`
-				WHERE 		`betrieb_id` = ' . $this->intval($id) . '
-			');
-		$out['foodsaver'] = $this->qCol('
-				SELECT 		`foodsaver_id`
-
-				FROM 		`' . PREFIX . 'betrieb_team`
-				WHERE 		`betrieb_id` = ' . $this->intval($id) . '
-				AND 		`active` = 1
-			');
-
-		return $out;
-	}
-
 	public function changeBetriebStatus($bid, $status)
 	{
 		$last = $this->qRow('SELECT id, milestone FROM `' . PREFIX . 'betrieb_notiz` WHERE `betrieb_id` = ' . (int)$bid . ' ORDER BY id DESC LIMIT 1');
@@ -2244,92 +2025,6 @@ class ManualDb extends Db
 		return $id;
 	}
 
-	public function update_betrieb($id, $data)
-	{
-		if (isset($data['lebensmittel']) && is_array($data['lebensmittel'])) {
-			$this->del('
-					DELETE FROM 	`fs_betrieb_has_lebensmittel`
-					WHERE 			`betrieb_id` = ' . $this->intval($id) . '
-				');
-
-			foreach ($data['lebensmittel'] as $lebensmittel_id) {
-				$this->insert('
-						INSERT INTO `' . PREFIX . 'betrieb_has_lebensmittel`
-						(
-							`betrieb_id`,
-							`lebensmittel_id`
-						)
-						VALUES
-						(
-							' . $this->intval($id) . ',
-							' . $this->intval($lebensmittel_id) . '
-						)
-					');
-			}
-		}
-		if (isset($data['foodsaver']) && is_array($data['foodsaver'])) {
-			$this->update('
-					UPDATE 	 		`fs_betrieb_team`
-					SET 			`verantwortlich` = 0
-					WHERE 			`betrieb_id` = ' . $this->intval($id) . '
-				');
-
-			foreach ($data['foodsaver'] as $foodsaver_id) {
-				$this->insert('
-						REPLACE INTO `' . PREFIX . 'betrieb_team`
-						(
-							`betrieb_id`,
-							`foodsaver_id`,
-							`verantwortlich`,
-							`active`
-						)
-						VALUES
-						(
-							' . $this->intval($id) . ',
-							' . $this->intval($foodsaver_id) . ',
-							1,
-							1
-						)
-					');
-			}
-		}
-
-		if (!isset($data['status_date'])) {
-			$data['status_date'] = date('Y-m-d H:i:s');
-		}
-
-		return $this->update('
-		UPDATE 	`' . PREFIX . 'betrieb`
-
-		SET 	`betrieb_status_id` =  ' . $this->intval($data['betrieb_status_id']) . ',
-				`bezirk_id` =  ' . $this->intval($data['bezirk_id']) . ',
-				`plz` =  ' . $this->strval($data['plz']) . ',
-				`stadt` =  ' . $this->strval($data['stadt']) . ',
-				`lat` =  ' . $this->strval($data['lat']) . ',
-				`lon` =  ' . $this->strval($data['lon']) . ',
-				`kette_id` =  ' . $this->intval($data['kette_id']) . ',
-				`betrieb_kategorie_id` =  ' . $this->intval($data['betrieb_kategorie_id']) . ',
-				`name` =  ' . $this->strval($data['name']) . ',
-				`str` =  ' . $this->strval($data['str']) . ',
-				`hsnr` =  ' . $this->strval($data['hsnr']) . ',
-				`status_date` =  ' . $this->dateval($data['status_date']) . ',
-				`ansprechpartner` =  ' . $this->strval($data['ansprechpartner']) . ',
-				`telefon` =  ' . $this->strval($data['telefon']) . ',
-				`fax` =  ' . $this->strval($data['fax']) . ',
-				`email` =  ' . $this->strval($data['email']) . ',
-				`begin` =  ' . $this->dateval($data['begin']) . ',
-				`besonderheiten` =  ' . $this->strval($data['besonderheiten']) . ',
-				`public_info` =  ' . $this->strval($data['public_info']) . ',
-				`public_time` =  ' . $this->intval($data['public_time']) . ',
-				`ueberzeugungsarbeit` =  ' . $this->intval($data['ueberzeugungsarbeit']) . ',
-				`presse` =  ' . $this->intval($data['presse']) . ',
-				`sticker` =  ' . $this->intval($data['sticker']) . ',
-				`abholmenge` =  ' . $this->intval($data['abholmenge']) . ',
-				`prefetchtime` = ' . (int)$data['prefetchtime'] . '
-
-		WHERE 	`id` = ' . $this->intval($id));
-	}
-
 	public function acceptBezirkRequest($fsid, $bid)
 	{
 		$bezirk = $this->getVal('name', 'bezirk', $bid);
@@ -2373,242 +2068,6 @@ class ManualDb extends Db
 					WHERE 		`bezirk_id` = ' . $this->intval($bid) . '
 					AND 		`foodsaver_id` = ' . $this->intval($fsid) . '
 		');
-	}
-
-	public function acceptRequest($fsid, $bid)
-	{
-		$betrieb = $this->getVal('name', 'betrieb', $bid);
-
-		$model = new StoreModel();
-		$model->addBell((int)$fsid, 'store_request_accept_title', 'store_request_accept', 'img img-store brown', array(
-			'href' => '/?page=fsbetrieb&id=' . (int)$bid
-		), array(
-			'user' => S::user('name'),
-			'name' => $betrieb
-		), 'store-arequest-' . (int)$fsid);
-
-		$msg = new MessageModel();
-
-		if ($scid = $msg->getBetriebConversation($bid, true)) {
-			$msg->deleteUserFromConversation($scid, $fsid, true);
-		}
-
-		if ($tcid = $msg->getBetriebConversation($bid, false)) {
-			$msg->addUserToConversation($tcid, $fsid, true);
-		}
-
-		return $this->update('
-					UPDATE 	 	`' . PREFIX . 'betrieb_team`
-					SET 		`active` = 1
-					WHERE 		`betrieb_id` = ' . $this->intval($bid) . '
-					AND 		`foodsaver_id` = ' . $this->intval($fsid) . '
-		');
-	}
-
-	public function warteRequest($fsid, $bid)
-	{
-		$betrieb = $this->getVal('name', 'betrieb', $bid);
-
-		$model = new StoreModel();
-		$model->addBell((int)$fsid, 'store_request_accept_wait_title', 'store_request_accept_wait', 'img img-store brown', array(
-			'href' => '/?page=fsbetrieb&id=' . (int)$bid
-		), array(
-			'user' => S::user('name'),
-			'name' => $betrieb
-		), 'store-wrequest-' . (int)$fsid);
-
-		$msg = new MessageModel();
-		if ($scid = $this->getBetriebConversation($bid, true)) {
-			$msg->addUserToConversation($scid, $fsid, true);
-		}
-
-		return $this->update('
-					UPDATE 	 	`' . PREFIX . 'betrieb_team`
-					SET 		`active` = 2
-					WHERE 		`betrieb_id` = ' . $this->intval($bid) . '
-					AND 		`foodsaver_id` = ' . $this->intval($fsid) . '
-		');
-	}
-
-	public function denyRequest($fsid, $bid)
-	{
-		$betrieb = $this->getVal('name', 'betrieb', $bid);
-
-		$model = new StoreModel();
-		$model->addBell((int)$fsid, 'store_request_deny_title', 'store_request_deny', 'img img-store brown', array(
-			'href' => '/?page=fsbetrieb&id=' . (int)$bid
-		), array(
-			'user' => S::user('name'),
-			'name' => $betrieb
-		), 'store-drequest-' . (int)$fsid);
-
-		return $this->update('
-					DELETE FROM 	`fs_betrieb_team`
-					WHERE 		`betrieb_id` = ' . $this->intval($bid) . '
-					AND 		`foodsaver_id` = ' . $this->intval($fsid) . '
-		');
-	}
-
-	public function teamRequest($fsid, $bid)
-	{
-		return $this->insert('
-			REPLACE INTO `' . PREFIX . 'betrieb_team`
-			(
-				`betrieb_id`,
-				`foodsaver_id`,
-				`verantwortlich`,
-				`active`
-			)
-			VALUES
-			(
-				' . $this->intval($bid) . ',
-				' . $this->intval($fsid) . ',
-				0,
-				0
-			)');
-	}
-
-	private function createTeamConversation($bid)
-	{
-		$msg = new MessageModel();
-		$tcid = $msg->insertConversation(array(), true);
-		$betrieb = $this->getMyBetrieb($bid);
-		$msg->renameConversation($tcid, 'Team ' . $betrieb['name']);
-
-		$this->update('
-				UPDATE	`' . PREFIX . 'betrieb` SET team_conversation_id = ' . $this->intval($tcid) . ' WHERE id = ' . $this->intval($bid) . '
-			');
-
-		$teamMembers = $this->getBetriebTeam($bid);
-		foreach ($teamMembers['id'] as $fs_id) {
-			$msg->addUserToConversation($tcid, $fs_id);
-		}
-
-		return $tcid;
-	}
-
-	private function createSpringerConversation($bid)
-	{
-		$msg = new MessageModel();
-		$scid = $msg->insertConversation(array(), true);
-		$betrieb = $this->getMyBetrieb($bid);
-		$msg->renameConversation($scid, 'Springer ' . $betrieb['name']);
-		$this->update('
-				UPDATE	`' . PREFIX . 'betrieb` SET springer_conversation_id = ' . $this->intval($scid) . ' WHERE id = ' . $this->intval($bid) . '
-			');
-
-		$springerMembers = $this->getBetriebSpringer($bid);
-		foreach ($springerMembers['id'] as $fs_id) {
-			$msg->addUserToConversation($scid, $fs_id);
-		}
-
-		return $scid;
-	}
-
-	public function add_betrieb($data)
-	{
-		$id = $this->insert('
-			INSERT INTO 	`' . PREFIX . 'betrieb`
-			(
-			`betrieb_status_id`,
-			`bezirk_id`,
-			`added`,
-			`plz`,
-			`stadt`,
-			`lat`,
-			`lon`,
-			`kette_id`,
-			`betrieb_kategorie_id`,
-			`name`,
-			`str`,
-			`hsnr`,
-			`status_date`,
-			`status`,
-			`ansprechpartner`,
-			`telefon`,
-			`fax`,
-			`email`,
-			`begin`,
-			`besonderheiten`,
-			`public_info`,
-			`public_time`,
-			`ueberzeugungsarbeit`,
-			`presse`,
-			`sticker`,
-      `abholmenge`
-			)
-			VALUES
-			(
-			' . $this->intval($data['betrieb_status_id']) . ',
-			' . $this->intval($data['bezirk_id']) . ',
-			NOW(),
-			' . $this->strval($data['plz']) . ',
-			' . $this->strval($data['stadt']) . ',
-			' . $this->strval($data['lat']) . ',
-			' . $this->strval($data['lon']) . ',
-			' . $this->intval($data['kette_id']) . ',
-			' . $this->intval($data['betrieb_kategorie_id']) . ',
-			' . $this->strval($data['name']) . ',
-			' . $this->strval($data['str']) . ',
-			' . $this->strval($data['hsnr']) . ',
-			' . $this->dateval($data['status_date']) . ',
-			' . $this->intval($data['betrieb_status_id']) . ',
-			' . $this->strval($data['ansprechpartner']) . ',
-			' . $this->strval($data['telefon']) . ',
-			' . $this->strval($data['fax']) . ',
-			' . $this->strval($data['email']) . ',
-			' . $this->dateval($data['begin']) . ',
-			' . $this->strval($data['besonderheiten']) . ',
-			' . $this->strval($data['public_info']) . ',
-			' . $this->intval($data['public_time']) . ',
-			' . $this->intval($data['ueberzeugungsarbeit']) . ',
-			' . $this->intval($data['presse']) . ',
-			' . $this->intval($data['sticker']) . ',
-      ' . $this->intval($data['abholmenge']) . '
-			)');
-
-		$this->createTeamConversation($id);
-		$this->createSpringerConversation($id);
-
-		if (isset($data['lebensmittel']) && is_array($data['lebensmittel'])) {
-			foreach ($data['lebensmittel'] as $lebensmittel_id) {
-				$this->insert('
-						INSERT INTO `' . PREFIX . 'betrieb_has_lebensmittel`
-						(
-							`betrieb_id`,
-							`lebensmittel_id`
-						)
-						VALUES
-						(
-							' . $this->intval($id) . ',
-							' . $this->intval($lebensmittel_id) . '
-						)
-					');
-			}
-		}
-
-		if (isset($data['foodsaver']) && is_array($data['foodsaver'])) {
-			foreach ($data['foodsaver'] as $foodsaver_id) {
-				$this->insert('
-						REPLACE INTO `' . PREFIX . 'betrieb_team`
-						(
-							`betrieb_id`,
-							`foodsaver_id`,
-							`verantwortlich`,
-							`active`
-						)
-						VALUES
-						(
-							' . $this->intval($id) . ',
-							' . $this->intval($foodsaver_id) . ',
-							1,
-							1
-						)
-					');
-			}
-		}
-
-		return $id;
 	}
 
 	public function getMyBetrieb($id)
@@ -2731,22 +2190,6 @@ class ManualDb extends Db
 		return $out;
 	}
 
-	public function getBetriebLeader($bid)
-	{
-		return $this->qCol('
-				SELECT 		t.`foodsaver_id`,
-							t.`verantwortlich`
-
-				FROM 		`' . PREFIX . 'betrieb_team` t
-				INNER JOIN  `' . PREFIX . 'foodsaver` fs ON fs.id = t.foodsaver_id
-
-				WHERE 		t.`betrieb_id` = ' . $this->intval($bid) . '
-				AND 		t.active = 1
-				AND 		t.verantwortlich = 1
-				AND			fs.deleted_at IS NULL
-		');
-	}
-
 	public function getBetriebTeam($bid)
 	{
 		return $this->q('
@@ -2827,65 +2270,6 @@ class ManualDb extends Db
 		}
 
 		return $this->qOne('SELECT ' . $ccol . ' FROM `' . PREFIX . 'betrieb` WHERE `id` = ' . (int)$bid);
-	}
-
-	public function addBetriebTeam($bid, $member, $verantwortlicher = false)
-	{
-		if (empty($member)) {
-			return false;
-		}
-		if (!$verantwortlicher) {
-			$verantwortlicher = array(
-				$this->func->fsId() => true
-			);
-		}
-
-		$tmp = array();
-		foreach ($verantwortlicher as $vv) {
-			$tmp[$vv] = $vv;
-		}
-		$verantwortlicher = $tmp;
-
-		$values = array();
-		$member_ids = array();
-
-		foreach ($member as $m) {
-			$v = 0;
-			if (isset($verantwortlicher[$m])) {
-				$v = 1;
-			}
-			$member_ids[] = (int)$m;
-			$values[] = '(' . $this->intval($bid) . ',' . $this->intval($m) . ',' . $v . ',1)';
-		}
-
-		$this->del('DELETE FROM `' . PREFIX . 'betrieb_team` WHERE `betrieb_id` = ' . $this->intval($bid) . ' AND active = 1 AND foodsaver_id NOT IN(' . implode(',', $member_ids) . ')');
-
-		$sql = 'INSERT IGNORE INTO `' . PREFIX . 'betrieb_team` (`betrieb_id`,`foodsaver_id`,`verantwortlich`,`active`)VALUES' . implode(',', $values);
-
-		$msg = new MessageModel();
-
-		if ($cid = $this->getBetriebConversation($bid)) {
-			$msg->setConversationMembers($cid, $member_ids);
-		}
-
-		if ($sid = $this->getBetriebConversation($bid, true)) {
-			foreach ($verantwortlicher as $user) {
-				$msg->addUserToConversation($sid, $user);
-			}
-		}
-
-		if ($this->sql($sql)) {
-			$this->update('
-				UPDATE	`' . PREFIX . 'betrieb_team` SET verantwortlich = 0 WHERE betrieb_id = ' . $this->intval($bid) . '
-			');
-			$this->update('
-				UPDATE	`' . PREFIX . 'betrieb_team` SET verantwortlich = 1 WHERE betrieb_id = ' . $this->intval($bid) . ' AND foodsaver_id IN(' . implode(',', $verantwortlicher) . ')
-			');
-
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 	public function getWantNew($bezirk_id)
@@ -3190,51 +2574,6 @@ class ManualDb extends Db
 			WHERE 		`id` = ' . $this->intval($id));
 
 		return $out;
-	}
-
-	public function getBasics_lebensmittel()
-	{
-		return $this->q('
-			SELECT 	 	`id`,
-						`name`
-
-			FROM 		`' . PREFIX . 'lebensmittel`
-			ORDER BY `name`');
-	}
-
-	public function get_kette()
-	{
-		$out = $this->q('
-			SELECT
-			`id`,
-			`name`,
-			`logo`
-
-			FROM 		`' . PREFIX . 'kette`
-			ORDER BY `name`');
-
-		return $out;
-	}
-
-	public function getBasics_kette()
-	{
-		return $this->q('
-			SELECT 	 	`id`,
-						`name`
-
-			FROM 		`' . PREFIX . 'kette`
-			ORDER BY `name`');
-	}
-
-	public function update_kette($id, $data)
-	{
-		return $this->update('
-		UPDATE 	`' . PREFIX . 'kette`
-
-		SET 	`name` =  ' . $this->strval($data['name']) . ',
-				`logo` =  ' . $this->strval($data['logo']) . '
-
-		WHERE 	`id` = ' . $this->intval($id));
 	}
 
 	public function get_faq()

@@ -8,10 +8,10 @@ use Foodsharing\Modules\Core\Control;
 
 class BellXhr extends Control
 {
-	public function __construct()
+	public function __construct(BellModel $model, BellView $view)
 	{
-		$this->model = new BellModel();
-		$this->view = new BellView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}

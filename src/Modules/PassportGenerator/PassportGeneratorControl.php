@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\PassportGenerator;
 
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use FPDI;
 
@@ -10,11 +11,13 @@ class PassportGeneratorControl extends Control
 {
 	private $bezirk_id;
 	private $bezirk;
+	private $bellGateway;
 
-	public function __construct()
+	public function __construct(PassportGeneratorModel $model, PassportGeneratorView $view, BellGateway $bellGateway)
 	{
-		$this->model = new PassportGeneratorModel();
-		$this->view = new PassportGeneratorView();
+		$this->model = $model;
+		$this->view = $view;
+		$this->bellGateway = $bellGateway;
 
 		parent::__construct();
 
@@ -99,7 +102,6 @@ class PassportGeneratorControl extends Control
 		$y = 0;
 		$card = 0;
 
-		$left = 0;
 		$nophoto = array();
 
 		end($foodsaver);
@@ -112,7 +114,7 @@ class PassportGeneratorControl extends Control
 				if (empty($fs['photo'])) {
 					$nophoto[] = $fs['name'] . ' ' . $fs['nachname'];
 
-					$this->model->addBell(
+					$this->bellGateway->addBell(
 						$fs['id'],
 						'passgen_failed_title',
 						'passgen_failed',
@@ -206,11 +208,11 @@ class PassportGeneratorControl extends Control
 	{
 		$role = [
 			0 => [ // not defined
-				0 => 'Freiwillige/r',
-				1 => 'Foodsaver',
-				2 => 'Betriebsverantwortliche/r',
-				3 => 'Botschafter/in',
-				4 => 'Botschafter/in' // role 4 stands for Orga but is referred to an AMB for the business card
+				0 => 'Freiwillige_r',
+				1 => 'Foodsaver_in',
+				2 => 'Betriebsverantwortliche_r',
+				3 => 'Botschafter_in',
+				4 => 'Botschafter_in' // role 4 stands for Orga but is referred to an AMB for the business card
 			],
 			1 => [ // male
 				0 => 'Freiwilliger',

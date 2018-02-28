@@ -11,9 +11,9 @@ use Foodsharing\Modules\Core\View;
 
 class BasketView extends View
 {
-	public function find($baskets)
+	public function find($baskets, $location)
 	{
-		$page = new vPage('Essenskörbe', $this->findMap());
+		$page = new vPage('Essenskörbe', $this->findMap($location));
 
 		if ($baskets) {
 			$page->addSectionRight($this->closeBaskets($baskets), 'In Deiner Nähe');
@@ -22,12 +22,12 @@ class BasketView extends View
 		$page->render();
 	}
 
-	private function findMap()
+	private function findMap($location)
 	{
-		$map = new vMap();
+		$map = new vMap('map', $location);
 
-		if ($loc = S::getLocation()) {
-			$map->setLocation($loc['lat'], $loc['lon']);
+		if (is_array($location)) {
+			$map->setLocation($location['lat'], $location['lon']);
 		}
 
 		$map->setSearchPanel('mapsearch');
@@ -91,7 +91,7 @@ class BasketView extends View
 			$page->addSectionRight($this->userBox($basket), 'AnbieterIn');
 
 			if ($basket['lat'] != 0 || $basket['lon'] != 0) {
-				$map = new vMap();
+				$map = new vMap('map', [$basket['lat'], $basket['lon']]);
 				$map->addMarker($basket['lat'], $basket['lon']);
 
 				$map->setDefaultMarker('basket', 'green');
@@ -174,12 +174,6 @@ class BasketView extends View
 
 	public function basketForm($foodsaver)
 	{
-		global $g_data;
-		$g_data['weight'] = '3';
-		$g_data['contact_type'] = 1;
-		$g_data['tel'] = $foodsaver['telefon'];
-		$g_data['handy'] = $foodsaver['handy'];
-
 		$out = '';
 
 		$out .= $this->v_utils->v_form_textarea('description', array('maxlength' => 1705));
@@ -206,18 +200,20 @@ class BasketView extends View
 		}
 
 		$out .= $this->v_utils->v_form_select('weight', array(
-			'values' => $values
+			'values' => $values,
+			'selected' => 3
 		));
 
 		$out .= $this->v_utils->v_form_checkbox('contact_type', array(
 			'values' => array(
 				array('id' => 1, 'name' => 'Per Nachricht'),
 				array('id' => 2, 'name' => 'Per Telefonanruf')
-			)
+			),
+			'checked' => [1]
 		));
 
-		$out .= $this->v_utils->v_form_text('tel');
-		$out .= $this->v_utils->v_form_text('handy');
+		$out .= $this->v_utils->v_form_text('tel', ['value' => $foodsaver['telefon']]);
+		$out .= $this->v_utils->v_form_text('handy', ['value' => $foodsaver['handy']]);
 
 		$out .= $this->v_utils->v_form_checkbox('food_type', array(
 			'values' => array(

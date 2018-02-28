@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\DI;
+
 require __DIR__ . '/includes/setup.php';
 /*
  * force only executing on commandline
@@ -30,14 +32,14 @@ if (isset($argv) && is_array($argv)) {
 	}
 }
 
+$app = '\\Foodsharing\\Modules\\' . $app . '\\' . $app . 'Control';
 echo "Starting $app::$method...\n";
-global $g_func;
-if ($obj = $g_func->loadApp($app)) {
-	if (method_exists($obj, $method)) {
-		$obj->$method();
 
-		exit();
-	}
+$appInstance = DI::$shared->get(ltrim($app, '\\'));
+
+if (is_callable([$appInstance, $method])) {
+	$appInstance->$method();
+	exit();
 }
 
 echo 'Modul ' . $app . ' konnte nicht geladen werden';

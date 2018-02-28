@@ -18,8 +18,7 @@ class ForumPostCest
 	{
 		$this->ambassador = $I->createAmbassador('pw', ['bezirk_id' => $this->testBezirk]);
 		$this->foodsaver = $I->createFoodsaver('pw', ['bezirk_id' => $this->testBezirk]);
-		$I->addBezirkMember($this->testBezirk, $this->ambassador['id'], true);
-		$I->addBezirkMember($this->testBezirk, $this->foodsaver['id']);
+		$I->addBezirkAdmin($this->testBezirk, $this->ambassador['id']);
 	}
 
 	private function createPosts($I)
@@ -44,30 +43,22 @@ class ForumPostCest
 	{
 		$I->login($this->{$example[0]}['email'], 'pw');
 		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
-		$I->waitForPageBody();
-		$this->expectPostButtons($I, true, $example[2]);
+		$this->waitForPostButtons($I, true, $example[2]);
 
 		$I->click('.button.bt_follow');
-		/* currently, this does a XHR request after which a full page reload is done. Click does not wait for the XHR
-		   to be completed so we need some additional wait before we can detect a page reload...
-		*/
-		$I->wait(1);
-		$I->waitForPageBody();
-		$this->expectPostButtons($I, false, $example[2]);
+		$this->waitForPostButtons($I, false, $example[2]);
 
 		$I->click('.button.bt_unfollow');
-		$I->wait(1);
-		$I->waitForPageBody();
-		$this->expectPostButtons($I, true, $example[2]);
+		$this->waitForPostButtons($I, true, $example[2]);
 	}
 
-	private function expectPostButtons($I, $follow, $stick)
+	private function waitForPostButtons($I, $follow, $stick)
 	{
 		if ($follow) {
-			$I->see('folgen', '.button.bt_follow');
+			$I->waitForText('folgen', 10, '.button.bt_follow');
 			$I->dontSee('entfolgen', '.button.bt_unfollow');
 		} else {
-			$I->see('entfolgen', '.button.bt_unfollow');
+			$I->waitForText('entfolgen', 10, '.button.bt_unfollow');
 			$I->dontSee('folgen', '.button.bt_follow');
 		}
 		if ($stick) {
@@ -91,17 +82,16 @@ class ForumPostCest
 		});
 
 		$I->click('.button.bt_stick');
-		$I->wait(1);
+		$I->waitForElement('.button.bt_unstick');
 		$nick->does(function (AcceptanceTester $I) {
 			$I->amOnPage($I->forumUrl($this->testBezirk));
 			$title = $this->thread_ambassador_user['name'];
 			$I->see($title, '#thread-' . $this->thread_user_ambassador['id'] . ' + #thread-' . $this->thread_ambassador_user['id']);
 		});
 
-		$I->waitForPageBody();
-
+		$I->waitForElement('.button.bt_unstick');
 		$I->click('.button.bt_unstick');
-		$I->wait(1);
+		$I->waitForElement('.button.bt_stick');
 		$nick->does(function (AcceptanceTester $I) {
 			$I->amOnPage($I->forumUrl($this->testBezirk));
 			$title = $this->thread_user_ambassador['name'];

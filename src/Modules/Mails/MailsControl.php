@@ -8,6 +8,7 @@ use Flourish\fMailbox;
 use Flourish\fSMTP;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Console\ConsoleControl;
+use Foodsharing\Modules\Mailbox\MailboxModel;
 
 class MailsControl extends ConsoleControl
 {
@@ -16,13 +17,15 @@ class MailsControl extends ConsoleControl
 	 */
 	public static $smtp = false;
 	public static $last_connect;
+	private $mailboxModel;
 
-	public function __construct()
+	public function __construct(MailsModel $model, MailboxModel $mailboxModel)
 	{
 		error_reporting(E_ALL);
 		ini_set('display_errors', '1');
 		self::$smtp = false;
-		$this->model = new MailsModel();
+		$this->model = $model;
+		$this->mailboxModel = $mailboxModel;
 		parent::__construct();
 	}
 
@@ -33,7 +36,7 @@ class MailsControl extends ConsoleControl
 			if ($elem !== false && $e = unserialize($elem)) {
 				switch ($e['type']) {
 					case 'email':
-						$res = self::handleEmail($e['data']);
+						$res = $this->handleEmail($e['data']);
 						// very basic email rate limit
 						usleep(100000);
 						break;
@@ -199,7 +202,7 @@ class MailsControl extends ConsoleControl
 		return false;
 	}
 
-	public static function handleEmail($data)
+	public function handleEmail($data)
 	{
 		self::info('mail arrived ...: ' . $data['from'][0] . '@' . $data['from'][1]);
 		$email = new fEmail();
@@ -218,7 +221,6 @@ class MailsControl extends ConsoleControl
 				}
 			}
 		}
-		$model = false;
 		$has_recip = false;
 		foreach ($data['recipients'] as $r) {
 			// check is it own lmr email? put direct into db
@@ -236,13 +238,10 @@ class MailsControl extends ConsoleControl
 				) == DEFAULT_HOST
 			) {
 				self::info($r[0] . ' own host save direct into db');
-				if ($model === false) {
-					$model = new MailsModel();
-				}
 
 				$mailbox = str_replace('@' . DEFAULT_HOST, '', $r[0]);
 
-				$mb_id = $model->getMailboxId($mailbox);
+				$mb_id = $this->model->getMailboxId($mailbox);
 				if (!$mb_id) {
 					// lost mailbox id
 					$mb_id = 25631;
@@ -253,7 +252,7 @@ class MailsControl extends ConsoleControl
 					$toarr[] = self::parseEmailAddress($r[0], $r[1]);
 				}
 
-				$model->saveMessage(
+				$this->model->saveMessage(
 					$mb_id, // mailbox id
 					1, // folder inbox
 					json_encode(self::parseEmailAddress($data['from'][0], $data['from'][1])), // sender
@@ -268,13 +267,8 @@ class MailsControl extends ConsoleControl
 				$has_recip = true;
 			}
 		}
-
-		if ($model !== false) {
-			$model->close();
-			$model = false;
-			if (!$has_recip) {
-				return true;
-			}
+		if (!$has_recip) {
+			return true;
 		}
 
 		// reconnect first time and force after 60 seconds inactive
@@ -303,8 +297,8 @@ class MailsControl extends ConsoleControl
 				break;
 			} catch (\Exception $e) {
 				self::smtpReconnect();
-				error('email send error: ' . $e->getMessage());
-				error(print_r($data, true));
+				self::error('email send error: ' . $e->getMessage());
+				self::error(print_r($data, true));
 			}
 
 			if ($max_try == 0) {
@@ -353,7 +347,7 @@ class MailsControl extends ConsoleControl
 
 			return true;
 		} catch (\Exception $e) {
-			error('reconnect failed: ' . $e->getMessage());
+			self::error('reconnect failed: ' . $e->getMessage());
 
 			return false;
 		}

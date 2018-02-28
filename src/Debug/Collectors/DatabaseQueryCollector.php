@@ -55,13 +55,13 @@ class DatabaseQueryCollector extends DataCollector implements Renderable, AssetP
 	public function getWidgets()
 	{
 		return [
-			'database' => [
+			'database (mysqli)' => [
 				'icon' => 'arrow-right',
 				'widget' => 'PhpDebugBar.Widgets.SQLQueriesWidget',
 				'map' => 'db',
 				'default' => '[]'
 			],
-			'database:badge' => [
+			'database (mysqli):badge' => [
 				'map' => 'db.nb_statements',
 				'default' => 0
 			]

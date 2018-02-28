@@ -3,24 +3,30 @@
 namespace Foodsharing\Modules\Store;
 
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 
 class StoreControl extends Control
 {
-	public function __construct()
+	private $bellGateway;
+
+	public function __construct(StoreModel $model, StoreView $view, BellGateway $bellGateway)
 	{
+		$this->model = $model;
+		$this->view = $view;
+		$this->bellGateway = $bellGateway;
+
+		parent::__construct();
+
 		if (!S::may()) {
 			$this->func->goLogin();
 		}
-
-		$this->model = new StoreModel();
-		$this->view = new StoreView();
-
-		parent::__construct();
 	}
 
 	public function index()
 	{
+		/* form methods below work with $g_data */
+		global $g_data;
 		$bezirk_id = $this->func->getGet('bid');
 
 		if (!isset($_GET['bid'])) {
@@ -39,7 +45,7 @@ class StoreControl extends Control
 		}
 		if ($this->func->getAction('new')) {
 			if (S::may('bieb')) {
-				$this->handle_add($bezirk_id);
+				$this->handle_add(S::id(), $bezirk_id);
 
 				$this->func->addBread($this->func->s('bread_betrieb'), '/?page=betrieb');
 				$this->func->addBread($this->func->s('bread_new_betrieb'));
@@ -48,7 +54,7 @@ class StoreControl extends Control
 					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
 				}
 
-				$this->func->addContent($this->view->betrieb_form($bezirk, 'betrieb', $this->model->getBasics_lebensmittel(), $this->model->getBasics_foodsaver(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
+				$this->func->addContent($this->view->betrieb_form($bezirk, 'betrieb', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
 
 				$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					array('name' => $this->func->s('back_to_overview'), 'href' => '/?page=fsbetrieb&bid=' . $bezirk_id)
@@ -83,7 +89,7 @@ class StoreControl extends Control
 					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
 				}
 
-				$this->func->addContent($this->view->betrieb_form($bezirk, '', $this->model->getBasics_lebensmittel(), $this->model->getBasics_foodsaver(), $this->model->get_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
+				$this->func->addContent($this->view->betrieb_form($bezirk, '', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
 			} else {
 				$this->func->info('Diesen Betrieb kannst Du nicht bearbeiten');
 			}
@@ -140,6 +146,8 @@ class StoreControl extends Control
 		global $g_data;
 		if ($this->func->submitted()) {
 			$g_data['stadt'] = $g_data['ort'];
+			$g_data['hsnr'] = '';
+			$g_data['str'] = $g_data['anschrift'];
 
 			if ($this->model->update_betrieb($_GET['id'], $g_data)) {
 				$this->func->info($this->func->s('betrieb_edit_success'));
@@ -150,7 +158,7 @@ class StoreControl extends Control
 		}
 	}
 
-	private function handle_add($bezirk_id)
+	private function handle_add($coordinator, $bezirk_id)
 	{
 		global $g_data;
 		if ($this->func->submitted()) {
@@ -161,6 +169,9 @@ class StoreControl extends Control
 			}
 
 			$g_data['stadt'] = $g_data['ort'];
+			$g_data['foodsaver'] = [$coordinator];
+			$g_data['str'] = $g_data['anschrift'];
+			$g_data['hsnr'] = '';
 
 			if ($id = $this->model->add_betrieb($g_data)) {
 				$this->model->add_betrieb_notiz(array(
@@ -183,7 +194,7 @@ class StoreControl extends Control
 
 				$foodsaver = $this->model->getFoodsaver($g_data['bezirk_id']);
 
-				$this->model->addBell($foodsaver, 'store_new_title', 'store_new', 'img img-store brown', array(
+				$this->bellGateway->addBell($foodsaver, 'store_new_title', 'store_new', 'img img-store brown', array(
 					'href' => '/?page=fsbetrieb&id=' . (int)$id
 				), array(
 					'user' => S::user('name'),

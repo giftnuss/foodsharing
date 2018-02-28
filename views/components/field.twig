@@ -1,0 +1,13 @@
+<div class="field">
+    {% set classes = classes |default([]) %}
+    {% if title %}
+        <div class="head ui-widget-header ui-corner-top">{{ title }}</div>
+        {% set classes = classes|merge(['corner-bottom']) %}
+    {% else %}
+        {%  set classes = classes|merge(['corner-all']) %}
+    {% endif %}
+
+    <div class="ui-widget ui-widget-content corner-all margin-bottom {{ classes|join(' ') }}">
+        {% block content %}{% endblock %}
+    </div>
+</div>
