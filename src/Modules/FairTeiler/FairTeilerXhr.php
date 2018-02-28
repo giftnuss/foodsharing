@@ -5,17 +5,19 @@ namespace Foodsharing\Modules\FairTeiler;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\Model;
 
 class FairTeilerXhr extends Control
 {
 	private $gateway;
 	private $bellGateway;
 
-	public function __construct(FairTeilerView $view, FairTeilerGateway $gateway, BellGateway $bellGateway)
+	public function __construct(Model $model, FairTeilerView $view, FairTeilerGateway $gateway, BellGateway $bellGateway)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->bellGateway = $bellGateway;
+		$this->model = $model;
 
 		parent::__construct();
 	}
