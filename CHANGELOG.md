@@ -5,6 +5,7 @@
 ## Breaking changes
 
 ## Features
+- Use of bcrypt as hashing algorithm to store passwords
 - Removed the working groups from the team->teammember page !262 @BassTii
 - Changed way of gendering in passport from "/" to "_" !251 @D0nPiano
 - auto adding of CH-BOTs, Vienna-BIEBs, and ZH-BIEBs to their working groups. !271 by @peter.toennies
@@ -23,6 +24,7 @@
 - Remove mass mail recipient options that are ambigous/irrelevant @NerdyProjects
 - Fix missing newsletter unsubscription links for pre-2014 foodsharing.de accounts @NerdyProjects
 - Fix newsletter should only be sent to activated accounts @NerdyProjects
+- Fixed a bug which throwed an error during mail change
 - Show regions in alphabetical order in the region selector (Bezirk beitreten) !267 by @alangecker
 - changed old foodsharing „Freiwilligenplattform“ mailfooter for outgoing replies via mail, which was based on lebensmittelretten !287 @irgendwer
 - consistent use of jumper list (Springerliste) all over the page. !293 by @peter.toennies

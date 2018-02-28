@@ -30,5 +30,12 @@ $I->seeInDatabase('fs_foodsaver', [
 	'email' => $email,
 	'name' => $first_name,
 	'nachname' => $last_name,
-	'newsletter' => 1
+	'newsletter' => 1,
+
+	'passwd' => null, // no md5 password
+	'fs_password' => null, // no sha1 password
 ]);
+
+// verify password
+$hash = $I->grabFromDatabase('fs_foodsaver', 'password', ['email' => $email]);
+$I->assertTrue(password_verify($pass, $hash));

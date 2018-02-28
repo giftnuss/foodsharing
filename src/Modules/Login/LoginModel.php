@@ -40,7 +40,7 @@ class LoginModel extends Model
 				`active`,
 				`plz`,
 				`email`,
-				`passwd`,
+				`password`,
 				`name`,
 				`nachname`,
 				`anschrift`,
@@ -61,7 +61,7 @@ class LoginModel extends Model
 				0,
 				' . $this->strval($data['plz']) . ',
 				' . $this->strval($data['email']) . ',
-				' . $this->strval($this->encryptMd5($data['email'], $data['pw'])) . ',
+				' . $this->strval($this->password_hash($data['pw'])) . ',
 				' . $this->strval($data['name']) . ',
 				' . $this->strval($data['surname']) . ',
 				' . $this->strval($data['str'] . ' ' . trim($data['nr'])) . ',
@@ -86,11 +86,9 @@ class LoginModel extends Model
 	{
 		if ((int)strlen($data['pass1']) > 4) {
 			if ($fsid = $this->qOne('SELECT `foodsaver_id` FROM `' . PREFIX . 'pass_request` WHERE `name` = ' . $this->strval($data['k']))) {
-				if ($fs = $this->qRow('SELECT `id`,`email` FROM `' . PREFIX . 'foodsaver` WHERE `id` = ' . $this->intval($fsid))) {
-					$this->del('DELETE FROM `' . PREFIX . 'pass_request` WHERE `foodsaver_id` = ' . (int)$fs['id']);
+				$this->del('DELETE FROM `' . PREFIX . 'pass_request` WHERE `foodsaver_id` = ' . $this->intval($fsid));
 
-					return $this->update('UPDATE `' . PREFIX . 'foodsaver` SET `passwd` = ' . $this->strval($this->encryptMd5($fs['email'], $data['pass1'])) . ' WHERE `id` = ' . (int)$fs['id']);
-				}
+				return $this->update('UPDATE `' . PREFIX . 'foodsaver` SET `password` = ' . $this->strval($this->password_hash($data['pass1'])) . ',`passwd`=NULL,`fs_password`=NULL WHERE `id` = ' . $this->intval($fsid));
 			}
 		}
 

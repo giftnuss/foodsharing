@@ -830,25 +830,6 @@ class XhrMethods
 
 				$search = array('{NAME}', '{ANREDE}', '{EMAIL}');
 				$replace = array($fs['name'], $anrede, $fs['email']);
-				$internal_message = true;
-				if (strpos($mail['message'], '{PASSWORD}') !== false) {
-					$passwd = $this->model->resetPassword($fs['id'], $fs['email']);
-					$mail['message'] = str_replace('{EMAIL}', $fs['email'], $mail['message']);
-					$mail['message'] = str_replace('{PASSWORD}', $passwd, $mail['message']);
-
-					$internal_message = false;
-				}
-
-				/*
-				 *  [id] => 1
-					[foodsaver_id] => 57
-					[complete] => 0
-					[name] => sdf
-					[message] => sdf
-					[zeit] => 2013-08-11 09:34:34
-					[recip] =>
-					[attach] =>
-				 */
 
 				$attach = false;
 				if (!empty($mail['attach'])) {

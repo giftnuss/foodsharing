@@ -25,3 +25,4 @@ modules:
         - \Helper\FoodsharingUI
         - \Helper\FoodsharingUrl
         - \Helper\Maildev
+        - Asserts
