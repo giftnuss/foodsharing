@@ -403,7 +403,7 @@ abstract class Control
 			 * only send email if the user want to retrieve emails
 			 */
 			if (Mem::user($recipient['id'], 'infomail')) {
-				$sessdata = Mem::user($this->func->fsId(), 'lastMailMessage');
+				$sessdata = $_SESSION['lastMailMessage'];
 
 				if (!$sessdata) {
 					$sessdata = array();
@@ -441,7 +441,7 @@ abstract class Control
 					}
 				}
 
-				Mem::userSet($this->func->fsId(), 'lastMailMessage', $sessdata);
+				$_SESSION['lastMailMessage'] = $sessdata;
 			}
 		}
 	}
