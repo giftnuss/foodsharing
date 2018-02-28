@@ -553,8 +553,13 @@ abstract class Db
 	public function login($email, $pass)
 	{
 		$email = trim($email);
-		if ($client = $this->checkClient($email, $pass)) {
-			$this->initSessionData($client['id']);
+		if ($this->qOne('
+			SELECT email FROM `' . PREFIX . 'email_blacklist`
+			WHERE email = ' . $this->strval($email))) {
+			return false;
+		}
+		if ($fsid = $this->checkClient($email, $pass)) {
+			$this->initSessionData($fsid);
 
 			$this->update('
 				UPDATE ' . PREFIX . 'foodsaver
@@ -562,11 +567,7 @@ abstract class Db
 				WHERE 	id = ' . (int)$this->func->fsId() . '
 			');
 
-			$blocked = $this->qOne('
-			SELECT email FROM `' . PREFIX . 'email_blacklist`
-			WHERE email = ' . $this->strval($email));
-
-			return $blocked === false;
+			return true;
 		} else {
 			return false;
 		}
@@ -656,7 +657,7 @@ abstract class Db
 		// modern hashing algorithm
 		if ($user['password']) {
 			if (password_verify($pass, $user['password'])) {
-				return $user;
+				return $user['id'];
 			} else {
 				return false;
 			}
@@ -673,7 +674,7 @@ abstract class Db
 					WHERE `id` = " . $user['id']
 				);
 
-				return $user;
+				return $user['id'];
 			} else {
 				return false;
 			}
