@@ -65,7 +65,7 @@
                 </div>
             </div>
             {% if broadcast_message %}
-                <div class="inner inside msg-inside info">{{ broadcast_message }}</div>
+                <div class="inner inside msg-inside info">{{ broadcast_message | raw }}</div>
             {% endif %}
         </div>
 
