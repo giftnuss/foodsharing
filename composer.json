@@ -1,7 +1,7 @@
 {
   "config": {
     "platform": {
-      "php": "7.0.24"
+      "php": "7.2.2"
     }
   },
   "require-dev": {
