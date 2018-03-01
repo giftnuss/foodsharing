@@ -1,3 +1,8 @@
+# 2018-03-01
+
+## Bugfixes
+- Events have not been createable/editable due to refactoring mistake @NerdyProjects
+
 # 2018-02-28
 
 ## Release notes
