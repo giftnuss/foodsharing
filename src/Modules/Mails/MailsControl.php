@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Mails;
 
+use Ddeboer\Imap\Server;
 use Flourish\fEmail;
 use Flourish\fFile;
-use Flourish\fMailbox;
 use Flourish\fSMTP;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Console\ConsoleControl;
@@ -58,9 +58,11 @@ class MailsControl extends ConsoleControl
 	 */
 	public function mailboxupdate()
 	{
-		$mailbox = new fMailbox('imap', IMAP_HOST, IMAP_USER, IMAP_PASS);
+		$server = new Server(IMAP_HOST);
+		$connection = $server->authenticate(IMAP_USER, IMAP_PASS);
 
-		$messages = $mailbox->listMessages();
+		$mailbox = $connection->getMailbox('INBOX');
+		$messages = $mailbox->getMessages();
 		if (is_array($messages) && count($messages) > 0) {
 			self::info(count($messages) . ' in Inbox');
 
@@ -72,105 +74,88 @@ class MailsControl extends ConsoleControl
 			foreach ($messages as $msg) {
 				++$i;
 				$progressbar->update($i);
-				if ($message = $mailbox->fetchMessage((int)$msg['uid'])) {
-					$mboxes = array();
-					if (isset($message['headers']) && isset($message['headers']['to'])) {
-						foreach ($message['headers']['to'] as $to) {
-							if (strtolower($to['host']) == DEFAULT_HOST) {
-								$mboxes[] = $to['mailbox'];
+				$mboxes = array();
+				$recipients = array_merge($msg->getTo(), $msg->getCc(), $msg->getBcc());
+				foreach ($recipients as $to) {
+					if (in_array(strtolower($to->getHostname()), MAILBOX_OWN_DOMAINS)) {
+						$mboxes[] = $to->getMailbox();
+					}
+				}
+
+				if (empty($mboxes)) {
+					$msg->delete();
+					continue;
+				}
+
+				$mb_ids = $this->model->getMailboxIds($mboxes);
+
+				if (!$mb_ids) {
+					$mb_ids = $this->model->getMailboxIds(array('lost'));
+				}
+
+				if ($mb_ids) {
+					$html = $msg->getBodyHtml();
+					if ($html) {
+						$h2t = new \Html2Text\Html2Text($html);
+						$body = $h2t->get_text();
+						$html = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $html);
+					} elseif ($text = $msg->getBodyText()) {
+						$body = $text;
+						$html = nl2br($this->func->autolink($text));
+					} else {
+						echo 'Empty mail?';
+						continue;
+					}
+
+					$attach = array();
+					foreach ($msg->getAttachments() as $a) {
+						$filename = $a->getFilename();
+						if ($this->attach_allow($a['filename'])) {
+							$new_filename = uniqid();
+							$path = 'data/mailattach/';
+							$j = 0;
+							while (file_exists($path . $new_filename)) {
+								++$j;
+								$new_filename = $j . '-' . $filename;
 							}
+
+							file_put_contents($path . $new_filename, $a->getDecodedContent());
+							$attach[] = array(
+								'filename' => $new_filename,
+								'origname' => $filename,
+								'mime' => $a->getType() . '/' . $a->getSubtype()
+							);
 						}
-						if (isset($message['headers']['cc'])) {
-							foreach ($message['headers']['cc'] as $to) {
-								if (strtolower($to['host']) == DEFAULT_HOST) {
-									$mboxes[] = $to['mailbox'];
-								}
-							}
+					}
+					$attach = json_encode($attach);
+
+					foreach ($mb_ids as $id) {
+						if (!isset($have_send[$id])) {
+							$have_send[$id] = array();
 						}
-						if (isset($message['headers']['bcc'])) {
-							foreach ($message['headers']['cc'] as $to) {
-								if (strtolower($to['host']) == DEFAULT_HOST) {
-									$mboxes[] = $to['mailbox'];
-								}
-							}
-						}
-
-						if (empty($mboxes)) {
-							$mailbox->deleteMessages((int)$msg['uid']);
-							continue;
-						}
-
-						$mb_ids = $this->model->getMailboxIds($mboxes);
-
-						if (!$mb_ids) {
-							$mb_ids = $this->model->getMailboxIds(array('lost'));
-						}
-
-						if ($mb_ids) {
-							$html = '';
-							if (isset($message['html'])) {
-								$h2t = new \Html2Text\Html2Text($message['html']);
-								$body = $h2t->get_text();
-								$html = $message['html'];
-								$html = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $html);
-							} elseif (isset($message['text'])) {
-								$body = $message['text'];
-								$html = nl2br($this->func->autolink($message['text']));
-							} else {
-								$body = json_encode($message);
-							}
-
-							$attach = '';
-							if (isset($message['attachment']) && !empty($message['attachment'])) {
-								$attach = array();
-								foreach ($message['attachment'] as $a) {
-									if ($this->attach_allow($a['filename'], $a['mimetype'])) {
-										$new_filename = uniqid();
-										$path = 'data/mailattach/';
-										while (file_exists($path . $new_filename)) {
-											++$i;
-											$new_filename = $i . '-' . $a['filename'];
-										}
-
-										file_put_contents($path . $new_filename, $a['data']);
-										$attach[] = array(
-											'filename' => $new_filename,
-											'origname' => $a['filename'],
-											'mime' => $a['mimetype']
-										);
-									}
-								}
-								$attach = json_encode($attach);
-							}
-
-							foreach ($mb_ids as $id) {
-								if (!isset($have_send[$id])) {
-									$have_send[$id] = array();
-								}
-								$md = $message['received'] . ':' . $message['headers']['subject'];
-								if (!isset($have_send[$id][$md])) {
-									$have_send[$id][$md] = true;
-									$this->model->saveMessage(
-										$id, // mailbox id
-										1, // folder
-										json_encode($message['headers']['from']), // sender
-										json_encode($message['headers']['to']), // to
-										strip_tags($message['headers']['subject']), // subject
-										$body,
-										$html,
-										date('Y-m-d H:i:s', strtotime($message['received'])), // time,
-										$attach, // attachements
-										0,
-										0
-									);
-								}
-							}
+						$md = $msg->getDate()->format('Y-m-d H:i:s') . ':' . $msg->getSubject();
+						if (!isset($have_send[$id][$md])) {
+							$have_send[$id][$md] = true;
+							$this->model->saveMessage(
+								$id, // mailbox id
+								1, // folder
+								json_encode($msg->getFrom()), // sender
+								json_encode($recipients), // to
+								strip_tags($msg->getSubject()), // subject
+								$body,
+								$html,
+								$msg->getDate()->format('Y-m-d H:i:s'),
+								$attach,
+								0,
+								0
+							);
 						}
 					}
 				}
 
-				$mailbox->deleteMessages((int)$msg['uid']);
+				$msg->delete();
 			}
+			$connection->expunge();
 			echo "\n";
 			self::success('ready :o)');
 		}
