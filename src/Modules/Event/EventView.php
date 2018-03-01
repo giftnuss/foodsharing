@@ -43,12 +43,18 @@ class EventView extends View
 				if($(this).val() == 0)
 				{
 					$("#location_name-wrapper").removeClass("required");
+					$("#anschrift-wrapper").removeClass("required");
+					$("#plz-wrapper").removeClass("required");
+					$("#ort-wrapper").removeClass("required");
 					$("#location_name-wrapper").next().hide();
 					$("#location_name-wrapper, #anschrift-wrapper, #plz-wrapper, #ort-wrapper").hide();
 				}
 				else
 				{
 					$("#location_name-wrapper").addClass("required");
+					$("#anschrift-wrapper").addClass("required");
+					$("#plz-wrapper").addClass("required");
+					$("#ort-wrapper").addClass("required");
 					$("#location_name-wrapper").next().show();
 					$("#location_name-wrapper, #anschrift-wrapper, #plz-wrapper, #ort-wrapper").show();
 				}
@@ -142,9 +148,17 @@ class EventView extends View
 		}
 
 		foreach (['anschrift', 'plz', 'ort', 'lat', 'lon'] as $i) {
-			$latLonOptions[$i] = $g_data[$i];
+			if (isset($g_data[$i])) {
+				$latLonOptions[$i] = $g_data[$i];
+			} else {
+				$latLonOptions[$i] = '';
+			}
 		}
-		$latLonOptions['location'] = ['lat' => $g_data['lat'], 'lon' => $g_data['lon']];
+		if (isset($g_data['lat']) && isset($g_data['lon'])) {
+			$latLonOptions['location'] = ['lat' => $g_data['lat'], 'lon' => $g_data['lon']];
+		} else {
+			$latLonOptions['location'] = ['lat' => 0, 'lon' => 0];
+		}
 
 		return $this->v_utils->v_field($this->v_utils->v_form('eventsss', array(
 			$public_el,

@@ -82,4 +82,9 @@ class FoodsharingUrl extends \Codeception\Module\Db
 	{
 		return '/?page=settings&sub=general';
 	}
+
+	public function eventAddUrl($region)
+	{
+		return '/?page=event&sub=add&bid=' . (int)$region;
+	}
 }
