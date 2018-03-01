@@ -63,7 +63,7 @@ class MailsControl extends ConsoleControl
 
 		$mailbox = $connection->getMailbox('INBOX');
 		$messages = $mailbox->getMessages();
-		if (is_array($messages) && count($messages) > 0) {
+		if (count($messages) > 0) {
 			self::info(count($messages) . ' in Inbox');
 
 			$progressbar = $this->progressbar(count($messages));
@@ -75,7 +75,7 @@ class MailsControl extends ConsoleControl
 				++$i;
 				$progressbar->update($i);
 				$mboxes = [];
-				$recipients = array_merge($msg->getTo(), $msg->getCc(), $msg->getBcc());
+				$recipients = $msg->getTo() + $msg->getCc() + $msg->getBcc();
 				foreach ($recipients as $to) {
 					if (in_array(strtolower($to->getHostname()), MAILBOX_OWN_DOMAINS)) {
 						$mboxes[] = $to->getMailbox();
@@ -120,11 +120,11 @@ class MailsControl extends ConsoleControl
 							}
 
 							file_put_contents($path . $new_filename, $a->getDecodedContent());
-							$attach[] = array(
+							$attach[] = [
 								'filename' => $new_filename,
 								'origname' => $filename,
-								'mime' => $a->getType() . '/' . $a->getSubtype()
-							);
+								'mime' => null
+							];
 						}
 					}
 					$attach = json_encode($attach);
@@ -139,8 +139,8 @@ class MailsControl extends ConsoleControl
 							$this->model->saveMessage(
 								$id, // mailbox id
 								1, // folder
-								json_encode($msg->getFrom()), // sender
-								json_encode($recipients), // to
+								json_encode($msg->getFrom()->getAddress()), // sender
+								json_encode(array_map(function ($r) { return $r->getAddress(); }, $recipients)), // all recipients
 								strip_tags($msg->getSubject()), // subject
 								$body,
 								$html,
