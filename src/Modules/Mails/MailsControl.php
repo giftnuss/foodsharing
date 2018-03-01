@@ -233,11 +233,7 @@ class MailsControl extends ConsoleControl
 					}
 				}
 				$newTo = json_encode($newTo);
-				echo "Update \n";
-				var_dump($r);
-				echo "to\n";
-				var_dump($newSender);
-				var_dump($newTo);
+				$this->database->update('fs_mailbox_message', ['sender' => $newSender, 'to' => $newTo], ['id' => $r['id']]);
 			}
 		}
 	}
