@@ -1,3 +1,6 @@
+## Bugfixes
+- Use modern ddeboer/imap library to fetch emails for internal mail system fixing some emails go missing on the way !323 @NerdyProjects
+
 # 2018-03-01
 
 ## Bugfixes
