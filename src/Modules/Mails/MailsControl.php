@@ -8,6 +8,7 @@ use Flourish\fFile;
 use Flourish\fSMTP;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Console\ConsoleControl;
+use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 
 class MailsControl extends ConsoleControl
@@ -18,14 +19,16 @@ class MailsControl extends ConsoleControl
 	public static $smtp = false;
 	public static $last_connect;
 	private $mailboxModel;
+	private $database;
 
-	public function __construct(MailsModel $model, MailboxModel $mailboxModel)
+	public function __construct(MailsModel $model, MailboxModel $mailboxModel, Database $database)
 	{
 		error_reporting(E_ALL);
 		ini_set('display_errors', '1');
 		self::$smtp = false;
 		$this->model = $model;
 		$this->mailboxModel = $mailboxModel;
+		$this->database = $database;
 		parent::__construct();
 	}
 
@@ -196,6 +199,40 @@ class MailsControl extends ConsoleControl
 
 			echo "\n";
 			self::success('ready :o)');
+		}
+	}
+
+	private function getMailAddressParts($str)
+	{
+		$parts = explode('@', $str);
+		if (count($parts) != 2) {
+			throw new \Exception($str . ' is not a valid email address');
+		}
+		$part['mailbox'] = $parts[0];
+		$part['host'] = $parts[1];
+
+		return $part;
+	}
+
+	public function fixWrongMailSenderFormat()
+	{
+		$res = $this->database->fetchAll('SELECT id, sender, `to` FROM fs_mailbox_message WHERE id < 185882 AND id > 175000');
+		foreach ($res as $r) {
+			$sender = json_decode($r['sender']);
+			$to = json_decode($r['to']);
+			if (is_string($sender)) {
+				$newSender = json_encode($this->getMailAddressParts($sender));
+				$newTo = [];
+				foreach ($to as $recip) {
+					$newTo[] = $this->getMailAddressParts($recip);
+				}
+				$newTo = json_encode($newTo);
+				echo "Update \n";
+				var_dump($r);
+				echo "to\n";
+				var_dump($newSender);
+				var_dump($newTo);
+			}
 		}
 	}
 
