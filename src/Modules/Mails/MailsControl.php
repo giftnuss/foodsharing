@@ -68,13 +68,13 @@ class MailsControl extends ConsoleControl
 
 			$progressbar = $this->progressbar(count($messages));
 
-			$have_send = array();
+			$have_send = [];
 			$i = 0;
 
 			foreach ($messages as $msg) {
 				++$i;
 				$progressbar->update($i);
-				$mboxes = array();
+				$mboxes = [];
 				$recipients = array_merge($msg->getTo(), $msg->getCc(), $msg->getBcc());
 				foreach ($recipients as $to) {
 					if (in_array(strtolower($to->getHostname()), MAILBOX_OWN_DOMAINS)) {
@@ -103,7 +103,7 @@ class MailsControl extends ConsoleControl
 						$body = $text;
 						$html = nl2br($this->func->autolink($text));
 					} else {
-						echo 'Empty mail?';
+						echo 'Empty mail? ' . $msg->getId() . '\n';
 						continue;
 					}
 
@@ -131,7 +131,7 @@ class MailsControl extends ConsoleControl
 
 					foreach ($mb_ids as $id) {
 						if (!isset($have_send[$id])) {
-							$have_send[$id] = array();
+							$have_send[$id] = [];
 						}
 						$md = $msg->getDate()->format('Y-m-d H:i:s') . ':' . $msg->getSubject();
 						if (!isset($have_send[$id][$md])) {
