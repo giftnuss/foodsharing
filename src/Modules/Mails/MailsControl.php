@@ -204,7 +204,7 @@ class MailsControl extends ConsoleControl
 
 	private function getMailAddressParts($str)
 	{
-		$parts = explode('@', $str);
+		$parts = explode('@', trim($str));
 		if (count($parts) != 2) {
 			throw new \Exception($str . ' is not a valid email address');
 		}
@@ -224,7 +224,13 @@ class MailsControl extends ConsoleControl
 				$newSender = json_encode($this->getMailAddressParts($sender));
 				$newTo = [];
 				foreach ($to as $recip) {
-					$newTo[] = $this->getMailAddressParts($recip);
+					if (strpos($recip, ';')) {
+						foreach (explode(';', $recip) as $rp) {
+							$newTo[] = $this->getMailAddressParts($rp);
+						}
+					} else {
+						$newTo[] = $this->getMailAddressParts($recip);
+					}
 				}
 				$newTo = json_encode($newTo);
 				echo "Update \n";
