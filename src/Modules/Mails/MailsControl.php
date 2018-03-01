@@ -70,108 +70,115 @@ class MailsControl extends ConsoleControl
 
 			$have_send = [];
 			$i = 0;
-
-			foreach ($messages as $msg) {
-				++$i;
-				$progressbar->update($i);
-				$mboxes = [];
-				$recipients = $msg->getTo() + $msg->getCc() + $msg->getBcc();
-				foreach ($recipients as $to) {
-					if (in_array(strtolower($to->getHostname()), MAILBOX_OWN_DOMAINS)) {
-						$mboxes[] = $to->getMailbox();
-					}
-				}
-
-				if (empty($mboxes)) {
-					$msg->delete();
-					continue;
-				}
-
-				$mb_ids = $this->model->getMailboxIds($mboxes);
-
-				if (!$mb_ids) {
-					$mb_ids = $this->model->getMailboxIds(array('lost'));
-				}
-
-				if ($mb_ids) {
-					try {
-						$html = $msg->getBodyHtml();
-					} catch (\Exception $e) {
-						$html = null;
-						echo 'Could not get HTML body ' . $e->getMessage() . ', continuing with PLAIN TEXT\n';
+			try {
+				foreach ($messages as $msg) {
+					++$i;
+					$progressbar->update($i);
+					$mboxes = [];
+					$recipients = $msg->getTo() + $msg->getCc() + $msg->getBcc();
+					foreach ($recipients as $to) {
+						if (in_array(strtolower($to->getHostname()), MAILBOX_OWN_DOMAINS)) {
+							$mboxes[] = $to->getMailbox();
+						}
 					}
 
-					if ($html) {
-						$h2t = new \Html2Text\Html2Text($html);
-						$body = $h2t->get_text();
-						$html = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $html);
-					} else {
+					if (empty($mboxes)) {
+						$msg->delete();
+						continue;
+					}
+
+					$mb_ids = $this->model->getMailboxIds($mboxes);
+
+					if (!$mb_ids) {
+						$mb_ids = $this->model->getMailboxIds(array('lost'));
+					}
+
+					if ($mb_ids) {
 						try {
-							$text = $msg->getBodyText();
+							$html = $msg->getBodyHtml();
 						} catch (\Exception $e) {
-							$text = null;
-							echo 'Could not get PLAIN TEXT body ' . $e->getMessage() . ', skipping mail.\n';
+							$html = null;
+							echo 'Could not get HTML body ' . $e->getMessage() . ', continuing with PLAIN TEXT\n';
 						}
-						if ($text != null) {
-							$body = $text;
-							$html = nl2br($this->func->autolink($text));
+
+						if ($html) {
+							$h2t = new \Html2Text\Html2Text($html);
+							$body = $h2t->get_text();
+							$html = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $html);
 						} else {
-							continue;
-						}
-					}
-
-					$attach = array();
-					foreach ($msg->getAttachments() as $a) {
-						$filename = $a->getFilename();
-						if ($this->attach_allow($filename, null)) {
-							$new_filename = uniqid();
-							$path = 'data/mailattach/';
-							$j = 0;
-							while (file_exists($path . $new_filename)) {
-								++$j;
-								$new_filename = $j . '-' . $filename;
-							}
 							try {
-								file_put_contents($path . $new_filename, $a->getDecodedContent());
-								$attach[] = [
-									'filename' => $new_filename,
-									'origname' => $filename,
-									'mime' => null
-								];
+								$text = $msg->getBodyText();
 							} catch (\Exception $e) {
-								echo 'Could not parse/save an attachment (' . $e->getMessage() . "), skipping that one...\n";
+								$text = null;
+								echo 'Could not get PLAIN TEXT body ' . $e->getMessage() . ', skipping mail.\n';
+							}
+							if ($text != null) {
+								$body = $text;
+								$html = nl2br($this->func->autolink($text));
+							} else {
+								continue;
+							}
+						}
+
+						$attach = array();
+						foreach ($msg->getAttachments() as $a) {
+							$filename = $a->getFilename();
+							if ($this->attach_allow($filename, null)) {
+								$new_filename = uniqid();
+								$path = 'data/mailattach/';
+								$j = 0;
+								while (file_exists($path . $new_filename)) {
+									++$j;
+									$new_filename = $j . '-' . $filename;
+								}
+								try {
+									file_put_contents($path . $new_filename, $a->getDecodedContent());
+									$attach[] = [
+										'filename' => $new_filename,
+										'origname' => $filename,
+										'mime' => null
+									];
+								} catch (\Exception $e) {
+									echo 'Could not parse/save an attachment (' . $e->getMessage() . "), skipping that one...\n";
+								}
+							}
+						}
+						$attach = json_encode($attach);
+
+						foreach ($mb_ids as $id) {
+							if (!isset($have_send[$id])) {
+								$have_send[$id] = [];
+							}
+							$md = $msg->getDate()->format('Y-m-d H:i:s') . ':' . $msg->getSubject();
+							if (!isset($have_send[$id][$md])) {
+								$have_send[$id][$md] = true;
+								$this->model->saveMessage(
+									$id, // mailbox id
+									1, // folder
+									json_encode($msg->getFrom()->getAddress()), // sender
+									json_encode(array_map(function ($r) {
+										return $r->getAddress();
+									}, $recipients)), // all recipients
+									strip_tags($msg->getSubject()), // subject
+									$body,
+									$html,
+									$msg->getDate()->format('Y-m-d H:i:s'),
+									$attach,
+									0,
+									0
+								);
 							}
 						}
 					}
-					$attach = json_encode($attach);
 
-					foreach ($mb_ids as $id) {
-						if (!isset($have_send[$id])) {
-							$have_send[$id] = [];
-						}
-						$md = $msg->getDate()->format('Y-m-d H:i:s') . ':' . $msg->getSubject();
-						if (!isset($have_send[$id][$md])) {
-							$have_send[$id][$md] = true;
-							$this->model->saveMessage(
-								$id, // mailbox id
-								1, // folder
-								json_encode($msg->getFrom()->getAddress()), // sender
-								json_encode(array_map(function ($r) { return $r->getAddress(); }, $recipients)), // all recipients
-								strip_tags($msg->getSubject()), // subject
-								$body,
-								$html,
-								$msg->getDate()->format('Y-m-d H:i:s'),
-								$attach,
-								0,
-								0
-							);
-						}
-					}
+					$msg->delete();
 				}
-
-				$msg->delete();
+			} catch (\Exception $e) {
+				echo 'Something went wrong, ' . $e->getMessage() . "\n";
+			} finally {
+				$connection->expunge();
 			}
-			$connection->expunge();
+
 			echo "\n";
 			self::success('ready :o)');
 		}
