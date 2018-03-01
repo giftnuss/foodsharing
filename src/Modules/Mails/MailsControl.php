@@ -149,7 +149,14 @@ class MailsControl extends ConsoleControl
 							if (!isset($have_send[$id])) {
 								$have_send[$id] = [];
 							}
-							$md = $msg->getDate()->format('Y-m-d H:i:s') . ':' . $msg->getSubject();
+							try {
+								$date = $msg->getDate();
+							} catch (\Exception $e) {
+								echo 'Error parsing date: ' . $e->getMessage() . ", continuing with 'now'\n";
+								$date = new \DateTime();
+							}
+
+							$md = $date->format('Y-m-d H:i:s') . ':' . $msg->getSubject();
 							if (!isset($have_send[$id][$md])) {
 								$have_send[$id][$md] = true;
 								$this->model->saveMessage(
@@ -162,7 +169,7 @@ class MailsControl extends ConsoleControl
 									strip_tags($msg->getSubject()), // subject
 									$body,
 									$html,
-									$msg->getDate()->format('Y-m-d H:i:s'),
+									$date->format('Y-m-d H:i:s'),
 									$attach,
 									0,
 									0
