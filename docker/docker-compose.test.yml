@@ -32,6 +32,10 @@ services:
       - redis:redis
       - db:db
       - chat:chat
+    depends_on:
+      - db
+      - redis
+      - mailqueuerunner
     volumes:
       - ../:/app
       - selenium_downloads:/downloads
@@ -48,6 +52,10 @@ services:
     image: registry.gitlab.com/foodsharing-dev/images/php:2.8
     command: php run.php Mails queueWorker
     working_dir: /app
+    restart: always
+    depends_on:
+      - db
+      - redis
     links:
       - maildev
       - redis:redis
