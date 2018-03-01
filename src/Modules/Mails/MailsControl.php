@@ -94,23 +94,36 @@ class MailsControl extends ConsoleControl
 				}
 
 				if ($mb_ids) {
-					$html = $msg->getBodyHtml();
+					try {
+						$html = $msg->getBodyHtml();
+					} catch (\Exception $e) {
+						$html = null;
+						echo 'Could not get HTML body ' . $e->getMessage() . ', continuing with PLAIN TEXT\n';
+					}
+
 					if ($html) {
 						$h2t = new \Html2Text\Html2Text($html);
 						$body = $h2t->get_text();
 						$html = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $html);
-					} elseif ($text = $msg->getBodyText()) {
-						$body = $text;
-						$html = nl2br($this->func->autolink($text));
 					} else {
-						echo 'Empty mail? ' . $msg->getId() . '\n';
-						continue;
+						try {
+							$text = $msg->getBodyText();
+						} catch (\Exception $e) {
+							$text = null;
+							echo 'Could not get PLAIN TEXT body ' . $e->getMessage() . ', skipping mail.\n';
+						}
+						if ($text != null) {
+							$body = $text;
+							$html = nl2br($this->func->autolink($text));
+						} else {
+							continue;
+						}
 					}
 
 					$attach = array();
 					foreach ($msg->getAttachments() as $a) {
 						$filename = $a->getFilename();
-						if ($this->attach_allow($a['filename'])) {
+						if ($this->attach_allow($filename, null)) {
 							$new_filename = uniqid();
 							$path = 'data/mailattach/';
 							$j = 0;
@@ -118,13 +131,16 @@ class MailsControl extends ConsoleControl
 								++$j;
 								$new_filename = $j . '-' . $filename;
 							}
-
-							file_put_contents($path . $new_filename, $a->getDecodedContent());
-							$attach[] = [
-								'filename' => $new_filename,
-								'origname' => $filename,
-								'mime' => null
-							];
+							try {
+								file_put_contents($path . $new_filename, $a->getDecodedContent());
+								$attach[] = [
+									'filename' => $new_filename,
+									'origname' => $filename,
+									'mime' => null
+								];
+							} catch (\Exception $e) {
+								echo 'Could not parse/save an attachment (' . $e->getMessage() . "), skipping that one...\n";
+							}
 						}
 					}
 					$attach = json_encode($attach);
