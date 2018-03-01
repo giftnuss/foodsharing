@@ -159,12 +159,20 @@ class MailsControl extends ConsoleControl
 							$md = $date->format('Y-m-d H:i:s') . ':' . $msg->getSubject();
 							if (!isset($have_send[$id][$md])) {
 								$have_send[$id][$md] = true;
+								$from = [];
+								$from['mailbox'] = $msg->getFrom()->getMailbox();
+								$from['host'] = $msg->getFrom()->getHostname();
+								$name = $msg->getFrom()->getName();
+								if ($name) {
+									$from['personal'] = $msg->getFrom()->getName();
+								}
+
 								$this->model->saveMessage(
 									$id, // mailbox id
 									1, // folder
-									json_encode($msg->getFrom()->getAddress()), // sender
+									json_encode($from), // sender
 									json_encode(array_map(function ($r) {
-										return $r->getAddress();
+										return ['mailbox' => $r->getMailbox(), 'host' => $r->getHostname()];
 									}, $recipients)), // all recipients
 									strip_tags($msg->getSubject()), // subject
 									$body,
