@@ -140,7 +140,7 @@ class MessageModel extends Model
 			if ($user = $this->q($sql)) {
 				$out = array_merge($out, $user);
 			}
-		} elseif (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke']) && count($_SESSION['client']['bezirke'] > 0)) {
+		} elseif (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke']) && count($_SESSION['client']['bezirke']) > 0) {
 			// add user in bezirk and groups
 			$ids = array();
 			foreach ($_SESSION['client']['bezirke'] as $i => $bezirk) {
