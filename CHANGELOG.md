@@ -2,6 +2,10 @@
 
 ## Bugfixes
 - Events have not been createable/editable due to refactoring mistake @NerdyProjects
+- Mumble events can be created again #315 @NerdyProjects
+
+## Features
+- Addresspicker: Street/house number editable again, better description for address search @NerdyProjects
 
 # 2018-02-28
 
