@@ -1,9 +1,7 @@
-## Bugfixes
-- Use modern ddeboer/imap library to fetch emails for internal mail system fixing some emails go missing on the way !323 @NerdyProjects
-
 # 2018-03-01
 
 ## Bugfixes
+- Use modern ddeboer/imap library to fetch emails for internal mail system fixing some emails go missing on the way !323 @NerdyProjects
 - Events have not been createable/editable due to refactoring mistake @NerdyProjects
 - Mumble events can be created again #315 @NerdyProjects
 
