@@ -443,9 +443,9 @@ class View
 		');
 
 		return $this->v_utils->v_input_wrapper($this->func->s('position_search'), '
-		<input placeholder="Straße, Ort..." type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
+		<input placeholder="Bitte hier deine Adresse suchen, nötigenfalls danach unten korrigieren" type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
 		<div id="map" class="pickermap"></div>') .
-			$this->v_utils->v_form_text('anschrift', ['value' => $options['anschrift'], 'disabled' => '1', 'required' => '1']) .
+			$this->v_utils->v_form_text('anschrift', ['value' => $options['anschrift'], 'required' => '1']) .
 			$this->v_utils->v_form_text('plz', ['value' => $options['plz'], 'disabled' => '1', 'required' => '1']) .
 			$this->v_utils->v_form_text('ort', ['value' => $options['ort'], 'disabled' => '1', 'required' => '1']) .
 			$this->v_utils->v_form_text('lat', ['value' => $options['lat']]) .
