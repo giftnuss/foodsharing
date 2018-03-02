@@ -1,4 +1,4 @@
-image: registry.gitlab.com/foodsharing-dev/images/ci:1.2
+image: registry.gitlab.com/foodsharing-dev/images/ci:1.4
 
 stages:
 - test
