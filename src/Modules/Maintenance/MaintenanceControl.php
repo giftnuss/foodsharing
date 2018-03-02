@@ -445,7 +445,7 @@ class MaintenanceControl extends ConsoleControl
 					'anrede' => $this->func->s('anrede_' . $fs['geschlecht']),
 					'name' => $fs['fs_name'],
 					'betrieb' => $fs['betrieb_name'],
-					'link' => URL_INTERN . '/?page=fsbetrieb&id=' . $fs['betrieb_id']
+					'link' => BASE_URL . '/?page=fsbetrieb&id=' . $fs['betrieb_id']
 				));
 			}
 			self::success('OK');

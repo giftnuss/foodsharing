@@ -203,7 +203,7 @@ class MailboxView extends View
 		}
 
 		if ($mail['time_ts'] > 1391338283) {
-			$body = '<iframe style="width:100%;height:100%;border:0;margin:0;padding:0;" frameborder="0" src="' . BASE_URL . '/xhrapp.php?app=mailbox&m=fmail&id=' . $mail['id'] . '"></iframe>';
+			$body = '<iframe style="width:100%;height:100%;border:0;margin:0;padding:0;" frameborder="0" src="/xhrapp.php?app=mailbox&m=fmail&id=' . $mail['id'] . '"></iframe>';
 		} else {
 			$body = nl2br($mail['body']);
 		}

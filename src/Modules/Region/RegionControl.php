@@ -417,7 +417,7 @@ class RegionControl extends Control
 		$body = $this->model->getVal('body', 'theme_post', $theme['last_post_id']);
 
 		$poster = $this->model->getVal('name', 'foodsaver', $theme['foodsaver_id']);
-		$link = URL_INTERN . '/?page=bezirk&bid=' . $this->bezirk_id . '&sub=' . $this->getSub() . '&tid=' . $theme_id;
+		$link = BASE_URL . '/?page=bezirk&bid=' . $this->bezirk_id . '&sub=' . $this->getSub() . '&tid=' . $theme_id;
 
 		if ($this->bot_theme == 1) {
 			$foodsaver = $this->model->getBotschafter($this->bezirk_id);
