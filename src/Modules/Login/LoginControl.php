@@ -27,7 +27,6 @@ class LoginControl extends Control
 		if (isset($_GET['e']) && $this->func->validEmail($_GET['e'])) {
 			$this->model->update('UPDATE `' . PREFIX . "foodsaver` SET newsletter=0 WHERE email='" . $this->model->safe($_GET['e']) . "'");
 			$this->func->addContent($this->v_utils->v_info('Du wirst nun keine weiteren Newsletter von uns erhalten', 'Erfolg!'));
-			file_put_contents('../unsubscribe.txt', $_GET['e'] . "\n", FILE_APPEND);
 		}
 	}
 
