@@ -2,6 +2,7 @@ image: registry.gitlab.com/foodsharing-dev/images/ci:1.4
 
 stages:
 - test
+- prepare_deploy
 - deploy
 
 test:
@@ -27,7 +28,7 @@ test:
     - tests/_output
 
 prepare_deploy:
-  stage: deploy
+  stage: prepare_deploy
 
   script:
   - eval $(ssh-agent -s)
