@@ -40,6 +40,7 @@ deploy_beta:
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   - (cd deployer && composer install)
   - deployer/vendor/bin/dep deploy $CI_ENVIRONMENT_NAME --revision $CI_COMMIT_SHA
+  - ./scripts/deploy.notifyslack.sh
 
   environment:
     name: beta
@@ -62,6 +63,7 @@ deploy_production:
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   - (cd deployer && composer install)
   - deployer/vendor/bin/dep deploy $CI_ENVIRONMENT_NAME --revision $CI_COMMIT_SHA
+  - ./scripts/deploy.notifyslack.sh
 
   environment:
     name: production
