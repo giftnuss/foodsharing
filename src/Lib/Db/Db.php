@@ -365,11 +365,7 @@ abstract class Db
 			}
 		}
 
-		if (count($out) > 0) {
-			return $out;
-		} else {
-			return false;
-		}
+		return $out;
 	}
 
 	/**
@@ -509,11 +505,7 @@ abstract class Db
 			}
 		}
 
-		if (count($out) > 0) {
-			return $out;
-		} else {
-			return false;
-		}
+		return $out;
 	}
 
 	public function __destruct()

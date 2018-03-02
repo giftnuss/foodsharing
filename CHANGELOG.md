@@ -1,3 +1,8 @@
+# 2018-03-02
+
+## Refactoring
+- Database multi-row query methods return empty array instead of false on no result !327 @NerdyProjects
+
 # 2018-03-01
 
 ## Hotfixes 2018-03-02
