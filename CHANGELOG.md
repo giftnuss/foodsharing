@@ -1,7 +1,8 @@
-# 2018-03-02
-
-##
 # 2018-03-01
+
+## Hotfixes 2018-03-02
+- Remove broken filemanager from content management system (content, email templates) @NerdyProjects
+- Fix preview for mass mailer @NerdyProjects
 
 ## Dev/Test/CI stuff
 - Use [Deployer](https://deployer.org/) to auto-deploy the foodsharing software
