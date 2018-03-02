@@ -310,7 +310,7 @@ class BasketXhr extends Control
 	{
 		$dia = new XhrDialog();
 
-		$dia->setTitle('Essenskorb von foodsharing.de');
+		$dia->setTitle('Essenskorb von ' . BASE_URL);
 
 		$dia->addContent($this->view->fsBubble($basket));
 		$modal = false;

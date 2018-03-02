@@ -102,7 +102,6 @@ function mb_forward() {
 }
 
 function mb_setMailbox(mb_id) {
-    // <option value="2" class="mb-2">koeln@lebensmittelretten.de</option>
     if ($("#edit-von").length > 0) {
         email = $("#edit-von option.mb-" + mb_id).text();
         $("#edit-von option.mb-" + mb_id).remove();

@@ -18,6 +18,7 @@ define('PREFIX', 'fs_');
 define('ERROR_REPORT', E_ALL);
 define('BASE_URL', $protocol . '://lmr.local/');
 define('DEFAULT_EMAIL', 'noreply@lebensmittelretten.de');
+define('SUPPORT_EMAIL', 'it@lebensmittelretten.de');
 define('DEFAULT_EMAIL_NAME', 'Foodsharing Freiwillige');
 define('VERSION', '0.8.1');
 define('EMAIL_PUBLIC', 'info@lebensmittelretten.de');

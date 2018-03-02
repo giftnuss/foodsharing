@@ -331,7 +331,7 @@ class BasketView extends View
 		' . $img . '
 		' . $this->v_utils->v_input_wrapper('Beschreibung', nl2br($this->func->autolink($basket['description']))) . '
 		' .
-			'<div style="text-align:center;"><a class="fsbutton" href="http://foodsharing.de/essenskoerbe/' . $basket['fsf_id'] . '" target="_blank">Essenskorb anfragen auf foodsharing.de</a></div>';
+			'<div style="text-align:center;"><a class="fsbutton" href="' . BASE_URL . '/essenskoerbe/' . $basket['fsf_id'] . '" target="_blank">Essenskorb anfragen auf foodsharing.de</a></div>';
 	}
 
 	public function bubbleNoUser($basket)

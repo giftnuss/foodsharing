@@ -34,7 +34,7 @@ class SettingsControl extends Control
 			$this->func->libmail(array(
 				'email' => $this->foodsaver['email'],
 				'email_name' => $this->foodsaver['name'] . ' ' . $this->foodsaver['nachname']
-			), 'loeschen@lebensmittelretten.de', $this->foodsaver['name'] . ' hat Account gelöscht', $this->foodsaver['name'] . ' ' . $this->foodsaver['nachname'] . ' hat Account gelöscht' . "\n\nGrund für das Löschen:\n" . strip_tags($_GET['reason']));
+			), 'loeschen@' . DEFAULT_EMAIL_HOST, $this->foodsaver['name'] . ' hat Account gelöscht', $this->foodsaver['name'] . ' ' . $this->foodsaver['nachname'] . ' hat Account gelöscht' . "\n\nGrund für das Löschen:\n" . strip_tags($_GET['reason']));
 			$this->model->del_foodsaver($this->func->fsId());
 			$this->func->go('/?page=logout');
 		}
@@ -195,7 +195,7 @@ class SettingsControl extends Control
 					return $this->view->quizFailed($this->model->getContent(13));
 				}
 			} else {
-				$this->func->addContent($this->v_utils->v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:it@' . DEFAULT_EMAIL_HOST . '"">it@' . DEFAULT_EMAIL_HOST . '</a>'));
+				$this->func->addContent($this->v_utils->v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:' . SUPPORT_EMAIL . '"">' . SUPPORT_EMAIL . '</a>'));
 			}
 		} else {
 			switch ($this->foodsaver['rolle']) {
@@ -354,22 +354,13 @@ class SettingsControl extends Control
 						$this->v_utils->v_form_checkbox('tel_public', array('desc' => 'Neben Deinem vollem Namen (und eventuell Foto) ist es für
 										Händler, Foodsharing-Freiwillge, Interessierte und die Presse
 										einfacher und direkter, Dich neben der für Deine
-										Region/Stadt/Bezirk zugewiesenen Botschafter-E-Mail-Adresse (z. B. mainz@lebensmittelretten.de)
+										Region/Stadt/Bezirk zugewiesenen Botschafter-E-Mail-Adresse (z. B. mainz@' . DEFAULT_EMAIL_HOST . ')
 										über Deine Festnetz- bzw. Handynummer zu erreichen. Bitte gib
 										hier alle Nummern an, die wir veröffentlichen dürfen und am
 										besten noch gewünschte Anrufzeiten.', 'required' => true, 'values' => array(
 							array('id' => 1, 'name' => 'Ich bin einverstanden, dass meine Telefonnummer veröffentlicht wird.')
 						))) .
-						$this->v_utils->v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös
-										und einladend gegenüber den Lebensmittelbetrieben, den
-										Foodsavern sowie allen, die bei foodsharing mitmachen wollen,
-										aufzutreten, wollen wir neben Deinem Foto, Namen und
-										Telefonnummer auch eine Beschreibung Deiner Person als Teil von
-										foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz,
-										hier unsere Vorlage: <a target="_blank"	href="http://www.lebensmittelretten.de/?p=botschafter">http://www.lebensmittelretten.de/botschafter</a>
-										Gerne kannst Du auch Deine Website, Projekt oder sonstiges
-										erwähnen, was Du öffentlich an Informationen teilen möchtest,
-										die vorteilhaft sind.')),
+						$this->v_utils->v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz, hier unsere Vorlage: https://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du öffentlich an Informationen teilen möchtest, die vorteilhaft sind.')),
 
 						'Botschafter werden',
 
