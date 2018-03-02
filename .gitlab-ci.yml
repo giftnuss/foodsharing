@@ -1,8 +1,8 @@
 image: registry.gitlab.com/foodsharing-dev/images/ci:1.2
 
 stages:
-  - test
-  - deploy
+- test
+- deploy
 
 test:
   script:
@@ -30,33 +30,34 @@ prepare_deploy:
   stage: deploy
 
   script:
-    - eval $(ssh-agent -s)
-    - ssh-add <(echo "$DEPLOY_SSH_KEY")
-    - mkdir -p ~/.ssh
-    # For Docker builds disable host key checking. Be aware that by adding that
-    # you are suspectible to man-in-the-middle attacks.
-    # WARNING: Use this only with the Docker executor, if you use it with shell
-    # you will overwrite your user's SSH config.
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - cd deployer
-    - composer install
+  - eval $(ssh-agent -s)
+  - ssh-add <(echo "$DEPLOY_SSH_KEY")
+  - mkdir -p ~/.ssh
+  # For Docker builds disable host key checking. Be aware that by adding that
+  # you are suspectible to man-in-the-middle attacks.
+  # WARNING: Use this only with the Docker executor, if you use it with shell
+  # you will overwrite your user's SSH config.
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  - cd deployer
+  - composer install
+  - cd ..
 
-    only:
-      - master
-      - production
+  only:
+  - master
+  - production
 
 deploy_beta:
   stage: deploy
 
   script:
-    - deployer/vendor/bin/dep deploy $CI_ENVIRONMENT_NAME --revision $CI_COMMIT_SHA
+  - deployer/vendor/bin/dep deploy $CI_ENVIRONMENT_NAME --revision $CI_COMMIT_SHA
 
   environment:
     name: beta
     url: https://beta.foodsharing.de
 
   only:
-    - master
+  - master
 
 deploy_production:
   stage: deploy
@@ -69,7 +70,7 @@ deploy_production:
     url: https://foodsharing.de
 
   only:
-    - production
+  - production
 
 variables:
   # https://docs.docker.com/engine/userguide/storagedriver/selectadriver/
