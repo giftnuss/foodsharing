@@ -19,6 +19,7 @@
 
 ## Refactoring
 - Database multi-row query methods return empty array instead of false on no result !327 @NerdyProjects
+- Cleaned up usage of some configuration constants !326 @NerdyProjects
 
 # 2018-03-01
 ## Hotfixes 2018-03-04
