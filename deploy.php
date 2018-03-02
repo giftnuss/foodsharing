@@ -3,7 +3,6 @@
 namespace Deployer;
 
 require 'recipe/common.php';
-require 'recipe/slack.php';
 
 // Project name
 set('application', 'foodsharing');
