@@ -28,20 +28,17 @@ set('clear_paths', ['tmp/.views-cache', 'tmp/di-cache.php']);
 host('beta')
 	->hostname('banana.foodsharing.de')
 	->user('deploy')
-	//->set('deploy_path', '/var/www/lmr-beta/www');
 	->set('deploy_path', '~/beta-deploy');
 
 host('production')
 	->hostname('banana.foodsharing.de')
 	->user('deploy')
-	//->set('deploy_path', '/var/www/lmr-beta/www');
 	->set('deploy_path', '~/production-deploy');
 
-desc('Create the revision information');
-task('deploy:create_revision', '
-./scripts/generate-revision.sh
-');
 // Tasks
+
+desc('Create the revision information');
+task('deploy:create_revision', './scripts/generate-revision.sh');
 
 desc('Deploy your project');
 task('deploy', [

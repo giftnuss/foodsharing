@@ -38,9 +38,7 @@ prepare_deploy:
   # WARNING: Use this only with the Docker executor, if you use it with shell
   # you will overwrite your user's SSH config.
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-  - cd deployer
-  - composer install
-  - cd ..
+  - (cd deployer && composer install)
 
   only:
   - master
