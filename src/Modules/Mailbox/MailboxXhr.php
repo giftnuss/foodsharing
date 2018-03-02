@@ -21,27 +21,6 @@ class MailboxXhr extends Control
 		}
 	}
 
-	public function testmail()
-	{
-		if (!S::may('orga')) {
-			return false;
-		}
-
-		if (!$this->func->validEmail($_POST['email'])) {
-			return array(
-				'status' => 1,
-				'script' => 'pulseError("Mit der E-Mail-Adresse stimmt etwas nicht!");'
-			);
-		} else {
-			$this->func->libmail(false, $_POST['email'], $_POST['subject'], $_POST['message']);
-
-			return array(
-				'status' => 1,
-				'script' => 'pulseInfo("E-Mail wurde versendet!");'
-			);
-		}
-	}
-
 	public function attach()
 	{
 		// is filesize (10MB) and filetype allowed?
