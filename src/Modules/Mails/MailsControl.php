@@ -289,19 +289,19 @@ class MailsControl extends ConsoleControl
 			$r[0] = strtolower($r[0]);
 			self::info(substr(
 				$r[0],
-				(strlen(DEFAULT_HOST) * -1),
-				strlen(DEFAULT_HOST)
+				(strlen(DEFAULT_EMAIL_HOST) * -1),
+				strlen(DEFAULT_EMAIL_HOST)
 			));
 			if (
 				substr(
 					$r[0],
-					(strlen(DEFAULT_HOST) * -1),
-					strlen(DEFAULT_HOST)
-				) == DEFAULT_HOST
+					(strlen(DEFAULT_EMAIL_HOST) * -1),
+					strlen(DEFAULT_EMAIL_HOST)
+				) == DEFAULT_EMAIL_HOST
 			) {
 				self::info($r[0] . ' own host save direct into db');
 
-				$mailbox = str_replace('@' . DEFAULT_HOST, '', $r[0]);
+				$mailbox = str_replace('@' . DEFAULT_EMAIL_HOST, '', $r[0]);
 
 				$mb_id = $this->model->getMailboxId($mailbox);
 				if (!$mb_id) {

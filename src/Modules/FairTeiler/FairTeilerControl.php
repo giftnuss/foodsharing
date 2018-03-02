@@ -109,7 +109,7 @@ class FairTeilerControl extends Control
 				<input type="hidden" name="ft-id" id="ft-id" value="' . $this->fairteiler['id'] . '" />
 				<input type="hidden" name="ft-urlname" id="ft-urlname" value="' . $this->fairteiler['urlname'] . '" />
 				<input type="hidden" name="ft-bezirk" id="ft-bezirk" value="' . $this->bezirk['urlname'] . '" />
-				<input type="hidden" name="ft-publicurl" id="ft-publicurl" value="http://www.' . DEFAULT_HOST . '/' . $this->bezirk['urlname'] . '/fairteiler/' . $this->fairteiler['id'] . '_' . $this->fairteiler['urlname'] . '" />
+				<input type="hidden" name="ft-publicurl" id="ft-publicurl" value="' . BASE_URL . '/' . $this->bezirk['urlname'] . '/fairteiler/' . $this->fairteiler['id'] . '_' . $this->fairteiler['urlname'] . '" />
 				');
 
 			if ($request->query->has('delete') && ($this->func->isOrgaTeam() || $this->func->isBotFor($this->bezirk_id))) {

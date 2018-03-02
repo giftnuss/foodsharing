@@ -57,7 +57,7 @@ class MailboxView extends View
 
 	public function manageMemberBox($box)
 	{
-		return $this->v_utils->v_quickform($box['name'] . '@' . DEFAULT_HOST, array(
+		return $this->v_utils->v_quickform($box['name'] . '@' . DEFAULT_EMAIL_HOST, array(
 			$this->v_utils->v_form_tagselect('foodsaver_' . $box['id'], array('label' => $this->func->s('mailbox_member'), 'xhr' => 'foodsaver')),
 			$this->v_utils->v_input_wrapper($this->func->s('email_name'), '<input type="text" value="' . $box['email_name'] . '" name="email_name" class="input text value">'),
 			$this->v_utils->v_form_hidden('mbid', $box['id'])
@@ -279,13 +279,13 @@ class MailboxView extends View
 			[type] => bot
 		 */
 		if (count($mailboxes) == 1) {
-			$von = $mailboxes[0]['email_name'] . ' (' . $mailboxes[0]['name'] . '@' . DEFAULT_HOST . ')<input type="hidden" id="h-edit-von" value="' . $mailboxes[0]['id'] . '" />';
+			$von = $mailboxes[0]['email_name'] . ' (' . $mailboxes[0]['name'] . '@' . DEFAULT_EMAIL_HOST . ')<input type="hidden" id="h-edit-von" value="' . $mailboxes[0]['id'] . '" />';
 		} else {
 			$von = '
 			<select class="von-select ui-corner-all" id="edit-von">';
 			foreach ($mailboxes as $m) {
 				$von .= '
-				<option class="mb-' . $m['id'] . '" value="' . $m['id'] . '">' . $m['email_name'] . ' (' . $m['name'] . '@' . DEFAULT_HOST . ')</option>';
+				<option class="mb-' . $m['id'] . '" value="' . $m['id'] . '">' . $m['email_name'] . ' (' . $m['name'] . '@' . DEFAULT_EMAIL_HOST . ')</option>';
 			}
 			$von .= '
 			</select>';

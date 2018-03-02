@@ -155,7 +155,7 @@ class LoginXhr extends Control
 		} else {
 			$token = uniqid('', true);
 			if ($id = $this->model->insertNewUser($data, $token)) {
-				$activationUrl = 'http://' . DEFAULT_HOST . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
+				$activationUrl = BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
 
 				$this->func->tplMail(25, $data['email'], array(
 					'name' => $data['name'],

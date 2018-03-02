@@ -195,7 +195,7 @@ class SettingsControl extends Control
 					return $this->view->quizFailed($this->model->getContent(13));
 				}
 			} else {
-				$this->func->addContent($this->v_utils->v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:it@' . DEFAULT_HOST . '"">it@' . DEFAULT_HOST . '</a>'));
+				$this->func->addContent($this->v_utils->v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:it@' . DEFAULT_EMAIL_HOST . '"">it@' . DEFAULT_EMAIL_HOST . '</a>'));
 			}
 		} else {
 			switch ($this->foodsaver['rolle']) {

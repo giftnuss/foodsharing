@@ -150,7 +150,7 @@ class WorkGroupModel extends Model
 				b.`fetch_count`,
 				b.`report_num`,
 				b.`type`,
-				CONCAT(m.name,"@' . DEFAULT_HOST . '") AS email
+				CONCAT(m.name,"@' . DEFAULT_EMAIL_HOST . '") AS email
 			FROM
 				' . PREFIX . 'bezirk b
 			LEFT JOIN
@@ -254,7 +254,7 @@ class WorkGroupModel extends Model
 				b.`week_num`,
 				b.`fetch_count`,
 				b.`report_num`,
-				CONCAT(m.name,"@' . DEFAULT_HOST . '") AS email
+				CONCAT(m.name,"@' . DEFAULT_EMAIL_HOST . '") AS email
 				
 			FROM
 				' . PREFIX . 'bezirk b
@@ -331,7 +331,7 @@ class WorkGroupModel extends Model
 		return $this->qOne('
 		
 			SELECT
-				CONCAT(mb.name,"@' . DEFAULT_HOST . '")
+				CONCAT(mb.name,"@' . DEFAULT_EMAIL_HOST . '")
 		
 			FROM
 				' . PREFIX . 'mailbox mb,
@@ -351,7 +351,7 @@ class WorkGroupModel extends Model
 		return $this->qOne('
 
 			SELECT 
-				CONCAT(mb.name,"@' . DEFAULT_HOST . '")
+				CONCAT(mb.name,"@' . DEFAULT_EMAIL_HOST . '")
 				
 			FROM 	
 				' . PREFIX . 'mailbox mb,

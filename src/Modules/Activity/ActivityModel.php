@@ -306,7 +306,7 @@ class ActivityModel extends Model
 						'attr' => array(
 							'href' => '/?page=mailbox&show=' . $u['id']
 						),
-						'title' => $from . ' <i class="fa fa-angle-right"></i> <a href="/?page=mailbox&show=' . $u['id'] . '">' . $this->func->ttt($u['subject'], 30) . '</a><small>' . $this->func->ttt($u['mb_name'] . '@' . DEFAULT_HOST, 19) . '</small>',
+						'title' => $from . ' <i class="fa fa-angle-right"></i> <a href="/?page=mailbox&show=' . $u['id'] . '">' . $this->func->ttt($u['subject'], 30) . '</a><small>' . $this->func->ttt($u['mb_name'] . '@' . DEFAULT_EMAIL_HOST, 19) . '</small>',
 						'desc' => $this->textPrepare(nl2br($u['body'])),
 						'time' => $u['time'],
 						'icon' => '/img/mailbox-50x50.png',

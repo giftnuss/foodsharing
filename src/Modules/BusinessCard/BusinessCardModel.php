@@ -29,14 +29,14 @@ class BusinessCardModel extends Model
 
 		if (S::may('bieb')) {
 			if ($mailbox = $this->qOne('SELECT mb.name FROM ' . PREFIX . 'mailbox mb, ' . PREFIX . 'foodsaver fs WHERE fs.mailbox_id = mb.id AND fs.id = ' . (int)$this->func->fsId())) {
-				$fs['email'] = $mailbox . '@' . DEFAULT_HOST;
+				$fs['email'] = $mailbox . '@' . DEFAULT_EMAIL_HOST;
 			}
 		}
 
 		$fs['bot'] = $this->q('
 			SELECT 	b.name,
 					b.id,
-					CONCAT(mb.`name`,"@","' . DEFAULT_HOST . '") AS email,
+					CONCAT(mb.`name`,"@","' . DEFAULT_EMAIL_HOST . '") AS email,
 					mb.name AS mailbox
 					
 			FROM 	' . PREFIX . 'bezirk b,

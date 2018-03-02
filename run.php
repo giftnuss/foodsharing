@@ -8,7 +8,7 @@ require __DIR__ . '/includes/setup.php';
 */
 require_once 'config.inc.php';
 if (!isset($argv)) {
-	header('Location: http://www.' . DEFAULT_HOST);
+	header('Location: ' . BASE_URL);
 	exit();
 }
 

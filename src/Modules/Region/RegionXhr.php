@@ -123,7 +123,7 @@ class RegionXhr extends Control
 							$this->func->tplMail(19, $f['email'], array(
 								'anrede' => $this->func->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 								'name' => $f['name'],
-								'link' => 'http://www.' . DEFAULT_HOST . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,
+								'link' => BASE_URL . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,
 								'theme' => $theme,
 								'post' => $body,
 								'poster' => S::user('name')
