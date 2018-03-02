@@ -1,4 +1,10 @@
+# 2018-03-02
+
+##
 # 2018-03-01
+
+## Dev/Test/CI stuff
+- Use [Deployer](https://deployer.org/) to auto-deploy the foodsharing software
 
 ## Bugfixes
 - Use modern ddeboer/imap library to fetch emails for internal mail system fixing some emails go missing on the way !323 @NerdyProjects
