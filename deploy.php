@@ -11,7 +11,8 @@ set('application', 'foodsharing');
 set('repository', 'git@gitlab.com:foodsharing-dev/foodsharing.git');
 
 // [Optional] Allocate tty for git clone. Default value is false.
-set('git_tty', true);
+// Needs to be false when we run in CI environment
+set('git_tty', false);
 
 // Shared files/dirs between deploys
 set('shared_files', ['config.inc.prod.php']);
