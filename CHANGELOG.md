@@ -4,6 +4,8 @@
 - Database multi-row query methods return empty array instead of false on no result !327 @NerdyProjects
 
 # 2018-03-01
+## Hotfixes 2018-03-04
+- Never use PDO Boolean binding to avoid silent insert failures [PDO Bug](https://bugs.php.net/bug.php?id=38546) leading to notification bells for unverified users joining regions missing @NerdyProjects
 
 ## Hotfixes 2018-03-02
 - Remove broken filemanager from content management system (content, email templates) @NerdyProjects

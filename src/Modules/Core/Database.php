@@ -131,7 +131,7 @@ class Database
 
 		foreach ($params as $param => $value) {
 			if (is_bool($value)) {
-				$type = \PDO::PARAM_BOOL;
+				$type = \PDO::PARAM_INT;
 			} elseif (is_int($value)) {
 				$type = \PDO::PARAM_INT;
 			} else {
