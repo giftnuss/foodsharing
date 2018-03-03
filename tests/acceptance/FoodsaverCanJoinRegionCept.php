@@ -4,7 +4,8 @@ $I = new AcceptanceTester($scenario);
 
 $I->wantTo('Join another region');
 
-$user = $I->createFoodsaver();
+/* This user is explicitly unverified to trigger #404; also actually newly registered users are unverified. */
+$user = $I->createFoodsaver(null, ['verified' => 0]);
 $region = $I->createRegion(null, 0, 3);
 $ambassador = $I->createAmbassador(null, ['bezirk_id' => $region['id']]);
 $I->addBezirkAdmin($region['id'], $ambassador['id']);
