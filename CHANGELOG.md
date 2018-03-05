@@ -1,4 +1,4 @@
-# Unreleased
+# 2018-03-02
 - remove ability for ambassador to add any foodsaver to his/her district !328 #405 by @k.miklobusec and @peter.toennies
 
 # 2018-03-02
