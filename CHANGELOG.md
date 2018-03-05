@@ -1,3 +1,6 @@
+# 2018-03-05
+- remove ability for ambassador to add any foodsaver to his district !405 @k.miklobusec
+
 # 2018-03-02
 
 ## Refactoring
