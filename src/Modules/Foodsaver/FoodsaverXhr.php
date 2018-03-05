@@ -59,29 +59,4 @@ class FoodsaverXhr extends Control
 			'script' => 'pulseInfo("Foodsaver wurde entfernt");$("#fsform").html("");fsapp.refreshfoodsaver();'
 		);
 	}
-
-	/**
-	 * xhr req to add a list of foodsavers to an bezirk.
-	 */
-	public function addfoodsaver()
-	{
-		$ids = explode(',', $_GET['ids']);
-
-		// clear id array
-		$outid = array();
-		foreach ($ids as $id) {
-			if ((int)$id > 0) {
-				$outid[] = (int)$id;
-			}
-		}
-
-		if (!empty($outid)) {
-			$this->model->addFoodsaverToBezirk($outid, $_GET['bid']);
-
-			return array(
-				'status' => 1,
-				'script' => 'fsapp.refreshfoodsaver();pulseInfo("Foodsaver wurden einsortiert");'
-			);
-		}
-	}
 }
