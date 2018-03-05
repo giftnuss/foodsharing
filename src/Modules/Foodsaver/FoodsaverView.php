@@ -7,24 +7,6 @@ use Foodsharing\Modules\Core\View;
 
 class FoodsaverView extends View
 {
-	public function addFoodsaver($bezirk)
-	{
-		$cnt = $this->v_utils->v_form_tagselect('search_name', array('required' => true, 'xhr' => 'recip'));
-
-		$cnt .= $this->v_utils->v_input_wrapper('', '<span class="button" onclick="fsapp.addFoodsaver();">' . $this->func->s('add') . '</span>');
-
-		$cnt .= '
-			<div id="appdata" style="display:none">
-				<input type="hidden" name="bid" class="bid" value="' . $bezirk['id'] . '" />
-			</div>';
-
-		return $this->v_utils->v_field(
-			$cnt,
-
-			'Foodsaver hinzufügen',
-			array('class' => 'ui-padding')
-		);
-	}
 
 	public function foodsaverForm($foodsaver = false)
 	{
