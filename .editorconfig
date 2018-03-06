@@ -1,11 +1,25 @@
 root = true
+
 [*]
 end_of_line = lf
 insert_final_newline = true
+trim_trailing_whitespace = true
+charset = utf-8
+
 [*.php]
 indent_style = tab
-[*.js]
-indent_style = tab
-[*.sh]
+
+[{*.js,*.sh}]
 indent_style = space
 indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[lib/**]
+indent_style = none
+indent_size = none
+end_of_line = none
+trim_trailing_whitespace = none
+charset = none
+insert_final_newline = none
