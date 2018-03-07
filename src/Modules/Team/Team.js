@@ -55,7 +55,7 @@ $(function () {
 		});
 	}
 
-	var $teamList = $('#teamList');
+	var $teamList = $('#team-list');
 	$teamList.find('.foot i').mouseover(function () {
 
 		var $this = $(this);
