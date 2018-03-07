@@ -103,7 +103,6 @@ class SettingsView extends View
 	{
 		global $g_data;
 		$out = '';
-		$disabled = false;
 
 		if ($fairteiler) {
 			foreach ($fairteiler as $ft) {
@@ -141,8 +140,7 @@ class SettingsView extends View
 					'values' => array(
 						array('id' => 1, 'name' => $this->func->s('follow_thread_mail')),
 						array('id' => 0, 'name' => $this->func->s('follow_thread_none'))
-					),
-					'disabled' => $disabled
+					)
 				));
 			}
 		}
