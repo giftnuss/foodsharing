@@ -9,6 +9,7 @@
 ## Bugfixes
 
 ## Refactoring
+- complete tidying up of all team related files !321 by @peter.toennies
 
 ## Dev/Test/CI stuff
 
@@ -88,7 +89,6 @@ as well as modern coding techniques.
 - Add twig templating for main menu and other things !292 @nicksellen
 - Remove global usage of Func, DB and ViewUtils Helper classes !289 @NerdyProjects
 - Refactor router for HTML controller classes !289 @NerdyProjects
-- complete tidying up of all team related files by !321 by @peter.toennies
 - Make some components ready to be used without global data passing variable !294 @NerdyProjects
 - Introduce Request and Response object and used it in WorkGroupControl !294 @NerdyProjects
 - Introduce input deserializer/sanitizer/validator component in WorkGroupControl !294 @NerdyProjects
