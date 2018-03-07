@@ -9,7 +9,7 @@ charset = utf-8
 [*.php]
 indent_style = tab
 
-[{*.js,*.sh}]
+[{*.css,*.js,*.sh}]
 indent_style = space
 indent_size = 2
 
