@@ -252,17 +252,15 @@ class SettingsModel extends Model
 		$this->del('DELETE FROM `' . PREFIX . 'mailchange` WHERE foodsaver_id = ' . (int)$this->func->fsId());
 	}
 
-	public function changeMail($email, $crypt)
+	public function changeMail($email)
 	{
 		$this->del('DELETE FROM `' . PREFIX . 'mailchange` WHERE foodsaver_id = ' . (int)$this->func->fsId());
 		$currentMail = $this->qOne('SELECT `email` FROM ' . PREFIX . 'foodsaver WHERE id = ' . (int)$this->func->fsId());
-		$this->logChangedSetting($this->func->fsId(), 'email', $currentMail, $email);
+		$this->logChangedSetting($this->func->fsId(), ['email' => $currentMail], ['email' => $email], ['email']);
 
 		if ($this->update('
 			UPDATE `' . PREFIX . 'foodsaver`
-			SET `email` = ' . $this->strval($email) . ',
-				`passwd` = ' . $this->strval($crypt) . '	
-
+			SET `email` = ' . $this->strval($email) . '
 			WHERE `id` = ' . (int)$this->func->fsId() . '
 		')
 		) {

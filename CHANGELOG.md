@@ -1,10 +1,56 @@
-# Unreleased
+# Not Release
 
 ## Release notes
 
 ## Breaking changes
 
 ## Features
+
+## Bugfixes
+
+## Refactoring
+
+## Dev/Test/CI stuff
+
+# 2018-03-05
+- remove ability for ambassador to add any foodsaver to his/her district !328 #405 by @k.miklobusec and @peter.toennies
+
+# 2018-03-02
+
+## Refactoring
+- Database multi-row query methods return empty array instead of false on no result !327 @NerdyProjects
+
+# 2018-03-01
+## Hotfixes 2018-03-04
+- Never use PDO Boolean binding to avoid silent insert failures [PDO Bug](https://bugs.php.net/bug.php?id=38546) leading to notification bells for unverified users joining regions missing @NerdyProjects
+
+## Hotfixes 2018-03-02
+- Remove broken filemanager from content management system (content, email templates) @NerdyProjects
+- Fix preview for mass mailer @NerdyProjects
+
+## Dev/Test/CI stuff
+- Use [Deployer](https://deployer.org/) to auto-deploy the foodsharing software
+
+## Bugfixes
+- Use modern ddeboer/imap library to fetch emails for internal mail system fixing some emails go missing on the way !323 @NerdyProjects
+- Events have not been createable/editable due to refactoring mistake @NerdyProjects
+- Mumble events can be created again #315 @NerdyProjects
+
+## Features
+- Addresspicker: Street/house number editable again, better description for address search @NerdyProjects
+
+# 2018-02-28
+
+## Release notes
+
+Wuhay, this is the first release after our hackweek. Quite a lot has happened:
+Nearly 4000 lines of code have been changed, half of the files have been moved into
+a better structure and all pages are now served from a [twig](https://twig.symfony.com/doc/2.x/) base template.
+As a side change, we now run the latest PHP 7.2.2 and are updating more and more internals to more recent technologies
+as well as modern coding techniques.
+
+## Features
+- Use of bcrypt as hashing algorithm to store passwords
 - Removed the working groups from the team->teammember page !262 @BassTii
 - Changed way of gendering in passport from "/" to "_" !251 @D0nPiano
 - auto adding of CH-BOTs, Vienna-BIEBs, and ZH-BIEBs to their working groups. !271 by @peter.toennies
@@ -23,6 +69,7 @@
 - Remove mass mail recipient options that are ambigous/irrelevant @NerdyProjects
 - Fix missing newsletter unsubscription links for pre-2014 foodsharing.de accounts @NerdyProjects
 - Fix newsletter should only be sent to activated accounts @NerdyProjects
+- Fixed a bug which throwed an error during mail change
 - Show regions in alphabetical order in the region selector (Bezirk beitreten) !267 by @alangecker
 - changed old foodsharing „Freiwilligenplattform“ mailfooter for outgoing replies via mail, which was based on lebensmittelretten !287 @irgendwer
 - consistent use of jumper list (Springerliste) all over the page. !293 by @peter.toennies

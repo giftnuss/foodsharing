@@ -276,8 +276,11 @@ class Foodsharing extends \Codeception\Module\Db
 		return $this->createRegion($name, $parentId, 7, $extra_params);
 	}
 
-	public function createRegion($name, $parentId = 741, $type = 9, $extra_params = [])
+	public function createRegion($name = null, $parentId = 741, $type = 9, $extra_params = [])
 	{
+		if ($name == null) {
+			$name = $this->faker->lastName() . '-region';
+		}
 		/* 741 is germany, so suitable for normal sub regions */
 		$v = array_merge([
 			'parent_id' => $parentId,

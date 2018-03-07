@@ -365,11 +365,7 @@ abstract class Db
 			}
 		}
 
-		if (count($out) > 0) {
-			return $out;
-		} else {
-			return false;
-		}
+		return $out;
 	}
 
 	/**
@@ -509,31 +505,7 @@ abstract class Db
 			}
 		}
 
-		if (count($out) > 0) {
-			return $out;
-		} else {
-			return false;
-		}
-	}
-
-	public function resetPassword($fs_id, $email)
-	{
-		/*
-		$password = nettesPasswort();
-
-		$crypt = $this->encryptMd5($email, $password);
-
-		$this->update('UPDATE '.PREFIX.'foodsaver SET `passwd` = "'.$crypt.'" WHERE `id` = '.$this->intval($fs_id));
-
-		return $password;
-		*/
-	}
-
-	public function encryptMd5($email, $pass)
-	{
-		$email = strtolower($email);
-
-		return md5($email . '-lz%&lk4-' . $pass);
+		return $out;
 	}
 
 	public function __destruct()
@@ -573,8 +545,13 @@ abstract class Db
 	public function login($email, $pass)
 	{
 		$email = trim($email);
-		if ($client = $this->checkClient($email, $pass)) {
-			$this->initSessionData($client['id']);
+		if ($this->qOne('
+			SELECT email FROM `' . PREFIX . 'email_blacklist`
+			WHERE email = ' . $this->strval($email))) {
+			return false;
+		}
+		if ($fsid = $this->checkClient($email, $pass)) {
+			$this->initSessionData($fsid);
 
 			$this->update('
 				UPDATE ' . PREFIX . 'foodsaver
@@ -582,11 +559,7 @@ abstract class Db
 				WHERE 	id = ' . (int)$this->func->fsId() . '
 			');
 
-			$blocked = $this->qOne('
-			SELECT email FROM `' . PREFIX . 'email_blacklist`
-			WHERE email = ' . $this->strval($email));
-
-			return $blocked === false;
+			return true;
 		} else {
 			return false;
 		}
@@ -612,6 +585,25 @@ abstract class Db
 	}
 
 	/**
+	 * hashes password with modern hashing algorithmn.
+	 */
+	public function password_hash($password)
+	{
+		return password_hash($password, PASSWORD_ARGON2I);
+	}
+
+	/**
+	 * Generates md5 hash with email as salt. used before
+	 * xx.02.2018.
+	 */
+	public function encryptMd5($email, $pass)
+	{
+		$email = strtolower($email);
+
+		return md5($email . '-lz%&lk4-' . $pass);
+	}
+
+	/**
 	 * Generate a foodsharing.de style hash before 12.12.2014
 	 * fusion.
 	 * Uses sha1 of concatenation of fixed salt and password.
@@ -633,43 +625,51 @@ abstract class Db
 		if (strlen($email) < 2 || strlen($pass) < 1) {
 			return false;
 		}
-		$hashed = $this->encryptMd5($email, $pass);
 
-		$sql = '
-				SELECT 	`id`,
-						`bezirk_id`,
-						`admin`,
-						`orgateam`,
-						`photo`
+		$user = $this->qRow('
+			SELECT 	`id`,
+					`password`,
+					`passwd`,
+					`fs_password`,
+					`bezirk_id`,
+					`admin`,
+					`orgateam`,
+					`photo`
 
-				FROM 	`' . PREFIX . 'foodsaver`
-				WHERE 	`email`     = "' . $email . '"
-				AND 	`passwd` 	= "' . $hashed . '"
-				AND     `deleted_at`   IS NULL
-		';
+			FROM 	`' . PREFIX . 'foodsaver`
+			WHERE 	`email`     = "' . $email . '"
+			AND     `deleted_at`   IS NULL
+		');
 
-		if ($user = $this->qRow($sql)) {
-			return $user;
-		} else {
-			$old_fs_hash = $this->fs_sha1hash($pass);
-			$sql = '
-        SELECT 	`id`,
-            `bezirk_id`,
-            `admin`,
-            `orgateam`,
-            `photo`
+		// does the email exist?
+		if (!$user) {
+			return false;
+		}
 
-        FROM 	`' . PREFIX . 'foodsaver`
-        WHERE 	`email` = ' . $this->strval($email) . '
-        AND 	`fs_password` 	= "' . $old_fs_hash . '"
-      ';
-			if ($user = $this->qRow($sql)) {
-				$this->update('UPDATE `' . PREFIX . "foodsaver` SET `fs_password` = NULL, `passwd` = '" . $hashed . "' WHERE `id` = " . $user['id']);
-
-				return $user;
+		// modern hashing algorithm
+		if ($user['password']) {
+			if (password_verify($pass, $user['password'])) {
+				return $user['id'];
+			} else {
+				return false;
 			}
 
-			return false;
+			// old hashing algorithm
+		} else {
+			if (
+				($user['passwd'] && $user['passwd'] == $this->encryptMd5($email, $pass)) || // md5
+				($user['fs_password'] && $user['fs_password'] == $this->fs_sha1hash($pass))  // sha1
+			) {
+				// update stored password to modern
+				$this->update('UPDATE `' . PREFIX . "foodsaver` 
+					SET `fs_password` = NULL, `passwd` = NULL, `password` = '" . $this->password_hash($pass) . "'
+					WHERE `id` = " . $user['id']
+				);
+
+				return $user['id'];
+			} else {
+				return false;
+			}
 		}
 	}
 

@@ -22,7 +22,7 @@ services:
 
   app:
     container_name: foodsharing_dev_app
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.7
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.8
     working_dir: /app
     expose:
       - 9000
@@ -30,6 +30,10 @@ services:
       - redis:redis
       - db:db
       - chat:chat
+    depends_on:
+      - db
+      - redis
+      - mailqueuerunner
     volumes:
       - ../:/app
       - ${PWD}/docker/conf/app/php.dev.ini:/usr/local/etc/php/conf.d/dev-config.ini
@@ -41,8 +45,12 @@ services:
 
   mailqueuerunner:
     container_name: foodsharing_dev_mailqueuerunner
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.7
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.8
     command: php run.php Mails queueWorker
+    restart: always
+    depends_on:
+      - db
+      - redis
     working_dir: /app
     links:
       - maildev

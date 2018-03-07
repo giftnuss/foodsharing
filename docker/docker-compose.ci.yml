@@ -30,6 +30,10 @@ services:
       dockerfile: docker/Dockerfile.php.ci
     expose:
       - 9000
+    depends_on:
+      - db
+      - redis
+      - mailqueuerunner
     links:
       - redis:redis
       - db:db
@@ -49,6 +53,10 @@ services:
     image: foodsharing_ci_app
     command: php run.php Mails queueWorker
     working_dir: /app
+    restart: always
+    depends_on:
+      - db
+      - redis
     links:
       - maildev
       - redis:redis

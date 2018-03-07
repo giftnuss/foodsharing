@@ -41,32 +41,6 @@ class FoodsaverModel extends Model
 		');
 	}
 
-	/**
-	 * Adds a list of foodsaver to an defined bezirk.
-	 *
-	 * @param array $foodsaver_ids
-	 * @param int $bezirk_id
-	 */
-	public function addFoodsaverToBezirk($foodsaver_ids, $bezirk_id)
-	{
-		$values = array();
-
-		foreach ($foodsaver_ids as $id) {
-			$values[] = '(' . (int)$bezirk_id . ',' . (int)$id . ',1)';
-		}
-
-		return $this->insert('
-			INSERT IGNORE INTO ' . PREFIX . 'foodsaver_has_bezirk
-			(
-				bezirk_id,
-				foodsaver_id,
-				active
-			)
-			VALUES
-			' . implode(',', $values) . '
-		');
-	}
-
 	public function delfrombezirk($bezirk_id, $foodsaver_id)
 	{
 		$this->del('

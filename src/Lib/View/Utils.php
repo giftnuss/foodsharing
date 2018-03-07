@@ -472,42 +472,11 @@ class Utils
 		$plugins = array('autoresize', 'link', 'image', 'media', 'table', 'contextmenu', 'paste', 'code', 'advlist', 'autolink', 'lists', 'charmap', 'print', 'preview', 'hr', 'anchor', 'pagebreak', 'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'insertdatetime', 'nonbreaking', 'directionality', 'emoticons', 'textcolor');
 		$toolbar = array('styleselect', 'bold italic', 'alignleft aligncenter alignright', 'bullist outdent indent', 'media image link', 'paste', 'code');
 		$addOpt = '';
-		$filemanager = '';
-		if (isset($option['filemanager'])) {
-			$plugins[] = 'responsivefilemanager';
-			$plugins[] = 'template';
-			$toolbar[] = 'responsivefilemanager';
-			$toolbar[] = 'template';
-			$addOpt .= ',
-			   templates: "/xhrapp.php?app=templates&m=templates",
-			   image_advtab: true ,
-			   external_filemanager_path:"/filemanager/",
-			   filemanager_title:"Dateimanager" ,
-			   external_plugins: { "filemanager" : "/filemanager/plugin.min.js"}';
-		}
 
 		if (isset($option['type'])) {
 			if ($option['type'] == 'email') {
 				$css = 'css/email.css';
 				$class = '';
-				/*
-				$js = '
-					$("#'.$id.'").tinymce({
-					  script_url : "./js/tinymce//tinymce.min.js",
-					  theme : "modern",
-					  language : "de",
-					  content_css : "'.$css.'",
-					  menubar: false,
-					  statusbar: false,
-					  body_class: "'.$class.'",
-					  valid_elements : "a[href|target=_blank],strong,b,div[align],br,p,ul,li,ol,table,tr,td[valign=top|align|style|width],th,tbody,thead,tfoot",
-					  plugins: "autoresize link image media table contextmenu image link code paste",
-					  toolbar: "bold italic alignleft aligncenter alignright bullist code link",
-					  relative_urls: true,
-					  convert_urls: false
-				   });
-				';
-				*/
 			}
 		}
 

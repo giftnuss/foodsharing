@@ -50,7 +50,7 @@
                     <div class="bottom_bar">
                         {% if group.appliedFor %}
                             <div class="ui-padding">
-                                {% include 'components/info.twig' with {'msg': 'Für diese Gruppe hast Du Dich bereits beworben'} only %}
+                                {% include 'partials/info.twig' with {'msg': 'Für diese Gruppe hast Du Dich bereits beworben'} only %}
                             </div>
                         {% elseif group.applicationRequirementsNotFulfilled %}
                             Für Diese Arbeitsgruppe kannst Du Dich mit

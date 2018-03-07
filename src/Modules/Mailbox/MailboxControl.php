@@ -26,8 +26,11 @@ class MailboxControl extends Control
 							$Dateiname = $attach[(int)$_GET['i']]['origname'];
 							$size = filesize($file);
 
-							header('Content-Type: ' . $attach[(int)$_GET['i']]['mime']);
-							header('Content-Disposition: attachment; filename=' . $Dateiname . '');
+							$mime = $attach[(int)$_GET['i']]['mime'];
+							if ($mime) {
+								header('Content-Type: ' . $mime);
+							}
+							header('Content-Disposition: attachment; filename="' . $Dateiname . '"');
 							header("Content-Length: $size");
 							readfile($file);
 							exit();

@@ -653,23 +653,6 @@ class ManualDb extends Db
 		}
 	}
 
-	private function updatePassword($fs_id, $new_pass)
-	{
-		if ($fs = $this->qRow('SELECT `id`, `email` FROM `' . PREFIX . 'foodsaver` WHERE `id` = ' . $this->intval($fs_id))) {
-			$enc = $this->encryptMd5($fs['email'], $new_pass);
-
-			$this->update('
-				UPDATE 	`' . PREFIX . 'foodsaver`
-				SET 	`passwd` = ' . $this->strval($enc) . '
-				WHERE 	`id` = ' . $this->intval($fs_id) . '
-			');
-
-			return true;
-		}
-
-		return false;
-	}
-
 	public function getReg($id)
 	{
 		return $this->qRow('

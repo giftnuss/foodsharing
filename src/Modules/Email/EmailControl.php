@@ -65,7 +65,7 @@ class EmailControl extends Control
 				$this->func->s('mailing_list'),
 				array('class' => 'ui-padding')
 			),
-			$this->v_utils->v_field($this->v_utils->v_form_tinymce('message', array('nowrapper' => true, 'type' => 'email', 'filemanager' => true)), $this->func->s('message'))
+			$this->v_utils->v_field($this->v_utils->v_form_tinymce('message', array('nowrapper' => true, 'type' => 'email')), $this->func->s('message'))
 		), array('submit' => 'Zum Senden Vorbereiten')));
 
 		$this->func->addStyle('#testemail{width:91%;}');

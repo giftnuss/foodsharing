@@ -280,7 +280,7 @@ class ContentControl extends Control
 				$title,
 				array('class' => 'ui-padding')
 			),
-			$this->v_utils->v_field($this->v_utils->v_form_tinymce('body', array('filemanager' => true, 'public_content' => true, 'nowrapper' => true)), 'Inhalt')
+			$this->v_utils->v_field($this->v_utils->v_form_tinymce('body', array('public_content' => true, 'nowrapper' => true)), 'Inhalt')
 		), array('submit' => $this->func->s('save')));
 	}
 

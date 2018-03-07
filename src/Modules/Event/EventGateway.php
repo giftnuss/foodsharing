@@ -78,7 +78,7 @@ class EventGateway extends BaseGateway
 		', ['id' => $id]);
 	}
 
-	public function addLocation($location_name, $lat, $lon, $anschrift, $plz, $ort)
+	public function addLocation($location_name, $lat, $lon, $address, $zip, $city)
 	{
 		$lat = round($lat, 8);
 		$lon = round($lon, 8);
@@ -87,9 +87,9 @@ class EventGateway extends BaseGateway
 			'name' => strip_tags($location_name),
 			'lat' => floatval($lat),
 			'lon' => floatval($lon),
-			'plz' => strip_tags($plz),
-			'ort' => strip_tags($ort),
-			'anschrift' => strip_tags($anschrift)
+			'zip' => strip_tags($zip),
+			'city' => strip_tags($city),
+			'street' => strip_tags($address)
 		]);
 	}
 

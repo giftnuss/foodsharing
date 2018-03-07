@@ -29,6 +29,8 @@ define('DEFAULT_HOST', 'lebensmittelretten.de');
 define('MAPZEN_API_KEY', 'mapzen-RaXru7A');
 define('GOOGLE_API_KEY', 'AIzaSyCkFfCoOnj8ZjGGcApHS1rX6Rt6OxrW6hQ');
 
+define('MAILBOX_OWN_DOMAINS', array('lebensmittelretten.de'));
+
 define('SMTP_HOST', 'maildev');
 define('SMTP_PORT', 25);
 

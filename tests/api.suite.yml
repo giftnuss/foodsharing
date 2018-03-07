@@ -1,9 +1,11 @@
 class_name: ApiTester
 modules:
     enabled:
+        - Asserts
         - \Helper\Api
         - \Helper\Foodsharing
         - Sequence
+        - \Helper\Maildev
         - Db:
             populate: true
             cleanup: true

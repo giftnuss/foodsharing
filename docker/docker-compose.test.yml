@@ -24,7 +24,7 @@ services:
 
   app:
     container_name: foodsharing_test_app
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.7
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.8
     working_dir: /app
     expose:
       - 9000
@@ -32,6 +32,10 @@ services:
       - redis:redis
       - db:db
       - chat:chat
+    depends_on:
+      - db
+      - redis
+      - mailqueuerunner
     volumes:
       - ../:/app
       - selenium_downloads:/downloads
@@ -45,9 +49,13 @@ services:
 
   mailqueuerunner:
     container_name: foodsharing_test_mailqueuerunner
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.7
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.8
     command: php run.php Mails queueWorker
     working_dir: /app
+    restart: always
+    depends_on:
+      - db
+      - redis
     links:
       - maildev
       - redis:redis

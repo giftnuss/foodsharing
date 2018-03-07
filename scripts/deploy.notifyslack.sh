@@ -12,8 +12,8 @@ if [ ! -z "$SLACK_WEBHOOK_URL" ]; then
   REF_URL="$REPO_URL/tree/$REF"
   COMMIT_URL="$REPO_URL/tree/$COMMIT_SHA"
 
-  URL="https://beta.foodsharing.de"
-  DEPLOY_ENV="beta"
+  URL="$CI_ENVIRONMENT_URL"
+  DEPLOY_ENV="$CI_ENVIRONMENT_NAME"
   DEPLOY_EMOJI=":bananadance:"
 
   GITLAB_JOB_URL="https://gitlab.com/foodsharing-dev/foodsharing/-/jobs/$CI_JOB_ID"
