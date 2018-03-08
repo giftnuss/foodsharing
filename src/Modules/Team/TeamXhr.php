@@ -23,7 +23,7 @@ class TeamXhr extends Control
 		$xhr = new Xhr();
 
 		if ($this->ipIsBlocked(120, 'contact')) {
-			$xhr->addMessage('Du hast zu viele Nachrichten versendet, bitte warte einen Moment', 'error');
+			$xhr->addMessage('Du hast zu viele Nachrichten versendet. Bitte warte einen Moment!', 'error');
 			$xhr->send();
 		}
 
