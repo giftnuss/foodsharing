@@ -16,7 +16,7 @@
 
 .chatboxhead {
     background-color: #4a3520;
-    padding: 0px;
+    padding: 0;
     color: #ffffff;
 
     border-right: 1px solid #B39985;
@@ -82,7 +82,7 @@
 .chatboxhead .settings li input {
     border: 1px solid #a2988e;
     border-radius: 4px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     padding: 4px 5px;
     width: 167px;
 }
@@ -136,7 +136,7 @@
 .chatboxtextarea {
     width: 255px;
     height: 44px;
-    padding: 3px 0pt 3px 3px;
+    padding: 3px 0 3px 3px;
     border: 1px solid #eeeeee;
     margin: 1px;
     overflow: hidden;
@@ -151,7 +151,7 @@
 
 .chatboxtextareaselected {
     border: 2px solid #61AB23;
-    margin: 0px;
+    margin: 0;
 }
 
 .chatclosed {
@@ -171,7 +171,7 @@
 }
 
 .chatboxmessagefrom {
-    margin: -5px -5px 0px -15px;
+    margin: -5px -5px 0 -15px;
     font-weight: bold;
     display: block;
     float: left;

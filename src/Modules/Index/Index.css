@@ -19,12 +19,12 @@
 }
 
 .biglogo p.small {
-    margin-top: 0px;
+    margin-top: 0;
     font-size: 29px;
 }
 
 .biglogo p.tiny {
-    margin-top: 0px;
+    margin-top: 0;
     font-size: 25px;
 }
 
@@ -117,7 +117,7 @@
     }
 
     .biglogo p {
-        margin-top: 0px;
+        margin-top: 0;
         font-size: 26px;
     }
 
@@ -130,6 +130,6 @@
     }
 
     .section .inside {
-        padding: 0px;
+        padding: 0;
     }
 }

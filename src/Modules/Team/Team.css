@@ -177,7 +177,7 @@
 @media all and (max-width: 700px) {
     #teamlist li {
         width: 100%;
-        margin: 80px 0px;
+        margin: 80px 0;
         display: block;
     }
 }

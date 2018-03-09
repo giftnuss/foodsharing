@@ -34,7 +34,7 @@
 }
 
 #msg-conversation ul {
-    padding: 0px;
+    padding: 0;
 
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
@@ -90,7 +90,7 @@
 }
 
 #msg-conversation ul li {
-    margin-top: 0px;
+    margin-top: 0;
     padding: 10px;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
@@ -98,7 +98,7 @@
 }
 
 #msg-conversation ul li:first-child {
-    margin-top: 0px;
+    margin-top: 0;
 }
 
 #msg-control {
@@ -190,14 +190,14 @@ li.unread-1 {
     #msg-conversation-wrapper .field .head {
         position: fixed;
         top: 41px;
-        left: 0px;
+        left: 0;
         width: 100%;
         z-index: 11;
         background-color: #DBD7D1;
         border-radius: 0;
-        -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.45);
-        -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.45);
-        box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.45);
+        -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.45);
+        -moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.45);
+        box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.45);
     }
 
     #msg-conversation-wrapper .field .head .images {
@@ -221,20 +221,20 @@ li.unread-1 {
 
     #msg_answer {
         position: fixed;
-        bottom: 0px;
-        left: 0px;
+        bottom: 0;
+        left: 0;
         width: 97%;
         height: 34px;
-        border-radius: 0px;
+        border-radius: 0;
         z-index: 10;
     }
 
     #conv_submit {
         position: fixed;
-        bottom: 0px;
-        right: 0px;
+        bottom: 0;
+        right: 0;
         z-index: 11;
-        border-radius: 0px;
+        border-radius: 0;
         margin: 0;
     }
 

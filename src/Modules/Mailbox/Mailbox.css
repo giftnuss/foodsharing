@@ -295,7 +295,7 @@ ul#et-file-list li {
     white-space: nowrap;
     background-image: url(img/icon-mail/attach-loader.gif);
     background-repeat: no-repeat;
-    background-position: 0px 0px;
+    background-position: 0 0;
     margin-bottom: 4px;
     width: 170px;
     padding-left: 20px;

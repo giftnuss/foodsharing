@@ -31,19 +31,19 @@
 }
 
 .stat_icon.fetchcount {
-    background-position: -96px 0px;
+    background-position: -96px 0;
 }
 
 .stat_icon.korpcount {
-    background-position: -192px 0px;
+    background-position: -192px 0;
 }
 
 .stat_icon.fscount {
-    background-position: -288px 0px;
+    background-position: -288px 0;
 }
 
 .stat_icon.fetchweight {
-    background-position: 0px 0px;
+    background-position: 0 0;
 }
 
 .stat_text h4 {
@@ -72,7 +72,7 @@
 table.stat_cities {
     border-collapse: inherit;
     width: 255px;
-    border-spacing: 0px 10px;
+    border-spacing: 0 10px;
 }
 
 table.stat_cities {

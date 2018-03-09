@@ -16,15 +16,15 @@
 }
 
 .verify-n span {
-    background-position: 0px 0px;
+    background-position: 0 0;
 }
 
 .verify-y span {
-    background-position: 0px -36px;
+    background-position: 0 -36px;
 }
 
 tr.hover td .verify-n span {
-    background-position: -36px 0px;
+    background-position: -36px 0;
 }
 
 tr.hover td .verify-y span {
