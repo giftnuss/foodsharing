@@ -5,14 +5,16 @@ namespace Foodsharing\Modules\Team;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\Model;
 
 class TeamXhr extends Control
 {
 	private $gateway;
 
-	public function __construct(TeamGateway $gateway, TeamView $view)
+	public function __construct(TeamGateway $gateway, Model $model, TeamView $view)
 	{
 		$this->gateway = $gateway;
+		$this->model = $model;
 		$this->view = $view;
 
 		parent::__construct();
