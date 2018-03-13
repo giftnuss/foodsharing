@@ -39,8 +39,8 @@ class ReportModel extends Model
 		return $this->q('
 
 			SELECT 	b.id, b.name
-			FROM 	' . PREFIX . 'betrieb_team t,
-					' . PREFIX . 'betrieb b
+			FROM 	fs_betrieb_team t,
+					fs_betrieb b
 			WHERE 	t.betrieb_id = b.id
 			AND 	t.foodsaver_id = ' . (int)$fsid . '
 				
@@ -49,13 +49,13 @@ class ReportModel extends Model
 
 	public function delReport($id)
 	{
-		return $this->del('DELETE FROM `' . PREFIX . 'report` WHERE id = ' . (int)$id . ' ');
+		return $this->del('DELETE FROM `fs_report` WHERE id = ' . (int)$id . ' ');
 	}
 
 	public function confirmReport($id)
 	{
 		return $this->update('
-			UPDATE `' . PREFIX . 'report` SET  committed = 1 WHERE id = ' . (int)$id . ' 
+			UPDATE `fs_report` SET  committed = 1 WHERE id = ' . (int)$id . ' 
 		');
 	}
 
@@ -70,8 +70,8 @@ class ReportModel extends Model
 					COUNT(rp.foodsaver_id) AS count,
 					CONCAT("/?page=report&sub=foodsaver&id=",fs.id) AS `href`
 				
-			FROM 	' . PREFIX . 'foodsaver fs,
-					' . PREFIX . 'report rp
+			FROM 	fs_foodsaver fs,
+					fs_report rp
 				
 			WHERE 	rp.foodsaver_id = fs.id
 				
@@ -85,7 +85,7 @@ class ReportModel extends Model
 	{
 		$ret = $this->qCol('
 			SELECT 	COUNT(`id`)
-			FROM 	' . PREFIX . 'report
+			FROM 	fs_report
 			GROUP BY `committed`
 		');
 
@@ -113,7 +113,7 @@ class ReportModel extends Model
 					`photo`,
 					sleep_status
 
-			FROM 	`' . PREFIX . 'foodsaver`
+			FROM 	`fs_foodsaver`
 				
 			WHERE 	id = ' . (int)$id . '
 		')
@@ -136,13 +136,13 @@ class ReportModel extends Model
 					
           
 				FROM
-	            	`' . PREFIX . 'report` r
+	            	`fs_report` r
 					
 	         	LEFT JOIN
-	            	`' . PREFIX . 'foodsaver` fs ON r.foodsaver_id = fs.id 
+	            	`fs_foodsaver` fs ON r.foodsaver_id = fs.id 
 					
 				LEFT JOIN
-	            	`' . PREFIX . 'foodsaver` rp ON r.reporter_id = rp.id 
+	            	`fs_foodsaver` rp ON r.reporter_id = rp.id 
 				
 				WHERE
 					r.foodsaver_id = ' . (int)$id . '
@@ -186,20 +186,20 @@ class ReportModel extends Model
 				
           
 			FROM
-            	`' . PREFIX . 'report` r
+            	`fs_report` r
 				
          	LEFT JOIN
-            	`' . PREFIX . 'foodsaver` fs ON r.foodsaver_id = fs.id 
+            	`fs_foodsaver` fs ON r.foodsaver_id = fs.id 
 				
 			LEFT JOIN
-            	`' . PREFIX . 'foodsaver` rp ON r.reporter_id = rp.id 
+            	`fs_foodsaver` rp ON r.reporter_id = rp.id 
 
 			WHERE
 				r.`id` = ' . (int)$id . '
 		');
 
 		if ($report['betrieb_id'] > 0) {
-			if ($betrieb = $this->qRow('SELECT id, name FROM ' . PREFIX . 'betrieb WHERE id = ' . (int)$report['betrieb_id'])) {
+			if ($betrieb = $this->qRow('SELECT id, name FROM fs_betrieb WHERE id = ' . (int)$report['betrieb_id'])) {
 				$report['betrieb'] = $betrieb;
 			}
 		}
@@ -233,16 +233,16 @@ class ReportModel extends Model
 				b.name AS b_name
 				
 			FROM
-            	`' . PREFIX . 'report` r
+            	`fs_report` r
 				
          	LEFT JOIN
-            	`' . PREFIX . 'foodsaver` fs ON r.foodsaver_id = fs.id 
+            	`fs_foodsaver` fs ON r.foodsaver_id = fs.id 
 				
 			LEFT JOIN
-            	`' . PREFIX . 'foodsaver` rp ON r.reporter_id = rp.id 
+            	`fs_foodsaver` rp ON r.reporter_id = rp.id 
 
 			LEFT JOIN
- 				`' . PREFIX . 'bezirk` b on fs.bezirk_id=b.id
+ 				`fs_bezirk` b on fs.bezirk_id=b.id
 			
 			WHERE
 				r.committed = ' . $committed . '
