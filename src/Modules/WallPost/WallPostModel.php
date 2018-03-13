@@ -81,7 +81,7 @@ class WallPostModel extends Model
 		return $this->qOne('
 			SELECT 	MAX(id) 
 			FROM 	`fs_wallpost` wp,
-					`fs_'. $this->table . '_has_wallpost` hp
+					`fs_' . $this->table . '_has_wallpost` hp
 			WHERE 	hp.wallpost_id = wp.id
 			AND 	hp.`' . $this->table . '_id` = ' . (int)$this->id . '
 		');

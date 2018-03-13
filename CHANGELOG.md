@@ -9,6 +9,7 @@
 ## Bugfixes
 
 ## Refactoring
+- replaced the PREFIX keyword in the whole source !339 #421 by peter.toennies
 
 ## Dev/Test/CI stuff
 

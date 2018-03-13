@@ -985,7 +985,7 @@ abstract class Db
 
 		return $this->qRow('
 			SELECT 	`' . $fields . '`
-			FROM 	`fs_'. $table . '`
+			FROM 	`fs_' . $table . '`
 			WHERE 	`id` = ' . $this->intval($id) . '
 		');
 	}
