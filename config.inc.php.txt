@@ -11,7 +11,6 @@ define('DB_HOST','localhost');
 define('DB_USER','root');
 define('DB_PASS','pw');
 define('DB_DB','lmr2');
-define('PREFIX','fs_');
 define('ERROR_REPORT',E_ALL);
 define('BASE_URL', $protocol . '//lmr.local/');
 define('DEFAULT_EMAIL','noreply@lebensmittelretten.de');
