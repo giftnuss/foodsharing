@@ -8,7 +8,7 @@ class APIModel extends Model
 {
 	public function getOrgaGroups()
 	{
-		return $this->q('SELECT id, name, parent_id FROM ' . PREFIX . 'bezirk WHERE type = 7 ORDER BY parent_id');
+		return $this->q('SELECT id, name, parent_id FROM fs_bezirk WHERE type = 7 ORDER BY parent_id');
 	}
 
 	public function allBaskets()
@@ -69,7 +69,7 @@ class APIModel extends Model
 					b.lon
 	
 				FROM
-					' . PREFIX . 'basket b
+					fs_basket b
 	
 				WHERE
 					b.id = ' . (int)$id . '
@@ -83,7 +83,7 @@ class APIModel extends Model
 				fs.id AS fs_id
 						
 				FROM
-				' . PREFIX . 'foodsaver fs
+				fs_foodsaver fs
 						
 				WHERE
 				fs.id = ' . (int)$basket['foodsaver_id'] . '

@@ -67,7 +67,7 @@ class XhrMethods
 		$bids = $this->model->getFsBezirkIds((int)$data['fid']);
 
 		if ($this->func->isBotForA($bids, false, true) || $this->func->isOrgaTeam()) {
-			if ($countver = $this->model->qOne('SELECT COUNT(*) FROM ' . PREFIX . 'verify_history WHERE date BETWEEN NOW()- INTERVAL 20 SECOND AND now() AND bot_id = ' . $this->func->fsId())) {
+			if ($countver = $this->model->qOne('SELECT COUNT(*) FROM fs_verify_history WHERE date BETWEEN NOW()- INTERVAL 20 SECOND AND now() AND bot_id = ' . $this->func->fsId())) {
 				if ($countver > 10) {
 					return json_encode(array(
 						'status' => 0
@@ -77,7 +77,7 @@ class XhrMethods
 
 			$countFetch = $this->model->qOne('
 			SELECT 	count(a.`date`)
-			FROM   `' . PREFIX . 'abholer` a
+			FROM   `fs_abholer` a
 
 			WHERE a.foodsaver_id = ' . (int)$data['fid'] . '
 			AND   a.`date` > NOW()
@@ -89,9 +89,9 @@ class XhrMethods
 				));
 			}
 
-			if ($this->model->update('UPDATE `' . PREFIX . 'foodsaver` SET `verified` = ' . (int)$data['v'] . ' WHERE `id` = ' . (int)$data['fid'])) {
+			if ($this->model->update('UPDATE `fs_foodsaver` SET `verified` = ' . (int)$data['v'] . ' WHERE `id` = ' . (int)$data['fid'])) {
 				$this->model->insert('
-			INSERT INTO 	`' . PREFIX . 'verify_history`
+			INSERT INTO 	`fs_verify_history`
 			(
 				`fs_id`,
 				`date`,
@@ -134,8 +134,8 @@ class XhrMethods
 						fs.photo,
 						n.milestone
 									
-				FROM  	' . PREFIX . 'betrieb_notiz n,
-						' . PREFIX . 'foodsaver fs
+				FROM  	fs_betrieb_notiz n,
+						fs_foodsaver fs
 				
 				WHERE fs.id = n.foodsaver_id
 				AND n.betrieb_id = ' . (int)$data['bid'] . '
@@ -213,7 +213,7 @@ class XhrMethods
 
 		if ($this->func->may()) {
 			if (isset($allowed[$data['t']])) {
-				if ($this->model->update('UPDATE `' . PREFIX . $data['t'] . '` SET `active` = ' . (int)$data['value'] . ' WHERE `id` = ' . (int)$data['id'])) {
+				if ($this->model->update('UPDATE `fs_' . $data['t'] . '` SET `active` = ' . (int)$data['value'] . ' WHERE `id` = ' . (int)$data['id'])) {
 					return 1;
 				}
 			}
@@ -228,7 +228,7 @@ class XhrMethods
 			Mem::delPageCache('/?page=dashboard');
 			$fields = $this->func->unsetAll($data, array('photo_public', 'lat', 'lon', 'stadt', 'plz', 'anschrift'));
 
-			if ($this->model->updateFields($fields, 'foodsaver', $this->func->fsId())) {
+			if ($this->model->updateFields($fields, 'fs_foodsaver', $this->func->fsId())) {
 				return $this->xhr_out();
 			}
 		}
@@ -273,7 +273,7 @@ class XhrMethods
 			if ($this->func->isOrgaTeam()) {
 				$sql = '';
 			}
-			if ($childs = $this->model->q('SELECT `id`,`parent_id`,`has_children`,`name`,`type` FROM `' . PREFIX . 'bezirk` WHERE `parent_id` = ' . $this->model->intval($data['parent']) . $sql . ' ORDER BY `name`')) {
+			if ($childs = $this->model->q('SELECT `id`,`parent_id`,`has_children`,`name`,`type` FROM `fs_bezirk` WHERE `parent_id` = ' . $this->model->intval($data['parent']) . $sql . ' ORDER BY `name`')) {
 				return json_encode(array(
 					'status' => 1,
 					'html' => $this->xhrViewUtils->childBezirke($childs, $data['parent'])
@@ -405,7 +405,7 @@ class XhrMethods
 
 	public function xhr_jsonTeam($data)
 	{
-		$fs = $this->model->q(' SELECT fs.`id`,CONCAT(fs.`name`," ",fs.`nachname`) AS name FROM ' . PREFIX . 'foodsaver fs WHERE `active` = 1 ');
+		$fs = $this->model->q(' SELECT fs.`id`,CONCAT(fs.`name`," ",fs.`nachname`) AS name FROM fs_foodsaver fs WHERE `active` = 1 ');
 
 		return 'var foodsaver = ' . json_encode($fs);
 	}
@@ -414,7 +414,7 @@ class XhrMethods
 	{
 		$b = '';
 		if (($this->func->isBotschafter() || $this->func->isOrgaTeam() || S::may('fs') || isset($foodsaver['botschafter']))) {
-			$b = $this->model->q(' SELECT `id`,lat,lon FROM ' . PREFIX . 'betrieb WHERE lat != "" ');
+			$b = $this->model->q(' SELECT `id`,lat,lon FROM fs_betrieb WHERE lat != "" ');
 		}
 
 		return 'var g_betriebe = ' . json_encode($b);
@@ -467,7 +467,7 @@ class XhrMethods
 	{
 		$fs = '';
 		if (($this->func->isBotschafter() || $this->func->isOrgaTeam() || S::may('fs') || isset($foodsaver['botschafter']))) {
-			$fs = $this->model->q(' SELECT `id`, `photo_public`,`lat`,`lon` FROM `' . PREFIX . 'foodsaver` WHERE `active` = 1 AND lat != "" ');
+			$fs = $this->model->q(' SELECT `id`, `photo_public`,`lat`,`lon` FROM `fs_foodsaver` WHERE `active` = 1 AND lat != "" ');
 		}
 
 		return 'var foodsaver = ' . json_encode($fs);
@@ -481,7 +481,7 @@ class XhrMethods
 			$out['status'] = 1;
 			foreach ($data['types'] as $t) {
 				if ($t == 'foodsaver') {
-					$out['foodsaver'] = $this->model->q(' SELECT `id`, `photo_public`,`lat`,`lon` FROM `' . PREFIX . 'foodsaver` WHERE `active` = 1 AND rolle IN(1,2,3,4) AND `photo_public` != 4 AND lat != "" ');
+					$out['foodsaver'] = $this->model->q(' SELECT `id`, `photo_public`,`lat`,`lon` FROM `fs_foodsaver` WHERE `active` = 1 AND rolle IN(1,2,3,4) AND `photo_public` != 4 AND lat != "" ');
 				} elseif ($t == 'betriebe') {
 					$team_status = array();
 					$nkoorp = '';
@@ -503,14 +503,14 @@ class XhrMethods
 						$team_status = '';
 					}
 
-					$out['betriebe'] = $this->model->q(' SELECT `id`,lat,lon FROM ' . PREFIX . 'betrieb WHERE lat != "" ' . $team_status . $nkoorp);
+					$out['betriebe'] = $this->model->q(' SELECT `id`,lat,lon FROM fs_betrieb WHERE lat != "" ' . $team_status . $nkoorp);
 				} elseif ($t == 'botschafter') {
 					$out['botschafter'] = $this->model->q(' 
 						
 						SELECT DISTINCT fs.`id`, fs.`photo_public`,fs.`lat`,fs.`lon` 
-						FROM 	`' . PREFIX . 'foodsaver` fs,
-								`' . PREFIX . 'botschafter` b,
-								`' . PREFIX . 'bezirk` bz
+						FROM 	`fs_foodsaver` fs,
+								`fs_botschafter` b,
+								`fs_bezirk` bz
 						 
 						WHERE 	fs.`id` = b.`foodsaver_id` 
 						AND 	b.bezirk_id = bz.id
@@ -518,12 +518,12 @@ class XhrMethods
 						AND 	bz.`type` != 7 
 				');
 				} elseif ($t == 'fairteiler') {
-					$out['fairteiler'] = $this->model->q(' SELECT `id`,lat,lon,bezirk_id AS bid FROM ' . PREFIX . 'fairteiler WHERE lat != "" AND status = 1 ');
+					$out['fairteiler'] = $this->model->q(' SELECT `id`,lat,lon,bezirk_id AS bid FROM fs_fairteiler WHERE lat != "" AND status = 1 ');
 				} elseif ($t == 'baskets') {
 					if ($baskets = $this->model->q('
 				
 					SELECT id, lat, lon, location_type
-					FROM ' . PREFIX . 'basket
+					FROM fs_basket
 					WHERE `status` = 1
 					
 				')
@@ -957,7 +957,7 @@ class XhrMethods
 
 			if (!empty($data['name'])) {
 				if ($out = $this->model->add_bezirk($data)) {
-					$this->model->update('UPDATE ' . PREFIX . 'bezirk SET has_children = 1 WHERE `id` = ' . $this->model->intval($data['parent_id']));
+					$this->model->update('UPDATE fs_bezirk SET has_children = 1 WHERE `id` = ' . $this->model->intval($data['parent_id']));
 
 					return json_encode(array(
 						'status' => 1,
@@ -971,12 +971,12 @@ class XhrMethods
 	public function xhr_update_abholen($data)
 	{
 		if ($this->model->isVerantwortlich($data['bid']) || $this->func->isBotschafter()) {
-			$this->model->del('DELETE FROM 	`' . PREFIX . 'abholzeiten` WHERE `betrieb_id` = ' . $this->model->intval($data['bid']));
+			$this->model->del('DELETE FROM 	`fs_abholzeiten` WHERE `betrieb_id` = ' . $this->model->intval($data['bid']));
 
 			if (is_array($data['newfetchtime'])) {
 				for ($i = 0; $i < (count($data['newfetchtime']) - 1); ++$i) {
 					$this->model->sql('
-				REPLACE INTO 	`' . PREFIX . 'abholzeiten`
+				REPLACE INTO 	`fs_abholzeiten`
 				(
 						`betrieb_id`,
 						`dow`,
@@ -1008,7 +1008,7 @@ class XhrMethods
 	public function xhr_update_bezirk($data)
 	{
 		return json_encode($this->model->update('
-		UPDATE `' . PREFIX . 'bezirk`
+		UPDATE `fs_bezirk`
 		SET 	`email` = ' . $this->model->strval($data['email']) . ', 
 				`email_pass` = ' . $this->model->strval($data['email_pass']) . ' 
 			
@@ -1049,7 +1049,7 @@ class XhrMethods
 		);
 		if ($this->model->isVerantwortlich($_GET['bid']) && isset($allow[(int)$_GET['s']])) {
 			return $this->model->update('
-			UPDATE `' . PREFIX . 'betrieb`
+			UPDATE `fs_betrieb`
 			SET 	`team_status` = ' . (int)$_GET['s'] . '
 			WHERE 	`id` = ' . (int)$_GET['bid'] . '
 		');
@@ -1302,14 +1302,14 @@ class XhrMethods
 		global $g_data;
 		$g_data = $data;
 
-		$mbid = (int)$this->model->qOne('SELECT mailbox_id FROM ' . PREFIX . 'bezirk WHERE id = ' . (int)$data['bezirk_id']);
+		$mbid = (int)$this->model->qOne('SELECT mailbox_id FROM fs_bezirk WHERE id = ' . (int)$data['bezirk_id']);
 
 		if (strlen($g_data['mailbox_name']) > 1) {
 			if ($mbid > 0) {
-				$this->model->update('UPDATE ' . PREFIX . 'mailbox SET name = ' . $this->model->strval($g_data['mailbox_name']) . ' WHERE id = ' . (int)$mbid);
+				$this->model->update('UPDATE fs_mailbox SET name = ' . $this->model->strval($g_data['mailbox_name']) . ' WHERE id = ' . (int)$mbid);
 			} else {
-				$mbid = $this->model->insert('INSERT INTO ' . PREFIX . 'mailbox(`name`)VALUES(' . $this->model->strval($g_data['mailbox_name']) . ')');
-				$this->model->update('UPDATE ' . PREFIX . 'bezirk SET mailbox_id = ' . (int)$mbid . ' WHERE id = ' . (int)$data['bezirk_id']);
+				$mbid = $this->model->insert('INSERT INTO fs_mailbox(`name`)VALUES(' . $this->model->strval($g_data['mailbox_name']) . ')');
+				$this->model->update('UPDATE fs_bezirk SET mailbox_id = ' . (int)$mbid . ' WHERE id = ' . (int)$data['bezirk_id']);
 			}
 		}
 
@@ -1432,12 +1432,12 @@ class XhrMethods
 			if (empty($new) && $bezirk_id > 0) {
 				$active = 1;
 				$this->model->insert('
-					REPLACE INTO  `' . PREFIX . 'foodsaver_has_bezirk` (`bezirk_id`,`foodsaver_id`,`active`)
+					REPLACE INTO  `fs_foodsaver_has_bezirk` (`bezirk_id`,`foodsaver_id`,`active`)
 					VALUES (' . (int)$bezirk_id . ',' . $this->func->fsId() . ', ' . $active . ' )
 				');
 
 				if (!$this->func->getBezirkId()) {
-					$this->model->update('UPDATE ' . PREFIX . 'foodsaver SET bezirk_id = ' . (int)$bezirk_id . ' WHERE id = ' . (int)$this->func->fsId());
+					$this->model->update('UPDATE fs_foodsaver SET bezirk_id = ' . (int)$bezirk_id . ' WHERE id = ' . (int)$this->func->fsId());
 				}
 
 				if ($bots = $this->model->getBotschafter($bezirk_id)) {
@@ -1524,7 +1524,7 @@ class XhrMethods
 	public function xhr_abortEmail($data)
 	{
 		if ($this->func->fsId() == $this->model->getVal('foodsaver_id', 'send_email', $data['id'])) {
-			$this->model->update('UPDATE ' . PREFIX . 'email_status SET status = 4 WHERE email_id = ' . (int)$data['id']);
+			$this->model->update('UPDATE fs_email_status SET status = 4 WHERE email_id = ' . (int)$data['id']);
 		}
 	}
 
@@ -1534,14 +1534,14 @@ class XhrMethods
 			$check = false;
 			if ($data['action'] == 'toteam') {
 				$check = true;
-				$this->model->update('UPDATE `' . PREFIX . 'betrieb_team` SET `active` = 1 WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . (int)$data['bid']);
+				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 1 WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . (int)$data['bid']);
 			} elseif ($data['action'] == 'tojumper') {
 				$check = true;
-				$this->model->update('UPDATE `' . PREFIX . 'betrieb_team` SET `active` = 2 WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . (int)$data['bid']);
+				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 2 WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . (int)$data['bid']);
 			} elseif ($data['action'] == 'delete') {
 				$check = true;
-				$this->model->del('DELETE FROM `' . PREFIX . 'betrieb_team` WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . (int)$data['bid']);
-				$this->model->del('DELETE FROM `' . PREFIX . 'abholer` WHERE `betrieb_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$data['fsid'] . ' AND `date` > NOW()');
+				$this->model->del('DELETE FROM `fs_betrieb_team` WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . (int)$data['bid']);
+				$this->model->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$data['fsid'] . ' AND `date` > NOW()');
 
 				if ($tcid = $this->messageModel->getBetriebConversation((int)$data['bid'])) {
 					$this->messageModel->deleteUserFromConversation($tcid, (int)$data['fsid'], true);

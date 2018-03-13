@@ -9,7 +9,7 @@ class PassportGeneratorModel extends Model
 	public function updateLastGen($foodsaver)
 	{
 		return $this->update('
-			UPDATE 	`' . PREFIX . 'foodsaver`
+			UPDATE 	`fs_foodsaver`
 			SET 	`last_pass` = NOW()
 			WHERE 	`id` IN(' . implode(',', $foodsaver) . ')		
 		');
@@ -27,9 +27,9 @@ class PassportGeneratorModel extends Model
 						b.name AS bezirk_name,
 						b.id AS bezirk_id
 				
-				FROM 	' . PREFIX . 'foodsaver_has_bezirk fb,
-						' . PREFIX . 'foodsaver fs,
-						' . PREFIX . 'bezirk b
+				FROM 	fs_foodsaver_has_bezirk fb,
+						fs_foodsaver fs,
+						fs_bezirk b
 				
 				WHERE 	fb.foodsaver_id = fs.id
 				AND 	fb.bezirk_id = b.id

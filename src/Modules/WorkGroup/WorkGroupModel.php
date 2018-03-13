@@ -13,7 +13,7 @@ class WorkGroupModel extends Model
 	{
 		if ($ret = $this->qCol('
 			SELECT 	`bezirk_id`
-			FROM 	`' . PREFIX . 'foodsaver_has_bezirk`	
+			FROM 	`fs_foodsaver_has_bezirk`	
 			WHERE 	`active` != 1	
 			AND 	foodsaver_id = ' . (int)$fsId . '
 		')
@@ -38,7 +38,7 @@ class WorkGroupModel extends Model
 			// delete all members they're not in the submitted array
 			$this->del('
 				DELETE FROM 
-					`' . PREFIX . 'foodsaver_has_bezirk`
+					`fs_foodsaver_has_bezirk`
 				
 				WHERE 
 					bezirk_id = ' . (int)$groupId . '
@@ -56,7 +56,7 @@ class WorkGroupModel extends Model
 
 			// insert new members
 			$this->insert('
-				INSERT IGNORE INTO `' . PREFIX . 'foodsaver_has_bezirk`
+				INSERT IGNORE INTO `fs_foodsaver_has_bezirk`
 				(
 					`foodsaver_id`,
 					`bezirk_id`,
@@ -76,7 +76,7 @@ class WorkGroupModel extends Model
 			// delete all group-admins (botschafter) they're not in the submitted array
 			$this->del('
 				DELETE FROM
-					`' . PREFIX . 'botschafter`
+					`fs_botschafter`
 			
 				WHERE
 					bezirk_id = ' . (int)$groupId . '
@@ -92,7 +92,7 @@ class WorkGroupModel extends Model
 
 			// insert new group-admins
 			$this->insert('
-				INSERT IGNORE INTO `' . PREFIX . 'botschafter`
+				INSERT IGNORE INTO `fs_botschafter`
 				(
 					`foodsaver_id`,
 					`bezirk_id`
@@ -114,7 +114,7 @@ class WorkGroupModel extends Model
 	private function emptyLeader($groupId)
 	{
 		return $this->del('
-			DELETE FROM `' . PREFIX . 'botschafter`
+			DELETE FROM `fs_botschafter`
 			WHERE bezirk_id = ' . (int)$groupId . '
 		');
 	}
@@ -127,7 +127,7 @@ class WorkGroupModel extends Model
 	private function emptyMember($groupId)
 	{
 		return $this->del('
-			DELETE FROM `' . PREFIX . 'foodsaver_has_bezirk`
+			DELETE FROM `fs_foodsaver_has_bezirk`
 			WHERE bezirk_id = ' . (int)$groupId . '
 			AND
 			`active` = 1
@@ -152,9 +152,9 @@ class WorkGroupModel extends Model
 				b.`type`,
 				CONCAT(m.name,"@' . DEFAULT_EMAIL_HOST . '") AS email
 			FROM
-				' . PREFIX . 'bezirk b
+				fs_bezirk b
 			LEFT JOIN
-				' . PREFIX . 'mailbox m
+				fs_mailbox m
 			ON
 				b.mailbox_id = m.id
 			WHERE
@@ -168,8 +168,8 @@ class WorkGroupModel extends Model
 						`photo`
 						 
 					FROM
-						`' . PREFIX . 'foodsaver` fs,
-						`' . PREFIX . 'foodsaver_has_bezirk` hb
+						`fs_foodsaver` fs,
+						`fs_foodsaver_has_bezirk` hb
 
 					WHERE 
 						hb.foodsaver_id = fs.id
@@ -186,8 +186,8 @@ class WorkGroupModel extends Model
 						`photo`
 							
 						FROM
-						`' . PREFIX . 'foodsaver` fs,
-						`' . PREFIX . 'botschafter` hb
+						`fs_foodsaver` fs,
+						`fs_botschafter` hb
 				
 						WHERE
 						hb.foodsaver_id = fs.id
@@ -203,7 +203,7 @@ class WorkGroupModel extends Model
 	public function addToGroup($group_id, $fsId)
 	{
 		return $this->insert('
-			REPLACE INTO `' . PREFIX . 'foodsaver_has_bezirk`(`foodsaver_id`, `bezirk_id`, `active`, `added`) 
+			REPLACE INTO `fs_foodsaver_has_bezirk`(`foodsaver_id`, `bezirk_id`, `active`, `added`) 
 			VALUES (
 				' . (int)$fsId . ',
 				' . (int)$group_id . ',
@@ -223,8 +223,8 @@ class WorkGroupModel extends Model
 				b.`photo`
 		
 			FROM
-				' . PREFIX . 'bezirk b,
-				' . PREFIX . 'foodsaver_has_bezirk hb
+				fs_bezirk b,
+				fs_foodsaver_has_bezirk hb
 		
 			WHERE
 				hb.bezirk_id = b.id
@@ -257,9 +257,9 @@ class WorkGroupModel extends Model
 				CONCAT(m.name,"@' . DEFAULT_EMAIL_HOST . '") AS email
 				
 			FROM
-				' . PREFIX . 'bezirk b
+				fs_bezirk b
 			LEFT JOIN
-				' . PREFIX . 'mailbox m
+				fs_mailbox m
 			ON
 				b.mailbox_id = m.id
 			WHERE
@@ -278,8 +278,8 @@ class WorkGroupModel extends Model
 						`photo`
 						 
 					FROM
-						`' . PREFIX . 'foodsaver` fs,
-						`' . PREFIX . 'foodsaver_has_bezirk` hb
+						`fs_foodsaver` fs,
+						`fs_foodsaver_has_bezirk` hb
 
 					WHERE 
 						hb.foodsaver_id = fs.id
@@ -296,8 +296,8 @@ class WorkGroupModel extends Model
 						`photo`
 							
 						FROM
-						`' . PREFIX . 'foodsaver` fs,
-						`' . PREFIX . 'botschafter` hb
+						`fs_foodsaver` fs,
+						`fs_botschafter` hb
 				
 						WHERE
 						hb.foodsaver_id = fs.id
@@ -334,8 +334,8 @@ class WorkGroupModel extends Model
 				CONCAT(mb.name,"@' . DEFAULT_EMAIL_HOST . '")
 		
 			FROM
-				' . PREFIX . 'mailbox mb,
-				' . PREFIX . 'foodsaver fs
+				fs_mailbox mb,
+				fs_foodsaver fs
 		
 			WHERE
 				fs.mailbox_id = mb.id
@@ -354,8 +354,8 @@ class WorkGroupModel extends Model
 				CONCAT(mb.name,"@' . DEFAULT_EMAIL_HOST . '")
 				
 			FROM 	
-				' . PREFIX . 'mailbox mb,
-				' . PREFIX . 'bezirk bz
+				fs_mailbox mb,
+				fs_bezirk bz
 				
 			WHERE 
 				bz.mailbox_id = mb.id
@@ -371,7 +371,7 @@ class WorkGroupModel extends Model
 		return $this->update('
 				
 			UPDATE 
-				`' . PREFIX . 'bezirk`
+				`fs_bezirk`
 				
 			SET 	
 				`name` = ' . $this->strval($data['name']) . ',
@@ -396,7 +396,7 @@ class WorkGroupModel extends Model
 			// 604800 = sekunden pro woche
 			$weeks = (int)round((time() - $time) / 604800);
 
-			$reports = $this->qOne('SELECT COUNT(foodsaver_id) FROM ' . PREFIX . 'report WHERE foodsaver_id = ' . (int)$fsId);
+			$reports = $this->qOne('SELECT COUNT(foodsaver_id) FROM fs_report WHERE foodsaver_id = ' . (int)$fsId);
 
 			return array(
 				'weeks' => (int)$weeks,
@@ -417,7 +417,7 @@ class WorkGroupModel extends Model
 				`parent_id`
 				
 			FROM 	
-				' . PREFIX . 'bezirk
+				fs_bezirk
 				
 			WHERE
 				`type` = 6

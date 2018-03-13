@@ -25,7 +25,7 @@ class SettingsModel extends Model
 	public function saveInfoSettings($newsletter, $infomail)
 	{
 		return $this->update('
-			UPDATE 	`' . PREFIX . 'foodsaver`
+			UPDATE 	`fs_foodsaver`
 			SET 	`newsletter` = ' . (int)$newsletter . ',
 					`infomail_message` = ' . (int)$infomail . '
 			WHERE 	`id` = ' . (int)$this->func->fsId() . '		
@@ -38,7 +38,7 @@ class SettingsModel extends Model
 		foreach ($logChangedKeys as $k) {
 			if (array_key_exists($k, $new) && $new[$k] != $old[$k]) {
 				$this->insert('INSERT INTO
-									  ' . PREFIX . 'foodsaver_change_history(
+									  fs_foodsaver_change_history(
 										`date`,
 										`fs_id`,
 										`changer_id`,
@@ -68,7 +68,7 @@ class SettingsModel extends Model
 				sleep_msg
 				
 			FROM 
-				' . PREFIX . 'foodsaver
+				fs_foodsaver
 				
 			WHERE 
 				id = ' . (int)$this->func->fsId() . '
@@ -88,7 +88,7 @@ class SettingsModel extends Model
 				`maxfp`
 
 			FROM
-				' . PREFIX . 'quiz_session
+				fs_quiz_session
 				
 			WHERE
 				`id` = ' . (int)$sid . '
@@ -98,7 +98,7 @@ class SettingsModel extends Model
 		';
 		$tmp = array();
 		if ($session = $this->qRow($sql)) {
-			$session['try_count'] = $this->qOne('SELECT COUNT(quiz_id) FROM ' . PREFIX . 'quiz_session WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND `quiz_id` = ' . (int)$session['quiz_id']);
+			$session['try_count'] = $this->qOne('SELECT COUNT(quiz_id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND `quiz_id` = ' . (int)$session['quiz_id']);
 
 			/*
 			 * First of all sort the question array and get al questions_ids etc to calculate the result
@@ -219,8 +219,8 @@ class SettingsModel extends Model
 					ff.infotype,
 					ff.`type`
 
-			FROM 	`' . PREFIX . 'fairteiler_follower` ff,
-					`' . PREFIX . 'fairteiler` ft
+			FROM 	`fs_fairteiler_follower` ff,
+					`fs_fairteiler` ft
 				
 			WHERE 	ff.fairteiler_id = ft.id
 			AND 	ff.foodsaver_id = ' . (int)$this->func->fsId() . '
@@ -230,7 +230,7 @@ class SettingsModel extends Model
 	public function addNewMail($email, $token)
 	{
 		return $this->insert('
-			REPLACE INTO `' . PREFIX . 'mailchange`
+			REPLACE INTO `fs_mailchange`
 			(
 				`foodsaver_id`,
 				`newmail`,
@@ -249,17 +249,17 @@ class SettingsModel extends Model
 
 	public function abortChangemail()
 	{
-		$this->del('DELETE FROM `' . PREFIX . 'mailchange` WHERE foodsaver_id = ' . (int)$this->func->fsId());
+		$this->del('DELETE FROM `fs_mailchange` WHERE foodsaver_id = ' . (int)$this->func->fsId());
 	}
 
 	public function changeMail($email)
 	{
-		$this->del('DELETE FROM `' . PREFIX . 'mailchange` WHERE foodsaver_id = ' . (int)$this->func->fsId());
-		$currentMail = $this->qOne('SELECT `email` FROM ' . PREFIX . 'foodsaver WHERE id = ' . (int)$this->func->fsId());
+		$this->del('DELETE FROM `fs_mailchange` WHERE foodsaver_id = ' . (int)$this->func->fsId());
+		$currentMail = $this->qOne('SELECT `email` FROM fs_foodsaver WHERE id = ' . (int)$this->func->fsId());
 		$this->logChangedSetting($this->func->fsId(), ['email' => $currentMail], ['email' => $email], ['email']);
 
 		if ($this->update('
-			UPDATE `' . PREFIX . 'foodsaver`
+			UPDATE `fs_foodsaver`
 			SET `email` = ' . $this->strval($email) . '
 			WHERE `id` = ' . (int)$this->func->fsId() . '
 		')
@@ -272,7 +272,7 @@ class SettingsModel extends Model
 
 	public function getMailchange()
 	{
-		return $this->qOne('SELECT `newmail` FROM ' . PREFIX . 'mailchange WHERE foodsaver_id = ' . (int)$this->func->fsId());
+		return $this->qOne('SELECT `newmail` FROM fs_mailchange WHERE foodsaver_id = ' . (int)$this->func->fsId());
 	}
 
 	public function getForumThreads()
@@ -282,8 +282,8 @@ class SettingsModel extends Model
 					th.name,
 					tf.infotype
 		
-			FROM 	`' . PREFIX . 'theme_follower` tf,
-					`' . PREFIX . 'theme` th
+			FROM 	`fs_theme_follower` tf,
+					`fs_theme` th
 		
 			WHERE 	tf.theme_id = th.id
 			AND 	tf.foodsaver_id = ' . (int)$this->func->fsId() . '
@@ -293,7 +293,7 @@ class SettingsModel extends Model
 	public function updateFollowFairteiler($fid, $infotype)
 	{
 		return $this->update('
-			UPDATE 		`' . PREFIX . 'fairteiler_follower`
+			UPDATE 		`fs_fairteiler_follower`
 			SET 		`infotype` = ' . (int)$infotype . '
 			WHERE 		`fairteiler_id` = ' . (int)$fid . '
 			AND 		`foodsaver_id` = ' . (int)$this->func->fsId() . '
@@ -303,7 +303,7 @@ class SettingsModel extends Model
 	public function updateFollowThread($tid, $infotype)
 	{
 		return $this->update('
-			UPDATE 		`' . PREFIX . 'theme_follower`
+			UPDATE 		`fs_theme_follower`
 			SET 		`infotype` = ' . (int)$infotype . '
 			WHERE 		`theme_id` = ' . (int)$tid . '
 			AND 		`foodsaver_id` = ' . (int)$this->func->fsId() . '
@@ -313,7 +313,7 @@ class SettingsModel extends Model
 	public function unfollowThread($unfollow)
 	{
 		return $this->del('
-			DELETE FROM 	`' . PREFIX . 'theme_follower`
+			DELETE FROM 	`fs_theme_follower`
 			WHERE 	foodsaver_id = ' . (int)$this->func->fsId() . '
 			AND 	theme_id IN(' . implode(',', $unfollow) . ')
 		');
@@ -322,7 +322,7 @@ class SettingsModel extends Model
 	public function unfollowFairteiler($unfollow)
 	{
 		return $this->del('
-			DELETE FROM 	`' . PREFIX . 'fairteiler_follower`
+			DELETE FROM 	`fs_fairteiler_follower`
 			WHERE 	foodsaver_id = ' . (int)$this->func->fsId() . '
 			AND 	fairteiler_id IN(' . implode(',', $unfollow) . ')		
 		');
@@ -335,7 +335,7 @@ class SettingsModel extends Model
 				COUNT(hb.foodsaver_id)
 	
 			FROM
-				' . PREFIX . 'foodsaver_has_bezirk hb
+				fs_foodsaver_has_bezirk hb
 	
 			WHERE
 				hb.bezirk_id = ' . (int)$bid . '
@@ -347,13 +347,13 @@ class SettingsModel extends Model
 
 	public function getNewMail($token)
 	{
-		return $this->qOne('SELECT newmail FROM ' . PREFIX . 'mailchange WHERE `token` = ' . $this->strval($token) . ' AND foodsaver_id = ' . (int)$this->func->fsId());
+		return $this->qOne('SELECT newmail FROM fs_mailchange WHERE `token` = ' . $this->strval($token) . ' AND foodsaver_id = ' . (int)$this->func->fsId());
 	}
 
 	public function updateRole($role_id, $current_role)
 	{
 		if ($role_id > $current_role) {
-			$this->update('UPDATE ' . PREFIX . 'foodsaver SET `rolle` = ' . (int)$role_id . ' WHERE id = ' . (int)$this->func->fsId());
+			$this->update('UPDATE fs_foodsaver SET `rolle` = ' . (int)$role_id . ' WHERE id = ' . (int)$this->func->fsId());
 		}
 	}
 
@@ -361,7 +361,7 @@ class SettingsModel extends Model
 	{
 		if ($res = $this->qOne('
 				SELECT COUNT(foodsaver_id) AS `count`
-				FROM ' . PREFIX . 'quiz_session
+				FROM fs_quiz_session
 				WHERE foodsaver_id =' . (int)$this->func->fsId() . '
 				AND quiz_id = ' . (int)$quiz_id . '
 				AND `status` = 1

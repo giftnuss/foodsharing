@@ -22,7 +22,7 @@ class StoreModel extends Model
 	public function addFetchDate($bid, $time, $fetchercount)
 	{
 		return $this->insert('
-			INSERT INTO `' . PREFIX . 'fetchdate`
+			INSERT INTO `fs_fetchdate`
 			(
 				`betrieb_id`, 
 				`time`, 
@@ -39,7 +39,7 @@ class StoreModel extends Model
 
 	public function updateBetriebBezirk($betrieb_id, $bezirk_id)
 	{
-		return $this->update('UPDATE ' . PREFIX . 'betrieb SET bezirk_id = ' . (int)$bezirk_id . ' WHERE id = ' . (int)$betrieb_id);
+		return $this->update('UPDATE fs_betrieb SET bezirk_id = ' . (int)$bezirk_id . ' WHERE id = ' . (int)$betrieb_id);
 	}
 
 	public function getFetchHistory($betrieb_id, $from, $to)
@@ -54,8 +54,8 @@ class StoreModel extends Model
 				UNIX_TIMESTAMP(a.date) AS date_ts
 	
 			FROM
-				' . PREFIX . 'foodsaver fs,
-				' . PREFIX . 'abholer a
+				fs_foodsaver fs,
+				fs_abholer a
 	
 			WHERE
 				a.foodsaver_id = fs.id
@@ -77,9 +77,9 @@ class StoreModel extends Model
 
 	public function deldate($bid, $date)
 	{
-		$this->del('DELETE FROM `' . PREFIX . 'abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `date` = ' . $this->dateval($date));
+		$this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `date` = ' . $this->dateval($date));
 
-		return $this->del('DELETE FROM `' . PREFIX . 'fetchdate` WHERE `betrieb_id` = ' . (int)$bid . ' AND `time` = ' . $this->dateval($date));
+		return $this->del('DELETE FROM `fs_fetchdate` WHERE `betrieb_id` = ' . (int)$bid . ' AND `time` = ' . $this->dateval($date));
 	}
 
 	public function listMyBetriebe()
@@ -93,8 +93,8 @@ class StoreModel extends Model
 					b.hsnr
 
 			FROM
-				' . PREFIX . 'betrieb b,
-				' . PREFIX . 'betrieb_team t
+				fs_betrieb b,
+				fs_betrieb_team t
 				
 			WHERE
 				b.id = t.betrieb_id
@@ -113,7 +113,7 @@ class StoreModel extends Model
 			SELECT 	`time`,
 					UNIX_TIMESTAMP(`time`) AS `time_ts`,
 					`fetchercount`
-			FROM 	' . PREFIX . 'fetchdate
+			FROM 	fs_fetchdate
 			WHERE 	`betrieb_id` = ' . (int)$bid . '
 			AND 	`time` > NOW()
 		')
@@ -142,11 +142,11 @@ class StoreModel extends Model
 	public function deleteFetchDate($fsid, $bid = null, $date = null)
 	{
 		if ($date !== null && $bid !== null) {
-			return $this->del('DELETE FROM `' . PREFIX . 'abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` = ' . $this->dateval($date));
+			return $this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` = ' . $this->dateval($date));
 		} elseif ($bid !== null) {
-			return $this->del('DELETE FROM `' . PREFIX . 'abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
+			return $this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
 		} else {
-			return $this->del('DELETE FROM `' . PREFIX . 'abholer` WHERE `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
+			return $this->del('DELETE FROM `fs_abholer` WHERE `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
 		}
 	}
 
@@ -154,8 +154,8 @@ class StoreModel extends Model
 	{
 		$bid = $this->intval($bid);
 		$fsid = $this->intval($fsid);
-		$this->del('DELETE FROM `' . PREFIX . 'betrieb_team` WHERE `betrieb_id` = ' . $bid . ' AND `foodsaver_id` = ' . $fsid . ' ');
-		$this->del('DELETE FROM `' . PREFIX . 'abholer` WHERE `betrieb_id` = ' . $bid . ' AND `foodsaver_id` = ' . $fsid . ' AND `date` > NOW()');
+		$this->del('DELETE FROM `fs_betrieb_team` WHERE `betrieb_id` = ' . $bid . ' AND `foodsaver_id` = ' . $fsid . ' ');
+		$this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . $bid . ' AND `foodsaver_id` = ' . $fsid . ' AND `date` > NOW()');
 
 		if ($tcid = $this->messageModel->getBetriebConversation($bid)) {
 			$this->messageModel->deleteUserFromConversation($tcid, $fsid, true);
@@ -171,7 +171,7 @@ class StoreModel extends Model
 			SELECT
 			`bezirk_id`
 
-			FROM 		`' . PREFIX . 'betrieb`
+			FROM 		`fs_betrieb`
 
 			WHERE 		`id` = ' . $this->intval($id));
 
@@ -185,7 +185,7 @@ class StoreModel extends Model
 				`id`,
 				`name`
 				
-				FROM 		`' . PREFIX . 'betrieb_kategorie`
+				FROM 		`fs_betrieb_kategorie`
 				ORDER BY `name`');
 
 		return $out;
@@ -198,7 +198,7 @@ class StoreModel extends Model
 				`id`,
 				`name`
 				
-				FROM 		`' . PREFIX . 'betrieb_status`
+				FROM 		`fs_betrieb_status`
 				ORDER BY `name`');
 
 		return $out;
@@ -236,20 +236,20 @@ class StoreModel extends Model
 			`public_info`,
 			`public_time`
 
-			FROM 		`' . PREFIX . 'betrieb`
+			FROM 		`fs_betrieb`
 
 			WHERE 		`id` = ' . $this->intval($id));
 
 		$out['lebensmittel'] = $this->qCol('
 				SELECT 		`lebensmittel_id`
 
-				FROM 		`' . PREFIX . 'betrieb_has_lebensmittel`
+				FROM 		`fs_betrieb_has_lebensmittel`
 				WHERE 		`betrieb_id` = ' . $this->intval($id) . '
 			');
 		$out['foodsaver'] = $this->qCol('
 				SELECT 		`foodsaver_id`
 
-				FROM 		`' . PREFIX . 'betrieb_team`
+				FROM 		`fs_betrieb_team`
 				WHERE 		`betrieb_id` = ' . $this->intval($id) . '
 				AND 		`active` = 1
 			');
@@ -263,8 +263,8 @@ class StoreModel extends Model
 				SELECT 		t.`foodsaver_id`,
 							t.`verantwortlich`
 
-				FROM 		`' . PREFIX . 'betrieb_team` t
-				INNER JOIN  `' . PREFIX . 'foodsaver` fs ON fs.id = t.foodsaver_id
+				FROM 		`fs_betrieb_team` t
+				INNER JOIN  `fs_foodsaver` fs ON fs.id = t.foodsaver_id
 
 				WHERE 		t.`betrieb_id` = ' . $this->intval($bid) . '
 				AND 		t.active = 1
@@ -279,7 +279,7 @@ class StoreModel extends Model
 			SELECT 	 	`id`,
 						`name`
 
-			FROM 		`' . PREFIX . 'lebensmittel`
+			FROM 		`fs_lebensmittel`
 			ORDER BY `name`');
 	}
 
@@ -289,32 +289,32 @@ class StoreModel extends Model
 			SELECT 	 	`id`,
 						`name`
 
-			FROM 		`' . PREFIX . 'kette`
+			FROM 		`fs_kette`
 			ORDER BY `name`');
 	}
 
 	public function listBetriebReq($bezirk_id)
 	{
 		return $this->q('
-				SELECT 	' . PREFIX . 'betrieb.id,
-						`' . PREFIX . 'betrieb`.betrieb_status_id,
-						' . PREFIX . 'betrieb.plz,
-						' . PREFIX . 'betrieb.added,
+				SELECT 	fs_betrieb.id,
+						`fs_betrieb`.betrieb_status_id,
+						fs_betrieb.plz,
+						fs_betrieb.added,
 						`stadt`,
-						' . PREFIX . 'betrieb.kette_id,
-						' . PREFIX . 'betrieb.betrieb_kategorie_id,
-						' . PREFIX . 'betrieb.name,
-						CONCAT(' . PREFIX . 'betrieb.str," ",' . PREFIX . 'betrieb.hsnr) AS anschrift,
-						' . PREFIX . 'betrieb.str,
-						' . PREFIX . 'betrieb.hsnr,
-						' . PREFIX . 'betrieb.`betrieb_status_id`,
-						' . PREFIX . 'bezirk.name AS bezirk_name
+						fs_betrieb.kette_id,
+						fs_betrieb.betrieb_kategorie_id,
+						fs_betrieb.name,
+						CONCAT(fs_betrieb.str," ",fs_betrieb.hsnr) AS anschrift,
+						fs_betrieb.str,
+						fs_betrieb.hsnr,
+						fs_betrieb.`betrieb_status_id`,
+						fs_bezirk.name AS bezirk_name
 
-				FROM 	' . PREFIX . 'betrieb,
-						' . PREFIX . 'bezirk
+				FROM 	fs_betrieb,
+						fs_bezirk
 
-				WHERE 	' . PREFIX . 'betrieb.bezirk_id = ' . PREFIX . 'bezirk.id
-				AND 	' . PREFIX . 'betrieb.bezirk_id IN(' . implode(',', $this->getChildBezirke($bezirk_id)) . ')
+				WHERE 	fs_betrieb.bezirk_id = fs_bezirk.id
+				AND 	fs_betrieb.bezirk_id IN(' . implode(',', $this->getChildBezirke($bezirk_id)) . ')
 
 
 		');
@@ -330,7 +330,7 @@ class StoreModel extends Model
 
 			foreach ($data['lebensmittel'] as $lebensmittel_id) {
 				$this->insert('
-						INSERT INTO `' . PREFIX . 'betrieb_has_lebensmittel`
+						INSERT INTO `fs_betrieb_has_lebensmittel`
 						(
 							`betrieb_id`,
 							`lebensmittel_id`
@@ -349,7 +349,7 @@ class StoreModel extends Model
 		}
 
 		return $this->update('
-		UPDATE 	`' . PREFIX . 'betrieb`
+		UPDATE 	`fs_betrieb`
 
 		SET 	`betrieb_status_id` =  ' . $this->intval($data['betrieb_status_id']) . ',
 				`bezirk_id` =  ' . $this->intval($data['bezirk_id']) . ',
@@ -383,7 +383,7 @@ class StoreModel extends Model
 	public function add_betrieb($data)
 	{
 		$id = $this->insert('
-			INSERT INTO 	`' . PREFIX . 'betrieb`
+			INSERT INTO 	`fs_betrieb`
 			(
 			`betrieb_status_id`,
 			`bezirk_id`,
@@ -445,7 +445,7 @@ class StoreModel extends Model
 		if (isset($data['lebensmittel']) && is_array($data['lebensmittel'])) {
 			foreach ($data['lebensmittel'] as $lebensmittel_id) {
 				$this->insert('
-						INSERT INTO `' . PREFIX . 'betrieb_has_lebensmittel`
+						INSERT INTO `fs_betrieb_has_lebensmittel`
 						(
 							`betrieb_id`,
 							`lebensmittel_id`
@@ -462,7 +462,7 @@ class StoreModel extends Model
 		if (isset($data['foodsaver']) && is_array($data['foodsaver'])) {
 			foreach ($data['foodsaver'] as $foodsaver_id) {
 				$this->insert('
-						REPLACE INTO `' . PREFIX . 'betrieb_team`
+						REPLACE INTO `fs_betrieb_team`
 						(
 							`betrieb_id`,
 							`foodsaver_id`,
@@ -506,7 +506,7 @@ class StoreModel extends Model
 		}
 
 		return $this->update('
-					UPDATE 	 	`' . PREFIX . 'betrieb_team`
+					UPDATE 	 	`fs_betrieb_team`
 					SET 		`active` = 1
 					WHERE 		`betrieb_id` = ' . $this->intval($bid) . '
 					AND 		`foodsaver_id` = ' . $this->intval($fsid) . '
@@ -529,7 +529,7 @@ class StoreModel extends Model
 		}
 
 		return $this->update('
-					UPDATE 	 	`' . PREFIX . 'betrieb_team`
+					UPDATE 	 	`fs_betrieb_team`
 					SET 		`active` = 2
 					WHERE 		`betrieb_id` = ' . $this->intval($bid) . '
 					AND 		`foodsaver_id` = ' . $this->intval($fsid) . '
@@ -557,7 +557,7 @@ class StoreModel extends Model
 	public function teamRequest($fsid, $bid)
 	{
 		return $this->insert('
-			REPLACE INTO `' . PREFIX . 'betrieb_team`
+			REPLACE INTO `fs_betrieb_team`
 			(
 				`betrieb_id`,
 				`foodsaver_id`,
@@ -580,7 +580,7 @@ class StoreModel extends Model
 		$this->messageModel->renameConversation($tcid, 'Team ' . $betrieb['name']);
 
 		$this->update('
-				UPDATE	`' . PREFIX . 'betrieb` SET team_conversation_id = ' . $this->intval($tcid) . ' WHERE id = ' . $this->intval($bid) . '
+				UPDATE	`fs_betrieb` SET team_conversation_id = ' . $this->intval($tcid) . ' WHERE id = ' . $this->intval($bid) . '
 			');
 
 		$teamMembers = $this->getBetriebTeam($bid);
@@ -599,7 +599,7 @@ class StoreModel extends Model
 		$betrieb = $this->getMyBetrieb($bid);
 		$this->messageModel->renameConversation($scid, 'Springer ' . $betrieb['name']);
 		$this->update('
-				UPDATE	`' . PREFIX . 'betrieb` SET springer_conversation_id = ' . $this->intval($scid) . ' WHERE id = ' . $this->intval($bid) . '
+				UPDATE	`fs_betrieb` SET springer_conversation_id = ' . $this->intval($scid) . ' WHERE id = ' . $this->intval($bid) . '
 			');
 
 		$springerMembers = $this->getBetriebSpringer($bid);
@@ -653,9 +653,9 @@ class StoreModel extends Model
 			$values[] = '(' . $this->intval($bid) . ',' . $this->intval($m) . ',' . $v . ',1)';
 		}
 
-		$this->del('DELETE FROM `' . PREFIX . 'betrieb_team` WHERE `betrieb_id` = ' . $this->intval($bid) . ' AND active = 1 AND foodsaver_id NOT IN(' . implode(',', $member_ids) . ')');
+		$this->del('DELETE FROM `fs_betrieb_team` WHERE `betrieb_id` = ' . $this->intval($bid) . ' AND active = 1 AND foodsaver_id NOT IN(' . implode(',', $member_ids) . ')');
 
-		$sql = 'INSERT IGNORE INTO `' . PREFIX . 'betrieb_team` (`betrieb_id`,`foodsaver_id`,`verantwortlich`,`active`) VALUES ' . implode(',', $values);
+		$sql = 'INSERT IGNORE INTO `fs_betrieb_team` (`betrieb_id`,`foodsaver_id`,`verantwortlich`,`active`) VALUES ' . implode(',', $values);
 
 		if ($cid = $this->getBetriebConversation($bid)) {
 			$this->messageModel->setConversationMembers($cid, $member_ids);
@@ -669,10 +669,10 @@ class StoreModel extends Model
 
 		if ($this->sql($sql)) {
 			$this->update('
-				UPDATE	`' . PREFIX . 'betrieb_team` SET verantwortlich = 0 WHERE betrieb_id = ' . $this->intval($bid) . '
+				UPDATE	`fs_betrieb_team` SET verantwortlich = 0 WHERE betrieb_id = ' . $this->intval($bid) . '
 			');
 			$this->update('
-				UPDATE	`' . PREFIX . 'betrieb_team` SET verantwortlich = 1 WHERE betrieb_id = ' . $this->intval($bid) . ' AND foodsaver_id IN(' . implode(',', $verantwortlicher) . ')
+				UPDATE	`fs_betrieb_team` SET verantwortlich = 1 WHERE betrieb_id = ' . $this->intval($bid) . ' AND foodsaver_id IN(' . implode(',', $verantwortlicher) . ')
 			');
 
 			return true;

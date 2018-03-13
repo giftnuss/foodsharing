@@ -13,7 +13,7 @@ class MaintenanceModel extends ConsoleModel
 
 	public function updateBezirkIds()
 	{
-		$foodsaver = $this->q('SELECT `bezirk_id`, `id` FROM `' . PREFIX . 'foodsaver` WHERE `bezirk_id` != 0');
+		$foodsaver = $this->q('SELECT `bezirk_id`, `id` FROM `fs_foodsaver` WHERE `bezirk_id` != 0');
 
 		$query = array();
 
@@ -22,7 +22,7 @@ class MaintenanceModel extends ConsoleModel
 		}
 
 		$this->sql('
-			REPLACE INTO `' . PREFIX . 'foodsaver_has_bezirk`
+			REPLACE INTO `fs_foodsaver_has_bezirk`
 			(
 				`foodsaver_id`,
 				`bezirk_id`,
@@ -35,29 +35,29 @@ class MaintenanceModel extends ConsoleModel
 
 	public function deleteUnconformedFetchDates()
 	{
-		return $this->del('DELETE FROM ' . PREFIX . 'abholer WHERE confirmed = 0 AND `date` < NOW()');
+		return $this->del('DELETE FROM fs_abholer WHERE confirmed = 0 AND `date` < NOW()');
 	}
 
 	public function listAvatars()
 	{
-		return $this->q('SELECT id, photo FROM ' . PREFIX . 'foodsaver WHERE photo != ""');
+		return $this->q('SELECT id, photo FROM fs_foodsaver WHERE photo != ""');
 	}
 
 	public function noAvatars($foodsaver_ids)
 	{
-		return $this->update('UPDATE ' . PREFIX . 'foodsaver SET photo = "" WHERE id IN(' . implode(',', $foodsaver_ids) . ')');
+		return $this->update('UPDATE fs_foodsaver SET photo = "" WHERE id IN(' . implode(',', $foodsaver_ids) . ')');
 	}
 
 	public function getUserInfo()
 	{
-		return $this->q('SELECT id, infomail_message FROM ' . PREFIX . 'foodsaver');
+		return $this->q('SELECT id, infomail_message FROM fs_foodsaver');
 	}
 
 	public function listOldBellIds($days = 7)
 	{
 		return $this->qCol('
 			SELECT id
-			FROM `' . PREFIX . 'bell`
+			FROM `fs_bell`
 			WHERE `time` <= NOW( ) - INTERVAL ' . (int)$days . ' DAY
 		');
 	}
@@ -65,7 +65,7 @@ class MaintenanceModel extends ConsoleModel
 	public function deactivateOldBaskets()
 	{
 		return $this->update('
-			UPDATE ' . PREFIX . 'basket
+			UPDATE fs_basket
 			SET `status` = 6 WHERE
 			until < NOW()
 			AND `status` = 1
@@ -75,29 +75,29 @@ class MaintenanceModel extends ConsoleModel
 	public function deleteBells($bell_ids)
 	{
 		$this->del('
-			DELETE FROM ' . PREFIX . 'foodsaver_has_bell 
+			DELETE FROM fs_foodsaver_has_bell 
 			WHERE 	bell_id IN(' . implode(',', $bell_ids) . ')
 		');
 
 		$this->del('
-			DELETE FROM `' . PREFIX . 'bell` 
+			DELETE FROM `fs_bell` 
 			WHERE 	id IN(' . implode(',', $bell_ids) . ')
 		');
 
-		$this->sql('LOCK TABLES `' . PREFIX . 'bell` WRITE');
-		$this->sql('ALTER TABLE `' . PREFIX . 'bell` AUTO_INCREMENT = (SELECT MAX(id) FROM `' . PREFIX . 'bell`)');
+		$this->sql('LOCK TABLES `fs_bell` WRITE');
+		$this->sql('ALTER TABLE `fs_bell` AUTO_INCREMENT = (SELECT MAX(id) FROM `fs_bell`)');
 		$this->sql('UNLOCK TABLES');
 	}
 
 	public function updateRolle()
 	{
-		if ($botschafter = $this->q('SELECT DISTINCT foodsaver_id FROM `' . PREFIX . 'botschafter` ')) {
+		if ($botschafter = $this->q('SELECT DISTINCT foodsaver_id FROM `fs_botschafter` ')) {
 			$foodsaver = $this->q('
 				SELECT DISTINCT bot.foodsaver_id
 	
 				FROM
-				    `' . PREFIX . 'botschafter` bot,
-				    `' . PREFIX . 'bezirk` b
+				    `fs_botschafter` bot,
+				    `fs_bezirk` b
 	
 				WHERE
 				    bot.bezirk_id = b.id
@@ -114,7 +114,7 @@ class MaintenanceModel extends ConsoleModel
 
 			if (!empty($botsch)) {
 				$count = $this->update('
-					UPDATE `' . PREFIX . 'foodsaver`
+					UPDATE `fs_foodsaver`
 	
 					SET
 						`rolle` = ' . $this->func->rolleWrap('bot') . '
@@ -135,7 +135,7 @@ class MaintenanceModel extends ConsoleModel
 			}
 			if (!empty($nomore)) {
 				$count = $this->update('
-					UPDATE `' . PREFIX . 'foodsaver` SET `rolle` = ' . $this->func->rolleWrap('fs') . ' WHERE `id` IN(' . implode(',', $nomore) . ')
+					UPDATE `fs_foodsaver` SET `rolle` = ' . $this->func->rolleWrap('fs') . ' WHERE `id` IN(' . implode(',', $nomore) . ')
 				');
 			}
 		}
@@ -143,7 +143,7 @@ class MaintenanceModel extends ConsoleModel
 
 	public function setFoodsaverInactive($fsids)
 	{
-		return $this->update('UPDATE ' . PREFIX . 'foodsaver SET sleep_status = 2 WHERE id IN(' . implode(',', $fsids) . ')');
+		return $this->update('UPDATE fs_foodsaver SET sleep_status = 2 WHERE id IN(' . implode(',', $fsids) . ')');
 	}
 
 	public function getUserBotschafter($fsid)
@@ -155,9 +155,9 @@ class MaintenanceModel extends ConsoleModel
 				fs.email
 				
 			FROM 
-				' . PREFIX . 'foodsaver_has_bezirk hb,
-				' . PREFIX . 'botschafter b,
-				' . PREFIX . 'foodsaver fs
+				fs_foodsaver_has_bezirk hb,
+				fs_botschafter b,
+				fs_foodsaver fs
 				
 			WHERE 
 				b.foodsaver_id = fs.id
@@ -181,7 +181,7 @@ class MaintenanceModel extends ConsoleModel
 				`geschlecht`
 
 			FROM 
-				' . PREFIX . 'foodsaver
+				fs_foodsaver
 				
 			WHERE 
 				sleep_status = 0
@@ -249,8 +249,8 @@ class MaintenanceModel extends ConsoleModel
 					DISTINCT b.id
 				
 				FROM
-					' . PREFIX . 'betrieb b,
-					' . PREFIX . 'abholer a
+					fs_betrieb b,
+					fs_abholer a
 				
 				WHERE
 					a.betrieb_id = b.id
@@ -294,9 +294,9 @@ class MaintenanceModel extends ConsoleModel
 						b.name AS betrieb_name
 						
 					FROM
-						' . PREFIX . 'betrieb b,
-						' . PREFIX . 'betrieb_team bt,
-						' . PREFIX . 'foodsaver fs
+						fs_betrieb b,
+						fs_betrieb_team bt,
+						fs_foodsaver fs
 						
 					WHERE
 						b.id = bt.betrieb_id

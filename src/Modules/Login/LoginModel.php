@@ -8,7 +8,7 @@ class LoginModel extends Model
 {
 	public function activate($email, $token)
 	{
-		if ((int)$this->update('UPDATE ' . PREFIX . 'foodsaver SET `active` = 1 WHERE email = ' . $this->strval($email) . ' AND `token` = ' . $this->strval($token)) > 0) {
+		if ((int)$this->update('UPDATE fs_foodsaver SET `active` = 1 WHERE email = ' . $this->strval($email) . ' AND `token` = ' . $this->strval($token)) > 0) {
 			return true;
 		}
 
@@ -33,7 +33,7 @@ class LoginModel extends Model
 		*/
 
 		return $this->insert('
-			INSERT INTO 	`' . PREFIX . 'foodsaver`
+			INSERT INTO 	`fs_foodsaver`
 			(
 				`rolle`,
 				`type`,
@@ -79,16 +79,16 @@ class LoginModel extends Model
 
 	public function checkResetKey($key)
 	{
-		return $this->qOne('SELECT `foodsaver_id` FROM `' . PREFIX . 'pass_request` WHERE `name` = ' . $this->strval($key));
+		return $this->qOne('SELECT `foodsaver_id` FROM `fs_pass_request` WHERE `name` = ' . $this->strval($key));
 	}
 
 	public function newPassword($data)
 	{
 		if ((int)strlen($data['pass1']) > 4) {
-			if ($fsid = $this->qOne('SELECT `foodsaver_id` FROM `' . PREFIX . 'pass_request` WHERE `name` = ' . $this->strval($data['k']))) {
-				$this->del('DELETE FROM `' . PREFIX . 'pass_request` WHERE `foodsaver_id` = ' . $this->intval($fsid));
+			if ($fsid = $this->qOne('SELECT `foodsaver_id` FROM `fs_pass_request` WHERE `name` = ' . $this->strval($data['k']))) {
+				$this->del('DELETE FROM `fs_pass_request` WHERE `foodsaver_id` = ' . $this->intval($fsid));
 
-				return $this->update('UPDATE `' . PREFIX . 'foodsaver` SET `password` = ' . $this->strval($this->password_hash($data['pass1'])) . ',`passwd`=NULL,`fs_password`=NULL WHERE `id` = ' . $this->intval($fsid));
+				return $this->update('UPDATE `fs_foodsaver` SET `password` = ' . $this->strval($this->password_hash($data['pass1'])) . ',`passwd`=NULL,`fs_password`=NULL WHERE `id` = ' . $this->intval($fsid));
 			}
 		}
 

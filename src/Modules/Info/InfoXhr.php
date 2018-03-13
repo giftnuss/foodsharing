@@ -23,7 +23,7 @@ class InfoXhr extends Control
 	{
 		$xhr = new Xhr();
 
-		$bell = (int)$this->model->qOne('SELECT COUNT(bell_id) FROM ' . PREFIX . 'foodsaver_has_bell WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND seen = 0');
+		$bell = (int)$this->model->qOne('SELECT COUNT(bell_id) FROM fs_foodsaver_has_bell WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND seen = 0');
 
 		// extra bells for betrieb
 		if (isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich'])) {
@@ -43,7 +43,7 @@ class InfoXhr extends Control
 		}
 
 		$xhr->addData('bell', $bell);
-		$xhr->addData('msg', (int)$this->model->qOne('SELECT COUNT(conversation_id) FROM ' . PREFIX . 'foodsaver_has_conversation WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND unread = 1'));
+		$xhr->addData('msg', (int)$this->model->qOne('SELECT COUNT(conversation_id) FROM fs_foodsaver_has_conversation WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND unread = 1'));
 		$xhr->addData('basket', 0);
 
 		$xhr->send();

@@ -18,12 +18,12 @@ class WallPostModel extends Model
 	public function delpost($post_id)
 	{
 		$this->del('
-				DELETE FROM `' . PREFIX . $this->table . '_has_wallpost`
+				DELETE FROM `fs_' . $this->table . '_has_wallpost`
 				WHERE 	wallpost_id = ' . (int)$post_id . '
 		');
 
 		return $this->del('
-				DELETE FROM `' . PREFIX . 'wallpost`
+				DELETE FROM `fs_wallpost`
 				WHERE 	id = ' . (int)$post_id . '
 		');
 	}
@@ -42,9 +42,9 @@ class WallPostModel extends Model
 					fs.`nachname`,
 					fs.`photo`
 				
-			FROM 	`' . PREFIX . 'wallpost` p,
-					`' . PREFIX . $this->table . '_has_wallpost` hp,
-					`' . PREFIX . 'foodsaver` fs
+			FROM 	`fs_wallpost` p,
+					`fs_' . $this->table . '_has_wallpost` hp,
+					`fs_foodsaver` fs
 				
 			WHERE 	p.foodsaver_id = fs.id
 			AND 	hp.wallpost_id = p.id
@@ -80,8 +80,8 @@ class WallPostModel extends Model
 	{
 		return $this->qOne('
 			SELECT 	MAX(id) 
-			FROM 	`' . PREFIX . 'wallpost` wp,
-					`' . PREFIX . $this->table . '_has_wallpost` hp
+			FROM 	`fs_wallpost` wp,
+					`fs_'. $this->table . '_has_wallpost` hp
 			WHERE 	hp.wallpost_id = wp.id
 			AND 	hp.`' . $this->table . '_id` = ' . (int)$this->id . '
 		');
@@ -90,7 +90,7 @@ class WallPostModel extends Model
 	public function post($message, $attach = '')
 	{
 		$post_id = $this->insert('
-			INSERT INTO 	`' . PREFIX . 'wallpost`
+			INSERT INTO 	`fs_wallpost`
 			(
 				`foodsaver_id`, 
 				`body`, 
@@ -105,7 +105,7 @@ class WallPostModel extends Model
 				' . $this->strval($attach) . '
 			)');
 		$this->insert('
-			INSERT INTO `' . PREFIX . $this->table . '_has_wallpost`
+			INSERT INTO `fs_' . $this->table . '_has_wallpost`
 			(
 				`' . $this->table . '_id`, 
 				`wallpost_id`

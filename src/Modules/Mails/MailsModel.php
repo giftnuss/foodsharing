@@ -20,7 +20,7 @@ class MailsModel extends ConsoleModel
 		$answer = 0)
 	{
 		return $this->insert('
-			INSERT INTO `' . PREFIX . 'mailbox_message`
+			INSERT INTO `fs_mailbox_message`
 			(
 				`mailbox_id`,
 				`folder`,
@@ -54,7 +54,7 @@ class MailsModel extends ConsoleModel
 	public function getMailboxId($mb_name)
 	{
 		return $this->qOne('
-			SELECT id FROM ' . PREFIX . 'mailbox WHERE `name` = ' . $this->strval($mb_name) . '
+			SELECT id FROM fs_mailbox WHERE `name` = ' . $this->strval($mb_name) . '
 		');
 	}
 
@@ -66,7 +66,7 @@ class MailsModel extends ConsoleModel
 		}
 
 		return $this->qCol('
-			SELECT id FROM ' . PREFIX . 'mailbox WHERE `name` IN(' . implode(',', $where) . ')
+			SELECT id FROM fs_mailbox WHERE `name` IN(' . implode(',', $where) . ')
 		');
 	}
 }

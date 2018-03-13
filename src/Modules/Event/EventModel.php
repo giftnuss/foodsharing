@@ -14,7 +14,7 @@ class EventModel extends Model
 		}
 
 		return $this->insert('
-			INSERT INTO 	`' . PREFIX . 'event`
+			INSERT INTO 	`fs_event`
 			(
 				`foodsaver_id`,
 				`bezirk_id`,
@@ -46,7 +46,7 @@ class EventModel extends Model
 	public function deleteInvites($event_id)
 	{
 		return $this->del('
-			DELETE FROM ' . PREFIX . 'foodsaver_has_event
+			DELETE FROM fs_foodsaver_has_event
 			WHERE event_id = ' . (int)$event_id . '	
 		');
 	}
@@ -60,7 +60,7 @@ class EventModel extends Model
 
 		return $this->update('
 			UPDATE 	
-				`' . PREFIX . 'event`
+				`fs_event`
 
 			SET
 				`location_id` = ' . (int)$location_id . ',
@@ -81,7 +81,7 @@ class EventModel extends Model
 	{
 		$status = $this->qOne('
 			SELECT `status` 
-			FROM 	`' . PREFIX . 'foodsaver_has_event`
+			FROM 	`fs_foodsaver_has_event`
 			WHERE 	event_id = ' . (int)$event_id . '	
 			AND 	foodsaver_id = ' . (int)$foodsaver_id . '	
 		');
@@ -96,7 +96,7 @@ class EventModel extends Model
 	public function setInviteStatus($event_id, $status)
 	{
 		$this->update('
-			UPDATE 	' . PREFIX . 'foodsaver_has_event
+			UPDATE 	fs_foodsaver_has_event
 			SET 	`status` = ' . (int)$status . '
 			WHERE 	foodsaver_id = ' . (int)$this->func->fsId() . '
 			AND 	event_id = ' . (int)$event_id . '
@@ -108,7 +108,7 @@ class EventModel extends Model
 	public function addInviteStatus($event_id, $status)
 	{
 		$this->update('
-			REPLACE INTO ' . PREFIX . 'foodsaver_has_event
+			REPLACE INTO fs_foodsaver_has_event
 			(`status`, `foodsaver_id`, `event_id`)
 			VALUES
 			(' . (int)$status . ', ' . (int)$this->func->fsId() . ', ' . (int)$event_id . ')
@@ -128,7 +128,7 @@ class EventModel extends Model
 
 		if ($fsids = $this->qCol('
 			SELECT 	foodsaver_id
-			FROM	' . PREFIX . 'foodsaver_has_bezirk
+			FROM	fs_foodsaver_has_bezirk
 			WHERE 	bezirk_id ' . $b_sql . ' 
 			AND 	`active` = 1
 		')
@@ -136,7 +136,7 @@ class EventModel extends Model
 			$invited = array();
 			if ($inv = $this->qCol(
 				'
-				SELECT foodsaver_id FROM ' . PREFIX . 'foodsaver_has_event
+				SELECT foodsaver_id FROM fs_foodsaver_has_event
 				WHERE event_id = ' . (int)$event_id
 			)
 			) {
@@ -154,7 +154,7 @@ class EventModel extends Model
 
 			if (!empty($sql)) {
 				return $this->sql('
-					INSERT INTO ' . PREFIX . 'foodsaver_has_event
+					INSERT INTO fs_foodsaver_has_event
 					(foodsaver_id,event_id,`status`)
 					VALUES
 					' . implode(',', $sql) . '

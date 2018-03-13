@@ -110,7 +110,7 @@ class PassportGeneratorControl extends Control
 		$fs_logo = $pdf->importPage(1);
 
 		foreach ($foodsaver as $i => $fs_id) {
-			if ($fs = $this->model->qRow('SELECT `photo`,`id`,`name`,`nachname`,`geschlecht`,`rolle` FROM ' . PREFIX . 'foodsaver WHERE `id` = ' . (int)$fs_id . ' ')) {
+			if ($fs = $this->model->qRow('SELECT `photo`,`id`,`name`,`nachname`,`geschlecht`,`rolle` FROM fs_foodsaver WHERE `id` = ' . (int)$fs_id . ' ')) {
 				if (empty($fs['photo'])) {
 					$nophoto[] = $fs['name'] . ' ' . $fs['nachname'];
 

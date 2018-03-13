@@ -12,7 +12,7 @@ class InfoModel extends Model
 	public function getFairteilerBadgdeCount()
 	{
 		if ($ids = $this->getBotBezirkIds()) {
-			return $this->qOne('SELECT COUNT(id) FROM ' . PREFIX . 'fairteiler WHERE bezirk_id IN(' . implode(',', $ids) . ') AND `status` = 0');
+			return $this->qOne('SELECT COUNT(id) FROM fs_fairteiler WHERE bezirk_id IN(' . implode(',', $ids) . ') AND `status` = 0');
 		}
 	}
 }

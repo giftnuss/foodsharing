@@ -299,7 +299,7 @@ class SettingsControl extends Control
 
 				if ($check) {
 					$data = $this->func->unsetAll($_POST, array('photo_public', 'new_bezirk'));
-					$this->model->updateFields($data, 'foodsaver', $this->func->fsId());
+					$this->model->updateFields($data, 'fs_foodsaver', $this->func->fsId());
 
 					$this->func->addContent($this->v_utils->v_field(
 						$this->v_utils->v_info($this->func->s('upgrade_bot_success')),
@@ -555,7 +555,7 @@ class SettingsControl extends Control
 			return false;
 		}
 
-		$this->model->insert('INSERT INTO ' . PREFIX . 'apitoken (foodsaver_id, token) VALUES (' . (int)$fs . ', "' . $token . '")');
+		$this->model->insert('INSERT INTO fs_apitoken (foodsaver_id, token) VALUES (' . (int)$fs . ', "' . $token . '")');
 
 		return $token;
 	}

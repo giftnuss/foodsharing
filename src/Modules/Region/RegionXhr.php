@@ -155,8 +155,8 @@ class RegionXhr extends Control
 	{
 		$data = $_GET;
 		if ($this->model->mayBezirk($data['bid'])) {
-			$this->model->del('DELETE FROM `' . PREFIX . 'foodsaver_has_bezirk` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->func->fsId() . ' ');
-			$this->model->del('DELETE FROM `' . PREFIX . 'botschafter` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->func->fsId() . ' ');
+			$this->model->del('DELETE FROM `fs_foodsaver_has_bezirk` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->func->fsId() . ' ');
+			$this->model->del('DELETE FROM `fs_botschafter` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->func->fsId() . ' ');
 
 			return array('status' => 1);
 		}

@@ -18,7 +18,7 @@ class Model extends ManualDb
 	public function getContent($id)
 	{
 		if ($cnt = $this->qRow('
-			SELECT 	`title`,`body` FROM ' . PREFIX . 'content WHERE `id` = ' . (int)$id . '		
+			SELECT 	`title`,`body` FROM fs_content WHERE `id` = ' . (int)$id . '		
 		')
 		) {
 			return $cnt;
@@ -40,7 +40,7 @@ class Model extends ManualDb
 
 	public function buddyStatus($fsid)
 	{
-		if (($status = $this->qOne('SELECT `confirmed` FROM ' . PREFIX . 'buddy WHERE `foodsaver_id` = ' . (int)$this->func->fsId() . ' AND `buddy_id` = ' . (int)$fsid)) !== false) {
+		if (($status = $this->qOne('SELECT `confirmed` FROM fs_buddy WHERE `foodsaver_id` = ' . (int)$this->func->fsId() . ' AND `buddy_id` = ' . (int)$fsid)) !== false) {
 			return $status;
 		}
 
@@ -50,7 +50,7 @@ class Model extends ManualDb
 	public function buddyRequest($fsid)
 	{
 		$this->insert('
-			REPLACE INTO `' . PREFIX . 'buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
+			REPLACE INTO `fs_buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
 			VALUES (' . (int)$this->func->fsId() . ',' . (int)$fsid . ',0)
 		');
 
@@ -60,18 +60,18 @@ class Model extends ManualDb
 	public function confirmBuddy($fsid)
 	{
 		$this->insert('
-			REPLACE INTO `' . PREFIX . 'buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
+			REPLACE INTO `fs_buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
 			VALUES (' . (int)$this->func->fsId() . ',' . (int)$fsid . ',1)
 		');
 		$this->insert('
-			REPLACE INTO `' . PREFIX . 'buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
+			REPLACE INTO `fs_buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
 			VALUES (' . (int)$fsid . ',' . (int)$this->func->fsId() . ',1)
 		');
 	}
 
 	public function delBells($identifier)
 	{
-		if ($bells = $this->q('SELECT id FROM ' . PREFIX . 'bell WHERE identifier = ' . $this->strval($identifier))) {
+		if ($bells = $this->q('SELECT id FROM fs_bell WHERE identifier = ' . $this->strval($identifier))) {
 			$ids = array();
 			foreach ($bells as $b) {
 				$ids[(int)$b['id']] = (int)$b['id'];
@@ -79,8 +79,8 @@ class Model extends ManualDb
 
 			$ids = implode(',', $ids);
 
-			$this->del('DELETE FROM ' . PREFIX . 'foodsaver_has_bell WHERE bell_id IN(' . $ids . ')');
-			$this->del('DELETE FROM ' . PREFIX . 'bell WHERE id IN(' . $ids . ')');
+			$this->del('DELETE FROM fs_foodsaver_has_bell WHERE bell_id IN(' . $ids . ')');
+			$this->del('DELETE FROM fs_bell WHERE id IN(' . $ids . ')');
 		}
 	}
 
@@ -88,7 +88,7 @@ class Model extends ManualDb
 	{
 		return $this->update('
  			UPDATE 
- 				' . PREFIX . 'foodsaver 
+ 				fs_foodsaver 
  				
  			SET	
  				`sleep_status` = ' . (int)$status . ',

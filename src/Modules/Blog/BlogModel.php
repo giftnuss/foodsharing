@@ -54,8 +54,8 @@ class BlogModel extends Model
 				CONCAT(fs.name," ",fs.nachname) AS fs_name
 	
 			FROM
-				`' . PREFIX . 'blog_entry` b,
-				`' . PREFIX . 'foodsaver` fs
+				`fs_blog_entry` b,
+				`fs_foodsaver` fs
 	
 			WHERE
 				b.foodsaver_id = fs.id
@@ -84,8 +84,8 @@ class BlogModel extends Model
 				CONCAT(fs.name," ",fs.nachname) AS fs_name
 		
 			FROM 
-				`' . PREFIX . 'blog_entry` b,
-				`' . PREFIX . 'foodsaver` fs
+				`fs_blog_entry` b,
+				`fs_foodsaver` fs
 		
 			WHERE 
 				b.foodsaver_id = fs.id
@@ -114,7 +114,7 @@ class BlogModel extends Model
 						`active`,
 						`bezirk_id`
 		
-			FROM 		`' . PREFIX . 'blog_entry`
+			FROM 		`fs_blog_entry`
 	
 			' . $not . '
 	
@@ -124,7 +124,7 @@ class BlogModel extends Model
 	public function del_blog_entry($id)
 	{
 		return $this->del('
-			DELETE FROM 	`' . PREFIX . 'blog_entry`
+			DELETE FROM 	`fs_blog_entry`
 			WHERE 			`id` = ' . $this->intval($id) . '
 		');
 	}
@@ -144,7 +144,7 @@ class BlogModel extends Model
 			UNIX_TIMESTAMP(`time`) AS time_ts,
 			`picture`
 			
-			FROM 		`' . PREFIX . 'blog_entry`
+			FROM 		`fs_blog_entry`
 			
 			WHERE 		`id` = ' . $this->intval($id));
 
@@ -161,7 +161,7 @@ class BlogModel extends Model
 		}
 
 		$id = $this->insert('
-			INSERT INTO 	`' . PREFIX . 'blog_entry`
+			INSERT INTO 	`fs_blog_entry`
 			(
 			`bezirk_id`,
 			`foodsaver_id`,

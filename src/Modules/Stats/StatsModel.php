@@ -13,7 +13,7 @@ class StatsModel extends ConsoleModel
 
 	public function getBetriebe($bezirk_id = false)
 	{
-		return $this->q('SELECT id, name, added FROM ' . PREFIX . 'betrieb');
+		return $this->q('SELECT id, name, added FROM fs_betrieb');
 	}
 
 	public function getFirstFetchInBetrieb($bid, $fsid)
@@ -24,7 +24,7 @@ class StatsModel extends ConsoleModel
 					MIN(`date`) 
 				
 				FROM 
-					' . PREFIX . 'abholer 
+					fs_abholer 
 				
 				WHERE 
 					betrieb_id = ' . $bid . ' 
@@ -41,8 +41,8 @@ class StatsModel extends ConsoleModel
 		$out = 0;
 		if ($res = $this->q('
 			SELECT COUNT(a.`betrieb_id`) AS anz, a.betrieb_id, b.abholmenge
-			FROM   `' . PREFIX . 'abholer` a,
-			       `' . PREFIX . 'betrieb` b
+			FROM   `fs_abholer` a,
+			       `fs_betrieb` b
 			WHERE a.betrieb_id =b.id
 			AND   foodsaver_id = ' . (int)$fsid . '
 			AND   a.`date` < NOW()
@@ -61,7 +61,7 @@ class StatsModel extends ConsoleModel
 
 	public function getFoodsaverIds()
 	{
-		return $this->qCol('SELECT id FROM ' . PREFIX . 'foodsaver');
+		return $this->qCol('SELECT id FROM fs_foodsaver');
 	}
 
 	public function getLastFetchInBetrieb($bid, $fsid)
@@ -72,7 +72,7 @@ class StatsModel extends ConsoleModel
 					MAX(`date`)
 	
 				FROM
-					' . PREFIX . 'abholer
+					fs_abholer
 	
 				WHERE
 					betrieb_id = ' . $bid . '
@@ -113,7 +113,7 @@ class StatsModel extends ConsoleModel
 		$val = $this->qOne('
 			SELECT COUNT(foodsaver_id)
 					
-			FROM 	' . PREFIX . 'abholer
+			FROM 	fs_abholer
 				
 			WHERE 	`foodsaver_id` = ' . (int)$fsid . '
 			AND 	`betrieb_id` = ' . (int)$bid . '
@@ -142,7 +142,7 @@ class StatsModel extends ConsoleModel
 				t.active
 				
 			FROM 
-				' . PREFIX . 'betrieb_team t
+				fs_betrieb_team t
 
 			WHERE 
 				t.betrieb_id = ' . (int)$bid . '
@@ -155,7 +155,7 @@ class StatsModel extends ConsoleModel
 		return $this->update('
 
 				UPDATE 	
-					`' . PREFIX . 'bezirk` 
+					`fs_bezirk` 
 				
 				SET 
 					`stat_last_update`= NOW(),
@@ -176,33 +176,33 @@ class StatsModel extends ConsoleModel
 
 	public function getAllBezirke($region_id = false)
 	{
-		return $this->q('SELECT id, name, stat_last_update FROM ' . PREFIX . 'bezirk');
+		return $this->q('SELECT id, name, stat_last_update FROM fs_bezirk');
 	}
 
 	public function getAllBezirkeNotUpdated($region_id = false)
 	{
-		return $this->q('SELECT id, name FROM ' . PREFIX . 'bezirk WHERE DATE_SUB(CURDATE(), INTERVAL 1 DAY) >= `stat_last_update`');
+		return $this->q('SELECT id, name FROM fs_bezirk WHERE DATE_SUB(CURDATE(), INTERVAL 1 DAY) >= `stat_last_update`');
 	}
 
 	public function getFairteilerCount($bezirk_id, $child_ids)
 	{
 		$child_ids[$bezirk_id] = $bezirk_id;
 
-		return (int)$this->qOne('SELECT COUNT(id) FROM ' . PREFIX . 'fairteiler WHERE bezirk_id IN(' . implode(',', $child_ids) . ')');
+		return (int)$this->qOne('SELECT COUNT(id) FROM fs_fairteiler WHERE bezirk_id IN(' . implode(',', $child_ids) . ')');
 	}
 
 	public function getBetriebKoorpCount($bezirk_id, $child_ids)
 	{
 		$child_ids[$bezirk_id] = $bezirk_id;
 
-		return (int)$this->qOne('SELECT COUNT(id) FROM ' . PREFIX . 'betrieb WHERE bezirk_id IN(' . implode(',', $child_ids) . ') AND betrieb_status_id IN(3,5)');
+		return (int)$this->qOne('SELECT COUNT(id) FROM fs_betrieb WHERE bezirk_id IN(' . implode(',', $child_ids) . ') AND betrieb_status_id IN(3,5)');
 	}
 
 	public function getBetriebCount($bezirk_id, $child_ids)
 	{
 		$child_ids[$bezirk_id] = $bezirk_id;
 
-		return (int)$this->qOne('SELECT COUNT(id) FROM ' . PREFIX . 'betrieb WHERE bezirk_id IN(' . implode(',', $child_ids) . ')');
+		return (int)$this->qOne('SELECT COUNT(id) FROM fs_betrieb WHERE bezirk_id IN(' . implode(',', $child_ids) . ')');
 	}
 
 	public function getPostCount($bezirk_id, $child_ids)
@@ -213,8 +213,8 @@ class StatsModel extends ConsoleModel
 			
 			SELECT COUNT(p.id) 
 				
-			FROM 	' . PREFIX . 'theme_post p,
-					' . PREFIX . 'bezirk_has_theme tb
+			FROM 	fs_theme_post p,
+					fs_bezirk_has_theme tb
 				
 			WHERE 	p.theme_id = tb.theme_id
 			AND 	tb.bezirk_id IN(' . implode(',', $child_ids) . ')
@@ -224,8 +224,8 @@ class StatsModel extends ConsoleModel
 		//$stat_post += (int)$this->qOne('SELECT COUNT(id) FROM '.PREFIX.'wallpost WHERE foodsaver_id = '.(int)$fsid);
 		$stat_post += (int)$this->qOne('
 			SELECT 	COUNT(bn.id) 
-			FROM 	' . PREFIX . 'betrieb_notiz bn,
-					' . PREFIX . 'betrieb b
+			FROM 	fs_betrieb_notiz bn,
+					fs_betrieb b
 			WHERE 	bn.betrieb_id = b.id
 			AND 	b.bezirk_id IN(' . implode(',', $child_ids) . ')
 				
@@ -240,7 +240,7 @@ class StatsModel extends ConsoleModel
 		$out = array();
 		if ($foodsaver = $this->q('
 			SELECT 	fb.foodsaver_id AS id
-			FROM 	' . PREFIX . 'botschafter fb
+			FROM 	fs_botschafter fb
 			WHERE 	fb.bezirk_id IN(' . implode(',', $child_ids) . ')
 		')
 		) {
@@ -258,7 +258,7 @@ class StatsModel extends ConsoleModel
 		$out = array();
 		if ($foodsaver = $this->q('
 			SELECT 	fb.foodsaver_id AS id
-			FROM 	' . PREFIX . 'foodsaver_has_bezirk fb
+			FROM 	fs_foodsaver_has_bezirk fb
 			WHERE 	fb.bezirk_id IN(' . implode(',', $child_ids) . ')
 		')
 		) {
@@ -282,8 +282,8 @@ class StatsModel extends ConsoleModel
 					a.`date`,
 					b.abholmenge
 					
-			FROM   `' . PREFIX . 'abholer` a,
-			       `' . PREFIX . 'betrieb` b
+			FROM   `fs_abholer` a,
+			       `fs_betrieb` b
 			WHERE 	a.betrieb_id =b.id
 			
 			AND   	a.`date` < NOW()

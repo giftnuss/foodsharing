@@ -33,10 +33,10 @@ class ActivityModel extends Model
 		
 		
 			FROM
-				' . PREFIX . 'basket_has_wallpost hw,
-				' . PREFIX . 'foodsaver fs,
-				' . PREFIX . 'wallpost w,
-				' . PREFIX . 'basket b
+				fs_basket_has_wallpost hw,
+				fs_foodsaver fs,
+				fs_wallpost w,
+				fs_basket b
 		
 			WHERE
 				w.id = hw.wallpost_id
@@ -77,11 +77,11 @@ class ActivityModel extends Model
 					b.id AS basket_id
 		
 				FROM
-					' . PREFIX . 'basket_has_wallpost hw,
-					' . PREFIX . 'foodsaver fs,
-					' . PREFIX . 'wallpost w,
-					' . PREFIX . 'basket b,
-					' . PREFIX . 'basket_anfrage ba
+					fs_basket_has_wallpost hw,
+					fs_foodsaver fs,
+					fs_wallpost w,
+					fs_basket b,
+					fs_basket_anfrage ba
 			
 				WHERE
 					w.id = hw.wallpost_id
@@ -182,12 +182,12 @@ class ActivityModel extends Model
 				
 
 			FROM 
-				' . PREFIX . 'foodsaver_has_wallpost hw,
-				' . PREFIX . 'foodsaver fs,
-				' . PREFIX . 'wallpost w
+				fs_foodsaver_has_wallpost hw,
+				fs_foodsaver fs,
+				fs_wallpost w
 				
 			LEFT JOIN
-				' . PREFIX . 'foodsaver poster
+				fs_foodsaver poster
 				
 			ON w.foodsaver_id = poster.id
 				
@@ -275,9 +275,9 @@ class ActivityModel extends Model
 					b.name AS mb_name
 			
 				FROM
-					' . PREFIX . 'mailbox_message m
+					fs_mailbox_message m
 				LEFT JOIN
-					' . PREFIX . 'mailbox b
+					fs_mailbox b
 				ON b.id = m.mailbox_id
 			
 				WHERE
@@ -368,11 +368,11 @@ class ActivityModel extends Model
 						b.name AS bezirk_name,
 						bt.bot_theme
 		
-			FROM 		' . PREFIX . 'theme t,
-						' . PREFIX . 'theme_post p,
-						' . PREFIX . 'bezirk_has_theme bt,
-						' . PREFIX . 'foodsaver fs,
-						' . PREFIX . 'bezirk b
+			FROM 		fs_theme t,
+						fs_theme_post p,
+						fs_bezirk_has_theme bt,
+						fs_foodsaver fs,
+						fs_bezirk b
 		
 			WHERE 		t.last_post_id = p.id 		
 			AND 		p.foodsaver_id = fs.id
@@ -428,7 +428,7 @@ class ActivityModel extends Model
 			if ($ret = $this->q('
 			
 			SELECT 	n.id, n.milestone, n.`text` , n.`zeit` AS update_time, UNIX_TIMESTAMP( n.`zeit` ) AS update_time_ts, fs.name AS foodsaver_name, fs.sleep_status, fs.id AS foodsaver_id, fs.photo AS foodsaver_photo, b.id AS betrieb_id, b.name AS betrieb_name
-			FROM 	' . PREFIX . 'betrieb_notiz n, ' . PREFIX . 'foodsaver fs, ' . PREFIX . 'betrieb b, ' . PREFIX . 'betrieb_team bt
+			FROM 	fs_betrieb_notiz n, fs_foodsaver fs, fs_betrieb b, fs_betrieb_team bt
 			
 			WHERE 	n.foodsaver_id = fs.id
 			AND 	n.betrieb_id = b.id
@@ -466,7 +466,7 @@ class ActivityModel extends Model
 	public function getBuddys()
 	{
 		if ($bids = S::get('buddy-ids')) {
-			return $this->q('SELECT photo,name,id FROM ' . PREFIX . 'foodsaver WHERE id IN(' . implode(',', $bids) . ')');
+			return $this->q('SELECT photo,name,id FROM fs_foodsaver WHERE id IN(' . implode(',', $bids) . ')');
 		}
 
 		return false;
