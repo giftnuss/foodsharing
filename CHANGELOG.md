@@ -7,6 +7,7 @@
 ## Features
 
 ## Bugfixes
+- It is possible to contact working groups again. !343 #403 by @peter.toennies @NerdyProjects
 
 ## Refactoring
 - replaced the PREFIX keyword in the whole source !339 #421 by peter.toennies
