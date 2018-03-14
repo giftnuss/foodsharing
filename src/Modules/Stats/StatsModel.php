@@ -221,7 +221,6 @@ class StatsModel extends ConsoleModel
 				
 		');
 
-		//$stat_post += (int)$this->qOne('SELECT COUNT(id) FROM '.PREFIX.'wallpost WHERE foodsaver_id = '.(int)$fsid);
 		$stat_post += (int)$this->qOne('
 			SELECT 	COUNT(bn.id) 
 			FROM 	fs_betrieb_notiz bn,

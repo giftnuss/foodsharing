@@ -1091,7 +1091,7 @@ class ManualDb extends Db
 				AND `lat` != ""
 
 
-				'); // -- AND 	'.PREFIX.'betrieb.bezirk_id = '.$this->intval(1).'
+				');
 	}
 
 	public function getBetriebe($bezirk_id = false)
@@ -1118,7 +1118,7 @@ class ManualDb extends Db
 				WHERE 	fs_betrieb.bezirk_id = ' . $this->intval($bezirk_id) . '
 
 
-				'); // -- AND 	'.PREFIX.'betrieb.bezirk_id = '.$this->intval(1).'
+				');
 	}
 
 	public function add_foodsaver($data)
@@ -1731,7 +1731,6 @@ class ManualDb extends Db
 							' . $this->intval($foodsaver_id) . '
 						)
 					');
-				//$this->update('UPDATE '.PREFIX.'foodsaver SET `bezirk_id` = '.(int)$id.' WHERE `id` = '.(int)$foodsaver_id);
 			}
 		}
 

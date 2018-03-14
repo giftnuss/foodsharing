@@ -294,7 +294,7 @@ abstract class Db
 				WHERE 	fs_betrieb.bezirk_id = ' . $this->intval($bezirk_id) . '
 
 
-				'); // -- AND 	'.PREFIX.'betrieb.bezirk_id = '.$this->intval(1).'
+				');
 	}
 
 	public function may()
