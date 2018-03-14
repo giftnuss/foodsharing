@@ -8,3 +8,4 @@ $g_lang['week_num'] = 'Seit wie vielen Wochen sollte ein Bewerber schon dabei se
 $g_lang['report_num'] = 'Dürfen sich auch Foodsaver mit Verstoßmeldungen bewerben?';
 $g_lang['member'] = 'Mitglieder';
 $g_lang['leader'] = 'Gruppen-Admins';
+$g_lang['contact-disclaimer'] = 'Durch Senden einer Nachricht an diese Arbeitsgruppe erhalten alle Administratoren der Arbeitsgruppe deine Emailadresse, welche du auf deinem foodsharing.de Profil angegeben hast.';
