@@ -20,6 +20,6 @@ $g_lang['email_name'] = 'Angezeigter Name';
 $g_lang['mailbox_add_success'] = 'Mailbox wurde erfolgreich angelegt.';
 $g_lang['mailbox_name_desc'] = 'Nur den Namen der Mailbox eintragen! Also ohne @'.DEFAULT_EMAIL_HOST;
 $g_lang['move_to_trash'] = 'In die Tonne';
-$g_lang['attach_file'] = 'Datei anhängen';
+$g_lang['attach_file'] = 'Datei anhängen (max. 1,2 MB)';
 $g_lang['wrong_file'] = 'Dieser Dateityp ist nicht erlaubt';
 $g_lang['file_to_big'] = 'Sorry! Die Datei ist zu groß.';
