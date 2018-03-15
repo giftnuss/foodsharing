@@ -10,6 +10,7 @@
 
 ## Refactoring
 - replaced the PREFIX keyword in the whole source !339 #421 by peter.toennies
+- refactored and cleaned the whole reports module. !335 by @peter.toennies
 
 ## Dev/Test/CI stuff
 # 2018-03-14 Hotfix for 2018-02-28
