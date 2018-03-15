@@ -19,6 +19,10 @@
 
 ## Bugfixes
 - fixed disabled unsubscription of forum posts for fair-teiler responsibles. !331 #317 by @peter.toennies
+# Not Released
+
+## Features
+- decreased distance to "close baskets" from 50 to 30 km. !332 #338 by @peter.toennies
 
 # 2018-03-05
 - remove ability for ambassador to add any foodsaver to his/her district !328 #405 by @k.miklobusec and @peter.toennies

@@ -91,7 +91,7 @@ class ManualDb extends Db
 		return false;
 	}
 
-	public function closeBaskets($distance = 50, $loc = false)
+	public function closeBaskets($distance = 30, $loc = false)
 	{
 		if ($loc === false) {
 			$loc = S::getLocation($this);

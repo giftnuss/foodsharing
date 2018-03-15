@@ -38,7 +38,7 @@ class BasketControl extends Control
 
 	public function find()
 	{
-		$baskets = $this->model->closeBaskets(50);
+		$baskets = $this->model->closeBaskets();
 		$this->view->find($baskets, S::getLocation($this->model));
 	}
 

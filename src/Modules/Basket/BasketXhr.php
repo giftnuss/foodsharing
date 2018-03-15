@@ -251,7 +251,7 @@ class BasketXhr extends Control
 		$xhr = new Xhr();
 
 		if (isset($_GET['choords'])) {
-			if ($basket = $this->model->closeBaskets(50, array(
+			if ($basket = $this->model->closeBaskets(30, array(
 				'lat' => $_GET['choords'][0],
 				'lon' => $_GET['choords'][1]
 			))
