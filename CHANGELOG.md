@@ -64,6 +64,7 @@ as well as modern coding techniques.
 
 ## Features
 - Use of bcrypt as hashing algorithm to store passwords
+- Added fairteiler to be shown by default on the map for not registered users and foodsharers !319 by @valentin.unicorn
 - Removed the working groups from the team->teammember page !262 @BassTii
 - Changed way of gendering in passport from "/" to "_" !251 @D0nPiano
 - auto adding of CH-BOTs, Vienna-BIEBs, and ZH-BIEBs to their working groups. !271 by @peter.toennies
