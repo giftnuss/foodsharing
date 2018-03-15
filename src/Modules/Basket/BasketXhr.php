@@ -251,7 +251,7 @@ class BasketXhr extends Control
 		$xhr = new Xhr();
 
 		if (isset($_GET['choords'])) {
-			if ($basket = $this->model->closeBaskets(50, array(
+			if ($basket = $this->model->closeBaskets(30, array(
 				'lat' => $_GET['choords'][0],
 				'lon' => $_GET['choords'][1]
 			))
@@ -310,7 +310,7 @@ class BasketXhr extends Control
 	{
 		$dia = new XhrDialog();
 
-		$dia->setTitle('Essenskorb von foodsharing.de');
+		$dia->setTitle('Essenskorb von ' . BASE_URL);
 
 		$dia->addContent($this->view->fsBubble($basket));
 		$modal = false;

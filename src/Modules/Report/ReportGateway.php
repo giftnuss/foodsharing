@@ -2,66 +2,51 @@
 
 namespace Foodsharing\Modules\Report;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Core\BaseGateway;
 
-class ReportModel extends Model
+class ReportGateway extends BaseGateway
 {
-	public function addBetriebReport($fsid, $reason_id, $reason, $message, $betrieb_id = 0)
+	public function addBetriebReport($reportedId, $reporterId, $reasonId, $reason, $message, $storeId = 0): int
 	{
-		return $this->insert('
-			INSERT INTO `fs_report`
-			(
-				`foodsaver_id`, 
-				`reporter_id`, 
-				`reporttype`, 
-				`betrieb_id`, 
-				`time`, 
-				`committed`, 
-				`msg`,
-				`tvalue`
-			) 
-			VALUES 
-			(
-				' . $this->intval($fsid) . ',
-				' . $this->intval($this->func->fsId()) . ',
-				' . $this->intval($reason_id) . ',
-				' . $this->intval($betrieb_id) . ',
-				NOW(),
-				0,
-				' . $this->strval($message) . ',
-				' . $this->strval($reason) . '
-			)
-		');
+		return $this->db->insert(
+			'fs_report', [
+			'foodsaver_id' => (int)$reportedId,
+			'reporter_id' => (int)$reporterId,
+			'reporttype' => (int)$reasonId,
+			'betrieb_id' => (int)$storeId,
+			'time' => date('Y-m-d H:i:s'),
+			'committed' => 0,
+			'msg' => strip_tags($message),
+			'tvalue' => strip_tags($reason)
+		]);
 	}
 
-	public function getFoodsaverBetriebe($fsid)
+	public function getFoodsaverBetriebe($fsId): array
 	{
-		return $this->q('
+		return $this->db->fetchAll('
 
 			SELECT 	b.id, b.name
-			FROM 	' . PREFIX . 'betrieb_team t,
-					' . PREFIX . 'betrieb b
+			FROM 	fs_betrieb_team t,
+					fs_betrieb b
 			WHERE 	t.betrieb_id = b.id
-			AND 	t.foodsaver_id = ' . (int)$fsid . '
+			AND 	t.foodsaver_id = ' . (int)$fsId . '
 				
 		');
 	}
 
-	public function delReport($id)
+	public function delReport($id): void
 	{
-		return $this->del('DELETE FROM `' . PREFIX . 'report` WHERE id = ' . (int)$id . ' ');
+		$this->db->delete('fs_report', ['id' => (int)$id]);
 	}
 
-	public function confirmReport($id)
+	public function confirmReport($id): void
 	{
-		return $this->update('
-			UPDATE `' . PREFIX . 'report` SET  committed = 1 WHERE id = ' . (int)$id . ' 
-		');
+		$this->db->update('fs_report', ['committed' => 1], ['id' => $id]);
 	}
 
-	public function getReportedSavers()
+	public function getReportedSavers(): array
 	{
-		return $this->q('
+		return $this->db->fetchAll('
 			SELECT 	fs.name,
 					CONCAT(fs.nachname," (",COUNT(rp.foodsaver_id),")") AS nachname,
 					fs.photo,
@@ -70,8 +55,8 @@ class ReportModel extends Model
 					COUNT(rp.foodsaver_id) AS count,
 					CONCAT("/?page=report&sub=foodsaver&id=",fs.id) AS `href`
 				
-			FROM 	' . PREFIX . 'foodsaver fs,
-					' . PREFIX . 'report rp
+			FROM 	fs_foodsaver fs,
+					fs_report rp
 				
 			WHERE 	rp.foodsaver_id = fs.id
 				
@@ -81,11 +66,11 @@ class ReportModel extends Model
 		');
 	}
 
-	public function getReportStats()
+	public function getReportStats(): array
 	{
-		$ret = $this->qCol('
+		$ret = $this->db->fetchAllValues('
 			SELECT 	COUNT(`id`)
-			FROM 	' . PREFIX . 'report
+			FROM 	fs_report
 			GROUP BY `committed`
 		');
 
@@ -104,21 +89,21 @@ class ReportModel extends Model
 		);
 	}
 
-	public function getReportedSaver($id)
+	public function getReportedSaver($id): ?array
 	{
-		if ($fs = $this->qRow('
+		if ($fs = $this->db->fetch('
 			SELECT 	`id`,
 					`name`,
 					`nachname`,
 					`photo`,
 					sleep_status
 
-			FROM 	`' . PREFIX . 'foodsaver`
+			FROM 	`fs_foodsaver`
 				
 			WHERE 	id = ' . (int)$id . '
 		')
 		) {
-			$fs['reports'] = $this->q('
+			$fs['reports'] = $this->db->fetchAll('
 
 				SELECT 
 					r.id,
@@ -136,13 +121,13 @@ class ReportModel extends Model
 					
           
 				FROM
-	            	`' . PREFIX . 'report` r
+	            	`fs_report` r
 					
 	         	LEFT JOIN
-	            	`' . PREFIX . 'foodsaver` fs ON r.foodsaver_id = fs.id 
+	            	`fs_foodsaver` fs ON r.foodsaver_id = fs.id 
 					
 				LEFT JOIN
-	            	`' . PREFIX . 'foodsaver` rp ON r.reporter_id = rp.id 
+	            	`fs_foodsaver` rp ON r.reporter_id = rp.id 
 				
 				WHERE
 					r.foodsaver_id = ' . (int)$id . '
@@ -158,11 +143,13 @@ class ReportModel extends Model
 
 			return $fs;
 		}
+
+		return null;
 	}
 
-	public function getReport($id)
+	public function getReport($id): ?array
 	{
-		$report = $this->qRow('
+		$report = $this->db->fetch('
 			SELECT 
 				r.id,
             	r.`msg`,
@@ -186,30 +173,31 @@ class ReportModel extends Model
 				
           
 			FROM
-            	`' . PREFIX . 'report` r
+            	`fs_report` r
 				
          	LEFT JOIN
-            	`' . PREFIX . 'foodsaver` fs ON r.foodsaver_id = fs.id 
+            	`fs_foodsaver` fs ON r.foodsaver_id = fs.id 
 				
 			LEFT JOIN
-            	`' . PREFIX . 'foodsaver` rp ON r.reporter_id = rp.id 
+            	`fs_foodsaver` rp ON r.reporter_id = rp.id 
 
 			WHERE
 				r.`id` = ' . (int)$id . '
 		');
+		if (!$report) {
+			return null;
+		}
 
-		if ($report['betrieb_id'] > 0) {
-			if ($betrieb = $this->qRow('SELECT id, name FROM ' . PREFIX . 'betrieb WHERE id = ' . (int)$report['betrieb_id'])) {
-				$report['betrieb'] = $betrieb;
-			}
+		if ($report['betrieb_id'] > 0 && $betrieb = $this->db->fetch('SELECT id, name FROM fs_betrieb WHERE id = ' . (int)$report['betrieb_id'])) {
+			$report['betrieb'] = $betrieb;
 		}
 
 		return $report;
 	}
 
-	public function getReports($committed = '0')
+	public function getReports($committed = '0'): array
 	{
-		$ret = $this->q('
+		$ret = $this->db->fetchAll('
 			SELECT 
 				r.id,
             	r.`msg`,
@@ -233,16 +221,16 @@ class ReportModel extends Model
 				b.name AS b_name
 				
 			FROM
-            	`' . PREFIX . 'report` r
+            	`fs_report` r
 				
          	LEFT JOIN
-            	`' . PREFIX . 'foodsaver` fs ON r.foodsaver_id = fs.id 
+            	`fs_foodsaver` fs ON r.foodsaver_id = fs.id 
 				
 			LEFT JOIN
-            	`' . PREFIX . 'foodsaver` rp ON r.reporter_id = rp.id 
+            	`fs_foodsaver` rp ON r.reporter_id = rp.id 
 
 			LEFT JOIN
- 				`' . PREFIX . 'bezirk` b on fs.bezirk_id=b.id
+ 				`fs_bezirk` b ON fs.bezirk_id=b.id
 			
 			WHERE
 				r.committed = ' . $committed . '

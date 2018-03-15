@@ -25,25 +25,25 @@ class StatsControl extends ConsoleControl
 				$bar->update($i);
 
 				$stat_gerettet = $this->model->getGerettet($fsid);
-				$stat_fetchcount = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM ' . PREFIX . 'abholer WHERE foodsaver_id = ' . (int)$fsid . ' AND `date` < NOW()');
-				$stat_post = (int)$this->model->qOne('SELECT COUNT(id) FROM ' . PREFIX . 'theme_post WHERE foodsaver_id = ' . (int)$fsid);
-				$stat_post += (int)$this->model->qOne('SELECT COUNT(id) FROM ' . PREFIX . 'wallpost WHERE foodsaver_id = ' . (int)$fsid);
-				$stat_post += (int)$this->model->qOne('SELECT COUNT(id) FROM ' . PREFIX . 'betrieb_notiz WHERE foodsaver_id = ' . (int)$fsid);
+				$stat_fetchcount = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM fs_abholer WHERE foodsaver_id = ' . (int)$fsid . ' AND `date` < NOW()');
+				$stat_post = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_theme_post WHERE foodsaver_id = ' . (int)$fsid);
+				$stat_post += (int)$this->model->qOne('SELECT COUNT(id) FROM fs_wallpost WHERE foodsaver_id = ' . (int)$fsid);
+				$stat_post += (int)$this->model->qOne('SELECT COUNT(id) FROM fs_betrieb_notiz WHERE foodsaver_id = ' . (int)$fsid);
 
-				$stat_bananacount = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM ' . PREFIX . 'rating WHERE `ratingtype` = 2 AND foodsaver_id = ' . (int)$fsid);
+				$stat_bananacount = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM fs_rating WHERE `ratingtype` = 2 AND foodsaver_id = ' . (int)$fsid);
 
-				$stat_buddycount = (int)$this->model->qone('SELECT COUNT(foodsaver_id) FROM ' . PREFIX . 'buddy WHERE foodsaver_id = ' . (int)$fsid . ' AND confirmed = 1');
+				$stat_buddycount = (int)$this->model->qone('SELECT COUNT(foodsaver_id) FROM fs_buddy WHERE foodsaver_id = ' . (int)$fsid . ' AND confirmed = 1');
 
 				$stat_fetchrate = 100;
 
-				$count_not_fetch = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM ' . PREFIX . 'rating WHERE `ratingtype` = 3 AND foodsaver_id = ' . (int)$fsid);
+				$count_not_fetch = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM fs_rating WHERE `ratingtype` = 3 AND foodsaver_id = ' . (int)$fsid);
 
 				if ($count_not_fetch > 0 && $stat_fetchcount >= $count_not_fetch) {
 					$stat_fetchrate = round(100 - ($count_not_fetch / ($stat_fetchcount / 100)), 2);
 				}
 
 				$this->model->update('
-						UPDATE ' . PREFIX . 'foodsaver
+						UPDATE fs_foodsaver
 		
 						SET 	stat_fetchweight = ' . $this->model->floatval($stat_gerettet) . ',
 						stat_fetchcount = ' . $this->model->intval($stat_fetchcount) . ',

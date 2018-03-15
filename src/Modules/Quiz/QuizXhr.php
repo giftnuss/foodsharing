@@ -413,7 +413,7 @@ class QuizXhr extends Control
 	public function quizpopup()
 	{
 		if (S::may('fs')) {
-			$count = (int)$this->model->qOne('SELECT COUNT(id) FROM ' . PREFIX . 'quiz_session WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND quiz_id = ' . (int)S::get('hastodoquiz-id') . ' AND `status` = 1');
+			$count = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND quiz_id = ' . (int)S::get('hastodoquiz-id') . ' AND `status` = 1');
 			if ($count == 0) {
 				$dia = new XhrDialog();
 				$dia->addOpt('width', 720);

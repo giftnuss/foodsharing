@@ -1,8 +1,8 @@
 #team-user {
-	background-color: #ffffff;
-	padding: 30px;
-	margin-top: 50px;
-	margin-bottom: 50px;
+    background-color: #ffffff;
+    padding: 30px;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 
 #team-user h1 {
@@ -23,31 +23,31 @@
 }
 
 #team-user .subtitle {
-	margin-bottom: 30px;
-	font-size: 12px;
+    margin-bottom: 30px;
+    font-size: 12px;
 }
 
 #team-socials li {
-	border-radius: 6px;
-	font-size: 16px;
-	display: inline-block;
+    border-radius: 6px;
+    font-size: 16px;
+    display: inline-block;
 }
 
 #team-list {
-	display: block;
-	text-align: center;
+    display: block;
+    text-align: center;
 }
 
 #team-list li {
-	width: 28%;
-	margin: 80px 24px;
-	display: inline-block;
+    width: 28%;
+    margin: 80px 24px;
+    display: inline-block;
 }
 
 #team-list li a {
-	background-color: #ffffff;
-	padding: 20px;
-	text-align: center;
+    background-color: #ffffff;
+    padding: 20px;
+    text-align: center;
 }
 
 #team-list li a:hover {
@@ -67,7 +67,7 @@
 }
 
 #team-list h3 {
-	font-size: 16px;
+    font-size: 16px;
 }
 
 #team-list .subtitle {
@@ -78,29 +78,29 @@
 }
 
 #team-list .img, #team-user .img {
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 
-	border: 4px solid #533a24;
+    border: 4px solid #533a24;
 
-	display: inline-block;
-	height: 150px;
-	margin-bottom: 15px;
-	margin-top: -100px;
-	width: 150px;
+    display: inline-block;
+    height: 150px;
+    margin-bottom: 15px;
+    margin-top: -100px;
+    width: 150px;
 }
 
 #team-list .img {
-	border-radius: 150px;
+    border-radius: 150px;
 }
 
 #team-user .img {
-	border-radius: 50px;
-	float: right;
-	height: 250px;
-	width: 200px;
+    border-radius: 50px;
+    float: right;
+    height: 250px;
+    width: 200px;
 }
 
 #team-list a:hover .img {
@@ -117,7 +117,7 @@
 }
 
 #team-user .foot {
-	margin: 30px -30px -30px -30px;
+    margin: 30px -30px -30px -30px;
 }
 
 #team-list a:hover .foot {
@@ -135,11 +135,11 @@
 }
 
 #team-list a:hover .foot i:hover, #team-user .foot a:hover i {
-	opacity: 0.8;
+    opacity: 0.8;
 }
 
 .foot i > span {
-	display: none !important;
+    display: none !important;
 }
 
 .foot i {
@@ -157,27 +157,27 @@
 }
 
 .tox-popup .tox-id {
-	width: 100%;
-	padding: 6px;
-	border: 1px solid #f5f5b5;
-	border-radius: 6px;
-	color: black;
-	text-align: center;
-	margin-bottom: 15px;
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #f5f5b5;
+    border-radius: 6px;
+    color: black;
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 @media all and (max-width: 980px) {
-	#team-list li {
-		width: 42%;
-		margin: 80px 24px;
-		display: inline-block;
-	}
+    #team-list li {
+        width: 42%;
+        margin: 80px 24px;
+        display: inline-block;
+    }
 }
 
 @media all and (max-width: 700px) {
-	#team-list li {
-		width: 100%;
-		margin: 80px 0;
-		display: block;
-	}
+    #team-list li {
+        width: 100%;
+        margin: 80px 0;
+        display: block;
+    }
 }

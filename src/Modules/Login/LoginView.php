@@ -132,7 +132,7 @@ class LoginView extends View
 							</div>
 							<div class="element-wrapper">
 								<h4>' . $rechtsvereinbarung['title'] . '</h4>
-								<a href="http://wiki.lebensmittelretten.de/Rechtsvereinbarung" target="_blank">Hier klicken</a> um unsere <a href="http://wiki.lebensmittelretten.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> in einem neuen Fenster zu &ouml;ffen
+								<a href="https://wiki.foodsharing.de/Rechtsvereinbarung" target="_blank">Hier klicken</a> um unsere <a href="https://wiki.foodsharing.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> in einem neuen Fenster zu &ouml;ffen
 							</div>
 							<label><input id="join_legal1" type="checkbox" name="join_legal1" value="1" /> ' . $this->func->s('have_read_the_legal_stuff1') . '</label><br />
 							<label><input id="join_legal2" type="checkbox" name="join_legal2" value="1" /> ' . $this->func->s('have_read_the_legal_stuff2') . '</label><br />

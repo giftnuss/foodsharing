@@ -11,17 +11,14 @@ define('DB_HOST','localhost');
 define('DB_USER','root');
 define('DB_PASS','pw');
 define('DB_DB','lmr2');
-define('PREFIX','fs_');
 define('ERROR_REPORT',E_ALL);
 define('BASE_URL', $protocol . '//lmr.local/');
-define('URL_INTERN',$protocol . '://lmr.local/freiwillige/');
 define('DEFAULT_EMAIL','noreply@lebensmittelretten.de');
 define('DEFAULT_EMAIL_NAME','Foodsharing Freiwillige');
 define('VERSION','0.8.1');
 define('EMAIL_PUBLIC', 'info@lebensmittelretten.de');
 define('EMAIL_PUBLIC_NAME','Foodsharing Freiwillige');
-define('DEFAULT_HOST','lebensmittelretten.de');
-define('API_ID','c1d9a69515d63194b4329a5359a4c40a'); // foodsharing api key
+define('DEFAULT_EMAIL_HOST','lebensmittelretten.de');
 define('SENTRY_URL', 'https://86ebe01df0e54f0680eeea01b7f81d26:2480ce812a464ed6a3e312fcb3793cc8@sentry.io/218135'); // sentry api key, optional
 
 define('SMTP_HOST','');

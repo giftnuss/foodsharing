@@ -15,7 +15,7 @@ class ContentModel extends Model
 				`answer`
 
 			FROM 
-				' . PREFIX . 'faq
+				fs_faq
 				
 			WHERE 
 				`faq_kategorie_id` IN(' . implode(',', $cat_ids) . ')

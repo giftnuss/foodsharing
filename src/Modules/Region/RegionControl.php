@@ -308,7 +308,7 @@ class RegionControl extends Control
 							$this->func->tplMail(19, $f['email'], array(
 								'anrede' => $this->func->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 								'name' => $f['name'],
-								'link' => 'http://www.' . DEFAULT_HOST . '/?page=bezirk&bid=' . $this->bezirk_id . '&sub=' . $this->getSub() . '&tid=' . (int)$_POST['thread'] . '&pid=' . $post_id . '#post' . $post_id,
+								'link' => BASE_URL . '/?page=bezirk&bid=' . $this->bezirk_id . '&sub=' . $this->getSub() . '&tid=' . (int)$_POST['thread'] . '&pid=' . $post_id . '#post' . $post_id,
 								'theme' => $theme,
 								'post' => $body,
 								'poster' => $poster
@@ -400,7 +400,7 @@ class RegionControl extends Control
 					'bezirk' => $this->bezirk['name'],
 					'poster' => $poster,
 					'thread' => $theme['name'],
-					'link' => 'http://www.' . DEFAULT_HOST . '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=forum&tid=' . (int)$theme_id
+					'link' => BASE_URL . '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=forum&tid=' . (int)$theme_id
 				);
 			}
 
@@ -417,7 +417,7 @@ class RegionControl extends Control
 		$body = $this->model->getVal('body', 'theme_post', $theme['last_post_id']);
 
 		$poster = $this->model->getVal('name', 'foodsaver', $theme['foodsaver_id']);
-		$link = URL_INTERN . '/?page=bezirk&bid=' . $this->bezirk_id . '&sub=' . $this->getSub() . '&tid=' . $theme_id;
+		$link = BASE_URL . '/?page=bezirk&bid=' . $this->bezirk_id . '&sub=' . $this->getSub() . '&tid=' . $theme_id;
 
 		if ($this->bot_theme == 1) {
 			$foodsaver = $this->model->getBotschafter($this->bezirk_id);
@@ -451,12 +451,12 @@ class RegionControl extends Control
 
 			if ($this->bot_theme == 1) {
 				$this->tplMailList(13, $foodsaver, array(
-					'email' => 'noreply@' . DEFAULT_HOST,
+					'email' => 'noreply@' . DEFAULT_EMAIL_HOST,
 					'email_name' => EMAIL_PUBLIC_NAME
 				));
 			} else {
 				$this->tplMailList(12, $foodsaver, array(
-					'email' => 'noreply@' . DEFAULT_HOST,
+					'email' => 'noreply@' . DEFAULT_EMAIL_HOST,
 					'email_name' => EMAIL_PUBLIC_NAME
 				));
 			}

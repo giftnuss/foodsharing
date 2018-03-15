@@ -53,7 +53,7 @@ class EmailControl extends Control
 
 		$boxes = $this->mbmodel->getBoxes();
 		foreach ($boxes as $key => $b) {
-			$boxes[$key]['name'] = $b['name'] . '@' . DEFAULT_HOST;
+			$boxes[$key]['name'] = $b['name'] . '@' . DEFAULT_EMAIL_HOST;
 		}
 		$this->func->addContent($this->v_utils->v_form('Nachrichten Verteiler', array(
 			$this->v_utils->v_field(
@@ -130,7 +130,7 @@ class EmailControl extends Control
 				} elseif ($data['recip_choose'] == 'newsletter_only_foodsharer') {
 					$foodsaver = $this->model->q('
 						SELECT 	`id`,`email`
-						FROM `' . PREFIX . 'foodsaver`
+						FROM `fs_foodsaver`
 						WHERE newsletter = 1 AND rolle = 0 AND `active` = 1 AND deleted_at IS NULL
 					');
 				} elseif ($data['recip_choose'] == 'all_no_botschafter') {
@@ -227,8 +227,8 @@ class EmailControl extends Control
 
 		$recip = $this->model->qCol('
 			SELECT 	CONCAT(fs.name," ",fs.nachname)
-			FROM 	`' . PREFIX . 'email_status` e,
-					`' . PREFIX . 'foodsaver` fs
+			FROM 	`fs_email_status` e,
+					`fs_foodsaver` fs
 			WHERE 	e.foodsaver_id = fs.id
 			AND 	e.email_id = ' . $mail['id'] . '
 		');

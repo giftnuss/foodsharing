@@ -12,7 +12,7 @@ class TeamGateway extends BaseGateway
 		$orgas = $this->db->fetchAll('
 				SELECT 
 					fs.id, 
-					CONCAT(mb.name,"@' . DEFAULT_HOST . '") AS email, 
+					CONCAT(mb.name,"@' . DEFAULT_EMAIL_HOST . '") AS email, 
 					fs.name,
 					fs.nachname,
 					fs.photo,

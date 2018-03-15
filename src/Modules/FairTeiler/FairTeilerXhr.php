@@ -41,7 +41,7 @@ class FairTeilerXhr extends Control
 						foreach ($attach['image'] as $img) {
 							$body .= '
 							<div>
-								<img src="http://www.' . DEFAULT_HOST . '/images/wallpost/medium_' . $img['file'] . '" />
+								<img src="' . BASE_URL . '/images/wallpost/medium_' . $img['file'] . '" />
 							</div>';
 						}
 					}
@@ -49,7 +49,7 @@ class FairTeilerXhr extends Control
 
 				foreach ($follower as $f) {
 					$this->func->tplMail(18, $f['email'], array(
-						'link' => 'http://www.lebensmittelretten.de/?page=fairteiler&sub=ft&id=' . (int)$_GET['fid'],
+						'link' => BASE_URL . '/?page=fairteiler&sub=ft&id=' . (int)$_GET['fid'],
 						'name' => $f['name'],
 						'anrede' => $this->func->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 						'fairteiler' => $ft['name'],

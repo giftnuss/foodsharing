@@ -12,21 +12,21 @@ class EmailTemplateAdminModel extends Model
 			SELECT 	 	`id`,
 						`name`
 			
-			FROM 		`' . PREFIX . 'message_tpl`
+			FROM 		`fs_message_tpl`
 			ORDER BY  	`name`');
 	}
 
 	public function del_message_tpl($id)
 	{
 		return $this->del('
-			DELETE FROM 	`' . PREFIX . 'message_tpl`
+			DELETE FROM 	`fs_message_tpl`
 			WHERE 			`id` = ' . $this->intval($id));
 	}
 
 	public function update_message_tpl($id, $data)
 	{
 		return $this->update('
-		UPDATE 	`' . PREFIX . 'message_tpl`
+		UPDATE 	`fs_message_tpl`
 
 		SET 	`language_id` =  ' . $this->intval($data['language_id']) . ',
 				`name` =  ' . $this->strval($data['name']) . ',

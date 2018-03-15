@@ -10,8 +10,20 @@
 
 ## Refactoring
 - complete tidying up of all team related files !321 by @peter.toennies
+- replaced the PREFIX keyword in the whole source !339 #421 by peter.toennies
+- refactored and cleaned the whole reports module. !335 by @peter.toennies
 
 ## Dev/Test/CI stuff
+# 2018-03-14 Hotfix for 2018-02-28
+- Events can be accepted or denied by non event admins again. !342 #418 by @NerdyProjects
+# Not Released
+
+## Bugfixes
+- fixed disabled unsubscription of forum posts for fair-teiler responsibles. !331 #317 by @peter.toennies
+# Not Released
+
+## Features
+- decreased distance to "close baskets" from 50 to 30 km. !332 #338 by @peter.toennies
 
 # 2018-03-05
 - remove ability for ambassador to add any foodsaver to his/her district !328 #405 by @k.miklobusec and @peter.toennies
@@ -20,6 +32,7 @@
 
 ## Refactoring
 - Database multi-row query methods return empty array instead of false on no result !327 @NerdyProjects
+- Cleaned up usage of some configuration constants !326 @NerdyProjects
 
 # 2018-03-01
 ## Hotfixes 2018-03-04
@@ -52,6 +65,7 @@ as well as modern coding techniques.
 
 ## Features
 - Use of bcrypt as hashing algorithm to store passwords
+- Added fairteiler to be shown by default on the map for not registered users and foodsharers !319 by @valentin.unicorn
 - Removed the working groups from the team->teammember page !262 @BassTii
 - Changed way of gendering in passport from "/" to "_" !251 @D0nPiano
 - auto adding of CH-BOTs, Vienna-BIEBs, and ZH-BIEBs to their working groups. !271 by @peter.toennies

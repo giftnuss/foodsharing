@@ -25,7 +25,7 @@ class LoginControl extends Control
 		$this->func->addTitle('Newsletter Abmeldung');
 		$this->func->addBread('Newsletter Abmeldung');
 		if (isset($_GET['e']) && $this->func->validEmail($_GET['e'])) {
-			$this->model->update('UPDATE `' . PREFIX . "foodsaver` SET newsletter=0 WHERE email='" . $this->model->safe($_GET['e']) . "'");
+			$this->model->update('UPDATE `fs_' . "foodsaver` SET newsletter=0 WHERE email='" . $this->model->safe($_GET['e']) . "'");
 			$this->func->addContent($this->v_utils->v_info('Du wirst nun keine weiteren Newsletter von uns erhalten', 'Erfolg!'));
 		}
 	}
@@ -75,7 +75,7 @@ class LoginControl extends Control
 				$_SESSION['mob'] = 1;
 			}
 
-			if ((isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], URL_INTERN) !== false) || isset($_GET['logout'])) {
+			if ((isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], BASE_URL) !== false) || isset($_GET['logout'])) {
 				if (isset($_GET['ref'])) {
 					$this->func->go(urldecode($_GET['ref']));
 				}

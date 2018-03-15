@@ -92,7 +92,7 @@ class FoodsaverControl extends Control
 			$foodsaver = $this->model->getValues(array('email', 'name', 'nachname', 'bezirk_id'), 'foodsaver', $id);
 
 			$this->model->del_foodsaver($id);
-			$this->func->info('Foodsaver ' . $foodsaver['name'] . ' ' . $foodsaver['nachname'] . ' wurde gelöscht, für die Wiederherstellung wende Dich an it@lebensmittelretten.de');
+			$this->func->info('Foodsaver ' . $foodsaver['name'] . ' ' . $foodsaver['nachname'] . ' wurde gelöscht, für die Wiederherstellung wende Dich an ' . SUPPORT_EMAIL);
 			$this->func->go('/?page=dashboard');
 		}
 	}

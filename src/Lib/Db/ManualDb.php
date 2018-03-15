@@ -12,7 +12,7 @@ class ManualDb extends Db
 			SELECT 	 	`id`,
 						`name`
 
-			FROM 		`' . PREFIX . 'content`
+			FROM 		`fs_content`
 			ORDER BY `name`');
 	}
 
@@ -26,7 +26,7 @@ class ManualDb extends Db
 			`body`,
 			`last_mod`
 
-			FROM 		`' . PREFIX . 'content`
+			FROM 		`fs_content`
 
 			WHERE 		`id` = ' . $this->intval($id));
 
@@ -71,7 +71,7 @@ class ManualDb extends Db
 		if ($ret = $this->q('
 
 			SELECT 	n.id, n.milestone, n.`text` , n.`zeit` AS update_time, UNIX_TIMESTAMP( n.`zeit` ) AS update_time_ts, fs.name AS foodsaver_name, fs.sleep_status, fs.id AS foodsaver_id, fs.photo AS foodsaver_photo, b.id AS betrieb_id, b.name AS betrieb_name
-			FROM 	' . PREFIX . 'betrieb_notiz n, ' . PREFIX . 'foodsaver fs, ' . PREFIX . 'betrieb b, ' . PREFIX . 'betrieb_team bt
+			FROM 	fs_betrieb_notiz n, fs_foodsaver fs, fs_betrieb b, fs_betrieb_team bt
 
 			WHERE 	n.foodsaver_id = fs.id
 			AND 	n.betrieb_id = b.id
@@ -91,7 +91,7 @@ class ManualDb extends Db
 		return false;
 	}
 
-	public function closeBaskets($distance = 50, $loc = false)
+	public function closeBaskets($distance = 30, $loc = false)
 	{
 		if ($loc === false) {
 			$loc = S::getLocation($this);
@@ -143,10 +143,10 @@ class ManualDb extends Db
 						t.last_post_id,
 						bt.bezirk_id
 
-			FROM 		' . PREFIX . 'theme t,
-						' . PREFIX . 'theme_post p,
-						' . PREFIX . 'bezirk_has_theme bt,
-						' . PREFIX . 'foodsaver fs
+			FROM 		fs_theme t,
+						fs_theme_post p,
+						fs_bezirk_has_theme bt,
+						fs_foodsaver fs
 
 			WHERE 		t.last_post_id = p.id
 			AND 		p.foodsaver_id = fs.id
@@ -181,10 +181,10 @@ class ManualDb extends Db
 						t.last_post_id,
 						bt.bezirk_id
 
-			FROM 		' . PREFIX . 'theme t,
-						' . PREFIX . 'theme_post p,
-						' . PREFIX . 'bezirk_has_theme bt,
-						' . PREFIX . 'foodsaver fs
+			FROM 		fs_theme t,
+						fs_theme_post p,
+						fs_bezirk_has_theme bt,
+						fs_foodsaver fs
 
 			WHERE 		t.last_post_id = p.id
 			AND 		p.foodsaver_id = fs.id
@@ -236,7 +236,7 @@ class ManualDb extends Db
 	{
 		return $this->qCol('
 			SELECT 	`bezirk_id`
-			FROM 	`' . PREFIX . 'foodsaver_has_bezirk`
+			FROM 	`fs_foodsaver_has_bezirk`
 			WHERE 	`foodsaver_id` = ' . (int)$foodsaver_id . '
 		');
 	}
@@ -260,7 +260,7 @@ class ManualDb extends Db
 	public function add_message_tpl($data)
 	{
 		$id = $this->insert('
-			INSERT INTO 	`' . PREFIX . 'message_tpl`
+			INSERT INTO 	`fs_message_tpl`
 			(
 			`language_id`,
 			`name`,
@@ -280,7 +280,7 @@ class ManualDb extends Db
 
 	public function getAbholzeiten($betrieb_id)
 	{
-		if ($res = $this->q('SELECT `time`,`dow`,`fetcher` FROM `' . PREFIX . 'abholzeiten` WHERE `betrieb_id` = ' . (int)$betrieb_id)) {
+		if ($res = $this->q('SELECT `time`,`dow`,`fetcher` FROM `fs_abholzeiten` WHERE `betrieb_id` = ' . (int)$betrieb_id)) {
 			$out = array();
 			foreach ($res as $r) {
 				$out[$r['dow'] . '-' . $r['time']] = array(
@@ -300,14 +300,14 @@ class ManualDb extends Db
 
 	public function getFaqIntern()
 	{
-		return $this->q('SELECT `id`, `answer`, `name` FROM `' . PREFIX . 'faq`');
+		return $this->q('SELECT `id`, `answer`, `name` FROM `fs_faq`');
 	}
 
 	public function getFsMap($bezirk_id)
 	{
 		$bezirk_id = (int)$bezirk_id;
 		if ($bezirk_id > 0) {
-			return $this->q('SELECT `id`,`lat`,`lon`,CONCAT(`name`," ",`nachname`) AS `name`,`plz`,`stadt`,`anschrift`,`photo` FROM `' . PREFIX . 'foodsaver` WHERE `active` = 1 AND `bezirk_id` = ' . $this->intval($bezirk_id) . ' AND `lat` != "" ');
+			return $this->q('SELECT `id`,`lat`,`lon`,CONCAT(`name`," ",`nachname`) AS `name`,`plz`,`stadt`,`anschrift`,`photo` FROM `fs_foodsaver` WHERE `active` = 1 AND `bezirk_id` = ' . $this->intval($bezirk_id) . ' AND `lat` != "" ');
 		}
 	}
 
@@ -329,7 +329,7 @@ class ManualDb extends Db
 		}
 
 		if (S::may('fs')) {
-			if ($res = $this->searchTable('bezirk', array('name'), $q, array(
+			if ($res = $this->searchTable('fs_bezirk', array('name'), $q, array(
 				'name' => '`name`',
 				'click' => 'CONCAT("goTo(\'/?page=bezirk&bid=",`id`,"\');")',
 				'teaser' => 'CONCAT("")'
@@ -340,7 +340,7 @@ class ManualDb extends Db
 		}
 
 		if (S::may('fs')) {
-			if ($res = $this->searchTable('foodsaver', array('name', 'nachname', 'plz', 'stadt'), $q, array(
+			if ($res = $this->searchTable('fs_foodsaver', array('name', 'nachname', 'plz', 'stadt'), $q, array(
 				'name' => 'CONCAT(`name`," ",`nachname`)',
 				'click' => 'CONCAT("profile(",`id`,");")',
 				'teaser' => 'stadt'
@@ -350,7 +350,7 @@ class ManualDb extends Db
 			}
 		}
 		if (S::may('fs')) {
-			if ($res = $this->searchTable('betrieb', array('name', 'stadt', 'plz'), $q, array(
+			if ($res = $this->searchTable('fs_betrieb', array('name', 'stadt', 'plz'), $q, array(
 				'name' => '`name`',
 				'click' => 'CONCAT("betrieb(",`id`,");")',
 				'teaser' => 'CONCAT(`str`,", ",`plz`," ",`stadt`)'
@@ -393,7 +393,7 @@ class ManualDb extends Db
 					 ' . $show['teaser'] . ' AS teaser
 
 
-			FROM 	' . PREFIX . $table . '
+			FROM 	' . $table . '
 
 			WHERE ' . $fsql . ' LIKE ' . implode(' AND ' . $fsql . ' LIKE ', $terms) . '
 			' . $fs_sql . '
@@ -404,7 +404,7 @@ class ManualDb extends Db
 
 	public function passGen($fsid)
 	{
-		return $this->sql('INSERT INTO `' . PREFIX . 'pass_gen`(`foodsaver_id`,`date`,`bot_id`)VALUES(' . $this->intval($fsid) . ',NOW(),' . $this->func->fsId() . ')');
+		return $this->sql('INSERT INTO `fs_pass_gen`(`foodsaver_id`,`date`,`bot_id`)VALUES(' . $this->intval($fsid) . ',NOW(),' . $this->func->fsId() . ')');
 	}
 
 	public function getFsAutocomplete($bezirk_id)
@@ -426,8 +426,8 @@ class ManualDb extends Db
 			SELECT 		fs.id,
 						CONCAT(fs.`name`, " ", fs.`nachname`) AS `value`
 
-			FROM 		' . PREFIX . 'foodsaver_has_bezirk fb,
-						`' . PREFIX . 'foodsaver` fs
+			FROM 		fs_foodsaver_has_bezirk fb,
+						`fs_foodsaver` fs
 
 			WHERE 		fb.foodsaver_id = fs.id
 			AND			fs.deleted_at IS NULL
@@ -461,8 +461,8 @@ class ManualDb extends Db
 						fs.`plz`,
 						fs.`geschlecht`
 
-			FROM 		' . PREFIX . 'foodsaver_has_bezirk fb,
-						`' . PREFIX . 'foodsaver` fs
+			FROM 		fs_foodsaver_has_bezirk fb,
+						`fs_foodsaver` fs
 
 			WHERE 		fb.foodsaver_id = fs.id
 			AND			fs.deleted_at IS NULL
@@ -475,7 +475,7 @@ class ManualDb extends Db
 		return $this->q('
 			SELECT 		bt.foodsaver_id as id
 
-			FROM 		' . PREFIX . 'betrieb_team bt
+			FROM 		fs_betrieb_team bt
 
 			WHERE 	bt.verantwortlich = 1 AND
 			active = 1 AND
@@ -499,7 +499,7 @@ class ManualDb extends Db
 				`type`,
 				`master`
 
-			FROM 		`' . PREFIX . 'bezirk`
+			FROM 		`fs_bezirk`
 
 			WHERE 		`parent_id` = ' . $this->intval($parent_id) . '
 			AND id != 0
@@ -514,8 +514,8 @@ class ManualDb extends Db
 			SELECT 	fs.`id`,
 					fs.`email`
 
-			FROM 	`' . PREFIX . 'foodsaver` fs,
-					`' . PREFIX . 'betrieb_team` bt
+			FROM 	`fs_foodsaver` fs,
+					`fs_betrieb_team` bt
 
 			WHERE 	bt.foodsaver_id = fs.id
 
@@ -546,7 +546,7 @@ class ManualDb extends Db
 
 		return $this->q('
 				SELECT 	`id`,`email`
-				FROM `' . PREFIX . 'foodsaver`
+				FROM `fs_foodsaver`
 				' . $where . ' AND active = 1
 				AND	deleted_at IS NULL
 		');
@@ -555,7 +555,7 @@ class ManualDb extends Db
 	public function add_content($data)
 	{
 		$id = $this->insert('
-			INSERT INTO 	`' . PREFIX . 'content`
+			INSERT INTO 	`fs_content`
 			(
 			`name`,
 			`title`,
@@ -576,7 +576,7 @@ class ManualDb extends Db
 	public function update_content($id, $data)
 	{
 		return $this->update('
-		UPDATE 	`' . PREFIX . 'content`
+		UPDATE 	`fs_content`
 
 		SET 	`name` =  ' . $this->strval($data['name']) . ',
 				`title` =  ' . $this->strval($data['title']) . ',
@@ -592,7 +592,7 @@ class ManualDb extends Db
 
 		return $this->q('
 				SELECT	`id`,CONCAT(`name`," ",`nachname` ) AS value
-				FROM 	' . PREFIX . 'foodsaver
+				FROM 	fs_foodsaver
 				WHERE 	`bezirk_id` IN(' . implode(',', $this->getChildBezirke($bezirk_id)) . ') AND deleted_at IS NULL');
 	}
 
@@ -602,8 +602,8 @@ class ManualDb extends Db
 				SELECT	DISTINCT fs.`id`,
 						CONCAT(fs.`name`," ",fs.`nachname` ) AS value
 
-				FROM 	' . PREFIX . 'foodsaver fs,
-						' . PREFIX . 'foodsaver_has_bezirk hb
+				FROM 	fs_foodsaver fs,
+						fs_foodsaver_has_bezirk hb
 				WHERE 	hb.foodsaver_id = fs.id
 				AND 	hb.bezirk_id IN(' . implode(',', $this->getBezirkIds()) . ')
 				AND		fs.deleted_at IS NULL
@@ -612,7 +612,7 @@ class ManualDb extends Db
 
 	public function isInTeam($bid)
 	{
-		if ($this->q('SELECT `foodsaver_id` FROM `' . PREFIX . 'betrieb_team` WHERE foodsaver_id = ' . $this->intval($this->func->fsId()) . ' AND betrieb_id = ' . (int)$bid . ' AND active IN(1,2)')) {
+		if ($this->q('SELECT `foodsaver_id` FROM `fs_betrieb_team` WHERE foodsaver_id = ' . $this->intval($this->func->fsId()) . ' AND betrieb_id = ' . (int)$bid . ' AND active IN(1,2)')) {
 			return true;
 		}
 
@@ -639,7 +639,7 @@ class ManualDb extends Db
 				SELECT		`id`,
 							CONCAT_WS(" ", `name`, `nachname`, CONCAT("(", `id`, ")")) AS value
 
-				FROM 		' . PREFIX . 'foodsaver
+				FROM 		fs_foodsaver
 
 				WHERE 		((`name` LIKE "' . $term . '%"
 				OR 			`nachname` LIKE "' . $term . '%"))
@@ -668,7 +668,7 @@ class ManualDb extends Db
 						plz,
 						rolle
 
-				FROM 	`' . PREFIX . 'foodsaver` fs
+				FROM 	`fs_foodsaver` fs
 
 				WHERE 	fs.`id` = ' . $this->intval($id) . ';
 		');
@@ -687,7 +687,7 @@ class ManualDb extends Db
 						`email`,
 						`geschlecht`
 
-				FROM 	`' . PREFIX . 'foodsaver`
+				FROM 	`fs_foodsaver`
 
 				WHERE 	`bezirk_id` IN(' . implode(',', $this->getChildBezirke($bezirk_id)) . ')
 				AND		deleted_at IS NULL
@@ -696,10 +696,10 @@ class ManualDb extends Db
 
 	private function updateHasChildren($bezirk_id)
 	{
-		$count = $this->qOne('SELECT COUNT(`id`) FROM ' . PREFIX . 'bezirk WHERE `parent_id` = ' . $this->intval($bezirk_id) . ' ');
+		$count = $this->qOne('SELECT COUNT(`id`) FROM fs_bezirk WHERE `parent_id` = ' . $this->intval($bezirk_id) . ' ');
 
 		if ($count == 0) {
-			$this->update('UPDATE ' . PREFIX . 'bezirk SET `has_children` = 0 WHERE `id` = ' . $this->intval($bezirk_id) . ' ');
+			$this->update('UPDATE fs_bezirk SET `has_children` = 0 WHERE `id` = ' . $this->intval($bezirk_id) . ' ');
 		}
 	}
 
@@ -708,10 +708,10 @@ class ManualDb extends Db
 		if ($this->func->isOrgaTeam()) {
 			$parent_id = $this->getVal('parent_id', 'bezirk', $id);
 
-			$this->update('UPDATE `' . PREFIX . 'foodsaver` SET `bezirk_id` = NULL WHERE `bezirk_id` = ' . (int)$id);
-			$this->update('UPDATE `' . PREFIX . 'bezirk` SET `parent_id` = 0 WHERE `parent_id` = ' . (int)$id);
+			$this->update('UPDATE `fs_foodsaver` SET `bezirk_id` = NULL WHERE `bezirk_id` = ' . (int)$id);
+			$this->update('UPDATE `fs_bezirk` SET `parent_id` = 0 WHERE `parent_id` = ' . (int)$id);
 
-			$this->del('DELETE FROM `' . PREFIX . 'bezirk` WHERE `id` = ' . (int)$id);
+			$this->del('DELETE FROM `fs_bezirk` WHERE `id` = ' . (int)$id);
 
 			$this->updateHasChildren($parent_id);
 		}
@@ -724,13 +724,13 @@ class ManualDb extends Db
 		$_SESSION['client']['photo'] = $file;
 		$this->update('
 
-		UPDATE `' . PREFIX . 'foodsaver`
+		UPDATE `fs_foodsaver`
 		SET 	`photo` = ' . $this->strval($file) . ' WHERE `id` = ' . $this->intval($fs_id));
 	}
 
 	public function getPhoto($fs_id)
 	{
-		$photo = $this->qOne('SELECT `photo` FROM `' . PREFIX . 'foodsaver` WHERE `id` = ' . $this->intval($fs_id));
+		$photo = $this->qOne('SELECT `photo` FROM `fs_foodsaver` WHERE `id` = ' . $this->intval($fs_id));
 		if (!empty($photo)) {
 			return $photo;
 		}
@@ -770,11 +770,11 @@ class ManualDb extends Db
 				`homepage`
 
 
-			FROM 		`' . PREFIX . 'foodsaver`
+			FROM 		`fs_foodsaver`
 
 			WHERE 		`id` = ' . $this->intval($id));
 
-		if ($bot = $this->q('SELECT `' . PREFIX . 'bezirk`.`name`,`' . PREFIX . 'bezirk`.`id` FROM `' . PREFIX . 'bezirk`,' . PREFIX . 'botschafter WHERE `' . PREFIX . 'botschafter`.`bezirk_id` = `' . PREFIX . 'bezirk`.`id` AND `' . PREFIX . 'botschafter`.foodsaver_id = ' . $this->intval($id))) {
+		if ($bot = $this->q('SELECT `fs_bezirk`.`name`,`fs_bezirk`.`id` FROM `fs_bezirk`,fs_botschafter WHERE `fs_botschafter`.`bezirk_id` = `fs_bezirk`.`id` AND `fs_botschafter`.foodsaver_id = ' . $this->intval($id))) {
 			$out['botschafter'] = $bot;
 		}
 
@@ -783,7 +783,7 @@ class ManualDb extends Db
 
 	public function emailExists($email)
 	{
-		$email = $this->q('SELECT `id` FROM `' . PREFIX . 'foodsaver` WHERE `email` = ' . $this->strval($email));
+		$email = $this->q('SELECT `id` FROM `fs_foodsaver` WHERE `email` = ' . $this->strval($email));
 
 		if (!empty($email)) {
 			return true;
@@ -803,7 +803,7 @@ class ManualDb extends Db
 			`zeit`,
 			UNIX_TIMESTAMP(`zeit`) AS zeit_ts
 
-			FROM 		`' . PREFIX . 'betrieb_notiz`
+			FROM 		`fs_betrieb_notiz`
 
 			WHERE `betrieb_id` = ' . $this->intval($id));
 
@@ -813,7 +813,7 @@ class ManualDb extends Db
 	public function deleteBPost($id)
 	{
 		return $this->del('
-			DELETE FROM 	`' . PREFIX . 'betrieb_notiz`
+			DELETE FROM 	`fs_betrieb_notiz`
 			WHERE `id` = ' . (int)$id . '
 		');
 	}
@@ -830,7 +830,7 @@ class ManualDb extends Db
 					fs.stat_fetchweight,
 					fs.sleep_status
 
-			FROM 	`' . PREFIX . 'foodsaver` fs
+			FROM 	`fs_foodsaver` fs
 
 			WHERE fs.id = ' . (int)$fsid . '
 		')
@@ -849,33 +849,33 @@ class ManualDb extends Db
 	public function getMyBetriebe($options = array())
 	{
 		$betriebe = $this->q('
-			SELECT 	' . PREFIX . 'betrieb.id,
-						`' . PREFIX . 'betrieb`.betrieb_status_id,
-						' . PREFIX . 'betrieb.plz,
-						' . PREFIX . 'betrieb.kette_id,
+			SELECT 	fs_betrieb.id,
+						`fs_betrieb`.betrieb_status_id,
+						fs_betrieb.plz,
+						fs_betrieb.kette_id,
 
-						' . PREFIX . 'betrieb.ansprechpartner,
-						' . PREFIX . 'betrieb.fax,
-						' . PREFIX . 'betrieb.telefon,
-						' . PREFIX . 'betrieb.email,
+						fs_betrieb.ansprechpartner,
+						fs_betrieb.fax,
+						fs_betrieb.telefon,
+						fs_betrieb.email,
 
-						' . PREFIX . 'betrieb.betrieb_kategorie_id,
-						' . PREFIX . 'betrieb.name,
-						CONCAT(' . PREFIX . 'betrieb.str," ",' . PREFIX . 'betrieb.hsnr) AS anschrift,
-						' . PREFIX . 'betrieb.str,
-						' . PREFIX . 'betrieb.hsnr,
-						' . PREFIX . 'betrieb.`betrieb_status_id`,
-						' . PREFIX . 'betrieb_team.verantwortlich,
-						' . PREFIX . 'betrieb_team.active
+						fs_betrieb.betrieb_kategorie_id,
+						fs_betrieb.name,
+						CONCAT(fs_betrieb.str," ",fs_betrieb.hsnr) AS anschrift,
+						fs_betrieb.str,
+						fs_betrieb.hsnr,
+						fs_betrieb.`betrieb_status_id`,
+						fs_betrieb_team.verantwortlich,
+						fs_betrieb_team.active
 
-				FROM 	' . PREFIX . 'betrieb,
-						' . PREFIX . 'betrieb_team
+				FROM 	fs_betrieb,
+						fs_betrieb_team
 
-				WHERE 	' . PREFIX . 'betrieb.id = ' . PREFIX . 'betrieb_team.betrieb_id
+				WHERE 	fs_betrieb.id = fs_betrieb_team.betrieb_id
 
-				AND 	' . PREFIX . 'betrieb_team.foodsaver_id = ' . $this->intval($this->func->fsId()) . '
+				AND 	fs_betrieb_team.foodsaver_id = ' . $this->intval($this->func->fsId()) . '
 
-				ORDER BY ' . PREFIX . 'betrieb_team.verantwortlich DESC, ' . PREFIX . 'betrieb.name ASC
+				ORDER BY fs_betrieb_team.verantwortlich DESC, fs_betrieb.name ASC
 		');
 		$out = array();
 		$out['verantwortlich'] = array();
@@ -928,8 +928,8 @@ class ManualDb extends Db
 							b.`betrieb_status_id`,
 							bz.name AS bezirk_name
 
-					FROM 	' . PREFIX . 'betrieb b,
-							' . PREFIX . 'bezirk bz
+					FROM 	fs_betrieb b,
+							fs_bezirk bz
 
 					WHERE 	b.bezirk_id = bz.id
 					AND 	bezirk_id IN(' . implode(',', $this->getChildBezirke($this->func->getBezirkId())) . ')
@@ -960,7 +960,7 @@ class ManualDb extends Db
 
 				SELECT 	betrieb_id
 
-				FROM 	' . PREFIX . 'betrieb_team
+				FROM 	fs_betrieb_team
 
 				WHERE 	betrieb_id = ' . $this->intval($betrieb_id) . '
 				AND 	foodsaver_id = ' . $this->intval($this->func->fsId()) . '
@@ -975,7 +975,7 @@ class ManualDb extends Db
 
 				SELECT 	betrieb_id
 
-				FROM 	' . PREFIX . 'betrieb_team
+				FROM 	fs_betrieb_team
 
 				WHERE 	betrieb_id = ' . $this->intval($betrieb_id) . '
 				AND 	foodsaver_id = ' . $this->intval($this->func->fsId()) . '
@@ -992,7 +992,7 @@ class ManualDb extends Db
 			$where = 'WHERE bezirk_id = ' . intval($bid);
 		}
 
-		return $this->qCol('SELECT DISTINCT ancestor_id FROM `' . PREFIX . 'bezirk_closure` ' . $where);
+		return $this->qCol('SELECT DISTINCT ancestor_id FROM `fs_bezirk_closure` ' . $where);
 	}
 
 	/**
@@ -1008,7 +1008,7 @@ class ManualDb extends Db
 		$ou = array();
 		$ou[$bid] = $bid;
 
-		if ($out = $this->qCol('SELECT bezirk_id FROM `' . PREFIX . 'bezirk_closure` WHERE ancestor_id = ' . (int)$bid)) {
+		if ($out = $this->qCol('SELECT bezirk_id FROM `fs_bezirk_closure` WHERE ancestor_id = ' . (int)$bid)) {
 			foreach ($out as $o) {
 				$ou[(int)$o] = (int)$o;
 			}
@@ -1022,27 +1022,27 @@ class ManualDb extends Db
 		$sql = '
 		SELECT		`id`,
 					plz,
-					`' . PREFIX . 'betrieb`.bezirk_id,
-					`' . PREFIX . 'betrieb`.kette_id,
-					`' . PREFIX . 'betrieb`.betrieb_kategorie_id,
-					`' . PREFIX . 'betrieb`.name,
-					`' . PREFIX . 'betrieb`.str,
-					`' . PREFIX . 'betrieb`.hsnr,
-					`' . PREFIX . 'betrieb`.stadt,
-					`' . PREFIX . 'betrieb`.lat,
-					`' . PREFIX . 'betrieb`.lon,
-					CONCAT(`' . PREFIX . 'betrieb`.str, " ",`' . PREFIX . 'betrieb`.hsnr) AS anschrift,
-					`' . PREFIX . 'betrieb`.`betrieb_status_id`,
-					`' . PREFIX . 'betrieb`.status_date,
-					`' . PREFIX . 'betrieb`.ansprechpartner,
-					`' . PREFIX . 'betrieb`.telefon,
-					`' . PREFIX . 'betrieb`.email,
-					`' . PREFIX . 'betrieb`.fax,
+					`fs_betrieb`.bezirk_id,
+					`fs_betrieb`.kette_id,
+					`fs_betrieb`.betrieb_kategorie_id,
+					`fs_betrieb`.name,
+					`fs_betrieb`.str,
+					`fs_betrieb`.hsnr,
+					`fs_betrieb`.stadt,
+					`fs_betrieb`.lat,
+					`fs_betrieb`.lon,
+					CONCAT(`fs_betrieb`.str, " ",`fs_betrieb`.hsnr) AS anschrift,
+					`fs_betrieb`.`betrieb_status_id`,
+					`fs_betrieb`.status_date,
+					`fs_betrieb`.ansprechpartner,
+					`fs_betrieb`.telefon,
+					`fs_betrieb`.email,
+					`fs_betrieb`.fax,
 					`kette_id`
 
-		FROM 		`' . PREFIX . 'betrieb`
+		FROM 		`fs_betrieb`
 
-		WHERE 		`' . PREFIX . 'betrieb`.`id` = ' . $this->intval($id) . '';
+		WHERE 		`fs_betrieb`.`id` = ' . $this->intval($id) . '';
 
 		$out = false;
 		if ($out = $this->qRow($sql)) {
@@ -1070,28 +1070,28 @@ class ManualDb extends Db
 		}
 
 		return $this->q('
-				SELECT 	' . PREFIX . 'betrieb.id,
-						`' . PREFIX . 'betrieb`.betrieb_status_id,
-						' . PREFIX . 'betrieb.plz,
+				SELECT 	fs_betrieb.id,
+						`fs_betrieb`.betrieb_status_id,
+						fs_betrieb.plz,
 						`lat`,
 						`lon`,
 						`stadt`,
-						' . PREFIX . 'betrieb.kette_id,
-						' . PREFIX . 'betrieb.betrieb_kategorie_id,
-						' . PREFIX . 'betrieb.name,
-						CONCAT(' . PREFIX . 'betrieb.str," ",' . PREFIX . 'betrieb.hsnr) AS anschrift,
-						' . PREFIX . 'betrieb.str,
-						' . PREFIX . 'betrieb.hsnr,
-						' . PREFIX . 'betrieb.`betrieb_status_id`
+						fs_betrieb.kette_id,
+						fs_betrieb.betrieb_kategorie_id,
+						fs_betrieb.name,
+						CONCAT(fs_betrieb.str," ",fs_betrieb.hsnr) AS anschrift,
+						fs_betrieb.str,
+						fs_betrieb.hsnr,
+						fs_betrieb.`betrieb_status_id`
 
-				FROM 	' . PREFIX . 'betrieb
+				FROM 	fs_betrieb
 
-				WHERE 	' . PREFIX . 'betrieb.bezirk_id = ' . $this->intval($bezirk_id) . '
+				WHERE 	fs_betrieb.bezirk_id = ' . $this->intval($bezirk_id) . '
 
 				AND `lat` != ""
 
 
-				'); // -- AND 	'.PREFIX.'betrieb.bezirk_id = '.$this->intval(1).'
+				');
 	}
 
 	public function getBetriebe($bezirk_id = false)
@@ -1101,24 +1101,24 @@ class ManualDb extends Db
 		}
 
 		return $this->q('
-				SELECT 	' . PREFIX . 'betrieb.id,
-						`' . PREFIX . 'betrieb`.betrieb_status_id,
-						' . PREFIX . 'betrieb.plz,
+				SELECT 	fs_betrieb.id,
+						`fs_betrieb`.betrieb_status_id,
+						fs_betrieb.plz,
 						`stadt`,
-						' . PREFIX . 'betrieb.kette_id,
-						' . PREFIX . 'betrieb.betrieb_kategorie_id,
-						' . PREFIX . 'betrieb.name,
-						CONCAT(' . PREFIX . 'betrieb.str," ",' . PREFIX . 'betrieb.hsnr) AS anschrift,
-						' . PREFIX . 'betrieb.str,
-						' . PREFIX . 'betrieb.hsnr,
-						' . PREFIX . 'betrieb.`betrieb_status_id`
+						fs_betrieb.kette_id,
+						fs_betrieb.betrieb_kategorie_id,
+						fs_betrieb.name,
+						CONCAT(fs_betrieb.str," ",fs_betrieb.hsnr) AS anschrift,
+						fs_betrieb.str,
+						fs_betrieb.hsnr,
+						fs_betrieb.`betrieb_status_id`
 
-				FROM 	' . PREFIX . 'betrieb
+				FROM 	fs_betrieb
 
-				WHERE 	' . PREFIX . 'betrieb.bezirk_id = ' . $this->intval($bezirk_id) . '
+				WHERE 	fs_betrieb.bezirk_id = ' . $this->intval($bezirk_id) . '
 
 
-				'); // -- AND 	'.PREFIX.'betrieb.bezirk_id = '.$this->intval(1).'
+				');
 	}
 
 	public function add_foodsaver($data)
@@ -1130,7 +1130,7 @@ class ManualDb extends Db
 		}
 
 		$id = $this->insert('
-			INSERT INTO 	`' . PREFIX . 'foodsaver`
+			INSERT INTO 	`fs_foodsaver`
 			(
 				`bezirk_id`,
 				`plz`,
@@ -1168,7 +1168,7 @@ class ManualDb extends Db
 			SELECT 	`name`,
 					`message`,
 					`zeit`
-			FROM 	`' . PREFIX . 'send_email`
+			FROM 	`fs_send_email`
 			WHERE 	`foodsaver_id` = ' . (int)$this->func->fsId() . '
 		');
 	}
@@ -1194,96 +1194,96 @@ class ManualDb extends Db
 	public function del_foodsaver($id)
 	{
 		$this->insert('
-			INSERT INTO ' . PREFIX . 'foodsaver_archive
+			INSERT INTO fs_foodsaver_archive
 			(
-				SELECT * FROM ' . PREFIX . 'foodsaver WHERE id = ' . (int)$id . '
+				SELECT * FROM fs_foodsaver WHERE id = ' . (int)$id . '
 			)
 		');
 
 		$this->del('
-            DELETE FROM ' . PREFIX . 'apitoken
+            DELETE FROM fs_apitoken
             WHERE foodsaver_id = ' . (int)$id . '
         ');
 		$this->del('
-            DELETE FROM ' . PREFIX . 'application_has_wallpost
+            DELETE FROM fs_application_has_wallpost
             WHERE application_id = ' . (int)$id . '
         ');
 		$this->del('
-            DELETE FROM ' . PREFIX . 'basket_anfrage
+            DELETE FROM fs_basket_anfrage
             WHERE foodsaver_id = ' . (int)$id . '
         ');
 		$this->del('
-            DELETE FROM ' . PREFIX . 'botschafter
+            DELETE FROM fs_botschafter
             WHERE foodsaver_id = ' . (int)$id . '
         ');
 		$this->del('
-            DELETE FROM ' . PREFIX . 'buddy
+            DELETE FROM fs_buddy
             WHERE foodsaver_id = ' . (int)$id . ' OR buddy_id = ' . (int)$id . '
         ');
 		$this->del('
-            DELETE FROM ' . PREFIX . 'email_status
+            DELETE FROM fs_email_status
             WHERE foodsaver_id = ' . (int)$id . '
         ');
 		$this->del('
-            DELETE FROM ' . PREFIX . 'fairteiler_follower
+            DELETE FROM fs_fairteiler_follower
             WHERE foodsaver_id = ' . (int)$id . '
         ');
 		$this->del('
-            DELETE FROM ' . PREFIX . 'foodsaver_has_bell
+            DELETE FROM fs_foodsaver_has_bell
             WHERE foodsaver_id = ' . (int)$id . '
         ');
 		$this->del('
-            DELETE FROM ' . PREFIX . 'foodsaver_has_bezirk
+            DELETE FROM fs_foodsaver_has_bezirk
             WHERE foodsaver_id = ' . (int)$id . '
         ');
 		$this->del('
-            DELETE FROM ' . PREFIX . 'foodsaver_has_contact
+            DELETE FROM fs_foodsaver_has_contact
             WHERE foodsaver_id = ' . (int)$id . '
         ');
 		$this->del('
-            DELETE FROM ' . PREFIX . 'foodsaver_has_event
+            DELETE FROM fs_foodsaver_has_event
             WHERE foodsaver_id = ' . (int)$id . '
         ');
 		$this->del('
-            DELETE FROM ' . PREFIX . 'foodsaver_has_wallpost
+            DELETE FROM fs_foodsaver_has_wallpost
             WHERE foodsaver_id = ' . (int)$id . '
         ');
 		$this->del('
-            DELETE FROM ' . PREFIX . 'mailbox_member
+            DELETE FROM fs_mailbox_member
             WHERE foodsaver_id = ' . (int)$id . '
         ');
 		$this->del('
-            DELETE FROM ' . PREFIX . 'mailchange
+            DELETE FROM fs_mailchange
             WHERE foodsaver_id = ' . (int)$id . '
         ');
 		$this->del('
-            DELETE FROM ' . PREFIX . 'pass_gen
+            DELETE FROM fs_pass_gen
             WHERE foodsaver_id = ' . (int)$id . ' OR bot_id = ' . (int)$id . '
         ');
 		$this->del('
-            DELETE FROM ' . PREFIX . 'pass_request
+            DELETE FROM fs_pass_request
             WHERE foodsaver_id = ' . (int)$id . '
         ');
 		$this->del('
-            DELETE FROM ' . PREFIX . 'quiz_session
+            DELETE FROM fs_quiz_session
             WHERE foodsaver_id = ' . (int)$id . '
         ');
 		$this->del('
-            DELETE FROM ' . PREFIX . 'rating
+            DELETE FROM fs_rating
             WHERE foodsaver_id = ' . (int)$id . '
         ');
 		$this->del('
-            DELETE FROM ' . PREFIX . 'theme_follower
+            DELETE FROM fs_theme_follower
             WHERE foodsaver_id = ' . (int)$id . '
 		');
 
 		// remove bananas given by this user
 		$this->del('
-            DELETE FROM ' . PREFIX . 'rating
+            DELETE FROM fs_rating
             WHERE rater_id = ' . (int)$id . '
 		');
 
-		$this->update('UPDATE ' . PREFIX . 'foodsaver SET verified = 0,
+		$this->update('UPDATE fs_foodsaver SET verified = 0,
 			rolle = 0,
 			plz = NULL,
 			stadt = NULL,
@@ -1324,7 +1324,7 @@ class ManualDb extends Db
 					`parent_id`,
 					`mailbox_id`
 
-			FROM 	`' . PREFIX . 'bezirk`
+			FROM 	`fs_bezirk`
 			WHERE 	`id` = ' . $this->intval($id));
 	}
 
@@ -1336,16 +1336,16 @@ class ManualDb extends Db
 						`fs_send_email`.`name`,
 						`fs_send_email`.`message`,
 						`fs_send_email`.`zeit`,
-						COUNT( `' . PREFIX . 'email_status`.`foodsaver_id` ) AS `anz`
+						COUNT( `fs_email_status`.`foodsaver_id` ) AS `anz`
 
-				FROM 	 `' . PREFIX . 'send_email`,
-						 `' . PREFIX . 'email_status`
+				FROM 	 `fs_send_email`,
+						 `fs_email_status`
 
-				WHERE 	`' . PREFIX . 'email_status`.`email_id` =  `' . PREFIX . 'send_email`.`id`
+				WHERE 	`fs_email_status`.`email_id` =  `fs_send_email`.`id`
 
-				AND 	`' . PREFIX . 'send_email`.`foodsaver_id` = ' . $this->intval($this->func->fsId()) . '
+				AND 	`fs_send_email`.`foodsaver_id` = ' . $this->intval($this->func->fsId()) . '
 
-				AND 	`' . PREFIX . 'email_status`.`status` = 0
+				AND 	`fs_email_status`.`status` = 0
 
 			');
 
@@ -1371,7 +1371,7 @@ class ManualDb extends Db
 		}
 
 		return $this->update('
-			UPDATE 	`' . PREFIX . 'email_status`
+			UPDATE 	`fs_email_status`
 			SET 	`status` = ' . $this->intval($status) . '
 			WHERE 	`email_id` = ' . $this->intval($mail_id) . '
 			AND 	(' . $query . ')
@@ -1380,7 +1380,7 @@ class ManualDb extends Db
 
 	public function getMailsLeft($mail_id)
 	{
-		return $this->qOne('SELECT COUNT(`email_id`) FROM `' . PREFIX . 'email_status` WHERE `email_id` = ' . $this->intval($mail_id) . ' AND `status` = 0');
+		return $this->qOne('SELECT COUNT(`email_id`) FROM `fs_email_status` WHERE `email_id` = ' . $this->intval($mail_id) . ' AND `status` = 0');
 	}
 
 	public function getMailNext($mail_id)
@@ -1395,8 +1395,8 @@ class ManualDb extends Db
 			fs.`email`,
 			fs.`token`
 
-			FROM 		`' . PREFIX . 'email_status` s,
-						`' . PREFIX . 'foodsaver` fs
+			FROM 		`fs_email_status` s,
+						`fs_foodsaver` fs
 
 			WHERE 		fs.`id` = s.`foodsaver_id`
 			AND 		s.email_id = ' . (int)$mail_id . '
@@ -1429,8 +1429,8 @@ class ManualDb extends Db
 							fs.`geschlecht`,
 							fs.`email`
 
-			FROM 	`' . PREFIX . 'foodsaver` fs,
-					`' . PREFIX . 'botschafter` b
+			FROM 	`fs_foodsaver` fs,
+					`fs_botschafter` b
 
 			WHERE 	b.foodsaver_id = fs.id
 			AND		b.`bezirk_id`  IN(' . implode(',', $query) . ')
@@ -1464,9 +1464,9 @@ class ManualDb extends Db
 			SELECT 	fs.`id`,
 					fs.`email`
 
-			FROM 	`' . PREFIX . 'foodsaver` fs,
-					`' . PREFIX . 'betrieb_team` bt,
-					`' . PREFIX . 'foodsaver_has_bezirk` b
+			FROM 	`fs_foodsaver` fs,
+					`fs_betrieb_team` bt,
+					`fs_foodsaver_has_bezirk` b
 
 			WHERE 	bt.foodsaver_id = fs.id
 			AND 	bt.foodsaver_id = b.foodsaver_id
@@ -1506,8 +1506,8 @@ class ManualDb extends Db
 							fs.`geschlecht`,
 							fs.`email`
 
-			FROM 	`' . PREFIX . 'foodsaver` fs,
-					`' . PREFIX . 'foodsaver_has_bezirk` b
+			FROM 	`fs_foodsaver` fs,
+					`fs_foodsaver_has_bezirk` b
 
 			WHERE 	b.foodsaver_id = fs.id
 			AND		b.`bezirk_id` IN(' . implode(',', $query) . ')
@@ -1562,7 +1562,7 @@ class ManualDb extends Db
 		)
 		 */
 		$this->sql('
-			INSERT INTO `' . PREFIX . 'email_status` (`email_id`,`foodsaver_id`,`status`)
+			INSERT INTO `fs_email_status` (`email_id`,`foodsaver_id`,`status`)
 			VALUES
 			' . implode(',', $query) . ';
 		');
@@ -1583,7 +1583,7 @@ class ManualDb extends Db
 			`recip`,
 			`attach`
 
-			FROM 		`' . PREFIX . 'send_email`
+			FROM 		`fs_send_email`
 
 			WHERE 		`id` = ' . $this->intval($id));
 
@@ -1597,7 +1597,7 @@ class ManualDb extends Db
 		}
 
 		return $this->insert('
-				INSERT INTO 	' . PREFIX . 'send_email (foodsaver_id, mailbox_id, name,`mode`, message, zeit, `attach`)
+				INSERT INTO 	fs_send_email (foodsaver_id, mailbox_id, name,`mode`, message, zeit, `attach`)
 
 				VALUES(
 					' . $this->intval($this->func->fsId()) . ',
@@ -1616,7 +1616,7 @@ class ManualDb extends Db
 	{
 		$name = urldecode($data['neu']);
 		$id = $this->insert('
-			INSERT INTO 	`' . PREFIX . 'betrieb_kategorie`
+			INSERT INTO 	`fs_betrieb_kategorie`
 			(
 			`name`
 			)
@@ -1638,14 +1638,14 @@ class ManualDb extends Db
 			`email_name`,
 			`email_pass`
 
-			FROM 		`' . PREFIX . 'bezirk`
+			FROM 		`fs_bezirk`
 
 			WHERE 		`id` = ' . $this->intval($id));
 	}
 
 	public function getMailboxname($mailbox_id)
 	{
-		return $this->qOne('SELECT `name` FROM ' . PREFIX . 'mailbox WHERE id = ' . (int)$mailbox_id);
+		return $this->qOne('SELECT `name` FROM fs_mailbox WHERE id = ' . (int)$mailbox_id);
 	}
 
 	public function getOne_bezirk($id)
@@ -1663,24 +1663,24 @@ class ManualDb extends Db
 			`master`,
 			`mailbox_id`
 
-			FROM 		`' . PREFIX . 'bezirk`
+			FROM 		`fs_bezirk`
 
 			WHERE 		`id` = ' . $this->intval($id));
 		$out['botschafter'] = $this->q('
-				SELECT 		`' . PREFIX . 'foodsaver`.`id`,
-							CONCAT(`' . PREFIX . 'foodsaver`.`name`," ",`' . PREFIX . 'foodsaver`.`nachname`) AS name
+				SELECT 		`fs_foodsaver`.`id`,
+							CONCAT(`fs_foodsaver`.`name`," ",`fs_foodsaver`.`nachname`) AS name
 
-				FROM 		`' . PREFIX . 'botschafter`,
-							`' . PREFIX . 'foodsaver`
+				FROM 		`fs_botschafter`,
+							`fs_foodsaver`
 
-				WHERE 		`' . PREFIX . 'foodsaver`.`id` = `' . PREFIX . 'botschafter`.`foodsaver_id`
-				AND 		`' . PREFIX . 'botschafter`.`bezirk_id` = ' . $this->intval($id) . '
+				WHERE 		`fs_foodsaver`.`id` = `fs_botschafter`.`foodsaver_id`
+				AND 		`fs_botschafter`.`bezirk_id` = ' . $this->intval($id) . '
 			');
 
 		$out['foodsaver'] = $this->qCol('
 				SELECT 		`foodsaver_id`
 
-				FROM 		`' . PREFIX . 'botschafter`
+				FROM 		`fs_botschafter`
 				WHERE 		`bezirk_id` = ' . $this->intval($id) . '
 			');
 
@@ -1698,7 +1698,7 @@ class ManualDb extends Db
 						CONCAT(`name`," ",`nachname`) AS `name`,
 						`anschrift`
 
-			FROM 		`' . PREFIX . 'foodsaver`
+			FROM 		`fs_foodsaver`
 
 			WHERE 		`bezirk_id` = ' . $this->intval($bezirk_id) . '
 			AND			deleted_at IS NULL
@@ -1711,7 +1711,7 @@ class ManualDb extends Db
 		$bezirk_id = $this->intval($id);
 		if (isset($data['botschafter']) && is_array($data['botschafter'])) {
 			$this->del('
-					DELETE FROM 	`' . PREFIX . 'botschafter`
+					DELETE FROM 	`fs_botschafter`
 					WHERE 			`bezirk_id` = ' . $this->intval($id) . '
 				');
 			$master = 0;
@@ -1720,7 +1720,7 @@ class ManualDb extends Db
 			}
 			foreach ($data['botschafter'] as $foodsaver_id) {
 				$this->insert('
-						INSERT INTO `' . PREFIX . 'botschafter`
+						INSERT INTO `fs_botschafter`
 						(
 							`bezirk_id`,
 							`foodsaver_id`
@@ -1731,19 +1731,18 @@ class ManualDb extends Db
 							' . $this->intval($foodsaver_id) . '
 						)
 					');
-				//$this->update('UPDATE '.PREFIX.'foodsaver SET `bezirk_id` = '.(int)$id.' WHERE `id` = '.(int)$foodsaver_id);
 			}
 		}
 
 		$this->begin_transaction();
 
 		if ((int)$data['parent_id'] > 0) {
-			$this->update('UPDATE `' . PREFIX . 'bezirk` SET `has_children` = 1 WHERE `id` = ' . (int)$data['parent_id']);
+			$this->update('UPDATE `fs_bezirk` SET `has_children` = 1 WHERE `id` = ' . (int)$data['parent_id']);
 		}
 
 		$has_children = 0;
 		if ($this->q('
-			SELECT	id FROM ' . PREFIX . 'bezirk WHERE parent_id = ' . (int)$id . '
+			SELECT	id FROM fs_bezirk WHERE parent_id = ' . (int)$id . '
 		')
 		) {
 			$has_children = 1;
@@ -1752,7 +1751,7 @@ class ManualDb extends Db
 		Mem::del('cb-' . $id);
 
 		$this->update('
-		UPDATE 	`' . PREFIX . 'bezirk`
+		UPDATE 	`fs_bezirk`
 
 		SET 	`name` =  ' . $this->strval($data['name']) . ',
 				`email_name` =  ' . $this->strval($data['email_name']) . ',
@@ -1763,8 +1762,8 @@ class ManualDb extends Db
 
 		WHERE 	`id` = ' . $this->intval($id));
 
-		$this->sql('DELETE a FROM `' . PREFIX . 'bezirk_closure` AS a JOIN `' . PREFIX . 'bezirk_closure` AS d ON a.bezirk_id = d.bezirk_id LEFT JOIN `' . PREFIX . 'bezirk_closure` AS x ON x.ancestor_id = d.ancestor_id AND x.bezirk_id = a.ancestor_id WHERE d.ancestor_id = ' . (int)$bezirk_id . ' AND x.ancestor_id IS NULL');
-		$this->sql('INSERT INTO `' . PREFIX . 'bezirk_closure` (ancestor_id, bezirk_id, depth) SELECT supertree.ancestor_id, subtree.bezirk_id, supertree.depth+subtree.depth+1 FROM `' . PREFIX . 'bezirk_closure` AS supertree JOIN `' . PREFIX . 'bezirk_closure` AS subtree WHERE subtree.ancestor_id = ' . (int)$bezirk_id . ' AND supertree.bezirk_id = ' . (int)$this->intval($data['parent_id']));
+		$this->sql('DELETE a FROM `fs_bezirk_closure` AS a JOIN `fs_bezirk_closure` AS d ON a.bezirk_id = d.bezirk_id LEFT JOIN `fs_bezirk_closure` AS x ON x.ancestor_id = d.ancestor_id AND x.bezirk_id = a.ancestor_id WHERE d.ancestor_id = ' . (int)$bezirk_id . ' AND x.ancestor_id IS NULL');
+		$this->sql('INSERT INTO `fs_bezirk_closure` (ancestor_id, bezirk_id, depth) SELECT supertree.ancestor_id, subtree.bezirk_id, supertree.depth+subtree.depth+1 FROM `fs_bezirk_closure` AS supertree JOIN `fs_bezirk_closure` AS subtree WHERE subtree.ancestor_id = ' . (int)$bezirk_id . ' AND supertree.bezirk_id = ' . (int)$this->intval($data['parent_id']));
 		$this->commit();
 	}
 
@@ -1776,7 +1775,7 @@ class ManualDb extends Db
 		}
 
 		return $this->update('
-		UPDATE 	`' . PREFIX . 'blog_entry`
+		UPDATE 	`fs_blog_entry`
 
 		SET 	`bezirk_id` =  ' . $this->intval($data['bezirk_id']) . ',
 				`foodsaver_id` =  ' . $this->intval($data['foodsaver_id']) . ',
@@ -1799,7 +1798,7 @@ class ManualDb extends Db
 
 			foreach ($data['foodsaver'] as $foodsaver_id) {
 				$this->insert('
-						INSERT INTO `' . PREFIX . 'botschafter`
+						INSERT INTO `fs_botschafter`
 						(
 							`bezirk_id`,
 							`foodsaver_id`
@@ -1816,7 +1815,7 @@ class ManualDb extends Db
 		Mem::del('cb-' . $id);
 
 		return $this->update('
-		UPDATE 	`' . PREFIX . 'bezirk`
+		UPDATE 	`fs_bezirk`
 
 		SET 	`name` =  ' . $this->strval($data['name']) . '
 
@@ -1835,12 +1834,12 @@ class ManualDb extends Db
 						fs.`photo`,
 						fs.`geschlecht`
 
-				FROM `' . PREFIX . 'foodsaver` fs,
-				`' . PREFIX . 'botschafter`
+				FROM `fs_foodsaver` fs,
+				`fs_botschafter`
 
-				WHERE fs.id = `' . PREFIX . 'botschafter`.`foodsaver_id`
+				WHERE fs.id = `fs_botschafter`.`foodsaver_id`
 
-				AND `' . PREFIX . 'botschafter`.`bezirk_id` = ' . $this->intval($bezirk_id) . '
+				AND `fs_botschafter`.`bezirk_id` = ' . $this->intval($bezirk_id) . '
 				AND		fs.deleted_at IS NULL
 		');
 	}
@@ -1855,11 +1854,11 @@ class ManualDb extends Db
 							fs.`geschlecht`,
 							fs.`email`
 
-				FROM 		`' . PREFIX . 'foodsaver` fs
+				FROM 		`fs_foodsaver` fs
 				WHERE		fs.id
 				IN			(SELECT foodsaver_id
-							FROM `' . PREFIX . 'fs_botschafter` b
-							LEFT JOIN `' . PREFIX . 'bezirk` bz
+							FROM `fs_fs_botschafter` b
+							LEFT JOIN `fs_bezirk` bz
 							ON b.bezirk_id = bz.id
 							WHERE bz.type != 7
 							)
@@ -1897,7 +1896,7 @@ class ManualDb extends Db
 							`geschlecht`,
 							`email`
 
-				FROM 		`' . PREFIX . 'foodsaver`
+				FROM 		`fs_foodsaver`
 
 				WHERE 		`orgateam` = 1
 
@@ -1907,7 +1906,7 @@ class ManualDb extends Db
 	public function updatePhoto($fs_id, $photo)
 	{
 		return $this->update('
-				UPDATE `' . PREFIX . 'foodsaver`
+				UPDATE `fs_foodsaver`
 				SET 	`photo` = ' . $this->strval($photo) . '
 				WHERE 	`id` = ' . $this->intval($fs_id) . '');
 	}
@@ -1922,7 +1921,7 @@ class ManualDb extends Db
 		}
 
 		$sql = '
-		UPDATE 	`' . PREFIX . 'foodsaver`
+		UPDATE 	`fs_foodsaver`
 
 		SET
 				`bezirk_id` =  ' . $this->intval($data['bezirk_id']) . ',
@@ -1963,11 +1962,11 @@ class ManualDb extends Db
 
 	public function changeBetriebStatus($bid, $status)
 	{
-		$last = $this->qRow('SELECT id, milestone FROM `' . PREFIX . 'betrieb_notiz` WHERE `betrieb_id` = ' . (int)$bid . ' ORDER BY id DESC LIMIT 1');
+		$last = $this->qRow('SELECT id, milestone FROM `fs_betrieb_notiz` WHERE `betrieb_id` = ' . (int)$bid . ' ORDER BY id DESC LIMIT 1');
 
 		if ($last['milestone'] == 3) {
 			$this->del('
-				DELETE FROM 	`' . PREFIX . 'betrieb_notiz`
+				DELETE FROM 	`fs_betrieb_notiz`
 				WHERE	id = ' . (int)$last['id'] . '
 			');
 		}
@@ -1981,7 +1980,7 @@ class ManualDb extends Db
 		));
 
 		return $this->update('
-			UPDATE 	`' . PREFIX . 'betrieb`
+			UPDATE 	`fs_betrieb`
 
 			SET 	`betrieb_status_id` =  ' . $this->intval($status) . '
 
@@ -1994,7 +1993,7 @@ class ManualDb extends Db
 		$last = 0;
 		if (isset($data['last']) && $data['last'] == 1) {
 			$this->update('
-				UPDATE 	`' . PREFIX . 'betrieb_notiz`
+				UPDATE 	`fs_betrieb_notiz`
 				SET 	`last` = 0
 				WHERE 	`betrieb_id` = ' . (int)$data['betrieb_id'] . '
 				AND 	`last` = 1
@@ -2003,7 +2002,7 @@ class ManualDb extends Db
 		}
 
 		$id = $this->insert('
-			INSERT INTO 	`' . PREFIX . 'betrieb_notiz`
+			INSERT INTO 	`fs_betrieb_notiz`
 			(
 			`foodsaver_id`,
 			`betrieb_id`,
@@ -2030,7 +2029,7 @@ class ManualDb extends Db
 		$bezirk = $this->getVal('name', 'bezirk', $bid);
 
 		return $this->update('
-					UPDATE 	 	`' . PREFIX . 'foodsaver_has_bezirk`
+					UPDATE 	 	`fs_foodsaver_has_bezirk`
 					SET 		`active` = 1,
 								`added` = NOW()
 
@@ -2042,7 +2041,7 @@ class ManualDb extends Db
 	public function linkBezirk($fsid, $bid, $active = 1)
 	{
 		return $this->insert('
-			REPLACE INTO `' . PREFIX . 'foodsaver_has_bezirk`
+			REPLACE INTO `fs_foodsaver_has_bezirk`
 			(
 				`bezirk_id`,
 				`foodsaver_id`,
@@ -2064,7 +2063,7 @@ class ManualDb extends Db
 		$bezirk = $this->getVal('name', 'bezirk', $bid);
 
 		return $this->update('
-					DELETE FROM  `' . PREFIX . 'foodsaver_has_bezirk`
+					DELETE FROM  `fs_foodsaver_has_bezirk`
 					WHERE 		`bezirk_id` = ' . $this->intval($bid) . '
 					AND 		`foodsaver_id` = ' . $this->intval($fsid) . '
 		');
@@ -2105,7 +2104,7 @@ class ManualDb extends Db
 		      `team_conversation_id`,
 		      `springer_conversation_id`
 
-			FROM 		`' . PREFIX . 'betrieb`
+			FROM 		`fs_betrieb`
 
 			WHERE 		`id` = ' . $this->intval($id));
 		if (!$out) {
@@ -2116,8 +2115,8 @@ class ManualDb extends Db
 				SELECT 		l.`id`,
 							l.name
 
-				FROM 		`' . PREFIX . 'betrieb_has_lebensmittel` hl,
-							`' . PREFIX . 'lebensmittel` l
+				FROM 		`fs_betrieb_has_lebensmittel` hl,
+							`fs_lebensmittel` l
 				WHERE 		l.id = hl.lebensmittel_id
 				AND 		`betrieb_id` = ' . $this->intval($id) . '
 		');
@@ -2133,8 +2132,8 @@ class ManualDb extends Db
 							name as vorname,
 							fs.sleep_status
 
-				FROM 		`' . PREFIX . 'betrieb_team` t,
-							`' . PREFIX . 'foodsaver` fs
+				FROM 		`fs_betrieb_team` t,
+							`fs_foodsaver` fs
 
 				WHERE 		fs.id = t.foodsaver_id
 				AND 		`betrieb_id` = ' . $this->intval($id) . '
@@ -2175,7 +2174,7 @@ class ManualDb extends Db
 		$out['team_js'] = implode(',', $out['team_js']);
 
 		$out['abholer'] = false;
-		if ($abholer = $this->q('SELECT `betrieb_id`,`dow` FROM `' . PREFIX . 'abholzeiten` WHERE `betrieb_id` = ' . (int)$id)) {
+		if ($abholer = $this->q('SELECT `betrieb_id`,`dow` FROM `fs_abholzeiten` WHERE `betrieb_id` = ' . (int)$id)) {
 			$out['abholer'] = array();
 			foreach ($abholer as $a) {
 				if (!isset($out['abholer'][$a['dow']])) {
@@ -2212,8 +2211,8 @@ class ManualDb extends Db
 							fs.sleep_status
 
 
-				FROM 		`' . PREFIX . 'betrieb_team` t,
-							`' . PREFIX . 'foodsaver` fs
+				FROM 		`fs_betrieb_team` t,
+							`fs_foodsaver` fs
 
 				WHERE 		fs.id = t.foodsaver_id
 				AND 		`betrieb_id` = ' . $this->intval($bid) . '
@@ -2241,8 +2240,8 @@ class ManualDb extends Db
 							UNIX_TIMESTAMP(t.`stat_add_date`) AS add_date,
 							fs.sleep_status
 
-				FROM 		`' . PREFIX . 'betrieb_team` t,
-							`' . PREFIX . 'foodsaver` fs
+				FROM 		`fs_betrieb_team` t,
+							`fs_foodsaver` fs
 
 				WHERE 		fs.id = t.foodsaver_id
 				AND 		`betrieb_id` = ' . $this->intval($bid) . '
@@ -2253,12 +2252,12 @@ class ManualDb extends Db
 
 	public function addAbholer($betrieb_id, $foodsaver_id, $dow)
 	{
-		return $this->sql('INSERT INTO `' . PREFIX . 'abholer`(`betrieb_id`,`foodsaver_id`,`dow`)VALUES(' . $this->intval($betrieb_id) . ',' . $this->intval($foodsaver_id) . ',' . $this->intval($dow) . ') ');
+		return $this->sql('INSERT INTO `fs_abholer`(`betrieb_id`,`foodsaver_id`,`dow`)VALUES(' . $this->intval($betrieb_id) . ',' . $this->intval($foodsaver_id) . ',' . $this->intval($dow) . ') ');
 	}
 
 	public function clearAbholer($betrieb_id)
 	{
-		$this->del('DELETE FROM `' . PREFIX . 'abholer` WHERE `betrieb_id` = ' . (int)$betrieb_id);
+		$this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$betrieb_id);
 	}
 
 	public function getBetriebConversation($bid, $springerConversation = false)
@@ -2269,7 +2268,7 @@ class ManualDb extends Db
 			$ccol = 'team_conversation_id';
 		}
 
-		return $this->qOne('SELECT ' . $ccol . ' FROM `' . PREFIX . 'betrieb` WHERE `id` = ' . (int)$bid);
+		return $this->qOne('SELECT ' . $ccol . ' FROM `fs_betrieb` WHERE `id` = ' . (int)$bid);
 	}
 
 	public function getWantNew($bezirk_id)
@@ -2285,17 +2284,17 @@ class ManualDb extends Db
 		}
 
 		return $this->q('
-			SELECT 	`' . PREFIX . 'foodsaver`.`id`,
-					`' . PREFIX . 'foodsaver`.`name`,
-					`' . PREFIX . 'foodsaver`.`photo`,
-					`' . PREFIX . 'foodsaver`.`nachname`,
-					`' . PREFIX . 'foodsaver`.`new_bezirk`,
-					`' . PREFIX . 'foodsaver`.`bezirk_id`,
-					`' . PREFIX . 'bezirk`.`name` AS bezirk_name
-			FROM 	`' . PREFIX . 'foodsaver` fs,
-					`' . PREFIX . 'bezirk`
+			SELECT 	`fs_foodsaver`.`id`,
+					`fs_foodsaver`.`name`,
+					`fs_foodsaver`.`photo`,
+					`fs_foodsaver`.`nachname`,
+					`fs_foodsaver`.`new_bezirk`,
+					`fs_foodsaver`.`bezirk_id`,
+					`fs_bezirk`.`name` AS bezirk_name
+			FROM 	`fs_foodsaver` fs,
+					`fs_bezirk`
 
-			WHERE 	`' . PREFIX . 'foodsaver`.`bezirk_id` = `' . PREFIX . 'bezirk`.`id`
+			WHERE 	`fs_foodsaver`.`bezirk_id` = `fs_bezirk`.`id`
 
 			AND 	`want_new` = 1
 			AND		fs.deleted_at IS NULL
@@ -2308,18 +2307,18 @@ class ManualDb extends Db
 
 	public function getTeamleader($betrieb_id)
 	{
-		return $this->qRow('SELECT 	fs.`id`,CONCAT(fs.name," ",nachname) AS name  FROM ' . PREFIX . 'betrieb_team t, ' . PREFIX . 'foodsaver fs WHERE t.foodsaver_id = fs.id AND `betrieb_id` = ' . $this->intval($betrieb_id) . ' AND t.verantwortlich = 1 AND fs.`active` = 1 AND	fs.deleted_at IS NULL');
+		return $this->qRow('SELECT 	fs.`id`,CONCAT(fs.name," ",nachname) AS name  FROM fs_betrieb_team t, fs_foodsaver fs WHERE t.foodsaver_id = fs.id AND `betrieb_id` = ' . $this->intval($betrieb_id) . ' AND t.verantwortlich = 1 AND fs.`active` = 1 AND	fs.deleted_at IS NULL');
 	}
 
 	public function getVerantwortlicher($betrieb_id)
 	{
-		return $this->qOne('SELECT 	`foodsaver_id`  FROM ' . PREFIX . 'betrieb_team WHERE `betrieb_id` = ' . $this->intval($betrieb_id) . ' AND verantwortlich = 1 AND `active` = 1');
+		return $this->qOne('SELECT 	`foodsaver_id`  FROM fs_betrieb_team WHERE `betrieb_id` = ' . $this->intval($betrieb_id) . ' AND verantwortlich = 1 AND `active` = 1');
 	}
 
 	public function removeAllVerantwortlicher($betrieb_id)
 	{
 		return $this->del('
-			DELETE FROM ' . PREFIX . 'betrieb_team
+			DELETE FROM fs_betrieb_team
 
 				WHERE 	betrieb_id = ' . $this->intval($betrieb_id) . '
 				AND verantwortlich = 1
@@ -2330,7 +2329,7 @@ class ManualDb extends Db
 	public function addVerantwortlicher($fs_id, $betrieb_id)
 	{
 		return $this->insert('
-			INSERT INTO ' . PREFIX . 'betrieb_team (foodsaver_id, betrieb_id, verantwortlich,active)
+			INSERT INTO fs_betrieb_team (foodsaver_id, betrieb_id, verantwortlich,active)
 			VALUES(' . $this->intval($fs_id) . ',' . $this->intval($betrieb_id) . ',1,1)
 		');
 	}
@@ -2350,8 +2349,8 @@ class ManualDb extends Db
 					a.date,
 					a.confirmed
 
-			FROM 	`' . PREFIX . 'abholer` a,
-					`' . PREFIX . 'foodsaver` fs
+			FROM 	`fs_abholer` a,
+					`fs_foodsaver` fs
 
 			WHERE 	a.foodsaver_id = fs.id
 			AND 	a.betrieb_id = ' . (int)$bid . '
@@ -2380,7 +2379,7 @@ class ManualDb extends Db
 	{
 		return $this->update('
 
-				UPDATE 	`' . PREFIX . 'abholer`
+				UPDATE 	`fs_abholer`
 				SET 	`confirmed` = 1
 				WHERE 	`foodsaver_id` = ' . (int)$fsid . '
 				AND 	`betrieb_id` = ' . (int)$bid . '
@@ -2396,7 +2395,7 @@ class ManualDb extends Db
 		}
 
 		return $this->sql('
-			INSERT IGNORE INTO `' . PREFIX . 'abholer`
+			INSERT IGNORE INTO `fs_abholer`
 			(`foodsaver_id`,`betrieb_id`,`date`,`confirmed`)
 			VALUES
 			(' . (int)$fsid . ',' . (int)$bid . ',' . $this->dateval($date) . ',' . $confirm . ')
@@ -2415,9 +2414,9 @@ class ManualDb extends Db
 				fe.`status`
 
 			FROM
-				`' . PREFIX . 'event` e
+				`fs_event` e
 			LEFT JOIN
-				`' . PREFIX . 'foodsaver_has_event` fe
+				`fs_foodsaver_has_event` fe
 			ON
 				e.id = fe.event_id AND fe.foodsaver_id = ' . (int)$this->func->fsId() . '
 
@@ -2455,8 +2454,8 @@ class ManualDb extends Db
 				fe.`status`
 
 			FROM
-				`' . PREFIX . 'event` e,
-				`' . PREFIX . 'foodsaver_has_event` fe
+				`fs_event` e,
+				`fs_foodsaver_has_event` fe
 
 			WHERE
 				fe.event_id = e.id
@@ -2477,7 +2476,7 @@ class ManualDb extends Db
 		$this->begin_transaction();
 
 		$id = $this->insert('
-		INSERT INTO 	`' . PREFIX . 'bezirk`
+		INSERT INTO 	`fs_bezirk`
 		(
 			`parent_id`,
 			`has_children`,
@@ -2495,13 +2494,13 @@ class ManualDb extends Db
 			' . $this->strval($data['email_pass']) . ',
 			' . $this->strval($data['email_name']) . '
 		)');
-		$this->insert('INSERT INTO `' . PREFIX . 'bezirk_closure` (ancestor_id, bezirk_id, depth) SELECT t.ancestor_id, ' . $id . ', t.depth+1 FROM `' . PREFIX . 'bezirk_closure` AS t WHERE t.bezirk_id = ' . $this->intval($data['parent_id']) . ' UNION ALL SELECT ' . $id . ', ' . $id . ', 0');
+		$this->insert('INSERT INTO `fs_bezirk_closure` (ancestor_id, bezirk_id, depth) SELECT t.ancestor_id, ' . $id . ', t.depth+1 FROM `fs_bezirk_closure` AS t WHERE t.bezirk_id = ' . $this->intval($data['parent_id']) . ' UNION ALL SELECT ' . $id . ', ' . $id . ', 0');
 		$this->commit();
 
 		if (isset($data['foodsaver']) && is_array($data['foodsaver'])) {
 			foreach ($data['foodsaver'] as $foodsaver_id) {
 				$this->insert('
-						INSERT INTO `' . PREFIX . 'botschafter`
+						INSERT INTO `fs_botschafter`
 						(
 						`bezirk_id`,
 						`foodsaver_id`
@@ -2517,7 +2516,7 @@ class ManualDb extends Db
 		if (isset($data['foodsaver']) && is_array($data['foodsaver'])) {
 			foreach ($data['foodsaver'] as $foodsaver_id) {
 				$this->insert('
-						INSERT INTO `' . PREFIX . 'foodsaver_has_bezirk`
+						INSERT INTO `fs_foodsaver_has_bezirk`
 						(
 						`bezirk_id`,
 						`foodsaver_id`
@@ -2544,7 +2543,7 @@ class ManualDb extends Db
 			`subject`,
 			`body`
 
-			FROM 		`' . PREFIX . 'message_tpl`
+			FROM 		`fs_message_tpl`
 
 			WHERE 		`id` = ' . $this->intval($id));
 
@@ -2557,7 +2556,7 @@ class ManualDb extends Db
 			SELECT 	 	`id`,
 						`name`
 
-			FROM 		`' . PREFIX . 'bezirk`
+			FROM 		`fs_bezirk`
 			ORDER BY `name`');
 	}
 
@@ -2569,7 +2568,7 @@ class ManualDb extends Db
 			`name`,
 			`logo`
 
-			FROM 		`' . PREFIX . 'kette`
+			FROM 		`fs_kette`
 
 			WHERE 		`id` = ' . $this->intval($id));
 
@@ -2586,7 +2585,7 @@ class ManualDb extends Db
 			`name`,
 			`answer`
 
-			FROM 		`' . PREFIX . 'faq`
+			FROM 		`fs_faq`
 			ORDER BY `name`');
 
 		return $out;
@@ -2602,7 +2601,7 @@ class ManualDb extends Db
 			`name`,
 			`answer`
 
-			FROM 		`' . PREFIX . 'faq`
+			FROM 		`fs_faq`
 
 			WHERE 		`id` = ' . $this->intval($id));
 
@@ -2615,14 +2614,14 @@ class ManualDb extends Db
 			SELECT 	 	`id`,
 						`name`
 
-			FROM 		`' . PREFIX . 'faq_category`
+			FROM 		`fs_faq_category`
 			ORDER BY `name`');
 	}
 
 	public function update_faq($id, $data)
 	{
 		return $this->update('
-		UPDATE 	`' . PREFIX . 'faq`
+		UPDATE 	`fs_faq`
 
 		SET 	`foodsaver_id` =  ' . $this->intval($data['foodsaver_id']) . ',
 				`faq_kategorie_id` =  ' . $this->intval($data['faq_kategorie_id']) . ',
@@ -2635,10 +2634,10 @@ class ManualDb extends Db
 	/* retrieves all biebs that are biebs for a given bezirk (by being bieb in a Betrieb that is part of that bezirk, which is semantically not the same we use on platform) */
 	public function getBiebIds($bezirk)
 	{
-		return $this->qCol('SELECT DISTINCT bt.foodsaver_id FROM `' . PREFIX . 'bezirk_closure` c
-			INNER JOIN `' . PREFIX . 'betrieb` b ON c.bezirk_id = b.bezirk_id
-			INNER JOIN `' . PREFIX . 'betrieb_team` bt ON bt.betrieb_id = b.id
-			INNER JOIN `' . PREFIX . 'foodsaver` fs ON fs.id = bt.foodsaver_id
+		return $this->qCol('SELECT DISTINCT bt.foodsaver_id FROM `fs_bezirk_closure` c
+			INNER JOIN `fs_betrieb` b ON c.bezirk_id = b.bezirk_id
+			INNER JOIN `fs_betrieb_team` bt ON bt.betrieb_id = b.id
+			INNER JOIN `fs_foodsaver` fs ON fs.id = bt.foodsaver_id
 			WHERE c.ancestor_id = ' . $this->intval($bezirk) . ' AND bt.verantwortlich = 1 AND fs.deleted_at IS NULL');
 	}
 
@@ -2652,10 +2651,10 @@ class ManualDb extends Db
 			$where_type = 'bz.type <> 7';
 		}
 
-		return $this->qCol('SELECT DISTINCT bot.foodsaver_id FROM `' . PREFIX . 'bezirk_closure` c
-			LEFT JOIN `' . PREFIX . 'bezirk` bz ON bz.id = c.bezirk_id
-			INNER JOIN `' . PREFIX . 'botschafter` bot ON bot.bezirk_id = c.bezirk_id
-			INNER JOIN `' . PREFIX . 'foodsaver` fs ON fs.id = bot.foodsaver_id
+		return $this->qCol('SELECT DISTINCT bot.foodsaver_id FROM `fs_bezirk_closure` c
+			LEFT JOIN `fs_bezirk` bz ON bz.id = c.bezirk_id
+			INNER JOIN `fs_botschafter` bot ON bot.bezirk_id = c.bezirk_id
+			INNER JOIN `fs_foodsaver` fs ON fs.id = bot.foodsaver_id
 			WHERE c.ancestor_id = ' . $this->intval($bezirk) . ' AND fs.deleted_at IS NULL AND ' . $where_type);
 	}
 
@@ -2666,21 +2665,21 @@ class ManualDb extends Db
 		$rows_ins = 0;
 		$rows_del = 0;
 		if ($leave_admins) {
-			$admins = $this->qCol('SELECT foodsaver_id FROM `' . PREFIX . 'botschafter` b WHERE b.bezirk_id = ' . $this->intval($bezirk));
+			$admins = $this->qCol('SELECT foodsaver_id FROM `fs_botschafter` b WHERE b.bezirk_id = ' . $this->intval($bezirk));
 			if ($admins) {
 				$foodsaver_ids = array_merge($foodsaver_ids, $admins);
 			}
 		}
 		$ids = implode(',', array_map(array($this, 'intval'), $foodsaver_ids));
 		if ($ids) {
-			$rows_del = $this->del('DELETE FROM `' . PREFIX . 'foodsaver_has_bezirk` WHERE bezirk_id = ' . $this->intval($bezirk) . ' AND foodsaver_id NOT IN (' . $ids . ')');
+			$rows_del = $this->del('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . $this->intval($bezirk) . ' AND foodsaver_id NOT IN (' . $ids . ')');
 			$insert_strings = array_map(function ($id) use ($bezirk) {
 				return '(' . $id . ',' . $bezirk . ',1,NOW())';
 			}, $foodsaver_ids);
 			$insert_values = implode(',', $insert_strings);
-			$rows_ins = $this->del('INSERT IGNORE INTO `' . PREFIX . 'foodsaver_has_bezirk` (foodsaver_id, bezirk_id, active, added) VALUES ' . $insert_values);
+			$rows_ins = $this->del('INSERT IGNORE INTO `fs_foodsaver_has_bezirk` (foodsaver_id, bezirk_id, active, added) VALUES ' . $insert_values);
 		} else {
-			$rows_del = $this->del('DELETE FROM `' . PREFIX . 'foodsaver_has_bezirk` WHERE bezirk_id = ' . $this->intval($bezirk));
+			$rows_del = $this->del('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . $this->intval($bezirk));
 		}
 
 		return array($rows_ins, $rows_del);

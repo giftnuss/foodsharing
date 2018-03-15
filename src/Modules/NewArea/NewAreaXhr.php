@@ -40,10 +40,7 @@ class NewAreaXhr extends Control
 
 							$message = str_replace(array('{ANREDE}', '{NAME}'), array($anrede, $name), $_GET['msg']);
 
-							$this->func->libmail(array(
-								'email' => 'info@lebensmittelretten.de',
-								'email_name' => 'Foodsharing Freiwillige'
-							), $foodsaver['email'], $_GET['subject'], $message);
+							$this->func->libmail(false, $foodsaver['email'], $_GET['subject'], $message);
 							$this->model->clearWantNew($fid);
 
 							$js .= '$(".wantnewcheck[value=\'' . $fid . '\']").parent().parent().remove();';

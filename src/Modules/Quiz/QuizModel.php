@@ -17,13 +17,13 @@ class QuizModel extends Model
 
 	public function listQuiz()
 	{
-		return $this->q('SELECT id,name FROM ' . PREFIX . 'quiz ORDER BY id');
+		return $this->q('SELECT id,name FROM fs_quiz ORDER BY id');
 	}
 
 	public function addQuiz($name, $desc, $maxfp, $questcount)
 	{
 		return $this->insert('
-			INSERT INTO `' . PREFIX . 'quiz`
+			INSERT INTO `fs_quiz`
 			(`name`,`desc`,`maxfp`,`questcount`)
 			VALUES
 			(' . $this->strval($name) . ',' . $this->strval($desc, true) . ',' . (int)$maxfp . ',' . (int)$questcount . ')	
@@ -32,7 +32,7 @@ class QuizModel extends Model
 
 	public function deleteSession($id)
 	{
-		return $this->del('DELETE FROM ' . PREFIX . 'quiz_session WHERE id = ' . (int)$id . ' LIMIT 1');
+		return $this->del('DELETE FROM fs_quiz_session WHERE id = ' . (int)$id . ' LIMIT 1');
 	}
 
 	public function getUserSessions($fsid)
@@ -49,8 +49,8 @@ class QuizModel extends Model
 
 				
 			FROM
-				' . PREFIX . 'quiz_session s,
-				' . PREFIX . 'quiz q
+				fs_quiz_session s,
+				fs_quiz q
 				
 			WHERE
 				s.quiz_id = q.id
@@ -80,8 +80,8 @@ class QuizModel extends Model
 				count(s.foodsaver_id) AS trycount
 				
 			FROM
-				' . PREFIX . 'quiz_session s,
-				' . PREFIX . 'foodsaver fs
+				fs_quiz_session s,
+				fs_foodsaver fs
 				
 			WHERE
 				s.foodsaver_id = fs.id
@@ -100,7 +100,7 @@ class QuizModel extends Model
 	public function updateQuiz($id, $name, $desc, $maxfp, $questcount)
 	{
 		return $this->update('
-			UPDATE	`' . PREFIX . 'quiz`
+			UPDATE	`fs_quiz`
 			SET 	`name` = ' . $this->strval($name) . ',
 					`desc` = ' . $this->strval($desc, true) . ',
 					`maxfp` = ' . (int)$maxfp . ',
@@ -113,20 +113,20 @@ class QuizModel extends Model
 	public function getQuiz($id)
 	{
 		return $this->qRow('
-			SELECT 	`id`,`name`,`desc`,`maxfp`,`questcount` FROM ' . PREFIX . 'quiz WHERE id = ' . (int)$id . '		
+			SELECT 	`id`,`name`,`desc`,`maxfp`,`questcount` FROM fs_quiz WHERE id = ' . (int)$id . '		
 		');
 	}
 
 	public function deleteQuest($id)
 	{
-		$this->del('DELETE FROM ' . PREFIX . 'answer WHERE `question_id` = ' . (int)$id);
-		$this->del('DELETE FROM ' . PREFIX . 'question WHERE `id` = ' . (int)$id);
-		$this->del('DELETE FROM ' . PREFIX . 'question_has_quiz WHERE `question_id` = ' . (int)$id);
+		$this->del('DELETE FROM fs_answer WHERE `question_id` = ' . (int)$id);
+		$this->del('DELETE FROM fs_question WHERE `id` = ' . (int)$id);
+		$this->del('DELETE FROM fs_question_has_quiz WHERE `question_id` = ' . (int)$id);
 	}
 
 	public function deleteAnswer($id)
 	{
-		return $this->del('DELETE FROM ' . PREFIX . 'answer WHERE `id` = ' . (int)$id);
+		return $this->del('DELETE FROM fs_answer WHERE `id` = ' . (int)$id);
 	}
 
 	public function addAnswer($qid, $text, $exp, $right)
@@ -155,7 +155,7 @@ class QuizModel extends Model
 	public function updateAnswer($id, $data)
 	{
 		return $this->update('
-			UPDATE 	`' . PREFIX . 'answer`
+			UPDATE 	`fs_answer`
 			SET 	`text` = ' . $this->strval($data['text']) . ',
 					`explanation` = ' . $this->strval($data['explanation']) . ',
 					`right` = ' . (int)$data['right'] . '	
@@ -167,7 +167,7 @@ class QuizModel extends Model
 	{
 		return $this->qRow('
 			SELECT 	`id`, question_id, `text`,`explanation`, `right`
-			FROM	' . PREFIX . 'answer
+			FROM	fs_answer
 			WHERE 	id = ' . (int)$aid . '		
 		');
 	}
@@ -181,8 +181,8 @@ class QuizModel extends Model
 				hq.fp
 		
 			FROM
-				' . PREFIX . 'question q,
-				' . PREFIX . 'question_has_quiz hq
+				fs_question q,
+				fs_question_has_quiz hq
 		
 			WHERE
 				hq.question_id = q.id
@@ -209,8 +209,8 @@ class QuizModel extends Model
 				hq.fp
 		
 			FROM
-				' . PREFIX . 'question q,
-				' . PREFIX . 'question_has_quiz hq
+				fs_question q,
+				fs_question_has_quiz hq
 		
 			WHERE
 				hq.question_id = q.id
@@ -223,8 +223,8 @@ class QuizModel extends Model
 			if ($meta = $this->q('
 				SELECT 	hq.fp, COUNT(q.id) AS `count`
 				FROM
-				' . PREFIX . 'question q,
-				' . PREFIX . 'question_has_quiz hq
+				fs_question q,
+				fs_question_has_quiz hq
 		
 				WHERE
 					hq.question_id = q.id
@@ -262,8 +262,8 @@ class QuizModel extends Model
 					hq.quiz_id
 				
 				FROM 
-					' . PREFIX . 'question q,
-					' . PREFIX . 'question_has_quiz hq
+					fs_question q,
+					fs_question_has_quiz hq
 				
 				WHERE
 					hq.question_id = q.id
@@ -276,7 +276,7 @@ class QuizModel extends Model
 	public function addUserComment($question_id, $comment)
 	{
 		if ($id = $this->insert('
-			INSERT INTO `' . PREFIX . 'wallpost`
+			INSERT INTO `fs_wallpost`
 			(`foodsaver_id`, `body`, `time`) 
 			VALUES 
 			(
@@ -291,7 +291,7 @@ class QuizModel extends Model
 					'comment' => $comment
 				));
 			}
-			$this->insert('INSERT INTO `' . PREFIX . 'question_has_wallpost`(`question_id`, `wallpost_id`, `usercomment`) VALUES (' . (int)$question_id . ',' . (int)$id . ',1)');
+			$this->insert('INSERT INTO `fs_question_has_wallpost`(`question_id`, `wallpost_id`, `usercomment`) VALUES (' . (int)$question_id . ',' . (int)$id . ',1)');
 
 			return true;
 		}
@@ -303,7 +303,7 @@ class QuizModel extends Model
 	{
 		return $this->q('
 			SELECT 	`id`, `text`,`explanation`, `right`
-			FROM	' . PREFIX . 'answer
+			FROM	fs_answer
 			WHERE 	question_id = ' . (int)$question_id . '
 		');
 	}
@@ -320,8 +320,8 @@ class QuizModel extends Model
 				hq.fp
 		
 				FROM
-				' . PREFIX . 'question q,
-				' . PREFIX . 'question_has_quiz hq
+				fs_question q,
+				fs_question_has_quiz hq
 		
 				WHERE
 				hq.question_id = q.id
@@ -334,7 +334,7 @@ class QuizModel extends Model
 				$out[$q['id']] = $q;
 				if ($answers = $this->q('
 						SELECT 	`id`, `text`,`explanation`, `right`
-						FROM	' . PREFIX . 'answer
+						FROM	fs_answer
 						WHERE 	question_id = ' . (int)$q['id'] . '
 				')
 				) {
@@ -362,8 +362,8 @@ class QuizModel extends Model
 					hq.fp
 				
 				FROM 
-					' . PREFIX . 'question q,
-					' . PREFIX . 'question_has_quiz hq
+					fs_question q,
+					fs_question_has_quiz hq
 				
 				WHERE
 					hq.question_id = q.id
@@ -375,10 +375,10 @@ class QuizModel extends Model
 			foreach ($questions as $key => $q) {
 				$questions[$key]['answers'] = $this->q('
 					SELECT 	`id`, `text`,`explanation`, `right`
-					FROM	' . PREFIX . 'answer
+					FROM	fs_answer
 					WHERE 	question_id = ' . (int)$q['id'] . '
 				');
-				$questions[$key]['comment_count'] = (int)$this->qOne('SELECT COUNT(question_id) FROM ' . PREFIX . 'question_has_wallpost WHERE question_id = ' . (int)$q['id']);
+				$questions[$key]['comment_count'] = (int)$this->qOne('SELECT COUNT(question_id) FROM fs_question_has_wallpost WHERE question_id = ' . (int)$q['id']);
 			}
 
 			return $questions;
@@ -391,7 +391,7 @@ class QuizModel extends Model
 	{
 		$this->update('
 			UPDATE
-				' . PREFIX . 'quiz_session
+				fs_quiz_session
 
 			SET
 				`status` = 2
@@ -414,7 +414,7 @@ class QuizModel extends Model
 				easymode
 
 			FROM
-				' . PREFIX . 'quiz_session
+				fs_quiz_session
 				
 			WHERE
 				`quiz_id` = ' . $quiz_id . '
@@ -446,7 +446,7 @@ class QuizModel extends Model
 
 		if ($res = $this->q('
 				SELECT foodsaver_id, `status`, UNIX_TIMESTAMP(`time_start`) AS time_ts
-				FROM ' . PREFIX . 'quiz_session
+				FROM fs_quiz_session
 				WHERE foodsaver_id =' . (int)$this->func->fsId() . '
 				AND quiz_id = ' . (int)$quiz_id . '
 				')
@@ -475,7 +475,7 @@ class QuizModel extends Model
 		$questions = serialize($questions);
 
 		return $this->insert('
-			INSERT INTO ' . PREFIX . 'quiz_session (
+			INSERT INTO fs_quiz_session (
 				foodsaver_id, 
 				quiz_id, 
 				`status`, 
@@ -509,7 +509,7 @@ class QuizModel extends Model
 
 		$this->update('
 			UPDATE 	
-				`' . PREFIX . 'quiz_session`
+				`fs_quiz_session`
 
 			SET
 				quiz_questions = ' . $this->strval($questions) . ',
@@ -535,7 +535,7 @@ class QuizModel extends Model
 
 		$this->update('
 			UPDATE
-				`' . PREFIX . 'quiz_session`
+				`fs_quiz_session`
 		
 			SET
 				quiz_result = ' . $this->strval($quiz_result) . ',
@@ -553,7 +553,7 @@ class QuizModel extends Model
 	public function updateQuestion($id, $quiz_id, $text, $fp, $duration, $wikilink)
 	{
 		$this->update('
-			UPDATE 	`' . PREFIX . 'question`
+			UPDATE 	`fs_question`
 			SET 	`text` = ' . $this->strval($text) . ',
 					`duration` = ' . (int)$duration . ',
 					`wikilink` = ' . $this->strval($wikilink) . '
@@ -561,7 +561,7 @@ class QuizModel extends Model
 		');
 
 		return $this->update('
-			UPDATE 	`' . PREFIX . 'question_has_quiz`
+			UPDATE 	`fs_question_has_quiz`
 			SET 	`fp` = ' . (int)$fp . '
 			WHERE 	`question_id` = ' . (int)$id . '
 			AND 	`quiz_id` = ' . (int)$quiz_id . '		
