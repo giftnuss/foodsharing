@@ -12,6 +12,8 @@
 - replaced the PREFIX keyword in the whole source !339 #421 by peter.toennies
 
 ## Dev/Test/CI stuff
+# 2018-03-14 Hotfix for 2018-02-28
+- Events can be accepted or denied by non event admins again. !342 #418 by @NerdyProjects
 
 # 2018-03-05
 - remove ability for ambassador to add any foodsaver to his/her district !328 #405 by @k.miklobusec and @peter.toennies
