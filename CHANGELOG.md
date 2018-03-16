@@ -10,6 +10,7 @@
 - Remove info section from foodsaver page, if it is empty !320
 
 ## Refactoring
+- complete tidying up of all team related files !321 by @peter.toennies
 - replaced the PREFIX keyword in the whole source !339 #421 by peter.toennies
 - refactored and cleaned the whole reports module. !335 by @peter.toennies
 
@@ -103,7 +104,6 @@ as well as modern coding techniques.
 - Add twig templating for main menu and other things !292 @nicksellen
 - Remove global usage of Func, DB and ViewUtils Helper classes !289 @NerdyProjects
 - Refactor router for HTML controller classes !289 @NerdyProjects
-- complete tidying up of all CSS files. !298 by @peter.toennies
 - Make some components ready to be used without global data passing variable !294 @NerdyProjects
 - Introduce Request and Response object and used it in WorkGroupControl !294 @NerdyProjects
 - Introduce input deserializer/sanitizer/validator component in WorkGroupControl !294 @NerdyProjects

@@ -2,14 +2,14 @@
 
 namespace Foodsharing\Modules\Team;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Core\BaseGateway;
 
-class TeamModel extends Model
+class TeamGateway extends BaseGateway
 {
-	public function getTeam($bezirkId = 1373)
+	public function getTeam($bezirkId = 1373): array
 	{
 		$out = array();
-		if ($orgas = $this->q('
+		$orgas = $this->db->fetchAll('
 				SELECT 
 					fs.id, 
 					CONCAT(mb.name,"@' . DEFAULT_EMAIL_HOST . '") AS email, 
@@ -24,8 +24,7 @@ class TeamModel extends Model
 					fs.tox,
 					fs.twitter,
 					fs.position,
-					fs.contact_public
-				
+					fs.contact_public				
 				FROM 
 					fs_foodsaver_has_bezirk hb
 
@@ -38,15 +37,12 @@ class TeamModel extends Model
 					fs_mailbox mb 
 				ON 
 					fs.mailbox_id = mb.id
-
 				WHERE 
 					hb.bezirk_id = ' . $bezirkId . '
 				ORDER BY fs.name
-		')
-		) {
-			foreach ($orgas as $o) {
-				$out[(int)$o['id']] = $o;
-			}
+		');
+		foreach ($orgas as $o) {
+			$out[(int)$o['id']] = $o;
 		}
 
 		return $out;
@@ -54,10 +50,10 @@ class TeamModel extends Model
 
 	public function getUser($id)
 	{
-		if ($user = $this->qRow('
+		if ($user = $this->db->fetch('
                     SELECT
                         fs.id,
-				CONCAT(fs.name," ",fs.nachname) AS name,
+				CONCAT(fs.name, " ", fs.nachname) AS name,
                         fs.about_me_public AS `desc`,
                         fs.rolle,
                         fs.geschlecht,
@@ -80,25 +76,6 @@ class TeamModel extends Model
                     LIMIT 1
 		')
 		) {
-			$user['groups'] = $this->q('
-				SELECT 
-					b.id,
-					b.name,
-					b.type
-						
-				FROM 
-					fs_botschafter bot,
-					fs_bezirk b
-						
-				WHERE 
-					bot.bezirk_id = b.id
-						
-				AND 
-					bot.foodsaver_id = ' . (int)$id . '
-					
-				AND 
-					b.type = 7');
-
 			return $user;
 		}
 	}

@@ -1,25 +1,25 @@
 #team-user {
-  background-color: #fff;
+  background-color: #ffffff;
   padding: 30px;
   margin-top: 50px;
   margin-bottom: 50px;
 }
 
 #team-user h1 {
-  font-family: 'Alfa Slab One';
+  font-family: 'Alfa Slab One', serif;
   font-size: 23px;
   font-weight: normal;
-  color: #4a3520;
+  color: #533a24;
 }
 
 #team-user small {
-  color: #4a3520;
+  color: #533a24;
   margin-bottom: 20px;
   display: block;
 }
 
 #team-user p {
-  color: #4a3520;
+  color: #533a24;
 }
 
 #team-user .subtitle {
@@ -33,58 +33,57 @@
   display: inline-block;
 }
 
-#teamlist {
+#team-list {
   display: block;
   text-align: center;
 }
 
-#teamlist li {
+#team-list li {
   width: 28%;
   margin: 80px 24px;
   display: inline-block;
 }
 
-#teamlist li a {
-  background-color: #fff;
+#team-list li a {
+  background-color: #ffffff;
   padding: 20px;
   text-align: center;
 }
 
-#teamlist li a:hover {
-  color: #4a3520;
-
+#team-list li a:hover {
+  color: #533a24;
 }
 
-#teamlist li a:hover span, #teamlist li a:hover h3 {
+#team-list li a:hover span, #team-list li a:hover h3 {
   background-color: transparent;
-  color: #4a3520;
+  color: #533a24;
 }
 
-#teamlist .desc {
-  color: #4a3520 !important;
+#team-list .desc {
+  color: #533a24;
   display: block;
   height: 160px;
   line-height: 20px;
 }
 
-#teamlist h3 {
+#team-list h3 {
   font-size: 16px;
 }
 
-#teamlist .subtitle {
-  color: #4a3520 !important;
+#team-list .subtitle {
+  color: #533a24;
   margin-bottom: 30px;
   display: inline-block;
   height: 30px;
 }
 
-#teamlist .img, #team-user .img {
+#team-list .img, #team-user .img {
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
 
-  border: 4px solid #4a3520;
+  border: 4px solid #533a24;
 
   display: inline-block;
   height: 150px;
@@ -93,7 +92,7 @@
   width: 150px;
 }
 
-#teamlist .img {
+#team-list .img {
   border-radius: 150px;
 }
 
@@ -104,38 +103,39 @@
   width: 200px;
 }
 
-#teamlist a:hover .img {
-  background-color: #ffffff !important;
+#team-list a:hover .img {
+  background-color: #ffffff;
 }
 
-#teamlist .foot, #team-user .foot {
-  background-color: #4a3520;
+#team-list .foot, #team-user .foot {
+  background-color: #533a24;
   display: block;
-  margin: -20px;
   line-height: 30px;
   text-align: center;
-  margin-top: 30px;
-  color: #4a3520;
+  margin: 30px -20px -20px;
+  color: #533a24;
 }
 
 #team-user .foot {
   margin: 30px -30px -30px -30px;
 }
 
-#teamlist a:hover .foot {
-  background-color: #967d61;
+#team-list a:hover .foot {
+  background-color: #533a24;
+  opacity: 0.8;
 }
 
-#teamlist a:hover .foot i {
-  color: #967d61;
+#team-list a:hover .foot i {
+  opacity: 0.8;
 }
 
-#teamlist a:hover .img {
-  border-color: #967d61;
+#team-list a:hover .img {
+  border-color: #533a24;
+  opacity: 0.8;
 }
 
-#teamlist a:hover .foot i:hover, #team-user .foot a:hover i {
-  opacity: 0.6;
+#team-list a:hover .foot i:hover, #team-user .foot a:hover i {
+  opacity: 0.8;
 }
 
 .foot i > span {
@@ -143,8 +143,8 @@
 }
 
 .foot i {
-  color: #4a3520;
-  background-color: #fff;
+  color: #533a24;
+  background-color: #ffffff;
   font-size: 17px;
   padding: 8px;
   border-radius: 20px;
@@ -167,7 +167,7 @@
 }
 
 @media all and (max-width: 980px) {
-  #teamlist li {
+  #team-list li {
     width: 42%;
     margin: 80px 24px;
     display: inline-block;
@@ -175,7 +175,7 @@
 }
 
 @media all and (max-width: 700px) {
-  #teamlist li {
+  #team-list li {
     width: 100%;
     margin: 80px 0;
     display: block;
