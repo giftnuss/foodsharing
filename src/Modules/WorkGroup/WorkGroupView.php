@@ -280,6 +280,8 @@ class WorkGroupView extends View
 			$head = $this->v_utils->v_input_wrapper(count($group['leader']) . ' Ansprechpartner', $head);
 		}
 
+		$head .= $this->v_utils->v_field($this->func->s('contact-disclaimer'));
+
 		return $head . $this->v_utils->v_form_textarea('message');
 	}
 }

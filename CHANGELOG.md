@@ -8,6 +8,7 @@
 
 ## Bugfixes
 - Remove info section from foodsaver page, if it is empty !320
+- It is possible to contact working groups again. !343 #403 by @peter.toennies @NerdyProjects
 
 ## Refactoring
 - complete tidying up of all team related files !321 by @peter.toennies

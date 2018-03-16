@@ -61,10 +61,12 @@
                         {% endif %}
 
                         <div class="float_right">
+                            {% if group.email|length %}
                             <a class="button" href="#"
                                onclick="ajreq('contactgroup',{id:{{ group.id }}});return false;">
                                 Gruppe kontaktieren
                             </a>
+                            {%  endif %}
                             {% if group.mayEdit %}
                                 <a class="button" href="/?page=groups&sub=edit&id={{ group.id }}">
                                     Gruppe bearbeiten
