@@ -1,4 +1,4 @@
-# Not Release
+# Not Released
 
 ## Release notes
 
@@ -7,6 +7,7 @@
 ## Features
 
 ## Bugfixes
+- Remove info section from foodsaver page, if it is empty !320
 
 ## Refactoring
 - replaced the PREFIX keyword in the whole source !339 #421 by peter.toennies
