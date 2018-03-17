@@ -14,7 +14,7 @@ class EventModel extends Model
 		}
 
 		return $this->insert('
-			INSERT INTO 	`' . PREFIX . 'event`
+			INSERT INTO 	`fs_event`
 			(
 				`foodsaver_id`,
 				`bezirk_id`,
@@ -29,7 +29,7 @@ class EventModel extends Model
 			)
 			VALUES
 			(
-				' . (int)fsId() . ',
+				' . (int)$this->func->fsId() . ',
 				' . (int)$event['bezirk_id'] . ',
 				' . (int)$location_id . ',
 				' . (int)$event['public'] . ',
@@ -46,7 +46,7 @@ class EventModel extends Model
 	public function deleteInvites($event_id)
 	{
 		return $this->del('
-			DELETE FROM ' . PREFIX . 'foodsaver_has_event
+			DELETE FROM fs_foodsaver_has_event
 			WHERE event_id = ' . (int)$event_id . '	
 		');
 	}
@@ -60,7 +60,7 @@ class EventModel extends Model
 
 		return $this->update('
 			UPDATE 	
-				`' . PREFIX . 'event`
+				`fs_event`
 
 			SET
 				`location_id` = ' . (int)$location_id . ',
@@ -81,7 +81,7 @@ class EventModel extends Model
 	{
 		$status = $this->qOne('
 			SELECT `status` 
-			FROM 	`' . PREFIX . 'foodsaver_has_event`
+			FROM 	`fs_foodsaver_has_event`
 			WHERE 	event_id = ' . (int)$event_id . '	
 			AND 	foodsaver_id = ' . (int)$foodsaver_id . '	
 		');
@@ -96,9 +96,9 @@ class EventModel extends Model
 	public function setInviteStatus($event_id, $status)
 	{
 		$this->update('
-			UPDATE 	' . PREFIX . 'foodsaver_has_event
+			UPDATE 	fs_foodsaver_has_event
 			SET 	`status` = ' . (int)$status . '
-			WHERE 	foodsaver_id = ' . (int)fsId() . '
+			WHERE 	foodsaver_id = ' . (int)$this->func->fsId() . '
 			AND 	event_id = ' . (int)$event_id . '
 		');
 
@@ -108,10 +108,10 @@ class EventModel extends Model
 	public function addInviteStatus($event_id, $status)
 	{
 		$this->update('
-			REPLACE INTO ' . PREFIX . 'foodsaver_has_event
+			REPLACE INTO fs_foodsaver_has_event
 			(`status`, `foodsaver_id`, `event_id`)
 			VALUES
-			(' . (int)$status . ', ' . (int)fsId() . ', ' . (int)$event_id . ')
+			(' . (int)$status . ', ' . (int)$this->func->fsId() . ', ' . (int)$event_id . ')
 		');
 
 		return true;
@@ -128,7 +128,7 @@ class EventModel extends Model
 
 		if ($fsids = $this->qCol('
 			SELECT 	foodsaver_id
-			FROM	' . PREFIX . 'foodsaver_has_bezirk
+			FROM	fs_foodsaver_has_bezirk
 			WHERE 	bezirk_id ' . $b_sql . ' 
 			AND 	`active` = 1
 		')
@@ -136,7 +136,7 @@ class EventModel extends Model
 			$invited = array();
 			if ($inv = $this->qCol(
 				'
-				SELECT foodsaver_id FROM ' . PREFIX . 'foodsaver_has_event
+				SELECT foodsaver_id FROM fs_foodsaver_has_event
 				WHERE event_id = ' . (int)$event_id
 			)
 			) {
@@ -154,7 +154,7 @@ class EventModel extends Model
 
 			if (!empty($sql)) {
 				return $this->sql('
-					INSERT INTO ' . PREFIX . 'foodsaver_has_event
+					INSERT INTO fs_foodsaver_has_event
 					(foodsaver_id,event_id,`status`)
 					VALUES
 					' . implode(',', $sql) . '
@@ -163,91 +163,5 @@ class EventModel extends Model
 				return true;
 			}
 		}
-	}
-
-	public function getEvent($id)
-	{
-		if ($event = $this->qRow('
-			SELECT
-				e.id,
-				e.public,
-				fs.`id` AS fs_id,
-				fs.name AS fs_name,
-				fs.photo AS fs_photo,
-				e.`bezirk_id`,
-				e.`location_id`,
-				e.`name`,
-				e.`start`,
-				UNIX_TIMESTAMP(e.`start`) AS start_ts,
-				e.`end`,
-				UNIX_TIMESTAMP(e.`end`) AS end_ts,
-				e.`description`,
-				e.`bot`,
-				e.`online`
-	
-			FROM
-				`' . PREFIX . 'event` e,
-				`' . PREFIX . 'foodsaver` fs
-	
-			WHERE
-				e.foodsaver_id = fs.id
-	
-			AND
-				e.id = ' . (int)$id . '
-		')
-		) {
-			$event['location'] = false;
-			$event['invites'] = $this->getEventInvites($id);
-
-			if ($event['location_id'] > 0) {
-				$event['location'] = $this->getLocation($event['location_id']);
-			}
-
-			return $event;
-		}
-
-		return false;
-	}
-
-	private function getEventInvites($event_id)
-	{
-		if ($invites = $this->q('
-			SELECT 	fs.id,
-					fs.name,
-					fs.photo,
-					fe.status
-
-			FROM 
-				`' . PREFIX . 'foodsaver_has_event` fe,
-				`' . PREFIX . 'foodsaver` fs
-				
-			WHERE
-				fe.foodsaver_id = fs.id
-				
-			AND 
-				fe.event_id = ' . (int)$event_id . '
-		')
-		) {
-			$out = array(
-				'invited' => array(),
-				'accepted' => array(),
-				'maybe' => array(),
-				'may' => array()
-			);
-			foreach ($invites as $i) {
-				$out['may'][$i['id']] = true;
-				if ($i['status'] == 0) {
-					$out['invited'][] = $i;
-				} elseif ($i['status'] == 1) {
-					$out['accepted'][] = $i;
-				} elseif ($i['status'] == 2) {
-					$out['maybe'][] = $i;
-				}
-			}
-
-			return $out;
-		}
-
-		return false;
 	}
 }

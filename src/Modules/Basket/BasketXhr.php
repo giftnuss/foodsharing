@@ -7,15 +7,20 @@ use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Message\MessageModel;
 
 class BasketXhr extends Control
 {
 	private $status;
+	private $gateway;
+	private $messageModel;
 
-	public function __construct()
+	public function __construct(BasketModel $model, BasketView $view, BasketGateway $gateway, MessageModel $messageModel)
 	{
-		$this->model = new BasketModel();
-		$this->view = new BasketView();
+		$this->model = $model;
+		$this->messageModel = $messageModel;
+		$this->view = $view;
+		$this->gateway = $gateway;
 
 		$this->status = array(
 			'ungelesen' => 0,
@@ -65,7 +70,7 @@ class BasketXhr extends Control
 
 		$dia->addPictureField('picture');
 
-		$foodsaver = $this->model->getValues(array('telefon', 'handy'), 'foodsaver', fsid());
+		$foodsaver = $this->model->getValues(array('telefon', 'handy'), 'foodsaver', $this->func->fsId());
 
 		$dia->addContent($this->view->basketForm($foodsaver));
 
@@ -137,7 +142,7 @@ class BasketXhr extends Control
 		$location_type = 0;
 
 		if ($location_type == 0) {
-			$fs = $this->model->getValues(array('lat', 'lon'), 'foodsaver', fsid());
+			$fs = $this->model->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
 			$lat = $fs['lat'];
 			$lon = $fs['lon'];
 		}
@@ -246,7 +251,7 @@ class BasketXhr extends Control
 		$xhr = new Xhr();
 
 		if (isset($_GET['choords'])) {
-			if ($basket = $this->model->closeBaskets(50, array(
+			if ($basket = $this->model->closeBaskets(30, array(
 				'lat' => $_GET['choords'][0],
 				'lon' => $_GET['choords'][1]
 			))
@@ -305,7 +310,7 @@ class BasketXhr extends Control
 	{
 		$dia = new XhrDialog();
 
-		$dia->setTitle('Essenskorb von foodsharing.de');
+		$dia->setTitle('Essenskorb von ' . BASE_URL);
 
 		$dia->addContent($this->view->fsBubble($basket));
 		$modal = false;
@@ -359,8 +364,8 @@ class BasketXhr extends Control
 			$msg = strip_tags($_GET['msg']);
 			$msg = trim($msg);
 			if (!empty($msg)) {
-				$this->model->message($fs_id, fsId(), $msg, 0);
-				$this->mailMessage(fsId(), $fs_id, $msg, 22);
+				$this->messageModel->message($fs_id, $this->func->fsId(), $msg, 0);
+				$this->mailMessage($this->func->fsId(), $fs_id, $msg, 22);
 				$this->model->setStatus($_GET['id'], 0);
 
 				return array(
@@ -403,7 +408,7 @@ class BasketXhr extends Control
 
 	public function update()
 	{
-		$count = $this->model->getUpdateCount();
+		$count = $this->gateway->getUpdateCount($this->func->fsId());
 		if ((int)$count > 0) {
 			return array(
 				'status' => 1,
@@ -424,7 +429,7 @@ class BasketXhr extends Control
 	public function answer()
 	{
 		if ($id = $this->model->getVal('foodsaver_id', 'basket', $_GET['id'])) {
-			if ($id == fsid()) {
+			if ($id == $this->func->fsId()) {
 				$this->model->setStatus($_GET['id'], 1, $_GET['fid']);
 
 				return array(
@@ -438,35 +443,22 @@ class BasketXhr extends Control
 	public function removeRequest()
 	{
 		if ($request = $this->model->getRequest($_GET['id'], $_GET['fid'])) {
-			global $g_data;
-			$g_data['fetchstate'] = 3;
-			/*
-			 * Array
-				(
-					[time_ts] => 1402149037
-					[fs_name] => Luisa
-					[fs_photo] => 530c93a86a9f8.jpg
-					[fs_id] => 3542
-					[id] => 20
-				)
-			 */
-
 			$dia = new XhrDialog();
 			$dia->addOpt('width', '400');
 			$dia->noOverflow();
 			$dia->setTitle('Essenskorbanfrage von ' . $request['fs_name'] . ' abschließen');
 			$dia->addContent(
 				'<div>
-					<img src="' . img($request['fs_photo']) . '" style="float:left;margin-right:10px;">
-					<p>Anfragezeitpunkt: ' . niceDate($request['time_ts']) . '</p>
+					<img src="' . $this->func->img($request['fs_photo']) . '" style="float:left;margin-right:10px;">
+					<p>Anfragezeitpunkt: ' . $this->func->niceDate($request['time_ts']) . '</p>
 					<div style="clear:both;"></div>
 				</div>'
-				. v_form_radio('fetchstate', array(
+				. $this->v_utils->v_form_radio('fetchstate', array(
 					'values' => array(
-						array('id' => 3, 'name' => 'Ja, ' . genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' hat den Korb abgeholt.'),
-						array('id' => 5, 'name' => 'Nein, ' . genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' ist leider nicht wie verabredet erschienen.'),
-						array('id' => 5, 'name' => 'Die Lebensmittel wurden von jemand anderem abgeholt.'),
-					)
+						array('id' => 3, 'name' => 'Ja, ' . $this->func->genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' hat den Korb abgeholt.'),
+						array('id' => 5, 'name' => 'Nein, ' . $this->func->genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' ist leider nicht wie verabredet erschienen.'),
+						array('id' => 5, 'name' => 'Die Lebensmittel wurden von jemand anderem abgeholt.')),
+					'selected' => 3
 				))
 			);
 			$dia->addAbortButton();

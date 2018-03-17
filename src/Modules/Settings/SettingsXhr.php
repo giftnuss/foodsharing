@@ -10,10 +10,10 @@ use Foodsharing\Lib\Xhr\XhrDialog;
 
 class SettingsXhr extends Control
 {
-	public function __construct()
+	public function __construct(SettingsModel $model, SettingsView $view)
 	{
-		$this->model = new SettingsModel();
-		$this->view = new SettingsView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 
@@ -24,7 +24,7 @@ class SettingsXhr extends Control
 
 	public function changemail()
 	{
-		if (may()) {
+		if ($this->func->may()) {
 			$dia = new XhrDialog();
 			$dia->setTitle('E-Mail-Adresse ändern');
 
@@ -41,7 +41,7 @@ class SettingsXhr extends Control
 
 	public function changemail2()
 	{
-		if (validEmail($_GET['email'])) {
+		if ($this->func->validEmail($_GET['email'])) {
 			if ($this->model->emailExists($_GET['email'])) {
 				return array(
 					'status' => 1,
@@ -52,11 +52,11 @@ class SettingsXhr extends Control
 			$this->model->addNewMail($_GET['email'], $token);
 			// anrede name link
 
-			if ($fs = $this->model->getValues(array('name', 'geschlecht'), 'foodsaver', fsid())) {
-				tplMail(21, $_GET['email'], array(
-					'anrede' => genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+			if ($fs = $this->model->getValues(array('name', 'geschlecht'), 'foodsaver', $this->func->fsId())) {
+				$this->func->tplMail(21, $_GET['email'], array(
+					'anrede' => $this->func->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 					'name' => $fs['name'],
-					'link' => 'http://www.' . DEFAULT_HOST . '/?page=settings&sub=general&newmail=' . $token
+					'link' => BASE_URL . '/?page=settings&sub=general&newmail=' . $token
 				));
 
 				return array(
@@ -94,22 +94,20 @@ class SettingsXhr extends Control
 
 	public function changemail4()
 	{
-		if ($fs = $this->model->getValues(array('email'), 'foodsaver', fsId())) {
+		if ($fs = $this->model->getValues(array('email'), 'foodsaver', $this->func->fsId())) {
 			$did = strip_tags($_GET['did']);
 			if ($this->model->checkClient($fs['email'], $_GET['pw'])) {
 				if ($email = $this->model->getMailchange()) {
-					if ($crypt = $this->model->encryptMd5($email, $_GET['pw'])) {
-						if ($this->model->changeMail($email, $crypt)) {
-							return array(
-								'status' => 1,
-								'script' => 'pulseInfo("Deine E-Mail-Adresse wurde geändert!");$("#' . $did . '").dialog("close");'
-							);
-						} else {
-							return array(
-								'status' => 1,
-								'script' => 'pulseInfo(\'Die E-Mail-Adresse konnte nicht geändert werden, jemand anderes benutzt sie schon!\');'
-							);
-						}
+					if ($this->model->changeMail($email)) {
+						return array(
+							'status' => 1,
+							'script' => 'pulseInfo("Deine E-Mail-Adresse wurde geändert!");$("#' . $did . '").dialog("close");'
+						);
+					} else {
+						return array(
+							'status' => 1,
+							'script' => 'pulseInfo(\'Die E-Mail-Adresse konnte nicht geändert werden, jemand anderes benutzt sie schon!\');'
+						);
 					}
 				}
 			}

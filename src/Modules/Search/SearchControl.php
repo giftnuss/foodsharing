@@ -7,21 +7,21 @@ use Foodsharing\Modules\Core\Control;
 
 class SearchControl extends Control
 {
-	public function __construct()
+	public function __construct(SearchModel $model, SearchView $view)
 	{
-		$this->model = new SearchModel();
-		$this->view = new SearchView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 
 		if (!S::may('fs')) {
-			go('/?page=dashboard');
+			$this->func->go('/?page=dashboard');
 		}
 	}
 
 	public function index()
 	{
-		addBread(s('search'));
+		$this->func->addBread($this->func->s('search'));
 		$value = '';
 		$out = '';
 
@@ -31,16 +31,16 @@ class SearchControl extends Control
 				foreach ($res as $key => $r) {
 					$cnt = '';
 					foreach ($r as $erg) {
-						$cnt .= v_input_wrapper($erg['name'], $erg['teaser'], 'search', array('click' => $erg['click']));
+						$cnt .= $this->v_utils->v_input_wrapper($erg['name'], $erg['teaser'], 'search', array('click' => $erg['click']));
 					}
-					$out .= v_field($cnt, count($r) . ' ' . s($key) . ' gefunden', array('class' => 'ui-padding'));
+					$out .= $this->v_utils->v_field($cnt, count($r) . ' ' . $this->func->s($key) . ' gefunden', array('class' => 'ui-padding'));
 				}
 			} else {
-				$out .= v_field(v_info('Die Suche gab leider keine Treffer'), 'Ergebnis', array('class' => 'ui-padding'));
+				$out .= $this->v_utils->v_field($this->v_utils->v_info('Die Suche gab leider keine Treffer'), 'Ergebnis', array('class' => 'ui-padding'));
 			}
 		}
 
-		addContent($this->view->searchBox($value));
-		addContent($out);
+		$this->func->addContent($this->view->searchBox($value));
+		$this->func->addContent($out);
 	}
 }

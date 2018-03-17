@@ -22,55 +22,68 @@ if(isset($_GET['g_path']))
 */
 
 use Foodsharing\Debug\DebugBar;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\DI;
+use Foodsharing\Lib\Func;
+use Foodsharing\Lib\Routing;
+use Foodsharing\Lib\View\Utils;
 
 require __DIR__ . '/includes/setup.php';
 
 require_once 'lib/inc.php';
-addCss('/css/gen/style.css?v=' . VERSION);
-addScript('/js/gen/script.js?v=' . VERSION);
+$view_utils = DI::$shared->get(Utils::class);
 
-//importUsers();
-
-getCurrent();
-$menu = getMenu();
-
-getMessages();
-makeHead();
-
-if (DebugBar::isEnabled()) {
-	addHead(DebugBar::renderHead());
+/**
+ * @return Func
+ */
+function getFunc()
+{
+	return DI::$shared->get(Func::class);
 }
 
-if (isset($_POST['form_submit'])) {
-	if (handleForm($_POST['form_submit'])) {
-		go('/?page=' . getPage());
+$func = getFunc();
+
+$func->addStylesheet('/css/gen/style.css?v=' . VERSION);
+$func->addScript('/js/gen/script.js?v=' . VERSION);
+
+if (DebugBar::isEnabled()) {
+	$func->addHead(DebugBar::renderHead());
+}
+
+if (DebugBar::isEnabled()) {
+	$func->addContent(DebugBar::renderContent(), CNT_BOTTOM);
+}
+
+$app = $func->getPage();
+
+$class = Routing::getClassName($app, 'Control');
+if ($class) {
+	$obj = DI::$shared->get(ltrim($class, '\\'));
+
+	if (isset($_GET['a']) && is_callable(array($obj, $_GET['a']))) {
+		$meth = $_GET['a'];
+		$obj->$meth($request, $response);
+	} else {
+		$obj->index($request, $response);
+	}
+	$sub = $sub = $obj->getSubFunc();
+	if ($sub !== false && is_callable(array($obj, $sub))) {
+		$obj->$sub($request, $response);
 	}
 }
-$msgbar = '';
-$logolink = '/';
-if (S::may()) {
-	$msgbar = v_msgBar();
-	$logolink = '/?page=dashboard';
+
+$page = $response->getContent();
+$isUsingResponse = $page !== '--';
+if ($isUsingResponse) {
+	$response->send();
 } else {
-	$msgbar = v_login();
+	$twig = DI::$shared->get(\Foodsharing\Lib\Twig::class);
+	$page = $twig->render('layouts/' . $g_template . '.twig', $func->generateAndGetGlobalViewData());
 }
 
-if (DebugBar::isEnabled()) {
-	addContent(DebugBar::renderContent(), CNT_BOTTOM);
-}
-
-/*
- * check for page caching
- */
 if (isset($cache) && $cache->shouldCache()) {
-	ob_start();
-	include 'tpl/' . $g_template . '.php';
-	$page = ob_get_contents();
 	$cache->cache($page);
-	ob_end_clean();
+}
 
+if (!$isUsingResponse) {
 	echo $page;
-} else {
-	include 'tpl/' . $g_template . '.php';
 }

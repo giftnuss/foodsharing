@@ -9,16 +9,17 @@ use Foodsharing\Lib\Xhr\Xhr;
 
 class ActivityXhr extends Control
 {
-	public function __construct()
-	{
-		$this->model = new ActivityModel();
+	private $mailboxModel;
 
+	public function __construct(ActivityModel $model, MailboxModel $mailboxModel)
+	{
+		$this->model = $model;
+		$this->mailboxModel = $mailboxModel;
 		parent::__construct();
 	}
 
 	public function loadmore()
 	{
-		$mailbox = new MailboxModel();
 		/*
 		 * get ids to not display from options
 		 */
@@ -49,7 +50,7 @@ class ActivityXhr extends Control
 		if ($up = $this->model->loadBetriebUpdates($_GET['page'])) {
 			$updates = array_merge($updates, $up);
 		}
-		if ($up = $this->model->loadMailboxUpdates($_GET['page'], $mailbox, $hidden_ids['mailbox'])) {
+		if ($up = $this->model->loadMailboxUpdates($_GET['page'], $this->mailboxModel, $hidden_ids['mailbox'])) {
 			$updates = array_merge($updates, $up);
 		}
 		if ($up = $this->model->loadFriendWallUpdates($_GET['page'], $hidden_ids['buddywall'])) {
@@ -69,9 +70,6 @@ class ActivityXhr extends Control
 		/*
 		 * get Forum updates
 		 */
-
-		$mailbox = new MailboxModel();
-
 		if (isset($_GET['options'])) {
 			$options = array();
 			foreach ($_GET['options'] as $o) {
@@ -113,7 +111,7 @@ class ActivityXhr extends Control
 		if ($up = $this->model->loadBetriebUpdates()) {
 			$updates = array_merge($updates, $up);
 		}
-		if ($up = $this->model->loadMailboxUpdates($page, $mailbox, $hidden_ids['mailbox'])) {
+		if ($up = $this->model->loadMailboxUpdates($page, $this->mailboxModel, $hidden_ids['mailbox'])) {
 			$updates = array_merge($updates, $up);
 		}
 		if ($up = $this->model->loadFriendWallUpdates($page, $hidden_ids['buddywall'])) {
@@ -126,9 +124,9 @@ class ActivityXhr extends Control
 		$xhr->addData('updates', $updates);
 
 		$xhr->addData('user', array(
-			'id' => fsId(),
+			'id' => $this->func->fsId(),
 			'name' => S::user('name'),
-			'avatar' => img(S::user('photo'))
+			'avatar' => $this->func->img(S::user('photo'))
 		));
 
 		if (isset($_GET['listings'])) {
@@ -179,7 +177,7 @@ class ActivityXhr extends Control
 					}
 					$listings['buddywalls'][] = array(
 						'id' => $b['id'],
-						'name' => '<img style="border-radius:4px;position:relative;top:5px;" src="' . img($b['photo']) . '" height="24" /> ' . $b['name'],
+						'name' => '<img style="border-radius:4px;position:relative;top:5px;" src="' . $this->func->img($b['photo']) . '" height="24" /> ' . $b['name'],
 						'checked' => $checked
 					);
 				}
@@ -188,7 +186,7 @@ class ActivityXhr extends Control
 			/*
 			 * listings mailboxes
 			*/
-			if ($boxes = $mailbox->getBoxes()) {
+			if ($boxes = $this->mailboxModel->getBoxes()) {
 				foreach ($boxes as $b) {
 					$checked = true;
 					if (isset($option['mailbox-' . $b['id']])) {
@@ -196,7 +194,7 @@ class ActivityXhr extends Control
 					}
 					$listings['mailboxes'][] = array(
 						'id' => $b['id'],
-						'name' => $b['name'] . '@' . DEFAULT_HOST,
+						'name' => $b['name'] . '@' . DEFAULT_EMAIL_HOST,
 						'checked' => $checked
 					);
 				}
@@ -204,22 +202,22 @@ class ActivityXhr extends Control
 
 			$xhr->addData('listings', array(
 				0 => array(
-					'name' => s('groups'),
+					'name' => $this->func->s('groups'),
 					'index' => 'bezirk',
 					'items' => $listings['groups']
 				),
 				1 => array(
-					'name' => s('regions'),
+					'name' => $this->func->s('regions'),
 					'index' => 'bezirk',
 					'items' => $listings['regions']
 				),
 				2 => array(
-					'name' => s('mailboxes'),
+					'name' => $this->func->s('mailboxes'),
 					'index' => 'mailbox',
 					'items' => $listings['mailboxes']
 				),
 				3 => array(
-					'name' => s('buddywalls'),
+					'name' => $this->func->s('buddywalls'),
 					'index' => 'buddywall',
 					'items' => $listings['buddywalls']
 				),

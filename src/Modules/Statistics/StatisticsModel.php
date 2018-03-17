@@ -21,7 +21,7 @@ class StatisticsModel extends Model
 					SUM(`stat_fairteilercount`) AS fairteilercount
 	
 				FROM
-					' . PREFIX . 'bezirk
+					fs_bezirk
 	
 				WHERE
 					`id` = 741
@@ -43,7 +43,7 @@ class StatisticsModel extends Model
 				`stat_fscount` AS fscount,
 				`stat_fairteilercount` AS fairteilercount
 			FROM
-				' . PREFIX . 'bezirk
+				fs_bezirk
 	
 			WHERE
 				`type` IN(1,8)
@@ -63,7 +63,7 @@ class StatisticsModel extends Model
 				`stat_fetchweight` AS fetchweight,
 				`stat_fetchcount` AS fetchcount
 			FROM
-				' . PREFIX . 'foodsaver
+				fs_foodsaver
 			WHERE
 				deleted_at IS NULL
 	

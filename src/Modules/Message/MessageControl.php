@@ -7,29 +7,30 @@ use Foodsharing\Modules\Core\Control;
 
 class MessageControl extends Control
 {
-	public function __construct()
+	public function __construct(MessageModel $model, MessageView $view)
 	{
-		$this->model = new MessageModel();
-		$this->view = new MessageView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 
 		if (!S::may()) {
-			goLogin();
+			$this->func->goLogin();
 		}
 	}
 
 	public function index()
 	{
 		$this->setTemplate('msg');
+		$this->setContentWidth(5, 8);
 
-		addJs('msg.fsid = ' . (int)fsId() . ';');
-		addBread(s('messages'));
-		addTitle(s('messages'));
+		$this->func->addJs('msg.fsid = ' . (int)$this->func->fsId() . ';');
+		$this->func->addBread($this->func->s('messages'));
+		$this->func->addTitle($this->func->s('messages'));
 
-		addContent($this->view->compose());
-		addContent($this->view->conversation());
-		addContent($this->view->leftMenu(), CNT_RIGHT);
+		$this->func->addContent($this->view->compose());
+		$this->func->addContent($this->view->conversation());
+		$this->func->addContent($this->view->leftMenu(), CNT_RIGHT);
 
 		if ($conversations = $this->model->listConversations()) {
 			$ids = array();
@@ -38,6 +39,6 @@ class MessageControl extends Control
 			}
 			S::set('msg_conversations', $ids);
 		}
-		addContent($this->view->convListWrapper($this->view->conversationList($conversations)), CNT_RIGHT);
+		$this->func->addContent($this->view->convListWrapper($this->view->conversationList($conversations)), CNT_RIGHT);
 	}
 }

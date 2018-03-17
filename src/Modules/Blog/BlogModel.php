@@ -3,14 +3,23 @@
 namespace Foodsharing\Modules\Blog;
 
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Model;
 
 class BlogModel extends Model
 {
+	private $bellGateway;
+
+	public function __construct(BellGateway $bellGateway)
+	{
+		parent::__construct();
+		$this->bellGateway = $bellGateway;
+	}
+
 	public function canEdit($article_id)
 	{
 		if ($val = $this->getValues(array('bezirk_id', 'foodsaver_id'), 'blog_entry', $article_id)) {
-			if (fsId() == $val['foodsaver_id'] || isBotFor($val['bezirk_id'])) {
+			if ($this->func->fsId() == $val['foodsaver_id'] || $this->func->isBotFor($val['bezirk_id'])) {
 				return true;
 			}
 		}
@@ -20,11 +29,11 @@ class BlogModel extends Model
 
 	public function canAdd($fsId, $bezirkId)
 	{
-		if (isOrgaTeam()) {
+		if ($this->func->isOrgaTeam()) {
 			return true;
 		}
 
-		if (isBotFor($bezirkId)) {
+		if ($this->func->isBotFor($bezirkId)) {
 			return true;
 		}
 
@@ -45,8 +54,8 @@ class BlogModel extends Model
 				CONCAT(fs.name," ",fs.nachname) AS fs_name
 	
 			FROM
-				`' . PREFIX . 'blog_entry` b,
-				`' . PREFIX . 'foodsaver` fs
+				`fs_blog_entry` b,
+				`fs_foodsaver` fs
 	
 			WHERE
 				b.foodsaver_id = fs.id
@@ -75,8 +84,8 @@ class BlogModel extends Model
 				CONCAT(fs.name," ",fs.nachname) AS fs_name
 		
 			FROM 
-				`' . PREFIX . 'blog_entry` b,
-				`' . PREFIX . 'foodsaver` fs
+				`fs_blog_entry` b,
+				`fs_foodsaver` fs
 		
 			WHERE 
 				b.foodsaver_id = fs.id
@@ -93,7 +102,7 @@ class BlogModel extends Model
 	public function listArticle()
 	{
 		$not = '';
-		if (!isOrgaTeam()) {
+		if (!$this->func->isOrgaTeam()) {
 			$not = 'WHERE 		`bezirk_id` IN (' . implode(',', $this->getBezirkIds()) . ')';
 		}
 
@@ -105,7 +114,7 @@ class BlogModel extends Model
 						`active`,
 						`bezirk_id`
 		
-			FROM 		`' . PREFIX . 'blog_entry`
+			FROM 		`fs_blog_entry`
 	
 			' . $not . '
 	
@@ -115,7 +124,7 @@ class BlogModel extends Model
 	public function del_blog_entry($id)
 	{
 		return $this->del('
-			DELETE FROM 	`' . PREFIX . 'blog_entry`
+			DELETE FROM 	`fs_blog_entry`
 			WHERE 			`id` = ' . $this->intval($id) . '
 		');
 	}
@@ -135,7 +144,7 @@ class BlogModel extends Model
 			UNIX_TIMESTAMP(`time`) AS time_ts,
 			`picture`
 			
-			FROM 		`' . PREFIX . 'blog_entry`
+			FROM 		`fs_blog_entry`
 			
 			WHERE 		`id` = ' . $this->intval($id));
 
@@ -145,14 +154,14 @@ class BlogModel extends Model
 	public function add_blog_entry($data)
 	{
 		$active = 0;
-		if (isOrgateam()) {
+		if ($this->func->isOrgaTeam()) {
 			$active = 1;
-		} elseif (isBotFor($data['bezirk_id'])) {
+		} elseif ($this->func->isBotFor($data['bezirk_id'])) {
 			$active = 1;
 		}
 
 		$id = $this->insert('
-			INSERT INTO 	`' . PREFIX . 'blog_entry`
+			INSERT INTO 	`fs_blog_entry`
 			(
 			`bezirk_id`,
 			`foodsaver_id`,
@@ -186,7 +195,7 @@ class BlogModel extends Model
 			$foodsaver[$b['id']] = $b;
 		}
 
-		$this->addBell(
+		$this->bellGateway->addBell(
 			$foodsaver,
 			'blog_new_check_title',
 			'blog_new_check',
@@ -194,7 +203,7 @@ class BlogModel extends Model
 			array('href' => '/?page=blog&sub=edit&id=' . $id),
 			array(
 				'user' => S::user('name'),
-				'teaser' => tt($data['teaser'], 100),
+				'teaser' => $this->func->tt($data['teaser'], 100),
 				'title' => $data['name']
 			),
 			'blog-check-' . $id

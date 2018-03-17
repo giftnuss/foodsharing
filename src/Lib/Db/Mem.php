@@ -2,12 +2,21 @@
 
 namespace Foodsharing\Lib\Db;
 
+use Foodsharing\DI;
+use Foodsharing\Lib\Func;
 use Redis;
 
 class Mem
 {
+	/**
+	 * @var Redis
+	 */
 	public static $cache;
 	public static $connected;
+	/**
+	 * @var Func
+	 */
+	private static $func;
 
 	public static function connect()
 	{
@@ -16,6 +25,7 @@ class Mem
 			self::$cache = new Redis();
 			self::$cache->connect(REDIS_HOST, REDIS_PORT);
 		}
+		self::$func = DI::$shared->get(Func::class);
 	}
 
 	// Set a key to a value, ttl in seconds
@@ -116,17 +126,17 @@ class Mem
 	{
 		global $g_page_cache_suffix;
 
-		return self::get('pc-' . $_SERVER['REQUEST_URI'] . ':' . fsId());
+		return self::get('pc-' . $_SERVER['REQUEST_URI'] . ':' . self::$func->fsId());
 	}
 
 	public static function setPageCache($page, $ttl)
 	{
-		return self::set('pc-' . $_SERVER['REQUEST_URI'] . ':' . fsId(), $page, $ttl);
+		return self::set('pc-' . $_SERVER['REQUEST_URI'] . ':' . self::$func->fsId(), $page, $ttl);
 	}
 
 	public static function delPageCache($page)
 	{
-		return self::del('pc-' . $page . ':' . fsId());
+		return self::del('pc-' . $page . ':' . self::$func->fsId());
 	}
 
 	/**
@@ -152,6 +162,3 @@ class Mem
 		return false;
 	}
 }
-
-/* this initializes the static class - can be refactored when we have DI, should be fine for now */
-Mem::connect();

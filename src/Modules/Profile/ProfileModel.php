@@ -16,7 +16,7 @@ class ProfileModel extends Model
 	public function rate($fsid, $rate, $type = 1, $message = '')
 	{
 		return $this->insert('
-			REPLACE INTO `' . PREFIX . 'rating`
+			REPLACE INTO `fs_rating`
 			(
 				`foodsaver_id`,
 				`rater_id`,
@@ -28,7 +28,7 @@ class ProfileModel extends Model
 			VALUES
 			(
 				' . (int)$fsid . ',
-				' . (int)fsId() . ',
+				' . (int)$this->func->fsId() . ',
 				' . (int)$rate . ',
 				' . (int)$type . ',
 				' . $this->strval($message) . ',
@@ -41,9 +41,9 @@ class ProfileModel extends Model
 	{
 		return $this->qOne('
 			SELECT 	`msg` 
-			FROM	`' . PREFIX . 'rating`
+			FROM	`fs_rating`
 			WHERE 	`foodsaver_id` = ' . (int)$fsid . '
-			AND 	`rater_id` = ' . (int)fsId() . '
+			AND 	`rater_id` = ' . (int)$this->func->fsId() . '
 		');
 	}
 
@@ -55,8 +55,8 @@ class ProfileModel extends Model
 					b.name AS betrieb_name,
 					b.id AS betrieb_id,
 					b.bezirk_id AS bezirk_id
-			FROM   `' . PREFIX . 'abholer` a,
-			       `' . PREFIX . 'betrieb` b
+			FROM   `fs_abholer` a,
+			       `fs_betrieb` b
 
 			WHERE a.betrieb_id =b.id
 			AND   a.foodsaver_id = ' . (int)$fsid . '
@@ -112,7 +112,7 @@ class ProfileModel extends Model
 					fs.mailbox_id,
 					fs.deleted_at
 		
-			FROM 	' . PREFIX . 'foodsaver fs
+			FROM 	fs_foodsaver fs
 				
 			WHERE 	fs.id = ' . (int)$this->fs_id . '
 		
@@ -121,10 +121,10 @@ class ProfileModel extends Model
 			return false;
 		}
 
-		//echo 'SELECT COUNT(rater_id) FROM `fs_rating` WHERE rater_id = '.(int)fsId().' AND foodsaver_id = '.(int)$this->fs_id.' AND ratingtype = 2';
+		//echo 'SELECT COUNT(rater_id) FROM `fs_rating` WHERE rater_id = '.(int)$this->func->fsId().' AND foodsaver_id = '.(int)$this->fs_id.' AND ratingtype = 2';
 		$data['bouched'] = false;
 		$data['bananen'] = false;
-		if ($this->qOne('SELECT 1 FROM `fs_rating` WHERE rater_id = ' . (int)fsId() . ' AND foodsaver_id = ' . (int)$this->fs_id . ' AND ratingtype = 2')) {
+		if ($this->qOne('SELECT 1 FROM `fs_rating` WHERE rater_id = ' . (int)$this->func->fsId() . ' AND foodsaver_id = ' . (int)$this->fs_id . ' AND ratingtype = 2')) {
 			$data['bouched'] = true;
 		}
 		$data['online'] = $this->isActive((int)$this->fs_id);
@@ -137,8 +137,8 @@ class ProfileModel extends Model
 						r.`time`,
 						UNIX_TIMESTAMP(r.`time`) AS time_ts
 		
-				FROM 	`' . PREFIX . 'foodsaver` fs,
-						 `' . PREFIX . 'rating` r
+				FROM 	`fs_foodsaver` fs,
+						 `fs_rating` r
 				WHERE 	r.rater_id = fs.id
 				AND 	r.foodsaver_id = ' . (int)$this->fs_id . '
 				AND 	r.ratingtype = 2
@@ -150,14 +150,14 @@ class ProfileModel extends Model
 
 		//echo((int)$data['bananen']);echo'<<<';die();
 
-		$this->update('UPDATE ' . PREFIX . 'foodsaver SET stat_bananacount = ' . (int)count($data['bananen']) . ' WHERE id = ' . (int)$this->fs_id);
+		$this->update('UPDATE fs_foodsaver SET stat_bananacount = ' . (int)count($data['bananen']) . ' WHERE id = ' . (int)$this->fs_id);
 		$data['stat_bananacount'] = (int)count($data['bananen']);
 
 		$data['botschafter'] = false;
 		$data['foodsaver'] = false;
 		$data['orga'] = false;
 
-		if (mayHandleReports()) {
+		if ($this->func->mayHandleReports()) {
 			$data['violation_count'] = (int)$this->getViolationCount($this->fs_id);
 			$data['note_count'] = (int)$this->getNotesCount($this->fs_id);
 		}
@@ -166,8 +166,8 @@ class ProfileModel extends Model
 			SELECT 	bz.`name`,
 					bz.`id` 
 				
-			FROM 	`' . PREFIX . 'bezirk` bz,
-					' . PREFIX . 'botschafter b 
+			FROM 	`fs_bezirk` bz,
+					fs_botschafter b 
 				
 			WHERE 	b.`bezirk_id` = bz.`id` 
 			AND 	b.foodsaver_id = ' . $this->intval($this->fs_id) . '
@@ -180,8 +180,8 @@ class ProfileModel extends Model
 			SELECT 	bz.`name`,
 					bz.`id`
 		
-			FROM 	`' . PREFIX . 'bezirk` bz,
-					' . PREFIX . 'foodsaver_has_bezirk b
+			FROM 	`fs_bezirk` bz,
+					fs_foodsaver_has_bezirk b
 		
 			WHERE 	b.`bezirk_id` = bz.`id`
 			AND 	b.foodsaver_id = ' . $this->intval($this->fs_id) . '
@@ -194,8 +194,8 @@ class ProfileModel extends Model
 			SELECT 	bz.`name`,
 					bz.`id`
 		
-			FROM 	`' . PREFIX . 'bezirk` bz,
-					' . PREFIX . 'botschafter b
+			FROM 	`fs_bezirk` bz,
+					fs_botschafter b
 		
 			WHERE 	b.`bezirk_id` = bz.`id`
 			AND 	b.foodsaver_id = ' . $this->intval($this->fs_id) . '
@@ -223,7 +223,7 @@ class ProfileModel extends Model
 			SELECT
 				COUNT(wallpost_id)
 			FROM
-	           	`' . PREFIX . 'usernotes_has_wallpost`
+	           	`fs_usernotes_has_wallpost`
 			WHERE
 				usernotes_id = ' . (int)$fsid . '
 		');
@@ -237,7 +237,7 @@ class ProfileModel extends Model
 					
           
 				FROM
-	            	`' . PREFIX . 'report` r
+	            	`fs_report` r
 				
 				WHERE
 					r.foodsaver_id = ' . (int)$fsid . '
@@ -256,9 +256,9 @@ class ProfileModel extends Model
 			  fs.nachname,
 			  fs.name
 			FROM
-			  ' . PREFIX . 'pass_gen pg
+			  fs_pass_gen pg
 			LEFT JOIN
-			  ' . PREFIX . 'foodsaver fs
+			  fs_foodsaver fs
 			ON
 			  pg.bot_id = fs.id
 			WHERE
@@ -284,9 +284,9 @@ class ProfileModel extends Model
 			  fs.nachname,
 			  fs.name
 			FROM
-			  ' . PREFIX . 'verify_history vh
+			  fs_verify_history vh
 			LEFT JOIN
-			  ' . PREFIX . 'foodsaver fs
+			  fs_foodsaver fs
 			ON
 			  vh.bot_id = fs.id
 			WHERE
@@ -309,8 +309,8 @@ class ProfileModel extends Model
 					b.name,
 					bt.verantwortlich
 				
-			FROM 	' . PREFIX . 'betrieb_team bt,
-					' . PREFIX . 'betrieb b
+			FROM 	fs_betrieb_team bt,
+					fs_betrieb b
 				
 			WHERE 	bt.betrieb_id = b.id
 			AND
@@ -327,8 +327,8 @@ class ProfileModel extends Model
 
 			SELECT 	count(b.id)
 				
-			FROM 	' . PREFIX . 'betrieb_team bt,
-					' . PREFIX . 'betrieb b
+			FROM 	fs_betrieb_team bt,
+					fs_betrieb b
 				
 			WHERE 	bt.betrieb_id = b.id
 			AND

@@ -5,6 +5,7 @@ use Codeception\Util\Locator;
 class WorkGroupCest
 {
 	private $regionMember;
+	private $groupAdmin;
 	private $unconnectedFoodsaver;
 	private $testGroup;
 
@@ -17,6 +18,9 @@ class WorkGroupCest
 		$I->addBezirkMember($this->testGroup['id'], $this->regionMember['id']);
 		$this->unconnectedFoodsaver = $I->createFoodsaver();
 		$this->foodsharer = $I->createFoodsharer();
+		$this->groupAdmin = $I->createFoodsaver();
+		$I->addBezirkMember($this->testGroup['id'], $this->groupAdmin['id']);
+		$I->addBezirkAdmin($this->testGroup['id'], $this->groupAdmin['id']);
 	}
 
 	public function _after(AcceptanceTester $I)
@@ -70,5 +74,24 @@ class WorkGroupCest
 		$I->amOnPage($I->forumUrl($group['id']));
 		$I->see($group['name']);
 		$I->see('Noch keine Themen gepostet');
+	}
+
+	public function canEditTeamList(AcceptanceTester $I)
+	{
+		$user = $I->createFoodsaver();
+		$admin = $I->createFoodsaver();
+		$I->login($this->groupAdmin['email']);
+		$I->amOnPage($I->groupEditUrl($this->testGroup['id']));
+		$I->addInTagSelect($admin['name'], '#leader');
+		$I->addInTagSelect($user['name'], '#member');
+		$I->click('Änderungen speichern');
+		$I->waitForText('Änderungen gespeichert');
+		$I->see($user['name'], '#member');
+		$I->see($admin['name'], '#leader');
+		$I->removeFromTagSelect($user['name'], 'member');
+		$I->click('Änderungen speichern');
+		$I->waitForText('Änderungen gespeichert');
+		$I->dontSee($user['name'], '#member');
+		$I->see($admin['name'], '#leader');
 	}
 }

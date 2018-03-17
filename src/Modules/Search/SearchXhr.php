@@ -7,10 +7,10 @@ use Foodsharing\Modules\Core\Control;
 
 class SearchXhr extends Control
 {
-	public function __construct()
+	public function __construct(SearchModel $model, SearchView $view)
 	{
-		$this->model = new SearchModel();
-		$this->view = new SearchView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}
@@ -23,7 +23,7 @@ class SearchXhr extends Control
 				foreach ($res as $key => $value) {
 					if (count($value) > 0) {
 						$out[] = array(
-							'title' => s($key),
+							'title' => $this->func->s($key),
 							'result' => $value
 						);
 					}

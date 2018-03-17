@@ -10,19 +10,22 @@ use Foodsharing\Lib\Xhr\XhrDialog;
 class ProfileXhr extends Control
 {
 	private $foodsaver;
+	private $storeModel;
 
-	public function __construct()
+	public function __construct(ProfileModel $model, ProfileView $view, StoreModel $storeModel)
 	{
+		$this->model = $model;
+		$this->view = $view;
+		$this->storeModel = $storeModel;
+
+		parent::__construct();
+
 		if (!S::may()) {
 			return array(
 				'status' => 1,
 				'script' => 'login();'
 			);
 		}
-		$this->model = new ProfileModel();
-		$this->view = new ProfileView();
-
-		parent::__construct();
 
 		if (isset($_GET['id'])) {
 			$this->model->setFsId($_GET['id']);
@@ -32,7 +35,7 @@ class ProfileXhr extends Control
 				$this->foodsaver = $fs;
 				$this->foodsaver['mailbox'] = false;
 				if (S::may('orga') && (int)$fs['mailbox_id'] > 0) {
-					$this->foodsaver['mailbox'] = $this->model->getVal('name', 'mailbox', $fs['mailbox_id']) . '@' . DEFAULT_HOST;
+					$this->foodsaver['mailbox'] = $this->model->getVal('name', 'mailbox', $fs['mailbox_id']) . '@' . DEFAULT_EMAIL_HOST;
 				}
 
 				/*
@@ -96,7 +99,7 @@ class ProfileXhr extends Control
 	public function history()
 	{
 		$bids = $this->model->getFsBezirkIds($_GET['fsid']);
-		if (S::may() && (S::may('orga') || isBotForA($bids, false, false))) {
+		if (S::may() && (S::may('orga') || $this->func->isBotForA($bids, false, false))) {
 			$dia = new XhrDialog();
 			if ($_GET['type'] == 0) {
 				$history = $this->model->getVerifyHistory($_GET['fsid']);
@@ -120,11 +123,10 @@ class ProfileXhr extends Control
 
 	public function deleteFromSlot()
 	{
-		$betriebModel = new StoreModel();
-		$betrieb = $betriebModel->getBetriebBezirkID($_GET['bid']);
+		$betrieb = $this->storeModel->getBetriebBezirkID($_GET['bid']);
 
-		if (isOrgaTeam() || isBotFor($betrieb['bezirk_id'])) {
-			if ($betriebModel->deleteFetchDate($_GET['fsid'], $_GET['bid'], date('Y-m-d H:i:s', $_GET['date']))) {
+		if ($this->func->isOrgaTeam() || $this->func->isBotFor($betrieb['bezirk_id'])) {
+			if ($this->storeModel->deleteFetchDate($_GET['fsid'], $_GET['bid'], date('Y-m-d H:i:s', $_GET['date']))) {
 				return array(
 					'status' => 1,
 					'script' => '
@@ -155,7 +157,7 @@ class ProfileXhr extends Control
 		$bezirk = $this->model->getBezirk($this->foodsaver['bezirk_id']);
 
 		if ($this->foodsaver['botschafter']) {
-			$subtitle = 'ist ' . genderWord($this->foodsaver['geschlecht'], 'Botschafter', 'Botschafterin', 'Botschafter/in') . ' f&uuml;r ';
+			$subtitle = 'ist ' . $this->func->genderWord($this->foodsaver['geschlecht'], 'Botschafter', 'Botschafterin', 'Botschafter/in') . ' f&uuml;r ';
 			foreach ($this->foodsaver['botschafter'] as $i => $b) {
 				$sep = ', ';
 
@@ -168,15 +170,15 @@ class ProfileXhr extends Control
 
 			$subtitle = substr($subtitle, 0, (strlen($subtitle) - 2));
 			if ($this->foodsaver['orgateam'] == 1) {
-				$subtitle .= ', außerdem engagiert ' . genderWord($this->foodsaver['geschlecht'], 'er', 'sie', 'er/sie') . ' sich im Foodsharing Orgateam';
+				$subtitle .= ', außerdem engagiert ' . $this->func->genderWord($this->foodsaver['geschlecht'], 'er', 'sie', 'er/sie') . ' sich im Foodsharing Orgateam';
 			}
 		} elseif ($this->foodsaver['bezirk_id'] == 0) {
 			$subtitle = 'hat sich bisher für keinen Bezirk entschieden.';
 		} else {
-			$subtitle = 'ist ' . genderWord($this->foodsaver['geschlecht'], 'Foodsaver', 'Foodsaverin', 'Foodsaver') . ' für ' . $bezirk['name'];
+			$subtitle = 'ist ' . $this->func->genderWord($this->foodsaver['geschlecht'], 'Foodsaver', 'Foodsaverin', 'Foodsaver') . ' für ' . $bezirk['name'];
 		}
 
-		$photo = img($this->foodsaver['photo'], 130, 'q');
+		$photo = $this->func->img($this->foodsaver['photo'], 130, 'q');
 
 		return array(
 			'status' => 1,

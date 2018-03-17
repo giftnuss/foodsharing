@@ -4,19 +4,19 @@ namespace Foodsharing\Modules\NewArea;
 
 use Foodsharing\Modules\Core\Control;
 
-class NewareaXhr extends Control
+class NewAreaXhr extends Control
 {
-	public function __construct()
+	public function __construct(NewAreaModel $model, NewAreaView $view)
 	{
-		$this->model = new NewareaModel();
-		$this->view = new NewareaView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}
 
 	public function orderFs()
 	{
-		if (isOrgaTeam()) {
+		if ($this->func->isOrgaTeam()) {
 			if ((int)$_GET['bid'] == 0) {
 				return array(
 					'status' => 1,
@@ -35,15 +35,12 @@ class NewareaXhr extends Control
 							$this->model->linkBezirk($fid, $bezirk_id);
 
 							$foodsaver = $this->model->getValues(array('geschlecht', 'email', 'name', 'nachname'), 'foodsaver', $fid);
-							$anrede = genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r');
+							$anrede = $this->func->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r');
 							$name = $foodsaver['name'];
 
 							$message = str_replace(array('{ANREDE}', '{NAME}'), array($anrede, $name), $_GET['msg']);
 
-							libmail(array(
-								'email' => 'info@lebensmittelretten.de',
-								'email_name' => 'Foodsharing Freiwillige'
-							), $foodsaver['email'], $_GET['subject'], $message);
+							$this->func->libmail(false, $foodsaver['email'], $_GET['subject'], $message);
 							$this->model->clearWantNew($fid);
 
 							$js .= '$(".wantnewcheck[value=\'' . $fid . '\']").parent().parent().remove();';
@@ -61,7 +58,7 @@ class NewareaXhr extends Control
 
 	public function deleteMarked()
 	{
-		if (isOrgaTeam()) {
+		if ($this->func->isOrgaTeam()) {
 			$parts = explode('-', $_GET['del']);
 			if (count($parts) > 0) {
 				foreach ($parts as $p) {

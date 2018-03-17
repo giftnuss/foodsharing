@@ -7,9 +7,9 @@ use FPDI;
 
 class BusinessCardXhr extends Control
 {
-	public function __construct()
+	public function __construct(BusinessCardModel $model)
 	{
-		$this->model = new BusinessCardModel();
+		$this->model = $model;
 
 		parent::__construct();
 	}
@@ -35,20 +35,17 @@ class BusinessCardXhr extends Control
 				if ($mailbox !== false) {
 					if ($type == 'fs') {
 						if ($data['geschlecht'] == 2) {
-							$data['subtitle'] = sv('fs_for_w', $mailbox['name']);
+							$data['subtitle'] = $this->func->sv('fs_for_w', $mailbox['name']);
 						} else {
-							$data['subtitle'] = sv('fs_for', $mailbox['name']);
+							$data['subtitle'] = $this->func->sv('fs_for', $mailbox['name']);
 						}
-
-						$data['web'] = 'www.' . DEFAULT_HOST;
 					} elseif ($type == 'bot') {
 						if ($data['geschlecht'] == 2) {
-							$data['subtitle'] = sv('bot_for_w', $mailbox['name']);
+							$data['subtitle'] = $this->func->sv('bot_for_w', $mailbox['name']);
 						} else {
-							$data['subtitle'] = sv('bot_for', $mailbox['name']);
+							$data['subtitle'] = $this->func->sv('bot_for', $mailbox['name']);
 						}
 						$data['email'] = $mailbox['email'];
-						$data['web'] = 'www.' . DEFAULT_HOST . '/' . $mailbox['mailbox'];
 					} else {
 						return false;
 					}
@@ -103,7 +100,7 @@ class BusinessCardXhr extends Control
 
 			$pdf->Text(53.4 + $x, 53.6 + $y, utf8_decode($tel));
 			$pdf->Text(53.4 + $x, 58.3 + $y, utf8_decode($data['email']));
-			$pdf->Text(53.4 + $x, 63.2 + $y, utf8_decode('www.foodsharing.de'));
+			$pdf->Text(53.4 + $x, 63.2 + $y, utf8_decode(BASE_URL));
 			if ($x == 0) {
 				$x += 91;
 			} else {
@@ -119,7 +116,7 @@ class BusinessCardXhr extends Control
 		return array(
 			'status' => 1,
 			'script' => '
-				pulseInfo(\'' . jsSafe(s('generation_success')) . '\');
+				pulseInfo(\'' . $this->func->jsSafe($this->func->s('generation_success')) . '\');
 				u_download("' . $type . ':' . $data['id'] . '");'
 		);
 	}

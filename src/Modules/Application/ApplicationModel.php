@@ -16,8 +16,8 @@ class ApplicationModel extends Model
 					fb.application,
 					fb.active
 
-			FROM 	`' . PREFIX . 'foodsaver_has_bezirk` fb,
-					`' . PREFIX . 'foodsaver` fs
+			FROM 	`fs_foodsaver_has_bezirk` fb,
+					`fs_foodsaver` fs
 				
 			WHERE 	fb.foodsaver_id = fs.id
 			AND 	fb.bezirk_id = ' . (int)$bid . '
@@ -29,7 +29,7 @@ class ApplicationModel extends Model
 	public function apply($bid, $fsid)
 	{
 		return $this->update('
-			UPDATE `' . PREFIX . 'foodsaver_has_bezirk`	
+			UPDATE `fs_foodsaver_has_bezirk`	
 			SET 	`active` = 1
 			WHERE 	`bezirk_id` = ' . (int)$bid . '
 			AND 	`foodsaver_id` = ' . (int)$fsid . '
@@ -39,7 +39,7 @@ class ApplicationModel extends Model
 	public function maybe($bid, $fsid)
 	{
 		return $this->update('
-			UPDATE `' . PREFIX . 'foodsaver_has_bezirk`
+			UPDATE `fs_foodsaver_has_bezirk`
 			SET 	`active` = 10
 			WHERE 	`bezirk_id` = ' . (int)$bid . '
 			AND 	`foodsaver_id` = ' . (int)$fsid . '
@@ -49,7 +49,7 @@ class ApplicationModel extends Model
 	public function noapply($bid, $fsid)
 	{
 		return $this->update('
-			UPDATE `' . PREFIX . 'foodsaver_has_bezirk`
+			UPDATE `fs_foodsaver_has_bezirk`
 			SET 	`active` = 20
 			WHERE 	`bezirk_id` = ' . (int)$bid . '
 			AND 	`foodsaver_id` = ' . (int)$fsid . '
@@ -73,7 +73,7 @@ class ApplicationModel extends Model
 				`stat_betriebcount`,
 				`stat_korpcount`
 	
-			FROM 	`' . PREFIX . 'bezirk`
+			FROM 	`fs_bezirk`
 	
 			WHERE 	`id` = ' . (int)$id . '
 			LIMIT 1
@@ -85,8 +85,8 @@ class ApplicationModel extends Model
 					fs.`name`,
 					fs.`nachname`
 	
-			FROM 	`' . PREFIX . 'foodsaver` fs,
-					`' . PREFIX . 'foodsaver_has_bezirk` c
+			FROM 	`fs_foodsaver` fs,
+					`fs_foodsaver_has_bezirk` c
 	
 			WHERE 	c.`foodsaver_id` = fs.id
 			AND 	c.bezirk_id = ' . (int)$id . '
@@ -101,8 +101,8 @@ class ApplicationModel extends Model
 					fs.`name`,
 					fs.`nachname`
 	
-			FROM 	`' . PREFIX . 'foodsaver` fs,
-					`' . PREFIX . 'botschafter` c
+			FROM 	`fs_foodsaver` fs,
+					`fs_botschafter` c
 	
 			WHERE 	c.`foodsaver_id` = fs.id
 			AND 	c.bezirk_id = ' . (int)$id . '

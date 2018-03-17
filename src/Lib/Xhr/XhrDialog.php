@@ -2,6 +2,10 @@
 
 namespace Foodsharing\Lib\Xhr;
 
+use Foodsharing\DI;
+use Foodsharing\Lib\Func;
+use Foodsharing\Lib\View\Utils;
+
 class XhrDialog
 {
 	private $id;
@@ -14,9 +18,13 @@ class XhrDialog
 	private $onclose;
 	private $onopen;
 	private $classnames;
+	private $viewUtils;
+	private $func;
 
 	public function __construct($title = false)
 	{
+		$this->viewUtils = DI::$shared->get(Utils::class);
+		$this->func = DI::$shared->get(Func::class);
 		$this->id = 'd-' . uniqid();
 		$this->buttons = array();
 		$this->options = array();
@@ -135,8 +143,8 @@ class XhrDialog
 	{
 		$in_id = $this->id . '-' . $id;
 
-		$this->addContent(v_input_wrapper(s($id . '-desc'), '
-				<span id="' . $in_id . '"><i class="fa fa-image"></i> ' . s($id . '-choose') . '</span>
+		$this->addContent($this->viewUtils->v_input_wrapper($this->func->s($id . '-desc'), '
+				<span id="' . $in_id . '"><i class="fa fa-image"></i> ' . $this->func->s($id . '-choose') . '</span>
 				<input class="input" type="hidden" name="filename" id="' . $in_id . '-filename" value="" />
 				<div class="attach-preview" style="float:right;">
 					
@@ -225,7 +233,7 @@ class XhrDialog
 					$(".xhrDialog").remove();
 				}
 				$("body").append(\'<div class="xhrDialog" style="display:none;" id="' . $this->id . '"></div>\');
-				$("#' . $this->id . '").html(\'' . jsSafe($this->content) . '\');
+				$("#' . $this->id . '").html(\'' . $this->func->jsSafe($this->content) . '\');
 				$(".xhrDialog .input.textarea").css("height","50px");
 				$(".xhrDialog .input.textarea").autosize();
 				$("#' . $this->id . '").dialog({

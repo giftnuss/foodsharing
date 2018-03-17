@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="de">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="favicon" href="/favicon.ico" type="image/x-icon" />
+
+        <title>{{ head.title }}</title>
+
+        {% for stylesheet in head.stylesheets %}
+            <link rel="stylesheet" type="text/css" href="{{ stylesheet }}" />
+        {% endfor %}
+
+        {% for script in head.scripts %}
+            <script type="text/javascript" src="{{ script }}"></script>
+        {% endfor %}
+
+        {{ head.extra | raw }}
+
+        {% block head %}{% endblock %}
+
+        <meta name="description" content="Auf foodsharing.de kannst Du Deine Lebensmittel vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben" />
+        <meta name="keywords" content="foodsharing, essen, lebensmittel, ablaufdatum, Lebensmittelverschwendung, essen wegschmeissen, spenden, lebensmitteltausch" />
+        <meta name="author" content="foodsharing" />
+        <meta name="robots" content="all" />
+        <meta name="allow-search" content="yes" />
+        <meta name="revisit-after" content="1 days" />
+        <meta name="google-site-verification" content="pZxwmxz2YMVLCW0aGaS5gFsCJRh-fivMv1afrDYFrks" />
+
+        <meta property="og:title" content="Lebensmittel teilen, statt wegwerfen - foodsharing Deutschland" />
+        <meta property="og:description" content="Auf foodsharing kannst Du Deine Lebensmitteln vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben" />
+        <meta property="og:image" content="http://foodsharing.de/img/foodsharinglogo_200px.png" />
+        <meta property="og:url" content="http://foodsharing.de" />
+
+        <style type="text/css">{{ head.css | raw }}</style>
+
+        <script type="text/javascript">
+            var _gaq = _gaq || [];  _gaq.push(['_setAccount', 'UA-43313114-1']);  _gaq.push(['_setDomainName', '{{ HTTP_HOST }}']);  _gaq.push(['_trackPageview']); (function() {var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);  })();
+        </script>
+
+        <script type="text/javascript">
+            {{ head.jsFunc | raw }}
+            $(document).ready(function(){
+                {{ head.js | raw }}
+            });
+        </script>
+
+    </head>
+
+    <body {{ bodyClass | raw }}>
+
+        <div id="top">
+            <div class="inner">
+                <div class="pure-g">
+                    <div class="pure-u-1">
+                        <div id="layout_logo"><a href="{{ logolink }}" title="foodsharing home">food<span>sharing</span></a></div>
+                        {{ msgbar | raw }}
+                        {{ menu.mobile | raw }}
+                        <div class="menu">
+                            {{ menu.default | raw }}
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                </div>
+            </div>
+            {% if broadcast_message %}
+                <div class="inner inside msg-inside info">{{ broadcast_message | raw }}</div>
+            {% endif %}
+        </div>
+
+        {% block overtop %}
+            {{ content.overtop.html | raw }}
+        {% endblock %}
+
+        {% block full %}
+
+            <div id="main" class="{{ isMob ? 'mobile' : '' }}">
+
+                {% include 'partials/breadcrumbs.twig' with { items: bread } %}
+
+                {% if block('top') %}
+                    <div class="pure-g">
+                        <div id="content_top" class="pure-u-1">
+                            <div class="inside">
+                                {% block top %}{% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="pure-g mainpure">
+                    {% if isMob %}
+
+                        {% if block('main') %}
+                            <div class="pure-u-1 pure-u-md-{{ contentMainWidth(block('left'), block('right'), content.left.width, content.right.width, 24) }}-24">
+                                <div class="inside">
+                                    {% block main %}{% endblock %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if block('right') %}
+                            <div class="pure-u-1 pure-u-md-{{ content.right.width }}-24" id="right">
+                                <div class="inside">
+                                    {% block right %}{% endblock %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if block('left') %}
+                            <div class="pure-u-1 pure-u-md-{{ content.left.width }}-24" id="left">
+                                <div class="inside">
+                                    {% block left %}{% endblock %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                    {% else %}
+
+                        {% if block('left') %}
+                            <div class="pure-u-1 pure-u-md-{{ content.left.width }}-24" id="left">
+                                <div class="inside">
+                                    {{ block('left') }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if block('main') %}
+                            <div class="pure-u-1 pure-u-md-{{ contentMainWidth(block('left'), block('right'), content.left.width, content.right.width, 24) }}-24">
+                                <div class="inside">
+                                    {{ block('main') }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if block('right') %}
+                            <div class="pure-u-1 pure-u-md-{{ content.right.width }}-24" id="right">
+                                <div class="inside">
+                                    {{ block('right') }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                    {% endif %}
+                </div>
+
+                {% if content.bottom.html %}
+                    <div class="pure-g">
+                        <div id="content_bottom" class="pure-u-1">
+                            <div class="inside">
+                                {% block bottom %}{% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        {% endblock full %}
+
+        {% block footer %}
+            {% include 'partials/footer.twig' %}
+        {% endblock %}
+
+        <noscript>
+            <div id="nojs">Ohne JavaScript l&auml;uft hier leider nichts.</div>
+        </noscript>
+
+        {% if hidden %}
+            <div style="display:none;">{{ hidden | raw }}</div>
+        {% endif %}
+
+        <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-error" style="display:none;"></div>
+        <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-info" style="display:none;"></div>
+        <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-success" style="display:none;"></div>
+
+    </body>
+</html>

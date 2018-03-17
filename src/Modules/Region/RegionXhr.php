@@ -5,69 +5,74 @@ namespace Foodsharing\Modules\Region;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\Model;
 
 class RegionXhr extends Control
 {
-	public function __construct()
+	private $responses;
+	private $forumGateway;
+
+	public function __construct(Model $model, RegionView $view, ForumGateway $forumGateway)
 	{
+		$this->model = $model;
+		$this->view = $view;
+		$this->forumGateway = $forumGateway;
 		$this->responses = new XhrResponses();
-		$this->model = new RegionModel(15);
-		$this->view = new RegionView();
 
 		parent::__construct();
 	}
 
 	private function hasThemeAccess($BotThemestatus)
 	{
-		return ($BotThemestatus['bot_theme'] == 0 && mayBezirk($BotThemestatus['bezirk_id']))
-			|| ($BotThemestatus['bot_theme'] == 1 && isBotFor($BotThemestatus['bezirk_id']))
-			|| isOrgaTeam();
+		return ($BotThemestatus['bot_theme'] == 0 && $this->func->mayBezirk($BotThemestatus['bezirk_id']))
+			|| ($BotThemestatus['bot_theme'] == 1 && $this->func->isBotFor($BotThemestatus['bezirk_id']))
+			|| $this->func->isOrgaTeam();
 	}
 
 	public function followTheme()
 	{
-		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
+		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
 		if (!S::may() || !$this->hasThemeAccess($bot_theme)) {
 			return $this->responses->fail_permissions();
 		}
 
-		$this->model->followTheme($_GET['tid']);
+		$this->forumGateway->followThread(S::id(), $_GET['tid']);
 
 		return $this->responses->success();
 	}
 
 	public function unfollowTheme()
 	{
-		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
+		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
 		if (!S::may() || !$this->hasThemeAccess($bot_theme)) {
 			return $this->responses->fail_permissions();
 		}
 
-		$this->model->unfollowTheme($_GET['tid']);
+		$this->forumGateway->unfollowThread(S::id(), $_GET['tid']);
 
 		return $this->responses->success();
 	}
 
 	public function stickTheme()
 	{
-		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
+		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
 		if (!S::may() || !$this->hasThemeAccess($bot_theme)) {
 			return $this->responses->fail_permissions();
 		}
 
-		$this->model->stickTheme($_GET['tid']);
+		$this->forumGateway->stickThread($_GET['tid']);
 
 		return $this->responses->success();
 	}
 
 	public function unstickTheme()
 	{
-		$bot_theme = $this->model->getBotThemestatus($_GET['tid']);
+		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
 		if (!S::may() || !$this->hasThemeAccess($bot_theme)) {
 			return $this->responses->fail_permissions();
 		}
 
-		$this->model->unstickTheme($_GET['tid']);
+		$this->forumGateway->unstickThread($_GET['tid']);
 
 		return $this->responses->success();
 	}
@@ -75,18 +80,18 @@ class RegionXhr extends Control
 	public function morethemes()
 	{
 		$bezirk_id = (int)$_GET['bid'];
-		if (isset($_GET['page']) && mayBezirk($bezirk_id)) {
+		if (isset($_GET['page']) && $this->func->mayBezirk($bezirk_id)) {
 			$sub = 'forum';
 
 			if ((int)$_GET['bot'] == 1) {
-				if (!isBotFor($bezirk_id)) {
+				if (!$this->func->isBotFor($bezirk_id)) {
 					return $this->responses->fail_permissions();
 				}
 				$sub = 'botforum';
 			}
 
 			$this->view->bezirk_id = $bezirk_id;
-			$themes = $this->model->getThemes($bezirk_id, (int)$_GET['bot'], (int)$_GET['page'], (int)$_GET['last']);
+			$themes = $this->forumGateway->listThreads($bezirk_id, (int)$_GET['bot'], (int)$_GET['page'], (int)$_GET['last']);
 
 			return array(
 				'status' => 1,
@@ -107,18 +112,18 @@ class RegionXhr extends Control
 
 			$body = strip_tags($_POST['msg']);
 			$body = nl2br($body);
-			$body = autolink($body);
+			$body = $this->func->autolink($body);
 
 			if ($bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid'])) {
-				if ($post_id = $this->model->addThemePost($_GET['tid'], $body, $_GET['pid'], $bezirk)) {
-					if ($follower = $this->model->getThreadFollower($_GET['tid'])) {
+				if ($post_id = $this->forumGateway->addPost(S::id(), $_GET['tid'], $body, $_GET['pid'], $bezirk)) {
+					if ($follower = $this->forumGateway->getThreadFollower(S::id(), $_GET['tid'])) {
 						$theme = $this->model->getVal('name', 'theme', $_GET['tid']);
 
 						foreach ($follower as $f) {
-							tplMail(19, $f['email'], array(
-								'anrede' => genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+							$this->func->tplMail(19, $f['email'], array(
+								'anrede' => $this->func->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 								'name' => $f['name'],
-								'link' => 'http://www.' . DEFAULT_HOST . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,
+								'link' => BASE_URL . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,
 								'theme' => $theme,
 								'post' => $body,
 								'poster' => S::user('name')
@@ -141,7 +146,7 @@ class RegionXhr extends Control
 
 		echo json_encode(array(
 			'status' => 0,
-			'message' => s('post_could_not_saved')
+			'message' => $this->func->s('post_could_not_saved')
 		));
 		exit();
 	}
@@ -150,8 +155,8 @@ class RegionXhr extends Control
 	{
 		$data = $_GET;
 		if ($this->model->mayBezirk($data['bid'])) {
-			$this->model->del('DELETE FROM `' . PREFIX . 'foodsaver_has_bezirk` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)fsId() . ' ');
-			$this->model->del('DELETE FROM `' . PREFIX . 'botschafter` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)fsId() . ' ');
+			$this->model->del('DELETE FROM `fs_foodsaver_has_bezirk` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->func->fsId() . ' ');
+			$this->model->del('DELETE FROM `fs_botschafter` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->func->fsId() . ' ');
 
 			return array('status' => 1);
 		}

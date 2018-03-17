@@ -1,0 +1,14 @@
+{% extends 'layouts/default.twig' %}
+
+{% block head %}
+    <link rel="stylesheet" href="/js/markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="/js/markercluster/dist/MarkerCluster.Default.css" />
+{% endblock %}
+
+{% block full %}
+    {{ content.main.html | raw }}
+    {{ content.top.html | raw }}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

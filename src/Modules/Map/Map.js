@@ -60,23 +60,13 @@ var map = {
                 items = new Array('betriebe');
             }
             else {
-                items = new Array('baskets');
+                items = new Array('fairteiler', 'baskets');
             }
 
             if (GET('load') == undefined) {
                 items = (storage.get('activeItems'));
             }
         }
-
-        if (items == undefined) {
-            if ($('#map-control .foodsaver').length > 0) {
-                items = new Array('betriebe');
-            }
-            else {
-                items = new Array('baskets');
-            }
-        }
-
         for (var i = 0; i < items.length; i++) {
             $('#map-control .linklist a.' + items[i]).addClass('active');
         }

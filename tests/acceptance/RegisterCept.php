@@ -54,7 +54,7 @@ $I->click('Anmeldung absenden', '.step.step3');
 $I->waitForElementVisible('#joinready', 4);
 $I->see('Deine Anmeldung war erfolgreich.');
 
-$I->expectNumMails(1, 1);
+$I->expectNumMails(1, 4);
 
 // now login as that user
 
@@ -63,8 +63,7 @@ $I->amOnPage('/');
 $I->fillField('email_adress', $email);
 $I->fillField('password', $password);
 $I->click('#loginbar input[type=submit]');
-$I->waitForPageBody();
-$I->see('Willkommen ' . $first_name . '!');
+$I->waitForText('Willkommen ' . $first_name . '!');
 
 $I->seeInDatabase('fs_foodsaver', [
 	'email' => $email,

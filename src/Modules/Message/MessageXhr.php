@@ -9,10 +9,10 @@ use Foodsharing\Modules\Core\Control;
 
 class MessageXhr extends Control
 {
-	public function __construct()
+	public function __construct(MessageModel $model, MessageView $view)
 	{
-		$this->model = new MessageModel();
-		$this->view = new MessageView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 
@@ -49,7 +49,7 @@ class MessageXhr extends Control
 	public function leave()
 	{
 		if ($this->mayConversation($_GET['cid']) && !$this->model->conversationLocked($_GET['cid'])) {
-			if ($this->model->deleteUserFromConversation($_GET['cid'], fsId())) {
+			if ($this->model->deleteUserFromConversation($_GET['cid'], $this->func->fsId())) {
 				$xhr = new Xhr();
 				$xhr->addScript('conv.close(' . (int)$_GET['cid'] . ');$("#convlist-' . (int)$_GET['cid'] . '").remove();conv.registerPollingService();');
 				$xhr->send();
@@ -136,10 +136,10 @@ class MessageXhr extends Control
 						if ($member = $this->model->listConversationMembers($_POST['c'])) {
 							$user_ids = array_column($member, 'id');
 
-							sendSockMulti($user_ids, 'conv', 'push', array(
+							$this->func->sendSockMulti($user_ids, 'conv', 'push', array(
 								'id' => $message_id,
 								'cid' => (int)$_POST['c'],
-								'fs_id' => fsId(),
+								'fs_id' => $this->func->fsId(),
 								'fs_name' => S::user('name'),
 								'fs_photo' => S::user('photo'),
 								'body' => $body,
@@ -147,14 +147,14 @@ class MessageXhr extends Control
 							));
 
 							foreach ($member as $m) {
-								if ($m['id'] != fsId()) {
+								if ($m['id'] != $this->func->fsId()) {
 									Mem::userAppend($m['id'], 'msg-update', (int)$_POST['c']);
 
 									/*
 									 * send an E-Mail if the user is not online
 									*/
 									if ($this->model->wantMsgEmailInfo($m['id'])) {
-										$this->convMessage($m, $_POST['c'], $body);
+										$this->convMessage($m, $_POST['c'], $body, $this->model);
 									}
 								}
 							}
@@ -166,14 +166,14 @@ class MessageXhr extends Control
 							'time' => date('Y-m-d H:i:s'),
 							'fs_photo' => S::user('photo'),
 							'fs_name' => S::user('name'),
-							'fs_id' => fsId()
+							'fs_id' => $this->func->fsId()
 						));
 						$xhr->send();
 					}
 				}
 			}
 		}
-		$xhr->addMessage(s('error'), 'error');
+		$xhr->addMessage($this->func->s('error'), 'error');
 		$xhr->send();
 	}
 
@@ -277,10 +277,10 @@ class MessageXhr extends Control
 					 */
 					$xhr->addData('cid', $cid);
 				} else {
-					$xhr->addMessage(s('error'), 'error');
+					$xhr->addMessage($this->func->s('error'), 'error');
 				}
 			} else {
-				$xhr->addMessage(s('wrong_recip_count'), 'error');
+				$xhr->addMessage($this->func->s('wrong_recip_count'), 'error');
 			}
 
 			/*

@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\PassportGenerator;
 
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use FPDI;
 
@@ -10,64 +11,66 @@ class PassportGeneratorControl extends Control
 {
 	private $bezirk_id;
 	private $bezirk;
+	private $bellGateway;
 
-	public function __construct()
+	public function __construct(PassportGeneratorModel $model, PassportGeneratorView $view, BellGateway $bellGateway)
 	{
-		$this->model = new PassportGeneratorModel();
-		$this->view = new PassportGeneratorView();
+		$this->model = $model;
+		$this->view = $view;
+		$this->bellGateway = $bellGateway;
 
 		parent::__construct();
 
 		$this->bezirk_id = false;
-		if (($this->bezirk_id = getGetId('bid')) === false) {
-			$this->bezirk_id = getBezirkId();
+		if (($this->bezirk_id = $this->func->getGetId('bid')) === false) {
+			$this->bezirk_id = $this->func->getBezirkId();
 		}
 
-		if (isBotFor($this->bezirk_id) || isOrgaTeam()) {
+		if ($this->func->isBotFor($this->bezirk_id) || $this->func->isOrgaTeam()) {
 			$this->bezirk = false;
 			if ($bezirk = $this->model->getBezirk($this->bezirk_id)) {
 				$this->bezirk = $bezirk;
 			}
 		} else {
-			go('/?page=dashboard');
+			$this->func->go('/?page=dashboard');
 		}
 	}
 
 	public function index()
 	{
-		addBread($this->bezirk['name'], '/?page=bezirk&bid=' . $this->bezirk_id . '&sub=forum');
-		addBread('Pass-Generator', getSelf());
+		$this->func->addBread($this->bezirk['name'], '/?page=bezirk&bid=' . $this->bezirk_id . '&sub=forum');
+		$this->func->addBread('Pass-Generator', $this->func->getSelf());
 
-		addTitle($this->bezirk['name']);
-		addTitle('Pass Generator');
+		$this->func->addTitle($this->bezirk['name']);
+		$this->func->addTitle('Pass Generator');
 
 		if (isset($_POST['foods']) && !empty($_POST['foods'])) {
 			$this->generate($_POST['foods']);
 		}
 
 		if ($bezirke = $this->model->getPassFoodsaver($this->bezirk_id)) {
-			addHidden('
-			<div id="verifyconfirm-dialog" title="' . s('verify_confirm_title') . '">
-				' . v_info('<p>' . s('verify_confirm') . '</p>', s('verify_confirm_title')) . '
-				<span class="button_confirm" style="display:none">' . s('verify_confirm_button') . '</span>
-				<span class="button_abort" style="display:none">' . s('abort') . '</span>
+			$this->func->addHidden('
+			<div id="verifyconfirm-dialog" title="' . $this->func->s('verify_confirm_title') . '">
+				' . $this->v_utils->v_info('<p>' . $this->func->s('verify_confirm') . '</p>', $this->func->s('verify_confirm_title')) . '
+				<span class="button_confirm" style="display:none">' . $this->func->s('verify_confirm_button') . '</span>
+				<span class="button_abort" style="display:none">' . $this->func->s('abort') . '</span>
 			</div>');
 
-			addHidden('
+			$this->func->addHidden('
 			<div id="unverifyconfirm-dialog" title="Es ist ein Problem aufgetreten">
-				' . v_info('<p>' . s('unverify_confirm') . '</p>', s('unverify_confirm_title')) . '
-				<span class="button_confirm" style="display:none">' . s('unverify_confirm_button') . '</span>
-				<span class="button_abort" style="display:none">' . s('abort') . '</span>
+				' . $this->v_utils->v_info('<p>' . $this->func->s('unverify_confirm') . '</p>', $this->func->s('unverify_confirm_title')) . '
+				<span class="button_confirm" style="display:none">' . $this->func->s('unverify_confirm_button') . '</span>
+				<span class="button_abort" style="display:none">' . $this->func->s('abort') . '</span>
 			</div>');
 
-			addContent('<form id="generate" method="post">');
+			$this->func->addContent('<form id="generate" method="post">');
 			foreach ($bezirke as $b) {
-				addContent($this->view->passTable($b));
+				$this->func->addContent($this->view->passTable($b));
 			}
-			addContent('</form>');
-			addContent($this->view->menubar(), CNT_RIGHT);
-			addContent($this->view->start(), CNT_RIGHT);
-			addContent($this->view->tips(), CNT_RIGHT);
+			$this->func->addContent('</form>');
+			$this->func->addContent($this->view->menubar(), CNT_RIGHT);
+			$this->func->addContent($this->view->start(), CNT_RIGHT);
+			$this->func->addContent($this->view->tips(), CNT_RIGHT);
 		}
 
 		if (isset($_GET['dl1'])) {
@@ -99,7 +102,6 @@ class PassportGeneratorControl extends Control
 		$y = 0;
 		$card = 0;
 
-		$left = 0;
 		$nophoto = array();
 
 		end($foodsaver);
@@ -108,11 +110,11 @@ class PassportGeneratorControl extends Control
 		$fs_logo = $pdf->importPage(1);
 
 		foreach ($foodsaver as $i => $fs_id) {
-			if ($fs = $this->model->qRow('SELECT `photo`,`id`,`name`,`nachname`,`geschlecht`,`rolle` FROM ' . PREFIX . 'foodsaver WHERE `id` = ' . (int)$fs_id . ' ')) {
+			if ($fs = $this->model->qRow('SELECT `photo`,`id`,`name`,`nachname`,`geschlecht`,`rolle` FROM fs_foodsaver WHERE `id` = ' . (int)$fs_id . ' ')) {
 				if (empty($fs['photo'])) {
 					$nophoto[] = $fs['name'] . ' ' . $fs['nachname'];
 
-					$this->model->addBell(
+					$this->bellGateway->addBell(
 						$fs['id'],
 						'passgen_failed_title',
 						'passgen_failed',
@@ -188,7 +190,7 @@ class PassportGeneratorControl extends Control
 		}
 		if (!empty($nophoto)) {
 			$last = array_pop($nophoto);
-			info(implode(', ', $nophoto) . ' und ' . $last . ' haben noch kein Foto hochgeladen und ihr Ausweis konnte nicht erstellt werden');
+			$this->func->info(implode(', ', $nophoto) . ' und ' . $last . ' haben noch kein Foto hochgeladen und ihr Ausweis konnte nicht erstellt werden');
 		}
 
 		$this->model->updateLastGen($is_generated);
@@ -206,11 +208,11 @@ class PassportGeneratorControl extends Control
 	{
 		$role = [
 			0 => [ // not defined
-				0 => 'Freiwillige/r',
-				1 => 'Foodsaver',
-				2 => 'Betriebsverantwortliche/r',
-				3 => 'Botschafter/in',
-				4 => 'Botschafter/in' // role 4 stands for Orga but is referred to an AMB for the business card
+				0 => 'Freiwillige_r',
+				1 => 'Foodsaver_in',
+				2 => 'Betriebsverantwortliche_r',
+				3 => 'Botschafter_in',
+				4 => 'Botschafter_in' // role 4 stands for Orga but is referred to an AMB for the business card
 			],
 			1 => [ // male
 				0 => 'Freiwilliger',
@@ -233,7 +235,7 @@ class PassportGeneratorControl extends Control
 
 	private function download1()
 	{
-		addJs('
+		$this->func->addJs('
 			setTimeout(function(){goTo("/?page=passgen&bid=' . $this->bezirk_id . '&dl2")},100);		
 		');
 	}

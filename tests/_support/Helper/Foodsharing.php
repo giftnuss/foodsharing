@@ -27,6 +27,7 @@ class Foodsharing extends \Codeception\Module\Db
 			DELETE FROM fs_betrieb_team;
 			DELETE FROM fs_betrieb;
 			DELETE FROM fs_abholer;
+			DELETE FROM fs_abholzeiten;
 			DELETE FROM fs_botschafter;
 			DELETE FROM fs_theme_post;
 			DELETE FROM fs_bezirk_has_theme;
@@ -36,6 +37,8 @@ class Foodsharing extends \Codeception\Module\Db
 			DELETE FROM fs_fairteiler_follower;
 			DELETE FROM fs_fairteiler_has_wallpost;
 			DELETE FROM fs_wallpost;
+			DELETE FROM fs_basket;
+			DELETE FROM fs_basket_has_wallpost;
 		', []);
 	}
 
@@ -76,6 +79,9 @@ class Foodsharing extends \Codeception\Module\Db
 		$params['last_login'] = $this->toDateTime($params['last_login']);
 		$params['anmeldedatum'] = $this->toDateTime($params['anmeldedatum']);
 		$id = $this->haveInDatabase('fs_foodsaver', $params);
+		if ($params['bezirk_id']) {
+			$this->addBezirkMember($params['bezirk_id'], $id);
+		}
 		$params['id'] = $id;
 
 		return $params;
@@ -144,29 +150,29 @@ class Foodsharing extends \Codeception\Module\Db
 	public function createStore($bezirk_id, $team_conversation = null, $springer_conversation = null, $extra_params = [])
 	{
 		$params = array_merge([
-			'betrieb_status_id' => 1,
-			'status' => 1, // same as betrieb_status_id
+			'betrieb_status_id' => $this->faker->numberBetween(0, 6),
+			'status' => 1,
 			'added' => $this->faker->dateTime(),
-			'plz' => '',
-			'stadt' => '',
-			'str' => '',
-			'hsnr' => '',
-			'lat' => '',
-			'lon' => '',
-			'name' => 'betrieb_' . $this->faker->name(),
+			'plz' => $this->faker->postcode(),
+			'stadt' => $this->faker->city(),
+			'str' => $this->faker->streetAddress(),
+			'hsnr' => $this->faker->numberBetween(0, 1000),
+			'lat' => $this->faker->latitude(),
+			'lon' => $this->faker->longitude(),
+			'name' => 'betrieb_' . $this->faker->company(),
 			'status_date' => $this->faker->dateTime(),
-			'ansprechpartner' => '',
-			'telefon' => '',
-			'fax' => '',
-			'email' => '',
-			'begin' => '0000-00-00',
+			'ansprechpartner' => $this->faker->name(),
+			'telefon' => $this->faker->phoneNumber(),
+			'fax' => $this->faker->phoneNumber(),
+			'email' => $this->faker->email(),
+			'begin' => $this->faker->date('Y-m-d'),
 			'besonderheiten' => '',
 			'public_info' => '',
 			'public_time' => 0,
 			'ueberzeugungsarbeit' => 0,
 			'presse' => 0,
 			'sticker' => 0,
-			'abholmenge' => 0,
+			'abholmenge' => $this->faker->numberBetween(0, 70),
 			'team_status' => 1,
 			'prefetchtime' => 1209600,
 
@@ -241,6 +247,24 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
+	public function addRecurringPickup($store, $extra_params = [])
+	{
+		$hours = $this->faker->numberBetween(0, 23);
+		$minutes = $this->faker->randomElement($array = array('00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'));
+
+		$params = array_merge([
+			'betrieb_id' => $store,
+			'dow' => $this->faker->numberBetween(0, 6),
+			'time' => sprintf('%02d:%s:00', $hours, $minutes),
+			'fetcher' => $this->faker->numberBetween(1, 8),
+		], $extra_params);
+
+		$id = $this->haveInDatabase('fs_abholzeiten', $params);
+		$params['id'] = $id;
+
+		return $params;
+	}
+
 	public function createWorkingGroup($name, $extra_params = [])
 	{
 		/* 392 is global working groups */
@@ -252,8 +276,11 @@ class Foodsharing extends \Codeception\Module\Db
 		return $this->createRegion($name, $parentId, 7, $extra_params);
 	}
 
-	public function createRegion($name, $parentId = 741, $type = 8, $extra_params = [])
+	public function createRegion($name = null, $parentId = 741, $type = 9, $extra_params = [])
 	{
+		if ($name == null) {
+			$name = $this->faker->lastName() . '-region';
+		}
 		/* 741 is germany, so suitable for normal sub regions */
 		$v = array_merge([
 			'parent_id' => $parentId,
@@ -270,7 +297,16 @@ class Foodsharing extends \Codeception\Module\Db
 		return $v;
 	}
 
-	public function addBezirkMember($bezirk_id, $fs_id, $is_admin = false, $is_active = true)
+	public function addBezirkAdmin($bezirk_id, $fs_id)
+	{
+		$v = [
+			'bezirk_id' => $bezirk_id,
+			'foodsaver_id' => $fs_id,
+		];
+		$this->haveInDatabase('fs_botschafter', $v);
+	}
+
+	public function addBezirkMember($bezirk_id, $fs_id, $is_active = true)
 	{
 		if (is_array($fs_id)) {
 			array_map(function ($x) use ($bezirk_id, $is_admin) {
@@ -283,13 +319,6 @@ class Foodsharing extends \Codeception\Module\Db
 				'active' => $is_active ? 1 : 0,
 			];
 			$this->haveInDatabase('fs_foodsaver_has_bezirk', $v);
-			if ($is_admin) {
-				$v = [
-					'bezirk_id' => $bezirk_id,
-					'foodsaver_id' => $fs_id,
-				];
-				$this->haveInDatabase('fs_botschafter', $v);
-			}
 		}
 	}
 
@@ -439,9 +468,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'type' => 1,
 			'infotype' => 1,
 		], $extra_params);
-		$id = $this->haveInDatabase('fs_fairteiler_follower', $params);
-
-		$params['id'] = $id;
+		$this->haveInDatabase('fs_fairteiler_follower', $params);
 
 		return $params;
 	}
@@ -476,6 +503,46 @@ class Foodsharing extends \Codeception\Module\Db
 		$params['id'] = $id;
 
 		return $params;
+	}
+
+	public function createFoodbasket($user, $bezirk = 241, $extra_params = [])
+	{
+		$params = array_merge([
+			'foodsaver_id' => $user,
+			'status' => 1,
+			'time' => $this->faker->dateTime($max = 'now'),
+			'until' => $this->faker->dateTimeBetween('now', '+14 days'),
+			'fetchtime' => null,
+			'description' => $this->faker->realText(200),
+			'picture' => null,
+			'tel' => $this->faker->phoneNumber(),
+			'handy' => $this->faker->phoneNumber(),
+			'contact_type' => 1,
+			'location_type' => 0,
+			'weight' => $this->faker->numberBetween(1, 100),
+			'lat' => $this->faker->latitude,
+			'lon' => $this->faker->longitude,
+			'bezirk_id' => $bezirk,
+		], $extra_params);
+		$params['time'] = $this->toDateTime($params['time']);
+		$params['until'] = $this->toDateTime($params['until']);
+
+		$id = $this->haveInDatabase('fs_basket', $params);
+
+		$params['id'] = $id;
+
+		return $params;
+	}
+
+	public function addFoodbasketWallpost($user, $foodbasket, $extra_params = [])
+	{
+		$post = $this->createWallpost($user, $extra_params);
+		$this->haveInDatabase('fs_basket_has_wallpost', [
+			'basket_id' => $foodbasket,
+			'wallpost_id' => $post['id'],
+		]);
+
+		return $post;
 	}
 
 	// =================================================================================================================

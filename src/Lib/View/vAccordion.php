@@ -2,14 +2,19 @@
 
 namespace Foodsharing\Lib\View;
 
+use Foodsharing\DI;
+use Foodsharing\Lib\Func;
+
 class vAccordion
 {
 	private $panels;
 	private $id;
 	private $options;
+	private $func;
 
 	public function __construct($option = array())
 	{
+		$this->func = DI::$shared->get(Func::class);
 		$this->panels = array();
 
 		$this->id = 'acc-' . uniqid();
@@ -26,7 +31,7 @@ class vAccordion
 
 	public function render()
 	{
-		addJs('$("#' . $this->id . '").accordion(' . json_encode($this->options) . ');');
+		$this->func->addJs('$("#' . $this->id . '").accordion(' . json_encode($this->options) . ');');
 
 		$out = '
 		<div id="' . $this->id . '">';

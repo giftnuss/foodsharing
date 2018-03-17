@@ -6,11 +6,13 @@ use Exception;
 use Flourish\fImage;
 use Flourish\fUpload;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\Model;
 
 class MainXhr extends Control
 {
-	public function __construct()
+	public function __construct(Model $model)
 	{
+		$this->model = $model;
 		parent::__construct();
 	}
 
@@ -32,7 +34,7 @@ class MainXhr extends Control
 					'image/pjpeg',
 					'image/png'
 				),
-				s('no_image')
+				$this->func->s('no_image')
 			);
 			try {
 				$file = $upload->move('tmp', 'picture');

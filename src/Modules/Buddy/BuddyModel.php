@@ -14,11 +14,11 @@ class BuddyModel extends Model
 					fs.nachname,
 					fs.photo
 			
-			FROM 	' . PREFIX . 'foodsaver fs,
-					' . PREFIX . 'buddy b
+			FROM 	fs_foodsaver fs,
+					fs_buddy b
 		
 			WHERE 	b.buddy_id = fs.id
-			AND 	b.foodsaver_id = ' . (int)fsId() . '
+			AND 	b.foodsaver_id = ' . (int)$this->func->fsId() . '
 			AND 	b.confirmed = 1
 		');
 	}
@@ -26,13 +26,13 @@ class BuddyModel extends Model
 	public function removeRequest($fsid)
 	{
 		$this->del('
-			DELETE FROM `' . PREFIX . 'buddy` WHERE foodsaver_id = ' . (int)$fsid . ' AND buddy_id = ' . (int)fsId() . '	
+			DELETE FROM `fs_buddy` WHERE foodsaver_id = ' . (int)$fsid . ' AND buddy_id = ' . (int)$this->func->fsId() . '	
 		');
 	}
 
 	public function buddyRequestedMe($fsid)
 	{
-		if ($this->qOne('SELECT 1 FROM ' . PREFIX . 'buddy WHERE foodsaver_id = ' . (int)$fsid . ' AND buddy_id = ' . (int)fsId())) {
+		if ($this->qOne('SELECT 1 FROM fs_buddy WHERE foodsaver_id = ' . (int)$fsid . ' AND buddy_id = ' . (int)$this->func->fsId())) {
 			return true;
 		}
 

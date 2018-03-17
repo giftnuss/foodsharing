@@ -19,7 +19,7 @@ class SearchModel extends Model
 		$out = array();
 
 		$children = false;
-		if (!isBotschafter() && !isOrgaTeam()) {
+		if (!$this->func->isBotschafter() && !$this->func->isOrgaTeam()) {
 			$children = $this->getChildBezirke($this->getCurrentBezirkId());
 		}
 
@@ -27,7 +27,7 @@ class SearchModel extends Model
 		if (S::may('orga')) {
 			$teaser = 'IF(`photo_public` BETWEEN 1 AND 3, CONCAT(`anschrift`,", ",`plz`," ",`stadt`), "")';
 		}
-		if ($res = $this->searchTable('foodsaver', array('name', 'nachname', 'plz', 'stadt'), $q, array(
+		if ($res = $this->searchTable('fs_foodsaver', array('name', 'nachname', 'plz', 'stadt'), $q, array(
 			'name' => 'CONCAT(`name`," ",`nachname`)',
 			'click' => 'CONCAT("profile(",`id`,");")',
 			'teaser' => $teaser
@@ -36,7 +36,7 @@ class SearchModel extends Model
 			$out['foodsaver'] = $res;
 		}
 
-		if ($res = $this->searchTable('bezirk', array('name'), $q, array(
+		if ($res = $this->searchTable('fs_bezirk', array('name'), $q, array(
 			'name' => '`name`',
 			'click' => 'CONCAT("goTo(\'/?page=bezirk&bid=",`id`,"\');")',
 			'teaser' => 'CONCAT("")'
@@ -45,7 +45,7 @@ class SearchModel extends Model
 			$out['bezirk'] = $res;
 		}
 
-		if ($res = $this->searchTable('betrieb', array('name', 'stadt', 'plz', 'str'), $q, array(
+		if ($res = $this->searchTable('fs_betrieb', array('name', 'stadt', 'plz', 'str'), $q, array(
 			'name' => '`name`',
 			'click' => 'CONCAT("betrieb(",`id`,");")',
 			'teaser' => 'CONCAT(`str`,", ",`plz`," ",`stadt`)'
@@ -87,7 +87,7 @@ class SearchModel extends Model
 					 ' . $show['teaser'] . ' AS teaser
 	
 		
-			FROM 	' . PREFIX . $table . '
+			FROM 	' . $table . '
 	
 			WHERE ' . $fsql . ' LIKE ' . implode(' AND ' . $fsql . ' LIKE ', $terms) . '
 			' . $fs_sql . '

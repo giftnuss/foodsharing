@@ -6,17 +6,8 @@ use Foodsharing\Modules\Core\View;
 
 class TeamView extends View
 {
-	public function user($user)
+	public function user($user): string
 	{
-		$subtitle = '';
-		if ($user['groups']) {
-			foreach ($user['groups'] as $g) {
-				$subtitle .= ', ' . $g['name'];
-			}
-
-			$subtitle = '<p class="subtitle">' . substr($subtitle, 2) . '</p>';
-		}
-
 		$socials = '';
 
 		if ($user['homepage'] != '') {
@@ -48,7 +39,6 @@ class TeamView extends View
 			<span class="img" style="background-image:url(/images/' . $user['photo'] . ');"></span>
 			<h1>' . $user['name'] . '</h1>
 			<small>' . $user['position'] . '</small>
-			' . $subtitle . '
 			<p>' . nl2br($user['desc']) . '</p>
 					
 			<span class="foot corner-bottom">
@@ -59,27 +49,35 @@ class TeamView extends View
 		return $out;
 	}
 
-	public function contactForm($user)
+	private function toxPopTpl($user): string
 	{
-		return v_quickform('Schreibe ' . $user['name'] . ' eine E-Mail!', array(
-			v_form_text('name'),
-			v_form_text('email'),
-			v_form_textarea('message'),
-			v_form_hidden('id', (int)$user['id'])
+		return '
+		<a style="display:none;overflow:hidden:width:1px;height:1px;" id="tox-pop-' . $user['id'] . '-opener" href="#tox-pop-' . $user['id'] . '">&nbsp;</a>
+		<div id="tox-pop-' . $user['id'] . '" class="white-popup mfp-hide tox-popup corner-all">
+			<div style="text-align:center">
+				<a href="https://tox.im/de" target="_blank"><img src="http://tox.im/assets/imgs/logo_head.png" /></a>
+				' . $this->v_utils->v_info('Tox ist eine sichere Open Source-Alternative zu Skype oder WhatsApp. Mit der Tox-ID kannst Du ' . $user['name'] . ' zu Deiner Kontaktliste hinzufügen.') . '
+				<h3>Tox-ID von ' . $user['name'] . '</h3>
+				<input type="text" class="tox-id" value="' . $user['tox'] . '" />
+				<div class="tox-qr"></div>
+			</div>
+		</div>';
+	}
+
+	public function contactForm($user): string
+	{
+		return $this->v_utils->v_quickform('Schreibe ' . $user['name'] . ' eine E-Mail!', array(
+			$this->v_utils->v_form_text('name'),
+			$this->v_utils->v_form_text('email'),
+			$this->v_utils->v_form_textarea('message'),
+			$this->v_utils->v_form_hidden('id', (int)$user['id'])
 		), array('id' => 'contactform'));
 	}
 
-	public function teamlist($team, $header)
+	public function teamList($team, $header): string
 	{
-		foreach ($team as $key => $t) {
-			if (isset($firsts[(int)$t['id']])) {
-				unset($team[$key]);
-				array_unshift($team, $t);
-			}
-		}
-
 		$out = '
-		<ul id="teamlist" class="linklist">';
+		<ul id="team-list" class="linklist">';
 
 		foreach ($team as $t) {
 			$socials = '&nbsp;';
@@ -106,7 +104,7 @@ class TeamView extends View
 					<h3>' . $t['name'] . ' ' . $t['nachname'] . '</h3>
 					<span class="subtitle">' . $t['position'] . '</span>
 					<span class="desc">
-						' . tt($t['desc'], 240) . '
+						' . $this->func->tt($t['desc'], 240) . '
 					</span>
 					<span class="foot corner-bottom">
 						' . $socials . '	
@@ -120,20 +118,5 @@ class TeamView extends View
 		</ul>';
 
 		return $header['body'] . $out;
-	}
-
-	private function toxPopTpl($user)
-	{
-		return '
-		<a style="display:none;overflow:hidden:width:1px;height:1px;" id="tox-pop-' . $user['id'] . '-opener" href="#tox-pop-' . $user['id'] . '">&nbsp;</a>
-		<div id="tox-pop-' . $user['id'] . '" class="white-popup mfp-hide tox-popup corner-all">
-			<div style="text-align:center">
-				<a href="https://tox.im/de" target="_blank"><img src="http://tox.im/assets/imgs/logo_head.png" /></a>
-				' . v_info('Tox ist eine sichere  OpenSource Alternative zu Skype oder WhatsApp. Mit der Tox-ID kannst Du ' . $user['name'] . ' Zu Deiner Kontaktliste hinzufügen.') . '
-				<h3>Tox-ID von ' . $user['name'] . '</h3>
-				<input type="text" class="tox-id" value="' . $user['tox'] . '" />
-				<div class="tox-qr"></div>
-			</div>
-		</div>';
 	}
 }

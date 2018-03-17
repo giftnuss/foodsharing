@@ -17,7 +17,7 @@
 			    		<li><a class="corner-all" href="/partner">Partner</a></li>
 						<li><a class="corner-all" href="/statistik">Statistik</a></li>
 						<li><a class="corner-all" href="/faq">F.A.Q.</a></li>
-						<li><a class="corner-all" href="/unterstuetzung">Unterstützung</a></li>
+						<li><a class="corner-all" href="/unterstuetzung">Spenden</a></li>
 					</ul>
 				</div>
 		    </div>

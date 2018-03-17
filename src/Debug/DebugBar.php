@@ -4,9 +4,11 @@ namespace Foodsharing\Debug;
 
 use DebugBar\DataCollector\MemoryCollector;
 use DebugBar\DataCollector\MessagesCollector;
+use DebugBar\DataCollector\PDO\TraceablePDO;
 use DebugBar\DataCollector\PhpInfoCollector;
 use DebugBar\DataCollector\RequestDataCollector;
 use Foodsharing\Debug\Collectors\DatabaseQueryCollector;
+use Foodsharing\Debug\Collectors\PrettierPDOCollector;
 
 /**
  * A static helper class to wrap our use of \DebugBar.
@@ -27,7 +29,7 @@ class DebugBar
 	/* @var $debugbar \DebugBar\StandardDebugBar */
 	private static $debugbar;
 
-	public static function register()
+	public static function register(TraceablePDO $traceablePDO)
 	{
 		self::$debugbar = new \DebugBar\DebugBar();
 
@@ -38,6 +40,10 @@ class DebugBar
 
 		self::$queryCollector = new DatabaseQueryCollector();
 		self::$debugbar->addCollector(self::$queryCollector);
+
+		$pdoCollector = new PrettierPDOCollector($traceablePDO);
+		$pdoCollector->setRenderSqlWithParams(true, '');
+		self::$debugbar->addCollector($pdoCollector);
 
 		self::$initialized = true;
 	}

@@ -4,12 +4,14 @@ namespace Foodsharing\Modules\Map;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Core\Model;
 
 class MapXhr extends Control
 {
-	public function __construct()
+	public function __construct(Model $model, MapView $view)
 	{
-		$this->view = new MapView();
+		$this->view = $view;
+		$this->model = $model;
 
 		parent::__construct();
 	}

@@ -14,7 +14,6 @@ define('DB_HOST', env('DB_HOST', '127.0.0.1'));
 define('DB_USER', env('DB_USERNAME', 'forge'));
 define('DB_PASS', env('DB_PASSWORD', ''));
 define('DB_DB', env('DB_DATABASE', 'forge'));
-define('PREFIX', 'fs_');
 define('ERROR_REPORT', E_ALL);
 define('BASE_URL', $protocol . '//' . $http_host . '/');
 define('URL_INTERN', $protocol . '://' . $http_host . '/freiwillige/');

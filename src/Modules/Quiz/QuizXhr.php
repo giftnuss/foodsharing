@@ -8,17 +8,17 @@ use Foodsharing\Modules\Core\Control;
 
 class QuizXhr extends Control
 {
-	public function __construct()
+	public function __construct(QuizModel $model, QuizView $view)
 	{
-		$this->model = new QuizModel();
-		$this->view = new QuizView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}
 
 	public function hideinfo()
 	{
-		S::setOption('quiz-infobox-seen', true);
+		S::setOption('quiz-infobox-seen', true, $this->model);
 	}
 
 	public function addquest()
@@ -30,7 +30,7 @@ class QuizXhr extends Control
 	[fp] => fdgh
 )
 		 */
-		if (mayEditQuiz()) {
+		if ($this->func->mayEditQuiz()) {
 			if (isset($_GET['text']) && isset($_GET['fp']) && isset($_GET['qid'])) {
 				$fp = (int)$_GET['fp'];
 				$text = strip_tags($_GET['text']);
@@ -38,7 +38,7 @@ class QuizXhr extends Control
 
 				if (!empty($text)) {
 					if ($id = $this->model->addQuestion($_GET['qid'], $text, $fp, $duration)) {
-						info('Frage wurde angelegt');
+						$this->func->info('Frage wurde angelegt');
 
 						return array(
 							'status' => 1,
@@ -57,7 +57,7 @@ class QuizXhr extends Control
 
 	public function delquest()
 	{
-		if (mayEditQuiz() && isset($_GET['id'])) {
+		if ($this->func->mayEditQuiz() && isset($_GET['id'])) {
 			$this->model->deleteQuest($_GET['id']);
 
 			return array(
@@ -69,7 +69,7 @@ class QuizXhr extends Control
 
 	public function delanswer()
 	{
-		if (mayEditQuiz() && isset($_GET['id'])) {
+		if ($this->func->mayEditQuiz() && isset($_GET['id'])) {
 			$this->model->deleteAnswer($_GET['id']);
 
 			return array(
@@ -88,7 +88,7 @@ class QuizXhr extends Control
 		text	458
 		 */
 
-		if (mayEditQuiz()) {
+		if ($this->func->mayEditQuiz()) {
 			if (isset($_GET['text']) && isset($_GET['right']) && isset($_GET['qid'])) {
 				$text = strip_tags($_GET['text']);
 				$exp = strip_tags($_GET['explanation']);
@@ -98,7 +98,7 @@ class QuizXhr extends Control
 					if ($id = $this->model->addAnswer($_GET['qid'], $text, $exp, $right)) {
 						return array(
 							'status' => 1,
-							'script' => 'pulseInfo("Antwort wurde angelegt");$("#answerlist-' . (int)$_GET['qid'] . '").append(\'<li class="right-' . (int)$right . '">' . jsSafe(nl2br(strip_tags($text))) . '</li>\');$( "#questions" ).accordion( "refresh" );'
+							'script' => 'pulseInfo("Antwort wurde angelegt");$("#answerlist-' . (int)$_GET['qid'] . '").append(\'<li class="right-' . (int)$right . '">' . $this->func->jsSafe(nl2br(strip_tags($text))) . '</li>\');$( "#questions" ).accordion( "refresh" );'
 						);
 					}
 				} else {
@@ -113,7 +113,7 @@ class QuizXhr extends Control
 
 	public function updateansw()
 	{
-		if (mayEditQuiz()) {
+		if ($this->func->mayEditQuiz()) {
 			if (isset($_GET['text']) && isset($_GET['right']) && isset($_GET['id'])) {
 				$text = strip_tags($_GET['text']);
 				$exp = strip_tags($_GET['explanation']);
@@ -128,7 +128,7 @@ class QuizXhr extends Control
 
 					return array(
 						'status' => 1,
-						'script' => 'pulseInfo("Antwort wurde geändert");$("#answer-' . (int)$_GET['id'] . '").replaceWith(\'<li id="answer-' . (int)$_GET['id'] . '" class="right-' . (int)$right . '">' . jsSafe(nl2br(strip_tags($text))) . '</li>\');$( "#questions" ).accordion( "refresh" );'
+						'script' => 'pulseInfo("Antwort wurde geändert");$("#answer-' . (int)$_GET['id'] . '").replaceWith(\'<li id="answer-' . (int)$_GET['id'] . '" class="right-' . (int)$right . '">' . $this->func->jsSafe(nl2br(strip_tags($text))) . '</li>\');$( "#questions" ).accordion( "refresh" );'
 					);
 				} else {
 					return array(
@@ -142,10 +142,10 @@ class QuizXhr extends Control
 
 	public function editanswer()
 	{
-		if (mayEditQuiz()) {
+		if ($this->func->mayEditQuiz()) {
 			if ($answer = $this->model->getAnswer($_GET['id'])) {
 				$answer['isright'] = $answer['right'];
-				setEditData($answer);
+				$this->func->setEditData($answer);
 				$dia = new XhrDialog();
 
 				$dia->addAbortButton();
@@ -220,9 +220,9 @@ class QuizXhr extends Control
 
 	public function editquest()
 	{
-		if (mayEditQuiz()) {
+		if ($this->func->mayEditQuiz()) {
 			if ($quest = $this->model->getQuestion($_GET['id'])) {
-				setEditData($quest);
+				$this->func->setEditData($quest);
 				$dia = new XhrDialog();
 
 				$dia->addAbortButton();
@@ -264,7 +264,7 @@ class QuizXhr extends Control
 	private function abortOrOpenDialog($session_id)
 	{
 		return '
-				$("body").append(\'<div id="abortOrPause">' . JsSafe($this->view->abortOrPause()) . '</div>\');
+				$("body").append(\'<div id="abortOrPause">' . $this->func->jsSafe($this->view->abortOrPause()) . '</div>\');
 				$("#abortOrPause").dialog({
 					autoOpen: false,
 					title: "Quiz wirklich abbrechen?",
@@ -413,7 +413,7 @@ class QuizXhr extends Control
 	public function quizpopup()
 	{
 		if (S::may('fs')) {
-			$count = (int)$this->model->qOne('SELECT COUNT(id) FROM ' . PREFIX . 'quiz_session WHERE foodsaver_id = ' . (int)fsId() . ' AND quiz_id = ' . (int)S::get('hastodoquiz-id') . ' AND `status` = 1');
+			$count = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND quiz_id = ' . (int)S::get('hastodoquiz-id') . ' AND `status` = 1');
 			if ($count == 0) {
 				$dia = new XhrDialog();
 				$dia->addOpt('width', 720);
@@ -580,7 +580,7 @@ class QuizXhr extends Control
 
 						$x = 1;
 						foreach ($answers as $a) {
-							$comment_aswers .= $x . '. Frage #' . $a['id'] . ' => ' . preg_replace('/[^a-zA-Z0-9\ \.]/', '', tt($a['text'], 25)) . "\n";
+							$comment_aswers .= $x . '. Frage #' . $a['id'] . ' => ' . preg_replace('/[^a-zA-Z0-9\ \.]/', '', $this->func->tt($a['text'], 25)) . "\n";
 							++$x;
 						}
 
@@ -611,7 +611,7 @@ class QuizXhr extends Control
 						$dia->addButton('Weiter', 'questcheckresult();return false;');
 						$dia->addButton('Pause', 'ajreq(\'pause\',{app:\'quiz\',sid:\'' . $session_id . '\'});');
 
-						$dia->addButton('nächste Frage', 'ajreq(\'next\',{app:\'quiz\',qid:' . (int)$question['id'] . ',commentanswers:"' . jsSafe($comment_aswers) . '"});$(".quiz-questiondialog .ui-dialog-buttonset .ui-button").button( "option", "disabled", true );$(".quiz-questiondialog .ui-dialog-buttonset .ui-button span").prepend(\'<i class="fa fa-spinner fa-spin"></i> \')');
+						$dia->addButton('nächste Frage', 'ajreq(\'next\',{app:\'quiz\',qid:' . (int)$question['id'] . ',commentanswers:"' . $this->func->jsSafe($comment_aswers) . '"});$(".quiz-questiondialog .ui-dialog-buttonset .ui-button").button( "option", "disabled", true );$(".quiz-questiondialog .ui-dialog-buttonset .ui-button span").prepend(\'<i class="fa fa-spinner fa-spin"></i> \')');
 
 						/*
 						 * add next() Button
@@ -729,7 +729,7 @@ class QuizXhr extends Control
 									special = 0;
 								}
 								clearInterval(counter);
-								ajreq(\'next\',{answer:$(\'.qanswers\').serialize(),noco:$(\'.nocheck:checked\').length,app:\'quiz\',commentanswers:"' . jsSafe($comment_aswers) . '",comment:$(\'#quizusercomment\').val(),qid:' . (int)$question['id'] . ',special:special});
+								ajreq(\'next\',{answer:$(\'.qanswers\').serialize(),noco:$(\'.nocheck:checked\').length,app:\'quiz\',commentanswers:"' . $this->func->jsSafe($comment_aswers) . '",comment:$(\'#quizusercomment\').val(),qid:' . (int)$question['id'] . ',special:special});
 							}
 							
 							function breaknext()
@@ -907,6 +907,7 @@ class QuizXhr extends Control
 	private function resultNew($question, $diaId)
 	{
 		$uanswers = array();
+		$out = array();
 
 		if (isset($question['answers']) && is_array($question['answers'])) {
 			foreach ($question['answers'] as $a) {
@@ -922,7 +923,6 @@ class QuizXhr extends Control
 					$joke = true;
 				}
 
-				$out = array();
 				foreach ($answers as $a) {
 					// schwerzfrageoder
 					if ($joke) {
@@ -1152,7 +1152,7 @@ class QuizXhr extends Control
 
 	public function updatequest()
 	{
-		if (mayEditQuiz()) {
+		if ($this->func->mayEditQuiz()) {
 			/*
 			 *   [id] => 10
 				 [text] => test
@@ -1166,7 +1166,7 @@ class QuizXhr extends Control
 
 				if (!empty($text)) {
 					$this->model->updateQuestion($_GET['id'], $_GET['qid'], $text, $fp, $duration, $wikilink);
-					info('Frage wurde geändert');
+					$this->func->info('Frage wurde geändert');
 
 					return array(
 						'status' => 1,

@@ -5,29 +5,29 @@ namespace Foodsharing\Modules\NewArea;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 
-class NewareaControl extends Control
+class NewAreaControl extends Control
 {
-	public function __construct()
+	public function __construct(NewAreaModel $model, NewAreaView $view)
 	{
-		$this->model = new NewareaModel();
-		$this->view = new NewareaView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 
 		if (!S::may('orga')) {
-			go('/?page=dashboard');
+			$this->func->go('/?page=dashboard');
 		}
 	}
 
 	public function index()
 	{
-		addBread('Anfragen für neue Bezirke');
+		$this->func->addBread('Anfragen für neue Bezirke');
 		if ($foodsaver = $this->model->getWantNews()) {
-			addContent($this->view->listWantNews($foodsaver));
+			$this->func->addContent($this->view->listWantNews($foodsaver));
 
-			addContent($this->view->orderToBezirk(), CNT_RIGHT);
+			$this->func->addContent($this->view->orderToBezirk(), CNT_RIGHT);
 
-			addContent($this->view->options(), CNT_RIGHT);
+			$this->func->addContent($this->view->options(), CNT_RIGHT);
 		}
 	}
 }

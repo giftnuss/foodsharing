@@ -17,7 +17,7 @@ class ApplicationView extends View
 
 	public function applicationMenu($application)
 	{
-		return v_menu(array(
+		return $this->v_utils->v_menu(array(
 			array('click' => 'ajreq(\'apply\',{bid:' . (int)$this->bezirk_id . ',fid:' . (int)$application['id'] . '});return false;', 'name' => 'Ja'),
 			array('click' => 'ajreq(\'noapply\',{bid:' . (int)$this->bezirk_id . ',fid:' . (int)$application['id'] . '});return false;', 'name' => 'Nein'),
 			array('click' => 'ajreq(\'maybeapply\',{bid:' . (int)$this->bezirk_id . ',fid:' . (int)$application['id'] . '});return false;', 'name' => 'Vielleicht')
@@ -26,14 +26,14 @@ class ApplicationView extends View
 
 	public function application($application)
 	{
-		$out = $this->headline('Bewerbung für ' . $this->bezirk['name'] . ' von ' . $application['name'], img($application['photo']), 'profile(' . $application['id'] . ');');
+		$out = $this->headline('Bewerbung für ' . $this->bezirk['name'] . ' von ' . $application['name'], $this->func->img($application['photo']), 'profile(' . $application['id'] . ');');
 
 		$cnt = nl2br($application['application']);
 
-		$cnt = v_input_wrapper($application['name'], $cnt);
+		$cnt = $this->v_utils->v_input_wrapper($application['name'], $cnt);
 		$cnt .= '<div class="clear"></div>';
 
-		$out .= v_field($cnt, 'Motivations-Text', array('class' => 'ui-padding'));
+		$out .= $this->v_utils->v_field($cnt, 'Motivations-Text', array('class' => 'ui-padding'));
 
 		return $out;
 	}

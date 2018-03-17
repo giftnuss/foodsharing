@@ -2,19 +2,20 @@
 
 class StoreCest
 {
+	private $bezirk_id = 241;
+
 	private function createStoreAndUsers()
 	{
 		$I = $this->tester;
-		$this->store = $I->createStore(241);
-		$this->storeCoordinator = $I->createStoreCoordinator('pw');
+		$this->store = $I->createStore($this->bezirk_id);
+		$this->storeCoordinator = $I->createStoreCoordinator(null, ['bezirk_id' => $this->bezirk_id]);
 		$I->addStoreTeam($this->store['id'], $this->storeCoordinator['id'], true);
-		$I->addBezirkMember($this->store['bezirk_id'], $this->storeCoordinator['id']);
 	}
 
 	private function loginAsCoordinator()
 	{
 		$I = $this->tester;
-		$I->login($this->storeCoordinator['email'], 'pw');
+		$I->login($this->storeCoordinator['email']);
 	}
 
 	public function WillKeepApproxPickupTime(\HtmlAcceptanceTester $I)

@@ -8,18 +8,18 @@ use Flourish\fUpload;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrDialog;
-use Foodsharing\Modules\Buddy\BuddyModel;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Region\RegionModel;
-use Foodsharing\Modules\Store\StoreModel;
-use Foodsharing\Modules\WorkGroup\WorkGroupModel;
+use Foodsharing\Services\SearchService;
 
 class LoginXhr extends Control
 {
-	public function __construct()
+	private $searchService;
+
+	public function __construct(LoginModel $model, LoginView $view, SearchService $searchService)
 	{
-		$this->model = new LoginModel();
-		$this->view = new LoginView();
+		$this->model = $model;
+		$this->view = $view;
+		$this->searchService = $searchService;
 
 		parent::__construct();
 	}
@@ -29,141 +29,13 @@ class LoginXhr extends Control
 	 */
 	private function fillMemcacheUserVars()
 	{
-		$info = $this->model->getVal('infomail_message', 'foodsaver', fsId());
+		$info = $this->model->getVal('infomail_message', 'foodsaver', $this->func->fsId());
 
 		if ((int)$info > 0) {
-			Mem::userSet(fsId(), 'infomail', true);
+			Mem::userSet($this->func->fsId(), 'infomail', true);
 		} else {
-			Mem::userSet(fsId(), 'infomail', false);
+			Mem::userSet($this->func->fsId(), 'infomail', false);
 		}
-
-		$this->model->updateActivity();
-	}
-
-	/**
-	 * Method to generate search Index for instant seach.
-	 */
-	private function genSearchIndex()
-	{
-		/*
-		 * The big array we want to fill ;)
-		 */
-		$index = array();
-
-		/*
-		 * Buddies Load persons in the index array that connected with the user
-		 */
-
-		$model = new BuddyModel();
-		if ($buddies = $model->listBuddies()) {
-			$result = array();
-			foreach ($buddies as $b) {
-				$img = '/img/avatar-mini.png';
-
-				if (!empty($b['photo'])) {
-					$img = img($b['photo']);
-				}
-
-				$result[] = array(
-					'name' => $b['name'] . ' ' . $b['nachname'],
-					'teaser' => '',
-					'img' => $img,
-					'click' => 'chat(\'' . $b['id'] . '\');',
-					'id' => $b['id'],
-					'search' => array(
-						$b['name'], $b['nachname']
-					)
-				);
-			}
-			$index[] = array(
-				'title' => 'Menschen die Du kennst',
-				'key' => 'buddies',
-				'result' => $result
-			);
-		}
-
-		/*
-		 * Groups load Groups connected to the user in the array
-		*/
-		$model = new WorkGroupModel();
-		if ($groups = $model->listMyGroups()) {
-			$result = array();
-			foreach ($groups as $b) {
-				$img = '/img/groups.png';
-				if (!empty($b['photo'])) {
-					$img = 'images/' . str_replace('photo/', 'photo/thumb_', $b['photo']);
-				}
-				$result[] = array(
-					'name' => $b['name'],
-					'teaser' => tt($b['teaser'], 65),
-					'img' => $img,
-					'href' => '/?page=bezirk&bid=' . $b['id'] . '&sub=forum',
-					'search' => array(
-						$b['name']
-					)
-				);
-			}
-			$index[] = array(
-				'title' => 'Deine Gruppen',
-				'result' => $result
-			);
-		}
-
-		/*
-		 * Betriebe load food stores connected to the user in the array
-		 */
-		$model = new StoreModel();
-		if ($betriebe = $model->listMyBetriebe()) {
-			$result = array();
-			foreach ($betriebe as $b) {
-				$result[] = array(
-					'name' => $b['name'],
-					'teaser' => $b['str'] . ' ' . $b['hsnr'] . ', ' . $b['plz'] . ' ' . $b['stadt'],
-					'href' => '/?page=fsbetrieb&id=' . $b['id'],
-					'search' => array(
-						$b['name'], $b['str']
-					)
-				);
-			}
-			$index[] = array(
-				'title' => 'Deine Betriebe',
-				'result' => $result
-			);
-		}
-
-		/*
-		 * Bezirke load Bezirke connected to the user in the array
-		*/
-		$model = new RegionModel();
-		if ($bezirke = $model->listMyBezirke()) {
-			$result = array();
-			foreach ($bezirke as $b) {
-				$result[] = array(
-					'name' => $b['name'],
-					'teaser' => '',
-					'img' => false,
-					'href' => '/?page=bezirk&bid=' . $b['id'] . '&sub=forum',
-					'search' => array(
-						$b['name']
-					)
-				);
-			}
-			$index[] = array(
-				'title' => 'Deine Bezirke',
-				'result' => $result
-			);
-		}
-
-		/*
-		 * Get or set an individual token as filename for the public json file
-		*/
-		if ($token = S::user('token')) {
-			file_put_contents('cache/searchindex/' . $token . '.json', json_encode($index));
-
-			return $token;
-		}
-
-		return false;
 	}
 
 	public function login()
@@ -171,7 +43,7 @@ class LoginXhr extends Control
 		if (!S::may()) {
 			$dia = new XhrDialog();
 
-			$dia->setTitle(s('login'));
+			$dia->setTitle($this->func->s('login'));
 
 			$dia->addContent($this->view->loginForm());
 
@@ -198,26 +70,26 @@ class LoginXhr extends Control
 	{
 		if ($this->model->login($_GET['u'], $_GET['p'])) {
 			$token_js = '';
-			if ($token = $this->genSearchIndex()) {
+			if ($token = $this->searchService->writeSearchIndexToDisk(S::id(), S::user('token'))) {
 				$token_js = 'user.token = "' . $token . '";';
 			}
 
 			$this->fillMemcacheUserVars();
 
-			$menu = getMenu();
-			$msgbar = v_msgBar();
+			$menu = $this->func->getMenu();
+			$msgbar = $this->v_utils->v_msgBar();
 
 			return array(
 				'status' => 1,
 				'script' => '
 					' . $token_js . '
-					pulseSuccess("' . s('login_success') . '");
+					pulseSuccess("' . $this->func->s('login_success') . '");
 					reload();'
 			);
 		} else {
 			return array(
 				'status' => 1,
-				'script' => 'pulseError("' . s('login_failed') . '");'
+				'script' => 'pulseError("' . $this->func->s('login_failed') . '");'
 			);
 		}
 	}
@@ -236,7 +108,7 @@ class LoginXhr extends Control
 					'image/pjpeg',
 					'image/png'
 				),
-				s('upload_no_image')
+				$this->func->s('upload_no_image')
 			);
 			$uploader->setMaxSize('5MB');
 
@@ -259,7 +131,7 @@ class LoginXhr extends Control
 				$func = 'parent.join.readyUpload(\'' . $name . '\');';
 			}
 		} catch (Exception $e) {
-			$func = 'parent.join.photoUploadError(\'' . s('error_image') . '\');';
+			$func = 'parent.join.photoUploadError(\'' . $this->func->s('error_image') . '\');';
 		}
 
 		echo '<html>
@@ -283,12 +155,12 @@ class LoginXhr extends Control
 		} else {
 			$token = uniqid('', true);
 			if ($id = $this->model->insertNewUser($data, $token)) {
-				$activationUrl = 'http://' . DEFAULT_HOST . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
+				$activationUrl = BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
 
-				tplMail(25, $data['email'], array(
+				$this->func->tplMail(25, $data['email'], array(
 					'name' => $data['name'],
 					'link' => $activationUrl,
-					'anrede' => s('anrede_' . $data['gender'])
+					'anrede' => $this->func->s('anrede_' . $data['gender'])
 				));
 
 				echo json_encode(array(
@@ -300,7 +172,7 @@ class LoginXhr extends Control
 
 		echo json_encode(array(
 			'status' => 0,
-			'error' => s('error')
+			'error' => $this->func->s('error')
 		));
 		exit();
 	}
@@ -348,19 +220,19 @@ class LoginXhr extends Control
 		$data['surname'] = trim($data['surname']);
 
 		if ($data['name'] == '') {
-			return s('error_name');
+			return $this->func->s('error_name');
 		}
 
-		if (!validEmail($data['email'])) {
-			return s('error_email');
+		if (!$this->func->validEmail($data['email'])) {
+			return $this->func->s('error_email');
 		}
 
 		if ($this->model->emailExists($data['email'])) {
-			return s('email_exists');
+			return $this->func->s('email_exists');
 		}
 
 		if (strlen($data['pw']) < 5 && strlen($data['pw']) > 30) {
-			return s('error_password');
+			return $this->func->s('error_password');
 		}
 
 		$data['gender'] = (int)$data['gender'];
@@ -396,12 +268,12 @@ class LoginXhr extends Control
 		if (!S::may()) {
 			$dia = new XhrDialog();
 
-			$dia->setTitle(s('join'));
+			$dia->setTitle($this->func->s('join'));
 
 			$email = '';
 			$pass = '';
 			if (isset($_GET['p']) && isset($_GET['e'])) {
-				if (validEmail($_GET['e'])) {
+				if ($this->func->validEmail($_GET['e'])) {
 					$email = strip_tags($_GET['e']);
 				}
 				$pass = strip_tags($_GET['p']);
@@ -588,7 +460,7 @@ class LoginXhr extends Control
 
 				return $img;
 			} catch (Exception $e) {
-				info('Dein Foto konnte nicht gespeichert werden');
+				$this->func->info('Dein Foto konnte nicht gespeichert werden');
 
 				return '';
 			}

@@ -2,23 +2,47 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Foodsharing\DI;
 use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\Func;
+use Foodsharing\Lib\Sanitizer;
 use Foodsharing\Lib\Session\S;
-use Foodsharing\Modules\Mailbox\MailboxModel;
+use Foodsharing\Lib\Twig;
+use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Message\MessageModel;
 use ReflectionClass;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class Control
 {
 	protected $isControl = false;
 	protected $isXhrControl = false;
+	/**
+	 * @var Model
+	 */
 	protected $model;
 	protected $view;
 	private $sub;
 	private $sub_func;
+	/**
+	 * @var Func
+	 */
+	protected $func;
+	/**
+	 * @var Utils
+	 */
+	protected $v_utils;
+
+	/**
+	 * @var Twig
+	 */
+	private $twig;
 
 	public function __construct()
 	{
+		$this->func = DI::$shared->get(Func::class);
+		$this->v_utils = DI::$shared->get(Utils::class);
+
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;
 		$className = $reflection->getShortName();
@@ -59,15 +83,29 @@ abstract class Control
 		}
 		if ($this->isControl) {
 			if (file_exists($dir . $moduleName . '.js')) {
-				addJsFunc(file_get_contents($dir . $moduleName . '.js'));
+				$this->func->addJsFunc(file_get_contents($dir . $moduleName . '.js'));
 			}
 			if (file_exists($dir . $moduleName . '.css')) {
-				addStyle(file_get_contents($dir . $moduleName . '.css'));
+				$this->func->addStyle(file_get_contents($dir . $moduleName . '.css'));
 			}
 		}
-		if (is_null($this->model)) {
-			$this->model = new Model();
-		}
+		$this->model->updateActivity(S::id());
+	}
+
+	/**
+	 * @required
+	 */
+	public function setTwig(Twig $twig)
+	{
+		$this->twig = $twig;
+	}
+
+	protected function render($template, $data)
+	{
+		$global = $this->func->generateAndGetGlobalViewData();
+		$viewData = array_merge($global, $data);
+
+		return $this->twig->render($template, $viewData);
 	}
 
 	public function setTemplate($template)
@@ -108,7 +146,7 @@ abstract class Control
 
 	public function wallposts($table, $id)
 	{
-		addJsFunc('
+		$this->func->addJsFunc('
 			function u_delPost(id)
 				{
 					var id = id;
@@ -140,7 +178,7 @@ abstract class Control
 					$("a.attach-load").remove();
 				}
 			');
-		addJs('
+		$this->func->addJs('
 				$("#wallpost-text").autosize();
 			$("#wallpost-text").focus(function(){
 				$("#wallpost-submit").show();
@@ -165,7 +203,7 @@ abstract class Control
 			});
 				$("#wall-submit").button().click(function(ev){
 					ev.preventDefault();
-					if(($("#wallpost-text").val() != "" && $("#wallpost-text").val() != "' . s('write_teaser') . '") || $("#attach-preview a").length > 0)
+					if(($("#wallpost-text").val() != "" && $("#wallpost-text").val() != "' . $this->func->s('write_teaser') . '") || $("#attach-preview a").length > 0)
 					{
 						$(".wall-posts table tr:first").before(\'<tr><td colspan="2" class="load">&nbsp;</td></tr>\');
 
@@ -179,7 +217,7 @@ abstract class Control
 						}
 
 						text = $("#wallpost-text").val();
-						if(text == "' . s('write_teaser') . '")
+						if(text == "' . $this->func->s('write_teaser') . '")
 						{
 							text = "";
 						}
@@ -235,14 +273,14 @@ abstract class Control
 		if (S::may()) {
 			$posthtml = '
 				<div class="tools ui-padding">
-				<textarea id="wallpost-text" name="text" title="' . s('write_teaser') . '" class="comment textarea inlabel"></textarea>
+				<textarea id="wallpost-text" name="text" title="' . $this->func->s('write_teaser') . '" class="comment textarea inlabel"></textarea>
 				<div id="attach-preview"></div>
 				<div style="display:none;" id="wallpost-attach" /></div>
 
 				<div id="wallpost-submit" align="right">
 
-					<span id="wallpost-loader"></span><span id="wallpost-attach-image"><i class="fa fa-image"></i> ' . s('attach_image') . '</span>
-					<a href="#" id="wall-submit">' . s('send') . '</a>
+					<span id="wallpost-loader"></span><span id="wallpost-attach-image"><i class="fa fa-image"></i> ' . $this->func->s('attach_image') . '</span>
+					<a href="#" id="wall-submit">' . $this->func->s('send') . '</a>
 					<div style="overflow:hidden;height:1px;">
 						<form id="wallpost-attachimage-form" action="/xhrapp.php?app=wallpost&m=attachimage&table=' . $table . '&id=' . $id . '" method="post" enctype="multipart/form-data" target="wallpost-frame">
 							<input id="wallpost-attach-trigger" type="file" maxlength="100000" size="chars" name="etattach" />
@@ -354,7 +392,7 @@ abstract class Control
 		return false;
 	}
 
-	public function convMessage($recipient, $conversation_id, $msg, $tpl_id = 9)
+	public function convMessage($recipient, $conversation_id, $msg, MessageModel $messageModel, $tpl_id = 9)
 	{
 		/*
 		 * only send email if the user is not online
@@ -365,68 +403,63 @@ abstract class Control
 			 * only send email if the user want to retrieve emails
 			 */
 			if (Mem::user($recipient['id'], 'infomail')) {
-				$sessdata = Mem::user(fsId(), 'lastMailMessage');
-
-				if (!$sessdata) {
+				if (!isset($_SESSION['lastMailMessage']) || !is_array($sessdata = $_SESSION['lastMailMessage'])) {
 					$sessdata = array();
 				}
 
 				if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
 					$sessdata[$recipient['id']] = time();
 
-					$msgDB = new MessageModel();
-					if ($betriebName = $msgDB->getBetriebname($conversation_id)) {
-						tplMail(30, $recipient['email'], array(
-							'anrede' => genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+					if ($betriebName = $messageModel->getBetriebname($conversation_id)) {
+						$this->func->tplMail(30, $recipient['email'], array(
+							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => S::user('name'),
 							'name' => $recipient['name'],
 							'chatname' => 'Betrieb ' . $betriebName,
 							'message' => $msg,
-							'link' => BASE_URL . '/?page=msg&uc=' . (int)fsId() . 'cid=' . (int)$conversation_id
+							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->func->fsId() . 'cid=' . (int)$conversation_id
 						));
-					} elseif ($memberNames = $msgDB->getChatMembers($conversation_id)) {
-						tplMail(30, $recipient['email'], array(
-							'anrede' => genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+					} elseif ($memberNames = $messageModel->getChatMembers($conversation_id)) {
+						$this->func->tplMail(30, $recipient['email'], array(
+							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => S::user('name'),
 							'name' => $recipient['name'],
 							'chatname' => implode(', ', $memberNames),
 							'message' => $msg,
-							'link' => BASE_URL . '/?page=msg&uc=' . (int)fsId() . 'cid=' . (int)$conversation_id
+							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->func->fsId() . 'cid=' . (int)$conversation_id
 						));
 					} else {
-						tplMail($tpl_id, $recipient['email'], array(
-							'anrede' => genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						$this->func->tplMail($tpl_id, $recipient['email'], array(
+							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => S::user('name'),
 							'name' => $recipient['name'],
 							'message' => $msg,
-							'link' => BASE_URL . '/?page=msg&uc=' . (int)fsId() . 'cid=' . (int)$conversation_id
+							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->func->fsId() . 'cid=' . (int)$conversation_id
 						));
 					}
 				}
 
-				Mem::userSet(fsId(), 'lastMailMessage', $sessdata);
+				$_SESSION['lastMailMessage'] = $sessdata;
 			}
 		}
 	}
 
 	public function mailMessage($sender_id, $recip_id, $msg, $tpl_id = 9)
 	{
-		$db = new MailboxModel();
-
-		$info = $db->getVal('infomail_message', 'foodsaver', $recip_id);
+		$info = $this->model->getVal('infomail_message', 'foodsaver', $recip_id);
 		if ((int)$info > 0) {
 			if (!isset($_SESSION['lastMailMessage'])) {
 				$_SESSION['lastMailMessage'] = array();
 			}
 
-			if (!$db->isActive($recip_id)) {
+			if (!$this->model->isActive($recip_id)) {
 				if (!isset($_SESSION['lastMailMessage'][$recip_id]) || (time() - $_SESSION['lastMailMessage'][$recip_id]) > 600) {
 					$_SESSION['lastMailMessage'][$recip_id] = time();
-					$foodsaver = $db->getOne_foodsaver($recip_id);
-					$sender = $db->getOne_foodsaver($sender_id);
+					$foodsaver = $this->model->getOne_foodsaver($recip_id);
+					$sender = $this->model->getOne_foodsaver($sender_id);
 
-					tplMail($tpl_id, $foodsaver['email'], array(
-						'anrede' => genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+					$this->func->tplMail($tpl_id, $foodsaver['email'], array(
+						'anrede' => $this->func->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 						'sender' => $sender['name'],
 						'name' => $foodsaver['name'],
 						'message' => $msg,
@@ -444,15 +477,6 @@ abstract class Control
 			echo strip_tags($_GET['callback']) . '(' . json_encode($data) . ');';
 		}
 		exit();
-	}
-
-	public function addBell($foodsaver_ids, $title, $body, $link_attributes = false)
-	{
-		if ($link_attributes !== false) {
-			$attr = serialize($link_attributes);
-		}
-
-		return $this->model->addBell($foodsaver_ids, $title, $body, $link_attributes);
 	}
 
 	public function setContentWidth($left, $right)
@@ -491,5 +515,27 @@ abstract class Control
 		}
 
 		return false;
+	}
+
+	protected function sanitizeRequest(Request $request, $spec)
+	{
+		$data = [];
+		foreach ($spec as $name => $s) {
+			$default = ['method' => 'get', 'required' => true, 'parameterName' => $name, 'default' => null];
+			$s = array_merge($default, $s);
+			$v = $request->request->{$s['method']}($s['parameterName']);
+			if (is_null($v)) {
+				if ($s['required']) {
+					throw new \Exception('Required parameter not set');
+				}
+				$v = $s['default'];
+			}
+			if (isset($s['filter'])) {
+				$v = call_user_func([Sanitizer::class, $s['filter']], $v);
+			}
+			$data[$name] = $v;
+		}
+
+		return $data;
 	}
 }

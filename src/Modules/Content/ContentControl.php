@@ -8,10 +8,10 @@ use Parsedown;
 
 class ContentControl extends Control
 {
-	public function __construct()
+	public function __construct(ContentModel $model, ContentView $view)
 	{
-		$this->model = new ContentModel();
-		$this->view = new ContentView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}
@@ -20,76 +20,75 @@ class ContentControl extends Control
 	{
 		if (!isset($_GET['sub'])) {
 			if (!S::may('orga')) {
-				go('/');
+				$this->func->go('/');
 			}
+			$this->model;
 
-			$db = $this->model;
-
-			if (getAction('neu')) {
+			if ($this->func->getAction('neu')) {
 				$this->handle_add();
 
-				addBread(s('bread_content'), '/?page=content');
-				addBread(s('bread_new_content'));
+				$this->func->addBread($this->func->s('bread_content'), '/?page=content');
+				$this->func->addBread($this->func->s('bread_new_content'));
 
-				addContent($this->content_form());
+				$this->func->addContent($this->content_form());
 
-				addContent(v_field(v_menu(array(
-					pageLink('content', 'back_to_overview')
-				)), s('actions')), CNT_RIGHT);
-			} elseif ($id = getActionId('delete')) {
-				if ($db->del_content($id)) {
-					info(s('content_deleted'));
-					goPage();
+				$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+					$this->func->pageLink('content', 'back_to_overview')
+				)), $this->func->s('actions')), CNT_RIGHT);
+			} elseif ($id = $this->func->getActionId('delete')) {
+				if ($this->model->del_content($id)) {
+					$this->func->info($this->func->s('content_deleted'));
+					$this->func->goPage();
 				}
-			} elseif ($id = getActionId('edit')) {
+			} elseif ($id = $this->func->getActionId('edit')) {
 				$this->handle_edit();
 
-				addBread(s('bread_content'), '/?page=content');
-				addBread(s('bread_edit_content'));
+				$this->func->addBread($this->func->s('bread_content'), '/?page=content');
+				$this->func->addBread($this->func->s('bread_edit_content'));
 
-				$data = $db->getOne_content($id);
-				setEditData($data);
+				$data = $this->model->getOne_content($id);
+				$this->func->setEditData($data);
 
-				addContent($this->content_form());
+				$this->func->addContent($this->content_form());
 
-				addContent(v_field(v_menu(array(
-					pageLink('content', 'back_to_overview')
-				)), s('actions')), CNT_RIGHT);
-			} elseif ($id = getActionId('view')) {
+				$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+					$this->func->pageLink('content', 'back_to_overview')
+				)), $this->func->s('actions')), CNT_RIGHT);
+			} elseif ($id = $this->func->getActionId('view')) {
 				if ($cnt = $this->model->getContent($id)) {
-					addBread($cnt['title']);
-					addTitle($cnt['title']);
+					$this->func->addBread($cnt['title']);
+					$this->func->addTitle($cnt['title']);
 
-					addContent($this->view->simple($cnt));
+					$this->func->addContent($this->view->simple($cnt));
 				}
 			} elseif (isset($_GET['id'])) {
-				go('/?page=content&a=edit&id=' . (int)$_GET['id']);
+				$this->func->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
 			} else {
-				addBread(s('content_bread'), '/?page=content');
+				$this->func->addBread($this->func->s('content_bread'), '/?page=content');
 
-				if ($data = $db->getBasics_content()) {
+				if ($data = $this->model->getBasics_content()) {
 					$rows = array();
 					foreach ($data as $d) {
 						$rows[] = array(
 							array('cnt' => $d['id']),
 							array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=content&id=' . $d['id'] . '">' . $d['name'] . '</a>'),
-							array('cnt' => v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => sv('delete_sure', $d['name'])))
+							array('cnt' => $this->v_utils->v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => $this->func->sv('delete_sure', $d['name'])))
 							));
 					}
 
-					$table = v_tablesorter(array(
+					$table = $this->v_utils->v_tablesorter(array(
 						array('name' => 'ID', 'width' => 30),
-						array('name' => s('name')),
-						array('name' => s('actions'), 'sort' => false, 'width' => 50)
+						array('name' => $this->func->s('name')),
+						array('name' => $this->func->s('actions'), 'sort' => false, 'width' => 50)
 					), $rows);
 
-					addContent(v_field($table, 'Öffentliche Webseiten bearbeiten'));
+					$this->func->addContent($this->v_utils->v_field($table, 'Öffentliche Webseiten bearbeiten'));
 				} else {
-					info(s('content_empty'));
+					$this->func->info($this->func->s('content_empty'));
 				}
 
-				addContent(v_field(v_menu(array(
-					array('href' => '/?page=content&a=neu', 'name' => s('neu_content'))
+				$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+					array('href' => '/?page=content&a=neu', 'name' => $this->func->s('neu_content'))
 				)), 'Aktionen'), CNT_RIGHT);
 			}
 		}
@@ -98,67 +97,97 @@ class ContentControl extends Control
 	public function partner()
 	{
 		if ($cnt = $this->model->getContent(10)) {
-			addBread($cnt['title']);
-			addTitle($cnt['title']);
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
 
-			addContent($this->view->partner($cnt));
+			$this->func->addContent($this->view->partner($cnt));
 		}
 	}
 
 	public function unterstuetzung()
 	{
 		if ($cnt = $this->model->getContent(42)) {
-			addBread($cnt['title']);
-			addTitle($cnt['title']);
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
 
-			addContent($this->view->simple($cnt));
+			$this->func->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function presse()
 	{
 		if ($cnt = $this->model->getContent(58)) {
-			addBread($cnt['title']);
-			addTitle($cnt['title']);
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
 
-			addContent($this->view->simple($cnt));
+			$this->func->addContent($this->view->simple($cnt));
+		}
+	}
+
+	public function communitiesGermany()
+	{
+		if ($cnt = $this->model->getContent(52)) {
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
+
+			$this->func->addContent($this->view->simple($cnt));
+		}
+	}
+
+	public function communitiesAustria()
+	{
+		if ($cnt = $this->model->getContent(61)) {
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
+
+			$this->func->addContent($this->view->simple($cnt));
+		}
+	}
+
+	public function communitiesSwitzerland()
+	{
+		if ($cnt = $this->model->getContent(62)) {
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
+
+			$this->func->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function forderungen()
 	{
 		if ($cnt = $this->model->getContent(60)) {
-			addBread($cnt['title']);
-			addTitle($cnt['title']);
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
 
-			addContent($this->view->simple($cnt));
+			$this->func->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function leeretonne()
 	{
 		if ($cnt = $this->model->getContent(46)) {
-			addBread($cnt['title']);
-			addTitle($cnt['title']);
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
 
-			addContent($this->view->simple($cnt));
+			$this->func->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function fairteilerrettung()
 	{
 		if ($cnt = $this->model->getContent(49)) {
-			addBread($cnt['title']);
-			addTitle($cnt['title']);
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
 
-			addContent($this->view->simple($cnt));
+			$this->func->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function faq()
 	{
-		addBread('F.A.Q');
-		addTitle('F.A.Q.');
+		$this->func->addBread('F.A.Q');
+		$this->func->addTitle('F.A.Q.');
 
 		$cat_ids = array(1, 6, 7);
 		if (S::may('fs')) {
@@ -170,117 +199,115 @@ class ContentControl extends Control
 		}
 
 		if ($faq = $this->model->listFaq($cat_ids)) {
-			addContent($this->view->faq($faq));
+			$this->func->addContent($this->view->faq($faq));
 		}
 	}
 
 	public function impressum()
 	{
 		if ($cnt = $this->model->getContent(8)) {
-			addBread($cnt['title']);
-			addTitle($cnt['title']);
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
 
-			addContent($this->view->impressum($cnt));
+			$this->func->addContent($this->view->impressum($cnt));
 		}
 	}
 
 	public function about()
 	{
 		if ($cnt = $this->model->getContent(9)) {
-			addBread($cnt['title']);
-			addTitle($cnt['title']);
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
 
-			addContent($this->view->about($cnt));
+			$this->func->addContent($this->view->about($cnt));
 		}
 	}
 
 	public function ratgeber()
 	{
-		addBread('Ratgeber');
-		addTitle('Ratgeber Lebensmittelsicherheit');
-		addContent($this->view->ratgeber());
+		$this->func->addBread('Ratgeber');
+		$this->func->addTitle('Ratgeber Lebensmittelsicherheit');
+		$this->func->addContent($this->view->ratgeber());
 	}
 
 	public function joininfo()
 	{
-		addBread('Mitmachen');
-		addTitle('Mitmachen - Unsere Regeln');
-		addContent($this->view->joininfo());
+		$this->func->addBread('Mitmachen');
+		$this->func->addTitle('Mitmachen - Unsere Regeln');
+		$this->func->addContent($this->view->joininfo());
 	}
 
 	public function fuer_unternehmen()
 	{
 		if ($cnt = $this->model->getContent(4)) {
-			addBread($cnt['title']);
-			addTitle($cnt['title']);
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
 
-			addContent($this->view->partner($cnt));
+			$this->func->addContent($this->view->partner($cnt));
 		}
 	}
 
 	public function infohub()
 	{
 		if ($cnt = $this->model->getContent(59)) {
-			addBread($cnt['title']);
-			addTitle($cnt['title']);
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
 
-			addContent($this->view->simple($cnt));
+			$this->func->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function changelog()
 	{
-		addBread('Changelog');
-		addTitle('Changelog');
+		$this->func->addBread('Changelog');
+		$this->func->addTitle('Changelog');
 		$markdown = file_get_contents('CHANGELOG.md');
 		$markdown = preg_replace('/\@(\S+)/', '[@\1](https://gitlab.com/\1)', $markdown);
 		$markdown = preg_replace('/!([0-9]+)/', '[!\1](https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/\1)', $markdown);
 		$Parsedown = new Parsedown();
 		$cl['body'] = $Parsedown->parse($markdown);
 		$cl['title'] = 'Changelog';
-		addContent($this->view->simple($cl));
+		$this->func->addContent($this->view->simple($cl));
 	}
 
 	private function content_form($title = 'Content Management')
 	{
-		return v_form('faq', array(
-			v_field(
-				v_form_text('name', array('required' => true)) .
-				v_form_text('title', array('required' => true)),
+		return $this->v_utils->v_form('faq', array(
+			$this->v_utils->v_field(
+				$this->v_utils->v_form_text('name', array('required' => true)) .
+				$this->v_utils->v_form_text('title', array('required' => true)),
 
 				$title,
 				array('class' => 'ui-padding')
 			),
-			v_field(v_form_tinymce('body', array('filemanager' => true, 'public_content' => true, 'nowrapper' => true)), 'Inhalt')
-		), array('submit' => s('save')));
+			$this->v_utils->v_field($this->v_utils->v_form_tinymce('body', array('public_content' => true, 'nowrapper' => true)), 'Inhalt')
+		), array('submit' => $this->func->s('save')));
 	}
 
 	private function handle_edit()
 	{
-		global $db;
 		global $g_data;
-		if (submitted()) {
+		if ($this->func->submitted()) {
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
-			if ($db->update_content($_GET['id'], $g_data)) {
-				info(s('content_edit_success'));
-				go('/?page=content&a=edit&id=' . (int)$_GET['id']);
+			if ($this->model->update_content($_GET['id'], $g_data)) {
+				$this->func->info($this->func->s('content_edit_success'));
+				$this->func->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
 			} else {
-				error(s('error'));
+				$this->func->error($this->func->s('error'));
 			}
 		}
 	}
 
 	private function handle_add()
 	{
-		global $db;
 		global $g_data;
-		if (submitted()) {
+		if ($this->func->submitted()) {
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
-			if ($db->add_content($g_data)) {
-				info(s('content_add_success'));
-				goPage();
+			if ($this->model->add_content($g_data)) {
+				$this->func->info($this->func->s('content_add_success'));
+				$this->func->goPage();
 			} else {
-				error(s('error'));
+				$this->func->error($this->func->s('error'));
 			}
 		}
 	}

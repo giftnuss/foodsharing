@@ -11,10 +11,14 @@ use Foodsharing\Modules\Message\MessageModel;
 
 class APIXhr extends Control
 {
-	public function __construct()
-	{
-		$this->model = new APIModel();
+	private $messageModel;
+	private $basketModel;
 
+	public function __construct(APIModel $model, MessageModel $messageModel, BasketModel $basketModel)
+	{
+		$this->model = $model;
+		$this->messageModel = $messageModel;
+		$this->basketModel = $basketModel;
 		parent::__construct();
 
 		if (!S::may() && $_GET['m'] != 'login') {
@@ -43,23 +47,21 @@ class APIXhr extends Control
 		$message = strip_tags($_GET['ms']);
 		$message = trim($message);
 
-		$model = new MessageModel();
-
 		if ((int)$_GET['id'] > 0 && $message != '') {
 			$conversation_id = (int)$_GET['id'];
 
-			if ($model->mayConversation($conversation_id)) {
-				$id = $model->sendMessage($conversation_id, $message);
+			if ($this->messageModel->mayConversation($conversation_id)) {
+				$id = $this->messageModel->sendMessage($conversation_id, $message);
 
-				if ($member = $model->listConversationMembers($conversation_id)) {
+				if ($member = $this->messageModel->listConversationMembers($conversation_id)) {
 					foreach ($member as $m) {
-						if ($m['id'] != fsId()) {
+						if ($m['id'] != $this->func->fsId()) {
 							Mem::userAppend($m['id'], 'msg-update', $conversation_id);
 
-							sendSock($m['id'], 'conv', 'push', array(
+							$this->func->sendSock($m['id'], 'conv', 'push', array(
 								'id' => $id,
 								'cid' => $conversation_id,
-								'fs_id' => fsId(),
+								'fs_id' => $this->func->fsId(),
 								'fs_name' => S::user('name'),
 								'fs_photo' => S::user('photo'),
 								'body' => $message,
@@ -69,8 +71,8 @@ class APIXhr extends Control
 							/*
 							 * send an E-Mail if the user is not online
 							*/
-							if ($model->wantMsgEmailInfo($m['id'])) {
-								$this->convMessage($m, $conversation_id, $message);
+							if ($this->messageModel->wantMsgEmailInfo($m['id'])) {
+								$this->convMessage($m, $conversation_id, $message, $this->messageModel);
 							}
 						}
 					}
@@ -92,15 +94,14 @@ class APIXhr extends Control
 
 	public function chathistory()
 	{
-		$model = new MessageModel();
 		$cid = (int)$_GET['id'];
 
-		if ($model->mayConversation($cid) && $history = $model->chatHistory($cid)) {
+		if ($this->messageModel->mayConversation($cid) && $history = $this->messageModel->chatHistory($cid)) {
 			return $this->appout(array(
 				'status' => 1,
 				'id' => $cid,
 				'history' => $history,
-				'user' => $model->listConversationMembers($cid)
+				'user' => $this->messageModel->listConversationMembers($cid)
 			));
 		}
 
@@ -138,7 +139,7 @@ class APIXhr extends Control
 	{
 		if (isset($_GET['e'])) {
 			if ($this->model->login($_GET['e'], $_GET['p'])) {
-				$fs = $this->model->getValues(array('telefon', 'handy', 'geschlecht', 'name', 'lat', 'lon', 'photo'), 'foodsaver', fsId());
+				$fs = $this->model->getValues(array('telefon', 'handy', 'geschlecht', 'name', 'lat', 'lon', 'photo'), 'foodsaver', $this->func->fsId());
 
 				$this->appout(array(
 					'status' => 1,
@@ -146,7 +147,7 @@ class APIXhr extends Control
 					'gender' => $fs['geschlecht'],
 					'phone' => $fs['telefon'],
 					'phone_mobile' => $fs['handy'],
-					'id' => fsId(),
+					'id' => $this->func->fsId(),
 					'name' => $fs['name'],
 					'lat' => $fs['lat'],
 					'lon' => $fs['lon'],
@@ -170,22 +171,9 @@ class APIXhr extends Control
 	public function basket_submit()
 	{
 		if (S::may()) {
-			/*
-			 * Array
-			(
-				[desc] => g
-				[art] => 2,4
-				[types] => 2,4
-				[fetchart] => loc
-				[lat] =>
-				[lon] =>
-			)
-			 */
-
 			$desc = strip_tags($_GET['desc']);
 			$tmp = array();
 
-			// Bio vegan ...
 			if (isset($_GET['art'])) {
 				$art = $_GET['art'];
 				foreach ($art as $a) {
@@ -198,7 +186,6 @@ class APIXhr extends Control
 
 			$tmp = array();
 
-			// Essens-Arten
 			if (isset($_GET['types'])) {
 				$types = $_GET['types'];
 				foreach ($types as $t) {
@@ -227,8 +214,6 @@ class APIXhr extends Control
 				$ctypes = array(1);
 			}
 
-			$model = new BasketModel();
-
 			if (!empty($desc)) {
 				$weight = floatval($_GET['weight']);
 				if ($weight <= 0) {
@@ -247,7 +232,7 @@ class APIXhr extends Control
 					}
 				}
 
-				$fs = $this->model->getValues(array('lat', 'lon'), 'foodsaver', fsId());
+				$fs = $this->model->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
 
 				$lat = $fs['lat'];
 				$lon = $fs['lon'];
@@ -262,7 +247,7 @@ class APIXhr extends Control
 					}
 				}
 
-				if ($id = $model->addBasket(
+				if ($id = $this->basketModel->addBasket(
 					$desc,
 					$photo, // pic
 					$tel, // phone
@@ -275,10 +260,10 @@ class APIXhr extends Control
 				)
 				) {
 					if (!empty($art)) {
-						$model->addArt($id, $art);
+						$this->basketModel->addArt($id, $art);
 					}
 					if (!empty($types)) {
-						$model->addTypes($id, $types);
+						$this->basketModel->addTypes($id, $types);
 					}
 
 					return $this->appout(array(
@@ -427,13 +412,11 @@ class APIXhr extends Control
 
 	public function loadrequests()
 	{
-		$model = new MessageModel();
-
-		if ($convs = $model->listConversations()) {
+		if ($convs = $this->messageModel->listConversations()) {
 			$out = array();
 			foreach ($convs as $c) {
 				$out[] = array(
-					't' => niceDateShort($c['last_ts']),
+					't' => $this->func->niceDateShort($c['last_ts']),
 					'n' => $c['name'],
 					'id' => $c['id'],
 					'u' => $c['member'],

@@ -1,0 +1,16 @@
+{% if items|length > 0 %}
+    <div class="pure-g">
+        <div class="pure-u-1">
+            <ul class="bread inside">
+                {% for item in items %}
+                    {% if loop.last %}
+                        <li class="last">{{ item.name }}</li>
+                    {% else %}
+                        <li><a href="{{ item.href }}">{{ item.name }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <div class="clear"></div>
+        </div>
+    </div>
+{% endif %}

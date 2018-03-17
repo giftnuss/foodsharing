@@ -1,12 +1,11 @@
 <?php
 
-
-// TODO: sanitize env name
-// TODO: maybe have a default env?
-// TODO: check if there is not already a concept of app environment elsewhere
+use DebugBar\DataCollector\PDO\TraceablePDO;
+use Foodsharing\DI;
 
 $FS_ENV = getenv('FS_ENV');
 $env_filename = 'config.inc.' . $FS_ENV . '.php';
+define('FS_ENV', $FS_ENV);
 
 if (file_exists($env_filename)) {
 	require_once $env_filename;
@@ -39,3 +38,31 @@ if (defined('SENTRY_URL')) {
 }
 
 define('FPDF_FONTPATH', __DIR__ . '/lib/font/');
+
+/* global definitions for Foodsharing\Lib\Func until they might
+go away or somewhere else :) */
+define('CNT_MAIN', 0);
+define('CNT_RIGHT', 1);
+define('CNT_TOP', 2);
+define('CNT_BOTTOM', 3);
+define('CNT_LEFT', 4);
+define('CNT_OVERTOP', 5);
+
+$dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_DB . ';charset=utf8';
+if ($FS_ENV === 'dev') {
+	// In development we need to wrap the PDO instance for the DebugBar
+	$pdo = new PDO($dsn, DB_USER, DB_PASS);
+	$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$pdo->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND, 'SET NAMES \'utf8\'');
+	$traceablePDO = new TraceablePDO($pdo);
+	DI::$shared->useTraceablePDO($traceablePDO);
+	Foodsharing\Debug\DebugBar::register($traceablePDO);
+} else {
+	DI::$shared->usePDO($dsn, DB_USER, DB_PASS);
+}
+
+DI::$shared->configureMysqli(DB_HOST, DB_USER, DB_PASS, DB_DB);
+DI::$shared->compile();
+
+Foodsharing\Lib\Db\Mem::connect();

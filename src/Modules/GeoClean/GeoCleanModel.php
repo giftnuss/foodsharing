@@ -10,7 +10,7 @@ class GeoCleanModel extends Model
 	{
 		return $this->q('
 			SELECT 	`name`,`nachname`,`photo`,`id`,`anschrift`,`plz`,`stadt`
-			FROM 	`' . PREFIX . 'foodsaver`
+			FROM 	`fs_foodsaver`
 			WHERE 	rolle > 0
 			AND (
 				CHAR_LENGTH(`lat`) < 3 OR CHAR_LENGTH(`lon`) < 3
@@ -28,7 +28,7 @@ class GeoCleanModel extends Model
 	{
 		return $this->update('
 				
-				UPDATE `' . PREFIX . 'foodsaver`
+				UPDATE `fs_foodsaver`
 				
 				SET 	`lat` = ' . $this->strval($lat) . ',
 						`lon` = ' . $this->strval($lon) . '

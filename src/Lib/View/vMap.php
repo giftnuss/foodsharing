@@ -2,7 +2,10 @@
 
 namespace Foodsharing\Lib\View;
 
+use Foodsharing\DI;
+use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Core\Model;
 
 class vMap extends vCore
 {
@@ -16,16 +19,29 @@ class vMap extends vCore
 	private $provider_options;
 	private $marker;
 	private $home_marker;
+	private $doGeoIPLookup = false;
 
-	public function __construct($id = 'map')
+	/**
+	 * @var Func
+	 */
+	private $func;
+
+	/**
+	 * @var Model
+	 */
+	private $model;
+
+	public function __construct($id = 'map', $center = false)
 	{
+		$this->func = DI::$shared->get(Func::class);
 		$this->id = $this->id($id);
+		$this->model = DI::$shared->get(Model::class);
 
-		$this->location = array(50.89, 10.13);
-
-		if ($loc = S::getLocation()) {
-			$this->location = array($loc['lat'], $loc['lon']);
+		if (!$center) {
+			$this->doGeoIPLookup = true;
+			$center = [50.89, 10.13];
 		}
+		$this->location = $center;
 
 		$this->zoom = 13;
 		$this->markercluster = false;
@@ -112,7 +128,7 @@ class vMap extends vCore
 
 	public function render()
 	{
-		addJsFunc('
+		$this->func->addJsFunc('
 			var ' . $this->id . '_latLng = [' . $this->location[0] . ',' . $this->location[1] . '];
 			var ' . $this->id . '_defaultIcon = L.AwesomeMarkers.icon({
 			    icon: "' . $this->default_marker['icon'] . '",
@@ -121,32 +137,32 @@ class vMap extends vCore
 			});
 		');
 		if ($this->home_marker) {
-			addJsFunc('
+			$this->func->addJsFunc('
 			var ' . $this->id . '_home_marker = null;		
 			var ' . $this->id . '_homeIcon = L.icon({   iconUrl: "/css/img/marker-home.png",shadowUrl: \'/css/img/default-shadow.png\',iconSize: [25, 41],	iconAnchor: [12, 41],popupAnchor: [1, -34],shadowSize: [46, 41],shadowAnchor: [12, 41]});
 			');
 		}
 
 		if ($this->markercluster) {
-			//addScriptTop('/js/leaflet.markercluster.js');
-			addCss('/js/markercluster/dist/MarkerCluster.css');
-			addCss('/js/markercluster/dist/MarkerCluster.Default.css');
+			//$this->func->addScriptTop('/js/leaflet.markercluster.js');
+			$this->func->addStylesheet('/js/markercluster/dist/MarkerCluster.css');
+			$this->func->addStylesheet('/js/markercluster/dist/MarkerCluster.Default.css');
 		}
 
-		addJsFunc('
+		$this->func->addJsFunc('
 			var ' . $this->id . ' = null;
 			var ' . $this->id . '_markers = null;	
 			var ' . $this->id . '_geocoder = null;	
 		');
 
-		addJs('' . $this->id . ' = L.map("' . $this->id . '").setView([' . $this->location[0] . ', ' . $this->location[1] . '], ' . $this->zoom . ');');
+		$this->func->addJs('' . $this->id . ' = L.map("' . $this->id . '").setView([' . $this->location[0] . ', ' . $this->location[1] . '], ' . $this->zoom . ');');
 		if ($this->searchpanel !== false) {
 			$hm = '';
 			if ($this->home_marker) {
 				$hm = $this->id . '_home_marker.setLatLng(new L.LatLng(latLng[0], latLng[1])).update();';
 			}
 
-			addJs('
+			$this->func->addJs('
 				$.getScript( "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=' . GOOGLE_API_KEY . '", function() {
 					var addressPicker = new AddressPicker({
 						map: {
@@ -164,7 +180,7 @@ class vMap extends vCore
 		}
 		switch ($this->provider) {
 			case 'osm':
-				addJs('
+				$this->func->addJs('
 					L.tileLayer(\'http://{s}.tile.osm.org/{z}/{x}/{y}.png\', {
 						attribution: \'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors\'
 					}).addTo(' . $this->id . ');
@@ -172,14 +188,14 @@ class vMap extends vCore
 				break;
 
 			case 'esri':
-				addJs('
+				$this->func->addJs('
 					L.tileLayer(\'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}\', {
 						attribution: \'Geocoding by <a href=\"https://google.com\">Google</a>, Tiles &copy; Esri 2014\'
 					}).addTo(' . $this->id . ');
 				');
 				break;
 			case 'mapquest':
-				addJs('
+				$this->func->addJs('
 					L.tileLayer(\'http://{s}.mqcdn.com/tiles/1.0.0/vy/map/{z}/{x}/{y}.png\', {
 						subdomains:["mtile01","mtile02","mtile03","mtile04"],
 						attributionControl: false
@@ -188,7 +204,7 @@ class vMap extends vCore
 				break;
 
 			case 'mapbox':
-				addJs('
+				$this->func->addJs('
 					L.tileLayer(\'http://{s}.tiles.mapbox.com/v3/' . $this->provider_options['user'] . '.' . $this->provider_options['map'] . '/{z}/{x}/{y}.png\', {
 					    attributionControl: false
 					}).addTo(' . $this->id . ');
@@ -196,7 +212,7 @@ class vMap extends vCore
 				break;
 
 			case 'cloudmade':
-				addJs('
+				$this->func->addJs('
 					L.tileLayer(\'http://{s}.tile.cloudmade.com/' . $this->provider_options['key'] . '/' . $this->provider_options['styleId'] . '/256/{z}/{x}/{y}.png\', {
 					    attributionControl: false
 					}).addTo(' . $this->id . ');
@@ -205,16 +221,16 @@ class vMap extends vCore
 		}
 		if (!empty($this->marker)) {
 			foreach ($this->marker as $m) {
-				addJs('L.marker([' . $m['lat'] . ', ' . $m['lng'] . '],{icon:' . $this->id . '_defaultIcon}).addTo(' . $this->id . ');');
+				$this->func->addJs('L.marker([' . $m['lat'] . ', ' . $m['lng'] . '],{icon:' . $this->id . '_defaultIcon}).addTo(' . $this->id . ');');
 			}
 		}
 
 		if ($this->home_marker) {
-			addJs($this->id . '_home_marker = L.marker([' . $this->location[0] . ', ' . $this->location[1] . '],{icon:' . $this->id . '_homeIcon}).addTo(' . $this->id . ');');
+			$this->func->addJs($this->id . '_home_marker = L.marker([' . $this->location[0] . ', ' . $this->location[1] . '],{icon:' . $this->id . '_homeIcon}).addTo(' . $this->id . ');');
 		}
 
 		if ($this->markercluster) {
-			addJsFunc('
+			$this->func->addJsFunc('
 			function ' . $this->id . '_clearCluster()
 			{
 				if(' . $this->id . '_markers != null && ' . $this->id . '_markers != undefined)
@@ -248,7 +264,7 @@ class vMap extends vCore
 			}
 			');
 		} else {
-			addJsFunc('
+			$this->func->addJsFunc('
 			function ' . $this->id . '_addMarker(lat,lng,id)
 			{
 				L.marker([lat, lng]).addTo(' . $this->id . ');	
@@ -256,39 +272,47 @@ class vMap extends vCore
 			');
 		}
 
-		$this->initLocation();
+		/*
+		 * Disable GeoIPLookup as
+		 * * we are injecting external javascript
+		 * * the service seemed to be down breaking the page on 2018-02-16
+		 */
+		/*
+		 if ($this->doGeoIPLookup) {
+			$this->addGeoIPLookup();
+			$this->doGeoIPLookup = false;
+		}
+		*/
 
 		return '
 		<div class="vmap" id="' . $this->id . '"></div><input type="hidden" name="latlng" id="' . $this->id . '-latLng" value="" />';
 	}
 
-	private function initLocation()
+	private function addGeoIPLookup()
 	{
-		if (!S::getLocation()) {
-			addJs('
-			$.getJSON("http://www.geoplugin.net/json.gp?ip=' . $_SERVER['REMOTE_ADDR'] . '&jsoncallback=?", function(data) {
-			    if(data.geoplugin_status != undefined && data.geoplugin_status >= 200 && data.geoplugin_status < 300)
-				{
-					$.getJSON("http://www.geoplugin.net/extras/postalcode.gp?lat="+data.geoplugin_latitude+"&long="+data.geoplugin_longitude+"&format=json&jsoncallback=?", function(plz){
-						if(plz.geoplugin_place != undefined)
-						{
-							' . $this->id . '_latLng = [data.geoplugin_latitude, data.geoplugin_longitude];
-							' . $this->id . '.setView([data.geoplugin_latitude, data.geoplugin_longitude],' . (int)$this->zoom . ');
-							ajreq({
-								app:"karte",
-								action:"setlocation",
-								data: {
-									lat: data.geoplugin_latitude,
-									lng: data.geoplugin_longitude,
-									city: plz.geoplugin_place,
-									zip: plz.geoplugin_postCode
-								}
-							});
-						}
-					});
-				}
-			});
-		');
-		}
+		$this->func->addJs('
+		$.getJSON("http://www.geoplugin.net/json.gp?ip=' . $_SERVER['REMOTE_ADDR'] . '&jsoncallback=?", function(data) {
+			if(data.geoplugin_status != undefined && data.geoplugin_status >= 200 && data.geoplugin_status < 300)
+			{
+				$.getJSON("http://www.geoplugin.net/extras/postalcode.gp?lat="+data.geoplugin_latitude+"&long="+data.geoplugin_longitude+"&format=json&jsoncallback=?", function(plz){
+					if(plz.geoplugin_place != undefined)
+					{
+						' . $this->id . '_latLng = [data.geoplugin_latitude, data.geoplugin_longitude];
+						' . $this->id . '.setView([data.geoplugin_latitude, data.geoplugin_longitude],' . (int)$this->zoom . ');
+						ajreq({
+							app:"karte",
+							action:"setlocation",
+							data: {
+								lat: data.geoplugin_latitude,
+								lng: data.geoplugin_longitude,
+								city: plz.geoplugin_place,
+								zip: plz.geoplugin_postCode
+							}
+						});
+					}
+				});
+			}
+		});
+	');
 	}
 }

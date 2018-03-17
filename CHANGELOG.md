@@ -1,4 +1,4 @@
-# Unreleased
+# Not Released
 
 ## Release notes
 
@@ -7,18 +7,126 @@
 ## Features
 
 ## Bugfixes
+- Remove info section from foodsaver page, if it is empty !320
+- It is possible to contact working groups again. !343 #403 by @peter.toennies @NerdyProjects
+
+## Refactoring
+- complete tidying up of all team related files !321 by @peter.toennies
+- replaced the PREFIX keyword in the whole source !339 #421 by peter.toennies
+- refactored and cleaned the whole reports module. !335 by @peter.toennies
+
+## Dev/Test/CI stuff
+# 2018-03-14 Hotfix for 2018-02-28
+- Events can be accepted or denied by non event admins again. !342 #418 by @NerdyProjects
+# Not Released
+
+## Bugfixes
+- fixed disabled unsubscription of forum posts for fair-teiler responsibles. !331 #317 by @peter.toennies
+# Not Released
+
+## Features
+- decreased distance to "close baskets" from 50 to 30 km. !332 #338 by @peter.toennies
+
+# 2018-03-05
+- remove ability for ambassador to add any foodsaver to his/her district !328 #405 by @k.miklobusec and @peter.toennies
+
+# 2018-03-02
+
+## Refactoring
+- Database multi-row query methods return empty array instead of false on no result !327 @NerdyProjects
+- Cleaned up usage of some configuration constants !326 @NerdyProjects
+
+# 2018-03-01
+## Hotfixes 2018-03-04
+- Never use PDO Boolean binding to avoid silent insert failures [PDO Bug](https://bugs.php.net/bug.php?id=38546) leading to notification bells for unverified users joining regions missing @NerdyProjects
+
+## Hotfixes 2018-03-02
+- Remove broken filemanager from content management system (content, email templates) @NerdyProjects
+- Fix preview for mass mailer @NerdyProjects
+
+## Dev/Test/CI stuff
+- Use [Deployer](https://deployer.org/) to auto-deploy the foodsharing software
+
+## Bugfixes
+- Use modern ddeboer/imap library to fetch emails for internal mail system fixing some emails go missing on the way !323 @NerdyProjects
+- Events have not been createable/editable due to refactoring mistake @NerdyProjects
+- Mumble events can be created again #315 @NerdyProjects
+
+## Features
+- Addresspicker: Street/house number editable again, better description for address search @NerdyProjects
+
+# 2018-02-28
+
+## Release notes
+
+Wuhay, this is the first release after our hackweek. Quite a lot has happened:
+Nearly 4000 lines of code have been changed, half of the files have been moved into
+a better structure and all pages are now served from a [twig](https://twig.symfony.com/doc/2.x/) base template.
+As a side change, we now run the latest PHP 7.2.2 and are updating more and more internals to more recent technologies
+as well as modern coding techniques.
+
+## Features
+- Use of bcrypt as hashing algorithm to store passwords
+- Added fairteiler to be shown by default on the map for not registered users and foodsharers !319 by @valentin.unicorn
+- Removed the working groups from the team->teammember page !262 @BassTii
+- Changed way of gendering in passport from "/" to "_" !251 @D0nPiano
+- auto adding of CH-BOTs, Vienna-BIEBs, and ZH-BIEBs to their working groups. !271 by @peter.toennies
+- Renamed footer "Unterstützung" to "Spenden" !273 @BassTii
+- Updates fullpage.js to 2.9.5 for fixing scrolling in firefox, general smoothness !244 @NerdyProjects
+- Page with list of communities for Austria/Germany/Switzerland. !286 by @k.miklobusec
+- Single appointment can be set to "appointment cancelled" (=0 Slots) !372 by @k.miklobusec
+- Changed the Store address format to not have a separate house number !294 @NerdyProjects
+
+
+## Bugfixes
+- Remove partly broken store coordinator management from store edit page (should happen with "manage team") !283 @NerdyProjects
+- Allow using more HTML tags in email templates to not break layout !278 @NerdyProjects
 - Reduce size of static images by lossless recompression with trimage !245 @NerdyProjects
 - Change impressum to match current association status @NerdyProjects
 - Remove mass mail recipient options that are ambigous/irrelevant @NerdyProjects
 - Fix missing newsletter unsubscription links for pre-2014 foodsharing.de accounts @NerdyProjects
 - Fix newsletter should only be sent to activated accounts @NerdyProjects
+- Fixed a bug which throwed an error during mail change
+- Show regions in alphabetical order in the region selector (Bezirk beitreten) !267 by @alangecker
+- changed old foodsharing „Freiwilligenplattform“ mailfooter for outgoing replies via mail, which was based on lebensmittelretten !287 @irgendwer
+- consistent use of jumper list (Springerliste) all over the page. !293 by @peter.toennies
+- fixed new fairteiler can not get a region set !294 @NerdyProjects
+- fixed ambassador of other region could edit fairteiler !294 @NerdyProjects
 
 ## Refactoring
+- Consolidate remaining functions and modules !269 @NerdyProjects
 - Remove old user registration code !246 @NerdyProjects
+- Add initial gateway database classes using PDO !264 @nicksellen
+- Add insert/update/delete PDO helper methods !285 @tiltec
+- Implement FairTeiler and Region gateway classes !285  @tiltec @nicksellen
+- Add Symfony dependency injection container !264 @nicksellen
+- Remove unused fpdf font data files !253 @NerdyProjects
+- Add twig templating engine !284 @nicksellen
+- Add twig templating for main menu and other things !292 @nicksellen
+- Remove global usage of Func, DB and ViewUtils Helper classes !289 @NerdyProjects
+- Refactor router for HTML controller classes !289 @NerdyProjects
+- Make some components ready to be used without global data passing variable !294 @NerdyProjects
+- Introduce Request and Response object and used it in WorkGroupControl !294 @NerdyProjects
+- Introduce input deserializer/sanitizer/validator component in WorkGroupControl !294 @NerdyProjects
+- Extract genSearchIndex to a service class !294 @NerdyProjects
 
 ## Dev/Test/CI stuff
 
+- Improve `FoodsaverVerifyUnverifyHistoryCept` test !279 @tiltec
+- Reduce flakyness of acceptance tests further !290 @tiltec
+- Disable xdebug in CI to increase test speed !290 @tiltec
+- Retry failed tests in CI !290 @tiltec
+- Enable [smartWait](https://codeception.com/docs/03-AcceptanceTests#SmartWait) for acceptance tests !279 @tiltec
+- Enable xdebug remote debugging for development !276 @NerdyProjects
 - Add better seed data for use during development !263 @tiltec
+- Enable xdebug profiler for dev environment !296 @NerdyProjects
+- Use PHP7.2.2 in dev/test/ci to make it ready for production !301 @NerdyProjects
+- More tests for FairTeiler and WorkGroup pages !294 @NerdyProjects
+
+## Other
+
+- PHP 7.2 compatibility of the code !301 @NerdyProjects
+- Added caching for DI container !299 @nicksellen
 
 # 2017-12-11
 
@@ -102,6 +210,7 @@ Many many thanks to all the contributors that made this possible (in order of ap
 * @peter.toennies
 * @raphaelw
 * @tiltec
+* @alangecker
 
 ## Breaking changes
 
@@ -126,6 +235,7 @@ Many many thanks to all the contributors that made this possible (in order of ap
 - Alphabetical order in the orga-menu !160 @peter.toennies
 - Aproximate time of pickup stays in shop settings !161 @peter.toennies
 - Fixed spelling in footer of automatic emails !174 @peter.toennies
+- Remove bananas when a user gets deleted
 
 ## Refactoring
 

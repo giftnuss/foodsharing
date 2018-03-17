@@ -1,14 +1,15 @@
 <?php
 
+use Foodsharing\DI;
 use Foodsharing\Lib\Cache\Caching;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Xhr\XhrMethods;
+use Foodsharing\Modules\Core\Model;
 
 require __DIR__ . '/includes/setup.php';
 
 require_once 'config.inc.php';
-require_once 'lib/func.inc.php';
 
-//session_init();
 S::init();
 if (isset($g_page_cache)) {
 	$cache = new Caching($g_page_cache);
@@ -16,31 +17,30 @@ if (isset($g_page_cache)) {
 }
 
 require_once 'lang/DE/de.php';
-require_once 'lib/xhr.inc.php';
-require_once 'lib/xhr.view.inc.php';
-require_once 'lib/view.inc.php';
 
 $action = $_GET['f'];
 
-$db->updateActivity();
+$db = new Model();
+
+$db->updateActivity(S::id());
 if (isset($_GET['f'])) {
+	$xhr = DI::$shared->get(XhrMethods::class);
 	$func = 'xhr_' . $action;
-	if (function_exists($func)) {
+	if (method_exists($xhr, $func)) {
 		/*
 		 * check for page caching
 		*/
 		if (isset($cache) && $cache->shouldCache()) {
 			ob_start();
-			echo $func($_GET);
+			echo $xhr->$func($_GET);
 			$page = ob_get_contents();
 			$cache->cache($page);
 
 			ob_end_clean();
 
 			echo $page;
-			//echo 'check';die();
 		} else {
-			echo $func($_GET);
+			echo $xhr->$func($_GET);
 		}
 	}
 }

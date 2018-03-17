@@ -10,24 +10,24 @@ class MailboxModel extends Model
 	public function getMailboxId($mb_name)
 	{
 		return $this->qOne('
-			SELECT id FROM ' . PREFIX . 'mailbox WHERE `name` = ' . $this->strval($mb_name) . '	
+			SELECT id FROM fs_mailbox WHERE `name` = ' . $this->strval($mb_name) . '	
 		');
 	}
 
 	public function mailboxActivity($mid)
 	{
-		return $this->update('UPDATE ' . PREFIX . 'mailbox SET last_access = NOW() WHERE id = ' . (int)$mid);
+		return $this->update('UPDATE fs_mailbox SET last_access = NOW() WHERE id = ' . (int)$mid);
 	}
 
 	public function addContact($email)
 	{
 		$id = $this->qOne('
-			SELECT 	`id` FROM  ' . PREFIX . 'contact WHERE `email` = ' . $this->strval($email) . '
+			SELECT 	`id` FROM  fs_contact WHERE `email` = ' . $this->strval($email) . '
 		');
 
 		if (!$id) {
 			$id = $this->insert('
-				INSERT INTO ' . PREFIX . 'contact
+				INSERT INTO fs_contact
 				(`email`)
 				VALUES
 				(' . $this->strval($email) . ')	
@@ -35,10 +35,10 @@ class MailboxModel extends Model
 		}
 		if ((int)$id > 0) {
 			$this->insert('
-				INSERT IGNORE INTO  `' . PREFIX . 'foodsaver_has_contact`
+				INSERT IGNORE INTO  `fs_foodsaver_has_contact`
 				(`foodsaver_id`,`contact_id`)
 				VALUES
-				(' . (int)fsId() . ',' . (int)$id . ')
+				(' . (int)$this->func->fsId() . ',' . (int)$id . ')
 			');
 
 			return true;
@@ -50,18 +50,18 @@ class MailboxModel extends Model
 	public function getMailAdresses()
 	{
 		$mails = $this->qCol('
-			SELECT 	CONCAT(mb.name,"@' . DEFAULT_HOST . '")
-			FROM 	' . PREFIX . 'mailbox mb,
-					' . PREFIX . 'bezirk bz
+			SELECT 	CONCAT(mb.name,"@' . DEFAULT_EMAIL_HOST . '")
+			FROM 	fs_mailbox mb,
+					fs_bezirk bz
 			WHERE 	bz.mailbox_id = mb.id
 		');
 
 		if ($contacts = $this->qCol('
 			SELECT 	c.`email`
-			FROM 	' . PREFIX . 'contact c,
-					' . PREFIX . 'foodsaver_has_contact fc
+			FROM 	fs_contact c,
+					fs_foodsaver_has_contact fc
 			WHERE 	fc.contact_id = c.id
-			AND 	fc.foodsaver_id = ' . (int)fsId() . '
+			AND 	fc.foodsaver_id = ' . (int)$this->func->fsId() . '
 		')
 		) {
 			$mails = array_merge($mails, $contacts);
@@ -73,7 +73,7 @@ class MailboxModel extends Model
 	public function addMailbox($name, $member = 0)
 	{
 		return $this->insert('
-			INSERT INTO `' . PREFIX . 'mailbox`
+			INSERT INTO `fs_mailbox`
 			(`name`,`member`)
 			VALUES
 			(' . $this->strval($name) . ',' . (int)$member . ')		
@@ -92,8 +92,8 @@ class MailboxModel extends Model
 					mb.name,
 					mb.id
 				
-			FROM 	`' . PREFIX . 'mailbox` mb,
-					`' . PREFIX . 'mailbox_message` mm
+			FROM 	`fs_mailbox` mb,
+					`fs_mailbox_message` mm
 
 			WHERE 	mm.mailbox_id = mb.id
 			AND 	mb.id IN(' . implode(',', $barr) . ')
@@ -109,7 +109,7 @@ class MailboxModel extends Model
 		if ($mb_id = $this->getVal('mailbox_id', 'mailbox_message', $message_id)) {
 			if ($this->mayMailbox($mb_id)) {
 				return $this->update('
-					UPDATE 	`' . PREFIX . 'mailbox_message`
+					UPDATE 	`fs_mailbox_message`
 					SET `answer` = 1
 					WHERE `id` = ' . (int)$message_id . '
 				');
@@ -142,12 +142,12 @@ class MailboxModel extends Model
 			}
 		}
 
-		return $this->del('DELETE FROM ' . PREFIX . 'mailbox_message WHERE id = ' . (int)$mid);
+		return $this->del('DELETE FROM fs_mailbox_message WHERE id = ' . (int)$mid);
 	}
 
 	public function move($mail_id, $folder)
 	{
-		return $this->update('UPDATE ' . PREFIX . 'mailbox_message SET folder = ' . (int)$folder . ' WHERE id = ' . (int)$mail_id);
+		return $this->update('UPDATE fs_mailbox_message SET folder = ' . (int)$folder . ' WHERE id = ' . (int)$mail_id);
 	}
 
 	public function mayMailbox($mb_id, $type = false)
@@ -178,7 +178,7 @@ class MailboxModel extends Model
 						UNIX_TIMESTAMP(`time`) AS time_ts,
 						`sender`,
 						`to`
-				FROM 	' . PREFIX . 'mailbox_message
+				FROM 	fs_mailbox_message
 				WHERE 	`mailbox_id` IN(' . implode(',', $boxids) . ')
 				AND 	`folder` = 1
 					
@@ -206,7 +206,7 @@ class MailboxModel extends Model
 						UNIX_TIMESTAMP(`time`) AS time_ts,
 						`sender`,
 						`to`
-				FROM 	' . PREFIX . 'mailbox_message
+				FROM 	fs_mailbox_message
 				WHERE 	`read` = 0
 				AND 	`mailbox_id` IN(' . implode(',', $boxids) . ')
 			');
@@ -232,9 +232,9 @@ class MailboxModel extends Model
 					m.`mailbox_id`,
 					b.name AS mailbox
 				
-			FROM 	' . PREFIX . 'mailbox_message m
+			FROM 	fs_mailbox_message m
 				
-			LEFT JOIN ' . PREFIX . 'mailbox b
+			LEFT JOIN fs_mailbox b
 				
 			ON m.mailbox_id = b.id
 				
@@ -251,7 +251,7 @@ class MailboxModel extends Model
 
 	public function setRead($mail_id, $read)
 	{
-		return $this->update('UPDATE ' . PREFIX . 'mailbox_message SET `read` = ' . (int)$read . ' WHERE id = ' . (int)$mail_id);
+		return $this->update('UPDATE fs_mailbox_message SET `read` = ' . (int)$read . ' WHERE id = ' . (int)$mail_id);
 	}
 
 	public function listMessages($mailbox_id, $folder = 'inbox')
@@ -277,7 +277,7 @@ class MailboxModel extends Model
 					`attach`,
 					`read`,
 					`answer`
-			FROM 	' . PREFIX . 'mailbox_message
+			FROM 	fs_mailbox_message
 			WHERE	mailbox_id = ' . (int)$mailbox_id . '
 			AND 	folder = ' . (int)$farray[$folder] . '
 				
@@ -299,7 +299,7 @@ class MailboxModel extends Model
 		$answer = 0)
 	{
 		return $this->insert('
-			INSERT INTO `' . PREFIX . 'mailbox_message`
+			INSERT INTO `fs_mailbox_message`
 			(
 				`mailbox_id`,
 				`folder`,
@@ -333,11 +333,11 @@ class MailboxModel extends Model
 	public function getMailbox($mb_id)
 	{
 		if ($mb = $this->getValues(array('name'), 'mailbox', $mb_id)) {
-			if ($email_name = $this->qOne('SELECT CONCAT(name," ", nachname) FROM ' . PREFIX . 'foodsaver WHERE mailbox_id = ' . (int)$mb_id)) {
+			if ($email_name = $this->qOne('SELECT CONCAT(name," ", nachname) FROM fs_foodsaver WHERE mailbox_id = ' . (int)$mb_id)) {
 				$mb['email_name'] = $email_name;
-			} elseif ($email_name = $this->qOne('SELECT email_name FROM ' . PREFIX . 'bezirk WHERE mailbox_id = ' . (int)$mb_id)) {
+			} elseif ($email_name = $this->qOne('SELECT email_name FROM fs_bezirk WHERE mailbox_id = ' . (int)$mb_id)) {
 				$mb['email_name'] = $email_name;
-			} elseif ($email_name = $this->qOne('SELECT email_name FROM ' . PREFIX . 'mailbox_member WHERE mailbox_id = ' . (int)$mb_id . ' AND email_name != "" LIMIT 1')) {
+			} elseif ($email_name = $this->qOne('SELECT email_name FROM fs_mailbox_member WHERE mailbox_id = ' . (int)$mb_id . ' AND email_name != "" LIMIT 1')) {
 				$mb['email_name'] = $email_name;
 			} else {
 				$mb['email_name'] = '';
@@ -355,7 +355,7 @@ class MailboxModel extends Model
 			SELECT 	name,
 					id
 					
-			FROM 	`' . PREFIX . 'mailbox` 
+			FROM 	`fs_mailbox` 
 
 			WHERE 	member = 1
 		')
@@ -367,8 +367,8 @@ class MailboxModel extends Model
 							CONCAT(fs.name," ",fs.nachname) AS name,
 							mm.email_name
 				
-					FROM 	`' . PREFIX . 'mailbox_member` mm,
-							`' . PREFIX . 'foodsaver` fs
+					FROM 	`fs_mailbox_member` mm,
+							`fs_foodsaver` fs
 				
 					WHERE 	mm.foodsaver_id = fs.id
 					AND 	mm.mailbox_id = ' . (int)$b['id'] . '
@@ -393,7 +393,7 @@ class MailboxModel extends Model
 		global $g_data;
 		if ((int)$mbid > 0) {
 			$this->del('
-				DELETE FROM `' . PREFIX . 'mailbox_member`
+				DELETE FROM `fs_mailbox_member`
 				WHERE mailbox_id = ' . (int)$mbid . '		
 			');
 
@@ -404,7 +404,7 @@ class MailboxModel extends Model
 			}
 
 			$this->insert('
-				INSERT INTO `' . PREFIX . 'mailbox_member`
+				INSERT INTO `fs_mailbox_member`
 				(`mailbox_id`,`foodsaver_id`,`email_name`)
 				VALUES
 				' . implode(',', $insert) . '		
@@ -441,10 +441,10 @@ class MailboxModel extends Model
 				bot.bezirk_id
 
 			FROM
-				' . PREFIX . 'botschafter bot
+				fs_botschafter bot
 				
 			WHERE
-				bot.foodsaver_id = ' . (int)fsId() . '
+				bot.foodsaver_id = ' . (int)$this->func->fsId() . '
 				
 		');
 
@@ -453,7 +453,7 @@ class MailboxModel extends Model
 
 	public function getBoxes()
 	{
-		if (isBotschafter()) {
+		if ($this->func->isBotschafter()) {
 			$bezirke = $this->getMailboxBezirkIds();
 			$bids = array();
 			$mboxes = array();
@@ -463,7 +463,7 @@ class MailboxModel extends Model
 
 			if ($bezirke = $this->q('
 				SELECT 	`id`,`mailbox_id`,`name`
-				FROM 	`' . PREFIX . 'bezirk`
+				FROM 	`fs_bezirk`
 				WHERE 	`id` IN(' . implode(',', $bids) . ')
 				AND 	`mailbox_id` = 0
 			')
@@ -483,12 +483,12 @@ class MailboxModel extends Model
 						$i = 0;
 						$mb_id = 0;
 
-						while (($mb_id = $this->insert('INSERT INTO `' . PREFIX . 'mailbox`(`name`)VALUES(' . $this->strval($tmp_name) . ')')) === false) {
+						while (($mb_id = $this->insert('INSERT INTO `fs_mailbox`(`name`)VALUES(' . $this->strval($tmp_name) . ')')) === false) {
 							++$i;
 							$tmp_name = $mb_name . $i;
 						}
 
-						if ($this->update('UPDATE `' . PREFIX . 'bezirk` SET mailbox_id = ' . (int)$mb_id . ' WHERE id = ' . (int)$b['id'])) {
+						if ($this->update('UPDATE `fs_bezirk` SET mailbox_id = ' . (int)$mb_id . ' WHERE id = ' . (int)$b['id'])) {
 							$b['mailbox_id'] = $mb_id;
 						}
 					}
@@ -500,8 +500,8 @@ class MailboxModel extends Model
 						b.email_name,
 						b.id AS bezirk_id
 					
-				FROM 	`' . PREFIX . 'bezirk` b,
-						`' . PREFIX . 'mailbox` m
+				FROM 	`fs_bezirk` b,
+						`fs_mailbox` m
 					
 				WHERE 	b.mailbox_id = m.id
 				AND 	b.`id` IN(' . implode(',', $bids) . ')
@@ -513,7 +513,7 @@ class MailboxModel extends Model
 						$b['email_name'] = 'Foodsharing ' . $b['name'];
 						$this->update(
 							'
-								UPDATE `' . PREFIX . 'bezirk` 
+								UPDATE `fs_bezirk` 
 								SET `email_name` = ' . $this->strval($b['email_name']) . ' 
 								WHERE id = ' . (int)$b['bezirk_id']
 						);
@@ -528,7 +528,7 @@ class MailboxModel extends Model
 			}
 		}
 
-		if ($me = $this->getValues(array('mailbox_id', 'name', 'nachname'), 'foodsaver', fsId())) {
+		if ($me = $this->getValues(array('mailbox_id', 'name', 'nachname'), 'foodsaver', $this->func->fsId())) {
 			if ($me['mailbox_id'] == 0 && S::may('bieb')) {
 				$me['name'] = explode(' ', $me['name']);
 				$me['name'] = $me['name'][0];
@@ -548,12 +548,12 @@ class MailboxModel extends Model
 				$mb_id = 0;
 
 				if (substr($tmp_name, 0, 1) != '.' && strlen($tmp_name) > 3) {
-					while (($mb_id = $this->insert('INSERT INTO `' . PREFIX . 'mailbox`(`name`)VALUES(' . $this->strval($tmp_name) . ')')) === false) {
+					while (($mb_id = $this->insert('INSERT INTO `fs_mailbox`(`name`)VALUES(' . $this->strval($tmp_name) . ')')) === false) {
 						++$i;
 						$tmp_name = $mb_name . $i;
 					}
 
-					if ($this->update('UPDATE `' . PREFIX . 'foodsaver` SET mailbox_id = ' . (int)$mb_id . ' WHERE id = ' . (int)fsId())) {
+					if ($this->update('UPDATE `fs_foodsaver` SET mailbox_id = ' . (int)$mb_id . ' WHERE id = ' . (int)$this->func->fsId())) {
 						$me['mailbox_id'] = $mb_id;
 					}
 				}
@@ -564,17 +564,17 @@ class MailboxModel extends Model
 					mb.`id`,
 					mm.email_name
 		
-			FROM	`' . PREFIX . 'mailbox` mb,
-					`' . PREFIX . 'mailbox_member` mm
+			FROM	`fs_mailbox` mb,
+					`fs_mailbox_member` mm
 		
 			WHERE 	mm.mailbox_id = mb.id
-			AND 	mm.foodsaver_id = ' . (int)fsid() . '
+			AND 	mm.foodsaver_id = ' . (int)$this->func->fsId() . '
 		')
 		) {
 			foreach ($memberb as $m) {
 				if (empty($m['email_name'])) {
-					$m['email_name'] = $m['name'] . '@' . DEFAULT_HOST;
-					$this->update('UPDATE ' . PREFIX . 'mailbox_member SET email_name = ' . $this->strval($m['name'] . '@' . DEFAULT_HOST) . ' WHERE mailbox_id = ' . (int)$m['id'] . ' AND foodsaver_id = ' . (int)fsId());
+					$m['email_name'] = $m['name'] . '@' . DEFAULT_EMAIL_HOST;
+					$this->update('UPDATE fs_mailbox_member SET email_name = ' . $this->strval($m['name'] . '@' . DEFAULT_EMAIL_HOST) . ' WHERE mailbox_id = ' . (int)$m['id'] . ' AND foodsaver_id = ' . (int)$this->func->fsId());
 				}
 				$mboxes[] = array(
 					'id' => $m['id'],
@@ -590,11 +590,11 @@ class MailboxModel extends Model
 							m.name,
 							CONCAT(fs.`name`," ",fs.`nachname`) AS email_name
 				
-				FROM 		`' . PREFIX . 'mailbox` m,
-							`' . PREFIX . 'foodsaver` fs
+				FROM 		`fs_mailbox` m,
+							`fs_foodsaver` fs
 				
 				WHERE 		fs.mailbox_id = m.id
-				AND 		fs.id = ' . (int)fsId() . '
+				AND 		fs.id = ' . (int)$this->func->fsId() . '
 			')
 		) {
 			$mboxes[] = array(

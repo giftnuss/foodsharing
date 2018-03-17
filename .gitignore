@@ -14,6 +14,7 @@ config.inc.php
 cache/**
 tmp/**
 vendor/**
+deployer/vendor/**
 tests/_output/*vendor
 tests/_support/_generated/
 .composer
@@ -27,3 +28,4 @@ migrations/_*
 .vagrant
 .DS_Store
 .vscode
+.views-cache

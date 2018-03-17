@@ -6,10 +6,10 @@ use Foodsharing\Modules\Core\Control;
 
 class MailboxControl extends Control
 {
-	public function __construct()
+	public function __construct(MailboxModel $model, MailboxView $view)
 	{
-		$this->model = new MailboxModel();
-		$this->view = new MailboxView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}
@@ -26,8 +26,11 @@ class MailboxControl extends Control
 							$Dateiname = $attach[(int)$_GET['i']]['origname'];
 							$size = filesize($file);
 
-							header('Content-Type: ' . $attach[(int)$_GET['i']]['mime']);
-							header('Content-Disposition: attachment; filename=' . $Dateiname . '');
+							$mime = $attach[(int)$_GET['i']]['mime'];
+							if ($mime) {
+								header('Content-Type: ' . $mime);
+							}
+							header('Content-Disposition: attachment; filename="' . $Dateiname . '"');
 							header("Content-Length: $size");
 							readfile($file);
 							exit();
@@ -37,86 +40,86 @@ class MailboxControl extends Control
 			}
 		}
 
-		goPage('mailbox');
+		$this->func->goPage('mailbox');
 	}
 
 	public function index()
 	{
-		addScript('/js/dynatree/jquery.dynatree.js');
-		addScript('/js/jquery.cookie.js');
-		addCss('/js/dynatree/skin/ui.dynatree.css');
+		$this->func->addScript('/js/dynatree/jquery.dynatree.js');
+		$this->func->addScript('/js/jquery.cookie.js');
+		$this->func->addStylesheet('/js/dynatree/skin/ui.dynatree.css');
 
-		addBread('Mailboxen');
+		$this->func->addBread('Mailboxen');
 
 		if ($boxes = $this->model->getBoxes()) {
 			if (isset($_GET['show']) && (int)$_GET['show']) {
 				if ($this->model->mayMessage($_GET['show'])) {
-					addJs('ajreq("loadMail",{id:' . (int)$_GET['show'] . '});');
+					$this->func->addJs('ajreq("loadMail",{id:' . (int)$_GET['show'] . '});');
 				}
 			}
 
 			$mailadresses = $this->model->getMailAdresses();
 
-			addContent($this->view->folder($boxes), CNT_LEFT);
-			addContent($this->view->folderlist($boxes, $mailadresses));
-			addContent($this->view->options(), CNT_LEFT);
+			$this->func->addContent($this->view->folder($boxes), CNT_LEFT);
+			$this->func->addContent($this->view->folderlist($boxes, $mailadresses));
+			$this->func->addContent($this->view->options(), CNT_LEFT);
 		}
 
-		if (isset($_GET['mailto']) && validEmail($_GET['mailto'])) {
-			addJs('mb_mailto("' . $_GET['mailto'] . '");');
+		if (isset($_GET['mailto']) && $this->func->validEmail($_GET['mailto'])) {
+			$this->func->addJs('mb_mailto("' . $_GET['mailto'] . '");');
 		}
 	}
 
 	public function newbox()
 	{
-		addBread('Mailbox Manager', '/?page=mailbox&a=manage');
-		addBread('Neue Mailbox');
+		$this->func->addBread('Mailbox Manager', '/?page=mailbox&a=manage');
+		$this->func->addBread('Neue Mailbox');
 
-		if (isOrgaTeam()) {
+		if ($this->func->isOrgaTeam()) {
 			if (isset($_POST['name'])) {
 				if ($mailbox = $this->model->filterName($_POST['name'])) {
 					if ($this->model->addMailbox($mailbox, 1)) {
-						info(s('mailbox_add_success'));
-						go('/?page=mailbox&a=manage');
+						$this->func->info($this->func->s('mailbox_add_success'));
+						$this->func->go('/?page=mailbox&a=manage');
 					} else {
-						error(s('mailbox_already_exists'));
+						$this->func->error($this->func->s('mailbox_already_exists'));
 					}
 				}
 			}
-			addContent($this->view->manageOpt(), CNT_LEFT);
-			addContent($this->view->mailboxform());
+			$this->func->addContent($this->view->manageOpt(), CNT_LEFT);
+			$this->func->addContent($this->view->mailboxform());
 		}
 	}
 
 	public function manage()
 	{
-		addBread('Mailbox Manager');
-		if (isOrgaTeam()) {
+		$this->func->addBread('Mailbox Manager');
+		if ($this->func->isOrgaTeam()) {
 			if (isset($_POST['mbid'])) {
 				global $g_data;
 
 				$index = 'foodsaver_' . (int)$_POST['mbid'];
 
-				handleTagselect($index);
+				$this->func->handleTagselect($index);
 
 				if ($this->model->updateMember($_POST['mbid'], $g_data[$index])) {
-					info(s('edit_success'));
-					go('/?page=mailbox&a=manage');
+					$this->func->info($this->func->s('edit_success'));
+					$this->func->go('/?page=mailbox&a=manage');
 				}
 			}
 
 			if ($boxes = $this->model->getMemberBoxes()) {
-				addJs('
+				$this->func->addJs('
 							
 				');
 				foreach ($boxes as $b) {
 					global $g_data;
 					$g_data['foodsaver_' . $b['id']] = $b['member'];
-					addContent($this->view->manageMemberBox($b));
+					$this->func->addContent($this->view->manageMemberBox($b));
 				}
 			}
 
-			addContent($this->view->manageOpt(), CNT_LEFT);
+			$this->func->addContent($this->view->manageOpt(), CNT_LEFT);
 		}
 	}
 }

@@ -30,14 +30,14 @@ class BellModel extends Model
 				b.closeable
 	
 			FROM
-				' . PREFIX . 'bell b,
-				`' . PREFIX . 'foodsaver_has_bell` hb
+				fs_bell b,
+				`fs_foodsaver_has_bell` hb
 	
 			WHERE
 				hb.bell_id = b.id
 	
 			AND
-				hb.foodsaver_id = ' . (int)fsId() . '
+				hb.foodsaver_id = ' . (int)$this->func->fsId() . '
 	
 			ORDER BY b.`time` DESC
 			' . $limit . '
@@ -82,8 +82,8 @@ class BellModel extends Model
 					UNIX_TIMESTAMP(ft.`add_date`) AS time_ts
 				
 				FROM 	
-					' . PREFIX . 'fairteiler ft,
-					' . PREFIX . 'bezirk bz
+					fs_fairteiler ft,
+					fs_bezirk bz
 						
 					
 				WHERE 	ft.bezirk_id = bz.id
@@ -94,11 +94,11 @@ class BellModel extends Model
 
 	public function delbell($id)
 	{
-		return $this->del('DELETE FROM `' . PREFIX . 'foodsaver_has_bell` WHERE `bell_id` = ' . (int)$id . ' AND foodsaver_id = ' . (int)fsId());
+		return $this->del('DELETE FROM `fs_foodsaver_has_bell` WHERE `bell_id` = ' . (int)$id . ' AND foodsaver_id = ' . (int)$this->func->fsId());
 	}
 
 	private function setBellsAsSeen($bids)
 	{
-		$this->update('UPDATE `' . PREFIX . 'foodsaver_has_bell` SET `seen` = 1 WHERE `bell_id` IN(' . implode(',', $bids) . ')');
+		$this->update('UPDATE `fs_foodsaver_has_bell` SET `seen` = 1 WHERE `bell_id` IN(' . implode(',', $bids) . ')');
 	}
 }

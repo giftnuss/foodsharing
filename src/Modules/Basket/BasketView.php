@@ -11,9 +11,9 @@ use Foodsharing\Modules\Core\View;
 
 class BasketView extends View
 {
-	public function find($baskets)
+	public function find($baskets, $location)
 	{
-		$page = new vPage('Essenskörbe', $this->findMap());
+		$page = new vPage('Essenskörbe', $this->findMap($location));
 
 		if ($baskets) {
 			$page->addSectionRight($this->closeBaskets($baskets), 'In Deiner Nähe');
@@ -22,12 +22,12 @@ class BasketView extends View
 		$page->render();
 	}
 
-	private function findMap()
+	private function findMap($location)
 	{
-		$map = new vMap();
+		$map = new vMap('map', $location);
 
-		if ($loc = S::getLocation()) {
-			$map->setLocation($loc['lat'], $loc['lon']);
+		if (is_array($location)) {
+			$map->setLocation($location['lat'], $location['lon']);
 		}
 
 		$map->setSearchPanel('mapsearch');
@@ -53,7 +53,7 @@ class BasketView extends View
 				<li>
 					<a class="ui-corner-all" onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . ',modal:1});return false;" href="#">
 						<span style="float:left;margin-right:7px;"><img width="35px" src="' . $img . '" class="ui-corner-all"></span>
-						<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' . $distance . ')</strong>' . tt($b['description'], 50) . '</span>
+						<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' . $distance . ')</strong>' . $this->func->tt($b['description'], 50) . '</span>
 						
 						<span style="clear:both;"></span>
 					</a>
@@ -82,7 +82,7 @@ class BasketView extends View
 		</div>
 		');
 
-		$page->setSubTitle('<p>Veröffentlicht am <strong>' . niceDate($basket['time_ts']) . '</strong></p><p>Gültig bis <strong>' . niceDate($basket['until_ts']) . '</strong></p>');
+		$page->setSubTitle('<p>Veröffentlicht am <strong>' . $this->func->niceDate($basket['time_ts']) . '</strong></p><p>Gültig bis <strong>' . $this->func->niceDate($basket['until_ts']) . '</strong></p>');
 
 		if ($wallposts) {
 			$page->addSection($wallposts, 'Pinnwand');
@@ -91,7 +91,7 @@ class BasketView extends View
 			$page->addSectionRight($this->userBox($basket), 'AnbieterIn');
 
 			if ($basket['lat'] != 0 || $basket['lon'] != 0) {
-				$map = new vMap();
+				$map = new vMap('map', [$basket['lat'], $basket['lon']]);
 				$map->addMarker($basket['lat'], $basket['lon']);
 
 				$map->setDefaultMarker('basket', 'green');
@@ -101,13 +101,13 @@ class BasketView extends View
 				$page->addSectionRight($map->render(), 'Wo?');
 			}
 
-			if ($basket['fs_id'] == fsId()) {
+			if ($basket['fs_id'] == $this->func->fsId()) {
 				if ($requests) {
 					$page->addSectionRight($this->requests($requests), count($requests) . ' Anfragen');
 				}
 			}
 		} else {
-			$page->addSectionRight(v_info('Für detailierte Infos musst Du Dich einloggen!', 'Hinweis!') . '<div>
+			$page->addSectionRight($this->v_utils->v_info('Für detailierte Infos musst Du Dich einloggen!', 'Hinweis!') . '<div>
 				<a class="button button-big" href="#" onclick="ajreq(\'login\',{app:\'login\'});return false;">Einloggen</a>
 			</div>', false, array('wrapper' => false));
 		}
@@ -135,7 +135,7 @@ class BasketView extends View
 
 		foreach ($requests as $r) {
 			$out .= '
-			<li><a onclick="chat(' . (int)$r['fs_id'] . ');return false;" href="#"><span class="pics"><img width="50" alt="avatar" src="' . img($r['fs_photo']) . '"></span><span class="names">' . $r['fs_name'] . '</span><span class="msg"></span><span class="time">' . niceDate($r['time_ts']) . '</span><span class="clear"></span></a></li>';
+			<li><a onclick="chat(' . (int)$r['fs_id'] . ');return false;" href="#"><span class="pics"><img width="50" alt="avatar" src="' . $this->func->img($r['fs_photo']) . '"></span><span class="names">' . $r['fs_name'] . '</span><span class="msg"></span><span class="time">' . $this->func->niceDate($r['time_ts']) . '</span><span class="clear"></span></a></li>';
 		}
 
 		$out .= '
@@ -148,7 +148,7 @@ class BasketView extends View
 	{
 		$request = '';
 
-		if ($basket['fs_id'] != fsId()) {
+		if ($basket['fs_id'] != $this->func->fsId()) {
 			$request = '<div><a class="button button-big" href="#" onclick="ajreq(\'request\',{app:\'basket\',id:' . (int)$basket['id'] . '});">Essenskorb anfragen</a>	</div>';
 		} else {
 			$request = '<div><a class="button button-big" href="#" onclick="ajreq(\'removeBasket\',{app:\'basket\',id:' . (int)$basket['id'] . '});">Essenskorb löschen</a>	</div>';
@@ -174,15 +174,9 @@ class BasketView extends View
 
 	public function basketForm($foodsaver)
 	{
-		global $g_data;
-		$g_data['weight'] = '3';
-		$g_data['contact_type'] = 1;
-		$g_data['tel'] = $foodsaver['telefon'];
-		$g_data['handy'] = $foodsaver['handy'];
-
 		$out = '';
 
-		$out .= v_form_textarea('description', array('maxlength' => 1705));
+		$out .= $this->v_utils->v_form_textarea('description', array('maxlength' => 1705));
 
 		$values = array(
 			array('id' => 0.25, 'name' => '250 g'),
@@ -205,21 +199,23 @@ class BasketView extends View
 			);
 		}
 
-		$out .= v_form_select('weight', array(
-			'values' => $values
+		$out .= $this->v_utils->v_form_select('weight', array(
+			'values' => $values,
+			'selected' => 3
 		));
 
-		$out .= v_form_checkbox('contact_type', array(
+		$out .= $this->v_utils->v_form_checkbox('contact_type', array(
 			'values' => array(
 				array('id' => 1, 'name' => 'Per Nachricht'),
 				array('id' => 2, 'name' => 'Per Telefonanruf')
-			)
+			),
+			'checked' => [1]
 		));
 
-		$out .= v_form_text('tel');
-		$out .= v_form_text('handy');
+		$out .= $this->v_utils->v_form_text('tel', ['value' => $foodsaver['telefon']]);
+		$out .= $this->v_utils->v_form_text('handy', ['value' => $foodsaver['handy']]);
 
-		$out .= v_form_checkbox('food_type', array(
+		$out .= $this->v_utils->v_form_checkbox('food_type', array(
 			'values' => array(
 				array('id' => 1, 'name' => 'Backwaren'),
 				array('id' => 2, 'name' => 'Obst & Gemüse'),
@@ -231,7 +227,7 @@ class BasketView extends View
 			)
 		));
 
-		$out .= v_form_checkbox('food_art', array(
+		$out .= $this->v_utils->v_form_checkbox('food_art', array(
 			'values' => array(
 				array('id' => 1, 'name' => 'sind Bio'),
 				array('id' => 2, 'name' => 'sind vegetarisch'),
@@ -245,12 +241,12 @@ class BasketView extends View
 
 	public function contactMsg($basket)
 	{
-		return v_form_textarea('contactmessage');
+		return $this->v_utils->v_form_textarea('contactmessage');
 	}
 
 	public function contactTitle($basket)
 	{
-		return '<img src="' . img($basket['fs_photo']) . '" style="float:left;margin-right:15px;" />
+		return '<img src="' . $this->func->img($basket['fs_photo']) . '" style="float:left;margin-right:15px;" />
 		<p>' . $basket['fs_name'] . ' kontaktieren</p>
 		<div style="clear:both;"></div>';
 	}
@@ -266,7 +262,7 @@ class BasketView extends View
 			$content .= ('<tr><td>Handy: &nbsp;</td><td>' . $basket['handy'] . '</td></tr>');
 		}
 		if (!empty($content)) {
-			$out .= v_input_wrapper('Telefonisch kontaktieren', '<table>' . $content . '</table>');
+			$out .= $this->v_utils->v_input_wrapper('Telefonisch kontaktieren', '<table>' . $content . '</table>');
 		}
 
 		return $out;
@@ -277,7 +273,7 @@ class BasketView extends View
 		$out = '<li class="title">Anfragen</li>';
 		foreach ($updates as $u) {
 			$fs = array('id' => $u['fs_id'], 'name' => $u['fs_name'], 'photo' => $u['fs_photo'], 'sleep_status' => $u['sleep_status']);
-			$out .= '<li><a href="#" onclick="ajreq(\'answer\',{app:\'basket\',id:' . (int)$u['id'] . ',fid:' . (int)$u['fs_id'] . '});return false;"><span class="button close" onclick="ajreq(\'removeRequest\',{app:\'basket\',id:' . (int)$u['id'] . ',fid:' . (int)$u['fs_id'] . '});return false;"><i class="fa fa-close"></i></span><span class="pics">' . avatar($fs, 50) . '</span><span class="names">Anfrage von ' . $u['fs_name'] . '</span><span class="msg">' . $u['description'] . '</span><span class="time">' . niceDate($u['time_ts']) . '</span><span class="clear"></span></a></li>';
+			$out .= '<li><a href="#" onclick="ajreq(\'answer\',{app:\'basket\',id:' . (int)$u['id'] . ',fid:' . (int)$u['fs_id'] . '});return false;"><span class="button close" onclick="ajreq(\'removeRequest\',{app:\'basket\',id:' . (int)$u['id'] . ',fid:' . (int)$u['fs_id'] . '});return false;"><i class="fa fa-close"></i></span><span class="pics">' . $this->func->avatar($fs, 50) . '</span><span class="names">Anfrage von ' . $u['fs_name'] . '</span><span class="msg">' . $u['description'] . '</span><span class="time">' . $this->func->niceDate($u['time_ts']) . '</span><span class="clear"></span></a></li>';
 		}
 
 		return $out;
@@ -305,15 +301,15 @@ class BasketView extends View
 				}
 			}
 
-			$reqtext = s('no_requests');
+			$reqtext = $this->func->s('no_requests');
 
 			if ($b['req_count'] == 1) {
-				$reqtext = s('one_request');
+				$reqtext = $this->func->s('one_request');
 			} elseif ($b['req_count'] > 0) {
-				$reqtext = sv('req_count', array('count' => $b['req_count']));
+				$reqtext = $this->func->sv('req_count', array('count' => $b['req_count']));
 			}
 
-			$out .= '<li class="basket-' . (int)$b['id'] . '"><a href="/essenskoerbe/' . (int)$b['id'] . '"><span class="button close" onclick="ajreq(\'removeBasket\',{app:\'basket\',id:' . (int)$b['id'] . '});return false;"><i class="fa fa-close"></i></span><span class="pics"><img width="50" src="/' . $img . '" alt="avatar" /></span><span class="names">' . tt($b['description'], 150) . '</span><span class="msg">' . $reqtext . '</span><span class="time">' . niceDate($b['time_ts']) . '</span><span class="clear"></span></a></li>';
+			$out .= '<li class="basket-' . (int)$b['id'] . '"><a href="/essenskoerbe/' . (int)$b['id'] . '"><span class="button close" onclick="ajreq(\'removeBasket\',{app:\'basket\',id:' . (int)$b['id'] . '});return false;"><i class="fa fa-close"></i></span><span class="pics"><img width="50" src="/' . $img . '" alt="avatar" /></span><span class="names">' . $this->func->tt($b['description'], 150) . '</span><span class="msg">' . $reqtext . '</span><span class="time">' . $this->func->niceDate($b['time_ts']) . '</span><span class="clear"></span></a></li>';
 		}
 
 		return $out;
@@ -333,9 +329,9 @@ class BasketView extends View
 
 		return '
 		' . $img . '
-		' . v_input_wrapper('Beschreibung', nl2br(autolink($basket['description']))) . '
+		' . $this->v_utils->v_input_wrapper('Beschreibung', nl2br($this->func->autolink($basket['description']))) . '
 		' .
-			'<div style="text-align:center;"><a class="fsbutton" href="http://foodsharing.de/essenskoerbe/' . $basket['fsf_id'] . '" target="_blank">Essenskorb anfragen auf foodsharing.de</a></div>';
+			'<div style="text-align:center;"><a class="fsbutton" href="' . BASE_URL . '/essenskoerbe/' . $basket['fsf_id'] . '" target="_blank">Essenskorb anfragen auf foodsharing.de</a></div>';
 	}
 
 	public function bubbleNoUser($basket)
@@ -347,7 +343,7 @@ class BasketView extends View
 
 		return '
 		' . $img . '
-		' . v_input_wrapper('Beschreibung', nl2br(autolink($basket['description']))) . '
+		' . $this->v_utils->v_input_wrapper('Beschreibung', nl2br($this->func->autolink($basket['description']))) . '
 		';
 	}
 
@@ -360,8 +356,8 @@ class BasketView extends View
 
 		return '
 		' . $img . '
-		' . v_input_wrapper('Einstelldatum', niceDate($basket['time_ts'])) . '
-		' . v_input_wrapper('Beschreibung', nl2br(autolink($basket['description']))) . '
+		' . $this->v_utils->v_input_wrapper('Einstelldatum', $this->func->niceDate($basket['time_ts'])) . '
+		' . $this->v_utils->v_input_wrapper('Beschreibung', nl2br($this->func->autolink($basket['description']))) . '
 		';
 	}
 }

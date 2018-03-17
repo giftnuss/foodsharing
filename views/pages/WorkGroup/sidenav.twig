@@ -1,0 +1,14 @@
+{% macro menu_tree(items, title, id) %}
+    {% embed 'components/field.twig' with {'title': title} %}
+        {% block content %}
+            {% include 'partials/menu.twig' with {'items': items} only %}
+        {% endblock %}
+    {% endembed %}
+{% endmacro %}
+
+{% import _self as sidenav%}
+
+{{ sidenav.menu_tree(nav.global, 'Überregionale Gruppen') }}
+{{ sidenav.menu_tree(nav.local, 'Lokalgruppen') }}
+{{ sidenav.menu_tree(nav.countries, 'Länderspezifische Gruppen') }}
+{{ sidenav.menu_tree(nav.groups, 'Deine Gruppen') }}

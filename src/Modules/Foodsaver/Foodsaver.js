@@ -17,20 +17,6 @@ var fsapp = {
             bid: $('#appdata .bid').val()
         });
     },
-    addFoodsaver: function () {
-        var ids = [];
-        $('#search_name input').each(function () {
-            id = parseInt($(this).attr('name').replace(/[^0-9]/g, ''));
-            if (id > 0) {
-                ids[ids.length] = id;
-            }
-        });
-        ajreq('addfoodsaver', {
-            app: 'foodsaver',
-            ids: ids.join(','),
-            bid: $('#appdata .bid').val()
-        });
-    },
     refreshfoodsaver: function () {
         ajreq('foodsaverrefresh', {
             app: 'foodsaver',

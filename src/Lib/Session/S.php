@@ -4,12 +4,20 @@ namespace Foodsharing\Lib\Session;
 
 use Flourish\fAuthorization;
 use Flourish\fSession;
-use Foodsharing\Lib\Db\ManualDb;
+use Foodsharing\DI;
+use Foodsharing\Lib\Func;
+use Foodsharing\Modules\Core\Model;
 
 class S
 {
+	/**
+	 * @var Func
+	 */
+	private static $func;
+
 	public static function init()
 	{
+		self::$func = DI::$shared->get(Func::class);
 		ini_set('session.save_handler', 'redis');
 		ini_set('session.save_path', 'tcp://' . REDIS_HOST . ':' . REDIS_PORT);
 
@@ -58,7 +66,7 @@ class S
 	{
 		if (isset($user['id']) && !empty($user['id']) && isset($user['rolle'])) {
 			fAuthorization::setUserToken($user['id']);
-			self::setAuthLevel(rolleWrapInt($user['rolle']));
+			self::setAuthLevel(self::$func->rolleWrapInt($user['rolle']));
 
 			self::set('user', array(
 				'name' => $user['name'],
@@ -102,12 +110,11 @@ class S
 		return false;
 	}
 
-	public static function getLocation()
+	public static function getLocation(Model $model)
 	{
 		$loc = fSession::get('g_location', false);
 		if (!$loc) {
-			$db = new ManualDb();
-			$loc = $db->getValues(array('lat', 'lon'), 'foodsaver', fsId());
+			$loc = $model->getValues(array('lat', 'lon'), 'foodsaver', self::$func->fsId());
 			self::set('g_location', $loc);
 		}
 
@@ -147,13 +154,9 @@ class S
 		return self::get('useroption_' . $key);
 	}
 
-	public static function setOption($key, $val, $db = false)
+	public static function setOption($key, $val, Model $model)
 	{
-		if (!$db) {
-			$db = new ManualDb();
-		}
-
-		$db->setOption($key, $val);
+		$model->setOption($key, $val);
 		self::set('useroption_' . $key, $val);
 	}
 
@@ -166,7 +169,7 @@ class S
 		}
 
 		if (!$title) {
-			$title = ' ' . s($type);
+			$title = ' ' . self::$func->s($type);
 		} else {
 			$title = ' ';
 		}

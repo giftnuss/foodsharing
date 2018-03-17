@@ -7,14 +7,14 @@ use Foodsharing\Modules\Core\Control;
 
 class BasketControl extends Control
 {
-	public function __construct()
+	public function __construct(BasketModel $model, BasketView $view)
 	{
-		$this->model = new BasketModel();
-		$this->view = new BasketView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 
-		addBread('Essenskörbe');
+		$this->func->addBread('Essenskörbe');
 	}
 
 	public function index()
@@ -28,18 +28,18 @@ class BasketControl extends Control
 				if (method_exists($this, $m)) {
 					$this->$m();
 				} else {
-					go('/essenskoerbe/find');
+					$this->func->go('/essenskoerbe/find');
 				}
 			} else {
-				go('/essenskoerbe/find');
+				$this->func->go('/essenskoerbe/find');
 			}
 		}
 	}
 
 	public function find()
 	{
-		$baskets = $this->model->closeBaskets(50);
-		$this->view->find($baskets);
+		$baskets = $this->model->closeBaskets();
+		$this->view->find($baskets, S::getLocation($this->model));
 	}
 
 	private function basket($basket)
@@ -48,8 +48,8 @@ class BasketControl extends Control
 		$requests = false;
 
 		if (S::may()) {
-			if ($basket['fs_id'] != fsId()) {
-				addJsFunc('
+			if ($basket['fs_id'] != $this->func->fsId()) {
+				$this->func->addJsFunc('
 				function u_wallpostReady(postid)
 				{
 					ajax.req("basket","follow",{
@@ -58,7 +58,7 @@ class BasketControl extends Control
 				}');
 			}
 			$wallposts = $this->wallposts('basket', $basket['id']);
-			if ($basket['fs_id'] == fsId()) {
+			if ($basket['fs_id'] == $this->func->fsId()) {
 				$requests = $this->model->listRequests($basket['id']);
 			}
 		}

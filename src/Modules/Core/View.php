@@ -2,11 +2,31 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Foodsharing\DI;
+use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Twig;
+use Foodsharing\Lib\View\Utils;
 
 class View
 {
 	private $sub;
+
+	/* @var \Foodsharing\Lib\View\Utils */
+	protected $v_utils;
+	protected $func;
+
+	/**
+	 * @var Twig
+	 */
+	private $twig;
+
+	public function __construct(Twig $twig, Func $func, Utils $viewUtils)
+	{
+		$this->twig = $twig;
+		$this->func = $func;
+		$this->v_utils = $viewUtils;
+	}
 
 	public function setSub($sub)
 	{
@@ -22,7 +42,7 @@ class View
 			$action = '/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']);
 		}
 
-		addJs('
+		$this->func->addJs('
 				storage.reset();
 				if(isMob())
 				{
@@ -41,16 +61,16 @@ class View
 			');
 
 		return '
-			<div id="g_login">' . v_field(
-				v_form('Login', array(
-					v_form_text('email_adress', array('label' => false, 'placeholder' => s('email_adress'))),
-					v_form_passwd('password', array('label' => false, 'placeholder' => s('password'))),
-					v_form_hidden('ismob', '0') .
+			<div id="g_login">' . $this->v_utils->v_field(
+				$this->v_utils->v_form('Login', array(
+					$this->v_utils->v_form_text('email_adress', array('label' => false, 'placeholder' => $this->func->s('email_adress'))),
+					$this->v_utils->v_form_passwd('password', array('label' => false, 'placeholder' => $this->func->s('password'))),
+					$this->v_utils->v_form_hidden('ismob', '0') .
 					'<p>
 									<a href="/?page=login&sub=passwordReset">Passwort vergessen?</a>
 								</p>
 								<p class="buttons">
-									<input class="button" type="submit" value="' . s('login') . '" name="login" /> <a href="#" onclick="ajreq(\'join\',{app:\'login\'});return false;" class="button">' . s('register') . '</a>
+									<input class="button" type="submit" value="' . $this->func->s('login') . '" name="login" /> <a href="#" onclick="ajreq(\'join\',{app:\'login\'});return false;" class="button">' . $this->func->s('register') . '</a>
 								</p>'
 				), array('action' => $action, 'submit' => false)),
 
@@ -97,16 +117,16 @@ class View
 
 	public function locationMumble()
 	{
-		$out = v_field('
+		$out = $this->v_utils->v_field('
 		<p>Online-Termin</p>
 		<p style="text-align:center;">
-			<a target="_blank" href="http://wiki.lebensmittelretten.de/Mumble"><img src="img/mlogo.png" alt="Mumble" /></a>
+			<a target="_blank" href="https://wiki.foodsharing.de/Mumble"><img src="img/mlogo.png" alt="Mumble" /></a>
 		</p>
 		<p>
 			Online-Sprachkonferenzen machen wir mit Mumble	
 		</p>
-		<p>Unser Mumble-Server:<br />mumble.lebensmittelretten.de</p>
-		<p>Anleitung unter: <a target="_blank" href="http://wiki.lebensmittelretten.de/Mumble">wiki.lebensmittelretten.de/Mumble</a></p>
+		<p>Unser Mumble-Server:<br />mumble.foodsharing.de</p>
+		<p>Anleitung unter: <a target="_blank" href="https://wiki.foodsharing.de/Mumble">wiki.foodsharing.de/Mumble</a></p>
 		', 'Ort', array('class' => 'ui-padding'));
 
 		return $out;
@@ -114,7 +134,7 @@ class View
 
 	public function location($location)
 	{
-		$out = v_field('
+		$out = $this->v_utils->v_field('
 		<p>' . $location['name'] . '</p>
 		<p>
 			' . $location['street'] . '<br />
@@ -165,7 +185,7 @@ class View
 				--$i;
 				$out .= '
 				<li>
-					<a title="' . $fs['name'] . '" style="background-image:url(' . img($fs['photo']) . ');" href="#" onclick="profile(' . (int)$fs['id'] . ');return false;"><span></span></a>	
+					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->func->img($fs['photo']) . ');" href="#" onclick="profile(' . (int)$fs['id'] . ');return false;"><span></span></a>	
 				</li>';
 				if ($i <= 0) {
 					$out .= '<li class="row">...und ' . (count($foodsaver) - 52) . ' weitere</li>';
@@ -190,7 +210,7 @@ class View
 			$option['scroller'] = true;
 		}
 
-		$id = id('team');
+		$id = $this->func->id('team');
 		if (isset($option['id'])) {
 			$id = $option['id'];
 		}
@@ -209,7 +229,7 @@ class View
 		foreach ($foodsaver as $fs) {
 			$jssaver[] = (int)$fs['id'];
 
-			$photo = avatar($fs);
+			$photo = $this->func->avatar($fs);
 
 			$click = ' onclick="profile(' . (int)$fs['id'] . ');return false;"';
 
@@ -234,8 +254,8 @@ class View
 		</div>';
 
 		if ($option['scroller']) {
-			$out = v_scroller($out, $height);
-			addStyle('.scroller .overview{left:0;}.scroller{margin:0}');
+			$out = $this->v_utils->v_scroller($out, $height);
+			$this->func->addStyle('.scroller .overview{left:0;}.scroller{margin:0}');
 		}
 
 		return $out;
@@ -253,7 +273,7 @@ class View
 			$active = $option['active'];
 		}
 
-		$id = id('vmenu');
+		$id = $this->func->id('vmenu');
 
 		$out = '';
 
@@ -298,7 +318,7 @@ class View
 
 	public function peopleChooser($id, $option = array())
 	{
-		addJs('
+		$this->func->addJs('
 			var date = new Date(); 
 			tstring = ""+date.getYear() + ""+date.getMonth() + ""+date.getDate() + ""+date.getHours();
 			var localsource = [];
@@ -367,23 +387,18 @@ class View
 
 		$input = '<input type="text" name="' . $id . '[]" value="" class="tag input text value" />';
 
-		return v_input_wrapper(s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
+		return $this->v_utils->v_input_wrapper($this->func->s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
 	}
 
 	public function latLonPicker($id, $options = array())
 	{
-		addHead('<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=' . GOOGLE_API_KEY . '"></script>');
+		$this->func->addHead('<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=' . GOOGLE_API_KEY . '"></script>');
 
-		global $g_data;
-		if (isset($g_data['lat']) && isset($g_data['lon']) && !empty($g_data['lat']) && !empty($g_data['lon'])) {
-			$data = array(
-				'lat' => $g_data['lat'],
-				'lon' => $g_data['lon'],
-				'zoom' => 14
-			);
+		if (isset($options['location'])) {
+			$data = array_merge(['zoom' => 14], $options['location']);
 		} else {
-			global $db;
-			$data = $db->getValues(array('lat', 'lon'), 'foodsaver', fsId());
+			$db = DI::$shared->get(Model::class);
+			$data = $db->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
 			$data['zoom'] = 14;
 		}
 
@@ -394,7 +409,7 @@ class View
 			$data['zoom'] = 5;
 		}
 
-		addJs('
+		$this->func->addJs('
 			
 			var addressPicker = new AddressPicker({
 				map: {
@@ -422,36 +437,25 @@ class View
 				$(\'#lon\').val(result.lng());
 				$(\'#plz\').val(result.nameForType(\'postal_code\'));
 				$(\'#ort\').val(result.nameForType(\'locality\'));
-				if($(\'#anschrift\').length) {
-					$(\'#anschrift\').val(address + (number ? (\' \' + number):\'\')) 
-				}
-				else {
-					$(\'#str\').val(address)
-					$(\'#hsnr\').val(number)
-				}
+				$(\'#anschrift\').val(address + (number ? (\' \' + number):\'\'));
 			});
 			$("#lat-wrapper,#lon-wrapper").hide();
 		');
 
-		$hsnr = v_form_text('anschrift', array('disabled' => '1', 'required' => '1'));
-		if (isset($options['hsnr'])) {
-			$hsnr = v_form_text('str', array('required' => '1')) . v_form_text('hsnr');
-		}
-
-		return v_input_wrapper(s('position_search'), '
-		<input placeholder="Straße, Ort..." type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
+		return $this->v_utils->v_input_wrapper($this->func->s('position_search'), '
+		<input placeholder="Bitte hier Deine Adresse suchen! Falls nötig, danach unten korrigieren." type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
 		<div id="map" class="pickermap"></div>') .
-			$hsnr .
-			v_form_text('plz', array('disabled' => '1', 'required' => '1')) .
-			v_form_text('ort', array('disabled' => '1', 'required' => '1')) .
-			v_form_text('lat') .
-			v_form_text('lon') .
+			$this->v_utils->v_form_text('anschrift', ['value' => $options['anschrift'], 'required' => '1']) .
+			$this->v_utils->v_form_text('plz', ['value' => $options['plz'], 'disabled' => '1', 'required' => '1']) .
+			$this->v_utils->v_form_text('ort', ['value' => $options['ort'], 'disabled' => '1', 'required' => '1']) .
+			$this->v_utils->v_form_text('lat', ['value' => $options['lat']]) .
+			$this->v_utils->v_form_text('lon', ['value' => $options['lon']]) .
 			'';
 	}
 
 	public function simpleContent($content)
 	{
-		$out = v_field($content['body'], $content['title'], array('class' => 'ui-padding'));
+		$out = $this->v_utils->v_field($content['body'], $content['title'], array('class' => 'ui-padding'));
 
 		return $out;
 	}

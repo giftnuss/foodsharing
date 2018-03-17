@@ -30,6 +30,10 @@ services:
       dockerfile: docker/Dockerfile.php.ci
     expose:
       - 9000
+    depends_on:
+      - db
+      - redis
+      - mailqueuerunner
     links:
       - redis:redis
       - db:db
@@ -39,6 +43,7 @@ services:
     volumes:
       - selenium_downloads:/downloads
       - vendor_cache:/app/vendor
+      - /dev/null:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
   # php mail queue runner
   #------------------------------------
@@ -46,8 +51,12 @@ services:
   mailqueuerunner:
     container_name: foodsharing_ci_mailqueuerunner
     image: foodsharing_ci_app
-    command: php run.php mails index
+    command: php run.php Mails queueWorker
     working_dir: /app
+    restart: always
+    depends_on:
+      - db
+      - redis
     links:
       - maildev
       - redis:redis

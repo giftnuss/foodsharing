@@ -7,21 +7,21 @@ use Foodsharing\Lib\Session\S;
 
 class GeoCleanControl extends Control
 {
-	public function __construct()
+	public function __construct(GeoCleanModel $model, GeoCleanView $view)
 	{
-		$this->model = new GeoCleanModel();
-		$this->view = new GeoCleanView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 
 		if (!S::may('orga')) {
-			goLogin();
+			$this->func->goLogin();
 		}
 	}
 
 	public function lostRegion()
 	{
-		addBread(s('lost_regions'));
+		$this->func->addBread($this->func->s('lost_regions'));
 		if ($regions = $this->model->q('
 			SELECT 
 				
@@ -56,20 +56,20 @@ class GeoCleanControl extends Control
 					}
 				}
 			}
-			addContent($this->view->regionList($tmp));
+			$this->func->addContent($this->view->regionList($tmp));
 		}
 	}
 
 	public function index()
 	{
 		if (!isset($_GET['sub'])) {
-			addBread('Geo Location Cleaner');
+			$this->func->addBread('Geo Location Cleaner');
 
 			if ($foodsaver = $this->model->getFsWithoutGeo()) {
-				addContent($this->view->listFs($foodsaver));
+				$this->func->addContent($this->view->listFs($foodsaver));
 			}
 
-			addContent($this->view->rightmenu(), CNT_RIGHT);
+			$this->func->addContent($this->view->rightmenu(), CNT_RIGHT);
 		}
 	}
 }

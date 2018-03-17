@@ -6,19 +6,19 @@ use Foodsharing\Modules\Core\Control;
 
 class ApplicationXhr extends Control
 {
-	public function __construct()
+	public function __construct(ApplicationModel $model, ApplicationView $view)
 	{
-		$this->model = new ApplicationModel();
-		$this->view = new ApplicationView();
+		$this->model = $model;
+		$this->view = $view;
 
 		parent::__construct();
 	}
 
 	public function apply()
 	{
-		if (isBotFor($_GET['bid']) || isOrgaTeam()) {
+		if ($this->func->isBotFor($_GET['bid']) || $this->func->isOrgaTeam()) {
 			if ($this->model->apply($_GET['bid'], $_GET['fid'])) {
-				info('Bewerbung angenommen');
+				$this->func->info('Bewerbung angenommen');
 
 				return array(
 					'status' => 1,
@@ -30,9 +30,9 @@ class ApplicationXhr extends Control
 
 	public function maybe()
 	{
-		if (isBotFor($_GET['bid']) || isOrgaTeam()) {
+		if ($this->func->isBotFor($_GET['bid']) || $this->func->isOrgaTeam()) {
 			if ($this->model->maybe($_GET['bid'], $_GET['fid'])) {
-				info('Bewerbungs Status geändert');
+				$this->func->info('Bewerbungs Status geändert');
 
 				return array(
 					'status' => 1,
@@ -44,10 +44,10 @@ class ApplicationXhr extends Control
 
 	public function noapply()
 	{
-		if (isBotFor($_GET['bid']) || isOrgaTeam()) {
+		if ($this->func->isBotFor($_GET['bid']) || $this->func->isOrgaTeam()) {
 			$this->model->noapply($_GET['bid'], $_GET['fid']);
 
-			info('Bewerbung abgelehnt');
+			$this->func->info('Bewerbung abgelehnt');
 
 			return array(
 				'status' => 1,

@@ -17,6 +17,11 @@ class FoodsharingUrl extends \Codeception\Module\Db
 		return '/?page=betrieb&id=' . (int)$id . '&a=edit';
 	}
 
+	public function storeNewUrl()
+	{
+		return '/?page=betrieb&&a=new';
+	}
+
 	public function groupEditUrl($id)
 	{
 		return '/?page=groups&sub=edit&id=' . (int)$id;
@@ -46,5 +51,40 @@ class FoodsharingUrl extends \Codeception\Module\Db
 	public function regionWallUrl($id)
 	{
 		return '/?page=bezirk&bid=' . (int)$id . '&sub=wall';
+	}
+
+	public function fairTeilerRegionListUrl($region_id)
+	{
+		return '/?page=fairteiler&bid=' . (int)$region_id;
+	}
+
+	public function fairTeilerGetUrlShort($fairteiler_id)
+	{
+		return '/fairteiler/' . (int)$fairteiler_id;
+	}
+
+	public function fairTeilerGetUrl($fairteiler_id)
+	{
+		return '/?page=fairteiler&sub=ft&id=' . (int)$fairteiler_id;
+	}
+
+	public function fairTeilerEditUrl($fairteiler_id)
+	{
+		return '/?page=fairteiler&sub=ft&id=' . (int)$fairteiler_id . '&sub=edit';
+	}
+
+	public function foodBasketInfoUrl($basket_id)
+	{
+		return '/essenskoerbe/' . (int)$basket_id;
+	}
+
+	public function settingsUrl()
+	{
+		return '/?page=settings&sub=general';
+	}
+
+	public function eventAddUrl($region)
+	{
+		return '/?page=event&sub=add&bid=' . (int)$region;
 	}
 }

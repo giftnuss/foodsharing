@@ -1,20 +1,20 @@
 <?php
 
+use Foodsharing\DI;
+
 require __DIR__ . '/includes/setup.php';
 /*
  * force only executing on commandline
 */
 require_once 'config.inc.php';
 if (!isset($argv)) {
-	header('Location: http://www.' . DEFAULT_HOST);
+	header('Location: ' . BASE_URL);
 	exit();
 }
 
-require_once ROOT_DIR . 'app/console/console.control.php';
-require_once ROOT_DIR . 'app/console/console.model.php';
 require_once ROOT_DIR . 'lang/DE/de.php';
 
-$app = 'core';
+$app = 'Console';
 $method = 'index';
 
 if (isset($argv[3]) && $argv[3] == 'quiet') {
@@ -32,14 +32,14 @@ if (isset($argv) && is_array($argv)) {
 	}
 }
 
+$app = '\\Foodsharing\\Modules\\' . $app . '\\' . $app . 'Control';
 echo "Starting $app::$method...\n";
 
-if ($obj = loadApp($app)) {
-	if (method_exists($obj, $method)) {
-		$obj->$method();
+$appInstance = DI::$shared->get(ltrim($app, '\\'));
 
-		exit();
-	}
+if (is_callable([$appInstance, $method])) {
+	$appInstance->$method();
+	exit();
 }
 
-error('Modul ' . $app . ' konnte nicht geladen werden');
+echo 'Modul ' . $app . ' konnte nicht geladen werden';
