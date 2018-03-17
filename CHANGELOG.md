@@ -5,11 +5,13 @@
 ## Breaking changes
 
 ## Features
+- decreased distance to "close baskets" from 50 to 30 km. !332 #338 by @peter.toennies
 
 ## Bugfixes
 - Remove info section from foodsaver page, if it is empty !320
 - It is possible to contact working groups again. !343 #403 by @peter.toennies @NerdyProjects
 - Fix store fetch count shown on map info bubble !265 @alangecker @NerdyProjects
+- fixed disabled unsubscription of forum posts for fair-teiler responsibles. !331 #317 by @peter.toennies
 
 ## Refactoring
 - complete tidying up of all team related files !321 by @peter.toennies
@@ -17,16 +19,9 @@
 - refactored and cleaned the whole reports module. !335 by @peter.toennies
 
 ## Dev/Test/CI stuff
+
 # 2018-03-14 Hotfix for 2018-02-28
 - Events can be accepted or denied by non event admins again. !342 #418 by @NerdyProjects
-# Not Released
-
-## Bugfixes
-- fixed disabled unsubscription of forum posts for fair-teiler responsibles. !331 #317 by @peter.toennies
-# Not Released
-
-## Features
-- decreased distance to "close baskets" from 50 to 30 km. !332 #338 by @peter.toennies
 
 # 2018-03-05
 - remove ability for ambassador to add any foodsaver to his/her district !328 #405 by @k.miklobusec and @peter.toennies
