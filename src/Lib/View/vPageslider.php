@@ -27,7 +27,9 @@ class vPageslider
 		$this->id = 'fullpage-' . self::$pageslider_count;
 		++self::$pageslider_count;
 
-		$this->func->addScript('/js/jquery.fullPage.min.js');
+		// TODO: work out best way to handle these
+		//$this->func->addScript('/js/jquery.fullPage.min.js');
+		// $this->func->addWebpackEntry('jquery.fullPage');
 		$this->func->addStylesheet('/css/jquery.fullPage.css');
 	}
 
@@ -43,9 +45,9 @@ class vPageslider
 	{
 		$out = '';
 
-		$colors = array();
-		$anchors = array();
-		$tooltips = array();
+		$colors = [];
+		$anchors = [];
+		$tooltips = [];
 		$afterloadjs = '';
 		$onleafejs = '';
 
@@ -65,21 +67,19 @@ class vPageslider
 				}';
 			}
 			if (isset($s['option']['color'])) {
-				$colors[] = '"' . $s['option']['color'] . '"';
+				$colors[] = $s['option']['color'];
 			} else {
-				$colors[] = '"' . $this->defaultBgColor . '"';
+				$colors[] = $this->defaultBgColor;
 			}
 
 			if (isset($s['option']['tooltip'])) {
-				$tooltips[] = '"' . $s['option']['tooltip'] . '"';
-			} else {
-				$tooltips[] = '""';
+				$tooltips[] = $s['option']['tooltip'];
 			}
 
 			if (isset($s['option']['anchor'])) {
-				$anchors[] = '"' . $s['option']['anchor'] . '"';
+				$anchors[] = $s['option']['anchor'];
 			} else {
-				$anchors[] = '"anchor-' . $i . '"';
+				$anchors[] = 'anchor-' . $i;
 			}
 
 			if (!isset($s['option']['wrapper']) || $s['option']['wrapper'] === true) {
@@ -91,6 +91,20 @@ class vPageslider
 				' . $s['html'] . '
 			</div>';
 		}
+
+		$slider = [
+			'id' => $this->id,
+			'anchors' => $anchors,
+			'colors' => $colors,
+			'tooltips' => $tooltips,
+			'sections' => $this->sections,
+		];
+
+		if (!isset($this->func->jsData['sliders'])) $this->func->jsData['sliders'] = [];
+
+		$this->func->jsData['sliders'][] = $slider;
+
+		/*
 
 		$this->func->addJs('
 		$("#main").hide();
@@ -106,16 +120,16 @@ class vPageslider
 				' . $onleafejs . '
 			},
 			afterLoad: function(anchorLink, index){
-					
+
 				' . $afterloadjs . '
-					
+
 				if(index == ' . (int)count($this->sections) . ')
 				{
 					$("#' . $this->id . ' footer").show();
 				}
 				else
 				{
-					$("#' . $this->id . ' footer").hide();	
+					$("#' . $this->id . ' footer").hide();
 				}
 			}
 		});
@@ -127,6 +141,7 @@ class vPageslider
 			$footer.remove();
 		}
 		');
+		*/
 
 		return '
 		<div id="' . $this->id . '">

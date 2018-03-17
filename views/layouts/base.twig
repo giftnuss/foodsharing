@@ -12,6 +12,10 @@
             <link rel="stylesheet" type="text/css" href="{{ stylesheet }}" />
         {% endfor %}
 
+        <script type="text/javascript">
+          window.ServerData = {{ head.ServerDataJSON | raw }};
+        </script>
+
         {% for script in head.scripts %}
             <script type="text/javascript" src="{{ script }}"></script>
         {% endfor %}
@@ -40,10 +44,23 @@
         </script>
 
         <script type="text/javascript">
-            {{ head.jsFunc | raw }}
-            $(document).ready(function(){
-                {{ head.js | raw }}
-            });
+
+            window.onload = function() {
+                {#
+                {{ head.jsFunc | raw }}
+                $(document).ready(function(){
+                    {{ head.js | raw }}
+                });
+                #}
+            }
+
+            function norun() {
+                {{ head.jsFunc | raw }}
+                $(document).ready(function(){
+                    {{ head.js | raw }}
+                });
+            }
+
         </script>
 
     </head>

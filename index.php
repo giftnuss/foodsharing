@@ -43,7 +43,8 @@ function getFunc()
 $func = getFunc();
 
 $func->addStylesheet('/css/gen/style.css?v=' . VERSION);
-$func->addScript('/js/gen/script.js?v=' . VERSION);
+//$func->addScript('/js/gen/script.js?v=' . VERSION);
+// $func->addScript('/js/gen/webpack/js/main.js');
 
 if (DebugBar::isEnabled()) {
 	$func->addHead(DebugBar::renderHead());

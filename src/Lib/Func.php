@@ -34,6 +34,8 @@ class Func
 	private $add_css;
 	private $viewUtils;
 
+	public $jsData = [];
+
 	/**
 	 * @var Twig
 	 */
@@ -1037,8 +1039,12 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 	}
 
-	public function addScript($src)
+	public function addScript($src, $ignore = true)
 	{
+		// ignore some as we want to try and not load any external things for now....
+		if ($ignore) {
+			$src = $src .'.ignored';
+		}
 		$this->scripts[] = $src;
 	}
 
@@ -1082,7 +1088,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'extra' => $this->head,
 			'css' => str_replace(["\r", "\n"], '', $this->add_css),
 			'jsFunc' => JSMin::minify($this->js_func),
-			'js' => JSMin::minify($this->js)
+			'js' => JSMin::minify($this->js),
+			'ServerDataJSON' => json_encode($this->jsData)
 		];
 	}
 

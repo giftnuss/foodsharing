@@ -77,6 +77,30 @@ if (S::may()) {
 	$user = 'user = {id:' . $func->fsId() . '};';
 }
 
+$userData = [
+    'id' => $func->fsId(),
+    'may' => S::may(),
+];
+
+if (S::may()) {
+    $userData['token'] = S::user('token');
+}
+
+if ($pos = S::get('blocation')) {
+    $func->jsData['location'] = [
+        'lat' => floatval($pos['lat']),
+        'lon' => floatval($pos['lon']),
+    ];
+} else {
+    $func->jsData['location'] = null;
+}
+
+$func->jsData['user'] = $userData;
+$func->jsData['page'] = $func->getPage();
+
+$func->addJs($user.';');
+
+/*
 $func->addJs('
 	' . $user . '
 	$("#mainMenu > li > a").each(function(){
@@ -109,10 +133,13 @@ $func->addJs('
 		]
 	}).siblings(".ui-dialog-titlebar").remove();
 ');
+*/
 $func->addHidden('<div id="fs-profile-rate-comment">' . $viewUtils->v_form_textarea('fs-profile-rate-msg', array('desc' => '...')) . '</div>');
 
+/*
+    // TODO: add back in
 if (!S::may()) {
-	$func->addJs('clearInterval(g_interval_newBasket);');
+	$func->addJs('clearInterval(g.interval_newBasket);');
 } else {
 	$func->addJs('
 		sock.connect();
@@ -120,9 +147,11 @@ if (!S::may()) {
 		info.init();
 	');
 }
+*/
 /*
  * Browser location abfrage nur einmal dann in session speichern
  */
+/*
 if ($pos = S::get('blocation')) {
 	$func->addJsFunc('
 		function getBrowserLocation(success)
@@ -150,3 +179,4 @@ if ($pos = S::get('blocation')) {
 		}
 	');
 }
+*/

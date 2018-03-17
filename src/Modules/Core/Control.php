@@ -83,7 +83,9 @@ abstract class Control
 		}
 		if ($this->isControl) {
 			if (file_exists($dir . $moduleName . '.js')) {
-				$this->func->addJsFunc(file_get_contents($dir . $moduleName . '.js'));
+				//$this->func->addJsFunc(file_get_contents($dir . $moduleName . '.js'));
+				// TODO: this assumes it's been webpacked up...
+				$this->func->addScript('/js/gen/webpack/js/Modules/'.$moduleName.'.js', false);
 			}
 			if (file_exists($dir . $moduleName . '.css')) {
 				$this->func->addStyle(file_get_contents($dir . $moduleName . '.css'));
