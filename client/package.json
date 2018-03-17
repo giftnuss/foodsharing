@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "shx rm -rf ../js/gen/webpack && webpack --mode production",
-    "dev": "shx rm -rf ../js/gen/webpack && webpack --mode development -w"
+    "build": "shx rm -rf ../assets && webpack --mode production",
+    "dev": "shx rm -rf ../assets && webpack --mode development -w",
+    "dev:server": "webpack-serve --mode development"
   },
   "keywords": [],
   "author": "",
@@ -13,15 +14,23 @@
     "@babel/core": "^7.0.0-beta.42",
     "@babel/preset-env": "^7.0.0-beta.42",
     "babel-loader": "^8.0.0-beta",
+    "css-loader": "^0.28.11",
     "exports-loader": "^0.7.0",
     "expose-loader": "^0.7.5",
+    "file-loader": "^1.1.11",
     "find": "^0.2.9",
+    "html-webpack-plugin": "^3.0.6",
     "imports-loader": "^0.8.0",
     "loader-utils": "^1.1.0",
+    "mini-css-extract-plugin": "^0.2.0",
     "shx": "^0.2.2",
     "standard": "^11.0.1",
+    "url-loader": "^1.0.1",
     "webpack": "^4.1.1",
-    "webpack-cli": "^2.0.12"
+    "webpack-cli": "^2.0.12",
+    "webpack-manifest-plugin": "^2.0.0-rc.2",
+    "webpack-serve": "^0.2.0",
+    "webpack-stats-plugin": "^0.2.1"
   },
   "dependencies": {
     "font-awesome": "^4.7.0",

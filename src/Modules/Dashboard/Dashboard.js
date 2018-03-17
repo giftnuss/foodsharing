@@ -1,3 +1,5 @@
+import '@/core'
+
 // TODO: import css...
 import 'jquery-contextmenu'
 

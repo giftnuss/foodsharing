@@ -40,6 +40,7 @@ $g_data = $func->getPostData();
 
 $db = DI::$shared->get(ManualDb::class);
 
+/*
 $func->addHead('<link rel="stylesheet" href="/css/pure/pure.min.css">
     <!--[if lte IE 8]>
         <link rel="stylesheet" href="/css/pure/grids-responsive-old-ie-min.css">
@@ -47,7 +48,8 @@ $func->addHead('<link rel="stylesheet" href="/css/pure/pure.min.css">
     <!--[if gt IE 8]><!-->
         <link rel="stylesheet" href="/css/pure/grids-responsive-min.css">
     <!--<![endif]-->');
-$func->addHead('<link rel="stylesheet" href="/fonts/font-awesome-4.7.0/css/font-awesome.min.css">');
+*/
+//$func->addHead('<link rel="stylesheet" href="/fonts/font-awesome-4.7.0/css/font-awesome.min.css">');
 
 $func->addHidden('<a id="' . $func->id('fancylink') . '" href="#fancy">&nbsp;</a>');
 $func->addHidden('<div id="' . $func->id('fancy') . '"></div>');

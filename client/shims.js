@@ -56,7 +56,8 @@ exports.rules = [
     [require.resolve('timeago/jquery.timeago')]: ['define=>false', 'jQuery=jquery'],
     [js('jquery-ui-addons.js')]: ['jQuery=jquery', 'window.jQuery=jquery', '_=jquery-ui'],
     [js('jquery.popup.min.js')]: ['window.jQuery=jquery'],
-    [js('fancybox/jquery.fancybox.pack.js')]: ['jQuery=jquery']
+    [js('fancybox/jquery.fancybox.pack.js')]: ['jQuery=jquery'],
+    [js('jquery.animatenumber.min.js')]: ['jQuery=jquery']
   })
 ]
 

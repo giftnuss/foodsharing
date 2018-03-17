@@ -203,7 +203,6 @@ const activity = {
   },
 
   initOption: function (listings) {
-
     var html = '<form id="activity-option-form" class="pure-form pure-form-stacked"><fieldset><legend>Updates-Anzeige-Optionen</legend>' +
       '<div class="msg-inside info">' +
       '<i class="fa fa-info-circle"></i> Hier kannst Du einstellen, welche Updates auf Deiner Startseite angezeigt werden.' +
@@ -233,8 +232,6 @@ const activity = {
           activity.listOptions.push({index: $el.attr('name'), id: $el.val()})
         }
       })
-
-      console.log(activity.listOptions)
 
       activity.initLoad({
         options: activity.listOptions

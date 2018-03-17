@@ -1043,7 +1043,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		// ignore some as we want to try and not load any external things for now....
 		if ($ignore) {
-			$src = $src .'.ignored';
+			$src = '/js/ignored' . $src;
 		}
 		$this->scripts[] = $src;
 	}
@@ -1064,8 +1064,12 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->js .= $njs;
 	}
 
-	public function addStylesheet($src)
+	public function addStylesheet($src, $ignore=true)
 	{
+		// ignore some as we want to try and not load any external things for now....
+		if ($ignore) {
+			$src = '/css/ignored' . $src;
+		}
 		$this->stylesheets[] = $src;
 	}
 
@@ -1706,5 +1710,13 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	public function getTemplate($tpl)
 	{
 		include 'tpl/' . $tpl . '.php';
+	}
+
+	// https://stackoverflow.com/a/834355
+	function endsWith($haystack, $needle)
+	{
+		$length = strlen($needle);
+		return $length === 0 ||
+			(substr($haystack, -$length) === $needle);
 	}
 }

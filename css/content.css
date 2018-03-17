@@ -145,7 +145,7 @@ table.tablesorter thead tr th, table.tablesorter tfoot tr th {
 }
 
 table.tablesorter thead tr .header {
-  background-image: url(img/bg.gif);
+  /*background-image: url(~img/bg.gif);*/
   background-repeat: no-repeat;
   background-position: center right;
   cursor: pointer;
@@ -167,11 +167,11 @@ table.tablesorter tbody tr.odd td {
 }
 
 table.tablesorter thead tr .headerSortUp {
-  background-image: url(img/asc.gif);
+  /*background-image: url(~img/asc.gif);*/
 }
 
 table.tablesorter thead tr .headerSortDown {
-  background-image: url(img/desc.gif);
+  /*background-image: url(~img/desc.gif); MISSING */
 }
 
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
@@ -228,7 +228,7 @@ p {
 }
 
 input.hasDatepicker {
-  background-image: url(/img/cal.png);
+  background-image: url(~img/cal.png);
   background-position: 175px 3px;
   background-repeat: no-repeat;
   cursor: pointer !important;
@@ -296,7 +296,7 @@ input.hasDatepicker {
 }
 
 a.linkrow:hover {
-  background: url("img/ui-bg_highlight-soft_40_407B35_1x100.png") repeat-x scroll 50% 50% #407b35;
+  background: url("~css/images/ui-bg_highlight-soft_40_407B35_1x100.png") repeat-x scroll 50% 50% #407b35;
   color: #ffffff;
 }
 
@@ -345,7 +345,7 @@ select.v-switch {
   display: block;
   width: 17px;
   height: 17px;
-  background-image: url(/img/ampel.png);
+  background-image: url(~img/ampel.png);
   background-repeat: no-repeat;
   text-decoration: none;
 }

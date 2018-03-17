@@ -1,3 +1,5 @@
+import $ from 'jquery'
+
 import { ajreq } from '@/script'
 
 // This is data that is defined by the server in lib/inc.php
@@ -18,4 +20,8 @@ export function getBrowserLocation (success) {
       })
     })
   }
+}
+
+export function start (fn) {
+  $(fn)
 }

@@ -82,11 +82,29 @@ abstract class Control
 			}
 		}
 		if ($this->isControl) {
+
+			$manifest = json_decode(file_get_contents($dir.'../../../assets/modules.json'), true);
+			$entry = 'Modules/'.$moduleName;
+			if (isset($manifest[$entry])) {
+				foreach ($manifest[$entry] as $asset) {
+					if ($this->func->endsWith($asset, '.js')) {
+						$this->func->addScript($asset, false);
+					} else if ($this->func->endsWith($asset, '.css')) {
+						$this->func->addStylesheet($asset, false);
+					} else {
+						throw new Exception('I do not know how to handle ['.$asset.'] !?');
+					}
+				}
+			}
+
+			/*
 			if (file_exists($dir . $moduleName . '.js')) {
 				//$this->func->addJsFunc(file_get_contents($dir . $moduleName . '.js'));
 				// TODO: this assumes it's been webpacked up...
-				$this->func->addScript('/js/gen/webpack/js/Modules/'.$moduleName.'.js', false);
+				//$this->func->addScript('/js/gen/webpack/Modules/'.$moduleName.'.js', false);
+				$this->func->addScript('/js/gen/webpack/runtime~Modules/'.$moduleName.'.js', false);
 			}
+			*/
 			if (file_exists($dir . $moduleName . '.css')) {
 				$this->func->addStyle(file_get_contents($dir . $moduleName . '.css'));
 			}

@@ -1,9 +1,14 @@
+import '@/core'
+
 import $ from 'jquery'
-
-import '@/main'
-
 import 'jquery-animatenumber'
-import 'fullpage.js'
+import '@php/Lib/View/vPageslider'
+import { ajreq, showLoader, hideLoader, goTo } from '@/script'
+
+/*
+  This calls some of the functions in Modules/Map/Map.js but it is not loaded.
+  However, I think it is not used anyway, so maybe much of it can be removed.
+ */
 
 var fsIcon = null
 var bkIcon = null
@@ -126,9 +131,9 @@ function loadMarker (types, loader) {
         indexmap.markers = null
 
         indexmap.markers = L.markerClusterGroup({maxClusterRadius: 50})
-        url = ''
+        let url = ''
         indexmap.markers.on('click', function (el) {
-          fsid = (el.layer.options.id)
+          let fsid = (el.layer.options.id)
           var type = el.layer.options.type
 
           if (type == 'fs') {
@@ -168,7 +173,7 @@ function loadMarker (types, loader) {
           }
         })
 
-        check = false
+        let check = false
 
         if (data.baskets != undefined) {
           $('#map-control li a.baskets').addClass('active')

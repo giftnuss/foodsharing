@@ -52,36 +52,38 @@ const info = {
    * pseudo construct
    */
   init: function () {
+    console.log('info init')
+
     if ($('#infobar').length > 0) {
       setTimeout(function () {
         info.startupTimeout = true
         // info.heartbeat();
       }, 5000)
       //
-      this.services = []()
+      this.services = []
 
       this.$infobar = $('#infobar')
 
       // init data array
-      this.data = []()
+      this.data = []
       this.data['msg'] = {}
       this.data['bell'] = {}
       this.data['basket'] = {}
 
       // init badge dom querys
-      this.$badge = []()
+      this.$badge = []
       this.$badge['msg'] = $('#infobar > li.msg > a .badge')
       this.$badge['bell'] = $('#infobar > li.bell > a .badge')
       this.$badge['basket'] = $('#infobar > li.basket > a .badge')
 
       // init linklist dom querys
-      this.$linklist = []()
+      this.$linklist = []
       this.$linklist['msg'] = $('#infobar .msg .linklist')
       this.$linklist['bell'] = $('#infobar .bell .linklist')
       this.$linklist['basket'] = $('#infobar .basket .linklist')
 
       // init linkwrappers its where the conten comes in
-      this.$linkwrapper = []()
+      this.$linkwrapper = []
       this.$linkwrapper['msg'] = $('#infobar .msg .linkwrapper')
       this.$linkwrapper['bell'] = $('#infobar .bell .linkwrapper')
       this.$linkwrapper['basket'] = $('#infobar .basket .linkwrapper')
@@ -257,7 +259,7 @@ const info = {
    * remove an polling service
    */
   removeService: function (app, method) {
-    var tmp = []()
+    var tmp = []
     for (var i = 0; i < info.services.length; i++) {
       if (!(info.services[i].a == app || info.services.m == method)) {
         tmp.push(info.services[i])
@@ -271,7 +273,7 @@ const info = {
    * modify service parameter
    */
   editService: function (app, method, options) {
-    var tmp = []()
+    var tmp = []
     for (var i = 0; i < info.services.length; i++) {
       if (!(info.services[i].a == app || info.services.m == method)) {
         tmp.push(info.services[i])

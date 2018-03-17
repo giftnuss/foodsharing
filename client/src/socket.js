@@ -2,6 +2,8 @@ import io from 'socket.io-client'
 
 import { info, session_id, GET } from '@/script'
 
+import conv from '@/conv'
+
 export default {
   connect: function () {
     var socket = io.connect(window.location.host, {path: '/chat/socket.io'})
@@ -14,8 +16,7 @@ export default {
       switch (data.m) {
         case 'push':
           if (GET('page') === 'msg') {
-            // TODO: ?? what is msg and conv??
-            msg.push(JSON.parse(data.o))
+            conv.push(JSON.parse(data.o))
           } else {
             conv.push(JSON.parse(data.o))
           }

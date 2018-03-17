@@ -16,10 +16,6 @@
           window.ServerData = {{ head.ServerDataJSON | raw }};
         </script>
 
-        {% for script in head.scripts %}
-            <script type="text/javascript" src="{{ script }}"></script>
-        {% endfor %}
-
         {{ head.extra | raw }}
 
         {% block head %}{% endblock %}
@@ -191,6 +187,12 @@
         <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-error" style="display:none;"></div>
         <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-info" style="display:none;"></div>
         <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-success" style="display:none;"></div>
+
+
+        {% for script in head.scripts %}
+            <script type="text/javascript" src="{{ script }}"></script>
+        {% endfor %}
+
 
     </body>
 </html>

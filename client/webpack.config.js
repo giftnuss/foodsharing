@@ -1,22 +1,15 @@
 
 const webpack = require('webpack')
+const StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
 const clientRoot = path.resolve(__dirname)
 const find = require('find')
 const shims = require('./shims')
+const { join } = require('path')
 
 function resolve (dir) {
   return path.join(clientRoot, dir)
-}
-
-function findSnippetEntries () {
-  const entries = {}
-  const dir = resolve('src/snippets')
-  find.fileSync(/\.js$/, dir).forEach(filename => {
-    const entryName = filename.substring(dir.length + 1).replace(/\.js$/, '')
-    entries['snippets/' + entryName] = filename
-  })
-  return entries
 }
 
 function findModuleEntries () {
@@ -30,17 +23,12 @@ function findModuleEntries () {
 }
 
 module.exports = {
-  entry: {
-    // main: resolve('src/main'),
-    // ...findSnippetEntries(),
-    ...findModuleEntries(),
-    // ...shims.entry
-  },
+  entry: findModuleEntries(),
+  mode: 'development',
   output: {
-    path: resolve('../js/gen/webpack'),
-    filename: 'js/[name].js',
-    chunkFilename: 'js/chunks/[id].[chunkhash].js',
-    publicPath: 'js/gen/webpack/'
+    path: resolve('../assets'),
+    filename: 'js/[name].[hash].js', // TODO: JUST hash for prod, just name for dev
+    publicPath: '/assets/'
   },
   resolve: {
     extensions: ['.js', '.vue'],
@@ -49,6 +37,10 @@ module.exports = {
     ],
     alias: {
       ...shims.alias,
+      'fonts': resolve('../fonts'),
+      'img': resolve('../img'),
+      'css': resolve('../css'),
+      'js': resolve('../js'),
       '@': resolve('src'),
       '@php': resolve('../src')
     }
@@ -56,11 +48,10 @@ module.exports = {
   module: {
     rules: [
       {
-        // Load client/src and src/modules/**.js via babel, but not js/**.js
         test: /\.js$/,
         exclude: [
           /(node_modules)/,
-          resolve('../js')
+          resolve('../js') // ignore the old js/**.js files
         ],
         use: {
           loader: 'babel-loader',
@@ -69,19 +60,57 @@ module.exports = {
           }
         }
       },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader'
+        ]
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: 'img/[name].[hash:7].[ext]'
+        }
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: 'fonts/[name].[hash:7].[ext]'
+        }
+      },
       ...shims.rules
     ]
   },
   plugins: [
     new webpack.ProvidePlugin({
-      ...shims.provides
+      // ...shims.provides
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[name].[hash].css'
+    }),
+    new StatsWriterPlugin({
+      filename: 'modules.json',
+      fields: ['publicPath', 'assetsByChunkName', 'entrypoints'],
+      transform (stats) {
+        const data = {}
+        for (const [entryName, { assets }] of Object.entries(stats.entrypoints)) {
+          data[entryName] = assets.map(asset => join(stats.publicPath, asset))
+        }
+        return JSON.stringify(data, null, 2)
+      }
     })
-  ]
-  /*
+  ],
   optimization: {
     splitChunks: {
-      chunks: 'all'
-    }
+      chunks: 'all',
+      name: false
+    },
+    runtimeChunk: true
   }
-  */
 }
