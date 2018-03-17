@@ -2073,41 +2073,44 @@ class ManualDb extends Db
 	{
 		$out = $this->qRow('
 			SELECT
-			`id`,
-			`betrieb_status_id`,
-			`bezirk_id`,
-			`plz`,
-			`stadt`,
-			`lat`,
-			`lon`,
-			`kette_id`,
-			`betrieb_kategorie_id`,
-			`name`,
-			`str`,
-			`hsnr`,
-			`status_date`,
-			`status`,
-			`ansprechpartner`,
-			`telefon`,
-			`fax`,
-			`email`,
-			`begin`,
-			`besonderheiten`,
-			`public_info`,
-			`public_time`,
-			`ueberzeugungsarbeit`,
-			`presse`,
-			`sticker`,
-			`abholmenge`,
-			`team_status`,
-			`prefetchtime`,
-			`team_conversation_id`,
-			`springer_conversation_id`,
-			(SELECT count(DISTINCT a.date) FROM fs_abholer AS a WHERE a.betrieb_id=fs_betrieb.id) AS pickup_count
+			b.`id`,
+			b.`betrieb_status_id`,
+			b.`bezirk_id`,
+			b.`plz`,
+			b.`stadt`,
+			b.`lat`,
+			b.`lon`,
+			b.`kette_id`,
+			b.`betrieb_kategorie_id`,
+			b.`name`,
+			b.`str`,
+			b.`hsnr`,
+			b.`status_date`,
+			b.`status`,
+			b.`ansprechpartner`,
+			b.`telefon`,
+			b.`fax`,
+			b.`email`,
+			b.`begin`,
+			b.`besonderheiten`,
+			b.`public_info`,
+			b.`public_time`,
+			b.`ueberzeugungsarbeit`,
+			b.`presse`,
+			b.`sticker`,
+			b.`abholmenge`,
+			b.`team_status`,
+			b.`prefetchtime`,
+			b.`team_conversation_id`,
+			b.`springer_conversation_id`,
+			count(DISTINCT(a.date)) AS pickup_count
 
-			FROM 		`fs_betrieb`
+			FROM 		`fs_betrieb` b
+			LEFT JOIN   `fs_abholer` a
+			ON a.betrieb_id = b.id
 
-			WHERE 		`id` = ' . $this->intval($id));
+			WHERE 		b.`id` = ' . $this->intval($id) . '
+			GROUP BY b.`id`');
 		if (!$out) {
 			return $out;
 		}
