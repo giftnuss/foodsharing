@@ -1,10 +1,9 @@
-
 const webpack = require('webpack')
-const StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin
+const { StatsWriterPlugin } = require('webpack-stats-plugin')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
 const clientRoot = path.resolve(__dirname)
-const find = require('find')
 const shims = require('./shims')
 const { join } = require('path')
 
@@ -12,18 +11,20 @@ function resolve (dir) {
   return path.join(clientRoot, dir)
 }
 
-function findModuleEntries () {
+function moduleEntries (...names) {
   const entries = {}
-  const dir = resolve('../src/Modules')
-  find.fileSync(/\.js$/, dir).forEach(filename => {
-    const entryName = path.basename(filename.replace(/\.js$/, ''))
-    entries['Modules/' + entryName] = filename
-  })
+  for (const name of names) {
+    entries[`Modules/${name}`] = resolve(`../src/Modules/${name}/${name}.js`)
+  }
   return entries
 }
 
 module.exports = {
-  entry: findModuleEntries(),
+  entry: moduleEntries(
+    // We explicitly define each foodsharing modules here so we can convert them one-by-one
+    'Index',
+    'Dashboard'
+  ),
   mode: 'development',
   output: {
     path: resolve('../assets'),
@@ -87,13 +88,11 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.ProvidePlugin({
-      // ...shims.provides
-    }),
     new MiniCssExtractPlugin({
-      filename: '[name].css',
-      chunkFilename: '[name].[hash].css'
+      filename: 'css/[name].css',
+      chunkFilename: 'css/[name].[hash].css'
     }),
+    new BundleAnalyzerPlugin(), // TODO only in prod
     new StatsWriterPlugin({
       filename: 'modules.json',
       fields: ['publicPath', 'assetsByChunkName', 'entrypoints'],

@@ -38,6 +38,8 @@ abstract class Control
 	 */
 	private $twig;
 
+	private $usesWebpack = false;
+
 	public function __construct()
 	{
 		$this->func = DI::$shared->get(Func::class);
@@ -83,28 +85,27 @@ abstract class Control
 		}
 		if ($this->isControl) {
 
-			$manifest = json_decode(file_get_contents($dir.'../../../assets/modules.json'), true);
-			$entry = 'Modules/'.$moduleName;
+			$webpackModules = $dir . '../../../assets/modules.json';
+			$manifest = json_decode(file_get_contents($webpackModules), true);
+			$entry = 'Modules/' . $moduleName;
 			if (isset($manifest[$entry])) {
+				// We are using new webpack style!
+				$this->usesWebpack = true;
 				foreach ($manifest[$entry] as $asset) {
 					if ($this->func->endsWith($asset, '.js')) {
 						$this->func->addScript($asset, false);
 					} else if ($this->func->endsWith($asset, '.css')) {
 						$this->func->addStylesheet($asset, false);
 					} else {
-						throw new Exception('I do not know how to handle ['.$asset.'] !?');
+						throw new Exception('I do not know how to handle [' . $asset . '] !?');
 					}
 				}
+			} else {
+				// Existing method of js loading
+				if (file_exists($dir . $moduleName . '.js')) {
+					$this->func->addJsFunc(file_get_contents($dir . $moduleName . '.js'));
+				}
 			}
-
-			/*
-			if (file_exists($dir . $moduleName . '.js')) {
-				//$this->func->addJsFunc(file_get_contents($dir . $moduleName . '.js'));
-				// TODO: this assumes it's been webpacked up...
-				//$this->func->addScript('/js/gen/webpack/Modules/'.$moduleName.'.js', false);
-				$this->func->addScript('/js/gen/webpack/runtime~Modules/'.$moduleName.'.js', false);
-			}
-			*/
 			if (file_exists($dir . $moduleName . '.css')) {
 				$this->func->addStyle(file_get_contents($dir . $moduleName . '.css'));
 			}
@@ -162,6 +163,11 @@ abstract class Control
 		} else {
 			return false;
 		}
+	}
+
+	public function getUsesWebpack(): bool
+	{
+		return $this->usesWebpack;
 	}
 
 	public function wallposts($table, $id)

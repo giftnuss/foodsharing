@@ -42,10 +42,6 @@ function getFunc()
 
 $func = getFunc();
 
-$func->addStylesheet('/css/gen/style.css?v=' . VERSION);
-//$func->addScript('/js/gen/script.js?v=' . VERSION);
-// $func->addScript('/js/gen/webpack/js/main.js');
-
 if (DebugBar::isEnabled()) {
 	$func->addHead(DebugBar::renderHead());
 }
@@ -56,9 +52,13 @@ if (DebugBar::isEnabled()) {
 
 $app = $func->getPage();
 
+$usesWebpack = false;
+
 $class = Routing::getClassName($app, 'Control');
 if ($class) {
 	$obj = DI::$shared->get(ltrim($class, '\\'));
+
+	$usesWebpack = $obj->getUsesWebpack();
 
 	if (isset($_GET['a']) && is_callable(array($obj, $_GET['a']))) {
 		$meth = $_GET['a'];
@@ -70,6 +70,11 @@ if ($class) {
 	if ($sub !== false && is_callable(array($obj, $sub))) {
 		$obj->$sub($request, $response);
 	}
+}
+
+if (!$usesWebpack) {
+	$func->addStylesheet('/css/gen/style.css?v=' . VERSION);
+	$func->addScript('/js/gen/script.js?v=' . VERSION);
 }
 
 $page = $response->getContent();

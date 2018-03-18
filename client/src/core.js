@@ -1,16 +1,16 @@
 import '@/style'
 
+import '@/globals' // causes this to be exported globally via an expose-loader
+
 import $ from 'jquery'
 import { ajreq } from '@/script'
 import 'jquery-ui'
-// import 'jquery.ui.position'
 
 import 'fullpage.js'
 import 'jquery-contextmenu'
 import 'jquery-contextmenu/dist/jquery.ui.position'
 import 'jquery-contextmenu/dist/jquery.contextMenu.css'
 
-import '@/g'
 import '@/menu'
 import '@/becomeBezirk'
 import '@/bezirkChildChooser'

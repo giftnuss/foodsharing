@@ -100,8 +100,6 @@ if ($pos = S::get('blocation')) {
 $func->jsData['user'] = $userData;
 $func->jsData['page'] = $func->getPage();
 
-$func->addJs($user.';');
-
 /*
 $func->addJs('
 	' . $user . '

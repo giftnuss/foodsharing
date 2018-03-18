@@ -9,12 +9,6 @@ function js (filename) {
   return resolve(path.join('..', 'js', filename))
 }
 
-exports.entry = {
-}
-
-exports.provides = {
-}
-
 exports.rules = [
   /*
   {
@@ -41,10 +35,10 @@ exports.rules = [
     }
   },
   {
-    test: resolve('src/g'),
+    test: resolve('src/globals'),
     use: {
       loader: 'expose-loader',
-      options: 'g'
+      options: 'globals'
     }
   },
 

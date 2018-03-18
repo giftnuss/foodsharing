@@ -43,8 +43,6 @@ class DashboardControl extends Control
 
 	public function index()
 	{
-		$this->func->addScript('/js/contextmenu/jquery.contextMenu.js');
-		$this->func->addStylesheet('/js/contextmenu/jquery.contextMenu.css');
 
 		$check = false;
 
