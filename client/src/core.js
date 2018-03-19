@@ -1,3 +1,5 @@
+import '@/raven'
+
 import '@/style'
 
 import '@/globals' // causes this to be exported globally via an expose-loader

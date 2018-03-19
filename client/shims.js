@@ -34,6 +34,15 @@ exports.rules = [
       options: { name: 'jquery' }
     }
   },
+  /*
+  {
+    test: resolve('src/globals'),
+    use: {
+      loader: 'imports-loader',
+      options: 'window=>window'
+    }
+  },
+  */
   {
     test: resolve('src/globals'),
     use: {

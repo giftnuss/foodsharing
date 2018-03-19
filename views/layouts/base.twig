@@ -12,9 +12,16 @@
             <link rel="stylesheet" type="text/css" href="{{ stylesheet }}" />
         {% endfor %}
 
-        <script type="text/javascript">
-          window.ServerData = {{ head.ServerDataJSON | raw }};
-        </script>
+        {% if head.webpack %}
+            <script type="text/javascript">
+              window.ServerData = {{ head.ServerDataJSON | raw }};
+            </script>
+            {# the main webpack scripts are rendered at the bottom of the page #}
+        {% else %}
+            {% for script in head.scripts %}
+                <script type="text/javascript" src="{{ script }}"></script>
+            {% endfor %}
+        {% endif %}
 
         {{ head.extra | raw }}
 
@@ -39,29 +46,25 @@
             var _gaq = _gaq || [];  _gaq.push(['_setAccount', 'UA-43313114-1']);  _gaq.push(['_setDomainName', '{{ HTTP_HOST }}']);  _gaq.push(['_trackPageview']); (function() {var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);  })();
         </script>
 
-        <script type="text/javascript">
-
-            window.onload = function() {
-                {#
-                {{ head.jsFunc | raw }}
-                $(document).ready(function(){
-                    {{ head.js | raw }}
-                });
-                #}
-            }
-
-            function norun() {
-                {{ head.jsFunc | raw }}
-                $(document).ready(function(){
-                    {{ head.js | raw }}
-                });
-            }
-
-        </script>
+        {% if head.webpack %}
+            <script type="text/javascript">
+                window.onload = function() {
+                    {{ head.jsFunc | raw }}
+                    $(document).ready(function(){
+                        {{ head.js | raw }}
+                    });
+                }
+            </script>
+        {% endif %}
 
     </head>
 
     <body {{ bodyClass | raw }}>
+
+        <h1>USES WEBPACK?? {{ head.webpack }}</h1>
+        <script type="text/javascript">
+            console.log('uses webpack?', '{{ head.webpack }}');
+        </script>
 
         <div id="top">
             <div class="inner">
@@ -189,10 +192,11 @@
         <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-success" style="display:none;"></div>
 
 
-        {% for script in head.scripts %}
-            <script type="text/javascript" src="{{ script }}"></script>
-        {% endfor %}
-
+        {% if head.webpack %}
+            {% for script in head.scripts %}
+                <script type="text/javascript" src="{{ script }}"></script>
+            {% endfor %}
+        {% endif %}
 
     </body>
 </html>

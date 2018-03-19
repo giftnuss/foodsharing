@@ -1,15 +1,16 @@
+/* eslint-disable eqeqeq,camelcase */
+
 import $ from 'jquery'
 import 'jquery-slimscroll'
 import 'jquery-fancybox'
 import 'jquery-ui-addons'
 
+import conv from '@/conv'
+
 const HTTP_GET_VARS = []
 const strGET = document.location.search.substr(1, document.location.search.length)
-var user = {
-  token: ''
-}
 
-var dialogs = {
+export const dialogs = {
   dialogs: [],
   add: function (dialog) {
     this.dialogs[this.dialogs.length] = dialog
@@ -27,10 +28,11 @@ var dialogs = {
     dialogs.dialogs = []
   }
 }
+
 if (strGET != '') {
-  var gArr = strGET.split('&')
-  for (var i = 0; i < gArr.length; ++i) {
-    var v = ''; var vArr = gArr[i].split('=')
+  let gArr = strGET.split('&')
+  for (let i = 0; i < gArr.length; ++i) {
+    let v = ''; let vArr = gArr[i].split('=')
     if (vArr.length > 1) { v = vArr[1] }
     HTTP_GET_VARS[unescape(vArr[0])] = unescape(v)
   }
@@ -42,8 +44,8 @@ export function GET (v) {
 }
 
 export function collapse_wrapper (id) {
-  var $content = $('#' + id + '-wrapper .element-wrapper')
-  var $label = $('#' + id + '-wrapper .wrapper-label i')
+  let $content = $('#' + id + '-wrapper .element-wrapper')
+  let $label = $('#' + id + '-wrapper .wrapper-label i')
   if ($content.is(':visible')) {
     $content.hide()
     $label.removeClass('fa-caret-down').addClass('fa-caret-right')
@@ -54,14 +56,14 @@ export function collapse_wrapper (id) {
 }
 
 export function closeAllDialogs () {
-  var $activeDialogs = $('.ui-dialog').find('.ui-dialog-content')
+  let $activeDialogs = $('.ui-dialog').find('.ui-dialog-content')
 
   $activeDialogs.each(function () {
-      var $dia = $(this)
-    	$dia.dialog()
-    	if ($dia.dialog('isOpen')) {
-    		$dia.dialog().dialog('close')
-    	}
+    let $dia = $(this)
+    $dia.dialog()
+    if ($dia.dialog('isOpen')) {
+      $dia.dialog().dialog('close')
+    }
   })
 }
 
@@ -83,100 +85,100 @@ $(document).ready(function () {
   sleepmode.init()
 
   $('textarea.comment').autosize()
-	 $('#nojs').css('display', 'none')
-	 $('#main').css('display', 'block')
+  $('#nojs').css('display', 'none')
+  $('#main').css('display', 'block')
 
-	 $('.moreswap').each(function () {
-		 var height = 100
+  $('.moreswap').each(function () {
+    var height = 100
 
-		 $this = $(this)
-		 $this.after('<a class="moreswaplink" href="#" data-show="0">Mehr anzeigen</a>')
+    let $this = $(this)
+    $this.after('<a class="moreswaplink" href="#" data-show="0">Mehr anzeigen</a>')
 
-		 cheight = $this.attr('class').split('moreswap-height-')
+    let cheight = $this.attr('class').split('moreswap-height-')
 
-		 if (cheight.length > 1) {
-			 height = parseInt(cheight[1])
-		 }
+    if (cheight.length > 1) {
+      height = parseInt(cheight[1])
+    }
 
-		 g_moreswapheight = height
+    g_moreswapheight = height
 
-		 if ($this.height() > 100) {
-			 $this.css({
-				 'height': height + 'px',
-				 'overflow': 'hidden'
-			 })
-		 }
-	 })
+    if ($this.height() > 100) {
+      $this.css({
+        'height': height + 'px',
+        'overflow': 'hidden'
+      })
+    }
+  })
 
-	 $('.moreswaplink').each(function () {
-		 $this = $(this)
-		 $this.prev().css({
-			 'height': g_moreswapheight + 'px',
-			 'overflow': 'hidden'
-		 })
-		 $this.click(function (ev) {
-			 ev.preventDefault()
-			 if ($this.attr('data-show') == 0) {
-				 $this.prev().css({
-					 'height': 'auto',
-					 'overflow': 'visible'
-				 })
-				 $this.text('einklappen')
-				 $this.attr('data-show', 1)
-			 } else {
-				 $this.prev().css({
-					 'height': g_moreswapheight + 'px',
-					 'overflow': 'hidden'
-				 })
-				 $this.text('Mehr anzeigen')
-				 $this.attr('data-show', 0)
-		     }
-		 })
-	 })
+  $('.moreswaplink').each(function () {
+    let $this = $(this)
+    $this.prev().css({
+      'height': g_moreswapheight + 'px',
+      'overflow': 'hidden'
+    })
+    $this.click(function (ev) {
+      ev.preventDefault()
+      if ($this.attr('data-show') == 0) {
+        $this.prev().css({
+          'height': 'auto',
+          'overflow': 'visible'
+        })
+        $this.text('einklappen')
+        $this.attr('data-show', 1)
+      } else {
+        $this.prev().css({
+          'height': g_moreswapheight + 'px',
+          'overflow': 'hidden'
+        })
+        $this.text('Mehr anzeigen')
+        $this.attr('data-show', 0)
+      }
+    })
+  })
 
-	 if (isMob()) {
-		 $('#mobilemenu, .v-mob').show()
-		 $('#mainMenu, .v-desktop').hide()
-	 } else {
-		 $('#mainMenu, .v-desktop').show()
-		 $('#mobilemenu, .v-mob').hide()
-	 }
-	 $(window).resize(function () {
-		 if (isMob()) {
-			 $('#mobilemenu, .v-mob').show()
-			 $('#mainMenu, .v-desktop').hide()
-		 } else {
-			 $('#mainMenu, .v-desktop').show()
-			 $('#mobilemenu, .v-mob').hide()
-		 }
-	 })
+  if (isMob()) {
+    $('#mobilemenu, .v-mob').show()
+    $('#mainMenu, .v-desktop').hide()
+  } else {
+    $('#mainMenu, .v-desktop').show()
+    $('#mobilemenu, .v-mob').hide()
+  }
+  $(window).resize(function () {
+    if (isMob()) {
+      $('#mobilemenu, .v-mob').show()
+      $('#mainMenu, .v-desktop').hide()
+    } else {
+      $('#mainMenu, .v-desktop').show()
+      $('#mobilemenu, .v-mob').hide()
+    }
+  })
 
-	 $('textarea.inlabel, input.inlabel').each(function () {
-	        var $this = $(this)
-	        if ($this.val() === '') {
-	           $this.val($this.attr('title'))
-	        }
-	        $this.focus(function () {
-	          if ($this.val() === $this.attr('title')) {
-	            $this.val('')
-	          }
-	        })
-	        $this.blur(function () {
-	        if ($this.val() === '') {
-	           $this.val($this.attr('title'))
-	        }
-	    })
-	 })
+  $('textarea.inlabel, input.inlabel').each(function () {
+    var $this = $(this)
+    if ($this.val() === '') {
+      $this.val($this.attr('title'))
+    }
+    $this.focus(function () {
+      if ($this.val() === $this.attr('title')) {
+        $this.val('')
+      }
+    })
+    $this.blur(function () {
+      if ($this.val() === '') {
+        $this.val($this.attr('title'))
+      }
+    })
+  })
 
-	 infoMenu()
-	 if (!isMob()) {
-		 $('#main a').tooltip({
+  infoMenu()
+  if (!isMob()) {
+    $('#main a').tooltip({
       show: false,
       hide: false,
       content: function () {
         var el = $(this)
         if (el.attr('title').substring(0, 4) == '#tt-') {
-          id = el.attr('title').substring(4)
+          const id = el.attr('title').substring(4)
           return $('.' + id).html()
         } else {
           return el.attr('title')
@@ -197,9 +199,9 @@ $(document).ready(function () {
     })
   }
 
-	 // $('.select').customSelect();
+  // $('.select').customSelect();
 
-	 $(function () {
+  $(function () {
     $('#dialog-confirm').dialog({
       resizable: false,
       height: 140,
@@ -244,7 +246,7 @@ $(document).ready(function () {
   )
 
   $('.value').blur(function () {
-    el = $(this)
+    let el = $(this)
     if (el.val() != '') {
       el.removeClass('input-error')
     }
@@ -254,38 +256,38 @@ $(document).ready(function () {
     autoOpen: false,
     modal: true,
     buttons:
-		{
-		  'Upload': function () {
-		    uploadPhoto()
-		  }
-		}
+    {
+      'Upload': function () {
+        uploadPhoto()
+      }
+    }
   })
 
   $('#comment').dialog({
     autoOpen: false,
     modal: true,
     buttons:
-		{
-		  'Speichern': function () {
-		    $.ajax({
-		      dataType: 'json',
-		      url: '/xhr.php?f=addComment&name=' + $('#comment-name').val() + '&id=' + $('#comment-id').val() + '&comment=' + encodeURIComponent($('#comment textarea').val()),
-		      success: function (data) {
-		        if (data.status == 1) {
-		          $('#comment').dialog('close')
-		          $('#comment textarea').val('')
-		          info(data.msg)
-		        } else {
-		          alert(data)
-		        }
-		      }
-		    })
-		  }
-		}
+    {
+      'Speichern': function () {
+        $.ajax({
+          dataType: 'json',
+          url: '/xhr.php?f=addComment&name=' + $('#comment-name').val() + '&id=' + $('#comment-id').val() + '&comment=' + encodeURIComponent($('#comment textarea').val()),
+          success: function (data) {
+            if (data.status == 1) {
+              $('#comment').dialog('close')
+              $('#comment textarea').val('')
+              info(data.msg)
+            } else {
+              alert(data)
+            }
+          }
+        })
+      }
+    }
   })
 
   $('.toolbar-comment').click(function () {
-    l = $(this).attr('attr').split(':')
+    const l = $(this).attr('attr').split(':')
     $('#comment-id').val(l[1])
     $('#comment-name').val(l[0])
 
@@ -301,7 +303,7 @@ $(document).ready(function () {
       g_firstChatUpdate = true
     },
     helpers: {
-		  overlay: {closeClick: false}
+      overlay: {closeClick: false}
     }
   })
 })
@@ -309,15 +311,15 @@ $(document).ready(function () {
 export function chat (fsid) {
   conv.userChat(fsid)
   /*
-	closeDialogs();
-	showLoader();
-	fancy_xhr("getMsg&id=" + fsid, false);
-	*/
+  closeDialogs();
+  showLoader();
+  fancy_xhr("getMsg&id=" + fsid, false);
+  */
 }
 export function closeDialogs () {
   $('.dialogbox').each(function () {
     if ($(this).dialog('isOpen')) {
-        	$(this).dialog('close')
+      $(this).dialog('close')
     }
   })
 }
@@ -363,26 +365,26 @@ export function quickprofile (id) {
         $('#tabs-profile').tabs()
 
         $('#dialog-profile-info').dialog({
-				        closeOnEscape: false,
-				        draggable: false,
-				        resizable: false,
-				        autoOpen: true,
-				        modal: true,
-				        width: 470,
-				        open: function () {
-				            $(this).find('.ui-dialog-titlebar-close').blur()
-				        }
+          closeOnEscape: false,
+          draggable: false,
+          resizable: false,
+          autoOpen: true,
+          modal: true,
+          width: 470,
+          open: function () {
+            $(this).find('.ui-dialog-titlebar-close').blur()
+          }
         }).parent().find('.ui-dialog-titlebar-close').prependTo('#tabs-profile').closest('.ui-dialog').children('.ui-dialog-titlebar').remove()
 
         $('#dialog-profile-info').css('padding', '0')
         $('.ui-dialog-titlebar-close').css({
-				     'position': 'absolute',
-					 'right': '8px',
-					 'top': '17px'
+          'position': 'absolute',
+          'right': '8px',
+          'top': '17px'
         })
         $('#tabs-profile').css({
-				    'border': 'none',
-				    'padding': '0'
+          'border': 'none',
+          'padding': '0'
         })
         $('.vouch-banana').tooltip({
           position: {
@@ -408,38 +410,38 @@ export function quickprofile (id) {
 
         $('#dialog-profile-info').dialog('option', 'position', 'center')
         /*
-				$('.fsrating').jRating({
-					step:true,
-					length : 10,
-					decimalLength:0,
-					bigStarsPath: '/css/icons/zitrone.png',
-					sendRequest: false,
-					rateMax: 10,
-					rateInfosY: 10,
-					onClick: function(el,rate){
-						showLoader();
-						$.ajax({
-							url: "xhrapp.php?app=profile&m=rate",
-							data:{
-								id: id,
-								rate: rate
-							},
-							dataType: "json",
-							success: function(data){
-								if(data.status == 1)
-								{
-									$("#ratecountlabel").html(parseInt($("#ratecountlabel").text())+1);
+        $('.fsrating').jRating({
+          step:true,
+          length : 10,
+          decimalLength:0,
+          bigStarsPath: '/css/icons/zitrone.png',
+          sendRequest: false,
+          rateMax: 10,
+          rateInfosY: 10,
+          onClick: function(el,rate){
+            showLoader();
+            $.ajax({
+              url: "xhrapp.php?app=profile&m=rate",
+              data:{
+                id: id,
+                rate: rate
+              },
+              dataType: "json",
+              success: function(data){
+                if(data.status == 1)
+                {
+                  $("#ratecountlabel").html(parseInt($("#ratecountlabel").text())+1);
 
-									$("#fs-profile-rate-comment").dialog("open");
-								}
-							},
-							complete: function(){
-								hideLoader();
-							}
-						});
-					}
-				});
-				*/
+                  $("#fs-profile-rate-comment").dialog("open");
+                }
+              },
+              complete: function(){
+                hideLoader();
+              }
+            });
+          }
+        });
+        */
         if (data.script != undefined) {
           $.globalEval(data.script)
         }
@@ -453,18 +455,18 @@ export function quickprofile (id) {
   })
 
   /*
-	 * helpers:  {
+   * helpers:  {
         overlay : {
             css : {
                 'background-color' : '#fff'
             }
         }
-	 */
+   */
 }
 export const ajax = {
   data: {},
   msg: function (msg) {
-    for (i = 0; i < msg.length; i++) {
+    for (let i = 0; i < msg.length; i++) {
       switch (msg[i].type) {
         case 'error':
           pulseError(msg[i].text)
@@ -543,29 +545,28 @@ export const ajax = {
   }
 }
 export function ajreq (name, options, method, app) {
-  var options = typeof options != 'undefined' ? options : {}
+  options = typeof options !== 'undefined' ? options : {}
   return ajax.req(options.app || app || GET('page'), name, {
     method: method,
     data: options,
     loader: options.loader
   })
 }
-var u_pulse_error_to = null
-var u_pulse_info_to = null
+let u_pulse_info_to = null
 export function pulseError (msg, opt) {
   if (opt == undefined) {
     opt = {
       sticky: false
     }
   }
-  time = 6000
+  let time = 6000
   if (opt.sticky) {
     time = 900000
   }
 
   $('#pulse-error').html(msg)
   $('#pulse-error').stop().fadeIn()
-  u_pulse_error_to = setTimeout(function () {
+  const u_pulse_error_to = setTimeout(function () {
     $('#pulse-error').fadeOut()
     $(document).unbind('click')
   }, time)
@@ -584,14 +585,14 @@ export function pulseSuccess (msg, opt) {
       sticky: false
     }
   }
-  time = 5000
+  let time = 5000
   if (opt.sticky) {
     time = 900000
   }
 
   $('#pulse-success').html(msg)
   $('#pulse-success').stop().fadeIn()
-  u_pulse_error_to = setTimeout(function () {
+  const u_pulse_error_to = setTimeout(function () {
     $('#pulse-success').fadeOut()
     $(document).unbind('click')
   }, time)
@@ -610,7 +611,7 @@ export function pulseInfo (msg, opt) {
       sticky: false
     }
   }
-  time = 4000
+  let time = 4000
   if (opt.sticky) {
     time = 900000
   }
@@ -733,9 +734,9 @@ export function checkEmail (email) {
   var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/
 
   if (!filter.test(email)) {
-    	return false
+    return false
   } else {
-    	return true
+    return true
   }
 }
 export function img (photo, size) {
@@ -814,8 +815,8 @@ export function stopHeartbeats () {
 }
 
 export function fancy (content, title, subtitle) {
-  t = ''
-  s = ''
+  let t = ''
+  let s = ''
   if (title != undefined) {
     t = '<h3>' + title + '</h3>'
   }
@@ -852,7 +853,7 @@ export function xhrf (func) {
 }
 
 export function reload () {
-  location.reload()
+  window.location.reload()
 }
 
 export function v_field (content, title, id) {
@@ -874,14 +875,14 @@ export function info (txt) {
 export function error (txt) {
   pulseError(txt)
   /*
-	if($('#error-msg').length == 0)
-	{
-		$('#top').after('<div class="ui-widget ui-msg"><div class="ui-state-error ui-corner-all ui-padding"><span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-alert"></span><ul id="error-msg">'+txt+'</ul><div class="clear"></div></div></div>');
-	}
-	else
-	{
-		$('#error-msg').append('<li>'+txt+'</li>');
-	} */
+  if($('#error-msg').length == 0)
+  {
+    $('#top').after('<div class="ui-widget ui-msg"><div class="ui-state-error ui-corner-all ui-padding"><span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-alert"></span><ul id="error-msg">'+txt+'</ul><div class="clear"></div></div></div>');
+  }
+  else
+  {
+    $('#error-msg').append('<li>'+txt+'</li>');
+  } */
 }
 
 export function uploadPhoto () {
@@ -889,7 +890,7 @@ export function uploadPhoto () {
 }
 
 export function uploadPhotoReady (id, file) {
-  fs_id = $('#uploadPhoto-fs_id').val()
+  let fs_id = $('#uploadPhoto-fs_id').val()
   $('#miniq-' + id).attr('src', file)
   // $('#uploadPhoto-preview').html('<img width="200" src="images/'+fs_id+'.'+ext+'" />');
   $('#uploadPhoto').dialog('close')
@@ -924,9 +925,9 @@ export function goTo (url) {
 }
 
 export function ucfirst (str) {
-	  str += ''
-	  var f = str.charAt(0).toUpperCase()
-	  return f + str.substr(1)
+  str += ''
+  var f = str.charAt(0).toUpperCase()
+  return f + str.substr(1)
 }
 
 export function showComment (id) {
@@ -947,19 +948,19 @@ export function ifconfirm (url, question, title) {
   $('#dialog-confirm-url').val(url)
   $('#dialog-confirm').dialog('open')
   /*
-	if(confirm(question))
-	{
-		goTo(url);
-	}
-	*/
+  if(confirm(question))
+  {
+    goTo(url);
+  }
+  */
 }
 
 export function picFinish (img, id) {
   $('#' + id + '-action').val('upload')
   // $("#fotoupload").dialog('close');
   $.fancybox.close()
-  d = new Date()
-  imgp = img + '?' + d.getTime()
+  let d = new Date()
+  let imgp = img + '?' + d.getTime()
   $('#' + id + '-open').html('<img src="images/' + imgp + '" /><input type="hidden" name="photo" value="' + img + '" />')
   hideLoader()
   reload()
@@ -972,35 +973,35 @@ export function pic_error (msg, id) {
 }
 export function fotoupload (file, id) {
   $('#' + id + '-file').val(file)
-  d = new Date()
-  img = file + '?' + d.getTime()
+  let d = new Date()
+  let img = file + '?' + d.getTime()
 
   $('#' + id + '-placeholder').html('<img src="./tmp/' + img + '" />')
-  jcrop = $('#' + id + '-placeholder img').Jcrop({
+  let jcrop = $('#' + id + '-placeholder img').Jcrop({
     setSelect: [ 100, 0, 400, 400 ],
     aspectRatio: 35 / 45,
     onSelect: function (c) {
-        		$('#' + id + '-x').val(c.x)
-        		$('#' + id + '-y').val(c.y)
-        		$('#' + id + '-w').val(c.w)
-        		$('#' + id + '-h').val(c.h)
+      $('#' + id + '-x').val(c.x)
+      $('#' + id + '-y').val(c.y)
+      $('#' + id + '-w').val(c.w)
+      $('#' + id + '-h').val(c.h)
     }
   })
-	 $('#' + id + '-save').show()
-	 $('#' + id + '-save').button().click(function () {
-		 showLoader()
-		 $('#' + id + '-action').val('crop')
-		 $('#' + id + '-form')[0].submit()
-		 return false
-	 })
+  $('#' + id + '-save').show()
+  $('#' + id + '-save').button().click(function () {
+    showLoader()
+    $('#' + id + '-action').val('crop')
+    $('#' + id + '-form')[0].submit()
+    return false
+  })
 
-	 $('#' + id + '-placeholder').css('height', 'auto')
-	 hideLoader()
-	 setTimeout(function () {
-		 $.fancybox.update()
-		 $.fancybox.reposition()
-		 $.fancybox.toggle()
-	 }, 200)
+  $('#' + id + '-placeholder').css('height', 'auto')
+  hideLoader()
+  setTimeout(function () {
+    $.fancybox.update()
+    $.fancybox.reposition()
+    $.fancybox.toggle()
+  }, 200)
 }
 
 export function closeBox () {
@@ -1016,10 +1017,10 @@ export function pictureReady (id, img) {
 }
 
 export function pictureCrop (id, img) {
-  ratio = $.parseJSON($('#' + id + '-ratio').val())
-  ratio_val = $.parseJSON($('#' + id + '-ratio-val').val())
+  let ratio = $.parseJSON($('#' + id + '-ratio').val())
+  let ratio_val = $.parseJSON($('#' + id + '-ratio-val').val())
 
-  ratio_i = parseInt($('#' + id + '-ratio-i').val())
+  let ratio_i = parseInt($('#' + id + '-ratio-i').val())
 
   if (ratio[ratio_i] != undefined) {
     $('#' + id + '-ratio-i').val((ratio_i + 1))
@@ -1029,21 +1030,21 @@ export function pictureCrop (id, img) {
     // alert(id+';'+path);
     $('#' + id + '-crop').html('<img src="images/' + id + '/' + img + '" /><br /><span id="' + id + '-crop-save">Speichern</span>')
     $('#' + id + '-crop img').Jcrop({
-	        setSelect: [ 100, 0, 400, 400 ],
-	        aspectRatio: ratio[ratio_i],
-	        onSelect: function (c) {
-	       		$('#' + id + '-x').val(c.x)
-	       		$('#' + id + '-y').val(c.y)
-	       		$('#' + id + '-w').val(c.w)
-	       		$('#' + id + '-h').val(c.h)
-	        }
-	    })
+      setSelect: [ 100, 0, 400, 400 ],
+      aspectRatio: ratio[ratio_i],
+      onSelect: function (c) {
+        $('#' + id + '-x').val(c.x)
+        $('#' + id + '-y').val(c.y)
+        $('#' + id + '-w').val(c.w)
+        $('#' + id + '-h').val(c.h)
+      }
+    })
     hideLoader()
     setTimeout(function () {
-			 $.fancybox.update()
-			 $.fancybox.reposition()
-			 $.fancybox.toggle()
-		 }, 200)
+      $.fancybox.update()
+      $.fancybox.reposition()
+      $.fancybox.toggle()
+    }, 200)
 
     $('#' + id + '-crop-save').button().click(function () {
       ratio_val[ratio_val.length] = {
@@ -1068,23 +1069,23 @@ export function nl2br (str, is_xhtml) {
 }
 
 export function u_loadCoords (addressdata, func) {
-  anschrift = ''
+  let anschrift = ''
   if (addressdata.str != undefined) {
     anschrift = addressdata.str + ' ' + addressdata.hsnr
   } else {
-    tmp = addressdata.anschrift.split('/')
+    let tmp = addressdata.anschrift.split('/')
     anschrift = tmp[0]
   }
-  address = encodeURIComponent(anschrift + ', ' + addressdata.plz + ', ' + addressdata.stadt + ', Germany')
+  let address = encodeURIComponent(anschrift + ', ' + addressdata.plz + ', ' + addressdata.stadt + ', Germany')
 
-  url = 'https://search.mapzen.com/v1/search?text=' + address
+  let url = 'https://search.mapzen.com/v1/search?text=' + address
 
   showLoader()
   $(document).ready(function () {
     $.getJSON(url,
       function (data) {
         if (data.features) {
-          for (i = 0; i < data.features.length; i++) {
+          for (let i = 0; i < data.features.length; i++) {
             if (data.features[i].properties.postalcode == addressdata.plz) {
               $('#pulse-error').hide()
               hideLoader()
@@ -1136,14 +1137,14 @@ export function rejectBetriebRequest (fsid, bid) {
         pulseSuccess(data.msg)
       } else {
         pulseError(data.msg)
-      }b
+      }
     },
     complete: function () { hideLoader() }
   })
 }
 
 export function checkAllCb (sel) {
-  $("input[type=\'checkbox\']").prop('checked', sel)
+  $("input[type='checkbox']").prop('checked', sel)
 }
 
 export function becomeBezirk () {

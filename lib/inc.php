@@ -40,16 +40,9 @@ $g_data = $func->getPostData();
 
 $db = DI::$shared->get(ManualDb::class);
 
-/*
-$func->addHead('<link rel="stylesheet" href="/css/pure/pure.min.css">
-    <!--[if lte IE 8]>
-        <link rel="stylesheet" href="/css/pure/grids-responsive-old-ie-min.css">
-    <![endif]-->
-    <!--[if gt IE 8]><!-->
-        <link rel="stylesheet" href="/css/pure/grids-responsive-min.css">
-    <!--<![endif]-->');
-*/
-//$func->addHead('<link rel="stylesheet" href="/fonts/font-awesome-4.7.0/css/font-awesome.min.css">');
+$func->addStylesheet('/css/pure/pure.min.css');
+$func->addStylesheet('/css/pure/grids-responsive-min.css');
+$func->addStylesheet('/fonts/font-awesome-4.7.0/css/font-awesome.min.css');
 
 $func->addHidden('<a id="' . $func->id('fancylink') . '" href="#fancy">&nbsp;</a>');
 $func->addHidden('<div id="' . $func->id('fancy') . '"></div>');
@@ -63,21 +56,6 @@ $func->addHidden('<div id="uploadPhoto"><form method="post" enctype="multipart/f
 //addHidden('<audio id="xhr-chat-notify"><source src="img/notify.ogg" type="audio/ogg"><source src="img/notify.mp3" type="audio/mpeg"><source src="img/notify.wav" type="audio/wav"></audio>');
 
 $func->addHidden('<div id="fs-profile"></div>');
-
-$user = '';
-$g_body_class = '';
-$g_broadcast_message = $db->qOne('SELECT `body` FROM fs_content WHERE `id` = 51');
-if (S::may()) {
-	if (isset($_GET['uc'])) {
-		if ($func->fsId() != $_GET['uc']) {
-			$db->logout();
-			$func->goLogin();
-		}
-	}
-
-	$g_body_class = ' class="loggedin"';
-	$user = 'user = {id:' . $func->fsId() . '};';
-}
 
 $userData = [
     'id' => $func->fsId(),
@@ -100,83 +78,4 @@ if ($pos = S::get('blocation')) {
 $func->jsData['user'] = $userData;
 $func->jsData['page'] = $func->getPage();
 
-/*
-$func->addJs('
-	' . $user . '
-	$("#mainMenu > li > a").each(function(){
-		if(parseInt(this.href.length) > 2 && this.href.indexOf("' . $func->getPage() . '") > 0)
-		{
-			$(this).parent().addClass("active").click(function(ev){
-				//ev.preventDefault();
-			});
-		}
-	});
-		
-	$("#fs-profile-rate-comment").dialog({
-		modal: true,
-		title: "",
-		autoOpen: false,
-		buttons: 
-		[
-			{
-				text: "Abbrechen",
-				click: function(){
-					$("#fs-profile-rate-comment").dialog("close");
-				}
-			},
-			{
-				text: "Absenden",
-				click: function(){
-					ajreq("rate",{app:"profile",type:2,id:$("#profile-rate-id").val(),message:$("#fsprofileratemsg").val()});
-				}
-			}
-		]
-	}).siblings(".ui-dialog-titlebar").remove();
-');
-*/
 $func->addHidden('<div id="fs-profile-rate-comment">' . $viewUtils->v_form_textarea('fs-profile-rate-msg', array('desc' => '...')) . '</div>');
-
-/*
-    // TODO: add back in
-if (!S::may()) {
-	$func->addJs('clearInterval(g.interval_newBasket);');
-} else {
-	$func->addJs('
-		sock.connect();
-		user.token = "' . S::user('token') . '";
-		info.init();
-	');
-}
-*/
-/*
- * Browser location abfrage nur einmal dann in session speichern
- */
-/*
-if ($pos = S::get('blocation')) {
-	$func->addJsFunc('
-		function getBrowserLocation(success)
-		{
-			success({
-				lat:' . floatval($pos['lat']) . ',
-				lon:' . floatval($pos['lon']) . '
-			});
-		}
-	');
-} else {
-	$func->addJsFunc('
-		function getBrowserLocation(success)
-		{
-			if(navigator.geolocation)
-			{
-				navigator.geolocation.getCurrentPosition(function(pos){
-					ajreq("savebpos",{app:"map",lat:pos.coords.latitude,lon:pos.coords.longitude});
-					success({
-						lat: pos.coords.latitude,
-						lon: pos.coords.longitude
-					});
-				});
-			}
-		}
-	');
-}
-*/

@@ -1,5 +1,5 @@
 i.img {
-  background-image: url(~img/icon-img.png?v=1);
+  background-image: url(/img/icon-img.png?v=1);
   background-position: center;
 }
 
@@ -24,7 +24,7 @@ i.img-basket {
 }
 
 i.img-fbasket {
-  background-image: url(~img/bicon.png);
+  background-image: url(/img/bicon.png);
   background-position: 0 0;
   background-repeat: no-repeat;
   display: inline-block;

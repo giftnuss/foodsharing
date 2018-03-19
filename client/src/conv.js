@@ -1,7 +1,10 @@
 import $ from 'jquery'
 
 import storage from '@/storage'
-import { info, ajax, GET, goTo, isMob } from '@/script'
+import { info, ajax, GET, goTo, isMob, nl2br } from '@/script'
+import { ServerData } from '@/utils'
+import timeformat from '@/timeformat'
+import autoLink from '@/autoLink'
 
 const conv = {
 
@@ -325,7 +328,7 @@ const conv = {
    */
   append: function (key, message) {
     conv.chatboxes[key].last_mid = parseInt(message.id)
-    conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append('<div title="' + message.time + '" class="chatboxmessage"><span class="chatboxmessagefrom"><a href="#" class="photo" onclick="profile(' + message.fs_id + ');return false;"><img src="' + conv.img(message.fs_photo + '', 'mini') + '"></a></span><span class="chatboxmessagecontent">' + nl2br(message.body.autoLink()) + '<span class="time">' + timeformat.nice(message.time) + '</span></span><div style="clear:both;"></div></div>')
+    conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append('<div title="' + message.time + '" class="chatboxmessage"><span class="chatboxmessagefrom"><a href="#" class="photo" onclick="profile(' + message.fs_id + ');return false;"><img src="' + conv.img(message.fs_photo + '', 'mini') + '"></a></span><span class="chatboxmessagecontent">' + nl2br(autoLink(message.body)) + '<span class="time">' + timeformat.nice(message.time) + '</span></span><div style="clear:both;"></div></div>')
   },
 
   /**
@@ -359,7 +362,7 @@ const conv = {
         if (ret.conversation.name == null) {
           title = []
           for (var i = 0; i < ret.member.length; i++) {
-            if (ret.member[i] != undefined && ret.member[i].id != user.id) {
+            if (ret.member[i] != undefined && ret.member[i].id != ServerData.user.id) {
               title.push(ret.member[i].name)
             }
           }

@@ -2,7 +2,7 @@ import $ from 'jquery'
 import tinysort from 'tinysort'
 import 'jquery-popup'
 import 'timeago/jquery.timeago'
-import * as timeformat from '@/timeformat'
+import timeformat from '@/timeformat'
 import { ajax, pulseError, pulseInfo } from '@/script'
 
 const activity = {

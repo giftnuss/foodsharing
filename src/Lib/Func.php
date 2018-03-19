@@ -34,6 +34,9 @@ class Func
 	private $add_css;
 	private $viewUtils;
 
+	private $webpackScripts;
+	private $webpackStylesheets;
+
 	public $jsData = [];
 
 	/**
@@ -1039,13 +1042,14 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 	}
 
-	public function addScript($src, $ignore = true)
+	public function addScript($src)
 	{
-		// ignore some as we want to try and not load any external things for now....
-		if ($ignore) {
-			$src = '/js/ignored' . $src;
-		}
 		$this->scripts[] = $src;
+	}
+
+	public function addWebpackScript ($src)
+	{
+		$this->webpackScripts[] = $src;
 	}
 
 	public function addScriptTop($src)
@@ -1064,13 +1068,14 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->js .= $njs;
 	}
 
-	public function addStylesheet($src, $ignore=true)
+	public function addStylesheet($src)
 	{
-		// ignore some as we want to try and not load any external things for now....
-		if ($ignore) {
-			$src = '/css/ignored' . $src;
-		}
 		$this->stylesheets[] = $src;
+	}
+
+	public function addWebpackStylesheet($src)
+	{
+		$this->webpackStylesheets[]	= $src;
 	}
 
 	public function addHead($str)
@@ -1083,21 +1088,37 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->title[] = $name;
 	}
 
-	public function getHeadData()
+	public function getHeadData(bool $usesWebpack = false)
 	{
-		return [
-			'stylesheets' => $this->stylesheets,
-			'scripts' => $this->scripts,
+		$data = [
 			'title' => implode(' | ', $this->title),
 			'extra' => $this->head,
 			'css' => str_replace(["\r", "\n"], '', $this->add_css),
-			'jsFunc' => JSMin::minify($this->js_func),
-			'js' => JSMin::minify($this->js),
 			'ServerDataJSON' => json_encode($this->jsData)
 		];
+
+		if ($usesWebpack) {
+			$data = array_merge($data, [
+				'webpack' => 'oh yes I do',
+				'stylesheets' => $this->webpackStylesheets,
+				'scripts' => $this->webpackScripts,
+				'jsFunc' => '',
+				'js' => '',
+			]);
+		} else {
+			$data = array_merge($data, [
+				'webpack' => 'no I do not',
+				'stylesheets' => $this->stylesheets,
+				'scripts' => $this->scripts,
+				'jsFunc' => JSMin::minify($this->js_func),
+				'js' => JSMin::minify($this->js),
+			]);
+		}
+
+		return $data;
 	}
 
-	public function generateAndGetGlobalViewData()
+	public function generateAndGetGlobalViewData(bool $usesWebpack = false)
 	{
 		global $g_broadcast_message;
 		global $g_body_class;
@@ -1131,7 +1152,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 
 		return [
-			'head' => $this->getHeadData(),
+			'head' => $this->getHeadData($usesWebpack),
 			'bread' => $this->getBread(),
 			'bodyClass' => $g_body_class,
 			'msgbar' => $msgbar,

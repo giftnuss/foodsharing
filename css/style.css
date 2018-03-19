@@ -68,27 +68,27 @@
 }
 
 .dickmilchbeta #campaignimg {
-  background-image: url(~img/pica_dickmilchbeta.png);
+  background-image: url(/img/pica_dickmilchbeta.png);
 }
 
 .dickmilch #campaignimg {
-  background-image: url(~img/pica_dickmilch.png);
+  background-image: url(/img/pica_dickmilch.png);
 }
 
 .walkingbread #campaignimg {
-  background-image: url(~img/pica_walkingbread.png);
+  background-image: url(/img/pica_walkingbread.png);
 }
 
 .foodporn #campaignimg {
-  background-image: url(~img/pica_foodporn.png);
+  background-image: url(/img/pica_foodporn.png);
 }
 
 .faulesei #campaignimg {
-  background-image: url(~img/pica_faulesei.png);
+  background-image: url(/img/pica_faulesei.png);
 }
 
 .sauregurken #campaignimg {
-  background-image: url(~img/pica_sauregurken.png);
+  background-image: url(/img/pica_sauregurken.png);
 }
 
 @media (max-aspect-ratio: 3/2) {
@@ -268,21 +268,21 @@
 }
 
 .avatar.size-mini.sleepmode-1 i, .avatar.size-mini.sleepmode-2 i {
-  background-image: url(~img/sleep35x35.png);
+  background-image: url(/img/sleep35x35.png);
   left: -4px;
   position: relative;
   top: -6px;
 }
 
 .avatar.size-50.sleepmode-1 i, .avatar.size-50.sleepmode-2 i {
-  background-image: url(~img/sleep50x50.png);
+  background-image: url(/img/sleep50x50.png);
   left: -8px;
   position: relative;
   top: -7px;
 }
 
 .avatar.size-130.sleepmode-1 i, .avatar.size-130.sleepmode-2 i {
-  background-image: url(~img/sleep130x130.png);
+  background-image: url(/img/sleep130x130.png);
   left: -30px;
   position: relative;
   top: -25px;
@@ -1063,7 +1063,7 @@ li.searchIcon.hover a {
 li.searchIcon a {
   text-decoration: none;
   width: 36px;
-  background-image: url(~img/sbt.png);
+  background-image: url(/img/sbt.png);
   background-position: center 16px;
   background-repeat: no-repeat;
 }
@@ -1386,11 +1386,11 @@ ul.imglist li a span {
   right: -21px;
   width: 16px;
   height: 16px;
-  background-image: url(~img/check.png);
+  background-image: url(/img/check.png);
 }
 
 ul.imglist li.unconfirmed a span {
-  background-image: url(~img/pending.png);
+  background-image: url(/img/pending.png);
 }
 
 div.input-wrapper.today {
@@ -1499,7 +1499,7 @@ iframe.text {
 }
 
 .rte-toolbar a span {
-  /*background-image: url(~img/nicEditorIcons.gif); MISSING */
+  /*background-image: url(/img/nicEditorIcons.gif); MISSING */
   background-repeat: no-repeat;
   display: block;
   float: left;
@@ -1788,7 +1788,7 @@ div.toolmenu {
 }
 
 .loading {
-  background: url(~img/dialog-loader.gif) no-repeat center !important;
+  background: url(/img/dialog-loader.gif) no-repeat center !important;
 }
 
 .loading .inner {
@@ -1832,7 +1832,7 @@ div.statdisplay a.item:hover {
 }
 
 span.verified {
-  background-image: url(~img/verify.png);
+  background-image: url(/img/verify.png);
   display: block;
   width: 36px;
   height: 36px;
@@ -2117,7 +2117,7 @@ p.jRatingInfos span.maxRate {
 
 .vouch-banana span {
   display: block;
-  background-image: url(~img/banana.png);
+  background-image: url(/img/banana.png);
   background-repeat: no-repeat;
   background-position: right;
   text-decoration: none;
@@ -2126,7 +2126,7 @@ p.jRatingInfos span.maxRate {
 }
 
 span.vouch-banana span {
-  background-image: url(~img/bananan.png);
+  background-image: url(/img/bananan.png);
 }
 
 a.vouch-banana:hover {
@@ -2247,7 +2247,7 @@ a.light {
   display: block;
   width: 30px;
   height: 30px;
-  /*background-image: url(~img/mobmenu.png); MISSING */
+  /*background-image: url(/img/mobmenu.png); MISSING */
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -2448,13 +2448,13 @@ a.preview-thumb:hover {
 
 .attach-load {
   background-repeat: no-repeat;
-  background-image: url(~img/icon-mail/attach-loader.gif);
+  background-image: url(/img/icon-mail/attach-loader.gif);
   background-position: center;
 }
 
 td.load {
   background-repeat: no-repeat;
-  background-image: url(~img/icon-mail/attach-loader.gif);
+  background-image: url(/img/icon-mail/attach-loader.gif);
   background-position: center;
 }
 

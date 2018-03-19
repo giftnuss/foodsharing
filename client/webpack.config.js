@@ -1,4 +1,3 @@
-const webpack = require('webpack')
 const { StatsWriterPlugin } = require('webpack-stats-plugin')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
@@ -25,7 +24,7 @@ module.exports = {
     'Index',
     'Dashboard'
   ),
-  mode: 'development',
+  devtool: 'source-map',
   output: {
     path: resolve('../assets'),
     filename: 'js/[name].[hash].js', // TODO: JUST hash for prod, just name for dev
@@ -93,6 +92,9 @@ module.exports = {
       chunkFilename: 'css/[name].[hash].css'
     }),
     new BundleAnalyzerPlugin(), // TODO only in prod
+
+    // Writes modules.json which is then loaded by the php app (see src/Modules/Core/Control.php).
+    // This is how the php app will know if it is a webpack-enabled module or not.
     new StatsWriterPlugin({
       filename: 'modules.json',
       fields: ['publicPath', 'assetsByChunkName', 'entrypoints'],

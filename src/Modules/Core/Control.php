@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Exception;
 use Foodsharing\DI;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
@@ -93,11 +94,9 @@ abstract class Control
 				$this->usesWebpack = true;
 				foreach ($manifest[$entry] as $asset) {
 					if ($this->func->endsWith($asset, '.js')) {
-						$this->func->addScript($asset, false);
+						$this->func->addWebpackScript($asset);
 					} else if ($this->func->endsWith($asset, '.css')) {
-						$this->func->addStylesheet($asset, false);
-					} else {
-						throw new Exception('I do not know how to handle [' . $asset . '] !?');
+						$this->func->addWebpackStylesheet($asset);
 					}
 				}
 			} else {
