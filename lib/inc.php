@@ -40,10 +40,6 @@ $g_data = $func->getPostData();
 
 $db = DI::$shared->get(ManualDb::class);
 
-$func->addStylesheet('/css/pure/pure.min.css');
-$func->addStylesheet('/css/pure/grids-responsive-min.css');
-$func->addStylesheet('/fonts/font-awesome-4.7.0/css/font-awesome.min.css');
-
 $func->addHidden('<a id="' . $func->id('fancylink') . '" href="#fancy">&nbsp;</a>');
 $func->addHidden('<div id="' . $func->id('fancy') . '"></div>');
 

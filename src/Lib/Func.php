@@ -1091,15 +1091,15 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	public function getHeadData(bool $usesWebpack = false)
 	{
 		$data = [
+			'webpack' => $usesWebpack,
 			'title' => implode(' | ', $this->title),
 			'extra' => $this->head,
 			'css' => str_replace(["\r", "\n"], '', $this->add_css),
-			'ServerDataJSON' => json_encode($this->jsData)
+			'ServerDataJSON' => json_encode(array_merge($this->jsData, ['webpack' => $usesWebpack]))
 		];
 
 		if ($usesWebpack) {
 			$data = array_merge($data, [
-				'webpack' => 'oh yes I do',
 				'stylesheets' => $this->webpackStylesheets,
 				'scripts' => $this->webpackScripts,
 				'jsFunc' => '',
@@ -1107,7 +1107,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			]);
 		} else {
 			$data = array_merge($data, [
-				'webpack' => 'no I do not',
 				'stylesheets' => $this->stylesheets,
 				'scripts' => $this->scripts,
 				'jsFunc' => JSMin::minify($this->js_func),

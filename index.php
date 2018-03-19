@@ -46,6 +46,10 @@ $func = getFunc();
 $func->addStylesheet('/css/gen/style.css?v=' . VERSION);
 $func->addScript('/js/gen/script.js?v=' . VERSION);
 
+$func->addStylesheet('/css/pure/pure.min.css');
+$func->addStylesheet('/css/pure/grids-responsive-min.css');
+$func->addStylesheet('/fonts/font-awesome-4.7.0/css/font-awesome.min.css');
+
 $user = '';
 $g_body_class = '';
 $g_broadcast_message = $db->qOne('SELECT `body` FROM fs_content WHERE `id` = 51');
