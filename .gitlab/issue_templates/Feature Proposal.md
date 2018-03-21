@@ -18,8 +18,14 @@ Please remove this notice now you've read it :)
 
 ### Description
 
-(Include problem, use cases, benefits, and/or goals)
+(Describe the problem and the affected use cases)
+
+### Impact
+
+(Which users / user roles are affected? Why is it important to solve this problem?)
 
 ### Proposal
+
+(How do you propose to solve the problem?)
 
 ### Links / references
