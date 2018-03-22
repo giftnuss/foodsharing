@@ -14,8 +14,8 @@ class IndexView extends View
 		$ps->addSection($this->campaign($first_content), array(
 			//'color' => '#26ad91', //dickmilch Mitte Dez - Mitte Jan
 			//'color' => '#7b4a94', //walkingbread Mitte Jan - Mitte Feb
-			'color' => '#fbbd13', //sauregurken Mitte Feb - Mitte Mrz
-			//'color' => '#eb7763', //faulesei Mitte Mrz - Mitte Apr
+			//'color' => '#fbbd13', //sauregurken Mitte Feb - Mitte Mrz
+			'color' => '#eb7763', //faulesei Mitte Mrz - Mitte Apr
 			//'color' => '#48bac4', //foodporn Mitte Apr - Mitte Jun
 			'anchor' => 'kampagne'
 		));
@@ -55,7 +55,7 @@ class IndexView extends View
 	private function campaign($first_content)
 	{
 		return '
-		<div id="campaign" class="pure-g sauregurken">
+		<div id="campaign" class="pure-g faulesei">
 			<div class="topbarpadding">
 				<div id="campaigntext" class="pure-u-1 pure-u-sm-1-2">
 					<h2>Don’t&nbsp;let good&nbsp;food&nbsp;go&nbsp;bad!</h2>
