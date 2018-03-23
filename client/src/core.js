@@ -15,7 +15,6 @@ import 'jquery-contextmenu/dist/jquery.contextMenu.css'
 
 import '@/menu'
 import '@/becomeBezirk'
-import '@/bezirkChildChooser'
 
 import { ServerData } from './utils'
 

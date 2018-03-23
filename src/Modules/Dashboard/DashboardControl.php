@@ -280,9 +280,7 @@ class DashboardControl extends Control
 			</div><a id="grab-info-link" href="#grab-info">&nbsp;</a>');
 		}
 
-		if (!$this->func->getBezirkId()) {
-			$this->func->addJs('becomeBezirk();');
-		} /*
+		/*
 		 * check is there are Betrieb not ordered to an bezirk
 		 */
 		elseif (isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich'])) {

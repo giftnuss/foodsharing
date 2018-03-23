@@ -1,5 +1,6 @@
 import io from 'socket.io-client'
 
+// eslint-disable-next-line camelcase
 import { info, session_id, GET } from '@/script'
 
 import conv from '@/conv'

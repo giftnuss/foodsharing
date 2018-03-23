@@ -425,7 +425,7 @@ class Func
 		return $this->mayGroup('orgateam');
 	}
 
-	public function getMenu()
+	public function getMenu($usesWebpack = false)
 	{
 		$regions = [];
 		$stores = [];
@@ -458,7 +458,8 @@ class Func
 			$workingGroups,
 			S::get('mailbox'),
 			$this->fsId(),
-			$loggedIn ? $this->img() : ''
+			$loggedIn ? $this->img() : '',
+			$usesWebpack
 		);
 	}
 
@@ -466,9 +467,11 @@ class Func
 		bool $loggedIn, array $regions, bool $hasFsRole,
 		bool $isOrgaTeam, bool $mayEditBlog, bool $mayEditQuiz, bool $mayHandleReports,
 		array $stores, array $workingGroups,
-		$sessionMailbox, int $fsId, string $image)
+		$sessionMailbox, int $fsId, string $image,
+		bool $usesWebpack)
 	{
-		$params = [
+		$params = array_merge([
+			'webpack' => $usesWebpack,
 			'loggedIn' => $loggedIn,
 			'fsId' => $fsId,
 			'image' => $image,
@@ -483,7 +486,7 @@ class Func
 			'stores' => $stores,
 			'regions' => $regions,
 			'workingGroups' => $workingGroups
-		];
+		]);
 
 		return [
 			'default' => $this->twig->render('partials/menu.default.twig', $params),
@@ -1102,8 +1105,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$data = array_merge($data, [
 				'stylesheets' => $this->webpackStylesheets,
 				'scripts' => $this->webpackScripts,
-				'jsFunc' => '',
-				'js' => '',
+				'jsFunc' => JSMin::minify($this->js_func),
+				'js' => JSMin::minify($this->js),
 			]);
 		} else {
 			$data = array_merge($data, [
@@ -1124,7 +1127,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		global $content_left_width;
 		global $content_right_width;
 
-		$menu = $this->getMenu();
+		$menu = $this->getMenu($usesWebpack);
 
 		$this->getMessages();
 

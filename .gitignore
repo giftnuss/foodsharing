@@ -31,3 +31,4 @@ migrations/_*
 .views-cache
 js/gen/webpack
 assets
+yarn-error.log

@@ -1,27 +1,37 @@
 /* eslint-disable camelcase */
 
 /*
-  Make some things from the webpack environment available globally.
+  Make some things from the webpack environment available globally on the window object.
 
   This is to allow webpack-enabled pages to still have a few bits of inline js:
   - inline click handlers
   - addJs scripts
   - addJsFunc scripts
 
-  Anything exported will be available globally (on the window object).
 */
 
-/*
-
-Actually, for now I will try to only expose things globally per-page/module level.
-See Dashboard.js for the first example of that.
-
 import $ from 'jquery'
-import {
-  pulseInfo, pulseError, pulseSuccess, dialogs, ajreq, ajax, u_loadCoords, showLoader, hideLoader
-} from '@/script'
+
 import conv from '@/conv'
 import info from '@/info'
+import socket from '@/socket'
+
+import {
+  pulseInfo,
+  pulseError,
+  pulseSuccess,
+  dialogs,
+  ajreq,
+  ajax,
+  u_loadCoords,
+  showLoader,
+  hideLoader,
+  becomeBezirk
+} from '@/script'
+
+import {
+  u_printChildBezirke
+} from '@/becomeBezirk'
 
 Object.assign(window, {
   $,
@@ -35,9 +45,9 @@ Object.assign(window, {
   u_loadCoords,
   showLoader,
   hideLoader,
+  becomeBezirk,
+  u_printChildBezirke,
   conv,
-  info
+  info,
+  sock: socket
 })
-*/
-
-export default {}

@@ -53,19 +53,53 @@ $func->addStylesheet('/fonts/font-awesome-4.7.0/css/font-awesome.min.css');
 $user = '';
 $g_body_class = '';
 $g_broadcast_message = $db->qOne('SELECT `body` FROM fs_content WHERE `id` = 51');
-if (S::may()) {
-	if (isset($_GET['uc'])) {
-		if ($func->fsId() != $_GET['uc']) {
-			$db->logout();
-			$func->goLogin();
-		}
-	}
 
-	$g_body_class = ' class="loggedin"';
-	$user = 'user = {id:' . $func->fsId() . '};';
+if (DebugBar::isEnabled()) {
+	$func->addHead(DebugBar::renderHead());
 }
 
-$func->addJs('
+if (DebugBar::isEnabled()) {
+	$func->addContent(DebugBar::renderContent(), CNT_BOTTOM);
+}
+
+$app = $func->getPage();
+
+$usesWebpack = false;
+
+$class = Routing::getClassName($app, 'Control');
+
+if ($class) {
+	$obj = DI::$shared->get(ltrim($class, '\\'));
+
+	$usesWebpack = $obj->getUsesWebpack();
+
+	if (isset($_GET['a']) && is_callable(array($obj, $_GET['a']))) {
+		$meth = $_GET['a'];
+		$obj->$meth($request, $response);
+	} else {
+		$obj->index($request, $response);
+	}
+	$sub = $sub = $obj->getSubFunc();
+	if ($sub !== false && is_callable(array($obj, $sub))) {
+		$obj->$sub($request, $response);
+	}
+}
+
+if (!$usesWebpack) {
+
+	if (S::may()) {
+		if (isset($_GET['uc'])) {
+			if ($func->fsId() != $_GET['uc']) {
+				$db->logout();
+				$func->goLogin();
+			}
+		}
+
+		$g_body_class = ' class="loggedin"';
+		$user = 'user = {id:' . $func->fsId() . '};';
+	}
+
+	$func->addJs('
 	' . $user . '
 	$("#mainMenu > li > a").each(function(){
 		if(parseInt(this.href.length) > 2 && this.href.indexOf("' . $func->getPage() . '") > 0)
@@ -98,20 +132,20 @@ $func->addJs('
 	}).siblings(".ui-dialog-titlebar").remove();
 ');
 
-if (!S::may()) {
-	$func->addJs('clearInterval(g.interval_newBasket);');
-} else {
-	$func->addJs('
+	if (!S::may()) {
+		$func->addJs('clearInterval(g_interval_newBasket);');
+	} else {
+		$func->addJs('
 		sock.connect();
 		user.token = "' . S::user('token') . '";
 		info.init();
 	');
-}
-/*
- * Browser location abfrage nur einmal dann in session speichern
- */
-if ($pos = S::get('blocation')) {
-	$func->addJsFunc('
+	}
+	/*
+     * Browser location abfrage nur einmal dann in session speichern
+     */
+	if ($pos = S::get('blocation')) {
+		$func->addJsFunc('
 		function getBrowserLocation(success)
 		{
 			success({
@@ -120,8 +154,8 @@ if ($pos = S::get('blocation')) {
 			});
 		}
 	');
-} else {
-	$func->addJsFunc('
+	} else {
+		$func->addJsFunc('
 		function getBrowserLocation(success)
 		{
 			if(navigator.geolocation)
@@ -136,36 +170,6 @@ if ($pos = S::get('blocation')) {
 			}
 		}
 	');
-}
-
-if (DebugBar::isEnabled()) {
-	$func->addHead(DebugBar::renderHead());
-}
-
-if (DebugBar::isEnabled()) {
-	$func->addContent(DebugBar::renderContent(), CNT_BOTTOM);
-}
-
-$app = $func->getPage();
-
-$usesWebpack = false;
-
-$class = Routing::getClassName($app, 'Control');
-
-if ($class) {
-	$obj = DI::$shared->get(ltrim($class, '\\'));
-
-	$usesWebpack = $obj->getUsesWebpack();
-
-	if (isset($_GET['a']) && is_callable(array($obj, $_GET['a']))) {
-		$meth = $_GET['a'];
-		$obj->$meth($request, $response);
-	} else {
-		$obj->index($request, $response);
-	}
-	$sub = $sub = $obj->getSubFunc();
-	if ($sub !== false && is_callable(array($obj, $sub))) {
-		$obj->$sub($request, $response);
 	}
 }
 
