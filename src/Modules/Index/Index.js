@@ -6,8 +6,6 @@ import 'jquery-animatenumber'
 import '@php/Lib/View/vPageslider'
 import { ajreq, showLoader, hideLoader, goTo } from '@/script'
 
-import '@/globals'
-
 /*
   This calls some of the functions in Modules/Map/Map.js but it is not loaded.
   However, I think it is not used anyway, so maybe much of it can be removed.
