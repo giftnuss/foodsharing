@@ -1,6 +1,7 @@
 import 'css/pure/pure.min.css'
 import 'css/pure/grids-responsive-min.css'
 import 'font-awesome/css/font-awesome.css'
+import 'css/jquery-ui.css'
 import 'fonts/alfaslabone/stylesheet.css'
 import 'css/jMenu.jquery.css'
 import 'js/fancybox/jquery.fancybox.css'

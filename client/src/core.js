@@ -6,7 +6,6 @@ import $ from 'jquery'
 import { ajreq } from '@/script'
 
 import 'jquery-ui'
-import 'jquery-ui/themes/base/jquery-ui.css'
 
 import 'fullpage.js'
 
