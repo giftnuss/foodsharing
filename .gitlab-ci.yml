@@ -20,6 +20,11 @@ build:
   tags:
   - non-shared
 
+  cache:
+    key: build
+    paths:
+    - client/node_modules
+
   artifacts:
     paths:
     - assets
