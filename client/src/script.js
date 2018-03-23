@@ -6,8 +6,6 @@ import 'jquery-slimscroll'
 import 'jquery-fancybox'
 import 'jquery-ui-addons'
 
-console.log('UNDERSCORE IS', _)
-
 import conv from '@/conv'
 
 const HTTP_GET_VARS = []

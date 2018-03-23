@@ -1,2 +1,2 @@
-// This is data that is defined by the server in lib/inc.php
-export default window.ServerData
+// This is data that is defined by the server see Func:getServerData
+export default window.serverData

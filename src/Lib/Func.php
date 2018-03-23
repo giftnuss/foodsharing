@@ -1091,29 +1091,58 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->title[] = $name;
 	}
 
+	/**
+	 * This is used to set window.serverData on in the frontend
+	 */
+	public function getServerData(bool $usesWebpack) {
+		$userData = [
+			'id' => $this->fsId(),
+			'may' => S::may(),
+		];
+
+		if (S::may()) {
+			$userData['token'] = S::user('token');
+		}
+
+		$location = null;
+
+		if ($pos = S::get('blocation')) {
+			$location = [
+				'lat' => floatval($pos['lat']),
+				'lon' => floatval($pos['lon']),
+			];
+		}
+
+		return array_merge($this->jsData, [
+			'webpack' => $usesWebpack,
+			'user' => $userData,
+			'page' => $this->getPage(),
+			'location' => $location
+		]);
+	}
+
 	public function getHeadData(bool $usesWebpack = false)
 	{
+
 		$data = [
 			'webpack' => $usesWebpack,
 			'title' => implode(' | ', $this->title),
 			'extra' => $this->head,
 			'css' => str_replace(["\r", "\n"], '', $this->add_css),
-			'ServerDataJSON' => json_encode(array_merge($this->jsData, ['webpack' => $usesWebpack]))
+			'jsFunc' => JSMin::minify($this->js_func),
+			'js' => JSMin::minify($this->js),
+			'serverDataJSON' => json_encode($this->getServerData($usesWebpack))
 		];
 
 		if ($usesWebpack) {
 			$data = array_merge($data, [
 				'stylesheets' => $this->webpackStylesheets,
 				'scripts' => $this->webpackScripts,
-				'jsFunc' => JSMin::minify($this->js_func),
-				'js' => JSMin::minify($this->js),
 			]);
 		} else {
 			$data = array_merge($data, [
 				'stylesheets' => $this->stylesheets,
 				'scripts' => $this->scripts,
-				'jsFunc' => JSMin::minify($this->js_func),
-				'js' => JSMin::minify($this->js),
 			]);
 		}
 

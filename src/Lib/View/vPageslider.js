@@ -2,7 +2,7 @@ import 'css/jquery.fullPage.css'
 
 import $ from 'jquery'
 import 'fullpage.js'
-import { ServerData } from '@/utils'
+import serverData from '@/server-data'
 
 const mainEl = $('main')
 const footerEl = $('footer')
@@ -10,7 +10,7 @@ const footerEl = $('footer')
 mainEl.hide()
 footerEl.hide()
 
-const sliders = ServerData.sliders || []
+const sliders = serverData.sliders || []
 
 for (const slider of sliders) {
   const { id, sections, anchors, colors, tooltips } = slider

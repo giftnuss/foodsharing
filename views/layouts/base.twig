@@ -12,12 +12,12 @@
             <link rel="stylesheet" type="text/css" href="{{ stylesheet }}" />
         {% endfor %}
 
-        {% if head.webpack %}
-            <script type="text/javascript">
-              window.ServerData = {{ head.ServerDataJSON | raw }};
-            </script>
+        <script type="text/javascript">
+          window.serverData = {{ head.serverDataJSON | raw }};
+        </script>
+
+        {% if not head.webpack %}
             {# the main webpack scripts are rendered at the bottom of the page #}
-        {% else %}
             {% for script in head.scripts %}
                 <script type="text/javascript" src="{{ script }}"></script>
             {% endfor %}
