@@ -24,13 +24,7 @@ for (const slider of sliders) {
     navigationPosition: 'right',
     navigationTooltips: tooltips,
     responsive: 900,
-    onLeave: function (index) {
-      // ' . $onleafejs . '
-      // TODO: check if it needs to run the onleave/afterload stuff... is available in the sections variable
-    },
     afterLoad: function (anchorLink, index) {
-      // ' . $afterloadjs . '
-
       if (index === sections.length) {
         el.find('footer').show()
       } else {
