@@ -1050,7 +1050,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->scripts[] = $src;
 	}
 
-	public function addWebpackScript ($src)
+	public function addWebpackScript($src)
 	{
 		$this->webpackScripts[] = $src;
 	}
@@ -1078,7 +1078,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function addWebpackStylesheet($src)
 	{
-		$this->webpackStylesheets[]	= $src;
+		$this->webpackStylesheets[] = $src;
 	}
 
 	public function addHead($str)
@@ -1736,9 +1736,10 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	}
 
 	// https://stackoverflow.com/a/834355
-	function endsWith($haystack, $needle)
+	public function endsWith($haystack, $needle)
 	{
 		$length = strlen($needle);
+
 		return $length === 0 ||
 			(substr($haystack, -$length) === $needle);
 	}

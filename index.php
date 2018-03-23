@@ -86,7 +86,6 @@ if ($class) {
 }
 
 if (!$usesWebpack) {
-
 	if (S::may()) {
 		if (isset($_GET['uc'])) {
 			if ($func->fsId() != $_GET['uc']) {
@@ -142,8 +141,8 @@ if (!$usesWebpack) {
 	');
 	}
 	/*
-     * Browser location abfrage nur einmal dann in session speichern
-     */
+	 * Browser location abfrage nur einmal dann in session speichern
+	 */
 	if ($pos = S::get('blocation')) {
 		$func->addJsFunc('
 		function getBrowserLocation(success)

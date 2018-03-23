@@ -58,7 +58,8 @@ class TwigExtensions extends Twig_Extension
 
 	public function webpackSnippetFunction($name)
 	{
-		$entryPath = '/js/gen/webpack/js/snippets/'.$name.'.js';
+		$entryPath = '/js/gen/webpack/js/snippets/' . $name . '.js';
+
 		return '<script type="text/javascript" src="' . $entryPath . '"></script>';
 		//return file_get_contents(__DIR__.'/../..);
 	}

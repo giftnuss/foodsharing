@@ -51,6 +51,7 @@ class DebugBar
 	public static function isEnabled()
 	{
 		return false;
+
 		return self::$initialized;
 	}
 

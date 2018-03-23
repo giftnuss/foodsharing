@@ -54,21 +54,21 @@ $func->addHidden('<div id="uploadPhoto"><form method="post" enctype="multipart/f
 $func->addHidden('<div id="fs-profile"></div>');
 
 $userData = [
-    'id' => $func->fsId(),
-    'may' => S::may(),
+	'id' => $func->fsId(),
+	'may' => S::may(),
 ];
 
 if (S::may()) {
-    $userData['token'] = S::user('token');
+	$userData['token'] = S::user('token');
 }
 
 if ($pos = S::get('blocation')) {
-    $func->jsData['location'] = [
-        'lat' => floatval($pos['lat']),
-        'lon' => floatval($pos['lon']),
-    ];
+	$func->jsData['location'] = [
+		'lat' => floatval($pos['lat']),
+		'lon' => floatval($pos['lon']),
+	];
 } else {
-    $func->jsData['location'] = null;
+	$func->jsData['location'] = null;
 }
 
 $func->jsData['user'] = $userData;

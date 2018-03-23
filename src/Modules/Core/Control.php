@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Core;
 
-use Exception;
 use Foodsharing\DI;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
@@ -85,7 +84,6 @@ abstract class Control
 			}
 		}
 		if ($this->isControl) {
-
 			$webpackModules = $dir . '../../../assets/modules.json';
 			$manifest = json_decode(file_get_contents($webpackModules), true);
 			$entry = 'Modules/' . $moduleName;
@@ -95,7 +93,7 @@ abstract class Control
 				foreach ($manifest[$entry] as $asset) {
 					if ($this->func->endsWith($asset, '.js')) {
 						$this->func->addWebpackScript($asset);
-					} else if ($this->func->endsWith($asset, '.css')) {
+					} elseif ($this->func->endsWith($asset, '.css')) {
 						$this->func->addWebpackStylesheet($asset);
 					}
 				}

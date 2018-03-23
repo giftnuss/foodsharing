@@ -43,7 +43,6 @@ class DashboardControl extends Control
 
 	public function index()
 	{
-
 		$check = false;
 
 		$is_bieb = S::may('bieb');

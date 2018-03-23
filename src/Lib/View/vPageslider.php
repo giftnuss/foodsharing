@@ -99,7 +99,9 @@ class vPageslider
 			'sections' => $this->sections,
 		];
 
-		if (!isset($this->func->jsData['sliders'])) $this->func->jsData['sliders'] = [];
+		if (!isset($this->func->jsData['sliders'])) {
+			$this->func->jsData['sliders'] = [];
+		}
 
 		$this->func->jsData['sliders'][] = $slider;
 
