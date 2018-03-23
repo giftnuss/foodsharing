@@ -1,9 +1,12 @@
 /* eslint-disable eqeqeq,camelcase */
 
 import $ from 'jquery'
+import _ from 'underscore'
 import 'jquery-slimscroll'
 import 'jquery-fancybox'
 import 'jquery-ui-addons'
+
+console.log('UNDERSCORE IS', _)
 
 import conv from '@/conv'
 
@@ -17,7 +20,6 @@ export const dialogs = {
   },
   closeAll: function () {
     for (var i = 0; i < dialogs.dialogs.length; i++) {
-      // alert(typeof(dialogs.dialogs[i]));
       var $dia = $('#' + dialogs.dialogs[i])
       if ($dia.length > 0) {
         if ($dia.dialog('isOpen') === true) {
@@ -348,8 +350,6 @@ export function profile (id) {
 }
 
 export function quickprofile (id) {
-  // alert(id);
-  // fancy_xhr('profile&id='+id);
 
   showLoader()
 
@@ -409,39 +409,7 @@ export function quickprofile (id) {
         $('.xvmoreinfo').slimScroll()
 
         $('#dialog-profile-info').dialog('option', 'position', 'center')
-        /*
-        $('.fsrating').jRating({
-          step:true,
-          length : 10,
-          decimalLength:0,
-          bigStarsPath: '/css/icons/zitrone.png',
-          sendRequest: false,
-          rateMax: 10,
-          rateInfosY: 10,
-          onClick: function(el,rate){
-            showLoader();
-            $.ajax({
-              url: "xhrapp.php?app=profile&m=rate",
-              data:{
-                id: id,
-                rate: rate
-              },
-              dataType: "json",
-              success: function(data){
-                if(data.status == 1)
-                {
-                  $("#ratecountlabel").html(parseInt($("#ratecountlabel").text())+1);
 
-                  $("#fs-profile-rate-comment").dialog("open");
-                }
-              },
-              complete: function(){
-                hideLoader();
-              }
-            });
-          }
-        });
-        */
         if (data.script != undefined) {
           $.globalEval(data.script)
         }
@@ -453,15 +421,6 @@ export function quickprofile (id) {
       hideLoader()
     }
   })
-
-  /*
-   * helpers:  {
-        overlay : {
-            css : {
-                'background-color' : '#fff'
-            }
-        }
-   */
 }
 export const ajax = {
   data: {},
@@ -668,11 +627,11 @@ export function infoMenu () {
     $('#msgbar-messages').hide()
     if ($('#msgbar-basket').is(':visible')) {
       $('#msgbar-basket').hide()
-      g_interval_newBasket = setInterval(function () {
+      window.g_interval_newBasket = setInterval(function () {
         ajreq('update', {app: 'basket', loader: false})
       }, 10000)
     } else {
-      clearInterval(g_interval_newBasket)
+      clearInterval(window.g_interval_newBasket)
       if ($('#msgbar-basket ul li.msg').length == 0) {
         $('#msgbar-basket ul').prepend('<li class="loading">&nbsp;</li>')
       }
@@ -725,13 +684,12 @@ export function infoMenu () {
 
   $('.msgbar-dropdown-menu.extended').slimScroll()
 }
-var g_interval_newBasket = null
 export function aNotify () {
   // $('#xhr-chat-notify')[0].play();
 }
 
 export function checkEmail (email) {
-  var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/
+  var filter = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/
 
   if (!filter.test(email)) {
     return false
@@ -768,11 +726,6 @@ export function updateChat () {
           $('#scrollbar1').tinyscrollbar_update('bottom')
           g_firstChatUpdate = false
         }
-
-        // $(".tinyscroll").css({"overflow":"hidden","height":"400px"});
-      } else if (data.status == 0) {
-
-        // $("ul#xv_message").html(data.html);
       }
     }
   })
@@ -810,7 +763,7 @@ export function fancy_xhr (func, loader) {
 }
 
 export function stopHeartbeats () {
-  clearInterval(g_interval_newBasket)
+  clearInterval(window.g_interval_newBasket)
   // stopChatHeartbeat();
 }
 
@@ -828,11 +781,7 @@ export function fancy (content, title, subtitle) {
 }
 
 export function isMob () {
-  if ($(window).width() < 900) {
-    return true
-  }
-
-  return false
+  return $(window).width() < 900
 }
 
 export function xhrf (func) {
@@ -874,15 +823,6 @@ export function info (txt) {
 }
 export function error (txt) {
   pulseError(txt)
-  /*
-  if($('#error-msg').length == 0)
-  {
-    $('#top').after('<div class="ui-widget ui-msg"><div class="ui-state-error ui-corner-all ui-padding"><span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-alert"></span><ul id="error-msg">'+txt+'</ul><div class="clear"></div></div></div>');
-  }
-  else
-  {
-    $('#error-msg').append('<li>'+txt+'</li>');
-  } */
 }
 
 export function uploadPhoto () {
@@ -890,9 +830,7 @@ export function uploadPhoto () {
 }
 
 export function uploadPhotoReady (id, file) {
-  let fs_id = $('#uploadPhoto-fs_id').val()
   $('#miniq-' + id).attr('src', file)
-  // $('#uploadPhoto-preview').html('<img width="200" src="images/'+fs_id+'.'+ext+'" />');
   $('#uploadPhoto').dialog('close')
   info('Foto erfolgreich hochgeladen!')
 }
@@ -947,24 +885,16 @@ export function ifconfirm (url, question, title) {
 
   $('#dialog-confirm-url').val(url)
   $('#dialog-confirm').dialog('open')
-  /*
-  if(confirm(question))
-  {
-    goTo(url);
-  }
-  */
 }
 
 export function picFinish (img, id) {
   $('#' + id + '-action').val('upload')
-  // $("#fotoupload").dialog('close');
   $.fancybox.close()
   let d = new Date()
   let imgp = img + '?' + d.getTime()
   $('#' + id + '-open').html('<img src="images/' + imgp + '" /><input type="hidden" name="photo" value="' + img + '" />')
   hideLoader()
   reload()
-  // $('#fotouploadopen').children('span').html('Foto bearbeiten');
 }
 export function pic_error (msg, id) {
   msg = '<div class="ui-widget"><div style="padding: 15px;" class="ui-state-error ui-corner-all"><p><span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-alert"></span><strong>Fehler:</strong> ' + msg + '</p></div></div>'
@@ -977,7 +907,7 @@ export function fotoupload (file, id) {
   let img = file + '?' + d.getTime()
 
   $('#' + id + '-placeholder').html('<img src="./tmp/' + img + '" />')
-  let jcrop = $('#' + id + '-placeholder img').Jcrop({
+  $('#' + id + '-placeholder img').Jcrop({
     setSelect: [ 100, 0, 400, 400 ],
     aspectRatio: 35 / 45,
     onSelect: function (c) {
@@ -1024,10 +954,6 @@ export function pictureCrop (id, img) {
 
   if (ratio[ratio_i] != undefined) {
     $('#' + id + '-ratio-i').val((ratio_i + 1))
-    if ($('#' + id + '-ratio')) {
-      // ratio = parseInt($('#' + id + '-ratio').val());
-    }
-    // alert(id+';'+path);
     $('#' + id + '-crop').html('<img src="images/' + id + '/' + img + '" /><br /><span id="' + id + '-crop-save">Speichern</span>')
     $('#' + id + '-crop img').Jcrop({
       setSelect: [ 100, 0, 400, 400 ],
@@ -1221,6 +1147,5 @@ $.fn.extend({
       $(this).css('-khtml-user-select', 'none')
       $(this).css('-webkit-user-select', 'none')
     })
-    return this
   }
 })

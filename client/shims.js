@@ -5,27 +5,11 @@ function resolve (dir) {
   return path.join(clientRoot, dir)
 }
 
-function js (filename) {
+function lib (filename) {
   return resolve(path.join('..', 'js', filename))
 }
 
 exports.rules = [
-  /*
-  {
-    // Makes jQuery available to non-webpack scripts
-    // Does not seem to be working though :/
-    test: require.resolve('jquery'),
-    use: [
-      'jQuery',
-      '$',
-    ].map(val => {
-      return {
-        loader: 'expose-loader',
-        options: val
-      }
-    })
-  },
-  */
   {
     // test: /jquery/,
     test: require.resolve('jquery'),
@@ -34,15 +18,6 @@ exports.rules = [
       options: { name: 'jquery' }
     }
   },
-  /*
-  {
-    test: resolve('src/globals'),
-    use: {
-      loader: 'imports-loader',
-      options: 'window=>window'
-    }
-  },
-  */
   {
     test: resolve('src/globals'),
     use: {
@@ -51,16 +26,16 @@ exports.rules = [
     }
   },
 
-  // Basically specifying dependencies
+  // Specifying dependencies for "legacy" libraries that don't/can't specify any themselves
   ...importLoadersRules({
     [require.resolve('fullpage.js')]: ['define=>false'],
     [require.resolve('jquery-slimscroll')]: ['jQuery=jquery'],
     [require.resolve('jquery-contextmenu')]: ['jQuery=jquery'],
     [require.resolve('timeago/jquery.timeago')]: ['define=>false', 'jQuery=jquery'],
-    [js('jquery-ui-addons.js')]: ['jQuery=jquery', 'window.jQuery=jquery', '_=jquery-ui'],
-    [js('jquery.popup.min.js')]: ['window.jQuery=jquery'],
-    [js('fancybox/jquery.fancybox.pack.js')]: ['jQuery=jquery'],
-    [js('jquery.animatenumber.min.js')]: ['jQuery=jquery']
+    [lib('jquery-ui-addons.js')]: ['jQuery=jquery', 'window.jQuery=jquery', '_=jquery-ui'],
+    [lib('jquery.popup.min.js')]: ['window.jQuery=jquery'],
+    [lib('fancybox/jquery.fancybox.pack.js')]: ['jQuery=jquery'],
+    [lib('jquery.animatenumber.min.js')]: ['jQuery=jquery']
   })
 ]
 
@@ -78,19 +53,19 @@ function importLoadersRules (entries) {
 }
 
 exports.alias = {
-  'jquery-ui-addons': js('jquery-ui-addons.js'),
-  'jquery-tablesorter': js('tablesorter/jquery.tablesorter.min.js'),
-  'jquery-fancybox': js('fancybox/jquery.fancybox.pack.js'),
-  'jquery-jcrop': js('jquery.Jcrop.min.js'),
-  'jquery-tagedit-auto-grow-input': js('tagedit/js/jquery.autoGrowInput.js'),
-  'jquery-tagedit': js('tagedit/js/jquery.tagedit.js'),
-  'jquery-animatenumber': js('jquery.animatenumber.min.js'),
-  'autolink': js('autolink.js'),
-  'underscore': js('underscore.js'),
-  'underscore-string': js('underscore.string.js'),
-  'instant-search': js('instant-search.js'),
-  'jquery-popup': js('jquery.popup.min.js'),
-  'typeahead': js('typeahead.bundle.js'),
-  'typeahead-address-picker': js('typeahead-addresspicker.js'),
-  'leaflet': js('leaflet/leaflet.js')
+  'jquery-ui-addons': lib('jquery-ui-addons.js'),
+  'jquery-tablesorter': lib('tablesorter/jquery.tablesorter.min.js'),
+  'jquery-fancybox': lib('fancybox/jquery.fancybox.pack.js'),
+  'jquery-jcrop': lib('jquery.Jcrop.min.js'),
+  'jquery-tagedit-auto-grow-input': lib('tagedit/js/jquery.autoGrowInput.js'),
+  'jquery-tagedit': lib('tagedit/js/jquery.tagedit.js'),
+  'jquery-animatenumber': lib('jquery.animatenumber.min.js'),
+  'autolink': lib('autolink.js'),
+  'underscore': lib('underscore.js'),
+  'underscore-string': lib('underscore.string.js'),
+  'instant-search': lib('instant-search.js'),
+  'jquery-popup': lib('jquery.popup.min.js'),
+  'typeahead': lib('typeahead.bundle.js'),
+  'typeahead-address-picker': lib('typeahead-addresspicker.js'),
+  'leaflet': lib('leaflet/leaflet.js')
 }

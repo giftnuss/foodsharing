@@ -1,4 +1,5 @@
 import '@/core'
+import '@/globals'
 
 import $ from 'jquery'
 import 'jquery-animatenumber'

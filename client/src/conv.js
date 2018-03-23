@@ -1,8 +1,9 @@
+/* eslint-disable eqeqeq */
 import $ from 'jquery'
 
 import storage from '@/storage'
 import { info, ajax, GET, goTo, isMob, nl2br } from '@/script'
-import { ServerData } from '@/utils'
+import serverData from '@/server-data'
 import timeformat from '@/timeformat'
 import autoLink from '@/autoLink'
 
@@ -159,7 +160,7 @@ const conv = {
 
   // minimize or maximize the chatbox
   togglebox: function (cid) {
-    key = conv.getKey(cid)
+    const key = conv.getKey(cid)
 
     conv.chatboxes[key].el.children('.slimScrollDiv, .chatboxinput').toggle()
     // $('#chat-'+cid+' .slimScrollDiv, #chat-'+cid+' ').toggle();
@@ -189,7 +190,6 @@ const conv = {
   checkInputKey: function (event, chatboxtextarea, cid) {
     var $ta = $(chatboxtextarea)
     var val = $ta.val().trim()
-    var key = this.getKey(cid)
 
     if (event.keyCode == 13 && event.shiftKey == 0 && val != '') {
       conv.showLoader(cid)
@@ -201,6 +201,7 @@ const conv = {
       }, 100)
 
       // replace to many line breaks
+      // eslint-disable-next-line no-control-regex
       val = val.replace(new RegExp('(\n){3,}', 'gim'), '\n\n')
 
       ajax.req('msg', 'sendmsg', {
@@ -362,7 +363,7 @@ const conv = {
         if (ret.conversation.name == null) {
           title = []
           for (var i = 0; i < ret.member.length; i++) {
-            if (ret.member[i] != undefined && ret.member[i].id != ServerData.user.id) {
+            if (ret.member[i] != undefined && ret.member[i].id != serverData.user.id) {
               title.push(ret.member[i].name)
             }
           }

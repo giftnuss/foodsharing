@@ -29,6 +29,4 @@ migrations/_*
 .DS_Store
 .vscode
 .views-cache
-js/gen/webpack
 assets
-yarn-error.log

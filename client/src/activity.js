@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import $ from 'jquery'
 import tinysort from 'tinysort'
 import 'jquery-popup'
@@ -7,9 +8,7 @@ import { ajax, pulseError, pulseInfo } from '@/script'
 
 const activity = {
 
-  /*
-     * Elements
-     */
+  // Elements
   $container: null,
   $loader: null,
   $page: null,
@@ -92,35 +91,6 @@ const activity = {
   },
 
   append: function (up) {
-    /*
-       '<div class="updatepost">'
-        + '<img src="'+up.icon+'" />'
-      + '<div class="post">'
-      + '<div class="activity_feed_content">'
-        + '<div class="activity_feed_content_text">'
-          + '<div class="activity_feed_content_info">'
-            + '<a onclick="profile(926);" href="#">Jessy</a> hat etwas auf die Pinnwand von <a href="/?page=fsbetrieb&amp;id=11">Alnatura Bayenthal</a> geschrieben.'
-          + '</div>'
-        + '</div>'
-        + '<div class="activity_feed_content_link">'
-          + 'Tragt euch fließig ein, die nächsten Tage gibt es noch viele freie Kästchen hier ;-)'
-        + '</div>'
-      + '</div>'
-      + '<div class="js_feed_comment_border">'
-      + '<div class="comment_mini_link_like">'
-        + '<div class="foot">'
-          + '<span class="time">Sonntag, 14. Dez, 12:59 Uhr</span>'
-        + '</div>'
-      + '</div>'
-      + '<div class="clear"></div>'
-      + '</div>'
-      + '</div>'
-      + '<div style="clear:both;"></div>'
-    + '</div>'
-
-    <a class="corner-all" href="'+href+'"'+click+'>
-    */
-
     var quickreply = ''
 
     if (up.quickreply != undefined) {
@@ -131,8 +101,6 @@ const activity = {
   },
 
   initQuickreply: function () {
-    var $act = $('#activity')
-
     // noninit
     $('.quickreply.noninit').each(function () {
       var $el = $(this)
@@ -186,20 +154,9 @@ const activity = {
   },
 
   sortUpdates: function () {
-    // TODO: check if it works!
     tinysort('#activity li', {order: 'desc', attr: 'data-ts'})
 
     this.initQuickreply()
-    /*
-      $("#activity li").sort(function (a, b) {
-          return parseInt(a.id) > parseInt(b.id);
-      }).each(function(){
-          var elem = $(this);
-
-          elem.remove();
-          $(elem).prependTo("#activity > ul");
-      });
-      */
   },
 
   initOption: function (listings) {

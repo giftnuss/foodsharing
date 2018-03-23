@@ -2,13 +2,14 @@ import '@/raven'
 
 import '@/style'
 
-import '@/globals' // causes this to be exported globally via an expose-loader
-
 import $ from 'jquery'
 import { ajreq } from '@/script'
+
 import 'jquery-ui'
+import 'jquery-ui/themes/base/jquery-ui.css'
 
 import 'fullpage.js'
+
 import 'jquery-contextmenu'
 import 'jquery-contextmenu/dist/jquery.ui.position'
 import 'jquery-contextmenu/dist/jquery.contextMenu.css'
@@ -16,13 +17,13 @@ import 'jquery-contextmenu/dist/jquery.contextMenu.css'
 import '@/menu'
 import '@/becomeBezirk'
 
-import { ServerData } from './utils'
+import serverData from '@/server-data'
 
 import socket from '@/socket'
 import info from '@/info'
 
 $('#mainMenu > li > a').each(function () {
-  if (parseInt(this.href.length) > 2 && this.href.indexOf(ServerData.page) > 0) {
+  if (parseInt(this.href.length) > 2 && this.href.indexOf(serverData.page) > 0) {
     $(this).parent().addClass('active').click(function (ev) {
       // ev.preventDefault();
     })
@@ -55,10 +56,9 @@ $('#fs-profile-rate-comment').dialog({
     ]
 }).siblings('.ui-dialog-titlebar').remove()
 
-if (ServerData.user.may) {
+if (serverData.user.may) {
   socket.connect()
   info.init()
 } else {
-  // TODO: work out what this is about
-  // clearInterval(g_interval_newBasket)
+  clearInterval(window.g_interval_newBasket)
 }

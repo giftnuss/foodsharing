@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import $ from 'jquery'
 
 import storage from '@/storage'
@@ -131,7 +132,6 @@ const info = {
    * function to init all the ui stuff
    */
   initEvents: function () {
-    // onclick="$(this).children(\'.linkwrapper\').toggle();" class="msg" onmouseover="$(this).children(\'.linkwrapper\').show();info.refresh(\'msg\');" onmouseout="$(this).children(\'.linkwrapper\').hide();"
     $('html').click(function () {
       info.$allWrapper.hide()
     })
@@ -143,34 +143,6 @@ const info = {
       $this.children('span').click(function (event) {
         event.stopPropagation()
       })
-
-      /*
-      $this.bind('touchstart',function(event){
-
-        event.stopPropagation();
-
-        info.hasTouchEvent = true;
-
-        //event.stopPropagation();
-        info.$allWrapper.hide();
-        info.$linkwrapper[type].show();
-        /*
-        if(info.$linkwrapper[type].is(':visible'))
-        {
-          info.$linkwrapper[type].hide();
-        }
-        else
-        {
-
-          info.refresh(type);
-
-        }
-        */
-      /*
-        info.$infobar.children('li').removeClass('touched');
-        $this.addClass('touched');
-      });
-      */
 
       $this.click(function (event) {
         event.stopPropagation()

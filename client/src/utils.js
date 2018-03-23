@@ -1,12 +1,9 @@
-import $ from 'jquery'
-
 import { ajreq } from '@/script'
 
-// This is data that is defined by the server in lib/inc.php
-export const ServerData = window.ServerData
+import serverData from '@/server-data'
 
 export function getBrowserLocation (success) {
-  if (ServerData.location) return success(ServerData.location)
+  if (serverData.location) return success(serverData.location)
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(pos => {
       ajreq('savebpos', {
@@ -20,8 +17,4 @@ export function getBrowserLocation (success) {
       })
     })
   }
-}
-
-export function start (fn) {
-  $(fn)
 }
