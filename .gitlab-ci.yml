@@ -7,10 +7,19 @@ stages:
 
 build:
   image: node:9.9.0
+
+  stage: build
+
   variables:
     NODE_ENV: production
+
   script:
-  - (cd client && yarn && yarn build)
+  - (cd client && yarn --prod=false && yarn build)
+
+  # run it on our foodsharing ci server
+  tags:
+  - non-shared
+
   artifacts:
     paths:
     - assets
