@@ -7,11 +7,13 @@ stages:
 
 build:
   image: node:9.9.0
+  variables:
+    NODE_ENV: production
   script:
   - (cd client && yarn && yarn build)
   artifacts:
     paths:
-      - assets
+    - assets
 
 test:
   script:

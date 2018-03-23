@@ -6,6 +6,8 @@ const clientRoot = path.resolve(__dirname)
 const shims = require('./shims')
 const { join } = require('path')
 
+const dev = process.env.NODE_ENV !== 'production'
+
 function resolve (dir) {
   return path.join(clientRoot, dir)
 }
@@ -27,7 +29,7 @@ module.exports = {
   devtool: 'source-map',
   output: {
     path: resolve('../assets'),
-    filename: 'js/[name].[hash].js', // TODO: JUST hash for prod, just name for dev
+    filename: dev ? 'js/[name].js' : 'js/[hash].js',
     publicPath: '/assets/'
   },
   resolve: {
@@ -91,7 +93,16 @@ module.exports = {
       filename: 'css/[name].css',
       chunkFilename: 'css/[name].[hash].css'
     }),
-    new BundleAnalyzerPlugin(), // TODO only in prod
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      reportFilename: 'bundlesize.html',
+      defaultSizes: 'gzip',
+      openAnalyzer: false,
+      generateStatsFile: false,
+      statsFilename: 'stats.json',
+      statsOptions: null,
+      logLevel: 'info'
+    }),
 
     // Writes modules.json which is then loaded by the php app (see src/Modules/Core/Control.php).
     // This is how the php app will know if it is a webpack-enabled module or not.
