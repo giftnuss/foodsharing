@@ -1,8 +1,17 @@
 image: registry.gitlab.com/foodsharing-dev/images/ci:1.5
 
 stages:
+- build
 - test
 - deploy
+
+build:
+  image: node:9.9.0
+  script:
+  - (cd client && yarn && yarn build)
+  artifacts:
+    paths:
+      - assets
 
 test:
   script:
