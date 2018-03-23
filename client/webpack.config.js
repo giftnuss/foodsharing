@@ -29,7 +29,7 @@ module.exports = {
   devtool: 'source-map',
   output: {
     path: resolve('../assets'),
-    filename: dev ? 'js/[name].js' : 'js/[hash].js',
+    filename: dev ? 'js/[name].js' : 'js/[id].[hash].js',
     publicPath: '/assets/'
   },
   resolve: {
@@ -90,10 +90,10 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'css/[name].css',
-      chunkFilename: 'css/[name].[hash].css'
+      filename: dev ? 'css/[name].css' : 'css/[id].[hash].css',
+      chunkFilename: 'css/[id].[hash].css'
     }),
-    new BundleAnalyzerPlugin({
+    ...(dev ? [new BundleAnalyzerPlugin({
       analyzerMode: 'static',
       reportFilename: 'bundlesize.html',
       defaultSizes: 'gzip',
@@ -102,7 +102,7 @@ module.exports = {
       statsFilename: 'stats.json',
       statsOptions: null,
       logLevel: 'info'
-    }),
+    })] : []),
 
     // Writes modules.json which is then loaded by the php app (see src/Modules/Core/Control.php).
     // This is how the php app will know if it is a webpack-enabled module or not.

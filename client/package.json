@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "NODE_ENV=production shx rm -rf ../assets && webpack --mode production",
-    "dev": "NODE_ENV=development shx rm -rf ../assets && webpack --mode development -w"
+    "build": "shx rm -rf ../assets && NODE_ENV=production webpack --mode production",
+    "dev": "shx rm -rf ../assets && NODE_ENV=development webpack --mode development -w"
   },
   "keywords": [],
   "author": "",
