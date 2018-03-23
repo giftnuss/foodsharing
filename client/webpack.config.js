@@ -1,3 +1,6 @@
+require('dotenv').config()
+
+const webpack = require('webpack')
 const { StatsWriterPlugin } = require('webpack-stats-plugin')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
@@ -103,6 +106,10 @@ module.exports = {
       statsOptions: null,
       logLevel: 'info'
     })] : []),
+
+    new webpack.EnvironmentPlugin({
+      RAVEN_CONFIG: null
+    }),
 
     // Writes modules.json which is then loaded by the php app (see src/Modules/Core/Control.php).
     // This is how the php app will know if it is a webpack-enabled module or not.
