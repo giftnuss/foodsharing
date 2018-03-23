@@ -1156,7 +1156,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			if (defined('RAVEN_JAVASCRIPT_CONFIG')) {
 				$data['ravenConfig'] = RAVEN_JAVASCRIPT_CONFIG;
 			}
-
 		}
 
 		return $data;
