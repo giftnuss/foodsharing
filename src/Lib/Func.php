@@ -1114,11 +1114,18 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			];
 		}
 
+		$ravenConfig = null;
+
+		if (defined('RAVEN_JAVASCRIPT_CONFIG')) {
+			$ravenConfig = RAVEN_JAVASCRIPT_CONFIG;
+		}
+
 		return array_merge($this->jsData, [
 			'webpack' => $usesWebpack,
 			'user' => $userData,
 			'page' => $this->getPage(),
-			'location' => $location
+			'location' => $location,
+			'ravenConfig' => $ravenConfig
 		]);
 	}
 
@@ -1131,19 +1138,25 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'css' => str_replace(["\r", "\n"], '', $this->add_css),
 			'jsFunc' => JSMin::minify($this->js_func),
 			'js' => JSMin::minify($this->js),
-			'serverDataJSON' => json_encode($this->getServerData($usesWebpack))
+			'serverDataJSON' => json_encode($this->getServerData($usesWebpack)),
+			'ravenConfig' => null
 		];
 
 		if ($usesWebpack) {
 			$data = array_merge($data, [
 				'stylesheets' => $this->webpackStylesheets,
-				'scripts' => $this->webpackScripts,
+				'scripts' => $this->webpackScripts
 			]);
 		} else {
 			$data = array_merge($data, [
 				'stylesheets' => $this->stylesheets,
-				'scripts' => $this->scripts,
+				'scripts' => $this->scripts
 			]);
+
+			if (defined('RAVEN_JAVASCRIPT_CONFIG')) {
+				$data['ravenConfig'] = RAVEN_JAVASCRIPT_CONFIG;
+			}
+
 		}
 
 		return $data;

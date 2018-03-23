@@ -13,11 +13,17 @@
         {% endfor %}
 
         <script type="text/javascript">
-          window.serverData = {{ head.serverDataJSON | raw }};
+            window.serverData = {{ head.serverDataJSON | raw }};
         </script>
 
         {% if not head.webpack %}
-            {# the main webpack scripts are rendered at the bottom of the page #}
+            {# note: when using webpack the scripts are rendered at the bottom of the page #}
+            {% if head.ravenConfig %}
+                <script src="https://cdn.ravenjs.com/3.24.0/raven.min.js" crossorigin="anonymous"></script>
+                <script type="text/javascript">
+                    Raven.config('{{ head.ravenConfig }}', { tags: { webpack: false } }).install()
+                </script>
+            {% endif %}
             {% for script in head.scripts %}
                 <script type="text/javascript" src="{{ script }}"></script>
             {% endfor %}

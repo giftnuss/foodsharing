@@ -1,7 +1,10 @@
 import Raven from 'raven-js'
 
-if (process.env.RAVEN_CONFIG) {
+import serverData from '@/server-data'
+
+if (serverData.ravenConfig) {
+  console.log('using raven config from server', serverData.ravenConfig)
   Raven
-    .config(process.env.RAVEN_CONFIG)
+    .config(serverData.ravenConfig, { tags: { webpack: true } })
     .install()
 }

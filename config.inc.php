@@ -37,6 +37,10 @@ if (defined('SENTRY_URL')) {
 	}
 }
 
+if (!defined('RAVEN_JAVASCRIPT_CONFIG') && getenv('RAVEN_JAVASCRIPT_CONFIG')) {
+	define('RAVEN_JAVASCRIPT_CONFIG', getenv('RAVEN_JAVASCRIPT_CONFIG'));
+}
+
 define('FPDF_FONTPATH', __DIR__ . '/lib/font/');
 
 /* global definitions for Foodsharing\Lib\Func until they might
