@@ -7,7 +7,7 @@ use Foodsharing\Lib\Session\S;
 $func = DI::$shared->get(Func::class);
 
 if (S::may()) {
-    $user = 'user = {id:' . $func->fsId() . '};';
+	$user = 'user = {id:' . $func->fsId() . '};';
 }
 
 $func->addJs('
@@ -44,9 +44,9 @@ $func->addJs('
 ');
 
 if (!S::may()) {
-    $func->addJs('clearInterval(g_interval_newBasket);');
+	$func->addJs('clearInterval(g_interval_newBasket);');
 } else {
-    $func->addJs('
+	$func->addJs('
 		sock.connect();
 		user.token = "' . S::user('token') . '";
 		info.init();
@@ -56,7 +56,7 @@ if (!S::may()) {
  * Browser location abfrage nur einmal dann in session speichern
  */
 if ($pos = S::get('blocation')) {
-    $func->addJsFunc('
+	$func->addJsFunc('
 		function getBrowserLocation(success)
 		{
 			success({
@@ -66,7 +66,7 @@ if ($pos = S::get('blocation')) {
 		}
 	');
 } else {
-    $func->addJsFunc('
+	$func->addJsFunc('
 		function getBrowserLocation(success)
 		{
 			if(navigator.geolocation)

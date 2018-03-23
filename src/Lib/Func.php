@@ -1092,9 +1092,10 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	}
 
 	/**
-	 * This is used to set window.serverData on in the frontend
+	 * This is used to set window.serverData on in the frontend.
 	 */
-	public function getServerData(bool $usesWebpack) {
+	public function getServerData(bool $usesWebpack)
+	{
 		$userData = [
 			'id' => $this->fsId(),
 			'may' => S::may(),
@@ -1123,7 +1124,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function getHeadData(bool $usesWebpack = false)
 	{
-
 		$data = [
 			'webpack' => $usesWebpack,
 			'title' => implode(' | ', $this->title),
