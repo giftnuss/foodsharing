@@ -10,11 +10,8 @@ build:
 
   stage: build
 
-  variables:
-    NODE_ENV: production
-
   script:
-  - (cd client && yarn --prod=false && yarn build)
+  - (cd client && yarn && yarn build)
 
   # run it on our foodsharing ci server
   tags:
