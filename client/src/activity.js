@@ -1,7 +1,7 @@
 /* eslint-disable eqeqeq */
 import $ from 'jquery'
 import tinysort from 'tinysort'
-import 'jquery-popup'
+import 'magnific-popup'
 import 'timeago/jquery.timeago'
 import timeformat from '@/timeformat'
 import { ajax, pulseError, pulseInfo } from '@/script'

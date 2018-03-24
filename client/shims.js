@@ -32,7 +32,6 @@ exports.rules = [
     [require.resolve('jquery-contextmenu')]: ['jQuery=jquery'],
     [require.resolve('timeago/jquery.timeago')]: ['define=>false', 'jQuery=jquery'],
     [lib('jquery-ui-addons.js')]: ['jQuery=jquery', 'window.jQuery=jquery', '_=jquery-ui'],
-    [lib('jquery.popup.min.js')]: ['window.jQuery=jquery'],
     [lib('fancybox/jquery.fancybox.pack.js')]: ['jQuery=jquery'],
     [lib('jquery.animatenumber.min.js')]: ['jQuery=jquery']
   })
@@ -63,7 +62,6 @@ exports.alias = {
   'underscore': lib('underscore.js'),
   'underscore-string': lib('underscore.string.js'),
   'instant-search': lib('instant-search.js'),
-  'jquery-popup': lib('jquery.popup.min.js'),
   'typeahead': lib('typeahead.bundle.js'),
   'typeahead-address-picker': lib('typeahead-addresspicker.js'),
   'leaflet': lib('leaflet/leaflet.js')
