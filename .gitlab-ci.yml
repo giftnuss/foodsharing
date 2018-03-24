@@ -32,7 +32,7 @@ build:
   image: node:9.9.0
   stage: build
   script:
-  - (cd client && yarn && yarn build)
+  - (cd client && yarn && yarn lint && yarn build)
   cache:
     key: build
     paths:
