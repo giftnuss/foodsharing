@@ -17,6 +17,7 @@
 - complete tidying up of all team related files !321 by @peter.toennies
 - replaced the PREFIX keyword in the whole source !339 #421 by peter.toennies
 - refactored and cleaned the whole reports module. !335 by @peter.toennies
+- add webpack for managing frontend assets. !345 @nicksellen
 
 ## Dev/Test/CI stuff
 
