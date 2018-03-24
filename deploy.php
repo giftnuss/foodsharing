@@ -37,11 +37,14 @@ host('production')
 
 // Tasks
 
+task('build', 'cd client && yarn && yarn build');
+
 desc('Create the revision information');
 task('deploy:create_revision', './scripts/generate-revision.sh');
 
 desc('Deploy your project');
 task('deploy', [
+  'build',
 	'deploy:info',
 	'deploy:prepare',
 	'deploy:lock',
