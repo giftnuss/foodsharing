@@ -278,7 +278,7 @@ $(document).ready(function () {
               $('#comment textarea').val('')
               info(data.msg)
             } else {
-              alert(data)
+              window.alert(data)
             }
           }
         })
@@ -348,7 +348,6 @@ export function profile (id) {
 }
 
 export function quickprofile (id) {
-
   showLoader()
 
   $.ajax({

@@ -1,5 +1,6 @@
 /* eslint-disable eqeqeq */
 import $ from 'jquery'
+import _ from 'underscore'
 
 import storage from '@/storage'
 import { ajax, GET } from '@/script'

@@ -31,3 +31,4 @@ migrations/_*
 .views-cache
 assets
 client/.env
+client/yarn-error.log
