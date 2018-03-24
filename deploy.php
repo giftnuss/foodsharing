@@ -37,7 +37,6 @@ host('production')
 
 // Tasks
 
-
 desc('Create the revision information');
 task('deploy:create_revision', './scripts/generate-revision.sh');
 
