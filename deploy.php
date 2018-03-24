@@ -44,7 +44,7 @@ task('deploy:create_revision', './scripts/generate-revision.sh');
 
 desc('Deploy your project');
 task('deploy', [
-  'build',
+	'build',
 	'deploy:info',
 	'deploy:prepare',
 	'deploy:lock',

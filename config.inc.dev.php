@@ -42,5 +42,3 @@ define('REDIS_PORT', 6379);
 if (!defined('ROOT_DIR')) {
 	define('ROOT_DIR', './');
 }
-
-define('RAVEN_JAVASCRIPT_CONFIG', 'https://7156ab04f174439d9a6ddf98aa5aafaa@sentry.io/305703');

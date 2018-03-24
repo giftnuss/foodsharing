@@ -33,7 +33,7 @@ module.exports = {
     publicPath: '/assets/'
   },
   resolve: {
-    extensions: ['.js', '.vue'],
+    extensions: ['.js'],
     modules: [
       resolve('node_modules')
     ],
