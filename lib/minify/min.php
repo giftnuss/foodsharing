@@ -30,7 +30,8 @@ $js_files = [
 	'/js/socket.js',
 	'/js/typeahead.bundle.js',
 	'/js/typeahead-addresspicker.js',
-	'/js/leaflet/leaflet.js'
+	'/js/leaflet/leaflet.js',
+  '/js/raven-3.24.0.min.js'
 ];
 $css_files = [
 	'/fonts/alfaslabone/stylesheet.css',
