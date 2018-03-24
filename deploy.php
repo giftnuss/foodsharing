@@ -37,14 +37,15 @@ host('production')
 
 // Tasks
 
-task('build', 'cd client && yarn && yarn build');
 
 desc('Create the revision information');
 task('deploy:create_revision', './scripts/generate-revision.sh');
 
+desc('Build the frontend');
+task('deploy:build_frontend', 'cd client && yarn && yarn build');
+
 desc('Deploy your project');
 task('deploy', [
-	'build',
 	'deploy:info',
 	'deploy:prepare',
 	'deploy:lock',
@@ -55,6 +56,7 @@ task('deploy', [
 	'deploy:vendors',
 	'deploy:clear_paths',
 	'deploy:create_revision',
+	'deploy:build_frontend',
 	'deploy:symlink',
 	'deploy:unlock',
 	'cleanup',
