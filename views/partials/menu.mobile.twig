@@ -1,3 +1,16 @@
+{% if not webpack %}
+    <script type="text/javascript">
+      $(function () {
+        $("#mobilemenu").bind("change", function () {
+          if ($(this).val() != "") {
+            showLoader();
+            goTo($(this).val());
+          }
+        });
+      });
+    </script>
+{% endif %}
+
 {% if loggedIn %}
     <select id="mobilemenu">
         <option class="famenu" value="dashboard" selected="selected">&#xf0c9;</option>

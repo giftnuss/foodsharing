@@ -11,7 +11,6 @@ function lib (filename) {
 
 exports.rules = [
   {
-    // test: /jquery/,
     test: require.resolve('jquery'),
     use: {
       loader: './debug-loader',

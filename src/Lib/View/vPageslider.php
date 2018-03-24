@@ -27,7 +27,6 @@ class vPageslider
 		$this->id = 'fullpage-' . self::$pageslider_count;
 		++self::$pageslider_count;
 
-		// TODO: work out best way to handle these
 		$this->func->addScript('/js/jquery.fullPage.min.js');
 		$this->func->addStylesheet('/css/jquery.fullPage.css');
 	}

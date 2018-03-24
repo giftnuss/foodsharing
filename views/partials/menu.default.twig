@@ -1,3 +1,9 @@
+{% if not webpack %}
+    <script type="text/javascript">
+      $("#top .menu").css("display", "block");
+    </script>
+{% endif %}
+
 {% include 'partials/becomeBezirk.twig' %}
 
 {% if loggedIn %}

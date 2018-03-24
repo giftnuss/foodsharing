@@ -25,8 +25,7 @@ class TwigExtensions extends Twig_Extension
 	public function getFunctions()
 	{
 		return [
-			new \Twig_Function('contentMainWidth', [$this, 'contentMainWidthFunction']),
-			new \Twig_Function('webpackSnippet', [$this, 'webpackSnippetFunction'])
+			new \Twig_Function('contentMainWidth', [$this, 'contentMainWidthFunction'])
 		];
 	}
 
@@ -54,13 +53,5 @@ class TwigExtensions extends Twig_Extension
 		}
 
 		return $baseWidth;
-	}
-
-	public function webpackSnippetFunction($name)
-	{
-		$entryPath = '/js/gen/webpack/js/snippets/' . $name . '.js';
-
-		return '<script type="text/javascript" src="' . $entryPath . '"></script>';
-		//return file_get_contents(__DIR__.'/../..);
 	}
 }
