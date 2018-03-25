@@ -53,13 +53,13 @@ function run-in-container() {
 function exec-in-container-asroot() {
   local container=$1; shift;
   local command=$@;
-  dc exec -T $container sh -c "$command"
+  dc exec --user root -T $container sh -c "$command"
 }
 
 function run-in-container-asroot() {
   local container=$1; shift;
   local command=$@;
-  dc run --rm $container sh -c "$command"
+  dc run --user root --rm $container sh -c "$command"
 }
 
 function dropdb() {

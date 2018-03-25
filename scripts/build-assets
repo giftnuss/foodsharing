@@ -8,6 +8,8 @@ echo "Building assets"
 exec-in-container app 'mkdir -p js/gen css/gen && lib/minify/min.php'
 
 echo "Building webpack assets"
+# volume is created as root-owned
+run-in-container-asroot client "chown -R $UID /app/client/node_modules"
 run-in-container client 'yarn && yarn build'
 
 echo "Done"

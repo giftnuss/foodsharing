@@ -62,6 +62,7 @@ module.exports = {
   ),
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'cheap-module-eval-source-map' : 'source-map',
+  stats: 'minimal',
   output: {
     path: assetsPath,
     ...(dev ? {
