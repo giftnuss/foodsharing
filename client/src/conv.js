@@ -2,10 +2,11 @@
 import $ from 'jquery'
 
 import storage from '@/storage'
-import { info, ajax, GET, goTo, isMob, nl2br } from '@/script'
+import { ajax, GET, goTo, isMob, nl2br } from '@/script'
 import serverData from '@/server-data'
 import timeformat from '@/timeformat'
 import autoLink from '@/autoLink'
+import info from '@/info'
 
 const conv = {
 
