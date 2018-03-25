@@ -6,4 +6,8 @@ set -e
 
 echo "Building assets"
 exec-in-container app 'mkdir -p js/gen css/gen && lib/minify/min.php'
+
+echo "Building webpack assets"
+run-in-container client 'yarn && yarn build'
+
 echo "Done"

@@ -40,6 +40,20 @@ services:
     environment:
       FS_ENV: dev
 
+  # webpack client javascript
+  #------------------------------------
+
+  client:
+    container_name: foodsharing_dev_client
+    image: node:9
+    # We don't run anything long running in here yet - build is run via ./scripts/build-assets
+    command: 'true'
+    working_dir: /app/client
+    user: "${UID}"
+    volumes:
+      - ../:/app
+      - client-node-modules:/app/client/node_modules
+
   # php mail queue runner
   #------------------------------------
 
@@ -198,6 +212,7 @@ services:
 
 
 volumes:
+  client-node-modules:
   light-node-modules:
   light-yarn-cache:
   api-virtualenv:

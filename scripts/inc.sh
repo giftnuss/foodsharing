@@ -4,6 +4,8 @@ set -e
 
 export FS_ENV=${FS_ENV:-dev}
 
+export UID
+
 MYSQL_USERNAME=${MYSQL_USERNAME:-root}
 MYSQL_PASSWORD=${MYSQL_PASSWORD:-root}
 
