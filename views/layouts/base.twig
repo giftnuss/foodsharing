@@ -12,11 +12,16 @@
             <link rel="stylesheet" type="text/css" href="{{ stylesheet }}" />
         {% endfor %}
 
+        {% if dev %}
+            {# to avoid a flash of unstyled content we hide the body initially, then reveal it at the end #}
+            <style type="text/css">body { display: none; }</style>
+        {% endif %}
+
         <script type="text/javascript">
-            window.serverData = {{ head.serverDataJSON | raw }};
+            window.serverData = {{ serverDataJSON | raw }};
         </script>
 
-        {% if not head.webpack %}
+        {% if not webpack %}
             {# note: when using webpack the scripts are rendered at the bottom of the page #}
             {% for script in head.scripts %}
                 <script type="text/javascript" src="{{ script }}"></script>
@@ -51,7 +56,7 @@
             var _gaq = _gaq || [];  _gaq.push(['_setAccount', 'UA-43313114-1']);  _gaq.push(['_setDomainName', '{{ HTTP_HOST }}']);  _gaq.push(['_trackPageview']); (function() {var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);  })();
         </script>
 
-        {% if not head.webpack %}
+        {% if not webpack %}
             <script type="text/javascript">
                 {{ head.jsFunc | raw }}
                 $(document).ready(function(){
@@ -190,7 +195,7 @@
         <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-success" style="display:none;"></div>
 
 
-        {% if head.webpack %}
+        {% if webpack %}
 
             {% for script in head.scripts %}
                 <script type="text/javascript" src="{{ script }}"></script>
@@ -205,5 +210,8 @@
 
         {% endif %}
 
+        {% if dev %}
+            <style type="text/css">body { display: block; }</style>
+        {% endif %}
     </body>
 </html>

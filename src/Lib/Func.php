@@ -1132,13 +1132,11 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	public function getHeadData(bool $usesWebpack = false)
 	{
 		$data = [
-			'webpack' => $usesWebpack,
 			'title' => implode(' | ', $this->title),
 			'extra' => $this->head,
 			'css' => str_replace(["\r", "\n"], '', $this->add_css),
 			'jsFunc' => JSMin::minify($this->js_func),
 			'js' => JSMin::minify($this->js),
-			'serverDataJSON' => json_encode($this->getServerData($usesWebpack)),
 			'ravenConfig' => null
 		];
 
@@ -1199,7 +1197,10 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'bread' => $this->getBread(),
 			'bodyClass' => $g_body_class,
 			'msgbar' => $msgbar,
+			'serverDataJSON' => json_encode($this->getServerData($usesWebpack)),
 			'menu' => $menu,
+			'webpack' => $usesWebpack,
+			'dev' => FS_ENV == 'dev',
 			'hidden' => $this->getHidden(),
 			'isMob' => $this->isMob(),
 			'logolink' => $logolink,
