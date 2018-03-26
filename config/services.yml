@@ -18,8 +18,8 @@ services:
         arguments:
             - '@Twig_Loader_Filesystem'
             -
-                cache: '../tmp/.views-cache'
-                debug: true
+                cache: 'cache/.views-cache'
+                debug: false
                 strict_variables: true
         calls:
             - [addRuntimeLoader, ['@Twig\RuntimeLoader\ContainerRuntimeLoader']]

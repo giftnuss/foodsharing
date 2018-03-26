@@ -19,9 +19,9 @@ set('shared_files', ['config.inc.prod.php']);
 set('shared_dirs', ['images', 'data', 'tmp']);
 
 // Writable dirs by web server
-set('writable_dirs', ['tmp', 'cache/searchindex']);
+set('writable_dirs', ['tmp', 'cache']);
 set('http_user', 'www-data');
-set('clear_paths', ['tmp/.views-cache', 'tmp/di-cache.php']);
+set('clear_paths', ['cache/.views-cache', 'cache/di-cache.php']);
 
 // Hosts
 

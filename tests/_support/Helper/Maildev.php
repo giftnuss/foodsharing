@@ -31,7 +31,7 @@ class Maildev extends \Codeception\Module
 				if (count($this->getMails()) == $num) {
 					return;
 				}
-				$timeout -= 1;
+				--$timeout;
 				sleep(1);
 			} while ($timeout > 0);
 		}

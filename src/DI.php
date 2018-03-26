@@ -16,7 +16,7 @@ class DI
 	 */
 	public static $shared;
 
-	private $cacheFile = __DIR__ . '/../tmp/di-cache.php';
+	private $cacheFile = __DIR__ . '/../cache/di-cache.php';
 	private $isDev;
 	private $useCached = false;
 	private $container;
