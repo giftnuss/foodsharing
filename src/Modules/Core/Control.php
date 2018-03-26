@@ -7,7 +7,6 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Sanitizer;
 use Foodsharing\Lib\Session\S;
-use Foodsharing\Lib\Twig;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Message\MessageModel;
 use ReflectionClass;
@@ -34,7 +33,7 @@ abstract class Control
 	protected $v_utils;
 
 	/**
-	 * @var Twig
+	 * @var \Twig\Environment
 	 */
 	private $twig;
 
@@ -113,14 +112,14 @@ abstract class Control
 	/**
 	 * @required
 	 */
-	public function setTwig(Twig $twig)
+	public function setTwig(\Twig\Environment $twig)
 	{
 		$this->twig = $twig;
 	}
 
 	protected function render($template, $data)
 	{
-		$global = $this->func->generateAndGetGlobalViewData();
+		$global = $this->func->generateAndGetGlobalViewData($this->usesWebpack);
 		$viewData = array_merge($global, $data);
 
 		return $this->twig->render($template, $viewData);

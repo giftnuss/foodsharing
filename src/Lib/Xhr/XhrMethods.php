@@ -16,6 +16,9 @@ use Foodsharing\Modules\Message\MessageModel;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreModel;
+use Intervention\Image\ImageManager;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class XhrMethods
 {
@@ -30,6 +33,7 @@ class XhrMethods
 	private $regionGateway;
 	private $forumGateway;
 	private $bellGateway;
+	private $imageManager;
 
 	/**
 	 * XhrMethods constructor.
@@ -47,7 +51,8 @@ class XhrMethods
 		BellModel $bellModel,
 		RegionGateway $regionGateway,
 		ForumGateway $forumGateway,
-		BellGateway $bellGateway)
+		BellGateway $bellGateway,
+		ImageManager $imageManager)
 	{
 		$this->func = $func;
 		$this->model = $model;
@@ -60,6 +65,7 @@ class XhrMethods
 		$this->regionGateway = $regionGateway;
 		$this->forumGateway = $forumGateway;
 		$this->bellGateway = $bellGateway;
+		$this->imageManager = $imageManager;
 	}
 
 	public function xhr_verify($data)
@@ -549,6 +555,66 @@ class XhrMethods
 	public function xhr_addComment($data)
 	{
 		return $this->model->addComment($data);
+	}
+
+	public function xhr_uploadPictureRefactorMeSoon($data)
+	{
+		$request = Request::createFromGlobals();
+		$response = JsonResponse::create([], 400);
+
+		$namespace = 'workgroup';
+		$width = 500;
+		$height = 500;
+
+		$file = $request->files->get('image');
+		if ($file->isValid()) {
+			try {
+				$img = $this->imageManager->make($file->getPathname());
+				if ($img->width() <= $width && $img->height() <= $height) {
+					/*
+					 * for now, we just check if the frontend did not want to betray us.
+					 * later, we might want to have better resize / error handling
+					 */
+					switch ($img->mime()) {
+						case 'image/jpeg':
+							$ext = 'jpg';
+							break;
+						case 'image/png':
+							$ext = 'png';
+							break;
+						case 'image/gif':
+							$ext = 'gif';
+							break;
+						default:
+							$ext = 'jpg';
+					}
+					$fullPath = sprintf('images/%s/%s.%s',
+							$namespace,
+							sha1_file($file->getPathname()),
+							$ext);
+					$internalName = sprintf('%s/%s.%s',
+						$namespace,
+						sha1_file($file->getPathname()),
+						$ext);
+					$img->save($fullPath);
+					$response->setStatusCode(200);
+					$response->setData([
+						'fullPath' => $fullPath,
+						'internalName' => $internalName
+					]);
+				} else {
+					$response->setData([
+						'width' => $img->width(),
+						'height' => $img->height(),
+						'max_width' => $width,
+						'max_height' => $height
+					]);
+				}
+			} catch (\Intervention\Image\Exception\NotReadableException $e) {
+				throw $e;
+			}
+		}
+		$response->send();
 	}
 
 	public function xhr_uploadPicture($data)

@@ -69,7 +69,7 @@ class Func
 	/**
 	 * @required
 	 */
-	public function setTwig(Twig $twig)
+	public function setTwig(\Twig\Environment $twig)
 	{
 		$this->twig = $twig;
 	}
@@ -1634,7 +1634,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->add_css .= trim($css);
 	}
 
-	public function clearPost()
+	public function goSelf()
 	{
 		$this->go($this->getSelf());
 	}

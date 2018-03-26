@@ -104,7 +104,7 @@ $isUsingResponse = $page !== '--';
 if ($isUsingResponse) {
 	$response->send();
 } else {
-	$twig = DI::$shared->get(\Foodsharing\Lib\Twig::class);
+	$twig = DI::$shared->get(\Twig\Environment::class);
 	$page = $twig->render('layouts/' . $g_template . '.twig', $func->generateAndGetGlobalViewData($usesWebpack));
 }
 

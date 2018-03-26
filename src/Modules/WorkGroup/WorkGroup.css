@@ -6,6 +6,7 @@
 .groups .photo {
   float: right;
   margin-left: 10px;
+  width: 250px;
 }
 
 .groups .bottom_bar {
@@ -18,4 +19,8 @@
 
 #apply-form textarea {
   width: 97%;
+}
+
+.img-container > img {
+  max-width: 100%;
 }

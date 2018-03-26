@@ -18,6 +18,9 @@
 - replaced the PREFIX keyword in the whole source !339 #421 by peter.toennies
 - refactored and cleaned the whole reports module. !335 by @peter.toennies
 - add webpack for managing frontend assets. !345 @nicksellen
+- use symfony form builder work work group edit page !347 @NerdyProjects
+- introduce CropperJS for handling image cropping (work group edit) !347 @NerdyProjects
+- configure dependency injection as yaml, not PHP !347 @NerdyProjects
 
 ## Dev/Test/CI stuff
 

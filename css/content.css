@@ -217,7 +217,9 @@ p {
   margin-top: 5px;
 }
 
-.text {
+.text,
+input[type=text],
+input[type=number] {
   width: 90%;
   border: 1px solid #c9bcaf;
   padding: 7px;
@@ -235,7 +237,7 @@ input.hasDatepicker {
   width: 189px !important;
 }
 
-.select {
+select {
   border: 1px solid #c9bcaf;
   -moz-border-radius: 6px; /* Firefox */
   -webkit-border-radius: 6px; /* Safari, Chrome */
@@ -244,7 +246,7 @@ input.hasDatepicker {
   margin-right: 7px;
 }
 
-#left .select {
+#left select {
   width: 100%;
 }
 
@@ -252,7 +254,7 @@ input.hasDatepicker {
   margin-bottom: 3px;
 }
 
-.textarea {
+textarea {
   width: 90%;
   height: 180px;
   border: 1px solid #c9bcaf;
@@ -263,7 +265,10 @@ input.hasDatepicker {
   border-radius: 6px; /* CSS3 */
 }
 
-.ui-dialog-content .text, .ui-dialog-content .textarea, .ui-dialog-content .select {
+.ui-dialog-content .text,
+.ui-dialog-content input[type=text],
+.ui-dialog-content textarea,
+.ui-dialog-content select {
   width: 254px;
 }
 
@@ -460,9 +465,8 @@ i {
   color: #4a3520;
 }
 
-.page h1, .page h2,
-
-,
+.page h1,
+.page h2,
 .page h3 {
   font-family: 'Alfa Slab One';
   font-weight: normal;

@@ -4,7 +4,6 @@ namespace Foodsharing\Lib\View;
 
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
-use Foodsharing\Lib\Twig;
 
 class Utils
 {
@@ -15,7 +14,7 @@ class Utils
 	private $func;
 
 	/**
-	 * @var Twig
+	 * @var \Twig\Environment
 	 */
 	private $twig;
 
@@ -35,7 +34,7 @@ class Utils
 	/**
 	 * @required
 	 */
-	public function setTwig(Twig $twig)
+	public function setTwig(\Twig\Environment $twig)
 	{
 		$this->twig = $twig;
 	}

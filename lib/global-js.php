@@ -7,7 +7,6 @@ use Foodsharing\Lib\Session\S;
 $func = DI::$shared->get(Func::class);
 
 $user = '';
-
 if (S::may()) {
 	$user = 'user = {id:' . $func->fsId() . '};';
 }

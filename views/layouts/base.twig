@@ -1,3 +1,8 @@
+{% set _left = block('left') %}
+{% set _top = block('top') %}
+{% set _main = block('main') %}
+{% set _right = block('right') %}
+{% set _bottom = block('bottom') %}
 <!DOCTYPE html>
 <html lang="de">
 
@@ -98,11 +103,11 @@
 
                 {% include 'partials/breadcrumbs.twig' with { items: bread } %}
 
-                {% if block('top') %}
+                {% if _top is not empty %}
                     <div class="pure-g">
                         <div id="content_top" class="pure-u-1">
                             <div class="inside">
-                                {% block top %}{% endblock %}
+                                {{ _top|raw }}
                             </div>
                         </div>
                     </div>
@@ -110,53 +115,52 @@
 
                 <div class="pure-g mainpure">
                     {% if isMob %}
-
-                        {% if block('main') %}
-                            <div class="pure-u-1 pure-u-md-{{ contentMainWidth(block('left'), block('right'), content.left.width, content.right.width, 24) }}-24">
+                        {% if _main is not empty %}
+                            <div class="pure-u-1 pure-u-md-{{ contentMainWidth(_left is not empty, _right is not empty, content.left.width, content.right.width, 24) }}-24">
                                 <div class="inside">
-                                    {% block main %}{% endblock %}
+                                    {{ _main|raw }}
                                 </div>
                             </div>
                         {% endif %}
 
-                        {% if block('right') %}
+                        {% if _right is not empty %}
                             <div class="pure-u-1 pure-u-md-{{ content.right.width }}-24" id="right">
                                 <div class="inside">
-                                    {% block right %}{% endblock %}
+                                    {{ _right|raw }}
                                 </div>
                             </div>
                         {% endif %}
 
-                        {% if block('left') %}
+                        {% if _left is not empty %}
                             <div class="pure-u-1 pure-u-md-{{ content.left.width }}-24" id="left">
                                 <div class="inside">
-                                    {% block left %}{% endblock %}
+                                    {{ _left|raw }}
                                 </div>
                             </div>
                         {% endif %}
 
                     {% else %}
 
-                        {% if block('left') %}
+                        {% if _left is not empty %}
                             <div class="pure-u-1 pure-u-md-{{ content.left.width }}-24" id="left">
                                 <div class="inside">
-                                    {{ block('left') }}
+                                    {{ _left|raw }}
                                 </div>
                             </div>
                         {% endif %}
 
-                        {% if block('main') %}
-                            <div class="pure-u-1 pure-u-md-{{ contentMainWidth(block('left'), block('right'), content.left.width, content.right.width, 24) }}-24">
+                        {% if _main is not empty %}
+                            <div class="pure-u-1 pure-u-md-{{ contentMainWidth(_left is not empty, _right is not empty, content.left.width, content.right.width, 24) }}-24">
                                 <div class="inside">
-                                    {{ block('main') }}
+                                    {{ _main|raw }}
                                 </div>
                             </div>
                         {% endif %}
 
-                        {% if block('right') %}
+                        {% if _right is not empty %}
                             <div class="pure-u-1 pure-u-md-{{ content.right.width }}-24" id="right">
                                 <div class="inside">
-                                    {{ block('right') }}
+                                    {{ _right|raw }}
                                 </div>
                             </div>
                         {% endif %}
@@ -164,11 +168,11 @@
                     {% endif %}
                 </div>
 
-                {% if content.bottom.html %}
+                {% if _bottom is not empty %}
                     <div class="pure-g">
                         <div id="content_bottom" class="pure-u-1">
                             <div class="inside">
-                                {% block bottom %}{% endblock %}
+                                {{ _bottom|raw }}
                             </div>
                         </div>
                     </div>

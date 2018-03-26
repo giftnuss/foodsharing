@@ -1,0 +1,27 @@
+{% extends 'Form/form_div_layout.html.twig' %}
+
+{% block tag_row %}
+    {{ form_widget(form) }}
+{% endblock %}
+
+{% block picture_upload_widget %}
+    {{ block('hidden_widget') }}
+    <div><img id="{{ id }}-preview" src="{{ value }}" /></div>
+    <span id="{{ id }}-opener">{{ 'button.change_picture'|trans }}</span>
+    <span style="display:none;"><a href="#{{ id }}-fancy" id="{{ id }}-link">&nbsp;</a></span>
+{% endblock picture_upload_widget %}
+
+{% block form_row %}
+    {% spaceless %}
+        <div class="input-wrapper" id="{{ id }}-wrapper">
+            {{ form_label(form, null, { 'label_attr': { 'class': 'wrapper-label ui-widget'}}) }}
+            {{ form_errors(form) }}
+            <div class="element-wrapper">
+                {{ form_widget(form) }}
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+    {% endspaceless %}
+{% endblock form_row %}
+
+

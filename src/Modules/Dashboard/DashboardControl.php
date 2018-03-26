@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Dashboard;
 
-use Foodsharing\Lib\Twig;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Content\ContentGateway;
@@ -23,7 +22,7 @@ class DashboardControl extends Control
 		ContentGateway $contentGateway,
 		Model $model,
 		ProfileModel $profileModel,
-		Twig $twig)
+		\Twig\Environment $twig)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;

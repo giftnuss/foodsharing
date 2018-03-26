@@ -148,7 +148,6 @@ class WorkGroupModel extends Model
 				b.`banana_count`,
 				b.`week_num`,
 				b.`fetch_count`,
-				b.`report_num`,
 				b.`type`,
 				CONCAT(m.name,"@' . DEFAULT_EMAIL_HOST . '") AS email
 			FROM
@@ -253,7 +252,6 @@ class WorkGroupModel extends Model
 				b.`banana_count`,
 				b.`week_num`,
 				b.`fetch_count`,
-				b.`report_num`,
 				CONCAT(m.name,"@' . DEFAULT_EMAIL_HOST . '") AS email
 				
 			FROM
@@ -380,9 +378,7 @@ class WorkGroupModel extends Model
 				`apply_type` = ' . (int)$data['apply_type'] . ',
 				`banana_count` = ' . (int)$data['banana_count'] . ',
 				`fetch_count` = ' . (int)$data['fetch_count'] . ',
-				`week_num` = ' . (int)$data['week_num'] . ',
-				`report_num` = ' . (int)$data['report_num'] . '
-				
+				`week_num` = ' . (int)$data['week_num'] . '
 			WHERE
 				`id` = ' . (int)$id . '
 				
@@ -396,14 +392,11 @@ class WorkGroupModel extends Model
 			// 604800 = sekunden pro woche
 			$weeks = (int)round((time() - $time) / 604800);
 
-			$reports = $this->qOne('SELECT COUNT(foodsaver_id) FROM fs_report WHERE foodsaver_id = ' . (int)$fsId);
-
-			return array(
+			return [
 				'weeks' => (int)$weeks,
 				'fetchcount' => (int)$ret['stat_fetchcount'],
 				'bananacount' => (int)$ret['stat_bananacount'],
-				'reports' => (int)$reports
-			);
+			];
 		}
 	}
 

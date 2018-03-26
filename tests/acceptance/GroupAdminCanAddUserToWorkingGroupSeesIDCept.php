@@ -11,7 +11,7 @@ $I->addBezirkAdmin($group['id'], $admin['id']);
 
 $I->login($admin['email']);
 $I->amOnPage($I->groupEditUrl($group['id']));
-$I->waitForText('Mitglieder', 10, '#member-wrapper');
-$I->addInTagSelect('lastNameOfThat (' . $foodsaver['id'] . ')', '#member');
+$I->waitForElement('.tagedit-listelement-old');
+$I->addInTagSelect('lastNameOfThat (' . $foodsaver['id'] . ')', '#work_group_form_members');
 $I->click('Änderungen speichern');
 $I->seeInDatabase('fs_foodsaver_has_bezirk', array('bezirk_id' => $group['id'], 'foodsaver_id' => $foodsaver['id']));

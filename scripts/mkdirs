@@ -15,6 +15,7 @@ dirs="\
   images/basket \
   images/wallpost \
   images/picture \
+  images/workgroup \
   data/attach \
   data/mailattach \
   data/pass \

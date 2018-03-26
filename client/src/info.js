@@ -54,8 +54,6 @@ const info = {
    * pseudo construct
    */
   init: function () {
-    console.log('info init')
-
     if ($('#infobar').length > 0) {
       setTimeout(function () {
         info.startupTimeout = true

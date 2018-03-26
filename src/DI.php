@@ -6,7 +6,6 @@ use DebugBar\DataCollector\PDO\TraceablePDO;
 use PDO;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
@@ -38,15 +37,9 @@ class DI
 			$this->container = new \FoodsharingCachedContainer();
 		} else {
 			$this->container = new ContainerBuilder();
-			$loader = new YamlFileLoader($this->container, new FileLocator(__DIR__));
+			$loader = new YamlFileLoader($this->container, new FileLocator(__DIR__ . '/../config'));
 
-			$definition = new Definition();
-			$definition
-				->setAutowired(true)
-				->setAutoconfigured(true)
-				->setPublic(true);
-
-			$loader->registerClasses($definition, 'Foodsharing\\', '*', '{Lib/Flourish,Lib/Cache,Lib/View/v*,Dev,Debug}');
+			$loader->load('services.yml');
 		}
 	}
 

@@ -58,7 +58,8 @@ module.exports = {
   entry: moduleEntries(
     // We explicitly define each foodsharing modules here so we can convert them one-by-one
     'Index',
-    'Dashboard'
+    'Dashboard',
+    'WorkGroup'
   ),
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'cheap-module-eval-source-map' : 'source-map',

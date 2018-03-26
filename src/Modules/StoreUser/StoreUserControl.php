@@ -60,7 +60,7 @@ class StoreUserControl extends Control
 					}
 				}
 				$this->func->info($this->func->s('changes_saved'));
-				$this->func->clearPost();
+				$this->func->goSelf();
 			} elseif (isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && ($this->model->isVerantwortlich($_GET['id']) || $this->func->isOrgaTeam() || $this->func->isBotFor($betrieb['bezirk_id']))) {
 				$this->model->changeBetriebStatus($_GET['id'], $_POST['betrieb_status_id']);
 				$this->func->go($this->func->getSelf());
