@@ -10,14 +10,6 @@ function lib (filename) {
 }
 
 exports.rules = [
-  {
-    test: resolve('src/globals'),
-    use: {
-      loader: 'expose-loader',
-      options: 'globals'
-    }
-  },
-
   // Specifying dependencies for "legacy" libraries that don't/can't specify any themselves
   ...importLoadersRules({
     [require.resolve('fullpage.js')]: ['define=>false'],
