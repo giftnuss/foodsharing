@@ -97,12 +97,7 @@ module.exports = {
           /(node_modules)/,
           resolve('../js') // ignore the old js/**.js files
         ],
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env']
-          }
-        }
+        use: 'babel-loader'
       },
       {
         test: /\.css$/,

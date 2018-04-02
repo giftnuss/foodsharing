@@ -47,5 +47,19 @@
     "webpack-bundle-analyzer": "^2.11.1",
     "webpack-cli": "^2.0.12",
     "webpack-serve": "^0.2.0"
-  }
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "useBuiltIns": "usage"
+        }
+      ]
+    ]
+  },
+  "browserslist": [
+    "> 0.5%",
+    "ie_mob >=11"
+  ]
 }
