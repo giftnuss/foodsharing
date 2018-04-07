@@ -17,7 +17,6 @@ $g_lang['peer'] = 'Foodsharer';
 $g_lang['geb_datum'] = 'Geburtsdatum';
 $g_lang['date_placeholder_format'] = 'JJJJ-MM-TT';
 $g_lang['organisation'] = 'Organisation';
-$g_lang['login_phone'] = 'Telefonnummer';
 $g_lang['login_mobile_phone'] = 'Mobilfunknummer';
 $g_lang['login_location'] = 'Deine Adresse';
 $g_lang['login_surname'] = 'Nachname';
