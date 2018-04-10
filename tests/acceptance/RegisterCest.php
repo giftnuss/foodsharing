@@ -62,7 +62,7 @@ class RegisterCest
 		// skip the step with the address map, it is optional
 
 		$I->waitForElementVisible('#joinform .step.step2', 4);
-	$I->fillField('login_mobile_phone',	$mobile_number);
+		$I->fillField('login_mobile_phone', $mobile_number);
 		$I->click('weiter', '.step.step2');
 
 		// tick all the check boxes
