@@ -147,7 +147,9 @@ var join = {
 		{
 			case 1:
 				check = true;
-				
+				// trim whitespace from email for validation and submission
+				$('#login_email').val($('#login_email').val().trim());
+
 				if($('#login_name').val() == '')
 				{
 					pulseInfo('Bitte Gib einen Benutzernamen ein');

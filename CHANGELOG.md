@@ -12,6 +12,7 @@
 - It is possible to contact working groups again. !343 #403 by @peter.toennies @NerdyProjects
 - Fix store fetch count shown on map info bubble !265 @alangecker @NerdyProjects
 - fixed disabled unsubscription of forum posts for fair-teiler responsibles. !331 #317 by @peter.toennies
+- fixed stripping of whitespace on email field for registration #58 @nigeldgreen
 
 ## Refactoring
 - complete tidying up of all team related files !321 by @peter.toennies
