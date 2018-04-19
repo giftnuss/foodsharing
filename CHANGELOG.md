@@ -6,6 +6,7 @@
 
 ## Features
 - decreased distance to "close baskets" from 50 to 30 km. !332 #338 by @peter.toennies
+- sort fairtiler list by name. !357 #171 by @k.miklobusec
 
 ## Bugfixes
 - Remove info section from foodsaver page, if it is empty !320

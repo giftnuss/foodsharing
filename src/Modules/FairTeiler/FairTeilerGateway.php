@@ -24,10 +24,10 @@ class FairTeilerGateway extends BaseGateway
 					fs.`nachname`,
 					fs.`email`,
 					fs.`geschlecht`
-				
+
 			FROM 	`fs_fairteiler_follower` ff,
 					`fs_foodsaver` fs
-				
+
 			WHERE 	ff.foodsaver_id = fs.id
 			AND 	ff.fairteiler_id = :id
 			AND 	ff.infotype = 1
@@ -42,16 +42,16 @@ class FairTeilerGateway extends BaseGateway
 						UNIX_TIMESTAMP(wp.time) AS time_ts,
 						wp.body,
 						wp.attach,
-						fs.name AS fs_name			
-					
-			FROM 		fs_fairteiler_has_wallpost hw 
+						fs.name AS fs_name
+
+			FROM 		fs_fairteiler_has_wallpost hw
 			LEFT JOIN 	fs_wallpost wp
 			ON 			hw.wallpost_id = wp.id
-				
+
 			LEFT JOIN 	fs_foodsaver fs ON wp.foodsaver_id = fs.id
 
 			WHERE 		hw.fairteiler_id = :id
-				
+
 			ORDER BY 	wp.id DESC
 			LIMIT 1
 		', [':id' => $id]);
@@ -88,10 +88,10 @@ class FairTeilerGateway extends BaseGateway
 					fs.`nachname`,
 					fs.`email`,
 					fs.sleep_status
-	
+
 			FROM 	`fs_fairteiler_follower` ff,
 					`fs_foodsaver` fs
-	
+
 			WHERE 	ff.foodsaver_id = fs.id
 			AND 	ff.fairteiler_id = ' . (int)$id . '
 		');
@@ -106,6 +106,7 @@ class FairTeilerGateway extends BaseGateway
 			FROM 	`fs_fairteiler`
 			WHERE 	`bezirk_id` IN( ' . implode(',', $bezirk_ids) . ' )
 			AND 	`status` = 1
+			ORDER BY `name`
 		', [])
 		) {
 			foreach ($fairteiler as $key => $ft) {
@@ -133,13 +134,14 @@ class FairTeilerGateway extends BaseGateway
 					ft.`picture`,
 					bz.id AS bezirk_id,
 					bz.name AS bezirk_name
-			
+
 			FROM 	`fs_fairteiler` ft,
 					`fs_bezirk` bz
-				
+
 			WHERE 	ft.bezirk_id = bz.id
 			AND 	ft.`bezirk_id` IN(' . implode(',', $bezirk_ids) . ')
 			AND 	ft.`status` = 1
+			ORDER BY ft.`name`
 		'))
 		) {
 			$out = array();
@@ -203,12 +205,12 @@ class FairTeilerGateway extends BaseGateway
 					fs.`photo`,
 					ff.type,
 					fs.sleep_status
-				
+
 			FROM 	fs_foodsaver fs,
 					fs_fairteiler_follower ff
 			WHERE 	ff.foodsaver_id = fs.id
 			AND 	ff.fairteiler_id = :id
-				
+
 		', [':id' => $id])
 		) {
 			$normal = array();
@@ -273,13 +275,13 @@ class FairTeilerGateway extends BaseGateway
 					ft.`add_foodsaver`,
 					fs.name AS fs_name,
 					fs.nachname AS fs_nachname,
-					fs.id AS fs_id	
-				
+					fs.id AS fs_id
+
 			FROM 	fs_fairteiler ft
 			LEFT JOIN
 					fs_foodsaver fs
-					
-				
+
+
 			ON 	ft.add_foodsaver = fs.id
 			WHERE 	ft.id = :id
 		', [':id' => $id])
