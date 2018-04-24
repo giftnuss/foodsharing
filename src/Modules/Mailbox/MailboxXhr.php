@@ -24,7 +24,8 @@ class MailboxXhr extends Control
 	public function attach()
 	{
 		// is filesize (10MB) and filetype allowed?
-		if (isset($_FILES['etattach']['size']) && $_FILES['etattach']['size'] < 1310720 && $this->attach_allow($_FILES['etattach']['name'], $_FILES['etattach']['type'])) {
+		$attachementIsAllowed = $this->attach_allow($_FILES['etattach']['name'], $_FILES['etattach']['type']);
+		if ($attachementIsAllowed && isset($_FILES['etattach']['size']) && $_FILES['etattach']['size'] < 1310720) {
 			$new_filename = uniqid();
 
 			$ext = strtolower($_FILES['etattach']['name']);
@@ -42,7 +43,7 @@ class MailboxXhr extends Control
 			move_uploaded_file($_FILES['etattach']['tmp_name'], 'data/mailattach/tmp/' . $new_filename);
 
 			$init = 'window.parent.mb_finishFile("' . $new_filename . '");';
-		} elseif (!$this->attach_allow($_FILES['etattach']['name'])) {
+		} elseif (!$attachementIsAllowed) {
 			$init = 'window.parent.pulseInfo(\'' . $this->func->jsSafe($this->func->s('wrong_file')) . '\');window.parent.mb_removeLast();';
 		} else {
 			$init = 'window.parent.pulseInfo(\'' . $this->func->jsSafe($this->func->s('file_to_big')) . '\');window.parent.mb_removeLast();';
