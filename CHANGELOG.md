@@ -15,6 +15,7 @@
 - fixed disabled unsubscription of forum posts for fair-teiler responsibles. !331 #317 by @peter.toennies
 - fixed stripping of whitespace on email field for registration #58 @nigeldgreen
 - use babel polyfills to support more browsers !359 @nicksellen
+- fixed check for allowed attachment types in the mail app. !363 #183 by @peter.toennies
 
 ## Refactoring
 - complete tidying up of all team related files !321 by @peter.toennies
