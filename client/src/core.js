@@ -20,6 +20,7 @@ import serverData from '@/server-data'
 
 import socket from '@/socket'
 import info from '@/info'
+import search from '@/instant-search'
 
 $('#mainMenu > li > a').each(function () {
   if (parseInt(this.href.length) > 2 && this.href.indexOf(serverData.page) > 0) {
@@ -58,6 +59,7 @@ $('#fs-profile-rate-comment').dialog({
 if (serverData.user.may) {
   socket.connect()
   info.init()
+  search.init()
 } else {
   clearInterval(window.g_interval_newBasket)
 }
