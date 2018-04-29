@@ -14,6 +14,7 @@
 
 ## Bugfixes
 - Removing a user from regions is possible again. !372 #14 @NerdyProjects
+- Fix search bar not working on some pages !364 by @NerdyProjects
 - Remove info section from foodsaver page, if it is empty !320
 - It is possible to contact working groups again. !343 #403 by @peter.toennies @NerdyProjects
 - Fix store fetch count shown on map info bubble !265 @alangecker @NerdyProjects
