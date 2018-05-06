@@ -791,7 +791,7 @@ class XhrMethods
 	public function xhr_out($html = '', $js = '')
 	{
 		$escapedHtml = array_map(array($this, 'sanitize_html'), $html);
-			return json_encode(array(
+		return json_encode(array(
 			'status' => 1,
 			'html' => $escapedHtml,
 			'script' => $js
