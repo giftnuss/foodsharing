@@ -783,11 +783,17 @@ class XhrMethods
 		return '<html><head></head><body onload="parent.pictureReady(\'' . $id . '\',\'' . $img . '\');"></body></html>';
 	}
 
+	private function sanitize_html($str)
+	{
+		return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
+	}
+
 	public function xhr_out($html = '', $js = '')
 	{
-		return json_encode(array(
+		$escapedHtml = array_map(array($this, 'sanitize_html'), $html);
+			return json_encode(array(
 			'status' => 1,
-			'html' => $html,
+			'html' => $escapedHtml,
 			'script' => $js
 		));
 	}
