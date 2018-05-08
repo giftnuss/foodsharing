@@ -168,9 +168,13 @@ class StoreControl extends Control
 				$g_data['bezirk_id'] = $this->func->getBezirkId();
 			}
 
-			$g_data['stadt'] = $g_data['ort'];
+			if (isset($g_data['ort'])) {
+				$g_data['stadt'] = $g_data['ort'];
+			}
 			$g_data['foodsaver'] = [$coordinator];
-			$g_data['str'] = $g_data['anschrift'];
+			if (isset($g_data['anschrift'])) {
+				$g_data['str'] = $g_data['anschrift'];
+			}
 			$g_data['hsnr'] = '';
 
 			if ($id = $this->model->add_betrieb($g_data)) {
