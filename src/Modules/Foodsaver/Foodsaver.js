@@ -8,8 +8,7 @@ const fsapp = {
     if ($('#fslist').length > 0) {
       $('#fslist a').click(function (ev) {
         ev.preventDefault()
-        let el = $(this)
-        let fsida = el.attr('href').split('#')
+        let fsida = $(this).attr('href').split('#')
         let fsid = parseInt(fsida[(fsida.length - 1)])
         fsapp.loadFoodsaver(fsid)
       })
