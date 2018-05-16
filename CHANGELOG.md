@@ -16,6 +16,7 @@
 - fixed stripping of whitespace on email field for registration #58 @nigeldgreen
 - use babel polyfills to support more browsers !359 @nicksellen
 - fixed check for allowed attachment types in the mail app. !363 #183 by @peter.toennies
+- data privacy : removed foodsaver / ambassador selection from map. #165 by @k.miklobusec
 
 ## Refactoring
 - complete tidying up of all team related files !321 by @peter.toennies

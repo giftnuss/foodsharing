@@ -25,13 +25,10 @@ class MapView extends View
 
 	public function mapControl()
 	{
-		$foodsaver = '';
 		$betriebe = '';
-		$botschafter = '';
 		$additional = '';
 
 		if (S::may('fs')) {
-			$foodsaver = '<li><a name="foodsaver" class="ui-corner-all foodsaver"><span class="icon orange"><i class="img img-smile"></i></span><span>Foodsaver</span></a></li>';
 			$betriebe = '<li><a name="betriebe" class="ui-corner-all betriebe"><span class="icon brown"><i class="img img-store"></i></span><span>Betriebe</span></a>
 				<div id="map-options">
 					<label><input type="checkbox" name="viewopt[]" value="allebetriebe" /> Alle Betriebe</label>
@@ -40,7 +37,6 @@ class MapView extends View
 					<label><input type="checkbox" name="viewopt" value="nkoorp" /> in Verhandlung</label>
 				</div>
 			</li>';
-			$botschafter = '<li><a name="botschafter" class="ui-corner-all botschafter"><span class="icon red"><i class="img img-smile"></i></span><span>Botschafter</span></a></li>';
 		}
 
 		return '
@@ -50,13 +46,10 @@ class MapView extends View
 						<div id="map-control">
 							<ul class="linklist">
 								<li><a name="baskets" class="ui-corner-all baskets"><span class="icon green"><i class="img img-basket"></i></span><span>Essenskörbe</span></a></li>
-								' . $foodsaver . '
-								' . $botschafter . '
 								' . $betriebe . '
-								
 								<li><a name="fairteiler" class="ui-corner-all fairteiler"><span class="icon yellow"><i class="img img-recycle"></i></span><span>Fair-Teiler</span></a></li>
-							</ul>	
-						</div>	
+							</ul>
+						</div>
 					</div>
 				</div>
 
