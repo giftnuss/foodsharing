@@ -158,8 +158,7 @@ class MailsControl extends ConsoleControl
 							} catch (\Exception $e) {
 								echo 'Error parsing date: ' . $e->getMessage() . ", continuing with 'now'\n";
 							}
-							if($date === null)
-							{
+							if ($date === null) {
 								$date = new \DateTime();
 							}
 
