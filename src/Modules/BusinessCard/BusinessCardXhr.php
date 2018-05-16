@@ -31,13 +31,18 @@ class BusinessCardXhr extends Control
 				} else {
 					return false;
 				}
-
 				if ($mailbox !== false) {
 					if ($type == 'fs') {
 						if ($data['geschlecht'] == 2) {
 							$data['subtitle'] = $this->func->sv('fs_for_w', $mailbox['name']);
 						} else {
 							$data['subtitle'] = $this->func->sv('fs_for', $mailbox['name']);
+						}
+					} elseif ($type == 'sm') {
+						if ($data['geschlecht'] == 2) {
+							$data['subtitle'] = $this->func->sv('sm_for_w', $mailbox['name']);
+						} else {
+							$data['subtitle'] = $this->func->sv('sm_for', $mailbox['name']);
 						}
 					} elseif ($type == 'bot') {
 						if ($data['geschlecht'] == 2) {

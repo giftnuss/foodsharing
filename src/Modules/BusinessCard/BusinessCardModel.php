@@ -21,7 +21,7 @@ class BusinessCardModel extends Model
 					fs.`handy`,
 					fs.`verified`,
 					fs.email
-				
+
 			FROM 	fs_foodsaver fs
 
 			WHERE 	fs.id = ' . (int)$this->func->fsId() . '
@@ -38,11 +38,11 @@ class BusinessCardModel extends Model
 					b.id,
 					CONCAT(mb.`name`,"@","' . DEFAULT_EMAIL_HOST . '") AS email,
 					mb.name AS mailbox
-					
+
 			FROM 	fs_bezirk b,
 					fs_mailbox mb,
 					fs_botschafter bot
-				
+
 			WHERE 	b.mailbox_id = mb.id
 			AND 	bot.bezirk_id = b.id
 			AND 	bot.foodsaver_id = ' . (int)$this->func->fsId() . '
@@ -52,14 +52,20 @@ class BusinessCardModel extends Model
 		$fs['fs'] = $this->q('
 			SELECT 	b.name,
 					b.id
-			
+
 			FROM 	fs_bezirk b,
 					fs_foodsaver_has_bezirk fhb
-		
+
 			WHERE 	fhb.bezirk_id = b.id
 			AND 	fhb.foodsaver_id = ' . (int)$this->func->fsId() . '
 			AND 	b.type != 7
+			AND  b.type != 6
+			AND  b.type != 5
 		');
+
+		if (S::may('bieb')) {
+			$fs['sm'] = $fs['fs'];
+		}
 
 		return $fs;
 	}

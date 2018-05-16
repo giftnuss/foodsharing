@@ -43,6 +43,14 @@ class BusinessCardControl extends Control
 					);
 				}
 			}
+			if ($data['sm']) {
+				foreach ($data['sm'] as $fs) {
+					$sel_data[] = array(
+						'id' => 'sm:' . $fs['id'],
+						'name' => $this->func->sv('sm_for', $fs['name'])
+					);
+				}
+			}
 			if ($data['fs']) {
 				foreach ($data['fs'] as $fs) {
 					$sel_data[] = array(
