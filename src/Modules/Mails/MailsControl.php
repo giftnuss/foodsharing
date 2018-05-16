@@ -152,10 +152,14 @@ class MailsControl extends ConsoleControl
 							if (!isset($have_send[$id])) {
 								$have_send[$id] = [];
 							}
+							$date = null;
 							try {
 								$date = $msg->getDate();
 							} catch (\Exception $e) {
 								echo 'Error parsing date: ' . $e->getMessage() . ", continuing with 'now'\n";
+							}
+							if($date === null)
+							{
 								$date = new \DateTime();
 							}
 

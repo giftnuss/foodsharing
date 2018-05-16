@@ -27,6 +27,8 @@
 - configure dependency injection as yaml, not PHP !347 @NerdyProjects
 
 ## Dev/Test/CI stuff
+# 2018-05-14 Hotfix
+- Fetching emails to platform mail addresses is more robust against broken mail dates now. #195
 
 # 2018-03-14 Hotfix for 2018-02-28
 - Events can be accepted or denied by non event admins again. !342 #418 by @NerdyProjects
