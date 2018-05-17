@@ -139,15 +139,15 @@ class XhrMethods
 						UNIX_TIMESTAMP(n.zeit) AS zeit,
 						fs.photo,
 						n.milestone
-									
+
 				FROM  	fs_betrieb_notiz n,
 						fs_foodsaver fs
-				
+
 				WHERE fs.id = n.foodsaver_id
 				AND n.betrieb_id = ' . (int)$data['bid'] . '
-				
+
 				ORDER BY n.zeit DESC
-				
+
 				LIMIT 50')
 			) {
 				//$out = array_reverse($out);
@@ -398,7 +398,7 @@ class XhrMethods
 							' . $edit . '
 						</ul>
 					</div>
-					
+
 					' . $this->xhrViewUtils->set($data, 'Kontaktdaten') . '
 					<div style="clear:both;"></div>
 						' . $pers . '
@@ -511,27 +511,27 @@ class XhrMethods
 
 					$out['betriebe'] = $this->model->q(' SELECT `id`,lat,lon FROM fs_betrieb WHERE lat != "" ' . $team_status . $nkoorp);
 				} elseif ($t == 'botschafter') {
-					$out['botschafter'] = $this->model->q(' 
-						
-						SELECT DISTINCT fs.`id`, fs.`photo_public`,fs.`lat`,fs.`lon` 
+					$out['botschafter'] = $this->model->q('
+
+						SELECT DISTINCT fs.`id`, fs.`photo_public`,fs.`lat`,fs.`lon`
 						FROM 	`fs_foodsaver` fs,
 								`fs_botschafter` b,
 								`fs_bezirk` bz
-						 
-						WHERE 	fs.`id` = b.`foodsaver_id` 
+
+						WHERE 	fs.`id` = b.`foodsaver_id`
 						AND 	b.bezirk_id = bz.id
-						AND 	lat != "" 
-						AND 	bz.`type` != 7 
+						AND 	lat != ""
+						AND 	bz.`type` != 7
 				');
 				} elseif ($t == 'fairteiler') {
 					$out['fairteiler'] = $this->model->q(' SELECT `id`,lat,lon,bezirk_id AS bid FROM fs_fairteiler WHERE lat != "" AND status = 1 ');
 				} elseif ($t == 'baskets') {
 					if ($baskets = $this->model->q('
-				
+
 					SELECT id, lat, lon, location_type
 					FROM fs_basket
 					WHERE `status` = 1
-					
+
 				')
 					) {
 						/*
@@ -783,18 +783,10 @@ class XhrMethods
 		return '<html><head></head><body onload="parent.pictureReady(\'' . $id . '\',\'' . $img . '\');"></body></html>';
 	}
 
-	private function sanitize_html($str)
+	public function xhr_out($js = '')
 	{
-		return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
-	}
-
-	public function xhr_out($html = '', $js = '')
-	{
-		$escapedHtml = array_map(array($this, 'sanitize_html'), $html);
-
 		return json_encode(array(
 			'status' => 1,
-			'html' => $escapedHtml,
 			'script' => $js
 		));
 	}
@@ -1082,9 +1074,9 @@ class XhrMethods
 	{
 		return json_encode($this->model->update('
 		UPDATE `fs_bezirk`
-		SET 	`email` = ' . $this->model->strval($data['email']) . ', 
-				`email_pass` = ' . $this->model->strval($data['email_pass']) . ' 
-			
+		SET 	`email` = ' . $this->model->strval($data['email']) . ',
+				`email_pass` = ' . $this->model->strval($data['email_pass']) . '
+
 				WHERE 	`id` = ' . $this->model->intval($data['bezirk_id']) . '
 		'));
 	}
@@ -1181,14 +1173,14 @@ class XhrMethods
 			$this->v_utils->v_input_wrapper('Master-Update', '<a class="button" href="#" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'geoclean\',id:' . (int)$data['id'] . '});}return false;">Master-Update starten</a>', 'masterupdate', array('desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen'));
 
 		$out['script'] = '
-		$("#bezirkform-form").unbind("submit");	
+		$("#bezirkform-form").unbind("submit");
 		$("#bezirkform-form").submit(function(ev){
 			ev.preventDefault();
-			
+
 			$("#dialog-confirm-msg").html("Sicher, dass Du die &Auml;nderungen am Bezirk speichern m&ouml;chtest?");
-			
+
 			$( "#dialog-confirm" ).dialog("option","buttons",{
-					"Ja, Speichern": function() 
+					"Ja, Speichern": function()
 					{
 						showLoader();
 						$.ajax({
@@ -1211,25 +1203,25 @@ class XhrMethods
 						$( "#dialog-confirm" ).dialog( "close" );
 					}
 				});
-			
+
 			$("#dialog-confirm").dialog("open");
-			
+
 		});
-			
+
 		$("input[type=\'submit\']").button();
-			
+
 		$("#' . $id . ' input").tagedit({
 			autocompleteURL: "xhr.php?f=getRecip",
 			allowEdit: false,
 			allowAdd: false
-		});	
-					
+		});
+
 		$(window).keydown(function(event){
 		    if(event.keyCode == 13) {
 		      event.preventDefault();
 		      return false;
 		    }
-		  });		
+		  });
 	';
 
 		if ($foodsaver = $this->model->getFsMap($data['id'])) {
@@ -1390,7 +1382,7 @@ class XhrMethods
 
 		$this->model->update_bezirkNew($data['bezirk_id'], $g_data);
 
-		return $this->xhr_out('', 'pulseInfo("' . $this->func->s('edit_success') . '");');
+		return $this->xhr_out('pulseInfo("' . $this->func->s('edit_success') . '");');
 	}
 
 	public function xhr_addFetcher($data)
