@@ -1065,7 +1065,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->js_func .= $nfunc;
 	}
 
-	// $js is echoed in tpl/default.php
 	public function addJs($njs)
 	{
 		$this->js .= $njs;
@@ -1405,7 +1404,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			{
 				showLoader();
 				$.ajax({
-					
+
 					dataType:"json",
 					url:"xhr.php?f=update_' . $table . '&" + $("#' . $id . ' form").serialize(),
 					success : function(data){
@@ -1422,7 +1421,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 				});
 			}
 		}
-	});	
+	});
 	');
 	}
 
@@ -1770,11 +1769,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'o' => json_encode($options) // options
 		));
 		file_get_contents(SOCK_URL . '?' . $query);
-	}
-
-	public function getTemplate($tpl)
-	{
-		include 'tpl/' . $tpl . '.php';
 	}
 
 	// https://stackoverflow.com/a/834355
