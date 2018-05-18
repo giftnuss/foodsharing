@@ -647,7 +647,8 @@ class XhrMethods
 
 	public function xhr_cropagain($data)
 	{
-		if ($photo = $this->model->getVal('photo', 'foodsaver', $data['fsid'])) {
+		$id = S::id();
+		if ($photo = $this->model->getVal('photo', 'foodsaver', $id)) {
 			$path = ROOT_DIR . 'images';
 			$img = $photo;
 
