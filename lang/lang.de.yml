@@ -42,3 +42,6 @@ group:
     join: Dieser Arbeitsgruppe beitreten
     safe: Änderungen speichern
   no_groups: Hier gibt es noch keine Arbeitsgruppen
+
+legal:
+  newpp: Neue Datenschutzerklärung
