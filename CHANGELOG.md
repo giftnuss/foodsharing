@@ -8,6 +8,7 @@
 - decreased distance to "close baskets" from 50 to 30 km. !332 #338 by @peter.toennies
 - sort fairtiler list by name. !357 #171 by @k.miklobusec
 - Store Managers business card creation for region. Remove country card. !76 by @k.miklobusec
+- Registered users need to fill their birthday and be 18+ for data protection and liability reasons. !377 @NerdyProjects
 
 ## Bugfixes
 - Remove info section from foodsaver page, if it is empty !320
