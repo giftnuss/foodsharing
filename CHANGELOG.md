@@ -7,6 +7,8 @@
 ## Features
 - decreased distance to "close baskets" from 50 to 30 km. !332 #338 by @peter.toennies
 - sort fairtiler list by name. !357 #171 by @k.miklobusec
+- Store Managers business card creation for region. Remove country card. !76 by @k.miklobusec
+- Registered users need to fill their birthday and be 18+ for data protection and liability reasons. !377 @NerdyProjects
 
 ## Bugfixes
 - Remove info section from foodsaver page, if it is empty !320
@@ -16,6 +18,8 @@
 - fixed stripping of whitespace on email field for registration #58 @nigeldgreen
 - use babel polyfills to support more browsers !359 @nicksellen
 - fixed check for allowed attachment types in the mail app. !363 #183 by @peter.toennies
+- data privacy : removed foodsaver / ambassador selection from map. #165 by @k.miklobusec
+- fixed potential security issue in profile picture uploads. !371 #84 @theolampert
 
 ## Refactoring
 - complete tidying up of all team related files !321 by @peter.toennies
@@ -27,6 +31,8 @@
 - configure dependency injection as yaml, not PHP !347 @NerdyProjects
 
 ## Dev/Test/CI stuff
+# 2018-05-14 Hotfix
+- Fetching emails to platform mail addresses is more robust against broken mail dates now. #195
 
 # 2018-03-14 Hotfix for 2018-02-28
 - Events can be accepted or denied by non event admins again. !342 #418 by @NerdyProjects

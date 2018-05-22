@@ -486,9 +486,7 @@ class XhrMethods
 		if (isset($data['types']) && is_array($data['types'])) {
 			$out['status'] = 1;
 			foreach ($data['types'] as $t) {
-				if ($t == 'foodsaver') {
-					$out['foodsaver'] = $this->model->q(' SELECT `id`, `photo_public`,`lat`,`lon` FROM `fs_foodsaver` WHERE `active` = 1 AND rolle IN(1,2,3,4) AND `photo_public` != 4 AND lat != "" ');
-				} elseif ($t == 'betriebe') {
+				if ($t == 'betriebe') {
 					$team_status = array();
 					$nkoorp = '';
 					if (isset($data['options']) && is_array($data['options'])) {
@@ -510,19 +508,6 @@ class XhrMethods
 					}
 
 					$out['betriebe'] = $this->model->q(' SELECT `id`,lat,lon FROM fs_betrieb WHERE lat != "" ' . $team_status . $nkoorp);
-				} elseif ($t == 'botschafter') {
-					$out['botschafter'] = $this->model->q('
-
-						SELECT DISTINCT fs.`id`, fs.`photo_public`,fs.`lat`,fs.`lon`
-						FROM 	`fs_foodsaver` fs,
-								`fs_botschafter` b,
-								`fs_bezirk` bz
-
-						WHERE 	fs.`id` = b.`foodsaver_id`
-						AND 	b.bezirk_id = bz.id
-						AND 	lat != ""
-						AND 	bz.`type` != 7
-				');
 				} elseif ($t == 'fairteiler') {
 					$out['fairteiler'] = $this->model->q(' SELECT `id`,lat,lon,bezirk_id AS bid FROM fs_fairteiler WHERE lat != "" AND status = 1 ');
 				} elseif ($t == 'baskets') {
@@ -662,7 +647,8 @@ class XhrMethods
 
 	public function xhr_cropagain($data)
 	{
-		if ($photo = $this->model->getVal('photo', 'foodsaver', $data['fsid'])) {
+		$id = S::id();
+		if ($photo = $this->model->getVal('photo', 'foodsaver', $id)) {
 			$path = ROOT_DIR . 'images';
 			$img = $photo;
 

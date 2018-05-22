@@ -76,14 +76,17 @@ class LoginView extends View
 								<div class="element-wrapper">
 									<input placeholder="' . $this->func->s('login_passwd2') . '" type="password" value="" id="login_passwd2" name="login_passwd1" class="input text value" />
 								</div>
-								
+								<div class="element-wrapper">
+									<input type="date" id="birthdate" min="' . date('Y-m-d', strtotime('-120 years')) . '" max="' . date('Y-m-d', strtotime('-18 years')) . '" required />
+									<label for="birthdate">' . $this->func->s('geb_datum') . '</label>
+								</div>
 							</div>
 							<div class="avatar">
 								<form action="/xhrapp.php?app=login&m=photoupload" id="join_photoform" target="join_upload_frame" method="post" enctype="multipart/form-data">
 									<input type="hidden" name="action" value="upload" />
 									<a onclick="$(\'#join_photo\').trigger(\'click\');return false;" class="container corner-all" href="#">
 										<span class="mega-octicon octicon-device-camera"></span>
-										<span class="fa fa-circle-o-notch fa-spin"></span>		
+										<span class="fa fa-circle-o-notch fa-spin"></span>
 									</a><br />
 									<a onclick="$(\'#join_photo\').trigger(\'click\');return false;" href="#" class="button">' . $this->func->s('select_picture') . '</a><span class="filewrapper"><input onchange="join.startUpload();" type="file" name="photo" id="join_photo" /></span>
 								</form>

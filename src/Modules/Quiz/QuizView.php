@@ -10,7 +10,7 @@ class QuizView extends View
 	public function abortOrPause()
 	{
 		return '
-				<p>Nimm Dir doch noch die Zeit diese Frage zu beantworten - ansonsten wird diese Frage als falsch gewertet.</p>
+				<p>Nimm Dir doch noch die Zeit diese Frage zu beantworten! Ansonsten wird diese Frage als falsch gewertet.</p>
 				<p>Nach der Beantwortung der Frage kannst Du auch <strong>pausieren</strong> ohne Fehlerpunkte zu bekommen.</p>';
 	}
 
@@ -96,7 +96,7 @@ class QuizView extends View
 				array('cnt' => $s['fp']),
 				array('cnt' => $status),
 
-				array('cnt' => $this->v_utils->v_toolbar(array('id' => $s['id'], 'types' => array('delete'), 'confirmMsg' => 'Soll diese Quiz Session wirklich gel&ouml;scht werden?')))
+				array('cnt' => $this->v_utils->v_toolbar(array('id' => $s['id'], 'types' => array('delete'), 'confirmMsg' => 'Soll diese Quiz-Session wirklich gel&ouml;scht werden?')))
 			);
 			if ($cur_qid != $s['quiz_id'] || $key == (count($sessions) - 1)) {
 				$cur_qid = $s['quiz_id'];
@@ -189,7 +189,7 @@ class QuizView extends View
 					array('id' => 1, 'name' => '1 Fehlerpunkt'),
 					array('id' => 2, 'name' => '2 Fehlerpunkte'),
 					array('id' => 3, 'name' => '3 Fehlerpunkte'),
-					array('id' => 12, 'name' => '12 Fehlerpunkte (K.O.)'),
+					array('id' => 12, 'name' => '12 Fehlerpunkte (k. o.)'),
 					array('id' => 0, 'name' => 'keine Fehlerpunkte (Scherzfrage)')
 				)
 			)) .
@@ -273,7 +273,7 @@ class QuizView extends View
 			<table id="quizbreath" width="100%" height="95%">
 				<tr><td style="vertical-align: middle;text-align:center;font-size:16px;font-weight:bold;color:#4A3520">
 				<img src="img/cuploader.gif" style="margin-bottom:20px;" /><br />
-				<span>Verschnauf-Pause... </span>
+				<span>Verschnaufpause... </span>
 				</td></tr>
 			</table>';
 	}
@@ -282,7 +282,7 @@ class QuizView extends View
 	{
 		$msg = '';
 		if (isset($_GET['timefail'])) {
-			$msg = $this->v_utils->v_info('Die Zeit ist abgelaufen, daher wird diese Frage leider als falsch bewertet');
+			$msg = $this->v_utils->v_info('Die Zeit ist abgelaufen. Daher wird diese Frage leider als falsch gewertet.');
 		}
 
 		return '
@@ -301,10 +301,10 @@ class QuizView extends View
 
 	public function result($explains, $fp, $maxfp)
 	{
-		$valid = 'Sorry diesmal hat es nicht geklappt.';
+		$valid = 'Sorry, diesmal hat es nicht geklappt.';
 		$bg = '#ED563D';
 		if ($fp < $maxfp) {
-			$valid = 'Herzlichen Glückwunsch! bestanden..';
+			$valid = 'Herzlichen Glückwunsch! Bestanden.';
 			$bg = '#48A21C';
 		}
 		$out = '
@@ -319,9 +319,9 @@ class QuizView extends View
 			$exp = '';
 
 			foreach ($e['explains'] as $ex) {
-				$right = 'Auch diese Antwort wäre <strong style="color:green;font-weight:bold;">Richtig</strong> gewesen!';
+				$right = 'Auch diese Antwort wäre <strong style="color:green;font-weight:bold;">richtig</strong> gewesen!';
 				if ($ex['right'] == 0) {
-					$right = 'Diese Antwort ist <strong style="color:red;font-weight:bold;">nicht Richtig</strong>!';
+					$right = 'Diese Antwort ist <strong style="color:red;font-weight:bold;">nicht richtig</strong>!';
 				} elseif ($ex['right'] != 1) {
 					$right = 'Diese Antwort wurde nicht gewertet.';
 				}
@@ -346,15 +346,15 @@ class QuizView extends View
 		if ($fp < $maxfp) {
 			switch (S::get('quiz-id')) {
 				case 1:
-					$out .= '<a href="/?page=settings&sub=upgrade/up_fs" class="button">Jetzt die Foodsaver Anmeldung abschließen!</a>';
+					$out .= '<a href="/?page=settings&sub=upgrade/up_fs" class="button">Jetzt die Foodsaver-Anmeldung abschließen.</a>';
 					break;
 
 				case 2:
-					$out .= '<a href="/?page=settings&sub=upgrade/up_bip" class="button">Jetzt die Betriebsverantwortlichen Anmeldung abschließen!</a>';
+					$out .= '<a href="/?page=settings&sub=upgrade/up_bip" class="button">Jetzt die Betriebsverantwortlichenanmeldung abschließen.</a>';
 					break;
 
 				case 3:
-					$out .= '<a href="/?page=settings&sub=upgrade/up_bot" class="button">Jetzt die Botschafter Anmeldung abschließen!</a>';
+					$out .= '<a href="/?page=settings&sub=upgrade/up_bot" class="button">Jetzt die Botschafteranmeldung abschließen.</a>';
 					break;
 
 				default:

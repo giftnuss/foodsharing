@@ -15,6 +15,7 @@ class RegisterCest
 		$this->first_name = sq('first_name');
 		$this->last_name = sq('last_name');
 		$this->password = sq('password');
+		$this->birthdate = '1991-04-27';
 	}
 
 	public function _after()
@@ -44,6 +45,8 @@ class RegisterCest
 		$I->fillField('login_name', $this->first_name);
 		$I->fillField('login_surname', $this->last_name);
 		$I->fillField('login_email', $this->email);
+		/* workaround because chromedriver fails to fill a date field... */
+		$I->executeJS("document.querySelector('#birthdate').value = '" . $this->birthdate . "'");
 		$I->fillField('#login_passwd1', $this->password);
 		$I->fillField('#login_passwd2', $this->password);
 		$I->click('weiter', '.step.step1');
@@ -86,6 +89,7 @@ class RegisterCest
 			'email' => $this->stripped_email,
 			'name' => $this->first_name,
 			'nachname' => $this->last_name,
+			'geb_datum' => $this->birthdate,
 			'newsletter' => 0
 		]);
 	}

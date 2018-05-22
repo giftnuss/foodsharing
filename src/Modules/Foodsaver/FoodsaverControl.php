@@ -71,8 +71,6 @@ class FoodsaverControl extends Control
 				}
 				$this->func->addContent($this->view->foodsaver_form($data['name'] . ' ' . $data['nachname'] . ' bearbeiten', $regionDetails));
 
-				$this->func->addContent($this->picture_box(), CNT_RIGHT);
-
 				$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					$this->func->pageLink('foodsaver', 'back_to_overview')
 				)), $this->func->s('actions')), CNT_RIGHT);
