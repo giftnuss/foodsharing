@@ -9,6 +9,8 @@
 - sort fairtiler list by name. !357 #171 by @k.miklobusec
 - Store Managers business card creation for region. Remove country card. !76 by @k.miklobusec
 - Registered users need to fill their birthday and be 18+ for data protection and liability reasons. !377 @NerdyProjects
+- Remove google analytics !374 @NerdyProjects
+- Remove external paypal donate button and host locally !374 @NerdyProjects
 
 ## Bugfixes
 - Remove info section from foodsaver page, if it is empty !320
