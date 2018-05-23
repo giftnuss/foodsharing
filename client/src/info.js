@@ -315,7 +315,7 @@ const info = {
    * show status loading on specific info item
    */
   showLoader: function (item) {
-    this.$linklist[item].prepend('<li class="loader"><i class="fa fa-spinner fa-spin"></i</li>')
+    this.$linklist[item].prepend('<li class="loader"><i class="fa fa-spinner fa-spin"></i></li>')
   },
 
   /**
