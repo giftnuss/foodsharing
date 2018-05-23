@@ -8,8 +8,12 @@
 - decreased distance to "close baskets" from 50 to 30 km. !332 #338 by @peter.toennies
 - sort fairtiler list by name. !357 #171 by @k.miklobusec
 - Store Managers business card creation for region. Remove country card. !76 by @k.miklobusec
+- Registered users need to fill their birthday and be 18+ for data protection and liability reasons. !377 @NerdyProjects
+- Remove google analytics !374 @NerdyProjects
+- Remove external paypal donate button and host locally !374 @NerdyProjects
 
 ## Bugfixes
+- Removing a user from regions is possible again. !372 #14 @NerdyProjects
 - Remove info section from foodsaver page, if it is empty !320
 - It is possible to contact working groups again. !343 #403 by @peter.toennies @NerdyProjects
 - Fix store fetch count shown on map info bubble !265 @alangecker @NerdyProjects

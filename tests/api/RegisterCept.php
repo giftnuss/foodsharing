@@ -8,6 +8,7 @@ $email = sq('email') . '@test.com';
 $first_name = sq('first_name');
 $last_name = sq('last_name');
 $pass = sq('pass');
+$birthdate = '1990-05-31';
 
 $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -19,6 +20,7 @@ $I->sendPOST('/xhrapp.php?app=login&m=joinsubmit', [
 	'phone' => '39833',
 	'pw' => $pass,
 	'gender' => 0,
+	'birthdate' => $birthdate,
 	'newsletter' => 1
 ]);
 
@@ -31,7 +33,7 @@ $I->seeInDatabase('fs_foodsaver', [
 	'name' => $first_name,
 	'nachname' => $last_name,
 	'newsletter' => 1,
-
+	'geb_datum' => $birthdate,
 	'passwd' => null, // no md5 password
 	'fs_password' => null, // no sha1 password
 ]);

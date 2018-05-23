@@ -59,6 +59,7 @@ module.exports = {
     // We explicitly define each foodsharing modules here so we can convert them one-by-one
     'Index',
     'Dashboard',
+    'Foodsaver',
     'WorkGroup'
   ),
   mode: dev ? 'development' : 'production',
