@@ -12,6 +12,7 @@
 - Remove google analytics !374 @NerdyProjects
 - Remove external paypal donate button and host locally !374 @NerdyProjects
 - Privacy policy need to be agreed before the page can be used !379 @NerdyProjects
+- Privacy notice need to be agreed by store coordinators/ambassadors !381 @NerdyProjects
 
 ## Bugfixes
 - Removing a user from regions is possible again. !372 #14 @NerdyProjects
