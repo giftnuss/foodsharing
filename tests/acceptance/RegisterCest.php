@@ -95,7 +95,7 @@ class RegisterCest
 
 		$I->waitForText('Ich stimme nicht zu und möchte ');
 		$I->checkOption('#legal_form_privacy_policy');
-		$I->selectOption('#legal_form_privacy_notice', '1');
+		//$I->selectOption('#legal_form_privacy_notice', '1');
 		$I->click('Einstellungen übernehmen');
 		$I->waitForText('Willkommen ' . $this->first_name . '!');
 
