@@ -54,6 +54,7 @@ class LegalControl extends Control
 				$this->gateway->agreeToPp(S::id(), $data->privacy_policy_date);
 				if ($data->privacy_notice == 1) {
 					$this->gateway->agreeToPn(S::id(), $data->privacy_notice_date);
+					$this->func->tplMail(31, S::user('email'), ['vorname' => S::user('name')]);
 				} elseif ($data->privacy_notice == 2) {
 					/* ToDo: This is to be properly abstracted... */
 					$this->gateway->downgradeToFoodsaver(S::id());
