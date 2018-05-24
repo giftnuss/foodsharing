@@ -44,11 +44,18 @@ group:
   no_groups: Hier gibt es noch keine Arbeitsgruppen
 
 legal:
-  newpp: Neue Datenschutzerklärung
-  acknowledge: Stimmst du der Datenschutzerklärung zu?
-  not_acknowledge_description: Um die foodsharing.de Plattform benutzen zu können, musst du der beschriebenenen Datenschutzerklärung zustimmen. Stimmst du nicht zu, musst du deinen Account löschen.
+  pp: Datenschutzerklärung
+  acknowledge: Stimmst du der Erklärung zu?
+  not_acknowledge_pp_description: Um die foodsharing.de Plattform benutzen zu können, musst du der beschriebenenen Datenschutzerklärung zustimmen. Stimmst du nicht zu, musst du deinen Account löschen.
   agree_privacy_policy: Ich stimme der Datenschutzvereinbarung zu.
   delete_account: Ich stimme nicht zu und möchte meinen Account löschen.
   actions:
-    safe: Ich bin mit den Bestimmungen einverstanden
+    safe: Einstellungen übernehmen
   must_accept_pp: Um bei foodsharing.de mitzumachen, musst du den Datenschutzbedingungen zustimmen.
+  privacy_notice: Datenschutzbelehrung
+  agree_privacy_notice: Über die Verpflichtung zur Vertraulichkeit personenbezogener Daten und die sich daraus ergebenden Verhaltensweisen wurde ich unterrichtet. Eine Bestätigung hierüber erhalte ich per E-Mail an die von mir angegebene Adresse für meine Unterlagen.
+  privacy_notice_agree:
+    select: Bitte auswählen
+    acknowledge: Ich stimme zu
+    not_acknowledge: Ich stimme nicht zu und möchte zum Foodsaver herabgestuft werden
+  not_acknowledge_pn_description: Wenn du mit der Belehrung nicht einverstanden bist, wirst du zum Foodsaver herabgestuft. Das bedeutet, dass du kein*e Botschafter*In von Bezirken mehr bist, deine Betriebsverantwortlichkeiten verlierst und das Quiz zum Betriebsverantwortlichen/Botschafter erneut durchführen musst.

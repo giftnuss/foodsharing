@@ -81,7 +81,8 @@ class S
 				'token' => $user['token'],
 				'mailbox_id' => $user['mailbox_id'],
 				'gender' => $user['geschlecht'],
-				'privacy_policy_accepted_date' => $user['privacy_policy_accepted_date']
+				'privacy_policy_accepted_date' => $user['privacy_policy_accepted_date'],
+				'privacy_notice_accepted_date' => $user['privacy_notice_accepted_date']
 			));
 
 			self::set('buddy-ids', $user['buddys']);
@@ -103,7 +104,10 @@ class S
 	{
 		$legalModel = DI::$shared->get(LegalGateway::class);
 		$ppVersion = $legalModel->getPpVersion();
-		if (self::id() && $ppVersion && $ppVersion > self::user('privacy_policy_accepted_date')) {
+		$pnVersion = $legalModel->getPnVersion();
+		if (self::id() &&
+			(($ppVersion && $ppVersion != self::user('privacy_policy_accepted_date')) ||
+			($pnVersion && self::user('rolle') >= 2 && self::user('privacy_notice_accepted_date') != $pnVersion))) {
 			/* Allow Settings page, otherwise redirect to legal page */
 			if (in_array(self::$func->getPage(), ['settings', 'logout'])) {
 				return null;
