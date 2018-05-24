@@ -104,6 +104,11 @@ class S
 		$legalModel = DI::$shared->get(LegalGateway::class);
 		$ppVersion = $legalModel->getPpVersion();
 		if (self::id() && $ppVersion && $ppVersion > self::user('privacy_policy_accepted_date')) {
+			/* Allow Settings page, otherwise redirect to legal page */
+			if (in_array(self::$func->getPage(), ['settings', 'logout'])) {
+				return null;
+			}
+
 			return LegalControl::class;
 		}
 

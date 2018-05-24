@@ -1,9 +1,0 @@
-{% extends 'layouts/default.twig' %}
-
-{% block main %}
-    {% embed 'components/field.twig' with {'title': 'legal.newpp'|trans, 'classes': ['ui-padding']} %}
-        {% block content %}
-            {{ pp|raw }}
-        {% endblock %}
-    {% endembed %}
-{% endblock %}
