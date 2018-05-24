@@ -1,13 +1,15 @@
-<script type="text/javascript">
-    $(function () {
+{% if not webpack %}
+    <script type="text/javascript">
+      $(function () {
         $("#mobilemenu").bind("change", function () {
-            if ($(this).val() != "") {
-                showLoader();
-                goTo($(this).val());
-            }
+          if ($(this).val() != "") {
+            showLoader();
+            goTo($(this).val());
+          }
         });
-    });
-</script>
+      });
+    </script>
+{% endif %}
 
 {% if loggedIn %}
     <select id="mobilemenu">

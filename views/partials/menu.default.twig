@@ -1,8 +1,10 @@
-<script type="text/javascript">
-    $("#top .menu").css("display", "block");
-</script>
+{% if not webpack %}
+    <script type="text/javascript">
+      $("#top .menu").css("display", "block");
+    </script>
+{% endif %}
 
-{% include 'partials/becomeBezirk.twig' only %}
+{% include 'partials/becomeBezirk.twig' %}
 
 {% if loggedIn %}
     <ul id="mainMenu" class="jMenu">

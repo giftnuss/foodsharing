@@ -160,7 +160,8 @@ class FuncMenuTest extends \Codeception\Test\Unit
 			'workingGroups' => [],
 			'sessionMailbox' => false,
 			'fsId' => $this->foodsaver['id'],
-			'image' => ''
+			'image' => '',
+			'webpack' => false
 		], $extraParams));
 	}
 
@@ -178,7 +179,8 @@ class FuncMenuTest extends \Codeception\Test\Unit
 			$params['workingGroups'],
 			$params['sessionMailbox'],
 			$params['fsId'],
-			$params['image']
+			$params['image'],
+			$params['webpack']
 		];
 	}
 

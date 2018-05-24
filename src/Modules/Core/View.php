@@ -5,7 +5,6 @@ namespace Foodsharing\Modules\Core;
 use Foodsharing\DI;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
-use Foodsharing\Lib\Twig;
 use Foodsharing\Lib\View\Utils;
 
 class View
@@ -17,11 +16,11 @@ class View
 	protected $func;
 
 	/**
-	 * @var Twig
+	 * @var \Twig\Environment
 	 */
 	private $twig;
 
-	public function __construct(Twig $twig, Func $func, Utils $viewUtils)
+	public function __construct(\Twig\Environment $twig, Func $func, Utils $viewUtils)
 	{
 		$this->twig = $twig;
 		$this->func = $func;
@@ -120,13 +119,13 @@ class View
 		$out = $this->v_utils->v_field('
 		<p>Online-Termin</p>
 		<p style="text-align:center;">
-			<a target="_blank" href="http://wiki.lebensmittelretten.de/Mumble"><img src="img/mlogo.png" alt="Mumble" /></a>
+			<a target="_blank" href="https://wiki.foodsharing.de/Mumble"><img src="img/mlogo.png" alt="Mumble" /></a>
 		</p>
 		<p>
 			Online-Sprachkonferenzen machen wir mit Mumble	
 		</p>
-		<p>Unser Mumble-Server:<br />mumble.lebensmittelretten.de</p>
-		<p>Anleitung unter: <a target="_blank" href="http://wiki.lebensmittelretten.de/Mumble">wiki.lebensmittelretten.de/Mumble</a></p>
+		<p>Unser Mumble-Server:<br />mumble.foodsharing.de</p>
+		<p>Anleitung unter: <a target="_blank" href="https://wiki.foodsharing.de/Mumble">wiki.foodsharing.de/Mumble</a></p>
 		', 'Ort', array('class' => 'ui-padding'));
 
 		return $out;

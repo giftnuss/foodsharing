@@ -24,7 +24,8 @@ class MailboxXhr extends Control
 	public function attach()
 	{
 		// is filesize (10MB) and filetype allowed?
-		if (isset($_FILES['etattach']['size']) && $_FILES['etattach']['size'] < 1310720 && $this->attach_allow($_FILES['etattach']['name'], $_FILES['etattach']['type'])) {
+		$attachmentIsAllowed = $this->attach_allow($_FILES['etattach']['name'], $_FILES['etattach']['type']);
+		if ($attachmentIsAllowed && isset($_FILES['etattach']['size']) && $_FILES['etattach']['size'] < 1310720) {
 			$new_filename = uniqid();
 
 			$ext = strtolower($_FILES['etattach']['name']);
@@ -42,7 +43,7 @@ class MailboxXhr extends Control
 			move_uploaded_file($_FILES['etattach']['tmp_name'], 'data/mailattach/tmp/' . $new_filename);
 
 			$init = 'window.parent.mb_finishFile("' . $new_filename . '");';
-		} elseif (!$this->attach_allow($_FILES['etattach']['name'])) {
+		} elseif (!$attachmentIsAllowed) {
 			$init = 'window.parent.pulseInfo(\'' . $this->func->jsSafe($this->func->s('wrong_file')) . '\');window.parent.mb_removeLast();';
 		} else {
 			$init = 'window.parent.pulseInfo(\'' . $this->func->jsSafe($this->func->s('file_to_big')) . '\');window.parent.mb_removeLast();';
@@ -86,7 +87,7 @@ class MailboxXhr extends Control
 					if ($newcount = $this->model->getNewCount($boxes)) {
 						foreach ($newcount as $nc) {
 							$nc_js .= '
-								$( "ul.dynatree-container a.dynatree-title:contains(\'' . $nc['name'] . '@' . DEFAULT_HOST . '\')" ).removeClass("nonew").addClass("newmail").text("' . $nc['name'] . '@' . DEFAULT_HOST . ' (' . (int)$nc['count'] . ')");';
+								$( "ul.dynatree-container a.dynatree-title:contains(\'' . $nc['name'] . '@' . DEFAULT_EMAIL_HOST . '\')" ).removeClass("nonew").addClass("newmail").text("' . $nc['name'] . '@' . DEFAULT_EMAIL_HOST . ' (' . (int)$nc['count'] . ')");';
 						}
 					}
 				}
@@ -155,7 +156,7 @@ class MailboxXhr extends Control
 					$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von " . $this->func->niceDate($message['time_ts']) . " ---------\n\n>\t" . str_replace("\n", "\n>\t", $message['body']);
 
 					$mail = new AsyncMail();
-					$mail->setFrom($message['mailbox'] . '@' . DEFAULT_HOST, S::user('name'));
+					$mail->setFrom($message['mailbox'] . '@' . DEFAULT_EMAIL_HOST, S::user('name'));
 					if ($sender['personal']) {
 						$mail->addRecipient($sender['mailbox'] . '@' . $sender['host'], $sender['personal']);
 					} else {
@@ -240,7 +241,7 @@ class MailboxXhr extends Control
 				$this->libPlainMail(
 					$an,
 					array(
-						'email' => $mailbox['name'] . '@' . DEFAULT_HOST,
+						'email' => $mailbox['name'] . '@' . DEFAULT_EMAIL_HOST,
 						'name' => $mailbox['email_name']
 					),
 					$_POST['sub'],
@@ -265,7 +266,7 @@ class MailboxXhr extends Control
 					$_POST['mb'],
 					2,
 					json_encode(array(
-						'host' => DEFAULT_HOST,
+						'host' => DEFAULT_EMAIL_HOST,
 						'mailbox' => $mailbox['name'],
 						'personal' => $mailbox['email_name']
 					)),

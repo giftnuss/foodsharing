@@ -271,7 +271,7 @@ class QuizXhr extends Control
 					modal: true,
 					buttons: [
 						{
-							text: "Quiz-Pausieren",
+							text: "Quiz pausieren",
 							click: function(){
 								$(this).dialog("close");
 								ajreq("pause",{app:"quiz",sid:' . (int)$session_id . '});
@@ -287,7 +287,7 @@ class QuizXhr extends Control
 	}
 
 	/**
-	 * Method to initiate a quiz session so get the defined amount of questions sort it randomly and store it in an session variable.
+	 * Method to initiate a quiz session so get the defined amount of questions, sort it randomly, and store it in a session variable.
 	 */
 	public function startquiz()
 	{
@@ -295,10 +295,10 @@ class QuizXhr extends Control
 			return false;
 		}
 		/*
-		 * First we want to check is there an quiz session what the user have lost?
+		 * First we want to check if there is a quiz session that the user has lost?
 		 */
 		if ($session = $this->model->getExsistingSession($_GET['qid'])) {
-			// if yes reinitiate the running quiz session
+			// if yes, reinitiate the running quiz session
 			S::set('quiz-id', (int)$_GET['qid']);
 			S::set('quiz-questions', $session['quiz_questions']);
 			S::set('quiz-index', $session['quiz_index']);
@@ -316,7 +316,7 @@ class QuizXhr extends Control
 
 			$dia->setTitle('Quiz fortführen');
 
-			$dia->addContent('<h1>Du hast Dein Quiz nicht beendet</h1><p>Aber keine Sorge Du kannst einfach jetzt das Quiz zum Ende bringen.</p><p>Also viel Spaß beim weiterquizzen.</p>');
+			$dia->addContent('<h1>Du hast Dein Quiz nicht beendet</h1><p>Aber keine Sorge, Du kannst einfach jetzt das Quiz zu Ende bringen.</p><p>Also viel Spaß beim Weiterquizzen.</p>');
 			$dia->addButton('Quiz fortführen', 'ajreq(\'next\',{app:\'quiz\'});');
 			$return = $dia->xhrout();
 
@@ -324,11 +324,11 @@ class QuizXhr extends Control
 
 			return $return;
 		} /*
-		 * Otherwiser we start a new quiz session
+		 * Otherwise, we start a new quiz session
 		 */
 		elseif ($quiz = $this->model->getQuiz($_GET['qid'])) {
 			/*
-			 * if foodsaver quiz user can choose between easy and quick mode
+			 * if foodsaver quiz, user can choose between easy and quick mode
 			*/
 
 			if ($_GET['qid'] == 1 && isset($_GET['easymode']) && $_GET['easymode'] == 1) {
@@ -342,13 +342,13 @@ class QuizXhr extends Control
 			 * first get random sorted quiz questions
 			 */
 			if ($questions = $this->getRandomQuestions($_GET['qid'], $quiz['questcount'])) {
-				//Get the description how the quiz works
+				// Get the description on how the quiz works
 				$content = $this->model->getContent(17);
 
-				// for safety check if there are not to many questions
+				// for safety check if there are not too many questions
 				$questions = array_slice($questions, 0, (int)$quiz['questcount']);
 
-				// check for double question (bugfix)
+				// check for double questions (bugfix)
 				$questions = $this->replaceDoubles($questions);
 
 				/*
@@ -359,7 +359,7 @@ class QuizXhr extends Control
 				S::set('quiz-index', 0);
 
 				/*
-				 * Make a litte output for the user that he/she cat just start the quiz now
+				 * Make a litle output for the user that he/she can just start the quiz now
 				 */
 				$dia = new XhrDialog();
 				$dia->addOpt('width', 600);
@@ -377,7 +377,7 @@ class QuizXhr extends Control
 		}
 
 		/*
-		 * If we cant get an quiz from the db send an error
+		 * If we can't get a quiz from the db, send an error
 		 */
 		return array(
 			'status' => 1,
@@ -396,11 +396,11 @@ class QuizXhr extends Control
 		$dia->addAbortButton();
 
 		if (S::get('hastodoquiz-id') == 1) {
-			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Foodsaver bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
+			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Foodsaver bestätigen', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
 		} elseif (S::get('hastodoquiz-id') == 2) {
-			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche*r bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bip\');');
+			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche*r bestätigen', 'goTo(\'/?page=settings&sub=upgrade/up_bip\');');
 		} elseif (S::get('hastodoquiz-id') == 3) {
-			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
+			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
 		}
 
 		$content = $this->model->getContent($content_id);
@@ -413,7 +413,7 @@ class QuizXhr extends Control
 	public function quizpopup()
 	{
 		if (S::may('fs')) {
-			$count = (int)$this->model->qOne('SELECT COUNT(id) FROM ' . PREFIX . 'quiz_session WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND quiz_id = ' . (int)S::get('hastodoquiz-id') . ' AND `status` = 1');
+			$count = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND quiz_id = ' . (int)S::get('hastodoquiz-id') . ' AND `status` = 1');
 			if ($count == 0) {
 				$dia = new XhrDialog();
 				$dia->addOpt('width', 720);
@@ -421,13 +421,13 @@ class QuizXhr extends Control
 				$dia->addAbortButton();
 
 				if (S::get('hastodoquiz-id') == 1) {
-					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Foodsaver bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
+					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Foodsaver bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
 				} elseif (S::get('hastodoquiz-id') == 2) {
 					$content_id = 34;
-					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche/r bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bip\');');
+					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche/r bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_bip\');');
 				} elseif (S::get('hastodoquiz-id') == 3) {
 					$content_id = 35;
-					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Botschafter bestätigen!', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
+					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
 				}
 
 				$content = $this->model->getContent($content_id);
@@ -637,7 +637,7 @@ class QuizXhr extends Control
 
 						// additional output if it was a joke question
 						if ($was_a_joke) {
-							$return['script'] .= 'pulseInfo("<h3>Das war eine Scherzfrage</h3>Du kannst beruhigt weitermachen und auch wenn die möglichen Antworten nicht falsch sind, müssen diese Fragen nicht richtig beantwortet werden, sie dienen lediglich des auflockerns für Zwischendurch ;)",{sticky:true});';
+							$return['script'] .= 'pulseInfo("<h3>Das war eine Scherzfrage</h3>Du kannst beruhigt weitermachen und auch wenn die möglichen Antworten nicht falsch sind, müssen diese Fragen nicht richtig beantwortet werden. Sie dienen lediglich zum Auflockern für Zwischendurch ;)",{sticky:true});';
 						}
 
 						/*
@@ -718,7 +718,7 @@ class QuizXhr extends Control
 								}
 								else
 								{
-									pulseError(\'Bitte treffe erst eine Auswahl!\')
+									pulseError(\'Bitte triff erst eine Auswahl!\')
 								}
 							}
 							
@@ -740,7 +740,7 @@ class QuizXhr extends Control
 								}
 								else
 								{
-									pulseError(\'Bitte treffe erst eine Auswahl!\')
+									pulseError(\'Bitte triff erst eine Auswahl!\')
 								}
 							}
 							
@@ -752,7 +752,7 @@ class QuizXhr extends Control
 								}
 								else
 								{
-									pulseError(\'Bitte treffe eine Auswahl!\')
+									pulseError(\'Bitte triff eine Auswahl!\')
 								}
 							}
 							
@@ -768,7 +768,7 @@ class QuizXhr extends Control
 								}
 								else
 								{
-									pulseError(\'Bitte treffe erst eine Auswahl!\')
+									pulseError(\'Bitte triff erst eine Auswahl!\')
 								}	
 							}
 										
@@ -847,7 +847,7 @@ class QuizXhr extends Control
 
 						return array(
 							'status' => 1,
-							'script' => 'pulseError("Diese Frage hat Keine Antworten, überspringe...");ajreq("next",{app:"quiz"});'
+							'script' => 'pulseError("Diese Frage hat keine Antworten. Überspringe...");ajreq("next",{app:"quiz"});'
 						);
 					}
 				}
@@ -861,7 +861,7 @@ class QuizXhr extends Control
 
 		return array(
 			'status' => 1,
-			'script' => 'pulseError("Es ist ein Fehler aufgetreten, Frage wird übersprungen");ajreq("next",{app:"quiz"});'
+			'script' => 'pulseError("Es ist ein Fehler aufgetreten. Frage wird übersprungen.");ajreq("next",{app:"quiz"});'
 		);
 	}
 
@@ -937,16 +937,16 @@ class QuizXhr extends Control
 					} // Antwort richtig angeklickt
 					elseif ((isset($uanswers[$a['id']]) && $a['right'] == 1) || (!isset($uanswers[$a['id']]) && $a['right'] == 0)) {
 						if ($a['right'] == 0) {
-							$atext = 'Diese Antwort war natürlich falsch, das hast Du richtig erkannt';
+							$atext = 'Diese Antwort war natürlich falsch. Das hast Du richtig erkannt.';
 						} else {
 							$atext = 'Richtig! Diese Antwort stimmt.';
 						}
 						$bg = '#599022';
 						$color = '#ffffff';
-					} // Antwort richtig weil nicht angeklickt
+					} // Antwort richtig, weil nicht angeklickt
 					else {
 						if ($a['right'] == 0) {
-							$atext = 'Falsch, Diese Antwort stimmt nicht.';
+							$atext = 'Falsch! Diese Antwort stimmt nicht.';
 						} else {
 							$atext = 'Auch diese Antwort wäre richtig gewesen.';
 						}
@@ -1064,7 +1064,7 @@ class QuizXhr extends Control
 						break;
 					default:
 
-						// Bei Neutralen Fragen einfach erklärung anfügen
+						// Bei neutralen Fragen einfach Erklärung anfügen
 						$explains[$a['id']] = $rightQuestions[$question['id']]['answers'][$a['id']];
 						break;
 				}
@@ -1088,7 +1088,7 @@ class QuizXhr extends Control
 			$percent = 100;
 		}
 
-		// fix alle fragen sind neutral
+		// fix alle Fragen sind neutral
 		if ($allNeutral) {
 			$fp = 0;
 			$percent = '0';

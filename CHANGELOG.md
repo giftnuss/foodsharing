@@ -1,3 +1,44 @@
+# 2018-05-24
+
+## Release notes
+This release is mostly pushed by GDPR (German: DSGVO) as this forces us to do some changes.
+I am not sure yet, if I am positive or negative about that...
+
+Also, we introduce new frontend technology here. I hope we did not break too much :-)
+
+## Features
+- decreased distance to "close baskets" from 50 to 30 km. !332 #338 by @peter.toennies
+- sort fairtiler list by name. !357 #171 by @k.miklobusec
+- Store Managers business card creation for region. Remove country card. !76 by @k.miklobusec
+- Registered users need to fill their birthday and be 18+ for data protection and liability reasons. !377 @NerdyProjects
+- Remove google analytics !374 @NerdyProjects
+- Remove external paypal donate button and host locally !374 @NerdyProjects
+- Privacy policy need to be agreed before the page can be used !379 @NerdyProjects
+- Privacy notice need to be agreed by store coordinators/ambassadors !381 @NerdyProjects
+
+## Bugfixes
+- Removing a user from regions is possible again. !372 #14 @NerdyProjects
+- Fix search bar not working on some pages !364 by @NerdyProjects
+- Remove info section from foodsaver page, if it is empty !320
+- It is possible to contact working groups again. !343 #403 by @peter.toennies @NerdyProjects
+- Fix store fetch count shown on map info bubble !265 @alangecker @NerdyProjects
+- fixed disabled unsubscription of forum posts for fair-teiler responsibles. !331 #317 by @peter.toennies
+- fixed stripping of whitespace on email field for registration #58 @nigeldgreen
+- use babel polyfills to support more browsers !359 @nicksellen
+- fixed check for allowed attachment types in the mail app. !363 #183 by @peter.toennies
+- data privacy : removed foodsaver / ambassador selection from map. #165 by @k.miklobusec
+- fixed potential security issue in profile picture uploads. !371 #84 @theolampert
+
+## Refactoring
+- complete tidying up of all team related files !321 by @peter.toennies
+- replaced the PREFIX keyword in the whole source !339 #421 by peter.toennies
+- refactored and cleaned the whole reports module. !335 by @peter.toennies
+- add webpack for managing frontend assets. !345 @nicksellen
+- use symfony form builder work work group edit page !347 @NerdyProjects
+- introduce CropperJS for handling image cropping (work group edit) !347 @NerdyProjects
+- configure dependency injection as yaml, not PHP !347 @NerdyProjects
+
+## Dev/Test/CI stuff
 # 2018-05-14 Hotfix
 - Fetching emails to platform mail addresses is more robust against broken mail dates now. #195
 
@@ -11,6 +52,7 @@
 
 ## Refactoring
 - Database multi-row query methods return empty array instead of false on no result !327 @NerdyProjects
+- Cleaned up usage of some configuration constants !326 @NerdyProjects
 
 # 2018-03-01
 ## Hotfixes 2018-03-04
@@ -43,6 +85,7 @@ as well as modern coding techniques.
 
 ## Features
 - Use of bcrypt as hashing algorithm to store passwords
+- Added fairteiler to be shown by default on the map for not registered users and foodsharers !319 by @valentin.unicorn
 - Removed the working groups from the team->teammember page !262 @BassTii
 - Changed way of gendering in passport from "/" to "_" !251 @D0nPiano
 - auto adding of CH-BOTs, Vienna-BIEBs, and ZH-BIEBs to their working groups. !271 by @peter.toennies
@@ -80,7 +123,6 @@ as well as modern coding techniques.
 - Add twig templating for main menu and other things !292 @nicksellen
 - Remove global usage of Func, DB and ViewUtils Helper classes !289 @NerdyProjects
 - Refactor router for HTML controller classes !289 @NerdyProjects
-- complete tidying up of all CSS files. !298 by @peter.toennies
 - Make some components ready to be used without global data passing variable !294 @NerdyProjects
 - Introduce Request and Response object and used it in WorkGroupControl !294 @NerdyProjects
 - Introduce input deserializer/sanitizer/validator component in WorkGroupControl !294 @NerdyProjects

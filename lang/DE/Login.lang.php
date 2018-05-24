@@ -14,6 +14,7 @@ $g_lang['contact_info'] = 'Kontaktinformationen';
 $g_lang['legal_stuff'] = 'Rechtliches';
 $g_lang['select_picture'] = 'Foto ausw&auml;hlen';
 $g_lang['peer'] = 'Foodsharer';
+$g_lang['geb_datum'] = 'Geburtsdatum';
 $g_lang['organisation'] = 'Organisation';
 $g_lang['login_phone'] = 'Telefonnummer';
 $g_lang['login_location'] = 'Deine Adresse';
@@ -36,6 +37,7 @@ $g_lang['error_name'] = 'Bitte gib einen Namen ein';
 $g_lang['error_email'] = 'Mit Deiner E-Mail-Adresse stimmt etwas nicht';
 $g_lang['error_passwd'] = 'Dein Passwort muss mindestens 5 und darf maximal 30 Zeichen haben';
 $g_lang['error_image'] = 'Dein Foto konnte nicht hochgeladen werden';
+$g_lang['error_birthdate'] = 'Aus datenschutz- und haftungsrechtlichen Gründen musst du mindestens 18 Jahre alt sein, um bei foodsharing.de mitzumachen.';
 
 $g_lang['activation_success'] = '<strong>Aktivierung erfolgreich.</strong> Logge Dich jetzt Mit Deiner E-Mail-Adresse und Deinem gewählten Passwort ein.';
 $g_lang['activation_failed'] = '<strong>Aktivierung fehlgeschlagen!</strong> Ist der eingegebene Link auch korrekt?';

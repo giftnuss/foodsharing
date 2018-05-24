@@ -169,9 +169,6 @@ class DashboardView extends View
 			}
 		}
 	');
-		$this->func->addScript('/js/jquery.tinysort.min.js');
-		$this->func->addScript('/js/activity.js');
-		$this->func->addJs('activity.init();');
 		$this->func->addContent('
 	<div class="head ui-widget-header ui-corner-top">
 		Updates-Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>

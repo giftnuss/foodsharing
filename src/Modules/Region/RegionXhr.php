@@ -123,7 +123,7 @@ class RegionXhr extends Control
 							$this->func->tplMail(19, $f['email'], array(
 								'anrede' => $this->func->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 								'name' => $f['name'],
-								'link' => 'http://www.' . DEFAULT_HOST . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,
+								'link' => BASE_URL . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,
 								'theme' => $theme,
 								'post' => $body,
 								'poster' => S::user('name')
@@ -155,8 +155,8 @@ class RegionXhr extends Control
 	{
 		$data = $_GET;
 		if ($this->model->mayBezirk($data['bid'])) {
-			$this->model->del('DELETE FROM `' . PREFIX . 'foodsaver_has_bezirk` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->func->fsId() . ' ');
-			$this->model->del('DELETE FROM `' . PREFIX . 'botschafter` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->func->fsId() . ' ');
+			$this->model->del('DELETE FROM `fs_foodsaver_has_bezirk` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->func->fsId() . ' ');
+			$this->model->del('DELETE FROM `fs_botschafter` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->func->fsId() . ' ');
 
 			return array('status' => 1);
 		}

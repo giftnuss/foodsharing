@@ -1,68 +1,74 @@
-<script type="text/javascript">
-
-    var u_current_bezirk_type = 0;
-
-    function u_printChildBezirke(element) {
-        val = element.value + "";
-
-        part = val.split(":");
-
-        var parent = part[0];
-
-        u_current_bezirk_type = part[1];
-
-        if (parent == -1) {
-            $("#{{ id }}").val("");
-            return false;
-        }
-
-        if (parent == -2) {
-            $("#{{ id }}-notAvail").fadeIn();
-        }
-
-        $("#{{ id }}").val(element.value);
-
-        el = $(element);
-
-        if (el.next().next().next().next().next().hasClass("childChanger")) {
-            el.next().next().next().next().next().remove();
-        }
-        if (el.next().next().next().next().hasClass("childChanger")) {
-            el.next().next().next().next().remove();
-        }
-        if (el.next().next().next().hasClass("childChanger")) {
-            el.next().next().next().remove();
-        }
-        if (el.next().next().hasClass("childChanger")) {
-            el.next().next().remove();
-        }
-        if (el.next().hasClass("childChanger")) {
-            el.next().remove();
-        }
-
-        $("#xv-childbezirk-" + parent).remove();
-
-
-        showLoader();
-        $.ajax({
-            dataType: "json",
-            url: "xhr.php?f=childBezirke&parent=" + parent,
-            success: function (data) {
-                if (data.status == 1) {
-                    $("#{{ id }}-childs-" + parent).remove();
-                    $("#{{ id }}-wrapper").append(data.html);
-                }
-                else {
-
-                }
-            },
-            complete: function () {
-                hideLoader();
-            }
-        });
-    }
-
-    u_printChildBezirke({value: "0:0"});
-</script>
-
 <div id="{{ id }}-wrapper"></div><input type="hidden" name="{{ id }}" id="{{ id }}" value="0"/>
+
+{% if not webpack %}
+
+    <script type="text/javascript">
+
+        var u_current_bezirk_type = 0;
+
+        function u_printChildBezirke(element) {
+
+            val = element.value + "";
+
+            part = val.split(":");
+
+            var parent = part[0];
+
+            u_current_bezirk_type = part[1];
+
+            if (parent == -1) {
+                $("#{{ id }}").val("");
+                return false;
+            }
+
+            if (parent == -2) {
+                $("#{{ id }}-notAvail").fadeIn();
+            }
+
+            $("#{{ id }}").val(element.value);
+
+            el = $(element);
+
+            if (el.next().next().next().next().next().hasClass("childChanger")) {
+                el.next().next().next().next().next().remove();
+            }
+            if (el.next().next().next().next().hasClass("childChanger")) {
+                el.next().next().next().next().remove();
+            }
+            if (el.next().next().next().hasClass("childChanger")) {
+                el.next().next().next().remove();
+            }
+            if (el.next().next().hasClass("childChanger")) {
+                el.next().next().remove();
+            }
+            if (el.next().hasClass("childChanger")) {
+                el.next().remove();
+            }
+
+            $("#xv-childbezirk-" + parent).remove();
+
+
+            showLoader();
+            $.ajax({
+                dataType: "json",
+                url: "xhr.php?f=childBezirke&parent=" + parent,
+                success: function (data) {
+                    if (data.status == 1) {
+                        $("#{{ id }}-childs-" + parent).remove();
+                        $("#{{ id }}-wrapper").append(data.html);
+                    }
+                    else {
+
+                    }
+                },
+                complete: function () {
+                    hideLoader();
+                }
+            });
+        }
+
+        u_printChildBezirke({value: "0:0"});
+    </script>
+
+{% endif %}
+

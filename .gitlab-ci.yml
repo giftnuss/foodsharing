@@ -1,74 +1,75 @@
-image: registry.gitlab.com/foodsharing-dev/images/ci:1.5
-
-stages:
-- test
-- deploy
-
-test:
-  script:
-  - ./scripts/ci.test
-
-  after_script:
-  # collect artifacts
-  - docker cp foodsharing_ci_selenium:/home/seluser/Downloads tests/_output/
-  - docker cp foodsharing_ci_app:/app/tests/_output/ tests/_output
-
-  # stop/kill all the containers
-  - FS_ENV=ci ./scripts/rm
+.defaults: &defaults
+  image: registry.gitlab.com/foodsharing-dev/images/ci:1.5
 
   # run it on our foodsharing ci server
   tags:
   - non-shared
 
+.deploy: &deploy
+  <<: *defaults
+  stage: deploy
+
+  script:
+  - eval $(ssh-agent -s)
+  - ssh-add <(echo "$DEPLOY_SSH_KEY")
+  - mkdir -p ~/.ssh
+  # For Docker builds disable host key checking. Be aware that by adding that
+  # you are suspectible to man-in-the-middle attacks.
+  # WARNING: Use this only with the Docker executor, if you use it with shell
+  # you will overwrite your user's SSH config.
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  - (cd deployer && composer install)
+  - deployer/vendor/bin/dep deploy $CI_ENVIRONMENT_NAME --revision $CI_COMMIT_SHA
+  - ./scripts/deploy.notifyslack.sh
+
+stages:
+- build
+- test
+- deploy
+
+build:
+  <<: *defaults
+  image: node:9.9.0
+  stage: build
+  script:
+  - (cd client && yarn && yarn lint && yarn build)
+  cache:
+    key: build
+    paths:
+    - client/node_modules
+  artifacts:
+    paths:
+    - assets
+
+test:
+  <<: *defaults
+  script:
+  - ./scripts/ci.test
+  after_script:
+  # collect artifacts
+  - docker cp foodsharing_ci_selenium:/home/seluser/Downloads tests/_output/
+  - docker cp foodsharing_ci_app:/app/tests/_output/ tests/_output
+  # stop/kill all the containers
+  - FS_ENV=ci ./scripts/rm
   # collect any test output
   artifacts:
     when: always
     paths:
     - tests/_output
 
-deploy_beta:
-  stage: deploy
-
-  script:
-  - eval $(ssh-agent -s)
-  - ssh-add <(echo "$DEPLOY_SSH_KEY")
-  - mkdir -p ~/.ssh
-  # For Docker builds disable host key checking. Be aware that by adding that
-  # you are suspectible to man-in-the-middle attacks.
-  # WARNING: Use this only with the Docker executor, if you use it with shell
-  # you will overwrite your user's SSH config.
-  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-  - (cd deployer && composer install)
-  - deployer/vendor/bin/dep deploy $CI_ENVIRONMENT_NAME --revision $CI_COMMIT_SHA
-  - ./scripts/deploy.notifyslack.sh
-
+deploy:beta:
+  <<: *deploy
   environment:
     name: beta
     url: https://beta.foodsharing.de
-
   only:
   - master
 
-deploy_production:
-  stage: deploy
-
-  script:
-  - eval $(ssh-agent -s)
-  - ssh-add <(echo "$DEPLOY_SSH_KEY")
-  - mkdir -p ~/.ssh
-  # For Docker builds disable host key checking. Be aware that by adding that
-  # you are suspectible to man-in-the-middle attacks.
-  # WARNING: Use this only with the Docker executor, if you use it with shell
-  # you will overwrite your user's SSH config.
-  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-  - (cd deployer && composer install)
-  - deployer/vendor/bin/dep deploy $CI_ENVIRONMENT_NAME --revision $CI_COMMIT_SHA
-  - ./scripts/deploy.notifyslack.sh
-
+deploy:production:
+  <<: *deploy
   environment:
     name: production
     url: https://foodsharing.de
-
   only:
   - production
 

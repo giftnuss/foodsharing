@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Dashboard;
 
-use Foodsharing\Lib\Twig;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Content\ContentGateway;
@@ -23,7 +22,7 @@ class DashboardControl extends Control
 		ContentGateway $contentGateway,
 		Model $model,
 		ProfileModel $profileModel,
-		Twig $twig)
+		\Twig\Environment $twig)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;
@@ -43,9 +42,6 @@ class DashboardControl extends Control
 
 	public function index()
 	{
-		$this->func->addScript('/js/contextmenu/jquery.contextMenu.js');
-		$this->func->addStylesheet('/js/contextmenu/jquery.contextMenu.css');
-
 		$check = false;
 
 		$is_bieb = S::may('bieb');
@@ -167,7 +163,7 @@ class DashboardControl extends Control
 
 		$this->view->updates();
 
-		if ($this->user['lat'] && ($baskets = $this->gateway->listCloseBaskets($this->func->fsId(), S::getLocation($this->model), 50))) {
+		if ($this->user['lat'] && ($baskets = $this->gateway->listCloseBaskets($this->func->fsId(), S::getLocation($this->model)))) {
 			$this->func->addContent($this->view->closeBaskets($baskets), CNT_LEFT);
 		} else {
 			if ($baskets = $this->gateway->getNewestFoodbaskets()) {
@@ -282,9 +278,7 @@ class DashboardControl extends Control
 			</div><a id="grab-info-link" href="#grab-info">&nbsp;</a>');
 		}
 
-		if (!$this->func->getBezirkId()) {
-			$this->func->addJs('becomeBezirk();');
-		} /*
+		/*
 		 * check is there are Betrieb not ordered to an bezirk
 		 */
 		elseif (isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich'])) {
@@ -446,9 +440,6 @@ class DashboardControl extends Control
 				}
 			}
 		');
-		$this->func->addScript('/js/jquery.tinysort.min.js');
-		$this->func->addScript('/js/activity.js');
-		$this->func->addJs('activity.init();');
 		$this->func->addContent('
 		<div class="head ui-widget-header ui-corner-top">
 			Updates-Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>

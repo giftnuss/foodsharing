@@ -232,7 +232,7 @@ class MaintenanceControl extends ConsoleControl
 		@unlink('images/.png');
 
 		/* foodsaver photos */
-		if ($foodsaver = $this->model->q('SELECT id, photo FROM ' . PREFIX . 'foodsaver WHERE photo != ""')) {
+		if ($foodsaver = $this->model->q('SELECT id, photo FROM fs_foodsaver WHERE photo != ""')) {
 			$update = array();
 			foreach ($foodsaver as $fs) {
 				if (!file_exists('images/' . $fs['photo'])) {
@@ -240,11 +240,11 @@ class MaintenanceControl extends ConsoleControl
 				}
 			}
 			if (!empty($update)) {
-				$this->model->update('UPDATE ' . PREFIX . 'foodsaver SET photo = "" WHERE id IN(' . implode(',', $update) . ')');
+				$this->model->update('UPDATE fs_foodsaver SET photo = "" WHERE id IN(' . implode(',', $update) . ')');
 			}
 		}
 		$check = array();
-		if ($foodsaver = $this->model->q('SELECT id, photo FROM ' . PREFIX . 'foodsaver WHERE photo != ""')) {
+		if ($foodsaver = $this->model->q('SELECT id, photo FROM fs_foodsaver WHERE photo != ""')) {
 			foreach ($foodsaver as $fs) {
 				$check[$fs['photo']] = $fs['id'];
 			}
@@ -338,8 +338,8 @@ class MaintenanceControl extends ConsoleControl
 				b.`master`,
 				hb.foodsaver_id
 
-				FROM 	`' . PREFIX . 'bezirk` b,
-				`' . PREFIX . 'foodsaver_has_bezirk` hb
+				FROM 	`fs_bezirk` b,
+				`fs_foodsaver_has_bezirk` hb
 
 				WHERE 	hb.bezirk_id = b.id
 				AND 	b.`master` != 0
@@ -348,10 +348,10 @@ class MaintenanceControl extends ConsoleControl
 		')
 		) {
 			foreach ($foodasver as $fs) {
-				if (!$this->model->qRow('SELECT bezirk_id FROM `' . PREFIX . 'foodsaver_has_bezirk` WHERE foodsaver_id = ' . (int)$fs['foodsaver_id'] . ' AND bezirk_id = ' . $fs['master'])) {
+				if (!$this->model->qRow('SELECT bezirk_id FROM `fs_foodsaver_has_bezirk` WHERE foodsaver_id = ' . (int)$fs['foodsaver_id'] . ' AND bezirk_id = ' . $fs['master'])) {
 					if ((int)$fs['master'] > 0) {
 						$this->model->insert('
-						INSERT INTO `' . PREFIX . 'foodsaver_has_bezirk`
+						INSERT INTO `fs_foodsaver_has_bezirk`
 						(
 							`foodsaver_id`,
 							`bezirk_id`,
@@ -445,7 +445,7 @@ class MaintenanceControl extends ConsoleControl
 					'anrede' => $this->func->s('anrede_' . $fs['geschlecht']),
 					'name' => $fs['fs_name'],
 					'betrieb' => $fs['betrieb_name'],
-					'link' => URL_INTERN . '/?page=fsbetrieb&id=' . $fs['betrieb_id']
+					'link' => BASE_URL . '/?page=fsbetrieb&id=' . $fs['betrieb_id']
 				));
 			}
 			self::success('OK');
@@ -485,9 +485,9 @@ class MaintenanceControl extends ConsoleControl
 			$bar = $this->progressbar(count($foodsaver));
 			foreach ($foodsaver as $key => $fs) {
 				$bar->update(($key + 1));
-				$count_fs_quiz = (int)$this->model->qOne('SELECT COUNT(id) FROM ' . PREFIX . 'quiz_session WHERE foodsaver_id = ' . (int)$fs['id'] . ' AND quiz_id = 1 AND `status` = 1');
-				$count_bib_quiz = (int)$this->model->qOne('SELECT COUNT(id) FROM ' . PREFIX . 'quiz_session WHERE foodsaver_id = ' . (int)$fs['id'] . ' AND quiz_id = 2 AND `status` = 1');
-				$count_bot_quiz = (int)$this->model->qOne('SELECT COUNT(id) FROM ' . PREFIX . 'quiz_session WHERE foodsaver_id = ' . (int)$fs['id'] . ' AND quiz_id = 3 AND `status` = 1');
+				$count_fs_quiz = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$fs['id'] . ' AND quiz_id = 1 AND `status` = 1');
+				$count_bib_quiz = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$fs['id'] . ' AND quiz_id = 2 AND `status` = 1');
+				$count_bot_quiz = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$fs['id'] . ' AND quiz_id = 3 AND `status` = 1');
 
 				$quiz_rolle = 0;
 				if ($count_fs_quiz > 0) {
@@ -500,7 +500,7 @@ class MaintenanceControl extends ConsoleControl
 					$quiz_rolle = 3;
 				}
 
-				$this->model->update('UPDATE ' . PREFIX . 'foodsaver SET quiz_rolle = ' . (int)$quiz_rolle . ' WHERE id = ' . (int)$fs['id']);
+				$this->model->update('UPDATE fs_foodsaver SET quiz_rolle = ' . (int)$quiz_rolle . ' WHERE id = ' . (int)$fs['id']);
 			}
 		}
 	}
@@ -509,7 +509,7 @@ class MaintenanceControl extends ConsoleControl
 	{
 		$this->model->update('
 			UPDATE
-				' . PREFIX . 'foodsaver
+				fs_foodsaver
 			SET
 				sleep_status = 0
 			WHERE

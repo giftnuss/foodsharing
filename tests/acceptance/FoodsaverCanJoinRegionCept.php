@@ -18,6 +18,7 @@ $I->login($user['email']);
 /*$I->moveMouseOver('//*[contains(@id, "mainMenu")]/li[contains(. ,"Bezirke")]');
 $I->click('Bezirk beitreten');
 */
+
 $I->see('Bitte auswählen');
 $I->selectOption('#xv-childbezirk-0', $region['name']);
 $I->moveMouseOver('#becomebezirkchooser-button');

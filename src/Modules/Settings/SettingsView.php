@@ -103,7 +103,6 @@ class SettingsView extends View
 	{
 		global $g_data;
 		$out = '';
-		$disabled = false;
 
 		if ($fairteiler) {
 			foreach ($fairteiler as $ft) {
@@ -141,8 +140,7 @@ class SettingsView extends View
 					'values' => array(
 						array('id' => 1, 'name' => $this->func->s('follow_thread_mail')),
 						array('id' => 0, 'name' => $this->func->s('follow_thread_none'))
-					),
-					'disabled' => $disabled
+					)
 				));
 			}
 		}
@@ -168,7 +166,7 @@ class SettingsView extends View
 
 	public function quizSession($session, $try_count, Model $model)
 	{
-		$infotext = $this->v_utils->v_error('mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten leider nicht bestanden. <a href="http://wiki.lebensmittelretten.de/" target="_blank">Informiere Dich im Wiki</a> für den nächsten Versuch.<p>Lies Dir hier noch mal in Ruhe die Fragen und die dazugehörigen Antworten durch, damit es beim nächsten Mal besser klappt</p>');
+		$infotext = $this->v_utils->v_error('mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten leider nicht bestanden. <a href="https://wiki.foodsharing.de/" target="_blank">Informiere Dich im Wiki</a> für den nächsten Versuch.<p>Lies Dir hier noch mal in Ruhe die Fragen und die dazugehörigen Antworten durch, damit es beim nächsten Mal besser klappt</p>');
 		$subtitle = 'Leider nicht bestanden';
 		if ($session['fp'] < $session['maxfp']) {
 			$subtitle = 'Bestanden!';
@@ -543,7 +541,7 @@ class SettingsView extends View
 			$this->v_utils->v_form_date('geb_datum', array('required' => true, 'yearRangeFrom' => date('Y') - 120, 'yearRangeTo' => date('Y') - 8)),
 			$communications,
 			$position,
-			$this->v_utils->v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz, hier unsere Vorlage: http://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du öffentlich an Informationen teilen möchtest, die vorteilhaft sind.')),
+			$this->v_utils->v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz, hier unsere Vorlage: https://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du öffentlich an Informationen teilen möchtest, die vorteilhaft sind.')),
 			$oeff
 		), array('submit' => $this->func->s('save')));
 	}

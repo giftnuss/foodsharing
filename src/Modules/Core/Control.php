@@ -7,7 +7,6 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Sanitizer;
 use Foodsharing\Lib\Session\S;
-use Foodsharing\Lib\Twig;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Message\MessageModel;
 use ReflectionClass;
@@ -34,9 +33,11 @@ abstract class Control
 	protected $v_utils;
 
 	/**
-	 * @var Twig
+	 * @var \Twig\Environment
 	 */
 	private $twig;
+
+	private $usesWebpack = false;
 
 	public function __construct()
 	{
@@ -82,8 +83,24 @@ abstract class Control
 			}
 		}
 		if ($this->isControl) {
-			if (file_exists($dir . $moduleName . '.js')) {
-				$this->func->addJsFunc(file_get_contents($dir . $moduleName . '.js'));
+			$webpackModules = $dir . '../../../assets/modules.json';
+			$manifest = json_decode(file_get_contents($webpackModules), true);
+			$entry = 'Modules/' . $moduleName;
+			if (isset($manifest[$entry])) {
+				// We are using new webpack style!
+				$this->usesWebpack = true;
+				foreach ($manifest[$entry] as $asset) {
+					if ($this->func->endsWith($asset, '.js')) {
+						$this->func->addWebpackScript($asset);
+					} elseif ($this->func->endsWith($asset, '.css')) {
+						$this->func->addWebpackStylesheet($asset);
+					}
+				}
+			} else {
+				// Existing method of js loading
+				if (file_exists($dir . $moduleName . '.js')) {
+					$this->func->addJsFunc(file_get_contents($dir . $moduleName . '.js'));
+				}
 			}
 			if (file_exists($dir . $moduleName . '.css')) {
 				$this->func->addStyle(file_get_contents($dir . $moduleName . '.css'));
@@ -95,14 +112,14 @@ abstract class Control
 	/**
 	 * @required
 	 */
-	public function setTwig(Twig $twig)
+	public function setTwig(\Twig\Environment $twig)
 	{
 		$this->twig = $twig;
 	}
 
 	protected function render($template, $data)
 	{
-		$global = $this->func->generateAndGetGlobalViewData();
+		$global = $this->func->generateAndGetGlobalViewData($this->usesWebpack);
 		$viewData = array_merge($global, $data);
 
 		return $this->twig->render($template, $viewData);
@@ -142,6 +159,11 @@ abstract class Control
 		} else {
 			return false;
 		}
+	}
+
+	public function getUsesWebpack(): bool
+	{
+		return $this->usesWebpack;
 	}
 
 	public function wallposts($table, $id)

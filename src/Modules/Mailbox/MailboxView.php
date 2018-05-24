@@ -19,7 +19,7 @@ class MailboxView extends View
 						$("#mbh-folder").val("inbox");$("#mbh-mailbox").val(' . (int)$b['id'] . ');$("#mbh-type").val("' . $b['type'] . '");';
 			}
 
-			$children[] = '{title: "' . $b['name'] . '@lebensmittelretten.de", isFolder: true, icon:"mailbox.png",' . $expand . '
+			$children[] = '{title: "' . $b['name'] . '@' . DEFAULT_EMAIL_HOST . '", isFolder: true, icon:"mailbox.png",' . $expand . '
                     children: [
                         {title: "' . $this->func->s('inbox') . '",ident:' . $b['id'] . ',folder:"inbox",icon:"inbox.png",type:"' . $b['type'] . '"},
                         {title: "' . $this->func->s('sent') . '",ident:' . $b['id'] . ',folder:"sent",icon:"sent.png",type:"' . $b['type'] . '"},
@@ -57,7 +57,7 @@ class MailboxView extends View
 
 	public function manageMemberBox($box)
 	{
-		return $this->v_utils->v_quickform($box['name'] . '@' . DEFAULT_HOST, array(
+		return $this->v_utils->v_quickform($box['name'] . '@' . DEFAULT_EMAIL_HOST, array(
 			$this->v_utils->v_form_tagselect('foodsaver_' . $box['id'], array('label' => $this->func->s('mailbox_member'), 'xhr' => 'foodsaver')),
 			$this->v_utils->v_input_wrapper($this->func->s('email_name'), '<input type="text" value="' . $box['email_name'] . '" name="email_name" class="input text value">'),
 			$this->v_utils->v_form_hidden('mbid', $box['id'])
@@ -100,22 +100,6 @@ class MailboxView extends View
 		$out = '';
 
 		foreach ($messages as $m) {
-			/*
-			 * (
-					 [mailbox_id] => 5
-					 [folder] => 1
-					 [sender] => {"personal":"Raphael Wintrich","mailbox":"raphi","host":"waldorfweb.net"}
-					 [to] => [{"mailbox":"r.wintrich","host":"lebensmittelretten.de"}]
-					 [subject] => Fwd: Newsletter ProVegan: Ausgabe 50/2013
-					 [time] => 2013-12-14 00:01:45
-					 [time_fs] => 1386975705
-					 [attach] =>
-					 [read] => 0
-					 [answer] => 0
-			 )
-
-			*/
-
 			$von = json_decode($m['sender'], true);
 
 			$von_str = $von['mailbox'];
@@ -157,25 +141,6 @@ class MailboxView extends View
 	public function message($mail)
 	{
 		$mail['body'] = trim($mail['body']);
-		/*
-		 * 		/*
-		 * Array
-		(
-			[id] => 1
-			[folder] => 1
-			[sender] => {"personal":"Raphael Wintrich","mailbox":"raphael","host":"waldorfweb.net"}
-			[to] => [{"mailbox":"r.wintrich","host":"lebensmittelretten.de"}]
-			[subject] => Test
-			[time] => 2013-12-13 23:42:20
-			[time_ts] => 1386974540
-			[attach] =>
-			[read] => 0
-			[answer] => 0
-			[body] => sldjkfhl ksdflkj sldfs df
-			[mailbox_id] => 5
-		)
-		 */
-
 		$von = json_decode($mail['sender'], true);
 
 		$von_str = $von['mailbox'] . '@' . $von['host'];
@@ -203,7 +168,7 @@ class MailboxView extends View
 		}
 
 		if ($mail['time_ts'] > 1391338283) {
-			$body = '<iframe style="width:100%;height:100%;border:0;margin:0;padding:0;" frameborder="0" src="' . BASE_URL . '/xhrapp.php?app=mailbox&m=fmail&id=' . $mail['id'] . '"></iframe>';
+			$body = '<iframe style="width:100%;height:100%;border:0;margin:0;padding:0;" frameborder="0" src="/xhrapp.php?app=mailbox&m=fmail&id=' . $mail['id'] . '"></iframe>';
 		} else {
 			$body = nl2br($mail['body']);
 		}
@@ -279,13 +244,13 @@ class MailboxView extends View
 			[type] => bot
 		 */
 		if (count($mailboxes) == 1) {
-			$von = $mailboxes[0]['email_name'] . ' (' . $mailboxes[0]['name'] . '@' . DEFAULT_HOST . ')<input type="hidden" id="h-edit-von" value="' . $mailboxes[0]['id'] . '" />';
+			$von = $mailboxes[0]['email_name'] . ' (' . $mailboxes[0]['name'] . '@' . DEFAULT_EMAIL_HOST . ')<input type="hidden" id="h-edit-von" value="' . $mailboxes[0]['id'] . '" />';
 		} else {
 			$von = '
 			<select class="von-select ui-corner-all" id="edit-von">';
 			foreach ($mailboxes as $m) {
 				$von .= '
-				<option class="mb-' . $m['id'] . '" value="' . $m['id'] . '">' . $m['email_name'] . ' (' . $m['name'] . '@' . DEFAULT_HOST . ')</option>';
+				<option class="mb-' . $m['id'] . '" value="' . $m['id'] . '">' . $m['email_name'] . ' (' . $m['name'] . '@' . DEFAULT_EMAIL_HOST . ')</option>';
 			}
 			$von .= '
 			</select>';

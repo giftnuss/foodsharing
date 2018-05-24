@@ -20,8 +20,8 @@ class FoodsaverModel extends Model
 			CONCAT("#",fs.id) AS href
 			 
 		    FROM
-			' . PREFIX . 'foodsaver fs,
-			' . PREFIX . 'foodsaver_has_bezirk hb
+			fs_foodsaver fs,
+			fs_foodsaver_has_bezirk hb
 			 
 		    WHERE
 			fs.id = hb.foodsaver_id
@@ -45,7 +45,7 @@ class FoodsaverModel extends Model
 	{
 		$this->del('
 			DELETE FROM
-				' . PREFIX . 'botschafter
+				fs_botschafter
 
 			WHERE
 				bezirk_id = ' . (int)$bezirk_id . '
@@ -56,7 +56,7 @@ class FoodsaverModel extends Model
 
 		return $this->del('
 			DELETE FROM
-				' . PREFIX . 'foodsaver_has_bezirk
+				fs_foodsaver_has_bezirk
 
 			WHERE
 				bezirk_id = ' . (int)$bezirk_id . '
@@ -79,7 +79,7 @@ class FoodsaverModel extends Model
 				last_login
 
 			FROM
-				' . PREFIX . 'foodsaver
+				fs_foodsaver
 
 			WHERE
 				id = ' . (int)$fsid . '
@@ -114,7 +114,7 @@ class FoodsaverModel extends Model
 
 				$bids = $this->q('
 					SELECT 	bt.betrieb_id as id
-					FROM 	' . PREFIX . 'betrieb_team bt
+					FROM 	fs_betrieb_team bt
 					WHERE 	bt.foodsaver_id = ' . $this->intval($id) . '
 				');
 				//Delete from Companies
@@ -124,24 +124,24 @@ class FoodsaverModel extends Model
 
 				//Delete Bells for Foodsaver
 				$this->del('
-					DELETE FROM  `' . PREFIX . 'foodsaver_has_bell`
+					DELETE FROM  `fs_foodsaver_has_bell`
 					WHERE 		`foodsaver_id` = ' . $this->intval($id) . '
 				');
 				// Delete from Bezirke and Working Groups
 				$this->del('
-					DELETE FROM  `' . PREFIX . 'foodsaver_has_bezirk`
+					DELETE FROM  `fs_foodsaver_has_bezirk`
 					WHERE 		`foodsaver_id` = ' . $this->intval($id) . '
 				');
 				//Delete from Bezirke and Working Groups (when Admin)
 				$this->del('
-					DELETE FROM  `' . PREFIX . 'botschafter`
+					DELETE FROM  `fs_botschafter`
 					WHERE 		`foodsaver_id` = ' . $this->intval($id) . '
 				');
 
 				//Block Person for Quiz
 				for ($i = 1; $i <= 7; ++$i) {
 					$this->insert('
-					INSERT INTO ' . PREFIX . 'quiz_session (
+					INSERT INTO fs_quiz_session (
 						foodsaver_id,
 						quiz_id,
 						`status`,
@@ -171,7 +171,7 @@ class FoodsaverModel extends Model
 
 		return $this->update('
 
-		UPDATE 	`' . PREFIX . 'foodsaver`
+		UPDATE 	`fs_foodsaver`
 
 		SET
 				`bezirk_id` =  ' . $this->intval($data['bezirk_id']) . ',

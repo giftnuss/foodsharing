@@ -17,7 +17,7 @@ require_once 'lang/DE/de.php';
  */
 function check_api_token($fs, $key, Model $model)
 {
-	$res = $model->qOne('SELECT COUNT(foodsaver_id) FROM ' . PREFIX . 'apitoken WHERE foodsaver_id = ' . (int)$fs . ' AND token="' . $model->safe($key) . '"');
+	$res = $model->qOne('SELECT COUNT(foodsaver_id) FROM fs_apitoken WHERE foodsaver_id = ' . (int)$fs . ' AND token="' . $model->safe($key) . '"');
 
 	return $res == 1;
 }
@@ -62,7 +62,7 @@ function api_generate_calendar($fs, $options, Model $model)
 	header('Content-Disposition: attachment; filename=calendar.ics');
 	echo "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Foodsharing.de//NONSGML v1.0//EN\r\nCALSCALE:GREGORIAN\r\n";
 	if (strpos($options, 's') !== false) {
-		$fetches = $model->q('SELECT b.id, b.name, b.str, b.hsnr, b.plz, b.stadt, a.confirmed, UNIX_TIMESTAMP(a.`date`) AS date_ts FROM ' . PREFIX . 'abholer a INNER JOIN ' . PREFIX . 'betrieb b ON a.betrieb_id = b.id WHERE a.foodsaver_id = ' . (int)$fs . ' AND a.`date` > NOW() - INTERVAL 1 DAY');
+		$fetches = $model->q('SELECT b.id, b.name, b.str, b.hsnr, b.plz, b.stadt, a.confirmed, UNIX_TIMESTAMP(a.`date`) AS date_ts FROM fs_abholer a INNER JOIN fs_betrieb b ON a.betrieb_id = b.id WHERE a.foodsaver_id = ' . (int)$fs . ' AND a.`date` > NOW() - INTERVAL 1 DAY');
 		if (is_array($fetches)) {
 			foreach ($fetches as $f) {
 				$datestart = $f['date_ts'];
@@ -96,13 +96,13 @@ function api_generate_calendar($fs, $options, Model $model)
 					loc.zip,
 					loc.city
 				FROM
-					`' . PREFIX . 'event` e
+					`fs_event` e
 				INNER JOIN
-					`' . PREFIX . 'foodsaver_has_event` fe
+					`fs_foodsaver_has_event` fe
 				ON
 					e.id = fe.event_id AND fe.foodsaver_id = ' . (int)$fs . '
 				LEFT JOIN
-					`' . PREFIX . 'location` loc
+					`fs_location` loc
 				ON
 					loc.id = e.location_id
 				WHERE

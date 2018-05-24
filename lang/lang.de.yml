@@ -1,0 +1,61 @@
+image: Bild
+picture_upload_widget:
+  picture_upload: Foto Upload
+  choose_picture: Wähle ein Bild von Deinem Rechner
+
+button:
+  change_picture: Bild ändern
+  rotate_right: im Uhrzeigersinn drehen
+  upload: Hochladen
+
+group:
+  name: Name
+  description: Beschreibung
+  photo: Foto
+  applications: Bewerbungen
+  application_requirements:
+    requirements: Wer kann sich für diese Gruppe eintragen?
+    nobody: Niemand (geschlossene Gruppe)
+    requires_properties: Jeder, der bestimmte Vertrauenspunkte erfüllt
+    everybody: Jeder darf sich bewerben
+    open: Jeder kann sich ohne Bewerbung einklinken
+    fetch_count: Wie viele Abholungen sollte ein Bewerber gemacht haben?
+    banana_count: Wie viele Vertrauensbananen braucht ein Mitglied?
+    banana_count_errors:
+      min: Niemand kann weniger als {{ limit }} Vertrauensbananen haben!
+      max: Bitte erwarte nicht mehr als {{ limit }} Vertrauensbananen!
+    member_since_weeks: Seit wie vielen Wochen sollte ein Bewerber schon dabei sein?
+    not_fulfilled: Um dich für diese Arbeitsgruppe zu bewerben, musst du seit %weeks% Wochen bei foodsharing dabei sein, schon %bananas% Vertrauensbananen gesammelt haben und schon %fetches% Abholungen mitgemacht haben.
+  members: Mitglieder
+  administrators: Gruppen-Admins
+  title: foodsharing Arbeitsgruppen
+  subtitle: hier findest du Hilfe und viel zu tun...
+  member_count: '{0} Keine Mitwirkenden|{1} Ein*e Mitwirkende*r| [2, Inf[ %count% Mitwirkende'
+  admin_count: '{0} Keine Administratoren|{1} Ein*e Administrator*in| [2, Inf[ %count% Administratoren'
+  image: Titelbild für %name%
+  already_applied: Für diese Gruppe hast Du Dich bereits beworben
+  actions:
+    contact: Gruppe kontaktieren
+    edit: Gruppe bearbeiten
+    go: Zur Gruppe
+    apply: Für diese Arbeitsgruppe bewerben
+    join: Dieser Arbeitsgruppe beitreten
+    safe: Änderungen speichern
+  no_groups: Hier gibt es noch keine Arbeitsgruppen
+
+legal:
+  pp: Datenschutzerklärung
+  acknowledge: Stimmst du der Erklärung zu?
+  not_acknowledge_pp_description: Um die foodsharing.de Plattform benutzen zu können, musst du der beschriebenenen Datenschutzerklärung zustimmen. Stimmst du nicht zu, musst du deinen Account löschen.
+  agree_privacy_policy: Ich stimme der Datenschutzvereinbarung zu.
+  delete_account: Ich stimme nicht zu und möchte meinen Account löschen.
+  actions:
+    safe: Einstellungen übernehmen
+  must_accept_pp: Um bei foodsharing.de mitzumachen, musst du den Datenschutzbedingungen zustimmen.
+  privacy_notice: Datenschutzbelehrung
+  agree_privacy_notice: Über die Verpflichtung zur Vertraulichkeit personenbezogener Daten und die sich daraus ergebenden Verhaltensweisen wurde ich unterrichtet. Eine Bestätigung hierüber erhalte ich per E-Mail an die von mir angegebene Adresse für meine Unterlagen.
+  privacy_notice_agree:
+    select: Bitte auswählen
+    acknowledge: Ich stimme zu
+    not_acknowledge: Ich stimme nicht zu und möchte zum Foodsaver herabgestuft werden
+  not_acknowledge_pn_description: Wenn du mit der Belehrung nicht einverstanden bist, wirst du zum Foodsaver herabgestuft. Das bedeutet, dass du kein*e Botschafter*In von Bezirken mehr bist, deine Betriebsverantwortlichkeiten verlierst und das Quiz zum Betriebsverantwortlichen/Botschafter erneut durchführen musst.

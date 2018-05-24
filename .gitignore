@@ -29,3 +29,8 @@ migrations/_*
 .DS_Store
 .vscode
 .views-cache
+assets
+client/.env
+client/yarn-error.log
+client/.cache
+client/.yarnrc

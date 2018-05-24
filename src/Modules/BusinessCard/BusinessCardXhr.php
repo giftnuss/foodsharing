@@ -31,7 +31,6 @@ class BusinessCardXhr extends Control
 				} else {
 					return false;
 				}
-
 				if ($mailbox !== false) {
 					if ($type == 'fs') {
 						if ($data['geschlecht'] == 2) {
@@ -39,8 +38,12 @@ class BusinessCardXhr extends Control
 						} else {
 							$data['subtitle'] = $this->func->sv('fs_for', $mailbox['name']);
 						}
-
-						$data['web'] = 'www.' . DEFAULT_HOST;
+					} elseif ($type == 'sm') {
+						if ($data['geschlecht'] == 2) {
+							$data['subtitle'] = $this->func->sv('sm_for_w', $mailbox['name']);
+						} else {
+							$data['subtitle'] = $this->func->sv('sm_for', $mailbox['name']);
+						}
 					} elseif ($type == 'bot') {
 						if ($data['geschlecht'] == 2) {
 							$data['subtitle'] = $this->func->sv('bot_for_w', $mailbox['name']);
@@ -48,7 +51,6 @@ class BusinessCardXhr extends Control
 							$data['subtitle'] = $this->func->sv('bot_for', $mailbox['name']);
 						}
 						$data['email'] = $mailbox['email'];
-						$data['web'] = 'www.' . DEFAULT_HOST . '/' . $mailbox['mailbox'];
 					} else {
 						return false;
 					}
@@ -103,7 +105,7 @@ class BusinessCardXhr extends Control
 
 			$pdf->Text(53.4 + $x, 53.6 + $y, utf8_decode($tel));
 			$pdf->Text(53.4 + $x, 58.3 + $y, utf8_decode($data['email']));
-			$pdf->Text(53.4 + $x, 63.2 + $y, utf8_decode('www.foodsharing.de'));
+			$pdf->Text(53.4 + $x, 63.2 + $y, utf8_decode(BASE_URL));
 			if ($x == 0) {
 				$x += 91;
 			} else {

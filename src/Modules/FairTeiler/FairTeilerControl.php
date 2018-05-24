@@ -109,7 +109,7 @@ class FairTeilerControl extends Control
 				<input type="hidden" name="ft-id" id="ft-id" value="' . $this->fairteiler['id'] . '" />
 				<input type="hidden" name="ft-urlname" id="ft-urlname" value="' . $this->fairteiler['urlname'] . '" />
 				<input type="hidden" name="ft-bezirk" id="ft-bezirk" value="' . $this->bezirk['urlname'] . '" />
-				<input type="hidden" name="ft-publicurl" id="ft-publicurl" value="http://www.' . DEFAULT_HOST . '/' . $this->bezirk['urlname'] . '/fairteiler/' . $this->fairteiler['id'] . '_' . $this->fairteiler['urlname'] . '" />
+				<input type="hidden" name="ft-publicurl" id="ft-publicurl" value="' . BASE_URL . '/' . $this->bezirk['urlname'] . '/fairteiler/' . $this->fairteiler['id'] . '_' . $this->fairteiler['urlname'] . '" />
 				');
 
 			if ($request->query->has('delete') && ($this->func->isOrgaTeam() || $this->func->isBotFor($this->bezirk_id))) {
@@ -218,7 +218,7 @@ class FairTeilerControl extends Control
 				$this->func->addContent($this->view->checkFairteiler($ft));
 				$this->func->addContent($this->view->menu(array(
 					array('href' => '/?page=fairteiler&sub=check&id=' . (int)$ft['id'] . '&agree=1', 'name' => 'Fair-Teiler freischalten'),
-					array('click' => 'if(confirm(\'Achtung! Wenn Du den Fair-Teiler löschst kannst Du dies nicht mehr rückgängig machen. Fortfahren?\')){goTo(this.href);}else{return false;}', 'href' => '/?page=fairteiler&sub=check&id=' . (int)$ft['id'] . '&agree=0', 'name' => 'Fair-Teiler ablehnen')
+					array('click' => 'if(confirm(\'Achtung! Wenn Du den Fair-Teiler löschst, kannst Du dies nicht mehr rückgängig machen. Fortfahren?\')){goTo(this.href);}else{return false;}', 'href' => '/?page=fairteiler&sub=check&id=' . (int)$ft['id'] . '&agree=0', 'name' => 'Fair-Teiler ablehnen')
 				), array('title' => 'Optionen')), CNT_RIGHT);
 			} else {
 				$this->func->goPage('fairteiler');
@@ -235,7 +235,7 @@ class FairTeilerControl extends Control
 		$this->func->addContent(
 			$this->view->fairteilerHead() . '
 			<div>
-				' . $this->v_utils->v_info('Beachte, dass Deine Beiträge auf der Fair-Teiler Pinnwand öffentlich einsehbar sind.', 'Hinweis!') . '
+				' . $this->v_utils->v_info('Beachte, dass Deine Beiträge auf der Fair-Teiler-Pinnwand öffentlich einsehbar sind.', 'Hinweis!') . '
 			</div>
 			<div class="ui-widget ui-widget-content ui-corner-all margin-bottom">
 				' . $this->wallposts('fairteiler', $this->fairteiler['id']) . '

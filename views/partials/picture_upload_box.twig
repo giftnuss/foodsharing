@@ -1,0 +1,19 @@
+<div id="{{ id }}-fancy" style="display: none">
+    <div class="popbox">
+        <h3>{{ 'picture_upload_widget.picture_upload'|trans }}</h3>
+        <p class="subtitle">{{ 'picture_upload_widget.choose_picture'|trans }}</p>
+        <div class="img-container">
+            <img id="{{ id }}-image" src="{{ img }}">
+        </div>
+
+        <div>
+            <input type="file" id="{{ id }}-upload" name="image" accept="image/*">
+        </div>
+        <div>
+            <button type="button" class="ui-button-text" id="{{ id }}-rotate">{{ 'button.rotate_right'|trans }}</button>
+            <button type="button" class="ui-button-text" id="{{ id }}-save">{{ 'button.upload'|trans }}</button>
+            <span id="{{ id }}-upload-error"></span>
+        </div>
+
+    </div>
+</div>

@@ -67,20 +67,11 @@ class ViewUtils
 		$besonderheiten = '';
 
 		$count_info = '';
-		if (is_array($b['foodsaver'])) {
-			$count = 0;
-			foreach ($b['foodsaver'] as $fs) {
-				$count += (int)$fs['stat_fetchcount'];
-			}
-
-			if ($count > 0) {
-				$fetch_times = (int)($count / count($b['foodsaver']));
-				$fetch_weight = round(floatval(($fetch_times * $this->model->gerettet_wrapper($b['abholmenge']))), 2);
-				$count_info = '<div>Bei diesem Betrieb wurde <strong>' . $fetch_times . '<span style="white-space:nowrap">&thinsp;</span>x</strong> abgeholt</div>';
-
-				// gerettet_wrapper
-				$count_info .= '<div">Es wurden <strong>' . $fetch_weight . '<span style="white-space:nowrap">&thinsp;</span>kg</strong> gerettet</div>';
-			}
+		$pickup_count = (int)$b['pickup_count'];
+		if ($pickup_count > 0) {
+			$count_info = '<div>Bei diesem Betrieb wurde <strong>' . $pickup_count . '<span style="white-space:nowrap">&thinsp;</span>x</strong> abgeholt</div>';
+			$fetch_weight = round(floatval(($pickup_count * $this->model->gerettet_wrapper($b['abholmenge']))), 2);
+			$count_info .= '<div">Es wurden <strong>' . $fetch_weight . '<span style="white-space:nowrap">&thinsp;</span>kg</strong> gerettet</div>';
 		}
 
 		$time = strtotime($b['begin']);

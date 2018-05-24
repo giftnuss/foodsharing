@@ -1,3 +1,8 @@
+{% set _left = block('left') %}
+{% set _top = block('top') %}
+{% set _main = block('main') %}
+{% set _right = block('right') %}
+{% set _bottom = block('bottom') %}
 <!DOCTYPE html>
 <html lang="de">
 
@@ -12,9 +17,26 @@
             <link rel="stylesheet" type="text/css" href="{{ stylesheet }}" />
         {% endfor %}
 
-        {% for script in head.scripts %}
-            <script type="text/javascript" src="{{ script }}"></script>
-        {% endfor %}
+        {% if dev %}
+            {# to avoid a flash of unstyled content we hide the body initially, then reveal it at the end #}
+            <style type="text/css">body { display: none; }</style>
+        {% endif %}
+
+        <script type="text/javascript">
+            window.serverData = {{ serverDataJSON | raw }};
+        </script>
+
+        {% if not webpack %}
+            {# note: when using webpack the scripts are rendered at the bottom of the page #}
+            {% for script in head.scripts %}
+                <script type="text/javascript" src="{{ script }}"></script>
+            {% endfor %}
+            {% if head.ravenConfig %}
+                <script type="text/javascript">
+                  Raven.config('{{ head.ravenConfig }}', { tags: { webpack: false } }).install()
+                </script>
+            {% endif %}
+        {% endif %}
 
         {{ head.extra | raw }}
 
@@ -35,16 +57,14 @@
 
         <style type="text/css">{{ head.css | raw }}</style>
 
-        <script type="text/javascript">
-            var _gaq = _gaq || [];  _gaq.push(['_setAccount', 'UA-43313114-1']);  _gaq.push(['_setDomainName', '{{ HTTP_HOST }}']);  _gaq.push(['_trackPageview']); (function() {var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);  })();
-        </script>
-
-        <script type="text/javascript">
-            {{ head.jsFunc | raw }}
-            $(document).ready(function(){
-                {{ head.js | raw }}
-            });
-        </script>
+        {% if not webpack %}
+            <script type="text/javascript">
+                {{ head.jsFunc | raw }}
+                $(document).ready(function(){
+                    {{ head.js | raw }}
+                });
+            </script>
+        {% endif %}
 
     </head>
 
@@ -79,11 +99,11 @@
 
                 {% include 'partials/breadcrumbs.twig' with { items: bread } %}
 
-                {% if block('top') %}
+                {% if _top is not empty %}
                     <div class="pure-g">
                         <div id="content_top" class="pure-u-1">
                             <div class="inside">
-                                {% block top %}{% endblock %}
+                                {{ _top|raw }}
                             </div>
                         </div>
                     </div>
@@ -91,53 +111,52 @@
 
                 <div class="pure-g mainpure">
                     {% if isMob %}
-
-                        {% if block('main') %}
-                            <div class="pure-u-1 pure-u-md-{{ contentMainWidth(block('left'), block('right'), content.left.width, content.right.width, 24) }}-24">
+                        {% if _main is not empty %}
+                            <div class="pure-u-1 pure-u-md-{{ contentMainWidth(_left is not empty, _right is not empty, content.left.width, content.right.width, 24) }}-24">
                                 <div class="inside">
-                                    {% block main %}{% endblock %}
+                                    {{ _main|raw }}
                                 </div>
                             </div>
                         {% endif %}
 
-                        {% if block('right') %}
+                        {% if _right is not empty %}
                             <div class="pure-u-1 pure-u-md-{{ content.right.width }}-24" id="right">
                                 <div class="inside">
-                                    {% block right %}{% endblock %}
+                                    {{ _right|raw }}
                                 </div>
                             </div>
                         {% endif %}
 
-                        {% if block('left') %}
+                        {% if _left is not empty %}
                             <div class="pure-u-1 pure-u-md-{{ content.left.width }}-24" id="left">
                                 <div class="inside">
-                                    {% block left %}{% endblock %}
+                                    {{ _left|raw }}
                                 </div>
                             </div>
                         {% endif %}
 
                     {% else %}
 
-                        {% if block('left') %}
+                        {% if _left is not empty %}
                             <div class="pure-u-1 pure-u-md-{{ content.left.width }}-24" id="left">
                                 <div class="inside">
-                                    {{ block('left') }}
+                                    {{ _left|raw }}
                                 </div>
                             </div>
                         {% endif %}
 
-                        {% if block('main') %}
-                            <div class="pure-u-1 pure-u-md-{{ contentMainWidth(block('left'), block('right'), content.left.width, content.right.width, 24) }}-24">
+                        {% if _main is not empty %}
+                            <div class="pure-u-1 pure-u-md-{{ contentMainWidth(_left is not empty, _right is not empty, content.left.width, content.right.width, 24) }}-24">
                                 <div class="inside">
-                                    {{ block('main') }}
+                                    {{ _main|raw }}
                                 </div>
                             </div>
                         {% endif %}
 
-                        {% if block('right') %}
+                        {% if _right is not empty %}
                             <div class="pure-u-1 pure-u-md-{{ content.right.width }}-24" id="right">
                                 <div class="inside">
-                                    {{ block('right') }}
+                                    {{ _right|raw }}
                                 </div>
                             </div>
                         {% endif %}
@@ -145,11 +164,11 @@
                     {% endif %}
                 </div>
 
-                {% if content.bottom.html %}
+                {% if _bottom is not empty %}
                     <div class="pure-g">
                         <div id="content_bottom" class="pure-u-1">
                             <div class="inside">
-                                {% block bottom %}{% endblock %}
+                                {{ _bottom|raw }}
                             </div>
                         </div>
                     </div>
@@ -175,5 +194,24 @@
         <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-info" style="display:none;"></div>
         <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-success" style="display:none;"></div>
 
+
+        {% if webpack %}
+
+            {% for script in head.scripts %}
+                <script type="text/javascript" src="{{ script }}"></script>
+            {% endfor %}
+
+            <script type="text/javascript">
+                {{ head.jsFunc | raw }}
+                $(document).ready(function(){
+                    {{ head.js | raw }}
+                });
+            </script>
+
+        {% endif %}
+
+        {% if dev %}
+            <style type="text/css">body { display: block; }</style>
+        {% endif %}
     </body>
 </html>

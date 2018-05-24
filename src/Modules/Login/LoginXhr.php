@@ -155,7 +155,7 @@ class LoginXhr extends Control
 		} else {
 			$token = uniqid('', true);
 			if ($id = $this->model->insertNewUser($data, $token)) {
-				$activationUrl = 'http://' . DEFAULT_HOST . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
+				$activationUrl = BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
 
 				$this->func->tplMail(25, $data['email'], array(
 					'name' => $data['name'],
@@ -240,7 +240,13 @@ class LoginXhr extends Control
 		if ($data['gender'] > 2 || $data['gender'] < 0) {
 			$data['gender'] = 0;
 		}
-
+		$birthdate = \DateTime::createFromFormat('Y-m-d', $data['birthdate']);
+		$min_birthdate = new \DateTime();
+		$min_birthdate->modify('-18 years');
+		if (!$birthdate || $birthdate > $min_birthdate) {
+			return $this->func->s('error_birthdate');
+		}
+		$data['birthdate'] = $birthdate->format('Y-m-d');
 		$data['phone'] = $this->format_phone_number($data['phone']);
 		$data['lat'] = floatval($data['lat']);
 		$data['lon'] = floatval($data['lon']);

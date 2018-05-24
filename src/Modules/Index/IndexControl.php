@@ -21,8 +21,6 @@ class IndexControl extends Control
 	{
 		$this->func->addTitle('Rette mit!');
 
-		$this->func->addScript('/js/jquery.animatenumber.min.js');
-
 		$gerettet = (int)$this->model->getGerettet();
 
 		if ($gerettet == 0) {

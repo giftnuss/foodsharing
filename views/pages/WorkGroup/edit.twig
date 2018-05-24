@@ -1,0 +1,47 @@
+{% extends 'layouts/default.twig' %}
+
+{% block left %}
+    {% include 'pages/WorkGroup/sidenav.twig' %}
+{% endblock %}
+
+{% block main %}
+    {% include 'partials/picture_upload_box.twig' with {'id': 'work_group_form_photo', 'img': form.vars.value.photo} %}
+    {{ form_start(form) }}
+    {% embed 'components/field.twig' with {'title': group.name, 'classes': ['ui-padding']} %}
+        {% block content %}
+            {{ form_row(form.name) }}
+            {{ form_row(form.description) }}
+            {{ form_row(form.photo) }}
+        {% endblock %}
+    {% endembed %}
+
+    {% embed 'components/field.twig' with {'title': 'group.applications'|trans, 'classes': ['ui-padding']} %}
+        {% block content %}
+            {{ form_row(form.applyType) }}
+            <div id="addapply">
+                {{ form_row(form.bananaCount) }}
+                {{ form_row(form.fetchCount) }}
+                {{ form_row(form.weekNum) }}
+            </div>
+        {% endblock %}
+    {% endembed %}
+
+    {% embed 'components/field.twig' with {'title': 'group.members'|trans, 'classes': ['ui-padding']} %}
+        {% block content %}
+            {{ form_row(form.members) }}
+        {% endblock %}
+    {% endembed %}
+
+    {% embed 'components/field.twig' with {'title': 'group.administrators'|trans, 'classes': ['ui-padding']} %}
+        {% block content %}
+            {{ form_row(form.administrators) }}
+        {% endblock %}
+    {% endembed %}
+
+    <input type="submit" value="{{ 'group.actions.safe'|trans }}" />
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block bottom %}
+    {{ content.bottom.html | raw }}
+{% endblock %}

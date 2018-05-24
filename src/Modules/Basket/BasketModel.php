@@ -20,7 +20,7 @@ class BasketModel extends Model
 		}
 
 		return $this->insert('
-			INSERT INTO `' . PREFIX . 'basket`
+			INSERT INTO `fs_basket`
 			(
 				`foodsaver_id`, 
 				`status`, 
@@ -90,8 +90,8 @@ class BasketModel extends Model
 				fs.sleep_status
 				
 			FROM
-				' . PREFIX . 'basket b,
-				' . PREFIX . 'foodsaver fs
+				fs_basket b,
+				fs_foodsaver fs
 				
 			WHERE 
 				b.foodsaver_id = fs.id
@@ -110,7 +110,7 @@ class BasketModel extends Model
 					fs.id AS fs_id
 					
 				FROM
-					' . PREFIX . 'foodsaver fs
+					fs_foodsaver fs
 					
 				WHERE
 					fs.id = ' . (int)$basket['foodsaver_id'] . '
@@ -160,9 +160,9 @@ class BasketModel extends Model
 		
 		
 				FROM
-					' . PREFIX . 'basket_anfrage a,
-					' . PREFIX . 'basket b,
-					' . PREFIX . 'foodsaver fs
+					fs_basket_anfrage a,
+					fs_basket b,
+					fs_foodsaver fs
 		
 				WHERE
 					a.basket_id = b.id
@@ -196,9 +196,9 @@ class BasketModel extends Model
 		
 		
 				FROM
-					' . PREFIX . 'basket_anfrage a,
-					' . PREFIX . 'basket b,
-					' . PREFIX . 'foodsaver fs
+					fs_basket_anfrage a,
+					fs_basket b,
+					fs_foodsaver fs
 		
 				WHERE
 					a.basket_id = b.id
@@ -236,9 +236,9 @@ class BasketModel extends Model
 				
 				
 			FROM 
-				' . PREFIX . 'basket_anfrage a, 
-				' . PREFIX . 'basket b,
-				' . PREFIX . 'foodsaver fs
+				fs_basket_anfrage a, 
+				fs_basket b,
+				fs_foodsaver fs
 				
 			WHERE 
 				a.basket_id = b.id 
@@ -260,7 +260,7 @@ class BasketModel extends Model
 
 	public function getUpdateCount()
 	{
-		$count = $this->qOne('SELECT COUNT(a.basket_id) FROM ' . PREFIX . 'basket_anfrage a, ' . PREFIX . 'basket b WHERE a.basket_id = b.id AND a.`status` = 0 AND b.foodsaver_id = ' . (int)$this->func->fsId());
+		$count = $this->qOne('SELECT COUNT(a.basket_id) FROM fs_basket_anfrage a, fs_basket b WHERE a.basket_id = b.id AND a.`status` = 0 AND b.foodsaver_id = ' . (int)$this->func->fsId());
 
 		return (int)$count;
 	}
@@ -275,7 +275,7 @@ class BasketModel extends Model
 			}
 
 			$this->insert('
-			INSERT INTO `' . PREFIX . 'basket_has_art`
+			INSERT INTO `fs_basket_has_art`
 			(
 				`basket_id`,
 				`art_id`
@@ -289,7 +289,7 @@ class BasketModel extends Model
 	public function removeBasket($id)
 	{
 		return $this->update('
-			UPDATE 	`' . PREFIX . 'basket`
+			UPDATE 	`fs_basket`
 			SET 	`status` = 3
 			WHERE 	`id` = ' . (int)$id . '
 			AND 	`foodsaver_id` = ' . (int)$this->func->fsId() . '		
@@ -307,7 +307,7 @@ class BasketModel extends Model
 				UNIX_TIMESTAMP(`time`) AS time_ts
 				
 			FROM 
-				' . PREFIX . 'basket
+				fs_basket
 				
 			WHERE
 				`foodsaver_id` = ' . (int)$this->func->fsId() . '
@@ -318,7 +318,7 @@ class BasketModel extends Model
 		')
 		) {
 			foreach ($baskets as $key => $b) {
-				$baskets[$key]['req_count'] = $this->qOne('SELECT COUNT(foodsaver_id) FROM ' . PREFIX . 'basket_anfrage WHERE basket_id = ' . (int)$b['id'] . ' AND status < 10');
+				$baskets[$key]['req_count'] = $this->qOne('SELECT COUNT(foodsaver_id) FROM fs_basket_anfrage WHERE basket_id = ' . (int)$b['id'] . ' AND status < 10');
 			}
 
 			return $baskets;
@@ -329,11 +329,11 @@ class BasketModel extends Model
 
 	public function follow($basket_id)
 	{
-		$status = $this->qOne('SELECT 1 FROM `' . PREFIX . 'basket_anfrage` WHERE basket_id = ' . (int)$basket_id . ' AND foodsaver_id = ' . (int)$this->func->fsId() . ' AND status <= 9');
+		$status = $this->qOne('SELECT 1 FROM `fs_basket_anfrage` WHERE basket_id = ' . (int)$basket_id . ' AND foodsaver_id = ' . (int)$this->func->fsId() . ' AND status <= 9');
 
 		if (!$status) {
 			$this->insert('
-			REPLACE INTO `' . PREFIX . 'basket_anfrage`
+			REPLACE INTO `fs_basket_anfrage`
 			(
 				`foodsaver_id`, `basket_id`, `status`, `time`,`appost`
 			)
@@ -357,7 +357,7 @@ class BasketModel extends Model
 		}
 
 		$this->insert('
-			REPLACE INTO `' . PREFIX . 'basket_anfrage`
+			REPLACE INTO `fs_basket_anfrage`
 			(
 				`foodsaver_id`, `basket_id`, `status`, `time`,`appost`
 			) 

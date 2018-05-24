@@ -1,0 +1,94 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    Foodsharing\:
+        resource: '../src/*'
+        exclude: '../src/{Lib/Flourish,Lib/Cache,Lib/View/v*,Dev,Debug}'
+
+    Twig_Loader_Filesystem:
+        class: Twig_Loader_Filesystem
+        calls:
+            - [addPath, ['views']]
+            - [addPath, ['vendor/symfony/twig-bridge/Resources/views/']]
+
+    Twig\Environment:
+        arguments:
+            - '@Twig_Loader_Filesystem'
+            -
+                cache: 'cache/.views-cache'
+                debug: false
+                strict_variables: true
+        calls:
+            - [addRuntimeLoader, ['@Twig\RuntimeLoader\ContainerRuntimeLoader']]
+            - [addExtension, ['@Symfony\Bridge\Twig\Extension\TranslationExtension']]
+            - [addExtension, ['@Symfony\Bridge\Twig\Extension\FormExtension']]
+            - [addExtension, ['@Twig_Extension_Debug']]
+            - [addExtension, ['@Foodsharing\Lib\TwigExtensions']]
+
+    Twig:
+        alias: Twig\Environment
+
+    Twig\RuntimeLoader\ContainerRuntimeLoader:
+
+    Twig_Extension_Debug:
+        class: Twig_Extension_Debug
+
+    Symfony\Bridge\Twig\Extension\TranslationExtension:
+        class: Symfony\Bridge\Twig\Extension\TranslationExtension
+        arguments:
+            - '@translator'
+
+    Symfony\Bridge\Twig\Extension\FormExtension:
+
+    twig.form_engine:
+        class: Symfony\Bridge\Twig\Form\TwigRendererEngine
+        arguments: [['Form/form_div_layout.html.twig', 'partials/fields.html.twig']]
+
+    Symfony\Component\Form\FormRenderer:
+        class: Symfony\Component\Form\FormRenderer
+        arguments: ['@twig.form_engine']
+
+    translator.xliff_file_loader:
+        class: Symfony\Component\Translation\Loader\XliffFileLoader
+
+    translator.yaml_file_loader:
+        class: Symfony\Component\Translation\Loader\YamlFileLoader
+
+    translator:
+        class: Symfony\Component\Translation\Translator
+        arguments:
+            - 'de'
+        calls:
+            - ['addLoader', ['xlf', '@translator.xliff_file_loader']]
+            - ['addLoader', ['yml', '@translator.yaml_file_loader']]
+            - ['addResource', ['xlf', 'vendor/symfony/validator/Resources/translations/validators.de.xlf', 'de', 'messages']]
+            - ['addResource', ['yml', 'lang/lang.de.yml', 'de', 'messages']]
+            - ['setFallbackLocales', [['de']]]
+
+    validator:
+        class: Symfony\Component\Validator\ValidatorBuilder
+        factory: [Symfony\Component\Validator\Validation, createValidatorBuilder]
+        calls:
+            - [setTranslator, ['@translator']]
+            - [setTranslationDomain, ['messages']]
+            - [enableAnnotationMapping]
+
+    Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension:
+
+    Symfony\Component\Form\Extension\Validator\ValidatorExtension:
+        arguments:
+            - "@=service('validator').getValidator()"
+
+    form.factory:
+        class: Symfony\Component\Form\FormFactoryBuilder
+        factory: [Symfony\Component\Form\Forms, createFormFactoryBuilder]
+        calls:
+            - [addExtension, ['@Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension']]
+            - [addExtension, ['@Symfony\Component\Form\Extension\Validator\ValidatorExtension']]
+
+    Intervention\Image\ImageManager:
+        arguments:
+            - driver: 'imagick'

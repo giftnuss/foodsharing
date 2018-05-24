@@ -62,7 +62,7 @@ var join = {
 		})
 	},
 	finish: function(){
-		
+
 		if($('#join_legal1:checked').length <= 0)
 		{
 			pulseError('Bitte akzeptiere unsere Datenschutzerkl&auml;rung');
@@ -77,7 +77,7 @@ var join = {
 		{
 			$('#joinform').hide();
 			$('#joinloader').show();
-			
+
 			$.ajax({
 				url: '/xhrapp.php?app=login&m=joinsubmit',
 				type:'post',
@@ -88,6 +88,7 @@ var join = {
 					surname:$('#login_surname').val(),
 					email:$('#login_email').val(),
 					pw:$('#login_passwd1').val(),
+          birthdate:$('#birthdate').val(),
 					avatar:$('#join_avatar').val(),
 					phone:$('#login_phone').val(),
 					lat:$('#join_lat').val(),
@@ -115,12 +116,12 @@ var join = {
 					}
 				}
 			});
-			
+
 		}
 	},
 	step: function(step)
 	{
-		
+
 		if(join.currentStep >= step || join.stepCheck(step))
 		{
 			switch(step)
@@ -128,11 +129,11 @@ var join = {
 				case 2:
 					join.loadMap();
 					break;
-					
+
 				default:
 					break;
 			}
-			
+
 			$('.step').hide();
 			$('.step'+step).show();
 			$('.linklist.join li').removeClass('active').children('a').children('i').remove();
@@ -147,7 +148,9 @@ var join = {
 		{
 			case 1:
 				check = true;
-				
+				// trim whitespace from email for validation and submission
+				$('#login_email').val($('#login_email').val().trim());
+
 				if($('#login_name').val() == '')
 				{
 					pulseInfo('Bitte Gib einen Benutzernamen ein');
@@ -155,7 +158,7 @@ var join = {
 					return false;
 					check = false;
 				}
-				
+
 				if(!checkEmail($('#login_email').val()))
 				{
 					pulseError('Mit Deiner E-Mail-Adresse stimmt etwas nicht');
@@ -163,7 +166,22 @@ var join = {
 					return false;
 					check = false;
 				}
-				
+        let birthdate = new Date($('#birthdate').val());
+        let now = new Date();
+        let diff = now.getFullYear() - birthdate.getFullYear();
+        if(birthdate.getMonth() > now.getMonth()) {
+          diff--;
+        } else {
+          if(birthdate.getMonth() == now.getMonth()) {
+            if (birthdate.getDay() > now.getDay())
+              diff--;
+          }
+        }
+				if(diff<18) {
+          pulseInfo('Aus datenschutz- und haftungsrechtlichen Gründen musst du mindestens 18 Jahre alt sein, um bei foodsharing.de mitzumachen.')
+          return false;
+        }
+
 				if($('#login_passwd1').val().length < 4) // || $('#login_passwd1').val() != $('#login_passwd2').val())
 				{
 					pulseInfo('Dein Passwort muss länger als 4 Buchstaben sein');
@@ -171,7 +189,7 @@ var join = {
 					return false;
 					check = false;
 				}
-				
+
 				if($('#login_passwd1').val() != $('#login_passwd2').val())
 				{
 					pulseInfo('Deine Passwörter stimmen nicht überein');
@@ -179,14 +197,14 @@ var join = {
 					return false;
 					check = false;
 				}
-				
+
 				if(join.isLoading)
 				{
 					pulseInfo('Bitte warte bis Dein Foto hochgeladen ist');
 					return false;
 					check = false;
 				}
-				
+
 				if($('#join_avatar_error').val() == '0' && $('#join_avatar').val() == '')
 				{
 					if(!confirm('Du hast kein Foto hochgeladen. Beachte, dass ein passbildähnliches Foto benötigt wird, wenn du später auch als Foodsaver aktiv werden möchtest. Ohne Foto fortfahren?'))
@@ -195,7 +213,7 @@ var join = {
 						check = false;
 					}
 				}
-				
+
 				if(check)
 				{
 					return true;
@@ -204,9 +222,9 @@ var join = {
 				{
 					return false;
 				}
-				
+
 				break;
-				
+
 			default:
 				return true;
 				break;

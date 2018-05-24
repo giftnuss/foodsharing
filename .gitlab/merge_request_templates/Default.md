@@ -1,4 +1,4 @@
-Closes ___ (e.g. issues0#123)
+Closes ___ (e.g. #123)
 
 ## What does this MR do?
 

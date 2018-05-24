@@ -10,21 +10,16 @@ class IndexView extends View
 	public function index($first_content, $gerettet)
 	{
 		$ps = new vPageslider();
-
 		$ps->addSection($this->campaign($first_content), array(
 			//'color' => '#26ad91', //dickmilch Mitte Dez - Mitte Jan
 			//'color' => '#7b4a94', //walkingbread Mitte Jan - Mitte Feb
 			//'color' => '#fbbd13', //sauregurken Mitte Feb - Mitte Mrz
-			'color' => '#eb7763', //faulesei Mitte Mrz - Mitte Apr
-			//'color' => '#48bac4', //foodporn Mitte Apr - Mitte Jun
+			//'color' => '#eb7763', //faulesei Mitte Mrz - Mitte Apr
+			'color' => '#48bac4', //foodporn Mitte Apr - Mitte Jun
 			'anchor' => 'kampagne'
+			//'color' => '#4a3520', // to be set May 22
+			//'anchor' => 'oben', // to be set May 22
 		));
-
-//		// After the campaign is finished these lines will replace the campaign section again
-//		$ps->addSection($first_content, array(
-//			'color' => '#4a3520',
-//			'anchor' => 'oben'
-//		));
 
 		$ps->addSection($this->welcome(), array(
 			'color' => '#F9F5E0',
@@ -55,7 +50,7 @@ class IndexView extends View
 	private function campaign($first_content)
 	{
 		return '
-		<div id="campaign" class="pure-g faulesei">
+		<div id="campaign" class="pure-g foodporn">
 			<div class="topbarpadding">
 				<div id="campaigntext" class="pure-u-1 pure-u-sm-1-2">
 					<h2>Don’t&nbsp;let good&nbsp;food&nbsp;go&nbsp;bad!</h2>

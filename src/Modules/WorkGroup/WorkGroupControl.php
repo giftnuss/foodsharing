@@ -3,19 +3,32 @@
 namespace Foodsharing\Modules\WorkGroup;
 
 use Foodsharing\Lib\Session\S;
-use Foodsharing\Lib\Twig;
 use Foodsharing\Modules\Core\Control;
+use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class WorkGroupControl extends Control
 {
+	/**
+	 * @var FormFactoryBuilder
+	 */
+	private $formFactory;
+
 	public function __construct(WorkGroupModel $model, WorkGroupView $view)
 	{
 		$this->model = $model;
 		$this->view = $view;
 
 		parent::__construct();
+	}
+
+	/**
+	 * @required
+	 */
+	public function setFormFactory(FormFactoryBuilder $formFactory)
+	{
+		$this->formFactory = $formFactory;
 	}
 
 	public function index(Request $request, Response $response)
@@ -36,8 +49,7 @@ class WorkGroupControl extends Control
 	private function fulfillApplicationRequirements($group, $stats)
 	{
 		return
-			($stats['reports'] == 0 || $group['report_num'] != 0)
-			&& $stats['bananacount'] >= $group['banana_count']
+			$stats['bananacount'] >= $group['banana_count']
 			&& $stats['fetchcount'] >= $group['fetch_count']
 			&& $stats['weeks'] >= $group['week_num'];
 	}
@@ -138,74 +150,36 @@ class WorkGroupControl extends Control
 		));
 	}
 
-	private function edit(Request $request)
+	private function edit(Request $request, Response $response)
 	{
-		$bids = $this->model->getFsBezirkIds($this->func->fsId());
+		$groupId = $request->query->getInt('id');
 
+		$bids = $this->model->getFsBezirkIds($this->func->fsId());
 		if (!$this->func->isOrgaTeam() && !$this->func->isBotForA($bids, true, true)) {
 			$this->func->go('/?page=dashboard');
 		}
 
-		if ($group = $this->model->getGroup($_GET['id'])) {
+		if ($group = $this->model->getGroup($groupId)) {
 			if ($group['type'] != 7) {
 				$this->func->go('/?page=dashboard');
 			}
-			if ($this->isSubmitted()) {
-				$data = $this->prepareEditInput($request);
-				if ($this->handleEdit($group, $data)) {
+			$this->func->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
+			$editWorkGroupRequest = EditWorkGroupData::fromGroup($group);
+			$form = $this->formFactory->getFormFactory()->create(WorkGroupForm::class, $editWorkGroupRequest);
+			$form->handleRequest($request);
+			if ($form->isSubmitted()) {
+				if ($form->isValid()) {
+					$data = $editWorkGroupRequest->toGroup();
+					$this->model->updateGroup($group['id'], $data);
+					$this->model->updateTeam($group['id'], $data['member'], $data['leader']);
 					$this->func->info('Änderungen gespeichert!');
-					$this->func->go('/?page=groups&sub=edit&id=' . (int)$group['id']);
+					$this->func->goSelf();
 				}
 			}
-			$this->addNav();
-			$this->func->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
-			$this->func->addContent($this->view->editGroup($group));
-		}
-	}
-
-	private function addNav()
-	{
-		$countrys = $this->model->getCountryGroups();
-		$bezirke = $this->model->getBezirke();
-
-		$this->func->addContent($this->view->leftNavi($countrys, $bezirke), CNT_LEFT);
-	}
-
-	private function prepareEditInput(Request $request)
-	{
-		$fields = [
-			'name' => ['filter' => 'stripTagsAndTrim'],
-			'teaser' => ['filter' => 'stripTagsAndTrim'],
-			'photo' => ['filter' => 'stripTagsAndTrim', 'required' => false],
-			'apply_type' => ['method' => 'getInt'],
-			'banana_count' => ['method' => 'getInt'],
-			'fetch_count' => ['method' => 'getInt'],
-			'week_num' => ['method' => 'getInt'],
-			'report_num' => ['filter' => 'isNonEmptyArray', 'required' => false, 'default' => false],
-			'members' => ['filter' => 'tagSelectIds', 'required' => false, 'default' => [], 'parameterName' => 'member'],
-			'leader' => ['filter' => 'tagSelectIds', 'required' => false, 'default' => []]
-		];
-
-		$data = $this->sanitizeRequest($request, $fields);
-
-		if ($data['apply_type'] != 1) {
-			$data['banana_count'] = 0;
-			$data['fetch_count'] = 0;
-			$data['week_num'] = 0;
-			$data['report_num'] = 0;
 		}
 
-		return $data;
-	}
-
-	private function handleEdit($group, $data)
-	{
-		if ($this->model->updateGroup($group['id'], $data)) {
-			$this->model->updateTeam($group['id'], $data['members'], $data['leader']);
-
-			return true;
-		}
-
-		return false;
+		$response->setContent($this->render('pages/WorkGroup/edit.twig',
+			['nav' => $this->getSideMenuData(), 'group' => $group, 'form' => $form->createView()]
+		));
 	}
 }

@@ -1,3 +1,24 @@
+function u_tox(id) {
+    var $pop = $('#tox-pop-' + id + '-opener');
+
+    $pop.magnificPopup({
+        type: 'inline'
+    });
+
+    var $qr = $('#tox-pop-' + id + ' .tox-qr');
+
+    if ($qr.children().length === 0) {
+        var $input = $('#tox-pop-' + id + ' .tox-id');
+        $qr.qrcode($input.val());
+
+        $input.bind('focus click', function () {
+            $(this).select();
+        });
+    }
+
+    $pop.trigger('click');
+}
+
 $(function () {
     var $form = $('#contactform-form');
     if ($form.length > 0) {
@@ -23,7 +44,7 @@ $(function () {
             if (!checkEmail($email.val())) {
                 $email.select();
                 $email.addClass('input-error');
-                pulseError('Bitte gib eine gültige E-Mail-Adresse ein damit wir Dir antworten können ;)');
+                pulseError('Bitte gib eine gültige E-Mail-Adresse ein, damit wir Dir antworten können!');
             }
             else {
                 ajax.req('team', 'contact', {
@@ -34,17 +55,18 @@ $(function () {
         });
     }
 
-    $('#teamlist .foot i').mouseover(function () {
+    var $teamList = $('#team-list');
+    $teamList.find('.foot i').mouseover(function () {
 
         var $this = $(this);
 
         var val = $this.children('span').text();
-        if (val != '') {
+        if (val !== '') {
             $this.parent().parent().attr('href', val).attr('target', '_blank');
         }
     });
 
-    $('#teamlist .foot i').click(function (ev) {
+    $teamList.find('.foot i').click(function (ev) {
 
         var $this = $(this);
         if ($this.hasClass('fa-lock')) {
@@ -59,35 +81,10 @@ $(function () {
         }
     });
 
-
-    $('#teamlist .foot i').mouseout(function () {
+    $teamList.find('.foot i').mouseout(function () {
         var $this = $(this).parent().parent();
 
         $this.attr('href', '/team/' + $this.attr('id').substring(2)).attr('target', '_self');
 
     });
-
-
 });
-
-
-function u_tox(id) {
-    var $pop = $('#tox-pop-' + id + '-opener');
-
-    $pop.magnificPopup({
-        type: 'inline'
-    });
-
-    var $qr = $('#tox-pop-' + id + ' .tox-qr');
-
-    if ($qr.children().length == 0) {
-        var $input = $('#tox-pop-' + id + ' .tox-id');
-        $('#tox-pop-' + id + ' .tox-qr').qrcode($input.val());
-
-        $input.bind('focus click', function () {
-            $(this).select();
-        });
-    }
-
-    $pop.trigger('click');
-}

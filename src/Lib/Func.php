@@ -34,6 +34,11 @@ class Func
 	private $add_css;
 	private $viewUtils;
 
+	private $webpackScripts;
+	private $webpackStylesheets;
+
+	public $jsData = [];
+
 	/**
 	 * @var Twig
 	 */
@@ -64,7 +69,7 @@ class Func
 	/**
 	 * @required
 	 */
-	public function setTwig(Twig $twig)
+	public function setTwig(\Twig\Environment $twig)
 	{
 		$this->twig = $twig;
 	}
@@ -420,7 +425,7 @@ class Func
 		return $this->mayGroup('orgateam');
 	}
 
-	public function getMenu()
+	public function getMenu($usesWebpack = false)
 	{
 		$regions = [];
 		$stores = [];
@@ -453,7 +458,8 @@ class Func
 			$workingGroups,
 			S::get('mailbox'),
 			$this->fsId(),
-			$loggedIn ? $this->img() : ''
+			$loggedIn ? $this->img() : '',
+			$usesWebpack
 		);
 	}
 
@@ -461,9 +467,11 @@ class Func
 		bool $loggedIn, array $regions, bool $hasFsRole,
 		bool $isOrgaTeam, bool $mayEditBlog, bool $mayEditQuiz, bool $mayHandleReports,
 		array $stores, array $workingGroups,
-		$sessionMailbox, int $fsId, string $image)
+		$sessionMailbox, int $fsId, string $image,
+		bool $usesWebpack)
 	{
-		$params = [
+		$params = array_merge([
+			'webpack' => $usesWebpack,
 			'loggedIn' => $loggedIn,
 			'fsId' => $fsId,
 			'image' => $image,
@@ -478,7 +486,7 @@ class Func
 			'stores' => $stores,
 			'regions' => $regions,
 			'workingGroups' => $workingGroups
-		];
+		]);
 
 		return [
 			'default' => $this->twig->render('partials/menu.default.twig', $params),
@@ -543,7 +551,7 @@ class Func
 		<tr>
 			<td height="20" valign="top" style="background-color:#FAF7E5">
 				<div style="text-align:center;padding-top:10px;font-size:11px;font-family:Arial;padding:15px;color:#594129;">
-					Möchtest Du keinen Newsletter mehr erhalten? <a style="color:#F36933" href="https://www.foodsharing.de/?page=login&sub=unsubscribe&t=' . $token . '&e=' . $email . '" target="_blank">Klicke hier zum Abbestellen!</a> Du kannst unter <a style="color:#F36933" href="https://www.foodsharing.de/?page=settings&sub=info" target="_blank">Benachrichtigungen</a> einstellen, welche Mails Du erhältst.
+					Möchtest Du keinen Newsletter mehr erhalten? <a style="color:#F36933" href="https://foodsharing.de/?page=login&sub=unsubscribe&t=' . $token . '&e=' . $email . '" target="_blank">Klicke hier zum Abbestellen!</a> Du kannst unter <a style="color:#F36933" href="https://foodsharing.de/?page=settings&sub=info" target="_blank">Benachrichtigungen</a> einstellen, welche Mails Du erhältst.
 				</div>
 <p style="font-size:11px;"><strong>Impressum</strong><br />
 Angaben gemäß § 5 TMG:<br />
@@ -575,8 +583,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 <tr>
 				<td valign="top" height="30" style="background-color:#4A3520">
 					<div style="padding:5px;font-size:13px;font-family:Arial;color:#FAF7E5;overflow:hidden;" align="left">
-						<a style="display:block;color:#FAF7E5;text-decoration:none;" href="https://www.foodsharing.de/" target="_blank">
-							<span style="margin-left:10px;font-size:20px;font-family:Arial Black, Arial;font-weight:bold;color:#FAF7E5;letter-spacing:-1px;">food</span><span style="margin-right:10px;font-size:20px;font-family:Arial Black, Arial;font-weight:bold;color:#4D971E;letter-spacing:-1px">sharing</span> <span style="font-style:italic">Lebensmittelretten<span style="color:#F36933">.</span>de</span>
+						<a style="display:block;color:#FAF7E5;text-decoration:none;" href="https://foodsharing.de/" target="_blank">
+							<span style="margin-left:10px;font-size:20px;font-family:Arial Black, Arial;font-weight:bold;color:#FAF7E5;letter-spacing:-1px;">food</span><span style="margin-right:10px;font-size:20px;font-family:Arial Black, Arial;font-weight:bold;color:#4D971E;letter-spacing:-1px">sharing</span><span style="color:#F36933">.</span>de
 						</a>
 					</div>
 				</td></tr>
@@ -1042,6 +1050,11 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->scripts[] = $src;
 	}
 
+	public function addWebpackScript($src)
+	{
+		$this->webpackScripts[] = $src;
+	}
+
 	public function addScriptTop($src)
 	{
 		array_unshift($this->scripts, $src);
@@ -1052,7 +1065,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->js_func .= $nfunc;
 	}
 
-	// $js is echoed in tpl/default.php
 	public function addJs($njs)
 	{
 		$this->js .= $njs;
@@ -1061,6 +1073,11 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	public function addStylesheet($src)
 	{
 		$this->stylesheets[] = $src;
+	}
+
+	public function addWebpackStylesheet($src)
+	{
+		$this->webpackStylesheets[] = $src;
 	}
 
 	public function addHead($str)
@@ -1073,27 +1090,82 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->title[] = $name;
 	}
 
-	public function getHeadData()
+	/**
+	 * This is used to set window.serverData on in the frontend.
+	 */
+	public function getServerData(bool $usesWebpack)
 	{
-		return [
-			'stylesheets' => $this->stylesheets,
-			'scripts' => $this->scripts,
+		$userData = [
+			'id' => $this->fsId(),
+			'may' => S::may(),
+		];
+
+		if (S::may()) {
+			$userData['token'] = S::user('token');
+		}
+
+		$location = null;
+
+		if ($pos = S::get('blocation')) {
+			$location = [
+				'lat' => floatval($pos['lat']),
+				'lon' => floatval($pos['lon']),
+			];
+		}
+
+		$ravenConfig = null;
+
+		if (defined('RAVEN_JAVASCRIPT_CONFIG')) {
+			$ravenConfig = RAVEN_JAVASCRIPT_CONFIG;
+		}
+
+		return array_merge($this->jsData, [
+			'webpack' => $usesWebpack,
+			'user' => $userData,
+			'page' => $this->getPage(),
+			'location' => $location,
+			'ravenConfig' => $ravenConfig
+		]);
+	}
+
+	public function getHeadData(bool $usesWebpack = false)
+	{
+		$data = [
 			'title' => implode(' | ', $this->title),
 			'extra' => $this->head,
 			'css' => str_replace(["\r", "\n"], '', $this->add_css),
 			'jsFunc' => JSMin::minify($this->js_func),
-			'js' => JSMin::minify($this->js)
+			'js' => JSMin::minify($this->js),
+			'ravenConfig' => null
 		];
+
+		if ($usesWebpack) {
+			$data = array_merge($data, [
+				'stylesheets' => $this->webpackStylesheets,
+				'scripts' => $this->webpackScripts
+			]);
+		} else {
+			$data = array_merge($data, [
+				'stylesheets' => $this->stylesheets,
+				'scripts' => $this->scripts
+			]);
+
+			if (defined('RAVEN_JAVASCRIPT_CONFIG')) {
+				$data['ravenConfig'] = RAVEN_JAVASCRIPT_CONFIG;
+			}
+		}
+
+		return $data;
 	}
 
-	public function generateAndGetGlobalViewData()
+	public function generateAndGetGlobalViewData(bool $usesWebpack = false)
 	{
 		global $g_broadcast_message;
 		global $g_body_class;
 		global $content_left_width;
 		global $content_right_width;
 
-		$menu = $this->getMenu();
+		$menu = $this->getMenu($usesWebpack);
 
 		$this->getMessages();
 
@@ -1120,11 +1192,14 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 
 		return [
-			'head' => $this->getHeadData(),
+			'head' => $this->getHeadData($usesWebpack),
 			'bread' => $this->getBread(),
 			'bodyClass' => $g_body_class,
 			'msgbar' => $msgbar,
+			'serverDataJSON' => json_encode($this->getServerData($usesWebpack)),
 			'menu' => $menu,
+			'webpack' => $usesWebpack,
+			'dev' => FS_ENV == 'dev',
 			'hidden' => $this->getHidden(),
 			'isMob' => $this->isMob(),
 			'logolink' => $logolink,
@@ -1329,7 +1404,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			{
 				showLoader();
 				$.ajax({
-					
+
 					dataType:"json",
 					url:"xhr.php?f=update_' . $table . '&" + $("#' . $id . ' form").serialize(),
 					success : function(data){
@@ -1346,7 +1421,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 				});
 			}
 		}
-	});	
+	});
 	');
 	}
 
@@ -1558,7 +1633,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->add_css .= trim($css);
 	}
 
-	public function clearPost()
+	public function goSelf()
 	{
 		$this->go($this->getSelf());
 	}
@@ -1696,8 +1771,12 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		file_get_contents(SOCK_URL . '?' . $query);
 	}
 
-	public function getTemplate($tpl)
+	// https://stackoverflow.com/a/834355
+	public function endsWith($haystack, $needle)
 	{
-		include 'tpl/' . $tpl . '.php';
+		$length = strlen($needle);
+
+		return $length === 0 ||
+			(substr($haystack, -$length) === $needle);
 	}
 }

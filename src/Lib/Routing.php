@@ -23,6 +23,7 @@ class Routing
 		'index' => 'Index',
 		'info' => 'Info',
 		'listFaq' => 'FAQList',
+		'legal' => 'Legal',
 		'login' => 'Login',
 		'logout' => 'Logout',
 		'mailbox' => 'Mailbox',

@@ -21,7 +21,7 @@ class GeoCleanXhr extends Control
 	public function masterupdate()
 	{
 		if ($bezirke = $this->model->getChildBezirke($_GET['id'], true)) {
-			$this->model->update('UPDATE ' . PREFIX . 'bezirk SET `master` = ' . $_GET['id'] . ' WHERE id IN(' . implode(',', $bezirke) . ')');
+			$this->model->update('UPDATE fs_bezirk SET `master` = ' . $_GET['id'] . ' WHERE id IN(' . implode(',', $bezirke) . ')');
 		}
 	}
 
