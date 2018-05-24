@@ -48,6 +48,7 @@ class LegalControl extends Control
 				$this->gateway->agreeToPp(S::id(), $data->privacy_policy_date);
 				/* need to reload session cache. TODO: This should be further abstracted */
 				$this->model->relogin();
+				$this->func->goSelf();
 			}
 		}
 		$response->setContent($this->render('pages/Legal/page.twig', [
