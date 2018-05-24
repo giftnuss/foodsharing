@@ -11,6 +11,7 @@
 - Registered users need to fill their birthday and be 18+ for data protection and liability reasons. !377 @NerdyProjects
 - Remove google analytics !374 @NerdyProjects
 - Remove external paypal donate button and host locally !374 @NerdyProjects
+- Privacy policy need to be agreed before the page can be used !379 @NerdyProjects
 
 ## Bugfixes
 - Removing a user from regions is possible again. !372 #14 @NerdyProjects
