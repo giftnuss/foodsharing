@@ -1,8 +1,10 @@
-# Not Released
+# 2018-05-24
 
 ## Release notes
+This release is mostly pushed by GDPR (German: DSGVO) as this forces us to do some changes.
+I am not sure yet, if I am positive or negative about that...
 
-## Breaking changes
+Also, we introduce new frontend technology here. I hope we did not break too much :-)
 
 ## Features
 - decreased distance to "close baskets" from 50 to 30 km. !332 #338 by @peter.toennies
