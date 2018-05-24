@@ -7,6 +7,7 @@ class RegisterCest
 	private $first_name;
 	private $last_name;
 	private $password;
+	private $birthdate;
 
 	public function _before()
 	{
@@ -83,6 +84,19 @@ class RegisterCest
 		$I->fillField('email_adress', $this->email);
 		$I->fillField('password', $this->password);
 		$I->click('#loginbar input[type=submit]');
+
+		$I->seeInDatabase('fs_foodsaver', [
+			'email' => $this->stripped_email,
+			'name' => $this->first_name,
+			'nachname' => $this->last_name,
+			'geb_datum' => $this->birthdate,
+			'newsletter' => 0
+		]);
+
+		$I->waitForText('Ich stimme nicht zu und möchte ');
+		$I->checkOption('#legal_form_privacy_policy');
+		//$I->submitForm('legal_form', []);
+		$I->click('Ich bin mit den Bestimmungen einverstanden');
 		$I->waitForText('Willkommen ' . $this->first_name . '!');
 
 		$I->seeInDatabase('fs_foodsaver', [

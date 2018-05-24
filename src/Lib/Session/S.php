@@ -7,6 +7,8 @@ use Flourish\fSession;
 use Foodsharing\DI;
 use Foodsharing\Lib\Func;
 use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Legal\LegalControl;
+use Foodsharing\Modules\Legal\LegalGateway;
 
 class S
 {
@@ -78,7 +80,8 @@ class S
 				'type' => $user['type'],
 				'token' => $user['token'],
 				'mailbox_id' => $user['mailbox_id'],
-				'gender' => $user['geschlecht']
+				'gender' => $user['geschlecht'],
+				'privacy_policy_accepted_date' => $user['privacy_policy_accepted_date']
 			));
 
 			self::set('buddy-ids', $user['buddys']);
@@ -94,6 +97,22 @@ class S
 		$user = self::get('user');
 
 		return $user[$index];
+	}
+
+	public static function getRouteOverride()
+	{
+		$legalModel = DI::$shared->get(LegalGateway::class);
+		$ppVersion = $legalModel->getPpVersion();
+		if (self::id() && $ppVersion && $ppVersion > self::user('privacy_policy_accepted_date')) {
+			/* Allow Settings page, otherwise redirect to legal page */
+			if (in_array(self::$func->getPage(), ['settings', 'logout'])) {
+				return null;
+			}
+
+			return LegalControl::class;
+		}
+
+		return null;
 	}
 
 	public static function id()

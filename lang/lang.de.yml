@@ -42,3 +42,13 @@ group:
     join: Dieser Arbeitsgruppe beitreten
     safe: Änderungen speichern
   no_groups: Hier gibt es noch keine Arbeitsgruppen
+
+legal:
+  newpp: Neue Datenschutzerklärung
+  acknowledge: Stimmst du der Datenschutzerklärung zu?
+  not_acknowledge_description: Um die foodsharing.de Plattform benutzen zu können, musst du der beschriebenenen Datenschutzerklärung zustimmen. Stimmst du nicht zu, musst du deinen Account löschen.
+  agree_privacy_policy: Ich stimme der Datenschutzvereinbarung zu.
+  delete_account: Ich stimme nicht zu und möchte meinen Account löschen.
+  actions:
+    safe: Ich bin mit den Bestimmungen einverstanden
+  must_accept_pp: Um bei foodsharing.de mitzumachen, musst du den Datenschutzbedingungen zustimmen.

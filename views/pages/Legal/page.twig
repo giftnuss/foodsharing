@@ -1,0 +1,19 @@
+{% extends 'layouts/default.twig' %}
+
+{% block main %}
+    {{ form_start(form) }}
+    {% embed 'components/field.twig' with {'title': 'legal.newpp'|trans, 'classes': ['ui-padding']} %}
+        {% block content %}
+            {{ pp|raw }}
+        {% endblock %}
+    {% endembed %}
+    {% embed 'components/field.twig' with {'title': 'legal.acknowledge'|trans, 'classes': ['ui-padding']} %}
+        {% block content %}
+            {{ 'legal.not_acknowledge_description'|trans }}
+            {{ form_row(form.privacy_policy) }}
+            <a href="/?page=settings&sub=deleteaccount">{{ 'legal.delete_account'|trans }}</a>
+        {% endblock %}
+    {% endembed %}
+    <input type="submit" value="{{ 'legal.actions.safe'|trans }}" />
+    {{ form_end(form) }}
+{% endblock %}

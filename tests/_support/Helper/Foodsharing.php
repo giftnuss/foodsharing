@@ -73,6 +73,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'handy' => $this->faker->phoneNumber,
 			'photo_public' => 1,
 			'active' => 1,
+			'privacy_policy_accepted_date' => '2016-01-19 14:00:32',
 		], $extra_params);
 		$params['passwd'] = $this->encryptMd5($params['email'], $pass);
 		$params['geb_datum'] = $this->toDateTime($params['geb_datum']);
