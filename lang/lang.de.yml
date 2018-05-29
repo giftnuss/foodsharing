@@ -1,6 +1,6 @@
 image: Bild
 picture_upload_widget:
-  picture_upload: Foto Upload
+  picture_upload: Foto-Upload
   choose_picture: Wähle ein Bild von Deinem Rechner
 
 button:
@@ -25,10 +25,10 @@ group:
       min: Niemand kann weniger als {{ limit }} Vertrauensbananen haben!
       max: Bitte erwarte nicht mehr als {{ limit }} Vertrauensbananen!
     member_since_weeks: Seit wie vielen Wochen sollte ein Bewerber schon dabei sein?
-    not_fulfilled: Um dich für diese Arbeitsgruppe zu bewerben, musst du seit %weeks% Wochen bei foodsharing dabei sein, schon %bananas% Vertrauensbananen gesammelt haben und schon %fetches% Abholungen mitgemacht haben.
+    not_fulfilled: Um Dich für diese Arbeitsgruppe zu bewerben, musst Du seit %weeks% Wochen bei foodsharing dabei sein, schon %bananas% Vertrauensbananen gesammelt und schon %fetches% Abholungen mitgemacht haben.
   members: Mitglieder
   administrators: Gruppen-Admins
-  title: foodsharing Arbeitsgruppen
+  title: foodsharing-Arbeitsgruppen
   subtitle: hier findest du Hilfe und viel zu tun...
   member_count: '{0} Keine Mitwirkenden|{1} Ein*e Mitwirkende*r| [2, Inf[ %count% Mitwirkende'
   admin_count: '{0} Keine Administratoren|{1} Ein*e Administrator*in| [2, Inf[ %count% Administratoren'
@@ -46,16 +46,16 @@ group:
 legal:
   pp: Datenschutzerklärung
   acknowledge: Stimmst du der Erklärung zu?
-  not_acknowledge_pp_description: Um die foodsharing.de Plattform benutzen zu können, musst du der beschriebenenen Datenschutzerklärung zustimmen. Stimmst du nicht zu, musst du deinen Account löschen.
-  agree_privacy_policy: Ich stimme der Datenschutzvereinbarung zu.
-  delete_account: Ich stimme nicht zu und möchte meinen Account löschen.
+  not_acknowledge_pp_description: Um die foodsharing-Plattform benutzen zu können, musst Du die beschriebenenen Datenschutzerklärung zur Kenntnis nehmen. Es steht Dir frei, Deinen Account zu löschen.
+  agree_privacy_policy: Ich habe die Datenschutzvereinbarung zur Kenntnis genommen.
+  delete_account: Ich möchte meinen Account löschen.
   actions:
     safe: Einstellungen übernehmen
-  must_accept_pp: Um bei foodsharing.de mitzumachen, musst du den Datenschutzbedingungen zustimmen.
+  must_accept_pp: Um bei foodsharing mitzumachen, musst du den Datenschutzbedingungen zustimmen.
   privacy_notice: Datenschutzbelehrung
-  agree_privacy_notice: Über die Verpflichtung zur Vertraulichkeit personenbezogener Daten und die sich daraus ergebenden Verhaltensweisen wurde ich unterrichtet. Eine Bestätigung hierüber erhalte ich per E-Mail an die von mir angegebene Adresse für meine Unterlagen.
+  agree_privacy_notice: Über die Verpflichtung zur Vertraulichkeit personenbezogener Daten und die sich daraus ergebenden Verhaltensweisen wurde ich unterrichtet. Eine Bestätigung hierüber erhalte ich per E-Mail für meine Unterlagen an die von mir angegebene Adresse.
   privacy_notice_agree:
     select: Bitte auswählen
     acknowledge: Ich stimme zu
     not_acknowledge: Ich stimme nicht zu und möchte zum Foodsaver herabgestuft werden
-  not_acknowledge_pn_description: Wenn du mit der Belehrung nicht einverstanden bist, wirst du zum Foodsaver herabgestuft. Das bedeutet, dass du kein*e Botschafter*In von Bezirken mehr bist, deine Betriebsverantwortlichkeiten verlierst und das Quiz zum Betriebsverantwortlichen/Botschafter erneut durchführen musst.
+  not_acknowledge_pn_description: Wenn Du mit der Belehrung nicht einverstanden bist, wirst Du zum Foodsaver herabgestuft. Das bedeutet, dass Du kein*e Botschafter*in von Bezirken mehr bist, Deine Betriebsverantwortlichkeiten verlierst und das Quiz zur/m Betriebsverantwortlichen/Botschafter*in erneut durchführen musst.
