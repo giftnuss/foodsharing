@@ -93,9 +93,8 @@ class RegisterCest
 			'newsletter' => 0
 		]);
 
-		$I->waitForText('Ich stimme nicht zu und möchte ');
+		$I->waitForText('Um die foodsharing-Plattform benutzen zu können, musst Du die beschriebenenen Datenschutzerklärung zur Kenntnis nehmen. Es steht Dir frei, Deinen Account zu löschen.');
 		$I->checkOption('#legal_form_privacy_policy');
-		//$I->selectOption('#legal_form_privacy_notice', '1');
 		$I->click('Einstellungen übernehmen');
 		$I->waitForText('Willkommen ' . $this->first_name . '!');
 
