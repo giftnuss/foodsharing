@@ -18,7 +18,8 @@ exports.rules = [
     [require.resolve('timeago/jquery.timeago')]: ['define=>false', 'jQuery=jquery'],
     [lib('jquery-ui-addons.js')]: ['jQuery=jquery', 'window.jQuery=jquery', '_=jquery-ui'],
     [lib('fancybox/jquery.fancybox.pack.js')]: ['jQuery=jquery'],
-    [lib('jquery.animatenumber.min.js')]: ['jQuery=jquery']
+    [lib('jquery.animatenumber.min.js')]: ['jQuery=jquery'],
+    [lib('dynatree/jquery.dynatree.js')]: ['jQuery=jquery']
   })
 ]
 
@@ -43,6 +44,8 @@ exports.alias = {
   'jquery-tagedit-auto-grow-input': lib('tagedit/js/jquery.autoGrowInput.js'),
   'jquery-tagedit': lib('tagedit/js/jquery.tagedit.js'),
   'jquery-animatenumber': lib('jquery.animatenumber.min.js'),
+  'jquery-dynatree': lib('dynatree/jquery.dynatree.js'),
+  'jquery-dynatree.css': lib('dynatree/skin/ui.dynatree.css'),
   'autolink': lib('autolink.js'),
   'underscore': lib('underscore.js'),
   'underscore-string': lib('underscore.string.js'),
