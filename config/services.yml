@@ -19,7 +19,7 @@ services:
             - '@Twig_Loader_Filesystem'
             -
                 cache: 'cache/.views-cache'
-                debug: false
+                debug: '@=constant("FS_ENV")!="prod"'
                 strict_variables: true
         calls:
             - [addRuntimeLoader, ['@Twig\RuntimeLoader\ContainerRuntimeLoader']]

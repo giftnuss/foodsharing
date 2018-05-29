@@ -1,5 +1,9 @@
 # 2018-05-24
 
+## Hotfixes
+- fixed region selector (using webpack now). !383 #207 @peter.toennies
+- fix new store page !373 #12 @nicksellen
+
 ## Release notes
 This release is mostly pushed by GDPR (German: DSGVO) as this forces us to do some changes.
 I am not sure yet, if I am positive or negative about that...

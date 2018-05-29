@@ -2,6 +2,8 @@ import '@/core'
 import '@/globals'
 import { ajreq, GET } from '@/script'
 import $ from 'jquery'
+import 'jquery-dynatree'
+import 'jquery-dynatree.css'
 
 const fsapp = {
   init: function () {
