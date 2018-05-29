@@ -1,4 +1,4 @@
-# Unreleases
+# Unreleased
 
 ## Release notes
 
