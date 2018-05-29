@@ -45,7 +45,7 @@ group:
 
 legal:
   pp: Datenschutzerklärung
-  acknowledge: Stimmst du der Erklärung zu?
+  acknowledge: Nimmst du die Vereinbarung zur Kenntnis?
   not_acknowledge_pp_description: Um die foodsharing-Plattform benutzen zu können, musst Du die beschriebenenen Datenschutzerklärung zur Kenntnis nehmen. Es steht Dir frei, Deinen Account zu löschen.
   agree_privacy_policy: Ich habe die Datenschutzvereinbarung zur Kenntnis genommen.
   delete_account: Ich möchte meinen Account löschen.
