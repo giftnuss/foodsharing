@@ -96,7 +96,7 @@ class StoreView extends View
 				$latLonOptions[$i] = $g_data[$i];
 			}
 		}
-		if (isset($g_data['lat']) && isset($g_data['lon'])) {
+		if (isset($g_data['lat'], $g_data['lon'])) {
 			$latLonOptions['location'] = ['lat' => $g_data['lat'], 'lon' => $g_data['lon']];
 		}
 
