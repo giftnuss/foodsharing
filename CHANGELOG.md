@@ -1,3 +1,17 @@
+# Unreleases
+
+## Release notes
+
+## Features
+
+## Bugfixes
+
+- fix new store page !373 #12 @nicksellen
+
+## Refactoring
+
+## Dev/Test/CI stuff
+
 # 2018-05-24
 
 ## Release notes
@@ -28,7 +42,6 @@ Also, we introduce new frontend technology here. I hope we did not break too muc
 - fixed check for allowed attachment types in the mail app. !363 #183 by @peter.toennies
 - data privacy : removed foodsaver / ambassador selection from map. #165 by @k.miklobusec
 - fixed potential security issue in profile picture uploads. !371 #84 @theolampert
-- fix new store page !373 #12 @nicksellen
 
 ## Refactoring
 - complete tidying up of all team related files !321 by @peter.toennies
