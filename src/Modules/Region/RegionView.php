@@ -25,7 +25,7 @@ class RegionView extends View
 				</div>
 				<div class="welcome_quick_link">
 					<ul>
-						<li>' . $this->bezirk['stat_fscount'] . ' Foodsaver, ' . $this->bezirk['stat_botcount'] . ' Botschafter, ' . $this->bezirk['stat_betriebcount'] . ' Betriebe, ' . $this->bezirk['stat_korpcount'] . ' laufende Kooperationen</li>
+						<li>' . $this->bezirk['stat_fscount'] . ' Foodsaver, ' . $this->bezirk['stat_botcount'] . ' BotschafterInnen, ' . $this->bezirk['stat_betriebcount'] . ' Betriebe, ' . $this->bezirk['stat_korpcount'] . ' laufende Kooperationen</li>
 					</ul>
 					<div class="clear"></div>
 				</div>

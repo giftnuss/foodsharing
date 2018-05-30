@@ -156,7 +156,7 @@ class ProfileView extends View
 				$bot[$b['id']] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
 			}
 			$infos[] = array(
-				'name' => $this->foodsaver['name'] . ' ist Botschafter für',
+				'name' => $this->foodsaver['name'] . ' ist Botschafter' . $this->func->genderWord($this->foodsaver['geschlecht'], '', 'in', '_in') . ' für',
 				'val' => implode(', ', $bot)
 			);
 		}

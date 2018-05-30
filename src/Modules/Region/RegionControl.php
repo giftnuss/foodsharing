@@ -120,7 +120,7 @@ class RegionControl extends Control
 		$this->func->addContent(
 			$this->v_utils->v_field($this->view->fsAvatarList($bezirk['botschafter'], array(
 				'scroller' => false
-			)), 'Botschafter für ' . $bezirk['name']),
+			)), 'BotschafterInnen für ' . $bezirk['name']),
 			CNT_LEFT
 		);
 
