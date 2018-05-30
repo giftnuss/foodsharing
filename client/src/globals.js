@@ -17,6 +17,8 @@ import info from '@/info'
 import socket from '@/socket'
 
 import {
+  betrieb,
+  chat,
   pulseInfo,
   pulseError,
   pulseSuccess,
@@ -38,6 +40,8 @@ import {
 Object.assign(window, {
   $,
   jQuery: $,
+  betrieb,
+  chat,
   pulseInfo,
   pulseError,
   pulseSuccess,

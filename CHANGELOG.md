@@ -3,6 +3,7 @@
 ## Hotfixes
 - fixed region selector (using webpack now). !383 #207 @peter.toennies
 - fix new store page !373 #12 @nicksellen
+- export chat/betrieb js functions globally !384 #211 @nicksellen
 
 ## Release notes
 This release is mostly pushed by GDPR (German: DSGVO) as this forces us to do some changes.
