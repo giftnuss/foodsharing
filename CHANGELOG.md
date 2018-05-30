@@ -1,16 +1,34 @@
-# Not Released
+# Unreleased
+
+## Refactoring
+- Extract StoreUser module javascript !358 @nicksellen
+
+# 2018-05-24
+
+## Hotfixes
+- fixed region selector (using webpack now). !383 #207 @peter.toennies
+- fix new store page !373 #12 @nicksellen
+- export chat/betrieb js functions globally !384 #211 @nicksellen
 
 ## Release notes
+This release is mostly pushed by GDPR (German: DSGVO) as this forces us to do some changes.
+I am not sure yet, if I am positive or negative about that...
 
-## Breaking changes
+Also, we introduce new frontend technology here. I hope we did not break too much :-)
 
 ## Features
 - decreased distance to "close baskets" from 50 to 30 km. !332 #338 by @peter.toennies
 - sort fairtiler list by name. !357 #171 by @k.miklobusec
 - Store Managers business card creation for region. Remove country card. !76 by @k.miklobusec
 - Registered users need to fill their birthday and be 18+ for data protection and liability reasons. !377 @NerdyProjects
+- Remove google analytics !374 @NerdyProjects
+- Remove external paypal donate button and host locally !374 @NerdyProjects
+- Privacy policy need to be agreed before the page can be used !379 @NerdyProjects
+- Privacy notice need to be agreed by store coordinators/ambassadors !381 @NerdyProjects
 
 ## Bugfixes
+- Removing a user from regions is possible again. !372 #14 @NerdyProjects
+- Fix search bar not working on some pages !364 by @NerdyProjects
 - Remove info section from foodsaver page, if it is empty !320
 - It is possible to contact working groups again. !343 #403 by @peter.toennies @NerdyProjects
 - Fix store fetch count shown on map info bubble !265 @alangecker @NerdyProjects

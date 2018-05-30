@@ -59,6 +59,8 @@ module.exports = {
     // We explicitly define each foodsharing modules here so we can convert them one-by-one
     'Index',
     'Dashboard',
+    'Foodsaver',
+    'StoreUser',
     'WorkGroup'
   ),
   mode: dev ? 'development' : 'production',
@@ -67,12 +69,17 @@ module.exports = {
   output: {
     path: assetsPath,
     ...(dev ? {
-      filename: 'js/[name].js'
+      filename: 'js/[name].js',
+      chunkFilename: 'js/[chunkhash].js'
     } : {
       filename: 'js/[name].[hash].js',
-      chunkFilename: 'js/[name].[chunkhash].js'
+      chunkFilename: 'js/[id].[chunkhash].js'
     }),
-    publicPath: '/assets/'
+    publicPath: '/assets/',
+
+    // See https://github.com/ctrlplusb/react-universally/pull/566#issuecomment-373292166
+    // TODO: find somewhere to set the multiStep option from https://github.com/webpack/webpack/issues/6693
+    hotUpdateChunkFilename: '[hash].hot-update.js'
   },
   resolve: {
     extensions: ['.js'],

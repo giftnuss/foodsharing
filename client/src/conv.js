@@ -1,4 +1,5 @@
 /* eslint-disable eqeqeq */
+
 import $ from 'jquery'
 
 import storage from '@/storage'

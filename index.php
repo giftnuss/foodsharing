@@ -75,8 +75,9 @@ if (S::may()) {
 $app = $func->getPage();
 
 $usesWebpack = false;
-
-$class = Routing::getClassName($app, 'Control');
+if (($class = S::getRouteOverride()) === null) {
+	$class = Routing::getClassName($app, 'Control');
+}
 
 if ($class) {
 	$obj = DI::$shared->get(ltrim($class, '\\'));

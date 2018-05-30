@@ -716,7 +716,9 @@ abstract class Db
 							`token`,
 							`mailbox_id`,
 							`option`,
-							`geschlecht`
+							`geschlecht`,
+							`privacy_policy_accepted_date`,
+							`privacy_notice_accepted_date`
 
 				FROM 		`fs_foodsaver`
 

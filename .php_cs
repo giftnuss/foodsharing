@@ -20,6 +20,7 @@ $finder = PhpCsFixer\Finder::create()
     ->notPath('lib/font')
     ->notPath('tests/_support/_generated')
     ->notPath('src/Lib/Flourish')
+    ->notPath('cache')
     ->in(__DIR__)
 ;
 

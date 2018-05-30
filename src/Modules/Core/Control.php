@@ -101,9 +101,9 @@ abstract class Control
 				if (file_exists($dir . $moduleName . '.js')) {
 					$this->func->addJsFunc(file_get_contents($dir . $moduleName . '.js'));
 				}
-			}
-			if (file_exists($dir . $moduleName . '.css')) {
-				$this->func->addStyle(file_get_contents($dir . $moduleName . '.css'));
+				if (file_exists($dir . $moduleName . '.css')) {
+					$this->func->addStyle(file_get_contents($dir . $moduleName . '.css'));
+				}
 			}
 		}
 		$this->model->updateActivity(S::id());

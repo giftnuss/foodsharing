@@ -22,9 +22,6 @@ class StoreUserControl extends Control
 
 	public function index()
 	{
-		$this->func->addScript('/js/contextmenu/jquery.contextMenu.js');
-		$this->func->addStylesheet('/js/contextmenu/jquery.contextMenu.css');
-
 		if (isset($_GET['id'])) {
 			$this->func->addBread($this->func->s('betrieb_bread'), '/?page=fsbetrieb');
 			$this->func->addTitle($this->func->s('betrieb_bread'));
@@ -36,6 +33,15 @@ class StoreUserControl extends Control
 			if (!$betrieb) {
 				$this->func->goPage();
 			}
+
+			$this->func->jsData['store'] = [
+				'id' => (int)$betrieb['id'],
+				'name' => (int)$betrieb['name'],
+				'bezirk_id' => (int)$betrieb['bezirk_id'],
+				'team_js' => $betrieb['team_js'],
+				'verantwortlich' => $betrieb['verantwortlich'],
+				'prefetchtime' => $betrieb['prefetchtime']
+			];
 
 			if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && ($this->model->isVerantwortlich($_GET['id']) || $this->func->isOrgaTeam() || $this->func->isBotFor($betrieb['bezirk_id']))) {
 				if ($_POST['form_submit'] == 'zeiten') {
@@ -116,117 +122,7 @@ class StoreUserControl extends Control
 					);
 
 					$this->func->addHidden('<div id="teamEditor">' . $edit_team . '</div>');
-
-					$this->func->addJs('
-						
-						$(".cb-verantwortlicher").click(function(){
-							if($(".cb-verantwortlicher:checked").length >= 4)
-							{
-								pulseError(\'' . $this->func->jsSafe($this->func->s('max_3_leader')) . '\');
-								return false;
-							}
-							
-						});		
-						$("#team-form").submit(function(ev){
-							if($(".cb-verantwortlicher:checked").length == 0)
-							{
-								pulseError(\'' . $this->func->jsSafe($this->func->s('verantwortlicher_must_be')) . '\');
-								ev.preventDefault();
-								return false;
-							}
-						});	
-						');
-
-					$this->func->addJsFunc('
-							function u_fetchconfirm(fsid,date,el)
-							{
-								var item = $(el);
-								showLoader();
-								$.ajax({
-									url:"xhr.php?f=fetchConfirm",
-									data: {
-										fsid:parseInt(fsid),
-										bid:' . (int)$betrieb['id'] . ',
-										date: date
-									},
-									success: function(ret){
-										if(ret == 1)
-										{
-											item.parent().removeClass("unconfirmed");
-										}
-									},
-									complete: function(){
-										hideLoader();
-									}
-								});		
-							}	
-							function u_fetchdeny(fsid,date,el)
-							{
-								var item = $(el);
-								showLoader();	
-								$.ajax({
-									url:"xhr.php?f=fetchDeny",
-									data: {
-										fsid:parseInt(fsid),
-										bid:' . (int)$betrieb['id'] . ',
-										date: date
-									},
-									success: function(ret){
-										if(ret == 1)
-										{
-											item.parent().parent().append(\'<li class="filled empty timedialog-add-me"><a onclick="return false;" href="#"><img alt="nobody" src="img/nobody.gif"></a></li>\');
-											item.parent().remove();
-										}
-									},
-									complete: function(){
-										hideLoader();
-									}
-								});			
-							}
-						');
 				}
-
-				/*pinnwand*/
-				$this->func->addJsFunc('
-					function u_clearDialogs()
-					{
-						$(".datefetch").val("");		
-						$(".shure_date").show();
-						$(".shure_range_date").hide();
-						$(".rangeFetch").hide();
-						$("button").show();
-						
-					}
-					function u_updatePosts(){
-						$.ajax({
-							dataType:"json",
-							data: $("div#pinnwand form").serialize(),
-							url:"xhr.php?f=getPinPost",
-							success : function(data){
-								if(data.status == 1)
-								{
-									$("#pinnwand .posts").html(data.html);
-								}
-							}
-						});
-					}
-					
-					function u_undate(date,date_format)
-					{
-						$("#u_undate").dialog("option","title","' . $this->func->s('del_date_for') . ' " + date_format);
-							
-						$("#team_msg-wrapper").hide();
-						$("#have_backup").show();
-						$("#msg_to_team").show();
-						$("#send_msg_to_team").hide();
-							
-						$("#undate-date").val(date);
-						$("#u_undate").dialog("open");
-						msg = "' . $this->func->jsSafe(str_replace(array('{BETRIEB}'), array($betrieb['name']), $this->func->s('tpl_msg_to_team')), '"') . '";
-						msg = msg.replace("{DATE}",date_format);
-						$("#team_msg").val(msg);
-					}
-					');
 				$this->func->addStyle('#team_msg{width:358px;}');
 				$this->func->addHidden('
 						<div id="u_undate">
@@ -236,112 +132,6 @@ class StoreUserControl extends Control
 							' . $this->v_utils->v_form_textarea('team_msg') . '
 						</div>
 					');
-
-				$this->func->addJs('
-					$("#team_msg-wrapper").hide();
-					$("#u_undate").dialog({
-						autoOpen: false,
-						modal: true,
-						width:400,
-						buttons: [
-							{
-								text:"' . $this->func->s('have_backup') . '",
-								click:function(){
-									showLoader();
-									$.ajax({
-										url:"xhr.php?f=delDate",
-										data:{"date":$("#undate-date").val(),"bid":' . (int)$betrieb['id'] . '},
-										dataType:"json",
-										success: function(ret){
-											if(ret.status == 1)
-											{
-												$(".fetch-" + $("#undate-date").val().replace(/[^0-9]/g,"") + "-' . $this->func->fsId() . '" ).hide();
-											}
-											else
-											{
-												hideLoader();	
-											}
-										},
-										complete: function(){
-											$("#u_undate").dialog("close");
-											hideLoader();
-										}
-									});
-								},
-								id: "have_backup"
-							},
-							{
-								text:"' . $this->func->s('msg_to_team') . '",
-								click:function(){
-									$("#team_msg-wrapper").show();
-									//$("#u_undate").dialog("option","height",400);
-									$("#have_backup").hide();
-									$("#msg_to_team").hide();
-									$("#send_msg_to_team").show();
-								},
-								id: "msg_to_team"
-							},
-							{
-								text:"' . $this->func->s('del_and_send') . '",
-								click:function(){
-									showLoader();
-									$.ajax({
-										url:"xhr.php?f=delDate",
-										data:{"date":$("#undate-date").val(),"msg":$("#team_msg").val(),"bid":' . (int)$betrieb['id'] . '},
-										dataType:"json",
-										success: function(ret){
-											if(ret.status == 1)
-											{
-												$(".fetch-" + $("#undate-date").val().replace(/[^0-9]/g,"") + "-' . $this->func->fsId() . '" ).hide();
-											}
-											else
-											{
-												hideLoader();	
-											}
-										},
-										complete: function(){
-											$("#u_undate").dialog("close");
-											hideLoader();
-										}
-									});
-								},
-								id: "send_msg_to_team",
-								css:{"display":"none"}
-							}
-						]
-					});
-							
-					$("#comment-post").hide();
-					$("div#pinnwand form textarea").focus(function(){
-						$("#comment-post").show();
-					});
-					$("div#pinnwand form textarea").blur(function(){
-						//$("#comment-post").hide();
-					});
-							
-					
-					$("div#pinnwand form input.submit").button().bind("keydown", function(event) {
-						  $("div#pinnwand form").submit();
-					});
-					$("div#pinnwand form").submit(function(e){
-						e.preventDefault();
-						if($("div#pinnwand form textarea").val() != $("div#pinnwand form textarea").attr("title"))
-						{
-							$.ajax({
-								dataType:"json",
-								data: $("div#pinnwand form").serialize(),
-								url:"xhr.php?f=addPinPost&team=' . $betrieb['team_js'] . '",
-								success : function(data){
-									if(data.status == 1)
-									{
-										$("div#pinnwand form textarea").val($("div#pinnwand form textarea").attr("title"));
-										$("#pinnwand .posts").html(data.html);
-									}
-								}
-							});
-						}
-					});
-				');
 
 				/*Infos*/
 				$betrieb['menge'] = '';
@@ -407,10 +197,7 @@ class StoreUserControl extends Control
 				);
 
 				if (!$betrieb['jumper'] || S::may('orga')) {
-					$this->func->addJs('
-							u_updatePosts();
-							//setInterval(u_updatePosts,5000);		
-						');
+					$this->func->addJs('u_updatePosts();');
 
 					$opt = array();
 					if ($this->func->isMob()) {
@@ -457,15 +244,6 @@ class StoreUserControl extends Control
 				 * Abholzeiten
 				 */
 
-				$click = '';
-				$click = 'profile(' . (int)$this->func->fsId() . ');return false;';
-				$confclass = 'unconfirmed';
-				$pulseconf = 'pulseInfo("' . $this->func->jsSafe($this->func->s('wait_for_confirm')) . '");';
-				if ($betrieb['verantwortlich']) {
-					$confclass = 'confirmed';
-					$pulseconf = '';
-				}
-
 				$this->func->addHidden('
 					<div id="timedialog">
 						
@@ -491,207 +269,6 @@ class StoreUserControl extends Control
 						<span class="abort" style="display:none">' . $this->func->s('abort') . '</span>
 					</div>');
 
-				$this->func->addJsFunc('
-						var clicked_pid = null;
-						function u_delPost(id)
-						{
-							clicked_pid = id;
-							$("#delete_shure").dialog("open");
-						}
-						var signout_bid;
-						function u_betrieb_sign_out(bid)
-						{
-							signout_bid = bid;	
-							$("#signout_shure").dialog("open");
-						}
-					');
-
-				$verified = 0;
-				if ($this->func->isVerified()) {
-					$verified = 1;
-				}
-
-				//Fix for Issue #171
-				$seconds = $betrieb['prefetchtime'];
-				if ($seconds >= 86400) {
-					$days = $seconds / 86400;
-				} else {
-					//If Bieb did not set the option "how many weeks in advance can a foodsaver apply" an alternative value
-					$days = 7;
-				}
-
-				$this->func->addJs('
-					
-					$("#signout_shure").dialog({
-						autoOpen:false,
-						modal:true,
-						buttons :[
-							{
-								text: $("#signout_shure .sure").text(),
-								click:function(){
-									showLoader();
-									
-									ajax.req("betrieb","signout",{
-										data:{id:' . (int)$_GET['id'] . '},
-										success: function(){
-											
-										}
-									});
-								}
-							},
-							{
-								text: $("#signout_shure .abort").text(),
-								click: function(){
-									$("#signout_shure").dialog("close");
-								}
-							}
-						]
-					});
-							
-					$("#delete_shure").dialog({
-						autoOpen:false,
-						modal:true,
-						buttons :[
-							{
-								text: $("#delete_shure .sure").text(),
-								click:function(){
-									showLoader();
-									$.ajax({
-										url:"xhr.php?f=delBPost",
-										data:{"pid":clicked_pid},
-										success:function(ret){
-											if(ret == 1)
-											{
-												$(".bpost-" + clicked_pid).remove();
-												$("#delete_shure").dialog("close");
-			
-											}
-										},
-										complete:function(){
-											hideLoader();
-										}
-									});
-								}
-							},
-							{
-								text: $("#delete_shure .abort").text(),
-								click: function(){
-									$("#delete_shure").dialog("close");
-								}
-							}
-						]
-					});
-							
-						$(".timedialog-add-me").click(function(){
-							u_clearDialogs();
-							
-							if(1 == ' . $verified . ')
-							{
-								date = $(this).children("input")[0].value.split("::")[0];
-								day = $(this).children("input")[0].value.split("::")[2];
-								label = $(this).children("input")[0].value.split("::")[1];
-								id = $(this).children("input")[1].value;
-								
-								$("#timedialog-date").val(date);
-								$("#date-label").html(day + ", " + label);
-								$("#range-day-label").html(day.toLowerCase());
-								$("#timedialog-id").val(id);
-								$("#timedialog").dialog("open");
-							}
-							else
-							{
-								pulseInfo(\'' . $this->func->jsSafe($this->func->s('not_verified')) . '\');
-							}
-						});
-						
-						$("#timedialog").dialog({
-								title:"Sicher?",
-								resizable: false,
-								modal: true,
-								autoOpen:false,
-								width:500,
-								buttons: {
-									"Eintragen": function() {
-						
-						
-										$.ajax({
-											url : "xhr.php?f=addFetcher",
-											data : {
-												date:$("#timedialog-date").val(),
-												bid:' . (int)$betrieb['id'] . ',
-												from: $("#timedialog-from").val(),
-												to: $("#timedialog-to").val()
-											},
-											success : function(ret){
-												u_clearDialogs();
-												$("#timedialog").dialog( "close" );
-												if(ret == "2")
-												{
-													reload();
-												}
-												else if(ret != 0)
-												{
-									
-													$("#"+ $("#timedialog-id").val() +"-button").last().remove();
-									
-													$("#"+ $("#timedialog-id").val() +"-imglist").prepend(\'<li class="' . $confclass . '"><a onclick="' . $click . '" href="#"><img src="\'+ret+\'" title="Du" /><span>&nbsp;</span></a></li>\');
-													' . $pulseconf . '
-			
-													if($("#"+ $("#timedialog-id").val() +"-imglist li:last").hasClass("empty"))
-													{
-														$("#"+ $("#timedialog-id").val() +"-imglist li:last").remove();	
-													}
-			
-													$("#"+ $("#timedialog-id").val() +"-imglist li.empty a").attr("title","");
-													$("#"+ $("#timedialog-id").val() +"-imglist li.empty").unbind("click");
-													$("#"+ $("#timedialog-id").val() +"-imglist li.empty").addClass("nohover");
-													$("#"+ $("#timedialog-id").val() +"-imglist li.empty").removeClass("filled");
-													$("#"+ $("#timedialog-id").val() +"-imglist li.empty a").tooltip("option", {disabled: true}).tooltip("close");
-												}
-						
-											}
-										});
-										
-						
-									},
-									"Regelmäßig abholen": function() {
-										$("#shure_date").hide();
-										$("#rangeFetch").show();
-										$("#shure_range_date").show();
-						
-										 $( "#timedialog-from" ).datepicker({
-											defaultDate: "+1w",
-											minDate: "0",
-											maxDate: "+' . (int)$days . '",
-											numberOfMonths: 1,
-											onClose: function( selectedDate ) {
-												if(selectedDate!="")
-												{
-													$( "#timedialog-to" ).datepicker( "option", "minDate", selectedDate );
-												}
-												$( "#timedialog-to" ).datepicker( "option", "maxDate", "+' . (int)$days . '");
-											}
-										});
-			
-										$( "#timedialog-to" ).datepicker({
-											defaultDate: "+1w",
-											minDate: "+2",
-											maxDate: "+' . (int)$days . '",
-											numberOfMonths: 1,
-											onClose: function( selectedDate ) {
-												$( "#timedialog-from" ).datepicker( "option", "maxDate", selectedDate );
-											}
-										});
-										$("#timedialog").next().children().children(":nth-child(2)").hide();
-									},
-									"Abbrechen": function() {
-										u_clearDialogs();
-										$( this ).dialog( "close" );
-									}
-								}
-							});
-					');
-
 				if (is_array($betrieb['abholer'])) {
 					foreach ($betrieb['abholer'] as $dow => $a) {
 						$g_data['dow' . $dow] = $a;
@@ -701,8 +278,6 @@ class StoreUserControl extends Control
 				$zeiten = $this->model->getAbholzeiten($betrieb['id']);
 
 				$next_dates = $this->view->u_getNextDates($zeiten, $betrieb, $this->model->listUpcommingFetchDates($_GET['id']));
-
-				$abholer = $this->model->getAbholdates($betrieb['id'], $next_dates);
 
 				$days = $this->func->getDow();
 
@@ -756,13 +331,6 @@ class StoreUserControl extends Control
 							$this->func->addHidden('<div id="changeStatus-hidden">' . $this->v_utils->v_form('changeStatusForm', array(
 									$this->v_utils->v_form_select('betrieb_status_id', array('value' => $betrieb['betrieb_status_id'], 'values' => $betriebStatusList))
 								)) . '</div>');
-
-							$this->func->addJs('$("#changeStatus").button().click(function(){
-								$("#changeStatus-hidden").dialog({
-									title: "' . $this->func->s('change_status') . '",
-									modal:true
-								});
-							});');
 							$bt = '<p><span id="changeStatus">' . $this->func->s('change_status') . '</a></p>';
 						}
 						$this->func->addContent($this->v_utils->v_field('<p>' . $this->v_utils->v_getStatusAmpel($betrieb['betrieb_status_id']) . $betriebsStatusName . '</p>' . $bt, $this->func->s('status'), array('class' => 'ui-padding')), CNT_RIGHT);

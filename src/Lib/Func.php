@@ -1090,6 +1090,13 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->title[] = $name;
 	}
 
+	public function getTranslations()
+	{
+		global $g_lang;
+
+		return $g_lang;
+	}
+
 	/**
 	 * This is used to set window.serverData on in the frontend.
 	 */
@@ -1098,6 +1105,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$userData = [
 			'id' => $this->fsId(),
 			'may' => S::may(),
+			'verified' => $this->isVerified(),
 		];
 
 		if (S::may()) {
@@ -1124,7 +1132,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'user' => $userData,
 			'page' => $this->getPage(),
 			'location' => $location,
-			'ravenConfig' => $ravenConfig
+			'ravenConfig' => $ravenConfig,
+			'translations' => $this->getTranslations()
 		]);
 	}
 

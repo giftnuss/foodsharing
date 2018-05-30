@@ -80,17 +80,25 @@ class StoreView extends View
 		if (isset($g_data['stadt'])) {
 			$g_data['ort'] = $g_data['stadt'];
 		}
-		$g_data['anschrift'] = $g_data['str'];
+		if (isset($g_data['str'])) {
+			$g_data['anschrift'] = $g_data['str'];
+		}
 		if (isset($g_data['hsnr'])) {
 			$g_data['anschrift'] .= ' ' . $g_data['hsnr'];
 		}
 
 		$this->func->addJs('$("textarea").css("height","70px");$("textarea").autosize();');
 
+		$latLonOptions = [];
+
 		foreach (['anschrift', 'plz', 'ort', 'lat', 'lon'] as $i) {
-			$latLonOptions[$i] = $g_data[$i];
+			if (isset($g_data[$i])) {
+				$latLonOptions[$i] = $g_data[$i];
+			}
 		}
-		$latLonOptions['location'] = ['lat' => $g_data['lat'], 'lon' => $g_data['lon']];
+		if (isset($g_data['lat'], $g_data['lon'])) {
+			$latLonOptions['location'] = ['lat' => $g_data['lat'], 'lon' => $g_data['lon']];
+		}
 
 		return $this->v_utils->v_quickform('betrieb', array(
 			$bc,
