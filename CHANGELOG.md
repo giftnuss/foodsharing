@@ -4,6 +4,7 @@
 - Fix pickup slots !390 #215 @nicksellen
 # Bugfixes
 - fixed wrong gendering of AMBs in region view and profile view. !386 #214 @peter.toennies
+- updated fpdi plugin to v2.0.2 !351 #168 by @peter.toennies
 
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen
