@@ -1,5 +1,8 @@
 # Unreleased
 
+## Bugfixes
+- removed XSS-possibility in xhr_out method. !370 @theolampert
+
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen
 
@@ -38,7 +41,6 @@ Also, we introduce new frontend technology here. I hope we did not break too muc
 - fixed check for allowed attachment types in the mail app. !363 #183 by @peter.toennies
 - data privacy : removed foodsaver / ambassador selection from map. #165 by @k.miklobusec
 - fixed potential security issue in profile picture uploads. !371 #84 @theolampert
-- removed XSS-possibility in xhr_out method. !370 @theolampert
 
 ## Refactoring
 - complete tidying up of all team related files !321 by @peter.toennies
