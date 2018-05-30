@@ -1,3 +1,8 @@
+# Unreleased
+
+## Refactoring
+- Extract StoreUser module javascript !358 @nicksellen
+
 # 2018-05-24
 
 ## Hotfixes

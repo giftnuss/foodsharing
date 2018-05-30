@@ -2,6 +2,7 @@
 
 import $ from 'jquery'
 import _ from 'underscore'
+
 import 'jquery-slimscroll'
 import 'jquery-fancybox'
 import 'jquery-ui-addons'

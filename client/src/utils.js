@@ -18,3 +18,15 @@ export function getBrowserLocation (success) {
     })
   }
 }
+
+/**
+ * Make things available globally via the browser window object
+ *
+ * This is to allow functions to be called from non-webpack javascript.
+ * e.g. click handlers, or xhr javascript responses
+ *
+ * @param data object of things to expose globally
+ */
+export function expose (data) {
+  Object.assign(window, data)
+}

@@ -16,6 +16,8 @@ import conv from '@/conv'
 import info from '@/info'
 import socket from '@/socket'
 
+import { expose } from '@/utils'
+
 import {
   betrieb,
   chat,
@@ -24,20 +26,22 @@ import {
   pulseSuccess,
   profile,
   goTo,
+  reload,
   dialogs,
   ajreq,
   ajax,
   u_loadCoords,
   showLoader,
   hideLoader,
-  becomeBezirk
+  becomeBezirk,
+  preZero
 } from '@/script'
 
 import {
   u_printChildBezirke
 } from '@/becomeBezirk'
 
-Object.assign(window, {
+expose({
   $,
   jQuery: $,
   betrieb,
@@ -47,6 +51,7 @@ Object.assign(window, {
   pulseSuccess,
   profile,
   goTo,
+  reload,
   dialogs,
   ajreq,
   ajax,
@@ -54,6 +59,7 @@ Object.assign(window, {
   showLoader,
   hideLoader,
   becomeBezirk,
+  preZero,
   u_printChildBezirke,
   conv,
   info,
