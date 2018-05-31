@@ -1,5 +1,8 @@
 # Unreleased
 
+## Bugfixes
+- Fix pickup slots !390 #215 @nicksellen
+
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen
 
