@@ -5,6 +5,7 @@
     }
   },
   "require-dev": {
+    "roave/security-advisories": "dev-master",
     "codeception/codeception": "^2.2",
     "friendsofphp/php-cs-fixer": "2.*",
     "filp/whoops": "^2.1",
@@ -18,7 +19,7 @@
     "maximebf/debugbar": "^1.14",
     "guiguiboy/php-cli-progress-bar": "*",
     "html2text/html2text": "^4.1",
-    "setasign/fpdi-fpdf": "^1.6",
+    "setasign/fpdi-fpdf": "^2.0",
     "erusev/parsedown": "^1.6",
     "fzaninotto/faker": "^1.7",
     "symfony/dependency-injection": "^3.4",

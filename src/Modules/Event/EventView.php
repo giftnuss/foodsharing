@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Event;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\View;
 
 class EventView extends View

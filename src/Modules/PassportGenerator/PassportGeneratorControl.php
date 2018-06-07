@@ -5,7 +5,7 @@ namespace Foodsharing\Modules\PassportGenerator;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
-use FPDI;
+use setasign\Fpdi;
 
 class PassportGeneratorControl extends Control
 {
@@ -92,7 +92,7 @@ class PassportGeneratorControl extends Control
 
 		include 'lib/phpqrcode/qrlib.php';
 
-		$pdf = new FPDI();
+		$pdf = new Fpdi\Fpdi();
 		$pdf->AddPage();
 		$pdf->SetTextColor(0, 0, 0);
 		$pdf->AddFont('Ubuntu-L', '', 'Ubuntu-L.php');

@@ -1,8 +1,11 @@
 # Unreleased
 
+## Features
+- updated fpdi plugin to v2.0.2 !351 #168 by @peter.toennies
+- update symfony to 4.1.0 as well as other dependencies !351 @NerdyProjects
+
 ## Bugfixes
 - Fix pickup slots !390 #215 @nicksellen
-# Bugfixes
 - fixed wrong gendering of AMBs in region view and profile view. !386 #214 @peter.toennies
 
 ## Refactoring
@@ -43,6 +46,7 @@ Also, we introduce new frontend technology here. I hope we did not break too muc
 - fixed check for allowed attachment types in the mail app. !363 #183 by @peter.toennies
 - data privacy : removed foodsaver / ambassador selection from map. #165 by @k.miklobusec
 - fixed potential security issue in profile picture uploads. !371 #84 @theolampert
+- updated fpdi plugin to v2.0.2 !351 #168 by @peter.toennies
 
 ## Refactoring
 - complete tidying up of all team related files !321 by @peter.toennies

@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\StoreUser;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\View;
 
 class StoreUserView extends View

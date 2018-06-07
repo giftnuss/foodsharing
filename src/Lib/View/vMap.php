@@ -4,7 +4,6 @@ namespace Foodsharing\Lib\View;
 
 use Foodsharing\DI;
 use Foodsharing\Lib\Func;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Model;
 
 class vMap extends vCore
