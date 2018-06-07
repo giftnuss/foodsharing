@@ -7,6 +7,8 @@
 ## Bugfixes
 - Fix pickup slots !390 #215 @nicksellen
 - fixed wrong gendering of AMBs in region view and profile view. !386 #214 @peter.toennies
+## Bugfixes
+- reduced the height of store info popups by removing the warning frame. !388 #216 @peter.toennies
 
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen

@@ -80,7 +80,7 @@ class ViewUtils
 		}
 
 		if ((int)$b['public_time'] != 0) {
-			$b['public_info'] .= '<div>Es wird in etwa ' . $this->func->s('pubbtime_' . (int)$b['public_time']) . ' abgeholt</div><div class="ui-padding">' . $this->viewUtils->v_info('Bitte niemals ohne Absprache zum Laden kommen!') . '</div>';
+			$b['public_info'] .= '<div>Es wird in etwa ' . $this->func->s('pubbtime_' . (int)$b['public_time']) . ' abgeholt. Geh bitte niemals ohne Absprache zum Laden!</div>';
 		}
 
 		if (!empty($b['public_info'])) {
