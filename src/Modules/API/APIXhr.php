@@ -13,36 +13,37 @@ class APIXhr extends Control
 {
 	private $messageModel;
 	private $basketModel;
+	private $gateway;
 
-	public function __construct(APIModel $model, MessageModel $messageModel, BasketModel $basketModel)
+	public function __construct(APIGateway $gateway, MessageModel $messageModel, BasketModel $basketModel)
 	{
-		$this->model = $model;
+		$this->gateway = $gateway;
 		$this->messageModel = $messageModel;
 		$this->basketModel = $basketModel;
 		parent::__construct();
 
-		if (!S::may() && $_GET['m'] != 'login') {
-			return $this->appout(array(
+		if ($_GET['m'] != 'login' && !S::may()) {
+			$this->appout([
 				'status' => 2
-			));
+			]);
 		}
 	}
 
-	public function udata()
+	public function udata(): void
 	{
-		if ($user = $this->model->getValues(array('id', 'name', 'photo'), 'foodsaver', $_GET['i'])) {
-			return $this->appout(array(
+		if ($user = $this->gateway->getValues(['id', 'name', 'photo'], 'foodsaver', $_GET['i'])) {
+			$this->appout([
 				'status' => 1,
 				'user' => $user
-			));
+			]);
 		}
 
-		return $this->appout(array(
+		$this->appout([
 			'status' => 0
-		));
+		]);
 	}
 
-	public function sendmsg()
+	public function sendmsg(): void
 	{
 		$message = strip_tags($_GET['ms']);
 		$message = trim($message);
@@ -58,7 +59,7 @@ class APIXhr extends Control
 						if ($m['id'] != $this->func->fsId()) {
 							Mem::userAppend($m['id'], 'msg-update', $conversation_id);
 
-							$this->func->sendSock($m['id'], 'conv', 'push', array(
+							$this->func->sendSock($m['id'], 'conv', 'push', [
 								'id' => $id,
 								'cid' => $conversation_id,
 								'fs_id' => $this->func->fsId(),
@@ -66,51 +67,46 @@ class APIXhr extends Control
 								'fs_photo' => S::user('photo'),
 								'body' => $message,
 								'time' => date('Y-m-d H:i:s')
-							));
+							]);
 
-							/*
-							 * send an E-Mail if the user is not online
-							*/
-							if ($this->messageModel->wantMsgEmailInfo($m['id'])) {
-								$this->convMessage($m, $conversation_id, $message, $this->messageModel);
-							}
+							$this->sendEmailIfUserNotOnline($m, $conversation_id, $message);
 						}
 					}
 				}
 
-				return $this->appout(array(
+				$this->appout([
 					'status' => 1,
 					'time' => time(),
 					'msg' => $message,
 					'id' => (int)$_GET['id']
-				));
+				]);
 			}
 		}
 
-		return $this->appout(array(
+		$this->appout([
 			'status' => 0
-		));
+		]);
 	}
 
-	public function chathistory()
+	public function chathistory(): void
 	{
 		$cid = (int)$_GET['id'];
 
 		if ($this->messageModel->mayConversation($cid) && $history = $this->messageModel->chatHistory($cid)) {
-			return $this->appout(array(
+			$this->appout([
 				'status' => 1,
 				'id' => $cid,
 				'history' => $history,
 				'user' => $this->messageModel->listConversationMembers($cid)
-			));
+			]);
 		}
 
-		return $this->appout(array(
+		$this->appout([
 			'status' => 0
-		));
+		]);
 	}
 
-	public function upload()
+	public function upload(): void
 	{
 		$ext = explode('.', $_FILES['file']['name']);
 		$ext = end($ext);
@@ -122,53 +118,51 @@ class APIXhr extends Control
 		exit();
 	}
 
-	public function logout()
+	public function logout(): void
 	{
-		$this->model->logout();
+		$this->gateway->logout();
 		$_SESSION['login'] = false;
 		$_SESSION = array();
 
 		S::destroy();
 
-		return $this->appout(array(
+		$this->appout([
 			'status' => 1
-		));
+		]);
 	}
 
-	public function login()
+	public function login(): void
 	{
-		if (isset($_GET['e'])) {
-			if ($this->model->login($_GET['e'], $_GET['p'])) {
-				$fs = $this->model->getValues(array('telefon', 'handy', 'geschlecht', 'name', 'lat', 'lon', 'photo'), 'foodsaver', $this->func->fsId());
+		if (isset($_GET['e']) && $this->gateway->login($_GET['e'], $_GET['p'])) {
+			$fs = $this->gateway->getValues(['telefon', 'handy', 'geschlecht', 'name', 'lat', 'lon', 'photo'], 'foodsaver', $this->func->fsId());
 
-				$this->appout(array(
-					'status' => 1,
-					'token' => session_id(),
-					'gender' => $fs['geschlecht'],
-					'phone' => $fs['telefon'],
-					'phone_mobile' => $fs['handy'],
-					'id' => $this->func->fsId(),
-					'name' => $fs['name'],
-					'lat' => $fs['lat'],
-					'lon' => $fs['lon'],
-					'photo' => $fs['photo']
-				));
-			}
+			$this->appout([
+				'status' => 1,
+				'token' => session_id(),
+				'gender' => $fs['geschlecht'],
+				'phone' => $fs['telefon'],
+				'phone_mobile' => $fs['handy'],
+				'id' => $this->func->fsId(),
+				'name' => $fs['name'],
+				'lat' => $fs['lat'],
+				'lon' => $fs['lon'],
+				'photo' => $fs['photo']
+			]);
 		}
 
-		$this->appout(array(
+		$this->appout([
 			'status' => 0
-		));
+		]);
 	}
 
-	public function initRelogin()
+	public function initRelogin(): void
 	{
-		$this->appout(array(
+		$this->appout([
 			'status' => 0
-		));
+		]);
 	}
 
-	public function basket_submit()
+	public function basket_submit(): void
 	{
 		if (S::may()) {
 			$desc = strip_tags($_GET['desc']);
@@ -198,48 +192,36 @@ class APIXhr extends Control
 
 			$tmp = array();
 
-			// contact types
-			if (isset($_GET['ctype'])) {
-				$ctypes = $_GET['ctype'];
+			$cTypes = $this->contactTypes($tmp);
 
-				foreach ($ctypes as $t) {
-					if (in_array((int)$t, array(1, 2))) {
-						$tmp[(int)$t] = (int)$t;
-					}
-				}
-			}
-			$ctypes = $tmp;
-
-			if (empty($ctypes)) {
-				$ctypes = array(1);
+			if (empty($cTypes)) {
+				$cTypes = [1];
 			}
 
 			if (!empty($desc)) {
-				$weight = floatval($_GET['weight']);
+				$weight = (float)$_GET['weight'];
 				if ($weight <= 0) {
 					$weight = 3;
 				}
 
-				$tel = array(
+				$tel = [
 					'tel' => preg_replace('[^0-9\ \+]', '', $_GET['phone']),
 					'handy' => preg_replace('[^0-9\ \+]', '', $_GET['phone_mobile'])
-				);
+				];
 
 				$photo = '';
-				if (isset($_GET['photo']) && !empty($_GET['photo'])) {
-					if ($this->resizePic($_GET['photo'])) {
-						$photo = strip_tags($_GET['photo']);
-					}
+				if (isset($_GET['photo']) && !empty($_GET['photo']) && $this->resizePic($_GET['photo'])) {
+					$photo = strip_tags($_GET['photo']);
 				}
 
-				$fs = $this->model->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
+				$fs = $this->gateway->getValues(['lat', 'lon'], 'foodsaver', $this->func->fsId());
 
 				$lat = $fs['lat'];
 				$lon = $fs['lon'];
 
 				if ($_GET['fp'] == 'loc') {
-					$llat = floatval($_GET['lat']);
-					$llon = floatval($_GET['lon']);
+					$llat = (float)$_GET['lat'];
+					$llon = (float)$_GET['lon'];
 
 					if (strlen($lat . '') > 2 && strlen($lon . '') > 2) {
 						$lat = $llat;
@@ -251,7 +233,7 @@ class APIXhr extends Control
 					$desc,
 					$photo, // pic
 					$tel, // phone
-					implode(':', $ctypes),
+					implode(':', $cTypes),
 					$weight, // weight
 					(int)$_GET['fetchart'], // location type
 					$lat, // lat
@@ -266,21 +248,21 @@ class APIXhr extends Control
 						$this->basketModel->addTypes($id, $types);
 					}
 
-					return $this->appout(array(
+					$this->appout([
 						'status' => 1
-					));
+					]);
 				}
 			}
 		}
 
-		return $this->initRelogin();
+		$this->initRelogin();
 	}
 
-	public function resizePic($pic)
+	public function resizePic($pic): bool
 	{
 		if (file_exists('tmp/' . $pic)) {
 			copy('tmp/' . $pic, 'images/basket/' . $pic);
-			$this->chmod('images/basket/' . $pic, 777);
+			$this->chmod('images/basket/' . $pic);
 
 			$img = new fImage('images/basket/' . $pic);
 
@@ -290,8 +272,8 @@ class APIXhr extends Control
 			copy('images/basket/' . $pic, 'images/basket/thumb-' . $pic);
 			copy('images/basket/' . $pic, 'images/basket/medium-' . $pic);
 
-			$this->chmod('images/basket/thumb-' . $pic, 777);
-			$this->chmod('images/basket/medium-' . $pic, 777);
+			$this->chmod('images/basket/thumb-' . $pic);
+			$this->chmod('images/basket/medium-' . $pic);
 
 			$img = new fImage('images/basket/thumb-' . $pic);
 			$img->cropToRatio(1, 1);
@@ -308,51 +290,51 @@ class APIXhr extends Control
 		return false;
 	}
 
-	private function chmod($file, $mode)
+	private function chmod($file): void
 	{
 		exec('chmod 777 /var/www/lmr-v1/freiwillige/' . $file);
 	}
 
-	public function checklogin()
+	public function checklogin(): void
 	{
 		if (S::may()) {
-			$this->appout(array(
+			$this->appout([
 				'status' => 1
-			));
+			]);
 		}
-		$this->appout(array(
+		$this->appout([
 			'status' => 0
-		));
+		]);
 	}
 
-	public function orgagruppen()
+	public function orgagruppen(): void
 	{
-		if ($groups = $this->model->getOrgaGroups()) {
+		if ($groups = $this->gateway->getOrgaGroups()) {
 			$this->out($groups);
 		}
 	}
 
-	public function auth()
+	public function auth(): void
 	{
-		if ($ret = $this->model->checkClient($_GET['user'], $_GET['pass'])) {
-			$values = $this->model->getValues(array('id', 'orgateam', 'name', 'email', 'photo', 'geschlecht', 'rolle'), 'foodsaver', $ret['id']);
+		if ($ret = $this->gateway->checkClient($_GET['user'], $_GET['pass'])) {
+			$values = $this->gateway->getValues(['id', 'orgateam', 'name', 'email', 'photo', 'geschlecht', 'rolle'], 'foodsaver', $ret['id']);
 
 			$values['bot'] = $values['rolle'] >= 3;
 
 			$values['menu'] = false;
 
-			$this->out(array(
+			$this->out([
 				'status' => 1,
 				'data' => $values
-			));
+			]);
 		} else {
-			$this->out(array(
+			$this->out([
 				'status' => 0
-			));
+			]);
 		}
 	}
 
-	private function out($data)
+	private function out($data): void
 	{
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
@@ -361,78 +343,106 @@ class APIXhr extends Control
 		exit();
 	}
 
-	public function loadBasket()
+	public function loadBasket(): void
 	{
-		if (S::may()) {
-			if ($basket = $this->model->getBasket($_GET['id'])) {
-				return $this->appout(array(
-					'status' => 1,
-					'basket' => $basket
-				));
-			}
+		if (S::may() && $basket = $this->gateway->getBasket($_GET['id'])) {
+			$this->appout([
+				'status' => 1,
+				'basket' => $basket
+			]);
 		}
 
-		return $this->appout(array(
+		$this->appout([
 			'status' => 0
-		));
+		]);
 	}
 
-	public function allbaskets()
+	public function allbaskets(): void
 	{
-		if (S::may()) {
-			if ($baskets = $this->model->allBaskets()) {
-				$this->appout(array(
-					'status' => 1,
-					'baskets' => $baskets
-				));
-			}
+		if (S::may() && $baskets = $this->gateway->allBaskets()) {
+			$this->appout([
+				'status' => 1,
+				'baskets' => $baskets
+			]);
 		}
-		$this->appout(array(
+		$this->appout([
 			'status' => 0
-		));
+		]);
 	}
 
-	public function basketsnear()
+	public function basketsnear(): void
 	{
-		if (S::may() && isset($_GET['lat']) && isset($_GET['lon'])) {
-			$lat = floatval($_GET['lat']);
-			$lon = floatval($_GET['lon']);
+		if (isset($_GET['lat'], $_GET['lon']) && S::may()) {
+			$lat = (float)$_GET['lat'];
+			$lon = (float)$_GET['lon'];
 
-			if ($baskets = $this->model->nearBaskets($lat, $lon)) {
-				$this->appout(array(
+			if ($baskets = $this->gateway->nearBaskets($lat, $lon)) {
+				$this->appout([
 					'status' => 1,
 					'baskets' => $baskets
-				));
+				]);
 			}
 		}
-		$this->appout(array(
+		$this->appout([
 			'status' => 0
-		));
+		]);
 	}
 
-	public function loadrequests()
+	public function loadrequests(): void
 	{
 		if ($convs = $this->messageModel->listConversations()) {
 			$out = array();
 			foreach ($convs as $c) {
-				$out[] = array(
+				$out[] = [
 					't' => $this->func->niceDateShort($c['last_ts']),
 					'n' => $c['name'],
 					'id' => $c['id'],
 					'u' => $c['member'],
 					'lu' => $c['last_foodsaver_id'],
 					'm' => $c['last_message']
-				);
+				];
 			}
 
-			return $this->appout(array(
+			$this->appout([
 				'status' => 1,
 				'requests' => $out
-			));
+			]);
 		}
 
-		return $this->appout(array(
+		$this->appout([
 			'status' => 0
-		));
+		]);
+	}
+
+	/**
+	 * @param $m
+	 * @param $conversation_id
+	 * @param $message
+	 */
+	private function sendEmailIfUserNotOnline($m, $conversation_id, $message): void
+	{
+		if ($this->messageModel->wantMsgEmailInfo($m['id'])) {
+			$this->convMessage($m, $conversation_id, $message, $this->messageModel);
+		}
+	}
+
+	/**
+	 * @param $tmp
+	 *
+	 * @return mixed
+	 */
+	private function contactTypes($tmp)
+	{
+		if (isset($_GET['ctype'])) {
+			$cTypes = $_GET['ctype'];
+
+			foreach ($cTypes as $t) {
+				if (in_array((int)$t, [1, 2])) {
+					$tmp[(int)$t] = (int)$t;
+				}
+			}
+		}
+
+		return $tmp;
 	}
 }
