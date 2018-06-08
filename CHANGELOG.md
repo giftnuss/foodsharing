@@ -13,6 +13,7 @@
 
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen
+- refactored and cleaned the whole activity module. !352 by @peter.toennies
 
 # 2018-05-24
 
@@ -61,6 +62,7 @@ Also, we introduce new frontend technology here. I hope we did not break too muc
 - use symfony form builder work work group edit page !347 @NerdyProjects
 - introduce CropperJS for handling image cropping (work group edit) !347 @NerdyProjects
 - configure dependency injection as yaml, not PHP !347 @NerdyProjects
+- refactored and cleaned the whole activity module. !352 by @peter.toennies
 
 ## Dev/Test/CI stuff
 # 2018-05-14 Hotfix
