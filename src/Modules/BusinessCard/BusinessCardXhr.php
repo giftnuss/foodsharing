@@ -3,7 +3,7 @@
 namespace Foodsharing\Modules\BusinessCard;
 
 use Foodsharing\Modules\Core\Control;
-use FPDI;
+use setasign\Fpdi;
 
 class BusinessCardXhr extends Control
 {
@@ -63,7 +63,7 @@ class BusinessCardXhr extends Control
 
 	private function generatePdf($data, $type = 'fs')
 	{
-		$pdf = new FPDI();
+		$pdf = new Fpdi\Fpdi();
 		$pdf->AddPage();
 		$pdf->SetTextColor(0, 0, 0);
 		$pdf->AddFont('Ubuntu-L', '', 'Ubuntu-L.php');

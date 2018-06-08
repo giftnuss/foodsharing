@@ -279,6 +279,8 @@ class StoreUserControl extends Control
 
 				$next_dates = $this->view->u_getNextDates($zeiten, $betrieb, $this->model->listUpcommingFetchDates($_GET['id']));
 
+				$this->model->getAbholdates($betrieb['id'], $next_dates);
+
 				$days = $this->func->getDow();
 
 				$scroller = '';

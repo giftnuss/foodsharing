@@ -2,9 +2,21 @@
 
 ## Bugfixes
 - removed XSS-possibility in xhr_out method. !370 @theolampert
+## Features
+- updated fpdi plugin to v2.0.2 !351 #168 by @peter.toennies
+- update symfony to 4.1.0 as well as other dependencies !351 @NerdyProjects
+
+## Bugfixes
+- Fix pickup slots !390 #215 @nicksellen
+- fixed wrong gendering of AMBs in region view and profile view. !386 #214 @peter.toennies
+## Bugfixes
+- reduced the height of store info popups by removing the warning frame. !388 #216 @peter.toennies
+- The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
 
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen
+- refactored and cleaned the whole activity module. !352 by @peter.toennies
+- refactored and cleaned the whole API module. !368 #9 by @peter.toennies
 
 # 2018-05-24
 
@@ -28,6 +40,8 @@ Also, we introduce new frontend technology here. I hope we did not break too muc
 - Remove external paypal donate button and host locally !374 @NerdyProjects
 - Privacy policy need to be agreed before the page can be used !379 @NerdyProjects
 - Privacy notice need to be agreed by store coordinators/ambassadors !381 @NerdyProjects
+- quiz comments are now visible for the BOTs of the quiz team only and not for the oga team. !367 #107 by @peter.toennies
+- The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
 
 ## Bugfixes
 - Removing a user from regions is possible again. !372 #14 @NerdyProjects
@@ -41,6 +55,7 @@ Also, we introduce new frontend technology here. I hope we did not break too muc
 - fixed check for allowed attachment types in the mail app. !363 #183 by @peter.toennies
 - data privacy : removed foodsaver / ambassador selection from map. #165 by @k.miklobusec
 - fixed potential security issue in profile picture uploads. !371 #84 @theolampert
+- updated fpdi plugin to v2.0.2 !351 #168 by @peter.toennies
 
 ## Refactoring
 - complete tidying up of all team related files !321 by @peter.toennies
@@ -50,6 +65,7 @@ Also, we introduce new frontend technology here. I hope we did not break too muc
 - use symfony form builder work work group edit page !347 @NerdyProjects
 - introduce CropperJS for handling image cropping (work group edit) !347 @NerdyProjects
 - configure dependency injection as yaml, not PHP !347 @NerdyProjects
+- refactored and cleaned the whole activity module. !352 by @peter.toennies
 
 ## Dev/Test/CI stuff
 # 2018-05-14 Hotfix

@@ -2,117 +2,30 @@
 
 namespace Foodsharing\Modules\Activity;
 
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 
 class ActivityModel extends Model
 {
-	private $items_per_page = 10;
 	private $mailboxModel;
+	private $activityGateway;
 
-	public function __construct(MailboxModel $mailboxModel)
+	public function __construct(MailboxModel $mailboxModel, ActivityGateway $activityGateway)
 	{
+		parent::__construct();
 		$this->mailboxModel = $mailboxModel;
+		$this->activityGateway = $activityGateway;
 	}
 
 	public function loadBasketWallUpdates($page = 0)
 	{
 		$updates = array();
-
-		if ($up = $this->q('
-			SELECT
-				w.id,
-				w.body,
-				w.time,
-				UNIX_TIMESTAMP(w.time) AS time_ts,
-				fs.id AS fs_id,
-				fs.name AS fs_name,
-				fs.photo AS fs_photo,
-				b.id AS basket_id
-		
-		
-			FROM
-				fs_basket_has_wallpost hw,
-				fs_foodsaver fs,
-				fs_wallpost w,
-				fs_basket b
-		
-			WHERE
-				w.id = hw.wallpost_id
-		
-			AND
-				w.foodsaver_id = fs.id
-		
-			AND
-				hw.basket_id = b.id
-				
-			AND
-				b.foodsaver_id = ' . (int)$this->func->fsId() . '
-					
-			AND 
-				w.foodsaver_id != ' . (int)$this->func->fsId() . '
-
-			AND
-				b.status = 1
-			
-			ORDER BY w.id DESC
-		
-			LIMIT ' . ((int)$page * $this->items_per_page) . ', ' . $this->items_per_page . '
-		
-		')
-		) {
+		if ($up = $this->activityGateway->fetchAllBasketWallUpdates(S::id(), $page)) {
 			$updates = $up;
 		}
 
-		if ($up = $this->q('
-				SELECT
-					w.id,
-					w.body,
-					w.time,
-					UNIX_TIMESTAMP(w.time) AS time_ts,
-					fs.id AS fs_id,
-					fs.name AS fs_name,
-					fs.photo AS fs_photo,
-					b.id AS basket_id
-		
-				FROM
-					fs_basket_has_wallpost hw,
-					fs_foodsaver fs,
-					fs_wallpost w,
-					fs_basket b,
-					fs_basket_anfrage ba
-			
-				WHERE
-					w.id = hw.wallpost_id
-		
-				AND
-					w.foodsaver_id = fs.id
-		
-				AND
-					hw.basket_id = b.id
-
-				AND
-					b.status = 1
-			
-				AND
-					ba.basket_id = b.id
-	
-				AND
-					ba.status < 10
-				
-				AND 	
-					w.foodsaver_id != ' . (int)$this->func->fsId() . '
-				
-				AND 
-					ba.foodsaver_id = ' . (int)$this->func->fsId() . '
-				
-				ORDER BY w.id DESC
-		
-				LIMIT ' . ((int)$page * $this->items_per_page) . ', ' . $this->items_per_page . '
-			
-			')
-		) {
+		if ($up = $this->activityGateway->fetchAllWallpostsFromFoodBasekts(S::id(), $page)) {
 			$updates = array_merge($updates, $up);
 		}
 
@@ -128,20 +41,20 @@ class ActivityModel extends Model
 				}
 				$hb[$u['basket_id']] = true;
 
-				$smtitle = '';
+				$smTitle = '';
 				$title = 'Essenskorb #' . $u['basket_id'];
 
-				$out[] = array(
-					'attr' => array(
+				$out[] = [
+					'attr' => [
 						'href' => '/profile/' . $u['fs_id']
-					),
-					'title' => '<a href="/profile/' . $u['fs_id'] . '">' . $u['fs_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="/essenskoerbe/' . $u['basket_id'] . '">' . $title . '</a><small>' . $smtitle . '</small>',
+					],
+					'title' => '<a href="/profile/' . $u['fs_id'] . '">' . $u['fs_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="/essenskoerbe/' . $u['basket_id'] . '">' . $title . '</a><small>' . $smTitle . '</small>',
 					'desc' => $this->textPrepare(nl2br($u['body'])),
 					'time' => $u['time'],
 					'icon' => $this->func->img($u['fs_photo'], 50),
 					'time_ts' => $u['time_ts'],
 					'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=basket&id=' . (int)$u['basket_id']
-				);
+				];
 			}
 
 			return $out;
@@ -150,7 +63,18 @@ class ActivityModel extends Model
 		return false;
 	}
 
-	public function loadFriendWallUpdates($page = 0, $hidden_ids)
+	private function textPrepare($txt): ?string
+	{
+		$txt = trim($txt);
+
+		if (strlen($txt) > 100) {
+			return '<span class="txt">' . $this->func->tt(strip_tags($txt), 90) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fa fa-angle-down"></i></a></span><span class="txt" style="display:none;">' . strip_tags($txt, '<br>') . ' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fa fa-angle-up"></i></a></span>';
+		}
+
+		return '<span class="txt">' . $txt . '</span>';
+	}
+
+	public function loadFriendWallUpdates($hidden_ids, $page = 0)
 	{
 		$buddy_ids = array();
 
@@ -167,51 +91,7 @@ class ActivityModel extends Model
 			}
 		}
 
-		if ($updates = $this->q('
-			SELECT 
-				w.id,
-				w.body,
-				w.time,
-				UNIX_TIMESTAMP(w.time) AS time_ts,
-				fs.id AS fs_id,
-				fs.name AS fs_name,
-				fs.photo AS fs_photo,
-				
-				poster.id AS poster_id,
-				poster.name AS poster_name
-				
-
-			FROM 
-				fs_foodsaver_has_wallpost hw,
-				fs_foodsaver fs,
-				fs_wallpost w
-				
-			LEFT JOIN
-				fs_foodsaver poster
-				
-			ON w.foodsaver_id = poster.id
-				
-			WHERE 
-				w.id = hw.wallpost_id
-
-			AND 
-				hw.foodsaver_id = fs.id
-
-			AND 
-				hw.foodsaver_id IN(' . implode(',', $bids) . ')
-				
-			
-				
-			ORDER BY w.id DESC
-		
-			LIMIT ' . ((int)$page * $this->items_per_page) . ', ' . $this->items_per_page . '
-
-		')
-		) {
-			/*
-			 * AND
-				poster_id != '.(int)$this->func->fsId().'
-			 */
+		if ($updates = $this->activityGateway->fetchAllFriendWallUpdates($bids, $page)) {
 			$out = array();
 			$hb = array();
 			foreach ($updates as $u) {
@@ -223,25 +103,22 @@ class ActivityModel extends Model
 				}
 				$hb[$u['fs_id']] = true;
 
-				$smtitle = $u['fs_name'] . 's Status';
-				$title = $u['fs_name'];
+				$smTitle = $u['fs_name'] . 's Status';
 
-				if ($u['fs_id'] == $this->func->fsId()) {
-					$smtitle = 'Deine Pinnwand';
-					$title = 'Deine Pinnwand';
+				if ($u['fs_id'] === $this->func->fsId()) {
+					$smTitle = 'Deine Pinnwand';
 				}
 
-				$out[] = array(
-					'attr' => array(
+				$out[] = [
+					'attr' => [
 						'href' => '/profile/' . $u['fs_id']
-					),
-					'title' => '<a href="/profile/' . $u['poster_id'] . '">' . $u['poster_name'] . '</a> <small>' . $smtitle . '</small>',
+					],
+					'title' => '<a href="/profile/' . $u['poster_id'] . '">' . $u['poster_name'] . '</a> <small>' . $smTitle . '</small>',
 					'desc' => $this->textPrepare(nl2br($u['body'])),
 					'time' => $u['time'],
 					'icon' => $this->func->img($u['fs_photo'], 50),
 					'time_ts' => $u['time_ts']
-					//'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=foodsaver&id=' . (int)$u['fs_id']
-				);
+				];
 			}
 
 			return $out;
@@ -250,7 +127,7 @@ class ActivityModel extends Model
 		return false;
 	}
 
-	public function loadMailboxUpdates($page = 0, $model, $hidden_ids = false)
+	public function loadMailboxUpdates($page = 0, $hidden_ids = false)
 	{
 		if ($boxes = $this->mailboxModel->getBoxes()) {
 			$mb_ids = array();
@@ -260,41 +137,18 @@ class ActivityModel extends Model
 				}
 			}
 
-			if (count($mb_ids) == 0) {
+			if (count($mb_ids) === 0) {
 				return false;
 			}
 
-			if ($updates = $this->q('
-				SELECT
-					m.id,
-					m.sender,
-					m.subject,
-					m.body,
-					m.time,
-					UNIX_TIMESTAMP(m.time) AS time_ts,
-					b.name AS mb_name
-			
-				FROM
-					fs_mailbox_message m
-				LEFT JOIN
-					fs_mailbox b
-				ON b.id = m.mailbox_id
-			
-				WHERE
-					m.mailbox_id IN(' . implode(',', $mb_ids) . ')
-					
-				ORDER BY m.id DESC
-		
-				LIMIT ' . ((int)$page * $this->items_per_page) . ', ' . $this->items_per_page . '
-			')
-			) {
+			if ($updates = $this->activityGateway->fetchAllMailboxUpdates($mb_ids, $page)) {
 				$out = array();
 				foreach ($updates as $u) {
 					$sender = @json_decode($u['sender'], true);
 
 					$from = 'E-Mail';
 
-					if ($sender != null) {
+					if ($sender !== null) {
 						if (isset($sender['from']) && !empty($sender['from'])) {
 							$from = '<a title="' . $sender['mailbox'] . '@' . $sender['host'] . '" href="/?page=mailbox&mailto=' . urlencode($sender['mailbox'] . '@' . $sender['host']) . '">' . $this->func->ttt($sender['personal'], 22) . '</a>';
 						} elseif (isset($sender['mailbox'])) {
@@ -302,17 +156,17 @@ class ActivityModel extends Model
 						}
 					}
 
-					$out[] = array(
-						'attr' => array(
+					$out[] = [
+						'attr' => [
 							'href' => '/?page=mailbox&show=' . $u['id']
-						),
+						],
 						'title' => $from . ' <i class="fa fa-angle-right"></i> <a href="/?page=mailbox&show=' . $u['id'] . '">' . $this->func->ttt($u['subject'], 30) . '</a><small>' . $this->func->ttt($u['mb_name'] . '@' . DEFAULT_EMAIL_HOST, 19) . '</small>',
 						'desc' => $this->textPrepare(nl2br($u['body'])),
 						'time' => $u['time'],
 						'icon' => '/img/mailbox-50x50.png',
 						'time_ts' => $u['time_ts'],
 						'quickreply' => '/xhrapp.php?app=mailbox&m=quickreply&mid=' . (int)$u['id']
-					);
+					];
 				}
 
 				return $out;
@@ -322,77 +176,31 @@ class ActivityModel extends Model
 		return false;
 	}
 
-	private function textPrepare($txt)
-	{
-		$txt = trim($txt);
-
-		if (strlen($txt) > 100) {
-			return '<span class="txt">' . $this->func->tt(strip_tags($txt), 90) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fa fa-angle-down"></i></a></span><span class="txt" style="display:none;">' . strip_tags($txt, '<br>') . ' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fa fa-angle-up"></i></a></span>';
-		} else {
-			return '<span class="txt">' . $txt . '</span>';
-		}
-	}
-
 	public function loadForumUpdates($page = 0, $bids_not_load = false)
 	{
 		$tmp = $this->getBezirkIds();
 		$bids = array();
-		if ($tmp == false or count($tmp) == 0) {
+		if ($tmp === false || count($tmp) === 0) {
 			return false;
 		}
+
 		foreach ($tmp as $t) {
 			if ($t > 0 && !isset($bids_not_load[$t])) {
 				$bids[] = $t;
 			}
 		}
 
-		if (count($bids) == 0) {
+		if (count($bids) === 0) {
 			return false;
 		}
 
-		if ($updates = $this->q('
-		
-			SELECT 		t.id,
-						t.name,
-						t.`time`,
-						UNIX_TIMESTAMP(t.`time`) AS time_ts,
-						fs.id AS foodsaver_id,
-						fs.name AS foodsaver_name,
-						fs.photo AS foodsaver_photo,
-						fs.sleep_status,
-						p.body AS post_body,
-						p.`time` AS update_time,
-						UNIX_TIMESTAMP(p.`time`) AS update_time_ts,
-						t.last_post_id,
-						bt.bezirk_id,
-						b.name AS bezirk_name,
-						bt.bot_theme
-		
-			FROM 		fs_theme t,
-						fs_theme_post p,
-						fs_bezirk_has_theme bt,
-						fs_foodsaver fs,
-						fs_bezirk b
-		
-			WHERE 		t.last_post_id = p.id 		
-			AND 		p.foodsaver_id = fs.id
-			AND 		bt.theme_id = t.id
-			AND 		bt.bezirk_id IN(' . implode(',', $bids) . ')
-			AND 		bt.bot_theme = 0
-			AND 		bt.bezirk_id = b.id
-			AND 		t.active = 1
-		
-			ORDER BY t.last_post_id DESC
-		
-			LIMIT ' . ((int)$page * $this->items_per_page) . ', ' . $this->items_per_page . '
-		
-		')
+		if ($updates = $this->activityGateway->fetchAllForumUpdates($bids, $page)
 		) {
 			$out = array();
 			foreach ($updates as $u) {
 				$check = true;
 				$sub = 'forum';
-				if ($u['bot_theme'] == 1) {
+				if ($u['bot_theme'] === 1) {
 					$sub = 'botforum';
 					if (!$this->func->isBotFor($u['bezirk_id'])) {
 						$check = false;
@@ -402,17 +210,17 @@ class ActivityModel extends Model
 				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub=' . $sub . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '#tpost-' . (int)$u['last_post_id'];
 
 				if ($check) {
-					$out[] = array(
-						'attr' => array(
+					$out[] = [
+						'attr' => [
 							'href' => $url
-						),
+						],
 						'title' => '<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="' . $url . '">' . $u['name'] . '</a> <small>' . $u['bezirk_name'] . '</small>',
 						'desc' => $this->textPrepare($u['post_body']),
 						'time' => $u['update_time'],
 						'icon' => $this->func->img($u['foodsaver_photo'], 50),
 						'time_ts' => $u['update_time_ts'],
 						'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $sub
-					);
+					];
 				}
 			}
 
@@ -422,51 +230,33 @@ class ActivityModel extends Model
 		return false;
 	}
 
-	public function loadBetriebUpdates($page = 0)
+	public function loadStoreUpdates($page = 0)
 	{
-		if ($bids = $this->getMyBetriebIds()) {
-			if ($ret = $this->q('
-			
-			SELECT 	n.id, n.milestone, n.`text` , n.`zeit` AS update_time, UNIX_TIMESTAMP( n.`zeit` ) AS update_time_ts, fs.name AS foodsaver_name, fs.sleep_status, fs.id AS foodsaver_id, fs.photo AS foodsaver_photo, b.id AS betrieb_id, b.name AS betrieb_name
-			FROM 	fs_betrieb_notiz n, fs_foodsaver fs, fs_betrieb b, fs_betrieb_team bt
-			
-			WHERE 	n.foodsaver_id = fs.id
-			AND 	n.betrieb_id = b.id
-			AND 	bt.betrieb_id = n.betrieb_id
-			AND 	bt.foodsaver_id = ' . (int)$this->func->fsId() . '
-			AND 	n.milestone = 0
-			AND 	n.last = 1
-			
-			ORDER BY n.id DESC
-			LIMIT ' . ((int)$page * $this->items_per_page) . ', ' . $this->items_per_page . '
-			
-		')
-			) {
-				$out = array();
-				foreach ($ret as $r) {
-					$out[] = array(
-						'attr' => array(
-							'href' => '/?page=fsbetrieb&id=' . $r['betrieb_id']
-						),
-						'title' => '<a href="/profile/' . $r['foodsaver_id'] . '">' . $r['foodsaver_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="/?page=fsbetrieb&id=' . $r['betrieb_id'] . '">' . $r['betrieb_name'] . '</a>',
-						'desc' => $this->textPrepare($r['text']),
-						'time' => $r['update_time'],
-						'icon' => $this->func->img($r['foodsaver_photo'], 50),
-						'time_ts' => $r['update_time_ts']
-					);
-				}
-
-				return $out;
+		if ($this->getMyBetriebIds() && $ret = $this->activityGateway->fetchAllStoreUpdates(S::id(), $page)) {
+			$out = array();
+			foreach ($ret as $r) {
+				$out[] = [
+					'attr' => [
+						'href' => '/?page=fsbetrieb&id=' . $r['betrieb_id']
+					],
+					'title' => '<a href="/profile/' . $r['foodsaver_id'] . '">' . $r['foodsaver_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="/?page=fsbetrieb&id=' . $r['betrieb_id'] . '">' . $r['betrieb_name'] . '</a>',
+					'desc' => $this->textPrepare($r['text']),
+					'time' => $r['update_time'],
+					'icon' => $this->func->img($r['foodsaver_photo'], 50),
+					'time_ts' => $r['update_time_ts']
+				];
 			}
+
+			return $out;
 		}
 
 		return false;
 	}
 
-	public function getBuddys()
+	public function getBuddies()
 	{
 		if ($bids = S::get('buddy-ids')) {
-			return $this->q('SELECT photo,name,id FROM fs_foodsaver WHERE id IN(' . implode(',', $bids) . ')');
+			return $this->activityGateway->fetchAllBuddies($bids);
 		}
 
 		return false;

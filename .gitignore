@@ -34,3 +34,4 @@ client/.env
 client/yarn-error.log
 client/.cache
 client/.yarnrc
+c3.php
