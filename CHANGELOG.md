@@ -9,6 +9,7 @@
 - fixed wrong gendering of AMBs in region view and profile view. !386 #214 @peter.toennies
 ## Bugfixes
 - reduced the height of store info popups by removing the warning frame. !388 #216 @peter.toennies
+- The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
 
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen
@@ -35,6 +36,8 @@ Also, we introduce new frontend technology here. I hope we did not break too muc
 - Remove external paypal donate button and host locally !374 @NerdyProjects
 - Privacy policy need to be agreed before the page can be used !379 @NerdyProjects
 - Privacy notice need to be agreed by store coordinators/ambassadors !381 @NerdyProjects
+- quiz comments are now visible for the BOTs of the quiz team only and not for the oga team. !367 #107 by @peter.toennies
+- The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
 
 ## Bugfixes
 - Removing a user from regions is possible again. !372 #14 @NerdyProjects

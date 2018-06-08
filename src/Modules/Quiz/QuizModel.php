@@ -286,8 +286,8 @@ class QuizModel extends Model
 			)		
 		')
 		) {
-			if ($orgateam = $this->getOrgateam()) {
-				$this->bellGateway->addBell($orgateam, 'new_quiz_comment_title', 'new_quiz_comment', 'fa fa-question-circle', array('href' => '/?page=quiz&sub=wall&id=' . (int)$question_id), array(
+			if ($quizAMBs = $this->getBotschafter(341)) {
+				$this->bellGateway->addBell($quizAMBs, 'new_quiz_comment_title', 'new_quiz_comment', 'fa fa-question-circle', array('href' => '/?page=quiz&sub=wall&id=' . (int)$question_id), array(
 					'comment' => $comment
 				));
 			}
