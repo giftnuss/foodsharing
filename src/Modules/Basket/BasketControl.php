@@ -7,8 +7,11 @@ use Foodsharing\Modules\Core\Control;
 
 class BasketControl extends Control
 {
-	public function __construct(BasketModel $model, BasketView $view)
+	private $gateway;
+
+	public function __construct(BasketModel $model, BasketGateway $gateway, BasketView $view)
 	{
+		$this->gateway = $gateway;
 		$this->model = $model;
 		$this->view = $view;
 
@@ -59,7 +62,7 @@ class BasketControl extends Control
 			}
 			$wallposts = $this->wallposts('basket', $basket['id']);
 			if ($basket['fs_id'] == $this->func->fsId()) {
-				$requests = $this->model->listRequests($basket['id']);
+				$requests = $this->gateway->listRequests($basket['id'], S::id());
 			}
 		}
 		if ($basket['until_ts'] >= time() && $basket['status'] == 1) {

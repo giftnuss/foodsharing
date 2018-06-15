@@ -6,11 +6,6 @@ use Foodsharing\Modules\Core\Model;
 
 class BasketModel extends Model
 {
-	public function getBasketChoords()
-	{
-		return $this->q('SELECT id,lat,lon FROM fs_basket WHERE status = 1');
-	}
-
 	public function addBasket($desc, $pic, $tel, $contact_type, $weight, $location_type, $lat, $lon, $bezirk_id)
 	{
 		$appost = 1;
@@ -145,126 +140,6 @@ class BasketModel extends Model
 		}
 	}
 
-	public function listRequests($basket_id)
-	{
-		return $this->q('
-		
-				SELECT
-					UNIX_TIMESTAMP(a.time) AS time_ts,
-					fs.name AS fs_name,
-					fs.photo AS fs_photo,
-					fs.id AS fs_id,
-					fs.geschlecht AS fs_gender,
-					fs.sleep_status,
-					b.id
-		
-		
-				FROM
-					fs_basket_anfrage a,
-					fs_basket b,
-					fs_foodsaver fs
-		
-				WHERE
-					a.basket_id = b.id
-		
-				AND
-					a.`status` IN(0,1)
-		
-				AND
-					a.foodsaver_id = fs.id
-		
-				AND
-					b.foodsaver_id = ' . (int)$this->func->fsId() . '
-		
-				AND
-					a.basket_id = ' . (int)$basket_id . '
-		
-				');
-	}
-
-	public function getRequest($basket_id, $fs_id)
-	{
-		return $this->qRow('
-		
-				SELECT
-					UNIX_TIMESTAMP(a.time) AS time_ts,
-					fs.name AS fs_name,
-					fs.photo AS fs_photo,
-					fs.id AS fs_id,
-					fs.geschlecht AS fs_gender,
-					b.id
-		
-		
-				FROM
-					fs_basket_anfrage a,
-					fs_basket b,
-					fs_foodsaver fs
-		
-				WHERE
-					a.basket_id = b.id
-		
-				AND
-					a.`status` IN(0,1)
-		
-				AND
-					a.foodsaver_id = fs.id
-		
-				AND
-					b.foodsaver_id = ' . (int)$this->func->fsId() . '
-				
-				AND
-					a.foodsaver_id = ' . (int)$fs_id . '
-				
-				AND
-					a.basket_id = ' . (int)$basket_id . '
-		
-				');
-	}
-
-	public function listUpdates()
-	{
-		return $this->q('
-
-			SELECT 
-				UNIX_TIMESTAMP(a.time) AS time_ts,
-				fs.name AS fs_name,
-				fs.photo AS fs_photo,
-				fs.id AS fs_id,
-				fs.sleep_status,
-				b.id,
-				b.description
-				
-				
-			FROM 
-				fs_basket_anfrage a, 
-				fs_basket b,
-				fs_foodsaver fs
-				
-			WHERE 
-				a.basket_id = b.id 
-				
-			AND 
-				a.`status` IN(0,1)
-				
-			AND
-				a.foodsaver_id = fs.id
-				
-			AND
-				b.foodsaver_id = ' . (int)$this->func->fsId() . '
-				
-			ORDER BY
-				a.`time` DESC
-				
-		');
-	}
-
-	public function getUpdateCount()
-	{
-		$count = $this->qOne('SELECT COUNT(a.basket_id) FROM fs_basket_anfrage a, fs_basket b WHERE a.basket_id = b.id AND a.`status` = 0 AND b.foodsaver_id = ' . (int)$this->func->fsId());
-
-		return (int)$count;
-	}
-
 	public function addArt($basket_id, $types)
 	{
 		if (!empty($types)) {
@@ -284,16 +159,6 @@ class BasketModel extends Model
 				' . implode(',', $sql) . '
 			');
 		}
-	}
-
-	public function removeBasket($id)
-	{
-		return $this->update('
-			UPDATE 	`fs_basket`
-			SET 	`status` = 3
-			WHERE 	`id` = ' . (int)$id . '
-			AND 	`foodsaver_id` = ' . (int)$this->func->fsId() . '		
-		');
 	}
 
 	public function listMyBaskets()

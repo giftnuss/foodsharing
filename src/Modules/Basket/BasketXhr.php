@@ -56,7 +56,7 @@ class BasketXhr extends Control
 	public function basketchoords()
 	{
 		$xhr = new Xhr();
-		if ($baskets = $this->model->getBasketChoords()) {
+		if ($baskets = $this->gateway->getBasketCoordinates()) {
 			$xhr->addData('baskets', $baskets);
 		}
 
@@ -393,7 +393,7 @@ class BasketXhr extends Control
 		$xhr = new Xhr();
 
 		$out = '';
-		if ($updates = $this->model->listUpdates()) {
+		if ($updates = $this->gateway->listUpdates(S::id())) {
 			$out = $this->view->listUpdates($updates);
 		}
 
@@ -408,7 +408,7 @@ class BasketXhr extends Control
 
 	public function update()
 	{
-		$count = $this->gateway->getUpdateCount($this->func->fsId());
+		$count = $this->gateway->getUpdateCount(S::id());
 		if ((int)$count > 0) {
 			return array(
 				'status' => 1,
@@ -442,7 +442,7 @@ class BasketXhr extends Control
 
 	public function removeRequest()
 	{
-		if ($request = $this->model->getRequest($_GET['id'], $_GET['fid'])) {
+		if ($request = $this->gateway->getRequest($_GET['id'], $_GET['fid'], S::id())) {
 			$dia = new XhrDialog();
 			$dia->addOpt('width', '400');
 			$dia->noOverflow();
@@ -470,7 +470,7 @@ class BasketXhr extends Control
 
 	public function removeBasket()
 	{
-		$this->model->removeBasket($_GET['id']);
+		$this->gateway->removeBasket($_GET['id'], S::id());
 
 		return array(
 			'status' => 1,
@@ -487,7 +487,7 @@ class BasketXhr extends Control
 
 	public function finishRequest()
 	{
-		if ($request = $this->model->getRequest($_GET['id'], $_GET['fid'])) {
+		if ($request = $this->gateway->getRequest($_GET['id'], $_GET['fid'], S::id())) {
 			if (isset($_GET['sk']) && (int)$_GET['sk'] > 0) {
 				$this->model->setStatus($_GET['id'], $_GET['sk'], $_GET['fid']);
 
