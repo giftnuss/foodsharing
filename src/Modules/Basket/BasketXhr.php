@@ -7,6 +7,7 @@ use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Message\MessageModel;
 
 class BasketXhr extends Control
@@ -15,7 +16,7 @@ class BasketXhr extends Control
 	private $gateway;
 	private $messageModel;
 
-	public function __construct(BasketModel $model, BasketView $view, BasketGateway $gateway, MessageModel $messageModel)
+	public function __construct(Model $model, BasketView $view, BasketGateway $gateway, MessageModel $messageModel)
 	{
 		$this->model = $model;
 		$this->messageModel = $messageModel;
