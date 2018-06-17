@@ -111,6 +111,15 @@ class BasketGateway extends BaseGateway
 		return $basket;
 	}
 
+	public function addTypes($basket_id, $types): void
+	{
+		if (!empty($types)) {
+			foreach ($types as $t) {
+				$this->db->insert('fs_basekt_has_types', ['basket_id' => $basket_id, 'types_id' => (int)$t]);
+			}
+		}
+	}
+
 	public function listRequests($basket_id, $id): array
 	{
 		$stm = '		
@@ -232,6 +241,15 @@ class BasketGateway extends BaseGateway
 			';
 
 		return (int)$this->db->fetchValue($stm, [':foodsaver_id' => $id]);
+	}
+
+	public function addArt($basket_id, $types): void
+	{
+		if (!empty($types)) {
+			foreach ($types as $t) {
+				$this->db->insert('fs_basket_has_art', ['basket_id' => $basket_id, 'art_id' => (int)$t]);
+			}
+		}
 	}
 
 	public function removeBasket($id, $fsId): int

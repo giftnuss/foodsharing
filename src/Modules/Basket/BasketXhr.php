@@ -179,7 +179,7 @@ class BasketXhr extends Control
 					}
 				}
 
-				$this->model->addTypes($id, $types);
+				$this->gateway->addTypes($id, $types);
 			}
 
 			if (isset($data['food_art']) && is_array($data['food_art'])) {
@@ -190,7 +190,7 @@ class BasketXhr extends Control
 					}
 				}
 
-				$this->model->addArt($id, $arts);
+				$this->gateway->addArt($id, $arts);
 			}
 
 			return array(

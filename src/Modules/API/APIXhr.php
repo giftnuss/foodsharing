@@ -5,21 +5,21 @@ namespace Foodsharing\Modules\API;
 use Flourish\fImage;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session\S;
-use Foodsharing\Modules\Basket\BasketModel;
+use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Message\MessageModel;
 
 class APIXhr extends Control
 {
 	private $messageModel;
-	private $basketModel;
+	private $basketGateway;
 	private $gateway;
 
-	public function __construct(APIGateway $gateway, MessageModel $messageModel, BasketModel $basketModel)
+	public function __construct(APIGateway $gateway, MessageModel $messageModel, BasketGateway $basketGateway)
 	{
 		$this->gateway = $gateway;
 		$this->messageModel = $messageModel;
-		$this->basketModel = $basketModel;
+		$this->basketGateway = $basketGateway;
 		parent::__construct();
 
 		if ($_GET['m'] != 'login' && !S::may()) {
@@ -229,7 +229,7 @@ class APIXhr extends Control
 					}
 				}
 
-				if ($id = $this->basketModel->addBasket(
+				if ($id = $this->basketGateway->addBasket(
 					$desc,
 					$photo, // pic
 					$tel, // phone
@@ -238,14 +238,15 @@ class APIXhr extends Control
 					(int)$_GET['fetchart'], // location type
 					$lat, // lat
 					$lon, // lon
-					S::user('bezirk_id')
+					S::user('bezirk_id'),
+					S::id()
 				)
 				) {
 					if (!empty($art)) {
-						$this->basketModel->addArt($id, $art);
+						$this->basketGateway->addArt($id, $art);
 					}
 					if (!empty($types)) {
-						$this->basketModel->addTypes($id, $types);
+						$this->basketGateway->addTypes($id, $types);
 					}
 
 					$this->appout([
