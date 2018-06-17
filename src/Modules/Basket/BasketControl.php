@@ -23,7 +23,7 @@ class BasketControl extends Control
 	public function index()
 	{
 		if ($id = $this->uriInt(2)) {
-			if ($basket = $this->model->getBasket($id)) {
+			if ($basket = $this->gateway->getBasket($id)) {
 				$this->basket($basket);
 			}
 		} else {
