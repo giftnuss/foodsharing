@@ -18,7 +18,7 @@ class View
 	/**
 	 * @var \Twig\Environment
 	 */
-	private $twig;
+	public $twig;
 
 	public function __construct(\Twig\Environment $twig, Func $func, Utils $viewUtils)
 	{
