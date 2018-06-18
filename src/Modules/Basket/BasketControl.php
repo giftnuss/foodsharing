@@ -52,7 +52,7 @@ class BasketControl extends Control
 		$requests = false;
 
 		if (S::may()) {
-			if ($basket['fs_id'] != $this->func->fsId()) {
+			if ($basket['fs_id'] != S::id()) {
 				$this->func->addJsFunc('
 				function u_wallpostReady(postid)
 				{
@@ -62,7 +62,7 @@ class BasketControl extends Control
 				}');
 			}
 			$wallposts = $this->wallposts('basket', $basket['id']);
-			if ($basket['fs_id'] == $this->func->fsId()) {
+			if ($basket['fs_id'] == S::id()) {
 				$requests = $this->gateway->listRequests($basket['id'], S::id());
 			}
 		}

@@ -294,34 +294,43 @@ class BasketGateway extends BaseGateway
 		$status = $this->db->fetchValue($stm, [':basket_id' => (int)$basket_id, ':foodsaver_id' => $fsId]);
 
 		if (!$status) {
-			$this->db->insert(
-				'fs_basket_anfrage',
-				[
-					'foodsaver_id' => (int)$fsId,
-					'basket_id' => (int)$basket_id,
-					'status' => 9,
-					'time' => NOW(),
-					'appost' => 0,
-				]
-			);
+			$stm = '
+			REPLACE INTO `fs_basket_anfrage`
+			(
+				`foodsaver_id`, `basket_id`, `status`, `time`,`appost`
+			)
+			VALUES
+			(
+				:foodsaver_id, :basket_id, 9, NOW(), 0
+			)
+		';
+			$this->db->execute($stm, [':foodsaver_id' => (int)$fsId, ':basket_id' => (int)$basket_id]);
 		}
 	}
 
-	public function setStatus($basket_id, $status, $fsid): void
+	public function setStatus($basket_id, $status, $fsId): void
 	{
 		$appost = 1;
 		if (isset($_REQUEST['appost']) && '0' === $_REQUEST['appost']) {
 			$appost = 0;
 		}
 
-		$this->db->insert(
-			'fs_basket_anfrage',
+		$stm = '
+			REPLACE INTO `fs_basket_anfrage`
+			(
+				`foodsaver_id`, `basket_id`, `status`, `time`,`appost`
+			) 
+			VALUES 
+			(
+				:foodsaver_id, :basket_id, :status, NOW(), :appost
+			)	
+		';
+		$this->db->execute($stm,
 			[
-				'foodsaver_id' => (int)$fsid,
-				'basket_id' => (int)$basket_id,
-				'status' => (int)$status,
-				'time' => date('Y-m-d H:i:s'),
-				'appost' => $appost,
+				':foodsaver_id' => (int)$fsId,
+				':basket_id' => (int)$basket_id,
+				':status' => (int)$status,
+				':appost' => $appost,
 			]
 		);
 	}
