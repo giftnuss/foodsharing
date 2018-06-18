@@ -77,7 +77,7 @@ class LoginView extends View
 									<input placeholder="' . $this->func->s('login_passwd2') . '" type="password" value="" id="login_passwd2" name="login_passwd1" class="input text value" />
 								</div>
 								<div class="element-wrapper">
-									<input placeholder="yyyy-mm-dd" type="date" id="birthdate" min="' . date('Y-m-d', strtotime('-120 years')) . '" max="' . date('Y-m-d', strtotime('-18 years')) . '" required />
+									<input placeholder="'. $this->func->s('date_placeholder_format') .'" type="date" id="birthdate" min="' . date('Y-m-d', strtotime('-120 years')) . '" max="' . date('Y-m-d', strtotime('-18 years')) . '" required />
 									<label for="birthdate">' . $this->func->s('geb_datum') . '</label>
 								</div>
 							</div>
