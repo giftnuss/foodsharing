@@ -62,21 +62,17 @@ class LoginView extends View
 	{
 		if (!S::may()) {
 			$mail = '';
+
 			if (isset($_GET['m']) && $this->func->validEmail($_GET['m'])) {
 				$mail = $_GET['m'];
 			}
 
-			$cnt = $this->v_utils->v_info('Bitte trage hier Deine E-Mail-Adresse ein, mit welcher Du auf foodsharing.de angemeldet bist!');
+			$params = array(
+				'email' => $this->func->s('login_email'),
+				'action' => $_SERVER['REQUEST_URI']
+			);
 
-			$cnt .= '
-			<form name="passReset" method="post" class="contact-form" action="' . $_SERVER['REQUEST_URI'] . '">
-					' . $this->v_utils->v_form_text('email', array('value' => $mail)) . '
-					' . $this->v_utils->v_form_submit($this->func->s('send'), 'submitted') . '
-			</form>';
-
-			return $this->v_utils->v_field($cnt, 'Passwort zurücksetzen', array('class' => 'ui-padding'));
-		} else {
-			return $this->v_utils->v_field($this->v_utils->v_info('Du bist angemeldet als ' . S::user('name'), 'Du bist angemeldet'), array('class' => 'ui-padding'));
+			return $this->twig->render('pages/ForgotPassword/page.twig', $params);
 		}
 	}
 
