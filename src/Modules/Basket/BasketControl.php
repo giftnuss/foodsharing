@@ -4,14 +4,16 @@ namespace Foodsharing\Modules\Basket;
 
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\Model;
 
 class BasketControl extends Control
 {
 	private $gateway;
 
-	public function __construct(BasketGateway $gateway, BasketView $view)
+	public function __construct(BasketGateway $gateway, BasketView $view, Model $model)
 	{
 		$this->gateway = $gateway;
+		$this->model = $model;
 		$this->view = $view;
 
 		parent::__construct();
