@@ -7,6 +7,7 @@
 ## Bugfixes
 - Fix pickup slots !390 #215 @nicksellen
 - fixed wrong gendering of AMBs in region view and profile view. !386 #214 @peter.toennies
+- Added a format placeholder to date input #217 @theolampert
 ## Bugfixes
 - reduced the height of store info popups by removing the warning frame. !388 #216 @peter.toennies
 - The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
