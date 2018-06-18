@@ -296,8 +296,8 @@ class Utils
 		}
 
 		return '<form id="loginbar" action="/?page=login&ref=%2F%3Fpage%3Ddashboard" method="post">
-					<input style="margin-right:4px;" class="input corner-all" type="email" name="email_adress" value="' . $username . '" placeholder="E-Mail-Adresse" />
-					<input class="input corner-all" type="password" name="password" value="' . $password . '" placeholder="Passwort" />
+					<input style="margin-right:4px;" class="input corner-all" type="email" name="email_adress" value="' . $username . '" placeholder="E-Mail-Adresse" required />
+					<input class="input corner-all" type="password" name="password" value="' . $password . '" placeholder="Passwort" required />
 					<input class="submit corner-right" type="submit" value="&#xf0a9;" />
 				</form>';
 	}

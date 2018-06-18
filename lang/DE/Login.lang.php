@@ -20,6 +20,7 @@ $g_lang['login_phone'] = 'Telefonnummer';
 $g_lang['login_location'] = 'Deine Adresse';
 $g_lang['login_surname'] = 'Nachname';
 $g_lang['login_phone_info'] = 'Es kann hilfreich sein, Deine Telefonnummer mit anderen Foodsharern zu teilen';
+$g_lang['forgotten_password'] = 'Passwort vergessen?';
 $g_lang['have_read_the_legal_stuff1'] = 'Ich habe die Datenschutzerklärung zur Kenntnis genommen';
 $g_lang['have_read_the_legal_stuff2'] = 'Ich habe die <a href="http://wiki.lebensmittelretten.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> zur Kenntnis genommen';
 $g_lang['prev'] = 'zur&uuml;ck';

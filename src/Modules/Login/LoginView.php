@@ -57,7 +57,7 @@ class LoginView extends View
 							<h3>' . $this->func->s('login_info') . '</h3>
 							<div class="form">
 								<div class="element-wrapper">
-									<input placeholder="' . $this->func->s('login_name') . '" type="text" value="" id="login_name" name="login_name" class="input text value" /><input placeholder="' . $this->func->s('login_surname') . '" type="text" value="" id="login_surname" name="login_surname" class="input text value" />
+									<input placeholder="' . $this->func->s('login_name') . '" type="email" value="" id="login_name" name="login_name" class="input text value" /><input placeholder="' . $this->func->s('login_surname') . '" type="text" value="" id="login_surname" name="login_surname" class="input text value" required />
 								</div>
 								<div class="element-wrapper">
 									<input placeholder="' . $this->func->s('login_email') . '" type="text" value="' . $email . '" id="login_email" name="login_email" class="input text value" />

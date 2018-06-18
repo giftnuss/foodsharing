@@ -41,43 +41,29 @@ class View
 			$action = '/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']);
 		}
 
+		$params = array(
+			'action' => $action,
+			'forgotten_password_label' => $this->func->s('forgotten_password'),
+			'login_button_label' => $this->func->s('login'),
+			'register_button_label' => $this->func->s('register')
+		);
+
 		$this->func->addJs('
-				storage.reset();
-				if(isMob())
-				{
+			storage.reset();
+			if(isMob()) {
+				$("#ismob").val("1");
+			}
+			$(window).resize(function(){
+				if(isMob()) {
 					$("#ismob").val("1");
 				}
-				$(window).resize(function(){
-					if(isMob())
-					{
-						$("#ismob").val("1");
-					}
-					else
-					{
-						$("#ismob").val("0");
-					}
-				});
-			');
+				else {
+					$("#ismob").val("0");
+				}
+			});
+		');
 
-		return '
-			<div id="g_login">' . $this->v_utils->v_field(
-				$this->v_utils->v_form('Login', array(
-					$this->v_utils->v_form_text('email_adress', array('label' => false, 'placeholder' => $this->func->s('email_adress'))),
-					$this->v_utils->v_form_passwd('password', array('label' => false, 'placeholder' => $this->func->s('password'))),
-					$this->v_utils->v_form_hidden('ismob', '0') .
-					'<p>
-									<a href="/?page=login&sub=passwordReset">Passwort vergessen?</a>
-								</p>
-								<p class="buttons">
-									<input class="button" type="submit" value="' . $this->func->s('login') . '" name="login" /> <a href="#" onclick="ajreq(\'join\',{app:\'login\'});return false;" class="button">' . $this->func->s('register') . '</a>
-								</p>'
-				), array('action' => $action, 'submit' => false)),
-
-				'Login',
-
-				array('class' => 'ui-padding')
-			) . '
-			</div>';
+		return $this->twig->render('pages/Login/page.twig', $params);
 	}
 
 	public function topbar($title, $subtitle = '', $icon = '')
