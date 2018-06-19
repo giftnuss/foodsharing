@@ -7,6 +7,7 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Basket\BasketModel;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Message\MessageModel;
 
 class APIXhr extends Control
@@ -15,11 +16,12 @@ class APIXhr extends Control
 	private $basketModel;
 	private $gateway;
 
-	public function __construct(APIGateway $gateway, MessageModel $messageModel, BasketModel $basketModel)
+	public function __construct(APIGateway $gateway, MessageModel $messageModel, BasketModel $basketModel, Model $model)
 	{
 		$this->gateway = $gateway;
 		$this->messageModel = $messageModel;
 		$this->basketModel = $basketModel;
+		$this->model = $model;
 		parent::__construct();
 
 		if ($_GET['m'] != 'login' && !S::may()) {
@@ -31,7 +33,7 @@ class APIXhr extends Control
 
 	public function udata(): void
 	{
-		if ($user = $this->gateway->getValues(['id', 'name', 'photo'], 'foodsaver', $_GET['i'])) {
+		if ($user = $this->model->getValues(['id', 'name', 'photo'], 'foodsaver', $_GET['i'])) {
 			$this->appout([
 				'status' => 1,
 				'user' => $user
@@ -120,7 +122,7 @@ class APIXhr extends Control
 
 	public function logout(): void
 	{
-		$this->gateway->logout();
+		$this->model->logout();
 		$_SESSION['login'] = false;
 		$_SESSION = array();
 
@@ -133,8 +135,8 @@ class APIXhr extends Control
 
 	public function login(): void
 	{
-		if (isset($_GET['e']) && $this->gateway->login($_GET['e'], $_GET['p'])) {
-			$fs = $this->gateway->getValues(['telefon', 'handy', 'geschlecht', 'name', 'lat', 'lon', 'photo'], 'foodsaver', $this->func->fsId());
+		if (isset($_GET['e']) && $this->model->login($_GET['e'], $_GET['p'])) {
+			$fs = $this->model->getValues(['telefon', 'handy', 'geschlecht', 'name', 'lat', 'lon', 'photo'], 'foodsaver', $this->func->fsId());
 
 			$this->appout([
 				'status' => 1,
@@ -214,7 +216,7 @@ class APIXhr extends Control
 					$photo = strip_tags($_GET['photo']);
 				}
 
-				$fs = $this->gateway->getValues(['lat', 'lon'], 'foodsaver', $this->func->fsId());
+				$fs = $this->model->getValues(['lat', 'lon'], 'foodsaver', $this->func->fsId());
 
 				$lat = $fs['lat'];
 				$lon = $fs['lon'];
@@ -316,8 +318,8 @@ class APIXhr extends Control
 
 	public function auth(): void
 	{
-		if ($ret = $this->gateway->checkClient($_GET['user'], $_GET['pass'])) {
-			$values = $this->gateway->getValues(['id', 'orgateam', 'name', 'email', 'photo', 'geschlecht', 'rolle'], 'foodsaver', $ret['id']);
+		if ($ret = $this->model->checkClient($_GET['user'], $_GET['pass'])) {
+			$values = $this->model->getValues(['id', 'orgateam', 'name', 'email', 'photo', 'geschlecht', 'rolle'], 'foodsaver', $ret['id']);
 
 			$values['bot'] = $values['rolle'] >= 3;
 
