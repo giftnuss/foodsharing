@@ -10,12 +10,14 @@
 ## Bugfixes
 - reduced the height of store info popups by removing the warning frame. !388 #216 @peter.toennies
 - The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
+- fixed wrong usage of gateway in API. !400 @peter.toennies
 
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen
 - refactored and cleaned the whole activity module. !352 by @peter.toennies
 - refactored and cleaned the whole API module. !368 #9 by @peter.toennies
 - refactored Basket to use gateway. !399 @peter.toennies
+- refactored Bell to use gateway. !402 by @peter.toennies
 
 # 2018-05-24
 

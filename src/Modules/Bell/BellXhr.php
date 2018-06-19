@@ -5,11 +5,15 @@ namespace Foodsharing\Modules\Bell;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\Model;
 
 class BellXhr extends Control
 {
-	public function __construct(BellModel $model, BellView $view)
+	private $gateway;
+
+	public function __construct(Model $model, BellView $view, BellGateway $gateway)
 	{
+		$this->gateway = $gateway;
 		$this->model = $model;
 		$this->view = $view;
 
@@ -25,7 +29,7 @@ class BellXhr extends Control
 		S::noWrite();
 
 		$xhr = new Xhr();
-		$bells = $this->model->listBells(20);
+		$bells = $this->gateway->listBells(S::id(), 20);
 
 		if (!empty($rbells)) {
 			if ($bells) {
@@ -42,7 +46,7 @@ class BellXhr extends Control
 				$ids[] = (int)$v['betrieb_id'];
 			}
 			if (!empty($ids)) {
-				if ($betrieb_bells = $this->model->getBetriebBells($ids)) {
+				if ($betrieb_bells = $this->gateway->getStoreBells($ids)) {
 					$bbells = array();
 
 					foreach ($betrieb_bells as $b) {
@@ -77,7 +81,7 @@ class BellXhr extends Control
 		 * additional bells for new fairteiler
 		 */
 		if (S::may('bot')) {
-			if ($fbells = $this->model->getFairteilerBells()) {
+			if ($fbells = $this->gateway->getFairteilerBells($this->model->getBotBezirkIds())) {
 				$bbells = array();
 
 				foreach ($fbells as $b) {
@@ -113,10 +117,10 @@ class BellXhr extends Control
 	}
 
 	/**
-	 * ajax call to delete an bell.
+	 * ajax call to delete a bell.
 	 */
 	public function delbell()
 	{
-		$this->model->delbell($_GET['id']);
+		$this->gateway->delbell($_GET['id'], S::id());
 	}
 }
