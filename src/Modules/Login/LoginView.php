@@ -7,7 +7,6 @@ use Foodsharing\Modules\Core\View;
 
 class LoginView extends View
 {
-
 	public function loginForm()
 	{
 		return $this->v_utils->v_form_text('email_adress') .
