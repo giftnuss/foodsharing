@@ -29,7 +29,7 @@ class BellXhr extends Control
 		S::noWrite();
 
 		$xhr = new Xhr();
-		$bells = $this->gateway->listBells(20);
+		$bells = $this->gateway->listBells(S::id(), 20);
 
 		if (!empty($rbells)) {
 			if ($bells) {
