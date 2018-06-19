@@ -15,6 +15,7 @@
 - Extract StoreUser module javascript !358 @nicksellen
 - refactored and cleaned the whole activity module. !352 by @peter.toennies
 - refactored and cleaned the whole API module. !368 #9 by @peter.toennies
+- refactored Bell to use gateway. !402 by @peter.toennies
 
 # 2018-05-24
 
