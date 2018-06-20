@@ -9,14 +9,17 @@
 ## Bugfixes
 - Fix pickup slots !390 #215 @nicksellen
 - fixed wrong gendering of AMBs in region view and profile view. !386 #214 @peter.toennies
+- Added a format placeholder to date input #217 @theolampert
 ## Bugfixes
 - reduced the height of store info popups by removing the warning frame. !388 #216 @peter.toennies
 - The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
+- fixed wrong usage of gateway in API. !400 @peter.toennies
 
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen
 - refactored and cleaned the whole activity module. !352 by @peter.toennies
 - refactored and cleaned the whole API module. !368 #9 by @peter.toennies
+- refactored Bell to use gateway. !402 by @peter.toennies
 
 # 2018-05-24
 
