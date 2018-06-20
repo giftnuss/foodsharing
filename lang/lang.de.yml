@@ -59,3 +59,7 @@ legal:
     acknowledge: Ich stimme zu
     not_acknowledge: Ich stimme nicht zu und möchte zum Foodsaver herabgestuft werden
   not_acknowledge_pn_description: Wenn Du mit der Belehrung nicht einverstanden bist, wirst Du zum Foodsaver herabgestuft. Das bedeutet, dass Du kein*e Botschafter*in von Bezirken mehr bist, Deine Betriebsverantwortlichkeiten verlierst und das Quiz zur/m Betriebsverantwortlichen/Botschafter*in erneut durchführen musst.
+
+login:
+  email_address: Email Adresse
+  password: Passwort

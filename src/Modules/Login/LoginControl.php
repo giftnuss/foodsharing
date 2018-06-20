@@ -5,10 +5,20 @@ namespace Foodsharing\Modules\Login;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Services\SearchService;
+use Symfony\Component\Form\FormFactoryBuilder;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Mobile_Detect;
 
 class LoginControl extends Control
 {
+	/**
+	 * @var FormFactoryBuilder
+	 */
+	private $formFactory;
+
 	private $searchService;
 
 	public function __construct(LoginModel $model, LoginView $view, SearchService $searchService)
@@ -18,6 +28,14 @@ class LoginControl extends Control
 		$this->searchService = $searchService;
 
 		parent::__construct();
+	}
+
+	/**
+	 * @required
+	 */
+	public function setFormFactory(FormFactoryBuilder $formFactory)
+	{
+		$this->formFactory = $formFactory;
 	}
 
 	public function unsubscribe()
@@ -30,18 +48,40 @@ class LoginControl extends Control
 		}
 	}
 
-	public function index()
+	public function index(Request $request, Response $response)
 	{
 		if (!S::may()) {
 			if (!isset($_GET['sub'])) {
-				if (isset($_POST['email_adress'])) {
+				if (isset($_POST['form']['email_adress'])) {
 					$this->handleLogin();
 				}
 				$ref = false;
 				if (isset($_GET['ref'])) {
 					$ref = urldecode($_GET['ref']);
 				}
-				$this->func->addContent($this->view->login($ref));
+
+				$action = '/?page=login';
+				if ($ref != false) {
+					$action = '/?page=login&ref=' . urlencode($ref);
+				} elseif (!isset($_GET['ref'])) {
+					$action = '/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']);
+				}
+
+				$form = $this->formFactory->getFormFactory()
+					->create()
+					->add('email_adress', TextType::class, ['label' => 'login.email_address'])
+					->add('password', PasswordType::class, ['label' => 'login.password']);
+
+				$params = array(
+					'action' => $action,
+					'title' => 'Login',
+					'forgotten_password_label' => $this->func->s('forgotten_password'),
+					'login_button_label' => $this->func->s('login'),
+					'register_button_label' => $this->func->s('register'),
+					'form' => $form->createView()
+				);
+
+				$response->setContent($this->render('pages/Login/page.twig', $params));
 			}
 		} else {
 			if (!isset($_GET['sub']) || $_GET['sub'] != 'unsubscribe') {
@@ -63,7 +103,8 @@ class LoginControl extends Control
 
 	private function handleLogin()
 	{
-		if ($this->model->login($_POST['email_adress'], $_POST['password'])) {
+		print_r($_POST);
+		if ($this->model->login($_POST['form']['email_adress'], $_POST['form']['password'])) {
 			$token = $this->searchService->writeSearchIndexToDisk(S::id(), S::user('token'));
 
 			if (isset($_POST['ismob'])) {

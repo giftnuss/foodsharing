@@ -1,38 +1,27 @@
+{% extends 'layouts/default.twig' %}
+{% block main %}
 <div id="g_login">
 	<div class="field">
-		<div class="head ui-widget-header ui-corner-top">Login</div>
-		<div class="ui-widget ui-widget-content corner-bottom margin-bottom ui-padding">    
+		<div class="head ui-widget-header ui-corner-top">{{ title }}</div>
+		<div class="ui-widget ui-widget-content corner-bottom margin-bottom ui-padding">
 		<div id="login">
-			<form method="post" id="login-form" class="validate" enctype="multipart/form-data" action="{{action}}">
-				<input type="hidden" name="form_submit" value="login">
-				<div class="input-wrapper" id="email_adress-wrapper">
-					<label class="wrapper-label ui-widget" for="email_adress"></label>
-					<div class="element-wrapper">
-						<input placeholder="E-Mail-Adresse" class="input text value" type="email" name="email_adress" id="email_adress" value="" required autocomplete="current-email">
-					</div>
-					<input type="hidden" id="email_adress-error-msg" value="">
-					<div style="clear:both;"></div>
-				</div>
-				<div class="input-wrapper" id="password-wrapper">
-					<label class="wrapper-label ui-widget" for="password"></label>
-					<div class="element-wrapper">
-						<input placeholder="Passwort" class="input text" type="password" name="password" id="password" autocomplete="current-password">
-					</div>
-					<input type="hidden" id="password-error-msg" value="">
-					<div style="clear:both;"></div>
-				</div>
-				<input type="hidden" id="ismob" name="ismob" value="1">
-				<p>
-					<a href="/?page=login&amp;sub=passwordReset">{{ forgotten_password_label }}</a>
-				</p>
-				<p class="buttons">
-					<input class="button" type="submit" value="{{ login_button_label }}" name="login"> 
-					<a href="#" onclick="ajreq('join',{ app:'login' });return false;" class="button">
-						{{ register_button_label }}
-					</a>
-				</p>
-			</form>
+		{{ form_start(form, {'action': action, 'method': 'POST'}) }}
+			{{ form_row(form.email_adress) }}
+			{{ form_row(form.password) }}
+			<p>
+				<a href="/?page=login&sub=passwordReset">{{ forgotten_password_label }}</a>
+			</p>
+			<p class="buttons">
+				<input class="button" type="submit" value="{{ login_button_label }}" name="login">
+				<a href="#" onclick="ajreq('join',{ app:'login' });return false;" class="button">
+					{{ register_button_label }}
+				</a>
+			</p>
+			<input type="hidden" id="ismob" name="ismob" value="1">
+			<input type="hidden" id="password-error-msg" value="">
+		{{ form_end(form) }}
 		</div>
 		</div>
 	</div>
 </div>
+{% endblock %}

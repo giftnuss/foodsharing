@@ -7,16 +7,6 @@ use Foodsharing\Modules\Core\View;
 
 class LoginView extends View
 {
-	public function loginForm()
-	{
-		return $this->v_utils->v_form_text('email_adress') .
-			$this->v_utils->v_form_passwd('password') .
-			$this->v_utils->v_form_hidden('ismob', '0') .
-			'<p>
-					<a id="forgotpasswordlink" href="/?page=login&sub=passwordReset">Passwort vergessen?</a>
-				</p>';
-	}
-
 	public function join($email = '', $pass = '', $datenschutz, $rechtsvereinbarung)
 	{
 		$params = array(
