@@ -14,6 +14,7 @@
 - reduced the height of store info popups by removing the warning frame. !388 #216 @peter.toennies
 - The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
 - fixed wrong usage of gateway in API. !400 @peter.toennies
+- fixed missalignment in future-pickups list. !389 # 136 @EmiliaPaz
 
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen

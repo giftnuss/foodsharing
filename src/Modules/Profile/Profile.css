@@ -52,6 +52,11 @@ div.statdisplay .item {
   border-radius: 40px;
 }
 
+#double {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 #double li {
   width: 33.333%;
 }
