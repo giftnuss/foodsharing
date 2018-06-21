@@ -5,23 +5,26 @@ namespace Foodsharing\Modules\Buddy;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\Model;
 
 class BuddyXhr extends Control
 {
 	private $bellGateway;
+	private $gateway;
 
-	public function __construct(BuddyModel $model, BellGateway $bellGateway)
+	public function __construct(BuddyGateway $gateway, BellGateway $bellGateway, Model $model)
 	{
-		$this->model = $model;
+		$this->gateway = $gateway;
 		$this->bellGateway = $bellGateway;
+		$this->model = $model;
 
 		parent::__construct();
 	}
 
 	public function request()
 	{
-		if ($this->model->buddyRequestedMe($_GET['id'])) {
-			$this->model->confirmBuddy($_GET['id']);
+		if ($this->gateway->buddyRequestedMe($_GET['id'], S::id())) {
+			$this->gateway->confirmBuddy($_GET['id'], S::id());
 
 			$this->model->delBells('buddy-' . $this->func->fsId() . '-' . (int)$_GET['id']);
 			$this->model->delBells('buddy-' . (int)$_GET['id'] . $this->func->fsId());
@@ -39,7 +42,9 @@ class BuddyXhr extends Control
 				'status' => 1,
 				'script' => '$(".buddyRequest").remove();pulseInfo("Jetzt kennt Ihr Euch!");'
 			);
-		} elseif ($this->model->buddyRequest($_GET['id'])) {
+		}
+
+		if ($this->gateway->buddyRequest($_GET['id'], S::id())) {
 			// language string for title
 			$title = 'buddy_request_title';
 
@@ -66,9 +71,9 @@ class BuddyXhr extends Control
 		}
 	}
 
-	public function removeRequest()
+	public function removeRequest(): array
 	{
-		$this->model->removeRequest($_GET['id']);
+		$this->gateway->removeRequest($_GET['id'], S::id());
 
 		return array(
 			'status' => 1,

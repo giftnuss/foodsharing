@@ -4,22 +4,22 @@ namespace Foodsharing\Services;
 
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
-use Foodsharing\Modules\Buddy\BuddyModel;
+use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Modules\WorkGroup\WorkGroupModel;
 
 class SearchService
 {
-	private $buddyModel;
+	private $buddyGateway;
 	private $workGroupModel;
 	private $storeModel;
 	private $regionGateway;
 	private $func;
 
-	public function __construct(BuddyModel $buddyModel, WorkGroupModel $workGroupModel, StoreModel $storeModel, regionGateway $regionGateway, Func $func)
+	public function __construct(BuddyGateway $buddyGateway, WorkGroupModel $workGroupModel, StoreModel $storeModel, regionGateway $regionGateway, Func $func)
 	{
-		$this->buddyModel = $buddyModel;
+		$this->buddyGateway = $buddyGateway;
 		$this->workGroupModel = $workGroupModel;
 		$this->storeModel = $storeModel;
 		$this->regionGateway = $regionGateway;
@@ -36,7 +36,7 @@ class SearchService
 		/*
 		 * Buddies Load persons in the index array that connected with the user
 		*/
-		if ($buddies = $this->buddyModel->listBuddies()) {
+		if ($buddies = $this->buddyGateway->listBuddies(S::id())) {
 			$result = [];
 			foreach ($buddies as $b) {
 				$img = '/img/avatar-mini.png';

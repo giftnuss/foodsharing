@@ -47,28 +47,6 @@ class Model extends ManualDb
 		return -1;
 	}
 
-	public function buddyRequest($fsid)
-	{
-		$this->insert('
-			REPLACE INTO `fs_buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
-			VALUES (' . (int)$this->func->fsId() . ',' . (int)$fsid . ',0)
-		');
-
-		return true;
-	}
-
-	public function confirmBuddy($fsid)
-	{
-		$this->insert('
-			REPLACE INTO `fs_buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
-			VALUES (' . (int)$this->func->fsId() . ',' . (int)$fsid . ',1)
-		');
-		$this->insert('
-			REPLACE INTO `fs_buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
-			VALUES (' . (int)$fsid . ',' . (int)$this->func->fsId() . ',1)
-		');
-	}
-
 	public function delBells($identifier)
 	{
 		if ($bells = $this->q('SELECT id FROM fs_bell WHERE identifier = ' . $this->strval($identifier))) {
