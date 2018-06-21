@@ -23,6 +23,7 @@
 - refactored Bell to use gateway. !402 by @peter.toennies
 - refactored BusinessCard to use gateway. !406 @peter.toennies
 - refactored Buddy to use gateway. !405 @peter.toennies
+- removed SQL injection possibilities from all exsisting gateways !398 @peter.toennies
 
 # 2018-05-24
 
