@@ -15,6 +15,12 @@
 - The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
 - fixed wrong usage of gateway in API. !400 @peter.toennies
 - fixed missalignment in future-pickups list. !389 # 136 @EmiliaPaz
+- Regaining support for mobile Safari 10 !396 #221 @michi-zuri
+- Fix pickup slots !390 #215 @nicksellen
+- fixed wrong gendering of AMBs in region view and profile view. !386 #214 @peter.toennies
+## Bugfixes
+- reduced the height of store info popups by removing the warning frame. !388 #216 @peter.toennies
+- The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
 
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen

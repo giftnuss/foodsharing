@@ -2,6 +2,7 @@ const mkdirp = require('mkdirp')
 const { writeFileSync } = require('fs')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const path = require('path')
 const clientRoot = path.resolve(__dirname)
 const shims = require('./shims')
@@ -134,6 +135,13 @@ module.exports = {
   },
   plugins,
   optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        uglifyOptions: {
+          safari10: true
+        }
+      })
+    ],
     splitChunks: {
       chunks: 'all',
       name: dev
