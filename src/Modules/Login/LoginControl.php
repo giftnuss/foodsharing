@@ -71,7 +71,6 @@ class LoginControl extends Control
 					$action = '/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']);
 				}
 
-
 				$params = array(
 					'action' => $action,
 					'form' => $form->createView(),
