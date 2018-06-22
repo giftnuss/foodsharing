@@ -61,7 +61,8 @@ module.exports = {
     'Dashboard',
     'Foodsaver',
     'StoreUser',
-    'WorkGroup'
+    'WorkGroup',
+    'Login'
   ),
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'cheap-module-eval-source-map' : 'source-map',

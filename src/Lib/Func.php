@@ -847,6 +847,16 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return $page;
 	}
 
+	public function getSubPage()
+	{
+		$sub_page = $this->getGet('sub');
+		if (!$sub_page) {
+			$sub_page = 'index';
+		}
+
+		return $sub_page;
+	}
+
 	public function getGetId($name)
 	{
 		if (isset($_GET[$name]) && (int)$_GET[$name] > 0) {
@@ -1131,6 +1141,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'webpack' => $usesWebpack,
 			'user' => $userData,
 			'page' => $this->getPage(),
+			'subpage' => $this->getSubPage(),
 			'location' => $location,
 			'ravenConfig' => $ravenConfig,
 			'translations' => $this->getTranslations()
