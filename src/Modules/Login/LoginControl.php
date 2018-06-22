@@ -49,15 +49,15 @@ class LoginControl extends Control
 	public function index(Request $request, Response $response)
 	{
 		if (!S::may()) {
-      bool $has_subpage = $request->query->has('sub');
-      bool $has_email_address = $request->request->has('form');
+			$has_subpage = $request->query->has('sub');
+			$has_email_address = $request->request->has('login_form');
 
-      if (!$has_subpage) {
+			if (!$has_subpage) {
 				if ($has_email_address) {
 					$this->handleLogin($request);
 				}
 
-        $ref = false;
+				$ref = false;
 				if (isset($_GET['ref'])) {
 					$ref = urldecode($_GET['ref']);
 				}
@@ -98,8 +98,8 @@ class LoginControl extends Control
 
 	private function handleLogin(Request $request)
 	{
-		string $email_address = $request->request->get('form')['email_address'];
-		string $password = $request->request->get('form')['password'];
+		$email_address = $request->request->get('login_form')['email_address'];
+		$password = $request->request->get('login_form')['password'];
 
 		if ($this->model->login($email_address, $password)) {
 			$token = $this->searchService->writeSearchIndexToDisk(S::id(), S::user('token'));

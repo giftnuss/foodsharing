@@ -7,7 +7,6 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-
 class LoginForm extends AbstractType
 {
 	public function buildForm(FormBuilderInterface $builder, array $options)
@@ -17,4 +16,3 @@ class LoginForm extends AbstractType
 			->add('password', PasswordType::class, ['label' => 'login.password']);
 	}
 }
-
