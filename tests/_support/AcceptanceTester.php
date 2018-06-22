@@ -33,8 +33,8 @@ class AcceptanceTester extends \Codeception\Actor
 	{
 		$I = $this;
 		$I->amOnPage('/');
-		$I->fillField('email_adress', $email);
-		$I->fillField('password', $password);
+		$I->fillField('login_form[email_address]', $email);
+		$I->fillField('login_form[password]', $password);
 		$I->click('#loginbar input[type=submit]');
 		$I->waitForPageBody();
 		$I->seeMatches('/Willkommen|Hallo/'); // depends on user type
