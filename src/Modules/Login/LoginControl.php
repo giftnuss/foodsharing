@@ -50,11 +50,13 @@ class LoginControl extends Control
 	{
 		if (!S::may()) {
 			$has_subpage = $request->query->has('sub');
-			$has_email_address = $request->request->has('login_form');
+
+			$form = $this->formFactory->getFormFactory()->create(LoginForm::class);
+			$form->handleRequest($request);
 
 			if (!$has_subpage) {
-				if ($has_email_address) {
-					$this->handleLogin($request);
+				if ($form->isSubmitted() && $form->isValid()) {
+					$this->handleLogin($request, $form);
 				}
 
 				$ref = false;
@@ -69,7 +71,6 @@ class LoginControl extends Control
 					$action = '/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']);
 				}
 
-				$form = $this->formFactory->getFormFactory()->create(LoginForm::class);
 
 				$params = array(
 					'action' => $action,
