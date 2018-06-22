@@ -15,6 +15,7 @@ $g_lang['legal_stuff'] = 'Rechtliches';
 $g_lang['select_picture'] = 'Foto ausw&auml;hlen';
 $g_lang['peer'] = 'Foodsharer';
 $g_lang['geb_datum'] = 'Geburtsdatum';
+$g_lang['date_placeholder_format'] = 'JJJJ-MM-TT';
 $g_lang['organisation'] = 'Organisation';
 $g_lang['login_phone'] = 'Telefonnummer';
 $g_lang['login_location'] = 'Deine Adresse';

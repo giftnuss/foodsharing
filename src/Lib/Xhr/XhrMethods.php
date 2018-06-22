@@ -9,7 +9,6 @@ use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Bell\BellGateway;
-use Foodsharing\Modules\Bell\BellModel;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 use Foodsharing\Modules\Message\MessageModel;
@@ -29,7 +28,6 @@ class XhrMethods
 	private $storeModel;
 	private $mailboxModel;
 	private $messageModel;
-	private $bellModel;
 	private $regionGateway;
 	private $forumGateway;
 	private $bellGateway;
@@ -48,7 +46,6 @@ class XhrMethods
 		StoreModel $storeModel,
 		MailboxModel $mailboxModel,
 		MessageModel $messageModel,
-		BellModel $bellModel,
 		RegionGateway $regionGateway,
 		ForumGateway $forumGateway,
 		BellGateway $bellGateway,
@@ -61,7 +58,6 @@ class XhrMethods
 		$this->storeModel = $storeModel;
 		$this->mailboxModel = $mailboxModel;
 		$this->messageModel = $messageModel;
-		$this->bellModel = $bellModel;
 		$this->regionGateway = $regionGateway;
 		$this->forumGateway = $forumGateway;
 		$this->bellGateway = $bellGateway;
@@ -112,7 +108,7 @@ class XhrMethods
 				' . (int)$data['v'] . '
 			)
 		');
-				$this->bellModel->delBells('new-fs-' . (int)$data['fid']);
+				$this->model->delBells('new-fs-' . (int)$data['fid']);
 
 				return json_encode(array(
 					'status' => 1
@@ -769,11 +765,10 @@ class XhrMethods
 		return '<html><head></head><body onload="parent.pictureReady(\'' . $id . '\',\'' . $img . '\');"></body></html>';
 	}
 
-	public function xhr_out($html = '', $js = '')
+	public function xhr_out($js = '')
 	{
 		return json_encode(array(
 			'status' => 1,
-			'html' => $html,
 			'script' => $js
 		));
 	}
@@ -1369,7 +1364,7 @@ class XhrMethods
 
 		$this->model->update_bezirkNew($data['bezirk_id'], $g_data);
 
-		return $this->xhr_out('', 'pulseInfo("' . $this->func->s('edit_success') . '");');
+		return $this->xhr_out('pulseInfo("' . $this->func->s('edit_success') . '");');
 	}
 
 	public function xhr_addFetcher($data)

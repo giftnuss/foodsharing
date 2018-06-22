@@ -6,7 +6,7 @@ use Foodsharing\Modules\Core\BaseGateway;
 
 class ActivityGateway extends BaseGateway
 {
-	private $items_per_page = 10;
+	private const ITEMS_PER_PAGE = 10;
 
 	public function fetchAllBasketWallUpdates($fsId, $page): array
 	{
@@ -32,20 +32,28 @@ class ActivityGateway extends BaseGateway
 			AND
 				hw.basket_id = b.id				
 			AND
-				b.foodsaver_id = ' . (int)$fsId . '
+				b.foodsaver_id = :foodsaver_id
 					
 			AND 
-				w.foodsaver_id != ' . (int)$fsId . '
+				w.foodsaver_id != :foodsaver_id_dup
 
 			AND
 				b.status = 1
 			
 			ORDER BY w.id DESC
 		
-			LIMIT ' . ((int)$page * $this->items_per_page) . ', ' . $this->items_per_page . '			
+			LIMIT :lower_limit, :upper_limit			
 		';
 
-		return $this->db->fetchAll($stm);
+		return $this->db->fetchAll(
+			$stm,
+			[
+				':foodsaver_id' => (int)$fsId,
+				':foodsaver_id_dup' => (int)$fsId,
+				':lower_limit' => (int)$page * self::ITEMS_PER_PAGE,
+				':upper_limit' => self::ITEMS_PER_PAGE,
+			]
+		);
 	}
 
 	public function fetchAllWallpostsFromFoodBasekts($fsId, $page): array
@@ -79,15 +87,23 @@ class ActivityGateway extends BaseGateway
 			AND
 				ba.status < 10				
 			AND 	
-				w.foodsaver_id != ' . (int)$fsId . '				
+				w.foodsaver_id != :foodsaver_id				
 			AND 
-				ba.foodsaver_id = ' . (int)$fsId . '			
+				ba.foodsaver_id = :foodsaver_id_dup			
 						
 			ORDER BY w.id DESC		
-			LIMIT ' . ((int)$page * $this->items_per_page) . ', ' . $this->items_per_page . '			
+			LIMIT :lower_limit, :upper_limit			
 		';
 
-		return $this->db->fetchAll($stm);
+		return $this->db->fetchAll(
+			$stm,
+			[
+				':foodsaver_id' => (int)$fsId,
+				':foodsaver_id_dup' => (int)$fsId,
+				':lower_limit' => (int)$page * self::ITEMS_PER_PAGE,
+				':upper_limit' => self::ITEMS_PER_PAGE,
+			]
+		);
 	}
 
 	public function fetchAllFriendWallUpdates($bids, $page): array
@@ -119,10 +135,13 @@ class ActivityGateway extends BaseGateway
 				hw.foodsaver_id IN(' . implode(',', $bids) . ')			
 				
 			ORDER BY w.id DESC		
-			LIMIT ' . ((int)$page * $this->items_per_page) . ', ' . $this->items_per_page . '			
+			LIMIT :lower_limit, :upper_limit			
 		';
 
-		return $this->db->fetchAll($stm);
+		return $this->db->fetchAll(
+			$stm,
+			[':lower_limit' => (int)$page * self::ITEMS_PER_PAGE, ':upper_limit' => self::ITEMS_PER_PAGE]
+		);
 	}
 
 	public function fetchAllMailboxUpdates($mb_ids, $page): array
@@ -146,12 +165,14 @@ class ActivityGateway extends BaseGateway
 				WHERE
 					m.mailbox_id IN(' . implode(',', $mb_ids) . ')
 					
-				ORDER BY m.id DESC
-		
-				LIMIT ' . ((int)$page * $this->items_per_page) . ', ' . $this->items_per_page . '			
+				ORDER BY m.id DESC		
+			LIMIT :lower_limit, :upper_limit			
 		';
 
-		return $this->db->fetchAll($stm);
+		return $this->db->fetchAll(
+			$stm,
+			[':lower_limit' => (int)$page * self::ITEMS_PER_PAGE, ':upper_limit' => self::ITEMS_PER_PAGE]
+		);
 	}
 
 	public function fetchAllForumUpdates($bids, $page): array
@@ -187,12 +208,14 @@ class ActivityGateway extends BaseGateway
 			AND 		bt.bezirk_id = b.id
 			AND 		t.active = 1
 		
-			ORDER BY t.last_post_id DESC
-		
-			LIMIT ' . ((int)$page * $this->items_per_page) . ', ' . $this->items_per_page . '			
+			ORDER BY t.last_post_id DESC		
+			LIMIT :lower_limit, :upper_limit			
 		';
 
-		return $this->db->fetchAll($stm);
+		return $this->db->fetchAll(
+			$stm,
+			[':lower_limit' => (int)$page * self::ITEMS_PER_PAGE, ':upper_limit' => self::ITEMS_PER_PAGE]
+		);
 	}
 
 	public function fetchAllStoreUpdates($fsId, $page): array
@@ -204,15 +227,22 @@ class ActivityGateway extends BaseGateway
 			WHERE 	n.foodsaver_id = fs.id
 			AND 	n.betrieb_id = b.id
 			AND 	bt.betrieb_id = n.betrieb_id
-			AND 	bt.foodsaver_id = ' . (int)$fsId . '
+			AND 	bt.foodsaver_id = :foodsaver_id
 			AND 	n.milestone = 0
 			AND 	n.last = 1
 			
 			ORDER BY n.id DESC
-			LIMIT ' . ((int)$page * $this->items_per_page) . ', ' . $this->items_per_page . '			
+			LIMIT :lower_limit, :upper_limit			
 		';
 
-		return $this->db->fetchAll($stm);
+		return $this->db->fetchAll(
+			$stm,
+			[
+				':foodsaver_id' => (int)$fsId,
+				':lower_limit' => (int)$page * self::ITEMS_PER_PAGE,
+				':upper_limit' => self::ITEMS_PER_PAGE,
+			]
+		);
 	}
 
 	public function fetchAllBuddies($bids): array

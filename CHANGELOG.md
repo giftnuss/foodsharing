@@ -1,10 +1,21 @@
 # Unreleased
 
+## Bugfixes
+- removed XSS-possibility in xhr_out method. !370 @theolampert
 ## Features
 - updated fpdi plugin to v2.0.2 !351 #168 by @peter.toennies
 - update symfony to 4.1.0 as well as other dependencies !351 @NerdyProjects
 
 ## Bugfixes
+- Fix pickup slots !390 #215 @nicksellen
+- fixed wrong gendering of AMBs in region view and profile view. !386 #214 @peter.toennies
+- Added a format placeholder to date input #217 @theolampert
+## Bugfixes
+- reduced the height of store info popups by removing the warning frame. !388 #216 @peter.toennies
+- The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
+- fixed wrong usage of gateway in API. !400 @peter.toennies
+- fixed missalignment in future-pickups list. !389 # 136 @EmiliaPaz
+- Regaining support for mobile Safari 10 !396 #221 @michi-zuri
 - Fix pickup slots !390 #215 @nicksellen
 - fixed wrong gendering of AMBs in region view and profile view. !386 #214 @peter.toennies
 ## Bugfixes
@@ -15,6 +26,10 @@
 - Extract StoreUser module javascript !358 @nicksellen
 - refactored and cleaned the whole activity module. !352 by @peter.toennies
 - refactored and cleaned the whole API module. !368 #9 by @peter.toennies
+- refactored Bell to use gateway. !402 by @peter.toennies
+- refactored BusinessCard to use gateway. !406 @peter.toennies
+- refactored Buddy to use gateway. !405 @peter.toennies
+- removed SQL injection possibilities from all exsisting gateways !398 @peter.toennies
 
 # 2018-05-24
 

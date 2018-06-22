@@ -2,13 +2,18 @@
 
 namespace Foodsharing\Modules\BusinessCard;
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\Model;
 use setasign\Fpdi;
 
 class BusinessCardXhr extends Control
 {
-	public function __construct(BusinessCardModel $model)
+	private $gateway;
+
+	public function __construct(BusinessCardGateway $gateway, Model $model)
 	{
+		$this->gateway = $gateway;
 		$this->model = $model;
 
 		parent::__construct();
@@ -16,7 +21,7 @@ class BusinessCardXhr extends Control
 
 	public function makeCard()
 	{
-		if (($data = $this->model->getMyData()) && ($opt = $this->getRequest('opt'))) {
+		if (($data = $this->gateway->getMyData(S::id())) && ($opt = $this->getRequest('opt'))) {
 			$opt = explode(':', $opt);
 			if (count($opt) == 2 && (int)$opt[1] > 0) {
 				$id = (int)$opt[1];

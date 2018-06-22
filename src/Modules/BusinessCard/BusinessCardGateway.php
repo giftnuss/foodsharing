@@ -3,13 +3,13 @@
 namespace Foodsharing\Modules\BusinessCard;
 
 use Foodsharing\Lib\Session\S;
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Core\BaseGateway;
 
-class BusinessCardModel extends Model
+class BusinessCardGateway extends BaseGateway
 {
-	public function getMyData()
+	public function getMyData($fsId)
 	{
-		$fs = $this->qRow('
+		$stm = '
 			SELECT 	fs.id,
 					fs.`name`,
 					fs.`geschlecht`,
@@ -24,16 +24,16 @@ class BusinessCardModel extends Model
 
 			FROM 	fs_foodsaver fs
 
-			WHERE 	fs.id = ' . (int)$this->func->fsId() . '
-		');
+			WHERE 	fs.id = :foodsaver_id
+		';
+		$fs = $this->db->fetch($stm, [':foodsaver_id' => $fsId]);
 
-		if (S::may('bieb')) {
-			if ($mailbox = $this->qOne('SELECT mb.name FROM fs_mailbox mb, fs_foodsaver fs WHERE fs.mailbox_id = mb.id AND fs.id = ' . (int)$this->func->fsId())) {
-				$fs['email'] = $mailbox . '@' . DEFAULT_EMAIL_HOST;
-			}
+		$stm = 'SELECT mb.name FROM fs_mailbox mb, fs_foodsaver fs WHERE fs.mailbox_id = mb.id AND fs.id = :foodsaver_id';
+		if (S::may('bieb') && $mailbox = $this->db->fetchValue($stm, [':foodsaver_id' => $fsId])) {
+			$fs['email'] = $mailbox . '@' . DEFAULT_EMAIL_HOST;
 		}
 
-		$fs['bot'] = $this->q('
+		$stm = '
 			SELECT 	b.name,
 					b.id,
 					CONCAT(mb.`name`,"@","' . DEFAULT_EMAIL_HOST . '") AS email,
@@ -45,11 +45,12 @@ class BusinessCardModel extends Model
 
 			WHERE 	b.mailbox_id = mb.id
 			AND 	bot.bezirk_id = b.id
-			AND 	bot.foodsaver_id = ' . (int)$this->func->fsId() . '
+			AND 	bot.foodsaver_id = :foodsaver_id
 			AND 	b.type != 7
-		');
+		';
+		$fs['bot'] = $this->db->fetchAll($stm, [':foodsaver_id' => $fsId]);
 
-		$fs['fs'] = $this->q('
+		$stm = '
 			SELECT 	b.name,
 					b.id
 
@@ -57,11 +58,12 @@ class BusinessCardModel extends Model
 					fs_foodsaver_has_bezirk fhb
 
 			WHERE 	fhb.bezirk_id = b.id
-			AND 	fhb.foodsaver_id = ' . (int)$this->func->fsId() . '
+			AND 	fhb.foodsaver_id = :foodsaver_id
 			AND 	b.type != 7
 			AND  b.type != 6
 			AND  b.type != 5
-		');
+		';
+		$fs['fs'] = $this->db->fetchAll($stm, [':foodsaver_id' => $fsId]);
 
 		if (S::may('bieb')) {
 			$fs['sm'] = $fs['fs'];
