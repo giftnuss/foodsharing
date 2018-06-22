@@ -2,19 +2,19 @@
 {% block main %}
 <div id="g_login">
 	<div class="field">
-		<div class="head ui-widget-header ui-corner-top">{{ title }}</div>
+		<div class="head ui-widget-header ui-corner-top">{{ 'login.form_title'|trans }}</div>
 		<div class="ui-widget ui-widget-content corner-bottom margin-bottom ui-padding">
 		<div id="login">
 		{{ form_start(form, {'action': action, 'method': 'POST'}) }}
-			{{ form_row(form.email_adress) }}
+			{{ form_row(form.email_address) }}
 			{{ form_row(form.password) }}
 			<p>
-				<a href="/?page=login&sub=passwordReset">{{ forgotten_password_label }}</a>
+				<a href="/?page=login&sub=passwordReset">{{ 'login.forgotten_password_label'|trans }}</a>
 			</p>
 			<p class="buttons">
-				<input class="button" type="submit" value="{{ login_button_label }}" name="login">
+				<input class="button" type="submit" value="{{ 'login.login_button_label'|trans }}" name="login">
 				<a href="#" onclick="ajreq('join',{ app:'login' });return false;" class="button">
-					{{ register_button_label }}
+					{{ 'register.register_button_label'|trans }}
 				</a>
 			</p>
 			<input type="hidden" id="ismob" name="ismob" value="1">

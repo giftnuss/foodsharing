@@ -8,8 +8,6 @@ use Foodsharing\Services\SearchService;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Mobile_Detect;
 
 class LoginControl extends Control
@@ -51,11 +49,15 @@ class LoginControl extends Control
 	public function index(Request $request, Response $response)
 	{
 		if (!S::may()) {
-			if (!isset($_GET['sub'])) {
-				if (isset($_POST['form']['email_adress'])) {
-					$this->handleLogin();
+      bool $has_subpage = $request->query->has('sub');
+      bool $has_email_address = $request->request->has('form');
+
+      if (!$has_subpage) {
+				if ($has_email_address) {
+					$this->handleLogin($request);
 				}
-				$ref = false;
+
+        $ref = false;
 				if (isset($_GET['ref'])) {
 					$ref = urldecode($_GET['ref']);
 				}
@@ -67,18 +69,11 @@ class LoginControl extends Control
 					$action = '/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']);
 				}
 
-				$form = $this->formFactory->getFormFactory()
-					->create()
-					->add('email_adress', TextType::class, ['label' => 'login.email_address'])
-					->add('password', PasswordType::class, ['label' => 'login.password']);
+				$form = $this->formFactory->getFormFactory()->create(LoginForm::class);
 
 				$params = array(
 					'action' => $action,
-					'title' => 'Login',
-					'forgotten_password_label' => $this->func->s('forgotten_password'),
-					'login_button_label' => $this->func->s('login'),
-					'register_button_label' => $this->func->s('register'),
-					'form' => $form->createView()
+					'form' => $form->createView(),
 				);
 
 				$response->setContent($this->render('pages/Login/page.twig', $params));
@@ -101,10 +96,12 @@ class LoginControl extends Control
 		}
 	}
 
-	private function handleLogin()
+	private function handleLogin(Request $request)
 	{
-		print_r($_POST);
-		if ($this->model->login($_POST['form']['email_adress'], $_POST['form']['password'])) {
+		string $email_address = $request->request->get('form')['email_address'];
+		string $password = $request->request->get('form')['password'];
+
+		if ($this->model->login($email_address, $password)) {
 			$token = $this->searchService->writeSearchIndexToDisk(S::id(), S::user('token'));
 
 			if (isset($_POST['ismob'])) {
@@ -125,7 +122,7 @@ class LoginControl extends Control
 				$this->func->go('/?page=dashboard');
 			}
 		} else {
-			$this->func->error('Falsche Zugangsdaten');
+			$this->func->error('Falsche Zugangsdaten'); //TODO: translation file 'Wrong access data'
 		}
 	}
 

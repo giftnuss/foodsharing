@@ -32,40 +32,6 @@ class View
 		$this->sub = $sub;
 	}
 
-	public function login($ref = false)
-	{
-		$action = '/?page=login';
-		if ($ref != false) {
-			$action = '/?page=login&ref=' . urlencode($ref);
-		} elseif (!isset($_GET['ref'])) {
-			$action = '/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']);
-		}
-
-		$params = array(
-			'action' => $action,
-			'forgotten_password_label' => $this->func->s('forgotten_password'),
-			'login_button_label' => $this->func->s('login'),
-			'register_button_label' => $this->func->s('register')
-		);
-
-		$this->func->addJs('
-			storage.reset();
-			if(isMob()) {
-				$("#ismob").val("1");
-			}
-			$(window).resize(function(){
-				if(isMob()) {
-					$("#ismob").val("1");
-				}
-				else {
-					$("#ismob").val("0");
-				}
-			});
-		');
-
-		return $this->twig->render('pages/Login/page.twig', $params);
-	}
-
 	public function topbar($title, $subtitle = '', $icon = '')
 	{
 		if ($icon != '') {
