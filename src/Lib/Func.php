@@ -1141,7 +1141,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'webpack' => $usesWebpack,
 			'user' => $userData,
 			'page' => $this->getPage(),
-			'subpage' => $this->getSubPage(),
+			'subPage' => $this->getSubPage(),
 			'location' => $location,
 			'ravenConfig' => $ravenConfig,
 			'translations' => $this->getTranslations()
