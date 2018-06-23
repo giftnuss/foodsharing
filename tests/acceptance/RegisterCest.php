@@ -106,7 +106,7 @@ class RegisterCest
 			'email' => $this->stripped_email,
 			'name' => $this->first_name,
 			'nachname' => $this->last_name,
-			'handy' => $mobile_number,
+			'handy' => $this->mobile_number,
 			'geb_datum' => $this->birthdate,
 			'newsletter' => 0
 		]);
