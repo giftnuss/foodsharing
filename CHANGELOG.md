@@ -5,6 +5,7 @@
 ## Features
 - updated fpdi plugin to v2.0.2 !351 #168 by @peter.toennies
 - update symfony to 4.1.0 as well as other dependencies !351 @NerdyProjects
+- Only accepted store members see updates on dashboard
 
 ## Bugfixes
 - Fix pickup slots !390 #215 @nicksellen
