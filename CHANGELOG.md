@@ -31,6 +31,9 @@
 - refactored Buddy to use gateway. !405 @peter.toennies
 - removed SQL injection possibilities from all exsisting gateways !398 @peter.toennies
 
+## Dev/Test/CI stuff
+- Fix cache clearing during test/deploy !414 @nicksellen
+
 # 2018-05-24
 
 ## Hotfixes
