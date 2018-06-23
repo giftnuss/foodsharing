@@ -154,7 +154,7 @@ class RegionXhr extends Control
 	public function signout()
 	{
 		$data = $_GET;
-		if ($this->model->mayBezirk($data['bid'])) {
+		if ($this->func->mayBezirk($data['bid'])) {
 			$this->model->del('DELETE FROM `fs_foodsaver_has_bezirk` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->func->fsId() . ' ');
 			$this->model->del('DELETE FROM `fs_botschafter` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->func->fsId() . ' ');
 

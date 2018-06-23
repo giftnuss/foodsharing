@@ -337,4 +337,13 @@ class ProfileModel extends Model
 				
 		');
 	}
+
+	public function buddyStatus($fsid)
+	{
+		if (($status = $this->qOne('SELECT `confirmed` FROM fs_buddy WHERE `foodsaver_id` = ' . (int)$this->func->fsId() . ' AND `buddy_id` = ' . (int)$fsid)) !== false) {
+			return $status;
+		}
+
+		return -1;
+	}
 }

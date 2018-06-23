@@ -58,7 +58,7 @@ class FairTeilerControl extends Control
 
 		$this->fairteiler = false;
 		$this->follower = false;
-		$this->bezirke = $this->model->getRealBezirke();
+		$this->bezirke = $this->getRealBezirke();
 		if ($ftid = $request->query->get('id')) {
 			$this->fairteiler = $this->gateway->getFairteiler($ftid);
 
@@ -118,6 +118,22 @@ class FairTeilerControl extends Control
 		}
 		$this->view->setBezirke($this->bezirke);
 		$this->view->setBezirk($this->bezirk);
+	}
+
+	public function getRealBezirke()
+	{
+		if ($bezirks = $this->model->getBezirke()) {
+			$out = array();
+			foreach ($bezirks as $b) {
+				if (in_array($b['type'], array(1, 2, 3, 9))) {
+					$out[] = $b;
+				}
+			}
+
+			return $out;
+		}
+
+		return false;
 	}
 
 	public function index(Request $request)
