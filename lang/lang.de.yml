@@ -69,3 +69,46 @@ login:
 
 register:
   register_button_label: Registrieren
+  login_success: Prima! Jetzt bist Du eingeloggt
+  login_failed: Diese Zugangdsdaten stimmen leider so nicht.
+  upload_no_image: Die hochgeladene Datei ist kein Foto. Bitte wähle eine andere Datei!
+  login_name: Dein Name
+  login_email: Deine E-Mail-Adresse
+  login_passwd1: Passwort
+  login_passwd2: Passwortwiederholung
+  i_am_a: Ich bin...
+  login_info: Login-Informationen
+  contact_info: Kontaktinformationen
+  legal_stuff: Rechtliches
+  select_picture: Foto ausw&aumlhlen
+  peer: Foodsharer
+  geb_datum: Geburtsdatum
+  date_placeholder_format: JJJJ-MM-TT
+  organisation: Organisation
+  login_phone: Telefonnummer
+  login_location: Deine Adresse
+  login_surname: Nachname
+  login_phone_info: Es kann hilfreich sein, Deine Telefonnummer mit anderen Foodsharern zu teilen
+  forgotten_password: Passwort vergessen?
+  have_read_the_legal_stuff1: Ich habe die Datenschutzerklärung zur Kenntnis genommen
+  have_read_the_legal_stuff2: Ich habe die <a href="http://wiki.lebensmittelretten.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> zur Kenntnis genommen
+  prev: zur&uumlck
+  next: weiter
+  finish: Anmeldung absenden
+  join_success: Deine Anmeldung war erfolgreich.
+  check_mail: Schau jetzt in Dein E-Mail-Postfach, um die Anmeldung abzuschließen!
+  select_your_gender: Für die Anrede...
+  woman: weiblich
+  man: männlich
+  other: sonstiges/anders
+  error: Es ist ein Fehler aufgetreten
+  error_name: Bitte gib einen Namen ein
+  error_email: Mit Deiner E-Mail-Adresse stimmt etwas nicht
+  error_passwd: Dein Passwort muss mindestens 5 und darf maximal 30 Zeichen haben
+  error_image: Dein Foto konnte nicht hochgeladen werden
+  error_birthdate: Aus datenschutz- und haftungsrechtlichen Gründen musst du mindestens 18 Jahre alt sein, um bei foodsharing.de mitzumachen.
+  activation_success: '<strong>Aktivierung erfolgreich.</strong> Logge Dich jetzt Mit Deiner E-Mail-Adresse und Deinem gewählten Passwort ein.'
+  activation_failed: '<strong>Aktivierung fehlgeschlagen!</strong> Ist der eingegebene Link auch korrekt?'
+  pass1: Dein neues gewünschtes Passwort
+  pass2: Passwortwiederholung
+

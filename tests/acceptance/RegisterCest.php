@@ -81,8 +81,8 @@ class RegisterCest
 
 		$I->amOnPage('/');
 
-		$I->fillField('email_adress', $this->email);
-		$I->fillField('password', $this->password);
+		$I->fillField('login_form[email_address]', $this->email);
+		$I->fillField('login_form[password]', $this->password);
 		$I->click('#loginbar input[type=submit]');
 
 		$I->seeInDatabase('fs_foodsaver', [

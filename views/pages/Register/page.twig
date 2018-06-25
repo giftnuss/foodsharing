@@ -1,10 +1,11 @@
 <div id="joinform">
 	<div class="left corner-all">
 		<ul class="linklist join">
-			<li class="step0 active"><a class="corner-all" href="#" onclick="if(!$(this).parent().hasClass('hidden')){join.step(0);}return false;">{{ i_am_a }}<i class="fa fa-hand-o-right"></i></a></li>
-			<li class="step1 hidden"><a class="corner-all" href="#" onclick="if(!$(this).parent().hasClass('hidden')){join.step(1);}return false;">{{ login_info }}</a></li>
-			<li class="step2 hidden"><a class="corner-all" href="#" onclick="if(!$(this).parent().hasClass('hidden')){join.step(2);}return false;">{{ contact_info }}</a></li>
-			<li class="step3 hidden"><a class="corner-all" href="#" onclick="if(!$(this).parent().hasClass('hidden')){join.step(3);}return false;">{{ legal_stuff }}</a></li>
+			<li class="step0 active">
+        <a class="corner-all" href="#" onclick="if(!$(this).parent().hasClass('hidden')){join.step(0);}return false;">{{ 'register.i_am_a'|trans }}<i class="fa fa-hand-o-right"></i></a></li>
+			<li class="step1 hidden"><a class="corner-all" href="#" onclick="if(!$(this).parent().hasClass('hidden')){join.step(1);}return false;">{{ 'register.login_info'|trans }}</a></li>
+			<li class="step2 hidden"><a class="corner-all" href="#" onclick="if(!$(this).parent().hasClass('hidden')){join.step(2);}return false;">{{ 'register.contact_info'|trans }}</a></li>
+			<li class="step3 hidden"><a class="corner-all" href="#" onclick="if(!$(this).parent().hasClass('hidden')){join.step(3);}return false;">{{ 'register.legal_stuff'|trans }}</a></li>
 		</ul>
 		<div class="bottom">
 		</div>
@@ -12,11 +13,11 @@
 	<div class="right">
 		<div class="step step0">
 			<div class="content">
-				<h3>{{ i_am_a }}</h3>
+				<h3>{{ 'register.i_am_a'|trans }}</h3>
 				<div class="iamchooser">
 					<a onmouseover="$('.humanshow').show();" onmouseout="$('.humanshow').hide();" class="active" href="#human" onclick="$(this).addClass('active').next().removeClass('active');$('#join_iam').val('human');">
 							<i class="mega-octicon octicon-person"></i>
-							<span>{{ peer }}</span>
+							<span>{{ 'register.peer'|trans }}</span>
 						</a>
 					<br />
 					<span class="peer"></span>
@@ -27,36 +28,36 @@
 				</div>
 			</div>
 			<div class="bottom">
-				<a class="button" href="" onclick="join.step(1);return false;">{{ next }}</a>
+				<a class="button" href="" onclick="join.step(1);return false;">{{ 'register.next'|trans }}</a>
 			</div>
 		</div>
 		<div style="display:none;" class="step step1">
 			<div class="content">
-				<h3>{{ login_info }}</h3>
+				<h3>{{ 'register.login_info'|trans }}</h3>
 				<div class="form">
 					<div class="element-wrapper">
-						<input placeholder="{{ login_name }}" type="text" value="" id="login_name" name="login_name" class="input text value" /><input placeholder="{{ login_surname }}" type="text" value="" id="login_surname" name="login_surname" class="input text value" required />
+						<input placeholder="{{ 'register.login_name'|trans }}" type="text" value="" id="login_name" name="login_name" class="input text value" /><input placeholder="{{ 'register.login_surname'|trans }}" type="text" value="" id="login_surname" name="login_surname" class="input text value" required />
 					</div>
 					<div class="element-wrapper">
-						<input placeholder="{{ login_email }}" type="text" value="{{ email }}" id="login_email" name="login_email" class="input text value" />
+						<input placeholder="{{ 'register.login_email'|trans }}" type="text" value="{{ email }}" id="login_email" name="login_email" class="input text value" />
 					</div>
 					<div class="element-wrapper">
 						<select id="login_gender" name="c[]" class="input select value">
-							<option selected="selected" value="0">{{ select_your_gender }}</option>
-							<option value="2">{{ woman }}</option>
-							<option value="1">{{ man }}</option>
-							<option value="0">{{ other }}</option>
+							<option selected="selected" value="0">{{ 'register.select_your_gender'|trans }}</option>
+							<option value="2">{{ 'register.woman'|trans }}</option>
+							<option value="1">{{ 'register.man'|trans }}</option>
+							<option value="0">{{ 'register.other'|trans }}</option>
 						</select>
 					</div>
 					<div class="element-wrapper">
-						<input placeholder="{{ login_passwd1 }}" type="password" value="{{ pass }}" id="login_passwd1" name="login_passwd1" class="input text value" />
+						<input placeholder="{{ 'register.login_passwd1'|trans }}" type="password" value="{{ pass }}" id="login_passwd1" name="login_passwd1" class="input text value" />
 					</div>
 					<div class="element-wrapper">
-						<input placeholder="{{ login_passwd2 }}" type="password" value="" id="login_passwd2" name="login_passwd1" class="input text value" />
+						<input placeholder="{{ 'register.login_passwd2'|trans }}" type="password" value="" id="login_passwd2" name="login_passwd1" class="input text value" />
 					</div>
 					<div class="element-wrapper">
 						<input class="input text value" type="date" id="birthdate" min="{{ date_min }}" max="{{ date_max }}" required />
-						<label for="birthdate">{{ geb_datum }}</label>
+						<label for="birthdate">{{ 'register.geb_datum'|trans }}</label>
 					</div>
 				</div>
 				<div class="avatar">
@@ -67,7 +68,7 @@
 							<span class="fa fa-circle-o-notch fa-spin"></span>
 						</a>
 						<br />
-						<a onclick="$('#join_photo').trigger('click');return false;" href="#" class="button">{{ select_picture|raw }}</a><span class="filewrapper"><input onchange="join.startUpload();" type="file" name="photo" id="join_photo" /></span>
+						<a onclick="$('#join_photo').trigger('click');return false;" href="#" class="button">{{ 'register.select_picture'|trans|raw }}</a><span class="filewrapper"><input onchange="join.startUpload();" type="file" name="photo" id="join_photo" /></span>
 					</form>
 					<iframe frameborder="0" style="width:10px;height:10px;" name="join_upload_frame" src="/empty.html"></iframe>
 					<input type="hidden" name="c[]" value="" id="join_avatar" />
@@ -76,19 +77,19 @@
 				<div style="clear:both;"></div>
 			</div>
 			<div class="bottom">
-				<a class="button" href="" onclick="join.step(0);return false;">{{ prev|raw }}</a>
-				<a class="button" href="" onclick="join.step(2);return false;">{{ next }}</a>
+				<a class="button" href="" onclick="join.step(0);return false;">{{ 'register.prev'|trans|raw }}</a>
+				<a class="button" href="" onclick="join.step(2);return false;">{{ 'register.next'|trans }}</a>
 			</div>
 		</div>
 		<div style="display:none;" class="step step2">
 			<div class="content">
-				<h3>{{ contact_info }}</h3>
+				<h3>{{ 'register.contact_info'|trans }}</h3>
 				<div class="element-wrapper">
-					<input placeholder="{{ login_phone }}" type="text" value="" id="login_phone" name="login_phone" class="input text value" />
-					{{ login_phone_info }}
+					<input placeholder="{{ 'register.login_phone'|trans }}" type="text" value="" id="login_phone" name="login_phone" class="input text value" />
+					{{ 'register.login_phone_info'|trans }}
 				</div>
 				<div class="element-wrapper">
-					<input placeholder="{{ login_location }}" type="text" value="" id="login_location" name="login_location" class="input text value" />
+					<input placeholder="{{ 'register.login_location'|trans }}" type="text" value="" id="login_location" name="login_location" class="input text value" />
 					<div class="corner-all" id="join_mapview"></div>
 					<form class="join_geo_data" style="display:none;">
 						<input type="hidden" name="lat" id="join_lat" value="" />
@@ -102,13 +103,13 @@
 				</div>
 			</div>
 			<div class="bottom">
-				<a class="button" href="" onclick="join.step(1);return false;">{{ prev|raw }}</a>
-				<a class="button" href="" onclick="join.step(3);return false;">{{ next }}</a>
+				<a class="button" href="" onclick="join.step(1);return false;">{{ 'register.prev'|trans|raw }}</a>
+				<a class="button" href="" onclick="join.step(3);return false;">{{ 'register.next'|trans }}</a>
 			</div>
 		</div>
 		<div style="display:none;" class="step step3">
 			<div class="content">
-				<h3>{{ legal_stuff }}</h3>
+				<h3>{{ 'register.legal_stuff'|trans }}</h3>
 				<div class="element-wrapper">
 					<h4>{{ datenschutz.title }}</h4>
 					<textarea readonly="readonly">{{ datenschutz.body|raw }}</textarea>
@@ -118,21 +119,21 @@
 					<a href="https://wiki.foodsharing.de/Rechtsvereinbarung" target="_blank">Hier klicken</a> um unsere <a href="https://wiki.foodsharing.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> in einem neuen Fenster zu &ouml;ffen
 				</div>
 				<label>
-					<input id="join_legal1" type="checkbox" name="join_legal1" value="1" /> {{ have_read_the_legal_stuff1|raw }}</label>
+					<input id="join_legal1" type="checkbox" name="join_legal1" value="1" /> {{ 'register.have_read_the_legal_stuff1'|trans|raw }}</label>
 				<br />
 				<label>
-					<input id="join_legal2" type="checkbox" name="join_legal2" value="1" /> {{ have_read_the_legal_stuff2|raw }}</label>
+					<input id="join_legal2" type="checkbox" name="join_legal2" value="1" /> {{ 'register.have_read_the_legal_stuff2'|trans|raw }}</label>
 				<br />
 				<label>
 					<input id="newsletter" type="checkbox" name="newsletter" value="1" /> Ich möchte ca. 1x im Monat den foodsharing Newsletter erhalten</label>
 			</div>
 			<div class="bottom">
-				<a class="button" href="" onclick="join.step(2);return false;">{{ prev|raw }}</a>
-				<a class="button" href="" onclick="join.finish();return false;">{{ finish }}</a>
+				<a class="button" href="" onclick="join.step(2);return false;">{{ 'register.prev'|trans|raw }}</a>
+				<a class="button" href="" onclick="join.finish();return false;">{{ 'register.finish'|trans }}</a>
 			</div>
 		</div>
 	</div>
 	<div style="clear:both;"></div>
 </div>
 <div id="joinloader" style="display:none;"><span class="fa fa-circle-o-notch fa-spin"></span></div>
-<div id="joinready" style="display:none">{{ check_mail }}, {{ join_success }}</div>
+<div id="joinready" style="display:none">{{ 'register.check_mail'|trans }}, {{ 'register.join_success'|trans }}</div>
