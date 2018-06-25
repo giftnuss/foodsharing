@@ -152,6 +152,7 @@ as well as modern coding techniques.
 - consistent use of jumper list (Springerliste) all over the page. !293 by @peter.toennies
 - fixed new fairteiler can not get a region set !294 @NerdyProjects
 - fixed ambassador of other region could edit fairteiler !294 @NerdyProjects
+- phone number validatino removed from login. Mobile Phone instead of landline phone asked. !361 by @k.miklobusec
 
 ## Refactoring
 - Consolidate remaining functions and modules !269 @NerdyProjects

@@ -8,6 +8,7 @@ class RegisterCest
 	private $last_name;
 	private $password;
 	private $birthdate;
+	private $mobile_number;
 
 	public function _before()
 	{
@@ -17,6 +18,7 @@ class RegisterCest
 		$this->last_name = sq('last_name');
 		$this->password = sq('password');
 		$this->birthdate = '1991-04-27';
+		$this->mobile_number = '+491773231323';
 	}
 
 	public function _after()
@@ -61,6 +63,7 @@ class RegisterCest
 		// skip the step with the address map, it is optional
 
 		$I->waitForElementVisible('#joinform .step.step2', 4);
+		$I->fillField('login_mobile_phone', $this->mobile_number);
 		$I->click('weiter', '.step.step2');
 
 		// tick all the check boxes
@@ -90,7 +93,8 @@ class RegisterCest
 			'name' => $this->first_name,
 			'nachname' => $this->last_name,
 			'geb_datum' => $this->birthdate,
-			'newsletter' => 0
+			'newsletter' => 0,
+			'handy' => $this->mobile_number
 		]);
 
 		$I->waitForText('Um die foodsharing-Plattform benutzen zu können, musst Du die beschriebenenen Datenschutzerklärung zur Kenntnis nehmen. Es steht Dir frei, Deinen Account zu löschen.');
@@ -102,6 +106,7 @@ class RegisterCest
 			'email' => $this->stripped_email,
 			'name' => $this->first_name,
 			'nachname' => $this->last_name,
+			'handy' => $this->mobile_number,
 			'geb_datum' => $this->birthdate,
 			'newsletter' => 0
 		]);

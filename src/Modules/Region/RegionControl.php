@@ -78,7 +78,7 @@ class RegionControl extends Control
 
 	public function index()
 	{
-		if ($this->model->mayBezirk($this->bezirk_id) && $this->bezirk !== false) {
+		if ($this->bezirk !== false && $this->func->mayBezirk($this->bezirk_id)) {
 			if ($this->mode == 'orgateam') {
 				return $this->orgateam();
 			} else {

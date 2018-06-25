@@ -1459,13 +1459,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return false;
 	}
 
-	public function mayBezirk($bid)
+	public function mayBezirk($bid): bool
 	{
-		if (isset($_SESSION['client']['bezirke'][$bid]) || $this->isBotFor($bid) || $this->isOrgaTeam()) {
-			return true;
-		}
-
-		return false;
+		return isset($_SESSION['client']['bezirke'][$bid]) || $this->isBotFor($bid) || $this->isOrgaTeam();
 	}
 
 	public function mayGroup($group)
