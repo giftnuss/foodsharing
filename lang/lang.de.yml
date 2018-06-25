@@ -85,7 +85,7 @@ register:
   geb_datum: Geburtsdatum
   date_placeholder_format: JJJJ-MM-TT
   organisation: Organisation
-  login_phone: Telefonnummer
+  login_mobile_phone: Mobilfunknummer
   login_location: Deine Adresse
   login_surname: Nachname
   login_phone_info: Es kann hilfreich sein, Deine Telefonnummer mit anderen Foodsharern zu teilen
