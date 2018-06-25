@@ -19,30 +19,30 @@ class ActivityGateway extends BaseGateway
 				fs.id AS fs_id,
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,
-				b.id AS basket_id	
+				b.id AS basket_id
 			FROM
 				fs_basket_has_wallpost hw,
 				fs_foodsaver fs,
 				fs_wallpost w,
-				fs_basket b		
+				fs_basket b
 			WHERE
-				w.id = hw.wallpost_id		
+				w.id = hw.wallpost_id
 			AND
-				w.foodsaver_id = fs.id		
+				w.foodsaver_id = fs.id
 			AND
-				hw.basket_id = b.id				
+				hw.basket_id = b.id
 			AND
 				b.foodsaver_id = :foodsaver_id
-					
-			AND 
+
+			AND
 				w.foodsaver_id != :foodsaver_id_dup
 
 			AND
 				b.status = 1
-			
+
 			ORDER BY w.id DESC
-		
-			LIMIT :lower_limit, :upper_limit			
+
+			LIMIT :lower_limit, :upper_limit
 		';
 
 		return $this->db->fetchAll(
@@ -67,32 +67,32 @@ class ActivityGateway extends BaseGateway
 				fs.id AS fs_id,
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,
-				b.id AS basket_id		
+				b.id AS basket_id
 			FROM
 				fs_basket_has_wallpost hw,
 				fs_foodsaver fs,
 				fs_wallpost w,
 				fs_basket b,
-				fs_basket_anfrage ba			
+				fs_basket_anfrage ba
 			WHERE
-				w.id = hw.wallpost_id		
+				w.id = hw.wallpost_id
 			AND
-				w.foodsaver_id = fs.id		
+				w.foodsaver_id = fs.id
 			AND
 				hw.basket_id = b.id
 			AND
-				b.status = 1			
+				b.status = 1
 			AND
-				ba.basket_id = b.id	
+				ba.basket_id = b.id
 			AND
-				ba.status < 10				
-			AND 	
-				w.foodsaver_id != :foodsaver_id				
-			AND 
-				ba.foodsaver_id = :foodsaver_id_dup			
-						
-			ORDER BY w.id DESC		
-			LIMIT :lower_limit, :upper_limit			
+				ba.status < 10
+			AND
+				w.foodsaver_id != :foodsaver_id
+			AND
+				ba.foodsaver_id = :foodsaver_id_dup
+
+			ORDER BY w.id DESC
+			LIMIT :lower_limit, :upper_limit
 		';
 
 		return $this->db->fetchAll(
@@ -109,7 +109,7 @@ class ActivityGateway extends BaseGateway
 	public function fetchAllFriendWallUpdates($bids, $page): array
 	{
 		$stm = '
-			SELECT 
+			SELECT
 				w.id,
 				w.body,
 				w.time,
@@ -117,25 +117,25 @@ class ActivityGateway extends BaseGateway
 				fs.id AS fs_id,
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,
-				
+
 				poster.id AS poster_id,
 				poster.name AS poster_name
-			FROM 
+			FROM
 				fs_foodsaver_has_wallpost hw,
 				fs_foodsaver fs,
-				fs_wallpost w				
+				fs_wallpost w
 			LEFT JOIN
-				fs_foodsaver poster				
-			ON w.foodsaver_id = poster.id				
-			WHERE 
+				fs_foodsaver poster
+			ON w.foodsaver_id = poster.id
+			WHERE
 				w.id = hw.wallpost_id
-			AND 
+			AND
 				hw.foodsaver_id = fs.id
-			AND 
-				hw.foodsaver_id IN(' . implode(',', $bids) . ')			
-				
-			ORDER BY w.id DESC		
-			LIMIT :lower_limit, :upper_limit			
+			AND
+				hw.foodsaver_id IN(' . implode(',', $bids) . ')
+
+			ORDER BY w.id DESC
+			LIMIT :lower_limit, :upper_limit
 		';
 
 		return $this->db->fetchAll(
@@ -155,18 +155,18 @@ class ActivityGateway extends BaseGateway
 					m.time,
 					UNIX_TIMESTAMP(m.time) AS time_ts,
 					b.name AS mb_name
-			
+
 				FROM
 					fs_mailbox_message m
 				LEFT JOIN
 					fs_mailbox b
 				ON b.id = m.mailbox_id
-			
+
 				WHERE
 					m.mailbox_id IN(' . implode(',', $mb_ids) . ')
-					
-				ORDER BY m.id DESC		
-			LIMIT :lower_limit, :upper_limit			
+
+				ORDER BY m.id DESC
+			LIMIT :lower_limit, :upper_limit
 		';
 
 		return $this->db->fetchAll(
@@ -177,7 +177,7 @@ class ActivityGateway extends BaseGateway
 
 	public function fetchAllForumUpdates($bids, $page): array
 	{
-		$stm = '		
+		$stm = '
 			SELECT 		t.id,
 						t.name,
 						t.`time`,
@@ -193,23 +193,23 @@ class ActivityGateway extends BaseGateway
 						bt.bezirk_id,
 						b.name AS bezirk_name,
 						bt.bot_theme
-		
+
 			FROM 		fs_theme t,
 						fs_theme_post p,
 						fs_bezirk_has_theme bt,
 						fs_foodsaver fs,
 						fs_bezirk b
-		
-			WHERE 		t.last_post_id = p.id 		
+
+			WHERE 		t.last_post_id = p.id
 			AND 		p.foodsaver_id = fs.id
 			AND 		bt.theme_id = t.id
 			AND 		bt.bezirk_id IN(' . implode(',', $bids) . ')
 			AND 		bt.bot_theme = 0
 			AND 		bt.bezirk_id = b.id
 			AND 		t.active = 1
-		
-			ORDER BY t.last_post_id DESC		
-			LIMIT :lower_limit, :upper_limit			
+
+			ORDER BY t.last_post_id DESC
+			LIMIT :lower_limit, :upper_limit
 		';
 
 		return $this->db->fetchAll(
@@ -220,19 +220,19 @@ class ActivityGateway extends BaseGateway
 
 	public function fetchAllStoreUpdates($fsId, $page): array
 	{
-		$stm = '			
+		$stm = '
 			SELECT 	n.id, n.milestone, n.`text` , n.`zeit` AS update_time, UNIX_TIMESTAMP( n.`zeit` ) AS update_time_ts, fs.name AS foodsaver_name, fs.sleep_status, fs.id AS foodsaver_id, fs.photo AS foodsaver_photo, b.id AS betrieb_id, b.name AS betrieb_name
 			FROM 	fs_betrieb_notiz n, fs_foodsaver fs, fs_betrieb b, fs_betrieb_team bt
-			
+
 			WHERE 	n.foodsaver_id = fs.id
 			AND 	n.betrieb_id = b.id
 			AND 	bt.betrieb_id = n.betrieb_id
 			AND 	bt.foodsaver_id = :foodsaver_id
 			AND 	n.milestone = 0
 			AND 	n.last = 1
-			
+
 			ORDER BY n.id DESC
-			LIMIT :lower_limit, :upper_limit			
+			LIMIT :lower_limit, :upper_limit
 		';
 
 		return $this->db->fetchAll(
@@ -250,5 +250,44 @@ class ActivityGateway extends BaseGateway
 		$stm = 'SELECT photo,name,id FROM fs_foodsaver WHERE id IN(' . implode(',', $bids) . ')';
 
 		return $this->db->fetchAll($stm);
+ }
+
+	public function fetchAllEventUpdates($fsId, $page): array
+	{
+		$stm = '
+			SELECT
+				w.id,
+				e.name,
+				w.body,
+				w.time,
+				UNIX_TIMESTAMP(w.time) AS time_ts,
+				fs.id AS fs_id,
+				fs.name AS fs_name,
+				fs.photo AS fs_photo,
+				e.id AS event_id
+			FROM
+				fs_foodsaver_has_event fhe
+				left outer join fs_event e on fhe.event_id = e.id
+				left outer join fs_event_has_wallpost hw on hw.event_id= e.id
+				left outer join fs_wallpost w on hw.wallpost_id=w.id
+				left outer join fs_foodsaver fs on w.foodsaver_id=fs.id
+			WHERE
+				fhe.foodsaver_id = :foodsaver_id
+			AND
+				e.end > now()
+			AND
+				fhe.status <> 3
+			ORDER BY w.id DESC
+			LIMIT :lower_limit, :upper_limit
+		';
+
+		return $this->db->fetchAll(
+			$stm,
+			[
+				':foodsaver_id' => (int)$fsId,
+				':lower_limit' => (int)$page * self::ITEMS_PER_PAGE,
+				':upper_limit' => self::ITEMS_PER_PAGE,
+			]
+		);
 	}
 }

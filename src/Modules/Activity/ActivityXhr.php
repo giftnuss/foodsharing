@@ -120,6 +120,9 @@ class ActivityXhr extends Control
 		if ($up = $this->model->loadBasketWallUpdates($page)) {
 			$updates = array_merge($updates, $up);
 		}
+		if ($up = $this->model->loadEventWallUpdates($page)) {
+			$updates = array_merge($updates, $up);
+		}
 
 		$xhr->addData('updates', $updates);
 
