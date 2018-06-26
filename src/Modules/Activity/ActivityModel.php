@@ -17,6 +17,7 @@ class ActivityModel extends Model
 		$this->mailboxModel = $mailboxModel;
 		$this->activityGateway = $activityGateway;
 	}
+
 	public function loadEventWallUpdates($page = 0)
 	{
 		$updates = array();
