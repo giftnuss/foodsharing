@@ -1,5 +1,8 @@
 # Unreleased
 
+## Features
+- For not declined Events the last wall posts are shown on dashboard update section.
+
 ## Bugfixes
 - removed XSS-possibility in xhr_out method. !370 @theolampert
 ## Features
