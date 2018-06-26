@@ -19,6 +19,7 @@ class ActivityModel extends Model
 		$this->activityGateway = $activityGateway;
 		$this->outputSanitizerService = $outputSanitzierService;
 	}
+
 	public function loadEventWallUpdates($page = 0)
 	{
 		$updates = array();
