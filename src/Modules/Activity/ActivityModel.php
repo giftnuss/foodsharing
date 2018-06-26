@@ -24,34 +24,31 @@ class ActivityModel extends Model
 			$updates = $up;
 		}
 
-		if (!empty($updates))
+		if (!empty($updates)) {
 			$out = array();
-
-			foreach ($updates as $u) {
-				/*
-				 * quick fix later list all comments in a package
-				*/
-				if (isset($hb[$u['event_id']])) {
-					continue;
-				}
-				$hb[$u['event_id']] = true;
-
-				$smTitle = '';
-				$title = 'Veranstaltung : ' . $u['name'];
-
-				$out[] = [
-					'attr' => [
-						'href' => '/profile/' . $u['fs_id']
-					],
-					'title' => '<a href="/profile/' . $u['fs_id'] . '">' . $u['fs_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="?page=event&id=' . $u['event_id'] . '">' . $title . '</a><small>' . $smTitle . '</small>',
-					'desc' => $this->textPrepare(nl2br($u['body'])),
-					'time' => $u['time'],
-					'icon' => $this->func->img($u['fs_photo'], 50),
-					'time_ts' => $u['time_ts'],
-				];
+		}
+		foreach ($updates as $u) {
+			if (isset($hb[$u['event_id']])) {
+				continue;
 			}
+			$hb[$u['event_id']] = true;
 
-			return $out;
+			$smTitle = '';
+			$title = 'Veranstaltung : ' . $u['name'];
+
+			$out[] = [
+				'attr' => [
+				'href' => '/profile/' . $u['fs_id']
+				],
+				'title' => '<a href="/profile/' . $u['fs_id'] . '">' . $u['fs_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="?page=event&id=' . $u['event_id'] . '">' . $title . '</a><small>' . $smTitle . '</small>',
+				'desc' => $this->textPrepare(nl2br($u['body'])),
+				'time' => $u['time'],
+				'icon' => $this->func->img($u['fs_photo'], 50),
+				'time_ts' => $u['time_ts'],
+			];
+		}
+
+		return $out;
 	}
 
 	public function loadBasketWallUpdates($page = 0)

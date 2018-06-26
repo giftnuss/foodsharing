@@ -250,7 +250,7 @@ class ActivityGateway extends BaseGateway
 		$stm = 'SELECT photo,name,id FROM fs_foodsaver WHERE id IN(' . implode(',', $bids) . ')';
 
 		return $this->db->fetchAll($stm);
- }
+	}
 
 	public function fetchAllEventUpdates($fsId, $page): array
 	{
