@@ -158,8 +158,7 @@ var join = {
 					return false;
 					check = false;
 				}
-
-				if(!checkEmail($('#login_email').val()))
+				if(!$('#login_email')['0'].validity.valid)
 				{
 					pulseError('Mit Deiner E-Mail-Adresse stimmt etwas nicht');
 					$('#login_email').select();

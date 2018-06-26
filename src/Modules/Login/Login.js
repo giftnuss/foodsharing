@@ -1,7 +1,6 @@
 import '@/core'
 import '@/globals'
 import { subPage } from '@/server-data'
-import $ from 'jquery'
 
 if (subPage === 'index') {
   const isMobileInput = document.querySelector('#ismob');
