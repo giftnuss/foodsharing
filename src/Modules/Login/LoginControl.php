@@ -30,8 +30,9 @@ class LoginControl extends Control
 
 	/**
 	 * @required
+	 * @param FormFactoryBuilder $formFactory
 	 */
-	public function setFormFactory(FormFactoryBuilder $formFactory)
+	public function setFormFactory(FormFactoryBuilder $formFactory) :void
 	{
 		$this->formFactory = $formFactory;
 	}
@@ -56,7 +57,7 @@ class LoginControl extends Control
 
 			if (!$has_subpage) {
 				if ($form->isSubmitted() && $form->isValid()) {
-					$this->handleLogin($request, $form);
+					$this->handleLogin($request);
 				}
 
 				$ref = false;
@@ -65,7 +66,7 @@ class LoginControl extends Control
 				}
 
 				$action = '/?page=login';
-				if ($ref != false) {
+				if ($ref) {
 					$action = '/?page=login&ref=' . urlencode($ref);
 				} elseif (!isset($_GET['ref'])) {
 					$action = '/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']);
