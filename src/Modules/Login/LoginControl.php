@@ -30,9 +30,10 @@ class LoginControl extends Control
 
 	/**
 	 * @required
+	 *
 	 * @param FormFactoryBuilder $formFactory
 	 */
-	public function setFormFactory(FormFactoryBuilder $formFactory) :void
+	public function setFormFactory(FormFactoryBuilder $formFactory): void
 	{
 		$this->formFactory = $formFactory;
 	}
