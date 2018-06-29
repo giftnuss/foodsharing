@@ -53,8 +53,9 @@ class ActivityXhr extends Control
 		if ($up = $this->model->loadMailboxUpdates($_GET['page'], $hidden_ids['mailbox'])) {
 			$updates = array_merge($updates, $up);
 		}
-
-		$updates = array_merge($updates, $this->model->loadFriendWallUpdates($hidden_ids['buddywall'], $_GET['page']));
+		if ($up = $this->model->loadFriendWallUpdates($hidden_ids['buddywall'], $_GET['page'])) {
+			$updates = array_merge($updates, $up);
+		}
 
 		$updates = array_merge($updates, $this->model->loadBasketWallUpdates($_GET['page']));
 
@@ -114,8 +115,9 @@ class ActivityXhr extends Control
 		if ($up = $this->model->loadMailboxUpdates($page, $hidden_ids['mailbox'])) {
 			$updates = array_merge($updates, $up);
 		}
-
-		$updates = array_merge($updates, $this->model->loadFriendWallUpdates($hidden_ids['buddywall'], $page));
+		if ($up = $this->model->loadFriendWallUpdates($hidden_ids['buddywall'], $page)) {
+			$updates = array_merge($updates, $up);
+		}
 
 		$updates = array_merge($updates, $this->model->loadBasketWallUpdates($page));
 
