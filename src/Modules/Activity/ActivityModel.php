@@ -129,9 +129,8 @@ class ActivityModel extends Model
 				$bids[] = $id;
 			}
 		}
-$out = array();
-		if ($updates = $this->activityGateway->fetchAllFriendWallUpdates($bids, $page)) {
 
+		if ($updates = $this->activityGateway->fetchAllFriendWallUpdates($bids, $page)) {
 			$hb = array();
 			foreach ($updates as $u) {
 				/*
