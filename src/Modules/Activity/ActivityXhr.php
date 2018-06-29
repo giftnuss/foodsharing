@@ -45,7 +45,7 @@ class ActivityXhr extends Control
 
 		$updates = array();
 
-		if ($up = $this->model->loadForumUpdates($_GET['page'], $hidden_ids['bezirk'])){
+		if ($up = $this->model->loadForumUpdates($_GET['page'], $hidden_ids['bezirk'])) {
 			$updates = $up;
 		}
 		if ($up = $this->model->loadStoreUpdates($_GET['page'])) {
