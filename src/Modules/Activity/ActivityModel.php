@@ -24,10 +24,11 @@ class ActivityModel extends Model
 		if ($up = $this->activityGateway->fetchAllEventUpdates(S::id(), $page)) {
 			$updates = $up;
 		}
-
+		$out = array();
 		if (!empty($updates)) {
 			$out = array();
 		}
+
 		foreach ($updates as $u) {
 			if (isset($hb[$u['event_id']])) {
 				continue;
@@ -46,6 +47,7 @@ class ActivityModel extends Model
 				'time' => $u['time'],
 				'icon' => $this->func->img($u['fs_photo'], 50),
 				'time_ts' => $u['time_ts'],
+				'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=event&id=' . (int)$u['event_id']
 			];
 		}
 
@@ -124,9 +126,9 @@ class ActivityModel extends Model
 				$bids[] = $id;
 			}
 		}
-
+$out = array();
 		if ($updates = $this->activityGateway->fetchAllFriendWallUpdates($bids, $page)) {
-			$out = array();
+
 			$hb = array();
 			foreach ($updates as $u) {
 				/*
