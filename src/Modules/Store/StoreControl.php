@@ -119,7 +119,7 @@ class StoreControl extends Control
 						['cnt' => ($b['added'])],
 						['cnt' => $b['bezirk_name']],
 						['cnt' => $status],
-						['cnt' => $this->v_utils->v_toolbar(['id' => $b['id'], 'types' => ['comment', 'edit', 'delete'], 'confirmMsg' => 'Soll ' . $b['name'] . ' wirklich unwiderruflich gel&ouml;scht werden?'])
+						['cnt' => $this->v_utils->v_toolbar(['id' => $b['id'], 'types' => ['edit', 'delete'], 'confirmMsg' => 'Soll ' . $b['name'] . ' wirklich unwiderruflich gel&ouml;scht werden?'])
 						]];
 				}
 
@@ -131,8 +131,6 @@ class StoreControl extends Control
 					['name' => 'Status', 'width' => 50],
 					['name' => 'Aktionen', 'sort' => false, 'width' => 75]
 				], $storesRows, ['pager' => true]);
-
-				$this->func->addJs('$("#comment").dialog({title:"Kommentar zum Betrieb"});');
 
 				$this->func->addContent($this->v_utils->v_field($table, 'Alle Betriebe aus dem Bezirk ' . $bezirk['name']));
 			} else {

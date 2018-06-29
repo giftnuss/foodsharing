@@ -125,7 +125,7 @@ class BlogModel extends Model
 	{
 		return $this->del('
 			DELETE FROM 	`fs_blog_entry`
-			WHERE 			`id` = ' . $this->intval($id) . '
+			WHERE 			`id` = ' . (int)$id . '
 		');
 	}
 
@@ -146,7 +146,7 @@ class BlogModel extends Model
 			
 			FROM 		`fs_blog_entry`
 			
-			WHERE 		`id` = ' . $this->intval($id));
+			WHERE 		`id` = ' . (int)$id);
 
 		return $out;
 	}
@@ -174,8 +174,8 @@ class BlogModel extends Model
 			)
 			VALUES
 			(
-			' . $this->intval($data['bezirk_id']) . ',
-			' . $this->intval($data['foodsaver_id']) . ',
+			' . (int)$data['bezirk_id'] . ',
+			' . (int)$data['foodsaver_id'] . ',
 			' . $this->strval($data['name']) . ',
 			' . $this->strval($data['teaser']) . ',
 			' . $this->strval($data['body'], true) . ',

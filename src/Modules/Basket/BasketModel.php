@@ -49,9 +49,9 @@ class BasketModel extends Model
 				' . $this->strval($tel['handy']) . ',
 				' . $this->strval($contact_type) . ',
 				' . (int)$location_type . ',
-				' . $this->floatval($weight) . ',
-				' . $this->floatval($lat) . ',
-				' . $this->floatval($lon) . ',
+				' . (float)$weight . ',
+				' . (float)$lat . ',
+				' . (float)$lon . ',
 				' . (int)$bezirk_id . ',
 				' . (int)$appost . ',
 				"' . date('Y-m-d', (time() + 1209600)) . '"

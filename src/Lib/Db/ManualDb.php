@@ -28,7 +28,7 @@ class ManualDb extends Db
 
 			FROM 		`fs_content`
 
-			WHERE 		`id` = ' . $this->intval($id));
+			WHERE 		`id` = ' . (int)$id);
 
 		return $out;
 	}
@@ -104,7 +104,7 @@ class ManualDb extends Db
 				b.description,
 				b.lat,
 				b.lon,
-				(6371 * acos( cos( radians( ' . $this->floatval($loc['lat']) . ' ) ) * cos( radians( b.lat ) ) * cos( radians( b.lon ) - radians( ' . $this->floatval($loc['lon']) . ' ) ) + sin( radians( ' . $this->floatval($loc['lat']) . ' ) ) * sin( radians( b.lat ) ) ))
+				(6371 * acos( cos( radians( ' . (float)$loc['lat'] . ' ) ) * cos( radians( b.lat ) ) * cos( radians( b.lon ) - radians( ' . (float)$loc['lon'] . ' ) ) + sin( radians( ' . (float)$loc['lat'] . ' ) ) * sin( radians( b.lat ) ) ))
 				AS distance
 			FROM
 				fs_basket b
@@ -269,7 +269,7 @@ class ManualDb extends Db
 			)
 			VALUES
 			(
-			' . $this->intval($data['language_id']) . ',
+			' . (int)$data['language_id'] . ',
 			' . $this->strval($data['name']) . ',
 			' . $this->strval($data['subject']) . ',
 			' . $this->strval($data['body'], true) . '
@@ -307,7 +307,7 @@ class ManualDb extends Db
 	{
 		$bezirk_id = (int)$bezirk_id;
 		if ($bezirk_id > 0) {
-			return $this->q('SELECT `id`,`lat`,`lon`,CONCAT(`name`," ",`nachname`) AS `name`,`plz`,`stadt`,`anschrift`,`photo` FROM `fs_foodsaver` WHERE `active` = 1 AND `bezirk_id` = ' . $this->intval($bezirk_id) . ' AND `lat` != "" ');
+			return $this->q('SELECT `id`,`lat`,`lon`,CONCAT(`name`," ",`nachname`) AS `name`,`plz`,`stadt`,`anschrift`,`photo` FROM `fs_foodsaver` WHERE `active` = 1 AND `bezirk_id` = ' . (int)$bezirk_id . ' AND `lat` != "" ');
 		}
 	}
 
@@ -404,12 +404,12 @@ class ManualDb extends Db
 
 	public function passGen($fsid)
 	{
-		return $this->sql('INSERT INTO `fs_pass_gen`(`foodsaver_id`,`date`,`bot_id`)VALUES(' . $this->intval($fsid) . ',NOW(),' . $this->func->fsId() . ')');
+		return $this->sql('INSERT INTO `fs_pass_gen`(`foodsaver_id`,`date`,`bot_id`)VALUES(' . (int)$fsid . ',NOW(),' . $this->func->fsId() . ')');
 	}
 
 	public function getFsAutocomplete($bezirk_id)
 	{
-		$and = 'AND 		fb.`bezirk_id` = ' . $this->intval($bezirk_id) . '';
+		$and = 'AND 		fb.`bezirk_id` = ' . (int)$bezirk_id . '';
 		if (is_array($bezirk_id)) {
 			if (is_array(end($bezirk_id))) {
 				$tmp = $bezirk_id;
@@ -437,7 +437,7 @@ class ManualDb extends Db
 
 	public function getFoodsaver($bezirk_id)
 	{
-		$and = 'AND 		fb.`bezirk_id` = ' . $this->intval($bezirk_id) . '';
+		$and = 'AND 		fb.`bezirk_id` = ' . (int)$bezirk_id . '';
 		if (is_array($bezirk_id)) {
 			if (is_array(end($bezirk_id))) {
 				$tmp = $bezirk_id;
@@ -479,7 +479,7 @@ class ManualDb extends Db
 
 			WHERE 	bt.verantwortlich = 1 AND
 			active = 1 AND
-			bt.betrieb_id = ' . $this->intval($bid) . '
+			bt.betrieb_id = ' . (int)$bid . '
 		');
 	}
 
@@ -501,7 +501,7 @@ class ManualDb extends Db
 
 			FROM 		`fs_bezirk`
 
-			WHERE 		`parent_id` = ' . $this->intval($parent_id) . '
+			WHERE 		`parent_id` = ' . (int)$parent_id . '
 			AND id != 0
 			' . $sql . '
 
@@ -583,7 +583,7 @@ class ManualDb extends Db
 				`body` =  ' . $this->strval($data['body'], true) . ',
 				`last_mod` =  ' . $this->dateval($data['last_mod']) . '
 
-		WHERE 	`id` = ' . $this->intval($id));
+		WHERE 	`id` = ' . (int)$id);
 	}
 
 	public function xhrGetTagFs($bezirk_id)
@@ -612,7 +612,7 @@ class ManualDb extends Db
 
 	public function isInTeam($bid)
 	{
-		if ($this->q('SELECT `foodsaver_id` FROM `fs_betrieb_team` WHERE foodsaver_id = ' . $this->intval($this->func->fsId()) . ' AND betrieb_id = ' . (int)$bid . ' AND active IN(1,2)')) {
+		if ($this->q('SELECT `foodsaver_id` FROM `fs_betrieb_team` WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND betrieb_id = ' . (int)$bid . ' AND active IN(1,2)')) {
 			return true;
 		}
 
@@ -630,7 +630,7 @@ class ManualDb extends Db
 			if (is_array($data['bid'])) {
 				$bezirk = 'AND bezirk_id IN(' . implode(',', $data['bid']) . ')';
 			} else {
-				$bezirk = 'AND bezirk_id = ' . $this->intval($data['bid']);
+				$bezirk = 'AND bezirk_id = ' . (int)$data['bid'];
 			}
 		}
 
@@ -670,7 +670,7 @@ class ManualDb extends Db
 
 				FROM 	`fs_foodsaver` fs
 
-				WHERE 	fs.`id` = ' . $this->intval($id) . ';
+				WHERE 	fs.`id` = ' . (int)$id . ';
 		');
 	}
 
@@ -696,10 +696,10 @@ class ManualDb extends Db
 
 	private function updateHasChildren($bezirk_id)
 	{
-		$count = $this->qOne('SELECT COUNT(`id`) FROM fs_bezirk WHERE `parent_id` = ' . $this->intval($bezirk_id) . ' ');
+		$count = $this->qOne('SELECT COUNT(`id`) FROM fs_bezirk WHERE `parent_id` = ' . (int)$bezirk_id . ' ');
 
 		if ($count == 0) {
-			$this->update('UPDATE fs_bezirk SET `has_children` = 0 WHERE `id` = ' . $this->intval($bezirk_id) . ' ');
+			$this->update('UPDATE fs_bezirk SET `has_children` = 0 WHERE `id` = ' . (int)$bezirk_id . ' ');
 		}
 	}
 
@@ -725,12 +725,12 @@ class ManualDb extends Db
 		$this->update('
 
 		UPDATE `fs_foodsaver`
-		SET 	`photo` = ' . $this->strval($file) . ' WHERE `id` = ' . $this->intval($fs_id));
+		SET 	`photo` = ' . $this->strval($file) . ' WHERE `id` = ' . (int)$fs_id);
 	}
 
 	public function getPhoto($fs_id)
 	{
-		$photo = $this->qOne('SELECT `photo` FROM `fs_foodsaver` WHERE `id` = ' . $this->intval($fs_id));
+		$photo = $this->qOne('SELECT `photo` FROM `fs_foodsaver` WHERE `id` = ' . (int)$fs_id);
 		if (!empty($photo)) {
 			return $photo;
 		}
@@ -772,9 +772,9 @@ class ManualDb extends Db
 
 			FROM 		`fs_foodsaver`
 
-			WHERE 		`id` = ' . $this->intval($id));
+			WHERE 		`id` = ' . (int)$id);
 
-		if ($bot = $this->q('SELECT `fs_bezirk`.`name`,`fs_bezirk`.`id` FROM `fs_bezirk`,fs_botschafter WHERE `fs_botschafter`.`bezirk_id` = `fs_bezirk`.`id` AND `fs_botschafter`.foodsaver_id = ' . $this->intval($id))) {
+		if ($bot = $this->q('SELECT `fs_bezirk`.`name`,`fs_bezirk`.`id` FROM `fs_bezirk`,fs_botschafter WHERE `fs_botschafter`.`bezirk_id` = `fs_bezirk`.`id` AND `fs_botschafter`.foodsaver_id = ' . (int)$id)) {
 			$out['botschafter'] = $bot;
 		}
 
@@ -805,7 +805,7 @@ class ManualDb extends Db
 
 			FROM 		`fs_betrieb_notiz`
 
-			WHERE `betrieb_id` = ' . $this->intval($id));
+			WHERE `betrieb_id` = ' . (int)$id);
 
 		return $out;
 	}
@@ -873,7 +873,7 @@ class ManualDb extends Db
 
 				WHERE 	fs_betrieb.id = fs_betrieb_team.betrieb_id
 
-				AND 	fs_betrieb_team.foodsaver_id = ' . $this->intval($this->func->fsId()) . '
+				AND 	fs_betrieb_team.foodsaver_id = ' . (int)$this->func->fsId() . '
 
 				ORDER BY fs_betrieb_team.verantwortlich DESC, fs_betrieb.name ASC
 		');
@@ -962,8 +962,8 @@ class ManualDb extends Db
 
 				FROM 	fs_betrieb_team
 
-				WHERE 	betrieb_id = ' . $this->intval($betrieb_id) . '
-				AND 	foodsaver_id = ' . $this->intval($this->func->fsId()) . '
+				WHERE 	betrieb_id = ' . (int)$betrieb_id . '
+				AND 	foodsaver_id = ' . (int)$this->func->fsId() . '
 				AND 	verantwortlich = 1
 				AND 	active = 1
 		');
@@ -977,8 +977,8 @@ class ManualDb extends Db
 
 				FROM 	fs_betrieb_team
 
-				WHERE 	betrieb_id = ' . $this->intval($betrieb_id) . '
-				AND 	foodsaver_id = ' . $this->intval($this->func->fsId()) . '
+				WHERE 	betrieb_id = ' . (int)$betrieb_id . '
+				AND 	foodsaver_id = ' . (int)$this->func->fsId() . '
 				AND 	verantwortlich = 0
 				AND 	active = 0
 		');
@@ -989,7 +989,7 @@ class ManualDb extends Db
 		if (is_array($bid)) {
 			$where = 'WHERE bezirk_id IN (' . implode(',', array_map('intval', $bid)) . ')';
 		} else {
-			$where = 'WHERE bezirk_id = ' . intval($bid);
+			$where = 'WHERE bezirk_id = ' . (int)$bid;
 		}
 
 		return $this->qCol('SELECT DISTINCT ancestor_id FROM `fs_bezirk_closure` ' . $where);
@@ -1042,7 +1042,7 @@ class ManualDb extends Db
 
 		FROM 		`fs_betrieb`
 
-		WHERE 		`fs_betrieb`.`id` = ' . $this->intval($id) . '';
+		WHERE 		`fs_betrieb`.`id` = ' . (int)$id . '';
 
 		$out = false;
 		if ($out = $this->qRow($sql)) {
@@ -1061,6 +1061,15 @@ class ManualDb extends Db
 		$out['notizen'] = $this->getBetriebNotiz($id);
 
 		return $out;
+	}
+
+	private function getBezirkName($bezirk_id = false)
+	{
+		if ($bezirk_id === false) {
+			$bezirk_id = $this->getCurrentBezirkId();
+		}
+
+		return $this->qOne('SELECT `name` FROM `fs_bezirk` WHERE `id` = ' . (int)$bezirk_id);
 	}
 
 	public function getMapsBetriebe($bezirk_id = false)
@@ -1086,36 +1095,9 @@ class ManualDb extends Db
 
 				FROM 	fs_betrieb
 
-				WHERE 	fs_betrieb.bezirk_id = ' . $this->intval($bezirk_id) . '
+				WHERE 	fs_betrieb.bezirk_id = ' . (int)$bezirk_id . '
 
 				AND `lat` != ""
-
-
-				');
-	}
-
-	public function getBetriebe($bezirk_id = false)
-	{
-		if (!$bezirk_id) {
-			$bezirk_id = $this->getCurrentBezirkId();
-		}
-
-		return $this->q('
-				SELECT 	fs_betrieb.id,
-						`fs_betrieb`.betrieb_status_id,
-						fs_betrieb.plz,
-						`stadt`,
-						fs_betrieb.kette_id,
-						fs_betrieb.betrieb_kategorie_id,
-						fs_betrieb.name,
-						CONCAT(fs_betrieb.str," ",fs_betrieb.hsnr) AS anschrift,
-						fs_betrieb.str,
-						fs_betrieb.hsnr,
-						fs_betrieb.`betrieb_status_id`
-
-				FROM 	fs_betrieb
-
-				WHERE 	fs_betrieb.bezirk_id = ' . $this->intval($bezirk_id) . '
 
 
 				');
@@ -1146,7 +1128,7 @@ class ManualDb extends Db
 			)
 			VALUES
 			(
-			' . $this->intval($data['bezirk_id']) . ',
+			' . (int)$data['bezirk_id'] . ',
 			' . $this->strval($data['plz']) . ',
 			' . $this->strval($data['email']) . ',
 			' . $this->strval($data['name']) . ',
@@ -1154,7 +1136,7 @@ class ManualDb extends Db
 			' . $this->strval($data['anschrift']) . ',
 			' . $this->strval($data['telefon']) . ',
 			' . $this->strval($data['handy']) . ',
-			' . $this->intval($data['geschlecht']) . ',
+			' . (int)$data['geschlecht'] . ',
 			' . $this->dateval($data['geb_datum']) . ',
 			' . $this->dateval($data['anmeldedatum']) . '
 			)');
@@ -1325,7 +1307,7 @@ class ManualDb extends Db
 					`mailbox_id`
 
 			FROM 	`fs_bezirk`
-			WHERE 	`id` = ' . $this->intval($id));
+			WHERE 	`id` = ' . (int)$id);
 	}
 
 	public function getEmailsToSend()
@@ -1343,7 +1325,7 @@ class ManualDb extends Db
 
 				WHERE 	`fs_email_status`.`email_id` =  `fs_send_email`.`id`
 
-				AND 	`fs_send_email`.`foodsaver_id` = ' . $this->intval($this->func->fsId()) . '
+				AND 	`fs_send_email`.`foodsaver_id` = ' . (int)$this->func->fsId() . '
 
 				AND 	`fs_email_status`.`status` = 0
 
@@ -1362,25 +1344,25 @@ class ManualDb extends Db
 		if (is_array($foodsaver)) {
 			$query = array();
 			foreach ($foodsaver as $fs) {
-				$query[] = '`foodsaver_id` = ' . $this->intval($fs['id']);
+				$query[] = '`foodsaver_id` = ' . (int)$fs['id'];
 			}
 
 			$query = implode(' OR ', $query);
 		} else {
-			$query = '`foodsaver_id` = ' . $this->intval($foodsaver);
+			$query = '`foodsaver_id` = ' . (int)$foodsaver;
 		}
 
 		return $this->update('
 			UPDATE 	`fs_email_status`
-			SET 	`status` = ' . $this->intval($status) . '
-			WHERE 	`email_id` = ' . $this->intval($mail_id) . '
+			SET 	`status` = ' . (int)$status . '
+			WHERE 	`email_id` = ' . (int)$mail_id . '
 			AND 	(' . $query . ')
 		');
 	}
 
 	public function getMailsLeft($mail_id)
 	{
-		return $this->qOne('SELECT COUNT(`email_id`) FROM `fs_email_status` WHERE `email_id` = ' . $this->intval($mail_id) . ' AND `status` = 0');
+		return $this->qOne('SELECT COUNT(`email_id`) FROM `fs_email_status` WHERE `email_id` = ' . (int)$mail_id . ' AND `status` = 0');
 	}
 
 	public function getMailNext($mail_id)
@@ -1419,7 +1401,7 @@ class ManualDb extends Db
 
 		$query = array();
 		foreach ($list as $b) {
-			$query[] = $this->intval($b);
+			$query[] = (int)$b;
 		}
 
 		$foodsaver = $this->q('
@@ -1457,7 +1439,7 @@ class ManualDb extends Db
 
 		$query = array();
 		foreach ($list as $b) {
-			$query[] = $this->intval($b);
+			$query[] = (int)$b;
 		}
 
 		if ($verant = $this->q('
@@ -1496,7 +1478,7 @@ class ManualDb extends Db
 
 		$query = array();
 		foreach ($list as $b) {
-			$query[] = $this->intval($b);
+			$query[] = (int)$b;
 		}
 
 		$foodsaver = $this->q('
@@ -1549,7 +1531,7 @@ class ManualDb extends Db
 
 		$query = array();
 		foreach ($foodsaver as $fs) {
-			$query[] = '(' . $this->intval($email_id) . ',' . $this->intval($fs['id']) . ',0)';
+			$query[] = '(' . (int)$email_id . ',' . (int)$fs['id'] . ',0)';
 		}
 
 		if ($this->func->isAdmin()) {
@@ -1585,7 +1567,7 @@ class ManualDb extends Db
 
 			FROM 		`fs_send_email`
 
-			WHERE 		`id` = ' . $this->intval($id));
+			WHERE 		`id` = ' . (int)$id);
 
 		return $out;
 	}
@@ -1600,8 +1582,8 @@ class ManualDb extends Db
 				INSERT INTO 	fs_send_email (foodsaver_id, mailbox_id, name,`mode`, message, zeit, `attach`)
 
 				VALUES(
-					' . $this->intval($this->func->fsId()) . ',
-					' . $this->intval($data['mailbox_id']) . ',
+					' . (int)$this->func->fsId() . ',
+					' . (int)$data['mailbox_id'] . ',
 					' . $this->strval($data['subject']) . ',
 					' . (int)$data['mode'] . ',
 					' . $this->strval($data['message'], true) . ',
@@ -1640,7 +1622,7 @@ class ManualDb extends Db
 
 			FROM 		`fs_bezirk`
 
-			WHERE 		`id` = ' . $this->intval($id));
+			WHERE 		`id` = ' . (int)$id);
 	}
 
 	public function getMailboxname($mailbox_id)
@@ -1665,7 +1647,7 @@ class ManualDb extends Db
 
 			FROM 		`fs_bezirk`
 
-			WHERE 		`id` = ' . $this->intval($id));
+			WHERE 		`id` = ' . (int)$id);
 		$out['botschafter'] = $this->q('
 				SELECT 		`fs_foodsaver`.`id`,
 							CONCAT(`fs_foodsaver`.`name`," ",`fs_foodsaver`.`nachname`) AS name
@@ -1674,14 +1656,14 @@ class ManualDb extends Db
 							`fs_foodsaver`
 
 				WHERE 		`fs_foodsaver`.`id` = `fs_botschafter`.`foodsaver_id`
-				AND 		`fs_botschafter`.`bezirk_id` = ' . $this->intval($id) . '
+				AND 		`fs_botschafter`.`bezirk_id` = ' . (int)$id . '
 			');
 
 		$out['foodsaver'] = $this->qCol('
 				SELECT 		`foodsaver_id`
 
 				FROM 		`fs_botschafter`
-				WHERE 		`bezirk_id` = ' . $this->intval($id) . '
+				WHERE 		`bezirk_id` = ' . (int)$id . '
 			');
 
 		return $out;
@@ -1700,7 +1682,7 @@ class ManualDb extends Db
 
 			FROM 		`fs_foodsaver`
 
-			WHERE 		`bezirk_id` = ' . $this->intval($bezirk_id) . '
+			WHERE 		`bezirk_id` = ' . (int)$bezirk_id . '
 			AND			deleted_at IS NULL
 
 			ORDER BY `name`');
@@ -1708,11 +1690,11 @@ class ManualDb extends Db
 
 	public function update_bezirkNew($id, $data)
 	{
-		$bezirk_id = $this->intval($id);
+		$bezirk_id = (int)$id;
 		if (isset($data['botschafter']) && is_array($data['botschafter'])) {
 			$this->del('
 					DELETE FROM 	`fs_botschafter`
-					WHERE 			`bezirk_id` = ' . $this->intval($id) . '
+					WHERE 			`bezirk_id` = ' . (int)$id . '
 				');
 			$master = 0;
 			if (isset($data['master'])) {
@@ -1727,8 +1709,8 @@ class ManualDb extends Db
 						)
 						VALUES
 						(
-							' . $this->intval($id) . ',
-							' . $this->intval($foodsaver_id) . '
+							' . (int)$id . ',
+							' . (int)$foodsaver_id . '
 						)
 					');
 			}
@@ -1755,15 +1737,15 @@ class ManualDb extends Db
 
 		SET 	`name` =  ' . $this->strval($data['name']) . ',
 				`email_name` =  ' . $this->strval($data['email_name']) . ',
-				`parent_id` = ' . $this->intval($data['parent_id']) . ',
+				`parent_id` = ' . (int)$data['parent_id'] . ',
 				`type` = ' . (int)$data['type'] . ',
 				`master` = ' . (int)$master . ',
 				`has_children` = ' . (int)$has_children . '
 
-		WHERE 	`id` = ' . $this->intval($id));
+		WHERE 	`id` = ' . (int)$id);
 
 		$this->sql('DELETE a FROM `fs_bezirk_closure` AS a JOIN `fs_bezirk_closure` AS d ON a.bezirk_id = d.bezirk_id LEFT JOIN `fs_bezirk_closure` AS x ON x.ancestor_id = d.ancestor_id AND x.bezirk_id = a.ancestor_id WHERE d.ancestor_id = ' . (int)$bezirk_id . ' AND x.ancestor_id IS NULL');
-		$this->sql('INSERT INTO `fs_bezirk_closure` (ancestor_id, bezirk_id, depth) SELECT supertree.ancestor_id, subtree.bezirk_id, supertree.depth+subtree.depth+1 FROM `fs_bezirk_closure` AS supertree JOIN `fs_bezirk_closure` AS subtree WHERE subtree.ancestor_id = ' . (int)$bezirk_id . ' AND supertree.bezirk_id = ' . (int)$this->intval($data['parent_id']));
+		$this->sql('INSERT INTO `fs_bezirk_closure` (ancestor_id, bezirk_id, depth) SELECT supertree.ancestor_id, subtree.bezirk_id, supertree.depth+subtree.depth+1 FROM `fs_bezirk_closure` AS supertree JOIN `fs_bezirk_closure` AS subtree WHERE subtree.ancestor_id = ' . (int)$bezirk_id . ' AND supertree.bezirk_id = ' . (int)(int)$data['parent_id']);
 		$this->commit();
 	}
 
@@ -1777,15 +1759,15 @@ class ManualDb extends Db
 		return $this->update('
 		UPDATE 	`fs_blog_entry`
 
-		SET 	`bezirk_id` =  ' . $this->intval($data['bezirk_id']) . ',
-				`foodsaver_id` =  ' . $this->intval($data['foodsaver_id']) . ',
+		SET 	`bezirk_id` =  ' . (int)$data['bezirk_id'] . ',
+				`foodsaver_id` =  ' . (int)$data['foodsaver_id'] . ',
 				`name` =  ' . $this->strval($data['name']) . ',
 				`teaser` =  ' . $this->strval($data['teaser']) . ',
 				`body` =  ' . $this->strval($data['body'], true) . ',
 				`time` =  ' . $this->dateval($data['time']) . '
 				' . $pic . '
 
-		WHERE 	`id` = ' . $this->intval($id));
+		WHERE 	`id` = ' . (int)$id);
 	}
 
 	public function update_bezirk($id, $data)
@@ -1793,7 +1775,7 @@ class ManualDb extends Db
 		if (isset($data['foodsaver']) && is_array($data['foodsaver'])) {
 			$this->del('
 					DELETE FROM 	`fs_botschafter`
-					WHERE 			`bezirk_id` = ' . $this->intval($id) . '
+					WHERE 			`bezirk_id` = ' . (int)$id . '
 				');
 
 			foreach ($data['foodsaver'] as $foodsaver_id) {
@@ -1805,8 +1787,8 @@ class ManualDb extends Db
 						)
 						VALUES
 						(
-							' . $this->intval($id) . ',
-							' . $this->intval($foodsaver_id) . '
+							' . (int)$id . ',
+							' . (int)$foodsaver_id . '
 						)
 					');
 			}
@@ -1819,7 +1801,7 @@ class ManualDb extends Db
 
 		SET 	`name` =  ' . $this->strval($data['name']) . '
 
-		WHERE 	`id` = ' . $this->intval($id));
+		WHERE 	`id` = ' . (int)$id);
 	}
 
 	public function getBotschafter($bezirk_id)
@@ -1839,7 +1821,7 @@ class ManualDb extends Db
 
 				WHERE fs.id = `fs_botschafter`.`foodsaver_id`
 
-				AND `fs_botschafter`.`bezirk_id` = ' . $this->intval($bezirk_id) . '
+				AND `fs_botschafter`.`bezirk_id` = ' . (int)$bezirk_id . '
 				AND		fs.deleted_at IS NULL
 		');
 	}
@@ -1908,7 +1890,7 @@ class ManualDb extends Db
 		return $this->update('
 				UPDATE `fs_foodsaver`
 				SET 	`photo` = ' . $this->strval($photo) . '
-				WHERE 	`id` = ' . $this->intval($fs_id) . '');
+				WHERE 	`id` = ' . (int)$fs_id . '');
 	}
 
 	public function updateProfile($fs_id, $data)
@@ -1924,7 +1906,7 @@ class ManualDb extends Db
 		UPDATE 	`fs_foodsaver`
 
 		SET
-				`bezirk_id` =  ' . $this->intval($data['bezirk_id']) . ',
+				`bezirk_id` =  ' . (int)$data['bezirk_id'] . ',
 				`plz` =  ' . $this->strval($data['plz']) . ',
 				`lat` =  ' . $this->strval($data['lat']) . ',
 				`lon` =  ' . $this->strval($data['lon']) . ',
@@ -1936,7 +1918,7 @@ class ManualDb extends Db
 				`geb_datum` =  ' . $this->dateval($data['geb_datum']) . ',
 
 				`about_me_public` =  ' . $this->strval($data['about_me_public']) . ',
-				`photo_public` = ' . $this->intval($data['photo_public']) . ',
+				`photo_public` = ' . (int)$data['photo_public'] . ',
 				`homepage` = ' . $this->strval($data['homepage']) . ',';
 		if (isset($data['twitter'])) {
 			$sql .= '`twitter` = ' . $this->strval($data['twitter']) . ',';
@@ -1949,7 +1931,7 @@ class ManualDb extends Db
 		}
 		$sql .= '`tox` = ' . $this->strval($data['tox']) . '
 
-		WHERE 	`id` = ' . $this->intval($fs_id);
+		WHERE 	`id` = ' . (int)$fs_id;
 
 		//debug($sql);
 
@@ -1982,7 +1964,7 @@ class ManualDb extends Db
 		return $this->update('
 			UPDATE 	`fs_betrieb`
 
-			SET 	`betrieb_status_id` =  ' . $this->intval($status) . '
+			SET 	`betrieb_status_id` =  ' . (int)$status . '
 
 			WHERE 	`id` = ' . (int)$bid . ' '
 		);
@@ -2013,12 +1995,12 @@ class ManualDb extends Db
 			)
 			VALUES
 			(
-			' . $this->intval($data['foodsaver_id']) . ',
-			' . $this->intval($data['betrieb_id']) . ',
-			' . $this->intval($data['milestone']) . ',
+			' . (int)$data['foodsaver_id'] . ',
+			' . (int)$data['betrieb_id'] . ',
+			' . (int)$data['milestone'] . ',
 			' . $this->strval($data['text']) . ',
 			' . $this->dateval($data['zeit']) . ',
-			' . $this->intval($last) . '
+			' . (int)$last . '
 			)');
 
 		return $id;
@@ -2033,8 +2015,8 @@ class ManualDb extends Db
 					SET 		`active` = 1,
 								`added` = NOW()
 
-					WHERE 		`bezirk_id` = ' . $this->intval($bid) . '
-					AND 		`foodsaver_id` = ' . $this->intval($fsid) . '
+					WHERE 		`bezirk_id` = ' . (int)$bid . '
+					AND 		`foodsaver_id` = ' . (int)$fsid . '
 		');
 	}
 
@@ -2050,8 +2032,8 @@ class ManualDb extends Db
 			)
 			VALUES
 			(
-				' . $this->intval($bid) . ',
-				' . $this->intval($fsid) . ',
+				' . (int)$bid . ',
+				' . (int)$fsid . ',
 				NOW(),
 				' . (int)$active . '
 			)
@@ -2064,8 +2046,8 @@ class ManualDb extends Db
 
 		return $this->update('
 					DELETE FROM  `fs_foodsaver_has_bezirk`
-					WHERE 		`bezirk_id` = ' . $this->intval($bid) . '
-					AND 		`foodsaver_id` = ' . $this->intval($fsid) . '
+					WHERE 		`bezirk_id` = ' . (int)$bid . '
+					AND 		`foodsaver_id` = ' . (int)$fsid . '
 		');
 	}
 
@@ -2109,7 +2091,7 @@ class ManualDb extends Db
 			LEFT JOIN   `fs_abholer` a
 			ON a.betrieb_id = b.id
 
-			WHERE 		b.`id` = ' . $this->intval($id) . '
+			WHERE 		b.`id` = ' . (int)$id . '
 			GROUP BY b.`id`');
 		if (!$out) {
 			return $out;
@@ -2122,7 +2104,7 @@ class ManualDb extends Db
 				FROM 		`fs_betrieb_has_lebensmittel` hl,
 							`fs_lebensmittel` l
 				WHERE 		l.id = hl.lebensmittel_id
-				AND 		`betrieb_id` = ' . $this->intval($id) . '
+				AND 		`betrieb_id` = ' . (int)$id . '
 		');
 
 		$out['foodsaver'] = $this->getBetriebTeam($id);
@@ -2140,7 +2122,7 @@ class ManualDb extends Db
 							`fs_foodsaver` fs
 
 				WHERE 		fs.id = t.foodsaver_id
-				AND 		`betrieb_id` = ' . $this->intval($id) . '
+				AND 		`betrieb_id` = ' . (int)$id . '
 				AND 		t.active = 0
 				AND			fs.deleted_at IS NULL
 		');
@@ -2219,7 +2201,7 @@ class ManualDb extends Db
 							`fs_foodsaver` fs
 
 				WHERE 		fs.id = t.foodsaver_id
-				AND 		`betrieb_id` = ' . $this->intval($bid) . '
+				AND 		`betrieb_id` = ' . (int)$bid . '
 				AND 		t.active  = 1
 				AND			fs.deleted_at IS NULL
 				ORDER BY 	t.`stat_fetchcount` DESC
@@ -2248,7 +2230,7 @@ class ManualDb extends Db
 							`fs_foodsaver` fs
 
 				WHERE 		fs.id = t.foodsaver_id
-				AND 		`betrieb_id` = ' . $this->intval($bid) . '
+				AND 		`betrieb_id` = ' . (int)$bid . '
 				AND 		t.active  = 2
 				AND			fs.deleted_at IS NULL
 		');
@@ -2256,7 +2238,7 @@ class ManualDb extends Db
 
 	public function addAbholer($betrieb_id, $foodsaver_id, $dow)
 	{
-		return $this->sql('INSERT INTO `fs_abholer`(`betrieb_id`,`foodsaver_id`,`dow`)VALUES(' . $this->intval($betrieb_id) . ',' . $this->intval($foodsaver_id) . ',' . $this->intval($dow) . ') ');
+		return $this->sql('INSERT INTO `fs_abholer`(`betrieb_id`,`foodsaver_id`,`dow`)VALUES(' . (int)$betrieb_id . ',' . (int)$foodsaver_id . ',' . (int)$dow . ') ');
 	}
 
 	public function clearAbholer($betrieb_id)
@@ -2311,12 +2293,12 @@ class ManualDb extends Db
 
 	public function getTeamleader($betrieb_id)
 	{
-		return $this->qRow('SELECT 	fs.`id`,CONCAT(fs.name," ",nachname) AS name  FROM fs_betrieb_team t, fs_foodsaver fs WHERE t.foodsaver_id = fs.id AND `betrieb_id` = ' . $this->intval($betrieb_id) . ' AND t.verantwortlich = 1 AND fs.`active` = 1 AND	fs.deleted_at IS NULL');
+		return $this->qRow('SELECT 	fs.`id`,CONCAT(fs.name," ",nachname) AS name  FROM fs_betrieb_team t, fs_foodsaver fs WHERE t.foodsaver_id = fs.id AND `betrieb_id` = ' . (int)$betrieb_id . ' AND t.verantwortlich = 1 AND fs.`active` = 1 AND	fs.deleted_at IS NULL');
 	}
 
 	public function getVerantwortlicher($betrieb_id)
 	{
-		return $this->qOne('SELECT 	`foodsaver_id`  FROM fs_betrieb_team WHERE `betrieb_id` = ' . $this->intval($betrieb_id) . ' AND verantwortlich = 1 AND `active` = 1');
+		return $this->qOne('SELECT 	`foodsaver_id`  FROM fs_betrieb_team WHERE `betrieb_id` = ' . (int)$betrieb_id . ' AND verantwortlich = 1 AND `active` = 1');
 	}
 
 	public function removeAllVerantwortlicher($betrieb_id)
@@ -2324,7 +2306,7 @@ class ManualDb extends Db
 		return $this->del('
 			DELETE FROM fs_betrieb_team
 
-				WHERE 	betrieb_id = ' . $this->intval($betrieb_id) . '
+				WHERE 	betrieb_id = ' . (int)$betrieb_id . '
 				AND verantwortlich = 1
 				AND 	active = 1
 		');
@@ -2334,7 +2316,7 @@ class ManualDb extends Db
 	{
 		return $this->insert('
 			INSERT INTO fs_betrieb_team (foodsaver_id, betrieb_id, verantwortlich,active)
-			VALUES(' . $this->intval($fs_id) . ',' . $this->intval($betrieb_id) . ',1,1)
+			VALUES(' . (int)$fs_id . ',' . (int)$betrieb_id . ',1,1)
 		');
 	}
 
@@ -2491,14 +2473,14 @@ class ManualDb extends Db
 		)
 		VALUES
 		(
-			' . $this->intval($data['parent_id']) . ',
-			' . $this->intval($data['has_children']) . ',
+			' . (int)$data['parent_id'] . ',
+			' . (int)$data['has_children'] . ',
 			' . $this->strval($data['name']) . ',
 			' . $this->strval($data['email']) . ',
 			' . $this->strval($data['email_pass']) . ',
 			' . $this->strval($data['email_name']) . '
 		)');
-		$this->insert('INSERT INTO `fs_bezirk_closure` (ancestor_id, bezirk_id, depth) SELECT t.ancestor_id, ' . $id . ', t.depth+1 FROM `fs_bezirk_closure` AS t WHERE t.bezirk_id = ' . $this->intval($data['parent_id']) . ' UNION ALL SELECT ' . $id . ', ' . $id . ', 0');
+		$this->insert('INSERT INTO `fs_bezirk_closure` (ancestor_id, bezirk_id, depth) SELECT t.ancestor_id, ' . $id . ', t.depth+1 FROM `fs_bezirk_closure` AS t WHERE t.bezirk_id = ' . (int)$data['parent_id'] . ' UNION ALL SELECT ' . $id . ', ' . $id . ', 0');
 		$this->commit();
 
 		if (isset($data['foodsaver']) && is_array($data['foodsaver'])) {
@@ -2511,8 +2493,8 @@ class ManualDb extends Db
 				)
 						VALUES
 						(
-						' . $this->intval($id) . ',
-						' . $this->intval($foodsaver_id) . '
+						' . (int)$id . ',
+						' . (int)$foodsaver_id . '
 				)
 						');
 			}
@@ -2527,8 +2509,8 @@ class ManualDb extends Db
 				)
 						VALUES
 						(
-						' . $this->intval($id) . ',
-						' . $this->intval($foodsaver_id) . '
+						' . (int)$id . ',
+						' . (int)$foodsaver_id . '
 				)
 						');
 			}
@@ -2549,7 +2531,7 @@ class ManualDb extends Db
 
 			FROM 		`fs_message_tpl`
 
-			WHERE 		`id` = ' . $this->intval($id));
+			WHERE 		`id` = ' . (int)$id);
 
 		return $out;
 	}
@@ -2574,7 +2556,7 @@ class ManualDb extends Db
 
 			FROM 		`fs_kette`
 
-			WHERE 		`id` = ' . $this->intval($id));
+			WHERE 		`id` = ' . (int)$id);
 
 		return $out;
 	}
@@ -2607,7 +2589,7 @@ class ManualDb extends Db
 
 			FROM 		`fs_faq`
 
-			WHERE 		`id` = ' . $this->intval($id));
+			WHERE 		`id` = ' . (int)$id);
 
 		return $out;
 	}
@@ -2627,12 +2609,12 @@ class ManualDb extends Db
 		return $this->update('
 		UPDATE 	`fs_faq`
 
-		SET 	`foodsaver_id` =  ' . $this->intval($data['foodsaver_id']) . ',
-				`faq_kategorie_id` =  ' . $this->intval($data['faq_kategorie_id']) . ',
+		SET 	`foodsaver_id` =  ' . (int)$data['foodsaver_id'] . ',
+				`faq_kategorie_id` =  ' . (int)$data['faq_kategorie_id'] . ',
 				`name` =  ' . $this->strval($data['name']) . ',
 				`answer` =  ' . $this->strval($data['answer']) . '
 
-		WHERE 	`id` = ' . $this->intval($id));
+		WHERE 	`id` = ' . (int)$id);
 	}
 
 	/* retrieves all biebs that are biebs for a given bezirk (by being bieb in a Betrieb that is part of that bezirk, which is semantically not the same we use on platform) */
@@ -2642,7 +2624,7 @@ class ManualDb extends Db
 			INNER JOIN `fs_betrieb` b ON c.bezirk_id = b.bezirk_id
 			INNER JOIN `fs_betrieb_team` bt ON bt.betrieb_id = b.id
 			INNER JOIN `fs_foodsaver` fs ON fs.id = bt.foodsaver_id
-			WHERE c.ancestor_id = ' . $this->intval($bezirk) . ' AND bt.verantwortlich = 1 AND fs.deleted_at IS NULL');
+			WHERE c.ancestor_id = ' . (int)$bezirk . ' AND bt.verantwortlich = 1 AND fs.deleted_at IS NULL');
 	}
 
 	/* retrieves the list of all bots for given bezirk or sub bezirk */
@@ -2659,7 +2641,7 @@ class ManualDb extends Db
 			LEFT JOIN `fs_bezirk` bz ON bz.id = c.bezirk_id
 			INNER JOIN `fs_botschafter` bot ON bot.bezirk_id = c.bezirk_id
 			INNER JOIN `fs_foodsaver` fs ON fs.id = bot.foodsaver_id
-			WHERE c.ancestor_id = ' . $this->intval($bezirk) . ' AND fs.deleted_at IS NULL AND ' . $where_type);
+			WHERE c.ancestor_id = ' . (int)$bezirk . ' AND fs.deleted_at IS NULL AND ' . $where_type);
 	}
 
 	/* updates the member list to given list of IDs, optionally leaving admins
@@ -2669,21 +2651,21 @@ class ManualDb extends Db
 		$rows_ins = 0;
 		$rows_del = 0;
 		if ($leave_admins) {
-			$admins = $this->qCol('SELECT foodsaver_id FROM `fs_botschafter` b WHERE b.bezirk_id = ' . $this->intval($bezirk));
+			$admins = $this->qCol('SELECT foodsaver_id FROM `fs_botschafter` b WHERE b.bezirk_id = ' . (int)$bezirk);
 			if ($admins) {
 				$foodsaver_ids = array_merge($foodsaver_ids, $admins);
 			}
 		}
-		$ids = implode(',', array_map(array($this, 'intval'), $foodsaver_ids));
+		$ids = implode(',', array_map('intval', $foodsaver_ids));
 		if ($ids) {
-			$rows_del = $this->del('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . $this->intval($bezirk) . ' AND foodsaver_id NOT IN (' . $ids . ')');
+			$rows_del = $this->del('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . (int)$bezirk . ' AND foodsaver_id NOT IN (' . $ids . ')');
 			$insert_strings = array_map(function ($id) use ($bezirk) {
 				return '(' . $id . ',' . $bezirk . ',1,NOW())';
 			}, $foodsaver_ids);
 			$insert_values = implode(',', $insert_strings);
 			$rows_ins = $this->del('INSERT IGNORE INTO `fs_foodsaver_has_bezirk` (foodsaver_id, bezirk_id, active, added) VALUES ' . $insert_values);
 		} else {
-			$rows_del = $this->del('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . $this->intval($bezirk));
+			$rows_del = $this->del('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . (int)$bezirk);
 		}
 
 		return array($rows_ins, $rows_del);
