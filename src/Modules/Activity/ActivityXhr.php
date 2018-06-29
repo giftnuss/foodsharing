@@ -44,21 +44,21 @@ class ActivityXhr extends Control
 		*/
 
 		$updates = array();
-		if ($up = $this->model->loadForumUpdates($_GET['page'], $hidden_ids['bezirk'])) {
-			$updates = $up;
-		}
+
+		$updates = $this->model->loadForumUpdates($_GET['page'], $hidden_ids['bezirk']);
+
 		if ($up = $this->model->loadStoreUpdates($_GET['page'])) {
 			$updates = array_merge($updates, $up);
 		}
 		if ($up = $this->model->loadMailboxUpdates($_GET['page'], $hidden_ids['mailbox'])) {
 			$updates = array_merge($updates, $up);
 		}
-		if ($up = $this->model->loadFriendWallUpdates($hidden_ids['buddywall'], $_GET['page'])) {
-			$updates = array_merge($updates, $up);
-		}
-		if ($up = $this->model->loadBasketWallUpdates($_GET['page'])) {
-			$updates = array_merge($updates, $up);
-		}
+
+		$updates = array_merge($updates, $this->model->loadFriendWallUpdates($hidden_ids['buddywall'], $_GET['page']));
+
+		$updates = array_merge($updates, $this->model->loadBasketWallUpdates($_GET['page']));
+
+		$updates = array_merge($updates, $this->model->loadEventWallUpdates($_GET['page']));
 
 		$xhr->addData('updates', $updates);
 
@@ -105,24 +105,21 @@ class ActivityXhr extends Control
 
 		$xhr = new Xhr();
 		$updates = array();
-		if ($up = $this->model->loadForumUpdates($page, $hidden_ids['bezirk'])) {
-			$updates = $up;
-		}
+		$updates = $this->model->loadForumUpdates($page, $hidden_ids['bezirk']);
+
 		if ($up = $this->model->loadStoreUpdates()) {
 			$updates = array_merge($updates, $up);
 		}
+
 		if ($up = $this->model->loadMailboxUpdates($page, $hidden_ids['mailbox'])) {
 			$updates = array_merge($updates, $up);
 		}
-		if ($up = $this->model->loadFriendWallUpdates($hidden_ids['buddywall'], $page)) {
-			$updates = array_merge($updates, $up);
-		}
-		if ($up = $this->model->loadBasketWallUpdates($page)) {
-			$updates = array_merge($updates, $up);
-		}
-		if ($up = $this->model->loadEventWallUpdates($page)) {
-			$updates = array_merge($updates, $up);
-		}
+
+		$updates = array_merge($updates, $this->model->loadFriendWallUpdates($hidden_ids['buddywall'], $page));
+
+		$updates = array_merge($updates, $this->model->loadBasketWallUpdates($page));
+
+		$updates = array_merge($updates, $this->model->loadEventWallUpdates($page));
 
 		$xhr->addData('updates', $updates);
 
