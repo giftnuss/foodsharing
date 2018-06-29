@@ -23,13 +23,9 @@ class ActivityModel extends Model
 	public function loadEventWallUpdates($page = 0)
 	{
 		$updates = array();
-		if ($up = $this->activityGateway->fetchAllEventUpdates(S::id(), $page)) {
-			$updates = $up;
-		}
+		$updates = $this->activityGateway->fetchAllEventUpdates(S::id(), $page);
+
 		$out = array();
-		if (!empty($updates)) {
-			$out = array();
-		}
 
 		foreach ($updates as $u) {
 			if (isset($hb[$u['event_id']])) {
