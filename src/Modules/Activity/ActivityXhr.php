@@ -45,8 +45,9 @@ class ActivityXhr extends Control
 
 		$updates = array();
 
-		$updates = $this->model->loadForumUpdates($_GET['page'], $hidden_ids['bezirk']);
-
+		if ($up = $this->model->loadForumUpdates($_GET['page'], $hidden_ids['bezirk'])){
+			$updates = $up;
+		}
 		if ($up = $this->model->loadStoreUpdates($_GET['page'])) {
 			$updates = array_merge($updates, $up);
 		}
@@ -106,7 +107,9 @@ class ActivityXhr extends Control
 
 		$xhr = new Xhr();
 		$updates = array();
-		$updates = $this->model->loadForumUpdates($page, $hidden_ids['bezirk']);
+		if ($up = $this->model->loadForumUpdates($page, $hidden_ids['bezirk'])) {
+			$updates = $up;
+		}
 
 		if ($up = $this->model->loadStoreUpdates()) {
 			$updates = array_merge($updates, $up);
