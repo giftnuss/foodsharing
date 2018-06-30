@@ -6,46 +6,46 @@ use Foodsharing\Modules\Core\Control;
 
 class ApplicationXhr extends Control
 {
-	public function __construct(ApplicationModel $model, ApplicationView $view)
+	private $gateway;
+
+	public function __construct(ApplicationGateway $gateway, ApplicationView $view)
 	{
-		$this->model = $model;
+		$this->gateway = $gateway;
 		$this->view = $view;
 
 		parent::__construct();
 	}
 
-	public function apply()
+	public function accept()
 	{
 		if ($this->func->isBotFor($_GET['bid']) || $this->func->isOrgaTeam()) {
-			if ($this->model->apply($_GET['bid'], $_GET['fid'])) {
-				$this->func->info('Bewerbung angenommen');
+			$this->gateway->acceptApplication($_GET['bid'], $_GET['fid']);
+			$this->func->info('Bewerbung angenommen');
 
-				return array(
+			return array(
 					'status' => 1,
 					'script' => 'goTo("/?page=bezirk&bid=' . (int)$_GET['bid'] . '");'
 				);
-			}
 		}
 	}
 
-	public function maybe()
+	public function defer()
 	{
 		if ($this->func->isBotFor($_GET['bid']) || $this->func->isOrgaTeam()) {
-			if ($this->model->maybe($_GET['bid'], $_GET['fid'])) {
-				$this->func->info('Bewerbungs Status geändert');
+			$this->gateway->deferApplication($_GET['bid'], $_GET['fid']);
+			$this->func->info('Bewerbungsstatus geändert');
 
-				return array(
+			return array(
 					'status' => 1,
 					'script' => 'goTo("/?page=bezirk&bid=' . (int)$_GET['bid'] . '");'
 				);
-			}
 		}
 	}
 
-	public function noapply()
+	public function deny()
 	{
 		if ($this->func->isBotFor($_GET['bid']) || $this->func->isOrgaTeam()) {
-			$this->model->noapply($_GET['bid'], $_GET['fid']);
+			$this->gateway->denyApplication($_GET['bid'], $_GET['fid']);
 
 			$this->func->info('Bewerbung abgelehnt');
 
