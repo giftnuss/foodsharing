@@ -24,12 +24,6 @@ class LoginView extends View
 	public function passwordRequest()
 	{
 		if (!S::may()) {
-			$mail = '';
-
-			if (isset($_GET['m']) && $this->func->validEmail($_GET['m'])) {
-				$mail = $_GET['m'];
-			}
-
 			$params = array(
 				'email' => $this->func->s('login_email'),
 				'action' => $_SERVER['REQUEST_URI']
