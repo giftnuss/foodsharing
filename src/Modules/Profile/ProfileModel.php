@@ -10,7 +10,7 @@ class ProfileModel extends Model
 
 	public function setFsId($id)
 	{
-		$this->fs_id = $this->intval($id);
+		$this->fs_id = (int)$id;
 	}
 
 	public function rate($fsid, $rate, $type = 1, $message = '')
@@ -170,7 +170,7 @@ class ProfileModel extends Model
 					fs_botschafter b 
 				
 			WHERE 	b.`bezirk_id` = bz.`id` 
-			AND 	b.foodsaver_id = ' . $this->intval($this->fs_id) . '
+			AND 	b.foodsaver_id = ' . (int)$this->fs_id . '
 			AND 	bz.type != 7
 		')
 		) {
@@ -184,7 +184,7 @@ class ProfileModel extends Model
 					fs_foodsaver_has_bezirk b
 		
 			WHERE 	b.`bezirk_id` = bz.`id`
-			AND 	b.foodsaver_id = ' . $this->intval($this->fs_id) . '
+			AND 	b.foodsaver_id = ' . (int)$this->fs_id . '
 			AND 	bz.type != 7
 		')
 		) {
@@ -198,7 +198,7 @@ class ProfileModel extends Model
 					fs_botschafter b
 		
 			WHERE 	b.`bezirk_id` = bz.`id`
-			AND 	b.foodsaver_id = ' . $this->intval($this->fs_id) . '
+			AND 	b.foodsaver_id = ' . (int)$this->fs_id . '
 			AND 	bz.type = 7
 		')
 		) {

@@ -99,14 +99,14 @@ class FoodsaverModel extends Model
 
 		$orga = '';
 		if (isset($data['orgateam'])) {
-			$orga = '`orgateam` = ' . $this->intval($data['orgateam']) . ',';
+			$orga = '`orgateam` = ' . (int)$data['orgateam'] . ',';
 		}
 
 		$rolle = '';
 		$quiz_rolle = '';
 		$verified = '';
 		if (isset($data['rolle'])) {
-			$rolle = '`rolle` =  ' . $this->intval($data['rolle']) . ',';
+			$rolle = '`rolle` =  ' . (int)$data['rolle'] . ',';
 			if ($data['rolle'] == 0 && $this->func->isOrgaTeam()) {
 				$data['bezirk_id'] = 0;
 				$quiz_rolle = '`quiz_rolle` = 0,';
@@ -115,7 +115,7 @@ class FoodsaverModel extends Model
 				$bids = $this->q('
 					SELECT 	bt.betrieb_id as id
 					FROM 	fs_betrieb_team bt
-					WHERE 	bt.foodsaver_id = ' . $this->intval($id) . '
+					WHERE 	bt.foodsaver_id = ' . (int)$id . '
 				');
 				//Delete from Companies
 				foreach ($bids as $b) {
@@ -125,17 +125,17 @@ class FoodsaverModel extends Model
 				//Delete Bells for Foodsaver
 				$this->del('
 					DELETE FROM  `fs_foodsaver_has_bell`
-					WHERE 		`foodsaver_id` = ' . $this->intval($id) . '
+					WHERE 		`foodsaver_id` = ' . (int)$id . '
 				');
 				// Delete from Bezirke and Working Groups
 				$this->del('
 					DELETE FROM  `fs_foodsaver_has_bezirk`
-					WHERE 		`foodsaver_id` = ' . $this->intval($id) . '
+					WHERE 		`foodsaver_id` = ' . (int)$id . '
 				');
 				//Delete from Bezirke and Working Groups (when Admin)
 				$this->del('
 					DELETE FROM  `fs_botschafter`
-					WHERE 		`foodsaver_id` = ' . $this->intval($id) . '
+					WHERE 		`foodsaver_id` = ' . (int)$id . '
 				');
 
 				//Block Person for Quiz
@@ -149,7 +149,7 @@ class FoodsaverModel extends Model
 					)
 					VALUES
 					(
-						' . $this->intval($id) . ',
+						' . (int)$id . ',
 						1,
 						2,
 						now()
@@ -174,7 +174,7 @@ class FoodsaverModel extends Model
 		UPDATE 	`fs_foodsaver`
 
 		SET
-				`bezirk_id` =  ' . $this->intval($data['bezirk_id']) . ',
+				`bezirk_id` =  ' . (int)$data['bezirk_id'] . ',
 				`plz` =  ' . $this->strval(trim($data['plz'])) . ',
 				`stadt` =  ' . $this->strval(trim($data['stadt'])) . ',
 				`lat` =  ' . $this->strval(trim($data['lat'])) . ',
@@ -184,7 +184,7 @@ class FoodsaverModel extends Model
 				`anschrift` =  ' . $this->strval($data['anschrift']) . ',
 				`telefon` =  ' . $this->strval($data['telefon']) . ',
 				`handy` =  ' . $this->strval($data['handy']) . ',
-				`geschlecht` =  ' . $this->intval($data['geschlecht']) . ',
+				`geschlecht` =  ' . (int)$data['geschlecht'] . ',
 				' . $position . '
 				' . $rolle . '
 				' . $orga . '
@@ -193,6 +193,6 @@ class FoodsaverModel extends Model
 				' . $verified . '
 				`geb_datum` =  ' . $this->dateval($data['geb_datum']) . '
 
-		WHERE 	`id` = ' . $this->intval($id));
+		WHERE 	`id` = ' . (int)$id);
 	}
 }

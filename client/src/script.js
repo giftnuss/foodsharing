@@ -264,37 +264,6 @@ $(document).ready(function () {
     }
   })
 
-  $('#comment').dialog({
-    autoOpen: false,
-    modal: true,
-    buttons:
-    {
-      'Speichern': function () {
-        $.ajax({
-          dataType: 'json',
-          url: '/xhr.php?f=addComment&name=' + $('#comment-name').val() + '&id=' + $('#comment-id').val() + '&comment=' + encodeURIComponent($('#comment textarea').val()),
-          success: function (data) {
-            if (data.status == 1) {
-              $('#comment').dialog('close')
-              $('#comment textarea').val('')
-              info(data.msg)
-            } else {
-              window.alert(data)
-            }
-          }
-        })
-      }
-    }
-  })
-
-  $('.toolbar-comment').click(function () {
-    const l = $(this).attr('attr').split(':')
-    $('#comment-id').val(l[1])
-    $('#comment-name').val(l[0])
-
-    $('#comment').dialog('open')
-  })
-
   $('#fancylink').fancybox({
     minWidth: 470,
     maxWidth: 470,
@@ -864,13 +833,6 @@ export function ucfirst (str) {
   str += ''
   var f = str.charAt(0).toUpperCase()
   return f + str.substr(1)
-}
-
-export function showComment (id) {
-  $('#dialog-comment').html($('#comment-' + id).val())
-
-  $('#dialog-comment').dialog('option', 'title', $('#comment-title-' + id).val())
-  $('#dialog-comment').dialog('open')
 }
 
 export function ifconfirm (url, question, title) {

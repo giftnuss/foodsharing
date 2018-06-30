@@ -62,7 +62,7 @@ echo $SECONDS seconds elapsed
 log-header "Running tests"
 failed=0
 SECONDS=0
-exec-in-container-asroot app rm -rf tmp/.views-cache tmp/di-cache.php
+exec-in-container-asroot app rm -rf cache/.views-cache cache/di-cache.php
 exec-in-container app vendor/bin/codecept run --xml --html || failed=1
 echo $SECONDS seconds elapsed
 

@@ -48,8 +48,8 @@ class SettingsModel extends Model
 									  )
 									VALUES(
 									  NOW(),
-									  ' . $this->intval($fsid) . ',
-									  ' . $this->intval($this->func->fsId()) . ',
+									  ' . (int)$fsid . ',
+									  ' . (int)$this->func->fsId() . ',
 									  \'' . $k . '\',
 									  \'' . $old[$k] . '\',
 									  \'' . $new[$k] . '\'

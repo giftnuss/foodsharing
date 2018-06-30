@@ -275,7 +275,7 @@ class XhrMethods
 			if ($this->func->isOrgaTeam()) {
 				$sql = '';
 			}
-			if ($childs = $this->model->q('SELECT `id`,`parent_id`,`has_children`,`name`,`type` FROM `fs_bezirk` WHERE `parent_id` = ' . $this->model->intval($data['parent']) . $sql . ' ORDER BY `name`')) {
+			if ($childs = $this->model->q('SELECT `id`,`parent_id`,`has_children`,`name`,`type` FROM `fs_bezirk` WHERE `parent_id` = ' . (int)$data['parent'] . $sql . ' ORDER BY `name`')) {
 				return json_encode(array(
 					'status' => 1,
 					'html' => $this->xhrViewUtils->childBezirke($childs, $data['parent'])
@@ -531,11 +531,6 @@ class XhrMethods
 		}
 
 		return json_encode($out);
-	}
-
-	public function xhr_addComment($data)
-	{
-		return $this->model->addComment($data);
 	}
 
 	public function xhr_uploadPictureRefactorMeSoon($data)
@@ -1004,7 +999,7 @@ class XhrMethods
 
 			if (!empty($data['name'])) {
 				if ($out = $this->model->add_bezirk($data)) {
-					$this->model->update('UPDATE fs_bezirk SET has_children = 1 WHERE `id` = ' . $this->model->intval($data['parent_id']));
+					$this->model->update('UPDATE fs_bezirk SET has_children = 1 WHERE `id` = ' . (int)$data['parent_id']);
 
 					return json_encode(array(
 						'status' => 1,
@@ -1018,7 +1013,7 @@ class XhrMethods
 	public function xhr_update_abholen($data)
 	{
 		if ($this->model->isVerantwortlich($data['bid']) || $this->func->isBotschafter()) {
-			$this->model->del('DELETE FROM 	`fs_abholzeiten` WHERE `betrieb_id` = ' . $this->model->intval($data['bid']));
+			$this->model->del('DELETE FROM 	`fs_abholzeiten` WHERE `betrieb_id` = ' . (int)$data['bid']);
 
 			if (is_array($data['newfetchtime'])) {
 				for ($i = 0; $i < (count($data['newfetchtime']) - 1); ++$i) {
@@ -1032,10 +1027,10 @@ class XhrMethods
 				)
 				VALUES
 				(
-					' . $this->model->intval($data['bid']) . ',
-					' . $this->model->intval($data['newfetchtime'][$i]) . ',
+					' . (int)$data['bid'] . ',
+					' . (int)$data['newfetchtime'][$i] . ',
 					' . $this->model->strval($this->func->preZero($data['nfttime']['hour'][$i]) . ':' . $this->func->preZero($data['nfttime']['min'][$i]) . ':00') . ',
-					' . $this->model->intval($data['nft-count'][$i]) . '
+					' . (int)$data['nft-count'][$i] . '
 				)
 			');
 				}
@@ -1059,7 +1054,7 @@ class XhrMethods
 		SET 	`email` = ' . $this->model->strval($data['email']) . ',
 				`email_pass` = ' . $this->model->strval($data['email_pass']) . '
 
-				WHERE 	`id` = ' . $this->model->intval($data['bezirk_id']) . '
+				WHERE 	`id` = ' . (int)$data['bezirk_id'] . '
 		'));
 	}
 
