@@ -18,7 +18,7 @@ class LoginView extends View
 			'email' => $email
 		);
 
-		return $this->twig->render('pages/Register/page.twig', $params);
+		return $this->twig->render('pages/Register/RegisterForm.twig', $params);
 	}
 
 	public function passwordRequest()
@@ -35,7 +35,7 @@ class LoginView extends View
 				'action' => $_SERVER['REQUEST_URI']
 			);
 
-			return $this->twig->render('pages/ForgotPassword/page.twig', $params);
+			return $this->twig->render('pages/ForgotPassword/ForgotPasswordForm.twig', $params);
 		}
 	}
 
