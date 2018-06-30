@@ -31,6 +31,7 @@
 - refactored Buddy to use gateway. !405 @peter.toennies
 - removed SQL injection possibilities from all exsisting gateways !398 @peter.toennies
 - reduced size of DataBase classes !409 @peter.toennies
+- refactored login and registration @theolampert
 
 ## Dev/Test/CI stuff
 - Fix cache clearing during test/deploy !414 @nicksellen
