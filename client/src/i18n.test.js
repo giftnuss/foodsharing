@@ -1,4 +1,5 @@
 /* eslint-env mocha */
+
 import assert from 'assert'
 
 import serverData from '@/server-data'

@@ -39,6 +39,7 @@ const conv = {
    * init function have to be called one time on domready
    */
   init: function () {
+    console.log('INIT', conv.initiated, 'page', GET('page'))
     if (conv.initiated === false) {
       if (GET('page') === 'msg') {
         this.isBigPageMode = true

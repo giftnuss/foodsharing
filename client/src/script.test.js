@@ -2,27 +2,24 @@
 
 import sinon from 'sinon'
 import assert from 'assert'
-import * as browser from '@/browser'
-import msg from '@/msg'
-import { sleep, jsonOK } from '>/utils'
+import { sleep, jsonOK, setGETParams, resetModules } from '>/utils'
 
 const sandbox = sinon.createSandbox()
 
+let browser
+let msg
 let script
 let mockBrowser
 let server
-let GETParams
-
-function setGETParams (params) {
-  Object.assign(GETParams, params)
-}
 
 beforeEach(() => {
-  mockBrowser = sandbox.mock(browser)
-  script = require('@/script')
   server = sinon.createFakeServer()
-  GETParams = {}
-  sandbox.stub(browser, 'GET').callsFake(param => GETParams[param])
+
+  browser = require('@/browser')
+  script = require('@/script')
+  msg = require('@/msg').default
+
+  mockBrowser = sandbox.mock(browser)
   sandbox.stub(msg, 'loadConversation')
 })
 
@@ -30,7 +27,7 @@ afterEach(() => {
   mockBrowser.verify()
   server.restore()
   sandbox.restore()
-  delete require.cache[require.resolve('@/script')]
+  resetModules()
 })
 
 describe('script', () => {
