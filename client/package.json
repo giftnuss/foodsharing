@@ -69,5 +69,11 @@
   "browserslist": [
     "> 0.5%",
     "ie_mob >=11"
-  ]
+  ],
+  "standard": {
+    "ignore": [
+      "dist",
+      "test/_compiled.js"
+    ]
+  }
 }

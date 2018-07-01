@@ -97,4 +97,9 @@ SECONDS=0
 run-in-container chat npm test
 echo $SECONDS seconds elapsed
 
+log-header "Running client js tests"
+SECONDS=0
+run-in-container client 'yarn && yarn lint && yarn test'
+echo $SECONDS seconds elapsed
+
 log-header "Done!"

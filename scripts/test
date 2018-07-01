@@ -32,4 +32,7 @@ exec-in-container app vendor/bin/codecept run "$@"
 echo "Running chat tests"
 run-in-container chat npm test
 
+echo "Running client js tests"
+run-in-container client 'yarn && yarn lint && yarn test'
+
 echo "Done!"
