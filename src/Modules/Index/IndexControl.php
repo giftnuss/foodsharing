@@ -2,18 +2,18 @@
 
 namespace Foodsharing\Modules\Index;
 
-use Foodsharing\Modules\Content\ContentModel;
+use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 
 class IndexControl extends Control
 {
-	private $contentModel;
+	private $contentGateway;
 
-	public function __construct(IndexModel $model, IndexView $view, ContentModel $contentModel)
+	public function __construct(IndexModel $model, IndexView $view, ContentGateway $contentGateway)
 	{
 		$this->model = $model;
 		parent::__construct();
-		$this->contentModel = $contentModel;
+		$this->contentGateway = $contentGateway;
 		$this->view = $view;
 	}
 
@@ -30,13 +30,13 @@ class IndexControl extends Control
 		$gerettet = round($gerettet, 0);
 
 		if (strpos($_SERVER['HTTP_HOST'], 'foodsharing.at') !== false) {
-			$page_content = $this->contentModel->getContent(37);
+			$page_content = $this->contentGateway->getContent(37);
 		} elseif (strpos($_SERVER['HTTP_HOST'], 'foodsharingschweiz.ch') !== false) {
-			$page_content = $this->contentModel->getContent(47);
+			$page_content = $this->contentGateway->getContent(47);
 		} elseif (strpos($_SERVER['HTTP_HOST'], 'beta.foodsharing.de') !== false) {
-			$page_content = $this->contentModel->getContent(48);
+			$page_content = $this->contentGateway->getContent(48);
 		} else {
-			$page_content = $this->contentModel->getContent(38);
+			$page_content = $this->contentGateway->getContent(38);
 		}
 
 		$this->func->addContent($this->view->index(

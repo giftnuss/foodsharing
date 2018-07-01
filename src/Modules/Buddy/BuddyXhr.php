@@ -26,8 +26,8 @@ class BuddyXhr extends Control
 		if ($this->gateway->buddyRequestedMe($_GET['id'], S::id())) {
 			$this->gateway->confirmBuddy($_GET['id'], S::id());
 
-			$this->model->delBells('buddy-' . $this->func->fsId() . '-' . (int)$_GET['id']);
-			$this->model->delBells('buddy-' . (int)$_GET['id'] . $this->func->fsId());
+			$this->bellGateway->delBellsByIdentifier('buddy-' . $this->func->fsId() . '-' . (int)$_GET['id']);
+			$this->bellGateway->delBellsByIdentifier('buddy-' . (int)$_GET['id'] . $this->func->fsId());
 
 			$buddy_ids = array();
 			if ($b = S::get('buddy-ids')) {

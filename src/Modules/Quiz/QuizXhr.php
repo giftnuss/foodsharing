@@ -4,14 +4,18 @@ namespace Foodsharing\Modules\Quiz;
 
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrDialog;
+use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 
 class QuizXhr extends Control
 {
-	public function __construct(QuizModel $model, QuizView $view)
+	private $contentGateway;
+
+	public function __construct(QuizModel $model, QuizView $view, ContentGateway $contentGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->contentGateway = $contentGateway;
 
 		parent::__construct();
 	}
@@ -343,7 +347,7 @@ class QuizXhr extends Control
 			 */
 			if ($questions = $this->getRandomQuestions($_GET['qid'], $quiz['questcount'])) {
 				// Get the description on how the quiz works
-				$content = $this->model->getContent(17);
+				$content = $this->contentGateway->getContent(17);
 
 				// for safety check if there are not too many questions
 				$questions = array_slice($questions, 0, (int)$quiz['questcount']);
@@ -403,7 +407,7 @@ class QuizXhr extends Control
 			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
 		}
 
-		$content = $this->model->getContent($content_id);
+		$content = $this->contentGateway->getContent($content_id);
 		$dia->setTitle($content['title']);
 		$dia->addContent($content['body']);
 
@@ -430,7 +434,7 @@ class QuizXhr extends Control
 					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
 				}
 
-				$content = $this->model->getContent($content_id);
+				$content = $this->contentGateway->getContent($content_id);
 				$dia->setTitle($content['title']);
 				$dia->addContent($content['body']);
 

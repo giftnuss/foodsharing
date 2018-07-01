@@ -13,21 +13,33 @@ class Database
 		$this->pdo = $pdo;
 	}
 
-	public function fetch($query, $params = [])
+	/**
+	 * Returns the first row.
+	 */
+	public function fetch($query, $params = []): array
 	{
 		return $this->preparedQuery($query, $params)->fetch();
 	}
 
-	public function fetchAll($query, $params = [])
+	/**
+	 * Returns all rows.
+	 */
+	public function fetchAll($query, $params = []): array
 	{
 		return $this->preparedQuery($query, $params)->fetchAll();
 	}
 
-	public function fetchAllValues($query, $params = [])
+	/**
+	 * Returns the first column.
+	 */
+	public function fetchAllValues($query, $params = []): array
 	{
 		return $this->preparedQuery($query, $params)->fetchAll(\PDO::FETCH_COLUMN, 0);
 	}
 
+	/**
+	 * Returns the value of the first column of the first row.
+	 */
 	public function fetchValue($query, $params = [])
 	{
 		return $this->preparedQuery($query, $params)->fetchColumn(0);

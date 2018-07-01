@@ -8,10 +8,16 @@ use Parsedown;
 
 class ContentControl extends Control
 {
-	public function __construct(ContentModel $model, ContentView $view)
-	{
+	private $contentGateway;
+
+	public function __construct(
+		ContentModel $model,
+		ContentView $view,
+		ContentGateway $contentGateway
+	) {
 		$this->model = $model;
 		$this->view = $view;
+		$this->contentGateway = $contentGateway;
 
 		parent::__construct();
 	}
@@ -55,7 +61,7 @@ class ContentControl extends Control
 					$this->func->pageLink('content', 'back_to_overview')
 				)), $this->func->s('actions')), CNT_RIGHT);
 			} elseif ($id = $this->func->getActionId('view')) {
-				if ($cnt = $this->model->getContent($id)) {
+				if ($cnt = $this->contentGateway->getContent($id)) {
 					$this->func->addBread($cnt['title']);
 					$this->func->addTitle($cnt['title']);
 
@@ -96,7 +102,7 @@ class ContentControl extends Control
 
 	public function partner()
 	{
-		if ($cnt = $this->model->getContent(10)) {
+		if ($cnt = $this->contentGateway->getContent(10)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -106,7 +112,7 @@ class ContentControl extends Control
 
 	public function unterstuetzung()
 	{
-		if ($cnt = $this->model->getContent(42)) {
+		if ($cnt = $this->contentGateway->getContent(42)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -116,7 +122,7 @@ class ContentControl extends Control
 
 	public function presse()
 	{
-		if ($cnt = $this->model->getContent(58)) {
+		if ($cnt = $this->contentGateway->getContent(58)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -126,7 +132,7 @@ class ContentControl extends Control
 
 	public function communitiesGermany()
 	{
-		if ($cnt = $this->model->getContent(52)) {
+		if ($cnt = $this->contentGateway->getContent(52)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -136,7 +142,7 @@ class ContentControl extends Control
 
 	public function communitiesAustria()
 	{
-		if ($cnt = $this->model->getContent(61)) {
+		if ($cnt = $this->contentGateway->getContent(61)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -146,7 +152,7 @@ class ContentControl extends Control
 
 	public function communitiesSwitzerland()
 	{
-		if ($cnt = $this->model->getContent(62)) {
+		if ($cnt = $this->contentGateway->getContent(62)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -156,7 +162,7 @@ class ContentControl extends Control
 
 	public function forderungen()
 	{
-		if ($cnt = $this->model->getContent(60)) {
+		if ($cnt = $this->contentGateway->getContent(60)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -166,7 +172,7 @@ class ContentControl extends Control
 
 	public function leeretonne()
 	{
-		if ($cnt = $this->model->getContent(46)) {
+		if ($cnt = $this->contentGateway->getContent(46)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -176,7 +182,7 @@ class ContentControl extends Control
 
 	public function fairteilerrettung()
 	{
-		if ($cnt = $this->model->getContent(49)) {
+		if ($cnt = $this->contentGateway->getContent(49)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -205,7 +211,7 @@ class ContentControl extends Control
 
 	public function impressum()
 	{
-		if ($cnt = $this->model->getContent(8)) {
+		if ($cnt = $this->contentGateway->getContent(8)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -215,7 +221,7 @@ class ContentControl extends Control
 
 	public function about()
 	{
-		if ($cnt = $this->model->getContent(9)) {
+		if ($cnt = $this->contentGateway->getContent(9)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -239,7 +245,7 @@ class ContentControl extends Control
 
 	public function fuer_unternehmen()
 	{
-		if ($cnt = $this->model->getContent(4)) {
+		if ($cnt = $this->contentGateway->getContent(4)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -249,7 +255,7 @@ class ContentControl extends Control
 
 	public function infohub()
 	{
-		if ($cnt = $this->model->getContent(59)) {
+		if ($cnt = $this->contentGateway->getContent(59)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 

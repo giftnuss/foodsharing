@@ -8,18 +8,21 @@ use Flourish\fUpload;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrDialog;
+use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Services\SearchService;
 
 class LoginXhr extends Control
 {
 	private $searchService;
+	private $contentGateway;
 
-	public function __construct(LoginModel $model, LoginView $view, SearchService $searchService)
+	public function __construct(LoginModel $model, LoginView $view, SearchService $searchService, ContentGateway $contentGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->searchService = $searchService;
+		$this->contentGateway = $contentGateway;
 
 		parent::__construct();
 	}
@@ -285,8 +288,8 @@ class LoginXhr extends Control
 				$pass = strip_tags($_GET['p']);
 			}
 
-			$datenschutz = $this->model->getContent(28);
-			$rechtsvereinbarung = $this->model->getContent(29);
+			$datenschutz = $this->contentGateway->getContent(28);
+			$rechtsvereinbarung = $this->contentGateway->getContent(29);
 
 			$rechtsvereinbarung['body'] = strip_tags(str_replace(array('<br>', '<br />', '<p>', '</p>'), "\n", $rechtsvereinbarung['body']));
 			$datenschutz['body'] = strip_tags(str_replace(array('<br>', '<br />', '<p>', '</p>'), "\n", $datenschutz['body']));

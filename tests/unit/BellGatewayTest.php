@@ -41,4 +41,22 @@ class BellGatewayTest extends \Codeception\Test\Unit
 		$this->tester->seeInDatabase('fs_foodsaver_has_bell', ['foodsaver_id' => $user1['id'], 'bell_id' => $bid, 'seen' => 0]);
 		$this->tester->seeInDatabase('fs_foodsaver_has_bell', ['foodsaver_id' => $user2['id'], 'bell_id' => $bid, 'seen' => 0]);
 	}
+
+	public function testRemoveBell()
+	{
+		$this->tester->clearTable('fs_bell');
+		$this->tester->clearTable('fs_foodsaver_has_bell');
+
+		$user1 = $this->tester->createFoodsaver();
+		$user2 = $this->tester->createFoodsaver();
+
+		$this->tester->addBells([$user1, $user2], ['identifier' => 'my-custom-identifier']);
+		$this->tester->seeNumRecords(1, 'fs_bell');
+		$this->tester->seeNumRecords(2, 'fs_foodsaver_has_bell');
+
+		$this->gateway->delBellsByIdentifier('my-custom-identifier');
+
+		$this->tester->seeNumRecords(0, 'fs_bell');
+		$this->tester->seeNumRecords(0, 'fs_foodsaver_has_bell');
+	}
 }

@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Profile;
 
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Lib\Session\S;
@@ -11,12 +12,14 @@ class ProfileXhr extends Control
 {
 	private $foodsaver;
 	private $storeModel;
+	private $bellGateway;
 
-	public function __construct(ProfileModel $model, ProfileView $view, StoreModel $storeModel)
+	public function __construct(ProfileModel $model, ProfileView $view, StoreModel $storeModel, BellGateway $bellGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->storeModel = $storeModel;
+		$this->bellGateway = $bellGateway;
 
 		parent::__construct();
 
@@ -47,7 +50,7 @@ class ProfileXhr extends Control
 
 				$this->view->setData($this->foodsaver);
 			} else {
-				$this->model->delBells('new-fs-' . (int)$_GET['id']);
+				$this->bellGateway->delBellsByIdentifier('new-fs-' . (int)$_GET['id']);
 
 				return array(
 					'status' => 0

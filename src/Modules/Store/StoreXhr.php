@@ -223,7 +223,7 @@ class StoreXhr extends Control
 					$dia->addOpt('width', '650px');
 					$dia->noOverflow();
 
-					$bezirks = $this->model->getBezirke();
+					$bezirks = S::getRegions();
 
 					foreach ($bezirks as $key => $b) {
 						if (!in_array($b['type'], array(1, 2, 3, 9))) {

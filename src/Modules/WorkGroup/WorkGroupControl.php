@@ -84,7 +84,7 @@ class WorkGroupControl extends Control
 	private function getSideMenuData()
 	{
 		$countries = $this->model->getCountryGroups();
-		$bezirke = $this->model->getBezirke();
+		$bezirke = S::getRegions();
 
 		$localRegions = array_filter($bezirke, function ($region) {
 			return !in_array($region['type'], [6, 7]);

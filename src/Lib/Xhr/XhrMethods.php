@@ -108,7 +108,7 @@ class XhrMethods
 				' . (int)$data['v'] . '
 			)
 		');
-				$this->model->delBells('new-fs-' . (int)$data['fid']);
+				$this->bellGateway->delBellsByIdentifier('new-fs-' . (int)$data['fid']);
 
 				return json_encode(array(
 					'status' => 1

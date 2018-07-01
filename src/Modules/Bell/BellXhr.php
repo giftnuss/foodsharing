@@ -121,6 +121,6 @@ class BellXhr extends Control
 	 */
 	public function delbell()
 	{
-		$this->gateway->delbell($_GET['id'], S::id());
+		$this->gateway->delBellForFoodsaver($_GET['id'], S::id());
 	}
 }

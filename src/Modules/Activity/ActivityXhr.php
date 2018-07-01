@@ -147,7 +147,7 @@ class ActivityXhr extends Control
 			/*
 			 * listings regions
 			*/
-			if ($bezirke = $this->model->getBezirke()) {
+			if ($bezirke = S::getRegions()) {
 				foreach ($bezirke as $b) {
 					$checked = true;
 					$regionId = 'bezirk-' . $b['id'];

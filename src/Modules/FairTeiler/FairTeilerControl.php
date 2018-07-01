@@ -122,7 +122,7 @@ class FairTeilerControl extends Control
 
 	public function getRealBezirke()
 	{
-		if ($bezirks = $this->model->getBezirke()) {
+		if ($bezirks = S::getRegions()) {
 			$out = array();
 			foreach ($bezirks as $b) {
 				if (in_array($b['type'], array(1, 2, 3, 9))) {
@@ -145,7 +145,7 @@ class FairTeilerControl extends Control
 		}
 		if (!$request->query->has('sub')) {
 			$items = array();
-			if ($bezirke = $this->model->getBezirke()) {
+			if ($bezirke = S::getRegions()) {
 				foreach ($bezirke as $b) {
 					$items[] = array('name' => $b['name'], 'href' => '/?page=fairteiler&bid=' . $b['id']);
 				}
@@ -198,7 +198,7 @@ class FairTeilerControl extends Control
 			$data['bfoodsaver'][$key]['name'] = $fs['name'] . ' ' . $fs['nachname'];
 		}
 
-		$data['bfoodsaver_values'] = $this->model->getFsAutocomplete($this->model->getBezirke());
+		$data['bfoodsaver_values'] = $this->model->getFsAutocomplete(S::getRegions());
 
 		$this->func->addContent($this->view->options($items), CNT_RIGHT);
 

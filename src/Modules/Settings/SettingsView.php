@@ -3,7 +3,7 @@
 namespace Foodsharing\Modules\Settings;
 
 use DateTime;
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\View;
 use Foodsharing\Lib\Session\S;
 
@@ -164,7 +164,7 @@ class SettingsView extends View
 		), array('submit' => $this->func->s('save'))), $this->func->s('settings_info'), array('class' => 'ui-padding'));
 	}
 
-	public function quizSession($session, $try_count, Model $model)
+	public function quizSession($session, $try_count, ContentGateway $contentGateway)
 	{
 		$infotext = $this->v_utils->v_error('mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten leider nicht bestanden. <a href="https://wiki.foodsharing.de/" target="_blank">Informiere Dich im Wiki</a> für den nächsten Versuch.<p>Lies Dir hier noch mal in Ruhe die Fragen und die dazugehörigen Antworten durch, damit es beim nächsten Mal besser klappt</p>');
 		$subtitle = 'Leider nicht bestanden';
@@ -248,7 +248,7 @@ class SettingsView extends View
 			}
 
 			if ($content_id) {
-				$cnt = $model->getContent($content_id);
+				$cnt = $contentGateway->getContent($content_id);
 				$out .= $this->v_utils->v_field($cnt['body'], $cnt['title'], array('class' => 'ui-padding'));
 			}
 		}

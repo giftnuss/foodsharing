@@ -2,21 +2,25 @@
 
 namespace Foodsharing\Modules\Statistics;
 
+use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 
 class StatisticsControl extends Control
 {
-	public function __construct(StatisticsModel $model, StatisticsView $view)
+	private $contentGateway;
+
+	public function __construct(StatisticsModel $model, StatisticsView $view, ContentGateway $contentGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->contentGateway = $contentGateway;
 
 		parent::__construct();
 	}
 
 	public function index()
 	{
-		$content = $this->model->getContent(11);
+		$content = $this->contentGateway->getContent(11);
 
 		$this->func->addTitle($content['title']);
 

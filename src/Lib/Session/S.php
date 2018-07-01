@@ -209,4 +209,11 @@ class S
 	{
 		session_write_close();
 	}
+
+	public static function getRegions()
+	{
+		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
+			return $_SESSION['client']['bezirke'];
+		}
+	}
 }
