@@ -89,7 +89,6 @@ class StoreGateway extends BaseGateway
 
 	public function getMyBetriebe($fs_id, $bezirk_id, $options = array())
 	{
-		// TODO this need proper testing!!!
 		$betriebe = $this->db->fetchAll('
 			SELECT 	fs_betrieb.id,
 						`fs_betrieb`.betrieb_status_id,
@@ -498,12 +497,10 @@ class StoreGateway extends BaseGateway
 		);
 	}
 
-	public function getAbholdates($bid, $dates)
+	public function listFetcher($bid, $dates)
 	{
-		// TODO needs testing
 		if (!empty($dates)) {
-			$dsql = array_keys($dates);
-			$placeholders = $this->db->generatePlaceholders(count($dsql));
+			$placeholders = $this->db->generatePlaceholders(count($dates));
 
 			$res = $this->db->fetchAll('
 				SELECT 	fs.id,
@@ -519,7 +516,7 @@ class StoreGateway extends BaseGateway
 				AND 	a.betrieb_id = ?
 				AND  	a.date IN(' . $placeholders . ')
 				AND		fs.deleted_at IS NULL',
-				array_merge([$bid], $dsql)
+				array_merge([$bid], $dates)
 			);
 
 			return $res;
@@ -624,7 +621,6 @@ class StoreGateway extends BaseGateway
 
 	public function isInTeam($fs_id, $bid)
 	{
-		// TODO needs testing
 		if ($this->db->fetchValue(
 			   'SELECT `foodsaver_id` 
 				FROM `fs_betrieb_team` 
