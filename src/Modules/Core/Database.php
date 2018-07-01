@@ -31,7 +31,12 @@ class Database
 	 */
 	public function fetchAll($query, $params = []): array
 	{
-		return $this->preparedQuery($query, $params)->fetchAll();
+		$out = $this->preparedQuery($query, $params)->fetchAll();
+		if (!$out) {
+			return [];
+		}
+
+		return $out;
 	}
 
 	/**
@@ -39,7 +44,12 @@ class Database
 	 */
 	public function fetchAllValues($query, $params = []): array
 	{
-		return $this->preparedQuery($query, $params)->fetchAll(\PDO::FETCH_COLUMN, 0);
+		$out = $this->preparedQuery($query, $params)->fetchAll(\PDO::FETCH_COLUMN, 0);
+		if (!$out) {
+			return [];
+		}
+
+		return $out;
 	}
 
 	/**
