@@ -13,9 +13,11 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 	 */
 	private $gateway;
 
-	private $bezirk_id = 241;
+	private $foodsaver;
 
-	private function storeData($store, $status = 'none')
+	private $region_id = 241;
+
+	private function storeData($store, $status = 'none'): array
 	{
 		$data = [
 			'id' => $store['id'],
@@ -30,7 +32,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 			'name' => $store['name'],
 			'anschrift' => implode(' ', [$store['str'], $store['hsnr']]),
 			'str' => $store['str'],
-			'hsnr' => strval($store['hsnr']),
+			'hsnr' => (string)$store['hsnr'],
 			'bezirk_name' => 'Göttingen'
 		];
 
@@ -51,7 +53,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 
 	public function testGetPickupDates()
 	{
-		$store = $this->tester->createStore($this->bezirk_id);
+		$store = $this->tester->createStore($this->region_id);
 		$time1 = '2018-07-18 16:40';
 		$fsid = $this->foodsaver['id'];
 		$this->tester->addRecurringPickup($store['id'], ['time' => $time1]);
@@ -71,7 +73,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 
 	public function testIsInTeam()
 	{
-		$store = $this->tester->createStore($this->bezirk_id);
+		$store = $this->tester->createStore($this->region_id);
 		$this->assertFalse(
 			$this->gateway->isInTeam($this->foodsaver['id'], $store['id'])
 		);
@@ -84,9 +86,9 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 
 	public function testListStoresForFoodsaver()
 	{
-		$store = $this->tester->createStore($this->bezirk_id);
+		$store = $this->tester->createStore($this->region_id);
 		$this->assertEquals(
-			$this->gateway->getMyBetriebe($this->foodsaver['id'], $this->bezirk_id),
+			$this->gateway->getMyBetriebe($this->foodsaver['id'], $this->region_id),
 			[
 				'verantwortlich' => [],
 				'team' => [],
@@ -99,7 +101,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 		$this->tester->addStoreTeam($store['id'], $this->foodsaver['id']);
 
 		$this->assertEquals(
-			$this->gateway->getMyBetriebe($this->foodsaver['id'], $this->bezirk_id),
+			$this->gateway->getMyBetriebe($this->foodsaver['id'], $this->region_id),
 			[
 				'verantwortlich' => [],
 				'team' => [$this->storeData($store, 'team')],

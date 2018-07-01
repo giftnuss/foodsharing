@@ -17,7 +17,7 @@ class StoreGateway extends BaseGateway
 		$this->regionGateway = $regionGateway;
 	}
 
-	public function getBetrieb($id)
+	public function getBetrieb($id): array
 	{
 		$out = $this->db->fetch('
 		SELECT		`id`,
@@ -61,7 +61,7 @@ class StoreGateway extends BaseGateway
 		return $out;
 	}
 
-	public function getMapsBetriebe($bezirk_id)
+	public function getMapsBetriebe($bezirk_id): array
 	{
 		return $this->db->fetchAll('
 			SELECT 	fs_betrieb.id,
@@ -87,7 +87,7 @@ class StoreGateway extends BaseGateway
 		);
 	}
 
-	public function getMyBetriebe($fs_id, $bezirk_id, $options = array())
+	public function getMyBetriebe($fs_id, $bezirk_id, $options = array()): array
 	{
 		$betriebe = $this->db->fetchAll('
 			SELECT 	fs_betrieb.id,
@@ -191,7 +191,7 @@ class StoreGateway extends BaseGateway
 		return $out;
 	}
 
-	public function getMyBetrieb($fs_id, $id)
+	public function getMyBetrieb($fs_id, $id): array
 	{
 		$out = $this->db->fetch('
 			SELECT
@@ -313,7 +313,7 @@ class StoreGateway extends BaseGateway
 		return $out;
 	}
 
-	public function getBetriebTeam($id)
+	public function getBetriebTeam($id): array
 	{
 		return $this->db->fetchAll('
 				SELECT 		fs.`id`,
@@ -346,7 +346,7 @@ class StoreGateway extends BaseGateway
 		', [':id' => $id]);
 	}
 
-	public function getBetriebSpringer($id)
+	public function getBetriebSpringer($id): array
 	{
 		return $this->db->fetch('
 				SELECT 		fs.`id`,
@@ -386,7 +386,7 @@ class StoreGateway extends BaseGateway
 			[':betrieb_id' => $betrieb_id]);
 	}
 
-	public function getAllFilialverantwortlich()
+	public function getAllFilialverantwortlich(): array
 	{
 		$verant = $this->db->fetchAll('
 			SELECT 	fs.`id`,
@@ -409,7 +409,7 @@ class StoreGateway extends BaseGateway
 		return $out;
 	}
 
-	public function getEmailBiepBez($region_ids)
+	public function getEmailBiepBez($region_ids): array
 	{
 		// TODO can probably be removed
 		$placeholders = $this->db->generatePlaceholders(count($region_ids));
@@ -464,7 +464,7 @@ class StoreGateway extends BaseGateway
 		', [':bid' => $betrieb_id, ':fs_id' => $fs_id]);
 	}
 
-	public function addFetcher($fsid, $bid, $date, $confirm = 0)
+	public function addFetcher($fsid, $bid, $date, $confirm = 0): int
 	{
 		return $this->db->insertIgnore('fs_abholer', [
 			'foodsaver_id' => $fsid,
@@ -474,7 +474,7 @@ class StoreGateway extends BaseGateway
 		]);
 	}
 
-	public function addAbholer($betrieb_id, $foodsaver_id, $dow)
+	public function addAbholer($betrieb_id, $foodsaver_id, $dow): int
 	{
 		return $this->db->insert('fs_abholer', [
 			'betrieb_id' => $betrieb_id,
@@ -483,12 +483,12 @@ class StoreGateway extends BaseGateway
 		]);
 	}
 
-	public function clearAbholer($betrieb_id)
+	public function clearAbholer($betrieb_id): int
 	{
 		return $this->db->delete('fs_abholer', ['betrieb_id' => $betrieb_id]);
 	}
 
-	public function confirmFetcher($fsid, $bid, $date)
+	public function confirmFetcher($fsid, $bid, $date): int
 	{
 		return $this->db->update(
 		'fs_abholer',
@@ -497,7 +497,7 @@ class StoreGateway extends BaseGateway
 		);
 	}
 
-	public function listFetcher($bid, $dates)
+	public function listFetcher($bid, $dates): array
 	{
 		if (!empty($dates)) {
 			$placeholders = $this->db->generatePlaceholders(count($dates));
@@ -556,7 +556,7 @@ class StoreGateway extends BaseGateway
 		return $this->db->fetchValue('SELECT ' . $ccol . ' FROM `fs_betrieb` WHERE `id` = :id', [':id' => $bid]);
 	}
 
-	public function changeBetriebStatus($fs_id, $bid, $status)
+	public function changeBetriebStatus($fs_id, $bid, $status): int
 	{
 		$last = $this->db->fetch('SELECT id, milestone FROM `fs_betrieb_notiz` WHERE `betrieb_id` = :id ORDER BY id DESC LIMIT 1', [':id' => $bid]);
 
@@ -579,7 +579,7 @@ class StoreGateway extends BaseGateway
 		);
 	}
 
-	public function add_betrieb_notiz($data)
+	public function add_betrieb_notiz($data): int
 	{
 		$last = 0;
 		if (isset($data['last']) && $data['last'] == 1) {
@@ -601,12 +601,12 @@ class StoreGateway extends BaseGateway
 		]);
 	}
 
-	public function deleteBPost($id)
+	public function deleteBPost($id): int
 	{
 		return $this->db->delete('fs_betrieb_notiz', ['id' => $id]);
 	}
 
-	public function getTeamleader($betrieb_id)
+	public function getTeamleader($betrieb_id): array
 	{
 		return $this->db->fetch(
 		'SELECT 	fs.`id`,CONCAT(fs.name," ",nachname) AS name  
@@ -619,7 +619,7 @@ class StoreGateway extends BaseGateway
 			[':id' => $betrieb_id]);
 	}
 
-	public function isInTeam($fs_id, $bid)
+	public function isInTeam($fs_id, $bid): bool
 	{
 		if ($this->db->fetchValue(
 			   'SELECT `foodsaver_id` 
@@ -636,7 +636,7 @@ class StoreGateway extends BaseGateway
 	}
 
 	/* retrieves all biebs that are biebs for a given bezirk (by being bieb in a Betrieb that is part of that bezirk, which is semantically not the same we use on platform) */
-	public function getBiebIds($bezirk)
+	public function getBiebIds($bezirk): array
 	{
 		return $this->db->fetchAllValues('SELECT DISTINCT bt.foodsaver_id FROM `fs_bezirk_closure` c
 			INNER JOIN `fs_betrieb` b ON c.bezirk_id = b.bezirk_id
@@ -650,7 +650,7 @@ class StoreGateway extends BaseGateway
 	 * Private methods
 	 */
 
-	private function getOne_kette($id)
+	private function getOne_kette($id): array
 	{
 		return $this->db->fetch('
 			SELECT
@@ -664,7 +664,7 @@ class StoreGateway extends BaseGateway
 			[':id' => $id]);
 	}
 
-	private function getBetriebNotiz($id)
+	private function getBetriebNotiz($id): array
 	{
 		return $this->db->fetchAll('
 			SELECT

@@ -70,12 +70,12 @@ class Database
 		$this->preparedQuery($query, $params);
 	}
 
-	public function insertIgnore(string $table, array $data, array $options = [])
+	public function insertIgnore(string $table, array $data, array $options = []): int
 	{
 		return $this->insert($table, $data, array_merge($options, ['ignore' => true]));
 	}
 
-	public function insert(string $table, array $data, array $options = [])
+	public function insert(string $table, array $data, array $options = []): int
 	{
 		$columns = array_map(
 			[$this, 'getQuotedName'],
@@ -97,7 +97,7 @@ class Database
 		return $lastInsertId;
 	}
 
-	public function update($table, array $data, array $criteria = [])
+	public function update($table, array $data, array $criteria = []): int
 	{
 		if (empty($data)) {
 			throw new \InvalidArgumentException(
@@ -119,7 +119,7 @@ class Database
 		return $this->preparedQuery($query, $params)->rowCount();
 	}
 
-	public function delete($table, array $criteria)
+	public function delete($table, array $criteria): int
 	{
 		$where = $this->generateWhereClause($criteria);
 
@@ -128,7 +128,7 @@ class Database
 		return $this->preparedQuery($query, array_values($criteria))->rowCount();
 	}
 
-	public function exists($table, array $criteria)
+	public function exists($table, array $criteria): bool
 	{
 		$where = $this->generateWhereClause($criteria);
 
@@ -144,17 +144,17 @@ class Database
 		}
 	}
 
-	public function beginTransaction()
+	public function beginTransaction(): bool
 	{
-		return $this->pdo->$this->beginTransaction();
+		return $this->pdo->beginTransaction();
 	}
 
-	public function commit()
+	public function commit(): bool
 	{
-		return $this->commit();
+		return $this->pdo->commit();
 	}
 
-	public function generatePlaceholders($length)
+	public function generatePlaceholders($length): string
 	{
 		return implode(', ', array_fill(0, $length, '?'));
 	}
