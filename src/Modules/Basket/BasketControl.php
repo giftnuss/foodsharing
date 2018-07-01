@@ -9,11 +9,11 @@ class BasketControl extends Control
 {
 	private $basketGateway;
 
-	public function __construct(BasketModel $model, BasketView $view, BasketGateway $basketBasketGateway)
+	public function __construct(BasketModel $model, BasketView $view, BasketGateway $basketGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
-		$this->basketGateway = $basketBasketGateway;
+		$this->basketGateway = $basketGateway;
 
 		parent::__construct();
 
