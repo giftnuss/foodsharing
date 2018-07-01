@@ -49,14 +49,16 @@ services:
   #------------------------------------
 
   client:
-    container_name: foodsharing_test_client
-    image: node:9
+    container_name: foodsharing_ci_client
+    image: foodsharing_ci_client
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.client.ci
     # We don't run anything long running in here yet - build is run via ./scripts/build-assets
     command: 'true'
     working_dir: /app/client
-    user: "${UID}"
     volumes:
-      - ../:/app
+      - client_node_modules_cache:/app/client/node_modules
 
   # php mail queue runner
   #------------------------------------
@@ -94,7 +96,7 @@ services:
       - 1337
       - 1338
     volumes:
-      - node_modules_cache:/app/chat/node_modules
+      - chat_node_modules_cache:/app/chat/node_modules
 
   # mysql
   #------------------------------------
@@ -153,4 +155,5 @@ services:
 volumes:
   selenium_downloads:
   vendor_cache:
-  node_modules_cache:
+  client_node_modules_cache:
+  chat_node_modules_cache:

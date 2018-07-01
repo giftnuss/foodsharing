@@ -1,0 +1,9 @@
+FROM node:9
+
+COPY client /app/client
+
+# Acess to legacy js libs
+COPY js /app/js
+
+# Access to js files in the php tree
+COPY src /app/src
