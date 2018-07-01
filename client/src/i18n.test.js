@@ -23,9 +23,9 @@ describe('i18n', () => {
 
   it('translation with variables', () => {
     assert.equal(i18n('bar', {
-      NAME: 'peter',
-      AGE: 21
-    }), 'my name is peter and I am 21 years old')
+      NAME: 'Peter',
+      AGE: 23
+    }), 'my name is Peter and I am 23 years old')
   })
 
   it('complains if missing key', () => {
