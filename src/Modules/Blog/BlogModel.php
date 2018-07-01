@@ -103,7 +103,7 @@ class BlogModel extends Model
 	{
 		$not = '';
 		if (!$this->func->isOrgaTeam()) {
-			$not = 'WHERE 		`bezirk_id` IN (' . implode(',', $this->getBezirkIds()) . ')';
+			$not = 'WHERE 		`bezirk_id` IN (' . implode(',', S::getBezirkIds()) . ')';
 		}
 
 		return $this->q('

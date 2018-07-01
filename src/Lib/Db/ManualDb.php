@@ -9,13 +9,13 @@ class ManualDb extends Db
 	public function updates()
 	{
 		$updates = array();
-		if ($bids = $this->getBezirkIds()) {
+		if ($bids = S::getBezirkIds()) {
 			$updates['forum'] = $this->forumUpdates($bids);
 		}
-		if ($botbids = $this->getBotBezirkIds()) {
+		if ($botbids = S::getBotBezirkIds()) {
 			$updates['bforum'] = $this->botForumUpdates($botbids);
 		}
-		if ($betrieb_ids = $this->getMyBetriebIds()) {
+		if ($betrieb_ids = S::getMyBetriebIds()) {
 			$updates['bpin'] = $this->betriebPinUpdates($botbids);
 		}
 
@@ -139,38 +139,6 @@ class ManualDb extends Db
 		');
 	}
 
-	public function getBotBezirkIds()
-	{
-		$out = array();
-		if (isset($_SESSION['client']['botschafter']) && is_array($_SESSION['client']['botschafter'])) {
-			foreach ($_SESSION['client']['botschafter'] as $b) {
-				$out[] = $b['bezirk_id'];
-			}
-		}
-
-		if (!empty($out)) {
-			return $out;
-		}
-
-		return false;
-	}
-
-	public function getMyBetriebIds()
-	{
-		$out = array();
-		if (isset($_SESSION['client']['betriebe']) && is_array($_SESSION['client']['betriebe'])) {
-			foreach ($_SESSION['client']['betriebe'] as $b) {
-				$out[] = $b['id'];
-			}
-		}
-
-		if (!empty($out)) {
-			return $out;
-		}
-
-		return false;
-	}
-
 	public function getFsBezirkIds($foodsaver_id)
 	{
 		return $this->qCol('
@@ -178,22 +146,6 @@ class ManualDb extends Db
 			FROM 	`fs_foodsaver_has_bezirk`
 			WHERE 	`foodsaver_id` = ' . (int)$foodsaver_id . '
 		');
-	}
-
-	public function getBezirkIds()
-	{
-		$out = array();
-		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
-			foreach ($_SESSION['client']['bezirke'] as $b) {
-				$out[] = $b['id'];
-			}
-		}
-
-		if (!empty($out)) {
-			return $out;
-		}
-
-		return false;
 	}
 
 	public function add_message_tpl($data)
@@ -264,7 +216,7 @@ class ManualDb extends Db
 		$children = false;
 		//$bezirk_id = (int)$this->getCurrentBezirkId();
 		if (!S::may('bot') && $bezirk_id > 0) {
-			$children = $this->getBezirkIds();
+			$children = S::getBezirkIds();
 		}
 
 		if (S::may('fs')) {
@@ -510,7 +462,7 @@ class ManualDb extends Db
 				FROM 	fs_foodsaver fs,
 						fs_foodsaver_has_bezirk hb
 				WHERE 	hb.foodsaver_id = fs.id
-				AND 	hb.bezirk_id IN(' . implode(',', $this->getBezirkIds()) . ')
+				AND 	hb.bezirk_id IN(' . implode(',', S::getBezirkIds()) . ')
 				AND		fs.deleted_at IS NULL
 		');
 	}
@@ -582,7 +534,7 @@ class ManualDb extends Db
 	public function getEmailAdressen($bezirk_id = false)
 	{
 		if (!$bezirk_id) {
-			$bezirk_id = $this->getCurrentBezirkId();
+			$bezirk_id = S::getCurrentBezirkId();
 		}
 
 		return $this->q('
@@ -626,7 +578,7 @@ class ManualDb extends Db
 	{
 		$file = str_replace('/', '', $file);
 		$file = strip_tags($file);
-		$_SESSION['client']['photo'] = $file;
+		S::setPhoto($file);
 		$this->update('
 
 		UPDATE `fs_foodsaver`
@@ -971,7 +923,7 @@ class ManualDb extends Db
 	private function getBezirkName($bezirk_id = false)
 	{
 		if ($bezirk_id === false) {
-			$bezirk_id = $this->getCurrentBezirkId();
+			$bezirk_id = S::getCurrentBezirkId();
 		}
 
 		return $this->qOne('SELECT `name` FROM `fs_bezirk` WHERE `id` = ' . (int)$bezirk_id);
@@ -980,7 +932,7 @@ class ManualDb extends Db
 	public function getMapsBetriebe($bezirk_id = false)
 	{
 		if (!$bezirk_id) {
-			$bezirk_id = $this->getCurrentBezirkId();
+			$bezirk_id = S::getCurrentBezirkId();
 		}
 
 		return $this->q('
@@ -1071,11 +1023,6 @@ class ManualDb extends Db
 		} else {
 			return $this->getBezirk($bezirk_id);
 		}
-	}
-
-	public function getCurrentBezirkId()
-	{
-		return $_SESSION['client']['bezirk_id'];
 	}
 
 	public function del_foodsaver($id)
@@ -1194,8 +1141,8 @@ class ManualDb extends Db
 
 	public function getBezirk($id = false)
 	{
-		if ($id === false && isset($_SESSION['client']['bezirk_id']) && (int)$_SESSION['client']['bezirk_id'] > 0) {
-			$id = $_SESSION['client']['bezirk_id'];
+		if ($id === false) {
+			$id = S::getCurrentBezirkId();
 		}
 
 		if ($id == 0) {
@@ -1577,7 +1524,7 @@ class ManualDb extends Db
 	public function getBasics_foodsaver($bezirk_id = false)
 	{
 		if (!$bezirk_id) {
-			$bezirk_id = $this->getCurrentBezirkId();
+			$bezirk_id = S::getCurrentBezirkId();
 		}
 
 		return $this->q('
@@ -2167,10 +2114,7 @@ class ManualDb extends Db
 		$onlybot = '';
 
 		if (!$this->func->isOrgaTeam()) {
-			$bid = array();
-			foreach ($_SESSION['client']['botschafter'] as $bezirk) {
-				$bid[] = (int)$bezirk['bezirk_id'];
-			}
+			$bid = S::getBotBezirkIds();
 			$onlybot = 'AND (	`bezirk_id` = ' . implode(' OR `bezirk_id` = ', $bid) . ' )	';
 		}
 

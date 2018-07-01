@@ -110,7 +110,7 @@ class BlogControl extends Control
 
 			$bezirke = S::getRegions();
 			if (!S::may('orga')) {
-				$bot_ids = $this->model->getBotBezirkIds();
+				$bot_ids = S::getBotBezirkIds();
 				foreach ($bezirke as $k => $v) {
 					if ($v['type'] != 7 || !in_array($v['id'], $bot_ids)) {
 						unset($bezirke[$k]);

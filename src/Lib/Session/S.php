@@ -217,4 +217,64 @@ class S
 			return $_SESSION['client']['bezirke'];
 		}
 	}
+
+	public static function getBotBezirkIds()
+	{
+		$out = array();
+		if (isset($_SESSION['client']['botschafter']) && is_array($_SESSION['client']['botschafter'])) {
+			foreach ($_SESSION['client']['botschafter'] as $b) {
+				$out[] = $b['bezirk_id'];
+			}
+		}
+
+		if (!empty($out)) {
+			return $out;
+		}
+
+		return false;
+	}
+
+	public static function getMyBetriebIds()
+	{
+		$out = array();
+		if (isset($_SESSION['client']['betriebe']) && is_array($_SESSION['client']['betriebe'])) {
+			foreach ($_SESSION['client']['betriebe'] as $b) {
+				$out[] = $b['id'];
+			}
+		}
+
+		if (!empty($out)) {
+			return $out;
+		}
+
+		return false;
+	}
+
+	public static function getBezirkIds()
+	{
+		$out = array();
+		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
+			foreach ($_SESSION['client']['bezirke'] as $b) {
+				$out[] = $b['id'];
+			}
+		}
+
+		if (!empty($out)) {
+			return $out;
+		}
+
+		return false;
+	}
+
+	public static function getCurrentBezirkId()
+	{
+		if (isset($_SESSION['client']['bezirk_id'])) {
+			return $_SESSION['client']['bezirk_id'];
+		}
+	}
+
+	public static function setPhoto($file)
+	{
+		$_SESSION['client']['photo'] = $file;
+	}
 }

@@ -178,7 +178,7 @@ class ActivityModel extends Model
 
 	public function loadForumUpdates($page = 0, $bids_not_load = false)
 	{
-		$tmp = $this->getBezirkIds();
+		$tmp = S::getBezirkIds();
 		$bids = array();
 		if ($tmp === false || count($tmp) === 0) {
 			return false;
@@ -232,7 +232,7 @@ class ActivityModel extends Model
 
 	public function loadStoreUpdates($page = 0)
 	{
-		if ($this->getMyBetriebIds() && $ret = $this->activityGateway->fetchAllStoreUpdates(S::id(), $page)) {
+		if (S::getMyBetriebIds() && $ret = $this->activityGateway->fetchAllStoreUpdates(S::id(), $page)) {
 			$out = array();
 			foreach ($ret as $r) {
 				$out[] = [
