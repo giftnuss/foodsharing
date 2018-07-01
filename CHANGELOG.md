@@ -36,6 +36,7 @@
 
 ## Dev/Test/CI stuff
 - Fix cache clearing during test/deploy !414 @nicksellen
+- Add testing for client js !422 @nicksellen
 
 # 2018-05-24
 
