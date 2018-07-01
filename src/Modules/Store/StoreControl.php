@@ -81,7 +81,7 @@ class StoreControl extends Control
 			$this->func->addTitle($data['name']);
 			$this->func->addTitle($this->func->s('edit'));
 
-			if (($this->func->isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $id)) || $this->func->isBotFor($data['bezirk_id'])) {
+			if ((S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $id)) || $this->func->isBotFor($data['bezirk_id'])) {
 				$this->handle_edit();
 
 				$this->func->setEditData($data);

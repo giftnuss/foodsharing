@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Store;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -252,7 +251,7 @@ class StoreGateway extends BaseGateway
 
 		$out['foodsaver'] = $this->getBetriebTeam($id);
 
-		$out['springer'] = $this->getBetriebSpringer($id); // TODO
+		$out['springer'] = $this->getBetriebSpringer($id);
 
 		$out['requests'] = $this->db->fetch('
 				SELECT 		fs.`id`,
@@ -441,11 +440,6 @@ class StoreGateway extends BaseGateway
 
 	public function isVerantwortlich($fs_id, $betrieb_id)
 	{
-		// TODO: move session access out of Gateway method
-		if (S::isOrgaTeam()) {
-			return true;
-		}
-
 		return $this->db->fetchValue('
 				SELECT 	betrieb_id
 				FROM 	fs_betrieb_team
@@ -471,13 +465,8 @@ class StoreGateway extends BaseGateway
 		', [':bid' => $betrieb_id, ':fs_id' => $fs_id]);
 	}
 
-	public function addFetcher($fsid, $bid, $date)
+	public function addFetcher($fsid, $bid, $date, $confirm = 0)
 	{
-		$confirm = 0;
-		if ($this->isVerantwortlich($fsid, $bid)) {
-			$confirm = 1;
-		}
-
 		return $this->db->insertIgnore('fs_abholer', [
 			'foodsaver_id' => $fsid,
 			'betrieb_id' => $bid,

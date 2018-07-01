@@ -60,7 +60,7 @@ class StoreXhr extends Control
 
 	public function getfetchhistory()
 	{
-		if (S::may() && ($this->storeGateway->isVerantwortlich(S::id(), $_GET['bid']) || S::may('orga'))) {
+		if (S::may() && (S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $_GET['bid']) || S::may('orga'))) {
 			if ($history = $this->model->getFetchHistory($_GET['bid'], $_GET['from'], $_GET['to'])) {
 				return array(
 					'status' => 1,
@@ -77,7 +77,7 @@ class StoreXhr extends Control
 
 	public function fetchhistory()
 	{
-		if (S::may() && ($this->storeGateway->isVerantwortlich(S::id(), $_GET['bid']) || S::may('orga'))) {
+		if (S::may() && (S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $_GET['bid']) || S::may('orga'))) {
 			$dia = new XhrDialog();
 			$dia->setTitle('Abholungshistorie');
 
@@ -201,7 +201,7 @@ class StoreXhr extends Control
 	{
 		if (isset($_GET['ids']) && is_array($_GET['ids']) && count($_GET['ids']) > 0) {
 			foreach ($_GET['ids'] as $b) {
-				if ($this->storeGateway->isVerantwortlich(S::id(), $b['id']) && (int)$b['v'] > 0) {
+				if ((S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $b['id'])) && (int)$b['v'] > 0) {
 					$this->model->updateBetriebBezirk($b['id'], $b['v']);
 				}
 			}
@@ -288,7 +288,7 @@ class StoreXhr extends Control
 	public function signout()
 	{
 		$xhr = new Xhr();
-		if ($this->storeGateway->isVerantwortlich(S::id(), $_GET['id'])) {
+		if (S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $_GET['id'])) {
 			$xhr->addMessage($this->func->s('signout_error_admin'), 'error');
 		} elseif ($this->storeGateway->isInTeam(S::id(), $_GET['id'])) {
 			$this->model->signout($_GET['id'], $this->func->fsId());

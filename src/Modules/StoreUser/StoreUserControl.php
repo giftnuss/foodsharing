@@ -47,7 +47,7 @@ class StoreUserControl extends Control
 				'prefetchtime' => $betrieb['prefetchtime']
 			];
 
-			if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && ($this->storeGateway->isVerantwortlich(S::id(), $_GET['id']) || $this->func->isOrgaTeam() || $this->func->isBotFor($betrieb['bezirk_id']))) {
+			if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && (S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $_GET['id']) || $this->func->isBotFor($betrieb['bezirk_id']))) {
 				if ($_POST['form_submit'] == 'zeiten') {
 					$range = range(0, 6);
 					global $g_data;
@@ -71,7 +71,7 @@ class StoreUserControl extends Control
 				}
 				$this->func->info($this->func->s('changes_saved'));
 				$this->func->goSelf();
-			} elseif (isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && ($this->storeGateway->isVerantwortlich(S::id(), $_GET['id']) || $this->func->isOrgaTeam() || $this->func->isBotFor($betrieb['bezirk_id']))) {
+			} elseif (isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && (S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $_GET['id']) || $this->func->isBotFor($betrieb['bezirk_id']))) {
 				$this->storeGateway->changeBetriebStatus(S::id(), $_GET['id'], $_POST['betrieb_status_id']);
 				$this->func->go($this->func->getSelf());
 			}
