@@ -139,15 +139,6 @@ class ManualDb extends Db
 		');
 	}
 
-	public function getFsBezirkIds($foodsaver_id)
-	{
-		return $this->qCol('
-			SELECT 	`bezirk_id`
-			FROM 	`fs_foodsaver_has_bezirk`
-			WHERE 	`foodsaver_id` = ' . (int)$foodsaver_id . '
-		');
-	}
-
 	public function add_message_tpl($data)
 	{
 		$id = $this->insert('
@@ -1858,51 +1849,6 @@ class ManualDb extends Db
 		return $id;
 	}
 
-	public function acceptBezirkRequest($fsid, $bid)
-	{
-		$bezirk = $this->getVal('name', 'bezirk', $bid);
-
-		return $this->update('
-					UPDATE 	 	`fs_foodsaver_has_bezirk`
-					SET 		`active` = 1,
-								`added` = NOW()
-
-					WHERE 		`bezirk_id` = ' . (int)$bid . '
-					AND 		`foodsaver_id` = ' . (int)$fsid . '
-		');
-	}
-
-	public function linkBezirk($fsid, $bid, $active = 1)
-	{
-		return $this->insert('
-			REPLACE INTO `fs_foodsaver_has_bezirk`
-			(
-				`bezirk_id`,
-				`foodsaver_id`,
-				`added`,
-				`active`
-			)
-			VALUES
-			(
-				' . (int)$bid . ',
-				' . (int)$fsid . ',
-				NOW(),
-				' . (int)$active . '
-			)
-		');
-	}
-
-	public function denyBezirkRequest($fsid, $bid)
-	{
-		$bezirk = $this->getVal('name', 'bezirk', $bid);
-
-		return $this->update('
-					DELETE FROM  `fs_foodsaver_has_bezirk`
-					WHERE 		`bezirk_id` = ' . (int)$bid . '
-					AND 		`foodsaver_id` = ' . (int)$fsid . '
-		');
-	}
-
 	public function getMyBetrieb($id)
 	{
 		$out = $this->qRow('
@@ -2304,68 +2250,6 @@ class ManualDb extends Db
 			AND
 				e.`end` > NOW()
 		');
-	}
-
-	public function add_bezirk($data)
-	{
-		$this->begin_transaction();
-
-		$id = $this->insert('
-		INSERT INTO 	`fs_bezirk`
-		(
-			`parent_id`,
-			`has_children`,
-			`name`,
-			`email`,
-			`email_pass`,
-			`email_name`
-		)
-		VALUES
-		(
-			' . (int)$data['parent_id'] . ',
-			' . (int)$data['has_children'] . ',
-			' . $this->strval($data['name']) . ',
-			' . $this->strval($data['email']) . ',
-			' . $this->strval($data['email_pass']) . ',
-			' . $this->strval($data['email_name']) . '
-		)');
-		$this->insert('INSERT INTO `fs_bezirk_closure` (ancestor_id, bezirk_id, depth) SELECT t.ancestor_id, ' . $id . ', t.depth+1 FROM `fs_bezirk_closure` AS t WHERE t.bezirk_id = ' . (int)$data['parent_id'] . ' UNION ALL SELECT ' . $id . ', ' . $id . ', 0');
-		$this->commit();
-
-		if (isset($data['foodsaver']) && is_array($data['foodsaver'])) {
-			foreach ($data['foodsaver'] as $foodsaver_id) {
-				$this->insert('
-						INSERT INTO `fs_botschafter`
-						(
-						`bezirk_id`,
-						`foodsaver_id`
-				)
-						VALUES
-						(
-						' . (int)$id . ',
-						' . (int)$foodsaver_id . '
-				)
-						');
-			}
-		}
-		if (isset($data['foodsaver']) && is_array($data['foodsaver'])) {
-			foreach ($data['foodsaver'] as $foodsaver_id) {
-				$this->insert('
-						INSERT INTO `fs_foodsaver_has_bezirk`
-						(
-						`bezirk_id`,
-						`foodsaver_id`
-				)
-						VALUES
-						(
-						' . (int)$id . ',
-						' . (int)$foodsaver_id . '
-				)
-						');
-			}
-		}
-
-		return $id;
 	}
 
 	public function getOne_message_tpl($id)

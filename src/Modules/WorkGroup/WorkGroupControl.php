@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\WorkGroup;
 
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Region\RegionGateway;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,11 +15,13 @@ class WorkGroupControl extends Control
 	 * @var FormFactoryBuilder
 	 */
 	private $formFactory;
+	private $regionGateway;
 
-	public function __construct(WorkGroupModel $model, WorkGroupView $view)
+	public function __construct(WorkGroupModel $model, WorkGroupView $view, RegionGateway $regionGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
 	}
@@ -154,7 +157,7 @@ class WorkGroupControl extends Control
 	{
 		$groupId = $request->query->getInt('id');
 
-		$bids = $this->model->getFsBezirkIds($this->func->fsId());
+		$bids = $this->regionGateway->getFsBezirkIds($this->func->fsId());
 		if (!$this->func->isOrgaTeam() && !$this->func->isBotForA($bids, true, true)) {
 			$this->func->go('/?page=dashboard');
 		}

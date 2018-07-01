@@ -3,13 +3,17 @@
 namespace Foodsharing\Modules\NewArea;
 
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class NewAreaXhr extends Control
 {
-	public function __construct(NewAreaModel $model, NewAreaView $view)
+	private $regionGateway;
+
+	public function __construct(NewAreaModel $model, NewAreaView $view, RegionGateway $regionGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
 	}
@@ -32,7 +36,7 @@ class NewAreaXhr extends Control
 						$fid = (int)$fid;
 						if ($fid > 0) {
 							++$count;
-							$this->model->linkBezirk($fid, $bezirk_id);
+							$this->regionGateway->linkBezirk($fid, $bezirk_id);
 
 							$foodsaver = $this->model->getValues(array('geschlecht', 'email', 'name', 'nachname'), 'foodsaver', $fid);
 							$anrede = $this->func->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r');

@@ -55,6 +55,15 @@ class RegionGateway extends BaseGateway
 		return $output;
 	}
 
+	public function getFsBezirkIds($foodsaver_id)
+	{
+		return $this->db->fetchAllValues('
+			SELECT 	`bezirk_id`
+			FROM 	`fs_foodsaver_has_bezirk`
+			WHERE 	`foodsaver_id` = :fs_id
+		', [':fs_id' => $foodsaver_id]);
+	}
+
 	public function listIdsForDescendantsAndSelf($bid)
 	{
 		if ((int)$bid == 0) {
@@ -161,5 +170,74 @@ class RegionGateway extends BaseGateway
 			AND 	fb.bezirk_id = :id
 			AND 	fb.active = 0
 		', ['id' => $id]);
+	}
+
+	public function acceptBezirkRequest($fsid, $bid)
+	{
+		return $this->db->update(
+			'fs_foodsaver_has_bezirk',
+					['active' => 1, 'add' => date('Y-m-d H:i:s')],
+					['bezirk_id' => $bid, 'foodsaver_id' => $fsid]
+		);
+	}
+
+	public function linkBezirk($fsid, $bid, $active = 1)
+	{
+		$this->db->execute('
+			REPLACE INTO `fs_foodsaver_has_bezirk`
+			(
+				`bezirk_id`,
+				`foodsaver_id`,
+				`added`,
+				`active`
+			)
+			VALUES
+			(
+				' . (int)$bid . ',
+				' . (int)$fsid . ',
+				NOW(),
+				' . (int)$active . '
+			)
+		');
+	}
+
+	public function denyBezirkRequest($fsid, $bid)
+	{
+		$this->db->delete('fs_foodsaver_has_bezirk', [
+			'bezirk_id' => $bid,
+			'foodsaver_id' => $fsid,
+		]);
+	}
+
+	public function add_bezirk($data)
+	{
+		$this->db->beginTransaction();
+
+		$id = $this->db->insert('fs_bezirk', [
+			'parent_id' => (int)$data['parent_id'],
+			'has_children' => (int)$data['has_children'],
+			'name' => strip_tags($data['name']),
+			'email' => strip_tags($data['email']),
+			'email_pass' => strip_tags($data['email_pass']),
+			'email_name' => strip_tags($data['email_name'])
+		]);
+
+		$this->db->execute('INSERT INTO `fs_bezirk_closure` (ancestor_id, bezirk_id, depth) SELECT t.ancestor_id, ' . $id . ', t.depth+1 FROM `fs_bezirk_closure` AS t WHERE t.bezirk_id = ' . (int)$data['parent_id'] . ' UNION ALL SELECT ' . $id . ', ' . $id . ', 0');
+		$this->db->commit();
+
+		if (isset($data['foodsaver']) && is_array($data['foodsaver'])) {
+			foreach ($data['foodsaver'] as $foodsaver_id) {
+				$this->db->insert('fs_botschafter', [
+					'bezirk_id' => (int)$id,
+					'foodsaver_id' => (int)$foodsaver_id
+				]);
+				$this->db->insert('fs_foodsaver_has_bezirk', [
+					'bezirk_id' => (int)$id,
+					'foodsaver_id' => (int)$foodsaver_id
+				]);
+			}
+		}
+
+		return $id;
 	}
 }

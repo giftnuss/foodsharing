@@ -129,6 +129,16 @@ class Database
 		}
 	}
 
+	public function beginTransaction()
+	{
+		return $this->pdo->$this->beginTransaction();
+	}
+
+	public function commit()
+	{
+		return $this->commit();
+	}
+
 	// === private functions ===
 
 	/**

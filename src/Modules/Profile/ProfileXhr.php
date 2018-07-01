@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Profile;
 
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrDialog;
@@ -13,13 +14,15 @@ class ProfileXhr extends Control
 	private $foodsaver;
 	private $storeModel;
 	private $bellGateway;
+	private $regionGateway;
 
-	public function __construct(ProfileModel $model, ProfileView $view, StoreModel $storeModel, BellGateway $bellGateway)
+	public function __construct(ProfileModel $model, ProfileView $view, StoreModel $storeModel, BellGateway $bellGateway, RegionGateway $regionGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->storeModel = $storeModel;
 		$this->bellGateway = $bellGateway;
+		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
 
@@ -101,7 +104,7 @@ class ProfileXhr extends Control
 
 	public function history()
 	{
-		$bids = $this->model->getFsBezirkIds($_GET['fsid']);
+		$bids = $this->regionGateway->getFsBezirkIds($_GET['fsid']);
 		if (S::may() && (S::may('orga') || $this->func->isBotForA($bids, false, false))) {
 			$dia = new XhrDialog();
 			if ($_GET['type'] == 0) {
