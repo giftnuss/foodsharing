@@ -134,11 +134,6 @@ module.exports = merge(webpackBase, {
           name: dev ? 'fonts/[name].[ext]' : 'fonts/[name].[hash:7].[ext]'
         }
       },
-      {
-        test: /test\.js$/,
-        loader: 'mocha-loader',
-        exclude: /node_modules/
-      },
       ...shims.rules
     ]
   },
