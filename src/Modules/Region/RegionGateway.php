@@ -240,4 +240,9 @@ class RegionGateway extends BaseGateway
 
 		return $id;
 	}
+
+	public function getBezirkName($bezirk_id)
+	{
+		return $this->db->fetchValue('SELECT `name` FROM `fs_bezirk` WHERE `id` = :id', [':id' => $bezirk_id]);
+	}
 }

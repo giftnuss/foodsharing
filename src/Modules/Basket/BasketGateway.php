@@ -28,7 +28,7 @@ class BasketGateway extends BaseGateway
 				b.description,
 				b.lat,
 				b.lon,
-				(6371 * acos( cos( radians( :lat ) ) * cos( radians( b.lat ) ) * cos( radians( b.lon ) - radians( :lon ) ) + sin( radians( :lat ) ) * sin( radians( b.lat ) ) ))
+				(6371 * acos( cos( radians( :lat ) ) * cos( radians( b.lat ) ) * cos( radians( b.lon ) - radians( :lon ) ) + sin( radians( :lat1 ) ) * sin( radians( b.lat ) ) ))
 				AS distance
 			FROM
 				fs_basket b
@@ -48,6 +48,7 @@ class BasketGateway extends BaseGateway
 			LIMIT 6
 		', [
 			':lat' => (float)$loc['lat'],
+			':lat1' => (float)$loc['lat'],
 			':lon' => (float)$loc['lon'],
 			':fs_id' => $fs_id,
 			':distance' => $distance,

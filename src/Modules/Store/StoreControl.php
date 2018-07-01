@@ -9,12 +9,14 @@ use Foodsharing\Modules\Core\Control;
 class StoreControl extends Control
 {
 	private $bellGateway;
+	private $storeGateway;
 
-	public function __construct(StoreModel $model, StoreView $view, BellGateway $bellGateway)
+	public function __construct(StoreModel $model, StoreView $view, BellGateway $bellGateway, StoreGateway $storeGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->bellGateway = $bellGateway;
+		$this->storeGateway = $storeGateway;
 
 		parent::__construct();
 
@@ -79,7 +81,7 @@ class StoreControl extends Control
 			$this->func->addTitle($data['name']);
 			$this->func->addTitle($this->func->s('edit'));
 
-			if (($this->func->isOrgaTeam() || $this->model->isVerantwortlich($id)) || $this->func->isBotFor($data['bezirk_id'])) {
+			if (($this->func->isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $id)) || $this->func->isBotFor($data['bezirk_id'])) {
 				$this->handle_edit();
 
 				$this->func->setEditData($data);
@@ -176,7 +178,7 @@ class StoreControl extends Control
 			$g_data['hsnr'] = '';
 
 			if ($id = $this->model->add_betrieb($g_data)) {
-				$this->model->add_betrieb_notiz(array(
+				$this->storeGateway->add_betrieb_notiz(array(
 					'foodsaver_id' => $this->func->fsId(),
 					'betrieb_id' => $id,
 					'text' => '{BETRIEB_ADDED}',
@@ -185,7 +187,7 @@ class StoreControl extends Control
 				));
 
 				if (isset($g_data['first_post']) && !empty($g_data['first_post'])) {
-					$this->model->add_betrieb_notiz(array(
+					$this->storeGateway->add_betrieb_notiz(array(
 						'foodsaver_id' => $this->func->fsId(),
 						'betrieb_id' => $id,
 						'text' => $g_data['first_post'],

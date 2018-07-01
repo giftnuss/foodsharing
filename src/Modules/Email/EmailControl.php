@@ -9,15 +9,18 @@ use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Mailbox\MailboxModel;
+use Foodsharing\Modules\Store\StoreGateway;
 
 class EmailControl extends Control
 {
 	private $mbmodel;
+	private $storeGateway;
 
-	public function __construct(Model $model, MailboxModel $mbmodel)
+	public function __construct(Model $model, MailboxModel $mbmodel, StoreGateway $storeGateway)
 	{
 		$this->model = $model;
 		$this->mbmodel = $mbmodel;
+		$this->storeGateway = $storeGateway;
 
 		parent::__construct();
 
@@ -136,9 +139,9 @@ class EmailControl extends Control
 				} elseif ($data['recip_choose'] == 'all_no_botschafter') {
 					$foodsaver = $this->model->getAllFoodsaverNoBotschafter();
 				} elseif ($data['recip_choose'] == 'filialverantwortlich') {
-					$foodsaver = $this->model->getAllFilialverantwortlich();
+					$foodsaver = $this->storeGateway->getAllFilialverantwortlich();
 				} elseif ($data['recip_choose'] == 'filialbot') {
-					$foodsaver1 = $this->model->getAllFilialverantwortlich();
+					$foodsaver1 = $this->storeGateway->getAllFilialverantwortlich();
 					$foodsaver2 = $this->model->getAllBotschafter();
 					$tmp = array_merge($foodsaver1, $foodsaver2);
 					$foodsaver = array();
@@ -179,7 +182,8 @@ class EmailControl extends Control
 
 					$foodsaver = array();
 				} elseif ($data['recip_choose'] == 'filialbez') {
-					$foodsaver = $this->model->getEmailBiepBez($data['recip_choose-choose']);
+					// TODO can probably be removed
+					$foodsaver = $this->storeGateway->getEmailBiepBez($data['recip_choose-choose']);
 				} elseif (isset($data['recip_choose-choose'])) {
 					if ($data['recip_choose'] == 'choosebot') {
 						$foodsaver = $this->model->getEmailBotFromBezirkList($data['recip_choose-choose']);

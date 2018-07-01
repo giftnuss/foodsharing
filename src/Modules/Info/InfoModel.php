@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Info;
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Model;
 
 class InfoModel extends Model

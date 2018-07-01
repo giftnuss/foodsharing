@@ -277,4 +277,18 @@ class S
 	{
 		$_SESSION['client']['photo'] = $file;
 	}
+
+	public static function mayGroup($group)
+	{
+		if (isset($_SESSION) && isset($_SESSION['client']['group'][$group])) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static function isOrgaTeam()
+	{
+		return S::mayGroup('orgateam');
+	}
 }

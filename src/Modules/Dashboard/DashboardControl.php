@@ -8,6 +8,7 @@ use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Profile\ProfileModel;
+use Foodsharing\Modules\Store\StoreGateway;
 
 class DashboardControl extends Control
 {
@@ -15,6 +16,7 @@ class DashboardControl extends Control
 	private $dashboardGateway;
 	private $contentGateway;
 	private $basketGateway;
+	private $storeGateway;
 	private $twig;
 	private $profileModel;
 
@@ -23,6 +25,7 @@ class DashboardControl extends Control
 		DashboardGateway $dashboardGateway,
 		ContentGateway $contentGateway,
 		BasketGateway $basketGateway,
+		StoreGateway $storeGateway,
 		Model $model,
 		ProfileModel $profileModel,
 		\Twig\Environment $twig)
@@ -31,6 +34,7 @@ class DashboardControl extends Control
 		$this->dashboardGateway = $dashboardGateway;
 		$this->contentGateway = $contentGateway;
 		$this->basketGateway = $basketGateway;
+		$this->storeGateway = $storeGateway;
 		$this->model = $model;
 		$this->twig = $twig;
 		$this->profileModel = $profileModel;
@@ -569,7 +573,7 @@ class DashboardControl extends Control
 		/*
 		 * Deine Betriebe
 		*/
-		if ($betriebe = $this->model->getMyBetriebe(array('sonstige' => false))) {
+		if ($betriebe = $this->storeGateway->getMyBetriebe(S::id(), S::getCurrentBezirkId(), array('sonstige' => false))) {
 			$this->func->addContent($this->view->u_myBetriebe($betriebe), CNT_LEFT);
 		} else {
 			$this->func->addContent($this->v_utils->v_info('Du bist bis jetzt in keinem Filial-Team.'), CNT_LEFT);

@@ -18,7 +18,12 @@ class Database
 	 */
 	public function fetch($query, $params = []): array
 	{
-		return $this->preparedQuery($query, $params)->fetch();
+		$out = $this->preparedQuery($query, $params)->fetch();
+		if (!$out) {
+			return [];
+		}
+
+		return $out;
 	}
 
 	/**
@@ -137,6 +142,11 @@ class Database
 	public function commit()
 	{
 		return $this->commit();
+	}
+
+	public function generatePlaceholders($length)
+	{
+		return implode(', ', array_fill(0, $length, '?'));
 	}
 
 	// === private functions ===

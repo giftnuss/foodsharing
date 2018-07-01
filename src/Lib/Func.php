@@ -420,6 +420,9 @@ class Func
 		return false;
 	}
 
+	/**
+	 * @deprecated use S::isOrgaTeam() instead
+	 */
 	public function isOrgaTeam()
 	{
 		return $this->mayGroup('orgateam');
@@ -830,11 +833,12 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		exit();
 	}
 
+	/**
+	 * @deprecated use S::getCurrentBezirkId() instead
+	 */
 	public function getBezirkId()
 	{
-		$manualDb = DI::$shared->get(ManualDb::class);
-
-		return $manualDb->getCurrentBezirkId();
+		return S::getCurrentBezirkId();
 	}
 
 	public function getPage()
@@ -1467,6 +1471,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return isset($_SESSION['client']['bezirke'][$bid]) || $this->isBotFor($bid) || $this->isOrgaTeam();
 	}
 
+	/**
+	 * @deprecated use S::mayGroup($group) instead
+	 */
 	public function mayGroup($group)
 	{
 		if (isset($_SESSION) && isset($_SESSION['client']['group'][$group])) {

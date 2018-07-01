@@ -3,12 +3,16 @@
 namespace Foodsharing\Modules\Stats;
 
 use Foodsharing\Modules\Console\ConsoleControl;
+use Foodsharing\Modules\Store\StoreGateway;
 
 class StatsControl extends ConsoleControl
 {
-	public function __construct(StatsModel $model)
+	private $storeGateway;
+
+	public function __construct(StatsModel $model, StoreGateway $storeGateway)
 	{
 		$this->model = $model;
+		$this->storeGateway = $storeGateway;
 		parent::__construct();
 	}
 
@@ -86,7 +90,7 @@ class StatsControl extends ConsoleControl
 		if ($bid > 0) {
 			$added = $betrieb['added'];
 
-			if ($team = $this->model->getBetriebTeam($bid)) {
+			if ($team = $this->storeGateway->getBetriebTeam($bid)) {
 				foreach ($team as $fs) {
 					$newdata = array(
 						'stat_first_fetch' => $fs['stat_first_fetch'],
