@@ -347,7 +347,7 @@ class QuizXhr extends Control
 			 */
 			if ($questions = $this->getRandomQuestions($_GET['qid'], $quiz['questcount'])) {
 				// Get the description on how the quiz works
-				$content = $this->contentGateway->getContent(17);
+				$content = $this->contentGateway->get(17);
 
 				// for safety check if there are not too many questions
 				$questions = array_slice($questions, 0, (int)$quiz['questcount']);
@@ -407,7 +407,7 @@ class QuizXhr extends Control
 			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
 		}
 
-		$content = $this->contentGateway->getContent($content_id);
+		$content = $this->contentGateway->get($content_id);
 		$dia->setTitle($content['title']);
 		$dia->addContent($content['body']);
 
@@ -434,7 +434,7 @@ class QuizXhr extends Control
 					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
 				}
 
-				$content = $this->contentGateway->getContent($content_id);
+				$content = $this->contentGateway->get($content_id);
 				$dia->setTitle($content['title']);
 				$dia->addContent($content['body']);
 

@@ -87,14 +87,14 @@ class SettingsControl extends Control
 	{
 		if (S::may() && $this->foodsaver['rolle'] > 0) {
 			if (!$this->foodsaver['verified']) {
-				$this->func->addContent($this->view->simpleContent($this->contentGateway->getContent(45)));
+				$this->func->addContent($this->view->simpleContent($this->contentGateway->get(45)));
 			} else {
 				if (($status = $this->quizModel->getQuizStatus(2)) && ($quiz = $this->quizModel->getQuiz(2))) {
 					if ((int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)$this->func->fsId()) == 0) {
 						$this->func->info('Du darfst zunächst das Foodsaver Quiz machen');
 						$this->func->go('/?page=settings&sub=upgrade/up_fs');
 					}
-					$desc = $this->contentGateway->getContent(12);
+					$desc = $this->contentGateway->get(12);
 
 					// Quiz wurde noch gar nicht probiert
 					if ($status['times'] == 0) {
@@ -118,7 +118,7 @@ class SettingsControl extends Control
 						$this->func->addContent($this->view->quizIndex($quiz, $desc));
 					} // hat alles nichts genützt
 					else {
-						$this->func->addContent($this->view->quizFailed($this->contentGateway->getContent(13)));
+						$this->func->addContent($this->view->quizFailed($this->contentGateway->get(13)));
 					}
 				}
 			}
@@ -136,7 +136,7 @@ class SettingsControl extends Control
 	{
 		if (S::may()) {
 			if (($status = $this->quizModel->getQuizStatus(1)) && ($quiz = $this->quizModel->getQuiz(1))) {
-				$desc = $this->contentGateway->getContent(12);
+				$desc = $this->contentGateway->get(12);
 
 				// Quiz wurde noch gar nicht probiert
 				if ($status['times'] == 0) {
@@ -161,7 +161,7 @@ class SettingsControl extends Control
 					$this->func->addContent($this->view->quizIndex($quiz, $desc));
 				} // hat alles nichts genützt
 				else {
-					$this->func->addContent($this->view->quizFailed($this->contentGateway->getContent(13)));
+					$this->func->addContent($this->view->quizFailed($this->contentGateway->get(13)));
 				}
 			}
 		}
@@ -171,7 +171,7 @@ class SettingsControl extends Control
 	{
 		if (S::may() && $this->foodsaver['rolle'] >= 2) {
 			if (($status = $this->quizModel->getQuizStatus(3)) && ($quiz = $this->quizModel->getQuiz(3))) {
-				$desc = $this->contentGateway->getContent(12);
+				$desc = $this->contentGateway->get(12);
 
 				// Quiz wurde noch gar nicht probiert
 				if ($status['times'] == 0) {
@@ -195,7 +195,7 @@ class SettingsControl extends Control
 					$this->func->addContent($this->view->quizIndex($quiz, $desc));
 				} // hat alles nichts genützt
 				else {
-					return $this->view->quizFailed($this->contentGateway->getContent(13));
+					return $this->view->quizFailed($this->contentGateway->get(13));
 				}
 			} else {
 				$this->func->addContent($this->v_utils->v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:' . SUPPORT_EMAIL . '"">' . SUPPORT_EMAIL . '</a>'));
@@ -236,8 +236,8 @@ class SettingsControl extends Control
 					$this->func->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
 				}
 			}
-			$cnt = $this->contentGateway->getContent(14);
-			$rv = $this->contentGateway->getContent(30);
+			$cnt = $this->contentGateway->get(14);
+			$rv = $this->contentGateway->get(30);
 			$this->func->addContent($this->view->confirmFs($cnt, $rv));
 		}
 	}
@@ -255,8 +255,8 @@ class SettingsControl extends Control
 					$this->func->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
 				}
 			}
-			$cnt = $this->contentGateway->getContent(15);
-			$rv = $this->contentGateway->getContent(31);
+			$cnt = $this->contentGateway->get(15);
+			$rv = $this->contentGateway->get(31);
 			$this->func->addContent($this->view->confirmBip($cnt, $rv));
 		}
 	}
@@ -335,10 +335,10 @@ class SettingsControl extends Control
 
 				// Rechtsvereinbarung
 
-				$rv = $this->contentGateway->getContent(32);
+				$rv = $this->contentGateway->get(32);
 
 				$this->func->addContent(
-					$this->view->confirmBot($this->contentGateway->getContent(16)) .
+					$this->view->confirmBot($this->contentGateway->get(16)) .
 
 					$this->v_utils->v_form('upBotsch', array($this->v_utils->v_field(
 						$this->v_utils->v_bezirkChooser('bezirk', $this->func->getBezirk(), array('label' => 'In welcher Region möchtest Du Botschafter werden?')) .

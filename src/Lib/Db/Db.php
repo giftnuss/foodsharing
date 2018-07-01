@@ -199,6 +199,9 @@ abstract class Db
 		}
 	}
 
+	/**
+	 * @deprecated not needed when passing data as prepared statement
+	 */
 	public function dateval($val)
 	{
 		return '"' . $this->safe($val) . '"';
@@ -239,6 +242,9 @@ abstract class Db
 		return $out;
 	}
 
+	/**
+	 * @deprecated Usage is not needed when passing data as prepared statement
+	 */
 	public function safe($str)
 	{
 		return $this->mysqli->escape_string($str);

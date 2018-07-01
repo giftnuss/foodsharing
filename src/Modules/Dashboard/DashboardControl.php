@@ -87,7 +87,7 @@ class DashboardControl extends Control
 		}
 
 		if ($check) {
-			$cnt = $this->contentGateway->getContent(33);
+			$cnt = $this->contentGateway->get(33);
 
 			$cnt['body'] = str_replace(array(
 				'{NAME}',
@@ -149,7 +149,7 @@ class DashboardControl extends Control
 
 		$this->func->addContent($this->view->foodsharerMenu(), CNT_LEFT);
 
-		$cnt = $this->contentGateway->getContent(33);
+		$cnt = $this->contentGateway->get(33);
 
 		$cnt['body'] = str_replace(array(
 			'{NAME}',

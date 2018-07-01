@@ -288,8 +288,8 @@ class LoginXhr extends Control
 				$pass = strip_tags($_GET['p']);
 			}
 
-			$datenschutz = $this->contentGateway->getContent(28);
-			$rechtsvereinbarung = $this->contentGateway->getContent(29);
+			$datenschutz = $this->contentGateway->get(28);
+			$rechtsvereinbarung = $this->contentGateway->get(29);
 
 			$rechtsvereinbarung['body'] = strip_tags(str_replace(array('<br>', '<br />', '<p>', '</p>'), "\n", $rechtsvereinbarung['body']));
 			$datenschutz['body'] = strip_tags(str_replace(array('<br>', '<br />', '<p>', '</p>'), "\n", $datenschutz['body']));

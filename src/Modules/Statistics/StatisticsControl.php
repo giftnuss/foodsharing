@@ -20,7 +20,7 @@ class StatisticsControl extends Control
 
 	public function index()
 	{
-		$content = $this->contentGateway->getContent(11);
+		$content = $this->contentGateway->get(11);
 
 		$this->func->addTitle($content['title']);
 

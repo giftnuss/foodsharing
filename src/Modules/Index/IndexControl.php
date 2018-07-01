@@ -30,13 +30,13 @@ class IndexControl extends Control
 		$gerettet = round($gerettet, 0);
 
 		if (strpos($_SERVER['HTTP_HOST'], 'foodsharing.at') !== false) {
-			$page_content = $this->contentGateway->getContent(37);
+			$page_content = $this->contentGateway->get(37);
 		} elseif (strpos($_SERVER['HTTP_HOST'], 'foodsharingschweiz.ch') !== false) {
-			$page_content = $this->contentGateway->getContent(47);
+			$page_content = $this->contentGateway->get(47);
 		} elseif (strpos($_SERVER['HTTP_HOST'], 'beta.foodsharing.de') !== false) {
-			$page_content = $this->contentGateway->getContent(48);
+			$page_content = $this->contentGateway->get(48);
 		} else {
-			$page_content = $this->contentGateway->getContent(38);
+			$page_content = $this->contentGateway->get(38);
 		}
 
 		$this->func->addContent($this->view->index(

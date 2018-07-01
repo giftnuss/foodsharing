@@ -248,7 +248,7 @@ class SettingsView extends View
 			}
 
 			if ($content_id) {
-				$cnt = $contentGateway->getContent($content_id);
+				$cnt = $contentGateway->get($content_id);
 				$out .= $this->v_utils->v_field($cnt['body'], $cnt['title'], array('class' => 'ui-padding'));
 			}
 		}

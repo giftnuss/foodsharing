@@ -6,33 +6,6 @@ use Foodsharing\Lib\Session\S;
 
 class ManualDb extends Db
 {
-	public function getBasics_content()
-	{
-		return $this->q('
-			SELECT 	 	`id`,
-						`name`
-
-			FROM 		`fs_content`
-			ORDER BY `name`');
-	}
-
-	public function getOne_content($id)
-	{
-		$out = $this->qRow('
-			SELECT
-			`id`,
-			`name`,
-			`title`,
-			`body`,
-			`last_mod`
-
-			FROM 		`fs_content`
-
-			WHERE 		`id` = ' . (int)$id);
-
-		return $out;
-	}
-
 	public function updates()
 	{
 		$updates = array();
@@ -550,40 +523,6 @@ class ManualDb extends Db
 				' . $where . ' AND active = 1
 				AND	deleted_at IS NULL
 		');
-	}
-
-	public function add_content($data)
-	{
-		$id = $this->insert('
-			INSERT INTO 	`fs_content`
-			(
-			`name`,
-			`title`,
-			`body`,
-			`last_mod`
-			)
-			VALUES
-			(
-			' . $this->strval($data['name']) . ',
-			' . $this->strval($data['title']) . ',
-			' . $this->strval($data['body'], true) . ',
-			' . $this->dateval($data['last_mod']) . '
-			)');
-
-		return $id;
-	}
-
-	public function update_content($id, $data)
-	{
-		return $this->update('
-		UPDATE 	`fs_content`
-
-		SET 	`name` =  ' . $this->strval($data['name']) . ',
-				`title` =  ' . $this->strval($data['title']) . ',
-				`body` =  ' . $this->strval($data['body'], true) . ',
-				`last_mod` =  ' . $this->dateval($data['last_mod']) . '
-
-		WHERE 	`id` = ' . (int)$id);
 	}
 
 	public function xhrGetTagFs($bezirk_id)
