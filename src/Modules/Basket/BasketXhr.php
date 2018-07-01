@@ -12,15 +12,15 @@ use Foodsharing\Modules\Message\MessageModel;
 class BasketXhr extends Control
 {
 	private $status;
-	private $gateway;
+	private $basketGateway;
 	private $messageModel;
 
-	public function __construct(BasketModel $model, BasketView $view, BasketGateway $gateway, MessageModel $messageModel)
+	public function __construct(BasketModel $model, BasketView $view, BasketGateway $basketGateway, MessageModel $messageModel)
 	{
 		$this->model = $model;
 		$this->messageModel = $messageModel;
 		$this->view = $view;
-		$this->gateway = $gateway;
+		$this->basketGateway = $basketGateway;
 
 		$this->status = array(
 			'ungelesen' => 0,
@@ -251,7 +251,7 @@ class BasketXhr extends Control
 		$xhr = new Xhr();
 
 		if (isset($_GET['choords'])) {
-			if ($basket = $this->model->closeBaskets(30, array(
+			if ($basket = $this->basketGateway->listCloseBaskets(S::id(), array(
 				'lat' => $_GET['choords'][0],
 				'lon' => $_GET['choords'][1]
 			))
@@ -408,7 +408,7 @@ class BasketXhr extends Control
 
 	public function update()
 	{
-		$count = $this->gateway->getUpdateCount($this->func->fsId());
+		$count = $this->basketGateway->getUpdateCount($this->func->fsId());
 		if ((int)$count > 0) {
 			return array(
 				'status' => 1,

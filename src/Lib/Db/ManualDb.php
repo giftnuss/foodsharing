@@ -64,40 +64,6 @@ class ManualDb extends Db
 		return false;
 	}
 
-	public function closeBaskets($distance = 30, $loc = false)
-	{
-		if ($loc === false) {
-			$loc = S::getLocation($this);
-		}
-
-		return $this->q('
-			SELECT
-				b.id,
-				b.picture,
-				b.description,
-				b.lat,
-				b.lon,
-				(6371 * acos( cos( radians( ' . (float)$loc['lat'] . ' ) ) * cos( radians( b.lat ) ) * cos( radians( b.lon ) - radians( ' . (float)$loc['lon'] . ' ) ) + sin( radians( ' . (float)$loc['lat'] . ' ) ) * sin( radians( b.lat ) ) ))
-				AS distance
-			FROM
-				fs_basket b
-
-			WHERE
-				b.status = 1
-
-			AND
-				foodsaver_id != ' . (int)$this->func->fsId() . '
-
-			HAVING
-				distance <=' . (int)$distance . '
-
-			ORDER BY
-				distance ASC
-
-			LIMIT 6
-		');
-	}
-
 	private function forumUpdates($bids)
 	{
 		return $this->q('

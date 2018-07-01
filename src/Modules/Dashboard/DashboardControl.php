@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Dashboard;
 
+use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Content\ContentGateway;
@@ -11,22 +12,25 @@ use Foodsharing\Modules\Profile\ProfileModel;
 class DashboardControl extends Control
 {
 	private $user;
-	private $gateway;
+	private $dashboardGateway;
 	private $contentGateway;
+	private $basketGateway;
 	private $twig;
 	private $profileModel;
 
 	public function __construct(
 		DashboardView $view,
-		DashboardGateway $gateway,
+		DashboardGateway $dashboardGateway,
 		ContentGateway $contentGateway,
+		BasketGateway $basketGateway,
 		Model $model,
 		ProfileModel $profileModel,
 		\Twig\Environment $twig)
 	{
 		$this->view = $view;
-		$this->gateway = $gateway;
+		$this->dashboardGateway = $dashboardGateway;
 		$this->contentGateway = $contentGateway;
+		$this->basketGateway = $basketGateway;
 		$this->model = $model;
 		$this->twig = $twig;
 		$this->profileModel = $profileModel;
@@ -37,7 +41,7 @@ class DashboardControl extends Control
 			$this->func->go('/');
 		}
 
-		$this->user = $this->gateway->getUser($this->func->fsId());
+		$this->user = $this->dashboardGateway->getUser($this->func->fsId());
 	}
 
 	public function index()
@@ -163,10 +167,10 @@ class DashboardControl extends Control
 
 		$this->view->updates();
 
-		if ($this->user['lat'] && ($baskets = $this->gateway->listCloseBaskets($this->func->fsId(), S::getLocation($this->model)))) {
+		if ($this->user['lat'] && ($baskets = $this->dashboardGateway->listCloseBaskets($this->func->fsId(), S::getLocation($this->model)))) {
 			$this->func->addContent($this->view->closeBaskets($baskets), CNT_LEFT);
 		} else {
-			if ($baskets = $this->gateway->getNewestFoodbaskets()) {
+			if ($baskets = $this->dashboardGateway->getNewestFoodbaskets()) {
 				$this->func->addContent($this->view->newBaskets($baskets), CNT_LEFT);
 			}
 		}
@@ -524,7 +528,7 @@ class DashboardControl extends Control
 		 * Essenskörbe
 		 */
 
-		if ($baskets = $this->model->closeBaskets()) {
+		if ($baskets = $this->basketGateway->listCloseBaskets(S::id(), S::getLocation())) {
 			$out = '
 			<ul class="linklist">';
 			foreach ($baskets as $b) {

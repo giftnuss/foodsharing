@@ -133,10 +133,11 @@ class S
 		return false;
 	}
 
-	public static function getLocation(Model $model)
+	public static function getLocation()
 	{
 		$loc = fSession::get('g_location', false);
 		if (!$loc) {
+			$model = DI::$shared->get(Model::class);
 			$loc = $model->getValues(array('lat', 'lon'), 'foodsaver', self::$func->fsId());
 			self::set('g_location', $loc);
 		}

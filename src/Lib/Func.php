@@ -1267,6 +1267,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		//return '<pre>'.print_r($el,true).'</pre>';
 	}
 
+	/**
+	 * @deprecated use S::id() instead
+	 */
 	public function fsId()
 	{
 		if ($this->loggedIn()) {
