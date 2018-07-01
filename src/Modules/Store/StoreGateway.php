@@ -502,10 +502,7 @@ class StoreGateway extends BaseGateway
 	{
 		// TODO needs testing
 		if (!empty($dates)) {
-			$dsql = array();
-			foreach ($dates as $date => $time) {
-				$dsql[] = $date;
-			}
+			$dsql = array_keys($dates);
 			$placeholders = $this->db->generatePlaceholders(count($dsql));
 
 			$res = $this->db->fetchAll('
@@ -524,19 +521,11 @@ class StoreGateway extends BaseGateway
 				AND		fs.deleted_at IS NULL',
 				array_merge([$bid], $dsql)
 			);
-			global $g_data;
-			foreach ($res as $r) {
-				$key = 'fetch-' . str_replace(array(':', ' ', '-'), '', $r['date']);
-				if (!isset($g_data[$key])) {
-					$g_data[$key] = array();
-				}
-				$g_data[$key][] = $r;
-			}
 
 			return $res;
 		}
 
-		return false;
+		return [];
 	}
 
 	public function getAbholzeiten($betrieb_id)

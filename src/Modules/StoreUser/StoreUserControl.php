@@ -283,7 +283,16 @@ class StoreUserControl extends Control
 
 				$next_dates = $this->view->u_getNextDates($zeiten, $betrieb, $this->model->listUpcommingFetchDates($_GET['id']));
 
-				$this->storeGateway->getAbholdates($betrieb['id'], $next_dates);
+				$abholdates = $this->storeGateway->getAbholdates($betrieb['id'], $next_dates);
+
+				global $g_data;
+				foreach ($abholdates as $r) {
+					$key = 'fetch-' . str_replace(array(':', ' ', '-'), '', $r['date']);
+					if (!isset($g_data[$key])) {
+						$g_data[$key] = array();
+					}
+					$g_data[$key][] = $r;
+				}
 
 				$days = $this->func->getDow();
 
