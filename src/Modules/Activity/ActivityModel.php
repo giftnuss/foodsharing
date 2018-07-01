@@ -20,7 +20,7 @@ class ActivityModel extends Model
 		$this->outputSanitizerService = $outputSanitzierService;
 	}
 
-	public function loadEventWallUpdates($page = 0)
+	public function loadEventWallUpdates($page = 0): array
 	{
 		$updates = array();
 		$updates = $this->activityGateway->fetchAllEventUpdates(S::id(), $page);
@@ -52,7 +52,7 @@ class ActivityModel extends Model
 		return $out;
 	}
 
-	public function loadBasketWallUpdates($page = 0)
+	public function loadBasketWallUpdates($page = 0): array
 	{
 		$updates = array();
 		if ($up = $this->activityGateway->fetchAllBasketWallUpdates($this->session->id(), $page)) {
