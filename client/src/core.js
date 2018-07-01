@@ -3,7 +3,7 @@ import '@/raven'
 import '@/style'
 
 import $ from 'jquery'
-import { ajreq } from '@/script'
+import { initialize, ajreq } from '@/script'
 
 import 'jquery-ui'
 
@@ -21,6 +21,8 @@ import serverData from '@/server-data'
 import socket from '@/socket'
 import info from '@/info'
 import search from '@/instant-search'
+
+initialize()
 
 $('#mainMenu > li > a').each(function () {
   if (parseInt(this.href.length) > 2 && this.href.indexOf(serverData.page) > 0) {

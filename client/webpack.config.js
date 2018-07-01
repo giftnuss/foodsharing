@@ -1,4 +1,6 @@
 const mkdirp = require('mkdirp')
+const merge = require('webpack-merge')
+const webpackBase = require('./webpack.base')
 const { writeFileSync } = require('fs')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
@@ -55,7 +57,7 @@ plugins.push(
   }
 )
 
-module.exports = {
+module.exports = merge(webpackBase, {
   entry: moduleEntries(
     // We explicitly define each foodsharing modules here so we can convert them one-by-one
     'Index',
@@ -95,7 +97,8 @@ module.exports = {
       'css': resolve('../css'),
       'js': resolve('../js'),
       '@': resolve('src'),
-      '@php': resolve('../src')
+      '@php': resolve('../src'),
+      '>': resolve('test')
     }
   },
   module: {
@@ -131,6 +134,11 @@ module.exports = {
           name: dev ? 'fonts/[name].[ext]' : 'fonts/[name].[hash:7].[ext]'
         }
       },
+      {
+        test: /test\.js$/,
+        loader: 'mocha-loader',
+        exclude: /node_modules/
+      },
       ...shims.rules
     ]
   },
@@ -148,7 +156,7 @@ module.exports = {
       name: dev
     }
   }
-}
+})
 
 function resolve (dir) {
   return path.join(clientRoot, dir)
