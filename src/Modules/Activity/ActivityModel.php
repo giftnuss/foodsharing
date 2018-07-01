@@ -18,7 +18,7 @@ class ActivityModel extends Model
 		$this->activityGateway = $activityGateway;
 	}
 
-	public function loadEventWallUpdates($page = 0)
+	public function loadEventWallUpdates($page = 0): array
 	{
 		$updates = array();
 		$updates = $this->activityGateway->fetchAllEventUpdates(S::id(), $page);
@@ -50,7 +50,7 @@ class ActivityModel extends Model
 		return $out;
 	}
 
-	public function loadBasketWallUpdates($page = 0)
+	public function loadBasketWallUpdates($page = 0): array
 	{
 		$updates = array();
 		if ($up = $this->activityGateway->fetchAllBasketWallUpdates(S::id(), $page)) {
