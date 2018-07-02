@@ -690,7 +690,7 @@ class Utils
 				<div class="fotoupload popbox" style="display:none;" id="' . $id . '">
 					<h3>Fotoupload</h3>
 					<p class="subtitle">Hier kannst Du ein Foto von Deinem Computer ausw&auml;hlen</p>
-					<form id="' . $id . '-form" method="post" enctype="multipart/form-data" target="' . $id . '-frame" action="xhr.php?f=uploadPhoto">
+					<form id="' . $id . '-form" method="post" enctype="multipart/form-data" target="' . $id . '-frame" action="/xhr.php?f=uploadPhoto">
 						<input type="file" name="uploadpic" onchange="showLoader();$(\'#' . $id . '-form\')[0].submit();" />
 						<input type="hidden" id="' . $id . '-action" name="action" value="upload" />
 						<input type="hidden" id="' . $id . '-x" name="x" value="0" />
