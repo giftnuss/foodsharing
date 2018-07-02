@@ -398,7 +398,7 @@ const conv = {
 
   appendChatbox: function (cid, min) {
     if (this.isBigPageMode) {
-      conv.loadConversation(cid)
+      msg.loadConversation(cid)
       return false
     }
 

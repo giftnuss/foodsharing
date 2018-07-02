@@ -22,7 +22,8 @@
     "raven-js": "^3.23.3",
     "socket.io-client": "1.5.0",
     "timeago": "^1.4.1",
-    "tinysort": "^2.3.6"
+    "tinysort": "^2.3.6",
+    "whatwg-fetch": "^2.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.42",

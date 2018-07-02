@@ -6,7 +6,7 @@ services:
 
     Foodsharing\:
         resource: '../src/*'
-        exclude: '../src/{Lib/Flourish,Lib/Cache,Lib/View/v*,Dev,Debug}'
+        exclude: '../src/{Lib/Flourish,Lib/Cache,Lib/View/v*,Dev,Debug,RestKernel.php}'
 
     Twig_Loader_Filesystem:
         class: Twig_Loader_Filesystem
@@ -82,8 +82,7 @@ services:
         arguments:
             - "@=service('validator').getValidator()"
 
-    form.factory:
-        class: Symfony\Component\Form\FormFactoryBuilder
+    Symfony\Component\Form\FormFactoryBuilder:
         factory: [Symfony\Component\Form\Forms, createFormFactoryBuilder]
         calls:
             - [addExtension, ['@Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension']]
@@ -92,3 +91,23 @@ services:
     Intervention\Image\ImageManager:
         arguments:
             - driver: 'imagick'
+    mysqli:
+      class: mysqli
+      arguments:
+        - !php/const DB_HOST
+        - !php/const DB_USER
+        - !php/const DB_PASS
+        - !php/const DB_DB
+      calls:
+        - [query, ['SET NAMES "utf8"']]
+    PDO:
+      class: PDO
+      arguments:
+        - !php/const DSN
+        - !php/const DB_USER
+        - !php/const DB_PASS
+      calls:
+        - [ setAttribute, [!php/const PDO::ATTR_EMULATE_PREPARES, false]]
+        - [ setAttribute, [!php/const PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION]]
+        - [ setAttribute, [!php/const PDO::MYSQL_ATTR_INIT_COMMAND, 'SET NAMES "utf8"']]
+

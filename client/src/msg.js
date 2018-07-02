@@ -7,7 +7,9 @@
 import $ from 'jquery'
 import info from '@/info'
 import conv from '@/conv'
+import autoLink from '@/autoLink'
 import timeformat from '@/timeformat'
+import api from '@/api'
 
 import {
   ajax,
@@ -301,7 +303,7 @@ const msg = {
   },
 
   msgTpl: function (message) {
-    return $('<li id="msg-' + message.id + '" style="display:none;"><span class="img"><a title="' + message.fs_name + '" href="#" onclick="profile(' + message.fs_id + ');return false;"><img height="35" src="' + img(message.fs_photo, 'mini') + '" /></a></span><span class="body">' + nl2br(message.body.autoLink()) + '<span class="time">' + timeformat.nice(message.time) + '</span></span><span class="clear"></span></li>')
+    return $('<li id="msg-' + message.id + '" style="display:none;"><span class="img"><a title="' + message.fs_name + '" href="#" onclick="profile(' + message.fs_id + ');return false;"><img height="35" src="' + img(message.fs_photo, 'mini') + '" /></a></span><span class="body">' + nl2br(autoLink(message.body)) + '<span class="time">' + timeformat.nice(message.time) + '</span></span><span class="clear"></span></li>')
   },
 
   getRecipients: function () {
@@ -328,7 +330,7 @@ const msg = {
     msg.conversation_id = 0
     msg.last_message_id = 0
   },
-  loadConversation: function (id) {
+  loadConversation: async function (id) {
     if (id == msg.conversation_id) {
       msg.scrollBottom()
       $('#msg_answer').select()
@@ -336,67 +338,59 @@ const msg = {
     }
     msg.conversation_id = id
 
-    ajax.req('msg', 'loadconversation', {
-      data: {
-        id: id
-      },
-      success: function (data) {
-        msg.resetConversation()
+    const { conversation, member, messages } = await api.getConversations(id)
 
-        const $conversation = $('#msg-conversation ul:first')
-        $conversation.html('')
+    msg.resetConversation()
 
-        /*
-         * add members to conversation title
-         */
+    const $conversation = $('#msg-conversation ul:first')
+    $conversation.html('')
 
-        let title = ''
+    let title = ''
 
-        let names = []
-        if (data.member != undefined && data.member.length > 0) {
-          for (var i = 0; i < data.member.length; i++) {
-            if (data.member[i].id != msg.fsid) {
-              names[names.length] = data.member[i].name
-              title += '<a title="' + data.member[i].name + '" href="#" onclick="profile(' + data.member[i].id + ');return false;"><img src="' + img(data.member[i].photo, 'mini') + '" width="22" alt="' + data.member[i].name + '" /></a>'
-            }
-          }
-        }
+    if (member != undefined && member.length > 0) {
+      const currentMember = member
+        .find(m => m.id != msg.fsid)
 
-        let strTitle = data.conversation.name
-        if (strTitle === null) {
-          strTitle = 'Unterhaltung mit ' + names.join(', ')
-        }
+      if (currentMember) {
+        title = `
+          <a title="${currentMember.name}" href="#" onclick="profile(${currentMember.id});return false;">
+            <img src="${img(member.photo, 'mini')}" width="22" alt="${currentMember.name}" />
+          </a>
+        `
+      }
+    }
 
-        title = '&nbsp;<div class="images">' + title + '</div>' + strTitle + '<div style="clear:both;"></div>'
+    const strTitle = conversation.name
+      ? conversation.name : `Unterhaltung mit ${member.map(m => m.name).join(', ')}`
 
-        $('#msg-conversation-title a').remove()
-        $('#msg-conversation-title').append(title)
+    title = `
+      &nbsp;<div class="images">${title}</div>${strTitle}<div style="clear:both;"></div>
+    `
 
-        /*
-         * append messages to conversation message list
-         */
-        if (data.messages != undefined) {
-          data.messages.reverse()
-          for (let i = 0; i < data.messages.length; i++) {
-            // $conversation.append('<li><span class="body">'++'</span><span class="time">'+timeformat.nice()+'</span></li>');
-            msg.appendMsg(data.messages[i])
-          }
-        }
+    $('#msg-conversation-title a').remove()
+    $('#msg-conversation-title').append(title)
 
-        $('#compose').hide()
-        $('#msg-conversation-wrapper').show()
-        msg.scrollBottom()
+    /*
+     * append messages to conversation message list
+     */
+    if (messages) {
+      messages
+        .reverse()
+        .forEach(m => msg.appendMsg(m))
+    }
 
-        msg.$convs.children('li.active').removeClass('active')
-        $('#convlist-' + id).addClass('active')
+    $('#compose').hide()
+    $('#msg-conversation-wrapper').show()
+    msg.scrollBottom()
 
-        $('#msg_answer').select()
+    msg.$convs.children('li.active').removeClass('active')
+    $(`#convlist-${id}`).addClass('active')
 
-        msg.heartbeatRestart()
+    $('#msg_answer').select()
 
-        msg.scrollTrigger()
-      } // success end
-    }) // ajax end
+    msg.heartbeatRestart()
+
+    msg.scrollTrigger()
   },
 
   loadMore: function () {

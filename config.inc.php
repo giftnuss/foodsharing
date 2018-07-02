@@ -1,6 +1,5 @@
 <?php
 
-use DebugBar\DataCollector\PDO\TraceablePDO;
 use Foodsharing\DI;
 
 $FS_ENV = getenv('FS_ENV');
@@ -52,21 +51,8 @@ define('CNT_BOTTOM', 3);
 define('CNT_LEFT', 4);
 define('CNT_OVERTOP', 5);
 
-$dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_DB . ';charset=utf8';
-if ($FS_ENV === 'dev') {
-	// In development we need to wrap the PDO instance for the DebugBar
-	$pdo = new PDO($dsn, DB_USER, DB_PASS);
-	$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$pdo->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND, 'SET NAMES \'utf8\'');
-	$traceablePDO = new TraceablePDO($pdo);
-	DI::$shared->useTraceablePDO($traceablePDO);
-	Foodsharing\Debug\DebugBar::register($traceablePDO);
-} else {
-	DI::$shared->usePDO($dsn, DB_USER, DB_PASS);
-}
+define('DSN', 'mysql:host=' . DB_HOST . ';dbname=' . DB_DB . ';charset=utf8');
 
-DI::$shared->configureMysqli(DB_HOST, DB_USER, DB_PASS, DB_DB);
 DI::$shared->compile();
 
 Foodsharing\Lib\Db\Mem::connect();
