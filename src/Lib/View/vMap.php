@@ -88,6 +88,7 @@ class vMap extends vCore
 			'searchpanel' => $this->searchpanel,
 			'defaultMarkerOptions' => $this->defaultMarkerOptions
 		];
-		return '<div class="vmap" id="map" data-options="'. htmlspecialchars(json_encode($mapOptions)) .'"></div><input type="hidden" name="latlng" id="map-latLng" value="" />';
+
+		return '<div class="vmap" id="map" data-options="' . htmlspecialchars(json_encode($mapOptions)) . '"></div><input type="hidden" name="latlng" id="map-latLng" value="" />';
 	}
 }
