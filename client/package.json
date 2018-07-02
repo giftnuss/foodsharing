@@ -23,11 +23,12 @@
     "socket.io-client": "1.5.0",
     "timeago": "^1.4.1",
     "tinysort": "^2.3.6",
+    "typeahead-addresspicker": "^1.0.1",
     "whatwg-fetch": "^2.0.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.42",
-    "@babel/preset-env": "^7.0.0-beta.42",
+    "@babel/core": "^7.0.0-beta.51",
+    "@babel/preset-env": "^7.0.0-beta.51",
     "babel-loader": "^8.0.0-beta",
     "css-loader": "^0.28.11",
     "dotenv": "^5.0.1",
