@@ -24,7 +24,7 @@ class BasketView extends View
 
 	private function findMap($location)
 	{
-		$map = new vMap('map', $location);
+		$map = new vMap($location);
 
 		if (is_array($location)) {
 			$map->setLocation($location['lat'], $location['lon']);
@@ -32,7 +32,7 @@ class BasketView extends View
 
 		$map->setSearchPanel('mapsearch');
 		$map->setMarkerCluster();
-		$map->setDefaultMarker('basket', 'green');
+		$map->setDefaultMarkerOptions('basket', 'green');
 
 		return '<div class="ui-widget"><input id="mapsearch" type="text" name="mapsearch" value="" placeholder="Adresssuche..." class="input text value ui-corner-top"/><div class="findmap">' . $map->render() . '</div></div>';
 	}
@@ -91,10 +91,10 @@ class BasketView extends View
 			$page->addSectionRight($this->userBox($basket), 'AnbieterIn');
 
 			if ($basket['lat'] != 0 || $basket['lon'] != 0) {
-				$map = new vMap('map', [$basket['lat'], $basket['lon']]);
+				$map = new vMap([$basket['lat'], $basket['lon']]);
 				$map->addMarker($basket['lat'], $basket['lon']);
 
-				$map->setDefaultMarker('basket', 'green');
+				$map->setDefaultMarkerOptions('basket', 'green');
 
 				$map->setLocation($basket['lat'], $basket['lon']);
 

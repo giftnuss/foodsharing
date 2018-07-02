@@ -5,18 +5,18 @@ import assert from 'assert'
 import serverData from '@/server-data'
 import i18n from '@/i18n'
 
-beforeEach(() => {
-  Object.assign(serverData.translations, {
-    foo: 'my nice translation',
-    bar: 'my name is {NAME} and I am {AGE} years old'
-  })
-})
-
-afterEach(() => {
-  serverData.translations = {}
-})
-
 describe('i18n', () => {
+  beforeEach(() => {
+    Object.assign(serverData.translations, {
+      foo: 'my nice translation',
+      bar: 'my name is {NAME} and I am {AGE} years old'
+    })
+  })
+
+  afterEach(() => {
+    serverData.translations = {}
+  })
+
   it('basic translation', () => {
     assert.equal(i18n('foo'), 'my nice translation')
   })

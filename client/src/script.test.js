@@ -4,33 +4,33 @@ import sinon from 'sinon'
 import assert from 'assert'
 import { sleep, jsonOK, setGETParams, resetModules } from '>/utils'
 
-const sandbox = sinon.createSandbox()
-
-let browser
-let msg
-let script
-let mockBrowser
-let server
-
-beforeEach(() => {
-  server = sinon.createFakeServer()
-
-  browser = require('@/browser')
-  script = require('@/script')
-  msg = require('@/msg').default
-
-  mockBrowser = sandbox.mock(browser)
-  sandbox.stub(msg, 'loadConversation')
-})
-
-afterEach(() => {
-  mockBrowser.verify()
-  server.restore()
-  sandbox.restore()
-  resetModules()
-})
-
 describe('script', () => {
+  const sandbox = sinon.createSandbox()
+
+  let browser
+  let msg
+  let script
+  let mockBrowser
+  let server
+
+  beforeEach(() => {
+    server = sinon.createFakeServer()
+
+    browser = require('@/browser')
+    script = require('@/script')
+    msg = require('@/msg').default
+
+    mockBrowser = sandbox.mock(browser)
+    sandbox.stub(msg, 'loadConversation')
+  })
+
+  afterEach(() => {
+    mockBrowser.verify()
+    server.restore()
+    sandbox.restore()
+    resetModules()
+  })
+
   describe('on mobile', () => {
     beforeEach(() => sandbox.stub(browser, 'isMob').returns(true))
 

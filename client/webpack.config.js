@@ -61,6 +61,7 @@ module.exports = merge(webpackBase, {
   entry: moduleEntries(
     // We explicitly define each foodsharing modules here so we can convert them one-by-one
     'Index',
+    'Basket',
     'Dashboard',
     'Foodsaver',
     'StoreUser',
@@ -105,14 +106,6 @@ module.exports = merge(webpackBase, {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        exclude: [
-          /(node_modules)/,
-          resolve('../js') // ignore the old js/**.js files
-        ],
-        use: 'babel-loader'
-      },
-      {
         test: /\.css$/,
         use: [
           dev ? 'style-loader' : MiniCssExtractPlugin.loader,
@@ -124,7 +117,7 @@ module.exports = merge(webpackBase, {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: dev ? 'fonts/[name].[ext]' : 'fonts/[name].[hash:7].[ext]'
+          name: dev ? 'img/[name].[ext]' : 'img/[name].[hash:7].[ext]'
         }
       },
       {
@@ -134,8 +127,7 @@ module.exports = merge(webpackBase, {
           limit: 10000,
           name: dev ? 'fonts/[name].[ext]' : 'fonts/[name].[hash:7].[ext]'
         }
-      },
-      ...shims.rules
+      }
     ]
   },
   plugins,

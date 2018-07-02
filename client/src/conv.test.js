@@ -5,20 +5,20 @@ import sinon from 'sinon'
 
 import { resetModules, setGETParams } from '>/utils'
 
-const sandbox = sinon.createSandbox()
-
-let conv
-
-beforeEach(() => {
-  conv = require('@/conv').default
-})
-
-afterEach(() => {
-  sandbox.restore()
-  resetModules()
-})
-
 describe('conv', () => {
+  const sandbox = sinon.createSandbox()
+
+  let conv
+
+  beforeEach(() => {
+    conv = require('@/conv').default
+  })
+
+  afterEach(() => {
+    sandbox.restore()
+    resetModules()
+  })
+
   describe('base page', () => {
     it('is not in big page mode', () => {
       conv.init()

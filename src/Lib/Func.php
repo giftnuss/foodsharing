@@ -1148,7 +1148,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'subPage' => $this->getSubPage(),
 			'location' => $location,
 			'ravenConfig' => $ravenConfig,
-			'translations' => $this->getTranslations()
+			'translations' => $this->getTranslations(),
+			'GOOGLE_API_KEY' => GOOGLE_API_KEY
 		]);
 	}
 

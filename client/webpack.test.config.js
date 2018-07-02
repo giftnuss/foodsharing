@@ -3,12 +3,14 @@ const merge = require('webpack-merge')
 
 const path = require('path')
 const clientRoot = path.resolve(__dirname)
-const shims = require('./shims')
 
 const webpackBase = require('./webpack.base')
 
 module.exports = merge(webpackBase, {
-  entry: glob.sync(resolve('src/**/*.test.js')),
+  entry: [
+    ...glob.sync(resolve('src/**/*.test.js')),
+    ...glob.sync(resolve('../src/**/*.test.js'))
+  ],
   mode: 'development',
   devtool: 'inline-cheap-module-source-map',
   output: {
@@ -25,7 +27,14 @@ module.exports = merge(webpackBase, {
           'css-loader'
         ]
       },
-      ...shims.rules
+      {
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        use: 'null-loader'
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        use: 'null-loader'
+      }
     ]
   }
 })
