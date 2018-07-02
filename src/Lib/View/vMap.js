@@ -16,21 +16,26 @@ import AddressPicker from 'typeahead-addresspicker'
 
 import { GOOGLE_API_KEY } from '@/server-data'
 
-let map
-let clusterGroup
+export let map
+export let clusterGroup
 let defaultMarker
 
 $(() => {
   const mapEL = document.getElementById('map')
-  if (mapEL) {
-    initializeMap(mapEL)
-  }
+  if (mapEL) initializeMap(mapEL)
 })
 
 export async function initializeMap (el) {
   const mapOptions = $(el).data('options')
+  if (!mapOptions) return console.error('map is missing data-options')
 
-  const { center, zoom, searchpanel, markers, defaultMarkerOptions } = mapOptions
+  const {
+    center,
+    zoom = 13,
+    searchpanel = false,
+    markers = [],
+    defaultMarkerOptions
+  } = mapOptions
 
   defaultMarker = L.AwesomeMarkers.icon({
     icon: defaultMarkerOptions.icon,

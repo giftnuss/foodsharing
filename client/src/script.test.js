@@ -92,6 +92,12 @@ describe('script', () => {
       let success
       let error
       beforeEach(() => {
+        document.body.innerHTML = `
+            <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-error" style="display:none;"></div>
+            <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-info" style="display:none;"></div>
+            <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-success" style="display:none;"></div>
+        `
+
         info = document.getElementById('pulse-info')
         success = document.getElementById('pulse-success')
         error = document.getElementById('pulse-error')
