@@ -15,7 +15,6 @@ import 'jquery-contextmenu/dist/jquery.contextMenu.css'
 
 import '@/menu'
 import '@/becomeBezirk'
-import '@/tablesorter'
 
 import serverData from '@/server-data'
 

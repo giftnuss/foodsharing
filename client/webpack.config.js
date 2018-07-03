@@ -68,8 +68,7 @@ module.exports = merge(webpackBase, {
     'StoreUser',
     'WorkGroup',
     'Login',
-    'Message',
-    'Store'
+    'Message'
   ),
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'cheap-module-eval-source-map' : 'source-map',
