@@ -66,6 +66,7 @@ module.exports = merge(webpackBase, {
     'Login',
     'Message',
     'Region',
+    'Store',
     'StoreUser',
     'WorkGroup'
   ),
