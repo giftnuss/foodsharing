@@ -33,6 +33,7 @@ exports.rules = [
     test: typeaheadAddresspicker,
     use: 'exports-loader?AddressPicker'
   }
+  })
 ]
 
 function importLoadersRules (entries) {
