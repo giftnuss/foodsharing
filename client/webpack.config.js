@@ -7,7 +7,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const path = require('path')
 const clientRoot = path.resolve(__dirname)
-const shims = require('./shims')
 const { join } = require('path')
 
 const dev = process.env.NODE_ENV !== 'production'
