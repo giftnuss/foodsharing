@@ -469,59 +469,6 @@ export function ajreq (name, options, method, app) {
   })
 }
 
-let u_pulse_info_to = null
-export function pulseErrorOff (msg, opt) {
-  if (opt == undefined) {
-    opt = {
-      sticky: false
-    }
-  }
-  let time = 6000
-  if (opt.sticky) {
-    time = 900000
-  }
-
-  $('#pulse-error').html(msg)
-  $('#pulse-error').stop().fadeIn()
-  const u_pulse_error_to = setTimeout(function () {
-    $('#pulse-error').fadeOut()
-    $(document).unbind('click')
-  }, time)
-  setTimeout(function () {
-    $(document).bind('click', function () {
-      $('#pulse-error').stop().fadeOut()
-      $(document).unbind('click')
-      clearTimeout(u_pulse_error_to)
-    })
-  }, 500)
-}
-
-export function pulseSuccessOff (msg, opt) {
-  if (opt == undefined) {
-    opt = {
-      sticky: false
-    }
-  }
-  let time = 5000
-  if (opt.sticky) {
-    time = 900000
-  }
-
-  $('#pulse-success').html(msg)
-  $('#pulse-success').stop().fadeIn()
-  const u_pulse_error_to = setTimeout(function () {
-    $('#pulse-success').fadeOut()
-    $(document).unbind('click')
-  }, time)
-  setTimeout(function () {
-    $(document).bind('click', function () {
-      $('#pulse-success').stop().fadeOut()
-      $(document).unbind('click')
-      clearTimeout(u_pulse_error_to)
-    })
-  }, 500)
-}
-
 function definePulse (type, defaultTimeout = 5000) {
   return (html, options = {}) => {
     let { timeout, sticky } = options || {}
@@ -544,33 +491,6 @@ function definePulse (type, defaultTimeout = 5000) {
 export const pulseInfo = definePulse('info', 4000)
 export const pulseSuccess = definePulse('success', 5000)
 export const pulseError = definePulse('error', 6000)
-
-export function pulseInfoOrig (msg, opt) {
-  if (opt == undefined) {
-    opt = {
-      sticky: false
-    }
-  }
-  let time = 4000
-  if (opt.sticky) {
-    time = 900000
-  }
-
-  $('#pulse-info').html(msg)
-  $('#pulse-info').fadeIn()
-
-  u_pulse_info_to = setTimeout(function () {
-    $('#pulse-info').fadeOut()
-    $(document).unbind('click')
-  }, time)
-  setTimeout(function () {
-    $(document).bind('click', function () {
-      $('#pulse-info').fadeOut()
-      $(document).unbind('click')
-      clearTimeout(u_pulse_info_to)
-    })
-  }, 500)
-}
 
 export function addHover (sel) { $(sel).hover(function () { $(this).addClass('hover') }, function () { $(this).removeClass('hover') }) }
 
