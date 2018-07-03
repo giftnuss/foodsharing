@@ -33,7 +33,6 @@ exports.rules = [
     test: typeaheadAddresspicker,
     use: 'exports-loader?AddressPicker'
   }
-  })
 ]
 
 function importLoadersRules (entries) {
@@ -73,4 +72,3 @@ exports.alias = {
   'tablesorter': lib('tablesorter/jquery.tablesorter.js'),
   'tablesorter-pagercontrols': lib('tablesorter/jquery.tablesorter.pager.js')
 }
-
