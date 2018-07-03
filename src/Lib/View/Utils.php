@@ -919,6 +919,18 @@ class Utils
 
 	public function v_tablesorter($head, $data, $option = array())
 	{
+		$params = [
+			'nohead' => isset($option['noHead']) && $option['noHead'],
+			'pager' => isset($option['pager']) && $option['pager'],
+			'head' => $head,
+			'data' => $data
+		];
+		return $this->twig->render('partials/tablesorter.twig', $params);
+
+	}
+
+	public function v_tablesorter2($head, $data, $option = array())
+	{
 		$id = $this->func->id('table');
 
 		$style = '';
