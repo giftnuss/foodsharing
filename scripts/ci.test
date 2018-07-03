@@ -21,7 +21,7 @@ SECONDS=0
 
 pids=()
 
-for name in app chat web client; do
+for name in app chat web client db; do
   dc build $name &
   pids+=($!)
 done

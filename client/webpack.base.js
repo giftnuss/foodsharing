@@ -16,7 +16,8 @@ module.exports = {
       'js': resolve('../js'),
       '@': resolve('src'),
       '@php': resolve('../src'),
-      '>': resolve('test')
+      '>': resolve('test'),
+      '@translations': resolve('../lang')
     }
   },
   module: {
@@ -28,6 +29,16 @@ module.exports = {
           resolve('../js') // ignore the old js/**.js files
         ],
         use: 'babel-loader'
+      },
+      {
+        test: /\.yml$/,
+        exclude: [
+          /(node_modules)/
+        ],
+        use: [
+          'json-loader',
+          'yaml-loader'
+        ]
       },
       ...shims.rules
     ]

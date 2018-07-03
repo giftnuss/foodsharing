@@ -1,0 +1,52 @@
+<div class="tablesort-wrapper">
+    <table class="tablesorter">
+        {% if not nohead %}
+            <thead>
+                <tr class="ui-corner-top">
+                    {% for h in head %}
+                        <th class="ui-corner-all" 
+                            {% if h.width is defined %}style="width: {{ h.width }}px"{% endif %}
+                            {% if h.sort is defined and not h.sort %}data-sort="false"{% endif %}
+                        >
+                            {{ h.name | raw }}
+                        </th>
+
+                    {% endfor %}
+                </tr>
+            </thead>
+        {% endif %}
+
+        <tbody>
+            {% for row in data %}
+                <tr>
+                    {% for cell in row %}
+                        <td>{{ cell.cnt | raw }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% if pager %}
+    <div class="pager ui-corner-all">
+        <form>
+            <a class="prev">&nbsp;</a>
+
+            <input style="display:none" type="text" class="pagedisplay"/>
+            <span class="pagedisplay2">
+                <span>Seite</span> <span class="seite"></span> <span>von</span> <span class="anz"></span>
+            </span>
+            <a class="next">&nbsp;</a>
+            <span class="pagesize-wrapper">
+                <select class="pagesize">
+                    <option selected="selected"  value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option  value="40">40</option>
+                </select> <span>Einträge pro Seite</span>
+            </span>
+        </form>
+    </div>
+{% endif %}
+</div>
+

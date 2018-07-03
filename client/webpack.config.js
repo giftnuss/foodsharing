@@ -7,7 +7,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const path = require('path')
 const clientRoot = path.resolve(__dirname)
-const shims = require('./shims')
 const { join } = require('path')
 
 const dev = process.env.NODE_ENV !== 'production'
@@ -88,23 +87,6 @@ module.exports = merge(webpackBase, {
     // TODO: find somewhere to set the multiStep option from https://github.com/webpack/webpack/issues/6693
     hotUpdateChunkFilename: '[hash].hot-update.js'
   },
-  resolve: {
-    extensions: ['.js'],
-    modules: [
-      resolve('node_modules')
-    ],
-    alias: {
-      ...shims.alias,
-      'fonts': resolve('../fonts'),
-      'img': resolve('../img'),
-      'css': resolve('../css'),
-      'js': resolve('../js'),
-      '@': resolve('src'),
-      '@php': resolve('../src'),
-      '>': resolve('test'),
-      '@translations': resolve('../lang')
-    }
-  },
   module: {
     rules: [
       {
@@ -136,16 +118,6 @@ module.exports = merge(webpackBase, {
           limit: 10000,
           name: dev ? 'fonts/[name].[ext]' : 'fonts/[name].[hash:7].[ext]'
         }
-      },
-      {
-        test: /\.yml$/,
-        exclude: [
-          /(node_modules)/
-        ],
-        use: [
-          'json-loader',
-          'yaml-loader'
-        ]
       }
     ]
   },

@@ -251,7 +251,7 @@ class RegionControl extends Control
 		if ($thread = $this->forumGateway->getThread($region['id'], $threadId, $ambassadorForum)) {
 			$viewdata['thread'] = $thread;
 			$this->func->addBread($thread['name']);
-			if ($thread['active'] == 0 && ($this->mayActivateThreads())) {
+			if ($thread['active'] == 0 && ($this->mayActivateThreads($region['id']))) {
 				if (isset($_GET['activate'])) {
 					$this->forumService->activateThread($threadId, $region, $ambassadorForum);
 					$this->func->info('Thema wurde aktiviert!');
@@ -265,7 +265,7 @@ class RegionControl extends Control
 				$viewdata['delete_url'] = $this->forumService->url($region['id'], $ambassadorForum, $threadId) . '&delete=1';
 			}
 
-			if ($thread['active'] == 1 || $this->mayActivateThreads()) {
+			if ($thread['active'] == 1 || $this->mayActivateThreads($region['id'])) {
 				$viewdata['posts'] = array_map($processPosts, $this->forumGateway->listPosts($threadId));
 				$viewdata['following'] = $this->forumGateway->isFollowing(S::id(), $threadId);
 				$viewdata['mayChangeStickyness'] = $this->mayChangeStickyness($region['id']);

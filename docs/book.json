@@ -1,0 +1,25 @@
+{
+  "title": "Foodsharing Developer Documentation",
+  "gitbook": ">3.0.0",
+  "structure": {
+    "readme": "README.md"
+  },
+  "plugins": [
+    "richquotes",
+    "edit-link",
+    "prism",
+    "-highlight",
+    "-sharing"
+  ],
+  "pluginsConfig": {
+    "edit-link": {
+      "base": "https://gitlab.com/foodsharing-dev/foodsharing/edit/master/docs",
+      "label": "Edit This Page"
+    }
+  },
+  "links": {
+    "sidebar": {
+      "Fodsharing Developer Documentation": "/"
+    }
+  }
+}
