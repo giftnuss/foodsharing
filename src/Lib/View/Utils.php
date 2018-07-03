@@ -925,8 +925,8 @@ class Utils
 			'head' => $head,
 			'data' => $data
 		];
-		return $this->twig->render('partials/tablesorter.twig', $params);
 
+		return $this->twig->render('partials/tablesorter.twig', $params);
 	}
 
 	public function v_tablesorter2($head, $data, $option = array())
