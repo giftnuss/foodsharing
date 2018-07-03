@@ -68,7 +68,6 @@ exports.alias = {
   'leaflet.awesome-markers': require.resolve('leaflet.awesome-markers/dist/leaflet.awesome-markers.js'),
   'leaflet.awesome-markers.css': require.resolve('leaflet.awesome-markers/dist/leaflet.awesome-markers.css'),
   'leaflet.awesome-markers.foodsharing-overrides.css': lib('leaflet/leaflet.awesome-markers.foodsharing-overrides.css'),
-  'leaflet': lib('leaflet/leaflet.js'),
   'tablesorter': lib('tablesorter/jquery.tablesorter.js'),
   'tablesorter-pagercontrols': lib('tablesorter/jquery.tablesorter.pager.js')
 }
