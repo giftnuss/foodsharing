@@ -8,10 +8,16 @@ use Parsedown;
 
 class ContentControl extends Control
 {
-	public function __construct(ContentModel $model, ContentView $view)
-	{
+	private $contentGateway;
+
+	public function __construct(
+		ContentModel $model,
+		ContentView $view,
+		ContentGateway $contentGateway
+	) {
 		$this->model = $model;
 		$this->view = $view;
+		$this->contentGateway = $contentGateway;
 
 		parent::__construct();
 	}
@@ -46,7 +52,7 @@ class ContentControl extends Control
 				$this->func->addBread($this->func->s('bread_content'), '/?page=content');
 				$this->func->addBread($this->func->s('bread_edit_content'));
 
-				$data = $this->model->getOne_content($id);
+				$data = $this->contentGateway->getDetail($id);
 				$this->func->setEditData($data);
 
 				$this->func->addContent($this->content_form());
@@ -55,7 +61,7 @@ class ContentControl extends Control
 					$this->func->pageLink('content', 'back_to_overview')
 				)), $this->func->s('actions')), CNT_RIGHT);
 			} elseif ($id = $this->func->getActionId('view')) {
-				if ($cnt = $this->model->getContent($id)) {
+				if ($cnt = $this->contentGateway->get($id)) {
 					$this->func->addBread($cnt['title']);
 					$this->func->addTitle($cnt['title']);
 
@@ -66,7 +72,7 @@ class ContentControl extends Control
 			} else {
 				$this->func->addBread($this->func->s('content_bread'), '/?page=content');
 
-				if ($data = $this->model->getBasics_content()) {
+				if ($data = $this->contentGateway->list()) {
 					$rows = array();
 					foreach ($data as $d) {
 						$rows[] = array(
@@ -96,7 +102,7 @@ class ContentControl extends Control
 
 	public function partner()
 	{
-		if ($cnt = $this->model->getContent(10)) {
+		if ($cnt = $this->contentGateway->get(10)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -106,7 +112,7 @@ class ContentControl extends Control
 
 	public function unterstuetzung()
 	{
-		if ($cnt = $this->model->getContent(42)) {
+		if ($cnt = $this->contentGateway->get(42)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -116,7 +122,7 @@ class ContentControl extends Control
 
 	public function presse()
 	{
-		if ($cnt = $this->model->getContent(58)) {
+		if ($cnt = $this->contentGateway->get(58)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -126,7 +132,7 @@ class ContentControl extends Control
 
 	public function communitiesGermany()
 	{
-		if ($cnt = $this->model->getContent(52)) {
+		if ($cnt = $this->contentGateway->get(52)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -136,7 +142,7 @@ class ContentControl extends Control
 
 	public function communitiesAustria()
 	{
-		if ($cnt = $this->model->getContent(61)) {
+		if ($cnt = $this->contentGateway->get(61)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -146,7 +152,7 @@ class ContentControl extends Control
 
 	public function communitiesSwitzerland()
 	{
-		if ($cnt = $this->model->getContent(62)) {
+		if ($cnt = $this->contentGateway->get(62)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -156,7 +162,7 @@ class ContentControl extends Control
 
 	public function forderungen()
 	{
-		if ($cnt = $this->model->getContent(60)) {
+		if ($cnt = $this->contentGateway->get(60)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -166,7 +172,7 @@ class ContentControl extends Control
 
 	public function leeretonne()
 	{
-		if ($cnt = $this->model->getContent(46)) {
+		if ($cnt = $this->contentGateway->get(46)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -176,7 +182,7 @@ class ContentControl extends Control
 
 	public function fairteilerrettung()
 	{
-		if ($cnt = $this->model->getContent(49)) {
+		if ($cnt = $this->contentGateway->get(49)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -205,7 +211,7 @@ class ContentControl extends Control
 
 	public function impressum()
 	{
-		if ($cnt = $this->model->getContent(8)) {
+		if ($cnt = $this->contentGateway->get(8)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -215,7 +221,7 @@ class ContentControl extends Control
 
 	public function about()
 	{
-		if ($cnt = $this->model->getContent(9)) {
+		if ($cnt = $this->contentGateway->get(9)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -239,7 +245,7 @@ class ContentControl extends Control
 
 	public function fuer_unternehmen()
 	{
-		if ($cnt = $this->model->getContent(4)) {
+		if ($cnt = $this->contentGateway->get(4)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -249,7 +255,7 @@ class ContentControl extends Control
 
 	public function infohub()
 	{
-		if ($cnt = $this->model->getContent(59)) {
+		if ($cnt = $this->contentGateway->get(59)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 
@@ -289,7 +295,7 @@ class ContentControl extends Control
 		global $g_data;
 		if ($this->func->submitted()) {
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
-			if ($this->model->update_content($_GET['id'], $g_data)) {
+			if ($this->contentGateway->update($_GET['id'], $g_data)) {
 				$this->func->info($this->func->s('content_edit_success'));
 				$this->func->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
 			} else {
@@ -303,7 +309,7 @@ class ContentControl extends Control
 		global $g_data;
 		if ($this->func->submitted()) {
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
-			if ($this->model->add_content($g_data)) {
+			if ($this->contentGateway->create($g_data)) {
 				$this->func->info($this->func->s('content_add_success'));
 				$this->func->goPage();
 			} else {

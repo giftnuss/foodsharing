@@ -7,10 +7,11 @@ import 'jquery-slimscroll'
 import 'jquery-fancybox'
 import 'jquery-ui-addons'
 
+import { goTo, isMob, GET } from '@/browser'
+
 import conv from '@/conv'
 
-const HTTP_GET_VARS = []
-const strGET = document.location.search.substr(1, document.location.search.length)
+export { goTo, isMob, GET }
 
 export const dialogs = {
   dialogs: [],
@@ -28,20 +29,6 @@ export const dialogs = {
     }
     dialogs.dialogs = []
   }
-}
-
-if (strGET != '') {
-  let gArr = strGET.split('&')
-  for (let i = 0; i < gArr.length; ++i) {
-    let v = ''; let vArr = gArr[i].split('=')
-    if (vArr.length > 1) { v = vArr[1] }
-    HTTP_GET_VARS[unescape(vArr[0])] = unescape(v)
-  }
-}
-
-export function GET (v) {
-  if (!HTTP_GET_VARS[v]) { return 'undefined' }
-  return HTTP_GET_VARS[v]
 }
 
 export function collapse_wrapper (id) {
@@ -80,71 +67,65 @@ var sleepmode = {
     })
   }
 }
-var g_moreswapheight = 100
-$(document).ready(function () {
-  // $(".sleepmode-1, .sleepmode-2").append('<span class="corner-all bubble bubble-right ui-shadow"> nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus</span>');
-  sleepmode.init()
 
-  $('textarea.comment').autosize()
-  $('#nojs').css('display', 'none')
-  $('#main').css('display', 'block')
+export function initialize () {
+  var g_moreswapheight = 100
+  $(document).ready(function () {
+    // $(".sleepmode-1, .sleepmode-2").append('<span class="corner-all bubble bubble-right ui-shadow"> nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus</span>');
+    sleepmode.init()
 
-  $('.moreswap').each(function () {
-    var height = 100
+    $('textarea.comment').autosize()
+    $('#nojs').css('display', 'none')
+    $('#main').css('display', 'block')
 
-    let $this = $(this)
-    $this.after('<a class="moreswaplink" href="#" data-show="0">Mehr anzeigen</a>')
+    $('.moreswap').each(function () {
+      var height = 100
 
-    let cheight = $this.attr('class').split('moreswap-height-')
+      let $this = $(this)
+      $this.after('<a class="moreswaplink" href="#" data-show="0">Mehr anzeigen</a>')
 
-    if (cheight.length > 1) {
-      height = parseInt(cheight[1])
-    }
+      let cheight = $this.attr('class').split('moreswap-height-')
 
-    g_moreswapheight = height
+      if (cheight.length > 1) {
+        height = parseInt(cheight[1])
+      }
 
-    if ($this.height() > 100) {
-      $this.css({
-        'height': height + 'px',
-        'overflow': 'hidden'
-      })
-    }
-  })
+      g_moreswapheight = height
 
-  $('.moreswaplink').each(function () {
-    let $this = $(this)
-    $this.prev().css({
-      'height': g_moreswapheight + 'px',
-      'overflow': 'hidden'
-    })
-    $this.click(function (ev) {
-      ev.preventDefault()
-      if ($this.attr('data-show') == 0) {
-        $this.prev().css({
-          'height': 'auto',
-          'overflow': 'visible'
-        })
-        $this.text('einklappen')
-        $this.attr('data-show', 1)
-      } else {
-        $this.prev().css({
-          'height': g_moreswapheight + 'px',
+      if ($this.height() > 100) {
+        $this.css({
+          'height': height + 'px',
           'overflow': 'hidden'
         })
-        $this.text('Mehr anzeigen')
-        $this.attr('data-show', 0)
       }
     })
-  })
 
-  if (isMob()) {
-    $('#mobilemenu, .v-mob').show()
-    $('#mainMenu, .v-desktop').hide()
-  } else {
-    $('#mainMenu, .v-desktop').show()
-    $('#mobilemenu, .v-mob').hide()
-  }
-  $(window).resize(function () {
+    $('.moreswaplink').each(function () {
+      let $this = $(this)
+      $this.prev().css({
+        'height': g_moreswapheight + 'px',
+        'overflow': 'hidden'
+      })
+      $this.click(function (ev) {
+        ev.preventDefault()
+        if ($this.attr('data-show') == 0) {
+          $this.prev().css({
+            'height': 'auto',
+            'overflow': 'visible'
+          })
+          $this.text('einklappen')
+          $this.attr('data-show', 1)
+        } else {
+          $this.prev().css({
+            'height': g_moreswapheight + 'px',
+            'overflow': 'hidden'
+          })
+          $this.text('Mehr anzeigen')
+          $this.attr('data-show', 0)
+        }
+      })
+    })
+
     if (isMob()) {
       $('#mobilemenu, .v-mob').show()
       $('#mainMenu, .v-desktop').hide()
@@ -152,162 +133,140 @@ $(document).ready(function () {
       $('#mainMenu, .v-desktop').show()
       $('#mobilemenu, .v-mob').hide()
     }
-  })
-
-  $('textarea.inlabel, input.inlabel').each(function () {
-    var $this = $(this)
-    if ($this.val() === '') {
-      $this.val($this.attr('title'))
-    }
-    $this.focus(function () {
-      if ($this.val() === $this.attr('title')) {
-        $this.val('')
+    $(window).resize(function () {
+      if (isMob()) {
+        $('#mobilemenu, .v-mob').show()
+        $('#mainMenu, .v-desktop').hide()
+      } else {
+        $('#mainMenu, .v-desktop').show()
+        $('#mobilemenu, .v-mob').hide()
       }
     })
-    $this.blur(function () {
+
+    $('textarea.inlabel, input.inlabel').each(function () {
+      var $this = $(this)
       if ($this.val() === '') {
         $this.val($this.attr('title'))
       }
-    })
-  })
-
-  infoMenu()
-  if (!isMob()) {
-    $('#main a').tooltip({
-      show: false,
-      hide: false,
-      content: function () {
-        var el = $(this)
-        if (el.attr('title').substring(0, 4) == '#tt-') {
-          const id = el.attr('title').substring(4)
-          return $('.' + id).html()
-        } else {
-          return el.attr('title')
+      $this.focus(function () {
+        if ($this.val() === $this.attr('title')) {
+          $this.val('')
         }
-      },
-      position: {
-        my: 'center bottom-20',
-        at: 'center top',
-        using: function (position, feedback) {
-          $(this).css(position)
-          $('<div>')
-            .addClass('arrow')
-            .addClass(feedback.vertical)
-            .addClass(feedback.horizontal)
-            .appendTo(this)
+      })
+      $this.blur(function () {
+        if ($this.val() === '') {
+          $this.val($this.attr('title'))
         }
-      }
+      })
     })
-  }
 
-  // $('.select').customSelect();
-
-  $(function () {
-    $('#dialog-confirm').dialog({
-      resizable: false,
-      height: 140,
-      modal: true,
-      autoOpen: false,
-      buttons: {
-        'unwiderruflich löschen': function () {
-          goTo($('#dialog-confirm-url').val())
-          $(this).dialog('close')
-        },
-        'Abbrechen': function () {
-          $(this).dialog('close')
-        }
-      }
-    })
-  })
-  // $('.button').button();
-  $('.dialog').dialog()
-  $('.v-switch').buttonset()
-
-  $('#topmenu').buttonset()
-  $('#topmenu').first().click()
-
-  $('ul.toolbar li').hover(
-    function () {
-      $(this).addClass('ui-state-hover')
-    },
-    function () {
-      $(this).removeClass('ui-state-hover')
-    }
-  )
-
-  $('.text, .textarea, select').focus(
-    function () {
-      $(this).addClass('focus')
-    }
-  )
-  $('.text, .textarea, select').blur(
-    function () {
-      $(this).removeClass('focus')
-    }
-  )
-
-  $('.value').blur(function () {
-    let el = $(this)
-    if (el.val() != '') {
-      el.removeClass('input-error')
-    }
-  })
-
-  $('#uploadPhoto').dialog({
-    autoOpen: false,
-    modal: true,
-    buttons:
-    {
-      'Upload': function () {
-        uploadPhoto()
-      }
-    }
-  })
-
-  $('#comment').dialog({
-    autoOpen: false,
-    modal: true,
-    buttons:
-    {
-      'Speichern': function () {
-        $.ajax({
-          dataType: 'json',
-          url: '/xhr.php?f=addComment&name=' + $('#comment-name').val() + '&id=' + $('#comment-id').val() + '&comment=' + encodeURIComponent($('#comment textarea').val()),
-          success: function (data) {
-            if (data.status == 1) {
-              $('#comment').dialog('close')
-              $('#comment textarea').val('')
-              info(data.msg)
-            } else {
-              window.alert(data)
-            }
+    infoMenu()
+    if (!isMob()) {
+      $('#main a').tooltip({
+        show: false,
+        hide: false,
+        content: function () {
+          var el = $(this)
+          if (el.attr('title').substring(0, 4) == '#tt-') {
+            const id = el.attr('title').substring(4)
+            return $('.' + id).html()
+          } else {
+            return el.attr('title')
           }
-        })
+        },
+        position: {
+          my: 'center bottom-20',
+          at: 'center top',
+          using: function (position, feedback) {
+            $(this).css(position)
+            $('<div>')
+              .addClass('arrow')
+              .addClass(feedback.vertical)
+              .addClass(feedback.horizontal)
+              .appendTo(this)
+          }
+        }
+      })
+    }
+
+    // $('.select').customSelect();
+
+    $(function () {
+      $('#dialog-confirm').dialog({
+        resizable: false,
+        height: 140,
+        modal: true,
+        autoOpen: false,
+        buttons: {
+          'unwiderruflich löschen': function () {
+            goTo($('#dialog-confirm-url').val())
+            $(this).dialog('close')
+          },
+          'Abbrechen': function () {
+            $(this).dialog('close')
+          }
+        }
+      })
+    })
+    // $('.button').button();
+    $('.dialog').dialog()
+    $('.v-switch').buttonset()
+
+    $('#topmenu').buttonset()
+    $('#topmenu').first().click()
+
+    $('ul.toolbar li').hover(
+      function () {
+        $(this).addClass('ui-state-hover')
+      },
+      function () {
+        $(this).removeClass('ui-state-hover')
       }
-    }
-  })
+    )
 
-  $('.toolbar-comment').click(function () {
-    const l = $(this).attr('attr').split(':')
-    $('#comment-id').val(l[1])
-    $('#comment-name').val(l[0])
+    $('.text, .textarea, select').focus(
+      function () {
+        $(this).addClass('focus')
+      }
+    )
+    $('.text, .textarea, select').blur(
+      function () {
+        $(this).removeClass('focus')
+      }
+    )
 
-    $('#comment').dialog('open')
-  })
+    $('.value').blur(function () {
+      let el = $(this)
+      if (el.val() != '') {
+        el.removeClass('input-error')
+      }
+    })
 
-  $('#fancylink').fancybox({
-    minWidth: 470,
-    maxWidth: 470,
-    minHeight: 450,
-    scrolling: 'auto',
-    beforeClose: function () {
-      g_firstChatUpdate = true
-    },
-    helpers: {
-      overlay: {closeClick: false}
-    }
+    $('#uploadPhoto').dialog({
+      autoOpen: false,
+      modal: true,
+      buttons:
+        {
+          'Upload': function () {
+            uploadPhoto()
+          }
+        }
+    })
+
+    $('#fancylink').fancybox({
+      minWidth: 470,
+      maxWidth: 470,
+      minHeight: 450,
+      scrolling: 'auto',
+      beforeClose: function () {
+        g_firstChatUpdate = true
+      },
+      helpers: {
+        overlay: {closeClick: false}
+      }
+    })
   })
-})
+}
 
 export function chat (fsid) {
   conv.userChat(fsid)
@@ -509,85 +468,29 @@ export function ajreq (name, options, method, app) {
     loader: options.loader
   })
 }
-let u_pulse_info_to = null
-export function pulseError (msg, opt) {
-  if (opt == undefined) {
-    opt = {
-      sticky: false
-    }
-  }
-  let time = 6000
-  if (opt.sticky) {
-    time = 900000
-  }
 
-  $('#pulse-error').html(msg)
-  $('#pulse-error').stop().fadeIn()
-  const u_pulse_error_to = setTimeout(function () {
-    $('#pulse-error').fadeOut()
-    $(document).unbind('click')
-  }, time)
-  setTimeout(function () {
-    $(document).bind('click', function () {
-      $('#pulse-error').stop().fadeOut()
-      $(document).unbind('click')
-      clearTimeout(u_pulse_error_to)
-    })
-  }, 500)
+function definePulse (type, defaultTimeout = 5000) {
+  return (html, options = {}) => {
+    let { timeout, sticky } = options || {}
+    if (typeof timeout === 'undefined') timeout = sticky ? 900000 : defaultTimeout
+    const animationDuration = Math.min(timeout, 400)
+    const el = $(`#pulse-${type}`)
+    el.html(html).stop().fadeIn(animationDuration)
+    const hide = () => {
+      el.stop().fadeOut(animationDuration)
+      $(document).unbind('click', hide)
+      clearTimeout(timer)
+    }
+    const timer = setTimeout(hide, timeout)
+    setTimeout(() => {
+      $(document).bind('click', hide)
+    }, 500)
+  }
 }
 
-export function pulseSuccess (msg, opt) {
-  if (opt == undefined) {
-    opt = {
-      sticky: false
-    }
-  }
-  let time = 5000
-  if (opt.sticky) {
-    time = 900000
-  }
-
-  $('#pulse-success').html(msg)
-  $('#pulse-success').stop().fadeIn()
-  const u_pulse_error_to = setTimeout(function () {
-    $('#pulse-success').fadeOut()
-    $(document).unbind('click')
-  }, time)
-  setTimeout(function () {
-    $(document).bind('click', function () {
-      $('#pulse-success').stop().fadeOut()
-      $(document).unbind('click')
-      clearTimeout(u_pulse_error_to)
-    })
-  }, 500)
-}
-
-export function pulseInfo (msg, opt) {
-  if (opt == undefined) {
-    opt = {
-      sticky: false
-    }
-  }
-  let time = 4000
-  if (opt.sticky) {
-    time = 900000
-  }
-
-  $('#pulse-info').html(msg)
-  $('#pulse-info').fadeIn()
-
-  u_pulse_info_to = setTimeout(function () {
-    $('#pulse-info').fadeOut()
-    $(document).unbind('click')
-  }, time)
-  setTimeout(function () {
-    $(document).bind('click', function () {
-      $('#pulse-info').fadeOut()
-      $(document).unbind('click')
-      clearTimeout(u_pulse_info_to)
-    })
-  }, 500)
-}
+export const pulseInfo = definePulse('info', 4000)
+export const pulseSuccess = definePulse('success', 5000)
+export const pulseError = definePulse('error', 6000)
 
 export function addHover (sel) { $(sel).hover(function () { $(this).addClass('hover') }, function () { $(this).removeClass('hover') }) }
 
@@ -778,10 +681,6 @@ export function fancy (content, title, subtitle) {
   $('#fancylink').trigger('click')
 }
 
-export function isMob () {
-  return $(window).width() < 900
-}
-
 export function xhrf (func) {
   showLoader()
   $.ajax({
@@ -854,23 +753,10 @@ export function betrieb (id) {
   goTo('/?page=betrieb&id=' + id)
 }
 
-export function goTo (url) {
-  if (url != '#') {
-    document.location.href = url
-  }
-}
-
 export function ucfirst (str) {
   str += ''
   var f = str.charAt(0).toUpperCase()
   return f + str.substr(1)
-}
-
-export function showComment (id) {
-  $('#dialog-comment').html($('#comment-' + id).val())
-
-  $('#dialog-comment').dialog('option', 'title', $('#comment-title-' + id).val())
-  $('#dialog-comment').dialog('open')
 }
 
 export function ifconfirm (url, question, title) {

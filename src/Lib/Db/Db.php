@@ -42,221 +42,6 @@ abstract class Db
 		$this->mysqli = $mysqli;
 	}
 
-	public function addPassRequest($email, $mail = true)
-	{
-		if ($fs = $this->qRow('SELECT fs.`id`,fs.`email`,fs.`name`,fs.`geschlecht` FROM `fs_foodsaver` fs WHERE fs.deleted_at IS NULL AND fs.`email` = ' . $this->strval($email))) {
-			$k = uniqid();
-			$key = md5($k);
-
-			$this->insert('
-			REPLACE INTO 	`fs_pass_request`
-			(
-				`foodsaver_id`,
-				`name`,
-				`time`
-			)
-			VALUES
-			(
-				' . $this->intval($fs['id']) . ',
-				' . $this->strval($key) . ',
-				NOW()
-			)');
-
-			if ($mail) {
-				$vars = array(
-					'link' => BASE_URL . '/?page=login&sub=passwordReset&k=' . $key,
-					'name' => $fs['name'],
-					'anrede' => $this->func->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r')
-				);
-
-				$this->func->tplMail(10, $fs['email'], $vars);
-
-				return true;
-			} else {
-				return $key;
-			}
-		}
-
-		return false;
-	}
-
-	public function addComment($data)
-	{
-		$out = false;
-		if (isset($data['name'])) {
-			switch ($data['name']) {
-				case 'betrieb':
-					$out = $this->addCommentBetrieb($data);
-					break;
-				default:
-					return false;
-					break;
-			}
-		}
-
-		if ($out !== false) {
-			return $out;
-		} else {
-			return '0';
-		}
-	}
-
-	private function addCommentBetrieb($data)
-	{
-		if ((int)$data['id'] > 0 && strlen($data['comment']) > 0) {
-			$this->insert('
-			INSERT INTO 	`fs_betrieb_notiz`
-			(
-				`foodsaver_id`,
-				`betrieb_id`,
-				`text`,
-				`zeit`
-			)
-			VALUES
-			(
-				' . $this->getFoodsaverId() . ',
-				' . $this->intval($data['id']) . ',
-				' . $this->strval(urldecode($data['comment'])) . ',
-				' . $this->dateval(date('Y-m-d H:i:s')) . '
-			)');
-
-			return json_encode(array(
-				'status' => 1,
-				'msg' => 'Notiz wurde gespeichert!'
-			));
-		}
-
-		return false;
-	}
-
-	public function getRolle()
-	{
-		$out = array();
-		if (isset($_SESSION['client']['botschafter'])) {
-			if ($name = $this->getBezirkName($_SESSION['client']['botschafter'][0]['bezirk_id'])) {
-				$out['botschafter'] = array(
-					'bezirk_id' => (int)$_SESSION['client']['botschafter'][0]['bezirk_id'],
-					'bezirk_name' => $name
-				);
-			}
-		}
-
-		if (isset($_SESSION['client']['verantwortlich'])) {
-			$out['verantwortlich'] = array();
-
-			$i = 0;
-			foreach ($_SESSION['client']['verantwortlich'] as $v) {
-				if ($name = $this->getBetriebName($v['betrieb_id'])) {
-					$out['verantwortlich'][] = array(
-						'betrieb_id' => (int)$v['betrieb_id'],
-						'betrieb_name' => $name
-					);
-				}
-				++$i;
-				if ($i == 1000) {
-					break;
-				}
-			}
-		}
-
-		if (empty($out)) {
-			return false;
-		} else {
-			return $out;
-		}
-	}
-
-	public function getBezirkName($bezirk_id = false)
-	{
-		if ($bezirk_id === false) {
-			$bezirk_id = $this->getCurrentBezirkId();
-		}
-
-		return $this->qOne('SELECT `name` FROM `fs_bezirk` WHERE `id` = ' . $this->intval($bezirk_id));
-	}
-
-	private function getBetriebName($betrieb_id)
-	{
-		return $this->qOne('SELECT `name` FROM `fs_betrieb` WHERE `id` = ' . $this->intval($betrieb_id));
-	}
-
-	public function addBetrieb($data)
-	{
-		/*
-		 * Array
-(
-	[form_submit] => newbetrieb
-	[bezeichnung] => kjl
-	[str] =>
-	[hsnr] =>
-	[plz] => 123
-	[ort] =>
-	[kategorie] => 2
-	[status] => 2
-	[betreibskette] => 3
-	[ansprechpartner] =>
-	[emailadresse] =>
-	[telefon] =>
-	[fax] =>
-	[verantwortlicherfoodsaver] =>
-)
-		 */
-
-		if ($betrieb_id = $this->insert('
-				INSERT INTO fs_betrieb
-				(
-					plz,
-					bezirk_id,
-					kette_id,
-					betrieb_kategorie_id,
-					name,
-					str,
-					hsnr,
-					`status`,
-					status_date,
-					ansprechpartner,
-					telefon,
-					email,
-					fax
-				)
-				VALUES
-				(
-					' . $this->strval($data['plz']) . ',
-					' . $this->intval($data['bezirk_id']) . ',
-					' . $this->intval($data['betreibskette']) . ',
-					' . $this->intval($data['kategorie']) . ',
-					' . $this->strval($data['bezeichnung']) . ',
-					' . $this->strval($data['str']) . ',
-					' . $this->strval($data['hsnr']) . ',
-					' . $this->intval($data['status']) . ',
-					' . $this->dateval(date('Y-m-d')) . ',
-					' . $this->strval($data['ansprechpartner']) . ',
-					' . $this->strval($data['telefon']) . ',
-					' . $this->strval($data['emailadresse']) . ',
-					' . $this->strval($data['fax']) . '
-
-				)
-		')
-		) {
-			if (!empty($data['verantwortlicherfoodsaver'])) {
-				$this->addVerantwortlicher($data['verantwortlicherfoodsaver'], $betrieb_id);
-			}
-
-			return $betrieb_id;
-		}
-
-		return false;
-	}
-
-	public function getBezirkId($name)
-	{
-		if ($id = $this->qOne('SELECT `id` FROM `fs_bezirk` WHERE `name` = ' . $this->strval($name))) {
-			return $id;
-		} else {
-			return $this->insert('INSERT INTO `fs_bezirk`(`name`)VALUES(' . $this->strval($name) . ')');
-		}
-	}
-
 	public function getAllFoodsaver()
 	{
 		return $this->q('
@@ -273,39 +58,6 @@ abstract class Db
 		');
 	}
 
-	public function getBetriebe($bezirk_id = false)
-	{
-		if (!$bezirk_id) {
-			$bezirk_id = $this->getCurrentBezirkId();
-		}
-
-		return $this->q('
-				SELECT 	fs_betrieb.id,
-						fs_betrieb.plz,
-						fs_betrieb.kette_id,
-						fs_betrieb.betrieb_kategorie_id,
-						fs_betrieb.name,
-						fs_betrieb.str,
-						fs_betrieb.hsnr,
-						fs_betrieb.`betrieb_status_id`
-
-				FROM 	fs_betrieb
-
-				WHERE 	fs_betrieb.bezirk_id = ' . $this->intval($bezirk_id) . '
-
-
-				');
-	}
-
-	public function may()
-	{
-		if (isset($_SESSION) && isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public function begin_transaction()
 	{
 		$this->mysqli->query('BEGIN');
@@ -314,11 +66,6 @@ abstract class Db
 	public function commit()
 	{
 		$this->mysqli->commit();
-	}
-
-	public function rollback()
-	{
-		$this->mysqli->rollback();
 	}
 
 	public function sql($query)
@@ -441,14 +188,6 @@ abstract class Db
 	}
 
 	/**
-	 * @deprecated cast to int if necessary
-	 */
-	public function intval($val)
-	{
-		return (int)$val;
-	}
-
-	/**
 	 * @deprecated use db->update
 	 */
 	public function update($sql)
@@ -460,17 +199,12 @@ abstract class Db
 		}
 	}
 
+	/**
+	 * @deprecated not needed when passing data as prepared statement
+	 */
 	public function dateval($val)
 	{
 		return '"' . $this->safe($val) . '"';
-	}
-
-	/**
-	 * @deprecated use floatval() directly
-	 */
-	public function floatval($val)
-	{
-		return floatval($val);
 	}
 
 	/**
@@ -508,24 +242,12 @@ abstract class Db
 		return $out;
 	}
 
-	public function __destruct()
-	{
-	}
-
-	public function close()
-	{
-		@$this->mysqli->close();
-		$this->mysqli = null;
-	}
-
+	/**
+	 * @deprecated Usage is not needed when passing data as prepared statement
+	 */
 	public function safe($str)
 	{
 		return $this->mysqli->escape_string($str);
-	}
-
-	public function getFoodsaverId()
-	{
-		return (int)$_SESSION['client']['id'];
 	}
 
 	public function relogin()
@@ -590,17 +312,6 @@ abstract class Db
 	public function password_hash($password)
 	{
 		return password_hash($password, PASSWORD_ARGON2I);
-	}
-
-	/**
-	 * Generates md5 hash with email as salt. used before
-	 * xx.02.2018.
-	 */
-	public function encryptMd5($email, $pass)
-	{
-		$email = strtolower($email);
-
-		return md5($email . '-lz%&lk4-' . $pass);
 	}
 
 	/**
@@ -674,6 +385,17 @@ abstract class Db
 	}
 
 	/**
+	 * Generates md5 hash with email as salt. used before
+	 * xx.02.2018.
+	 */
+	private function encryptMd5($email, $pass)
+	{
+		$email = strtolower($email);
+
+		return md5($email . '-lz%&lk4-' . $pass);
+	}
+
+	/**
 	 * Method to check users online status by checking timestamp from memcahce.
 	 *
 	 * @param int $fs_id
@@ -722,7 +444,7 @@ abstract class Db
 
 				FROM 		`fs_foodsaver`
 
-				WHERE 		`id` = ' . $this->intval($fs_id) . '
+				WHERE 		`id` = ' . (int)$fs_id . '
 		')
 		) {
 			S::set('g_location', array(
@@ -871,14 +593,14 @@ abstract class Db
 
 						WHERE 	`fs_bezirk`.`id` = `fs_botschafter`.`bezirk_id`
 
-						AND 	`fs_botschafter`.`foodsaver_id` = ' . $this->intval($fs['id']) . '
+						AND 	`fs_botschafter`.`foodsaver_id` = ' . (int)$fs['id'] . '
 				')
 				) {
 					$_SESSION['client']['botschafter'] = $r;
 					$_SESSION['client']['group']['botschafter'] = true;
 					$mailbox = true;
 					foreach ($r as $rr) {
-						if (!$this->q('SELECT foodsaver_id FROM `fs_foodsaver_has_bezirk` WHERE foodsaver_id = ' . $this->intval($fs['id']) . ' AND bezirk_id = ' . (int)$rr['id'] . ' AND active = 1')) {
+						if (!$this->q('SELECT foodsaver_id FROM `fs_foodsaver_has_bezirk` WHERE foodsaver_id = ' . (int)$fs['id'] . ' AND bezirk_id = ' . (int)$rr['id'] . ' AND active = 1')) {
 							$this->insert('
 							REPLACE INTO `fs_foodsaver_has_bezirk`
 							(
@@ -909,7 +631,7 @@ abstract class Db
 									`fs_bezirk` b
 
 							WHERE 	hb.bezirk_id = b.id
-							AND 	`foodsaver_id` = ' . $this->intval($fs['id']) . '
+							AND 	`foodsaver_id` = ' . (int)$fs['id'] . '
 							AND 	hb.active = 1
 
 							ORDER BY b.name
@@ -934,7 +656,7 @@ abstract class Db
 								`fs_betrieb` b
 
 						WHERE 	bt.betrieb_id = b.id
-						AND 	bt.`foodsaver_id` = ' . $this->intval($fs['id']) . '
+						AND 	bt.`foodsaver_id` = ' . (int)$fs['id'] . '
 						AND 	bt.active = 1
 						ORDER BY b.name
 				')
@@ -950,7 +672,7 @@ abstract class Db
 
 						FROM 	`fs_betrieb_team`
 
-						WHERE 	`foodsaver_id` = ' . $this->intval($fs['id']) . '
+						WHERE 	`foodsaver_id` = ' . (int)$fs['id'] . '
 						AND 	`verantwortlich` = 1
 			')
 			) {
@@ -964,23 +686,6 @@ abstract class Db
 		}
 	}
 
-	public function getTables()
-	{
-		$out = $this->q('SHOW TABLES');
-
-		$tables = array();
-		foreach ($out as $t) {
-			$tables[] = end($t);
-		}
-
-		$out = array();
-		foreach ($tables as $key => $t) {
-			$out[$t] = $this->q('SHOW FULL COLUMNS FROM `' . $t . '`');
-		}
-
-		return $out;
-	}
-
 	public function getValues($fields, $table, $id)
 	{
 		$fields = implode('`,`', $fields);
@@ -988,7 +693,7 @@ abstract class Db
 		return $this->qRow('
 			SELECT 	`' . $fields . '`
 			FROM 	`fs_' . $table . '`
-			WHERE 	`id` = ' . $this->intval($id) . '
+			WHERE 	`id` = ' . (int)$id . '
 		');
 	}
 
@@ -998,7 +703,7 @@ abstract class Db
 			$this->values[$field . '-' . $table . '-' . $id] = $this->qOne('
 			SELECT 	`' . $field . '`
 			FROM 	`fs_' . $table . '`
-			WHERE 	`id` = ' . $this->intval($id) . '
+			WHERE 	`id` = ' . (int)$id . '
 		');
 		}
 
@@ -1010,22 +715,13 @@ abstract class Db
 		$sql = array();
 		foreach ($fields as $k => $f) {
 			if (preg_replace('/[^0-9]/', '', $f) == $f) {
-				$sql[] = '`' . $k . '`=' . $this->intval($f);
+				$sql[] = '`' . $k . '`=' . (int)$f;
 			} else {
 				$sql[] = '`' . $k . '`=' . $this->strval($f);
 			}
 		}
 
 		return $this->update('UPDATE `' . $table . '` SET ' . implode(',', $sql) . ' WHERE `id` = ' . (int)$id);
-	}
-
-	public function getTable($fields, $table, $where = '')
-	{
-		return $this->q('
-			SELECT 	`' . implode('`,`', $fields) . '`
-			FROM 	`fs_' . $table . '`
-			' . $where . '
-		');
 	}
 
 	/**

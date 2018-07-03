@@ -3,14 +3,24 @@
 ## Features
 - updated fpdi plugin to v2.0.2 !351 #168 by @peter.toennies
 - update symfony to 4.1.0 as well as other dependencies !351 @NerdyProjects
+- remove user list in forums to allow big regions to work !421 @NerdyProjects
+- add php intl component for localized internationalization !421 @NerdyProjects
 
 ## Bugfixes
+- removed XSS-possibility in xhr_out method. !370 @theolampert
 - Fix pickup slots !390 #215 @nicksellen
 - fixed wrong gendering of AMBs in region view and profile view. !386 #214 @peter.toennies
-## Bugfixes
+- Added a format placeholder to date input #217 @theolampert
 - reduced the height of store info popups by removing the warning frame. !388 #216 @peter.toennies
 - The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
 - fixed wrong usage of gateway in API. !400 @peter.toennies
+- fixed missalignment in future-pickups list. !389 # 136 @EmiliaPaz
+- Regaining support for mobile Safari 10 !396 #221 @michi-zuri
+- Fix pickup slots !390 #215 @nicksellen
+- fixed wrong gendering of AMBs in region view and profile view. !386 #214 @peter.toennies
+- reduced the height of store info popups by removing the warning frame. !388 #216 @peter.toennies
+- The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
+- fix relative loading of some xhr/other urls !422 @nicksellen
 
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen
@@ -18,6 +28,19 @@
 - refactored and cleaned the whole API module. !368 #9 by @peter.toennies
 - refactored Basket to use gateway. !399 @peter.toennies
 - refactored Bell to use gateway. !402 by @peter.toennies
+- refactored BusinessCard to use gateway. !406 @peter.toennies
+- refactored Buddy to use gateway. !405 @peter.toennies
+- removed SQL injection possibilities from all exsisting gateways !398 @peter.toennies
+- refactored Application to use gateway. !397 #9 @peter.toennies
+- reduced size of DataBase classes !409 @peter.toennies
+- refactored login and registration !403 @theolampert
+- partial refactor of Basket module !426 @nicksellen
+- refactored region module into twig/webpack loaded javascript !421 @NerdyProjects
+- add constants class database constants in region module !413 @peter.toennies @nicksellen
+
+## Dev/Test/CI stuff
+- Fix cache clearing during test/deploy !414 @nicksellen
+- Add testing for client js !422 @nicksellen
 
 # 2018-05-24
 
@@ -140,6 +163,7 @@ as well as modern coding techniques.
 - consistent use of jumper list (Springerliste) all over the page. !293 by @peter.toennies
 - fixed new fairteiler can not get a region set !294 @NerdyProjects
 - fixed ambassador of other region could edit fairteiler !294 @NerdyProjects
+- phone number validatino removed from login. Mobile Phone instead of landline phone asked. !361 by @k.miklobusec
 
 ## Refactoring
 - Consolidate remaining functions and modules !269 @NerdyProjects

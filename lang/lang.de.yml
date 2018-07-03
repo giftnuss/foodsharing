@@ -5,14 +5,20 @@ picture_upload_widget:
 
 button:
   change_picture: Bild ändern
+  attach_image: Bild anhängen
   rotate_right: im Uhrzeigersinn drehen
   upload: Hochladen
+  yes_i_am_sure: Ja, ich bin mir sicher
+  abort: Abbrechen
+  send: Senden
+  answer: Antworten
 
 group:
   name: Name
   description: Beschreibung
   photo: Foto
   applications: Bewerbungen
+  applications_for: Bewerbungen für %name%
   application_requirements:
     requirements: Wer kann sich für diese Gruppe eintragen?
     nobody: Niemand (geschlossene Gruppe)
@@ -42,6 +48,9 @@ group:
     join: Dieser Arbeitsgruppe beitreten
     safe: Änderungen speichern
   no_groups: Hier gibt es noch keine Arbeitsgruppen
+  quit_name: Team %name% verlassen
+  quit: Verlassen
+  really_quit_name: Möchtest Du wirklich den Bezirk bzw. das Team %name% verlassen?
 
 legal:
   pp: Datenschutzerklärung
@@ -59,3 +68,116 @@ legal:
     acknowledge: Ich stimme zu
     not_acknowledge: Ich stimme nicht zu und möchte zum Foodsaver herabgestuft werden
   not_acknowledge_pn_description: Wenn Du mit der Belehrung nicht einverstanden bist, wirst Du zum Foodsaver herabgestuft. Das bedeutet, dass Du kein*e Botschafter*in von Bezirken mehr bist, Deine Betriebsverantwortlichkeiten verlierst und das Quiz zur/m Betriebsverantwortlichen/Botschafter*in erneut durchführen musst.
+
+login:
+  form_title: Login
+  email_address: Email Adresse
+  password: Passwort
+  forgotten_password_label: Passwort vergessen?
+  login_button_label: Login
+
+register:
+  register_button_label: Registrieren
+  login_success: Prima! Jetzt bist Du eingeloggt
+  login_failed: Diese Zugangdsdaten stimmen leider so nicht.
+  upload_no_image: Die hochgeladene Datei ist kein Foto. Bitte wähle eine andere Datei!
+  login_name: Dein Name
+  login_email: Deine E-Mail-Adresse
+  login_passwd1: Passwort
+  login_passwd2: Passwortwiederholung
+  i_am_a: Ich bin...
+  login_info: Login-Informationen
+  contact_info: Kontaktinformationen
+  legal_stuff: Rechtliches
+  select_picture: Foto ausw&aumlhlen
+  peer: Foodsharer
+  geb_datum: Geburtsdatum
+  date_placeholder_format: JJJJ-MM-TT
+  organisation: Organisation
+  login_mobile_phone: Mobilfunknummer
+  login_location: Deine Adresse
+  login_surname: Nachname
+  login_phone_info: Es kann hilfreich sein, Deine Telefonnummer mit anderen Foodsharern zu teilen
+  forgotten_password: Passwort vergessen?
+  have_read_the_legal_stuff1: Ich habe die Datenschutzerklärung zur Kenntnis genommen
+  have_read_the_legal_stuff2: Ich habe die <a href="http://wiki.lebensmittelretten.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> zur Kenntnis genommen
+  prev: zur&uumlck
+  next: weiter
+  finish: Anmeldung absenden
+  join_success: Deine Anmeldung war erfolgreich.
+  check_mail: Schau jetzt in Dein E-Mail-Postfach, um die Anmeldung abzuschließen!
+  select_your_gender: Für die Anrede...
+  woman: weiblich
+  man: männlich
+  other: sonstiges/anders
+  error: Es ist ein Fehler aufgetreten
+  error_name: Bitte gib einen Namen ein
+  error_email: Mit Deiner E-Mail-Adresse stimmt etwas nicht
+  error_passwd: Dein Passwort muss mindestens 5 und darf maximal 30 Zeichen haben
+  error_image: Dein Foto konnte nicht hochgeladen werden
+  error_birthdate: Aus datenschutz- und haftungsrechtlichen Gründen musst du mindestens 18 Jahre alt sein, um bei foodsharing.de mitzumachen.
+  activation_success: '<strong>Aktivierung erfolgreich.</strong> Logge Dich jetzt Mit Deiner E-Mail-Adresse und Deinem gewählten Passwort ein.'
+  activation_failed: '<strong>Aktivierung fehlgeschlagen!</strong> Ist der eingegebene Link auch korrekt?'
+  pass1: Dein neues gewünschtes Passwort
+  pass2: Passwortwiederholung
+
+terminology:
+  forum: Forum
+  events: Termine
+  ambassador_forum: BotschafterInnenforum
+  ambassadors: Botschafter
+  wall: Pinnwand
+  fsp: Fair-Teiler
+  groups: Arbeitsgruppen
+  group: Arbeitsgruppe
+  n_foodsaver: 'Ein Foodsaver|%count% Foodsaver'
+  n_sleeping: 'Eine Schlafmütze|%count% Schlafmützen'
+  n_ambassadors: 'Ein(e) BotschafterIn|%count% BotschafterInnen'
+  n_stores: 'Ein Betrieb|%count% Betriebe'
+  n_cooperating_stores: 'Eine laufende Kooperation|%count% laufende Kooperationen'
+
+statistics:
+  kg_food_saved: '%count% kg Lebensmittel gerettet'
+  num_fetches: 'Bei einem Rettungseinsatz|Bei %count% Rettungseinsätzen'
+
+are_you_sure: Bist Du sicher?
+really_delete: Wirklich löschen?
+yes: Ja
+no: Nein
+options: Optionen
+
+forum:
+  from: Von %name%
+  threads: Themen
+  new_thread: Neues Thema verfassen
+  subscribe_thread: Möchtest Du über dieses Thema auf dem Laufenden gehalten werden?
+  thread_is_inactive: Thema inaktiv!
+  thread_is_inactive_description: Dieses Thema ist noch nicht aktiv. Hier hast Du die Möglichkeit das Thema zu akzeptieren und alle Foodsaver darüber zu informieren.
+  placeholder_answer: Antworten...
+  unfollow: Thema entfolgen
+  follow: Thema folgen
+  stick: Thema fixieren
+  unstick: Fixierung aufheben
+  delete_post: Beitrag löschen
+  thread_title: Titel
+  post_body: Nachricht
+  activate_thread: Thema aktivieren
+  delete_thread: Thema löschen
+  hold_back_for_moderation: Das Thema wurde gespeichert und wird veröffentlicht sobald ein Botschafter es bestätigt.
+  no_threads: Noch keine Themen gepostet
+
+chat:
+  open_chat: Nachricht schreiben
+
+wall:
+  name: Pinnwand
+  message_placeholder: Nachricht schreiben...
+
+fairteiler:
+  all_at: Alle Fair-Teiler in %name%
+  add_new: Neuer Fair-Teiler
+
+events:
+  name: Termine
+  add_new_event: Jetzt neuen Termin eintragen
+  add_event: Neues Event

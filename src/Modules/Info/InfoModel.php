@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Info;
 
+use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Model;
 
 class InfoModel extends Model
@@ -11,7 +12,7 @@ class InfoModel extends Model
 	 */
 	public function getFairteilerBadgdeCount()
 	{
-		if ($ids = $this->getBotBezirkIds()) {
+		if ($ids = S::getBotBezirkIds()) {
 			return $this->qOne('SELECT COUNT(id) FROM fs_fairteiler WHERE bezirk_id IN(' . implode(',', $ids) . ') AND `status` = 0');
 		}
 	}

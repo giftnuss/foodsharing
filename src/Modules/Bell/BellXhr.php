@@ -81,7 +81,7 @@ class BellXhr extends Control
 		 * additional bells for new fairteiler
 		 */
 		if (S::may('bot')) {
-			if ($fbells = $this->gateway->getFairteilerBells($this->model->getBotBezirkIds())) {
+			if ($fbells = $this->gateway->getFairteilerBells(S::getBotBezirkIds())) {
 				$bbells = array();
 
 				foreach ($fbells as $b) {
@@ -121,6 +121,6 @@ class BellXhr extends Control
 	 */
 	public function delbell()
 	{
-		$this->gateway->delbell($_GET['id'], S::id());
+		$this->gateway->delBellForFoodsaver($_GET['id'], S::id());
 	}
 }

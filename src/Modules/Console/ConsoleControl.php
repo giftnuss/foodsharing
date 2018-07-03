@@ -70,7 +70,7 @@ class ConsoleControl
 		$s = '';
 
 		foreach ($units as $name => $divisor) {
-			if ($quot = intval($secs / $divisor)) {
+			if ($quot = (int)($secs / $divisor)) {
 				$s .= "$quot $name";
 				$s .= (abs($quot) > 1 ? 's' : '') . ', ';
 				$secs -= $quot * $divisor;

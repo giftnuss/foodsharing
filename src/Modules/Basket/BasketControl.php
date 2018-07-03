@@ -4,17 +4,16 @@ namespace Foodsharing\Modules\Basket;
 
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
 
 class BasketControl extends Control
 {
-	private $gateway;
+	private $basketGateway;
 
-	public function __construct(BasketGateway $gateway, BasketView $view, Model $model)
+	public function __construct(BasketView $view, BasketGateway $basketGateway)
 	{
 		$this->gateway = $gateway;
-		$this->model = $model;
 		$this->view = $view;
+		$this->basketGateway = $basketGateway;
 
 		parent::__construct();
 
@@ -42,8 +41,8 @@ class BasketControl extends Control
 
 	public function find()
 	{
-		$baskets = $this->model->closeBaskets();
-		$this->view->find($baskets, S::getLocation($this->model));
+		$baskets = $this->basketGateway->listCloseBaskets(S::id(), S::getLocation());
+		$this->view->find($baskets, S::getLocation());
 	}
 
 	private function basket($basket)

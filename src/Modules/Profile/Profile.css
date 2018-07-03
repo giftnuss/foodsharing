@@ -34,16 +34,14 @@
 }
 
 .stat_bananacount {
-  background-image: url("/img/banana.png");
-  background-position: center 22px;
-  background-repeat: no-repeat;
+  background: url("/img/banana.png") no-repeat center 22px;
 }
 
 .stat_bananacount.bouched {
   background-image: url("/img/bananan.png");
 }
 
-.page ul.linklist {
+.page .linklist {
   margin-top: 10px;
   margin-bottom: 0;
 }
@@ -52,26 +50,26 @@ div.statdisplay .item {
   border-radius: 40px;
 }
 
+#double {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 #double li {
-  width: 33.333%;
+  width: 33.333333%; /* fallback for older browsers */
+  width: calc(100% / 3);
 }
 
 #double ul {
   width: 100%;
-  margin-bottom: 20px;
-  overflow: hidden;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #f1e7c9;
 }
 
 #double ul li {
-  line-height: 1.5em;
-  border-bottom: 1px solid #ccc;
-  float: left;
-  display: inline;
+  border-bottom: 1px solid #f1e7c9;
 }
 
-a.disabled {
+.disabled {
   pointer-events: none;
   background-color: #858789;
 }
-

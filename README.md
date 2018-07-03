@@ -110,11 +110,13 @@ vagrant up
 `vagrant ssh` connects to the virtual machine.
 
 Once connected to the virtual machine go to /vagrant with `cd /vagrant` 
-This is where you find all the files of the foodsharing repository in the VM. 
-From there on you can run all scripts with `./scripts/NAME` 
+This is where the foodsharing folder is mounted in the VM.
+From there on you can run all scripts with `./scripts/NAME`
 
 Note:
 `./scripts/start` will always be executed, when you start the virtual machine with `vagrant up`
+
+There is a known bug when running virtualbox + nginx that nginx serves files from a memory cache. If you encounter this problem, it can probably be fixed by emptying the memory cache with ``sync; sudo sh -c "/bin/echo 3 > /proc/sys/vm/drop_caches"`` or even running this every second with ``watch -n 1 'sync; sudo sh -c "/bin/echo 3 > /proc/sys/vm/drop_caches"'``
 
 ### foodsharing light and API
 

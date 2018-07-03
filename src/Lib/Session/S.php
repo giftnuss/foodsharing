@@ -133,10 +133,11 @@ class S
 		return false;
 	}
 
-	public static function getLocation(Model $model)
+	public static function getLocation()
 	{
 		$loc = fSession::get('g_location', false);
 		if (!$loc) {
+			$model = DI::$shared->get(Model::class);
 			$loc = $model->getValues(array('lat', 'lon'), 'foodsaver', self::$func->fsId());
 			self::set('g_location', $loc);
 		}
@@ -208,5 +209,88 @@ class S
 	public static function noWrite()
 	{
 		session_write_close();
+	}
+
+	public static function getRegions(): array
+	{
+		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
+			return $_SESSION['client']['bezirke'];
+		} else {
+			return [];
+		}
+	}
+
+	public static function getBotBezirkIds()
+	{
+		$out = array();
+		if (isset($_SESSION['client']['botschafter']) && is_array($_SESSION['client']['botschafter'])) {
+			foreach ($_SESSION['client']['botschafter'] as $b) {
+				$out[] = $b['bezirk_id'];
+			}
+		}
+
+		if (!empty($out)) {
+			return $out;
+		}
+
+		return false;
+	}
+
+	public static function getMyBetriebIds()
+	{
+		$out = array();
+		if (isset($_SESSION['client']['betriebe']) && is_array($_SESSION['client']['betriebe'])) {
+			foreach ($_SESSION['client']['betriebe'] as $b) {
+				$out[] = $b['id'];
+			}
+		}
+
+		if (!empty($out)) {
+			return $out;
+		}
+
+		return false;
+	}
+
+	public static function getBezirkIds()
+	{
+		$out = array();
+		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
+			foreach ($_SESSION['client']['bezirke'] as $b) {
+				$out[] = $b['id'];
+			}
+		}
+
+		if (!empty($out)) {
+			return $out;
+		}
+
+		return false;
+	}
+
+	public static function getCurrentBezirkId()
+	{
+		if (isset($_SESSION['client']['bezirk_id'])) {
+			return $_SESSION['client']['bezirk_id'];
+		}
+	}
+
+	public static function setPhoto($file)
+	{
+		$_SESSION['client']['photo'] = $file;
+	}
+
+	public static function mayGroup($group)
+	{
+		if (isset($_SESSION) && isset($_SESSION['client']['group'][$group])) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static function isOrgaTeam()
+	{
+		return S::mayGroup('orgateam');
 	}
 }

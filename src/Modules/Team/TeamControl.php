@@ -2,18 +2,21 @@
 
 namespace Foodsharing\Modules\Team;
 
+use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
 
 class TeamControl extends Control
 {
 	private $gateway;
+	private $contentGateway;
 
-	public function __construct(Model $model, TeamGateway $gateway, TeamView $view)
+	public function __construct(Model $model, TeamGateway $gateway, TeamView $view, ContentGateway $contentGateway)
 	{
 		$this->gateway = $gateway;
 		$this->model = $model;
 		$this->view = $view;
+		$this->contentGateway = $contentGateway;
 
 		parent::__construct();
 
@@ -75,7 +78,7 @@ class TeamControl extends Control
 	private function displayTeamContent($bezirkId, $contentId): void
 	{
 		if ($team = $this->gateway->getTeam($bezirkId)) {
-			$this->func->addContent($this->view->teamList($team, $this->model->getContent($contentId)));
+			$this->func->addContent($this->view->teamList($team, $this->contentGateway->get($contentId)));
 		}
 	}
 }

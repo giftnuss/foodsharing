@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Foodsaver;
 
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Settings\SettingsModel;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Store\StoreModel;
@@ -11,13 +12,15 @@ class FoodsaverControl extends Control
 {
 	private $storeModel;
 	private $settingsModel;
+	private $regionGateway;
 
-	public function __construct(FoodsaverModel $model, FoodsaverView $view, StoreModel $storeModel, SettingsModel $settingsModel)
+	public function __construct(FoodsaverModel $model, FoodsaverView $view, StoreModel $storeModel, SettingsModel $settingsModel, RegionGateway $regionGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->storeModel = $storeModel;
 		$this->settingsModel = $settingsModel;
+		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
 
@@ -57,7 +60,7 @@ class FoodsaverControl extends Control
 			}
 		} elseif (($id = $this->func->getActionId('edit')) && ($this->func->isBotschafter() || $this->func->isOrgaTeam())) {
 			$data = $this->model->getOne_foodsaver($id);
-			$bids = $this->model->getFsBezirkIds($id);
+			$bids = $this->regionGateway->getFsBezirkIds($id);
 			if ($data && ($this->func->isOrgaTeam() || $this->func->isBotForA($bids, false, true))) {
 				$this->handle_edit();
 				$data = $this->model->getOne_foodsaver($id);

@@ -109,7 +109,7 @@ export function u_printChildBezirke (element) {
   showLoader()
   $.ajax({
     dataType: 'json',
-    url: 'xhr.php?f=childBezirke&parent=' + parent,
+    url: '/xhr.php?f=childBezirke&parent=' + parent,
     success: function (data) {
       if (data.status == 1) {
         $('#becomebezirkchooser-childs-' + parent).remove()

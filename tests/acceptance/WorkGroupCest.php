@@ -1,6 +1,7 @@
 <?php
 
 use Codeception\Util\Locator;
+use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
 
 class WorkGroupCest
 {
@@ -13,7 +14,7 @@ class WorkGroupCest
 	{
 		/* WorkGroup open to join for everybody */
 		$I->createWorkingGroup('0random-placeholder-group');
-		$this->testGroup = $I->createWorkingGroup('a group for testing to see groups', array('apply_type' => 3));
+		$this->testGroup = $I->createWorkingGroup('a group for testing to see groups', ['apply_type' => ApplyType::OPEN]);
 		$this->regionMember = $I->createFoodsaver();
 		$I->addBezirkMember($this->testGroup['id'], $this->regionMember['id']);
 		$this->unconnectedFoodsaver = $I->createFoodsaver();

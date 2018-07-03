@@ -1,7 +1,14 @@
-{% macro linklist(items) %}
+{% macro menu_tree(items, title, active) %}
+    {% embed 'components/field.twig' with {'title': title} %}
+        {% block content %}
+            {% include 'partials/menu.twig' with {'items': items, 'active': active} only %}
+        {% endblock %}
+    {% endembed %}
+{% endmacro %}
+{% macro linklist(items, active) %}
     <ul class="linklist">
         {% for item in items %}
-            <li><a class="ui-corner-all" href="{{ item.href }}">{{ item.name }}</a></li>
+            <li><a class="ui-corner-all{{ active is not null and active in item.href ? ' active' }}" href="{{ item.href }}">{{ item.name|trans }}</a></li>
         {% endfor %}
     </ul>
 {% endmacro %}
@@ -10,11 +17,11 @@
     <h3 class="head ui-widget-header ui-corner-top">{{ title }}</h3>
     <div class="ui-widget ui-widget-content ui-corner-bottom margin-bottom ui-padding">
         <div id="{{ id }}">
-            {{ menu.linklist(items) }}
+            {{ menu.linklist(items, active) }}
         </div>
     </div>
 {% else %}
     <div class="ui-widget ui-widget-content ui-corner-all ui-padding">
-        {{ menu.linklist(items) }}
+        {{ menu.linklist(items, active) }}
     </div>
 {% endif %}

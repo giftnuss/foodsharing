@@ -169,7 +169,7 @@ abstract class Control
 	public function wallposts($table, $id)
 	{
 		$this->func->addJsFunc('
-			function u_delPost(id)
+			function u_delPost(id, module, wallId)
 				{
 					var id = id;
 					$.ajax({
@@ -312,7 +312,7 @@ abstract class Control
 				</div>
 				<div style="clear:both"></div>
 				<div style="visibility:hidden;">
-				<iframe name="wallpost-frame" src="empty.html" style="height:1px;" frameborder="0"></iframe>
+				<iframe name="wallpost-frame" src="/empty.html" style="height:1px;" frameborder="0"></iframe>
 				</div>
 			</div>';
 		}

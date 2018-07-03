@@ -1,0 +1,9 @@
+{% extends 'pages/Region/baseRegion.twig' %}
+
+{% block main %}
+    {% embed 'components/field.twig' with {'title': 'wall.name'|trans()} %}
+        {% block content %}
+            {% include 'partials/wall.twig' with wall only %}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}

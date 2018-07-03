@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\FairTeiler;
 use Foodsharing\Lib\Sanitizer;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Region\RegionGateway;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,7 +59,7 @@ class FairTeilerControl extends Control
 
 		$this->fairteiler = false;
 		$this->follower = false;
-		$this->bezirke = $this->model->getRealBezirke();
+		$this->bezirke = $this->getRealRegions();
 		if ($ftid = $request->query->get('id')) {
 			$this->fairteiler = $this->gateway->getFairteiler($ftid);
 
@@ -120,6 +121,27 @@ class FairTeilerControl extends Control
 		$this->view->setBezirk($this->bezirk);
 	}
 
+	public function getRealRegions(): array
+	{
+		$regions = S::getRegions();
+
+		return array_filter($regions, [$this, 'isRealRegion']);
+	}
+
+	private function isRealRegion($region): bool
+	{
+		return \in_array(
+			$region['type'],
+			[
+				Type::CITY,
+				Type::DISTRICT,
+				Type::REGION,
+				Type::PART_OF_TOWN,
+			],
+			false
+		);
+	}
+
 	public function index(Request $request)
 	{
 		$this->setup($request);
@@ -129,9 +151,9 @@ class FairTeilerControl extends Control
 		}
 		if (!$request->query->has('sub')) {
 			$items = array();
-			if ($bezirke = $this->model->getBezirke()) {
-				foreach ($bezirke as $b) {
-					$items[] = array('name' => $b['name'], 'href' => '/?page=fairteiler&bid=' . $b['id']);
+			if ($regions = S::getRegions()) {
+				foreach ($regions as $r) {
+					$items[] = array('name' => $r['name'], 'href' => '/?page=fairteiler&bid=' . $r['id']);
 				}
 			}
 
@@ -182,7 +204,7 @@ class FairTeilerControl extends Control
 			$data['bfoodsaver'][$key]['name'] = $fs['name'] . ' ' . $fs['nachname'];
 		}
 
-		$data['bfoodsaver_values'] = $this->model->getFsAutocomplete($this->model->getBezirke());
+		$data['bfoodsaver_values'] = $this->model->getFsAutocomplete(S::getRegions());
 
 		$this->func->addContent($this->view->options($items), CNT_RIGHT);
 

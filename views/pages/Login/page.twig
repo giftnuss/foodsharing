@@ -1,0 +1,27 @@
+{% extends 'layouts/default.twig' %}
+{% block main %}
+<div id="g_login">
+	<div class="field">
+		<div class="head ui-widget-header ui-corner-top">{{ 'login.form_title'|trans }}</div>
+		<div class="ui-widget ui-widget-content corner-bottom margin-bottom ui-padding">
+		<div id="login">
+		{{ form_start(form, {'action': action, 'method': 'POST'}) }}
+			{{ form_row(form.email_address) }}
+			{{ form_row(form.password) }}
+			<p>
+				<a href="/?page=login&sub=passwordReset">{{ 'login.forgotten_password_label'|trans }}</a>
+			</p>
+			<p class="buttons">
+				<input class="button" type="submit" value="{{ 'login.login_button_label'|trans }}" name="login">
+				<a href="#" onclick="ajreq('join',{ app:'login' });return false;" class="button">
+					{{ 'register.register_button_label'|trans }}
+				</a>
+			</p>
+			<input type="hidden" id="ismob" name="ismob" value="1">
+			<input type="hidden" id="password-error-msg" value="">
+		{{ form_end(form) }}
+		</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

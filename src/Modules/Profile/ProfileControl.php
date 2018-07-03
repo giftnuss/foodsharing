@@ -4,16 +4,19 @@ namespace Foodsharing\Modules\Profile;
 
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class ProfileControl extends Control
 {
 	private $foodsaver;
 	private $fs_id;
+	private $regionGateway;
 
-	public function __construct(ProfileModel $model, ProfileView $view)
+	public function __construct(ProfileModel $model, ProfileView $view, RegionGateway $regionGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
 
@@ -63,7 +66,7 @@ class ProfileControl extends Control
 
 	public function profile()
 	{
-		$bids = $this->model->getFsBezirkIds($this->foodsaver['id']);
+		$bids = $this->regionGateway->getFsBezirkIds($this->foodsaver['id']);
 		if ($this->func->isOrgaTeam() || $this->func->isBotForA($bids, false, true)) {
 			$this->view->profile($this->wallposts('foodsaver', $this->foodsaver['id']), true, true, true, true, $this->model->getCompanies($this->foodsaver['id']), $this->model->getCompaniesCount($this->foodsaver['id']), $this->model->getNextDates($this->foodsaver['id'], 50));
 		} else {

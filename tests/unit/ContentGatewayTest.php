@@ -20,7 +20,7 @@ class ContentGatewayTest extends \Codeception\Test\Unit
 
 	public function testGetContent()
 	{
-		$content = $this->gateway->getContent(33);
+		$content = $this->gateway->get(33);
 		$this->assertNotNull($content);
 		$this->assertEquals('Wichtiger Hinweis:', $content['title']);
 		$this->assertContains('Lebensmittelverschwendung', $content['body']);

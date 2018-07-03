@@ -45,7 +45,7 @@ class LoginModel extends Model
 				`nachname`,
 				`anschrift`,
 				`geb_datum`,
-				`telefon`,
+				`handy`,
 				`newsletter`,
 				`geschlecht`,
 				`anmeldedatum`,
@@ -67,9 +67,9 @@ class LoginModel extends Model
 				' . $this->strval($data['surname']) . ',
 				' . $this->strval($data['str'] . ' ' . trim($data['nr'])) . ',
 				' . $this->strval($data['birthdate']) . ',
-				' . $this->strval($data['phone']) . ',
-				' . $this->intval($data['newsletter']) . ',
-				' . $this->intval($data['gender']) . ',
+				' . $this->strval($data['mobile_phone']) . ',
+				' . (int)$data['newsletter'] . ',
+				' . (int)$data['gender'] . ',
 				NOW(),
 				' . $this->strval($data['city']) . ',
 				' . $this->strval($data['lat']) . ',
@@ -88,9 +88,47 @@ class LoginModel extends Model
 	{
 		if ((int)strlen($data['pass1']) > 4) {
 			if ($fsid = $this->qOne('SELECT `foodsaver_id` FROM `fs_pass_request` WHERE `name` = ' . $this->strval($data['k']))) {
-				$this->del('DELETE FROM `fs_pass_request` WHERE `foodsaver_id` = ' . $this->intval($fsid));
+				$this->del('DELETE FROM `fs_pass_request` WHERE `foodsaver_id` = ' . (int)$fsid);
 
-				return $this->update('UPDATE `fs_foodsaver` SET `password` = ' . $this->strval($this->password_hash($data['pass1'])) . ',`passwd`=NULL,`fs_password`=NULL WHERE `id` = ' . $this->intval($fsid));
+				return $this->update('UPDATE `fs_foodsaver` SET `password` = ' . $this->strval($this->password_hash($data['pass1'])) . ',`passwd`=NULL,`fs_password`=NULL WHERE `id` = ' . (int)$fsid);
+			}
+		}
+
+		return false;
+	}
+
+	public function addPassRequest($email, $mail = true)
+	{
+		if ($fs = $this->qRow('SELECT fs.`id`,fs.`email`,fs.`name`,fs.`geschlecht` FROM `fs_foodsaver` fs WHERE fs.deleted_at IS NULL AND fs.`email` = ' . $this->strval($email))) {
+			$k = uniqid();
+			$key = md5($k);
+
+			$this->insert('
+			REPLACE INTO 	`fs_pass_request`
+			(
+				`foodsaver_id`,
+				`name`,
+				`time`
+			)
+			VALUES
+			(
+				' . (int)$fs['id'] . ',
+				' . $this->strval($key) . ',
+				NOW()
+			)');
+
+			if ($mail) {
+				$vars = array(
+					'link' => BASE_URL . '/?page=login&sub=passwordReset&k=' . $key,
+					'name' => $fs['name'],
+					'anrede' => $this->func->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r')
+				);
+
+				$this->func->tplMail(10, $fs['email'], $vars);
+
+				return true;
+			} else {
+				return $key;
 			}
 		}
 

@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\WorkGroup;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrDialog;
+use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
 
 class WorkGroupXhr extends Control
 {
@@ -36,7 +37,7 @@ class WorkGroupXhr extends Control
 	public function addtogroup()
 	{
 		if ($group = $this->model->getGroup($_GET['id'])) {
-			if ($group['apply_type'] == 3) {
+			if ($group['apply_type'] == ApplyType::OPEN) {
 				$this->model->addToGroup($_GET['id'], S::id());
 
 				return array(

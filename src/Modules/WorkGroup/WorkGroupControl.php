@@ -4,6 +4,9 @@ namespace Foodsharing\Modules\WorkGroup;
 
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\Region\RegionGateway;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,11 +17,13 @@ class WorkGroupControl extends Control
 	 * @var FormFactoryBuilder
 	 */
 	private $formFactory;
+	private $regionGateway;
 
-	public function __construct(WorkGroupModel $model, WorkGroupView $view)
+	public function __construct(WorkGroupModel $model, WorkGroupView $view, RegionGateway $regionGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
 	}
@@ -70,24 +75,24 @@ class WorkGroupControl extends Control
 		return
 			!$this->func->mayBezirk($group['id'])
 			&& !in_array($group['id'], $applications)
-			&& ($group['apply_type'] == 2
-			  || ($group['apply_type'] == 1 && $this->fulfillApplicationRequirements($group, $stats)));
+			&& ($group['apply_type'] == ApplyType::EVERYBODY
+			  || ($group['apply_type'] == ApplyType::REQUIRES_PROPERTIES && $this->fulfillApplicationRequirements($group, $stats)));
 	}
 
 	private function mayJoin($group)
 	{
 		return
 			!$this->func->mayBezirk($group['id'])
-			&& $group['apply_type'] == 3;
+			&& $group['apply_type'] == ApplyType::OPEN;
 	}
 
-	private function getSideMenuData()
+	private function getSideMenuData($activeUrlPartial = null)
 	{
 		$countries = $this->model->getCountryGroups();
-		$bezirke = $this->model->getBezirke();
+		$bezirke = S::getRegions();
 
 		$localRegions = array_filter($bezirke, function ($region) {
-			return !in_array($region['type'], [6, 7]);
+			return !in_array($region['type'], [Type::COUNTRY, Type::WORKING_GROUP]);
 		});
 
 		$regionToMenuItem = function ($region) {
@@ -102,7 +107,7 @@ class WorkGroupControl extends Control
 		$menuCountries = array_map($regionToMenuItem, $countries);
 
 		$myGroups = array_filter(isset($_SESSION['client']['bezirke']) ? $_SESSION['client']['bezirke'] : [], function ($group) {
-			return $group['type'] == 7;
+			return $group['type'] == Type::WORKING_GROUP;
 		});
 		$menuMyGroups = array_map(
 			function ($group) {
@@ -116,7 +121,8 @@ class WorkGroupControl extends Control
 		return ['global' => $menuGlobal,
 			'local' => $menuLocalRegions,
 			'countries' => $menuCountries,
-			'groups' => $menuMyGroups];
+			'groups' => $menuMyGroups,
+			'active' => $activeUrlPartial];
 	}
 
 	private function list(Request $request, Response $response)
@@ -135,7 +141,7 @@ class WorkGroupControl extends Control
 					'applyMinBananaCount' => $group['banana_count'],
 					'applyMinFetchCount' => $group['fetch_count'],
 					'applyMinFoodsaverWeeks' => $group['week_num'],
-					'applicationRequirementsNotFulfilled' => ($group['apply_type'] == 1) && !$this->fulfillApplicationRequirements($group, $myStats),
+					'applicationRequirementsNotFulfilled' => ($group['apply_type'] == ApplyType::REQUIRES_PROPERTIES) && !$this->fulfillApplicationRequirements($group, $myStats),
 					'mayEdit' => $this->mayEdit($group),
 					'mayAccess' => $this->mayAccess($group),
 					'mayApply' => $this->mayApply($group, $myApplications, $myStats),
@@ -146,7 +152,7 @@ class WorkGroupControl extends Control
 		$this->func->addTitle($this->func->s('groups'));
 
 		$response->setContent($this->render('pages/WorkGroup/list.twig',
-			['nav' => $this->getSideMenuData(), 'groups' => $groups]
+			['nav' => $this->getSideMenuData('=' . $parent), 'groups' => $groups]
 		));
 	}
 
@@ -154,7 +160,7 @@ class WorkGroupControl extends Control
 	{
 		$groupId = $request->query->getInt('id');
 
-		$bids = $this->model->getFsBezirkIds($this->func->fsId());
+		$bids = $this->regionGateway->getFsBezirkIds($this->func->fsId());
 		if (!$this->func->isOrgaTeam() && !$this->func->isBotForA($bids, true, true)) {
 			$this->func->go('/?page=dashboard');
 		}

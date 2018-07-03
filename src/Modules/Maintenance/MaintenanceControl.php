@@ -6,15 +6,18 @@ use Flourish\fImage;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Console\ConsoleControl;
+use Foodsharing\Modules\Store\StoreGateway;
 
 class MaintenanceControl extends ConsoleControl
 {
 	private $bellGateway;
+	private $storeGateway;
 
-	public function __construct(MaintenanceModel $model, BellGateway $bellGateway)
+	public function __construct(MaintenanceModel $model, BellGateway $bellGateway, StoreGateway $storeGateway)
 	{
 		$this->model = $model;
 		$this->bellGateway = $bellGateway;
+		$this->storeGateway = $storeGateway;
 		parent::__construct();
 	}
 
@@ -120,7 +123,7 @@ class MaintenanceControl extends ConsoleControl
 	private function updateSpecialGroupMemberships()
 	{
 		self::info('updating HH bieb austausch');
-		$hh_biebs = $this->model->getBiebIds(31);
+		$hh_biebs = $this->storeGateway->getBiebIds(31);
 		$hh_biebs[] = 3166;   // Gerard Roscoe
 		$counts = $this->model->updateGroupMembers(826, $hh_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
@@ -131,7 +134,7 @@ class MaintenanceControl extends ConsoleControl
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
 		self::info('updating berlin bieb austausch');
-		$berlin_biebs = $this->model->getBiebIds(47);
+		$berlin_biebs = $this->storeGateway->getBiebIds(47);
 		$counts = $this->model->updateGroupMembers(1057, $berlin_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
@@ -141,12 +144,12 @@ class MaintenanceControl extends ConsoleControl
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
 		self::info('updating Zürich BIEB austausch');
-		$zuerich_biebs = $this->model->getBiebIds(108);
+		$zuerich_biebs = $this->storeGateway->getBiebIds(108);
 		$counts = $this->model->updateGroupMembers(1313, $zuerich_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
 		self::info('updating Wien BIEB austausch (Filialverantwortung)');
-		$wien_biebs = $this->model->getBiebIds(13);
+		$wien_biebs = $this->storeGateway->getBiebIds(13);
 		$counts = $this->model->updateGroupMembers(707, $wien_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 	}

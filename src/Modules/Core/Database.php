@@ -13,21 +13,48 @@ class Database
 		$this->pdo = $pdo;
 	}
 
-	public function fetch($query, $params = [])
+	/**
+	 * Returns the first row.
+	 */
+	public function fetch($query, $params = []): array
 	{
-		return $this->preparedQuery($query, $params)->fetch();
+		$out = $this->preparedQuery($query, $params)->fetch();
+		if (!$out) {
+			return [];
+		}
+
+		return $out;
 	}
 
-	public function fetchAll($query, $params = [])
+	/**
+	 * Returns all rows.
+	 */
+	public function fetchAll($query, $params = []): array
 	{
-		return $this->preparedQuery($query, $params)->fetchAll();
+		$out = $this->preparedQuery($query, $params)->fetchAll();
+		if (!$out) {
+			return [];
+		}
+
+		return $out;
 	}
 
-	public function fetchAllValues($query, $params = [])
+	/**
+	 * Returns the first column.
+	 */
+	public function fetchAllValues($query, $params = []): array
 	{
-		return $this->preparedQuery($query, $params)->fetchAll(\PDO::FETCH_COLUMN, 0);
+		$out = $this->preparedQuery($query, $params)->fetchAll(\PDO::FETCH_COLUMN, 0);
+		if (!$out) {
+			return [];
+		}
+
+		return $out;
 	}
 
+	/**
+	 * Returns the value of the first column of the first row.
+	 */
 	public function fetchValue($query, $params = [])
 	{
 		return $this->preparedQuery($query, $params)->fetchColumn(0);
@@ -43,12 +70,12 @@ class Database
 		$this->preparedQuery($query, $params);
 	}
 
-	public function insertIgnore(string $table, array $data, array $options = [])
+	public function insertIgnore(string $table, array $data, array $options = []): int
 	{
 		return $this->insert($table, $data, array_merge($options, ['ignore' => true]));
 	}
 
-	public function insert(string $table, array $data, array $options = [])
+	public function insert(string $table, array $data, array $options = []): int
 	{
 		$columns = array_map(
 			[$this, 'getQuotedName'],
@@ -70,7 +97,7 @@ class Database
 		return $lastInsertId;
 	}
 
-	public function update($table, array $data, array $criteria = [])
+	public function update($table, array $data, array $criteria = []): int
 	{
 		if (empty($data)) {
 			throw new \InvalidArgumentException(
@@ -92,7 +119,7 @@ class Database
 		return $this->preparedQuery($query, $params)->rowCount();
 	}
 
-	public function delete($table, array $criteria)
+	public function delete($table, array $criteria): int
 	{
 		$where = $this->generateWhereClause($criteria);
 
@@ -101,7 +128,7 @@ class Database
 		return $this->preparedQuery($query, array_values($criteria))->rowCount();
 	}
 
-	public function exists($table, array $criteria)
+	public function exists($table, array $criteria): bool
 	{
 		$where = $this->generateWhereClause($criteria);
 
@@ -115,6 +142,21 @@ class Database
 		if (!$this->exists($table, $criteria)) {
 			throw new \Exception('No matching records found for criteria ' . json_encode($criteria) . ' in table ' . $table);
 		}
+	}
+
+	public function beginTransaction(): bool
+	{
+		return $this->pdo->beginTransaction();
+	}
+
+	public function commit(): bool
+	{
+		return $this->pdo->commit();
+	}
+
+	public function generatePlaceholders($length): string
+	{
+		return implode(', ', array_fill(0, $length, '?'));
 	}
 
 	// === private functions ===

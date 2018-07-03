@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Region;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
@@ -74,11 +73,25 @@ class ForumGateway extends BaseGateway
 			return $ret;
 		}
 
-		return false;
+		return [];
 	}
 
-	public function getThread($bezirk_id, $thread_id, $bot_theme = 0)
+	public function getThreadInfo($threadId)
 	{
+		return $this->db->fetch('
+		SELECT		t.name,
+					bt.bezirk_id as region_id,
+					bt.bot_theme as ambassador_forum
+		FROM		fs_theme t
+		LEFT JOIN   fs_bezirk_has_theme bt ON bt.theme_id = t.id
+		WHERE		t.id = :thread_id
+		', ['thread_id' => $threadId]);
+	}
+
+	public function getThread($bezirk_id, $thread_id, $bot_theme = false)
+	{
+		$bot_theme_v = $bot_theme ? 1 : 0;
+
 		return $this->db->fetch('
 			SELECT 		t.id,
 						t.name,
@@ -91,7 +104,8 @@ class ForumGateway extends BaseGateway
 						p.`time` AS post_time,
 						UNIX_TIMESTAMP(p.`time`) AS post_time_ts,
 						t.last_post_id,
-						t.`active`
+						t.`active`,
+						t.`sticky`
 
 			FROM 		fs_theme t
 						INNER JOIN
@@ -110,11 +124,12 @@ class ForumGateway extends BaseGateway
 
 			LIMIT 1
 
-		', ['bezirk_id' => $bezirk_id, 'thread_id' => $thread_id, 'bot_theme' => $bot_theme]);
+		', ['bezirk_id' => $bezirk_id, 'thread_id' => $thread_id, 'bot_theme' => $bot_theme_v]);
 	}
 
-	public function addThread($fs_id, $bezirk_id, $name, $body, $bot_theme = 0, $active)
+	public function addThread($fs_id, $bezirk_id, $name, $body, $bot_theme = false, $active)
 	{
+		$bot_theme_v = $bot_theme ? 1 : 0;
 		$thread_id = $this->db->insert('fs_theme', [
 			'foodsaver_id' => $fs_id,
 			'name' => strip_tags($name),
@@ -127,7 +142,7 @@ class ForumGateway extends BaseGateway
 		$this->db->insert('fs_bezirk_has_theme', [
 			'bezirk_id' => $bezirk_id,
 			'theme_id' => $thread_id,
-			'bot_theme' => $bot_theme
+			'bot_theme' => $bot_theme_v
 		]);
 
 		$this->addPost($fs_id, $thread_id, $body);
@@ -161,15 +176,12 @@ class ForumGateway extends BaseGateway
 		', ['theme_id' => $thread_id, 'fs_id' => $fs_id]);
 	}
 
-	public function getFollowCounter($fs_id, $thread_id)
+	public function isFollowing($fsId, $threadId)
 	{
-		return $this->db->fetchValue('
-			SELECT  count(DISTINCT tf.theme_id)
-			FROM
-					fs_theme_follower tf
-			WHERE   tf.theme_id = :theme_id
-			AND 	tf.foodsaver_id = :fs_id
-		', ['theme_id' => $thread_id, 'fs_id' => $fs_id]);
+		return $this->db->exists(
+			'fs_theme_follower',
+			['theme_id' => $threadId, 'foodsaver_id' => $fsId]
+		);
 	}
 
 	public function getBotThreadStatus($thread_id)
@@ -217,46 +229,21 @@ class ForumGateway extends BaseGateway
 		);
 	}
 
-	public function getStickStatus($thread_id)
-	{
-		return $this->db->fetchValue('
-			SELECT `sticky`
-			FROM fs_theme
-			WHERE id = :id
-		', ['id' => $thread_id]);
-	}
-
 	// Post-related
 
-	public function addPost($fs_id, $thread_id, $body, $reply = 0, $bezirk = false)
+	public function addPost($fs_id, $thread_id, $body)
 	{
 		$post_id = $this->db->insert(
 			'fs_theme_post',
 			[
 				'theme_id' => $thread_id,
 				'foodsaver_id' => $fs_id,
-				'reply_post' => $reply,
 				'body' => strip_tags($body, '<p><a><ul><strong><b><i><ol><li><br>'),
 				'time' => date('Y-m-d H:i:s')
 			]
 		);
 
 		$this->db->update('fs_theme', ['last_post_id' => $post_id], ['id' => $thread_id]);
-
-		if ($reply > 0) {
-			$post_fs_id = $this->db->fetchValue('SELECT `foodsaver_id` FROM `fs_theme_post` WHERE `id` = :id', ['id' => $reply]);
-			if ($post_fs_id != $fs_id) {
-				$this->bellGateway->addBell(
-					$post_fs_id,
-					'forum_answer_title',
-					'forum_answer',
-					'fa fa-comments',
-					array('href' => '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=forum&tid=' . $thread_id . '&pid=' . $post_id . '#post' . $post_id),
-					array('user' => S::user('name'), 'forum' => $bezirk['name']),
-					'forum-post-' . $post_id
-				);
-			}
-		}
 
 		return $post_id;
 	}

@@ -11,12 +11,15 @@ class RegionXhr extends Control
 {
 	private $responses;
 	private $forumGateway;
+	private $regionHelper;
+	private $twig;
 
-	public function __construct(Model $model, RegionView $view, ForumGateway $forumGateway)
+	public function __construct(Model $model, ForumGateway $forumGateway, RegionHelper $regionHelper, \Twig\Environment $twig)
 	{
 		$this->model = $model;
-		$this->view = $view;
 		$this->forumGateway = $forumGateway;
+		$this->regionHelper = $regionHelper;
+		$this->twig = $twig;
 		$this->responses = new XhrResponses();
 
 		parent::__construct();
@@ -79,24 +82,20 @@ class RegionXhr extends Control
 
 	public function morethemes()
 	{
-		$bezirk_id = (int)$_GET['bid'];
-		if (isset($_GET['page']) && $this->func->mayBezirk($bezirk_id)) {
-			$sub = 'forum';
-
-			if ((int)$_GET['bot'] == 1) {
-				if (!$this->func->isBotFor($bezirk_id)) {
-					return $this->responses->fail_permissions();
-				}
-				$sub = 'botforum';
+		$regionId = (int)$_GET['bid'];
+		$ambassadorForum = ($_GET['bot'] == 1);
+		if (isset($_GET['page']) && $this->func->mayBezirk($regionId)) {
+			if ($ambassadorForum && !$this->func->isBotFor($regionId)) {
+				return $this->responses->fail_permissions();
 			}
 
-			$this->view->bezirk_id = $bezirk_id;
-			$themes = $this->forumGateway->listThreads($bezirk_id, (int)$_GET['bot'], (int)$_GET['page'], (int)$_GET['last']);
+			$viewdata['region']['id'] = $regionId;
+			$viewdata['threads'] = $this->regionHelper->transformThreadViewData($this->forumGateway->listThreads($regionId, $ambassadorForum, (int)$_GET['page'], (int)$_GET['last']), $regionId, $ambassadorForum);
 
 			return array(
 				'status' => 1,
 				'data' => array(
-					'html' => $this->view->forum_index($themes, true, $sub)
+					'html' => $this->twig->render('pages/Region/forum/threadEntries.twig', $viewdata)
 				)
 			);
 		}
@@ -154,7 +153,7 @@ class RegionXhr extends Control
 	public function signout()
 	{
 		$data = $_GET;
-		if ($this->model->mayBezirk($data['bid'])) {
+		if ($this->func->mayBezirk($data['bid'])) {
 			$this->model->del('DELETE FROM `fs_foodsaver_has_bezirk` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->func->fsId() . ' ');
 			$this->model->del('DELETE FROM `fs_botschafter` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->func->fsId() . ' ');
 

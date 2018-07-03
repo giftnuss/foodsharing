@@ -8,6 +8,7 @@ import serverData from '@/server-data'
 import timeformat from '@/timeformat'
 import autoLink from '@/autoLink'
 import info from '@/info'
+import msg from '@/msg'
 
 const conv = {
 
@@ -84,7 +85,7 @@ const conv = {
     $('#convlist-4768').removeClass('unread-1').addClass('unread-0')
     if (isMob()) {
       if (GET('page') == 'msg') {
-        conv.loadConversation(cid)
+        msg.loadConversation(cid)
       } else {
         goTo('/?page=msg&cid=' + cid)
       }
@@ -397,7 +398,7 @@ const conv = {
 
   appendChatbox: function (cid, min) {
     if (this.isBigPageMode) {
-      conv.loadConversation(cid)
+      msg.loadConversation(cid)
       return false
     }
 

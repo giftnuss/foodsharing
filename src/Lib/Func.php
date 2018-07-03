@@ -12,6 +12,7 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use JSMin;
 
 class Func
@@ -386,7 +387,7 @@ class Func
 			}
 			foreach ($_SESSION['client']['botschafter'] as $b) {
 				foreach ($bezirk_ids as $bid) {
-					if ($b['bezirk_id'] == $bid && ($include_groups || $b['type'] != 7)) {
+					if ($b['bezirk_id'] == $bid && ($include_groups || $b['type'] != Type::WORKING_GROUP)) {
 						return true;
 						break;
 					}
@@ -420,6 +421,9 @@ class Func
 		return false;
 	}
 
+	/**
+	 * @deprecated use S::isOrgaTeam() instead
+	 */
 	public function isOrgaTeam()
 	{
 		return $this->mayGroup('orgateam');
@@ -433,7 +437,7 @@ class Func
 		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
 			foreach ($_SESSION['client']['bezirke'] as $region) {
 				$region = array_merge($region, ['isBot' => $this->isBotFor($region['id'])]);
-				if ($region['type'] == 7) {
+				if ($region['type'] == Type::WORKING_GROUP) {
 					$workingGroups[] = $region;
 				} else {
 					$regions[] = $region;
@@ -830,11 +834,12 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		exit();
 	}
 
+	/**
+	 * @deprecated use S::getCurrentBezirkId() instead
+	 */
 	public function getBezirkId()
 	{
-		$manualDb = DI::$shared->get(ManualDb::class);
-
-		return $manualDb->getCurrentBezirkId();
+		return S::getCurrentBezirkId();
 	}
 
 	public function getPage()
@@ -845,6 +850,16 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 
 		return $page;
+	}
+
+	public function getSubPage()
+	{
+		$sub_page = $this->getGet('sub');
+		if (!$sub_page) {
+			$sub_page = 'index';
+		}
+
+		return $sub_page;
 	}
 
 	public function getGetId($name)
@@ -1131,9 +1146,11 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'webpack' => $usesWebpack,
 			'user' => $userData,
 			'page' => $this->getPage(),
+			'subPage' => $this->getSubPage(),
 			'location' => $location,
 			'ravenConfig' => $ravenConfig,
-			'translations' => $this->getTranslations()
+			'translations' => $this->getTranslations(),
+			'GOOGLE_API_KEY' => GOOGLE_API_KEY
 		]);
 	}
 
@@ -1256,6 +1273,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		//return '<pre>'.print_r($el,true).'</pre>';
 	}
 
+	/**
+	 * @deprecated use S::id() instead
+	 */
 	public function fsId()
 	{
 		if ($this->loggedIn()) {
@@ -1448,15 +1468,14 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return false;
 	}
 
-	public function mayBezirk($bid)
+	public function mayBezirk($bid): bool
 	{
-		if (isset($_SESSION['client']['bezirke'][$bid]) || $this->isBotFor($bid) || $this->isOrgaTeam()) {
-			return true;
-		}
-
-		return false;
+		return isset($_SESSION['client']['bezirke'][$bid]) || $this->isBotFor($bid) || $this->isOrgaTeam();
 	}
 
+	/**
+	 * @deprecated use S::mayGroup($group) instead
+	 */
 	public function mayGroup($group)
 	{
 		if (isset($_SESSION) && isset($_SESSION['client']['group'][$group])) {

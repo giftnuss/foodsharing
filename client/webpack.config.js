@@ -1,7 +1,10 @@
 const mkdirp = require('mkdirp')
+const merge = require('webpack-merge')
+const webpackBase = require('./webpack.base')
 const { writeFileSync } = require('fs')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const path = require('path')
 const clientRoot = path.resolve(__dirname)
 const shims = require('./shims')
@@ -54,14 +57,18 @@ plugins.push(
   }
 )
 
-module.exports = {
+module.exports = merge(webpackBase, {
   entry: moduleEntries(
     // We explicitly define each foodsharing modules here so we can convert them one-by-one
     'Index',
+    'Basket',
     'Dashboard',
     'Foodsaver',
+    'Region',
     'StoreUser',
-    'WorkGroup'
+    'WorkGroup',
+    'Login',
+    'Message'
   ),
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'cheap-module-eval-source-map' : 'source-map',
@@ -93,24 +100,25 @@ module.exports = {
       'css': resolve('../css'),
       'js': resolve('../js'),
       '@': resolve('src'),
-      '@php': resolve('../src')
+      '@php': resolve('../src'),
+      '>': resolve('test'),
+      '@translations': resolve('../lang')
     }
   },
   module: {
     rules: [
       {
-        test: /\.js$/,
-        exclude: [
-          /(node_modules)/,
-          resolve('../js') // ignore the old js/**.js files
-        ],
-        use: 'babel-loader'
-      },
-      {
         test: /\.css$/,
         use: [
           dev ? 'style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader'
+          {
+            loader: 'css-loader',
+            options: {
+              alias: {
+                './img': ('img')
+              }
+            }
+          }
         ]
       },
       {
@@ -118,7 +126,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: dev ? 'fonts/[name].[ext]' : 'fonts/[name].[hash:7].[ext]'
+          name: dev ? 'img/[name].[ext]' : 'img/[name].[hash:7].[ext]'
         }
       },
       {
@@ -129,17 +137,33 @@ module.exports = {
           name: dev ? 'fonts/[name].[ext]' : 'fonts/[name].[hash:7].[ext]'
         }
       },
-      ...shims.rules
+      {
+        test: /\.yml$/,
+        exclude: [
+          /(node_modules)/
+        ],
+        use: [
+          'json-loader',
+          'yaml-loader'
+        ]
+      }
     ]
   },
   plugins,
   optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        uglifyOptions: {
+          safari10: true
+        }
+      })
+    ],
     splitChunks: {
       chunks: 'all',
       name: dev
     }
   }
-}
+})
 
 function resolve (dir) {
   return path.join(clientRoot, dir)

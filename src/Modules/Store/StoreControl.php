@@ -9,12 +9,14 @@ use Foodsharing\Modules\Core\Control;
 class StoreControl extends Control
 {
 	private $bellGateway;
+	private $storeGateway;
 
-	public function __construct(StoreModel $model, StoreView $view, BellGateway $bellGateway)
+	public function __construct(StoreModel $model, StoreView $view, BellGateway $bellGateway, StoreGateway $storeGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->bellGateway = $bellGateway;
+		$this->storeGateway = $storeGateway;
 
 		parent::__construct();
 
@@ -79,7 +81,7 @@ class StoreControl extends Control
 			$this->func->addTitle($data['name']);
 			$this->func->addTitle($this->func->s('edit'));
 
-			if (($this->func->isOrgaTeam() || $this->model->isVerantwortlich($id)) || $this->func->isBotFor($data['bezirk_id'])) {
+			if ((S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $id)) || $this->func->isBotFor($data['bezirk_id'])) {
 				$this->handle_edit();
 
 				$this->func->setEditData($data);
@@ -119,7 +121,7 @@ class StoreControl extends Control
 						['cnt' => ($b['added'])],
 						['cnt' => $b['bezirk_name']],
 						['cnt' => $status],
-						['cnt' => $this->v_utils->v_toolbar(['id' => $b['id'], 'types' => ['comment', 'edit', 'delete'], 'confirmMsg' => 'Soll ' . $b['name'] . ' wirklich unwiderruflich gel&ouml;scht werden?'])
+						['cnt' => $this->v_utils->v_toolbar(['id' => $b['id'], 'types' => ['edit', 'delete'], 'confirmMsg' => 'Soll ' . $b['name'] . ' wirklich unwiderruflich gel&ouml;scht werden?'])
 						]];
 				}
 
@@ -131,8 +133,6 @@ class StoreControl extends Control
 					['name' => 'Status', 'width' => 50],
 					['name' => 'Aktionen', 'sort' => false, 'width' => 75]
 				], $storesRows, ['pager' => true]);
-
-				$this->func->addJs('$("#comment").dialog({title:"Kommentar zum Betrieb"});');
 
 				$this->func->addContent($this->v_utils->v_field($table, 'Alle Betriebe aus dem Bezirk ' . $bezirk['name']));
 			} else {
@@ -178,7 +178,7 @@ class StoreControl extends Control
 			$g_data['hsnr'] = '';
 
 			if ($id = $this->model->add_betrieb($g_data)) {
-				$this->model->add_betrieb_notiz(array(
+				$this->storeGateway->add_betrieb_notiz(array(
 					'foodsaver_id' => $this->func->fsId(),
 					'betrieb_id' => $id,
 					'text' => '{BETRIEB_ADDED}',
@@ -187,7 +187,7 @@ class StoreControl extends Control
 				));
 
 				if (isset($g_data['first_post']) && !empty($g_data['first_post'])) {
-					$this->model->add_betrieb_notiz(array(
+					$this->storeGateway->add_betrieb_notiz(array(
 						'foodsaver_id' => $this->func->fsId(),
 						'betrieb_id' => $id,
 						'text' => $g_data['first_post'],

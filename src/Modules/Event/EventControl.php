@@ -92,7 +92,7 @@ class EventControl extends Control
 					}
 				}
 
-				$bezirke = $this->model->getBezirke();
+				$bezirke = S::getRegions();
 
 				if ($event['location_id'] > 0) {
 					if ($loc = $this->gateway->getLocation($event['location_id'])) {
@@ -130,7 +130,7 @@ class EventControl extends Control
 				}
 			}
 		} else {
-			$bezirke = $this->model->getBezirke();
+			$bezirke = S::getRegions();
 
 			$this->func->addContent($this->view->eventForm($bezirke));
 		}

@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\WorkGroup;
 
+use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class EditWorkGroupData
@@ -95,7 +96,7 @@ class EditWorkGroupData
 		 * called to get the data out of this data object.
 		 * A separate transformation method might make sense.
 		 */
-		if ($this->applyType != 1) {
+		if ($this->applyType != ApplyType::REQUIRES_PROPERTIES) {
 			$this->bananaCount = 0;
 			$this->fetchCount = 0;
 			$this->weekNum = 0;
@@ -111,7 +112,7 @@ class EditWorkGroupData
 			$administrators[] = explode('-', $k)[0];
 		}
 
-		$photo = explode('images/', $this->photo, 2)[1];
+		$photo = $this->photo ? explode('images/', $this->photo, 2)[1] : null;
 
 		$res = [
 			'name' => $this->name,

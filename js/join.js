@@ -90,7 +90,7 @@ var join = {
 					pw:$('#login_passwd1').val(),
           birthdate:$('#birthdate').val(),
 					avatar:$('#join_avatar').val(),
-					phone:$('#login_phone').val(),
+					mobile_phone:$('#login_mobile_phone').val(),
 					lat:$('#join_lat').val(),
 					lon:$('#join_lon').val(),
 					str:$('#join_str').val(),
@@ -158,8 +158,7 @@ var join = {
 					return false;
 					check = false;
 				}
-
-				if(!checkEmail($('#login_email').val()))
+				if(!$('#login_email')['0'].validity.valid)
 				{
 					pulseError('Mit Deiner E-Mail-Adresse stimmt etwas nicht');
 					$('#login_email').select();

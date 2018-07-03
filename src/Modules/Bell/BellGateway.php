@@ -142,9 +142,14 @@ class BellGateway extends BaseGateway
 		}
 	}
 
-	public function delbell($id, $fsId): int
+	public function delBellForFoodsaver($id, $fsId): int
 	{
 		return $this->db->delete('fs_foodsaver_has_bell', ['bell_id' => (int)$id, 'foodsaver_id' => (int)$fsId]);
+	}
+
+	public function delBellsByIdentifier($identifier): void
+	{
+		$this->db->delete('fs_bell', ['identifier' => $identifier]);
 	}
 
 	private function setBellsAsSeen($bids): void

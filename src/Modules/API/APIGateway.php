@@ -28,7 +28,6 @@ class APIGateway extends BaseGateway
 		
 			AND
 				b.fs_id = 0
-
 		';
 
 		return $this->db->fetchAll($stm);
@@ -41,7 +40,7 @@ class APIGateway extends BaseGateway
 				b.id AS i,
 				b.lat AS a, 
 				b.lon AS o, 
-				(6371 * acos( cos( radians( ' . (float)$lat . ' ) ) * cos( radians( b.lat ) ) * cos( radians( b.lon ) - radians( ' . (float)$lon . ' ) ) + sin( radians( ' . (float)$lat . ' ) ) * sin( radians( b.lat ) ) ))
+				(6371 * acos( cos( radians( :latitude ) ) * cos( radians( b.lat ) ) * cos( radians( b.lon ) - radians( :longitude ) ) + sin( radians( :latitude_dup ) ) * sin( radians( b.lat ) ) ))
 				AS d
 			FROM 	
 				fs_basket b
@@ -53,10 +52,18 @@ class APIGateway extends BaseGateway
 				b.fs_id = 0
 				
 			HAVING 
-				d <=' . (int)$distance . '
+				d <= :distance
 		';
 
-		return $this->db->fetchAll($stm);
+		return $this->db->fetchAll(
+			$stm,
+			[
+				':latitude' => (float)$lat,
+				':longitude' => (float)$lon,
+				':latitude_dup' => (float)$lat,
+				':distance' => (int)$distance,
+			]
+		);
 	}
 
 	public function getBasket($id)
@@ -78,9 +85,9 @@ class APIGateway extends BaseGateway
 					fs_basket b
 	
 				WHERE
-					b.id = ' . (int)$id . '
+					b.id = :id
 		';
-		$basket = $this->db->fetch($stm);
+		$basket = $this->db->fetch($stm, [':id' => (int)$id]);
 
 		$stm = '
 				SELECT
@@ -92,9 +99,12 @@ class APIGateway extends BaseGateway
 				fs_foodsaver fs
 						
 				WHERE
-				fs.id = ' . (int)$basket['foodsaver_id'] . '						
+				fs.id = :foodsaver_id						
 			';
-		if ($basket['fsf_id'] == 0 && $fs = $this->db->fetch($stm)) {
+		if ('0' === $basket['fsf_id'] && $fs = $this->db->fetch(
+				$stm,
+				[':foodsaver_id' => (int)$basket['foodsaver_id']]
+			)) {
 			$basket = array_merge($basket, $fs);
 		}
 

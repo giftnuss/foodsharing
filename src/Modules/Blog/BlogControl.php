@@ -108,9 +108,9 @@ class BlogControl extends Control
 
 			$this->func->addBread($this->func->s('bread_new_blog_entry'));
 
-			$bezirke = $this->model->getBezirke();
+			$bezirke = S::getRegions();
 			if (!S::may('orga')) {
-				$bot_ids = $this->model->getBotBezirkIds();
+				$bot_ids = S::getBotBezirkIds();
 				foreach ($bezirke as $k => $v) {
 					if ($v['type'] != 7 || !in_array($v['id'], $bot_ids)) {
 						unset($bezirke[$k]);
@@ -155,7 +155,7 @@ class BlogControl extends Control
 			$this->func->addBread($this->func->s('bread_edit_blog_entry'));
 
 			$this->func->setEditData($data);
-			$bezirke = $this->model->getBezirke();
+			$bezirke = S::getRegions();
 
 			$this->func->addContent($this->view->blog_entry_form($bezirke));
 

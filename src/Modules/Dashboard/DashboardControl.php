@@ -2,31 +2,40 @@
 
 namespace Foodsharing\Modules\Dashboard;
 
+use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Content\ContentGateway;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Profile\ProfileModel;
+use Foodsharing\Modules\Store\StoreGateway;
 
 class DashboardControl extends Control
 {
 	private $user;
-	private $gateway;
+	private $dashboardGateway;
 	private $contentGateway;
+	private $basketGateway;
+	private $storeGateway;
 	private $twig;
 	private $profileModel;
 
 	public function __construct(
 		DashboardView $view,
-		DashboardGateway $gateway,
+		DashboardGateway $dashboardGateway,
 		ContentGateway $contentGateway,
+		BasketGateway $basketGateway,
+		StoreGateway $storeGateway,
 		Model $model,
 		ProfileModel $profileModel,
 		\Twig\Environment $twig)
 	{
 		$this->view = $view;
-		$this->gateway = $gateway;
+		$this->dashboardGateway = $dashboardGateway;
 		$this->contentGateway = $contentGateway;
+		$this->basketGateway = $basketGateway;
+		$this->storeGateway = $storeGateway;
 		$this->model = $model;
 		$this->twig = $twig;
 		$this->profileModel = $profileModel;
@@ -37,7 +46,7 @@ class DashboardControl extends Control
 			$this->func->go('/');
 		}
 
-		$this->user = $this->gateway->getUser($this->func->fsId());
+		$this->user = $this->dashboardGateway->getUser($this->func->fsId());
 	}
 
 	public function index()
@@ -87,7 +96,7 @@ class DashboardControl extends Control
 		}
 
 		if ($check) {
-			$cnt = $this->contentGateway->getContent(33);
+			$cnt = $this->contentGateway->get(33);
 
 			$cnt['body'] = str_replace(array(
 				'{NAME}',
@@ -149,7 +158,7 @@ class DashboardControl extends Control
 
 		$this->func->addContent($this->view->foodsharerMenu(), CNT_LEFT);
 
-		$cnt = $this->contentGateway->getContent(33);
+		$cnt = $this->contentGateway->get(33);
 
 		$cnt['body'] = str_replace(array(
 			'{NAME}',
@@ -163,10 +172,10 @@ class DashboardControl extends Control
 
 		$this->view->updates();
 
-		if ($this->user['lat'] && ($baskets = $this->gateway->listCloseBaskets($this->func->fsId(), S::getLocation($this->model)))) {
+		if ($this->user['lat'] && ($baskets = $this->dashboardGateway->listCloseBaskets($this->func->fsId(), S::getLocation($this->model)))) {
 			$this->func->addContent($this->view->closeBaskets($baskets), CNT_LEFT);
 		} else {
-			if ($baskets = $this->gateway->getNewestFoodbaskets()) {
+			if ($baskets = $this->dashboardGateway->getNewestFoodbaskets()) {
 				$this->func->addContent($this->view->newBaskets($baskets), CNT_LEFT);
 			}
 		}
@@ -497,7 +506,7 @@ class DashboardControl extends Control
 		<ul class="linklist">';
 			$orgacheck = false;
 			foreach ($_SESSION['client']['bezirke'] as $b) {
-				if ($b['type'] != 7) {
+				if ($b['type'] != Type::WORKING_GROUP) {
 					$out .= '
 			<li><a class="ui-corner-all" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a></li>';
 				} else {
@@ -524,7 +533,7 @@ class DashboardControl extends Control
 		 * Essenskörbe
 		 */
 
-		if ($baskets = $this->model->closeBaskets()) {
+		if ($baskets = $this->basketGateway->listCloseBaskets(S::id(), S::getLocation())) {
 			$out = '
 			<ul class="linklist">';
 			foreach ($baskets as $b) {
@@ -565,7 +574,7 @@ class DashboardControl extends Control
 		/*
 		 * Deine Betriebe
 		*/
-		if ($betriebe = $this->model->getMyBetriebe(array('sonstige' => false))) {
+		if ($betriebe = $this->storeGateway->getMyBetriebe(S::id(), S::getCurrentBezirkId(), array('sonstige' => false))) {
 			$this->func->addContent($this->view->u_myBetriebe($betriebe), CNT_LEFT);
 		} else {
 			$this->func->addContent($this->v_utils->v_info('Du bist bis jetzt in keinem Filial-Team.'), CNT_LEFT);

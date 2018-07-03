@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision :shell, inline: "apt-get update"
   
-  config.vm.synced_folder ".", "/vagrant", owner: "www-data"
+  config.vm.synced_folder ".", "/vagrant", owner: "www-data", :mount_options => ["dmode=777","fmode=777"]
   
   config.vm.provision :docker
   config.vm.provision :docker_compose
