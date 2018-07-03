@@ -6,6 +6,7 @@ use Flourish\fFile;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
@@ -51,10 +52,10 @@ class RegionControl extends Control
 
 		$this->bezirk = false;
 		if ($bezirk = $this->gateway->getRegionDetails($this->bezirk_id)) {
-			$big = array(8 => 1, 5 => 1, 6 => 1);
+			$big = array(Type::BIG_CITY => 1, Type::FEDERAL_STATE => 1, Type::COUNTRY => 1);
 			if (isset($big[$bezirk['type']])) {
 				$this->mode = 'big';
-			} elseif ($bezirk['type'] == 7) {
+			} elseif ($bezirk['type'] == Type::WORKING_GROUP) {
 				$this->mode = 'orgateam';
 			}
 			$this->view->setMode($this->mode);

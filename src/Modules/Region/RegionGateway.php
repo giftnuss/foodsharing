@@ -28,7 +28,7 @@ class RegionGateway extends BaseGateway
 		return $bezirk_ids;
 	}
 
-	public function listForFoodsaver($fs_id)
+	public function listForFoodsaver($fs_id): array
 	{
 		$values = $this->db->fetchAll(
 			'							
@@ -44,7 +44,7 @@ class RegionGateway extends BaseGateway
 			AND 	hb.active = 1
 			
 			ORDER BY b.name',
-			['fs_id' => $fs_id]
+			[':fs_id' => $fs_id]
 		);
 
 		$output = [];

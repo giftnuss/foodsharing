@@ -9,6 +9,7 @@ use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 use Foodsharing\Modules\Message\MessageModel;
@@ -1139,16 +1140,22 @@ class XhrMethods
 				$this->v_utils->v_form_text('name'),
 				$this->v_utils->v_form_text('mailbox_name', ['desc' => 'Achtung! Nicht willkürlich ändern! Auch darauf achten, dass diese Adresse unter Mailboxen verwalten noch nicht existiert.']),
 				$this->v_utils->v_form_text('email_name', array('label' => 'Absendername')),
-				$this->v_utils->v_form_select('type', array('label' => 'Bezirkstyp', 'values' => array(
-					array('id' => '1', 'name' => 'Stadt'),
-					array('id' => '8', 'name' => 'Großstadt (ohne Anmeldemöglichkeit)'),
-					array('id' => '9', 'name' => 'Stadtteil'),
-					array('id' => '2', 'name' => 'Bezirk'),
-					array('id' => '3', 'name' => 'Region'),
-					array('id' => '5', 'name' => 'Bundesland'),
-					array('id' => '6', 'name' => 'Land'),
-					array('id' => '7', 'name' => 'Orgateam')
-				))),
+				$this->v_utils->v_form_select(
+					'type',
+					[
+						'label' => 'Bezirkstyp',
+						'values' => [
+							['id' => Type::CITY, 'name' => 'Stadt'],
+							['id' => Type::BIG_CITY, 'name' => 'Großstadt (ohne Anmeldemöglichkeit)'],
+							['id' => Type::PART_OF_TOWN, 'name' => 'Stadtteil'],
+							['id' => Type::DISTRICT, 'name' => 'Bezirk'],
+							['id' => Type::REGION, 'name' => 'Region'],
+							['id' => Type::FEDERAL_STATE, 'name' => 'Bundesland'],
+							['id' => Type::COUNTRY, 'name' => 'Land'],
+							['id' => Type::WORKING_GROUP, 'name' => 'Arbeitsgruppe'],
+						],
+					]
+				),
 				$this->v_utils->v_input_wrapper($this->func->s($id), $inputs, $id)
 			), array('submit' => $this->func->s('save'))) .
 			$this->v_utils->v_input_wrapper('Master-Update', '<a class="button" href="#" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'geoclean\',id:' . (int)$data['id'] . '});}return false;">Master-Update starten</a>', 'masterupdate', array('desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen'));

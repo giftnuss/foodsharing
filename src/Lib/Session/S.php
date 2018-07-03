@@ -211,10 +211,12 @@ class S
 		session_write_close();
 	}
 
-	public static function getRegions()
+	public static function getRegions(): array
 	{
 		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
 			return $_SESSION['client']['bezirke'];
+		} else {
+			return [];
 		}
 	}
 

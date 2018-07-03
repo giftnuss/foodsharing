@@ -12,6 +12,7 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use JSMin;
 
 class Func
@@ -386,7 +387,7 @@ class Func
 			}
 			foreach ($_SESSION['client']['botschafter'] as $b) {
 				foreach ($bezirk_ids as $bid) {
-					if ($b['bezirk_id'] == $bid && ($include_groups || $b['type'] != 7)) {
+					if ($b['bezirk_id'] == $bid && ($include_groups || $b['type'] != Type::WORKING_GROUP)) {
 						return true;
 						break;
 					}
@@ -436,7 +437,7 @@ class Func
 		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
 			foreach ($_SESSION['client']['bezirke'] as $region) {
 				$region = array_merge($region, ['isBot' => $this->isBotFor($region['id'])]);
-				if ($region['type'] == 7) {
+				if ($region['type'] == Type::WORKING_GROUP) {
 					$workingGroups[] = $region;
 				} else {
 					$regions[] = $region;

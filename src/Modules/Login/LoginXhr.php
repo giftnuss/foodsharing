@@ -212,7 +212,7 @@ class LoginXhr extends Control
 			$data['type'] = 1;
 		}
 
-		if ($data['avatar'] != '') {
+		if (isset($data['avatar']) && $data['avatar'] != '') {
 			$data['avatar'] = $this->resizeAvatar($data['avatar']);
 		}
 

@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Event;
 
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\View;
 
 class EventView extends View
@@ -90,7 +91,7 @@ class EventView extends View
 					$sel = ' selected="selected"';
 				}
 
-				if ($b['type'] == 7) {
+				if ($b['type'] == Type::WORKING_GROUP) {
 					$ag .= '<option value="' . $b['id'] . '"' . $sel . '>' . $b['name'] . '</option>';
 				} else {
 					$bez .= '<option value="' . $b['id'] . '"' . $sel . '>' . $b['name'] . '</option>';

@@ -67,6 +67,8 @@ class BusinessCardGateway extends BaseGateway
 
 		if (S::may('bieb')) {
 			$fs['sm'] = $fs['fs'];
+		} else {
+			$fs['sm'] = false;
 		}
 
 		return $fs;

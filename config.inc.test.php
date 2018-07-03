@@ -39,3 +39,9 @@ define('REDIS_PORT', 6379);
 if (!defined('ROOT_DIR')) {
 	define('ROOT_DIR', './');
 }
+
+/* Adding Whoops during testing can be very useful as the screenshots in the tests/_output folder can show a nice
+   error message. However, it's not useful to enable it all the time yet as it also catches warnings and the whole
+   site runs in a way that is always throwing warnings out. But hopefully we fix all those at some point then can
+   enable it in test env always! Happy coding :) */
+//Foodsharing\Debug\Whoops::register();

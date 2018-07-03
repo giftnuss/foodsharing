@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Activity;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 
 class ActivityXhr extends Control
@@ -159,7 +160,7 @@ class ActivityXhr extends Control
 						'name' => $b['name'],
 						'checked' => $checked
 					];
-					if ($b['type'] === 7) {
+					if ($b['type'] == Type::WORKING_GROUP) {
 						$listings['groups'][] = $dat;
 					} else {
 						$listings['regions'][] = $dat;

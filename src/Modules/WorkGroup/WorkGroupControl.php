@@ -4,6 +4,8 @@ namespace Foodsharing\Modules\WorkGroup;
 
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Region\RegionGateway;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\HttpFoundation\Request;
@@ -73,15 +75,15 @@ class WorkGroupControl extends Control
 		return
 			!$this->func->mayBezirk($group['id'])
 			&& !in_array($group['id'], $applications)
-			&& ($group['apply_type'] == 2
-			  || ($group['apply_type'] == 1 && $this->fulfillApplicationRequirements($group, $stats)));
+			&& ($group['apply_type'] == ApplyType::EVERYBODY
+			  || ($group['apply_type'] == ApplyType::REQUIRES_PROPERTIES && $this->fulfillApplicationRequirements($group, $stats)));
 	}
 
 	private function mayJoin($group)
 	{
 		return
 			!$this->func->mayBezirk($group['id'])
-			&& $group['apply_type'] == 3;
+			&& $group['apply_type'] == ApplyType::OPEN;
 	}
 
 	private function getSideMenuData()
@@ -90,7 +92,7 @@ class WorkGroupControl extends Control
 		$bezirke = S::getRegions();
 
 		$localRegions = array_filter($bezirke, function ($region) {
-			return !in_array($region['type'], [6, 7]);
+			return !in_array($region['type'], [Type::COUNTRY, Type::WORKING_GROUP]);
 		});
 
 		$regionToMenuItem = function ($region) {
@@ -105,7 +107,7 @@ class WorkGroupControl extends Control
 		$menuCountries = array_map($regionToMenuItem, $countries);
 
 		$myGroups = array_filter(isset($_SESSION['client']['bezirke']) ? $_SESSION['client']['bezirke'] : [], function ($group) {
-			return $group['type'] == 7;
+			return $group['type'] == Type::WORKING_GROUP;
 		});
 		$menuMyGroups = array_map(
 			function ($group) {
@@ -138,7 +140,7 @@ class WorkGroupControl extends Control
 					'applyMinBananaCount' => $group['banana_count'],
 					'applyMinFetchCount' => $group['fetch_count'],
 					'applyMinFoodsaverWeeks' => $group['week_num'],
-					'applicationRequirementsNotFulfilled' => ($group['apply_type'] == 1) && !$this->fulfillApplicationRequirements($group, $myStats),
+					'applicationRequirementsNotFulfilled' => ($group['apply_type'] == ApplyType::REQUIRES_PROPERTIES) && !$this->fulfillApplicationRequirements($group, $myStats),
 					'mayEdit' => $this->mayEdit($group),
 					'mayAccess' => $this->mayAccess($group),
 					'mayApply' => $this->mayApply($group, $myApplications, $myStats),

@@ -6,6 +6,7 @@ use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Content\ContentGateway;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Profile\ProfileModel;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -505,7 +506,7 @@ class DashboardControl extends Control
 		<ul class="linklist">';
 			$orgacheck = false;
 			foreach ($_SESSION['client']['bezirke'] as $b) {
-				if ($b['type'] != 7) {
+				if ($b['type'] != Type::WORKING_GROUP) {
 					$out .= '
 			<li><a class="ui-corner-all" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a></li>';
 				} else {

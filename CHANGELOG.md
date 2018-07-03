@@ -32,6 +32,7 @@
 - reduced size of DataBase classes !409 @peter.toennies
 - refactored login and registration !403 @theolampert
 - partial refactor of Basket module !426 @nicksellen
+- add constants class database constants in region module !413 @peter.toennies @nicksellen
 
 ## Dev/Test/CI stuff
 - Fix cache clearing during test/deploy !414 @nicksellen

@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\FairTeiler;
 use Foodsharing\Lib\Sanitizer;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Region\RegionGateway;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,7 +59,7 @@ class FairTeilerControl extends Control
 
 		$this->fairteiler = false;
 		$this->follower = false;
-		$this->bezirke = $this->getRealBezirke();
+		$this->bezirke = $this->getRealRegions();
 		if ($ftid = $request->query->get('id')) {
 			$this->fairteiler = $this->gateway->getFairteiler($ftid);
 
@@ -120,20 +121,25 @@ class FairTeilerControl extends Control
 		$this->view->setBezirk($this->bezirk);
 	}
 
-	public function getRealBezirke()
+	public function getRealRegions(): array
 	{
-		if ($bezirks = S::getRegions()) {
-			$out = array();
-			foreach ($bezirks as $b) {
-				if (in_array($b['type'], array(1, 2, 3, 9))) {
-					$out[] = $b;
-				}
-			}
+		$regions = S::getRegions();
 
-			return $out;
-		}
+		return array_filter($regions, [$this, 'isRealRegion']);
+	}
 
-		return false;
+	private function isRealRegion($region): bool
+	{
+		return \in_array(
+			$region['type'],
+			[
+				Type::CITY,
+				Type::DISTRICT,
+				Type::REGION,
+				Type::PART_OF_TOWN,
+			],
+			false
+		);
 	}
 
 	public function index(Request $request)
@@ -145,9 +151,9 @@ class FairTeilerControl extends Control
 		}
 		if (!$request->query->has('sub')) {
 			$items = array();
-			if ($bezirke = S::getRegions()) {
-				foreach ($bezirke as $b) {
-					$items[] = array('name' => $b['name'], 'href' => '/?page=fairteiler&bid=' . $b['id']);
+			if ($regions = S::getRegions()) {
+				foreach ($regions as $r) {
+					$items[] = array('name' => $r['name'], 'href' => '/?page=fairteiler&bid=' . $r['id']);
 				}
 			}
 

@@ -6,6 +6,7 @@ use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
 class StoreXhr extends Control
 {
@@ -229,7 +230,7 @@ class StoreXhr extends Control
 					$bezirks = S::getRegions();
 
 					foreach ($bezirks as $key => $b) {
-						if (!in_array($b['type'], array(1, 2, 3, 9))) {
+						if (!in_array($b['type'], [Type::CITY, Type::DISTRICT, Type::REGION, Type::PART_OF_TOWN])) {
 							unset($bezirks[$key]);
 						}
 					}
