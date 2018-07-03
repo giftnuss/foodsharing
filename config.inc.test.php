@@ -39,5 +39,3 @@ define('REDIS_PORT', 6379);
 if (!defined('ROOT_DIR')) {
 	define('ROOT_DIR', './');
 }
-
-Foodsharing\Debug\Whoops::register();
