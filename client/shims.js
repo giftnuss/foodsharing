@@ -25,7 +25,9 @@ exports.rules = [
     [lib('fancybox/jquery.fancybox.pack.js')]: ['jQuery=jquery'],
     [lib('jquery.animatenumber.min.js')]: ['jQuery=jquery'],
     [lib('dynatree/jquery.dynatree.js')]: ['jQuery=jquery'],
-    [lib('typeahead.bundle.js')]: ['window.jQuery=jquery']
+    [lib('typeahead.bundle.js')]: ['window.jQuery=jquery'],
+    [lib('tablesorter/jquery.tablesorter.js')]: ['jQuery=jquery'],
+    [lib('tablesorter/jquery.tablesorter.pager.js')]: ['jQuery=jquery']
   }),
   {
     test: typeaheadAddresspicker,
@@ -65,5 +67,9 @@ exports.alias = {
   'leaflet.css': 'leaflet/dist/leaflet.css',
   'leaflet.awesome-markers': require.resolve('leaflet.awesome-markers/dist/leaflet.awesome-markers.js'),
   'leaflet.awesome-markers.css': require.resolve('leaflet.awesome-markers/dist/leaflet.awesome-markers.css'),
-  'leaflet.awesome-markers.foodsharing-overrides.css': lib('leaflet/leaflet.awesome-markers.foodsharing-overrides.css')
+  'leaflet.awesome-markers.foodsharing-overrides.css': lib('leaflet/leaflet.awesome-markers.foodsharing-overrides.css'),
+  'leaflet': lib('leaflet/leaflet.js'),
+  'tablesorter': lib('tablesorter/jquery.tablesorter.js'),
+  'tablesorter-pagercontrols': lib('tablesorter/jquery.tablesorter.pager.js')
 }
+
