@@ -7,3 +7,6 @@ COPY js /app/js
 
 # Access to js files in the php tree
 COPY src /app/src
+
+# Language files are available in JS, too
+COPY lang /app/lang
