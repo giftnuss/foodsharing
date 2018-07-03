@@ -36,6 +36,8 @@
 - partial refactor of Basket module !426 @nicksellen
 - refactored region module into twig/webpack loaded javascript !421 @NerdyProjects
 - add constants class database constants in region module !413 @peter.toennies @nicksellen
+- refactored login and registration @theolampert
+- refactored tablesorter @alangecker
 
 ## Dev/Test/CI stuff
 - Fix cache clearing during test/deploy !414 @nicksellen
