@@ -7,6 +7,7 @@ use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Message\MessageModel;
 
@@ -24,13 +25,13 @@ class BasketXhr extends Control
 		$this->basketGateway = $basketGateway;
 
 		$this->status = array(
-			'ungelesen' => 0,
-			'gelesen' => 1,
-			'abgeholt' => 2,
-			'abgelehnt' => 3,
-			'nicht_gekommen' => 4,
-			'wall_follow' => 9,
-			'angeklickt' => 10
+			'ungelesen' => Status::REQUESTED_MESSAGE_UNREAD,
+			'gelesen' => Status::REQUESTED_MESSAGE_READ,
+			'abgeholt' => Status::DELETED_PICKED_UP,
+			'abgelehnt' => Status::DENIED,
+			'nicht_gekommen' => Status::NOT_PICKED_UP,
+			'wall_follow' => Status::FOLLOWED,
+			'angeklickt' => Status::REQESTED
 		);
 
 		parent::__construct();
@@ -57,7 +58,7 @@ class BasketXhr extends Control
 	public function basketchoords()
 	{
 		$xhr = new Xhr();
-		if ($baskets = $this->gateway->getBasketCoordinates()) {
+		if ($baskets = $this->basketGateway->getBasketCoordinates()) {
 			$xhr->addData('baskets', $baskets);
 		}
 
@@ -171,7 +172,7 @@ class BasketXhr extends Control
 			}
 		}
 
-		if (!empty($desc) && ($id = $this->gateway->addBasket($desc, $pic, $tel, $contact_type, $weight, $location_type, $lat, $lon, S::user('bezirk_id'), S::id()))) {
+		if (!empty($desc) && ($id = $this->basketGateway->addBasket($desc, $pic, $tel, $contact_type, $weight, $location_type, $lat, $lon, S::user('bezirk_id'), S::id()))) {
 			if (isset($data['food_type']) && is_array($data['food_type'])) {
 				$types = array();
 				foreach ($data['food_type'] as $ft) {
@@ -180,7 +181,7 @@ class BasketXhr extends Control
 					}
 				}
 
-				$this->gateway->addTypes($id, $types);
+				$this->basketGateway->addTypes($id, $types);
 			}
 
 			if (isset($data['food_art']) && is_array($data['food_art'])) {
@@ -191,7 +192,7 @@ class BasketXhr extends Control
 					}
 				}
 
-				$this->gateway->addArt($id, $arts);
+				$this->basketGateway->addArt($id, $arts);
 			}
 
 			return array(
@@ -266,7 +267,7 @@ class BasketXhr extends Control
 
 	public function bubble()
 	{
-		if (($basket = $this->gateway->getBasket($_GET['id']))) {
+		if ($basket = $this->basketGateway->getBasket($_GET['id'])) {
 			if ($basket['fsf_id'] == 0) {
 				$dia = new XhrDialog();
 
@@ -333,8 +334,8 @@ class BasketXhr extends Control
 
 	public function request()
 	{
-		if ($basket = $this->gateway->getBasket($_GET['id'])) {
-			$this->gateway->setStatus($_GET['id'], 10, S::id());
+		if ($basket = $this->basketGateway->getBasket($_GET['id'])) {
+			$this->basketGateway->setStatus($_GET['id'], Status::REQESTED, S::id());
 			$dia = new XhrDialog();
 			$dia->setTitle('Essenskorb von ' . $basket['fs_name'] . '');
 			$dia->addOpt('width', 300);
@@ -367,7 +368,7 @@ class BasketXhr extends Control
 			if (!empty($msg)) {
 				$this->messageModel->message($fs_id, $this->func->fsId(), $msg, 0);
 				$this->mailMessage($this->func->fsId(), $fs_id, $msg, 22);
-				$this->gateway->setStatus($_GET['id'], 0, S::id());
+				$this->basketGateway->setStatus($_GET['id'], Status::REQUESTED_MESSAGE_UNREAD, S::id());
 
 				return array(
 					'status' => 1,
@@ -394,11 +395,11 @@ class BasketXhr extends Control
 		$xhr = new Xhr();
 
 		$out = '';
-		if ($updates = $this->gateway->listUpdates(S::id())) {
+		if ($updates = $this->basketGateway->listUpdates(S::id())) {
 			$out = $this->view->listUpdates($updates);
 		}
 
-		if ($baskets = $this->gateway->listMyBaskets(S::id())) {
+		if ($baskets = $this->basketGateway->listMyBaskets(S::id())) {
 			$out .= $this->view->listMyBaskets($baskets);
 		}
 
@@ -431,7 +432,7 @@ class BasketXhr extends Control
 	{
 		if ($id = $this->model->getVal('foodsaver_id', 'basket', $_GET['id'])) {
 			if ($id == $this->func->fsId()) {
-				$this->gateway->setStatus($_GET['id'], 1, $_GET['fid']);
+				$this->basketGateway->setStatus($_GET['id'], Status::REQUESTED_MESSAGE_READ, $_GET['fid']);
 
 				return array(
 					'status' => 1,
@@ -443,7 +444,7 @@ class BasketXhr extends Control
 
 	public function removeRequest()
 	{
-		if ($request = $this->gateway->getRequest($_GET['id'], $_GET['fid'], S::id())) {
+		if ($request = $this->basketGateway->getRequest($_GET['id'], $_GET['fid'], S::id())) {
 			$dia = new XhrDialog();
 			$dia->addOpt('width', '400');
 			$dia->noOverflow();
@@ -456,9 +457,9 @@ class BasketXhr extends Control
 				</div>'
 				. $this->v_utils->v_form_radio('fetchstate', array(
 					'values' => array(
-						array('id' => 3, 'name' => 'Ja, ' . $this->func->genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' hat den Korb abgeholt.'),
-						array('id' => 5, 'name' => 'Nein, ' . $this->func->genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' ist leider nicht wie verabredet erschienen.'),
-						array('id' => 5, 'name' => 'Die Lebensmittel wurden von jemand anderem abgeholt.')),
+						array('id' => Status::DELETED_PICKED_UP, 'name' => 'Ja, ' . $this->func->genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' hat den Korb abgeholt.'),
+						array('id' => Status::NOT_PICKED_UP, 'name' => 'Nein, ' . $this->func->genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' ist leider nicht wie verabredet erschienen.'),
+						array('id' => Status::DELETED_OTHER_REASON, 'name' => 'Die Lebensmittel wurden von jemand anderem abgeholt.')),
 					'selected' => 3
 				))
 			);
@@ -471,7 +472,7 @@ class BasketXhr extends Control
 
 	public function removeBasket()
 	{
-		$this->gateway->removeBasket($_GET['id'], S::id());
+		$this->basketGateway->removeBasket($_GET['id'], S::id());
 
 		return array(
 			'status' => 1,
@@ -482,15 +483,15 @@ class BasketXhr extends Control
 	public function follow()
 	{
 		if (isset($_GET['bid']) && (int)$_GET['bid'] > 0) {
-			$this->gateway->follow($_GET['bid'], S::id());
+			$this->basketGateway->follow($_GET['bid'], S::id());
 		}
 	}
 
 	public function finishRequest()
 	{
-		if ($request = $this->gateway->getRequest($_GET['id'], $_GET['fid'], S::id())) {
+		if ($request = $this->basketGateway->getRequest($_GET['id'], $_GET['fid'], S::id())) {
 			if (isset($_GET['sk']) && (int)$_GET['sk'] > 0) {
-				$this->gateway->setStatus($_GET['id'], $_GET['sk'], $_GET['fid']);
+				$this->basketGateway->setStatus($_GET['id'], $_GET['sk'], $_GET['fid']);
 
 				return array(
 					'status' => 1,

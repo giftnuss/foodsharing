@@ -1,5 +1,6 @@
 <?php
 
+// table fs_bezirk
 namespace Foodsharing\Modules\Core\DBConstants\Region;
 
 /**

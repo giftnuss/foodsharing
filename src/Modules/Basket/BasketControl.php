@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Basket;
 
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
 
 class BasketControl extends Control
 {
@@ -11,7 +12,6 @@ class BasketControl extends Control
 
 	public function __construct(BasketView $view, BasketGateway $basketGateway)
 	{
-		$this->gateway = $gateway;
 		$this->view = $view;
 		$this->basketGateway = $basketGateway;
 
@@ -23,7 +23,7 @@ class BasketControl extends Control
 	public function index()
 	{
 		if ($id = $this->uriInt(2)) {
-			if ($basket = $this->gateway->getBasket($id)) {
+			if ($basket = $this->basketGateway->getBasket($id)) {
 				$this->basket($basket);
 			}
 		} else {
@@ -62,12 +62,12 @@ class BasketControl extends Control
 			}
 			$wallposts = $this->wallposts('basket', $basket['id']);
 			if ($basket['fs_id'] == S::id()) {
-				$requests = $this->gateway->listRequests($basket['id'], S::id());
+				$requests = $this->basketGateway->listRequests($basket['id'], S::id());
 			}
 		}
-		if ($basket['until_ts'] >= time() && $basket['status'] == 1) {
+		if ($basket['until_ts'] >= time() && $basket['status'] == Status::REQUESTED_MESSAGE_READ) {
 			$this->view->basket($basket, $wallposts, $requests);
-		} elseif ($basket['until_ts'] <= time() || $basket['status'] == 3) {
+		} elseif ($basket['until_ts'] <= time() || $basket['status'] == Status::DENIED) {
 			$this->view->basketTaken($basket);
 		}
 	}

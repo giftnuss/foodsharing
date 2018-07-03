@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Basket;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
 
 class BasketGateway extends BaseGateway
 {
@@ -11,10 +12,10 @@ class BasketGateway extends BaseGateway
 		$stm = '
 			SELECT id,lat,lon 
 			FROM fs_basket 
-			WHERE status = 1
+			WHERE status = :status
 			';
 
-		return $this->db->fetchAll($stm);
+		return $this->db->fetchAll($stm, [':status' => Status::REQUESTED_MESSAGE_READ]);
 	}
 
 	public function addBasket($desc, $pic, $tel, $contact_type, $weight, $location_type, $lat, $lon, $bezirk_id, $fsId): int
@@ -254,7 +255,7 @@ class BasketGateway extends BaseGateway
 
 	public function removeBasket($id, $fsId): int
 	{
-		return $this->db->update('fs_basket', ['status' => 3], ['id' => (int)$id, 'foodsaver_id' => $fsId]);
+		return $this->db->update('fs_basket', ['status' => Status::DELETED_OTHER_REASON], ['id' => (int)$id, 'foodsaver_id' => $fsId]);
 	}
 
 	public function listMyBaskets($fsId)
@@ -290,8 +291,8 @@ class BasketGateway extends BaseGateway
 
 	public function follow($basket_id, $fsId): void
 	{
-		$stm = 'SELECT 1 FROM `fs_basket_anfrage` WHERE basket_id = :basket_id AND foodsaver_id = :foodsaver_id AND status <= 9';
-		$status = $this->db->fetchValue($stm, [':basket_id' => (int)$basket_id, ':foodsaver_id' => $fsId]);
+		$stm = 'SELECT 1 FROM `fs_basket_anfrage` WHERE basket_id = :basket_id AND foodsaver_id = :foodsaver_id AND status <= :status';
+		$status = $this->db->fetchValue($stm, [':basket_id' => (int)$basket_id, ':foodsaver_id' => $fsId, ':status' => Status::FOLLOWED]);
 
 		if (!$status) {
 			$stm = '
@@ -301,10 +302,10 @@ class BasketGateway extends BaseGateway
 			)
 			VALUES
 			(
-				:foodsaver_id, :basket_id, 9, NOW(), 0
+				:foodsaver_id, :basket_id, :status, NOW(), 0
 			)
 		';
-			$this->db->execute($stm, [':foodsaver_id' => (int)$fsId, ':basket_id' => (int)$basket_id]);
+			$this->db->execute($stm, [':foodsaver_id' => (int)$fsId, ':basket_id' => (int)$basket_id, ':status' => Status::FOLLOWED]);
 		}
 	}
 
@@ -350,7 +351,7 @@ class BasketGateway extends BaseGateway
 				fs_basket b
 
 			WHERE
-				b.status = 1
+				b.status = :status
 
 			AND
 				foodsaver_id != :fs_id
@@ -366,6 +367,7 @@ class BasketGateway extends BaseGateway
 			':lat' => (float)$loc['lat'],
 			':lat1' => (float)$loc['lat'],
 			':lon' => (float)$loc['lon'],
+			':status' => Status::REQUESTED_MESSAGE_READ,
 			':fs_id' => $fs_id,
 			':distance' => $distance,
 		]);
