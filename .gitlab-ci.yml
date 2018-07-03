@@ -49,6 +49,8 @@ test:
   # collect artifacts
   - docker cp foodsharing_ci_selenium:/home/seluser/Downloads tests/_output/
   - docker cp foodsharing_ci_app:/app/tests/_output/ tests/_output
+  - docker logs foodsharing_ci_app > tests/_output/logs-app.txt
+  - docker logs foodsharing_dev_mailqueuerunner > tests/_output/logs-mailqueuerunner.txt
   # stop/kill all the containers
   - FS_ENV=ci ./scripts/rm
   # collect any test output
