@@ -59,15 +59,15 @@ plugins.push(
 module.exports = merge(webpackBase, {
   entry: moduleEntries(
     // We explicitly define each foodsharing modules here so we can convert them one-by-one
-    'Index',
     'Basket',
     'Dashboard',
     'Foodsaver',
+    'Index',
+    'Login',
+    'Message',
     'Region',
     'StoreUser',
-    'WorkGroup',
-    'Login',
-    'Message'
+    'WorkGroup'
   ),
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'cheap-module-eval-source-map' : 'source-map',

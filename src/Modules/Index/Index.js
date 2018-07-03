@@ -5,6 +5,7 @@ import $ from 'jquery'
 import 'jquery-animatenumber'
 import '@php/Lib/View/vPageslider'
 import { ajreq, showLoader, hideLoader, goTo } from '@/script'
+import './Index.css'
 
 /*
   This calls some of the functions in Modules/Map/Map.js but it is not loaded.
