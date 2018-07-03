@@ -28,6 +28,32 @@ class RegionGateway extends BaseGateway
 		return $bezirk_ids;
 	}
 
+	/**
+	 * @param $fsId
+	 * @param $regionId
+	 *
+	 * @return array with flags 'active' and 'ambassador' describing these properties of the given user/region combination
+	 */
+	public function getFoodsaverStatus($fsId, $regionId)
+	{
+		$res['active'] = $this->db->fetchValue(
+			'
+			SELECT	hb.active
+			FROM	`fs_foodsaver_has_bezirk` hb
+			WHERE	hb.bezirk_id = :region_id
+			AND 	hb.foodsaver_id = :fs_id
+		', ['region_id' => $regionId, 'fs_id' => $fsId]) == 1;
+		$res['ambassador'] = $this->db->fetchValue(
+			'
+			SELECT	1
+			FROM	`fs_botschafter` bot
+			WHERE bot.foodsaver_id = :fs_id
+			AND bot.bezirk_id = :region_id
+		', ['region_id' => $regionId, 'fs_id' => $fsId]) == 1;
+
+		return $res;
+	}
+
 	public function listForFoodsaver($fs_id): array
 	{
 		$values = $this->db->fetchAll(

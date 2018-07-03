@@ -1,6 +1,6 @@
 <div class="field">
     {% set classes = classes |default([]) %}
-    {% if title %}
+    {% if title is defined and title %}
         <div class="head ui-widget-header ui-corner-top">{{ title }}</div>
         {% set classes = classes|merge(['corner-bottom']) %}
     {% else %}

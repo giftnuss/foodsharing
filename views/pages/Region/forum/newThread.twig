@@ -1,0 +1,10 @@
+{% embed 'components/field.twig' with {'title': 'forum.new_thread'|trans, 'classes': ['ui-padding']} %}
+    {% block content %}
+        {{ form_start(newThreadForm) }}
+        {{ form_row(newThreadForm.title) }}
+        {{ form_row(newThreadForm.body) }}
+        <input type="submit" class="button" name="submitted"
+               value="{{ 'button.send'|trans }}"/>
+        {{ form_end(newThreadForm) }}
+    {% endblock %}
+{% endembed %}

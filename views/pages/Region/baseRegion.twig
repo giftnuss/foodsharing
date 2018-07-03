@@ -1,0 +1,21 @@
+{% extends 'layouts/default.twig' %}
+
+{% block left %}
+    {% include 'pages/Region/sidenav.twig' %}
+
+{% endblock %}
+
+{% block top %}
+    {% if isRegion %}
+        {% include 'pages/Region/regionTop.twig' %}
+    {% else %}
+        {% include 'partials/topbar.twig' with {
+            'title': 'terminology.group'|trans ~ ' - ' ~ region.name,
+            'subtitle': 'group.member_count'|transchoice(region.stat.num_fs),
+            'img': '/img/groups.png',
+        } %}
+    {% endif %}
+{% endblock %}
+{% block bottom %}
+    {{ content.bottom.html | raw }}
+{% endblock %}

@@ -86,7 +86,7 @@ class WorkGroupControl extends Control
 			&& $group['apply_type'] == ApplyType::OPEN;
 	}
 
-	private function getSideMenuData()
+	private function getSideMenuData($activeUrlPartial = null)
 	{
 		$countries = $this->model->getCountryGroups();
 		$bezirke = S::getRegions();
@@ -121,7 +121,8 @@ class WorkGroupControl extends Control
 		return ['global' => $menuGlobal,
 			'local' => $menuLocalRegions,
 			'countries' => $menuCountries,
-			'groups' => $menuMyGroups];
+			'groups' => $menuMyGroups,
+			'active' => $activeUrlPartial];
 	}
 
 	private function list(Request $request, Response $response)
@@ -151,7 +152,7 @@ class WorkGroupControl extends Control
 		$this->func->addTitle($this->func->s('groups'));
 
 		$response->setContent($this->render('pages/WorkGroup/list.twig',
-			['nav' => $this->getSideMenuData(), 'groups' => $groups]
+			['nav' => $this->getSideMenuData('=' . $parent), 'groups' => $groups]
 		));
 	}
 

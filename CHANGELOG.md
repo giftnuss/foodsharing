@@ -3,6 +3,8 @@
 ## Features
 - updated fpdi plugin to v2.0.2 !351 #168 by @peter.toennies
 - update symfony to 4.1.0 as well as other dependencies !351 @NerdyProjects
+- remove user list in forums to allow big regions to work !421 @NerdyProjects
+- add php intl component for localized internationalization !421 @NerdyProjects
 
 ## Bugfixes
 - removed XSS-possibility in xhr_out method. !370 @theolampert
@@ -32,6 +34,7 @@
 - reduced size of DataBase classes !409 @peter.toennies
 - refactored login and registration !403 @theolampert
 - partial refactor of Basket module !426 @nicksellen
+- refactored region module into twig/webpack loaded javascript !421 @NerdyProjects
 - add constants class database constants in region module !413 @peter.toennies @nicksellen
 
 ## Dev/Test/CI stuff

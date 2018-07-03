@@ -26,6 +26,7 @@ services:
             - [addExtension, ['@Symfony\Bridge\Twig\Extension\TranslationExtension']]
             - [addExtension, ['@Symfony\Bridge\Twig\Extension\FormExtension']]
             - [addExtension, ['@Twig_Extension_Debug']]
+            - [addExtension, ['@Twig_Extension_Intl']]
             - [addExtension, ['@Foodsharing\Lib\TwigExtensions']]
 
     Twig:
@@ -35,6 +36,9 @@ services:
 
     Twig_Extension_Debug:
         class: Twig_Extension_Debug
+
+    Twig_Extension_Intl:
+        class: Twig_Extensions_Extension_Intl
 
     Symfony\Bridge\Twig\Extension\TranslationExtension:
         class: Symfony\Bridge\Twig\Extension\TranslationExtension
@@ -67,6 +71,8 @@ services:
             - ['addResource', ['xlf', 'vendor/symfony/validator/Resources/translations/validators.de.xlf', 'de', 'messages']]
             - ['addResource', ['yml', 'lang/lang.de.yml', 'de', 'messages']]
             - ['setFallbackLocales', [['de']]]
+
+    Symfony\Component\Translation\TranslatorInterface: '@translator'
 
     validator:
         class: Symfony\Component\Validator\ValidatorBuilder

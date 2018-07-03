@@ -169,7 +169,7 @@ abstract class Control
 	public function wallposts($table, $id)
 	{
 		$this->func->addJsFunc('
-			function u_delPost(id)
+			function u_delPost(id, module, wallId)
 				{
 					var id = id;
 					$.ajax({

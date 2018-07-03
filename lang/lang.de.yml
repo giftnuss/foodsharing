@@ -5,14 +5,20 @@ picture_upload_widget:
 
 button:
   change_picture: Bild ändern
+  attach_image: Bild anhängen
   rotate_right: im Uhrzeigersinn drehen
   upload: Hochladen
+  yes_i_am_sure: Ja, ich bin mir sicher
+  abort: Abbrechen
+  send: Senden
+  answer: Antworten
 
 group:
   name: Name
   description: Beschreibung
   photo: Foto
   applications: Bewerbungen
+  applications_for: Bewerbungen für %name%
   application_requirements:
     requirements: Wer kann sich für diese Gruppe eintragen?
     nobody: Niemand (geschlossene Gruppe)
@@ -42,6 +48,9 @@ group:
     join: Dieser Arbeitsgruppe beitreten
     safe: Änderungen speichern
   no_groups: Hier gibt es noch keine Arbeitsgruppen
+  quit_name: Team %name% verlassen
+  quit: Verlassen
+  really_quit_name: Möchtest Du wirklich den Bezirk bzw. das Team %name% verlassen?
 
 legal:
   pp: Datenschutzerklärung
@@ -112,3 +121,63 @@ register:
   pass1: Dein neues gewünschtes Passwort
   pass2: Passwortwiederholung
 
+terminology:
+  forum: Forum
+  events: Termine
+  ambassador_forum: BotschafterInnenforum
+  ambassadors: Botschafter
+  wall: Pinnwand
+  fsp: Fair-Teiler
+  groups: Arbeitsgruppen
+  group: Arbeitsgruppe
+  n_foodsaver: 'Ein Foodsaver|%count% Foodsaver'
+  n_sleeping: 'Eine Schlafmütze|%count% Schlafmützen'
+  n_ambassadors: 'Ein(e) BotschafterIn|%count% BotschafterInnen'
+  n_stores: 'Ein Betrieb|%count% Betriebe'
+  n_cooperating_stores: 'Eine laufende Kooperation|%count% laufende Kooperationen'
+
+statistics:
+  kg_food_saved: '%count% kg Lebensmittel gerettet'
+  num_fetches: 'Bei einem Rettungseinsatz|Bei %count% Rettungseinsätzen'
+
+are_you_sure: Bist Du sicher?
+really_delete: Wirklich löschen?
+yes: Ja
+no: Nein
+options: Optionen
+
+forum:
+  from: Von %name%
+  threads: Themen
+  new_thread: Neues Thema verfassen
+  subscribe_thread: Möchtest Du über dieses Thema auf dem Laufenden gehalten werden?
+  thread_is_inactive: Thema inaktiv!
+  thread_is_inactive_description: Dieses Thema ist noch nicht aktiv. Hier hast Du die Möglichkeit das Thema zu akzeptieren und alle Foodsaver darüber zu informieren.
+  placeholder_answer: Antworten...
+  unfollow: Thema entfolgen
+  follow: Thema folgen
+  stick: Thema fixieren
+  unstick: Fixierung aufheben
+  delete_post: Beitrag löschen
+  thread_title: Titel
+  post_body: Nachricht
+  activate_thread: Thema aktivieren
+  delete_thread: Thema löschen
+  hold_back_for_moderation: Das Thema wurde gespeichert und wird veröffentlicht sobald ein Botschafter es bestätigt.
+  no_threads: Noch keine Themen gepostet
+
+chat:
+  open_chat: Nachricht schreiben
+
+wall:
+  name: Pinnwand
+  message_placeholder: Nachricht schreiben...
+
+fairteiler:
+  all_at: Alle Fair-Teiler in %name%
+  add_new: Neuer Fair-Teiler
+
+events:
+  name: Termine
+  add_new_event: Jetzt neuen Termin eintragen
+  add_event: Neues Event

@@ -1,0 +1,13 @@
+{% extends 'pages/Region/baseRegion.twig' %}
+
+{% block main %}
+    {% if threads is defined %}
+        {% include 'pages/Region/forum/listThreads.twig' %}
+    {% endif %}
+    {% if posts is defined %}
+        {% include 'pages/Region/forum/showThread.twig' %}
+    {% endif %}
+    {% if newThreadForm is defined %}
+        {% include 'pages/Region/forum/newThread.twig' %}
+    {% endif %}
+{% endblock %}

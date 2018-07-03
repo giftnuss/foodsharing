@@ -64,6 +64,7 @@ module.exports = merge(webpackBase, {
     'Basket',
     'Dashboard',
     'Foodsaver',
+    'Region',
     'StoreUser',
     'WorkGroup',
     'Login',
@@ -100,7 +101,8 @@ module.exports = merge(webpackBase, {
       'js': resolve('../js'),
       '@': resolve('src'),
       '@php': resolve('../src'),
-      '>': resolve('test')
+      '>': resolve('test'),
+      '@translations': resolve('../lang')
     }
   },
   module: {
@@ -109,7 +111,14 @@ module.exports = merge(webpackBase, {
         test: /\.css$/,
         use: [
           dev ? 'style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader'
+          {
+            loader: 'css-loader',
+            options: {
+              alias: {
+                './img': ('img')
+              }
+            }
+          }
         ]
       },
       {
@@ -127,6 +136,16 @@ module.exports = merge(webpackBase, {
           limit: 10000,
           name: dev ? 'fonts/[name].[ext]' : 'fonts/[name].[hash:7].[ext]'
         }
+      },
+      {
+        test: /\.yml$/,
+        exclude: [
+          /(node_modules)/
+        ],
+        use: [
+          'json-loader',
+          'yaml-loader'
+        ]
       }
     ]
   },

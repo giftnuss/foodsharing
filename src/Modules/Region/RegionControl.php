@@ -2,8 +2,6 @@
 
 namespace Foodsharing\Modules\Region;
 
-use Flourish\fFile;
-use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
@@ -11,601 +9,360 @@ use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Services\ForumService;
+use Symfony\Component\Form\FormFactoryBuilder;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class RegionControl extends Control
 {
-	private $bezirk_id;
-	private $bezirk;
-	private $bot_theme;
-	private $mode;
+	private $region;
 	private $gateway;
 	private $eventGateway;
 	private $foodsaverGateway;
 	private $forumGateway;
 	private $fairteilerGateway;
+	/* @var TranslatorInterface */
+	private $translator;
+	/* @var FormFactoryBuilder */
+	private $formFactory;
+	private $forumService;
+	private $forumModerated;
+	private $regionHelper;
 
-	public function __construct(Model $model, RegionView $view, RegionGateway $gateway, EventGateway $eventGateway, FoodsaverGateway $foodsaverGateway, ForumGateway $forumGateway, FairTeilerGateway $fairteilerGateway)
+	/**
+	 * @required
+	 */
+	public function setTranslator(TranslatorInterface $translator)
 	{
-		$this->mode = 'normal';
+		$this->translator = $translator;
+	}
+
+	/**
+	 * @required
+	 */
+	public function setFormFactory(FormFactoryBuilder $formFactory)
+	{
+		$this->formFactory = $formFactory;
+	}
+
+	public function __construct(
+		EventGateway $eventGateway,
+		FairTeilerGateway $fairteilerGateway,
+		FoodsaverGateway $foodsaverGateway,
+		ForumGateway $forumGateway,
+		ForumService $forumService,
+		Model $model,
+		RegionGateway $gateway,
+		RegionHelper $regionHelper
+	) {
+		$this->forumModerated = false;
 		$this->model = $model;
-		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->eventGateway = $eventGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumGateway = $forumGateway;
 		$this->fairteilerGateway = $fairteilerGateway;
-		$this->view->setMode($this->mode);
-		parent::__construct();
+		$this->forumService = $forumService;
+		$this->regionHelper = $regionHelper;
 
+		parent::__construct();
+	}
+
+	private function mayAccessAmbassadorBoard($regionId)
+	{
+		return $this->func->isBotFor($regionId) || $this->func->isOrgaTeam();
+	}
+
+	private function mayAccessApplications($regionId)
+	{
+		return $this->mayAccessAmbassadorBoard($regionId);
+	}
+
+	private function regionViewData($region, $activeSubpage)
+	{
+		$isWorkGroup = $this->isWorkGroup($region);
+		$menu = [
+			['name' => 'terminology.forum', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=forum'],
+			['name' => 'terminology.events', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=events'],
+		];
+
+		if ($this->mayAccessAmbassadorBoard($region['id']) && !$isWorkGroup) {
+			$menu[] = ['name' => 'terminology.ambassador_forum', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=botforum'];
+		}
+
+		if ($isWorkGroup) {
+			$menu[] = ['name' => 'terminology.wall', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=wall'];
+			if (S::may('orga') || $this->func->isBotFor($region['id'])) {
+				$menu[] = ['name' => 'Gruppe verwalten', 'href' => '/?page=groups&sub=edit&id=' . (int)$region['id']];
+			}
+		} else {
+			$menu[] = ['name' => 'terminology.fsp', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=fairteiler'];
+			$menu[] = ['name' => 'terminology.groups', 'href' => '/?page=groups&p=' . (int)$region['id']];
+		}
+		if ($this->mayAccessApplications($region['id'])) {
+			if ($requests = $this->gateway->listRequests($region['id'])) {
+				$menu[] = ['name' => $this->translator->trans('group.applications') . ' <strong>(' . count($requests) . ')</strong>', 'href' => '/?page=bezirk&bid=' . $region['id'] . '&sub=applications'];
+			}
+		}
+
+		$avatarListEntry = function ($fs) {
+			return [
+				'user' => ['id' => $fs['id'],
+					'name' => $fs['name'],
+					'sleep_status' => $fs['sleep_status']
+				],
+				'size' => 50,
+				'imageUrl' => $this->func->img($fs['photo'], 50, 'q')
+			];
+		};
+		$viewdata['isRegion'] = !$isWorkGroup;
+		$stat = [
+			'num_fs' => count($this->region['foodsaver']),
+			'num_sleeping' => count($this->region['sleeper']),
+			'num_ambassadors' => $this->region['stat_botcount'],
+			'num_stores' => $this->region['stat_betriebcount'],
+			'num_cooperations' => $this->region['stat_korpcount'],
+			'num_pickups' => $this->region['stat_fetchcount'],
+			'pickup_weight_kg' => round($this->region['stat_fetchweight']),
+		];
+		$viewdata['region'] = [
+			'id' => $this->region['id'],
+			'name' => $this->region['name'],
+			'stat' => $stat,
+			'admins' => array_map($avatarListEntry, array_slice($this->region['botschafter'], 0, 30)),
+		];
+
+		$viewdata['nav'] = ['menu' => $menu, 'active' => '=' . $activeSubpage];
+
+		return $viewdata;
+	}
+
+	private function isWorkGroup($region)
+	{
+		return $region['type'] == Type::WORKING_GROUP;
+	}
+
+	public function index(Request $request, Response $response)
+	{
 		if (!S::may()) {
 			$this->func->goLogin();
 		}
 
-		$this->bezirk_id = false;
-		if (($this->bezirk_id = $this->func->getGetId('bid')) === false) {
-			$this->bezirk_id = $this->func->getBezirkId();
-		}
+		$region_id = $request->query->getInt('bid', $_SESSION['client']['bezirk_id']);
 
-		if (!$this->func->mayBezirk($this->bezirk_id)) {
+		if ($this->func->mayBezirk($region_id) && ($region = $this->gateway->getRegionDetails($region_id))) {
+			$big = [Type::BIG_CITY, Type::FEDERAL_STATE, Type::COUNTRY];
+			$region['moderated'] = $region['moderated'] || in_array($region['type'], $big);
+			$this->region = $region;
+		} else {
 			$this->func->go('/?page=dashboard');
 		}
 
-		$this->bezirk = false;
-		if ($bezirk = $this->gateway->getRegionDetails($this->bezirk_id)) {
-			$big = array(Type::BIG_CITY => 1, Type::FEDERAL_STATE => 1, Type::COUNTRY => 1);
-			if (isset($big[$bezirk['type']])) {
-				$this->mode = 'big';
-			} elseif ($bezirk['type'] == Type::WORKING_GROUP) {
-				$this->mode = 'orgateam';
-			}
-			$this->view->setMode($this->mode);
-			$this->bezirk = $bezirk;
-		}
+		$this->func->addTitle($region['name']);
+		$this->func->addBread($region['name'], '/?page=bezirk&bid=' . $region_id);
 
-		$this->view->setBezirk($this->bezirk);
-
-		$this->bot_theme = 0;
-		if ($this->getSub() == 'botforum') {
-			$this->bot_theme = 1;
-		}
-
-		if ($this->bot_theme == 1) {
-			if ($this->func->isBotFor($this->bezirk_id) || $this->func->isOrgaTeam()) {
-			} else {
-				$this->func->go('/?page=bezirk&bid=' . $this->bezirk_id . '&sub=forum');
-			}
-		}
-	}
-
-	public function index()
-	{
-		if ($this->bezirk !== false && $this->func->mayBezirk($this->bezirk_id)) {
-			if ($this->mode == 'orgateam') {
-				return $this->orgateam();
-			} else {
-				return $this->normal();
-			}
-		}
-	}
-
-	public function normal()
-	{
-		if (!isset($_GET['sub'])) {
-			$this->func->go('/?page=bezirk&bid=' . $this->bezirk_id . '&sub=forum');
-		}
-
-		$this->func->addTitle($this->bezirk['name']);
-
-		$bezirk = $this->bezirk;
-		if ($this->func->isBotFor($this->bezirk_id) || $this->func->isOrgaTeam()) {
-			$this->bezirkRequests();
-		}
-		$this->func->addBread($bezirk['name'], '/?page=bezirk&bid=' . (int)$this->bezirk_id);
-		$this->func->addContent($this->view->top(), CNT_TOP);
-
-		$menu = array();
-
-		$menu[] = array('name' => 'Forum', 'href' => '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=forum');
-		$menu[] = array('name' => 'Termine', 'href' => '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=events');
-
-		if ($this->func->isBotFor($this->bezirk_id) || $this->func->isOrgaTeam()) {
-			$menu[] = array('name' => 'BotschafterInnenforum', 'href' => '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=botforum');
-		}
-
-		$menu[] = array('name' => 'Fair-Teiler', 'href' => '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=fairteiler');
-
-		$menu[] = array('name' => 'Arbeitsgruppen', 'href' => '/?page=groups&p=' . (int)$this->bezirk_id);
-
-		$this->func->addContent($this->view->menu($menu, array('active' => $this->getSub())), CNT_LEFT);
-
-		$this->func->addContent(
-			$this->v_utils->v_field($this->view->fsAvatarList($bezirk['botschafter'], array(
-				'scroller' => false
-			)), 'BotschafterInnen für ' . $bezirk['name']),
-			CNT_LEFT
-		);
-
-		$this->func->addContent(
-			$this->v_utils->v_field($this->view->fsAvatarList($bezirk['foodsaver']), count($bezirk['foodsaver']) . ' aktive Foodsaver in ' . $bezirk['name']),
-			CNT_LEFT
-		);
-
-		if ($this->bezirk['sleeper']) {
-			$this->func->addContent(
-				$this->v_utils->v_field($this->view->fsAvatarList($bezirk['sleeper']), count($bezirk['sleeper']) . ' Schlafmützen in ' . $bezirk['name']),
-				CNT_LEFT
-			);
-		}
-
-		$this->func->addContent(
-			$this->view->signout($this->bezirk),
-			CNT_LEFT
-		);
-	}
-
-	public function orgateam()
-	{
-		if (!isset($_GET['sub'])) {
-			$this->func->go('/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=wall');
-		}
-
-		$bezirk = $this->bezirk;
-		$menu = array();
-
-		$this->func->addTitle($this->bezirk['name']);
-
-		if ($this->func->isBotFor($this->bezirk_id) || $this->func->isOrgaTeam()) {
-			if ($requests = $this->gateway->listRequests($this->bezirk_id)) {
-				$menu[] = array('name' => 'Bewerbungen <strong>(' . count($requests) . ')</strong>', 'href' => '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=applications');
-			}
-		}
-		$this->func->addBread($bezirk['name'], '/?page=bezirk&bid=' . (int)$this->bezirk_id);
-		$this->func->addContent($this->view->topOrga(), CNT_TOP);
-
-		$menu[] = array('name' => 'Pinnwand', 'href' => '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=wall');
-		$menu[] = array('name' => 'Forum', 'href' => '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=forum');
-		$menu[] = array('name' => 'Termine', 'href' => '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=events');
-
-		if (S::may('orga') || $this->func->isBotFor($this->bezirk_id)) {
-			$menu[] = array('name' => 'Gruppe verwalten', 'href' => '/?page=groups&sub=edit&id=' . (int)$this->bezirk_id);
-		}
-
-		$this->func->addContent($this->view->menu($menu, array('active' => $this->getSub())), CNT_LEFT);
-
-		$this->func->addContent(
-			$this->v_utils->v_field($this->view->fsAvatarList($bezirk['foodsaver'], array('shuffle' => false)), count($bezirk['foodsaver']) . ' aktive Mitglieder'),
-			CNT_LEFT
-		);
-
-		if ($this->bezirk['sleeper']) {
-			$this->func->addContent(
-				$this->v_utils->v_field($this->view->fsAvatarList($bezirk['sleeper']), count($bezirk['sleeper']) . ' Schlafmützen in ' . $bezirk['name']),
-				CNT_LEFT
-			);
-		}
-
-		$this->func->addContent(
-			$this->view->signout($this->bezirk),
-			CNT_LEFT
-		);
-	}
-
-	public function wall()
-	{
-		$this->func->addContent($this->v_utils->v_field($this->wallposts('bezirk', $this->bezirk_id), 'Pinnwand'));
-	}
-
-	public function fairteiler()
-	{
-		$this->func->addBread($this->func->s('fairteiler'), '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=fairteiler');
-		$this->func->addContent($this->view->ftOptions($this->bezirk_id), CNT_RIGHT);
-		$this->func->addTitle($this->func->s('fairteiler'));
-		$bezirk_ids = $this->gateway->listIdsForDescendantsAndSelf($this->bezirk_id);
-		if ($fairteiler = $this->fairteilerGateway->listFairteiler($bezirk_ids)) {
-			$this->func->addContent($this->view->listFairteiler($fairteiler));
-		} else {
-			$this->func->addContent($this->v_utils->v_info($this->func->s('no_fairteiler_available')));
-		}
-	}
-
-	private function bezirkRequests()
-	{
-		if ($requests = $this->gateway->listRequests($this->bezirk_id)) {
-			$out = '<table class="pintable">';
-			$odd = 'odd';
-			$this->func->addJs('$("table.pintable tr td ul li").tooltip();');
-
-			$this->func->addJsFunc('
-				function acceptRequest(fsid,bid){
-					showLoader();
-					$.ajax({
-						dataType:"json",
-						data: "fsid="+fsid+"&bid="+bid,
-						url:"xhr.php?f=acceptBezirkRequest",
-						success : function(data){
-							if(data.status == 1)
-							{
-								reload();
-								//$("tr.request-"+fsid).fadeOut();
-							}
-						},
-						complete:function(){hideLoader();}
-					});
+		switch ($request->query->get('sub')) {
+			case 'botforum':
+				if (!$this->mayAccessAmbassadorBoard($region_id)) {
+					$this->func->go($this->forumService->url($region_id, false));
 				}
-				function denyRequest(fsid,bid){
-					showLoader();
-					$.ajax({
-						dataType:"json",
-						data: "fsid="+fsid+"&bid="+bid,
-						url:"xhr.php?f=denyBezirkRequest",
-						success : function(data){
-							if(data.status == 1)
-							{
-								reload();
-							}
-						},
-						complete:function(){hideLoader();}
-					});
-				}');
-
-			foreach ($requests as $r) {
-				if ($odd == 'even') {
-					$odd = 'odd';
+				$this->forum($request, $response, $region, true);
+				break;
+			case 'forum':
+				$this->forum($request, $response, $region, false);
+				break;
+			case 'wall':
+				$this->wall($request, $response, $region);
+				break;
+			case 'fairteiler':
+				$this->fairteiler($request, $response, $region);
+				break;
+			case 'events':
+				$this->events($request, $response, $region);
+				break;
+			case 'applications':
+				$this->applications($request, $response, $region);
+				break;
+			default:
+				if ($this->isWorkGroup($region)) {
+					$this->func->go('/?page=bezirk&bid=' . $region_id . '&sub=wall');
 				} else {
-					$odd = 'even';
+					$this->func->go($this->forumService->url($region_id, false));
 				}
-				$out .= '
-		<tr class="' . $odd . ' request-' . $r['id'] . '">
-			<td class="img" width="35px"><a href="#" onclick="profile(' . (int)$r['id'] . ');return false;"><img src="' . $this->func->img($r['photo']) . '" /></a></td>
-			<td style="padding-top:17px;"><span class="msg"><a href="#" onclick="profile(' . (int)$r['id'] . ');return false;">' . $r['name'] . '</a></span></td>
-			<td style="width:66px;padding-top:17px;"><span class="msg"><ul class="toolbar"><li class="ui-state-default ui-corner-left" title="Ablehnen" onclick="denyRequest(' . (int)$r['id'] . ',' . (int)$this->bezirk_id . ');"><span class="ui-icon ui-icon-closethick"></span></li><li class="ui-state-default ui-corner-right" title="Akzeptieren" onclick="acceptRequest(' . (int)$r['id'] . ',' . (int)$this->bezirk_id . ');"><span class="ui-icon ui-icon-heart"></span></li></ul></span></td>
-		</tr>';
-			}
-
-			$out .= '</table>';
-
-			$this->func->hiddenDialog('requests', array($out));
-			$this->func->addJs('$("#dialog_requests").dialog("option","title","Anfragen für ' . $this->bezirk['name'] . '");');
-			$this->func->addJs('$("#dialog_requests").dialog("option","buttons",{});');
-			$this->func->addJs('$("#dialog_requests").dialog("open");');
+				break;
 		}
 	}
 
-	public function forum()
+	private function wall(Request $request, Response $response, $region)
 	{
-		return $this->_forum(false);
+		$viewdata = $this->regionViewData($region, $request->query->get('sub'));
+		$viewdata['wall'] = ['module' => 'bezirk', 'wallId' => $region['id']];
+		$response->setContent($this->render('pages/Region/wall.twig', $viewdata));
 	}
 
-	public function botforum()
+	private function fairteiler(Request $request, Response $response, $region)
 	{
-		return $this->_forum(true);
+		$this->func->addBread($this->func->s('fairteiler'), '/?page=bezirk&bid=' . $region['id'] . '&sub=fairteiler');
+		$this->func->addTitle($this->func->s('fairteiler'));
+		$viewdata = $this->regionViewData($region, $request->query->get('sub'));
+		$bezirk_ids = $this->gateway->listIdsForDescendantsAndSelf($region['id']);
+		$viewdata['fairteiler'] = $this->fairteilerGateway->listFairteiler($bezirk_ids);
+		$response->setContent($this->render('pages/Region/fairteiler.twig', $viewdata));
 	}
 
-	private function _forum($botForum)
+	private function mayActivateThreads($regionId)
 	{
-		$botForum = $botForum && ($this->bot_theme == 1);
-		$this->func->addBread($this->func->s('forum'), '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=' . ($botForum ? 'botforum' : 'forum'));
-
-		$this->func->addTitle($this->func->s($botForum ? 'bot_forum' : 'forum'));
-
-		if (isset($_POST['submitted'])) {
-			$body = strip_tags($_POST['body']);
-			$body = nl2br($body);
-			$body = $this->func->autolink($body);
-
-			if ($post_id = $this->forumGateway->addPost(S::id(), $_POST['thread'], $body, $_POST['post'], $this->bezirk)) {
-				// Dunno why this is only done for non-bot-posts
-				if (!$botForum) {
-					if ($_POST['follow'] == 1) {
-						$this->forumGateway->followThread(S::id(), $_POST['thread']);
-					} elseif ($_POST['follow'] == 0) {
-						$this->forumGateway->unfollowThread(S::id(), $_POST['thread']);
-					}
-
-					if ($follower = $this->forumGateway->getThreadFollower(S::id(), $_POST['thread'])) {
-						$theme = $this->model->getVal('name', 'theme', $_POST['thread']);
-						$poster = $this->model->getVal('name', 'foodsaver', $this->func->fsId());
-						foreach ($follower as $f) {
-							$this->func->tplMail(19, $f['email'], array(
-								'anrede' => $this->func->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-								'name' => $f['name'],
-								'link' => BASE_URL . '/?page=bezirk&bid=' . $this->bezirk_id . '&sub=' . $this->getSub() . '&tid=' . (int)$_POST['thread'] . '&pid=' . $post_id . '#post' . $post_id,
-								'theme' => $theme,
-								'post' => $body,
-								'poster' => $poster
-							));
-						}
-					}
-				}
-
-				$this->func->go('/?page=bezirk&bid=' . $this->bezirk_id . '&sub=' . $this->getSub() . '&tid=' . (int)$_POST['thread'] . '&pid=' . $post_id . '#post' . $post_id);
-			} else {
-				$this->func->error($this->func->s('post_could_not_saved'));
-				$this->func->go('/?page=bezirk&bid=' . $this->bezirk_id . '&sub=' . $this->getSub() . '&tid=' . (int)$_POST['thread'] . '&pid=' . (int)$_POST['post'] . '#post' . (int)$_POST['post']);
-			}
-		}
-
-		if (isset($_GET['tid'])) {
-			return $this->forum_thread($_GET['tid']);
-		}
-
-		$this->func->addContent($this->view->forum_top());
-
-		if ($themes = $this->forumGateway->listThreads($this->bezirk_id, $botForum ? 1 : 0)) {
-			$this->func->addContent(
-				$this->view->forum_index($themes, false, $botForum ? 'botforum' : 'forum')
-			);
-		} else {
-			$this->func->addContent(
-				$this->view->forum_empty()
-			);
-		}
-
-		$this->func->addContent($this->view->forum_bottom($botForum ? 1 : 0));
+		return $this->func->isBotFor($regionId);
 	}
 
-	private function forum_thread($thread_id)
+	private function mayChangeStickyness($regionId)
 	{
-		if ($thread = $this->forumGateway->getThread($this->bezirk_id, $thread_id, $this->bot_theme)) {
+		return S::may('orga') || $this->func->isBotFor($regionId);
+	}
+
+	private function mayDeletePost($region, $post)
+	{
+		return S::may('orga') ||
+			$post['fs_id'] == S::id() ||
+			($this->isWorkGroup($region) && ($this->func->isBotFor($region['id'])));
+	}
+
+	private function forum_thread($threadId, $region, $ambassadorForum = false)
+	{
+		$viewdata = [];
+
+		$processPosts = function ($p) use ($region) {
+			$p['mayDeletePost'] = $this->mayDeletePost($region, $p);
+			$p['avatar'] = [
+				'user' => ['id' => $p['fs_id'],
+					'name' => $p['fs_name'],
+					'sleep_status' => $p['fs_sleep_status'],
+				],
+				'size' => '130',
+				'imageUrl' => $this->func->img($p['fs_photo'], '130', 'q')
+			];
+			$p['time'] = $this->func->niceDate($p['time_ts']);
+
+			return $p;
+		};
+
+		if ($thread = $this->forumGateway->getThread($region['id'], $threadId, $ambassadorForum)) {
+			$viewdata['thread'] = $thread;
 			$this->func->addBread($thread['name']);
-			if ($thread['active'] == 0 && ($this->func->isBotFor($this->bezirk_id) || $this->func->isOrgaTeam())) {
+			if ($thread['active'] == 0 && ($this->mayActivateThreads())) {
 				if (isset($_GET['activate'])) {
-					$this->forumGateway->activateThread($thread_id);
-					$this->themeInfoMail($thread_id);
+					$this->forumService->activateThread($threadId, $region, $ambassadorForum);
 					$this->func->info('Thema wurde aktiviert!');
-					$this->func->go('/?page=bezirk&bid=' . $this->bezirk_id . '&sub=forum&tid=' . (int)$thread_id);
+					$this->func->go($this->forumService->url($region['id'], $ambassadorForum, $threadId));
 				} elseif (isset($_GET['delete'])) {
 					$this->func->info('Thema wurde gelöscht!');
-					$this->forumGateway->deleteThread($thread_id);
-					$this->func->go('/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=forum');
+					$this->forumGateway->deleteThread($threadId);
+					$this->func->go($this->forumService->url($region['id'], $ambassadorForum));
 				}
-				$this->func->addContent($this->view->activateTheme($thread), CNT_TOP);
+				$viewdata['activate_url'] = $this->forumService->url($region['id'], $ambassadorForum, $threadId) . '&activate=1';
+				$viewdata['delete_url'] = $this->forumService->url($region['id'], $ambassadorForum, $threadId) . '&delete=1';
 			}
 
-			if ($thread['active'] == 1 || S::may('orga') || $this->func->isBotFor($this->bezirk_id)) {
-				$posts = $this->forumGateway->listPosts($thread_id);
-				$followCounter = $this->forumGateway->getFollowCounter(S::id(), $thread_id);
-				$bezirkType = $this->gateway->getType($this->bezirk_id);
-				$stickStatus = $this->forumGateway->getStickStatus($thread_id);
-				$this->func->addContent($this->view->thread($thread, $posts, $followCounter, $bezirkType, $stickStatus));
+			if ($thread['active'] == 1 || $this->mayActivateThreads()) {
+				$viewdata['posts'] = array_map($processPosts, $this->forumGateway->listPosts($threadId));
+				$viewdata['following'] = $this->forumGateway->isFollowing(S::id(), $threadId);
+				$viewdata['mayChangeStickyness'] = $this->mayChangeStickyness($region['id']);
 			} else {
-				$this->func->go('/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=forum');
+				$this->func->go($this->forumService->url($region['id'], false));
 			}
 		} else {
-			$this->func->go('/?page=bezirk&bid=' . $this->bezirk_id . '&sub=' . $this->getSub());
+			$this->func->go($this->forumService->url($region['id'], $ambassadorForum));
 		}
+
+		return $viewdata;
 	}
 
-	public function ntheme()
+	private function handleNewThreadForm(Request $request, $region, $ambassadorForum)
 	{
-		$this->func->addBread($this->func->s('forum'), '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=' . $this->getSub());
-		$this->func->addBread($this->func->s('new_theme'));
-
-		if ($this->handleNtheme()) {
-			$this->func->go('/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=' . $this->getSub());
+		$this->func->addBread($this->translator->trans('forum.new_thread'));
+		$data = CreateForumThreadData::create();
+		$form = $this->formFactory->getFormFactory()->create(ForumCreateThreadForm::class, $data);
+		$form->handleRequest($request);
+		if ($form->isSubmitted()) {
+			if ($form->isValid() && $this->forumService->mayPostToRegion(S::id(), $region['id'], $ambassadorForum)) {
+				$threadId = $this->forumService->createThread(S::id(), $data->title, $data->body, $region, $ambassadorForum, $this->forumModerated);
+				$this->forumGateway->followThread(S::id(), $threadId);
+				if ($this->forumModerated) {
+					$this->func->info($this->translator->trans('forum.hold_back_for_moderation'));
+				}
+				$this->func->go($this->forumService->url($region['id'], $ambassadorForum));
+			}
 		}
 
-		$this->func->addContent($this->view->newThemeForm());
+		return $form->createView();
 	}
 
-	private function themeInfoBotschafter($theme_id)
+	private function handlePostForm(Request $request, Response $response, $region, $threadId, $ambassadorForum)
 	{
-		$theme = $this->model->getValues(array('foodsaver_id', 'name'), 'theme', $theme_id);
-		$poster = $this->model->getVal('name', 'foodsaver', $theme['foodsaver_id']);
-
-		if ($foodsaver = $this->model->getBotschafter($this->bezirk_id)) {
-			foreach ($foodsaver as $i => $fs) {
-				$foodsaver[$i]['var'] = array(
-					'name' => $fs['vorname'],
-					'anrede' => $this->func->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-					'bezirk' => $this->bezirk['name'],
-					'poster' => $poster,
-					'thread' => $theme['name'],
-					'link' => BASE_URL . '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=forum&tid=' . (int)$theme_id
-				);
-			}
-
-			$this->tplMailList(20, $foodsaver, array(
-				'email' => EMAIL_PUBLIC,
-				'email_name' => EMAIL_PUBLIC_NAME
-			));
-		}
-	}
-
-	private function themeInfoMail($theme_id)
-	{
-		$theme = $this->model->getValues(array('foodsaver_id', 'name', 'last_post_id'), 'theme', $theme_id);
-		$body = $this->model->getVal('body', 'theme_post', $theme['last_post_id']);
-
-		$poster = $this->model->getVal('name', 'foodsaver', $theme['foodsaver_id']);
-		$link = BASE_URL . '/?page=bezirk&bid=' . $this->bezirk_id . '&sub=' . $this->getSub() . '&tid=' . $theme_id;
-
-		if ($this->bot_theme == 1) {
-			$foodsaver = $this->model->getBotschafter($this->bezirk_id);
-		} elseif ($this->mode == 'orgateam') {
-			$foodsaver = $this->foodsaverGateway->listActiveWithFullNameByRegion($this->bezirk_id);
-		} else {
-			$foodsaver = $this->model->getFoodsaver($this->bezirk_id);
-		}
-
-		if ($foodsaver) {
-			$tmp = array();
-			foreach ($foodsaver as $fs) {
-				$tmp[$fs['email']] = $fs;
-			}
-
-			$foodsaver = array();
-			$i = 0;
-			foreach ($tmp as $fs) {
-				$foodsaver[$i] = $fs;
-				$foodsaver[$i]['var'] = array(
-					'name' => $fs['vorname'],
-					'anrede' => $this->func->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-					'bezirk' => $this->bezirk['name'],
-					'poster' => $poster,
-					'thread' => $theme['name'],
-					'link' => $link,
-					'post' => $body
-				);
-				++$i;
-			}
-
-			if ($this->bot_theme == 1) {
-				$this->tplMailList(13, $foodsaver, array(
-					'email' => 'noreply@' . DEFAULT_EMAIL_HOST,
-					'email_name' => EMAIL_PUBLIC_NAME
-				));
-			} else {
-				$this->tplMailList(12, $foodsaver, array(
-					'email' => 'noreply@' . DEFAULT_EMAIL_HOST,
-					'email_name' => EMAIL_PUBLIC_NAME
-				));
-			}
-		}
-	}
-
-	private function handleNtheme()
-	{
-		if (isset($_POST['form_submit'])) {
-			$active = 1;
-			if (
-				!$this->func->isVerified()
-				||
-				(
-					$this->mode == 'big'
-					&&
-					!($this->func->isBotFor($this->bezirk_id) || $this->getSub() == 'botforum')
-				)
-				||
-				$this->bezirk['moderated']
-			) {
-				$this->func->info('Das Thema wurde gespeichert und wird veröffentlicht sobald ein Botschafter aus ' . $this->bezirk['name'] . ' es bestätigt.');
-				$active = 0;
-			}
-
-			$body = strip_tags($_POST['body']);
-			$body = nl2br($body);
-			$body = $this->func->autolink($body);
-
-			if ($theme_id = $this->forumGateway->addThread($this->func->fsId(), $this->bezirk_id, $_POST['title'], $body, $this->bot_theme, $active)) {
-				if ($active) {
-					$this->themeInfoMail($theme_id);
+		$data = CreateForumPostData::create($this->forumGateway->isFollowing(S::id(), $threadId), $threadId);
+		$form = $this->formFactory->getFormFactory()->create(ForumPostForm::class, $data);
+		$form->handleRequest($request);
+		if ($form->isSubmitted()) {
+			if ($form->isValid() && $this->forumService->mayPostToThread(S::id(), $threadId)) {
+				$postId = $this->forumService->addPostToThread(S::id(), $data->thread, $data->body);
+				if ($data->subscribe) {
+					$this->forumGateway->followThread(S::id(), $data->thread);
 				} else {
-					$this->themeInfoBotschafter($theme_id);
+					$this->forumGateway->unfollowThread(S::id(), $data->thread);
 				}
-
-				return true;
+				$this->func->go($this->forumService->url($region['id'], $ambassadorForum, $data->thread, $postId));
+			} else {
+				$this->func->error($this->func->s('post_could_not_saved'));
 			}
 		}
 
-		return false;
+		return $form->createView();
 	}
 
-	public function events()
+	private function forum(Request $request, Response $response, $region, $ambassadorForum)
 	{
-		$this->func->addBread('Termine', '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=events');
+		$sub = $request->query->get('sub');
+		$trans = $this->translator->trans(($ambassadorForum) ? 'terminology.ambassador_forum' : 'terminology.forum');
+		$viewdata = $this->regionViewData($region, $sub);
+		$this->func->addBread($trans, $this->forumService->url($region['id'], $ambassadorForum));
+		$this->func->addTitle($trans);
+		$viewdata['sub'] = $sub;
 
-		$this->func->addTitle($this->func->s('dates'));
-
-		if ($events = $this->eventGateway->listForRegion((int)$this->bezirk_id)) {
-			$this->func->addContent($this->view->listEvents($events));
+		if ($tid = $request->query->getInt('tid')) {
+			$viewdata['postForm'] = $this->handlePostForm($request, $response, $region, $tid, $ambassadorForum);
+			$viewdata = array_merge($viewdata, $this->forum_thread($tid, $region, $ambassadorForum));
+		} elseif ($request->query->has('newthread')) {
+			$viewdata['newThreadForm'] = $this->handleNewThreadForm($request, $region, $ambassadorForum);
 		} else {
-			$this->func->addContent($this->v_utils->v_info($this->func->s('no_events_posted')));
+			$viewdata['threads'] = $this->regionHelper->transformThreadViewData($this->forumGateway->listThreads($region['id'], $ambassadorForum), $region['id'], $ambassadorForum);
 		}
 
-		$this->func->addContent($this->view->addEvent(), CNT_RIGHT);
+		$response->setContent($this->render('pages/Region/forum.twig', $viewdata));
 	}
 
-	public function applications()
+	private function events(Request $request, Response $response, $region)
 	{
-		if (!($this->func->isBotFor($this->bezirk_id) || $this->func->isOrgaTeam())) {
-			return;
-		}
-		if ($requests = $this->gateway->listRequests($this->bezirk_id)) {
-			$this->func->addContent($this->view->applications($requests));
-		}
+		$this->func->addBread($this->translator->trans('events.name'), '/?page=bezirk&bid=' . $region['id'] . '&sub=events');
+		$this->func->addTitle($this->translator->trans('events.name'));
+		$sub = $request->query->get('sub');
+		$viewdata = $this->regionViewData($region, $sub);
+
+		$viewdata['events'] = $this->eventGateway->listForRegion($region['id']);
+
+		$response->setContent($this->render('pages/Region/events.twig', $viewdata));
 	}
 
-	public function show()
+	private function applications(Request $request, Response $response, $region)
 	{
-		if ($event = $this->eventGateway->getEvent($_GET['id'])) {
-			$this->func->addBread('Termine', '/?page=bezirk&bid=' . (int)$this->bezirk_id . '&sub=events');
-			$this->func->addBread($event['name']);
-			$this->func->addContent($this->view->eventTop($event), CNT_TOP);
-			$this->func->addContent($this->view->event($event));
-			if ($event['location'] != false) {
-				$this->func->addContent($this->view->location($event['location']), CNT_RIGHT);
-			}
-
-			$this->func->addContent($this->v_utils->v_field($this->wallposts('event', $event['id']), 'Pinnwand'));
-		} else {
-			$this->func->go('/?page=bezirk&bid=' . $this->bezirk_id . '&sub=events');
+		$this->func->addBread($this->translator->trans('group.applications'), '/?page=bezirk&bid=' . $region['id'] . '&sub=events');
+		$this->func->addTitle($this->translator->trans('group.applications_for', ['%name%' => $region['name']]));
+		$sub = $request->query->get('sub');
+		$viewdata = $this->regionViewData($region, $sub);
+		if ($this->mayAccessApplications($region['id'])) {
+			$viewdata['applications'] = $this->gateway->listRequests($region['id']);
 		}
-	}
-
-	private function tplMailList($tpl_id, $to, $from = false, $attach = false)
-	{
-		if (!is_array($from) && $this->func->validEmail($from)) {
-			$from = array(
-				'email' => $from,
-				'email_name' => $from
-			);
-		} elseif ($from === false) {
-			$from = array(
-				'email' => DEFAULT_EMAIL,
-				'email_name' => DEFAULT_EMAIL_NAME
-			);
-		}
-
-		$tpl_message = $this->model->getOne_message_tpl($tpl_id);
-
-		foreach ($to as $t) {
-			if (!$this->func->validEmail($t['email'])) {
-				continue;
-			}
-
-			$mail = new AsyncMail();
-			$mail->setFrom($from['email'], $from['email_name']);
-
-			$search = array();
-			$replace = array();
-			foreach ($t['var'] as $key => $v) {
-				$search[] = '{' . strtoupper($key) . '}';
-				$replace[] = $v;
-			}
-
-			$message = str_replace($search, $replace, $tpl_message['body']);
-			$subject = str_replace($search, $replace, $tpl_message['subject']);
-
-			$mail->addRecipient($t['email']);
-
-			if (!$subject) {
-				$subject = 'Foodsharing-Mail';
-			}
-			$mail->setSubject($subject);
-			//Read an HTML message body from an external file, convert referenced images to embedded, convert HTML into a basic plain-text alternative body
-
-			if (!isset($t['token'])) {
-				$t['token'] = false;
-			}
-
-			$mail->setHTMLBody($this->func->emailBodyTpl($message, $t['email'], $t['token']));
-
-			// playintext body
-			$message = str_replace('<br />', "\r\n", $message);
-			$message = strip_tags($message);
-			$mail->setBody($message);
-
-			/*
-			 *  todo: implement logic that we dont have to send one attachment multiple time to the slave db ...
-			*/
-
-			if ($attach !== false) {
-				foreach ($attach as $a) {
-					$mail->addAttachment(new fFile($a['path']), $a['name']);
-				}
-			}
-			$mail->send();
-		}
+		$response->setContent($this->render('pages/Region/applications.twig', $viewdata));
 	}
 }

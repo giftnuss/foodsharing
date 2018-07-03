@@ -1,0 +1,16 @@
+{% import 'partials/menu.twig' as sidenav %}
+
+{{ sidenav.menu_tree(nav.menu, null, nav.active) }}
+
+{% embed 'components/field.twig' with {'title': 'terminology.ambassadors'|trans()} %}
+    {% block content %}
+        {% include 'partials/avatarList.twig' with {'id': 'admin-list', 'entries': region.admins}%}
+    {% endblock %}
+{% endembed %}
+
+<div id="signout_sure" title="{{ 'are_you_sure'|trans }}">
+    {% include 'partials/info.twig' with {'msg': 'group.really_quit_name'|trans({'%name%': region.name})} %}
+    <input type="hidden" name="bid" class="bid" value="{{ region.id }}" />
+</div>
+
+{{ sidenav.menu_tree({'items': {'href': '#signout', 'name': 'group.quit_name'|trans({'%name%': region.name}) }}, 'group.quit'|trans) }}

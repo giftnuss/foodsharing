@@ -16,6 +16,7 @@ if (!defined('SOCK_URL')) {
 }
 
 date_default_timezone_set('Europe/Berlin');
+locale_set_default('de-DE');
 /*
  * Read revision from revision file.
  * It is supposed to define SRC_REVISION.
