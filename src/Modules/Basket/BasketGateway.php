@@ -18,8 +18,18 @@ class BasketGateway extends BaseGateway
 		return $this->db->fetchAll($stm, [':status' => Status::REQUESTED_MESSAGE_READ]);
 	}
 
-	public function addBasket($desc, $pic, $tel, $contact_type, $weight, $location_type, $lat, $lon, $bezirk_id, $fsId): int
-	{
+	public function addBasket(
+		$desc,
+		$pic,
+		$tel,
+		$contact_type,
+		$weight,
+		$location_type,
+		$lat,
+		$lon,
+		$bezirk_id,
+		$fsId
+	): int {
 		$appost = 1;
 
 		if (isset($_REQUEST['appost']) && '0' === $_REQUEST['appost']) {
@@ -53,7 +63,7 @@ class BasketGateway extends BaseGateway
 		$status_sql = '';
 
 		if ($status !== false) {
-			$status_sql = 'AND `status` = ' . (int)$status;
+			$status_sql = 'AND `status` = '.(int)$status;
 		}
 
 		$stm = '
@@ -85,7 +95,7 @@ class BasketGateway extends BaseGateway
 			
 			AND
 				b.id = :id
-			' . $status_sql . '				
+			'.$status_sql.'				
 		';
 		$basket = $this->db->fetch($stm, [':id' => $id]);
 
@@ -99,7 +109,7 @@ class BasketGateway extends BaseGateway
 					fs_foodsaver fs
 					
 				WHERE
-					fs.id = ' . (int)$basket['foodsaver_id'] . '
+					fs.id = '.(int)$basket['foodsaver_id'].'
 					
 			';
 		if ('0' === $basket['fsf_id'] && $fs = $this->db->fetch(
@@ -154,7 +164,15 @@ class BasketGateway extends BaseGateway
 					a.basket_id = :basket_id		
 				';
 
-		return $this->db->fetchAll($stm, [':status_unread' => Status::REQUESTED_MESSAGE_UNREAD, ':status_read' => Status::REQUESTED_MESSAGE_READ, ':foodsaver_id' => $id, ':basket_id' => $basket_id]);
+		return $this->db->fetchAll(
+			$stm,
+			[
+				':status_unread' => Status::REQUESTED_MESSAGE_UNREAD,
+				':status_read' => Status::REQUESTED_MESSAGE_READ,
+				':foodsaver_id' => $id,
+				':basket_id' => $basket_id,
+			]
+		);
 	}
 
 	public function getRequest($basket_id, $fs_id, $id): array
@@ -192,7 +210,16 @@ class BasketGateway extends BaseGateway
 					a.basket_id = :basket_id		
 				';
 
-		return $this->db->fetch($stm, [':status_unread' => Status::REQUESTED_MESSAGE_UNREAD, ':status_read' => Status::REQUESTED_MESSAGE_READ, ':foodsaver_id' => $id, ':fs_id' => $fs_id, ':basket_id' => $basket_id]);
+		return $this->db->fetch(
+			$stm,
+			[
+				':status_unread' => Status::REQUESTED_MESSAGE_UNREAD,
+				':status_read' => Status::REQUESTED_MESSAGE_READ,
+				':foodsaver_id' => $id,
+				':fs_id' => $fs_id,
+				':basket_id' => $basket_id,
+			]
+		);
 	}
 
 	public function listUpdates($fsId): array
@@ -228,7 +255,14 @@ class BasketGateway extends BaseGateway
 				a.`time` DESC				
 		';
 
-		return $this->db->fetchAll($stm, [':status_unread' => Status::REQUESTED_MESSAGE_UNREAD, ':status_read' => Status::REQUESTED_MESSAGE_READ, ':foodsaver_id' => $fsId]);
+		return $this->db->fetchAll(
+			$stm,
+			[
+				':status_unread' => Status::REQUESTED_MESSAGE_UNREAD,
+				':status_read' => Status::REQUESTED_MESSAGE_READ,
+				':foodsaver_id' => $fsId,
+			]
+		);
 	}
 
 	public function getUpdateCount($id): int
@@ -241,7 +275,10 @@ class BasketGateway extends BaseGateway
 				AND b.foodsaver_id = :foodsaver_id
 			';
 
-		return (int)$this->db->fetchValue($stm, [':status' => Status::REQUESTED_MESSAGE_UNREAD, ':foodsaver_id' => $id]);
+		return (int)$this->db->fetchValue(
+			$stm,
+			[':status' => Status::REQUESTED_MESSAGE_UNREAD, ':foodsaver_id' => $id]
+		);
 	}
 
 	public function addArt($basket_id, $types): void
@@ -255,7 +292,11 @@ class BasketGateway extends BaseGateway
 
 	public function removeBasket($id, $fsId): int
 	{
-		return $this->db->update('fs_basket', ['status' => Status::DELETED_OTHER_REASON], ['id' => $id, 'foodsaver_id' => $fsId]);
+		return $this->db->update(
+			'fs_basket',
+			['status' => Status::DELETED_OTHER_REASON],
+			['id' => $id, 'foodsaver_id' => $fsId]
+		);
 	}
 
 	public function listMyBaskets($fsId)
@@ -276,11 +317,17 @@ class BasketGateway extends BaseGateway
 			AND 
 				`status` = :status
 				';
-		if ($baskets = $this->db->fetchAll($stm, [':foodsaver_id' => $fsId, ':status' => Status::REQUESTED_MESSAGE_READ])
+		if ($baskets = $this->db->fetchAll(
+			$stm,
+			[':foodsaver_id' => $fsId, ':status' => Status::REQUESTED_MESSAGE_READ]
+		)
 		) {
 			foreach ($baskets as $key => $b) {
 				$stm = 'SELECT COUNT(foodsaver_id) FROM fs_basket_anfrage WHERE basket_id = :basket_id AND status < :status';
-				$baskets[$key]['req_count'] = $this->db->fetchValue($stm, [':basket_id' => $b['id'], ':status' => Status::REQESTED]);
+				$baskets[$key]['req_count'] = $this->db->fetchValue(
+					$stm,
+					[':basket_id' => $b['id'], ':status' => Status::REQESTED]
+				);
 			}
 
 			return $baskets;
@@ -292,7 +339,10 @@ class BasketGateway extends BaseGateway
 	public function follow($basket_id, $fsId): void
 	{
 		$stm = 'SELECT 1 FROM `fs_basket_anfrage` WHERE basket_id = :basket_id AND foodsaver_id = :foodsaver_id AND status <= :status';
-		$status = $this->db->fetchValue($stm, [':basket_id' => $basket_id, ':foodsaver_id' => $fsId, ':status' => Status::FOLLOWED]);
+		$status = $this->db->fetchValue(
+			$stm,
+			[':basket_id' => $basket_id, ':foodsaver_id' => $fsId, ':status' => Status::FOLLOWED]
+		);
 
 		if (!$status) {
 			$stm = '
@@ -305,7 +355,10 @@ class BasketGateway extends BaseGateway
 				:foodsaver_id, :basket_id, :status, NOW(), 0
 			)
 		';
-			$this->db->execute($stm, [':foodsaver_id' => $fsId, ':basket_id' => $basket_id, ':status' => Status::FOLLOWED]);
+			$this->db->execute(
+				$stm,
+				[':foodsaver_id' => $fsId, ':basket_id' => $basket_id, ':status' => Status::FOLLOWED]
+			);
 		}
 	}
 
@@ -326,7 +379,8 @@ class BasketGateway extends BaseGateway
 				:foodsaver_id, :basket_id, :status, NOW(), :appost
 			)	
 		';
-		$this->db->execute($stm,
+		$this->db->execute(
+			$stm,
 			[
 				':foodsaver_id' => $fsId,
 				':basket_id' => $basket_id,
@@ -338,7 +392,8 @@ class BasketGateway extends BaseGateway
 
 	public function listCloseBaskets($fs_id, $loc, $distance = 30)
 	{
-		return $this->db->fetchAll('
+		return $this->db->fetchAll(
+			'
 			SELECT
 				b.id,
 				b.picture,
@@ -363,13 +418,15 @@ class BasketGateway extends BaseGateway
 				distance ASC
 
 			LIMIT 6
-		', [
-			':lat' => (float)$loc['lat'],
-			':lat1' => (float)$loc['lat'],
-			':lon' => (float)$loc['lon'],
-			':status' => Status::REQUESTED_MESSAGE_READ,
-			':fs_id' => $fs_id,
-			':distance' => $distance,
-		]);
+		',
+			[
+				':lat' => (float)$loc['lat'],
+				':lat1' => (float)$loc['lat'],
+				':lon' => (float)$loc['lon'],
+				':status' => Status::REQUESTED_MESSAGE_READ,
+				':fs_id' => $fs_id,
+				':distance' => $distance,
+			]
+		);
 	}
 }
