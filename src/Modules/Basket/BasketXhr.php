@@ -198,9 +198,9 @@ class BasketXhr extends Control
 			))) {
 			if (isset($data['food_type']) && is_array($data['food_type'])) {
 				$types = array();
-				foreach ($data['food_type'] as $ft) {
-					if ((int)$ft > 0) {
-						$types[] = (int)$ft;
+				foreach ($data['food_type'] as $foodType) {
+					if ((int)$foodType > 0) {
+						$types[] = (int)$foodType;
 					}
 				}
 
@@ -208,14 +208,14 @@ class BasketXhr extends Control
 			}
 
 			if (isset($data['food_art']) && is_array($data['food_art'])) {
-				$arts = array();
-				foreach ($data['food_art'] as $ft) {
-					if ((int)$ft > 0) {
-						$arts[] = (int)$ft;
+				$kinds = array();
+				foreach ($data['food_art'] as $foodKind) {
+					if ((int)$foodKind > 0) {
+						$kinds[] = (int)$foodKind;
 					}
 				}
 
-				$this->basketGateway->addArt($id, $arts);
+				$this->basketGateway->addKind($id, $kinds);
 			}
 
 			return [

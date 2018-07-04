@@ -170,22 +170,22 @@ class APIXhr extends Control
 			$tmp = array();
 
 			if (isset($_GET['art'])) {
-				$art = $_GET['art'];
-				foreach ($art as $a) {
-					if ((int)$a > 0) {
-						$tmp[] = (int)$a;
+				$kinds = $_GET['art'];
+				foreach ($kinds as $kind) {
+					if ((int)$kind > 0) {
+						$tmp[] = (int)$kind;
 					}
 				}
 			}
-			$art = $tmp;
+			$kinds = $tmp;
 
 			$tmp = array();
 
 			if (isset($_GET['types'])) {
 				$types = $_GET['types'];
-				foreach ($types as $t) {
-					if ((int)$t > 0) {
-						$tmp[] = (int)$t;
+				foreach ($types as $type) {
+					if ((int)$type > 0) {
+						$tmp[] = (int)$type;
 					}
 				}
 			}
@@ -240,11 +240,11 @@ class APIXhr extends Control
 					$lat, // lat
 					$lon, // lon
 					$this->session->user('bezirk_id'),
-					S::id()
+					$this->session->id()
 				)
 				) {
-					if (!empty($art)) {
-						$this->basketGateway->addArt($id, $art);
+					if (!empty($kinds)) {
+						$this->basketGateway->addKind($id, $kinds);
 					}
 					if (!empty($types)) {
 						$this->basketGateway->addTypes($id, $types);
