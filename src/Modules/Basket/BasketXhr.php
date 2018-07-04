@@ -156,7 +156,7 @@ class BasketXhr extends Control
 		$location_type = 0;
 
 		if ($location_type == 0) {
-			$fs = $this->model->getValues(array('lat', 'lon'), 'foodsaver', $this->session->id());
+			$fs = $this->model->getValues(['lat', 'lon'], 'foodsaver', $this->session->id());
 			$lat = $fs['lat'];
 			$lon = $fs['lon'];
 		}
@@ -194,7 +194,7 @@ class BasketXhr extends Control
 				$lat,
 				$lon,
 				$this->session->user('bezirk_id'),
-				S::id()
+				$this->session->id()
 			))) {
 			if (isset($data['food_type']) && is_array($data['food_type'])) {
 				$types = array();
