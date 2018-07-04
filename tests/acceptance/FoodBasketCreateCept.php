@@ -73,6 +73,6 @@ $I->moveMouseOver("//a[contains(@onclick, 'basket')]");
 $I->click('.button.close');
 $I->waitForText('Essenskorbanfrage von ' . $picker['name'] . ' abschließen');
 $I->see('Hat alles gut geklappt?');
-$I->seeOptionIsSelected('#fetchstate-wrapper input[name=fetchstate]', 3);
+$I->seeOptionIsSelected('#fetchstate-wrapper input[name=fetchstate]', 2);
 $I->click('Weiter');
 $I->waitForText('Danke');

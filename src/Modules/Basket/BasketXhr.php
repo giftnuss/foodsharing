@@ -231,7 +231,7 @@ class BasketXhr extends Control
 
 		return [
 			'status' => 1,
-			'script' => 'pulseError("Es gab einen Fehler, der Essenskorb konnte nicht veröffentlicht werden.");',
+			'script' => 'pulseError("Es gab einen Fehler. Der Essenskorb konnte nicht veröffentlicht werden.");',
 		];
 	}
 
@@ -479,7 +479,7 @@ class BasketXhr extends Control
 				</div>'
 				. $this->v_utils->v_form_radio(
 					'fetchstate',
-					array(
+					[
 						'values' => [
 							[
 								'id' => Status::DELETED_PICKED_UP,
@@ -504,8 +504,8 @@ class BasketXhr extends Control
 								'name' => 'Die Lebensmittel wurden von jemand anderem abgeholt.',
 							],
 						],
-						'selected' => 3,
-					)
+						'selected' => Status::DELETED_PICKED_UP,
+					]
 				)
 			);
 			$dia->addAbortButton();
