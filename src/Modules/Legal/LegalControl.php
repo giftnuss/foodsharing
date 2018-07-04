@@ -59,7 +59,7 @@ class LegalControl extends Control
 					$this->gateway->downgradeToFoodsaver($this->session->id());
 				}
 				/* need to reload session cache. TODO: This should be further abstracted */
-				$this->model->relogin();
+				$this->session->refreshFromDatabase();
 				$this->func->goSelf();
 			}
 		}

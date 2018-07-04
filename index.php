@@ -23,6 +23,7 @@ if(isset($_GET['g_path']))
 
 use Foodsharing\Debug\DebugBar;
 use Foodsharing\DI;
+use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Routing;
 use Foodsharing\Lib\Session;
@@ -62,7 +63,7 @@ if (DebugBar::isEnabled()) {
 if ($session->may()) {
 	if (isset($_GET['uc'])) {
 		if ($func->fsId() != $_GET['uc']) {
-			$db->logout();
+			Mem::logout($session->id());
 			$func->goLogin();
 		}
 	}

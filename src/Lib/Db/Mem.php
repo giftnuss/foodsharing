@@ -161,4 +161,34 @@ class Mem
 
 		return false;
 	}
+
+	/**
+	 * Method to check users online status by checking timestamp from memcache.
+	 *
+	 * @param int $fs_id
+	 *
+	 * @return bool
+	 */
+	public static function userIsActive($fs_id)
+	{
+		if ($time = self::user($fs_id, 'active')) {
+			return !((time() - $time) > 600);
+		}
+
+		return false;
+	}
+
+	public static function updateActivity($fs_id = null)
+	{
+		if ($fs_id) {
+			Mem::userSet($fs_id, 'active', time());
+		}
+	}
+
+	public static function logout($fs_id)
+	{
+		Mem::userDel($fs_id, 'active');
+		Mem::userDel($fs_id, 'lastMailMessage');
+		Mem::userRemoveSession($fs_id, session_id());
+	}
 }

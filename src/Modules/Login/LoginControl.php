@@ -17,12 +17,14 @@ class LoginControl extends Control
 	private $formFactory;
 
 	private $searchService;
+	private $loginGateway;
 
-	public function __construct(LoginModel $model, LoginView $view, SearchService $searchService)
+	public function __construct(LoginModel $model, LoginView $view, SearchService $searchService, LoginGateway $loginGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->searchService = $searchService;
+		$this->loginGateway = $loginGateway;
 
 		parent::__construct();
 	}
@@ -102,28 +104,33 @@ class LoginControl extends Control
 		$email_address = $request->request->get('login_form')['email_address'];
 		$password = $request->request->get('login_form')['password'];
 
-		if ($this->model->login($email_address, $password)) {
-			$token = $this->searchService->writeSearchIndexToDisk($this->session->id(), $this->session->user('token'));
+		$fs_id = $this->loginGateway->login($email_address, $password);
 
-			if (isset($_POST['ismob'])) {
-				$_SESSION['mob'] = (int)$_POST['ismob'];
-			}
-
-			$mobdet = new Mobile_Detect();
-			if ($mobdet->isMobile()) {
-				$_SESSION['mob'] = 1;
-			}
-
-			if ((isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], BASE_URL) !== false) || isset($_GET['logout'])) {
-				if (isset($_GET['ref'])) {
-					$this->func->go(urldecode($_GET['ref']));
-				}
-				$this->func->go(str_replace('/?page=login&logout', '/?page=dashboard', $_SERVER['HTTP_REFERER']));
-			} else {
-				$this->func->go('/?page=dashboard');
-			}
-		} else {
+		if ($fs_id === null) {
 			$this->func->error('Falsche Zugangsdaten'); //TODO: translation file 'Wrong access data'
+			return;
+		}
+
+		$this->session->refreshFromDatabase($fs_id);
+
+		$token = $this->searchService->writeSearchIndexToDisk($this->session->id(), $this->session->user('token'));
+
+		if (isset($_POST['ismob'])) {
+			$_SESSION['mob'] = (int)$_POST['ismob'];
+		}
+
+		$mobdet = new Mobile_Detect();
+		if ($mobdet->isMobile()) {
+			$_SESSION['mob'] = 1;
+		}
+
+		if ((isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], BASE_URL) !== false) || isset($_GET['logout'])) {
+			if (isset($_GET['ref'])) {
+				$this->func->go(urldecode($_GET['ref']));
+			}
+			$this->func->go(str_replace('/?page=login&logout', '/?page=dashboard', $_SERVER['HTTP_REFERER']));
+		} else {
+			$this->func->go('/?page=dashboard');
 		}
 	}
 

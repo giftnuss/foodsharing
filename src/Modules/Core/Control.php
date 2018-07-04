@@ -127,7 +127,7 @@ abstract class Control
 				}
 			}
 		}
-		$this->manualDb->updateActivity($this->session->id());
+		Mem::updateActivity($this->session->id());
 	}
 
 	/**
@@ -495,7 +495,7 @@ abstract class Control
 				$_SESSION['lastMailMessage'] = array();
 			}
 
-			if (!$this->manualDb->isActive($recip_id)) {
+			if (!Mem::userIsActive($recip_id)) {
 				if (!isset($_SESSION['lastMailMessage'][$recip_id]) || (time() - $_SESSION['lastMailMessage'][$recip_id]) > 600) {
 					$_SESSION['lastMailMessage'][$recip_id] = time();
 					$foodsaver = $this->foodsaverGateway->getOne_foodsaver($recip_id);

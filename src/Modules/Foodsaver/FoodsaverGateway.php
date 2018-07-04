@@ -40,6 +40,35 @@ class FoodsaverGateway extends BaseGateway
 		);
 	}
 
+	public function getFoodsaverDetails($fs_id)
+	{
+		return $this->db->fetchByCriteria(
+			'fs_foodsaver',
+			[
+				'id',
+				'admin',
+				'orgateam',
+				'bezirk_id',
+				'photo',
+				'rolle',
+				'type',
+				'verified',
+				'name',
+				'nachname',
+				'lat',
+				'lon',
+				'email',
+				'token',
+				'mailbox_id',
+				'option',
+				'geschlecht',
+				'privacy_policy_accepted_date',
+				'privacy_notice_accepted_date'
+			],
+			['id' => $fs_id]
+		);
+	}
+
 	public function getFoodsaverBasics($fsid)
 	{
 		if ($fs = $this->db->fetch('
@@ -140,6 +169,11 @@ class FoodsaverGateway extends BaseGateway
 			AND		fs.deleted_at IS NULL',
 			[':id' => $bezirk_id]
 		);
+	}
+
+	public function getBezirkCountForBotschafter($fs_id): int
+	{
+		return $this->db->count('fs_botschafter', ['foodsaver_id' => $fs_id]);
 	}
 
 	public function getAllBotschafter()
@@ -732,5 +766,23 @@ class FoodsaverGateway extends BaseGateway
 	public function emailExists($email)
 	{
 		return $this->db->exists('fs_foodsaver', ['email' => $email]);
+	}
+
+	/**
+	 * set option is an key value store each var is avalable in the user session.
+	 *
+	 * @param string $key
+	 * @param $val
+	 */
+	public function setOption($fs_id, $key, $val)
+	{
+		$options = array();
+		if ($opt = $this->db->fetchValueByCriteria('fs_foodsaver', 'option', ['id' => $fs_id])) {
+			$options = unserialize($opt);
+		}
+
+		$options[$key] = $val;
+
+		return $this->db->update('fs_foodsaver', ['option' => serialize($options)], ['id' => $fs_id]);
 	}
 }

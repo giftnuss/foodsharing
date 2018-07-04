@@ -6,21 +6,44 @@ use Exception;
 use Flourish\fAuthorization;
 use Flourish\fSession;
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Modules\Buddy\BuddyGateway;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Legal\LegalControl;
 use Foodsharing\Modules\Legal\LegalGateway;
+use Foodsharing\Modules\Quiz\QuizHelper;
+use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Modules\Store\StoreGateway;
 
 class Session
 {
 	private $func;
 	private $legalGateway;
+	private $foodsaverGateway;
+	private $quizHelper;
+	private $regionGateway;
+	private $buddyGateway;
+	private $storeGateway;
 	private $db;
 	private $initialized = false;
 
-	public function __construct(Func $func, LegalGateway $legalGateway, Db $db)
-	{
+	public function __construct(
+		Func $func,
+		LegalGateway $legalGateway,
+		FoodsaverGateway $foodsaverGateway,
+		QuizHelper $quizHelper,
+		RegionGateway $regionGateway,
+		BuddyGateway $buddyGateway,
+		StoreGateway $storeGateway,
+		Db $db
+	) {
 		$this->func = $func;
 		$this->legalGateway = $legalGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
+		$this->quizHelper = $quizHelper;
+		$this->regionGateway = $regionGateway;
+		$this->buddyGateway = $buddyGateway;
+		$this->storeGateway = $storeGateway;
 		$this->db = $db;
 	}
 
@@ -73,35 +96,6 @@ class Session
 		$this->set('user', false);
 		fAuthorization::destroyUserInfo();
 		$this->setAuthLevel('guest');
-	}
-
-	public function login($user)
-	{
-		if (isset($user['id']) && !empty($user['id']) && isset($user['rolle'])) {
-			fAuthorization::setUserToken($user['id']);
-			$this->setAuthLevel($this->func->rolleWrapInt($user['rolle']));
-
-			$this->set('user', array(
-				'name' => $user['name'],
-				'nachname' => $user['nachname'],
-				'photo' => $user['photo'],
-				'bezirk_id' => $user['bezirk_id'],
-				'email' => $user['email'],
-				'rolle' => $user['rolle'],
-				'type' => $user['type'],
-				'token' => $user['token'],
-				'mailbox_id' => $user['mailbox_id'],
-				'gender' => $user['geschlecht'],
-				'privacy_policy_accepted_date' => $user['privacy_policy_accepted_date'],
-				'privacy_notice_accepted_date' => $user['privacy_notice_accepted_date']
-			));
-
-			$this->set('buddy-ids', $user['buddys']);
-
-			return true;
-		}
-
-		return false;
 	}
 
 	public function user($index)
@@ -187,9 +181,9 @@ class Session
 		return $this->get('useroption_' . $key);
 	}
 
-	public function setOption($key, $val, Model $model)
+	public function setOption($key, $val)
 	{
-		$model->setOption($key, $val);
+		$this->foodsaverGateway->setOption($this->id(), $key, $val);
 		$this->set('useroption_' . $key, $val);
 	}
 
@@ -311,5 +305,137 @@ class Session
 		}
 
 		return false;
+	}
+
+	public function refreshFromDatabase($fs_id = null)
+	{
+		if ($fs_id === null) {
+			$fs_id = $this->id();
+		}
+
+		Mem::updateActivity($fs_id);
+		$fs = $this->foodsaverGateway->getFoodsaverDetails($fs_id);
+		if (!$fs) {
+			$this->func->goPage('logout');
+		}
+		$this->set('g_location', array(
+			'lat' => $fs['lat'],
+			'lon' => $fs['lon']
+		));
+
+		$hastodo_id = $this->quizHelper->refreshQuizData($fs_id, $fs['rolle']);
+		$hastodo = $hastodo_id > 0;
+		$this->set('hastodoquiz', $hastodo);
+		$this->set('hastodoquiz-id', $hastodo_id);
+
+		$mailbox = false;
+		if ((int)$fs['mailbox_id'] > 0) {
+			$mailbox = true;
+		}
+
+		if ((int)$fs['bezirk_id'] > 0 && $fs['rolle'] > 0) {
+			$this->regionGateway->addMember($fs_id, $fs['bezirk_id']);
+		}
+
+		if ($master = $this->regionGateway->getMasterId($fs['bezirk_id'])) {
+			$this->regionGateway->addMember($fs_id, $master);
+		}
+
+		if ($fs['photo'] != '' && file_exists('images/mini_q_' . $fs['photo'])) {
+			$image1 = new fImage('images/mini_q_' . $fs['photo']);
+			if ($image1->getWidth() > 36) {
+				$image1->cropToRatio(1, 1);
+				$image1->resize(35, 35);
+				$image1->saveChanges();
+			}
+		}
+
+		$fs['buddys'] = $this->buddyGateway->listBuddyIds($fs_id);
+
+		fAuthorization::setUserToken($fs['id']);
+		$this->setAuthLevel($this->func->rolleWrapInt($fs['rolle']));
+
+		$this->set('user', array(
+			'name' => $fs['name'],
+			'nachname' => $fs['nachname'],
+			'photo' => $fs['photo'],
+			'bezirk_id' => $fs['bezirk_id'],
+			'email' => $fs['email'],
+			'rolle' => $fs['rolle'],
+			'type' => $fs['type'],
+			'token' => $fs['token'],
+			'mailbox_id' => $fs['mailbox_id'],
+			'gender' => $fs['geschlecht'],
+			'privacy_policy_accepted_date' => $fs['privacy_policy_accepted_date'],
+			'privacy_notice_accepted_date' => $fs['privacy_notice_accepted_date']
+		));
+		$this->set('buddy-ids', $fs['buddys']);
+
+		/*
+		 * Add entry into user -> session set
+		 */
+		Mem::userAddSession($fs_id, session_id());
+
+		/*
+		 * store all options in the session
+		*/
+		if (!empty($fs['option'])) {
+			$options = unserialize($fs['option']);
+			foreach ($options as $key => $val) {
+				$this->setOption($key, $val);
+			}
+		}
+
+		$_SESSION['login'] = true;
+		$_SESSION['client'] = array(
+			'id' => $fs['id'],
+			'bezirk_id' => $fs['bezirk_id'],
+			'group' => array('member' => true),
+			'photo' => $fs['photo'],
+			'rolle' => (int)$fs['rolle'],
+			'verified' => (int)$fs['verified']
+		);
+		if ($fs['admin'] == 1) {
+			$_SESSION['client']['group']['admin'] = true;
+		}
+		if ($fs['orgateam'] == 1) {
+			$_SESSION['client']['group']['orgateam'] = true;
+		}
+		if ((int)$fs['rolle'] > 0) {
+			if ($r = $this->regionGateway->listRegionsForBotschafter($fs['id'])
+			) {
+				$_SESSION['client']['botschafter'] = $r;
+				$_SESSION['client']['group']['botschafter'] = true;
+				$mailbox = true;
+				foreach ($r as $rr) {
+					$this->regionGateway->addOrUpdateMember($fs['id'], $rr['id']);
+				}
+			}
+
+			if ($r = $this->regionGateway->listRegionsForFoodsaver($fs['id'])) {
+				$_SESSION['client']['bezirke'] = array();
+				foreach ($r as $rr) {
+					$_SESSION['client']['bezirke'][$rr['id']] = array(
+						'id' => $rr['id'],
+						'name' => $rr['name'],
+						'type' => $rr['type']
+					);
+				}
+			}
+		}
+		$_SESSION['client']['betriebe'] = false;
+		if ($r = $this->storeGateway->listStoresForFoodsaver($fs['id'])) {
+			$_SESSION['client']['betriebe'] = array();
+			foreach ($r as $rr) {
+				$_SESSION['client']['betriebe'][$rr['id']] = $rr;
+			}
+		}
+
+		if ($r = $this->storeGateway->listStoreIdsForBieb($fs['id'])) {
+			$_SESSION['client']['verantwortlich'] = $r;
+			$_SESSION['client']['group']['verantwortlich'] = true;
+			$mailbox = true;
+		}
+		$this->set('mailbox', $mailbox);
 	}
 }

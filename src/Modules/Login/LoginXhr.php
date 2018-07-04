@@ -17,8 +17,9 @@ class LoginXhr extends Control
 	private $searchService;
 	private $contentGateway;
 	private $foodsaverGateway;
+	private $loginGateway;
 
-	public function __construct(LoginModel $model, LoginView $view, SearchService $searchService, ContentGateway $contentGateway, FoodsaverGateway $foodsaverGateway)
+	public function __construct(LoginModel $model, LoginView $view, SearchService $searchService, ContentGateway $contentGateway, FoodsaverGateway $foodsaverGateway, LoginGateway $loginGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
@@ -73,7 +74,7 @@ class LoginXhr extends Control
 
 	public function loginsubmit()
 	{
-		if ($this->model->login($_GET['u'], $_GET['p'])) {
+		if ($this->loginGateway->login($_GET['u'], $_GET['p'])) {
 			$token_js = '';
 			if ($token = $this->searchService->writeSearchIndexToDisk($this->session->id(), $this->session->user('token'))) {
 				$token_js = 'user.token = "' . $token . '";';

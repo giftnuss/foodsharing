@@ -2,9 +2,9 @@
 
 use Foodsharing\DI;
 use Foodsharing\Lib\Cache\Caching;
+use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrMethods;
-use Foodsharing\Modules\Core\Model;
 
 require __DIR__ . '/includes/setup.php';
 
@@ -23,9 +23,7 @@ require_once 'lang/DE/de.php';
 
 $action = $_GET['f'];
 
-$db = new Model();
-
-$db->updateActivity($session->id());
+Mem::updateActivity($session->id());
 if (isset($_GET['f'])) {
 	/* @var $xhr XhrMethods */
 	$xhr = DI::$shared->get(XhrMethods::class);

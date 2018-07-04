@@ -409,6 +409,11 @@ class StoreGateway extends BaseGateway
 		return $out;
 	}
 
+	public function getStoreCountForBieb($fs_id)
+	{
+		return $this->db->count('fs_betrieb_team', ['foodsaver_id' => $fs_id, 'verantwortlich' => 1]);
+	}
+
 	public function getEmailBiepBez($region_ids): array
 	{
 		// TODO can probably be removed
@@ -632,6 +637,28 @@ class StoreGateway extends BaseGateway
 			INNER JOIN `fs_foodsaver` fs ON fs.id = bt.foodsaver_id
 			WHERE c.ancestor_id = :id AND bt.verantwortlich = 1 AND fs.deleted_at IS NULL',
 			[':id' => $bezirk]);
+	}
+
+	public function listStoresForFoodsaver($fsId)
+	{
+		return $this->db->fetchAll('
+			SELECT 	b.`id`,
+					b.name
+
+			FROM 	`fs_betrieb_team` bt,
+					`fs_betrieb` b
+
+			WHERE 	bt.betrieb_id = b.id
+			AND 	bt.`foodsaver_id` = :id
+			AND 	bt.active = 1
+			ORDER BY b.name',
+			[':id' => $fsId]
+		);
+	}
+
+	public function listStoreIdsForBieb($fsId)
+	{
+		return $this->db->fetchAllByCriteria('fs_betrieb_team', ['betrieb_id'], ['foodsaver_id' => $fsId, 'verantwortlich' => 1]);
 	}
 
 	/*
