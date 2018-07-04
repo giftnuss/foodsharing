@@ -1,8 +1,8 @@
 <?php
 
 // table fs_basket_anfrage
-namespace Foodsharing\Modules\Core\DBConstants\BasketRequests;
 
+namespace Foodsharing\Modules\Core\DBConstants\BasketRequests;
 
 /**
  * The current status of food basket requests
@@ -23,5 +23,4 @@ class Status
 	public const FOLLOWED = 9;
 	/* request pop up opened */
 	public const REQESTED = 10;
-
 }

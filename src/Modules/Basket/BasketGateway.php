@@ -63,7 +63,7 @@ class BasketGateway extends BaseGateway
 		$status_sql = '';
 
 		if ($status !== false) {
-			$status_sql = 'AND `status` = '.(int)$status;
+			$status_sql = 'AND `status` = ' . (int)$status;
 		}
 
 		$stm = '
@@ -95,7 +95,7 @@ class BasketGateway extends BaseGateway
 			
 			AND
 				b.id = :id
-			'.$status_sql.'				
+			' . $status_sql . '				
 		';
 		$basket = $this->db->fetch($stm, [':id' => $id]);
 
@@ -109,7 +109,7 @@ class BasketGateway extends BaseGateway
 					fs_foodsaver fs
 					
 				WHERE
-					fs.id = '.(int)$basket['foodsaver_id'].'
+					fs.id = ' . (int)$basket['foodsaver_id'] . '
 					
 			';
 		if ('0' === $basket['fsf_id'] && $fs = $this->db->fetch(

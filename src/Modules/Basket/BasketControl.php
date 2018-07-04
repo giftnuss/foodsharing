@@ -56,7 +56,7 @@ class BasketControl extends Control
 				function u_wallpostReady(postid)
 				{
 					ajax.req("basket","follow",{
-						data:{bid:'.(int)$basket['id'].'}
+						data:{bid:' . (int)$basket['id'] . '}
 					});
 				}'
 				);

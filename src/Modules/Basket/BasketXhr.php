@@ -115,9 +115,9 @@ class BasketXhr extends Control
 
 		$dia->addButton(
 			'Essenskorb veröffentlichen',
-			'ajreq(\'publish\',{appost:0,app:\'basket\',data:$(\'#'.$dia->getId(
-			).' .input\').serialize(),description:$(\'#description\').val(),picture:$(\'#'.$dia->getId(
-			).'-picture-filename\').val(),weight:$(\'#weight\').val()});'
+			'ajreq(\'publish\',{appost:0,app:\'basket\',data:$(\'#' . $dia->getId(
+			) . ' .input\').serialize(),description:$(\'#description\').val(),picture:$(\'#' . $dia->getId(
+			) . '-picture-filename\').val(),weight:$(\'#weight\').val()});'
 		);
 
 		return $dia->xhrout();
@@ -145,7 +145,7 @@ class BasketXhr extends Control
 
 		if (isset($data['filename'])) {
 			$pic = preg_replace('/[^a-z0-9\.]/', '', $data['filename']);
-			if (!empty($pic) && file_exists('tmp/'.$pic)) {
+			if (!empty($pic) && file_exists('tmp/' . $pic)) {
 				$this->resizePic($pic);
 			}
 		}
@@ -237,35 +237,35 @@ class BasketXhr extends Control
 
 	public function resizePic($pic): void
 	{
-		copy('tmp/'.$pic, 'images/basket/'.$pic);
+		copy('tmp/' . $pic, 'images/basket/' . $pic);
 
-		$img = new fImage('images/basket/'.$pic);
+		$img = new fImage('images/basket/' . $pic);
 		$img->resize(800, 800);
 		$img->saveChanges();
 
-		copy('images/basket/'.$pic, 'images/basket/medium-'.$pic);
+		copy('images/basket/' . $pic, 'images/basket/medium-' . $pic);
 
-		$img = new fImage('images/basket/medium-'.$pic);
+		$img = new fImage('images/basket/medium-' . $pic);
 		$img->resize(450, 450);
 		$img->saveChanges();
 
-		copy('images/basket/medium-'.$pic, 'images/basket/thumb-'.$pic);
+		copy('images/basket/medium-' . $pic, 'images/basket/thumb-' . $pic);
 
-		$img = new fImage('images/basket/thumb-'.$pic);
+		$img = new fImage('images/basket/thumb-' . $pic);
 		$img->cropToRatio(1, 1);
 		$img->resize(200, 200);
 		$img->saveChanges();
 
-		copy('images/basket/thumb-'.$pic, 'images/basket/75x75-'.$pic);
+		copy('images/basket/thumb-' . $pic, 'images/basket/75x75-' . $pic);
 
-		$img = new fImage('images/basket/75x75-'.$pic);
+		$img = new fImage('images/basket/75x75-' . $pic);
 		$img->cropToRatio(1, 1);
 		$img->resize(75, 75);
 		$img->saveChanges();
 
-		copy('images/basket/75x75-'.$pic, 'images/basket/50x50-'.$pic);
+		copy('images/basket/75x75-' . $pic, 'images/basket/50x50-' . $pic);
 
-		$img = new fImage('images/basket/50x50-'.$pic);
+		$img = new fImage('images/basket/50x50-' . $pic);
 		$img->cropToRatio(1, 1);
 		$img->resize(50, 50);
 		$img->saveChanges();
@@ -301,11 +301,11 @@ class BasketXhr extends Control
 					$dia->setTitle('Essenskorb');
 					$dia->addContent($this->view->bubbleNoUser($basket));
 				} else {
-					$dia->setTitle('Essenskorb von '.$basket['fs_name']);
+					$dia->setTitle('Essenskorb von ' . $basket['fs_name']);
 					$dia->addContent($this->view->bubble($basket));
 				}
 
-				$dia->addButton('zum Essenskorb', 'goTo(\'/essenskoerbe/'.(int)$basket['id'].'\');');
+				$dia->addButton('zum Essenskorb', 'goTo(\'/essenskoerbe/' . (int)$basket['id'] . '\');');
 
 				$modal = false;
 				if (isset($_GET['modal'])) {
@@ -333,7 +333,7 @@ class BasketXhr extends Control
 	{
 		$dia = new XhrDialog();
 
-		$dia->setTitle('Essenskorb von '.BASE_URL);
+		$dia->setTitle('Essenskorb von ' . BASE_URL);
 
 		$dia->addContent($this->view->fsBubble($basket));
 		$modal = false;
@@ -356,7 +356,7 @@ class BasketXhr extends Control
 		if ($basket = $this->basketGateway->getBasket($_GET['id'])) {
 			$this->basketGateway->setStatus($_GET['id'], Status::REQESTED, $this->session->id());
 			$dia = new XhrDialog();
-			$dia->setTitle('Essenskorb von '.$basket['fs_name'].'');
+			$dia->setTitle('Essenskorb von ' . $basket['fs_name'] . '');
 			$dia->addOpt('width', 300);
 			$dia->noOverflow();
 			$dia->addContent($this->view->contactTitle($basket));
@@ -374,7 +374,7 @@ class BasketXhr extends Control
 				$dia->addContent($this->view->contactMsg());
 				$dia->addButton(
 					'Anfrage absenden',
-					'ajreq(\'sendreqmessage\',{appost:0,app:\'basket\',id:'.(int)$_GET['id'].',msg:$(\'#contactmessage\').val()});'
+					'ajreq(\'sendreqmessage\',{appost:0,app:\'basket\',id:' . (int)$_GET['id'] . ',msg:$(\'#contactmessage\').val()});'
 				);
 			}
 
@@ -437,7 +437,7 @@ class BasketXhr extends Control
 			return [
 				'status' => 1,
 				'script' => '
-					$("#msgBar-badge .bar-basket").text("'.$count.'").css({ opacity: 1 });
+					$("#msgBar-badge .bar-basket").text("' . $count . '").css({ opacity: 1 });
 					$("#msgbar-basket ul li.loading").remove();
 					$("#msgbar-basket ul").prepend(\'<li class="loading">&nbsp;</li>\');
 				',
@@ -458,7 +458,7 @@ class BasketXhr extends Control
 
 				return array(
 					'status' => 1,
-					'script' => 'chat('.$_GET['fid'].');$("#msgbar-basket").hide();ajreq("update",{app:"basket"});',
+					'script' => 'chat(' . $_GET['fid'] . ');$("#msgbar-basket").hide();ajreq("update",{app:"basket"});',
 				);
 			}
 		}
@@ -470,34 +470,34 @@ class BasketXhr extends Control
 			$dia = new XhrDialog();
 			$dia->addOpt('width', '400');
 			$dia->noOverflow();
-			$dia->setTitle('Essenskorbanfrage von '.$request['fs_name'].' abschließen');
+			$dia->setTitle('Essenskorbanfrage von ' . $request['fs_name'] . ' abschließen');
 			$dia->addContent(
 				'<div>
-					<img src="'.$this->func->img($request['fs_photo']).'" style="float:left;margin-right:10px;">
-					<p>Anfragezeitpunkt: '.$this->func->niceDate($request['time_ts']).'</p>
+					<img src="' . $this->func->img($request['fs_photo']) . '" style="float:left;margin-right:10px;">
+					<p>Anfragezeitpunkt: ' . $this->func->niceDate($request['time_ts']) . '</p>
 					<div style="clear:both;"></div>
 				</div>'
-				.$this->v_utils->v_form_radio(
+				. $this->v_utils->v_form_radio(
 					'fetchstate',
 					array(
 						'values' => [
 							[
 								'id' => Status::DELETED_PICKED_UP,
-								'name' => 'Ja, '.$this->func->genderWord(
+								'name' => 'Ja, ' . $this->func->genderWord(
 										$request['fs_gender'],
 										'er',
 										'sie',
 										'er/sie'
-									).' hat den Korb abgeholt.',
+									) . ' hat den Korb abgeholt.',
 							],
 							[
 								'id' => Status::NOT_PICKED_UP,
-								'name' => 'Nein, '.$this->func->genderWord(
+								'name' => 'Nein, ' . $this->func->genderWord(
 										$request['fs_gender'],
 										'er',
 										'sie',
 										'er/sie'
-									).' ist leider nicht wie verabredet erschienen.',
+									) . ' ist leider nicht wie verabredet erschienen.',
 							],
 							[
 								'id' => Status::DELETED_OTHER_REASON,
@@ -511,7 +511,7 @@ class BasketXhr extends Control
 			$dia->addAbortButton();
 			$dia->addButton(
 				'Weiter',
-				'ajreq(\'finishRequest\',{app:\'basket\',id:'.(int)$_GET['id'].',fid:'.(int)$_GET['fid'].',sk:$(\'#fetchstate-wrapper input:checked\').val()});'
+				'ajreq(\'finishRequest\',{app:\'basket\',id:' . (int)$_GET['id'] . ',fid:' . (int)$_GET['fid'] . ',sk:$(\'#fetchstate-wrapper input:checked\').val()});'
 			);
 
 			return $dia->xhrout();
@@ -524,7 +524,7 @@ class BasketXhr extends Control
 
 		return [
 			'status' => 1,
-			'script' => '$(".basket-'.(int)$_GET['id'].'").remove();pulseInfo("Essenskorb ist jetzt nicht mehr aktiv!");',
+			'script' => '$(".basket-' . (int)$_GET['id'] . '").remove();pulseInfo("Essenskorb ist jetzt nicht mehr aktiv!");',
 		];
 	}
 
@@ -547,7 +547,7 @@ class BasketXhr extends Control
 			return [
 				'status' => 1,
 				'script' => '
-						$(".msg-'.(int)$_GET['id'].'-'.(int)$_GET['fid'].'").remove();
+						$(".msg-' . (int)$_GET['id'] . '-' . (int)$_GET['fid'] . '").remove();
 						pulseInfo("Danke Dir! Der Vorgang ist abgeschlossen.");
 						$(".xhrDialog").dialog("close");
 						$(".xhrDialog").dialog("destroy");

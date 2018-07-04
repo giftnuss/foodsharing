@@ -16,7 +16,7 @@ class APIXhr extends Control
 	private $gateway;
 
 	public function __construct(APIGateway $gateway, MessageModel $messageModel, BasketGateway $basketGateway, Model $model
-	){
+	) {
 		$this->gateway = $gateway;
 		$this->messageModel = $messageModel;
 		$this->basketGateway = $basketGateway;
