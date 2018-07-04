@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Search;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 
 class SearchControl extends Control
@@ -16,7 +15,7 @@ class SearchControl extends Control
 
 		parent::__construct();
 
-		if (!S::may('fs')) {
+		if (!$this->session->may('fs')) {
 			$this->func->go('/?page=dashboard');
 		}
 	}

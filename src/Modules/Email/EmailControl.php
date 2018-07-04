@@ -5,7 +5,6 @@ namespace Foodsharing\Modules\Email;
 use DOMDocument;
 use Exception;
 use Flourish\fImage;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -32,7 +31,7 @@ class EmailControl extends Control
 
 		parent::__construct();
 
-		if (!S::may('orga')) {
+		if (!$this->session->may('orga')) {
 			$this->func->go('/');
 		}
 	}
@@ -42,7 +41,7 @@ class EmailControl extends Control
 		$this->handleEmail();
 		$this->func->addBread($this->func->s('mailinglist'), '/?page=email');
 
-		if ($emailstosend = $this->emailGateway->getEmailsToSend(S::id())) {
+		if ($emailstosend = $this->emailGateway->getEmailsToSend($this->session->id())) {
 			$this->func->addContent($this->v_email_statusbox($emailstosend));
 		}
 
@@ -98,7 +97,7 @@ class EmailControl extends Control
 
 		$i = 0;
 		$divs = '';
-		if ($mails = $this->emailGateway->getSendMails(S::id())) {
+		if ($mails = $this->emailGateway->getSendMails($this->session->id())) {
 			foreach ($mails as $m) {
 				++$i;
 				$this->func->addContent('<li><a href="#" onclick="$(\'#right-' . $i . '\').dialog(\'open\');return false;">' . date('d.m.', strtotime($m['zeit'])) . ' ' . $m['name'] . '</a></li>', CNT_RIGHT);
@@ -124,7 +123,7 @@ class EmailControl extends Control
 
 			if ($this->func->isBotschafter() || $this->func->isOrgaTeam()) {
 				if ($data['recip_choose'] == 'bezirk') {
-					$region_ids = $this->regionGateway->listIdsForDescendantsAndSelf(S::getCurrentBezirkId());
+					$region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($this->session->getCurrentBezirkId());
 					$foodsaver = $this->foodsaverGateway->getEmailAdressen($region_ids);
 				} elseif ($data['recip_choose'] == 'botschafter') {
 					$foodsaver = $this->foodsaverGateway->getAllBotschafter();
@@ -201,7 +200,7 @@ class EmailControl extends Control
 					}
 				}
 			} else {
-				$region_ids = $this->regionGateway->listIdsForDescendantsAndSelf(S::getCurrentBezirkId());
+				$region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($this->session->getCurrentBezirkId());
 				$foodsaver = $this->foodsaverGateway->getEmailAdressen($region_ids);
 			}
 
@@ -228,10 +227,10 @@ class EmailControl extends Control
 
 				 */
 				$mode = $data['mode'];
-				if (!S::isOrgaTeam()) {
+				if (!$this->session->isOrgaTeam()) {
 					$mode = 1;
 				}
-				$this->emailGateway->initEmail(S::id(), $mailbox_id, $foodsaver, $nachricht, $betreff, $attach, $mode);
+				$this->emailGateway->initEmail($this->session->id(), $mailbox_id, $foodsaver, $nachricht, $betreff, $attach, $mode);
 				$this->func->goPage();
 			} elseif ($data['recip_choose'] != 'manual') {
 				$this->func->error('In den ausgew&auml;hlten Bezirken gibt es noch keine Foodsaver');

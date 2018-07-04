@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Foodsaver;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\View;
 
 class FoodsaverView extends View
@@ -47,7 +46,7 @@ class FoodsaverView extends View
 
 		$position = '';
 
-		if (S::may('orga')) {
+		if ($this->session->may('orga')) {
 			$position = $this->v_utils->v_form_text('position');
 			$options = array(
 				'values' => array(

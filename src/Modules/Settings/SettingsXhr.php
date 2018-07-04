@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\Settings;
 
 use DateTime;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -21,7 +20,7 @@ class SettingsXhr extends Control
 
 		parent::__construct();
 
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			return false;
 		}
 	}

@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Event;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 
@@ -96,7 +95,7 @@ class EventXhr extends Control
 
 	private function mayEvent()
 	{
-		if ($this->event['public'] == 1 || S::may('orga') || $this->func->isBotFor($this->event['bezirk_id']) || isset($this->event['invites']['may'][$this->func->fsId()])) {
+		if ($this->event['public'] == 1 || $this->session->may('orga') || $this->func->isBotFor($this->event['bezirk_id']) || isset($this->event['invites']['may'][$this->func->fsId()])) {
 			return true;
 		}
 

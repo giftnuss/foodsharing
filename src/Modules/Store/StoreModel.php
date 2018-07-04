@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Store;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Message\MessageModel;
@@ -498,7 +497,7 @@ class StoreModel extends Model
 		$this->bellGateway->addBell((int)$fsid, 'store_request_accept_title', 'store_request_accept', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$bid
 		), array(
-			'user' => S::user('name'),
+			'user' => $this->session->user('name'),
 			'name' => $betrieb
 		), 'store-arequest-' . (int)$fsid);
 
@@ -525,7 +524,7 @@ class StoreModel extends Model
 		$this->bellGateway->addBell((int)$fsid, 'store_request_accept_wait_title', 'store_request_accept_wait', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$bid
 		), array(
-			'user' => S::user('name'),
+			'user' => $this->session->user('name'),
 			'name' => $betrieb
 		), 'store-wrequest-' . (int)$fsid);
 
@@ -548,7 +547,7 @@ class StoreModel extends Model
 		$this->bellGateway->addBell((int)$fsid, 'store_request_deny_title', 'store_request_deny', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$bid
 		), array(
-			'user' => S::user('name'),
+			'user' => $this->session->user('name'),
 			'name' => $betrieb
 		), 'store-drequest-' . (int)$fsid);
 
@@ -581,7 +580,7 @@ class StoreModel extends Model
 	public function createTeamConversation($bid)
 	{
 		$tcid = $this->messageModel->insertConversation(array(), true);
-		$betrieb = $this->storeGateway->getMyBetrieb(S::id(), $bid);
+		$betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $bid);
 		$this->messageModel->renameConversation($tcid, 'Team ' . $betrieb['name']);
 
 		$this->update('
@@ -601,7 +600,7 @@ class StoreModel extends Model
 	public function createSpringerConversation($bid)
 	{
 		$scid = $this->messageModel->insertConversation(array(), true);
-		$betrieb = $this->storeGateway->getMyBetrieb(S::id(), $bid);
+		$betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $bid);
 		$this->messageModel->renameConversation($scid, 'Springer ' . $betrieb['name']);
 		$this->update('
 				UPDATE	`fs_betrieb` SET springer_conversation_id = ' . (int)$scid . ' WHERE id = ' . (int)$bid . '
@@ -619,7 +618,7 @@ class StoreModel extends Model
 
 	public function addTeamMessage($bid, $message)
 	{
-		if ($betrieb = $this->storeGateway->getMyBetrieb(S::id(), $bid)) {
+		if ($betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $bid)) {
 			if (!is_null($betrieb['team_conversation_id'])) {
 				$this->messageModel->sendMessage($betrieb['team_conversation_id'], $message);
 			} elseif (is_null($betrieb['team_conversation_id'])) {

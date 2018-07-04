@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\StoreUser;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -22,7 +21,7 @@ class StoreUserControl extends Control
 
 		parent::__construct();
 
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			$this->func->goLogin();
 		}
 	}
@@ -35,7 +34,7 @@ class StoreUserControl extends Control
 			$this->func->addStyle('.button{margin-right:8px;}#right .tagedit-list{width:256px;}#foodsaver-wrapper{padding-top:0px;}');
 			global $g_data;
 
-			$betrieb = $this->storeGateway->getMyBetrieb(S::id(), $_GET['id']);
+			$betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $_GET['id']);
 
 			if (!$betrieb) {
 				$this->func->goPage();
@@ -50,7 +49,7 @@ class StoreUserControl extends Control
 				'prefetchtime' => $betrieb['prefetchtime']
 			];
 
-			if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && (S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $_GET['id']) || $this->func->isBotFor($betrieb['bezirk_id']))) {
+			if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $_GET['id']) || $this->func->isBotFor($betrieb['bezirk_id']))) {
 				if ($_POST['form_submit'] == 'zeiten') {
 					$range = range(0, 6);
 					global $g_data;
@@ -74,14 +73,14 @@ class StoreUserControl extends Control
 				}
 				$this->func->info($this->func->s('changes_saved'));
 				$this->func->goSelf();
-			} elseif (isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && (S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $_GET['id']) || $this->func->isBotFor($betrieb['bezirk_id']))) {
-				$this->storeGateway->changeBetriebStatus(S::id(), $_GET['id'], $_POST['betrieb_status_id']);
+			} elseif (isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $_GET['id']) || $this->func->isBotFor($betrieb['bezirk_id']))) {
+				$this->storeGateway->changeBetriebStatus($this->session->id(), $_GET['id'], $_POST['betrieb_status_id']);
 				$this->func->go($this->func->getSelf());
 			}
 
 			$this->func->addTitle($betrieb['name']);
 
-			if ($this->storeGateway->isInTeam(S::id(), $_GET['id']) || S::may('orga') || $this->func->isBotFor($betrieb['bezirk_id'])) {
+			if ($this->storeGateway->isInTeam($this->session->id(), $_GET['id']) || $this->session->may('orga') || $this->func->isBotFor($betrieb['bezirk_id'])) {
 				if ((!$betrieb['verantwortlich'] && $this->func->isBotFor($betrieb['bezirk_id']))) {
 					$betrieb['verantwortlich'] = true;
 					$this->func->info('<strong>' . $this->func->s('reference') . ':</strong> ' . $this->func->s('not_responsible_but_bot'));
@@ -123,7 +122,7 @@ class StoreUserControl extends Control
 						'team',
 
 						array(
-							$this->v_utils->v_form_tagselect('foodsaver', array('valueOptions' => $this->foodsaverGateway->xhrGetTagFsAll(S::getBezirkIds()))),
+							$this->v_utils->v_form_tagselect('foodsaver', array('valueOptions' => $this->foodsaverGateway->xhrGetTagFsAll($this->session->getBezirkIds()))),
 							$verantwortlich_select),
 						array('submit' => $this->func->s('save'))
 					);
@@ -172,7 +171,7 @@ class StoreUserControl extends Control
 
 				$menu = array();
 
-				if (!$betrieb['jumper'] || S::may('orga')) {
+				if (!$betrieb['jumper'] || $this->session->may('orga')) {
 					if (!is_null($betrieb['team_conversation_id'])) {
 						$menu[] = array('name' => 'Nachricht ans Team', 'click' => 'conv.chat(' . $betrieb['team_conversation_id'] . ');');
 					}
@@ -180,7 +179,7 @@ class StoreUserControl extends Control
 						$menu[] = array('name' => 'Nachricht an Springer', 'click' => 'conv.chat(' . $betrieb['springer_conversation_id'] . ');');
 					}
 				}
-				if ($betrieb['verantwortlich'] || S::may('orga')) {
+				if ($betrieb['verantwortlich'] || $this->session->may('orga')) {
 					$menu[] = array('name' => $this->func->s('fetch_history'), 'click' => "ajreq('fetchhistory',{app:'betrieb',bid:" . (int)$betrieb['id'] . '});');
 					$menu[] = array('name' => $this->func->s('edit_betrieb'), 'href' => '/?page=betrieb&a=edit&id=' . $betrieb['id']);
 					$menu[] = array('name' => $this->func->s('edit_team'), 'click' => '$(\'#teamEditor\').dialog({modal:true,width:425,title:\'' . $this->func->s('edit_team') . '\'});');
@@ -203,7 +202,7 @@ class StoreUserControl extends Control
 					CNT_LEFT
 				);
 
-				if (!$betrieb['jumper'] || S::may('orga')) {
+				if (!$betrieb['jumper'] || $this->session->may('orga')) {
 					$this->func->addJs('u_updatePosts();');
 
 					$opt = array();
@@ -329,7 +328,7 @@ class StoreUserControl extends Control
 				/*
 				 * Abholzeiten ändern
 				 */
-				if ($betrieb['verantwortlich'] || S::may('orga')) {
+				if ($betrieb['verantwortlich'] || $this->session->may('orga')) {
 					$this->func->hiddenDialog('abholen', array($this->view->u_form_abhol_table($zeiten), $this->v_utils->v_form_hidden('bid', 0), '<input type="hidden" name="team" value="' . $betrieb['team_js'] . '" />'), $this->func->s('add_fetchtime'), array('reload' => true, 'width' => 500));
 				}
 
@@ -370,7 +369,7 @@ class StoreUserControl extends Control
 			), 'Aktionen'), CNT_RIGHT);
 
 			$bezirk = $this->func->getBezirk();
-			$betriebe = $this->storeGateway->getMyBetriebe(S::id(), S::getCurrentBezirkId());
+			$betriebe = $this->storeGateway->getMyBetriebe($this->session->id(), $this->session->getCurrentBezirkId());
 			$this->func->addContent($this->view->u_betriebList($betriebe['verantwortlich'], $this->func->s('you_responsible'), true));
 			$this->func->addContent($this->view->u_betriebList($betriebe['team'], $this->func->s('you_fetcher'), false));
 			$this->func->addContent($this->view->u_betriebList($betriebe['sonstige'], $this->func->sv('more_stores', array('name' => $bezirk['name'])), false));

@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Region;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\Model;
@@ -95,7 +94,7 @@ class RegionControl extends Control
 
 		if ($isWorkGroup) {
 			$menu[] = ['name' => 'terminology.wall', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=wall'];
-			if (S::may('orga') || $this->func->isBotFor($region['id'])) {
+			if ($this->session->may('orga') || $this->func->isBotFor($region['id'])) {
 				$menu[] = ['name' => 'Gruppe verwalten', 'href' => '/?page=groups&sub=edit&id=' . (int)$region['id']];
 			}
 		} else {
@@ -147,7 +146,7 @@ class RegionControl extends Control
 
 	public function index(Request $request, Response $response)
 	{
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			$this->func->goLogin();
 		}
 
@@ -220,13 +219,13 @@ class RegionControl extends Control
 
 	private function mayChangeStickyness($regionId)
 	{
-		return S::may('orga') || $this->func->isBotFor($regionId);
+		return $this->session->may('orga') || $this->func->isBotFor($regionId);
 	}
 
 	private function mayDeletePost($region, $post)
 	{
-		return S::may('orga') ||
-			$post['fs_id'] == S::id() ||
+		return $this->session->may('orga') ||
+			$post['fs_id'] == $this->session->id() ||
 			($this->isWorkGroup($region) && ($this->func->isBotFor($region['id'])));
 	}
 
@@ -268,7 +267,7 @@ class RegionControl extends Control
 
 			if ($thread['active'] == 1 || $this->mayActivateThreads($region['id'])) {
 				$viewdata['posts'] = array_map($processPosts, $this->forumGateway->listPosts($threadId));
-				$viewdata['following'] = $this->forumGateway->isFollowing(S::id(), $threadId);
+				$viewdata['following'] = $this->forumGateway->isFollowing($this->session->id(), $threadId);
 				$viewdata['mayChangeStickyness'] = $this->mayChangeStickyness($region['id']);
 			} else {
 				$this->func->go($this->forumService->url($region['id'], false));
@@ -287,9 +286,9 @@ class RegionControl extends Control
 		$form = $this->formFactory->getFormFactory()->create(ForumCreateThreadForm::class, $data);
 		$form->handleRequest($request);
 		if ($form->isSubmitted()) {
-			if ($form->isValid() && $this->forumService->mayPostToRegion(S::id(), $region['id'], $ambassadorForum)) {
-				$threadId = $this->forumService->createThread(S::id(), $data->title, $data->body, $region, $ambassadorForum, $this->forumModerated);
-				$this->forumGateway->followThread(S::id(), $threadId);
+			if ($form->isValid() && $this->forumService->mayPostToRegion($this->session->id(), $region['id'], $ambassadorForum)) {
+				$threadId = $this->forumService->createThread($this->session->id(), $data->title, $data->body, $region, $ambassadorForum, $this->forumModerated);
+				$this->forumGateway->followThread($this->session->id(), $threadId);
 				if ($this->forumModerated) {
 					$this->func->info($this->translator->trans('forum.hold_back_for_moderation'));
 				}
@@ -302,16 +301,16 @@ class RegionControl extends Control
 
 	private function handlePostForm(Request $request, Response $response, $region, $threadId, $ambassadorForum)
 	{
-		$data = CreateForumPostData::create($this->forumGateway->isFollowing(S::id(), $threadId), $threadId);
+		$data = CreateForumPostData::create($this->forumGateway->isFollowing($this->session->id(), $threadId), $threadId);
 		$form = $this->formFactory->getFormFactory()->create(ForumPostForm::class, $data);
 		$form->handleRequest($request);
 		if ($form->isSubmitted()) {
-			if ($form->isValid() && $this->forumService->mayPostToThread(S::id(), $threadId)) {
-				$postId = $this->forumService->addPostToThread(S::id(), $data->thread, $data->body);
+			if ($form->isValid() && $this->forumService->mayPostToThread($this->session->id(), $threadId)) {
+				$postId = $this->forumService->addPostToThread($this->session->id(), $data->thread, $data->body);
 				if ($data->subscribe) {
-					$this->forumGateway->followThread(S::id(), $data->thread);
+					$this->forumGateway->followThread($this->session->id(), $data->thread);
 				} else {
-					$this->forumGateway->unfollowThread(S::id(), $data->thread);
+					$this->forumGateway->unfollowThread($this->session->id(), $data->thread);
 				}
 				$this->func->go($this->forumService->url($region['id'], $ambassadorForum, $data->thread, $postId));
 			} else {

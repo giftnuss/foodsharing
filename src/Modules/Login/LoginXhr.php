@@ -46,7 +46,7 @@ class LoginXhr extends Control
 
 	public function login()
 	{
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			$dia = new XhrDialog();
 
 			$dia->setTitle($this->func->s('login'));
@@ -76,7 +76,7 @@ class LoginXhr extends Control
 	{
 		if ($this->model->login($_GET['u'], $_GET['p'])) {
 			$token_js = '';
-			if ($token = $this->searchService->writeSearchIndexToDisk(S::id(), S::user('token'))) {
+			if ($token = $this->searchService->writeSearchIndexToDisk($this->session->id(), $this->session->user('token'))) {
 				$token_js = 'user.token = "' . $token . '";';
 			}
 
@@ -280,7 +280,7 @@ class LoginXhr extends Control
 	 */
 	public function join()
 	{
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			$dia = new XhrDialog();
 
 			$dia->setTitle($this->func->s('join'));

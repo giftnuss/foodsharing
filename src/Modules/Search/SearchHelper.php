@@ -7,20 +7,22 @@ use Foodsharing\Lib\Session\S;
 class SearchHelper
 {
 	private $searchGateway;
+	private $session;
 
-	public function __construct(SearchGateway $searchGateway)
+	public function __construct(SearchGateway $searchGateway, S $session)
 	{
 		$this->searchGateway = $searchGateway;
+		$this->session = $session;
 	}
 
 	public function search($q)
 	{
-		$isAdmin = S::isBotschafter() || S::isOrgaTeam();
+		$isAdmin = $this->session->isBotschafter() || $this->session->isOrgaTeam();
 
 		return $this->searchGateway->search(
 			$q,
-			S::may('orga'),
-			$isAdmin ? false : S::getCurrentBezirkId()
+			$this->session->may('orga'),
+			$isAdmin ? false : $this->session->getCurrentBezirkId()
 		);
 	}
 }

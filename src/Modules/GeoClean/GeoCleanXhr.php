@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\GeoClean;
 
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class GeoCleanXhr extends Control
@@ -17,7 +16,7 @@ class GeoCleanXhr extends Control
 
 		parent::__construct();
 
-		if (!S::may('orga')) {
+		if (!$this->session->may('orga')) {
 			return false;
 		}
 	}

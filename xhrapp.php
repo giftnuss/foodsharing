@@ -14,7 +14,10 @@ if (isset($_GET['app']) && isset($_GET['m'])) {
 	require_once 'config.inc.php';
 	require_once 'lang/DE/de.php';
 
-	S::init();
+	/* @var $session S */
+	$session = DI::$shared->get(S::class);
+	$session->init();
+
 	$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
 	$class = Routing::getClassName($app, 'Xhr');

@@ -60,9 +60,9 @@ class vMap extends vCore
 		];
 	}
 
-	public function setLocation($lat, $lng)
+	public function setCenter($lat, $lng)
 	{
-		$this->location = array($lat, $lng);
+		$this->center = array($lat, $lng);
 	}
 
 	public function setMarkerCluster($val = true)

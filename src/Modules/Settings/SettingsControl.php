@@ -29,7 +29,7 @@ class SettingsControl extends Control
 
 		parent::__construct();
 
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			$this->func->goLogin();
 		}
 
@@ -91,7 +91,7 @@ class SettingsControl extends Control
 
 	public function up_bip()
 	{
-		if (S::may() && $this->foodsaver['rolle'] > 0) {
+		if ($this->session->may() && $this->foodsaver['rolle'] > 0) {
 			if (!$this->foodsaver['verified']) {
 				$this->func->addContent($this->view->simpleContent($this->contentGateway->get(45)));
 			} else {
@@ -140,7 +140,7 @@ class SettingsControl extends Control
 
 	public function up_fs()
 	{
-		if (S::may()) {
+		if ($this->session->may()) {
 			if (($status = $this->quizModel->getQuizStatus(1)) && ($quiz = $this->quizModel->getQuiz(1))) {
 				$desc = $this->contentGateway->get(12);
 
@@ -175,7 +175,7 @@ class SettingsControl extends Control
 
 	public function up_bot()
 	{
-		if (S::may() && $this->foodsaver['rolle'] >= 2) {
+		if ($this->session->may() && $this->foodsaver['rolle'] >= 2) {
 			if (($status = $this->quizModel->getQuizStatus(3)) && ($quiz = $this->quizModel->getQuiz(3))) {
 				$desc = $this->contentGateway->get(12);
 
@@ -233,9 +233,9 @@ class SettingsControl extends Control
 					$check = false;
 					$this->func->error($this->func->s('not_rv_accepted'));
 				} else {
-					S::set('hastodoquiz', false);
+					$this->session->set('hastodoquiz', false);
 					Mem::delPageCache('/?page=dashboard');
-					if (!S::may('fs')) {
+					if (!$this->session->may('fs')) {
 						$this->model->updateRole(1, $this->foodsaver['rolle']);
 					}
 					$this->func->info('Danke! Du bist jetzt Foodsaver');
@@ -519,9 +519,9 @@ class SettingsControl extends Control
 				}
 
 				if (!isset($data['bezirk_id'])) {
-					$data['bezirk_id'] = S::getCurrentBezirkId();
+					$data['bezirk_id'] = $this->session->getCurrentBezirkId();
 				}
-				if ($this->foodsaverGateway->updateProfile(S::id(), $data)) {
+				if ($this->foodsaverGateway->updateProfile($this->session->id(), $data)) {
 					$this->manualDb->relogin();
 					$this->func->info($this->func->s('foodsaver_edit_success'));
 				} else {
@@ -533,7 +533,7 @@ class SettingsControl extends Control
 
 	public function picture_box()
 	{
-		$photo = $this->foodsaverGateway->getPhoto(S::id());
+		$photo = $this->foodsaverGateway->getPhoto($this->session->id());
 
 		if (!(file_exists('images/thumb_crop_' . $photo))) {
 			$p_cnt = $this->v_utils->v_photo_edit('img/portrait.png');

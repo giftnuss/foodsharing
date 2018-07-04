@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\PassportGenerator;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -128,7 +127,7 @@ class PassportGeneratorControl extends Control
 						'passgen_failed',
 						'fa fa-camera',
 						array('href' => '/?page=settings'),
-						array('user' => S::user('name')),
+						array('user' => $this->session->user('name')),
 						'pass-fail-' . $fs['id']
 					);
 					continue;
@@ -142,7 +141,7 @@ class PassportGeneratorControl extends Control
 
 				++$card;
 
-				$this->passportGateway->passGen(S::id(), $fs['id']);
+				$this->passportGateway->passGen($this->session->id(), $fs['id']);
 
 				$pdf->Image('img/pass_bg.png', 10 + $x, 10 + $y, 83, 55);
 

@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Content;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Parsedown;
 
@@ -25,7 +24,7 @@ class ContentControl extends Control
 	public function index()
 	{
 		if (!isset($_GET['sub'])) {
-			if (!S::may('orga')) {
+			if (!$this->session->may('orga')) {
 				$this->func->go('/');
 			}
 			$this->model;
@@ -196,11 +195,11 @@ class ContentControl extends Control
 		$this->func->addTitle('F.A.Q.');
 
 		$cat_ids = array(1, 6, 7);
-		if (S::may('fs')) {
+		if ($this->session->may('fs')) {
 			$cat_ids[] = 2;
 			$cat_ids[] = 4;
 		}
-		if (S::may('bot')) {
+		if ($this->session->may('bot')) {
 			$cat_ids[] = 5;
 		}
 

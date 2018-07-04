@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\FAQAdmin;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
 
@@ -18,7 +17,7 @@ class FAQAdminControl extends Control
 
 		parent::__construct();
 
-		if (!S::may('orga')) {
+		if (!$this->session->may('orga')) {
 			$this->func->goLogin();
 		}
 	}

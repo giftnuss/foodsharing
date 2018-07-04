@@ -4,7 +4,7 @@ namespace Foodsharing\Lib\Session;
 
 use Flourish\fAuthorization;
 use Flourish\fSession;
-use Foodsharing\DI;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Func;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Legal\LegalControl;
@@ -12,14 +12,25 @@ use Foodsharing\Modules\Legal\LegalGateway;
 
 class S
 {
-	/**
-	 * @var Func
-	 */
-	private static $func;
+	private $func;
+	private $legalGateway;
+	private $db;
+	private $initialized = false;
 
-	public static function init()
+	public function __construct(Func $func, LegalGateway $legalGateway, Db $db)
 	{
-		self::$func = DI::$shared->get(Func::class);
+		$this->func = $func;
+		$this->legalGateway = $legalGateway;
+		$this->db = $db;
+	}
+
+	public function init()
+	{
+		if ($this->initialized) {
+			throw new Exception('Session is already initialized');
+		}
+		$this->initialized = true;
+
 		ini_set('session.save_handler', 'redis');
 		ini_set('session.save_path', 'tcp://' . REDIS_HOST . ':' . REDIS_PORT);
 
@@ -43,7 +54,7 @@ class S
 		fSession::open();
 	}
 
-	public static function setAuthLevel($role)
+	public function setAuthLevel($role)
 	{
 		fAuthorization::setLoginPage('/?page=login');
 		fAuthorization::setUserAuthLevel($role);
@@ -57,20 +68,20 @@ class S
 		);
 	}
 
-	public static function logout()
+	public function logout()
 	{
-		self::set('user', false);
+		$this->set('user', false);
 		fAuthorization::destroyUserInfo();
-		self::setAuthLevel('guest');
+		$this->setAuthLevel('guest');
 	}
 
-	public static function login($user)
+	public function login($user)
 	{
 		if (isset($user['id']) && !empty($user['id']) && isset($user['rolle'])) {
 			fAuthorization::setUserToken($user['id']);
-			self::setAuthLevel(self::$func->rolleWrapInt($user['rolle']));
+			$this->setAuthLevel($this->func->rolleWrapInt($user['rolle']));
 
-			self::set('user', array(
+			$this->set('user', array(
 				'name' => $user['name'],
 				'nachname' => $user['nachname'],
 				'photo' => $user['photo'],
@@ -85,7 +96,7 @@ class S
 				'privacy_notice_accepted_date' => $user['privacy_notice_accepted_date']
 			));
 
-			self::set('buddy-ids', $user['buddys']);
+			$this->set('buddy-ids', $user['buddys']);
 
 			return true;
 		}
@@ -93,24 +104,22 @@ class S
 		return false;
 	}
 
-	public static function user($index)
+	public function user($index)
 	{
-		$user = self::get('user');
+		$user = $this->get('user');
 
 		return $user[$index];
 	}
 
-	public static function getRouteOverride()
+	public function getRouteOverride()
 	{
-		/* @var $legalModel LegalGateway */
-		$legalModel = DI::$shared->get(LegalGateway::class);
-		$ppVersion = $legalModel->getPpVersion();
-		$pnVersion = $legalModel->getPnVersion();
-		if (self::id() &&
-			(($ppVersion && $ppVersion != self::user('privacy_policy_accepted_date')) ||
-			($pnVersion && self::user('rolle') >= 2 && self::user('privacy_notice_accepted_date') != $pnVersion))) {
+		$ppVersion = $this->legalGateway->getPpVersion();
+		$pnVersion = $this->legalGateway->getPnVersion();
+		if ($this->id() &&
+			(($ppVersion && $ppVersion != $this->user('privacy_policy_accepted_date')) ||
+				($pnVersion && $this->user('rolle') >= 2 && $this->user('privacy_notice_accepted_date') != $pnVersion))) {
 			/* Allow Settings page, otherwise redirect to legal page */
-			if (in_array(self::$func->getPage(), ['settings', 'logout'])) {
+			if (in_array($this->func->getPage(), ['settings', 'logout'])) {
 				return null;
 			}
 
@@ -120,12 +129,12 @@ class S
 		return null;
 	}
 
-	public static function id()
+	public function id()
 	{
 		return fAuthorization::getUserToken();
 	}
 
-	public static function may($role = 'user')
+	public function may($role = 'user')
 	{
 		if (fAuthorization::checkAuthLevel($role)) {
 			return true;
@@ -134,38 +143,36 @@ class S
 		return false;
 	}
 
-	public static function getLocation()
+	public function getLocation()
 	{
 		$loc = fSession::get('g_location', false);
 		if (!$loc) {
-			/* @var $db Db */
-			$db = DI::$shared->get(\Foodsharing\Lib\Db\Db::class);
-			$loc = $db->getValues(array('lat', 'lon'), 'foodsaver', self::$func->fsId());
-			self::set('g_location', $loc);
+			$loc = $this->db->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
+			$this->set('g_location', $loc);
 		}
 
 		return $loc;
 	}
 
-	public static function setLocation($lat, $lng)
+	public function setLocation($lat, $lng)
 	{
-		self::set('g_location', array(
+		$this->set('g_location', array(
 			'lat' => $lat,
 			'lon' => $lng
 		));
 	}
 
-	public static function destroy()
+	public function destroy()
 	{
 		fSession::destroy();
 	}
 
-	public static function set($key, $value)
+	public function set($key, $value)
 	{
 		fSession::set($key, $value);
 	}
 
-	public static function get($var)
+	public function get($var)
 	{
 		return fSession::get($var, false);
 	}
@@ -175,18 +182,18 @@ class S
 	 *
 	 * @param $name
 	 */
-	public static function option($key)
+	public function option($key)
 	{
-		return self::get('useroption_' . $key);
+		return $this->get('useroption_' . $key);
 	}
 
-	public static function setOption($key, $val, Model $model)
+	public function setOption($key, $val, Model $model)
 	{
 		$model->setOption($key, $val);
-		self::set('useroption_' . $key, $val);
+		$this->set('useroption_' . $key, $val);
 	}
 
-	public static function addMsg($message, $type, $title = null)
+	public function addMsg($message, $type, $title = null)
 	{
 		$msg = fSession::get('g_message', array());
 
@@ -195,7 +202,7 @@ class S
 		}
 
 		if (!$title) {
-			$title = ' ' . self::$func->s($type);
+			$title = ' ' . $this->func->s($type);
 		} else {
 			$title = ' ';
 		}
@@ -208,22 +215,22 @@ class S
 	 * static method for disable session writing
 	 * this is important if more than one ajax request is sended to the server, if session writing is enabled php is waiting for finish and the requests cant live together.
 	 */
-	public static function noWrite()
+	public function noWrite()
 	{
 		session_write_close();
 	}
 
-	public static function getRegions(): array
+	public function getRegions(): array
 	{
 		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
 			return $_SESSION['client']['bezirke'];
 		}
 		// TODO enable to receive Sentry messages
-		// trigger_error('S::getRegions(): accessed but not initialized yet', E_USER_NOTICE);
+		// trigger_error('$this->session->getRegions(): accessed but not initialized yet', E_USER_NOTICE);
 		return [];
 	}
 
-	public static function getBotBezirkIds()
+	public function getBotBezirkIds()
 	{
 		$out = array();
 		if (isset($_SESSION['client']['botschafter']) && is_array($_SESSION['client']['botschafter'])) {
@@ -239,7 +246,7 @@ class S
 		return false;
 	}
 
-	public static function getMyBetriebIds()
+	public function getMyBetriebIds()
 	{
 		$out = array();
 		if (isset($_SESSION['client']['betriebe']) && is_array($_SESSION['client']['betriebe'])) {
@@ -255,7 +262,7 @@ class S
 		return false;
 	}
 
-	public static function getBezirkIds()
+	public function getBezirkIds()
 	{
 		$out = array();
 		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
@@ -271,19 +278,19 @@ class S
 		return false;
 	}
 
-	public static function getCurrentBezirkId()
+	public function getCurrentBezirkId()
 	{
 		if (isset($_SESSION['client']['bezirk_id'])) {
 			return $_SESSION['client']['bezirk_id'];
 		}
 	}
 
-	public static function setPhoto($file)
+	public function setPhoto($file)
 	{
 		$_SESSION['client']['photo'] = $file;
 	}
 
-	public static function mayGroup($group)
+	public function mayGroup($group)
 	{
 		if (isset($_SESSION) && isset($_SESSION['client']['group'][$group])) {
 			return true;
@@ -292,12 +299,12 @@ class S
 		return false;
 	}
 
-	public static function isOrgaTeam()
+	public function isOrgaTeam()
 	{
-		return S::mayGroup('orgateam');
+		return $this->mayGroup('orgateam');
 	}
 
-	public static function isBotschafter()
+	public function isBotschafter()
 	{
 		if (isset($_SESSION['client']['botschafter'])) {
 			return true;

@@ -14,6 +14,11 @@ class Utils
 	private $func;
 
 	/**
+	 * @var S
+	 */
+	private $session;
+
+	/**
 	 * @var \Twig\Environment
 	 */
 	private $twig;
@@ -29,6 +34,14 @@ class Utils
 	public function setFunc(Func $func)
 	{
 		$this->func = $func;
+	}
+
+	/**
+	 * @required
+	 */
+	public function setSession(S $session)
+	{
+		$this->session = $session;
 	}
 
 	/**
@@ -230,7 +243,7 @@ class Utils
 		});');
 
 		$nodeselect = 'node.data.type == 1 || node.data.type == 2 || node.data.type == 3 || node.data.type == 4 || node.data.type == 7';
-		if (S::may('orga')) {
+		if ($this->session->may('orga')) {
 			$nodeselect = 'true';
 		}
 

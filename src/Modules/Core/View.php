@@ -15,17 +15,19 @@ class View
 	/* @var \Foodsharing\Lib\View\Utils */
 	protected $v_utils;
 	protected $func;
+	protected $session;
 
 	/**
 	 * @var \Twig\Environment
 	 */
 	public $twig;
 
-	public function __construct(\Twig\Environment $twig, Func $func, Utils $viewUtils)
+	public function __construct(\Twig\Environment $twig, Func $func, Utils $viewUtils, S $session)
 	{
 		$this->twig = $twig;
 		$this->func = $func;
 		$this->v_utils = $viewUtils;
+		$this->session = $session;
 	}
 
 	public function setSub($sub)
@@ -275,7 +277,7 @@ class View
 			tstring = ""+date.getYear() + ""+date.getMonth() + ""+date.getDate() + ""+date.getHours();
 			var localsource = [];
 			$.ajax({
-				url: "/cache/searchindex/' . S::user('token') . '.json",
+				url: "/cache/searchindex/' . $this->session->user('token') . '.json",
 				dataType: "json",
 				data: {t:$.now()},
 				success: function(json){

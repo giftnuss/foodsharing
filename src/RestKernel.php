@@ -10,7 +10,8 @@ use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 use Foodsharing\Lib\Session\S;
 
-S::init();
+$session = DI::$shared->get(S::class);
+$session->init();
 
 class RestKernel extends BaseKernel
 {

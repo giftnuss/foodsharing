@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Message;
 
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
 
@@ -16,7 +15,7 @@ class MessageXhr extends Control
 
 		parent::__construct();
 
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			echo '';
 			exit();
 		}
@@ -62,7 +61,7 @@ class MessageXhr extends Control
 	 */
 	public function infobar()
 	{
-		S::noWrite();
+		$this->session->noWrite();
 
 		$xhr = new Xhr();
 		$conversations = $this->model->listConversations(10);
@@ -121,7 +120,7 @@ class MessageXhr extends Control
 	{
 		$xhr = new Xhr();
 		if ($this->mayConversation($_POST['c'])) {
-			S::noWrite();
+			$this->session->noWrite();
 
 			if (isset($_POST['b'])) {
 				$body = trim($_POST['b']);
@@ -140,8 +139,8 @@ class MessageXhr extends Control
 								'id' => $message_id,
 								'cid' => (int)$_POST['c'],
 								'fs_id' => $this->func->fsId(),
-								'fs_name' => S::user('name'),
-								'fs_photo' => S::user('photo'),
+								'fs_name' => $this->session->user('name'),
+								'fs_photo' => $this->session->user('photo'),
 								'body' => $body,
 								'time' => date('Y-m-d H:i:s')
 							));
@@ -164,8 +163,8 @@ class MessageXhr extends Control
 							'id' => $message_id,
 							'body' => $body,
 							'time' => date('Y-m-d H:i:s'),
-							'fs_photo' => S::user('photo'),
-							'fs_name' => S::user('name'),
+							'fs_photo' => $this->session->user('photo'),
+							'fs_name' => $this->session->user('name'),
 							'fs_id' => $this->func->fsId()
 						));
 						$xhr->send();
@@ -182,7 +181,7 @@ class MessageXhr extends Control
 	 */
 	public function loadconvlist()
 	{
-		S::noWrite();
+		$this->session->noWrite();
 
 		if ($conversations = $this->model->listConversations()) {
 			$xhr = new Xhr();
@@ -199,7 +198,7 @@ class MessageXhr extends Control
 	private function mayConversation($conversation_id)
 	{
 		// first get the session array
-		if (!($ids = S::get('msg_conversations'))) {
+		if (!($ids = $this->session->get('msg_conversations'))) {
 			$ids = array();
 		}
 
@@ -208,7 +207,7 @@ class MessageXhr extends Control
 			return true;
 		} elseif ($this->model->mayConversation($conversation_id)) {
 			$ids[$conversation_id] = true;
-			S::set('msg_conversations', $ids);
+			$this->session->set('msg_conversations', $ids);
 
 			return true;
 		}
@@ -334,7 +333,7 @@ class MessageXhr extends Control
 
 	public function people()
 	{
-		S::noWrite();
+		$this->session->noWrite();
 
 		$term = trim($_GET['term']);
 		if ($people = $this->model->findConnectedPeople($term)) {

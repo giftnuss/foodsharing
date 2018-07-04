@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Login;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Services\SearchService;
 use Symfony\Component\Form\FormFactoryBuilder;
@@ -50,7 +49,7 @@ class LoginControl extends Control
 
 	public function index(Request $request, Response $response)
 	{
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			$has_subpage = $request->query->has('sub');
 
 			$form = $this->formFactory->getFormFactory()->create(LoginForm::class);
@@ -104,7 +103,7 @@ class LoginControl extends Control
 		$password = $request->request->get('login_form')['password'];
 
 		if ($this->model->login($email_address, $password)) {
-			$token = $this->searchService->writeSearchIndexToDisk(S::id(), S::user('token'));
+			$token = $this->searchService->writeSearchIndexToDisk($this->session->id(), $this->session->user('token'));
 
 			if (isset($_POST['ismob'])) {
 				$_SESSION['mob'] = (int)$_POST['ismob'];

@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Bell;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
@@ -25,11 +24,11 @@ class BellXhr extends Control
 	 */
 	public function infobar()
 	{
-		S::set('badge-info', 0);
-		S::noWrite();
+		$this->session->set('badge-info', 0);
+		$this->session->noWrite();
 
 		$xhr = new Xhr();
-		$bells = $this->gateway->listBells(S::id(), 20);
+		$bells = $this->gateway->listBells($this->session->id(), 20);
 
 		if (!empty($rbells)) {
 			if ($bells) {
@@ -80,8 +79,8 @@ class BellXhr extends Control
 		/*
 		 * additional bells for new fairteiler
 		 */
-		if (S::may('bot')) {
-			if ($fbells = $this->gateway->getFairteilerBells(S::getBotBezirkIds())) {
+		if ($this->session->may('bot')) {
+			if ($fbells = $this->gateway->getFairteilerBells($this->session->getBotBezirkIds())) {
 				$bbells = array();
 
 				foreach ($fbells as $b) {
@@ -121,6 +120,6 @@ class BellXhr extends Control
 	 */
 	public function delbell()
 	{
-		$this->gateway->delBellForFoodsaver($_GET['id'], S::id());
+		$this->gateway->delBellForFoodsaver($_GET['id'], $this->session->id());
 	}
 }

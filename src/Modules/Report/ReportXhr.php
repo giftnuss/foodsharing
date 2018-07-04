@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Report;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
@@ -183,7 +182,7 @@ class ReportXhr extends Control
 		if ($_GET['reason_id'] === 2) {
 			$reason_id = 2;
 		}
-		$this->reportGateway->addBetriebReport($_GET['fsid'], S::id(), $reason_id, $_GET['reason'], $_GET['msg'], (int)$_GET['bid']);
+		$this->reportGateway->addBetriebReport($_GET['fsid'], $this->session->id(), $reason_id, $_GET['reason'], $_GET['msg'], (int)$_GET['bid']);
 
 		return [
 			'status' => 1,

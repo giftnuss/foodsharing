@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Map;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
 
@@ -35,7 +34,7 @@ class MapControl extends Control
 			$this->view->lMap($center)
 		);
 
-		if (S::may('fs') && isset($_GET['bid'])) {
+		if ($this->session->may('fs') && isset($_GET['bid'])) {
 			$center = $this->model->getValues(array('lat', 'lon'), 'betrieb', (int)$_GET['bid']);
 
 			$this->func->addJs('

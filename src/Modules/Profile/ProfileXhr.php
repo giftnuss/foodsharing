@@ -6,7 +6,6 @@ use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreModel;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrDialog;
 
 class ProfileXhr extends Control
@@ -26,7 +25,7 @@ class ProfileXhr extends Control
 
 		parent::__construct();
 
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			return array(
 				'status' => 1,
 				'script' => 'login();'
@@ -40,7 +39,7 @@ class ProfileXhr extends Control
 			if (isset($fs['id'])) {
 				$this->foodsaver = $fs;
 				$this->foodsaver['mailbox'] = false;
-				if (S::may('orga') && (int)$fs['mailbox_id'] > 0) {
+				if ($this->session->may('orga') && (int)$fs['mailbox_id'] > 0) {
 					$this->foodsaver['mailbox'] = $this->model->getVal('name', 'mailbox', $fs['mailbox_id']) . '@' . DEFAULT_EMAIL_HOST;
 				}
 
@@ -105,7 +104,7 @@ class ProfileXhr extends Control
 	public function history()
 	{
 		$bids = $this->regionGateway->getFsBezirkIds($_GET['fsid']);
-		if (S::may() && (S::may('orga') || $this->func->isBotForA($bids, false, false))) {
+		if ($this->session->may() && ($this->session->may('orga') || $this->func->isBotForA($bids, false, false))) {
 			$dia = new XhrDialog();
 			if ($_GET['type'] == 0) {
 				$history = $this->model->getVerifyHistory($_GET['fsid']);

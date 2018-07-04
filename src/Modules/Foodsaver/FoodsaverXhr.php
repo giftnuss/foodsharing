@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Foodsaver;
 
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class FoodsaverXhr extends Control
@@ -19,7 +18,7 @@ class FoodsaverXhr extends Control
 		parent::__construct();
 
 		// permission check
-		if (!S::may('orga') && !$this->func->isBotFor($_GET['bid'])) {
+		if (!$this->session->may('orga') && !$this->func->isBotFor($_GET['bid'])) {
 			return false;
 		}
 	}

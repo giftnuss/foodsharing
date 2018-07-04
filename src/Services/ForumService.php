@@ -23,6 +23,7 @@ class ForumService
 	/* @var Model */
 	private $model;
 	private $func;
+	private $session;
 
 	public function __construct(
 		BellGateway $bellGateway,
@@ -30,6 +31,7 @@ class ForumService
 		FoodsaverGateway $foodsaverGateway,
 		ForumGateway $forumGateway,
 		Func $func,
+		S $session,
 		Model $model,
 		RegionGateway $regionGateway
 	) {
@@ -38,6 +40,7 @@ class ForumService
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumGateway = $forumGateway;
 		$this->func = $func;
+		$this->session = $session;
 		$this->model = $model;
 		$this->regionGateway = $regionGateway;
 	}
@@ -92,7 +95,7 @@ class ForumService
 			'forum_answer',
 			'fa fa-comments',
 			['href' => $this->url($info['region_id'], $info['ambassador_forum'], $threadId, $postId)],
-			['user' => S::user('name'), 'forum' => $regionName],
+			['user' => $this->session->user('name'), 'forum' => $regionName],
 			'forum-post-' . $postId
 		);
 	}
@@ -133,9 +136,9 @@ class ForumService
 	public function notifyFollowersNewPost($threadId, $rawPostBody, $postFrom, $postId)
 	{
 		$body = nl2br(htmlentities($rawPostBody));
-		if ($follower = $this->forumGateway->getThreadFollower(S::id(), $threadId)) {
+		if ($follower = $this->forumGateway->getThreadFollower($this->session->id(), $threadId)) {
 			$info = $this->forumGateway->getThreadInfo($threadId);
-			$poster = $this->model->getVal('name', 'foodsaver', S::id());
+			$poster = $this->model->getVal('name', 'foodsaver', $this->session->id());
 			foreach ($follower as $f) {
 				$this->func->tplMail(19, $f['email'], array(
 					'anrede' => $this->func->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),

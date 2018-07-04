@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Blog;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 
 class BlogControl extends Control
@@ -111,9 +110,9 @@ class BlogControl extends Control
 
 			$this->func->addBread($this->func->s('bread_new_blog_entry'));
 
-			$bezirke = S::getRegions();
-			if (!S::may('orga')) {
-				$bot_ids = S::getBotBezirkIds();
+			$bezirke = $this->session->getRegions();
+			if (!$this->session->may('orga')) {
+				$bot_ids = $this->session->getBotBezirkIds();
 				foreach ($bezirke as $k => $v) {
 					if ($v['type'] != 7 || !in_array($v['id'], $bot_ids)) {
 						unset($bezirke[$k]);
@@ -158,7 +157,7 @@ class BlogControl extends Control
 			$this->func->addBread($this->func->s('bread_edit_blog_entry'));
 
 			$this->func->setEditData($data);
-			$bezirke = S::getRegions();
+			$bezirke = $this->session->getRegions();
 
 			$this->func->addContent($this->view->blog_entry_form($bezirke));
 

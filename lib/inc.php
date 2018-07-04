@@ -10,7 +10,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 require_once 'config.inc.php';
-S::init();
+
+$session = DI::$shared->get(S::class);
+$session->init();
+
 if (isset($g_page_cache)) {
 	$cache = new Caching($g_page_cache);
 	$cache->lookup();

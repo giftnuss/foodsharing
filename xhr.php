@@ -10,7 +10,11 @@ require __DIR__ . '/includes/setup.php';
 
 require_once 'config.inc.php';
 
-S::init();
+/* @var $session S */
+$session = DI::$shared->get(S::class);
+
+$session->init();
+
 if (isset($g_page_cache)) {
 	$cache = new Caching($g_page_cache);
 	$cache->lookup();
@@ -22,7 +26,7 @@ $action = $_GET['f'];
 
 $db = new Model();
 
-$db->updateActivity(S::id());
+$db->updateActivity($session->id());
 if (isset($_GET['f'])) {
 	/* @var $xhr XhrMethods */
 	$xhr = DI::$shared->get(XhrMethods::class);

@@ -28,6 +28,7 @@ class XhrMethods
 {
 	private $model;
 	private $func;
+	private $session;
 	private $v_utils;
 	private $xhrViewUtils;
 	private $storeModel;
@@ -49,6 +50,7 @@ class XhrMethods
 	 */
 	public function __construct(
 		Func $func,
+		S $session,
 		Model $model,
 		Utils $viewUtils,
 		ViewUtils $xhrViewUtils,
@@ -65,6 +67,7 @@ class XhrMethods
 		ImageManager $imageManager)
 	{
 		$this->func = $func;
+		$this->session = $session;
 		$this->model = $model;
 		$this->v_utils = $viewUtils;
 		$this->xhrViewUtils = $xhrViewUtils;
@@ -143,7 +146,7 @@ class XhrMethods
 		$this->func->incLang('Store');
 		$this->func->incLang('StoreUser');
 
-		if ($this->storeGateway->isInTeam(S::id(), $data['bid']) || $this->func->isBotschafter() || $this->func->isOrgaTeam()) {
+		if ($this->storeGateway->isInTeam($this->session->id(), $data['bid']) || $this->func->isBotschafter() || $this->func->isOrgaTeam()) {
 			if ($out = $this->model->q('
 				SELECT 	n.id,
 						n.`text`,
@@ -243,7 +246,7 @@ class XhrMethods
 
 	public function xhr_grabInfo($data)
 	{
-		if (S::may()) {
+		if ($this->session->may()) {
 			Mem::delPageCache('/?page=dashboard');
 			$fields = $this->func->unsetAll($data, array('photo_public', 'lat', 'lon', 'stadt', 'plz', 'anschrift'));
 
@@ -255,7 +258,7 @@ class XhrMethods
 
 	public function xhr_addPinPost($data)
 	{
-		if ($this->storeGateway->isInTeam(S::id(), $data['bid']) || $this->func->isOrgaTeam() || $this->func->isBotschafter()) {
+		if ($this->storeGateway->isInTeam($this->session->id(), $data['bid']) || $this->func->isOrgaTeam() || $this->func->isBotschafter()) {
 			if (isset($_SESSION['last_pinPost'])) {
 				if ((time() - $_SESSION['last_pinPost']) < 2) {
 					return $this->xhr_getPinPost($data);
@@ -275,7 +278,7 @@ class XhrMethods
 				$this->bellGateway->addBell($data['team'], 'store_wallpost_title', 'store_wallpost', 'img img-store brown', array(
 					'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
 				), array(
-					'user' => S::user('name'),
+					'user' => $this->session->user('name'),
 					'name' => $betrieb
 				), 'store-wallpost-' . (int)$data['bid']);
 				$_SESSION['last_pinPost'] = time();
@@ -432,7 +435,7 @@ class XhrMethods
 	public function xhr_jsonBetriebe($data)
 	{
 		$b = '';
-		if (($this->func->isBotschafter() || $this->func->isOrgaTeam() || S::may('fs') || isset($foodsaver['botschafter']))) {
+		if (($this->func->isBotschafter() || $this->func->isOrgaTeam() || $this->session->may('fs') || isset($foodsaver['botschafter']))) {
 			$b = $this->model->q(' SELECT `id`,lat,lon FROM fs_betrieb WHERE lat != "" ');
 		}
 
@@ -441,14 +444,14 @@ class XhrMethods
 
 	public function xhr_bBubble($data)
 	{
-		if (S::may('fs')) {
-			if ($b = $this->storeGateway->getMyBetrieb(S::id(), $data['id'])) {
+		if ($this->session->may('fs')) {
+			if ($b = $this->storeGateway->getMyBetrieb($this->session->id(), $data['id'])) {
 				$b['inTeam'] = false;
 				$b['pendingRequest'] = false;
-				if ($this->storeGateway->isInTeam(S::id(), $b['id'])) {
+				if ($this->storeGateway->isInTeam($this->session->id(), $b['id'])) {
 					$b['inTeam'] = true;
 				}
-				if ($this->storeGateway->userAppliedForStore(S::id(), $b['id'])) {
+				if ($this->storeGateway->userAppliedForStore($this->session->id(), $b['id'])) {
 					$b['pendingRequest'] = true;
 				}
 
@@ -485,7 +488,7 @@ class XhrMethods
 	public function xhr_jsonFoodsaver($data)
 	{
 		$fs = '';
-		if (($this->func->isBotschafter() || $this->func->isOrgaTeam() || S::may('fs') || isset($foodsaver['botschafter']))) {
+		if (($this->func->isBotschafter() || $this->func->isOrgaTeam() || $this->session->may('fs') || isset($foodsaver['botschafter']))) {
 			$fs = $this->model->q(' SELECT `id`, `photo_public`,`lat`,`lon` FROM `fs_foodsaver` WHERE `active` = 1 AND lat != "" ');
 		}
 
@@ -655,7 +658,7 @@ class XhrMethods
 
 	public function xhr_cropagain($data)
 	{
-		$id = S::id();
+		$id = $this->session->id();
 		if ($photo = $this->model->getVal('photo', 'foodsaver', $id)) {
 			$path = ROOT_DIR . 'images';
 			$img = $photo;
@@ -846,7 +849,7 @@ class XhrMethods
 					@unlink('./tmp/tmp_' . $file);
 
 					$this->foodsaverGateway->updatePhoto($user_id, str_replace('/', '', $file));
-					S::setPhoto($file);
+					$this->session->setPhoto($file);
 
 					return '<html><head></head><body onload="parent.uploadPhotoReady(' . $user_id . ',\'./images/mini_q_' . $file . '\');"></body></html>';
 				}
@@ -993,7 +996,7 @@ class XhrMethods
 
 				$this->func->makeThumbs($file);
 
-				$this->foodsaverGateway->updatePhoto(S::id(), $file);
+				$this->foodsaverGateway->updatePhoto($this->session->id(), $file);
 
 				$func = 'parent.picFinish(\'' . $img . '\',\'' . $id . '\');';
 			} else {
@@ -1030,7 +1033,7 @@ class XhrMethods
 
 	public function xhr_update_abholen($data)
 	{
-		if (S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $data['bid']) || $this->func->isBotschafter()) {
+		if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid']) || $this->func->isBotschafter()) {
 			$this->model->del('DELETE FROM 	`fs_abholzeiten` WHERE `betrieb_id` = ' . (int)$data['bid']);
 
 			if (is_array($data['newfetchtime'])) {
@@ -1057,7 +1060,7 @@ class XhrMethods
 			$this->bellGateway->addBell($data['team'], 'store_cr_times_title', 'store_cr_times', 'img img-store brown', array(
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
 			), array(
-				'user' => S::user('name'),
+				'user' => $this->session->user('name'),
 				'name' => $betrieb
 			), 'store-time-' . (int)$data['bid']);
 
@@ -1078,7 +1081,7 @@ class XhrMethods
 
 	public function xhr_bezirkTree($data)
 	{
-		if ($bezirk = $this->regionGateway->getBezirkByParent($data['p'], S::isOrgaTeam())) {
+		if ($bezirk = $this->regionGateway->getBezirkByParent($data['p'], $this->session->isOrgaTeam())) {
 			$out = array();
 			foreach ($bezirk as $b) {
 				$hc = false;
@@ -1107,7 +1110,7 @@ class XhrMethods
 			1 => true,
 			2 => true
 		);
-		if ((S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $_GET['bid'])) && isset($allow[(int)$_GET['s']])) {
+		if (($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $_GET['bid'])) && isset($allow[(int)$_GET['s']])) {
 			return $this->model->update('
 			UPDATE `fs_betrieb`
 			SET 	`team_status` = ' . (int)$_GET['s'] . '
@@ -1236,7 +1239,7 @@ class XhrMethods
 					}
 				}
 				$button = '';
-				if ($this->storeGateway->isInTeam(S::id(), $b['id'])) {
+				if ($this->storeGateway->isInTeam($this->session->id(), $b['id'])) {
 					$button = '<div style="text-align:center;padding:top:8px;"><span onclick="goTo(\'/?page=fsbetrieb&id=' . (int)$b['id'] . '\');" class="bigbutton cardbutton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Zur Teamseite</span></span></div>';
 				} else {
 					$button = '<div style="text-align:center;padding:top:8px;"><span onclick="betriebRequest(' . (int)$b['id'] . ');" class="bigbutton cardbutton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><div style="text-align:center;padding:top:8px;"><span class="ui-button-text">Ich möchte hier Lebensmittel abholen</span></span></div>';
@@ -1274,7 +1277,7 @@ class XhrMethods
 
 	public function xhr_denyRequest($data)
 	{
-		if (S::isOrgaTeam() || S::id() == $data['fsid'] || $this->storeGateway->isVerantwortlich(S::id(), $data['bid'])) {
+		if ($this->session->isOrgaTeam() || $this->session->id() == $data['fsid'] || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid'])) {
 			$this->storeModel->denyRequest($data['fsid'], $data['bid']);
 
 			$msg = 'Deine Anfrage wurde erfolgreich zur&uuml;ckgezogen!';
@@ -1289,7 +1292,7 @@ class XhrMethods
 
 	public function xhr_acceptRequest($data)
 	{
-		if (S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $data['bid']) || $this->func->isBotschafter()) {
+		if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid']) || $this->func->isBotschafter()) {
 			$this->storeModel->acceptRequest($data['fsid'], $data['bid']);
 
 			$this->storeGateway->add_betrieb_notiz(array(
@@ -1309,7 +1312,7 @@ class XhrMethods
 
 	public function xhr_warteRequest($data)
 	{
-		if (S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $data['bid']) || $this->func->isBotschafter()) {
+		if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid']) || $this->func->isBotschafter()) {
 			$this->storeModel->warteRequest($data['fsid'], $data['bid']);
 
 			return json_encode(array('status' => 1));
@@ -1329,7 +1332,7 @@ class XhrMethods
 			$this->bellGateway->addBell($biebs, 'store_new_request_title', 'store_new_request', 'img img-store brown', array(
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['id']
 			), array(
-				'user' => S::user('name'),
+				'user' => $this->session->user('name'),
 				'name' => $betrieb
 			), 'store-request-' . (int)$data['id']);
 		} else {
@@ -1349,7 +1352,7 @@ class XhrMethods
 			$this->bellGateway->addBell($botsch, 'store_new_request_title', 'store_new_request', 'img img-store brown', array(
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['id']
 			), array(
-				'user' => S::user('name'),
+				'user' => $this->session->user('name'),
 				'name' => $betrieb
 			), 'store-request-' . (int)$data['id']);
 		}
@@ -1385,14 +1388,14 @@ class XhrMethods
 
 	public function xhr_addFetcher($data)
 	{
-		if (($this->storeGateway->isInTeam(S::id(), $data['bid']) || $this->func->isBotschafter() || $this->func->isOrgaTeam()) && $this->func->isVerified()) {
+		if (($this->storeGateway->isInTeam($this->session->id(), $data['bid']) || $this->func->isBotschafter() || $this->func->isOrgaTeam()) && $this->func->isVerified()) {
 			/*
 			 * 	[f] => addFetcher
 				[date] => 2013-09-23 20:00:00
 				[bid] => 1
 			 */
 			$confirm = 0;
-			if (S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $data['bid'])) {
+			if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid'])) {
 				$confirm = 1;
 			}
 
@@ -1422,7 +1425,7 @@ class XhrMethods
 				do {
 					if (date('w', $cur_date) == $dow) {
 						++$count;
-						$this->storeGateway->addFetcher(S::id(), $data['bid'], date('Y-m-d', $cur_date) . ' ' . $time, $confirm);
+						$this->storeGateway->addFetcher($this->session->id(), $data['bid'], date('Y-m-d', $cur_date) . ' ' . $time, $confirm);
 					}
 					if ($count > 20) {
 						break;
@@ -1437,7 +1440,7 @@ class XhrMethods
 				return 0;
 			} else {
 				$data['date'] = date('Y-m-d H:i:s', strtotime($data['date']));
-				if ($this->storeGateway->addFetcher(S::id(), $data['bid'], $data['date'], $confirm)) {
+				if ($this->storeGateway->addFetcher($this->session->id(), $data['bid'], $data['date'], $confirm)) {
 					return $this->func->img($this->model->getVal('photo', 'foodsaver', $this->func->fsId()));
 				}
 			}
@@ -1449,7 +1452,7 @@ class XhrMethods
 	public function xhr_delDate($data)
 	{
 		$status = 0;
-		if ($this->storeGateway->isInTeam(S::id(), $data['bid']) && isset($data['date'])) {
+		if ($this->storeGateway->isInTeam($this->session->id(), $data['bid']) && isset($data['date'])) {
 			if ($this->storeModel->deleteFetchDate($this->func->fsId(), $data['bid'], $data['date'])) {
 				$status = 1;
 			}
@@ -1466,7 +1469,7 @@ class XhrMethods
 
 	public function xhr_fetchDeny($data)
 	{
-		if ((S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $data['bid'])) && isset($data['date'])) {
+		if (($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid'])) && isset($data['date'])) {
 			$this->storeModel->deleteFetchDate($data['fsid'], $data['bid'], date('Y-m-d H:i:s', strtotime($data['date'])));
 
 			return 1;
@@ -1475,7 +1478,7 @@ class XhrMethods
 
 	public function xhr_fetchConfirm($data)
 	{
-		if (S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $data['bid'])) {
+		if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid'])) {
 			$this->storeGateway->confirmFetcher($data['fsid'], $data['bid'], date('Y-m-d H:i:s', strtotime($data['date'])));
 
 			return 1;
@@ -1598,7 +1601,7 @@ class XhrMethods
 
 	public function xhr_bcontext($data)
 	{
-		if (S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $data['bid']) || $this->func->isBotFor($data['bzid'])) {
+		if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid']) || $this->func->isBotFor($data['bzid'])) {
 			$check = false;
 			if ($data['action'] == 'toteam') {
 				$check = true;

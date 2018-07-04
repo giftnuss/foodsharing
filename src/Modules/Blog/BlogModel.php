@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Blog;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -106,7 +105,7 @@ class BlogModel extends Model
 	{
 		$not = '';
 		if (!$this->func->isOrgaTeam()) {
-			$not = 'WHERE 		`bezirk_id` IN (' . implode(',', S::getBezirkIds()) . ')';
+			$not = 'WHERE 		`bezirk_id` IN (' . implode(',', $this->session->getBezirkIds()) . ')';
 		}
 
 		return $this->q('
@@ -205,7 +204,7 @@ class BlogModel extends Model
 			'fa fa-bullhorn',
 			array('href' => '/?page=blog&sub=edit&id=' . $id),
 			array(
-				'user' => S::user('name'),
+				'user' => $this->session->user('name'),
 				'teaser' => $this->func->tt($data['teaser'], 100),
 				'title' => $data['name']
 			),

@@ -9,11 +9,13 @@ class Caching
 {
 	private $cacheRules;
 	private $cacheMode;
+	private $session;
 
-	public function __construct($cache_rules)
+	public function __construct($cache_rules, S $session)
 	{
+		$this->session = $session;
 		$this->cacheRules = $cache_rules;
-		$this->cacheMode = S::may() ? 'u' : 'g';
+		$this->cacheMode = $this->session->may() ? 'u' : 'g';
 	}
 
 	public function lookup()

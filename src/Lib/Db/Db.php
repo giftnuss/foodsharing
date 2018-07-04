@@ -21,6 +21,11 @@ class Db
 	 */
 	protected $func;
 
+	/**
+	 * @var S
+	 */
+	protected $session;
+
 	public function __construct()
 	{
 		$this->values = array();
@@ -32,6 +37,14 @@ class Db
 	public function setFunc(Func $func)
 	{
 		$this->func = $func;
+	}
+
+	/**
+	 * @required
+	 */
+	public function setSession(S $session)
+	{
+		$this->session = $session;
 	}
 
 	/**
@@ -431,7 +444,7 @@ class Db
 				WHERE 		`id` = ' . (int)$fs_id . '
 		')
 		) {
-			S::set('g_location', array(
+			$this->session->set('g_location', array(
 				'lat' => $fs['lat'],
 				'lon' => $fs['lon']
 			));
@@ -491,8 +504,8 @@ class Db
 				$hastodo_id = 3;
 			}
 
-			S::set('hastodoquiz', $hastodo);
-			S::set('hastodoquiz-id', $hastodo_id);
+			$this->session->set('hastodoquiz', $hastodo);
+			$this->session->set('hastodoquiz-id', $hastodo_id);
 
 			/*
 			 * temp quiz stuff end...
@@ -530,7 +543,7 @@ class Db
 			/*
 			 * New Session Management
 			 */
-			S::login($fs);
+			$this->session->login($fs);
 
 			/*
 			 * Add entry into user -> session set
@@ -544,7 +557,7 @@ class Db
 			if (!empty($fs['option'])) {
 				$options = unserialize($fs['option']);
 				foreach ($options as $key => $val) {
-					S::setOption($key, $val, $this);
+					$this->session->setOption($key, $val, $this);
 				}
 			}
 
@@ -664,7 +677,7 @@ class Db
 				$_SESSION['client']['group']['verantwortlich'] = true;
 				$mailbox = true;
 			}
-			S::set('mailbox', $mailbox);
+			$this->session->set('mailbox', $mailbox);
 		} else {
 			$this->func->goPage('logout');
 		}

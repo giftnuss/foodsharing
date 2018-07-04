@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\RegionAdmin;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -19,7 +18,7 @@ class RegionAdminControl extends Control
 
 		parent::__construct();
 
-		if (!S::may('orga')) {
+		if (!$this->session->may('orga')) {
 			$this->func->go('/');
 		}
 	}

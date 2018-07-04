@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\EmailTemplateAdmin;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 
 class EmailTemplateAdminControl extends Control
@@ -17,7 +16,7 @@ class EmailTemplateAdminControl extends Control
 
 		parent::__construct();
 
-		if (!S::may('orga')) {
+		if (!$this->session->may('orga')) {
 			$this->func->go('/');
 		}
 	}

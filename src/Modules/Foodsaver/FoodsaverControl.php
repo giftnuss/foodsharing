@@ -5,7 +5,6 @@ namespace Foodsharing\Modules\Foodsaver;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Settings\SettingsModel;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Store\StoreModel;
 
 class FoodsaverControl extends Control
@@ -43,7 +42,7 @@ class FoodsaverControl extends Control
 	public function index()
 	{
 		// check bezirk_id and permissions
-		if (isset($_GET['bid']) && ($bezirk = $this->regionGateway->getBezirk($_GET['bid'])) && (S::may('orga') || $this->func->isBotForA(array($_GET['bid']), false, true))) {
+		if (isset($_GET['bid']) && ($bezirk = $this->regionGateway->getBezirk($_GET['bid'])) && ($this->session->may('orga') || $this->func->isBotForA(array($_GET['bid']), false, true))) {
 			// permission granted so we can load the foodsavers
 			if ($foodsaver = $this->model->listFoodsaver($_GET['bid'])) {
 				// add breadcrumps
@@ -97,7 +96,7 @@ class FoodsaverControl extends Control
 
 	private function deleteAccount($id)
 	{
-		if ((S::may('orga'))) {
+		if (($this->session->may('orga'))) {
 			$foodsaver = $this->model->getValues(array('email', 'name', 'nachname', 'bezirk_id'), 'foodsaver', $id);
 
 			$this->foodsaverGateway->del_foodsaver($id);

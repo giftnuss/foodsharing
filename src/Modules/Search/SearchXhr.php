@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Search;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 
 class SearchXhr extends Control
@@ -19,7 +18,7 @@ class SearchXhr extends Control
 
 	public function search()
 	{
-		if (S::may('fs')) {
+		if ($this->session->may('fs')) {
 			if ($res = $this->helper->search($_GET['s'])) {
 				$out = array();
 				foreach ($res as $key => $value) {

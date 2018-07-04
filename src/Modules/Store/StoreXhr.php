@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Store;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
@@ -20,7 +19,7 @@ class StoreXhr extends Control
 
 		parent::__construct();
 
-		if (!S::may('fs')) {
+		if (!$this->session->may('fs')) {
 			exit();
 		}
 	}
@@ -61,7 +60,7 @@ class StoreXhr extends Control
 
 	public function getfetchhistory()
 	{
-		if (S::may() && (S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $_GET['bid']) || S::may('orga'))) {
+		if ($this->session->may() && ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $_GET['bid']) || $this->session->may('orga'))) {
 			if ($history = $this->model->getFetchHistory($_GET['bid'], $_GET['from'], $_GET['to'])) {
 				return array(
 					'status' => 1,
@@ -78,7 +77,7 @@ class StoreXhr extends Control
 
 	public function fetchhistory()
 	{
-		if (S::may() && (S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $_GET['bid']) || S::may('orga'))) {
+		if ($this->session->may() && ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $_GET['bid']) || $this->session->may('orga'))) {
 			$dia = new XhrDialog();
 			$dia->setTitle('Abholungshistorie');
 
@@ -202,7 +201,7 @@ class StoreXhr extends Control
 	{
 		if (isset($_GET['ids']) && is_array($_GET['ids']) && count($_GET['ids']) > 0) {
 			foreach ($_GET['ids'] as $b) {
-				if ((S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $b['id'])) && (int)$b['v'] > 0) {
+				if (($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $b['id'])) && (int)$b['v'] > 0) {
 					$this->model->updateBetriebBezirk($b['id'], $b['v']);
 				}
 			}
@@ -227,7 +226,7 @@ class StoreXhr extends Control
 					$dia->addOpt('width', '650px');
 					$dia->noOverflow();
 
-					$bezirks = S::getRegions();
+					$bezirks = $this->session->getRegions();
 
 					foreach ($bezirks as $key => $b) {
 						if (!in_array($b['type'], [Type::CITY, Type::DISTRICT, Type::REGION, Type::PART_OF_TOWN])) {
@@ -289,9 +288,9 @@ class StoreXhr extends Control
 	public function signout()
 	{
 		$xhr = new Xhr();
-		if (S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $_GET['id'])) {
+		if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $_GET['id'])) {
 			$xhr->addMessage($this->func->s('signout_error_admin'), 'error');
-		} elseif ($this->storeGateway->isInTeam(S::id(), $_GET['id'])) {
+		} elseif ($this->storeGateway->isInTeam($this->session->id(), $_GET['id'])) {
 			$this->model->signout($_GET['id'], $this->func->fsId());
 			$xhr->addScript('goTo("/?page=relogin&url=" + encodeURIComponent("/?page=dashboard") );');
 		} else {

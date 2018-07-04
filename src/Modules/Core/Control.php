@@ -29,6 +29,12 @@ abstract class Control
 	 * @var Func
 	 */
 	protected $func;
+
+	/**
+	 * @var S
+	 */
+	protected $session;
+
 	/**
 	 * @var Utils
 	 */
@@ -54,6 +60,7 @@ abstract class Control
 	public function __construct()
 	{
 		$this->func = DI::$shared->get(Func::class);
+		$this->session = DI::$shared->get(S::class);
 		$this->v_utils = DI::$shared->get(Utils::class);
 		$this->manualDb = DI::$shared->get(ManualDb::class);
 		$this->foodsaverGateway = DI::$shared->get(FoodsaverGateway::class);
@@ -120,7 +127,7 @@ abstract class Control
 				}
 			}
 		}
-		$this->manualDb->updateActivity(S::id());
+		$this->manualDb->updateActivity($this->session->id());
 	}
 
 	/**
@@ -306,7 +313,7 @@ abstract class Control
 		');
 		$posthtml = '';
 
-		if (S::may()) {
+		if ($this->session->may()) {
 			$posthtml = '
 				<div class="tools ui-padding">
 				<textarea id="wallpost-text" name="text" title="' . $this->func->s('write_teaser') . '" class="comment textarea inlabel"></textarea>
@@ -449,7 +456,7 @@ abstract class Control
 					if ($betriebName = $messageModel->getBetriebname($conversation_id)) {
 						$this->func->tplMail(30, $recipient['email'], array(
 							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-							'sender' => S::user('name'),
+							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
 							'chatname' => 'Betrieb ' . $betriebName,
 							'message' => $msg,
@@ -458,7 +465,7 @@ abstract class Control
 					} elseif ($memberNames = $messageModel->getChatMembers($conversation_id)) {
 						$this->func->tplMail(30, $recipient['email'], array(
 							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-							'sender' => S::user('name'),
+							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
 							'chatname' => implode(', ', $memberNames),
 							'message' => $msg,
@@ -467,7 +474,7 @@ abstract class Control
 					} else {
 						$this->func->tplMail($tpl_id, $recipient['email'], array(
 							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-							'sender' => S::user('name'),
+							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
 							'message' => $msg,
 							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->func->fsId() . 'cid=' . (int)$conversation_id

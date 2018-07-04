@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\WorkGroup;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
@@ -38,7 +37,7 @@ class WorkGroupControl extends Control
 
 	public function index(Request $request, Response $response)
 	{
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			$this->func->goLogin();
 		}
 
@@ -89,7 +88,7 @@ class WorkGroupControl extends Control
 	private function getSideMenuData($activeUrlPartial = null)
 	{
 		$countries = $this->model->getCountryGroups();
-		$bezirke = S::getRegions();
+		$bezirke = $this->session->getRegions();
 
 		$localRegions = array_filter($bezirke, function ($region) {
 			return !in_array($region['type'], [Type::COUNTRY, Type::WORKING_GROUP]);
@@ -128,8 +127,8 @@ class WorkGroupControl extends Control
 	private function list(Request $request, Response $response)
 	{
 		$parent = $request->query->getInt('p', 392);
-		$myApplications = $this->model->getApplications(S::id());
-		$myStats = $this->model->getStats(S::id());
+		$myApplications = $this->model->getApplications($this->session->id());
+		$myStats = $this->model->getStats($this->session->id());
 		$groups = $this->model->listGroups($parent);
 
 		$groups = array_map(
