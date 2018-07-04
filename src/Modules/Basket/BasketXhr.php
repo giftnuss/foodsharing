@@ -27,7 +27,7 @@ class BasketXhr extends Control
 		$this->view = $view;
 		$this->basketGateway = $basketGateway;
 
-		$this->status = array(
+		$this->status = [
 			'ungelesen' => Status::REQUESTED_MESSAGE_UNREAD,
 			'gelesen' => Status::REQUESTED_MESSAGE_READ,
 			'abgeholt' => Status::DELETED_PICKED_UP,
@@ -35,7 +35,7 @@ class BasketXhr extends Control
 			'nicht_gekommen' => Status::NOT_PICKED_UP,
 			'wall_follow' => Status::FOLLOWED,
 			'angeklickt' => Status::REQESTED,
-		);
+		];
 
 		parent::__construct();
 
@@ -45,8 +45,8 @@ class BasketXhr extends Control
 		$allowed = [
 			'bubble' => true,
 			'login' => true,
-			'basketchoords' => true,
-			'closebaskets' => true,
+			'basketCoordinates' => true,
+			'closeBaskets' => true,
 		];
 
 		if (!isset($allowed[$_GET['m']]) && !$this->session->may()) {
@@ -60,7 +60,7 @@ class BasketXhr extends Control
 		}
 	}
 
-	public function basketchoords(): void
+	public function basketCoordinates(): void
 	{
 		$xhr = new Xhr();
 		if ($baskets = $this->basketGateway->getBasketCoordinates()) {
@@ -70,7 +70,7 @@ class BasketXhr extends Control
 		$xhr->send();
 	}
 
-	public function newbasket(): array
+	public function newBasket(): array
 	{
 		$dia = new XhrDialog();
 		$dia->setTitle('Essenskorb anbieten');
@@ -271,7 +271,7 @@ class BasketXhr extends Control
 		$img->saveChanges();
 	}
 
-	public function closebaskets()
+	public function closeBaskets()
 	{
 		$xhr = new Xhr();
 
@@ -323,10 +323,10 @@ class BasketXhr extends Control
 			return $this->fsBubble($basket);
 		}
 
-		return array(
+		return [
 			'status' => 1,
 			'script' => 'pulseError("Essenskorb konnte nicht geladen werden");',
-		);
+		];
 	}
 
 	public function fsBubble($basket)
@@ -361,7 +361,7 @@ class BasketXhr extends Control
 			$dia->noOverflow();
 			$dia->addContent($this->view->contactTitle($basket));
 
-			$contact_type = array(1);
+			$contact_type = [1];
 
 			if (!empty($basket['contact_type'])) {
 				$contact_type = explode(':', $basket['contact_type']);

@@ -181,7 +181,7 @@ class DashboardView extends View
 	public function foodsharerMenu()
 	{
 		return $this->menu(array(
-			array('name' => $this->func->s('new_basket'), 'click' => "ajreq('newbasket',{app:'basket'});return false;"),
+			array('name' => $this->func->s('new_basket'), 'click' => "ajreq('newBasket',{app:'basket'});return false;"),
 			array('name' => $this->func->s('all_baskets'), 'href' => '/karte?load=baskets')
 		));
 	}

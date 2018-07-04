@@ -348,7 +348,7 @@ class Utils
 						<span style="display:none;" class="linkwrapper corner-all ui-shadow">
 							<ul class="linklist conversation-list">
 							</ul>
-							<a class="more" href="#" onclick="ajreq(\'newbasket\',{app:\'basket\'});return false;">Neuen Essenskorb anlegen</a>
+							<a class="more" href="#" onclick="ajreq(\'newBasket\',{app:\'basket\'});return false;">Neuen Essenskorb anlegen</a>
 						</span>
 
 					</li>
