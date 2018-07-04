@@ -6,7 +6,7 @@ use Exception;
 use Flourish\fImage;
 use Foodsharing\Debug\DebugBar;
 use Foodsharing\Lib\Func;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 use mysqli;
 
 class Db
@@ -22,7 +22,7 @@ class Db
 	protected $func;
 
 	/**
-	 * @var S
+	 * @var Session
 	 */
 	protected $session;
 
@@ -42,7 +42,7 @@ class Db
 	/**
 	 * @required
 	 */
-	public function setSession(S $session)
+	public function setSession(Session $session)
 	{
 		$this->session = $session;
 	}

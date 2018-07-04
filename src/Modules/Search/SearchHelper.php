@@ -2,14 +2,14 @@
 
 namespace Foodsharing\Modules\Search;
 
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 
 class SearchHelper
 {
 	private $searchGateway;
 	private $session;
 
-	public function __construct(SearchGateway $searchGateway, S $session)
+	public function __construct(SearchGateway $searchGateway, Session $session)
 	{
 		$this->searchGateway = $searchGateway;
 		$this->session = $session;

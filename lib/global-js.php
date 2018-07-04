@@ -2,13 +2,13 @@
 
 use Foodsharing\DI;
 use Foodsharing\Lib\Func;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 
 /* @var $func Func */
 $func = DI::$shared->get(Func::class);
 
-/* @var $session S */
-$session = DI::$shared->get(S::class);
+/* @var $session \Foodsharing\Lib\Session */
+$session = DI::$shared->get(Session::class);
 
 $user = '';
 if ($session->may()) {

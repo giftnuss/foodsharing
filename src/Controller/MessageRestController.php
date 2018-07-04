@@ -2,16 +2,16 @@
 
 namespace Foodsharing\Controller;
 
-use FOS\RestBundle\Controller\FOSRestController;
+use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Message\MessageModel;
-use Foodsharing\Lib\Session\S;
+use FOS\RestBundle\Controller\FOSRestController;
 
 class MessageRestController extends FOSRestController
 {
 	private $model;
 	private $session;
 
-	public function __construct(MessageModel $model, S $session)
+	public function __construct(MessageModel $model, Session $session)
 	{
 		$this->model = $model;
 		$this->session = $session;

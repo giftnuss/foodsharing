@@ -5,7 +5,7 @@ namespace Foodsharing\Services;
 use Flourish\fFile;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Mail\AsyncMail;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
@@ -31,7 +31,7 @@ class ForumService
 		FoodsaverGateway $foodsaverGateway,
 		ForumGateway $forumGateway,
 		Func $func,
-		S $session,
+		Session $session,
 		Model $model,
 		RegionGateway $regionGateway
 	) {

@@ -9,11 +9,10 @@ use Flourish\fImage;
 use Foodsharing\DI;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
 use Foodsharing\Modules\Region\RegionGateway;
-use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use JSMin;
 
 class Func
@@ -47,7 +46,7 @@ class Func
 	private $twig;
 
 	/**
-	 * @var S
+	 * @var Session
 	 */
 	private $session;
 
@@ -84,7 +83,7 @@ class Func
 	/**
 	 * @required
 	 */
-	public function setSession(S $session)
+	public function setSession(Session $session)
 	{
 		$this->session = $session;
 	}

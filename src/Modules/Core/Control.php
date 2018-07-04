@@ -7,7 +7,7 @@ use Foodsharing\Lib\Db\ManualDb;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Sanitizer;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Message\MessageModel;
@@ -31,7 +31,7 @@ abstract class Control
 	protected $func;
 
 	/**
-	 * @var S
+	 * @var \Foodsharing\Lib\Session
 	 */
 	protected $session;
 
@@ -60,7 +60,7 @@ abstract class Control
 	public function __construct()
 	{
 		$this->func = DI::$shared->get(Func::class);
-		$this->session = DI::$shared->get(S::class);
+		$this->session = DI::$shared->get(Session::class);
 		$this->v_utils = DI::$shared->get(Utils::class);
 		$this->manualDb = DI::$shared->get(ManualDb::class);
 		$this->foodsaverGateway = DI::$shared->get(FoodsaverGateway::class);

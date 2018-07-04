@@ -6,7 +6,6 @@ use Exception;
 use Flourish\fImage;
 use Flourish\fUpload;
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;

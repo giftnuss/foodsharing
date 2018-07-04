@@ -3,7 +3,7 @@
 namespace Foodsharing\Lib\Cache;
 
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 
 class Caching
 {
@@ -11,7 +11,7 @@ class Caching
 	private $cacheMode;
 	private $session;
 
-	public function __construct($cache_rules, S $session)
+	public function __construct($cache_rules, Session $session)
 	{
 		$this->session = $session;
 		$this->cacheRules = $cache_rules;

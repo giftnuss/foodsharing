@@ -3,7 +3,7 @@
 namespace Foodsharing\Services;
 
 use Foodsharing\Lib\Func;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreModel;
@@ -24,7 +24,7 @@ class SearchService
 		StoreModel $storeModel,
 		regionGateway $regionGateway,
 		Func $func,
-		S $session
+		Session $session
 	) {
 		$this->buddyGateway = $buddyGateway;
 		$this->workGroupModel = $workGroupModel;

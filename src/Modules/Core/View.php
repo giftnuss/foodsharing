@@ -5,7 +5,7 @@ namespace Foodsharing\Modules\Core;
 use Foodsharing\DI;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Func;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 
 class View
@@ -22,7 +22,7 @@ class View
 	 */
 	public $twig;
 
-	public function __construct(\Twig\Environment $twig, Func $func, Utils $viewUtils, S $session)
+	public function __construct(\Twig\Environment $twig, Func $func, Utils $viewUtils, Session $session)
 	{
 		$this->twig = $twig;
 		$this->func = $func;

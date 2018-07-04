@@ -4,14 +4,14 @@ use Foodsharing\DI;
 use Foodsharing\Lib\Cache\Caching;
 use Foodsharing\Lib\Db\ManualDb;
 use Foodsharing\Lib\Func;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 require_once 'config.inc.php';
 
-$session = DI::$shared->get(S::class);
+$session = DI::$shared->get(Session::class);
 $session->init();
 
 if (isset($g_page_cache)) {

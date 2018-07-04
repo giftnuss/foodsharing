@@ -2,7 +2,7 @@
 
 use Foodsharing\DI;
 use Foodsharing\Lib\Routing;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrResponses;
 
 require __DIR__ . '/includes/setup.php';
@@ -14,8 +14,8 @@ if (isset($_GET['app']) && isset($_GET['m'])) {
 	require_once 'config.inc.php';
 	require_once 'lang/DE/de.php';
 
-	/* @var $session S */
-	$session = DI::$shared->get(S::class);
+	/* @var $session \Foodsharing\Lib\Session */
+	$session = DI::$shared->get(Session::class);
 	$session->init();
 
 	$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();

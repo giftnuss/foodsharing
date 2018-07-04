@@ -3,7 +3,7 @@
 namespace Foodsharing\Lib\View;
 
 use Foodsharing\Lib\Func;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 
 class Utils
 {
@@ -14,7 +14,7 @@ class Utils
 	private $func;
 
 	/**
-	 * @var S
+	 * @var \Foodsharing\Lib\Session
 	 */
 	private $session;
 
@@ -39,7 +39,7 @@ class Utils
 	/**
 	 * @required
 	 */
-	public function setSession(S $session)
+	public function setSession(Session $session)
 	{
 		$this->session = $session;
 	}

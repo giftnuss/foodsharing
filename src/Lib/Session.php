@@ -1,16 +1,16 @@
 <?php
 
-namespace Foodsharing\Lib\Session;
+namespace Foodsharing\Lib;
 
+use Exception;
 use Flourish\fAuthorization;
 use Flourish\fSession;
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Lib\Func;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Legal\LegalControl;
 use Foodsharing\Modules\Legal\LegalGateway;
 
-class S
+class Session
 {
 	private $func;
 	private $legalGateway;

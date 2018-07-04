@@ -2,7 +2,7 @@
 
 use Foodsharing\DI;
 use Foodsharing\Lib\Cache\Caching;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrMethods;
 use Foodsharing\Modules\Core\Model;
 
@@ -10,8 +10,8 @@ require __DIR__ . '/includes/setup.php';
 
 require_once 'config.inc.php';
 
-/* @var $session S */
-$session = DI::$shared->get(S::class);
+/* @var $session \Foodsharing\Lib\Session */
+$session = DI::$shared->get(Session::class);
 
 $session->init();
 

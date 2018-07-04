@@ -6,7 +6,7 @@ use Exception;
 use Flourish\fImage;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
@@ -50,7 +50,7 @@ class XhrMethods
 	 */
 	public function __construct(
 		Func $func,
-		S $session,
+		Session $session,
 		Model $model,
 		Utils $viewUtils,
 		ViewUtils $xhrViewUtils,

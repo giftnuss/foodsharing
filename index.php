@@ -25,7 +25,7 @@ use Foodsharing\Debug\DebugBar;
 use Foodsharing\DI;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Routing;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 
 require __DIR__ . '/includes/setup.php';
@@ -38,8 +38,8 @@ $view_utils = DI::$shared->get(Utils::class);
 /* @var $func Func */
 $func = DI::$shared->get(Func::class);
 
-/* @var $session S */
-$session = DI::$shared->get(S::class);
+/* @var $session Session */
+$session = DI::$shared->get(Session::class);
 
 $func->addStylesheet('/css/gen/style.css?v=' . VERSION);
 $func->addScript('/js/gen/script.js?v=' . VERSION);

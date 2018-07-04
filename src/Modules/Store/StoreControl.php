@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Store;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;

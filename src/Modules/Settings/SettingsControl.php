@@ -3,12 +3,11 @@
 namespace Foodsharing\Modules\Settings;
 
 use Foodsharing\Lib\Db\ManualDb;
+use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Quiz\QuizModel;
-use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\Session\S;
 
 class SettingsControl extends Control
 {

@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Quiz;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
