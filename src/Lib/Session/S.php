@@ -102,6 +102,7 @@ class S
 
 	public static function getRouteOverride()
 	{
+		/* @var $legalModel LegalGateway */
 		$legalModel = DI::$shared->get(LegalGateway::class);
 		$ppVersion = $legalModel->getPpVersion();
 		$pnVersion = $legalModel->getPnVersion();
@@ -137,8 +138,9 @@ class S
 	{
 		$loc = fSession::get('g_location', false);
 		if (!$loc) {
-			$model = DI::$shared->get(Model::class);
-			$loc = $model->getValues(array('lat', 'lon'), 'foodsaver', self::$func->fsId());
+			/* @var $db Db */
+			$db = DI::$shared->get(\Foodsharing\Lib\Db\Db::class);
+			$loc = $db->getValues(array('lat', 'lon'), 'foodsaver', self::$func->fsId());
 			self::set('g_location', $loc);
 		}
 
@@ -215,9 +217,10 @@ class S
 	{
 		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
 			return $_SESSION['client']['bezirke'];
-		} else {
-			return [];
 		}
+		// TODO enable to receive Sentry messages
+		// trigger_error('S::getRegions(): accessed but not initialized yet', E_USER_NOTICE);
+		return [];
 	}
 
 	public static function getBotBezirkIds()
@@ -292,5 +295,14 @@ class S
 	public static function isOrgaTeam()
 	{
 		return S::mayGroup('orgateam');
+	}
+
+	public static function isBotschafter()
+	{
+		if (isset($_SESSION['client']['botschafter'])) {
+			return true;
+		}
+
+		return false;
 	}
 }

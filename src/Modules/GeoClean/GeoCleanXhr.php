@@ -4,12 +4,16 @@ namespace Foodsharing\Modules\GeoClean;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class GeoCleanXhr extends Control
 {
-	public function __construct(GeoCleanModel $model)
+	private $regionGateway;
+
+	public function __construct(GeoCleanModel $model, RegionGateway $regionGateway)
 	{
 		$this->model = $model;
+		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
 
@@ -20,7 +24,7 @@ class GeoCleanXhr extends Control
 
 	public function masterupdate()
 	{
-		if ($bezirke = $this->model->getChildBezirke($_GET['id'], true)) {
+		if ($bezirke = $this->regionGateway->listIdsForDescendantsAndSelf($_GET['id'])) {
 			$this->model->update('UPDATE fs_bezirk SET `master` = ' . $_GET['id'] . ' WHERE id IN(' . implode(',', $bezirke) . ')');
 		}
 	}

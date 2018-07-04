@@ -8,6 +8,7 @@ use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -18,12 +19,14 @@ class ForumService
 	private $regionGateway;
 	private $foodsaverGateway;
 	private $bellGateway;
+	private $emailTemplateGateway;
 	/* @var Model */
 	private $model;
 	private $func;
 
 	public function __construct(
 		BellGateway $bellGateway,
+		EmailTemplateGateway $emailTemplateGateway,
 		FoodsaverGateway $foodsaverGateway,
 		ForumGateway $forumGateway,
 		Func $func,
@@ -31,6 +34,7 @@ class ForumService
 		RegionGateway $regionGateway
 	) {
 		$this->bellGateway = $bellGateway;
+		$this->emailTemplateGateway = $emailTemplateGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumGateway = $forumGateway;
 		$this->func = $func;
@@ -131,7 +135,7 @@ class ForumService
 		$body = nl2br(htmlentities($rawPostBody));
 		if ($follower = $this->forumGateway->getThreadFollower(S::id(), $threadId)) {
 			$info = $this->forumGateway->getThreadInfo($threadId);
-			$poster = $this->model->getVal('name', 'foodsaver', $this->func->fsId());
+			$poster = $this->model->getVal('name', 'foodsaver', S::id());
 			foreach ($follower as $f) {
 				$this->func->tplMail(19, $f['email'], array(
 					'anrede' => $this->func->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
@@ -150,7 +154,7 @@ class ForumService
 		$theme = $this->model->getValues(array('foodsaver_id', 'name'), 'theme', $threadId);
 		$poster = $this->model->getVal('name', 'foodsaver', $theme['foodsaver_id']);
 
-		if ($foodsaver = $this->model->getBotschafter($region['id'])) {
+		if ($foodsaver = $this->foodsaverGateway->getBotschafter($region['id'])) {
 			foreach ($foodsaver as $i => $fs) {
 				$foodsaver[$i]['var'] = array(
 					'name' => $fs['vorname'],
@@ -177,7 +181,7 @@ class ForumService
 		$poster = $this->model->getVal('name', 'foodsaver', $theme['foodsaver_id']);
 
 		if ($ambassadorForum) {
-			$foodsaver = $this->model->getBotschafter($region['id']);
+			$foodsaver = $this->foodsaverGateway->getBotschafter($region['id']);
 		} else {
 			$foodsaver = $this->foodsaverGateway->listActiveWithFullNameByRegion($region['id']);
 		}
@@ -232,7 +236,7 @@ class ForumService
 			);
 		}
 
-		$tpl_message = $this->model->getOne_message_tpl($tpl_id);
+		$tpl_message = $this->emailTemplateGateway->getOne_message_tpl($tpl_id);
 
 		foreach ($to as $t) {
 			if (!$this->func->validEmail($t['email'])) {

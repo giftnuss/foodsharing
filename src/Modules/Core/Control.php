@@ -3,11 +3,13 @@
 namespace Foodsharing\Modules\Core;
 
 use Foodsharing\DI;
+use Foodsharing\Lib\Db\ManualDb;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Sanitizer;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Message\MessageModel;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,10 +41,22 @@ abstract class Control
 
 	private $usesWebpack = false;
 
+	/**
+	 * @var ManualDb
+	 */
+	private $manualDb;
+
+	/**
+	 * @var FoodsaverGateway
+	 */
+	private $foodsaverGateway;
+
 	public function __construct()
 	{
 		$this->func = DI::$shared->get(Func::class);
 		$this->v_utils = DI::$shared->get(Utils::class);
+		$this->manualDb = DI::$shared->get(ManualDb::class);
+		$this->foodsaverGateway = DI::$shared->get(FoodsaverGateway::class);
 
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;
@@ -106,7 +120,7 @@ abstract class Control
 				}
 			}
 		}
-		$this->model->updateActivity(S::id());
+		$this->manualDb->updateActivity(S::id());
 	}
 
 	/**
@@ -468,17 +482,17 @@ abstract class Control
 
 	public function mailMessage($sender_id, $recip_id, $msg, $tpl_id = 9)
 	{
-		$info = $this->model->getVal('infomail_message', 'foodsaver', $recip_id);
+		$info = $this->manualDb->getVal('infomail_message', 'foodsaver', $recip_id);
 		if ((int)$info > 0) {
 			if (!isset($_SESSION['lastMailMessage'])) {
 				$_SESSION['lastMailMessage'] = array();
 			}
 
-			if (!$this->model->isActive($recip_id)) {
+			if (!$this->manualDb->isActive($recip_id)) {
 				if (!isset($_SESSION['lastMailMessage'][$recip_id]) || (time() - $_SESSION['lastMailMessage'][$recip_id]) > 600) {
 					$_SESSION['lastMailMessage'][$recip_id] = time();
-					$foodsaver = $this->model->getOne_foodsaver($recip_id);
-					$sender = $this->model->getOne_foodsaver($sender_id);
+					$foodsaver = $this->foodsaverGateway->getOne_foodsaver($recip_id);
+					$sender = $this->foodsaverGateway->getOne_foodsaver($sender_id);
 
 					$this->func->tplMail($tpl_id, $foodsaver['email'], array(
 						'anrede' => $this->func->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),

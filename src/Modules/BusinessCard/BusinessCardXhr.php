@@ -21,7 +21,7 @@ class BusinessCardXhr extends Control
 
 	public function makeCard()
 	{
-		if (($data = $this->gateway->getMyData(S::id())) && ($opt = $this->getRequest('opt'))) {
+		if (($data = $this->gateway->getMyData(S::id(), S::may('bieb'))) && ($opt = $this->getRequest('opt'))) {
 			$opt = explode(':', $opt);
 			if (count($opt) == 2 && (int)$opt[1] > 0) {
 				$id = (int)$opt[1];

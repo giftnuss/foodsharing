@@ -7,10 +7,12 @@ use Foodsharing\Modules\Core\Control;
 
 class SearchControl extends Control
 {
-	public function __construct(SearchModel $model, SearchView $view)
+	private $helper;
+
+	public function __construct(SearchView $view, SearchHelper $helper)
 	{
-		$this->model = $model;
 		$this->view = $view;
+		$this->helper = $helper;
 
 		parent::__construct();
 
@@ -27,7 +29,7 @@ class SearchControl extends Control
 
 		if (isset($_GET['q']) && strlen($_GET['q']) > 0) {
 			$value = strip_tags($_GET['q']);
-			if ($res = $this->model->search($value)) {
+			if ($res = $this->helper->search($value)) {
 				foreach ($res as $key => $r) {
 					$cnt = '';
 					foreach ($r as $erg) {

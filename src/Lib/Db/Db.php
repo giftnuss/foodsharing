@@ -9,7 +9,7 @@ use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
 use mysqli;
 
-abstract class Db
+class Db
 {
 	/**
 	 * @var mysqli
@@ -40,22 +40,6 @@ abstract class Db
 	public function setMysqli(mysqli $mysqli)
 	{
 		$this->mysqli = $mysqli;
-	}
-
-	public function getAllFoodsaver()
-	{
-		return $this->q('
-			SELECT 		fs.id,
-						CONCAT(fs.`name`, " ", fs.`nachname`) AS `name`,
-						fs.`anschrift`,
-						fs.`email`,
-						fs.`telefon`,
-						fs.`handy`,
-						fs.plz
-
-			FROM 		`fs_foodsaver` fs
-			WHERE		fs.deleted_at IS NULL AND fs.`active` = 1
-		');
 	}
 
 	public function begin_transaction()

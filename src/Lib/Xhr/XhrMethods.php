@@ -11,6 +11,9 @@ use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Email\EmailGateway;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 use Foodsharing\Modules\Message\MessageModel;
 use Foodsharing\Modules\Region\ForumGateway;
@@ -34,6 +37,9 @@ class XhrMethods
 	private $forumGateway;
 	private $bellGateway;
 	private $storeGateway;
+	private $foodsaverGateway;
+	private $emailGateway;
+	private $mailboxGateway;
 	private $imageManager;
 
 	/**
@@ -53,6 +59,9 @@ class XhrMethods
 		ForumGateway $forumGateway,
 		BellGateway $bellGateway,
 		StoreGateway $storeGateway,
+		FoodsaverGateway $foodsaverGateway,
+		EmailGateway $emailGateway,
+		MailboxGateway $mailboxGateway,
 		ImageManager $imageManager)
 	{
 		$this->func = $func;
@@ -66,6 +75,9 @@ class XhrMethods
 		$this->forumGateway = $forumGateway;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
+		$this->emailGateway = $emailGateway;
+		$this->mailboxGateway = $mailboxGateway;
 		$this->imageManager = $imageManager;
 	}
 
@@ -295,9 +307,9 @@ class XhrMethods
 
 	public function xhr_profile($data)
 	{
-		$foodsaver = $this->model->getOne_foodsaver($data['id']);
+		$foodsaver = $this->foodsaverGateway->getOne_foodsaver($data['id']);
 
-		$bezirk = $this->model->getBezirk($foodsaver['bezirk_id']);
+		$bezirk = $this->regionGateway->getBezirk($foodsaver['bezirk_id']);
 
 		if (isset($foodsaver['botschafter'])) {
 			$subtitle = 'ist ' . $this->func->genderWord($foodsaver['geschlecht'], 'Botschafter', 'Botschafterin', 'Botschafter/in') . ' f&uuml;r ';
@@ -436,7 +448,7 @@ class XhrMethods
 				if ($this->storeGateway->isInTeam(S::id(), $b['id'])) {
 					$b['inTeam'] = true;
 				}
-				if ($this->storeGateway->hasAnfrageAtStore(S::id(), $b['id'])) {
+				if ($this->storeGateway->userAppliedForStore(S::id(), $b['id'])) {
 					$b['pendingRequest'] = true;
 				}
 
@@ -455,7 +467,7 @@ class XhrMethods
 
 	public function xhr_fsBubble($data)
 	{
-		if ($b = $this->model->getOne_foodsaver($data['id'])) {
+		if ($b = $this->foodsaverGateway->getOne_foodsaver($data['id'])) {
 			return json_encode(array(
 				'status' => 1,
 				'html' => $this->xhrViewUtils->fsBubble($b)
@@ -781,7 +793,7 @@ class XhrMethods
 	public function xhr_getRecip($data)
 	{
 		if ($this->func->may()) {
-			$fs = $this->model->xhrGetFoodsaver($data);
+			$fs = $this->foodsaverGateway->xhrGetFoodsaver($data);
 
 			return json_encode($fs);
 		}
@@ -833,7 +845,8 @@ class XhrMethods
 
 					@unlink('./tmp/tmp_' . $file);
 
-					$this->model->addPhoto($user_id, $file);
+					$this->foodsaverGateway->updatePhoto($user_id, str_replace('/', '', $file));
+					S::setPhoto($file);
 
 					return '<html><head></head><body onload="parent.uploadPhotoReady(' . $user_id . ',\'./images/mini_q_' . $file . '\');"></body></html>';
 				}
@@ -846,12 +859,12 @@ class XhrMethods
 		if ($this->func->isOrgaTeam() || $this->func->isBotschafter()) {
 			$mail_id = (int)$data['id'];
 
-			$mail = $this->model->getOne_send_email($mail_id);
+			$mail = $this->emailGateway->getOne_send_email($mail_id);
 
-			$bezirk = $this->model->getMailBezirk($this->func->getBezirkId());
+			$bezirk = $this->regionGateway->getMailBezirk($this->func->getBezirkId());
 			$bezirk['email'] = EMAIL_PUBLIC;
 			$bezirk['email_name'] = EMAIL_PUBLIC_NAME;
-			$recip = $this->model->getMailNext($mail_id);
+			$recip = $this->emailGateway->getMailNext($mail_id);
 
 			$mailbox = $this->mailboxModel->getMailbox((int)$mail['mailbox_id']);
 			$mailbox['email'] = $mailbox['name'] . '@' . DEFAULT_EMAIL_HOST;
@@ -863,7 +876,7 @@ class XhrMethods
 				exit();
 			}
 
-			$this->model->setEmailStatus($mail['id'], $recip, 1);
+			$this->emailGateway->setEmailStatus($mail['id'], $recip, 1);
 
 			foreach ($recip as $fs) {
 				$anrede = 'Liebe/r';
@@ -914,13 +927,13 @@ class XhrMethods
 				}
 
 				if (!$check) {
-					$this->model->setEmailStatus($mail['id'], $fs['id'], 3);
+					$this->emailGateway->setEmailStatus($mail['id'], $fs['id'], 3);
 				} else {
-					$this->model->setEmailStatus($mail['id'], $fs['id'], 2);
+					$this->emailGateway->setEmailStatus($mail['id'], $fs['id'], 2);
 				}
 			}
 
-			$mails_left = $this->model->getMailsLeft($mail['id']);
+			$mails_left = $this->emailGateway->getMailsLeft($mail['id']);
 			if ($mails_left) {
 				// throttle to 5 mails per second here to avoid queue bloat
 				sleep(2);
@@ -980,7 +993,7 @@ class XhrMethods
 
 				$this->func->makeThumbs($file);
 
-				$this->model->updatePhoto($this->func->fsId(), $file);
+				$this->foodsaverGateway->updatePhoto(S::id(), $file);
 
 				$func = 'parent.picFinish(\'' . $img . '\',\'' . $id . '\');';
 			} else {
@@ -1065,7 +1078,7 @@ class XhrMethods
 
 	public function xhr_bezirkTree($data)
 	{
-		if ($bezirk = $this->model->getBezirkByParent($data['p'])) {
+		if ($bezirk = $this->regionGateway->getBezirkByParent($data['p'], S::isOrgaTeam())) {
 			$out = array();
 			foreach ($bezirk as $b) {
 				$hc = false;
@@ -1107,14 +1120,12 @@ class XhrMethods
 	{
 		global $g_data;
 
-		$g_data = $this->model->getOne_bezirk($data['id']);
+		$g_data = $this->regionGateway->getOne_bezirk($data['id']);
 
 		$g_data['mailbox_name'] = '';
-		if ($mbname = $this->model->getMailboxname($g_data['mailbox_id'])) {
+		if ($mbname = $this->mailboxGateway->getMailboxname($g_data['mailbox_id'])) {
 			$g_data['mailbox_name'] = $mbname;
 		}
-
-		$foodsaver_values = $this->model->getBasics_foodsaver($data['id']);
 
 		$out = array();
 		$out['status'] = 1;
@@ -1132,7 +1143,7 @@ class XhrMethods
 
 		$inputs = '<div id="' . $id . '">' . $inputs . '</div>';
 
-		$cats = $this->model->getBasics_bezirk();
+		$cats = $this->regionGateway->getBasics_bezirk();
 		$out['html'] = $this->v_utils->v_form('bezirkForm', array(
 				$this->v_utils->v_form_hidden('bezirk_id', (int)$data['id']),
 				$this->v_utils->v_form_select('parent_id', array('values' => $cats)),
@@ -1212,7 +1223,7 @@ class XhrMethods
 		  });
 	';
 
-		if ($foodsaver = $this->model->getFsMap($data['id'])) {
+		if ($foodsaver = $this->foodsaverGateway->getFsMap($data['id'])) {
 			$out['foodsaver'] = $foodsaver;
 		}
 		if ($betriebe = $this->storeGateway->getMapsBetriebe($data['id'])) {
@@ -1326,12 +1337,12 @@ class XhrMethods
 
 			$botsch = array();
 			$add = '';
-			if ($b = $this->model->getBotschafter($bezirk_id)) {
+			if ($b = $this->foodsaverGateway->getBotschafter($bezirk_id)) {
 				foreach ($b as $bb) {
 					$botsch[] = $bb['id'];
 				}
 			} else {
-				$botsch = $this->model->getOrgateam();
+				$botsch = $this->foodsaverGateway->getOrgateam();
 				$add = ' Es gibt aber keinen Botschafter';
 			}
 
@@ -1366,7 +1377,8 @@ class XhrMethods
 
 		$this->func->handleTagselect('botschafter');
 
-		$this->model->update_bezirkNew($data['bezirk_id'], $g_data);
+		$this->regionGateway->update_bezirkNew($data['bezirk_id'], $g_data);
+		Mem::del('cb-' . $data['bezirk_id']);
 
 		return $this->xhr_out('pulseInfo("' . $this->func->s('edit_success') . '");');
 	}
@@ -1496,7 +1508,7 @@ class XhrMethods
 					$this->model->update('UPDATE fs_foodsaver SET bezirk_id = ' . (int)$bezirk_id . ' WHERE id = ' . (int)$this->func->fsId());
 				}
 
-				if ($bots = $this->model->getBotschafter($bezirk_id)) {
+				if ($bots = $this->foodsaverGateway->getBotschafter($bezirk_id)) {
 					if (
 						($foodsaver = $this->model->getValues(array('verified', 'name', 'nachname', 'photo'), 'foodsaver', $this->func->fsId())) &&
 						($bezirk = $this->model->getValues(array('name'), 'bezirk', $bezirk_id))
@@ -1532,7 +1544,7 @@ class XhrMethods
 					}
 				}
 
-				if ($botschafter = $this->model->getBotschafter($bezirk_id)) {
+				if ($botschafter = $this->foodsaverGateway->getBotschafter($bezirk_id)) {
 					return json_encode(array(
 						'active' => $active,
 						'status' => 1,

@@ -4,19 +4,23 @@ namespace Foodsharing\Modules\FAQList;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\FAQAdmin\FAQGateway;
 
 class FAQListControl extends Control
 {
-	public function __construct(Model $model)
+	private $faqGateway;
+
+	public function __construct(Model $model, FAQGateway $faqGateway)
 	{
 		$this->model = $model;
+		$this->faqGateway = $faqGateway;
 		parent::__construct();
 	}
 
 	public function index()
 	{
 		if (isset($_GET['id'])) {
-			if ($res = $this->model->getOne_faq($_GET['id'])) {
+			if ($res = $this->faqGateway->getOne_faq($_GET['id'])) {
 				$this->func->addBread('FAQ`s', '/?page=listFaq');
 				$this->func->addBread(substr($res['name'], 0, 30));
 
@@ -33,7 +37,7 @@ class FAQListControl extends Control
 		} else {
 			$this->func->addBread('FAQ`s', '/?page=listFaq');
 
-			$docs = $this->model->getFaqIntern();
+			$docs = $this->faqGateway->getFaqIntern();
 			$menu = array();
 			foreach ($docs as $d) {
 				$menu[] = array(

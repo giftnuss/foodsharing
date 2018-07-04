@@ -7,11 +7,12 @@ use Flourish\fDate;
 use Flourish\fFile;
 use Flourish\fImage;
 use Foodsharing\DI;
-use Foodsharing\Lib\Db\ManualDb;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
+use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use JSMin;
 
@@ -380,10 +381,11 @@ class Func
 
 	public function isBotForA($bezirk_ids, $include_groups = true, $include_parent_bezirke = false)
 	{
-		if ($this->isBotschafter() && is_array($bezirk_ids)) {
+		if (S::isBotschafter() && is_array($bezirk_ids)) {
 			if ($include_parent_bezirke) {
-				$manualDb = DI::$shared->get(ManualDb::class);
-				$bezirk_ids = $manualDb->getParentBezirke($bezirk_ids);
+				/* @var $gw RegionGateway */
+				$gw = DI::$shared->get(RegionGateway::class);
+				$bezirk_ids = $gw->getParentBezirke($bezirk_ids);
 			}
 			foreach ($_SESSION['client']['botschafter'] as $b) {
 				foreach ($bezirk_ids as $bid) {
@@ -412,13 +414,12 @@ class Func
 		return false;
 	}
 
+	/**
+	 * @deprecated use S::isBotschafter() instead
+	 */
 	public function isBotschafter()
 	{
-		if (isset($_SESSION['client']['botschafter'])) {
-			return true;
-		}
-
-		return false;
+		return S::isBotschafter();
 	}
 
 	/**
@@ -426,7 +427,7 @@ class Func
 	 */
 	public function isOrgaTeam()
 	{
-		return $this->mayGroup('orgateam');
+		return S::isOrgaTeam();
 	}
 
 	public function getMenu($usesWebpack = false)
@@ -610,7 +611,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function tplMail($tpl_id, $to, $var = array(), $from_email = false)
 	{
-		$manualDb = DI::$shared->get(ManualDb::class);
 		$mail = new AsyncMail();
 
 		if ($from_email !== false && $this->validEmail($from_email)) {
@@ -619,7 +619,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$mail->setFrom(DEFAULT_EMAIL, DEFAULT_EMAIL_NAME);
 		}
 
-		$message = $manualDb->getOne_message_tpl($tpl_id);
+		/* @var $gw EmailTemplateGateway */
+		$gw = DI::$shared->get(EmailTemplateGateway::class);
+		$message = $gw->getOne_message_tpl($tpl_id);
 
 		$search = array();
 		$replace = array();
@@ -1374,9 +1376,10 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function getBezirk()
 	{
-		$manualDb = DI::$shared->get(ManualDb::class);
+		/* @var $gw RegionGateway */
+		$gw = DI::$shared->get(RegionGateway::class);
 
-		return $manualDb->getBezirk();
+		return $gw->getBezirk(S::getCurrentBezirkId());
 	}
 
 	public function genderWord($gender, $m, $w, $other)

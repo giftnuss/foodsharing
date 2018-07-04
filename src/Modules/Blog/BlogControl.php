@@ -7,10 +7,13 @@ use Foodsharing\Modules\Core\Control;
 
 class BlogControl extends Control
 {
-	public function __construct(BlogModel $model, BlogView $view)
+	private $blogGateway;
+
+	public function __construct(BlogModel $model, BlogView $view, BlogGateway $blogGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->blogGateway = $blogGateway;
 
 		parent::__construct();
 		if ($id = $this->func->getActionId('delete')) {
@@ -177,7 +180,7 @@ class BlogControl extends Control
 			$g_data['foodsaver_id'] = $data['foodsaver_id'];
 			$g_data['time'] = $data['time'];
 
-			if ($this->model->update_blog_entry($_GET['id'], $g_data)) {
+			if ($this->blogGateway->update_blog_entry($_GET['id'], $g_data)) {
 				$this->func->info($this->func->s('blog_entry_edit_success'));
 				$this->func->goPage();
 			} else {

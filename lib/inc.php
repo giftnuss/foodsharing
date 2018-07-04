@@ -32,12 +32,16 @@ $content_right_width = 6;
 $request = Request::createFromGlobals();
 $response = new Response('--');
 
+/* @var $func Func */
 $func = DI::$shared->get(Func::class);
+
+/* @var $viewUtils Utils */
 $viewUtils = DI::$shared->get(Utils::class);
 
 $g_template = 'default';
 $g_data = $func->getPostData();
 
+/* @var $db ManualDb */
 $db = DI::$shared->get(ManualDb::class);
 
 $func->addHidden('<a id="' . $func->id('fancylink') . '" href="#fancy">&nbsp;</a>');

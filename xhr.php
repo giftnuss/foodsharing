@@ -24,6 +24,7 @@ $db = new Model();
 
 $db->updateActivity(S::id());
 if (isset($_GET['f'])) {
+	/* @var $xhr XhrMethods */
 	$xhr = DI::$shared->get(XhrMethods::class);
 	$func = 'xhr_' . $action;
 	if (method_exists($xhr, $func)) {

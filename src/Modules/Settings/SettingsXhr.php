@@ -7,13 +7,17 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
 class SettingsXhr extends Control
 {
-	public function __construct(SettingsModel $model, SettingsView $view)
+	private $foodsaverGateway;
+
+	public function __construct(SettingsModel $model, SettingsView $view, FoodsaverGateway $foodsaverGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->foodsaverGateway = $foodsaverGateway;
 
 		parent::__construct();
 
@@ -42,7 +46,7 @@ class SettingsXhr extends Control
 	public function changemail2()
 	{
 		if ($this->func->validEmail($_GET['email'])) {
-			if ($this->model->emailExists($_GET['email'])) {
+			if ($this->foodsaverGateway->emailExists($_GET['email'])) {
 				return array(
 					'status' => 1,
 					'script' => 'pulseError("Diese E-Mail-Adresse benutzt bereits jemand anderes.");'

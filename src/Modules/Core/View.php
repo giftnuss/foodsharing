@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Core;
 
 use Foodsharing\DI;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\Utils;
@@ -348,7 +349,8 @@ class View
 		if (isset($options['location'])) {
 			$data = array_merge(['zoom' => 14], $options['location']);
 		} else {
-			$db = DI::$shared->get(Model::class);
+			/* @var $db Db */
+			$db = DI::$shared->get(Db::class);
 			$data = $db->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
 			$data['zoom'] = 14;
 		}

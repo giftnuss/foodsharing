@@ -13,14 +13,22 @@ class FoodsaverControl extends Control
 	private $storeModel;
 	private $settingsModel;
 	private $regionGateway;
+	private $foodsaverGateway;
 
-	public function __construct(FoodsaverModel $model, FoodsaverView $view, StoreModel $storeModel, SettingsModel $settingsModel, RegionGateway $regionGateway)
-	{
+	public function __construct(
+		FoodsaverModel $model,
+		FoodsaverView $view,
+		StoreModel $storeModel,
+		SettingsModel $settingsModel,
+		RegionGateway $regionGateway,
+		FoodsaverGateway $foodsaverGateway
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->storeModel = $storeModel;
 		$this->settingsModel = $settingsModel;
 		$this->regionGateway = $regionGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 
 		parent::__construct();
 
@@ -35,7 +43,7 @@ class FoodsaverControl extends Control
 	public function index()
 	{
 		// check bezirk_id and permissions
-		if (isset($_GET['bid']) && ($bezirk = $this->model->getBezirk($_GET['bid'])) && (S::may('orga') || $this->func->isBotForA(array($_GET['bid']), false, true))) {
+		if (isset($_GET['bid']) && ($bezirk = $this->regionGateway->getBezirk($_GET['bid'])) && (S::may('orga') || $this->func->isBotForA(array($_GET['bid']), false, true))) {
 			// permission granted so we can load the foodsavers
 			if ($foodsaver = $this->model->listFoodsaver($_GET['bid'])) {
 				// add breadcrumps
@@ -59,18 +67,18 @@ class FoodsaverControl extends Control
 				}
 			}
 		} elseif (($id = $this->func->getActionId('edit')) && ($this->func->isBotschafter() || $this->func->isOrgaTeam())) {
-			$data = $this->model->getOne_foodsaver($id);
+			$data = $this->foodsaverGateway->getOne_foodsaver($id);
 			$bids = $this->regionGateway->getFsBezirkIds($id);
 			if ($data && ($this->func->isOrgaTeam() || $this->func->isBotForA($bids, false, true))) {
 				$this->handle_edit();
-				$data = $this->model->getOne_foodsaver($id);
+				$data = $this->foodsaverGateway->getOne_foodsaver($id);
 
 				$this->func->addBread($this->func->s('bread_foodsaver'), '/?page=foodsaver');
 				$this->func->addBread($this->func->s('bread_edit_foodsaver'));
 				$this->func->setEditData($data);
 				$regionDetails = false;
 				if ($data['bezirk_id'] > 0) {
-					$regionDetails = $this->model->getBezirk($data['bezirk_id']);
+					$regionDetails = $this->regionGateway->getBezirk($data['bezirk_id']);
 				}
 				$this->func->addContent($this->view->foodsaver_form($data['name'] . ' ' . $data['nachname'] . ' bearbeiten', $regionDetails));
 
@@ -92,7 +100,7 @@ class FoodsaverControl extends Control
 		if ((S::may('orga'))) {
 			$foodsaver = $this->model->getValues(array('email', 'name', 'nachname', 'bezirk_id'), 'foodsaver', $id);
 
-			$this->model->del_foodsaver($id);
+			$this->foodsaverGateway->del_foodsaver($id);
 			$this->func->info('Foodsaver ' . $foodsaver['name'] . ' ' . $foodsaver['nachname'] . ' wurde gelöscht, für die Wiederherstellung wende Dich an ' . SUPPORT_EMAIL);
 			$this->func->go('/?page=dashboard');
 		}
@@ -113,7 +121,7 @@ class FoodsaverControl extends Control
 				unset($g_data['rolle']);
 			}
 
-			if ($oldFs = $this->settingsModel->getOne_foodsaver($_GET['id'])) {
+			if ($oldFs = $this->foodsaverGateway->getOne_foodsaver($_GET['id'])) {
 				$logChangedFields = array('name', 'nachname', 'stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum', 'rolle', 'orgateam');
 				$this->settingsModel->logChangedSetting($_GET['id'], $oldFs, $g_data, $logChangedFields);
 			}
@@ -127,7 +135,7 @@ class FoodsaverControl extends Control
 
 	private function picture_box()
 	{
-		$photo = $this->model->getPhoto($_GET['id']);
+		$photo = $this->foodsaverGateway->getPhoto($_GET['id']);
 
 		if (!(file_exists('images/thumb_crop_' . $photo))) {
 			$p_cnt = $this->v_utils->v_photo_edit('img/portrait.png', (int)$_GET['id']);

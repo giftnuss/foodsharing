@@ -8,19 +8,27 @@ use Flourish\fImage;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Mailbox\MailboxModel;
+use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 
 class EmailControl extends Control
 {
 	private $mbmodel;
 	private $storeGateway;
+	private $foodsaverGateway;
+	private $emailGateway;
+	private $regionGateway;
 
-	public function __construct(Model $model, MailboxModel $mbmodel, StoreGateway $storeGateway)
+	public function __construct(Model $model, MailboxModel $mbmodel, StoreGateway $storeGateway, FoodsaverGateway $foodsaverGateway, EmailGateway $emailGateway, RegionGateway $regionGateway)
 	{
 		$this->model = $model;
 		$this->mbmodel = $mbmodel;
 		$this->storeGateway = $storeGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
+		$this->emailGateway = $emailGateway;
+		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
 
@@ -34,7 +42,7 @@ class EmailControl extends Control
 		$this->handleEmail();
 		$this->func->addBread($this->func->s('mailinglist'), '/?page=email');
 
-		if ($emailstosend = $this->model->getEmailsToSend()) {
+		if ($emailstosend = $this->emailGateway->getEmailsToSend(S::id())) {
 			$this->func->addContent($this->v_email_statusbox($emailstosend));
 		}
 
@@ -90,7 +98,7 @@ class EmailControl extends Control
 
 		$i = 0;
 		$divs = '';
-		if ($mails = $this->model->getSendMails()) {
+		if ($mails = $this->emailGateway->getSendMails(S::id())) {
 			foreach ($mails as $m) {
 				++$i;
 				$this->func->addContent('<li><a href="#" onclick="$(\'#right-' . $i . '\').dialog(\'open\');return false;">' . date('d.m.', strtotime($m['zeit'])) . ' ' . $m['name'] . '</a></li>', CNT_RIGHT);
@@ -116,20 +124,21 @@ class EmailControl extends Control
 
 			if ($this->func->isBotschafter() || $this->func->isOrgaTeam()) {
 				if ($data['recip_choose'] == 'bezirk') {
-					$foodsaver = $this->model->getEmailAdressen();
+					$region_ids = $this->regionGateway->listIdsForDescendantsAndSelf(S::getCurrentBezirkId());
+					$foodsaver = $this->foodsaverGateway->getEmailAdressen($region_ids);
 				} elseif ($data['recip_choose'] == 'botschafter') {
-					$foodsaver = $this->model->getAllBotschafter();
+					$foodsaver = $this->foodsaverGateway->getAllBotschafter();
 				} elseif ($data['recip_choose'] == 'orgateam') {
-					$foodsaver = $this->model->getOrgateam();
+					$foodsaver = $this->foodsaverGateway->getOrgateam();
 				}
 			}
 			if ($this->func->isOrgaTeam()) {
 				if ($data['recip_choose'] == 'all') {
-					$foodsaver = $this->model->getAllEmailFoodsaver();
+					$foodsaver = $this->foodsaverGateway->getAllEmailFoodsaver();
 				} elseif ($data['recip_choose'] == 'newsletter') {
-					$foodsaver = $this->model->getAllEmailFoodsaver(true);
+					$foodsaver = $this->foodsaverGateway->getAllEmailFoodsaver(true);
 				} elseif ($data['recip_choose'] == 'newsletter_all') {
-					$foodsaver = $this->model->getAllEmailFoodsaver(true, false);
+					$foodsaver = $this->foodsaverGateway->getAllEmailFoodsaver(true, false);
 				} elseif ($data['recip_choose'] == 'newsletter_only_foodsharer') {
 					$foodsaver = $this->model->q('
 						SELECT 	`id`,`email`
@@ -137,12 +146,12 @@ class EmailControl extends Control
 						WHERE newsletter = 1 AND rolle = 0 AND `active` = 1 AND deleted_at IS NULL
 					');
 				} elseif ($data['recip_choose'] == 'all_no_botschafter') {
-					$foodsaver = $this->model->getAllFoodsaverNoBotschafter();
+					$foodsaver = $this->foodsaverGateway->getAllFoodsaverNoBotschafter();
 				} elseif ($data['recip_choose'] == 'filialverantwortlich') {
 					$foodsaver = $this->storeGateway->getAllFilialverantwortlich();
 				} elseif ($data['recip_choose'] == 'filialbot') {
 					$foodsaver1 = $this->storeGateway->getAllFilialverantwortlich();
-					$foodsaver2 = $this->model->getAllBotschafter();
+					$foodsaver2 = $this->foodsaverGateway->getAllBotschafter();
 					$tmp = array_merge($foodsaver1, $foodsaver2);
 					$foodsaver = array();
 					foreach ($tmp as $t) {
@@ -186,13 +195,14 @@ class EmailControl extends Control
 					$foodsaver = $this->storeGateway->getEmailBiepBez($data['recip_choose-choose']);
 				} elseif (isset($data['recip_choose-choose'])) {
 					if ($data['recip_choose'] == 'choosebot') {
-						$foodsaver = $this->model->getEmailBotFromBezirkList($data['recip_choose-choose']);
+						$foodsaver = $this->foodsaverGateway->getEmailBotFromBezirkList($data['recip_choose-choose']);
 					} else {
-						$foodsaver = $this->model->getEmailFoodSaverFromBezirkList($data['recip_choose-choose']);
+						$foodsaver = $this->foodsaverGateway->getEmailFoodSaverFromBezirkList($data['recip_choose-choose']);
 					}
 				}
 			} else {
-				$foodsaver = $this->model->getEmailAdressen();
+				$region_ids = $this->regionGateway->listIdsForDescendantsAndSelf(S::getCurrentBezirkId());
+				$foodsaver = $this->foodsaverGateway->getEmailAdressen($region_ids);
 			}
 
 			if (!empty($foodsaver)) {
@@ -217,7 +227,11 @@ class EmailControl extends Control
 				)
 
 				 */
-				$this->model->initEmail($mailbox_id, $foodsaver, $nachricht, $betreff, $attach, $data['mode']);
+				$mode = $data['mode'];
+				if (!S::isOrgaTeam()) {
+					$mode = 1;
+				}
+				$this->emailGateway->initEmail(S::id(), $mailbox_id, $foodsaver, $nachricht, $betreff, $attach, $mode);
 				$this->func->goPage();
 			} elseif ($data['recip_choose'] != 'manual') {
 				$this->func->error('In den ausgew&auml;hlten Bezirken gibt es noch keine Foodsaver');

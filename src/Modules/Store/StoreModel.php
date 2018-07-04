@@ -6,18 +6,21 @@ use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Message\MessageModel;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class StoreModel extends Model
 {
 	private $messageModel;
 	private $bellGateway;
 	private $storeGateway;
+	private $regionGateway;
 
-	public function __construct(MessageModel $messageModel, BellGateway $bellGateway, StoreGateway $storeGateway)
+	public function __construct(MessageModel $messageModel, BellGateway $bellGateway, StoreGateway $storeGateway, RegionGateway $regionGateway)
 	{
 		$this->messageModel = $messageModel;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
+		$this->regionGateway = $regionGateway;
 		parent::__construct();
 	}
 
@@ -316,7 +319,7 @@ class StoreModel extends Model
 						fs_bezirk
 
 				WHERE 	fs_betrieb.bezirk_id = fs_bezirk.id
-				AND 	fs_betrieb.bezirk_id IN(' . implode(',', $this->getChildBezirke($bezirk_id)) . ')
+				AND 	fs_betrieb.bezirk_id IN(' . implode(',', $this->regionGateway->listIdsForDescendantsAndSelf($bezirk_id)) . ')
 
 
 		');

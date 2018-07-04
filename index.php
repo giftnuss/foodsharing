@@ -31,12 +31,13 @@ use Foodsharing\Lib\View\Utils;
 require __DIR__ . '/includes/setup.php';
 
 require_once 'lib/inc.php';
+/* @var $view_utils Utils */
 $view_utils = DI::$shared->get(Utils::class);
 
 /**
  * @return Func
  */
-function getFunc()
+function getFunc(): Func
 {
 	return DI::$shared->get(Func::class);
 }
@@ -105,6 +106,7 @@ $isUsingResponse = $page !== '--';
 if ($isUsingResponse) {
 	$response->send();
 } else {
+	/* @var $twig \Twig\Environment */
 	$twig = DI::$shared->get(\Twig\Environment::class);
 	$page = $twig->render('layouts/' . $g_template . '.twig', $func->generateAndGetGlobalViewData($usesWebpack));
 }

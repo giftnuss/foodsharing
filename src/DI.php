@@ -95,6 +95,10 @@ class DI
 
 		if (!$this->isDev) {
 			$dumper = new PhpDumper($this->container);
+			$cacheDir = dirname($this->cacheFile);
+			if (!is_dir($cacheDir)) {
+				mkdir($cacheDir, 0700);
+			}
 			file_put_contents($this->cacheFile, $dumper->dump(['class' => 'FoodsharingCachedContainer']));
 		}
 	}

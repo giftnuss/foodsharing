@@ -8,6 +8,8 @@ use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Event\EventGateway;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Profile\ProfileModel;
 use Foodsharing\Modules\Store\StoreGateway;
 
@@ -18,6 +20,8 @@ class DashboardControl extends Control
 	private $contentGateway;
 	private $basketGateway;
 	private $storeGateway;
+	private $foodsaverGateway;
+	private $eventGateway;
 	private $twig;
 	private $profileModel;
 
@@ -27,6 +31,8 @@ class DashboardControl extends Control
 		ContentGateway $contentGateway,
 		BasketGateway $basketGateway,
 		StoreGateway $storeGateway,
+		FoodsaverGateway $foodsaverGateway,
+		EventGateway $eventGateway,
 		Model $model,
 		ProfileModel $profileModel,
 		\Twig\Environment $twig)
@@ -36,6 +42,8 @@ class DashboardControl extends Control
 		$this->contentGateway = $contentGateway;
 		$this->basketGateway = $basketGateway;
 		$this->storeGateway = $storeGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
+		$this->eventGateway = $eventGateway;
 		$this->model = $model;
 		$this->twig = $twig;
 		$this->profileModel = $profileModel;
@@ -303,12 +311,12 @@ class DashboardControl extends Control
 		}
 
 		/* Einladungen */
-		if ($invites = $this->model->getInvites()) {
+		if ($invites = $this->eventGateway->getInvites(S::id())) {
 			$this->func->addContent($this->view->u_invites($invites));
 		}
 
 		/* Events */
-		if ($events = $this->model->getNextEvents()) {
+		if ($events = $this->eventGateway->getNextEvents(S::id())) {
 			$this->func->addContent($this->view->u_events($events));
 		}
 
@@ -461,7 +469,7 @@ class DashboardControl extends Control
 		/*
 		 * Top
 		*/
-		$me = $this->model->getFoodsaverBasics($this->func->fsId());
+		$me = $this->foodsaverGateway->getFoodsaverBasics(S::id());
 		if ($me['rolle'] < 0 || $me['rolle'] > 4) {
 			$me['rolle'] = 0;
 		}

@@ -10,6 +10,9 @@ class vAccordion
 	private $panels;
 	private $id;
 	private $options;
+	/**
+	 * @var Func
+	 */
 	private $func;
 
 	public function __construct($option = array())

@@ -114,7 +114,7 @@ class RegionXhr extends Control
 			$body = $this->func->autolink($body);
 
 			if ($bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid'])) {
-				if ($post_id = $this->forumGateway->addPost(S::id(), $_GET['tid'], $body, $_GET['pid'], $bezirk)) {
+				if ($post_id = $this->forumGateway->addPost(S::id(), $_GET['tid'], $body)) {
 					if ($follower = $this->forumGateway->getThreadFollower(S::id(), $_GET['tid'])) {
 						$theme = $this->model->getVal('name', 'theme', $_GET['tid']);
 

@@ -7,6 +7,7 @@ use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -20,12 +21,14 @@ class FairTeilerControl extends Control
 
 	private $gateway;
 	private $regionGateway;
+	private $foodsaverGateway;
 
-	public function __construct(FairTeilerView $view, FairTeilerGateway $gateway, RegionGateway $regionGateway, Model $model)
+	public function __construct(FairTeilerView $view, FairTeilerGateway $gateway, RegionGateway $regionGateway, FoodsaverGateway $foodsaverGateway, Model $model)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->regionGateway = $regionGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 		$this->model = $model;
 
 		parent::__construct();
@@ -70,7 +73,7 @@ class FairTeilerControl extends Control
 		}
 
 		if (isset($bid) || $bid = $request->query->get('bid')) {
-			if ($bezirk = $this->model->getBezirk($bid)) {
+			if ($bezirk = $this->regionGateway->getBezirk($bid)) {
 				$this->bezirk_id = $bid;
 				$this->bezirk = $bezirk;
 				if ((int)$bezirk['mailbox_id'] > 0) {
@@ -93,7 +96,7 @@ class FairTeilerControl extends Control
 			}
 
 			if (!isset($this->bezirke[$this->fairteiler['bezirk_id']])) {
-				$this->bezirke[] = $this->model->getBezirk($this->fairteiler['bezirk_id']);
+				$this->bezirke[] = $this->regionGateway->getBezirk($this->fairteiler['bezirk_id']);
 			}
 
 			$this->follower = $this->gateway->getFollower($ftid);
@@ -204,7 +207,7 @@ class FairTeilerControl extends Control
 			$data['bfoodsaver'][$key]['name'] = $fs['name'] . ' ' . $fs['nachname'];
 		}
 
-		$data['bfoodsaver_values'] = $this->model->getFsAutocomplete(S::getRegions());
+		$data['bfoodsaver_values'] = $this->foodsaverGateway->getFsAutocomplete(S::getRegions());
 
 		$this->func->addContent($this->view->options($items), CNT_RIGHT);
 

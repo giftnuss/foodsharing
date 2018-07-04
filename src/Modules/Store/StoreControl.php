@@ -5,18 +5,30 @@ namespace Foodsharing\Modules\Store;
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class StoreControl extends Control
 {
 	private $bellGateway;
 	private $storeGateway;
+	private $regionGateway;
+	private $foodsaverGateway;
 
-	public function __construct(StoreModel $model, StoreView $view, BellGateway $bellGateway, StoreGateway $storeGateway)
-	{
+	public function __construct(
+		StoreModel $model,
+		StoreView $view,
+		BellGateway $bellGateway,
+		StoreGateway $storeGateway,
+		FoodsaverGateway $foodsaverGateway,
+		RegionGateway $regionGateway
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
+		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
 
@@ -41,7 +53,7 @@ class StoreControl extends Control
 			$bezirk_id = $this->func->getBezirkId();
 		}
 		if ($bezirk_id > 0) {
-			$bezirk = $this->model->getBezirk($bezirk_id);
+			$bezirk = $this->regionGateway->getBezirk($bezirk_id);
 		} else {
 			$bezirk = array('name' => 'kompletter Datenbank');
 		}
@@ -196,7 +208,7 @@ class StoreControl extends Control
 					));
 				}
 
-				$foodsaver = $this->model->getFoodsaver($g_data['bezirk_id']);
+				$foodsaver = $this->foodsaverGateway->getFoodsaver($g_data['bezirk_id']);
 
 				$this->bellGateway->addBell($foodsaver, 'store_new_title', 'store_new', 'img img-store brown', array(
 					'href' => '/?page=fsbetrieb&id=' . (int)$id

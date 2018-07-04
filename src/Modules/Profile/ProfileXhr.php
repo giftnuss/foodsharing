@@ -160,7 +160,7 @@ class ProfileXhr extends Control
 			$this->view = new ProfileView();
 		}
 
-		$bezirk = $this->model->getBezirk($this->foodsaver['bezirk_id']);
+		$bezirk = $this->regionGateway->getBezirk($this->foodsaver['bezirk_id']);
 
 		if ($this->foodsaver['botschafter']) {
 			$subtitle = 'ist ' . $this->func->genderWord($this->foodsaver['geschlecht'], 'Botschafter', 'Botschafterin', 'Botschafter/in') . ' f&uuml;r ';

@@ -23,6 +23,7 @@ class RegionControl extends Control
 	private $foodsaverGateway;
 	private $forumGateway;
 	private $fairteilerGateway;
+
 	/* @var TranslatorInterface */
 	private $translator;
 	/* @var FormFactoryBuilder */

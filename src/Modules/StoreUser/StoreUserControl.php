@@ -4,18 +4,21 @@ namespace Foodsharing\Modules\StoreUser;
 
 use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
 
 class StoreUserControl extends Control
 {
 	private $storeGateway;
+	private $foodsaverGateway;
 
-	public function __construct(StoreModel $model, StoreUserView $view, StoreGateway $storeGateway)
+	public function __construct(StoreModel $model, StoreUserView $view, StoreGateway $storeGateway, FoodsaverGateway $foodsaverGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->storeGateway = $storeGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 
 		parent::__construct();
 
@@ -120,7 +123,7 @@ class StoreUserControl extends Control
 						'team',
 
 						array(
-							$this->v_utils->v_form_tagselect('foodsaver', array('valueOptions' => $this->model->xhrGetTagFsAll())),
+							$this->v_utils->v_form_tagselect('foodsaver', array('valueOptions' => $this->foodsaverGateway->xhrGetTagFsAll(S::getBezirkIds()))),
 							$verantwortlich_select),
 						array('submit' => $this->func->s('save'))
 					);

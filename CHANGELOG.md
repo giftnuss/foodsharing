@@ -29,7 +29,7 @@
 - refactored Bell to use gateway. !402 by @peter.toennies
 - refactored BusinessCard to use gateway. !406 @peter.toennies
 - refactored Buddy to use gateway. !405 @peter.toennies
-- removed SQL injection possibilities from all exsisting gateways !398 @peter.toennies
+- removed SQL injection possibilities from all existing gateways !398 @peter.toennies
 - refactored Application to use gateway. !397 #9 @peter.toennies
 - reduced size of DataBase classes !409 @peter.toennies
 - refactored login and registration !403 @theolampert
@@ -37,6 +37,7 @@
 - refactored region module into twig/webpack loaded javascript !421 @NerdyProjects
 - add constants class database constants in region module !413 @peter.toennies @nicksellen
 - refactored login and registration @theolampert
+- refactor Model.php and ManualDB.php to gateway classes !420 !424 !425 @tiltec
 - refactored tablesorter @alangecker
 
 ## Dev/Test/CI stuff

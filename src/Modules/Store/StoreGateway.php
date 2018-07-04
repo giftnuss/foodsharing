@@ -239,7 +239,7 @@ class StoreGateway extends BaseGateway
 			return $out;
 		}
 
-		$out['lebensmittel'] = $this->db->fetch('
+		$out['lebensmittel'] = $this->db->fetchAll('
 				SELECT 		l.`id`,
 							l.name
 				FROM 		`fs_betrieb_has_lebensmittel` hl,
@@ -252,7 +252,7 @@ class StoreGateway extends BaseGateway
 
 		$out['springer'] = $this->getBetriebSpringer($id);
 
-		$out['requests'] = $this->db->fetch('
+		$out['requests'] = $this->db->fetchAll('
 				SELECT 		fs.`id`,
 							fs.photo,
 							CONCAT(fs.name," ",fs.nachname) AS name,
@@ -301,7 +301,7 @@ class StoreGateway extends BaseGateway
 		$out['team_js'] = implode(',', $out['team_js']);
 
 		$out['abholer'] = false;
-		if ($abholer = $this->db->fetch('SELECT `betrieb_id`,`dow` FROM `fs_abholzeiten` WHERE `betrieb_id` = :id', [':id' => $id])) {
+		if ($abholer = $this->db->fetchAll('SELECT `betrieb_id`,`dow` FROM `fs_abholzeiten` WHERE `betrieb_id` = :id', [':id' => $id])) {
 			$out['abholer'] = array();
 			foreach ($abholer as $a) {
 				if (!isset($out['abholer'][$a['dow']])) {
@@ -348,7 +348,7 @@ class StoreGateway extends BaseGateway
 
 	public function getBetriebSpringer($id): array
 	{
-		return $this->db->fetch('
+		return $this->db->fetchAll('
 				SELECT 		fs.`id`,
 							fs.`active`,
 							fs.`telefon`,
@@ -376,7 +376,7 @@ class StoreGateway extends BaseGateway
 
 	public function getBiebsForStore($betrieb_id)
 	{
-		return $this->db->fetchValue(
+		return $this->db->fetchAll(
 			'
 			SELECT 	`foodsaver_id` as id
 			FROM fs_betrieb_team
@@ -439,29 +439,23 @@ class StoreGateway extends BaseGateway
 
 	public function isVerantwortlich($fs_id, $betrieb_id)
 	{
-		return $this->db->fetchValue('
-				SELECT 	betrieb_id
-				FROM 	fs_betrieb_team
-				WHERE 	betrieb_id = :bid
-				AND 	foodsaver_id = :fs_id
-				AND 	verantwortlich = 1
-				AND 	active = 1
-		', [':bid' => $betrieb_id, ':fs_id' => $fs_id]);
+		return $this->db->exists('fs_betrieb_team', [
+			'betrieb_id' => $betrieb_id,
+			'foodsaver_id' => $fs_id,
+			'verantwortlich' => 1,
+			'active' => 1
+		]);
 	}
 
-	public function hasAnfrageAtStore($fs_id, $betrieb_id)
+	public function userAppliedForStore($fsId, $storeId)
 	{
-		return $this->db->fetchValue('
-
-				SELECT 	betrieb_id
-
-				FROM 	fs_betrieb_team
-
-				WHERE 	betrieb_id = :bid
-				AND 	foodsaver_id = :fs_id
-				AND 	verantwortlich = 0
-				AND 	active = 0
-		', [':bid' => $betrieb_id, ':fs_id' => $fs_id]);
+		return $this->db->exists('fs_betrieb_team',
+			[
+				'betrieb_id' => $storeId,
+				'foodsaver_id' => $fsId,
+				'verantwortlich' => 0,
+				'active' => 0
+			]);
 	}
 
 	public function addFetcher($fsid, $bid, $date, $confirm = 0): int
@@ -621,18 +615,12 @@ class StoreGateway extends BaseGateway
 
 	public function isInTeam($fs_id, $bid): bool
 	{
-		if ($this->db->fetchValue(
-			   'SELECT `foodsaver_id` 
-				FROM `fs_betrieb_team` 
-				WHERE foodsaver_id = :fs_id
-				AND betrieb_id = :bid
-				AND active IN(1,2)',
-			[':fs_id' => $fs_id, ':bid' => $bid])
-		) {
-			return true;
-		}
-
-		return false;
+		return $this->db->exists('fs_betrieb_team',
+			[
+				'foodsaver_id' => $fs_id,
+				'betrieb_id' => $bid,
+				'active >=' => 1
+			]);
 	}
 
 	/* retrieves all biebs that are biebs for a given bezirk (by being bieb in a Betrieb that is part of that bezirk, which is semantically not the same we use on platform) */

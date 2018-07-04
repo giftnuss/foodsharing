@@ -2,9 +2,11 @@
 
 namespace Foodsharing\Modules\Console;
 
+use Foodsharing\DI;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
 
 class ConsoleControl
 {
@@ -17,8 +19,14 @@ class ConsoleControl
 	 */
 	protected $func;
 
+	/**
+	 * @var EmailTemplateGateway
+	 */
+	private $emailTemplateGateway;
+
 	public function __construct()
 	{
+		$this->emailTemplateGateway = DI::$shared->get(EmailTemplateGateway::class);
 	}
 
 	/**
@@ -82,7 +90,7 @@ class ConsoleControl
 
 	protected function tplMail($tpl_id, $to, $var = array())
 	{
-		if ($message = $this->model->getOne_message_tpl($tpl_id)) {
+		if ($message = $this->emailTemplateGateway->getOne_message_tpl($tpl_id)) {
 			$search = array();
 			$replace = array();
 

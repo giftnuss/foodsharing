@@ -2,8 +2,10 @@
 
 namespace Foodsharing\Modules\Settings;
 
+use Foodsharing\Lib\Db\ManualDb;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Quiz\QuizModel;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session\S;
@@ -13,13 +15,17 @@ class SettingsControl extends Control
 	private $foodsaver;
 	private $quizModel;
 	private $contentGateway;
+	private $foodsaverGateway;
+	private $manualDb;
 
-	public function __construct(SettingsModel $model, SettingsView $view, QuizModel $quizModel, ContentGateway $contentGateway)
+	public function __construct(SettingsModel $model, SettingsView $view, QuizModel $quizModel, ContentGateway $contentGateway, FoodsaverGateway $foodsaverGateway, ManualDb $manualDb)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->quizModel = $quizModel;
 		$this->contentGateway = $contentGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
+		$this->manualDb = $manualDb;
 
 		parent::__construct();
 
@@ -38,7 +44,7 @@ class SettingsControl extends Control
 				'email' => $this->foodsaver['email'],
 				'email_name' => $this->foodsaver['name'] . ' ' . $this->foodsaver['nachname']
 			), 'loeschen@' . DEFAULT_EMAIL_HOST, $this->foodsaver['name'] . ' hat Account gelöscht', $this->foodsaver['name'] . ' ' . $this->foodsaver['nachname'] . ' hat Account gelöscht' . "\n\nGrund für das Löschen:\n" . strip_tags($_GET['reason']));
-			$this->model->del_foodsaver($this->func->fsId());
+			$this->foodsaverGateway->del_foodsaver($this->func->fsId());
 			$this->func->go('/?page=logout');
 		}
 
@@ -389,7 +395,7 @@ class SettingsControl extends Control
 	{
 		$this->handle_edit();
 
-		$data = $this->model->getOne_foodsaver($this->func->fsId());
+		$data = $this->foodsaverGateway->getOne_foodsaver($this->func->fsId());
 
 		$this->func->setEditData($data);
 
@@ -507,12 +513,16 @@ class SettingsControl extends Control
 			}
 
 			if ($check) {
-				if ($oldFs = $this->model->getOne_foodsaver($this->func->fsId())) {
+				if ($oldFs = $this->foodsaverGateway->getOne_foodsaver($this->func->fsId())) {
 					$logChangedFields = array('stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum');
 					$this->model->logChangedSetting($this->func->fsId(), $oldFs, $data, $logChangedFields);
 				}
 
-				if ($this->model->updateProfile($this->func->fsId(), $data)) {
+				if (!isset($data['bezirk_id'])) {
+					$data['bezirk_id'] = S::getCurrentBezirkId();
+				}
+				if ($this->foodsaverGateway->updateProfile(S::id(), $data)) {
+					$this->manualDb->relogin();
 					$this->func->info($this->func->s('foodsaver_edit_success'));
 				} else {
 					$this->func->error($this->func->s('error'));
@@ -523,7 +533,7 @@ class SettingsControl extends Control
 
 	public function picture_box()
 	{
-		$photo = $this->model->getPhoto($this->func->fsId());
+		$photo = $this->foodsaverGateway->getPhoto(S::id());
 
 		if (!(file_exists('images/thumb_crop_' . $photo))) {
 			$p_cnt = $this->v_utils->v_photo_edit('img/portrait.png');

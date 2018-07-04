@@ -4,6 +4,7 @@ use Foodsharing\DI;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session\S;
 
+/* @var $func Func */
 $func = DI::$shared->get(Func::class);
 
 $user = '';
