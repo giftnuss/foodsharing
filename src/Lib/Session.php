@@ -4,6 +4,7 @@ namespace Foodsharing\Lib;
 
 use Exception;
 use Flourish\fAuthorization;
+use Flourish\fImage;
 use Flourish\fSession;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
