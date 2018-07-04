@@ -15,7 +15,7 @@ $session = DI::$shared->get(Session::class);
 $session->init();
 
 if (isset($g_page_cache)) {
-	$cache = new Caching($g_page_cache);
+	$cache = new Caching($g_page_cache, $session);
 	$cache->lookup();
 }
 
