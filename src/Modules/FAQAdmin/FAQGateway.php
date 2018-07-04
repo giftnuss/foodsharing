@@ -67,4 +67,19 @@ class FAQGateway extends BaseGateway
 	{
 		return $this->db->fetchAll('SELECT `id`, `answer`, `name` FROM `fs_faq`');
 	}
+
+	public function add_faq($data)
+	{
+		return $this->db->insert('fs_faq', [
+				'foodsaver_id' => $data['foodsaver_id'],
+				'faq_kategorie_id' => $data['faq_kategorie_id'],
+				'name' => strip_tags($data['name']),
+				'answer' => strip_tags($data['answer'])
+			]);
+	}
+
+	public function del_faq($id)
+	{
+		return $this->db->delete('fs_faq', ['id' => $id]);
+	}
 }
