@@ -44,6 +44,7 @@
 - Fix cache clearing during test/deploy !414 @nicksellen
 - Add testing for client js !422 @nicksellen
 - Improve linting config !431 @nicksellen
+- Use instance access for Session !433 @nicksellen
 
 # 2018-05-24
 
