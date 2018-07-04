@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Dashboard;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\View;
 
 class DashboardView extends View
@@ -392,7 +391,7 @@ class DashboardView extends View
 			$out = $this->v_utils->v_info('Du bist bis jetzt in keinem Filial-Team.');
 		}
 
-		if (S::may('bieb')) {
+		if ($this->session->may('bieb')) {
 			$out .= '
 				<div class="ui-widget ui-widget-content ui-corner-all margin-bottom ui-padding">
 					<ul class="linklist">

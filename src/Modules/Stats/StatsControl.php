@@ -3,16 +3,19 @@
 namespace Foodsharing\Modules\Stats;
 
 use Foodsharing\Modules\Console\ConsoleControl;
+use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 
 class StatsControl extends ConsoleControl
 {
 	private $storeGateway;
+	private $regionGateway;
 
-	public function __construct(StatsModel $model, StoreGateway $storeGateway)
+	public function __construct(StatsModel $model, StoreGateway $storeGateway, RegionGateway $regionGateway)
 	{
 		$this->model = $model;
 		$this->storeGateway = $storeGateway;
+		$this->regionGateway = $regionGateway;
 		parent::__construct();
 	}
 
@@ -170,7 +173,7 @@ class StatsControl extends ConsoleControl
 		$bezirk_id = $bezirk['id'];
 		$last_update = $bezirk['stat_last_update'];
 
-		$child_ids = $this->model->getChildBezirke($bezirk_id);
+		$child_ids = $this->regionGateway->listIdsForDescendantsAndSelf($bezirk_id);
 
 		/* abholmenge & anzahl abholungen */
 		$stat_fetchweight = $this->model->getFetchWeight($bezirk_id, $last_update, $child_ids);

@@ -2,19 +2,21 @@
 
 namespace Foodsharing\Modules\EmailTemplateAdmin;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 
 class EmailTemplateAdminControl extends Control
 {
-	public function __construct(EmailTemplateAdminModel $model, EmailTemplateAdminView $view)
+	private $emailTemplateGateway;
+
+	public function __construct(EmailTemplateAdminModel $model, EmailTemplateAdminView $view, EmailTemplateGateway $emailTemplateGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->emailTemplateGateway = $emailTemplateGateway;
 
 		parent::__construct();
 
-		if (!S::may('orga')) {
+		if (!$this->session->may('orga')) {
 			$this->func->go('/');
 		}
 	}
@@ -43,7 +45,7 @@ class EmailTemplateAdminControl extends Control
 			$this->func->addBread($this->func->s('bread_message_tpl'), '/?page=message_tpl');
 			$this->func->addBread($this->func->s('bread_edit_message_tpl'));
 
-			$data = $this->model->getOne_message_tpl($id);
+			$data = $this->emailTemplateGateway->getOne_message_tpl($id);
 			$this->func->setEditData($data);
 
 			$this->func->addContent($this->view->message_tpl_form());
@@ -96,7 +98,7 @@ class EmailTemplateAdminControl extends Control
 	{
 		global $g_data;
 		if ($this->func->submitted()) {
-			if ($this->model->add_message_tpl($g_data)) {
+			if ($this->emailTemplateGateway->add_message_tpl($g_data)) {
 				$this->func->info($this->func->s('message_tpl_add_success'));
 				$this->func->goPage();
 			} else {

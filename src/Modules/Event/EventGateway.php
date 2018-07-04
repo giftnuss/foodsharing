@@ -172,4 +172,73 @@ class EventGateway extends BaseGateway
 
 		return $out;
 	}
+
+	public function getNextEvents($fs_id)
+	{
+		$next = $this->db->fetchAll('
+			SELECT
+				e.id,
+				e.name,
+				e.`description`,
+				e.`start`,
+				UNIX_TIMESTAMP(e.`start`) AS start_ts,
+				fe.`status`
+
+			FROM
+				`fs_event` e
+			LEFT JOIN
+				`fs_foodsaver_has_event` fe
+			ON
+				e.id = fe.event_id AND fe.foodsaver_id = ' . (int)$fs_id . '
+
+			WHERE
+				e.start >= CURDATE()
+			AND
+				((e.public = 1 AND (fe.`status` IS NULL OR fe.`status` <> 3))
+				OR
+					fe.`status` IN(1,2)
+				)
+			ORDER BY e.`start`
+		');
+
+		$out = array();
+
+		if ($next) {
+			foreach ($next as $n) {
+				$out[date('Y-m-d H:i', $n['start_ts']) . '-' . $n['id']] = $n;
+			}
+		}
+		if (!empty($out)) {
+			return $out;
+		}
+	}
+
+	public function getInvites($fs_id)
+	{
+		return $this->db->fetchAll('
+			SELECT
+				e.id,
+				e.name,
+				e.`description`,
+				e.`start`,
+				UNIX_TIMESTAMP(e.`start`) AS start_ts,
+				fe.`status`
+
+			FROM
+				`fs_event` e,
+				`fs_foodsaver_has_event` fe
+
+			WHERE
+				fe.event_id = e.id
+
+			AND
+				fe.foodsaver_id = ' . (int)$fs_id . '
+
+			AND
+				fe.`status` = 0
+
+			AND
+				e.`end` > NOW()
+		');
+	}
 }

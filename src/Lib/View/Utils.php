@@ -3,7 +3,7 @@
 namespace Foodsharing\Lib\View;
 
 use Foodsharing\Lib\Func;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 
 class Utils
 {
@@ -12,6 +12,11 @@ class Utils
 	 * @var Func
 	 */
 	private $func;
+
+	/**
+	 * @var \Foodsharing\Lib\Session
+	 */
+	private $session;
 
 	/**
 	 * @var \Twig\Environment
@@ -29,6 +34,14 @@ class Utils
 	public function setFunc(Func $func)
 	{
 		$this->func = $func;
+	}
+
+	/**
+	 * @required
+	 */
+	public function setSession(Session $session)
+	{
+		$this->session = $session;
 	}
 
 	/**
@@ -230,7 +243,7 @@ class Utils
 		});');
 
 		$nodeselect = 'node.data.type == 1 || node.data.type == 2 || node.data.type == 3 || node.data.type == 4 || node.data.type == 7';
-		if (S::may('orga')) {
+		if ($this->session->may('orga')) {
 			$nodeselect = 'true';
 		}
 

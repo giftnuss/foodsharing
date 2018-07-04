@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Quiz;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
@@ -22,7 +21,7 @@ class QuizXhr extends Control
 
 	public function hideinfo()
 	{
-		S::setOption('quiz-infobox-seen', true, $this->model);
+		$this->session->setOption('quiz-infobox-seen', true, $this->model);
 	}
 
 	public function addquest()
@@ -255,7 +254,7 @@ class QuizXhr extends Control
 
 	public function abort()
 	{
-		if (S::may()) {
+		if ($this->session->may()) {
 			$this->model->abortSession($_GET['sid']);
 
 			return array(
@@ -295,7 +294,7 @@ class QuizXhr extends Control
 	 */
 	public function startquiz()
 	{
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			return false;
 		}
 		/*
@@ -303,15 +302,15 @@ class QuizXhr extends Control
 		 */
 		if ($session = $this->model->getExsistingSession($_GET['qid'])) {
 			// if yes, reinitiate the running quiz session
-			S::set('quiz-id', (int)$_GET['qid']);
-			S::set('quiz-questions', $session['quiz_questions']);
-			S::set('quiz-index', $session['quiz_index']);
-			S::set('quiz-session', $session['id']);
+			$this->session->set('quiz-id', (int)$_GET['qid']);
+			$this->session->set('quiz-questions', $session['quiz_questions']);
+			$this->session->set('quiz-index', $session['quiz_index']);
+			$this->session->set('quiz-session', $session['id']);
 			$easymode = false;
 			if ($session['easymode'] == 1 && (int)$_GET['qid'] == 1) {
 				$easymode = true;
 			}
-			S::set('quiz-easymode', $easymode);
+			$this->session->set('quiz-easymode', $easymode);
 
 			/*
 			 * Make a little output that the user can continue the quiz
@@ -336,10 +335,10 @@ class QuizXhr extends Control
 			*/
 
 			if ($_GET['qid'] == 1 && isset($_GET['easymode']) && $_GET['easymode'] == 1) {
-				S::set('quiz-easymode', true);
+				$this->session->set('quiz-easymode', true);
 				$quiz['questcount'] = 20;
 			} else {
-				S::set('quiz-easymode', false);
+				$this->session->set('quiz-easymode', false);
 			}
 
 			/*
@@ -358,9 +357,9 @@ class QuizXhr extends Control
 				/*
 				 * Store quiz data in the users session
 				 */
-				S::set('quiz-id', (int)$_GET['qid']);
-				S::set('quiz-questions', $questions);
-				S::set('quiz-index', 0);
+				$this->session->set('quiz-id', (int)$_GET['qid']);
+				$this->session->set('quiz-questions', $questions);
+				$this->session->set('quiz-index', 0);
 
 				/*
 				 * Make a litle output for the user that he/she can just start the quiz now
@@ -399,11 +398,11 @@ class QuizXhr extends Control
 
 		$dia->addAbortButton();
 
-		if (S::get('hastodoquiz-id') == 1) {
+		if ($this->session->get('hastodoquiz-id') == 1) {
 			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Foodsaver bestätigen', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
-		} elseif (S::get('hastodoquiz-id') == 2) {
+		} elseif ($this->session->get('hastodoquiz-id') == 2) {
 			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche*r bestätigen', 'goTo(\'/?page=settings&sub=upgrade/up_bip\');');
-		} elseif (S::get('hastodoquiz-id') == 3) {
+		} elseif ($this->session->get('hastodoquiz-id') == 3) {
 			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
 		}
 
@@ -416,20 +415,20 @@ class QuizXhr extends Control
 
 	public function quizpopup()
 	{
-		if (S::may('fs')) {
-			$count = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND quiz_id = ' . (int)S::get('hastodoquiz-id') . ' AND `status` = 1');
+		if ($this->session->may('fs')) {
+			$count = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND quiz_id = ' . (int)$this->session->get('hastodoquiz-id') . ' AND `status` = 1');
 			if ($count == 0) {
 				$dia = new XhrDialog();
 				$dia->addOpt('width', 720);
 				$content_id = 18;
 				$dia->addAbortButton();
 
-				if (S::get('hastodoquiz-id') == 1) {
+				if ($this->session->get('hastodoquiz-id') == 1) {
 					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Foodsaver bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
-				} elseif (S::get('hastodoquiz-id') == 2) {
+				} elseif ($this->session->get('hastodoquiz-id') == 2) {
 					$content_id = 34;
 					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche/r bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_bip\');');
-				} elseif (S::get('hastodoquiz-id') == 3) {
+				} elseif ($this->session->get('hastodoquiz-id') == 3) {
 					$content_id = 35;
 					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
 				}
@@ -449,7 +448,7 @@ class QuizXhr extends Control
 
 	public function addcomment()
 	{
-		if (S::may() && !empty($_GET['comment']) && (int)$_GET['id'] > 0) {
+		if ($this->session->may() && !empty($_GET['comment']) && (int)$_GET['id'] > 0) {
 			$this->model->addUserComment((int)$_GET['id'], $_GET['comment']);
 
 			return array(
@@ -466,32 +465,32 @@ class QuizXhr extends Control
 	 */
 	public function next()
 	{
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			return false;
 		}
 		/*
 		 * Try to find a current quiz session ant retrieve the questions
 		 */
-		if ($quiz = S::get('quiz-questions')) {
+		if ($quiz = $this->session->get('quiz-questions')) {
 			$dia = new XhrDialog();
 			$dia->addClass('quiz-questiondialog');
 			// get quiz_index it is the current array index of the questions
-			$i = S::get('quiz-index');
+			$i = $this->session->get('quiz-index');
 
 			/*
 			 * If the quiz index is 0 we have to start a new quiz session
 			 */
 
 			$easymode = 0;
-			if (S::get('quiz-easymode')) {
+			if ($this->session->get('quiz-easymode')) {
 				$easymode = 1;
 			}
 
 			if ($i == 0) {
-				$quuizz = $this->model->getQuiz(S::get('quiz-id'));
+				$quuizz = $this->model->getQuiz($this->session->get('quiz-id'));
 				// init quiz session in DB
-				if ($id = $this->model->initQuizSession(S::get('quiz-id'), $quiz, $quuizz['maxfp'], $quuizz['questcount'], $easymode)) {
-					S::set('quiz-session', $id);
+				if ($id = $this->model->initQuizSession($this->session->get('quiz-id'), $quiz, $quuizz['maxfp'], $quuizz['questcount'], $easymode)) {
+					$this->session->set('quiz-session', $id);
 				}
 			}
 
@@ -526,7 +525,7 @@ class QuizXhr extends Control
 				/*
 				 * store the time how much time has the user need
 				 */
-				$quiz[($i - 1)]['userduration'] = (time() - (int)S::get('quiz-quest-start'));
+				$quiz[($i - 1)]['userduration'] = (time() - (int)$this->session->get('quiz-quest-start'));
 
 				/*
 				 * has store noco ;) its the value when the user marked that no answer is correct
@@ -536,7 +535,7 @@ class QuizXhr extends Control
 				/*
 				 * And store it all back to the session
 				 */
-				S::set('quiz-questions', $quiz);
+				$this->session->set('quiz-questions', $quiz);
 			}
 
 			/*
@@ -557,13 +556,13 @@ class QuizXhr extends Control
 			if (isset($_GET['special'])) {
 				// make a break
 				if ($_GET['special'] == 'pause') {
-					$this->model->updateQuizSession(S::get('quiz-session'), $quiz, $i);
+					$this->model->updateQuizSession($this->session->get('quiz-session'), $quiz, $i);
 
 					return $this->pause();
 				}
 
 				if ($_GET['special'] == 'result') {
-					$this->model->updateQuizSession(S::get('quiz-session'), $quiz, $i);
+					$this->model->updateQuizSession($this->session->get('quiz-session'), $quiz, $i);
 
 					return $this->resultNew($quiz[($i - 1)], $dia->getId());
 				}
@@ -592,12 +591,12 @@ class QuizXhr extends Control
 						 * increase the question index so we are at the next question ;)
 						 */
 						++$i;
-						S::set('quiz-index', $i);
+						$this->session->set('quiz-index', $i);
 
 						// update quiz session
-						$session_id = S::get('quiz-session');
+						$session_id = $this->session->get('quiz-session');
 						$this->model->updateQuizSession($session_id, $quiz, $i);
-						S::set('quiz-quest-start', time());
+						$this->session->set('quiz-quest-start', time());
 
 						/*
 						 * let's prepare the output dialog
@@ -847,7 +846,7 @@ class QuizXhr extends Control
 						return $return;
 					} else {
 						++$i;
-						S::set('quiz-index', $i);
+						$this->session->set('quiz-index', $i);
 
 						return array(
 							'status' => 1,
@@ -861,7 +860,7 @@ class QuizXhr extends Control
 		}
 
 		++$i;
-		S::set('quiz-index', $i);
+		$this->session->set('quiz-index', $i);
 
 		return array(
 			'status' => 1,
@@ -871,13 +870,13 @@ class QuizXhr extends Control
 
 	private function quizResult()
 	{
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			return false;
 		}
 
-		if ($quiz = $this->model->getQuiz(S::get('quiz-id'))) {
-			if ($questions = S::get('quiz-questions')) {
-				if ($rightQuestions = $this->model->getRightQuestions(S::get('quiz-id'))) {
+		if ($quiz = $this->model->getQuiz($this->session->get('quiz-id'))) {
+			if ($questions = $this->session->get('quiz-questions')) {
+				if ($rightQuestions = $this->model->getRightQuestions($this->session->get('quiz-id'))) {
 					$explains = array();
 					$fp = 0;
 					$question_number = 0;
@@ -898,11 +897,11 @@ class QuizXhr extends Control
 					}
 				}
 
-				$this->model->finishQuiz(S::get('quiz-session'), $questions, $explains, $fp, $quiz['maxfp']);
+				$this->model->finishQuiz($this->session->get('quiz-session'), $questions, $explains, $fp, $quiz['maxfp']);
 
 				return array(
 					'status' => 1,
-					'script' => 'goTo("/?page=settings&sub=quizsession&sid=' . (int)S::get('quiz-session') . '");'
+					'script' => 'goTo("/?page=settings&sub=quizsession&sid=' . (int)$this->session->get('quiz-session') . '");'
 				);
 			}
 		}

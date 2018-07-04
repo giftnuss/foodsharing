@@ -2,18 +2,20 @@
 
 namespace Foodsharing\Modules\Blog;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
 class BlogModel extends Model
 {
 	private $bellGateway;
+	private $foodsaverGateway;
 
-	public function __construct(BellGateway $bellGateway)
+	public function __construct(BellGateway $bellGateway, FoodsaverGateway $foodsaverGateway)
 	{
 		parent::__construct();
 		$this->bellGateway = $bellGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 	}
 
 	public function canEdit($article_id)
@@ -103,7 +105,7 @@ class BlogModel extends Model
 	{
 		$not = '';
 		if (!$this->func->isOrgaTeam()) {
-			$not = 'WHERE 		`bezirk_id` IN (' . implode(',', S::getBezirkIds()) . ')';
+			$not = 'WHERE 		`bezirk_id` IN (' . implode(',', $this->session->getBezirkIds()) . ')';
 		}
 
 		return $this->q('
@@ -185,8 +187,8 @@ class BlogModel extends Model
 			)');
 
 		$foodsaver = array();
-		$orgateam = $this->getOrgateam();
-		$botschafter = $this->getBotschafter($data['bezirk_id']);
+		$orgateam = $this->foodsaverGateway->getOrgateam();
+		$botschafter = $this->foodsaverGateway->getBotschafter($data['bezirk_id']);
 
 		foreach ($orgateam as $o) {
 			$foodsaver[$o['id']] = $o;
@@ -202,7 +204,7 @@ class BlogModel extends Model
 			'fa fa-bullhorn',
 			array('href' => '/?page=blog&sub=edit&id=' . $id),
 			array(
-				'user' => S::user('name'),
+				'user' => $this->session->user('name'),
 				'teaser' => $this->func->tt($data['teaser'], 100),
 				'title' => $data['name']
 			),

@@ -6,23 +6,25 @@ use Exception;
 use Flourish\fImage;
 use Flourish\fUpload;
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Services\SearchService;
 
 class LoginXhr extends Control
 {
 	private $searchService;
 	private $contentGateway;
+	private $foodsaverGateway;
 
-	public function __construct(LoginModel $model, LoginView $view, SearchService $searchService, ContentGateway $contentGateway)
+	public function __construct(LoginModel $model, LoginView $view, SearchService $searchService, ContentGateway $contentGateway, FoodsaverGateway $foodsaverGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->searchService = $searchService;
 		$this->contentGateway = $contentGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 
 		parent::__construct();
 	}
@@ -43,7 +45,7 @@ class LoginXhr extends Control
 
 	public function login()
 	{
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			$dia = new XhrDialog();
 
 			$dia->setTitle($this->func->s('login'));
@@ -73,7 +75,7 @@ class LoginXhr extends Control
 	{
 		if ($this->model->login($_GET['u'], $_GET['p'])) {
 			$token_js = '';
-			if ($token = $this->searchService->writeSearchIndexToDisk(S::id(), S::user('token'))) {
+			if ($token = $this->searchService->writeSearchIndexToDisk($this->session->id(), $this->session->user('token'))) {
 				$token_js = 'user.token = "' . $token . '";';
 			}
 
@@ -214,6 +216,8 @@ class LoginXhr extends Control
 
 		if (isset($data['avatar']) && $data['avatar'] != '') {
 			$data['avatar'] = $this->resizeAvatar($data['avatar']);
+		} else {
+			$data['avatar'] = '';
 		}
 
 		$data['name'] = strip_tags($data['name']);
@@ -230,7 +234,7 @@ class LoginXhr extends Control
 			return $this->func->s('error_email');
 		}
 
-		if ($this->model->emailExists($data['email'])) {
+		if ($this->foodsaverGateway->emailExists($data['email'])) {
 			return $this->func->s('email_exists');
 		}
 
@@ -250,16 +254,17 @@ class LoginXhr extends Control
 			return $this->func->s('error_birthdate');
 		}
 		$data['birthdate'] = $birthdate->format('Y-m-d');
-		$data['mobile_phone'] = strip_tags($data['mobile_phone']);
-		$data['lat'] = floatval($data['lat']);
-		$data['lon'] = floatval($data['lon']);
-		$data['str'] = strip_tags($data['str']);
-		$data['plz'] = preg_replace('[^0-9]', '', $data['plz']) . '';
-		$data['city'] = strip_tags($data['city']);
+		$data['mobile_phone'] = strip_tags($data['mobile_phone'] ?? null);
+		$data['lat'] = floatval($data['lat'] ?? null);
+		$data['lon'] = floatval($data['lon'] ?? null);
+		$data['str'] = strip_tags($data['str'] ?? null);
+		$data['plz'] = preg_replace('[^0-9]', '', $data['plz'] ?? null) . '';
+		$data['city'] = strip_tags($data['city'] ?? null);
 		$data['city'] = trim($data['city']);
-		$data['country'] = strip_tags($data['country']);
+		$data['country'] = strip_tags($data['country'] ?? null);
 		$data['country'] = strtolower($data['country']);
 		$data['country'] = trim($data['country']);
+		$data['nr'] = $data['nr'] ?? null;
 
 		$data['newsletter'] = (int)$data['newsletter'];
 		if (!in_array($data['newsletter'], array(0, 1), true)) {
@@ -274,7 +279,7 @@ class LoginXhr extends Control
 	 */
 	public function join()
 	{
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			$dia = new XhrDialog();
 
 			$dia->setTitle($this->func->s('join'));

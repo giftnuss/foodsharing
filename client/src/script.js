@@ -55,7 +55,7 @@ export function closeAllDialogs () {
   })
 }
 
-var sleepmode = {
+export const sleepmode = {
   init: function () {
     $('.sleepmode-1, .sleepmode-2').mouseover(function () {
       var $this = $(this)

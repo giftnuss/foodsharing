@@ -8,6 +8,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const path = require('path')
 const clientRoot = path.resolve(__dirname)
 const { join } = require('path')
+const modules = require('./modules')
 
 const dev = process.env.NODE_ENV !== 'production'
 
@@ -57,18 +58,7 @@ plugins.push(
 )
 
 module.exports = merge(webpackBase, {
-  entry: moduleEntries(
-    // We explicitly define each foodsharing modules here so we can convert them one-by-one
-    'Index',
-    'Basket',
-    'Dashboard',
-    'Foodsaver',
-    'Region',
-    'StoreUser',
-    'WorkGroup',
-    'Login',
-    'Message'
-  ),
+  entry: moduleEntries(...modules),
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'cheap-module-eval-source-map' : 'source-map',
   stats: 'minimal',

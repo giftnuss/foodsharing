@@ -1,5 +1,11 @@
 <?php
 
+/* Adding Whoops during testing can be very useful as the screenshots in the tests/_output folder can show a nice
+	 error message. It also catches warnings and the whole site runs in a way that is always throwing warnings out.
+	 But hopefully we fix all those at some point :)
+*/
+Foodsharing\Debug\Whoops::register();
+
 /* Codeception remote codecoverage - only used for testing */
 define('C3_CODECOVERAGE_ERROR_LOG_FILE', '/app/tests/_output/c3_error.log'); //Optional (if not set the default c3 output dir will be used)
 include __DIR__ . '/vendor/codeception/c3/c3.php';
@@ -39,9 +45,3 @@ define('REDIS_PORT', 6379);
 if (!defined('ROOT_DIR')) {
 	define('ROOT_DIR', './');
 }
-
-/* Adding Whoops during testing can be very useful as the screenshots in the tests/_output folder can show a nice
-   error message. However, it's not useful to enable it all the time yet as it also catches warnings and the whole
-   site runs in a way that is always throwing warnings out. But hopefully we fix all those at some point then can
-   enable it in test env always! Happy coding :) */
-//Foodsharing\Debug\Whoops::register();

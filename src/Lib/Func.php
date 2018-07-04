@@ -7,12 +7,12 @@ use Flourish\fDate;
 use Flourish\fFile;
 use Flourish\fImage;
 use Foodsharing\DI;
-use Foodsharing\Lib\Db\ManualDb;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
+use Foodsharing\Modules\Region\RegionGateway;
 use JSMin;
 
 class Func
@@ -41,9 +41,14 @@ class Func
 	public $jsData = [];
 
 	/**
-	 * @var Twig
+	 * @var \Twig\Environment
 	 */
 	private $twig;
+
+	/**
+	 * @var Session
+	 */
+	private $session;
 
 	public function __construct(Utils $viewUtils)
 	{
@@ -73,6 +78,14 @@ class Func
 	public function setTwig(\Twig\Environment $twig)
 	{
 		$this->twig = $twig;
+	}
+
+	/**
+	 * @required
+	 */
+	public function setSession(Session $session)
+	{
+		$this->session = $session;
 	}
 
 	public function jsonSafe($str)
@@ -380,10 +393,11 @@ class Func
 
 	public function isBotForA($bezirk_ids, $include_groups = true, $include_parent_bezirke = false)
 	{
-		if ($this->isBotschafter() && is_array($bezirk_ids)) {
+		if ($this->session->isBotschafter() && is_array($bezirk_ids)) {
 			if ($include_parent_bezirke) {
-				$manualDb = DI::$shared->get(ManualDb::class);
-				$bezirk_ids = $manualDb->getParentBezirke($bezirk_ids);
+				/* @var $gw RegionGateway */
+				$gw = DI::$shared->get(RegionGateway::class);
+				$bezirk_ids = $gw->getParentBezirke($bezirk_ids);
 			}
 			foreach ($_SESSION['client']['botschafter'] as $b) {
 				foreach ($bezirk_ids as $bid) {
@@ -412,21 +426,20 @@ class Func
 		return false;
 	}
 
+	/**
+	 * @deprecated use $this->session->isBotschafter() instead
+	 */
 	public function isBotschafter()
 	{
-		if (isset($_SESSION['client']['botschafter'])) {
-			return true;
-		}
-
-		return false;
+		return $this->session->isBotschafter();
 	}
 
 	/**
-	 * @deprecated use S::isOrgaTeam() instead
+	 * @deprecated use $this->session->isOrgaTeam() instead
 	 */
 	public function isOrgaTeam()
 	{
-		return $this->mayGroup('orgateam');
+		return $this->session->isOrgaTeam();
 	}
 
 	public function getMenu($usesWebpack = false)
@@ -448,19 +461,19 @@ class Func
 			$stores = $_SESSION['client']['betriebe'];
 		}
 
-		$loggedIn = S::may();
+		$loggedIn = $this->session->may();
 
 		return $this->getMenuFn(
 			$loggedIn,
 			$regions,
-			S::may('fs'),
+			$this->session->may('fs'),
 			$this->isOrgaTeam(),
 			$this->mayEditBlog(),
 			$this->mayEditQuiz(),
 			$this->mayHandleReports(),
 			$stores,
 			$workingGroups,
-			S::get('mailbox'),
+			$this->session->get('mailbox'),
 			$this->fsId(),
 			$loggedIn ? $this->img() : '',
 			$usesWebpack
@@ -610,7 +623,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function tplMail($tpl_id, $to, $var = array(), $from_email = false)
 	{
-		$manualDb = DI::$shared->get(ManualDb::class);
 		$mail = new AsyncMail();
 
 		if ($from_email !== false && $this->validEmail($from_email)) {
@@ -619,7 +631,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$mail->setFrom(DEFAULT_EMAIL, DEFAULT_EMAIL_NAME);
 		}
 
-		$message = $manualDb->getOne_message_tpl($tpl_id);
+		/* @var $gw EmailTemplateGateway */
+		$gw = DI::$shared->get(EmailTemplateGateway::class);
+		$message = $gw->getOne_message_tpl($tpl_id);
 
 		$search = array();
 		$replace = array();
@@ -835,11 +849,11 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	}
 
 	/**
-	 * @deprecated use S::getCurrentBezirkId() instead
+	 * @deprecated use $this->session->getCurrentBezirkId() instead
 	 */
 	public function getBezirkId()
 	{
-		return S::getCurrentBezirkId();
+		return $this->session->getCurrentBezirkId();
 	}
 
 	public function getPage()
@@ -1119,17 +1133,17 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		$userData = [
 			'id' => $this->fsId(),
-			'may' => S::may(),
+			'may' => $this->session->may(),
 			'verified' => $this->isVerified(),
 		];
 
-		if (S::may()) {
-			$userData['token'] = S::user('token');
+		if ($this->session->may()) {
+			$userData['token'] = $this->session->user('token');
 		}
 
 		$location = null;
 
-		if ($pos = S::get('blocation')) {
+		if ($pos = $this->session->get('blocation')) {
 			$location = [
 				'lat' => floatval($pos['lat']),
 				'lon' => floatval($pos['lon']),
@@ -1210,7 +1224,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 		$msgbar = '';
 		$logolink = '/';
-		if (S::may()) {
+		if ($this->session->may()) {
 			$msgbar = $this->viewUtils->v_msgBar();
 			$logolink = '/?page=dashboard';
 		} else {
@@ -1274,7 +1288,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	}
 
 	/**
-	 * @deprecated use S::id() instead
+	 * @deprecated use $this->session->id() instead
 	 */
 	public function fsId()
 	{
@@ -1374,9 +1388,10 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function getBezirk()
 	{
-		$manualDb = DI::$shared->get(ManualDb::class);
+		/* @var $gw RegionGateway */
+		$gw = DI::$shared->get(RegionGateway::class);
 
-		return $manualDb->getBezirk();
+		return $gw->getBezirk($this->session->getCurrentBezirkId());
 	}
 
 	public function genderWord($gender, $m, $w, $other)
@@ -1474,7 +1489,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	}
 
 	/**
-	 * @deprecated use S::mayGroup($group) instead
+	 * @deprecated use $this->session->mayGroup($group) instead
 	 */
 	public function mayGroup($group)
 	{
@@ -1488,21 +1503,21 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	public function mayHandleReports()
 	{
 		// group "Verstöße/Meldungen"
-		return S::may('orga') || $this->isBotFor(432);
+		return $this->session->may('orga') || $this->isBotFor(432);
 	}
 
 	public function mayEditQuiz()
 	{
-		return S::may('orga') || $this->isBotFor(341);
+		return $this->session->may('orga') || $this->isBotFor(341);
 	}
 
 	public function mayEditBlog()
 	{
 		if ($all_group_admins = Mem::get('all_global_group_admins')) {
-			return S::may('orga') || in_array($this->fsId(), unserialize($all_group_admins));
+			return $this->session->may('orga') || in_array($this->fsId(), unserialize($all_group_admins));
 		}
 
-		return S::may('orga');
+		return $this->session->may('orga');
 	}
 
 	public function may()

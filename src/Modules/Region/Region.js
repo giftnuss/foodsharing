@@ -105,7 +105,7 @@ if (['botforum', 'forum'].includes(GET('sub'))) {
             data: {'pid': clickedPid},
             success: function (ret) {
               if (ret == 1) {
-                $('#tpost-' + clickedPid).remove();
+                $('#tpost-' + clickedPid).remove()
                 if ($('.post').length == 0) {
                   reload()
                 } else {

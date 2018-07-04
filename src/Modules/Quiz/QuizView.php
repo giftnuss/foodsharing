@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Quiz;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\View;
 
 class QuizView extends View
@@ -344,7 +343,7 @@ class QuizView extends View
 		<p style="text-align:center;">';
 
 		if ($fp < $maxfp) {
-			switch (S::get('quiz-id')) {
+			switch ($this->session->get('quiz-id')) {
 				case 1:
 					$out .= '<a href="/?page=settings&sub=upgrade/up_fs" class="button">Jetzt die Foodsaver-Anmeldung abschließen.</a>';
 					break;

@@ -6,6 +6,7 @@ import 'jquery-tagedit'
 import 'jquery-tagedit-auto-grow-input'
 import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.css'
+import './WorkGroup.css'
 
 var $groups = $('.groups .field')
 if ($groups.length > 3) {

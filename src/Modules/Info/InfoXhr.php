@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Info;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
 
@@ -36,7 +35,7 @@ class InfoXhr extends Control
 			}
 		}
 		// get new Fair-Teiler badgecount only for region admin
-		if (S::may('bot')) {
+		if ($this->session->may('bot')) {
 			if ($count = $this->model->getFairteilerBadgdeCount()) {
 				$bell += $count;
 			}

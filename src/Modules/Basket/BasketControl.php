@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Basket;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
 
@@ -41,8 +40,8 @@ class BasketControl extends Control
 
 	public function find()
 	{
-		$baskets = $this->basketGateway->listCloseBaskets(S::id(), S::getLocation());
-		$this->view->find($baskets, S::getLocation());
+		$baskets = $this->basketGateway->listCloseBaskets($this->session->id(), $this->session->getLocation());
+		$this->view->find($baskets, $this->session->getLocation());
 	}
 
 	private function basket($basket)
@@ -50,7 +49,7 @@ class BasketControl extends Control
 		$wallposts = false;
 		$requests = false;
 
-		if (S::may()) {
+		if ($this->session->may()) {
 			if ($basket['fs_id'] != S::id()) {
 				$this->func->addJsFunc('
 				function u_wallpostReady(postid)

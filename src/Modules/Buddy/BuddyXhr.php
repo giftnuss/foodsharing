@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Buddy;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
@@ -23,20 +22,20 @@ class BuddyXhr extends Control
 
 	public function request()
 	{
-		if ($this->gateway->buddyRequestedMe($_GET['id'], S::id())) {
-			$this->gateway->confirmBuddy($_GET['id'], S::id());
+		if ($this->gateway->buddyRequestedMe($_GET['id'], $this->session->id())) {
+			$this->gateway->confirmBuddy($_GET['id'], $this->session->id());
 
 			$this->bellGateway->delBellsByIdentifier('buddy-' . $this->func->fsId() . '-' . (int)$_GET['id']);
 			$this->bellGateway->delBellsByIdentifier('buddy-' . (int)$_GET['id'] . $this->func->fsId());
 
 			$buddy_ids = array();
-			if ($b = S::get('buddy-ids')) {
+			if ($b = $this->session->get('buddy-ids')) {
 				$buddy_ids = $b;
 			}
 
 			$buddy_ids[(int)$_GET['id']] = (int)$_GET['id'];
 
-			S::set('buddy-ids', $buddy_ids);
+			$this->session->set('buddy-ids', $buddy_ids);
 
 			return array(
 				'status' => 1,
@@ -44,7 +43,7 @@ class BuddyXhr extends Control
 			);
 		}
 
-		if ($this->gateway->buddyRequest($_GET['id'], S::id())) {
+		if ($this->gateway->buddyRequest($_GET['id'], $this->session->id())) {
 			// language string for title
 			$title = 'buddy_request_title';
 
@@ -52,13 +51,13 @@ class BuddyXhr extends Control
 			$body = 'buddy_request';
 
 			// icon css class
-			$icon = $this->func->img(S::user('photo'));
+			$icon = $this->func->img($this->session->user('photo'));
 
 			// whats happen when click on the bell content
 			$link_attributes = array('href' => '#', 'onclick' => 'profile(' . (int)$this->func->fsId() . ');return false;');
 
 			// variables for the language strings
-			$vars = array('name' => S::user('name'));
+			$vars = array('name' => $this->session->user('name'));
 
 			$identifier = 'buddy-' . $this->func->fsId() . '-' . (int)$_GET['id'];
 
@@ -73,7 +72,7 @@ class BuddyXhr extends Control
 
 	public function removeRequest(): array
 	{
-		$this->gateway->removeRequest($_GET['id'], S::id());
+		$this->gateway->removeRequest($_GET['id'], $this->session->id());
 
 		return array(
 			'status' => 1,

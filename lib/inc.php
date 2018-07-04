@@ -4,15 +4,18 @@ use Foodsharing\DI;
 use Foodsharing\Lib\Cache\Caching;
 use Foodsharing\Lib\Db\ManualDb;
 use Foodsharing\Lib\Func;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 require_once 'config.inc.php';
-S::init();
+
+$session = DI::$shared->get(Session::class);
+$session->init();
+
 if (isset($g_page_cache)) {
-	$cache = new Caching($g_page_cache);
+	$cache = new Caching($g_page_cache, $session);
 	$cache->lookup();
 }
 
@@ -32,12 +35,16 @@ $content_right_width = 6;
 $request = Request::createFromGlobals();
 $response = new Response('--');
 
+/* @var $func Func */
 $func = DI::$shared->get(Func::class);
+
+/* @var $viewUtils Utils */
 $viewUtils = DI::$shared->get(Utils::class);
 
 $g_template = 'default';
 $g_data = $func->getPostData();
 
+/* @var $db ManualDb */
 $db = DI::$shared->get(ManualDb::class);
 
 $func->addHidden('<a id="' . $func->id('fancylink') . '" href="#fancy">&nbsp;</a>');

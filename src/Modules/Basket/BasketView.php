@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\Basket;
 
 use Exception;
 use Flourish\fImage;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\vMap;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\View;
@@ -27,7 +26,7 @@ class BasketView extends View
 		$map = new vMap($location);
 
 		if (is_array($location)) {
-			$map->setLocation($location['lat'], $location['lon']);
+			$map->setCenter($location['lat'], $location['lon']);
 		}
 
 		$map->setSearchPanel('mapsearch');
@@ -87,7 +86,7 @@ class BasketView extends View
 		if ($wallposts) {
 			$page->addSection($wallposts, 'Pinnwand');
 		}
-		if (S::may()) {
+		if ($this->session->may()) {
 			$page->addSectionRight($this->userBox($basket), 'AnbieterIn');
 
 			if ($basket['lat'] != 0 || $basket['lon'] != 0) {
@@ -96,7 +95,7 @@ class BasketView extends View
 
 				$map->setDefaultMarkerOptions('basket', 'green');
 
-				$map->setLocation($basket['lat'], $basket['lon']);
+				$map->setCenter($basket['lat'], $basket['lon']);
 
 				$page->addSectionRight($map->render(), 'Wo?');
 			}

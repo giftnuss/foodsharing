@@ -2,9 +2,10 @@
 
 namespace Foodsharing\Modules\PassportGenerator;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Region\RegionGateway;
 use setasign\Fpdi;
 
 class PassportGeneratorControl extends Control
@@ -12,12 +13,18 @@ class PassportGeneratorControl extends Control
 	private $bezirk_id;
 	private $bezirk;
 	private $bellGateway;
+	private $regionGateway;
+	private $passportGateway;
+	private $foodsaverGateway;
 
-	public function __construct(PassportGeneratorModel $model, PassportGeneratorView $view, BellGateway $bellGateway)
+	public function __construct(PassportGeneratorModel $model, PassportGeneratorView $view, BellGateway $bellGateway, RegionGateway $regionGateway, PassportGateway $passportGateway, FoodsaverGateway $foodsaverGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->bellGateway = $bellGateway;
+		$this->regionGateway = $regionGateway;
+		$this->passportGateway = $passportGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 
 		parent::__construct();
 
@@ -28,7 +35,7 @@ class PassportGeneratorControl extends Control
 
 		if ($this->func->isBotFor($this->bezirk_id) || $this->func->isOrgaTeam()) {
 			$this->bezirk = false;
-			if ($bezirk = $this->model->getBezirk($this->bezirk_id)) {
+			if ($bezirk = $this->regionGateway->getBezirk($this->bezirk_id)) {
 				$this->bezirk = $bezirk;
 			}
 		} else {
@@ -120,7 +127,7 @@ class PassportGeneratorControl extends Control
 						'passgen_failed',
 						'fa fa-camera',
 						array('href' => '/?page=settings'),
-						array('user' => S::user('name')),
+						array('user' => $this->session->user('name')),
 						'pass-fail-' . $fs['id']
 					);
 					continue;
@@ -134,7 +141,7 @@ class PassportGeneratorControl extends Control
 
 				++$card;
 
-				$this->model->passGen($fs['id']);
+				$this->passportGateway->passGen($this->session->id(), $fs['id']);
 
 				$pdf->Image('img/pass_bg.png', 10 + $x, 10 + $y, 83, 55);
 
@@ -163,7 +170,7 @@ class PassportGeneratorControl extends Control
 
 				$pdf->Image('tmp/qr_' . $fs_id . '.png', 70 + $x, 42.1 + $y);
 
-				if ($photo = $this->model->getPhoto($fs_id)) {
+				if ($photo = $this->foodsaverGateway->getPhoto($fs_id)) {
 					if (file_exists('images/crop_' . $photo)) {
 						$pdf->Image('images/crop_' . $photo, 14 + $x, 29.7 + $y, 24);
 					} elseif (file_exists('images/' . $photo)) {

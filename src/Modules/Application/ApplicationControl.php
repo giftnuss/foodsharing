@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Application;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
@@ -38,7 +37,7 @@ class ApplicationControl extends Control
 
 		$this->view->setBezirk($this->bezirk);
 
-		if (!($this->func->isBotFor($this->bezirk_id) || S::may('orga'))) {
+		if (!($this->func->isBotFor($this->bezirk_id) || $this->session->may('orga'))) {
 			$this->func->go('/');
 		}
 	}

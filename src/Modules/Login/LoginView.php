@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Login;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\View;
 
 class LoginView extends View
@@ -23,7 +22,7 @@ class LoginView extends View
 
 	public function passwordRequest()
 	{
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			$params = array(
 				'email' => $this->func->s('login_email'),
 				'action' => $_SERVER['REQUEST_URI']

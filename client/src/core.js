@@ -12,6 +12,7 @@ import 'fullpage.js'
 import 'jquery-contextmenu'
 import 'jquery-contextmenu/dist/jquery.ui.position'
 import 'jquery-contextmenu/dist/jquery.contextMenu.css'
+import '@/jquery.contextMenu.overrides.css'
 
 import '@/menu'
 import '@/becomeBezirk'

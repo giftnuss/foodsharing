@@ -2,17 +2,19 @@
 
 namespace Foodsharing\Controller;
 
-use FOS\RestBundle\Controller\FOSRestController;
+use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Message\MessageModel;
-use Foodsharing\Lib\Session\S;
+use FOS\RestBundle\Controller\FOSRestController;
 
 class MessageRestController extends FOSRestController
 {
 	private $model;
+	private $session;
 
-	public function __construct(MessageModel $model)
+	public function __construct(MessageModel $model, Session $session)
 	{
 		$this->model = $model;
+		$this->session = $session;
 	}
 
 	private function handleUnauthorized()
@@ -29,7 +31,7 @@ class MessageRestController extends FOSRestController
 	private function mayConversation($conversation_id)
 	{
 		// first get the session array
-		if (!($ids = S::get('msg_conversations'))) {
+		if (!($ids = $this->session->get('msg_conversations'))) {
 			$ids = [];
 		}
 
@@ -38,7 +40,7 @@ class MessageRestController extends FOSRestController
 			return true;
 		} elseif ($this->model->mayConversation($conversation_id)) {
 			$ids[$conversation_id] = true;
-			S::set('msg_conversations', $ids);
+			$this->session->set('msg_conversations', $ids);
 
 			return true;
 		}
@@ -48,7 +50,7 @@ class MessageRestController extends FOSRestController
 
 	public function getConversationAction($id)
 	{
-		if (!S::may() || !$this->mayConversation($id)) {
+		if (!$this->session->may() || !$this->mayConversation($id)) {
 			return $this->handleUnauthorized();
 		}
 

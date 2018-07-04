@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\WorkGroup;
 
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
 
@@ -38,7 +37,7 @@ class WorkGroupXhr extends Control
 	{
 		if ($group = $this->model->getGroup($_GET['id'])) {
 			if ($group['apply_type'] == ApplyType::OPEN) {
-				$this->model->addToGroup($_GET['id'], S::id());
+				$this->model->addToGroup($_GET['id'], $this->session->id());
 
 				return array(
 					'status' => 1,
@@ -74,7 +73,7 @@ class WorkGroupXhr extends Control
 								'Zeit:' . "\n=====\n" . trim($zeit)
 							);
 
-							$this->model->groupApply($group['id'], S::id(), implode("\n\n", $content));
+							$this->model->groupApply($group['id'], $this->session->id(), implode("\n\n", $content));
 
 							$this->func->libmail(array(
 								'email' => $fs['email'],
@@ -104,7 +103,7 @@ class WorkGroupXhr extends Control
 				$this->func->tplMail(24, $group['email'], array(
 					'gruppenname' => $group['name'],
 					'message' => $message
-				), S::user('email'));
+				), $this->session->user('email'));
 
 				return array(
 					'status' => 1,

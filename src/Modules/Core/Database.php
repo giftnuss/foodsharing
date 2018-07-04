@@ -13,61 +13,82 @@ class Database
 		$this->pdo = $pdo;
 	}
 
+	// === high-level methods that build SQL internally ===
+
 	/**
 	 * Returns the first row.
+	 * Provide table name, column names and criteria.
+	 *
+	 * @param string $table
+	 * @param mixed  $column_names
+	 * @param array  $criteria
+	 *
+	 * @return array
 	 */
-	public function fetch($query, $params = []): array
+	public function fetchByCriteria(string $table, $column_names, array $criteria = []): array
 	{
-		$out = $this->preparedQuery($query, $params)->fetch();
-		if (!$out) {
-			return [];
-		}
-
-		return $out;
+		return $this->fetch(...$this->generateSelectStatement($table, $column_names, $criteria));
 	}
 
 	/**
 	 * Returns all rows.
+	 * Provide table name, column names and criteria.
+	 *
+	 * @param string $table
+	 * @param mixed $column_names
+	 * @param array  $criteria
+	 *
+	 * @return array
 	 */
-	public function fetchAll($query, $params = []): array
+	public function fetchAllByCriteria(string $table, $column_names, array $criteria = []): array
 	{
-		$out = $this->preparedQuery($query, $params)->fetchAll();
-		if (!$out) {
-			return [];
+		return $this->fetchAll(...$this->generateSelectStatement($table, $column_names, $criteria));
+	}
+
+	/**
+	 * Returns the named column.
+	 * Provide table name, desired column and criteria.
+	 *
+	 * @param string $table
+	 * @param string $column
+	 * @param array  $criteria
+	 *
+	 * @return array
+	 */
+	public function fetchAllValuesByCriteria(string $table, string $column, array $criteria = []): array
+	{
+		return $this->fetchAllValues(...$this->generateSelectStatement($table, [$column], $criteria));
+	}
+
+	/**
+	 * Returns the value of a named column in the first row of the result.
+	 * Provide table name, desired column and criteria.
+	 *
+	 * @param string $table
+	 * @param string $column
+	 * @param array  $criteria
+	 *
+	 * @return mixed
+	 */
+	public function fetchValueByCriteria(string $table, string $column, array $criteria = [])
+	{
+		return $this->fetchValue(...$this->generateSelectStatement($table, [$column], $criteria));
+	}
+
+	public function exists($table, array $criteria): bool
+	{
+		$where = $this->generateWhereClause($criteria);
+
+		$query = 'SELECT COUNT(*) FROM ' . $this->getQuotedName($table) . ' ' . $where;
+
+		return $this->fetchValue($query, array_values($criteria)) > 0;
+	}
+
+	public function requireExists($table, array $criteria)
+	{
+		if (!$this->exists($table, $criteria)) {
+			throw new \Exception('No matching records found for criteria ' . json_encode($criteria) . ' in table ' . $table);
 		}
-
-		return $out;
-	}
-
-	/**
-	 * Returns the first column.
-	 */
-	public function fetchAllValues($query, $params = []): array
-	{
-		$out = $this->preparedQuery($query, $params)->fetchAll(\PDO::FETCH_COLUMN, 0);
-		if (!$out) {
-			return [];
-		}
-
-		return $out;
-	}
-
-	/**
-	 * Returns the value of the first column of the first row.
-	 */
-	public function fetchValue($query, $params = [])
-	{
-		return $this->preparedQuery($query, $params)->fetchColumn(0);
-	}
-
-	/**
-	 * @deprecated Use more specific methods if possible
-	 * @see Database::update()
-	 * @see Database::delete()
-	 */
-	public function execute($query, $params = [])
-	{
-		$this->preparedQuery($query, $params);
 	}
 
 	public function insertIgnore(string $table, array $data, array $options = []): int
@@ -128,20 +149,99 @@ class Database
 		return $this->preparedQuery($query, array_values($criteria))->rowCount();
 	}
 
-	public function exists($table, array $criteria): bool
+	// === methods that accept SQL statements ===
+
+	/**
+	 * Returns the first row.
+	 *
+	 * @param string $query SQL select statement to prepare and execute
+	 * @param array $params parameters for prepared statement
+	 */
+	public function fetch(string $query, array $params = []): array
 	{
-		$where = $this->generateWhereClause($criteria);
+		$out = $this->preparedQuery($query, $params)->fetch();
+		// TODO throw Exception if no result was found
+		if (!$out) {
+			return [];
+		}
 
-		$query = 'SELECT COUNT(*) FROM ' . $this->getQuotedName($table) . ' ' . $where;
-
-		return $this->fetchValue($query, array_values($criteria)) > 0;
+		return $out;
 	}
 
-	public function requireExists($table, array $criteria)
+	/**
+	 * Returns all rows.
+	 *
+	 * @param string $query SQL select statement to prepare and execute
+	 * @param array $params parameters for prepared statement
+	 */
+	public function fetchAll(string $query, array $params = []): array
 	{
-		if (!$this->exists($table, $criteria)) {
-			throw new \Exception('No matching records found for criteria ' . json_encode($criteria) . ' in table ' . $table);
+		$out = $this->preparedQuery($query, $params)->fetchAll();
+		if (!$out) {
+			return [];
 		}
+
+		return $out;
+	}
+
+	/**
+	 * Returns the first column.
+	 *
+	 * @param string $query SQL select statement to prepare and execute
+	 * @param array $params parameters for prepared statement
+	 */
+	public function fetchAllValues(string $query, array $params = []): array
+	{
+		$out = $this->preparedQuery($query, $params)->fetchAll(\PDO::FETCH_COLUMN, 0);
+		if (!$out) {
+			return [];
+		}
+
+		return $out;
+	}
+
+	/**
+	 * Returns the value of the first column of the first row.
+	 *
+	 * @param string $query SQL select statement to prepare and execute
+	 * @param array $params parameters for prepared statement
+	 */
+	public function fetchValue(string $query, array $params = [])
+	{
+		// throw new \Exception('query ' . $query . ', params ' . json_encode($params));
+		$out = $this->preparedQuery($query, $params)->fetchAll();
+		if ($out === false || count($out) === 0) {
+			throw new \Exception('Expected one or more results, but none was returned.');
+		}
+
+		return array_values($out[0])[0];
+	}
+
+	/**
+	 * @deprecated Use more specific methods if possible
+	 * @see Database::update()
+	 * @see Database::delete()
+	 */
+	public function execute($query, $params = [])
+	{
+		return $this->preparedQuery($query, $params);
+	}
+
+	// === helper methods ===
+
+	public function generatePlaceholders($length): string
+	{
+		return implode(', ', array_fill(0, $length, '?'));
+	}
+
+	public function quote($string): string
+	{
+		return $this->pdo->quote($string);
+	}
+
+	public function now(): string
+	{
+		return date('Y-m-d H:i:s');
 	}
 
 	public function beginTransaction(): bool
@@ -154,12 +254,7 @@ class Database
 		return $this->pdo->commit();
 	}
 
-	public function generatePlaceholders($length): string
-	{
-		return implode(', ', array_fill(0, $length, '?'));
-	}
-
-	// === private functions ===
+	// === private methods ===
 
 	/**
 	 * @throws \Exception
@@ -193,12 +288,33 @@ class Database
 		return $statement;
 	}
 
-	private function getQuotedName($name)
+	private function generateSelectStatement(string $table, $column_names, array $criteria)
+	{
+		$where = $this->generateWhereClause($criteria);
+
+		if (is_string($column_names) && $column_names === '*') {
+			$column_query = '*';
+		} elseif (is_array($column_names)) {
+			$column_query = implode(', ', array_map(
+				[$this, 'getQuotedName'],
+				$column_names
+			));
+		} else {
+			throw new \Exception('$column_names has unknown format: ' . json_encode($column_names));
+		}
+
+		$query = sprintf('SELECT %s FROM %s %s', $column_query, $this->getQuotedName($table), $where);
+		$params = array_values($criteria);
+
+		return [$query, $params];
+	}
+
+	private function getQuotedName(string $name): string
 	{
 		return '`' . str_replace('.', '`.`', $name) . '`';
 	}
 
-	private function generateWhereClause(array &$criteria)
+	private function generateWhereClause(array &$criteria): string
 	{
 		if (empty($criteria)) {
 			return '';

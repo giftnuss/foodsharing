@@ -14,6 +14,9 @@ class vPage
 	private $sections_right;
 	private $subtitle;
 	private $bread;
+	/**
+	 * @var Func
+	 */
 	private $func;
 
 	public function __construct($title, $content)

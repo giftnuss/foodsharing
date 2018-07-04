@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\BusinessCard;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
 
@@ -25,7 +24,7 @@ class BusinessCardControl extends Control
 
 		$this->func->addContent($this->view->top(), CNT_TOP);
 
-		if ($data = $this->gateway->getMyData(S::id())) {
+		if ($data = $this->gateway->getMyData($this->session->id(), $this->session->may('bieb'))) {
 			if (strlen($data['anschrift'] . ', ' . $data['plz'] . ' ' . $data['stadt']) >= 49) {
 				$this->func->error('Deine Anschrift ist zu lang! Anschrift, Postleitzahl und Stadt dürfen zusammen maximal 49 Zeichen haben.');
 				$this->func->go('/?page=settings');
@@ -48,6 +47,7 @@ class BusinessCardControl extends Control
 					);
 				}
 			}
+
 			if ($data['sm']) {
 				foreach ($data['sm'] as $fs) {
 					$sel_data[] = array(

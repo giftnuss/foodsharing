@@ -1,5 +1,5 @@
-import core from '@/core'
-import globals from '@/globals'
+import '@/core'
+import '@/globals'
 import 'jquery-tagedit'
 import 'jquery-tagedit-auto-grow-input'
 import './Message.css'

@@ -3,8 +3,9 @@
 namespace Foodsharing\Modules\Core;
 
 use Foodsharing\DI;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Func;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 
 class View
@@ -14,17 +15,19 @@ class View
 	/* @var \Foodsharing\Lib\View\Utils */
 	protected $v_utils;
 	protected $func;
+	protected $session;
 
 	/**
 	 * @var \Twig\Environment
 	 */
 	public $twig;
 
-	public function __construct(\Twig\Environment $twig, Func $func, Utils $viewUtils)
+	public function __construct(\Twig\Environment $twig, Func $func, Utils $viewUtils, Session $session)
 	{
 		$this->twig = $twig;
 		$this->func = $func;
 		$this->v_utils = $viewUtils;
+		$this->session = $session;
 	}
 
 	public function setSub($sub)
@@ -274,7 +277,7 @@ class View
 			tstring = ""+date.getYear() + ""+date.getMonth() + ""+date.getDate() + ""+date.getHours();
 			var localsource = [];
 			$.ajax({
-				url: "/cache/searchindex/' . S::user('token') . '.json",
+				url: "/cache/searchindex/' . $this->session->user('token') . '.json",
 				dataType: "json",
 				data: {t:$.now()},
 				success: function(json){
@@ -348,7 +351,8 @@ class View
 		if (isset($options['location'])) {
 			$data = array_merge(['zoom' => 14], $options['location']);
 		} else {
-			$db = DI::$shared->get(Model::class);
+			/* @var $db Db */
+			$db = DI::$shared->get(Db::class);
 			$data = $db->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
 			$data['zoom'] = 14;
 		}

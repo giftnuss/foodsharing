@@ -3,10 +3,10 @@
 namespace Foodsharing\Modules\FairTeiler;
 
 use Foodsharing\Lib\Sanitizer;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -20,12 +20,14 @@ class FairTeilerControl extends Control
 
 	private $gateway;
 	private $regionGateway;
+	private $foodsaverGateway;
 
-	public function __construct(FairTeilerView $view, FairTeilerGateway $gateway, RegionGateway $regionGateway, Model $model)
+	public function __construct(FairTeilerView $view, FairTeilerGateway $gateway, RegionGateway $regionGateway, FoodsaverGateway $foodsaverGateway, Model $model)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->regionGateway = $regionGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 		$this->model = $model;
 
 		parent::__construct();
@@ -53,7 +55,7 @@ class FairTeilerControl extends Control
 		/*
 		 * allowed only for logged in users
 		 */
-		if (!S::may() && $request->query->has('sub') && $request->query->get('sub') != 'ft') {
+		if (!$this->session->may() && $request->query->has('sub') && $request->query->get('sub') != 'ft') {
 			$this->func->goLogin();
 		}
 
@@ -70,7 +72,7 @@ class FairTeilerControl extends Control
 		}
 
 		if (isset($bid) || $bid = $request->query->get('bid')) {
-			if ($bezirk = $this->model->getBezirk($bid)) {
+			if ($bezirk = $this->regionGateway->getBezirk($bid)) {
 				$this->bezirk_id = $bid;
 				$this->bezirk = $bezirk;
 				if ((int)$bezirk['mailbox_id'] > 0) {
@@ -87,13 +89,13 @@ class FairTeilerControl extends Control
 		if ($ftid) {
 			$follow = $request->query->get('follow');
 			$infotype = $request->query->get('infotype', 2);
-			if ($this->handleFollowUnfollow($ftid, S::id(), $follow, $infotype)) {
+			if ($this->handleFollowUnfollow($ftid, $this->session->id(), $follow, $infotype)) {
 				$url = explode('&follow=', $this->func->getSelf());
 				$this->func->go($url[0]);
 			}
 
 			if (!isset($this->bezirke[$this->fairteiler['bezirk_id']])) {
-				$this->bezirke[] = $this->model->getBezirk($this->fairteiler['bezirk_id']);
+				$this->bezirke[] = $this->regionGateway->getBezirk($this->fairteiler['bezirk_id']);
 			}
 
 			$this->follower = $this->gateway->getFollower($ftid);
@@ -123,7 +125,7 @@ class FairTeilerControl extends Control
 
 	public function getRealRegions(): array
 	{
-		$regions = S::getRegions();
+		$regions = $this->session->getRegions();
 
 		return array_filter($regions, [$this, 'isRealRegion']);
 	}
@@ -151,7 +153,7 @@ class FairTeilerControl extends Control
 		}
 		if (!$request->query->has('sub')) {
 			$items = array();
-			if ($regions = S::getRegions()) {
+			if ($regions = $this->session->getRegions()) {
 				foreach ($regions as $r) {
 					$items[] = array('name' => $r['name'], 'href' => '/?page=fairteiler&bid=' . $r['id']);
 				}
@@ -204,7 +206,7 @@ class FairTeilerControl extends Control
 			$data['bfoodsaver'][$key]['name'] = $fs['name'] . ' ' . $fs['nachname'];
 		}
 
-		$data['bfoodsaver_values'] = $this->model->getFsAutocomplete(S::getRegions());
+		$data['bfoodsaver_values'] = $this->foodsaverGateway->getFsAutocomplete($this->session->getRegions());
 
 		$this->func->addContent($this->view->options($items), CNT_RIGHT);
 
@@ -264,7 +266,7 @@ class FairTeilerControl extends Control
 			</div>'
 		);
 
-		if (S::may()) {
+		if ($this->session->may()) {
 			$items = array();
 
 			if ($this->mayEdit()) {

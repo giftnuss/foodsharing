@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Message;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 
 class MessageControl extends Control
@@ -14,7 +13,7 @@ class MessageControl extends Control
 
 		parent::__construct();
 
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			$this->func->goLogin();
 		}
 	}
@@ -37,7 +36,7 @@ class MessageControl extends Control
 			foreach ($conversations as $c) {
 				$ids[$c['id']] = true;
 			}
-			S::set('msg_conversations', $ids);
+			$this->session->set('msg_conversations', $ids);
 		}
 		$this->func->addContent($this->view->convListWrapper($this->view->conversationList($conversations)), CNT_RIGHT);
 	}

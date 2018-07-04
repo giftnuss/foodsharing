@@ -2,25 +2,36 @@
 
 namespace Foodsharing\Modules\Store;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class StoreControl extends Control
 {
 	private $bellGateway;
 	private $storeGateway;
+	private $regionGateway;
+	private $foodsaverGateway;
 
-	public function __construct(StoreModel $model, StoreView $view, BellGateway $bellGateway, StoreGateway $storeGateway)
-	{
+	public function __construct(
+		StoreModel $model,
+		StoreView $view,
+		BellGateway $bellGateway,
+		StoreGateway $storeGateway,
+		FoodsaverGateway $foodsaverGateway,
+		RegionGateway $regionGateway
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
+		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
 
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			$this->func->goLogin();
 		}
 	}
@@ -41,13 +52,13 @@ class StoreControl extends Control
 			$bezirk_id = $this->func->getBezirkId();
 		}
 		if ($bezirk_id > 0) {
-			$bezirk = $this->model->getBezirk($bezirk_id);
+			$bezirk = $this->regionGateway->getBezirk($bezirk_id);
 		} else {
 			$bezirk = array('name' => 'kompletter Datenbank');
 		}
 		if ($this->func->getAction('new')) {
-			if (S::may('bieb')) {
-				$this->handle_add(S::id(), $bezirk_id);
+			if ($this->session->may('bieb')) {
+				$this->handle_add($this->session->id(), $bezirk_id);
 
 				$this->func->addBread($this->func->s('bread_betrieb'), '/?page=betrieb');
 				$this->func->addBread($this->func->s('bread_new_betrieb'));
@@ -81,7 +92,7 @@ class StoreControl extends Control
 			$this->func->addTitle($data['name']);
 			$this->func->addTitle($this->func->s('edit'));
 
-			if ((S::isOrgaTeam() || $this->storeGateway->isVerantwortlich(S::id(), $id)) || $this->func->isBotFor($data['bezirk_id'])) {
+			if (($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $id)) || $this->func->isBotFor($data['bezirk_id'])) {
 				$this->handle_edit();
 
 				$this->func->setEditData($data);
@@ -104,7 +115,7 @@ class StoreControl extends Control
 		} else {
 			$this->func->addBread($this->func->s('betrieb_bread'), '/?page=betrieb');
 
-			if (S::may('bieb')) {
+			if ($this->session->may('bieb')) {
 				$this->func->addContent($this->v_utils->v_menu(array(
 					array('href' => '/?page=betrieb&a=new&bid=' . (int)$bezirk_id, 'name' => 'Neuen Betrieb eintragen')
 				), 'Aktionen'), CNT_RIGHT);
@@ -196,12 +207,12 @@ class StoreControl extends Control
 					));
 				}
 
-				$foodsaver = $this->model->getFoodsaver($g_data['bezirk_id']);
+				$foodsaver = $this->foodsaverGateway->getFoodsaver($g_data['bezirk_id']);
 
 				$this->bellGateway->addBell($foodsaver, 'store_new_title', 'store_new', 'img img-store brown', array(
 					'href' => '/?page=fsbetrieb&id=' . (int)$id
 				), array(
-					'user' => S::user('name'),
+					'user' => $this->session->user('name'),
 					'name' => $g_data['name']
 				), 'store-new-' . (int)$id);
 

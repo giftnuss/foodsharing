@@ -5,7 +5,6 @@ namespace Foodsharing\Modules\Settings;
 use DateTime;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\View;
-use Foodsharing\Lib\Session\S;
 
 class SettingsView extends View
 {
@@ -502,7 +501,7 @@ class SettingsView extends View
 			array('name' => 'Meine Daten niemandem zeigen.', 'id' => 4)
 		)));
 
-		if (S::may('bot')) {
+		if ($this->session->may('bot')) {
 			$oeff = '<input type="hidden" name="photo_public" value="1" />';
 		}
 		$bezirkchoose = '';
@@ -510,7 +509,7 @@ class SettingsView extends View
 		$communications = $this->v_utils->v_form_text('homepage') .
 			$this->v_utils->v_form_text('tox', array('desc' => $this->func->s('tox_desc')));
 
-		if (S::may('orga')) {
+		if ($this->session->may('orga')) {
 			$bezirk = array('id' => 0, 'name' => false);
 			if ($b = $this->func->getBezirk($g_data['bezirk_id'])) {
 				$bezirk['id'] = $b['id'];

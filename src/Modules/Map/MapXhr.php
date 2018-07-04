@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Map;
 
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Model;
 
 class MapXhr extends Control
@@ -21,7 +20,7 @@ class MapXhr extends Control
 		$lat = floatval($_GET['lat']);
 		$lon = floatval($_GET['lon']);
 
-		S::set('blocation', array(
+		$this->session->set('blocation', array(
 			'lat' => $lat,
 			'lon' => $lon
 		));

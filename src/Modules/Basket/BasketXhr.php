@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Basket;
 
 use Flourish\fImage;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
@@ -17,8 +16,8 @@ class BasketXhr extends Control
 	private $basketGateway;
 	private $messageModel;
 
-	public function __construct(Model $model, BasketView $view, BasketGateway $basketGateway, MessageModel $messageModel)
-	{
+	public function __construct(Model $model, BasketView $view, BasketGateway $basketGateway, MessageModel $messageModel
+	){
 		$this->model = $model;
 		$this->messageModel = $messageModel;
 		$this->view = $view;
@@ -46,7 +45,7 @@ class BasketXhr extends Control
 			'closebaskets' => true
 		);
 
-		if (!S::may() && !isset($allowed[$_GET['m']])) {
+		if (!$this->session->may() && !isset($allowed[$_GET['m']])) {
 			echo json_encode(array(
 				'status' => 1,
 				'script' => 'pulseError("Du bist nicht eingeloggt, vielleicht ist Deine Session abgelaufen, bitte logge Dich ein und sende Deine Anfrage erneut ab.");'
@@ -172,7 +171,7 @@ class BasketXhr extends Control
 			}
 		}
 
-		if (!empty($desc) && ($id = $this->basketGateway->addBasket($desc, $pic, $tel, $contact_type, $weight, $location_type, $lat, $lon, S::user('bezirk_id'), S::id()))) {
+		if (!empty($desc) && ($id = $this->basketGateway->addBasket($desc, $pic, $tel, $contact_type, $weight, $location_type, $lat, $lon, $this->session->user('bezirk_id'), S::id()))) {
 			if (isset($data['food_type']) && is_array($data['food_type'])) {
 				$types = array();
 				foreach ($data['food_type'] as $ft) {
@@ -253,7 +252,7 @@ class BasketXhr extends Control
 		$xhr = new Xhr();
 
 		if (isset($_GET['choords'])) {
-			if ($basket = $this->basketGateway->listCloseBaskets(S::id(), array(
+			if ($basket = $this->basketGateway->listCloseBaskets($this->session->id(), array(
 				'lat' => $_GET['choords'][0],
 				'lon' => $_GET['choords'][1]
 			))
@@ -274,7 +273,7 @@ class BasketXhr extends Control
 				/*
 				 * What see the user if not logged in?
 				 */
-				if (!S::may()) {
+				if (!$this->session->may()) {
 					$dia->setTitle('Essenskorb');
 					$dia->addContent($this->view->bubbleNoUser($basket));
 				} else {
@@ -390,7 +389,7 @@ class BasketXhr extends Control
 
 	public function infobar()
 	{
-		S::noWrite();
+		$this->session->noWrite();
 
 		$xhr = new Xhr();
 

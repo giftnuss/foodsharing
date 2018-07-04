@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Email;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
 
@@ -17,7 +16,7 @@ class EmailXhr extends Control
 
 	public function testmail()
 	{
-		if (!S::may('orga')) {
+		if (!$this->session->may('orga')) {
 			return false;
 		}
 

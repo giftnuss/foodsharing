@@ -2,22 +2,24 @@
 
 namespace Foodsharing\Modules\Store;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Message\MessageModel;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class StoreModel extends Model
 {
 	private $messageModel;
 	private $bellGateway;
 	private $storeGateway;
+	private $regionGateway;
 
-	public function __construct(MessageModel $messageModel, BellGateway $bellGateway, StoreGateway $storeGateway)
+	public function __construct(MessageModel $messageModel, BellGateway $bellGateway, StoreGateway $storeGateway, RegionGateway $regionGateway)
 	{
 		$this->messageModel = $messageModel;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
+		$this->regionGateway = $regionGateway;
 		parent::__construct();
 	}
 
@@ -316,7 +318,7 @@ class StoreModel extends Model
 						fs_bezirk
 
 				WHERE 	fs_betrieb.bezirk_id = fs_bezirk.id
-				AND 	fs_betrieb.bezirk_id IN(' . implode(',', $this->getChildBezirke($bezirk_id)) . ')
+				AND 	fs_betrieb.bezirk_id IN(' . implode(',', $this->regionGateway->listIdsForDescendantsAndSelf($bezirk_id)) . ')
 
 
 		');
@@ -495,7 +497,7 @@ class StoreModel extends Model
 		$this->bellGateway->addBell((int)$fsid, 'store_request_accept_title', 'store_request_accept', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$bid
 		), array(
-			'user' => S::user('name'),
+			'user' => $this->session->user('name'),
 			'name' => $betrieb
 		), 'store-arequest-' . (int)$fsid);
 
@@ -522,7 +524,7 @@ class StoreModel extends Model
 		$this->bellGateway->addBell((int)$fsid, 'store_request_accept_wait_title', 'store_request_accept_wait', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$bid
 		), array(
-			'user' => S::user('name'),
+			'user' => $this->session->user('name'),
 			'name' => $betrieb
 		), 'store-wrequest-' . (int)$fsid);
 
@@ -545,7 +547,7 @@ class StoreModel extends Model
 		$this->bellGateway->addBell((int)$fsid, 'store_request_deny_title', 'store_request_deny', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$bid
 		), array(
-			'user' => S::user('name'),
+			'user' => $this->session->user('name'),
 			'name' => $betrieb
 		), 'store-drequest-' . (int)$fsid);
 
@@ -578,7 +580,7 @@ class StoreModel extends Model
 	public function createTeamConversation($bid)
 	{
 		$tcid = $this->messageModel->insertConversation(array(), true);
-		$betrieb = $this->storeGateway->getMyBetrieb(S::id(), $bid);
+		$betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $bid);
 		$this->messageModel->renameConversation($tcid, 'Team ' . $betrieb['name']);
 
 		$this->update('
@@ -598,7 +600,7 @@ class StoreModel extends Model
 	public function createSpringerConversation($bid)
 	{
 		$scid = $this->messageModel->insertConversation(array(), true);
-		$betrieb = $this->storeGateway->getMyBetrieb(S::id(), $bid);
+		$betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $bid);
 		$this->messageModel->renameConversation($scid, 'Springer ' . $betrieb['name']);
 		$this->update('
 				UPDATE	`fs_betrieb` SET springer_conversation_id = ' . (int)$scid . ' WHERE id = ' . (int)$bid . '
@@ -616,7 +618,7 @@ class StoreModel extends Model
 
 	public function addTeamMessage($bid, $message)
 	{
-		if ($betrieb = $this->storeGateway->getMyBetrieb(S::id(), $bid)) {
+		if ($betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $bid)) {
 			if (!is_null($betrieb['team_conversation_id'])) {
 				$this->messageModel->sendMessage($betrieb['team_conversation_id'], $message);
 			} elseif (is_null($betrieb['team_conversation_id'])) {

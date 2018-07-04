@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Logout;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
 
@@ -19,7 +18,7 @@ class LogoutControl extends Control
 		$this->model->logout();
 		$_SESSION['login'] = false;
 		$_SESSION = array();
-		S::destroy();
+		$this->session->destroy();
 		header('Location: /');
 		exit();
 	}

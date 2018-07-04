@@ -2,12 +2,11 @@
 
 namespace Foodsharing\Modules\BusinessCard;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\BaseGateway;
 
 class BusinessCardGateway extends BaseGateway
 {
-	public function getMyData($fsId)
+	public function getMyData($fsId, $isBieb)
 	{
 		$stm = '
 			SELECT 	fs.id,
@@ -29,7 +28,7 @@ class BusinessCardGateway extends BaseGateway
 		$fs = $this->db->fetch($stm, [':foodsaver_id' => $fsId]);
 
 		$stm = 'SELECT mb.name FROM fs_mailbox mb, fs_foodsaver fs WHERE fs.mailbox_id = mb.id AND fs.id = :foodsaver_id';
-		if (S::may('bieb') && $mailbox = $this->db->fetchValue($stm, [':foodsaver_id' => $fsId])) {
+		if ($isBieb && $mailbox = $this->db->fetchValue($stm, [':foodsaver_id' => $fsId])) {
 			$fs['email'] = $mailbox . '@' . DEFAULT_EMAIL_HOST;
 		}
 
@@ -65,7 +64,7 @@ class BusinessCardGateway extends BaseGateway
 		';
 		$fs['fs'] = $this->db->fetchAll($stm, [':foodsaver_id' => $fsId]);
 
-		if (S::may('bieb')) {
+		if ($isBieb) {
 			$fs['sm'] = $fs['fs'];
 		} else {
 			$fs['sm'] = false;
