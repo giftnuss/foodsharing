@@ -128,7 +128,7 @@ class BasketXhr extends Control
 		}
 
 		$pic = '';
-		$weight = floatval($data['weight']);
+		$weight = (float)$data['weight'];
 
 		if (isset($data['filename'])) {
 			$pic = preg_replace('/[^a-z0-9\.]/', '', $data['filename']);
@@ -143,7 +143,7 @@ class BasketXhr extends Control
 		$location_type = 0;
 
 		if ($location_type == 0) {
-			$fs = $this->model->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
+			$fs = $this->model->getValues(array('lat', 'lon'), 'foodsaver', $this->session->id());
 			$lat = $fs['lat'];
 			$lon = $fs['lon'];
 		}
@@ -334,7 +334,7 @@ class BasketXhr extends Control
 	public function request()
 	{
 		if ($basket = $this->basketGateway->getBasket($_GET['id'])) {
-			$this->basketGateway->setStatus($_GET['id'], Status::REQESTED, S::id());
+			$this->basketGateway->setStatus($_GET['id'], Status::REQESTED, $this->session->id());
 			$dia = new XhrDialog();
 			$dia->setTitle('Essenskorb von ' . $basket['fs_name'] . '');
 			$dia->addOpt('width', 300);
@@ -366,8 +366,8 @@ class BasketXhr extends Control
 			$msg = trim($msg);
 			if (!empty($msg)) {
 				$this->messageModel->message($fs_id, $this->func->fsId(), $msg, 0);
-				$this->mailMessage($this->func->fsId(), $fs_id, $msg, 22);
-				$this->basketGateway->setStatus($_GET['id'], Status::REQUESTED_MESSAGE_UNREAD, S::id());
+				$this->mailMessage($this->session->id(), $fs_id, $msg, 22);
+				$this->basketGateway->setStatus($_GET['id'], Status::REQUESTED_MESSAGE_UNREAD, $this->session->id());
 
 				return array(
 					'status' => 1,
@@ -394,11 +394,11 @@ class BasketXhr extends Control
 		$xhr = new Xhr();
 
 		$out = '';
-		if ($updates = $this->basketGateway->listUpdates(S::id())) {
+		if ($updates = $this->basketGateway->listUpdates($this->session->id())) {
 			$out = $this->view->listUpdates($updates);
 		}
 
-		if ($baskets = $this->basketGateway->listMyBaskets(S::id())) {
+		if ($baskets = $this->basketGateway->listMyBaskets($this->session->id())) {
 			$out .= $this->view->listMyBaskets($baskets);
 		}
 
@@ -430,7 +430,7 @@ class BasketXhr extends Control
 	public function answer()
 	{
 		if ($id = $this->model->getVal('foodsaver_id', 'basket', $_GET['id'])) {
-			if ($id == $this->func->fsId()) {
+			if ($id == $this->session->id()) {
 				$this->basketGateway->setStatus($_GET['id'], Status::REQUESTED_MESSAGE_READ, $_GET['fid']);
 
 				return array(
@@ -471,7 +471,7 @@ class BasketXhr extends Control
 
 	public function removeBasket()
 	{
-		$this->basketGateway->removeBasket($_GET['id'], S::id());
+		$this->basketGateway->removeBasket($_GET['id'], $this->session->id());
 
 		return array(
 			'status' => 1,
@@ -482,7 +482,7 @@ class BasketXhr extends Control
 	public function follow()
 	{
 		if (isset($_GET['bid']) && (int)$_GET['bid'] > 0) {
-			$this->basketGateway->follow($_GET['bid'], S::id());
+			$this->basketGateway->follow($_GET['bid'], $this->session->id());
 		}
 	}
 
