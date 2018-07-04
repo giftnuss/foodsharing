@@ -31,14 +31,14 @@ class MapControl extends Control
 		}
 
 		$this->func->addContent(
-			$this->view->lMap($center)
+			$this->view->lMap()
 		);
 
 		if ($this->session->may('fs') && isset($_GET['bid'])) {
 			$center = $this->model->getValues(array('lat', 'lon'), 'betrieb', (int)$_GET['bid']);
 
 			$this->func->addJs('
-				u_loadDialog("xhr.php?f=bBubble&id=' . (int)$_GET['bid'] . '");
+				u_loadDialog("/xhr.php?f=bBubble&id=' . (int)$_GET['bid'] . '");
 			');
 		}
 

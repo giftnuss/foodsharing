@@ -34,7 +34,9 @@ import {
   showLoader,
   hideLoader,
   becomeBezirk,
-  preZero
+  preZero,
+  betriebRequest,
+  rejectBetriebRequest
 } from '@/script'
 
 import {
@@ -60,6 +62,8 @@ expose({
   hideLoader,
   becomeBezirk,
   preZero,
+  betriebRequest,
+  rejectBetriebRequest,
   u_printChildBezirke,
   conv,
   info,

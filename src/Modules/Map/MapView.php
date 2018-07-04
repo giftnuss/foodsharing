@@ -25,7 +25,6 @@ class MapView extends View
 	public function mapControl()
 	{
 		$betriebe = '';
-		$additional = '';
 
 		if ($this->session->may('fs')) {
 			$betriebe = '<li><a name="betriebe" class="ui-corner-all betriebe"><span class="icon brown"><i class="img img-store"></i></span><span>Betriebe</span></a>

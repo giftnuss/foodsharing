@@ -5,6 +5,7 @@ module.exports = [
   'Foodsaver',
   'Index',
   'Login',
+  'Map',
   'Message',
   'Region',
   'Store',
