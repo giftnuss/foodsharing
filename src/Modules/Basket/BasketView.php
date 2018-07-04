@@ -100,10 +100,8 @@ class BasketView extends View
 				$page->addSectionRight($map->render(), 'Wo?');
 			}
 
-			if ($basket['fs_id'] == $this->func->fsId()) {
-				if ($requests) {
-					$page->addSectionRight($this->requests($requests), count($requests) . ' Anfragen');
-				}
+			if ($basket['fs_id'] == $this->session->id() && $requests) {
+				$page->addSectionRight($this->requests($requests), count($requests) . ' Anfragen');
 			}
 		} else {
 			$page->addSectionRight($this->v_utils->v_info('Für detailierte Infos musst Du Dich einloggen!', 'Hinweis!') . '<div>
@@ -147,7 +145,7 @@ class BasketView extends View
 	{
 		$request = '';
 
-		if ($basket['fs_id'] != $this->func->fsId()) {
+		if ($basket['fs_id'] != $this->session->id()) {
 			$request = '<div><a class="button button-big" href="#" onclick="ajreq(\'request\',{app:\'basket\',id:' . (int)$basket['id'] . '});">Essenskorb anfragen</a>	</div>';
 		} else {
 			$request = '<div><a class="button button-big" href="#" onclick="ajreq(\'removeBasket\',{app:\'basket\',id:' . (int)$basket['id'] . '});">Essenskorb löschen</a>	</div>';
@@ -162,95 +160,99 @@ class BasketView extends View
 			$request;
 	}
 
-	private function pageImg($img)
+	private function pageImg($img): string
 	{
 		if ($img != '') {
 			return '<img class="basket-img" src="/images/basket/medium-' . $img . '" />';
-		} else {
-			return '<img class="basket-img" src="/img/foodloob.gif" />';
 		}
+
+		return '<img class="basket-img" src="/img/foodloob.gif" />';
 	}
 
-	public function basketForm($foodsaver)
+	public function basketForm($foodsaver): string
 	{
 		$out = '';
 
 		$out .= $this->v_utils->v_form_textarea('description', array('maxlength' => 1705));
 
-		$values = array(
-			array('id' => 0.25, 'name' => '250 g'),
-			array('id' => 0.5, 'name' => '500 g'),
-			array('id' => 0.75, 'name' => '750 g')
-		);
+		$values = [
+			['id' => 0.25, 'name' => '250 g'],
+			['id' => 0.5, 'name' => '500 g'],
+			['id' => 0.75, 'name' => '750 g']
+		];
 
 		for ($i = 1; $i <= 10; ++$i) {
-			$values[] = array(
+			$values[] = [
 				'id' => $i,
 				'name' => number_format($i, 2, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg'
-			);
+			];
 		}
 
 		for ($i = 2; $i <= 10; ++$i) {
 			$val = ($i * 10);
-			$values[] = array(
+			$values[] = [
 				'id' => $val,
 				'name' => number_format($val, 2, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg'
-			);
+			];
 		}
 
-		$out .= $this->v_utils->v_form_select('weight', array(
+		$out .= $this->v_utils->v_form_select('weight', [
 			'values' => $values,
 			'selected' => 3
-		));
+		]
+		);
 
-		$out .= $this->v_utils->v_form_checkbox('contact_type', array(
-			'values' => array(
-				array('id' => 1, 'name' => 'Per Nachricht'),
-				array('id' => 2, 'name' => 'Per Telefonanruf')
-			),
+		$out .= $this->v_utils->v_form_checkbox('contact_type', [
+			'values' => [
+				['id' => 1, 'name' => 'Per Nachricht'],
+				['id' => 2, 'name' => 'Per Telefonanruf']
+			],
 			'checked' => [1]
-		));
+		]
+		);
 
 		$out .= $this->v_utils->v_form_text('tel', ['value' => $foodsaver['telefon']]);
 		$out .= $this->v_utils->v_form_text('handy', ['value' => $foodsaver['handy']]);
 
-		$out .= $this->v_utils->v_form_checkbox('food_type', array(
-			'values' => array(
-				array('id' => 1, 'name' => 'Backwaren'),
-				array('id' => 2, 'name' => 'Obst & Gemüse'),
-				array('id' => 3, 'name' => 'Molkereiprodukte'),
-				array('id' => 4, 'name' => 'Trockenware'),
-				array('id' => 5, 'name' => 'Tiefkühlware'),
-				array('id' => 6, 'name' => 'Zubereitete Speisen'),
-				array('id' => 7, 'name' => 'Tierfutter')
-			)
-		));
+		$out .= $this->v_utils->v_form_checkbox('food_type', [
+			'values' => [
+				['id' => 1, 'name' => 'Backwaren'],
+				['id' => 2, 'name' => 'Obst & Gemüse'],
+				['id' => 3, 'name' => 'Molkereiprodukte'],
+				['id' => 4, 'name' => 'Trockenware'],
+				['id' => 5, 'name' => 'Tiefkühlware'],
+				['id' => 6, 'name' => 'Zubereitete Speisen'],
+				['id' => 7, 'name' => 'Tierfutter']
+			]
+		]
+		);
 
-		$out .= $this->v_utils->v_form_checkbox('food_art', array(
-			'values' => array(
-				array('id' => 1, 'name' => 'sind Bio'),
-				array('id' => 2, 'name' => 'sind vegetarisch'),
-				array('id' => 3, 'name' => 'sind vegan'),
-				array('id' => 4, 'name' => 'sind glutenfrei')
-			)
-		));
+		$out .= $this->v_utils->v_form_checkbox('food_art', [
+			'values' => [
+				['id' => 1, 'name' => 'sind Bio'],
+				['id' => 2, 'name' => 'sind vegetarisch'],
+				['id' => 3, 'name' => 'sind vegan'],
+				['id' => 4, 'name' => 'sind glutenfrei']
+			]
+		]
+		);
 
 		return $out;
 	}
 
-	public function contactMsg($basket)
+	public function contactMsg(): string
 	{
 		return $this->v_utils->v_form_textarea('contactmessage');
 	}
 
-	public function contactTitle($basket)
+	public function contactTitle($basket): string
 	{
 		return '<img src="' . $this->func->img($basket['fs_photo']) . '" style="float:left;margin-right:15px;" />
 		<p>' . $basket['fs_name'] . ' kontaktieren</p>
 		<div style="clear:both;"></div>';
 	}
 
-	public function contactNumber($basket)
+	public function contactNumber($basket): string
 	{
 		$out = '';
 		$content = '';
@@ -267,7 +269,7 @@ class BasketView extends View
 		return $out;
 	}
 
-	public function listUpdates($updates)
+	public function listUpdates($updates): string
 	{
 		$out = '<li class="title">Anfragen</li>';
 		foreach ($updates as $u) {
@@ -278,7 +280,7 @@ class BasketView extends View
 		return $out;
 	}
 
-	public function listMyBaskets($baskets)
+	public function listMyBaskets($baskets): string
 	{
 		$out = '<li class="title">Deine Essenskörbe</li>';
 		foreach ($baskets as $b) {
@@ -314,12 +316,12 @@ class BasketView extends View
 		return $out;
 	}
 
-	private function chmod($file, $mode)
+	private function chmod($file): void
 	{
 		exec('chmod 777 /var/www/lmr-v1/freiwillige/' . $file);
 	}
 
-	public function fsBubble($basket)
+	public function fsBubble($basket): string
 	{
 		$img = '';
 		if (!empty($basket['picture'])) {
@@ -333,7 +335,7 @@ class BasketView extends View
 			'<div style="text-align:center;"><a class="fsbutton" href="' . BASE_URL . '/essenskoerbe/' . $basket['fsf_id'] . '" target="_blank">Essenskorb anfragen auf foodsharing.de</a></div>';
 	}
 
-	public function bubbleNoUser($basket)
+	public function bubbleNoUser($basket): string
 	{
 		$img = '';
 		if (!empty($basket['picture'])) {
@@ -346,7 +348,7 @@ class BasketView extends View
 		';
 	}
 
-	public function bubble($basket)
+	public function bubble($basket): string
 	{
 		$img = '';
 		if (!empty($basket['picture'])) {

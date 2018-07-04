@@ -87,7 +87,7 @@ class BasketGateway extends BaseGateway
 				b.id = :id
 			' . $status_sql . '				
 		';
-		$basket = $this->db->fetch($stm, [':id' => (int)$id]);
+		$basket = $this->db->fetch($stm, [':id' => $id]);
 
 		$stm = '
 				SELECT 
@@ -104,7 +104,7 @@ class BasketGateway extends BaseGateway
 			';
 		if ('0' === $basket['fsf_id'] && $fs = $this->db->fetch(
 				$stm,
-				['foodsaver_id' => (int)$basket['foodsaver_id']]
+				['foodsaver_id' => $basket['foodsaver_id']]
 			)) {
 			$basket = array_merge($basket, $fs);
 		}
@@ -116,7 +116,7 @@ class BasketGateway extends BaseGateway
 	{
 		if (!empty($types)) {
 			foreach ($types as $t) {
-				$this->db->insert('fs_basekt_has_types', ['basket_id' => $basket_id, 'types_id' => (int)$t]);
+				$this->db->insert('fs_basekt_has_types', ['basket_id' => $basket_id, 'types_id' => $t]);
 			}
 		}
 	}
@@ -157,7 +157,7 @@ class BasketGateway extends BaseGateway
 		return $this->db->fetchAll($stm, [':status_unread' => Status::REQUESTED_MESSAGE_UNREAD, ':status_read' => Status::REQUESTED_MESSAGE_READ, ':foodsaver_id' => $id, ':basket_id' => $basket_id]);
 	}
 
-	public function getRequest($basket_id, $fs_id, $id)
+	public function getRequest($basket_id, $fs_id, $id): array
 	{
 		$stm = '		
 				SELECT
@@ -248,14 +248,14 @@ class BasketGateway extends BaseGateway
 	{
 		if (!empty($types)) {
 			foreach ($types as $t) {
-				$this->db->insert('fs_basket_has_art', ['basket_id' => $basket_id, 'art_id' => (int)$t]);
+				$this->db->insert('fs_basket_has_art', ['basket_id' => $basket_id, 'art_id' => $t]);
 			}
 		}
 	}
 
 	public function removeBasket($id, $fsId): int
 	{
-		return $this->db->update('fs_basket', ['status' => Status::DELETED_OTHER_REASON], ['id' => (int)$id, 'foodsaver_id' => $fsId]);
+		return $this->db->update('fs_basket', ['status' => Status::DELETED_OTHER_REASON], ['id' => $id, 'foodsaver_id' => $fsId]);
 	}
 
 	public function listMyBaskets($fsId)
@@ -280,7 +280,7 @@ class BasketGateway extends BaseGateway
 		) {
 			foreach ($baskets as $key => $b) {
 				$stm = 'SELECT COUNT(foodsaver_id) FROM fs_basket_anfrage WHERE basket_id = :basket_id AND status < :status';
-				$baskets[$key]['req_count'] = $this->db->fetchValue($stm, [':basket_id' => (int)$b['id'], ':status' => Status::REQESTED]);
+				$baskets[$key]['req_count'] = $this->db->fetchValue($stm, [':basket_id' => $b['id'], ':status' => Status::REQESTED]);
 			}
 
 			return $baskets;
@@ -292,7 +292,7 @@ class BasketGateway extends BaseGateway
 	public function follow($basket_id, $fsId): void
 	{
 		$stm = 'SELECT 1 FROM `fs_basket_anfrage` WHERE basket_id = :basket_id AND foodsaver_id = :foodsaver_id AND status <= :status';
-		$status = $this->db->fetchValue($stm, [':basket_id' => (int)$basket_id, ':foodsaver_id' => $fsId, ':status' => Status::FOLLOWED]);
+		$status = $this->db->fetchValue($stm, [':basket_id' => $basket_id, ':foodsaver_id' => $fsId, ':status' => Status::FOLLOWED]);
 
 		if (!$status) {
 			$stm = '
@@ -305,7 +305,7 @@ class BasketGateway extends BaseGateway
 				:foodsaver_id, :basket_id, :status, NOW(), 0
 			)
 		';
-			$this->db->execute($stm, [':foodsaver_id' => (int)$fsId, ':basket_id' => (int)$basket_id, ':status' => Status::FOLLOWED]);
+			$this->db->execute($stm, [':foodsaver_id' => $fsId, ':basket_id' => $basket_id, ':status' => Status::FOLLOWED]);
 		}
 	}
 
@@ -328,9 +328,9 @@ class BasketGateway extends BaseGateway
 		';
 		$this->db->execute($stm,
 			[
-				':foodsaver_id' => (int)$fsId,
-				':basket_id' => (int)$basket_id,
-				':status' => (int)$status,
+				':foodsaver_id' => $fsId,
+				':basket_id' => $basket_id,
+				':status' => $status,
 				':appost' => $appost,
 			]
 		);

@@ -19,7 +19,7 @@ class BasketControl extends Control
 		$this->func->addBread('Essenskörbe');
 	}
 
-	public function index()
+	public function index(): void
 	{
 		if ($id = $this->uriInt(2)) {
 			if ($basket = $this->basketGateway->getBasket($id)) {
@@ -38,15 +38,15 @@ class BasketControl extends Control
 		}
 	}
 
-	public function find()
+	public function find(): void
 	{
 		$baskets = $this->basketGateway->listCloseBaskets($this->session->id(), $this->session->getLocation());
 		$this->view->find($baskets, $this->session->getLocation());
 	}
 
-	private function basket($basket)
+	private function basket($basket): void
 	{
-		$wallposts = false;
+		$wallPosts = false;
 		$requests = false;
 
 		if ($this->session->may()) {
@@ -59,13 +59,13 @@ class BasketControl extends Control
 					});
 				}');
 			}
-			$wallposts = $this->wallposts('basket', $basket['id']);
+			$wallPosts = $this->wallposts('basket', $basket['id']);
 			if ($basket['fs_id'] == $this->session->id()) {
 				$requests = $this->basketGateway->listRequests($basket['id'], $this->session->id());
 			}
 		}
 		if ($basket['until_ts'] >= time() && $basket['status'] == Status::REQUESTED_MESSAGE_READ) {
-			$this->view->basket($basket, $wallposts, $requests);
+			$this->view->basket($basket, $wallPosts, $requests);
 		} elseif ($basket['until_ts'] <= time() || $basket['status'] == Status::DENIED) {
 			$this->view->basketTaken($basket);
 		}
