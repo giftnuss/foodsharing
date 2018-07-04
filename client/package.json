@@ -2,7 +2,8 @@
   "name": "foodsharing-frontend",
   "version": "1.0.0",
   "scripts": {
-    "lint": "standard",
+    "lint": "bin/standard --verbose | snazzy",
+    "fix": "bin/standard --fix --verbose | snazzy",
     "clean-assets": "shx rm -rf ../assets",
     "build": "yarn clean-assets && NODE_ENV=production webpack",
     "dev": "yarn clean-assets && webpack-serve --config serve.config.js",
@@ -55,6 +56,7 @@
     "null-loader": "^0.1.1",
     "shx": "^0.2.2",
     "sinon": "^6.0.1",
+    "snazzy": "^7.1.1",
     "standard": "^11.0.1",
     "style-loader": "^0.20.3",
     "url-loader": "^1.0.1",

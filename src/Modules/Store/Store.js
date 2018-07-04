@@ -1,5 +1,5 @@
-import "@/core"
-import globals from "@/globals"
+import '@/core'
+import '@/globals'
 import 'jquery-dynatree'
 import 'jquery-dynatree.css'
 
@@ -10,8 +10,3 @@ import 'js/typeahead-addresspicker'
 import 'js/leaflet/leaflet.js'
 import 'css/tablesorter.css'
 // -----------------------------
-
-
-
-
-
