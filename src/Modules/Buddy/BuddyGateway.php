@@ -25,6 +25,11 @@ class BuddyGateway extends BaseGateway
 		return $this->db->fetchAll($stm, [':foodsaver_id' => $fsId]);
 	}
 
+	public function listBuddyIds($fsId): array
+	{
+		return $this->db->fetchAllValuesByCriteria('fs_buddy', 'buddy_id', ['foodsaver_id' => $fsId, 'confirmed' => 1]);
+	}
+
 	public function removeRequest($buddyId, $fsId): void
 	{
 		$this->db->delete('fs_buddy', ['foodsaver_id' => (int)$buddyId, 'buddy_id' => (int)$fsId]);
@@ -32,8 +37,7 @@ class BuddyGateway extends BaseGateway
 
 	public function buddyRequestedMe($buddyId, $fsId): bool
 	{
-		$stm = 'SELECT 1 FROM fs_buddy WHERE foodsaver_id = :buddy_id AND buddy_id = :foodsaver_id';
-		if ($this->db->fetchValue($stm, ['foodsaver_id' => (int)$fsId, 'buddy_id' => (int)$buddyId])) {
+		if ($this->db->exists('fs_buddy', ['foodsaver_id' => (int)$fsId, 'buddy_id' => (int)$buddyId])) {
 			return true;
 		}
 

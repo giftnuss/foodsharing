@@ -3,12 +3,19 @@
 namespace Foodsharing\Modules\Stats;
 
 use Foodsharing\Modules\Console\ConsoleControl;
+use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Modules\Store\StoreGateway;
 
 class StatsControl extends ConsoleControl
 {
-	public function __construct(StatsModel $model)
+	private $storeGateway;
+	private $regionGateway;
+
+	public function __construct(StatsModel $model, StoreGateway $storeGateway, RegionGateway $regionGateway)
 	{
 		$this->model = $model;
+		$this->storeGateway = $storeGateway;
+		$this->regionGateway = $regionGateway;
 		parent::__construct();
 	}
 
@@ -45,14 +52,14 @@ class StatsControl extends ConsoleControl
 				$this->model->update('
 						UPDATE fs_foodsaver
 		
-						SET 	stat_fetchweight = ' . $this->model->floatval($stat_gerettet) . ',
-						stat_fetchcount = ' . $this->model->intval($stat_fetchcount) . ',
-						stat_postcount = ' . $this->model->intval($stat_post) . ',
-						stat_buddycount = ' . $this->model->intval($stat_buddycount) . ',
-						stat_bananacount = ' . $this->model->intval($stat_bananacount) . ',
-						stat_fetchrate = ' . $this->model->floatval($stat_fetchrate) . '
+						SET 	stat_fetchweight = ' . (float)$stat_gerettet . ',
+						stat_fetchcount = ' . (int)$stat_fetchcount . ',
+						stat_postcount = ' . (int)$stat_post . ',
+						stat_buddycount = ' . (int)$stat_buddycount . ',
+						stat_bananacount = ' . (int)$stat_bananacount . ',
+						stat_fetchrate = ' . (float)$stat_fetchrate . '
 		
-						WHERE 	id = ' . $this->model->intval($fsid) . '
+						WHERE 	id = ' . (int)$fsid . '
 				');
 			}
 		}
@@ -86,7 +93,7 @@ class StatsControl extends ConsoleControl
 		if ($bid > 0) {
 			$added = $betrieb['added'];
 
-			if ($team = $this->model->getBetriebTeam($bid)) {
+			if ($team = $this->storeGateway->getBetriebTeam($bid)) {
 				foreach ($team as $fs) {
 					$newdata = array(
 						'stat_first_fetch' => $fs['stat_first_fetch'],
@@ -166,7 +173,7 @@ class StatsControl extends ConsoleControl
 		$bezirk_id = $bezirk['id'];
 		$last_update = $bezirk['stat_last_update'];
 
-		$child_ids = $this->model->getChildBezirke($bezirk_id);
+		$child_ids = $this->regionGateway->listIdsForDescendantsAndSelf($bezirk_id);
 
 		/* abholmenge & anzahl abholungen */
 		$stat_fetchweight = $this->model->getFetchWeight($bezirk_id, $last_update, $child_ids);

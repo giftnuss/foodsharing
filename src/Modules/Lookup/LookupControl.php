@@ -3,12 +3,17 @@
 namespace Foodsharing\Modules\Lookup;
 
 use Foodsharing\Modules\Console\ConsoleControl;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
 class LookupControl extends ConsoleControl
 {
-	public function __construct(LookupModel $model)
+	private $foodsaverGateway;
+
+	public function __construct(LookupModel $model, FoodsaverGateway $foodsaverGateway)
 	{
 		$this->model = $model;
+		$this->foodsaverGateway = $foodsaverGateway;
+
 		parent::__construct();
 	}
 
@@ -33,7 +38,7 @@ class LookupControl extends ConsoleControl
 		foreach ($csv as $row) {
 			$email = $row[0];
 			$fs = $this->model->getFoodsaverByEmail($email);
-			echo $fs['id'] . ',' . $fs['last_login'] . ',' . $fs['bezirk'] . ',' . $fs['name'] . ',' . $fs['nachname'] . implode(',', $row) . "\n";
+			echo $fs['id'] . ',' . $fs['last_login'] . ',' . $fs['bezirk_id'] . ',' . $fs['name'] . ',' . $fs['nachname'] . implode(',', $row) . "\n";
 		}
 	}
 
@@ -51,7 +56,7 @@ class LookupControl extends ConsoleControl
 			$olderThan->sub(new \DateInterval('P6M'));
 			if ($date < $olderThan) {
 				$this->info('Deleted user ' . $fs['id']);
-				$this->model->del_foodsaver($fs['id']);
+				$this->foodsaverGateway->del_foodsaver($fs['id']);
 			}
 		}
 	}

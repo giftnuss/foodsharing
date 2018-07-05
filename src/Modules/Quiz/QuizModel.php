@@ -4,15 +4,18 @@ namespace Foodsharing\Modules\Quiz;
 
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
 class QuizModel extends Model
 {
 	private $bellGateway;
+	private $foodsaverGateway;
 
-	public function __construct(BellGateway $bellGateway)
+	public function __construct(BellGateway $bellGateway, FoodsaverGateway $foodsaverGateway)
 	{
 		parent::__construct();
 		$this->bellGateway = $bellGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 	}
 
 	public function listQuiz()
@@ -286,7 +289,7 @@ class QuizModel extends Model
 			)		
 		')
 		) {
-			if ($quizAMBs = $this->getBotschafter(341)) {
+			if ($quizAMBs = $this->foodsaverGateway->getBotschafter(341)) {
 				$this->bellGateway->addBell($quizAMBs, 'new_quiz_comment_title', 'new_quiz_comment', 'fa fa-question-circle', array('href' => '/?page=quiz&sub=wall&id=' . (int)$question_id), array(
 					'comment' => $comment
 				));

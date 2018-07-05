@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Message;
 
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Model;
 
 class MessageModel extends Model
@@ -124,7 +123,7 @@ class MessageModel extends Model
 		$out = array();
 
 		// for orga and bot-welcome team, allow to contact everyone who is foodsaver
-		if (S::may('orga') || (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke']) && in_array(813, $_SESSION['client']['bezirke']))) {
+		if ($this->session->may('orga') || (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke']) && in_array(813, $_SESSION['client']['bezirke']))) {
 			$sql = '
 				SELECT fs.id AS id,
 						CONCAT(fs.name," ",fs.nachname ) AS value

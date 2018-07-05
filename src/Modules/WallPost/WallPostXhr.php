@@ -34,7 +34,7 @@ class WallPostXhr extends Control
 			$this->table = $_GET['table'];
 			$this->id = (int)$_GET['id'];
 			$this->model->setTable($this->table, $this->id);
-			$this->view->setTable($this->table);
+			$this->view->setTable($this->table, $this->id);
 		} else {
 			echo '{status:0}';
 			exit();
@@ -126,7 +126,7 @@ class WallPostXhr extends Control
 					'status' => 1,
 					'html' => $this->view->posts($this->model->getLastPosts()),
 					'script' => '
-					if(u_wallpostReady != undefined && $.isFunction(u_wallpostReady))
+					if(typeof u_wallpostReady !== \'undefined\' && $.isFunction(u_wallpostReady))
 					{
 						u_wallpostReady(' . (int)$post_id . ');
 					}'

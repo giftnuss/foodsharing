@@ -3,7 +3,7 @@
 namespace Foodsharing\Services;
 
 use Foodsharing\Lib\Func;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreModel;
@@ -16,14 +16,22 @@ class SearchService
 	private $storeModel;
 	private $regionGateway;
 	private $func;
+	private $session;
 
-	public function __construct(BuddyGateway $buddyGateway, WorkGroupModel $workGroupModel, StoreModel $storeModel, regionGateway $regionGateway, Func $func)
-	{
+	public function __construct(
+		BuddyGateway $buddyGateway,
+		WorkGroupModel $workGroupModel,
+		StoreModel $storeModel,
+		regionGateway $regionGateway,
+		Func $func,
+		Session $session
+	) {
 		$this->buddyGateway = $buddyGateway;
 		$this->workGroupModel = $workGroupModel;
 		$this->storeModel = $storeModel;
 		$this->regionGateway = $regionGateway;
 		$this->func = $func;
+		$this->session = $session;
 	}
 
 	/**
@@ -36,7 +44,7 @@ class SearchService
 		/*
 		 * Buddies Load persons in the index array that connected with the user
 		*/
-		if ($buddies = $this->buddyGateway->listBuddies(S::id())) {
+		if ($buddies = $this->buddyGateway->listBuddies($this->session->id())) {
 			$result = [];
 			foreach ($buddies as $b) {
 				$img = '/img/avatar-mini.png';
@@ -113,7 +121,7 @@ class SearchService
 		/*
 		 * Bezirke load Bezirke connected to the user in the array
 		*/
-		$bezirke = $this->regionGateway->listForFoodsaverExceptWorkingGroups(S::id());
+		$bezirke = $this->regionGateway->listForFoodsaverExceptWorkingGroups($this->session->id());
 		$result = [];
 		foreach ($bezirke as $b) {
 			$result[] = array(

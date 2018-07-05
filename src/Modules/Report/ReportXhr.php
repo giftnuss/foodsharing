@@ -2,33 +2,35 @@
 
 namespace Foodsharing\Modules\Report;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
 class ReportXhr extends Control
 {
 	private $foodsaver;
-	private $gateway;
+	private $reportGateway;
+	private $foodsaverGateway;
 
-	public function __construct(ReportGateway $gateway, Model $model, ReportView $view)
+	public function __construct(ReportGateway $reportGateway, Model $model, ReportView $view, FoodsaverGateway $foodsaverGateway)
 	{
-		$this->gateway = $gateway;
 		$this->model = $model;
 		$this->view = $view;
+		$this->reportGateway = $reportGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 
 		parent::__construct();
 
 		if (isset($_GET['fsid'])) {
-			$this->foodsaver = $this->model->getOne_foodsaver($_GET['fsid']);
+			$this->foodsaver = $this->foodsaverGateway->getOne_foodsaver($_GET['fsid']);
 			$this->view->setFoodsaver($this->foodsaver);
 		}
 	}
 
 	public function loadReport(): ?array
 	{
-		if ($this->func->mayHandleReports() && $report = $this->gateway->getReport($_GET['id'])) {
+		if ($this->func->mayHandleReports() && $report = $this->reportGateway->getReport($_GET['id'])) {
 			$reason = explode('=>', $report['tvalue']);
 
 			$dialog = new XhrDialog();
@@ -72,7 +74,7 @@ class ReportXhr extends Control
 	public function comReport(): ?array
 	{
 		if ($this->func->mayHandleReports()) {
-			$this->gateway->confirmReport($_GET['id']);
+			$this->reportGateway->confirmReport($_GET['id']);
 			$this->func->info('Meldung wurde bestätigt!');
 
 			return [
@@ -85,7 +87,7 @@ class ReportXhr extends Control
 	public function delReport(): ?array
 	{
 		if ($this->func->mayHandleReports()) {
-			$this->gateway->delReport($_GET['id']);
+			$this->reportGateway->delReport($_GET['id']);
 			$this->func->info('Meldung wurde gelöscht!');
 
 			return [
@@ -105,7 +107,7 @@ class ReportXhr extends Control
 		$dialog->addContent($this->view->reportDialog());
 		$bid = 0;
 		if (!isset($_GET['bid']) || (int)$_GET['bid'] === 0) {
-			if ($betriebe = $this->gateway->getFoodsaverBetriebe($_GET['fsid'])) {
+			if ($betriebe = $this->reportGateway->getFoodsaverBetriebe($_GET['fsid'])) {
 				$dialog->addContent($this->view->betriebList($betriebe));
 			}
 		} else {
@@ -180,7 +182,7 @@ class ReportXhr extends Control
 		if ($_GET['reason_id'] === 2) {
 			$reason_id = 2;
 		}
-		$this->gateway->addBetriebReport($_GET['fsid'], S::id(), $reason_id, $_GET['reason'], $_GET['msg'], (int)$_GET['bid']);
+		$this->reportGateway->addBetriebReport($_GET['fsid'], $this->session->id(), $reason_id, $_GET['reason'], $_GET['msg'], (int)$_GET['bid']);
 
 		return [
 			'status' => 1,

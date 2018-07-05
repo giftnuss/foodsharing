@@ -30,6 +30,23 @@ for pid in "${pids[@]}"; do
   wait $pid
 done
 
+# Do not build all images in parallel as it would need more than 4 GB of space on /tmp
+for name in client db; do
+  dc build $name &
+  pids+=($!)
+done
+
+for pid in "${pids[@]}"; do
+  wait $pid
+done
+
+echo $SECONDS seconds elapsed
+
+log-header "Installing composer deps in app container"
+SECONDS=0
+dc up -d --no-build --no-deps app
+exec-in-container-asroot app composer install
+exec-in-container-asroot app rm -rf cache/.views-cache cache/di-cache.php
 echo $SECONDS seconds elapsed
 
 log-header "Bring up containers"
@@ -49,11 +66,6 @@ migratedb foodsharing
 $dir/mkdirs
 echo $SECONDS seconds elapsed
 
-log-header "Installing composer deps"
-SECONDS=0
-exec-in-container-asroot app composer install
-echo $SECONDS seconds elapsed
-
 log-header "Checking code style"
 SECONDS=0
 exec-in-container-asroot app scripts/php-cs-fixer.ci.sh --cache-file=vendor/php-cs-cache fix
@@ -62,7 +74,6 @@ echo $SECONDS seconds elapsed
 log-header "Running tests"
 failed=0
 SECONDS=0
-exec-in-container-asroot app rm -rf tmp/.views-cache tmp/di-cache.php
 exec-in-container app vendor/bin/codecept run --xml --html || failed=1
 echo $SECONDS seconds elapsed
 
@@ -95,6 +106,11 @@ fi
 log-header "Running chat tests"
 SECONDS=0
 run-in-container chat npm test
+echo $SECONDS seconds elapsed
+
+log-header "Running client js tests"
+SECONDS=0
+run-in-container client 'yarn && yarn lint && yarn test'
 echo $SECONDS seconds elapsed
 
 log-header "Done!"

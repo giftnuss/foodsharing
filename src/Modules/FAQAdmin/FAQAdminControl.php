@@ -2,20 +2,22 @@
 
 namespace Foodsharing\Modules\FAQAdmin;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
 
 class FAQAdminControl extends Control
 {
-	public function __construct(Model $model, FAQAdminView $view)
+	private $faqGateway;
+
+	public function __construct(Model $model, FAQAdminView $view, FAQGateway $faqGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->faqGateway = $faqGateway;
 
 		parent::__construct();
 
-		if (!S::may('orga')) {
+		if (!$this->session->may('orga')) {
 			$this->func->goLogin();
 		}
 	}
@@ -28,13 +30,13 @@ class FAQAdminControl extends Control
 			$this->func->addBread($this->func->s('bread_faq'), '/?page=faq');
 			$this->func->addBread($this->func->s('bread_new_faq'));
 
-			$this->func->addContent($this->view->faq_form($this->model->getBasics_faq_category()));
+			$this->func->addContent($this->view->faq_form($this->faqGateway->getBasics_faq_category()));
 
 			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 				$this->func->pageLink('faq', 'back_to_overview')
 			)), $this->func->s('actions')), CNT_RIGHT);
 		} elseif ($id = $this->func->getActionId('delete')) {
-			if ($this->model->del_faq($id)) {
+			if ($this->faqGateway->del_faq($id)) {
 				$this->func->info($this->func->s('faq_deleted'));
 				$this->func->goPage();
 			}
@@ -43,21 +45,21 @@ class FAQAdminControl extends Control
 			$this->func->addBread($this->func->s('bread_faq'), '/?page=faq');
 			$this->func->addBread($this->func->s('bread_edit_faq'));
 
-			$data = $this->model->getOne_faq($id);
+			$data = $this->faqGateway->getOne_faq($id);
 			$this->func->setEditData($data);
 
-			$this->func->addContent($this->view->faq_form($this->model->getBasics_faq_category()));
+			$this->func->addContent($this->view->faq_form($this->faqGateway->getBasics_faq_category()));
 
 			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 				$this->func->pageLink('faq', 'back_to_overview')
 			)), $this->func->s('actions')), CNT_RIGHT);
 		} elseif (isset($_GET['id'])) {
-			$data = $this->model->getOne_faq($_GET['id']);
+			$data = $this->faqGateway->getOne_faq($_GET['id']);
 			print_r($data);
 		} else {
 			$this->func->addBread($this->func->s('faq_bread'), '/?page=faq');
 
-			if ($data = $this->model->get_faq()) {
+			if ($data = $this->faqGateway->get_faq()) {
 				$sort = array();
 				foreach ($data as $d) {
 					if (!isset($sort[$d['faq_kategorie_id']])) {
@@ -98,7 +100,7 @@ class FAQAdminControl extends Control
 
 		if ($this->func->submitted()) {
 			$g_data['foodsaver_id'] = $this->func->fsId();
-			if ($this->model->update_faq($_GET['id'], $g_data)) {
+			if ($this->faqGateway->update_faq($_GET['id'], $g_data)) {
 				$this->func->info($this->func->s('faq_edit_success'));
 				$this->func->goPage();
 			} else {

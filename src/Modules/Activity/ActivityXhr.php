@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Activity;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 
 class ActivityXhr extends Control
@@ -29,7 +29,7 @@ class ActivityXhr extends Control
 			'buddywall' => array()
 		);
 
-		if ($sesOptions = S::option('activity-listings')) {
+		if ($sesOptions = $this->session->option('activity-listings')) {
 			foreach ($sesOptions as $o) {
 				if (isset($hidden_ids[$o['index']])) {
 					$hidden_ids[$o['index']][$o['id']] = true;
@@ -85,7 +85,7 @@ class ActivityXhr extends Control
 				$options = false;
 			}
 
-			S::setOption('activity-listings', $options, $this->model);
+			$this->session->setOption('activity-listings', $options, $this->model);
 		}
 
 		$page = 0;
@@ -95,7 +95,7 @@ class ActivityXhr extends Control
 			'buddywall' => array()
 		);
 
-		if ($sesOptions = S::option('activity-listings')) {
+		if ($sesOptions = $this->session->option('activity-listings')) {
 			foreach ($sesOptions as $o) {
 				if (isset($hidden_ids[$o['index']])) {
 					$hidden_ids[$o['index']][$o['id']] = $o['id'];
@@ -125,8 +125,8 @@ class ActivityXhr extends Control
 
 		$xhr->addData('user', [
 			'id' => $this->func->fsId(),
-			'name' => S::user('name'),
-			'avatar' => $this->func->img(S::user('photo'))
+			'name' => $this->session->user('name'),
+			'avatar' => $this->func->img($this->session->user('photo'))
 		]);
 
 		if (isset($_GET['listings'])) {
@@ -140,14 +140,14 @@ class ActivityXhr extends Control
 
 			$option = array();
 
-			if ($list = S::option('activity-listings')) {
+			if ($list = $this->session->option('activity-listings')) {
 				$option = $list;
 			}
 
 			/*
 			 * listings regions
 			*/
-			if ($bezirke = $this->model->getBezirke()) {
+			if ($bezirke = $this->session->getRegions()) {
 				foreach ($bezirke as $b) {
 					$checked = true;
 					$regionId = 'bezirk-' . $b['id'];
@@ -159,7 +159,7 @@ class ActivityXhr extends Control
 						'name' => $b['name'],
 						'checked' => $checked
 					];
-					if ($b['type'] === 7) {
+					if ($b['type'] == Type::WORKING_GROUP) {
 						$listings['groups'][] = $dat;
 					} else {
 						$listings['regions'][] = $dat;

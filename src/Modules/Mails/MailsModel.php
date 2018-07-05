@@ -36,8 +36,8 @@ class MailsModel extends ConsoleModel
 			)
 			VALUES
 			(
-				' . $this->intval($mailbox_id) . ',
-				' . $this->intval($folder) . ',
+				' . (int)$mailbox_id . ',
+				' . (int)$folder . ',
 				' . $this->strval($from) . ',
 				' . $this->strval($to) . ',
 				' . $this->strval($subject) . ',
@@ -45,8 +45,8 @@ class MailsModel extends ConsoleModel
 				' . $this->strval($html, true) . ',
 				' . $this->strval($time) . ',
 				' . $this->strval($attach) . ',
-				' . $this->intval($read) . ',
-				' . $this->intval($answer) . '
+				' . (int)$read . ',
+				' . (int)$answer . '
 			)
 		');
 	}

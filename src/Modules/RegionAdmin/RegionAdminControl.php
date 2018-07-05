@@ -2,19 +2,23 @@
 
 namespace Foodsharing\Modules\RegionAdmin;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class RegionAdminControl extends Control
 {
-	public function __construct(Model $model, RegionAdminView $view)
+	private $regionGateway;
+
+	public function __construct(Model $model, RegionAdminView $view, RegionGateway $regionGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->regionGateway = $regionGateway;
+
 		parent::__construct();
 
-		if (!S::may('orga')) {
+		if (!$this->session->may('orga')) {
 			$this->func->go('/');
 		}
 	}
@@ -22,7 +26,7 @@ class RegionAdminControl extends Control
 	public function index()
 	{
 		if ($this->func->isOrgaTeam() && isset($_GET['delete']) && (int)$_GET['delete'] > 0) {
-			$this->model->deleteBezirk($_GET['delete']);
+			$this->regionGateway->deleteBezirk($_GET['delete']);
 			$this->func->goPage('region');
 		}
 
@@ -46,7 +50,7 @@ class RegionAdminControl extends Control
 			}
 		});');
 
-		$bezirke = $this->model->getBasics_bezirk();
+		$bezirke = $this->regionGateway->getBasics_bezirk();
 
 		array_unshift($bezirke, array('id' => '0', 'name' => 'Ohne `Eltern` Bezirk'));
 

@@ -4,27 +4,34 @@ namespace Foodsharing\Modules\API;
 
 use Flourish\fImage;
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Basket\BasketModel;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Message\MessageModel;
 
 class APIXhr extends Control
 {
 	private $messageModel;
 	private $basketModel;
-	private $gateway;
+	private $apiGateway;
+	private $loginGateway;
 
-	public function __construct(APIGateway $gateway, MessageModel $messageModel, BasketModel $basketModel, Model $model)
-	{
-		$this->gateway = $gateway;
+	public function __construct(
+		APIGateway $apiGateway,
+		LoginGateway $loginGateway,
+		MessageModel $messageModel,
+		BasketModel $basketModel,
+		Model $model
+	) {
+		$this->apiGateway = $apiGateway;
+		$this->loginGateway = $loginGateway;
 		$this->messageModel = $messageModel;
 		$this->basketModel = $basketModel;
 		$this->model = $model;
 		parent::__construct();
 
-		if ($_GET['m'] != 'login' && !S::may()) {
+		if ($_GET['m'] != 'login' && !$this->session->may()) {
 			$this->appout([
 				'status' => 2
 			]);
@@ -65,8 +72,8 @@ class APIXhr extends Control
 								'id' => $id,
 								'cid' => $conversation_id,
 								'fs_id' => $this->func->fsId(),
-								'fs_name' => S::user('name'),
-								'fs_photo' => S::user('photo'),
+								'fs_name' => $this->session->user('name'),
+								'fs_photo' => $this->session->user('photo'),
 								'body' => $message,
 								'time' => date('Y-m-d H:i:s')
 							]);
@@ -122,11 +129,11 @@ class APIXhr extends Control
 
 	public function logout(): void
 	{
-		$this->model->logout();
+		Mem::logout($this->session->id());
 		$_SESSION['login'] = false;
 		$_SESSION = array();
 
-		S::destroy();
+		$this->session->destroy();
 
 		$this->appout([
 			'status' => 1
@@ -135,8 +142,18 @@ class APIXhr extends Control
 
 	public function login(): void
 	{
-		if (isset($_GET['e']) && $this->model->login($_GET['e'], $_GET['p'])) {
-			$fs = $this->model->getValues(['telefon', 'handy', 'geschlecht', 'name', 'lat', 'lon', 'photo'], 'foodsaver', $this->func->fsId());
+		if (!isset($_GET['e'])) {
+			$this->appout([
+				'status' => 0
+			]);
+		}
+
+		$fs_id = $this->loginGateway->login($_GET['e'], $_GET['p']);
+
+		if ($fs_id !== null) {
+			$this->session->refreshFromDatabase($fs_id);
+
+			$fs = $this->model->getValues(['telefon', 'handy', 'geschlecht', 'name', 'lat', 'lon', 'photo'], 'foodsaver', $this->session->id());
 
 			$this->appout([
 				'status' => 1,
@@ -150,11 +167,11 @@ class APIXhr extends Control
 				'lon' => $fs['lon'],
 				'photo' => $fs['photo']
 			]);
+		} else {
+			$this->appout([
+				'status' => 0
+			]);
 		}
-
-		$this->appout([
-			'status' => 0
-		]);
 	}
 
 	public function initRelogin(): void
@@ -166,7 +183,7 @@ class APIXhr extends Control
 
 	public function basket_submit(): void
 	{
-		if (S::may()) {
+		if ($this->session->may()) {
 			$desc = strip_tags($_GET['desc']);
 			$tmp = array();
 
@@ -240,7 +257,7 @@ class APIXhr extends Control
 					(int)$_GET['fetchart'], // location type
 					$lat, // lat
 					$lon, // lon
-					S::user('bezirk_id')
+					$this->session->user('bezirk_id')
 				)
 				) {
 					if (!empty($art)) {
@@ -299,7 +316,7 @@ class APIXhr extends Control
 
 	public function checklogin(): void
 	{
-		if (S::may()) {
+		if ($this->session->may()) {
 			$this->appout([
 				'status' => 1
 			]);
@@ -311,14 +328,14 @@ class APIXhr extends Control
 
 	public function orgagruppen(): void
 	{
-		if ($groups = $this->gateway->getOrgaGroups()) {
+		if ($groups = $this->apiGateway->getOrgaGroups()) {
 			$this->out($groups);
 		}
 	}
 
 	public function auth(): void
 	{
-		if ($ret = $this->model->checkClient($_GET['user'], $_GET['pass'])) {
+		if ($ret = $this->loginGateway->checkClient($_GET['user'], $_GET['pass'])) {
 			$values = $this->model->getValues(['id', 'orgateam', 'name', 'email', 'photo', 'geschlecht', 'rolle'], 'foodsaver', $ret['id']);
 
 			$values['bot'] = $values['rolle'] >= 3;
@@ -347,7 +364,7 @@ class APIXhr extends Control
 
 	public function loadBasket(): void
 	{
-		if (S::may() && $basket = $this->gateway->getBasket($_GET['id'])) {
+		if ($this->session->may() && $basket = $this->apiGateway->getBasket($_GET['id'])) {
 			$this->appout([
 				'status' => 1,
 				'basket' => $basket
@@ -361,7 +378,7 @@ class APIXhr extends Control
 
 	public function allbaskets(): void
 	{
-		if (S::may() && $baskets = $this->gateway->allBaskets()) {
+		if ($this->session->may() && $baskets = $this->apiGateway->allBaskets()) {
 			$this->appout([
 				'status' => 1,
 				'baskets' => $baskets
@@ -374,11 +391,11 @@ class APIXhr extends Control
 
 	public function basketsnear(): void
 	{
-		if (isset($_GET['lat'], $_GET['lon']) && S::may()) {
+		if (isset($_GET['lat'], $_GET['lon']) && $this->session->may()) {
 			$lat = (float)$_GET['lat'];
 			$lon = (float)$_GET['lon'];
 
-			if ($baskets = $this->gateway->nearBaskets($lat, $lon)) {
+			if ($baskets = $this->apiGateway->nearBaskets($lat, $lon)) {
 				$this->appout([
 					'status' => 1,
 					'baskets' => $baskets

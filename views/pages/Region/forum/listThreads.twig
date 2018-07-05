@@ -1,0 +1,18 @@
+{% embed 'components/field.twig' with {'classes': ['ui-padding']} %}
+    {% block content %}
+        <a class="button"
+           href="/?page=bezirk&bid={{ region.id }}&sub={{ sub }}&newthread">{{ 'forum.new_thread'|trans }}</a>
+    {% endblock %}
+{% endembed %}
+{% embed 'components/field.twig' with {'title': 'forum.threads'|trans(), 'classes': ['ui-padding']} %}
+    {% block content %}
+        {% if threads is not empty %}
+        <ul class="forum_threads linklist">
+            {% include 'pages/Region/forum/threadEntries.twig' %}
+        </ul>
+        {% else %}
+        {{ 'forum.no_threads'|trans }}
+        {% endif %}
+        <input type="hidden" id="morebutton" value="0"/>
+    {% endblock %}
+{% endembed %}

@@ -2,22 +2,41 @@
 
 namespace Foodsharing\Modules\Login;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Services\SearchService;
+use Symfony\Component\Form\FormFactoryBuilder;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Mobile_Detect;
 
 class LoginControl extends Control
 {
-	private $searchService;
+	/**
+	 * @var FormFactoryBuilder
+	 */
+	private $formFactory;
 
-	public function __construct(LoginModel $model, LoginView $view, SearchService $searchService)
+	private $searchService;
+	private $loginGateway;
+
+	public function __construct(LoginModel $model, LoginView $view, SearchService $searchService, LoginGateway $loginGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->searchService = $searchService;
+		$this->loginGateway = $loginGateway;
 
 		parent::__construct();
+	}
+
+	/**
+	 * @required
+	 *
+	 * @param FormFactoryBuilder $formFactory
+	 */
+	public function setFormFactory(FormFactoryBuilder $formFactory): void
+	{
+		$this->formFactory = $formFactory;
 	}
 
 	public function unsubscribe()
@@ -30,18 +49,37 @@ class LoginControl extends Control
 		}
 	}
 
-	public function index()
+	public function index(Request $request, Response $response)
 	{
-		if (!S::may()) {
-			if (!isset($_GET['sub'])) {
-				if (isset($_POST['email_adress'])) {
-					$this->handleLogin();
+		if (!$this->session->may()) {
+			$has_subpage = $request->query->has('sub');
+
+			$form = $this->formFactory->getFormFactory()->create(LoginForm::class);
+			$form->handleRequest($request);
+
+			if (!$has_subpage) {
+				if ($form->isSubmitted() && $form->isValid()) {
+					$this->handleLogin($request);
 				}
+
 				$ref = false;
 				if (isset($_GET['ref'])) {
 					$ref = urldecode($_GET['ref']);
 				}
-				$this->func->addContent($this->view->login($ref));
+
+				$action = '/?page=login';
+				if ($ref) {
+					$action = '/?page=login&ref=' . urlencode($ref);
+				} elseif (!isset($_GET['ref'])) {
+					$action = '/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']);
+				}
+
+				$params = array(
+					'action' => $action,
+					'form' => $form->createView(),
+				);
+
+				$response->setContent($this->render('pages/Login/page.twig', $params));
 			}
 		} else {
 			if (!isset($_GET['sub']) || $_GET['sub'] != 'unsubscribe') {
@@ -61,30 +99,38 @@ class LoginControl extends Control
 		}
 	}
 
-	private function handleLogin()
+	private function handleLogin(Request $request)
 	{
-		if ($this->model->login($_POST['email_adress'], $_POST['password'])) {
-			$token = $this->searchService->writeSearchIndexToDisk(S::id(), S::user('token'));
+		$email_address = $request->request->get('login_form')['email_address'];
+		$password = $request->request->get('login_form')['password'];
 
-			if (isset($_POST['ismob'])) {
-				$_SESSION['mob'] = (int)$_POST['ismob'];
-			}
+		$fs_id = $this->loginGateway->login($email_address, $password);
 
-			$mobdet = new Mobile_Detect();
-			if ($mobdet->isMobile()) {
-				$_SESSION['mob'] = 1;
-			}
+		if ($fs_id === null) {
+			$this->func->error('Falsche Zugangsdaten'); //TODO: translation file 'Wrong access data'
+			return;
+		}
 
-			if ((isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], BASE_URL) !== false) || isset($_GET['logout'])) {
-				if (isset($_GET['ref'])) {
-					$this->func->go(urldecode($_GET['ref']));
-				}
-				$this->func->go(str_replace('/?page=login&logout', '/?page=dashboard', $_SERVER['HTTP_REFERER']));
-			} else {
-				$this->func->go('/?page=dashboard');
+		$this->session->refreshFromDatabase($fs_id);
+
+		$token = $this->searchService->writeSearchIndexToDisk($this->session->id(), $this->session->user('token'));
+
+		if (isset($_POST['ismob'])) {
+			$_SESSION['mob'] = (int)$_POST['ismob'];
+		}
+
+		$mobdet = new Mobile_Detect();
+		if ($mobdet->isMobile()) {
+			$_SESSION['mob'] = 1;
+		}
+
+		if ((isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], BASE_URL) !== false) || isset($_GET['logout'])) {
+			if (isset($_GET['ref'])) {
+				$this->func->go(urldecode($_GET['ref']));
 			}
+			$this->func->go(str_replace('/?page=login&logout', '/?page=dashboard', $_SERVER['HTTP_REFERER']));
 		} else {
-			$this->func->error('Falsche Zugangsdaten');
+			$this->func->go('/?page=dashboard');
 		}
 	}
 

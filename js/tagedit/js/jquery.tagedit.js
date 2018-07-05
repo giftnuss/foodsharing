@@ -14,6 +14,10 @@
 * @version 1.2.1 (11/2011)
 * Requires: jQuery v1.4+, jQueryUI v1.8+, jQuerry.autoGrowInput
 *
+* 2018-07-03
+* Warning Foodsharing Maintainers:
+* Hotfix from https://github.com/webworka/Tagedit/commit/6dc7da904c3c68b186f99831ea2c14c9f39c0f1b applied manually
+*
 * Example of usage:
 *
 * $( "input.tag" ).tagedit();
@@ -162,7 +166,7 @@
 
 						// Event ist triggert in case of choosing an item from the autocomplete, or finish the input
 						$(this).bind('transformToTag', function(event, id) {
-							var oldValue = (typeof id != 'undefined' && id.length > 0);
+							var oldValue = (typeof id != 'undefined' && (id.length > 0 || id > 0));
 
 							var checkAutocomplete = oldValue == true? false : true;
 							// check if the Value ist new
@@ -403,7 +407,7 @@
 		function isNew(value, checkAutocomplete) {
             checkAutocomplete = typeof checkAutocomplete == 'undefined'? false : checkAutocomplete;
 			var autoCompleteId = null;
-            
+
             var compareValue = options.checkNewEntriesCaseSensitive == true? value : value.toLowerCase();
 
 			var isNew = true;
@@ -440,7 +444,7 @@
 						}
 					});
 				}
-                
+
 				// If there is an entry for that already in the autocomplete, don't use it (Check could be case sensitive or not)
 				for (var i = 0; i < result.length; i++) {
                     var label = options.checkNewEntriesCaseSensitive == true? result[i].label : result[i].label.toLowerCase();

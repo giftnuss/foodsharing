@@ -6,8 +6,12 @@ use Foodsharing\Modules\Console\ConsoleModel;
 
 class StatsModel extends ConsoleModel
 {
-	public function __construct()
+	private $statsService;
+
+	public function __construct(StatsService $statsService)
 	{
+		$this->statsService = $statsService;
+
 		parent::__construct();
 	}
 
@@ -52,7 +56,7 @@ class StatsModel extends ConsoleModel
 		')
 		) {
 			foreach ($res as $r) {
-				$out += $this->gerettet_wrapper($r['abholmenge']) * $r['anz'];
+				$out += $this->statsService->gerettet_wrapper($r['abholmenge']) * $r['anz'];
 			}
 		}
 
@@ -98,7 +102,7 @@ class StatsModel extends ConsoleModel
 			UPDATE 	`fs_betrieb_team` 
 				
 			SET 	`stat_last_update` = NOW(),
-					`stat_fetchcount` = ' . $this->intval($fetchcount) . ',
+					`stat_fetchcount` = ' . (int)$fetchcount . ',
 					`stat_first_fetch` = ' . $this->dateval($first_fetch) . ',
 					`stat_add_date` = ' . $this->dateval($add_date) . ',
 					`stat_last_fetch` = ' . $this->dateval($last_fetch) . '
@@ -159,14 +163,14 @@ class StatsModel extends ConsoleModel
 				
 				SET 
 					`stat_last_update`= NOW(),
-					`stat_fetchweight`=' . $this->floatval($fetchweight) . ',
-					`stat_fetchcount`=' . $this->intval($fetchcount) . ',
-					`stat_postcount`=' . $this->intval($postcount) . ',
-					`stat_betriebcount`=' . $this->intval($betriebcount) . ',
-					`stat_korpcount`=' . $this->intval($korpcount) . ',
-					`stat_botcount`=' . $this->intval($botcount) . ',
-					`stat_fscount`=' . $this->intval($fscount) . ',
-					`stat_fairteilercount`=' . $this->intval($fairteilercount) . ' 
+					`stat_fetchweight`=' . (float)$fetchweight . ',
+					`stat_fetchcount`=' . (int)$fetchcount . ',
+					`stat_postcount`=' . (int)$postcount . ',
+					`stat_betriebcount`=' . (int)$betriebcount . ',
+					`stat_korpcount`=' . (int)$korpcount . ',
+					`stat_botcount`=' . (int)$botcount . ',
+					`stat_fscount`=' . (int)$fscount . ',
+					`stat_fairteilercount`=' . (int)$fairteilercount . ' 
 				
 				WHERE 
 					`id` = ' . (int)$bezirk_id . '
@@ -296,7 +300,7 @@ class StatsModel extends ConsoleModel
 				$dat[$r['betrieb_id'] . '-' . $r['date']] = $r;
 			}
 			foreach ($dat as $r) {
-				$weight += $this->gerettet_wrapper($r['abholmenge']);
+				$weight += $this->statsService->gerettet_wrapper($r['abholmenge']);
 			}
 		}
 

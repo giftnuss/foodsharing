@@ -2,22 +2,24 @@
 
 namespace Foodsharing\Modules\Profile;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class ProfileControl extends Control
 {
 	private $foodsaver;
 	private $fs_id;
+	private $regionGateway;
 
-	public function __construct(ProfileModel $model, ProfileView $view)
+	public function __construct(ProfileModel $model, ProfileView $view, RegionGateway $regionGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
 
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			$this->func->go('/');
 		}
 
@@ -25,7 +27,7 @@ class ProfileControl extends Control
 			$this->model->setFsId((int)$id);
 			$this->fs_id = (int)$id;
 			if ($data = $this->model->getData()) {
-				if (is_null($data['deleted_at']) || S::may('orga')) {
+				if (is_null($data['deleted_at']) || $this->session->may('orga')) {
 					$this->foodsaver = $data;
 					$this->foodsaver['buddy'] = $this->model->buddyStatus($this->foodsaver['id']);
 
@@ -54,7 +56,7 @@ class ProfileControl extends Control
 	private function organotes()
 	{
 		$this->func->addBread($this->foodsaver['name'], '/profile/' . $this->foodsaver['id']);
-		if (S::may('orga')) {
+		if ($this->session->may('orga')) {
 			$this->view->usernotes($this->wallposts('usernotes', $this->foodsaver['id']), true, true, true, $this->model->getCompanies($this->foodsaver['id']), $this->model->getCompaniesCount($this->foodsaver['id']), $this->model->getNextDates($this->foodsaver['id'], 50));
 		} else {
 			$this->func->go('/profile/' . $this->foodsaver['id']);
@@ -63,7 +65,7 @@ class ProfileControl extends Control
 
 	public function profile()
 	{
-		$bids = $this->model->getFsBezirkIds($this->foodsaver['id']);
+		$bids = $this->regionGateway->getFsBezirkIds($this->foodsaver['id']);
 		if ($this->func->isOrgaTeam() || $this->func->isBotForA($bids, false, true)) {
 			$this->view->profile($this->wallposts('foodsaver', $this->foodsaver['id']), true, true, true, true, $this->model->getCompanies($this->foodsaver['id']), $this->model->getCompaniesCount($this->foodsaver['id']), $this->model->getNextDates($this->foodsaver['id'], 50));
 		} else {

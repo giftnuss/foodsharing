@@ -3,17 +3,19 @@
 namespace Foodsharing\Lib\Cache;
 
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 
 class Caching
 {
 	private $cacheRules;
 	private $cacheMode;
+	private $session;
 
-	public function __construct($cache_rules)
+	public function __construct($cache_rules, Session $session)
 	{
+		$this->session = $session;
 		$this->cacheRules = $cache_rules;
-		$this->cacheMode = S::may() ? 'u' : 'g';
+		$this->cacheMode = $this->session->may() ? 'u' : 'g';
 	}
 
 	public function lookup()

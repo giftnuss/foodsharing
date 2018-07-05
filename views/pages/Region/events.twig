@@ -1,0 +1,31 @@
+{% extends 'pages/Region/baseRegion.twig' %}
+
+{% block main %}
+    {% embed 'components/field.twig' with {'title': 'events.name'|trans} %}
+    {% block content %}
+        <ul class="linklist">
+            {% for event in events %}
+            <li>
+                <a href="/?page=event&id={{ event.id }}">
+                        <span class="calendar" style="margin-right:10px;">
+                            <span class="month">{{ event.start_ts|localizeddate('none', 'none', NULL, NULL, 'MMMM') }}</span>
+                            <span class="day">{{ event.start_ts|date('d') }}</span>
+                        </span>
+                    <span class="title">{{ event.name }}</span><br />
+                    {{ event.start_ts|date('d.m.Y H:i') }} - {{ event.end_ts|date('d.m.Y H:i') }}
+                    <span class="clear"></span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block right %}
+    {% embed 'components/field.twig' with {'title': 'events.add_event'|trans, 'classes': ['ui-padding']} %}
+    {% block content %}
+        <p align="center"><a class="button" href="/?page=event&sub=add&bid={{ region.id }}">{{ 'events.add_new_event'|trans }}</a></p>
+    {% endblock %}
+    {% endembed %}
+{% endblock %}

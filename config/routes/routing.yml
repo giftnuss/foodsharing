@@ -1,0 +1,5 @@
+messages:
+  type: rest
+  prefix: /api
+  resource: Foodsharing\Controller\MessageRestController
+  defaults: {_format: json}

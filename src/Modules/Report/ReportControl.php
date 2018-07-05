@@ -7,11 +7,11 @@ use Foodsharing\Modules\Core\Model;
 
 class ReportControl extends Control
 {
-	private $gateway;
+	private $reportGateway;
 
-	public function __construct(ReportGateway $gateway, Model $model, ReportView $view)
+	public function __construct(ReportGateway $reportGateway, Model $model, ReportView $view)
 	{
-		$this->gateway = $gateway;
+		$this->reportGateway = $reportGateway;
 		$this->model = $model;
 		$this->view = $view;
 
@@ -34,9 +34,9 @@ class ReportControl extends Control
 	public function uncom(): void
 	{
 		if ($this->func->mayHandleReports()) {
-			$this->func->addContent($this->view->statsMenu($this->gateway->getReportStats()), CNT_LEFT);
+			$this->func->addContent($this->view->statsMenu($this->reportGateway->getReportStats()), CNT_LEFT);
 
-			if ($reports = $this->gateway->getReports(0)) {
+			if ($reports = $this->reportGateway->getReports(0)) {
 				$this->func->addContent($this->view->listReports($reports));
 			}
 			$this->func->addContent($this->view->topbar('Neue Verstoßmeldungen', \count($reports) . ' insgesamt', '<img src="/img/shit.png" />'), CNT_TOP);
@@ -46,9 +46,9 @@ class ReportControl extends Control
 	public function com(): void
 	{
 		if ($this->func->mayHandleReports()) {
-			$this->func->addContent($this->view->statsMenu($this->gateway->getReportStats()), CNT_LEFT);
+			$this->func->addContent($this->view->statsMenu($this->reportGateway->getReportStats()), CNT_LEFT);
 
-			if ($reports = $this->gateway->getReports(1)) {
+			if ($reports = $this->reportGateway->getReports(1)) {
 				$this->func->addContent($this->view->listReports($reports));
 			}
 			$this->func->addContent($this->view->topbar('Bestätigte Verstoßmeldungen', \count($reports) . ' insgesamt', '<img src="/img/shit.png" />'), CNT_TOP);
@@ -58,7 +58,7 @@ class ReportControl extends Control
 	public function foodsaver(): void
 	{
 		if ($this->func->mayHandleReports()) {
-			if ($foodsaver = $this->gateway->getReportedSaver($_GET['id'])) {
+			if ($foodsaver = $this->reportGateway->getReportedSaver($_GET['id'])) {
 				$this->func->addBread('Verstoßmeldungen', '/?page=report&sub=foodsaver&id=' . (int)$foodsaver['id']);
 				$this->func->addJs('
 						$(".welcome_profile_image").css("cursor","pointer");

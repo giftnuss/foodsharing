@@ -2,17 +2,20 @@
 
 use Foodsharing\DI;
 use Foodsharing\Lib\Cache\Caching;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrMethods;
-use Foodsharing\Modules\Core\Model;
 
 require __DIR__ . '/includes/setup.php';
 
 require_once 'config.inc.php';
 
-S::init();
+/* @var $session \Foodsharing\Lib\Session */
+$session = DI::$shared->get(Session::class);
+$session->init();
+
 if (isset($g_page_cache)) {
-	$cache = new Caching($g_page_cache);
+	$cache = new Caching($g_page_cache, $session);
 	$cache->lookup();
 }
 
@@ -20,10 +23,9 @@ require_once 'lang/DE/de.php';
 
 $action = $_GET['f'];
 
-$db = new Model();
-
-$db->updateActivity(S::id());
+Mem::updateActivity($session->id());
 if (isset($_GET['f'])) {
+	/* @var $xhr XhrMethods */
 	$xhr = DI::$shared->get(XhrMethods::class);
 	$func = 'xhr_' . $action;
 	if (method_exists($xhr, $func)) {

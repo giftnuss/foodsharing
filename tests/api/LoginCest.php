@@ -17,8 +17,10 @@ class LoginCest
 		$I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
 		$I->sendPOST('/?page=login', [
-			'email_adress' => $user['email'],
-			'password' => $pass
+			'login_form' => [
+				'email_address' => $user['email'],
+				'password' => $pass
+			]
 		]);
 
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
@@ -54,8 +56,10 @@ class LoginCest
 		$I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
 		$I->sendPOST('/?page=login', [
-			'email_adress' => $user['email'],
-			'password' => 'WROOOOOOOOONG'
+			'login_form' => [
+				'email_address' => $user['email'],
+				'password' => 'WROOOOOOOOONG'
+			]
 		]);
 
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);

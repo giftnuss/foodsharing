@@ -3,11 +3,13 @@
 namespace Foodsharing\Modules\Core;
 
 use Foodsharing\DI;
+use Foodsharing\Lib\Db\ManualDb;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Sanitizer;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Message\MessageModel;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,6 +29,12 @@ abstract class Control
 	 * @var Func
 	 */
 	protected $func;
+
+	/**
+	 * @var \Foodsharing\Lib\Session
+	 */
+	protected $session;
+
 	/**
 	 * @var Utils
 	 */
@@ -39,10 +47,23 @@ abstract class Control
 
 	private $usesWebpack = false;
 
+	/**
+	 * @var ManualDb
+	 */
+	private $manualDb;
+
+	/**
+	 * @var FoodsaverGateway
+	 */
+	private $foodsaverGateway;
+
 	public function __construct()
 	{
 		$this->func = DI::$shared->get(Func::class);
+		$this->session = DI::$shared->get(Session::class);
 		$this->v_utils = DI::$shared->get(Utils::class);
+		$this->manualDb = DI::$shared->get(ManualDb::class);
+		$this->foodsaverGateway = DI::$shared->get(FoodsaverGateway::class);
 
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;
@@ -106,7 +127,7 @@ abstract class Control
 				}
 			}
 		}
-		$this->model->updateActivity(S::id());
+		Mem::updateActivity($this->session->id());
 	}
 
 	/**
@@ -169,7 +190,7 @@ abstract class Control
 	public function wallposts($table, $id)
 	{
 		$this->func->addJsFunc('
-			function u_delPost(id)
+			function u_delPost(id, module, wallId)
 				{
 					var id = id;
 					$.ajax({
@@ -292,7 +313,7 @@ abstract class Control
 		');
 		$posthtml = '';
 
-		if (S::may()) {
+		if ($this->session->may()) {
 			$posthtml = '
 				<div class="tools ui-padding">
 				<textarea id="wallpost-text" name="text" title="' . $this->func->s('write_teaser') . '" class="comment textarea inlabel"></textarea>
@@ -312,7 +333,7 @@ abstract class Control
 				</div>
 				<div style="clear:both"></div>
 				<div style="visibility:hidden;">
-				<iframe name="wallpost-frame" src="empty.html" style="height:1px;" frameborder="0"></iframe>
+				<iframe name="wallpost-frame" src="/empty.html" style="height:1px;" frameborder="0"></iframe>
 				</div>
 			</div>';
 		}
@@ -435,7 +456,7 @@ abstract class Control
 					if ($betriebName = $messageModel->getBetriebname($conversation_id)) {
 						$this->func->tplMail(30, $recipient['email'], array(
 							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-							'sender' => S::user('name'),
+							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
 							'chatname' => 'Betrieb ' . $betriebName,
 							'message' => $msg,
@@ -444,7 +465,7 @@ abstract class Control
 					} elseif ($memberNames = $messageModel->getChatMembers($conversation_id)) {
 						$this->func->tplMail(30, $recipient['email'], array(
 							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-							'sender' => S::user('name'),
+							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
 							'chatname' => implode(', ', $memberNames),
 							'message' => $msg,
@@ -453,7 +474,7 @@ abstract class Control
 					} else {
 						$this->func->tplMail($tpl_id, $recipient['email'], array(
 							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-							'sender' => S::user('name'),
+							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
 							'message' => $msg,
 							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->func->fsId() . 'cid=' . (int)$conversation_id
@@ -468,17 +489,17 @@ abstract class Control
 
 	public function mailMessage($sender_id, $recip_id, $msg, $tpl_id = 9)
 	{
-		$info = $this->model->getVal('infomail_message', 'foodsaver', $recip_id);
+		$info = $this->manualDb->getVal('infomail_message', 'foodsaver', $recip_id);
 		if ((int)$info > 0) {
 			if (!isset($_SESSION['lastMailMessage'])) {
 				$_SESSION['lastMailMessage'] = array();
 			}
 
-			if (!$this->model->isActive($recip_id)) {
+			if (!Mem::userIsActive($recip_id)) {
 				if (!isset($_SESSION['lastMailMessage'][$recip_id]) || (time() - $_SESSION['lastMailMessage'][$recip_id]) > 600) {
 					$_SESSION['lastMailMessage'][$recip_id] = time();
-					$foodsaver = $this->model->getOne_foodsaver($recip_id);
-					$sender = $this->model->getOne_foodsaver($sender_id);
+					$foodsaver = $this->foodsaverGateway->getOne_foodsaver($recip_id);
+					$sender = $this->foodsaverGateway->getOne_foodsaver($sender_id);
 
 					$this->func->tplMail($tpl_id, $foodsaver['email'], array(
 						'anrede' => $this->func->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),

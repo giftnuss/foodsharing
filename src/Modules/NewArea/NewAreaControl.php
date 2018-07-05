@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\NewArea;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 
 class NewAreaControl extends Control
@@ -14,7 +13,7 @@ class NewAreaControl extends Control
 
 		parent::__construct();
 
-		if (!S::may('orga')) {
+		if (!$this->session->may('orga')) {
 			$this->func->go('/?page=dashboard');
 		}
 	}

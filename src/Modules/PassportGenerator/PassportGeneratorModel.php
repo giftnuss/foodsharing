@@ -3,9 +3,19 @@
 namespace Foodsharing\Modules\PassportGenerator;
 
 use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class PassportGeneratorModel extends Model
 {
+	private $regionGateway;
+
+	public function __construct(RegionGateway $regionGateway)
+	{
+		$this->regionGateway = $regionGateway;
+
+		parent::__construct();
+	}
+
 	public function updateLastGen($foodsaver)
 	{
 		return $this->update('
@@ -33,7 +43,7 @@ class PassportGeneratorModel extends Model
 				
 				WHERE 	fb.foodsaver_id = fs.id
 				AND 	fb.bezirk_id = b.id
-				AND 	fb.`bezirk_id` IN(' . implode(',', $this->getChildBezirke($bezirk_id)) . ')
+				AND 	fb.`bezirk_id` IN(' . implode(',', $this->regionGateway->listIdsForDescendantsAndSelf($bezirk_id)) . ')
 				AND		fs.deleted_at IS NULL
 				
 				ORDER BY bezirk_name

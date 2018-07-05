@@ -42,6 +42,11 @@ class Foodsharing extends \Codeception\Module\Db
 		', []);
 	}
 
+	public function clearTable($table)
+	{
+		$this->driver->deleteQueryByCriteria($table, []);
+	}
+
 	/**
 	 * Insert a new foodsharer into the database.
 	 *
@@ -549,6 +554,31 @@ class Foodsharing extends \Codeception\Module\Db
 		]);
 
 		return $post;
+	}
+
+	public function addBells($users, $extra_params = [])
+	{
+		$params = array_merge([
+			'name' => 'title',
+			'body' => $this->faker->text(50),
+			'vars' => '',
+			'attr' => '',
+			'icon' => '',
+			'identifier' => '',
+			'time' => $this->faker->dateTime($max = 'now'),
+			'closeable' => 1
+		], $extra_params);
+		$params['time'] = $this->toDateTime($params['time']);
+
+		$bell_id = $this->haveInDatabase('fs_bell', $params);
+
+		foreach ($users as $user) {
+			$this->haveInDatabase('fs_foodsaver_has_bell', [
+				'foodsaver_id' => $user['id'],
+				'bell_id' => $bell_id,
+				'seen' => 0
+			]);
+		}
 	}
 
 	// =================================================================================================================

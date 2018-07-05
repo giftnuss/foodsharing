@@ -18,10 +18,10 @@ class ApplicationView extends View
 	public function applicationMenu($application)
 	{
 		return $this->v_utils->v_menu(array(
-			array('click' => 'ajreq(\'apply\',{bid:' . (int)$this->bezirk_id . ',fid:' . (int)$application['id'] . '});return false;', 'name' => 'Ja'),
-			array('click' => 'ajreq(\'noapply\',{bid:' . (int)$this->bezirk_id . ',fid:' . (int)$application['id'] . '});return false;', 'name' => 'Nein'),
-			array('click' => 'ajreq(\'maybeapply\',{bid:' . (int)$this->bezirk_id . ',fid:' . (int)$application['id'] . '});return false;', 'name' => 'Vielleicht')
-		), 'Bewerbung Annehmen');
+			array('click' => 'ajreq(\'accept\',{bid:' . (int)$this->bezirk_id . ',fid:' . (int)$application['id'] . '});return false;', 'name' => 'Ja'),
+			array('click' => 'ajreq(\'decline\',{bid:' . (int)$this->bezirk_id . ',fid:' . (int)$application['id'] . '});return false;', 'name' => 'Nein'),
+			array('click' => 'ajreq(\'defer\',{bid:' . (int)$this->bezirk_id . ',fid:' . (int)$application['id'] . '});return false;', 'name' => 'Vielleicht')
+		), 'Bewerbung annehmen');
 	}
 
 	public function application($application)

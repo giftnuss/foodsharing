@@ -1,0 +1,89 @@
+<div id="delete_sure" title="{{ 'really_delete'|trans }}">
+    {% include 'partials/info.twig' with {'msg': 'forum.really_delete'|trans} %}
+</div>
+
+{% if activate_url is defined %}
+    {% embed 'components/field.twig' with {'title': 'forum.thread_is_inactive', 'classes': ['ui-padding']} %}
+        {% block content %}
+            {% include 'partials/info.twig' with {'msg': 'forum.thread_is_inactive_description'} %}
+            <div class="ui-padding" style="text-align:center;">
+                <a class="button" href="{{ activate_url }}">{{ 'forum.activate_thread'|trans }}</a>
+                <a class="button" href="{{ delete_url }}"
+                   onclick="if(!confirm('{{ 'really_delete'|trans }}')){return false;}">{{ 'forum.delete_thread'|trans }}</a>
+            </div>
+        {% endblock %}
+    {% endembed %}
+{% endif %}
+
+<div class="head ui-widget-header ui-corner-top">{{ thread.name }}</div>
+{% for post in posts %}
+    <div id="tpost-{{ post.id }}"
+         class="{% if loop.first %}ui-corner-bottom{% else %}ui-corner-all{% endif %} ui-widget ui-widget-content margin-bottom ui-padding">
+        <div class="post">
+            <div class="top_bar">
+                <span class="time">{{ post.time }}</span><a name="post{{ post.id }}"
+                                                            id="post{{ post.id }}">{{ post.fs_name }}</a>
+            </div>
+            <div class="forum_user_info_holder">
+                <div class="xv_left">
+                    <a href="#" onclick="profile({{ post.fs_id }});return false;">
+                        {% include 'partials/avatar.twig' with post.avatar only %}
+                    </a>
+                    <ul>
+                        <li><a href="#"
+                               onclick="chat({{ post.fs_id }});return false;">{{ 'chat.open_chat'|trans }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="post_body">
+                {{ post.body }}
+            </div>
+            <div style="clear:both"></div>
+            <div class="bottom_bar">
+                <div class="normal normal{{ post.id }}">
+                    <div class="float_left bottom_time">{{ post.time }}</div>
+                    <div class="float_right">
+                        {% if following %}
+                            <a class="button bt_unfollow"
+                               onclick="unfollow({{ thread.id }}, {{ region.id }})"
+                               href="#">{{ 'forum.unfollow'|trans }}</a>
+                        {% else %}
+                            <a class="button bt_follow" onclick="follow({{ thread.id }}, {{ region.id }})"
+                               href="#">{{ 'forum.follow'|trans }}</a>
+                        {% endif %}
+
+                        {% if mayChangeStickyness %}
+                            {% if thread.sticky %}
+                                <a class="button bt_unstick"
+                                   onclick="unstick({{ thread.id }}, {{ region.id }})"
+                                   href="#">{{ 'forum.unstick'|trans }}</a>
+                            {% else %}
+                                <a class="button bt_stick"
+                                   onclick="stick({{ thread.id }}, {{ region.id }})"
+                                   href="#">{{ 'forum.stick'|trans }}</a>
+                            {% endif %}
+                        {% endif %}
+                        <a class="button bt_answer" href="#answer">{{ 'button.answer'|trans }}</a>
+                        {% if post.mayDeletePost %}
+                            <a class="button bt_delete" href="#p{{ post.id }}">{{ 'forum.delete_post'|trans }}</a>
+                        {% endif %}
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{% embed 'components/field.twig' with {'classes': ['ui-padding']} %}
+{% block content %}
+    <div id="answer" class="answer">
+        {{ form_start(postForm) }}
+        {{ form_row(postForm.body) }}
+        {{ form_row(postForm.subscribe) }}
+        <input type="submit" class="button" name="submitted"
+               value="{{ 'button.send'|trans }}"/>
+        {{ form_end(postForm) }}
+    </div>
+{% endblock %}
+{% endembed %}

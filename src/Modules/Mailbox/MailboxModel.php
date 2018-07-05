@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Mailbox;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Model;
 
 class MailboxModel extends Model
@@ -315,8 +314,8 @@ class MailboxModel extends Model
 			)
 			VALUES
 			(
-				' . $this->intval($mailbox_id) . ',
-				' . $this->intval($folder) . ',
+				' . (int)$mailbox_id . ',
+				' . (int)$folder . ',
 				' . $this->strval($from) . ',
 				' . $this->strval($to) . ',
 				' . $this->strval($subject) . ',
@@ -324,8 +323,8 @@ class MailboxModel extends Model
 				' . $this->strval($html, true) . ',
 				' . $this->strval($time) . ',
 				' . $this->strval($attach) . ',
-				' . $this->intval($read) . ',
-				' . $this->intval($answer) . '
+				' . (int)$read . ',
+				' . (int)$answer . '
 			)
 		');
 	}
@@ -529,7 +528,7 @@ class MailboxModel extends Model
 		}
 
 		if ($me = $this->getValues(array('mailbox_id', 'name', 'nachname'), 'foodsaver', $this->func->fsId())) {
-			if ($me['mailbox_id'] == 0 && S::may('bieb')) {
+			if ($me['mailbox_id'] == 0 && $this->session->may('bieb')) {
 				$me['name'] = explode(' ', $me['name']);
 				$me['name'] = $me['name'][0];
 

@@ -1,0 +1,30 @@
+<div id="wallposts">
+    <div class="tools ui-padding">
+        <textarea id="wallpost-text" name="text" title="{{ 'wall.message_placeholder'|trans }}"
+                  class="comment textarea inlabel"></textarea>
+        <div id="attach-preview"></div>
+        <div style="display:none;" id="wallpost-attach"/>
+    </div>
+
+    <div id="wallpost-submit" align="right">
+
+        <span id="wallpost-loader"></span><span id="wallpost-attach-image"><i
+                    class="fa fa-image"></i>{{ 'button.attach_image'|trans }}</span>
+        <a href="#" id="wall-submit">{{ 'button.send'|trans }}</a>
+        <div style="overflow:hidden;height:1px;">
+            <form id="wallpost-attachimage-form"
+                  action="/xhrapp.php?app=wallpost&m=attachimage&table={{ module }}&id={{ wallId }}" method="post"
+                  enctype="multipart/form-data" target="wallpost-frame">
+                <input id="wallpost-attach-trigger" type="file" maxlength="100000" size="chars" name="etattach"/>
+            </form>
+        </div>
+
+    </div>
+    <div style="clear:both"></div>
+    <div style="visibility:hidden;">
+        <iframe name="wallpost-frame" src="/empty.html" style="height:1px;" frameborder="0"></iframe>
+    </div>
+</div>
+<div class="wall-posts">
+
+</div>

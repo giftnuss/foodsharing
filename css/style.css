@@ -1634,7 +1634,7 @@ ul.linklist li span.i img {
 }
 
 ul.linklist li > a.more {
-  background-color: #599022;
+  background-color: #64ae24;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   color: #ffffff;
@@ -1673,7 +1673,7 @@ ul.linklist li > a.active {
 }
 
 ul.linklist li > a:hover, ul.linklist li > a:hover span {
-  background-color: #599022;
+  background-color: #64ae24;
   color: #ffffff !important;
 }
 
@@ -1751,7 +1751,7 @@ div.statdisplay .item {
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   border-radius: 8px;
-  background-color: #599022;
+  background-color: #64ae24;
   color: #ffffff;
   text-align: center;
   width: 62px;
@@ -2444,6 +2444,8 @@ td.load {
   width: 91%;
   display: block;
   text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .button.button-med {
