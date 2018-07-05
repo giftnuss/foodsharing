@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\Basket;
 
 use Exception;
 use Flourish\fImage;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\vMap;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\View;
@@ -24,15 +23,15 @@ class BasketView extends View
 
 	private function findMap($location)
 	{
-		$map = new vMap('map', $location);
+		$map = new vMap($location);
 
 		if (is_array($location)) {
-			$map->setLocation($location['lat'], $location['lon']);
+			$map->setCenter($location['lat'], $location['lon']);
 		}
 
 		$map->setSearchPanel('mapsearch');
 		$map->setMarkerCluster();
-		$map->setDefaultMarker('basket', 'green');
+		$map->setDefaultMarkerOptions('basket', 'green');
 
 		return '<div class="ui-widget"><input id="mapsearch" type="text" name="mapsearch" value="" placeholder="Adresssuche..." class="input text value ui-corner-top"/><div class="findmap">' . $map->render() . '</div></div>';
 	}
@@ -87,16 +86,16 @@ class BasketView extends View
 		if ($wallposts) {
 			$page->addSection($wallposts, 'Pinnwand');
 		}
-		if (S::may()) {
+		if ($this->session->may()) {
 			$page->addSectionRight($this->userBox($basket), 'AnbieterIn');
 
 			if ($basket['lat'] != 0 || $basket['lon'] != 0) {
-				$map = new vMap('map', [$basket['lat'], $basket['lon']]);
+				$map = new vMap([$basket['lat'], $basket['lon']]);
 				$map->addMarker($basket['lat'], $basket['lon']);
 
-				$map->setDefaultMarker('basket', 'green');
+				$map->setDefaultMarkerOptions('basket', 'green');
 
-				$map->setLocation($basket['lat'], $basket['lon']);
+				$map->setCenter($basket['lat'], $basket['lon']);
 
 				$page->addSectionRight($map->render(), 'Wo?');
 			}

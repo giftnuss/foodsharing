@@ -3,7 +3,7 @@
 namespace Foodsharing\Lib\View;
 
 use Foodsharing\Lib\Func;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 
 class Utils
 {
@@ -12,6 +12,11 @@ class Utils
 	 * @var Func
 	 */
 	private $func;
+
+	/**
+	 * @var \Foodsharing\Lib\Session
+	 */
+	private $session;
 
 	/**
 	 * @var \Twig\Environment
@@ -29,6 +34,14 @@ class Utils
 	public function setFunc(Func $func)
 	{
 		$this->func = $func;
+	}
+
+	/**
+	 * @required
+	 */
+	public function setSession(Session $session)
+	{
+		$this->session = $session;
 	}
 
 	/**
@@ -111,28 +124,28 @@ class Utils
 		function u_printChildBezirke(element)
 		{
 				val = element.value + "";
-				
+
 				part = val.split(":");
-				
+
 				var parent = part[0];
-				
+
 				u_current_bezirk_type = part[1];
-				
+
 				if(parent == -1)
 				{
 					$("#' . $id . '").val("");
 					return false;
 				}
-	
+
 				if(parent == -2)
 				{
 					$("#' . $id . '-notAvail").fadeIn();
 				}
-				
+
 				$("#' . $id . '").val(element.value);
-				
+
 				el = $(element);
-			
+
 				if(el.next().next().next().next().next().hasClass("childChanger"))
 				{
 					el.next().next().next().next().next().remove();
@@ -153,10 +166,10 @@ class Utils
 				{
 					el.next().remove();
 				}
-			
+
 				$("#xv-childbezirk-"+parent).remove();
-				
-				
+
+
 				showLoader();
 				$.ajax({
 						dataType:"json",
@@ -164,17 +177,17 @@ class Utils
 						success : function(data){
 							if(data.status == 1)
 							{
-								
+
 								$("#' . $id . '-childs-"+parent).remove();
 								$("#' . $id . '-wrapper").append(data.html);
 								//$("#' . $id . '").val("");
-								
+
 								//$("select.childChanger").last().append(\'<option style="font-weight:bold;" value="-2">- Meine Region ist nicht dabei -</option>\');
-								
+
 							}
 							else
 							{
-								
+
 							}
 						},
 						complete: function(){
@@ -230,7 +243,7 @@ class Utils
 		});');
 
 		$nodeselect = 'node.data.type == 1 || node.data.type == 2 || node.data.type == 3 || node.data.type == 4 || node.data.type == 7';
-		if (S::may('orga')) {
+		if ($this->session->may('orga')) {
 			$nodeselect = 'true';
 		}
 
@@ -249,7 +262,7 @@ class Utils
 							node.select(false);
 							pulseError("Sorry, Du kannst nicht als Region ein Land oder ein Bundesland auswählen.");
 						}
-						
+
 					});
 				},
 				persist: false,
@@ -264,12 +277,12 @@ class Utils
 						data: { "p": node.data.ident },
 						dataType: "json",
 						success: function(node) {
-							
+
 						},
 						error: function(node, XMLHttpRequest, textStatus, errorThrown) {
-							
+
 						},
-						cache: false 
+						cache: false
 					});
 				}
 			});');
@@ -296,8 +309,8 @@ class Utils
 		}
 
 		return '<form id="loginbar" action="/?page=login&ref=%2F%3Fpage%3Ddashboard" method="post">
-					<input style="margin-right:4px;" class="input corner-all" type="email" name="email_adress" value="' . $username . '" placeholder="E-Mail-Adresse" />
-					<input class="input corner-all" type="password" name="password" value="' . $password . '" placeholder="Passwort" />
+					<input style="margin-right:4px;" class="input corner-all" type="email" name="login_form[email_address]" value="' . $username . '" placeholder="E-Mail-Adresse" required />
+					<input class="input corner-all" type="password" name="login_form[password]" value="' . $password . '" placeholder="Passwort" required />
 					<input class="submit corner-right" type="submit" value="&#xf0a9;" />
 				</form>';
 	}
@@ -315,7 +328,7 @@ class Utils
 							<a class="more" href="/?page=msg">Alle zeigen</a>
 						</span>
 					</li>
-				
+
 					<li class="bell">
 						<a href="#" onclick="return false;">
 							<i class="fa fa-bell"></i><span style="display:none;" class="badge">0</span>
@@ -325,9 +338,9 @@ class Utils
 							</ul>
 							<!-- <a class="more" href="/?page=msg">Alle zeigen</a> -->
 						</span>
-						
+
 					</li>
-				
+
 					<li class="basket">
 						<a href="#" onclick="return false;">
 							<i class="img-fbasket"></i><span style="display:none;" class="badge">0</span>
@@ -337,17 +350,17 @@ class Utils
 							</ul>
 							<a class="more" href="#" onclick="ajreq(\'newbasket\',{app:\'basket\'});return false;">Neuen Essenskorb anlegen</a>
 						</span>
-						
+
 					</li>
 				</ul>
-				
+
 				<div id="searchbar">
 				<i class="fa fa-search"></i><input type="text" value="" placeholder="' . $this->func->s('search') . '..." />
 				<div class="result-wrapper" style="display:none;">
 					<ul class="linklist index"></ul>
 					<ul class="linklist result"></ul>
 					<ul class="linklist more">
-						<li><a class="more" onclick="goTo(\'/?page=search&q=\' + encodeURIComponent($(\'#searchbar input\').val()));return false;" href="#">Alle Ergebnisse</a></li>	
+						<li><a class="more" onclick="goTo(\'/?page=search&q=\' + encodeURIComponent($(\'#searchbar input\').val()));return false;" href="#">Alle Ergebnisse</a></li>
 					</ul>
 				</div>
 			</div>';
@@ -493,7 +506,7 @@ class Utils
 			relative_urls: false,
 			valid_elements : "a[href|name|target=_blank|class|style],span,strong,b,div[align|class],br,i,p[class],ul[class],li[class],ol,h1,h2,h3,h4,h5,h6,table,tr,td[valign=top|align|style],th,tbody,thead,tfoot,img[src|width|name|class]",
 			convert_urls: false' . $addOpt . '
-		 
+
 		});';
 
 		$this->func->addJs($js);
@@ -531,18 +544,18 @@ class Utils
 				<option value="all">' . $this->func->s('recip_all') . '</option>
 				<option value="newsletter">Alle Newsletter-Abonnenten (mindestens Foodsaver)</option>
 				<option value="newsletter_all">Alle Newsletter-Abonnenten (Foodsharer, Foodsaver, alle)</option>
-				
+
 				<option value="newsletter_only_foodsharer">NL Abonnenten NUR Foodsharer</option>
 				<option value="botschafter">Alle Botschafter weltweit</option>
 				<option value="filialverantwortlich">Alle Filialverantwortlichen weltweit</option>
 				<option value="filialbot">Alle Filialverantwortlichen + Botschafter</option>
 				<option value="all_no_botschafter">Alle Foodsaver ohne Botschafter</option>
 				<option value="orgateam">Orgateam</option>
-				<option value="choose">' . $this->func->s('recip_choose_bezirk') . '</option>		
+				<option value="choose">' . $this->func->s('recip_choose_bezirk') . '</option>
 				<option value="manual">Manuelle Eingabe</option>
 			</select>
 			<div id="' . $id . '-hidden" style="display:none">
-					
+
 			</div>
 			<div id="' . $id . 'manual-wrapper" style="display:none">
 				' . $this->v_form_textarea($id . 'manual') . '
@@ -550,7 +563,7 @@ class Utils
 			<div id="' . $id . '-tree-wrapper" style="display:none;">
 				' . $this->v_info('<strong>Hinweis</strong> Um untergeordnete Bezirke zu markieren, musst Du den Ordner erst öffnen! Sonst: Alle nicht sichtbaren Bezirke bekommen keine Mail.') . '
 				<div id="' . $id . '-tree">
-					
+
 				</div>
 			</div>';
 
@@ -571,9 +584,9 @@ class Utils
 						$("#' . $id . 'manual-wrapper").hide();
 						$("#' . $id . '-tree-wrapper").hide();
 					}
-							
+
 				});
-				
+
 				$("#' . $id . '-tree").dynatree({
 				onSelect: function(select, node) {
 					$("#' . $id . '-hidden").html("");
@@ -584,7 +597,7 @@ class Utils
 				persist: false,
 				checkbox:true,
 				selectMode: 3,
-				clickFolderMode: 3, 
+				clickFolderMode: 3,
 				activeVisible: true,
 				initAjax: {
 					url: "xhr.php?f=bezirkTree",
@@ -595,12 +608,12 @@ class Utils
 						data: { "p": node.data.ident },
 						dataType: "json",
 						success: function(node) {
-							
+
 						},
 						error: function(node, XMLHttpRequest, textStatus, errorThrown) {
-							
+
 						},
-						cache: false 
+						cache: false
 					});
 				}
 			});');
@@ -619,18 +632,18 @@ class Utils
 		$original = end($original);
 
 		$this->func->addJs('
-				
+
 				$("#' . $id . '-link").fancybox({
 					minWidth : 600,
 					scrolling :"auto",
 					closeClick : false,
-					helpers : { 
+					helpers : {
 					  overlay : {closeClick: false}
 					}
 				});
-						
+
 				$("a[href=\'#edit\']").click(function(){
-					
+
 					$("#' . $id . '-placeholder").html(\'<img src="images/' . $original . '" />\');
 					$("#' . $id . '-link").trigger("click");
 					$.fancybox.reposition();
@@ -644,7 +657,7 @@ class Utils
 								$("#' . $id . '-h").val(c.h);
 						 }
 					 });
-										
+
 					 $("#' . $id . '-save").show();
 					 $("#' . $id . '-save").button().click(function(){
 						 showLoader();
@@ -661,7 +674,7 @@ class Utils
 							success:function(data){
 								if(data == 1)
 								{
-									reload();		
+									reload();
 								}
 							},
 							complete:function(){
@@ -670,7 +683,7 @@ class Utils
 						 });
 						 return false;
 					 });
-					 
+
 					 $("#' . $id . '-placeholder").css("height","auto");
 					 hideLoader();
 					 setTimeout(function(){
@@ -679,7 +692,7 @@ class Utils
 						 $.fancybox.toggle();
 					 },200);
 				});
-					
+
 				$("a[href=\'#new\']").click(function(){
 					$("#' . $id . '-link").trigger("click");
 					return false;
@@ -690,7 +703,7 @@ class Utils
 				<div class="fotoupload popbox" style="display:none;" id="' . $id . '">
 					<h3>Fotoupload</h3>
 					<p class="subtitle">Hier kannst Du ein Foto von Deinem Computer ausw&auml;hlen</p>
-					<form id="' . $id . '-form" method="post" enctype="multipart/form-data" target="' . $id . '-frame" action="xhr.php?f=uploadPhoto">
+					<form id="' . $id . '-form" method="post" enctype="multipart/form-data" target="' . $id . '-frame" action="/xhr.php?f=uploadPhoto">
 						<input type="file" name="uploadpic" onchange="showLoader();$(\'#' . $id . '-form\')[0].submit();" />
 						<input type="hidden" id="' . $id . '-action" name="action" value="upload" />
 						<input type="hidden" id="' . $id . '-x" name="x" value="0" />
@@ -701,7 +714,7 @@ class Utils
 						<input type="hidden" name="pic_id" value="' . $id . '" />
 					</form>
 					<div id="' . $id . '-placeholder" style="margin-top:15px;margin-bottom:15px;background-repeat:no-repeat;background-position:center center;">
-						
+
 					</div>
 					<a href="#" style="display:none" id="' . $id . '-save">Speichern</a>
 					<iframe name="' . $id . '-frame" src="upload.php" width="1" height="1" style="visibility:hidden;"></iframe>
@@ -775,7 +788,7 @@ class Utils
 		';
 
 		$this->func->addJs('$("#' . $id . '-form").submit(function(ev){
-			
+
 			check = true;
 			$("#' . $id . '-form div.required .value").each(function(i,el){
 				input = $(el);
@@ -786,12 +799,12 @@ class Utils
 					error($("#" + input.attr("id") + "-error-msg").val());
 				}
 			});
-	
+
 			if(check == false)
 			{
 				ev.preventDefault();
 			}
-				
+
 		});');
 
 		if (!empty($js)) {
@@ -894,10 +907,6 @@ class Utils
 				case 'new':
 					$out .= '<li onclick="goTo(\'/?page=' . $page . '&id=' . $id . '&a=new\');" title="neu" class="ui-state-default' . $corner . '"><span class="ui-icon ui-icon-document"></span></li>';
 					break;
-				case 'comment':
-					$out .= '<li attr="' . $page . ':' . $id . '" title="Notiz hinzuf&uuml;gen" class="toolbar-comment ui-state-default' . $corner . '"><span class="ui-icon ui-icon-comment"></span></li>';
-					break;
-
 				case 'edit':
 					$out .= '<li onclick="goTo(\'/?page=' . $page . '&id=' . $id . '&a=edit\');" title="bearbeiten" class="ui-state-default' . $corner . '"><span class="ui-icon ui-icon-wrench"></span></li>';
 					break;
@@ -923,131 +932,14 @@ class Utils
 
 	public function v_tablesorter($head, $data, $option = array())
 	{
-		$id = $this->func->id('table');
+		$params = [
+			'nohead' => isset($option['noHead']) && $option['noHead'],
+			'pager' => isset($option['pager']) && $option['pager'],
+			'head' => $head,
+			'data' => $data
+		];
 
-		$style = '';
-		if (isset($option['noHead'])) {
-			$style = ' style="visibility:hidden;margin:0;paddin:0;height:1px;overflow:hidden;"';
-		}
-
-		$out = '
-		<div class="tablesort-wrapper">
-			<table id="' . $id . '" class="tablesorter">			
-				<thead' . $style . '>
-					<tr class="ui-corner-top"' . $style . '>';
-
-		$i = 0;
-
-		$jsoption = '';
-		foreach ($head as $h) {
-			$width = '';
-			if (isset($h['width'])) {
-				$width = ' style="width:' . $h['width'] . 'px"';
-			}
-			$out .= '
-						<th' . $width . '' . $style . ' class="ui-corner-all">' . $h['name'] . '</th>';
-
-			if (isset($h['sort']) && $h['sort'] == false) {
-				$jsoption .= $i . ':{sorter:false},';
-			}
-
-			++$i;
-		}
-
-		$out .= '
-					</tr>
-				</thead>
-				<tbody>';
-
-		foreach ($data as $row) {
-			$out .= '
-					<tr>';
-			foreach ($row as $r) {
-				$out .= '
-						<td>' . $r['cnt'] . '</td>';
-			}
-			$out .= '
-					</tr>';
-		}
-
-		$out .= '
-				</tbody>
-			</table>
-		</div>';
-
-		$this->func->addJs('
-			$("table.tablesorter td ul.toolbar").css("visibility","hidden");
-	
-			$( "table.tablesorter tbody tr" ).hover(
-					function() {
-						$( this ).addClass("hover");
-						$( this ).children("td:last").children("ul").css("visibility","visible");
-					},
-					function() {
-						$( this ).removeClass("hover");
-						$( this ).children("td:last").children("ul").css("visibility","hidden");
-					}
-			);
-		');
-
-		$pager_js = '';
-		if (isset($option['pager']) && count($data) > 14) {
-			$this->func->addScript('/js/tablesorter/jquery.tablesorter.pager.js');
-			$this->func->addStyle('div.pager{position:relative !important;}');
-
-			$this->func->addJs('
-				$(".prev").button({
-					icons: {
-						primary: "ui-icon-circle-arrow-w"
-					},
-					text: false
-				});
-				$(".next").button({
-					icons: {
-						primary: "ui-icon-circle-arrow-e"
-					},
-					text: false
-				});
-			');
-
-			$out .= '
-			<div id="' . $id . '-pager" class="pager ui-corner-all">
-				<form>
-					<!--<a class="first" href="#">&nbsp;</a>-->
-					<a class="prev">&nbsp;</a>
-					
-					<input style="display:none" type="text" class="pagedisplay"/>
-					<span class="pagedisplay2">
-						<span>Seite</span> <span class="seite"></span> <span>von</span> <span class="anz"></span>
-					</span>
-					<a class="next">&nbsp;</a>
-					<!-- <img src="http://tablesorter.com/addons/pager/icons/last.png" class="last"/> -->
-					<span class="pagesize-wrapper">
-						<select class="pagesize">
-							<option selected="selected"  value="10">10</option>
-							<option value="20">20</option>
-							<option value="30">30</option>
-							<option  value="40">40</option>
-						</select> <span>Einträge pro Seite</span>
-					</span>
-				</form>
-			</div>';
-
-			$pager_js = '.tablesorterPager({container: $("#' . $id . '-pager")})';
-		}
-
-		if (!empty($jsoption)) {
-			$jsoption = 'headers:{' . substr($jsoption, 0, (strlen($jsoption) - 1)) . '}';
-
-			$this->func->addJs('$("#' . $id . '").tablesorter({
-					' . $jsoption . ',
-					widgets: ["zebra"]
-				})' . $pager_js . ';');
-		} else {
-			$this->func->addJs('$("#' . $id . '").tablesorter({widgets: ["zebra"]})' . $pager_js . ';');
-		}
-
-		return $out;
+		return $this->twig->render('partials/tablesorter.twig', $params);
 	}
 
 	public function v_form_submit($val, $id, $option = array())
@@ -1179,8 +1071,8 @@ class Utils
 				allowEdit: false,
 				allowAdd: false,
 				animSpeed:100
-			});	
-			
+			});
+
 			$("#' . $id . '").keydown(function(event){
 				if(event.keyCode == 13) {
 				  event.preventDefault();
@@ -1214,16 +1106,16 @@ class Utils
 				minWidth : 600,
 				scrolling :"auto",
 				closeClick : false,
-				helpers : { 
+				helpers : {
 				  overlay : {closeClick: false}
 				}
-			});	
-					
+			});
+
 			$("#' . $id . '-opener").button().click(function(){
-				
+
 				$("#' . $id . '-link").trigger("click");
-				
-			});		
+
+			});
 		');
 
 		$options = '';
@@ -1245,25 +1137,25 @@ class Utils
 			<div class="popbox">
 				<h3>' . $this->func->s($id) . ' Upload</h3>
 				<p class="subtitle">W&auml;hle ein Bild von Deinem Rechner</p>
-				
+
 				<form id="' . $id . '-form" method="post" enctype="multipart/form-data" target="' . $id . '-iframe" action="xhr.php?f=uploadPicture&id=' . $id . '&crop=' . $crop . '">
-						
+
 					<input type="file" name="uploadpic" onchange="showLoader();$(\'#' . $id . '-form\')[0].submit();" />
-					
+
 					<input type="hidden" id="' . $id . '-action" name="action" value="uploadPicture" />
 					<input type="hidden" id="' . $id . '-id" name="id" value="' . $id . '" />
-	
+
 					<input type="hidden" id="' . $id . '-x" name="x" value="0" />
 					<input type="hidden" id="' . $id . '-y" name="y" value="0" />
 					<input type="hidden" id="' . $id . '-w" name="w" value="0" />
 					<input type="hidden" id="' . $id . '-h" name="h" value="0" />
-							
+
 					' . $options . '
-							
+
 				</form>
-							
+
 				<div id="' . $id . '-crop"></div>
-									
+
 				<iframe src="" id="' . $id . '-iframe" name="' . $id . '-iframe" style="width:1px;height:1px;visibility:hidden;"></iframe>
 			</div>
 		</div>');
@@ -1407,25 +1299,25 @@ class Utils
 			$out .= '<a href="#" id="' . $id . '-add" class="select-add">&nbsp;</a>';
 
 			$this->func->addJs('
-					
+
 					$("#' . $id . 'neu").keyup(function(e){
-						
+
 						if(e.keyCode == 13)
 						{
 						  addSelect("' . $id . '");
 						}
 					});
-					
-	
-					
+
+
+
 					$("#' . $id . '-add").button({
 						icons:{primary:"ui-icon-plusthick"},
 						text:false
 					}).click(function(event){
-					
+
 						event.preventDefault();
 						$("#' . $id . '-dialog label").remove();
-						
+
 						$("#' . $id . '-dialog").dialog({
 							modal:true,
 							title: "' . $label . ' anlegen",
@@ -1438,8 +1330,8 @@ class Utils
 							}
 						});
 					});
-					
-					
+
+
 					');
 		}
 

@@ -3,8 +3,9 @@
 namespace Foodsharing\Modules\Core;
 
 use Foodsharing\DI;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Func;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 
 class View
@@ -14,70 +15,24 @@ class View
 	/* @var \Foodsharing\Lib\View\Utils */
 	protected $v_utils;
 	protected $func;
+	protected $session;
 
 	/**
 	 * @var \Twig\Environment
 	 */
-	private $twig;
+	public $twig;
 
-	public function __construct(\Twig\Environment $twig, Func $func, Utils $viewUtils)
+	public function __construct(\Twig\Environment $twig, Func $func, Utils $viewUtils, Session $session)
 	{
 		$this->twig = $twig;
 		$this->func = $func;
 		$this->v_utils = $viewUtils;
+		$this->session = $session;
 	}
 
 	public function setSub($sub)
 	{
 		$this->sub = $sub;
-	}
-
-	public function login($ref = false)
-	{
-		$action = '/?page=login';
-		if ($ref != false) {
-			$action = '/?page=login&ref=' . urlencode($ref);
-		} elseif (!isset($_GET['ref'])) {
-			$action = '/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']);
-		}
-
-		$this->func->addJs('
-				storage.reset();
-				if(isMob())
-				{
-					$("#ismob").val("1");
-				}
-				$(window).resize(function(){
-					if(isMob())
-					{
-						$("#ismob").val("1");
-					}
-					else
-					{
-						$("#ismob").val("0");
-					}
-				});
-			');
-
-		return '
-			<div id="g_login">' . $this->v_utils->v_field(
-				$this->v_utils->v_form('Login', array(
-					$this->v_utils->v_form_text('email_adress', array('label' => false, 'placeholder' => $this->func->s('email_adress'))),
-					$this->v_utils->v_form_passwd('password', array('label' => false, 'placeholder' => $this->func->s('password'))),
-					$this->v_utils->v_form_hidden('ismob', '0') .
-					'<p>
-									<a href="/?page=login&sub=passwordReset">Passwort vergessen?</a>
-								</p>
-								<p class="buttons">
-									<input class="button" type="submit" value="' . $this->func->s('login') . '" name="login" /> <a href="#" onclick="ajreq(\'join\',{app:\'login\'});return false;" class="button">' . $this->func->s('register') . '</a>
-								</p>'
-				), array('action' => $action, 'submit' => false)),
-
-				'Login',
-
-				array('class' => 'ui-padding')
-			) . '
-			</div>';
 	}
 
 	public function topbar($title, $subtitle = '', $icon = '')
@@ -322,7 +277,7 @@ class View
 			tstring = ""+date.getYear() + ""+date.getMonth() + ""+date.getDate() + ""+date.getHours();
 			var localsource = [];
 			$.ajax({
-				url: "/cache/searchindex/' . S::user('token') . '.json",
+				url: "/cache/searchindex/' . $this->session->user('token') . '.json",
 				dataType: "json",
 				data: {t:$.now()},
 				success: function(json){
@@ -396,7 +351,8 @@ class View
 		if (isset($options['location'])) {
 			$data = array_merge(['zoom' => 14], $options['location']);
 		} else {
-			$db = DI::$shared->get(Model::class);
+			/* @var $db Db */
+			$db = DI::$shared->get(Db::class);
 			$data = $db->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
 			$data['zoom'] = 14;
 		}

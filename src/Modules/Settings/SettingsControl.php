@@ -2,25 +2,30 @@
 
 namespace Foodsharing\Modules\Settings;
 
-use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Quiz\QuizModel;
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Content\ContentGateway;
+use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Quiz\QuizModel;
 
 class SettingsControl extends Control
 {
 	private $foodsaver;
 	private $quizModel;
+	private $contentGateway;
+	private $foodsaverGateway;
 
-	public function __construct(SettingsModel $model, SettingsView $view, QuizModel $quizModel)
+	public function __construct(SettingsModel $model, SettingsView $view, QuizModel $quizModel, ContentGateway $contentGateway, FoodsaverGateway $foodsaverGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->quizModel = $quizModel;
+		$this->contentGateway = $contentGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 
 		parent::__construct();
 
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			$this->func->goLogin();
 		}
 
@@ -35,7 +40,7 @@ class SettingsControl extends Control
 				'email' => $this->foodsaver['email'],
 				'email_name' => $this->foodsaver['name'] . ' ' . $this->foodsaver['nachname']
 			), 'loeschen@' . DEFAULT_EMAIL_HOST, $this->foodsaver['name'] . ' hat Account gelöscht', $this->foodsaver['name'] . ' ' . $this->foodsaver['nachname'] . ' hat Account gelöscht' . "\n\nGrund für das Löschen:\n" . strip_tags($_GET['reason']));
-			$this->model->del_foodsaver($this->func->fsId());
+			$this->foodsaverGateway->del_foodsaver($this->func->fsId());
 			$this->func->go('/?page=logout');
 		}
 
@@ -82,16 +87,16 @@ class SettingsControl extends Control
 
 	public function up_bip()
 	{
-		if (S::may() && $this->foodsaver['rolle'] > 0) {
+		if ($this->session->may() && $this->foodsaver['rolle'] > 0) {
 			if (!$this->foodsaver['verified']) {
-				$this->func->addContent($this->view->simpleContent($this->model->getContent(45)));
+				$this->func->addContent($this->view->simpleContent($this->contentGateway->get(45)));
 			} else {
 				if (($status = $this->quizModel->getQuizStatus(2)) && ($quiz = $this->quizModel->getQuiz(2))) {
 					if ((int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)$this->func->fsId()) == 0) {
 						$this->func->info('Du darfst zunächst das Foodsaver Quiz machen');
 						$this->func->go('/?page=settings&sub=upgrade/up_fs');
 					}
-					$desc = $this->model->getContent(12);
+					$desc = $this->contentGateway->get(12);
 
 					// Quiz wurde noch gar nicht probiert
 					if ($status['times'] == 0) {
@@ -115,7 +120,7 @@ class SettingsControl extends Control
 						$this->func->addContent($this->view->quizIndex($quiz, $desc));
 					} // hat alles nichts genützt
 					else {
-						$this->func->addContent($this->view->quizFailed($this->model->getContent(13)));
+						$this->func->addContent($this->view->quizFailed($this->contentGateway->get(13)));
 					}
 				}
 			}
@@ -125,15 +130,15 @@ class SettingsControl extends Control
 	public function quizsession()
 	{
 		if ($session = $this->model->getQuizSession($_GET['sid'])) {
-			$this->func->addContent($this->view->quizSession($session, $session['try_count'], $this->model));
+			$this->func->addContent($this->view->quizSession($session, $session['try_count'], $this->contentGateway));
 		}
 	}
 
 	public function up_fs()
 	{
-		if (S::may()) {
+		if ($this->session->may()) {
 			if (($status = $this->quizModel->getQuizStatus(1)) && ($quiz = $this->quizModel->getQuiz(1))) {
-				$desc = $this->model->getContent(12);
+				$desc = $this->contentGateway->get(12);
 
 				// Quiz wurde noch gar nicht probiert
 				if ($status['times'] == 0) {
@@ -158,7 +163,7 @@ class SettingsControl extends Control
 					$this->func->addContent($this->view->quizIndex($quiz, $desc));
 				} // hat alles nichts genützt
 				else {
-					$this->func->addContent($this->view->quizFailed($this->model->getContent(13)));
+					$this->func->addContent($this->view->quizFailed($this->contentGateway->get(13)));
 				}
 			}
 		}
@@ -166,9 +171,9 @@ class SettingsControl extends Control
 
 	public function up_bot()
 	{
-		if (S::may() && $this->foodsaver['rolle'] >= 2) {
+		if ($this->session->may() && $this->foodsaver['rolle'] >= 2) {
 			if (($status = $this->quizModel->getQuizStatus(3)) && ($quiz = $this->quizModel->getQuiz(3))) {
-				$desc = $this->model->getContent(12);
+				$desc = $this->contentGateway->get(12);
 
 				// Quiz wurde noch gar nicht probiert
 				if ($status['times'] == 0) {
@@ -192,7 +197,7 @@ class SettingsControl extends Control
 					$this->func->addContent($this->view->quizIndex($quiz, $desc));
 				} // hat alles nichts genützt
 				else {
-					return $this->view->quizFailed($this->model->getContent(13));
+					return $this->view->quizFailed($this->contentGateway->get(13));
 				}
 			} else {
 				$this->func->addContent($this->v_utils->v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:' . SUPPORT_EMAIL . '"">' . SUPPORT_EMAIL . '</a>'));
@@ -224,17 +229,17 @@ class SettingsControl extends Control
 					$check = false;
 					$this->func->error($this->func->s('not_rv_accepted'));
 				} else {
-					S::set('hastodoquiz', false);
+					$this->session->set('hastodoquiz', false);
 					Mem::delPageCache('/?page=dashboard');
-					if (!S::may('fs')) {
+					if (!$this->session->may('fs')) {
 						$this->model->updateRole(1, $this->foodsaver['rolle']);
 					}
 					$this->func->info('Danke! Du bist jetzt Foodsaver');
 					$this->func->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
 				}
 			}
-			$cnt = $this->model->getContent(14);
-			$rv = $this->model->getContent(30);
+			$cnt = $this->contentGateway->get(14);
+			$rv = $this->contentGateway->get(30);
 			$this->func->addContent($this->view->confirmFs($cnt, $rv));
 		}
 	}
@@ -252,8 +257,8 @@ class SettingsControl extends Control
 					$this->func->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
 				}
 			}
-			$cnt = $this->model->getContent(15);
-			$rv = $this->model->getContent(31);
+			$cnt = $this->contentGateway->get(15);
+			$rv = $this->contentGateway->get(31);
 			$this->func->addContent($this->view->confirmBip($cnt, $rv));
 		}
 	}
@@ -332,10 +337,10 @@ class SettingsControl extends Control
 
 				// Rechtsvereinbarung
 
-				$rv = $this->model->getContent(32);
+				$rv = $this->contentGateway->get(32);
 
 				$this->func->addContent(
-					$this->view->confirmBot($this->model->getContent(16)) .
+					$this->view->confirmBot($this->contentGateway->get(16)) .
 
 					$this->v_utils->v_form('upBotsch', array($this->v_utils->v_field(
 						$this->v_utils->v_bezirkChooser('bezirk', $this->func->getBezirk(), array('label' => 'In welcher Region möchtest Du Botschafter werden?')) .
@@ -386,7 +391,7 @@ class SettingsControl extends Control
 	{
 		$this->handle_edit();
 
-		$data = $this->model->getOne_foodsaver($this->func->fsId());
+		$data = $this->foodsaverGateway->getOne_foodsaver($this->func->fsId());
 
 		$this->func->setEditData($data);
 
@@ -504,12 +509,16 @@ class SettingsControl extends Control
 			}
 
 			if ($check) {
-				if ($oldFs = $this->model->getOne_foodsaver($this->func->fsId())) {
+				if ($oldFs = $this->foodsaverGateway->getOne_foodsaver($this->func->fsId())) {
 					$logChangedFields = array('stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum');
 					$this->model->logChangedSetting($this->func->fsId(), $oldFs, $data, $logChangedFields);
 				}
 
-				if ($this->model->updateProfile($this->func->fsId(), $data)) {
+				if (!isset($data['bezirk_id'])) {
+					$data['bezirk_id'] = $this->session->getCurrentBezirkId();
+				}
+				if ($this->foodsaverGateway->updateProfile($this->session->id(), $data)) {
+					$this->session->refreshFromDatabase();
 					$this->func->info($this->func->s('foodsaver_edit_success'));
 				} else {
 					$this->func->error($this->func->s('error'));
@@ -520,7 +529,7 @@ class SettingsControl extends Control
 
 	public function picture_box()
 	{
-		$photo = $this->model->getPhoto($this->func->fsId());
+		$photo = $this->foodsaverGateway->getPhoto($this->session->id());
 
 		if (!(file_exists('images/thumb_crop_' . $photo))) {
 			$p_cnt = $this->v_utils->v_photo_edit('img/portrait.png');

@@ -142,6 +142,7 @@ $fs = $_GET['fs'];
 $key = $_GET['key'];
 $opts = $_GET['opts'];
 
+/* @var $model Model */
 $model = DI::$shared->get(Model::class);
 
 if (!check_api_token($fs, $key, $model)) {

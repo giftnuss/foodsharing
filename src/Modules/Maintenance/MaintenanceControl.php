@@ -6,15 +6,21 @@ use Flourish\fImage;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Console\ConsoleControl;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Store\StoreGateway;
 
 class MaintenanceControl extends ConsoleControl
 {
 	private $bellGateway;
+	private $storeGateway;
+	private $foodsaverGateway;
 
-	public function __construct(MaintenanceModel $model, BellGateway $bellGateway)
+	public function __construct(MaintenanceModel $model, BellGateway $bellGateway, StoreGateway $storeGateway, FoodsaverGateway $foodsaverGateway)
 	{
 		$this->model = $model;
 		$this->bellGateway = $bellGateway;
+		$this->storeGateway = $storeGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 		parent::__construct();
 	}
 
@@ -120,34 +126,34 @@ class MaintenanceControl extends ConsoleControl
 	private function updateSpecialGroupMemberships()
 	{
 		self::info('updating HH bieb austausch');
-		$hh_biebs = $this->model->getBiebIds(31);
+		$hh_biebs = $this->storeGateway->getBiebIds(31);
 		$hh_biebs[] = 3166;   // Gerard Roscoe
-		$counts = $this->model->updateGroupMembers(826, $hh_biebs, true);
+		$counts = $this->foodsaverGateway->updateGroupMembers(826, $hh_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
 		self::info('updating Europe Bot group');
-		$bots = $this->model->getBotIds(741);
-		$counts = $this->model->updateGroupMembers(881, $bots, true);
+		$bots = $this->foodsaverGateway->getBotIds(741);
+		$counts = $this->foodsaverGateway->updateGroupMembers(881, $bots, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
 		self::info('updating berlin bieb austausch');
-		$berlin_biebs = $this->model->getBiebIds(47);
-		$counts = $this->model->updateGroupMembers(1057, $berlin_biebs, true);
+		$berlin_biebs = $this->storeGateway->getBiebIds(47);
+		$counts = $this->foodsaverGateway->updateGroupMembers(1057, $berlin_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
 		self::info('updating CH BOT group');
-		$chBots = $this->model->getBotIds(106);
-		$counts = $this->model->updateGroupMembers(1763, $chBots, true);
+		$chBots = $this->foodsaverGateway->getBotIds(106);
+		$counts = $this->foodsaverGateway->updateGroupMembers(1763, $chBots, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
 		self::info('updating Zürich BIEB austausch');
-		$zuerich_biebs = $this->model->getBiebIds(108);
-		$counts = $this->model->updateGroupMembers(1313, $zuerich_biebs, true);
+		$zuerich_biebs = $this->storeGateway->getBiebIds(108);
+		$counts = $this->foodsaverGateway->updateGroupMembers(1313, $zuerich_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
 		self::info('updating Wien BIEB austausch (Filialverantwortung)');
-		$wien_biebs = $this->model->getBiebIds(13);
-		$counts = $this->model->updateGroupMembers(707, $wien_biebs, true);
+		$wien_biebs = $this->storeGateway->getBiebIds(13);
+		$counts = $this->foodsaverGateway->updateGroupMembers(707, $wien_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 	}
 
@@ -313,7 +319,7 @@ class MaintenanceControl extends ConsoleControl
 			self::info('memcache userinfo updated');
 		}
 
-		$admins = $this->model->getBotIds(0, false, true);
+		$admins = $this->foodsaverGateway->getBotIds(0, false, true);
 		if (!$admins) {
 			$admins = array();
 		}

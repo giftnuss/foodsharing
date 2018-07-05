@@ -3,9 +3,19 @@
 namespace Foodsharing\Modules\Event;
 
 use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class EventModel extends Model
 {
+	private $regionGateway;
+
+	public function __construct(RegionGateway $regionGateway)
+	{
+		$this->regionGateway = $regionGateway;
+
+		parent::__construct();
+	}
+
 	public function addEvent($event)
 	{
 		$location_id = 0;
@@ -122,7 +132,7 @@ class EventModel extends Model
 		$b_sql = '= ' . (int)$bezirk_id;
 
 		if ($invite_subs) {
-			$bids = $this->getChildBezirke($bezirk_id);
+			$bids = $this->regionGateway->listIdsForDescendantsAndSelf($bezirk_id);
 			$b_sql = 'IN(' . implode(',', $bids) . ')';
 		}
 

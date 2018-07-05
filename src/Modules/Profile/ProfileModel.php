@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Profile;
 
+use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Core\Model;
 
 class ProfileModel extends Model
@@ -10,7 +11,7 @@ class ProfileModel extends Model
 
 	public function setFsId($id)
 	{
-		$this->fs_id = $this->intval($id);
+		$this->fs_id = (int)$id;
 	}
 
 	public function rate($fsid, $rate, $type = 1, $message = '')
@@ -127,7 +128,7 @@ class ProfileModel extends Model
 		if ($this->qOne('SELECT 1 FROM `fs_rating` WHERE rater_id = ' . (int)$this->func->fsId() . ' AND foodsaver_id = ' . (int)$this->fs_id . ' AND ratingtype = 2')) {
 			$data['bouched'] = true;
 		}
-		$data['online'] = $this->isActive((int)$this->fs_id);
+		$data['online'] = Mem::userIsActive((int)$this->fs_id);
 
 		$data['bananen'] = $this->q('
 				SELECT 	fs.id,
@@ -170,7 +171,7 @@ class ProfileModel extends Model
 					fs_botschafter b 
 				
 			WHERE 	b.`bezirk_id` = bz.`id` 
-			AND 	b.foodsaver_id = ' . $this->intval($this->fs_id) . '
+			AND 	b.foodsaver_id = ' . (int)$this->fs_id . '
 			AND 	bz.type != 7
 		')
 		) {
@@ -184,7 +185,7 @@ class ProfileModel extends Model
 					fs_foodsaver_has_bezirk b
 		
 			WHERE 	b.`bezirk_id` = bz.`id`
-			AND 	b.foodsaver_id = ' . $this->intval($this->fs_id) . '
+			AND 	b.foodsaver_id = ' . (int)$this->fs_id . '
 			AND 	bz.type != 7
 		')
 		) {
@@ -198,7 +199,7 @@ class ProfileModel extends Model
 					fs_botschafter b
 		
 			WHERE 	b.`bezirk_id` = bz.`id`
-			AND 	b.foodsaver_id = ' . $this->intval($this->fs_id) . '
+			AND 	b.foodsaver_id = ' . (int)$this->fs_id . '
 			AND 	bz.type = 7
 		')
 		) {

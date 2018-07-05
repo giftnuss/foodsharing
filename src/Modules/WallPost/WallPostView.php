@@ -7,10 +7,12 @@ use Foodsharing\Modules\Core\View;
 class WallPostView extends View
 {
 	private $table;
+	private $wallId;
 
-	public function setTable($table)
+	public function setTable($table, $wallId)
 	{
 		$this->table = $table;
+		$this->wallId = $wallId;
 	}
 
 	public function posts($posts)
@@ -58,7 +60,7 @@ class WallPostView extends View
 				$p['foodsaver_id'] == $this->func->fsId()
 				|| (!in_array($this->table, array('fairteiler', 'foodsaver')) && ($this->func->isBotschafter() || $this->func->isOrgaTeam()))
 			) {
-				$del = '<span class="dot">·</span><a onclick="u_delPost(' . $p['id'] . ');return false;" href="#p' . $p['id'] . '" class="pdelete light">' . $this->func->s('delete') . '</a>';
+				$del = '<span class="dot">·</span><a onclick="u_delPost(' . $p['id'] . ', \'' . $this->table . '\', ' . $this->wallId . ');return false;" href="#p' . $p['id'] . '" class="pdelete light">' . $this->func->s('delete') . '</a>';
 			}
 
 			$out .= '

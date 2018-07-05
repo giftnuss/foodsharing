@@ -27,6 +27,9 @@ revision.inc.php
 migrations/_*
 .vagrant
 .DS_Store
+docs/_book
+docs/dist
+docs/node_modules
 .vscode
 .views-cache
 assets
@@ -34,4 +37,6 @@ client/.env
 client/yarn-error.log
 client/.cache
 client/.yarnrc
+client/dist
+client/test/_compiled.js
 c3.php

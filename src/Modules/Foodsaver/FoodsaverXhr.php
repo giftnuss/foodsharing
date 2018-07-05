@@ -3,19 +3,22 @@
 namespace Foodsharing\Modules\Foodsaver;
 
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class FoodsaverXhr extends Control
 {
-	public function __construct(FoodsaverModel $model, FoodsaverView $view)
+	private $regionGateway;
+
+	public function __construct(FoodsaverModel $model, FoodsaverView $view, RegionGateway $regionGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
 
 		// permission check
-		if (!S::may('orga') && !$this->func->isBotFor($_GET['bid'])) {
+		if (!$this->session->may('orga') && !$this->func->isBotFor($_GET['bid'])) {
 			return false;
 		}
 	}
@@ -38,7 +41,7 @@ class FoodsaverXhr extends Control
 	public function foodsaverrefresh()
 	{
 		$foodsaver = $this->model->listFoodsaver($_GET['bid']);
-		$bezirk = $this->model->getBezirk($_GET['bid']);
+		$bezirk = $this->regionGateway->getBezirk($_GET['bid']);
 		$html = $this->func->jsSafe($this->view->foodsaverList($foodsaver, $bezirk), "'");
 
 		return array(

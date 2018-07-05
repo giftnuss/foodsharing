@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Event;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 
 class EventControl extends Control
@@ -51,7 +50,7 @@ class EventControl extends Control
 
 	private function isEventAdmin($event)
 	{
-		if ($event['fs_id'] == $this->func->fsId() || $this->func->isBotFor($event['bezirk_id']) || S::may('orga')) {
+		if ($event['fs_id'] == $this->func->fsId() || $this->func->isBotFor($event['bezirk_id']) || $this->session->may('orga')) {
 			return true;
 		}
 
@@ -60,7 +59,7 @@ class EventControl extends Control
 
 	private function mayEvent($event)
 	{
-		if ($event['public'] == 1 || S::may('orga') || $this->func->isBotFor($event['bezirk_id']) || isset($event['invites']['may'][$this->func->fsId()])) {
+		if ($event['public'] == 1 || $this->session->may('orga') || $this->func->isBotFor($event['bezirk_id']) || isset($event['invites']['may'][$this->func->fsId()])) {
 			return true;
 		}
 
@@ -92,7 +91,7 @@ class EventControl extends Control
 					}
 				}
 
-				$bezirke = $this->model->getBezirke();
+				$bezirke = $this->session->getRegions();
 
 				if ($event['location_id'] > 0) {
 					if ($loc = $this->gateway->getLocation($event['location_id'])) {
@@ -130,7 +129,7 @@ class EventControl extends Control
 				}
 			}
 		} else {
-			$bezirke = $this->model->getBezirke();
+			$bezirke = $this->session->getRegions();
 
 			$this->func->addContent($this->view->eventForm($bezirke));
 		}

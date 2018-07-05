@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Profile;
 
 use Flourish\fDate;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\View;
 
@@ -26,7 +25,7 @@ class ProfileView extends View
 
 		$page->addSectionLeft($this->photo($showEditButton, $showPassportGenerationHistoryButton, $showVerificationHistoryButton));
 
-		if ($this->foodsaver['stat_buddycount'] > 0 || S::may('orga')) {
+		if ($this->foodsaver['stat_buddycount'] > 0 || $this->session->may('orga')) {
 			$page->addSectionLeft($this->sideInfos(), 'Infos');
 		}
 
@@ -93,7 +92,7 @@ class ProfileView extends View
 		$page->addSectionLeft($this->photo($showEditButton, $showPassportGenerationHistoryButton, $showVerificationHistoryButton));
 		$page->addSectionLeft($this->sideInfos(), 'Infos');
 
-		if (S::may('orga')) {
+		if ($this->session->may('orga')) {
 			$page->addSectionLeft($this->sideInfosCompanies($userCompanies), 'Betriebe (' . $userCompaniesCount . ')');
 		}
 
@@ -104,7 +103,7 @@ class ProfileView extends View
 	{
 		$infos = array();
 
-		if (S::may('orga')) {
+		if ($this->session->may('orga')) {
 			$last_login = new fDate($this->foodsaver['last_login']);
 			$registration_date = new fDate($this->foodsaver['anmeldedatum']);
 
@@ -231,7 +230,7 @@ class ProfileView extends View
 		/*
 		 * Banana
 		*/
-		if (S::may('fs')) {
+		if ($this->session->may('fs')) {
 			$count_banana = count($this->foodsaver['bananen']);
 			if ($count_banana == 0) {
 				$count_banana = '&nbsp;';
@@ -450,7 +449,7 @@ class ProfileView extends View
 			);
 		}
 
-		if (S::may('orga')) {
+		if ($this->session->may('orga')) {
 			$infos[] = array(
 				'name' => $this->func->s('private_mail'),
 				'val' => '<a href="/?page=mailbox&mailto=' . urlencode($this->foodsaver['email']) . '">' . $this->foodsaver['email'] . '</a>'

@@ -9,6 +9,8 @@ function lib (filename) {
   return resolve(path.join('..', 'js', filename))
 }
 
+const typeaheadAddresspicker = require.resolve('typeahead-addresspicker/dist/typeahead-addresspicker.js')
+
 exports.rules = [
   // Specifying dependencies for "legacy" libraries that don't/can't specify any themselves
   ...importLoadersRules({
@@ -16,11 +18,21 @@ exports.rules = [
     [require.resolve('jquery-slimscroll')]: ['jQuery=jquery'],
     [require.resolve('jquery-contextmenu')]: ['jQuery=jquery'],
     [require.resolve('timeago/jquery.timeago')]: ['define=>false', 'jQuery=jquery'],
+    [require.resolve('leaflet.awesome-markers/dist/leaflet.awesome-markers.js')]: ['L=leaflet'],
+    [require.resolve('leaflet.markercluster')]: ['L=leaflet'],
+    [typeaheadAddresspicker]: ['jQuery=jquery', '_=typeahead'],
     [lib('jquery-ui-addons.js')]: ['jQuery=jquery', 'window.jQuery=jquery', '_=jquery-ui'],
     [lib('fancybox/jquery.fancybox.pack.js')]: ['jQuery=jquery'],
     [lib('jquery.animatenumber.min.js')]: ['jQuery=jquery'],
-    [lib('dynatree/jquery.dynatree.js')]: ['jQuery=jquery']
-  })
+    [lib('dynatree/jquery.dynatree.js')]: ['jQuery=jquery'],
+    [lib('typeahead.bundle.js')]: ['window.jQuery=jquery'],
+    [lib('tablesorter/jquery.tablesorter.js')]: ['jQuery=jquery'],
+    [lib('tablesorter/jquery.tablesorter.pager.js')]: ['jQuery=jquery']
+  }),
+  {
+    test: typeaheadAddresspicker,
+    use: 'exports-loader?AddressPicker'
+  }
 ]
 
 function importLoadersRules (entries) {
@@ -51,6 +63,11 @@ exports.alias = {
   'underscore-string': lib('underscore.string.js'),
   'instant-search': lib('instant-search.js'),
   'typeahead': lib('typeahead.bundle.js'),
-  'typeahead-address-picker': lib('typeahead-addresspicker.js'),
-  'leaflet': lib('leaflet/leaflet.js')
+  'typeahead-addresspicker': typeaheadAddresspicker,
+  'leaflet.css': 'leaflet/dist/leaflet.css',
+  'leaflet.awesome-markers': require.resolve('leaflet.awesome-markers/dist/leaflet.awesome-markers.js'),
+  'leaflet.awesome-markers.css': require.resolve('leaflet.awesome-markers/dist/leaflet.awesome-markers.css'),
+  'leaflet.awesome-markers.foodsharing-overrides.css': lib('leaflet/leaflet.awesome-markers.foodsharing-overrides.css'),
+  'tablesorter': lib('tablesorter/jquery.tablesorter.js'),
+  'tablesorter-pagercontrols': lib('tablesorter/jquery.tablesorter.pager.js')
 }

@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\FairTeiler;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
@@ -65,7 +64,7 @@ class FairTeilerXhr extends Control
 					'ft_update',
 					'img img-recycle yellow',
 					array('href' => '/?page=fairteiler&sub=ft&id=' . (int)$_GET['fid']),
-					array('name' => $ft['name'], 'user' => S::user('name'), 'teaser' => $this->func->tt($post['body'], 100)),
+					array('name' => $ft['name'], 'user' => $this->session->user('name'), 'teaser' => $this->func->tt($post['body'], 100)),
 					'fairteiler-' . (int)$_GET['fid']
 				);
 			}

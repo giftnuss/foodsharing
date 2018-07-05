@@ -23,25 +23,24 @@ if(isset($_GET['g_path']))
 
 use Foodsharing\Debug\DebugBar;
 use Foodsharing\DI;
+use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Routing;
-use Foodsharing\Lib\Session\S;
+use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 
 require __DIR__ . '/includes/setup.php';
 
 require_once 'lib/inc.php';
+
+/* @var $view_utils Utils */
 $view_utils = DI::$shared->get(Utils::class);
 
-/**
- * @return Func
- */
-function getFunc()
-{
-	return DI::$shared->get(Func::class);
-}
+/* @var $func Func */
+$func = DI::$shared->get(Func::class);
 
-$func = getFunc();
+/* @var $session Session */
+$session = DI::$shared->get(Session::class);
 
 $func->addStylesheet('/css/gen/style.css?v=' . VERSION);
 $func->addScript('/js/gen/script.js?v=' . VERSION);
@@ -61,10 +60,10 @@ if (DebugBar::isEnabled()) {
 	$func->addContent(DebugBar::renderContent(), CNT_BOTTOM);
 }
 
-if (S::may()) {
+if ($session->may()) {
 	if (isset($_GET['uc'])) {
 		if ($func->fsId() != $_GET['uc']) {
-			$db->logout();
+			Mem::logout($session->id());
 			$func->goLogin();
 		}
 	}
@@ -75,7 +74,7 @@ if (S::may()) {
 $app = $func->getPage();
 
 $usesWebpack = false;
-if (($class = S::getRouteOverride()) === null) {
+if (($class = $session->getRouteOverride()) === null) {
 	$class = Routing::getClassName($app, 'Control');
 }
 
@@ -105,6 +104,7 @@ $isUsingResponse = $page !== '--';
 if ($isUsingResponse) {
 	$response->send();
 } else {
+	/* @var $twig \Twig\Environment */
 	$twig = DI::$shared->get(\Twig\Environment::class);
 	$page = $twig->render('layouts/' . $g_template . '.twig', $func->generateAndGetGlobalViewData($usesWebpack));
 }

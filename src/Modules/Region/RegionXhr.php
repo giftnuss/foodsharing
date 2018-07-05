@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Region;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\Model;
@@ -11,12 +10,15 @@ class RegionXhr extends Control
 {
 	private $responses;
 	private $forumGateway;
+	private $regionHelper;
+	private $twig;
 
-	public function __construct(Model $model, RegionView $view, ForumGateway $forumGateway)
+	public function __construct(Model $model, ForumGateway $forumGateway, RegionHelper $regionHelper, \Twig\Environment $twig)
 	{
 		$this->model = $model;
-		$this->view = $view;
 		$this->forumGateway = $forumGateway;
+		$this->regionHelper = $regionHelper;
+		$this->twig = $twig;
 		$this->responses = new XhrResponses();
 
 		parent::__construct();
@@ -32,11 +34,11 @@ class RegionXhr extends Control
 	public function followTheme()
 	{
 		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
-		if (!S::may() || !$this->hasThemeAccess($bot_theme)) {
+		if (!$this->session->may() || !$this->hasThemeAccess($bot_theme)) {
 			return $this->responses->fail_permissions();
 		}
 
-		$this->forumGateway->followThread(S::id(), $_GET['tid']);
+		$this->forumGateway->followThread($this->session->id(), $_GET['tid']);
 
 		return $this->responses->success();
 	}
@@ -44,11 +46,11 @@ class RegionXhr extends Control
 	public function unfollowTheme()
 	{
 		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
-		if (!S::may() || !$this->hasThemeAccess($bot_theme)) {
+		if (!$this->session->may() || !$this->hasThemeAccess($bot_theme)) {
 			return $this->responses->fail_permissions();
 		}
 
-		$this->forumGateway->unfollowThread(S::id(), $_GET['tid']);
+		$this->forumGateway->unfollowThread($this->session->id(), $_GET['tid']);
 
 		return $this->responses->success();
 	}
@@ -56,7 +58,7 @@ class RegionXhr extends Control
 	public function stickTheme()
 	{
 		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
-		if (!S::may() || !$this->hasThemeAccess($bot_theme)) {
+		if (!$this->session->may() || !$this->hasThemeAccess($bot_theme)) {
 			return $this->responses->fail_permissions();
 		}
 
@@ -68,7 +70,7 @@ class RegionXhr extends Control
 	public function unstickTheme()
 	{
 		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
-		if (!S::may() || !$this->hasThemeAccess($bot_theme)) {
+		if (!$this->session->may() || !$this->hasThemeAccess($bot_theme)) {
 			return $this->responses->fail_permissions();
 		}
 
@@ -79,24 +81,20 @@ class RegionXhr extends Control
 
 	public function morethemes()
 	{
-		$bezirk_id = (int)$_GET['bid'];
-		if (isset($_GET['page']) && $this->func->mayBezirk($bezirk_id)) {
-			$sub = 'forum';
-
-			if ((int)$_GET['bot'] == 1) {
-				if (!$this->func->isBotFor($bezirk_id)) {
-					return $this->responses->fail_permissions();
-				}
-				$sub = 'botforum';
+		$regionId = (int)$_GET['bid'];
+		$ambassadorForum = ($_GET['bot'] == 1);
+		if (isset($_GET['page']) && $this->func->mayBezirk($regionId)) {
+			if ($ambassadorForum && !$this->func->isBotFor($regionId)) {
+				return $this->responses->fail_permissions();
 			}
 
-			$this->view->bezirk_id = $bezirk_id;
-			$themes = $this->forumGateway->listThreads($bezirk_id, (int)$_GET['bot'], (int)$_GET['page'], (int)$_GET['last']);
+			$viewdata['region']['id'] = $regionId;
+			$viewdata['threads'] = $this->regionHelper->transformThreadViewData($this->forumGateway->listThreads($regionId, $ambassadorForum, (int)$_GET['page'], (int)$_GET['last']), $regionId, $ambassadorForum);
 
 			return array(
 				'status' => 1,
 				'data' => array(
-					'html' => $this->view->forum_index($themes, true, $sub)
+					'html' => $this->twig->render('pages/Region/forum/threadEntries.twig', $viewdata)
 				)
 			);
 		}
@@ -104,7 +102,7 @@ class RegionXhr extends Control
 
 	public function quickreply()
 	{
-		if (isset($_GET['bid']) && isset($_GET['tid']) && isset($_GET['pid']) && S::may() && isset($_POST['msg']) && $_POST['msg'] != '') {
+		if (isset($_GET['bid']) && isset($_GET['tid']) && isset($_GET['pid']) && $this->session->may() && isset($_POST['msg']) && $_POST['msg'] != '') {
 			$sub = 'forum';
 			if ($_GET['sub'] != 'forum') {
 				$sub = 'botforum';
@@ -115,8 +113,8 @@ class RegionXhr extends Control
 			$body = $this->func->autolink($body);
 
 			if ($bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid'])) {
-				if ($post_id = $this->forumGateway->addPost(S::id(), $_GET['tid'], $body, $_GET['pid'], $bezirk)) {
-					if ($follower = $this->forumGateway->getThreadFollower(S::id(), $_GET['tid'])) {
+				if ($post_id = $this->forumGateway->addPost($this->session->id(), $_GET['tid'], $body)) {
+					if ($follower = $this->forumGateway->getThreadFollower($this->session->id(), $_GET['tid'])) {
 						$theme = $this->model->getVal('name', 'theme', $_GET['tid']);
 
 						foreach ($follower as $f) {
@@ -126,7 +124,7 @@ class RegionXhr extends Control
 								'link' => BASE_URL . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,
 								'theme' => $theme,
 								'post' => $body,
-								'poster' => S::user('name')
+								'poster' => $this->session->user('name')
 							));
 						}
 					}

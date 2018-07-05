@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Map;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\View;
 
 class MapView extends View
@@ -26,9 +25,8 @@ class MapView extends View
 	public function mapControl()
 	{
 		$betriebe = '';
-		$additional = '';
 
-		if (S::may('fs')) {
+		if ($this->session->may('fs')) {
 			$betriebe = '<li><a name="betriebe" class="ui-corner-all betriebe"><span class="icon brown"><i class="img img-store"></i></span><span>Betriebe</span></a>
 				<div id="map-options">
 					<label><input type="checkbox" name="viewopt[]" value="allebetriebe" /> Alle Betriebe</label>

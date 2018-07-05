@@ -1,0 +1,101 @@
+
+/* TABLESORTER */
+div.tablesort-wrapper {
+    margin-top: -1px;
+    margin-left: -1px;
+    margin-right: -1px;
+  }
+  
+  table.tablesorter {
+    text-align: left;
+    width: 100%;
+  }
+  
+  table.tablesorter thead {
+    background-color: #4a3520;
+  }
+  
+  table.tablesorter thead tr th, table.tablesorter tfoot tr th {
+  
+    background-color: #4a3520;
+    color: #ffffff;
+    border: 0 solid #fffffe;
+    padding: 8px;
+  }
+  
+  table.tablesorter thead tr .header {
+    /*background-image: url(~img/bg.gif); MISSING */
+    background-repeat: no-repeat;
+    background-position: center right;
+    cursor: pointer;
+  }
+  
+  table.tablesorter tbody td {
+    color: #3d3d3d;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 4px;
+    paddin-right: 4px;
+    background-color: #fffffe;
+    vertical-align: middle;
+    height: 50px;
+  }
+  
+  table.tablesorter tbody tr.odd td {
+    background-color: #f0f0f6;
+  }
+  
+  table.tablesorter thead tr .headerSortUp {
+    /*background-image: url(~img/asc.gif); MISSING */
+  }
+  
+  table.tablesorter thead tr .headerSortDown {
+    /*background-image: url(~img/desc.gif); MISSING */
+  }
+
+  
+  table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
+    background-color: #4a3522;
+  }
+  
+  table.tablesorter tbody tr.odd td {
+    background-color: #ffffff;
+  }
+  
+  table.tablesorter tbody tr:hover td {
+    background-color: #4a3520;
+    color: #ffffff !important;
+  }
+  
+  table.tablesorter tbody tr:hover td a {
+    color: #ffffff !important;
+  }
+
+  table.tablesorter tbody tr ul.toolbar {
+    display: none;
+  }
+  table.tablesorter tbody tr:hover  ul.toolbar {
+      display: block;
+  }
+
+  div.pager {
+    background-color: #4a3520;
+    color: #ffffff;
+    margin: 10px;
+    padding: 10px;
+  }
+  
+  .pagesize-wrapper {
+    float: right;
+  }
+  
+  .pagedisplay2 {
+    margin: 0 5px;
+  }
+  
+  .ui-button.ui-state-active {
+    border: 0 !important;
+  }
+  
+  /* TABLESORTER END */
+  

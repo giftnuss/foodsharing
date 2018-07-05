@@ -17,7 +17,7 @@ $I->sendPOST('/xhrapp.php?app=login&m=joinsubmit', [
 	'name' => $first_name,
 	'surname' => $last_name,
 	'email' => $email,
-	'phone' => '39833',
+	'mobile_phone' => '39833',
 	'pw' => $pass,
 	'gender' => 0,
 	'birthdate' => $birthdate,

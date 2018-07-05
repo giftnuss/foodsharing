@@ -2,51 +2,67 @@
 
 namespace Foodsharing\Modules\Dashboard;
 
+use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Content\ContentGateway;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Event\EventGateway;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Profile\ProfileModel;
+use Foodsharing\Modules\Store\StoreGateway;
 
 class DashboardControl extends Control
 {
 	private $user;
-	private $gateway;
+	private $dashboardGateway;
 	private $contentGateway;
+	private $basketGateway;
+	private $storeGateway;
+	private $foodsaverGateway;
+	private $eventGateway;
 	private $twig;
 	private $profileModel;
 
 	public function __construct(
 		DashboardView $view,
-		DashboardGateway $gateway,
+		DashboardGateway $dashboardGateway,
 		ContentGateway $contentGateway,
+		BasketGateway $basketGateway,
+		StoreGateway $storeGateway,
+		FoodsaverGateway $foodsaverGateway,
+		EventGateway $eventGateway,
 		Model $model,
 		ProfileModel $profileModel,
 		\Twig\Environment $twig)
 	{
 		$this->view = $view;
-		$this->gateway = $gateway;
+		$this->dashboardGateway = $dashboardGateway;
 		$this->contentGateway = $contentGateway;
+		$this->basketGateway = $basketGateway;
+		$this->storeGateway = $storeGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
+		$this->eventGateway = $eventGateway;
 		$this->model = $model;
 		$this->twig = $twig;
 		$this->profileModel = $profileModel;
 
 		parent::__construct();
 
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			$this->func->go('/');
 		}
 
-		$this->user = $this->gateway->getUser($this->func->fsId());
+		$this->user = $this->dashboardGateway->getUser($this->func->fsId());
 	}
 
 	public function index()
 	{
 		$check = false;
 
-		$is_bieb = S::may('bieb');
-		$is_bot = S::may('bot');
-		$is_fs = S::may('fs');
+		$is_bieb = $this->session->may('bieb');
+		$is_bot = $this->session->may('bot');
+		$is_fs = $this->session->may('fs');
 
 		if (isset($_SESSION['client']['betriebe']) && is_array($_SESSION['client']['betriebe']) && count($_SESSION['client']['betriebe']) > 0) {
 			$is_fs = true;
@@ -87,17 +103,17 @@ class DashboardControl extends Control
 		}
 
 		if ($check) {
-			$cnt = $this->contentGateway->getContent(33);
+			$cnt = $this->contentGateway->get(33);
 
 			$cnt['body'] = str_replace(array(
 				'{NAME}',
 				'{ANREDE}'
 			), array(
-				S::user('name'),
-				$this->func->s('anrede_' . S::user('gender'))
+				$this->session->user('name'),
+				$this->func->s('anrede_' . $this->session->user('gender'))
 			), $cnt['body']);
 
-			if (S::option('quiz-infobox-seen')) {
+			if ($this->session->option('quiz-infobox-seen')) {
 				$cnt['body'] = '<div>' . substr(strip_tags($cnt['body']), 0, 120) . ' ...<a href="#" onclick="$(this).parent().hide().next().show();return false;">weiterlesen</a></div><div style="display:none;">' . $cnt['body'] . '</div>';
 			} else {
 				$cnt['body'] = $cnt['body'] . '<p><a href="#" onclick="ajreq(\'quizpopup\',{app:\'quiz\'});return false;">Weiter zum Quiz</a></p><p><a href="#" onclick="$(this).parent().parent().hide();ajax.req(\'quiz\',\'hideinfo\');return false;"><i class="fa fa-check-square-o"></i> Hinweis gelesen und nicht mehr anzeigen</a></p>';
@@ -115,7 +131,7 @@ class DashboardControl extends Control
 			$this->func->addJs('becomeBezirk();');
 		}
 
-		if (S::may('fs')) {
+		if ($this->session->may('fs')) {
 			$this->dashFoodsaver();
 		} else {
 			// foodsharer dashboard
@@ -149,24 +165,24 @@ class DashboardControl extends Control
 
 		$this->func->addContent($this->view->foodsharerMenu(), CNT_LEFT);
 
-		$cnt = $this->contentGateway->getContent(33);
+		$cnt = $this->contentGateway->get(33);
 
 		$cnt['body'] = str_replace(array(
 			'{NAME}',
 			'{ANREDE}'
 		), array(
-			S::user('name'),
-			$this->func->s('anrede_' . S::user('gender'))
+			$this->session->user('name'),
+			$this->func->s('anrede_' . $this->session->user('gender'))
 		), $cnt['body']);
 
 		$this->func->addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
 
 		$this->view->updates();
 
-		if ($this->user['lat'] && ($baskets = $this->gateway->listCloseBaskets($this->func->fsId(), S::getLocation($this->model)))) {
+		if ($this->user['lat'] && ($baskets = $this->dashboardGateway->listCloseBaskets($this->func->fsId(), $this->session->getLocation($this->model)))) {
 			$this->func->addContent($this->view->closeBaskets($baskets), CNT_LEFT);
 		} else {
-			if ($baskets = $this->gateway->getNewestFoodbaskets()) {
+			if ($baskets = $this->dashboardGateway->getNewestFoodbaskets()) {
 				$this->func->addContent($this->view->newBaskets($baskets), CNT_LEFT);
 			}
 		}
@@ -294,12 +310,12 @@ class DashboardControl extends Control
 		}
 
 		/* Einladungen */
-		if ($invites = $this->model->getInvites()) {
+		if ($invites = $this->eventGateway->getInvites($this->session->id())) {
 			$this->func->addContent($this->view->u_invites($invites));
 		}
 
 		/* Events */
-		if ($events = $this->model->getNextEvents()) {
+		if ($events = $this->eventGateway->getNextEvents($this->session->id())) {
 			$this->func->addContent($this->view->u_events($events));
 		}
 
@@ -452,7 +468,7 @@ class DashboardControl extends Control
 		/*
 		 * Top
 		*/
-		$me = $this->model->getFoodsaverBasics($this->func->fsId());
+		$me = $this->foodsaverGateway->getFoodsaverBasics($this->session->id());
 		if ($me['rolle'] < 0 || $me['rolle'] > 4) {
 			$me['rolle'] = 0;
 		}
@@ -497,7 +513,7 @@ class DashboardControl extends Control
 		<ul class="linklist">';
 			$orgacheck = false;
 			foreach ($_SESSION['client']['bezirke'] as $b) {
-				if ($b['type'] != 7) {
+				if ($b['type'] != Type::WORKING_GROUP) {
 					$out .= '
 			<li><a class="ui-corner-all" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a></li>';
 				} else {
@@ -524,7 +540,7 @@ class DashboardControl extends Control
 		 * Essenskörbe
 		 */
 
-		if ($baskets = $this->model->closeBaskets()) {
+		if ($baskets = $this->basketGateway->listCloseBaskets($this->session->id(), $this->session->getLocation())) {
 			$out = '
 			<ul class="linklist">';
 			foreach ($baskets as $b) {
@@ -565,7 +581,7 @@ class DashboardControl extends Control
 		/*
 		 * Deine Betriebe
 		*/
-		if ($betriebe = $this->model->getMyBetriebe(array('sonstige' => false))) {
+		if ($betriebe = $this->storeGateway->getMyBetriebe($this->session->id(), $this->session->getCurrentBezirkId(), array('sonstige' => false))) {
 			$this->func->addContent($this->view->u_myBetriebe($betriebe), CNT_LEFT);
 		} else {
 			$this->func->addContent($this->v_utils->v_info('Du bist bis jetzt in keinem Filial-Team.'), CNT_LEFT);

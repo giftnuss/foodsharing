@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\Mailbox;
 
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 
 class MailboxXhr extends Control
@@ -16,7 +15,7 @@ class MailboxXhr extends Control
 
 		parent::__construct();
 
-		if (!S::may('bieb')) {
+		if (!$this->session->may('bieb')) {
 			return false;
 		}
 	}
@@ -156,7 +155,7 @@ class MailboxXhr extends Control
 					$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von " . $this->func->niceDate($message['time_ts']) . " ---------\n\n>\t" . str_replace("\n", "\n>\t", $message['body']);
 
 					$mail = new AsyncMail();
-					$mail->setFrom($message['mailbox'] . '@' . DEFAULT_EMAIL_HOST, S::user('name'));
+					$mail->setFrom($message['mailbox'] . '@' . DEFAULT_EMAIL_HOST, $this->session->user('name'));
 					if ($sender['personal']) {
 						$mail->addRecipient($sender['mailbox'] . '@' . $sender['host'], $sender['personal']);
 					} else {

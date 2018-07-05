@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Quiz;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Control;
 
 class QuizControl extends Control
@@ -14,7 +13,7 @@ class QuizControl extends Control
 
 		parent::__construct();
 
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			$this->func->goLogin();
 		} elseif (!$this->func->mayEditQuiz()) {
 			$this->func->go('/');

@@ -20,7 +20,7 @@ class EmailTemplateAdminModel extends Model
 	{
 		return $this->del('
 			DELETE FROM 	`fs_message_tpl`
-			WHERE 			`id` = ' . $this->intval($id));
+			WHERE 			`id` = ' . (int)$id);
 	}
 
 	public function update_message_tpl($id, $data)
@@ -28,11 +28,11 @@ class EmailTemplateAdminModel extends Model
 		return $this->update('
 		UPDATE 	`fs_message_tpl`
 
-		SET 	`language_id` =  ' . $this->intval($data['language_id']) . ',
+		SET 	`language_id` =  ' . (int)$data['language_id'] . ',
 				`name` =  ' . $this->strval($data['name']) . ',
 				`subject` =  ' . $this->strval($data['subject']) . ',
 				`body` =  "' . $this->safe($data['body']) . '"
 
-		WHERE 	`id` = ' . $this->intval($id));
+		WHERE 	`id` = ' . (int)$id);
 	}
 }

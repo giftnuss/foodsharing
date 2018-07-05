@@ -18,7 +18,13 @@ class XhrDialog
 	private $onclose;
 	private $onopen;
 	private $classnames;
+	/**
+	 * @var Utils
+	 */
 	private $viewUtils;
+	/**
+	 * @var Func
+	 */
 	private $func;
 
 	public function __construct($title = false)

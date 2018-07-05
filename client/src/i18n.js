@@ -1,9 +1,12 @@
 import serverData from '@/server-data'
+import trans from '@translations/lang.de.yml'
+import objectPath from 'object-path'
 
 const { translations } = serverData
 
 export default function (key, variables = {}) {
-  const message = translations[key]
+  let message = objectPath.get(trans, key)
+  if (!message) message = translations[key]
   if (!message) throw new Error(`Missing translation for [${key}]`)
   return message.replace(/\{([^}]+)\}/g, (match, name) => {
     const value = variables[name]

@@ -4,20 +4,26 @@ namespace Foodsharing\Modules\Settings;
 
 use DateTime;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Login\LoginGateway;
 
 class SettingsXhr extends Control
 {
-	public function __construct(SettingsModel $model, SettingsView $view)
+	private $foodsaverGateway;
+	private $loginGateway;
+
+	public function __construct(SettingsModel $model, SettingsView $view, FoodsaverGateway $foodsaverGateway, LoginGateway $loginGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->foodsaverGateway = $foodsaverGateway;
+		$this->loginGateway = $loginGateway;
 
 		parent::__construct();
 
-		if (!S::may()) {
+		if (!$this->session->may()) {
 			return false;
 		}
 	}
@@ -42,7 +48,7 @@ class SettingsXhr extends Control
 	public function changemail2()
 	{
 		if ($this->func->validEmail($_GET['email'])) {
-			if ($this->model->emailExists($_GET['email'])) {
+			if ($this->foodsaverGateway->emailExists($_GET['email'])) {
 				return array(
 					'status' => 1,
 					'script' => 'pulseError("Diese E-Mail-Adresse benutzt bereits jemand anderes.");'
@@ -96,7 +102,7 @@ class SettingsXhr extends Control
 	{
 		if ($fs = $this->model->getValues(array('email'), 'foodsaver', $this->func->fsId())) {
 			$did = strip_tags($_GET['did']);
-			if ($this->model->checkClient($fs['email'], $_GET['pw'])) {
+			if ($this->loginGateway->checkClient($fs['email'], $_GET['pw'])) {
 				if ($email = $this->model->getMailchange()) {
 					if ($this->model->changeMail($email)) {
 						return array(

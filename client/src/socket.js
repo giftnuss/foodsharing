@@ -3,6 +3,7 @@ import io from 'socket.io-client'
 // eslint-disable-next-line camelcase
 import { info, session_id, GET } from '@/script'
 
+import msg from '@/msg'
 import conv from '@/conv'
 
 export default {
@@ -17,7 +18,7 @@ export default {
       switch (data.m) {
         case 'push':
           if (GET('page') === 'msg') {
-            conv.push(JSON.parse(data.o))
+            msg.push(JSON.parse(data.o))
           } else {
             conv.push(JSON.parse(data.o))
           }

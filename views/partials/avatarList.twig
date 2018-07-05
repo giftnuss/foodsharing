@@ -1,0 +1,14 @@
+<div>
+    <ul id="{{ id }}" class="linklist">
+        {% for entry in entries%}
+        <li>
+            <a href="#" onclick="profile({{ entry.user.id }});return false;" class="ui-corner-all">
+            <span style="float:left;margin-right:7px;">{% include 'partials/avatar.twig' with entry only %}</span>
+            <span class="title">{{ entry.user.name }}</span>
+            <span style="clear:both;"></span>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    <div style="clear:both"></div>
+</div>

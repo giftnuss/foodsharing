@@ -3,9 +3,8 @@
 namespace Foodsharing\Modules\Settings;
 
 use DateTime;
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\View;
-use Foodsharing\Lib\Session\S;
 
 class SettingsView extends View
 {
@@ -164,7 +163,7 @@ class SettingsView extends View
 		), array('submit' => $this->func->s('save'))), $this->func->s('settings_info'), array('class' => 'ui-padding'));
 	}
 
-	public function quizSession($session, $try_count, Model $model)
+	public function quizSession($session, $try_count, ContentGateway $contentGateway)
 	{
 		$infotext = $this->v_utils->v_error('mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten leider nicht bestanden. <a href="https://wiki.foodsharing.de/" target="_blank">Informiere Dich im Wiki</a> für den nächsten Versuch.<p>Lies Dir hier noch mal in Ruhe die Fragen und die dazugehörigen Antworten durch, damit es beim nächsten Mal besser klappt</p>');
 		$subtitle = 'Leider nicht bestanden';
@@ -248,7 +247,7 @@ class SettingsView extends View
 			}
 
 			if ($content_id) {
-				$cnt = $model->getContent($content_id);
+				$cnt = $contentGateway->get($content_id);
 				$out .= $this->v_utils->v_field($cnt['body'], $cnt['title'], array('class' => 'ui-padding'));
 			}
 		}
@@ -502,7 +501,7 @@ class SettingsView extends View
 			array('name' => 'Meine Daten niemandem zeigen.', 'id' => 4)
 		)));
 
-		if (S::may('bot')) {
+		if ($this->session->may('bot')) {
 			$oeff = '<input type="hidden" name="photo_public" value="1" />';
 		}
 		$bezirkchoose = '';
@@ -510,7 +509,7 @@ class SettingsView extends View
 		$communications = $this->v_utils->v_form_text('homepage') .
 			$this->v_utils->v_form_text('tox', array('desc' => $this->func->s('tox_desc')));
 
-		if (S::may('orga')) {
+		if ($this->session->may('orga')) {
 			$bezirk = array('id' => 0, 'name' => false);
 			if ($b = $this->func->getBezirk($g_data['bezirk_id'])) {
 				$bezirk['id'] = $b['id'];

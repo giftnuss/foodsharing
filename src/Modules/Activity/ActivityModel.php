@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Activity;
 
-use Foodsharing\Lib\Session\S;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 
@@ -53,11 +52,11 @@ class ActivityModel extends Model
 	public function loadBasketWallUpdates($page = 0): array
 	{
 		$updates = array();
-		if ($up = $this->activityGateway->fetchAllBasketWallUpdates(S::id(), $page)) {
+		if ($up = $this->activityGateway->fetchAllBasketWallUpdates($this->session->id(), $page)) {
 			$updates = $up;
 		}
 
-		if ($up = $this->activityGateway->fetchAllWallpostsFromFoodBasekts(S::id(), $page)) {
+		if ($up = $this->activityGateway->fetchAllWallpostsFromFoodBasekts($this->session->id(), $page)) {
 			$updates = array_merge($updates, $up);
 		}
 
@@ -110,7 +109,7 @@ class ActivityModel extends Model
 	{
 		$buddy_ids = array();
 
-		if ($b = S::get('buddy-ids')) {
+		if ($b = $this->session->get('buddy-ids')) {
 			$buddy_ids = $b;
 		}
 
@@ -209,7 +208,7 @@ class ActivityModel extends Model
 
 	public function loadForumUpdates($page = 0, $bids_not_load = false)
 	{
-		$tmp = $this->getBezirkIds();
+		$tmp = $this->session->getBezirkIds();
 		$bids = array();
 		if ($tmp === false || count($tmp) === 0) {
 			return false;
@@ -263,7 +262,7 @@ class ActivityModel extends Model
 
 	public function loadStoreUpdates($page = 0)
 	{
-		if ($this->getMyBetriebIds() && $ret = $this->activityGateway->fetchAllStoreUpdates(S::id(), $page)) {
+		if ($this->session->getMyBetriebIds() && $ret = $this->activityGateway->fetchAllStoreUpdates($this->session->id(), $page)) {
 			$out = array();
 			foreach ($ret as $r) {
 				$out[] = [
@@ -286,7 +285,7 @@ class ActivityModel extends Model
 
 	public function getBuddies()
 	{
-		if ($bids = S::get('buddy-ids')) {
+		if ($bids = $this->session->get('buddy-ids')) {
 			return $this->activityGateway->fetchAllBuddies($bids);
 		}
 
