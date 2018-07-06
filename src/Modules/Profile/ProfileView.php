@@ -155,22 +155,32 @@ class ProfileView extends View
 				$bot[$b['id']] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
 			}
 			$infos[] = array(
-				'name' => $this->foodsaver['name'] . ' ist Botschafter' . $this->func->genderWord($this->foodsaver['geschlecht'], '', 'in', '_in') . ' für',
+				'name' => $this->func->sv('ambassador_districts', array('name' => $this->foodsaver['name'], 'gender' => $this->func->genderWord($this->foodsaver['geschlecht'], '', 'in', '_in'))),
 				'val' => implode(', ', $bot)
 			);
 		}
 
 		if ($this->foodsaver['foodsaver']) {
 			$fsa = array();
+			$fshomedistrict = array();
 			foreach ($this->foodsaver['foodsaver'] as $b) {
+				if ($b['id'] == $this->foodsaver['bezirk_id']) {
+					$fshomedistrict[] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
+				}
 				if (!isset($bot[$b['id']])) {
 					$fsa[] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
 				}
 			}
 			if (!empty($fsa)) {
 				$infos[] = array(
-					'name' => $this->foodsaver['name'] . ' ist Foodsaver für',
+					'name' => $this->func->sv('foodsaver_districts', array('name' => $this->foodsaver['name'])),
 					'val' => implode(', ', $fsa)
+				);
+			}
+			if (!empty($fshomedistrict)) {
+				$infos[] = array(
+					'name' => $this->func->sv('foodsaver_home_district', array('name' => $this->foodsaver['name'])),
+					'val' => implode(', ', $fshomedistrict)
 				);
 			}
 		}
@@ -185,8 +195,22 @@ class ProfileView extends View
 				}
 			}
 			$infos[] = array(
-				'name' => $this->func->genderWord($this->foodsaver['geschlecht'], 'Er', 'Sie', 'Er/Sie') . ' ist aktiv in den Orgagruppen',
+				'name' => $this->func->sv('foodsaver_workgroups', array('gender' => $this->func->genderWord($this->foodsaver['geschlecht'], 'Er', 'Sie', 'Er/Sie'))),
 				'val' => implode(', ', $bot)
+			);
+		}
+
+		if ($this->foodsaver['sleep_status'] == 1) {
+			$infos[] = array(
+				'name' => $this->func->sv('foodsaver_sleeping_hat', array('name' => $this->foodsaver['name'], 'von' => date('d.m.Y', $this->foodsaver['sleep_from_ts']), 'bis' => date('d.m.Y', $this->foodsaver['sleep_until_ts']))),
+				'val' => $this->foodsaver['sleep_msg']
+			);
+		}
+
+		if ($this->foodsaver['sleep_status'] == 2) {
+			$infos[] = array(
+				'name' => $this->func->sv('foodsaver_sleeping_hat_time_undefined', array('name' => $this->foodsaver['name'])),
+				'val' => $this->foodsaver['sleep_msg']
 			);
 		}
 
@@ -244,7 +268,7 @@ class ProfileView extends View
 				$givebanana = '
 				<a onclick="$(this).hide().next().show().children(\'textarea\').autosize();return false;" href="#">Schenke ' . $this->foodsaver['name'] . ' eine Banane</a>
 				<div class="vouch-banana-wrapper" style="display:none;">
-					<div class="vouch-banana-desc">		
+					<div class="vouch-banana-desc">
 						Hier kannst Du etwas dazu schreiben, warum Du ' . $this->foodsaver['name'] . ' gerne eine Banane schenken möchtest. Du kannst jedem Foodsaver nur eine Banane schenken!<br />
 						Bitte gib die Vertrauensbanane nur an Foodsaver, die Du persönlich kennst und bei denen Du weißt, dass sie zuverlässig und engagiert sind und Du sicher bist, dass sie die Verhaltensregeln und die Rechtsvereinbarung einhalten.
 						<p><strong>Vertrauensbananen können nicht zurückgenommen werden. Sei bitte deswegen besonders achtsam, wem Du eine schenkst.</strong></p>
@@ -683,7 +707,7 @@ class ProfileView extends View
 								' . $opt . '
 							</ul>
 						</div>
-						
+
 						<table>
 							<tr>
 								<td>
@@ -710,7 +734,7 @@ class ProfileView extends View
 								' . $this->foodsaver['name'] . ' eine Vertrauensbanane schenken
 							</div>
 							<div class="vouch-banana-desc">
-								
+
 								Hier kannst Du etwas dazu schreiben, warum Du ' . $this->foodsaver['name'] . ' gerne eine Banane schenken möchtest. Du kannst jedem Foodsaver nur eine Banane schenken!<br />
 								Bitte gib die Vertrauensbanane nur an Foodsaver, die Du persönlich kennst und bei denen Du weißt, dass sie zuverlässig und engagiert sind und Du sicher bist, dass sie die Verhaltensregeln und die Rechtsvereinbarung einhalten.
 								<p><strong>Vertrauensbananen können nicht zurückgenommen werden. Sei bitte deswegen besonders achtsam, wem Du eine schenkst.</strong></p>

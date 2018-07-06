@@ -25,7 +25,7 @@ class ProfileModel extends Model
 				`ratingtype`,
 				`msg`,
 				`time`
-			)		
+			)
 			VALUES
 			(
 				' . (int)$fsid . ',
@@ -41,7 +41,7 @@ class ProfileModel extends Model
 	public function getRateMessage($fsid)
 	{
 		return $this->qOne('
-			SELECT 	`msg` 
+			SELECT 	`msg`
 			FROM	`fs_rating`
 			WHERE 	`foodsaver_id` = ' . (int)$fsid . '
 			AND 	`rater_id` = ' . (int)$this->func->fsId() . '
@@ -72,7 +72,7 @@ class ProfileModel extends Model
 	public function getData()
 	{
 		if (($data = $this->qRow('
-		
+
 			SELECT 	fs.`id`,
 					fs.`bezirk_id`,
 					fs.`plz`,
@@ -106,17 +106,18 @@ class ProfileModel extends Model
 					fs.anmeldedatum,
 					fs.sleep_status,
 					fs.sleep_msg,
+					fs.sleep_from,
 					fs.sleep_until,
 					fs.rolle,
 					UNIX_TIMESTAMP(fs.sleep_from) AS sleep_from_ts,
 					UNIX_TIMESTAMP(fs.sleep_until) AS sleep_until_ts,
 					fs.mailbox_id,
 					fs.deleted_at
-		
+
 			FROM 	fs_foodsaver fs
-				
+
 			WHERE 	fs.id = ' . (int)$this->fs_id . '
-		
+
 			')) == false
 		) {
 			return false;
@@ -137,7 +138,7 @@ class ProfileModel extends Model
 						r.`msg`,
 						r.`time`,
 						UNIX_TIMESTAMP(r.`time`) AS time_ts
-		
+
 				FROM 	`fs_foodsaver` fs,
 						 `fs_rating` r
 				WHERE 	r.rater_id = fs.id
@@ -165,12 +166,12 @@ class ProfileModel extends Model
 
 		if ($bot = $this->q('
 			SELECT 	bz.`name`,
-					bz.`id` 
-				
+					bz.`id`
+
 			FROM 	`fs_bezirk` bz,
-					fs_botschafter b 
-				
-			WHERE 	b.`bezirk_id` = bz.`id` 
+					fs_botschafter b
+
+			WHERE 	b.`bezirk_id` = bz.`id`
 			AND 	b.foodsaver_id = ' . (int)$this->fs_id . '
 			AND 	bz.type != 7
 		')
@@ -180,10 +181,10 @@ class ProfileModel extends Model
 		if ($fs = $this->q('
 			SELECT 	bz.`name`,
 					bz.`id`
-		
+
 			FROM 	`fs_bezirk` bz,
 					fs_foodsaver_has_bezirk b
-		
+
 			WHERE 	b.`bezirk_id` = bz.`id`
 			AND 	b.foodsaver_id = ' . (int)$this->fs_id . '
 			AND 	bz.type != 7
@@ -194,10 +195,10 @@ class ProfileModel extends Model
 		if ($orga = $this->q('
 			SELECT 	bz.`name`,
 					bz.`id`
-		
+
 			FROM 	`fs_bezirk` bz,
 					fs_botschafter b
-		
+
 			WHERE 	b.`bezirk_id` = bz.`id`
 			AND 	b.foodsaver_id = ' . (int)$this->fs_id . '
 			AND 	bz.type = 7
@@ -233,13 +234,13 @@ class ProfileModel extends Model
 	private function getViolationCount($fsid)
 	{
 		return (int)$this->qOne('
-			SELECT 
+			SELECT
 					COUNT(r.id)
-					
-          
+
+
 				FROM
 	            	`fs_report` r
-				
+
 				WHERE
 					r.foodsaver_id = ' . (int)$fsid . '
 		');
@@ -268,7 +269,7 @@ class ProfileModel extends Model
 			  pg.date
 			DESC
 
-				
+
 		');
 	}
 
@@ -296,7 +297,7 @@ class ProfileModel extends Model
 			  vh.date
 			DESC
 
-				
+
 		');
 
 		return ($ret === false) ? array() : $ret;
@@ -309,16 +310,16 @@ class ProfileModel extends Model
 			SELECT 	b.id,
 					b.name,
 					bt.verantwortlich
-				
+
 			FROM 	fs_betrieb_team bt,
 					fs_betrieb b
-				
+
 			WHERE 	bt.betrieb_id = b.id
 			AND
 					bt.foodsaver_id = ' . (int)$fsid . '
 			ORDER BY b.name ASC
 
-				
+
 		');
 	}
 
@@ -327,15 +328,15 @@ class ProfileModel extends Model
 		return $this->qOne('
 
 			SELECT 	count(b.id)
-				
+
 			FROM 	fs_betrieb_team bt,
 					fs_betrieb b
-				
+
 			WHERE 	bt.betrieb_id = b.id
 			AND
 					bt.foodsaver_id = ' . (int)$fsid . '
 
-				
+
 		');
 	}
 
