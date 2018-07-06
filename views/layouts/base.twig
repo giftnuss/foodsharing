@@ -26,18 +26,6 @@
             window.serverData = {{ serverDataJSON | raw }};
         </script>
 
-        {% if not webpack %}
-            {# note: when using webpack the scripts are rendered at the bottom of the page #}
-            {% for script in head.scripts %}
-                <script type="text/javascript" src="{{ script }}"></script>
-            {% endfor %}
-            {% if head.ravenConfig %}
-                <script type="text/javascript">
-                  Raven.config('{{ head.ravenConfig }}', { tags: { webpack: false } }).install()
-                </script>
-            {% endif %}
-        {% endif %}
-
         {{ head.extra | raw }}
 
         {% block head %}{% endblock %}
@@ -56,16 +44,6 @@
         <meta property="og:url" content="http://foodsharing.de" />
 
         <style type="text/css">{{ head.css | raw }}</style>
-
-        {% if not webpack %}
-            <script type="text/javascript">
-                {{ head.jsFunc | raw }}
-                $(document).ready(function(){
-                    {{ head.js | raw }}
-                });
-            </script>
-        {% endif %}
-
     </head>
 
     <body {{ bodyClass | raw }}>
@@ -194,21 +172,16 @@
         <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-info" style="display:none;"></div>
         <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-success" style="display:none;"></div>
 
+        {% for script in head.scripts %}
+            <script type="text/javascript" src="{{ script }}"></script>
+        {% endfor %}
 
-        {% if webpack %}
-
-            {% for script in head.scripts %}
-                <script type="text/javascript" src="{{ script }}"></script>
-            {% endfor %}
-
-            <script type="text/javascript">
-                {{ head.jsFunc | raw }}
-                $(document).ready(function(){
-                    {{ head.js | raw }}
-                });
-            </script>
-
-        {% endif %}
+        <script type="text/javascript">
+            {{ head.jsFunc | raw }}
+            document.addEventListener("DOMContentLoaded", function() {
+                {{ head.js | raw }}
+            });
+        </script>
 
         {% if dev %}
             <style type="text/css">body { display: block; }</style>

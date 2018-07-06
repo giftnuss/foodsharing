@@ -45,8 +45,6 @@ abstract class Control
 	 */
 	private $twig;
 
-	private $usesWebpack = false;
-
 	/**
 	 * @var ManualDb
 	 */
@@ -108,22 +106,12 @@ abstract class Control
 			$manifest = json_decode(file_get_contents($webpackModules), true);
 			$entry = 'Modules/' . $moduleName;
 			if (isset($manifest[$entry])) {
-				// We are using new webpack style!
-				$this->usesWebpack = true;
 				foreach ($manifest[$entry] as $asset) {
 					if ($this->func->endsWith($asset, '.js')) {
 						$this->func->addWebpackScript($asset);
 					} elseif ($this->func->endsWith($asset, '.css')) {
 						$this->func->addWebpackStylesheet($asset);
 					}
-				}
-			} else {
-				// Existing method of js loading
-				if (file_exists($dir . $moduleName . '.js')) {
-					$this->func->addJsFunc(file_get_contents($dir . $moduleName . '.js'));
-				}
-				if (file_exists($dir . $moduleName . '.css')) {
-					$this->func->addStyle(file_get_contents($dir . $moduleName . '.css'));
 				}
 			}
 		}
@@ -140,7 +128,7 @@ abstract class Control
 
 	protected function render($template, $data)
 	{
-		$global = $this->func->generateAndGetGlobalViewData($this->usesWebpack);
+		$global = $this->func->generateAndGetGlobalViewData();
 		$viewData = array_merge($global, $data);
 
 		return $this->twig->render($template, $viewData);
@@ -180,11 +168,6 @@ abstract class Control
 		} else {
 			return false;
 		}
-	}
-
-	public function getUsesWebpack(): bool
-	{
-		return $this->usesWebpack;
 	}
 
 	public function wallposts($table, $id)

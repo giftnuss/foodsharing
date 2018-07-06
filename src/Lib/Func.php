@@ -13,7 +13,7 @@ use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
 use Foodsharing\Modules\Region\RegionGateway;
-use JSMin;
+use JSMin\JSMin;
 
 class Func
 {
@@ -442,7 +442,7 @@ class Func
 		return $this->session->isOrgaTeam();
 	}
 
-	public function getMenu($usesWebpack = false)
+	public function getMenu()
 	{
 		$regions = [];
 		$stores = [];
@@ -475,8 +475,7 @@ class Func
 			$workingGroups,
 			$this->session->get('mailbox'),
 			$this->fsId(),
-			$loggedIn ? $this->img() : '',
-			$usesWebpack
+			$loggedIn ? $this->img() : ''
 		);
 	}
 
@@ -484,11 +483,9 @@ class Func
 		bool $loggedIn, array $regions, bool $hasFsRole,
 		bool $isOrgaTeam, bool $mayEditBlog, bool $mayEditQuiz, bool $mayHandleReports,
 		array $stores, array $workingGroups,
-		$sessionMailbox, int $fsId, string $image,
-		bool $usesWebpack)
+		$sessionMailbox, int $fsId, string $image)
 	{
 		$params = array_merge([
-			'webpack' => $usesWebpack,
 			'loggedIn' => $loggedIn,
 			'fsId' => $fsId,
 			'image' => $image,
@@ -1074,11 +1071,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 	}
 
-	public function addScript($src)
-	{
-		$this->scripts[] = $src;
-	}
-
 	public function addWebpackScript($src)
 	{
 		$this->webpackScripts[] = $src;
@@ -1097,11 +1089,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	public function addJs($njs)
 	{
 		$this->js .= $njs;
-	}
-
-	public function addStylesheet($src)
-	{
-		$this->stylesheets[] = $src;
 	}
 
 	public function addWebpackStylesheet($src)
@@ -1129,7 +1116,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	/**
 	 * This is used to set window.serverData on in the frontend.
 	 */
-	public function getServerData(bool $usesWebpack)
+	public function getServerData()
 	{
 		$userData = [
 			'id' => $this->fsId(),
@@ -1157,7 +1144,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 
 		return array_merge($this->jsData, [
-			'webpack' => $usesWebpack,
 			'user' => $userData,
 			'page' => $this->getPage(),
 			'subPage' => $this->getSubPage(),
@@ -1168,44 +1154,28 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		]);
 	}
 
-	public function getHeadData(bool $usesWebpack = false)
+	public function getHeadData()
 	{
-		$data = [
+		return [
 			'title' => implode(' | ', $this->title),
 			'extra' => $this->head,
 			'css' => str_replace(["\r", "\n"], '', $this->add_css),
 			'jsFunc' => JSMin::minify($this->js_func),
 			'js' => JSMin::minify($this->js),
-			'ravenConfig' => null
+			'ravenConfig' => null,
+			'stylesheets' => $this->webpackStylesheets,
+			'scripts' => $this->webpackScripts
 		];
-
-		if ($usesWebpack) {
-			$data = array_merge($data, [
-				'stylesheets' => $this->webpackStylesheets,
-				'scripts' => $this->webpackScripts
-			]);
-		} else {
-			$data = array_merge($data, [
-				'stylesheets' => $this->stylesheets,
-				'scripts' => $this->scripts
-			]);
-
-			if (defined('RAVEN_JAVASCRIPT_CONFIG')) {
-				$data['ravenConfig'] = RAVEN_JAVASCRIPT_CONFIG;
-			}
-		}
-
-		return $data;
 	}
 
-	public function generateAndGetGlobalViewData(bool $usesWebpack = false)
+	public function generateAndGetGlobalViewData()
 	{
 		global $g_broadcast_message;
 		global $g_body_class;
 		global $content_left_width;
 		global $content_right_width;
 
-		$menu = $this->getMenu($usesWebpack);
+		$menu = $this->getMenu();
 
 		$this->getMessages();
 
@@ -1232,13 +1202,12 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 
 		return [
-			'head' => $this->getHeadData($usesWebpack),
+			'head' => $this->getHeadData(),
 			'bread' => $this->getBread(),
 			'bodyClass' => $g_body_class,
 			'msgbar' => $msgbar,
-			'serverDataJSON' => json_encode($this->getServerData($usesWebpack)),
+			'serverDataJSON' => json_encode($this->getServerData()),
 			'menu' => $menu,
-			'webpack' => $usesWebpack,
 			'dev' => FS_ENV == 'dev',
 			'hidden' => $this->getHidden(),
 			'isMob' => $this->isMob(),
@@ -1450,7 +1419,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 				$.ajax({
 
 					dataType:"json",
-					url:"xhr.php?f=update_' . $table . '&" + $("#' . $id . ' form").serialize(),
+					url:"/xhr.php?f=update_' . $table . '&" + $("#' . $id . ' form").serialize(),
 					success : function(data){
 						$("#' . $id . '").dialog(\'close\');
 						' . $success . '

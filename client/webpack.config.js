@@ -5,10 +5,11 @@ const { writeFileSync } = require('fs')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const path = require('path')
 const clientRoot = path.resolve(__dirname)
-const { join } = require('path')
-const modules = require('./modules')
+const { join, dirname } = require('path')
+const glob = require('glob')
 
 const dev = process.env.NODE_ENV !== 'production'
 
@@ -56,9 +57,14 @@ plugins.push(
     }
   }
 )
+plugins.push(
+  new CopyWebpackPlugin([
+    { from: './lib/tinymce', to: './tinymce' }
+  ])
+)
 
 module.exports = merge(webpackBase, {
-  entry: moduleEntries(...modules),
+  entry: moduleEntries(),
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'cheap-module-eval-source-map' : 'source-map',
   stats: 'minimal',
@@ -131,10 +137,16 @@ function resolve (dir) {
   return path.join(clientRoot, dir)
 }
 
-function moduleEntries (...names) {
-  const entries = {}
-  for (const name of names) {
-    entries[`Modules/${name}`] = resolve(`../src/Modules/${name}/${name}.js`)
-  }
-  return entries
+function moduleEntries () {
+  const basedir = join(__dirname, '../src/Modules')
+  return uniq(glob.sync(join(basedir, '*/*.js')).map(filename => {
+    return dirname(filename).substring(basedir.length + 1)
+  })).reduce((entries, name) => {
+    entries[`Modules/${name}`] = join(basedir, name, `${name}.js`)
+    return entries
+  }, {})
+}
+
+function uniq (items) {
+  return [...new Set(items)]
 }

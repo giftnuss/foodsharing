@@ -37,7 +37,7 @@ build:
   script:
   - (cd client && yarn && yarn lint && yarn build)
   cache:
-    key: build
+    key: client:build
     paths:
     - client/node_modules
   artifacts:
@@ -79,6 +79,17 @@ test:
     when: always
     paths:
     - tests/_output
+
+test:client:
+  <<: *defaults
+  image: node:9.9.0
+  stage: test
+  script:
+  - (cd client && yarn && yarn test)
+  cache:
+    key: client:build
+    paths:
+    - client/node_modules
 
 deploy:beta:
   <<: *deploy

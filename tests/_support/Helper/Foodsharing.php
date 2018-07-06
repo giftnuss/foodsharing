@@ -80,6 +80,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'active' => 1,
 			'privacy_policy_accepted_date' => '2018-05-24 10:24:53',
 			'privacy_notice_accepted_date' => '2018-05-24 18:25:28',
+			'token' => uniqid()
 		], $extra_params);
 		$params['passwd'] = $this->encryptMd5($params['email'], $pass);
 		$params['geb_datum'] = $this->toDateTime($params['geb_datum']);
@@ -579,6 +580,24 @@ class Foodsharing extends \Codeception\Module\Db
 				'seen' => 0
 			]);
 		}
+	}
+
+	public function addBlogPost($authorId, $regionId, $extra_params = [])
+	{
+		$params = array_merge([
+			'bezirk_id' => $regionId,
+			'foodsaver_id' => $authorId,
+			'name' => $this->faker->text(40),
+			'body' => $this->faker->text(),
+			'teaser' => $this->faker->text(50),
+			'time' => $this->faker->dateTime($max = 'now'),
+			'active' => 1,
+			'picture' => ''
+		], $extra_params);
+		$params['time'] = $this->toDateTime($params['time']);
+		$params['id'] = $this->haveInDatabase('fs_blog_entry', $params);
+
+		return $params;
 	}
 
 	// =================================================================================================================

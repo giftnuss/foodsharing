@@ -188,7 +188,7 @@ class FairTeilerView extends View
 			<ul class="linklist fairteilerlist">';
 			foreach ($bezirk['fairteiler'] as $ft) {
 				++$count;
-				$image = '<span class="image noimage ui-corner-all" style="background-image:url(img/fairteiler_thumb.png);"></span>';
+				$image = '<span class="image noimage ui-corner-all" style="background-image:url(/img/fairteiler_thumb.png);"></span>';
 				if ($ft['pic']) {
 					$image = '<span class="image ui-corner-all" style="background-image:url(' . $ft['pic']['thumb'] . ');"></span>';
 				}
@@ -208,9 +208,9 @@ class FairTeilerView extends View
 		}
 
 		if ($this->bezirk_id > 0) {
-			$this->func->addContent($this->topbar($this->func->sv('list_fairteiler', $this->bezirk['name']), 'Es gibt ' . $count . ' Fair-Teiler in ' . $this->bezirk['name'] . ' und allen Unterbezirken', '<img src="img/fairteiler_thumb.png" />'), CNT_TOP);
+			$this->func->addContent($this->topbar($this->func->sv('list_fairteiler', $this->bezirk['name']), 'Es gibt ' . $count . ' Fair-Teiler in ' . $this->bezirk['name'] . ' und allen Unterbezirken', '<img src="/img/fairteiler_thumb.png" />'), CNT_TOP);
 		} else {
-			$this->func->addContent($this->topbar($this->func->s('your_fairteiler'), 'Es gibt ' . $count . ' Fair-Teiler in allen Bezirken in denen Du aktiv bist', '<img src="img/fairteiler_thumb.png" />'), CNT_TOP);
+			$this->func->addContent($this->topbar($this->func->s('your_fairteiler'), 'Es gibt ' . $count . ' Fair-Teiler in allen Bezirken in denen Du aktiv bist', '<img src="/img/fairteiler_thumb.png" />'), CNT_TOP);
 		}
 
 		return $content;

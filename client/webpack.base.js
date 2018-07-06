@@ -13,7 +13,7 @@ module.exports = {
       'fonts': resolve('../fonts'),
       'img': resolve('../img'),
       'css': resolve('../css'),
-      'js': resolve('../js'),
+      'js': resolve('lib'),
       '@': resolve('src'),
       '@php': resolve('../src'),
       '>': resolve('test'),
@@ -26,7 +26,7 @@ module.exports = {
         test: /\.js$/,
         exclude: [
           /(node_modules)/,
-          resolve('../js') // ignore the old js/**.js files
+          resolve('lib') // ignore the old lib/**.js files
         ],
         use: 'babel-loader'
       },

@@ -86,7 +86,7 @@ export function u_fetchdeny (fsid, date, el) {
     },
     success: function (ret) {
       if (ret == 1) {
-        item.parent().parent().append('<li class="filled empty timedialog-add-me"><a onclick="return false;" href="#"><img alt="nobody" src="img/nobody.gif"></a></li>')
+        item.parent().parent().append('<li class="filled empty timedialog-add-me"><a onclick="return false;" href="#"><img alt="nobody" src="/img/nobody.gif"></a></li>')
         item.parent().remove()
       }
     },

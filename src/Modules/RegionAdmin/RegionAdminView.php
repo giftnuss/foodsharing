@@ -8,17 +8,13 @@ class RegionAdminView extends View
 {
 	public function v_bezirk_tree($id)
 	{
-		$this->func->addScript('/js/dynatree/jquery.dynatree.js');
-		$this->func->addScript('/js/jquery.cookie.js');
-		$this->func->addStylesheet('/js/dynatree/skin/ui.dynatree.css');
-
 		$this->func->addJs('
 	$("#' . $id . '").dynatree({
 		onDblClick: function(node, event) {
 			alert(node.data.ident);
 		},
 	    initAjax: {
-			url: "xhr.php?f=bezirkTree",
+			url: "/xhr.php?f=bezirkTree",
 			data: {p: "0" }
 		},
 		onActivate: function(node){
@@ -27,7 +23,7 @@ class RegionAdminView extends View
 			$("#' . $id . '-hidden").val(node.data.ident);
 			$("#' . $id . '-hidden-name").val(node.data.title);
 			$.ajax({
-				url: "xhr.php?f=getBezirk",
+				url: "/xhr.php?f=getBezirk",
 				data: { "id": node.data.ident },
 				dataType: "json",
 				success: function(data) {
@@ -37,10 +33,10 @@ class RegionAdminView extends View
 						$.globalEval(data.script);
 					}
 					' . $id . '_clearMarkers();
-					image = L.icon({iconUrl: "img/foodsaver.png",
+					image = L.icon({iconUrl: "/img/foodsaver.png",
 						        iconSize: [32.0, 37.0],
 						        iconAnchor: [16.0, 18.0],
-										shadowIconUrl: "img/shadow-foodsaver.png",
+										shadowIconUrl: "/img/shadow-foodsaver.png",
 						        shadowIconSize: [51.0, 37.0],
 						        shadowIconAnchor: [16.0, 18.0]
 					});
@@ -86,10 +82,10 @@ class RegionAdminView extends View
 							' . $id . '_markers[y] = L.marker(loc, {
 						      title:data.betriebe[i].name,
 						      icon:   L.icon( {
-							  			iconUrl: "img/supermarkt.png",
+							  			iconUrl: "/img/supermarkt.png",
 						        	iconSize: [32.0, 37.0],
 						        	iconAnchor: [16.0, 18.0],
-										shadowIconUrl: "img/shadow-foodsaver.png",
+										shadowIconUrl: "/img/shadow-foodsaver.png",
 						        shadowIconSize: [51.0, 37.0],
 						        shadowIconAnchor: [16.0, 18.0]
 							  } )
@@ -112,7 +108,7 @@ class RegionAdminView extends View
 			});
 		},
 		onLazyRead: function(node){
-			 node.appendAjax({url: "xhr.php?f=bezirkTree",
+			 node.appendAjax({url: "/xhr.php?f=bezirkTree",
 				data: { "p": node.data.ident },
 				dataType: "json",
 				success: function(node) {
@@ -144,7 +140,6 @@ class RegionAdminView extends View
 		' . $id . '_markers = [];
 	}');
 
-		$this->func->addStyle('div.map{width:512px;}');
 		$this->func->addContent($this->v_utils->v_field('<div class="map" id="' . $id . '_map"></div>', 'Karte'));
 
 		$zoom = 6;

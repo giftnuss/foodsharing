@@ -273,7 +273,7 @@ class EmailControl extends Control
 			$("#' . $id . '-abort").button().click(function(){
 				showLoader();
 				$.ajax({
-					url:"xhr.php?f=abortEmail",
+					url:"/xhr.php?f=abortEmail",
 					data:{id:' . (int)$mail['id'] . '},
 					complete:function(){hideLoader();closeBox();}
 				});
@@ -288,7 +288,7 @@ class EmailControl extends Control
 				showLoader();
 				$.ajax({
 						dataType:"json",
-						url:"xhr.php?f=continueMail&id=' . (int)$mail['id'] . '",
+						url:"/xhr.php?f=continueMail&id=' . (int)$mail['id'] . '",
 						success : function(data){
 							$("#' . $id . '-continue").hide();
 							if(data.status == 1)

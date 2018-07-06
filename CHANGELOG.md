@@ -21,6 +21,7 @@
 - reduced the height of store info popups by removing the warning frame. !388 #216 @peter.toennies
 - The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
 - fix relative loading of some xhr/other urls !422 @nicksellen
+- fixes user autocomplete fetching for conversation creation 
 
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen
@@ -41,6 +42,7 @@
 - refactored tablesorter @alangecker
 - use instance access for Session !433 @nicksellen
 - refactor Map module to webpack !435 @nicksellen
+- all entrypoints load most JS/CSS via webpack now !432 @NerdyProjects
 
 ## Dev/Test/CI stuff
 - Fix cache clearing during test/deploy !414 @nicksellen

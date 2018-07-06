@@ -3,13 +3,13 @@
 const { join } = require('path')
 const { spawn } = require('child_process')
 
-const modules = require('../modules')
-
 const base = join(__dirname, '..')
 
 const globs = [
-  join(base, '**/*.js'),
-  ...modules.map(name => join(base, `../src/Modules/${name}/**/*.js`))
+  join(base, 'src/**/*.js'),
+  join(base, '../src/**/*.js'),
+  join(base, 'test/**/*.js'),
+  join(base, '*.js')
 ]
 
 const args = process.argv.slice(2)

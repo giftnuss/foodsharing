@@ -15,12 +15,7 @@ import storage from '@/storage'
 import L from 'leaflet'
 
 import 'leaflet.awesome-markers'
-import 'leaflet.awesome-markers.css'
-import 'leaflet.awesome-markers.foodsharing-overrides.css'
-
 import 'leaflet.markercluster'
-import 'leaflet.markercluster/dist/MarkerCluster.css'
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 
 import './Map.css'
 

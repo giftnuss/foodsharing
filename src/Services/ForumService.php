@@ -61,16 +61,13 @@ class ForumService
 	public function mayPostToThread($fsId, $threadId)
 	{
 		$threadStatus = $this->forumGateway->getBotThreadStatus($threadId);
-		$status = $this->regionGateway->getFoodsaverStatus($fsId, $threadStatus['bezirk_id']);
 
-		return $status['active'] && (!$threadStatus['bot_theme'] || $status['ambassador']);
+		return $this->mayPostToRegion($fsId, $threadStatus['bezirk_id'], $threadStatus['bot_theme']);
 	}
 
 	public function mayPostToRegion($fsId, $regionId, $ambassadorForum)
 	{
-		$status = $this->regionGateway->getFoodsaverStatus($fsId, $regionId);
-
-		return $status['active'] && (!$ambassadorForum || $status['ambassador']);
+		return $this->regionGateway->hasMember($fsId, $regionId) && (!$ambassadorForum || $this->regionGateway->isAdmin($fsId, $regionId));
 	}
 
 	public function notifyParticipantsViaBell($threadId, $authorId, $postId)

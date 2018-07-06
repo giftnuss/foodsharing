@@ -2315,6 +2315,19 @@ copy-descriptor@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
 
+copy-webpack-plugin@^4.5.2:
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/copy-webpack-plugin/-/copy-webpack-plugin-4.5.2.tgz#d53444a8fea2912d806e78937390ddd7e632ee5c"
+  dependencies:
+    cacache "^10.0.4"
+    find-cache-dir "^1.0.0"
+    globby "^7.1.1"
+    is-glob "^4.0.0"
+    loader-utils "^1.1.0"
+    minimatch "^3.0.4"
+    p-limit "^1.0.0"
+    serialize-javascript "^1.4.0"
+
 core-js@^2.4.0, core-js@^2.4.1, core-js@^2.5.0:
   version "2.5.7"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.5.7.tgz#f972608ff0cead68b841a16a932d0b183791814e"
@@ -4547,6 +4560,10 @@ jquery-contextmenu@^2.6.4:
   version "2.6.4"
   resolved "https://registry.yarnpkg.com/jquery-contextmenu/-/jquery-contextmenu-2.6.4.tgz#f48e56c436b1becb6935e5dd0def02e39d4e129e"
 
+jquery-jcrop@^0.9.13:
+  version "0.9.13"
+  resolved "https://registry.yarnpkg.com/jquery-jcrop/-/jquery-jcrop-0.9.13.tgz#cda8c9557fffc56540008cc7b6291a0ec4071bf5"
+
 jquery-slimscroll@1.3.3:
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/jquery-slimscroll/-/jquery-slimscroll-1.3.3.tgz#60786588f5111c49178060a06a1766833e6c6ee6"
@@ -5814,7 +5831,7 @@ p-lazy@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/p-lazy/-/p-lazy-1.0.0.tgz#ec53c802f2ee3ac28f166cc82d0b2b02de27a835"
 
-p-limit@^1.1.0:
+p-limit@^1.0.0, p-limit@^1.1.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-1.3.0.tgz#b86bd5f0c25690911c7590fcbfc2010d54b3ccb8"
   dependencies:
@@ -7723,10 +7740,6 @@ type-is@^1.5.5, type-is@~1.6.15, type-is@~1.6.16:
     media-typer "0.3.0"
     mime-types "~2.1.18"
 
-typeahead-addresspicker@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/typeahead-addresspicker/-/typeahead-addresspicker-1.0.1.tgz#933b36ec2aad4cca4575d8d240bac15e3fd10ae2"
-
 typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
@@ -7761,6 +7774,10 @@ uglifyjs-webpack-plugin@^1.2.4:
 ultron@1.0.x:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/ultron/-/ultron-1.0.2.tgz#ace116ab557cd197386a4e88f4685378c8b2e4fa"
+
+underscore@1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.7.0.tgz#6bbaf0877500d36be34ecaa584e0db9fef035209"
 
 underscore@~1.6.0:
   version "1.6.0"

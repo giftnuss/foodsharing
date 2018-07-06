@@ -46,7 +46,7 @@ class QuizControl extends Control
 			if (!isset($_GET['id'])) {
 				$this->func->go('/?page=quiz&id=1');
 			}
-			$this->func->addContent($this->view->topbar('Quiz' . $topbtn, $slogan, '<img src="img/quiz.png" />'), CNT_TOP);
+			$this->func->addContent($this->view->topbar('Quiz' . $topbtn, $slogan, '<img src="/img/quiz.png" />'), CNT_TOP);
 			$this->func->addContent($this->view->listQuiz($this->model->listQuiz()), CNT_LEFT);
 			$this->func->addContent($this->view->quizMenu(), CNT_LEFT);
 		}
@@ -59,7 +59,7 @@ class QuizControl extends Control
 				$this->func->addBread($name, '/?page=quiz&id=' . (int)$_GET['id']);
 			}
 			$this->func->addBread('Frage  #' . $q['id'], '/?page=quiz&sub=wall&id=' . (int)$q['id']);
-			$this->func->addContent($this->view->topbar('Quizfrage  #' . $q['id'], '<a style="float:right;color:#FFF;font-size:13px;margin-top:-20px;" href="#" class="button" onclick="ajreq(\'editquest\',{id:' . (int)$q['id'] . ',qid:' . (int)$q['quiz_id'] . '});return false;">Frage bearbeiten</a>' . $q['text'] . '<p><strong>' . $q['fp'] . ' Fehlerpunkte, ' . $q['duration'] . ' Sekunden zum Antworten</strong></p>', '<img src="img/quiz.png" />'), CNT_TOP);
+			$this->func->addContent($this->view->topbar('Quizfrage  #' . $q['id'], '<a style="float:right;color:#FFF;font-size:13px;margin-top:-20px;" href="#" class="button" onclick="ajreq(\'editquest\',{id:' . (int)$q['id'] . ',qid:' . (int)$q['quiz_id'] . '});return false;">Frage bearbeiten</a>' . $q['text'] . '<p><strong>' . $q['fp'] . ' Fehlerpunkte, ' . $q['duration'] . ' Sekunden zum Antworten</strong></p>', '<img src="/img/quiz.png" />'), CNT_TOP);
 			$this->func->addContent($this->v_utils->v_field($this->wallposts('question', $_GET['id']), 'Kommentare'), CNT_MAIN);
 			$this->func->addContent($this->view->answerSidebar($this->model->getAnswers($q['id']), $_GET['id']), CNT_RIGHT);
 		}
@@ -115,9 +115,9 @@ class QuizControl extends Control
 
 	public function sessiondetail()
 	{
-		if ($fs = $this->model->getValues(array('name', 'nachname', 'photo', 'rolle', 'geschlecht'), 'foodsaver', $_GET['fsid'])) {
+		if ($fs = $this->model->getValues(array('name', 'nachname', 'photo', 'rolle', 'geschlecht', 'sleep_status'), 'foodsaver', $_GET['fsid'])) {
 			$this->func->addBread('Quiz Sessions von ' . $fs['name'] . ' ' . $fs['nachname']);
-			$this->func->addContent($this->view->topbar('Quiz-Sessions von ' . $fs['name'] . ' ' . $fs['nachname'], $this->func->getRolle($fs['geschlecht'], $fs['rolle']), $this->func->img($fs['photo'])), CNT_TOP);
+			$this->func->addContent($this->view->topbar('Quiz-Sessions von ' . $fs['name'] . ' ' . $fs['nachname'], $this->func->getRolle($fs['geschlecht'], $fs['rolle']), $this->func->avatar($fs)), CNT_TOP);
 
 			if ($sessions = $this->model->getUserSessions($_GET['fsid'])) {
 				$this->func->addContent($this->view->userSessions($sessions, $fs));
@@ -139,7 +139,7 @@ class QuizControl extends Control
 			$this->func->addBread('Auswertung');
 			$slogan = 'Klausurfragen für ' . $quiz['name'];
 
-			$this->func->addContent($this->view->topbar('Auswertung für ' . $quiz['name'] . ' Quiz', $slogan, 'img/quiz.png'), CNT_TOP);
+			$this->func->addContent($this->view->topbar('Auswertung für ' . $quiz['name'] . ' Quiz', $slogan, '<img src="/img/quiz.png" />'), CNT_TOP);
 		}
 	}
 

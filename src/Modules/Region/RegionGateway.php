@@ -171,26 +171,22 @@ class RegionGateway extends BaseGateway
 	 * @param $fsId
 	 * @param $regionId
 	 *
-	 * @return array with flags 'active' and 'ambassador' describing these properties of the given user/region combination
+	 * @return bool true when the given user is active (an accepted member) in the given region
 	 */
-	public function getFoodsaverStatus($fsId, $regionId)
+	public function hasMember($fsId, $regionId)
 	{
-		$res['active'] = $this->db->fetchValue(
-			'
-			SELECT	hb.active
-			FROM	`fs_foodsaver_has_bezirk` hb
-			WHERE	hb.bezirk_id = :region_id
-			AND 	hb.foodsaver_id = :fs_id
-		', ['region_id' => $regionId, 'fs_id' => $fsId]) == 1;
-		$res['ambassador'] = $this->db->fetchValue(
-			'
-			SELECT	1
-			FROM	`fs_botschafter` bot
-			WHERE bot.foodsaver_id = :fs_id
-			AND bot.bezirk_id = :region_id
-		', ['region_id' => $regionId, 'fs_id' => $fsId]) == 1;
+		return $this->db->exists('fs_foodsaver_has_bezirk', ['bezirk_id' => $regionId, 'foodsaver_id' => $fsId, 'active' => 1]);
+	}
 
-		return $res;
+	/**
+	 * @param $fsId
+	 * @param $regionId
+	 *
+	 * @return bool true when the given user is an admin/ambassador for the given group/region
+	 */
+	public function isAdmin($fsId, $regionId)
+	{
+		return $this->db->exists('fs_botschafter', ['bezirk_id' => $regionId, 'foodsaver_id' => $fsId]);
 	}
 
 	public function listForFoodsaver($fs_id): array

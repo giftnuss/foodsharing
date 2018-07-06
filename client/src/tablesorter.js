@@ -2,6 +2,7 @@
 import $ from 'jquery'
 import 'tablesorter'
 import 'tablesorter-pagercontrols'
+import 'css/tablesorter.css'
 
 // duplicated in /js/tablesorter.js
 $('table.tablesorter').each((index, table) => {

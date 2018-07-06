@@ -177,7 +177,7 @@ class MailboxView extends View
 			<div class="popbox">
 				<div class="message-top">
 					<div class="buttonbar">
-						<a href="#" onclick="mb_moveto(3);return false;" class="button">' . $this->func->s('move_to_trash') . '</a> <a href="#" onclick="mb_answer();return false;" class="button">' . $this->func->s('answer') . '</a><!-- <a href="#" class="button">' . $this->func->s('forward') . '</a>--> 
+						<a href="#" onclick="mb_moveto(3);return false;" class="button">' . $this->func->s('move_to_trash') . '</a> <a href="#" onclick="mb_answer();return false;" class="button">' . $this->func->s('answer') . '</a> 
 					</div>
 					<table class="header">
 						<tr>
@@ -370,10 +370,10 @@ class MailboxView extends View
 				$("#mail-subject").before(\'<tr><td class="label">&nbsp;</td><td class="data"><input type="text" name="an[]" class="edit-an" value="" /></td></tr>\');	
 					
 				u_addTypeHead();
-				var height = (bodytextheight-(availmail_count*28));
+				var height = $("#edit-body").height() - (availmail_count * 28);
 				if(height > 40)
 				{
-					$("#edit-body").css("height",(bodytextheight-(availmail_count*28))+"px");	
+					$("#edit-body").css("height", height+"px");	
 				}
 				
 				$(".edit-an:last").focus();			

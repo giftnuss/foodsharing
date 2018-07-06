@@ -21,6 +21,7 @@ import {
 
 import 'jquery-tagedit'
 import 'jquery-tagedit-auto-grow-input'
+import '@/tablesorter'
 
 import { store, user } from '@/server-data'
 

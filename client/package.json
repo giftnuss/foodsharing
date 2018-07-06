@@ -10,12 +10,14 @@
     "test": "node test"
   },
   "dependencies": {
+    "copy-webpack-plugin": "^4.5.2",
     "cropperjs": "^1.3.3",
     "font-awesome": "^4.7.0",
     "fullpage.js": "2.9.5",
     "install": "^0.10.4",
     "jquery": "1.11.0",
     "jquery-contextmenu": "^2.6.4",
+    "jquery-jcrop": "^0.9.13",
     "jquery-slimscroll": "1.3.3",
     "jquery-ui": "1.10.4",
     "jquery.ui.position": "^1.11.4",
@@ -28,7 +30,7 @@
     "socket.io-client": "1.5.0",
     "timeago": "^1.4.1",
     "tinysort": "^2.3.6",
-    "typeahead-addresspicker": "^1.0.1",
+    "underscore": "1.7.0",
     "whatwg-fetch": "^2.0.4"
   },
   "devDependencies": {

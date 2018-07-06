@@ -1,0 +1,10 @@
+import '@/core'
+import '@/globals'
+import 'jquery-tagedit'
+import 'jquery-tagedit-auto-grow-input'
+import 'jquery-dynatree'
+import 'leaflet'
+import 'leaflet.awesome-markers'
+import 'leaflet.markercluster'
+
+import './RegionAdmin.css'

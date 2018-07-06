@@ -74,7 +74,7 @@ class View
 		$out = $this->v_utils->v_field('
 		<p>Online-Termin</p>
 		<p style="text-align:center;">
-			<a target="_blank" href="https://wiki.foodsharing.de/Mumble"><img src="img/mlogo.png" alt="Mumble" /></a>
+			<a target="_blank" href="https://wiki.foodsharing.de/Mumble"><img src="/img/mlogo.png" alt="Mumble" /></a>
 		</p>
 		<p>
 			Online-Sprachkonferenzen machen wir mit Mumble	
@@ -306,18 +306,18 @@ class View
 										data: {term:request.term},
 						                dataType: "json",
 						                success: function(data) {
-											
-											local = [];
-											term = request.term.toLowerCase();
-											for(i=0;i<localsource.length;i++)
-											{
-												if(localsource[i].value.indexOf(term) > 0)
-												{
-													local.push(localsource[i]);
-												}
-											}
-							
-											response(merge(local,data,"id"));
+											response(data);
+											// following doesn\'t work somehow => ignoring
+											// local = [];
+											// term = request.term.toLowerCase();
+											// for(i=0;i<localsource.length;i++)
+											// {
+											// 	if(localsource[i].value.indexOf(term) > 0)
+											// 	{
+											// 		local.push(localsource[i]);
+											// 	}
+											// }
+											// response(merge(local,data,"id"));
 						                }
 						            });
 								}
@@ -336,7 +336,7 @@ class View
 				}
 			});
 				
-				var localsource = [{"id":"56","value":"Raphael Wintrich"},{"id":"62","value":"Raphael"}];
+				var localsource = [];
 		');
 
 		$input = '<input type="text" name="' . $id . '[]" value="" class="tag input text value" />';

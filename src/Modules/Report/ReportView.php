@@ -191,13 +191,13 @@ class ReportView extends View
 
 	public function listReports($reports): string
 	{
-		$this->func->addStyle('#table td{ cursor:pointer; }');
+		$this->func->addStyle('.tablesorter td{ cursor:pointer; }');
 
 		$this->func->addJs('
-			$("#table tr").click(function(){
+			$(".tablesorter tr").click(function(){
 				rid = parseInt($(this).children("td:first").children("input:first").val());
 				ajreq("loadReport",{id:rid});
-			});		
+			});
 		');
 
 		$rows = array();
