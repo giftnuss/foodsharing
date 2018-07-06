@@ -3,7 +3,6 @@ const merge = require('webpack-merge')
 const webpackBase = require('./webpack.base')
 const { writeFileSync } = require('fs')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const path = require('path')
@@ -20,10 +19,6 @@ const plugins = []
 
 if (!dev) {
   plugins.push(
-    new MiniCssExtractPlugin({
-      filename: dev ? 'css/[name].css' : 'css/[id].[hash].css',
-      chunkFilename: 'css/[id].[hash].css'
-    }),
     new BundleAnalyzerPlugin({
       analyzerMode: 'static',
       reportFilename: 'bundlesize.html',
@@ -85,20 +80,6 @@ module.exports = merge(webpackBase, {
   },
   module: {
     rules: [
-      {
-        test: /\.css$/,
-        use: [
-          dev ? 'style-loader' : MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: {
-              alias: {
-                './img': ('img')
-              }
-            }
-          }
-        ]
-      },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',

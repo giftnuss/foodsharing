@@ -5,6 +5,8 @@
 - update symfony to 4.1.0 as well as other dependencies !351 @NerdyProjects
 - remove user list in forums to allow big regions to work !421 @NerdyProjects
 - add php intl component for localized internationalization !421 @NerdyProjects
+- add vue.js, bootstrap & scss !430 @alangecker
+- new store list with filtering !430 #191 @alangecker
 
 ## Bugfixes
 - removed XSS-possibility in xhr_out method. !370 @theolampert

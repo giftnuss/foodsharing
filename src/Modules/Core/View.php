@@ -421,4 +421,12 @@ class View
 
 		return $out;
 	}
+
+	public function vueComponent($elementName, $props = array())
+	{
+		return $this->twig->render('partials/vue-wrapper.twig', [
+			'elementName' => $elementName,
+			'props' => $props
+		]);
+	}
 }
