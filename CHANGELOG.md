@@ -24,6 +24,7 @@
 - The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
 - fix relative loading of some xhr/other urls !422 @nicksellen
 - fixes user autocomplete fetching for conversation creation 
+- fix profile sleeping hat variable #243
 
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen

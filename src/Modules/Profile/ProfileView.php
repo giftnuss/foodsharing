@@ -202,7 +202,7 @@ class ProfileView extends View
 
 		if ($this->foodsaver['sleep_status'] == 1) {
 			$infos[] = array(
-				'name' => $this->func->sv('foodsaver_sleeping_hat', array('name' => $this->foodsaver['name'], 'von' => date('d.m.Y', $this->foodsaver['sleep_from_ts']), 'bis' => date('d.m.Y', $this->foodsaver['sleep_until_ts']))),
+				'name' => $this->func->sv('foodsaver_sleeping_hat_time', array('name' => $this->foodsaver['name'], 'datum_von' => date('d.m.Y', $this->foodsaver['sleep_from_ts']), 'datum_bis' => date('d.m.Y', $this->foodsaver['sleep_until_ts']))),
 				'val' => $this->foodsaver['sleep_msg']
 			);
 		}
