@@ -12,7 +12,7 @@ const glob = require('glob')
 
 const dev = process.env.NODE_ENV !== 'production'
 
-const assetsPath = resolve('../assets')
+const assetsPath = dev ? resolve('../dev-assets') : resolve('../assets')
 const modulesJsonPath = join(assetsPath, 'modules.json')
 
 const plugins = []

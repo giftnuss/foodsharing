@@ -102,7 +102,11 @@ abstract class Control
 			}
 		}
 		if ($this->isControl) {
-			$webpackModules = $dir . '../../../assets/modules.json';
+			if (FS_ENV === 'dev' && isset($_SERVER['HTTP_USE_DEV_ASSETS'])) {
+				$webpackModules = $dir . '../../../dev-assets/modules.json';
+			} else {
+				$webpackModules = $dir . '../../../assets/modules.json';
+			}
 			$manifest = json_decode(file_get_contents($webpackModules), true);
 			$entry = 'Modules/' . $moduleName;
 			if (isset($manifest[$entry])) {

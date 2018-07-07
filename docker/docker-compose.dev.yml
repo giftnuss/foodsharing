@@ -46,13 +46,19 @@ services:
   client:
     container_name: foodsharing_dev_client
     image: node:9
-    # We don't run anything long running in here yet - build is run via ./scripts/build-assets
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    # we don't run webpack dev mode by default, make them run ./scripts/dev
     command: 'true'
     working_dir: /app/client
     user: "${UID}"
     volumes:
       - ../:/app
       - client-node-modules:/app/client/node_modules
+    environment:
+      HOST: 0.0.0.0
+      PROXY_TARGET: http://web:8080
 
   # php mail queue runner
   #------------------------------------

@@ -5,8 +5,9 @@
     "lint": "bin/standard --verbose | snazzy",
     "fix": "bin/standard --fix --verbose | snazzy",
     "clean-assets": "shx rm -rf ../assets",
+    "clean-dev-assets": "shx rm -rf ../dev-assets",
     "build": "yarn clean-assets && NODE_ENV=production webpack",
-    "dev": "yarn clean-assets && webpack-serve --config serve.config.js",
+    "dev": "yarn clean-dev-assets && webpack-serve --config serve.config.js",
     "test": "node test"
   },
   "dependencies": {
