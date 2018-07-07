@@ -7,7 +7,7 @@
             <a 
                 :class="['btn', 'btn-sm', (emoji.mine ? 'btn-primary' : 'btn-secondary')]"
                 :title="emoji.key"
-                @click="toogleReaction(emoji.key)"
+                @click="toggleReaction(emoji.key)"
             >
                 {{ emoji.count }}x <Emoji :name="emoji.key" />
             </a>
@@ -77,7 +77,7 @@ export default {
       }
   },
   methods: {
-    toogleReaction(key, dontRemove=false) {
+    toggleReaction(key, dontRemove=false) {
         let myReactionKeys = this.reactions.filter(e => e.mine).map(e => e.key)
 
         if(myReactionKeys.indexOf(key) !== -1) {
@@ -89,7 +89,7 @@ export default {
     },
     giveEmoji(key) {
         this.$refs.emojiSelector.hide()
-        this.toogleReaction(key, true)
+        this.toggleReaction(key, true)
     },
   }
 }
