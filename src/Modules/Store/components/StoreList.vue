@@ -42,9 +42,10 @@
           :current-page="currentPage"
           :per-page="perPage"
           :sort-compare="compare"
+          responsive
         >
          <template slot="status" slot-scope="data">
-            <StoreStatusIcon :status="data.value" />
+            <div class="text-center"><StoreStatusIcon :status="data.value" /></div>
           </template>
           <template slot="name" slot-scope="data">
               <a class="ui-corner-all" :href="`/?page=betrieb&id=${data.item.id}`">{{ data.value }}</a>
