@@ -14,6 +14,12 @@ import i18n from '@/i18n'
 import './Region.css'
 import * as wall from '@/wall'
 import { expose } from '@/utils'
+import { vueUse } from '@/vue'
+import ThreadPost from './components/ThreadPost'
+
+vueUse({
+  ThreadPost
+})
 
 expose({
   unfollow,

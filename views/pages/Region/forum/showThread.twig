@@ -17,7 +17,12 @@
 
 <div class="head ui-widget-header ui-corner-top">{{ thread.name }}</div>
 {% for post in posts %}
-    <div id="tpost-{{ post.id }}"
+
+
+    {% include "partials/vue-wrapper.twig" with { elementName: "thread-post", props: {post: post} } %}
+
+
+    {# <div id="tpost-{{ post.id }}"
          class="{% if loop.first %}ui-corner-bottom{% else %}ui-corner-all{% endif %} ui-widget ui-widget-content margin-bottom ui-padding">
         <div class="post">
             <div class="top_bar">
@@ -73,7 +78,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> #}
 {% endfor %}
 {% embed 'components/field.twig' with {'classes': ['ui-padding']} %}
 {% block content %}
