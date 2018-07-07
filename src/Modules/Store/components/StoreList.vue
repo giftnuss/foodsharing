@@ -4,27 +4,32 @@
       <div class="card-header text-white bg-primary">
         Alle Betriebe aus dem Bezirk {{ regionName }} (<span v-if="stores.length !== storesFiltered.length">{{ storesFiltered.length }} von </span>{{ stores.length }})
       </div>
-      <div v-if="stores.length" class="card-body p-0">
+      <div
+        v-if="stores.length"
+        class="card-body p-0">
         <div class="form-row p-1 ">
           <div class="col-2 text-center">
             <label class=" col-form-label col-form-label-sm">Filtern nach...</label>
           </div>
           <div class="col-4">
             <input
+              v-model="filterText"
               type="text"
               class="form-control form-control-sm"
               placeholder="Name/Adresse/Bezirk"
-              v-model="filterText"
-            />
+            >
           </div>
           <div class="col-3">
-            <b-form-select v-model="filterStatus" :options="statusOptions" size="sm" />
+            <b-form-select
+              v-model="filterStatus"
+              :options="statusOptions"
+              size="sm" />
           </div>
           <div class="col">
             <button
+              v-b-tooltip.hover
               type="button"
               class="btn btn-sm"
-              v-b-tooltip.hover
               title="Filter leeren"
               @click="clearFilter"
             >
@@ -37,25 +42,37 @@
         <b-table
           :fields="fields"
           :items="storesFiltered"
-          small
-          hover
           :current-page="currentPage"
           :per-page="perPage"
           :sort-compare="compare"
+          small
+          hover
           responsive
         >
-         <template slot="status" slot-scope="data">
+          <template
+            slot-scope="data"
+            slot="status">
             <div class="text-center"><StoreStatusIcon :status="data.value" /></div>
           </template>
-          <template slot="name" slot-scope="data">
-              <a class="ui-corner-all" :href="`/?page=betrieb&id=${data.item.id}`">{{ data.value }}</a>
+          <template
+            slot-scope="data"
+            slot="name">
+            <a
+              :href="`/?page=betrieb&id=${data.item.id}`"
+              class="ui-corner-all">{{ data.value }}</a>
           </template>
-       </b-table>
-       <div class="float-right p-1 pr-3">
-         <b-pagination :total-rows="storesFiltered.length" :per-page="perPage" v-model="currentPage" class="my-0" />
-       </div>
+        </b-table>
+        <div class="float-right p-1 pr-3">
+          <b-pagination
+            :total-rows="storesFiltered.length"
+            :per-page="perPage"
+            v-model="currentPage"
+            class="my-0" />
+        </div>
       </div>
-      <div v-else class="card-body">
+      <div
+        v-else
+        class="card-body">
         Es sind noch keine Betriebe eingetragen
       </div>
     </div>
@@ -69,11 +86,21 @@ import bFormSelect from '@b/components/form-select/form-select'
 import bTooltip from '@b/directives/tooltip/tooltip'
 import StoreStatusIcon from './StoreStatusIcon.vue'
 
-const no_locale = /^[\w-.\s,]*$/
+const noLocale = /^[\w-.\s,]*$/
 
 export default {
-  components: {bTable, bPagination, bFormSelect, StoreStatusIcon},
-  directives: {bTooltip},
+  components: { bTable, bPagination, bFormSelect, StoreStatusIcon },
+  directives: { bTooltip },
+  props: {
+    regionName: {
+      type: String,
+      default: ''
+    },
+    stores: {
+      type: Array,
+      default: () => []
+    }
+  },
   data () {
     return {
       currentPage: 1,
@@ -84,7 +111,7 @@ export default {
         status: {
           label: 'Status',
           tdClass: 'status',
-          sortable: true,
+          sortable: true
         },
         name: {
           label: 'Name',
@@ -104,32 +131,22 @@ export default {
         }
       },
       statusOptions: [
-        {value: null, text: 'Status'},
-        {value: 1, text: 'Noch kein Kontakt'},
-        {value: 2, text: 'Verhandlungen laufen'},
-        {value: 3, text: 'In Kooperation'},
-        {value: 4, text: 'Will nicht kooperieren'},
-        {value: 6, text: 'Wirft nichts weg'},
+        { value: null, text: 'Status' },
+        { value: 1, text: 'Noch kein Kontakt' },
+        { value: 2, text: 'Verhandlungen laufen' },
+        { value: 3, text: 'In Kooperation' },
+        { value: 4, text: 'Will nicht kooperieren' },
+        { value: 6, text: 'Wirft nichts weg' }
       ],
-      compare(a, b, key) {
+      compare (a, b, key) {
         const elemA = a[key]
         const elemB = b[key]
-        if (typeof elemA === 'number' || (no_locale.test(elemA) && no_locale.test(elemB))) {
+        if (typeof elemA === 'number' || (noLocale.test(elemA) && noLocale.test(elemB))) {
           return (elemA > elemB ? 1 : (elemA === elemB ? 0 : -1))
         } else {
-          return elemA.localeCompare(elemB);
+          return elemA.localeCompare(elemB)
         }
       }
-    }
-  },
-  props: {
-    regionName: {
-      type: String,
-      default: ''
-    },
-    stores: {
-      type: Array,
-      default: () => []
     }
   },
   computed: {
@@ -138,7 +155,7 @@ export default {
       let filterText = this.filterText ? this.filterText.toLowerCase() : null
       return this.stores.filter((store) => {
         return (
-          (!this.filterStatus || store.status == this.filterStatus) &&
+          (!this.filterStatus || store.status === this.filterStatus) &&
           (!filterText || (
             store.name.toLowerCase().indexOf(filterText) !== -1 ||
             store.address.toLowerCase().indexOf(filterText) !== -1 ||

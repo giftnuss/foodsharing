@@ -1,5 +1,3 @@
-/* eslint-env mocha */
-
 import assert from 'assert'
 import sinon from 'sinon'
 

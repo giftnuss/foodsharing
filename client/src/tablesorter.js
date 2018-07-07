@@ -15,12 +15,12 @@ $('table.tablesorter').each((index, table) => {
 
   // column disabled for sorting? set in the options
   $('> thead th', table).each((index, el) => {
-    if ($(el).data('sort') === false) options.headers[index] = {sorter: false}
+    if ($(el).data('sort') === false) options.headers[index] = { sorter: false }
   })
   const sorter = $(table).tablesorter(options)
 
   if (pager.length) {
-    sorter.tablesorterPager({container: $(pager)})
+    sorter.tablesorterPager({ container: $(pager) })
 
     $('.prev', pager).button({
       icons: {

@@ -262,7 +262,7 @@ export function initialize () {
         g_firstChatUpdate = true
       },
       helpers: {
-        overlay: {closeClick: false}
+        overlay: { closeClick: false }
       }
     })
   })
@@ -299,7 +299,7 @@ export function addbanana (fsid) {
   $('#fs-profile-rate-comment').dialog('open')
 }
 export function login () {
-  ajreq('login', {app: 'login'})
+  ajreq('login', { app: 'login' })
 }
 
 export function profile (id) {
@@ -529,14 +529,14 @@ export function infoMenu () {
     if ($('#msgbar-basket').is(':visible')) {
       $('#msgbar-basket').hide()
       window.g_interval_newBasket = setInterval(function () {
-        ajreq('update', {app: 'basket', loader: false})
+        ajreq('update', { app: 'basket', loader: false })
       }, 10000)
     } else {
       clearInterval(window.g_interval_newBasket)
       if ($('#msgbar-basket ul li.msg').length == 0) {
         $('#msgbar-basket ul').prepend('<li class="loading">&nbsp;</li>')
       }
-      ajreq('loadupdates', {app: 'basket', loader: false})
+      ajreq('loadupdates', { app: 'basket', loader: false })
       $('#msgbar-basket').show()
     }
 

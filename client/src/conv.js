@@ -65,7 +65,7 @@ const conv = {
       this.init()
     }
     ajax.req('msg', 'user2conv', {
-      data: {fsid: fsid},
+      data: { fsid: fsid },
       success: function (ret) {
         conv.chat(ret.cid)
       }

@@ -196,7 +196,7 @@ const msg = {
       $itemLink.children('.time').text(timeformat.nice(message.time))
       $item.hide()
       $item.prependTo('#conversation-list ul:first')
-      $item.show('highlight', {color: '#F5F5B5'})
+      $item.show('highlight', { color: '#F5F5B5' })
     } else {
       msg.loadConversationList()
     }
@@ -285,7 +285,7 @@ const msg = {
 
     msg.$conversation.children('ul:first').prepend($el)
 
-    $el.show('highlight', {color: '#F5F5B5'})
+    $el.show('highlight', { color: '#F5F5B5' })
   },
 
   appendMsg: function (message) {
@@ -297,7 +297,7 @@ const msg = {
 
     msg.$conversation.children('ul:first').append($el)
 
-    $el.show('highlight', {color: '#F5F5B5'})
+    $el.show('highlight', { color: '#F5F5B5' })
 
     this.last_message_id = message.id
   },
@@ -414,7 +414,7 @@ const msg = {
           let position = $('#msg-' + lmid).position()
 
           if (!msg.isMob()) {
-            $('#msg-conversation').slimScroll({scrollTo: position.top + 'px'})
+            $('#msg-conversation').slimScroll({ scrollTo: position.top + 'px' })
           } else {
             $(window).scrollTop(position.top)
           }
@@ -503,7 +503,7 @@ const msg = {
       msg.$convs.append($el)
     }
 
-    $el.show('highlight', {color: '#F5F5B5'})
+    $el.show('highlight', { color: '#F5F5B5' })
 
     msg.$convs.children('.noconv').remove()
   },
@@ -513,7 +513,7 @@ const msg = {
   },
   scrollBottom: function () {
     if (!msg.isMob()) {
-      $('#msg-conversation').slimScroll({scrollTo: $('#msg-conversation').prop('scrollHeight') + 'px'})
+      $('#msg-conversation').slimScroll({ scrollTo: $('#msg-conversation').prop('scrollHeight') + 'px' })
     } else {
       $(window).scrollTop($(document).height())
     }

@@ -102,7 +102,7 @@ if (['botforum', 'forum'].includes(GET('sub'))) {
           showLoader()
           $.ajax({
             url: 'xhr.php?f=delPost',
-            data: {'pid': clickedPid},
+            data: { 'pid': clickedPid },
             success: function (ret) {
               if (ret == 1) {
                 $('#tpost-' + clickedPid).remove()
@@ -143,21 +143,21 @@ function handleButtonRequest (module, method, data, buttonSelector) {
 }
 
 export function unfollow (tid, bid) {
-  handleButtonRequest('bezirk', 'unfollowTheme', {tid: tid, bid: bid}, '.bt_unfollow')
+  handleButtonRequest('bezirk', 'unfollowTheme', { tid: tid, bid: bid }, '.bt_unfollow')
   return false
 }
 
 export function follow (tid, bid) {
-  handleButtonRequest('bezirk', 'followTheme', {tid: tid, bid: bid}, '.bt_follow')
+  handleButtonRequest('bezirk', 'followTheme', { tid: tid, bid: bid }, '.bt_follow')
   return false
 }
 
 export function unstick (tid, bid) {
-  handleButtonRequest('bezirk', 'unstickTheme', {tid: tid, bid: bid}, '.bt_unstick')
+  handleButtonRequest('bezirk', 'unstickTheme', { tid: tid, bid: bid }, '.bt_unstick')
   return false
 }
 
 export function stick (tid, bid) {
-  handleButtonRequest('bezirk', 'stickTheme', {tid: tid, bid: bid}, '.bt_stick')
+  handleButtonRequest('bezirk', 'stickTheme', { tid: tid, bid: bid }, '.bt_stick')
   return false
 }

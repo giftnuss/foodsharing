@@ -142,7 +142,7 @@ $('#work_group_form_photo-link').fancybox({
     onAfterClose.push(() => upload.removeEventListener('click', onUploadClick))
   },
   helpers: {
-    overlay: {closeClick: false}
+    overlay: { closeClick: false }
   }
 })
 

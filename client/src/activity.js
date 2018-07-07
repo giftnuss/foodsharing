@@ -58,7 +58,7 @@ const activity = {
     this.page = 0
     this.$container.html('')
 
-    let opt = {listings: 1}
+    let opt = { listings: 1 }
     if (option != undefined) {
       opt = option
     }
@@ -108,7 +108,7 @@ const activity = {
 
       $el.autosize()
       $el.focus(function () {
-        $el.parent().css({opacity: 1})
+        $el.parent().css({ opacity: 1 })
       })
 
       $el.keydown(function (event) {
@@ -121,7 +121,7 @@ const activity = {
 
           $.ajax({
             url: $el.data('url'),
-            data: {msg: $el.val()},
+            data: { msg: $el.val() },
             dataType: 'json',
             type: 'post',
             complete: function () {
@@ -154,7 +154,7 @@ const activity = {
   },
 
   sortUpdates: function () {
-    tinysort('#activity li', {order: 'desc', attr: 'data-ts'})
+    tinysort('#activity li', { order: 'desc', attr: 'data-ts' })
 
     this.initQuickreply()
   },
@@ -186,7 +186,7 @@ const activity = {
       $('#activity-option-form input[type=\'checkbox\']').each(function () {
         if (!this.checked) {
           let $el = $(this)
-          activity.listOptions.push({index: $el.attr('name'), id: $el.val()})
+          activity.listOptions.push({ index: $el.attr('name'), id: $el.val() })
         }
       })
 

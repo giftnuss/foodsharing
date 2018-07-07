@@ -52,6 +52,7 @@
 - Add testing for client js !422 @nicksellen
 - Improve linting config !431 @nicksellen
 - Add ./scripts/dev for running webpack dev env !437 @nicksellen
+- Improve linting config more (add vue linting) !441 @nicksellen
 
 # 2018-05-24
 

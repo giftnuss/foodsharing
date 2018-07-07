@@ -19,7 +19,7 @@ expose({
 })
 
 function u_wallpostReady (postid) {
-  ajreq('infofollower', {fid: $('#ft-id').val(), pid: postid})
+  ajreq('infofollower', { fid: $('#ft-id').val(), pid: postid })
 }
 
 $('#wall-submit').bind('mousedown', function () {

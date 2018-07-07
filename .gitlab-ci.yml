@@ -32,7 +32,7 @@ stages:
 
 build:
   <<: *defaults
-  image: node:9.9.0
+  image: node:10
   stage: build
   script:
   - (cd client && yarn && yarn lint && yarn build)
@@ -46,7 +46,7 @@ build:
 
 build:docs:
   <<: *defaults
-  image: node:9.9.0
+  image: node:10
   stage: build
   script:
   - yarn global add gitbook-cli
@@ -82,7 +82,7 @@ test:
 
 test:client:
   <<: *defaults
-  image: node:9.9.0
+  image: node:10
   stage: test
   script:
   - (cd client && yarn && yarn test)

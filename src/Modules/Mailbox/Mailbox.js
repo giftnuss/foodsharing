@@ -50,7 +50,7 @@ function u_getGeo (id) {
         hideLoader()
       }
     }, function (lat, lon) {
-      ajreq('updateGeo', {lat: lat, lon: lon, id: id})
+      ajreq('updateGeo', { lat: lat, lon: lon, id: id })
     })
   }
 }

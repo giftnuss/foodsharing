@@ -29,7 +29,7 @@ function u_getGeo (id, conti) {
         hideLoader()
       }
     }, function (lat, lon) {
-      ajreq('updateGeo', {lat: lat, lon: lon, id: id})
+      ajreq('updateGeo', { lat: lat, lon: lon, id: id })
     })
   }
 }

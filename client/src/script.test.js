@@ -1,5 +1,3 @@
-/* eslint-env mocha */
-
 import sinon from 'sinon'
 import assert from 'assert'
 import { sleep, jsonOK, setGETParams, resetModules } from '>/utils'

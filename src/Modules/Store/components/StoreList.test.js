@@ -1,5 +1,3 @@
-/* eslint-env mocha */
-
 import sinon from 'sinon'
 import { mount } from '@vue/test-utils'
 import { resetModules } from '>/utils'

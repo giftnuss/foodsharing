@@ -1,18 +1,27 @@
 <template>
-    <span class="status" v-b-tooltip.hover :title="description" :data-status="status">
-        <i class="fa fa-circle"  />
-    </span>
+  <span
+    v-b-tooltip.hover
+    :title="description"
+    :data-status="status"
+    class="status">
+    <i class="fa fa-circle" />
+  </span>
 </template>
 
 <script>
 import bTooltip from '@b/directives/tooltip/tooltip'
 
 export default {
-  directives: {bTooltip},
-  props: ['status'],
+  directives: { bTooltip },
+  props: {
+    status: {
+      type: Number,
+      required: true
+    }
+  },
   computed: {
     description () {
-      switch (parseInt(this.status)) {
+      switch (this.status) {
         case 1:
           return 'Es besteht noch kein Kontakt'
         case 2:
