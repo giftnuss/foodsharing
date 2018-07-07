@@ -42,7 +42,8 @@
     "friendsofsymfony/rest-bundle": "^2.3",
     "symfony/debug": "^4.1",
     "jms/serializer-bundle": "^2.4",
-    "mrclay/jsmin-php": "^2.3"
+    "mrclay/jsmin-php": "^2.3",
+    "sensio/framework-extra-bundle": "^5.2"
   },
   "autoload": {
     "psr-4": {"Foodsharing\\": "src/",

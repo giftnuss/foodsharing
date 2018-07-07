@@ -13,6 +13,9 @@ $border-radius: 6px;
 // scoped inside a class to decide, where the styles are applied
 // should be removed at some point
 .bootstrap {
+    textarea {
+        height: initial;
+    }
     @import "~bootstrap/scss/reboot";
     @import "~bootstrap/scss/type";
     @import "~bootstrap/scss/images";

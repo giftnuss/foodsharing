@@ -74,19 +74,23 @@ services:
 
     Symfony\Component\Translation\TranslatorInterface: '@translator'
 
-    validator:
+    validator.builder:
         class: Symfony\Component\Validator\ValidatorBuilder
-        factory: [Symfony\Component\Validator\Validation, createValidatorBuilder]
+        factory: 'Symfony\Component\Validator\Validation::createValidatorBuilder'
         calls:
             - [setTranslator, ['@translator']]
             - [setTranslationDomain, ['messages']]
             - [enableAnnotationMapping]
 
+    validator:
+        class: Symfony\Component\Validator\Validator\ValidatorInterface
+        factory: "validator.builder:getValidator"
+
     Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension:
 
     Symfony\Component\Form\Extension\Validator\ValidatorExtension:
         arguments:
-            - "@=service('validator').getValidator()"
+            - "@=service('validator')"
 
     Symfony\Component\Form\FormFactoryBuilder:
         factory: [Symfony\Component\Form\Forms, createFormFactoryBuilder]

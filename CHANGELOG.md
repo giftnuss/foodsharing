@@ -7,6 +7,7 @@
 - add php intl component for localized internationalization !421 @NerdyProjects
 - add vue.js, bootstrap & scss !430 @alangecker
 - new store list with filtering !430 #191 @alangecker
+- implement Wallpost API to replace XHR soon !439 @NerdyProjects
 
 ## Bugfixes
 - removed XSS-possibility in xhr_out method. !370 @theolampert
