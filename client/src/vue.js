@@ -1,7 +1,11 @@
 import Vue from 'vue'
 import $ from 'jquery'
-
+import i18n from '@/i18n'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+Vue.filter('i18n', (key, variables = {}) => {
+  return i18n(key, variables)
+})
 
 export function vueUse (components) {
   $('.vue-wrapper').each((index, el) => {
