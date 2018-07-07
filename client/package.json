@@ -33,6 +33,7 @@
     "socket.io-client": "1.5.0",
     "timeago": "^1.4.1",
     "tinysort": "^2.3.6",
+    "twemoji": "^11.0.0",
     "typeahead-addresspicker": "^1.0.1",
     "underscore": "1.7.0",
     "vue": "^2.5.16",
