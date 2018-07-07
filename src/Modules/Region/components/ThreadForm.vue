@@ -13,7 +13,7 @@
             <div class="card-footer">
               <div class="row">
                    <div class="col ml-2 pt-2">
-                        <b-form-checkbox v-model="subscribe" @keyup.shift.enter="submit">
+                        <b-form-checkbox :checked="isFollowing" @change="$emit('toggleFollow')" >
                             {{ $i18n('forum.subscribe_thread') }}
                         </b-form-checkbox>
                         
@@ -34,17 +34,17 @@ export default {
   components: { bFormCheckbox },
   data() {
       return {
-          text: '',
-          subscribe: false,
+          text: ''
       }
   },
   props: {
-      errorMessage: {}
+      errorMessage: {},
+      isFollowing: {}
   },
   methods: {
     submit() {
         if(!this.text.trim()) return
-        this.$emit('submit', this.text.trim(), this.subscribe)
+        this.$emit('submit', this.text.trim())
         this.text = ''
     },
   }

@@ -28,6 +28,7 @@
                     <ThreadPostActions 
                         :reactions="reactions" 
                         :mayDelete="mayDelete"
+                        :mayEdit="mayEdit"
                         @delete="$emit('delete')"
                         @reactionAdd="$emit('reactionAdd', $event)"
                         @reactionRemove="$emit('reactionRemove', $event)"
@@ -52,6 +53,7 @@ export default {
     author: Object,
     time: Date,
     reactions: Array,
+    mayEdit: Boolean,
     mayDelete: Boolean,
     isLoading: Boolean,
   },

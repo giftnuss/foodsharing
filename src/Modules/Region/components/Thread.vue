@@ -23,20 +23,29 @@
             :body="post.body"
             :reactions="post.reactions"
             :mayDelete="true"
+            :mayEdit="true"
             :isLoading="loadingPosts.indexOf(post.id) != -1"
             :time="new Date(post.time)"
             @delete="deletePost(post)"
+            @toggleFollow="toggleFollow"
             @reactionAdd="reactionAdd(post, arguments[0])"
             @reactionRemove="reactionRemove(post, arguments[0])"
         />
     </div>
-    <ThreadForm @submit="createPost" :errorMessage="errorMessage" ref="form" />
+    <ThreadForm 
+        @submit="createPost"
+        @toggleFollow="toggleFollow"
+        :isFollowing="isFollowing"
+        :errorMessage="errorMessage" ref="form" />
   </div>
 </template>
 
 <script>
 import ThreadPost from './ThreadPost'
 import ThreadForm from './ThreadForm'
+import * as api from '@/api/forum'
+import { pulseError } from '@/script'
+import i18n from '@/i18n'
 
 export default {
   components: { ThreadPost, ThreadForm },
@@ -57,56 +66,99 @@ export default {
       // TODO: get data by API instead of HTML created by FormControl.php
   },
   methods: {
-    deletePost(post) {
+    async deletePost(post) {
         this.loadingPosts.push(post.id)
 
-        // TODO: call api
-
-        setTimeout( () => {
+        try {
+            await api.deletePost(post.id)
             let index = this.posts.indexOf(post)
             this.posts.splice(index, 1)
-        }, 1000)
+        } catch(err) {
+            pulseError(i18n('error_unexpected'))
+            this.loadingPosts.splice(this.loadingPosts.indexOf(post.id), 1)
+        }
     },
-    reactionAdd(post, key) {
+    getReactionFromPost(post, key) {
         let reactionKeys = post.reactions.map(e => e.key)
         let index = reactionKeys.indexOf(key)
 
-        if(index !== -1) {
+        if(index === -1)  return null
+
+        return post.reactions[index]
+    },
+    async reactionAdd(post, key) {
+        let reaction = this.getReactionFromPost(post, key)
+
+        if(reaction) {
             // reaction alrready in list, increase count by 1
-            if(post.reactions[index].mine) return // already given - abort
-            post.reactions[index].count++
-            post.reactions[index].mine = true
+            if(reaction.mine) return // already given - abort
+            reaction.count++
+            reaction.mine = true
         } else {
             // reaction not in the list yet, append it
             post.reactions.push({ key, count: 1, mine: true })
         }
     
-        // TODO: call api
-    },
-    reactionRemove(post, key) {
-        let reactionKeys = post.reactions.map(e => e.key)
-        let index = reactionKeys.indexOf(key)
-
-        if(!post.reactions[index].mine) return 
-
-        post.reactions[index].count--
-        post.reactions[index].mine = false
-
-        // TODO: call api
-    },
-    toggleFollow() {
-        this.isFollowing = !this.isFollowing
-        // TODO: call api
-    },
-    toggleStickyness() {
-        this.isSticked = !this.isSticked
-        // TODO: call api
-    },
-    createPost(body, subscribe) {
-        this.errorMessage = null
-        if((subscribe && !this.isFollowing) || !subscribe && this.isFollowing) {
-            this.toggleFollow()
+        try {
+            await api.addReaction(post.id, key)
+        } catch(err) {
+            // failed? remove it again
+            let reaction = this.getReactionFromPost(post, key)
+            reaction.count--
+            reaction.mine = false
+            pulseError(i18n('error_unexpected'))
         }
+    },
+    async reactionRemove(post, key) {
+        let reaction = this.getReactionFromPost(post, key)
+
+        if(!reaction.mine) return 
+
+        reaction.count--
+        reaction.mine = false
+
+        try {
+            await api.removeReaction(post.id, key)
+        } catch(err) {
+            // failed? add it again
+            let reaction = this.getReactionFromPost(post, key)
+            reaction.count++
+            reaction.mine = true
+            pulseError(i18n('error_unexpected'))
+        }
+    },
+    async toggleFollow() {
+        let targetState = !this.isFollowing
+        this.isFollowing = targetState
+        try {
+            if(targetState) {
+                await api.followThread(this.id)
+            } else {
+                await api.unfollowThread(this.id)
+            }
+        } catch(err) {
+            // failed? undo it
+            this.isFollowing = !targetState
+            pulseError(i18n('error_unexpected'))
+        }
+    },
+    async toggleStickyness() {
+        let targetState = !this.isSticked
+        this.isSticked = targetState
+        try {
+            if(targetState) {
+                await api.stickThread(this.id)
+            } else {
+                await api.stickThread(this.id)
+            }
+        } catch(err) {
+            // failed? undo it
+            this.isSticked = !targetState
+            pulseError(i18n('error_unexpected'))
+        }
+    },
+    async createPost(body) {
+        this.errorMessage = null
 
         let dummyPost = {
             id: -1,
@@ -125,23 +177,19 @@ export default {
         this.loadingPosts.push(-1)
         this.posts.push(dummyPost)
 
-        setTimeout( () => {
-            try {
-                // TODO: handle API call
-                // replace dummyPost with response post
-                if(Math.random() > 0.5) {
-                    dummyPost.id = Math.random()*1000
-                } else {
-                    throw new Error('Timeout')
-                }
-            } catch(err) {
-                let index = this.posts.indexOf(dummyPost)
-                this.posts.splice(index, 1)
+        try {
+            let post = await api.createPost(this.id, body)
 
-                this.errorMessage = err.message
-                this.$refs.form.text = body
-            }
-        }, 1000)
+            // replace dummy post with the one from the api
+            this.posts[this.posts.indexOf(dummyPost)] = post
+
+        } catch(err) {
+            let index = this.posts.indexOf(dummyPost)
+            this.posts.splice(index, 1)
+
+            this.errorMessage = err.message
+            this.$refs.form.text = body
+        }
         
     }
   }

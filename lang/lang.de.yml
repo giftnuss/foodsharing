@@ -145,6 +145,7 @@ really_delete: Wirklich löschen?
 yes: Ja
 no: Nein
 options: Optionen
+error_unexpected: Es ist ein Fehler aufgetreten 
 
 forum:
   from: Von %name%
