@@ -58,18 +58,6 @@ class ForumService
 		return  $url;
 	}
 
-	public function mayPostToThread($fsId, $threadId)
-	{
-		$threadStatus = $this->forumGateway->getBotThreadStatus($threadId);
-
-		return $this->mayPostToRegion($fsId, $threadStatus['bezirk_id'], $threadStatus['bot_theme']);
-	}
-
-	public function mayPostToRegion($fsId, $regionId, $ambassadorForum)
-	{
-		return $this->regionGateway->hasMember($fsId, $regionId) && (!$ambassadorForum || $this->regionGateway->isAdmin($fsId, $regionId));
-	}
-
 	public function notifyParticipantsViaBell($threadId, $authorId, $postId)
 	{
 		$posts = $this->forumGateway->listPosts($threadId);
@@ -77,7 +65,7 @@ class ForumService
 		$regionName = $this->regionGateway->getBezirkName($info['region_id']);
 
 		$getFsId = function ($post) {
-			return $post['fs_id'];
+			return $post['author_id'];
 		};
 		$removeAuthorFsId = function ($id) use ($authorId) {
 			return $id != $authorId;

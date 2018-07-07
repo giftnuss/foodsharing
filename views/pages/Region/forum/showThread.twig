@@ -38,16 +38,16 @@
         <div class="post">
             <div class="top_bar">
                 <span class="time">{{ post.time }}</span><a name="post{{ post.id }}"
-                                                            id="post{{ post.id }}">{{ post.fs_name }}</a>
+                                                            id="post{{ post.id }}">{{ post.author_name }}</a>
             </div>
             <div class="forum_user_info_holder">
                 <div class="xv_left">
-                    <a href="#" onclick="profile({{ post.fs_id }});return false;">
+                    <a href="#" onclick="profile({{ post.author_id }});return false;">
                         {% include 'partials/avatar.twig' with post.avatar only %}
                     </a>
                     <ul>
                         <li><a href="#"
-                               onclick="chat({{ post.fs_id }});return false;">{{ 'chat.open_chat'|trans }}</a>
+                               onclick="chat({{ post.author_id }});return false;">{{ 'chat.open_chat'|trans }}</a>
                         </li>
                     </ul>
                 </div>

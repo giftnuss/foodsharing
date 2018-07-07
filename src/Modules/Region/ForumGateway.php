@@ -97,9 +97,9 @@ class ForumGateway extends BaseGateway
 						t.name,
 						t.`time`,
 						UNIX_TIMESTAMP(t.`time`) AS time_ts,
-						fs.id AS foodsaver_id,
-						IF(fs.deleted_at IS NOT NULL,"abgemeldeter Benutzer", fs.name) AS foodsaver_name,
-						fs.photo AS foodsaver_photo,
+						fs.id AS author_id,
+						IF(fs.deleted_at IS NOT NULL,"abgemeldeter Benutzer", fs.name) AS author_name,
+						fs.photo AS author_photo,
 						IF(fs.deleted_at IS NOT NULL, "Beitrag von nicht mehr angemeldetem Benutzer", p.body) AS post_body,
 						p.`time` AS post_time,
 						UNIX_TIMESTAMP(p.`time`) AS post_time_ts,
@@ -251,10 +251,10 @@ class ForumGateway extends BaseGateway
 	public function listPosts($thread_id)
 	{
 		return $this->db->fetchAll('
-			SELECT 		fs.id AS fs_id,
-						IF(fs.deleted_at IS NOT NULL,"abgemeldeter Benutzer", fs.name) AS fs_name,
-						fs.photo AS fs_photo,
-						fs.sleep_status AS fs_sleep_status,
+			SELECT 		fs.id AS author_id,
+						IF(fs.deleted_at IS NOT NULL,"abgemeldeter Benutzer", fs.name) AS author_name,
+						fs.photo AS author_photo,
+						fs.sleep_status AS author_sleep_status,
 						IF(fs.deleted_at IS NOT NULL, "Beitrag von nicht mehr angemeldetem Benutzer", p.body) AS body,
 						p.`time`,
 						p.id,

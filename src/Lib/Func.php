@@ -412,18 +412,12 @@ class Func
 		return false;
 	}
 
+	/**
+	 * @deprecated use $this->session->isAdminFor($regionId) instead
+	 */
 	public function isBotFor($bezirk_id)
 	{
-		if ($this->isBotschafter()) {
-			foreach ($_SESSION['client']['botschafter'] as $b) {
-				if ($b['bezirk_id'] == $bezirk_id) {
-					return true;
-					break;
-				}
-			}
-		}
-
-		return false;
+		return $this->session->isAdminFor($bezirk_id);
 	}
 
 	/**
