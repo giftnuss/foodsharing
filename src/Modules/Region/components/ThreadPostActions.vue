@@ -3,11 +3,11 @@
 
       <!-- emoji buttons & selector -->
       <span class="emojis">
-        <span v-for="emoji in givenEmojis" :key="emoji.key" v-if="emoji.count">
+        <span v-for="emoji in reactions" :key="emoji.key" v-if="emoji.count">
             <a 
                 :class="['btn', 'btn-sm', (emoji.mine ? 'btn-primary' : 'btn-secondary')]"
                 :title="emoji.key"
-                @click="toggleEmoji(emoji.key)"
+                @click="toogleReaction(emoji.key)"
             >
                 {{ emoji.count }}x <Emoji :name="emoji.key" />
             </a>
@@ -37,22 +37,22 @@
 
 
     <!-- non emoji button -->
-    <a class="btn btn-sm btn-secondary">{{ 'button.answer'|i18n }}</a>
-    <a v-if="mayDeletePost" class="btn btn-sm btn-secondary" v-b-modal.modal1>
-        {{ 'forum.delete_post'|i18n }}
+    <a class="btn btn-sm btn-secondary">{{ $i18n('button.answer') }}</a>
+    <a v-if="mayDelete" class="btn btn-sm btn-secondary" @click="$refs.modal.show()">
+        {{ $i18n('forum.delete_post') }}
     </a>
 
 
     <!-- delete confirm modal -->
     <b-modal 
-        v-if="mayDeletePost"
-        id="modal1"
-        :title="'forum.delete_post'|i18n"
-        :cancel-title="'button.abort'|i18n"
-        :ok-title="'button.yes_i_am_sure'|i18n"
+        v-if="mayDelete"
+        ref="modal"
         @ok="$emit('delete')"
+        :title="$i18n('forum.delete_post')"
+        :cancel-title="$i18n('button.abort')"
+        :ok-title="$i18n('button.yes_i_am_sure')"
     >
-        <p class="my-4">{{ 'really_delete'|i18n }}</p>
+        <p>{{ $i18n('really_delete') }}</p>
     </b-modal>
   </div>
 </template>
@@ -68,28 +68,28 @@ export default {
   components: { bDropdown, Emoji, bModal },
   directives: { bModal: bModalDirective },
   props: {
-    givenEmojis: {},
-    mayDeletePost: {}
+    reactions: {},
+    mayDelete: {}
   },
   data() {
       return {
-          emojis: emojiList,
+          emojis: emojiList
       }
   },
   methods: {
-    toggleEmoji(key, dontRemove=false) {
-        let myEmojiKeys = this.givenEmojis.filter(e => e.mine).map(e => e.key)
+    toogleReaction(key, dontRemove=false) {
+        let myReactionKeys = this.reactions.filter(e => e.mine).map(e => e.key)
 
-        if(myEmojiKeys.indexOf(key) !== -1) {
+        if(myReactionKeys.indexOf(key) !== -1) {
             if(dontRemove) return
-            else this.$emit('emojiRemove', key)
+            else this.$emit('reactionRemove', key)
         } else {
-            this.$emit('emojiAdd', key)
+            this.$emit('reactionAdd', key)
         }
     },
     giveEmoji(key) {
         this.$refs.emojiSelector.hide()
-        this.toggleEmoji(key, true)
+        this.toogleReaction(key, true)
     },
   }
 }

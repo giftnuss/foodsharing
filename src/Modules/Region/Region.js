@@ -15,10 +15,10 @@ import './Region.css'
 import * as wall from '@/wall'
 import { expose } from '@/utils'
 import { vueUse } from '@/vue'
-import ThreadPost from './components/ThreadPost'
+import Thread from './components/Thread'
 
 vueUse({
-  ThreadPost
+  Thread
 })
 
 expose({

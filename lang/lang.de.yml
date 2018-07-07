@@ -165,6 +165,7 @@ forum:
   delete_thread: Thema löschen
   hold_back_for_moderation: Das Thema wurde gespeichert und wird veröffentlicht sobald ein Botschafter es bestätigt.
   no_threads: Noch keine Themen gepostet
+  sending_error: Beim Senden ist ein Fehler aufgetreten
 
 chat:
   open_chat: Nachricht schreiben

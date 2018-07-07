@@ -1,6 +1,6 @@
 <template>
   <div class="container bootstrap">
-    <div class="card mb-3">
+    <div class="card mb-3 rounded">
       <div class="card-header text-white bg-primary">
         Alle Betriebe aus dem Bezirk {{ regionName }} (<span v-if="stores.length !== storesFiltered.length">{{ storesFiltered.length }} von </span>{{ stores.length }})
       </div>
@@ -103,6 +103,9 @@ export default {
   },
   data () {
     return {
+      regionName: '',
+      stores: [],
+
       currentPage: 1,
       perPage: 20,
       filterText: '',

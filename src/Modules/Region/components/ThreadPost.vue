@@ -1,37 +1,38 @@
 <template>
   <div class="bootstrap">
-    <div :class="{card:true, disabledLoading: this.isLoading, 'mb-2':true}">
+    <div :class="{card:true, disabledLoading: isLoading, 'mb-2':true}">
         <div class="card-header">
-            {{ post.fs_name }}
+            {{ author.name }}
         </div>
         <div class="card-body row">
             <div class="col-3 avatarSide text-center">
-                <a :href="`/profile/${post.fs_id}`">
+                <a :href="$url('profile', author.id)">
                     <Avatar 
-                        :url="post.avatar.imageUrl"
-                        :size="post.avatar.size"
-                        :sleepStatus="post.avatar.user.sleep_status"
+                        :url="author.avatar.url"
+                        :size="author.avatar.size"
+                        :sleepStatus="author.sleepStatus"
                     />
                 </a>
-                <a @click="openChat"  class="btn btn-sm btn-outline-primary"><i class="fa fa-comments" /> {{ 'chat.open_chat'|i18n }}</a>
+                <a @click="openChat"  class="btn btn-sm btn-outline-primary"><i class="fa fa-comments" /> {{ $i18n('chat.open_chat') }}</a>
             </div>
             <div class="col">
-                {{ post.body }}
+                {{ body }}
             </div>
         </div>
         <div class="card-footer">
             <div class="row">
                 <div class="col-4 text-muted">
-                    <small>{{ post.time }}</small>
+                    <small>{{ time | dateFormat('dddd, Do MMMM YYYY, HH:mm [Uhr]') }}</small>
                 </div>
                 <div class="col text-right">
                     <ThreadPostActions 
-                        :givenEmojis="givenEmojis" 
-                        :mayDeletePost="post.mayDeletePost"
-                        @delete="deletePost"
-                        @emojiAdd="emojiAdd"
-                        @emojiRemove="emojiRemove"
+                        :reactions="reactions" 
+                        :mayDelete="mayDelete"
+                        @delete="$emit('delete')"
+                        @reactionAdd="$emit('reactionAdd', $event)"
+                        @reactionRemove="$emit('reactionRemove', $event)"
                     />
+
                 </div>
             </div>
         </div>
@@ -47,54 +48,16 @@ import conv from '@/conv'
 export default {
   components: { Avatar, ThreadPostActions },
   props: {
-    post: {}
-  },
-  data() {
-      return {
-          isLoading: false,
-          givenEmojis: [
-              {key: 'banana', count: 3, mine: false }, 
-              {key: 'thumbsup', count: 1, mine: false } 
-          ]
-      }
-  },
-  computed: {
-
+    body: String,
+    author: Object,
+    time: Date,
+    reactions: Array,
+    mayDelete: Boolean,
+    isLoading: Boolean,
   },
   methods: {
     openChat() {
         conv.userChat(this.post.fs_id)
-    },
-    deletePost() {
-        this.isLoading = true
-        console.log('delete')
-    },
-    emojiAdd(key) {
-        let emojiKeys = this.givenEmojis.map(e => e.key)
-        let index = emojiKeys.indexOf(key)
-
-        if(index !== -1) {
-            // emoji alrready in list, increase count by 1
-            if(this.givenEmojis[index].mine) return // already given - abort
-            this.givenEmojis[index].count++
-            this.givenEmojis[index].mine = true
-        } else {
-            // emoji not in the list yet, append it
-            this.givenEmojis.push({ key, count: 1, mine: true })
-        }
-
-        // TODO: call api
-    },
-    emojiRemove(key) {
-        let emojiKeys = this.givenEmojis.map(e => e.key)
-        let index = emojiKeys.indexOf(key)
-
-        if(!this.givenEmojis[index].mine) return 
-
-        this.givenEmojis[index].count--
-        this.givenEmojis[index].mine = false
-
-        // TODO: call api
     }
   }
 }

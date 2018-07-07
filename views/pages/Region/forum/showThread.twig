@@ -1,6 +1,6 @@
-<div id="delete_sure" title="{{ 'really_delete'|trans }}">
+{# <div id="delete_sure" title="{{ 'really_delete'|trans }}">
     {% include 'partials/info.twig' with {'msg': 'really_delete'|trans} %}
-</div>
+</div> #}
 
 {% if activate_url is defined %}
     {% embed 'components/field.twig' with {'title': 'forum.thread_is_inactive', 'classes': ['ui-padding']} %}
@@ -15,11 +15,17 @@
     {% endembed %}
 {% endif %}
 
-<div class="head ui-widget-header ui-corner-top">{{ thread.name }}</div>
-{% for post in posts %}
+{% include "partials/vue-wrapper.twig" with { elementName: "thread", props: {
+    id: thread.id,
+    title: thread.name,
+    posts: posts
+} } %}
 
 
-    {% include "partials/vue-wrapper.twig" with { elementName: "thread-post", props: {post: post} } %}
+{# {% for post in posts %} #}
+
+
+    {# {% include "partials/vue-wrapper.twig" with { elementName: "thread-post", props: {post: post} } %} #}
 
 
     {# <div id="tpost-{{ post.id }}"
@@ -79,7 +85,7 @@
             </div>
         </div>
     </div> #}
-{% endfor %}
+{# {% endfor %}
 {% embed 'components/field.twig' with {'classes': ['ui-padding']} %}
 {% block content %}
     <div id="answer" class="answer">
@@ -91,4 +97,4 @@
         {{ form_end(postForm) }}
     </div>
 {% endblock %}
-{% endembed %}
+{% endembed %} #}

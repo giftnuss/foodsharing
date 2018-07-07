@@ -339,6 +339,35 @@ class RegionControl extends Control
 			$viewdata['threads'] = $this->regionHelper->transformThreadViewData($this->forumGateway->listThreads($region['id'], $ambassadorForum), $region['id'], $ambassadorForum);
 		}
 
+		// map the post objects to match the format which is gonna be send out by the api
+		// get removed anyway as soon as the API is in use
+		if(isset($viewdata['posts'])) {
+			$viewdata['posts'] = array_map(function($post) {
+				return [
+					'id' => (int)$post['id'],
+					'body' => $post['body'],
+					'time' => date("Y-m-d H:i:s", $post['time_ts']),
+					'author' => [
+						'id' => (int)$post['fs_id'],
+						'name' => $post['fs_name'],
+						'sleepStatus' => (int)$post['fs_sleep_status'],
+						'avatar' => [
+							'url' => $post['avatar']['imageUrl'],
+							'size' => (int)$post['avatar']['size'],
+						]
+					],
+					'reactions'=> [
+						[
+							'key' => 'banana',
+							'count'=> 5
+						],
+					],
+					'mayDeletePost'=> (boolean)$post['mayDeletePost']
+				];
+			}, $viewdata['posts']);
+			$viewdata['posts'] = array_slice($viewdata['posts'], 0, 2);
+		}
+		
 		$response->setContent($this->render('pages/Region/forum.twig', $viewdata));
 	}
 
