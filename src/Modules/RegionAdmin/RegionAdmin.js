@@ -7,4 +7,11 @@ import 'leaflet'
 import 'leaflet.awesome-markers'
 import 'leaflet.markercluster'
 
+import { img } from '@/script'
+import { expose } from '@/utils'
+
 import './RegionAdmin.css'
+
+expose({
+  img
+})

@@ -56,7 +56,7 @@ class RegionGateway extends BaseGateway
 			FROM 		`fs_bezirk`
 
 			WHERE 		`id` = ' . (int)$id);
-		$out['botschafter'] = $this->db->fetch('
+		$out['botschafter'] = $this->db->fetchAll('
 				SELECT 		`fs_foodsaver`.`id`,
 							CONCAT(`fs_foodsaver`.`name`," ",`fs_foodsaver`.`nachname`) AS name
 

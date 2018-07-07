@@ -26,6 +26,7 @@
 - fix relative loading of some xhr/other urls !422 @nicksellen
 - fixes user autocomplete fetching for conversation creation 
 - fix profile sleeping hat variable #243
+- fix bug in region dynatree loading #244 !444 @nicksellen
 
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen
