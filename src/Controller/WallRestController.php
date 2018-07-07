@@ -23,7 +23,7 @@ class WallRestController extends FOSRestController
 		$this->session = $session;
 	}
 
-	private function serializePost($post)
+	private function normalizePost($post)
 	{
 		return [
 			'id' => $post['id'],
@@ -47,7 +47,7 @@ class WallRestController extends FOSRestController
 			throw new HttpException(403);
 		}
 		$posts = $this->wallPostGateway->getPosts($target, $targetId);
-		$posts = array_map(function ($value) {return $this->serializePost($value); }, $posts);
+		$posts = array_map(function ($value) {return $this->normalizePost($value); }, $posts);
 
 		$view = $this->view([
 			'results' => $posts,
@@ -69,7 +69,7 @@ class WallRestController extends FOSRestController
 		}
 		$body = $paramFetcher->get('body');
 		$postId = $this->wallPostGateway->addPost($body, $this->session->id(), $target, $targetId);
-		$view = $this->view(['post' => $this->serializePost($this->wallPostGateway->getPost($postId))], 200);
+		$view = $this->view(['post' => $this->normalizePost($this->wallPostGateway->getPost($postId))], 200);
 
 		return $this->handleView($view);
 	}
