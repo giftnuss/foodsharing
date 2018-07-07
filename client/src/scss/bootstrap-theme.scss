@@ -1,4 +1,5 @@
 $primary: #533a20;
+$secondary: #64ae24;
 $card-spacer-x: 8px;
 $card-spacer-y: 6px;
 $card-border-width: 0;
@@ -13,6 +14,14 @@ $border-radius: 6px;
 // scoped inside a class to decide, where the styles are applied
 // should be removed at some point
 .bootstrap {
+    // clear some fs styles
+    footer, {
+        background-color: initial;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+    }
+
     textarea {
         height: initial;
     }
@@ -47,25 +56,35 @@ $border-radius: 6px;
     @import "~bootstrap/scss/utilities";
     @import "~bootstrap/scss/print";
 
-    .card {
+    .card.rounded {
         background: none;
+        .card-header {
+            font-family: Helvetica, Arial, "lucida grande", tahoma, verdana, arial, sans-serif;
+            font-weight: bold;
+        }
+
+        .card-header:first-child {
+            border-radius: 6px;
+        }
+        .card-body {
+            border-color: inherit;
+            border-width: 1px;
+            border-style: solid;
+            border-radius: 6px;
+        }
     }
-    .card > * {
+    .card.rounded > * {
         background-color: #fff;
     }
-    .card-header {
-        font-family: Helvetica, Arial, "lucida grande", tahoma, verdana, arial, sans-serif;
-        font-weight: bold;
-    }
 
-    .card-header:first-child {
-        border-radius: 6px;
+    .btn-sm, .btn-group-sm > .btn {
+        font-size: 0.7rem;
     }
-    .card-body {
-        border-color: inherit;
-        border-width: 1px;
-        border-style: solid;
-        border-radius: 6px;
+    .btn-secondary, a:not([href]):not([tabindex]).btn-secondary {
+        color: white;
+    }
+    .modal {
+        text-align: left; // sometimes modals are created inside a different aligned element
     }
 }
 

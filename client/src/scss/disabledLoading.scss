@@ -1,0 +1,27 @@
+.disabledLoading {
+    position: relative;
+}
+.disabledLoading::after {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255,255,255,0.8);
+}
+.disabledLoading::before {
+    position: absolute;
+    background: url('/img/469.gif') center center no-repeat;
+    content: '';
+    height: 40px;
+    width: 40px;
+    background-color: white;
+    border-radius: 20px;
+    border: 1px solid grey;
+    top: 50%;
+    left: 50%;
+    margin-top: -20px;
+    margin-left: -20px;
+    z-index: 10;
+}
