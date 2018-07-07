@@ -9,7 +9,7 @@ import info from '@/info'
 import conv from '@/conv'
 import autoLink from '@/autoLink'
 import timeformat from '@/timeformat'
-import api from '@/api'
+import * as api from '@/api/conversations'
 
 import {
   ajax,
@@ -338,7 +338,7 @@ const msg = {
     }
     msg.conversation_id = id
 
-    const { conversation, member, messages } = await api.getConversations(id)
+    const { conversation, member, messages } = await api.getConversation(id)
 
     msg.resetConversation()
 
