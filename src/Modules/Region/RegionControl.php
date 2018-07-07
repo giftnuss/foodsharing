@@ -230,7 +230,7 @@ class RegionControl extends Control
 			return $p;
 		};
 
-		if ($thread = $this->forumGateway->getThread($region['id'], $threadId, $ambassadorForum)) {
+		if ($this->forumPermissions->mayAccessThread($threadId) && $thread = $this->forumGateway->getThread($threadId)) {
 			$viewdata['thread'] = $thread;
 			$this->func->addBread($thread['name']);
 			if ($thread['active'] == 0 && ($this->forumPermissions->mayActivateThreads($region['id']))) {

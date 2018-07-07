@@ -18,10 +18,8 @@ class ForumGateway extends BaseGateway
 
 	// Thread-related
 
-	public function listThreads($bezirk_id, $bot_theme = 0, $page = 0, $last = 0)
+	public function listThreads($bezirk_id, $bot_theme = 0, $page = 0, $last = 0, $threads_per_page = 15)
 	{
-		$threads_per_page = 15;
-
 		if ($ret = $this->db->fetchAll('
 			SELECT 		t.id,
 						t.name,
@@ -35,7 +33,11 @@ class ForumGateway extends BaseGateway
 						p.`time` AS post_time,
 						UNIX_TIMESTAMP(p.`time`) AS post_time_ts,
 						t.last_post_id,
-						t.sticky
+						t.sticky,
+						creator.id as creator_id,
+						creator.name as creator_name,
+						creator.photo as creator_photo,
+						creator.sleep_status as creator_sleep_status
 
 			FROM 		fs_theme t
 						INNER JOIN
@@ -47,6 +49,9 @@ class ForumGateway extends BaseGateway
 						INNER JOIN
 						fs_foodsaver fs
 						ON  fs.id = p.foodsaver_id
+						INNER JOIN
+						fs_foodsaver creator
+						ON creator.id = t.foodsaver_id
 
 			WHERE       bt.bezirk_id = :bezirk_id
 			AND 		bt.bot_theme = :bot_theme
@@ -88,43 +93,25 @@ class ForumGateway extends BaseGateway
 		', ['thread_id' => $threadId]);
 	}
 
-	public function getThread($bezirk_id, $thread_id, $bot_theme = false)
+	public function getThread($thread_id)
 	{
-		$bot_theme_v = $bot_theme ? 1 : 0;
-
 		return $this->db->fetch('
 			SELECT 		t.id,
 						t.name,
 						t.`time`,
 						UNIX_TIMESTAMP(t.`time`) AS time_ts,
-						fs.id AS author_id,
-						IF(fs.deleted_at IS NOT NULL,"abgemeldeter Benutzer", fs.name) AS author_name,
-						fs.photo AS author_photo,
-						IF(fs.deleted_at IS NOT NULL, "Beitrag von nicht mehr angemeldetem Benutzer", p.body) AS post_body,
-						p.`time` AS post_time,
-						UNIX_TIMESTAMP(p.`time`) AS post_time_ts,
 						t.last_post_id,
 						t.`active`,
-						t.`sticky`
+						t.`sticky`,
+						t.foodsaver_id as creator_id
 
 			FROM 		fs_theme t
-						INNER JOIN
-						fs_theme_post p
-						ON t.last_post_id = p.id
-						INNER JOIN
-						fs_bezirk_has_theme bt
-						ON bt.theme_id = t.id
-						INNER JOIN
-						fs_foodsaver fs
-						ON p.foodsaver_id = fs.id
 
-			WHERE 		bt.bezirk_id = :bezirk_id
-			AND 		t.id = :thread_id
-			AND 		bt.bot_theme = :bot_theme
+			WHERE 		t.id = :thread_id
 
 			LIMIT 1
 
-		', ['bezirk_id' => $bezirk_id, 'thread_id' => $thread_id, 'bot_theme' => $bot_theme_v]);
+		', ['thread_id' => $thread_id]);
 	}
 
 	public function addThread($fs_id, $bezirk_id, $name, $body, $bot_theme = false, $active)

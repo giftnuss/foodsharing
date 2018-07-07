@@ -42,9 +42,23 @@ class ForumPermissions
 		return $this->mayPostToRegion($threadStatus['bezirk_id'], $threadStatus['bot_theme']);
 	}
 
+	public function mayAccessThread($threadId)
+	{
+		return $this->mayPostToThread($threadId);
+	}
+
 	public function mayAccessAmbassadorBoard($regionId)
 	{
 		return $this->mayPostToRegion($regionId, 1);
+	}
+
+	public function mayAccessForum($forumId, $subForumId)
+	{
+		if ($subForumId !== 0 && $subForumId !== 1) {
+			return false;
+		}
+
+		return $this->mayPostToRegion($forumId, $subForumId);
 	}
 
 	public function mayActivateThreads($regionId)
