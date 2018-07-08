@@ -75,7 +75,7 @@ class ForumRestController extends FOSRestController
 				'avatar' => '/images/130_q_' . $post['author_photo'],
 				'sleepStatus' => $post['author_sleep_status']
 			],
-			'reactions' => $reactions[$post['id']] ?? []
+			'reactions' => $reactions[$post['id']] ?? new \ArrayObject()
 		];
 	}
 
