@@ -36,7 +36,7 @@
 
     </span>
 
-    <span class="divider text-primary">|</span>
+    <span :class="{divider: true, textPprimary: true, mobile: isMobile }" />
 
     <!-- non emoji button -->
     <a class="btn btn-sm btn-secondary" @click="$emit('reply')">{{ $i18n('button.answer') }}</a>
@@ -78,6 +78,10 @@ export default {
       default: () => ({})
     },
     mayDelete: {
+      type: Boolean,
+      default: false
+    },
+    isMobile: {
       type: Boolean,
       default: false
     }
@@ -124,6 +128,7 @@ export default {
 
 <style lang="scss" scoped>
 .emojis {
+    line-height: 2.2;
     > span > a {
         color: white !important;
         margin-left: 0.3em;
@@ -136,5 +141,15 @@ export default {
 .divider {
     margin: 0 0.3em;
     opacity: 0.3;
+    &::before {
+        content: '|';
+    }
+}
+.divider.mobile {
+    &::before {
+        content: '';
+    }
+    height: 5px;
+    display: block;
 }
 </style>

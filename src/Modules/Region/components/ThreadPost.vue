@@ -13,7 +13,7 @@
               size="130"
             />
           </a>
-          <a
+          <a v-if="!wXS"
             class="btn btn-sm btn-outline-primary"
             @click="openChat"><i class="fa fa-comments" /> {{ $i18n('chat.open_chat') }}</a>
         </div>
@@ -24,7 +24,8 @@
       <div class="card-footer">
         <div class="row">
           <div class="col-4 text-muted">
-            <small>{{ createdAt | dateFormat('dddd, Do MMM YYYY, HH:mm [Uhr]') }}</small>
+            <small v-if="wXS">{{ createdAt | dateFormat('dddd, DD.MM.YY, HH:mm[&nbsp;Uhr]') }}</small>
+            <small v-else>{{ createdAt | dateFormat('dddd, Do mm YYYY, HH:mm [Uhr]') }}</small>
           </div>
           <div class="col text-right">
             <ThreadPostActions
@@ -35,6 +36,7 @@
               @reactionAdd="$emit('reactionAdd', $event)"
               @reactionRemove="$emit('reactionRemove', $event)"
               @reply="$emit('reply', body)"
+              :isMobile="wXS"
             />
 
           </div>
@@ -48,8 +50,10 @@
 import Avatar from '@/components/Avatar'
 import ThreadPostActions from './ThreadPostActions'
 import conv from '@/conv'
+import MediaQueryMixin from '@/utils/VueMediaQueryMixin'
 
 export default {
+  mixins: [MediaQueryMixin],
   components: { Avatar, ThreadPostActions },
   props: {
     id: { type: Number, default: null },
