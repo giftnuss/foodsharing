@@ -13,11 +13,14 @@
               size="130"
             />
           </a>
-          <a v-if="!wXS"
+          <a
+            v-if="!wXS"
             class="btn btn-sm btn-outline-primary"
             @click="openChat"><i class="fa fa-comments" /> {{ $i18n('chat.open_chat') }}</a>
         </div>
-        <div class="col" v-html="body" />
+        <div
+          class="col"
+          v-html="body" />
       </div>
       <div class="card-footer">
         <div class="row">
@@ -30,11 +33,11 @@
               :reactions="reactions"
               :may-delete="mayDelete"
               :may-edit="mayEdit"
+              :is-mobile="wXS"
               @delete="$emit('delete')"
               @reactionAdd="$emit('reactionAdd', $event)"
               @reactionRemove="$emit('reactionRemove', $event)"
               @reply="$emit('reply', body)"
-              :isMobile="wXS"
             />
 
           </div>
@@ -51,8 +54,8 @@ import conv from '@/conv'
 import MediaQueryMixin from '@/utils/VueMediaQueryMixin'
 
 export default {
-  mixins: [MediaQueryMixin],
   components: { Avatar, ThreadPostActions },
+  mixins: [MediaQueryMixin],
   props: {
     id: { type: Number, default: null },
     body: { type: String, default: '' },
