@@ -27,6 +27,7 @@ export function vueUse (components) {
   $('.vue-wrapper').each((index, el) => {
     let elementName = $(el).data('element')
     let props = $(el).data('props') || {}
+    let initialData = $(el).data('initial-data') || {}
 
     if (!elementName) {
       throw new Error('fsvue-Error: missing element name. pass it as <div class="vue-wrapper" data-element="myelement" />')
@@ -37,15 +38,16 @@ export function vueUse (components) {
       el,
       components,
       render (h) {
-        return h(elementName)
+        return h(elementName, {props})
       }
     })
-
-    for (let key in props) {
-      if (typeof vm.$children[0][key] === 'undefined' || typeof vm.$children[0][key] === 'function') {
-        throw new Error(`vueUse() Error: prop '${key}' needs to be defined in data()`)
+    if (initialData && typeof initialData === 'object') {
+      for (let key in initialData) {
+        if (typeof vm.$children[0][key] === 'undefined' || typeof vm.$children[0][key] === 'function') {
+          throw new Error(`vueUse() Error: prop '${key}' needs to be defined in data()`)
+        }
+        vm.$children[0][key] = initialData[key]
       }
-      vm.$children[0][key] = props[key]
     }
   })
 }

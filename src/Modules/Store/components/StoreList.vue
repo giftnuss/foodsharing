@@ -103,9 +103,6 @@ export default {
   },
   data () {
     return {
-      regionName: '',
-      stores: [],
-
       currentPage: 1,
       perPage: 20,
       filterText: '',

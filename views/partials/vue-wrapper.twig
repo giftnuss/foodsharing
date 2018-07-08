@@ -1,1 +1,6 @@
-<div class="vue-wrapper" data-element="{{ elementName }}" data-props="{{ props|json_encode }}"></div>
+<div 
+    class="vue-wrapper"
+    data-element="{{ elementName }}"
+    data-props="{{ props|json_encode }}"
+    {% if initialData is defined %}data-initial-data="{{ initialData|json_encode }}"{% endif %}
+/>

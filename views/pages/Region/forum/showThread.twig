@@ -15,11 +15,16 @@
     {% endembed %}
 {% endif %}
 
-{% include "partials/vue-wrapper.twig" with { elementName: "thread", props: {
-    id: thread.id,
-    title: thread.name,
-    posts: posts
-} } %}
+{% include "partials/vue-wrapper.twig" with { 
+    elementName: "thread", 
+    props: {
+        id: thread.id,
+    },
+    initialData: {
+        title: thread.name,
+        posts: posts
+    }
+} %}
 
 
 {# {% for post in posts %} #}

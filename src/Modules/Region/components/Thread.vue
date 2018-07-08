@@ -51,9 +51,13 @@ import {user} from '@/server-data'
 
 export default {
   components: { ThreadPost, ThreadForm },
+  props: {
+    id: {
+        type: Number
+    }
+  },
   data() {
       return {
-          id: null,
           regionId: null,
           title: '',
           posts: [],
@@ -61,6 +65,8 @@ export default {
           isFollowing: true,
           isSticked: true,
           mayChangeStickyness: true,
+
+          isLoading: false,
           errorMessage: null
       }
   },
