@@ -59,7 +59,7 @@ class ForumPermissions
 		return false;
 	}
 
-	public function mayAdministrateThread($threadId): bool
+	public function mayModerate($threadId): bool
 	{
 		if ($this->session->isOrgaTeam()) {
 			return true;

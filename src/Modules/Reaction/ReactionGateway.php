@@ -22,7 +22,7 @@ class ReactionGateway extends BaseGateway
 		$q = '
 		SELECT
 			r.target,
-			r.emoji,
+			r.`key`,
 			r.time,
 			r.foodsaver_id,
 			fs.name as foodsaver_name
@@ -48,14 +48,14 @@ class ReactionGateway extends BaseGateway
 		return $res;
 	}
 
-	public function addReaction($target, $fsId, $emoji): bool
+	public function addReaction($target, $fsId, $key): bool
 	{
 		$this->db->insert(
 			'fs_reaction',
 			[
 				'target' => $target,
 				'foodsaver_id' => $fsId,
-				'emoji' => $emoji,
+				'key' => $key,
 				'time' => $this->db->now()
 			]
 		);
@@ -63,14 +63,14 @@ class ReactionGateway extends BaseGateway
 		return true;
 	}
 
-	public function removeReaction($target, $fsId, $emoji)
+	public function removeReaction($target, $fsId, $key)
 	{
 		$this->db->delete(
 			'fs_reaction',
 			[
 				'target' => $target,
 				'foodsaver_id' => $fsId,
-				'emoji' => $emoji
+				'key' => $key
 			]
 		);
 	}

@@ -32,8 +32,8 @@ class ForumRestController extends FOSRestController
 			'id' => $thread['id'],
 			'name' => $thread['name'],
 			'createdAt' => $thread['time'],
-			'sticky' => $thread['sticky'],
-			'active' => $thread['active'] ?? 1,
+			'isSticky' => (bool)$thread['sticky'],
+			'isActive' => (bool)$thread['active'] ?? true,
 			'lastPost' => [
 				'id' => $thread['last_post_id'],
 			],
@@ -73,7 +73,7 @@ class ForumRestController extends FOSRestController
 				'id' => $post['author_id'],
 				'name' => $post['author_name'],
 				'avatar' => '/images/130_q_' . $post['author_photo'],
-				'sleep_status' => $post['author_sleep_status']
+				'sleepStatus' => $post['author_sleep_status']
 			],
 			'reactions' => $reactions[$post['id']] ?? []
 		];
@@ -115,6 +115,8 @@ class ForumRestController extends FOSRestController
 		$reactions = $this->forumService->getReactionsForThread($threadId);
 
 		$thread = $this->normalizeThread($thread);
+		$thread['isFollowing'] = $this->forumGateway->isFollowing($this->session->id(), $threadId);
+		$thread['mayModerate'] = $this->forumPermissions->mayModerate($threadId);
 		$thread['posts'] = array_map(function ($post) use ($reactions) { return $this->normalizePost($post, $reactions); }, $posts);
 
 		$view = $this->view([
@@ -131,7 +133,7 @@ class ForumRestController extends FOSRestController
 	 */
 	public function patchThreadAction($threadId, ParamFetcher $paramFetcher)
 	{
-		if (!$this->forumPermissions->mayAdministrateThread($threadId)) {
+		if (!$this->forumPermissions->mayModerate($threadId)) {
 			throw new HttpException(403);
 		}
 		$sticky = $paramFetcher->get('sticky');

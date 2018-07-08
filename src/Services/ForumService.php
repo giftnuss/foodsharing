@@ -291,20 +291,20 @@ class ForumService
 		return $target;
 	}
 
-	public function addReaction($fsId, $threadId, $postId, $emoji)
+	public function addReaction($fsId, $threadId, $postId, $key)
 	{
-		if (!$fsId || !$threadId || !$postId || !$emoji) {
+		if (!$fsId || !$threadId || !$postId || !$key) {
 			throw new \InvalidArgumentException();
 		}
-		$this->reactionGateway->addReaction($this->getReactionTarget($threadId, $postId), $fsId, $emoji);
+		$this->reactionGateway->addReaction($this->getReactionTarget($threadId, $postId), $fsId, $key);
 	}
 
-	public function removeReaction($fsId, $threadId, $postId, $emoji)
+	public function removeReaction($fsId, $threadId, $postId, $key)
 	{
-		if (!$fsId || !$threadId || !$postId || !$emoji) {
+		if (!$fsId || !$threadId || !$postId || !$key) {
 			throw new \InvalidArgumentException();
 		}
-		$this->reactionGateway->removeReaction($this->getReactionTarget($threadId, $postId), $fsId, $emoji);
+		$this->reactionGateway->removeReaction($this->getReactionTarget($threadId, $postId), $fsId, $key);
 	}
 
 	public function getReactionsForThread($threadId)
@@ -321,7 +321,7 @@ class ForumService
 			}
 			if (!isset($reactions[$postId])) {
 				$reactions[$postId] = [
-					'emoji' => $r['emoji'],
+					'key' => $r['key'],
 					'users' => []
 				];
 			}
