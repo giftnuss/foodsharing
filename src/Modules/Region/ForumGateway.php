@@ -97,6 +97,8 @@ class ForumGateway extends BaseGateway
 	{
 		return $this->db->fetch('
 			SELECT 		t.id,
+						b.bezirk_id AS regionId, 
+						b.bot_theme AS regionSubId, 
 						t.name as title,
 						t.`time`,
 						UNIX_TIMESTAMP(t.`time`) AS time_ts,
@@ -107,8 +109,10 @@ class ForumGateway extends BaseGateway
 
 			FROM 		fs_theme t
 
-			WHERE 		t.id = :thread_id
+			LEFT JOIN fs_bezirk_has_theme AS b ON b.theme_id = t.id
 
+			WHERE 		t.id = :thread_id
+			
 			LIMIT 1
 
 		', ['thread_id' => $thread_id]);

@@ -3,6 +3,9 @@ import { get, post, put, patch, remove } from './base'
 export function getThread (threadId) {
   return get(`/forum/thread/${threadId}`)
 }
+export function deleteThread (threadId) {
+  return remove(`/forum/thread/${threadId}`)
+}
 
 export function followThread (threadId) {
   return post(`/forum/thread/${threadId}/follow`)
@@ -21,6 +24,12 @@ export function stickThread (threadId) {
 export function unstickThread (threadId) {
   return patch(`/forum/thread/${threadId}`, {
     isSticky: false
+  })
+}
+
+export function activateThread (threadId) {
+  return patch(`/forum/thread/${threadId}`, {
+    isActive: true
   })
 }
 

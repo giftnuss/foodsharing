@@ -3,5 +3,6 @@
 
 export default {
   profile: (id) => `/profile/${id}`,
-  store: (id) => `?page=betrieb&id=${id}`
+  store: (id) => `/?page=betrieb&id=${id}`,
+  forum: (regionId, regionSubId = 0) => `/?page=bezirk&bid=${regionId}&sub=${regionSubId === 1 ? 'botforum' : 'forum'}`
 }

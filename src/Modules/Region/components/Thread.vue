@@ -2,7 +2,8 @@
   <div
     :class="{disabledLoading: isLoading}"
     class="bootstrap">
-    <div v-if="isLoading">
+
+    <div v-if="isLoading && !regionId">
       <div class="card-header text-white bg-primary">
         {{ title || '...' }}
       </div>
@@ -10,7 +11,7 @@
     </div>
 
     <div
-      v-if="!isLoading && id"
+      v-if="regionId"
       class="card rounded">
       <div class="card-header text-white bg-primary">
         <div class="row">
@@ -32,7 +33,24 @@
           </div>
         </div>
       </div>
+      <div
+        v-if="!isActive && mayModerate"
+        class="card-body">
+        <div
+          class="alert alert-warning"
+          role="alert">
+          {{ $i18n('forum.thread_is_inactive_description') }}
+          <hr>
+          <button
+            class="btn btn-secondary btn-sm"
+            @click="activateThread"><i class="fa fa-check" /> {{ $i18n('forum.activate_thread') }}</button>
+          <button
+            class="btn btn-secondary btn-sm"
+            @click="$refs.deleteModal.show()"><i class="fa fa-trash" /> {{ $i18n('forum.delete_thread') }}</button>
+        </div>
+      </div>
     </div>
+
     <div
       v-for="post in posts"
       :key="post.id">
@@ -69,10 +87,22 @@
       :error-message="errorMessage"
       @submit="createPost"
       @toggleFollow="toggleFollow" />
+
+    <b-modal
+      ref="deleteModal"
+      :title="$i18n('forum.delete_thread')"
+      :cancel-title="$i18n('button.abort')"
+      :ok-title="$i18n('button.yes_i_am_sure')"
+      @ok="deleteThread"
+    >
+      {{ $i18n('really_delete') }}
+    </b-modal>
   </div>
 </template>
 
 <script>
+import bModal from '@b/components/modal/modal'
+
 import ThreadPost from './ThreadPost'
 import ThreadForm from './ThreadForm'
 import * as api from '@/api/forum'
@@ -81,7 +111,7 @@ import i18n from '@/i18n'
 import { user } from '@/server-data'
 
 export default {
-  components: { ThreadPost, ThreadForm },
+  components: { bModal, ThreadPost, ThreadForm },
   props: {
     id: {
       type: Number,
@@ -91,6 +121,8 @@ export default {
   data () {
     return {
       title: '',
+      regionId: null,
+      regionSubId: null,
       posts: [],
 
       isSticky: true,
@@ -108,7 +140,7 @@ export default {
     this.reload()
   },
   methods: {
-    reply(body) {
+    reply (body) {
       // this.$refs.form.text = `> ${body.split('\n').join('\n> ')}\n\n${this.$refs.form.text}`
       this.$refs.form.focus()
     },
@@ -117,6 +149,8 @@ export default {
         let res = (await api.getThread(this.id)).data
         Object.assign(this, {
           title: res.title,
+          regionId: res.regionId,
+          regionSubId: res.regionSubId,
           posts: res.posts,
           isSticky: res.isSticky,
           isActive: res.isActive,
@@ -238,11 +272,35 @@ export default {
         this.errorMessage = err.message
         this.$refs.form.text = body
       }
+    },
+
+    async activateThread () {
+      this.isActive = true
+      try {
+        await api.activateThread(this.id)
+      } catch (err) {
+        this.isActive = false
+        pulseError(i18n('error_unexpected'))
+      }
+    },
+    async deleteThread () {
+      this.isLoading = true
+      try {
+        await api.deleteThread(this.id)
+
+        // redirect to forum overview
+        window.location = this.$url('forum', this.regionId, this.regionSubId)
+      } catch (err) {
+        this.isLoading = false
+        pulseError(i18n('error_unexpected'))
+      }
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
+.card-body > .alert {
+  margin-bottom: 0;
+}
 </style>
