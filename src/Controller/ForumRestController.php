@@ -30,7 +30,7 @@ class ForumRestController extends FOSRestController
 	{
 		$res = [
 			'id' => $thread['id'],
-			'name' => $thread['name'],
+			'title' => $thread['title'],
 			'createdAt' => $thread['time'],
 			'isSticky' => (bool)$thread['sticky'],
 			'isActive' => (bool)$thread['active'] ?? true,

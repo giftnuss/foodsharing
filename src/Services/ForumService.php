@@ -137,7 +137,7 @@ class ForumService
 					'anrede' => $this->func->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 					'name' => $f['name'],
 					'link' => BASE_URL . $this->url($info['region_id'], $info['ambassador_forum'], $threadId, $postId),
-					'theme' => $info['name'],
+					'theme' => $info['title'],
 					'post' => $body,
 					'poster' => $poster
 				));
@@ -157,7 +157,7 @@ class ForumService
 					'anrede' => $this->func->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 					'bezirk' => $region['name'],
 					'poster' => $poster,
-					'thread' => $theme['name'],
+					'thread' => $theme['title'],
 					'link' => BASE_URL . $this->url($region['id'], false, $threadId)
 				);
 			}
@@ -171,7 +171,7 @@ class ForumService
 
 	private function notifyUsersNewThread($region, $threadId, $ambassadorForum)
 	{
-		$theme = $this->model->getValues(array('foodsaver_id', 'name', 'last_post_id'), 'theme', $threadId);
+		$theme = $this->model->getValues(array('foodsaver_id', 'title', 'last_post_id'), 'theme', $threadId);
 		$body = $this->model->getVal('body', 'theme_post', $theme['last_post_id']);
 
 		$poster = $this->model->getVal('name', 'foodsaver', $theme['foodsaver_id']);
@@ -197,7 +197,7 @@ class ForumService
 					'anrede' => $this->func->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 					'bezirk' => $region['name'],
 					'poster' => $poster,
-					'thread' => $theme['name'],
+					'thread' => $theme['title'],
 					'link' => BASE_URL . $this->url($region['id'], $ambassadorForum, $threadId),
 					'post' => $body
 				);
