@@ -88,5 +88,14 @@ $border-radius: 6px;
     }
 }
 
+
 // some components get created outside the scope (e.g. tooltip)
 @import "~bootstrap/scss/tooltip";
+
+// override conflicting fs styles for the bootstrap tooltips
+.tooltip > .arrow {
+    margin-left: 7px;
+    &::after {
+        display: none;
+    }
+}
