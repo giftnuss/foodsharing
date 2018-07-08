@@ -42,7 +42,17 @@ export function post (path, body) {
 
 export function put (path, body) {
   return request(path, {
-    method: 'POST',
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    body: JSON.stringify(body)
+  })
+}
+
+export function patch (path, body) {
+  return request(path, {
+    method: 'PATCH',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
     },

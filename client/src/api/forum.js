@@ -1,4 +1,4 @@
-import { get, post, put, remove } from './base'
+import { get, post, put, patch, remove } from './base'
 
 export function getThread (threadId) {
   return get(`/forum/thread/${threadId}`)
@@ -13,11 +13,15 @@ export function unfollowThread (threadId) {
 }
 
 export function stickThread (threadId) {
-  return post(`/forum/thread/${threadId}/stick`)
+  return patch(`/forum/thread/${threadId}`, {
+    isSticky: true
+  })
 }
 
 export function unstickThread (threadId) {
-  return remove(`/forum/thread/${threadId}/stick`)
+  return patch(`/forum/thread/${threadId}`, {
+    isSticky: false
+  })
 }
 
 export function createPost (threadId, body) {
@@ -37,14 +41,10 @@ export function deletePost (postId) {
   return remove(`/forum/post/${postId}`)
 }
 
-export function addReaction (postId, emoji) {
-  return post(`/forum/post/${postId}/reaction`, {
-    emoji: emoji
-  })
+export function addReaction (postId, key) {
+  return post(`/forum/post/${postId}/reaction/${key}`)
 }
 
-export function removeReaction (postId, emoji) {
-  return remove(`/forum/post/${postId}/reaction`, {
-    emoji: emoji
-  })
+export function removeReaction (postId, key) {
+  return remove(`/forum/post/${postId}/reaction/${key}`)
 }
