@@ -36,13 +36,13 @@ export function expose (data) {
 }
 
 export function dateFormat (date, format = 'full-long') {
-  if (format == 'full-long') {
+  if (format === 'full-long') {
     if (dateFnsIsSameYear(date, new Date())) {
       return dateFormat(date, 'dddd, Do MMM, HH:mm [Uhr]')
     } else {
       return dateFormat(date, 'dddd, Do MMM YYYY, HH:mm [Uhr]')
     }
-  } else if (format == 'full-short') {
+  } else if (format === 'full-short') {
     if (dateFnsIsSameYear(date, new Date())) {
       return dateFormat(date, 'dd, DD. MMM, HH:mm')
     } else {
