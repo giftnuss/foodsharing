@@ -1,36 +1,4 @@
-
-<div align="center">
-	<br>
-	<br>
-	<a href="https://foodsharing.de">
-		<!-- image is docs/images/FS_Logo_gb_RGB.png but hosted publicly -->
-		<img src="https://user-images.githubusercontent.com/31616/42413241-8802b03c-821c-11e8-91c5-f94930313290.png" alt="foodsharing">
-	</a>
-	<br>
-	<br>
-</div>
-
-<!-- image is docs/images/fsscreenshot.png but hosted pubicly -->
-![](https://user-images.githubusercontent.com/31616/42418486-f8f571e6-82a1-11e8-8771-41e403944101.png)
-
-## 🌍 Overview
-
-This is the code that powers
-[foodsharing.de](https://foodsharing.de), 
-[foodsharing.at](https://foodsharing.at), and
-[foodsharingschweiz.ch](https://foodsharingschweiz.ch).
-
-## 💻 Development
-
-Visit [devdocs.foodsharing.de](https://devdocs.foodsharing.de) to get started with development.
-
-## 💒 Community
-
-Our developers hang out in the
-[yunity slack](https://slackin.yunity.org) group in the
-**#foodsharing-dev** and **#foodsharing-beta** channels. Come and say hi!
-
-## 👪 Contributors
+# Contributors
 
 <!-- FOODSHARING-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <table border="0">
@@ -277,6 +245,3 @@ Our developers hang out in the
   </tbody>
 </table>
 <!-- FOODSHARING-CONTRIBUTORS-LIST:END -->
-
-This project sort of follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification.
-Contributions of any kind are welcome!

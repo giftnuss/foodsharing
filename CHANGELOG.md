@@ -55,6 +55,7 @@
 - Improve linting config !431 @nicksellen
 - Add ./scripts/dev for running webpack dev env !437 @nicksellen
 - Improve linting config more (add vue linting) !441 @nicksellen
+- Implement basic dev docs content, make shinier readme with contributors !443 @nicksellen
 
 # 2018-05-24
 
