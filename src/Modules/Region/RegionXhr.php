@@ -31,54 +31,6 @@ class RegionXhr extends Control
 			|| $this->func->isOrgaTeam();
 	}
 
-	public function followTheme()
-	{
-		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
-		if (!$this->session->may() || !$this->hasThemeAccess($bot_theme)) {
-			return $this->responses->fail_permissions();
-		}
-
-		$this->forumGateway->followThread($this->session->id(), $_GET['tid']);
-
-		return $this->responses->success();
-	}
-
-	public function unfollowTheme()
-	{
-		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
-		if (!$this->session->may() || !$this->hasThemeAccess($bot_theme)) {
-			return $this->responses->fail_permissions();
-		}
-
-		$this->forumGateway->unfollowThread($this->session->id(), $_GET['tid']);
-
-		return $this->responses->success();
-	}
-
-	public function stickTheme()
-	{
-		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
-		if (!$this->session->may() || !$this->hasThemeAccess($bot_theme)) {
-			return $this->responses->fail_permissions();
-		}
-
-		$this->forumGateway->stickThread($_GET['tid']);
-
-		return $this->responses->success();
-	}
-
-	public function unstickTheme()
-	{
-		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
-		if (!$this->session->may() || !$this->hasThemeAccess($bot_theme)) {
-			return $this->responses->fail_permissions();
-		}
-
-		$this->forumGateway->unstickThread($_GET['tid']);
-
-		return $this->responses->success();
-	}
-
 	public function morethemes()
 	{
 		$regionId = (int)$_GET['bid'];

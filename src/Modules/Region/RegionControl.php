@@ -211,56 +211,6 @@ class RegionControl extends Control
 		$response->setContent($this->render('pages/Region/fairteiler.twig', $viewdata));
 	}
 
-	private function forum_thread($threadId, $region, $ambassadorForum = false)
-	{
-		$viewdata = [];
-
-		$processPosts = function ($p) {
-			$p['mayDeletePost'] = $this->forumPermissions->mayDeletePost($p);
-			$p['avatar'] = [
-				'user' => ['id' => $p['author_id'],
-					'name' => $p['author_name'],
-					'sleep_status' => $p['author_sleep_status'],
-				],
-				'size' => '130',
-				'imageUrl' => $this->func->img($p['author_photo'], '130', 'q')
-			];
-			$p['time'] = $this->func->niceDate($p['time_ts']);
-
-			return $p;
-		};
-
-		if ($this->forumPermissions->mayAccessThread($threadId) && $thread = $this->forumGateway->getThread($threadId)) {
-			$viewdata['thread'] = $thread;
-			$this->func->addBread($thread['title']);
-			if ($thread['active'] == 0 && ($this->forumPermissions->mayActivateThreads($region['id']))) {
-				if (isset($_GET['activate'])) {
-					$this->forumService->activateThread($threadId, $region, $ambassadorForum);
-					$this->func->info('Thema wurde aktiviert!');
-					$this->func->go($this->forumService->url($region['id'], $ambassadorForum, $threadId));
-				} elseif (isset($_GET['delete'])) {
-					$this->func->info('Thema wurde gelöscht!');
-					$this->forumGateway->deleteThread($threadId);
-					$this->func->go($this->forumService->url($region['id'], $ambassadorForum));
-				}
-				$viewdata['activate_url'] = $this->forumService->url($region['id'], $ambassadorForum, $threadId) . '&activate=1';
-				$viewdata['delete_url'] = $this->forumService->url($region['id'], $ambassadorForum, $threadId) . '&delete=1';
-			}
-
-			if ($thread['active'] == 1 || $this->forumPermissions->mayActivateThreads($region['id'])) {
-				$viewdata['posts'] = array_map($processPosts, $this->forumGateway->listPosts($threadId));
-				$viewdata['following'] = $this->forumGateway->isFollowing($this->session->id(), $threadId);
-				$viewdata['mayChangeStickyness'] = $this->forumPermissions->mayChangeStickyness($region['id']);
-			} else {
-				$this->func->go($this->forumService->url($region['id'], false));
-			}
-		} else {
-			$this->func->go($this->forumService->url($region['id'], $ambassadorForum));
-		}
-
-		return $viewdata;
-	}
-
 	private function handleNewThreadForm(Request $request, $region, $ambassadorForum)
 	{
 		$this->func->addBread($this->translator->trans('forum.new_thread'));
@@ -281,28 +231,6 @@ class RegionControl extends Control
 		return $form->createView();
 	}
 
-	private function handlePostForm(Request $request, Response $response, $region, $threadId, $ambassadorForum)
-	{
-		$data = CreateForumPostData::create($this->forumGateway->isFollowing($this->session->id(), $threadId), $threadId);
-		$form = $this->formFactory->getFormFactory()->create(ForumPostForm::class, $data);
-		$form->handleRequest($request);
-		if ($form->isSubmitted()) {
-			if ($form->isValid() && $this->forumPermissions->mayPostToThread($threadId)) {
-				$postId = $this->forumService->addPostToThread($this->session->id(), $data->thread, $data->body);
-				if ($data->subscribe) {
-					$this->forumGateway->followThread($this->session->id(), $data->thread);
-				} else {
-					$this->forumGateway->unfollowThread($this->session->id(), $data->thread);
-				}
-				$this->func->go($this->forumService->url($region['id'], $ambassadorForum, $data->thread, $postId));
-			} else {
-				$this->func->error($this->func->s('post_could_not_saved'));
-			}
-		}
-
-		return $form->createView();
-	}
-
 	private function forum(Request $request, Response $response, $region, $ambassadorForum)
 	{
 		$sub = $request->query->get('sub');
@@ -313,42 +241,13 @@ class RegionControl extends Control
 		$viewdata['sub'] = $sub;
 
 		if ($tid = $request->query->getInt('tid')) {
-			$viewdata['postForm'] = $this->handlePostForm($request, $response, $region, $tid, $ambassadorForum);
-			$viewdata = array_merge($viewdata, $this->forum_thread($tid, $region, $ambassadorForum));
+			/* this index triggers the rendering of the vue forum component */
+			$viewdata['thread'] = ['id' => $tid];
+			$viewdata['posts'] = [];
 		} elseif ($request->query->has('newthread')) {
 			$viewdata['newThreadForm'] = $this->handleNewThreadForm($request, $region, $ambassadorForum);
 		} else {
 			$viewdata['threads'] = $this->regionHelper->transformThreadViewData($this->forumGateway->listThreads($region['id'], $ambassadorForum), $region['id'], $ambassadorForum);
-		}
-
-		// map the post objects to match the format which is gonna be send out by the api
-		// get removed anyway as soon as the API is in use
-		if (isset($viewdata['posts'])) {
-			// $viewdata['posts'] = array_map(function ($post) {
-			// 	return [
-			// 		'id' => (int)$post['id'],
-			// 		'body' => $post['body'],
-			// 		'time' => date('Y-m-d H:i:s', $post['time_ts']),
-			// 		'author' => [
-			// 			'id' => (int)$post['fs_id'],
-			// 			'name' => $post['fs_name'],
-			// 			'sleepStatus' => (int)$post['fs_sleep_status'],
-			// 			'avatar' => [
-			// 				'url' => $post['avatar']['imageUrl'],
-			// 				'size' => (int)$post['avatar']['size'],
-			// 			]
-			// 		],
-			// 		'reactions' => [
-			// 			[
-			// 				'key' => 'banana',
-			// 				'count' => 5
-			// 			],
-			// 		],
-			// 		'mayDeletePost' => (bool)$post['mayDeletePost']
-			// 	];
-			// }, $viewdata['posts']);
-			// $viewdata['posts'] = array_slice($viewdata['posts'], 0, 2);
-			$viewdata['posts'] = [];
 		}
 
 		$response->setContent($this->render('pages/Region/forum.twig', $viewdata));
