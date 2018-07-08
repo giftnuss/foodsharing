@@ -4,7 +4,7 @@
       v-if="isLoading"
       class="disabledLoading">
       <div class="card-header text-white bg-primary">
-        {{ title || '...' }}
+        {{ name || '...' }}
       </div>
       <div class="card-body p-5"/>
     </div>
@@ -15,7 +15,7 @@
       <div class="card-header text-white bg-primary">
         <div class="row">
           <div class="col text-truncate ml-2 pt-1 font-weight-bold">
-            {{ title }}
+            {{ name }}
           </div>
           <div class="col text-right">
             <a
@@ -24,9 +24,10 @@
               {{ $i18n(isFollowing ? 'forum.unfollow' : 'forum.follow') }}
             </a>
             <a
+              v-if="mayModerate"
               class="btn btn-sm btn-secondary"
               @click="toggleStickyness">
-              {{ $i18n(isSticked ? 'forum.unstick' : 'forum.stick') }}
+              {{ $i18n(isSticky ? 'forum.unstick' : 'forum.stick') }}
             </a>
           </div>
         </div>
@@ -88,23 +89,31 @@ export default {
   },
   data () {
     return {
-      regionId: null,
-      title: '',
+      name: '',
       posts: [],
-      loadingPosts: [],
+      
+      isSticky: true,
+      isActive: true,
+      mayModerate: false,
       isFollowing: true,
-      isSticked: true,
-      mayChangeStickyness: true,
 
       isLoading: false,
+      loadingPosts: [],
       errorMessage: null
     }
   },
   async created () {
     try {
       this.isLoading = true
-      let thread = await api.getThread(this.id)
-      Object.assign(this, thread)
+      let res = (await api.getThread(this.id)).data
+      Object.assign(this, {
+        name: res.name,
+        posts: res.posts,
+        isSticky: res.isSticky,
+        isActive: res.isActive,
+        mayModerate: res.mayModerate,
+        isFollowing: res.isFollowing
+      })
       this.isLoading = false
     } catch (err) {
       this.isLoading = false
@@ -189,8 +198,8 @@ export default {
       }
     },
     async toggleStickyness () {
-      let targetState = !this.isSticked
-      this.isSticked = targetState
+      let targetState = !this.isSticky
+      this.isSticky = targetState
       try {
         if (targetState) {
           await api.stickThread(this.id)
@@ -199,7 +208,7 @@ export default {
         }
       } catch (err) {
         // failed? undo it
-        this.isSticked = !targetState
+        this.isSticky = !targetState
         pulseError(i18n('error_unexpected'))
       }
     },

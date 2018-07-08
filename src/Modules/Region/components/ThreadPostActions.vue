@@ -4,15 +4,15 @@
     <!-- emoji buttons & selector -->
     <span class="emojis">
       <span
-        v-for="emoji in reactions"
-        v-if="emoji.count"
-        :key="emoji.key">
+        v-for="reaction in reactions"
+        v-if="reaction.count"
+        :key="reaction.key">
         <a
-          :class="['btn', 'btn-sm', (emoji.mine ? 'btn-primary' : 'btn-secondary')]"
-          :title="emoji.key"
-          @click="toggleReaction(emoji.key)"
+          :class="['btn', 'btn-sm', (reaction.mine ? 'btn-primary' : 'btn-secondary')]"
+          :title="reaction.key"
+          @click="toggleReaction(reaction.key)"
         >
-          {{ emoji.count }}x <Emoji :name="emoji.key" />
+          {{ reaction.users.length }}x <Emoji :name="reaction.key" />
         </a>
       </span>
       <b-dropdown

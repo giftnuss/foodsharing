@@ -8,9 +8,9 @@
         <div class="col-3 avatarSide text-center">
           <a :href="$url('profile', author.id)">
             <Avatar
-              :url="author.avatar.url"
-              :size="author.avatar.size"
+              :url="author.avatar"
               :sleep-status="author.sleepStatus"
+              size="130"
             />
           </a>
           <a
@@ -24,7 +24,7 @@
       <div class="card-footer">
         <div class="row">
           <div class="col-4 text-muted">
-            <small>{{ time | dateFormat('dddd, Do MMM YYYY, HH:mm [Uhr]') }}</small>
+            <small>{{ createdAt | dateFormat('dddd, Do MMM YYYY, HH:mm [Uhr]') }}</small>
           </div>
           <div class="col text-right">
             <ThreadPostActions
@@ -51,9 +51,10 @@ import conv from '@/conv'
 export default {
   components: { Avatar, ThreadPostActions },
   props: {
+    id: { type: Number, default: null },
     body: { type: String, default: '' },
     author: { type: Object, default: () => ({ avatar: {} }) },
-    time: { type: Date, default: null },
+    createdAt: { type: Date, default: null },
     reactions: { type: Array, default: () => [] },
     mayEdit: { type: Boolean, default: false },
     mayDelete: { type: Boolean, default: false },
