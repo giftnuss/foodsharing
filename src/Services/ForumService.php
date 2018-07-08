@@ -320,12 +320,12 @@ class ForumService
 				$postId = $id[1];
 			}
 			if (!isset($reactions[$postId])) {
-				$reactions[$postId] = [
-					'key' => $r['key'],
-					'users' => []
-				];
+				$reactions[$postId] = [];
 			}
-			$reactions[$postId]['users'][] = [
+			if (!isset($reactions[$postId][$r['key']])) {
+				$reactions[$postId][$r['key']] = [];
+			}
+			$reactions[$postId][$r['key']][] = [
 				'id' => $r['foodsaver_id'],
 				'name' => $r['foodsaver_name']
 			];
