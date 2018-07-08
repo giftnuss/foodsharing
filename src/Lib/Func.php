@@ -1693,6 +1693,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	public function tt($str, $length = 160)
 	{
 		if (strlen($str) > $length) {
+			/* this removes the part of the last word that might have been destroyed by substr */
 			$str = preg_replace('/[^ ]*$/', '', substr($str, 0, $length)) . ' ...';
 		}
 

@@ -77,6 +77,17 @@ services:
 
     Symfony\Component\Translation\TranslatorInterface: '@translator'
 
+    markdown.nohtml:
+        class: \Parsedown
+        calls:
+            - ['setSafeMode', [true]]
+            - ['setMarkupEscaped', [false]]
+            - ['setBreaksEnabled', [true]]
+
+    Parsedown: '@markdown.nohtml'
+
+    HTMLPurifier: '@exercise_html_purifier.default'
+
     validator.builder:
         class: Symfony\Component\Validator\ValidatorBuilder
         factory: 'Symfony\Component\Validator\Validation::createValidatorBuilder'

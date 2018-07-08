@@ -6,6 +6,7 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Services\ForumService;
+use Foodsharing\Services\OutputSanitizerService;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -17,13 +18,15 @@ class ForumRestController extends FOSRestController
 	private $forumGateway;
 	private $forumPermissions;
 	private $forumService;
+	private $outputSanitizerService;
 
-	public function __construct(Session $session, ForumGateway $forumGateway, ForumPermissions $forumPermissions, ForumService $forumService)
+	public function __construct(Session $session, ForumGateway $forumGateway, ForumPermissions $forumPermissions, ForumService $forumService, OutputSanitizerService $outputSanitizerService)
 	{
 		$this->session = $session;
 		$this->forumGateway = $forumGateway;
 		$this->forumPermissions = $forumPermissions;
 		$this->forumService = $forumService;
+		$this->outputSanitizerService = $outputSanitizerService;
 	}
 
 	private function normalizeThread($thread)
@@ -43,7 +46,7 @@ class ForumRestController extends FOSRestController
 		];
 		if (isset($thread['post_time'])) {
 			$res['lastPost']['createdAt'] = $thread['post_time'];
-			$res['lastPost']['body'] = $thread['post_body'];
+			$res['lastPost']['body'] = $this->outputSanitizerService->sanitizeForHtml($thread['post_body']);
 			$res['lastPost']['author'] = [
 				'id' => $thread['foodsaver_id'],
 				'name' => $thread['foodsaver_name'],
@@ -67,7 +70,7 @@ class ForumRestController extends FOSRestController
 	{
 		return [
 			'id' => $post['id'],
-			'body' => $post['body'],
+			'body' => $this->outputSanitizerService->sanitizeForHtml($post['body']),
 			'createdAt' => $post['time'],
 			'author' => [
 				'id' => $post['author_id'],

@@ -4,17 +4,20 @@ namespace Foodsharing\Modules\Activity;
 
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Mailbox\MailboxModel;
+use Foodsharing\Services\OutputSanitizerService;
 
 class ActivityModel extends Model
 {
 	private $mailboxModel;
 	private $activityGateway;
+	private $outputSanitizerService;
 
-	public function __construct(MailboxModel $mailboxModel, ActivityGateway $activityGateway)
+	public function __construct(MailboxModel $mailboxModel, ActivityGateway $activityGateway, OutputSanitizerService $outputSanitzierService)
 	{
 		parent::__construct();
 		$this->mailboxModel = $mailboxModel;
 		$this->activityGateway = $activityGateway;
+		$this->outputSanitizerService = $outputSanitzierService;
 	}
 
 	public function loadBasketWallUpdates($page = 0)
@@ -65,12 +68,13 @@ class ActivityModel extends Model
 	private function textPrepare($txt): ?string
 	{
 		$txt = trim($txt);
+		$sanitized = $this->outputSanitizerService->sanitizeForHtml($txt);
 
 		if (strlen($txt) > 100) {
-			return '<span class="txt">' . $this->func->tt(strip_tags($txt), 90) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fa fa-angle-down"></i></a></span><span class="txt" style="display:none;">' . strip_tags($txt, '<br>') . ' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fa fa-angle-up"></i></a></span>';
+			return '<span class="txt">' . $this->outputSanitizerService->sanitizeForHtml($this->func->tt($txt, 90)) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fa fa-angle-down"></i></a></span><span class="txt" style="display:none;">' . $sanitized . ' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fa fa-angle-up"></i></a></span>';
 		}
 
-		return '<span class="txt">' . $txt . '</span>';
+		return '<span class="txt">' . $sanitized . '</span>';
 	}
 
 	public function loadFriendWallUpdates($hidden_ids, $page = 0)

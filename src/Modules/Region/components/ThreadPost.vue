@@ -17,9 +17,7 @@
             class="btn btn-sm btn-outline-primary"
             @click="openChat"><i class="fa fa-comments" /> {{ $i18n('chat.open_chat') }}</a>
         </div>
-        <div class="col">
-          {{ body }}
-        </div>
+        <div class="col" v-html="body" />
       </div>
       <div class="card-footer">
         <div class="row">
