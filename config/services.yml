@@ -28,6 +28,9 @@ services:
             - [addExtension, ['@Twig_Extension_Debug']]
             - [addExtension, ['@Twig_Extension_Intl']]
             - [addExtension, ['@Foodsharing\Lib\TwigExtensions']]
+            - [addExtension, ['@Exercise\HTMLPurifierBundle\Twig\HTMLPurifierExtension']]
+
+    Exercise\HTMLPurifierBundle\Twig\HTMLPurifierExtension: ~
 
     Twig:
         alias: Twig\Environment
