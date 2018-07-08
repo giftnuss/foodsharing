@@ -34,6 +34,7 @@
               @delete="$emit('delete')"
               @reactionAdd="$emit('reactionAdd', $event)"
               @reactionRemove="$emit('reactionRemove', $event)"
+              @reply="$emit('reply', body)"
             />
 
           </div>

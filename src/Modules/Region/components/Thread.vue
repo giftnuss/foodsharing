@@ -48,6 +48,7 @@
         @toggleFollow="toggleFollow"
         @reactionAdd="reactionAdd(post, arguments[0])"
         @reactionRemove="reactionRemove(post, arguments[0])"
+        @reply="reply"
       />
     </div>
     <div
@@ -107,6 +108,10 @@ export default {
     this.reload()
   },
   methods: {
+    reply(body) {
+      // this.$refs.form.text = `> ${body.split('\n').join('\n> ')}\n\n${this.$refs.form.text}`
+      this.$refs.form.focus()
+    },
     async reload () {
       try {
         let res = (await api.getThread(this.id)).data

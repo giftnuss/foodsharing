@@ -6,6 +6,7 @@
       </div>
       <div class="card-body">
         <textarea
+          ref="textarea"
           v-model="text"
           class="form-control"
           rows="3"
@@ -54,6 +55,9 @@ export default {
       if (!this.text.trim()) return
       this.$emit('submit', this.text.trim())
       this.text = ''
+    },
+    focus () {
+      this.$refs.textarea.focus()
     }
   }
 }
