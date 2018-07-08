@@ -43,7 +43,7 @@
         :may-delete="true"
         :may-edit="true"
         :is-loading="loadingPosts.indexOf(post.id) != -1"
-        :createdAt="new Date(post.createdAt)"
+        :created-at="new Date(post.createdAt)"
         @delete="deletePost(post)"
         @toggleFollow="toggleFollow"
         @reactionAdd="reactionAdd(post, arguments[0])"
