@@ -1,6 +1,13 @@
 <template>
   <div class="bootstrap">
-    <div class="card rounded">
+    <div v-if="isLoading" class="disabledLoading">
+        <div class="card-header text-white bg-primary">
+                {{ title || '...' }}
+        </div>
+        <div class="card-body p-5"></div>
+    </div>
+    
+    <div v-if="!isLoading && id" class="card rounded">
         <div class="card-header text-white bg-primary">
             <div class="row">
                 <div class="col text-truncate ml-2 pt-1 font-weight-bold">
@@ -31,6 +38,12 @@
             @reactionAdd="reactionAdd(post, arguments[0])"
             @reactionRemove="reactionRemove(post, arguments[0])"
         />
+    </div>
+    <div v-if="!isLoading && id && !posts.length" class="alert alert-warning" role="alert">
+        Bisher keine Beiträge vorhanden
+    </div>
+    <div v-if="errorMessage" class="alert alert-danger" role="alert">
+        <strong>{{ $i18n('error_unexpected') }}:</strong> {{ errorMessage }}
     </div>
     <ThreadForm 
         @submit="createPost"
@@ -70,8 +83,16 @@ export default {
           errorMessage: null
       }
   },
-  created() {
-      // TODO: get data by API instead of HTML created by FormControl.php
+  async created() {
+      try {
+          this.isLoading = true
+          let thread = await api.getThread(this.id)
+          Object.assign(this, thread)
+          this.isLoading = false
+      } catch(err) {
+          this.isLoading = false
+          this.errorMessage = err.message
+      }
   },
   methods: {
     async deletePost(post) {

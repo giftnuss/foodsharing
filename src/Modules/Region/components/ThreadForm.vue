@@ -5,9 +5,6 @@
               Antworten
             </div>
             <div class="card-body">
-                <div v-if="errorMessage" class="alert alert-danger" role="alert">
-                    <strong>{{ $i18n('forum.sending_error') }}:</strong> {{ errorMessage }}
-                </div>
                 <textarea class="form-control" v-model="text" rows="3"  @keyup.shift.enter="submit"></textarea>
             </div>
             <div class="card-footer">
@@ -38,7 +35,6 @@ export default {
       }
   },
   props: {
-      errorMessage: {},
       isFollowing: {}
   },
   methods: {
