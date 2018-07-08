@@ -117,6 +117,7 @@ class ForumService
 	public function activateThread($threadId, $region = null, $ambassadorForum = false)
 	{
 		$this->forumGateway->activateThread($threadId);
+		/* TODO: this needs proper first activation handling */
 		if ($region) {
 			$this->notifyUsersNewThread($region, $threadId, $ambassadorForum);
 		}

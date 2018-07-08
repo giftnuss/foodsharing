@@ -8,6 +8,7 @@ use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Services\ForumService;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ForumRestController extends FOSRestController
@@ -101,7 +102,6 @@ class ForumRestController extends FOSRestController
 	}
 
 	/**
-	 * @param $threadId integer unique ID of thread to be requested
 	 * @Rest\Get("forum/thread/{threadId}", requirements={"threadId" = "\d+"})
 	 */
 	public function getThreadAction($threadId)
@@ -122,6 +122,32 @@ class ForumRestController extends FOSRestController
 		], 200);
 
 		return $this->handleView($view);
+	}
+
+	/**
+	 * @Rest\Patch("forum/thread/{threadId}", requirements={"threadId" = "\d+"})
+	 * @Rest\RequestParam(name="sticky", nullable=true, default=null)
+	 * @Rest\RequestParam(name="active", nullable=true, default=null)
+	 */
+	public function patchThreadAction($threadId, ParamFetcher $paramFetcher)
+	{
+		if (!$this->forumPermissions->mayAdministrateThread($threadId)) {
+			throw new HttpException(403);
+		}
+		$sticky = $paramFetcher->get('sticky');
+		$active = $paramFetcher->get('active');
+		if (!is_null($sticky)) {
+			if ($sticky === true) {
+				$this->forumGateway->stickThread($threadId);
+			} else {
+				$this->forumGateway->unstickThread($threadId);
+			}
+		}
+		if ($active === true) {
+			$this->forumService->activateThread($threadId);
+		}
+
+		return $this->getThreadAction($threadId);
 	}
 
 	/**

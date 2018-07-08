@@ -59,6 +59,21 @@ class ForumPermissions
 		return false;
 	}
 
+	public function mayAdministrateThread($threadId): bool
+	{
+		if ($this->session->isOrgaTeam()) {
+			return true;
+		}
+		$forums = $this->forumGateway->getForumsForThread($threadId);
+		foreach ($forums as $forum) {
+			if ($this->mayAccessForum($forum['forumId'], 1)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public function mayAccessThread($threadId): bool
 	{
 		return $this->mayPostToThread($threadId);
