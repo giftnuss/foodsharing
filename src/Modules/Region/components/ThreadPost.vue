@@ -22,7 +22,7 @@
         <div class="card-footer">
             <div class="row">
                 <div class="col-4 text-muted">
-                    <small>{{ time | dateFormat('dddd, Do MMMM YYYY, HH:mm [Uhr]') }}</small>
+                    <small>{{ time | dateFormat('dddd, Do MMM YYYY, HH:mm [Uhr]') }}</small>
                 </div>
                 <div class="col text-right">
                     <ThreadPostActions 

@@ -123,5 +123,6 @@ export default {
 }
 .divider {
     margin: 0 0.3em;
+    opacity: 0.3;
 }
 </style>
