@@ -80,7 +80,6 @@
 <script>
 import bDropdown from '@b/components/dropdown/dropdown'
 import bModal from '@b/components/modal/modal'
-import bModalDirective from '@b/directives/modal/modal'
 import bTooltip from '@b/directives/tooltip/tooltip'
 
 import Emoji from '@/components/Emoji'
@@ -89,7 +88,7 @@ import { user } from '@/server-data'
 
 export default {
   components: { bDropdown, Emoji, bModal },
-  directives: { bModal: bModalDirective, bTooltip },
+  directives: { bTooltip },
   props: {
     reactions: {
       type: Object,
@@ -126,8 +125,7 @@ export default {
       return !!this.reactions[key].find(r => r.id === user.id)
     },
     concatUsers (users) {
-      let names = users.map(u => u.id === user.id ? 'von dir' : u.name)
-
+      let names = users.map(u => u.id === user.id ? 'Du' : u.name)
       if (names.length === 1) return names[0]
 
       return names.slice(0, names.length - 1).join(', ') + ' & ' + names[names.length - 1]
