@@ -8,15 +8,18 @@
         v-if="users.length"
         :key="key">
         <a
+          v-b-tooltip.hover
+          :title="concatUsers(users)"
           :class="['btn', 'btn-sm', (gaveIThisReaction(key) ? 'btn-primary' : 'btn-secondary')]"
-          :title="key"
           @click="toggleReaction(key)"
         >
           {{ users.length }}x <Emoji :name="key" />
         </a>
       </span>
       <b-dropdown
+        v-b-tooltip.hover
         ref="emojiSelector"
+        title="Eine Reaktion hinzufügen"
         text="➕"
         class="emoji-dropdown"
         toggle-class="btn-outline-secondary"
@@ -39,13 +42,26 @@
     <span :class="{divider: true, textPprimary: true, mobile: isMobile }" />
 
     <!-- non emoji button -->
-    <a class="btn btn-sm btn-secondary" @click="$emit('reply')">{{ $i18n('button.answer') }}</a>
     <a
+      class="btn btn-sm btn-secondary"
+      @click="$emit('reply')">{{ $i18n('button.answer') }}</a>
+    <a
+      v-b-tooltip.hover
       v-if="mayDelete"
+      title="Beitrag löschen"
       class="btn btn-sm btn-secondary"
       @click="$refs.modal.show()">
-      {{ $i18n('forum.delete_post') }}
+      <i class="fa fa-trash" />
     </a>
+
+    <!-- <a
+      v-if="mayEdit"
+      v-b-tooltip.hover
+      title="Beitrag bearbeiten"
+      class="btn btn-sm btn-secondary"
+      @click="$emit('edit')">
+      <i class="fa fa-pencil" />
+    </a> -->
 
     <!-- delete confirm modal -->
     <b-modal
@@ -65,13 +81,15 @@
 import bDropdown from '@b/components/dropdown/dropdown'
 import bModal from '@b/components/modal/modal'
 import bModalDirective from '@b/directives/modal/modal'
+import bTooltip from '@b/directives/tooltip/tooltip'
+
 import Emoji from '@/components/Emoji'
 import emojiList from '@/emojiList.json'
 import { user } from '@/server-data'
 
 export default {
   components: { bDropdown, Emoji, bModal },
-  directives: { bModal: bModalDirective },
+  directives: { bModal: bModalDirective, bTooltip },
   props: {
     reactions: {
       type: Object,
@@ -106,6 +124,13 @@ export default {
     gaveIThisReaction (key) {
       if (!this.reactions[key]) return false
       return !!this.reactions[key].find(r => r.id === user.id)
+    },
+    concatUsers (users) {
+      let names = users.map(u => u.id === user.id ? 'von dir' : u.name)
+
+      if (names.length === 1) return names[0]
+
+      return names.slice(0, names.length - 1).join(', ') + ' & ' + names[names.length - 1]
     }
   }
 }
