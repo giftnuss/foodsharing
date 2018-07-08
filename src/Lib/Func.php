@@ -1118,10 +1118,20 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	 */
 	public function getServerData()
 	{
+		
+		$user = $this->session->get('user');
+
 		$userData = [
 			'id' => $this->fsId(),
+			'firstname' => $user['name'],
+			'lastname' => $user['nachname'],
 			'may' => $this->session->may(),
 			'verified' => $this->isVerified(),
+			'avatar' => [
+				'mini' => $this->img($user['photo'], 'mini'),
+				'50' => $this->img($user['photo'], '50'),
+				'130' => $this->img($user['photo'], '130')
+			]
 		];
 
 		if ($this->session->may()) {

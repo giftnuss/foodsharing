@@ -46,6 +46,8 @@ import ThreadForm from './ThreadForm'
 import * as api from '@/api/forum'
 import { pulseError } from '@/script'
 import i18n from '@/i18n'
+import {user} from '@/server-data'
+
 
 export default {
   components: { ThreadPost, ThreadForm },
@@ -159,18 +161,16 @@ export default {
     },
     async createPost(body) {
         this.errorMessage = null
-
         let dummyPost = {
             id: -1,
             time: new Date,
             body: body,
             reactions: [],
             author: {
-                // TODO: implement some global user state
-                name: 'dummyName',
+                name: `${user.firstname} ${user.lastname}`,
                 avatar: {
                     size: 130,
-                    url: '/img/130_q_avatar.png' 
+                    url: user.avatar['130'] 
                 }
             }
         }
