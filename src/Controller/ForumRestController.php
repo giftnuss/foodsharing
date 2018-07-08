@@ -127,7 +127,7 @@ class ForumRestController extends FOSRestController
 	}
 
 	/**
-	 * @Rest\Post("forum/thread/{threadId}", requirements={"threadId" = "\d+"})
+	 * @Rest\Post("forum/thread/{threadId}/posts", requirements={"threadId" = "\d+"})
 	 * @Rest\RequestParam(name="body")
 	 */
 	public function createPostAction($threadId, ParamFetcher $paramFetcher)
