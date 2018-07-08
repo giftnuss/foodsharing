@@ -4,7 +4,7 @@
       v-if="isLoading"
       class="disabledLoading">
       <div class="card-header text-white bg-primary">
-        {{ name || '...' }}
+        {{ title || '...' }}
       </div>
       <div class="card-body p-5"/>
     </div>
@@ -15,7 +15,7 @@
       <div class="card-header text-white bg-primary">
         <div class="row">
           <div class="col text-truncate ml-2 pt-1 font-weight-bold">
-            {{ name }}
+            {{ title }}
           </div>
           <div class="col text-right">
             <a
@@ -89,9 +89,9 @@ export default {
   },
   data () {
     return {
-      name: '',
+      title: '',
       posts: [],
-      
+
       isSticky: true,
       isActive: true,
       mayModerate: false,
@@ -107,7 +107,7 @@ export default {
       this.isLoading = true
       let res = (await api.getThread(this.id)).data
       Object.assign(this, {
-        name: res.name,
+        title: res.title,
         posts: res.posts,
         isSticky: res.isSticky,
         isActive: res.isActive,
@@ -133,53 +133,44 @@ export default {
         this.loadingPosts.splice(this.loadingPosts.indexOf(post.id), 1)
       }
     },
-    getReactionFromPost (post, key) {
-      let reactionKeys = post.reactions.map(e => e.key)
-      let index = reactionKeys.indexOf(key)
 
-      if (index === -1) return null
+    async reactionAdd (post, key, onlyLocally=false) {
 
-      return post.reactions[index]
-    },
-    async reactionAdd (post, key) {
-      let reaction = this.getReactionFromPost(post, key)
-
-      if (reaction) {
+      if (post.reactions[key]) {
         // reaction alrready in list, increase count by 1
-        if (reaction.mine) return // already given - abort
-        reaction.count++
-        reaction.mine = true
+        if (post.reactions[key].find(r => r.id === user.id)) return // already given - abort
+        post.reactions[key].push({ id: user.id, name: user.firstname})
       } else {
         // reaction not in the list yet, append it
-        post.reactions.push({ key, count: 1, mine: true })
+        this.$set(post.reactions, key, [{ id: user.id, name: user.firstname}])
       }
 
-      try {
-        await api.addReaction(post.id, key)
-      } catch (err) {
-        // failed? remove it again
-        let reaction = this.getReactionFromPost(post, key)
-        reaction.count--
-        reaction.mine = false
-        pulseError(i18n('error_unexpected'))
+      if(!onlyLocally) {
+        try {
+          await api.addReaction(post.id, key)
+        } catch (err) {
+          // failed? remove it again
+          this.reactionRemove(post, key, true)
+          pulseError(i18n('error_unexpected'))
+        }
       }
     },
-    async reactionRemove (post, key) {
-      let reaction = this.getReactionFromPost(post, key)
+    async reactionRemove (post, key, onlyLocally=false) {
 
-      if (!reaction.mine) return
+    let reactionUser = post.reactions[key].find(r => r.id === user.id)
 
-      reaction.count--
-      reaction.mine = false
+      if(!reactionUser) return
 
-      try {
-        await api.removeReaction(post.id, key)
-      } catch (err) {
-        // failed? add it again
-        let reaction = this.getReactionFromPost(post, key)
-        reaction.count++
-        reaction.mine = true
-        pulseError(i18n('error_unexpected'))
+      post.reactions[key].splice(post.reactions[key].indexOf(reactionUser), 1)
+
+      if(!onlyLocally) {
+        try {
+          await api.removeReaction(post.id, key)
+        } catch (err) {
+          // failed? add it again
+          this.reactionAdd(post, key, true)
+          pulseError(i18n('error_unexpected'))
+        }
       }
     },
     async toggleFollow () {

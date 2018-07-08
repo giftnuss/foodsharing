@@ -4,15 +4,15 @@
     <!-- emoji buttons & selector -->
     <span class="emojis">
       <span
-        v-for="reaction in reactions"
-        v-if="reaction.count"
-        :key="reaction.key">
+        v-for="(users, key) in reactions"
+        v-if="users.length"
+        :key="key">
         <a
-          :class="['btn', 'btn-sm', (reaction.mine ? 'btn-primary' : 'btn-secondary')]"
-          :title="reaction.key"
-          @click="toggleReaction(reaction.key)"
+          :class="['btn', 'btn-sm', (gaveIThisReaction(key) ? 'btn-primary' : 'btn-secondary')]"
+          :title="key"
+          @click="toggleReaction(key)"
         >
-          {{ reaction.users.length }}x <Emoji :name="reaction.key" />
+          {{ users.length }}x <Emoji :name="key" />
         </a>
       </span>
       <b-dropdown
@@ -67,6 +67,7 @@ import bModal from '@b/components/modal/modal'
 import bModalDirective from '@b/directives/modal/modal'
 import Emoji from '@/components/Emoji'
 import emojiList from '@/emojiList.json'
+import { user } from '@/server-data'
 
 export default {
   components: { bDropdown, Emoji, bModal },
@@ -74,7 +75,7 @@ export default {
   props: {
     reactions: {
       type: Object,
-      default: () => []
+      default: () => ({})
     },
     mayDelete: {
       type: Boolean,
@@ -88,17 +89,19 @@ export default {
   },
   methods: {
     toggleReaction (key, dontRemove = false) {
-      let myReactionKeys = this.reactions.filter(e => e.mine).map(e => e.key)
-
-      if (myReactionKeys.indexOf(key) !== -1) {
-        if (!dontRemove) this.$emit('reactionRemove', key)
-      } else {
-        this.$emit('reactionAdd', key)
-      }
+        if(this.gaveIThisReaction(key)) {
+            if (!dontRemove) this.$emit('reactionRemove', key)
+        } else {
+            this.$emit('reactionAdd', key)
+        }
     },
     giveEmoji (key) {
       this.$refs.emojiSelector.hide()
       this.toggleReaction(key, true)
+    },
+    gaveIThisReaction(key) {
+        if(!this.reactions[key]) return false
+        return !!this.reactions[key].find(r => r.id === user.id)
     }
   }
 }

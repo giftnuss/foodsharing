@@ -55,7 +55,7 @@ export default {
     body: { type: String, default: '' },
     author: { type: Object, default: () => ({ avatar: {} }) },
     createdAt: { type: Date, default: null },
-    reactions: { type: Array, default: () => [] },
+    reactions: { type: Object, default: () => ({}) },
     mayEdit: { type: Boolean, default: false },
     mayDelete: { type: Boolean, default: false },
     isLoading: { type: Boolean, default: true }
