@@ -18,8 +18,12 @@ export async function request (path, options = {}) {
     if (!res.ok) {
       throw new HTTPError(res.status, res.statusText)
     }
-    const json = await res.json()
-    return json
+    if(res.status == 204) {
+      return {}
+    } else {
+      const json = await res.json()
+      return json
+    }
   } catch (err) {
     console.error(err)
     throw err
