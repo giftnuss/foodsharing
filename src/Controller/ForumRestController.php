@@ -163,7 +163,7 @@ class ForumRestController extends FOSRestController
 
 		$this->forumGateway->followThread($this->session->id(), $threadId);
 
-		return $this->handleView($this->view());
+		return $this->handleView($this->view([]));
 	}
 
 	/**
@@ -173,7 +173,7 @@ class ForumRestController extends FOSRestController
 	{
 		$this->forumGateway->unfollowThread($this->session->id(), $threadId);
 
-		return $this->handleView($this->view());
+		return $this->handleView($this->view([]));
 	}
 
 	/**
@@ -187,7 +187,7 @@ class ForumRestController extends FOSRestController
 		}
 		$this->forumService->addReaction($this->session->id(), $threadId, $postId, $emoji);
 
-		return $this->handleView($this->view());
+		return $this->handleView($this->view([]));
 	}
 
 	/**
@@ -198,6 +198,6 @@ class ForumRestController extends FOSRestController
 		$threadId = $this->forumGateway->getThreadForPost($postId);
 		$this->forumService->removeReaction($this->session->id(), $threadId, $postId, $emoji);
 
-		return $this->handleView($this->view());
+		return $this->handleView($this->view([]));
 	}
 }
