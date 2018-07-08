@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "allowSyntheticDefaultImports": false,
+    "baseUrl": "./",
+    "paths": {
+      "@b/*": ["client/node_modules/bootstrap-vue/es/*"],
+      "@/*": ["client/src/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
+}
