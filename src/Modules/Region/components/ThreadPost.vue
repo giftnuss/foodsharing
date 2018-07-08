@@ -24,9 +24,9 @@
       </div>
       <div class="card-footer">
         <div class="row">
-          <div class="col-4 text-muted">
+          <div class="col-4 text-muted pt-1 pl-3">
             <small v-if="wXS">{{ createdAt | dateFormat('dddd, DD.MM.YY, HH:mm[&nbsp;Uhr]') }}</small>
-            <small v-else>{{ createdAt | dateFormat('dddd, Do mm YYYY, HH:mm [Uhr]') }}</small>
+            <small v-else>{{ createdAt | dateFormat('dddd, Do MMM YYYY, HH:mm [Uhr]') }}</small>
           </div>
           <div class="col text-right">
             <ThreadPostActions
