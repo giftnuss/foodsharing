@@ -427,7 +427,7 @@ class View
 		return $this->twig->render('partials/vue-wrapper.twig', [
 			'elementName' => $elementName,
 			'props' => $props,
-			'data' => $data,
+			'initialData' => $data,
 		]);
 	}
 }
