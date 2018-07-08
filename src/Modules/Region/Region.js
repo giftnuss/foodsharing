@@ -5,27 +5,16 @@ import $ from 'jquery'
 import {
   ajax,
   goTo,
-  GET,
-  showLoader,
-  hideLoader,
-  reload
+  GET
 } from '@/script'
 import i18n from '@/i18n'
 import './Region.css'
 import * as wall from '@/wall'
-import { expose } from '@/utils'
 import { vueUse } from '@/vue'
 import Thread from './components/Thread'
 
 vueUse({
   Thread
-})
-
-expose({
-  unfollow,
-  follow,
-  unstick,
-  stick
 })
 
 $('a[href=\'#signout\']').click(function () {
@@ -91,79 +80,4 @@ if (['botforum', 'forum'].includes(GET('sub'))) {
       })
     }
   })
-
-  let clickedPid = null
-  $('.bt_delete').click(function (el) {
-    clickedPid = parseInt($(this).attr('href').replace('#p', ''))
-    $('#delete_sure').dialog('open')
-  })
-
-  $('#delete_sure').dialog({
-    autoOpen: false,
-    modal: true,
-    buttons: [
-      {
-        text: i18n('button.yes_i_am_sure'),
-        click: function () {
-          showLoader()
-          $.ajax({
-            url: 'xhr.php?f=delPost',
-            data: { 'pid': clickedPid },
-            success: function (ret) {
-              if (ret == 1) {
-                $('#tpost-' + clickedPid).remove()
-                if ($('.post').length == 0) {
-                  reload()
-                } else {
-                  $('#delete_sure').dialog('close')
-                }
-              }
-            },
-            complete: function () {
-              hideLoader()
-            }
-          })
-        }
-      },
-      {
-        text: i18n('button.abort'),
-        click: function () {
-          $('#delete_sure').dialog('close')
-        }
-      }
-    ]
-  })
-}
-
-function handleButtonRequest (module, method, data, buttonSelector) {
-  let buttons = $(buttonSelector)
-  buttons.prop('disable', true)
-  ajax.req(module, method, {
-    data: data,
-    success: () => {
-      if (buttons) {
-        buttons.remove()
-      }
-    }
-  })
-}
-
-export function unfollow (tid, bid) {
-  handleButtonRequest('bezirk', 'unfollowTheme', { tid: tid, bid: bid }, '.bt_unfollow')
-  return false
-}
-
-export function follow (tid, bid) {
-  handleButtonRequest('bezirk', 'followTheme', { tid: tid, bid: bid }, '.bt_follow')
-  return false
-}
-
-export function unstick (tid, bid) {
-  handleButtonRequest('bezirk', 'unstickTheme', { tid: tid, bid: bid }, '.bt_unstick')
-  return false
-}
-
-export function stick (tid, bid) {
-  handleButtonRequest('bezirk', 'stickTheme', { tid: tid, bid: bid }, '.bt_stick')
-  return false
 }
