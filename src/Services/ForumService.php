@@ -10,12 +10,14 @@ use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Reaction\ReactionGateway;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class ForumService
 {
 	private $forumGateway;
+	private $reactionGateway;
 	private $regionGateway;
 	private $foodsaverGateway;
 	private $bellGateway;
@@ -33,7 +35,8 @@ class ForumService
 		Func $func,
 		Session $session,
 		Model $model,
-		RegionGateway $regionGateway
+		RegionGateway $regionGateway,
+		ReactionGateway $reactionGateway
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->emailTemplateGateway = $emailTemplateGateway;
@@ -43,6 +46,7 @@ class ForumService
 		$this->session = $session;
 		$this->model = $model;
 		$this->regionGateway = $regionGateway;
+		$this->reactionGateway = $reactionGateway;
 	}
 
 	public function url($regionId, $ambassadorForum, $threadId = null, $postId = null)
@@ -55,7 +59,7 @@ class ForumService
 			$url .= '&pid=' . $postId . '#post' . $postId;
 		}
 
-		return  $url;
+		return $url;
 	}
 
 	public function notifyParticipantsViaBell($threadId, $authorId, $postId)
@@ -274,5 +278,58 @@ class ForumService
 			}
 			$mail->send();
 		}
+	}
+
+	private function getReactionTarget($threadId, $postId = null)
+	{
+		$target = 'forum-' . $threadId . '-';
+		if ($postId) {
+			$target .= $postId;
+		}
+
+		return $target;
+	}
+
+	public function addReaction($fsId, $threadId, $postId, $emoji)
+	{
+		if (!$fsId || !$threadId || !$postId || !$emoji) {
+			throw new \InvalidArgumentException();
+		}
+		$this->reactionGateway->addReaction($this->getReactionTarget($threadId, $postId), $fsId, $emoji);
+	}
+
+	public function removeReaction($fsId, $threadId, $postId, $emoji)
+	{
+		if (!$fsId || !$threadId || !$postId || !$emoji) {
+			throw new \InvalidArgumentException();
+		}
+		$this->reactionGateway->removeReaction($this->getReactionTarget($threadId, $postId), $fsId, $emoji);
+	}
+
+	public function getReactionsForThread($threadId)
+	{
+		$target = $this->getReactionTarget($threadId);
+		$res = $this->reactionGateway->getReactions($target, true);
+		$reactions = [];
+		foreach ($res as $r) {
+			$id = explode($target, $r['target']);
+			if (count($id) !== 2) {
+				continue;
+			} else {
+				$postId = $id[1];
+			}
+			if (!isset($reactions[$postId])) {
+				$reactions[$postId] = [
+					'emoji' => $r['emoji'],
+					'users' => []
+				];
+			}
+			$reactions[$postId]['users'][] = [
+				'id' => $r['foodsaver_id'],
+				'name' => $r['foodsaver_name']
+			];
+		}
+
+		return $reactions;
 	}
 }

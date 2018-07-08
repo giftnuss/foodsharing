@@ -20,7 +20,7 @@ class ForumPermissions
 		$this->session = $session;
 	}
 
-	public function mayPostToRegion($regionId, $ambassadorForum)
+	public function mayPostToRegion($regionId, $ambassadorForum): bool
 	{
 		if ($this->session->isOrgaTeam()) {
 			return true;
@@ -35,43 +35,51 @@ class ForumPermissions
 		return true;
 	}
 
-	public function mayPostToThread($threadId)
+	public function mayAccessForum($forumId, $forumSubId): bool
 	{
-		$threadStatus = $this->forumGateway->getBotThreadStatus($threadId);
+		if ($forumSubId !== 0 && $forumSubId !== 1) {
+			return false;
+		}
 
-		return $this->mayPostToRegion($threadStatus['bezirk_id'], $threadStatus['bot_theme']);
+		return $this->mayPostToRegion($forumId, $forumSubId);
 	}
 
-	public function mayAccessThread($threadId)
+	public function mayPostToThread($threadId): bool
+	{
+		if ($this->session->isOrgaTeam()) {
+			return true;
+		}
+		$forums = $this->forumGateway->getForumsForThread($threadId);
+		foreach ($forums as $forum) {
+			if ($this->mayAccessForum($forum['forumId'], $forum['forumSubId'])) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public function mayAccessThread($threadId): bool
 	{
 		return $this->mayPostToThread($threadId);
 	}
 
-	public function mayAccessAmbassadorBoard($regionId)
+	public function mayAccessAmbassadorBoard($regionId): bool
 	{
 		return $this->mayPostToRegion($regionId, 1);
 	}
 
-	public function mayAccessForum($forumId, $subForumId)
-	{
-		if ($subForumId !== 0 && $subForumId !== 1) {
-			return false;
-		}
-
-		return $this->mayPostToRegion($forumId, $subForumId);
-	}
-
-	public function mayActivateThreads($regionId)
+	public function mayActivateThreads($regionId): bool
 	{
 		return $this->mayPostToRegion($regionId, 1);
 	}
 
-	public function mayChangeStickyness($regionId)
+	public function mayChangeStickyness($regionId): bool
 	{
 		return $this->mayPostToRegion($regionId, 1);
 	}
 
-	public function mayDeletePost($region, $post)
+	public function mayDeletePost($region, $post): bool
 	{
 		if ($this->session->isOrgaTeam()) {
 			return true;

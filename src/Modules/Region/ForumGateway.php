@@ -286,4 +286,29 @@ class ForumGateway extends BaseGateway
 			AND 	tp.id = :id
 		', ['id' => $post_id]);
 	}
+
+	public function getForumsForThread($threadId)
+	{
+		return $this->db->fetchAll('
+		SELECT
+			bt.bezirk_id AS forumId,
+			bt.bot_theme AS forumSubId
+		FROM
+			fs_bezirk_has_theme bt
+			
+		WHERE bt.theme_id = :threadId
+		', ['threadId' => $threadId]);
+	}
+
+	public function getThreadForPost($postId)
+	{
+		return $this->db->fetchValue('
+		SELECT
+			theme_id AS threadId
+		FROM
+			fs_theme_post
+		WHERE
+			id = :postId
+		', ['postId' => $postId]);
+	}
 }
