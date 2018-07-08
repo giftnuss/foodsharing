@@ -235,9 +235,9 @@ class ForumGateway extends BaseGateway
 		return $post_id;
 	}
 
-	public function listPosts($thread_id)
+	private function getPostSelect()
 	{
-		return $this->db->fetchAll('
+		return '
 			SELECT 		fs.id AS author_id,
 						IF(fs.deleted_at IS NOT NULL,"abgemeldeter Benutzer", fs.name) AS author_name,
 						fs.photo AS author_photo,
@@ -245,15 +245,36 @@ class ForumGateway extends BaseGateway
 						IF(fs.deleted_at IS NOT NULL, "Beitrag von nicht mehr angemeldetem Benutzer", p.body) AS body,
 						p.`time`,
 						p.id,
-						UNIX_TIMESTAMP(p.`time`) AS time_ts
+						UNIX_TIMESTAMP(p.`time`) AS time_ts,
+						b.`type` AS region_type
 
 			FROM 		fs_theme_post p
 			INNER JOIN   fs_foodsaver fs
 				ON 		p.foodsaver_id = fs.id
-			WHERE 		p.theme_id = :thread_id
+			LEFT JOIN   fs_bezirk_has_theme ht 
+				ON 		ht.theme_id = p.theme_id
+			LEFT JOIN	fs_bezirk b
+				ON		b.id = ht.bezirk_id';
+	}
+
+	public function listPosts($threadId)
+	{
+		return $this->db->fetchAll(
+			$this->getPostSelect() . ' 
+			WHERE 		p.theme_id = :threadId
 
 			ORDER BY 	p.`time`
-		', ['thread_id' => $thread_id]);
+		', ['threadId' => $threadId]);
+	}
+
+	public function getPost($postId)
+	{
+		return $this->db->fetch(
+			$this->getPostSelect() . ' 
+			WHERE 		p.id = :postId
+
+			ORDER BY 	p.`time`
+		', ['postId' => $postId]);
 	}
 
 	public function deletePost($id)
@@ -295,20 +316,17 @@ class ForumGateway extends BaseGateway
 			bt.bot_theme AS forumSubId
 		FROM
 			fs_bezirk_has_theme bt
-			
+
 		WHERE bt.theme_id = :threadId
 		', ['threadId' => $threadId]);
 	}
 
 	public function getThreadForPost($postId)
 	{
-		return $this->db->fetchValue('
-		SELECT
-			theme_id AS threadId
-		FROM
-			fs_theme_post
-		WHERE
-			id = :postId
-		', ['postId' => $postId]);
+		return $this->db->fetchValueByCriteria(
+			'fs_theme_post',
+			'theme_id',
+			['id' => $postId]
+		);
 	}
 }

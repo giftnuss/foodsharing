@@ -94,7 +94,7 @@ class ForumPermissions
 		return $this->mayPostToRegion($regionId, 1);
 	}
 
-	public function mayDeletePost($region, $post): bool
+	public function mayDeletePost($post): bool
 	{
 		if ($this->session->isOrgaTeam()) {
 			return true;
@@ -102,7 +102,8 @@ class ForumPermissions
 		if ($post['author_id'] == $this->session->id()) {
 			return true;
 		}
-		if ($region['type'] == Type::WORKING_GROUP && ($this->session->isAdminFor($region['id']))) {
+		/* ToDo: If forum ever gets used outside of the region context, the relationship in the post is not accurate anymore */
+		if ($post['region_type'] == Type::WORKING_GROUP && ($this->session->isAdminFor($post['region_type']))) {
 			return true;
 		}
 

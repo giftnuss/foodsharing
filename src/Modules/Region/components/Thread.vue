@@ -43,7 +43,7 @@
         :may-delete="true"
         :may-edit="true"
         :is-loading="loadingPosts.indexOf(post.id) != -1"
-        :time="new Date(post.time)"
+        :createdAt="new Date(post.createdAt)"
         @delete="deletePost(post)"
         @toggleFollow="toggleFollow"
         @reactionAdd="reactionAdd(post, arguments[0])"
@@ -130,10 +130,10 @@ export default {
 
       try {
         await api.deletePost(post.id)
-        let index = this.posts.indexOf(post)
-        this.posts.splice(index, 1)
+        await this.reload()
       } catch (err) {
         pulseError(i18n('error_unexpected'))
+      } finally {
         this.loadingPosts.splice(this.loadingPosts.indexOf(post.id), 1)
       }
     },
@@ -211,7 +211,7 @@ export default {
         id: -1,
         time: new Date(),
         body: body,
-        reactions: [],
+        reactions: {},
         author: {
           name: `${user.firstname} ${user.lastname}`,
           avatar: {

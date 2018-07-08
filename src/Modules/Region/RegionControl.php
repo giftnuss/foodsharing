@@ -215,8 +215,8 @@ class RegionControl extends Control
 	{
 		$viewdata = [];
 
-		$processPosts = function ($p) use ($region) {
-			$p['mayDeletePost'] = $this->forumPermissions->mayDeletePost($region, $p);
+		$processPosts = function ($p) {
+			$p['mayDeletePost'] = $this->forumPermissions->mayDeletePost($p);
 			$p['avatar'] = [
 				'user' => ['id' => $p['author_id'],
 					'name' => $p['author_name'],

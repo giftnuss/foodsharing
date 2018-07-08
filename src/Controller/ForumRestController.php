@@ -76,7 +76,7 @@ class ForumRestController extends FOSRestController
 				'sleepStatus' => $post['author_sleep_status']
 			],
 			'reactions' => $reactions[$post['id']] ?? new \ArrayObject(),
-			'mayDelete' => false
+			'mayDelete' => $this->forumPermissions->mayDeletePost($post)
 		];
 	}
 
@@ -217,11 +217,12 @@ class ForumRestController extends FOSRestController
 	 */
 	public function deletePostAction($postId)
 	{
-		/*if (!$this->forumPermissions->mayDeletePost($post, $forumId)) {
+		$post = $this->forumGateway->getPost($postId);
+		if (!$this->forumPermissions->mayDeletePost($post)) {
 			return new HttpException(403);
 		}
-		$this->forumService->addReaction($this->session->id(), $threadId, $postId, $emoji);
-		*/
+		$this->forumGateway->deletePost($postId);
+
 		return $this->handleView($this->view([]));
 	}
 
