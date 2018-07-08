@@ -128,24 +128,24 @@ class ForumRestController extends FOSRestController
 
 	/**
 	 * @Rest\Patch("forum/thread/{threadId}", requirements={"threadId" = "\d+"})
-	 * @Rest\RequestParam(name="sticky", nullable=true, default=null)
-	 * @Rest\RequestParam(name="active", nullable=true, default=null)
+	 * @Rest\RequestParam(name="isSticky", nullable=true, default=null)
+	 * @Rest\RequestParam(name="isActive", nullable=true, default=null)
 	 */
 	public function patchThreadAction($threadId, ParamFetcher $paramFetcher)
 	{
 		if (!$this->forumPermissions->mayModerate($threadId)) {
 			throw new HttpException(403);
 		}
-		$sticky = $paramFetcher->get('sticky');
-		$active = $paramFetcher->get('active');
-		if (!is_null($sticky)) {
-			if ($sticky === true) {
+		$isSticky = $paramFetcher->get('isSticky');
+		$isActive = $paramFetcher->get('isActive');
+		if (!is_null($isSticky)) {
+			if ($isSticky === true) {
 				$this->forumGateway->stickThread($threadId);
 			} else {
 				$this->forumGateway->unstickThread($threadId);
 			}
 		}
-		if ($active === true) {
+		if ($isActive === true) {
 			$this->forumService->activateThread($threadId);
 		}
 
