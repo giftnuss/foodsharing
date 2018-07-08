@@ -75,7 +75,8 @@ class ForumRestController extends FOSRestController
 				'avatar' => '/images/130_q_' . $post['author_photo'],
 				'sleepStatus' => $post['author_sleep_status']
 			],
-			'reactions' => $reactions[$post['id']] ?? new \ArrayObject()
+			'reactions' => $reactions[$post['id']] ?? new \ArrayObject(),
+			'mayDelete' => false
 		];
 	}
 
@@ -208,6 +209,19 @@ class ForumRestController extends FOSRestController
 	{
 		$this->forumGateway->unfollowThread($this->session->id(), $threadId);
 
+		return $this->handleView($this->view([]));
+	}
+
+	/**
+	 * @Rest\Delete("forum/post/{postId}", requirements={"postId" = "\d+"})
+	 */
+	public function deletePostAction($postId)
+	{
+		/*if (!$this->forumPermissions->mayDeletePost($post, $forumId)) {
+			return new HttpException(403);
+		}
+		$this->forumService->addReaction($this->session->id(), $threadId, $postId, $emoji);
+		*/
 		return $this->handleView($this->view([]));
 	}
 
