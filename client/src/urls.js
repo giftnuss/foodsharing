@@ -2,5 +2,6 @@
 // e.g. $url('profile', 15)
 
 export default {
-  profile: (id) => `/profile/${id}`
+  profile: (id) => `/profile/${id}`,
+  store: (id) => `?page=betrieb&id=${id}`
 }

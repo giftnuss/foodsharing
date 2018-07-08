@@ -58,7 +58,7 @@
             slot-scope="data"
             slot="name">
             <a
-              :href="`/?page=betrieb&id=${data.item.id}`"
+              :href="$url('store', data.item.id)"
               class="ui-corner-all">{{ data.value }}</a>
           </template>
         </b-table>
