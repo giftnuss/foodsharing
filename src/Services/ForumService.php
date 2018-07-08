@@ -104,6 +104,9 @@ class ForumService
 
 	public function createThread($fsId, $title, $body, $region, $ambassadorForum, $moderated)
 	{
+		$body = nl2br(strip_tags($body));
+		$body = $this->func->autolink($body);
+		/* TODO: Implement proper sanitation that happens on output, not input */
 		$threadId = $this->forumGateway->addThread($fsId, $region['id'], $title, $body, $ambassadorForum, !$moderated);
 		if ($moderated) {
 			$this->notifyAdminsModeratedThread($region, $threadId);

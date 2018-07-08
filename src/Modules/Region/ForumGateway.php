@@ -22,7 +22,7 @@ class ForumGateway extends BaseGateway
 	{
 		if ($ret = $this->db->fetchAll('
 			SELECT 		t.id,
-						t.name,
+						t.name as title,
 						t.`time`,
 						UNIX_TIMESTAMP(t.`time`) AS time_ts,
 						fs.id AS foodsaver_id,
@@ -84,7 +84,7 @@ class ForumGateway extends BaseGateway
 	public function getThreadInfo($threadId)
 	{
 		return $this->db->fetch('
-		SELECT		t.name,
+		SELECT		t.name as title,
 					bt.bezirk_id as region_id,
 					bt.bot_theme as ambassador_forum
 		FROM		fs_theme t
@@ -97,7 +97,7 @@ class ForumGateway extends BaseGateway
 	{
 		return $this->db->fetch('
 			SELECT 		t.id,
-						t.name,
+						t.name as title,
 						t.`time`,
 						UNIX_TIMESTAMP(t.`time`) AS time_ts,
 						t.last_post_id,
@@ -114,12 +114,12 @@ class ForumGateway extends BaseGateway
 		', ['thread_id' => $thread_id]);
 	}
 
-	public function addThread($fs_id, $bezirk_id, $name, $body, $bot_theme = false, $active)
+	public function addThread($fs_id, $bezirk_id, $title, $body, $bot_theme = false, $active)
 	{
 		$bot_theme_v = $bot_theme ? 1 : 0;
 		$thread_id = $this->db->insert('fs_theme', [
 			'foodsaver_id' => $fs_id,
-			'name' => strip_tags($name),
+			'name' => $title,
 			'time' => date('Y-m-d H:i:s'),
 			'active' => $active,
 		]);

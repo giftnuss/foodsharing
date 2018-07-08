@@ -81,17 +81,17 @@ class ForumRestController extends FOSRestController
 
 	/**
 	 * @param $forumId integer which forum to return threads for (maps to regions/groups)
-	 * @param $subForumId integer each region/group as another namespace to separate different forums with the same base id (region/group id, here: forumId).
+	 * @param $forumSubId integer each region/group as another namespace to separate different forums with the same base id (region/group id, here: forumId).
 	 * So with any forumId, there is (currently) 2, possibly infinite, actual forums (list of threads)
-	 * @Rest\Get("forum/{forumId}/{subForumId}", requirements={"forumId" = "\d+", "subForumId" = "\d"})
+	 * @Rest\Get("forum/{forumId}/{forumSubId}", requirements={"forumId" = "\d+", "forumSubId" = "\d"})
 	 */
-	public function listThreadsAction(int $forumId, int $subForumId)
+	public function listThreadsAction(int $forumId, int $forumSubId)
 	{
-		if (!$this->forumPermissions->mayAccessForum($forumId, $subForumId)) {
+		if (!$this->forumPermissions->mayAccessForum($forumId, $forumSubId)) {
 			throw new HttpException(403);
 		}
 
-		$threads = $this->forumGateway->listThreads($forumId, $subForumId, 0, 0, 1000);
+		$threads = $this->forumGateway->listThreads($forumId, $forumSubId, 0, 0, 1000);
 		$threads = array_map(function ($thread) { return $this->normalizeThread($thread); }, $threads);
 
 		$view = $this->view([
@@ -124,6 +124,41 @@ class ForumRestController extends FOSRestController
 		], 200);
 
 		return $this->handleView($view);
+	}
+
+	/**
+	 * @Rest\Post("forum/thread/{threadId}", requirements={"threadId" = "\d+"})
+	 * @Rest\RequestParam(name="body")
+	 */
+	public function createPostAction($threadId, ParamFetcher $paramFetcher)
+	{
+		if (!$this->forumPermissions->mayPostToThread($threadId)) {
+			throw new HttpException(403);
+		}
+
+		$body = $paramFetcher->get('body');
+		$this->forumService->addPostToThread($this->session->id(), $threadId, $body);
+
+		return $this->handleView($this->view());
+	}
+
+	/**
+	 * @Rest\Post("forum/{forumId}/{forumSubId}", requirements={"forumId" = "\d+", "forumSubId" = "\d"})
+	 * @Rest\RequestParam(name="title")
+	 * @Rest\RequestParam(name="body")
+	 */
+	public function createThreadAction($forumId, $forumSubId, ParamFetcher $paramFetcher)
+	{
+		if (!$this->forumPermissions->mayAccessForum($forumId, $forumSubId)) {
+			throw new HttpException(403);
+		}
+
+		$body = $paramFetcher->get('body');
+		$title = $paramFetcher->get('title');
+
+		$threadId = $this->forumService->createThread($this->session->id(), $title, $body, $forumId, $forumSubId);
+
+		return $this->getThreadAction($threadId);
 	}
 
 	/**
