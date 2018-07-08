@@ -2,13 +2,10 @@ import Vue from 'vue'
 import $ from 'jquery'
 import i18n from '@/i18n'
 import urls from '@/urls'
+import { dateFormat } from '@/utils'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import dateFormat from 'date-fns/format'
-import dateLocaleDE from 'date-fns/locale/de'
 
-Vue.filter('dateFormat', (date, format) => {
-  return dateFormat(date, format, { locale: dateLocaleDE })
-})
+Vue.filter('dateFormat', dateFormat)
 
 Vue.filter('i18n', (key, variables = {}) => {
   console.warn(`i18n as a vue filter is deprecated. use i18n() as a vue functions`)
