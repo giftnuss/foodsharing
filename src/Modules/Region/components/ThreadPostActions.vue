@@ -39,7 +39,7 @@
     <span class="divider text-primary">|</span>
 
     <!-- non emoji button -->
-    <a class="btn btn-sm btn-secondary">{{ $i18n('button.answer') }}</a>
+    <!-- <a class="btn btn-sm btn-secondary">{{ $i18n('button.answer') }}</a> -->
     <a
       v-if="mayDelete"
       class="btn btn-sm btn-secondary"
