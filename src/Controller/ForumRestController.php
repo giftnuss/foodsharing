@@ -151,6 +151,30 @@ class ForumRestController extends FOSRestController
 	}
 
 	/**
+	 * @Rest\Post("forum/thread/{threadId}/follow", requirements={"threadId" = "\d+"})
+	 */
+	public function followThreadAction($threadId)
+	{
+		if (!$this->forumPermissions->mayAccessThread($threadId)) {
+			throw new HttpException(403);
+		}
+
+		$this->forumGateway->followThread($this->session->id(), $threadId);
+
+		return $this->handleView($this->view());
+	}
+
+	/**
+	 * @Rest\Delete("forum/thread/{threadId}/follow", requirements={"threadId" = "\d+"})
+	 */
+	public function unfollowThreadAction($threadId)
+	{
+		$this->forumGateway->unfollowThread($this->session->id(), $threadId);
+
+		return $this->handleView($this->view());
+	}
+
+	/**
 	 * @Rest\Post("forum/post/{postId}/reaction/{emoji}", requirements={"postId" = "\d+", "emoji" = "\w+"})
 	 */
 	public function addReactionAction($postId, $emoji)
