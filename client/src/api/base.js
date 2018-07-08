@@ -1,5 +1,6 @@
 const BASE_URL = '/api'
 const DEFAULT_OPTIONS = {
+  method: 'GET',
   credentials: 'same-origin',
   mode: 'cors'
 }
@@ -14,11 +15,11 @@ export class HTTPError extends Error {
 
 export async function request (path, options = {}) {
   try {
-    const res = await window.fetch(BASE_URL + path, Object.assign(DEFAULT_OPTIONS, options))
+    const res = await window.fetch(BASE_URL + path, Object.assign({}, DEFAULT_OPTIONS, options))
     if (!res.ok) {
       throw new HTTPError(res.status, res.statusText)
     }
-    if(res.status == 204) {
+    if (res.status === 204) {
       return {}
     } else {
       const json = await res.json()

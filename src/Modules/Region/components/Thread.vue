@@ -1,8 +1,8 @@
 <template>
-  <div class="bootstrap">
-    <div
-      v-if="isLoading"
-      class="disabledLoading">
+  <div
+    :class="{disabledLoading: isLoading}"
+    class="bootstrap">
+    <div v-if="isLoading">
       <div class="card-header text-white bg-primary">
         {{ title || '...' }}
       </div>
@@ -51,7 +51,7 @@
       />
     </div>
     <div
-      v-if="!isLoading && id && !posts.length"
+      v-if="!isLoading && !errorMessage && !posts.length"
       class="alert alert-warning"
       role="alert">
       Bisher keine Beiträge vorhanden
@@ -103,24 +103,28 @@ export default {
     }
   },
   async created () {
-    try {
-      this.isLoading = true
-      let res = (await api.getThread(this.id)).data
-      Object.assign(this, {
-        title: res.title,
-        posts: res.posts,
-        isSticky: res.isSticky,
-        isActive: res.isActive,
-        mayModerate: res.mayModerate,
-        isFollowing: res.isFollowing
-      })
-      this.isLoading = false
-    } catch (err) {
-      this.isLoading = false
-      this.errorMessage = err.message
-    }
+    this.isLoading = true
+    this.reload()
   },
   methods: {
+    async reload () {
+      try {
+        let res = (await api.getThread(this.id)).data
+        Object.assign(this, {
+          title: res.title,
+          posts: res.posts,
+          isSticky: res.isSticky,
+          isActive: res.isActive,
+          mayModerate: res.mayModerate,
+          isFollowing: res.isFollowing
+        })
+        this.isLoading = false
+      } catch (err) {
+        this.isLoading = false
+        this.errorMessage = err.message
+      }
+    },
+
     async deletePost (post) {
       this.loadingPosts.push(post.id)
 
@@ -134,18 +138,17 @@ export default {
       }
     },
 
-    async reactionAdd (post, key, onlyLocally=false) {
-
+    async reactionAdd (post, key, onlyLocally = false) {
       if (post.reactions[key]) {
         // reaction alrready in list, increase count by 1
         if (post.reactions[key].find(r => r.id === user.id)) return // already given - abort
-        post.reactions[key].push({ id: user.id, name: user.firstname})
+        post.reactions[key].push({ id: user.id, name: user.firstname })
       } else {
         // reaction not in the list yet, append it
-        this.$set(post.reactions, key, [{ id: user.id, name: user.firstname}])
+        this.$set(post.reactions, key, [{ id: user.id, name: user.firstname }])
       }
 
-      if(!onlyLocally) {
+      if (!onlyLocally) {
         try {
           await api.addReaction(post.id, key)
         } catch (err) {
@@ -155,15 +158,14 @@ export default {
         }
       }
     },
-    async reactionRemove (post, key, onlyLocally=false) {
+    async reactionRemove (post, key, onlyLocally = false) {
+      let reactionUser = post.reactions[key].find(r => r.id === user.id)
 
-    let reactionUser = post.reactions[key].find(r => r.id === user.id)
-
-      if(!reactionUser) return
+      if (!reactionUser) return
 
       post.reactions[key].splice(post.reactions[key].indexOf(reactionUser), 1)
 
-      if(!onlyLocally) {
+      if (!onlyLocally) {
         try {
           await api.removeReaction(post.id, key)
         } catch (err) {
@@ -222,10 +224,8 @@ export default {
       this.posts.push(dummyPost)
 
       try {
-        let post = await api.createPost(this.id, body)
-
-        // replace dummy post with the one from the api
-        this.posts[this.posts.indexOf(dummyPost)] = post
+        await api.createPost(this.id, body)
+        await this.reload()
       } catch (err) {
         let index = this.posts.indexOf(dummyPost)
         this.posts.splice(index, 1)

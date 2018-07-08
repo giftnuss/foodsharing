@@ -25,8 +25,7 @@ export function unstickThread (threadId) {
 }
 
 export function createPost (threadId, body) {
-  return post(`/forum/post`, {
-    threadId: threadId,
+  return post(`/forum/thread/${threadId}/posts`, {
     body: body
   })
 }

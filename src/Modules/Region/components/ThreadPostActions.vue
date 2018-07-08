@@ -89,19 +89,19 @@ export default {
   },
   methods: {
     toggleReaction (key, dontRemove = false) {
-        if(this.gaveIThisReaction(key)) {
-            if (!dontRemove) this.$emit('reactionRemove', key)
-        } else {
-            this.$emit('reactionAdd', key)
-        }
+      if (this.gaveIThisReaction(key)) {
+        if (!dontRemove) this.$emit('reactionRemove', key)
+      } else {
+        this.$emit('reactionAdd', key)
+      }
     },
     giveEmoji (key) {
       this.$refs.emojiSelector.hide()
       this.toggleReaction(key, true)
     },
-    gaveIThisReaction(key) {
-        if(!this.reactions[key]) return false
-        return !!this.reactions[key].find(r => r.id === user.id)
+    gaveIThisReaction (key) {
+      if (!this.reactions[key]) return false
+      return !!this.reactions[key].find(r => r.id === user.id)
     }
   }
 }
