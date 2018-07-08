@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     openChat() {
-        conv.userChat(this.post.fs_id)
+        conv.userChat(this.author.id)
     }
   }
 }
