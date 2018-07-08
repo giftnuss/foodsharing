@@ -1112,7 +1112,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	 */
 	public function getServerData()
 	{
-		
 		$user = $this->session->get('user');
 
 		$userData = [
