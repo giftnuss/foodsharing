@@ -6,7 +6,6 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import dateFormat from 'date-fns/format'
 import dateLocaleDE from 'date-fns/locale/de'
 
-
 Vue.filter('dateFormat', (date, format) => {
   return dateFormat(date, format, { locale: dateLocaleDE })
 })
@@ -38,7 +37,7 @@ export function vueUse (components) {
       el,
       components,
       render (h) {
-        return h(elementName, {props})
+        return h(elementName, { props })
       }
     })
     if (initialData && typeof initialData === 'object') {
