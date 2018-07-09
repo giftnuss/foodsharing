@@ -124,7 +124,7 @@ class ForumRestController extends FOSRestController
 		$thread['isFollowing'] = $this->forumGateway->isFollowing($this->session->id(), $threadId);
 		$thread['mayModerate'] = $this->forumPermissions->mayModerate($threadId);
 		$thread['posts'] = array_map(function ($post) use ($reactions) { return $this->normalizePost($post, $reactions); }, $posts);
-		
+
 		$view = $this->view([
 			'data' => $thread
 		], 200);
