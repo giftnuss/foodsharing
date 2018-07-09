@@ -3,13 +3,13 @@
 	<br>
 	<a href="https://foodsharing.de">
 		<!-- image is docs/images/FS_Logo_gb_RGB.png but hosted publicly -->
-		<img src="images/FS_Logo_gb_RGB.png" alt="foodsharing">
+		<img src="https://user-images.githubusercontent.com/31616/42413241-8802b03c-821c-11e8-91c5-f94930313290.png" alt="foodsharing">
 	</a>
 	<br>
 	<br>
 </div>
 
-![](images/fsscreenshot.png)
+![](https://user-images.githubusercontent.com/31616/42418486-f8f571e6-82a1-11e8-8771-41e403944101.png)
 
 ## Overview
 
