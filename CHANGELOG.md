@@ -14,6 +14,8 @@
 - forum emoji reactions !442 @alangecker
 - Vue functions for i18n and date !442 @alangecker
 - Proper input sanitizing for forum posts with support for markdown markup !442 @NerdyProjects
+- Properly sanitize outgoing HTML mails !442 @NerdyProjects
+- All outgoing emails now generate their plain text via HTML2Text !442 @NerdyProjects
 
 ## Bugfixes
 - removed XSS-possibility in xhr_out method. !370 @theolampert
