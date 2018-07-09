@@ -15,6 +15,11 @@ class OutputSanitizerService
 		$this->htmlPurifier = $HTMLPurifier;
 	}
 
+	public function sanitizeForHtmlNoMarkup($text)
+	{
+		return nl2br(htmlspecialchars($text));
+	}
+
 	public function sanitizeForHtml($html, $containsMarkdown = true)
 	{
 		if ($containsMarkdown) {

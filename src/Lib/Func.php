@@ -643,7 +643,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$message['subject'] = 'Foodsharing-Mail';
 		}
 
-		$mail->setSubject($message['subject']);
+		$mail->setSubject($this->outputSanitizerService->sanitizeForText($message['subject']));
 		$htmlBody = $this->emailBodyTpl($message['body']);
 		$mail->setHTMLBody($htmlBody);
 
@@ -1345,11 +1345,10 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$subject = 'Foodsharing-Mail';
 		}
 		$mail->setSubject($subject);
-		$mail->setHTMLBody($this->emailBodyTpl($message, $email, $token));
+		$htmlBody = $this->emailBodyTpl($message, $email, $token);
+		$mail->setHTMLBody($htmlBody);
 
-		//Replace the plain text body with one created manually
-		$message = str_replace('<br />', "\r\n", $message);
-		$message = strip_tags($message);
+		$plainBody = $this->outputSanitizerService->sanitizeForText($htmlBody);
 		$mail->setBody($message);
 
 		if ($attach !== false) {

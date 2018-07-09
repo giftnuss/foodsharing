@@ -164,6 +164,7 @@ class ForumGateway extends BaseGateway
 			WHERE 	tf.foodsaver_id = fs.id
 			AND 	tf.theme_id = :theme_id
 			AND 	tf.foodsaver_id != :fs_id
+			AND		fs.deleted_at IS NULL
 		', ['theme_id' => $thread_id, 'fs_id' => $fs_id]);
 	}
 
