@@ -2,6 +2,8 @@
 
 namespace Foodsharing\Services;
 
+use Html2Text\Html2Text;
+
 class OutputSanitizerService
 {
 	private $parsedown;
@@ -13,11 +15,21 @@ class OutputSanitizerService
 		$this->htmlPurifier = $HTMLPurifier;
 	}
 
-	public function sanitizeForHtml($text)
+	public function sanitizeForHtml($html, $containsMarkdown = true)
 	{
-		$parsedMarkdown = $this->parsedown->text(strip_tags($text));
-		$purified = $this->htmlPurifier->purify($parsedMarkdown);
+		if ($containsMarkdown) {
+			$html = $this->parsedown->text(strip_tags($html));
+		}
+
+		$purified = $this->htmlPurifier->purify($html);
 
 		return $purified;
+	}
+
+	public function sanitizeForText($html)
+	{
+		$html = new Html2Text($html);
+
+		return $html->getText();
 	}
 }

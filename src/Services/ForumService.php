@@ -26,6 +26,7 @@ class ForumService
 	private $model;
 	private $func;
 	private $session;
+	private $outputSanitizerService;
 
 	public function __construct(
 		BellGateway $bellGateway,
@@ -36,7 +37,8 @@ class ForumService
 		Session $session,
 		Model $model,
 		RegionGateway $regionGateway,
-		ReactionGateway $reactionGateway
+		ReactionGateway $reactionGateway,
+		OutputSanitizerService $outputSanitizerService
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->emailTemplateGateway = $emailTemplateGateway;
@@ -47,6 +49,7 @@ class ForumService
 		$this->model = $model;
 		$this->regionGateway = $regionGateway;
 		$this->reactionGateway = $reactionGateway;
+		$this->outputSanitizerService = $outputSanitizerService;
 	}
 
 	public function url($regionId, $ambassadorForum, $threadId = null, $postId = null)
@@ -128,7 +131,7 @@ class ForumService
 
 	public function notifyFollowersNewPost($threadId, $rawPostBody, $postFrom, $postId)
 	{
-		$body = nl2br(htmlentities($rawPostBody));
+		$body = $this->outputSanitizerService->sanitizeForHtml($rawPostBody);
 		if ($follower = $this->forumGateway->getThreadFollower($this->session->id(), $threadId)) {
 			$info = $this->forumGateway->getThreadInfo($threadId);
 			$poster = $this->model->getVal('name', 'foodsaver', $this->session->id());

@@ -13,6 +13,7 @@ use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Services\OutputSanitizerService;
 use JSMin\JSMin;
 
 class Func
@@ -34,6 +35,7 @@ class Func
 	private $stylesheets;
 	private $add_css;
 	private $viewUtils;
+	private $outputSanitizerService;
 
 	private $webpackScripts;
 	private $webpackStylesheets;
@@ -50,9 +52,10 @@ class Func
 	 */
 	private $session;
 
-	public function __construct(Utils $viewUtils)
+	public function __construct(Utils $viewUtils, OutputSanitizerService $outputSanitizerService)
 	{
 		$this->viewUtils = $viewUtils;
+		$this->outputSanitizerService = $outputSanitizerService;
 		$this->content_main = '';
 		$this->content_right = '';
 		$this->content_left = '';
@@ -641,12 +644,12 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 
 		$mail->setSubject($message['subject']);
-		$mail->setHTMLBody($this->emailBodyTpl($message['body']));
+		$htmlBody = $this->emailBodyTpl($message['body']);
+		$mail->setHTMLBody($htmlBody);
 
 		// playintext body
-		$body = str_replace(array('<br />', '<br>', '<br/>', '<p>', '</p>'), "\r\n", $message['body']);
-		$body = strip_tags($body);
-		$mail->setBody($body);
+		$plainBody = $this->outputSanitizerService->sanitizeForText($htmlBody);
+		$mail->setBody($plainBody);
 
 		$mail->addRecipient($to);
 		$mail->send();
