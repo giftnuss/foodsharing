@@ -236,7 +236,7 @@ export default {
         if (targetState) {
           await api.stickThread(this.id)
         } else {
-          await api.stickThread(this.id)
+          await api.unstickThread(this.id)
         }
       } catch (err) {
         // failed? undo it
