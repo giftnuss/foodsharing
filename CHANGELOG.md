@@ -9,6 +9,11 @@
 - new store list with filtering !430 #191 @alangecker
 - implement Wallpost API to replace XHR soon !439 @NerdyProjects
 - add HTMLPurifier for proper user HTML handling to be used soon !445 @NerdyProjects
+- Forum rest api !442 @NerdyProjects
+- Reimplement forum thread/post view as a vue component !442 @alangecker
+- forum emoji reactions !442 @alangecker
+- Vue functions for i18n and date !442 @alangecker
+- Proper input sanitizing for forum posts with support for markdown markup !442 @NerdyProjects
 
 ## Bugfixes
 - removed XSS-possibility in xhr_out method. !370 @theolampert
@@ -49,6 +54,7 @@
 - use instance access for Session !433 @nicksellen
 - refactor Map module to webpack !435 @nicksellen
 - all entrypoints load most JS/CSS via webpack now !432 @NerdyProjects
+- Refactor forum logic to Gateway/Service/PermissionService !442 @NerdyProjects
 
 ## Dev/Test/CI stuff
 - Fix cache clearing during test/deploy !414 @nicksellen
