@@ -1,7 +1,7 @@
 import sinon from 'sinon'
 import { mount } from '@vue/test-utils'
 import { resetModules } from '>/utils'
-import StoreList from './StoreList'
+import '@/vue'
 
 const assert = require('assert')
 
@@ -19,18 +19,23 @@ function createMockStore () {
 describe('StoreList', () => {
   const sandbox = sinon.createSandbox()
 
+  let storeList
+
+  beforeEach(() => {
+    storeList = require('./StoreList').default
+  })
   afterEach(() => {
     sandbox.restore()
     resetModules()
   })
 
   it('loads', () => {
-    assert(StoreList)
+    assert(storeList)
   })
 
   it('can render', () => {
     const regionName = 'Test Region Name'
-    const wrapper = mount(StoreList, {
+    const wrapper = mount(storeList, {
       propsData: {
         regionName,
         stores: [createMockStore()]
