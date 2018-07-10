@@ -1,7 +1,7 @@
 import '@/core'
 import '@/globals'
 import 'jquery-dynatree'
-import { vueUse } from '@/vue'
+import { vueRegister, vueApply } from '@/vue'
 import StoreList from './components/StoreList.vue'
 
 // import some legacy js files
@@ -12,6 +12,7 @@ import 'leaflet'
 import 'leaflet.awesome-markers'
 import '@/tablesorter'
 
-vueUse({
+vueRegister({
   StoreList
 })
+vueApply('#vue-storelist')

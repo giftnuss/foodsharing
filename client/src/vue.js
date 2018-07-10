@@ -19,22 +19,31 @@ Vue.prototype.$url = (key, ...params) => {
   return urls[key](...params)
 }
 
-export function vueUse (components) {
-  $('.vue-wrapper').each((index, el) => {
-    let elementName = $(el).data('element')
-    let props = $(el).data('props') || {}
-    let initialData = $(el).data('initial-data') || {}
+export function vueRegister (components) {
+  for (let key in components) {
+    Vue.component(key, components[key])
+  }
+}
 
-    if (!elementName) {
-      throw new Error('fsvue-Error: missing element name. pass it as <div class="vue-wrapper" data-element="myelement" />')
+export function vueApply (selector) {
+  let elements = $(selector)
+  if (!elements.length) {
+    throw new Error(`vueUse-Error: no elements were found with selector '${selector}'`)
+  }
+  elements.each((index, el) => {
+    let componentName = $(el).data('vue-component')
+    let props = $(el).data('vue-props') || {}
+    let initialData = $(el).data('vue-initial-data') || {}
+
+    if (!componentName) {
+      throw new Error('vueUse-Error: missing component name. pass it as <div data-vue-component="my-component" />')
     }
 
     // eslint-disable-next-line no-new
     let vm = new Vue({
       el,
-      components,
       render (h) {
-        return h(elementName, { props })
+        return h(componentName, { props })
       }
     })
     if (initialData && typeof initialData === 'object') {
