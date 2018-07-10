@@ -2,10 +2,6 @@
 
 ## Features
 - For not declined Events the last wall posts are shown on dashboard update section. !417 #227 @k.miklobusec
-
-## Bugfixes
-- removed XSS-possibility in xhr_out method. !370 @theolampert
-## Features
 - updated fpdi plugin to v2.0.2 !351 #168 by @peter.toennies
 - update symfony to 4.1.0 as well as other dependencies !351 @NerdyProjects
 - remove user list in forums to allow big regions to work !421 @NerdyProjects
