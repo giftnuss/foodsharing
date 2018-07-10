@@ -10,12 +10,13 @@ import {
 import i18n from '@/i18n'
 import './Region.css'
 import * as wall from '@/wall'
-import { vueUse } from '@/vue'
+import { vueRegister, vueApply } from '@/vue'
 import Thread from './components/Thread'
 
-vueUse({
+vueRegister({
   Thread
 })
+vueApply('#vue-thread')
 
 $('a[href=\'#signout\']').click(function () {
   $('#signout_sure').dialog('open')

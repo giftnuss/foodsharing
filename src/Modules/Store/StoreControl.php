@@ -135,7 +135,7 @@ class StoreControl extends Control
 				];
 			}, $stores);
 
-			$this->func->addContent($this->view->vueComponent('store-list', [
+			$this->func->addContent($this->view->vueComponent('vue-storelist', 'store-list', [
 				'regionName' => $bezirk['name'],
 				'stores' => $storesMapped
 			]));

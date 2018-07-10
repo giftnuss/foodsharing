@@ -12,7 +12,8 @@
 {% endif %}
 
 {% include "partials/vue-wrapper.twig" with {
-    elementName: "thread",
+    id: 'vue-thread',
+    component: "Thread",
     props: {
         id: thread.id,
     }
