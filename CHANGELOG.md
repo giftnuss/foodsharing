@@ -16,6 +16,7 @@
 - Proper input sanitizing for forum posts with support for markdown markup !442 @NerdyProjects
 - Properly sanitize outgoing HTML mails !442 @NerdyProjects
 - All outgoing emails now generate their plain text via HTML2Text !442 @NerdyProjects
+- Show Report ID in Detail Report window #246 @k.miklobusec
 
 ## Bugfixes
 - removed XSS-possibility in xhr_out method. !370 @theolampert
