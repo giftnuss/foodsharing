@@ -482,6 +482,22 @@ class Func
 		array $stores, array $workingGroups,
 		$sessionMailbox, int $fsId, string $image)
 	{
+		// $params = array_merge([
+		// 	'loggedIn' => $loggedIn,
+		// 	'fsId' => $fsId,
+		// 	'image' => $image,
+		// 	'mailbox' => false,
+		// 	'hasFsRole' => false,
+		// 	'isOrgaTeam' => false,
+		// 	'may' => [
+		// 		'editBlog' => false,
+		// 		'editQuiz' => false,
+		// 		'handleReports' => false
+		// 	],
+		// 	'stores' => array_values([]),
+		// 	'regions' => array_values([]),
+		// 	'workingGroups' => $workingGroups
+		// ]);
 		$params = array_merge([
 			'loggedIn' => $loggedIn,
 			'fsId' => $fsId,
@@ -494,15 +510,20 @@ class Func
 				'editQuiz' => $mayEditQuiz,
 				'handleReports' => $mayHandleReports
 			],
-			'stores' => $stores,
+			'stores' => array_values($stores),
 			'regions' => $regions,
 			'workingGroups' => $workingGroups
 		]);
 
-		return [
-			'default' => $this->twig->render('partials/menu.default.twig', $params),
-			'mobile' => $this->twig->render('partials/menu.mobile.twig', $params)
-		];
+		return $this->twig->render('partials/vue-wrapper.twig', [
+			'id' => 'vue-topbar',
+			'component' => 'topbar',
+			'props' => $params
+		]);
+		// return [
+		// 	'default' => $this->twig->render('partials/menu.default.twig', $params),
+		// 	'mobile' => $this->twig->render('partials/menu.mobile.twig', $params)
+		// ];
 	}
 
 	public function preZero($i)

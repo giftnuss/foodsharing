@@ -47,8 +47,13 @@
     </head>
 
     <body {{ bodyClass | raw }}>
-
-        <div id="top">
+        {# {% include "partials/vue-wrapper.twig" with {
+            id: 'vue-topbar',
+            component: "topbar",
+            props: {}
+        } %} #}
+        {{ menu | raw }}
+        {# <div id="top">
             <div class="inner">
                 <div class="pure-g">
                     <div class="pure-u-1">
@@ -61,7 +66,7 @@
                         <div style="clear:both;"></div>
                     </div>
                 </div>
-            </div>
+            </div> #}
             {% if broadcast_message %}
                 <div class="inner inside msg-inside info">{{ broadcast_message | raw }}</div>
             {% endif %}
