@@ -12,6 +12,6 @@ export default {
   wall: (regionId) => `/?page=bezirk&bid=${regionId}&sub=wall`,
   foodsaverList: (regionId) => `/?page=foodsaver&bid=${regionId}`,
   passports: (regionId) => `/?page=passgen&bid=${regionId}`,
-  search: (query) => `/?page=search&q=${encodeURIComponent(query)}`
-
+  search: (query) => `/?page=search&q=${encodeURIComponent(query)}`,
+  conversations: () => `?page=msg`
 }
