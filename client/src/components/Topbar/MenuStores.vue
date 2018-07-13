@@ -6,6 +6,8 @@
         <div v-for="store in stores" :key="store.id">
             <a role="menuitem" :href="$url('events', store.id)"  class="dropdown-item"><i class="fa fa-shopping-cart"/> {{ store.name }} </a>
         </div>
+        <div v-if="stores.length" class="dropdown-divider"></div>
+        <a href="#" role="menuitem" class="dropdown-item"><small><i class="fa fa-plus" /> Einem Betrieb hinzufügen</small></a>
     </nav-item-dropdown>
 </template>
 <script>

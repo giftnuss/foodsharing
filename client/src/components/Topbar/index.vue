@@ -30,10 +30,16 @@
                 <b-collapse is-nav id="nav_collapse">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item" v-b-tooltip title="Home">
-                            <a href="#" class="nav-link"><i class="fa fa-home" /></a>
+                            <a href="#" class="nav-link">
+                                <i class="fa fa-home" />
+                                <span class="d-md-none">Startseite</span>
+                            </a>
                         </li>
                         <li v-if="isMobile" class="nav-item" v-b-tooltip title="Karte">
-                            <a href="#" class="nav-link"><i class="fa fa-map-marker" /></a>
+                            <a href="#" class="nav-link">
+                                <i class="fa fa-map-marker" />
+                                <span class="d-md-none">Karte</span>
+                            </a>
                         </li>
                         <menu-admin 
                             v-if="someAdminRights"
@@ -43,6 +49,7 @@
                         <nav-item-dropdown tooltip="Informationen" right no-caret>
                             <template slot="button-content">
                                 <i class="fa fa-info "/>
+                                <span class="d-md-none">Infomationen</span>
                             </template>
                             <a class="dropdown-item" href="/news" role="menuitem">News</a>
                             <a class="dropdown-item" href="/ueber-uns" role="menuitem">Über uns</a>
@@ -54,11 +61,14 @@
                             <a class="dropdown-item" href="/?page=content&sub=changelog" role="menuitem">Changelog</a>
                         </nav-item-dropdown>
                         <li v-if="mailbox" class="nav-item" v-b-tooltip title="E-Mail-Postfach">
-                            <a href="#" class="nav-link"><i class="fa fa-envelope" /></a>
+                            <a href="#" class="nav-link">
+                                <i class="fa fa-envelope" />
+                                <span class="d-md-none">E-Mail-Postfach</span>
+                            </a>
                         </li>
                         <menu-messages v-if="!isMobile" />
                         <menu-bells v-if="!isMobile" />
-                        <menu-user />
+                        <menu-user :avatar="image" :isMobile="isMobile" />
 
                     </ul>
                 </b-collapse>
@@ -189,6 +199,10 @@ export default {
             height: 2.4em;
         }
     }
+    .dropdown-menu {
+        max-height: 400px;
+        overflow-y: auto;
+    }
 }
 #topbar-navleft {
 
@@ -211,6 +225,12 @@ export default {
     position: absolute;
     margin-top: -0.5em;
     margin-left: -0.7em;
+}
+.navbar-collapse.collapsing, .navbar-collapse.show {
+    .nav-link i {
+        width: 40px;
+        text-align: center;
+    }
 }
 </style>
 

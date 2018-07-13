@@ -16,6 +16,7 @@
                     <a v-if="region.isBot" role="menuitem" :href="$url('passports', region.id)"  class="dropdown-item dropdown-item-sub"><i class="fa fa-address-card" />Ausweise</a>
                 </b-collapse>
             </div>
+            <div v-if="regionsSorted.length" class="dropdown-divider"></div>
             <a href="#" role="menuitem" class="dropdown-item"><small><i class="fa fa-plus" /> Einem Bezirk beitreten</small></a>
         </b-nav-item-dropdown>
 </template>

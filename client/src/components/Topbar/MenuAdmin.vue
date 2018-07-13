@@ -2,6 +2,7 @@
     <nav-item-dropdown tooltip="Administration" right no-caret>
         <template slot="button-content">
             <i class="fa fa-gear"/>
+            <span class="d-md-none">Administration</span>
         </template>
         <a v-if="isOrgaTeam" class="dropdown-item" href="/?page=betrieb&bid=0">{{ $i18n('menu_all_store') }}</a>
         <a v-if="isOrgaTeam" class="dropdown-item" href="/?page=foodsaver&bid=0">{{ $i18n('menu_all_fs') }}</a>

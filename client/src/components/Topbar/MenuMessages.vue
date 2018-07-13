@@ -50,8 +50,6 @@ export default {
 .topbar-messages {
     .list-group {
         width: 250px;
-        max-height: 300px;
-        overflow-y: auto;
     }
     .dropdown-menu {
         padding: 0;
