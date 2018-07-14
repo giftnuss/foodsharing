@@ -2,7 +2,7 @@
     <nav-item-dropdown tooltip="Nachrichten" no-caret right class="topbar-messages">
         <template slot="button-content">
             <i class="fa fa-comments"/>
-            <span class="badge badge-danger">{{ unread }}</span>
+            <span v-if="unread" class="badge badge-danger">{{ unread }}</span>
         </template>
         <div class="list-group">
             <menu-messages-entry

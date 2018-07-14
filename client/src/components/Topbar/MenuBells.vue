@@ -2,7 +2,7 @@
     <nav-item-dropdown tooltip="Benachrichtigungen" no-caret right class="topbar-bells">
         <template slot="button-content">
             <i class="fa fa-bell"/>
-            <span class="badge badge-danger">{{ unread }}</span>
+            <span v-if="unread" class="badge badge-danger">{{ unread }}</span>
         </template>
         <div class="list-group">
             <menu-bells-entry
