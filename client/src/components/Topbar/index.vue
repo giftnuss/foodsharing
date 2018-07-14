@@ -4,7 +4,7 @@
             <div class="container">
 
                 <div id="topbar-navleft">
-                    <a class="navbar-brand" href="#">food<span>sharing</span></a>
+                    <a class="navbar-brand" href="#">food<span>shar<span>i</span>ng</span></a>
                     <ul class="navbar-nav flex-row no-collapse">
                         
                         <menu-region v-if="hasFsRole" :regions="regions" :activeRegionId="241" />
@@ -166,6 +166,17 @@ export default {
         margin-right: 0;
         span {
             color: #64ae25;
+        }
+        span span {
+            position: relative;
+            &:hover::before {
+                content: '♥';
+                color: red;
+                position: absolute;
+                font-size: 0.5em;
+                margin-top: -0.04em;
+                margin-left: -0.085em;
+            }
         }
         font-size: 1.1rem;
     }
