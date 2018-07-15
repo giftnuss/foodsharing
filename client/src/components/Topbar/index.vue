@@ -1,7 +1,35 @@
 <template>
     <div id="topbar" class="bootstrap">
         <div class="navbar navbar-expand-md navbar-dark bg-primary ">
-            <div class="container">
+            <div v-if="!loggedIn" class="container">
+                <div id="topbar-navleft">
+                    <a class="navbar-brand mr-4" href="#">food<span>shar<span>i</span>ng</span></a>
+                    <login />
+                </div>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fa fa-map-marker" />
+                            Karte
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fa fa-info" />
+                            Infos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fa fa-rocket" />
+                            Mach mit!
+                        </a>
+                    </li>
+                    
+                 </ul>
+            </div>
+
+            <div v-if="loggedIn" class="container">
 
                 <div id="topbar-navleft">
                     <a class="navbar-brand" href="#">food<span>shar<span>i</span>ng</span></a>
@@ -12,15 +40,16 @@
                         <menu-groups :workingGroups="workingGroups" />
                         <menu-baskets />
                         <li v-if="!isMobile" class="nav-item" v-b-tooltip title="Karte">
-                            <a href="#" class="nav-link"><i class="fa fa-map-marker" /></a>
+                            <a href="#" class="nav-link">
+                                <i class="fa fa-map-marker" />
+                                <span v-if="!loggedIn">Karte</span>
+                            </a>
+                            
                         </li>
                         <menu-messages v-if="isMobile" />
                         <menu-bells v-if="isMobile" />
                     </ul>
-                </div>
-
-
-
+                </div>              
 
 
                 <search />
@@ -97,9 +126,10 @@ import MenuMessages from './MenuMessages'
 import MenuBells from './MenuBells'
 import MenuUser from './MenuUser'
 import Search from './Search'
+import Login from './Login'
 
 export default {
-    components: {NavItemDropdown, MenuRegion, MenuStores, MenuGroups, MenuBaskets, MenuAdmin, MenuMessages, MenuBells, MenuUser, Search},
+    components: {NavItemDropdown, MenuRegion, MenuStores, MenuGroups, MenuBaskets, MenuAdmin, MenuMessages, MenuBells, MenuUser, Search, Login},
     props: {
         fsId: {
             type: Number,

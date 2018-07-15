@@ -13,5 +13,6 @@ export default {
   foodsaverList: (regionId) => `/?page=foodsaver&bid=${regionId}`,
   passports: (regionId) => `/?page=passgen&bid=${regionId}`,
   search: (query) => `/?page=search&q=${encodeURIComponent(query)}`,
-  conversations: () => `?page=msg`
+  conversations: () => `?page=msg`,
+  dashboard: () => `/?page=dashboard`
 }
