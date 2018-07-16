@@ -12,7 +12,7 @@
             <div class="col-10">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">{{ conversation.title }}</h5>
-                    <small class="text-muted">3 days ago</small>
+                    <small class="text-muted">{{ conversation.lastMessageTime | dateDistanceInWords }}</small>
                 </div>
                 <p class="mb-1 text-truncate">{{ conversation.lastMessage.bodyRaw }}</p>
             </div>
