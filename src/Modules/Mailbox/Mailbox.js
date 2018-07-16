@@ -11,8 +11,8 @@ import {
   hideLoader,
   showLoader,
   u_loadCoords,
-  u_handleNewEmail,
   pulseInfo,
+  pulseError,
   checkEmail
 } from '@/script'
 import './Mailbox.css'
@@ -35,7 +35,10 @@ expose({
   mb_send_message,
   u_goAll,
   mb_refresh,
-  checkEmail
+  checkEmail,
+  u_handleNewEmail,
+  u_addTypeHead,
+  setAutocompleteAddresses
 })
 
 function u_getGeo (id) {
@@ -223,4 +226,98 @@ function mb_refresh () {
     folder: $('#mbh-folder').val(),
     type: $('#mbh-type').val()
   })
+}
+
+var substringMatcher = function (strs) {
+  return function findMatches (q, cb) {
+    // regex used to determine if a string contains the substring `q`
+    var substringRegex = new RegExp(q, 'i')
+
+    // an array that will be populated with substring matches
+    var matches = []
+
+    // iterate through the pool of strings and for any string that
+    // contains the substring `q`, add it to the `matches` array
+    $.each(strs, function (i, str) {
+      if (substringRegex.test(str)) {
+        matches.push({ value: str })
+      }
+    })
+
+    cb(matches)
+  }
+}
+
+let addresses = []
+
+function setAutocompleteAddresses (adr) {
+  addresses = adr
+}
+
+function u_addTypeHead () {
+  $('.edit-an').typeahead('destroy')
+  $('.edit-an:last').typeahead({
+    hint: true,
+    minLength: 2
+  }, {
+    name: 'addresses',
+    source: substringMatcher(addresses),
+    limit: 15
+  })
+
+  $('.edit-an').on('typeahead:selected typeahead:autocompleted', function (e, datum) {
+    window.setTimeout(() => (u_handleNewEmail(this.value, $(this))), 100)
+  }).on('blur', function () {
+    let $this = this
+    if ($this.value != '' && !checkEmail($this.value)) {
+      pulseError('Diese E-Mail-Adresse ist nicht korrekt')
+      $this.focus()
+    } else if ($this.value != '') {
+      window.setTimeout(() => (u_handleNewEmail(this.value, $(this))), 100)
+    }
+  })
+}
+
+function u_handleNewEmail (email, el) {
+  if (u_anHasChanged()) {
+    let availmail = []
+    let availmail_count = 0
+    $('.edit-an').each(function () {
+      let $this = $(this)
+      if (!checkEmail($this.val()) || (availmail[$this.val()] != undefined)) {
+        // $this.parent().parent().parent().remove();
+      } else {
+        availmail[$this.val()] = true
+        availmail_count++
+      }
+    })
+
+    $('#mail-subject').before('<tr><td class="label">&nbsp;</td><td class="data"><input type="text" name="an[]" class="edit-an" value="" /></td></tr>')
+
+    u_addTypeHead()
+    var height = $('#edit-body').height() - (availmail_count * 28)
+    if (height > 40) {
+      $('#edit-body').css('height', height + 'px')
+    }
+
+    $('.edit-an:last').focus()
+  }
+}
+
+let mailcheck = ''
+
+function u_anHasChanged () {
+  let check = ''
+  $('.edit-an').each(function () {
+    check += this.value
+  })
+  if (mailcheck == '') {
+    mailcheck = check
+    return true
+  } else if (mailcheck != check) {
+    mailcheck = check
+    return true
+  } else {
+    return false
+  }
 }
