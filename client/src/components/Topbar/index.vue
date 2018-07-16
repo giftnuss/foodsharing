@@ -63,7 +63,7 @@
             <div v-if="loggedIn" class="container">
 
                 <div id="topbar-navleft">
-                    <a class="navbar-brand" href="#">food<span>shar<span>i</span>ng</span></a>
+                    <a class="navbar-brand" :href="$url('dashboard')">food<span>shar<span>i</span>ng</span></a>
                     <ul class="navbar-nav flex-row no-collapse">
                         
                         <menu-region v-if="hasFsRole" :regions="regions" :activeRegionId="241" />
@@ -71,7 +71,7 @@
                         <menu-groups :workingGroups="workingGroups" />
                         <menu-baskets />
                         <li v-if="!isMobile" class="nav-item" v-b-tooltip title="Karte">
-                            <a href="#" class="nav-link">
+                            <a :href="$url('map')" class="nav-link">
                                 <i class="fa fa-map-marker" />
                                 <span v-if="!loggedIn">Karte</span>
                             </a>
@@ -89,13 +89,13 @@
                 <b-collapse is-nav id="nav_collapse">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item" v-b-tooltip title="Home">
-                            <a href="#" class="nav-link">
+                            <a :href="$url('home')" class="nav-link">
                                 <i class="fa fa-home" />
                                 <span class="d-md-none">Startseite</span>
                             </a>
                         </li>
                         <li v-if="isMobile" class="nav-item" v-b-tooltip title="Karte">
-                            <a href="#" class="nav-link">
+                            <a :href="$url('map')" class="nav-link">
                                 <i class="fa fa-map-marker" />
                                 <span class="d-md-none">Karte</span>
                             </a>
@@ -110,24 +110,28 @@
                                 <i class="fa fa-info "/>
                                 <span class="d-md-none">Infomationen</span>
                             </template>
-                            <a class="dropdown-item" href="/news" role="menuitem">News</a>
-                            <a class="dropdown-item" href="/ueber-uns" role="menuitem">Über uns</a>
-                            <a class="dropdown-item" href="/?page=listFaq" role="menuitem">F.A.Q.</a>
-                            <a class="dropdown-item" href="https://wiki.foodsharing.de/" role="menuitem">Wiki</a>
-                            <a class="dropdown-item" href="/ratgeber" role="menuitem">Ratgeber</a>
-                            <a class="dropdown-item" href="/unterstuetzung" role="menuitem">Spendenaufruf</a>
-                            <a class="dropdown-item" href="/statistik" role="menuitem">Statistik</a>
-                            <a class="dropdown-item" href="/?page=content&sub=changelog" role="menuitem">Changelog</a>
+                            <a :href="$url('vision')" class="dropdown-item" role="menuitem">Vision</a>
+                            <a :href="$url('claims')" class="dropdown-item" role="menuitem">Forderungen</a>
+                            <a :href="$url('partner')" class="dropdown-item" role="menuitem">Partner</a>
+                            <a :href="$url('statistics')" class="dropdown-item" role="menuitem">Statistik</a>
+                            <div class="dropdown-divider" />
+                            <a :href="$url('infos')" class="dropdown-item" role="menuitem">Infosammlung</a>
+                            <a :href="$url('blog')" class="dropdown-item" role="menuitem">Blog</a>
+                            <a :href="$url('faq')" class="dropdown-item" role="menuitem">F.A.Q.</a>
+                            <a :href="$url('guide')" class="dropdown-item" role="menuitem">Ratgeber</a>
+                            <a :href="$url('wiki')" class="dropdown-item" role="menuitem">Wiki</a>
                         </nav-item-dropdown>
+                        
                         <li v-if="mailbox" class="nav-item" v-b-tooltip title="E-Mail-Postfach">
-                            <a href="#" class="nav-link">
+                            <a :href="$url('mailbox')" class="nav-link">
                                 <i class="fa fa-envelope" />
                                 <span class="d-md-none">E-Mail-Postfach</span>
                             </a>
                         </li>
+
                         <menu-messages v-if="!isMobile" />
                         <menu-bells v-if="!isMobile" />
-                        <menu-user :avatar="image" :isMobile="isMobile" />
+                        <menu-user :userId="fsId" :avatar="image" :isMobile="isMobile" />
 
                     </ul>
                 </b-collapse>

@@ -4,6 +4,7 @@
             <i class="fa fa-gear"/>
             <span class="d-md-none">Administration</span>
         </template>
+        <!-- TODO: replace hard coded links with $url() -->
         <a v-if="isOrgaTeam" class="dropdown-item" href="/?page=betrieb&bid=0">{{ $i18n('menu_all_store') }}</a>
         <a v-if="isOrgaTeam" class="dropdown-item" href="/?page=foodsaver&bid=0">{{ $i18n('menu_all_fs') }}</a>
         <a v-if="isOrgaTeam" class="dropdown-item" href="/?page=geoclean&sub=lostregion">{{ $i18n('menu_regions_without_bots') }}</a>

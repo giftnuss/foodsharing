@@ -3,7 +3,7 @@
         <template slot="button-content">
             <i class="fa fa-users"/>
         </template>
-            <a href="#" role="menuitem" class="dropdown-item"><i class="fa fa-users" /> Gruppenübersicht</a>
+            <a :href="$url('workingGroups')" role="menuitem" class="dropdown-item"><i class="fa fa-users" /> Gruppenübersicht</a>
             <div v-for="group in workingGroups" :key="group.id">
                 <a v-if="!alwaysOpen" role="menuitem" v-b-toggle="'topbargroup_'+group.id"  class="dropdown-item">{{ group.name }}</a>
                 <h3 v-if="alwaysOpen" role="menuitem" class="dropdown-header">{{ group.name }}</h3>
@@ -11,7 +11,7 @@
                     <a role="menuitem" :href="$url('forum', group.id)" class="dropdown-item"><i class="fa fa-comment-o" /> Forum</a>
                     <a role="menuitem" :href="$url('events', group.id)" class="dropdown-item"><i class="fa fa-calendar" /> Termine</a>
                     <a role="menuitem" :href="$url('wall', group.id)" class="dropdown-item"><i class="fa fa-group" /> Pinnwand</a>
-                    <a role="menuitem" :href="`/?page=groups&sub=edit&id=${group.id}`" class="dropdown-item"><i class="fa fa-cog" /> Gruppe verwalten</a>
+                    <a role="menuitem" :href="$url('workingGroupEdit', group.id)" class="dropdown-item"><i class="fa fa-cog" /> Gruppe verwalten</a>
                 </b-collapse>
             </div>
     </nav-item-dropdown>

@@ -73,7 +73,7 @@ export default {
                 window.location = this.$url('dashboard')
             } catch(err) {
                 if(err.code && err.code === 401) {
-                    pulseError('Benutzername oder Passwort find falsch')
+                    pulseError('Benutzername oder Passwort sind falsch')
                 } else {
                     pulseError('Unknown error')
                 }
