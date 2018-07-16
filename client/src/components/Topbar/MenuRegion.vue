@@ -21,7 +21,7 @@
         </b-nav-item-dropdown>
 </template>
 <script>
-import bCollapse from '@b/components/navbar/navbar';
+import bCollapse from '@b/components/collapse/collapse';
 import bNavItemDropdown from '@b/components/nav//nav-item-dropdown';
 import bToggle from '@b/directives/toggle/toggle';
 
