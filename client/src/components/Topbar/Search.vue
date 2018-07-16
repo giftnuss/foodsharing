@@ -36,9 +36,10 @@ import SearchResults from './SearchResults'
 import { instantSearch, instantSearchIndex } from '@/api/search'
 import { user } from '@/server-data'
 import clickoutMixin from '@b/mixins/clickout'
+import listenOnRootMixin from '@b/mixins/listen-on-root'
 
 export default {
-    mixins: [clickoutMixin],
+    mixins: [clickoutMixin, listenOnRootMixin],
     components: {SearchResults},
     data() {
         return {
@@ -74,6 +75,10 @@ export default {
                 this.isLoading = false
             }
         }
+    },
+    mounted() {
+        // close the result box if another dropdown menu gets opened
+        this.listenOnRoot('bv::dropdown::shown', this.close)
     },
     created() {
         this.fetchIndex()
