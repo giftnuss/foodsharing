@@ -1177,7 +1177,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'location' => $location,
 			'ravenConfig' => $ravenConfig,
 			'translations' => $this->getTranslations(),
-			'GOOGLE_API_KEY' => GOOGLE_API_KEY
+			'GOOGLE_API_KEY' => GOOGLE_API_KEY,
+			'isDev' => getenv('FS_ENV') === 'dev'
 		]);
 	}
 

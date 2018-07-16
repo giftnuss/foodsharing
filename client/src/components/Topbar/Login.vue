@@ -45,11 +45,13 @@
 import { login } from '@/api/user'
 
 import { pulseError, pulseSuccess } from '@/script'
+import serverData from '@/server-data'
+
 export default {
     data() {
         return {
-            username: '',
-            password: '',
+            username: serverData.isDev ? 'userbot@example.com' : '',
+            password: serverData.isDev ? 'test' : '',
             isLoading: false,
             error: null
         }
