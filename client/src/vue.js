@@ -18,7 +18,8 @@ Vue.prototype.$i18n = (key, variables = {}) => {
 
 Vue.prototype.$url = (key, ...params) => {
   if (!urls[key]) {
-    throw new Error(`Vue.$url() Error: url key '${key}' does not exist`)
+    console.error(new Error(`Vue.$url() Error: url key '${key}' does not exist`))
+    return '#'
   }
   return urls[key](...params)
 }
