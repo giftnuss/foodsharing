@@ -51,7 +51,7 @@ export default {
     data() {
         return {
             username: serverData.isDev ? 'userbot@example.com' : '',
-            password: serverData.isDev ? 'test' : '',
+            password: serverData.isDev ? 'user' : '',
             isLoading: false,
             error: null
         }
