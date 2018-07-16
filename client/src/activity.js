@@ -154,7 +154,7 @@ const activity = {
   },
 
   sortUpdates: function () {
-    tinysort('#activity li', { order: 'desc', attr: 'data-ts' })
+    tinysort('#activity li[data-ts]', { order: 'desc', attr: 'data-ts' })
 
     this.initQuickreply()
   },
