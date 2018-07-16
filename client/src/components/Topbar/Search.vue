@@ -1,5 +1,5 @@
 <template>
-    <form class="form-inline my-2 my-lg-0" style="flex-grow: 1">
+    <form id="topbar-search" class="form-inline my-2 my-lg-0" style="flex-grow: 1">
         <div class="input-group" ref="inputgroup">
             <div class="input-group-prepend">
                 <label class="input-group-text text-primary" for="searchfield">
@@ -122,6 +122,11 @@ export default {
             return false
         },
         resultsStyle() {
+                return  {
+                    left: this.posX+'px',
+                    // width: Math.max(this.width, 250)+'px'
+                }
+            
             if(this.isMobile) {
                 return {
                     left: '0px',
@@ -138,34 +143,42 @@ export default {
 }
 </script>
 
+<style lang="scss" scoped>
+
+</style>
+
 <style lang="scss">
-.input-group {
-    margin-bottom: 0;
-    img, i {
-        height: 1em;
-        width: 1em;
-    }
-    .input-group-text {
-        background-color: white;
-        border: none;
-        padding: 0.1rem 0.4rem;
-        font-size: .9em;
-    }
-    input.form-control {
-        padding: 0.1rem 0.75rem;
-        font-size: 1em;
-        border: none;
-        padding-left: 0;
-        font-weight: bold;
-        &:focus {
-            box-shadow: none;
+#topbar-search {
+    .input-group {
+        margin-bottom: 0;
+        width: 100% !important;
+        img, i {
+            height: 1em;
+            width: 1em;
+        }
+        .input-group-text {
+            background-color: white;
             border: none;
+            padding: 0.1rem 0.4rem;
+            font-size: .9em;
+        }
+        input.form-control {
+            padding: 0.1rem 0.75rem;
+            font-size: 1em;
+            border: none;
+            padding-left: 0;
+            font-weight: bold;
+            &:focus {
+                box-shadow: none;
+                border: none;
+            }
         }
     }
 }
 #search-results {
     display: block;
-    width: 100%;
+    // width: 100%;
+    width: 250px;
 }
 </style>
 

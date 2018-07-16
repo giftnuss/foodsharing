@@ -44,10 +44,22 @@ export default {
 }
 </script>
 
-<style>
-.regionMenu > a {
+<style lang="scss">
+.regionMenu {
+    margin-top: 0.1em;
+
+    .dropdown-toggle {
+        white-space: nowrap;
+    }
+    @media (max-width: 350px) {
+        .dropdown-toggle::after {
+            content: none;
+        }
+    }
+}
+.regionMenu > a.nav-link {
     font-family: 'Alfa Slab One';
     /* margin-top: -35px; */
-
+    font-size: 1.1em !important;
 }
 </style>

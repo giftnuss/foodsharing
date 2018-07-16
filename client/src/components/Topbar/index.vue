@@ -6,7 +6,7 @@
                     <a class="navbar-brand mr-4" href="#">food<span>shar<span>i</span>ng</span></a>
                     <login />
                 </div>
-                <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav ml-auto no-collapse" id="topbar-navright">
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="fa fa-map-marker" />
@@ -54,7 +54,6 @@
 
                 <search />
                 <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-
                 
                 <b-collapse is-nav id="nav_collapse">
                     <ul class="navbar-nav ml-auto">
@@ -113,6 +112,7 @@
 import BootstrapVue from 'bootstrap-vue'
 import Vue from 'vue'
 Vue.use(BootstrapVue);
+import ui from '@/stores/ui'
 
 
 
@@ -177,23 +177,29 @@ export default {
             return this.isOrgaTeam || this.may.editBlog || this.may.editQuiz || this.may.handleReports
         },
         isMobile() {
-            return false
+            return this.ui.wSM || this.ui.wXS
+        },
+        ui() {
+            return ui
         }
     }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #topbar {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-
     .container {
         max-width: 1000px;
     }
+
+
+    // logo
     .navbar-brand {
         font-family: 'Alfa Slab One';
         color: #ffffff;
         margin-right: 0;
+        font-size: 1.1rem;
         span {
             color: #64ae25;
         }
@@ -208,14 +214,69 @@ export default {
                 margin-left: -0.085em;
             }
         }
-        font-size: 1.1rem;
     }
     @media (max-width: 700px) {
         .navbar-brand {
             font-size: 0.4rem;
-            margin-top: .5rem;
         }
     }
+
+    @media (max-width: 630px) {
+        #topbar-navleft {
+            width: 100%;
+        }
+    }
+
+    .navbar-nav {
+        align-items: center;
+    }
+    .navbar-collapse.collapse, .navbar-collapse.collapsing {
+        .navbar-nav {
+            align-items: start;
+        }
+    }
+}
+#topbar-navleft {
+    display:flex;
+    align-items: center;
+    flex-grow: 1;
+    margin-right: 1em;
+}
+</style>
+
+<style lang="scss">
+#topbar {
+    .nav-link {
+        font-size: 1.25em;
+        padding: 0.4em 0.5em;
+    }
+    @media (max-width: 700px) {
+        .nav-link {
+            font-size: 1em;
+            padding: 0.4em 0.2em;
+        }
+    }
+    .no-collapse {
+        display:flex;
+        flex-grow: 1;
+        .nav-link {
+            padding-right: 0.5rem;
+            padding-left: 0.5rem;
+        }
+        .dropdown-menu {
+            position: absolute;
+        }
+    }
+    .nav-item > a > .badge {
+        position: absolute;
+        margin-top: -0.5em;
+        margin-left: -0.7em;
+    }
+    ul {
+        margin-left: 0;
+    }
+
+    // dropdown styles
     .dropdown-item i {
         display: inline-block;
         width: 1.7em;
@@ -226,52 +287,40 @@ export default {
         font-size: 0.9em;
         padding-left: 3em;
         font-weight: normal;
-
     }
     .dropdown-item {
-        font-size: 14px;
         font-weight: bold;
     }
-    .user {
-        & > a {
-            padding: 0 0.5rem !important;
-        }
-        img {
-            height: 2.4em;
-        }
-    }
+
     .dropdown-menu {
-        max-height: 400px;
+        max-height: 350px;
         overflow-y: auto;
     }
-}
-#topbar-navleft {
 
-    display:flex;
-    flex-grow: 1;
+    @media (max-width: 500px) {
+        .dropdown {
+            position: initial;
+        }
+        .dropdown-menu {
+            width: 100%;
+            top: 2.2em;
+        }
+        #search-results {
+            top: 5em;
+            width: 100%;
+            left: 0px !important;
+        }
+    }
+    .navbar-collapse.collapsing, .navbar-collapse.show {
+        .nav-link i {
+            width: 40px;
+            text-align: center;
+        }
+        li {
+            width: 100%;
+        }
+    }
+}
 
-    & > ul {
-        margin-left: 0;
-    }
-    .dropdown-menu {
-        position: absolute;
-    }
-    .nav-link {
-        padding-right: 0.5rem;
-        padding-left: 0.5rem;
-    }
-}
-
-.nav-item > a > .badge {
-    position: absolute;
-    margin-top: -0.5em;
-    margin-left: -0.7em;
-}
-.navbar-collapse.collapsing, .navbar-collapse.show {
-    .nav-link i {
-        width: 40px;
-        text-align: center;
-    }
-}
 </style>
 

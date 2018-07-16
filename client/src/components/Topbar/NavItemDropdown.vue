@@ -76,11 +76,10 @@ export default {
   },
   methods: {
     buttonClick(event) {
-      console.log('click')
-      console.log(this)
+      if(this.visible) {
+        this.hover = false
+      }
       this.toggle(event)
-      // this.$root.$emit('bv::show::tooltip', 'test');
-      // this.$refs.toggle.$emit('close')
     }
   },
   props: {

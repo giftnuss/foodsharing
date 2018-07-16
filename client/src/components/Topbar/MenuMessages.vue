@@ -48,9 +48,6 @@ export default {
 
 <style lang="scss">
 .topbar-messages {
-    .list-group {
-        width: 250px;
-    }
     .dropdown-menu {
         padding: 0;
     }
