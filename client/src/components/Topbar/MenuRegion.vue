@@ -1,5 +1,5 @@
 <template>
-    <b-nav-item-dropdown class="regionMenu" >
+    <b-nav-item-dropdown class="regionMenu" ref="dropdown">
             <template slot="button-content">
                 {{ activeRegion ? activeRegion.name : 'Bezirke' }}
             </template>
@@ -17,10 +17,12 @@
                 </b-collapse>
             </div>
             <div v-if="regionsSorted.length" class="dropdown-divider"></div>
-            <a href="#" role="menuitem" class="dropdown-item"><small><i class="fa fa-plus" /> Einem Bezirk beitreten</small></a>
+            <a href="#" role="menuitem" class="dropdown-item" @click="joinRegionDialog"><small><i class="fa fa-plus" /> Einem Bezirk beitreten</small></a>
         </b-nav-item-dropdown>
 </template>
 <script>
+import { becomeBezirk } from '@/script'
+
 export default {
     props: {
         regions: {
@@ -39,6 +41,12 @@ export default {
                 if(this.activeRegionId && b.id == this.activeRegionId) return 1
                 else return a.name-b.name
             })
+        }
+    },
+    methods: {
+        joinRegionDialog() {
+            this.$refs.dropdown.visible = false
+            becomeBezirk()
         }
     }
 }
