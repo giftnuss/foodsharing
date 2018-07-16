@@ -36,8 +36,11 @@
 // modified version of boostrap-vue's b-nav-item-dropdown
 import idMixin from '@b/mixins/id'
 import dropdownMixin from '@b/mixins/dropdown'
+import bTooltip from '@b/components/tooltip/tooltip'
+
 export default {
   mixins: [idMixin, dropdownMixin],
+  components: { bTooltip },
   data() {
     return {
       hover: false

@@ -17,11 +17,13 @@
     </nav-item-dropdown>
 </template>
 <script>
+import bCollapse from '@b/components/navbar/navbar';
+import bToggle from '@b/directives/toggle/toggle';
 import NavItemDropdown from './NavItemDropdown'
+
 export default {
-    components: {
-        NavItemDropdown
-    },
+    components: { bCollapse, NavItemDropdown },
+    directives: { bToggle },
     computed: {
         alwaysOpen() {
             return this.workingGroups.length <= 2

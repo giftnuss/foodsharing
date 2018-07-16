@@ -142,13 +142,10 @@
 
 
 <script>
-
-// TODO: remove complete bootstrap-vue import again
-import BootstrapVue from 'bootstrap-vue'
-import Vue from 'vue'
-Vue.use(BootstrapVue);
 import ui from '@/stores/ui'
-
+import bTooltip from '@b/directives/tooltip/tooltip'
+import bCollapse from '@b/components/collapse/collapse'
+import bNavbarToggle from '@b/components/navbar/navbar-toggle'
 
 
 import NavItemDropdown from './NavItemDropdown'
@@ -164,7 +161,8 @@ import Search from './Search'
 import Login from './Login'
 
 export default {
-    components: {NavItemDropdown, MenuRegion, MenuStores, MenuGroups, MenuBaskets, MenuAdmin, MenuMessages, MenuBells, MenuUser, Search, Login},
+    components: { bCollapse, bNavbarToggle, NavItemDropdown, MenuRegion, MenuStores, MenuGroups, MenuBaskets, MenuAdmin, MenuMessages, MenuBells, MenuUser, Search, Login},
+    directives: { bTooltip },
     props: {
         fsId: {
             type: Number,

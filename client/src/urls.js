@@ -22,6 +22,7 @@ export default {
   mailbox: () => `/?page=mailbox`,
   settings: () => `/?page=settings`,
   logout: () => `/?page=logout`,
+  joininfo: () => `/?page=content&sub=joininfo`,
 
   vision: () => `/ueber-uns`,
   claims: () => `/?page=content&sub=forderungen`,

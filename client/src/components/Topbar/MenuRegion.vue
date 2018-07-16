@@ -21,9 +21,15 @@
         </b-nav-item-dropdown>
 </template>
 <script>
+import bCollapse from '@b/components/navbar/navbar';
+import bNavItemDropdown from '@b/components/nav//nav-item-dropdown';
+import bToggle from '@b/directives/toggle/toggle';
+
 import { becomeBezirk } from '@/script'
 
 export default {
+    components: { bCollapse, bNavItemDropdown },
+    directives: { bToggle },
     props: {
         regions: {
             type: Array,
