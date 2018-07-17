@@ -30,7 +30,8 @@ export default {
 <style lang="scss" scoped>
 .avatarDiv {
   position: relative;
-  margin: auto;
+  // margin: auto;
+  display: inline-block;
   background-size: cover;
 }
 .sleeping::after {

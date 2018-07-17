@@ -15,7 +15,7 @@ export default {
   foodsaverList: (regionId) => `/?page=foodsaver&bid=${regionId}`,
   passports: (regionId) => `/?page=passgen&bid=${regionId}`,
   search: (query) => `/?page=search&q=${encodeURIComponent(query)}`,
-  conversations: () => `?page=msg`,
+  conversations: () => `/?page=msg`,
   dashboard: () => `/?page=dashboard`,
   map: () => `/karte`,
   home: () => `/`,
@@ -23,6 +23,8 @@ export default {
   settings: () => `/?page=settings`,
   logout: () => `/?page=logout`,
   joininfo: () => `/?page=content&sub=joininfo`,
+  basket: (basketId) => `/essenskoerbe/${basketId}`,
+  baskets: () => `/essenskoerbe`,
 
   vision: () => `/ueber-uns`,
   claims: () => `/?page=content&sub=forderungen`,

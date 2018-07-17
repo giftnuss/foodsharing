@@ -324,7 +324,7 @@ class BasketModel extends Model
 			return $baskets;
 		}
 
-		return false;
+		return [];
 	}
 
 	public function follow($basket_id)
