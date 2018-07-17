@@ -5,6 +5,7 @@
             <span v-if="unread" class="badge badge-danger">{{ unread }}</span>
         </template>
         <div class="list-group">
+            <small v-if="!bells.length" class="list-group-item text-muted">Du hast derzeit keine Benachrichtungen</small>
             <menu-bells-entry
                 v-for="bell in bells"
                 :key="bell.id"

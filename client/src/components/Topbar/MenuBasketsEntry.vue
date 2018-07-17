@@ -1,5 +1,5 @@
 <template>
-    <a :href="$url('basket', basket.id)" class="dropdown-item">
+    <a :href="$url('basket', basket.id)" class="list-group-item list-group-item-action">
         <div class="row">
             <div class="col-2 pl-2">
                 <img src="/img/basket.png" />

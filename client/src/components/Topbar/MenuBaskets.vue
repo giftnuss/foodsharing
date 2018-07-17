@@ -12,14 +12,14 @@
                 :key="basket.id"
                 :basket="basket"
             />
-        </div>
-        <div class="p-2 text-center">
-            <a :href="$url('baskets')" class="btn btn-sm btn-secondary">
-                Alle Essenskörbe
-            </a>
-            <a href="#" @click="openBasketCreationForm" class="btn btn-sm btn-secondary">
-                Essenskorb anlegen
-            </a>
+            <div class="list-grou-item p-2 text-center">
+                <a :href="$url('baskets')" class="btn btn-sm btn-secondary">
+                    Alle Essenskörbe
+                </a>
+                <a href="#" @click="openBasketCreationForm" class="btn btn-sm btn-secondary">
+                    Essenskorb anlegen
+                </a>
+            </div>
         </div>
     </nav-item-dropdown>
 </template>
@@ -66,6 +66,7 @@ export default {
 <style lang="scss">
 .topbar-baskets {
     .dropdown-menu {
+        overflow-x: hidden;
         padding: 0;
     }
 }
