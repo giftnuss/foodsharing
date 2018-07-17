@@ -326,8 +326,8 @@ class Foodsharing extends \Codeception\Module\Db
 	public function addBezirkMember($bezirk_id, $fs_id, $is_active = true)
 	{
 		if (is_array($fs_id)) {
-			array_map(function ($x) use ($bezirk_id, $is_admin) {
-				$this->addBezirkMember($bezirk_id, $x, $is_admin);
+			array_map(function ($x) use ($bezirk_id, $is_active) {
+				$this->addBezirkMember($bezirk_id, $x, $is_active);
 			}, $fs_id);
 		} else {
 			$v = [
