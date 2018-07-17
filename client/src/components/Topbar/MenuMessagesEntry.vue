@@ -2,6 +2,7 @@
     <a 
         href="#"
         :class="classes"
+        @click="openChat"
     >
         <div class="row">
             <div class="col-2">
@@ -21,6 +22,7 @@
 </template>
 <script>
 import serverData from '@/server-data'
+import msg from '@/msg'
 
 export default {
     props: {
@@ -70,6 +72,11 @@ export default {
         },
         loggedinUser() {
             return serverData.user
+        }
+    },
+    methods: {
+        openChat() {
+            msg.loadConversation(this.conversation.id)
         }
     }
 }
