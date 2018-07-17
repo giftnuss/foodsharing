@@ -11,8 +11,13 @@ import 'typeahead-addresspicker'
 import 'leaflet'
 import 'leaflet.awesome-markers'
 import '@/tablesorter'
+import {
+  GET
+} from '@/script'
 
-vueRegister({
-  StoreList
-})
-vueApply('#vue-storelist')
+if (GET('sub') === 'undefined') {
+  vueRegister({
+    StoreList
+  })
+  vueApply('#vue-storelist')
+}
