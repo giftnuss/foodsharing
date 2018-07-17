@@ -12,7 +12,7 @@
             </div>
             <div class="col-10">
                 <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">{{ conversation.title }}</h5>
+                    <h5 class="mb-1">{{ title }}</h5>
                     <small class="text-muted">{{ conversation.lastMessageTime | dateDistanceInWords }}</small>
                 </div>
                 <p class="mb-1 text-truncate">{{ conversation.lastMessage.bodyRaw }}</p>
@@ -41,12 +41,20 @@ export default {
                 this.conversation.hasUnreadMessages ? 'list-group-item-warning' :null
             ]
         },
+        title() {
+            if(this.conversation.title) return this.conversation.title
+            let members = this.conversation.members
+                // without ourselve
+                .filter(m => m.id !== this.loggedinUser.id)
+            
+            return members.map(m => m.name).join(', ')
+        },
         avatars() {
             let lastId = this.conversation.lastMessage.authorId
             let members = this.conversation.members
 
                 // without ourselve
-                .filter(m => m.id === this.loggedinUser.id)
+                .filter(m => m.id !== this.loggedinUser.id)
 
                 // bring last participant to the top
                 .sort( (a,b) => {
