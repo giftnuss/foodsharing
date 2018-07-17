@@ -17,7 +17,7 @@
                     <a class="navbar-brand" :href="$url('dashboard')">food<span>shar<span>i</span>ng</span></a>
                     <ul class="navbar-nav flex-row no-collapse">
                         
-                        <menu-region v-if="hasFsRole" :regions="regions" :activeRegionId="241" />
+                        <menu-region v-if="hasFsRole" :regions="regions" :activeRegionId="activeRegionId" />
                         <menu-stores v-if="hasFsRole && stores.length" :stores="stores" />
                         <menu-groups :workingGroups="workingGroups" />
                         <menu-baskets />
@@ -166,6 +166,9 @@ export default {
         },
         ui() {
             return ui
+        },
+        activeRegionId() {
+            return ui.activeRegionId
         }
     }
 }

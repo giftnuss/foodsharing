@@ -71,6 +71,6 @@ export default {
 .regionMenu > a.nav-link {
     font-family: 'Alfa Slab One';
     /* margin-top: -35px; */
-    font-size: 1.1em !important;
+    font-size: 1em !important;
 }
 </style>

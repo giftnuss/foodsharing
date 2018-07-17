@@ -1,4 +1,7 @@
 import Vue from 'vue'
+import serverData from '@/server-data'
+import { GET } from '@/script'
+
 const mediaQuery = {
   xs: {
     max: 575
@@ -27,7 +30,9 @@ const ui = new Vue({
     wSM: false,
     wMD: false,
     wLG: false,
-    wXL: false
+    wXL: false,
+
+    activeRegionId: null
   },
   methods: {
     updateWindowWidth (event) {
@@ -40,6 +45,19 @@ const ui = new Vue({
       this.wXL = w >= mediaQuery.xl.min
 
       console.log(w)
+    },
+    updateRegionId () {
+      let regionId
+      if(['bezirk', 'betrieb', 'foodsaver', 'passgen'].indexOf(serverData.page) != -1 && GET('bid')) regionId = parseInt(GET('bid'))
+      else if(serverData.page === 'groups' && GET('p')) regionId = parseInt(GET('p'))
+      else if(localStorage.getItem("lastRegion")) regionId = parseInt(localStorage.getItem("lastRegion"))
+      else if(serverData.user.regularRegion) regionId = serverData.user.regularRegion
+
+      console.log('last regionId', regionId)
+      if(regionId !== this.activeRegionId) {
+        this.activeRegionId = regionId
+        localStorage.setItem("lastRegion", regionId);
+      }
     }
   }
 })
@@ -47,6 +65,7 @@ const ui = new Vue({
 ui.$nextTick(function () {
   window.addEventListener('resize', this.updateWindowWidth)
   this.updateWindowWidth()
+  this.updateRegionId()
 })
 
 export default ui
