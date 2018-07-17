@@ -62,9 +62,6 @@ export default {
 .regionMenu {
     margin-top: 0.1em;
 
-    .dropdown-toggle {
-        white-space: nowrap;
-    }
     @media (max-width: 350px) {
         .dropdown-toggle::after {
             content: none;

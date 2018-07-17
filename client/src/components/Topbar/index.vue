@@ -1,63 +1,14 @@
 <template>
-    <div id="topbar" class="bootstrap">
+    <div id="topbar" :class="{bootstrap:true, loggedIn}">
         <div class="navbar navbar-expand-md navbar-dark bg-primary ">
             <div v-if="!loggedIn" class="container">
                 <div id="topbar-navleft">
                     <a :href="$url('home')" class="navbar-brand mr-4">food<span>shar<span>i</span>ng</span></a>
-                    <login />
+                    <login v-if="!isMobile"/>
+                    <menu-loggedout v-if="isMobile"/>
                 </div>
-                <ul class="navbar-nav ml-auto no-collapse" id="topbar-navright">
-                    <li class="nav-item">
-                        <a :href="$url('map')" class="nav-link">
-                            <i class="fa fa-map-marker" />
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a :href="$url('joininfo')" class="nav-link">
-                            <i class="fa fa-rocket" />
-                            Mach mit!
-                        </a>
-                    </li>
-
-                    <nav-item-dropdown rightt>
-                        <template slot="button-content">
-                            <i class="fa fa-bullhorn "/>
-                            Über uns
-                        </template>
-                        <a :href="$url('vision')" class="dropdown-item" role="menuitem">Vision</a>
-                        <a :href="$url('claims')" class="dropdown-item" role="menuitem">Forderungen</a>
-                        <a :href="$url('partner')" class="dropdown-item" role="menuitem">Partner</a>
-                        <a :href="$url('statistics')" class="dropdown-item" role="menuitem">Statistik</a>
-                        <a :href="$url('infosCompany')" class="dropdown-item" role="menuitem">Für Unternehmen</a>
-                    </nav-item-dropdown>
-
-                    <nav-item-dropdown right>
-                        <template slot="button-content">
-                            <i class="fa fa-info "/>
-                            Infos
-                        </template>
-                        <a :href="$url('infos')" class="dropdown-item" role="menuitem">Infosammlung</a>
-                        <a :href="$url('blog')" class="dropdown-item" role="menuitem">Blog</a>
-                        <a :href="$url('faq')" class="dropdown-item" role="menuitem">F.A.Q.</a>
-                        <a :href="$url('guide')" class="dropdown-item" role="menuitem">Ratgeber</a>
-                        <a :href="$url('wiki')" class="dropdown-item" role="menuitem">Wiki</a>
-                    </nav-item-dropdown>
-
-                    <nav-item-dropdown tooltip="Kontakt" right>
-                        <template slot="button-content">
-                            <i class="fa fa-envelope" />
-                        </template>
-                        <h3 class="dropdown-header">Communities</h3>
-                        <a :href="$url('communitiesGermany')" class="dropdown-item sub" role="menuitem">Deutschland</a>
-                        <a :href="$url('communitiesAustria')" class="dropdown-item sub" role="menuitem">Österreich</a>
-                        <a :href="$url('communitiesSwitzerland')" class="dropdown-item sub" role="menuitem">Schweiz</a>
-                        <div class="dropdown-divider" />
-                        <a :href="$url('team')" class="dropdown-item" role="menuitem">Team</a>
-                        <a :href="$url('press')" class="dropdown-item" role="menuitem">Presse</a>
-                        <a :href="$url('imprint')" class="dropdown-item" role="menuitem">Impressum</a>
-                    </nav-item-dropdown>
-                 </ul>
+                <login v-if="isMobile"/>
+                <menu-loggedout v-if="!isMobile"/>
             </div>
 
             <div v-if="loggedIn" class="container">
@@ -84,7 +35,7 @@
 
 
                 <search />
-                <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+                <b-navbar-toggle target="nav_collapse" class="ml-2"></b-navbar-toggle>
                 
                 <b-collapse is-nav id="nav_collapse">
                     <ul class="navbar-nav ml-auto">
@@ -159,9 +110,10 @@ import MenuBells from './MenuBells'
 import MenuUser from './MenuUser'
 import Search from './Search'
 import Login from './Login'
+import MenuLoggedout from './MenuLoggedout'
 
 export default {
-    components: { bCollapse, bNavbarToggle, NavItemDropdown, MenuRegion, MenuStores, MenuGroups, MenuBaskets, MenuAdmin, MenuMessages, MenuBells, MenuUser, Search, Login},
+    components: { bCollapse, bNavbarToggle, NavItemDropdown, MenuLoggedout, MenuRegion, MenuStores, MenuGroups, MenuBaskets, MenuAdmin, MenuMessages, MenuBells, MenuUser, Search, Login},
     directives: { bTooltip },
     props: {
         fsId: {
@@ -248,8 +200,8 @@ export default {
             }
         }
     }
-    @media (max-width: 700px) {
-        .navbar-brand {
+    @media (max-width: 650px) {
+        &.loggedIn .navbar-brand {
             font-size: 0.4rem;
         }
     }
@@ -293,6 +245,7 @@ export default {
             }
         }
     }
+    
     .no-collapse {
         display:flex;
         flex-grow: 1;
@@ -303,6 +256,9 @@ export default {
         .dropdown-menu {
             position: absolute;
         }
+    }
+    .dropdown-toggle {
+        white-space: nowrap;
     }
     .nav-item > a > .badge {
         position: absolute;

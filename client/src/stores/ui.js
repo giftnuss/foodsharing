@@ -5,10 +5,10 @@ const mediaQuery = {
   },
   sm: {
     min: 576,
-    max: 749
+    max: 753
   },
   md: {
-    min: 750,
+    min: 754,
     max: 991
   },
   lg: {
