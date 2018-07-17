@@ -17,7 +17,6 @@ export async function getConversationList () {
     },
     hasUnreadMessages: c.unread === '1'
   }))
-    .filter(c => c.lastMessage.bodyRaw && c.title)
 }
 
 export function getConversation (conversationId) {
