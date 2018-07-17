@@ -105,7 +105,7 @@ class BellGateway extends BaseGateway
 			return $bells;
 		}
 
-		return false;
+		return [];
 	}
 
 	public function getStoreBells($bids): array
