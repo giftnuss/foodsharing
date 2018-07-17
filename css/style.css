@@ -67,30 +67,6 @@
   background-repeat: no-repeat;
 }
 
-.dickmilchbeta #campaignimg {
-  background-image: url(/img/pica_dickmilchbeta.png);
-}
-
-.dickmilch #campaignimg {
-  background-image: url(/img/pica_dickmilch.png);
-}
-
-.walkingbread #campaignimg {
-  background-image: url(/img/pica_walkingbread.png);
-}
-
-.foodporn #campaignimg {
-  background-image: url(/img/pica_foodporn.png);
-}
-
-.faulesei #campaignimg {
-  background-image: url(/img/pica_faulesei.png);
-}
-
-.sauregurken #campaignimg {
-  background-image: url(/img/pica_sauregurken.png);
-}
-
 @media (max-aspect-ratio: 3/2) {
   #campaign {
     width: 100vw;
