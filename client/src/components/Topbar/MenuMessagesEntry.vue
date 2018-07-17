@@ -22,7 +22,7 @@
 </template>
 <script>
 import serverData from '@/server-data'
-import msg from '@/msg'
+import conv from '@/conv'
 
 export default {
     props: {
@@ -76,7 +76,8 @@ export default {
     },
     methods: {
         openChat() {
-            msg.loadConversation(this.conversation.id)
+            conv.chat(this.conversation.id)
+            this.$emit('chatOpened')
         }
     }
 }

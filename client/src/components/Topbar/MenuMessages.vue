@@ -1,5 +1,5 @@
 <template>
-    <nav-item-dropdown tooltip="Nachrichten" no-caret right class="topbar-messages">
+    <nav-item-dropdown tooltip="Nachrichten" no-caret right class="topbar-messages" ref="dropdown">
         <template slot="button-content">
             <i class="fa fa-comments"/>
             <span v-if="unread" class="badge badge-danger">{{ unread }}</span>
@@ -9,6 +9,7 @@
                 v-for="conversation in conversations"
                 :key="conversation.id"
                 :conversation="conversation"
+                @chatOpened="close"
             />
         </div>
         <a :href="$url('conversations')" class="dropdown-item bg-secondary text-white text-center">
@@ -41,6 +42,11 @@ export default {
                 if(conv.hasUnreadMessages) unreadMessages++
             }
             return unreadMessages
+        }
+    },
+    methods: {
+        close() {
+            this.$refs.dropdown.visible = false
         }
     }
 }
