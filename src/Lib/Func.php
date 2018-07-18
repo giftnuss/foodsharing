@@ -842,14 +842,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		exit();
 	}
 
-	/**
-	 * @deprecated use $this->session->getCurrentBezirkId() instead
-	 */
-	public function getBezirkId()
-	{
-		return $this->session->getCurrentBezirkId();
-	}
-
 	public function getPage()
 	{
 		$page = $this->getGet('page');

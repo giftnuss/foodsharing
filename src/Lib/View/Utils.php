@@ -872,7 +872,7 @@ class Utils
 		if (isset($_GET['bid'])) {
 			$bid = '&bid=' . (int)$_GET['bid'];
 		} else {
-			$bid = $this->func->getBezirkId();
+			$bid = $this->session->getCurrentBezirkId();
 		}
 
 		$out = '';

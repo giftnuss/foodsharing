@@ -94,7 +94,7 @@ class FoodsaverModel extends Model
 		$data['anmeldedatum'] = date('Y-m-d H:i:s');
 
 		if (!isset($data['bezirk_id'])) {
-			$data['bezirk_id'] = $this->func->getBezirkId();
+			$data['bezirk_id'] = $this->session->getCurrentBezirkId();
 		}
 
 		$orga = '';

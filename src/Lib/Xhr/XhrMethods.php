@@ -864,7 +864,7 @@ class XhrMethods
 
 			$mail = $this->emailGateway->getOne_send_email($mail_id);
 
-			$bezirk = $this->regionGateway->getMailBezirk($this->func->getBezirkId());
+			$bezirk = $this->regionGateway->getMailBezirk($this->session->getCurrentBezirkId());
 			$bezirk['email'] = EMAIL_PUBLIC;
 			$bezirk['email_name'] = EMAIL_PUBLIC_NAME;
 			$recip = $this->emailGateway->getMailNext($mail_id);
@@ -1507,7 +1507,7 @@ class XhrMethods
 					VALUES (' . (int)$bezirk_id . ',' . $this->func->fsId() . ', ' . $active . ' )
 				');
 
-				if (!$this->func->getBezirkId()) {
+				if (!$this->session->getCurrentBezirkId()) {
 					$this->model->update('UPDATE fs_foodsaver SET bezirk_id = ' . (int)$bezirk_id . ' WHERE id = ' . (int)$this->func->fsId());
 				}
 
