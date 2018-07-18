@@ -1257,11 +1257,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->title = array($name);
 	}
 
-	public function pv($el)
-	{
-		//return '<pre>'.print_r($el,true).'</pre>';
-	}
-
 	/**
 	 * @deprecated use $this->session->id() instead
 	 */
