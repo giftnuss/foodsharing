@@ -38,6 +38,7 @@ class AcceptanceTester extends \Codeception\Actor
 		$I->fillField('#login-password', $password);
 		$I->click('#topbar .btn');
 		$I->waitForElement('#pulse-success');
+		$I->waitForElementNotVisible('#pulse-success');
 		$I->waitForPageBody();
 		$I->seeMatches('/Willkommen|Hallo/'); // depends on user type
 	}
@@ -57,5 +58,9 @@ class AcceptanceTester extends \Codeception\Actor
 	{
 		$text = $this->grabTextFrom($selector);
 		$this->doAssertRegExp($regexp, $text);
+	}
+
+	public function waitForActiveAPICalls($timeout = 60) {
+		$this->waitForJS('return window.fetch.activeFetchCalls == 0;', $timeout);
 	}
 }

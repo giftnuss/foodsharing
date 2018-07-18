@@ -4,6 +4,7 @@ const DEFAULT_OPTIONS = {
   credentials: 'same-origin',
   mode: 'cors'
 }
+window.fetch.activeFetchCalls = 0
 
 export class HTTPError extends Error {
   constructor (code, text) {
@@ -15,18 +16,22 @@ export class HTTPError extends Error {
 
 export async function request (path, options = {}) {
   try {
+    window.fetch.activeFetchCalls++
     const res = await window.fetch(BASE_URL + path, Object.assign({}, DEFAULT_OPTIONS, options))
     if (!res.ok) {
       throw new HTTPError(res.status, res.statusText)
     }
     if (res.status === 204) {
+      window.fetch.activeFetchCalls--
       return {}
     } else {
       const json = await res.json()
+      window.fetch.activeFetchCalls--
       return json
     }
   } catch (err) {
     console.error(err)
+    window.fetch.activeFetchCalls--
     throw err
   }
 }
