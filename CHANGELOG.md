@@ -37,6 +37,7 @@
 - fixes user autocomplete fetching for conversation creation 
 - fix profile sleeping hat variable #243
 - fix bug in region dynatree loading #244 !444 @nicksellen
+- Only show forum post removal button when the user is allowed to delete a post !456 @NerdyProjects
 
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen
@@ -59,6 +60,7 @@
 - refactor Map module to webpack !435 @nicksellen
 - all entrypoints load most JS/CSS via webpack now !432 @NerdyProjects
 - Refactor forum logic to Gateway/Service/PermissionService !442 @NerdyProjects
+- Refactor reactions to be more forum specific !456 @NerdyProjects
 
 ## Dev/Test/CI stuff
 - Fix cache clearing during test/deploy !414 @nicksellen
@@ -67,6 +69,7 @@
 - Add ./scripts/dev for running webpack dev env !437 @nicksellen
 - Improve linting config more (add vue linting) !441 @nicksellen
 - Implement basic dev docs content, make shinier readme with contributors !443 @nicksellen
+- Add tests for SanitizerService !456 @NerdyProjects
 
 # 2018-05-24
 

@@ -4,20 +4,20 @@ namespace Foodsharing\Modules\Activity;
 
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Mailbox\MailboxModel;
-use Foodsharing\Services\OutputSanitizerService;
+use Foodsharing\Services\SanitizerService;
 
 class ActivityModel extends Model
 {
 	private $mailboxModel;
 	private $activityGateway;
-	private $outputSanitizerService;
+	private $sanitizerService;
 
-	public function __construct(MailboxModel $mailboxModel, ActivityGateway $activityGateway, OutputSanitizerService $outputSanitzierService)
+	public function __construct(MailboxModel $mailboxModel, ActivityGateway $activityGateway, SanitizerService $sanitizerService)
 	{
 		parent::__construct();
 		$this->mailboxModel = $mailboxModel;
 		$this->activityGateway = $activityGateway;
-		$this->outputSanitizerService = $outputSanitzierService;
+		$this->sanitizerService = $sanitizerService;
 	}
 
 	public function loadBasketWallUpdates($page = 0)
@@ -68,10 +68,10 @@ class ActivityModel extends Model
 	private function textPrepare($txt): ?string
 	{
 		$txt = trim($txt);
-		$sanitized = $this->outputSanitizerService->sanitizeForHtml($txt);
+		$sanitized = $this->sanitizerService->markdownToHtml($txt);
 
 		if (strlen($txt) > 100) {
-			return '<span class="txt">' . $this->outputSanitizerService->sanitizeForHtml($this->func->tt($txt, 90)) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fa fa-angle-down"></i></a></span><span class="txt" style="display:none;">' . $sanitized . ' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fa fa-angle-up"></i></a></span>';
+			return '<span class="txt">' . $this->sanitizerService->markdownToHtml($this->func->tt($txt, 90)) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fa fa-angle-down"></i></a></span><span class="txt" style="display:none;">' . $sanitized . ' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fa fa-angle-up"></i></a></span>';
 		}
 
 		return '<span class="txt">' . $sanitized . '</span>';
