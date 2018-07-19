@@ -20,7 +20,7 @@ class NewAreaXhr extends Control
 
 	public function orderFs()
 	{
-		if ($this->func->isOrgaTeam()) {
+		if ($this->session->isOrgaTeam()) {
 			if ((int)$_GET['bid'] == 0) {
 				return array(
 					'status' => 1,
@@ -62,7 +62,7 @@ class NewAreaXhr extends Control
 
 	public function deleteMarked()
 	{
-		if ($this->func->isOrgaTeam()) {
+		if ($this->session->isOrgaTeam()) {
 			$parts = explode('-', $_GET['del']);
 			if (count($parts) > 0) {
 				foreach ($parts as $p) {

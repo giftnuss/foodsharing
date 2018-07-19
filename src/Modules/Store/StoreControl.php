@@ -48,7 +48,7 @@ class StoreControl extends Control
 			$bezirk_id = (int)$_GET['bid'];
 		}
 
-		if (!$this->func->isOrgaTeam() && $bezirk_id == 0) {
+		if (!$this->session->isOrgaTeam() && $bezirk_id == 0) {
 			$bezirk_id = $this->session->getCurrentBezirkId();
 		}
 		if ($bezirk_id > 0) {

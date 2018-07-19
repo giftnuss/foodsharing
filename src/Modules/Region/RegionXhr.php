@@ -28,7 +28,7 @@ class RegionXhr extends Control
 	{
 		return ($BotThemestatus['bot_theme'] == 0 && $this->func->mayBezirk($BotThemestatus['bezirk_id']))
 			|| ($BotThemestatus['bot_theme'] == 1 && $this->func->isBotFor($BotThemestatus['bezirk_id']))
-			|| $this->func->isOrgaTeam();
+			|| $this->session->isOrgaTeam();
 	}
 
 	public function morethemes()

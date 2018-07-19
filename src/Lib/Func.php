@@ -431,14 +431,6 @@ class Func
 		return $this->session->isBotschafter();
 	}
 
-	/**
-	 * @deprecated use $this->session->isOrgaTeam() instead
-	 */
-	public function isOrgaTeam()
-	{
-		return $this->session->isOrgaTeam();
-	}
-
 	public function getMenu()
 	{
 		$regions = [];
@@ -464,7 +456,7 @@ class Func
 			$loggedIn,
 			$regions,
 			$this->session->may('fs'),
-			$this->isOrgaTeam(),
+			$this->session->isOrgaTeam(),
 			$this->mayEditBlog(),
 			$this->mayEditQuiz(),
 			$this->mayHandleReports(),
@@ -1263,7 +1255,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function isVerified()
 	{
-		if ($this->isOrgaTeam()) {
+		if ($this->session->isOrgaTeam()) {
 			return true;
 		} elseif (isset($_SESSION['client']['verified']) && $_SESSION['client']['verified'] == 1) {
 			return true;
@@ -1446,7 +1438,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function mayBezirk($bid): bool
 	{
-		return isset($_SESSION['client']['bezirke'][$bid]) || $this->isBotFor($bid) || $this->isOrgaTeam();
+		return isset($_SESSION['client']['bezirke'][$bid]) || $this->isBotFor($bid) || $this->session->isOrgaTeam();
 	}
 
 	/**

@@ -107,7 +107,7 @@ class FoodsaverModel extends Model
 		$verified = '';
 		if (isset($data['rolle'])) {
 			$rolle = '`rolle` =  ' . (int)$data['rolle'] . ',';
-			if ($data['rolle'] == 0 && $this->func->isOrgaTeam()) {
+			if ($data['rolle'] == 0 && $this->session->isOrgaTeam()) {
 				$data['bezirk_id'] = 0;
 				$quiz_rolle = '`quiz_rolle` = 0,';
 				$verified = '`verified` = 0,';

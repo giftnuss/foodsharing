@@ -54,7 +54,7 @@ class ProfileView extends View
 							</a>
 						</li>';
 
-			if ($this->func->isOrgaTeam() || $this->func->isBotFor($d['bezirk_id'])) {
+			if ($this->session->isOrgaTeam() || $this->func->isBotFor($d['bezirk_id'])) {
 				$out .= '<li>
 							<a class="button button-big" href="#" onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',deleteAll:false,bid:' . $d['betrieb_id'] . ',date:' . $d['date_ts'] . '});return false;">austragen</a>
 							</li>';
@@ -188,7 +188,7 @@ class ProfileView extends View
 		if ($this->foodsaver['orga']) {
 			$bot = array();
 			foreach ($this->foodsaver['orga'] as $b) {
-				if ($this->func->isOrgaTeam()) {
+				if ($this->session->isOrgaTeam()) {
 					$bot[$b['id']] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
 				} else {
 					$bot[$b['id']] = $b['name'];
@@ -512,7 +512,7 @@ class ProfileView extends View
 		if ($this->foodsaver['orga']) {
 			$bot = array();
 			foreach ($this->foodsaver['orga'] as $b) {
-				if ($this->func->isOrgaTeam()) {
+				if ($this->session->isOrgaTeam()) {
 					$bot[$b['id']] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
 				} else {
 					$bot[$b['id']] = $b['name'];
@@ -566,7 +566,7 @@ class ProfileView extends View
 		$topinfos = array();
 
 		$opt = '';
-		if ($this->func->isOrgaTeam() || $this->func->isBotschafter()) {
+		if ($this->session->isOrgaTeam() || $this->func->isBotschafter()) {
 			$opt .= '<li><a href="/?page=foodsaver&a=edit&id=' . $this->foodsaver['id'] . '">bearbeiten</a></li>';
 		}
 
@@ -663,7 +663,7 @@ class ProfileView extends View
 		}
 
 		$photo = $this->func->avatar($this->foodsaver, '130');
-		if ($this->func->isOrgaTeam()) {
+		if ($this->session->isOrgaTeam()) {
 			$data = array();
 			if (!empty($this->foodsaver['data'])) {
 				$data = json_decode($this->foodsaver['data'], true);

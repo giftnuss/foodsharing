@@ -25,7 +25,7 @@ class RegionAdminControl extends Control
 
 	public function index()
 	{
-		if ($this->func->isOrgaTeam() && isset($_GET['delete']) && (int)$_GET['delete'] > 0) {
+		if ($this->session->isOrgaTeam() && isset($_GET['delete']) && (int)$_GET['delete'] > 0) {
 			$this->regionGateway->deleteBezirk($_GET['delete']);
 			$this->func->goPage('region');
 		}

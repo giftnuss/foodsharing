@@ -3,6 +3,7 @@
 namespace Foodsharing\Lib\Xhr;
 
 use Foodsharing\Lib\Func;
+use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Stats\StatsService;
@@ -24,13 +25,15 @@ class ViewUtils
 	private $model;
 
 	private $statsService;
+	private $session;
 
-	public function __construct(Func $func, Utils $viewUtils, Model $model, StatsService $statsService)
+	public function __construct(Func $func, Utils $viewUtils, Model $model, StatsService $statsService, Session $session)
 	{
 		$this->func = $func;
 		$this->viewUtils = $viewUtils;
 		$this->model = $model;
 		$this->statsService = $statsService;
+		$this->session = $session;
 	}
 
 	public function fsBubble($fs)
@@ -49,7 +52,7 @@ class ViewUtils
 	public function bBubble($b)
 	{
 		$button = '';
-		if (($b['inTeam']) || $this->func->isOrgaTeam()) {
+		if (($b['inTeam']) || $this->session->isOrgaTeam()) {
 			$button .= '<div class="buttonrow"><a class="lbutton" href="/?page=fsbetrieb&id=' . (int)$b['id'] . '">' . $this->func->s('to_team_page') . '</a></div>';
 		}
 		if ($b['team_status'] != 0 && (!$b['inTeam'] && (!$b['pendingRequest']))) {
