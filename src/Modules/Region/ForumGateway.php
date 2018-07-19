@@ -230,7 +230,7 @@ class ForumGateway extends BaseGateway
 			[
 				'theme_id' => $thread_id,
 				'foodsaver_id' => $fs_id,
-				'body' => strip_tags($body, '<p><a><ul><strong><b><i><ol><li><br>'),
+				'body' => $body,
 				'time' => date('Y-m-d H:i:s')
 			]
 		);
