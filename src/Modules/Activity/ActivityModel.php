@@ -51,7 +51,7 @@ class ActivityModel extends Model
 						'href' => '/profile/' . $u['fs_id']
 					],
 					'title' => '<a href="/profile/' . $u['fs_id'] . '">' . $u['fs_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="/essenskoerbe/' . $u['basket_id'] . '">' . $title . '</a><small>' . $smTitle . '</small>',
-					'desc' => $this->textPrepare(nl2br($u['body'])),
+					'desc' => $this->textPrepare($u['body']),
 					'time' => $u['time'],
 					'icon' => $this->func->img($u['fs_photo'], 50),
 					'time_ts' => $u['time_ts'],
@@ -117,7 +117,7 @@ class ActivityModel extends Model
 						'href' => '/profile/' . $u['fs_id']
 					],
 					'title' => '<a href="/profile/' . $u['poster_id'] . '">' . $u['poster_name'] . '</a> <small>' . $smTitle . '</small>',
-					'desc' => $this->textPrepare(nl2br($u['body'])),
+					'desc' => $this->textPrepare($u['body']),
 					'time' => $u['time'],
 					'icon' => $this->func->img($u['fs_photo'], 50),
 					'time_ts' => $u['time_ts']
@@ -164,7 +164,7 @@ class ActivityModel extends Model
 							'href' => '/?page=mailbox&show=' . $u['id']
 						],
 						'title' => $from . ' <i class="fa fa-angle-right"></i> <a href="/?page=mailbox&show=' . $u['id'] . '">' . $this->func->ttt($u['subject'], 30) . '</a><small>' . $this->func->ttt($u['mb_name'] . '@' . DEFAULT_EMAIL_HOST, 19) . '</small>',
-						'desc' => $this->textPrepare(nl2br($u['body'])),
+						'desc' => $this->textPrepare($u['body']),
 						'time' => $u['time'],
 						'icon' => '/img/mailbox-50x50.png',
 						'time_ts' => $u['time_ts'],
