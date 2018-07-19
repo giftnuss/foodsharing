@@ -26,6 +26,7 @@ class LoginXhr extends Control
 		$this->searchService = $searchService;
 		$this->contentGateway = $contentGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->loginGateway = $loginGateway;
 
 		parent::__construct();
 	}

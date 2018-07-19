@@ -78,7 +78,7 @@ class ContentView extends View
 			<p>30 % alle Lebensmittel landen im Müll. Damit soll nun endlich SCHLUSS sein. Wir möchten nichts mehr wegwerfen! Wir wollen verantwortungsvoll mit Lebensmittel umgehen und freuen uns, dass Du mitmachst.</p>
 			<h5><span>4</span>Sei zuverlässig</h5>
 			<p>Wir haben Hotspots eingerichtet, dort kann man sich treffen und tauschen. Oder Ihr macht selber einen Foodsharing/Ort mit Eurem Partner aus. Bitte seid zuverlässig und pünktlich, lasst keinen im „Regen“ stehen.</p>
-			<h5><span>5</span>Melde Verstöße</h5>
+			<h5><span>5</span>Melde Regelverletzungen</h5>
 			<p>Wir haben das Mindesthaltbarkeitsdatum, aber auch ein gutes Auge, eine feine Nase und das gute Gewissen keine verschimmelten, verdorbenen Lebensmittel anzubieten. Also bitte nicht einfach nur das Kreuz bei „Lebensmittelrecht gelesen“  machen, sondern den Ratgeber sorgsam durchlesen. Denn wer will schon aus der Foodsharing/Community rausgeworfen werden?</p>
 			<h5><span>6</span>Mach Vorschläge</h5>
 			<p>Wir wollen uns weiterentwickeln, immer besser werden. Dazu brauchen wir Euch mit vielen guten Ideen und Tipps. Die schickt Ihr an <a href="mailto:ideen@foodsharing.de">ideen@foodsharing.de</a></p>

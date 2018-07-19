@@ -1498,7 +1498,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function mayHandleReports()
 	{
-		// group "Verstöße/Meldungen"
+		// group "Regelverletzungen/Meldungen"
 		return $this->session->may('orga') || $this->isBotFor(432);
 	}
 

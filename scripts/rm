@@ -16,7 +16,7 @@ else
   echo "... there are none!"
 fi
 
-volume_name=foodsharing$FS_ENV
+volume_name=foodsharing_$FS_ENV
 
 echo "Removing $volume_name volumes"
 volumes=$(docker volume ls -q -f name=$volume_name)

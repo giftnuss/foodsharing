@@ -25,7 +25,7 @@ class ReportControl extends Control
 	public function index(): void
 	{
 		if ($this->func->mayHandleReports()) {
-			$this->func->addBread('Verstoßmeldungen', '/?page=report');
+			$this->func->addBread('Meldungen', '/?page=report');
 		} else {
 			$this->func->go('/?page=dashboard');
 		}
@@ -39,7 +39,7 @@ class ReportControl extends Control
 			if ($reports = $this->reportGateway->getReports(0)) {
 				$this->func->addContent($this->view->listReports($reports));
 			}
-			$this->func->addContent($this->view->topbar('Neue Verstoßmeldungen', \count($reports) . ' insgesamt', '<img src="/img/shit.png" />'), CNT_TOP);
+			$this->func->addContent($this->view->topbar('Neue Meldungen', \count($reports) . ' insgesamt', '<img src="/img/shit.png" />'), CNT_TOP);
 		}
 	}
 
@@ -51,7 +51,7 @@ class ReportControl extends Control
 			if ($reports = $this->reportGateway->getReports(1)) {
 				$this->func->addContent($this->view->listReports($reports));
 			}
-			$this->func->addContent($this->view->topbar('Bestätigte Verstoßmeldungen', \count($reports) . ' insgesamt', '<img src="/img/shit.png" />'), CNT_TOP);
+			$this->func->addContent($this->view->topbar('Bestätigte Meldungen', \count($reports) . ' insgesamt', '<img src="/img/shit.png" />'), CNT_TOP);
 		}
 	}
 
@@ -59,7 +59,7 @@ class ReportControl extends Control
 	{
 		if ($this->func->mayHandleReports()) {
 			if ($foodsaver = $this->reportGateway->getReportedSaver($_GET['id'])) {
-				$this->func->addBread('Verstoßmeldungen', '/?page=report&sub=foodsaver&id=' . (int)$foodsaver['id']);
+				$this->func->addBread('Meldungen', '/?page=report&sub=foodsaver&id=' . (int)$foodsaver['id']);
 				$this->func->addJs('
 						$(".welcome_profile_image").css("cursor","pointer");
 						$(".welcome_profile_image").click(function(){
@@ -67,7 +67,7 @@ class ReportControl extends Control
 						});
 				');
 				$this->func->addContent($this->view->topbar('Meldungen von <a href="#" onclick="profile(' . (int)$foodsaver['id'] . ');return false;">' . $foodsaver['name'] . ' ' . $foodsaver['nachname'] . '</a>', \count($foodsaver['reports']) . ' gesamt', $this->func->avatar($foodsaver, 50)), CNT_TOP);
-				$this->func->addContent($this->v_utils->v_field($this->wallposts('fsreport', (int)$_GET['id']), 'Notizen'));
+				$this->func->addContent($this->v_utils->v_field($this->wallposts('fsreport', (int)$_GET['id']), 'Notizen und Entscheidungen'));
 				$this->func->addContent($this->view->listReportsTiny($foodsaver['reports']), CNT_RIGHT);
 			}
 		} else {

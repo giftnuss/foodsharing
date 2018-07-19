@@ -222,7 +222,9 @@ class MailboxView extends View
 
 	public function folderlist($mailboxes, $mailadresses)
 	{
-		$this->func->addJs('$("#message-body").dialog({
+		$this->func->addJs('
+		setAutocompleteAddresses(' . json_encode($mailadresses) . ');
+		$("#message-body").dialog({
 			autoOpen:false,
 			width:980,
 			modal:true,
@@ -292,115 +294,6 @@ class MailboxView extends View
 				pulseError("' . $this->func->s('file_to_big') . '");
 			}
 		});
-		');
-
-		$this->func->addJsFunc('
-		
-		var addresses = ' . json_encode($mailadresses) . ';
-			
-		var substringMatcher = function (strs) {
-     		return function findMatches(q, cb) {         
-            // regex used to determine if a string contains the substring `q`
-            var substringRegex = new RegExp(q, \'i\');
-
-            // an array that will be populated with substring matches
-            var matches = [];
-
-            // iterate through the pool of strings and for any string that
-            // contains the substring `q`, add it to the `matches` array
-            $.each(strs, function (i, str) {
-                if (substringRegex.test(str)) {
-                    matches.push({value: str});
-                }
-            });
-
-            cb(matches);
-        };        
-			};
-					
-		function u_addTypeHead()
-        {
-        	$(".edit-an").typeahead("destroy");
-            $(".edit-an").typeahead({
-				hint: true,
-  				highlight: true,
-  				minLength: 2
-  				}, {
-  				name: \'addresses\',
-				source: substringMatcher(addresses),
-				limit: 15
-			});
-                            
-            $(".edit-an").on("typeahead:selected typeahead:autocompleted", function (e, datum) {
-            	u_handleNewEmail(this.value, $(this));
-            }).on("blur",function(){
-            	$this = this;
-                if($this.value != "" && !checkEmail($this.value))
-                {
-                	pulseError("Diese E-Mail-Adresse ist nicht korrekt");
-                    $this.focus();  
-                }
-                else if($this.value != "")
-                {
-                	u_handleNewEmail($this.value, $($this));
-                }
-            });
-        }
-
-		var mailcheck = "";
-		function u_handleNewEmail(email,el)
-		{
-			if(u_anHasChanged())
-			{
-				availmail = [];
-				availmail_count = 0;
-				$(".edit-an").each(function(){
-					$this = $(this);
-					if(!checkEmail($this.val()) || (availmail[$this.val()] != undefined))
-					{
-						//$this.parent().parent().parent().remove();
-					}
-					else
-					{
-						availmail[$this.val()] = true;
-						availmail_count++;
-					}
-				});
-							
-				$("#mail-subject").before(\'<tr><td class="label">&nbsp;</td><td class="data"><input type="text" name="an[]" class="edit-an" value="" /></td></tr>\');	
-					
-				u_addTypeHead();
-				var height = $("#edit-body").height() - (availmail_count * 28);
-				if(height > 40)
-				{
-					$("#edit-body").css("height", height+"px");	
-				}
-				
-				$(".edit-an:last").focus();			
-			}		
-		}
-						
-		function u_anHasChanged()
-		{
-			check = "";
-			$(".edit-an").each(function(){
-				check += this.value;
-			});
-			if(mailcheck == "")
-			{
-				mailcheck = check;
-				return true;
-			}
-			else if(mailcheck != check)
-			{
-				mailcheck = check;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
 		');
 
 		$this->func->addHidden('

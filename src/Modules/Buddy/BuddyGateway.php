@@ -37,7 +37,7 @@ class BuddyGateway extends BaseGateway
 
 	public function buddyRequestedMe($buddyId, $fsId): bool
 	{
-		if ($this->db->exists('fs_buddy', ['foodsaver_id' => (int)$fsId, 'buddy_id' => (int)$buddyId])) {
+		if ($this->db->exists('fs_buddy', ['foodsaver_id' => (int)$buddyId, 'buddy_id' => (int)$fsId])) {
 			return true;
 		}
 
