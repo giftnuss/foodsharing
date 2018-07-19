@@ -127,7 +127,7 @@ services:
 
   selenium:
     container_name: foodsharing_test_selenium
-    image: registry.gitlab.com/foodsharing-dev/images/selenium:1.1
+    image: registry.gitlab.com/foodsharing-dev/images/selenium:1.2
     shm_size: 256M
     links:
       - web:web
