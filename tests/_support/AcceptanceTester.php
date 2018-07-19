@@ -60,7 +60,8 @@ class AcceptanceTester extends \Codeception\Actor
 		$this->doAssertRegExp($regexp, $text);
 	}
 
-	public function waitForActiveAPICalls($timeout = 60) {
+	public function waitForActiveAPICalls($timeout = 60)
+	{
 		$this->waitForJS('return window.fetch.activeFetchCalls == 0;', $timeout);
 	}
 }

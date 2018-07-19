@@ -13,10 +13,10 @@ $I->login($foodsaver['email'], $pass);
 
 $I->amOnPage('/');
 
-$I->click('#infobar .basket a');
-$I->see('Neuen Essenskorb anlegen');
+$I->click('.topbar-baskets > a');
+$I->see('Essenskorb anlegen');
 
-$I->click('Neuen Essenskorb anlegen');
+$I->click('Essenskorb anlegen');
 $I->waitForText('Essenskorb anbieten');
 /*
  * Check for default options on the foodbasket create form.
@@ -65,12 +65,12 @@ $nick->does(function (AcceptanceTester $I) use ($id, $picker) {
 
 $I->amOnPage($I->foodBasketInfoUrl($id));
 $I->waitForText('1 Anfrage');
-$I->click('.img-fbasket');
-$I->waitForText('Anfrage von ' . $picker['name']);
-$I->click('Anfrage von ' . $picker['name']);
+$I->click('.topbar-baskets > a');
+$I->waitForText('angefragt von');
+$I->click('.topbar-baskets .requests > a');
 $I->waitForText('Hi friend, can I have');
-$I->moveMouseOver("//a[contains(@onclick, 'basket')]");
-$I->click('.button.close');
+$I->moveMouseOver(['css' => '.topbar-baskets .requests > a'], 5, 5);
+$I->click('a[data-original-title="Essensanfrage abschließen"]');
 $I->waitForText('Essenskorbanfrage von ' . $picker['name'] . ' abschließen');
 $I->see('Hat alles gut geklappt?');
 $I->seeOptionIsSelected('#fetchstate-wrapper input[name=fetchstate]', 3);
