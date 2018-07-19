@@ -106,7 +106,7 @@ class BasketView extends View
 				}
 			}
 		} else {
-			$page->addSectionRight($this->v_utils->v_info('Für detailierte Infos musst Du eingeloggt sein! Bist du noch nicht als Foodsharer registriert? Dann klick oben auf <b>Mach mit!</b> um loszulegen.', 'Hinweis!') . '<div>
+			$page->addSectionRight($this->v_utils->v_info('Für detaillierte Infos musst Du eingeloggt sein. Bist du noch nicht als Foodsharer registriert? Dann klick oben auf <b>Mach mit!</b> um loszulegen!', 'Hinweis!') . '<div>
 			</div>', false, array('wrapper' => false));
 		}
 

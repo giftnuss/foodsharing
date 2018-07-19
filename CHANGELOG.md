@@ -37,6 +37,7 @@
 - fixes user autocomplete fetching for conversation creation 
 - fix profile sleeping hat variable #243
 - fix bug in region dynatree loading #244 !444 @nicksellen
+- removed dead login button and updated registration info for food baskets #240 !457 @michi-zuri
 
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen
