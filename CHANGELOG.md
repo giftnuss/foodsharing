@@ -1,4 +1,14 @@
-# Unreleased
+# 2018-07-19
+We are quite good at doing major releases every three months.
+So here we go:
+- Enjoy a new shiny forum post view, using a modern implementation in vue.js / bootstrap-vue
+- We now require a javascript enabled browser, as we are using more and more modern frontend technologies
+- Forum posts will finally not only allow you to use `whatever <you> want to type «»äá<>>>< in there, but also styling using *markdown*`. See [Wikipedia: Markdown](https://en.wikipedia.org/wiki/Markdown) for an introduction on how to use that
+- Behind the scenes, we achieved a lot more, that you hopefully don't notice. See the list below for all changes.
+
+You can read a bit more about the recent weeks and happenings of the developers in the [Development Blog: Summer hackweek](https://devblog.foodsharing.de/2018/07/16/summer-hackweek.html).
+
+Many thanks to @peter.toennies @NerdyProjects @alangecker @theolampert @nicksellen @EmiliaPaz @michi-zuri @tiltec (in order of appearance in this changelog) for all their work done for this release.
 
 ## Features
 - updated fpdi plugin to v2.0.2 !351 #168 by @peter.toennies
@@ -29,10 +39,6 @@
 - fixed wrong usage of gateway in API. !400 @peter.toennies
 - fixed missalignment in future-pickups list. !389 # 136 @EmiliaPaz
 - Regaining support for mobile Safari 10 !396 #221 @michi-zuri
-- Fix pickup slots !390 #215 @nicksellen
-- fixed wrong gendering of AMBs in region view and profile view. !386 #214 @peter.toennies
-- reduced the height of store info popups by removing the warning frame. !388 #216 @peter.toennies
-- The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
 - fix relative loading of some xhr/other urls !422 @nicksellen
 - fixes user autocomplete fetching for conversation creation 
 - fix profile sleeping hat variable #243
@@ -53,7 +59,6 @@
 - partial refactor of Basket module !426 @nicksellen
 - refactored region module into twig/webpack loaded javascript !421 @NerdyProjects
 - add constants class database constants in region module !413 @peter.toennies @nicksellen
-- refactored login and registration @theolampert
 - refactor Model.php and ManualDB.php to gateway classes !420 !424 !425 @tiltec
 - refactored tablesorter @alangecker
 - use instance access for Session !433 @nicksellen
