@@ -22,7 +22,6 @@
         title="Eine Reaktion hinzufügen"
         text="➕"
         class="emoji-dropdown"
-        toggle-class="btn-outline-secondary"
         size="sm"
         no-caret
         right
