@@ -22,7 +22,7 @@ class SanitizerService
 
 	public function markdownToHtml($text)
 	{
-		$html = $this->parsedown->text(strip_tags($text));
+		$html = $this->parsedown->text($text);
 
 		$purified = $this->htmlPurifier->purify($html);
 
