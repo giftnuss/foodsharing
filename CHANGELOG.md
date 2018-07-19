@@ -1,3 +1,13 @@
+# Unreleased
+
+## Features
+
+## Bugfixes
+
+## Refactoring
+
+## Dev/Test/CI stuff
+
 # 2018-07-19
 We are quite good at doing major releases every three months.
 So here we go:
