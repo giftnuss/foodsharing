@@ -7,11 +7,13 @@
             <p v-if="!baskets.length" class="dropdown-header">
                 Du hast keine Essenskörbe eingetragen
             </p>
-            <menu-baskets-entry
-                v-for="basket in basketsSorted"
-                :key="basket.id"
-                :basket="basket"
-            />
+            <div class="scroll-container">
+                <menu-baskets-entry
+                    v-for="basket in basketsSorted"
+                    :key="basket.id"
+                    :basket="basket"
+                />
+            </div>
             <div class="list-grou-item p-2 text-center">
                 <a :href="$url('baskets')" class="btn btn-sm btn-secondary">
                     Alle Essenskörbe

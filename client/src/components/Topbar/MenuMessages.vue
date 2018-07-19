@@ -5,12 +5,14 @@
             <span v-if="unread" class="badge badge-danger">{{ unread }}</span>
         </template>
         <div class="list-group">
-            <menu-messages-entry
-                v-for="conversation in conversations"
-                :key="conversation.id"
-                :conversation="conversation"
-                @chatOpened="close"
-            />
+            <div class="scroll-container">
+                <menu-messages-entry
+                    v-for="conversation in conversations"
+                    :key="conversation.id"
+                    :conversation="conversation"
+                    @chatOpened="close"
+                />
+            </div>
         </div>
         <a :href="$url('conversations')" class="dropdown-item bg-secondary text-white text-center">
             Alle Nachrichten

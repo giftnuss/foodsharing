@@ -298,6 +298,10 @@ export default {
         max-width: 300px;
         overflow-y: auto;
     }
+    .dropdown-menu .scroll-container {
+        max-height: 300px;
+        overflow-y: scroll;
+    }
 
     @media (max-width: 500px) {
         .dropdown {
