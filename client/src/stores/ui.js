@@ -48,15 +48,15 @@ const ui = new Vue({
     },
     updateRegionId () {
       let regionId
-      if(['bezirk', 'betrieb', 'foodsaver', 'passgen'].indexOf(serverData.page) != -1 && GET('bid')) regionId = parseInt(GET('bid'))
-      else if(serverData.page === 'groups' && GET('p')) regionId = parseInt(GET('p'))
-      else if(localStorage.getItem("lastRegion")) regionId = parseInt(localStorage.getItem("lastRegion"))
-      else if(serverData.user.regularRegion) regionId = serverData.user.regularRegion
+      if (['bezirk', 'betrieb', 'foodsaver', 'passgen'].indexOf(serverData.page) !== -1 && GET('bid')) regionId = parseInt(GET('bid'))
+      else if (serverData.page === 'groups' && GET('p')) regionId = parseInt(GET('p'))
+      else if (localStorage.getItem('lastRegion')) regionId = parseInt(localStorage.getItem('lastRegion'))
+      else if (serverData.user.regularRegion) regionId = serverData.user.regularRegion
 
       console.log('last regionId', regionId)
-      if(regionId !== this.activeRegionId) {
+      if (regionId !== this.activeRegionId) {
         this.activeRegionId = regionId
-        localStorage.setItem("lastRegion", regionId);
+        localStorage.setItem('lastRegion', regionId)
       }
     }
   }
