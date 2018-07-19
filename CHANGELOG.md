@@ -17,6 +17,7 @@
 - Properly sanitize outgoing HTML mails !442 @NerdyProjects
 - All outgoing emails now generate their plain text via HTML2Text !442 @NerdyProjects
 - Show Report ID in Detail Report window #246 @k.miklobusec
+- updated wording in respect to new report handling procedure !454 @peter.toennies
 
 ## Bugfixes
 - removed XSS-possibility in xhr_out method. !370 @theolampert
