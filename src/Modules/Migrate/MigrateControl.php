@@ -18,7 +18,7 @@ class MigrateControl extends ConsoleControl
 
 	public function ForumPostRemoveBr()
 	{
-		$num = $this->migrateGateway->forumPostsRemoveBr('2018-07-19 17:27:00');
+		$num = $this->migrateGateway->forumPostsRemoveBr('2018-07-19 22:02:00');
 		self::info('Migrated ' . $num . ' posts.');
 	}
 }
