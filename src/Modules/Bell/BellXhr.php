@@ -110,12 +110,12 @@ class BellXhr extends Control
 			}
 		}
 
-
 		// $xhr->addData('aaa', $bells);
-		$xhr->addData('list', array_map( function ($bell) {
-			if(isset($bell['attr']['onclick'])) {
+		$xhr->addData('list', array_map(function ($bell) {
+			if (isset($bell['attr']['onclick'])) {
 				// TODO transform  onClick="profile(:id)" to /profile/:id
 			}
+
 			return [
 				'id' => $bell['id'],
 				'key' => $bell['body'],
@@ -123,8 +123,8 @@ class BellXhr extends Control
 				'payload' => $bell['vars'],
 				'icon' => $bell['icon'],
 				'createdAt' => $bell['time'],
-				'isRead' => (boolean)$bell['closeable'],
-				'isCloseable' => (boolean)$bell['closeable']
+				'isRead' => (bool)$bell['closeable'],
+				'isCloseable' => (bool)$bell['closeable']
 			];
 		}, $bells));
 		// $xhr->addData('html', $this->view->bellList($bells));

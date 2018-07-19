@@ -404,33 +404,34 @@ class BasketXhr extends Control
 			$out .= $this->view->listMyBaskets($baskets);
 		}
 
-
-		$xhr->addData('baskets', array_map( function($b) use ($updates) {
+		$xhr->addData('baskets', array_map(function ($b) use ($updates) {
 			$basket = [
 				'id' => (int)$b['id'],
 				'description' => $b['description'],
-				'createdAt' =>  date('Y-m-d H:i:s', $b['time_ts']),
+				'createdAt' => date('Y-m-d H:i:s', $b['time_ts']),
 				'updatedAt' => date('Y-m-d H:i:s', $b['time_ts']),
-				'requests'=> []
+				'requests' => []
 			];
-			foreach($updates as $update) {
-				if((int)$update['id'] == $basket['id']) {
+			foreach ($updates as $update) {
+				if ((int)$update['id'] == $basket['id']) {
 					$time = date('Y-m-d H:i:s', $update['time_ts']);
 					$basket['requests'][] = [
 						'user' => [
 							'id' => (int)$update['fs_id'],
-							'name' =>  $update['fs_name'],
+							'name' => $update['fs_name'],
 							'avatar' => $update['fs_photo'],
 							'sleepStatus' => $update['sleep_status'],
 						],
 						'description' => $update['description'],
 						'time' => $time,
 					];
-					if(strcmp($time, $basket['updatedAt']) > 0) $basket['updatedAt'] = $time;
+					if (strcmp($time, $basket['updatedAt']) > 0) {
+						$basket['updatedAt'] = $time;
+					}
 				}
 			}
-			return $basket;
 
+			return $basket;
 		}, $baskets));
 
 		$xhr->addData('html', $out);
