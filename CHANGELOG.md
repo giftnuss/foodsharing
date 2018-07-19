@@ -12,6 +12,15 @@
 - Store statistics could not be updated due to a mistake while refactoring
 - Dashboard updates used to show some HTML tags in different entries
 - Message notifications have not been sent for some hours
+# Unreleased
+
+## Features
+
+## Bugfixes
+
+## Refactoring
+
+## Dev/Test/CI stuff
 
 # 2018-07-19
 We are quite good at doing major releases every three months.
