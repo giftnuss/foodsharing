@@ -5,7 +5,7 @@
         {{ author.name }}
       </div>
       <div class="card-body row">
-        <div class="col-3 avatarSide text-center">
+        <div class="col-sm-3 avatarSide text-center">
           <a :href="$url('profile', author.id)">
             <Avatar
               :url="author.avatar"
@@ -19,12 +19,12 @@
             @click="openChat"><i class="fa fa-comments" /> {{ $i18n('chat.open_chat') }}</a>
         </div>
         <div
-          class="col"
+          class="col-sm-9"
           v-html="body" />
       </div>
       <div class="card-footer">
         <div class="row">
-          <div class="col-4 text-muted pt-1 pl-3">
+          <div class="col-auto text-muted pt-1 pl-3">
             <small v-if="wXS">{{ createdAt | dateFormat('full-short') }}</small>
             <small v-else>{{ createdAt | dateFormat('full-long') }}</small>
           </div>

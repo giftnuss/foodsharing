@@ -22,7 +22,7 @@
             </b-form-checkbox>
 
           </div>
-          <div class="col-2 text-right">
+          <div class="col-auto text-right">
             <button
               :disabled="!text.trim()"
               class="btn btn-secondary"
