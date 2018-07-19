@@ -12,6 +12,7 @@
                     v-for="basket in basketsSorted"
                     :key="basket.id"
                     :basket="basket"
+                    @basketRemove="openRemoveBasketForm"
                 />
             </div>
             <div class="list-grou-item p-2 text-center">
@@ -55,6 +56,14 @@ export default {
         openBasketCreationForm() {
             this.$refs.dropdown.visible = false
             ajreq('newbasket', {app:'basket'})
+        },
+        openRemoveBasketForm(basketId, userId) {
+            this.$refs.dropdown.visible = false
+            ajreq('removeRequest', {
+                app:'basket',
+                id: basketId,
+                fid: userId
+            })
         }
     },
     computed: {
