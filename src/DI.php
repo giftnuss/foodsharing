@@ -46,8 +46,8 @@ class DI
 				'default' => [
 					'Cache.SerializerPath' => __DIR__ . '/../cache/htmlpurifier-cache',
 					'Cache.SerializerPermissions' => 0775,
-					'AutoFormat.DisplayLinkURI' => true,
-					'AutoFormat.Linkify' => true,
+					'AutoFormat.DisplayLinkURI' => false,
+					'AutoFormat.Linkify' => false,
 					'CSS.AllowedProperties' => [],
 					'URI.DisableExternalResources' => true
 				]
