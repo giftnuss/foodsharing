@@ -84,10 +84,12 @@ class RegisterCest
 
 		$I->amOnPage('/');
 
-		$I->fillField('login_form[email_address]', $this->email);
-		$I->fillField('login_form[password]', $this->password);
-		$I->click('#loginbar input[type=submit]');
-
+		$I->waitForElement('#login-username');
+		$I->fillField('#login-username', $this->email);
+		$I->fillField('#login-password', $this->password);
+		$I->click('#topbar .btn');
+		$I->waitForElement('#pulse-success');
+ 
 		$I->seeInDatabase('fs_foodsaver', [
 			'email' => $this->stripped_email,
 			'name' => $this->first_name,
