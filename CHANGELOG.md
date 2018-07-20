@@ -1,6 +1,35 @@
 # Unreleased
 
 ## Features
+
+## Bugfixes
+
+## Refactoring
+
+## Dev/Test/CI stuff
+
+# 2018-07-20 Hotfix
+- Fairteiler Walls can be accessed again
+- Login Form from Fairteiler removed
+- Store name for pickup team notification was missing in serverData
+- Deletion of non-existing post lead to 500 instead of 404
+- Store statistics could not be updated due to a mistake while refactoring
+- Dashboard updates used to show some HTML tags in different entries
+- Message notifications have not been sent for some hours
+
+# 2018-07-19
+We are quite good at doing major releases every three months.
+So here we go:
+- Enjoy a new shiny forum post view, using a modern implementation in vue.js / bootstrap-vue
+- We now require a javascript enabled browser, as we are using more and more modern frontend technologies
+- Forum posts will finally not only allow you to use `whatever <you> want to type «»äá<>>>< in there, but also styling using *markdown*`. See [Wikipedia: Markdown](https://en.wikipedia.org/wiki/Markdown) for an introduction on how to use that
+- Behind the scenes, we achieved a lot more, that you hopefully don't notice. See the list below for all changes.
+
+You can read a bit more about the recent weeks and happenings of the developers in the [Development Blog: Summer hackweek](https://devblog.foodsharing.de/2018/07/16/summer-hackweek.html).
+
+Many thanks to @peter.toennies @NerdyProjects @alangecker @theolampert @nicksellen @EmiliaPaz @michi-zuri @tiltec (in order of appearance in this changelog) for all their work done for this release.
+
+## Features
 - updated fpdi plugin to v2.0.2 !351 #168 by @peter.toennies
 - update symfony to 4.1.0 as well as other dependencies !351 @NerdyProjects
 - remove user list in forums to allow big regions to work !421 @NerdyProjects
@@ -29,14 +58,11 @@
 - fixed wrong usage of gateway in API. !400 @peter.toennies
 - fixed missalignment in future-pickups list. !389 # 136 @EmiliaPaz
 - Regaining support for mobile Safari 10 !396 #221 @michi-zuri
-- Fix pickup slots !390 #215 @nicksellen
-- fixed wrong gendering of AMBs in region view and profile view. !386 #214 @peter.toennies
-- reduced the height of store info popups by removing the warning frame. !388 #216 @peter.toennies
-- The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
 - fix relative loading of some xhr/other urls !422 @nicksellen
 - fixes user autocomplete fetching for conversation creation 
 - fix profile sleeping hat variable #243
 - fix bug in region dynatree loading #244 !444 @nicksellen
+- Only show forum post removal button when the user is allowed to delete a post !456 @NerdyProjects
 
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen
@@ -52,13 +78,13 @@
 - partial refactor of Basket module !426 @nicksellen
 - refactored region module into twig/webpack loaded javascript !421 @NerdyProjects
 - add constants class database constants in region module !413 @peter.toennies @nicksellen
-- refactored login and registration @theolampert
 - refactor Model.php and ManualDB.php to gateway classes !420 !424 !425 @tiltec
 - refactored tablesorter @alangecker
 - use instance access for Session !433 @nicksellen
 - refactor Map module to webpack !435 @nicksellen
 - all entrypoints load most JS/CSS via webpack now !432 @NerdyProjects
 - Refactor forum logic to Gateway/Service/PermissionService !442 @NerdyProjects
+- Refactor reactions to be more forum specific !456 @NerdyProjects
 
 ## Dev/Test/CI stuff
 - Fix cache clearing during test/deploy !414 @nicksellen
@@ -67,6 +93,7 @@
 - Add ./scripts/dev for running webpack dev env !437 @nicksellen
 - Improve linting config more (add vue linting) !441 @nicksellen
 - Implement basic dev docs content, make shinier readme with contributors !443 @nicksellen
+- Add tests for SanitizerService !456 @NerdyProjects
 
 # 2018-05-24
 

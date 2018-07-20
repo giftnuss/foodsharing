@@ -282,8 +282,6 @@ class FairTeilerControl extends Control
 
 			$this->func->addContent($this->view->options($items), CNT_LEFT);
 			$this->func->addContent($this->view->follower(), CNT_LEFT);
-		} else {
-			$this->func->addContent($this->view->loginToFollow(), CNT_LEFT);
 		}
 
 		$this->func->addContent($this->view->desc(), CNT_RIGHT);

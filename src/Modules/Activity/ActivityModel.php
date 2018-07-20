@@ -4,20 +4,20 @@ namespace Foodsharing\Modules\Activity;
 
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Mailbox\MailboxModel;
-use Foodsharing\Services\OutputSanitizerService;
+use Foodsharing\Services\SanitizerService;
 
 class ActivityModel extends Model
 {
 	private $mailboxModel;
 	private $activityGateway;
-	private $outputSanitizerService;
+	private $sanitizerService;
 
-	public function __construct(MailboxModel $mailboxModel, ActivityGateway $activityGateway, OutputSanitizerService $outputSanitzierService)
+	public function __construct(MailboxModel $mailboxModel, ActivityGateway $activityGateway, SanitizerService $sanitizerService)
 	{
 		parent::__construct();
 		$this->mailboxModel = $mailboxModel;
 		$this->activityGateway = $activityGateway;
-		$this->outputSanitizerService = $outputSanitzierService;
+		$this->sanitizerService = $sanitizerService;
 	}
 
 	public function loadBasketWallUpdates($page = 0)
@@ -51,7 +51,7 @@ class ActivityModel extends Model
 						'href' => '/profile/' . $u['fs_id']
 					],
 					'title' => '<a href="/profile/' . $u['fs_id'] . '">' . $u['fs_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="/essenskoerbe/' . $u['basket_id'] . '">' . $title . '</a><small>' . $smTitle . '</small>',
-					'desc' => $this->textPrepare(nl2br($u['body'])),
+					'desc' => $this->textPrepare($u['body']),
 					'time' => $u['time'],
 					'icon' => $this->func->img($u['fs_photo'], 50),
 					'time_ts' => $u['time_ts'],
@@ -68,10 +68,10 @@ class ActivityModel extends Model
 	private function textPrepare($txt): ?string
 	{
 		$txt = trim($txt);
-		$sanitized = $this->outputSanitizerService->sanitizeForHtml($txt);
+		$sanitized = $this->sanitizerService->markdownToHtml($txt);
 
 		if (strlen($txt) > 100) {
-			return '<span class="txt">' . $this->outputSanitizerService->sanitizeForHtml($this->func->tt($txt, 90)) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fa fa-angle-down"></i></a></span><span class="txt" style="display:none;">' . $sanitized . ' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fa fa-angle-up"></i></a></span>';
+			return '<span class="txt">' . $this->sanitizerService->markdownToHtml($this->func->tt($txt, 90)) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fa fa-angle-down"></i></a></span><span class="txt" style="display:none;">' . $sanitized . ' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fa fa-angle-up"></i></a></span>';
 		}
 
 		return '<span class="txt">' . $sanitized . '</span>';
@@ -117,7 +117,7 @@ class ActivityModel extends Model
 						'href' => '/profile/' . $u['fs_id']
 					],
 					'title' => '<a href="/profile/' . $u['poster_id'] . '">' . $u['poster_name'] . '</a> <small>' . $smTitle . '</small>',
-					'desc' => $this->textPrepare(nl2br($u['body'])),
+					'desc' => $this->textPrepare($u['body']),
 					'time' => $u['time'],
 					'icon' => $this->func->img($u['fs_photo'], 50),
 					'time_ts' => $u['time_ts']
@@ -164,7 +164,7 @@ class ActivityModel extends Model
 							'href' => '/?page=mailbox&show=' . $u['id']
 						],
 						'title' => $from . ' <i class="fa fa-angle-right"></i> <a href="/?page=mailbox&show=' . $u['id'] . '">' . $this->func->ttt($u['subject'], 30) . '</a><small>' . $this->func->ttt($u['mb_name'] . '@' . DEFAULT_EMAIL_HOST, 19) . '</small>',
-						'desc' => $this->textPrepare(nl2br($u['body'])),
+						'desc' => $this->textPrepare($u['body']),
 						'time' => $u['time'],
 						'icon' => '/img/mailbox-50x50.png',
 						'time_ts' => $u['time_ts'],
