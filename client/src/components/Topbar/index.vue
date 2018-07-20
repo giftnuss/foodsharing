@@ -307,7 +307,7 @@ export default {
     }
 
     .dropdown-menu {
-        max-height: 350px;
+        max-height: 360px;
         width: 270px;
         overflow-y: auto;
     }
