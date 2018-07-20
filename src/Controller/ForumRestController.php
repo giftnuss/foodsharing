@@ -222,6 +222,9 @@ class ForumRestController extends FOSRestController
 	public function deletePostAction($postId)
 	{
 		$post = $this->forumGateway->getPost($postId);
+		if (!$post) {
+			throw new HttpException(404);
+		}
 		if (!$this->forumPermissions->mayDeletePost($post)) {
 			throw new HttpException(403);
 		}
