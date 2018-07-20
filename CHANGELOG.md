@@ -1,10 +1,16 @@
 # Unreleased
 
 ## Features
+- new topbar in vue.js !451, #11, #15, #155, #158, #30, #66, #67, #93 @alangecker
+- reactive vue stores !451 @alangecker
+- resizeable avatar component !451 @alangecker
+
 
 ## Bugfixes
 
 ## Refactoring
+- removed global $g_body_class variable !451 @alangecker
+
 
 ## Dev/Test/CI stuff
 
