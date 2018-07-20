@@ -46,13 +46,13 @@
         <style type="text/css">{{ head.css | raw }}</style>
     </head>
 
-    <body {{ bodyClass | raw }}>
+    <body class="{{ bodyClasses|join(' ') }}">
         {# {% include "partials/vue-wrapper.twig" with {
             id: 'vue-topbar',
             component: "topbar",
             props: {}
         } %} #}
-        {% include 'partials/becomeBezirk.twig' %}
+    {% include 'partials/becomeBezirk.twig' %}
         {{ menu | raw }}
         {# <div id="top">
             <div class="inner">
@@ -68,10 +68,10 @@
                     </div>
                 </div>
             </div> #}
-            {% if broadcast_message %}
-                <div class="inner inside msg-inside info">{{ broadcast_message | raw }}</div>
-            {% endif %}
-        </div>
+        {% if broadcast_message %}
+            <div class="inner inside msg-inside info">{{ broadcast_message | raw }}</div>
+        {% endif %}
+        {# </div> #}
 
         {% block overtop %}
             {{ content.overtop.html | raw }}
