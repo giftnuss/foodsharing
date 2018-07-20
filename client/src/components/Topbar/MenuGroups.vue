@@ -1,5 +1,5 @@
 <template>
-    <nav-item-dropdown tooltip="Deine Gruppen" no-caret>
+    <nav-item-dropdown v-if="workingGroups.length" tooltip="Deine Gruppen" no-caret>
         <template slot="button-content">
             <i class="fa fa-users"/>
         </template>
@@ -15,15 +15,21 @@
                 </b-collapse>
             </div>
     </nav-item-dropdown>
+    <li v-else class="nav-item">
+        <a :href="$url('workingGroups')" class="nav-link" v-b-tooltip title="Gruppenübersicht">
+            <i class="fa fa-users" />
+        </a>
+    </li>
 </template>
 <script>
 import bCollapse from '@b/components/collapse/collapse';
 import bToggle from '@b/directives/toggle/toggle';
+import bTooltip from '@b/directives/tooltip/tooltip';
 import NavItemDropdown from './NavItemDropdown'
 
 export default {
     components: { bCollapse, NavItemDropdown },
-    directives: { bToggle },
+    directives: { bToggle, bTooltip },
     computed: {
         alwaysOpen() {
             return this.workingGroups.length <= 2

@@ -25,6 +25,7 @@ export default {
   joininfo: () => `/?page=content&sub=joininfo`,
   basket: (basketId) => `/essenskoerbe/${basketId}`,
   baskets: () => `/essenskoerbe`,
+  upgradeToFs: () => `/?page=settings&sub=upgrade/up_fs`,
 
   vision: () => `/ueber-uns`,
   claims: () => `/?page=content&sub=forderungen`,

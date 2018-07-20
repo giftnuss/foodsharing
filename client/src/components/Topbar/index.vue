@@ -16,26 +16,33 @@
                 <div id="topbar-navleft">
                     <a class="navbar-brand" :href="$url('dashboard')">food<span>shar<span>i</span>ng</span></a>
                     <ul class="navbar-nav flex-row no-collapse">
-                        <div v-if="!hasFsRole" class="ml-3"></div>
+                        <li v-if="!hasFsRole" class="nav-item ml-2">
+                            <a :href="$url('upgradeToFs')" class="nav-link">
+                                <i class="fa fa-rocket" />
+                                <small v-if="isMobile">Werde Foodsaver*in</small>
+                                <span v-else>Werde Foodsaver*in</span>
+                            </a>
+                        </li>
                         <menu-region v-if="hasFsRole" :regions="regions" :activeRegionId="activeRegionId" />
                         <menu-stores v-if="hasFsRole && stores.length" :stores="stores" />
-                        <menu-groups :workingGroups="workingGroups" />
-                        <menu-baskets />
+                        <menu-groups v-if="hasFsRole" :workingGroups="workingGroups" />
+                        <menu-baskets :showLabel="!hasFsRole && !isMobile" />
                         <li v-if="!isMobile" class="nav-item" v-b-tooltip title="Karte">
                             <a :href="$url('map')" class="nav-link">
                                 <i class="fa fa-map-marker" />
-                                <span v-if="!loggedIn">Karte</span>
+                                <span v-if="!loggedIn || !hasFsRole">Karte</span>
                             </a>
                             
                         </li>
                         <menu-messages v-if="isMobile" />
                         <menu-bells v-if="isMobile" />
                     </ul>
+                    <b-navbar-toggle v-if="!hasFsRole" target="nav_collapse" class="ml-2"></b-navbar-toggle>
                 </div>              
 
 
-                <search />
-                <b-navbar-toggle target="nav_collapse" class="ml-2"></b-navbar-toggle>
+                <search v-if="hasFsRole" />
+                <b-navbar-toggle v-if="hasFsRole" target="nav_collapse" class="ml-2"></b-navbar-toggle>
                 
                 <b-collapse is-nav id="nav_collapse">
                     <ul class="navbar-nav ml-auto">
@@ -238,6 +245,7 @@ export default {
 <style lang="scss">
 #topbar {
     .nav-link {
+        white-space: nowrap;
         padding: 0.4em 0.5em;
         i {
             font-size: 1.25em;
@@ -300,11 +308,12 @@ export default {
 
     .dropdown-menu {
         max-height: 350px;
-        max-width: 300px;
+        width: 270px;
         overflow-y: auto;
     }
     .dropdown-menu .scroll-container {
         max-height: 300px;
+        min-height: 120px;
         overflow-y: scroll;
     }
 

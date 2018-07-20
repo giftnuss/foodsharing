@@ -1,7 +1,8 @@
 <template>
-    <nav-item-dropdown tooltip="Essenskörbe" no-caret class="topbar-baskets" ref="dropdown">
+    <nav-item-dropdown tooltip="Essenskörbe" :no-caret="!showLabel" class="topbar-baskets" ref="dropdown">
         <template slot="button-content">
             <i class="fa fa-shopping-basket"/>
+            <span v-if="showLabel">Essenskörbe</span>
         </template>
         <div class="list-group">
             <p v-if="!baskets.length" class="dropdown-header">
@@ -40,6 +41,11 @@ export default {
     components: {
         NavItemDropdown,
         MenuBasketsEntry
+    },
+    props: {
+        showLabel: {
+            type: Boolean
+        }
     },
     data() {
         return {
