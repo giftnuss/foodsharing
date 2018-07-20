@@ -5,6 +5,8 @@ import '@/tablesorter'
 import $ from 'jquery'
 import 'jquery-dynatree'
 import 'typeahead'
+import 'jquery-tagedit'
+import 'jquery-tagedit-auto-grow-input'
 import { expose } from '@/utils'
 import {
   ajreq,

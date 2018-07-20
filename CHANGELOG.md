@@ -7,6 +7,7 @@
 
 
 ## Bugfixes
+- Add missing tagedit lib on mailbox edit page !459 #248 @nicksellen
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
