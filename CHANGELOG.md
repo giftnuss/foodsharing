@@ -1,13 +1,3 @@
-# Unreleased
-
-## Features
-
-## Bugfixes
-
-## Refactoring
-
-## Dev/Test/CI stuff
-
 # 2018-07-20 Hotfix
 - Fairteiler Walls can be accessed again
 - Login Form from Fairteiler removed
