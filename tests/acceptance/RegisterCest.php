@@ -84,8 +84,8 @@ class RegisterCest
 
 		$I->amOnPage('/');
 
-		$I->waitForElement('#login-username');
-		$I->fillField('#login-username', $this->email);
+		$I->waitForElement('#login-email');
+		$I->fillField('#login-email', $this->email);
 		$I->fillField('#login-password', $this->password);
 		$I->click('#topbar .btn');
 		$I->waitForElement('#pulse-success');

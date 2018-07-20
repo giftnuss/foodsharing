@@ -10,8 +10,8 @@
                 type="text" 
                 id="login-email"
                 class="form-control text-primary" 
-                placeholder="Benutzername" 
-                aria-label="Benutzername"
+                placeholder="E-Mail" 
+                aria-label="E-Mail"
                 v-model="email"
                 @keydown.enter="submit"
             >
@@ -59,7 +59,7 @@ export default {
     methods: {
         async submit() {
             if(!this.email) {
-                pulseError('Bitte gib einen Benutzernamen an')
+                pulseError('Bitte gib deine Email an')
                 return    
             }
             if(!this.password) {
@@ -74,7 +74,7 @@ export default {
                 window.location = this.$url('dashboard')
             } catch(err) {
                 if(err.code && err.code === 401) {
-                    pulseError('Benutzername oder Passwort sind falsch')
+                    pulseError('E-Mail oder Passwort sind falsch')
                 } else {
                     console.error(err);
                     pulseError('Unknown error')
