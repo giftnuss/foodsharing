@@ -1199,7 +1199,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	public function generateAndGetGlobalViewData()
 	{
 		global $g_broadcast_message;
-		global $g_body_class;
 		global $content_left_width;
 		global $content_right_width;
 
@@ -1222,17 +1221,22 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 		$msgbar = '';
 		$logolink = '/';
+		$bodyClasses = [];
+
 		if ($this->session->may()) {
 			$msgbar = $this->viewUtils->v_msgBar();
 			$logolink = '/?page=dashboard';
+			$bodyClasses[] = 'loggedin';
 		} else {
 			$msgbar = $this->viewUtils->v_login();
 		}
 
+		$bodyClasses[] = 'page-' . $this->getPage();
+
 		return [
 			'head' => $this->getHeadData(),
 			'bread' => $this->getBread(),
-			'bodyClass' => $g_body_class,
+			'bodyClasses' => $bodyClasses,
 			'msgbar' => $msgbar,
 			'serverDataJSON' => json_encode($this->getServerData()),
 			'menu' => $menu,
