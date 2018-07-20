@@ -5,6 +5,12 @@ body {
   padding: 0;
   width: 100%;
 }
+body.page-map #topbar {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
 
 .map-wrapper {
   position: absolute;
