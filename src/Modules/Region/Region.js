@@ -13,11 +13,6 @@ import * as wall from '@/wall'
 import { vueRegister, vueApply } from '@/vue'
 import Thread from './components/Thread'
 
-vueRegister({
-  Thread
-})
-vueApply('#vue-thread')
-
 $('a[href=\'#signout\']').click(function () {
   $('#signout_sure').dialog('open')
   return false
