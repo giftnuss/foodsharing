@@ -45,7 +45,7 @@ class ForumPostCest
 		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
 		$I->waitForActiveAPICalls();
 		$this->waitForPostButtons($I, true, false, $example[2]);
-		
+
 		$followButton = \Codeception\Util\Locator::contains('.btn', 'folgen');
 		$I->waitForElement($followButton);
 		$I->click($followButton);
@@ -80,7 +80,7 @@ class ForumPostCest
 		$I->login($this->ambassador['email'], 'pw');
 		$I->amOnPage($I->forumThemeUrl($this->thread_user_ambassador['id'], null));
 		$I->waitForActiveAPICalls();
-		
+
 		$nick = $I->haveFriend('nick');
 		$nick->does(function (AcceptanceTester $I) {
 			$I->login($this->foodsaver['email'], 'pw');

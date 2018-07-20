@@ -37,7 +37,7 @@ class AcceptanceTester extends \Codeception\Actor
 		$I->fillField('#login-email', $email);
 		$I->fillField('#login-password', $password);
 		$I->click('#topbar .btn');
-		$I->waitForElement('#pulse-success');
+		$I->waitForActiveAPICalls();
 		$I->waitForElementNotVisible('#pulse-success');
 		$I->waitForPageBody();
 		$I->seeMatches('/Willkommen|Hallo/'); // depends on user type

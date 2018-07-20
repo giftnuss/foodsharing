@@ -20,39 +20,38 @@ class UserRestController extends FOSRestController
 	public function __construct(Session $session, LoginGateway $loginGateway, SearchService $searchService)
 	{
 		$this->session = $session;
-		$this->loginGateway = $loginGateway; 
-		$this->searchService = $searchService; 
+		$this->loginGateway = $loginGateway;
+		$this->searchService = $searchService;
 	}
 
 	/**
 	 * @Rest\Post("user/login")
-     * @Rest\RequestParam(name="email")
-     * @Rest\RequestParam(name="password")
+	 * @Rest\RequestParam(name="email")
+	 * @Rest\RequestParam(name="password")
 	 */
 	public function loginAction(ParamFetcher $paramFetcher)
 	{
 		$email = $paramFetcher->get('email');
-        $password = $paramFetcher->get('password');
-        $fs_id = $this->loginGateway->login($email, $password);
-        if($fs_id) {
+		$password = $paramFetcher->get('password');
+		$fs_id = $this->loginGateway->login($email, $password);
+		if ($fs_id) {
+			$this->session->refreshFromDatabase($fs_id);
 
-	    	$this->session->refreshFromDatabase($fs_id);
+			$token = $this->searchService->writeSearchIndexToDisk($this->session->id(), $this->session->user('token'));
 
-		    $token = $this->searchService->writeSearchIndexToDisk($this->session->id(), $this->session->user('token'));
+			$mobdet = new Mobile_Detect();
+			if ($mobdet->isMobile()) {
+				$_SESSION['mob'] = 1;
+			}
+			$user = $this->session->get('user');
 
-            $mobdet = new Mobile_Detect();
-            if ($mobdet->isMobile()) {
-                $_SESSION['mob'] = 1;
-            }
-            $user = $this->session->get('user');
-
-            return $this->handleView($this->view([
-                'id' => $fs_id,
-                'name' => $user['name']
-                // this response can get extended further, once needed
-            ], 200));
-        } else {
-            throw new HttpException(401, "email or password are invalid");
-        }
+			return $this->handleView($this->view([
+				'id' => $fs_id,
+				'name' => $user['name']
+				// this response can get extended further, once needed
+			], 200));
+		} else {
+			throw new HttpException(401, 'email or password are invalid');
+		}
 	}
 }

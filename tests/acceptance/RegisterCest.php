@@ -89,7 +89,7 @@ class RegisterCest
 		$I->fillField('#login-password', $this->password);
 		$I->click('#topbar .btn');
 		$I->waitForElement('#pulse-success');
- 
+
 		$I->seeInDatabase('fs_foodsaver', [
 			'email' => $this->stripped_email,
 			'name' => $this->first_name,
