@@ -22,6 +22,15 @@
 
 ## Dev/Test/CI stuff
 
+# 2018-07-20 Hotfix
+- Fairteiler Walls can be accessed again
+- Login Form from Fairteiler removed
+- Store name for pickup team notification was missing in serverData
+- Deletion of non-existing post lead to 500 instead of 404
+- Store statistics could not be updated due to a mistake while refactoring
+- Dashboard updates used to show some HTML tags in different entries
+- Message notifications have not been sent for some hours
+
 # 2018-07-19
 We are quite good at doing major releases every three months.
 So here we go:
