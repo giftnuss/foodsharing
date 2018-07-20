@@ -2,17 +2,17 @@
     <form class="form-inline my-2 my-lg-0" style="flex-grow: 1">
         <div class="input-group mr-2" ref="inputgroup">
             <div class="input-group-prepend">
-                <label class="input-group-text text-primary" for="login-username">
+                <label class="input-group-text text-primary" for="login-email">
                     <i class="fa fa-user" />
                 </label>
             </div>
             <input 
                 type="text" 
-                id="login-username"
+                id="login-email"
                 class="form-control text-primary" 
                 placeholder="Benutzername" 
                 aria-label="Benutzername"
-                v-model="username"
+                v-model="email"
                 @keydown.enter="submit"
             >
         </div>
@@ -50,7 +50,7 @@ import serverData from '@/server-data'
 export default {
     data() {
         return {
-            username: serverData.isDev ? 'userbot@example.com' : '',
+            email: serverData.isDev ? 'userbot@example.com' : '',
             password: serverData.isDev ? 'user' : '',
             isLoading: false,
             error: null
@@ -58,7 +58,7 @@ export default {
     },
     methods: {
         async submit() {
-            if(!this.username) {
+            if(!this.email) {
                 pulseError('Bitte gib einen Benutzernamen an')
                 return    
             }
@@ -68,13 +68,15 @@ export default {
             }
             this.isLoading = true
             try {
-                let user = await login(this.username, this.password)
+                let user = await login(this.email, this.password)
+                console.log({user})
                 pulseSuccess(`<b>Wunderschönen Tag Dir ${user.name}!</b><br />Du hast dich erfolgreich eingeloggt und wirst gleich weitergeleitet`)
                 window.location = this.$url('dashboard')
             } catch(err) {
                 if(err.code && err.code === 401) {
                     pulseError('Benutzername oder Passwort sind falsch')
                 } else {
+                    console.error(err);
                     pulseError('Unknown error')
                 }
                 this.isLoading = false
