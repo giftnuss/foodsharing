@@ -91,6 +91,10 @@ export default {
 #topbar .input-group {
     margin-bottom: 0;
     width: 10em;
+
+    @media (max-width: 320px) {
+        width: 80%;
+    }
     img, i {
         height: 1em;
         width: 1em;
@@ -113,6 +117,7 @@ export default {
         }
     }
 }
+
 .loadingButton {
     img {
         height: 1em;

@@ -5,10 +5,10 @@
                 <div id="topbar-navleft">
                     <a :href="$url('home')" class="navbar-brand mr-4">food<span>shar<span>i</span>ng</span></a>
                     <login v-if="!isMobile"/>
-                    <menu-loggedout v-if="isMobile"/>
+                    <menu-loggedout v-if="isMobile" :wXS="ui.wXS" />
                 </div>
                 <login v-if="isMobile"/>
-                <menu-loggedout v-if="!isMobile"/>
+                <menu-loggedout v-if="!isMobile" :wXS="ui.wXS" />
             </div>
 
             <div v-if="loggedIn" class="container">
@@ -16,7 +16,7 @@
                 <div id="topbar-navleft">
                     <a class="navbar-brand" :href="$url('dashboard')">food<span>shar<span>i</span>ng</span></a>
                     <ul class="navbar-nav flex-row no-collapse">
-                        
+                        <div v-if="!hasFsRole" class="ml-3"></div>
                         <menu-region v-if="hasFsRole" :regions="regions" :activeRegionId="activeRegionId" />
                         <menu-stores v-if="hasFsRole && stores.length" :stores="stores" />
                         <menu-groups :workingGroups="workingGroups" />
@@ -204,6 +204,9 @@ export default {
         }
     }
     @media (max-width: 650px) {
+        & .navbar-brand {
+            font-size: 0.9rem;
+        }
         &.loggedIn .navbar-brand {
             font-size: 0.4rem;
         }
@@ -252,6 +255,8 @@ export default {
     .no-collapse {
         display:flex;
         flex-grow: 1;
+        flex-direction: row;
+        
         .nav-link {
             padding-right: 0.5rem;
             padding-left: 0.5rem;

@@ -515,7 +515,7 @@ div#main, footer .wrapper {
 
 div#main {
   min-height: 650px;
-  margin-top: 45px;
+  margin-top: 0.5em;
   padding-bottom: 40px;
 }
 
