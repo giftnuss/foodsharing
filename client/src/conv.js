@@ -9,6 +9,7 @@ import timeformat from '@/timeformat'
 import autoLink from '@/autoLink'
 import info from '@/info'
 import msg from '@/msg'
+import conversationStore from '@/stores/conversations'
 
 const conv = {
 
@@ -133,8 +134,9 @@ const conv = {
       conv.append(key, data)
       conv.scrollBottom(data.cid)
     } else {
-      info.badgeInc('msg')
+      // info.badgeInc('msg')
     }
+    conversationStore.loadConversations()
     // alert(key);
 
     /*
@@ -216,6 +218,9 @@ const conv = {
         },
         complete: function () {
           conv.hideLoader(cid)
+
+          // reload conversations
+          conversationStore.loadConversations()
         }
       })
     }

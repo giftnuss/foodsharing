@@ -54,77 +54,8 @@ const info = {
    * pseudo construct
    */
   init: function () {
-    if ($('#infobar').length > 0) {
-      setTimeout(function () {
-        info.startupTimeout = true
-        // info.heartbeat();
-      }, 5000)
-      //
-      this.services = []
-
-      this.$infobar = $('#infobar')
-
-      // init data array
-      this.data = []
-      this.data['msg'] = {}
-      this.data['bell'] = {}
-      this.data['basket'] = {}
-
-      // init badge dom querys
-      this.$badge = []
-      this.$badge['msg'] = $('#infobar > li.msg > a .badge')
-      this.$badge['bell'] = $('#infobar > li.bell > a .badge')
-      this.$badge['basket'] = $('#infobar > li.basket > a .badge')
-
-      // init linklist dom querys
-      this.$linklist = []
-      this.$linklist['msg'] = $('#infobar .msg .linklist')
-      this.$linklist['bell'] = $('#infobar .bell .linklist')
-      this.$linklist['basket'] = $('#infobar .basket .linklist')
-
-      // init linkwrappers its where the conten comes in
-      this.$linkwrapper = []
-      this.$linkwrapper['msg'] = $('#infobar .msg .linkwrapper')
-      this.$linkwrapper['bell'] = $('#infobar .bell .linkwrapper')
-      this.$linkwrapper['basket'] = $('#infobar .basket .linkwrapper')
-
-      this.$allWrapper = $('#infobar .linkwrapper')
-
-      // add nice scroller to lists
-      $('#infobar .linkwrapper .linklist').slimScroll()
-
-      // init dom events
-      this.initEvents()
-
-      var badge = storage.get('badge')
-
-      if (badge != undefined) {
-        this.badge('bell', badge.bell)
-        this.badge('msg', badge.msg)
-        this.badge('basket', badge.basket)
-      } else {
-        ajax.req('info', 'initbadge', {
-          loader: false,
-          success: function (ret) {
-            storage.set('badge', {
-              bell: ret.bell,
-              msg: ret.msg,
-              basket: ret.basket
-            })
-
-            if (ret.bell > 0) {
-              info.badge('bell', ret.bell)
-            }
-            if (ret.msg > 0) {
-              info.badge('msg', ret.msg)
-            }
-            if (ret.basket > 0) {
-              info.badge('basket', ret.basket)
-            }
-          }
-        })
-      }
-    }
+    this.services = []
+    // removed code for the old topbar
   },
 
   /*
@@ -191,18 +122,18 @@ const info = {
    * function to increment current badge number to specific type
    */
   badgeInc: function (type) {
-    if (this.$badge[type] != undefined) {
-      let val = parseInt(this.$badge[type].text())
-      val++
-      this.$badge[type].text(val + '')
-      if (val > 0) {
-        this.$badge[type].css('display', 'inline-block')
-      } else {
-        this.$badge[type].css('display', 'none')
-      }
-    } else {
-      console.log(type + ' is undefined')
-    }
+    // if (this.$badge[type] != undefined) {
+    //   let val = parseInt(this.$badge[type].text())
+    //   val++
+    //   this.$badge[type].text(val + '')
+    //   if (val > 0) {
+    //     this.$badge[type].css('display', 'inline-block')
+    //   } else {
+    //     this.$badge[type].css('display', 'none')
+    //   }
+    // } else {
+    //   console.log(type + ' is undefined')
+    // }
   },
 
   /**

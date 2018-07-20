@@ -30,7 +30,8 @@
 <script>
 import NavItemDropdown from './NavItemDropdown'
 import MenuBasketsEntry from './MenuBasketsEntry'
-import { getBaskets } from '@/api/baskets'
+import basketStore from '@/stores/baskets'
+
 import { ajreq } from '@/script'
 
 function stringCompare(str1, str2) {
@@ -47,18 +48,10 @@ export default {
             type: Boolean
         }
     },
-    data() {
-        return {
-            baskets: []
-        }
-    },
     created() {
-        this.loadBaskets()
+        basketStore.loadBaskets()
     },
     methods: {
-        async loadBaskets() {
-            this.baskets = await getBaskets()
-        },
         openBasketCreationForm() {
             this.$refs.dropdown.visible = false
             ajreq('newbasket', {app:'basket'})
@@ -73,6 +66,9 @@ export default {
         }
     },
     computed: {
+        baskets() {
+            return basketStore.baskets
+        },
         basketsSorted() {
             return this.baskets.sort( (a,b) => stringCompare(b.updatedAt, a.updatedAt))
         }

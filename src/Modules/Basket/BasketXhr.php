@@ -201,6 +201,7 @@ class BasketXhr extends Control
 				'script' => '
 					$("#msgbar-basket").hide();
 					pulseInfo("Danke Dir! Der Essenskorb wurde veröffentlicht!");
+					basketStore.loadBaskets();
 					$(".xhrDialog").dialog("close");
 					$(".xhrDialog").dialog("destroy");
 					$(".xhrDialog").remove();'
