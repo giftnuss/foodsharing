@@ -15,6 +15,9 @@
 
 ## Dev/Test/CI stuff
 
+# 2018-07-21 Hotfix
+- Fix foodsaver_id access in StatsControl
+
 # 2018-07-20 Hotfix
 - Fairteiler Walls can be accessed again
 - Login Form from Fairteiler removed
