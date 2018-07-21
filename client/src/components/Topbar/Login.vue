@@ -7,7 +7,7 @@
                 </label>
             </div>
             <input 
-                type="text" 
+                type="email" 
                 id="login-email"
                 class="form-control text-primary" 
                 placeholder="E-Mail" 
