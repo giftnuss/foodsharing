@@ -98,7 +98,7 @@ class StatsControl extends ConsoleControl
 					$newdata = array(
 						'stat_first_fetch' => $fs['stat_first_fetch'],
 						'stat_add_date' => $fs['stat_add_date'],
-						'foodsaver_id' => $fs['foodsaver_id'],
+						'foodsaver_id' => $fs['id'],
 						'betrieb_id' => $bid,
 						'verantwortlich' => $fs['verantwortlich'],
 						'stat_fetchcount' => $fs['stat_fetchcount'],
