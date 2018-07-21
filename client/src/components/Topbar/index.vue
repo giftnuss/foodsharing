@@ -3,7 +3,7 @@
         <div class="navbar fixed-top navbar-expand-md navbar-dark bg-primary ">
             <div v-if="!loggedIn" class="container">
                 <div id="topbar-navleft">
-                    <a :href="$url('home')" class="navbar-brand mr-4">food<span>shar<span>i</span>ng</span></a>
+                    <a :href="$url('home')" class="navbar-brand mr-2">food<span>shar<span>i</span>ng</span></a>
                     <login v-if="!isMobile"/>
                     <menu-loggedout v-if="isMobile" :wXS="ui.wXS" />
                 </div>
@@ -246,6 +246,7 @@ export default {
 
 <style lang="scss">
 #topbar {
+    overflow-x: hidden;
     .nav-link {
         white-space: nowrap;
         padding: 0.4em 0.5em;
