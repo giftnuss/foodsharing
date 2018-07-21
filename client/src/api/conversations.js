@@ -8,7 +8,7 @@ export async function getConversationList () {
     id: parseInt(c.id),
     title: c.name,
     lastMessageTime: c.last,
-    members: c.member ? c.member.map((m) => ({
+    members: c.member && c.member instanceof Array ? c.member.map((m) => ({
       id: parseInt(m.id),
       name: m.name,
       avatar: m.photo ? '/images/mini_q_' + m.photo : null
