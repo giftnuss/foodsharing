@@ -69,17 +69,16 @@ export default {
             this.isLoading = true
             try {
                 let user = await login(this.email, this.password)
-                console.log({user})
                 pulseSuccess(`<b>Wunderschönen Tag Dir ${user.name}!</b><br />Du hast dich erfolgreich eingeloggt und wirst gleich weitergeleitet`)
                 window.location = this.$url('dashboard')
             } catch(err) {
+                this.isLoading = false
                 if(err.code && err.code === 401) {
                     pulseError('E-Mail oder Passwort sind falsch')
                 } else {
-                    console.error(err);
                     pulseError('Unknown error')
+                    throw err
                 }
-                this.isLoading = false
             }
         }
     }

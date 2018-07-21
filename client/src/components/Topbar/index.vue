@@ -24,7 +24,7 @@
                             </a>
                         </li>
                         <menu-region v-if="hasFsRole" :regions="regions" :activeRegionId="activeRegionId" />
-                        <menu-stores v-if="hasFsRole && stores.length" :stores="stores" />
+                        <menu-stores v-if="hasFsRole && stores.length" :stores="stores" :mayAddStore="may.addStore" />
                         <menu-groups v-if="hasFsRole" :workingGroups="workingGroups" />
                         <menu-baskets :showLabel="!hasFsRole && !isMobile" />
                         <li v-if="!isMobile" class="nav-item" v-b-tooltip title="Karte">
@@ -71,6 +71,7 @@
                             <a :href="$url('vision')" class="dropdown-item" role="menuitem">Vision</a>
                             <a :href="$url('claims')" class="dropdown-item" role="menuitem">Forderungen</a>
                             <a :href="$url('partner')" class="dropdown-item" role="menuitem">Partner</a>
+                            <a :href="$url('donate')" class="dropdown-item" role="menuitem">Spenden</a>
                             <a :href="$url('statistics')" class="dropdown-item" role="menuitem">Statistik</a>
                             <div class="dropdown-divider" />
                             <a :href="$url('infos')" class="dropdown-item" role="menuitem">Infosammlung</a>
@@ -78,6 +79,7 @@
                             <a :href="$url('faq')" class="dropdown-item" role="menuitem">F.A.Q.</a>
                             <a :href="$url('guide')" class="dropdown-item" role="menuitem">Ratgeber</a>
                             <a :href="$url('wiki')" class="dropdown-item" role="menuitem">Wiki</a>
+                            <a :href="$url('changelog')" class="dropdown-item" role="menuitem">Changelog</a>
                         </nav-item-dropdown>
                         
                         <li v-if="mailbox" class="nav-item" v-b-tooltip title="E-Mail-Postfach">
@@ -308,12 +310,13 @@ export default {
 
     .dropdown-menu {
         max-height: 360px;
-        width: 270px;
+        max-width: 300px;
         overflow-y: auto;
     }
     .dropdown-menu .scroll-container {
         max-height: 300px;
         min-height: 120px;
+        width: 270px;
         overflow-y: scroll;
     }
 

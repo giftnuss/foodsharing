@@ -472,7 +472,8 @@ class Func
 			$workingGroups,
 			$this->session->get('mailbox'),
 			$this->fsId(),
-			$loggedIn ? $this->img() : ''
+			$loggedIn ? $this->img() : '',
+			$this->session->may('bieb')
 		);
 	}
 
@@ -480,7 +481,7 @@ class Func
 		bool $loggedIn, array $regions, bool $hasFsRole,
 		bool $isOrgaTeam, bool $mayEditBlog, bool $mayEditQuiz, bool $mayHandleReports,
 		array $stores, array $workingGroups,
-		$sessionMailbox, int $fsId, string $image)
+		$sessionMailbox, int $fsId, string $image, bool $mayAddStore)
 	{
 		$params = array_merge([
 			'loggedIn' => $loggedIn,
@@ -492,7 +493,8 @@ class Func
 			'may' => [
 				'editBlog' => $mayEditBlog,
 				'editQuiz' => $mayEditQuiz,
-				'handleReports' => $mayHandleReports
+				'handleReports' => $mayHandleReports,
+				'addStore' => $mayAddStore
 			],
 			'stores' => array_values($stores),
 			'regions' => $regions,

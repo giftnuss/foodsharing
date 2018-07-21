@@ -30,6 +30,7 @@
                 <span class="d-none d-lg-inline">Infos</span>
             </template>
             <a :href="$url('infos')" class="dropdown-item" role="menuitem">Infosammlung</a>
+            <a :href="$url('donate')" class="dropdown-item" role="menuitem">Spenden</a>
             <a :href="$url('blog')" class="dropdown-item" role="menuitem">Blog</a>
             <a :href="$url('faq')" class="dropdown-item" role="menuitem">F.A.Q.</a>
             <a :href="$url('guide')" class="dropdown-item" role="menuitem">Ratgeber</a>

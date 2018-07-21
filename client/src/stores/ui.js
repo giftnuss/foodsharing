@@ -43,8 +43,6 @@ const ui = new Vue({
       this.wMD = w >= mediaQuery.md.min && w <= mediaQuery.md.max
       this.wLG = w >= mediaQuery.lg.min && w <= mediaQuery.lg.max
       this.wXL = w >= mediaQuery.xl.min
-
-      console.log(w)
     },
     updateRegionId () {
       let regionId
@@ -53,7 +51,6 @@ const ui = new Vue({
       else if (localStorage.getItem('lastRegion')) regionId = parseInt(localStorage.getItem('lastRegion'))
       else if (serverData.user.regularRegion) regionId = serverData.user.regularRegion
 
-      console.log('last regionId', regionId)
       if (regionId !== this.activeRegionId) {
         this.activeRegionId = regionId
         localStorage.setItem('lastRegion', regionId)

@@ -42,5 +42,7 @@ export default {
   communitiesSwitzerland: () => `/?page=content&sub=communitiesSwitzerland`,
   team: () => `/team`,
   press: () => `/?page=content&sub=presse`,
-  imprint: () => `/impressum`
+  imprint: () => `/impressum`,
+  donate: () => `/unterstuetzung`,
+  changelog: () => `/?page=content&sub=changelog`
 }

@@ -6,8 +6,8 @@
         <div v-for="store in stores" :key="store.id">
             <a role="menuitem" :href="$url('store', store.id)"  class="dropdown-item"><i class="fa fa-shopping-cart"/> {{ store.name }} </a>
         </div>
-        <div v-if="stores.length" class="dropdown-divider"></div>
-        <a :href="$url('storeAdd')" role="menuitem" class="dropdown-item"><small><i class="fa fa-plus" /> Einem Betrieb hinzufügen</small></a>
+        <div v-if="stores.length && mayAddStore" class="dropdown-divider"></div>
+        <a v-if="mayAddStore" :href="$url('storeAdd')" role="menuitem" class="dropdown-item"><small><i class="fa fa-plus" /> Einem Betrieb hinzufügen</small></a>
     </nav-item-dropdown>
 </template>
 <script>
@@ -21,6 +21,9 @@ export default {
             type: Array,
             default: () => []
         },
+        mayAddStore: {
+            type: Boolean
+        }
     }
 }
 </script>
