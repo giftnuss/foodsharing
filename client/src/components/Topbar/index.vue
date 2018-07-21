@@ -1,6 +1,6 @@
 <template>
     <div id="topbar" :class="{bootstrap:true, loggedIn}">
-        <div class="navbar navbar-expand-md navbar-dark bg-primary ">
+        <div class="navbar fixed-top navbar-expand-md navbar-dark bg-primary ">
             <div v-if="!loggedIn" class="container">
                 <div id="topbar-navleft">
                     <a :href="$url('home')" class="navbar-brand mr-4">food<span>shar<span>i</span>ng</span></a>
