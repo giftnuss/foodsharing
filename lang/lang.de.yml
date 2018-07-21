@@ -192,6 +192,7 @@ bell:
   blog_new_check: "{title}"
   ft_update_title: "{name}"
   ft_update: "{teaser}"
+  store_new_title: "Neuer Betrieb"
   store_new: "{name} wurde eingetragen"
   store_new_request_title: "Neue Teamanfrage"
   store_new_request: "Anfrage für {name}"
