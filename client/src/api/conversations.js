@@ -9,7 +9,7 @@ export async function getConversationList () {
     members: c.member.map((m) => ({
       id: parseInt(m.id),
       name: m.name,
-      avatar: m.photo
+      avatar: m.photo ? '/images/mini_q_' + m.photo : null
     })),
     lastMessage: {
       bodyRaw: c.last_message,
