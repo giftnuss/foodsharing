@@ -1,3 +1,23 @@
+# Unreleased
+
+## Features
+- new topbar in vue.js !451, #11, #15, #155, #158, #30, #66, #67, #93 @alangecker
+- reactive vue stores !451 @alangecker
+- resizeable avatar component !451 @alangecker
+
+
+## Bugfixes
+- Add missing tagedit lib on mailbox edit page !459 #248 @nicksellen
+
+## Refactoring
+- removed global $g_body_class variable !451 @alangecker
+
+
+## Dev/Test/CI stuff
+
+# 2018-07-21 Hotfix
+- Fix foodsaver_id access in StatsControl
+
 # 2018-07-20 Hotfix
 - Fairteiler Walls can be accessed again
 - Login Form from Fairteiler removed
