@@ -185,7 +185,10 @@ export default {
 
 <style lang="scss" scoped>
 #topbar {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    .navbar {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    }
+
     .container {
         max-width: 1000px;
     }
