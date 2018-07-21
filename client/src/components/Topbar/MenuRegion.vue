@@ -1,10 +1,10 @@
 <template>
     <b-nav-item-dropdown class="regionMenu" ref="dropdown">
             <template slot="button-content">
-                {{ activeRegion ? activeRegion.name : 'Bezirke' }}
+                <span class="regionName text-truncate">{{ activeRegion ? activeRegion.name : 'Bezirke' }}</span>
             </template>
             <div v-for="region in regionsSorted" :key="region.id">
-                <a v-if="region.id !== activeRegionId || regions.length !== 1" role="menuitem" v-b-toggle="'topbarregion_'+region.id" href="#" target="_self" class="dropdown-item">{{ region.name }}</a>
+                <a v-if="region.id !== activeRegionId || regions.length !== 1" role="menuitem" v-b-toggle="'topbarregion_'+region.id" href="#" target="_self" class="dropdown-item text-truncate">{{ region.name }}</a>
                 <b-collapse class="sub" :id="'topbarregion_'+region.id" accordion="regions" :visible="region.id === activeRegionId">
                     <a role="menuitem" :href="$url('forum', region.id)" class="dropdown-item dropdown-item-sub"><i class="fa fa-comment-o" />Forum</a>
                     <a v-if="region.isBot" role="menuitem" :href="$url('forum', region.id, 1)" class="dropdown-item dropdown-item-sub"><i class="fa fa-commenting-o" />Bot-Forum</a>
@@ -72,5 +72,12 @@ export default {
     font-family: 'Alfa Slab One';
     /* margin-top: -35px; */
     font-size: 1em !important;
+}
+</style>
+<style lang="scss" scoped>
+.regionName {
+    max-width: 120px;
+    display: inline-block;
+    margin-bottom: -0.35em;
 }
 </style>
