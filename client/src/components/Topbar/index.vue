@@ -330,6 +330,9 @@ export default {
             max-width: initial;
             top: 2.2em;
         }
+        .dropdown-menu .scroll-container {
+            width: 100%;
+        }
         #search-results {
             top: 5em;
             width: 100%;
