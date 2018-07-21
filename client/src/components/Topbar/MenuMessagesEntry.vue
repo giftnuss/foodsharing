@@ -62,20 +62,15 @@ export default {
                     if(b.id == lastId) return 1
                     return 0
                 })
+            
             // enough avatars for displaying? 
             if(members.filter(m => m.avatar).length > 4) {
-                members = members.filter(m => m => m.avatar)
+                members = members.filter(m => m.avatar)
             }
 
             // we dont need more then 4
             members = members.slice(0, 4)
 
-            return [
-                '/images/b3bc0229b900aca4bf7f84b063a2291d.png',
-                '/img/130_q_avatar.png',
-                '/img/pica_bread.png',
-                '/img/pica_foodporn.png'
-            ]
             return members.map(m => m.avatar)
         },
         loggedinUser() {

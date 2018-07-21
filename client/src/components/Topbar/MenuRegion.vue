@@ -45,7 +45,7 @@ export default {
             return this.regions.sort((a,b) => {
                 if(this.activeRegionId && a.id == this.activeRegionId) return -1
                 if(this.activeRegionId && b.id == this.activeRegionId) return 1
-                else return a.name-b.name
+                else return a.name.localeCompare(b.name)
             })
         }
     },

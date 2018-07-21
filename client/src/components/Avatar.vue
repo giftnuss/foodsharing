@@ -19,7 +19,7 @@ export default {
       return {
         width: this.size+'px',
         height: this.size+'px',
-        backgroundImage: `url(${this.url && false ? this.url : '/img/130_q_avatar.png'})`
+        backgroundImage: `url(${this.url ? this.url : '/img/130_q_avatar.png'})`
       }
     }
   }

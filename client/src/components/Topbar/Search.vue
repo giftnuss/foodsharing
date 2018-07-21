@@ -123,25 +123,9 @@ export default {
         }
     },
     computed: {
-        isMobile() {
-            return false
-        },
         resultsStyle() {
-                return  {
-                    left: this.posX+'px',
-                    // width: Math.max(this.width, 250)+'px'
-                }
-            
-            if(this.isMobile) {
-                return {
-                    left: '0px',
-                    width: '100%'
-                }
-            } else {
-                return  {
-                    left: this.posX+'px',
-                    width: Math.max(this.width, 250)+'px'
-                }
+            return  {
+                left: this.posX+'px'
             }
         }
     }

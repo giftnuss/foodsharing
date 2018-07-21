@@ -34,10 +34,6 @@ import basketStore from '@/stores/baskets'
 
 import { ajreq } from '@/script'
 
-function stringCompare(str1, str2) {
-    return str1 < str2 ? -1 : str1 > str2
-}
-
 export default {
     components: {
         NavItemDropdown,
@@ -70,7 +66,7 @@ export default {
             return basketStore.baskets
         },
         basketsSorted() {
-            return this.baskets.sort( (a,b) => stringCompare(b.updatedAt, a.updatedAt))
+            return this.baskets.sort( (a,b) => b.updatedAt.localeCompare(a.updatedAt))
         }
     }
 }

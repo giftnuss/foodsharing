@@ -7,7 +7,6 @@ import { ajax, GET, goTo, isMob, nl2br } from '@/script'
 import serverData from '@/server-data'
 import timeformat from '@/timeformat'
 import autoLink from '@/autoLink'
-import info from '@/info'
 import msg from '@/msg'
 import conversationStore from '@/stores/conversations'
 
@@ -134,6 +133,8 @@ const conv = {
       conv.append(key, data)
       conv.scrollBottom(data.cid)
     } else {
+      // following line got commented out, because it is part of the old topbar
+      // this whole file should get replaced with a vue store
       // info.badgeInc('msg')
     }
     conversationStore.loadConversations()

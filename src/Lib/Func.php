@@ -482,22 +482,6 @@ class Func
 		array $stores, array $workingGroups,
 		$sessionMailbox, int $fsId, string $image)
 	{
-		// $params = array_merge([
-		// 	'loggedIn' => $loggedIn,
-		// 	'fsId' => $fsId,
-		// 	'image' => $image,
-		// 	'mailbox' => false,
-		// 	'hasFsRole' => false,
-		// 	'isOrgaTeam' => false,
-		// 	'may' => [
-		// 		'editBlog' => false,
-		// 		'editQuiz' => false,
-		// 		'handleReports' => false
-		// 	],
-		// 	'stores' => array_values([]),
-		// 	'regions' => array_values([]),
-		// 	'workingGroups' => $workingGroups
-		// ]);
 		$params = array_merge([
 			'loggedIn' => $loggedIn,
 			'fsId' => $fsId,

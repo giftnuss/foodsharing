@@ -31,20 +31,14 @@ export default {
     },
     computed: {
         bells() {
-            return bellStore.bells.slice(0, 10)
+            return bellStore.bells
         },
         unread() {
-            return 0
-            let unreadBells = 0
-            for(let bell of this.bells) {
-                if(!bell.isRead) unreadBells++
-            }
-            return unreadBells
+            return bellStore.unreadCount
         }
     },
     methods: {
         async onBellDelete(id) {
-            console.log('delete')
             try {
                 await bellStore.delete(id)
             } catch(err) {

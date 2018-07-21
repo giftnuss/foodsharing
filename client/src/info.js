@@ -122,6 +122,9 @@ const info = {
    * function to increment current badge number to specific type
    */
   badgeInc: function (type) {
+    // following line got commented out, because it is part of the old topbar
+    // probably this file can get removed entirely anyway
+    // -------------
     // if (this.$badge[type] != undefined) {
     //   let val = parseInt(this.$badge[type].text())
     //   val++

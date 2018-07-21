@@ -11,7 +11,7 @@
                 </small>
                 <h5 v-if="basket.requests.length" class="text-muted mb-1 pl-2">angefragt von</h5>
                 <div v-if="basket.requests.length" class="requests list-group">
-                        <a v-for="req in basket.requests" :key="req.time" href="#" @click="openChat(req.user.id, $event)" class="list-group-item list-group-item-action p-1 request">
+                        <a v-for="req in basket.requests" :key="req.time" href="#" @click.prevent="openChat(req.user.id, $event)" class="list-group-item list-group-item-action p-1 request">
                             <div class="row pl-1 align-items-center">
                                 <div class="col-1 text-right pt-1">
                                     <avatar
@@ -27,7 +27,7 @@
                                             {{ req.time | dateDistanceInWords }}
                                         </div>
                                         <div class="col-8 text-right text-muted hover">
-                                            <a href="#" @click="openRemoveDialog(req.user.id, $event)" class="btn btn-sm btn-secondary" title="Essensanfrage abschließen" v-b-tooltip><i class="fa fa-close" /></a>
+                                            <a href="#" @click.prevent.stop="openRemoveDialog(req.user.id, $event)" class="btn btn-sm btn-secondary" title="Essensanfrage abschließen" v-b-tooltip><i class="fa fa-close" /></a>
                                         </div>
 
                                     </div>
@@ -57,12 +57,9 @@ export default {
     },
     methods: {
         openChat(userId, e) {
-            e.preventDefault()
             conv.userChat(userId)
         },
         openRemoveDialog(userId, e) {
-            e.preventDefault()
-            e.stopPropagation()
             this.$emit('basketRemove', this.basket.id, userId)
         }
     }

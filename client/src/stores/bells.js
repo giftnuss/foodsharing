@@ -5,6 +5,11 @@ export default new Vue({
   data: {
     bells: []
   },
+  computed: {
+    unreadCount () {
+      return this.bells.filter(b => !b.isRead).length
+    }
+  },
   methods: {
     async loadBells () {
       this.bells = await getBellList()

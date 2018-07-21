@@ -37,13 +37,8 @@ export default {
         conversations() {
             return conversationStore.conversations.slice(0, 10)
         },
-
         unread() {
-            let unreadMessages = 0
-            for(let conv of this.conversations) {
-                if(conv.hasUnreadMessages) unreadMessages++
-            }
-            return unreadMessages
+            return conversationStore.unreadCount
         }
     },
     methods: {

@@ -4,7 +4,7 @@ const DEFAULT_OPTIONS = {
   credentials: 'same-origin',
   mode: 'cors'
 }
-if(window.fetch) window.fetch.activeFetchCalls = 0
+if (window.fetch) window.fetch.activeFetchCalls = 0
 
 export class HTTPError extends Error {
   constructor (code, text) {
