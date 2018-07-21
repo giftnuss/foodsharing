@@ -11,6 +11,7 @@
 - Add missing tagedit lib on mailbox edit page !459 #248 @nicksellen
 - reenabling source maps on the production build !468 #254 @alangecker
 - removed dead login button and updated registration info for food baskets #240 !457 @michi-zuri
+- Remove broken LoginXhr->login method !465 @tiltec
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
@@ -29,6 +30,7 @@
 
 # 2018-07-21 Hotfix
 - Fix foodsaver_id access in StatsControl
+- Remove broken login popup
 
 # 2018-07-20 Hotfix
 - Fairteiler Walls can be accessed again
