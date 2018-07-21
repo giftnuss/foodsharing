@@ -8,7 +8,7 @@
             <p v-if="!baskets.length" class="dropdown-header">
                 Du hast keine Essenskörbe eingetragen
             </p>
-            <div class="scroll-container">
+            <div v-else class="scroll-container">
                 <menu-baskets-entry
                     v-for="basket in basketsSorted"
                     :key="basket.id"
