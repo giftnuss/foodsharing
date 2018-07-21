@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-2">
                 <div :class="['avatar', 'avatar_'+avatars.length]">
-                    <div v-for="avatar in avatars" :key="avatar" :style="{backgroundImage: `url('${avatar}')`}" />
+                    <div v-for="avatar in avatars" :key="avatar" :style="{backgroundImage: `url('${avatar || '/img/130_q_avatar.png'}')`}" />
                 </div>
             </div>
             <div class="col-10">
