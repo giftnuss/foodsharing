@@ -113,7 +113,10 @@ class BellXhr extends Control
 		// $xhr->addData('aaa', $bells);
 		$xhr->addData('list', array_map(function ($bell) {
 			if (isset($bell['attr']['onclick'])) {
-				// TODO transform  onClick="profile(:id)" to /profile/:id
+				preg_match('/profile\((.*?)\)/', $bell['attr']['onclick'], $matches);
+				if ($matches) {
+					$bell['attr']['href'] = '/profile/' . $matches[1];
+				}
 			}
 
 			return [

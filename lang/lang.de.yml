@@ -215,8 +215,9 @@ bell:
   new_quiz_comment: "{comment}"
 
   new_foodsaver_title: "{name} neu in {bezirk}"
-  new_foodsaver_verified: "Schon verifiziert - kann loslegen"
   new_foodsaver: "Braucht EINABs"
+  new_foodsaver_verified_title: "{name} neu in {bezirk}"
+  new_foodsaver_verified: "Schon verifiziert - kann loslegen"
   betrieb_fetch_title: "{betrieb}"
   betrieb_fetch: "{count} unbestätigte Abholzeiten"
 
