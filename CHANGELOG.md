@@ -11,6 +11,7 @@
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
+- removed copy of email sending method for CLI applications !464 @NerdyProjects
 
 
 ## Dev/Test/CI stuff
