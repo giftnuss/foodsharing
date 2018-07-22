@@ -57,20 +57,6 @@ class MessageXhr extends Control
 	}
 
 	/**
-	 * ajax call to refresh infobar messages.
-	 */
-	public function infobar()
-	{
-		$this->session->noWrite();
-
-		$xhr = new Xhr();
-		$conversations = $this->model->listConversations(10);
-		$xhr->addData('html', $this->view->conversationList($conversations, 'conv.chat'));
-
-		$xhr->send();
-	}
-
-	/**
 	 * ajax call to load an existing conversation.
 	 */
 	public function loadconversation()

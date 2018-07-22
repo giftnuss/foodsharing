@@ -44,12 +44,6 @@ div#main {
   margin-left: -490px;
 }
 
-div#top {
-  -moz-box-shadow: 1px 5px 5px rgba(0, 0, 0, 0.4);
-  -webkit-box-shadow: 1px 5px 5px rgba(0, 0, 0, 0.4);
-  box-shadow: 1px 5px 5px rgba(0, 0, 0, 0.4);
-}
-
 .ajax-loader {
   background-color: #ffffff;
   border-radius: 10px 10px 10px 10px;

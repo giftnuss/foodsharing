@@ -1205,16 +1205,10 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$mainwidth -= $content_right_width;
 		}
 
-		$msgbar = '';
-		$logolink = '/';
 		$bodyClasses = [];
 
 		if ($this->session->may()) {
-			$msgbar = $this->viewUtils->v_msgBar();
-			$logolink = '/?page=dashboard';
 			$bodyClasses[] = 'loggedin';
-		} else {
-			$msgbar = $this->viewUtils->v_login();
 		}
 
 		$bodyClasses[] = 'page-' . $this->getPage();
@@ -1223,13 +1217,11 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'head' => $this->getHeadData(),
 			'bread' => $this->getBread(),
 			'bodyClasses' => $bodyClasses,
-			'msgbar' => $msgbar,
 			'serverDataJSON' => json_encode($this->getServerData()),
 			'menu' => $menu,
 			'dev' => FS_ENV == 'dev',
 			'hidden' => $this->getHidden(),
 			'isMob' => $this->isMob(),
-			'logolink' => $logolink,
 			'broadcast_message' => $g_broadcast_message,
 			'SRC_REVISION' => defined('SRC_REVISION') ? SRC_REVISION : null,
 			'HTTP_HOST' => $_SERVER['HTTP_HOST'],

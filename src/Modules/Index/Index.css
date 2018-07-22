@@ -3,10 +3,6 @@
   float: left;
 }
 
-#top {
-  box-shadow: none;
-}
-
 .biglogo p, .biglogo h1 {
   color: #ffffff;
   font-family: 'Alfa Slab One';

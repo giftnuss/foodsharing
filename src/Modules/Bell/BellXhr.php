@@ -10,11 +10,10 @@ class BellXhr extends Control
 {
 	private $gateway;
 
-	public function __construct(Model $model, BellView $view, BellGateway $gateway)
+	public function __construct(Model $model, BellGateway $gateway)
 	{
 		$this->gateway = $gateway;
 		$this->model = $model;
-		$this->view = $view;
 
 		parent::__construct();
 	}
@@ -24,7 +23,6 @@ class BellXhr extends Control
 	 */
 	public function infobar()
 	{
-		$this->session->set('badge-info', 0);
 		$this->session->noWrite();
 
 		$xhr = new Xhr();
@@ -130,7 +128,6 @@ class BellXhr extends Control
 				'isCloseable' => (bool)$bell['closeable']
 			];
 		}, $bells));
-		// $xhr->addData('html', $this->view->bellList($bells));
 
 		$xhr->send();
 	}
