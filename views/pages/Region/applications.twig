@@ -6,7 +6,7 @@
         {% block content %}
             <div class="requests">
                 {% for application in applications %}
-                <a href="/?page=application&bid={{ region.id }}&fid=application.id">{{ application.name }}</a><br />
+                <a href="/?page=application&bid={{ region.id }}&fid={{ application.id }}">{{ application.name }}</a><br />
                 {% endfor %}
             </div>
         {% endblock %}
