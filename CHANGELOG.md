@@ -1,3 +1,6 @@
+# 2018-07-22 Hotfix
+- Fix links to group application details
+
 # 2018-07-21 Hotfix
 - Fix foodsaver_id access in StatsControl
 
