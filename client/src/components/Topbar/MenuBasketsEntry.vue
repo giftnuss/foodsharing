@@ -22,12 +22,12 @@
                                 </div>
                                 <div class="col-10 pt-1">
                                    <div class="row">
-                                        <h6 class="col-4 text-truncate mb-1">{{ req.user.name }}</h6>
-                                        <div class="col-8 text-right text-muted nhover">
+                                        <h6 class="col text-truncate mb-1">{{ req.user.name }}</h6>
+                                        <div class="col nowrap text-right text-muted nhover">
                                             {{ req.time | dateDistanceInWords }}
                                         </div>
-                                        <div class="col-8 text-right text-muted hover">
-                                            <a href="#" @click.prevent.stop="openRemoveDialog(req.user.id, $event)" class="btn btn-sm btn-secondary" title="Essensanfrage abschließen" v-b-tooltip><i class="fa fa-close" /></a>
+                                        <div class="text-right text-muted hover">
+                                            <a href="#" @click.prevent.stop="openRemoveDialog(req.user.id, $event)" class="m-1 btn btn-sm btn-secondary" title="Essensanfrage abschließen" v-b-tooltip><i class="fa fa-close" /></a>
                                         </div>
 
                                     </div>
@@ -97,5 +97,8 @@ h5 {
 }
 .request:hover .hover {
     display: block;    
+}
+.nowrap {
+    white-space: nowrap;
 }
 </style>

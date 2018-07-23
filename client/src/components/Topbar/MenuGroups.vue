@@ -4,8 +4,12 @@
             <i class="fa fa-users"/>
         </template>
             <div v-for="group in workingGroups" :key="group.id" class="group">
-                <a v-if="!alwaysOpen" role="menuitem" v-b-toggle="'topbargroup_'+group.id"  class="dropdown-item text-truncate">{{ group.name }}</a>
-                <h3 v-if="alwaysOpen" role="menuitem" class="dropdown-header text-truncate">{{ group.name }}</h3>
+                <a v-if="!alwaysOpen" role="menuitem" v-b-toggle="'topbargroup_'+group.id"  class="dropdown-item text-truncate">
+                    {{ group.name }}
+                </a>
+                <h3 v-if="alwaysOpen" role="menuitem" class="dropdown-header text-truncate">
+                    {{ group.name }}
+                </h3>
                 <b-collapse class="sub" :visible="alwaysOpen" :id="'topbargroup_'+group.id" :accordion="alwaysOpen ? null : 'groups'">
                     <a role="menuitem" :href="$url('forum', group.id)" class="dropdown-item"><i class="fa fa-comment-o" /> Forum</a>
                     <a role="menuitem" :href="$url('events', group.id)" class="dropdown-item"><i class="fa fa-calendar" /> Termine</a>
@@ -45,5 +49,12 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.dropdown-header {
+    font-weight: bold;
+    font-size: 0.9em;
+}
+</style>
 
  
