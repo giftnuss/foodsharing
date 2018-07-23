@@ -13,7 +13,7 @@
             <div class="col-10">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">{{ title }}</h5>
-                    <small class="text-muted">{{ conversation.lastMessageTime | dateDistanceInWords }}</small>
+                    <small class="text-muted text-right">{{ conversation.lastMessageTime | dateDistanceInWords }}</small>
                 </div>
                 <p class="mb-1 text-truncate">{{ conversation.lastMessage.bodyRaw }}</p>
             </div>
@@ -23,6 +23,7 @@
 <script>
 import serverData from '@/server-data'
 import conv from '@/conv'
+import { AVATAR_DEFAULT, GROUP_PICTURE_DEFAULT } from '@/consts'
 
 export default {
     props: {
@@ -71,7 +72,17 @@ export default {
             // we dont need more then 4
             members = members.slice(0, 4)
 
-            return members.map(m => m.avatar)
+            if(members.length) {
+                return members.map(m => m.avatar)
+            } else {
+                if(this.conversation.members.length !== 2) {
+                    // default group picture
+                    return [GROUP_PICTURE_DEFAULT]
+                } else {
+                    // default user picture
+                    return [AVATAR_DEFAULT]
+                }
+            }
         },
         loggedinUser() {
             return serverData.user
