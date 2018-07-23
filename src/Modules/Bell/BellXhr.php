@@ -124,7 +124,7 @@ class BellXhr extends Control
 				'payload' => $bell['vars'],
 				'icon' => $bell['icon'][0] != '/' ? $bell['icon'] : null,
 				'image' => $bell['icon'][0] == '/' ? $bell['icon'] : null,
-				'createdAt' => $bell['time'],
+				'createdAt' => str_replace(' ', 'T', $bell['time']),
 				'isRead' => (bool)$bell['closeable'],
 				'isCloseable' => (bool)$bell['closeable']
 			];

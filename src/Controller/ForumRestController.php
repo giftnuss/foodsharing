@@ -36,7 +36,7 @@ class ForumRestController extends FOSRestController
 			'regionId' => $thread['regionId'],
 			'regionSubId' => $thread['regionSubId'],
 			'title' => $thread['title'],
-			'createdAt' => $thread['time'],
+			'createdAt' => str_replace(' ', 'T', $thread['time']),
 			'isSticky' => (bool)$thread['sticky'],
 			'isActive' => (bool)$thread['active'] ?? true,
 			'lastPost' => [
@@ -47,7 +47,7 @@ class ForumRestController extends FOSRestController
 			]
 		];
 		if (isset($thread['post_time'])) {
-			$res['lastPost']['createdAt'] = $thread['post_time'];
+			$res['lastPost']['createdAt'] = str_replace(' ', 'T', $thread['post_time']);
 			$res['lastPost']['body'] = $this->sanitizerService->markdownToHtml($thread['post_body']);
 			$res['lastPost']['author'] = [
 				'id' => $thread['foodsaver_id'],
@@ -73,7 +73,7 @@ class ForumRestController extends FOSRestController
 		return [
 			'id' => $post['id'],
 			'body' => $this->sanitizerService->markdownToHtml($post['body']),
-			'createdAt' => $post['time'],
+			'createdAt' => str_replace(' ', 'T', $post['time']),
 			'author' => [
 				'id' => $post['author_id'],
 				'name' => $post['author_name'],
