@@ -12,8 +12,8 @@
             </div>
             <div class="col-10">
                 <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">{{ title }}</h5>
-                    <small class="text-muted text-right">{{ conversation.lastMessageTime | dateDistanceInWords }}</small>
+                    <h5 class="mb-1 text-truncate">{{ title }}</h5>
+                    <small class="text-muted text-right nowrap">{{ conversation.lastMessageTime | dateDistanceInWords }}</small>
                 </div>
                 <p class="mb-1 text-truncate">{{ conversation.lastMessage.bodyRaw }}</p>
             </div>
@@ -131,5 +131,8 @@ p {
 .avatar_3 div, .avatar_4 div {
     height: 1.5em;
     width: 1.5em;
+}
+.nowrap {
+    white-space: nowrap;
 }
 </style>

@@ -16,7 +16,7 @@
             <div class="col-10">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">{{ $i18n('bell.'+bell.key+'_title', bell.payload) }}</h5>
-                    <small class="text-muted text-right">{{ bell.createdAt | dateDistanceInWords }}</small>
+                    <small class="text-muted text-right nowrap">{{ bell.createdAt | dateDistanceInWords }}</small>
                 </div>
                 <p class="mb-1 text-truncate">{{ $i18n('bell.'+bell.key, bell.payload) }}</p>
             </div>
@@ -88,5 +88,8 @@ p {
 }
 .list-group-item:hover .fa.fa-close {
     display: block;
+}
+.nowrap {
+    white-space: nowrap;
 }
 </style>
