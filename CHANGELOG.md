@@ -8,6 +8,7 @@
 
 ## Bugfixes
 - Add missing tagedit lib on mailbox edit page !459 #248 @nicksellen
+- reenabling source maps on the production build !468 #254 @alangecker
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
