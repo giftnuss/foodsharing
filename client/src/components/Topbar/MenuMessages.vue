@@ -14,9 +14,11 @@
                 />
             </div>
         </div>
-        <a :href="$url('conversations')" class="dropdown-item bg-secondary text-white text-center">
-            Alle Nachrichten
-        </a>
+        <div class="list-grou-item p-2 text-right">
+            <a :href="$url('conversations')" class="btn btn-sm btn-secondary">
+                <i class="fa fa-comments" /> Alle Nachrichten
+            </a>
+        </div>
     </nav-item-dropdown>
 </template>
 <script>
