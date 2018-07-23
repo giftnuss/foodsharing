@@ -215,7 +215,7 @@ export default {
             }
         }
     }
-    @media (max-width: 650px) {
+    @media (max-width: 680px) {
         & .navbar-brand {
             font-size: 0.9rem;
         }
@@ -352,6 +352,17 @@ export default {
         }
     }
 }
+
+// move the main content below the topbar
+div#main {
+    margin-top: 45px;
+
+    @media (max-width: 630px) {
+        // two line topbar
+        margin-top: 80px;
+    }
+}
+
 
 </style>
 
