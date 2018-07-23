@@ -177,10 +177,15 @@ class MessageXhr extends Control
 			// At some point there should always the raw input handled, which the user has entered
 			// and served over a proper API endpoint
 
-			if(isset($_GET['raw']) && $_GET['raw']) {
-				$xhr->addData('convs', array_map( function($c) {
-					if(isset($c['name']) && $c['name']) $c['name'] = html_entity_decode($c['name']);
-					if(isset($c['last_message'])) $c['last_message'] = html_entity_decode($c['last_message']);
+			if (isset($_GET['raw']) && $_GET['raw']) {
+				$xhr->addData('convs', array_map(function ($c) {
+					if (isset($c['name']) && $c['name']) {
+						$c['name'] = html_entity_decode($c['name']);
+					}
+					if (isset($c['last_message'])) {
+						$c['last_message'] = html_entity_decode($c['last_message']);
+					}
+
 					return $c;
 				}, $conversations));
 			} else {

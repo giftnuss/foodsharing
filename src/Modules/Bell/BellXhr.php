@@ -116,6 +116,7 @@ class BellXhr extends Control
 					$bell['attr']['href'] = '/profile/' . $matches[1];
 				}
 			}
+
 			return [
 				'id' => $bell['id'],
 				'key' => $bell['body'],
