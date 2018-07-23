@@ -4,9 +4,10 @@
         :class="classes"
     >
         <div class="row">
-            <div class="col-2 icon">
+            <div class="col-2 icon-side">
                 <a href="#" @click="$emit('remove', bell.id)">
-                    <i :class="bell.icon" />
+                    <i v-if="bell.icon" :class="'icon '+bell.icon" />
+                    <div v-if="bell.image" class="icon"><img :src="bell.image" /></div>
                     <i class="fa fa-close" />
                     <!-- <div :class="['avatar', 'avatar_'+avatars.length]">
                         <div v-for="avatar in avatars" :key="avatar" :style="{backgroundImage: `url('${avatar}')`}" />
@@ -14,7 +15,7 @@
                 </a>
             </div>
             <div class="col-10">
-                <div class="d-flex w-100 justify-content-between">
+                <div class="mt-1 d-flex w-100 justify-content-between">
                     <h5 class="mb-1">{{ $i18n('bell.'+bell.key+'_title', bell.payload) }}</h5>
                     <small class="text-muted text-right nowrap">{{ bell.createdAt | dateDistanceInWords }}</small>
                 </div>
@@ -52,7 +53,7 @@ export default {
 <style lang="scss" scoped>
 h5 {
     font-weight: bold;
-    font-size: 1em;
+    font-size: 0.9em;
 }
 p {
     font-size: 0.8em;
@@ -61,29 +62,21 @@ p {
     padding: 0.4em 1em;
 }
 
-
-// .avatar {
-//     height: 3em;
-//     width: 3em;
-//     line-height: 0.7em;
-//     margin-left: -0.5em;
-//     div {
-//         background-size: cover;
-//         background-position: center;
-//         display: inline-block;
-//     }
-// }
-.icon {
+.icon-side {
     font-size: 2em;
     margin-top: 0.2em;
 }
-.fa {
+.icon {
     display: block;
+    width: 2em;
+}
+.icon img {
+    width: 100%;
 }
 .fa.fa-close {
     display: none;
 }
-.list-group-item:hover .fa {
+.list-group-item:hover .icon {
     display: none;
 }
 .list-group-item:hover .fa.fa-close {
@@ -91,5 +84,22 @@ p {
 }
 .nowrap {
     white-space: nowrap;
+}
+
+/* 
+  some bells use ".img-store", which shows a white store based on a .png
+  because we are on a white background we have to override this with a black one
+*/
+.img-store {
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: 14px;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: none;
+    &:before {
+        content: "\f07a";
+    }
 }
 </style>

@@ -11,7 +11,7 @@
                 </div>
             </div>
             <div class="col-10">
-                <div class="d-flex w-100 justify-content-between">
+                <div class="mt-1 d-flex w-100 justify-content-between">
                     <h5 class="mb-1 text-truncate">{{ title }}</h5>
                     <small class="text-muted text-right nowrap">{{ conversation.lastMessageTime | dateDistanceInWords }}</small>
                 </div>
@@ -100,7 +100,7 @@ export default {
 <style lang="scss" scoped>
 h5 {
     font-weight: bold;
-    font-size: 1em;
+    font-size: 0.9em;
 }
 p {
     font-size: 0.8em;

@@ -116,13 +116,13 @@ class BellXhr extends Control
 					$bell['attr']['href'] = '/profile/' . $matches[1];
 				}
 			}
-
 			return [
 				'id' => $bell['id'],
 				'key' => $bell['body'],
 				'href' => $bell['attr']['href'],
 				'payload' => $bell['vars'],
-				'icon' => $bell['icon'],
+				'icon' => $bell['icon'][0] != '/' ? $bell['icon'] : null,
+				'image' => $bell['icon'][0] == '/' ? $bell['icon'] : null,
 				'createdAt' => $bell['time'],
 				'isRead' => (bool)$bell['closeable'],
 				'isCloseable' => (bool)$bell['closeable']
