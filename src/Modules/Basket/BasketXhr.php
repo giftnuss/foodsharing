@@ -403,7 +403,7 @@ class BasketXhr extends Control
 		$xhr->addData('baskets', array_map(function ($b) use ($updates) {
 			$basket = [
 				'id' => (int)$b['id'],
-				'description' => $b['description'],
+				'description' => html_entity_decode($b['description']),
 				'createdAt' => date('Y-m-d H:i:s', $b['time_ts']),
 				'updatedAt' => date('Y-m-d H:i:s', $b['time_ts']),
 				'requests' => []

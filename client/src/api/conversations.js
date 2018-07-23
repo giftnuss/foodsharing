@@ -2,7 +2,7 @@ import { get } from './base'
 
 // wrapper around the legacy SearchXHR method
 export async function getConversationList () {
-  const res = await get('/../xhrapp.php?app=msg&m=loadconvlist')
+  const res = await get('/../xhrapp.php?app=msg&m=loadconvlist&raw=1')
   if (!res.data.convs) return []
   return res.data.convs.map(c => ({
     id: parseInt(c.id),
