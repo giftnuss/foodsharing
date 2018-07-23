@@ -359,7 +359,7 @@ div#main {
 
     @media (max-width: 630px) {
         // two line topbar
-        margin-top: 80px;
+        margin-top: 74px;
     }
 }
 
