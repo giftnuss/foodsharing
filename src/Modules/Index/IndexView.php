@@ -46,10 +46,15 @@ class IndexView extends View
 		return '
 		<div id="campaign" class="pure-g">
 			<div class="topbarpadding">
+				<a href="http://www.foodsharing-festival.org">
+				<div id="campaignimg" class="pure-u-1 pure-u-sm-1-2" style="background-image:url(/img/festival2018.png)">
+				</div></a>
 				<div id="campaigntext" class="pure-u-1 pure-u-sm-1-2">
-				<h2>food<span>sharing</span> ist und bleibt kostenlos, unabhängig und werbefrei!</h2>
-				</div>
-				<div id="campaignimg" class="pure-u-1 pure-u-sm-1-2" style="background-image:url(/img/gabel.png)">
+				<h2>Sei dabei beim foodsharing festival 2018</h2>
+				<h3>21<small style="font-size:80%"> SEP</small> - 23<small style="font-size:80%"> SEP</small></h3>
+				<br>
+				<h3>Infos und Anmeldung hier:</h3>
+				<h3><a href="http://www.foodsharing-festival.org">foodsharing-festival.org</a></h3>
 				</div>
 			</div>
 		</div>
