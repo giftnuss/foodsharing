@@ -72,8 +72,7 @@ h1, h2, h3, h4, h5, h6, .head.ui-widget-header {
 }
 
 div.welcome .welcome_quick_link ul li,
-ul.linklist li a,
-#searchbar ul li.title,
+ul.linklist li a, 
 .input-wrapper label.wrapper-label,
 .activity_feed_content_info p,
 input, textarea, select, option {

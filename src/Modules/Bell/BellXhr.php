@@ -10,11 +10,10 @@ class BellXhr extends Control
 {
 	private $gateway;
 
-	public function __construct(Model $model, BellView $view, BellGateway $gateway)
+	public function __construct(Model $model, BellGateway $gateway)
 	{
 		$this->gateway = $gateway;
 		$this->model = $model;
-		$this->view = $view;
 
 		parent::__construct();
 	}
@@ -24,7 +23,6 @@ class BellXhr extends Control
 	 */
 	public function infobar()
 	{
-		$this->session->set('badge-info', 0);
 		$this->session->noWrite();
 
 		$xhr = new Xhr();
@@ -110,7 +108,27 @@ class BellXhr extends Control
 			}
 		}
 
-		$xhr->addData('html', $this->view->bellList($bells));
+		// $xhr->addData('aaa', $bells);
+		$xhr->addData('list', array_map(function ($bell) {
+			if (isset($bell['attr']['onclick'])) {
+				preg_match('/profile\((.*?)\)/', $bell['attr']['onclick'], $matches);
+				if ($matches) {
+					$bell['attr']['href'] = '/profile/' . $matches[1];
+				}
+			}
+
+			return [
+				'id' => $bell['id'],
+				'key' => $bell['body'],
+				'href' => $bell['attr']['href'],
+				'payload' => $bell['vars'],
+				'icon' => $bell['icon'][0] != '/' ? $bell['icon'] : null,
+				'image' => $bell['icon'][0] == '/' ? $bell['icon'] : null,
+				'createdAt' => $bell['time'],
+				'isRead' => (bool)$bell['closeable'],
+				'isCloseable' => (bool)$bell['closeable']
+			];
+		}, $bells));
 
 		$xhr->send();
 	}

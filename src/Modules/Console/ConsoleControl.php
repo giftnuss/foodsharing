@@ -2,11 +2,8 @@
 
 namespace Foodsharing\Modules\Console;
 
-use Foodsharing\DI;
 use Foodsharing\Lib\Func;
-use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Modules\Core\Model;
-use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
 
 class ConsoleControl
 {
@@ -19,14 +16,8 @@ class ConsoleControl
 	 */
 	protected $func;
 
-	/**
-	 * @var EmailTemplateGateway
-	 */
-	private $emailTemplateGateway;
-
 	public function __construct()
 	{
-		$this->emailTemplateGateway = DI::$shared->get(EmailTemplateGateway::class);
 	}
 
 	/**
@@ -86,32 +77,6 @@ class ConsoleControl
 		}
 
 		return substr($s, 0, -2);
-	}
-
-	protected function tplMail($tpl_id, $to, $var = array())
-	{
-		if ($message = $this->emailTemplateGateway->getOne_message_tpl($tpl_id)) {
-			$search = array();
-			$replace = array();
-
-			foreach ($var as $key => $v) {
-				$search[] = '{' . strtoupper($key) . '}';
-				$replace[] = $v;
-			}
-
-			$message['body'] = str_replace($search, $replace, $message['body']);
-
-			$message['subject'] = str_replace($search, $replace, $message['subject']);
-
-			$email = new AsyncMail();
-			$email->setFrom(DEFAULT_EMAIL, DEFAULT_EMAIL_NAME);
-			$email->addRecipient($to);
-			$email->setSubject($message['subject']);
-			$email->setHTMLBody($this->func->emailBodyTpl($message['body']));
-			$email->setBody($message['body']);
-
-			$email->send();
-		}
 	}
 
 	public static function error($msg)

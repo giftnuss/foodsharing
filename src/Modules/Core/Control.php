@@ -505,6 +505,8 @@ abstract class Control
 		header('content-type: application/json; charset=utf-8');
 		if (isset($_GET['callback']) && strlen($_GET['callback']) > 1) {
 			echo strip_tags($_GET['callback']) . '(' . json_encode($data) . ');';
+		} else {
+			echo json_encode($data);
 		}
 		exit();
 	}
