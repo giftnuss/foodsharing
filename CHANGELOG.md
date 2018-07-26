@@ -1,34 +1,10 @@
-# 2018-07-22 Hotfix
-- Fix links to group application details
-
-# 2018-07-21 Hotfix
-- Fix foodsaver_id access in StatsControl
-
-# 2018-07-20 Hotfix
-- Fairteiler Walls can be accessed again
-- Login Form from Fairteiler removed
-- Store name for pickup team notification was missing in serverData
-- Deletion of non-existing post lead to 500 instead of 404
-- Store statistics could not be updated due to a mistake while refactoring
-- Dashboard updates used to show some HTML tags in different entries
-- Message notifications have not been sent for some hours
-# Unreleased
-
-## Features
-
-## Bugfixes
-
-## Refactoring
-
-## Dev/Test/CI stuff
-
 # Unreleased
 
 ## Features
 - new topbar in vue.js !451, #11, #15, #155, #158, #30, #66, #67, #93 @alangecker
 - reactive vue stores !451 @alangecker
 - resizeable avatar component !451 @alangecker
-
+- updated landingpage with festival content !462 and !471 @michi-zuri
 
 ## Bugfixes
 - Add missing tagedit lib on mailbox edit page !459 #248 @nicksellen
@@ -98,7 +74,7 @@ Many thanks to @peter.toennies @NerdyProjects @alangecker @theolampert @nicksell
 - fixed missalignment in future-pickups list. !389 # 136 @EmiliaPaz
 - Regaining support for mobile Safari 10 !396 #221 @michi-zuri
 - fix relative loading of some xhr/other urls !422 @nicksellen
-- fixes user autocomplete fetching for conversation creation 
+- fixes user autocomplete fetching for conversation creation
 - fix profile sleeping hat variable #243
 - fix bug in region dynatree loading #244 !444 @nicksellen
 - Only show forum post removal button when the user is allowed to delete a post !456 @NerdyProjects
@@ -386,7 +362,7 @@ Many many thanks to all the contributors that made this possible (in order of ap
 - Added a list of inactive foodsavers to the foodsavers page !183 @valentin.unicorn
 - Ensure PHP7 compatibility and upgrade environment to PHP7 !171 @nicksellen
 - Show current commit in footer as well as use it in sentry if errors occur !153 @NerdyProjects
-- Reports list can be sorted by main region of the FS !151 @k.miklobusec @peter.toennies 
+- Reports list can be sorted by main region of the FS !151 @k.miklobusec @peter.toennies
 
 ## Bugfixes
 
