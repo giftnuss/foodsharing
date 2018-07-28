@@ -67,7 +67,7 @@ class FoodsaverControl extends Control
 			}
 		} elseif (($id = $this->func->getActionId('edit')) && ($this->func->isBotschafter() || $this->func->isOrgaTeam())) {
 			$data = $this->foodsaverGateway->getOne_foodsaver($id);
-			$bids = $this->regionGateway->getFsBezirkIds($id);
+			$bids = $this->regionGateway->getFsRegionIds($id);
 			if ($data && ($this->func->isOrgaTeam() || $this->func->isBotForA($bids, false, true))) {
 				$this->handle_edit();
 				$data = $this->foodsaverGateway->getOne_foodsaver($id);

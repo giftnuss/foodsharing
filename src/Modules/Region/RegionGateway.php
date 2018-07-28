@@ -92,15 +92,11 @@ class RegionGateway extends BaseGateway
 			WHERE 		`id` = ' . (int)$id);
 	}
 
-	public function getParentBezirke($bid)
+	public function getParentRegions($region_id): array
 	{
-		if (is_array($bid)) {
-			$where = 'WHERE bezirk_id IN (' . implode(',', array_map('intval', $bid)) . ')';
-		} else {
-			$where = 'WHERE bezirk_id = ' . (int)$bid;
-		}
+		$stm = 'SELECT DISTINCT ancestor_id FROM `fs_bezirk_closure` WHERE bezirk_id IN (' . implode(',', array_map('intval', $region_id)) . ')';
 
-		return $this->db->fetchAllValues('SELECT DISTINCT ancestor_id FROM `fs_bezirk_closure` ' . $where);
+		return $this->db->fetchAllValues($stm);
 	}
 
 	public function getBasics_bezirk()
@@ -216,7 +212,7 @@ class RegionGateway extends BaseGateway
 		return $output;
 	}
 
-	public function getFsBezirkIds($foodsaver_id)
+	public function getFsRegionIds($foodsaver_id): array
 	{
 		return $this->db->fetchAllValues('
 			SELECT 	`bezirk_id`

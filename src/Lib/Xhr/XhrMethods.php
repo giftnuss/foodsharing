@@ -86,7 +86,7 @@ class XhrMethods
 
 	public function xhr_verify($data)
 	{
-		$bids = $this->regionGateway->getFsBezirkIds((int)$data['fid']);
+		$bids = $this->regionGateway->getFsRegionIds((int)$data['fid']);
 
 		if ($this->func->isBotForA($bids, false, true) || $this->func->isOrgaTeam()) {
 			if ($countver = $this->model->qOne('SELECT COUNT(*) FROM fs_verify_history WHERE date BETWEEN NOW()- INTERVAL 20 SECOND AND now() AND bot_id = ' . $this->func->fsId())) {
