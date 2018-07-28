@@ -13,6 +13,7 @@
 - removed dead login button and updated registration info for food baskets #240 !457 @michi-zuri
 - Remove broken LoginXhr->login method !465 @tiltec
 - Added possibility to change main region to a part of town (region type 9) !470 #268 @peter.toennies
+- fetching parent regions without any give regin id not possible anymore !474 #258 @peter.toennies
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
