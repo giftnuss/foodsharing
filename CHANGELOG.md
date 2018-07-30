@@ -14,7 +14,7 @@
 - removed global $g_body_class variable !451 @alangecker
 - removed copy of email sending method for CLI applications !464 @NerdyProjects
 - refactored statistics from model to gateway !476 #9 @peter.toennies
-
+- remvoed several layers of the legacy database-classes structure !477 @peter.toennies
 
 ## Dev/Test/CI stuff
 
