@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Modules\Console;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 
-class ConsoleModel extends Model
+class ConsoleModel extends Db
 {
 }

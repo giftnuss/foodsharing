@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\NewArea;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 
-class NewAreaModel extends Model
+class NewAreaModel extends Db
 {
 	public function getWantNews()
 	{

@@ -2,13 +2,13 @@
 
 namespace Foodsharing\Modules\Logout;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
 
 class LogoutControl extends Control
 {
-	public function __construct(Model $model)
+	public function __construct(Db $model)
 	{
 		$this->model = $model;
 		parent::__construct();

@@ -5,8 +5,8 @@ namespace Foodsharing\Modules\Email;
 use DOMDocument;
 use Exception;
 use Flourish\fImage;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -20,7 +20,7 @@ class EmailControl extends Control
 	private $emailGateway;
 	private $regionGateway;
 
-	public function __construct(Model $model, MailboxModel $mbmodel, StoreGateway $storeGateway, FoodsaverGateway $foodsaverGateway, EmailGateway $emailGateway, RegionGateway $regionGateway)
+	public function __construct(Db $model, MailboxModel $mbmodel, StoreGateway $storeGateway, FoodsaverGateway $foodsaverGateway, EmailGateway $emailGateway, RegionGateway $regionGateway)
 	{
 		$this->model = $model;
 		$this->mbmodel = $mbmodel;

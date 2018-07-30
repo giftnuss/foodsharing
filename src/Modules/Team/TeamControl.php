@@ -2,16 +2,16 @@
 
 namespace Foodsharing\Modules\Team;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
 
 class TeamControl extends Control
 {
 	private $gateway;
 	private $contentGateway;
 
-	public function __construct(Model $model, TeamGateway $gateway, TeamView $view, ContentGateway $contentGateway)
+	public function __construct(Db $model, TeamGateway $gateway, TeamView $view, ContentGateway $contentGateway)
 	{
 		$this->gateway = $gateway;
 		$this->model = $model;

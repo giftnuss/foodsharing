@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Statistics;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 
-class StatisticsModel extends Model
+class StatisticsModel extends Db
 {
 	public function getStatGesamt()
 	{

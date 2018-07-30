@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Maintenance;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 
-class MaintenanceModel extends Model
+class MaintenanceModel extends Db
 {
 	public function updateBezirkIds()
 	{

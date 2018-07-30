@@ -19,7 +19,7 @@ abstract class Control
 	protected $isControl = false;
 	protected $isXhrControl = false;
 	/**
-	 * @var Model
+	 * @var Db
 	 */
 	protected $model;
 	protected $view;

@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Stats;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 
-class StatsModel extends Model
+class StatsModel extends Db
 {
 	private $statsService;
 

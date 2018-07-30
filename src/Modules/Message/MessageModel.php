@@ -2,10 +2,10 @@
 
 namespace Foodsharing\Modules\Message;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Modules\Core\Model;
 
-class MessageModel extends Model
+class MessageModel extends Db
 {
 	public function getBetriebname($cid)
 	{

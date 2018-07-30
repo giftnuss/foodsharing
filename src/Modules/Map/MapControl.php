@@ -2,12 +2,12 @@
 
 namespace Foodsharing\Modules\Map;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
 
 class MapControl extends Control
 {
-	public function __construct(Model $model, MapView $view)
+	public function __construct(Db $model, MapView $view)
 	{
 		$this->view = $view;
 		$this->model = $model;

@@ -2,10 +2,10 @@
 
 namespace Foodsharing\Modules\Settings;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Quiz\QuizModel;
 
-class SettingsModel extends Model
+class SettingsModel extends Db
 {
 	/**
 	 * @var QuizModel

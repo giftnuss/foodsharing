@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Basket;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 
-class BasketModel extends Model
+class BasketModel extends Db
 {
 	public function getBasketChoords()
 	{
