@@ -2,13 +2,13 @@
 
 namespace Foodsharing\Modules\Statistics;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Core\BaseGateway;
 
-class StatisticsModel extends Model
+class StatisticsGateway extends BaseGateway
 {
 	public function getStatGesamt()
 	{
-		return $this->qRow('
+		return $this->db->fetch('
 	
 				SELECT
 					SUM(`stat_fetchweight`) AS fetchweight,
@@ -30,7 +30,7 @@ class StatisticsModel extends Model
 
 	public function getStatCities()
 	{
-		return $this->q('
+		return $this->db->fetchAll('
 			SELECT
 				`id`,
 				`name`,
@@ -55,7 +55,7 @@ class StatisticsModel extends Model
 
 	public function getStatFoodsaver()
 	{
-		return $this->q('
+		return $this->db->fetchAll('
 			SELECT
 				`id`,
 				`name`,
