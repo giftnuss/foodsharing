@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Stats;
 
-use Foodsharing\Modules\Console\ConsoleModel;
+use Foodsharing\Modules\Core\Model;
 
-class StatsModel extends ConsoleModel
+class StatsModel extends Model
 {
 	private $statsService;
 

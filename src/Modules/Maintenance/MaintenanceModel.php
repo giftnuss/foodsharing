@@ -2,15 +2,10 @@
 
 namespace Foodsharing\Modules\Maintenance;
 
-use Foodsharing\Modules\Console\ConsoleModel;
+use Foodsharing\Modules\Core\Model;
 
-class MaintenanceModel extends ConsoleModel
+class MaintenanceModel extends Model
 {
-	public function __construct()
-	{
-		parent::__construct();
-	}
-
 	public function updateBezirkIds()
 	{
 		$foodsaver = $this->q('SELECT `bezirk_id`, `id` FROM `fs_foodsaver` WHERE `bezirk_id` != 0');

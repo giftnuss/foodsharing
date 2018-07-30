@@ -3,11 +3,11 @@
 namespace Foodsharing\Modules\Statsman;
 
 use Foodsharing\Modules\Console\ConsoleControl;
-use Foodsharing\Modules\Console\ConsoleModel;
+use Foodsharing\Modules\Core\Model;
 
 class StatsmanControl extends ConsoleControl
 {
-	public function __construct(ConsoleModel $model)
+	public function __construct(Model $model)
 	{
 		$this->model = $model;
 		parent::__construct();
