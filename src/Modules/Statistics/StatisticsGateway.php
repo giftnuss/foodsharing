@@ -3,12 +3,15 @@
 namespace Foodsharing\Modules\Statistics;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
 class StatisticsGateway extends BaseGateway
 {
+	private const ID_FOR_REGION_EUROPE = 741;
+
 	public function listTotalStat(): array
 	{
-		return $this->db->fetch('
+		$stm = '
 	
 				SELECT
 					SUM(`stat_fetchweight`) AS fetchweight,
@@ -24,13 +27,15 @@ class StatisticsGateway extends BaseGateway
 					fs_bezirk
 	
 				WHERE
-					`id` = 741
-		');
+					`id` = :region_id
+		';
+
+		return $this->db->fetch($stm, [':region_id' => self::ID_FOR_REGION_EUROPE]);
 	}
 
 	public function listStatCities(): array
 	{
-		return $this->db->fetchAll('
+		$stm = '
 			SELECT
 				`id`,
 				`name`,
@@ -46,16 +51,18 @@ class StatisticsGateway extends BaseGateway
 				fs_bezirk
 	
 			WHERE
-				`type` IN(1,8)
+				`type` IN(:city, :bigCity)
 	
 			ORDER BY fetchweight DESC
 			LIMIT 10
-		');
+		';
+
+		return $this->db->fetchAll($stm, [':city' => Type::CITY, ':bigCity' => Type::BIG_CITY]);
 	}
 
 	public function listStatFoodsaver(): array
 	{
-		return $this->db->fetchAll('
+		$stm = '
 			SELECT
 				`id`,
 				`name`,
@@ -69,6 +76,8 @@ class StatisticsGateway extends BaseGateway
 	
 			ORDER BY fetchweight DESC
 			LIMIT 10
-		');
+		';
+
+		return $this->db->fetchAll($stm);
 	}
 }
