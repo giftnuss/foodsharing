@@ -3,9 +3,19 @@
 namespace Foodsharing\Modules\Event;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class EventGateway extends BaseGateway
 {
+	private $regionGateway;
+
+	public function __construct(Database $db, RegionGateway $regionGateway)
+	{
+		parent::__construct($db);
+		$this->regionGateway = $regionGateway;
+	}
+
 	public function listForRegion($id)
 	{
 		return $this->db->fetchAll('
@@ -71,6 +81,10 @@ class EventGateway extends BaseGateway
 
 	public function getLocation($id)
 	{
+		if (is_null($id)) {
+			return null;
+		}
+
 		return $this->db->fetch('
 			SELECT id, name, lat, lon, zip, city, street
 			FROM  fs_location
@@ -240,5 +254,127 @@ class EventGateway extends BaseGateway
 			AND
 				e.`end` > NOW()
 		');
+	}
+
+	public function addEvent($fs_id, $event)
+	{
+		// have to extract these because there is more stuff in $event
+		$db_data = [
+			'foodsaver_id' => $fs_id,
+			'bezirk_id' => $event['bezirk_id'],
+			'location_id' => $event['location_id'],
+			'public' => $event['public'],
+			'name' => $event['name'],
+			'start' => $event['start'],
+			'end' => $event['end'],
+			'description' => $event['description'],
+			'bot' => 0,
+			'online' => $event['online']
+		];
+
+		return $this->db->insert('fs_event', $db_data);
+	}
+
+	public function updateEvent($id, $event)
+	{
+		// have to extract these because there is more stuff in $event
+		$db_data = [
+			'bezirk_id' => $event['bezirk_id'],
+			'location_id' => $event['location_id'],
+			'public' => $event['public'],
+			'name' => $event['name'],
+			'start' => $event['start'],
+			'end' => $event['end'],
+			'description' => $event['description'],
+			'online' => $event['online']
+		];
+
+		$this->db->requireExists('fs_event', ['id' => $id]);
+		$this->db->update('fs_event', $db_data, ['id' => $id]);
+
+		return true;
+	}
+
+	public function deleteInvites($event_id)
+	{
+		return $this->db->delete('fs_foodsaver_has_event', ['event_id' => $event_id]);
+	}
+
+	public function getInviteStatus($event_id, $foodsaver_id)
+	{
+		try {
+			$status = $this->db->fetchValueByCriteria(
+				'fs_foodsaver_has_event',
+				'status',
+				['event_id' => $event_id, 'foodsaver_id' => $foodsaver_id]
+			);
+		} catch (\Exception $e) {
+			$status = -1;
+		}
+
+		return (int)$status;
+	}
+
+	public function setInviteStatus($event_id, $foodsaver_id, $status)
+	{
+		$this->db->update(
+			'fs_foodsaver_has_event',
+			['status' => $status],
+			['foodsaver_id' => $foodsaver_id, 'event_id' => $event_id]
+		);
+
+		return true;
+	}
+
+	public function addInviteStatus($event_id, $foodsaver_id, $status)
+	{
+		$this->db->insertOrUpdate(
+			'fs_foodsaver_has_event',
+			[
+				'status' => $status,
+				'foodsaver_id' => $foodsaver_id,
+				'event_id' => $event_id
+			]
+		);
+
+		return true;
+	}
+
+	public function inviteBezirk($bezirk_id, $event_id, $invite_subs = false)
+	{
+		$b_sql = '= ' . (int)$bezirk_id;
+
+		if ($invite_subs) {
+			$bids = $this->regionGateway->listIdsForDescendantsAndSelf($bezirk_id);
+			$b_sql = 'IN(' . implode(',', $bids) . ')';
+		}
+
+		if ($fsids = $this->db->fetchAllValues('
+			SELECT 	`foodsaver_id`
+			FROM	`fs_foodsaver_has_bezirk`
+			WHERE 	`bezirk_id` ' . $b_sql . ' 
+			AND 	`active` = 1
+		')
+		) {
+			$invited = array();
+			if ($inv = $this->db->fetchAllValues(
+				'
+				SELECT `foodsaver_id` FROM `fs_foodsaver_has_event`
+				WHERE `event_id` = ' . (int)$event_id
+			)
+			) {
+				foreach ($inv as $i) {
+					$invited[$i] = true;
+				}
+			}
+
+			foreach ($fsids as $id) {
+				if (!isset($invited[$id])) {
+					$this->addInviteStatus($event_id, $id, 0);
+				}
+			}
+
+			return true;
+		}
 	}
 }

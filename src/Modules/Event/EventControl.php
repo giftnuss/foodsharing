@@ -8,9 +8,8 @@ class EventControl extends Control
 {
 	private $gateway;
 
-	public function __construct(EventModel $model, EventView $view, EventGateway $gateway)
+	public function __construct(EventView $view, EventGateway $gateway)
 	{
-		$this->model = $model;
 		$this->view = $view;
 		$this->gateway = $gateway;
 
@@ -27,7 +26,7 @@ class EventControl extends Control
 			$this->func->addBread('Termine', '/?page=event');
 			$this->func->addBread($event['name']);
 
-			$status = $this->model->getInviteStatus($event['id'], $this->func->fsId());
+			$status = $this->gateway->getInviteStatus($event['id'], $this->func->fsId());
 
 			$this->func->addContent($this->view->eventTop($event), CNT_TOP);
 			$this->func->addContent($this->view->statusMenu($event, $status), CNT_LEFT);
@@ -78,12 +77,12 @@ class EventControl extends Control
 
 				if ($this->isSubmitted()) {
 					if ($data = $this->validateEvent()) {
-						if ($this->model->updateEvent($_GET['id'], $data)) {
+						if ($this->gateway->updateEvent($_GET['id'], $data)) {
 							if (isset($_POST['delinvites']) && $_POST['delinvites'] == 1) {
-								$this->model->deleteInvites($_GET['id']);
+								$this->gateway->deleteInvites($_GET['id']);
 							}
 							if ($data['invite']) {
-								$this->model->inviteBezirk($data['bezirk_id'], $_GET['id'], $data['invitesubs']);
+								$this->gateway->inviteBezirk($data['bezirk_id'], $_GET['id'], $data['invitesubs']);
 							}
 							$this->func->info('Event wurde erfolgreich geändert!');
 							$this->func->go('/?page=event&id=' . (int)$_GET['id']);
@@ -93,7 +92,7 @@ class EventControl extends Control
 
 				$bezirke = $this->session->getRegions();
 
-				if ($event['location_id'] > 0) {
+				if (!is_null($event['location_id'])) {
 					if ($loc = $this->gateway->getLocation($event['location_id'])) {
 						$event['location_name'] = $loc['name'];
 						$event['lat'] = $loc['lat'];
@@ -120,9 +119,9 @@ class EventControl extends Control
 
 		if ($this->isSubmitted()) {
 			if ($data = $this->validateEvent()) {
-				if ($id = $this->model->addEvent($data)) {
+				if ($id = $this->gateway->addEvent($this->func->fsId(), $data)) {
 					if ($data['invite']) {
-						$this->model->inviteBezirk($data['bezirk_id'], $id, $data['invitesubs']);
+						$this->gateway->inviteBezirk($data['bezirk_id'], $id, $data['invitesubs']);
 					}
 					$this->func->info('Event wurde erfolgreich eingetragen!');
 					$this->func->go('/?page=event&id=' . (int)$id);
@@ -141,7 +140,7 @@ class EventControl extends Control
 			'name' => '',
 			'description' => '',
 			'online_type' => 0,
-			'location_id' => 0,
+			'location_id' => null,
 			'start' => date('Y-m-d') . ' 15:00:00',
 			'end' => date('Y-m-d') . ' 16:00:00',
 			'public' => 0,
@@ -204,7 +203,7 @@ class EventControl extends Control
 			$out['location_id'] = $id;
 		} else {
 			$out['online'] = 1;
-			$out['location_id'] = 0;
+			$out['location_id'] = null;
 		}
 
 		return $out;
