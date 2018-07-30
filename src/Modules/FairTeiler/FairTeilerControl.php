@@ -28,8 +28,7 @@ class FairTeilerControl extends Control
 		RegionGateway $regionGateway,
 		FoodsaverGateway $foodsaverGateway,
 		Db $model
-	)
-	{
+	) {
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->regionGateway = $regionGateway;
