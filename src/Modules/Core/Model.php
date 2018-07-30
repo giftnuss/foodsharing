@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Modules\Core;
 
-use Foodsharing\Lib\Db\ManualDb;
+use Foodsharing\Lib\Db\Db;
 
-class Model extends ManualDb
+class Model extends Db
 {
 }

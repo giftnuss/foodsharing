@@ -3,7 +3,7 @@
 namespace Foodsharing\Modules\Core;
 
 use Foodsharing\DI;
-use Foodsharing\Lib\Db\ManualDb;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Sanitizer;
@@ -46,9 +46,9 @@ abstract class Control
 	private $twig;
 
 	/**
-	 * @var ManualDb
+	 * @var Db
 	 */
-	private $manualDb;
+	private $legacyDb;
 
 	/**
 	 * @var FoodsaverGateway
@@ -60,7 +60,7 @@ abstract class Control
 		$this->func = DI::$shared->get(Func::class);
 		$this->session = DI::$shared->get(Session::class);
 		$this->v_utils = DI::$shared->get(Utils::class);
-		$this->manualDb = DI::$shared->get(ManualDb::class);
+		$this->legacyDb = DI::$shared->get(Db::class);
 		$this->foodsaverGateway = DI::$shared->get(FoodsaverGateway::class);
 
 		$reflection = new ReflectionClass($this);
@@ -476,7 +476,7 @@ abstract class Control
 
 	public function mailMessage($sender_id, $recip_id, $msg, $tpl_id = 9)
 	{
-		$info = $this->manualDb->getVal('infomail_message', 'foodsaver', $recip_id);
+		$info = $this->legacyDb->getVal('infomail_message', 'foodsaver', $recip_id);
 		if ((int)$info > 0) {
 			if (!isset($_SESSION['lastMailMessage'])) {
 				$_SESSION['lastMailMessage'] = array();
