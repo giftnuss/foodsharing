@@ -6,7 +6,7 @@ use Foodsharing\Modules\Core\BaseGateway;
 
 class StatisticsGateway extends BaseGateway
 {
-	public function getStatGesamt()
+	public function listTotalStat(): array
 	{
 		return $this->db->fetch('
 	
@@ -28,7 +28,7 @@ class StatisticsGateway extends BaseGateway
 		');
 	}
 
-	public function getStatCities()
+	public function listStatCities(): array
 	{
 		return $this->db->fetchAll('
 			SELECT
@@ -53,7 +53,7 @@ class StatisticsGateway extends BaseGateway
 		');
 	}
 
-	public function getStatFoodsaver()
+	public function listStatFoodsaver(): array
 	{
 		return $this->db->fetchAll('
 			SELECT
