@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Modules\Dashboard;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Profile\ProfileModel;
@@ -32,7 +32,7 @@ class DashboardControl extends Control
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
 		EventGateway $eventGateway,
-		Model $model,
+		Db $model,
 		ProfileModel $profileModel,
 		\Twig\Environment $twig)
 	{

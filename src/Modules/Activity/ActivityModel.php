@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Modules\Activity;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 use Foodsharing\Services\SanitizerService;
 
-class ActivityModel extends Model
+class ActivityModel extends Db
 {
 	private $mailboxModel;
 	private $activityGateway;

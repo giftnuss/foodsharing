@@ -2,13 +2,13 @@
 
 namespace Foodsharing\Modules\Console;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Func;
-use Foodsharing\Modules\Core\Model;
 
 class ConsoleControl
 {
 	/**
-	 * @var Model
+	 * @var Db
 	 */
 	protected $model;
 	/**

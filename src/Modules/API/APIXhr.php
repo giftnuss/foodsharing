@@ -3,10 +3,10 @@
 namespace Foodsharing\Modules\API;
 
 use Flourish\fImage;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Basket\BasketModel;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Message\MessageModel;
 
@@ -22,7 +22,7 @@ class APIXhr extends Control
 		LoginGateway $loginGateway,
 		MessageModel $messageModel,
 		BasketModel $basketModel,
-		Model $model
+		Db $model
 	) {
 		$this->apiGateway = $apiGateway;
 		$this->loginGateway = $loginGateway;

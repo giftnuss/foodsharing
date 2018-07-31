@@ -2,10 +2,10 @@
 
 namespace Foodsharing\Modules\FairTeiler;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Sanitizer;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,8 +22,13 @@ class FairTeilerControl extends Control
 	private $regionGateway;
 	private $foodsaverGateway;
 
-	public function __construct(FairTeilerView $view, FairTeilerGateway $gateway, RegionGateway $regionGateway, FoodsaverGateway $foodsaverGateway, Model $model)
-	{
+	public function __construct(
+		FairTeilerView $view,
+		FairTeilerGateway $gateway,
+		RegionGateway $regionGateway,
+		FoodsaverGateway $foodsaverGateway,
+		Db $model
+	) {
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->regionGateway = $regionGateway;

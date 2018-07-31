@@ -9,11 +9,13 @@
 ## Bugfixes
 - Add missing tagedit lib on mailbox edit page !459 #248 @nicksellen
 - reenabling source maps on the production build !468 #254 @alangecker
+- removed dead login button and updated registration info for food baskets #240 !457 @michi-zuri
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
 - removed copy of email sending method for CLI applications !464 @NerdyProjects
-
+- refactored statistics from model to gateway !476 #9 @peter.toennies
+- removed several layers of the legacy database-classes structure !477 @peter.toennies
 
 ## Dev/Test/CI stuff
 

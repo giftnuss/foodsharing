@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Modules\Quiz;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Bell\BellGateway;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
-class QuizModel extends Model
+class QuizModel extends Db
 {
 	private $bellGateway;
 	private $foodsaverGateway;
