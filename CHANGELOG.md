@@ -20,6 +20,7 @@
 - refactored content from model to gateway !481 #9 @peter.toennies
 - refactored NewArea module from model to gateway !483 #9 @peter.toennies
 - refactored NewArea module from model to gateway !484 #9 @peter.toennies
+- refactored index from model to gateway !480 #9 @peter.toennies
 
 ## Dev/Test/CI stuff
 
