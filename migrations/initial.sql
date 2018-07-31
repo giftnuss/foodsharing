@@ -2657,7 +2657,7 @@ ALTER TABLE `fs_mailbox_member`
 ALTER TABLE `fs_mailbox_message`
   ADD PRIMARY KEY (`id`),
   ADD KEY `email_message_folder` (`folder`),
-  ADD KEY `mailbox_message_FKIndex1` (`mailbox_id`);
+  ADD KEY `mailbox_message_FKIndex1` (`mailbox_id`, `read`);
 
 --
 -- Indexes for table `fs_mailchange`
@@ -2697,7 +2697,7 @@ ALTER TABLE `fs_message_tpl`
 ALTER TABLE `fs_msg`
   ADD PRIMARY KEY (`id`),
   ADD KEY `message_FKIndex1` (`foodsaver_id`),
-  ADD KEY `message_FKIndex2` (`conversation_id`);
+  ADD KEY `message_conversationTimeIndex` (`conversation_id`, `time`);
 
 --
 -- Indexes for table `fs_mumbleuser`

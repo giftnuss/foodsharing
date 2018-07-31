@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Modules\Legal;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Core\View;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +18,7 @@ class LegalControl extends Control
 	 */
 	private $formFactory;
 
-	public function __construct(LegalGateway $gateway, View $view, Model $model)
+	public function __construct(LegalGateway $gateway, View $view, Db $model)
 	{
 		$this->model = $model;
 		$this->view = $view;
@@ -59,7 +59,7 @@ class LegalControl extends Control
 					$this->gateway->downgradeToFoodsaver($this->session->id());
 				}
 				/* need to reload session cache. TODO: This should be further abstracted */
-				$this->model->relogin();
+				$this->session->refreshFromDatabase();
 				$this->func->goSelf();
 			}
 		}

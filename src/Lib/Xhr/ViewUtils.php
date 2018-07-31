@@ -2,9 +2,10 @@
 
 namespace Foodsharing\Lib\Xhr;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\View\Utils;
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Stats\StatsService;
 
 class ViewUtils
 {
@@ -18,15 +19,18 @@ class ViewUtils
 	private $viewUtils;
 
 	/**
-	 * @var Model
+	 * @var Db
 	 */
 	private $model;
 
-	public function __construct(Func $func, Utils $viewUtils, Model $model)
+	private $statsService;
+
+	public function __construct(Func $func, Utils $viewUtils, Db $model, StatsService $statsService)
 	{
 		$this->func = $func;
 		$this->viewUtils = $viewUtils;
 		$this->model = $model;
+		$this->statsService = $statsService;
 	}
 
 	public function fsBubble($fs)
@@ -70,7 +74,7 @@ class ViewUtils
 		$pickup_count = (int)$b['pickup_count'];
 		if ($pickup_count > 0) {
 			$count_info = '<div>Bei diesem Betrieb wurde <strong>' . $pickup_count . '<span style="white-space:nowrap">&thinsp;</span>x</strong> abgeholt</div>';
-			$fetch_weight = round(floatval(($pickup_count * $this->model->gerettet_wrapper($b['abholmenge']))), 2);
+			$fetch_weight = round(floatval(($pickup_count * $this->statsService->gerettet_wrapper($b['abholmenge']))), 2);
 			$count_info .= '<div">Es wurden <strong>' . $fetch_weight . '<span style="white-space:nowrap">&thinsp;</span>kg</strong> gerettet</div>';
 		}
 

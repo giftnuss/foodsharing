@@ -2,10 +2,23 @@
 
 namespace Foodsharing\Modules\Login;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 
-class LoginModel extends Model
+class LoginModel extends Db
 {
+	/**
+	 * @var LoginGateway
+	 */
+	private $loginGateway;
+
+	/**
+	 * @required
+	 */
+	public function setLoginGateway(LoginGateway $loginGateway)
+	{
+		$this->loginGateway = $loginGateway;
+	}
+
 	public function activate($email, $token)
 	{
 		if ((int)$this->update('UPDATE fs_foodsaver SET `active` = 1 WHERE email = ' . $this->strval($email) . ' AND `token` = ' . $this->strval($token)) > 0) {
@@ -62,7 +75,7 @@ class LoginModel extends Model
 				0,
 				' . $this->strval($data['plz']) . ',
 				' . $this->strval($data['email']) . ',
-				' . $this->strval($this->password_hash($data['pw'])) . ',
+				' . $this->strval($this->loginGateway->password_hash($data['pw'])) . ',
 				' . $this->strval($data['name']) . ',
 				' . $this->strval($data['surname']) . ',
 				' . $this->strval($data['str'] . ' ' . trim($data['nr'])) . ',
@@ -90,7 +103,7 @@ class LoginModel extends Model
 			if ($fsid = $this->qOne('SELECT `foodsaver_id` FROM `fs_pass_request` WHERE `name` = ' . $this->strval($data['k']))) {
 				$this->del('DELETE FROM `fs_pass_request` WHERE `foodsaver_id` = ' . (int)$fsid);
 
-				return $this->update('UPDATE `fs_foodsaver` SET `password` = ' . $this->strval($this->password_hash($data['pass1'])) . ',`passwd`=NULL,`fs_password`=NULL WHERE `id` = ' . (int)$fsid);
+				return $this->update('UPDATE `fs_foodsaver` SET `password` = ' . $this->strval($this->loginGateway->password_hash($data['pass1'])) . ',`passwd`=NULL,`fs_password`=NULL WHERE `id` = ' . (int)$fsid);
 			}
 		}
 

@@ -4,7 +4,9 @@ namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Message\MessageModel;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class MessageRestController extends FOSRestController
 {
@@ -15,16 +17,6 @@ class MessageRestController extends FOSRestController
 	{
 		$this->model = $model;
 		$this->session = $session;
-	}
-
-	private function handleUnauthorized()
-	{
-		$view = $this->view([
-			'statusCode' => 401,
-			'message' => 'Unauthorized'
-		], 401);
-
-		return $this->handleView($view);
 	}
 
 	// TODO: this is copied directly from from messageXhr.php
@@ -48,15 +40,28 @@ class MessageRestController extends FOSRestController
 		return false;
 	}
 
-	public function getConversationAction($id)
+	/**
+	 * @Rest\Get("conversations/{conversationId}", requirements={"conversationId" = "\d+"})
+	 */
+	public function getConversationAction($conversationId)
 	{
-		if (!$this->session->may() || !$this->mayConversation($id)) {
-			return $this->handleUnauthorized();
+		if (!$this->session->may() || !$this->mayConversation($conversationId)) {
+			throw new HttpException(401);
 		}
 
-		$member = $this->model->listConversationMembers($id);
-		$messages = $this->model->loadConversationMessages($id);
-		$conversation = $this->model->getValues(array('name'), 'conversation', $id);
+		$member = $this->model->listConversationMembers($conversationId);
+		$publicMemberInfo = function ($member) {
+			return [
+				'id' => $member['id'],
+				'name' => $member['name'],
+				'photo' => $member['photo']
+			];
+		};
+		$member = array_map($publicMemberInfo, $member);
+
+		$messages = $this->model->loadConversationMessages($conversationId);
+		$conversation = $this->model->getValues(array('name'), 'conversation', $conversationId);
+		$this->model->setAsRead([$conversationId]);
 
 		$data = [
 			'conversation' => $conversation,

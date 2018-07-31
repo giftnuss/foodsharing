@@ -17,14 +17,16 @@ class LoginXhr extends Control
 	private $searchService;
 	private $contentGateway;
 	private $foodsaverGateway;
+	private $loginGateway;
 
-	public function __construct(LoginModel $model, LoginView $view, SearchService $searchService, ContentGateway $contentGateway, FoodsaverGateway $foodsaverGateway)
+	public function __construct(LoginModel $model, LoginView $view, SearchService $searchService, ContentGateway $contentGateway, FoodsaverGateway $foodsaverGateway, LoginGateway $loginGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->searchService = $searchService;
 		$this->contentGateway = $contentGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->loginGateway = $loginGateway;
 
 		parent::__construct();
 	}
@@ -73,7 +75,7 @@ class LoginXhr extends Control
 
 	public function loginsubmit()
 	{
-		if ($this->model->login($_GET['u'], $_GET['p'])) {
+		if ($this->loginGateway->login($_GET['u'], $_GET['p'])) {
 			$token_js = '';
 			if ($token = $this->searchService->writeSearchIndexToDisk($this->session->id(), $this->session->user('token'))) {
 				$token_js = 'user.token = "' . $token . '";';
@@ -82,7 +84,6 @@ class LoginXhr extends Control
 			$this->fillMemcacheUserVars();
 
 			$menu = $this->func->getMenu();
-			$msgbar = $this->v_utils->v_msgBar();
 
 			return array(
 				'status' => 1,
@@ -310,15 +311,7 @@ class LoginXhr extends Control
 				var date = new Date();
 				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/fonts/octicons/octicons.css").appendTo("head");
 				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/css/join.css?" + date.getTime()).appendTo("head");
-			');
-
-			$dia->addJsAfter('
-				( typeof L !== "undefined" ? $.Deferred().resolve() : $.getScript( "/js/leaflet/leaflet.js" ) )
-				.then( function() {
-					return typeof join !== "undefined" ? $.Deferred().resolve() : $.getScript( "/js/join.js" );
-				} ).then( function() {
-					join.init( "' . GOOGLE_API_KEY . '" );
-				} );
+				join.init();
 			');
 
 			return $dia->xhrout();

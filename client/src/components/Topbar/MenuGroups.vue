@@ -1,0 +1,60 @@
+<template>
+    <nav-item-dropdown v-if="workingGroups.length" tooltip="Deine Gruppen" no-caret>
+        <template slot="button-content">
+            <i class="fa fa-users"/>
+        </template>
+            <div v-for="group in workingGroups" :key="group.id" class="group">
+                <a v-if="!alwaysOpen" role="menuitem" v-b-toggle="'topbargroup_'+group.id"  class="dropdown-item text-truncate">
+                    {{ group.name }}
+                </a>
+                <h3 v-if="alwaysOpen" role="menuitem" class="dropdown-header text-truncate">
+                    {{ group.name }}
+                </h3>
+                <b-collapse class="sub" :visible="alwaysOpen" :id="'topbargroup_'+group.id" :accordion="alwaysOpen ? null : 'groups'">
+                    <a role="menuitem" :href="$url('forum', group.id)" class="dropdown-item"><i class="fa fa-comment-o" /> Forum</a>
+                    <a role="menuitem" :href="$url('events', group.id)" class="dropdown-item"><i class="fa fa-calendar" /> Termine</a>
+                    <a role="menuitem" :href="$url('wall', group.id)" class="dropdown-item"><i class="fa fa-group" /> Pinnwand</a>
+                    <a role="menuitem" :href="$url('workingGroupEdit', group.id)" class="dropdown-item"><i class="fa fa-cog" /> Gruppe verwalten</a>
+                </b-collapse>
+            </div>
+            <div class="dropdown-divider" />
+            <a :href="$url('workingGroups')" role="menuitem" class="dropdown-item"><small><i class="fa fa-users" /> Gruppenübersicht</small></a>
+
+    </nav-item-dropdown>
+    <li v-else class="nav-item">
+        <a :href="$url('workingGroups')" class="nav-link" v-b-tooltip title="Gruppenübersicht">
+            <i class="fa fa-users" />
+        </a>
+    </li>
+</template>
+<script>
+import bCollapse from '@b/components/collapse/collapse';
+import bToggle from '@b/directives/toggle/toggle';
+import bTooltip from '@b/directives/tooltip/tooltip';
+import NavItemDropdown from './NavItemDropdown'
+
+export default {
+    components: { bCollapse, NavItemDropdown },
+    directives: { bToggle, bTooltip },
+    computed: {
+        alwaysOpen() {
+            return this.workingGroups.length <= 2
+        }
+    },
+    props: {
+        workingGroups: {
+            type: Array,
+            default: () => []
+        },
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.dropdown-header {
+    font-weight: bold;
+    font-size: 0.9em;
+}
+</style>
+
+ 

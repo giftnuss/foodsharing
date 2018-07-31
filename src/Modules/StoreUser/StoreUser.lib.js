@@ -86,7 +86,7 @@ export function u_fetchdeny (fsid, date, el) {
     },
     success: function (ret) {
       if (ret == 1) {
-        item.parent().parent().append('<li class="filled empty timedialog-add-me"><a onclick="return false;" href="#"><img alt="nobody" src="img/nobody.gif"></a></li>')
+        item.parent().parent().append('<li class="filled empty timedialog-add-me"><a onclick="return false;" href="#"><img alt="nobody" src="/img/nobody.gif"></a></li>')
         item.parent().remove()
       }
     },
@@ -143,12 +143,12 @@ export function u_contextAction (action, fsid) {
   if (action == 'message') {
     chat(fsid)
   } else if (action == 'report') {
-    ajreq('reportDialog', {app: 'report', fsid: fsid, bid: store.id})
+    ajreq('reportDialog', { app: 'report', fsid: fsid, bid: store.id })
   } else {
     showLoader()
     $.ajax({
       url: 'xhr.php?f=bcontext',
-      data: {'action': action, 'fsid': fsid, 'bid': store.id, 'bzid': store.bezirk_id},
+      data: { 'action': action, 'fsid': fsid, 'bid': store.id, 'bzid': store.bezirk_id },
       dataType: 'json',
       success: function (data) {
         if (data.status == 1) {
@@ -180,10 +180,10 @@ export function createJumperMenu () {
       u_contextAction(key, fsid)
     },
     items: {
-      'report': {name: 'Melden', icon: 'report'},
-      'toteam': {name: 'Ins Team aufnehmen', icon: 'accept'},
-      'delete': {name: 'Aus Team löschen', icon: 'delete'},
-      'message': {name: 'Nachricht schreiben', icon: 'message'}
+      'report': { name: 'Melden', icon: 'report' },
+      'toteam': { name: 'Ins Team aufnehmen', icon: 'accept' },
+      'delete': { name: 'Aus Team löschen', icon: 'delete' },
+      'message': { name: 'Nachricht schreiben', icon: 'message' }
     }
   }
 }
@@ -198,10 +198,10 @@ export function createMenu () {
       u_contextAction(key, fsid)
     },
     items: {
-      'report': {name: 'Melden', icon: 'report'},
-      'tojumper': {name: 'Auf die Springerliste', icon: 'wait'},
-      'delete': {name: 'Aus Team löschen', icon: 'delete'},
-      'message': {name: 'Nachricht schreiben', icon: 'message'}
+      'report': { name: 'Melden', icon: 'report' },
+      'tojumper': { name: 'Auf die Springerliste', icon: 'wait' },
+      'delete': { name: 'Aus Team löschen', icon: 'delete' },
+      'message': { name: 'Nachricht schreiben', icon: 'message' }
     }
   }
 }
@@ -224,8 +224,8 @@ export function createConfirmedMenu () {
       u_timetableAction(key, this)
     },
     items: {
-      'deny': {name: 'Austragen', icon: 'delete'},
-      'message': {name: 'Nachricht schreiben', icon: 'message'}
+      'deny': { name: 'Austragen', icon: 'delete' },
+      'message': { name: 'Nachricht schreiben', icon: 'message' }
     }
   }
 }
@@ -236,9 +236,9 @@ export function createUnconfirmedMenu () {
       u_timetableAction(key, this)
     },
     items: {
-      'confirm': {name: 'Bestätigen', icon: 'accept'},
-      'deny': {name: 'Austragen', icon: 'delete'},
-      'message': {name: 'Nachricht schreiben', icon: 'message'}
+      'confirm': { name: 'Bestätigen', icon: 'accept' },
+      'deny': { name: 'Austragen', icon: 'delete' },
+      'message': { name: 'Nachricht schreiben', icon: 'message' }
     }
   }
 }

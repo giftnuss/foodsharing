@@ -5,13 +5,17 @@ namespace Foodsharing\Modules\Mailbox;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Services\SanitizerService;
 
 class MailboxXhr extends Control
 {
-	public function __construct(MailboxModel $model, MailboxView $view)
+	private $sanitizerService;
+
+	public function __construct(MailboxModel $model, MailboxView $view, SanitizerService $sanitizerService)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 
@@ -162,7 +166,9 @@ class MailboxXhr extends Control
 						$mail->addRecipient($sender['mailbox'] . '@' . $sender['host']);
 					}
 					$mail->setSubject($subject);
-					$mail->setHTMLBody(nl2br($body));
+					$html = nl2br($body);
+					$mail->setHTMLBody($html);
+					$plainBody = $this->sanitizerService->htmlToPlain($html);
 					$mail->setBody($body);
 					$mail->send();
 
@@ -400,9 +406,11 @@ class MailboxXhr extends Control
 		$message = str_replace(array('<br>', '<br/>', '<br />', '<p>', '</p>', '</p>'), "\r\n", $message);
 		$message = strip_tags($message);
 
-		$mail->setHTMLBody(nl2br($message));
+		$html = nl2br($message);
+		$mail->setHTMLBody($html);
 
-		$mail->setBody($message);
+		$plainBody = $this->sanitizerService->htmlToPlain($html);
+		$mail->setBody($plainBody);
 
 		if ($attach !== false) {
 			foreach ($attach as $a) {

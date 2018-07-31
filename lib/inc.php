@@ -2,7 +2,7 @@
 
 use Foodsharing\DI;
 use Foodsharing\Lib\Cache\Caching;
-use Foodsharing\Lib\Db\ManualDb;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
@@ -20,7 +20,6 @@ if (isset($g_page_cache)) {
 }
 
 require_once 'lang/DE/de.php';
-require_once 'lib/minify/JSMin.php';
 
 error_reporting(E_ALL);
 
@@ -44,8 +43,8 @@ $viewUtils = DI::$shared->get(Utils::class);
 $g_template = 'default';
 $g_data = $func->getPostData();
 
-/* @var $db ManualDb */
-$db = DI::$shared->get(ManualDb::class);
+/* @var $db Db */
+$db = DI::$shared->get(Db::class);
 
 $func->addHidden('<a id="' . $func->id('fancylink') . '" href="#fancy">&nbsp;</a>');
 $func->addHidden('<div id="' . $func->id('fancy') . '"></div>');

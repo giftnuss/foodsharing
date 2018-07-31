@@ -1,0 +1,9 @@
+.markdown-section table td,
+.markdown-section table th {
+  border: none;
+}
+
+.markdown-section table tr {
+  border: none;
+  background: none !important;
+}

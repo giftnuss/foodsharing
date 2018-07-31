@@ -2,16 +2,16 @@
 
 namespace Foodsharing\Modules\FairTeiler;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
 
 class FairTeilerXhr extends Control
 {
 	private $gateway;
 	private $bellGateway;
 
-	public function __construct(Model $model, FairTeilerView $view, FairTeilerGateway $gateway, BellGateway $bellGateway)
+	public function __construct(Db $model, FairTeilerView $view, FairTeilerGateway $gateway, BellGateway $bellGateway)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;

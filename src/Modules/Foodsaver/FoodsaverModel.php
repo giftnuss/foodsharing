@@ -3,10 +3,10 @@
 namespace Foodsharing\Modules\Foodsaver;
 
 use DateTime;
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Store\StoreModel;
 
-class FoodsaverModel extends Model
+class FoodsaverModel extends Db
 {
 	public function listFoodsaver($bezirk_id, $showOnlyInactive = false)
 	{

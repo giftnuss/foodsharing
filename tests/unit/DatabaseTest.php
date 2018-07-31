@@ -82,4 +82,27 @@ class DatabaseTest extends \Codeception\Test\Unit
 			['id' => -1]
 		);
 	}
+
+	public function testInsertOrUpdate()
+	{
+		// update
+		$data = [
+			'id' => $this->foodsaver['id'],
+			'name' => 'my new name'
+		];
+
+		$this->tester->dontSeeInDatabase('fs_foodsaver', $data);
+		$this->db->insertOrUpdate('fs_foodsaver', $data);
+		$this->tester->seeInDatabase('fs_foodsaver', $data);
+
+		// insert
+		$data = [
+			'id' => $this->foodsaver['id'] + 1000,
+			'name' => 'my new name'
+		];
+
+		$this->tester->dontSeeInDatabase('fs_foodsaver', $data);
+		$this->db->insertOrUpdate('fs_foodsaver', $data);
+		$this->tester->seeInDatabase('fs_foodsaver', $data);
+	}
 }

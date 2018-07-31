@@ -84,7 +84,7 @@ class Utils
 				on_callback: function(){
 					showLoader();
 					$.ajax({
-						url: "xhr.php?f=activeSwitch",
+						url: "/xhr.php?f=activeSwitch",
 						data:{t:"' . $table . '",id:"' . $field_id . '",value:1},
 						method:"get",
 						complete:function(){
@@ -95,7 +95,7 @@ class Utils
 				off_callback:function(){
 					showLoader();
 					$.ajax({
-						url: "xhr.php?f=activeSwitch",
+						url: "/xhr.php?f=activeSwitch",
 						data:{t:"' . $table . '",id:"' . $field_id . '",value:0},
 						method:"get",
 						complete:function(){
@@ -173,7 +173,7 @@ class Utils
 				showLoader();
 				$.ajax({
 						dataType:"json",
-						url:"xhr.php?f=childBezirke&parent=" + parent,
+						url:"/xhr.php?f=childBezirke&parent=" + parent,
 						success : function(data){
 							if(data.status == 1)
 							{
@@ -211,10 +211,6 @@ class Utils
 
 	public function v_bezirkChooser($id = 'bezirk_id', $bezirk = false, $option = array())
 	{
-		$this->func->addScript('/js/dynatree/jquery.dynatree.js');
-		$this->func->addScript('/js/jquery.cookie.js');
-		$this->func->addStylesheet('/js/dynatree/skin/ui.dynatree.css');
-
 		if (!$bezirk) {
 			//$bezirk = $this->func->getBezirk();
 			$bezirk = array(
@@ -269,11 +265,11 @@ class Utils
 				checkbox:true,
 				selectMode: 1,
 				initAjax: {
-					url: "xhr.php?f=bezirkTree",
+					url: "/xhr.php?f=bezirkTree",
 					data: {p: "0" }
 				},
 				onLazyRead: function(node){
-					 node.appendAjax({url: "xhr.php?f=bezirkTree",
+					 node.appendAjax({url: "/xhr.php?f=bezirkTree",
 						data: { "p": node.data.ident },
 						dataType: "json",
 						success: function(node) {
@@ -313,57 +309,6 @@ class Utils
 					<input class="input corner-all" type="password" name="login_form[password]" value="' . $password . '" placeholder="Passwort" required />
 					<input class="submit corner-right" type="submit" value="&#xf0a9;" />
 				</form>';
-	}
-
-	public function v_msgBar()
-	{
-		return '<ul id="infobar">
-					<li class="msg">
-						<a href="#" onclick="return false;">
-							<i class="fa fa-comments"></i><span style="display:none;" class="badge">0</span>
-						</a>
-						<span style="display:none;" class="linkwrapper corner-all ui-shadow">
-							<ul class="linklist conversation-list">
-							</ul>
-							<a class="more" href="/?page=msg">Alle zeigen</a>
-						</span>
-					</li>
-
-					<li class="bell">
-						<a href="#" onclick="return false;">
-							<i class="fa fa-bell"></i><span style="display:none;" class="badge">0</span>
-						</a>
-						<span style="display:none;" class="linkwrapper corner-all ui-shadow">
-							<ul class="linklist conversation-list">
-							</ul>
-							<!-- <a class="more" href="/?page=msg">Alle zeigen</a> -->
-						</span>
-
-					</li>
-
-					<li class="basket">
-						<a href="#" onclick="return false;">
-							<i class="img-fbasket"></i><span style="display:none;" class="badge">0</span>
-						</a>
-						<span style="display:none;" class="linkwrapper corner-all ui-shadow">
-							<ul class="linklist conversation-list">
-							</ul>
-							<a class="more" href="#" onclick="ajreq(\'newBasket\',{app:\'basket\'});return false;">Neuen Essenskorb anlegen</a>
-						</span>
-
-					</li>
-				</ul>
-
-				<div id="searchbar">
-				<i class="fa fa-search"></i><input type="text" value="" placeholder="' . $this->func->s('search') . '..." />
-				<div class="result-wrapper" style="display:none;">
-					<ul class="linklist index"></ul>
-					<ul class="linklist result"></ul>
-					<ul class="linklist more">
-						<li><a class="more" onclick="goTo(\'/?page=search&q=\' + encodeURIComponent($(\'#searchbar input\').val()));return false;" href="#">Alle Ergebnisse</a></li>
-					</ul>
-				</div>
-			</div>';
 	}
 
 	public function v_success($msg, $title = false)
@@ -468,7 +413,6 @@ class Utils
 
 	public function v_form_tinymce($id, $option = array())
 	{
-		$this->func->addScript('/js/tinymce/jquery.tinymce.min.js');
 		$id = $this->func->id($id);
 		$label = $this->func->s($id);
 		$value = $this->func->getValue($id);
@@ -494,7 +438,7 @@ class Utils
 
 		$js = '
 		$("#' . $id . '").tinymce({
-			script_url : "./js/tinymce/tinymce.min.js",
+			script_url : "./assets/tinymce/tinymce.min.js",
 			theme : "modern",
 			language : "de",
 			content_css : "' . $css . '",
@@ -534,10 +478,6 @@ class Utils
 
 	public function v_form_recip_chooser()
 	{
-		$this->func->addScript('/js/dynatree/jquery.dynatree.js');
-		$this->func->addScript('/js/jquery.cookie.js');
-		$this->func->addStylesheet('/js/dynatree/skin/ui.dynatree.css');
-
 		$id = 'recip_choose';
 		$out = '
 			<select class="select" name="' . $id . '" id="' . $id . '">
@@ -600,11 +540,11 @@ class Utils
 				clickFolderMode: 3,
 				activeVisible: true,
 				initAjax: {
-					url: "xhr.php?f=bezirkTree",
+					url: "/xhr.php?f=bezirkTree",
 					data: {p: "0" }
 				},
 				onLazyRead: function(node){
-					 node.appendAjax({url: "xhr.php?f=bezirkTree",
+					 node.appendAjax({url: "/xhr.php?f=bezirkTree",
 						data: { "p": node.data.ident },
 						dataType: "json",
 						success: function(node) {
@@ -663,7 +603,7 @@ class Utils
 						 showLoader();
 						 $("#' . $id . '-action").val("crop");
 						 $.ajax({
-							url: "xhr.php?f=cropagain",
+							url: "/xhr.php?f=cropagain",
 							data: {
 								x:parseInt($("#' . $id . '-x").val()),
 								y:parseInt($("#' . $id . '-y").val()),
@@ -1058,7 +998,7 @@ class Utils
 			$url = $option['url'];
 		}
 
-		$source = 'autocompleteURL: "xhr.php?f=' . $url . '"';
+		$source = 'autocompleteURL: "/xhr.php?f=' . $url . '"';
 		$post = '';
 
 		if (isset($option['valueOptions'])) {
@@ -1138,7 +1078,7 @@ class Utils
 				<h3>' . $this->func->s($id) . ' Upload</h3>
 				<p class="subtitle">W&auml;hle ein Bild von Deinem Rechner</p>
 
-				<form id="' . $id . '-form" method="post" enctype="multipart/form-data" target="' . $id . '-iframe" action="xhr.php?f=uploadPicture&id=' . $id . '&crop=' . $crop . '">
+				<form id="' . $id . '-form" method="post" enctype="multipart/form-data" target="' . $id . '-iframe" action="/xhr.php?f=uploadPicture&id=' . $id . '&crop=' . $crop . '">
 
 					<input type="file" name="uploadpic" onchange="showLoader();$(\'#' . $id . '-form\')[0].submit();" />
 
@@ -1595,8 +1535,7 @@ class Utils
 
 	public function v_switch($views = array())
 	{
-		$out = '<select class="v-switch"  onchange="goTo(this.value);">
-					<!--<option value="#">Ansicht:</option>-->';
+		$out = '<select class="v-switch"  onchange="goTo(this.value);">';
 
 		foreach ($views as $v) {
 			$id = $this->func->makeId($v);

@@ -1,10 +1,69 @@
 # Unreleased
 
 ## Features
+- new topbar in vue.js !451, #11, #15, #155, #158, #30, #66, #67, #93 @alangecker
+- reactive vue stores !451 @alangecker
+- resizeable avatar component !451 @alangecker
+- updated landingpage with festival content !462 and !471 @michi-zuri
+
+## Bugfixes
+- Add missing tagedit lib on mailbox edit page !459 #248 @nicksellen
+- reenabling source maps on the production build !468 #254 @alangecker
+- removed dead login button and updated registration info for food baskets #240 !457 @michi-zuri
+
+## Refactoring
+- removed global $g_body_class variable !451 @alangecker
+- removed copy of email sending method for CLI applications !464 @NerdyProjects
+- refactored statistics from model to gateway !476 #9 @peter.toennies
+- removed several layers of the legacy database-classes structure !477 @peter.toennies
+
+## Dev/Test/CI stuff
+
+# 2018-07-22 Hotfix
+- Fix links to group application details
+
+# 2018-07-21 Hotfix
+- Fix foodsaver_id access in StatsControl
+
+# 2018-07-20 Hotfix
+- Fairteiler Walls can be accessed again
+- Login Form from Fairteiler removed
+- Store name for pickup team notification was missing in serverData
+- Deletion of non-existing post lead to 500 instead of 404
+- Store statistics could not be updated due to a mistake while refactoring
+- Dashboard updates used to show some HTML tags in different entries
+- Message notifications have not been sent for some hours
+
+# 2018-07-19
+We are quite good at doing major releases every three months.
+So here we go:
+- Enjoy a new shiny forum post view, using a modern implementation in vue.js / bootstrap-vue
+- We now require a javascript enabled browser, as we are using more and more modern frontend technologies
+- Forum posts will finally not only allow you to use `whatever <you> want to type «»äá<>>>< in there, but also styling using *markdown*`. See [Wikipedia: Markdown](https://en.wikipedia.org/wiki/Markdown) for an introduction on how to use that
+- Behind the scenes, we achieved a lot more, that you hopefully don't notice. See the list below for all changes.
+
+You can read a bit more about the recent weeks and happenings of the developers in the [Development Blog: Summer hackweek](https://devblog.foodsharing.de/2018/07/16/summer-hackweek.html).
+
+Many thanks to @peter.toennies @NerdyProjects @alangecker @theolampert @nicksellen @EmiliaPaz @michi-zuri @tiltec (in order of appearance in this changelog) for all their work done for this release.
+
+## Features
 - updated fpdi plugin to v2.0.2 !351 #168 by @peter.toennies
 - update symfony to 4.1.0 as well as other dependencies !351 @NerdyProjects
 - remove user list in forums to allow big regions to work !421 @NerdyProjects
 - add php intl component for localized internationalization !421 @NerdyProjects
+- add vue.js, bootstrap & scss !430 @alangecker
+- new store list with filtering !430 #191 @alangecker
+- implement Wallpost API to replace XHR soon !439 @NerdyProjects
+- add HTMLPurifier for proper user HTML handling to be used soon !445 @NerdyProjects
+- Forum rest api !442 @NerdyProjects
+- Reimplement forum thread/post view as a vue component !442 @alangecker
+- forum emoji reactions !442 @alangecker
+- Vue functions for i18n and date !442 @alangecker
+- Proper input sanitizing for forum posts with support for markdown markup !442 @NerdyProjects
+- Properly sanitize outgoing HTML mails !442 @NerdyProjects
+- All outgoing emails now generate their plain text via HTML2Text !442 @NerdyProjects
+- Show Report ID in Detail Report window #246 @k.miklobusec
+- updated wording in respect to new report handling procedure !454 @peter.toennies
 
 ## Bugfixes
 - removed XSS-possibility in xhr_out method. !370 @theolampert
@@ -16,11 +75,11 @@
 - fixed wrong usage of gateway in API. !400 @peter.toennies
 - fixed missalignment in future-pickups list. !389 # 136 @EmiliaPaz
 - Regaining support for mobile Safari 10 !396 #221 @michi-zuri
-- Fix pickup slots !390 #215 @nicksellen
-- fixed wrong gendering of AMBs in region view and profile view. !386 #214 @peter.toennies
-- reduced the height of store info popups by removing the warning frame. !388 #216 @peter.toennies
-- The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
 - fix relative loading of some xhr/other urls !422 @nicksellen
+- fixes user autocomplete fetching for conversation creation
+- fix profile sleeping hat variable #243
+- fix bug in region dynatree loading #244 !444 @nicksellen
+- Only show forum post removal button when the user is allowed to delete a post !456 @NerdyProjects
 
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen
@@ -37,16 +96,22 @@
 - partial refactor of Basket module !426 @nicksellen
 - refactored region module into twig/webpack loaded javascript !421 @NerdyProjects
 - add constants class database constants in region module !413 @peter.toennies @nicksellen
-- refactored login and registration @theolampert
 - refactor Model.php and ManualDB.php to gateway classes !420 !424 !425 @tiltec
 - refactored tablesorter @alangecker
 - use instance access for Session !433 @nicksellen
 - refactor Map module to webpack !435 @nicksellen
+- all entrypoints load most JS/CSS via webpack now !432 @NerdyProjects
+- Refactor forum logic to Gateway/Service/PermissionService !442 @NerdyProjects
+- Refactor reactions to be more forum specific !456 @NerdyProjects
 
 ## Dev/Test/CI stuff
 - Fix cache clearing during test/deploy !414 @nicksellen
 - Add testing for client js !422 @nicksellen
 - Improve linting config !431 @nicksellen
+- Add ./scripts/dev for running webpack dev env !437 @nicksellen
+- Improve linting config more (add vue linting) !441 @nicksellen
+- Implement basic dev docs content, make shinier readme with contributors !443 @nicksellen
+- Add tests for SanitizerService !456 @NerdyProjects
 
 # 2018-05-24
 
@@ -63,6 +128,8 @@ Also, we introduce new frontend technology here. I hope we did not break too muc
 
 ## Features
 - decreased distance to "close baskets" from 50 to 30 km. !332 #338 by @peter.toennies
+- show date and comment of sleeping hat on profile page. !427 #178 by k.miklobusec
+- show home district on profile page. !427 #237 by k.miklobusec
 - sort fairtiler list by name. !357 #171 by @k.miklobusec
 - Store Managers business card creation for region. Remove country card. !76 by @k.miklobusec
 - Registered users need to fill their birthday and be 18+ for data protection and liability reasons. !377 @NerdyProjects
@@ -298,7 +365,7 @@ Many many thanks to all the contributors that made this possible (in order of ap
 - Added a list of inactive foodsavers to the foodsavers page !183 @valentin.unicorn
 - Ensure PHP7 compatibility and upgrade environment to PHP7 !171 @nicksellen
 - Show current commit in footer as well as use it in sentry if errors occur !153 @NerdyProjects
-- Reports list can be sorted by main region of the FS !151 @k.miklobusec @peter.toennies 
+- Reports list can be sorted by main region of the FS !151 @k.miklobusec @peter.toennies
 
 ## Bugfixes
 

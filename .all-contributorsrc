@@ -1,0 +1,223 @@
+{
+  "projectName": "foodsharing",
+  "projectOwner": "NerdyProjects",
+  "files": [
+    "README.md",
+    "docs/contributors.md"
+  ],
+  "imageSize": 200,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "NerdyProjects",
+      "name": "Matthias Larisch",
+      "avatar_url": "https://assets.gitlab-static.net/uploads/-/system/user/avatar/642557/avatar.png",
+      "profile": "https://gitlab.com/NerdyProjects",
+      "contributions": [
+        "code",
+        "infra",
+        "review"
+      ]
+    },
+    {
+      "login": "peter.toennies",
+      "name": "Peter Tönnies",
+      "avatar_url": "https://foodsharing.de/images/q_f57a9d0c7fa4b1b889cfe3245310ad06.jpg",
+      "profile": "https://gitlab.com/peter.toennies",
+      "contributions": [
+        "code",
+        "bug",
+        "ideas",
+        "question",
+        "review"
+      ]
+    },
+    {
+      "login": "k.miklobusec",
+      "name": "OnceUponAFoodsharingTime",
+      "avatar_url": "https://foodsharing.de/images/q_e09cefb9259140ef547313b6cb5691ea.jpg",
+      "profile": "https://gitlab.com/k.miklobusec",
+      "contributions": [
+        "code",
+        "ideas",
+        "question",
+        "bug",
+        "board"
+      ]
+    },
+    {
+      "login": "nicksellen",
+      "name": "Nick Sellen",
+      "avatar_url": "https://assets.gitlab-static.net/uploads/-/system/user/avatar/640443/avatar.png",
+      "profile": "https://gitlab.com/nicksellen",
+      "contributions": [
+        "code",
+        "infra",
+        "review",
+        "doc"
+      ]
+    },
+    {
+      "login": "tiltec",
+      "name": "Tilmann Becker",
+      "avatar_url": "https://assets.gitlab-static.net/uploads/-/system/user/avatar/640465/avatar.png",
+      "profile": "https://gitlab.com/tiltec",
+      "contributions": [
+        "code",
+        "review"
+      ]
+    },
+    {
+      "login": "michi-zuri",
+      "name": "Michael Paul Killian",
+      "avatar_url": "https://assets.gitlab-static.net/uploads/-/system/user/avatar/1682847/avatar.png",
+      "profile": "https://gitlab.com/michi-zuri",
+      "contributions": [
+        "code",
+        "design",
+        "bug"
+      ]
+    },
+    {
+      "login": "raphaelw",
+      "name": "Raphael",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/7235821?s=460&v=4",
+      "profile": "https://gitlab.com/raphaelw",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "alangecker",
+      "name": "Andreas Langecker",
+      "avatar_url": "https://assets.gitlab-static.net/uploads/-/system/user/avatar/1109912/avatar.png",
+      "profile": "https://gitlab.com/alangecker",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "theolampert",
+      "name": "Theo",
+      "avatar_url": "https://assets.gitlab-static.net/uploads/-/system/user/avatar/2275979/avatar.png",
+      "profile": "https://gitlab.com/theolampert",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "irgendwer",
+      "name": "irgendwer",
+      "avatar_url": "https://assets.gitlab-static.net/uploads/-/system/user/avatar/1681670/avatar.png",
+      "profile": "https://gitlab.com/irgendwer",
+      "contributions": [
+        "ideas",
+        "security",
+        "bug"
+      ]
+    },
+    {
+      "login": "manuel_w",
+      "name": "Manuel Wiemann",
+      "avatar_url": "https://foodsharing.de/images/q_df07990f3897921b5ff18888edf545ac.jpg",
+      "profile": "https://gitlab.com/manuel_w",
+      "contributions": [
+        "ideas",
+        "board"
+      ]
+    },
+    {
+      "login": "djahnie",
+      "name": "djahnie",
+      "avatar_url": "https://assets.gitlab-static.net/uploads/-/system/user/avatar/782504/avatar.png",
+      "profile": "https://gitlab.com/djahnie",
+      "contributions": [
+        "ideas"
+      ]
+    },
+    {
+      "login": "em.ka",
+      "name": "mel",
+      "avatar_url": "https://ca.slack-edge.com/T0B6WCFM5-U0EHB1RP1-07d379bea6ff-512",
+      "profile": "https://gitlab.com/em.ka",
+      "contributions": [
+        "design",
+        "ideas"
+      ]
+    },
+    {
+      "login": "EmiliaPaz",
+      "name": "Emilia Paz",
+      "avatar_url": "https://secure.gravatar.com/avatar/c0370928d12a1dd06716ba813ce4dbcd?s=80&d=identicon",
+      "profile": "https://gitlab.com/EmiliaPaz",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "nigeldgreen",
+      "name": "Nigel Green",
+      "avatar_url": "https://assets.gitlab-static.net/uploads/-/system/user/avatar/544783/avatar.png",
+      "profile": "https://gitlab.com/nigeldgreen",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "D0nPiano",
+      "name": "D0nPiano",
+      "avatar_url": "https://ca.slack-edge.com/T0B6WCFM5-U1F4FK22C-c22aeb486bd9-512",
+      "profile": "https://gitlab.com/D0nPiano",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "adrianheine",
+      "name": "Adrian Heine",
+      "avatar_url": "https://secure.gravatar.com/avatar/83dd2a385c44fc42d52f14fccd9d992a?s=80&d=identicon",
+      "profile": "https://gitlab.com/adrianheine",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "BassTii",
+      "name": "Basti A.",
+      "avatar_url": "https://secure.gravatar.com/avatar/f72182ecbe91d6d60603ec2c31efe7cc?s=80&d=identicon",
+      "profile": "https://gitlab.com/BassTii",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "valentin.unicorn",
+      "name": "Valentin",
+      "avatar_url": "https://secure.gravatar.com/avatar/588c72c402d090166de1bd15a69fdd6b?s=80&d=identicon",
+      "profile": "https://gitlab.com/valentin.unicorn",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "inktrap",
+      "name": "Valentin",
+      "avatar_url": "https://secure.gravatar.com/avatar/ee9f855b89d786169f0413e76ab944e0?s=80&d=identicon",
+      "profile": "https://gitlab.com/inktrap",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "derhuerst",
+      "name": "Jannis R",
+      "avatar_url": "https://assets.gitlab-static.net/uploads/-/system/user/avatar/204799/avatar.png",
+      "profile": "https://gitlab.com/derhuerst",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "repoType": "gitlab"
+}

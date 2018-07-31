@@ -3,21 +3,29 @@
 namespace Foodsharing\Modules\API;
 
 use Flourish\fImage;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Message\MessageModel;
 
 class APIXhr extends Control
 {
 	private $messageModel;
 	private $basketGateway;
-	private $gateway;
+	private $apiGateway;
+	private $loginGateway;
 
-	public function __construct(APIGateway $gateway, MessageModel $messageModel, BasketGateway $basketGateway, Model $model
+	public function __construct(
+		APIGateway $apiGateway,
+		LoginGateway $loginGateway,
+		MessageModel $messageModel,
+		BasketGateway $basketGateway,
+		Db $model
 	) {
-		$this->gateway = $gateway;
+		$this->apiGateway = $apiGateway;
+		$this->loginGateway = $loginGateway;
 		$this->messageModel = $messageModel;
 		$this->basketGateway = $basketGateway;
 		$this->model = $model;
@@ -121,7 +129,7 @@ class APIXhr extends Control
 
 	public function logout(): void
 	{
-		$this->model->logout();
+		Mem::logout($this->session->id());
 		$_SESSION['login'] = false;
 		$_SESSION = array();
 
@@ -134,8 +142,18 @@ class APIXhr extends Control
 
 	public function login(): void
 	{
-		if (isset($_GET['e']) && $this->model->login($_GET['e'], $_GET['p'])) {
-			$fs = $this->model->getValues(['telefon', 'handy', 'geschlecht', 'name', 'lat', 'lon', 'photo'], 'foodsaver', $this->func->fsId());
+		if (!isset($_GET['e'])) {
+			$this->appout([
+				'status' => 0
+			]);
+		}
+
+		$fs_id = $this->loginGateway->login($_GET['e'], $_GET['p']);
+
+		if ($fs_id !== null) {
+			$this->session->refreshFromDatabase($fs_id);
+
+			$fs = $this->model->getValues(['telefon', 'handy', 'geschlecht', 'name', 'lat', 'lon', 'photo'], 'foodsaver', $this->session->id());
 
 			$this->appout([
 				'status' => 1,
@@ -149,11 +167,11 @@ class APIXhr extends Control
 				'lon' => $fs['lon'],
 				'photo' => $fs['photo']
 			]);
+		} else {
+			$this->appout([
+				'status' => 0
+			]);
 		}
-
-		$this->appout([
-			'status' => 0
-		]);
 	}
 
 	public function initRelogin(): void
@@ -311,14 +329,14 @@ class APIXhr extends Control
 
 	public function orgagruppen(): void
 	{
-		if ($groups = $this->gateway->getOrgaGroups()) {
+		if ($groups = $this->apiGateway->getOrgaGroups()) {
 			$this->out($groups);
 		}
 	}
 
 	public function auth(): void
 	{
-		if ($ret = $this->model->checkClient($_GET['user'], $_GET['pass'])) {
+		if ($ret = $this->loginGateway->checkClient($_GET['user'], $_GET['pass'])) {
 			$values = $this->model->getValues(['id', 'orgateam', 'name', 'email', 'photo', 'geschlecht', 'rolle'], 'foodsaver', $ret['id']);
 
 			$values['bot'] = $values['rolle'] >= 3;
@@ -347,7 +365,7 @@ class APIXhr extends Control
 
 	public function loadBasket(): void
 	{
-		if ($this->session->may() && $basket = $this->gateway->getBasket($_GET['id'])) {
+		if ($this->session->may() && $basket = $this->apiGateway->getBasket($_GET['id'])) {
 			$this->appout([
 				'status' => 1,
 				'basket' => $basket
@@ -361,7 +379,7 @@ class APIXhr extends Control
 
 	public function allbaskets(): void
 	{
-		if ($this->session->may() && $baskets = $this->gateway->allBaskets()) {
+		if ($this->session->may() && $baskets = $this->apiGateway->allBaskets()) {
 			$this->appout([
 				'status' => 1,
 				'baskets' => $baskets
@@ -378,7 +396,7 @@ class APIXhr extends Control
 			$lat = (float)$_GET['lat'];
 			$lon = (float)$_GET['lon'];
 
-			if ($baskets = $this->gateway->nearBaskets($lat, $lon)) {
+			if ($baskets = $this->apiGateway->nearBaskets($lat, $lon)) {
 				$this->appout([
 					'status' => 1,
 					'baskets' => $baskets

@@ -2,8 +2,6 @@
 
 namespace Foodsharing\Modules\Basket;
 
-use Exception;
-use Flourish\fImage;
 use Foodsharing\Lib\View\vMap;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\View;
@@ -115,9 +113,7 @@ class BasketView extends View
 			}
 		} else {
 			$page->addSectionRight(
-				$this->v_utils->v_info('Für detailierte Infos musst Du Dich einloggen!', 'Hinweis!') . '<div>
-				<a class="button button-big" href="#" onclick="ajreq(\'login\',{app:\'login\'});return false;">Einloggen</a>
-			</div>',
+				$this->v_utils->v_info('Für detaillierte Infos musst Du eingeloggt sein. Bist du noch nicht als Foodsharer registriert? Dann klick oben auf <b>Mach mit!</b> um loszulegen!', 'Hinweis!'),
 				false,
 				array('wrapper' => false)
 			);
@@ -302,74 +298,7 @@ class BasketView extends View
 		return $out;
 	}
 
-	public function listUpdates($updates): string
-	{
-		$out = '<li class="title">Anfragen</li>';
-		foreach ($updates as $u) {
-			$fs = array(
-				'id' => $u['fs_id'],
-				'name' => $u['fs_name'],
-				'photo' => $u['fs_photo'],
-				'sleep_status' => $u['sleep_status'],
-			);
-			$out .= '<li><a href="#" onclick="ajreq(\'answer\',{app:\'basket\',id:' . (int)$u['id'] . ',fid:' . (int)$u['fs_id'] . '});return false;"><span class="button close" onclick="ajreq(\'removeRequest\',{app:\'basket\',id:' . (int)$u['id'] . ',fid:' . (int)$u['fs_id'] . '});return false;"><i class="fa fa-close"></i></span><span class="pics">' . $this->func->avatar(
-					$fs,
-					50
-				) . '</span><span class="names">Anfrage von ' . $u['fs_name'] . '</span><span class="msg">' . $u['description'] . '</span><span class="time">' . $this->func->niceDate(
-					$u['time_ts']
-				) . '</span><span class="clear"></span></a></li>';
-		}
-
-		return $out;
-	}
-
-	public function listMyBaskets($baskets): string
-	{
-		$out = '<li class="title">Deine Essenskörbe</li>';
-		foreach ($baskets as $b) {
-			$img = 'img/basket.png';
-			if (!empty($b['picture'])) {
-				$img = 'images/basket/50x50-' . $b['picture'];
-				if (!file_exists($img)) {
-					try {
-						copy('images/basket/thumb-' . $b['picture'], 'images/basket/50x50-' . $b['picture']);
-						$this->chmod('images/basket/50x50-' . $b['picture'], 777);
-
-						$fimg = new fImage('images/basket/50x50-' . $b['picture']);
-						$fimg->cropToRatio(1, 1);
-						$fimg->resize(50, 50);
-						$fimg->saveChanges();
-					} catch (Exception $e) {
-						$img = 'img/basket.png';
-					}
-				}
-			}
-
-			$reqtext = $this->func->s('no_requests');
-
-			if ($b['req_count'] == 1) {
-				$reqtext = $this->func->s('one_request');
-			} elseif ($b['req_count'] > 0) {
-				$reqtext = $this->func->sv('req_count', array('count' => $b['req_count']));
-			}
-
-			$out .= '<li class="basket-' . (int)$b['id'] . '"><a href="/essenskoerbe/' . (int)$b['id'] . '"><span class="button close" onclick="ajreq(\'removeBasket\',{app:\'basket\',id:' . (int)$b['id'] . '});return false;"><i class="fa fa-close"></i></span><span class="pics"><img width="50" src="/' . $img . '" alt="avatar" /></span><span class="names">' . $this->func->tt(
-					$b['description'],
-					150
-				) . '</span><span class="msg">' . $reqtext . '</span><span class="time">' . $this->func->niceDate(
-					$b['time_ts']
-				) . '</span><span class="clear"></span></a></li>';
-		}
-
-		return $out;
-	}
-
-	private function chmod($file): void
-	{
-		exec('chmod 777 /var/www/lmr-v1/freiwillige/' . $file);
-	}
-
-	public function fsBubble($basket): string
+	public function fsBubble($basket)
 	{
 		$img = '';
 		if (!empty($basket['picture'])) {

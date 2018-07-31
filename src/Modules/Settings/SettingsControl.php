@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Settings;
 
-use Foodsharing\Lib\Db\ManualDb;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
@@ -15,16 +14,14 @@ class SettingsControl extends Control
 	private $quizModel;
 	private $contentGateway;
 	private $foodsaverGateway;
-	private $manualDb;
 
-	public function __construct(SettingsModel $model, SettingsView $view, QuizModel $quizModel, ContentGateway $contentGateway, FoodsaverGateway $foodsaverGateway, ManualDb $manualDb)
+	public function __construct(SettingsModel $model, SettingsView $view, QuizModel $quizModel, ContentGateway $contentGateway, FoodsaverGateway $foodsaverGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->quizModel = $quizModel;
 		$this->contentGateway = $contentGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
-		$this->manualDb = $manualDb;
 
 		parent::__construct();
 
@@ -521,7 +518,7 @@ class SettingsControl extends Control
 					$data['bezirk_id'] = $this->session->getCurrentBezirkId();
 				}
 				if ($this->foodsaverGateway->updateProfile($this->session->id(), $data)) {
-					$this->manualDb->relogin();
+					$this->session->refreshFromDatabase();
 					$this->func->info($this->func->s('foodsaver_edit_success'));
 				} else {
 					$this->func->error($this->func->s('error'));

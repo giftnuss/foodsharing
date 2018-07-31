@@ -2,12 +2,16 @@
 
 namespace Foodsharing\Modules\Stats;
 
-use Foodsharing\Modules\Console\ConsoleModel;
+use Foodsharing\Lib\Db\Db;
 
-class StatsModel extends ConsoleModel
+class StatsModel extends Db
 {
-	public function __construct()
+	private $statsService;
+
+	public function __construct(StatsService $statsService)
 	{
+		$this->statsService = $statsService;
+
 		parent::__construct();
 	}
 
@@ -52,7 +56,7 @@ class StatsModel extends ConsoleModel
 		')
 		) {
 			foreach ($res as $r) {
-				$out += $this->gerettet_wrapper($r['abholmenge']) * $r['anz'];
+				$out += $this->statsService->gerettet_wrapper($r['abholmenge']) * $r['anz'];
 			}
 		}
 
@@ -296,7 +300,7 @@ class StatsModel extends ConsoleModel
 				$dat[$r['betrieb_id'] . '-' . $r['date']] = $r;
 			}
 			foreach ($dat as $r) {
-				$weight += $this->gerettet_wrapper($r['abholmenge']);
+				$weight += $this->statsService->gerettet_wrapper($r['abholmenge']);
 			}
 		}
 

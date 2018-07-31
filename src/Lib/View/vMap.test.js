@@ -35,7 +35,7 @@ describe('vMap', () => {
 
     document.body.innerHTML = `
         <div id="searchpanel"></div>
-        <div id="map"
+        <div class="vmap" id="map"
              style="width: 500px; height: 500px;"
              data-options="${escape(JSON.stringify(options))}"></div>`
 

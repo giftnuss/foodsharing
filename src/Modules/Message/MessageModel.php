@@ -2,10 +2,10 @@
 
 namespace Foodsharing\Modules\Message;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Modules\Core\Model;
 
-class MessageModel extends Model
+class MessageModel extends Db
 {
 	public function getBetriebname($cid)
 	{
@@ -201,7 +201,7 @@ class MessageModel extends Model
 		/*
 		 * only send email if the user is not online
 		 */
-		if (!$this->isActive($foodsaver_id)) {
+		if (!Mem::userIsActive($foodsaver_id)) {
 			if (Mem::get('infomail_message_' . $foodsaver_id)) {
 				return true;
 			}

@@ -144,10 +144,6 @@ li.unread-1 {
     overflow-x: hidden !important;
   }
 
-  div#main {
-    margin: 0;
-    padding: 0
-  }
 
   #right {
     display: none;
@@ -156,7 +152,7 @@ li.unread-1 {
   #msg-conversation-wrapper {
     height: 100vh;
     margin: 0;
-    padding-top: 100px;
+    padding-top: 30px;
   }
 
   #msg-conversation {
@@ -189,7 +185,7 @@ li.unread-1 {
 
   #msg-conversation-wrapper .field .head {
     position: fixed;
-    top: 41px;
+    top: 73px;
     left: 0;
     width: 100%;
     z-index: 11;

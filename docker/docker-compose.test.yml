@@ -49,7 +49,7 @@ services:
 
   client:
     container_name: foodsharing_test_client
-    image: node:9
+    image: node:10
     # We don't run anything long running in here yet - build is run via ./scripts/build-assets
     command: 'true'
     working_dir: /app/client
@@ -127,7 +127,7 @@ services:
 
   selenium:
     container_name: foodsharing_test_selenium
-    image: registry.gitlab.com/foodsharing-dev/images/selenium:1.1
+    image: registry.gitlab.com/foodsharing-dev/images/selenium:1.2
     shm_size: 256M
     links:
       - web:web

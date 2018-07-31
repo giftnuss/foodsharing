@@ -77,11 +77,7 @@ class Database
 
 	public function exists($table, array $criteria): bool
 	{
-		$where = $this->generateWhereClause($criteria);
-
-		$query = 'SELECT COUNT(*) FROM ' . $this->getQuotedName($table) . ' ' . $where;
-
-		return $this->fetchValue($query, array_values($criteria)) > 0;
+		return $this->count($table, $criteria) > 0;
 	}
 
 	public function requireExists($table, array $criteria)
@@ -91,6 +87,20 @@ class Database
 		}
 	}
 
+	public function count($table, array $criteria): bool
+	{
+		$where = $this->generateWhereClause($criteria);
+
+		$query = 'SELECT COUNT(*) FROM ' . $this->getQuotedName($table) . ' ' . $where;
+
+		return $this->fetchValue($query, array_values($criteria));
+	}
+
+	public function insertOrUpdate(string $table, array $data, array $options = []): int
+	{
+		return $this->insert($table, $data, array_merge($options, ['update' => true]));
+	}
+
 	public function insertIgnore(string $table, array $data, array $options = []): int
 	{
 		return $this->insert($table, $data, array_merge($options, ['ignore' => true]));
@@ -98,17 +108,36 @@ class Database
 
 	public function insert(string $table, array $data, array $options = []): int
 	{
+		$options = array_merge([
+			'update' => false,
+			'ignore' => false,
+		], $options);
+
+		if ($options['ignore'] && $options['update']) {
+			throw new \Exception('Can not handle ignore and update at the same time, choose one');
+		}
+
 		$columns = array_map(
 			[$this, 'getQuotedName'],
 			array_keys($data)
 		);
 
+		$updateStatement = '';
+		if ($options['update']) {
+			$updateValues = array_map(function ($name) {
+				return sprintf('%s = VALUES (%s)', $name, $name);
+			}, $columns);
+			$updateValues = implode(', ', $updateValues);
+			$updateStatement = sprintf('ON DUPLICATE KEY UPDATE %s', $updateValues);
+		}
+
 		$query = sprintf(
-			'INSERT %s INTO %s (%s) VALUES (%s)',
-			array_key_exists('ignore', $options) && $options['ignore'] ? 'IGNORE' : '',
+			'INSERT %s INTO %s (%s) VALUES (%s) %s',
+			 $options['ignore'] ? 'IGNORE' : '',
 			$this->getQuotedName($table),
 			implode(', ', $columns),
-			implode(', ', array_fill(0, count($data), '?'))
+			implode(', ', array_fill(0, count($data), '?')),
+			$updateStatement
 		);
 
 		$this->preparedQuery($query, array_values($data));

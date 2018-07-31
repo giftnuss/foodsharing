@@ -200,7 +200,7 @@ class QuizView extends View
 		return
 			$this->v_utils->v_form_textarea('text') .
 			$this->v_utils->v_form_textarea('explanation') .
-			$this->v_utils->v_form_select('isright', array('values' => array(
+			$this->v_utils->v_form_select('right', array('values' => array(
 				array('id' => 1, 'name' => 'Richtig'),
 				array('id' => 0, 'name' => 'Falsch'),
 				array('id' => 2, 'name' => 'Neutral')
@@ -233,8 +233,6 @@ class QuizView extends View
 	{
 		$out = '
 				<div style="float:right;width:150px;margin-left:50px;margin-bottom:10px;" id="countdown"></div>
-			<!-- <div id="countdown" style="font-size:16px;font-weight:bold;float:right;margin-left:10px;background-color:#4A3520;padding:15px;border-radius:30px;height:30px;width:30px;line-height:30px;text-align:center;color:#FFFFFF;">' . $question['duration'] . '</div> -->
-		
 			<div style="border-radius:10px;font-size:16px;color:#4A3520;padding:10px;background:#F5F5B5;margin-bottom:15px;line-height:20px;">' . $question['text'] . '</div>
 		';
 
@@ -271,7 +269,7 @@ class QuizView extends View
 			</div>
 			<table id="quizbreath" width="100%" height="95%">
 				<tr><td style="vertical-align: middle;text-align:center;font-size:16px;font-weight:bold;color:#4A3520">
-				<img src="img/cuploader.gif" style="margin-bottom:20px;" /><br />
+				<img src="/img/cuploader.gif" style="margin-bottom:20px;" /><br />
 				<span>Verschnaufpause... </span>
 				</td></tr>
 			</table>';
@@ -284,15 +282,7 @@ class QuizView extends View
 			$msg = $this->v_utils->v_info('Die Zeit ist abgelaufen. Daher wird diese Frage leider als falsch gewertet.');
 		}
 
-		return '
-		<!--
-		<div style="position:relative;width:267px;height:31px;overflow:hidden;border-radius:8px;">
-		  <div style="position:absolute;top:-269px;left:-5px">
-		    <iframe width="300" height="300" src="https://www.youtube.com/embed/kupOnNcoIUY?rel=0&autoplay=1"></iframe>
-		  </div>
-		</div>
-		-->
-		' . $msg . '
+		return $msg . '
 		<p style="text-align:center;padding:40px;">
 			<img src="/img/clockloader.gif" />
 		</p>';

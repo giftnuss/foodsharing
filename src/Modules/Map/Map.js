@@ -15,12 +15,7 @@ import storage from '@/storage'
 import L from 'leaflet'
 
 import 'leaflet.awesome-markers'
-import 'leaflet.awesome-markers.css'
-import 'leaflet.awesome-markers.foodsharing-overrides.css'
-
 import 'leaflet.markercluster'
-import 'leaflet.markercluster/dist/MarkerCluster.css'
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 
 import './Map.css'
 
@@ -122,7 +117,7 @@ const map = {
     if (!this.initiated) {
       this.init()
     }
-    u_map.setView([lat, lon], zoom, {animation: true})
+    u_map.setView([lat, lon], zoom, { animation: true })
   }
 }
 
@@ -139,7 +134,7 @@ function u_loadDialog (purl) {
   $('#b_content').addClass('loading')
   $('#b_content').dialog('option', 'title', 'lade...')
   $('#b_content').dialog('open')
-  const pos = $('#top .inner').offset()
+  const pos = $('#topbar .container').offset()
   $('#b_content').parent().css({
     'left': pos.left + 'px',
     'top': '80px'
@@ -196,7 +191,7 @@ function loadMarker (types, loader) {
 
   $.ajax({
     url: '/xhr.php?f=loadMarker',
-    data: {types: types, options: options},
+    data: { types: types, options: options },
     dataType: 'json',
     success: function (data) {
       if (data.status == 1) {
@@ -216,7 +211,7 @@ function loadMarker (types, loader) {
             url = '/xhr.php?f=fsBubble&id=' + fsid
             showLoader()
           } else if (type === 'bk') {
-            ajreq('bubble', {app: 'basket', id: fsid})
+            ajreq('bubble', { app: 'basket', id: fsid })
           } else if (type === 'b') {
             url = '/xhr.php?f=bBubble&id=' + fsid
             u_loadDialog()
@@ -231,7 +226,7 @@ function loadMarker (types, loader) {
               success: function (data) {
                 if (data.status === 1) {
                   if (type === 'fs') {
-                    const popup = new L.Popup({offset: new L.Point(1, -35)})
+                    const popup = new L.Popup({ offset: new L.Point(1, -35) })
                     popup.setLatLng(el.latlng)
                     popup.setContent(data.html)
                     u_map.openPopup(popup)
@@ -254,7 +249,7 @@ function loadMarker (types, loader) {
           $('#map-control li a.baskets').addClass('active')
           for (let i = 0; i < data.baskets.length; i++) {
             const a = data.baskets[i]
-            const marker = L.marker(new L.LatLng(a.lat, a.lon), {id: a.id, icon: bkIcon, type: 'bk'})
+            const marker = L.marker(new L.LatLng(a.lat, a.lon), { id: a.id, icon: bkIcon, type: 'bk' })
             markers.addLayer(marker)
           }
         }
@@ -263,7 +258,7 @@ function loadMarker (types, loader) {
           $('#map-control li a.foodsaver').addClass('active')
           for (let i = 0; i < data.foodsaver.length; i++) {
             const a = data.foodsaver[i]
-            const marker = L.marker(new L.LatLng(a.lat, a.lon), {id: a.id, icon: fsIcon, type: 'fs'})
+            const marker = L.marker(new L.LatLng(a.lat, a.lon), { id: a.id, icon: fsIcon, type: 'fs' })
             markers.addLayer(marker)
           }
         }
@@ -272,7 +267,7 @@ function loadMarker (types, loader) {
           $('#map-control li a.betriebe').addClass('active')
           for (let i = 0; i < data.betriebe.length; i++) {
             const a = data.betriebe[i]
-            const marker = L.marker(new L.LatLng(a.lat, a.lon), {id: a.id, icon: bIcon, type: 'b'})
+            const marker = L.marker(new L.LatLng(a.lat, a.lon), { id: a.id, icon: bIcon, type: 'b' })
 
             markers.addLayer(marker)
           }
@@ -297,7 +292,7 @@ function loadMarker (types, loader) {
           $('#map-control li a.botschafter').addClass('active')
           for (let i = 0; i < data.botschafter.length; i++) {
             const a = data.botschafter[i]
-            const marker = L.marker(new L.LatLng(a.lat, a.lon), {id: a.id, icon: botIcon, type: 'fs'})
+            const marker = L.marker(new L.LatLng(a.lat, a.lon), { id: a.id, icon: botIcon, type: 'fs' })
             markers.addLayer(marker)
           }
         }

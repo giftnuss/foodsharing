@@ -167,5 +167,9 @@ class SeedCommand extends Command implements CustomCommandInterface
 				$I->addFairteilerPost($follower, $fairteiler['id']);
 			}
 		}
+
+		foreach (range(0, 20) as $_) {
+			$I->addBlogPost($userbot['id'], $bezirk1);
+		}
 	}
 }

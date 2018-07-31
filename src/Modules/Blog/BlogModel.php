@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Modules\Blog;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Bell\BellGateway;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
-class BlogModel extends Model
+class BlogModel extends Db
 {
 	private $bellGateway;
 	private $foodsaverGateway;
@@ -105,7 +105,7 @@ class BlogModel extends Model
 	{
 		$not = '';
 		if (!$this->func->isOrgaTeam()) {
-			$not = 'WHERE 		`bezirk_id` IN (' . implode(',', $this->session->getBezirkIds()) . ')';
+			$not = 'WHERE 		`bezirk_id` IN (' . implode(',', $this->session->getRegionIds()) . ')';
 		}
 
 		return $this->q('

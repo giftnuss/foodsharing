@@ -329,48 +329,6 @@
   background-color: #599022;
 }
 
-#infobar li a .button {
-  border: 0 none;
-  font-size: 22px;
-  height: 25px;
-  line-height: 24px;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  width: 25px;
-  display: none;
-  position: absolute;
-  right: 4px;
-}
-
-#infobar li a:hover .icon {
-  display: none;
-}
-
-#infobar li a:hover .button {
-  display: inline-block;
-  background-color: #967d61 !important;
-  -webkit-border-radius: 14px;
-  -moz-border-radius: 14px;
-  border-radius: 14px;
-}
-
-#infobar li a:hover .button:hover {
-  background-color: #599022 !important;
-}
-
-#infobar li.title {
-  color: #b4aba3;
-  border-top: 1px solid #e4e1de;
-  padding: 4px;
-  font-size: 12px;
-  padding-top: 20px;
-}
-
-#infobar li.title:first-child {
-  display: none;
-}
-
 .conversation-list li > a {
   padding: 6px;
   -webkit-border-radius: 4px;
@@ -408,12 +366,4 @@
 .conversation-list .time {
   color: #b4aba3;
   font-size: 11px;
-}
-
-#infobar .loader {
-  text-align: center;
-  font-size: 25px;
-  height: 50px;
-  line-height: 50px;
-  color: #4a3520;
 }

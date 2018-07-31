@@ -90,7 +90,7 @@
 				</div>
 				<div class="element-wrapper">
 					<input placeholder="{{ 'register.login_location'|trans }}" type="text" value="" id="login_location" name="login_location" class="input text value" />
-					<div class="corner-all" id="join_mapview"></div>
+					{{ map|raw }}
 					<form class="join_geo_data" style="display:none;">
 						<input type="hidden" name="lat" id="join_lat" value="" />
 						<input type="hidden" name="lng" id="join_lon" value="" />

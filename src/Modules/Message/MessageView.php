@@ -13,7 +13,7 @@ class MessageView extends View
 
 			<div class="welcome_profile_image">
 				<a onclick="profile(56);return false;" href="#">
-					<img width="50" height="50" src="img/message.png" alt="' . $this->func->s('messages') . '" class="image_online">
+					<img width="50" height="50" src="/img/message.png" alt="' . $this->func->s('messages') . '" class="image_online">
 				</a>
 			</div>
 			<div class="welcome_profile_name">
@@ -84,7 +84,7 @@ class MessageView extends View
 						$title = $c['name'];
 					}
 
-					$list .= '<li id="convlist-' . $c['id'] . '" class="unread-' . (int)$c['unread'] . '"><a href="#" onclick="' . $click . '(' . $c['id'] . ');info.$allWrapper.hide();return false;"><span class="pics">' . $pics . '</span><span class="names">' . $title . '</span><span class="msg">' . $c['last_message'] . '</span><span class="time">' . $this->func->niceDate($c['last_ts']) . '</span><span class="clear"></span></a></li>';
+					$list .= '<li id="convlist-' . $c['id'] . '" class="unread-' . (int)$c['unread'] . '"><a href="#" onclick="' . $click . '(' . $c['id'] . ');return false;"><span class="pics">' . $pics . '</span><span class="names">' . $title . '</span><span class="msg">' . $c['last_message'] . '</span><span class="time">' . $this->func->niceDate($c['last_ts']) . '</span><span class="clear"></span></a></li>';
 				}
 			}
 		} else {

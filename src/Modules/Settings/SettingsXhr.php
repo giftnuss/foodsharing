@@ -7,16 +7,19 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Login\LoginGateway;
 
 class SettingsXhr extends Control
 {
 	private $foodsaverGateway;
+	private $loginGateway;
 
-	public function __construct(SettingsModel $model, SettingsView $view, FoodsaverGateway $foodsaverGateway)
+	public function __construct(SettingsModel $model, SettingsView $view, FoodsaverGateway $foodsaverGateway, LoginGateway $loginGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->loginGateway = $loginGateway;
 
 		parent::__construct();
 
@@ -99,7 +102,7 @@ class SettingsXhr extends Control
 	{
 		if ($fs = $this->model->getValues(array('email'), 'foodsaver', $this->func->fsId())) {
 			$did = strip_tags($_GET['did']);
-			if ($this->model->checkClient($fs['email'], $_GET['pw'])) {
+			if ($this->loginGateway->checkClient($fs['email'], $_GET['pw'])) {
 				if ($email = $this->model->getMailchange()) {
 					if ($this->model->changeMail($email)) {
 						return array(

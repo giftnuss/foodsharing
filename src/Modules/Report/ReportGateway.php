@@ -72,27 +72,28 @@ class ReportGateway extends BaseGateway
 
 	public function getReportStats(): array
 	{
-		$ret = $this->db->fetchAllValues(
+		$ret = $this->db->fetchAll(
 			'
-			SELECT 	COUNT(`id`)
+			SELECT 	`committed`, COUNT(`id`) as count
 			FROM 	fs_report
 			GROUP BY `committed`
+			ORDER BY `committed`
 		'
 		);
-
 		$new = 0;
 		$com = 0;
-		if (isset($ret[0])) {
-			$new = $ret[0];
-		}
-		if (isset($ret[1])) {
-			$com = $ret[1];
+		foreach ($ret as $r) {
+			if ($r['committed'] == 0) {
+				$new = $r['count'];
+			} else {
+				$com = $r['count'];
+			}
 		}
 
-		return array(
+		return [
 			'com' => $com,
-			'new' => $new,
-		);
+			'new' => $new
+		];
 	}
 
 	public function getReportedSaver($id): ?array
