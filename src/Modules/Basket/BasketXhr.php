@@ -3,11 +3,11 @@
 namespace Foodsharing\Modules\Basket;
 
 use Flourish\fImage;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Message\MessageModel;
 
 class BasketXhr extends Control
@@ -17,7 +17,7 @@ class BasketXhr extends Control
 	private $messageModel;
 
 	public function __construct(
-		Model $model,
+		Db $model,
 		BasketView $view,
 		BasketGateway $basketGateway,
 		MessageModel $messageModel

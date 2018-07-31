@@ -299,7 +299,7 @@ class BasketGateway extends BaseGateway
 		);
 	}
 
-	public function listMyBaskets($fsId)
+	public function listMyBaskets($fsId): array
 	{
 		$stm = '
 			SELECT 
@@ -333,7 +333,7 @@ class BasketGateway extends BaseGateway
 			return $baskets;
 		}
 
-		return false;
+		return [];
 	}
 
 	public function follow($basket_id, $fsId): void
