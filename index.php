@@ -42,14 +42,6 @@ $func = DI::$shared->get(Func::class);
 /* @var $session Session */
 $session = DI::$shared->get(Session::class);
 
-$func->addStylesheet('/css/gen/style.css?v=' . VERSION);
-$func->addScript('/js/gen/script.js?v=' . VERSION);
-
-$func->addStylesheet('/css/pure/pure.min.css');
-$func->addStylesheet('/css/pure/grids-responsive-min.css');
-$func->addStylesheet('/fonts/font-awesome-4.7.0/css/font-awesome.min.css');
-
-$g_body_class = '';
 $g_broadcast_message = $db->qOne('SELECT `body` FROM fs_content WHERE `id` = 51');
 
 if (DebugBar::isEnabled()) {
@@ -67,21 +59,16 @@ if ($session->may()) {
 			$func->goLogin();
 		}
 	}
-
-	$g_body_class = ' class="loggedin"';
 }
 
 $app = $func->getPage();
 
-$usesWebpack = false;
 if (($class = $session->getRouteOverride()) === null) {
 	$class = Routing::getClassName($app, 'Control');
 }
 
 if ($class) {
 	$obj = DI::$shared->get(ltrim($class, '\\'));
-
-	$usesWebpack = $obj->getUsesWebpack();
 
 	if (isset($_GET['a']) && is_callable(array($obj, $_GET['a']))) {
 		$meth = $_GET['a'];
@@ -95,10 +82,6 @@ if ($class) {
 	}
 }
 
-if (!$usesWebpack) {
-	require_once 'lib/global-js.php';
-}
-
 $page = $response->getContent();
 $isUsingResponse = $page !== '--';
 if ($isUsingResponse) {
@@ -106,7 +89,7 @@ if ($isUsingResponse) {
 } else {
 	/* @var $twig \Twig\Environment */
 	$twig = DI::$shared->get(\Twig\Environment::class);
-	$page = $twig->render('layouts/' . $g_template . '.twig', $func->generateAndGetGlobalViewData($usesWebpack));
+	$page = $twig->render('layouts/' . $g_template . '.twig', $func->generateAndGetGlobalViewData());
 }
 
 if (isset($cache) && $cache->shouldCache()) {

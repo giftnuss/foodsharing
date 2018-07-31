@@ -37,8 +37,6 @@ class AsyncMail
 
 	public function setBody($body)
 	{
-		$body = str_replace(array('<br>', '<br />', '<br/>', '<p>', '</p>', '</ p>'), "\n", $body);
-		$body = strip_tags($body);
 		$this->data['body'] = $body;
 	}
 

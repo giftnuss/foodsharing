@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Region;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
 
 class RegionXhr extends Control
 {
@@ -13,7 +13,7 @@ class RegionXhr extends Control
 	private $regionHelper;
 	private $twig;
 
-	public function __construct(Model $model, ForumGateway $forumGateway, RegionHelper $regionHelper, \Twig\Environment $twig)
+	public function __construct(Db $model, ForumGateway $forumGateway, RegionHelper $regionHelper, \Twig\Environment $twig)
 	{
 		$this->model = $model;
 		$this->forumGateway = $forumGateway;
@@ -29,54 +29,6 @@ class RegionXhr extends Control
 		return ($BotThemestatus['bot_theme'] == 0 && $this->func->mayBezirk($BotThemestatus['bezirk_id']))
 			|| ($BotThemestatus['bot_theme'] == 1 && $this->func->isBotFor($BotThemestatus['bezirk_id']))
 			|| $this->func->isOrgaTeam();
-	}
-
-	public function followTheme()
-	{
-		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
-		if (!$this->session->may() || !$this->hasThemeAccess($bot_theme)) {
-			return $this->responses->fail_permissions();
-		}
-
-		$this->forumGateway->followThread($this->session->id(), $_GET['tid']);
-
-		return $this->responses->success();
-	}
-
-	public function unfollowTheme()
-	{
-		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
-		if (!$this->session->may() || !$this->hasThemeAccess($bot_theme)) {
-			return $this->responses->fail_permissions();
-		}
-
-		$this->forumGateway->unfollowThread($this->session->id(), $_GET['tid']);
-
-		return $this->responses->success();
-	}
-
-	public function stickTheme()
-	{
-		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
-		if (!$this->session->may() || !$this->hasThemeAccess($bot_theme)) {
-			return $this->responses->fail_permissions();
-		}
-
-		$this->forumGateway->stickThread($_GET['tid']);
-
-		return $this->responses->success();
-	}
-
-	public function unstickTheme()
-	{
-		$bot_theme = $this->forumGateway->getBotThreadStatus($_GET['tid']);
-		if (!$this->session->may() || !$this->hasThemeAccess($bot_theme)) {
-			return $this->responses->fail_permissions();
-		}
-
-		$this->forumGateway->unstickThread($_GET['tid']);
-
-		return $this->responses->success();
 	}
 
 	public function morethemes()

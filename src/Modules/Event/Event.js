@@ -1,0 +1,7 @@
+import '@/core'
+import '@/globals'
+import 'typeahead'
+import 'typeahead-addresspicker'
+import 'leaflet'
+import 'leaflet.awesome-markers'
+import './Event.css'

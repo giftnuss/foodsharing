@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Report;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
 class ReportXhr extends Control
@@ -13,7 +13,7 @@ class ReportXhr extends Control
 	private $reportGateway;
 	private $foodsaverGateway;
 
-	public function __construct(ReportGateway $reportGateway, Model $model, ReportView $view, FoodsaverGateway $foodsaverGateway)
+	public function __construct(ReportGateway $reportGateway, Db $model, ReportView $view, FoodsaverGateway $foodsaverGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
@@ -36,7 +36,8 @@ class ReportXhr extends Control
 			$dialog = new XhrDialog();
 			$dialog->setTitle('Meldung über ' . $report['fs_name'] . ' ' . $report['fs_nachname']);
 
-			$content = $this->v_utils->v_input_wrapper('Zeitpunkt', $this->func->niceDate($report['time_ts']));
+			$content = $this->v_utils->v_input_wrapper('Report ID', $report['id']);
+			$content .= $this->v_utils->v_input_wrapper('Zeitpunkt', $this->func->niceDate($report['time_ts']));
 
 			if (isset($report['betrieb'])) {
 				$content .= $this->v_utils->v_input_wrapper('Zugeordneter Betrieb', '<a href="/?page=fsbetrieb&id=' . $report['betrieb']['id'] . '">' . $report['betrieb']['name'] . '</a>');
@@ -131,22 +132,22 @@ class ReportXhr extends Control
 			$("#reportreason ~ div.cb").hide();
 			$("#reportreason_" + value).show();
 			$("#reportreason_" + value + "_sub").show();
-		});	
+		});
 		$("#reportreason ~ select").hide();
 		$("#reportreason ~ div.cb").hide();');
 
 		$dialog->addJs('$("#reportmessage").css("width","555px");');
 		$dialog->addButton('Meldung senden', '
-				
+
 		if($("#reportreason").val() == 0)
 		{
-			pulseError("Gib Bitte einen Grund für die Meldung an!");		
+			pulseError("Gib Bitte einen Grund für die Meldung an!");
 		}
 		else
 		{
-				
+
 			var reason = $("#reportreason option:selected").text();
-			
+
 			if($("select#reportreason_" + $("#reportreason").val()).length > 0 && $("select#reportreason_" + $("#reportreason").val()).val() != 0)
 			{
 				reason += " => " + $("select#reportreason_" + $("#reportreason").val() + " option:selected").text();
@@ -155,7 +156,7 @@ class ReportXhr extends Control
 			{
 				$("#reportreason_" + $("#reportreason").val() + " input:checked").each(function(){
 					reason += " => " + $(this).parent().text();
-					
+
 				});
 			}
 			if($("select#reportreason_" + $("#reportreason").val() + "_sub").length > 0 && $("select#reportreason_" + $("#reportreason").val() + "_sub").val() != 0)
@@ -169,7 +170,7 @@ class ReportXhr extends Control
 				reason_id: $("#reportreason").val(),
 				reason: reason,
 				msg: $("#reportmessage").val()
-			});	
+			});
 		}
 		');
 
@@ -190,7 +191,7 @@ class ReportXhr extends Control
 				$(".xhrDialog").dialog("close");
 				$(".xhrDialog").dialog("destroy");
 				$(".xhrDialog").remove();
-				
+
 				pulseInfo("Danke Dir! Die Meldung wird an die verantwortlichen Personen weitergeleitet.");
 				$("#reportmessage").val("");
 				$("#reportreason ~ select").hide();

@@ -13,7 +13,8 @@ use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
 use Foodsharing\Modules\Region\RegionGateway;
-use JSMin;
+use Foodsharing\Services\SanitizerService;
+use JSMin\JSMin;
 
 class Func
 {
@@ -34,6 +35,7 @@ class Func
 	private $stylesheets;
 	private $add_css;
 	private $viewUtils;
+	private $sanitizerService;
 
 	private $webpackScripts;
 	private $webpackStylesheets;
@@ -50,9 +52,10 @@ class Func
 	 */
 	private $session;
 
-	public function __construct(Utils $viewUtils)
+	public function __construct(Utils $viewUtils, SanitizerService $sanitizerService)
 	{
 		$this->viewUtils = $viewUtils;
+		$this->sanitizerService = $sanitizerService;
 		$this->content_main = '';
 		$this->content_right = '';
 		$this->content_left = '';
@@ -412,18 +415,12 @@ class Func
 		return false;
 	}
 
+	/**
+	 * @deprecated use $this->session->isAdminFor($regionId) instead
+	 */
 	public function isBotFor($bezirk_id)
 	{
-		if ($this->isBotschafter()) {
-			foreach ($_SESSION['client']['botschafter'] as $b) {
-				if ($b['bezirk_id'] == $bezirk_id) {
-					return true;
-					break;
-				}
-			}
-		}
-
-		return false;
+		return $this->session->isAdminFor($bezirk_id);
 	}
 
 	/**
@@ -442,7 +439,7 @@ class Func
 		return $this->session->isOrgaTeam();
 	}
 
-	public function getMenu($usesWebpack = false)
+	public function getMenu()
 	{
 		$regions = [];
 		$stores = [];
@@ -476,7 +473,7 @@ class Func
 			$this->session->get('mailbox'),
 			$this->fsId(),
 			$loggedIn ? $this->img() : '',
-			$usesWebpack
+			$this->session->may('bieb')
 		);
 	}
 
@@ -484,11 +481,9 @@ class Func
 		bool $loggedIn, array $regions, bool $hasFsRole,
 		bool $isOrgaTeam, bool $mayEditBlog, bool $mayEditQuiz, bool $mayHandleReports,
 		array $stores, array $workingGroups,
-		$sessionMailbox, int $fsId, string $image,
-		bool $usesWebpack)
+		$sessionMailbox, int $fsId, string $image, bool $mayAddStore)
 	{
 		$params = array_merge([
-			'webpack' => $usesWebpack,
 			'loggedIn' => $loggedIn,
 			'fsId' => $fsId,
 			'image' => $image,
@@ -498,17 +493,23 @@ class Func
 			'may' => [
 				'editBlog' => $mayEditBlog,
 				'editQuiz' => $mayEditQuiz,
-				'handleReports' => $mayHandleReports
+				'handleReports' => $mayHandleReports,
+				'addStore' => $mayAddStore
 			],
-			'stores' => $stores,
+			'stores' => array_values($stores),
 			'regions' => $regions,
 			'workingGroups' => $workingGroups
 		]);
 
-		return [
-			'default' => $this->twig->render('partials/menu.default.twig', $params),
-			'mobile' => $this->twig->render('partials/menu.mobile.twig', $params)
-		];
+		return $this->twig->render('partials/vue-wrapper.twig', [
+			'id' => 'vue-topbar',
+			'component' => 'topbar',
+			'props' => $params
+		]);
+		// return [
+		// 	'default' => $this->twig->render('partials/menu.default.twig', $params),
+		// 	'mobile' => $this->twig->render('partials/menu.mobile.twig', $params)
+		// ];
 	}
 
 	public function preZero($i)
@@ -649,13 +650,13 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$message['subject'] = 'Foodsharing-Mail';
 		}
 
-		$mail->setSubject($message['subject']);
-		$mail->setHTMLBody($this->emailBodyTpl($message['body']));
+		$mail->setSubject($this->sanitizerService->htmlToPlain($message['subject']));
+		$htmlBody = $this->emailBodyTpl($message['body']);
+		$mail->setHTMLBody($htmlBody);
 
 		// playintext body
-		$body = str_replace(array('<br />', '<br>', '<br/>', '<p>', '</p>'), "\r\n", $message['body']);
-		$body = strip_tags($body);
-		$mail->setBody($body);
+		$plainBody = $this->sanitizerService->htmlToPlain($htmlBody);
+		$mail->setBody($plainBody);
 
 		$mail->addRecipient($to);
 		$mail->send();
@@ -1074,11 +1075,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 	}
 
-	public function addScript($src)
-	{
-		$this->scripts[] = $src;
-	}
-
 	public function addWebpackScript($src)
 	{
 		$this->webpackScripts[] = $src;
@@ -1097,11 +1093,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	public function addJs($njs)
 	{
 		$this->js .= $njs;
-	}
-
-	public function addStylesheet($src)
-	{
-		$this->stylesheets[] = $src;
 	}
 
 	public function addWebpackStylesheet($src)
@@ -1129,12 +1120,21 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	/**
 	 * This is used to set window.serverData on in the frontend.
 	 */
-	public function getServerData(bool $usesWebpack)
+	public function getServerData()
 	{
+		$user = $this->session->get('user');
+
 		$userData = [
 			'id' => $this->fsId(),
+			'firstname' => $user['name'],
+			'lastname' => $user['nachname'],
 			'may' => $this->session->may(),
 			'verified' => $this->isVerified(),
+			'avatar' => [
+				'mini' => $this->img($user['photo'], 'mini'),
+				'50' => $this->img($user['photo'], '50'),
+				'130' => $this->img($user['photo'], '130')
+			]
 		];
 
 		if ($this->session->may()) {
@@ -1157,55 +1157,38 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 
 		return array_merge($this->jsData, [
-			'webpack' => $usesWebpack,
 			'user' => $userData,
 			'page' => $this->getPage(),
 			'subPage' => $this->getSubPage(),
 			'location' => $location,
 			'ravenConfig' => $ravenConfig,
 			'translations' => $this->getTranslations(),
-			'GOOGLE_API_KEY' => GOOGLE_API_KEY
+			'GOOGLE_API_KEY' => GOOGLE_API_KEY,
+			'isDev' => getenv('FS_ENV') === 'dev'
 		]);
 	}
 
-	public function getHeadData(bool $usesWebpack = false)
+	public function getHeadData()
 	{
-		$data = [
+		return [
 			'title' => implode(' | ', $this->title),
 			'extra' => $this->head,
 			'css' => str_replace(["\r", "\n"], '', $this->add_css),
 			'jsFunc' => JSMin::minify($this->js_func),
 			'js' => JSMin::minify($this->js),
-			'ravenConfig' => null
+			'ravenConfig' => null,
+			'stylesheets' => $this->webpackStylesheets,
+			'scripts' => $this->webpackScripts
 		];
-
-		if ($usesWebpack) {
-			$data = array_merge($data, [
-				'stylesheets' => $this->webpackStylesheets,
-				'scripts' => $this->webpackScripts
-			]);
-		} else {
-			$data = array_merge($data, [
-				'stylesheets' => $this->stylesheets,
-				'scripts' => $this->scripts
-			]);
-
-			if (defined('RAVEN_JAVASCRIPT_CONFIG')) {
-				$data['ravenConfig'] = RAVEN_JAVASCRIPT_CONFIG;
-			}
-		}
-
-		return $data;
 	}
 
-	public function generateAndGetGlobalViewData(bool $usesWebpack = false)
+	public function generateAndGetGlobalViewData()
 	{
 		global $g_broadcast_message;
-		global $g_body_class;
 		global $content_left_width;
 		global $content_right_width;
 
-		$menu = $this->getMenu($usesWebpack);
+		$menu = $this->getMenu();
 
 		$this->getMessages();
 
@@ -1222,27 +1205,23 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$mainwidth -= $content_right_width;
 		}
 
-		$msgbar = '';
-		$logolink = '/';
+		$bodyClasses = [];
+
 		if ($this->session->may()) {
-			$msgbar = $this->viewUtils->v_msgBar();
-			$logolink = '/?page=dashboard';
-		} else {
-			$msgbar = $this->viewUtils->v_login();
+			$bodyClasses[] = 'loggedin';
 		}
 
+		$bodyClasses[] = 'page-' . $this->getPage();
+
 		return [
-			'head' => $this->getHeadData($usesWebpack),
+			'head' => $this->getHeadData(),
 			'bread' => $this->getBread(),
-			'bodyClass' => $g_body_class,
-			'msgbar' => $msgbar,
-			'serverDataJSON' => json_encode($this->getServerData($usesWebpack)),
+			'bodyClasses' => $bodyClasses,
+			'serverDataJSON' => json_encode($this->getServerData()),
 			'menu' => $menu,
-			'webpack' => $usesWebpack,
 			'dev' => FS_ENV == 'dev',
 			'hidden' => $this->getHidden(),
 			'isMob' => $this->isMob(),
-			'logolink' => $logolink,
 			'broadcast_message' => $g_broadcast_message,
 			'SRC_REVISION' => defined('SRC_REVISION') ? SRC_REVISION : null,
 			'HTTP_HOST' => $_SERVER['HTTP_HOST'],
@@ -1370,11 +1349,10 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$subject = 'Foodsharing-Mail';
 		}
 		$mail->setSubject($subject);
-		$mail->setHTMLBody($this->emailBodyTpl($message, $email, $token));
+		$htmlBody = $this->emailBodyTpl($message, $email, $token);
+		$mail->setHTMLBody($htmlBody);
 
-		//Replace the plain text body with one created manually
-		$message = str_replace('<br />', "\r\n", $message);
-		$message = strip_tags($message);
+		$plainBody = $this->sanitizerService->htmlToPlain($htmlBody);
 		$mail->setBody($message);
 
 		if ($attach !== false) {
@@ -1450,7 +1428,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 				$.ajax({
 
 					dataType:"json",
-					url:"xhr.php?f=update_' . $table . '&" + $("#' . $id . ' form").serialize(),
+					url:"/xhr.php?f=update_' . $table . '&" + $("#' . $id . ' form").serialize(),
 					success : function(data){
 						$("#' . $id . '").dialog(\'close\');
 						' . $success . '
@@ -1502,7 +1480,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function mayHandleReports()
 	{
-		// group "Verstöße/Meldungen"
+		// group "Regelverletzungen/Meldungen"
 		return $this->session->may('orga') || $this->isBotFor(432);
 	}
 
@@ -1721,6 +1699,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	public function tt($str, $length = 160)
 	{
 		if (strlen($str) > $length) {
+			/* this removes the part of the last word that might have been destroyed by substr */
 			$str = preg_replace('/[^ ]*$/', '', substr($str, 0, $length)) . ' ...';
 		}
 

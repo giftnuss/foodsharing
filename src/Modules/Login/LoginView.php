@@ -2,19 +2,23 @@
 
 namespace Foodsharing\Modules\Login;
 
+use Foodsharing\Lib\View\vMap;
 use Foodsharing\Modules\Core\View;
 
 class LoginView extends View
 {
 	public function join($email = '', $pass = '', $datenschutz, $rechtsvereinbarung)
 	{
+		$map = new vMap();
+		$map->setSearchPanel('login_location');
 		$params = array(
 			'date_min' => date('Y-m-d', strtotime('-120 years')),
 			'date_max' => date('Y-m-d', strtotime('-18 years')),
 			'datenschutz' => $datenschutz,
 			'rechtsvereinbarung' => $rechtsvereinbarung,
 			'pass' => $pass,
-			'email' => $email
+			'email' => $email,
+			'map' => $map->render()
 		);
 
 		return $this->twig->render('pages/Register/RegisterForm.twig', $params);

@@ -110,6 +110,9 @@ class FairTeilerGateway extends BaseGateway
 
 	public function listFairteiler($bezirk_ids)
 	{
+		if (!$bezirk_ids) {
+			return [];
+		}
 		if ($fairteiler = $this->db->fetchAll(
 			'
 			SELECT 	`id`,

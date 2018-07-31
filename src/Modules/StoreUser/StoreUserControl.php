@@ -42,7 +42,7 @@ class StoreUserControl extends Control
 
 			$this->func->jsData['store'] = [
 				'id' => (int)$betrieb['id'],
-				'name' => (int)$betrieb['name'],
+				'name' => $betrieb['name'],
 				'bezirk_id' => (int)$betrieb['bezirk_id'],
 				'team_js' => $betrieb['team_js'],
 				'verantwortlich' => $betrieb['verantwortlich'],
@@ -122,7 +122,7 @@ class StoreUserControl extends Control
 						'team',
 
 						array(
-							$this->v_utils->v_form_tagselect('foodsaver', array('valueOptions' => $this->foodsaverGateway->xhrGetTagFsAll($this->session->getBezirkIds()))),
+							$this->v_utils->v_form_tagselect('foodsaver', array('valueOptions' => $this->foodsaverGateway->xhrGetTagFsAll($this->session->getRegionIds()))),
 							$verantwortlich_select),
 						array('submit' => $this->func->s('save'))
 					);

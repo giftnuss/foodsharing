@@ -50,7 +50,7 @@ class SettingsView extends View
 				{
 					$("#daterange-wrapper").hide();
 				}
-				
+
 				if($this.val() > 0)
 				{
 					$("#sleep_msg-wrapper").show();
@@ -59,9 +59,9 @@ class SettingsView extends View
 				{
 					$("#sleep_msg-wrapper").hide();
 				}
-			});	
-			$("#sleep_msg").css("height","50px").autosize();	
-				
+			});
+			$("#sleep_msg").css("height","50px").autosize();
+
 			$("#schlafmtzenfunktion-form").submit(function(ev){
 				ev.preventDefault();
 				ajax.req("settings","sleepmode",{
@@ -82,6 +82,7 @@ class SettingsView extends View
 
 		$out = $this->v_utils->v_quickform($this->func->s('sleepmode'), array(
 			$this->v_utils->v_info($this->func->s('sleepmode_info')),
+			$this->v_utils->v_info($this->func->s('sleepmode_show')),
 			$this->v_utils->v_form_select('sleep_status', array(
 				'values' => array(
 					array('id' => 0, 'name' => $this->func->s('no_sleepmode')),
@@ -330,21 +331,21 @@ class SettingsView extends View
 					<div class="answer q-' . $right . '">
 						' . $this->v_utils->v_input_wrapper('Antwort ' . $ai . $atext, $a['text']) . '
 						' . $this->v_utils->v_input_wrapper('Erklärung', $a['explanation']) . '
-						
+
 					</div>';
 				} elseif ($sort_right == 'neutral') {
 					$neutral_answers .= '
 					<div class="answer q-' . $right . '">
 						' . $this->v_utils->v_input_wrapper('Antwort ' . $ai . $atext, $a['text']) . '
 						' . $this->v_utils->v_input_wrapper('Erklärung', $a['explanation']) . '
-			
+
 					</div>';
 				} elseif ($sort_right == 'false') {
 					$wrong_answers .= '
 					<div class="answer q-' . $right . '">
 						' . $this->v_utils->v_input_wrapper('Antwort ' . $ai . $atext, $a['text']) . '
 						' . $this->v_utils->v_input_wrapper('Erklärung', $a['explanation']) . '
-					
+
 					</div>';
 				}
 			}
@@ -453,7 +454,7 @@ class SettingsView extends View
 				}
 			}
 		});
-		
+
 		$("#delete-account").button().click(function(){
 			$("#delete-account-confirm").dialog("open");
 		});
@@ -484,14 +485,14 @@ class SettingsView extends View
 			$e = e;
 			if($("#photo_public").val()==4 && confirm("Achtung niemand kann Dich mit Deinen Einstellungen kontaktieren. Bist Du sicher?"))
 			{
-	
+
 			}
 			else
 			{
 				$e.preventDefault();
 			}
 		}
-	
+
 	});');
 
 		$oeff = $this->v_utils->v_form_radio('photo_public', array('desc' => 'Du solltest zumindest intern den Menschen in Deiner Umgebung ermöglichen, Dich zu kontaktieren. So kannst Du von anderen Foodsavern eingeladen werden, Lebensmittel zu retten und Ihr könnt Euch einander kennen lernen.', 'values' => array(

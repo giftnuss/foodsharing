@@ -43,13 +43,14 @@ class ChatCest
 			$I->login($this->foodsaver2['email'], 'pw');
 			$I->amOnPage('/');
 
+			$I->waitForActiveAPICalls();
 			// check they have the nice little notification badge
-			$I->see('1', '.msg .badge');
+			$I->see('1', '.topbar-messages .badge');
 
 			// open the conversation menu and open the new conversation
-			$I->click('.msg a');
-			$I->waitForElementVisible('.unread-1', 4);
-			$I->click('.unread-1 a');
+			$I->click('.topbar-messages > a');
+			$I->waitForElementVisible('.topbar-messages .list-group-item-warning', 4);
+			$I->click('.topbar-messages .list-group-item-warning');
 			$I->waitForElementVisible('.chatboxtextarea', 4);
 
 			// write a nice reply

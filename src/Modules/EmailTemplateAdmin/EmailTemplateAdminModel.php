@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\EmailTemplateAdmin;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 
-class EmailTemplateAdminModel extends Model
+class EmailTemplateAdminModel extends Db
 {
 	public function getBasics_message_tpl()
 	{

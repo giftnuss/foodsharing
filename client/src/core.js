@@ -8,11 +8,15 @@ import { initialize, ajreq } from '@/script'
 import 'jquery-ui'
 
 import 'fullpage.js'
-
 import 'jquery-contextmenu'
 import 'jquery-contextmenu/dist/jquery.ui.position'
 import 'jquery-contextmenu/dist/jquery.contextMenu.css'
 import '@/jquery.contextMenu.overrides.css'
+import './scss/bootstrap-theme.scss'
+import './scss/index.scss'
+
+// TODO: join dynamic form could be on any page - fix this
+import '@/join'
 
 import '@/menu'
 import '@/becomeBezirk'
@@ -20,18 +24,8 @@ import '@/becomeBezirk'
 import serverData from '@/server-data'
 
 import socket from '@/socket'
-import info from '@/info'
-import search from '@/instant-search'
 
 initialize()
-
-$('#mainMenu > li > a').each(function () {
-  if (parseInt(this.href.length) > 2 && this.href.indexOf(serverData.page) > 0) {
-    $(this).parent().addClass('active').click(function (ev) {
-      // ev.preventDefault();
-    })
-  }
-})
 
 $('#fs-profile-rate-comment').dialog({
   modal: true,
@@ -61,8 +55,6 @@ $('#fs-profile-rate-comment').dialog({
 
 if (serverData.user.may) {
   socket.connect()
-  info.init()
-  search.init()
 } else {
   clearInterval(window.g_interval_newBasket)
 }

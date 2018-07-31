@@ -103,7 +103,7 @@ class StoreView extends View
 		return $this->v_utils->v_quickform('betrieb', array(
 			$bc,
 			$this->v_utils->v_form_hidden('page', $page),
-			$this->v_utils->v_form_text('name'),
+			$this->v_utils->v_form_text('name', ['required' => true]),
 			$this->latLonPicker('LatLng', $latLonOptions),
 
 			$this->v_utils->v_form_select('kette_id', array('add' => true, 'values' => $chains, 'desc' => 'Bitte nur inhabergeführte Betriebe selbstständig ansprechen, niemals Betriebe einer Kette anfragen!')),

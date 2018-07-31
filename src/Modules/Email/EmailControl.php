@@ -5,8 +5,8 @@ namespace Foodsharing\Modules\Email;
 use DOMDocument;
 use Exception;
 use Flourish\fImage;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -20,7 +20,7 @@ class EmailControl extends Control
 	private $emailGateway;
 	private $regionGateway;
 
-	public function __construct(Model $model, MailboxModel $mbmodel, StoreGateway $storeGateway, FoodsaverGateway $foodsaverGateway, EmailGateway $emailGateway, RegionGateway $regionGateway)
+	public function __construct(Db $model, MailboxModel $mbmodel, StoreGateway $storeGateway, FoodsaverGateway $foodsaverGateway, EmailGateway $emailGateway, RegionGateway $regionGateway)
 	{
 		$this->model = $model;
 		$this->mbmodel = $mbmodel;
@@ -273,7 +273,7 @@ class EmailControl extends Control
 			$("#' . $id . '-abort").button().click(function(){
 				showLoader();
 				$.ajax({
-					url:"xhr.php?f=abortEmail",
+					url:"/xhr.php?f=abortEmail",
 					data:{id:' . (int)$mail['id'] . '},
 					complete:function(){hideLoader();closeBox();}
 				});
@@ -288,7 +288,7 @@ class EmailControl extends Control
 				showLoader();
 				$.ajax({
 						dataType:"json",
-						url:"xhr.php?f=continueMail&id=' . (int)$mail['id'] . '",
+						url:"/xhr.php?f=continueMail&id=' . (int)$mail['id'] . '",
 						success : function(data){
 							$("#' . $id . '-continue").hide();
 							if(data.status == 1)

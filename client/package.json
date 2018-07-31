@@ -2,20 +2,25 @@
   "name": "foodsharing-frontend",
   "version": "1.0.0",
   "scripts": {
-    "lint": "bin/standard --verbose | snazzy",
-    "fix": "bin/standard --fix --verbose | snazzy",
+    "lint": "bin/eslint -c package.json",
+    "fix": "bin/eslint -c package.json --fix",
     "clean-assets": "shx rm -rf ../assets",
+    "clean-dev-assets": "shx rm -rf ../dev-assets",
     "build": "yarn clean-assets && NODE_ENV=production webpack",
-    "dev": "yarn clean-assets && webpack-serve --config serve.config.js",
+    "dev": "yarn clean-dev-assets && webpack-serve --config serve.config.js",
     "test": "node test"
   },
   "dependencies": {
+    "bootstrap-vue": "^2.0.0-rc.11",
+    "copy-webpack-plugin": "^4.5.2",
     "cropperjs": "^1.3.3",
+    "date-fns": "^1.29.0",
     "font-awesome": "^4.7.0",
     "fullpage.js": "2.9.5",
     "install": "^0.10.4",
     "jquery": "1.11.0",
     "jquery-contextmenu": "^2.6.4",
+    "jquery-jcrop": "^0.9.13",
     "jquery-slimscroll": "1.3.3",
     "jquery-ui": "1.10.4",
     "jquery.ui.position": "^1.11.4",
@@ -23,20 +28,34 @@
     "leaflet.awesome-markers": "^2.0.4",
     "leaflet.markercluster": "0.4.0",
     "magnific-popup": "^1.1.0",
+    "node-sass": "^4.9.0",
     "object-path": "^0.11.4",
     "raven-js": "^3.23.3",
     "socket.io-client": "1.5.0",
     "timeago": "^1.4.1",
     "tinysort": "^2.3.6",
+    "twemoji": "^11.0.0",
     "typeahead-addresspicker": "^1.0.1",
+    "underscore": "1.7.0",
+    "vue": "^2.5.16",
     "whatwg-fetch": "^2.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.51",
     "@babel/preset-env": "^7.0.0-beta.51",
+    "@vue/test-utils": "^1.0.0-beta.20",
+    "babel-eslint": "^9.0.0-beta",
     "babel-loader": "^8.0.0-beta",
     "css-loader": "^0.28.11",
     "dotenv": "^5.0.1",
+    "eslint": "^5.0.1",
+    "eslint-config-standard": "^12.0.0-alpha",
+    "eslint-plugin-html": "^4.0.5",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "eslint-plugin-vue": "^4.5.0",
     "exports-loader": "^0.7.0",
     "expose-loader": "^0.7.5",
     "file-loader": "^1.1.11",
@@ -54,12 +73,14 @@
     "mocha": "^5.2.0",
     "node-localstorage": "^1.3.1",
     "null-loader": "^0.1.1",
+    "sass-loader": "^7.0.3",
     "shx": "^0.2.2",
     "sinon": "^6.0.1",
-    "snazzy": "^7.1.1",
-    "standard": "^11.0.1",
     "style-loader": "^0.20.3",
     "url-loader": "^1.0.1",
+    "vue-eslint-parser": "^3.0.0",
+    "vue-loader": "^15.2.4",
+    "vue-template-compiler": "^2.5.16",
     "webpack": "^4.1.1",
     "webpack-bundle-analyzer": "^2.11.1",
     "webpack-cli": "^2.0.12",
@@ -81,10 +102,36 @@
     "> 0.5%",
     "ie_mob >=11"
   ],
-  "standard": {
-    "ignore": [
-      "dist",
-      "test/_compiled.js"
+  "eslintConfig": {
+    "parser": "vue-eslint-parser",
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "env": {
+      "browser": true
+    },
+    "extends": [
+      "standard",
+      "plugin:vue/recommended"
+    ],
+    "rules": {
+      "object-curly-spacing": [
+        "error",
+        "always"
+      ]
+    },
+    "overrides": [
+      {
+        "files": [
+          "*.test.js"
+        ],
+        "env": {
+          "mocha": true
+        }
+      }
     ]
-  }
+  },
+  "eslintIgnore": [
+    "test/_compiled.js"
+  ]
 }

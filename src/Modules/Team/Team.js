@@ -1,90 +1,73 @@
-function u_tox(id) {
-    var $pop = $('#tox-pop-' + id + '-opener');
+/* eslint-disable camelcase */
+import '@/core'
+import '@/globals'
+import $ from 'jquery'
+import {
+  checkEmail,
+  pulseError,
+  ajax,
+  goTo
+} from '@/script'
+import './Team.css'
 
-    $pop.magnificPopup({
-        type: 'inline'
-    });
+let $form = $('#contactform-form')
+if ($form.length > 0) {
+  var $email = $('#email')
 
-    var $qr = $('#tox-pop-' + id + ' .tox-qr');
-
-    if ($qr.children().length === 0) {
-        var $input = $('#tox-pop-' + id + ' .tox-id');
-        $qr.qrcode($input.val());
-
-        $input.bind('focus click', function () {
-            $(this).select();
-        });
+  $email.keyup(function () {
+    var $el = $(this)
+    if (checkEmail($el.val())) {
+      $email.removeClass('input-error')
     }
+  })
 
-    $pop.trigger('click');
+  $email.blur(function () {
+    var $el = $(this)
+    if (!checkEmail($el.val())) {
+      $email.addClass('input-error')
+      pulseError('Mit Deiner E-Mail-Adressse stimmt etwas nicht.')
+    }
+  })
+
+  $form.submit(function (ev) {
+    ev.preventDefault()
+    if (!checkEmail($email.val())) {
+      $email.select()
+      $email.addClass('input-error')
+      pulseError('Bitte gib eine gültige E-Mail-Adresse ein, damit wir Dir antworten können!')
+    } else {
+      ajax.req('team', 'contact', {
+        data: $form.serialize(),
+        method: 'post'
+      })
+    }
+  })
 }
 
-$(function () {
-    var $form = $('#contactform-form');
-    if ($form.length > 0) {
-        var $email = $('#email');
+let $teamList = $('#team-list')
+$teamList.find('.foot i').mouseover(function () {
+  var $this = $(this)
 
-        $email.keyup(function () {
-            var $el = $(this);
-            if (checkEmail($el.val())) {
-                $email.removeClass('input-error');
-            }
-        });
+  var val = $this.children('span').text()
+  if (val !== '') {
+    $this.parent().parent().attr('href', val).attr('target', '_blank')
+  }
+})
 
-        $email.blur(function () {
-            var $el = $(this);
-            if (!checkEmail($el.val())) {
-                $email.addClass('input-error');
-                pulseError('Mit Deiner E-Mail-Adressse stimmt etwas nicht.');
-            }
-        });
+$teamList.find('.foot i').click(function (ev) {
+  var $this = $(this)
+  if ($this.hasClass('fa-lock')) {
+    ev.preventDefault()
+  }
 
-        $form.submit(function (ev) {
-            ev.preventDefault();
-            if (!checkEmail($email.val())) {
-                $email.select();
-                $email.addClass('input-error');
-                pulseError('Bitte gib eine gültige E-Mail-Adresse ein, damit wir Dir antworten können!');
-            }
-            else {
-                ajax.req('team', 'contact', {
-                    data: $form.serialize(),
-                    method: 'post'
-                });
-            }
-        });
-    }
+  if ($this.hasClass('fa-envelope')) {
+    ev.preventDefault()
+    goTo($this.parent().parent().attr('href'))
+  }
+})
 
-    var $teamList = $('#team-list');
-    $teamList.find('.foot i').mouseover(function () {
+$teamList.find('.foot i').mouseout(function () {
+  var $this = $(this).parent().parent()
 
-        var $this = $(this);
-
-        var val = $this.children('span').text();
-        if (val !== '') {
-            $this.parent().parent().attr('href', val).attr('target', '_blank');
-        }
-    });
-
-    $teamList.find('.foot i').click(function (ev) {
-
-        var $this = $(this);
-        if ($this.hasClass('fa-lock')) {
-            ev.preventDefault();
-            u_tox($this.children('span').text());
-
-        }
-
-        if ($this.hasClass('fa-envelope')) {
-            ev.preventDefault();
-            goTo($this.parent().parent().attr('href'));
-        }
-    });
-
-    $teamList.find('.foot i').mouseout(function () {
-        var $this = $(this).parent().parent();
-
-        $this.attr('href', '/team/' + $this.attr('id').substring(2)).attr('target', '_self');
-
-    });
-});
+  $this.attr('href', '/team/' + $this.attr('id').substring(2)).attr('target', '_self')
+})

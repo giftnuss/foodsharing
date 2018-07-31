@@ -3,7 +3,7 @@
 namespace Foodsharing\Modules\Core;
 
 use Foodsharing\DI;
-use Foodsharing\Lib\Db\ManualDb;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Sanitizer;
@@ -19,7 +19,7 @@ abstract class Control
 	protected $isControl = false;
 	protected $isXhrControl = false;
 	/**
-	 * @var Model
+	 * @var Db
 	 */
 	protected $model;
 	protected $view;
@@ -45,12 +45,10 @@ abstract class Control
 	 */
 	private $twig;
 
-	private $usesWebpack = false;
-
 	/**
-	 * @var ManualDb
+	 * @var Db
 	 */
-	private $manualDb;
+	private $legacyDb;
 
 	/**
 	 * @var FoodsaverGateway
@@ -62,7 +60,7 @@ abstract class Control
 		$this->func = DI::$shared->get(Func::class);
 		$this->session = DI::$shared->get(Session::class);
 		$this->v_utils = DI::$shared->get(Utils::class);
-		$this->manualDb = DI::$shared->get(ManualDb::class);
+		$this->legacyDb = DI::$shared->get(Db::class);
 		$this->foodsaverGateway = DI::$shared->get(FoodsaverGateway::class);
 
 		$reflection = new ReflectionClass($this);
@@ -104,26 +102,20 @@ abstract class Control
 			}
 		}
 		if ($this->isControl) {
-			$webpackModules = $dir . '../../../assets/modules.json';
+			if (FS_ENV === 'dev' && isset($_SERVER['HTTP_USE_DEV_ASSETS'])) {
+				$webpackModules = $dir . '../../../dev-assets/modules.json';
+			} else {
+				$webpackModules = $dir . '../../../assets/modules.json';
+			}
 			$manifest = json_decode(file_get_contents($webpackModules), true);
 			$entry = 'Modules/' . $moduleName;
 			if (isset($manifest[$entry])) {
-				// We are using new webpack style!
-				$this->usesWebpack = true;
 				foreach ($manifest[$entry] as $asset) {
 					if ($this->func->endsWith($asset, '.js')) {
 						$this->func->addWebpackScript($asset);
 					} elseif ($this->func->endsWith($asset, '.css')) {
 						$this->func->addWebpackStylesheet($asset);
 					}
-				}
-			} else {
-				// Existing method of js loading
-				if (file_exists($dir . $moduleName . '.js')) {
-					$this->func->addJsFunc(file_get_contents($dir . $moduleName . '.js'));
-				}
-				if (file_exists($dir . $moduleName . '.css')) {
-					$this->func->addStyle(file_get_contents($dir . $moduleName . '.css'));
 				}
 			}
 		}
@@ -140,7 +132,7 @@ abstract class Control
 
 	protected function render($template, $data)
 	{
-		$global = $this->func->generateAndGetGlobalViewData($this->usesWebpack);
+		$global = $this->func->generateAndGetGlobalViewData();
 		$viewData = array_merge($global, $data);
 
 		return $this->twig->render($template, $viewData);
@@ -180,11 +172,6 @@ abstract class Control
 		} else {
 			return false;
 		}
-	}
-
-	public function getUsesWebpack(): bool
-	{
-		return $this->usesWebpack;
 	}
 
 	public function wallposts($table, $id)
@@ -489,7 +476,7 @@ abstract class Control
 
 	public function mailMessage($sender_id, $recip_id, $msg, $tpl_id = 9)
 	{
-		$info = $this->manualDb->getVal('infomail_message', 'foodsaver', $recip_id);
+		$info = $this->legacyDb->getVal('infomail_message', 'foodsaver', $recip_id);
 		if ((int)$info > 0) {
 			if (!isset($_SESSION['lastMailMessage'])) {
 				$_SESSION['lastMailMessage'] = array();
@@ -518,6 +505,8 @@ abstract class Control
 		header('content-type: application/json; charset=utf-8');
 		if (isset($_GET['callback']) && strlen($_GET['callback']) > 1) {
 			echo strip_tags($_GET['callback']) . '(' . json_encode($data) . ');';
+		} else {
+			echo json_encode($data);
 		}
 		exit();
 	}

@@ -2,15 +2,15 @@
 
 namespace Foodsharing\Modules\FAQList;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\FAQAdmin\FAQGateway;
 
 class FAQListControl extends Control
 {
 	private $faqGateway;
 
-	public function __construct(Model $model, FAQGateway $faqGateway)
+	public function __construct(Db $model, FAQGateway $faqGateway)
 	{
 		$this->model = $model;
 		$this->faqGateway = $faqGateway;

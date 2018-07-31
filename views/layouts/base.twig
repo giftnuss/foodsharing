@@ -26,18 +26,6 @@
             window.serverData = {{ serverDataJSON | raw }};
         </script>
 
-        {% if not webpack %}
-            {# note: when using webpack the scripts are rendered at the bottom of the page #}
-            {% for script in head.scripts %}
-                <script type="text/javascript" src="{{ script }}"></script>
-            {% endfor %}
-            {% if head.ravenConfig %}
-                <script type="text/javascript">
-                  Raven.config('{{ head.ravenConfig }}', { tags: { webpack: false } }).install()
-                </script>
-            {% endif %}
-        {% endif %}
-
         {{ head.extra | raw }}
 
         {% block head %}{% endblock %}
@@ -56,38 +44,14 @@
         <meta property="og:url" content="http://foodsharing.de" />
 
         <style type="text/css">{{ head.css | raw }}</style>
-
-        {% if not webpack %}
-            <script type="text/javascript">
-                {{ head.jsFunc | raw }}
-                $(document).ready(function(){
-                    {{ head.js | raw }}
-                });
-            </script>
-        {% endif %}
-
     </head>
 
-    <body {{ bodyClass | raw }}>
-
-        <div id="top">
-            <div class="inner">
-                <div class="pure-g">
-                    <div class="pure-u-1">
-                        <div id="layout_logo"><a href="{{ logolink }}" title="foodsharing home">food<span>sharing</span></a></div>
-                        {{ msgbar | raw }}
-                        {{ menu.mobile | raw }}
-                        <div class="menu">
-                            {{ menu.default | raw }}
-                        </div>
-                        <div style="clear:both;"></div>
-                    </div>
-                </div>
-            </div>
-            {% if broadcast_message %}
-                <div class="inner inside msg-inside info">{{ broadcast_message | raw }}</div>
-            {% endif %}
-        </div>
+    <body class="{{ bodyClasses|join(' ') }}">
+        {% include 'partials/becomeBezirk.twig' %}
+        {{ menu | raw }}
+        {% if broadcast_message %}
+            <div class="inner inside msg-inside info">{{ broadcast_message | raw }}</div>
+        {% endif %}
 
         {% block overtop %}
             {{ content.overtop.html | raw }}
@@ -194,21 +158,16 @@
         <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-info" style="display:none;"></div>
         <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-success" style="display:none;"></div>
 
+        {% for script in head.scripts %}
+            <script type="text/javascript" src="{{ script }}"></script>
+        {% endfor %}
 
-        {% if webpack %}
-
-            {% for script in head.scripts %}
-                <script type="text/javascript" src="{{ script }}"></script>
-            {% endfor %}
-
-            <script type="text/javascript">
-                {{ head.jsFunc | raw }}
-                $(document).ready(function(){
-                    {{ head.js | raw }}
-                });
-            </script>
-
-        {% endif %}
+        <script type="text/javascript">
+            {{ head.jsFunc | raw }}
+            document.addEventListener("DOMContentLoaded", function() {
+                {{ head.js | raw }}
+            });
+        </script>
 
         {% if dev %}
             <style type="text/css">body { display: block; }</style>

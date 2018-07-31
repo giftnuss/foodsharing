@@ -21,6 +21,7 @@ import {
 
 import 'jquery-tagedit'
 import 'jquery-tagedit-auto-grow-input'
+import '@/tablesorter'
 
 import { store, user } from '@/server-data'
 
@@ -98,7 +99,7 @@ $('#u_undate').dialog({
         showLoader()
         $.ajax({
           url: 'xhr.php?f=delDate',
-          data: {'date': $('#undate-date').val(), 'bid': store.id},
+          data: { 'date': $('#undate-date').val(), 'bid': store.id },
           dataType: 'json',
           success: function (ret) {
             if (ret.status == 1) {
@@ -131,7 +132,7 @@ $('#u_undate').dialog({
         showLoader()
         $.ajax({
           url: 'xhr.php?f=delDate',
-          data: {'date': $('#undate-date').val(), 'msg': $('#team_msg').val(), 'bid': store.id},
+          data: { 'date': $('#undate-date').val(), 'msg': $('#team_msg').val(), 'bid': store.id },
           dataType: 'json',
           success: function (ret) {
             if (ret.status == 1) {
@@ -147,7 +148,7 @@ $('#u_undate').dialog({
         })
       },
       id: 'send_msg_to_team',
-      css: {'display': 'none'}
+      css: { 'display': 'none' }
     }
   ]
 })
@@ -302,7 +303,7 @@ $('#timedialog').dialog({
             $('#' + $('#timedialog-id').val() + '-imglist li.empty').unbind('click')
             $('#' + $('#timedialog-id').val() + '-imglist li.empty').addClass('nohover')
             $('#' + $('#timedialog-id').val() + '-imglist li.empty').removeClass('filled')
-            $('#' + $('#timedialog-id').val() + '-imglist li.empty a').tooltip('option', {disabled: true}).tooltip('close')
+            $('#' + $('#timedialog-id').val() + '-imglist li.empty a').tooltip('option', { disabled: true }).tooltip('close')
           }
         }
       })

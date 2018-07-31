@@ -13,12 +13,6 @@
 {% endblock %}
 
 {% block main %}
-    <script type="text/javascript">
-        $(function () {
-            $(".fancybox").fancybox();
-        })
-    </script>
-
     <div class="groups">
         {% for group in groups %}
             {% embed 'components/field.twig' with {'title': group.name, 'classes': ['ui-padding']} %}

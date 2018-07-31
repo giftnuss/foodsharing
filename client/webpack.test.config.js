@@ -17,16 +17,8 @@ module.exports = merge(webpackBase, {
     path: resolve('test'),
     filename: '_compiled.js'
   },
-  target: 'node',
   module: {
     rules: [
-      {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
-      },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         use: 'null-loader'

@@ -33,6 +33,7 @@ docs/node_modules
 .vscode
 .views-cache
 assets
+dev-assets
 client/.env
 client/yarn-error.log
 client/.cache

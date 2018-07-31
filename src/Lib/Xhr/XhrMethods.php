@@ -4,13 +4,13 @@ namespace Foodsharing\Lib\Xhr;
 
 use Exception;
 use Flourish\fImage;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Email\EmailGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
@@ -51,7 +51,7 @@ class XhrMethods
 	public function __construct(
 		Func $func,
 		Session $session,
-		Model $model,
+		Db $model,
 		Utils $viewUtils,
 		ViewUtils $xhrViewUtils,
 		StoreModel $storeModel,
@@ -1186,7 +1186,7 @@ class XhrMethods
 					{
 						showLoader();
 						$.ajax({
-							url: "xhr.php?f=saveBezirk",
+							url: "/xhr.php?f=saveBezirk",
 							data: $("#bezirkform-form").serialize(),
 							dataType: "json",
 							success: function(data) {
@@ -1213,7 +1213,7 @@ class XhrMethods
 		$("input[type=\'submit\']").button();
 
 		$("#' . $id . ' input").tagedit({
-			autocompleteURL: "xhr.php?f=getRecip",
+			autocompleteURL: "/xhr.php?f=getRecip",
 			allowEdit: false,
 			allowAdd: false
 		});

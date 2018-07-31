@@ -1,73 +1,194 @@
 const path = require('path')
 const clientRoot = path.resolve(__dirname)
 
-function resolve (dir) {
-  return path.join(clientRoot, dir)
-}
-
 function lib (filename) {
-  return resolve(path.join('..', 'js', filename))
+  return path.join(clientRoot, 'lib', filename)
 }
 
-const typeaheadAddresspicker = require.resolve('typeahead-addresspicker/dist/typeahead-addresspicker.js')
+// const shims = createShimHelper()
 
-exports.rules = [
-  // Specifying dependencies for "legacy" libraries that don't/can't specify any themselves
-  ...importLoadersRules({
-    [require.resolve('fullpage.js')]: ['define=>false'],
-    [require.resolve('jquery-slimscroll')]: ['jQuery=jquery'],
-    [require.resolve('jquery-contextmenu')]: ['jQuery=jquery'],
-    [require.resolve('timeago/jquery.timeago')]: ['define=>false', 'jQuery=jquery'],
-    [require.resolve('leaflet.awesome-markers/dist/leaflet.awesome-markers.js')]: ['L=leaflet'],
-    [require.resolve('leaflet.markercluster')]: ['L=leaflet'],
-    [typeaheadAddresspicker]: ['jQuery=jquery', '_=typeahead'],
-    [lib('jquery-ui-addons.js')]: ['jQuery=jquery', 'window.jQuery=jquery', '_=jquery-ui'],
-    [lib('fancybox/jquery.fancybox.pack.js')]: ['jQuery=jquery'],
-    [lib('jquery.animatenumber.min.js')]: ['jQuery=jquery'],
-    [lib('dynatree/jquery.dynatree.js')]: ['jQuery=jquery'],
-    [lib('typeahead.bundle.js')]: ['window.jQuery=jquery'],
-    [lib('tablesorter/jquery.tablesorter.js')]: ['jQuery=jquery'],
-    [lib('tablesorter/jquery.tablesorter.pager.js')]: ['jQuery=jquery']
-  }),
-  {
-    test: typeaheadAddresspicker,
-    use: 'exports-loader?AddressPicker'
+Object.assign(module.exports, convert({
+
+  'leaflet': {
+    dependencies: [
+      'leaflet/dist/leaflet.css'
+    ]
+  },
+
+  'leaflet.awesome-markers': {
+    resolve: require.resolve('leaflet.awesome-markers/dist/leaflet.awesome-markers.js'),
+    imports: {
+      L: 'leaflet'
+    },
+    dependencies: [
+      require.resolve('leaflet.awesome-markers/dist/leaflet.awesome-markers.css'),
+      lib('leaflet/leaflet.awesome-markers.foodsharing-overrides.css')
+    ]
+  },
+
+  'leaflet.markercluster': {
+    imports: {
+      L: 'leaflet'
+    },
+    dependencies: [
+      require.resolve('leaflet.markercluster/dist/MarkerCluster.css'),
+      require.resolve('leaflet.markercluster/dist/MarkerCluster.Default.css')
+    ]
+  },
+
+  'fullpage.js': {
+    disableAMD: true,
+    dependencies: [
+      'fullpage.js/dist/jquery.fullpage.css'
+    ]
+  },
+
+  'jquery-slimscroll': {
+    imports: {
+      jQuery: 'jquery'
+    }
+  },
+
+  'jquery-contextmenu': {
+    imports: {
+      jQuery: 'jquery'
+    }
+  },
+
+  'timeago/jquery.timeago': {
+    disableAMD: true,
+    imports: {
+      jQuery: 'jquery'
+    }
+  },
+
+  'typeahead-addresspicker': {
+    resolve: lib('typeahead-addresspicker.js'),
+    imports: {
+      jQuery: 'jquery'
+    },
+    dependencies: [
+      'typeahead'
+    ],
+    exports: 'AddressPicker'
+  },
+
+  'jquery-ui-addons': {
+    resolve: lib('jquery-ui-addons.js'),
+    imports: {
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery'
+    },
+    dependencies: [
+      'jquery-ui'
+    ]
+  },
+
+  'jquery-fancybox': {
+    resolve: lib('fancybox/jquery.fancybox.pack.js'),
+    imports: {
+      jQuery: 'jquery'
+    }
+  },
+
+  'jquery-dynatree': {
+    resolve: lib('dynatree/jquery.dynatree.js'),
+    imports: {
+      jQuery: 'jquery'
+    },
+    dependencies: [
+      lib('dynatree/skin/ui.dynatree.css')
+    ]
+  },
+
+  'typeahead': {
+    resolve: lib('typeahead.bundle.js'),
+    imports: {
+      'window.jQuery': 'jquery'
+    }
+  },
+
+  'jquery-tablesorter': {
+    resolve: lib('tablesorter/jquery.tablesorter.js'),
+    imports: {
+      jQuery: 'jquery'
+    }
+  },
+
+  'tablesorter-pagercontrols': {
+    resolve: lib('tablesorter/jquery.tablesorter.pager.js'),
+    imports: {
+      jQuery: 'jquery'
+    }
+  },
+
+  'tablesorter': {
+    resolve: lib('tablesorter/jquery.tablesorter.js')
+  },
+
+  'jquery-tagedit-auto-grow-input': {
+    resolve: lib('tagedit/js/jquery.autoGrowInput.js')
+  },
+
+  'jquery-tagedit': {
+    resolve: lib('tagedit/js/jquery.tagedit.js')
+  },
+
+  'jquery.tinymce': {
+    resolve: lib('tinymce/jquery.tinymce.min')
   }
-]
 
-function importLoadersRules (entries) {
-  return Object.keys(entries).map(lib => {
-    const deps = entries[lib]
-    return {
-      test: lib,
+}))
+
+function convert (entries) {
+  if (!global._counter) global._counter = 0
+  const rules = []
+  const aliases = {}
+
+  for (const [name, options] of Object.entries(entries)) {
+    const importsLoaderOptions = []
+
+    const {
+      resolve,
+      disableAMD = false,
+      imports = {},
+      dependencies = [],
+      exports
+    } = options
+
+    const test = resolve || require.resolve(name)
+
+    if (resolve) {
+      aliases[name] = resolve
+    }
+
+    if (disableAMD) {
+      importsLoaderOptions.push('define=>false')
+    }
+
+    for (const [k, v] of Object.entries(imports)) {
+      importsLoaderOptions.push(`${k}=${v}`)
+    }
+
+    for (const dependency of dependencies) {
+      importsLoaderOptions.push(`_${global._counter++}=${dependency}`)
+    }
+
+    if (exports) {
+      rules.push({
+        test,
+        use: `exports-loader?${exports}`
+      })
+    }
+
+    rules.push({
+      test,
       use: {
         loader: 'imports-loader',
-        options: deps.join(',')
+        options: importsLoaderOptions.join(',')
       }
-    }
-  })
-}
+    })
+  }
 
-exports.alias = {
-  'jquery-ui-addons': lib('jquery-ui-addons.js'),
-  'jquery-tablesorter': lib('tablesorter/jquery.tablesorter.min.js'),
-  'jquery-fancybox': lib('fancybox/jquery.fancybox.pack.js'),
-  'jquery-jcrop': lib('jquery.Jcrop.min.js'),
-  'jquery-tagedit-auto-grow-input': lib('tagedit/js/jquery.autoGrowInput.js'),
-  'jquery-tagedit': lib('tagedit/js/jquery.tagedit.js'),
-  'jquery-animatenumber': lib('jquery.animatenumber.min.js'),
-  'jquery-dynatree': lib('dynatree/jquery.dynatree.js'),
-  'jquery-dynatree.css': lib('dynatree/skin/ui.dynatree.css'),
-  'autolink': lib('autolink.js'),
-  'underscore': lib('underscore.js'),
-  'underscore-string': lib('underscore.string.js'),
-  'instant-search': lib('instant-search.js'),
-  'typeahead': lib('typeahead.bundle.js'),
-  'typeahead-addresspicker': typeaheadAddresspicker,
-  'leaflet.css': 'leaflet/dist/leaflet.css',
-  'leaflet.awesome-markers': require.resolve('leaflet.awesome-markers/dist/leaflet.awesome-markers.js'),
-  'leaflet.awesome-markers.css': require.resolve('leaflet.awesome-markers/dist/leaflet.awesome-markers.css'),
-  'leaflet.awesome-markers.foodsharing-overrides.css': lib('leaflet/leaflet.awesome-markers.foodsharing-overrides.css'),
-  'tablesorter': lib('tablesorter/jquery.tablesorter.js'),
-  'tablesorter-pagercontrols': lib('tablesorter/jquery.tablesorter.pager.js')
+  return { rules, alias: aliases }
 }

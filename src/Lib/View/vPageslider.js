@@ -1,7 +1,7 @@
-import 'css/jquery.fullPage.css'
-
 import $ from 'jquery'
+
 import 'fullpage.js'
+
 import serverData from '@/server-data'
 
 const mainEl = $('main')

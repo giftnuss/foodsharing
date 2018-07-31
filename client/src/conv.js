@@ -7,8 +7,8 @@ import { ajax, GET, goTo, isMob, nl2br } from '@/script'
 import serverData from '@/server-data'
 import timeformat from '@/timeformat'
 import autoLink from '@/autoLink'
-import info from '@/info'
 import msg from '@/msg'
+import conversationStore from '@/stores/conversations'
 
 const conv = {
 
@@ -65,7 +65,7 @@ const conv = {
       this.init()
     }
     ajax.req('msg', 'user2conv', {
-      data: {fsid: fsid},
+      data: { fsid: fsid },
       success: function (ret) {
         conv.chat(ret.cid)
       }
@@ -133,8 +133,11 @@ const conv = {
       conv.append(key, data)
       conv.scrollBottom(data.cid)
     } else {
-      info.badgeInc('msg')
+      // following line got commented out, because it is part of the old topbar
+      // this whole file should get replaced with a vue store
+      // info.badgeInc('msg')
     }
+    conversationStore.loadConversations()
     // alert(key);
 
     /*
@@ -216,6 +219,9 @@ const conv = {
         },
         complete: function () {
           conv.hideLoader(cid)
+
+          // reload conversations
+          conversationStore.loadConversations()
         }
       })
     }

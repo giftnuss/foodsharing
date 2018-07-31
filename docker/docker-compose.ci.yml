@@ -45,21 +45,6 @@ services:
       - vendor_cache:/app/vendor
       - /dev/null:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
-  # webpack client javascript
-  #------------------------------------
-
-  client:
-    container_name: foodsharing_ci_client
-    image: foodsharing_ci_client
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile.client.ci
-    # We don't run anything long running in here yet - build is run via ./scripts/build-assets
-    command: 'true'
-    working_dir: /app/client
-    volumes:
-      - client_node_modules_cache:/app/client/node_modules
-
   # php mail queue runner
   #------------------------------------
 
@@ -131,7 +116,7 @@ services:
 
   selenium:
     container_name: foodsharing_ci_selenium
-    image: registry.gitlab.com/foodsharing-dev/images/selenium:1.1
+    image: registry.gitlab.com/foodsharing-dev/images/selenium:1.2
     shm_size: 256M
     links:
       - web:web

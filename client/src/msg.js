@@ -9,7 +9,8 @@ import info from '@/info'
 import conv from '@/conv'
 import autoLink from '@/autoLink'
 import timeformat from '@/timeformat'
-import api from '@/api'
+import * as api from '@/api/conversations'
+import conversationStore from '@/stores/conversations'
 
 import {
   ajax,
@@ -133,6 +134,9 @@ const msg = {
             setTimeout(function () {
               msg.hideLoader()
             }, 100)
+
+            // reload conversations
+            conversationStore.loadConversations()
           }
 
         })
@@ -186,6 +190,7 @@ const msg = {
     } else {
       msg.updateConvList(message)
     }
+    conversationStore.loadConversations()
   },
 
   updateConvList: function (message) {
@@ -196,7 +201,7 @@ const msg = {
       $itemLink.children('.time').text(timeformat.nice(message.time))
       $item.hide()
       $item.prependTo('#conversation-list ul:first')
-      $item.show('highlight', {color: '#F5F5B5'})
+      $item.show('highlight', { color: '#F5F5B5' })
     } else {
       msg.loadConversationList()
     }
@@ -285,7 +290,7 @@ const msg = {
 
     msg.$conversation.children('ul:first').prepend($el)
 
-    $el.show('highlight', {color: '#F5F5B5'})
+    $el.show('highlight', { color: '#F5F5B5' })
   },
 
   appendMsg: function (message) {
@@ -297,7 +302,7 @@ const msg = {
 
     msg.$conversation.children('ul:first').append($el)
 
-    $el.show('highlight', {color: '#F5F5B5'})
+    $el.show('highlight', { color: '#F5F5B5' })
 
     this.last_message_id = message.id
   },
@@ -338,7 +343,7 @@ const msg = {
     }
     msg.conversation_id = id
 
-    const { conversation, member, messages } = await api.getConversations(id)
+    const { conversation, member, messages } = await api.getConversation(id)
 
     msg.resetConversation()
 
@@ -414,7 +419,7 @@ const msg = {
           let position = $('#msg-' + lmid).position()
 
           if (!msg.isMob()) {
-            $('#msg-conversation').slimScroll({scrollTo: position.top + 'px'})
+            $('#msg-conversation').slimScroll({ scrollTo: position.top + 'px' })
           } else {
             $(window).scrollTop(position.top)
           }
@@ -503,7 +508,7 @@ const msg = {
       msg.$convs.append($el)
     }
 
-    $el.show('highlight', {color: '#F5F5B5'})
+    $el.show('highlight', { color: '#F5F5B5' })
 
     msg.$convs.children('.noconv').remove()
   },
@@ -513,7 +518,7 @@ const msg = {
   },
   scrollBottom: function () {
     if (!msg.isMob()) {
-      $('#msg-conversation').slimScroll({scrollTo: $('#msg-conversation').prop('scrollHeight') + 'px'})
+      $('#msg-conversation').slimScroll({ scrollTo: $('#msg-conversation').prop('scrollHeight') + 'px' })
     } else {
       $(window).scrollTop($(document).height())
     }

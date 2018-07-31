@@ -33,9 +33,12 @@ class AcceptanceTester extends \Codeception\Actor
 	{
 		$I = $this;
 		$I->amOnPage('/');
-		$I->fillField('login_form[email_address]', $email);
-		$I->fillField('login_form[password]', $password);
-		$I->click('#loginbar input[type=submit]');
+		$I->waitForElement('#login-email');
+		$I->fillField('#login-email', $email);
+		$I->fillField('#login-password', $password);
+		$I->click('#topbar .btn');
+		$I->waitForActiveAPICalls();
+		$I->waitForElementNotVisible('#pulse-success');
 		$I->waitForPageBody();
 		$I->seeMatches('/Willkommen|Hallo/'); // depends on user type
 	}
@@ -55,5 +58,10 @@ class AcceptanceTester extends \Codeception\Actor
 	{
 		$text = $this->grabTextFrom($selector);
 		$this->doAssertRegExp($regexp, $text);
+	}
+
+	public function waitForActiveAPICalls($timeout = 60)
+	{
+		$this->waitForJS('return window.fetch.activeFetchCalls == 0;', $timeout);
 	}
 }

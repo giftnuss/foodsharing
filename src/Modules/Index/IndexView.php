@@ -11,14 +11,8 @@ class IndexView extends View
 	{
 		$ps = new vPageslider();
 		$ps->addSection($this->campaign($first_content), array(
-			//'color' => '#26ad91', //dickmilch Mitte Dez - Mitte Jan
-			//'color' => '#7b4a94', //walkingbread Mitte Jan - Mitte Feb
-			//'color' => '#fbbd13', //sauregurken Mitte Feb - Mitte Mrz
-			//'color' => '#eb7763', //faulesei Mitte Mrz - Mitte Apr
-			'color' => '#48bac4', //foodporn Mitte Apr - Mitte Jun
-			'anchor' => 'kampagne'
-			//'color' => '#4a3520', // to be set May 22
-			//'anchor' => 'oben', // to be set May 22
+			'color' => '#533a20',
+			'anchor' => 'festival'
 		));
 
 		$ps->addSection($this->welcome(), array(
@@ -50,15 +44,17 @@ class IndexView extends View
 	private function campaign($first_content)
 	{
 		return '
-		<div id="campaign" class="pure-g foodporn">
+		<div id="campaign" class="pure-g">
 			<div class="topbarpadding">
+				<a href="http://www.foodsharing-festival.org">
+				<div id="campaignimg" class="pure-u-1 pure-u-sm-1-2" style="background-image:url(/img/festival2018.png)">
+				</div></a>
 				<div id="campaigntext" class="pure-u-1 pure-u-sm-1-2">
-					<h2>Don’t&nbsp;let good&nbsp;food&nbsp;go&nbsp;bad!</h2>
-					<div><img src="/img/gabel.png"></div>
-					<h4>Rette mit!</h4>
-					<h3>food<span>sharing</span></h3>
-				</div>
-				<div id="campaignimg" class="pure-u-1 pure-u-sm-1-2">
+				<h2>Sei dabei beim foodsharing festival 2018</h2>
+				<h3>21<small style="font-size:80%"> SEP</small> - 23<small style="font-size:80%"> SEP</small></h3>
+				<br>
+				<h3>Infos und Anmeldung hier:</h3>
+				<h3><a href="http://www.foodsharing-festival.org">foodsharing-festival.org</a></h3>
 				</div>
 			</div>
 		</div>

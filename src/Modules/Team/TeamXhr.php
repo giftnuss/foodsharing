@@ -2,20 +2,23 @@
 
 namespace Foodsharing\Modules\Team;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Services\SanitizerService;
 
 class TeamXhr extends Control
 {
 	private $gateway;
+	private $sanitizerService;
 
-	public function __construct(TeamGateway $gateway, Model $model, TeamView $view)
+	public function __construct(TeamGateway $gateway, Db $model, TeamView $view, SanitizerService $sanitizerService)
 	{
 		$this->gateway = $gateway;
 		$this->model = $model;
 		$this->view = $view;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 	}
@@ -39,13 +42,13 @@ class TeamXhr extends Control
 					$mail->setFrom(DEFAULT_EMAIL);
 				}
 
-				$msg = strip_tags($_POST['message']);
+				$msg = $_POST['message'];
 				$name = strip_tags($_POST['name']);
 
 				$msg = 'Name: ' . $name . "\n\n" . $msg;
 
 				$mail->setBody($msg);
-				$mail->setHtmlBody(nl2br($msg));
+				$mail->setHtmlBody($this->sanitizerService->plainToHtml($msg));
 				$mail->setSubject('foodsharing.de Kontaktformular Anfrage von ' . $name);
 
 				$mail->addRecipient($user['email']);
