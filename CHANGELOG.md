@@ -9,6 +9,7 @@
 ## Bugfixes
 - Add missing tagedit lib on mailbox edit page !459 #248 @nicksellen
 - reenabling source maps on the production build !468 #254 @alangecker
+- removed dead login button and updated registration info for food baskets #240 !457 @michi-zuri
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
@@ -78,7 +79,6 @@ Many thanks to @peter.toennies @NerdyProjects @alangecker @theolampert @nicksell
 - fixes user autocomplete fetching for conversation creation
 - fix profile sleeping hat variable #243
 - fix bug in region dynatree loading #244 !444 @nicksellen
-- removed dead login button and updated registration info for food baskets #240 !457 @michi-zuri
 - Only show forum post removal button when the user is allowed to delete a post !456 @NerdyProjects
 
 ## Refactoring
