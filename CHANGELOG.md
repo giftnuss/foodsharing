@@ -1,7 +1,7 @@
 # Unreleased
 
 ## Features
-- For not declined Events the last wall posts are shown on dashboard update section. !417 #227 @k.miklobusec
+- For not declined events, the last wall posts are shown on the dashboard update-section. !417 #227 @k.miklobusec
 
 ## Bugfixes
 - removed XSS-possibility in xhr_out method. !370 @theolampert
