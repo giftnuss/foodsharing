@@ -59,22 +59,22 @@ export default {
     methods: {
         async submit() {
             if(!this.email) {
-                pulseError('Bitte gib deine Email an')
+                pulseError('Bitte gib Deine E-Mail-Adresse an!')
                 return    
             }
             if(!this.password) {
-                pulseError('Bitte gib dein Passwort an')
+                pulseError('Bitte gib Dein Passwort an!')
                 return    
             }
             this.isLoading = true
             try {
                 let user = await login(this.email, this.password)
-                pulseSuccess(`<b>Wunderschönen Tag Dir ${user.name}!</b><br />Du hast dich erfolgreich eingeloggt und wirst gleich weitergeleitet`)
+                pulseSuccess(`<b>Wunderschönen Tag Dir, ${user.name}!</b><br />Du hast Dich erfolgreich eingeloggt und wirst gleich weitergeleitet.`)
                 window.location = this.$url('dashboard')
             } catch(err) {
                 this.isLoading = false
                 if(err.code && err.code === 401) {
-                    pulseError('E-Mail oder Passwort sind falsch')
+                    pulseError('E-Mail-Adresse oder Passwort sind falsch')
                 } else {
                     pulseError('Unknown error')
                     throw err
@@ -123,4 +123,3 @@ export default {
     }
 }
 </style>
-
