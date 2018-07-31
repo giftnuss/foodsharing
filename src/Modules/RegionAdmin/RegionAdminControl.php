@@ -2,15 +2,15 @@
 
 namespace Foodsharing\Modules\RegionAdmin;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class RegionAdminControl extends Control
 {
 	private $regionGateway;
 
-	public function __construct(Model $model, RegionAdminView $view, RegionGateway $regionGateway)
+	public function __construct(Db $model, RegionAdminView $view, RegionGateway $regionGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;

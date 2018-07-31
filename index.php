@@ -42,7 +42,6 @@ $func = DI::$shared->get(Func::class);
 /* @var $session Session */
 $session = DI::$shared->get(Session::class);
 
-$g_body_class = '';
 $g_broadcast_message = $db->qOne('SELECT `body` FROM fs_content WHERE `id` = 51');
 
 if (DebugBar::isEnabled()) {
@@ -60,8 +59,6 @@ if ($session->may()) {
 			$func->goLogin();
 		}
 	}
-
-	$g_body_class = ' class="loggedin"';
 }
 
 $app = $func->getPage();

@@ -4,7 +4,7 @@ $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure various pages work');
 
 $I->amOnPage('/');
-$I->see('let good food go bad');
+$I->see('Sei dabei beim foodsharing festival 2018');
 
 $I->amOnPage('/essenskoerbe');
 $I->seeCurrentUrlEquals('/essenskoerbe/find'); // it redirects

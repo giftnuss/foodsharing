@@ -98,25 +98,23 @@ class StatsControl extends ConsoleControl
 					$newdata = array(
 						'stat_first_fetch' => $fs['stat_first_fetch'],
 						'stat_add_date' => $fs['stat_add_date'],
-						'foodsaver_id' => $fs['foodsaver_id'],
+						'foodsaver_id' => $fs['id'],
 						'betrieb_id' => $bid,
 						'verantwortlich' => $fs['verantwortlich'],
 						'stat_fetchcount' => $fs['stat_fetchcount'],
-						'stat_last_fetch' => $fs['stat_last_fetch']
+						'stat_last_fetch' => null
 					);
 
 					/* first_fetch */
-					if ($first_fetch = $this->model->getFirstFetchInBetrieb($bid, $fs['foodsaver_id'])) {
-						if ((int)$fs['first_fetch_ts'] == 0) {
-							$newdata['stat_first_fetch'] = $first_fetch;
-						}
-						if ((int)$fs['add_date_ts'] == 0) {
+					if ($first_fetch = $this->model->getFirstFetchInBetrieb($bid, $fs['id'])) {
+						$newdata['stat_first_fetch'] = $first_fetch;
+						if ((int)$fs['add_date'] == 0) {
 							$newdata['stat_add_date'] = $first_fetch;
 						}
 					}
 
 					/*last fetch*/
-					if ($last_fetch = $this->model->getLastFetchInBetrieb($bid, $fs['foodsaver_id'])) {
+					if ($last_fetch = $this->model->getLastFetchInBetrieb($bid, $fs['id'])) {
 						$newdata['stat_last_fetch'] = $last_fetch;
 					}
 
@@ -126,11 +124,11 @@ class StatsControl extends ConsoleControl
 					}
 
 					/*fetchcount*/
-					$fetchcount = $this->model->getBetriebFetchCount($bid, $fs['foodsaver_id'], $fs['stat_last_update'], $fs['stat_fetchcount']);
+					$fetchcount = $this->model->getBetriebFetchCount($bid, $fs['id'], $fs['stat_last_update'], $fs['stat_fetchcount']);
 
 					$this->model->updateBetriebStat(
 						$bid, // Betrieb id
-						$fs['foodsaver_id'], // foodsaver_id
+						$fs['id'], // foodsaver_id
 						$newdata['stat_add_date'], // add date
 						$newdata['stat_first_fetch'], // erste mal abholen
 						$fetchcount, // anzahl abholungen

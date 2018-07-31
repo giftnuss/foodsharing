@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import '@/core'
 import '@/globals'
 import './Settings.css'
@@ -9,11 +10,13 @@ import 'leaflet'
 import 'leaflet.awesome-markers'
 import {
   fotoupload,
-  picFinish
+  picFinish,
+  collapse_wrapper
 } from '@/script'
 import { expose } from '@/utils'
 
 expose({
   fotoupload,
-  picFinish
+  picFinish,
+  collapse_wrapper
 })

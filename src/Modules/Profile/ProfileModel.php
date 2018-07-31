@@ -2,10 +2,10 @@
 
 namespace Foodsharing\Modules\Profile;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Modules\Core\Model;
 
-class ProfileModel extends Model
+class ProfileModel extends Db
 {
 	private $fs_id;
 

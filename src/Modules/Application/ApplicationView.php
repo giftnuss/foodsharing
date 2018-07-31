@@ -19,8 +19,7 @@ class ApplicationView extends View
 	{
 		return $this->v_utils->v_menu(array(
 			array('click' => 'ajreq(\'accept\',{bid:' . (int)$this->bezirk_id . ',fid:' . (int)$application['id'] . '});return false;', 'name' => 'Ja'),
-			array('click' => 'ajreq(\'decline\',{bid:' . (int)$this->bezirk_id . ',fid:' . (int)$application['id'] . '});return false;', 'name' => 'Nein'),
-			array('click' => 'ajreq(\'defer\',{bid:' . (int)$this->bezirk_id . ',fid:' . (int)$application['id'] . '});return false;', 'name' => 'Vielleicht')
+			array('click' => 'ajreq(\'decline\',{bid:' . (int)$this->bezirk_id . ',fid:' . (int)$application['id'] . '});return false;', 'name' => 'Nein')
 		), 'Bewerbung annehmen');
 	}
 

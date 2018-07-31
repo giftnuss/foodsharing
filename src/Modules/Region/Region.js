@@ -47,7 +47,7 @@ if (GET('sub') == 'wall') {
 }
 
 if (['botforum', 'forum'].includes(GET('sub'))) {
-  if ( GET('tid') !== 'undefined') {
+  if (GET('tid') !== 'undefined') {
     vueRegister({
       Thread
     })

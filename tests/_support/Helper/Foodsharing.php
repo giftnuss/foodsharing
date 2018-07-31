@@ -361,9 +361,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'body' => $this->faker->realText(500),
 			'time' => $params['time'],
 		];
-		$this->addForumThemePost($theme_id, $fs_id, $post_params);
-
-		$params['post'] = $post_params;
+		$params['post'] = $this->addForumThemePost($theme_id, $fs_id, $post_params);
 		$params['id'] = $theme_id;
 
 		return $params;

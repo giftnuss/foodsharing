@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Region;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -56,7 +56,7 @@ class RegionControl extends Control
 		ForumGateway $forumGateway,
 		ForumPermissions $forumPermissions,
 		ForumService $forumService,
-		Model $model,
+		Db $model,
 		RegionGateway $gateway,
 		RegionHelper $regionHelper
 	) {

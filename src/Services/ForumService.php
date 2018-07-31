@@ -2,29 +2,27 @@
 
 namespace Foodsharing\Services;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Reaction\ReactionGateway;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class ForumService
 {
 	private $forumGateway;
-	private $reactionGateway;
 	private $regionGateway;
 	private $foodsaverGateway;
 	private $bellGateway;
 	private $emailTemplateGateway;
-	/* @var Model */
+	/* @var Db */
 	private $model;
 	private $func;
 	private $session;
-	private $outputSanitizerService;
+	private $sanitizerService;
 
 	public function __construct(
 		BellGateway $bellGateway,
@@ -33,10 +31,9 @@ class ForumService
 		ForumGateway $forumGateway,
 		Func $func,
 		Session $session,
-		Model $model,
+		Db $model,
 		RegionGateway $regionGateway,
-		ReactionGateway $reactionGateway,
-		OutputSanitizerService $outputSanitizerService
+		SanitizerService $sanitizerService
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->emailTemplateGateway = $emailTemplateGateway;
@@ -46,8 +43,7 @@ class ForumService
 		$this->session = $session;
 		$this->model = $model;
 		$this->regionGateway = $regionGateway;
-		$this->reactionGateway = $reactionGateway;
-		$this->outputSanitizerService = $outputSanitizerService;
+		$this->sanitizerService = $sanitizerService;
 	}
 
 	public function url($regionId, $ambassadorForum, $threadId = null, $postId = null)
@@ -93,9 +89,6 @@ class ForumService
 	public function addPostToThread($fsId, $threadId, $body)
 	{
 		$rawBody = $body;
-		/* TODO: Implement proper sanitation that happens on output, not input */
-		$body = nl2br(strip_tags($body));
-		$body = $this->func->autolink($body);
 		$pid = $this->forumGateway->addPost($fsId, $threadId, $body);
 		$this->notifyFollowersNewPost($threadId, $rawBody, $fsId, $pid);
 		$this->notifyParticipantsViaBell($threadId, $fsId, $pid);
@@ -105,9 +98,6 @@ class ForumService
 
 	public function createThread($fsId, $title, $body, $region, $ambassadorForum, $moderated)
 	{
-		$body = nl2br(strip_tags($body));
-		$body = $this->func->autolink($body);
-		/* TODO: Implement proper sanitation that happens on output, not input */
 		$threadId = $this->forumGateway->addThread($fsId, $region['id'], $title, $body, $ambassadorForum, !$moderated);
 		if ($moderated) {
 			$this->notifyAdminsModeratedThread($region, $threadId);
@@ -136,7 +126,7 @@ class ForumService
 				array_merge($data,
 					[
 						'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-						'name' => $this->outputSanitizerService->sanitizeForHtmlNoMarkup($recipient['name'])
+						'name' => $this->sanitizerService->plainToHtml($recipient['name'])
 					])
 			);
 		}
@@ -149,9 +139,9 @@ class ForumService
 			$poster = $this->model->getVal('name', 'foodsaver', $this->session->id());
 			$data = [
 				'link' => BASE_URL . $this->url($info['region_id'], $info['ambassador_forum'], $threadId, $postId),
-				'theme' => $this->outputSanitizerService->sanitizeForHtmlNoMarkup($info['title']),
-				'post' => $this->outputSanitizerService->sanitizeForHtml($rawPostBody),
-				'poster' => $this->outputSanitizerService->sanitizeForHtmlNoMarkup($poster)
+				'theme' => $this->sanitizerService->plainToHtml($info['title']),
+				'post' => $this->sanitizerService->markdownToHtml($rawPostBody),
+				'poster' => $this->sanitizerService->plainToHtml($poster)
 			];
 			$this->notificationMail($follower, 19, $data);
 		}
@@ -165,9 +155,9 @@ class ForumService
 		if ($foodsaver = $this->foodsaverGateway->getBotschafter($region['id'])) {
 			$data = [
 				'link' => BASE_URL . $this->url($region['id'], false, $threadId),
-				'thread' => $this->outputSanitizerService->sanitizeForHtmlNoMarkup($theme['name']),
-				'poster' => $this->outputSanitizerService->sanitizeForHtmlNoMarkup($poster),
-				'bezirk' => $this->outputSanitizerService->sanitizeForHtmlNoMarkup($region['name']),
+				'thread' => $this->sanitizerService->plainToHtml($theme['name']),
+				'poster' => $this->sanitizerService->plainToHtml($poster),
+				'bezirk' => $this->sanitizerService->plainToHtml($region['name']),
 			];
 
 			$this->notificationMail($foodsaver, 20, $data);
@@ -188,65 +178,28 @@ class ForumService
 		}
 
 		$data = [
-			'bezirk' => $this->outputSanitizerService->sanitizeForHtmlNoMarkup($region['name']),
-			'poster' => $this->outputSanitizerService->sanitizeForHtmlNoMarkup($poster),
-			'thread' => $this->outputSanitizerService->sanitizeForHtmlNoMarkup($theme['name']),
+			'bezirk' => $this->sanitizerService->plainToHtml($region['name']),
+			'poster' => $this->sanitizerService->plainToHtml($poster),
+			'thread' => $this->sanitizerService->plainToHtml($theme['name']),
 			'link' => BASE_URL . $this->url($region['id'], $ambassadorForum, $threadId),
-			'post' => $this->outputSanitizerService->sanitizeForHtml($body),
+			'post' => $this->sanitizerService->markdownToHtml($body),
 			];
 		$this->notificationMail($foodsaver, $ambassadorForum ? 13 : 12, $data);
 	}
 
-	private function getReactionTarget($threadId, $postId = null)
+	public function addReaction($fsId, $postId, $key)
 	{
-		$target = 'forum-' . $threadId . '-';
-		if ($postId) {
-			$target .= $postId;
-		}
-
-		return $target;
-	}
-
-	public function addReaction($fsId, $threadId, $postId, $key)
-	{
-		if (!$fsId || !$threadId || !$postId || !$key) {
+		if (!$fsId || !$postId || !$key) {
 			throw new \InvalidArgumentException();
 		}
-		$this->reactionGateway->addReaction($this->getReactionTarget($threadId, $postId), $fsId, $key);
+		$this->forumGateway->addReaction($postId, $fsId, $key);
 	}
 
-	public function removeReaction($fsId, $threadId, $postId, $key)
+	public function removeReaction($fsId, $postId, $key)
 	{
-		if (!$fsId || !$threadId || !$postId || !$key) {
+		if (!$fsId || !$postId || !$key) {
 			throw new \InvalidArgumentException();
 		}
-		$this->reactionGateway->removeReaction($this->getReactionTarget($threadId, $postId), $fsId, $key);
-	}
-
-	public function getReactionsForThread($threadId)
-	{
-		$target = $this->getReactionTarget($threadId);
-		$res = $this->reactionGateway->getReactions($target, true);
-		$reactions = [];
-		foreach ($res as $r) {
-			$id = explode($target, $r['target']);
-			if (count($id) !== 2) {
-				continue;
-			} else {
-				$postId = $id[1];
-			}
-			if (!isset($reactions[$postId])) {
-				$reactions[$postId] = [];
-			}
-			if (!isset($reactions[$postId][$r['key']])) {
-				$reactions[$postId][$r['key']] = [];
-			}
-			$reactions[$postId][$r['key']][] = [
-				'id' => $r['foodsaver_id'],
-				'name' => $r['foodsaver_name']
-			];
-		}
-
-		return $reactions;
+		$this->forumGateway->removeReaction($postId, $fsId, $key);
 	}
 }
