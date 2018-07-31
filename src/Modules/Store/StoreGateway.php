@@ -330,6 +330,7 @@ class StoreGateway extends BaseGateway
 							t.`stat_last_update`,
 							t.`stat_fetchcount`,
 							t.`stat_first_fetch`,
+							t.`stat_add_date`,
 							UNIX_TIMESTAMP(t.`stat_last_fetch`) AS last_fetch,
 							UNIX_TIMESTAMP(t.`stat_add_date`) AS add_date,
 							fs.sleep_status

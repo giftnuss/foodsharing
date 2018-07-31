@@ -33,6 +33,8 @@ class WallPostPermissions
 				return $event['public'] || isset($event['may'][$fsId]);
 			case 'foodsaver':
 				return $fsId > 0;
+			case 'fairteiler':
+				return true;
 			case 'question':
 				return $this->regionGateway->hasMember($fsId, 341);
 			case 'usernotes':
@@ -50,7 +52,7 @@ class WallPostPermissions
 			case 'question':
 				return $fsId > 0;
 			default:
-				return $this->mayReadWall($fsId, $target, $targetId);
+				return $fsId > 0 && $this->mayReadWall($fsId, $target, $targetId);
 		}
 	}
 

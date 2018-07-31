@@ -2,10 +2,10 @@
 
 namespace Foodsharing\Lib\Xhr;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Stats\StatsService;
 
 class ViewUtils
@@ -20,14 +20,14 @@ class ViewUtils
 	private $viewUtils;
 
 	/**
-	 * @var Model
+	 * @var Db
 	 */
 	private $model;
 
 	private $statsService;
 	private $session;
 
-	public function __construct(Func $func, Utils $viewUtils, Model $model, StatsService $statsService, Session $session)
+	public function __construct(Func $func, Utils $viewUtils, Db $model, StatsService $statsService, Session $session)
 	{
 		$this->func = $func;
 		$this->viewUtils = $viewUtils;

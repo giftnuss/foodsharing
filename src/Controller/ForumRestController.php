@@ -6,7 +6,7 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Services\ForumService;
-use Foodsharing\Services\OutputSanitizerService;
+use Foodsharing\Services\SanitizerService;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -18,15 +18,15 @@ class ForumRestController extends FOSRestController
 	private $forumGateway;
 	private $forumPermissions;
 	private $forumService;
-	private $outputSanitizerService;
+	private $sanitizerService;
 
-	public function __construct(Session $session, ForumGateway $forumGateway, ForumPermissions $forumPermissions, ForumService $forumService, OutputSanitizerService $outputSanitizerService)
+	public function __construct(Session $session, ForumGateway $forumGateway, ForumPermissions $forumPermissions, ForumService $forumService, SanitizerService $sanitizerService)
 	{
 		$this->session = $session;
 		$this->forumGateway = $forumGateway;
 		$this->forumPermissions = $forumPermissions;
 		$this->forumService = $forumService;
-		$this->outputSanitizerService = $outputSanitizerService;
+		$this->sanitizerService = $sanitizerService;
 	}
 
 	private function normalizeThread($thread)
@@ -48,7 +48,7 @@ class ForumRestController extends FOSRestController
 		];
 		if (isset($thread['post_time'])) {
 			$res['lastPost']['createdAt'] = $thread['post_time'];
-			$res['lastPost']['body'] = $this->outputSanitizerService->sanitizeForHtml($thread['post_body']);
+			$res['lastPost']['body'] = $this->sanitizerService->markdownToHtml($thread['post_body']);
 			$res['lastPost']['author'] = [
 				'id' => $thread['foodsaver_id'],
 				'name' => $thread['foodsaver_name'],
@@ -68,11 +68,11 @@ class ForumRestController extends FOSRestController
 		return $res;
 	}
 
-	private function normalizePost($post, $reactions)
+	private function normalizePost($post)
 	{
 		return [
 			'id' => $post['id'],
-			'body' => $this->outputSanitizerService->sanitizeForHtml($post['body']),
+			'body' => $this->sanitizerService->markdownToHtml($post['body']),
 			'createdAt' => $post['time'],
 			'author' => [
 				'id' => $post['author_id'],
@@ -80,7 +80,7 @@ class ForumRestController extends FOSRestController
 				'avatar' => '/images/130_q_' . $post['author_photo'],
 				'sleepStatus' => $post['author_sleep_status']
 			],
-			'reactions' => $reactions[$post['id']] ?? new \ArrayObject(),
+			'reactions' => $post['reactions'] ?: new \ArrayObject(),
 			'mayDelete' => $this->forumPermissions->mayDeletePost($post)
 		];
 	}
@@ -118,12 +118,11 @@ class ForumRestController extends FOSRestController
 
 		$thread = $this->forumGateway->getThread($threadId);
 		$posts = $this->forumGateway->listPosts($threadId);
-		$reactions = $this->forumService->getReactionsForThread($threadId);
 
 		$thread = $this->normalizeThread($thread);
 		$thread['isFollowing'] = $this->forumGateway->isFollowing($this->session->id(), $threadId);
 		$thread['mayModerate'] = $this->forumPermissions->mayModerate($threadId);
-		$thread['posts'] = array_map(function ($post) use ($reactions) { return $this->normalizePost($post, $reactions); }, $posts);
+		$thread['posts'] = array_map(function ($post) { return $this->normalizePost($post); }, $posts);
 
 		$view = $this->view([
 			'data' => $thread
@@ -223,8 +222,11 @@ class ForumRestController extends FOSRestController
 	public function deletePostAction($postId)
 	{
 		$post = $this->forumGateway->getPost($postId);
+		if (!$post) {
+			throw new HttpException(404);
+		}
 		if (!$this->forumPermissions->mayDeletePost($post)) {
-			return new HttpException(403);
+			throw new HttpException(403);
 		}
 		$this->forumGateway->deletePost($postId);
 
@@ -238,9 +240,9 @@ class ForumRestController extends FOSRestController
 	{
 		$threadId = $this->forumGateway->getThreadForPost($postId);
 		if (!$this->forumPermissions->mayAccessThread($threadId)) {
-			return new HttpException(403);
+			throw new HttpException(403);
 		}
-		$this->forumService->addReaction($this->session->id(), $threadId, $postId, $emoji);
+		$this->forumService->addReaction($this->session->id(), $postId, $emoji);
 
 		return $this->handleView($this->view([]));
 	}
@@ -251,7 +253,7 @@ class ForumRestController extends FOSRestController
 	public function deleteReactionAction($postId, $emoji)
 	{
 		$threadId = $this->forumGateway->getThreadForPost($postId);
-		$this->forumService->removeReaction($this->session->id(), $threadId, $postId, $emoji);
+		$this->forumService->removeReaction($this->session->id(), $postId, $emoji);
 
 		return $this->handleView($this->view([]));
 	}

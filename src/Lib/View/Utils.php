@@ -311,56 +311,6 @@ class Utils
 				</form>';
 	}
 
-	public function v_msgBar()
-	{
-		return '<ul id="infobar">
-					<li class="msg">
-						<a href="#" onclick="return false;">
-							<i class="fa fa-comments"></i><span style="display:none;" class="badge">0</span>
-						</a>
-						<span style="display:none;" class="linkwrapper corner-all ui-shadow">
-							<ul class="linklist conversation-list">
-							</ul>
-							<a class="more" href="/?page=msg">Alle zeigen</a>
-						</span>
-					</li>
-
-					<li class="bell">
-						<a href="#" onclick="return false;">
-							<i class="fa fa-bell"></i><span style="display:none;" class="badge">0</span>
-						</a>
-						<span style="display:none;" class="linkwrapper corner-all ui-shadow">
-							<ul class="linklist conversation-list">
-							</ul>
-						</span>
-
-					</li>
-
-					<li class="basket">
-						<a href="#" onclick="return false;">
-							<i class="img-fbasket"></i><span style="display:none;" class="badge">0</span>
-						</a>
-						<span style="display:none;" class="linkwrapper corner-all ui-shadow">
-							<ul class="linklist conversation-list">
-							</ul>
-							<a class="more" href="#" onclick="ajreq(\'newbasket\',{app:\'basket\'});return false;">Neuen Essenskorb anlegen</a>
-						</span>
-
-					</li>
-				</ul>
-
-				<div id="searchbar">
-				<i class="fa fa-search"></i><input type="text" value="" placeholder="' . $this->func->s('search') . '..." />
-				<div class="result-wrapper" style="display:none;">
-					<ul class="linklist index"></ul>
-					<ul class="linklist result"></ul>
-					<ul class="linklist more">
-						<li><a class="more" onclick="goTo(\'/?page=search&q=\' + encodeURIComponent($(\'#searchbar input\').val()));return false;" href="#">Alle Ergebnisse</a></li>
-					</ul>
-				</div>
-			</div>';
-	}
-
 	public function v_success($msg, $title = false)
 	{
 		if ($title !== false) {

@@ -134,7 +134,7 @@ function u_loadDialog (purl) {
   $('#b_content').addClass('loading')
   $('#b_content').dialog('option', 'title', 'lade...')
   $('#b_content').dialog('open')
-  const pos = $('#top .inner').offset()
+  const pos = $('#topbar .container').offset()
   $('#b_content').parent().css({
     'left': pos.left + 'px',
     'top': '80px'

@@ -43,6 +43,7 @@ class ForumPostCest
 	{
 		$I->login($this->{$example[0]}['email'], 'pw');
 		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
+		$I->waitForActiveAPICalls();
 		$this->waitForPostButtons($I, true, false, $example[2]);
 
 		$followButton = \Codeception\Util\Locator::contains('.btn', 'folgen');
@@ -51,6 +52,7 @@ class ForumPostCest
 		$this->waitForPostButtons($I, false, false, $example[2]);
 
 		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
+		$I->waitForActiveAPICalls();
 
 		$unfollowButton = \Codeception\Util\Locator::contains('.btn', 'entfolgen');
 		$I->waitForElement($unfollowButton);
@@ -61,10 +63,10 @@ class ForumPostCest
 	private function waitForPostButtons($I, $follow, $unfollow, $stickUnstick)
 	{
 		if ($follow) {
-			$I->waitForText('folgen', 10, '.btn');
+			$I->waitForText('Thema folgen', 3);
 		}
 		if ($unfollow) {
-			$I->waitForText('entfolgen', 10, '.btn');
+			$I->waitForText('Thema entfolgen', 3);
 		}
 		if ($stickUnstick) {
 			$I->see('fixieren', '.btn');
@@ -77,6 +79,8 @@ class ForumPostCest
 	{
 		$I->login($this->ambassador['email'], 'pw');
 		$I->amOnPage($I->forumThemeUrl($this->thread_user_ambassador['id'], null));
+		$I->waitForActiveAPICalls();
+
 		$nick = $I->haveFriend('nick');
 		$nick->does(function (AcceptanceTester $I) {
 			$I->login($this->foodsaver['email'], 'pw');

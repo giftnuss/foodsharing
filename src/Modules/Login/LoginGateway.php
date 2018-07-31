@@ -10,7 +10,7 @@ class LoginGateway extends BaseGateway
 	{
 		$email = trim($email);
 		if ($this->db->exists('fs_email_blacklist', ['email' => $email])) {
-			return false;
+			return null;
 		}
 		if ($fsid = $this->checkClient($email, $pass)) {
 			$this->db->update(

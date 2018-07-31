@@ -2,10 +2,11 @@ import Vue from 'vue'
 import $ from 'jquery'
 import i18n from '@/i18n'
 import urls from '@/urls'
-import { dateFormat } from '@/utils'
+import { dateFormat, dateDistanceInWords } from '@/utils'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.filter('dateFormat', dateFormat)
+Vue.filter('dateDistanceInWords', dateDistanceInWords)
 
 Vue.filter('i18n', (key, variables = {}) => {
   console.warn(`i18n as a vue filter is deprecated. use i18n() as a vue functions`)
@@ -16,6 +17,10 @@ Vue.prototype.$i18n = (key, variables = {}) => {
 }
 
 Vue.prototype.$url = (key, ...params) => {
+  if (!urls[key]) {
+    console.error(new Error(`Vue.$url() Error: url key '${key}' does not exist`))
+    return '#'
+  }
   return urls[key](...params)
 }
 

@@ -10,10 +10,10 @@ $description = 'test foodbasket with bananas';
 $I->login($foodsaver['email'], 'password');
 $I->amOnPage('/');
 
-$I->click('#infobar .basket a');
-$I->see('Neuen Essenskorb anlegen');
+$I->click('.topbar-baskets > a');
+$I->waitForText('Essenskorb anlegen');
 
-$I->click('Neuen Essenskorb anlegen');
+$I->click('Essenskorb anlegen');
 $I->waitForText('Essenskorb anbieten');
 
 $I->fillField('description', $description);

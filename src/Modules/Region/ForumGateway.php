@@ -230,7 +230,7 @@ class ForumGateway extends BaseGateway
 			[
 				'theme_id' => $thread_id,
 				'foodsaver_id' => $fs_id,
-				'body' => strip_tags($body, '<p><a><ul><strong><b><i><ol><li><br>'),
+				'body' => $body,
 				'time' => date('Y-m-d H:i:s')
 			]
 		);
@@ -262,14 +262,89 @@ class ForumGateway extends BaseGateway
 				ON		b.id = ht.bezirk_id';
 	}
 
+	private function getReactionsForPosts($postIds)
+	{
+		/* This message is private because we currently trust the given postIds to exist as well as be not-harmful */
+		$postIdClause = implode(',', $postIds);
+		$reactions = $this->db->fetchAll('
+			SELECT
+			r.post_id,
+			r.`key`,
+			r.time,
+			r.foodsaver_id,
+			fs.name as foodsaver_name
+			
+			FROM
+			fs_post_reaction r
+			LEFT JOIN
+			fs_foodsaver fs
+			ON
+			fs.id = r.foodsaver_id
+			WHERE r.post_id IN (' . $postIdClause . ')'
+		);
+		$out = [];
+		foreach ($postIds as $id) {
+			$out[$id] = [];
+		}
+		foreach ($reactions as $r) {
+			$user = [
+				'id' => $r['foodsaver_id'],
+				'name' => $r['foodsaver_name']
+			];
+			if (!isset($out[$r['post_id']][$r['key']])) {
+				$out[$r['post_id']][$r['key']] = [$user];
+			} else {
+				$out[$r['post_id']][$r['key']][] = $user;
+			}
+		}
+
+		return $out;
+	}
+
+	public function addReaction($postId, $fsId, $key): bool
+	{
+		$this->db->insert(
+			'fs_post_reaction',
+			[
+				'post_id' => $postId,
+				'foodsaver_id' => $fsId,
+				'key' => $key,
+				'time' => $this->db->now()
+			]
+		);
+
+		return true;
+	}
+
+	public function removeReaction($postId, $fsId, $key)
+	{
+		$this->db->delete(
+			'fs_post_reaction',
+			[
+				'post_id' => $postId,
+				'foodsaver_id' => $fsId,
+				'key' => $key
+			]
+		);
+	}
+
 	public function listPosts($threadId)
 	{
-		return $this->db->fetchAll(
+		$posts = $this->db->fetchAll(
 			$this->getPostSelect() . ' 
 			WHERE 		p.theme_id = :threadId
 
 			ORDER BY 	p.`time`
 		', ['threadId' => $threadId]);
+		$postIds = array_column($posts, 'id');
+		$reactions = $this->getReactionsForPosts($postIds);
+		$mergeReactions = function ($post) use ($reactions) {
+			$post['reactions'] = $reactions[$post['id']];
+
+			return $post;
+		};
+
+		return array_map($mergeReactions, $posts);
 	}
 
 	public function getPost($postId)

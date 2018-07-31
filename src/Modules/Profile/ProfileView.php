@@ -436,7 +436,7 @@ class ProfileView extends View
 		<ul class="linklist">
 			<li><a href="#" onclick="chat(' . $this->foodsaver['id'] . ');return false;"><i class="fa fa-comment"></i>Nachricht schreiben</a></li>
 			' . $opt . '
-			<li><a href="#" onclick="ajreq(\'reportDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;"><i class="fa fa-life-ring"></i>Verstoß melden</a></li>
+			<li><a href="#" onclick="ajreq(\'reportDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;"><i class="fa fa-life-ring"></i>Regelverletzung melden</a></li>
 		</ul>';
 	}
 
@@ -531,7 +531,7 @@ class ProfileView extends View
 			);
 		}
 
-		$infos[] = array('name' => '', 'val' => '<a href="#" onclick="ajreq(\'reportDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;">Verstoß melden</a>');
+		$infos[] = array('name' => '', 'val' => '<a href="#" onclick="ajreq(\'reportDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;">Regelverletzung melden</a>');
 
 		$fetchweight = '';
 		if ($this->foodsaver['stat_fetchweight'] > 0) {

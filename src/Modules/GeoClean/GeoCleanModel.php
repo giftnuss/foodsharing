@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\GeoClean;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 
-class GeoCleanModel extends Model
+class GeoCleanModel extends Db
 {
 	public function getFsWithoutGeo()
 	{

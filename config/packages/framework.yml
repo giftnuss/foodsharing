@@ -15,7 +15,8 @@ fos_rest:
 exercise_html_purifier:
     default:
         Cache.SerializerPath: '%kernel.cache_dir%/htmlpurifier-cache'
-        AutoFormat.DisplayLinkURI: true
-        AutoFormat.Linkify: true
+        Cache.SerializerPermissions: 0775
+        AutoFormat.DisplayLinkURI: false
+        AutoFormat.Linkify: false
         CSS.AllowedProperties: []
         URI.DisableExternalResources: true

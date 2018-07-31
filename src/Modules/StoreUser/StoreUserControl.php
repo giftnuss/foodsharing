@@ -42,7 +42,7 @@ class StoreUserControl extends Control
 
 			$this->func->jsData['store'] = [
 				'id' => (int)$betrieb['id'],
-				'name' => (int)$betrieb['name'],
+				'name' => $betrieb['name'],
 				'bezirk_id' => (int)$betrieb['bezirk_id'],
 				'team_js' => $betrieb['team_js'],
 				'verantwortlich' => $betrieb['verantwortlich'],
