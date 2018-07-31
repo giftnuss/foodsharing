@@ -74,7 +74,7 @@ class RegionGatewayTest extends \Codeception\Test\Unit
 		$this->assertEquals($regions, [$this->region['id'], $this->childRegion['id']]);
 	}
 
-	public function testGetParentRegions(): void
+	public function testListRegionsIncludingParents(): void
 	{
 		$regions = $this->gateway->listRegionsIncludingParents([$this->childRegion['id']]);
 		$this->assertEquals($regions, [$this->region['id'], $this->childRegion['id']]);
