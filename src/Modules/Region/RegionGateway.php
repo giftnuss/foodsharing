@@ -92,7 +92,7 @@ class RegionGateway extends BaseGateway
 			WHERE 		`id` = ' . (int)$id);
 	}
 
-	public function getParentRegions($region_id): array
+	public function listRegionsIncludingParents($region_id): array
 	{
 		$stm = 'SELECT DISTINCT ancestor_id FROM `fs_bezirk_closure` WHERE bezirk_id IN (' . implode(',', array_map('intval', $region_id)) . ')';
 

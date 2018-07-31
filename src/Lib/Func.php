@@ -400,7 +400,7 @@ class Func
 			if ($include_parent_regions) {
 				/* @var $gw RegionGateway */
 				$gw = DI::$shared->get(RegionGateway::class);
-				$regions_ids = $gw->getParentRegions($regions_ids);
+				$regions_ids = $gw->listRegionsIncludingParents($regions_ids);
 			}
 			foreach ($_SESSION['client']['botschafter'] as $b) {
 				foreach ($regions_ids as $bid) {
