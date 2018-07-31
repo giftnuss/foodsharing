@@ -184,7 +184,7 @@ class StoreUserView extends View
 				var val = $(this).val();
 				showLoader();
 				$.ajax({
-					url: "xhr.php?f=bteamstatus&bid=' . (int)$betrieb['id'] . '&s=" + val,
+					url: "/xhr.php?f=bteamstatus&bid=' . (int)$betrieb['id'] . '&s=" + val,
 					success: function(){
 						hideLoader();
 					}
@@ -416,14 +416,14 @@ class StoreUserView extends View
 				if (!$bindabei) {
 					$out .= '
 				<li class="filled empty timedialog-add-me">
-					<a href="#" onclick="return false;" title="' . $this->func->s('add_me_here') . '"><img src="img/nobody.gif" alt="nobody" /></a>
+					<a href="#" onclick="return false;" title="' . $this->func->s('add_me_here') . '"><img src="/img/nobody.gif" alt="nobody" /></a>
 					<input type="hidden" name="' . $id . '-date" class="daydate" value="' . $date . '::' . $this->func->format_db_date($date) . '::' . $this->func->s('dow' . date('w', strtotime($date))) . '" />
 					<input type="hidden" name="' . $id . '-dateid" class="dayid" value="' . $id . '" />
 				</li>';
 				} else {
 					$out .= '
 				<li class="empty nohover">
-					<a href="#" onclick="return false;" title=""><img src="img/nobody.gif" alt="nobody" /></a>
+					<a href="#" onclick="return false;" title=""><img src="/img/nobody.gif" alt="nobody" /></a>
 				</li>';
 				}
 			}

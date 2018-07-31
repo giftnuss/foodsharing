@@ -80,6 +80,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'active' => 1,
 			'privacy_policy_accepted_date' => '2018-05-24 10:24:53',
 			'privacy_notice_accepted_date' => '2018-05-24 18:25:28',
+			'token' => uniqid()
 		], $extra_params);
 		$params['passwd'] = $this->encryptMd5($params['email'], $pass);
 		$params['geb_datum'] = $this->toDateTime($params['geb_datum']);
@@ -266,8 +267,13 @@ class Foodsharing extends \Codeception\Module\Db
 			'fetcher' => $this->faker->numberBetween(1, 8),
 		], $extra_params);
 
-		$id = $this->haveInDatabase('fs_abholzeiten', $params);
-		$params['id'] = $id;
+		try {
+			/* ToDo: Easy to generate a collision with the chosen randoms on big number of stores */
+			$id = $this->haveInDatabase('fs_abholzeiten', $params);
+			$params['id'] = $id;
+		} catch (\Exception $e) {
+			return $this->addRecurringPickup($store, $extra_params);
+		}
 
 		return $params;
 	}
@@ -320,8 +326,8 @@ class Foodsharing extends \Codeception\Module\Db
 	public function addBezirkMember($bezirk_id, $fs_id, $is_active = true)
 	{
 		if (is_array($fs_id)) {
-			array_map(function ($x) use ($bezirk_id, $is_admin) {
-				$this->addBezirkMember($bezirk_id, $x, $is_admin);
+			array_map(function ($x) use ($bezirk_id, $is_active) {
+				$this->addBezirkMember($bezirk_id, $x, $is_active);
 			}, $fs_id);
 		} else {
 			$v = [
@@ -579,6 +585,24 @@ class Foodsharing extends \Codeception\Module\Db
 				'seen' => 0
 			]);
 		}
+	}
+
+	public function addBlogPost($authorId, $regionId, $extra_params = [])
+	{
+		$params = array_merge([
+			'bezirk_id' => $regionId,
+			'foodsaver_id' => $authorId,
+			'name' => $this->faker->text(40),
+			'body' => $this->faker->text(),
+			'teaser' => $this->faker->text(50),
+			'time' => $this->faker->dateTime($max = 'now'),
+			'active' => 1,
+			'picture' => ''
+		], $extra_params);
+		$params['time'] = $this->toDateTime($params['time']);
+		$params['id'] = $this->haveInDatabase('fs_blog_entry', $params);
+
+		return $params;
 	}
 
 	// =================================================================================================================

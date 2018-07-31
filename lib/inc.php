@@ -20,7 +20,6 @@ if (isset($g_page_cache)) {
 }
 
 require_once 'lang/DE/de.php';
-require_once 'lib/minify/JSMin.php';
 
 error_reporting(E_ALL);
 

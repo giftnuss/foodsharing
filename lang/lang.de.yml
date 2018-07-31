@@ -1,7 +1,7 @@
 image: Bild
 picture_upload_widget:
   picture_upload: Foto-Upload
-  choose_picture: Wähle ein Bild von Deinem Rechner
+  choose_picture: Wähle ein Bild von Deinem Rechner!
 
 button:
   change_picture: Bild ändern
@@ -71,7 +71,7 @@ legal:
 
 login:
   form_title: Login
-  email_address: Email Adresse
+  email_address: E-Mail-Adresse
   password: Passwort
   forgotten_password_label: Passwort vergessen?
   login_button_label: Login
@@ -145,6 +145,7 @@ really_delete: Wirklich löschen?
 yes: Ja
 no: Nein
 options: Optionen
+error_unexpected: Es ist ein Fehler aufgetreten 
 
 forum:
   from: Von %name%
@@ -165,6 +166,7 @@ forum:
   delete_thread: Thema löschen
   hold_back_for_moderation: Das Thema wurde gespeichert und wird veröffentlicht sobald ein Botschafter es bestätigt.
   no_threads: Noch keine Themen gepostet
+  sending_error: Beim Senden ist ein Fehler aufgetreten
 
 chat:
   open_chat: Nachricht schreiben

@@ -8,11 +8,15 @@ import { initialize, ajreq } from '@/script'
 import 'jquery-ui'
 
 import 'fullpage.js'
-
 import 'jquery-contextmenu'
 import 'jquery-contextmenu/dist/jquery.ui.position'
 import 'jquery-contextmenu/dist/jquery.contextMenu.css'
 import '@/jquery.contextMenu.overrides.css'
+import './scss/bootstrap-theme.scss'
+import './scss/index.scss'
+
+// TODO: join dynamic form could be on any page - fix this
+import '@/join'
 
 import '@/menu'
 import '@/becomeBezirk'

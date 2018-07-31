@@ -1,340 +1,282 @@
-# foodsharing
 
-Welcome to the foodsharing code!
-
-## Getting started
-
-You can use the docker-compose setup if you are using one of:
-
-- Linux
-- OSX Yosemite 10.10.3 or higher
-- Windows 10 Pro or higher
-
-If you are not using one of those, then try the vagrant + docker-compose setup.
-
-### Linux
-
-Install
-[docker CE](https://docs.docker.com/engine/installation/).
-
-And ensure you have 
-[docker-compose](https://docs.docker.com/compose/install/) (at least version 1.6.0)
-installed too (often comes with docker).
-
-If you can't connect to docker with your local user, you may want to add yourself
-to the docker group:
-
-```
-sudo usermod -aG docker $USER
-
-# then either login again to reload the groups
-# or run (for each shell...)
-su - $USER
-
-# should now be able to connect without errors
-docker info
-```
-
-Then:
-
-```
-git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
-cd foodsharing
-./scripts/start
-```
-
-### OSX Yosemite 10.10.3 or higher
-
-Install [Docker for Mac](https://docs.docker.com/engine/installation/mac/).
-
-Then:
-
-```
-git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
-cd foodsharing
-./scripts/start
-```
-
-### Windows 10 Pro or higher
-
-Install [Docker for Windows](https://docs.docker.com/docker-for-windows/install/).
-Install Git for Windows: (https://git-scm.com/download/win)
-
-There is a GUI interface to administrate the repo, which is recommended for git-beginners
-
-But you can use the GIT bash shell just like in Linux to clone it:
-
-```
-git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
-```
-
-To start the containers, use the GIT bash shell:
-```
-cd foodsharing
-./scripts/start
-```
-
-##For the Future
-
-
-You should be able to get something working by
-installing/enabling
-[Windows Subsystem for Linux](https://msdn.microsoft.com/en-gb/commandline/wsl/install_guide)
-in the future, because their kernel is not good enough to support the docker daemon.
-
-### Vagrant
-
-If you cannot use any of the above methods,
-then this should work with all common operation systems.
-
-However, we are less familiar with this solution so may be less able to support you.
-
-Install
-[Virtualbox](https://www.virtualbox.org/wiki/Downloads) and
-[Vagrant](https://www.vagrantup.com/downloads.html).
-
-Then:
-
-```
-git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
-cd foodsharing
-vagrant up
-```
-
-#### Daily work
-
-`vagrant up` starts the machine and foodsharing project.
-
-`vagrant halt` stops the virtual machine
-
-`vagrant ssh` connects to the virtual machine.
-
-Once connected to the virtual machine go to /vagrant with `cd /vagrant` 
-This is where the foodsharing folder is mounted in the VM.
-From there on you can run all scripts with `./scripts/NAME`
-
-Note:
-`./scripts/start` will always be executed, when you start the virtual machine with `vagrant up`
-
-There is a known bug when running virtualbox + nginx that nginx serves files from a memory cache. If you encounter this problem, it can probably be fixed by emptying the memory cache with ``sync; sudo sh -c "/bin/echo 3 > /proc/sys/vm/drop_caches"`` or even running this every second with ``watch -n 1 'sync; sudo sh -c "/bin/echo 3 > /proc/sys/vm/drop_caches"'``
-
-### foodsharing light and API
-
-If you want to include the new Django API and the foodsharing light frontend, then:
-
-```
-# you may have "api" and "light" directories already present, if so remove them first
-git clone https://github.com/foodsharing-dev/foodsharing-light.git light
-git clone https://github.com/foodsharing-dev/foodsharing-django-api.git api
-./scripts/start
-```
-
-Then visit [localhost:18082](http://localhost:18082) for fs light frontend and
-[localhost:18000/docs/](http://localhost:18000/docs/) for the API swagger view.
-
-You can run the foodsharing light frontend tests and run tests on change with:
-
-```
-./scripts/docker-compose run light sh -c "xvfb-run npm run test:watch -- --browsers Firefox"
-```
-
-You can run the api tests with:
-
-```
-./scripts/docker-compose run api env/bin/python manage.py test
-```
-
-When you update or change the Django API so that it would need to run `pip-sync` or apply migrations,
-this can be done with:
-
-```
-./scripts/docker-compose restart api
-```
-
-### Up and Running
-
-Now go and visit [localhost:18080](http://localhost:18080).
-
-If you want a bit of seed data to play with, run:
-
-```
-./scripts/seed
-```
-
-It will give you some users you can sign in as:
-
-| email                | password |
-|----------------------|----------|
-| user1@example.com    | user     |
-| user2@example.com    | user     |
-| userbot@example.com  | user     |
-| userorga@example.com | user     |
-
-It also generates more users and data to fill the page with life (a bit at least). If you want to modify it, look at the `SeedCommand.php` file.
-
-To stop everything again just run:
-
-```
-./scripts/stop
-```
-
-PHPMyAdmin is also included: [localhost:18081](http://localhost:18081). Log in with:
-
-| field | value |
-|-------|-------|
-| Server | db |
-| Username | root |
-| Password | root |
-
-### Testing
-
-Run the tests with:
-
-```
-./scripts/test
-```
-
-You will need to have initialized everything once (with `./scripts/start`),
-but you do not need to have the main containers running to run the tests
-as it uses it's own cluster of docker containers.
-
-#### Writing acceptance tests
-
-The `tests` directory has much stuff in it.
-
-You just need to care about 2 places:
-
-`tests/seed.sql` - add any data you want to be in the database when the tests are run
-`acceptance/` - copy an existing test and get started!
-
-http://codeception.com/docs/modules/WebDriver#Actions is a very useful page, showing all the things can call on`$I`.
-Please read the command descriptions carefully.
-
-##### How acceptance tests work
-
-Tests are run through selenium on firefox.
-The interaction of the test with the browser is defined by commands.
-Keep in mind that this is on very high level.
-Selenium does at most points not know what the browser is doing!
-
-It is especially hard to get waits right as the blocking/waiting behaviour
-of the commands may change with the test driver (PhantomJS, Firefox, Chromium, etc.).
-
-```
-$I->amOnPage
-```
-uses Webdriver GET command and waits for the HTML body of the page to be loaded (JavaScript onload handler fired),
-but nothing else.
-
-```
-$I->click
-```
-just fires a click event on the given element. It does not wait for anything afterwards!
-If you expect a page reload or any asynchronous requests happening, you need to wait for that before
-being able to assert any content.
-
-Even just a javascript popup, like an alert, may not be visible immediately!
-
-```
-$I->waitForPageBody()
-```
-can be used to wait for the static page load to be done.
-It does also not wait for any javascript executed etc...
-
-##### Some useful commands / common pitfalls
-
-|command|Action|Pitfall|
-|-------|------|-------|
-|amOnPage|changes URL, loads page, waits for body visible|Do not use to assert being on a URL|
-|amOnSubdomain|changes internal URL state|Does not load a page|
-|amOnUrl|changes internal URL state|Does not load a page|
-|click|fires JavaScript click event|Does not wait for anything to happen afterwards|
-|seeCurrentUrlEquals|checks on which URL the browser is (e.g. after a redirect)||
-|submitForm|fills form details and submits it via click on the submit button|does not wait for anything to happen afterwards|
-|waitForElement|waits until a specific element is available in the DOM||
-|waitForPageBody|waits until the page body is visible (e.g. after click is expected to load a new page)|
-
-
-### Asset watching / building
-
-To rebuild assets on change, run:
-
-```
-./scripts/watch-assets
-```
-
-# Code style
-
-We use php-cs-fixer to format the code style. The aim is to make it use the same style as phpstorm does by default.
-It is based on the @Symfony ruleset, with a few changes.
-
-To format all files you can run:
-
-```
-vendor/bin/php-cs-fixer fix --show-progress=estimating --verbose
-```
-
-For convenience, you can and should add the code style fix as a pre-commit hook, so you will never commit/push any PHP code that does not
-follow the code style rules.
-
-There are two possibilities:
-
-## Using local PHP
-
-When PHP >= 7.0 is installed locally and the vendor folder is in place (by having used the automated tests or the dev environment), you can use
-your computers PHP to check/fix the codestyle, as this is the fastest option:
-
-```
-./scripts/fix-codestyle-local
-```
-
-Adding this to `.git/hooks/pre-commit` could look like that:
-
-```
-#!/bin/sh
-HASH_BEFORE=`git diff | sha1sum`
-./scripts/fix-codestyle-local
-HASH_AFTER=`git diff | sha1sum`
-
-if [ "$HASH_AFTER" != "$HASH_BEFORE" ]; then
-  echo "PHP Codestyle was fixed. Please readd your changes and retry commit."
-  exit 1;
-fi
-```
-
-## Using docker PHP
-Executing the following script will use the dev environment to run the codestyle check. As it currently always runs a new container using docker-compose, it will take some seconds to execute:
-
-```
-./scripts/fix-codestyle
-```
-
-# Helper scripts
-
-There are a number of helper scripts available. Most of them obey the `FS_INT` env var. Default is `dev`, you can also set it to `test`.
-
-| script | purpose |
-|--------|---------|
-| ./scripts/build-assets | builds the static assets |
-| ./scripts/watch-assets | builds the static assets on change (you will need nodejs installed locally) |
-| ./scripts/composer | run php composer |
-| ./scripts/docker-compose | docker-compose with the correct options set for the env |
-| ./scripts/dropdb | drop the database |
-| ./scripts/clean | remove anything add by start/test commands |
-| ./scripts/initdb | create the database and run migrations |
-| ./scripts/mkdirs | create directories that need to be present |
-| ./scripts/mysql | run mysql command in correct context: ./scripts/mysql foodsharing "select * from fs_foodsaver" |
-| ./scripts/mysqldump | run mysqldump command in correct context |
-| ./scripts/npm | run npm in the chat server context |
-| ./scripts/rebuild-container [name] | rebuilds and restarts a single container, useful if changing nginx config for example |
-| ./scripts/rm | shutdown and cleanup all containers |
-| ./scripts/seed | run seed scripts in `scripts/seeds/*.sql` |
-| ./scripts/start| start everything! initializing anything if needed |
-| ./scripts/stop | stop everything, but leave it configured |
-| ./scripts/test | run tests |
-| ./scripts/test-rerun | run tests without recreating db |
-
-## Deployment
-
-Ensure you set env var `FS_ENV=prod` (e.g. in php-fpm pool defintion)
-and create a `config.inc.prod.php` file.
+<div align="center">
+	<br>
+	<br>
+	<a href="https://foodsharing.de">
+		<!-- image is docs/images/FS_Logo_gb_RGB.png but hosted publicly -->
+		<img src="https://user-images.githubusercontent.com/31616/42413241-8802b03c-821c-11e8-91c5-f94930313290.png" alt="foodsharing">
+	</a>
+	<br>
+	<br>
+</div>
+
+<!-- image is docs/images/fsscreenshot.png but hosted pubicly -->
+![](https://user-images.githubusercontent.com/31616/42418486-f8f571e6-82a1-11e8-8771-41e403944101.png)
+
+## 🌍 Overview
+
+This is the code that powers
+[foodsharing.de](https://foodsharing.de), 
+[foodsharing.at](https://foodsharing.at), and
+[foodsharingschweiz.ch](https://foodsharingschweiz.ch).
+
+## 💻 Development
+
+Visit [devdocs.foodsharing.de](https://devdocs.foodsharing.de) to get started with development.
+
+## 💒 Community
+
+Our developers hang out in the
+[yunity slack](https://slackin.yunity.org) group in the
+**#foodsharing-dev** and **#foodsharing-beta** channels. Come and say hi!
+
+## 👪 Contributors
+
+<!-- FOODSHARING-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<table border="0">
+  <tbody>
+    <tr border="0">
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/NerdyProjects">
+            <img src="https://assets.gitlab-static.net/uploads/-/system/user/avatar/642557/avatar.png" width="100px">
+          </a><br>
+        </div>
+        <span title="Code"><img width="14px" class="emoji" draggable="false" alt="💻" src="https://twemoji.maxcdn.com/2/svg/1f4bb.svg"/></span>&nbsp;<span title="Infrastructure (Hosting, Build-Tools, etc)"><img width="14px" class="emoji" draggable="false" alt="🔩" src="https://twemoji.maxcdn.com/2/svg/1f529.svg"/></span>&nbsp;<span title="Reviewed Pull Requests"><img width="14px" class="emoji" draggable="false" alt="👀" src="https://twemoji.maxcdn.com/2/svg/1f440.svg"/></span><br>
+        <a href="https://gitlab.com/NerdyProjects">
+          <sub>Matthias Larisch</sub>
+        </a>
+      </td>
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/peter.toennies">
+            <img src="https://foodsharing.de/images/q_f57a9d0c7fa4b1b889cfe3245310ad06.jpg" width="100px">
+          </a><br>
+        </div>
+        <span title="Bug reports"><img width="14px" class="emoji" draggable="false" alt="🐜" src="https://twemoji.maxcdn.com/2/svg/1f41c.svg"/></span>&nbsp;<span title="Code"><img width="14px" class="emoji" draggable="false" alt="💻" src="https://twemoji.maxcdn.com/2/svg/1f4bb.svg"/></span>&nbsp;<span title="Ideas, Planning, & Feedback"><img width="14px" class="emoji" draggable="false" alt="💡" src="https://twemoji.maxcdn.com/2/svg/1f4a1.svg"/></span>&nbsp;<span title="Answering Questions"><img width="14px" class="emoji" draggable="false" alt="💬" src="https://twemoji.maxcdn.com/2/svg/1f4ac.svg"/></span>&nbsp;<span title="Reviewed Pull Requests"><img width="14px" class="emoji" draggable="false" alt="👀" src="https://twemoji.maxcdn.com/2/svg/1f440.svg"/></span><br>
+        <a href="https://gitlab.com/peter.toennies">
+          <sub>Peter Tönnies</sub>
+        </a>
+      </td>
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/k.miklobusec">
+            <img src="https://foodsharing.de/images/q_e09cefb9259140ef547313b6cb5691ea.jpg" width="100px">
+          </a><br>
+        </div>
+        <span title="Board member"><img width="14px" class="emoji" draggable="false" alt="🏢" src="https://twemoji.maxcdn.com/2/svg/1f3e2.svg"/></span>&nbsp;<span title="Bug reports"><img width="14px" class="emoji" draggable="false" alt="🐜" src="https://twemoji.maxcdn.com/2/svg/1f41c.svg"/></span>&nbsp;<span title="Code"><img width="14px" class="emoji" draggable="false" alt="💻" src="https://twemoji.maxcdn.com/2/svg/1f4bb.svg"/></span>&nbsp;<span title="Ideas, Planning, & Feedback"><img width="14px" class="emoji" draggable="false" alt="💡" src="https://twemoji.maxcdn.com/2/svg/1f4a1.svg"/></span>&nbsp;<span title="Answering Questions"><img width="14px" class="emoji" draggable="false" alt="💬" src="https://twemoji.maxcdn.com/2/svg/1f4ac.svg"/></span><br>
+        <a href="https://gitlab.com/k.miklobusec">
+          <sub>Once&#8203;Upon&#8203;A&#8203;Foodsharing&#8203;Time</sub>
+        </a>
+      </td>
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/nicksellen">
+            <img src="https://assets.gitlab-static.net/uploads/-/system/user/avatar/640443/avatar.png" width="100px">
+          </a><br>
+        </div>
+        <span title="Code"><img width="14px" class="emoji" draggable="false" alt="💻" src="https://twemoji.maxcdn.com/2/svg/1f4bb.svg"/></span>&nbsp;<span title="Documentation"><img width="14px" class="emoji" draggable="false" alt="📝" src="https://twemoji.maxcdn.com/2/svg/1f4dd.svg"/></span>&nbsp;<span title="Infrastructure (Hosting, Build-Tools, etc)"><img width="14px" class="emoji" draggable="false" alt="🔩" src="https://twemoji.maxcdn.com/2/svg/1f529.svg"/></span>&nbsp;<span title="Reviewed Pull Requests"><img width="14px" class="emoji" draggable="false" alt="👀" src="https://twemoji.maxcdn.com/2/svg/1f440.svg"/></span><br>
+        <a href="https://gitlab.com/nicksellen">
+          <sub>Nick Sellen</sub>
+        </a>
+      </td>
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/tiltec">
+            <img src="https://assets.gitlab-static.net/uploads/-/system/user/avatar/640465/avatar.png" width="100px">
+          </a><br>
+        </div>
+        <span title="Code"><img width="14px" class="emoji" draggable="false" alt="💻" src="https://twemoji.maxcdn.com/2/svg/1f4bb.svg"/></span>&nbsp;<span title="Reviewed Pull Requests"><img width="14px" class="emoji" draggable="false" alt="👀" src="https://twemoji.maxcdn.com/2/svg/1f440.svg"/></span><br>
+        <a href="https://gitlab.com/tiltec">
+          <sub>Tilmann Becker</sub>
+        </a>
+      </td>
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/michi-zuri">
+            <img src="https://assets.gitlab-static.net/uploads/-/system/user/avatar/1682847/avatar.png" width="100px">
+          </a><br>
+        </div>
+        <span title="Bug reports"><img width="14px" class="emoji" draggable="false" alt="🐜" src="https://twemoji.maxcdn.com/2/svg/1f41c.svg"/></span>&nbsp;<span title="Code"><img width="14px" class="emoji" draggable="false" alt="💻" src="https://twemoji.maxcdn.com/2/svg/1f4bb.svg"/></span>&nbsp;<span title="Design"><img width="14px" class="emoji" draggable="false" alt="🎨" src="https://twemoji.maxcdn.com/2/svg/1f3a8.svg"/></span><br>
+        <a href="https://gitlab.com/michi-zuri">
+          <sub>Michael Paul Killian</sub>
+        </a>
+      </td>
+    </tr>
+    <tr border="0">
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/raphaelw">
+            <img src="https://avatars2.githubusercontent.com/u/7235821?s=460&v=4" width="100px">
+          </a><br>
+        </div>
+        <span title="Code"><img width="14px" class="emoji" draggable="false" alt="💻" src="https://twemoji.maxcdn.com/2/svg/1f4bb.svg"/></span><br>
+        <a href="https://gitlab.com/raphaelw">
+          <sub>Raphael</sub>
+        </a>
+      </td>
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/alangecker">
+            <img src="https://assets.gitlab-static.net/uploads/-/system/user/avatar/1109912/avatar.png" width="100px">
+          </a><br>
+        </div>
+        <span title="Code"><img width="14px" class="emoji" draggable="false" alt="💻" src="https://twemoji.maxcdn.com/2/svg/1f4bb.svg"/></span><br>
+        <a href="https://gitlab.com/alangecker">
+          <sub>Andreas Langecker</sub>
+        </a>
+      </td>
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/theolampert">
+            <img src="https://assets.gitlab-static.net/uploads/-/system/user/avatar/2275979/avatar.png" width="100px">
+          </a><br>
+        </div>
+        <span title="Code"><img width="14px" class="emoji" draggable="false" alt="💻" src="https://twemoji.maxcdn.com/2/svg/1f4bb.svg"/></span><br>
+        <a href="https://gitlab.com/theolampert">
+          <sub>Theo</sub>
+        </a>
+      </td>
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/irgendwer">
+            <img src="https://assets.gitlab-static.net/uploads/-/system/user/avatar/1681670/avatar.png" width="100px">
+          </a><br>
+        </div>
+        <span title="Bug reports"><img width="14px" class="emoji" draggable="false" alt="🐜" src="https://twemoji.maxcdn.com/2/svg/1f41c.svg"/></span>&nbsp;<span title="Ideas, Planning, & Feedback"><img width="14px" class="emoji" draggable="false" alt="💡" src="https://twemoji.maxcdn.com/2/svg/1f4a1.svg"/></span>&nbsp;<span title="Security"><img width="14px" class="emoji" draggable="false" alt="🔐" src="https://twemoji.maxcdn.com/2/svg/1f510.svg"/></span><br>
+        <a href="https://gitlab.com/irgendwer">
+          <sub>irgendwer</sub>
+        </a>
+      </td>
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/manuel_w">
+            <img src="https://foodsharing.de/images/q_df07990f3897921b5ff18888edf545ac.jpg" width="100px">
+          </a><br>
+        </div>
+        <span title="Board member"><img width="14px" class="emoji" draggable="false" alt="🏢" src="https://twemoji.maxcdn.com/2/svg/1f3e2.svg"/></span>&nbsp;<span title="Ideas, Planning, & Feedback"><img width="14px" class="emoji" draggable="false" alt="💡" src="https://twemoji.maxcdn.com/2/svg/1f4a1.svg"/></span><br>
+        <a href="https://gitlab.com/manuel_w">
+          <sub>Manuel Wiemann</sub>
+        </a>
+      </td>
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/djahnie">
+            <img src="https://assets.gitlab-static.net/uploads/-/system/user/avatar/782504/avatar.png" width="100px">
+          </a><br>
+        </div>
+        <span title="Ideas, Planning, & Feedback"><img width="14px" class="emoji" draggable="false" alt="💡" src="https://twemoji.maxcdn.com/2/svg/1f4a1.svg"/></span><br>
+        <a href="https://gitlab.com/djahnie">
+          <sub>djahnie</sub>
+        </a>
+      </td>
+    </tr>
+    <tr border="0">
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/em.ka">
+            <img src="https://ca.slack-edge.com/T0B6WCFM5-U0EHB1RP1-07d379bea6ff-512" width="100px">
+          </a><br>
+        </div>
+        <span title="Design"><img width="14px" class="emoji" draggable="false" alt="🎨" src="https://twemoji.maxcdn.com/2/svg/1f3a8.svg"/></span>&nbsp;<span title="Ideas, Planning, & Feedback"><img width="14px" class="emoji" draggable="false" alt="💡" src="https://twemoji.maxcdn.com/2/svg/1f4a1.svg"/></span><br>
+        <a href="https://gitlab.com/em.ka">
+          <sub>mel</sub>
+        </a>
+      </td>
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/EmiliaPaz">
+            <img src="https://secure.gravatar.com/avatar/c0370928d12a1dd06716ba813ce4dbcd?s=80&d=identicon" width="100px">
+          </a><br>
+        </div>
+        <span title="Code"><img width="14px" class="emoji" draggable="false" alt="💻" src="https://twemoji.maxcdn.com/2/svg/1f4bb.svg"/></span><br>
+        <a href="https://gitlab.com/EmiliaPaz">
+          <sub>Emilia Paz</sub>
+        </a>
+      </td>
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/nigeldgreen">
+            <img src="https://assets.gitlab-static.net/uploads/-/system/user/avatar/544783/avatar.png" width="100px">
+          </a><br>
+        </div>
+        <span title="Code"><img width="14px" class="emoji" draggable="false" alt="💻" src="https://twemoji.maxcdn.com/2/svg/1f4bb.svg"/></span><br>
+        <a href="https://gitlab.com/nigeldgreen">
+          <sub>Nigel Green</sub>
+        </a>
+      </td>
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/D0nPiano">
+            <img src="https://ca.slack-edge.com/T0B6WCFM5-U1F4FK22C-c22aeb486bd9-512" width="100px">
+          </a><br>
+        </div>
+        <span title="Code"><img width="14px" class="emoji" draggable="false" alt="💻" src="https://twemoji.maxcdn.com/2/svg/1f4bb.svg"/></span><br>
+        <a href="https://gitlab.com/D0nPiano">
+          <sub>D0nPiano</sub>
+        </a>
+      </td>
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/adrianheine">
+            <img src="https://secure.gravatar.com/avatar/83dd2a385c44fc42d52f14fccd9d992a?s=80&d=identicon" width="100px">
+          </a><br>
+        </div>
+        <span title="Code"><img width="14px" class="emoji" draggable="false" alt="💻" src="https://twemoji.maxcdn.com/2/svg/1f4bb.svg"/></span><br>
+        <a href="https://gitlab.com/adrianheine">
+          <sub>Adrian Heine</sub>
+        </a>
+      </td>
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/BassTii">
+            <img src="https://secure.gravatar.com/avatar/f72182ecbe91d6d60603ec2c31efe7cc?s=80&d=identicon" width="100px">
+          </a><br>
+        </div>
+        <span title="Code"><img width="14px" class="emoji" draggable="false" alt="💻" src="https://twemoji.maxcdn.com/2/svg/1f4bb.svg"/></span><br>
+        <a href="https://gitlab.com/BassTii">
+          <sub>Basti A.</sub>
+        </a>
+      </td>
+    </tr>
+    <tr border="0">
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/valentin.unicorn">
+            <img src="https://secure.gravatar.com/avatar/588c72c402d090166de1bd15a69fdd6b?s=80&d=identicon" width="100px">
+          </a><br>
+        </div>
+        <span title="Code"><img width="14px" class="emoji" draggable="false" alt="💻" src="https://twemoji.maxcdn.com/2/svg/1f4bb.svg"/></span><br>
+        <a href="https://gitlab.com/valentin.unicorn">
+          <sub>Valentin</sub>
+        </a>
+      </td>
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/inktrap">
+            <img src="https://secure.gravatar.com/avatar/ee9f855b89d786169f0413e76ab944e0?s=80&d=identicon" width="100px">
+          </a><br>
+        </div>
+        <span title="Code"><img width="14px" class="emoji" draggable="false" alt="💻" src="https://twemoji.maxcdn.com/2/svg/1f4bb.svg"/></span>&nbsp;<span title="Documentation"><img width="14px" class="emoji" draggable="false" alt="📝" src="https://twemoji.maxcdn.com/2/svg/1f4dd.svg"/></span><br>
+        <a href="https://gitlab.com/inktrap">
+          <sub>Valentin</sub>
+        </a>
+      </td>
+      <td border="0" align="center" valign="top" width="16%">
+        <div style="height: 100px; width: 100px;">
+          <a href="https://gitlab.com/derhuerst">
+            <img src="https://assets.gitlab-static.net/uploads/-/system/user/avatar/204799/avatar.png" width="100px">
+          </a><br>
+        </div>
+        <span title="Code"><img width="14px" class="emoji" draggable="false" alt="💻" src="https://twemoji.maxcdn.com/2/svg/1f4bb.svg"/></span><br>
+        <a href="https://gitlab.com/derhuerst">
+          <sub>Jannis R</sub>
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- FOODSHARING-CONTRIBUTORS-LIST:END -->
+
+This project sort of follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification.
+Contributions of any kind are welcome!

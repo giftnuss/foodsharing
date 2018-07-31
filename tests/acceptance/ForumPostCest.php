@@ -45,27 +45,31 @@ class ForumPostCest
 		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
 		$this->waitForPostButtons($I, true, false, $example[2]);
 
-		$I->click('.button.bt_follow');
+		$followButton = \Codeception\Util\Locator::contains('.btn', 'folgen');
+		$I->waitForElement($followButton);
+		$I->click($followButton);
 		$this->waitForPostButtons($I, false, false, $example[2]);
 
 		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
 
-		$I->click('.button.bt_unfollow');
+		$unfollowButton = \Codeception\Util\Locator::contains('.btn', 'entfolgen');
+		$I->waitForElement($unfollowButton);
+		$I->click($unfollowButton);
 		$this->waitForPostButtons($I, false, false, $example[2]);
 	}
 
 	private function waitForPostButtons($I, $follow, $unfollow, $stickUnstick)
 	{
 		if ($follow) {
-			$I->waitForText('folgen', 10, '.button.bt_follow');
+			$I->waitForText('folgen', 10, '.btn');
 		}
 		if ($unfollow) {
-			$I->waitForText('entfolgen', 10, '.button.bt_unfollow');
+			$I->waitForText('entfolgen', 10, '.btn');
 		}
 		if ($stickUnstick) {
-			$I->see('fixieren', '.button.bt_stick');
+			$I->see('fixieren', '.btn');
 		} else {
-			$I->dontSee('fixieren', '.button.bt_stick');
+			$I->dontSee('fixieren', '.btn');
 		}
 	}
 
@@ -82,19 +86,23 @@ class ForumPostCest
 			$I->see($title, '#thread-' . $this->thread_ambassador_user['id'] . ' + #thread-' . $this->thread_user_ambassador['id']);
 		});
 
-		$I->click('.button.bt_stick');
-		$I->waitForElementNotVisible('.button.bt_stick');
+		$stickButton = \Codeception\Util\Locator::contains('.btn', 'fixieren');
+		$I->waitForElement($stickButton);
+		$I->click($stickButton);
+		$I->waitForElementNotVisible($stickButton);
 		$nick->does(function (AcceptanceTester $I) {
+			$I->wait(2);
 			$I->amOnPage($I->forumUrl($this->testBezirk));
 			$title = $this->thread_ambassador_user['name'];
 			$I->see($title, '#thread-' . $this->thread_user_ambassador['id'] . ' + #thread-' . $this->thread_ambassador_user['id']);
 		});
 
-		$I->amOnPage($I->forumThemeUrl($this->thread_user_ambassador['id'], null));
-		$I->waitForElement('.button.bt_unstick');
-		$I->click('.button.bt_unstick');
-		$I->waitForElementNotVisible('.button.bt_unstick');
+		$unstickButton = \Codeception\Util\Locator::contains('.btn', 'Fixierung aufheben');
+		$I->waitForElementVisible($unstickButton);
+		$I->click($unstickButton);
+		$I->waitForElementNotVisible($unstickButton);
 		$nick->does(function (AcceptanceTester $I) {
+			$I->wait(2);
 			$I->amOnPage($I->forumUrl($this->testBezirk));
 			$title = $this->thread_user_ambassador['name'];
 			$I->see($title, '#thread-' . $this->thread_ambassador_user['id'] . ' + #thread-' . $this->thread_user_ambassador['id']);

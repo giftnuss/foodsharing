@@ -5,6 +5,7 @@ namespace Foodsharing\Controller;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Message\MessageModel;
 use FOS\RestBundle\Controller\FOSRestController;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class MessageRestController extends FOSRestController
 {
@@ -15,16 +16,6 @@ class MessageRestController extends FOSRestController
 	{
 		$this->model = $model;
 		$this->session = $session;
-	}
-
-	private function handleUnauthorized()
-	{
-		$view = $this->view([
-			'statusCode' => 401,
-			'message' => 'Unauthorized'
-		], 401);
-
-		return $this->handleView($view);
 	}
 
 	// TODO: this is copied directly from from messageXhr.php
@@ -51,7 +42,7 @@ class MessageRestController extends FOSRestController
 	public function getConversationAction($id)
 	{
 		if (!$this->session->may() || !$this->mayConversation($id)) {
-			return $this->handleUnauthorized();
+			throw new HttpException(401);
 		}
 
 		$member = $this->model->listConversationMembers($id);

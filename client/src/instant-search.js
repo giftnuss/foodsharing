@@ -128,7 +128,7 @@ const search = {
       this.lastSearch = search.$input.val()
       ajax.req('search', 'search', {
         loader: false,
-        data: {s: this.lastSearch},
+        data: { s: this.lastSearch },
         success: function (data) {
           if (data != undefined && data.length > 0) {
             search.showResult(data)

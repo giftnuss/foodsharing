@@ -40,9 +40,8 @@ class BellGateway extends BaseGateway
 				$id = $id['id'];
 			}
 
-			$values[] = '(' . (int)$id . ',' . (int)$bid . ',0)';
+			$this->db->insert('fs_foodsaver_has_bell', ['foodsaver_id' => (int)$id, 'bell_id' => $bid, 'seen' => 0]);
 		}
-		$this->db->execute('INSERT INTO `fs_foodsaver_has_bell`(`foodsaver_id`, `bell_id`, `seen`) VALUES ' . implode(',', $values));
 	}
 
 	/**
@@ -120,7 +119,7 @@ class BellGateway extends BaseGateway
 		return $this->db->fetchAll($stm);
 	}
 
-	public function getFairteilerBells($bids): ?array
+	public function getFairteilerBells($bids): array
 	{
 		if ($bids) {
 			return $this->db->fetchAll('
@@ -140,6 +139,8 @@ class BellGateway extends BaseGateway
 				AND 	ft.status = 0
 				AND 	ft.bezirk_id IN(' . implode(',', $bids) . ')');
 		}
+
+		return [];
 	}
 
 	public function delBellForFoodsaver($id, $fsId): int

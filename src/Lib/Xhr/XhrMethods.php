@@ -1186,7 +1186,7 @@ class XhrMethods
 					{
 						showLoader();
 						$.ajax({
-							url: "xhr.php?f=saveBezirk",
+							url: "/xhr.php?f=saveBezirk",
 							data: $("#bezirkform-form").serialize(),
 							dataType: "json",
 							success: function(data) {
@@ -1213,7 +1213,7 @@ class XhrMethods
 		$("input[type=\'submit\']").button();
 
 		$("#' . $id . ' input").tagedit({
-			autocompleteURL: "xhr.php?f=getRecip",
+			autocompleteURL: "/xhr.php?f=getRecip",
 			allowEdit: false,
 			allowAdd: false
 		});

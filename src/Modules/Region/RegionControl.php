@@ -8,6 +8,7 @@ use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Services\ForumService;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,6 +29,7 @@ class RegionControl extends Control
 	/* @var FormFactoryBuilder */
 	private $formFactory;
 	private $forumService;
+	private $forumPermissions;
 	private $forumModerated;
 	private $regionHelper;
 
@@ -52,6 +54,7 @@ class RegionControl extends Control
 		FairTeilerGateway $fairteilerGateway,
 		FoodsaverGateway $foodsaverGateway,
 		ForumGateway $forumGateway,
+		ForumPermissions $forumPermissions,
 		ForumService $forumService,
 		Model $model,
 		RegionGateway $gateway,
@@ -62,6 +65,7 @@ class RegionControl extends Control
 		$this->gateway = $gateway;
 		$this->eventGateway = $eventGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->forumPermissions = $forumPermissions;
 		$this->forumGateway = $forumGateway;
 		$this->fairteilerGateway = $fairteilerGateway;
 		$this->forumService = $forumService;
@@ -70,14 +74,9 @@ class RegionControl extends Control
 		parent::__construct();
 	}
 
-	private function mayAccessAmbassadorBoard($regionId)
-	{
-		return $this->func->isBotFor($regionId) || $this->func->isOrgaTeam();
-	}
-
 	private function mayAccessApplications($regionId)
 	{
-		return $this->mayAccessAmbassadorBoard($regionId);
+		return $this->forumPermissions->mayAccessAmbassadorBoard($regionId);
 	}
 
 	private function regionViewData($region, $activeSubpage)
@@ -88,7 +87,7 @@ class RegionControl extends Control
 			['name' => 'terminology.events', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=events'],
 		];
 
-		if ($this->mayAccessAmbassadorBoard($region['id']) && !$isWorkGroup) {
+		if ($this->forumPermissions->mayAccessAmbassadorBoard($region['id']) && !$isWorkGroup) {
 			$menu[] = ['name' => 'terminology.ambassador_forum', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=botforum'];
 		}
 
@@ -165,7 +164,7 @@ class RegionControl extends Control
 
 		switch ($request->query->get('sub')) {
 			case 'botforum':
-				if (!$this->mayAccessAmbassadorBoard($region_id)) {
+				if (!$this->forumPermissions->mayAccessAmbassadorBoard($region_id)) {
 					$this->func->go($this->forumService->url($region_id, false));
 				}
 				$this->forum($request, $response, $region, true);
@@ -212,73 +211,6 @@ class RegionControl extends Control
 		$response->setContent($this->render('pages/Region/fairteiler.twig', $viewdata));
 	}
 
-	private function mayActivateThreads($regionId)
-	{
-		return $this->func->isBotFor($regionId);
-	}
-
-	private function mayChangeStickyness($regionId)
-	{
-		return $this->session->may('orga') || $this->func->isBotFor($regionId);
-	}
-
-	private function mayDeletePost($region, $post)
-	{
-		return $this->session->may('orga') ||
-			$post['fs_id'] == $this->session->id() ||
-			($this->isWorkGroup($region) && ($this->func->isBotFor($region['id'])));
-	}
-
-	private function forum_thread($threadId, $region, $ambassadorForum = false)
-	{
-		$viewdata = [];
-
-		$processPosts = function ($p) use ($region) {
-			$p['mayDeletePost'] = $this->mayDeletePost($region, $p);
-			$p['avatar'] = [
-				'user' => ['id' => $p['fs_id'],
-					'name' => $p['fs_name'],
-					'sleep_status' => $p['fs_sleep_status'],
-				],
-				'size' => '130',
-				'imageUrl' => $this->func->img($p['fs_photo'], '130', 'q')
-			];
-			$p['time'] = $this->func->niceDate($p['time_ts']);
-
-			return $p;
-		};
-
-		if ($thread = $this->forumGateway->getThread($region['id'], $threadId, $ambassadorForum)) {
-			$viewdata['thread'] = $thread;
-			$this->func->addBread($thread['name']);
-			if ($thread['active'] == 0 && ($this->mayActivateThreads($region['id']))) {
-				if (isset($_GET['activate'])) {
-					$this->forumService->activateThread($threadId, $region, $ambassadorForum);
-					$this->func->info('Thema wurde aktiviert!');
-					$this->func->go($this->forumService->url($region['id'], $ambassadorForum, $threadId));
-				} elseif (isset($_GET['delete'])) {
-					$this->func->info('Thema wurde gelöscht!');
-					$this->forumGateway->deleteThread($threadId);
-					$this->func->go($this->forumService->url($region['id'], $ambassadorForum));
-				}
-				$viewdata['activate_url'] = $this->forumService->url($region['id'], $ambassadorForum, $threadId) . '&activate=1';
-				$viewdata['delete_url'] = $this->forumService->url($region['id'], $ambassadorForum, $threadId) . '&delete=1';
-			}
-
-			if ($thread['active'] == 1 || $this->mayActivateThreads($region['id'])) {
-				$viewdata['posts'] = array_map($processPosts, $this->forumGateway->listPosts($threadId));
-				$viewdata['following'] = $this->forumGateway->isFollowing($this->session->id(), $threadId);
-				$viewdata['mayChangeStickyness'] = $this->mayChangeStickyness($region['id']);
-			} else {
-				$this->func->go($this->forumService->url($region['id'], false));
-			}
-		} else {
-			$this->func->go($this->forumService->url($region['id'], $ambassadorForum));
-		}
-
-		return $viewdata;
-	}
-
 	private function handleNewThreadForm(Request $request, $region, $ambassadorForum)
 	{
 		$this->func->addBread($this->translator->trans('forum.new_thread'));
@@ -286,35 +218,13 @@ class RegionControl extends Control
 		$form = $this->formFactory->getFormFactory()->create(ForumCreateThreadForm::class, $data);
 		$form->handleRequest($request);
 		if ($form->isSubmitted()) {
-			if ($form->isValid() && $this->forumService->mayPostToRegion($this->session->id(), $region['id'], $ambassadorForum)) {
+			if ($form->isValid() && $this->forumPermissions->mayPostToRegion($region['id'], $ambassadorForum)) {
 				$threadId = $this->forumService->createThread($this->session->id(), $data->title, $data->body, $region, $ambassadorForum, $this->forumModerated);
 				$this->forumGateway->followThread($this->session->id(), $threadId);
 				if ($this->forumModerated) {
 					$this->func->info($this->translator->trans('forum.hold_back_for_moderation'));
 				}
 				$this->func->go($this->forumService->url($region['id'], $ambassadorForum));
-			}
-		}
-
-		return $form->createView();
-	}
-
-	private function handlePostForm(Request $request, Response $response, $region, $threadId, $ambassadorForum)
-	{
-		$data = CreateForumPostData::create($this->forumGateway->isFollowing($this->session->id(), $threadId), $threadId);
-		$form = $this->formFactory->getFormFactory()->create(ForumPostForm::class, $data);
-		$form->handleRequest($request);
-		if ($form->isSubmitted()) {
-			if ($form->isValid() && $this->forumService->mayPostToThread($this->session->id(), $threadId)) {
-				$postId = $this->forumService->addPostToThread($this->session->id(), $data->thread, $data->body);
-				if ($data->subscribe) {
-					$this->forumGateway->followThread($this->session->id(), $data->thread);
-				} else {
-					$this->forumGateway->unfollowThread($this->session->id(), $data->thread);
-				}
-				$this->func->go($this->forumService->url($region['id'], $ambassadorForum, $data->thread, $postId));
-			} else {
-				$this->func->error($this->func->s('post_could_not_saved'));
 			}
 		}
 
@@ -331,8 +241,9 @@ class RegionControl extends Control
 		$viewdata['sub'] = $sub;
 
 		if ($tid = $request->query->getInt('tid')) {
-			$viewdata['postForm'] = $this->handlePostForm($request, $response, $region, $tid, $ambassadorForum);
-			$viewdata = array_merge($viewdata, $this->forum_thread($tid, $region, $ambassadorForum));
+			/* this index triggers the rendering of the vue forum component */
+			$viewdata['thread'] = ['id' => $tid];
+			$viewdata['posts'] = [];
 		} elseif ($request->query->has('newthread')) {
 			$viewdata['newThreadForm'] = $this->handleNewThreadForm($request, $region, $ambassadorForum);
 		} else {

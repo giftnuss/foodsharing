@@ -315,7 +315,7 @@ class DashboardView extends View
 						$.ajax({
 							dataType:"json",
 							data: "fsid="+fsid+"&bid="+bid,
-							url:"xhr.php?f=denyRequest",
+							url:"/xhr.php?f=denyRequest",
 							success : function(data){
 								if(data.status == 1)
 								{

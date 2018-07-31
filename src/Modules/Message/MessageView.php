@@ -13,7 +13,7 @@ class MessageView extends View
 
 			<div class="welcome_profile_image">
 				<a onclick="profile(56);return false;" href="#">
-					<img width="50" height="50" src="img/message.png" alt="' . $this->func->s('messages') . '" class="image_online">
+					<img width="50" height="50" src="/img/message.png" alt="' . $this->func->s('messages') . '" class="image_online">
 				</a>
 			</div>
 			<div class="welcome_profile_name">

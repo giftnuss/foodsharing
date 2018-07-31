@@ -19,8 +19,6 @@ class TeamControl extends Control
 		$this->contentGateway = $contentGateway;
 
 		parent::__construct();
-
-		$this->func->addScript('/js/jquery.qrcode.min.js');
 	}
 
 	public function index(): void

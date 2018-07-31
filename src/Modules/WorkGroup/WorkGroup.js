@@ -8,7 +8,7 @@ import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.css'
 import './WorkGroup.css'
 
-var $groups = $('.groups .field')
+const $groups = $('.groups .field')
 if ($groups.length > 3) {
   $groups.children('.head').css({
     'cursor': 'pointer',
@@ -18,7 +18,7 @@ if ($groups.length > 3) {
   }).mouseout(function () {
     $(this).css('text-decoration', 'none')
   }).click(function () {
-    var $this = $(this)
+    const $this = $(this)
 
     if (!$this.next('.ui-widget.ui-widget-content.corner-bottom').is(':visible')) {
       $groups.children('.ui-widget.ui-widget-content.corner-bottom').hide()
@@ -39,7 +39,7 @@ if ($groups.length > 3) {
   $groups.children('.ui-widget.ui-widget-content.corner-bottom').hide()
 }
 
-var selectEl = $('#work_group_form_applyType')
+const selectEl = $('#work_group_form_applyType')
 
 function handleApplicationConstraintVisibility () {
   if (selectEl.val() == 1) {
@@ -142,7 +142,7 @@ $('#work_group_form_photo-link').fancybox({
     onAfterClose.push(() => upload.removeEventListener('click', onUploadClick))
   },
   helpers: {
-    overlay: {closeClick: false}
+    overlay: { closeClick: false }
   }
 })
 
@@ -160,3 +160,5 @@ const tageditOptions = {
 $('#work_group_form_members input.tag').tagedit(tageditOptions)
 
 $('#work_group_form_administrators input.tag').tagedit(tageditOptions)
+
+$('.fancybox').fancybox()

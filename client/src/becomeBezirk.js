@@ -124,4 +124,4 @@ export function u_printChildBezirke (element) {
   })
 }
 
-u_printChildBezirke({value: '0:0'})
+u_printChildBezirke({ value: '0:0' })

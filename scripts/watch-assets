@@ -1,15 +1,5 @@
 #!/bin/bash
 
+echo "This command does not work right now, it needs reimplementing now we use webpack."
 
-set -e
-
-dir=$(dirname "$0")
-
-export PATH=$dir/node_modules/.bin:$PATH
-
-. $dir/inc.sh
-
-watch_dir=$(cd "$dir/.." && pwd)
-
-echo "Watching assets"
-watch $dir/build-assets --filter=$dir/watch-filter.js $watch_dir
+exit 1

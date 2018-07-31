@@ -2696,7 +2696,13 @@ footer .linklist li a:hover {
 
 .vmap {
   width: 100%;
-  height: 250px;
+  height: 450px;
+  background-color: #fff
+}
+
+.step2 .vmap {
+  width: 300px;
+  height: 150px;
   background-color: #fff
 }
 

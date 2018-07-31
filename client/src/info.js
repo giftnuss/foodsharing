@@ -161,7 +161,7 @@ const info = {
 
   delBell: function (id) {
     ajax.req('bell', 'delbell', {
-      data: {id: id},
+      data: { id: id },
       loader: false
     })
 

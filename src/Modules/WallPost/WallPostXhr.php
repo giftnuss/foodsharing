@@ -3,37 +3,26 @@
 namespace Foodsharing\Modules\WallPost;
 
 use Flourish\fImage;
+use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\Control;
 
 class WallPostXhr extends Control
 {
-	private $tables;
+	private $wallPostGateway;
 	private $table;
 	private $id;
 
-	public function __construct(WallPostModel $model, WallPostView $view)
+	public function __construct(WallPostGateway $wallPostGateway, WallPostView $view, Session $session)
 	{
-		$this->model = $model;
+		$this->wallPostGateway = $wallPostGateway;
 		$this->view = $view;
+		$this->session = $session;
 
 		parent::__construct();
 
-		$this->tables = array(
-			'fairteiler' => true,
-			'foodsaver' => true,
-			'application' => true,
-			'bezirk' => true,
-			'event' => true,
-			'fsreport' => true,
-			'question' => true,
-			'basket' => true,
-			'usernotes' => true
-		);
-
-		if ($this->isAllowed($_GET['table']) && (int)$_GET['id'] > 0) {
+		if ($this->wallPostGateway->isValidTarget($_GET['table']) && (int)$_GET['id'] > 0) {
 			$this->table = $_GET['table'];
 			$this->id = (int)$_GET['id'];
-			$this->model->setTable($this->table, $this->id);
 			$this->view->setTable($this->table, $this->id);
 		} else {
 			echo '{status:0}';
@@ -44,11 +33,14 @@ class WallPostXhr extends Control
 	public function delpost()
 	{
 		if ((int)$_GET['post'] > 0) {
-			$fs = $this->model->getFsByPost((int)$_GET['post']);
+			$postId = (int)$_GET['post'];
+			$fs = $this->wallPostGateway->getFsByPost($postId);
 			if ($fs == $this->func->fsId()
 				|| (!in_array($this->table, array('fairteiler', 'foodsaver')) && ($this->func->isBotschafter() || $this->func->isOrgaTeam()))
 			) {
-				if ($this->model->delpost((int)$_GET['post'])) {
+				if ($this->wallPostGateway->deletePost($postId)) {
+					$this->wallPostGateway->unlinkPost($postId, $this->table);
+
 					return array(
 						'status' => 1
 					);
@@ -63,8 +55,8 @@ class WallPostXhr extends Control
 
 	public function update()
 	{
-		if ((int)$this->model->getLastPostId() != (int)$_GET['last']) {
-			if ($posts = $this->model->getLastPosts()) {
+		if ((int)$this->wallPostGateway->getLastPostId($this->table, $this->id) != (int)$_GET['last']) {
+			if ($posts = $this->wallPostGateway->getPosts($this->table, $this->id)) {
 				return array(
 					'status' => 1,
 					'html' => $this->view->posts($posts)
@@ -82,7 +74,7 @@ class WallPostXhr extends Control
 		$message = trim(strip_tags($_POST['msg']));
 
 		if (!empty($message)) {
-			if ($post_id = $this->model->post($message)) {
+			if ($post_id = $this->wallPostGateway->addPost($message, $this->session->id(), $this->table, $this->id)) {
 				echo json_encode(array(
 					'status' => 1,
 					'message' => 'Klasse! Dein Pinnwandeintrag wurde gespeichert.'
@@ -121,10 +113,10 @@ class WallPostXhr extends Control
 					$attach = json_encode($attach);
 				}
 			}
-			if ($post_id = $this->model->post($message, $attach)) {
+			if ($post_id = $this->wallPostGateway->addPost($message, $this->session->id(), $this->table, $this->id, $attach)) {
 				return array(
 					'status' => 1,
-					'html' => $this->view->posts($this->model->getLastPosts()),
+					'html' => $this->view->posts($this->wallPostGateway->getPosts($this->table, $this->id)),
 					'script' => '
 					if(typeof u_wallpostReady !== \'undefined\' && $.isFunction(u_wallpostReady))
 					{
@@ -137,11 +129,7 @@ class WallPostXhr extends Control
 
 	private function isAllowed($table)
 	{
-		if (isset($this->tables[$table])) {
-			return true;
-		}
-
-		return false;
+		return $this->wallPostGateway->isValidTarget($table);
 	}
 
 	public function attachimage()

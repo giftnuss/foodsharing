@@ -3,26 +3,22 @@ const merge = require('webpack-merge')
 const webpackBase = require('./webpack.base')
 const { writeFileSync } = require('fs')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const path = require('path')
 const clientRoot = path.resolve(__dirname)
-const { join } = require('path')
-const modules = require('./modules')
+const { join, dirname } = require('path')
+const glob = require('glob')
 
 const dev = process.env.NODE_ENV !== 'production'
 
-const assetsPath = resolve('../assets')
+const assetsPath = dev ? resolve('../dev-assets') : resolve('../assets')
 const modulesJsonPath = join(assetsPath, 'modules.json')
 
 const plugins = []
 
 if (!dev) {
   plugins.push(
-    new MiniCssExtractPlugin({
-      filename: dev ? 'css/[name].css' : 'css/[id].[hash].css',
-      chunkFilename: 'css/[id].[hash].css'
-    }),
     new BundleAnalyzerPlugin({
       analyzerMode: 'static',
       reportFilename: 'bundlesize.html',
@@ -56,9 +52,14 @@ plugins.push(
     }
   }
 )
+plugins.push(
+  new CopyWebpackPlugin([
+    { from: './lib/tinymce', to: './tinymce' }
+  ])
+)
 
 module.exports = merge(webpackBase, {
-  entry: moduleEntries(...modules),
+  entry: moduleEntries(),
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'cheap-module-eval-source-map' : 'source-map',
   stats: 'minimal',
@@ -79,20 +80,6 @@ module.exports = merge(webpackBase, {
   },
   module: {
     rules: [
-      {
-        test: /\.css$/,
-        use: [
-          dev ? 'style-loader' : MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: {
-              alias: {
-                './img': ('img')
-              }
-            }
-          }
-        ]
-      },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
@@ -131,10 +118,16 @@ function resolve (dir) {
   return path.join(clientRoot, dir)
 }
 
-function moduleEntries (...names) {
-  const entries = {}
-  for (const name of names) {
-    entries[`Modules/${name}`] = resolve(`../src/Modules/${name}/${name}.js`)
-  }
-  return entries
+function moduleEntries () {
+  const basedir = join(__dirname, '../src/Modules')
+  return uniq(glob.sync(join(basedir, '*/*.js')).map(filename => {
+    return dirname(filename).substring(basedir.length + 1)
+  })).reduce((entries, name) => {
+    entries[`Modules/${name}`] = join(basedir, name, `${name}.js`)
+    return entries
+  }, {})
+}
+
+function uniq (items) {
+  return [...new Set(items)]
 }

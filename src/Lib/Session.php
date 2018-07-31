@@ -241,6 +241,20 @@ class Session
 		return false;
 	}
 
+	public function isAdminFor($regionId)
+	{
+		if ($this->isBotschafter()) {
+			foreach ($_SESSION['client']['botschafter'] as $b) {
+				if ($b['bezirk_id'] == $regionId) {
+					return true;
+					break;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	public function getMyBetriebIds()
 	{
 		$out = array();
@@ -257,7 +271,7 @@ class Session
 		return false;
 	}
 
-	public function getBezirkIds()
+	public function getRegionIds()
 	{
 		$out = array();
 		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {

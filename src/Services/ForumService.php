@@ -2,20 +2,20 @@
 
 namespace Foodsharing\Services;
 
-use Flourish\fFile;
 use Foodsharing\Lib\Func;
-use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Reaction\ReactionGateway;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class ForumService
 {
 	private $forumGateway;
+	private $reactionGateway;
 	private $regionGateway;
 	private $foodsaverGateway;
 	private $bellGateway;
@@ -24,6 +24,7 @@ class ForumService
 	private $model;
 	private $func;
 	private $session;
+	private $outputSanitizerService;
 
 	public function __construct(
 		BellGateway $bellGateway,
@@ -33,7 +34,9 @@ class ForumService
 		Func $func,
 		Session $session,
 		Model $model,
-		RegionGateway $regionGateway
+		RegionGateway $regionGateway,
+		ReactionGateway $reactionGateway,
+		OutputSanitizerService $outputSanitizerService
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->emailTemplateGateway = $emailTemplateGateway;
@@ -43,6 +46,8 @@ class ForumService
 		$this->session = $session;
 		$this->model = $model;
 		$this->regionGateway = $regionGateway;
+		$this->reactionGateway = $reactionGateway;
+		$this->outputSanitizerService = $outputSanitizerService;
 	}
 
 	public function url($regionId, $ambassadorForum, $threadId = null, $postId = null)
@@ -55,22 +60,7 @@ class ForumService
 			$url .= '&pid=' . $postId . '#post' . $postId;
 		}
 
-		return  $url;
-	}
-
-	public function mayPostToThread($fsId, $threadId)
-	{
-		$threadStatus = $this->forumGateway->getBotThreadStatus($threadId);
-		$status = $this->regionGateway->getFoodsaverStatus($fsId, $threadStatus['bezirk_id']);
-
-		return $status['active'] && (!$threadStatus['bot_theme'] || $status['ambassador']);
-	}
-
-	public function mayPostToRegion($fsId, $regionId, $ambassadorForum)
-	{
-		$status = $this->regionGateway->getFoodsaverStatus($fsId, $regionId);
-
-		return $status['active'] && (!$ambassadorForum || $status['ambassador']);
+		return $url;
 	}
 
 	public function notifyParticipantsViaBell($threadId, $authorId, $postId)
@@ -80,7 +70,7 @@ class ForumService
 		$regionName = $this->regionGateway->getBezirkName($info['region_id']);
 
 		$getFsId = function ($post) {
-			return $post['fs_id'];
+			return $post['author_id'];
 		};
 		$removeAuthorFsId = function ($id) use ($authorId) {
 			return $id != $authorId;
@@ -115,6 +105,9 @@ class ForumService
 
 	public function createThread($fsId, $title, $body, $region, $ambassadorForum, $moderated)
 	{
+		$body = nl2br(strip_tags($body));
+		$body = $this->func->autolink($body);
+		/* TODO: Implement proper sanitation that happens on output, not input */
 		$threadId = $this->forumGateway->addThread($fsId, $region['id'], $title, $body, $ambassadorForum, !$moderated);
 		if ($moderated) {
 			$this->notifyAdminsModeratedThread($region, $threadId);
@@ -128,27 +121,39 @@ class ForumService
 	public function activateThread($threadId, $region = null, $ambassadorForum = false)
 	{
 		$this->forumGateway->activateThread($threadId);
+		/* TODO: this needs proper first activation handling */
 		if ($region) {
 			$this->notifyUsersNewThread($region, $threadId, $ambassadorForum);
 		}
 	}
 
+	public function notificationMail($recipients, $tpl, $data)
+	{
+		foreach ($recipients as $recipient) {
+			$this->func->tplMail(
+				$tpl,
+				$recipient['email'],
+				array_merge($data,
+					[
+						'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						'name' => $this->outputSanitizerService->sanitizeForHtmlNoMarkup($recipient['name'])
+					])
+			);
+		}
+	}
+
 	public function notifyFollowersNewPost($threadId, $rawPostBody, $postFrom, $postId)
 	{
-		$body = nl2br(htmlentities($rawPostBody));
 		if ($follower = $this->forumGateway->getThreadFollower($this->session->id(), $threadId)) {
 			$info = $this->forumGateway->getThreadInfo($threadId);
 			$poster = $this->model->getVal('name', 'foodsaver', $this->session->id());
-			foreach ($follower as $f) {
-				$this->func->tplMail(19, $f['email'], array(
-					'anrede' => $this->func->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-					'name' => $f['name'],
-					'link' => BASE_URL . $this->url($info['region_id'], $info['ambassador_forum'], $threadId, $postId),
-					'theme' => $info['name'],
-					'post' => $body,
-					'poster' => $poster
-				));
-			}
+			$data = [
+				'link' => BASE_URL . $this->url($info['region_id'], $info['ambassador_forum'], $threadId, $postId),
+				'theme' => $this->outputSanitizerService->sanitizeForHtmlNoMarkup($info['title']),
+				'post' => $this->outputSanitizerService->sanitizeForHtml($rawPostBody),
+				'poster' => $this->outputSanitizerService->sanitizeForHtmlNoMarkup($poster)
+			];
+			$this->notificationMail($follower, 19, $data);
 		}
 	}
 
@@ -158,21 +163,14 @@ class ForumService
 		$poster = $this->model->getVal('name', 'foodsaver', $theme['foodsaver_id']);
 
 		if ($foodsaver = $this->foodsaverGateway->getBotschafter($region['id'])) {
-			foreach ($foodsaver as $i => $fs) {
-				$foodsaver[$i]['var'] = array(
-					'name' => $fs['vorname'],
-					'anrede' => $this->func->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-					'bezirk' => $region['name'],
-					'poster' => $poster,
-					'thread' => $theme['name'],
-					'link' => BASE_URL . $this->url($region['id'], false, $threadId)
-				);
-			}
+			$data = [
+				'link' => BASE_URL . $this->url($region['id'], false, $threadId),
+				'thread' => $this->outputSanitizerService->sanitizeForHtmlNoMarkup($theme['name']),
+				'poster' => $this->outputSanitizerService->sanitizeForHtmlNoMarkup($poster),
+				'bezirk' => $this->outputSanitizerService->sanitizeForHtmlNoMarkup($region['name']),
+			];
 
-			$this->tplMailList(20, $foodsaver, array(
-				'email' => EMAIL_PUBLIC,
-				'email_name' => EMAIL_PUBLIC_NAME
-			));
+			$this->notificationMail($foodsaver, 20, $data);
 		}
 	}
 
@@ -189,105 +187,66 @@ class ForumService
 			$foodsaver = $this->foodsaverGateway->listActiveWithFullNameByRegion($region['id']);
 		}
 
-		if ($foodsaver) {
-			$tmp = array();
-			foreach ($foodsaver as $fs) {
-				$tmp[$fs['email']] = $fs;
-			}
-
-			$foodsaver = array();
-			$i = 0;
-			foreach ($tmp as $fs) {
-				$foodsaver[$i] = $fs;
-				$foodsaver[$i]['var'] = array(
-					'name' => $fs['vorname'],
-					'anrede' => $this->func->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-					'bezirk' => $region['name'],
-					'poster' => $poster,
-					'thread' => $theme['name'],
-					'link' => BASE_URL . $this->url($region['id'], $ambassadorForum, $threadId),
-					'post' => $body
-				);
-				++$i;
-			}
-
-			if ($ambassadorForum) {
-				$this->tplMailList(13, $foodsaver, array(
-					'email' => 'noreply@' . DEFAULT_EMAIL_HOST,
-					'email_name' => EMAIL_PUBLIC_NAME
-				));
-			} else {
-				$this->tplMailList(12, $foodsaver, array(
-					'email' => 'noreply@' . DEFAULT_EMAIL_HOST,
-					'email_name' => EMAIL_PUBLIC_NAME
-				));
-			}
-		}
+		$data = [
+			'bezirk' => $this->outputSanitizerService->sanitizeForHtmlNoMarkup($region['name']),
+			'poster' => $this->outputSanitizerService->sanitizeForHtmlNoMarkup($poster),
+			'thread' => $this->outputSanitizerService->sanitizeForHtmlNoMarkup($theme['name']),
+			'link' => BASE_URL . $this->url($region['id'], $ambassadorForum, $threadId),
+			'post' => $this->outputSanitizerService->sanitizeForHtml($body),
+			];
+		$this->notificationMail($foodsaver, $ambassadorForum ? 13 : 12, $data);
 	}
 
-	private function tplMailList($tpl_id, $to, $from = false, $attach = false)
+	private function getReactionTarget($threadId, $postId = null)
 	{
-		if (!is_array($from) && $this->func->validEmail($from)) {
-			$from = array(
-				'email' => $from,
-				'email_name' => $from
-			);
-		} elseif ($from === false) {
-			$from = array(
-				'email' => DEFAULT_EMAIL,
-				'email_name' => DEFAULT_EMAIL_NAME
-			);
+		$target = 'forum-' . $threadId . '-';
+		if ($postId) {
+			$target .= $postId;
 		}
 
-		$tpl_message = $this->emailTemplateGateway->getOne_message_tpl($tpl_id);
+		return $target;
+	}
 
-		foreach ($to as $t) {
-			if (!$this->func->validEmail($t['email'])) {
+	public function addReaction($fsId, $threadId, $postId, $key)
+	{
+		if (!$fsId || !$threadId || !$postId || !$key) {
+			throw new \InvalidArgumentException();
+		}
+		$this->reactionGateway->addReaction($this->getReactionTarget($threadId, $postId), $fsId, $key);
+	}
+
+	public function removeReaction($fsId, $threadId, $postId, $key)
+	{
+		if (!$fsId || !$threadId || !$postId || !$key) {
+			throw new \InvalidArgumentException();
+		}
+		$this->reactionGateway->removeReaction($this->getReactionTarget($threadId, $postId), $fsId, $key);
+	}
+
+	public function getReactionsForThread($threadId)
+	{
+		$target = $this->getReactionTarget($threadId);
+		$res = $this->reactionGateway->getReactions($target, true);
+		$reactions = [];
+		foreach ($res as $r) {
+			$id = explode($target, $r['target']);
+			if (count($id) !== 2) {
 				continue;
+			} else {
+				$postId = $id[1];
 			}
-
-			$mail = new AsyncMail();
-			$mail->setFrom($from['email'], $from['email_name']);
-
-			$search = array();
-			$replace = array();
-			foreach ($t['var'] as $key => $v) {
-				$search[] = '{' . strtoupper($key) . '}';
-				$replace[] = $v;
+			if (!isset($reactions[$postId])) {
+				$reactions[$postId] = [];
 			}
-
-			$message = str_replace($search, $replace, $tpl_message['body']);
-			$subject = str_replace($search, $replace, $tpl_message['subject']);
-
-			$mail->addRecipient($t['email']);
-
-			if (!$subject) {
-				$subject = 'Foodsharing-Mail';
+			if (!isset($reactions[$postId][$r['key']])) {
+				$reactions[$postId][$r['key']] = [];
 			}
-			$mail->setSubject($subject);
-			//Read an HTML message body from an external file, convert referenced images to embedded, convert HTML into a basic plain-text alternative body
-
-			if (!isset($t['token'])) {
-				$t['token'] = false;
-			}
-
-			$mail->setHTMLBody($this->func->emailBodyTpl($message, $t['email'], $t['token']));
-
-			// playintext body
-			$message = str_replace('<br />', "\r\n", $message);
-			$message = strip_tags($message);
-			$mail->setBody($message);
-
-			/*
-			 *  todo: implement logic that we dont have to send one attachment multiple time to the slave db ...
-			*/
-
-			if ($attach !== false) {
-				foreach ($attach as $a) {
-					$mail->addAttachment(new fFile($a['path']), $a['name']);
-				}
-			}
-			$mail->send();
+			$reactions[$postId][$r['key']][] = [
+				'id' => $r['foodsaver_id'],
+				'name' => $r['foodsaver_name']
+			];
 		}
+
+		return $reactions;
 	}
 }

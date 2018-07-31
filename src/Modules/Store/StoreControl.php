@@ -121,34 +121,24 @@ class StoreControl extends Control
 				), 'Aktionen'), CNT_RIGHT);
 			}
 
-			if ($stores = $this->model->listBetriebReq($bezirk_id)) {
-				$storesRows = array();
-				foreach ($stores as $b) {
-					$status = $this->v_utils->v_getStatusAmpel($b['betrieb_status_id']);
+			$stores = $this->model->listBetriebReq($bezirk_id);
 
-					$storesRows[] = [
-						['cnt' => '<a class="linkrow ui-corner-all" href="/?page=betrieb&id=' . $b['id'] . '">' . $b['name'] . '</a>'],
-						['cnt' => $b['str'] . ' ' . $b['hsnr']],
-						['cnt' => ($b['added'])],
-						['cnt' => $b['bezirk_name']],
-						['cnt' => $status],
-						['cnt' => $this->v_utils->v_toolbar(['id' => $b['id'], 'types' => ['edit', 'delete'], 'confirmMsg' => 'Soll ' . $b['name'] . ' wirklich unwiderruflich gel&ouml;scht werden?'])
-						]];
-				}
+			$storesMapped = array_map(function ($store) {
+				return [
+					'id' => (int)$store['id'],
+					'name' => $store['name'],
+					// status 3 and 5 are the same (in cooperation), always return 3
+					'status' => $store['betrieb_status_id'] == 5 ? 3 : (int)$store['betrieb_status_id'],
+					'added' => $store['added'],
+					'region' => $store['bezirk_name'],
+					'address' => $store['anschrift'],
+				];
+			}, $stores);
 
-				$table = $this->v_utils->v_tablesorter([
-					['name' => 'Name'],
-					['name' => 'Anschrift'],
-					['name' => 'eingetragen'],
-					['name' => $this->func->s('bezirk')],
-					['name' => 'Status', 'width' => 50],
-					['name' => 'Aktionen', 'sort' => false, 'width' => 75]
-				], $storesRows, ['pager' => true]);
-
-				$this->func->addContent($this->v_utils->v_field($table, 'Alle Betriebe aus dem Bezirk ' . $bezirk['name']));
-			} else {
-				$this->func->info('Es sind noch keine Betriebe eingetragen');
-			}
+			$this->func->addContent($this->view->vueComponent('vue-storelist', 'store-list', [
+				'regionName' => $bezirk['name'],
+				'stores' => $storesMapped
+			]));
 		}
 	}
 

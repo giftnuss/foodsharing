@@ -10,6 +10,19 @@
 - update symfony to 4.1.0 as well as other dependencies !351 @NerdyProjects
 - remove user list in forums to allow big regions to work !421 @NerdyProjects
 - add php intl component for localized internationalization !421 @NerdyProjects
+- add vue.js, bootstrap & scss !430 @alangecker
+- new store list with filtering !430 #191 @alangecker
+- implement Wallpost API to replace XHR soon !439 @NerdyProjects
+- add HTMLPurifier for proper user HTML handling to be used soon !445 @NerdyProjects
+- Forum rest api !442 @NerdyProjects
+- Reimplement forum thread/post view as a vue component !442 @alangecker
+- forum emoji reactions !442 @alangecker
+- Vue functions for i18n and date !442 @alangecker
+- Proper input sanitizing for forum posts with support for markdown markup !442 @NerdyProjects
+- Properly sanitize outgoing HTML mails !442 @NerdyProjects
+- All outgoing emails now generate their plain text via HTML2Text !442 @NerdyProjects
+- Show Report ID in Detail Report window #246 @k.miklobusec
+- updated wording in respect to new report handling procedure !454 @peter.toennies
 
 ## Bugfixes
 - removed XSS-possibility in xhr_out method. !370 @theolampert
@@ -26,6 +39,9 @@
 - reduced the height of store info popups by removing the warning frame. !388 #216 @peter.toennies
 - The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
 - fix relative loading of some xhr/other urls !422 @nicksellen
+- fixes user autocomplete fetching for conversation creation 
+- fix profile sleeping hat variable #243
+- fix bug in region dynatree loading #244 !444 @nicksellen
 
 ## Refactoring
 - Extract StoreUser module javascript !358 @nicksellen
@@ -46,11 +62,16 @@
 - refactored tablesorter @alangecker
 - use instance access for Session !433 @nicksellen
 - refactor Map module to webpack !435 @nicksellen
+- all entrypoints load most JS/CSS via webpack now !432 @NerdyProjects
+- Refactor forum logic to Gateway/Service/PermissionService !442 @NerdyProjects
 
 ## Dev/Test/CI stuff
 - Fix cache clearing during test/deploy !414 @nicksellen
 - Add testing for client js !422 @nicksellen
 - Improve linting config !431 @nicksellen
+- Add ./scripts/dev for running webpack dev env !437 @nicksellen
+- Improve linting config more (add vue linting) !441 @nicksellen
+- Implement basic dev docs content, make shinier readme with contributors !443 @nicksellen
 
 # 2018-05-24
 
@@ -67,6 +88,8 @@ Also, we introduce new frontend technology here. I hope we did not break too muc
 
 ## Features
 - decreased distance to "close baskets" from 50 to 30 km. !332 #338 by @peter.toennies
+- show date and comment of sleeping hat on profile page. !427 #178 by k.miklobusec
+- show home district on profile page. !427 #237 by k.miklobusec
 - sort fairtiler list by name. !357 #171 by @k.miklobusec
 - Store Managers business card creation for region. Remove country card. !76 by @k.miklobusec
 - Registered users need to fill their birthday and be 18+ for data protection and liability reasons. !377 @NerdyProjects

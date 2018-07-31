@@ -8,7 +8,7 @@ import conv from '@/conv'
 
 export default {
   connect: function () {
-    var socket = io.connect(window.location.host, {path: '/chat/socket.io'})
+    var socket = io.connect(window.location.host, { path: '/chat/socket.io' })
     socket.on('connect', function () {
       console.log('connected')
       socket.emit('register', session_id())

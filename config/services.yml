@@ -28,6 +28,9 @@ services:
             - [addExtension, ['@Twig_Extension_Debug']]
             - [addExtension, ['@Twig_Extension_Intl']]
             - [addExtension, ['@Foodsharing\Lib\TwigExtensions']]
+            - [addExtension, ['@Exercise\HTMLPurifierBundle\Twig\HTMLPurifierExtension']]
+
+    Exercise\HTMLPurifierBundle\Twig\HTMLPurifierExtension: ~
 
     Twig:
         alias: Twig\Environment
@@ -74,19 +77,34 @@ services:
 
     Symfony\Component\Translation\TranslatorInterface: '@translator'
 
-    validator:
+    markdown.nohtml:
+        class: \Parsedown
+        calls:
+            - ['setSafeMode', [true]]
+            - ['setMarkupEscaped', [false]]
+            - ['setBreaksEnabled', [true]]
+
+    Parsedown: '@markdown.nohtml'
+
+    HTMLPurifier: '@exercise_html_purifier.default'
+
+    validator.builder:
         class: Symfony\Component\Validator\ValidatorBuilder
-        factory: [Symfony\Component\Validator\Validation, createValidatorBuilder]
+        factory: 'Symfony\Component\Validator\Validation::createValidatorBuilder'
         calls:
             - [setTranslator, ['@translator']]
             - [setTranslationDomain, ['messages']]
             - [enableAnnotationMapping]
 
+    validator:
+        class: Symfony\Component\Validator\Validator\ValidatorInterface
+        factory: "validator.builder:getValidator"
+
     Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension:
 
     Symfony\Component\Form\Extension\Validator\ValidatorExtension:
         arguments:
-            - "@=service('validator').getValidator()"
+            - "@=service('validator')"
 
     Symfony\Component\Form\FormFactoryBuilder:
         factory: [Symfony\Component\Form\Forms, createFormFactoryBuilder]

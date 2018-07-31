@@ -2,15 +2,15 @@ import $ from 'jquery'
 
 import L from 'leaflet'
 
-import 'leaflet.css'
+// import 'leaflet.css'
 
 import 'leaflet.awesome-markers'
-import 'leaflet.awesome-markers.css'
-import 'leaflet.awesome-markers.foodsharing-overrides.css'
+// import 'leaflet.awesome-markers.css'
+// import 'leaflet.awesome-markers.foodsharing-overrides.css'
 
 import 'leaflet.markercluster'
-import 'leaflet.markercluster/dist/MarkerCluster.css'
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
+// import 'leaflet.markercluster/dist/MarkerCluster.css'
+// import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 
 import AddressPicker from 'typeahead-addresspicker'
 
@@ -19,13 +19,12 @@ import { GOOGLE_API_KEY } from '@/server-data'
 export let map
 export let clusterGroup
 let defaultMarker
-
+let googleApiScriptLoaded = false
 $(() => {
-  const mapEL = document.getElementById('map')
-  if (mapEL) initializeMap(mapEL)
+  $('.vmap').each((i, el) => initializeMap(el))
 })
 
-export async function initializeMap (el) {
+export async function initializeMap (el, cb = null) {
   const mapOptions = $(el).data('options')
   if (!mapOptions) return console.error('map is missing data-options')
 
@@ -54,9 +53,13 @@ export async function initializeMap (el) {
   clearCluster()
 
   if (searchpanel) {
-    $.getScript(`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=${GOOGLE_API_KEY}`, () => {
-      initializeSearchpanel(searchpanel)
-    })
+    if (googleApiScriptLoaded) {
+      initializeSearchpanel(searchpanel, cb)
+    } else {
+      $.getScript(`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=${GOOGLE_API_KEY}`, () => {
+        initializeSearchpanel(searchpanel, cb)
+      })
+    }
   }
 
   markers.forEach(addMarker)
@@ -64,7 +67,7 @@ export async function initializeMap (el) {
   commitCluster()
 }
 
-function initializeSearchpanel (searchpanel) {
+function initializeSearchpanel (searchpanel, cb = null) {
   const $searchpanel = $('#' + searchpanel)
   const addressPicker = new AddressPicker()
 
@@ -102,6 +105,10 @@ function initializeSearchpanel (searchpanel) {
     } else {
       map.setCenter(latLng)
       map.setZoom(16)
+    }
+
+    if (cb) {
+      cb(result)
     }
   })
 }

@@ -3,6 +3,7 @@
 namespace Foodsharing;
 
 use DebugBar\DataCollector\PDO\TraceablePDO;
+use Exercise\HTMLPurifierBundle\DependencyInjection\ExerciseHTMLPurifierExtension;
 use PDO;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -38,8 +39,20 @@ class DI
 		} else {
 			$this->container = new ContainerBuilder();
 			$loader = new YamlFileLoader($this->container, new FileLocator(__DIR__ . '/../config'));
-
 			$loader->load('services.yml');
+			$htmlpurifier = new ExerciseHTMLPurifierExtension();
+			/* html purifier config duplicated in framework.yml for symfony entry point */
+			$htmlPurifierConfig = [[
+				'default' => [
+					'Cache.SerializerPath' => __DIR__ . '/../cache/htmlpurifier-cache',
+					'AutoFormat.DisplayLinkURI' => true,
+					'AutoFormat.Linkify' => true,
+					'CSS.AllowedProperties' => [],
+					'URI.DisableExternalResources' => true
+				]
+			]
+			];
+			$htmlpurifier->load($htmlPurifierConfig, $this->container);
 		}
 	}
 

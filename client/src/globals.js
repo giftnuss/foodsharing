@@ -36,7 +36,8 @@ import {
   becomeBezirk,
   preZero,
   betriebRequest,
-  rejectBetriebRequest
+  rejectBetriebRequest,
+  error
 } from '@/script'
 
 import {
@@ -67,5 +68,6 @@ expose({
   u_printChildBezirke,
   conv,
   info,
+  error,
   sock: socket
 })

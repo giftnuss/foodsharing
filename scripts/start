@@ -14,6 +14,7 @@ $dir/mkdirs
 
 echo "Running composer install"
 exec-in-container app composer install
+exec-in-container-asroot app rm -rf cache/.views-cache cache/di-cache.php
 
 echo "Waiting for mysql"
 wait-for-mysql

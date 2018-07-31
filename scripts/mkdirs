@@ -18,6 +18,7 @@ dirs="\
   images/workgroup \
   data/attach \
   data/mailattach \
+  data/mailattach/tmp \
   data/pass \
   data/visite \
   cache \

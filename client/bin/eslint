@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+
+/*
+ * The purpose of this is to wrap the eslint command to specify the correct paths.
+ * By default it is not happy to include a whole directory at a higher level, but we need
+ * this to lint the files included in ../src.
+ *
+ * However, it is happy to include individual files, so we do the glob ourselves, and pass that
+ * to eslint.
+ *
+ * This command will pass all the other args through so you can use it like normal!
+ */
+
+const glob = require('glob')
+const { join } = require('path')
+const { spawn } = require('child_process')
+
+const base = join(__dirname, '..')
+
+const paths = [
+  join(base, 'src'),
+  join(base, 'test'),
+  ...glob.sync(join(base, '*.js')),
+  ...glob.sync(join(base, '../src/**/*.js')),
+  ...glob.sync(join(base, '../src/**/*.vue'))
+]
+
+const args = process.argv.slice(2)
+
+spawn(join(__dirname, '../node_modules/.bin/eslint'), [...args, ...paths], {
+  stdio: 'inherit'
+})

@@ -270,7 +270,7 @@ class DashboardControl extends Control
 			{
 				showLoader();
 				$.ajax({
-					url:"xhr.php?f=grabInfo",
+					url:"/xhr.php?f=grabInfo",
 					data: $("#grabinfo-form").serialize(),
 					dataType: "json",
 					complete:function(){hideLoader();},

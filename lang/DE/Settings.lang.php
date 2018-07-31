@@ -58,7 +58,8 @@ $g_lang['full_sleepmode'] = 'Ich tauche erstmal auf unbestimmte Zeit ab';
 $g_lang['daterange'] = 'Hier kannst Du einstellen, in welchem Zeitraum Du in etwa nicht zur Verfügung stehst.';
 $g_lang['sleep_status'] = 'Dein aktueller Status';
 $g_lang['sleepmode'] = 'Schlafmützenfunktion';
-$g_lang['sleepmode_info'] = 'Mit der Schlafmützenfunktion ist es Dir möglich der Community mitzuteilen, dass Du zzt. verreist bist oder aus anderen Gründen keine Zeit für das Retten von Lebensmitteln hast.';
+$g_lang['sleepmode_info'] = 'Mit der Schlafmützenfunktion ist es Dir möglich der Community mitzuteilen, dass Du zzt. verreist bist oder aus anderen Gründen keine Zeit für das Retten von Lebensmitteln hast. Es ist hilfreich für die Community, wenn du ihr mitteilst, ob es dir möglich sein wird auf Nachrichten zu reagieren und ob du dennoch Abholungen durchführst.';
+$g_lang['sleepmode_show'] = 'Mit der Nutzung dieser Funktion bist Du damit einverstanden, dass Dein Status, Deine Abwesenheitsdauer und Deine Nachricht auf Deiner Profilseite angezeigt und ein "Schlafmützensymbol" über Dein Profilbild gesetzt wird.';
 $g_lang['sleep_msg'] = 'Hier kannst Du eine kurze Nachricht hinterlassen, warum Du gerade keine Zeit hast.';
 
 $g_lang['geb_datum'] = 'Geburtsdatum';

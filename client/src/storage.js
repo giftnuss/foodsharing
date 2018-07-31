@@ -8,7 +8,7 @@ const storage = {
     this.prefix = prefix + ':'
   },
   set: function (key, val) {
-    val = JSON.stringify({v: val})
+    val = JSON.stringify({ v: val })
     window.localStorage.setItem(storage.prefix + key, val)
   },
   get: function (key) {
