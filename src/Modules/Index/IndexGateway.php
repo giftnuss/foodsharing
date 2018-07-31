@@ -10,7 +10,7 @@ class IndexGateway extends BaseGateway
 	public function getFetchedWeight()
 	{
 		$stm = 'SELECT stat_fetchweight FROM fs_bezirk WHERE id = :region_id';
-		
+
 		return $this->db->fetchValue($stm, [':region_id' => RegionIDs::EUROPE]);
 	}
 }
