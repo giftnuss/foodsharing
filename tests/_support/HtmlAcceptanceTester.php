@@ -37,9 +37,9 @@ class HtmlAcceptanceTester extends \Codeception\Actor
 	public function login($email, $password = 'password')
 	{
 		$I = $this;
-		$I->amOnPage('/');
+		$I->amOnPage('/?page=login');
 		$I->fillField('login_form[email_address]', $email);
 		$I->fillField('login_form[password]', $password);
-		$I->click('#loginbar input[type=submit]');
+		$I->click('#login input[type=submit]');
 	}
 }

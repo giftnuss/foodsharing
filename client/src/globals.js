@@ -13,7 +13,6 @@
 import $ from 'jquery'
 
 import conv from '@/conv'
-import info from '@/info'
 import socket from '@/socket'
 
 import { expose } from '@/utils'
@@ -67,7 +66,6 @@ expose({
   rejectBetriebRequest,
   u_printChildBezirke,
   conv,
-  info,
   error,
   sock: socket
 })

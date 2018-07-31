@@ -13,7 +13,7 @@ use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
 use Foodsharing\Modules\Region\RegionGateway;
-use Foodsharing\Services\OutputSanitizerService;
+use Foodsharing\Services\SanitizerService;
 use JSMin\JSMin;
 
 class Func
@@ -35,7 +35,7 @@ class Func
 	private $stylesheets;
 	private $add_css;
 	private $viewUtils;
-	private $outputSanitizerService;
+	private $sanitizerService;
 
 	private $webpackScripts;
 	private $webpackStylesheets;
@@ -52,10 +52,10 @@ class Func
 	 */
 	private $session;
 
-	public function __construct(Utils $viewUtils, OutputSanitizerService $outputSanitizerService)
+	public function __construct(Utils $viewUtils, SanitizerService $sanitizerService)
 	{
 		$this->viewUtils = $viewUtils;
-		$this->outputSanitizerService = $outputSanitizerService;
+		$this->sanitizerService = $sanitizerService;
 		$this->content_main = '';
 		$this->content_right = '';
 		$this->content_left = '';
@@ -472,7 +472,8 @@ class Func
 			$workingGroups,
 			$this->session->get('mailbox'),
 			$this->fsId(),
-			$loggedIn ? $this->img() : ''
+			$loggedIn ? $this->img() : '',
+			$this->session->may('bieb')
 		);
 	}
 
@@ -480,7 +481,7 @@ class Func
 		bool $loggedIn, array $regions, bool $hasFsRole,
 		bool $isOrgaTeam, bool $mayEditBlog, bool $mayEditQuiz, bool $mayHandleReports,
 		array $stores, array $workingGroups,
-		$sessionMailbox, int $fsId, string $image)
+		$sessionMailbox, int $fsId, string $image, bool $mayAddStore)
 	{
 		$params = array_merge([
 			'loggedIn' => $loggedIn,
@@ -492,17 +493,23 @@ class Func
 			'may' => [
 				'editBlog' => $mayEditBlog,
 				'editQuiz' => $mayEditQuiz,
-				'handleReports' => $mayHandleReports
+				'handleReports' => $mayHandleReports,
+				'addStore' => $mayAddStore
 			],
-			'stores' => $stores,
+			'stores' => array_values($stores),
 			'regions' => $regions,
 			'workingGroups' => $workingGroups
 		]);
 
-		return [
-			'default' => $this->twig->render('partials/menu.default.twig', $params),
-			'mobile' => $this->twig->render('partials/menu.mobile.twig', $params)
-		];
+		return $this->twig->render('partials/vue-wrapper.twig', [
+			'id' => 'vue-topbar',
+			'component' => 'topbar',
+			'props' => $params
+		]);
+		// return [
+		// 	'default' => $this->twig->render('partials/menu.default.twig', $params),
+		// 	'mobile' => $this->twig->render('partials/menu.mobile.twig', $params)
+		// ];
 	}
 
 	public function preZero($i)
@@ -643,12 +650,12 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$message['subject'] = 'Foodsharing-Mail';
 		}
 
-		$mail->setSubject($this->outputSanitizerService->sanitizeForText($message['subject']));
+		$mail->setSubject($this->sanitizerService->htmlToPlain($message['subject']));
 		$htmlBody = $this->emailBodyTpl($message['body']);
 		$mail->setHTMLBody($htmlBody);
 
 		// playintext body
-		$plainBody = $this->outputSanitizerService->sanitizeForText($htmlBody);
+		$plainBody = $this->sanitizerService->htmlToPlain($htmlBody);
 		$mail->setBody($plainBody);
 
 		$mail->addRecipient($to);
@@ -1156,7 +1163,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'location' => $location,
 			'ravenConfig' => $ravenConfig,
 			'translations' => $this->getTranslations(),
-			'GOOGLE_API_KEY' => GOOGLE_API_KEY
+			'GOOGLE_API_KEY' => GOOGLE_API_KEY,
+			'isDev' => getenv('FS_ENV') === 'dev'
 		]);
 	}
 
@@ -1177,7 +1185,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	public function generateAndGetGlobalViewData()
 	{
 		global $g_broadcast_message;
-		global $g_body_class;
 		global $content_left_width;
 		global $content_right_width;
 
@@ -1198,26 +1205,23 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$mainwidth -= $content_right_width;
 		}
 
-		$msgbar = '';
-		$logolink = '/';
+		$bodyClasses = [];
+
 		if ($this->session->may()) {
-			$msgbar = $this->viewUtils->v_msgBar();
-			$logolink = '/?page=dashboard';
-		} else {
-			$msgbar = $this->viewUtils->v_login();
+			$bodyClasses[] = 'loggedin';
 		}
+
+		$bodyClasses[] = 'page-' . $this->getPage();
 
 		return [
 			'head' => $this->getHeadData(),
 			'bread' => $this->getBread(),
-			'bodyClass' => $g_body_class,
-			'msgbar' => $msgbar,
+			'bodyClasses' => $bodyClasses,
 			'serverDataJSON' => json_encode($this->getServerData()),
 			'menu' => $menu,
 			'dev' => FS_ENV == 'dev',
 			'hidden' => $this->getHidden(),
 			'isMob' => $this->isMob(),
-			'logolink' => $logolink,
 			'broadcast_message' => $g_broadcast_message,
 			'SRC_REVISION' => defined('SRC_REVISION') ? SRC_REVISION : null,
 			'HTTP_HOST' => $_SERVER['HTTP_HOST'],
@@ -1348,7 +1352,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$htmlBody = $this->emailBodyTpl($message, $email, $token);
 		$mail->setHTMLBody($htmlBody);
 
-		$plainBody = $this->outputSanitizerService->sanitizeForText($htmlBody);
+		$plainBody = $this->sanitizerService->htmlToPlain($htmlBody);
 		$mail->setBody($message);
 
 		if ($attach !== false) {

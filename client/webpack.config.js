@@ -104,7 +104,8 @@ module.exports = merge(webpackBase, {
       new UglifyJsPlugin({
         uglifyOptions: {
           safari10: true
-        }
+        },
+        sourceMap: true
       })
     ],
     splitChunks: {

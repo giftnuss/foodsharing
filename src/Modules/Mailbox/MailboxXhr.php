@@ -5,17 +5,17 @@ namespace Foodsharing\Modules\Mailbox;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Services\OutputSanitizerService;
+use Foodsharing\Services\SanitizerService;
 
 class MailboxXhr extends Control
 {
-	private $outputSanitizerService;
+	private $sanitizerService;
 
-	public function __construct(MailboxModel $model, MailboxView $view, OutputSanitizerService $outputSanitizerService)
+	public function __construct(MailboxModel $model, MailboxView $view, SanitizerService $sanitizerService)
 	{
 		$this->model = $model;
 		$this->view = $view;
-		$this->outputSanitizerService = $outputSanitizerService;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 
@@ -168,7 +168,7 @@ class MailboxXhr extends Control
 					$mail->setSubject($subject);
 					$html = nl2br($body);
 					$mail->setHTMLBody($html);
-					$plainBody = $this->outputSanitizerService->sanitizeForText($html);
+					$plainBody = $this->sanitizerService->htmlToPlain($html);
 					$mail->setBody($body);
 					$mail->send();
 
@@ -409,7 +409,7 @@ class MailboxXhr extends Control
 		$html = nl2br($message);
 		$mail->setHTMLBody($html);
 
-		$plainBody = $this->outputSanitizerService->sanitizeForText($html);
+		$plainBody = $this->sanitizerService->htmlToPlain($html);
 		$mail->setBody($plainBody);
 
 		if ($attach !== false) {

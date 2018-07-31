@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Content;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 
-class ContentModel extends Model
+class ContentModel extends Db
 {
 	public function listFaq($cat_ids)
 	{

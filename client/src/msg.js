@@ -10,6 +10,7 @@ import conv from '@/conv'
 import autoLink from '@/autoLink'
 import timeformat from '@/timeformat'
 import * as api from '@/api/conversations'
+import conversationStore from '@/stores/conversations'
 
 import {
   ajax,
@@ -133,6 +134,9 @@ const msg = {
             setTimeout(function () {
               msg.hideLoader()
             }, 100)
+
+            // reload conversations
+            conversationStore.loadConversations()
           }
 
         })
@@ -186,6 +190,7 @@ const msg = {
     } else {
       msg.updateConvList(message)
     }
+    conversationStore.loadConversations()
   },
 
   updateConvList: function (message) {

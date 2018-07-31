@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\WorkGroup;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 
-class WorkGroupModel extends Model
+class WorkGroupModel extends Db
 {
 	/*
 	 * Eigene Vorhandene Bewerbungen

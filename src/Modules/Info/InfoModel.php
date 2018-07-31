@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Info;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 
-class InfoModel extends Model
+class InfoModel extends Db
 {
 	/**
 	 * returns the count of new fairteiler.

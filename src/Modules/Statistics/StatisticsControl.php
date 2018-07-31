@@ -8,10 +8,11 @@ use Foodsharing\Modules\Core\Control;
 class StatisticsControl extends Control
 {
 	private $contentGateway;
+	private $statisticsGateway;
 
-	public function __construct(StatisticsModel $model, StatisticsView $view, ContentGateway $contentGateway)
+	public function __construct(StatisticsGateway $statisticsGateway, StatisticsView $view, ContentGateway $contentGateway)
 	{
-		$this->model = $model;
+		$this->statisticsGateway = $statisticsGateway;
 		$this->view = $view;
 		$this->contentGateway = $contentGateway;
 
@@ -26,15 +27,15 @@ class StatisticsControl extends Control
 
 		$this->func->addBread($content['title']);
 
-		$stat_gesamt = $this->model->getStatGesamt();
+		$stat_gesamt = $this->statisticsGateway->listTotalStat();
 
-		$stat_cities = $this->model->getStatCities();
+		$stat_cities = $this->statisticsGateway->listStatCities();
 
 		foreach ($stat_cities as $i => $c) {
 			$stat_cities[$i]['percent'] = $this->getPercent($stat_gesamt['fetchweight'], $c['fetchweight']);
 		}
 
-		$stat_fs = $this->model->getStatFoodsaver();
+		$stat_fs = $this->statisticsGateway->listStatFoodsaver();
 
 		$this->func->addContent($this->view->getStatTotal($stat_gesamt), CNT_TOP);
 

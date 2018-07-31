@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Mails;
 
-use Foodsharing\Modules\Console\ConsoleModel;
+use Foodsharing\Lib\Db\Db;
 
-class MailsModel extends ConsoleModel
+class MailsModel extends Db
 {
 	public function saveMessage(
 		$mailbox_id, // mailbox id

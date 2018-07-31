@@ -1,7 +1,7 @@
 <?php
 
 use Foodsharing\DI;
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 
 require __DIR__ . '/includes/setup.php';
 
@@ -15,7 +15,7 @@ require_once 'lang/DE/de.php';
  *
  * @return true or False depending on validity
  */
-function check_api_token($fs, $key, Model $model)
+function check_api_token($fs, $key, Db $model)
 {
 	$res = $model->qOne('SELECT COUNT(foodsaver_id) FROM fs_apitoken WHERE foodsaver_id = ' . (int)$fs . ' AND token="' . $model->safe($key) . '"');
 
@@ -55,7 +55,7 @@ function generate_calendar_event($utc_begin, $utc_end, $utc_change, $uid, $locat
 	return $out;
 }
 
-function api_generate_calendar($fs, $options, Model $model)
+function api_generate_calendar($fs, $options, Db $model)
 {
 	/* from https://gist.github.com/jakebellacera/635416 */
 	header('Content-type: text/calendar; charset=utf-8');

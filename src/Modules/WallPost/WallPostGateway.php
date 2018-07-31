@@ -11,6 +11,7 @@ class WallPostGateway extends BaseGateway
 		'basket',
 		'bezirk',
 		'event',
+		'fairteiler',
 		'foodsaver',
 		'fsreport',
 		'question',

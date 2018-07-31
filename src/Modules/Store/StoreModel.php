@@ -2,12 +2,12 @@
 
 namespace Foodsharing\Modules\Store;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Bell\BellGateway;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Message\MessageModel;
 use Foodsharing\Modules\Region\RegionGateway;
 
-class StoreModel extends Model
+class StoreModel extends Db
 {
 	private $messageModel;
 	private $bellGateway;

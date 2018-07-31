@@ -2,10 +2,10 @@
 
 namespace Foodsharing\Modules\PassportGenerator;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Region\RegionGateway;
 
-class PassportGeneratorModel extends Model
+class PassportGeneratorModel extends Db
 {
 	private $regionGateway;
 

@@ -1,6 +1,7 @@
 import dateFnsFormat from 'date-fns/format'
 import dateFnsIsSameYear from 'date-fns/is_same_year'
 import dateFnsLocaleDE from 'date-fns/locale/de'
+import dateFnsDistanceInWords from 'date-fns/distance_in_words'
 
 import { ajreq } from '@/script'
 
@@ -51,4 +52,10 @@ export function dateFormat (date, format = 'full-long') {
   } else {
     return dateFnsFormat(date, format, { locale: dateFnsLocaleDE })
   }
+}
+export function dateDistanceInWords (date) {
+  return dateFnsDistanceInWords(new Date(), date, {
+    locale: dateFnsLocaleDE,
+    addSuffix: true
+  })
 }
