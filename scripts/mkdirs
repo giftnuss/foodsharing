@@ -23,6 +23,7 @@ dirs="\
   data/visite \
   cache \
   cache/searchindex \
+  cache/htmlpurifier-cache \
   tmp \
 "
 

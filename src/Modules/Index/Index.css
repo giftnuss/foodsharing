@@ -1,135 +1,192 @@
-/* biglogo */
-.biglogo img {
-  float: left;
-}
-
-#top {
+body.fp-viewing-festival #top {
   box-shadow: none;
 }
 
-.biglogo p, .biglogo h1 {
-  color: #ffffff;
-  font-family: 'Alfa Slab One';
+#campaign {
+  height: 100vh;
+  width: 150vh;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+#campaign .topbarpadding {
+  padding: 41px 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#campaigntext, #campaignimg {
+  height: 100%;
+  width: 50%;
+}
+
+#campaigntext {
+  text-align: center;
+  font-size: 12px;
+  font-size: 2.5vh;
+  color: #f9f5e0;
+  text-shadow: 0 1px #555;
+  -webkit-text-size-adjust: none;
+  padding-top: 15vh;
+}
+
+#campaigntext h2 {
+  font-family: "Alfa Slab One", Arial;
+  font-size: 2.6em;
+  font-weight: normal;
+  padding:2vh;
+}
+
+#campaigntext h4 {
+  font-family: "Alfa Slab One", Arial;
+  font-size: 1.3em;
   font-weight: normal;
 }
 
-.biglogo p {
-  margin-top: 80px;
-  font-size: 40px;
+#campaigntext div img {
+  width: 50px;
+  width: 8.5vh;
+  margin: 0 auto;
 }
 
-.biglogo p.small {
-  margin-top: 0;
-  font-size: 29px;
+#campaigntext h3 {
+  font-family: "Alfa Slab One", Arial;
+  font-size: 2em;
+  font-weight: normal;
 }
 
-.biglogo p.tiny {
-  margin-top: 0;
-  font-size: 25px;
+#campaigntext span {
+  color: #64ae24;
 }
 
-.biglogo h1 {
-  color: #5ab946;
-  font-size: 50px;
+#campaignimg {
+  background-position: 50% 0;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
-.biglogo h1 span {
-  color: #ffffff;
+@media (max-aspect-ratio: 3/2) {
+  #campaign {
+    width: 100vw;
+    height: 66vw;
+    top: 50%;
+    left: 0;
+    transform: translate(0, -50%);
+  }
+
+  #campaigntext {
+    font-size: 1.5vw;
+  }
+
+  #campaigntext div img {
+    width: 4.5vw;
+  }
 }
 
-.biglogo {
-  text-align: center;
+@media (max-aspect-ratio: 9/10) {
+  #campaign {
+    width: 100%;
+    height: 120vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: none;
+  }
+
+  #campaigntext {
+    width: 100%;
+    height: 40em;
+    font-size: 1.9vw;
+    padding-top: 0.5vh;
+  }
+
+  #campaigntext div img {
+    display: none;
+  }
+
+  #campaignimg {
+    width: 100%;
+    height: 60vw;
+    background-position: center;
+  }
 }
 
-.biglogo .centerblock {
+.carpetroll {
+  color: #533a20;
+  padding: 41px 0;
+}
+
+.carpetroll p {
+  margin: 1rem 2rem 0 2rem;
+}
+
+.carpetroll h3 {
+  color: #64ae24;
+  font-size: 24px;
+  font-weight: normal;
+  font-family: "Alfa Slab One", Arial;
+  letter-spacing: 0.4px;
+  border-bottom: 4px solid #64ae24;
+  box-sizing: content-box;
+  padding-bottom: 0.3rem;
+  margin: 1rem 2rem 2rem 1rem;
   display: inline-block;
   text-align: left;
-  max-width: 700px;
-  width: 100%;
 }
 
-#home {
-  background-color: #4a3520;
+.carpetroll .button {
+  font-size: 150%;
+  font-family: "Alfa Slab One", Arial;
+  font-weight: normal !important;
 }
 
-#main {
-  min-height: 1000px;
-}
-
-.countnumber p {
-  font-size: 40px;
+.carpetroll .whatiswhaticons {
+  background-color: #64ae24;
+  color: white;
+  padding: 0.2em;
+  font-size: 500%;
+  width: 1.1em;
+  height: 1.1em;
   text-align: center;
-  color: #5ab946;
-  font-family: 'Alfa Slab One';
+  border-radius: 50%;
+  display: block;
+  margin: 0.5em auto 0.2em;
+}
+
+.carpetroll span.iconlegend {
+  display: block;
+  text-align: center;
+  width: 100%;
+  font-family: "Alfa Slab One", Arial;
+  font-size: 120%;
+}
+
+.carpetroll .clickable:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+#joinbuttoninfootersection {
+  display: block;
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  text-align: center;
+  font-size: 8vw;
   font-weight: normal;
+  background-color: #64ae24;
+  color: white;
+  font-family: "Alfa Slab One", Arial;
+  width: 8em;
+  border-radius: 1em;
+  text-decoration: none;
+  letter-spacing: 0.4px;
 }
 
-.countnumber p.number {
-  font-size: 60px;
-  color: #4a3520;
-  font-family: 'Alfa Slab One';
-  font-weight: normal;
-}
-
-.section .inside {
-  padding: 10px 30px;
-}
-
-.section .inside h3 {
-  font-family: 'Alfa Slab One';
-  font-weight: normal;
-  color: #4a3520;
-  font-size: 34px;
-}
-
-.section .inside p {
-  color: #4a3520;
-}
-
-.section .inner {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 0 15px 0 15px;
-}
-
-.linklist span.n {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.leaflet-top .leaflet-control {
-  margin-top: 60px !important;
-}
-
-@media (max-width: 700px) {
-
-  .section .inside {
-    text-align: center;
-  }
-
-  .vidlink {
-    margin-top: 30px;
-  }
-
-  .biglogo h1 {
-    font-size: 30px;
-  }
-
-  .biglogo p {
-    margin-top: 0;
-    font-size: 26px;
-  }
-
-  .biglogo p.small {
-    font-size: 22px;
-  }
-
-  .biglogo p.tiny {
-    font-size: 19px;
-  }
-
-  .section .inside {
-    padding: 0;
-  }
+#joinbuttoninfootersection:hover {
+  opacity: 0.8;
 }

@@ -2,14 +2,14 @@
 
 namespace Foodsharing\Modules\FAQAdmin;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
 
 class FAQAdminControl extends Control
 {
 	private $faqGateway;
 
-	public function __construct(Model $model, FAQAdminView $view, FAQGateway $faqGateway)
+	public function __construct(Db $model, FAQAdminView $view, FAQGateway $faqGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;

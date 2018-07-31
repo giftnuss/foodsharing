@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Lookup;
 
-use Foodsharing\Modules\Console\ConsoleModel;
+use Foodsharing\Lib\Db\Db;
 
-class LookupModel extends ConsoleModel
+class LookupModel extends Db
 {
 	public function getFoodsaverByEmail($email)
 	{

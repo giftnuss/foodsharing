@@ -199,8 +199,8 @@ class BasketXhr extends Control
 			return array(
 				'status' => 1,
 				'script' => '
-					$("#msgbar-basket").hide();
 					pulseInfo("Danke Dir! Der Essenskorb wurde veröffentlicht!");
+					basketStore.loadBaskets();
 					$(".xhrDialog").dialog("close");
 					$(".xhrDialog").dialog("destroy");
 					$(".xhrDialog").remove();'
@@ -391,42 +391,46 @@ class BasketXhr extends Control
 
 	public function infobar()
 	{
+		// TODO: rewrite this to an proper API endpoint
+		// and update /client/src/api/baskets.js
 		$this->session->noWrite();
 
 		$xhr = new Xhr();
 
-		$out = '';
-		if ($updates = $this->model->listUpdates()) {
-			$out = $this->view->listUpdates($updates);
-		}
+		$updates = $this->model->listUpdates();
+		$baskets = $this->model->listMyBaskets();
 
-		if ($baskets = $this->model->listMyBaskets()) {
-			$out .= $this->view->listMyBaskets($baskets);
-		}
+		$xhr->addData('baskets', array_map(function ($b) use ($updates) {
+			$basket = [
+				'id' => (int)$b['id'],
+				'description' => html_entity_decode($b['description']),
+				'createdAt' => date('Y-m-d H:i:s', $b['time_ts']),
+				'updatedAt' => date('Y-m-d H:i:s', $b['time_ts']),
+				'requests' => []
+			];
+			foreach ($updates as $update) {
+				if ((int)$update['id'] == $basket['id']) {
+					$time = date('Y-m-d H:i:s', $update['time_ts']);
+					$basket['requests'][] = [
+						'user' => [
+							'id' => (int)$update['fs_id'],
+							'name' => $update['fs_name'],
+							'avatar' => $update['fs_photo'],
+							'sleepStatus' => $update['sleep_status'],
+						],
+						'description' => $update['description'],
+						'time' => $time,
+					];
+					if (strcmp($time, $basket['updatedAt']) > 0) {
+						$basket['updatedAt'] = $time;
+					}
+				}
+			}
 
-		$xhr->addData('html', $out);
+			return $basket;
+		}, $baskets));
 
 		$xhr->send();
-	}
-
-	public function update()
-	{
-		$count = $this->basketGateway->getUpdateCount($this->func->fsId());
-		if ((int)$count > 0) {
-			return array(
-				'status' => 1,
-				'script' => '
-					$("#msgBar-badge .bar-basket").text("' . $count . '").css({ opacity: 1 });
-					$("#msgbar-basket ul li.loading").remove();
-					$("#msgbar-basket ul").prepend(\'<li class="loading">&nbsp;</li>\');
-				'
-			);
-		} else {
-			return array(
-				'status' => 1,
-				'script' => '$("#msgBar-badge .bar-basket").text("0").css({ opacity: 0 });'
-			);
-		}
 	}
 
 	public function answer()
@@ -437,7 +441,7 @@ class BasketXhr extends Control
 
 				return array(
 					'status' => 1,
-					'script' => 'chat(' . $_GET['fid'] . ');$("#msgbar-basket").hide();ajreq("update",{app:"basket"});'
+					'script' => 'chat(' . $_GET['fid'] . ');basketStore.loadBaskets();'
 				);
 			}
 		}
@@ -477,7 +481,7 @@ class BasketXhr extends Control
 
 		return array(
 			'status' => 1,
-			'script' => '$(".basket-' . (int)$_GET['id'] . '").remove();pulseInfo("Essenskorb ist jetzt nicht mehr aktiv!");'
+			'script' => 'basketStore.loadBaskets();pulseInfo("Essenskorb ist jetzt nicht mehr aktiv!");'
 		);
 	}
 
@@ -497,7 +501,6 @@ class BasketXhr extends Control
 				return array(
 					'status' => 1,
 					'script' => '
-						$(".msg-' . (int)$_GET['id'] . '-' . (int)$_GET['fid'] . '").remove();
 						pulseInfo("Danke Dir! Der Vorgang ist abgeschlossen.");
 						$(".xhrDialog").dialog("close");
 						$(".xhrDialog").dialog("destroy");

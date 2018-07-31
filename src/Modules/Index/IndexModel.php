@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Index;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 
-class IndexModel extends Model
+class IndexModel extends Db
 {
 	public function getGerettet()
 	{

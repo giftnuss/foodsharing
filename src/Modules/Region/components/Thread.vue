@@ -58,8 +58,8 @@
         :author="post.author"
         :body="post.body"
         :reactions="post.reactions"
-        :may-delete="true"
-        :may-edit="true"
+        :may-delete="post.mayDelete"
+        :may-edit="false"
         :is-loading="loadingPosts.indexOf(post.id) != -1"
         :created-at="new Date(post.createdAt)"
         @delete="deletePost(post)"
@@ -128,6 +128,7 @@ export default {
       isSticky: true,
       isActive: true,
       mayModerate: false,
+      mayDelete: false,
       isFollowing: true,
 
       isLoading: false,
@@ -155,6 +156,7 @@ export default {
           isSticky: res.isSticky,
           isActive: res.isActive,
           mayModerate: res.mayModerate,
+          mayDelete: res.mayDelete,
           isFollowing: res.isFollowing
         })
         this.isLoading = false

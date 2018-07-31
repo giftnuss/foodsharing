@@ -45,8 +45,9 @@ class DI
 			$htmlPurifierConfig = [[
 				'default' => [
 					'Cache.SerializerPath' => __DIR__ . '/../cache/htmlpurifier-cache',
-					'AutoFormat.DisplayLinkURI' => true,
-					'AutoFormat.Linkify' => true,
+					'Cache.SerializerPermissions' => 0775,
+					'AutoFormat.DisplayLinkURI' => false,
+					'AutoFormat.Linkify' => false,
 					'CSS.AllowedProperties' => [],
 					'URI.DisableExternalResources' => true
 				]

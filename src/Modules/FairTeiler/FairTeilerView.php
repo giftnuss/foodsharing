@@ -24,15 +24,6 @@ class FairTeilerView extends View
 		$this->bezirk_id = $bezirk['id'];
 	}
 
-	public function loginToFollow()
-	{
-		return $this->v_utils->v_field(
-			$this->v_utils->v_info('Wenn Du Dich einloggst kannst Du Dich benachrichtigen lassen bei Updates zu diesem FairTeiler')
-			. $this->menu(array(array('name' => 'jetzt einloggen', 'click' => 'login();'))),
-			false
-		);
-	}
-
 	public function setFairteiler($fairteiler, $follower)
 	{
 		$this->fairteiler = $fairteiler;

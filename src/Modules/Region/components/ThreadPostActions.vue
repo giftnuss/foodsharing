@@ -20,9 +20,8 @@
         v-b-tooltip.hover
         ref="emojiSelector"
         title="Eine Reaktion hinzufügen"
-        text="➕"
+        text="+"
         class="emoji-dropdown"
-        toggle-class="btn-outline-secondary"
         size="sm"
         no-caret
         right

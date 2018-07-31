@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Login;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 
-class LoginModel extends Model
+class LoginModel extends Db
 {
 	/**
 	 * @var LoginGateway
