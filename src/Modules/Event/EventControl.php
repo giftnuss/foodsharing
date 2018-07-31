@@ -26,7 +26,7 @@ class EventControl extends Control
 			$this->func->addBread('Termine', '/?page=event');
 			$this->func->addBread($event['name']);
 
-			$status = $this->gateway->getInviteStatus($event['id'], $this->func->fsId());
+			$status = $this->gateway->getInviteStatus($event['id'], $this->session->id());
 
 			$this->func->addContent($this->view->eventTop($event), CNT_TOP);
 			$this->func->addContent($this->view->statusMenu($event, $status), CNT_LEFT);
@@ -82,7 +82,7 @@ class EventControl extends Control
 								$this->gateway->deleteInvites($_GET['id']);
 							}
 							if ($data['invite']) {
-								$this->gateway->inviteBezirk($data['bezirk_id'], $_GET['id'], $data['invitesubs']);
+								$this->gateway->inviteFullRegion($data['bezirk_id'], $_GET['id'], $data['invitesubs']);
 							}
 							$this->func->info('Event wurde erfolgreich geändert!');
 							$this->func->go('/?page=event&id=' . (int)$_GET['id']);
@@ -119,9 +119,9 @@ class EventControl extends Control
 
 		if ($this->isSubmitted()) {
 			if ($data = $this->validateEvent()) {
-				if ($id = $this->gateway->addEvent($this->func->fsId(), $data)) {
+				if ($id = $this->gateway->addEvent($this->session->id(), $data)) {
 					if ($data['invite']) {
-						$this->gateway->inviteBezirk($data['bezirk_id'], $id, $data['invitesubs']);
+						$this->gateway->inviteFullRegion($data['bezirk_id'], $id, $data['invitesubs']);
 					}
 					$this->func->info('Event wurde erfolgreich eingetragen!');
 					$this->func->go('/?page=event&id=' . (int)$id);

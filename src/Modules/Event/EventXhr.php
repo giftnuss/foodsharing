@@ -34,7 +34,7 @@ class EventXhr extends Control
 
 	public function accept()
 	{
-		if ($this->gateway->setInviteStatus($_GET['id'], $this->func->fsId(), 1)) {
+		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), 1)) {
 			$dialog = new XhrDialog();
 			$dialog->setTitle('Einladung');
 			$dialog->addContent($this->v_utils->v_info('Lieben Dank! Du hast die Einladung angenommen.'));
@@ -47,7 +47,7 @@ class EventXhr extends Control
 
 	public function maybe()
 	{
-		if ($this->gateway->setInviteStatus($_GET['id'], $this->func->fsId(), 2)) {
+		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), 2)) {
 			$dialog = new XhrDialog();
 			$dialog->setTitle('Einladung');
 			$dialog->addContent($this->v_utils->v_info('Lieben Dank! Schön, dass Du vielleicht dabei bist.'));
@@ -60,7 +60,7 @@ class EventXhr extends Control
 
 	public function noaccept()
 	{
-		if ($this->gateway->setInviteStatus($_GET['id'], $this->func->fsId(), 3)) {
+		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), 3)) {
 			return array(
 				'status' => 1,
 				'script' => 'pulseInfo("Einladung gelöscht.");'
@@ -71,7 +71,7 @@ class EventXhr extends Control
 	public function ustat()
 	{
 		if (isset($this->stats[(int)$_GET['s']])) {
-			if ($this->gateway->setInviteStatus($_GET['id'], $this->func->fsId(), $_GET['s'])) {
+			if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), $_GET['s'])) {
 				return array(
 					'status' => 1,
 					'script' => 'pulseInfo("Einladungsstatus geändert!");'
@@ -83,7 +83,7 @@ class EventXhr extends Control
 	public function ustatadd()
 	{
 		if (isset($this->stats[(int)$_GET['s']])) {
-			if ($this->gateway->addInviteStatus($_GET['id'], $this->func->fsId(), $_GET['s'])) {
+			if ($this->gateway->addInviteStatus($_GET['id'], $this->session->id(), $_GET['s'])) {
 				return array(
 					'status' => 1,
 					'script' => 'pulseInfo("Status geändert!");'
