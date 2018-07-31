@@ -74,10 +74,9 @@ class RegionGatewayTest extends \Codeception\Test\Unit
 		$this->assertEquals($regions, [$this->region['id'], $this->childRegion['id']]);
 	}
 
-
 	public function testGetParentRegions(): void
 	{
-		$regions = $this->gateway->listRegionsIncludingParents([108]); // 108 is ID of Zurich
-		$this->assertEquals($regions, [108, 106, 741, 0]); // Zurich, Switzerland, Europe, don't know what that is.
+		$regions = $this->gateway->listRegionsIncludingParents([$this->childRegion['id']]);
+		$this->assertEquals($regions, [$this->region['id'], $this->childRegion['id']]);
 	}
 }
