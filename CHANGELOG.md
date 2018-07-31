@@ -5,6 +5,7 @@
 - reactive vue stores !451 @alangecker
 - resizeable avatar component !451 @alangecker
 - updated landingpage with festival content !462 and !471 @michi-zuri
+- Only accepted store members see updates on dashboard !412 @k.miklobusec
 
 ## Bugfixes
 - Add missing tagedit lib on mailbox edit page !459 #248 @nicksellen
@@ -48,7 +49,6 @@ Many thanks to @peter.toennies @NerdyProjects @alangecker @theolampert @nicksell
 ## Features
 - updated fpdi plugin to v2.0.2 !351 #168 by @peter.toennies
 - update symfony to 4.1.0 as well as other dependencies !351 @NerdyProjects
-- Only accepted store members see updates on dashboard !412 @k.miklobusec
 - remove user list in forums to allow big regions to work !421 @NerdyProjects
 - add php intl component for localized internationalization !421 @NerdyProjects
 - add vue.js, bootstrap & scss !430 @alangecker
