@@ -72,7 +72,7 @@ class EventGateway extends BaseGateway
 		', [':id' => $id]);
 
 		$event['location'] = false;
-		if ($event['location_id'] > 0) {
+		if ($event['location_id'] !== null) {
 			$event['location'] = $this->getLocation($event['location_id']);
 		}
 
@@ -81,7 +81,7 @@ class EventGateway extends BaseGateway
 
 	public function getLocation($id)
 	{
-		if (is_null($id)) {
+		if ($id === null) {
 			return null;
 		}
 
@@ -141,7 +141,7 @@ class EventGateway extends BaseGateway
 		$event['location'] = false;
 		$event['invites'] = $this->getEventInvites($id);
 
-		if ($event['location_id'] > 0) {
+		if ($event['location_id'] !== null) {
 			$event['location'] = $this->getLocation($event['location_id']);
 		}
 

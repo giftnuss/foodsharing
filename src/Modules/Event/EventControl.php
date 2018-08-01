@@ -92,7 +92,7 @@ class EventControl extends Control
 
 				$bezirke = $this->session->getRegions();
 
-				if (!is_null($event['location_id'])) {
+				if ($event['location_id'] !== null) {
 					if ($loc = $this->gateway->getLocation($event['location_id'])) {
 						$event['location_name'] = $loc['name'];
 						$event['lat'] = $loc['lat'];

@@ -10,7 +10,7 @@
 - Add missing tagedit lib on mailbox edit page !459 #248 @nicksellen
 - reenabling source maps on the production build !468 #254 @alangecker
 - removed dead login button and updated registration info for food baskets #240 !457 @michi-zuri
-- set location_id to null for mumble events !478 #276 @wapplications
+- saving mumble events is now possible !478 #276 @wapplications
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
