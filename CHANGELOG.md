@@ -17,6 +17,7 @@
 - removed copy of email sending method for CLI applications !464 @NerdyProjects
 - refactored statistics from model to gateway !476 #9 @peter.toennies
 - removed several layers of the legacy database-classes structure !477 @peter.toennies
+- refactored content from model to gateway !481 #9 @peter.toennies
 
 ## Dev/Test/CI stuff
 
