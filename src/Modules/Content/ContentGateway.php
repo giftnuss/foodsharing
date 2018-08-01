@@ -6,7 +6,7 @@ use Foodsharing\Modules\Core\BaseGateway;
 
 class ContentGateway extends BaseGateway
 {
-	public function get($id)
+	public function get($id): array
 	{
 		return $this->db->fetch('
 				SELECT `title`, `body`
@@ -16,7 +16,7 @@ class ContentGateway extends BaseGateway
 		);
 	}
 
-	public function list()
+	public function list(): array
 	{
 		return $this->db->fetchAll('
 			SELECT 	 	`id`,
@@ -26,7 +26,7 @@ class ContentGateway extends BaseGateway
 		);
 	}
 
-	public function getDetail($id)
+	public function getDetail($id): array
 	{
 		return $this->db->fetch('
 			SELECT
@@ -43,7 +43,7 @@ class ContentGateway extends BaseGateway
 		);
 	}
 
-	public function create($data)
+	public function create($data): int
 	{
 		return $this->db->insert('fs_content', [
 			'name' => strip_tags($data['name']),
@@ -53,7 +53,7 @@ class ContentGateway extends BaseGateway
 		]);
 	}
 
-	public function update($id, $data)
+	public function update($id, $data): int
 	{
 		return $this->db->update('fs_content', [
 			'name' => strip_tags($data['name']),
@@ -61,5 +61,23 @@ class ContentGateway extends BaseGateway
 			'body' => $data['body'],
 			'last_mod' => $data['last_mod']
 		], ['id' => $id]);
+	}
+
+	public function listFaq($cat_ids): array
+	{
+		$stm = '
+			SELECT 
+				`id`,
+				`name`,
+				`answer`
+
+			FROM 
+				fs_faq
+				
+			WHERE 
+				`faq_kategorie_id` IN(' . implode(',', $cat_ids) . ')
+		';
+
+		return $this->db->fetchAll($stm);
 	}
 }
