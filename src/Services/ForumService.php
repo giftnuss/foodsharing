@@ -6,7 +6,6 @@ use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
-use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -17,7 +16,6 @@ class ForumService
 	private $regionGateway;
 	private $foodsaverGateway;
 	private $bellGateway;
-	private $emailTemplateGateway;
 	/* @var Db */
 	private $model;
 	private $func;
@@ -26,7 +24,6 @@ class ForumService
 
 	public function __construct(
 		BellGateway $bellGateway,
-		EmailTemplateGateway $emailTemplateGateway,
 		FoodsaverGateway $foodsaverGateway,
 		ForumGateway $forumGateway,
 		Func $func,
@@ -36,7 +33,6 @@ class ForumService
 		SanitizerService $sanitizerService
 	) {
 		$this->bellGateway = $bellGateway;
-		$this->emailTemplateGateway = $emailTemplateGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumGateway = $forumGateway;
 		$this->func = $func;

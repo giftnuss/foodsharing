@@ -11,7 +11,7 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
-use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
+use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateAdminGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Services\SanitizerService;
 use JSMin\JSMin;
@@ -632,8 +632,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$mail->setFrom(DEFAULT_EMAIL, DEFAULT_EMAIL_NAME);
 		}
 
-		/* @var $gw EmailTemplateGateway */
-		$gw = DI::$shared->get(EmailTemplateGateway::class);
+		/* @var $gw EmailTemplateAdminGateway */
+		$gw = DI::$shared->get(EmailTemplateAdminGateway::class);
 		$message = $gw->getOne_message_tpl($tpl_id);
 
 		$search = array();
