@@ -107,3 +107,8 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
         display: none;
     }
 }
+
+// bring jquery-ui 'ui-front' elements in front of bootstrap elements  
+.ui-front {
+    z-index: 1100;
+}
