@@ -39,8 +39,7 @@ class ContentControl extends Control
 					$this->func->pageLink('content', 'back_to_overview')
 				)), $this->func->s('actions')), CNT_RIGHT);
 			} elseif ($id = $this->func->getActionId('delete')) {
-				// todo: function del_content() does not exist (PT 2018-08-01)
-				if ($this->contentGateway->del_content($id)) {
+				if ($this->contentGateway->delete($id)) {
 					$this->func->info($this->func->s('content_deleted'));
 					$this->func->goPage();
 				}

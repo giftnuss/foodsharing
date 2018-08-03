@@ -63,6 +63,11 @@ class ContentGateway extends BaseGateway
 		], ['id' => $id]);
 	}
 
+	public function delete($id): int
+	{
+		return $this->db->delete('fs_content', ['id' => $id]);
+	}
+
 	public function listFaq($cat_ids): array
 	{
 		$stm = '
