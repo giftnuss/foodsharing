@@ -26,7 +26,10 @@
                 :myGroups="index.myGroups"
                 :myRegions="index.myRegions"
                 :myStores="index.myStores"
-                :query="query" />
+                :myBuddies="index.myBuddies"
+                :query="query" 
+                :isLoading="isLoading"
+            />
         </div>
     </form>
 </template>
@@ -57,6 +60,7 @@ export default {
                 myStores: [],
                 myGroups: [],
                 myRegions: [],
+                myBuddies: [],
             }
         }
     },
