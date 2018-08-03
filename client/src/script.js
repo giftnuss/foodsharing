@@ -75,7 +75,6 @@ export function initialize () {
     sleepmode.init()
 
     $('textarea.comment').autosize()
-    $('#nojs').css('display', 'none')
     $('#main').css('display', 'block')
 
     $('.moreswap').each(function () {
