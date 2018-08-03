@@ -1,7 +1,18 @@
 <template>
     <div>
-        <div v-if="isEmpty" class="dropdown-header alert alert-warning">
+        <div v-if="isEmpty && !isLoading" class="dropdown-header alert alert-warning">
             Es konnten keine Ergebnisse gefunden werden
+        </div>
+        <div v-if="filtered.myBuddies.length">
+            <h3 class="dropdown-header"><i class="fa fa-user" /> Meine Buddies</h3>
+            <search-result-entry v-for="buddy in filtered.myBuddies" 
+                :key="buddy.id" 
+                :href="$url('profile', buddy.id)" 
+                :title="buddy.name" 
+                :teaser="buddy.teaser"
+                :image="buddy.image"
+            />
+            <div class="dropdown-divider"></div>
         </div>
         <div v-if="filtered.myGroups.length">
             <h3 class="dropdown-header"><i class="fa fa-users" /> Meine Gruppen</h3>
@@ -124,9 +135,16 @@ export default {
             type: Array,
             default: () => []
         },
+        myBuddies: {
+            type: Array,
+            default: () => []
+        },
         query: {
             type: String,
             default: ''
+        },
+        isLoading: {
+            type: Boolean
         },
     },
     computed: {
@@ -147,7 +165,8 @@ export default {
                 groups: this.groups.filter(filterFunction),
                 myGroups: this.myGroups.filter(filterFunction),
                 myStores: this.myStores.filter(filterFunction),
-                myRegions: this.myRegions.filter(filterFunction)
+                myRegions: this.myRegions.filter(filterFunction),
+                myBuddies: this.myBuddies.filter(filterFunction)
             }
 
             // additionally remove elements in gobal search wich are already contained in the private lists
@@ -155,6 +174,7 @@ export default {
             res.stores = arrayFilterDuplicate(res.stores, res.myStores)
             res.groups = arrayFilterDuplicate(res.groups, res.myGroups)
             res.regions = arrayFilterDuplicate(res.regions, res.myRegions)
+            res.users = arrayFilterDuplicate(res.users, res.myBuddies)
             
             // because myGroups are still contained in the regions reponse, we filter them out additionally
             res.regions = arrayFilterDuplicate(res.regions, res.myGroups)
@@ -168,7 +188,8 @@ export default {
                 !this.filtered.groups.length &&
                 !this.filtered.myGroups.length &&
                 !this.filtered.myStores.length &&
-                !this.filtered.myRegions.length
+                !this.filtered.myRegions.length &&
+                !this.filtered.myBuddies.length 
             )
         }
     }
