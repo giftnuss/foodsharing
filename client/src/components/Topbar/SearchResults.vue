@@ -93,6 +93,13 @@ function arrayFilterDuplicate(list, ignore) {
     let ids = ignore.map(e => e.id)
     return list.filter(e => ids.indexOf(e.id) == -1)
 }
+
+function match(word, e) {
+    if(e.name && e.name.toLowerCase().indexOf(word) !== -1) return true
+    if(e.teaser && e.teaser.toLowerCase().indexOf(word) !== -1) return true
+    return false
+}
+
 export default {
     components: { SearchResultEntry },
     props: {
@@ -131,14 +138,16 @@ export default {
     },
     computed: {
         filtered() {
-            let query = this.query.toLowerCase().trim()
+            const query = this.query.toLowerCase().trim()
+            const words = query.match(/[^ ,;+.]+/g)
 
-            // filter elements, whether the query string is contained in name or teaser
-            let filterFunction = (e) => {
-                if(!query) return false
-                if(e.name && e.name.toLowerCase().indexOf(query) !== -1) return true
-                if(e.teaser && e.teaser.toLowerCase().indexOf(query) !== -1) return true
-                return false
+            // filter elements, whether all of the query words are contained somewhere in name or teaser
+            const filterFunction = (e) => {
+                if(!words.length) return false
+                for(let word of words) {
+                    if(!match(word, e)) return false
+                }
+                return true
             }
             let res = {
                 stores: this.stores.filter(filterFunction),
