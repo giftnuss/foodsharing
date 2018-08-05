@@ -28,7 +28,7 @@ class ProfileXhr extends Control
 		if (!$this->session->may()) {
 			return array(
 				'status' => 1,
-				'script' => 'login();'
+				'script' => ''
 			);
 		}
 
@@ -103,7 +103,7 @@ class ProfileXhr extends Control
 
 	public function history()
 	{
-		$bids = $this->regionGateway->getFsBezirkIds($_GET['fsid']);
+		$bids = $this->regionGateway->getFsRegionIds($_GET['fsid']);
 		if ($this->session->may() && ($this->session->may('orga') || $this->func->isBotForA($bids, false, false))) {
 			$dia = new XhrDialog();
 			if ($_GET['type'] == 0) {

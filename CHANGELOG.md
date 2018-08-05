@@ -5,10 +5,16 @@
 - reactive vue stores !451 @alangecker
 - resizeable avatar component !451 @alangecker
 - updated landingpage with festival content !462 and !471 @michi-zuri
+- Only accepted store members see updates on dashboard !412 @k.miklobusec
 
 ## Bugfixes
 - Add missing tagedit lib on mailbox edit page !459 #248 @nicksellen
 - reenabling source maps on the production build !468 #254 @alangecker
+- removed dead login button and updated registration info for food baskets #240 !457 @michi-zuri
+- Remove broken LoginXhr->login method !465 @tiltec
+- Added possibility to change main region to a part of town (region type 9) !470 #268 @peter.toennies
+- fetching parent regions without any give regin id not possible anymore !474 #258 @peter.toennies
+- fetching parent regions without any given region ID is not possible anymore !474 #258 @peter.toennies
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
@@ -16,6 +22,10 @@
 - refactored statistics from model to gateway !476 #9 @peter.toennies
 - removed several layers of the legacy database-classes structure !477 @peter.toennies
 - removed several deprecated functions from func all over the source !436 @peter.toennies
+- refactored content from model to gateway !481 #9 @peter.toennies
+- refactored NewArea module from model to gateway !483 #9 @peter.toennies
+- refactored NewArea module from model to gateway !484 #9 @peter.toennies
+- refactored index from model to gateway !480 #9 @peter.toennies
 
 ## Dev/Test/CI stuff
 
@@ -24,6 +34,7 @@
 
 # 2018-07-21 Hotfix
 - Fix foodsaver_id access in StatsControl
+- Remove broken login popup
 
 # 2018-07-20 Hotfix
 - Fairteiler Walls can be accessed again
@@ -85,6 +96,7 @@ Many thanks to @peter.toennies @NerdyProjects @alangecker @theolampert @nicksell
 - Extract StoreUser module javascript !358 @nicksellen
 - refactored and cleaned the whole activity module. !352 by @peter.toennies
 - refactored and cleaned the whole API module. !368 #9 by @peter.toennies
+- refactored Basket to use gateway. !399 @peter.toennies
 - refactored Bell to use gateway. !402 by @peter.toennies
 - refactored BusinessCard to use gateway. !406 @peter.toennies
 - refactored Buddy to use gateway. !405 @peter.toennies

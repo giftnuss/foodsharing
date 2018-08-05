@@ -394,19 +394,18 @@ class Func
 		}
 	}
 
-	public function isBotForA($bezirk_ids, $include_groups = true, $include_parent_bezirke = false)
+	public function isBotForA($regions_ids, $include_groups = true, $include_parent_regions = false): bool
 	{
-		if ($this->session->isBotschafter() && is_array($bezirk_ids)) {
-			if ($include_parent_bezirke) {
+		if (is_array($regions_ids) && count($regions_ids) && $this->session->isBotschafter()) {
+			if ($include_parent_regions) {
 				/* @var $gw RegionGateway */
 				$gw = DI::$shared->get(RegionGateway::class);
-				$bezirk_ids = $gw->getParentBezirke($bezirk_ids);
+				$regions_ids = $gw->listRegionsIncludingParents($regions_ids);
 			}
 			foreach ($_SESSION['client']['botschafter'] as $b) {
-				foreach ($bezirk_ids as $bid) {
+				foreach ($regions_ids as $bid) {
 					if ($b['bezirk_id'] == $bid && ($include_groups || $b['type'] != Type::WORKING_GROUP)) {
 						return true;
-						break;
 					}
 				}
 			}

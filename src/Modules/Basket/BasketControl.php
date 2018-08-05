@@ -3,14 +3,14 @@
 namespace Foodsharing\Modules\Basket;
 
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
 
 class BasketControl extends Control
 {
 	private $basketGateway;
 
-	public function __construct(BasketModel $model, BasketView $view, BasketGateway $basketGateway)
+	public function __construct(BasketView $view, BasketGateway $basketGateway)
 	{
-		$this->model = $model;
 		$this->view = $view;
 		$this->basketGateway = $basketGateway;
 
@@ -19,10 +19,10 @@ class BasketControl extends Control
 		$this->func->addBread('Essenskörbe');
 	}
 
-	public function index()
+	public function index(): void
 	{
 		if ($id = $this->uriInt(2)) {
-			if ($basket = $this->model->getBasket($id)) {
+			if ($basket = $this->basketGateway->getBasket($id)) {
 				$this->basket($basket);
 			}
 		} else {
@@ -38,35 +38,37 @@ class BasketControl extends Control
 		}
 	}
 
-	public function find()
+	public function find(): void
 	{
 		$baskets = $this->basketGateway->listCloseBaskets($this->session->id(), $this->session->getLocation());
 		$this->view->find($baskets, $this->session->getLocation());
 	}
 
-	private function basket($basket)
+	private function basket($basket): void
 	{
-		$wallposts = false;
+		$wallPosts = false;
 		$requests = false;
 
 		if ($this->session->may()) {
-			if ($basket['fs_id'] != $this->func->fsId()) {
-				$this->func->addJsFunc('
+			if ($basket['fs_id'] != $this->session->id()) {
+				$this->func->addJsFunc(
+					'
 				function u_wallpostReady(postid)
 				{
 					ajax.req("basket","follow",{
 						data:{bid:' . (int)$basket['id'] . '}
 					});
-				}');
+				}'
+				);
 			}
-			$wallposts = $this->wallposts('basket', $basket['id']);
-			if ($basket['fs_id'] == $this->func->fsId()) {
-				$requests = $this->model->listRequests($basket['id']);
+			$wallPosts = $this->wallposts('basket', $basket['id']);
+			if ($basket['fs_id'] == $this->session->id()) {
+				$requests = $this->basketGateway->listRequests($basket['id'], $this->session->id());
 			}
 		}
-		if ($basket['until_ts'] >= time() && $basket['status'] == 1) {
-			$this->view->basket($basket, $wallposts, $requests);
-		} elseif ($basket['until_ts'] <= time() || $basket['status'] == 3) {
+		if ($basket['until_ts'] >= time() && $basket['status'] == Status::REQUESTED_MESSAGE_READ) {
+			$this->view->basket($basket, $wallPosts, $requests);
+		} elseif ($basket['until_ts'] <= time() || $basket['status'] == Status::DENIED) {
 			$this->view->basketTaken($basket);
 		}
 	}

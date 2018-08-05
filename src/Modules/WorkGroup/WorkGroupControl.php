@@ -159,7 +159,7 @@ class WorkGroupControl extends Control
 	{
 		$groupId = $request->query->getInt('id');
 
-		$bids = $this->regionGateway->getFsBezirkIds($this->func->fsId());
+		$bids = $this->regionGateway->getFsRegionIds($this->func->fsId());
 		if (!$this->session->isOrgaTeam() && !$this->func->isBotForA($bids, true, true)) {
 			$this->func->go('/?page=dashboard');
 		}

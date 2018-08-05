@@ -50,7 +50,7 @@ export default {
     methods: {
         openBasketCreationForm() {
             this.$refs.dropdown.visible = false
-            ajreq('newbasket', {app:'basket'})
+            ajreq('newBasket', {app:'basket'})
         },
         openRemoveBasketForm(basketId, userId) {
             this.$refs.dropdown.visible = false
@@ -80,4 +80,3 @@ export default {
     }
 }
 </style>
-  
