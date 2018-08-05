@@ -2,16 +2,19 @@
 
 namespace Foodsharing\Modules\NewArea;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class NewAreaXhr extends Control
 {
 	private $regionGateway;
+	private $newAreaGateway;
 
-	public function __construct(NewAreaModel $model, NewAreaView $view, RegionGateway $regionGateway)
+	public function __construct(Db $model, NewAreaGateway $newAreaGateway, NewAreaView $view, RegionGateway $regionGateway)
 	{
 		$this->model = $model;
+		$this->newAreaGateway = $newAreaGateway;
 		$this->view = $view;
 		$this->regionGateway = $regionGateway;
 
@@ -45,7 +48,7 @@ class NewAreaXhr extends Control
 							$message = str_replace(array('{ANREDE}', '{NAME}'), array($anrede, $name), $_GET['msg']);
 
 							$this->func->libmail(false, $foodsaver['email'], $_GET['subject'], $message);
-							$this->model->clearWantNew($fid);
+							$this->newAreaGateway->clearWantNew($fid);
 
 							$js .= '$(".wantnewcheck[value=\'' . $fid . '\']").parent().parent().remove();';
 						}
@@ -66,7 +69,7 @@ class NewAreaXhr extends Control
 			$parts = explode('-', $_GET['del']);
 			if (count($parts) > 0) {
 				foreach ($parts as $p) {
-					$this->model->clearWantNew($p);
+					$this->newAreaGateway->clearWantNew($p);
 				}
 			}
 

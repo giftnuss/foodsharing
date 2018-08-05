@@ -3,12 +3,11 @@
 namespace Foodsharing\Modules\Statistics;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
 class StatisticsGateway extends BaseGateway
 {
-	private const ID_FOR_REGION_EUROPE = 741;
-
 	public function listTotalStat(): array
 	{
 		$stm = '
@@ -30,7 +29,7 @@ class StatisticsGateway extends BaseGateway
 					`id` = :region_id
 		';
 
-		return $this->db->fetch($stm, [':region_id' => self::ID_FOR_REGION_EUROPE]);
+		return $this->db->fetch($stm, [':region_id' => RegionIDs::EUROPE]);
 	}
 
 	public function listStatCities(): array

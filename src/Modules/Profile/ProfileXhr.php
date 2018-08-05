@@ -28,7 +28,7 @@ class ProfileXhr extends Control
 		if (!$this->session->may()) {
 			return array(
 				'status' => 1,
-				'script' => 'login();'
+				'script' => ''
 			);
 		}
 
