@@ -396,7 +396,7 @@ class Func
 
 	public function isBotForA($regions_ids, $include_groups = true, $include_parent_regions = false): bool
 	{
-		if ($regions_ids !== null && is_array($regions_ids) && $this->session->isBotschafter()) {
+		if (is_array($regions_ids) && count($regions_ids) && $this->session->isBotschafter()) {
 			if ($include_parent_regions) {
 				/* @var $gw RegionGateway */
 				$gw = DI::$shared->get(RegionGateway::class);
