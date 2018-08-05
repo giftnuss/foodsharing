@@ -21,6 +21,7 @@ class FoodsharingUI extends \Codeception\Module
 		$this->getBrowser()->clickWithLeftButton($tagEditInSelector, 3, 3);
 		$this->getBrowser()->fillField($inputId, $value);
 		$selector = '//a[contains(@id, \'ui-id\') and contains(text(), "' . $value . '")]';
+		$this->getBrowser()->waitForElement($selector);
 		$this->getBrowser()->click($selector);
 	}
 
