@@ -18,6 +18,8 @@
 - refactored statistics from model to gateway !476 #9 @peter.toennies
 - removed several layers of the legacy database-classes structure !477 @peter.toennies
 - refactored content from model to gateway !481 #9 @peter.toennies
+- refactored NewArea module from model to gateway !483 #9 @peter.toennies
+- refactored NewArea module from model to gateway !484 #9 @peter.toennies
 
 ## Dev/Test/CI stuff
 
