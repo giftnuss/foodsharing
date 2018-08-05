@@ -111,10 +111,5 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
 
 // bring jquery-ui 'ui-front' elements in front of bootstrap elements  
 .ui-front {
-    z-index: 1100;
-}
-
-// except navbar
-.bootstrap .navbar.fixed-top {
-    z-index: 1101;
+    z-index: $zindex-tooltip;
 }
