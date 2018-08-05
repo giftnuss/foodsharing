@@ -364,5 +364,17 @@ div#main {
 }
 
 
+// following is applied on the initial <div> before the vue component gets injected
+// it shows an brown bar as a placeholder for the actual topbar 
+#vue-topbar {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    height: 2em;
+    background-color: #533a20 !important;
+    position: fixed;
+    top: 0;
+    height: 37px;
+    width: 100%;
+    z-index: 1200;
+}
 </style>
 
