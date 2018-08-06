@@ -18,7 +18,7 @@
 - Fix #287 allowing all members of a group to edit that group !487 @NerdyProjects
 - Fix #286 making group applications work again !489 @NerdyProjects
 - Fix #255 do not improperly render html tags in region side nav !489 @NerdyProjects
-- Fix Database commit missing after migrations in dev/test environment
+- Fix Database commit missing after migrations in dev/test environment !489 @NerdyProjects
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
@@ -32,6 +32,7 @@
 - refactored index from model to gateway !480 #9 @peter.toennies
 
 ## Dev/Test/CI stuff
+- Add test for workgroup application / acceptance process !489 @NerdyProjects
 
 # 2018-07-22 Hotfix
 - Fix links to group application details
