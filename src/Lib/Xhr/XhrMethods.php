@@ -86,9 +86,9 @@ class XhrMethods
 
 	public function xhr_verify($data)
 	{
-		$bids = $this->regionGateway->getFsBezirkIds((int)$data['fid']);
+		$bids = $this->regionGateway->getFsRegionIds((int)$data['fid']);
 
-		if ($this->func->isBotForA($bids, false, true) || $this->func->isOrgaTeam()) {
+		if ($this->func->isBotForA($bids, false, true) || $this->session->isOrgaTeam()) {
 			if ($countver = $this->model->qOne('SELECT COUNT(*) FROM fs_verify_history WHERE date BETWEEN NOW()- INTERVAL 20 SECOND AND now() AND bot_id = ' . $this->func->fsId())) {
 				if ($countver > 10) {
 					return json_encode(array(
@@ -146,7 +146,7 @@ class XhrMethods
 		$this->func->incLang('Store');
 		$this->func->incLang('StoreUser');
 
-		if ($this->storeGateway->isInTeam($this->session->id(), $data['bid']) || $this->func->isBotschafter() || $this->func->isOrgaTeam()) {
+		if ($this->storeGateway->isInTeam($this->session->id(), $data['bid']) || $this->func->isBotschafter() || $this->session->isOrgaTeam()) {
 			if ($out = $this->model->q('
 				SELECT 	n.id,
 						n.`text`,
@@ -178,7 +178,7 @@ class XhrMethods
 					$pic = $this->func->img($o['photo']);
 
 					$delete = '';
-					if ($this->func->isOrgaTeam() || $this->func->fsId() == $o['fsid']) {
+					if ($this->session->isOrgaTeam() || $this->func->fsId() == $o['fsid']) {
 						$delete = '<span class="dot">·</span><a class="pdelete light" href="#p' . $o['id'] . '" onclick="u_delPost(' . (int)$o['id'] . ');return false;">' . $this->func->s('delete') . '</a>';
 					}
 
@@ -258,7 +258,7 @@ class XhrMethods
 
 	public function xhr_addPinPost($data)
 	{
-		if ($this->storeGateway->isInTeam($this->session->id(), $data['bid']) || $this->func->isOrgaTeam() || $this->func->isBotschafter()) {
+		if ($this->storeGateway->isInTeam($this->session->id(), $data['bid']) || $this->session->isOrgaTeam() || $this->func->isBotschafter()) {
 			if (isset($_SESSION['last_pinPost'])) {
 				if ((time() - $_SESSION['last_pinPost']) < 2) {
 					return $this->xhr_getPinPost($data);
@@ -292,7 +292,7 @@ class XhrMethods
 	{
 		if (isset($data['parent'])) {
 			$sql = ' AND 		`type` != 7';
-			if ($this->func->isOrgaTeam()) {
+			if ($this->session->isOrgaTeam()) {
 				$sql = '';
 			}
 			if ($childs = $this->model->q('SELECT `id`,`parent_id`,`has_children`,`name`,`type` FROM `fs_bezirk` WHERE `parent_id` = ' . (int)$data['parent'] . $sql . ' ORDER BY `name`')) {
@@ -339,14 +339,14 @@ class XhrMethods
 		$photo = $this->func->img($foodsaver['photo'], 130, 'q');
 		$data = array();
 
-		if (($this->func->isBotschafter() || $this->func->isOrgaTeam() || isset($foodsaver['botschafter']))) {
+		if (($this->func->isBotschafter() || $this->session->isOrgaTeam() || isset($foodsaver['botschafter']))) {
 			if (!empty($foodsaver['handy'])) {
 				$data[] = array('name' => 'Handy', 'val' => $foodsaver['handy']);
 			}
 			if (!empty($foodsaver['telefon'])) {
 				$data[] = array('name' => 'Telefon', 'val' => $foodsaver['telefon']);
 			}
-			if ($this->func->isOrgaTeam()) {
+			if ($this->session->isOrgaTeam()) {
 				$data[] = array('name' => 'E-Mail-Adresse', 'val' => $foodsaver['email']);
 				$data[] = array('name' => 'Adresse', 'val' => $foodsaver['anschrift'] . '<br />' . $foodsaver['plz'] . ' ' . $foodsaver['stadt']);
 			}
@@ -364,7 +364,7 @@ class XhrMethods
 		$thead = '';
 		$tbody = '';
 
-		if ($this->func->isOrgaTeam()) {
+		if ($this->session->isOrgaTeam()) {
 			$fsdata = json_decode($foodsaver['data'], true);
 			$detail = '';
 
@@ -393,7 +393,7 @@ class XhrMethods
 		}
 
 		$edit = '';
-		if ($this->func->isOrgaTeam() || $this->func->isBotschafter()) {
+		if ($this->session->isOrgaTeam() || $this->func->isBotschafter()) {
 			$edit = '<li><a href="/?page=foodsaver&a=edit&id=' . $foodsaver['id'] . '">bearbeiten</a></li>';
 		}
 
@@ -435,7 +435,7 @@ class XhrMethods
 	public function xhr_jsonBetriebe($data)
 	{
 		$b = '';
-		if (($this->func->isBotschafter() || $this->func->isOrgaTeam() || $this->session->may('fs') || isset($foodsaver['botschafter']))) {
+		if (($this->func->isBotschafter() || $this->session->isOrgaTeam() || $this->session->may('fs') || isset($foodsaver['botschafter']))) {
 			$b = $this->model->q(' SELECT `id`,lat,lon FROM fs_betrieb WHERE lat != "" ');
 		}
 
@@ -488,7 +488,7 @@ class XhrMethods
 	public function xhr_jsonFoodsaver($data)
 	{
 		$fs = '';
-		if (($this->func->isBotschafter() || $this->func->isOrgaTeam() || $this->session->may('fs') || isset($foodsaver['botschafter']))) {
+		if (($this->func->isBotschafter() || $this->session->isOrgaTeam() || $this->session->may('fs') || isset($foodsaver['botschafter']))) {
 			$fs = $this->model->q(' SELECT `id`, `photo_public`,`lat`,`lon` FROM `fs_foodsaver` WHERE `active` = 1 AND lat != "" ');
 		}
 
@@ -859,12 +859,12 @@ class XhrMethods
 
 	public function xhr_continueMail($data)
 	{
-		if ($this->func->isOrgaTeam() || $this->func->isBotschafter()) {
+		if ($this->session->isOrgaTeam() || $this->func->isBotschafter()) {
 			$mail_id = (int)$data['id'];
 
 			$mail = $this->emailGateway->getOne_send_email($mail_id);
 
-			$bezirk = $this->regionGateway->getMailBezirk($this->func->getBezirkId());
+			$bezirk = $this->regionGateway->getMailBezirk($this->session->getCurrentBezirkId());
 			$bezirk['email'] = EMAIL_PUBLIC;
 			$bezirk['email_name'] = EMAIL_PUBLIC_NAME;
 			$recip = $this->emailGateway->getMailNext($mail_id);
@@ -1011,7 +1011,7 @@ class XhrMethods
 
 	public function xhr_update_newbezirk($data)
 	{
-		if ($this->func->isOrgaTeam()) {
+		if ($this->session->isOrgaTeam()) {
 			$data['name'] = strip_tags($data['name']);
 			$data['name'] = str_replace(array('/', '"', "'", '.', ';'), '', $data['name']);
 			$data['has_children'] = 0;
@@ -1259,7 +1259,7 @@ class XhrMethods
 
 	public function xhr_acceptBezirkRequest($data)
 	{
-		if ($this->func->isBotFor($data['bid']) || $this->func->isOrgaTeam()) {
+		if ($this->func->isBotFor($data['bid']) || $this->session->isOrgaTeam()) {
 			$this->regionGateway->acceptBezirkRequest($data['fsid'], $data['bid']);
 
 			return json_encode(array('status' => 1));
@@ -1268,7 +1268,7 @@ class XhrMethods
 
 	public function xhr_denyBezirkRequest($data)
 	{
-		if ($this->func->isBotFor($data['bid']) || $this->func->isOrgaTeam()) {
+		if ($this->func->isBotFor($data['bid']) || $this->session->isOrgaTeam()) {
 			$this->regionGateway->denyBezirkRequest($data['fsid'], $data['bid']);
 
 			return json_encode(array('status' => 1));
@@ -1388,7 +1388,7 @@ class XhrMethods
 
 	public function xhr_addFetcher($data)
 	{
-		if (($this->storeGateway->isInTeam($this->session->id(), $data['bid']) || $this->func->isBotschafter() || $this->func->isOrgaTeam()) && $this->func->isVerified()) {
+		if (($this->storeGateway->isInTeam($this->session->id(), $data['bid']) || $this->func->isBotschafter() || $this->session->isOrgaTeam()) && $this->func->isVerified()) {
 			/*
 			 * 	[f] => addFetcher
 				[date] => 2013-09-23 20:00:00
@@ -1507,7 +1507,7 @@ class XhrMethods
 					VALUES (' . (int)$bezirk_id . ',' . $this->func->fsId() . ', ' . $active . ' )
 				');
 
-				if (!$this->func->getBezirkId()) {
+				if (!$this->session->getCurrentBezirkId()) {
 					$this->model->update('UPDATE fs_foodsaver SET bezirk_id = ' . (int)$bezirk_id . ' WHERE id = ' . (int)$this->func->fsId());
 				}
 
@@ -1568,7 +1568,7 @@ class XhrMethods
 	public function xhr_delBPost($data)
 	{
 		$fsid = $this->model->getVal('foodsaver_id', 'betrieb_notiz', $data['pid']);
-		if ($this->func->isOrgaTeam() || $fsid == $this->func->fsId()) {
+		if ($this->session->isOrgaTeam() || $fsid == $this->func->fsId()) {
 			$this->storeGateway->deleteBPost($data['pid']);
 
 			return 1;
@@ -1583,7 +1583,7 @@ class XhrMethods
 		$bezirkId = $this->forumGateway->getRegionForPost($data['pid']);
 		$bezirkType = $this->regionGateway->getType($bezirkId);
 
-		if ($this->func->isOrgaTeam() || $fsid == $this->func->fsId() || ($this->func->isBotFor($bezirkId) && $bezirkType == 7)) {
+		if ($this->session->isOrgaTeam() || $fsid == $this->func->fsId() || ($this->func->isBotFor($bezirkId) && $bezirkType == 7)) {
 			$this->forumGateway->deletePost($data['pid']);
 
 			return 1;

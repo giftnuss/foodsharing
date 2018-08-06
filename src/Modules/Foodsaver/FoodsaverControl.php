@@ -65,10 +65,10 @@ class FoodsaverControl extends Control
 					);
 				}
 			}
-		} elseif (($id = $this->func->getActionId('edit')) && ($this->func->isBotschafter() || $this->func->isOrgaTeam())) {
+		} elseif (($id = $this->func->getActionId('edit')) && ($this->func->isBotschafter() || $this->session->isOrgaTeam())) {
 			$data = $this->foodsaverGateway->getOne_foodsaver($id);
-			$bids = $this->regionGateway->getFsBezirkIds($id);
-			if ($data && ($this->func->isOrgaTeam() || $this->func->isBotForA($bids, false, true))) {
+			$bids = $this->regionGateway->getFsRegionIds($id);
+			if ($data && ($this->session->isOrgaTeam() || $this->func->isBotForA($bids, false, true))) {
 				$this->handle_edit();
 				$data = $this->foodsaverGateway->getOne_foodsaver($id);
 
@@ -85,7 +85,7 @@ class FoodsaverControl extends Control
 					$this->func->pageLink('foodsaver', 'back_to_overview')
 				)), $this->func->s('actions')), CNT_RIGHT);
 
-				if ($this->func->isOrgaTeam()) {
+				if ($this->session->isOrgaTeam()) {
 					$this->func->addContent($this->view->u_delete_account(), CNT_RIGHT);
 				}
 			}
@@ -110,7 +110,7 @@ class FoodsaverControl extends Control
 		global $g_data;
 
 		if ($this->func->submitted()) {
-			if ($this->func->isOrgaTeam()) {
+			if ($this->session->isOrgaTeam()) {
 				if (isset($g_data['orgateam']) && is_array($g_data['orgateam']) && $g_data['orgateam'][0] == 1) {
 					$g_data['orgateam'] = 1;
 				}

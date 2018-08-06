@@ -68,7 +68,7 @@ const mapsearch = {
 mapsearch.init()
 
 if ($('#mapsearch').length > 0) {
-  ajax.req('basket', 'basketchoords', {
+  ajax.req('basket', 'basketCoordinates', {
     success: function (ret) {
       if (ret.baskets != undefined && ret.baskets.length > 0) {
         mapsearch.setMarker(ret.baskets)
@@ -79,7 +79,7 @@ if ($('#mapsearch').length > 0) {
   $('#map-latLng').change(function () {
     console.log()
 
-    ajax.req('basket', 'closebaskets', {
+    ajax.req('basket', 'closeBaskets', {
       data: {
         choords: JSON.parse($('#map-latLng').val())
       },

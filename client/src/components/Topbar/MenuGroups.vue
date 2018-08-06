@@ -14,7 +14,7 @@
                     <a role="menuitem" :href="$url('forum', group.id)" class="dropdown-item"><i class="fa fa-comment-o" /> Forum</a>
                     <a role="menuitem" :href="$url('events', group.id)" class="dropdown-item"><i class="fa fa-calendar" /> Termine</a>
                     <a role="menuitem" :href="$url('wall', group.id)" class="dropdown-item"><i class="fa fa-group" /> Pinnwand</a>
-                    <a role="menuitem" :href="$url('workingGroupEdit', group.id)" class="dropdown-item"><i class="fa fa-cog" /> Gruppe verwalten</a>
+                    <a v-if="group.isBot" role="menuitem" :href="$url('workingGroupEdit', group.id)" class="dropdown-item"><i class="fa fa-cog" /> Gruppe verwalten</a>
                 </b-collapse>
             </div>
             <div class="dropdown-divider" />

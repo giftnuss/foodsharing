@@ -276,9 +276,6 @@ export function addbanana (fsid) {
   })
   $('#fs-profile-rate-comment').dialog('open')
 }
-export function login () {
-  ajreq('login', { app: 'login' })
-}
 
 export function profile (id) {
   showLoader()
