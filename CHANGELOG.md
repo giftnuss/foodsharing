@@ -15,6 +15,7 @@
 - Added possibility to change main region to a part of town (region type 9) !470 #268 @peter.toennies
 - fetching parent regions without any give regin id not possible anymore !474 #258 @peter.toennies
 - fetching parent regions without any given region ID is not possible anymore !474 #258 @peter.toennies
+- Fix #287 allowing all members of a group to edit that group !487 @NerdyProjects
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker

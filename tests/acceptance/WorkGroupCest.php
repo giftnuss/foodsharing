@@ -95,4 +95,17 @@ class WorkGroupCest
 		$I->dontSee($user['name'], '#work_group_form_members');
 		$I->see($admin['name'], '#work_group_form_administrators');
 	}
+
+	/**
+	 * @param \Codeception\Example $example
+	 * @example["unconnectedFoodsaver"]
+	 * @example["regionMember"]
+	 */
+	public function canNotEditWorkGroupAs(AcceptanceTester $I, \Codeception\Example $example)
+	{
+		$I->login($this->{$example[0]}['email']);
+		$I->amOnPage($I->groupEditUrl($this->testGroup['id']));
+		$I->seeInCurrentUrl('dashboard');
+		$I->dontSee('Bewerbungen');
+	}
 }
