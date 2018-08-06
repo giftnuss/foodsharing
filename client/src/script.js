@@ -75,7 +75,6 @@ export function initialize () {
     sleepmode.init()
 
     $('textarea.comment').autosize()
-    $('#nojs').css('display', 'none')
     $('#main').css('display', 'block')
 
     $('.moreswap').each(function () {
@@ -276,9 +275,6 @@ export function addbanana (fsid) {
     height: 450
   })
   $('#fs-profile-rate-comment').dialog('open')
-}
-export function login () {
-  ajreq('login', { app: 'login' })
 }
 
 export function profile (id) {

@@ -47,7 +47,7 @@ class EmailControl extends Control
 
 		$recip = '';
 		$mode = '';
-		if ($this->func->isOrgaTeam()) {
+		if ($this->session->isOrgaTeam()) {
 			$recip = $this->v_utils->v_form_recip_chooser();
 			$mode = $this->v_utils->v_form_select('mode', array('required' => true, 'values' => array(
 				array('id' => 1, 'name' => $this->func->s('send_as_pm')),
@@ -121,7 +121,7 @@ class EmailControl extends Control
 
 			$foodsaver = array();
 
-			if ($this->func->isBotschafter() || $this->func->isOrgaTeam()) {
+			if ($this->func->isBotschafter() || $this->session->isOrgaTeam()) {
 				if ($data['recip_choose'] == 'bezirk') {
 					$region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($this->session->getCurrentBezirkId());
 					$foodsaver = $this->foodsaverGateway->getEmailAdressen($region_ids);
@@ -131,7 +131,7 @@ class EmailControl extends Control
 					$foodsaver = $this->foodsaverGateway->getOrgateam();
 				}
 			}
-			if ($this->func->isOrgaTeam()) {
+			if ($this->session->isOrgaTeam()) {
 				if ($data['recip_choose'] == 'all') {
 					$foodsaver = $this->foodsaverGateway->getAllEmailFoodsaver();
 				} elseif ($data['recip_choose'] == 'newsletter') {

@@ -12,7 +12,7 @@ class BlogView extends View
 		foreach ($data as $d) {
 			$row_tmp = array();
 
-			if ($this->func->isOrgaTeam() || $this->func->isBotFor($d['bezirk_id'])) {
+			if ($this->session->isOrgaTeam() || $this->func->isBotFor($d['bezirk_id'])) {
 				$row_tmp[] = array('cnt' => $this->v_utils->v_activeSwitcher('blog_entry', $d['id'], $d['active']));
 			} else {
 				$row_tmp[] = array('cnt' => $this->func->s('status_' . $d['active']));

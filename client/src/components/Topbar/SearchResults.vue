@@ -1,7 +1,18 @@
 <template>
     <div>
-        <div v-if="isEmpty" class="dropdown-header alert alert-warning">
+        <div v-if="isEmpty && !isLoading" class="dropdown-header alert alert-warning">
             Es konnten keine Ergebnisse gefunden werden
+        </div>
+        <div v-if="filtered.myBuddies.length">
+            <h3 class="dropdown-header"><i class="fa fa-user" /> Meine Buddies</h3>
+            <search-result-entry v-for="buddy in filtered.myBuddies" 
+                :key="buddy.id" 
+                :href="$url('profile', buddy.id)" 
+                :title="buddy.name" 
+                :teaser="buddy.teaser"
+                :image="buddy.image"
+            />
+            <div class="dropdown-divider"></div>
         </div>
         <div v-if="filtered.myGroups.length">
             <h3 class="dropdown-header"><i class="fa fa-users" /> Meine Gruppen</h3>
@@ -93,6 +104,13 @@ function arrayFilterDuplicate(list, ignore) {
     let ids = ignore.map(e => e.id)
     return list.filter(e => ids.indexOf(e.id) == -1)
 }
+
+function match(word, e) {
+    if(e.name && e.name.toLowerCase().indexOf(word) !== -1) return true
+    if(e.teaser && e.teaser.toLowerCase().indexOf(word) !== -1) return true
+    return false
+}
+
 export default {
     components: { SearchResultEntry },
     props: {
@@ -124,21 +142,30 @@ export default {
             type: Array,
             default: () => []
         },
+        myBuddies: {
+            type: Array,
+            default: () => []
+        },
         query: {
             type: String,
             default: ''
         },
+        isLoading: {
+            type: Boolean
+        },
     },
     computed: {
         filtered() {
-            let query = this.query.toLowerCase().trim()
+            const query = this.query.toLowerCase().trim()
+            const words = query.match(/[^ ,;+.]+/g)
 
-            // filter elements, whether the query string is contained in name or teaser
-            let filterFunction = (e) => {
-                if(!query) return false
-                if(e.name && e.name.toLowerCase().indexOf(query) !== -1) return true
-                if(e.teaser && e.teaser.toLowerCase().indexOf(query) !== -1) return true
-                return false
+            // filter elements, whether all of the query words are contained somewhere in name or teaser
+            const filterFunction = (e) => {
+                if(!words.length) return false
+                for(let word of words) {
+                    if(!match(word, e)) return false
+                }
+                return true
             }
             let res = {
                 stores: this.stores.filter(filterFunction),
@@ -147,7 +174,8 @@ export default {
                 groups: this.groups.filter(filterFunction),
                 myGroups: this.myGroups.filter(filterFunction),
                 myStores: this.myStores.filter(filterFunction),
-                myRegions: this.myRegions.filter(filterFunction)
+                myRegions: this.myRegions.filter(filterFunction),
+                myBuddies: this.myBuddies.filter(filterFunction)
             }
 
             // additionally remove elements in gobal search wich are already contained in the private lists
@@ -155,6 +183,7 @@ export default {
             res.stores = arrayFilterDuplicate(res.stores, res.myStores)
             res.groups = arrayFilterDuplicate(res.groups, res.myGroups)
             res.regions = arrayFilterDuplicate(res.regions, res.myRegions)
+            res.users = arrayFilterDuplicate(res.users, res.myBuddies)
             
             // because myGroups are still contained in the regions reponse, we filter them out additionally
             res.regions = arrayFilterDuplicate(res.regions, res.myGroups)
@@ -168,7 +197,8 @@ export default {
                 !this.filtered.groups.length &&
                 !this.filtered.myGroups.length &&
                 !this.filtered.myStores.length &&
-                !this.filtered.myRegions.length
+                !this.filtered.myRegions.length &&
+                !this.filtered.myBuddies.length 
             )
         }
     }

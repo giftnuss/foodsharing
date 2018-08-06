@@ -127,7 +127,7 @@ class DashboardControl extends Control
 		 * User is foodsaver
 		 */
 
-		if ($this->user['rolle'] > 0 && !$this->func->getBezirkId()) {
+		if ($this->user['rolle'] > 0 && !$this->session->getCurrentBezirkId()) {
 			$this->func->addJs('becomeBezirk();');
 		}
 

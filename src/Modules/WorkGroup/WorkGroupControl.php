@@ -61,7 +61,7 @@ class WorkGroupControl extends Control
 	private function mayEdit($group)
 	{
 		/* this actually only implements access for bots for _direct parents_, not all hierarchical parents */
-		return $this->func->isOrgaTeam() || $this->func->isBotFor($group['id']) || $this->func->isBotFor($group['parent_id']);
+		return $this->session->isOrgaTeam() || $this->session->isAdminFor($group['id']) || $this->session->isAdminFor($group['parent_id']);
 	}
 
 	private function mayAccess($group)
@@ -159,15 +159,14 @@ class WorkGroupControl extends Control
 	{
 		$groupId = $request->query->getInt('id');
 
-		$bids = $this->regionGateway->getFsBezirkIds($this->func->fsId());
-		if (!$this->func->isOrgaTeam() && !$this->func->isBotForA($bids, true, true)) {
-			$this->func->go('/?page=dashboard');
-		}
-
 		if ($group = $this->model->getGroup($groupId)) {
-			if ($group['type'] != 7) {
+			if ($group['type'] != Type::WORKING_GROUP) {
 				$this->func->go('/?page=dashboard');
 			}
+			if (!$this->mayEdit($group)) {
+				$this->func->go('/?page=dashboard');
+			}
+
 			$this->func->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
 			$editWorkGroupRequest = EditWorkGroupData::fromGroup($group);
 			$form = $this->formFactory->getFormFactory()->create(WorkGroupForm::class, $editWorkGroupRequest);

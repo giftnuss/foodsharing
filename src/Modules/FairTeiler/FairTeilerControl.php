@@ -120,7 +120,7 @@ class FairTeilerControl extends Control
 				<input type="hidden" name="ft-publicurl" id="ft-publicurl" value="' . BASE_URL . '/' . $this->bezirk['urlname'] . '/fairteiler/' . $this->fairteiler['id'] . '_' . $this->fairteiler['urlname'] . '" />
 				');
 
-			if ($request->query->has('delete') && ($this->func->isOrgaTeam() || $this->func->isBotFor($this->bezirk_id))) {
+			if ($request->query->has('delete') && ($this->session->isOrgaTeam() || $this->func->isBotFor($this->bezirk_id))) {
 				$this->delete();
 			}
 		}
@@ -201,7 +201,7 @@ class FairTeilerControl extends Control
 			array('name' => $this->func->s('back'), 'href' => '/?page=fairteiler&sub=ft&bid=' . $this->bezirk_id . '&id=' . $this->fairteiler['id'])
 		);
 
-		if ($this->func->isOrgaTeam() || $this->func->isBotFor($this->bezirk_id)) {
+		if ($this->session->isOrgaTeam() || $this->func->isBotFor($this->bezirk_id)) {
 			$items[] = array('name' => $this->func->s('delete'), 'click' => 'if(confirm(\'' . $this->func->sv('delete_sure', $this->fairteiler['name']) . '\')){goTo(\'/?page=fairteiler&sub=ft&bid=' . $this->bezirk_id . '&id=' . $this->fairteiler['id'] . '&delete=1\');}return false;');
 		}
 
@@ -236,7 +236,7 @@ class FairTeilerControl extends Control
 	public function check(Request $request)
 	{
 		if ($ft = $this->fairteiler) {
-			if ($this->func->isOrgaTeam() || $this->func->isBotFor($ft['bezirk_id'])) {
+			if ($this->session->isOrgaTeam() || $this->func->isBotFor($ft['bezirk_id'])) {
 				if ($request->query->has('agree')) {
 					if ($request->query->get('agree')) {
 						$this->accept();
@@ -299,7 +299,7 @@ class FairTeilerControl extends Control
 
 		if ($request->request->get('form_submit') == 'fairteiler') {
 			if ($this->handleAddFt($request)) {
-				if ($this->func->isBotFor($this->bezirk_id) || $this->func->isOrgaTeam()) {
+				if ($this->func->isBotFor($this->bezirk_id) || $this->session->isOrgaTeam()) {
 					$this->func->info($this->func->s('fairteiler_add_success'));
 				} else {
 					$this->func->info($this->func->s('fairteiler_prepare_success'));
@@ -358,7 +358,7 @@ class FairTeilerControl extends Control
 		$data = $this->prepareInput($request);
 		if ($this->validateInput($data)) {
 			$status = 0;
-			if ($this->func->isBotFor($this->bezirk_id) || $this->func->isOrgaTeam()) {
+			if ($this->func->isBotFor($this->bezirk_id) || $this->session->isOrgaTeam()) {
 				$status = 1;
 			}
 			$data['status'] = $status;
@@ -378,7 +378,7 @@ class FairTeilerControl extends Control
 	{
 		if (
 			$this->func->isBotFor($this->bezirk_id) ||
-			$this->func->isOrgaTeam() ||
+			$this->session->isOrgaTeam() ||
 			(
 				isset($this->follower['all'][$this->func->fsId()]) &&
 				$this->follower['all'][$this->func->fsId()] == 'verantwortlich'

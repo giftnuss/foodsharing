@@ -138,7 +138,7 @@ class EventView extends View
 
 		$public_el = '';
 
-		if ($this->func->isOrgaTeam()) {
+		if ($this->session->isOrgaTeam()) {
 			$chk = '';
 			if (isset($g_data['public']) && $g_data['public'] == 1) {
 				$chk = ' checked="checked"';
@@ -182,7 +182,7 @@ class EventView extends View
 	{
 		$menu = array();
 
-		if ($event['fs_id'] == $this->func->fsId() || $this->func->isOrgaTeam()) {
+		if ($event['fs_id'] == $this->func->fsId() || $this->session->isOrgaTeam()) {
 			$menu[] = array(
 				'name' => 'Event bearbeiten',
 				'href' => '/?page=event&sub=edit&id=' . (int)$event['id']

@@ -8,6 +8,7 @@ $navbar-padding-y: 0.1em;
 $navbar-dark-color: rgba(#ffffff, 0.7) ;
 $navbar-dark-hover-color: rgba(#ffffff, 1) ;
 
+
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
@@ -106,4 +107,12 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
     &::after {
         display: none;
     }
+}
+
+// bring jquery-ui 'ui-front' elements in front of bootstrap elements  
+.ui-front {
+    z-index: $zindex-tooltip;
+}
+.ui-front.ui-autocomplete {
+    z-index: #{$zindex-tooltip+1};
 }

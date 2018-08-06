@@ -8,10 +8,11 @@ use Foodsharing\Modules\Core\Control;
 class IndexControl extends Control
 {
 	private $contentGateway;
+	private $indexGateway;
 
-	public function __construct(IndexModel $model, IndexView $view, ContentGateway $contentGateway)
+	public function __construct(IndexGateway $indexGateway, IndexView $view, ContentGateway $contentGateway)
 	{
-		$this->model = $model;
+		$this->indexGateway = $indexGateway;
 		parent::__construct();
 		$this->contentGateway = $contentGateway;
 		$this->view = $view;
@@ -21,7 +22,7 @@ class IndexControl extends Control
 	{
 		$this->func->addTitle('Rette mit!');
 
-		$gerettet = (int)$this->model->getGerettet();
+		$gerettet = (int)$this->indexGateway->getFetchedWeight();
 
 		if ($gerettet == 0) {
 			$gerettet = 762338;

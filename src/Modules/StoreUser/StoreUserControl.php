@@ -84,7 +84,7 @@ class StoreUserControl extends Control
 				if ((!$betrieb['verantwortlich'] && $this->func->isBotFor($betrieb['bezirk_id']))) {
 					$betrieb['verantwortlich'] = true;
 					$this->func->info('<strong>' . $this->func->s('reference') . ':</strong> ' . $this->func->s('not_responsible_but_bot'));
-				} elseif (!$betrieb['verantwortlich'] && $this->func->isOrgaTeam()) {
+				} elseif (!$betrieb['verantwortlich'] && $this->session->isOrgaTeam()) {
 					$betrieb['verantwortlich'] = true;
 					$this->func->info('<strong>' . $this->func->s('reference') . ':</strong> ' . $this->func->s('not_responsible_but_orga'));
 				}
@@ -185,7 +185,7 @@ class StoreUserControl extends Control
 					$menu[] = array('name' => $this->func->s('edit_team'), 'click' => '$(\'#teamEditor\').dialog({modal:true,width:425,title:\'' . $this->func->s('edit_team') . '\'});');
 					$menu[] = array('name' => $this->func->s('edit_fetchtime'), 'click' => '$(\'#bid\').val(' . (int)$betrieb['id'] . ');$(\'#dialog_abholen\').dialog(\'open\');return false;');
 				}
-				if (!$betrieb['verantwortlich'] || $this->func->isOrgaTeam() || $this->func->isBotschafter()) {
+				if (!$betrieb['verantwortlich'] || $this->session->isOrgaTeam() || $this->func->isBotschafter()) {
 					$menu[] = array('name' => $this->func->s('betrieb_sign_out'), 'click' => 'u_betrieb_sign_out(' . (int)$betrieb['id'] . ');return false;');
 				}
 

@@ -72,7 +72,7 @@ class StoreUserView extends View
 			$click = 'profile(' . (int)$fs['id'] . ');';
 			if ($fs['verantwortlich'] == 1) {
 				$class .= ' verantwortlich';
-			} elseif ($betrieb['verantwortlich'] || $this->func->isBotFor($betrieb['bezirk_id']) || $this->func->isOrgaTeam()) {
+			} elseif ($betrieb['verantwortlich'] || $this->func->isBotFor($betrieb['bezirk_id']) || $this->session->isOrgaTeam()) {
 				$class .= ' context-team';
 				$click = '';
 			}
@@ -133,7 +133,7 @@ class StoreUserView extends View
 
 				$class = '';
 				$click = 'profile(' . (int)$fs['id'] . ');';
-				if ($betrieb['verantwortlich'] || $this->func->isBotFor($betrieb['bezirk_id']) || $this->func->isOrgaTeam()) {
+				if ($betrieb['verantwortlich'] || $this->func->isBotFor($betrieb['bezirk_id']) || $this->session->isOrgaTeam()) {
 					$class .= ' context-jumper';
 					$click = '';
 				}
@@ -389,7 +389,7 @@ class StoreUserView extends View
 				if (!$ago && $option['verantwortlich'] && $fs['confirmed'] == 0) {
 					$aclass = 'context-unconfirmed';
 					$click = '';
-				} elseif (!$ago && ($option['verantwortlich'] || $this->func->isBotFor($option['bezirk_id']) || $this->func->isOrgaTeam())) {
+				} elseif (!$ago && ($option['verantwortlich'] || $this->func->isBotFor($option['bezirk_id']) || $this->session->isOrgaTeam())) {
 					$aclass .= 'context-confirmed';
 					$click = '';
 				}
@@ -440,7 +440,7 @@ class StoreUserView extends View
 
 		$dellink = '';
 
-		if (!$ago && isset($option['field']['additional']) && ($option['verantwortlich'] || $this->func->isOrgaTeam() || $this->func->isBotFor($option['bezirk_id']))) {
+		if (!$ago && isset($option['field']['additional']) && ($option['verantwortlich'] || $this->session->isOrgaTeam() || $this->func->isBotFor($option['bezirk_id']))) {
 			$dellink = '<br /><a class="button" href="#" onclick="if(confirm(\'Termin wirklich löschen?\')){ajreq(\'deldate\',{app:\'betrieb\',id:\'' . (int)$_GET['id'] . '\',time:\'' . $option['field']['datetime'] . '\'});}return false;">Termin löschen</a>';
 		}
 

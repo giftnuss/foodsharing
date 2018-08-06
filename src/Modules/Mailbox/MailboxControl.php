@@ -71,7 +71,7 @@ class MailboxControl extends Control
 		$this->func->addBread('Mailbox Manager', '/?page=mailbox&a=manage');
 		$this->func->addBread('Neue Mailbox');
 
-		if ($this->func->isOrgaTeam()) {
+		if ($this->session->isOrgaTeam()) {
 			if (isset($_POST['name'])) {
 				if ($mailbox = $this->model->filterName($_POST['name'])) {
 					if ($this->model->addMailbox($mailbox, 1)) {
@@ -90,7 +90,7 @@ class MailboxControl extends Control
 	public function manage()
 	{
 		$this->func->addBread('Mailbox Manager');
-		if ($this->func->isOrgaTeam()) {
+		if ($this->session->isOrgaTeam()) {
 			if (isset($_POST['mbid'])) {
 				global $g_data;
 
