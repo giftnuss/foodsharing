@@ -102,7 +102,7 @@ class RegionControl extends Control
 		}
 		if ($this->mayAccessApplications($region['id'])) {
 			if ($requests = $this->gateway->listRequests($region['id'])) {
-				$menu[] = ['name' => $this->translator->trans('group.applications') . ' <strong>(' . count($requests) . ')</strong>', 'href' => '/?page=bezirk&bid=' . $region['id'] . '&sub=applications'];
+				$menu[] = ['name' => $this->translator->trans('group.applications') . ' (' . count($requests) . ')', 'href' => '/?page=bezirk&bid=' . $region['id'] . '&sub=applications'];
 			}
 		}
 
