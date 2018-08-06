@@ -113,3 +113,6 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
 .ui-front {
     z-index: $zindex-tooltip;
 }
+.ui-front.ui-autocomplete {
+    z-index: #{$zindex-tooltip+1};
+}
