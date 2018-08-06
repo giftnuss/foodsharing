@@ -16,6 +16,9 @@
 - fetching parent regions without any give regin id not possible anymore !474 #258 @peter.toennies
 - fetching parent regions without any given region ID is not possible anymore !474 #258 @peter.toennies
 - Fix #287 allowing all members of a group to edit that group !487 @NerdyProjects
+- Fix #286 making group applications work again !489 @NerdyProjects
+- Fix #255 do not improperly render html tags in region side nav !489 @NerdyProjects
+- Fix Database commit missing after migrations in dev/test environment
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
