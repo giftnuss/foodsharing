@@ -304,7 +304,7 @@ class ProfileView extends View
 				}
 				$bananacount .= '
 				<tr class="' . $odd . ' bpost">
-					<td class="img"><a class="tooltip" title="' . $b['name'] . '" href="#"><img onclick="profile(' . $b['id'] . ');return false;" src="' . $this->func->img($b['photo']) . '"></a></td>
+					<td class="img"><a title="' . $b['name'] . '" href="#"><img onclick="profile(' . $b['id'] . ');return false;" src="' . $this->func->img($b['photo']) . '"></a></td>
 					<td><span class="msg">' . nl2br($b['msg']) . '</span>
 					<div class="foot">
 						<span class="time">' . $this->func->niceDate($b['time_ts']) . ' von ' . $b['name'] . '</span>
