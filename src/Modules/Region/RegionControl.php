@@ -60,7 +60,6 @@ class RegionControl extends Control
 		RegionGateway $gateway,
 		RegionHelper $regionHelper
 	) {
-		$this->forumModerated = false;
 		$this->model = $model;
 		$this->gateway = $gateway;
 		$this->eventGateway = $eventGateway;
@@ -219,9 +218,10 @@ class RegionControl extends Control
 		$form->handleRequest($request);
 		if ($form->isSubmitted()) {
 			if ($form->isValid() && $this->forumPermissions->mayPostToRegion($region['id'], $ambassadorForum)) {
-				$threadId = $this->forumService->createThread($this->session->id(), $data->title, $data->body, $region, $ambassadorForum, $this->forumModerated);
+				$moderated = !$this->session->user('verified') || $this->region['moderated'];
+				$threadId = $this->forumService->createThread($this->session->id(), $data->title, $data->body, $region, $ambassadorForum, $moderated);
 				$this->forumGateway->followThread($this->session->id(), $threadId);
-				if ($this->forumModerated) {
+				if ($moderated) {
 					$this->func->info($this->translator->trans('forum.hold_back_for_moderation'));
 				}
 				$this->func->go($this->forumService->url($region['id'], $ambassadorForum));

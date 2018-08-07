@@ -378,6 +378,7 @@ class Session
 			'email' => $fs['email'],
 			'rolle' => $fs['rolle'],
 			'type' => $fs['type'],
+			'verified' => $fs['verified'],
 			'token' => $fs['token'],
 			'mailbox_id' => $fs['mailbox_id'],
 			'gender' => $fs['geschlecht'],
