@@ -2,7 +2,7 @@
 
 $I = new AcceptanceTester($scenario);
 
-$I->wantTo('Check if an someone edditing a profile sees return to profile button and if return to profile button points to the edited profile');
+$I->wantTo('Check if an someone editing a profile sees return to profile button and if return to profile button points to the edited profile');
 
 $member = $I->createFoodsaver();
 $region = $I->createRegion(null, 0, 3);
