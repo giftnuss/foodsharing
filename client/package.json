@@ -88,20 +88,6 @@
     "webpack-serve": "^0.2.0",
     "yaml-loader": "^0.5.0"
   },
-  "babel": {
-    "presets": [
-      [
-        "@babel/preset-env",
-        {
-          "useBuiltIns": "usage"
-        }
-      ]
-    ]
-  },
-  "browserslist": [
-    "> 0.5%",
-    "ie_mob >=11"
-  ],
   "eslintConfig": {
     "parser": "vue-eslint-parser",
     "parserOptions": {

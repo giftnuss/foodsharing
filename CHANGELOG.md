@@ -24,6 +24,8 @@
 - Fix forum moderation for unverified users / certain regions !490 @NerdyProjects
 - Remove bootstrap tooltip class from profile pictures in banana view !493 @NerdyProjects
 - Wallpost pictures are displayed again #279 !497 @NerdyProjects
+- Move babel config into webpack config to avoid loading errors !494 @NerdyProjects
+- Add fetch polyfill to support ie11 !494 @NerdyProjects
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
