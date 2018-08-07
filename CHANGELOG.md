@@ -20,6 +20,7 @@
 - Fix #255 do not improperly render html tags in region side nav !489 @NerdyProjects
 - Fix Database commit missing after migrations in dev/test environment !489 @NerdyProjects
 - We were losing some emails because subjects contained new lines, filter this now !491 @NerdyProjects
+- Fix forum moderation for unverified users / certain regions !490 @NerdyProjects
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
@@ -35,6 +36,7 @@
 ## Dev/Test/CI stuff
 - Add test for workgroup application / acceptance process !489 @NerdyProjects
 - Increase deployer task timeout for more reliable deployments @NerdyProjects
+- Add test for forum post creation / moderation / activation !490 @NerdyProjects
 
 # 2018-07-22 Hotfix
 - Fix links to group application details
