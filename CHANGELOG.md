@@ -21,6 +21,7 @@
 - Fix Database commit missing after migrations in dev/test environment !489 @NerdyProjects
 - We were losing some emails because subjects contained new lines, filter this now !491 @NerdyProjects
 - Fix forum moderation for unverified users / certain regions !490 @NerdyProjects
+- Remove bootstrap tooltip class from profile pictures in banana view !493 @NerdyProjects
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
