@@ -27,7 +27,7 @@ class ActivityModel extends Db
 			$updates = $up;
 		}
 
-		if ($up = $this->activityGateway->fetchAllWallpostsFromFoodBasekts($this->session->id(), $page)) {
+		if ($up = $this->activityGateway->fetchAllWallpostsFromFoodBaskets($this->session->id(), $page)) {
 			$updates = array_merge($updates, $up);
 		}
 

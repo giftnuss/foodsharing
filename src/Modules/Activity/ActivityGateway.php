@@ -56,7 +56,7 @@ class ActivityGateway extends BaseGateway
 		);
 	}
 
-	public function fetchAllWallpostsFromFoodBasekts($fsId, $page): array
+	public function fetchAllWallpostsFromFoodBaskets($fsId, $page): array
 	{
 		$stm = '
 			SELECT
