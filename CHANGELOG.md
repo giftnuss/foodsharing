@@ -34,6 +34,7 @@
 
 ## Dev/Test/CI stuff
 - Add test for workgroup application / acceptance process !489 @NerdyProjects
+- Increase deployer task timeout for more reliable deployments @NerdyProjects
 
 # 2018-07-22 Hotfix
 - Fix links to group application details
