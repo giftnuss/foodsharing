@@ -276,7 +276,7 @@ class BasketGateway extends BaseGateway
 	{
 		if (!empty($types)) {
 			foreach ($types as $type) {
-				$this->db->insert('fs_basekt_has_types', ['basket_id' => $basket_id, 'types_id' => $type]);
+				$this->db->insert('fs_basket_has_types', ['basket_id' => $basket_id, 'types_id' => $type]);
 			}
 		}
 	}
