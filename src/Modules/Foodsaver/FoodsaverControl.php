@@ -82,7 +82,7 @@ class FoodsaverControl extends Control
 				$this->func->addContent($this->view->foodsaver_form($data['name'] . ' ' . $data['nachname'] . ' bearbeiten', $regionDetails));
 
 				$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-					array('href' => '/profile/' . $data['id'], 'name' => $this->func->s('back_to_overview'))
+					array('href' => '/profile/' . $data['id'], 'name' => $this->func->s('back_to_profile'))
 				)), $this->func->s('actions')), CNT_RIGHT);
 
 				if ($this->session->isOrgaTeam()) {

@@ -45,7 +45,7 @@ $g_lang['foodsaver_deleted'] = 'Foodsaver gelöscht';
 $g_lang['fs_id'] = 'Foodsharing-ID';
 $g_lang['upload_new_photo'] = 'Neues Foto hochladen';
 $g_lang['edit_photo'] = 'Foto bearbeiten';
-$g_lang['back_to_overview'] = 'Zurück zum Profil';
+$g_lang['back_to_profile'] = 'Zurück zum Profil';
 
 $g_lang['posible_restore_account'] = 'Der Account kann nach dem Löschen wieder hergestellt werden.';
 $g_lang['delete_now'] = 'Account jetzt löschen';

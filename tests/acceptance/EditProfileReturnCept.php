@@ -1,14 +1,17 @@
 <?php
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
 $I = new AcceptanceTester($scenario);
 
-$I->wantTo('Check if an someone editing a profile sees return to profile button and if return to profile button points to the edited profile');
+$I->wantTo('Check if someone editing a profile sees return to profile button and if return to profile button points to the edited profile');
+
+$region = $I->createRegion(null, 0, Type::REGION);
 
 $member = $I->createFoodsaver();
-$region = $I->createRegion(null, 0, 3);
-$I->addBezirkMember($region['id'], $member['id']);
 $ambassador = $I->createAmbassador(null, ['bezirk_id' => $region['id']]);
+
 $I->addBezirkAdmin($region['id'], $ambassador['id']);
+$I->addBezirkMember($region['id'], $member['id']);
 
 $I->login($ambassador['email']);
 
