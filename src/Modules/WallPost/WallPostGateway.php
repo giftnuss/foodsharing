@@ -109,7 +109,7 @@ class WallPostGateway extends BaseGateway
 							'thumb' => 'images/wallpost/thumb_' . $img['file']
 						);
 					}
-					$wp[$key]['gallery'] = $gallery;
+					$posts[$key]['gallery'] = $gallery;
 				}
 			}
 		}
