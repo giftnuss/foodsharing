@@ -10,7 +10,7 @@
 - introduce new font fontawesome 5.2 !500 @peter.toennies
 
 ## Bugfixes
-- Changed button to return to profile on the profile editing page #285 @leisinger.sebastian
+- Changed button to return to profile on the profile editing page !492 #285 @leisinger.sebastian
 - Add missing tagedit lib on mailbox edit page !459 #248 @nicksellen
 - reenabling source maps on the production build !468 #254 @alangecker
 - removed dead login button and updated registration info for food baskets #240 !457 @michi-zuri
