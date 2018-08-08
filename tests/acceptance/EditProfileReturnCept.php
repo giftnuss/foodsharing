@@ -1,4 +1,5 @@
 <?php
+
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
 $I = new AcceptanceTester($scenario);
