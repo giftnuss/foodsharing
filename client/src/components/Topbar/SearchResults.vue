@@ -61,7 +61,7 @@
             <div class="dropdown-divider"></div>
         </div>
         <div v-if="filtered.users.length">
-            <h3 class="dropdown-header"><i class="fa fa-child" /> Foodsaver</h3>
+            <h3 class="dropdown-header"><i class="fa fa-child" /> Personen</h3>
             <search-result-entry v-for="user in filtered.users" 
                 :key="user.id" 
                 :href="$url('profile', user.id)" 
@@ -178,14 +178,14 @@ export default {
                 myBuddies: this.myBuddies.filter(filterFunction)
             }
 
-            // additionally remove elements in gobal search wich are already contained in the private lists
+            // additionally remove elements in global search which are already contained in the private lists
 
             res.stores = arrayFilterDuplicate(res.stores, res.myStores)
             res.groups = arrayFilterDuplicate(res.groups, res.myGroups)
             res.regions = arrayFilterDuplicate(res.regions, res.myRegions)
             res.users = arrayFilterDuplicate(res.users, res.myBuddies)
             
-            // because myGroups are still contained in the regions reponse, we filter them out additionally
+            // because myGroups are still contained in the regions response, we filter them out additionally
             res.regions = arrayFilterDuplicate(res.regions, res.myGroups)
             return res
         },
