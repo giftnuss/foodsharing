@@ -5,18 +5,21 @@ namespace Foodsharing\Modules\Region;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Permissions\ForumPermissions;
 
 class RegionXhr extends Control
 {
 	private $responses;
 	private $forumGateway;
+	private $forumPermissions;
 	private $regionHelper;
 	private $twig;
 
-	public function __construct(Db $model, ForumGateway $forumGateway, RegionHelper $regionHelper, \Twig\Environment $twig)
+	public function __construct(Db $model, ForumGateway $forumGateway, ForumPermissions $forumPermissions, RegionHelper $regionHelper, \Twig\Environment $twig)
 	{
 		$this->model = $model;
 		$this->forumGateway = $forumGateway;
+		$this->forumPermissions = $forumPermissions;
 		$this->regionHelper = $regionHelper;
 		$this->twig = $twig;
 		$this->responses = new XhrResponses();
@@ -64,7 +67,8 @@ class RegionXhr extends Control
 			$body = nl2br($body);
 			$body = $this->func->autolink($body);
 
-			if ($bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid'])) {
+			$check = $this->forumPermissions->mayPostToThread($_GET['tid']);
+			if ($check && $bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid'])) {
 				if ($post_id = $this->forumGateway->addPost($this->session->id(), $_GET['tid'], $body)) {
 					if ($follower = $this->forumGateway->getThreadFollower($this->session->id(), $_GET['tid'])) {
 						$theme = $this->model->getVal('name', 'theme', $_GET['tid']);
