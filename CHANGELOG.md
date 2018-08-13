@@ -219,6 +219,8 @@ Also, we introduce new frontend technology here. I hope we did not break too muc
 - data privacy : removed foodsaver / ambassador selection from map. #165 by @k.miklobusec
 - fixed potential security issue in profile picture uploads. !371 #84 @theolampert
 - updated fpdi plugin to v2.0.2 !351 #168 by @peter.toennies
+- check user permissions in quickreply() in RegionXhr !499 #85 @anna.os
+- fix exception if request have no "msg"-Attribute in quickreply() in WallPostXhr !499 @annaos
 
 ## Refactoring
 - complete tidying up of all team related files !321 by @peter.toennies
