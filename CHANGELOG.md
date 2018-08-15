@@ -27,6 +27,7 @@
 - Wallpost pictures are displayed again #279 !497 @NerdyProjects
 - Move babel config into webpack config to avoid loading errors !494 @NerdyProjects
 - Add fetch polyfill to support ie11 !494 @NerdyProjects
+- fix wrong usage of region ID lists for post permissions !503 #308 @peter.toennies
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
