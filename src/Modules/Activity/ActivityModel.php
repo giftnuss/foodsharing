@@ -181,7 +181,7 @@ class ActivityModel extends Db
 
 	public function loadForumUpdates($page = 0, $bids_not_load = false)
 	{
-		$tmp = $this->session->getRegionIds();
+		$tmp = $this->session->listRegionIDs();
 		$bids = array();
 		if ($tmp === false || count($tmp) === 0) {
 			return false;

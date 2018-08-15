@@ -25,10 +25,7 @@ class ForumPermissions
 		if ($this->session->isOrgaTeam()) {
 			return true;
 		}
-		if (!in_array($regionId, $this->session->getRegionIds())) {
-			return false;
-		}
-		if ($ambassadorForum && !$this->session->isAdminFor($regionId)) {
+		if (($ambassadorForum && !$this->session->isAdminFor($regionId)) || !in_array($regionId, $this->session->listRegionIDs(), true)) {
 			return false;
 		}
 
@@ -81,17 +78,17 @@ class ForumPermissions
 
 	public function mayAccessAmbassadorBoard($regionId): bool
 	{
-		return $this->mayPostToRegion($regionId, 1);
+		return $this->mayPostToRegion($regionId, true);
 	}
 
 	public function mayActivateThreads($regionId): bool
 	{
-		return $this->mayPostToRegion($regionId, 1);
+		return $this->mayPostToRegion($regionId, true);
 	}
 
-	public function mayChangeStickyness($regionId): bool
+	public function mayChangeStickiness($regionId): bool
 	{
-		return $this->mayPostToRegion($regionId, 1);
+		return $this->mayPostToRegion($regionId, true);
 	}
 
 	public function mayDeletePost($post): bool
