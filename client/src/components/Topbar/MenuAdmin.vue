@@ -93,7 +93,7 @@ export default {
             if(this.may.handleReports) {
                 items.push(    {
                     url: '/?page=report&sub=uncom',
-                    icon: 'far fa-exclamation',
+                    icon: 'fas fa-exclamation',
                     label: this.$i18n('menu_reports')
                 })
             }
