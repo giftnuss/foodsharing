@@ -66,7 +66,7 @@ export default {
                     },
                     {
                         url: '/?page=mailbox&a=manage',
-                        icon: 'fas fa-envelope-o',
+                        icon: 'far fa-envelope',
                         label: this.$i18n('menu_mailbox_manage')
                     },
                     {

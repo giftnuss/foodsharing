@@ -73,13 +73,13 @@ p {
 .icon img {
     width: 100%;
 }
-.fa.fa-close {
+.fas.fa-times {
     display: none;
 }
 .list-group-item:hover .icon {
     display: none;
 }
-.list-group-item:hover .fa.fa-close {
+.list-group-item:hover .fas.fa-times {
     display: block;
 }
 .nowrap {
