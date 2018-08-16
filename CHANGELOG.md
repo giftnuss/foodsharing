@@ -68,6 +68,7 @@ IE11, Safari and slightly older androids should work again, although I can only 
 - Groups in the menu are also keyboard navigatable !515 #314 @theolampert @NerdyProjects
 - Enable autofill username/password for login !515 @theolampert @NerdyProjects
 - Fix display of avatars for users without avatars !520 @theolampert @NerdyProjects
+- Fix conversation name when changing firm #294 @surrim
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker

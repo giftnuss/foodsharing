@@ -352,6 +352,14 @@ class StoreModel extends Db
 			$data['status_date'] = date('Y-m-d H:i:s');
 		}
 
+		$name = $data['name'];
+		if ($tcid = $this->storeGateway->getBetriebConversation($id, false)) {
+			$this->messageModel->renameConversation($tcid, 'Team ' . $name);
+		}
+		if ($scid = $this->storeGateway->getBetriebConversation($id, true)) {
+			$this->messageModel->renameConversation($scid, 'Springer ' . $name);
+		}
+
 		return $this->update('
 		UPDATE 	`fs_betrieb`
 
@@ -363,7 +371,7 @@ class StoreModel extends Db
 				`lon` =  ' . $this->strval($data['lon']) . ',
 				`kette_id` =  ' . (int)$data['kette_id'] . ',
 				`betrieb_kategorie_id` =  ' . (int)$data['betrieb_kategorie_id'] . ',
-				`name` =  ' . $this->strval($data['name']) . ',
+				`name` =  ' . $this->strval($name) . ',
 				`str` =  ' . $this->strval($data['str']) . ',
 				`hsnr` =  ' . $this->strval($data['hsnr']) . ',
 				`status_date` =  ' . $this->dateval($data['status_date']) . ',
