@@ -162,7 +162,7 @@ class XhrDialog
 						<input type="hidden" name="oid" value="' . $id . '" />
 						<input type="hidden" name="inid" value="' . $in_id . '" />
 					</form>
-					<iframe frameborder="0" style="width:1px;height:1px;opacity:0;" name="' . $in_id . '-iframe" src="/empty.html"></iframe>
+					<iframe frameborder="0" style="width:1px;height:1px;opacity:0;" name="' . $in_id . '-iframe"></iframe>
 					<div style="clear:both;"></div>
 				</div>
 				

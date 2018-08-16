@@ -329,7 +329,7 @@ class MailboxView extends View
 										</form>
 									</div>
 	
-									<iframe width="1" height="1" frameborder="0" name="et-upload" src="empty.html"></iframe>
+									<iframe width="1" height="1" frameborder="0" name="et-upload"></iframe>
 									<ul id="et-file-list">
 													
 									</ul>
