@@ -1,7 +1,7 @@
 <template>
     <nav-item-dropdown tooltip="Nachrichten" no-caret right class="topbar-messages" ref="dropdown">
         <template slot="button-content">
-            <i class="fa fa-comments"/>
+            <i class="fas fa-comments"/>
             <span v-if="unread" class="badge badge-danger">{{ unread }}</span>
         </template>
         <div class="list-group">
@@ -16,7 +16,7 @@
         </div>
         <div class="list-grou-item p-2 text-right">
             <a :href="$url('conversations')" class="btn btn-sm btn-secondary">
-                <i class="fa fa-comments" /> Alle Nachrichten
+                <i class="fas fa-comments" /> Alle Nachrichten
             </a>
         </div>
     </nav-item-dropdown>
@@ -58,4 +58,3 @@ export default {
     }
 }
 </style>
- 

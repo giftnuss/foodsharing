@@ -8,7 +8,7 @@
                 <a href="#" @click="$emit('remove', bell.id)">
                     <i v-if="bell.icon" :class="'icon '+bell.icon" />
                     <div v-if="bell.image" class="icon"><img :src="bell.image" /></div>
-                    <i class="fa fa-close" />
+                    <i class="fas fa-times" />
                     <!-- <div :class="['avatar', 'avatar_'+avatars.length]">
                         <div v-for="avatar in avatars" :key="avatar" :style="{backgroundImage: `url('${avatar}')`}" />
                     </div> -->

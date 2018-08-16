@@ -109,7 +109,7 @@ var join = {
       $('.step' + step).show()
       $('.linklist.join li').removeClass('active').children('a').children('i').remove()
       $('.linklist.join li.step' + step).addClass('active')
-      $('.linklist.join li.step' + step).removeClass('hidden').children('a').append('<i class="fa fa-hand-o-right"></i>')
+      $('.linklist.join li.step' + step).removeClass('hidden').children('a').append('<i class="far hand-point-right"></i>')
 
       if (step === 2) join.loadMap()
 

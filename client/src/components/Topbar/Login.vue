@@ -33,7 +33,7 @@
             >
         </div>
         <a v-if="!isLoading " href="#" class="btn btn-secondary btn-sm" @click="submit">
-            <i class="fa fa-arrow-right" />
+            <i class="fas fa-arrow-right" />
         </a>
         <a v-else class="btn btn-light btn-sm loadingButton" @click="submit">
             <img src="/img/469.gif" />

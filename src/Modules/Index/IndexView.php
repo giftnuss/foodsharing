@@ -132,12 +132,12 @@ class IndexView extends View
 			</div>
 			<div class="pure-u-1 pure-u-md-1-5">
 				<h2><span class="clickable" onclick="alert(\'Du kannst Deine eigenen überschüssigen Lebensmittel der lokalen foodsharing-Community anbieten und Lebensmittel bei anderen Community-Mitgliedern abholen. Über die Plattform könnt Ihr Kontakt aufnehmen, um die Übergabe zu organisieren.\
-					\');"><i class="fa fa-shopping-basket whatiswhaticons" aria-hidden="true"></i>
+					\');"><i class="fas fa-shopping-basket whatiswhaticons" aria-hidden="true"></i>
 				<span class="iconlegend">Essenskörbe</span></span></h2>
 			</div>
 			<div class="pure-u-1 pure-u-md-1-5">
 				<h2><span class="clickable" onclick="alert(\'Der Fair-Teiler ist wie ein „Umschlagplatz“ für Lebensmittel, zu dem Du Lebensmittel bringen und von dort gratis mitnehmen darfst. Als Fair-Teiler dient ein Regal und/oder ein Kühlschrank. Du findest unsere Fair-Teiler an gut zugänglichen Orten wie in privaten oder kommunalen Räumen, auf dem Uni-Gelände, in Vereinsräumen u. v. m. Die Fair-Teiler können auf unserer Plattform eingetragen und somit für alle Nutzer*innen auf einer Karte angezeigt werden.\n\nEs gibt Fair-Teiler mit geregelten Öffnungszeiten und solche, die rund um die Uhr zugänglich sind.\nUnsere Fair-Teiler-Regeln und -Voraussetzungen, etwa der Hygieneplan und die Verantwortlichkeit eines betriebsverantwortlichen Foodsavers sind in jedem Fall zu beachten.\
-					\');"><i class="fa fa-refresh whatiswhaticons" aria-hidden="true"></i>
+					\');"><i class="fas fa-sync whatiswhaticons" aria-hidden="true"></i>
 				<span class="iconlegend">Fair&#8209;Teiler</span></span></h2>
 			</div>
 			<div class="pure-u-1 pure-u-md-1-5">
@@ -147,7 +147,7 @@ class IndexView extends View
 			</div>
 			<div class="pure-u-1 pure-u-md-1-5">
 				<h2><span class="clickable" onclick="alert(\'foodsharing ist regelmäßig auf vielen Veranstaltungen und Festivals präsent, um auch dort auf die Initiativen und unser Engagement aufmerksam zu machen. Wir nutzen auch diese Gelegenheiten, um ein klares Statement gegen Lebensmittel- und Ressourcenverschwendung und für Nachhaltigkeit in Umwelt- und Konsumfragen abzugeben. Dafür veranstalten wir auf dem Festivalgelände Workshops oder Vorträge, Filmvorführungen und Diskussionsrunden und sind an Infoständen (mit und ohne Essensverteilung) zu finden.\n\nEine Bedingung für unsere Präsenz ist, direkt mit Festivalbetreiber*innen zu kooperieren um auf dem Veranstaltungsgelände selbst &quot;aktiv&quot; werden zu können.\nWir retten auf Festivals überschüssige Lebensmittel von Besucher*innen oder von Essensständen. Am Ende eines Festivals bergen wir auch zurückgelassene Dinge, die noch brauchbar sind.\
-					\');"><i class="fa fa-music whatiswhaticons" aria-hidden="true"></i>
+					\');"><i class="fas fa-music whatiswhaticons" aria-hidden="true"></i>
 				<span class="iconlegend">Festivals</span></span></h2>
 			</div>
 		</div>

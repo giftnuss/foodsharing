@@ -102,7 +102,7 @@ class MessageView extends View
 	public function conversation()
 	{
 		$out = '
-			<div id="msg-conversation" class="corner-all"><ul></ul><div class="loader" style="display:none;"><i class="fa fa-refresh fa-spin"></i></div></div>
+			<div id="msg-conversation" class="corner-all"><ul></ul><div class="loader" style="display:none;"><i class="fas fa-sync fa-spin"></i></div></div>
 		';
 
 		$out .= '

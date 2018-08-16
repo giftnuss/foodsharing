@@ -1,7 +1,7 @@
 <template>
     <nav-item-dropdown tooltip="Essenskörbe" :no-caret="!showLabel" class="topbar-baskets" ref="dropdown">
         <template slot="button-content">
-            <i class="fa fa-shopping-basket"/>
+            <i class="fas fa-shopping-basket"/>
             <span v-if="showLabel">Essenskörbe</span>
         </template>
         <div class="list-group">

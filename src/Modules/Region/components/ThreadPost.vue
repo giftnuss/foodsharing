@@ -16,7 +16,7 @@
           <a
             v-if="!wXS"
             class="btn btn-sm btn-outline-primary"
-            @click="openChat"><i class="fa fa-comments" /> {{ $i18n('chat.open_chat') }}</a>
+            @click="openChat"><i class="fas fa-comments" /> {{ $i18n('chat.open_chat') }}</a>
         </div>
         <div
           class="col-sm-9"

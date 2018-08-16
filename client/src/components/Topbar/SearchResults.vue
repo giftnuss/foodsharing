@@ -26,7 +26,7 @@
             <div class="dropdown-divider"></div>
         </div>
         <div v-if="filtered.myStores.length">
-            <h3 class="dropdown-header"><i class="fa fa-shopping-cart" /> Meine Betriebe</h3>
+            <h3 class="dropdown-header"><i class="fas fa-shopping-cart" /> Meine Betriebe</h3>
             <search-result-entry v-for="store in filtered.myStores" 
                 :key="store.id" 
                 :href="$url('store', store.id)"  
@@ -61,7 +61,7 @@
             <div class="dropdown-divider"></div>
         </div>
         <div v-if="filtered.users.length">
-            <h3 class="dropdown-header"><i class="fa fa-child" /> Personen</h3>
+            <h3 class="dropdown-header"><i class="fas fa-child" /> Personen</h3>
             <search-result-entry v-for="user in filtered.users" 
                 :key="user.id" 
                 :href="$url('profile', user.id)" 
@@ -72,7 +72,7 @@
             <div class="dropdown-divider"></div>
         </div>
         <div v-if="filtered.stores.length">
-            <h3 class="dropdown-header"><i class="fa fa-shopping-cart" /> Betriebe</h3>
+            <h3 class="dropdown-header"><i class="fas fa-shopping-cart" /> Betriebe</h3>
             <search-result-entry v-for="store in filtered.stores" 
                 :key="store.id" 
                 :href="$url('store', store.id)" 
