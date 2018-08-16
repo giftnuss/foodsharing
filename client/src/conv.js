@@ -360,7 +360,7 @@ const conv = {
          */
         if (ret.member.length > 2) {
           // conv.addChatOption(cid,'<a href="#" onclick="ajax.req(\'msg\',\'invite\',{data:{cid:'+cid+'}});return false;">Jemand zum Chat hinzufügen</a>');
-          conv.addChatOption(cid, '<a href="#" onclick="if(confirm(\'Bist Du Dir Sicher das Du den Chat verlassen möchtest?\')){ajax.req(\'msg\',\'leave\',{data:{cid:' + cid + '}});}return false;">Chat verlassen</a>')
+          conv.addChatOption(cid, '<a href="#" onclick="if(confirm(\'Bist Du Dir sicher, dass Du den Chat verlassen möchtest?\')){ajax.req(\'msg\',\'leave\',{data:{cid:' + cid + '}});}return false;">Chat verlassen</a>')
           conv.addChatOption(cid, '<span class="optinput"><input placeholder="Chat umbenennen..." type="text" name="chatname" value="" maxlength="30" /><i onclick="var val=$(this).prev().val();ajax.req(\'msg\',\'rename\',{data:{cid:' + cid + ',name:val}});return false;" class="fas fa-arrow-circle-right"></i></span>')
         }
 

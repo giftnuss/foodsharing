@@ -261,7 +261,7 @@ class DashboardControl extends Control
 			{
 				$("input[name=\'photo_public\']")[0].focus();
 				check = false;
-				if(confirm("Sicher das Du Deine Daten nicht anzeigen lassen möchstest? So kann Dich kein Foodsaver finden"))
+				if(confirm("Sicher, dass Du Deine Daten nicht anzeigen lassen möchstest? So kann Dich kein Foodsaver finden."))
 				{
 					check = true;
 				}
