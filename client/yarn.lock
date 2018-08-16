@@ -8365,6 +8365,10 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
+typeface-alfa-slab-one@0.0.54:
+  version "0.0.54"
+  resolved "https://registry.yarnpkg.com/typeface-alfa-slab-one/-/typeface-alfa-slab-one-0.0.54.tgz#b37e22da816c20ff89253fe4cda77745fdf01982"
+
 uglify-es@^3.3.4:
   version "3.3.9"
   resolved "https://registry.yarnpkg.com/uglify-es/-/uglify-es-3.3.9.tgz#0c1c4f0700bed8dbc124cdb304d2592ca203e677"
