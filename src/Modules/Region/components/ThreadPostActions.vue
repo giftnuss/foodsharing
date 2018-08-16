@@ -50,7 +50,7 @@
       title="Beitrag löschen"
       class="btn btn-sm btn-secondary"
       @click="$refs.modal.show()">
-      <i class="fa fa-trash" />
+      <i class="fas fa-trash-alt" />
     </a>
 
     <!-- <a
@@ -59,7 +59,7 @@
       title="Beitrag bearbeiten"
       class="btn btn-sm btn-secondary"
       @click="$emit('edit')">
-      <i class="fa fa-pencil" />
+      <i class="fas fa-pencil-alt" />
     </a> -->
 
     <!-- delete confirm modal -->

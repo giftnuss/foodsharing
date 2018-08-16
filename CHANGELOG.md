@@ -7,6 +7,7 @@
 - updated landingpage with festival content !462 and !471 @michi-zuri
 - Only accepted store members see updates on dashboard !412 @k.miklobusec
 - Add description about markdown formatting in forum posts !496 @NerdyProjects
+- introduce new font fontawesome 5.2 !500 @peter.toennies
 
 ## Bugfixes
 - Add missing tagedit lib on mailbox edit page !459 #248 @nicksellen

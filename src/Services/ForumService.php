@@ -79,7 +79,7 @@ class ForumService
 			$fsIds,
 			'forum_answer_title',
 			'forum_answer',
-			'fa fa-comments',
+			'fas fa-comments',
 			['href' => $this->url($info['region_id'], $info['ambassador_forum'], $threadId, $postId)],
 			['user' => $this->session->user('name'), 'forum' => $regionName],
 			'forum-post-' . $postId

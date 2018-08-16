@@ -4,7 +4,7 @@
             Es konnten keine Ergebnisse gefunden werden
         </div>
         <div v-if="filtered.myBuddies.length">
-            <h3 class="dropdown-header"><i class="fa fa-user" /> Meine Buddies</h3>
+            <h3 class="dropdown-header"><i class="fas fa-user" /> Meine Buddies</h3>
             <search-result-entry v-for="buddy in filtered.myBuddies" 
                 :key="buddy.id" 
                 :href="$url('profile', buddy.id)" 
@@ -15,7 +15,7 @@
             <div class="dropdown-divider"></div>
         </div>
         <div v-if="filtered.myGroups.length">
-            <h3 class="dropdown-header"><i class="fa fa-users" /> Meine Gruppen</h3>
+            <h3 class="dropdown-header"><i class="fas fa-users" /> Meine Gruppen</h3>
             <search-result-entry v-for="group in filtered.myGroups" 
                 :key="group.id" 
                 :href="$url('forum', group.id)" 
@@ -37,7 +37,7 @@
             <div class="dropdown-divider"></div>
         </div>
         <div v-if="filtered.myRegions.length">
-            <h3 class="dropdown-header"><i class="fa fa-home" /> Meine Bezirke</h3>
+            <h3 class="dropdown-header"><i class="fas fa-home" /> Meine Bezirke</h3>
             <search-result-entry v-for="region in filtered.myRegions" 
                 :key="region.id" 
                 :href="$url('forum', region.id)" 
@@ -50,7 +50,7 @@
 
 
         <div v-if="filtered.groups.length">
-            <h3 class="dropdown-header"><i class="fa fa-users" /> Gruppen</h3>
+            <h3 class="dropdown-header"><i class="fas fa-users" /> Gruppen</h3>
             <search-result-entry v-for="group in filtered.groups" 
                 :key="group.id" 
                 :href="$url('forum', group.id)" 
@@ -83,7 +83,7 @@
             <div class="dropdown-divider"></div>
         </div>
         <div v-if="filtered.regions.length">
-            <h3 class="dropdown-header"><i class="fa fa-home" /> Bezirke</h3>
+            <h3 class="dropdown-header"><i class="fas fa-home" /> Bezirke</h3>
             <search-result-entry v-for="region in filtered.regions" 
                 :key="region.id" 
                 :href="$url('forum', region.id)" 

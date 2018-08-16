@@ -43,10 +43,10 @@
           <hr>
           <button
             class="btn btn-secondary btn-sm"
-            @click="activateThread"><i class="fa fa-check" /> {{ $i18n('forum.activate_thread') }}</button>
+            @click="activateThread"><i class="fas fa-check" /> {{ $i18n('forum.activate_thread') }}</button>
           <button
             class="btn btn-secondary btn-sm"
-            @click="$refs.deleteModal.show()"><i class="fa fa-trash" /> {{ $i18n('forum.delete_thread') }}</button>
+            @click="$refs.deleteModal.show()"><i class="fas fa-trash-alt" /> {{ $i18n('forum.delete_thread') }}</button>
         </div>
       </div>
     </div>

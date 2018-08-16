@@ -4,7 +4,7 @@
     :title="description"
     :data-status="status"
     class="status">
-    <i class="fa fa-circle" />
+    <i class="fas fa-circle" />
   </span>
 </template>
 

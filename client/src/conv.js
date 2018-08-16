@@ -361,7 +361,7 @@ const conv = {
         if (ret.member.length > 2) {
           // conv.addChatOption(cid,'<a href="#" onclick="ajax.req(\'msg\',\'invite\',{data:{cid:'+cid+'}});return false;">Jemand zum Chat hinzufügen</a>');
           conv.addChatOption(cid, '<a href="#" onclick="if(confirm(\'Bist Du Dir Sicher das Du den Chat verlassen möchtest?\')){ajax.req(\'msg\',\'leave\',{data:{cid:' + cid + '}});}return false;">Chat verlassen</a>')
-          conv.addChatOption(cid, '<span class="optinput"><input placeholder="Chat umbenennen..." type="text" name="chatname" value="" maxlength="30" /><i onclick="var val=$(this).prev().val();ajax.req(\'msg\',\'rename\',{data:{cid:' + cid + ',name:val}});return false;" class="fa fa-arrow-circle-right"></i></span>')
+          conv.addChatOption(cid, '<span class="optinput"><input placeholder="Chat umbenennen..." type="text" name="chatname" value="" maxlength="30" /><i onclick="var val=$(this).prev().val();ajax.req(\'msg\',\'rename\',{data:{cid:' + cid + ',name:val}});return false;" class="fas fa-arrow-circle-right"></i></span>')
         }
 
         /*
@@ -379,7 +379,7 @@ const conv = {
           title = title.join(', ')
         }
 
-        conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html('<i class="fa fa-comment fa-flip-horizontal"></i> ' + title)
+        conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html('<i class="fas fa-comment fa-flip-horizontal"></i> ' + title)
 
         /*
          * now append all arrived messages
@@ -420,7 +420,7 @@ const conv = {
       const name = ''
 
       var $el = $('<div id="chat-' + cid + '" class="chatbox ui-corner-top" style="bottom: 0px; right: ' + right + 'px; display: block;"></div>').appendTo('body')
-      $el.html('<div class="chatboxhead ui-corner-top"><a class="chatboxtitle" href="#" onclick="conv.togglebox(' + cid + ');return false;"><i class="fa fa-spinner fa-spin"></i> ' + name + '</a><ul style="display:none;" class="settings linklist linkbubble ui-shadow corner-all">' + options + '</ul><div class="chatboxoptions"><a href="#" class="fa fa-gear" title="Einstellungen" onclick="conv.settings(' + cid + ');return false;"></a><a title="schließen" class="fa fa-close" href="#" onclick="conv.close(' + cid + ');return false;"></a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea placeholder="Schreibe etwas..." class="chatboxtextarea" onkeydown="conv.checkInputKey(event,this,\'' + cid + '\');"></textarea></div>')
+      $el.html('<div class="chatboxhead ui-corner-top"><a class="chatboxtitle" href="#" onclick="conv.togglebox(' + cid + ');return false;"><i class="fas fa-spinner fa-spin"></i> ' + name + '</a><ul style="display:none;" class="settings linklist linkbubble ui-shadow corner-all">' + options + '</ul><div class="chatboxoptions"><a href="#" class="fas fa-cog" title="Einstellungen" onclick="conv.settings(' + cid + ');return false;"></a><a title="schließen" class="fa fa-close" href="#" onclick="conv.close(' + cid + ');return false;"></a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea placeholder="Schreibe etwas..." class="chatboxtextarea" onkeydown="conv.checkInputKey(event,this,\'' + cid + '\');"></textarea></div>')
 
       $el.children('.chatboxcontent').slimScroll()
       $el.children('.chatboxinput').children('textarea').autosize()

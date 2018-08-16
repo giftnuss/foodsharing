@@ -319,11 +319,11 @@ class Utils
 
 		return '
 		<div class="msg-inside success">
-				<i class="fa fa-check-circle"></i> ' . $title . $msg . '
+				<i class="fas fa-check-circle"></i> ' . $title . $msg . '
 		</div>';
 	}
 
-	public function v_info($msg, $title = false, $icon = '<i class="fa fa-info-circle"></i>')
+	public function v_info($msg, $title = false, $icon = '<i class="fas fa-info-circle"></i>')
 	{
 		if ($title !== false) {
 			$title = '<strong>' . $title . '</strong> ';
@@ -343,7 +343,7 @@ class Utils
 
 		return '
 		<div class="msg-inside error">
-				<i class="fa fa-warning"></i> ' . $title . $msg . '
+				<i class="fas fa-exclamation-triangle"></i> ' . $title . $msg . '
 		</div>';
 	}
 
@@ -1306,7 +1306,7 @@ class Utils
 		}
 
 		if (isset($option['collapse'])) {
-			$label = '<i class="fa fa-caret-right"></i> ' . $label;
+			$label = '<i class="fas fa-caret-right"></i> ' . $label;
 			$this->func->addJs('
 				$("#' . $id . '-wrapper .element-wrapper").hide();
 			');

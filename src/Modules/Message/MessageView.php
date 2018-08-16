@@ -96,7 +96,7 @@ class MessageView extends View
 
 	public function convListWrapper($list)
 	{
-		return $this->v_utils->v_field('<div id="conversation-list"><ul class="linklist conversation-list">' . $list . '</ul></div>', '<i class="fa fa-comments"></i> ' . $this->func->s('conversations'));
+		return $this->v_utils->v_field('<div id="conversation-list"><ul class="linklist conversation-list">' . $list . '</ul></div>', '<i class="fas fa-comments"></i> ' . $this->func->s('conversations'));
 	}
 
 	public function conversation()
@@ -112,6 +112,6 @@ class MessageView extends View
 				</form>
 			</div>';
 
-		return '<div id="msg-conversation-wrapper" style="display:none;">' . $this->v_utils->v_field($out, '<span id="msg-conversation-title"><i class="fa fa-comment"></i></span>', array('class' => 'ui-padding')) . '</div>';
+		return '<div id="msg-conversation-wrapper" style="display:none;">' . $this->v_utils->v_field($out, '<span id="msg-conversation-title"><i class="fas fa-comment"></i></span>', array('class' => 'ui-padding')) . '</div>';
 	}
 }

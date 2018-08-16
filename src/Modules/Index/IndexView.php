@@ -127,7 +127,7 @@ class IndexView extends View
 			</div>
 			<div class="pure-u-1 pure-u-md-1-5">
 				<h2><span class="clickable" onclick="alert(\'Sobald Du Dich bei foodsharing registriert hast, gehörst Du als Lebensmittelretter*in (Foodsharer) zur Community.\n\nAls Foodsharer kannst Du Essenskörbe anbieten oder abholen, an foodsharing-Events teilnehmen und Lebensmittel zum Fair-Teiler bringen oder von dort mitnehmen. Wenn Du als Foodsharer von Betrieben Lebensmittel retten möchtest, musst Du zwei weitere Schritte tun:\n1. Du nimmst an einem foodsharing-Quiz teil.\n2. Du absolvierst drei betreute Einführungsabholungen bei einem Betrieb.\n\nAls Foodsaver handelst Du aktiv und freiwillig mit dem Ziel, gute Lebensmittel nicht in der Tonne enden zu lassen. Du wirst in Absprache mit anderen Foodsavern Lebensmittel von den kooperierenden Betrieben einsammeln und fair-teilen. Es ist natürlich sinnvoll und wünschenswert, wenn Du mit der Community in Kontakt stehst und an Events und Bezirkstreffen teilnimmst.\n\nFalls Du Interesse an einem weiterreichenden Engagement hast, findest Du bei uns auch verantwortungsvolle Tätigkeiten, etwa als Mitglied einer Arbeitsgruppe, als Betriebsverantwortliche*r oder Botschafter*in.\
-					\');"><i class="fa fa-smile-o whatiswhaticons" aria-hidden="true"></i>
+					\');"><i class="far fa-smile whatiswhaticons" aria-hidden="true"></i>
 				<span class="iconlegend">Foodsharer und Foodsaver</span></span></h2>
 			</div>
 			<div class="pure-u-1 pure-u-md-1-5">
@@ -142,7 +142,7 @@ class IndexView extends View
 			</div>
 			<div class="pure-u-1 pure-u-md-1-5">
 				<h2><span class="clickable" onclick="alert(\'Unsere kooperierenden Betriebe sind Bäckereien, Obst- und Gemüsehändler, Filialen von Supermärkten, Wochenmärkte, Restaurants, Kantinen, Cafés, Catering-Services, der Großhandel, Bauernhöfe u. v. m.\n\nFür jede Kooperation mit einem Betrieb gibt es einen betriebsverantwortlichen Foodsaver. Außerdem kümmert er/sie sich um die Organisation zuverlässiger Abholungen. Wir sind bestrebt, das Tagesgeschäft der Betriebe so wenig wie möglich zu beeinträchtigen. Die Abholungen bei Betrieben werden daher im Vorfeld abgestimmt und vereinbart.\n\nDie foodsharing-Kooperation ist nachhaltig und eine Win-Win-Situation. Die Betriebe können dabei ihre Lebensmittelabfälle und damit verbundene Entsorgungskosten reduzieren und bewusst ein Zeichen gegen Lebensmittelverschwendung setzen.\
-					\');"><i class="fa fa-home whatiswhaticons" aria-hidden="true"></i>
+					\');"><i class="fas fa-home whatiswhaticons" aria-hidden="true"></i>
 				<span class="iconlegend">Betriebe</span></span></h2>
 			</div>
 			<div class="pure-u-1 pure-u-md-1-5">

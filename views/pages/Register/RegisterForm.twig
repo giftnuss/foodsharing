@@ -65,7 +65,7 @@
 						<input type="hidden" name="action" value="upload" />
 						<a onclick="$('#join_photo').trigger('click');return false;" class="container corner-all" href="#">
 							<span class="mega-octicon octicon-device-camera"></span>
-							<span class="fa fa-circle-o-notch fa-spin"></span>
+							<span class="fas fa-circle-notch fa-spin"></span>
 						</a>
 						<br />
 						<a onclick="$('#join_photo').trigger('click');return false;" href="#" class="button">{{ 'register.select_picture'|trans|raw }}</a><span class="filewrapper"><input onchange="join.startUpload();" type="file" name="photo" id="join_photo" /></span>
@@ -135,5 +135,5 @@
 	</div>
 	<div style="clear:both;"></div>
 </div>
-<div id="joinloader" style="display:none;"><span class="fa fa-circle-o-notch fa-spin"></span></div>
+<div id="joinloader" style="display:none;"><span class="fas fa-circle-notch fa-spin"></span></div>
 <div id="joinready" style="display:none">{{ 'register.check_mail'|trans }}, {{ 'register.join_success'|trans }}</div>

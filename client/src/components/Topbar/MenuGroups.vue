@@ -1,7 +1,7 @@
 <template>
     <nav-item-dropdown v-if="workingGroups.length" tooltip="Deine Gruppen" no-caret>
         <template slot="button-content">
-            <i class="fa fa-users"/>
+            <i class="fas fa-users"/>
         </template>
             <div v-for="group in workingGroups" :key="group.id" class="group">
                 <a v-if="!alwaysOpen" role="menuitem" v-b-toggle="'topbargroup_'+group.id"  class="dropdown-item text-truncate">
@@ -11,19 +11,19 @@
                     {{ group.name }}
                 </h3>
                 <b-collapse class="sub" :visible="alwaysOpen" :id="'topbargroup_'+group.id" :accordion="alwaysOpen ? null : 'groups'">
-                    <a role="menuitem" :href="$url('forum', group.id)" class="dropdown-item"><i class="fa fa-comment-o" /> Forum</a>
-                    <a role="menuitem" :href="$url('wall', group.id)" class="dropdown-item"><i class="fa fa-bullhorn" /> Pinnwand</a>
-                    <a role="menuitem" :href="$url('events', group.id)" class="dropdown-item"><i class="fa fa-calendar" /> Termine</a>
-                    <a v-if="group.isBot" role="menuitem" :href="$url('workingGroupEdit', group.id)" class="dropdown-item"><i class="fa fa-cog" /> Gruppe verwalten</a>
+                    <a role="menuitem" :href="$url('forum', group.id)" class="dropdown-item"><i class="far fa-comment" /> Forum</a>
+                    <a role="menuitem" :href="$url('wall', group.id)" class="dropdown-item"><i class="fas fa-bullhorn" /> Pinnwand</a>
+                    <a role="menuitem" :href="$url('events', group.id)" class="dropdown-item"><i class="far fa-calendar-alt" /> Termine</a>
+                    <a v-if="group.isBot" role="menuitem" :href="$url('workingGroupEdit', group.id)" class="dropdown-item"><i class="fas fa-cog" /> Gruppe verwalten</a>
                 </b-collapse>
             </div>
             <div class="dropdown-divider" />
-            <a :href="$url('workingGroups')" role="menuitem" class="dropdown-item"><small><i class="fa fa-users" /> Gruppenübersicht</small></a>
+            <a :href="$url('workingGroups')" role="menuitem" class="dropdown-item"><small><i class="fas fa-users" /> Gruppenübersicht</small></a>
 
     </nav-item-dropdown>
     <li v-else class="nav-item">
         <a :href="$url('workingGroups')" class="nav-link" v-b-tooltip title="Gruppenübersicht">
-            <i class="fa fa-users" />
+            <i class="fas fa-users" />
         </a>
     </li>
 </template>
@@ -57,4 +57,3 @@ export default {
 }
 </style>
 
- 

@@ -394,7 +394,7 @@ class ProfileView extends View
 		$online = '';
 
 		if ($this->foodsaver['online']) {
-			$online = '<div style="margin-top:10px;">' . $this->v_utils->v_info($this->foodsaver['name'] . ' ist online!', false, '<i class="fa fa-circle" style="color:#5ab946;"></i>') . '</div>';
+			$online = '<div style="margin-top:10px;">' . $this->v_utils->v_info($this->foodsaver['name'] . ' ist online!', false, '<i class="fas fa-circle" style="color:#5ab946;"></i>') . '</div>';
 		}
 
 		return '<div style="text-align:center;">
@@ -409,34 +409,34 @@ class ProfileView extends View
 		$opt = '';
 
 		if ($showEditButton) {
-			$opt .= '<li><a href="/?page=foodsaver&a=edit&id=' . $this->foodsaver['id'] . '"><i class="fa fa-pencil"></i>Profil bearbeiten</a></li>';
+			$opt .= '<li><a href="/?page=foodsaver&a=edit&id=' . $this->foodsaver['id'] . '"><i class="fas fa-pencil-alt fa-fw"></i>Profil bearbeiten</a></li>';
 		}
 		if ($this->foodsaver['buddy'] === -1 && $this->foodsaver['id'] != $this->func->fsId()) {
 			$name = explode(' ', $this->foodsaver['name']);
 			$name = $name[0];
-			$opt .= '<li class="buddyRequest"><a onclick="ajreq(\'request\',{app:\'buddy\',id:' . (int)$this->foodsaver['id'] . '});return false;" href="#"><i class="fa fa-user"></i>Ich kenne ' . $name . '</a></li>';
+			$opt .= '<li class="buddyRequest"><a onclick="ajreq(\'request\',{app:\'buddy\',id:' . (int)$this->foodsaver['id'] . '});return false;" href="#"><i class="fas fa-user fa-fw"></i>Ich kenne ' . $name . '</a></li>';
 		}
 		if ($showPassportGenerationHistoryButton) {
-			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:1});"><i class="fa fa-file-text"></i>Passhistorie</a></li>';
+			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:1});"><i class="fas fa-file-alt fa-fw"></i>Passhistorie</a></li>';
 		}
 		if ($showVerificationHistoryButton) {
-			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:0});"><i class="fa fa-file-text"></i>Verifizierungshistorie</a></li>';
+			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:0});"><i class="fas fa-file-alt fa-fw"></i>Verifizierungshistorie</a></li>';
 		}
 
 		if ($this->func->mayHandleReports()) {
 			if (isset($this->foodsaver['note_count'])) {
-				$opt .= '<li><a href="/profile/' . (int)$this->foodsaver['id'] . '/notes/"><i class="fa fa-file-text-o"></i>' . $this->func->sv('notes_count', array('count' => $this->foodsaver['note_count'])) . '</a></li>';
+				$opt .= '<li><a href="/profile/' . (int)$this->foodsaver['id'] . '/notes/"><i class="far fa-file-alt fa-fw"></i>' . $this->func->sv('notes_count', array('count' => $this->foodsaver['note_count'])) . '</a></li>';
 			}
 			if (isset($this->foodsaver['violation_count']) && $this->foodsaver['violation_count'] > 0) {
-				$opt .= '<li><a href="/?page=report&sub=foodsaver&id=' . (int)$this->foodsaver['id'] . '"><i class="fa fa-meh-o"></i>' . $this->func->sv('violation_count', array('count' => $this->foodsaver['violation_count'])) . '</a></li>';
+				$opt .= '<li><a href="/?page=report&sub=foodsaver&id=' . (int)$this->foodsaver['id'] . '"><i class="far fa-meh fa-fw"></i>' . $this->func->sv('violation_count', array('count' => $this->foodsaver['violation_count'])) . '</a></li>';
 			}
 		}
 
 		return '
 		<ul class="linklist">
-			<li><a href="#" onclick="chat(' . $this->foodsaver['id'] . ');return false;"><i class="fa fa-comment"></i>Nachricht schreiben</a></li>
+			<li><a href="#" onclick="chat(' . $this->foodsaver['id'] . ');return false;"><i class="fas fa-comment fa-fw"></i>Nachricht schreiben</a></li>
 			' . $opt . '
-			<li><a href="#" onclick="ajreq(\'reportDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;"><i class="fa fa-life-ring"></i>Regelverletzung melden</a></li>
+			<li><a href="#" onclick="ajreq(\'reportDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;"><i class="far fa-life-ring fa-fw"></i>Regelverletzung melden</a></li>
 		</ul>';
 	}
 

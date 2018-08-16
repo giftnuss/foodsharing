@@ -309,7 +309,7 @@ abstract class Control
 
 				<div id="wallpost-submit" align="right">
 
-					<span id="wallpost-loader"></span><span id="wallpost-attach-image"><i class="fa fa-image"></i> ' . $this->func->s('attach_image') . '</span>
+					<span id="wallpost-loader"></span><span id="wallpost-attach-image"><i class="far fa-image"></i> ' . $this->func->s('attach_image') . '</span>
 					<a href="#" id="wall-submit">' . $this->func->s('send') . '</a>
 					<div style="overflow:hidden;height:1px;">
 						<form id="wallpost-attachimage-form" action="/xhrapp.php?app=wallpost&m=attachimage&table=' . $table . '&id=' . $id . '" method="post" enctype="multipart/form-data" target="wallpost-frame">

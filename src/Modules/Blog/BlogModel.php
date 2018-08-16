@@ -201,7 +201,7 @@ class BlogModel extends Db
 			$foodsaver,
 			'blog_new_check_title',
 			'blog_new_check',
-			'fa fa-bullhorn',
+			'fas fa-bullhorn',
 			array('href' => '/?page=blog&sub=edit&id=' . $id),
 			array(
 				'user' => $this->session->user('name'),

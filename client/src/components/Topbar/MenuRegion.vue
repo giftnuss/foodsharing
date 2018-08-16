@@ -6,13 +6,13 @@
             <div v-for="region in regionsSorted" :key="region.id">
                 <a v-if="region.id !== activeRegionId || regions.length !== 1" role="menuitem" v-b-toggle="'topbarregion_'+region.id" href="#" target="_self" class="dropdown-item text-truncate">{{ region.name }}</a>
                 <b-collapse class="sub" :id="'topbarregion_'+region.id" accordion="regions" :visible="region.id === activeRegionId">
-                    <a role="menuitem" :href="$url('forum', region.id)" class="dropdown-item dropdown-item-sub"><i class="fa fa-comment-o" />Forum</a>
+                    <a role="menuitem" :href="$url('forum', region.id)" class="dropdown-item dropdown-item-sub"><i class="far fa-comment" />Forum</a>
                     <a v-if="region.isBot" role="menuitem" :href="$url('forum', region.id, 1)" class="dropdown-item dropdown-item-sub"><i class="fa fa-commenting-o" />Bot-Forum</a>
                     <a role="menuitem" :href="$url('fairteiler', region.id)" class="dropdown-item dropdown-item-sub"><i class="fa fa-recycle" />Fair-Teiler</a>
-                    <a role="menuitem" :href="$url('events', region.id)"  class="dropdown-item dropdown-item-sub"><i class="fa fa-calendar" />Termine</a>
+                    <a role="menuitem" :href="$url('events', region.id)"  class="dropdown-item dropdown-item-sub"><i class="far fa-calendar-alt" />Termine</a>
                     <a role="menuitem" :href="$url('stores', region.id)"  class="dropdown-item dropdown-item-sub"><i class="fa fa-cart-plus" />Betriebe</a>
                     <a role="menuitem" :href="$url('workingGroups', region.id)"  class="dropdown-item dropdown-item-sub"><i class="fa fa-group" />Arbeitsgruppen</a>
-                    <a v-if="region.isBot" role="menuitem" :href="$url('foodsaverList', region.id)"  class="dropdown-item dropdown-item-sub"><i class="fa fa-user" />Foodsaver</a>
+                    <a v-if="region.isBot" role="menuitem" :href="$url('foodsaverList', region.id)"  class="dropdown-item dropdown-item-sub"><i class="fas fa-user" />Foodsaver</a>
                     <a v-if="region.isBot" role="menuitem" :href="$url('passports', region.id)"  class="dropdown-item dropdown-item-sub"><i class="fa fa-address-card" />Ausweise</a>
                 </b-collapse>
             </div>

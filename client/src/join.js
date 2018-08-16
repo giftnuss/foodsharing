@@ -34,7 +34,7 @@ var join = {
   startUpload: function () {
     $('#join_photoform').addClass('load').submit()
     join.isLoading = true
-    $('#joinform .avatar .container').css('background-image', 'none').html('<span class="mega-octicon octicon-device-camera"></span><span class="fa fa-circle-o-notch fa-spin"></span>')
+    $('#joinform .avatar .container').css('background-image', 'none').html('<span class="mega-octicon octicon-device-camera"></span><span class="fas fa-circle-notch fa-spin"></span>')
   },
   loadMap: function () {
     if (!this.mapInitialized) {

@@ -3,7 +3,7 @@
         <div class="input-group mr-2" ref="inputgroup">
             <div class="input-group-prepend">
                 <label class="input-group-text text-primary" for="login-email">
-                    <i class="fa fa-user" />
+                    <i class="fas fa-user" />
                 </label>
             </div>
             <input 
@@ -19,7 +19,7 @@
         <div class="input-group mr-2" ref="inputgroup">
             <div class="input-group-prepend">
                 <label class="input-group-text text-primary" for="login-password">
-                    <i class="fa fa-key" />
+                    <i class="fas fa-key" />
                 </label>
             </div>
             <input 

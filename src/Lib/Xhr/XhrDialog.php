@@ -150,7 +150,7 @@ class XhrDialog
 		$in_id = $this->id . '-' . $id;
 
 		$this->addContent($this->viewUtils->v_input_wrapper($this->func->s($id . '-desc'), '
-				<span id="' . $in_id . '"><i class="fa fa-image"></i> ' . $this->func->s($id . '-choose') . '</span>
+				<span id="' . $in_id . '"><i class="far fa-image"></i> ' . $this->func->s($id . '-choose') . '</span>
 				<input class="input" type="hidden" name="filename" id="' . $in_id . '-filename" value="" />
 				<div class="attach-preview" style="float:right;">
 					
