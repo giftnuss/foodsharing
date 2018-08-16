@@ -25,7 +25,11 @@ class ForumPermissions
 		if ($this->session->isOrgaTeam()) {
 			return true;
 		}
-		if (($ambassadorForum && !$this->session->isAdminFor($regionId)) || !in_array($regionId, $this->session->listRegionIDs(), true)) {
+		if (($ambassadorForum && !$this->session->isAdminFor($regionId)) || !in_array(
+				$regionId,
+				$this->session->listRegionIDs(),
+				false
+			)) {
 			return false;
 		}
 
