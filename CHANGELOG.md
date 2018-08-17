@@ -30,6 +30,7 @@
 - Add fetch polyfill to support ie11 !494 @NerdyProjects
 - fix wrong usage of region ID lists for post permissions !503 #308 @peter.toennies
 - Fix fairteiler/blog picture upload by exposing necessary javascript methods #307 @NerdyProjects
+- Reimplement forum scroll to post functionality !514 #270 @NerdyProjects
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
