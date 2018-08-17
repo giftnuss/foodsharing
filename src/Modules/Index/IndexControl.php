@@ -30,11 +30,12 @@ class IndexControl extends Control
 
 		$gerettet = round($gerettet, 0);
 
-		if (strpos($_SERVER['HTTP_HOST'], 'foodsharing.at') !== false) {
+		$host = $_SERVER['HTTP_HOST'] ?? BASE_URL;
+		if (strpos($host, 'foodsharing.at') !== false) {
 			$page_content = $this->contentGateway->get(37);
-		} elseif (strpos($_SERVER['HTTP_HOST'], 'foodsharingschweiz.ch') !== false) {
+		} elseif (strpos($host, 'foodsharingschweiz.ch') !== false) {
 			$page_content = $this->contentGateway->get(47);
-		} elseif (strpos($_SERVER['HTTP_HOST'], 'beta.foodsharing.de') !== false) {
+		} elseif (strpos($host, 'beta.foodsharing.de') !== false) {
 			$page_content = $this->contentGateway->get(48);
 		} else {
 			$page_content = $this->contentGateway->get(38);

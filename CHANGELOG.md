@@ -31,6 +31,7 @@
 - fix wrong usage of region ID lists for post permissions !503 #308 @peter.toennies
 - Fix fairteiler/blog picture upload by exposing necessary javascript methods #307 @NerdyProjects
 - Admins of Workgroups are called admins again instead of ambassadors !513 #264 @NerdyProjects
+- Do not rely on $\_SERVER['HTTP\_HOST'] being set #263 !510 @NerdyProjects 
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
