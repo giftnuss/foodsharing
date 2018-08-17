@@ -128,6 +128,7 @@ class RegionControl extends Control
 		$viewdata['region'] = [
 			'id' => $this->region['id'],
 			'name' => $this->region['name'],
+			'isWorkGroup' => $isWorkGroup,
 			'stat' => $stat,
 			'admins' => array_map($avatarListEntry, array_slice($this->region['botschafter'], 0, 30)),
 		];
