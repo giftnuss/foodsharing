@@ -41,6 +41,7 @@
 - refactored NewArea module from model to gateway !484 #9 @peter.toennies
 - refactored index from model to gateway !480 #9 @peter.toennies
 - alfa slab one font now used as npm package !501 @peter.toennies
+- octicons font not used anymore !504 @peter.toennies and @michi-zuri
 
 ## Dev/Test/CI stuff
 - Add test for workgroup application / acceptance process !489 @NerdyProjects

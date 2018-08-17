@@ -16,7 +16,7 @@
 				<h3>{{ 'register.i_am_a'|trans }}</h3>
 				<div class="iamchooser">
 					<a onmouseover="$('.humanshow').show();" onmouseout="$('.humanshow').hide();" class="active" href="#human" onclick="$(this).addClass('active').next().removeClass('active');$('#join_iam').val('human');">
-							<i class="mega-octicon octicon-person"></i>
+							<i class="fas fa-user"></i>
 							<span>{{ 'register.peer'|trans }}</span>
 						</a>
 					<br />
@@ -64,7 +64,7 @@
 					<form action="/xhrapp.php?app=login&m=photoupload" id="join_photoform" target="join_upload_frame" method="post" enctype="multipart/form-data">
 						<input type="hidden" name="action" value="upload" />
 						<a onclick="$('#join_photo').trigger('click');return false;" class="container corner-all" href="#">
-							<span class="mega-octicon octicon-device-camera"></span>
+							<span class="fas fa-camera-retro"></span>
 							<span class="fas fa-circle-notch fa-spin"></span>
 						</a>
 						<br />
