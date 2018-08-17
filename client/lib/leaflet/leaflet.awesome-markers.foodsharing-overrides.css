@@ -106,29 +106,15 @@
 }
 
 @media (max-width: 600px) {
-  #map-control ul.linklist li a {
-    width: 22px !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    height: 29px;
-    overflow: hidden !important;
-    padding: 0;
-    white-space: nowrap !important;
-    width: 27px !important;
+  #map-control .linklist li a {
+    overflow: hidden;
+    padding: 6px 0;
+    white-space: nowrap;
+    width: 27px;
   }
 
-  #map-control {
-    width: 20px !important;
-  }
-
-  #map-control-wrapper {
-    width: 27px !important;
-  }
-
-  #map-option-wrapper {
-    left: -117px !important;
-    margin-top: 177px !important;
-    position: relative !important;
-    width: 161px !important;
+  #map-control-wrapper .ui-dialog-content {
+    padding: 0 6px;
   }
 }
+
