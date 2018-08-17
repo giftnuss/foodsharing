@@ -55,6 +55,7 @@
       v-for="post in posts"
       :key="post.id">
       <ThreadPost
+        :name="`post-${post.id}`"
         :author="post.author"
         :body="post.body"
         :reactions="post.reactions"
@@ -109,6 +110,7 @@ import * as api from '@/api/forum'
 import { pulseError } from '@/script'
 import i18n from '@/i18n'
 import { user } from '@/server-data'
+import { GET } from '@/browser'
 
 export default {
   components: { bModal, ThreadPost, ThreadForm },
@@ -138,9 +140,16 @@ export default {
   },
   async created () {
     this.isLoading = true
-    this.reload()
+    await this.reload()
+    this.scrollToPost(GET('pid'))
   },
   methods: {
+    scrollToPost (pid) {
+      let els = window.document.getElementsByName(`post-${pid}`)
+      if (els.length > 0) {
+        els[0].scrollIntoView(false)
+      }
+    },
     reply (body) {
       // this.$refs.form.text = `> ${body.split('\n').join('\n> ')}\n\n${this.$refs.form.text}`
       this.$refs.form.focus()
