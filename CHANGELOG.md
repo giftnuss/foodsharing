@@ -1,4 +1,9 @@
-# Unreleased
+# 2018-08-18
+
+A spontaneous hack-weekend led to us finally finishing this release.
+The new topbar is the main feature, paired with a lot of bugfixes of all the things we broke with the last release and the new topbar.
+Another big thing to note is that we accidentally removed support for a lot of browsers with the last release which should have been fixed again:
+IE11, Safari and slightly older androids should work again, although I can only ask you to please always keep your devices and browsers up to date!
 
 ## Features
 - new topbar in vue.js !451, #11, #15, #155, #158, #30, #66, #67, #93 @alangecker
