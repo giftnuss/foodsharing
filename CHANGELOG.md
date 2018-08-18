@@ -8,6 +8,7 @@
 - Only accepted store members see updates on dashboard !412 @k.miklobusec
 - Add description about markdown formatting in forum posts !496 @NerdyProjects
 - introduce new font fontawesome 5.2 !500 @peter.toennies
+- added placeholder text for the birth date in the registration form !505 @peter.toennies 
 
 ## Bugfixes
 - Changed button to return to profile on the profile editing page !492 #285 @leisinger.sebastian
