@@ -28,7 +28,7 @@ class WallRestController extends FOSRestController
 		return [
 			'id' => $post['id'],
 			'body' => $post['body'],
-			'createdAt' => $post['time'],
+			'createdAt' => str_replace(' ', 'T', $post['time']),
 			'pictures' => null,
 			'author' => [
 				'id' => $post['foodsaver_id'],
