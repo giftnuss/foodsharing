@@ -9,6 +9,7 @@
 - Add description about markdown formatting in forum posts !496 @NerdyProjects
 - introduce new font fontawesome 5.2 !500 @peter.toennies
 - added placeholder text for the birth date in the registration form !505 @peter.toennies 
+- Search in navbar shows more results, distinct results page removed as it was the same !515 #315 @NerdyProjects @theolampert
 
 ## Bugfixes
 - Changed button to return to profile on the profile editing page !492 #285 @leisinger.sebastian
@@ -39,6 +40,7 @@
 - Reimplement forum scroll to post functionality !514 #270 @NerdyProjects
 - Add back redirect to invalid login event !516 @theolampert
 - Reformatting of conversation message times happen in API to avoid javascript error on empty conversation !517 @NerdyProjects @theolampert
+- Groups in the menu are also keyboard navigatable !515 #314 @theolampert @NerdyProjects
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
