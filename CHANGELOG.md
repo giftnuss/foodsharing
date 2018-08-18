@@ -34,6 +34,7 @@
 - Do not rely on $\_SERVER['HTTP\_HOST'] being set #263 !510 @NerdyProjects 
 - Admins of workgroups are called admins again instead of ambassadors !513 #264 @NerdyProjects
 - Map legend now more usable in mobile view !215 #119 @michi-zuri
+- Fix joining regions from subpages like profile not possible !509 #300 @NerdyProjects
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
