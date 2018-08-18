@@ -1,5 +1,5 @@
 <template>
-    <form id="topbar-search" class="form-inline my-2 my-lg-0" style="flex-grow: 1">
+    <div id="topbar-search" class="form-inline my-2 my-lg-0" style="flex-grow: 1">
         <div class="input-group" ref="inputgroup">
             <div class="input-group-prepend">
                 <label class="input-group-text text-primary" for="searchfield">
@@ -15,7 +15,6 @@
                 aria-label="Suche"
                 aria-describedby="basic-addon1"
                 v-model="query"
-                @keydown.enter="submit"
             >
         </div>
         <div v-if="isOpen" id="search-results" class="dropdown-menu" :style="resultsStyle">
@@ -31,7 +30,7 @@
                 :isLoading="isLoading"
             />
         </div>
-    </form>
+    </div>
 </template>
 
 <script>
@@ -104,9 +103,6 @@ export default {
         }, 
         close() {
             this.isOpen = false
-        },
-        submit() {
-            window.location = this.$url('search', this.query)
         },
         async fetch() {
             let curQuery = this.query
