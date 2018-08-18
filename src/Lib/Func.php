@@ -1207,8 +1207,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'isMob' => $this->isMob(),
 			'broadcast_message' => $g_broadcast_message,
 			'SRC_REVISION' => defined('SRC_REVISION') ? SRC_REVISION : null,
-			'HTTP_HOST' => $_SERVER['HTTP_HOST'],
-			'is_foodsharing_dot_at' => strpos($_SERVER['HTTP_HOST'], 'foodsharing.at') !== false,
+			'HTTP_HOST' => $_SERVER['HTTP_HOST'] ?? BASE_URL,
+			'is_foodsharing_dot_at' => strpos($_SERVER['HTTP_HOST'] ?? BASE_URL, 'foodsharing.at') !== false,
 			'content' => [
 				'main' => [
 					'html' => $this->getContent(CNT_MAIN),

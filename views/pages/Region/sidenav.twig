@@ -2,7 +2,8 @@
 
 {{ sidenav.menu_tree(nav.menu, null, nav.active) }}
 
-{% embed 'components/field.twig' with {'title': 'terminology.ambassadors'|trans()} %}
+
+{% embed 'components/field.twig' with {'title': (region.isWorkGroup ? 'terminology.admins' : 'terminology.ambassadors')|trans()} %}
     {% block content %}
         {% include 'partials/avatarList.twig' with {'id': 'admin-list', 'entries': region.admins}%}
     {% endblock %}
