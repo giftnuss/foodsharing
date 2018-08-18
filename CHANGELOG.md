@@ -1,3 +1,13 @@
+# Unreleased 
+
+## Features
+
+## Bugfixes
+
+## Refactoring
+
+## Dev/Test/CI stuff
+
 # 2018-08-18
 
 A spontaneous hack-weekend led to us finally finishing this release.
