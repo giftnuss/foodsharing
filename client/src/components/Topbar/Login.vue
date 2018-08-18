@@ -75,6 +75,9 @@ export default {
                 this.isLoading = false
                 if(err.code && err.code === 401) {
                     pulseError('E-Mail-Adresse oder Passwort sind falsch')
+                    setTimeout(() => {
+                      window.location = '/?page=login&ref=%2F%3Fpage%3Ddashboard'
+                    }, 2000)
                 } else {
                     pulseError('Unknown error')
                     throw err
