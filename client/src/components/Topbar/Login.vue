@@ -1,5 +1,5 @@
 <template>
-    <form class="form-inline my-2 my-lg-0" style="flex-grow: 1">
+    <form class="form-inline my-2 my-lg-0" style="flex-grow: 1" v-on:submit.prevent>
         <div class="input-group mr-2" ref="inputgroup">
             <div class="input-group-prepend">
                 <label class="input-group-text text-primary" for="login-email">
@@ -7,10 +7,11 @@
                 </label>
             </div>
             <input 
-                type="email" 
+                type="email"
+                name="login-email"
                 id="login-email"
-                class="form-control text-primary" 
-                placeholder="E-Mail" 
+                class="form-control text-primary"
+                placeholder="E-Mail"
                 aria-label="E-Mail"
                 v-model="email"
                 @keydown.enter="submit"
@@ -23,21 +24,22 @@
                 </label>
             </div>
             <input 
-                type="password" 
+                type="password"
+                name="login-password"
                 id="login-password"
-                class="form-control text-primary" 
-                placeholder="Passwort" 
+                class="form-control text-primary"
+                placeholder="Passwort"
                 aria-label="Passwort"
                 v-model="password"
                 @keydown.enter="submit"
             >
         </div>
-        <a v-if="!isLoading " href="#" class="btn btn-secondary btn-sm" @click="submit">
+        <button v-if="!isLoading " href="#" class="btn btn-secondary btn-sm" @click="submit">
             <i class="fas fa-arrow-right" />
-        </a>
-        <a v-else class="btn btn-light btn-sm loadingButton" @click="submit">
+        </button>
+        <button v-else class="btn btn-light btn-sm loadingButton" @click="submit">
             <img src="/img/469.gif" />
-        </a>
+        </button>
     </form>
 </template>
 

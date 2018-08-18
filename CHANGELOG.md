@@ -41,6 +41,7 @@
 - Add back redirect to invalid login event !516 @theolampert
 - Reformatting of conversation message times happen in API to avoid javascript error on empty conversation !517 @NerdyProjects @theolampert
 - Groups in the menu are also keyboard navigatable !515 #314 @theolampert @NerdyProjects
+- Enable autofill username/password for login !515 @theolampert @NerdyProjects
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
