@@ -4,7 +4,7 @@
             <i class="fas fa-users"/>
         </template>
             <div v-for="group in workingGroups" :key="group.id" class="group">
-                <a v-if="!alwaysOpen" role="menuitem" v-b-toggle="'topbargroup_'+group.id"  class="dropdown-item text-truncate">
+                <a v-if="!alwaysOpen" role="menuitem" v-b-toggle="'topbargroup_'+group.id"  class="dropdown-item text-truncate" href="#" target="_self">
                     {{ group.name }}
                 </a>
                 <h3 v-if="alwaysOpen" role="menuitem" class="dropdown-header text-truncate">
