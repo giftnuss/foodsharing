@@ -24,26 +24,26 @@
                             </a>
                         </li>
                         <menu-region v-if="hasFsRole" :regions="regions" :activeRegionId="activeRegionId" />
-                        <menu-stores v-if="hasFsRole && stores.length" :stores="stores" :mayAddStore="may.addStore" />
                         <menu-groups v-if="hasFsRole" :workingGroups="workingGroups" />
+                        <menu-stores v-if="hasFsRole && stores.length" :stores="stores" :mayAddStore="may.addStore" />
                         <menu-baskets :showLabel="!hasFsRole && !isMobile" />
                         <li v-if="!isMobile" class="nav-item" v-b-tooltip title="Karte">
                             <a :href="$url('map')" class="nav-link">
                                 <i class="fas fa-map-marker-alt" />
                                 <span v-if="!loggedIn || !hasFsRole">Karte</span>
                             </a>
-                            
+
                         </li>
                         <menu-messages v-if="isMobile" />
                         <menu-bells v-if="isMobile" />
                     </ul>
                     <b-navbar-toggle v-if="!hasFsRole" target="nav_collapse" class="ml-2"></b-navbar-toggle>
-                </div>              
+                </div>
 
 
                 <search v-if="hasFsRole" />
                 <b-navbar-toggle v-if="hasFsRole" target="nav_collapse" class="ml-2"></b-navbar-toggle>
-                
+
                 <b-collapse is-nav id="nav_collapse">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item" v-b-tooltip title="Home">
@@ -58,7 +58,7 @@
                                 <span class="d-md-none">Karte</span>
                             </a>
                         </li>
-                        <menu-admin 
+                        <menu-admin
                             v-if="someAdminRights"
                             :isOrgaTeam="isOrgaTeam"
                             :may="may"
@@ -81,7 +81,7 @@
                             <a :href="$url('wiki')" class="dropdown-item" role="menuitem">Wiki</a>
                             <a :href="$url('changelog')" class="dropdown-item" role="menuitem">Changelog</a>
                         </nav-item-dropdown>
-                        
+
                         <li v-if="mailbox" class="nav-item" v-b-tooltip title="E-Mail-Postfach">
                             <a :href="$url('mailbox')" class="nav-link">
                                 <i class="fas fa-envelope" />
@@ -151,7 +151,7 @@ export default {
         },
         may: {
             type: Object,
-            default: () => ({}) 
+            default: () => ({})
         },
         stores: {
             type: Array,
@@ -261,16 +261,16 @@ export default {
         .nav-link {
             padding: 0.4em 0.2em;
             i {
-                font-size: 1em;   
+                font-size: 1em;
             }
         }
     }
-    
+
     .no-collapse {
         display:flex;
         flex-grow: 1;
         flex-direction: row;
-        
+
         .nav-link {
             padding-right: 0.5rem;
             padding-left: 0.5rem;
@@ -365,7 +365,7 @@ div#main {
 
 
 // following is applied on the initial <div> before the vue component gets injected
-// it shows an brown bar as a placeholder for the actual topbar 
+// it shows an brown bar as a placeholder for the actual topbar
 #vue-topbar {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     height: 2em;
