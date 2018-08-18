@@ -36,6 +36,7 @@
 - Fix joining regions from subpages like profile not possible !509 #300 @NerdyProjects
 - Fixed `Invalid Date`-Error on safari !469 @alangecker
 - Reimplement forum scroll to post functionality !514 #270 @NerdyProjects
+- Add back redirect to invalid login event
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
