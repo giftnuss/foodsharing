@@ -52,7 +52,7 @@ class ForumRestController extends FOSRestController
 			$res['lastPost']['author'] = [
 				'id' => $thread['foodsaver_id'],
 				'name' => $thread['foodsaver_name'],
-				'avatar' => '/images/130_q_' . $thread['foodsaver_photo'],
+				'avatar' => $thread['foodsaver_photo'] ? ('/images/130_q_' . $thread['foodsaver_photo']) : null,
 				'sleepStatus' => $thread['sleep_status']
 			];
 		}
@@ -60,7 +60,7 @@ class ForumRestController extends FOSRestController
 			$res['creator'] = [
 				'id' => $thread['creator_id'],
 				'name' => $thread['creator_name'],
-				'avatar' => '/images/130_q_' . $thread['creator_photo'],
+				'avatar' => $thread['creator_photo'] ? ('/images/130_q_' . $thread['creator_photo']) : null,
 				'sleepStatus' => $thread['creator_sleep_status']
 			];
 		}
@@ -77,7 +77,7 @@ class ForumRestController extends FOSRestController
 			'author' => [
 				'id' => $post['author_id'],
 				'name' => $post['author_name'],
-				'avatar' => '/images/130_q_' . $post['author_photo'],
+				'avatar' => $post['author_photo'] ? ('/images/130_q_' . $post['author_photo']) : null,
 				'sleepStatus' => $post['author_sleep_status']
 			],
 			'reactions' => $post['reactions'] ?: new \ArrayObject(),
