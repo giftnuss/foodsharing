@@ -10,11 +10,9 @@ class ContentControl extends Control
 	private $contentGateway;
 
 	public function __construct(
-		ContentModel $model,
 		ContentView $view,
 		ContentGateway $contentGateway
 	) {
-		$this->model = $model;
 		$this->view = $view;
 		$this->contentGateway = $contentGateway;
 
@@ -41,7 +39,7 @@ class ContentControl extends Control
 					$this->func->pageLink('content', 'back_to_overview')
 				)), $this->func->s('actions')), CNT_RIGHT);
 			} elseif ($id = $this->func->getActionId('delete')) {
-				if ($this->model->del_content($id)) {
+				if ($this->contentGateway->delete($id)) {
 					$this->func->info($this->func->s('content_deleted'));
 					$this->func->goPage();
 				}
@@ -189,7 +187,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function faq()
+	public function faq(): void
 	{
 		$this->func->addBread('F.A.Q');
 		$this->func->addTitle('F.A.Q.');
@@ -203,7 +201,7 @@ class ContentControl extends Control
 			$cat_ids[] = 5;
 		}
 
-		if ($faq = $this->model->listFaq($cat_ids)) {
+		if ($faq = $this->contentGateway->listFaq($cat_ids)) {
 			$this->func->addContent($this->view->faq($faq));
 		}
 	}

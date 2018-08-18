@@ -279,7 +279,7 @@ class SettingsControl extends Control
 				$check = true;
 				if (!isset($_POST['photo_public'])) {
 					$check = false;
-					$this->func->error('Du musst dem zustimmen das wir Dein Foto veröffentlichen dürfen');
+					$this->func->error('Du musst zustimmen, dass wir Dein Foto veröffentlichen dürfen.');
 				}
 
 				if (empty($_POST['about_me_public'])) {
@@ -289,7 +289,7 @@ class SettingsControl extends Control
 
 				if (!isset($_POST['tel_public'])) {
 					$check = false;
-					$this->func->error('Du musst dem zustimmen das wir Deine Telefonnummer veröffentlichen');
+					$this->func->error('Du musst zustimmen, dass wir Deine Telefonnummer veröffentlichen.');
 				}
 
 				if (!isset($_POST['rv_botschafter'])) {
@@ -299,7 +299,7 @@ class SettingsControl extends Control
 
 				if ((int)$_POST['bezirk'] == 0) {
 					$check = false;
-					$this->func->error('Du hast keinen Bezirk gewählt in dem Du Botschafter werden möchtest');
+					$this->func->error('Du hast keinen Bezirk gewählt, in dem Du Botschafter werden möchtest');
 				}
 
 				if ($check) {
@@ -325,7 +325,7 @@ class SettingsControl extends Control
 					if($("#bezirk").val() == 0)
 					{
 						check = false;
-						error("Du musst einen bezirk ausw&auml;hlen");
+						error("Du musst einen Bezirk ausw&auml;hlen");
 					}
 				
 					if(!check)

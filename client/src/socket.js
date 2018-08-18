@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 
 // eslint-disable-next-line camelcase
-import { info, session_id, GET } from '@/script'
+import { session_id, GET } from '@/script'
 
 import msg from '@/msg'
 import conv from '@/conv'
@@ -29,7 +29,7 @@ export default {
     socket.on('info', function (data) {
       switch (data.m) {
         case 'badge':
-          info.badge('info', data.o.count)
+          // info.badge('info', data.o.count)
           break
       }
     })

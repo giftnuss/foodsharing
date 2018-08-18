@@ -2,10 +2,10 @@
 
 namespace Foodsharing\Modules\Event;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Region\RegionGateway;
 
-class EventModel extends Model
+class EventModel extends Db
 {
 	private $regionGateway;
 

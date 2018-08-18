@@ -36,7 +36,7 @@ class WallPostXhr extends Control
 			$postId = (int)$_GET['post'];
 			$fs = $this->wallPostGateway->getFsByPost($postId);
 			if ($fs == $this->func->fsId()
-				|| (!in_array($this->table, array('fairteiler', 'foodsaver')) && ($this->func->isBotschafter() || $this->func->isOrgaTeam()))
+				|| (!in_array($this->table, array('fairteiler', 'foodsaver')) && ($this->func->isBotschafter() || $this->session->isOrgaTeam()))
 			) {
 				if ($this->wallPostGateway->deletePost($postId)) {
 					$this->wallPostGateway->unlinkPost($postId, $this->table);

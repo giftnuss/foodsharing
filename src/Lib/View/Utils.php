@@ -238,7 +238,7 @@ class Utils
 			}
 		});');
 
-		$nodeselect = 'node.data.type == 1 || node.data.type == 2 || node.data.type == 3 || node.data.type == 4 || node.data.type == 7';
+		$nodeselect = 'node.data.type == 1 || node.data.type == 2 || node.data.type == 3 || node.data.type == 7 || node.data.type == 9';
 		if ($this->session->may('orga')) {
 			$nodeselect = 'true';
 		}
@@ -311,56 +311,6 @@ class Utils
 				</form>';
 	}
 
-	public function v_msgBar()
-	{
-		return '<ul id="infobar">
-					<li class="msg">
-						<a href="#" onclick="return false;">
-							<i class="fa fa-comments"></i><span style="display:none;" class="badge">0</span>
-						</a>
-						<span style="display:none;" class="linkwrapper corner-all ui-shadow">
-							<ul class="linklist conversation-list">
-							</ul>
-							<a class="more" href="/?page=msg">Alle zeigen</a>
-						</span>
-					</li>
-
-					<li class="bell">
-						<a href="#" onclick="return false;">
-							<i class="fa fa-bell"></i><span style="display:none;" class="badge">0</span>
-						</a>
-						<span style="display:none;" class="linkwrapper corner-all ui-shadow">
-							<ul class="linklist conversation-list">
-							</ul>
-						</span>
-
-					</li>
-
-					<li class="basket">
-						<a href="#" onclick="return false;">
-							<i class="img-fbasket"></i><span style="display:none;" class="badge">0</span>
-						</a>
-						<span style="display:none;" class="linkwrapper corner-all ui-shadow">
-							<ul class="linklist conversation-list">
-							</ul>
-							<a class="more" href="#" onclick="ajreq(\'newbasket\',{app:\'basket\'});return false;">Neuen Essenskorb anlegen</a>
-						</span>
-
-					</li>
-				</ul>
-
-				<div id="searchbar">
-				<i class="fa fa-search"></i><input type="text" value="" placeholder="' . $this->func->s('search') . '..." />
-				<div class="result-wrapper" style="display:none;">
-					<ul class="linklist index"></ul>
-					<ul class="linklist result"></ul>
-					<ul class="linklist more">
-						<li><a class="more" onclick="goTo(\'/?page=search&q=\' + encodeURIComponent($(\'#searchbar input\').val()));return false;" href="#">Alle Ergebnisse</a></li>
-					</ul>
-				</div>
-			</div>';
-	}
-
 	public function v_success($msg, $title = false)
 	{
 		if ($title !== false) {
@@ -369,11 +319,11 @@ class Utils
 
 		return '
 		<div class="msg-inside success">
-				<i class="fa fa-check-circle"></i> ' . $title . $msg . '
+				<i class="fas fa-check-circle"></i> ' . $title . $msg . '
 		</div>';
 	}
 
-	public function v_info($msg, $title = false, $icon = '<i class="fa fa-info-circle"></i>')
+	public function v_info($msg, $title = false, $icon = '<i class="fas fa-info-circle"></i>')
 	{
 		if ($title !== false) {
 			$title = '<strong>' . $title . '</strong> ';
@@ -393,7 +343,7 @@ class Utils
 
 		return '
 		<div class="msg-inside error">
-				<i class="fa fa-warning"></i> ' . $title . $msg . '
+				<i class="fas fa-exclamation-triangle"></i> ' . $title . $msg . '
 		</div>';
 	}
 
@@ -872,7 +822,7 @@ class Utils
 		if (isset($_GET['bid'])) {
 			$bid = '&bid=' . (int)$_GET['bid'];
 		} else {
-			$bid = $this->func->getBezirkId();
+			$bid = $this->session->getCurrentBezirkId();
 		}
 
 		$out = '';
@@ -1356,7 +1306,7 @@ class Utils
 		}
 
 		if (isset($option['collapse'])) {
-			$label = '<i class="fa fa-caret-right"></i> ' . $label;
+			$label = '<i class="fas fa-caret-right"></i> ' . $label;
 			$this->func->addJs('
 				$("#' . $id . '-wrapper .element-wrapper").hide();
 			');

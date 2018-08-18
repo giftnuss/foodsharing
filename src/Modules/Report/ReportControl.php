@@ -2,14 +2,14 @@
 
 namespace Foodsharing\Modules\Report;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
 
 class ReportControl extends Control
 {
 	private $reportGateway;
 
-	public function __construct(ReportGateway $reportGateway, Model $model, ReportView $view)
+	public function __construct(ReportGateway $reportGateway, Db $model, ReportView $view)
 	{
 		$this->reportGateway = $reportGateway;
 		$this->model = $model;

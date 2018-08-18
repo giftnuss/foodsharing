@@ -12,7 +12,7 @@ class BlogView extends View
 		foreach ($data as $d) {
 			$row_tmp = array();
 
-			if ($this->func->isOrgaTeam() || $this->func->isBotFor($d['bezirk_id'])) {
+			if ($this->session->isOrgaTeam() || $this->func->isBotFor($d['bezirk_id'])) {
 				$row_tmp[] = array('cnt' => $this->v_utils->v_activeSwitcher('blog_entry', $d['id'], $d['active']));
 			} else {
 				$row_tmp[] = array('cnt' => $this->func->s('status_' . $d['active']));
@@ -59,10 +59,10 @@ class BlogView extends View
 	{
 		$links = '';
 		if ($page > 1) {
-			$links .= '<a class="button" href="/?page=blog&p=' . ($page - 1) . '"><i class="fa fa-arrow-circle-left"></i></a>';
+			$links .= '<a class="button" href="/?page=blog&p=' . ($page - 1) . '"><i class="fas fa-arrow-circle-left"></i></a>';
 		}
 
-		$links .= '<a class="button" href="/?page=blog&p=' . ($page + 1) . '"><i class="fa fa-arrow-circle-right"></i></a>';
+		$links .= '<a class="button" href="/?page=blog&p=' . ($page + 1) . '"><i class="fas fa-arrow-circle-right"></i></a>';
 
 		return '<p class="pager">' . $links . '</p>';
 	}

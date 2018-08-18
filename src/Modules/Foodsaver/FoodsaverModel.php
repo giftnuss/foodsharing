@@ -3,10 +3,10 @@
 namespace Foodsharing\Modules\Foodsaver;
 
 use DateTime;
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Store\StoreModel;
 
-class FoodsaverModel extends Model
+class FoodsaverModel extends Db
 {
 	public function listFoodsaver($bezirk_id, $showOnlyInactive = false)
 	{
@@ -94,7 +94,7 @@ class FoodsaverModel extends Model
 		$data['anmeldedatum'] = date('Y-m-d H:i:s');
 
 		if (!isset($data['bezirk_id'])) {
-			$data['bezirk_id'] = $this->func->getBezirkId();
+			$data['bezirk_id'] = $this->session->getCurrentBezirkId();
 		}
 
 		$orga = '';
@@ -107,7 +107,7 @@ class FoodsaverModel extends Model
 		$verified = '';
 		if (isset($data['rolle'])) {
 			$rolle = '`rolle` =  ' . (int)$data['rolle'] . ',';
-			if ($data['rolle'] == 0 && $this->func->isOrgaTeam()) {
+			if ($data['rolle'] == 0 && $this->session->isOrgaTeam()) {
 				$data['bezirk_id'] = 0;
 				$quiz_rolle = '`quiz_rolle` = 0,';
 				$verified = '`verified` = 0,';

@@ -2,15 +2,15 @@
 
 namespace Foodsharing\Modules\BusinessCard;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
 use setasign\Fpdi;
 
 class BusinessCardXhr extends Control
 {
 	private $gateway;
 
-	public function __construct(BusinessCardGateway $gateway, Model $model)
+	public function __construct(BusinessCardGateway $gateway, Db $model)
 	{
 		$this->gateway = $gateway;
 		$this->model = $model;

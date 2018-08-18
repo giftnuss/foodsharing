@@ -36,7 +36,7 @@ class ForumRestController extends FOSRestController
 			'regionId' => $thread['regionId'],
 			'regionSubId' => $thread['regionSubId'],
 			'title' => $thread['title'],
-			'createdAt' => $thread['time'],
+			'createdAt' => str_replace(' ', 'T', $thread['time']),
 			'isSticky' => (bool)$thread['sticky'],
 			'isActive' => (bool)$thread['active'] ?? true,
 			'lastPost' => [
@@ -47,12 +47,12 @@ class ForumRestController extends FOSRestController
 			]
 		];
 		if (isset($thread['post_time'])) {
-			$res['lastPost']['createdAt'] = $thread['post_time'];
+			$res['lastPost']['createdAt'] = str_replace(' ', 'T', $thread['post_time']);
 			$res['lastPost']['body'] = $this->sanitizerService->markdownToHtml($thread['post_body']);
 			$res['lastPost']['author'] = [
 				'id' => $thread['foodsaver_id'],
 				'name' => $thread['foodsaver_name'],
-				'avatar' => '/images/130_q_' . $thread['foodsaver_photo'],
+				'avatar' => $thread['foodsaver_photo'] ? ('/images/130_q_' . $thread['foodsaver_photo']) : null,
 				'sleepStatus' => $thread['sleep_status']
 			];
 		}
@@ -60,7 +60,7 @@ class ForumRestController extends FOSRestController
 			$res['creator'] = [
 				'id' => $thread['creator_id'],
 				'name' => $thread['creator_name'],
-				'avatar' => '/images/130_q_' . $thread['creator_photo'],
+				'avatar' => $thread['creator_photo'] ? ('/images/130_q_' . $thread['creator_photo']) : null,
 				'sleepStatus' => $thread['creator_sleep_status']
 			];
 		}
@@ -73,11 +73,11 @@ class ForumRestController extends FOSRestController
 		return [
 			'id' => $post['id'],
 			'body' => $this->sanitizerService->markdownToHtml($post['body']),
-			'createdAt' => $post['time'],
+			'createdAt' => str_replace(' ', 'T', $post['time']),
 			'author' => [
 				'id' => $post['author_id'],
 				'name' => $post['author_name'],
-				'avatar' => '/images/130_q_' . $post['author_photo'],
+				'avatar' => $post['author_photo'] ? ('/images/130_q_' . $post['author_photo']) : null,
 				'sleepStatus' => $post['author_sleep_status']
 			],
 			'reactions' => $post['reactions'] ?: new \ArrayObject(),

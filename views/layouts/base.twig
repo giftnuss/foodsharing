@@ -46,26 +46,12 @@
         <style type="text/css">{{ head.css | raw }}</style>
     </head>
 
-    <body {{ bodyClass | raw }}>
-
-        <div id="top">
-            <div class="inner">
-                <div class="pure-g">
-                    <div class="pure-u-1">
-                        <div id="layout_logo"><a href="{{ logolink }}" title="foodsharing home">food<span>sharing</span></a></div>
-                        {{ msgbar | raw }}
-                        {{ menu.mobile | raw }}
-                        <div class="menu">
-                            {{ menu.default | raw }}
-                        </div>
-                        <div style="clear:both;"></div>
-                    </div>
-                </div>
-            </div>
-            {% if broadcast_message %}
-                <div class="inner inside msg-inside info">{{ broadcast_message | raw }}</div>
-            {% endif %}
-        </div>
+    <body class="{{ bodyClasses|join(' ') }}">
+        {% include 'partials/becomeBezirk.twig' %}
+        {{ menu | raw }}
+        {% if broadcast_message %}
+            <div class="inner inside msg-inside info">{{ broadcast_message | raw }}</div>
+        {% endif %}
 
         {% block overtop %}
             {{ content.overtop.html | raw }}
@@ -161,7 +147,9 @@
         {% endblock %}
 
         <noscript>
-            <div id="nojs">Ohne JavaScript l&auml;uft hier leider nichts.</div>
+            <div id="nojs" class="bootstrap">
+                <div class="alert alert-danger">Ohne JavaScript l&auml;uft hier leider nichts.</div>
+            </div>
         </noscript>
 
         {% if hidden %}

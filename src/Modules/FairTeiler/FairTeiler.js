@@ -9,12 +9,14 @@ import 'typeahead-addresspicker'
 import 'leaflet'
 import 'leaflet.awesome-markers'
 import {
-  ajreq
+  ajreq,
+  pictureCrop
 } from '@/script'
 import { expose } from '@/utils'
 import './FairTeiler.css'
 
 expose({
+  pictureCrop,
   u_wallpostReady
 })
 

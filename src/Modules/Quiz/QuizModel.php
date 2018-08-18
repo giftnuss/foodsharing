@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Modules\Quiz;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Bell\BellGateway;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
-class QuizModel extends Model
+class QuizModel extends Db
 {
 	private $bellGateway;
 	private $foodsaverGateway;
@@ -290,7 +290,7 @@ class QuizModel extends Model
 		')
 		) {
 			if ($quizAMBs = $this->foodsaverGateway->getBotschafter(341)) {
-				$this->bellGateway->addBell($quizAMBs, 'new_quiz_comment_title', 'new_quiz_comment', 'fa fa-question-circle', array('href' => '/?page=quiz&sub=wall&id=' . (int)$question_id), array(
+				$this->bellGateway->addBell($quizAMBs, 'new_quiz_comment_title', 'new_quiz_comment', 'fas fa-question-circle', array('href' => '/?page=quiz&sub=wall&id=' . (int)$question_id), array(
 					'comment' => $comment
 				));
 			}

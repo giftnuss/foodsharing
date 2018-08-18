@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Region;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
 
 class RegionXhr extends Control
 {
@@ -13,7 +13,7 @@ class RegionXhr extends Control
 	private $regionHelper;
 	private $twig;
 
-	public function __construct(Model $model, ForumGateway $forumGateway, RegionHelper $regionHelper, \Twig\Environment $twig)
+	public function __construct(Db $model, ForumGateway $forumGateway, RegionHelper $regionHelper, \Twig\Environment $twig)
 	{
 		$this->model = $model;
 		$this->forumGateway = $forumGateway;
@@ -28,7 +28,7 @@ class RegionXhr extends Control
 	{
 		return ($BotThemestatus['bot_theme'] == 0 && $this->func->mayBezirk($BotThemestatus['bezirk_id']))
 			|| ($BotThemestatus['bot_theme'] == 1 && $this->func->isBotFor($BotThemestatus['bezirk_id']))
-			|| $this->func->isOrgaTeam();
+			|| $this->session->isOrgaTeam();
 	}
 
 	public function morethemes()

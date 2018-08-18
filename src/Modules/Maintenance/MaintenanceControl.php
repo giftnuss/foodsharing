@@ -169,7 +169,7 @@ class MaintenanceControl extends ConsoleControl
 		if ($foodsaver = $this->model->listFoodsaverInactiveSince(30)) {
 			foreach ($foodsaver as $fs) {
 				$inactive_fsids[$fs['id']] = $fs['id'];
-				$this->tplMail(27, $fs['email'], array(
+				$this->func->tplMail(27, $fs['email'], array(
 					'name' => $fs['name'],
 					'anrede' => $this->func->s('anrede_' . $fs['geschlecht'])
 				));
@@ -186,7 +186,7 @@ class MaintenanceControl extends ConsoleControl
 		 */
 		if ($foodsaver = $this->model->listFoodsaverInactiveSince(14)) {
 			foreach ($foodsaver as $fs) {
-				$this->tplMail(26, $fs['email'], array(
+				$this->func->tplMail(26, $fs['email'], array(
 					'name' => $fs['name'],
 					'anrede' => $this->func->s('anrede_' . $fs['geschlecht'])
 				));
@@ -203,7 +203,7 @@ class MaintenanceControl extends ConsoleControl
 				$botschafer,
 				'fs_sleepmode_title',
 				'fs_sleepmode',
-				'fa fa-user',
+				'fas fa-user',
 				array('href' => '#', 'onclick' => 'profile(' . $foodsaver['id'] . ');return false;'),
 				array('name' => $foodsaver['name'], 'nachname' => $foodsaver['nachname'], 'id' => $foodsaver['id']),
 				'fs-sleep' . (int)$foodsaver['id']
@@ -447,7 +447,7 @@ class MaintenanceControl extends ConsoleControl
 		if ($foodsaver = $this->model->getAlertBetriebeAdmins()) {
 			self::info('send ' . count($foodsaver) . ' warnings...');
 			foreach ($foodsaver as $fs) {
-				$this->tplMail(28, $fs['fs_email'], array(
+				$this->func->tplMail(28, $fs['fs_email'], array(
 					'anrede' => $this->func->s('anrede_' . $fs['geschlecht']),
 					'name' => $fs['fs_name'],
 					'betrieb' => $fs['betrieb_name'],

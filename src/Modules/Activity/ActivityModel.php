@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Modules\Activity;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 use Foodsharing\Services\SanitizerService;
 
-class ActivityModel extends Model
+class ActivityModel extends Db
 {
 	private $mailboxModel;
 	private $activityGateway;
@@ -27,7 +27,7 @@ class ActivityModel extends Model
 			$updates = $up;
 		}
 
-		if ($up = $this->activityGateway->fetchAllWallpostsFromFoodBasekts($this->session->id(), $page)) {
+		if ($up = $this->activityGateway->fetchAllWallpostsFromFoodBaskets($this->session->id(), $page)) {
 			$updates = array_merge($updates, $up);
 		}
 
@@ -50,7 +50,7 @@ class ActivityModel extends Model
 					'attr' => [
 						'href' => '/profile/' . $u['fs_id']
 					],
-					'title' => '<a href="/profile/' . $u['fs_id'] . '">' . $u['fs_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="/essenskoerbe/' . $u['basket_id'] . '">' . $title . '</a><small>' . $smTitle . '</small>',
+					'title' => '<a href="/profile/' . $u['fs_id'] . '">' . $u['fs_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="/essenskoerbe/' . $u['basket_id'] . '">' . $title . '</a><small>' . $smTitle . '</small>',
 					'desc' => $this->textPrepare($u['body']),
 					'time' => $u['time'],
 					'icon' => $this->func->img($u['fs_photo'], 50),
@@ -71,7 +71,7 @@ class ActivityModel extends Model
 		$sanitized = $this->sanitizerService->markdownToHtml($txt);
 
 		if (strlen($txt) > 100) {
-			return '<span class="txt">' . $this->sanitizerService->markdownToHtml($this->func->tt($txt, 90)) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fa fa-angle-down"></i></a></span><span class="txt" style="display:none;">' . $sanitized . ' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fa fa-angle-up"></i></a></span>';
+			return '<span class="txt">' . $this->sanitizerService->markdownToHtml($this->func->tt($txt, 90)) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fas fa-angle-down"></i></a></span><span class="txt" style="display:none;">' . $sanitized . ' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fas fa-angle-up"></i></a></span>';
 		}
 
 		return '<span class="txt">' . $sanitized . '</span>';
@@ -163,7 +163,7 @@ class ActivityModel extends Model
 						'attr' => [
 							'href' => '/?page=mailbox&show=' . $u['id']
 						],
-						'title' => $from . ' <i class="fa fa-angle-right"></i> <a href="/?page=mailbox&show=' . $u['id'] . '">' . $this->func->ttt($u['subject'], 30) . '</a><small>' . $this->func->ttt($u['mb_name'] . '@' . DEFAULT_EMAIL_HOST, 19) . '</small>',
+						'title' => $from . ' <i class="fas fa-angle-right"></i> <a href="/?page=mailbox&show=' . $u['id'] . '">' . $this->func->ttt($u['subject'], 30) . '</a><small>' . $this->func->ttt($u['mb_name'] . '@' . DEFAULT_EMAIL_HOST, 19) . '</small>',
 						'desc' => $this->textPrepare($u['body']),
 						'time' => $u['time'],
 						'icon' => '/img/mailbox-50x50.png',
@@ -181,7 +181,7 @@ class ActivityModel extends Model
 
 	public function loadForumUpdates($page = 0, $bids_not_load = false)
 	{
-		$tmp = $this->session->getRegionIds();
+		$tmp = $this->session->listRegionIDs();
 		$bids = array();
 		if ($tmp === false || count($tmp) === 0) {
 			return false;
@@ -217,7 +217,7 @@ class ActivityModel extends Model
 						'attr' => [
 							'href' => $url
 						],
-						'title' => '<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="' . $url . '">' . $u['name'] . '</a> <small>' . $u['bezirk_name'] . '</small>',
+						'title' => '<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="' . $url . '">' . $u['name'] . '</a> <small>' . $u['bezirk_name'] . '</small>',
 						'desc' => $this->textPrepare($u['post_body']),
 						'time' => $u['update_time'],
 						'icon' => $this->func->img($u['foodsaver_photo'], 50),
@@ -242,7 +242,7 @@ class ActivityModel extends Model
 					'attr' => [
 						'href' => '/?page=fsbetrieb&id=' . $r['betrieb_id']
 					],
-					'title' => '<a href="/profile/' . $r['foodsaver_id'] . '">' . $r['foodsaver_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="/?page=fsbetrieb&id=' . $r['betrieb_id'] . '">' . $r['betrieb_name'] . '</a>',
+					'title' => '<a href="/profile/' . $r['foodsaver_id'] . '">' . $r['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="/?page=fsbetrieb&id=' . $r['betrieb_id'] . '">' . $r['betrieb_name'] . '</a>',
 					'desc' => $this->textPrepare($r['text']),
 					'time' => $r['update_time'],
 					'icon' => $this->func->img($r['foodsaver_photo'], 50),

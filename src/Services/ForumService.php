@@ -2,10 +2,10 @@
 
 namespace Foodsharing\Services;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\ForumGateway;
@@ -18,7 +18,7 @@ class ForumService
 	private $foodsaverGateway;
 	private $bellGateway;
 	private $emailTemplateGateway;
-	/* @var Model */
+	/* @var Db */
 	private $model;
 	private $func;
 	private $session;
@@ -31,7 +31,7 @@ class ForumService
 		ForumGateway $forumGateway,
 		Func $func,
 		Session $session,
-		Model $model,
+		Db $model,
 		RegionGateway $regionGateway,
 		SanitizerService $sanitizerService
 	) {
@@ -79,7 +79,7 @@ class ForumService
 			$fsIds,
 			'forum_answer_title',
 			'forum_answer',
-			'fa fa-comments',
+			'fas fa-comments',
 			['href' => $this->url($info['region_id'], $info['ambassador_forum'], $threadId, $postId)],
 			['user' => $this->session->user('name'), 'forum' => $regionName],
 			'forum-post-' . $postId

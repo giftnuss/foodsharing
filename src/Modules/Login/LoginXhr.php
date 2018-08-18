@@ -45,34 +45,6 @@ class LoginXhr extends Control
 		}
 	}
 
-	public function login()
-	{
-		if (!$this->session->may()) {
-			$dia = new XhrDialog();
-
-			$dia->setTitle($this->func->s('login'));
-
-			$dia->addContent($this->view->loginForm());
-
-			$dia->addButton('Registrieren', 'ajreq(\'join\',{app:\'login\',e:$(\'#email_adress\').val(),p:$(\'#password\').val()});');
-			$dia->addButton('Einloggen', "ajreq('loginsubmit',{app:'login',u:$('#email_adress').val(),p:$('#password').val()});");
-
-			$dia->addJs('
-				$("#forgotpasswordlink").focus(function(){
-					$(".ui-dialog-buttonpane button:last")[0].focus();
-				});
-				$("#password").keydown(function(ev){
-					if(ev.which == 13)
-					{
-						ajreq("loginsubmit",{app:"login",u:$("#email_adress").val(),p:$("#password").val()});
-					}
-				});
-			');
-
-			return $dia->xhrout();
-		}
-	}
-
 	public function loginsubmit()
 	{
 		if ($this->loginGateway->login($_GET['u'], $_GET['p'])) {
@@ -84,7 +56,6 @@ class LoginXhr extends Control
 			$this->fillMemcacheUserVars();
 
 			$menu = $this->func->getMenu();
-			$msgbar = $this->v_utils->v_msgBar();
 
 			return array(
 				'status' => 1,

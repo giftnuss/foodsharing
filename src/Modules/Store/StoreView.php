@@ -27,7 +27,7 @@ class StoreView extends View
 	public function fetchHistory()
 	{
 		return $this->v_utils->v_form_daterange('daterange', array(
-				'content_after' => ' <a href="#" id="daterange_submit" class="button"><i class="fa fa-search"></i></a>'
+				'content_after' => ' <a href="#" id="daterange_submit" class="button"><i class="fas fa-search"></i></a>'
 			)) . '<div id="daterange_content"></div>';
 	}
 

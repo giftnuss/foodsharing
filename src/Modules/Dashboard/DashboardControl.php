@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Modules\Dashboard;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Profile\ProfileModel;
@@ -32,7 +32,7 @@ class DashboardControl extends Control
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
 		EventGateway $eventGateway,
-		Model $model,
+		Db $model,
 		ProfileModel $profileModel,
 		\Twig\Environment $twig)
 	{
@@ -116,7 +116,7 @@ class DashboardControl extends Control
 			if ($this->session->option('quiz-infobox-seen')) {
 				$cnt['body'] = '<div>' . substr(strip_tags($cnt['body']), 0, 120) . ' ...<a href="#" onclick="$(this).parent().hide().next().show();return false;">weiterlesen</a></div><div style="display:none;">' . $cnt['body'] . '</div>';
 			} else {
-				$cnt['body'] = $cnt['body'] . '<p><a href="#" onclick="ajreq(\'quizpopup\',{app:\'quiz\'});return false;">Weiter zum Quiz</a></p><p><a href="#" onclick="$(this).parent().parent().hide();ajax.req(\'quiz\',\'hideinfo\');return false;"><i class="fa fa-check-square-o"></i> Hinweis gelesen und nicht mehr anzeigen</a></p>';
+				$cnt['body'] = $cnt['body'] . '<p><a href="#" onclick="ajreq(\'quizpopup\',{app:\'quiz\'});return false;">Weiter zum Quiz</a></p><p><a href="#" onclick="$(this).parent().parent().hide();ajax.req(\'quiz\',\'hideinfo\');return false;"><i class="far fa-check-square"></i> Hinweis gelesen und nicht mehr anzeigen</a></p>';
 			}
 			$this->func->addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
 		}
@@ -127,7 +127,7 @@ class DashboardControl extends Control
 		 * User is foodsaver
 		 */
 
-		if ($this->user['rolle'] > 0 && !$this->func->getBezirkId()) {
+		if ($this->user['rolle'] > 0 && !$this->session->getCurrentBezirkId()) {
 			$this->func->addJs('becomeBezirk();');
 		}
 
@@ -261,7 +261,7 @@ class DashboardControl extends Control
 			{
 				$("input[name=\'photo_public\']")[0].focus();
 				check = false;
-				if(confirm("Sicher das Du Deine Daten nicht anzeigen lassen möchstest? So kann Dich kein Foodsaver finden"))
+				if(confirm("Sicher, dass Du Deine Daten nicht anzeigen lassen möchstest? So kann Dich kein Foodsaver finden."))
 				{
 					check = true;
 				}
@@ -458,7 +458,7 @@ class DashboardControl extends Control
 		');
 		$this->func->addContent('
 		<div class="head ui-widget-header ui-corner-top">
-			Updates-Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>
+			Updates-Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fas fa-cog"></a></span>
 		</div>
 		<div id="activity">
 			<div class="loader" style="padding:40px;background-image:url(/img/469.gif);background-repeat:no-repeat;background-position:center;"></div>

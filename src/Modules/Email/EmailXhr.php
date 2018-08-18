@@ -2,12 +2,12 @@
 
 namespace Foodsharing\Modules\Email;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
 
 class EmailXhr extends Control
 {
-	public function __construct(Model $model)
+	public function __construct(Db $model)
 	{
 		$this->model = $model;
 

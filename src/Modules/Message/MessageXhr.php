@@ -34,7 +34,7 @@ class MessageXhr extends Control
 
 			if ($name != '') {
 				if ($this->model->renameConversation($_GET['cid'], $name)) {
-					$xhr->addScript('$("#chat-' . (int)$_GET['cid'] . ' .chatboxtitle").html(\'<i class="fa fa-comment fa-flip-horizontal"></i> ' . $name . '\');conv.settings(' . (int)$_GET['cid'] . ');$("#convlist-' . (int)$_GET['cid'] . ' .names").html("' . $name . '")');
+					$xhr->addScript('$("#chat-' . (int)$_GET['cid'] . ' .chatboxtitle").html(\'<i class="fas fa-comment fa-flip-horizontal"></i> ' . $name . '\');conv.settings(' . (int)$_GET['cid'] . ');$("#convlist-' . (int)$_GET['cid'] . ' .names").html("' . $name . '")');
 				}
 			}
 
@@ -54,20 +54,6 @@ class MessageXhr extends Control
 				$xhr->send();
 			}
 		}
-	}
-
-	/**
-	 * ajax call to refresh infobar messages.
-	 */
-	public function infobar()
-	{
-		$this->session->noWrite();
-
-		$xhr = new Xhr();
-		$conversations = $this->model->listConversations(10);
-		$xhr->addData('html', $this->view->conversationList($conversations, 'conv.chat'));
-
-		$xhr->send();
 	}
 
 	/**
@@ -185,7 +171,27 @@ class MessageXhr extends Control
 
 		if ($conversations = $this->model->listConversations()) {
 			$xhr = new Xhr();
-			$xhr->addData('convs', $conversations);
+
+			// because some of the messages and the titles are still stored in encoded html, theres the option to
+			// decode them again for the usage in vue components
+			// At some point there should always the raw input handled, which the user has entered
+			// and served over a proper API endpoint
+
+			if (isset($_GET['raw']) && $_GET['raw']) {
+				$xhr->addData('convs', array_map(function ($c) {
+					$c['last'] = $c['last'] ? str_replace(' ', 'T', $c['last']) : null;
+					if (isset($c['name']) && $c['name']) {
+						$c['name'] = html_entity_decode($c['name']);
+					}
+					if (isset($c['last_message'])) {
+						$c['last_message'] = html_entity_decode($c['last_message']);
+					}
+
+					return $c;
+				}, $conversations));
+			} else {
+				$xhr->addData('convs', $conversations);
+			}
 			$xhr->send();
 		}
 	}

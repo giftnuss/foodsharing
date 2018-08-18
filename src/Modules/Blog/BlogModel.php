@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Modules\Blog;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Bell\BellGateway;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
-class BlogModel extends Model
+class BlogModel extends Db
 {
 	private $bellGateway;
 	private $foodsaverGateway;
@@ -31,7 +31,7 @@ class BlogModel extends Model
 
 	public function canAdd($fsId, $bezirkId)
 	{
-		if ($this->func->isOrgaTeam()) {
+		if ($this->session->isOrgaTeam()) {
 			return true;
 		}
 
@@ -104,8 +104,8 @@ class BlogModel extends Model
 	public function listArticle()
 	{
 		$not = '';
-		if (!$this->func->isOrgaTeam()) {
-			$not = 'WHERE 		`bezirk_id` IN (' . implode(',', $this->session->getRegionIds()) . ')';
+		if (!$this->session->isOrgaTeam()) {
+			$not = 'WHERE 		`bezirk_id` IN (' . implode(',', $this->session->listRegionIDs()) . ')';
 		}
 
 		return $this->q('
@@ -156,7 +156,7 @@ class BlogModel extends Model
 	public function add_blog_entry($data)
 	{
 		$active = 0;
-		if ($this->func->isOrgaTeam()) {
+		if ($this->session->isOrgaTeam()) {
 			$active = 1;
 		} elseif ($this->func->isBotFor($data['bezirk_id'])) {
 			$active = 1;
@@ -201,7 +201,7 @@ class BlogModel extends Model
 			$foodsaver,
 			'blog_new_check_title',
 			'blog_new_check',
-			'fa fa-bullhorn',
+			'fas fa-bullhorn',
 			array('href' => '/?page=blog&sub=edit&id=' . $id),
 			array(
 				'user' => $this->session->user('name'),

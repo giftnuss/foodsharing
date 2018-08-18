@@ -170,7 +170,7 @@ class DashboardView extends View
 	');
 		$this->func->addContent('
 	<div class="head ui-widget-header ui-corner-top">
-		Updates-Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fa fa-gear"></a></span>
+		Updates-Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fas fa-cog"></a></span>
 	</div>
 	<div id="activity">
 		<div class="loader" style="padding:40px;background-image:url(/img/469.gif);background-repeat:no-repeat;background-position:center;"></div>
@@ -181,7 +181,7 @@ class DashboardView extends View
 	public function foodsharerMenu()
 	{
 		return $this->menu(array(
-			array('name' => $this->func->s('new_basket'), 'click' => "ajreq('newbasket',{app:'basket'});return false;"),
+			array('name' => $this->func->s('new_basket'), 'click' => "ajreq('newBasket',{app:'basket'});return false;"),
 			array('name' => $this->func->s('all_baskets'), 'href' => '/karte?load=baskets')
 		));
 	}
@@ -222,7 +222,7 @@ class DashboardView extends View
 	{
 		return '
 	   <div class="msg-inside info">
-			   <i class="fa fa-info-circle"></i> <strong><a href="/?page=settings&sub=upgrade/up_fs">Möchtest Du auch Lebensmittel bei Betrieben retten und fair-teilen?<br />Werde Foodsaver!</a></strong>
+			   <i class="fas fa-info-circle"></i> <strong><a href="/?page=settings&sub=upgrade/up_fs">Möchtest Du auch Lebensmittel bei Betrieben retten und fair-teilen?<br />Werde Foodsaver!</a></strong>
 	   </div>';
 	}
 

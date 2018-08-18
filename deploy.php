@@ -23,6 +23,9 @@ set('writable_dirs', ['tmp', 'cache', 'cache/searchindex', 'cache/htmlpurifier-c
 set('http_user', 'www-data');
 set('clear_paths', ['cache/.views-cache', 'cache/di-cache.php']);
 
+// default timeout of 300 was failing sometimes
+set('default_timeout', 600);
+
 // Hosts
 
 host('beta')

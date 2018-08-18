@@ -75,7 +75,6 @@ export function initialize () {
     sleepmode.init()
 
     $('textarea.comment').autosize()
-    $('#nojs').css('display', 'none')
     $('#main').css('display', 'block')
 
     $('.moreswap').each(function () {
@@ -126,23 +125,6 @@ export function initialize () {
       })
     })
 
-    if (isMob()) {
-      $('#mobilemenu, .v-mob').show()
-      $('#mainMenu, .v-desktop').hide()
-    } else {
-      $('#mainMenu, .v-desktop').show()
-      $('#mobilemenu, .v-mob').hide()
-    }
-    $(window).resize(function () {
-      if (isMob()) {
-        $('#mobilemenu, .v-mob').show()
-        $('#mainMenu, .v-desktop').hide()
-      } else {
-        $('#mainMenu, .v-desktop').show()
-        $('#mobilemenu, .v-mob').hide()
-      }
-    })
-
     $('textarea.inlabel, input.inlabel').each(function () {
       var $this = $(this)
       if ($this.val() === '') {
@@ -160,7 +142,6 @@ export function initialize () {
       })
     })
 
-    infoMenu()
     if (!isMob()) {
       $('#main a').tooltip({
         show: false,
@@ -211,9 +192,6 @@ export function initialize () {
     // $('.button').button();
     $('.dialog').dialog()
     $('.v-switch').buttonset()
-
-    $('#topmenu').buttonset()
-    $('#topmenu').first().click()
 
     $('ul.toolbar li').hover(
       function () {
@@ -297,9 +275,6 @@ export function addbanana (fsid) {
     height: 450
   })
   $('#fs-profile-rate-comment').dialog('open')
-}
-export function login () {
-  ajreq('login', { app: 'login' })
 }
 
 export function profile (id) {
@@ -494,97 +469,6 @@ export const pulseError = definePulse('error', 6000)
 
 export function addHover (sel) { $(sel).hover(function () { $(this).addClass('hover') }, function () { $(this).removeClass('hover') }) }
 
-export function infoMenu () {
-  addHover('div#msgBar .bar-item')
-
-  $('div#msgBar .bar-msg').click(function (event) {
-    event.stopPropagation()
-    $('#msgbar-messages').toggle()
-    $('#msgbar-infos').hide()
-    $('#msgbar-basket').hide()
-  })
-
-  $('#msgbar-messages').click(function (event) {
-    event.stopPropagation()
-  })
-
-  $(document).click(function () {
-    $('#msgbar-messages').hide()
-    $('#msgbar-infos').hide()
-  })
-  /* msg bar infos */
-  $('div#msgBar .bar-info').click(function (event) {
-    event.stopPropagation()
-    $('#msgbar-infos').toggle()
-    $('#msgbar-messages').hide()
-    $('#msgbar-basket').hide()
-  })
-
-  /* msg bar basket */
-  $('div#msgBar .bar-basket').click(function (event) {
-    event.stopPropagation()
-
-    $('#msgbar-infos').hide()
-    $('#msgbar-messages').hide()
-    if ($('#msgbar-basket').is(':visible')) {
-      $('#msgbar-basket').hide()
-      window.g_interval_newBasket = setInterval(function () {
-        ajreq('update', { app: 'basket', loader: false })
-      }, 10000)
-    } else {
-      clearInterval(window.g_interval_newBasket)
-      if ($('#msgbar-basket ul li.msg').length == 0) {
-        $('#msgbar-basket ul').prepend('<li class="loading">&nbsp;</li>')
-      }
-      ajreq('loadupdates', { app: 'basket', loader: false })
-      $('#msgbar-basket').show()
-    }
-
-    event.stopPropagation()
-  })
-
-  $('#msgBar-badge span.bar-info').mouseover(function () {
-    $('#msgBar .bar-info').trigger('mouseover')
-  })
-  $('#msgBar-badge span.bar-info').mouseout(function () {
-    $('#msgBar .bar-info').trigger('mouseout')
-  })
-
-  $('#msgBar-badge span.bar-msg').mouseover(function () {
-    $('#msgBar .bar-msg').trigger('mouseover')
-  })
-  $('#msgBar-badge span.bar-msg').mouseout(function () {
-    $('#msgBar .bar-msg').trigger('mouseout')
-  })
-
-  $('#msgBar-badge span.bar-basket').mouseover(function () {
-    $('#msgBar .bar-item.bar-basket').trigger('mouseover')
-  })
-  $('#msgBar-badge span.bar-basket').mouseout(function () {
-    $('#msgBar .bar-item.bar-basket').trigger('mouseout')
-  })
-  $('#msgBar-badge span.bar-basket').click(function () {
-    $('#msgBar .bar-item.bar-basket').trigger('click')
-  })
-
-  $('#msgBar-badge span.bar-info').click(function (event) {
-    event.stopPropagation()
-    $('div#msgBar .bar-info').trigger('click')
-  })
-  $('#msgBar-badge span.bar-msg').click(function (event) {
-    event.stopPropagation()
-    $('div#msgBar .bar-msg').trigger('click')
-  })
-
-  $('#msgBar .bar-item').on('touchstart', function (ev) {
-    $(this).addClass('hover')
-  })
-  $('#msgBar .bar-item').on('touchend', function (ev) {
-    $(this).removeClass('hover')
-  })
-
-  $('.msgbar-dropdown-menu.extended').slimScroll()
-}
 export function aNotify () {
   // $('#xhr-chat-notify')[0].play();
 }

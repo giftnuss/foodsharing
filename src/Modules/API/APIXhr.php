@@ -3,17 +3,17 @@
 namespace Foodsharing\Modules\API;
 
 use Flourish\fImage;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Modules\Basket\BasketModel;
+use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Model;
 use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Message\MessageModel;
 
 class APIXhr extends Control
 {
 	private $messageModel;
-	private $basketModel;
+	private $basketGateway;
 	private $apiGateway;
 	private $loginGateway;
 
@@ -21,13 +21,13 @@ class APIXhr extends Control
 		APIGateway $apiGateway,
 		LoginGateway $loginGateway,
 		MessageModel $messageModel,
-		BasketModel $basketModel,
-		Model $model
+		BasketGateway $basketGateway,
+		Db $model
 	) {
 		$this->apiGateway = $apiGateway;
 		$this->loginGateway = $loginGateway;
 		$this->messageModel = $messageModel;
-		$this->basketModel = $basketModel;
+		$this->basketGateway = $basketGateway;
 		$this->model = $model;
 		parent::__construct();
 
@@ -188,22 +188,22 @@ class APIXhr extends Control
 			$tmp = array();
 
 			if (isset($_GET['art'])) {
-				$art = $_GET['art'];
-				foreach ($art as $a) {
-					if ((int)$a > 0) {
-						$tmp[] = (int)$a;
+				$kinds = $_GET['art'];
+				foreach ($kinds as $kind) {
+					if ((int)$kind > 0) {
+						$tmp[] = (int)$kind;
 					}
 				}
 			}
-			$art = $tmp;
+			$kinds = $tmp;
 
 			$tmp = array();
 
 			if (isset($_GET['types'])) {
 				$types = $_GET['types'];
-				foreach ($types as $t) {
-					if ((int)$t > 0) {
-						$tmp[] = (int)$t;
+				foreach ($types as $type) {
+					if ((int)$type > 0) {
+						$tmp[] = (int)$type;
 					}
 				}
 			}
@@ -248,7 +248,7 @@ class APIXhr extends Control
 					}
 				}
 
-				if ($id = $this->basketModel->addBasket(
+				if ($id = $this->basketGateway->addBasket(
 					$desc,
 					$photo, // pic
 					$tel, // phone
@@ -257,14 +257,15 @@ class APIXhr extends Control
 					(int)$_GET['fetchart'], // location type
 					$lat, // lat
 					$lon, // lon
-					$this->session->user('bezirk_id')
+					$this->session->user('bezirk_id'),
+					$this->session->id()
 				)
 				) {
-					if (!empty($art)) {
-						$this->basketModel->addArt($id, $art);
+					if (!empty($kinds)) {
+						$this->basketGateway->addKind($id, $kinds);
 					}
 					if (!empty($types)) {
-						$this->basketModel->addTypes($id, $types);
+						$this->basketGateway->addTypes($id, $types);
 					}
 
 					$this->appout([

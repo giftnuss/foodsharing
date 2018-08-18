@@ -72,7 +72,7 @@ class EventControl extends Control
 			if (!$this->isEventAdmin($event)) {
 				return false;
 			}
-			if ($event['fs_id'] == $this->func->fsId() || $this->func->isOrgaTeam() || $this->func->isBotFor($event['bezirk_id'])) {
+			if ($event['fs_id'] == $this->func->fsId() || $this->session->isOrgaTeam() || $this->func->isBotFor($event['bezirk_id'])) {
 				$this->func->addBread('Termine', '/?page=event');
 				$this->func->addBread('Neuer Termin');
 

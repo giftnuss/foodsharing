@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Mailbox;
 
-use Foodsharing\Modules\Core\Model;
+use Foodsharing\Lib\Db\Db;
 
-class MailboxModel extends Model
+class MailboxModel extends Db
 {
 	public function getMailboxId($mb_name)
 	{

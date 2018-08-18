@@ -293,6 +293,17 @@ class Foodsharing extends \Codeception\Module\Db
 		return $this->createRegion($name, $parentId, 7, $extra_params);
 	}
 
+	public function createMailbox($name = null)
+	{
+		if ($name == null) {
+			$name = $this->faker->userName();
+		}
+		$mb['name'] = $name;
+		$mb['id'] = $this->haveInDatabase('fs_mailbox', $mb);
+
+		return $mb;
+	}
+
 	public function createRegion($name = null, $parentId = 741, $type = 9, $extra_params = [])
 	{
 		if ($name == null) {
@@ -305,6 +316,8 @@ class Foodsharing extends \Codeception\Module\Db
 			'type' => $type],
 			$extra_params);
 		$v['id'] = $this->haveInDatabase('fs_bezirk', $v);
+		$mailbox = $this->createMailbox('region-' . $v['id']);
+		$this->updateInDatabase('fs_bezirk', ['mailbox_id' => $mailbox['id']], ['id' => $v['id']]);
 		/* Add to closure table for hierarchies */
 		$this->driver->executeQuery('INSERT INTO `fs_bezirk_closure`
 		(ancestor_id, bezirk_id, depth)

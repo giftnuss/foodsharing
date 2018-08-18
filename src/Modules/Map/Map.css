@@ -5,6 +5,12 @@ body {
   padding: 0;
   width: 100%;
 }
+body.page-map #topbar {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+}
+
 
 .map-wrapper {
   position: absolute;
@@ -23,11 +29,20 @@ body {
 
 #map {
   position: absolute;
-  top: 0;
+  top: 37px;
   left: 0;
   width: 100%;
   height: 100%;
 }
+
+
+
+@media (max-width: 630px) {
+  #map {
+    top: 73px;
+  }
+}
+
 
 div#main {
   position: absolute;
@@ -36,12 +51,6 @@ div#main {
   left: 50%;
   top: 0;
   margin-left: -490px;
-}
-
-div#top {
-  -moz-box-shadow: 1px 5px 5px rgba(0, 0, 0, 0.4);
-  -webkit-box-shadow: 1px 5px 5px rgba(0, 0, 0, 0.4);
-  box-shadow: 1px 5px 5px rgba(0, 0, 0, 0.4);
 }
 
 .ajax-loader {
@@ -120,7 +129,7 @@ div#top {
   position: absolute;
   right: 16px;
   margin: 0;
-  top: 55px;
+  top: 80px;
 }
 
 #map-control-wrapper > div {

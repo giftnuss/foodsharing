@@ -20,6 +20,9 @@ const base = join(__dirname, '..')
 const paths = [
   join(base, 'src'),
   join(base, 'test'),
+  join(base, 'src/**/*.js'),
+  join(base, 'src/**/*.vue'),
+  join(base, 'test/**/*.js'),
   ...glob.sync(join(base, '*.js')),
   ...glob.sync(join(base, '../src/**/*.js')),
   ...glob.sync(join(base, '../src/**/*.vue'))

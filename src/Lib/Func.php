@@ -394,19 +394,18 @@ class Func
 		}
 	}
 
-	public function isBotForA($bezirk_ids, $include_groups = true, $include_parent_bezirke = false)
+	public function isBotForA($regions_ids, $include_groups = true, $include_parent_regions = false): bool
 	{
-		if ($this->session->isBotschafter() && is_array($bezirk_ids)) {
-			if ($include_parent_bezirke) {
+		if (is_array($regions_ids) && count($regions_ids) && $this->session->isBotschafter()) {
+			if ($include_parent_regions) {
 				/* @var $gw RegionGateway */
 				$gw = DI::$shared->get(RegionGateway::class);
-				$bezirk_ids = $gw->getParentBezirke($bezirk_ids);
+				$regions_ids = $gw->listRegionsIncludingParents($regions_ids);
 			}
 			foreach ($_SESSION['client']['botschafter'] as $b) {
-				foreach ($bezirk_ids as $bid) {
+				foreach ($regions_ids as $bid) {
 					if ($b['bezirk_id'] == $bid && ($include_groups || $b['type'] != Type::WORKING_GROUP)) {
 						return true;
-						break;
 					}
 				}
 			}
@@ -429,14 +428,6 @@ class Func
 	public function isBotschafter()
 	{
 		return $this->session->isBotschafter();
-	}
-
-	/**
-	 * @deprecated use $this->session->isOrgaTeam() instead
-	 */
-	public function isOrgaTeam()
-	{
-		return $this->session->isOrgaTeam();
 	}
 
 	public function getMenu()
@@ -464,7 +455,7 @@ class Func
 			$loggedIn,
 			$regions,
 			$this->session->may('fs'),
-			$this->isOrgaTeam(),
+			$this->session->isOrgaTeam(),
 			$this->mayEditBlog(),
 			$this->mayEditQuiz(),
 			$this->mayHandleReports(),
@@ -472,7 +463,8 @@ class Func
 			$workingGroups,
 			$this->session->get('mailbox'),
 			$this->fsId(),
-			$loggedIn ? $this->img() : ''
+			$loggedIn ? $this->img() : '',
+			$this->session->may('bieb')
 		);
 	}
 
@@ -480,7 +472,7 @@ class Func
 		bool $loggedIn, array $regions, bool $hasFsRole,
 		bool $isOrgaTeam, bool $mayEditBlog, bool $mayEditQuiz, bool $mayHandleReports,
 		array $stores, array $workingGroups,
-		$sessionMailbox, int $fsId, string $image)
+		$sessionMailbox, int $fsId, string $image, bool $mayAddStore)
 	{
 		$params = array_merge([
 			'loggedIn' => $loggedIn,
@@ -492,17 +484,23 @@ class Func
 			'may' => [
 				'editBlog' => $mayEditBlog,
 				'editQuiz' => $mayEditQuiz,
-				'handleReports' => $mayHandleReports
+				'handleReports' => $mayHandleReports,
+				'addStore' => $mayAddStore
 			],
-			'stores' => $stores,
+			'stores' => array_values($stores),
 			'regions' => $regions,
 			'workingGroups' => $workingGroups
 		]);
 
-		return [
-			'default' => $this->twig->render('partials/menu.default.twig', $params),
-			'mobile' => $this->twig->render('partials/menu.mobile.twig', $params)
-		];
+		return $this->twig->render('partials/vue-wrapper.twig', [
+			'id' => 'vue-topbar',
+			'component' => 'topbar',
+			'props' => $params
+		]);
+		// return [
+		// 	'default' => $this->twig->render('partials/menu.default.twig', $params),
+		// 	'mobile' => $this->twig->render('partials/menu.mobile.twig', $params)
+		// ];
 	}
 
 	public function preZero($i)
@@ -842,14 +840,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		exit();
 	}
 
-	/**
-	 * @deprecated use $this->session->getCurrentBezirkId() instead
-	 */
-	public function getBezirkId()
-	{
-		return $this->session->getCurrentBezirkId();
-	}
-
 	public function getPage()
 	{
 		$page = $this->getGet('page');
@@ -1156,7 +1146,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'location' => $location,
 			'ravenConfig' => $ravenConfig,
 			'translations' => $this->getTranslations(),
-			'GOOGLE_API_KEY' => GOOGLE_API_KEY
+			'GOOGLE_API_KEY' => GOOGLE_API_KEY,
+			'isDev' => getenv('FS_ENV') === 'dev'
 		]);
 	}
 
@@ -1177,7 +1168,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	public function generateAndGetGlobalViewData()
 	{
 		global $g_broadcast_message;
-		global $g_body_class;
 		global $content_left_width;
 		global $content_right_width;
 
@@ -1198,30 +1188,27 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$mainwidth -= $content_right_width;
 		}
 
-		$msgbar = '';
-		$logolink = '/';
+		$bodyClasses = [];
+
 		if ($this->session->may()) {
-			$msgbar = $this->viewUtils->v_msgBar();
-			$logolink = '/?page=dashboard';
-		} else {
-			$msgbar = $this->viewUtils->v_login();
+			$bodyClasses[] = 'loggedin';
 		}
+
+		$bodyClasses[] = 'page-' . $this->getPage();
 
 		return [
 			'head' => $this->getHeadData(),
 			'bread' => $this->getBread(),
-			'bodyClass' => $g_body_class,
-			'msgbar' => $msgbar,
+			'bodyClasses' => $bodyClasses,
 			'serverDataJSON' => json_encode($this->getServerData()),
 			'menu' => $menu,
 			'dev' => FS_ENV == 'dev',
 			'hidden' => $this->getHidden(),
 			'isMob' => $this->isMob(),
-			'logolink' => $logolink,
 			'broadcast_message' => $g_broadcast_message,
 			'SRC_REVISION' => defined('SRC_REVISION') ? SRC_REVISION : null,
-			'HTTP_HOST' => $_SERVER['HTTP_HOST'],
-			'is_foodsharing_dot_at' => strpos($_SERVER['HTTP_HOST'], 'foodsharing.at') !== false,
+			'HTTP_HOST' => $_SERVER['HTTP_HOST'] ?? BASE_URL,
+			'is_foodsharing_dot_at' => strpos($_SERVER['HTTP_HOST'] ?? BASE_URL, 'foodsharing.at') !== false,
 			'content' => [
 				'main' => [
 					'html' => $this->getContent(CNT_MAIN),
@@ -1257,11 +1244,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->title = array($name);
 	}
 
-	public function pv($el)
-	{
-		//return '<pre>'.print_r($el,true).'</pre>';
-	}
-
 	/**
 	 * @deprecated use $this->session->id() instead
 	 */
@@ -1276,7 +1258,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function isVerified()
 	{
-		if ($this->isOrgaTeam()) {
+		if ($this->session->isOrgaTeam()) {
 			return true;
 		} elseif (isset($_SESSION['client']['verified']) && $_SESSION['client']['verified'] == 1) {
 			return true;
@@ -1459,7 +1441,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function mayBezirk($bid): bool
 	{
-		return isset($_SESSION['client']['bezirke'][$bid]) || $this->isBotFor($bid) || $this->isOrgaTeam();
+		return isset($_SESSION['client']['bezirke'][$bid]) || $this->isBotFor($bid) || $this->session->isOrgaTeam();
 	}
 
 	/**

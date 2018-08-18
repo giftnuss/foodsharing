@@ -272,7 +272,8 @@ class MailsControl extends ConsoleControl
 		self::info('mail arrived ...: ' . $data['from'][0] . '@' . $data['from'][1]);
 		$email = new fEmail();
 		$email->setFromEmail($data['from'][0], $data['from'][1]);
-		$email->setSubject($data['subject']);
+		$subject = preg_replace('/\s+/', ' ', trim($data['subject']));
+		$email->setSubject($subject);
 		$email->setHTMLBody($data['html']);
 		$email->setBody($data['body']);
 

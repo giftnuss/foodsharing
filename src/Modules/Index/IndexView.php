@@ -132,27 +132,27 @@ class IndexView extends View
 			</div>
 			<div class="pure-u-1 pure-u-md-1-5">
 				<h2><span class="clickable" onclick="alert(\'Sobald Du Dich bei foodsharing registriert hast, gehörst Du als Lebensmittelretter*in (Foodsharer) zur Community.\n\nAls Foodsharer kannst Du Essenskörbe anbieten oder abholen, an foodsharing-Events teilnehmen und Lebensmittel zum Fair-Teiler bringen oder von dort mitnehmen. Wenn Du als Foodsharer von Betrieben Lebensmittel retten möchtest, musst Du zwei weitere Schritte tun:\n1. Du nimmst an einem foodsharing-Quiz teil.\n2. Du absolvierst drei betreute Einführungsabholungen bei einem Betrieb.\n\nAls Foodsaver handelst Du aktiv und freiwillig mit dem Ziel, gute Lebensmittel nicht in der Tonne enden zu lassen. Du wirst in Absprache mit anderen Foodsavern Lebensmittel von den kooperierenden Betrieben einsammeln und fair-teilen. Es ist natürlich sinnvoll und wünschenswert, wenn Du mit der Community in Kontakt stehst und an Events und Bezirkstreffen teilnimmst.\n\nFalls Du Interesse an einem weiterreichenden Engagement hast, findest Du bei uns auch verantwortungsvolle Tätigkeiten, etwa als Mitglied einer Arbeitsgruppe, als Betriebsverantwortliche*r oder Botschafter*in.\
-					\');"><i class="fa fa-smile-o whatiswhaticons" aria-hidden="true"></i>
+					\');"><i class="far fa-smile whatiswhaticons" aria-hidden="true"></i>
 				<span class="iconlegend">Foodsharer und Foodsaver</span></span></h2>
 			</div>
 			<div class="pure-u-1 pure-u-md-1-5">
 				<h2><span class="clickable" onclick="alert(\'Du kannst Deine eigenen überschüssigen Lebensmittel der lokalen foodsharing-Community anbieten und Lebensmittel bei anderen Community-Mitgliedern abholen. Über die Plattform könnt Ihr Kontakt aufnehmen, um die Übergabe zu organisieren.\
-					\');"><i class="fa fa-shopping-basket whatiswhaticons" aria-hidden="true"></i>
+					\');"><i class="fas fa-shopping-basket whatiswhaticons" aria-hidden="true"></i>
 				<span class="iconlegend">Essenskörbe</span></span></h2>
 			</div>
 			<div class="pure-u-1 pure-u-md-1-5">
 				<h2><span class="clickable" onclick="alert(\'Der Fair-Teiler ist wie ein „Umschlagplatz“ für Lebensmittel, zu dem Du Lebensmittel bringen und von dort gratis mitnehmen darfst. Als Fair-Teiler dient ein Regal und/oder ein Kühlschrank. Du findest unsere Fair-Teiler an gut zugänglichen Orten wie in privaten oder kommunalen Räumen, auf dem Uni-Gelände, in Vereinsräumen u. v. m. Die Fair-Teiler können auf unserer Plattform eingetragen und somit für alle Nutzer*innen auf einer Karte angezeigt werden.\n\nEs gibt Fair-Teiler mit geregelten Öffnungszeiten und solche, die rund um die Uhr zugänglich sind.\nUnsere Fair-Teiler-Regeln und -Voraussetzungen, etwa der Hygieneplan und die Verantwortlichkeit eines betriebsverantwortlichen Foodsavers sind in jedem Fall zu beachten.\
-					\');"><i class="fa fa-refresh whatiswhaticons" aria-hidden="true"></i>
+					\');"><i class="fas fa-sync whatiswhaticons" aria-hidden="true"></i>
 				<span class="iconlegend">Fair&#8209;Teiler</span></span></h2>
 			</div>
 			<div class="pure-u-1 pure-u-md-1-5">
 				<h2><span class="clickable" onclick="alert(\'Unsere kooperierenden Betriebe sind Bäckereien, Obst- und Gemüsehändler, Filialen von Supermärkten, Wochenmärkte, Restaurants, Kantinen, Cafés, Catering-Services, der Großhandel, Bauernhöfe u. v. m.\n\nFür jede Kooperation mit einem Betrieb gibt es einen betriebsverantwortlichen Foodsaver. Außerdem kümmert er/sie sich um die Organisation zuverlässiger Abholungen. Wir sind bestrebt, das Tagesgeschäft der Betriebe so wenig wie möglich zu beeinträchtigen. Die Abholungen bei Betrieben werden daher im Vorfeld abgestimmt und vereinbart.\n\nDie foodsharing-Kooperation ist nachhaltig und eine Win-Win-Situation. Die Betriebe können dabei ihre Lebensmittelabfälle und damit verbundene Entsorgungskosten reduzieren und bewusst ein Zeichen gegen Lebensmittelverschwendung setzen.\
-					\');"><i class="fa fa-home whatiswhaticons" aria-hidden="true"></i>
+					\');"><i class="fas fa-home whatiswhaticons" aria-hidden="true"></i>
 				<span class="iconlegend">Betriebe</span></span></h2>
 			</div>
 			<div class="pure-u-1 pure-u-md-1-5">
 				<h2><span class="clickable" onclick="alert(\'foodsharing ist regelmäßig auf vielen Veranstaltungen und Festivals präsent, um auch dort auf die Initiativen und unser Engagement aufmerksam zu machen. Wir nutzen auch diese Gelegenheiten, um ein klares Statement gegen Lebensmittel- und Ressourcenverschwendung und für Nachhaltigkeit in Umwelt- und Konsumfragen abzugeben. Dafür veranstalten wir auf dem Festivalgelände Workshops oder Vorträge, Filmvorführungen und Diskussionsrunden und sind an Infoständen (mit und ohne Essensverteilung) zu finden.\n\nEine Bedingung für unsere Präsenz ist, direkt mit Festivalbetreiber*innen zu kooperieren um auf dem Veranstaltungsgelände selbst &quot;aktiv&quot; werden zu können.\nWir retten auf Festivals überschüssige Lebensmittel von Besucher*innen oder von Essensständen. Am Ende eines Festivals bergen wir auch zurückgelassene Dinge, die noch brauchbar sind.\
-					\');"><i class="fa fa-music whatiswhaticons" aria-hidden="true"></i>
+					\');"><i class="fas fa-music whatiswhaticons" aria-hidden="true"></i>
 				<span class="iconlegend">Festivals</span></span></h2>
 			</div>
 		</div>
