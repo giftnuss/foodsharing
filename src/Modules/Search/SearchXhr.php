@@ -8,9 +8,8 @@ class SearchXhr extends Control
 {
 	private $helper;
 
-	public function __construct(SearchView $view, SearchHelper $helper)
+	public function __construct(SearchHelper $helper)
 	{
-		$this->view = $view;
 		$this->helper = $helper;
 
 		parent::__construct();
