@@ -71,7 +71,7 @@ class WallPostXhr extends Control
 
 	public function quickreply()
 	{
-		$message = trim(strip_tags(isset($_POST['msg']) ?? ''));
+		$message = trim(strip_tags($_POST['msg'] ?? ''));
 
 		if (!empty($message)) {
 			if ($post_id = $this->wallPostGateway->addPost($message, $this->session->id(), $this->table, $this->id)) {
