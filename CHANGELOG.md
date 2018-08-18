@@ -36,6 +36,7 @@
 - Map legend now more usable in mobile view !215 #119 @michi-zuri
 - Fix joining regions from subpages like profile not possible !509 #300 @NerdyProjects
 - Fixed `Invalid Date`-Error on safari !469 @alangecker
+- Reimplement forum scroll to post functionality !514 #270 @NerdyProjects
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
