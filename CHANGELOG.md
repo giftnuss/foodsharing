@@ -16,7 +16,6 @@
 - removed dead login button and updated registration info for food baskets #240 !457 @michi-zuri
 - Remove broken LoginXhr->login method !465 @tiltec
 - Added possibility to change main region to a part of town (region type 9) !470 #268 @peter.toennies
-- fetching parent regions without any give regin id not possible anymore !474 #258 @peter.toennies
 - fetching parent regions without any given region ID is not possible anymore !474 #258 @peter.toennies
 - Fix #287 allowing all members of a group to edit that group !487 @NerdyProjects
 - Fix #286 making group applications work again !489 @NerdyProjects
@@ -45,7 +44,6 @@
 - removed several layers of the legacy database-classes structure !477 @peter.toennies
 - removed several deprecated functions from func all over the source !436 @peter.toennies
 - refactored content from model to gateway !481 #9 @peter.toennies
-- refactored NewArea module from model to gateway !483 #9 @peter.toennies
 - refactored NewArea module from model to gateway !484 #9 @peter.toennies
 - refactored index from model to gateway !480 #9 @peter.toennies
 - alfa slab one font now used as npm package !501 @peter.toennies
