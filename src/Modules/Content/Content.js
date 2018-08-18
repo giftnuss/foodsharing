@@ -8,5 +8,5 @@ import { expose } from '@/utils'
 import { ifconfirm } from '@/script'
 
 expose({
-    ifconfirm
+  ifconfirm
 })

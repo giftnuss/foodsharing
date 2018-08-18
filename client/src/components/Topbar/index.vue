@@ -18,7 +18,7 @@
                     <ul class="navbar-nav flex-row no-collapse">
                         <li v-if="!hasFsRole" class="nav-item ml-2">
                             <a :href="$url('upgradeToFs')" class="nav-link">
-                                <i class="fa fa-rocket" />
+                                <i class="fas fa-rocket" />
                                 <small v-if="isMobile">Werde Foodsaver*in</small>
                                 <span v-else>Werde Foodsaver*in</span>
                             </a>
@@ -29,7 +29,7 @@
                         <menu-baskets :showLabel="!hasFsRole && !isMobile" />
                         <li v-if="!isMobile" class="nav-item" v-b-tooltip title="Karte">
                             <a :href="$url('map')" class="nav-link">
-                                <i class="fa fa-map-marker" />
+                                <i class="fas fa-map-marker-alt" />
                                 <span v-if="!loggedIn || !hasFsRole">Karte</span>
                             </a>
                             
@@ -48,13 +48,13 @@
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item" v-b-tooltip title="Home">
                             <a :href="$url('home')" class="nav-link">
-                                <i class="fa fa-home" />
+                                <i class="fas fa-home" />
                                 <span class="d-md-none">Startseite</span>
                             </a>
                         </li>
                         <li v-if="isMobile" class="nav-item" v-b-tooltip title="Karte">
                             <a :href="$url('map')" class="nav-link">
-                                <i class="fa fa-map-marker" />
+                                <i class="fas fa-map-marker-alt" />
                                 <span class="d-md-none">Karte</span>
                             </a>
                         </li>
@@ -65,7 +65,7 @@
                         />
                         <nav-item-dropdown tooltip="Informationen" right no-caret>
                             <template slot="button-content">
-                                <i class="fa fa-info "/>
+                                <i class="fas fa-info "/>
                                 <span class="d-md-none">Infomationen</span>
                             </template>
                             <a :href="$url('vision')" class="dropdown-item" role="menuitem">Vision</a>
@@ -84,7 +84,7 @@
                         
                         <li v-if="mailbox" class="nav-item" v-b-tooltip title="E-Mail-Postfach">
                             <a :href="$url('mailbox')" class="nav-link">
-                                <i class="fa fa-envelope" />
+                                <i class="fas fa-envelope" />
                                 <span class="d-md-none">E-Mail-Postfach</span>
                             </a>
                         </li>

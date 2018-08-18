@@ -5,6 +5,7 @@
         Antworten
       </div>
       <div class="card-body">
+        <p v-html="$i18n('forum.markdown_description')" />
         <textarea
           ref="textarea"
           v-model="text"

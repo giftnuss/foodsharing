@@ -8,7 +8,7 @@
                 <a href="#" @click="$emit('remove', bell.id)">
                     <i v-if="bell.icon" :class="'icon '+bell.icon" />
                     <div v-if="bell.image" class="icon"><img :src="bell.image" /></div>
-                    <i class="fa fa-close" />
+                    <i class="fas fa-times" />
                     <!-- <div :class="['avatar', 'avatar_'+avatars.length]">
                         <div v-for="avatar in avatars" :key="avatar" :style="{backgroundImage: `url('${avatar}')`}" />
                     </div> -->
@@ -73,13 +73,13 @@ p {
 .icon img {
     width: 100%;
 }
-.fa.fa-close {
+.fas.fa-times {
     display: none;
 }
 .list-group-item:hover .icon {
     display: none;
 }
-.list-group-item:hover .fa.fa-close {
+.list-group-item:hover .fas.fa-times {
     display: block;
 }
 .nowrap {
@@ -91,7 +91,9 @@ p {
   because we are on a white background we have to override this with a black one
 */
 .img-store {
-    font: normal normal normal 14px/1 FontAwesome;
+    font-family: "Font Awesome 5 Free";
+    font-style: normal;
+    font-weight: 900;
     font-size: 14px;
     font-size: inherit;
     text-rendering: auto;

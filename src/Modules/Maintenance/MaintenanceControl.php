@@ -203,7 +203,7 @@ class MaintenanceControl extends ConsoleControl
 				$botschafer,
 				'fs_sleepmode_title',
 				'fs_sleepmode',
-				'fa fa-user',
+				'fas fa-user',
 				array('href' => '#', 'onclick' => 'profile(' . $foodsaver['id'] . ');return false;'),
 				array('name' => $foodsaver['name'], 'nachname' => $foodsaver['nachname'], 'id' => $foodsaver['id']),
 				'fs-sleep' . (int)$foodsaver['id']

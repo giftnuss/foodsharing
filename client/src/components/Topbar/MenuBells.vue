@@ -1,7 +1,7 @@
 <template>
     <nav-item-dropdown tooltip="Benachrichtigungen" no-caret right class="topbar-bells">
         <template slot="button-content">
-            <i class="fa fa-bell"/>
+            <i class="fas fa-bell"/>
             <span v-if="unread" class="badge badge-danger">{{ unread }}</span>
         </template>
         <div class="list-group">

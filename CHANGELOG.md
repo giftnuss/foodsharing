@@ -6,8 +6,11 @@
 - resizeable avatar component !451 @alangecker
 - updated landingpage with festival content !462 and !471 @michi-zuri
 - Only accepted store members see updates on dashboard !412 @k.miklobusec
+- Add description about markdown formatting in forum posts !496 @NerdyProjects
+- introduce new font fontawesome 5.2 !500 @peter.toennies
 
 ## Bugfixes
+- Changed button to return to profile on the profile editing page !492 #285 @leisinger.sebastian
 - Add missing tagedit lib on mailbox edit page !459 #248 @nicksellen
 - reenabling source maps on the production build !468 #254 @alangecker
 - removed dead login button and updated registration info for food baskets #240 !457 @michi-zuri
@@ -17,6 +20,24 @@
 - fetching parent regions without any give regin id not possible anymore !474 #258 @peter.toennies
 - fetching parent regions without any given region ID is not possible anymore !474 #258 @peter.toennies
 - Fix #287 allowing all members of a group to edit that group !487 @NerdyProjects
+- Fix #286 making group applications work again !489 @NerdyProjects
+- Fix #255 do not improperly render html tags in region side nav !489 @NerdyProjects
+- Fix Database commit missing after migrations in dev/test environment !489 @NerdyProjects
+- We were losing some emails because subjects contained new lines, filter this now !491 @NerdyProjects
+- Fix forum moderation for unverified users / certain regions !490 @NerdyProjects
+- Remove bootstrap tooltip class from profile pictures in banana view !493 @NerdyProjects
+- Wallpost pictures are displayed again #279 !497 @NerdyProjects
+- Move babel config into webpack config to avoid loading errors !494 @NerdyProjects
+- Add fetch polyfill to support ie11 !494 @NerdyProjects
+- fix wrong usage of region ID lists for post permissions !503 #308 @peter.toennies
+- Fix fairteiler/blog picture upload by exposing necessary javascript methods #307 @NerdyProjects
+- Admins of Workgroups are called admins again instead of ambassadors !513 #264 @NerdyProjects
+- Do not rely on $\_SERVER['HTTP\_HOST'] being set #263 !510 @NerdyProjects 
+- Admins of workgroups are called admins again instead of ambassadors !513 #264 @NerdyProjects
+- Map legend now more usable in mobile view !215 #119 @michi-zuri
+- Fix joining regions from subpages like profile not possible !509 #300 @NerdyProjects
+- Fixed `Invalid Date`-Error on safari !469 @alangecker
+- Reimplement forum scroll to post functionality !514 #270 @NerdyProjects
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
@@ -29,8 +50,13 @@
 - refactored NewArea module from model to gateway !483 #9 @peter.toennies
 - refactored NewArea module from model to gateway !484 #9 @peter.toennies
 - refactored index from model to gateway !480 #9 @peter.toennies
+- alfa slab one font now used as npm package !501 @peter.toennies
+- octicons font not used anymore !504 @peter.toennies and @michi-zuri
 
 ## Dev/Test/CI stuff
+- Add test for workgroup application / acceptance process !489 @NerdyProjects
+- Increase deployer task timeout for more reliable deployments @NerdyProjects
+- Add test for forum post creation / moderation / activation !490 @NerdyProjects
 
 # 2018-07-22 Hotfix
 - Fix links to group application details

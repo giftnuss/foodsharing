@@ -59,10 +59,10 @@ class BlogView extends View
 	{
 		$links = '';
 		if ($page > 1) {
-			$links .= '<a class="button" href="/?page=blog&p=' . ($page - 1) . '"><i class="fa fa-arrow-circle-left"></i></a>';
+			$links .= '<a class="button" href="/?page=blog&p=' . ($page - 1) . '"><i class="fas fa-arrow-circle-left"></i></a>';
 		}
 
-		$links .= '<a class="button" href="/?page=blog&p=' . ($page + 1) . '"><i class="fa fa-arrow-circle-right"></i></a>';
+		$links .= '<a class="button" href="/?page=blog&p=' . ($page + 1) . '"><i class="fas fa-arrow-circle-right"></i></a>';
 
 		return '<p class="pager">' . $links . '</p>';
 	}

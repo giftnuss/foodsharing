@@ -2,19 +2,19 @@
     <ul class="navbar-nav ml-auto no-collapse" id="topbar-navright">
         <li class="nav-item">
             <a :href="$url('map')" class="nav-link">
-                <i class="fa fa-map-marker" />
+                <i class="fas fa-map-marker-alt" />
             </a>
         </li>
         <li class="nav-item">
             <a :href="$url('joininfo')" class="nav-link">
-                <i class="fa fa-rocket" />
+                <i class="fas fa-rocket" />
                 Mach mit!
             </a>
         </li>
 
         <nav-item-dropdown rightt>
             <template slot="button-content">
-                <i class="fa fa-bullhorn "/>
+                <i class="fas fa-bullhorn "/>
                 <span v-if="!wXS">Über uns</span>
             </template>
             <a :href="$url('vision')" class="dropdown-item" role="menuitem">Vision</a>
@@ -26,7 +26,7 @@
 
         <nav-item-dropdown right>
             <template slot="button-content">
-                <i class="fa fa-info "/>
+                <i class="fas fa-info "/>
                 <span class="d-none d-lg-inline">Infos</span>
             </template>
             <a :href="$url('infos')" class="dropdown-item" role="menuitem">Infosammlung</a>
@@ -39,7 +39,7 @@
 
         <nav-item-dropdown tooltip="Kontakt" right>
             <template slot="button-content">
-                <i class="fa fa-envelope" />
+                <i class="fas fa-envelope" />
             </template>
             <h3 class="dropdown-header">Communities</h3>
             <a :href="$url('communitiesGermany')" class="dropdown-item sub" role="menuitem">Deutschland</a>

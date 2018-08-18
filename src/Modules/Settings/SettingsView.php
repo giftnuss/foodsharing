@@ -387,7 +387,7 @@ class SettingsView extends View
 			 * If the question was a joke question lets diplay it to the user!
 			 */
 			if ($was_a_joke) {
-				$ftext = 'war nur eine Scherzfrage und wird natürlich nicht bewertet <i class="fa fa-smile-o"></i>';
+				$ftext = 'war nur eine Scherzfrage und wird natürlich nicht bewertet <i class="far fa-smile"></i>';
 			}
 
 			/*

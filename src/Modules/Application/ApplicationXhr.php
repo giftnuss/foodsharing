@@ -29,20 +29,7 @@ class ApplicationXhr extends Control
 		}
 	}
 
-	public function defer()
-	{
-		if ($this->func->isBotFor($_GET['bid']) || $this->session->isOrgaTeam()) {
-			$this->gateway->deferApplication($_GET['bid'], $_GET['fid']);
-			$this->func->info('Bewerbungsstatus geändert');
-
-			return array(
-					'status' => 1,
-					'script' => 'goTo("/?page=bezirk&bid=' . (int)$_GET['bid'] . '");'
-				);
-		}
-	}
-
-	public function deny()
+	public function decline()
 	{
 		if ($this->func->isBotFor($_GET['bid']) || $this->session->isOrgaTeam()) {
 			$this->gateway->denyApplication($_GET['bid'], $_GET['fid']);

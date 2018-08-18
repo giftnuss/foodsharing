@@ -197,7 +197,7 @@ abstract class Control
 					$("#wallpost-attach").append(\'<input type="hidden" name="attach[]" value="image-\'+file+\'" />\');
 					$("#attach-preview div:last").remove();
 					$(".attach-load").remove();
-					$("#attach-preview").append(\'<a rel="wallpost-gallery" class="preview-thumb" href="images/wallpost/\'+file+\'"><img src="images/wallpost/thumb_\'+file+\'" height="60" /></a>\');
+					$("#attach-preview").append(\'<a rel="wallpost-gallery" class="preview-thumb" href="/images/wallpost/\'+file+\'"><img src="/images/wallpost/thumb_\'+file+\'" height="60" /></a>\');
 					$("#attach-preview").append(\'<div style="clear:both;"></div>\');
 					$("#attach-preview a").fancybox();
 					mb_clear();
@@ -309,7 +309,7 @@ abstract class Control
 
 				<div id="wallpost-submit" align="right">
 
-					<span id="wallpost-loader"></span><span id="wallpost-attach-image"><i class="fa fa-image"></i> ' . $this->func->s('attach_image') . '</span>
+					<span id="wallpost-loader"></span><span id="wallpost-attach-image"><i class="far fa-image"></i> ' . $this->func->s('attach_image') . '</span>
 					<a href="#" id="wall-submit">' . $this->func->s('send') . '</a>
 					<div style="overflow:hidden;height:1px;">
 						<form id="wallpost-attachimage-form" action="/xhrapp.php?app=wallpost&m=attachimage&table=' . $table . '&id=' . $id . '" method="post" enctype="multipart/form-data" target="wallpost-frame">
@@ -320,7 +320,7 @@ abstract class Control
 				</div>
 				<div style="clear:both"></div>
 				<div style="visibility:hidden;">
-				<iframe name="wallpost-frame" src="/empty.html" style="height:1px;" frameborder="0"></iframe>
+				<iframe name="wallpost-frame" style="height:1px;" frameborder="0"></iframe>
 				</div>
 			</div>';
 		}

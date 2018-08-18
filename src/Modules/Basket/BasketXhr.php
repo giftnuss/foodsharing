@@ -425,13 +425,13 @@ class BasketXhr extends Control
 			$basket = [
 				'id' => (int)$b['id'],
 				'description' => html_entity_decode($b['description']),
-				'createdAt' => date('Y-m-d H:i:s', $b['time_ts']),
-				'updatedAt' => date('Y-m-d H:i:s', $b['time_ts']),
+				'createdAt' => date('Y-m-d\TH:i:s', $b['time_ts']),
+				'updatedAt' => date('Y-m-d\TH:i:s', $b['time_ts']),
 				'requests' => []
 			];
 			foreach ($updates as $update) {
 				if ((int)$update['id'] == $basket['id']) {
-					$time = date('Y-m-d H:i:s', $update['time_ts']);
+					$time = date('Y-m-d\TH:i:s', $update['time_ts']);
 					$basket['requests'][] = [
 						'user' => [
 							'id' => (int)$update['fs_id'],

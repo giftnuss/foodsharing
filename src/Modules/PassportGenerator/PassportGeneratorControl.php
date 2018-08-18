@@ -125,7 +125,7 @@ class PassportGeneratorControl extends Control
 						$fs['id'],
 						'passgen_failed_title',
 						'passgen_failed',
-						'fa fa-camera',
+						'fas fa-camera',
 						array('href' => '/?page=settings'),
 						array('user' => $this->session->user('name')),
 						'pass-fail-' . $fs['id']

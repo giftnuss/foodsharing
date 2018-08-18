@@ -122,7 +122,7 @@ class StoreUserControl extends Control
 						'team',
 
 						array(
-							$this->v_utils->v_form_tagselect('foodsaver', array('valueOptions' => $this->foodsaverGateway->xhrGetTagFsAll($this->session->getRegionIds()))),
+							$this->v_utils->v_form_tagselect('foodsaver', array('valueOptions' => $this->foodsaverGateway->xhrGetTagFsAll($this->session->listRegionIDs()))),
 							$verantwortlich_select),
 						array('submit' => $this->func->s('save'))
 					);

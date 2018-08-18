@@ -27,7 +27,7 @@
                                             {{ req.time | dateDistanceInWords }}
                                         </div>
                                         <div class="text-right text-muted hover">
-                                            <a href="#" @click.prevent.stop="openRemoveDialog(req.user.id, $event)" class="m-1 btn btn-sm btn-secondary" title="Essensanfrage abschließen" v-b-tooltip><i class="fa fa-close" /></a>
+                                            <a href="#" @click.prevent.stop="openRemoveDialog(req.user.id, $event)" class="m-1 btn btn-sm btn-secondary" title="Essensanfrage abschließen" v-b-tooltip><i class="fas fa-times" /></a>
                                         </div>
 
                                     </div>

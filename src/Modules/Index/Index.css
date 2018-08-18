@@ -117,6 +117,8 @@ body.fp-viewing-festival #topbar .navbar {
 .carpetroll {
   color: #533a20;
   padding: 41px 0;
+  max-width:1000px;
+  margin:0 auto;
 }
 
 .carpetroll p {

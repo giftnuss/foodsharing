@@ -4,7 +4,7 @@
             <div class="input-group-prepend">
                 <label class="input-group-text text-primary" for="searchfield">
                     <img v-if="isLoading" src="/img/469.gif" />
-                    <i v-else class="fa fa-search" />
+                    <i v-else class="fas fa-search" />
                 </label>
             </div>
             <input 

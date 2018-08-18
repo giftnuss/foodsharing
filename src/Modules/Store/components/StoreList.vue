@@ -33,7 +33,7 @@
               title="Filter leeren"
               @click="clearFilter"
             >
-              <i class="fa fa-remove"/>
+              <i class="fas fa-times"/>
             </button>
 
           </div>

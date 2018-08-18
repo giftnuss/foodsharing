@@ -105,7 +105,7 @@ class BlogModel extends Db
 	{
 		$not = '';
 		if (!$this->session->isOrgaTeam()) {
-			$not = 'WHERE 		`bezirk_id` IN (' . implode(',', $this->session->getRegionIds()) . ')';
+			$not = 'WHERE 		`bezirk_id` IN (' . implode(',', $this->session->listRegionIDs()) . ')';
 		}
 
 		return $this->q('
@@ -201,7 +201,7 @@ class BlogModel extends Db
 			$foodsaver,
 			'blog_new_check_title',
 			'blog_new_check',
-			'fa fa-bullhorn',
+			'fas fa-bullhorn',
 			array('href' => '/?page=blog&sub=edit&id=' . $id),
 			array(
 				'user' => $this->session->user('name'),

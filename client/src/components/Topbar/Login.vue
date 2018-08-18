@@ -3,7 +3,7 @@
         <div class="input-group mr-2" ref="inputgroup">
             <div class="input-group-prepend">
                 <label class="input-group-text text-primary" for="login-email">
-                    <i class="fa fa-user" />
+                    <i class="fas fa-user" />
                 </label>
             </div>
             <input 
@@ -19,7 +19,7 @@
         <div class="input-group mr-2" ref="inputgroup">
             <div class="input-group-prepend">
                 <label class="input-group-text text-primary" for="login-password">
-                    <i class="fa fa-key" />
+                    <i class="fas fa-key" />
                 </label>
             </div>
             <input 
@@ -33,7 +33,7 @@
             >
         </div>
         <a v-if="!isLoading " href="#" class="btn btn-secondary btn-sm" @click="submit">
-            <i class="fa fa-arrow-right" />
+            <i class="fas fa-arrow-right" />
         </a>
         <a v-else class="btn btn-light btn-sm loadingButton" @click="submit">
             <img src="/img/469.gif" />

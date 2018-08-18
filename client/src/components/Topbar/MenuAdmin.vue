@@ -1,7 +1,7 @@
 <template>
     <nav-item-dropdown tooltip="Administration" right no-caret>
         <template slot="button-content">
-            <i class="fa fa-gear"/>
+            <i class="fas fa-cog"/>
             <span class="d-md-none">Administration</span>
         </template>
         <a v-for="item in items" :key="item.url" class="dropdown-item" :href="item.url">
@@ -31,47 +31,47 @@ export default {
                 items.push(...[
                     {
                         url: '/?page=region',
-                        icon: 'fa fa-map',
+                        icon: 'fas fa-map',
                         label: this.$i18n('menu_manage_regions')
                     },
                     {
                         url: '/?page=geoclean&sub=lostregion',
-                        icon: 'fa fa-map',
+                        icon: 'fas fa-map',
                         label: this.$i18n('menu_regions_without_bots')
                     },
                     {
                         url: '/?page=newarea',
-                        icon: 'fa fa-map-o',
+                        icon: 'far fa-map',
                         label: this.$i18n('menu_newarea')
                     },
                     {
                         url: '/?page=email',
-                        icon: 'fa fa-envelope',
+                        icon: 'fas fa-envelope',
                         label: this.$i18n('menu_email')
                     },
                     {
                         url: '/?page=message_tpl',
-                        icon: 'fa fa-envelope',
+                        icon: 'fas fa-envelope',
                         label: this.$i18n('menu_email_tpl')
                     },
                     {
                         url: '/?page=faq',
-                        icon: 'fa fa-question',
+                        icon: 'fas fa-question',
                         label: this.$i18n('menu_faq')
                     },
                     {
                         url: '/?page=geoclean',
-                        icon: 'fa fa-user',
+                        icon: 'fas fa-user',
                         label: this.$i18n('menu_foodsaver_without_region')
                     },
                     {
                         url: '/?page=mailbox&a=manage',
-                        icon: 'fa fa-envelope-o',
+                        icon: 'far fa-envelope',
                         label: this.$i18n('menu_mailbox_manage')
                     },
                     {
                         url: '/?page=content',
-                        icon: 'fa fa-file-text',
+                        icon: 'fas fa-file-alt',
                         label: this.$i18n('menu_content')
                     }
                 ])
@@ -79,21 +79,21 @@ export default {
             if(this.may.editBlog) {
                 items.push({
                     url: '/?page=blog&sub=manage',
-                    icon: 'fa fa-newspaper-o',
+                    icon: 'far fa-newspaper',
                     label: this.$i18n('menu_blog')
                 })
             }
             if(this.may.editQuiz) {
                 items.push({
                     url: '/?page=quiz',
-                    icon: 'fa fa-question-circle',
+                    icon: 'fas fa-question-circle',
                     label: this.$i18n('menu_quiz')
                 })
             }
             if(this.may.handleReports) {
                 items.push(    {
                     url: '/?page=report&sub=uncom',
-                    icon: 'fa fa-exclamation',
+                    icon: 'fas fa-exclamation',
                     label: this.$i18n('menu_reports')
                 })
             }
