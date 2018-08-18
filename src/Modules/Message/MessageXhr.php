@@ -179,6 +179,7 @@ class MessageXhr extends Control
 
 			if (isset($_GET['raw']) && $_GET['raw']) {
 				$xhr->addData('convs', array_map(function ($c) {
+					$c['last'] = $c['last'] ? str_replace(' ', 'T', $c['last']) : null;
 					if (isset($c['name']) && $c['name']) {
 						$c['name'] = html_entity_decode($c['name']);
 					}

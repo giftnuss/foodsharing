@@ -38,6 +38,7 @@
 - Fixed `Invalid Date`-Error on safari !469 @alangecker
 - Reimplement forum scroll to post functionality !514 #270 @NerdyProjects
 - Add back redirect to invalid login event !516 @theolampert
+- Reformatting of conversation message times happen in API to avoid javascript error on empty conversation !517 @NerdyProjects @theolampert
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
