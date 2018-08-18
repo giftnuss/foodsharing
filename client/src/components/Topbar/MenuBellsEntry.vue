@@ -91,7 +91,9 @@ p {
   because we are on a white background we have to override this with a black one
 */
 .img-store {
-    font: normal normal normal 14px/1 FontAwesome;
+    font-family: "Font Awesome 5 Free";
+    font-style: normal;
+    font-weight: 900;
     font-size: 14px;
     font-size: inherit;
     text-rendering: auto;

@@ -2033,8 +2033,10 @@ ul.bread li a:hover {
 }
 
 .ui-dialog .ui-dialog-titlebar-close:before {
+  font-family: 'Font Awesome 5 Free';
+  font-style: normal;
+  font-weight: 900;
   content: "\f00d";
-  font-family: 'FontAwesome';
   text-indent: 0;
   font-size: 16px;
   position: relative;
@@ -2079,7 +2081,9 @@ ul.bread li a:hover {
 }
 
 .pac-icon:before {
-  font-family: 'FontAwesome';
+  font-family: 'Font Awesome 5 Free';
+  font-style: normal;
+  font-weight: 900;
   content: "\f041";
   color: #aaa174;
   font-size: 16px;
@@ -2195,7 +2199,9 @@ footer .linklist li a:hover {
 }
 
 #loginbar .submit {
-  font-family: 'FontAwesome';
+  font-family: 'Font Awesome 5 Free';
+  font-style: normal;
+  font-weight: 900;
   background-color: #ffffff;
   color: #533a20;
   font-size: 20px;
