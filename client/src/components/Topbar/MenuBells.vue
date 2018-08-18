@@ -13,7 +13,7 @@
     <div class="list-group">
       <small
         v-if="!bells.length"
-        class="list-group-item text-muted">Du hast derzeit keine Benachrichtungen</small>
+        class="list-group-item text-muted">Du hast derzeit keine Benachrichtigungen</small>
       <menu-bells-entry
         v-for="bell in bells"
         :key="bell.id"
