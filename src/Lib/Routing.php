@@ -21,7 +21,6 @@ class Routing
 		'foodsaver' => 'Foodsaver',
 		'geoclean' => 'GeoClean',
 		'index' => 'Index',
-		'info' => 'Info',
 		'listFaq' => 'FAQList',
 		'legal' => 'Legal',
 		'login' => 'Login',
