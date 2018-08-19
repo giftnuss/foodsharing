@@ -1,3 +1,13 @@
+# Unreleased
+
+## Features
+
+## Bugfixes
+
+## Refactoring
+
+## Dev/Test/CI stuff
+
 # 2018-08-19 Hotfix
 
 ## Bugfixes 
