@@ -100,4 +100,13 @@ class ReportApiCest
 		$I->sendGET($I->apiReportListForRegion($this->region['id']));
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::FORBIDDEN);
 	}
+
+	public function reportTeamCanAccessReports(\ApiTester $I)
+	{
+		$fs = $I->createFoodsaver();
+		$I->addBezirkMember(Foodsharing\Modules\Core\DBConstants\Region\RegionIDs::EUROPE_REPORT_TEAM, $fs['id']);
+		$I->login($fs['email']);
+		$I->sendGET($I->apiReportListForRegion($this->region['id']));
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::FORBIDDEN);
+	}
 }

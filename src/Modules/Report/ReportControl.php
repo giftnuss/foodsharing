@@ -22,7 +22,7 @@ class ReportControl extends Control
 
 	public function index(Request $request, Response $response): void
 	{
-		if(isset($_GET['bid'])) {
+		if (isset($_GET['bid'])) {
 			$this->byRegion($_GET['bid'], $response);
 		} else {
 			if (!isset($_GET['sub'])) {
@@ -36,7 +36,8 @@ class ReportControl extends Control
 		}
 	}
 
-	private function byRegion($bid, $response) {
+	private function byRegion($bid, $response)
+	{
 		$response->setContent($this->render('pages/Report/by-region.twig',
 			['bid' => $bid]
 		));
