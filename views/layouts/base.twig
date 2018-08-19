@@ -147,7 +147,9 @@
         {% endblock %}
 
         <noscript>
-            <div id="nojs">Ohne JavaScript l&auml;uft hier leider nichts.</div>
+            <div id="nojs" class="bootstrap">
+                <div class="alert alert-danger">Ohne JavaScript l&auml;uft hier leider nichts.</div>
+            </div>
         </noscript>
 
         {% if hidden %}

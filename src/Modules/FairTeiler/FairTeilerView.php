@@ -210,7 +210,7 @@ class FairTeilerView extends View
 	public function ftOptions($bezirk_id)
 	{
 		$items = array();
-		if ($this->func->isBotFor($bezirk_id) || $this->func->isOrgaTeam()) {
+		if ($this->func->isBotFor($bezirk_id) || $this->session->isOrgaTeam()) {
 			$items[] = array('name' => 'Fair-Teiler eintragen', 'href' => '/?page=fairteiler&bid=' . (int)$bezirk_id . '&sub=addFt');
 		} else {
 			$items[] = array('name' => 'Fair-Teiler vorschlagen', 'href' => '/?page=fairteiler&bid=' . (int)$bezirk_id . '&sub=addFt');

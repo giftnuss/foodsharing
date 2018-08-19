@@ -44,7 +44,7 @@ $('#becomebezirkchooser-button').button().click(function () {
       }
       $.ajax({
         dataType: 'json',
-        url: 'xhr.php?f=becomeBezirk',
+        url: '/xhr.php?f=becomeBezirk',
         data: 'b=' + bid + '&new=' + neu,
         success: function (data) {
           if (data.status == 1) {

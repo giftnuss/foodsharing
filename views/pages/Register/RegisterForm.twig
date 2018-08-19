@@ -2,7 +2,7 @@
 	<div class="left corner-all">
 		<ul class="linklist join">
 			<li class="step0 active">
-        <a class="corner-all" href="#" onclick="if(!$(this).parent().hasClass('hidden')){join.step(0);}return false;">{{ 'register.i_am_a'|trans }}<i class="fa fa-hand-o-right"></i></a></li>
+        <a class="corner-all" href="#" onclick="if(!$(this).parent().hasClass('hidden')){join.step(0);}return false;">{{ 'register.i_am_a'|trans }}<i class="far hand-point-right"></i></a></li>
 			<li class="step1 hidden"><a class="corner-all" href="#" onclick="if(!$(this).parent().hasClass('hidden')){join.step(1);}return false;">{{ 'register.login_info'|trans }}</a></li>
 			<li class="step2 hidden"><a class="corner-all" href="#" onclick="if(!$(this).parent().hasClass('hidden')){join.step(2);}return false;">{{ 'register.contact_info'|trans }}</a></li>
 			<li class="step3 hidden"><a class="corner-all" href="#" onclick="if(!$(this).parent().hasClass('hidden')){join.step(3);}return false;">{{ 'register.legal_stuff'|trans }}</a></li>
@@ -16,7 +16,7 @@
 				<h3>{{ 'register.i_am_a'|trans }}</h3>
 				<div class="iamchooser">
 					<a onmouseover="$('.humanshow').show();" onmouseout="$('.humanshow').hide();" class="active" href="#human" onclick="$(this).addClass('active').next().removeClass('active');$('#join_iam').val('human');">
-							<i class="mega-octicon octicon-person"></i>
+							<i class="fas fa-user"></i>
 							<span>{{ 'register.peer'|trans }}</span>
 						</a>
 					<br />
@@ -24,7 +24,7 @@
 				</div>
 				<input type="hidden" name="iam" id="join_iam" value="human" />
 				<div style="display:none;" class="humanshow msg-inside success">
-					<i class="fa fa-info-circle"></i>Melde Dich als Foodsharer an, um als Privatperson Lebensmittel zu teilen und zu retten.
+					<i class="fas fa-info-circle"></i>Melde Dich als Foodsharer an, um als Privatperson Lebensmittel zu teilen und zu retten.
 				</div>
 			</div>
 			<div class="bottom">
@@ -56,7 +56,7 @@
 						<input placeholder="{{ 'register.login_passwd2'|trans }}" type="password" value="" id="login_passwd2" name="login_passwd1" class="input text value" />
 					</div>
 					<div class="element-wrapper">
-						<input class="input text value" type="date" id="birthdate" min="{{ date_min }}" max="{{ date_max }}" required />
+						<input placeholder="{{ 'register.date_placeholder_format'|trans }}" class="input text value" type="date" id="birthdate" min="{{ date_min }}" max="{{ date_max }}" required />
 						<label for="birthdate">{{ 'register.geb_datum'|trans }}</label>
 					</div>
 				</div>
@@ -64,13 +64,13 @@
 					<form action="/xhrapp.php?app=login&m=photoupload" id="join_photoform" target="join_upload_frame" method="post" enctype="multipart/form-data">
 						<input type="hidden" name="action" value="upload" />
 						<a onclick="$('#join_photo').trigger('click');return false;" class="container corner-all" href="#">
-							<span class="mega-octicon octicon-device-camera"></span>
-							<span class="fa fa-circle-o-notch fa-spin"></span>
+							<span class="fas fa-camera-retro"></span>
+							<span class="fas fa-circle-notch fa-spin"></span>
 						</a>
 						<br />
 						<a onclick="$('#join_photo').trigger('click');return false;" href="#" class="button">{{ 'register.select_picture'|trans|raw }}</a><span class="filewrapper"><input onchange="join.startUpload();" type="file" name="photo" id="join_photo" /></span>
 					</form>
-					<iframe frameborder="0" style="width:10px;height:10px;" name="join_upload_frame" src="/empty.html"></iframe>
+					<iframe frameborder="0" style="width:10px;height:10px;" name="join_upload_frame"></iframe>
 					<input type="hidden" name="c[]" value="" id="join_avatar" />
 					<input type="hidden" name="c[]" value="0" id="join_avatar_error" />
 				</div>
@@ -135,5 +135,5 @@
 	</div>
 	<div style="clear:both;"></div>
 </div>
-<div id="joinloader" style="display:none;"><span class="fa fa-circle-o-notch fa-spin"></span></div>
+<div id="joinloader" style="display:none;"><span class="fas fa-circle-notch fa-spin"></span></div>
 <div id="joinready" style="display:none">{{ 'register.check_mail'|trans }}, {{ 'register.join_success'|trans }}</div>

@@ -43,13 +43,13 @@ class StoreControl extends Control
 		$bezirk_id = $this->func->getGet('bid');
 
 		if (!isset($_GET['bid'])) {
-			$bezirk_id = $this->func->getBezirkId();
+			$bezirk_id = $this->session->getCurrentBezirkId();
 		} else {
 			$bezirk_id = (int)$_GET['bid'];
 		}
 
-		if (!$this->func->isOrgaTeam() && $bezirk_id == 0) {
-			$bezirk_id = $this->func->getBezirkId();
+		if (!$this->session->isOrgaTeam() && $bezirk_id == 0) {
+			$bezirk_id = $this->session->getCurrentBezirkId();
 		}
 		if ($bezirk_id > 0) {
 			$bezirk = $this->regionGateway->getBezirk($bezirk_id);
@@ -166,7 +166,7 @@ class StoreControl extends Control
 			$g_data['status_date'] = date('Y-m-d H:i:s');
 
 			if (!isset($g_data['bezirk_id'])) {
-				$g_data['bezirk_id'] = $this->func->getBezirkId();
+				$g_data['bezirk_id'] = $this->session->getCurrentBezirkId();
 			}
 
 			if (isset($g_data['ort'])) {

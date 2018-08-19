@@ -271,20 +271,16 @@ class Session
 		return false;
 	}
 
-	public function getRegionIds()
+	public function listRegionIDs(): array
 	{
 		$out = array();
 		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
-			foreach ($_SESSION['client']['bezirke'] as $b) {
-				$out[] = $b['id'];
+			foreach ($_SESSION['client']['bezirke'] as $region) {
+				$out[] = $region['id'];
 			}
 		}
 
-		if (!empty($out)) {
-			return $out;
-		}
-
-		return false;
+		return $out;
 	}
 
 	public function getCurrentBezirkId()
@@ -378,6 +374,7 @@ class Session
 			'email' => $fs['email'],
 			'rolle' => $fs['rolle'],
 			'type' => $fs['type'],
+			'verified' => $fs['verified'],
 			'token' => $fs['token'],
 			'mailbox_id' => $fs['mailbox_id'],
 			'gender' => $fs['geschlecht'],

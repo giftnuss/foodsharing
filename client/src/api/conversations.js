@@ -7,7 +7,7 @@ export async function getConversationList () {
   return res.data.convs.map(c => ({
     id: parseInt(c.id),
     title: c.name,
-    lastMessageTime: c.last,
+    lastMessageTime: new Date(c.last),
     members: c.member && c.member instanceof Array ? c.member.map((m) => ({
       id: parseInt(m.id),
       name: m.name,

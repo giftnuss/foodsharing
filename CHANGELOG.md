@@ -1,4 +1,19 @@
-# Unreleased
+# Unreleased 
+
+## Features
+
+## Bugfixes
+
+## Refactoring
+
+## Dev/Test/CI stuff
+
+# 2018-08-18
+
+A spontaneous hack-weekend led to us finally finishing this release.
+The new topbar is the main feature, paired with a lot of bugfixes of all the things we broke with the last release and the new topbar.
+Another big thing to note is that we accidentally removed support for a lot of browsers with the last release which should have been fixed again:
+IE11, Safari and slightly older androids should work again, although I can only ask you to please always keep your devices and browsers up to date!
 
 ## Features
 - new topbar in vue.js !451, #11, #15, #155, #158, #30, #66, #67, #93 @alangecker
@@ -6,11 +21,43 @@
 - resizeable avatar component !451 @alangecker
 - updated landingpage with festival content !462 and !471 @michi-zuri
 - Only accepted store members see updates on dashboard !412 @k.miklobusec
+- Add description about markdown formatting in forum posts !496 @NerdyProjects
+- introduce new font fontawesome 5.2 !500 @peter.toennies
+- added placeholder text for the birth date in the registration form !505 @peter.toennies 
+- Search in navbar shows more results, distinct results page removed as it was the same !515 #315 @NerdyProjects @theolampert
 
 ## Bugfixes
+- Changed button to return to profile on the profile editing page !492 #285 @leisinger.sebastian
 - Add missing tagedit lib on mailbox edit page !459 #248 @nicksellen
 - reenabling source maps on the production build !468 #254 @alangecker
 - removed dead login button and updated registration info for food baskets #240 !457 @michi-zuri
+- Remove broken LoginXhr->login method !465 @tiltec
+- Added possibility to change main region to a part of town (region type 9) !470 #268 @peter.toennies
+- fetching parent regions without any given region ID is not possible anymore !474 #258 @peter.toennies
+- Fix #287 allowing all members of a group to edit that group !487 @NerdyProjects
+- Fix #286 making group applications work again !489 @NerdyProjects
+- Fix #255 do not improperly render html tags in region side nav !489 @NerdyProjects
+- Fix Database commit missing after migrations in dev/test environment !489 @NerdyProjects
+- We were losing some emails because subjects contained new lines, filter this now !491 @NerdyProjects
+- Fix forum moderation for unverified users / certain regions !490 @NerdyProjects
+- Remove bootstrap tooltip class from profile pictures in banana view !493 @NerdyProjects
+- Wallpost pictures are displayed again #279 !497 @NerdyProjects
+- Move babel config into webpack config to avoid loading errors !494 @NerdyProjects
+- Add fetch polyfill to support ie11 !494 @NerdyProjects
+- fix wrong usage of region ID lists for post permissions !503 #308 @peter.toennies
+- Fix fairteiler/blog picture upload by exposing necessary javascript methods #307 @NerdyProjects
+- Admins of Workgroups are called admins again instead of ambassadors !513 #264 @NerdyProjects
+- Do not rely on $\_SERVER['HTTP\_HOST'] being set #263 !510 @NerdyProjects 
+- Admins of workgroups are called admins again instead of ambassadors !513 #264 @NerdyProjects
+- Map legend now more usable in mobile view !215 #119 @michi-zuri
+- Fix joining regions from subpages like profile not possible !509 #300 @NerdyProjects
+- Fixed `Invalid Date`-Error on safari !469 @alangecker
+- Reimplement forum scroll to post functionality !514 #270 @NerdyProjects
+- Add back redirect to invalid login event !516 @theolampert
+- Reformatting of conversation message times happen in API to avoid javascript error on empty conversation !517 @NerdyProjects @theolampert
+- Groups in the menu are also keyboard navigatable !515 #314 @theolampert @NerdyProjects
+- Enable autofill username/password for login !515 @theolampert @NerdyProjects
+- Fix display of avatars for users without avatars !520 @theolampert @NerdyProjects
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
@@ -18,14 +65,25 @@
 - refactored statistics from model to gateway !476 #9 @peter.toennies
 - removed several layers of the legacy database-classes structure !477 @peter.toennies
 - refactored EmailTemplateAdminGateway from model to gateway !482 #9 @peter.toennies
+- removed several deprecated functions from func all over the source !436 @peter.toennies
+- refactored content from model to gateway !481 #9 @peter.toennies
+- refactored NewArea module from model to gateway !484 #9 @peter.toennies
+- refactored index from model to gateway !480 #9 @peter.toennies
+- alfa slab one font now used as npm package !501 @peter.toennies
+- octicons font not used anymore !504 @peter.toennies and @michi-zuri
 
 ## Dev/Test/CI stuff
+- Add test for workgroup application / acceptance process !489 @NerdyProjects
+- Increase deployer task timeout for more reliable deployments @NerdyProjects
+- Add test for forum post creation / moderation / activation !490 @NerdyProjects
+- Also lint js/vue files deep inside client/src !520 @theolampert @NerdyProjects
 
 # 2018-07-22 Hotfix
 - Fix links to group application details
 
 # 2018-07-21 Hotfix
 - Fix foodsaver_id access in StatsControl
+- Remove broken login popup
 
 # 2018-07-20 Hotfix
 - Fairteiler Walls can be accessed again
@@ -87,6 +145,7 @@ Many thanks to @peter.toennies @NerdyProjects @alangecker @theolampert @nicksell
 - Extract StoreUser module javascript !358 @nicksellen
 - refactored and cleaned the whole activity module. !352 by @peter.toennies
 - refactored and cleaned the whole API module. !368 #9 by @peter.toennies
+- refactored Basket to use gateway. !399 @peter.toennies
 - refactored Bell to use gateway. !402 by @peter.toennies
 - refactored BusinessCard to use gateway. !406 @peter.toennies
 - refactored Buddy to use gateway. !405 @peter.toennies

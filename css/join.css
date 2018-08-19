@@ -167,20 +167,16 @@
   background-position: center;
 }
 
-#joinform .avatar form .container span.fa {
+#joinform .avatar form .container span.fa-circle-notch {
   display: none;
 }
 
-#joinform .avatar form.load .container span.fa {
+#joinform .avatar form.load .container span.fas {
   display: inline-block;
 }
 
 #joinform .avatar form.load a.button {
   visibility: hidden;
-}
-
-.avatar form.load .container span.mega-octicon {
-  display: none;
 }
 
 #joinform .form {

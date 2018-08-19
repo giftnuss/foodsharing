@@ -1,112 +1,205 @@
 <template>
-    <div id="topbar" :class="{bootstrap:true, loggedIn}">
-        <div class="navbar fixed-top navbar-expand-md navbar-dark bg-primary ">
-            <div v-if="!loggedIn" class="container">
-                <div id="topbar-navleft">
-                    <a :href="$url('home')" class="navbar-brand mr-2">food<span>shar<span>i</span>ng</span></a>
-                    <login v-if="!isMobile"/>
-                    <menu-loggedout v-if="isMobile" :wXS="ui.wXS" />
-                </div>
-                <login v-if="isMobile"/>
-                <menu-loggedout v-if="!isMobile" :wXS="ui.wXS" />
-            </div>
-
-            <div v-if="loggedIn" class="container">
-
-                <div id="topbar-navleft">
-                    <a class="navbar-brand" :href="$url('dashboard')">food<span>shar<span>i</span>ng</span></a>
-                    <ul class="navbar-nav flex-row no-collapse">
-                        <li v-if="!hasFsRole" class="nav-item ml-2">
-                            <a :href="$url('upgradeToFs')" class="nav-link">
-                                <i class="fa fa-rocket" />
-                                <small v-if="isMobile">Werde Foodsaver*in</small>
-                                <span v-else>Werde Foodsaver*in</span>
-                            </a>
-                        </li>
-                        <menu-region v-if="hasFsRole" :regions="regions" :activeRegionId="activeRegionId" />
-                        <menu-stores v-if="hasFsRole && stores.length" :stores="stores" :mayAddStore="may.addStore" />
-                        <menu-groups v-if="hasFsRole" :workingGroups="workingGroups" />
-                        <menu-baskets :showLabel="!hasFsRole && !isMobile" />
-                        <li v-if="!isMobile" class="nav-item" v-b-tooltip title="Karte">
-                            <a :href="$url('map')" class="nav-link">
-                                <i class="fa fa-map-marker" />
-                                <span v-if="!loggedIn || !hasFsRole">Karte</span>
-                            </a>
-                            
-                        </li>
-                        <menu-messages v-if="isMobile" />
-                        <menu-bells v-if="isMobile" />
-                    </ul>
-                    <b-navbar-toggle v-if="!hasFsRole" target="nav_collapse" class="ml-2"></b-navbar-toggle>
-                </div>              
-
-
-                <search v-if="hasFsRole" />
-                <b-navbar-toggle v-if="hasFsRole" target="nav_collapse" class="ml-2"></b-navbar-toggle>
-                
-                <b-collapse is-nav id="nav_collapse">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item" v-b-tooltip title="Home">
-                            <a :href="$url('home')" class="nav-link">
-                                <i class="fa fa-home" />
-                                <span class="d-md-none">Startseite</span>
-                            </a>
-                        </li>
-                        <li v-if="isMobile" class="nav-item" v-b-tooltip title="Karte">
-                            <a :href="$url('map')" class="nav-link">
-                                <i class="fa fa-map-marker" />
-                                <span class="d-md-none">Karte</span>
-                            </a>
-                        </li>
-                        <menu-admin 
-                            v-if="someAdminRights"
-                            :isOrgaTeam="isOrgaTeam"
-                            :may="may"
-                        />
-                        <nav-item-dropdown tooltip="Informationen" right no-caret>
-                            <template slot="button-content">
-                                <i class="fa fa-info "/>
-                                <span class="d-md-none">Infomationen</span>
-                            </template>
-                            <a :href="$url('vision')" class="dropdown-item" role="menuitem">Vision</a>
-                            <a :href="$url('claims')" class="dropdown-item" role="menuitem">Forderungen</a>
-                            <a :href="$url('partner')" class="dropdown-item" role="menuitem">Partner</a>
-                            <a :href="$url('donate')" class="dropdown-item" role="menuitem">Spenden</a>
-                            <a :href="$url('statistics')" class="dropdown-item" role="menuitem">Statistik</a>
-                            <div class="dropdown-divider" />
-                            <a :href="$url('infos')" class="dropdown-item" role="menuitem">Infosammlung</a>
-                            <a :href="$url('blog')" class="dropdown-item" role="menuitem">Blog</a>
-                            <a :href="$url('faq')" class="dropdown-item" role="menuitem">F.A.Q.</a>
-                            <a :href="$url('guide')" class="dropdown-item" role="menuitem">Ratgeber</a>
-                            <a :href="$url('wiki')" class="dropdown-item" role="menuitem">Wiki</a>
-                            <a :href="$url('changelog')" class="dropdown-item" role="menuitem">Changelog</a>
-                        </nav-item-dropdown>
-                        
-                        <li v-if="mailbox" class="nav-item" v-b-tooltip title="E-Mail-Postfach">
-                            <a :href="$url('mailbox')" class="nav-link">
-                                <i class="fa fa-envelope" />
-                                <span class="d-md-none">E-Mail-Postfach</span>
-                            </a>
-                        </li>
-
-                        <menu-messages v-if="!isMobile" />
-                        <menu-bells v-if="!isMobile" />
-                        <menu-user :userId="fsId" :avatar="image" :isMobile="isMobile" />
-
-                    </ul>
-                </b-collapse>
-            </div>
+  <div
+    id="topbar"
+    :class="{bootstrap:true, loggedIn}">
+    <div class="navbar fixed-top navbar-expand-md navbar-dark bg-primary ">
+      <div
+        v-if="!loggedIn"
+        class="container">
+        <div id="topbar-navleft">
+          <a
+            :href="$url('home')"
+            class="navbar-brand mr-2">food<span>shar<span>i</span>ng</span></a>
+          <login v-if="!isMobile"/>
+          <menu-loggedout
+            v-if="isMobile"
+            :w-xs="ui.wXS" />
         </div>
-    </div>
-</template>
+        <login v-if="isMobile"/>
+        <menu-loggedout
+          v-if="!isMobile"
+          :w-xs="ui.wXS" />
+      </div>
 
+      <div
+        v-if="loggedIn"
+        class="container">
+
+        <div id="topbar-navleft">
+          <a
+            :href="$url('dashboard')"
+            class="navbar-brand">food<span>shar<span>i</span>ng</span></a>
+          <ul class="navbar-nav flex-row no-collapse">
+            <li
+              v-if="!hasFsRole"
+              class="nav-item ml-2">
+              <a
+                :href="$url('upgradeToFs')"
+                class="nav-link">
+                <i class="fas fa-rocket" />
+                <small v-if="isMobile">Werde Foodsaver*in</small>
+                <span v-else>Werde Foodsaver*in</span>
+              </a>
+            </li>
+            <menu-region
+              v-if="hasFsRole"
+              :regions="regions"
+              :active-region-id="activeRegionId" />
+            <menu-groups
+              v-if="hasFsRole"
+              :working-groups="workingGroups" />
+            <menu-stores
+              v-if="hasFsRole && stores.length"
+              :stores="stores"
+              :may-add-store="may.addStore" />
+            <menu-baskets :show-label="!hasFsRole && !isMobile" />
+            <li
+              v-b-tooltip
+              v-if="!isMobile"
+              class="nav-item"
+              title="Karte">
+              <a
+                :href="$url('map')"
+                class="nav-link">
+                <i class="fas fa-map-marker-alt" />
+                <span v-if="!loggedIn || !hasFsRole">Karte</span>
+              </a>
+
+            </li>
+            <menu-messages v-if="isMobile" />
+            <menu-bells v-if="isMobile" />
+          </ul>
+          <b-navbar-toggle
+            v-if="!hasFsRole"
+            target="nav_collapse"
+            class="ml-2"/>
+        </div>
+
+        <search v-if="hasFsRole" />
+        <b-navbar-toggle
+          v-if="hasFsRole"
+          target="nav_collapse"
+          class="ml-2"/>
+
+        <b-collapse
+          id="nav_collapse"
+          is-nav>
+          <ul class="navbar-nav ml-auto">
+            <li
+              v-b-tooltip
+              class="nav-item"
+              title="Home">
+              <a
+                :href="$url('home')"
+                class="nav-link">
+                <i class="fas fa-home" />
+                <span class="d-md-none">Startseite</span>
+              </a>
+            </li>
+            <li
+              v-b-tooltip
+              v-if="isMobile"
+              class="nav-item"
+              title="Karte">
+              <a
+                :href="$url('map')"
+                class="nav-link">
+                <i class="fas fa-map-marker-alt" />
+                <span class="d-md-none">Karte</span>
+              </a>
+            </li>
+            <menu-admin
+              v-if="someAdminRights"
+              :is-orga-team="isOrgaTeam"
+              :may="may"
+            />
+            <nav-item-dropdown
+              tooltip="Informationen"
+              right
+              no-caret>
+              <template slot="button-content">
+                <i class="fas fa-info "/>
+                <span class="d-md-none">Infomationen</span>
+              </template>
+              <a
+                :href="$url('vision')"
+                class="dropdown-item"
+                role="menuitem">Vision</a>
+              <a
+                :href="$url('claims')"
+                class="dropdown-item"
+                role="menuitem">Forderungen</a>
+              <a
+                :href="$url('partner')"
+                class="dropdown-item"
+                role="menuitem">Partner</a>
+              <a
+                :href="$url('donate')"
+                class="dropdown-item"
+                role="menuitem">Spenden</a>
+              <a
+                :href="$url('statistics')"
+                class="dropdown-item"
+                role="menuitem">Statistik</a>
+              <div class="dropdown-divider" />
+              <a
+                :href="$url('infos')"
+                class="dropdown-item"
+                role="menuitem">Infosammlung</a>
+              <a
+                :href="$url('blog')"
+                class="dropdown-item"
+                role="menuitem">Blog</a>
+              <a
+                :href="$url('faq')"
+                class="dropdown-item"
+                role="menuitem">F.A.Q.</a>
+              <a
+                :href="$url('guide')"
+                class="dropdown-item"
+                role="menuitem">Ratgeber</a>
+              <a
+                :href="$url('wiki')"
+                class="dropdown-item"
+                role="menuitem">Wiki</a>
+              <a
+                :href="$url('changelog')"
+                class="dropdown-item"
+                role="menuitem">Changelog</a>
+            </nav-item-dropdown>
+
+            <li
+              v-b-tooltip
+              v-if="mailbox"
+              class="nav-item"
+              title="E-Mail-Postfach">
+              <a
+                :href="$url('mailbox')"
+                class="nav-link">
+                <i class="fas fa-envelope" />
+                <span class="d-md-none">E-Mail-Postfach</span>
+              </a>
+            </li>
+
+            <menu-messages v-if="!isMobile" />
+            <menu-bells v-if="!isMobile" />
+            <menu-user
+              :user-id="fsId"
+              :avatar="image"
+              :is-mobile="isMobile" />
+
+          </ul>
+        </b-collapse>
+      </div>
+    </div>
+  </div>
+</template>
 
 <script>
 import ui from '@/stores/ui'
 import bTooltip from '@b/directives/tooltip/tooltip'
 import bCollapse from '@b/components/collapse/collapse'
 import bNavbarToggle from '@b/components/navbar/navbar-toggle'
-
 
 import NavItemDropdown from './NavItemDropdown'
 import MenuRegion from './MenuRegion'
@@ -122,64 +215,64 @@ import Login from './Login'
 import MenuLoggedout from './MenuLoggedout'
 
 export default {
-    components: { bCollapse, bNavbarToggle, NavItemDropdown, MenuLoggedout, MenuRegion, MenuStores, MenuGroups, MenuBaskets, MenuAdmin, MenuMessages, MenuBells, MenuUser, Search, Login},
-    directives: { bTooltip },
-    props: {
-        fsId: {
-            type: Number,
-            default: null
-        },
-        loggedIn: {
-            type: Boolean,
-            default: true
-        },
-        image: {
-            type: String,
-            default: ''
-        },
-        mailbox: {
-            type: Boolean,
-            default: true
-        },
-        hasFsRole: {
-            type: Boolean,
-            default: true
-        },
-        isOrgaTeam: {
-            type: Boolean,
-            default: true
-        },
-        may: {
-            type: Object,
-            default: () => ({}) 
-        },
-        stores: {
-            type: Array,
-            default: () => []
-        },
-        regions: {
-            type: Array,
-            default: () => []
-        },
-        workingGroups: {
-            type: Array,
-            default: () => []
-        }
+  components: { bCollapse, bNavbarToggle, NavItemDropdown, MenuLoggedout, MenuRegion, MenuStores, MenuGroups, MenuBaskets, MenuAdmin, MenuMessages, MenuBells, MenuUser, Search, Login },
+  directives: { bTooltip },
+  props: {
+    fsId: {
+      type: Number,
+      default: null
     },
-    computed: {
-        someAdminRights() {
-            return this.isOrgaTeam || this.may.editBlog || this.may.editQuiz || this.may.handleReports
-        },
-        isMobile() {
-            return this.ui.wSM || this.ui.wXS
-        },
-        ui() {
-            return ui
-        },
-        activeRegionId() {
-            return ui.activeRegionId
-        }
+    loggedIn: {
+      type: Boolean,
+      default: true
+    },
+    image: {
+      type: String,
+      default: ''
+    },
+    mailbox: {
+      type: Boolean,
+      default: true
+    },
+    hasFsRole: {
+      type: Boolean,
+      default: true
+    },
+    isOrgaTeam: {
+      type: Boolean,
+      default: true
+    },
+    may: {
+      type: Object,
+      default: () => ({})
+    },
+    stores: {
+      type: Array,
+      default: () => []
+    },
+    regions: {
+      type: Array,
+      default: () => []
+    },
+    workingGroups: {
+      type: Array,
+      default: () => []
     }
+  },
+  computed: {
+    someAdminRights () {
+      return this.isOrgaTeam || this.may.editBlog || this.may.editQuiz || this.may.handleReports
+    },
+    isMobile () {
+      return this.ui.wSM || this.ui.wXS
+    },
+    ui () {
+      return ui
+    },
+    activeRegionId () {
+      return ui.activeRegionId
+    }
+  }
 }
 </script>
 
@@ -192,7 +285,6 @@ export default {
     .container {
         max-width: 1000px;
     }
-
 
     // logo
     .navbar-brand {
@@ -261,16 +353,16 @@ export default {
         .nav-link {
             padding: 0.4em 0.2em;
             i {
-                font-size: 1em;   
+                font-size: 1em;
             }
         }
     }
-    
+
     .no-collapse {
         display:flex;
         flex-grow: 1;
         flex-direction: row;
-        
+
         .nav-link {
             padding-right: 0.5rem;
             padding-left: 0.5rem;
@@ -363,6 +455,16 @@ div#main {
     }
 }
 
-
+// following is applied on the initial <div> before the vue component gets injected
+// it shows an brown bar as a placeholder for the actual topbar
+#vue-topbar {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    height: 2em;
+    background-color: #533a20 !important;
+    position: fixed;
+    top: 0;
+    height: 37px;
+    width: 100%;
+    z-index: 1200;
+}
 </style>
-

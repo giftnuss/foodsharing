@@ -470,7 +470,7 @@ const msg = {
     })
   },
   resetConversation: function () {
-    $('#msg-conversation-title').html('<i class="fa fa-comment"></i>')
+    $('#msg-conversation-title').html('<i class="fas fa-comment"></i>')
     $('#msg-conversation ul').html('')
   },
   appendConvList: function (conversation, prepend) {

@@ -126,6 +126,7 @@ terminology:
   events: Termine
   ambassador_forum: BotschafterInnenforum
   ambassadors: Botschafter
+  admins: Administratoren
   wall: Pinnwand
   fsp: Fair-Teiler
   groups: Arbeitsgruppen
@@ -167,6 +168,7 @@ forum:
   hold_back_for_moderation: Das Thema wurde gespeichert und wird veröffentlicht sobald ein Botschafter es bestätigt.
   no_threads: Noch keine Themen gepostet
   sending_error: Beim Senden ist ein Fehler aufgetreten
+  markdown_description: 'Zur Formatierung von *<i>kursivem</i>* oder **<b>fettem</b>** Text kannst du <a href="https://de.wikipedia.org/wiki/Markdown">Markdown</a> verwenden.<br />Achtung: Möchtest du ein * in deinem Text verwenden, so musst du ein \ voranstellen. Zum Beispiel beim Gendern des Wortes Botschafter\*innen.'
 
 chat:
   open_chat: Nachricht schreiben

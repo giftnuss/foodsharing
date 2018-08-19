@@ -24,7 +24,8 @@ function mapOldResponseToNewFormat (data) {
     'Lebensmittelspenderbetrieb/e': 'stores',
     'Deine Gruppen': 'myGroups',
     'Deine Betriebe': 'myStores',
-    'Deine Bezirke': 'myRegions'
+    'Deine Bezirke': 'myRegions',
+    'Menschen die Du kennst': 'myBuddies'
   }
   return data.reduce((o, el) => {
     let key = mapping[el.title]

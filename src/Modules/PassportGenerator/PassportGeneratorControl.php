@@ -30,10 +30,10 @@ class PassportGeneratorControl extends Control
 
 		$this->bezirk_id = false;
 		if (($this->bezirk_id = $this->func->getGetId('bid')) === false) {
-			$this->bezirk_id = $this->func->getBezirkId();
+			$this->bezirk_id = $this->session->getCurrentBezirkId();
 		}
 
-		if ($this->func->isBotFor($this->bezirk_id) || $this->func->isOrgaTeam()) {
+		if ($this->func->isBotFor($this->bezirk_id) || $this->session->isOrgaTeam()) {
 			$this->bezirk = false;
 			if ($bezirk = $this->regionGateway->getBezirk($this->bezirk_id)) {
 				$this->bezirk = $bezirk;
@@ -125,7 +125,7 @@ class PassportGeneratorControl extends Control
 						$fs['id'],
 						'passgen_failed_title',
 						'passgen_failed',
-						'fa fa-camera',
+						'fas fa-camera',
 						array('href' => '/?page=settings'),
 						array('user' => $this->session->user('name')),
 						'pass-fail-' . $fs['id']

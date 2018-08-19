@@ -1,26 +1,37 @@
 <template>
-    <a :href="href" class="dropdown-item text-truncate search-result">
-        <div v-if="image" class="bg-primary image" :style="{backgroundImage: `url('${image}')`}" />
-        {{ title }}
-        <small v-if="teaser" class="text-truncate">{{ teaser }}</small>
-    </a>
+  <a
+    :href="href"
+    class="dropdown-item text-truncate search-result">
+    <div
+      v-if="image"
+      :style="{backgroundImage: `url('${image}')`}"
+      class="bg-primary image" />
+    {{ title }}
+    <small
+      v-if="teaser"
+      class="text-truncate">{{ teaser }}</small>
+  </a>
 </template>
 <script>
 export default {
-    props: {
-        href: {
-            type: String
-        },
-        title: {
-            type: String
-        },
-        teaser: {
-            type: String
-        },
-        image: {
-            type: String
-        }
+  props: {
+    href: {
+      type: String,
+      default: null
+    },
+    title: {
+      type: String,
+      default: ''
+    },
+    teaser: {
+      type: String,
+      default: ''
+    },
+    image: {
+      type: String,
+      default: ''
     }
+  }
 }
 </script>
 

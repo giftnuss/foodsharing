@@ -102,6 +102,7 @@ function migratedb() {
     cat $f >> $dest
     echo ';' >> $dest
   done
+  echo "COMMIT;" >> $dest
 
   # if running in ci we do not have a mounted folder so we need to
   # manually copy the generated migration file into the container

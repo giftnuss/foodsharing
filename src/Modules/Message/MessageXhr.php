@@ -34,7 +34,7 @@ class MessageXhr extends Control
 
 			if ($name != '') {
 				if ($this->model->renameConversation($_GET['cid'], $name)) {
-					$xhr->addScript('$("#chat-' . (int)$_GET['cid'] . ' .chatboxtitle").html(\'<i class="fa fa-comment fa-flip-horizontal"></i> ' . $name . '\');conv.settings(' . (int)$_GET['cid'] . ');$("#convlist-' . (int)$_GET['cid'] . ' .names").html("' . $name . '")');
+					$xhr->addScript('$("#chat-' . (int)$_GET['cid'] . ' .chatboxtitle").html(\'<i class="fas fa-comment fa-flip-horizontal"></i> ' . $name . '\');conv.settings(' . (int)$_GET['cid'] . ');$("#convlist-' . (int)$_GET['cid'] . ' .names").html("' . $name . '")');
 				}
 			}
 
@@ -179,6 +179,7 @@ class MessageXhr extends Control
 
 			if (isset($_GET['raw']) && $_GET['raw']) {
 				$xhr->addData('convs', array_map(function ($c) {
+					$c['last'] = $c['last'] ? str_replace(' ', 'T', $c['last']) : null;
 					if (isset($c['name']) && $c['name']) {
 						$c['name'] = html_entity_decode($c['name']);
 					}

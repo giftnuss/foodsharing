@@ -10,13 +10,13 @@
             <Avatar
               :url="author.avatar"
               :sleep-status="author.sleepStatus"
-              size="130"
+              :size="130"
             />
           </a>
           <a
             v-if="!wXS"
             class="btn btn-sm btn-outline-primary"
-            @click="openChat"><i class="fa fa-comments" /> {{ $i18n('chat.open_chat') }}</a>
+            @click="openChat"><i class="fas fa-comments" /> {{ $i18n('chat.open_chat') }}</a>
         </div>
         <div
           class="col-sm-9"
@@ -59,7 +59,7 @@ export default {
   props: {
     id: { type: Number, default: null },
     body: { type: String, default: '' },
-    author: { type: Object, default: () => ({ avatar: {} }) },
+    author: { type: Object, default: () => ({ avatar: null }) },
     createdAt: { type: Date, default: null },
     reactions: { type: Object, default: () => ({}) },
     mayEdit: { type: Boolean, default: false },

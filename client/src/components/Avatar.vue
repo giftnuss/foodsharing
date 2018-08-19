@@ -1,10 +1,9 @@
 
-
 <template>
   <div
     :style="style"
     :class="{avatarDiv: true, sleeping: sleepStatus}"
-   />
+  />
 </template>
 
 <script>
@@ -12,22 +11,30 @@ import { AVATAR_DEFAULT } from '@/consts'
 
 export default {
   props: {
-    url: {},
-    size: {},
-    sleepStatus: {}
+    url: {
+      type: String,
+      default: null
+    },
+    size: {
+      type: Number,
+      default: 130
+    },
+    sleepStatus: {
+      type: Number,
+      default: 0
+    }
   },
   computed: {
-    style() {
+    style () {
       return {
-        width: this.size+'px',
-        height: this.size+'px',
+        width: this.size + 'px',
+        height: this.size + 'px',
         backgroundImage: `url(${this.url ? this.url : AVATAR_DEFAULT})`
       }
     }
   }
 }
 </script>
-
 
 <style lang="scss" scoped>
 .avatarDiv {
