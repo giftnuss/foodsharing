@@ -4,6 +4,8 @@ namespace Foodsharing\Modules\Report;
 
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ReportControl extends Control
 {
@@ -16,19 +18,28 @@ class ReportControl extends Control
 		$this->view = $view;
 
 		parent::__construct();
+	}
 
-		if (!isset($_GET['sub'])) {
-			$this->func->go('/?page=report&sub=uncom');
+	public function index(Request $request, Response $response): void
+	{
+		if(isset($_GET['bid'])) {
+			$this->byRegion($_GET['bid'], $response);
+		} else {
+			if (!isset($_GET['sub'])) {
+				$this->func->go('/?page=report&sub=uncom');
+			}
+			if ($this->func->mayHandleReports()) {
+				$this->func->addBread('Meldungen', '/?page=report');
+			} else {
+				$this->func->go('/?page=dashboard');
+			}
 		}
 	}
 
-	public function index(): void
-	{
-		if ($this->func->mayHandleReports()) {
-			$this->func->addBread('Meldungen', '/?page=report');
-		} else {
-			$this->func->go('/?page=dashboard');
-		}
+	private function byRegion($bid, $response) {
+		$response->setContent($this->render('pages/Report/by-region.twig',
+			['bid' => $bid]
+		));
 	}
 
 	public function uncom(): void
