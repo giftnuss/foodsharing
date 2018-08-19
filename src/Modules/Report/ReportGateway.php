@@ -213,6 +213,7 @@ class ReportGateway extends BaseGateway
 			->leftJoin('fs_foodsaver fs ON r.foodsaver_id = fs.id')
 			->leftJoin('fs_foodsaver rp ON r.reporter_id = rp.id')
 			->leftJoin('fs_bezirk b ON fs.bezirk_id = b.id')
+			->leftJoin('fs_betrieb s ON r.betrieb_id = s.id')
 			->orderBy('r.time DESC');
 
 		if ($committed !== null) {
@@ -232,6 +233,8 @@ class ReportGateway extends BaseGateway
 			r.`tvalue`,
 			r.`reporttype`,
 			r.`time`,
+			r.`betrieb_id`,
+			s.`name` as betrieb_name,
 			UNIX_TIMESTAMP(r.`time`) AS time_ts,
 				
 				fs.id AS fs_id,
