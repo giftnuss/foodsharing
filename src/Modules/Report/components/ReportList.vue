@@ -2,7 +2,7 @@
   <div class="container bootstrap">
     <div class="card mb-3 rounded">
       <div class="card-header text-white bg-primary">
-        Alle Betriebe aus dem Bezirk {{ regionName }} (<span v-if="reports.length !== reportsFiltered.length">{{ reportsFiltered.length }} von </span>{{ reports.length }})
+        Alle Reports (<span v-if="reports.length !== reportsFiltered.length">{{ reportsFiltered.length }} von </span>{{ reports.length }})
       </div>
       <div
         v-if="reports.length"
@@ -15,23 +15,44 @@
           :per-page="perPage"
           responsive
         >
-        <template slot="avatar" slot-scope="row">
-          <Avatar
-              :url="row.item.rp_photo"
-              :sleep-status="0"
-              :size="75"
-            />
-        </template>
+          <template
+            slot-scope="row"
+            slot="avatar">
+            <div class="avatars">
+              <Avatar
+                :url="row.item.fs_photo"
+                :sleep-status="0"
+                :size="35"
+              />
+              <Avatar
+                :url="row.item.rp_photo"
+                :sleep-status="0"
+                :size="35"
+              />
+            </div>
+          </template>
 
-        <template slot="actions" slot-scope="row">
-          <b-button size="sm" @click.stop="row.toggleDetails">
-            {{ row.detailsShowing ? 'Hide' : 'Show' }} Report
-          </b-button>
-        </template>
-        <template slot="row-details" slot-scope="row">
-          <h4>{{row.item.fs_name}} {{ row.item.fs_nachname }}</h4>
-          <p>{{row.item.rp_content}}</p>
-        </template>
+          <template
+            slot-scope="row"
+            slot="actions">
+            <b-button
+              size="sm"
+              @click.stop="row.toggleDetails">
+              {{ row.detailsShowing ? 'Hide' : 'Show' }}
+            </b-button>
+          </template>
+          <template
+            slot-scope="row"
+            slot="row-details">
+            <div class="report">
+              <p><strong>Report ID:</strong> {{ row.item.rp_id }}</p>
+              <p><strong>Zeitpunkt:</strong> {{ row.item.time }}</p>
+              <p><strong>Über:</strong><a :href="`/profile/${row.item.fs_id}`"> {{ row.item.fs_name }} {{ row.item.fs_nachname }}</a></p>
+              <p><strong>Von:</strong><a :href="`/profile/${row.item.rp_id}`"> {{ row.item.rp_name }} {{ row.item.rp_nachname }}</a></p>
+              <p><strong>Grund:</strong> {{ row.item.tvalue }}</p>
+              <p><strong>Beschreibung:</strong> {{ row.item.msg }}</p>
+            </div>
+          </template>
         </b-table>
         <div class="float-right p-1 pr-3">
           <b-pagination
@@ -44,11 +65,8 @@
       <div
         v-else
         class="card-body">
-        Es sind noch keine Betriebe eingetragen
+        Es sind noch keine Meldungen vorhanden
       </div>
-      <b-modal id="modalInfo" :title="modalInfo.title" ok-only>
-        <pre>{{ modalInfo.content }}</pre>
-      </b-modal>
     </div>
   </div>
 </template>
@@ -57,22 +75,17 @@
 import bTable from '@b/components/table/table'
 import bPagination from '@b/components/pagination/pagination'
 import bFormSelect from '@b/components/form-select/form-select'
-import bModal from '@b/components/modal/modal'
 import bButton from '@b/components/button/button'
-import bTooltip from '@b/directives/tooltip/tooltip'
 import * as api from '@/api/report'
 
 import Avatar from '@/components/Avatar'
 
-const noLocale = /^[\w-.\s,]*$/
-
 export default {
-  components: { Avatar, bTable, bPagination, bFormSelect, bModal, bButton },
-  directives: { bTooltip },
+  components: { Avatar, bTable, bPagination, bFormSelect, bButton },
   props: {
     regionId: {
-      type: Number,
-      default: null,
+      type: String,
+      default: null
     },
     regionName: {
       type: String,
@@ -82,72 +95,60 @@ export default {
   data () {
     return {
       currentPage: 1,
-      perPage: 100,
-      filterText: '',
-      filterStatus: null,
+      perPage: 50,
       reports: [],
       fields: {
         avatar: {
-          labael: 'Avatar'
+          labael: ''
         },
         fs_stadt: {
           label: 'Stadt',
           sortable: true
         },
+        time: {
+          label: 'Zeitpunkt',
+          sortable: true
+        },
         fs_name: {
-          label: 'Name',
+          label: 'Uber Name',
           sortable: true
         },
         fs_nachname: {
-          label: 'Nachname',
+          label: 'Uber Nachname',
           sortable: true
         },
         rp_name: {
-          label: 'Report',
+          label: 'Von Name',
           sortable: true
         },
         rp_nachname: {
-          label: '',
+          label: 'Von Nachname',
           sortable: true
         },
         b_name: {
-          label: '',
+          label: 'Region',
           sortable: true
         },
         actions: {
-          label: 'Actions'
+          label: ''
         }
-      },
-      modalInfo: { title: '', content: '' },
-      info (item, index, button) {
-        this.modalInfo.title = `${item.fs_name} ${item.fs_nachname}`
-        this.modalInfo.content = JSON.stringify(item, null, 2)
-        this.$root.$emit('bv::show::modal', 'modalInfo', button)
-      },
-
+      }
     }
   },
   async created () {
-    const reports = await api.getReportsByRegion(this.regionId);
+    const reports = await api.getReportsByRegion(this.regionId)
     Object.assign(this, {
-      reports: reports,
-    });
-  },
-  computed: {
-    reportsFiltered: function () {
-      if (!this.filterText.trim() && !this.filterStatus) return this.reports
-      let filterText = this.filterText ? this.filterText.toLowerCase() : null
-      return this.reports.filter((store) => {
-        return (
-          (!this.filterStatus || store.status === this.filterStatus) &&
-          (!filterText || (
-            store.name.toLowerCase().indexOf(filterText) !== -1 ||
-            store.address.toLowerCase().indexOf(filterText) !== -1 ||
-            store.region.toLowerCase().indexOf(filterText) !== -1
-          ))
-        )
-      })
-    }
+      reports
+    })
   }
 }
 </script>
+<style>
+  .avatars {
+    display: flex;
+  }
+  .avatars div {
+    margin-right: 5px;
+  }
+
+</style>
