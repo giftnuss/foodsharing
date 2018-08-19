@@ -6,6 +6,8 @@ use Foodsharing\Modules\Core\BaseGateway;
 
 class ReportGateway extends BaseGateway
 {
+	/* Reporttype: 1: Other (see list ReportView for list of possible reasons, they are all mapped to 1...), 2: missed pickup */
+
 	public function addBetriebReport($reportedId, $reporterId, $reasonId, $reason, $message, $storeId = 0): int
 	{
 		return $this->db->insert(
@@ -205,17 +207,34 @@ class ReportGateway extends BaseGateway
 		return $report;
 	}
 
-	public function getReports($committed = '0'): array
+	public function getReports($committed = '0', $regions = null, $excludeUser = null): array
 	{
-		$stm = '
-			SELECT 
-				r.id,
-            	r.`msg`,
-            	r.`tvalue`,
-            	r.`reporttype`,
-				r.`time`,
-				UNIX_TIMESTAMP(r.`time`) AS time_ts,
-				CONCAT("a",r.`time`) AS time_class,
+		$query = $this->db->fluent()
+			->from('fs_report r')
+			->disableSmartJoin()
+			->leftJoin('fs_foodsaver fs ON r.foodsaver_id = fs.id')
+			->leftJoin('fs_foodsaver rp ON r.reporter_id = rp.id')
+			->leftJoin('fs_bezirk b ON fs.bezirk_id = b.id')
+			->orderBy('r.time DESC');
+
+		if ($committed !== null) {
+			$query = $query->where('r.committed = ?', $committed);
+		}
+		if ($regions !== null && is_array($regions)) {
+			$query = $query->where('fs.bezirk_id', $regions);
+		}
+		if ($excludeUser !== null) {
+			$query = $query->where('fs.id != ?', $excludeUser);
+		}
+
+		return $query->select(
+			'r.id')
+			->select('
+			r.`msg`,
+			r.`tvalue`,
+			r.`reporttype`,
+			r.`time`,
+			UNIX_TIMESTAMP(r.`time`) AS time_ts,
 				
 				fs.id AS fs_id,
 				fs.name AS fs_name,
@@ -228,27 +247,6 @@ class ReportGateway extends BaseGateway
 				rp.nachname AS rp_nachname,
 				rp.photo AS rp_photo,
 				
-				b.name AS b_name
-				
-			FROM
-            	`fs_report` r
-				
-         	LEFT JOIN
-            	`fs_foodsaver` fs ON r.foodsaver_id = fs.id 
-				
-			LEFT JOIN
-            	`fs_foodsaver` rp ON r.reporter_id = rp.id 
-
-			LEFT JOIN
- 				`fs_bezirk` b ON fs.bezirk_id=b.id
-			
-			WHERE
-				r.committed = :commited
-				
-          	ORDER BY 
-				r.`time` DESC
-		';
-
-		return $this->db->fetchAll($stm, [':commited' => $committed]);
+				b.name AS b_name')->fetchAll();
 	}
 }
