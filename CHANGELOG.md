@@ -6,6 +6,7 @@
 - Orga members are now able to leave stores they are not responsible for #283 !524 @annaos
 - check user permissions in quickreply() in RegionXhr !499 #85 @annaos
 - fix exception if request have no "msg"-Attribute in quickreply() in WallPostXhr !499 @annaos
+- removed not needed add store button from the dashboard !523 @peter.toennies
 
 ## Refactoring
 
