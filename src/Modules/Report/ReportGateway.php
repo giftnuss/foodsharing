@@ -205,49 +205,75 @@ class ReportGateway extends BaseGateway
 		return $report;
 	}
 
-	public function getReports($committed = '0', $regions = null, $excludeUser = null): array
+	private function reportSelect(): \SelectQuery
 	{
 		$query = $this->db->fluent()
 			->from('fs_report r')
 			->disableSmartJoin()
+			->select('
+				r.id,
+				r.`msg`,
+				r.`tvalue`,
+				r.`reporttype`,
+				r.`time`,
+				r.`betrieb_id`,
+				s.`name` as betrieb_name,
+				UNIX_TIMESTAMP(r.`time`) AS time_ts,
+					
+				fs.id AS fs_id,
+				fs.name AS fs_name,
+				fs.nachname AS fs_nachname,
+				fs.photo AS fs_photo,
+				fs.stadt AS fs_stadt,
+	
+				rp.id AS rp_id,
+				rp.name AS rp_name,
+				rp.nachname AS rp_nachname,
+				rp.photo AS rp_photo,
+				
+				b.name AS b_name')
 			->leftJoin('fs_foodsaver fs ON r.foodsaver_id = fs.id')
 			->leftJoin('fs_foodsaver rp ON r.reporter_id = rp.id')
 			->leftJoin('fs_bezirk b ON fs.bezirk_id = b.id')
 			->leftJoin('fs_betrieb s ON r.betrieb_id = s.id')
 			->orderBy('r.time DESC');
 
-		if ($committed !== null) {
-			$query = $query->where('r.committed = ?', $committed);
-		}
+		return $query;
+	}
+
+	public function getReportsByReporteeRegions($regions, $excludeReportsAboutUser = null)
+	{
+		$query = $this->reportSelect();
+
 		if ($regions !== null && is_array($regions)) {
 			$query = $query->where('fs.bezirk_id', $regions);
 		}
-		if ($excludeUser !== null) {
-			$query = $query->where('fs.id != ?', $excludeUser);
+		if ($excludeReportsAboutUser !== null) {
+			$query = $query->where('fs.id != ?', $excludeReportsAboutUser);
 		}
 
-		return $query->select(
-			'r.id')
-			->select('
-			r.`msg`,
-			r.`tvalue`,
-			r.`reporttype`,
-			r.`time`,
-			r.`betrieb_id`,
-			s.`name` as betrieb_name,
-			UNIX_TIMESTAMP(r.`time`) AS time_ts,
-				
-				fs.id AS fs_id,
-				fs.name AS fs_name,
-				fs.nachname AS fs_nachname,
-				fs.photo AS fs_photo,
-				fs.stadt AS fs_stadt,
+		return $query->fetchAll();
+	}
 
-				rp.id AS rp_id,
-				rp.name AS rp_name,
-				rp.nachname AS rp_nachname,
-				rp.photo AS rp_photo,
-				
-				b.name AS b_name')->fetchAll();
+	public function getReportsForRegionlessByReporterRegion($regions, $excludeReportsAboutUser = null)
+	{
+		$query = $this->reportSelect();
+		$query->where('fs.bezirk_id = 0');
+		if ($regions !== null && is_array($regions)) {
+			$query = $query->where('rp.bezirk_id', $regions);
+		}
+		if ($excludeReportsAboutUser !== null) {
+			$query = $query->where('fs.id != ?', $excludeReportsAboutUser);
+		}
+
+		return $query->fetchAll();
+	}
+
+	public function getReports($committed = '0'): array
+	{
+		$query = $this->reportSelect();
+		$query = $query->where('r.committed = ?', $committed);
+
+		return $query->fetchAll();
 	}
 }

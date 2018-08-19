@@ -45,7 +45,10 @@ class ReportRestController extends FOSRestController
 		*/
 		$regions = $this->regionGateway->listIdsForDescendantsAndSelf($regionId);
 
-		$reports = $this->reportGateway->getReports(null, $regions, $this->session->id());
+		$reports = array_merge(
+			$this->reportGateway->getReportsByReporteeRegions($regions, $this->session->id()),
+			$this->reportGateway->getReportsForRegionlessByReporterRegion($regions, $this->session->id())
+		);
 
 		$view = $this->view([
 			'data' => $reports
