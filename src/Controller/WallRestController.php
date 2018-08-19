@@ -33,7 +33,7 @@ class WallRestController extends FOSRestController
 			'author' => [
 				'id' => $post['foodsaver_id'],
 				'name' => $post['name'],
-				'avatar' => '/images/mini_q_' . $post['photo']
+				'avatar' => $post['photo'] ?? null
 			]
 		];
 	}
