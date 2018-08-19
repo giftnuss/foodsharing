@@ -2,15 +2,26 @@
 
 namespace Foodsharing\Modules\Core;
 
+use FluentPDO;
 use PDO;
 
 class Database
 {
 	private $pdo;
+	private $fluent;
 
 	public function __construct(PDO $pdo)
 	{
 		$this->pdo = $pdo;
+		$this->fluent = new FluentPDO($pdo);
+	}
+
+	/**
+	 * @return FluentPDO FluentPDO Querybuilder
+	 */
+	public function fluent()
+	{
+		return $this->fluent;
 	}
 
 	// === high-level methods that build SQL internally ===
