@@ -350,7 +350,7 @@ class EventGateway extends BaseGateway
 		if ($fsids = $this->db->fetchAllValues('
 			SELECT 	`foodsaver_id`
 			FROM	`fs_foodsaver_has_bezirk`
-			WHERE 	`bezirk_id` ' . $b_sql . ' 
+			WHERE 	`bezirk_id` ' . $b_sql . '
 			AND 	`active` = 1
 		')
 		) {
