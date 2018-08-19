@@ -1,6 +1,7 @@
 # Unreleased
 
 ## Features
+- Return 404 instead of 500 or broken layout for non existant pages !525 @NerdyProjects
 
 ## Bugfixes
 

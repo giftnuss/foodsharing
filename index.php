@@ -28,6 +28,7 @@ use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Routing;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 require __DIR__ . '/includes/setup.php';
 
@@ -65,11 +66,15 @@ $app = $func->getPage();
 
 if (($class = $session->getRouteOverride()) === null) {
 	$class = Routing::getClassName($app, 'Control');
+	try {
+		$obj = DI::$shared->get(ltrim($class, '\\'));
+	} catch (ServiceNotFoundException $e) {
+	}
+} else {
+	$obj = DI::$shared->get(ltrim($class, '\\'));
 }
 
-if ($class) {
-	$obj = DI::$shared->get(ltrim($class, '\\'));
-
+if (isset($obj)) {
 	if (isset($_GET['a']) && is_callable(array($obj, $_GET['a']))) {
 		$meth = $_GET['a'];
 		$obj->$meth($request, $response);
@@ -80,6 +85,9 @@ if ($class) {
 	if ($sub !== false && is_callable(array($obj, $sub))) {
 		$obj->$sub($request, $response);
 	}
+} else {
+	$response->setStatusCode(404);
+	$response->setContent('');
 }
 
 $page = $response->getContent();
