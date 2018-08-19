@@ -296,6 +296,8 @@ export default {
 #topbar {
     .navbar {
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        max-height: 100%;
+        overflow-y: scroll;
     }
 
     .container {
