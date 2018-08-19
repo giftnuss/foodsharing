@@ -1,4 +1,4 @@
-# Unreleased 
+# Unreleased
 
 ## Features
 
@@ -7,6 +7,11 @@
 ## Refactoring
 
 ## Dev/Test/CI stuff
+
+# 2018-08-19 Hotfix
+
+## Bugfixes 
+- Fix an issue with the navbar for users of safari 11 !527 @theolampert
 
 # 2018-08-18
 
@@ -23,7 +28,7 @@ IE11, Safari and slightly older androids should work again, although I can only 
 - Only accepted store members see updates on dashboard !412 @k.miklobusec
 - Add description about markdown formatting in forum posts !496 @NerdyProjects
 - introduce new font fontawesome 5.2 !500 @peter.toennies
-- added placeholder text for the birth date in the registration form !505 @peter.toennies 
+- added placeholder text for the birth date in the registration form !505 @peter.toennies
 - Search in navbar shows more results, distinct results page removed as it was the same !515 #315 @NerdyProjects @theolampert
 
 ## Bugfixes
@@ -47,7 +52,7 @@ IE11, Safari and slightly older androids should work again, although I can only 
 - fix wrong usage of region ID lists for post permissions !503 #308 @peter.toennies
 - Fix fairteiler/blog picture upload by exposing necessary javascript methods #307 @NerdyProjects
 - Admins of Workgroups are called admins again instead of ambassadors !513 #264 @NerdyProjects
-- Do not rely on $\_SERVER['HTTP\_HOST'] being set #263 !510 @NerdyProjects 
+- Do not rely on $\_SERVER['HTTP\_HOST'] being set #263 !510 @NerdyProjects
 - Admins of workgroups are called admins again instead of ambassadors !513 #264 @NerdyProjects
 - Map legend now more usable in mobile view !215 #119 @michi-zuri
 - Fix joining regions from subpages like profile not possible !509 #300 @NerdyProjects
