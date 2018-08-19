@@ -1,5 +1,7 @@
 # 2018-08-19 Hotfix
 
+- Use Ctrl+Enter instead Shift+Enter for sending messages
+
 ## Bugfixes 
 - Fix an issue with the navbar for users of safari 11 !527 @theolampert
 - Return 404 instead of 500 or broken layout for non existant pages !525 @NerdyProjects
