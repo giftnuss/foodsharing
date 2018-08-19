@@ -121,7 +121,6 @@ class ReportGateway extends BaseGateway
 	            	r.`reporttype`,
 					r.`time`,
 					UNIX_TIMESTAMP(r.`time`) AS time_ts,
-					CONCAT("a",r.`time`) AS time_class,
 					
 					rp.id AS rp_id,
 					rp.name AS rp_name,
@@ -167,7 +166,6 @@ class ReportGateway extends BaseGateway
 				r.committed,
 				r.betrieb_id,
 				UNIX_TIMESTAMP(r.`time`) AS time_ts,
-				CONCAT("a",r.`time`) AS time_class,
 				
 				fs.id AS fs_id,
 				fs.name AS fs_name,
