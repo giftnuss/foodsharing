@@ -288,7 +288,7 @@ class StoreXhr extends Control
 	public function signout()
 	{
 		$xhr = new Xhr();
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $_GET['id'])) {
+		if ($this->storeGateway->isVerantwortlich($this->session->id(), $_GET['id'])) {
 			$xhr->addMessage($this->func->s('signout_error_admin'), 'error');
 		} elseif ($this->storeGateway->isInTeam($this->session->id(), $_GET['id'])) {
 			$this->model->signout($_GET['id'], $this->func->fsId());

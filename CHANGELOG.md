@@ -3,6 +3,7 @@
 ## Features
 
 ## Bugfixes
+- orga should can leave a store #283 @annaos
 
 ## Refactoring
 
