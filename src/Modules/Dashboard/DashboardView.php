@@ -289,7 +289,7 @@ class DashboardView extends View
 			}
 			$list .= '
 			</ul>';
-			$out .= $this->v_utils->v_field($list, 'Du bist auf der Springer- / oder Warteliste bei', array('class' => 'ui-padding'));
+			$out .= $this->v_utils->v_field($list, 'Du bist auf der Springerliste bei', array('class' => 'ui-padding'));
 		}
 
 		if (!empty($betriebe['anfrage'])) {
@@ -388,18 +388,7 @@ class DashboardView extends View
 		}
 
 		if (empty($out)) {
-			$out = $this->v_utils->v_info('Du bist bis jetzt in keinem Filial-Team.');
-		}
-
-		if ($this->session->may('bieb')) {
-			$out .= '
-				<div class="ui-widget ui-widget-content ui-corner-all margin-bottom ui-padding">
-					<ul class="linklist">
-						<li>
-							<a href="/?page=betrieb&a=new" class="ui-corner-all">Neuen Betrieb eintragen</a>
-						</li>
-					</ul>
-				</div>';
+			$out = $this->v_utils->v_info('Du bist bis jetzt in keinem Betriebsteam.');
 		}
 
 		return $out;

@@ -1,36 +1,39 @@
 
 <template>
-    <li :class="this.dropdownClasses">
+  <li :class="dropdownClasses">
 
-        <a 
-            :class="this.toggleClasses"
-            ref="toggle"
-            :id="`dropdown_${_uid}`"
-            href="#"
-            aria-haspopup="true"
-            :aria-expanded="this.visible ? 'true' : 'false'"
-            @click="this.buttonClick"
-            @mouseover="() => hover = true"
-            @mouseout="() => hover = false"
-            @keydown="this.buttonClick"
-            :aria-label="tooltip"
-        >
-            <slot name="button-content"></slot>
-        </a>
-        <b-tooltip ref="tooltip" :target="`dropdown_${_uid}`" :show="hover && !visible" :triggers="[]">
-          {{ tooltip }}
-        </b-tooltip>
-        <div 
-            :class="this.menuClasses"
-            ref="menu"
-            @mouseover="onMouseOver"
-            @keydown="onKeydown"
-        >
-            <slot></slot>
-        </div>
-    </li>
+    <a
+      ref="toggle"
+      :class="toggleClasses"
+      :id="`dropdown_${_uid}`"
+      :aria-expanded="visible ? 'true' : 'false'"
+      :aria-label="tooltip"
+      href="#"
+      aria-haspopup="true"
+      @click="buttonClick"
+      @mouseover="() => hover = true"
+      @mouseout="() => hover = false"
+      @keydown="buttonClick"
+    >
+      <slot name="button-content"/>
+    </a>
+    <b-tooltip
+      ref="tooltip"
+      :target="`dropdown_${_uid}`"
+      :show="hover && !visible"
+      :triggers="[]">
+      {{ tooltip }}
+    </b-tooltip>
+    <div
+      ref="menu"
+      :class="menuClasses"
+      @mouseover="onMouseOver"
+      @keydown="onKeydown"
+    >
+      <slot/>
+    </div>
+  </li>
 </template>
-
 
 <script>
 // modified version of boostrap-vue's b-nav-item-dropdown
@@ -39,9 +42,33 @@ import dropdownMixin from '@b/mixins/dropdown'
 import bTooltip from '@b/components/tooltip/tooltip'
 
 export default {
-  mixins: [idMixin, dropdownMixin],
   components: { bTooltip },
-  data() {
+  mixins: [idMixin, dropdownMixin],
+  props: {
+    noCaret: {
+      type: Boolean,
+      default: false
+    },
+    extraToggleClasses: {
+      // Extra Toggle classes
+      type: String,
+      default: ''
+    },
+    extraMenuClasses: {
+      // Extra Menu classes
+      type: String,
+      default: ''
+    },
+    role: {
+      type: String,
+      default: 'menu'
+    },
+    tooltip: {
+      type: String,
+      default: null
+    }
+  },
+  data () {
     return {
       hover: false
     }
@@ -78,37 +105,13 @@ export default {
     }
   },
   methods: {
-    buttonClick(event) {
-      if(this.visible) {
+    buttonClick (event) {
+      if (this.visible) {
         this.hover = false
       }
       this.toggle(event)
     }
-  },
-  props: {
-    noCaret: {
-      type: Boolean,
-      default: false
-    },
-    extraToggleClasses: {
-      // Extra Toggle classes
-      type: String,
-      default: ''
-    },
-    extraMenuClasses: {
-      // Extra Menu classes
-      type: String,
-      default: ''
-    },
-    role: {
-      type: String,
-      default: 'menu'
-    },
-    tooltip: {
-      type: String,
-      default: null
-    }
   }
-    
+
 }
 </script>

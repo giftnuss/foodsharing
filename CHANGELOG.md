@@ -1,6 +1,32 @@
 # Unreleased
 
 ## Features
+- Fix conversation name when changing store (name) #294 !508 @surrim
+
+## Bugfixes
+- Orga members are now able to leave stores they are not responsible for #283 !524 @annaos
+- check user permissions in quickreply() in RegionXhr !499 #85 @annaos
+- fix exception if request have no "msg"-Attribute in quickreply() in WallPostXhr !499 @annaos
+- removed not needed add store button from the dashboard !523 @peter.toennies
+
+## Refactoring
+
+## Dev/Test/CI stuff
+
+# 2018-08-19 Hotfix
+
+## Bugfixes 
+- Fix an issue with the navbar for users of safari 11 !527 @theolampert
+- Return 404 instead of 500 or broken layout for non existant pages !525 @NerdyProjects
+
+# 2018-08-18
+
+A spontaneous hack-weekend led to us finally finishing this release.
+The new topbar is the main feature, paired with a lot of bugfixes of all the things we broke with the last release and the new topbar.
+Another big thing to note is that we accidentally removed support for a lot of browsers with the last release which should have been fixed again:
+IE11, Safari and slightly older androids should work again, although I can only ask you to please always keep your devices and browsers up to date!
+
+## Features
 - new topbar in vue.js !451, #11, #15, #155, #158, #30, #66, #67, #93 @alangecker
 - reactive vue stores !451 @alangecker
 - resizeable avatar component !451 @alangecker
@@ -8,6 +34,8 @@
 - Only accepted store members see updates on dashboard !412 @k.miklobusec
 - Add description about markdown formatting in forum posts !496 @NerdyProjects
 - introduce new font fontawesome 5.2 !500 @peter.toennies
+- added placeholder text for the birth date in the registration form !505 @peter.toennies
+- Search in navbar shows more results, distinct results page removed as it was the same !515 #315 @NerdyProjects @theolampert
 
 ## Bugfixes
 - Changed button to return to profile on the profile editing page !492 #285 @leisinger.sebastian
@@ -17,7 +45,6 @@
 - saving mumble events is now possible !478 #276 @wapplications
 - Remove broken LoginXhr->login method !465 @tiltec
 - Added possibility to change main region to a part of town (region type 9) !470 #268 @peter.toennies
-- fetching parent regions without any give regin id not possible anymore !474 #258 @peter.toennies
 - fetching parent regions without any given region ID is not possible anymore !474 #258 @peter.toennies
 - Fix #287 allowing all members of a group to edit that group !487 @NerdyProjects
 - Fix #286 making group applications work again !489 @NerdyProjects
@@ -32,12 +59,17 @@
 - fix wrong usage of region ID lists for post permissions !503 #308 @peter.toennies
 - Fix fairteiler/blog picture upload by exposing necessary javascript methods #307 @NerdyProjects
 - Admins of Workgroups are called admins again instead of ambassadors !513 #264 @NerdyProjects
-- Do not rely on $\_SERVER['HTTP\_HOST'] being set #263 !510 @NerdyProjects 
+- Do not rely on $\_SERVER['HTTP\_HOST'] being set #263 !510 @NerdyProjects
 - Admins of workgroups are called admins again instead of ambassadors !513 #264 @NerdyProjects
 - Map legend now more usable in mobile view !215 #119 @michi-zuri
 - Fix joining regions from subpages like profile not possible !509 #300 @NerdyProjects
 - Fixed `Invalid Date`-Error on safari !469 @alangecker
 - Reimplement forum scroll to post functionality !514 #270 @NerdyProjects
+- Add back redirect to invalid login event !516 @theolampert
+- Reformatting of conversation message times happen in API to avoid javascript error on empty conversation !517 @NerdyProjects @theolampert
+- Groups in the menu are also keyboard navigatable !515 #314 @theolampert @NerdyProjects
+- Enable autofill username/password for login !515 @theolampert @NerdyProjects
+- Fix display of avatars for users without avatars !520 @theolampert @NerdyProjects
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker
@@ -47,7 +79,6 @@
 - refactored event from model to gateway !478 #9 @wapplications
 - removed several deprecated functions from func all over the source !436 @peter.toennies
 - refactored content from model to gateway !481 #9 @peter.toennies
-- refactored NewArea module from model to gateway !483 #9 @peter.toennies
 - refactored NewArea module from model to gateway !484 #9 @peter.toennies
 - refactored index from model to gateway !480 #9 @peter.toennies
 - alfa slab one font now used as npm package !501 @peter.toennies
@@ -57,6 +88,7 @@
 - Add test for workgroup application / acceptance process !489 @NerdyProjects
 - Increase deployer task timeout for more reliable deployments @NerdyProjects
 - Add test for forum post creation / moderation / activation !490 @NerdyProjects
+- Also lint js/vue files deep inside client/src !520 @theolampert @NerdyProjects
 
 # 2018-07-22 Hotfix
 - Fix links to group application details

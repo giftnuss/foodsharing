@@ -443,7 +443,7 @@ class StoreGateway extends BaseGateway
 		return $out;
 	}
 
-	public function isVerantwortlich($fs_id, $betrieb_id)
+	public function isResponsible($fs_id, $betrieb_id)
 	{
 		return $this->db->exists('fs_betrieb_team', [
 			'betrieb_id' => $betrieb_id,

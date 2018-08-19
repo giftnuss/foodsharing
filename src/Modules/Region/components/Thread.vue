@@ -264,10 +264,7 @@ export default {
         reactions: {},
         author: {
           name: `${user.firstname} ${user.lastname}`,
-          avatar: {
-            size: 130,
-            url: user.avatar['130']
-          }
+          avatar: user.avatar['130']
         }
       }
       this.loadingPosts.push(-1)

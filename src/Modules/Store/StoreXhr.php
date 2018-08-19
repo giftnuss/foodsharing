@@ -60,7 +60,7 @@ class StoreXhr extends Control
 
 	public function getfetchhistory()
 	{
-		if ($this->session->may() && ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $_GET['bid']) || $this->session->may('orga'))) {
+		if ($this->session->may() && ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $_GET['bid']) || $this->session->may('orga'))) {
 			if ($history = $this->model->getFetchHistory($_GET['bid'], $_GET['from'], $_GET['to'])) {
 				return array(
 					'status' => 1,
@@ -77,7 +77,7 @@ class StoreXhr extends Control
 
 	public function fetchhistory()
 	{
-		if ($this->session->may() && ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $_GET['bid']) || $this->session->may('orga'))) {
+		if ($this->session->may() && ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $_GET['bid']) || $this->session->may('orga'))) {
 			$dia = new XhrDialog();
 			$dia->setTitle('Abholungshistorie');
 
@@ -201,7 +201,7 @@ class StoreXhr extends Control
 	{
 		if (isset($_GET['ids']) && is_array($_GET['ids']) && count($_GET['ids']) > 0) {
 			foreach ($_GET['ids'] as $b) {
-				if (($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $b['id'])) && (int)$b['v'] > 0) {
+				if (($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $b['id'])) && (int)$b['v'] > 0) {
 					$this->model->updateBetriebBezirk($b['id'], $b['v']);
 				}
 			}
@@ -288,7 +288,7 @@ class StoreXhr extends Control
 	public function signout()
 	{
 		$xhr = new Xhr();
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $_GET['id'])) {
+		if ($this->storeGateway->isResponsible($this->session->id(), $_GET['id'])) {
 			$xhr->addMessage($this->func->s('signout_error_admin'), 'error');
 		} elseif ($this->storeGateway->isInTeam($this->session->id(), $_GET['id'])) {
 			$this->model->signout($_GET['id'], $this->func->fsId());

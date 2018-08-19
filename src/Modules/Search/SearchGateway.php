@@ -112,7 +112,7 @@ class SearchGateway extends BaseGateway
 	
 			ORDER BY `name`
 				
-			LIMIT 0,10
+			LIMIT 0,50
 			
 		');
 	}

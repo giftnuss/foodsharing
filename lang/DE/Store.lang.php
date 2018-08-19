@@ -41,3 +41,5 @@ $g_lang['fetch_history'] = 'Abholungshistorie';
 $g_lang['prefetchtime'] = 'Wie viele Wochen im Voraus können sich Foodsaver eintragen?';
 $g_lang['no_member'] = 'Du bist gar kein Mitglied in diesem Betrieb';
 $g_lang['signout_error_admin'] = 'Du bist verantwortlich für diesen Betrieb und kannst Dich nicht löschen!';
+$g_lang['team_conversation_name'] = 'Team {var}';
+$g_lang['springer_conversation_name'] = 'Springer {var}';

@@ -1033,7 +1033,7 @@ class XhrMethods
 
 	public function xhr_update_abholen($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid']) || $this->func->isBotschafter()) {
+		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid']) || $this->func->isBotschafter()) {
 			$this->model->del('DELETE FROM 	`fs_abholzeiten` WHERE `betrieb_id` = ' . (int)$data['bid']);
 
 			if (is_array($data['newfetchtime'])) {
@@ -1110,7 +1110,7 @@ class XhrMethods
 			1 => true,
 			2 => true
 		);
-		if (($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $_GET['bid'])) && isset($allow[(int)$_GET['s']])) {
+		if (($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $_GET['bid'])) && isset($allow[(int)$_GET['s']])) {
 			return $this->model->update('
 			UPDATE `fs_betrieb`
 			SET 	`team_status` = ' . (int)$_GET['s'] . '
@@ -1277,7 +1277,7 @@ class XhrMethods
 
 	public function xhr_denyRequest($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->session->id() == $data['fsid'] || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid'])) {
+		if ($this->session->isOrgaTeam() || $this->session->id() == $data['fsid'] || $this->storeGateway->isResponsible($this->session->id(), $data['bid'])) {
 			$this->storeModel->denyRequest($data['fsid'], $data['bid']);
 
 			$msg = 'Deine Anfrage wurde erfolgreich zur&uuml;ckgezogen!';
@@ -1292,7 +1292,7 @@ class XhrMethods
 
 	public function xhr_acceptRequest($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid']) || $this->func->isBotschafter()) {
+		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid']) || $this->func->isBotschafter()) {
 			$this->storeModel->acceptRequest($data['fsid'], $data['bid']);
 
 			$this->storeGateway->add_betrieb_notiz(array(
@@ -1312,7 +1312,7 @@ class XhrMethods
 
 	public function xhr_warteRequest($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid']) || $this->func->isBotschafter()) {
+		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid']) || $this->func->isBotschafter()) {
 			$this->storeModel->warteRequest($data['fsid'], $data['bid']);
 
 			return json_encode(array('status' => 1));
@@ -1395,7 +1395,7 @@ class XhrMethods
 				[bid] => 1
 			 */
 			$confirm = 0;
-			if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid'])) {
+			if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid'])) {
 				$confirm = 1;
 			}
 
@@ -1469,7 +1469,7 @@ class XhrMethods
 
 	public function xhr_fetchDeny($data)
 	{
-		if (($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid'])) && isset($data['date'])) {
+		if (($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid'])) && isset($data['date'])) {
 			$this->storeModel->deleteFetchDate($data['fsid'], $data['bid'], date('Y-m-d H:i:s', strtotime($data['date'])));
 
 			return 1;
@@ -1478,7 +1478,7 @@ class XhrMethods
 
 	public function xhr_fetchConfirm($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid'])) {
+		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid'])) {
 			$this->storeGateway->confirmFetcher($data['fsid'], $data['bid'], date('Y-m-d H:i:s', strtotime($data['date'])));
 
 			return 1;
@@ -1601,7 +1601,7 @@ class XhrMethods
 
 	public function xhr_bcontext($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid']) || $this->func->isBotFor($data['bzid'])) {
+		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid']) || $this->func->isBotFor($data['bzid'])) {
 			$check = false;
 			if ($data['action'] == 'toteam') {
 				$check = true;
