@@ -336,10 +336,12 @@ export default {
         #topbar-navleft {
             width: 100%;
         }
-        .navbar {
-          max-height: 100%;
+    }
+    @media (max-width: 500px) {
+      .navbar {
+          max-height: 100vh;
           overflow-y: scroll;
-        }
+      }
     }
 
     .navbar-nav {
@@ -388,6 +390,9 @@ export default {
         }
         .dropdown-menu {
             position: absolute;
+            @media (max-width: 500px) {
+              position: fixed;
+            }
         }
     }
     .dropdown-toggle {
