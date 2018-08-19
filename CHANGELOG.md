@@ -6,6 +6,8 @@
 
 ## Refactoring
 
+- refactored EmailTemplateAdminGateway from model to gateway !482 #9 @peter.toennies
+
 ## Dev/Test/CI stuff
 
 # 2018-08-18
@@ -64,7 +66,6 @@ IE11, Safari and slightly older androids should work again, although I can only 
 - removed copy of email sending method for CLI applications !464 @NerdyProjects
 - refactored statistics from model to gateway !476 #9 @peter.toennies
 - removed several layers of the legacy database-classes structure !477 @peter.toennies
-- refactored EmailTemplateAdminGateway from model to gateway !482 #9 @peter.toennies
 - removed several deprecated functions from func all over the source !436 @peter.toennies
 - refactored content from model to gateway !481 #9 @peter.toennies
 - refactored NewArea module from model to gateway !484 #9 @peter.toennies
