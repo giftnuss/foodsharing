@@ -3,6 +3,7 @@
 namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Report\ReportGateway;
 use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Services\SanitizerService;
@@ -16,11 +17,13 @@ class ReportRestController extends FOSRestController
 	private $sanitizerService;
 	private $reportPermissions;
 	private $reportGateway;
+	private $regionGateway;
 
-	public function __construct(Session $session, SanitizerService $sanitizerService, ReportGateway $reportGateway, ReportPermissions $reportPermissions)
+	public function __construct(Session $session, SanitizerService $sanitizerService, RegionGateway $regionGateway, ReportGateway $reportGateway, ReportPermissions $reportPermissions)
 	{
 		$this->session = $session;
 		$this->sanitizerService = $sanitizerService;
+		$this->regionGateway = $regionGateway;
 		$this->reportGateway = $reportGateway;
 		$this->reportPermissions = $reportPermissions;
 	}
@@ -35,7 +38,14 @@ class ReportRestController extends FOSRestController
 			throw new HttpException(403);
 		}
 
-		$reports = $this->reportGateway->getReports(null, $regionId, $this->session->id());
+		/* from https://gitlab.com/foodsharing-dev/foodsharing/issues/296
+		  reports lists do show every report from that region and all child regions (filter will be needed)
+		  reports lists do only show the reports of the visitor if anonymity has been repealed by the reporter (feature yet to come)
+		  -> remove reports of the person visiting from output
+		*/
+		$regions = $this->regionGateway->listIdsForDescendantsAndSelf($regionId);
+
+		$reports = $this->reportGateway->getReports(null, $regions, $this->session->id());
 
 		$view = $this->view([
 			'data' => $reports
