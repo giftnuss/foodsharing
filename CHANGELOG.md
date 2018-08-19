@@ -1,18 +1,8 @@
-# Unreleased
-
-## Features
-- Return 404 instead of 500 or broken layout for non existant pages !525 @NerdyProjects
-
-## Bugfixes
-
-## Refactoring
-
-## Dev/Test/CI stuff
-
 # 2018-08-19 Hotfix
 
 ## Bugfixes 
 - Fix an issue with the navbar for users of safari 11 !527 @theolampert
+- Return 404 instead of 500 or broken layout for non existant pages !525 @NerdyProjects
 
 # 2018-08-18
 
