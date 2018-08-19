@@ -64,7 +64,7 @@ class Db
 		$duration = microtime(true) - $start;
 
 		if ($res == false) {
-			error_log('SQL QUERY ERROR URL ' . ($_SERVER['REQUEST_URI'] ?? $_SERVER['argv']) . ' IN ' . $query . ' : ' . $this->mysqli->error);
+			error_log('SQL QUERY ERROR URL ' . ($_SERVER['REQUEST_URI'] ?? $_SERVER['argv'][0]) . ' IN ' . $query . ' : ' . $this->mysqli->error);
 			DebugBar::addQuery($query, $duration, false, $this->mysqli->errno, $this->mysqli->error);
 		} else {
 			DebugBar::addQuery($query, $duration, true);

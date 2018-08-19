@@ -215,7 +215,23 @@ import Login from './Login'
 import MenuLoggedout from './MenuLoggedout'
 
 export default {
-  components: { bCollapse, bNavbarToggle, NavItemDropdown, MenuLoggedout, MenuRegion, MenuStores, MenuGroups, MenuBaskets, MenuAdmin, MenuMessages, MenuBells, MenuUser, Search, Login },
+  components: {
+    bCollapse,
+    bNavbarToggle,
+    NavItemDropdown,
+    MenuLoggedout,
+    MenuRegion,
+    MenuStores,
+    MenuGroups,
+    MenuBaskets,
+    MenuAdmin,
+    MenuMessages,
+    MenuBells,
+    MenuUser,
+    Search,
+    Login,
+    bTooltip
+  },
   directives: { bTooltip },
   props: {
     fsId: {
@@ -341,7 +357,6 @@ export default {
 
 <style lang="scss">
 #topbar {
-    overflow-x: hidden;
     .nav-link {
         white-space: nowrap;
         padding: 0.4em 0.5em;

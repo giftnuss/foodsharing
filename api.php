@@ -142,8 +142,8 @@ $fs = $_GET['fs'];
 $key = $_GET['key'];
 $opts = $_GET['opts'];
 
-/* @var $model Model */
-$model = DI::$shared->get(Model::class);
+/* @var $model Db */
+$model = DI::$shared->get(Db::class);
 
 if (!check_api_token($fs, $key, $model)) {
 	http_response_code(403);
