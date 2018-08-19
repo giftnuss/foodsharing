@@ -1,12 +1,17 @@
 # Unreleased
 
 ## Features
+- API to display report per region allowing ambassadors to work on their reports !529 #296 @NerdyProjects
+- Vue.JS implementation of reports page !529 #296 @theolampert
 
 ## Bugfixes
 
 ## Refactoring
+- API does not expose full URL to avatar images to allow the frontend to chose the resolution !529 @NerdyProjects
+- FluentPDO Query builder integrated to try it out !529 @NerdyProjects
 
 ## Dev/Test/CI stuff
+- Seed data for reports !529 @NerdyProjects
 
 # 2018-08-19 Hotfix
 
