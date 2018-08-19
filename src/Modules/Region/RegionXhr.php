@@ -67,8 +67,9 @@ class RegionXhr extends Control
 			$body = nl2br($body);
 			$body = $this->func->autolink($body);
 
-			if ($this->forumPermissions->mayPostToThread($_GET['tid']) &&
-				$bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid'])) {
+			if ($this->forumPermissions->mayPostToThread($_GET['tid'])
+				&& $bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid'])
+			) {
 				if ($post_id = $this->forumGateway->addPost($this->session->id(), $_GET['tid'], $body)) {
 					if ($follower = $this->forumGateway->getThreadFollower($this->session->id(), $_GET['tid'])) {
 						$theme = $this->model->getVal('name', 'theme', $_GET['tid']);
