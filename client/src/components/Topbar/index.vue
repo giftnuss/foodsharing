@@ -296,8 +296,6 @@ export default {
 #topbar {
     .navbar {
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-        max-height: 100%;
-        overflow-y: scroll;
     }
 
     .container {
@@ -337,6 +335,10 @@ export default {
     @media (max-width: 630px) {
         #topbar-navleft {
             width: 100%;
+        }
+        .navbar {
+          max-height: 100%;
+          overflow-y: scroll;
         }
     }
 
