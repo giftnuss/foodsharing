@@ -3,7 +3,7 @@
 ## Features
 
 ## Bugfixes
-- orga should can leave a store #283 @annaos
+- Orga members are now able to leave stores they are not responsible for #283 !524 @annaos
 
 ## Refactoring
 
