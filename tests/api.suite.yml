@@ -4,6 +4,7 @@ modules:
         - Asserts
         - \Helper\Api
         - \Helper\Foodsharing
+        - \Helper\FoodsharingUrl
         - Sequence
         - \Helper\Maildev
         - Db:
