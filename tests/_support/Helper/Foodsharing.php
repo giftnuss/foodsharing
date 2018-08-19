@@ -37,6 +37,7 @@ class Foodsharing extends \Codeception\Module\Db
 			DELETE FROM fs_fairteiler_follower;
 			DELETE FROM fs_fairteiler_has_wallpost;
 			DELETE FROM fs_wallpost;
+			DELETE FROM fs_report;
 			DELETE FROM fs_basket;
 			DELETE FROM fs_basket_has_wallpost;
 		', []);
@@ -612,6 +613,23 @@ class Foodsharing extends \Codeception\Module\Db
 		], $extra_params);
 		$params['time'] = $this->toDateTime($params['time']);
 		$params['id'] = $this->haveInDatabase('fs_blog_entry', $params);
+
+		return $params;
+	}
+
+	public function addReport($reporterId, $reporteeId, $storeId = 0, $confirmed = 0, $reason = null, $msg = null)
+	{
+		$params = [
+			'reporter_id' => $reporterId,
+			'foodsaver_id' => $reporteeId,
+			'betrieb_id' => $storeId,
+			'reporttype' => 1,
+			'time' => $this->toDateTime($this->faker->dateTime($max = 'now')),
+			'msg' => $msg ?? $this->faker->text(500),
+			'tvalue' => $reason ?? $this->faker->text(50),
+			'committed' => $confirmed
+		];
+		$params['id'] = $this->haveInDatabase('fs_report', $params);
 
 		return $params;
 	}

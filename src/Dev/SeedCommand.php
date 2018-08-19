@@ -171,5 +171,13 @@ class SeedCommand extends Command implements CustomCommandInterface
 		foreach (range(0, 20) as $_) {
 			$I->addBlogPost($userbot['id'], $bezirk1);
 		}
+
+		foreach (range(0, 4) as $_) {
+			$I->addReport($this->getRandomUser(), $this->getRandomUser(), 0, 0);
+		}
+
+		foreach (range(0, 3) as $_) {
+			$I->addReport($this->getRandomUser(), $this->getRandomUser(), 0, 1);
+		}
 	}
 }
