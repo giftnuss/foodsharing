@@ -20,7 +20,7 @@
       v-if="mayAddStore"
       :href="$url('storeAdd')"
       role="menuitem"
-      class="dropdown-item"><small><i class="fas fa-plus" /> Einem Betrieb hinzufügen</small></a>
+      class="dropdown-item"><small><i class="fas fa-plus" /> Neuen Betrieb anlegen</small></a>
   </nav-item-dropdown>
 </template>
 <script>
