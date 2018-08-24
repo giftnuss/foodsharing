@@ -190,15 +190,17 @@ reports:
   about: Über
   about_first_name: Über Name
   about_last_name: Über Nachname
+  all_reports: Alle Meldungen
   city: Stadt
   from: Von
   from_first_name: Von Name
   from_last_name: Von Nachname
-  ground: Grund
   message: Beschreibung
-  region: Region
-  report_id: Report ID
+  reason: Grund
+  region: Stammbezirk
+  report_id: Meldungs-ID
   time: Zeitpunkt
+  no_reports_fallback: Es sind noch keine Meldungen vorhanden
 
 bell:
   no_bells: "Keine Benachrichtigungen"

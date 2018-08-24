@@ -2,7 +2,7 @@
   <div class="container bootstrap">
     <div class="card mb-3 rounded">
       <div class="card-header text-white bg-primary">
-        Alle Reports (<span v-if="reports.length">{{ reports.length }}</span>)
+        {{ $i18n('reports.all_reports') }} (<span v-if="reports.length">{{ reports.length }}</span>)
       </div>
       <div
         v-if="reports.length"
@@ -49,7 +49,7 @@
               <p><strong>{{ $i18n('reports.time') }}:</strong> {{ row.item.time }}</p>
               <p><strong>{{ $i18n('reports.about') }}</strong><a :href="`/profile/${row.item.fs_id}`"> {{ row.item.fs_name }} {{ row.item.fs_nachname }}</a></p>
               <p><strong>{{ $i18n('reports.from') }}:</strong><a :href="`/profile/${row.item.rp_id}`"> {{ row.item.rp_name }} {{ row.item.rp_nachname }}</a></p>
-              <p><strong>{{ $i18n('reports.ground') }}:</strong> {{ row.item.tvalue }}</p>
+              <p><strong>{{ $i18n('reports.reason') }}:</strong> {{ row.item.tvalue }}</p>
               <p><strong>{{ $i18n('reports.message') }}:</strong> {{ row.item.msg }}</p>
             </div>
           </template>
@@ -65,7 +65,7 @@
       <div
         v-else
         class="card-body">
-        Es sind noch keine Meldungen vorhanden
+        {{ $i18n('reports.no_reports_fallback') }}
       </div>
     </div>
   </div>
