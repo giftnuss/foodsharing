@@ -14,7 +14,7 @@ class ReportPermissions
 		$this->session = $session;
 	}
 
-	public function mayAccessReportsForRegion($regionId)
+	public function mayAccessReportsForRegion($regionId): bool
 	{
 		/* from https://gitlab.com/foodsharing-dev/foodsharing/issues/296
 		 * reports list on region level is accessible for orga and for the AMBs of that very region
