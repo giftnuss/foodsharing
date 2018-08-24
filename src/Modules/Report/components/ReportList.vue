@@ -45,12 +45,12 @@
             slot-scope="row"
             slot="row-details">
             <div class="report">
-              <p><strong>Report ID:</strong> {{ row.item.rp_id }}</p>
-              <p><strong>Zeitpunkt:</strong> {{ row.item.time }}</p>
-              <p><strong>Über:</strong><a :href="`/profile/${row.item.fs_id}`"> {{ row.item.fs_name }} {{ row.item.fs_nachname }}</a></p>
-              <p><strong>Von:</strong><a :href="`/profile/${row.item.rp_id}`"> {{ row.item.rp_name }} {{ row.item.rp_nachname }}</a></p>
-              <p><strong>Grund:</strong> {{ row.item.tvalue }}</p>
-              <p><strong>Beschreibung:</strong> {{ row.item.msg }}</p>
+              <p><strong>{{ $i18n('reports.report_id') }}:</strong> {{ row.item.rp_id }}</p>
+              <p><strong>{{ $i18n('reports.time') }}:</strong> {{ row.item.time }}</p>
+              <p><strong>{{ $i18n('reports.about') }}</strong><a :href="`/profile/${row.item.fs_id}`"> {{ row.item.fs_name }} {{ row.item.fs_nachname }}</a></p>
+              <p><strong>{{ $i18n('reports.from') }}:</strong><a :href="`/profile/${row.item.rp_id}`"> {{ row.item.rp_name }} {{ row.item.rp_nachname }}</a></p>
+              <p><strong>{{ $i18n('reports.ground') }}:</strong> {{ row.item.tvalue }}</p>
+              <p><strong>{{ $i18n('reports.message') }}:</strong> {{ row.item.msg }}</p>
             </div>
           </template>
         </b-table>
@@ -99,34 +99,34 @@ export default {
       reports: [],
       fields: {
         avatar: {
-          labael: ''
+          label: ''
         },
         fs_stadt: {
-          label: 'Stadt',
+          label: this.$i18n('reports.city'),
           sortable: true
         },
         time: {
-          label: 'Zeitpunkt',
+          label: this.$i18n('reports.time'),
           sortable: true
         },
         fs_name: {
-          label: 'Uber Name',
+          label: this.$i18n('reports.about_first_name'),
           sortable: true
         },
         fs_nachname: {
-          label: 'Uber Nachname',
+          label: this.$i18n('reports.about_last_name'),
           sortable: true
         },
         rp_name: {
-          label: 'Von Name',
+          label: this.$i18n('reports.from_first_name'),
           sortable: true
         },
         rp_nachname: {
-          label: 'Von Nachname',
+          label: this.$i18n('reports.from_last_name'),
           sortable: true
         },
         b_name: {
-          label: 'Region',
+          label: this.$i18n('reports.region'),
           sortable: true
         },
         actions: {

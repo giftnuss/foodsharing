@@ -186,6 +186,20 @@ events:
   add_new_event: Jetzt neuen Termin eintragen
   add_event: Neues Event
 
+reports:
+  about: Über
+  about_first_name: Über Name
+  about_last_name: Über Nachname
+  city: Stadt
+  from: Von
+  from_first_name: Von Name
+  from_last_name: Von Nachname
+  ground: Grund
+  message: Beschreibung
+  region: Region
+  report_id: Report ID
+  time: Zeitpunkt
+
 bell:
   no_bells: "Keine Benachrichtigungen"
   forum_answer_title: "{forum}"
