@@ -2,7 +2,7 @@
   <div class="container bootstrap">
     <div class="card mb-3 rounded">
       <div class="card-header text-white bg-primary">
-        Alle Reports (<span v-if="reports.length !== reportsFiltered.length">{{ reportsFiltered.length }} von </span>{{ reports.length }})
+        Alle Reports (<span v-if="reports.length">{{ reports.length }}</span>)
       </div>
       <div
         v-if="reports.length"
@@ -10,7 +10,7 @@
 
         <b-table
           :fields="fields"
-          :items="reportsFiltered"
+          :items="reports"
           :current-page="currentPage"
           :per-page="perPage"
           responsive
@@ -56,7 +56,7 @@
         </b-table>
         <div class="float-right p-1 pr-3">
           <b-pagination
-            :total-rows="reportsFiltered.length"
+            :total-rows="reports.length"
             :per-page="perPage"
             v-model="currentPage"
             class="my-0" />
