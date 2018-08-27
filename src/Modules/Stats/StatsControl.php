@@ -43,7 +43,7 @@ class StatsControl extends ConsoleControl
 
 				$stat_fetchrate = 100;
 
-				$count_not_fetch = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM fs_rating WHERE `ratingtype` = 3 AND foodsaver_id = ' . (int)$fsid);
+				$count_not_fetch = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM fs_report WHERE `reporttype` = 1 AND committed = 1 AND foodsaver_id = ' . (int)$fsid);
 
 				if ($count_not_fetch > 0 && $stat_fetchcount >= $count_not_fetch) {
 					$stat_fetchrate = round(100 - ($count_not_fetch / ($stat_fetchcount / 100)), 2);
@@ -51,14 +51,14 @@ class StatsControl extends ConsoleControl
 
 				$this->model->update('
 						UPDATE fs_foodsaver
-		
+
 						SET 	stat_fetchweight = ' . (float)$stat_gerettet . ',
 						stat_fetchcount = ' . (int)$stat_fetchcount . ',
 						stat_postcount = ' . (int)$stat_post . ',
 						stat_buddycount = ' . (int)$stat_buddycount . ',
 						stat_bananacount = ' . (int)$stat_bananacount . ',
 						stat_fetchrate = ' . (float)$stat_fetchrate . '
-		
+
 						WHERE 	id = ' . (int)$fsid . '
 				');
 			}

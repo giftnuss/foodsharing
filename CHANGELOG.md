@@ -8,6 +8,7 @@
 - check user permissions in quickreply() in RegionXhr !499 #85 @annaos
 - fix exception if request have no "msg"-Attribute in quickreply() in WallPostXhr !499 @annaos
 - removed not needed add store button from the dashboard !523 @peter.toennies
+- stat_fetchrate is calculated correctly and shown in profile #281 @k.miklobusec
 
 ## Refactoring
 

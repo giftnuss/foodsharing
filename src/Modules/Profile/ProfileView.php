@@ -25,7 +25,7 @@ class ProfileView extends View
 
 		$page->addSectionLeft($this->photo($showEditButton, $showPassportGenerationHistoryButton, $showVerificationHistoryButton));
 
-		if ($this->foodsaver['stat_buddycount'] > 0 || $this->session->may('orga')) {
+		if ($this->foodsaver['stat_buddycount'] > 0 || $this->foodsaver['stat_fetchrate'] > 0 || $this->session->may('orga')) {
 			$page->addSectionLeft($this->sideInfos(), 'Infos');
 		}
 
@@ -131,6 +131,13 @@ class ProfileView extends View
 			$infos[] = array(
 				'name' => 'Bekannte',
 				'val' => $this->foodsaver['name'] . (($this->foodsaver['stat_buddycount'] == 1) ? ' kennt ' : ' kennen ') . $this->foodsaver['stat_buddycount'] . ' Foodsaver'
+			);
+		}
+
+		if ($this->foodsaver['stat_fetchrate'] > 0) {
+			$infos[] = array(
+				'name' => 'Abholquote',
+				'val' => $this->foodsaver['stat_fetchrate'] . '%'
 			);
 		}
 
