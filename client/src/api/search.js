@@ -21,7 +21,7 @@ function mapOldResponseToNewFormat (data) {
   const mapping = {
     'Foodsaver': 'users',
     'Bezirk': 'regions',
-    'Lebensmittelspenderbetrieb/e': 'stores',
+    'Kooperationsbetrieb/e': 'stores',
     'Deine Gruppen': 'myGroups',
     'Deine Betriebe': 'myStores',
     'Deine Bezirke': 'myRegions',
