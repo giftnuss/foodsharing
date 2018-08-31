@@ -73,7 +73,7 @@ $g_lang['status_msg_6'] = 'Spendet an Tafel etc. und wirft nichts weg';
 $g_lang['status_change_at'] = 'Statusänderung am {var}';
 $g_lang['shure_range_date'] = '<strong>Verbindlich {label}s</strong> im gewählten Zeitraum abholen.';
 $g_lang['zeitraum'] = 'Zeitraum';
-$g_lang['date_add_successful'] = '<p><b>Termine wurden erfolgreich hinzugefügt</b><br>Müssen nur noch vom Filialverantwortlichen bestätigt werden</p>';
+$g_lang['date_add_successful'] = '<p><b>Termine wurden erfolgreich hinzugefügt.</b><br>Sie müssen nur noch vom Betriebsverantwortlichen bestätigt werden.</p>';
 $g_lang['del_and_send'] = 'Termin löschen und Nachricht senden';
 $g_lang['tpl_msg_to_team'] = 'Liebes {BETRIEB}-Team, 
 
@@ -87,7 +87,7 @@ $g_lang['have_backup'] = 'Ich habe schon eine Vertretung';
 $g_lang['del_date_for'] = 'Austragen für';
 $g_lang['fetcher'] = 'Abholer';
 $g_lang['fetcher_count'] = 'Anzahl Abholer';
-$g_lang['max_3_leader'] = 'Es darf maximal drei Verantwortliche für diese Filiale geben.';
+$g_lang['max_3_leader'] = 'Es darf maximal drei Verantwortliche für diesen Betrieb geben.';
 $g_lang['menge'] = 'Abholmenge im Schnitt';
 $g_lang['verantwortlicher_must_be'] = 'Es muss mindestens einen Verantwortlichen für jeden Betrieb geben!';
 $g_lang['edit_betrieb'] = 'Betrieb bearbeiten';

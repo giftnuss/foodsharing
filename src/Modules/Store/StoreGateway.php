@@ -387,7 +387,7 @@ class StoreGateway extends BaseGateway
 			[':betrieb_id' => $betrieb_id]);
 	}
 
-	public function getAllFilialverantwortlich(): array
+	public function getAllStoreManagers(): array
 	{
 		$verant = $this->db->fetchAll('
 			SELECT 	fs.`id`,

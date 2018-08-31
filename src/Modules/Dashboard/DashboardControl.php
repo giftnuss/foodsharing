@@ -584,7 +584,7 @@ class DashboardControl extends Control
 		if ($betriebe = $this->storeGateway->getMyBetriebe($this->session->id(), $this->session->getCurrentBezirkId(), array('sonstige' => false))) {
 			$this->func->addContent($this->view->u_myBetriebe($betriebe), CNT_LEFT);
 		} else {
-			$this->func->addContent($this->v_utils->v_info('Du bist bis jetzt in keinem Filial-Team.'), CNT_LEFT);
+			$this->func->addContent($this->v_utils->v_info('Du bist bis jetzt in keinem Betriebsteam.'), CNT_LEFT);
 		}
 	}
 }

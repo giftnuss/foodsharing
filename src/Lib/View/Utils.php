@@ -487,8 +487,8 @@ class Utils
 
 				<option value="newsletter_only_foodsharer">NL Abonnenten NUR Foodsharer</option>
 				<option value="botschafter">Alle Botschafter weltweit</option>
-				<option value="filialverantwortlich">Alle Filialverantwortlichen weltweit</option>
-				<option value="filialbot">Alle Filialverantwortlichen + Botschafter</option>
+				<option value="storemanagers">Alle Betriebsverantwortlichen weltweit</option>
+				<option value="storemanagers_and_ambs">Alle Betriebsverantwortlichen + Botschafter</option>
 				<option value="all_no_botschafter">Alle Foodsaver ohne Botschafter</option>
 				<option value="orgateam">Orgateam</option>
 				<option value="choose">' . $this->func->s('recip_choose_bezirk') . '</option>
