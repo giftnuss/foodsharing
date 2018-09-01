@@ -11,8 +11,8 @@ export default new Vue({
     }
   },
   methods: {
-    async loadConversations () {
-      this.conversations = await getConversationList()
+    async loadConversations (limit = -1) {
+      this.conversations = await getConversationList(limit)
     }
   }
 })

@@ -43,14 +43,14 @@ export default {
 
   computed: {
     conversations () {
-      return conversationStore.conversations.slice(0, 10)
+      return conversationStore.conversations
     },
     unread () {
       return conversationStore.unreadCount
     }
   },
   created () {
-    return conversationStore.loadConversations()
+    return conversationStore.loadConversations(10)
   },
   methods: {
     close () {

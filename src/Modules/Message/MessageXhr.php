@@ -169,8 +169,13 @@ class MessageXhr extends Control
 	{
 		$this->session->noWrite();
 
-		if ($conversations = $this->model->listConversations()) {
-			$xhr = new Xhr();
+        $limit = -1;
+        if (isset($_GET['limit'])) {
+            $limit = (int)$_GET['limit'];
+        }
+
+        if ($conversations = $this->model->listConversations($limit)) {
+            $xhr = new Xhr();
 
 			// because some of the messages and the titles are still stored in encoded html, theres the option to
 			// decode them again for the usage in vue components

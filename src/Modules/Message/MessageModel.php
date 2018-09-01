@@ -210,16 +210,18 @@ class MessageModel extends Db
 		return true;
 	}
 
-	/**
-	 * Method returns an array of all conversation from the user.
-	 *
-	 * @return Ambigous <boolean, array >
-	 */
-	public function listConversations($limit = '')
+    /**
+     * Method returns an array of all conversation from the user.
+     *
+     * @return Ambigous <boolean, array >
+     */
+	public function listConversations(int $limit = -1)
 	{
-		if ($limit != '') {
-			$limit = ' LIMIT 0,' . (int)$limit;
-		}
+		if ($limit === -1) {
+            $limit = '';
+		} else {
+            $limit = ' LIMIT 0,' . $limit;
+        }
 
 		if ($convs = $this->q('
 			SELECT
