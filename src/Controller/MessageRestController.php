@@ -41,6 +41,10 @@ class MessageRestController extends FOSRestController
 	}
 
 	/**
+     * Gets the first 20 messages of a conversation.
+     *
+     * To load the rest of the conversation, you'll have to use MessageXhr::loadmore().
+     *
 	 * @Rest\Get("conversations/{conversationId}", requirements={"conversationId" = "\d+"})
 	 */
 	public function getConversationAction($conversationId)

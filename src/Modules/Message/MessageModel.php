@@ -447,6 +447,7 @@ class MessageModel extends Db
 		return false;
 	}
 
+    //loads the first 20 messages of a conversation
 	public function loadConversationMessages($conversation_id)
 	{
 		return $this->q('
