@@ -5,12 +5,13 @@ import { session_id, GET } from '@/script'
 
 import msg from '@/msg'
 import conv from '@/conv'
+import bellsStore from '@/stores/bells'
 
 export default {
   connect: function () {
     var socket = io.connect(window.location.host, { path: '/chat/socket.io' })
     socket.on('connect', function () {
-      console.log('connected')
+      console.log('Websocket connected.')
       socket.emit('register', session_id())
     })
 
@@ -30,6 +31,14 @@ export default {
       switch (data.m) {
         case 'badge':
           // info.badge('info', data.o.count)
+          break
+      }
+    })
+
+    socket.on('bell', function (data) {
+      switch (data.m) {
+        case 'notify':
+          bellsStore.loadBells()
           break
       }
     })
