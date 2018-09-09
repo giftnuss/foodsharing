@@ -8,3 +8,7 @@ export async function getBellList () {
 export function deleteBell (id) {
   return get(`/../xhrapp.php?app=bell&m=delbell&id=${id}`)
 }
+
+export function markBellAsRead(id) {
+    return get(`/../xhrapp.php?app=bell&m=markBellAsRead&id=${id}`)
+}

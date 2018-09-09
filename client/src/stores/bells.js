@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { getBellList, deleteBell } from '@/api/bells'
+import {getBellList, deleteBell, markBellAsRead} from '@/api/bells'
 
 export default new Vue({
   data: {
@@ -24,6 +24,11 @@ export default new Vue({
         this.$set(bell, 'isDeleting', false)
         throw err
       }
-    }
+    },
+      async markAsRead(id) {
+          let bell = this.bells.find(b => b.id === id)
+          bell.isRead = true;
+          await markBellAsRead(id)
+      }
   }
 })

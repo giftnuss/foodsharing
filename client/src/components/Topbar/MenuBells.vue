@@ -15,10 +15,11 @@
         v-if="!bells.length"
         class="list-group-item text-muted">Du hast derzeit keine Benachrichtigungen</small>
       <menu-bells-entry
-        v-for="bell in bells"
-        :key="bell.id"
-        :bell="bell"
-        @remove="onBellDelete"
+              v-for="bell in bells"
+              :key="bell.id"
+              :bell="bell"
+              @remove="onBellDelete"
+              @bellClick="onBellClick"
       />
     </div>
   </nav-item-dropdown>
@@ -53,7 +54,14 @@ export default {
       } catch (err) {
         pulseError(i18n('error_unexpected'))
       }
-    }
+    },
+      async onBellClick(id) {
+          try {
+              await bellStore.markAsRead(id)
+          } catch (err) {
+              pulseError(i18n('error_unexpected'))
+          }
+      }
   }
 }
 </script>

@@ -111,8 +111,6 @@ class BellGateway extends BaseGateway
 				}
 			}
 
-			$this->setBellsAsSeen($ids);
-
 			return $bells;
 		}
 
@@ -164,7 +162,7 @@ class BellGateway extends BaseGateway
 		$this->db->delete('fs_bell', ['identifier' => $identifier]);
 	}
 
-	private function setBellsAsSeen(array $bids): void
+    public function setBellsAsSeen(array $bids): void
 	{
 		$stm = 'UPDATE `fs_foodsaver_has_bell` SET `seen` = 1 WHERE `bell_id` IN (' . implode(',', $bids) . ')';
 		$this->db->execute($stm);
