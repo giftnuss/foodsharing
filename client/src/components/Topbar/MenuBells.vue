@@ -55,12 +55,16 @@ export default {
         pulseError(i18n('error_unexpected'))
       }
     },
-      async onBellClick(id) {
-          try {
-              await bellStore.markAsRead(id)
+      async onBellClick(bell) {
+          if (!bell.isRead) {
+              try {
+                  await bellStore.markAsRead(bell.id)
           } catch (err) {
               pulseError(i18n('error_unexpected'))
           }
+      }
+
+          window.location.href = bell.href
       }
   }
 }
