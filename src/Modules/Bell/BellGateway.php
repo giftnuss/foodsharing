@@ -3,17 +3,17 @@
 namespace Foodsharing\Modules\Bell;
 
 use Foodsharing\Lib\Func;
+use Foodsharing\Lib\websocketTrait;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 
 class BellGateway extends BaseGateway
 {
-    private $func;
+    use websocketTrait;
 
-    public function __construct(Database $db, Func $func)
+    public function __construct(Database $db)
     {
         parent::__construct($db);
-        $this->func = $func;
     }
 
     public function addBell($foodsaver_ids, $title, $body, $icon, $link_attributes, $vars, $identifier = '', $closeable = 1): void
@@ -170,6 +170,6 @@ class BellGateway extends BaseGateway
 
 	private function notifyFoodsaver(int $foodsaverId)
     {
-        $this->func->sendSock($foodsaverId, 'bell', 'notify', []);
+        $this->sendSock($foodsaverId, 'bell', 'notify', []);
     }
 }
