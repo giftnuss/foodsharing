@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\API;
 use Flourish\fImage;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\websocketTrait;
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Login\LoginGateway;
@@ -12,17 +13,19 @@ use Foodsharing\Modules\Message\MessageModel;
 
 class APIXhr extends Control
 {
+    use websocketTrait;
+
 	private $messageModel;
 	private $basketGateway;
 	private $apiGateway;
 	private $loginGateway;
 
 	public function __construct(
-		APIGateway $apiGateway,
-		LoginGateway $loginGateway,
-		MessageModel $messageModel,
-		BasketGateway $basketGateway,
-		Db $model
+        APIGateway $apiGateway,
+        LoginGateway $loginGateway,
+        MessageModel $messageModel,
+        BasketGateway $basketGateway,
+        Db $model
 	) {
 		$this->apiGateway = $apiGateway;
 		$this->loginGateway = $loginGateway;
@@ -68,7 +71,7 @@ class APIXhr extends Control
 						if ($m['id'] != $this->func->fsId()) {
 							Mem::userAppend($m['id'], 'msg-update', $conversation_id);
 
-							$this->func->sendSock($m['id'], 'conv', 'push', [
+                            $this->sendSock($m['id'], 'conv', 'push', [
 								'id' => $id,
 								'cid' => $conversation_id,
 								'fs_id' => $this->func->fsId(),
@@ -79,7 +82,8 @@ class APIXhr extends Control
 							]);
 
 							$this->sendEmailIfUserNotOnline($m, $conversation_id, $message);
-						}
+
+                        }
 					}
 				}
 
