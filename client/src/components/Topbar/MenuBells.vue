@@ -58,10 +58,10 @@ export default {
       async onBellClick(bell) {
           if (!bell.isRead) {
               try {
-                  await bellStore.markAsRead(bell.id)
-          } catch (err) {
-              pulseError(i18n('error_unexpected'))
-          }
+                  await bellStore.markAsRead(bell)
+              } catch (err) {
+                  pulseError(i18n('error_unexpected'))
+              }
       }
 
           window.location.href = bell.href

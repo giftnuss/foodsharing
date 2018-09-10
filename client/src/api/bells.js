@@ -9,6 +9,6 @@ export function deleteBell (id) {
   return get(`/../xhrapp.php?app=bell&m=delbell&id=${id}`)
 }
 
-export function markBellAsRead(id) {
-    return get(`/../xhrapp.php?app=bell&m=markBellAsRead&id=${id}`)
+export function markBellsAsRead(ids) {
+    return get(`/../xhrapp.php?app=bell&m=markBellsAsRead&ids=${JSON.stringify(ids)}`)
 }

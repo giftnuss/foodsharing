@@ -144,8 +144,9 @@ class BellXhr extends Control
     /**
      * ajax call to set bell as seen.
      */
-    public function markBellAsRead()
+    public function markBellsAsRead()
     {
-        $this->gateway->setBellsAsSeen([$_GET['id']]);
+        $ids = json_decode($_GET['ids']);
+        $this->gateway->setBellsAsSeen($ids, $this->session->id());
     }
 }
