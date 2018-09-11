@@ -11,7 +11,7 @@ export default new Vue({
     }
   },
   methods: {
-    async loadConversations (limit = -1) {
+      async loadConversations(limit = 10) {
       this.conversations = await getConversationList(limit)
     }
   }
