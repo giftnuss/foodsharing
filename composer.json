@@ -44,7 +44,8 @@
     "jms/serializer-bundle": "^2.4",
     "mrclay/jsmin-php": "^2.3",
     "sensio/framework-extra-bundle": "^5.2",
-    "exercise/htmlpurifier-bundle": "^1.0"
+    "exercise/htmlpurifier-bundle": "^1.0",
+    "minishlink/web-push": "^4.0"
   },
   "autoload": {
     "psr-4": {"Foodsharing\\": "src/",

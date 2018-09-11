@@ -6,15 +6,19 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\websocketTrait;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\PushNotification\PushNotificationGateway;
 
 class MessageXhr extends Control
 {
     use websocketTrait;
 
-	public function __construct(MessageModel $model, MessageView $view)
+    private $pushNotificationGateway;
+
+    public function __construct(MessageModel $model, MessageView $view, PushNotificationGateway $pushNotificationGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+        $this->pushNotificationGateway = $pushNotificationGateway;
 
 		parent::__construct();
 
@@ -137,6 +141,8 @@ class MessageXhr extends Control
 							foreach ($member as $m) {
 								if ($m['id'] != $this->func->fsId()) {
 									Mem::userAppend($m['id'], 'msg-update', (int)$_POST['c']);
+
+                                    $this->pushNotificationGateway->sendPushNotificationsToFoodsaver($m['id'], $body);
 
 									/*
 									 * send an E-Mail if the user is not online
