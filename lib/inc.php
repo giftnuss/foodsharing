@@ -13,7 +13,7 @@ require_once 'config.inc.php';
 
 /* @var $session Session */
 $session = DI::$shared->get(Session::class);
-$session->init();
+$session->initIfCookieExists();
 
 if (isset($g_page_cache)) {
 	$cache = new Caching($g_page_cache, $session);

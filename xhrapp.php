@@ -16,7 +16,7 @@ if (isset($_GET['app']) && isset($_GET['m'])) {
 
 	/* @var $session \Foodsharing\Lib\Session */
 	$session = DI::$shared->get(Session::class);
-	$session->init();
+	$session->initIfCookieExists();
 
 	$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 

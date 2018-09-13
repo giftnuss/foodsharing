@@ -12,7 +12,7 @@ use Symfony\Component\Routing\RouteCollectionBuilder;
 
 /* @var $session Session */
 $session = DI::$shared->get(Session::class);
-$session->init();
+$session->initIfCookieExists();
 
 class RestKernel extends BaseKernel
 {

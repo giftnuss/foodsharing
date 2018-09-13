@@ -48,6 +48,18 @@ class Session
 		$this->db = $db;
 	}
 
+	public function initIfCookieExists()
+	{
+		if (isset($_COOKIE[session_name()])) {
+			$this->init();
+    	}
+	}
+
+	public function checkInitialized()
+	{
+		if (!$this->initialized) throw new Exception('Session not initialized');
+	}
+
 	public function init()
 	{
 		if ($this->initialized) {
@@ -126,11 +138,13 @@ class Session
 
 	public function id()
 	{
+		if (!$this->initialized) return null;
 		return fAuthorization::getUserToken();
 	}
 
 	public function may($role = 'user')
 	{
+		if (!$this->initialized) return false;
 		if (fAuthorization::checkAuthLevel($role)) {
 			return true;
 		}
@@ -140,6 +154,7 @@ class Session
 
 	public function getLocation()
 	{
+		$this->checkInitialized();
 		$loc = fSession::get('g_location', false);
 		if (!$loc) {
 			$loc = $this->db->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
@@ -159,16 +174,19 @@ class Session
 
 	public function destroy()
 	{
+		$this->checkInitialized();
 		fSession::destroy();
 	}
 
 	public function set($key, $value)
 	{
+		$this->checkInitialized();
 		fSession::set($key, $value);
 	}
 
 	public function get($var)
 	{
+		if (!$this->initialized) return false;
 		return fSession::get($var, false);
 	}
 
@@ -190,6 +208,7 @@ class Session
 
 	public function addMsg($message, $type, $title = null)
 	{
+		$this->checkInitialized();
 		$msg = fSession::get('g_message', array());
 
 		if (!isset($msg[$type])) {
@@ -320,6 +339,8 @@ class Session
 
 	public function refreshFromDatabase($fs_id = null)
 	{
+		if (!$this->initialized) $this->init();
+
 		if ($fs_id === null) {
 			$fs_id = $this->id();
 		}
