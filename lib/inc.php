@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 require_once 'config.inc.php';
 
+/* @var $session Session */
 $session = DI::$shared->get(Session::class);
 $session->init();
 
