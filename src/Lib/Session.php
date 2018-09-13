@@ -59,7 +59,7 @@ class Session
 		ini_set('session.save_path', 'tcp://' . REDIS_HOST . ':' . REDIS_PORT);
 
 		fSession::setLength('24 hours', '1 week');
-		//fSession::enablePersistence();
+		fSession::enablePersistence();
 
 		fAuthorization::setAuthLevels(
 			array(
