@@ -52,12 +52,14 @@ class Session
 	{
 		if (isset($_COOKIE[session_name()])) {
 			$this->init();
-    	}
+		}
 	}
 
 	public function checkInitialized()
 	{
-		if (!$this->initialized) throw new Exception('Session not initialized');
+		if (!$this->initialized) {
+			throw new Exception('Session not initialized');
+		}
 	}
 
 	public function init($login = false)
@@ -142,13 +144,18 @@ class Session
 
 	public function id()
 	{
-		if (!$this->initialized) return null;
+		if (!$this->initialized) {
+			return null;
+		}
+
 		return fAuthorization::getUserToken();
 	}
 
 	public function may($role = 'user')
 	{
-		if (!$this->initialized) return false;
+		if (!$this->initialized) {
+			return false;
+		}
 		if (fAuthorization::checkAuthLevel($role)) {
 			return true;
 		}
@@ -190,7 +197,10 @@ class Session
 
 	public function get($var)
 	{
-		if (!$this->initialized) return false;
+		if (!$this->initialized) {
+			return false;
+		}
+
 		return fSession::get($var, false);
 	}
 
@@ -343,7 +353,9 @@ class Session
 
 	public function refreshFromDatabase($fs_id = null)
 	{
-		if (!$this->initialized) $this->init(true);
+		if (!$this->initialized) {
+			$this->init(true);
+		}
 
 		if ($fs_id === null) {
 			$fs_id = $this->id();
