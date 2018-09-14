@@ -165,7 +165,9 @@ class Session
 
 	public function getLocation()
 	{
-		$this->checkInitialized();
+		if (!$this->initialized) {
+			return false;
+		}
 		$loc = fSession::get('g_location', false);
 		if (!$loc) {
 			$loc = $this->db->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
