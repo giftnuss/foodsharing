@@ -10,11 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
-///* @var $session Session */
-//$session = DI::$shared->get(Session::class);
-//$session->initIfCookieExists();
-
-class RestKernel extends BaseKernel
+class FoodsharingKernel extends BaseKernel
 {
 	use MicroKernelTrait;
 
