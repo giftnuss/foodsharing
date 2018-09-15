@@ -16,12 +16,6 @@ class Container extends \Codeception\Module\Db
 	public function _initialize()
 	{
 		parent::_initialize();
-
-		define('DB_HOST', $this->config['host']);
-		define('DB_USER', $this->config['user']);
-		define('DB_PASS', $this->config['password']);
-		define('DB_DB', $this->config['db']);
-
 		global $container;
 		$container = initializeLegacyContainer();
 		$this->di = $container;
