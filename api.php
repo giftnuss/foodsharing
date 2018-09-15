@@ -1,6 +1,5 @@
 <?php
 
-use Foodsharing\DI;
 use Foodsharing\Lib\Db\Db;
 
 require __DIR__ . '/includes/setup.php';

@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Message;
 
-use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
 
@@ -133,7 +132,7 @@ class MessageXhr extends Control
 
 							foreach ($member as $m) {
 								if ($m['id'] != $this->func->fsId()) {
-									Mem::userAppend($m['id'], 'msg-update', (int)$_POST['c']);
+									$this->mem->userAppend($m['id'], 'msg-update', (int)$_POST['c']);
 
 									/*
 									 * send an E-Mail if the user is not online

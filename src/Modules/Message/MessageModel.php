@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Message;
 
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Lib\Db\Mem;
 
 class MessageModel extends Db
 {
@@ -201,8 +200,8 @@ class MessageModel extends Db
 		/*
 		 * only send email if the user is not online
 		 */
-		if (!Mem::userIsActive($foodsaver_id)) {
-			if (Mem::get('infomail_message_' . $foodsaver_id)) {
+		if (!$this->mem->userIsActive($foodsaver_id)) {
+			if ($this->mem->get('infomail_message_' . $foodsaver_id)) {
 				return true;
 			}
 		}
@@ -277,19 +276,19 @@ class MessageModel extends Db
 		/*
 		 * Memcache var is settet but no updates
 		 */
-		$cache = Mem::user($this->func->fsId(), 'msg-update');
+		$cache = $this->mem->user($this->func->fsId(), 'msg-update');
 
 		if ($cache === 0) {
 			return false;
 		} elseif (is_array($cache)) {
-			Mem::userSet($this->func->fsId(), 'msg-update', 0);
+			$this->mem->userSet($this->func->fsId(), 'msg-update', 0);
 
 			return $cache;
 		} /*
 		 * Memcache is not settedso get coonversation ids direct fromdm
 		 */
 		else {
-			Mem::userSet($this->func->fsId(), 'msg-update', 0);
+			$this->mem->userSet($this->func->fsId(), 'msg-update', 0);
 
 			return $this->getUpdatedConversationIds();
 		}
@@ -397,7 +396,7 @@ class MessageModel extends Db
 	 */
 	public function setAsRead($conv_ids)
 	{
-		Mem::userDel($this->func->fsId(), 'msg-update');
+		$this->mem->userDel($this->func->fsId(), 'msg-update');
 
 		return $this->update('UPDATE fs_foodsaver_has_conversation SET unread = 0 WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND conversation_id IN(' . implode(',', $conv_ids) . ')');
 	}

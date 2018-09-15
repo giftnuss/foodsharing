@@ -5,7 +5,6 @@ namespace Foodsharing\Modules\Login;
 use Exception;
 use Flourish\fImage;
 use Flourish\fUpload;
-use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
@@ -39,9 +38,9 @@ class LoginXhr extends Control
 		$info = $this->model->getVal('infomail_message', 'foodsaver', $this->func->fsId());
 
 		if ((int)$info > 0) {
-			Mem::userSet($this->func->fsId(), 'infomail', true);
+			$this->mem->userSet($this->func->fsId(), 'infomail', true);
 		} else {
-			Mem::userSet($this->func->fsId(), 'infomail', false);
+			$this->mem->userSet($this->func->fsId(), 'infomail', false);
 		}
 	}
 

@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Profile;
 
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Lib\Db\Mem;
 
 class ProfileModel extends Db
 {
@@ -129,7 +128,7 @@ class ProfileModel extends Db
 		if ($this->qOne('SELECT 1 FROM `fs_rating` WHERE rater_id = ' . (int)$this->func->fsId() . ' AND foodsaver_id = ' . (int)$this->fs_id . ' AND ratingtype = 2')) {
 			$data['bouched'] = true;
 		}
-		$data['online'] = Mem::userIsActive((int)$this->fs_id);
+		$data['online'] = $this->mem->userIsActive((int)$this->fs_id);
 
 		$data['bananen'] = $this->q('
 				SELECT 	fs.id,

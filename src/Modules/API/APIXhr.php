@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\API;
 
 use Flourish\fImage;
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Login\LoginGateway;
@@ -66,7 +65,7 @@ class APIXhr extends Control
 				if ($member = $this->messageModel->listConversationMembers($conversation_id)) {
 					foreach ($member as $m) {
 						if ($m['id'] != $this->func->fsId()) {
-							Mem::userAppend($m['id'], 'msg-update', $conversation_id);
+							$this->mem->userAppend($m['id'], 'msg-update', $conversation_id);
 
 							$this->func->sendSock($m['id'], 'conv', 'push', [
 								'id' => $id,
@@ -129,7 +128,7 @@ class APIXhr extends Control
 
 	public function logout(): void
 	{
-		Mem::logout($this->session->id());
+		$this->mem->logout($this->session->id());
 		$_SESSION['login'] = false;
 		$_SESSION = array();
 

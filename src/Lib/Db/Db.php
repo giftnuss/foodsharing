@@ -21,6 +21,11 @@ class Db
 	protected $func;
 
 	/**
+	 * @var Mem
+	 */
+	protected $mem;
+
+	/**
 	 * @var Session
 	 */
 	protected $session;
@@ -36,6 +41,14 @@ class Db
 	public function setFunc(Func $func)
 	{
 		$this->func = $func;
+	}
+
+	/**
+	 * @required
+	 */
+	public function setMem(Mem $mem)
+	{
+		$this->mem = $mem;
 	}
 
 	/**

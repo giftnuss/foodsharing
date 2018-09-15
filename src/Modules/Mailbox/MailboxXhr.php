@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Mailbox;
 
-use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Services\SanitizerService;
@@ -68,7 +67,7 @@ class MailboxXhr extends Control
 
 	public function loadmails()
 	{
-		$last_refresh = (int)Mem::get('mailbox_refresh');
+		$last_refresh = (int)$this->mem->get('mailbox_refresh');
 
 		$cur_time = (int)time();
 
@@ -77,7 +76,7 @@ class MailboxXhr extends Control
 			||
 			($cur_time - $last_refresh) > 30
 		) {
-			Mem::set('mailbox_refresh', $cur_time);
+			$this->mem->set('mailbox_refresh', $cur_time);
 			$ref = $this->refresh();
 		}
 
@@ -197,7 +196,7 @@ class MailboxXhr extends Control
 			sub		betr
 		 */
 
-		if ($last = (int)Mem::user($this->func->fsId(), 'mailbox-last')) {
+		if ($last = (int)$this->mem->user($this->func->fsId(), 'mailbox-last')) {
 			if ((time() - $last) < 15) {
 				return array(
 					'status' => 1,
@@ -206,7 +205,7 @@ class MailboxXhr extends Control
 			}
 		}
 
-		Mem::userSet($this->func->fsId(), 'mailbox-last', time());
+		$this->mem->userSet($this->func->fsId(), 'mailbox-last', time());
 
 		if ($this->model->mayMailbox($_POST['mb'])) {
 			if ($mailbox = $this->model->getMailbox($_POST['mb'])) {

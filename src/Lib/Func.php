@@ -6,7 +6,6 @@ use Exception;
 use Flourish\fDate;
 use Flourish\fFile;
 use Flourish\fImage;
-use Foodsharing\DI;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\View\Utils;
@@ -52,6 +51,11 @@ class Func
 	 */
 	private $session;
 
+	/**
+	 * @var Mem
+	 */
+	private $mem;
+
 	public function __construct(Utils $viewUtils, SanitizerService $sanitizerService)
 	{
 		$this->viewUtils = $viewUtils;
@@ -89,6 +93,14 @@ class Func
 	public function setSession(Session $session)
 	{
 		$this->session = $session;
+	}
+
+	/**
+	 * @required
+	 */
+	public function setMem(Mem $mem)
+	{
+		$this->mem = $mem;
 	}
 
 	public function jsonSafe($str)
@@ -398,8 +410,9 @@ class Func
 	{
 		if (is_array($regions_ids) && count($regions_ids) && $this->session->isBotschafter()) {
 			if ($include_parent_regions) {
+				global $container;
 				/* @var $gw RegionGateway */
-				$gw = DI::$shared->get(RegionGateway::class);
+				$gw = $container->get(RegionGateway::class);
 				$regions_ids = $gw->listRegionsIncludingParents($regions_ids);
 			}
 			foreach ($_SESSION['client']['botschafter'] as $b) {
@@ -615,7 +628,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function tplMail($tpl_id, $to, $var = array(), $from_email = false)
 	{
-		$mail = new AsyncMail();
+		$mail = new AsyncMail($this->mem);
 
 		if ($from_email !== false && $this->validEmail($from_email)) {
 			$mail->setFrom($from_email);
@@ -623,8 +636,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$mail->setFrom(DEFAULT_EMAIL, DEFAULT_EMAIL_NAME);
 		}
 
+		global $container;
 		/* @var $gw EmailTemplateGateway */
-		$gw = DI::$shared->get(EmailTemplateGateway::class);
+		$gw = $container->get(EmailTemplateGateway::class);
 		$message = $gw->getOne_message_tpl($tpl_id);
 
 		$search = array();
@@ -1293,7 +1307,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			return false;
 		}
 
-		$mail = new AsyncMail();
+		$mail = new AsyncMail($this->mem);
 		$mail->setFrom($bezirk['email'], $bezirk['email_name']);
 		$mail->addRecipient($email);
 		if (!$subject) {
@@ -1317,8 +1331,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function getBezirk()
 	{
+		global $container;
 		/* @var $gw RegionGateway */
-		$gw = DI::$shared->get(RegionGateway::class);
+		$gw = $container->get(RegionGateway::class);
 
 		return $gw->getBezirk($this->session->getCurrentBezirkId());
 	}
@@ -1442,7 +1457,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function mayEditBlog()
 	{
-		if ($all_group_admins = Mem::get('all_global_group_admins')) {
+		if ($all_group_admins = $this->mem->get('all_global_group_admins')) {
 			return $this->session->may('orga') || in_array($this->fsId(), unserialize($all_group_admins));
 		}
 

@@ -19,6 +19,7 @@ use Foodsharing\Modules\Store\StoreGateway;
 class Session
 {
 	private $func;
+	private $mem;
 	private $legalGateway;
 	private $foodsaverGateway;
 	private $quizHelper;
@@ -30,6 +31,7 @@ class Session
 
 	public function __construct(
 		Func $func,
+		Mem $mem,
 		LegalGateway $legalGateway,
 		FoodsaverGateway $foodsaverGateway,
 		QuizHelper $quizHelper,
@@ -39,6 +41,7 @@ class Session
 		Db $db
 	) {
 		$this->func = $func;
+		$this->mem = $mem;
 		$this->legalGateway = $legalGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->quizHelper = $quizHelper;
@@ -50,7 +53,7 @@ class Session
 
 	public function initIfCookieExists()
 	{
-		if (isset($_COOKIE[session_name()])) {
+		if (isset($_COOKIE[session_name()]) && !$this->initialized) {
 			$this->init();
 		}
 	}
@@ -363,7 +366,7 @@ class Session
 			$fs_id = $this->id();
 		}
 
-		Mem::updateActivity($fs_id);
+		$this->mem->updateActivity($fs_id);
 		$fs = $this->foodsaverGateway->getFoodsaverDetails($fs_id);
 		if (!$fs) {
 			$this->func->goPage('logout');
@@ -425,7 +428,7 @@ class Session
 		/*
 		 * Add entry into user -> session set
 		 */
-		Mem::userAddSession($fs_id, session_id());
+		$this->mem->userAddSession($fs_id, session_id());
 
 		/*
 		 * store all options in the session

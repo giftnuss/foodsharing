@@ -35,6 +35,7 @@ class Mem
 	public function set($key, $data, $ttl = 0)
 	{
 		if (MEM_ENABLED) {
+			$this->ensureConnected();
 			$options = array();
 			if ($ttl > 0) {
 				$options['ex'] = $ttl;
@@ -56,6 +57,7 @@ class Mem
 	{
 		if (MEM_ENABLED) {
 			$e = serialize(array('type' => $type, 'data' => $data));
+			$this->ensureConnected();
 
 			return $this->cache->lPush('workqueue', $e);
 		}
@@ -64,6 +66,8 @@ class Mem
 	public function get($key)
 	{
 		if (MEM_ENABLED) {
+			$this->ensureConnected();
+
 			return $this->cache->get($key);
 		}
 
@@ -73,6 +77,8 @@ class Mem
 	public function del($key)
 	{
 		if (MEM_ENABLED) {
+			$this->ensureConnected();
+
 			return $this->cache->delete($key);
 		}
 
@@ -117,11 +123,15 @@ class Mem
 	 */
 	public function userAddSession($fs_id, $session_id)
 	{
+		$this->ensureConnected();
+
 		return $this->cache->sAdd(join(':', array('php', 'user', $fs_id, 'sessions')), $session_id);
 	}
 
 	public function userRemoveSession($fs_id, $session_id)
 	{
+		$this->ensureConnected();
+
 		return $this->cache->sRem(join(':', array('php', 'user', $fs_id, 'sessions')), $session_id);
 	}
 
@@ -191,5 +201,12 @@ class Mem
 		$this->userDel($fs_id, 'active');
 		$this->userDel($fs_id, 'lastMailMessage');
 		$this->userRemoveSession($fs_id, session_id());
+	}
+
+	public function ensureConnected()
+	{
+		if (!$this->connected) {
+			$this->connect();
+		}
 	}
 }

@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Lib\Xhr;
 
-use Foodsharing\DI;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\View\Utils;
 
@@ -29,8 +28,9 @@ class XhrDialog
 
 	public function __construct($title = false)
 	{
-		$this->viewUtils = DI::$shared->get(Utils::class);
-		$this->func = DI::$shared->get(Func::class);
+		global $container;
+		$this->viewUtils = $container->get(Utils::class);
+		$this->func = $container->get(Func::class);
 		$this->id = 'd-' . uniqid();
 		$this->buttons = array();
 		$this->options = array();

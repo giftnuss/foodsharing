@@ -1,18 +1,23 @@
 <?php
 
-use Foodsharing\DI;
 use Foodsharing\Lib\Cache\Caching;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrMethods;
 
 require __DIR__ . '/includes/setup.php';
-
 require_once 'config.inc.php';
 
-/* @var $session \Foodsharing\Lib\Session */
-$session = DI::$shared->get(Session::class);
+/* @var $container Container */
+global $container;
+$container = initializeLegacyContainer();
+
+/* @var $session Session */
+$session = $container->get(Session::class);
 $session->initIfCookieExists();
+
+/* @var $mem Mem */
+$mem = $container->get(Mem::class);
 
 if (isset($g_page_cache)) {
 	$cache = new Caching($g_page_cache, $session);
@@ -23,10 +28,10 @@ require_once 'lang/DE/de.php';
 
 $action = $_GET['f'];
 
-Mem::updateActivity($session->id());
+$mem->updateActivity($session->id());
 if (isset($_GET['f'])) {
 	/* @var $xhr XhrMethods */
-	$xhr = DI::$shared->get(XhrMethods::class);
+	$xhr = $container->get(XhrMethods::class);
 	$func = 'xhr_' . $action;
 	if (method_exists($xhr, $func)) {
 		/*
