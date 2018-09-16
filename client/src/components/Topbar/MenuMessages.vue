@@ -50,7 +50,7 @@ export default {
     }
   },
   created () {
-      return conversationStore.loadConversations()
+    return conversationStore.loadConversations()
   },
   methods: {
     close () {
