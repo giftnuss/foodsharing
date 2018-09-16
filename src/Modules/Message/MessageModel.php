@@ -210,18 +210,18 @@ class MessageModel extends Db
 		return true;
 	}
 
-    /**
-     * Method returns an array of all conversation from the user.
-     *
-     * @return Ambigous <boolean, array >
-     */
+	/**
+	 * Method returns an array of all conversation from the user.
+	 *
+	 * @return Ambigous <boolean, array >
+	 */
 	public function listConversations(int $limit = -1)
 	{
 		if ($limit === -1) {
-            $limit = '';
+			$limit = '';
 		} else {
-            $limit = ' LIMIT 0,' . $limit;
-        }
+			$limit = ' LIMIT 0,' . $limit;
+		}
 
 		if ($convs = $this->q('
 			SELECT
@@ -447,7 +447,7 @@ class MessageModel extends Db
 		return false;
 	}
 
-    //loads the first 20 messages of a conversation
+	//loads the first 20 messages of a conversation
 	public function loadConversationMessages($conversation_id)
 	{
 		return $this->q('

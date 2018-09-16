@@ -9,7 +9,7 @@ use Foodsharing\Modules\Core\Control;
 
 class MessageXhr extends Control
 {
-    use websocketTrait;
+	use websocketTrait;
 
 	public function __construct(MessageModel $model, MessageView $view)
 	{
@@ -124,7 +124,7 @@ class MessageXhr extends Control
 						if ($member = $this->model->listConversationMembers($_POST['c'])) {
 							$user_ids = array_column($member, 'id');
 
-                            $this->sendSockMulti($user_ids, 'conv', 'push', array(
+							$this->sendSockMulti($user_ids, 'conv', 'push', array(
 								'id' => $message_id,
 								'cid' => (int)$_POST['c'],
 								'fs_id' => $this->func->fsId(),
@@ -172,13 +172,13 @@ class MessageXhr extends Control
 	{
 		$this->session->noWrite();
 
-        $limit = -1;
-        if (isset($_GET['limit'])) {
-            $limit = (int)$_GET['limit'];
-        }
+		$limit = -1;
+		if (isset($_GET['limit'])) {
+			$limit = (int)$_GET['limit'];
+		}
 
-        if ($conversations = $this->model->listConversations($limit)) {
-            $xhr = new Xhr();
+		if ($conversations = $this->model->listConversations($limit)) {
+			$xhr = new Xhr();
 
 			// because some of the messages and the titles are still stored in encoded html, theres the option to
 			// decode them again for the usage in vue components

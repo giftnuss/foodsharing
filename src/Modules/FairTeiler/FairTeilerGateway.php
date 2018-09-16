@@ -88,9 +88,9 @@ class FairTeilerGateway extends BaseGateway
 		);
 	}
 
-    public function getInfoFollowerIds($id)
-    {
-        return $this->db->fetchAllValues(
+	public function getInfoFollowerIds($id)
+	{
+		return $this->db->fetchAllValues(
 			'
 			SELECT 	fs.`id`
 

@@ -2,21 +2,20 @@
 
 namespace Foodsharing\Modules\Bell;
 
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\websocketTrait;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 
 class BellGateway extends BaseGateway
 {
-    use websocketTrait;
+	use websocketTrait;
 
-    public function __construct(Database $db)
-    {
-        parent::__construct($db);
-    }
+	public function __construct(Database $db)
+	{
+		parent::__construct($db);
+	}
 
-    public function addBell($foodsaver_ids, $title, $body, $icon, $link_attributes, $vars, $identifier = '', $closeable = 1): void
+	public function addBell($foodsaver_ids, $title, $body, $icon, $link_attributes, $vars, $identifier = '', $closeable = 1): void
 	{
 		if (!is_array($foodsaver_ids)) {
 			$foodsaver_ids = array($foodsaver_ids);
@@ -162,14 +161,14 @@ class BellGateway extends BaseGateway
 		$this->db->delete('fs_bell', ['identifier' => $identifier]);
 	}
 
-    public function setBellsAsSeen(array $bids, int $foodsaverId): void
-    {
-        $stm = 'UPDATE `fs_foodsaver_has_bell` SET `seen` = 1 WHERE `bell_id` IN (' . implode(',', $bids) . ') AND `foodsaver_id` = ' . $foodsaverId;
+	public function setBellsAsSeen(array $bids, int $foodsaverId): void
+	{
+		$stm = 'UPDATE `fs_foodsaver_has_bell` SET `seen` = 1 WHERE `bell_id` IN (' . implode(',', $bids) . ') AND `foodsaver_id` = ' . $foodsaverId;
 		$this->db->execute($stm);
 	}
 
 	private function notifyFoodsaver(int $foodsaverId)
-    {
-        $this->sendSock($foodsaverId, 'bell', 'notify', []);
-    }
+	{
+		$this->sendSock($foodsaverId, 'bell', 'notify', []);
+	}
 }

@@ -29,7 +29,7 @@ class FairTeilerXhr extends Control
 		$post = '';
 
 		if ($ft = $this->gateway->getFairteiler($_GET['fid'])) {
-            if ($followers = $this->gateway->getEmailFollower($_GET['fid'])) {
+			if ($followers = $this->gateway->getEmailFollower($_GET['fid'])) {
 				$post = $this->gateway->getLastFtPost($_GET['fid']);
 
 				$body = nl2br($post['body']);
@@ -46,7 +46,7 @@ class FairTeilerXhr extends Control
 					}
 				}
 
-                foreach ($followers as $f) {
+				foreach ($followers as $f) {
 					$this->func->tplMail(18, $f['email'], array(
 						'link' => BASE_URL . '/?page=fairteiler&sub=ft&id=' . (int)$_GET['fid'],
 						'name' => $f['name'],
@@ -57,10 +57,10 @@ class FairTeilerXhr extends Control
 				}
 			}
 
-            if ($followers = $this->gateway->getInfoFollowerIds($_GET['fid'])) {
-                $followersWithoutPostAuthor = array_diff($followers, [$this->session->id()]);
+			if ($followers = $this->gateway->getInfoFollowerIds($_GET['fid'])) {
+				$followersWithoutPostAuthor = array_diff($followers, [$this->session->id()]);
 				$this->bellGateway->addBell(
-                    $followersWithoutPostAuthor,
+					$followersWithoutPostAuthor,
 					'ft_update_title',
 					'ft_update',
 					'img img-recycle yellow',
