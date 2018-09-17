@@ -5,7 +5,7 @@ require_once 'config.inc.php';
 
 /* @var $container Container */
 global $container;
-$container = initializeLegacyContainer();
+$container = initializeContainer();
 
 /*
  * force only executing on commandline

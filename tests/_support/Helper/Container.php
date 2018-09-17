@@ -17,7 +17,7 @@ class Container extends \Codeception\Module\Db
 	{
 		parent::_initialize();
 		global $container;
-		$container = initializeLegacyContainer();
+		$container = initializeContainer();
 		$this->di = $container;
 	}
 

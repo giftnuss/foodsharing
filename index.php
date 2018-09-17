@@ -35,7 +35,7 @@ require_once 'config.inc.php';
 
 /* @var $container Container */
 global $container;
-$container = initializeLegacyContainer();
+$container = initializeContainer();
 
 require_once 'lib/inc.php';
 

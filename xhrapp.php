@@ -9,7 +9,7 @@ require_once 'config.inc.php';
 
 /* @var $container Container */
 global $container;
-$container = initializeLegacyContainer();
+$container = initializeContainer();
 
 if (isset($_GET['app']) && isset($_GET['m'])) {
 	$app = str_replace('/', '', $_GET['app']);

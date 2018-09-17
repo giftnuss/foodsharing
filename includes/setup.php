@@ -10,7 +10,7 @@ require __DIR__ . '/../vendor/autoload.php';
 /**
  * @return Container
  */
-function initializeLegacyContainer()
+function initializeContainer()
 {
 	$env = $_SERVER['FS_ENV'] ?? 'dev';
 	$debug = (bool)($_SERVER['APP_DEBUG'] ?? ('prod' !== $env));
