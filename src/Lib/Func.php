@@ -67,7 +67,7 @@ class Func
 		$this->viewUtils = $viewUtils;
 		$this->sanitizerService = $sanitizerService;
 		$this->regionGateway = $regionGateway;
-		$this->$emailTemplateGateway = $emailTemplateGateway;
+		$this->emailTemplateGateway = $emailTemplateGateway;
 		$this->content_main = '';
 		$this->content_right = '';
 		$this->content_left = '';
