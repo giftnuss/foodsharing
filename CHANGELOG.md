@@ -4,6 +4,7 @@
 - Fix conversation name when changing store (name) #294 !508 @surrim
 - New non-festival homepage !546 @michi-zuri
 - Enable persistent sessions cookies !543 @nicksellen
+- Only set session cookie when logged in !544 @nicksellen
 
 ## Bugfixes
 - Orga members are now able to leave stores they are not responsible for #283 !524 @annaos
@@ -13,6 +14,7 @@
 - stat_fetchrate is calculated correctly and shown in profile #281 @k.miklobusec
 
 ## Refactoring
+- Unify Symfony DI configuration !544 @nicksellen
 
 ## Dev/Test/CI stuff
 
