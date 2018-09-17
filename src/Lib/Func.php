@@ -35,6 +35,8 @@ class Func
 	private $add_css;
 	private $viewUtils;
 	private $sanitizerService;
+	private $regionGateway;
+	private $emailTemplateGateway;
 
 	private $webpackScripts;
 	private $webpackStylesheets;
@@ -56,10 +58,16 @@ class Func
 	 */
 	private $mem;
 
-	public function __construct(Utils $viewUtils, SanitizerService $sanitizerService)
-	{
+	public function __construct(
+		Utils $viewUtils,
+		SanitizerService $sanitizerService,
+		RegionGateway $regionGateway,
+		EmailTemplateGateway $emailTemplateGateway
+	) {
 		$this->viewUtils = $viewUtils;
 		$this->sanitizerService = $sanitizerService;
+		$this->regionGateway = $regionGateway;
+		$this->$emailTemplateGateway = $emailTemplateGateway;
 		$this->content_main = '';
 		$this->content_right = '';
 		$this->content_left = '';
@@ -410,10 +418,7 @@ class Func
 	{
 		if (is_array($regions_ids) && count($regions_ids) && $this->session->isBotschafter()) {
 			if ($include_parent_regions) {
-				global $container;
-				/* @var $gw RegionGateway */
-				$gw = $container->get(RegionGateway::class);
-				$regions_ids = $gw->listRegionsIncludingParents($regions_ids);
+				$regions_ids = $this->regionGateway->listRegionsIncludingParents($regions_ids);
 			}
 			foreach ($_SESSION['client']['botschafter'] as $b) {
 				foreach ($regions_ids as $bid) {
@@ -636,10 +641,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$mail->setFrom(DEFAULT_EMAIL, DEFAULT_EMAIL_NAME);
 		}
 
-		global $container;
-		/* @var $gw EmailTemplateGateway */
-		$gw = $container->get(EmailTemplateGateway::class);
-		$message = $gw->getOne_message_tpl($tpl_id);
+		$message = $this->emailTemplateGateway->getOne_message_tpl($tpl_id);
 
 		$search = array();
 		$replace = array();
@@ -1331,11 +1333,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function getBezirk()
 	{
-		global $container;
-		/* @var $gw RegionGateway */
-		$gw = $container->get(RegionGateway::class);
-
-		return $gw->getBezirk($this->session->getCurrentBezirkId());
+		return $this->regionGateway->getBezirk($this->session->getCurrentBezirkId());
 	}
 
 	public function genderWord($gender, $m, $w, $other)
