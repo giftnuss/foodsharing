@@ -65,7 +65,7 @@ class Session
 		}
 	}
 
-	public function init()
+	public function init($login = false)
 	{
 		if ($this->initialized) {
 			throw new Exception('Session is already initialized');
@@ -76,6 +76,11 @@ class Session
 		ini_set('session.save_path', 'tcp://' . REDIS_HOST . ':' . REDIS_PORT);
 
 		fSession::setLength('24 hours', '1 week');
+
+		if ($login) {
+			// This regenerates the session id even if it's already persistent, we want to only set it when logging in
+			fSession::enablePersistence();
+		}
 
 		fAuthorization::setAuthLevels(
 			array(
@@ -354,7 +359,7 @@ class Session
 	public function refreshFromDatabase($fs_id = null)
 	{
 		if (!$this->initialized) {
-			$this->init();
+			$this->init(true);
 		}
 
 		if ($fs_id === null) {
