@@ -3,18 +3,22 @@
 namespace Foodsharing\Modules\Message;
 
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\websocketTrait;
+use Foodsharing\Lib\WebsocketSender;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
 
 class MessageXhr extends Control
 {
-	use websocketTrait;
+    /**
+     * @var WebsocketSender
+     */
+    private $websocketSender;
 
-	public function __construct(MessageModel $model, MessageView $view)
+	public function __construct(MessageModel $model, MessageView $view, WebsocketSender $websocketSender)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->websocketSender = $websocketSender;
 
 		parent::__construct();
 
@@ -124,7 +128,7 @@ class MessageXhr extends Control
 						if ($member = $this->model->listConversationMembers($_POST['c'])) {
 							$user_ids = array_column($member, 'id');
 
-							$this->sendSockMulti($user_ids, 'conv', 'push', array(
+							$this->websocketSender->sendSockMulti($user_ids, 'conv', 'push', array(
 								'id' => $message_id,
 								'cid' => (int)$_POST['c'],
 								'fs_id' => $this->func->fsId(),

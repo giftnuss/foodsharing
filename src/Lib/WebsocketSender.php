@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Lib;
 
-trait websocketTrait
+class WebsocketSender
 {
 	public function sendSock($fsid, $app, $method, $options)
 	{
