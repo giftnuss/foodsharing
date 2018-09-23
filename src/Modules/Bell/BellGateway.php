@@ -8,10 +8,10 @@ use Foodsharing\Modules\Core\Database;
 
 class BellGateway extends BaseGateway
 {
-    /**
-     * @var WebsocketSender
-     */
-    private $websocketSender;
+	/**
+	 * @var WebsocketSender
+	 */
+	private $websocketSender;
 
 	public function __construct(Database $db, WebsocketSender $websocketSender)
 	{

@@ -96,9 +96,9 @@ class WallPostXhr extends Control
 
 	public function post()
 	{
-	    if (!$this->wallPostPermissions->mayWriteWall($this->session->id(), $this->table, $this->id)) {
-	        return XhrResponses::PERMISSION_DENIED;
-        }
+		if (!$this->wallPostPermissions->mayWriteWall($this->session->id(), $this->table, $this->id)) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 
 		$message = strip_tags($_POST['text']);
 		if (!(empty($message) && empty($_POST['attach']))) {

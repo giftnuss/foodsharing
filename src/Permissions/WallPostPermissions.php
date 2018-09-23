@@ -53,8 +53,8 @@ class WallPostPermissions
 				return $fsId == $targetId;
 			case 'question':
 				return $fsId > 0;
-            case 'fairteiler':
-                return DI::$shared->get(FairTeilerGateway::class)->mayFairteiler($fsId, $targetId);
+			case 'fairteiler':
+				return DI::$shared->get(FairTeilerGateway::class)->mayFairteiler($fsId, $targetId);
 			default:
 				return $fsId > 0 && $this->mayReadWall($fsId, $target, $targetId);
 		}

@@ -9,10 +9,10 @@ use Foodsharing\Modules\Core\Control;
 
 class MessageXhr extends Control
 {
-    /**
-     * @var WebsocketSender
-     */
-    private $websocketSender;
+	/**
+	 * @var WebsocketSender
+	 */
+	private $websocketSender;
 
 	public function __construct(MessageModel $model, MessageView $view, WebsocketSender $websocketSender)
 	{

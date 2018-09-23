@@ -25,7 +25,7 @@ class APIXhr extends Control
 		MessageModel $messageModel,
 		BasketGateway $basketGateway,
 		Db $model,
-        WebsocketSender $websocketSender
+		WebsocketSender $websocketSender
 	) {
 		$this->apiGateway = $apiGateway;
 		$this->loginGateway = $loginGateway;

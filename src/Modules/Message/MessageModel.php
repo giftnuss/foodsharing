@@ -471,7 +471,7 @@ class MessageModel extends Db
 			ORDER BY
 				m.`time` DESC
 
-			LIMIT ' . $offset. ',' . $limit. '
+			LIMIT ' . $offset . ',' . $limit . '
 		');
 	}
 
