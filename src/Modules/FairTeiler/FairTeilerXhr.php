@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\FairTeiler;
 
 use Foodsharing\Lib\Db\Db;
+use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 
@@ -24,7 +25,7 @@ class FairTeilerXhr extends Control
 	public function infofollower()
 	{
 		if (!$this->mayFairteiler($_GET['fid'])) {
-			return false;
+			return XhrResponses::PERMISSION_DENIED;
 		}
 		$post = '';
 
@@ -78,12 +79,6 @@ class FairTeilerXhr extends Control
 
 	private function mayFairteiler($fid)
 	{
-		if ($ids = $this->gateway->getFairteilerIds($this->func->fsId())) {
-			if (in_array($fid, $ids)) {
-				return true;
-			}
-		}
-
-		return false;
+		return $this->gateway->mayFairteiler($this->session->id(), $fid);
 	}
 }

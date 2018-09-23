@@ -346,4 +346,15 @@ class FairTeilerGateway extends BaseGateway
 
 		return $ft_id;
 	}
+
+	public function mayFairteiler(int $foodsaverId, int $fairteilerId)
+    {
+        if ($ids = $this->getFairteilerIds($foodsaverId)) {
+            if (in_array($fairteilerId, $ids)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
