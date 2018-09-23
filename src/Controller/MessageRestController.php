@@ -41,13 +41,9 @@ class MessageRestController extends FOSRestController
 	}
 
 	/**
-	 * Gets the first 20 messages of a conversation.
-	 *
-	 * To load the rest of the conversation, you'll have to use MessageXhr::loadmore().
-	 *
-	 * @Rest\Get("conversations/{conversationId}", requirements={"conversationId" = "\d+"})
+	 * @Rest\Get("conversations/{conversationId}/{messagesNumber}/{messagesOffset}", requirements={"conversationId" = "\d+"}, defaults={"messagesNumber" = 20, "messagesOffset" = 0})
 	 */
-	public function getConversationAction($conversationId)
+	public function getConversationAction(int $conversationId, int $messagesNumber, int $messagesOffset)
 	{
 		if (!$this->session->may() || !$this->mayConversation($conversationId)) {
 			throw new HttpException(401);
@@ -63,7 +59,7 @@ class MessageRestController extends FOSRestController
 		};
 		$member = array_map($publicMemberInfo, $member);
 
-		$messages = $this->model->loadConversationMessages($conversationId);
+		$messages = $this->model->loadConversationMessages($conversationId, $messagesNumber, $messagesOffset);
 		$conversation = $this->model->getValues(array('name'), 'conversation', $conversationId);
 		$this->model->setAsRead([$conversationId]);
 

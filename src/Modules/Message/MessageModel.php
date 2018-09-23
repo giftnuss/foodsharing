@@ -330,7 +330,7 @@ class MessageModel extends Db
 		}
 	}
 
-	public function loadMore($conversation_id, $last_message_id)
+	public function loadMore(int $conversation_id, int $last_message_id, int $limit = 20)
 	{
 		return $this->q('
 			SELECT
@@ -349,15 +349,15 @@ class MessageModel extends Db
 				m.foodsaver_id = fs.id
 
 			AND
-				m.conversation_id = ' . (int)$conversation_id . '
+				m.conversation_id = ' . $conversation_id . '
 
 			AND
-				m.id < ' . (int)$last_message_id . '
+				m.id < ' . $last_message_id . '
 
 			ORDER BY
 				m.`time` DESC
 
-			LIMIT 0,20
+			LIMIT 0,' . $limit . '
 		');
 	}
 
@@ -447,8 +447,7 @@ class MessageModel extends Db
 		return false;
 	}
 
-	//loads the first 20 messages of a conversation
-	public function loadConversationMessages($conversation_id)
+	public function loadConversationMessages(int $conversation_id, int $limit = 20, int $offset = 0)
 	{
 		return $this->q('
 			SELECT
@@ -467,12 +466,12 @@ class MessageModel extends Db
 				m.foodsaver_id = fs.id
 
 			AND
-				m.conversation_id = ' . (int)$conversation_id . '
+				m.conversation_id = ' . $conversation_id . '
 
 			ORDER BY
 				m.`time` DESC
 
-			LIMIT 0,20
+			LIMIT ' . $offset. ',' . $limit. '
 		');
 	}
 
