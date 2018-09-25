@@ -48,8 +48,7 @@ class IndexView extends View
 			<div class="topbarpadding">
 				<div id="campaignimg" class="pure-u-1 pure-u-sm-1-2" style="background-image:url(/img/gabel.png)"></div>
 				<div id="campaigntext" class="pure-u-1 pure-u-sm-1-2">
-				<h2>Die Initiative foodsharing</h2>
-				<h3>ist und bleibt kostenlos, nicht kommerziell, unabhängig und werbefrei.</h3>
+				<h2>foodsharing ist und bleibt kostenlos, nicht kommerziell, unabhängig und werbefrei.</h2>
 				</div>
 			</div>
 		</div>
