@@ -411,7 +411,8 @@ class StoreUserView extends View
 				}
 
 				if ($fs['id'] == $this->func->fsId() && !$ago) {
-					$click = 'u_undate(\'' . $date . '\',\'' . $this->func->format_db_date($date) . '\');return false;';
+					
+					$click = 'u_undate(\'' . $date . '\',\'' . $this->func->niceDateRelative(strtotime($date)) . '\');return false;';
 					$aclass = '';
 				}
 

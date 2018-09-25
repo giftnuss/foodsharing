@@ -234,6 +234,31 @@ class Func
 		return $pre . ', ' . date('H:i', $ts) . ' ' . $this->s('clock');
 	}
 
+	//given a unix time $ts it provides a human readable full date format + time with a relative time keyword like "today", "tomorrow",.. at the beginning. Seperated by a comma.
+	public function niceDateRelative($ts)
+	{
+		$pre = '';
+		$date = new fDate($ts);
+
+		if ($date->eq('today')) {
+			$pre = $this->s('today').', ';
+		} elseif ($date->eq('tomorrow')) {
+			$pre = $this->s('tomorrow').', ';
+		} elseif ($date->eq('-1 day')) {
+			$pre = $this->s('yesterday').', ';
+		} 
+		
+		$days = $this->getDow();
+		$pre = $pre . $days[date('w', $ts)] . ', ' . (int)date('d', $ts) . '. ' . $this->s('smonth_' . date('n', $ts));
+		$year = date('Y', $ts);
+		if ($year != date('Y')) {
+			$pre = $pre . ' ' . $year;
+		}
+
+		return $pre . ', ' . date('H:i', $ts) . ' ' . $this->s('clock');
+	}
+
+
 	public function incLang($id)
 	{
 		global $g_lang;
