@@ -70,6 +70,7 @@ class Session
 		if ($this->initialized) {
 			throw new Exception('Session is already initialized');
 		}
+
 		$this->initialized = true;
 
 		ini_set('session.save_handler', 'redis');
@@ -360,6 +361,8 @@ class Session
 	{
 		if (!$this->initialized) {
 			$this->init(true);
+		} else {
+			fSession::enablePersistence();
 		}
 
 		if ($fs_id === null) {
