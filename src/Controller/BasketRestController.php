@@ -24,10 +24,11 @@ class BasketRestController extends FOSRestController
 	}
 
 	/**
-	 * Normalizes the details of a basket of the current user for the Rest 
+	 * Normalizes the details of a basket of the current user for the Rest
 	 * response, including requests.
 	 */
-	private function normalizeMyBasket($b, $updates = []) {
+	private function normalizeMyBasket($b, $updates = [])
+	{
 		$basket = [
 			'id' => (int)$b['id'],
 			'description' => html_entity_decode($b['description']),
@@ -36,7 +37,7 @@ class BasketRestController extends FOSRestController
 			'updatedAt' => date('Y-m-d\TH:i:s', $b['time_ts']),
 			'requests' => []
 		];
-		
+
 		//add requests, if there are any in the updates
 		foreach ($updates as $update) {
 			if ((int)$update['id'] == $basket['id']) {
@@ -56,7 +57,7 @@ class BasketRestController extends FOSRestController
 				}
 			}
 		}
-		
+
 		return $basket;
 	}
 
@@ -84,13 +85,13 @@ class BasketRestController extends FOSRestController
 				'sleepStatus' => $b['sleep_status']
 			]
 		];
-		
+
 		//add phone numbers if contact_type includes telephone
 		$tel = '';
 		$handy = '';
 		if (isset($b['contact_type'])) {
 			$contactTypes = explode(':', $b['contact_type']);
-			
+
 			if (in_array(2, $contactTypes)) {
 				$tel = $b['tel'];
 				$handy = $b['handy'];
@@ -137,24 +138,25 @@ class BasketRestController extends FOSRestController
 		$basket = $this->gateway->getBasket($basketId);
 		$updates = $this->gateway->listUpdates($this->session->id());
 		$data = $this->normalizeBasket($basket, $updates);
-		
+
 		$view = $this->view([
 			'basket' => $data
 		], 200);
 
 		return $this->handleView($view);
 	}
-	
+
 	/**
 	 * Lists all baskets of the current user.
-	 * 
+	 *
 	 * @Rest\Get("baskets/mybaskets")
 	 */
-	public function listMyBasketsAction() {
+	public function listMyBasketsAction()
+	{
 		if (!$this->session->may()) {
 			throw new HttpException(401);
 		}
-        
+
 		$updates = $this->gateway->listUpdates($this->session->id());
 		$baskets = $this->gateway->listMyBaskets($this->session->id());
 		$data = array_map(function ($b) use ($updates) { return $this->normalizeMyBasket($b, $updates); }, $baskets);
@@ -164,12 +166,12 @@ class BasketRestController extends FOSRestController
 		], 200);
 
 		return $this->handleView($view);
-    }
-	
+	}
+
 	/**
-	 * Adds a new basket. The description must not be empty, all other 
+	 * Adds a new basket. The description must not be empty, all other
 	 * parameters are optional.
-	 * 
+	 *
 	 * @Rest\Post("baskets/add")
 	 * @Rest\RequestParam(name="description", nullable=false)
 	 * @Rest\RequestParam(name="contactTypes", nullable=true)
@@ -179,20 +181,21 @@ class BasketRestController extends FOSRestController
 	 * @Rest\RequestParam(name="foodTypes", nullable=true)
 	 * @Rest\RequestParam(name="foodKinds", nullable=true)
 	 */
-	public function addBasketAction(ParamFetcher $paramFetcher) {
+	public function addBasketAction(ParamFetcher $paramFetcher)
+	{
 		if (!$this->session->may()) {
 			throw new HttpException(401);
 		}
-		
+
 		//prepare and check description
 		$description = trim(strip_tags($paramFetcher->get('description')));
 		if (empty($description)) {
-			throw new HttpException(400, 'the description must not be empty: '.
+			throw new HttpException(400, 'the description must not be empty: ' .
 					$paramFetcher->get('description')
-					.' '.strip_tags($paramFetcher->get('description'))
-					.' '.trim(strip_tags($paramFetcher->get('description'))));
+					. ' ' . strip_tags($paramFetcher->get('description'))
+					. ' ' . trim(strip_tags($paramFetcher->get('description'))));
 		}
-		
+
 		//find user's location
 		$location_type = 0;
 		$loc = $this->session->getLocation();
@@ -201,7 +204,7 @@ class BasketRestController extends FOSRestController
 		if ($lat == 0 && $lon == 0) {
 			throw new HttpException(400, 'the user profile has no address');
 		}
-		
+
 		//parse contact type and phone numbers
 		$contactString = '1';
 		$phone = [
@@ -218,24 +221,24 @@ class BasketRestController extends FOSRestController
 				];
 			}
 		}
-		
+
 		//add basket
 		$pic = ''; //TODO
-		$basketId = $this->gateway->addBasket($description, $pic, $phone, $contactString, 
-				$paramFetcher->get('weight'), $location_type, $lat, $lon, 
+		$basketId = $this->gateway->addBasket($description, $pic, $phone, $contactString,
+				$paramFetcher->get('weight'), $location_type, $lat, $lon,
 				$this->session->user('bezirk_id'), $this->session->id()
 		);
 		if ($basketId == 0) {
 			throw new HttpException(400, 'unable to create the basket');
-		} 
+		}
 
 		//add food types
 		$foodTypes = $paramFetcher->get('foodTypes');
 		if (!is_null($foodTypes) && is_array($foodTypes)) {
 			$types = array();
 			foreach ($foodTypes as $ft) {
-				if ((int) $ft > 0) {
-					$types[] = (int) $ft;
+				if ((int)$ft > 0) {
+					$types[] = (int)$ft;
 				}
 			}
 
@@ -247,8 +250,8 @@ class BasketRestController extends FOSRestController
 		if (!is_null($foodKinds) && is_array($foodKinds)) {
 			$kinds = array();
 			foreach ($foodKinds as $fk) {
-				if ((int) $fk > 0) {
-					$kinds[] = (int) $fk;
+				if ((int)$fk > 0) {
+					$kinds[] = (int)$fk;
 				}
 			}
 
@@ -260,14 +263,15 @@ class BasketRestController extends FOSRestController
 
 	/**
 	 * Removes a basket of this user with the given ID.
-	 * 
+	 *
 	 * @Rest\Get("baskets/remove/{basketId}", requirements={"basketId" = "\d+"})
 	 */
-	public function removeBasketAction($basketId) {
+	public function removeBasketAction($basketId)
+	{
 		if (!$this->session->may()) {
 			throw new HttpException(401);
 		}
-		
+
 		$status = $this->gateway->removeBasket($basketId, $this->session->id());
 
 		if ($status == 0) {
