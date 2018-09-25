@@ -2,6 +2,7 @@
 
 ## Features
 - Fix conversation name when changing store (name) #294 !508 @surrim
+- New non-festival homepage !546 @michi-zuri
 
 ## Bugfixes
 - Orga members are now able to leave stores they are not responsible for #283 !524 @annaos
