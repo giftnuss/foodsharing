@@ -2,6 +2,7 @@
 
 ## Features
 - Fix conversation name when changing store (name) #294 !508 @surrim
+- Making the "tpl_msg_to_team" canceling message more informative !545 @jofranz
 
 ## Bugfixes
 - Orga members are now able to leave stores they are not responsible for #283 !524 @annaos
