@@ -241,13 +241,13 @@ class Func
 		$date = new fDate($ts);
 
 		if ($date->eq('today')) {
-			$pre = $this->s('today').', ';
+			$pre = $this->s('today') . ', ';
 		} elseif ($date->eq('tomorrow')) {
-			$pre = $this->s('tomorrow').', ';
+			$pre = $this->s('tomorrow') . ', ';
 		} elseif ($date->eq('-1 day')) {
-			$pre = $this->s('yesterday').', ';
-		} 
-		
+			$pre = $this->s('yesterday') . ', ';
+		}
+
 		$days = $this->getDow();
 		$pre = $pre . $days[date('w', $ts)] . ', ' . (int)date('d', $ts) . '. ' . $this->s('smonth_' . date('n', $ts));
 		$year = date('Y', $ts);
@@ -257,7 +257,6 @@ class Func
 
 		return $pre . ', ' . date('H:i', $ts) . ' ' . $this->s('clock');
 	}
-
 
 	public function incLang($id)
 	{
