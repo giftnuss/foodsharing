@@ -8,6 +8,7 @@
 - Only set session cookie when logged in !544 @nicksellen
 - Added a second line to hover texts in stores #88 !547 @alex.simm
 - New selection for expiration of baskets #340 !553 @alex.simm
+- Making the "tpl_msg_to_team" canceling message more informative !545 @jofranz
 
 ## Bugfixes
 - Orga members are now able to leave stores they are not responsible for #283 !524 @annaos
