@@ -521,7 +521,7 @@ class StoreModel extends Db
 
 		return $this->update('
 					UPDATE 	 	`fs_betrieb_team`
-					SET 		`active` = 1
+					SET 		`active` = 1, `stat_add_date` = NOW()
 					WHERE 		`betrieb_id` = ' . (int)$bid . '
 					AND 		`foodsaver_id` = ' . (int)$fsid . '
 		');
@@ -544,7 +544,7 @@ class StoreModel extends Db
 
 		return $this->update('
 					UPDATE 	 	`fs_betrieb_team`
-					SET 		`active` = 2
+					SET 		`active` = 2, `stat_add_date` = NOW()
 					WHERE 		`betrieb_id` = ' . (int)$bid . '
 					AND 		`foodsaver_id` = ' . (int)$fsid . '
 		');
