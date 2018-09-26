@@ -102,3 +102,5 @@ $g_lang['reportmessage'] = 'Beschreibe den Vorfall noch etwas genauer!';
 $g_lang['fetch_history'] = 'Abholungshistorie';
 $g_lang['stat_fetchcount'] = 'Letzte Abholung am {date}';
 $g_lang['stat_fetchcount_none'] = 'Noch keine Lebensmittel abgeholt';
+$g_lang['stat_teammember_since'] = 'Im Team seit {date}';
+$g_lang['stat_jumper_since'] = 'Springer seit {date}';
