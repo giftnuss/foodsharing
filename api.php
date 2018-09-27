@@ -141,8 +141,12 @@ $fs = $_GET['fs'];
 $key = $_GET['key'];
 $opts = $_GET['opts'];
 
+/* @var $container Container */
+global $container;
+$container = initializeContainer();
+
 /* @var $model Db */
-$model = DI::$shared->get(Db::class);
+$model = $container->get(Db::class);
 
 if (!check_api_token($fs, $key, $model)) {
 	http_response_code(403);
