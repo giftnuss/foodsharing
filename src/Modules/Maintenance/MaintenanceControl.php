@@ -383,6 +383,8 @@ class MaintenanceControl extends ConsoleControl
 	{
 		self::info('flush Page Cache...');
 
+		$this->mem->ensureConnected();
+
 		if ($keys = $this->mem->cache->getAllKeys()) {
 			foreach ($keys as $key) {
 				if (substr($key, 0, 3) == 'pc-') {
@@ -397,6 +399,8 @@ class MaintenanceControl extends ConsoleControl
 	public function membackup()
 	{
 		self::info('backup memcache to file...');
+
+		$this->mem->ensureConnected();
 
 		if ($keys = $this->mem->cache->getAllKeys()) {
 			$bar = $this->progressbar(count($keys));
