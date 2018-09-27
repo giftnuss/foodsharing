@@ -99,9 +99,15 @@ class StoreUserView extends View
 				$last = $this->func->sv('stat_fetchcount_none', array());
 			}
 
-			//format date when user was added
+			//date at which user was added
+			if ($fs['add_date']) {
+				$addDate = date('d.m.Y', $fs['add_date']);
+			} else {
+				//fallback if add_date is not set
+				$addDate = '(unbekannt)';
+			}
 			$memberSince = $this->func->sv('stat_teammember_since', array(
-				'date' => date('d.m.Y', $fs['add_date'])
+				'date' => $addDate
 			));
 
 			$onclick = ' onclick="' . $click . 'return false;"';
@@ -152,9 +158,15 @@ class StoreUserView extends View
 					$tel .= '<span class="item phone"><span>' . $fs['telefon'] . '</span></span>';
 				}
 
-				//format date when jumper was added
+				//date at which jumper was added
+				if ($fs['add_date']) {
+					$dateAdded = date('d.m.Y', $fs['add_date']);
+				} else {
+					//fallback if add_date is not set
+					$dateAdded = '';
+				}
 				$jumperSince = $this->func->sv('stat_jumper_since', array(
-					'date' => date('d.m.Y', $fs['add_date'])
+					'date' => $dateAdded
 				));
 
 				$onclick = ' onclick="' . $click . 'return false;"';
