@@ -163,7 +163,7 @@ class StoreUserView extends View
 					$dateAdded = date('d.m.Y', $fs['add_date']);
 				} else {
 					//fallback if add_date is not set
-					$dateAdded = '';
+					$dateAdded = '(unbekannt)';
 				}
 				$jumperSince = $this->func->sv('stat_jumper_since', array(
 					'date' => $dateAdded
