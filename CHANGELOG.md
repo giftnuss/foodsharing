@@ -3,7 +3,6 @@
 ## Features
 - Fix conversation name when changing store (name) #294 !508 @surrim
 - New non-festival homepage !546 @michi-zuri
-- Enable persistent sessions cookies !543 @nicksellen
 - Only set session cookie when logged in !544 @nicksellen
 
 ## Bugfixes
