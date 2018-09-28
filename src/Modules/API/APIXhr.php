@@ -154,7 +154,7 @@ class APIXhr extends Control
 		$fs_id = $this->loginGateway->login($_GET['e'], $_GET['p']);
 
 		if ($fs_id !== null) {
-			$this->session->refreshFromDatabase($fs_id);
+			$this->session->login($fs_id);
 
 			$fs = $this->model->getValues(['telefon', 'handy', 'geschlecht', 'name', 'lat', 'lon', 'photo'], 'foodsaver', $this->session->id());
 

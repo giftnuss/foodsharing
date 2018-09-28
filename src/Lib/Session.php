@@ -357,13 +357,17 @@ class Session
 		return false;
 	}
 
-	public function refreshFromDatabase($fs_id = null)
+	public function login($fs_id = null)
 	{
 		if (!$this->initialized) {
 			$this->init(true);
-		} else {
-			fSession::enablePersistence();
 		}
+		$this->refreshFromDatabase($fs_id);
+	}
+
+	public function refreshFromDatabase($fs_id = null)
+	{
+		$this->checkInitialized();
 
 		if ($fs_id === null) {
 			$fs_id = $this->id();

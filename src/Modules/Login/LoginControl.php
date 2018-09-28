@@ -111,7 +111,7 @@ class LoginControl extends Control
 			return;
 		}
 
-		$this->session->refreshFromDatabase($fs_id);
+		$this->session->login($fs_id);
 
 		$token = $this->searchService->writeSearchIndexToDisk($this->session->id(), $this->session->user('token'));
 
