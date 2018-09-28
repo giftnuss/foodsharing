@@ -24,6 +24,17 @@ class BasketRestController extends FOSRestController
 	}
 
 	/**
+	 * Normalizes a basket request.
+	 */
+	private function normalizeRequest($request) {
+		$user = RestNormalization::normalizeFoodsaver($request);
+		return [
+			'user' => $user,
+			'time' => $request['time_ts'],
+		];
+	}
+
+	/**
 	 * Normalizes the details of a basket of the current user for the Rest
 	 * response, including requests.
 	 */
@@ -33,28 +44,16 @@ class BasketRestController extends FOSRestController
 			'id' => (int)$b['id'],
 			'description' => html_entity_decode($b['description']),
 			'picture' => $b['picture'],
-			'createdAt' => date('Y-m-d\TH:i:s', $b['time_ts']),
-			'updatedAt' => date('Y-m-d\TH:i:s', $b['time_ts']),
+			'createdAt' => (int)$b['time_ts'],
+			'updatedAt' => (int)$b['time_ts'],
 			'requests' => []
 		];
 
 		//add requests, if there are any in the updates
 		foreach ($updates as $update) {
-			if ((int)$update['id'] == $basket['id']) {
-				$time = date('Y-m-d\TH:i:s', $update['time_ts']);
-				$basket['requests'][] = [
-					'user' => [
-						'id' => (int)$update['fs_id'],
-						'name' => $update['fs_name'],
-						'avatar' => $update['fs_photo'],
-						'sleepStatus' => $update['sleep_status'],
-					],
-					'description' => $update['description'],
-					'time' => $time,
-				];
-				if (strcmp($time, $basket['updatedAt']) > 0) {
-					$basket['updatedAt'] = $time;
-				}
+			if ((int) $update['id'] == $basket['id']) {
+				$basket['requests'][] = $this->normalizeRequest($update);
+				$basket['updatedAt'] = max($basket['updatedAt'], (int)$update['time_ts']);
 			}
 		}
 
@@ -67,32 +66,26 @@ class BasketRestController extends FOSRestController
 	private function normalizeBasket($b)
 	{
 		//set main properties
+		$creator = RestNormalization::normalizeFoodsaver($b);
 		$basket = [
 			'id' => (int)$b['id'],
 			'status' => (int)$b['status'],
 			'description' => html_entity_decode($b['description']),
 			'picture' => $b['picture'],
-			'contactTypes' => $b['contact_type'],
-			'createdAt' => date('Y-m-d\TH:i:s', $b['time_ts']),
-			'updatedAt' => date('Y-m-d\TH:i:s', $b['time_ts']),
-			'until' => date('Y-m-d\TH:i:s', $b['until_ts']),
-			'lat' => (float)$b['lat'],
-			'lon' => (float)$b['lon'],
-			'creator' => [
-				'id' => $b['fs_id'],
-				'name' => $b['fs_name'],
-				'avatar' => $b['fs_photo'] ? ('/images/130_q_' . $b['fs_photo']) : null,
-				'sleepStatus' => $b['sleep_status']
-			]
+			'contactTypes' => array_map('intval', explode(':', $b['contact_type'])),
+			'createdAt' => (int)$b['time_ts'],
+			'updatedAt' => (int)$b['time_ts'],
+			'until' => (int)$b['until_ts'],
+			'lat' => (double)$b['lat'],
+			'lon' => (double)$b['lon'],
+			'creator' => $creator
 		];
 
 		//add phone numbers if contact_type includes telephone
 		$tel = '';
 		$handy = '';
 		if (isset($b['contact_type'])) {
-			$contactTypes = explode(':', $b['contact_type']);
-
-			if (in_array(2, $contactTypes)) {
+			if (in_array(2, $basket['contactTypes'])) {
 				$tel = $b['tel'];
 				$handy = $b['handy'];
 			}
@@ -111,16 +104,11 @@ class BasketRestController extends FOSRestController
 	public function getBasketCoordinatesAction()
 	{
 		if (!$this->session->may()) {
-			throw new HttpException(401);
+			throw new HttpException(401, 'not logged in');
 		}
 
 		$baskets = $this->gateway->getBasketCoordinates();
-
-		$view = $this->view([
-			'baskets' => $baskets
-		], 200);
-
-		return $this->handleView($view);
+		return $this->handleView($this->view(['baskets' => $baskets], 200));
 	}
 
 	/**
@@ -139,11 +127,7 @@ class BasketRestController extends FOSRestController
 		$updates = $this->gateway->listUpdates($this->session->id());
 		$data = $this->normalizeBasket($basket, $updates);
 
-		$view = $this->view([
-			'basket' => $data
-		], 200);
-
-		return $this->handleView($view);
+		return $this->handleView($this->view(['basket' => $data], 200));
 	}
 
 	/**
@@ -154,18 +138,16 @@ class BasketRestController extends FOSRestController
 	public function listMyBasketsAction()
 	{
 		if (!$this->session->may()) {
-			throw new HttpException(401);
+			throw new HttpException(401, 'not logged in');
 		}
 
 		$updates = $this->gateway->listUpdates($this->session->id());
 		$baskets = $this->gateway->listMyBaskets($this->session->id());
-		$data = array_map(function ($b) use ($updates) { return $this->normalizeMyBasket($b, $updates); }, $baskets);
+		$data = array_map(function ($b) use ($updates) { 
+			return $this->normalizeMyBasket($b, $updates); 
+		}, $baskets);
 
-		$view = $this->view([
-			'baskets' => $data
-		], 200);
-
-		return $this->handleView($view);
+		return $this->handleView($this->view(['baskets' => $data], 200));
 	}
 
 	/**
