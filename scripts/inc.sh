@@ -6,6 +6,7 @@ set -e
 # :- is an shell operator. If FS_ENV is set and not the empty string, use FS_ENV, otherwise use dev
 export FS_ENV=${FS_ENV:-dev}
 
+# user identification number of the current user
 export UID
 
 MYSQL_USERNAME=${MYSQL_USERNAME:-root}
