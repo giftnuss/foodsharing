@@ -7,6 +7,8 @@ set -e
 
 dir=$(dirname "$0")
 
+# . is a bash builtin, synonymous to source
+# it runs the content of the argument as if there were here (without launching a subshell!)
 . $dir/inc.sh
 
 echo "Bringing up containers"
