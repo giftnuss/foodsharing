@@ -1,4 +1,7 @@
 #!/bin/bash
+# run docker-compose with the container specified by $FS_ENV and a suitable project name
+# which command to run by docker-compose and additional arguments is specified by the arguments
+# of this script
 
 set -e
 
