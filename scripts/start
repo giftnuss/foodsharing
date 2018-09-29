@@ -12,10 +12,12 @@ dir=$(dirname "$0")
 . $dir/inc.sh
 
 echo "Bringing up containers"
+# dc is defined in inc.sh and start docker-compose with following arguments
 dc up -d
 $dir/mkdirs
 
 echo "Running composer install"
+# exec-in-container is defined in inc.sh
 exec-in-container app composer install
 exec-in-container-asroot app rm -rf cache/.views-cache cache/di-cache.php
 
