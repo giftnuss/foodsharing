@@ -12,6 +12,9 @@ export UID
 MYSQL_USERNAME=${MYSQL_USERNAME:-root}
 MYSQL_PASSWORD=${MYSQL_PASSWORD:-root}
 
+# BASH_SOURCE is an array with the filenames of the files that were called to get here
+# so BASH_SOURCE[0] is the filename (with path) of this file
+# different to $0 when this file is sourced with "." as in many of the scripts
 dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
 
 function log-header() {
