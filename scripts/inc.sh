@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# set -e tells the shell to exit as a command exits with non-zero status, i.e. fails
 set -e
 
 export FS_ENV=${FS_ENV:-dev}
