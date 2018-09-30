@@ -10,8 +10,8 @@ use Minishlink\WebPush\Subscription;
 
 class PushNotificationGateway extends BaseGateway
 {
-    private const pathToPrivateKey = ROOT_DIR . 'keys/pushnotifications/priv.key';
-    private const pathToPublicKey = ROOT_DIR . 'keys/pushnotifications/pub.key';
+    private const pathOfPrivateKeyFile = ROOT_DIR . 'keys/pushnotifications/priv.key';
+    private const pathOfPublicKeyFile = ROOT_DIR . 'keys/pushnotifications/pub.key';
 
     private $privateKey;
     private $publicKey;
@@ -62,6 +62,8 @@ class PushNotificationGateway extends BaseGateway
 
         foreach ($subscriptionsAsJson as $subscriptionAsJson) {
             $subscriptionArray = json_decode($subscriptionAsJson['subscription'], true);
+
+            // Fix inconsistent definition of encoding by some clients
             $subscriptionArray['contentEncoding'] = $subscriptionArray['contentEncoding'] ?? 'aesgcm';
 
             $subscription = Subscription::create($subscriptionArray);
@@ -77,8 +79,8 @@ class PushNotificationGateway extends BaseGateway
             return $this->publicKey;
         }
 
-        if (is_file(self::pathToPublicKey)) {
-            return $this->publicKey = file_get_contents(self::pathToPublicKey);
+        if (is_file(self::pathOfPublicKeyFile)) {
+            return $this->publicKey = file_get_contents(self::pathOfPublicKeyFile);
         }
 
         $this->generateKeys();
@@ -91,8 +93,8 @@ class PushNotificationGateway extends BaseGateway
             return $this->privateKey;
         }
 
-        if (is_file(self::pathToPrivateKey)) {
-            return $this->privateKey = file_get_contents(self::pathToPrivateKey);
+        if (is_file(self::pathOfPrivateKeyFile)) {
+            return $this->privateKey = file_get_contents(self::pathOfPrivateKeyFile);
         }
 
         $this->generateKeys();
@@ -105,7 +107,7 @@ class PushNotificationGateway extends BaseGateway
         $this->publicKey = $keys['publicKey'];
         $this->privateKey = $keys['privateKey'];
 
-        file_put_contents(self::pathToPrivateKey, $this->privateKey);
-        file_put_contents(self::pathToPublicKey, $this->publicKey);
+        file_put_contents(self::pathOfPrivateKeyFile, $this->privateKey);
+        file_put_contents(self::pathOfPublicKeyFile, $this->publicKey);
     }
 }
