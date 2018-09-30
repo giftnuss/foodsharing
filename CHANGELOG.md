@@ -2,12 +2,16 @@
 
 ## Features
 - Fix conversation name when changing store (name) #294 !508 @surrim
+- Notify user when bell notifications arrive without need for page reload #328 !542 @janopae
+- Fix read/unread behavior for bell notifications #328 !542 @janopae
 
 ## Bugfixes
 - Orga members are now able to leave stores they are not responsible for #283 !524 @annaos
 - check user permissions in quickreply() in RegionXhr !499 #85 @annaos
 - fix exception if request have no "msg"-Attribute in quickreply() in WallPostXhr !499 @annaos
 - removed not needed add store button from the dashboard !523 @peter.toennies
+- limit conversations sent to client at page loading !542 @janopae
+- check permissions before saving a wallpost in WallpostXhr !542 @janopae
 
 ## Refactoring
 
