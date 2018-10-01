@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\DependencyInjection\Container;
+
 require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';
 

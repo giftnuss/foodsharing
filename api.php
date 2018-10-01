@@ -1,6 +1,7 @@
 <?php
 
 use Foodsharing\Lib\Db\Db;
+use Symfony\Component\DependencyInjection\Container;
 
 require __DIR__ . '/includes/setup.php';
 

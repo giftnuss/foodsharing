@@ -2,6 +2,7 @@
 
 use Foodsharing\Lib\Cache\Caching;
 use Foodsharing\Lib\Db\Db;
+use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
@@ -16,8 +17,11 @@ global $container;
 $session = $container->get(Session::class);
 $session->initIfCookieExists();
 
+/* @var $mem Mem */
+$mem = $container->get(Mem::class);
+
 if (isset($g_page_cache)) {
-	$cache = new Caching($g_page_cache, $session);
+	$cache = new Caching($g_page_cache, $session, $mem);
 	$cache->lookup();
 }
 

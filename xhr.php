@@ -4,6 +4,7 @@ use Foodsharing\Lib\Cache\Caching;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrMethods;
+use Symfony\Component\DependencyInjection\Container;
 
 require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';
@@ -20,7 +21,7 @@ $session->initIfCookieExists();
 $mem = $container->get(Mem::class);
 
 if (isset($g_page_cache)) {
-	$cache = new Caching($g_page_cache, $session);
+	$cache = new Caching($g_page_cache, $session, $mem);
 	$cache->lookup();
 }
 

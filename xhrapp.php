@@ -3,6 +3,7 @@
 use Foodsharing\Lib\Routing;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrResponses;
+use Symfony\Component\DependencyInjection\Container;
 
 require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';
