@@ -2,6 +2,6 @@
 
 set -e
 
-. $(dirname "$0")/inc.sh
+source $(dirname "$0")/inc.sh
 db=$1; shift;
 exec-in-container-asroot db mysql -p$MYSQL_PASSWORD $db -e \""$@"\"

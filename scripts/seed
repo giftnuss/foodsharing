@@ -7,6 +7,6 @@ set -e
 
 # . is a bash builtin, synonymous to source
 # it runs the content of the argument as if there were here (without launching a subshell!)
-. $(dirname "$0")/inc.sh
+source $(dirname "$0")/inc.sh
 
 exec-in-container app vendor/bin/codecept foodsharing:seed "$@"
