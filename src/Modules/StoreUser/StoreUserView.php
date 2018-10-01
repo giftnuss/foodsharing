@@ -102,8 +102,8 @@ class StoreUserView extends View
 			//date at which user was added
 			$memberSince = '';
 			if ($betrieb['verantwortlich']) {
-				$addDate = $fs['add_date'] ? date('d.m.Y', $fs['add_date']) 
-						: '('.$this->func->sv('stat_since_unknown', array()).')';
+				$addDate = $fs['add_date'] ? date('d.m.Y', $fs['add_date'])
+						: '(' . $this->func->sv('stat_since_unknown', array()) . ')';
 				$memberSince = $this->func->sv('stat_teammember_since', array(
 					'date' => $addDate
 				));
