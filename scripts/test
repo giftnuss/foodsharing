@@ -10,6 +10,7 @@ set -e
 #install-chat-dependencies
 
 echo "Bring up containers"
+# up starts the container, -d: run in background as a deamon
 dc up -d
 
 echo "Waiting for mysql to start"

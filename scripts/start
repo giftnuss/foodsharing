@@ -14,6 +14,7 @@ dir=$(dirname "$0")
 
 echo "Bringing up containers"
 # dc is defined in inc.sh and start docker-compose with following arguments
+# up starts the container, -d: run in background as a deamon
 dc up -d
 $dir/mkdirs
 
