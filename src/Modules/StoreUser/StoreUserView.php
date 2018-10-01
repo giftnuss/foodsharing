@@ -158,7 +158,7 @@ class StoreUserView extends View
 				}
 
 				//date at which jumper was added
-				$dateAdded = $fs['add_date'] ? date('d.m.Y', $fs['add_date']) : '(unbekannt)';
+				$dateAdded = $fs['add_date'] ? date('d.m.Y', $fs['add_date']) : '(' . $this->func->sv('stat_since_unknown', array()) . ')';
 				$jumperSince = $this->func->sv('stat_jumper_since', array(
 					'date' => $dateAdded
 				));
