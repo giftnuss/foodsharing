@@ -104,3 +104,4 @@ $g_lang['stat_fetchcount'] = 'Letzte Abholung am {date}';
 $g_lang['stat_fetchcount_none'] = 'Noch keine Lebensmittel abgeholt';
 $g_lang['stat_teammember_since'] = 'Im Team seit {date}';
 $g_lang['stat_jumper_since'] = 'Springer seit {date}';
+$g_lang['stat_since_unknown'] = 'unbekannt';
