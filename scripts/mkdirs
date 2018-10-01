@@ -6,7 +6,7 @@ set -e
 
 dir=$(dirname "$0")
 
-. $dir/inc.sh
+source $dir/inc.sh
 
 # directories used by the application
 

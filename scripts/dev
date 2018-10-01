@@ -6,7 +6,7 @@ set -e
 
 dir=$(dirname "$0")
 
-. $dir/inc.sh
+source $dir/inc.sh
 
 echo "Running client/js/webpack dev"
 run-in-container-with-service-ports client 'yarn && yarn dev'

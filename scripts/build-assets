@@ -2,7 +2,7 @@
 
 set -e
 
-. $(dirname "$0")/inc.sh
+source $(dirname "$0")/inc.sh
 
 echo "Building webpack assets"
 # volume is created as root-owned
