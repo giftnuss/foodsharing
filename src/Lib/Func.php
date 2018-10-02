@@ -211,33 +211,10 @@ class Func
 		return date('j.m.Y. H:i', $ts);
 	}
 
-	public function niceDate($ts)
+	//given a unix time $ts (=time seconds) provides a human readable full date format.
+	//Parameter $relativePlusDate == true adds the date between "heute/morgen" and the time while false leaves it empty
+	public function niceDate($ts, $relativePlusDate = false)
 	{
-		$pre = '';
-		$date = new fDate($ts);
-
-		if ($date->eq('today')) {
-			$pre = $this->s('today');
-		} elseif ($date->eq('tomorrow')) {
-			$pre = $this->s('tomorrow');
-		} elseif ($date->eq('-1 day')) {
-			$pre = $this->s('yesterday');
-		} else {
-			$days = $this->getDow();
-			$pre = $days[date('w', $ts)] . ', ' . (int)date('d', $ts) . '. ' . $this->s('smonth_' . date('n', $ts));
-			$year = date('Y', $ts);
-			if ($year != date('Y')) {
-				$pre = $pre . ' ' . $year;
-			}
-		}
-
-		return $pre . ', ' . date('H:i', $ts) . ' ' . $this->s('clock');
-	}
-
-	//given a unix time $ts it provides a human readable full date format + time with a relative time keyword like "today", "tomorrow",.. at the beginning. Seperated by a comma.
-	public function niceDateRelative($ts)
-	{
-		$pre = '';
 		$date = new fDate($ts);
 
 		if ($date->eq('today')) {
@@ -246,16 +223,22 @@ class Func
 			$pre = $this->s('tomorrow') . ', ';
 		} elseif ($date->eq('-1 day')) {
 			$pre = $this->s('yesterday') . ', ';
+		} else {
+			$pre = '';
+			$relativePlusDate = true;
 		}
 
-		$days = $this->getDow();
-		$pre = $pre . $days[date('w', $ts)] . ', ' . (int)date('d', $ts) . '. ' . $this->s('smonth_' . date('n', $ts));
-		$year = date('Y', $ts);
-		if ($year != date('Y')) {
-			$pre = $pre . ' ' . $year;
+		if ($relativePlusDate == true) {
+			$days = $this->getDow();
+			$pre = $pre . $days[date('w', $ts)] . ', ' . (int)date('d', $ts) . '. ' . $this->s('smonth_' . date('n', $ts));
+			$year = date('Y', $ts);
+			if ($year != date('Y')) {
+				$pre = $pre . ' ' . $year;
+			}
+			$pre = $pre . ', ';
 		}
 
-		return $pre . ', ' . date('H:i', $ts) . ' ' . $this->s('clock');
+		return $pre . date('H:i', $ts) . ' ' . $this->s('clock');
 	}
 
 	public function incLang($id)
