@@ -12,7 +12,7 @@ class IndexView extends View
 		$ps = new vPageslider();
 		$ps->addSection($this->campaign($first_content), array(
 			'color' => '#533a20',
-			'anchor' => 'festival'
+			'anchor' => 'hallowelt'
 		));
 
 		$ps->addSection($this->welcome(), array(
@@ -55,11 +55,7 @@ class IndexView extends View
 				<div id="campaignimg" class="pure-u-1 pure-u-sm-1-2" style="background-image:url(/img/festival2018.png)">
 				</div></a>
 				<div id="campaigntext" class="pure-u-1 pure-u-sm-1-2">
-				<h2>Sei dabei beim foodsharing festival 2018</h2>
-				<h3>21<small style="font-size:80%"> SEP</small> - 23<small style="font-size:80%"> SEP</small></h3>
-				<br>
-				' . $dynamic_line . '
-				<h3><a href="http://www.foodsharing-festival.org">foodsharing-festival.org</a></h3>
+				<h2>foodsharing ist und bleibt kostenlos, nicht kommerziell, unabhängig und werbefrei.</h2>
 				</div>
 			</div>
 		</div>
