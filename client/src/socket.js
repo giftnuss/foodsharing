@@ -16,30 +16,24 @@ export default {
     })
 
     socket.on('conv', function (data) {
-      switch (data.m) {
-        case 'push':
-          if (GET('page') === 'msg') {
-            msg.push(JSON.parse(data.o))
-          } else {
-            conv.push(JSON.parse(data.o))
-          }
-          break
+      if (data.m === 'push') {
+        if (GET('page') === 'msg') {
+          msg.push(JSON.parse(data.o))
+        } else {
+          conv.push(JSON.parse(data.o))
+        }
       }
     })
 
     socket.on('info', function (data) {
-      switch (data.m) {
-        case 'badge':
-          // info.badge('info', data.o.count)
-          break
+      if (data.m === 'badge') {
+        // info.badge('info', data.o.count)
       }
     })
 
     socket.on('bell', function (data) {
-      switch (data.m) {
-        case 'notify':
-          bellsStore.loadBells()
-          break
+      if (data.m === 'notify') {
+        bellsStore.loadBells()
       }
     })
   }
