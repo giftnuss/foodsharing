@@ -97,7 +97,8 @@ class BasketRestController extends FOSRestController
 	}
 
 	/**
-	 * Returns a list of all basket IDs together with the coordinates.
+	 * Returns a list of all basket IDs together with the coordinates. Returns
+	 * 200 or 401, if not logged in.
 	 *
 	 * @Rest\Get("baskets/coordinates")
 	 */
@@ -112,7 +113,8 @@ class BasketRestController extends FOSRestController
 	}
 
 	/**
-	 * Returns details of the basket with the given ID.
+	 * Returns details of the basket with the given ID. Returns 200 and the 
+	 * basket, 500 if the basket does not exist, or 401 if not logged in.
 	 *
 	 * @Rest\Get("baskets/basket/{basketId}", requirements={"basketId" = "\d+"})
 	 */
@@ -131,7 +133,8 @@ class BasketRestController extends FOSRestController
 	}
 
 	/**
-	 * Lists all baskets of the current user.
+	 * Lists all baskets of the current user. Returns 200 and a list of 
+	 * baskets or 401, if not logged in.
 	 *
 	 * @Rest\Get("baskets/mybaskets")
 	 */
@@ -244,7 +247,9 @@ class BasketRestController extends FOSRestController
 	}
 
 	/**
-	 * Removes a basket of this user with the given ID.
+	 * Removes a basket of this user with the given ID. Returns 200 if a basket
+	 * of the user was found and deleted, 404 if no such basket was found, or 
+	 * 401 if not logged in.
 	 *
 	 * @Rest\Get("baskets/remove/{basketId}", requirements={"basketId" = "\d+"})
 	 */
