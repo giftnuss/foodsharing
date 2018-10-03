@@ -4,7 +4,7 @@
 - Fix conversation name when changing store (name) #294 !508 @surrim
 - New non-festival homepage !546 @michi-zuri
 - Only set session cookie when logged in !544 @nicksellen
-- Added a second line to hover texts in stores #88 !547 @alexander.simm
+- Added a second line to hover texts in stores #88 !547 @alex.simm
 
 ## Bugfixes
 - Orga members are now able to leave stores they are not responsible for #283 !524 @annaos
