@@ -4,6 +4,7 @@ namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Basket\BasketGateway;
+use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -26,8 +27,10 @@ class BasketRestController extends FOSRestController
 	/**
 	 * Normalizes a basket request.
 	 */
-	private function normalizeRequest($request) {
+	private function normalizeRequest($request)
+	{
 		$user = RestNormalization::normalizeFoodsaver($request);
+
 		return [
 			'user' => $user,
 			'time' => $request['time_ts'],
@@ -51,7 +54,7 @@ class BasketRestController extends FOSRestController
 
 		//add requests, if there are any in the updates
 		foreach ($updates as $update) {
-			if ((int) $update['id'] == $basket['id']) {
+			if ((int)$update['id'] == $basket['id']) {
 				$basket['requests'][] = $this->normalizeRequest($update);
 				$basket['updatedAt'] = max($basket['updatedAt'], (int)$update['time_ts']);
 			}
@@ -76,8 +79,8 @@ class BasketRestController extends FOSRestController
 			'createdAt' => (int)$b['time_ts'],
 			'updatedAt' => (int)$b['time_ts'],
 			'until' => (int)$b['until_ts'],
-			'lat' => (double)$b['lat'],
-			'lon' => (double)$b['lon'],
+			'lat' => (float)$b['lat'],
+			'lon' => (float)$b['lon'],
 			'creator' => $creator
 		];
 
@@ -109,11 +112,12 @@ class BasketRestController extends FOSRestController
 		}
 
 		$baskets = $this->gateway->getBasketCoordinates();
+
 		return $this->handleView($this->view(['baskets' => $baskets], 200));
 	}
 
 	/**
-	 * Returns details of the basket with the given ID. Returns 200 and the 
+	 * Returns details of the basket with the given ID. Returns 200 and the
 	 * basket, 500 if the basket does not exist, or 401 if not logged in.
 	 *
 	 * @Rest\Get("baskets/basket/{basketId}", requirements={"basketId" = "\d+"})
@@ -126,14 +130,17 @@ class BasketRestController extends FOSRestController
 
 		//TODO: this throws (500 "Notice: Undefined index: foodsaver_id") instead of a 400 code
 		$basket = $this->gateway->getBasket($basketId);
-		$updates = $this->gateway->listUpdates($this->session->id());
-		$data = $this->normalizeBasket($basket, $updates);
+		if ($basket['status'] == Status::DELETED_OTHER_REASON || $basket['status'] == Status::DELETED_PICKED_UP) {
+			throw new HttpException(404);
+		}
+
+		$data = $this->normalizeBasket($basket);
 
 		return $this->handleView($this->view(['basket' => $data], 200));
 	}
 
 	/**
-	 * Lists all baskets of the current user. Returns 200 and a list of 
+	 * Lists all baskets of the current user. Returns 200 and a list of
 	 * baskets or 401, if not logged in.
 	 *
 	 * @Rest\Get("baskets/mybaskets")
@@ -146,8 +153,8 @@ class BasketRestController extends FOSRestController
 
 		$updates = $this->gateway->listUpdates($this->session->id());
 		$baskets = $this->gateway->listMyBaskets($this->session->id());
-		$data = array_map(function ($b) use ($updates) { 
-			return $this->normalizeMyBasket($b, $updates); 
+		$data = array_map(function ($b) use ($updates) {
+			return $this->normalizeMyBasket($b, $updates);
 		}, $baskets);
 
 		return $this->handleView($this->view(['baskets' => $data], 200));
@@ -155,7 +162,7 @@ class BasketRestController extends FOSRestController
 
 	/**
 	 * Adds a new basket. The description must not be empty, all other
-	 * parameters are optional.
+	 * parameters are optional. Returns the created basket.
 	 *
 	 * @Rest\Post("baskets/add")
 	 * @Rest\RequestParam(name="description", nullable=false)
@@ -196,7 +203,7 @@ class BasketRestController extends FOSRestController
 			'tel' => '',
 			'handy' => ''
 		];
-		$contactTypes = $paramFetcher->get('body');
+		$contactTypes = $paramFetcher->get('contactTypes');
 		if (!is_null($contactTypes) && is_array($contactTypes)) {
 			$contactString = implode(':', $contactTypes);
 			if (in_array(2, $contactTypes)) {
@@ -227,7 +234,7 @@ class BasketRestController extends FOSRestController
 				}
 			}
 
-			$this->basketGateway->addTypes($basketId, $types);
+			$this->gateway->addTypes($basketId, $types);
 		}
 
 		//add kinds of food
@@ -240,15 +247,18 @@ class BasketRestController extends FOSRestController
 				}
 			}
 
-			$this->basketGateway->addKind($basketId, $kinds);
+			$this->gateway->addKind($basketId, $kinds);
 		}
 
-		return $this->handleView($this->view([]), 200);
+		//return the created basket
+		$data = $this->normalizeBasket($this->gateway->getBasket($basketId));
+
+		return $this->handleView($this->view(['basket' => $data], 200));
 	}
 
 	/**
 	 * Removes a basket of this user with the given ID. Returns 200 if a basket
-	 * of the user was found and deleted, 404 if no such basket was found, or 
+	 * of the user was found and deleted, 404 if no such basket was found, or
 	 * 401 if not logged in.
 	 *
 	 * @Rest\Get("baskets/remove/{basketId}", requirements={"basketId" = "\d+"})
