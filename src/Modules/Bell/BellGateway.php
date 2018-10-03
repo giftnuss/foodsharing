@@ -172,7 +172,7 @@ class BellGateway extends BaseGateway
 		$this->db->execute($stm);
 	}
 
-	private function notifyFoodsaver(int $foodsaverId)
+	private function notifyFoodsaver(int $foodsaverId): void
 	{
 		$this->webSocketSender->sendSock($foodsaverId, 'bell', 'notify', []);
 	}
