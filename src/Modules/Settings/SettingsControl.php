@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Settings;
 
-use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -230,7 +229,7 @@ class SettingsControl extends Control
 					$this->func->error($this->func->s('not_rv_accepted'));
 				} else {
 					$this->session->set('hastodoquiz', false);
-					Mem::delPageCache('/?page=dashboard');
+					$this->mem->delPageCache('/?page=dashboard');
 					if (!$this->session->may('fs')) {
 						$this->model->updateRole(1, $this->foodsaver['rolle']);
 					}

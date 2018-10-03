@@ -19,6 +19,7 @@ use Foodsharing\Modules\Store\StoreGateway;
 class Session
 {
 	private $func;
+	private $mem;
 	private $legalGateway;
 	private $foodsaverGateway;
 	private $quizHelper;
@@ -30,6 +31,7 @@ class Session
 
 	public function __construct(
 		Func $func,
+		Mem $mem,
 		LegalGateway $legalGateway,
 		FoodsaverGateway $foodsaverGateway,
 		QuizHelper $quizHelper,
@@ -39,6 +41,7 @@ class Session
 		Db $db
 	) {
 		$this->func = $func;
+		$this->mem = $mem;
 		$this->legalGateway = $legalGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->quizHelper = $quizHelper;
@@ -46,6 +49,20 @@ class Session
 		$this->buddyGateway = $buddyGateway;
 		$this->storeGateway = $storeGateway;
 		$this->db = $db;
+	}
+
+	public function initIfCookieExists()
+	{
+		if (isset($_COOKIE[session_name()]) && !$this->initialized) {
+			$this->init();
+		}
+	}
+
+	public function checkInitialized()
+	{
+		if (!$this->initialized) {
+			throw new Exception('Session not initialized');
+		}
 	}
 
 	public function init()
@@ -59,7 +76,6 @@ class Session
 		ini_set('session.save_path', 'tcp://' . REDIS_HOST . ':' . REDIS_PORT);
 
 		fSession::setLength('24 hours', '1 week');
-		//fSession::enablePersistence();
 
 		fAuthorization::setAuthLevels(
 			array(
@@ -126,11 +142,18 @@ class Session
 
 	public function id()
 	{
+		if (!$this->initialized) {
+			return null;
+		}
+
 		return fAuthorization::getUserToken();
 	}
 
 	public function may($role = 'user')
 	{
+		if (!$this->initialized) {
+			return false;
+		}
 		if (fAuthorization::checkAuthLevel($role)) {
 			return true;
 		}
@@ -140,6 +163,9 @@ class Session
 
 	public function getLocation()
 	{
+		if (!$this->initialized) {
+			return false;
+		}
 		$loc = fSession::get('g_location', false);
 		if (!$loc) {
 			$loc = $this->db->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
@@ -159,16 +185,22 @@ class Session
 
 	public function destroy()
 	{
+		$this->checkInitialized();
 		fSession::destroy();
 	}
 
 	public function set($key, $value)
 	{
+		$this->checkInitialized();
 		fSession::set($key, $value);
 	}
 
 	public function get($var)
 	{
+		if (!$this->initialized) {
+			return false;
+		}
+
 		return fSession::get($var, false);
 	}
 
@@ -190,6 +222,7 @@ class Session
 
 	public function addMsg($message, $type, $title = null)
 	{
+		$this->checkInitialized();
 		$msg = fSession::get('g_message', array());
 
 		if (!isset($msg[$type])) {
@@ -320,11 +353,15 @@ class Session
 
 	public function refreshFromDatabase($fs_id = null)
 	{
+		if (!$this->initialized) {
+			$this->init();
+		}
+
 		if ($fs_id === null) {
 			$fs_id = $this->id();
 		}
 
-		Mem::updateActivity($fs_id);
+		$this->mem->updateActivity($fs_id);
 		$fs = $this->foodsaverGateway->getFoodsaverDetails($fs_id);
 		if (!$fs) {
 			$this->func->goPage('logout');
@@ -386,7 +423,7 @@ class Session
 		/*
 		 * Add entry into user -> session set
 		 */
-		Mem::userAddSession($fs_id, session_id());
+		$this->mem->userAddSession($fs_id, session_id());
 
 		/*
 		 * store all options in the session

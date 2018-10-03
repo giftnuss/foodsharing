@@ -1,11 +1,16 @@
 <?php
 
-use Foodsharing\DI;
 use Foodsharing\Lib\Routing;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrResponses;
+use Symfony\Component\DependencyInjection\Container;
 
 require __DIR__ . '/includes/setup.php';
+require_once 'config.inc.php';
+
+/* @var $container Container */
+global $container;
+$container = initializeContainer();
 
 if (isset($_GET['app']) && isset($_GET['m'])) {
 	$app = str_replace('/', '', $_GET['app']);
@@ -15,13 +20,13 @@ if (isset($_GET['app']) && isset($_GET['m'])) {
 	require_once 'lang/DE/de.php';
 
 	/* @var $session \Foodsharing\Lib\Session */
-	$session = DI::$shared->get(Session::class);
-	$session->init();
+	$session = $container->get(Session::class);
+	$session->initIfCookieExists();
 
 	$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
 	$class = Routing::getClassName($app, 'Xhr');
-	$obj = DI::$shared->get(ltrim($class, '\\'));
+	$obj = $container->get(ltrim($class, '\\'));
 
 	if (method_exists($obj, $meth)) {
 		$out = $obj->$meth($request);

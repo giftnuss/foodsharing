@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Permissions;
 
-use Foodsharing\DI;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -13,12 +12,18 @@ class WallPostPermissions
 	private $wallPostGateway;
 	private $regionGateway;
 	private $eventGateway;
+	private $fairteilerGateway;
 
-	public function __construct(RegionGateway $regionGateway, WallPostGateway $wallPostGateway, EventGateway $eventGateway)
-	{
+	public function __construct(
+		RegionGateway $regionGateway,
+		WallPostGateway $wallPostGateway,
+		EventGateway $eventGateway,
+		FairteilerGateway $fairteilerGateway
+	) {
 		$this->wallPostGateway = $wallPostGateway;
 		$this->regionGateway = $regionGateway;
 		$this->eventGateway = $eventGateway;
+		$this->fairteilerGateway = $fairteilerGateway;
 	}
 
 	public function mayReadWall($fsId, $target, $targetId)
@@ -54,7 +59,7 @@ class WallPostPermissions
 			case 'question':
 				return $fsId > 0;
 			case 'fairteiler':
-				return DI::$shared->get(FairTeilerGateway::class)->mayFairteiler($fsId, $targetId);
+				return $this->fairteilerGateway->mayFairteiler($fsId, $targetId);
 			default:
 				return $fsId > 0 && $this->mayReadWall($fsId, $target, $targetId);
 		}

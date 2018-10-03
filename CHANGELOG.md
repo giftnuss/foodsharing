@@ -4,6 +4,9 @@
 - Fix conversation name when changing store (name) #294 !508 @surrim
 - Notify user when bell notifications arrive without need for page reload #328 !542 @janopae
 - Fix read/unread behavior for bell notifications #328 !542 @janopae
+- New non-festival homepage !546 @michi-zuri
+- Only set session cookie when logged in !544 @nicksellen
+- Added a second line to hover texts in stores #88 !547 @alex.simm
 
 ## Bugfixes
 - Orga members are now able to leave stores they are not responsible for #283 !524 @annaos
@@ -12,8 +15,11 @@
 - removed not needed add store button from the dashboard !523 @peter.toennies
 - limit conversations sent to client at page loading !542 @janopae
 - check permissions before saving a wallpost in WallpostXhr !542 @janopae
+- stat_fetchrate is calculated correctly and shown in profile #281 @k.miklobusec
+- fix mail sending by passing instance of Mem to AsyncMail constructor !551 @nicksellen
 
 ## Refactoring
+- Unify Symfony DI configuration !544 @nicksellen
 
 ## Dev/Test/CI stuff
 

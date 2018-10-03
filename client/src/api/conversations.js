@@ -10,7 +10,8 @@ export async function getConversationList (limit = -1) {
   }
 
   const res = await get('/../xhrapp.php?app=msg&m=loadconvlist&raw=1' + limitParameter)
-  if (!res.data.convs) return []
+  if (!res.data || !res.data.convs) return []
+
   return res.data.convs.map(c => ({
     id: parseInt(c.id),
     title: c.name,

@@ -99,6 +99,16 @@ class StoreUserView extends View
 				$last = $this->func->sv('stat_fetchcount_none', array());
 			}
 
+			//date at which user was added
+			$memberSince = '';
+			if ($betrieb['verantwortlich']) {
+				$addDate = $fs['add_date'] ? date('d.m.Y', $fs['add_date'])
+						: '(' . $this->func->sv('stat_since_unknown', array()) . ')';
+				$memberSince = $this->func->sv('stat_teammember_since', array(
+					'date' => $addDate
+				));
+			}
+
 			$onclick = ' onclick="' . $click . 'return false;"';
 			$href = '#';
 			if ($number !== false && $this->func->isMob()) {
@@ -116,7 +126,7 @@ class StoreUserView extends View
 						</span>
 					</a>
 					<span style="display:none" class="tt-' . $fs['id'] . '">
-						' . $last . '
+						' . (!empty($memberSince) ? $memberSince . '<br>' : '') . $last . '
 					</span>
 				</li>';
 
@@ -147,6 +157,12 @@ class StoreUserView extends View
 					$tel .= '<span class="item phone"><span>' . $fs['telefon'] . '</span></span>';
 				}
 
+				//date at which jumper was added
+				$dateAdded = $fs['add_date'] ? date('d.m.Y', $fs['add_date']) : '(' . $this->func->sv('stat_since_unknown', array()) . ')';
+				$jumperSince = $this->func->sv('stat_jumper_since', array(
+					'date' => $dateAdded
+				));
+
 				$onclick = ' onclick="' . $click . 'return false;"';
 				$href = '#';
 				if ($this->func->isMob() && $number !== false) {
@@ -164,7 +180,7 @@ class StoreUserView extends View
 							</span>
 						</a>
 						<span style="display:none" class="tt-' . $fs['id'] . '">
-							' . $fs['vorname'] . ' ist Springer seit ' . date('m/y', $fs['add_date']) . '
+							' . $jumperSince . '
 						</span>
 					</li>';
 

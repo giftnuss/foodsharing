@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Lib\Db;
 
-use Foodsharing\DI;
 use Foodsharing\Lib\Func;
 use Redis;
 
@@ -11,35 +10,40 @@ class Mem
 	/**
 	 * @var Redis
 	 */
-	public static $cache;
-	public static $connected;
+	public $cache;
+	public $connected;
 	/**
 	 * @var Func
 	 */
-	private static $func;
+	private $func;
 
-	public static function connect()
+	public function __construct(Func $func)
+	{
+		$this->func = $func;
+	}
+
+	public function connect()
 	{
 		if (MEM_ENABLED) {
-			self::$connected = true;
-			self::$cache = new Redis();
-			self::$cache->connect(REDIS_HOST, REDIS_PORT);
+			$this->connected = true;
+			$this->cache = new Redis();
+			$this->cache->connect(REDIS_HOST, REDIS_PORT);
 		}
-		self::$func = DI::$shared->get(Func::class);
 	}
 
 	// Set a key to a value, ttl in seconds
-	public static function set($key, $data, $ttl = 0)
+	public function set($key, $data, $ttl = 0)
 	{
 		if (MEM_ENABLED) {
+			$this->ensureConnected();
 			$options = array();
 			if ($ttl > 0) {
 				$options['ex'] = $ttl;
 			}
 			if ($options) {
-				return self::$cache->set($key, $data, $options);
+				return $this->cache->set($key, $data, $options);
 			} else {
-				return self::$cache->set($key, $data);
+				return $this->cache->set($key, $data);
 			}
 		}
 
@@ -49,59 +53,64 @@ class Mem
 	/* enqueue work of specified type.
 	   counterpart of asynchronous queue runner in mails.control
 	 */
-	public static function queueWork($type, $data)
+	public function queueWork($type, $data)
 	{
 		if (MEM_ENABLED) {
 			$e = serialize(array('type' => $type, 'data' => $data));
+			$this->ensureConnected();
 
-			return self::$cache->lPush('workqueue', $e);
+			return $this->cache->lPush('workqueue', $e);
 		}
 	}
 
-	public static function get($key)
+	public function get($key)
 	{
 		if (MEM_ENABLED) {
-			return self::$cache->get($key);
+			$this->ensureConnected();
+
+			return $this->cache->get($key);
 		}
 
 		return false;
 	}
 
-	public static function del($key)
+	public function del($key)
 	{
 		if (MEM_ENABLED) {
-			return self::$cache->delete($key);
+			$this->ensureConnected();
+
+			return $this->cache->delete($key);
 		}
 
 		return false;
 	}
 
-	public static function user($id, $key)
+	public function user($id, $key)
 	{
-		return self::get('user-' . $key . '-' . $id);
+		return $this->get('user-' . $key . '-' . $id);
 	}
 
-	public static function userSet($id, $key, $value)
+	public function userSet($id, $key, $value)
 	{
-		return self::set('user-' . $key . '-' . $id, $value);
+		return $this->set('user-' . $key . '-' . $id, $value);
 	}
 
-	public static function userAppend($id, $key, $value)
+	public function userAppend($id, $key, $value)
 	{
 		$out = array();
-		if ($val = self::user($id, $key)) {
+		if ($val = $this->user($id, $key)) {
 			if (is_array($val)) {
 				$out = $val;
 			}
 		}
 		$out[] = $value;
 
-		return self::set('user-' . $key . '-' . $id, $out);
+		return $this->set('user-' . $key . '-' . $id, $out);
 	}
 
-	public static function userDel($id, $key)
+	public function userDel($id, $key)
 	{
-		return self::del('user-' . $key . '-' . $id);
+		return $this->del('user-' . $key . '-' . $id);
 	}
 
 	/*
@@ -112,31 +121,33 @@ class Mem
 	 * This then provides a way to get all the active sessions for a user and expire old ones.
 	 * See `chat/session-ids.lua` for a redis lua script that does this.
 	 */
-	public static function userAddSession($fs_id, $session_id)
+	public function userAddSession($fs_id, $session_id)
 	{
-		return self::$cache->sAdd(join(':', array('php', 'user', $fs_id, 'sessions')), $session_id);
+		$this->ensureConnected();
+
+		return $this->cache->sAdd(join(':', array('php', 'user', $fs_id, 'sessions')), $session_id);
 	}
 
-	public static function userRemoveSession($fs_id, $session_id)
+	public function userRemoveSession($fs_id, $session_id)
 	{
-		return self::$cache->sRem(join(':', array('php', 'user', $fs_id, 'sessions')), $session_id);
+		$this->ensureConnected();
+
+		return $this->cache->sRem(join(':', array('php', 'user', $fs_id, 'sessions')), $session_id);
 	}
 
-	public static function getPageCache()
+	public function getPageCache()
 	{
-		global $g_page_cache_suffix;
-
-		return self::get('pc-' . $_SERVER['REQUEST_URI'] . ':' . self::$func->fsId());
+		return $this->get('pc-' . $_SERVER['REQUEST_URI'] . ':' . $this->func->fsId());
 	}
 
-	public static function setPageCache($page, $ttl)
+	public function setPageCache($page, $ttl)
 	{
-		return self::set('pc-' . $_SERVER['REQUEST_URI'] . ':' . self::$func->fsId(), $page, $ttl);
+		return $this->set('pc-' . $_SERVER['REQUEST_URI'] . ':' . $this->func->fsId(), $page, $ttl);
 	}
 
-	public static function delPageCache($page)
+	public function delPageCache($page)
 	{
-		return self::del('pc-' . $page . ':' . self::$func->fsId());
+		return $this->del('pc-' . $page . ':' . $this->func->fsId());
 	}
 
 	/**
@@ -146,9 +157,9 @@ class Mem
 	 *
 	 * @return bool
 	 */
-	public static function userOnline($fs_id)
+	public function userOnline($fs_id)
 	{
-		if ($time = self::user($fs_id, 'active')) {
+		if ($time = $this->user($fs_id, 'active')) {
 			if ((time() - $time) < 600) {
 				return true;
 			}
@@ -156,8 +167,8 @@ class Mem
 		/*
 		 * free memcache from userdata
 		 */
-		self::userDel($fs_id, 'lastMailMessage');
-		self::userDel($fs_id, 'active');
+		$this->userDel($fs_id, 'lastMailMessage');
+		$this->userDel($fs_id, 'active');
 
 		return false;
 	}
@@ -169,26 +180,33 @@ class Mem
 	 *
 	 * @return bool
 	 */
-	public static function userIsActive($fs_id)
+	public function userIsActive($fs_id)
 	{
-		if ($time = self::user($fs_id, 'active')) {
+		if ($time = $this->user($fs_id, 'active')) {
 			return !((time() - $time) > 600);
 		}
 
 		return false;
 	}
 
-	public static function updateActivity($fs_id = null)
+	public function updateActivity($fs_id = null)
 	{
 		if ($fs_id) {
-			Mem::userSet($fs_id, 'active', time());
+			$this->userSet($fs_id, 'active', time());
 		}
 	}
 
-	public static function logout($fs_id)
+	public function logout($fs_id)
 	{
-		Mem::userDel($fs_id, 'active');
-		Mem::userDel($fs_id, 'lastMailMessage');
-		Mem::userRemoveSession($fs_id, session_id());
+		$this->userDel($fs_id, 'active');
+		$this->userDel($fs_id, 'lastMailMessage');
+		$this->userRemoveSession($fs_id, session_id());
+	}
+
+	public function ensureConnected()
+	{
+		if (!$this->connected) {
+			$this->connect();
+		}
 	}
 }

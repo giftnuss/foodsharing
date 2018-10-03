@@ -28,6 +28,7 @@ class XhrMethods
 {
 	private $model;
 	private $func;
+	private $mem;
 	private $session;
 	private $v_utils;
 	private $xhrViewUtils;
@@ -50,6 +51,7 @@ class XhrMethods
 	 */
 	public function __construct(
 		Func $func,
+		Mem $mem,
 		Session $session,
 		Db $model,
 		Utils $viewUtils,
@@ -67,6 +69,7 @@ class XhrMethods
 		ImageManager $imageManager)
 	{
 		$this->func = $func;
+		$this->mem = $mem;
 		$this->session = $session;
 		$this->model = $model;
 		$this->v_utils = $viewUtils;
@@ -247,7 +250,7 @@ class XhrMethods
 	public function xhr_grabInfo($data)
 	{
 		if ($this->session->may()) {
-			Mem::delPageCache('/?page=dashboard');
+			$this->mem->delPageCache('/?page=dashboard');
 			$fields = $this->func->unsetAll($data, array('photo_public', 'lat', 'lon', 'stadt', 'plz', 'anschrift'));
 
 			if ($this->model->updateFields($fields, 'fs_foodsaver', $this->func->fsId())) {
@@ -1381,7 +1384,7 @@ class XhrMethods
 		$this->func->handleTagselect('botschafter');
 
 		$this->regionGateway->update_bezirkNew($data['bezirk_id'], $g_data);
-		Mem::del('cb-' . $data['bezirk_id']);
+		$this->mem->del('cb-' . $data['bezirk_id']);
 
 		return $this->xhr_out('pulseInfo("' . $this->func->s('edit_success') . '");');
 	}
@@ -1493,7 +1496,7 @@ class XhrMethods
 	public function xhr_becomeBezirk($data)
 	{
 		if ($this->func->may()) {
-			Mem::delPageCache('/?page=dashboard');
+			$this->mem->delPageCache('/?page=dashboard');
 			$bezirk_id = (int)$data['b'];
 			$new = '';
 			if (isset($data['new'])) {
