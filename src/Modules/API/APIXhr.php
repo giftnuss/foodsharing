@@ -20,12 +20,12 @@ class APIXhr extends Control
 	private $webSocketSender;
 
 	public function __construct(
-        APIGateway $apiGateway,
-        LoginGateway $loginGateway,
-        MessageModel $messageModel,
-        BasketGateway $basketGateway,
-        Db $model,
-        WebSocketSender $websocketSender
+		APIGateway $apiGateway,
+		LoginGateway $loginGateway,
+		MessageModel $messageModel,
+		BasketGateway $basketGateway,
+		Db $model,
+		WebSocketSender $websocketSender
 	) {
 		$this->apiGateway = $apiGateway;
 		$this->loginGateway = $loginGateway;
