@@ -5,7 +5,7 @@ namespace Foodsharing\Modules\API;
 use Flourish\fImage;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\WebsocketSender;
+use Foodsharing\Lib\WebSocketSender;
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Login\LoginGateway;
@@ -17,22 +17,22 @@ class APIXhr extends Control
 	private $basketGateway;
 	private $apiGateway;
 	private $loginGateway;
-	private $websocketSender;
+	private $webSocketSender;
 
 	public function __construct(
-		APIGateway $apiGateway,
-		LoginGateway $loginGateway,
-		MessageModel $messageModel,
-		BasketGateway $basketGateway,
-		Db $model,
-		WebsocketSender $websocketSender
+        APIGateway $apiGateway,
+        LoginGateway $loginGateway,
+        MessageModel $messageModel,
+        BasketGateway $basketGateway,
+        Db $model,
+        WebSocketSender $websocketSender
 	) {
 		$this->apiGateway = $apiGateway;
 		$this->loginGateway = $loginGateway;
 		$this->messageModel = $messageModel;
 		$this->basketGateway = $basketGateway;
 		$this->model = $model;
-		$this->websocketSender = $websocketSender;
+		$this->webSocketSender = $websocketSender;
 		parent::__construct();
 
 		if ($_GET['m'] != 'login' && !$this->session->may()) {
@@ -72,7 +72,7 @@ class APIXhr extends Control
 						if ($m['id'] != $this->func->fsId()) {
 							Mem::userAppend($m['id'], 'msg-update', $conversation_id);
 
-							$this->websocketSender->sendSock($m['id'], 'conv', 'push', [
+							$this->webSocketSender->sendSock($m['id'], 'conv', 'push', [
 								'id' => $id,
 								'cid' => $conversation_id,
 								'fs_id' => $this->func->fsId(),

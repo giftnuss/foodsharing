@@ -11,7 +11,7 @@ export default {
   connect: function () {
     var socket = io.connect(window.location.host, { path: '/chat/socket.io' })
     socket.on('connect', function () {
-      console.log('Websocket connected.')
+      console.log('WebSocket connected.')
       socket.emit('register', session_id())
     })
 
