@@ -157,7 +157,7 @@ class MailboxXhr extends Control
 
 					$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von " . $this->func->niceDate($message['time_ts']) . " ---------\n\n>\t" . str_replace("\n", "\n>\t", $message['body']);
 
-					$mail = new AsyncMail();
+					$mail = new AsyncMail($this->mem);
 					$mail->setFrom($message['mailbox'] . '@' . DEFAULT_EMAIL_HOST, $this->session->user('name'));
 					if ($sender['personal']) {
 						$mail->addRecipient($sender['mailbox'] . '@' . $sender['host'], $sender['personal']);
@@ -385,7 +385,7 @@ class MailboxXhr extends Control
 			$from_name = $from['name'];
 		}
 
-		$mail = new AsyncMail();
+		$mail = new AsyncMail($this->mem);
 
 		$mail->setFrom($from_email, $from_name);
 

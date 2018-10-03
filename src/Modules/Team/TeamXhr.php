@@ -34,7 +34,7 @@ class TeamXhr extends Control
 
 		if ($id = $this->getPostInt('id')) {
 			if ($user = $this->gateway->getUser($id)) {
-				$mail = new AsyncMail();
+				$mail = new AsyncMail($this->mem);
 
 				if ($this->func->validEmail($_POST['email'])) {
 					$mail->setFrom($_POST['email']);

@@ -13,6 +13,7 @@
 - fix exception if request have no "msg"-Attribute in quickreply() in WallPostXhr !499 @annaos
 - removed not needed add store button from the dashboard !523 @peter.toennies
 - stat_fetchrate is calculated correctly and shown in profile #281 @k.miklobusec
+- fix mail sending by passing instance of Mem to AsyncMail constructor !551 @nicksellen
 
 ## Refactoring
 - Unify Symfony DI configuration !544 @nicksellen
