@@ -73,6 +73,7 @@ class DashboardControl extends Control
 		}
 
 		if (isset($_SESSION['client']['botschafter']) && is_array($_SESSION['client']['botschafter']) && count($_SESSION['client']['botschafter']) > 0) {
+			//this is is_bieb on purpose; prevents group administrators to be notified about the ambassador quiz
 			$is_bieb = true;
 		}
 
