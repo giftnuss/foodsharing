@@ -137,7 +137,7 @@ class ProfileView extends View
 		if ($this->foodsaver['stat_fetchrate'] > 0) {
 			$infos[] = array(
 				'name' => 'Abholquote',
-				'val' => $this->foodsaver['stat_fetchrate'] . '%'
+				'val' => $this->foodsaver['stat_fetchrate'] . '<span style="white-space:nowrap">&thinsp;</span>%'
 			);
 		}
 
