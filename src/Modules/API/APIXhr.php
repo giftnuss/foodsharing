@@ -252,7 +252,7 @@ class APIXhr extends Control
 				}
 
 				//fix lifetime between 1 and 21 days and convert from days to seconds
-				$lifetime = (float) $_GET['lifetime'];
+				$lifetime = (float)$_GET['lifetime'];
 				if ($lifetime < 1 || $lifetime > 21) {
 					$lifetime = 7;
 				}
