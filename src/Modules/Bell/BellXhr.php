@@ -48,7 +48,7 @@ class BellXhr extends Control
 
 					foreach ($betrieb_bells as $b) {
 						$bbells[] = array(
-							'id' => 'b-' . $b['id'],
+							'id' => $b['id'],
 							'name' => 'betrieb_fetch_title',
 							'body' => 'betrieb_fetch',
 							'vars' => array(
@@ -83,7 +83,7 @@ class BellXhr extends Control
 
 				foreach ($fbells as $b) {
 					$bbells[] = array(
-						'id' => 'f-' . $b['id'],
+						'id' => $b['id'],
 						'name' => 'sharepoint_activate_title',
 						'body' => 'sharepoint_activate',
 						'vars' => array(
