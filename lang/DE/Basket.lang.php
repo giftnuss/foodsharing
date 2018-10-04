@@ -10,7 +10,8 @@ $g_lang['contactmessage'] = 'Per Nachricht';
 $g_lang['fetchstate'] = 'Hat alles gut geklappt?';
 $g_lang['contact_type'] = 'Wie möchtest Du kontaktiert werden?';
 $g_lang['tel'] = 'Festnetztelefon';
-$g_lang['lifetime'] = 'Wann soll der Essenskorb automatisch ablaufen?';
+$g_lang['lifetime'] = 'Wie lange soll dein Essenskörb gültig sein?';
+$g_lang['lifetime_options'] = ['ein Tag', 'zwei Tage', 'drei Tage', 'eine Woche', 'zwei Wochen', 'drei Wochen'];
 
 $g_lang['no_requests'] = 'bisher keine Anfragen';
 $g_lang['one_request'] = 'eine Anfrage';

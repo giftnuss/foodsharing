@@ -239,6 +239,22 @@ class BasketView extends View
 		$out .= $this->v_utils->v_form_text('tel', ['value' => $foodsaver['telefon']]);
 		$out .= $this->v_utils->v_form_text('handy', ['value' => $foodsaver['handy']]);
 
+		$lifetimeNames = $this->func->sv('lifetime_options', array());
+		$out .= $this->v_utils->v_form_select(
+			'lifetime',
+			[
+				'values' => [
+					['id' => 1, 'name' => $lifetimeNames[0]],
+					['id' => 2, 'name' => $lifetimeNames[1]],
+					['id' => 3, 'name' => $lifetimeNames[2]],
+					['id' => 7, 'name' => $lifetimeNames[3]],
+					['id' => 14, 'name' => $lifetimeNames[4]],
+					['id' => 21, 'name' => $lifetimeNames[5]]
+				],
+				'selected' => 7,
+			]
+		);
+
 		$out .= $this->v_utils->v_form_checkbox(
 			'food_type',
 			[
@@ -263,21 +279,6 @@ class BasketView extends View
 					['id' => 3, 'name' => 'sind vegan'],
 					['id' => 4, 'name' => 'sind glutenfrei'],
 				],
-			]
-		);
-
-		$out .= $this->v_utils->v_form_select(
-			'lifetime',
-			[
-				'values' => [
-					['id' => 1, 'name' => '1 Tag'],
-					['id' => 2, 'name' => '2 Tage'],
-					['id' => 3, 'name' => '3 Tage'],
-					['id' => 7, 'name' => '1 Woche'],
-					['id' => 14, 'name' => '2 Wochen'],
-					['id' => 21, 'name' => '3 Wochen']
-				],
-				'selected' => 7,
 			]
 		);
 
