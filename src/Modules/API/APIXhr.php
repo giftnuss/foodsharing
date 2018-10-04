@@ -251,6 +251,13 @@ class APIXhr extends Control
 					}
 				}
 
+				//fix lifetime between 1 and 21 days and convert from days to seconds
+				$lifetime = (float) $_GET['lifetime'];
+				if ($lifetime < 1 || $lifetime > 21) {
+					$lifetime = 7;
+				}
+				$lifetime *= 60 * 60 * 24;
+
 				if ($id = $this->basketGateway->addBasket(
 					$desc,
 					$photo, // pic
@@ -260,6 +267,7 @@ class APIXhr extends Control
 					(int)$_GET['fetchart'], // location type
 					$lat, // lat
 					$lon, // lon
+					$lifetime,
 					$this->session->user('bezirk_id'),
 					$this->session->id()
 				)

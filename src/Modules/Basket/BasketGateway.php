@@ -27,6 +27,7 @@ class BasketGateway extends BaseGateway
 		$location_type,
 		$lat,
 		$lon,
+		$lifetime, //in seconds
 		$bezirk_id,
 		$fsId
 	): int {
@@ -53,7 +54,7 @@ class BasketGateway extends BaseGateway
 				'lon' => (float)$lon,
 				'bezirk_id' => (int)$bezirk_id,
 				'appost' => $appost,
-				'until' => date('Y-m-d', time() + 1209600),
+				'until' => date('Y-m-d', time() + $lifetime),
 			]
 		);
 	}

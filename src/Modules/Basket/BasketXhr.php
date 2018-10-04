@@ -184,6 +184,13 @@ class BasketXhr extends Control
 			}
 		}
 
+		//fix lifetime between 1 and 21 days and convert from days to seconds
+		$lifetime = (int)$data['lifetime'];
+		if ($lifetime < 1 || $lifetime > 21) {
+			$lifetime = 7;
+		}
+		$lifetime *= 60 * 60 * 24;
+
 		if (!empty($desc) && ($id = $this->basketGateway->addBasket(
 				$desc,
 				$pic,
@@ -193,6 +200,7 @@ class BasketXhr extends Control
 				$location_type,
 				$lat,
 				$lon,
+				$lifetime,
 				$this->session->user('bezirk_id'),
 				$this->session->id()
 			))) {

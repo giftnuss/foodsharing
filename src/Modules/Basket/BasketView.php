@@ -266,6 +266,21 @@ class BasketView extends View
 			]
 		);
 
+		$out .= $this->v_utils->v_form_select(
+			'lifetime',
+			[
+				'values' => [
+					['id' => 1, 'name' => '1 Tag'],
+					['id' => 2, 'name' => '2 Tage'],
+					['id' => 3, 'name' => '3 Tage'],
+					['id' => 7, 'name' => '1 Woche'],
+					['id' => 14, 'name' => '2 Wochen'],
+					['id' => 21, 'name' => '3 Wochen']
+				],
+				'selected' => 7,
+			]
+		);
+
 		return $out;
 	}
 
