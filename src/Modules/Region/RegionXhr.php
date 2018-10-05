@@ -63,9 +63,7 @@ class RegionXhr extends Control
 				$sub = 'botforum';
 			}
 
-			$body = strip_tags($_POST['msg']);
-			$body = nl2br($body);
-			$body = $this->func->autolink($body);
+			$body = $_POST['msg'];
 
 			if ($this->forumPermissions->mayPostToThread($_GET['tid'])
 				&& $bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid'])

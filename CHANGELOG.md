@@ -17,6 +17,7 @@
 - check permissions before saving a wallpost in WallpostXhr !542 @janopae
 - stat_fetchrate is calculated correctly and shown in profile #281 @k.miklobusec
 - fix mail sending by passing instance of Mem to AsyncMail constructor !551 @nicksellen
+- fixed wrong html formatting in quick replies to forum posts !534 @peter.toennies
 
 ## Refactoring
 - Unify Symfony DI configuration !544 @nicksellen
