@@ -206,9 +206,9 @@ class Func
 	{
 		if (date('Y-m-d', $ts) == date('Y-m-d')) {
 			return $this->s('today') . ' ' . date('H:i', $ts);
-		} else {
-			return date('j.m.Y. H:i', $ts);
 		}
+
+		return date('j.m.Y. H:i', $ts);
 	}
 
 	public function niceDate($ts)
@@ -246,9 +246,9 @@ class Func
 
 		if (isset($g_lang[$id])) {
 			return $g_lang[$id];
-		} else {
-			return $id;
 		}
+
+		return $id;
 	}
 
 	public function format_d($ts)
@@ -273,9 +273,9 @@ class Func
 		$p = explode(':', $time);
 		if (count($p) >= 2) {
 			return (int)$p[0] . '.' . $p[1] . ' Uhr';
-		} else {
-			return '';
 		}
+
+		return '';
 	}
 
 	public function ts_day($ts)
@@ -298,15 +298,19 @@ class Func
 		if ($diff < 600) {
 			// letzte 10 minuten
 			return $this->s('currently');
-		} elseif ($diff < 86400) {
+		}
+
+		if ($diff < 86400) {
 			// heute noch
 			return $this->sv('today_time', $this->ts_time($ts));
-		} elseif ($diff < 604800) {
+		}
+
+		if ($diff < 604800) {
 			// diese woche noch
 			return $this->ts_day($ts) . ', ' . $this->ts_time($ts);
-		} else {
-			return $this->s('before_one_week');
 		}
+
+		return $this->s('before_one_week');
 	}
 
 	public function makeThumbs($pic)
@@ -366,9 +370,9 @@ class Func
 			}
 
 			return str_replace($search, $replace, $g_lang[$id]);
-		} else {
-			return str_replace('{var}', $var, $g_lang[$id]);
 		}
+
+		return str_replace('{var}', $var, $g_lang[$id]);
 	}
 
 	public function addBread($name, $href = '')
@@ -391,9 +395,9 @@ class Func
 	{
 		if (isset($_GET['a']) && $_GET['a'] == $a) {
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function pageLink($page, $id, $action = '')
@@ -409,9 +413,9 @@ class Func
 	{
 		if (isset($_GET['a'], $_GET['id']) && $_GET['a'] == $a && (int)$_GET['id'] > 0) {
 			return (int)$_GET['id'];
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function isBotForA($regions_ids, $include_groups = true, $include_parent_regions = false): bool
@@ -525,9 +529,9 @@ class Func
 	{
 		if ($i < 10) {
 			return '0' . $i;
-		} else {
-			return $i;
 		}
+
+		return $i;
 	}
 
 	public function getDow()
@@ -683,9 +687,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		if (!empty($file)) {
 			return 'images/' . str_replace('/', '/' . $size . '_', $file);
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function img($file = false, $size = 'mini', $format = 'q', $altimg = false)
@@ -701,22 +705,22 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			}
 
 			return '/images/' . $size . '_' . $format . '_' . $file;
-		} else {
-			if ($altimg === false) {
-				return '/img/' . $size . '_' . $format . '_avatar.png';
-			} else {
-				return $altimg;
-			}
 		}
+
+		if ($altimg === false) {
+			return '/img/' . $size . '_' . $format . '_avatar.png';
+		}
+
+		return $altimg;
 	}
 
 	public function isMob()
 	{
 		if (isset($_SESSION['mob']) && $_SESSION['mob'] == 1) {
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function id($name)
@@ -763,9 +767,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 				'mime' => mime_content_type('./data/attach/' . $new_name),
 				'size' => $size
 			);
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function checkInput($option, $name)
@@ -807,9 +811,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		if (isset($_POST)) {
 			return $_POST;
-		} else {
-			return array();
 		}
+
+		return array();
 	}
 
 	public function getValue($id)
@@ -818,9 +822,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 		if (isset($g_data[$id])) {
 			return $g_data[$id];
-		} else {
-			return '';
 		}
+
+		return '';
 	}
 
 	public function jsSafe($str, $quote = "'")
@@ -880,18 +884,18 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		if (isset($_GET[$name]) && (int)$_GET[$name] > 0) {
 			return (int)$_GET[$name];
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function getGet($name)
 	{
 		if (isset($_GET[$name])) {
 			return $_GET[$name];
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function addGet($name, $val)
@@ -1042,9 +1046,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		if (isset($_SESSION['client']) && $_SESSION['client']['id'] > 0) {
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function addWebpackScript($src)
@@ -1240,16 +1244,18 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		if ($this->loggedIn()) {
 			return $_SESSION['client']['id'];
-		} else {
-			return 0;
 		}
+
+		return 0;
 	}
 
 	public function isVerified()
 	{
 		if ($this->session->isOrgaTeam()) {
 			return true;
-		} elseif (isset($_SESSION['client']['verified']) && $_SESSION['client']['verified'] == 1) {
+		}
+
+		if (isset($_SESSION['client']['verified']) && $_SESSION['client']['verified'] == 1) {
 			return true;
 		}
 
@@ -1260,9 +1266,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function validUrl($url)
@@ -1466,9 +1472,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		if (isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0) {
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function getRolle($gender_id, $rolle_id)

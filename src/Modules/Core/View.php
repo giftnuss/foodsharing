@@ -258,15 +258,15 @@ class View
 				' . $out . '
 			</ul>
 		</div>';
-		} else {
-			return '
-			<h3 class="head ui-widget-header ui-corner-top">' . $title . '</h3>
-			<div class="ui-widget ui-widget-content ui-corner-bottom ui-padding margin-bottom">
-				<ul class="linklist">
-					' . $out . '
-				</ul>
-			</div>';
 		}
+
+		return '
+		<h3 class="head ui-widget-header ui-corner-top">' . $title . '</h3>
+		<div class="ui-widget ui-widget-content ui-corner-bottom ui-padding margin-bottom">
+			<ul class="linklist">
+				' . $out . '
+			</ul>
+		</div>';
 	}
 
 	public function peopleChooser($id, $option = array())

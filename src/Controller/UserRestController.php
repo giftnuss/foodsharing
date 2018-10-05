@@ -50,8 +50,8 @@ class UserRestController extends FOSRestController
 				'name' => $user['name']
 				// this response can get extended further, once needed
 			], 200));
-		} else {
-			throw new HttpException(401, 'email or password are invalid');
 		}
+
+		throw new HttpException(401, 'email or password are invalid');
 	}
 }

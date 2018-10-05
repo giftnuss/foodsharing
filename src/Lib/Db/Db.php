@@ -139,9 +139,9 @@ class Db
 
 		if (count($out) > 0) {
 			return $out;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	/**
@@ -184,9 +184,9 @@ class Db
 	{
 		if ($res = $this->sql($sql)) {
 			return $this->mysqli->insert_id;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	/**
@@ -196,9 +196,9 @@ class Db
 	{
 		if ($this->sql($sql)) {
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	/**

@@ -153,8 +153,8 @@ class EmailGateway extends BaseGateway
 
 		if ($row['anz'] == 0) {
 			return false;
-		} else {
-			return $row;
 		}
+
+		return $row;
 	}
 }

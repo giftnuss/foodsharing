@@ -119,13 +119,13 @@ class MailboxXhr extends Control
 						' . $nc_js . '
 					'
 				);
-			} else {
-				return array(
-					'status' => 1,
-					'html' => $this->view->noMessage(),
-					'append' => '#messagelist tbody'
-				);
 			}
+
+			return array(
+				'status' => 1,
+				'html' => $this->view->noMessage(),
+				'append' => '#messagelist tbody'
+			);
 		}
 	}
 

@@ -347,9 +347,9 @@ class FairTeilerControl extends Control
 				$this->gateway->updateVerantwortliche($this->fairteiler['id'], $responsible);
 
 				return $this->gateway->updateFairteiler($this->fairteiler['id'], $data);
-			} else {
-				return false;
 			}
+
+			return false;
 		}
 	}
 
@@ -364,9 +364,9 @@ class FairTeilerControl extends Control
 			$data['status'] = $status;
 
 			return $this->gateway->addFairteiler($this->func->fsId(), $data);
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	private function isFollower()

@@ -41,9 +41,9 @@ class MailboxModel extends Db
 			');
 
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function getMailAdresses()
@@ -424,9 +424,9 @@ class MailboxModel extends Db
 
 		if (!empty($mb_name)) {
 			return $mb_name;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	/**

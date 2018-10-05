@@ -282,18 +282,19 @@ class MessageModel extends Db
 
 		if ($cache === 0) {
 			return false;
-		} elseif (is_array($cache)) {
+		}
+
+		if (is_array($cache)) {
 			$this->mem->userSet($this->func->fsId(), 'msg-update', 0);
 
 			return $cache;
-		} /*
+		}  /*
 		 * Memcache is not settedso get coonversation ids direct fromdm
 		 */
-		else {
-			$this->mem->userSet($this->func->fsId(), 'msg-update', 0);
 
-			return $this->getUpdatedConversationIds();
-		}
+		$this->mem->userSet($this->func->fsId(), 'msg-update', 0);
+
+		return $this->getUpdatedConversationIds();
 	}
 
 	private function getUpdatedConversationIds()

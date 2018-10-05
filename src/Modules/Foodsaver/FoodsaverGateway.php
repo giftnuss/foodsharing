@@ -302,9 +302,9 @@ class FoodsaverGateway extends BaseGateway
 			');
 
 			return $out;
-		} else {
-			return array();
 		}
+
+		return array();
 	}
 
 	public function getEmailAdressen($region_ids)

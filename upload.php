@@ -79,9 +79,9 @@ function cropImage($bild, $x, $y, $w, $h)
 		$image->saveChanges();
 
 		return 'thumb_crop_' . $bild;
-	} else {
-		return false;
 	}
+
+	return false;
 }
 
 function is_allowed($img)
@@ -99,7 +99,9 @@ function is_allowed($img)
 
 	if (!isset($allowed[$ext])) {
 		return false;
-	} elseif (isset($allowed_mime[$img['type']])) {
+	}
+
+	if (isset($allowed_mime[$img['type']])) {
 		return true;
 	}
 

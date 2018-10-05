@@ -175,9 +175,9 @@ abstract class Control
 			$val = $_REQUEST[$name];
 
 			return $val;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function wallposts($table, $id)

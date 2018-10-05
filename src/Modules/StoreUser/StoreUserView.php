@@ -228,45 +228,45 @@ class StoreUserView extends View
 	{
 		if (empty($betriebe)) {
 			return '';
-		} else {
-			$bezirk = false;
-			$betriebrows = array();
-			foreach ($betriebe as $i => $b) {
-				$status = $this->v_utils->v_getStatusAmpel($b['betrieb_status_id']);
-
-				$betriebrows[$i] = array(
-					array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $b['name'] . '</a>'),
-					array('cnt' => $b['str'] . ' ' . $b['hsnr']),
-					array('cnt' => $b['plz']),
-					array('cnt' => $status)
-				);
-
-				if (isset($b['bezirk_name'])) {
-					$betriebrows[$i][] = array('cnt' => $b['bezirk_name']);
-					$bezirk = true;
-				}
-
-				if ($verantwortlich) {
-					$betriebrows[$i][] = array('cnt' => $this->v_utils->v_toolbar(array('id' => $b['id'], 'types' => array('edit'), 'confirmMsg' => 'Soll ' . $b['name'] . ' wirklich unwiderruflich gel&ouml;scht werden?')));
-				}
-			}
-
-			$head = array(
-				array('name' => 'Name', 'width' => 180),
-				array('name' => 'Anschrift'),
-				array('name' => 'Postleitzahl', 'width' => 90),
-				array('name' => 'Status', 'width' => 50));
-			if ($bezirk) {
-				$head[] = array('name' => 'Region');
-			}
-			if ($verantwortlich) {
-				$head[] = array('name' => 'Aktionen', 'sort' => false, 'width' => 30);
-			}
-
-			$table = $this->v_utils->v_tablesorter($head, $betriebrows);
-
-			return $this->v_utils->v_field($table, $title);
 		}
+
+		$bezirk = false;
+		$betriebrows = array();
+		foreach ($betriebe as $i => $b) {
+			$status = $this->v_utils->v_getStatusAmpel($b['betrieb_status_id']);
+
+			$betriebrows[$i] = array(
+				array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $b['name'] . '</a>'),
+				array('cnt' => $b['str'] . ' ' . $b['hsnr']),
+				array('cnt' => $b['plz']),
+				array('cnt' => $status)
+			);
+
+			if (isset($b['bezirk_name'])) {
+				$betriebrows[$i][] = array('cnt' => $b['bezirk_name']);
+				$bezirk = true;
+			}
+
+			if ($verantwortlich) {
+				$betriebrows[$i][] = array('cnt' => $this->v_utils->v_toolbar(array('id' => $b['id'], 'types' => array('edit'), 'confirmMsg' => 'Soll ' . $b['name'] . ' wirklich unwiderruflich gel&ouml;scht werden?')));
+			}
+		}
+
+		$head = array(
+			array('name' => 'Name', 'width' => 180),
+			array('name' => 'Anschrift'),
+			array('name' => 'Postleitzahl', 'width' => 90),
+			array('name' => 'Status', 'width' => 50));
+		if ($bezirk) {
+			$head[] = array('name' => 'Region');
+		}
+		if ($verantwortlich) {
+			$head[] = array('name' => 'Aktionen', 'sort' => false, 'width' => 30);
+		}
+
+		$table = $this->v_utils->v_tablesorter($head, $betriebrows);
+
+		return $this->v_utils->v_field($table, $title);
 	}
 
 	/**

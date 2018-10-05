@@ -303,11 +303,11 @@ class XhrMethods
 					'status' => 1,
 					'html' => $this->xhrViewUtils->childBezirke($childs, $data['parent'])
 				));
-			} else {
-				return json_encode(array(
-					'status' => 0
-				));
 			}
+
+			return json_encode(array(
+				'status' => 0
+			));
 		}
 	}
 
@@ -946,9 +946,9 @@ class XhrMethods
 			}
 
 			return json_encode(array('left' => $mails_left, 'status' => 1, 'comment' => 'Versende E-Mails ... (aktuelle E-Mail-Adresse: ' . $fs['email'] . ')'));
-		} else {
-			return 0;
 		}
+
+		return 0;
 	}
 
 	public function xhr_uploadPhoto($data)
@@ -1286,11 +1286,11 @@ class XhrMethods
 			$msg = 'Deine Anfrage wurde erfolgreich zur&uuml;ckgezogen!';
 
 			return json_encode(array('status' => 1, 'msg' => $msg));
-		} else {
-			$msg = 'Es ist ein Fehler aufgetreten!';
-
-			return json_encode(array('status' => 0, 'msg' => $msg));
 		}
+
+		$msg = 'Es ist ein Fehler aufgetreten!';
+
+		return json_encode(array('status' => 0, 'msg' => $msg));
 	}
 
 	public function xhr_acceptRequest($data)
@@ -1439,13 +1439,15 @@ class XhrMethods
 				$this->func->info($this->func->s('date_add_successful'));
 
 				return '2';
-			} elseif (!empty($data['from'])) {
+			}
+
+			if (!empty($data['from'])) {
 				return 0;
-			} else {
-				$data['date'] = date('Y-m-d H:i:s', strtotime($data['date']));
-				if ($this->storeGateway->addFetcher($this->session->id(), $data['bid'], $data['date'], $confirm)) {
-					return $this->func->img($this->model->getVal('photo', 'foodsaver', $this->func->fsId()));
-				}
+			}
+
+			$data['date'] = date('Y-m-d H:i:s', strtotime($data['date']));
+			if ($this->storeGateway->addFetcher($this->session->id(), $data['bid'], $data['date'], $confirm)) {
+				return $this->func->img($this->model->getVal('photo', 'foodsaver', $this->func->fsId()));
 			}
 		}
 
@@ -1556,13 +1558,13 @@ class XhrMethods
 						'status' => 1,
 						'botschafter' => $botschafter
 					));
-				} else {
-					return json_encode(array(
-						'active' => $active,
-						'status' => 1,
-						'botschafter' => false
-					));
 				}
+
+				return json_encode(array(
+					'active' => $active,
+					'status' => 1,
+					'botschafter' => false
+				));
 				//}
 			}
 		}
@@ -1575,9 +1577,9 @@ class XhrMethods
 			$this->storeGateway->deleteBPost($data['pid']);
 
 			return 1;
-		} else {
-			return 0;
 		}
+
+		return 0;
 	}
 
 	public function xhr_delPost($data)
@@ -1590,9 +1592,9 @@ class XhrMethods
 			$this->forumGateway->deletePost($data['pid']);
 
 			return 1;
-		} else {
-			return 0;
 		}
+
+		return 0;
 	}
 
 	public function xhr_abortEmail($data)
