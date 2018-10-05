@@ -172,9 +172,7 @@ abstract class Control
 	public function getRequest($name)
 	{
 		if (isset($_REQUEST[$name])) {
-			$val = $_REQUEST[$name];
-
-			return $val;
+			return $_REQUEST[$name];
 		}
 
 		return false;

@@ -95,9 +95,7 @@ class MessageModel extends Db
 
 	public function conversationLocked($cid)
 	{
-		$res = $this->qOne('SELECT locked FROM fs_conversation WHERE id = ' . (int)$cid);
-
-		return $res;
+		return $this->qOne('SELECT locked FROM fs_conversation WHERE id = ' . (int)$cid);
 	}
 
 	public function updateConversation($cid, $last_fs_id, $body, $last_message_id)
