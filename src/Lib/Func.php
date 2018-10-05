@@ -211,11 +211,11 @@ class Func
 		return date('j.m.Y. H:i', $ts);
 	}
 
-	//given a unix time $ts (=time seconds) provides a human readable full date format.
-	//Parameter $relativePlusDate == true adds the date between "heute/morgen" and the time while false leaves it empty
-	public function niceDate($ts, $relativePlusDate = false)
+	// given a unix time it provides a human readable full date format.
+	// parameter $relativePlusDate == true adds the date between "today/tomorrow" and the time while false leaves it empty.
+	public function niceDate($timeInSeconds, $relativePlusDate = false): string
 	{
-		$date = new fDate($ts);
+		$date = new fDate($timeInSeconds);
 
 		if ($date->eq('today')) {
 			$pre = $this->s('today') . ', ';
@@ -228,17 +228,17 @@ class Func
 			$relativePlusDate = true;
 		}
 
-		if ($relativePlusDate == true) {
+		if ($relativePlusDate) {
 			$days = $this->getDow();
-			$pre = $pre . $days[date('w', $ts)] . ', ' . (int)date('d', $ts) . '. ' . $this->s('smonth_' . date('n', $ts));
-			$year = date('Y', $ts);
-			if ($year != date('Y')) {
+			$pre = $pre . $days[date('w', $timeInSeconds)] . ', ' . (int)date('d', $timeInSeconds) . '. ' . $this->s('smonth_' . date('n', $timeInSeconds));
+			$year = date('Y', $timeInSeconds);
+			if ($year !== date('Y')) {
 				$pre = $pre . ' ' . $year;
 			}
-			$pre = $pre . ', ';
+			$pre .= ', ';
 		}
 
-		return $pre . date('H:i', $ts) . ' ' . $this->s('clock');
+		return $pre . date('H:i', $timeInSeconds) . ' ' . $this->s('clock');
 	}
 
 	public function incLang($id)
