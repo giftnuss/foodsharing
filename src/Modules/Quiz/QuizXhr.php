@@ -328,6 +328,9 @@ class QuizXhr extends Control
 			return $return;
 		}
 
+		/*
+		 * Otherwise, we start a new quiz session
+		 */
 		if ($quiz = $this->model->getQuiz($_GET['qid'])) {
 			/*
 			 * if foodsaver quiz, user can choose between easy and quick mode
@@ -376,9 +379,7 @@ class QuizXhr extends Control
 
 				return $return;
 			}
-		} /*
-		 * Otherwise, we start a new quiz session
-		 */
+		}
 
 		/*
 		 * If we can't get a quiz from the db, send an error
