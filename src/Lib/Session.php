@@ -330,7 +330,7 @@ class Session
 
 	public function mayGroup($group)
 	{
-		if (isset($_SESSION) && isset($_SESSION['client']['group'][$group])) {
+		if (isset($_SESSION['client']['group'][$group])) {
 			return true;
 		}
 

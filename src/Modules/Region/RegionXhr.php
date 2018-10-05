@@ -57,7 +57,8 @@ class RegionXhr extends Control
 
 	public function quickreply()
 	{
-		if (isset($_GET['bid']) && isset($_GET['tid']) && isset($_GET['pid']) && $this->session->may() && isset($_POST['msg']) && $_POST['msg'] != '') {
+		if (isset($_GET['bid'], $_GET['tid'], $_GET['pid'], $_POST['msg']) && $this->session->may(
+			) && $_POST['msg'] != '') {
 			$sub = 'forum';
 			if ($_GET['sub'] != 'forum') {
 				$sub = 'botforum';

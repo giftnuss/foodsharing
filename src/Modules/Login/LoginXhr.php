@@ -258,7 +258,7 @@ class LoginXhr extends Control
 
 			$email = '';
 			$pass = '';
-			if (isset($_GET['p']) && isset($_GET['e'])) {
+			if (isset($_GET['p'], $_GET['e'])) {
 				if ($this->func->validEmail($_GET['e'])) {
 					$email = strip_tags($_GET['e']);
 				}

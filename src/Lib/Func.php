@@ -407,7 +407,7 @@ class Func
 
 	public function getActionId($a)
 	{
-		if (isset($_GET['a']) && $_GET['a'] == $a && isset($_GET['id']) && (int)$_GET['id'] > 0) {
+		if (isset($_GET['a'], $_GET['id']) && $_GET['a'] == $a && (int)$_GET['id'] > 0) {
 			return (int)$_GET['id'];
 		} else {
 			return false;
@@ -1435,7 +1435,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	 */
 	public function mayGroup($group)
 	{
-		if (isset($_SESSION) && isset($_SESSION['client']['group'][$group])) {
+		if (isset($_SESSION['client']['group'][$group])) {
 			return true;
 		}
 
@@ -1464,7 +1464,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function may()
 	{
-		if (isset($_SESSION) && isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0) {
+		if (isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0) {
 			return true;
 		} else {
 			return false;

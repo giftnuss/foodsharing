@@ -165,7 +165,7 @@ class LoginControl extends Control
 
 		if ($k !== false && $this->model->checkResetKey($k)) {
 			if ($this->model->checkResetKey($k)) {
-				if (isset($_POST['pass1']) && isset($_POST['pass2'])) {
+				if (isset($_POST['pass1'], $_POST['pass2'])) {
 					if ($_POST['pass1'] == $_POST['pass2']) {
 						$check = true;
 						if ($this->model->newPassword($_POST)) {

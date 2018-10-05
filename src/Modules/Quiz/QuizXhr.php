@@ -34,7 +34,7 @@ class QuizXhr extends Control
 )
 		 */
 		if ($this->func->mayEditQuiz()) {
-			if (isset($_GET['text']) && isset($_GET['fp']) && isset($_GET['qid'])) {
+			if (isset($_GET['text'], $_GET['fp'], $_GET['qid'])) {
 				$fp = (int)$_GET['fp'];
 				$text = strip_tags($_GET['text']);
 				$duration = (int)$_GET['duration'];
@@ -92,7 +92,7 @@ class QuizXhr extends Control
 		 */
 
 		if ($this->func->mayEditQuiz()) {
-			if (isset($_GET['text']) && isset($_GET['right']) && isset($_GET['qid'])) {
+			if (isset($_GET['text'], $_GET['right'], $_GET['qid'])) {
 				$text = strip_tags($_GET['text']);
 				$exp = strip_tags($_GET['explanation']);
 				$right = (int)$_GET['right'];
@@ -117,7 +117,7 @@ class QuizXhr extends Control
 	public function updateansw()
 	{
 		if ($this->func->mayEditQuiz()) {
-			if (isset($_GET['text']) && isset($_GET['right']) && isset($_GET['id'])) {
+			if (isset($_GET['text'], $_GET['right'], $_GET['id'])) {
 				$text = strip_tags($_GET['text']);
 				$exp = strip_tags($_GET['explanation']);
 				$right = (int)$_GET['right'];
@@ -1161,7 +1161,7 @@ class QuizXhr extends Control
 				 [text] => test
 				 [fp] => 3
 			 */
-			if (isset($_GET['text']) && isset($_GET['fp']) && isset($_GET['id'])) {
+			if (isset($_GET['text'], $_GET['fp'], $_GET['id'])) {
 				$fp = (int)$_GET['fp'];
 				$text = strip_tags($_GET['text']);
 				$duration = (int)$_GET['duration'];

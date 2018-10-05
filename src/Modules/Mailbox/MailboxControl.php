@@ -16,7 +16,7 @@ class MailboxControl extends Control
 
 	public function dlattach()
 	{
-		if (isset($_GET['mid']) && isset($_GET['i'])) {
+		if (isset($_GET['mid'], $_GET['i'])) {
 			if ($m = $this->model->getValues(array('mailbox_id', 'attach'), 'mailbox_message', $_GET['mid'])) {
 				if ($this->model->mayMailbox($m['mailbox_id'])) {
 					if ($attach = json_decode($m['attach'], true)) {

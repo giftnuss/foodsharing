@@ -152,7 +152,7 @@ class MailboxXhr extends Control
 		if (isset($_GET['mid']) && $this->model->mayMessage($_GET['mid'])) {
 			if ($message = $this->model->getMessage($_GET['mid'])) {
 				$sender = @json_decode($message['sender'], true);
-				if ($sender != null && isset($sender['mailbox']) && isset($sender['host'])) {
+				if (isset($sender['mailbox'], $sender['host']) && $sender != null) {
 					$subject = 'Re: ' . trim(str_replace(array('Re:', 'RE:', 're:', 'aw:', 'Aw:', 'AW:'), '', $message['subject']));
 
 					$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von " . $this->func->niceDate($message['time_ts']) . " ---------\n\n>\t" . str_replace("\n", "\n>\t", $message['body']);
@@ -226,7 +226,7 @@ class MailboxXhr extends Control
 				if (isset($_POST['attach']) && is_array($_POST['attach'])) {
 					$attach = array();
 					foreach ($_POST['attach'] as $a) {
-						if (isset($a['name']) && isset($a['tmp'])) {
+						if (isset($a['name'], $a['tmp'])) {
 							$tmp = str_replace(array('/', '\\'), '', $a['tmp']);
 							$name = strtolower($a['name']);
 							str_replace(array('ä', 'ö', 'ü', 'ß', ' '), array('ae', 'oe', 'ue', 'ss', '_'), $name);

@@ -384,7 +384,7 @@ abstract class Control
 
 	public function getPostTime($name)
 	{
-		if (isset($_POST[$name]['hour']) && isset($_POST[$name]['min'])) {
+		if (isset($_POST[$name]['hour'], $_POST[$name]['min'])) {
 			return array(
 				'hour' => (int)$_POST[$name]['hour'],
 				'min' => (int)$_POST[$name]['min']
