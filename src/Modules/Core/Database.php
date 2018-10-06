@@ -147,7 +147,7 @@ class Database
 		return $lastInsertId;
 	}
 
-	public function update($table, array $data, array $criteria = []): int
+	public function update(string $table, array $data, array $criteria = []): int
 	{
 		if (empty($data)) {
 			throw new \InvalidArgumentException(
@@ -296,6 +296,9 @@ class Database
 		}
 
 		foreach ($params as $param => $value) {
+			if (is_array($value)) {
+				$value = implode(', ', $value);
+			}
 			if (is_bool($value)) {
 				$type = \PDO::PARAM_INT;
 			} elseif (is_int($value)) {
@@ -356,6 +359,11 @@ class Database
 			if ($v === null) {
 				$params[] = $this->getQuotedName($k) . ' IS NULL ';
 				unset($criteria[$k]);
+				continue;
+			}
+
+			if (is_array($v)) {
+				$params[] = $this->getQuotedName($k) . ' IN (?) ';
 				continue;
 			}
 
