@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Store;
 
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -9,12 +10,14 @@ use Foodsharing\Modules\Region\RegionGateway;
 class StoreGateway extends BaseGateway
 {
 	private $regionGateway;
+	private $bellGateway;
 
-	public function __construct(Database $db, RegionGateway $regionGateway)
+	public function __construct(Database $db, RegionGateway $regionGateway, BellGateway $bellGateway)
 	{
 		parent::__construct($db);
 
 		$this->regionGateway = $regionGateway;
+		$this->bellGateway = $bellGateway;
 	}
 
 	public function getBetrieb($id): array
@@ -466,14 +469,98 @@ class StoreGateway extends BaseGateway
 
 	public function addFetcher($fsid, $bid, $date, $confirm = 0): int
 	{
-		return $this->db->insertIgnore('fs_abholer', [
+		$queryResult = $this->db->insertIgnore('fs_abholer', [
 			'foodsaver_id' => $fsid,
 			'betrieb_id' => $bid,
 			'date' => $date,
 			'confirmed' => $confirm
 		]);
+
+		if ($confirm === 0) {
+			$this->updateBellNotificationForBiebs($bid, true);
+		}
+
+		return $queryResult;
 	}
 
+	/**
+	 * @param bool $markNotificationAsUnread:
+	 * if an older notification exists, that has already been marked as read,
+	 * it can be marked as unread again while updating it
+	 */
+	public function updateBellNotificationForBiebs(int $storeId, bool $markNotificationAsUnread = false): void
+	{
+		$storeName = $this->db->fetchValueByCriteria('fs_betrieb', 'name', ['id' => $storeId]);
+		$messagTitle = 'betrieb_fetch_title';
+		$messageBody = 'betrieb_fetch';
+		$messageIcon = 'img img-store brown';
+		$messageHref = '/?page=fsbetrieb&id=' . $storeId;
+		$messageIdentifier = 'store-' . $storeId;
+
+		$messageCount = $this->getUnconfirmedFetchesCount($storeId);
+		$messageTimestamp = $this->getNextUnconfirmedFetchTime($storeId);
+
+		$responsibleFoodsaverIds = $this->getResponsibleFoodsavers($storeId);
+
+		$oldBellExists = $this->bellGateway->bellWithIdentifierExists($messageIdentifier);
+
+		if ($messageCount === 0 && !$oldBellExists) {
+			return;
+		}
+
+		if ($messageCount === 0 && $oldBellExists) {
+			$this->bellGateway->delBellsByIdentifier($messageIdentifier);
+
+			return;
+		}
+
+		if ($messageCount > 0 && !$oldBellExists) {
+			$this->bellGateway->addBell(
+				$responsibleFoodsaverIds,
+				$messagTitle,
+				$messageBody,
+				$messageIcon,
+				['href' => $messageHref],
+				[
+					'betrieb' => $storeName,
+					'count' => $messageCount
+				],
+				$messageIdentifier,
+				0,
+				$messageTimestamp
+			);
+
+			return;
+		}
+
+		if ($messageCount > 0 && $oldBellExists) {
+			$oldBellId = $this->bellGateway->getOneByIdentifier($messageIdentifier);
+
+			$this->bellGateway->updateBell(
+				$oldBellId,
+				'betrieb_fetch_title',
+				'betrieb_fetch',
+				'img img-store brown',
+				['href' => '/?page=fsbetrieb&id=' . $storeId],
+				[
+					'betrieb' => $storeName,
+					'count' => $messageCount
+				],
+				$messageIdentifier,
+				0,
+				$messageTimestamp,
+				$markNotificationAsUnread
+			);
+		}
+	}
+
+	/**
+	 * @deprecated
+	 *
+	 * This function does not match to our database structure. Column 'dow' does not exist
+	 * in 'fs_abholer', but it exists in in 'fs_abholen'. Its only usage in StoreUserControl may need to be
+	 * replaced with addFetcher, otherwise it may lead to exceptions.
+	 */
 	public function addAbholer($betrieb_id, $foodsaver_id, $dow): int
 	{
 		return $this->db->insert('fs_abholer', [
@@ -485,16 +572,23 @@ class StoreGateway extends BaseGateway
 
 	public function clearAbholer($betrieb_id): int
 	{
-		return $this->db->delete('fs_abholer', ['betrieb_id' => $betrieb_id]);
+		$result = $this->db->delete('fs_abholer', ['betrieb_id' => $betrieb_id]);
+		$this->updateBellNotificationForBiebs($betrieb_id);
+
+		return $result;
 	}
 
 	public function confirmFetcher($fsid, $bid, $date): int
 	{
-		return $this->db->update(
+		$result = $this->db->update(
 		'fs_abholer',
 			['confirmed' => 1],
 			['foodsaver_id' => $fsid, 'betrieb_id' => $bid, 'date' => $date]
 		);
+
+		$this->updateBellNotificationForBiebs($bid);
+
+		return $result;
 	}
 
 	public function listFetcher($bid, $dates): array
@@ -662,6 +756,29 @@ class StoreGateway extends BaseGateway
 		return $this->db->fetchAllByCriteria('fs_betrieb_team', ['betrieb_id'], ['foodsaver_id' => $fsId, 'verantwortlich' => 1]);
 	}
 
+	/**
+	 * returns a unix time stamp.
+	 */
+	private function getNextUnconfirmedFetchTime(int $storeId): ?int
+	{
+		return $this->db->fetchValue(
+			'SELECT MIN(UNIX_TIMESTAMP(`date`)) 
+                   FROM `fs_abholer`
+                   WHERE `betrieb_id` = :storeId AND `confirmed` = 0 AND `date` > NOW()',
+			[':storeId' => $storeId]
+		);
+	}
+
+	private function getUnconfirmedFetchesCount(int $storeId)
+	{
+		return $this->db->fetchValue(
+			'SELECT COUNT(`betrieb_id`)
+            FROM `fs_abholer`                                                   
+            WHERE `betrieb_id` = :storeId AND `confirmed` = 0 AND `date` > NOW()',
+			[':storeId' => $storeId]
+		);
+	}
+
 	/*
 	 * Private methods
 	 */
@@ -695,5 +812,20 @@ class StoreGateway extends BaseGateway
 
 			WHERE `betrieb_id` = :id',
 		[':id' => $id]);
+	}
+
+	/**
+	 * @return int[]
+	 */
+	private function getResponsibleFoodsavers(int $storeId): array
+	{
+		return $this->db->fetchAllValuesByCriteria(
+			'fs_betrieb_team',
+			'foodsaver_id',
+			[
+				'betrieb_id' => $storeId,
+				'verantwortlich' => 1
+			]
+		);
 	}
 }

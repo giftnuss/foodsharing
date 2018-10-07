@@ -20,8 +20,23 @@ class BellGateway extends BaseGateway
 		$this->webSocketSender = $webSocketSender;
 	}
 
-	public function addBell($foodsaver_ids, $title, $body, $icon, $link_attributes, $vars, $identifier = '', $closeable = 1): void
-	{
+	/**
+	 * @param int|int[] $foodsaver_ids
+	 * @param string[] $link_attributes
+	 * @param string[] $vars
+	 * @param int|null $timestamp A unix timestamp for the bell's time - null means current date and time
+	 */
+	public function addBell(
+		$foodsaver_ids,
+		string $title,
+		string $body,
+		string $icon,
+		array $link_attributes,
+		array $vars,
+		string $identifier = '',
+		int $closeable = 1,
+		int $timestamp = null
+	): void {
 		if (!is_array($foodsaver_ids)) {
 			$foodsaver_ids = array($foodsaver_ids);
 		}
@@ -34,6 +49,10 @@ class BellGateway extends BaseGateway
 			$vars = serialize($vars);
 		}
 
+		if ($timestamp === null) {
+			$timestamp = time();
+		}
+
 		$bid = $this->db->insert(
 			'fs_bell',
 			[
@@ -42,7 +61,7 @@ class BellGateway extends BaseGateway
 				'vars' => strip_tags($vars),
 				'attr' => strip_tags($link_attributes),
 				'icon' => strip_tags($icon),
-				'identifier' => strip_tags($identifier),
+				'identifier' => strip_tags($identifier, $timestamp),
 				'time' => date('Y-m-d H:i:s'),
 				'closeable' => $closeable
 			]
@@ -57,6 +76,59 @@ class BellGateway extends BaseGateway
 			$this->db->insert('fs_foodsaver_has_bell', ['foodsaver_id' => (int)$id, 'bell_id' => $bid, 'seen' => 0]);
 			$this->notifyFoodsaver((int)$id);
 		}
+	}
+
+	/**
+	 * @param string[] $link_attributes
+	 * @param string[] $vars
+	 * @param int|null $timestamp A unix timestamp for the bells time - null means current date and time
+	 */
+	public function updateBell(
+		int $bellId,
+		string $title,
+		string $body,
+		string $icon,
+		array $link_attributes,
+		array $vars,
+		string $identifier = '',
+		int $closeable = 1,
+		int $timestamp = null,
+		bool $setUnseen = false
+	): void {
+		if ($link_attributes !== false) {
+			$link_attributes = serialize($link_attributes);
+		}
+
+		if ($vars !== false) {
+			$vars = serialize($vars);
+		}
+
+		if ($timestamp === null) {
+			$timestamp = time();
+		}
+
+		$this->db->update(
+			'fs_bell',
+			[
+				'name' => strip_tags($title),
+				'body' => strip_tags($body),
+				'vars' => strip_tags($vars),
+				'attr' => strip_tags($link_attributes),
+				'icon' => strip_tags($icon),
+				'identifier' => strip_tags($identifier),
+				'time' => date('Y-m-d H:i:s', $timestamp),
+				'closeable' => $closeable
+			],
+			['id' => $bellId]
+		);
+
+		$foodsaverIds = $this->db->fetchAllValuesByCriteria('fs_foodsaver_has_bell', 'foodsaver_id', ['bell_id' => $bellId]);
+
+		if ($setUnseen) {
+			$this->db->update('fs_foodsaver_has_bell', ['seen' => 0], ['foodsaver_id' => $foodsaverIds, 'bell_id' => $bellId]);
+		}
+
+		$this->notifyFoodsavers($foodsaverIds);
 	}
 
 	/**
@@ -121,49 +193,36 @@ class BellGateway extends BaseGateway
 		return [];
 	}
 
-	public function getStoreBells($bids): array
+	public function getOneByIdentifier(string $identifier): int
 	{
-		$stm = '
-			SELECT COUNT( b.id ) AS count, b.name, b.id, MAX( a.date ) AS `date`, UNIX_TIMESTAMP(MAX( a.date )) AS date_ts 
-			FROM `fs_betrieb` b, fs_abholer a	
-			WHERE a.betrieb_id = b.id AND a.betrieb_id IN(' . implode(',', $bids) . ') AND	a.confirmed = 0  AND a.`date` > NOW() 
-			GROUP BY b.id';
-
-		return $this->db->fetchAll($stm);
+		return $this->db->fetchValueByCriteria('fs_bell', 'id', ['identifier' => $identifier]);
 	}
 
-	public function getFairteilerBells($bids): array
+	public function bellWithIdentifierExists(string $identifier): bool
 	{
-		if ($bids) {
-			return $this->db->fetchAll('
-				SELECT 	
-					ft.id,
-					ft.`bezirk_id`,
-					bz.name AS bezirk_name,
-					ft.`name`,
-					ft.`add_date`,
-					UNIX_TIMESTAMP(ft.`add_date`) AS time_ts
-				
-				FROM 	
-					fs_fairteiler ft,
-					fs_bezirk bz						
-					
-				WHERE 	ft.bezirk_id = bz.id
-				AND 	ft.status = 0
-				AND 	ft.bezirk_id IN(' . implode(',', $bids) . ')');
-		}
-
-		return [];
+		return $this->db->exists('fs_bell', ['identifier' => $identifier]);
 	}
 
 	public function delBellForFoodsaver($id, $fsId): int
 	{
-		return $this->db->delete('fs_foodsaver_has_bell', ['bell_id' => (int)$id, 'foodsaver_id' => (int)$fsId]);
+		$result = $this->db->delete('fs_foodsaver_has_bell', ['bell_id' => (int)$id, 'foodsaver_id' => (int)$fsId]);
+		$this->notifyFoodsaver($fsId);
+
+		return $result;
 	}
 
 	public function delBellsByIdentifier($identifier): void
 	{
+		$foodsaverIds = $this->db->fetchAllValues(
+			'SELECT `foodsaver_id` 
+            FROM `fs_foodsaver_has_bell` JOIN `fs_bell` 
+            WHERE `identifier` = :identifier',
+			[':identifier' => $identifier]
+		);
+
 		$this->db->delete('fs_bell', ['identifier' => $identifier]);
+
+		$this->notifyFoodsavers($foodsaverIds);
 	}
 
 	public function setBellsAsSeen(array $bids, int $foodsaverId): void
@@ -175,5 +234,13 @@ class BellGateway extends BaseGateway
 	private function notifyFoodsaver(int $foodsaverId): void
 	{
 		$this->webSocketSender->sendSock($foodsaverId, 'bell', 'notify', []);
+	}
+
+	/**
+	 * @param int[] $foodsaverIds
+	 */
+	private function notifyFoodsavers(array $foodsaverIds): void
+	{
+		$this->webSocketSender->sendSockMulti($foodsaverIds, 'bell', 'notify', []);
 	}
 }

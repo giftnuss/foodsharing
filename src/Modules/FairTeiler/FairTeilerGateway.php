@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\FairTeiler;
 
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -9,11 +10,13 @@ use Foodsharing\Modules\Region\RegionGateway;
 class FairTeilerGateway extends BaseGateway
 {
 	private $regionGateway;
+	private $bellGateway;
 
-	public function __construct(Database $db, RegionGateway $regionGateway)
+	public function __construct(Database $db, RegionGateway $regionGateway, BellGateway $bellGateway)
 	{
 		parent::__construct($db);
 		$this->regionGateway = $regionGateway;
+		$this->bellGateway = $bellGateway;
 	}
 
 	public function getEmailFollower($id)
@@ -262,6 +265,7 @@ class FairTeilerGateway extends BaseGateway
 	public function acceptFairteiler($id)
 	{
 		$this->db->update('fs_fairteiler', ['status' => 1], ['id' => $id]);
+		$this->removeBellNotificationForNewFairteiler($id);
 	}
 
 	public function updateFairteiler($id, $data)
@@ -276,7 +280,11 @@ class FairTeilerGateway extends BaseGateway
 	{
 		$this->db->delete('fs_fairteiler_follower', ['fairteiler_id' => $id]);
 
-		return $this->db->delete('fs_fairteiler', ['id' => $id]);
+		$result = $this->db->delete('fs_fairteiler', ['id' => $id]);
+
+		$this->removeBellNotificationForNewFairteiler($id);
+
+		return $result;
 	}
 
 	public function getFairteiler($id)
@@ -342,9 +350,44 @@ class FairTeilerGateway extends BaseGateway
 				'fs_fairteiler_follower',
 				['fairteiler_id' => $ft_id, 'foodsaver_id' => $fs_id, 'type' => 2]
 			);
+
+			$this->sendBellNotificationForNewFairteiler($ft_id);
 		}
 
 		return $ft_id;
+	}
+
+	private function sendBellNotificationForNewFairteiler(int $fairteilerId): void
+	{
+		$fairteiler = $this->getFairteiler($fairteilerId);
+
+		if ($fairteiler['status'] === 1) {
+			return; //Fairteiler has been created by orga member or the ambassador himself
+		}
+
+		$region = $this->regionGateway->getBezirk($fairteiler['bezirk_id']);
+
+		$ambassadorIds = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id', ['bezirk_id' => $region['id']]);
+
+		$this->bellGateway->addBell(
+			$ambassadorIds,
+			'sharepoint_activate_title',
+			'sharepoint_activate',
+			'img img-recycle yellow',
+			['href' => '/?page=fairteiler&sub=check&id=' . $fairteilerId],
+			['bezirk' => $region['name'], 'name' => $fairteiler['name']],
+			'new-fairteiler-' . $fairteilerId,
+			0
+		);
+	}
+
+	private function removeBellNotificationForNewFairteiler(int $fairteilerId): void
+	{
+		$identifier = 'new-fairteiler-' . $fairteilerId;
+		if (!$this->bellGateway->bellWithIdentifierExists($identifier)) {
+			return;
+		}
+		$this->bellGateway->delBellsByIdentifier($identifier);
 	}
 
 	public function mayFairteiler(int $foodsaverId, int $fairteilerId): bool
