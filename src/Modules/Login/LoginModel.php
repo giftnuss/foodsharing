@@ -22,9 +22,9 @@ class LoginModel extends Db
 	public function activate($email, $token): bool
 	{
 		return (int)$this->update(
-				'UPDATE fs_foodsaver SET `active` = 1 WHERE email = '.$this->strval(
+				'UPDATE fs_foodsaver SET `active` = 1 WHERE email = ' . $this->strval(
 					$email
-				).' AND `token` = '.$this->strval($token)
+				) . ' AND `token` = ' . $this->strval($token)
 			) > 0;
 	}
 
