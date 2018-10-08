@@ -65,7 +65,7 @@ class Session
 		}
 	}
 
-	public function init($login = false)
+	public function init($rememberMe = false)
 	{
 		if ($this->initialized) {
 			throw new Exception('Session is already initialized');
@@ -78,7 +78,7 @@ class Session
 
 		fSession::setLength('24 hours', '1 week');
 
-		if ($login) {
+		if ($rememberMe) {
 			// This regenerates the session id even if it's already persistent, we want to only set it when logging in
 			fSession::enablePersistence();
 		}
@@ -357,10 +357,10 @@ class Session
 		return false;
 	}
 
-	public function login($fs_id = null)
+	public function login($fs_id = null, $rememberMe = false)
 	{
 		if (!$this->initialized) {
-			$this->init(true);
+			$this->init($rememberMe);
 		}
 		$this->refreshFromDatabase($fs_id);
 	}

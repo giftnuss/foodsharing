@@ -28,14 +28,16 @@ class UserRestController extends FOSRestController
 	 * @Rest\Post("user/login")
 	 * @Rest\RequestParam(name="email")
 	 * @Rest\RequestParam(name="password")
+	 * @Rest\RequestParam(name="remember_me", default=false)
 	 */
 	public function loginAction(ParamFetcher $paramFetcher)
 	{
 		$email = $paramFetcher->get('email');
 		$password = $paramFetcher->get('password');
+		$rememberMe = (bool)$paramFetcher->get('remember_me');
 		$fs_id = $this->loginGateway->login($email, $password);
 		if ($fs_id) {
-			$this->session->login($fs_id);
+			$this->session->login($fs_id, $rememberMe);
 
 			$token = $this->searchService->writeSearchIndexToDisk($this->session->id(), $this->session->user('token'));
 
