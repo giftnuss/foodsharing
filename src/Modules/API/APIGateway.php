@@ -66,6 +66,14 @@ class APIGateway extends BaseGateway
 		);
 	}
 
+	/**
+	 * Fetches a basket from the database. Returns details of the basket with
+	 * the given id or false if the basket does not yet exist.
+	 *
+	 * @param int $id the basket's id
+	 *
+	 * @return array/boolean the details of the basket or false
+	 */
 	public function getBasket($id)
 	{
 		$stm = '
@@ -88,6 +96,11 @@ class APIGateway extends BaseGateway
 					b.id = :id
 		';
 		$basket = $this->db->fetch($stm, [':id' => (int)$id]);
+
+		//check if the first fetch succeeded
+		if (empty($basket) || !isset($basket['foodsaver_id']) || !isset($basket['fsf_id'])) {
+			return false;
+		}
 
 		$stm = '
 				SELECT
