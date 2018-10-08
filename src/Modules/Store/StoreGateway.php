@@ -504,36 +504,9 @@ class StoreGateway extends BaseGateway
 
 		$oldBellExists = $this->bellGateway->bellWithIdentifierExists($messageIdentifier);
 
-		if ($messageCount === 0 && !$oldBellExists) {
-			return;
-		}
-
 		if ($messageCount === 0 && $oldBellExists) {
 			$this->bellGateway->delBellsByIdentifier($messageIdentifier);
-
-			return;
-		}
-
-		if ($messageCount > 0 && !$oldBellExists) {
-			$this->bellGateway->addBell(
-				$responsibleFoodsaverIds,
-				$messagTitle,
-				$messageBody,
-				$messageIcon,
-				['href' => $messageHref],
-				[
-					'betrieb' => $storeName,
-					'count' => $messageCount
-				],
-				$messageIdentifier,
-				0,
-				$messageTimestamp
-			);
-
-			return;
-		}
-
-		if ($messageCount > 0 && $oldBellExists) {
+		} elseif ($messageCount > 0 && $oldBellExists) {
 			$oldBellId = $this->bellGateway->getOneByIdentifier($messageIdentifier);
 
 			$this->bellGateway->updateBell(
@@ -550,6 +523,21 @@ class StoreGateway extends BaseGateway
 				0,
 				$messageTimestamp,
 				$markNotificationAsUnread
+			);
+		} elseif ($messageCount > 0 && !$oldBellExists) {
+			$this->bellGateway->addBell(
+				$responsibleFoodsaverIds,
+				$messagTitle,
+				$messageBody,
+				$messageIcon,
+				['href' => $messageHref],
+				[
+					'betrieb' => $storeName,
+					'count' => $messageCount
+				],
+				$messageIdentifier,
+				0,
+				$messageTimestamp
 			);
 		}
 	}
