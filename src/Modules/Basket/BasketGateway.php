@@ -58,6 +58,16 @@ class BasketGateway extends BaseGateway
 		);
 	}
 
+	/**
+	 * Fetches a basket from the database. Returns details of the basket with
+	 * the given id or false if the basket does not yet exist. If the status is
+	 * set only a basket that matches this will be returned.
+	 *
+	 * @param int $id the basket's id
+	 * @param integer/boolean $status a basket status or false
+	 *
+	 * @return array/boolean the details of the basket or false
+	 */
 	public function getBasket($id, $status = false)
 	{
 		$status_sql = '';
@@ -99,6 +109,11 @@ class BasketGateway extends BaseGateway
 		';
 		$basket = $this->db->fetch($stm, [':id' => $id]);
 
+		//check if the first fetch succeeded
+		if (empty($basket) || !isset($basket['foodsaver_id']) || !isset($basket['fsf_id'])) {
+			return false;
+		}
+
 		$stm = '
 				SELECT 
 					fs.name AS fs_name,
@@ -109,12 +124,11 @@ class BasketGateway extends BaseGateway
 					fs_foodsaver fs
 					
 				WHERE
-					fs.id = ' . (int)$basket['foodsaver_id'] . '
-					
+					fs.id = :foodsaver_id
 			';
 		if ('0' === $basket['fsf_id'] && $fs = $this->db->fetch(
 				$stm,
-				['foodsaver_id' => $basket['foodsaver_id']]
+				[':foodsaver_id' => $basket['foodsaver_id']]
 			)) {
 			$basket = array_merge($basket, $fs);
 		}
