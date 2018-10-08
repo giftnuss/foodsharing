@@ -15,6 +15,7 @@
 - The possibility to automatically ask for new regions has been removed #329 !571 @peter.toennies
 - it is now possible to open profiles in new tabs via middle mouse button !574 @peter.toennies
 - Database functions can now be called with critera that contain arrays !559 @janopae
+- Added a Rest controller for food baskets #345 !557 @alex.simm
 
 ## Bugfixes
 - Foodsavers list is now sorted by name and doesn't reshuffle !578 #54 @odedNea
