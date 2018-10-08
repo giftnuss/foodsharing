@@ -44,7 +44,17 @@
     "jms/serializer-bundle": "^2.4",
     "mrclay/jsmin-php": "^2.3",
     "sensio/framework-extra-bundle": "^5.2",
-    "exercise/htmlpurifier-bundle": "^1.0"
+    "exercise/htmlpurifier-bundle": "^1.0",
+    "ext-json": "*",
+    "ext-pdo": "*",
+    "ext-mysqli": "*",
+    "ext-dom": "*",
+    "ext-redis": "*",
+    "ext-fileinfo": "*",
+    "ext-gd": "*",
+    "ext-zlib": "*",
+    "ext-openssl": "*",
+    "ext-intl": "*"
   },
   "autoload": {
     "psr-4": {"Foodsharing\\": "src/",
