@@ -72,7 +72,7 @@ class APIGateway extends BaseGateway
 	 *
 	 * @param int $id the basket's id
 	 *
-	 * @return array/boolean the details of the basket or false
+	 * @return array|bool the details of the basket or false
 	 */
 	public function getBasket($id)
 	{

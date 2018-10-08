@@ -64,9 +64,9 @@ class BasketGateway extends BaseGateway
 	 * set only a basket that matches this will be returned.
 	 *
 	 * @param int $id the basket's id
-	 * @param integer/boolean $status a basket status or false
+	 * @param int|bool $status a basket status or false
 	 *
-	 * @return array/boolean the details of the basket or false
+	 * @return array|bool the details of the basket or false
 	 */
 	public function getBasket($id, $status = false)
 	{
