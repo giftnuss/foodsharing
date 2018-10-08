@@ -35,7 +35,7 @@ class BellGateway extends BaseGateway
 		array $vars,
 		string $identifier = '',
 		int $closeable = 1,
-		int $timestamp = null
+		?int $timestamp = null
 	): void {
 		if (!is_array($foodsaver_ids)) {
 			$foodsaver_ids = array($foodsaver_ids);
@@ -92,7 +92,7 @@ class BellGateway extends BaseGateway
 		array $vars,
 		string $identifier = '',
 		int $closeable = 1,
-		int $timestamp = null,
+		?int $timestamp = null,
 		bool $setUnseen = false
 	): void {
 		if ($link_attributes !== false) {
