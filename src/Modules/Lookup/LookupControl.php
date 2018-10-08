@@ -28,9 +28,8 @@ class LookupControl extends ConsoleControl
 		}
 
 		$this->info('Loading emails from ' . $filename);
-		$csv = array_map('str_getcsv', file($filename));
 
-		return $csv;
+		return array_map('str_getcsv', file($filename));
 	}
 
 	public function lookup(): void

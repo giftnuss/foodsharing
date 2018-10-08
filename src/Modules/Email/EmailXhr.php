@@ -25,13 +25,13 @@ class EmailXhr extends Control
 				'status' => 1,
 				'script' => 'pulseError("Mit der E-Mail-Adresse stimmt etwas nicht!");'
 			);
-		} else {
-			$this->func->libmail(false, $_POST['email'], $_POST['subject'], $_POST['message']);
-
-			return array(
-				'status' => 1,
-				'script' => 'pulseInfo("E-Mail wurde versendet!");'
-			);
 		}
+
+		$this->func->libmail(false, $_POST['email'], $_POST['subject'], $_POST['message']);
+
+		return array(
+			'status' => 1,
+			'script' => 'pulseInfo("E-Mail wurde versendet!");'
+		);
 	}
 }

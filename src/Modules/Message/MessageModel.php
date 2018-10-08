@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Message;
 
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Lib\Db\Mem;
 
 class MessageModel extends Db
 {
@@ -96,9 +95,7 @@ class MessageModel extends Db
 
 	public function conversationLocked($cid)
 	{
-		$res = $this->qOne('SELECT locked FROM fs_conversation WHERE id = ' . (int)$cid);
-
-		return $res;
+		return $this->qOne('SELECT locked FROM fs_conversation WHERE id = ' . (int)$cid);
 	}
 
 	public function updateConversation($cid, $last_fs_id, $body, $last_message_id)
@@ -201,8 +198,8 @@ class MessageModel extends Db
 		/*
 		 * only send email if the user is not online
 		 */
-		if (!Mem::userIsActive($foodsaver_id)) {
-			if (Mem::get('infomail_message_' . $foodsaver_id)) {
+		if (!$this->mem->userIsActive($foodsaver_id)) {
+			if ($this->mem->get('infomail_message_' . $foodsaver_id)) {
 				return true;
 			}
 		}
@@ -215,10 +212,12 @@ class MessageModel extends Db
 	 *
 	 * @return Ambigous <boolean, array >
 	 */
-	public function listConversations($limit = '')
+	public function listConversations(int $limit = -1)
 	{
-		if ($limit != '') {
-			$limit = ' LIMIT 0,' . (int)$limit;
+		if ($limit === -1) {
+			$limit = '';
+		} else {
+			$limit = ' LIMIT 0,' . $limit;
 		}
 
 		if ($convs = $this->q('
@@ -277,22 +276,23 @@ class MessageModel extends Db
 		/*
 		 * Memcache var is settet but no updates
 		 */
-		$cache = Mem::user($this->func->fsId(), 'msg-update');
+		$cache = $this->mem->user($this->func->fsId(), 'msg-update');
 
 		if ($cache === 0) {
 			return false;
-		} elseif (is_array($cache)) {
-			Mem::userSet($this->func->fsId(), 'msg-update', 0);
+		}
+
+		if (is_array($cache)) {
+			$this->mem->userSet($this->func->fsId(), 'msg-update', 0);
 
 			return $cache;
-		} /*
+		}  /*
 		 * Memcache is not settedso get coonversation ids direct fromdm
 		 */
-		else {
-			Mem::userSet($this->func->fsId(), 'msg-update', 0);
 
-			return $this->getUpdatedConversationIds();
-		}
+		$this->mem->userSet($this->func->fsId(), 'msg-update', 0);
+
+		return $this->getUpdatedConversationIds();
 	}
 
 	private function getUpdatedConversationIds()
@@ -328,7 +328,7 @@ class MessageModel extends Db
 		}
 	}
 
-	public function loadMore($conversation_id, $last_message_id)
+	public function loadMore(int $conversation_id, int $last_message_id, int $limit = 20)
 	{
 		return $this->q('
 			SELECT
@@ -347,15 +347,15 @@ class MessageModel extends Db
 				m.foodsaver_id = fs.id
 
 			AND
-				m.conversation_id = ' . (int)$conversation_id . '
+				m.conversation_id = ' . $conversation_id . '
 
 			AND
-				m.id < ' . (int)$last_message_id . '
+				m.id < ' . $last_message_id . '
 
 			ORDER BY
 				m.`time` DESC
 
-			LIMIT 0,20
+			LIMIT 0,' . $limit . '
 		');
 	}
 
@@ -397,7 +397,7 @@ class MessageModel extends Db
 	 */
 	public function setAsRead($conv_ids)
 	{
-		Mem::userDel($this->func->fsId(), 'msg-update');
+		$this->mem->userDel($this->func->fsId(), 'msg-update');
 
 		return $this->update('UPDATE fs_foodsaver_has_conversation SET unread = 0 WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND conversation_id IN(' . implode(',', $conv_ids) . ')');
 	}
@@ -445,7 +445,7 @@ class MessageModel extends Db
 		return false;
 	}
 
-	public function loadConversationMessages($conversation_id)
+	public function loadConversationMessages(int $conversation_id, int $limit = 20, int $offset = 0)
 	{
 		return $this->q('
 			SELECT
@@ -464,12 +464,12 @@ class MessageModel extends Db
 				m.foodsaver_id = fs.id
 
 			AND
-				m.conversation_id = ' . (int)$conversation_id . '
+				m.conversation_id = ' . $conversation_id . '
 
 			ORDER BY
 				m.`time` DESC
 
-			LIMIT 0,20
+			LIMIT ' . $offset . ',' . $limit . '
 		');
 	}
 

@@ -24,9 +24,7 @@ class SanitizerService
 	{
 		$html = $this->parsedown->text($text);
 
-		$purified = $this->htmlPurifier->purify($html);
-
-		return $purified;
+		return $this->htmlPurifier->purify($html);
 	}
 
 	public function htmlToPlain($html)

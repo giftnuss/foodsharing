@@ -2,16 +2,22 @@
 
 namespace Foodsharing\Modules\Message;
 
-use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\WebSocketSender;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
 
 class MessageXhr extends Control
 {
-	public function __construct(MessageModel $model, MessageView $view)
+	/**
+	 * @var WebSocketSender
+	 */
+	private $webSocketSender;
+
+	public function __construct(MessageModel $model, MessageView $view, WebSocketSender $webSocketSender)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->webSocketSender = $webSocketSender;
 
 		parent::__construct();
 
@@ -121,7 +127,7 @@ class MessageXhr extends Control
 						if ($member = $this->model->listConversationMembers($_POST['c'])) {
 							$user_ids = array_column($member, 'id');
 
-							$this->func->sendSockMulti($user_ids, 'conv', 'push', array(
+							$this->webSocketSender->sendSockMulti($user_ids, 'conv', 'push', array(
 								'id' => $message_id,
 								'cid' => (int)$_POST['c'],
 								'fs_id' => $this->func->fsId(),
@@ -133,7 +139,7 @@ class MessageXhr extends Control
 
 							foreach ($member as $m) {
 								if ($m['id'] != $this->func->fsId()) {
-									Mem::userAppend($m['id'], 'msg-update', (int)$_POST['c']);
+									$this->mem->userAppend($m['id'], 'msg-update', (int)$_POST['c']);
 
 									/*
 									 * send an E-Mail if the user is not online
@@ -169,7 +175,12 @@ class MessageXhr extends Control
 	{
 		$this->session->noWrite();
 
-		if ($conversations = $this->model->listConversations()) {
+		$limit = -1;
+		if (isset($_GET['limit'])) {
+			$limit = (int)$_GET['limit'];
+		}
+
+		if ($conversations = $this->model->listConversations($limit)) {
 			$xhr = new Xhr();
 
 			// because some of the messages and the titles are still stored in encoded html, theres the option to
@@ -211,7 +222,9 @@ class MessageXhr extends Control
 		// check if the conversation in stored in the session
 		if (isset($ids[(int)$conversation_id])) {
 			return true;
-		} elseif ($this->model->mayConversation($conversation_id)) {
+		}
+
+		if ($this->model->mayConversation($conversation_id)) {
 			$ids[$conversation_id] = true;
 			$this->session->set('msg_conversations', $ids);
 
@@ -249,9 +262,9 @@ class MessageXhr extends Control
 		 */
 
 		/*
-		 * Check is there are correct post data sendet?
+		 * Check is there are correct post data sender?
 		 */
-		if (isset($_POST['recip']) && isset($_POST['body'])) {
+		if (isset($_POST['recip'], $_POST['body'])) {
 			/*
 			 * initiate an xhr object
 			 */
@@ -304,7 +317,7 @@ class MessageXhr extends Control
 		$cid = false;
 		$lmid = false;
 
-		if (isset($opt['cid']) && $this->mayConversation($opt['cid']) && isset($opt['mid'])) {
+		if (isset($opt['cid'], $opt['mid']) && $this->mayConversation($opt['cid'])) {
 			$cid = (int)$opt['cid'];
 			$lmid = (int)$opt['mid'];
 		}

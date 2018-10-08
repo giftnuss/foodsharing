@@ -1,14 +1,40 @@
-# Unreleased 
+# Unreleased
 
 ## Features
+- Fix conversation name when changing store (name) #294 !508 @surrim
+- Notify user when bell notifications arrive without need for page reload #328 !542 @janopae
+- Fix read/unread behavior for bell notifications #328 !542 @janopae
+- New non-festival homepage !546 @michi-zuri
+- Only set session cookie when logged in !544 @nicksellen
+- Added a second line to hover texts in stores #88 !547 @alex.simm
+- New selection for expiration of baskets #340 !553 @alex.simm
 
 ## Bugfixes
+- Orga members are now able to leave stores they are not responsible for #283 !524 @annaos
+- check user permissions in quickreply() in RegionXhr !499 #85 @annaos
+- fix exception if request have no "msg"-Attribute in quickreply() in WallPostXhr !499 @annaos
+- removed not needed add store button from the dashboard !523 @peter.toennies
+- limit conversations sent to client at page loading !542 @janopae
+- check permissions before saving a wallpost in WallpostXhr !542 @janopae
+- stat_fetchrate is calculated correctly and shown in profile #281 @k.miklobusec
+- fix mail sending by passing instance of Mem to AsyncMail constructor !551 @nicksellen
+- fixed wrong html formatting in quick replies to forum posts !534 @peter.toennies
+- fixed index check in BasketGateway #354 !556 @alex.simm
 
 ## Refactoring
+- Unify Symfony DI configuration !544 @nicksellen
 
 - refactored EmailTemplateAdminGateway from model to gateway !482 #9 @peter.toennies
 
 ## Dev/Test/CI stuff
+
+# 2018-08-19 Hotfix
+
+- Use Ctrl+Enter instead Shift+Enter for sending messages
+
+## Bugfixes 
+- Fix an issue with the navbar for users of safari 11 !527 @theolampert
+- Return 404 instead of 500 or broken layout for non existant pages !525 @NerdyProjects
 
 # 2018-08-18
 
@@ -25,7 +51,7 @@ IE11, Safari and slightly older androids should work again, although I can only 
 - Only accepted store members see updates on dashboard !412 @k.miklobusec
 - Add description about markdown formatting in forum posts !496 @NerdyProjects
 - introduce new font fontawesome 5.2 !500 @peter.toennies
-- added placeholder text for the birth date in the registration form !505 @peter.toennies 
+- added placeholder text for the birth date in the registration form !505 @peter.toennies
 - Search in navbar shows more results, distinct results page removed as it was the same !515 #315 @NerdyProjects @theolampert
 
 ## Bugfixes
@@ -33,6 +59,7 @@ IE11, Safari and slightly older androids should work again, although I can only 
 - Add missing tagedit lib on mailbox edit page !459 #248 @nicksellen
 - reenabling source maps on the production build !468 #254 @alangecker
 - removed dead login button and updated registration info for food baskets #240 !457 @michi-zuri
+- saving mumble events is now possible !478 #276 @wapplications
 - Remove broken LoginXhr->login method !465 @tiltec
 - Added possibility to change main region to a part of town (region type 9) !470 #268 @peter.toennies
 - fetching parent regions without any given region ID is not possible anymore !474 #258 @peter.toennies
@@ -49,7 +76,7 @@ IE11, Safari and slightly older androids should work again, although I can only 
 - fix wrong usage of region ID lists for post permissions !503 #308 @peter.toennies
 - Fix fairteiler/blog picture upload by exposing necessary javascript methods #307 @NerdyProjects
 - Admins of Workgroups are called admins again instead of ambassadors !513 #264 @NerdyProjects
-- Do not rely on $\_SERVER['HTTP\_HOST'] being set #263 !510 @NerdyProjects 
+- Do not rely on $\_SERVER['HTTP\_HOST'] being set #263 !510 @NerdyProjects
 - Admins of workgroups are called admins again instead of ambassadors !513 #264 @NerdyProjects
 - Map legend now more usable in mobile view !215 #119 @michi-zuri
 - Fix joining regions from subpages like profile not possible !509 #300 @NerdyProjects
@@ -66,6 +93,7 @@ IE11, Safari and slightly older androids should work again, although I can only 
 - removed copy of email sending method for CLI applications !464 @NerdyProjects
 - refactored statistics from model to gateway !476 #9 @peter.toennies
 - removed several layers of the legacy database-classes structure !477 @peter.toennies
+- refactored event from model to gateway !478 #9 @wapplications
 - removed several deprecated functions from func all over the source !436 @peter.toennies
 - refactored content from model to gateway !481 #9 @peter.toennies
 - refactored NewArea module from model to gateway !484 #9 @peter.toennies

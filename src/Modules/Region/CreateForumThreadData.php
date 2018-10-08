@@ -20,8 +20,6 @@ class CreateForumThreadData
 
 	public static function create()
 	{
-		$data = new self();
-
-		return $data;
+		return new self();
 	}
 }

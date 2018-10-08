@@ -29,6 +29,7 @@ $I->dontSeeElement('#handy');
 $I->checkOption('.input.cb-contact_type[value="2"]');
 $I->waitForElement('#handy');
 $I->seeInField('#handy', $foodsaver['handy']);
+$I->seeOptionIsSelected('#lifetime', 'eine Woche');
 
 $I->fillField('description', $description);
 

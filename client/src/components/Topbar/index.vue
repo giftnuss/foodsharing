@@ -215,7 +215,23 @@ import Login from './Login'
 import MenuLoggedout from './MenuLoggedout'
 
 export default {
-  components: { bCollapse, bNavbarToggle, NavItemDropdown, MenuLoggedout, MenuRegion, MenuStores, MenuGroups, MenuBaskets, MenuAdmin, MenuMessages, MenuBells, MenuUser, Search, Login },
+  components: {
+    bCollapse,
+    bNavbarToggle,
+    NavItemDropdown,
+    MenuLoggedout,
+    MenuRegion,
+    MenuStores,
+    MenuGroups,
+    MenuBaskets,
+    MenuAdmin,
+    MenuMessages,
+    MenuBells,
+    MenuUser,
+    Search,
+    Login,
+    bTooltip
+  },
   directives: { bTooltip },
   props: {
     fsId: {
@@ -321,6 +337,12 @@ export default {
             width: 100%;
         }
     }
+    @media (max-width: 500px) {
+      .navbar {
+          max-height: 100vh;
+          overflow-y: scroll;
+      }
+    }
 
     .navbar-nav {
         align-items: center;
@@ -341,7 +363,6 @@ export default {
 
 <style lang="scss">
 #topbar {
-    overflow-x: hidden;
     .nav-link {
         white-space: nowrap;
         padding: 0.4em 0.5em;
@@ -369,6 +390,9 @@ export default {
         }
         .dropdown-menu {
             position: absolute;
+            @media (max-width: 500px) {
+              position: fixed;
+            }
         }
     }
     .dropdown-toggle {

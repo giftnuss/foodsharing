@@ -146,10 +146,10 @@ class EmailControl extends Control
 					');
 				} elseif ($data['recip_choose'] == 'all_no_botschafter') {
 					$foodsaver = $this->foodsaverGateway->getAllFoodsaverNoBotschafter();
-				} elseif ($data['recip_choose'] == 'filialverantwortlich') {
-					$foodsaver = $this->storeGateway->getAllFilialverantwortlich();
-				} elseif ($data['recip_choose'] == 'filialbot') {
-					$foodsaver1 = $this->storeGateway->getAllFilialverantwortlich();
+				} elseif ($data['recip_choose'] == 'storemanagers') {
+					$foodsaver = $this->storeGateway->getAllStoreManagers();
+				} elseif ($data['recip_choose'] == 'storemanagers_and_ambs') {
+					$foodsaver1 = $this->storeGateway->getAllStoreManagers();
 					$foodsaver2 = $this->foodsaverGateway->getAllBotschafter();
 					$tmp = array_merge($foodsaver1, $foodsaver2);
 					$foodsaver = array();

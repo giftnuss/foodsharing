@@ -4,17 +4,21 @@ namespace Foodsharing\Modules\WallPost;
 
 use Flourish\fImage;
 use Foodsharing\Lib\Session;
+use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Permissions\WallPostPermissions;
 
 class WallPostXhr extends Control
 {
 	private $wallPostGateway;
+	private $wallPostPermissions;
 	private $table;
 	private $id;
 
-	public function __construct(WallPostGateway $wallPostGateway, WallPostView $view, Session $session)
+	public function __construct(WallPostGateway $wallPostGateway, WallPostPermissions $wallPostPermissions, WallPostView $view, Session $session)
 	{
 		$this->wallPostGateway = $wallPostGateway;
+		$this->wallPostPermissions = $wallPostPermissions;
 		$this->view = $view;
 		$this->session = $session;
 
@@ -71,7 +75,7 @@ class WallPostXhr extends Control
 
 	public function quickreply()
 	{
-		$message = trim(strip_tags($_POST['msg']));
+		$message = trim(strip_tags($_POST['msg'] ?? ''));
 
 		if (!empty($message)) {
 			if ($post_id = $this->wallPostGateway->addPost($message, $this->session->id(), $this->table, $this->id)) {
@@ -92,6 +96,10 @@ class WallPostXhr extends Control
 
 	public function post()
 	{
+		if (!$this->wallPostPermissions->mayWriteWall($this->session->id(), $this->table, $this->id)) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+
 		$message = strip_tags($_POST['text']);
 		if (!(empty($message) && empty($_POST['attach']))) {
 			$attach = '';

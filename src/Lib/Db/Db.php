@@ -21,6 +21,11 @@ class Db
 	protected $func;
 
 	/**
+	 * @var Mem
+	 */
+	protected $mem;
+
+	/**
 	 * @var Session
 	 */
 	protected $session;
@@ -36,6 +41,14 @@ class Db
 	public function setFunc(Func $func)
 	{
 		$this->func = $func;
+	}
+
+	/**
+	 * @required
+	 */
+	public function setMem(Mem $mem)
+	{
+		$this->mem = $mem;
 	}
 
 	/**
@@ -64,7 +77,7 @@ class Db
 		$duration = microtime(true) - $start;
 
 		if ($res == false) {
-			error_log('SQL QUERY ERROR URL ' . ($_SERVER['REQUEST_URI'] ?? $_SERVER['argv']) . ' IN ' . $query . ' : ' . $this->mysqli->error);
+			error_log('SQL QUERY ERROR URL ' . ($_SERVER['REQUEST_URI'] ?? $_SERVER['argv'][0]) . ' IN ' . $query . ' : ' . $this->mysqli->error);
 			DebugBar::addQuery($query, $duration, false, $this->mysqli->errno, $this->mysqli->error);
 		} else {
 			DebugBar::addQuery($query, $duration, true);
@@ -126,9 +139,9 @@ class Db
 
 		if (count($out) > 0) {
 			return $out;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	/**
@@ -171,9 +184,9 @@ class Db
 	{
 		if ($res = $this->sql($sql)) {
 			return $this->mysqli->insert_id;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	/**
@@ -183,9 +196,9 @@ class Db
 	{
 		if ($this->sql($sql)) {
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	/**

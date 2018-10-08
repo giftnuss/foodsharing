@@ -404,9 +404,9 @@ class QuizView extends View
 			</div>';
 
 			return $out;
-		} else {
-			return $this->v_utils->v_field($this->v_utils->v_info('Noch keine Fragen zu diesem Quiz'), 'Fragen');
 		}
+
+		return $this->v_utils->v_field($this->v_utils->v_info('Noch keine Fragen zu diesem Quiz'), 'Fragen');
 	}
 
 	public function answerSidebar($answers, $quiz_id)

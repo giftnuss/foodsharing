@@ -50,9 +50,9 @@ class BlogView extends View
 	{
 		if (!empty($news['picture'])) {
 			return '<a href="/?page=blog&sub=read&id=' . $news['id'] . '"><img class="corner-all" src="/images/' . str_replace('/', '/' . $prefix, $news['picture']) . '" /></a>';
-		} else {
-			return '';
 		}
+
+		return '';
 	}
 
 	public function pager($page)

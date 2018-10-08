@@ -147,11 +147,13 @@ class StoreModel extends Db
 	{
 		if ($date !== null && $bid !== null) {
 			return $this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` = ' . $this->dateval($date));
-		} elseif ($bid !== null) {
-			return $this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
-		} else {
-			return $this->del('DELETE FROM `fs_abholer` WHERE `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
 		}
+
+		if ($bid !== null) {
+			return $this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
+		}
+
+		return $this->del('DELETE FROM `fs_abholer` WHERE `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
 	}
 
 	public function signout($bid, $fsid)
@@ -352,6 +354,16 @@ class StoreModel extends Db
 			$data['status_date'] = date('Y-m-d H:i:s');
 		}
 
+		$name = $data['name'];
+		if ($tcid = $this->storeGateway->getBetriebConversation($id, false)) {
+			$team_conversation_name = $this->func->sv('team_conversation_name', $name);
+			$this->messageModel->renameConversation($tcid, $team_conversation_name);
+		}
+		if ($scid = $this->storeGateway->getBetriebConversation($id, true)) {
+			$springer_conversation_name = $this->func->sv('springer_conversation_name', $name);
+			$this->messageModel->renameConversation($scid, $springer_conversation_name);
+		}
+
 		return $this->update('
 		UPDATE 	`fs_betrieb`
 
@@ -363,7 +375,7 @@ class StoreModel extends Db
 				`lon` =  ' . $this->strval($data['lon']) . ',
 				`kette_id` =  ' . (int)$data['kette_id'] . ',
 				`betrieb_kategorie_id` =  ' . (int)$data['betrieb_kategorie_id'] . ',
-				`name` =  ' . $this->strval($data['name']) . ',
+				`name` =  ' . $this->strval($name) . ',
 				`str` =  ' . $this->strval($data['str']) . ',
 				`hsnr` =  ' . $this->strval($data['hsnr']) . ',
 				`status_date` =  ' . $this->dateval($data['status_date']) . ',
@@ -511,7 +523,7 @@ class StoreModel extends Db
 
 		return $this->update('
 					UPDATE 	 	`fs_betrieb_team`
-					SET 		`active` = 1
+					SET 		`active` = 1, `stat_add_date` = NOW()
 					WHERE 		`betrieb_id` = ' . (int)$bid . '
 					AND 		`foodsaver_id` = ' . (int)$fsid . '
 		');
@@ -534,7 +546,7 @@ class StoreModel extends Db
 
 		return $this->update('
 					UPDATE 	 	`fs_betrieb_team`
-					SET 		`active` = 2
+					SET 		`active` = 2, `stat_add_date` = NOW()
 					WHERE 		`betrieb_id` = ' . (int)$bid . '
 					AND 		`foodsaver_id` = ' . (int)$fsid . '
 		');
@@ -581,7 +593,8 @@ class StoreModel extends Db
 	{
 		$tcid = $this->messageModel->insertConversation(array(), true);
 		$betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $bid);
-		$this->messageModel->renameConversation($tcid, 'Team ' . $betrieb['name']);
+		$team_conversation_name = $this->func->sv('team_conversation_name', $betrieb['name']);
+		$this->messageModel->renameConversation($tcid, $team_conversation_name);
 
 		$this->update('
 				UPDATE	`fs_betrieb` SET team_conversation_id = ' . (int)$tcid . ' WHERE id = ' . (int)$bid . '
@@ -601,7 +614,8 @@ class StoreModel extends Db
 	{
 		$scid = $this->messageModel->insertConversation(array(), true);
 		$betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $bid);
-		$this->messageModel->renameConversation($scid, 'Springer ' . $betrieb['name']);
+		$springer_conversation_name = $this->func->sv('springer_conversation_name', $betrieb['name']);
+		$this->messageModel->renameConversation($scid, $springer_conversation_name);
 		$this->update('
 				UPDATE	`fs_betrieb` SET springer_conversation_id = ' . (int)$scid . ' WHERE id = ' . (int)$bid . '
 			');
@@ -680,8 +694,8 @@ class StoreModel extends Db
 			');
 
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 }

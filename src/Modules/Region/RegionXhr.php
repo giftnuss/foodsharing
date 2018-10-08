@@ -5,18 +5,21 @@ namespace Foodsharing\Modules\Region;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Permissions\ForumPermissions;
 
 class RegionXhr extends Control
 {
 	private $responses;
 	private $forumGateway;
+	private $forumPermissions;
 	private $regionHelper;
 	private $twig;
 
-	public function __construct(Db $model, ForumGateway $forumGateway, RegionHelper $regionHelper, \Twig\Environment $twig)
+	public function __construct(Db $model, ForumGateway $forumGateway, ForumPermissions $forumPermissions, RegionHelper $regionHelper, \Twig\Environment $twig)
 	{
 		$this->model = $model;
 		$this->forumGateway = $forumGateway;
+		$this->forumPermissions = $forumPermissions;
 		$this->regionHelper = $regionHelper;
 		$this->twig = $twig;
 		$this->responses = new XhrResponses();
@@ -54,17 +57,18 @@ class RegionXhr extends Control
 
 	public function quickreply()
 	{
-		if (isset($_GET['bid']) && isset($_GET['tid']) && isset($_GET['pid']) && $this->session->may() && isset($_POST['msg']) && $_POST['msg'] != '') {
+		if (isset($_GET['bid'], $_GET['tid'], $_GET['pid'], $_POST['msg']) && $this->session->may(
+			) && $_POST['msg'] != '') {
 			$sub = 'forum';
 			if ($_GET['sub'] != 'forum') {
 				$sub = 'botforum';
 			}
 
-			$body = strip_tags($_POST['msg']);
-			$body = nl2br($body);
-			$body = $this->func->autolink($body);
+			$body = $_POST['msg'];
 
-			if ($bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid'])) {
+			if ($this->forumPermissions->mayPostToThread($_GET['tid'])
+				&& $bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid'])
+			) {
 				if ($post_id = $this->forumGateway->addPost($this->session->id(), $_GET['tid'], $body)) {
 					if ($follower = $this->forumGateway->getThreadFollower($this->session->id(), $_GET['tid'])) {
 						$theme = $this->model->getVal('name', 'theme', $_GET['tid']);

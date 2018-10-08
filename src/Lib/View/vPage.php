@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Lib\View;
 
-use Foodsharing\DI;
 use Foodsharing\Lib\Func;
 
 class vPage
@@ -21,7 +20,8 @@ class vPage
 
 	public function __construct($title, $content)
 	{
-		$this->func = DI::$shared->get(Func::class);
+		global $container;
+		$this->func = $container->get(Func::class);
 		$this->setTitle($title);
 		$this->setContent($content);
 

@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Maintenance;
 
 use Flourish\fImage;
-use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -313,7 +312,7 @@ class MaintenanceControl extends ConsoleControl
 					$info = true;
 				}
 
-				Mem::userSet($fs['id'], 'infomail', $info);
+				$this->mem->userSet($fs['id'], 'infomail', $info);
 			}
 
 			self::info('memcache userinfo updated');
@@ -323,7 +322,7 @@ class MaintenanceControl extends ConsoleControl
 		if (!$admins) {
 			$admins = array();
 		}
-		Mem::set('all_global_group_admins', serialize($admins));
+		$this->mem->set('all_global_group_admins', serialize($admins));
 	}
 
 	private function updateBezirkIds()
@@ -384,10 +383,12 @@ class MaintenanceControl extends ConsoleControl
 	{
 		self::info('flush Page Cache...');
 
-		if ($keys = Mem::$cache->getAllKeys()) {
+		$this->mem->ensureConnected();
+
+		if ($keys = $this->mem->cache->getAllKeys()) {
 			foreach ($keys as $key) {
 				if (substr($key, 0, 3) == 'pc-') {
-					Mem::del($key);
+					$this->mem->del($key);
 				}
 			}
 		}
@@ -399,7 +400,9 @@ class MaintenanceControl extends ConsoleControl
 	{
 		self::info('backup memcache to file...');
 
-		if ($keys = Mem::$cache->getAllKeys()) {
+		$this->mem->ensureConnected();
+
+		if ($keys = $this->mem->cache->getAllKeys()) {
 			$bar = $this->progressbar(count($keys));
 			$data = array();
 			$i = 0;
@@ -407,7 +410,7 @@ class MaintenanceControl extends ConsoleControl
 				++$i;
 				$bar->update($i);
 				if (substr($key, 0, 3) == 'cb-' || substr($key, 0, 5) == 'user-') {
-					$data[$key] = Mem::get($key);
+					$data[$key] = $this->mem->get($key);
 				}
 			}
 			file_put_contents(ROOT_DIR . 'tmp/membackup.ser', serialize($data));
@@ -434,7 +437,7 @@ class MaintenanceControl extends ConsoleControl
 
 				$ttl = 0;
 
-				Mem::set($key, $val, $ttl);
+				$this->mem->set($key, $val, $ttl);
 			}
 		}
 

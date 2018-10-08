@@ -28,6 +28,7 @@ class XhrMethods
 {
 	private $model;
 	private $func;
+	private $mem;
 	private $session;
 	private $v_utils;
 	private $xhrViewUtils;
@@ -50,6 +51,7 @@ class XhrMethods
 	 */
 	public function __construct(
 		Func $func,
+		Mem $mem,
 		Session $session,
 		Db $model,
 		Utils $viewUtils,
@@ -67,6 +69,7 @@ class XhrMethods
 		ImageManager $imageManager)
 	{
 		$this->func = $func;
+		$this->mem = $mem;
 		$this->session = $session;
 		$this->model = $model;
 		$this->v_utils = $viewUtils;
@@ -247,7 +250,7 @@ class XhrMethods
 	public function xhr_grabInfo($data)
 	{
 		if ($this->session->may()) {
-			Mem::delPageCache('/?page=dashboard');
+			$this->mem->delPageCache('/?page=dashboard');
 			$fields = $this->func->unsetAll($data, array('photo_public', 'lat', 'lon', 'stadt', 'plz', 'anschrift'));
 
 			if ($this->model->updateFields($fields, 'fs_foodsaver', $this->func->fsId())) {
@@ -300,11 +303,11 @@ class XhrMethods
 					'status' => 1,
 					'html' => $this->xhrViewUtils->childBezirke($childs, $data['parent'])
 				));
-			} else {
-				return json_encode(array(
-					'status' => 0
-				));
 			}
+
+			return json_encode(array(
+				'status' => 0
+			));
 		}
 	}
 
@@ -943,9 +946,9 @@ class XhrMethods
 			}
 
 			return json_encode(array('left' => $mails_left, 'status' => 1, 'comment' => 'Versende E-Mails ... (aktuelle E-Mail-Adresse: ' . $fs['email'] . ')'));
-		} else {
-			return 0;
 		}
+
+		return 0;
 	}
 
 	public function xhr_uploadPhoto($data)
@@ -1033,7 +1036,7 @@ class XhrMethods
 
 	public function xhr_update_abholen($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid']) || $this->func->isBotschafter()) {
+		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid']) || $this->func->isBotschafter()) {
 			$this->model->del('DELETE FROM 	`fs_abholzeiten` WHERE `betrieb_id` = ' . (int)$data['bid']);
 
 			if (is_array($data['newfetchtime'])) {
@@ -1110,7 +1113,7 @@ class XhrMethods
 			1 => true,
 			2 => true
 		);
-		if (($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $_GET['bid'])) && isset($allow[(int)$_GET['s']])) {
+		if (($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $_GET['bid'])) && isset($allow[(int)$_GET['s']])) {
 			return $this->model->update('
 			UPDATE `fs_betrieb`
 			SET 	`team_status` = ' . (int)$_GET['s'] . '
@@ -1277,22 +1280,22 @@ class XhrMethods
 
 	public function xhr_denyRequest($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->session->id() == $data['fsid'] || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid'])) {
+		if ($this->session->isOrgaTeam() || $this->session->id() == $data['fsid'] || $this->storeGateway->isResponsible($this->session->id(), $data['bid'])) {
 			$this->storeModel->denyRequest($data['fsid'], $data['bid']);
 
 			$msg = 'Deine Anfrage wurde erfolgreich zur&uuml;ckgezogen!';
 
 			return json_encode(array('status' => 1, 'msg' => $msg));
-		} else {
-			$msg = 'Es ist ein Fehler aufgetreten!';
-
-			return json_encode(array('status' => 0, 'msg' => $msg));
 		}
+
+		$msg = 'Es ist ein Fehler aufgetreten!';
+
+		return json_encode(array('status' => 0, 'msg' => $msg));
 	}
 
 	public function xhr_acceptRequest($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid']) || $this->func->isBotschafter()) {
+		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid']) || $this->func->isBotschafter()) {
 			$this->storeModel->acceptRequest($data['fsid'], $data['bid']);
 
 			$this->storeGateway->add_betrieb_notiz(array(
@@ -1312,7 +1315,7 @@ class XhrMethods
 
 	public function xhr_warteRequest($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid']) || $this->func->isBotschafter()) {
+		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid']) || $this->func->isBotschafter()) {
 			$this->storeModel->warteRequest($data['fsid'], $data['bid']);
 
 			return json_encode(array('status' => 1));
@@ -1381,7 +1384,7 @@ class XhrMethods
 		$this->func->handleTagselect('botschafter');
 
 		$this->regionGateway->update_bezirkNew($data['bezirk_id'], $g_data);
-		Mem::del('cb-' . $data['bezirk_id']);
+		$this->mem->del('cb-' . $data['bezirk_id']);
 
 		return $this->xhr_out('pulseInfo("' . $this->func->s('edit_success') . '");');
 	}
@@ -1395,7 +1398,7 @@ class XhrMethods
 				[bid] => 1
 			 */
 			$confirm = 0;
-			if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid'])) {
+			if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid'])) {
 				$confirm = 1;
 			}
 
@@ -1436,13 +1439,15 @@ class XhrMethods
 				$this->func->info($this->func->s('date_add_successful'));
 
 				return '2';
-			} elseif (!empty($data['from'])) {
+			}
+
+			if (!empty($data['from'])) {
 				return 0;
-			} else {
-				$data['date'] = date('Y-m-d H:i:s', strtotime($data['date']));
-				if ($this->storeGateway->addFetcher($this->session->id(), $data['bid'], $data['date'], $confirm)) {
-					return $this->func->img($this->model->getVal('photo', 'foodsaver', $this->func->fsId()));
-				}
+			}
+
+			$data['date'] = date('Y-m-d H:i:s', strtotime($data['date']));
+			if ($this->storeGateway->addFetcher($this->session->id(), $data['bid'], $data['date'], $confirm)) {
+				return $this->func->img($this->model->getVal('photo', 'foodsaver', $this->func->fsId()));
 			}
 		}
 
@@ -1469,7 +1474,7 @@ class XhrMethods
 
 	public function xhr_fetchDeny($data)
 	{
-		if (($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid'])) && isset($data['date'])) {
+		if (($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid'])) && isset($data['date'])) {
 			$this->storeModel->deleteFetchDate($data['fsid'], $data['bid'], date('Y-m-d H:i:s', strtotime($data['date'])));
 
 			return 1;
@@ -1478,7 +1483,7 @@ class XhrMethods
 
 	public function xhr_fetchConfirm($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid'])) {
+		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid'])) {
 			$this->storeGateway->confirmFetcher($data['fsid'], $data['bid'], date('Y-m-d H:i:s', strtotime($data['date'])));
 
 			return 1;
@@ -1493,7 +1498,7 @@ class XhrMethods
 	public function xhr_becomeBezirk($data)
 	{
 		if ($this->func->may()) {
-			Mem::delPageCache('/?page=dashboard');
+			$this->mem->delPageCache('/?page=dashboard');
 			$bezirk_id = (int)$data['b'];
 			$new = '';
 			if (isset($data['new'])) {
@@ -1553,13 +1558,13 @@ class XhrMethods
 						'status' => 1,
 						'botschafter' => $botschafter
 					));
-				} else {
-					return json_encode(array(
-						'active' => $active,
-						'status' => 1,
-						'botschafter' => false
-					));
 				}
+
+				return json_encode(array(
+					'active' => $active,
+					'status' => 1,
+					'botschafter' => false
+				));
 				//}
 			}
 		}
@@ -1572,9 +1577,9 @@ class XhrMethods
 			$this->storeGateway->deleteBPost($data['pid']);
 
 			return 1;
-		} else {
-			return 0;
 		}
+
+		return 0;
 	}
 
 	public function xhr_delPost($data)
@@ -1587,9 +1592,9 @@ class XhrMethods
 			$this->forumGateway->deletePost($data['pid']);
 
 			return 1;
-		} else {
-			return 0;
 		}
+
+		return 0;
 	}
 
 	public function xhr_abortEmail($data)
@@ -1601,7 +1606,7 @@ class XhrMethods
 
 	public function xhr_bcontext($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isVerantwortlich($this->session->id(), $data['bid']) || $this->func->isBotFor($data['bzid'])) {
+		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid']) || $this->func->isBotFor($data['bzid'])) {
 			$check = false;
 			if ($data['action'] == 'toteam') {
 				$check = true;

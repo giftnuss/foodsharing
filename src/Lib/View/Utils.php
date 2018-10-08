@@ -61,15 +61,15 @@ class Utils
 	{
 		if ($this->func->isMob()) {
 			return $content;
-		} else {
-			$id = $this->func->id('scroller');
-			$this->func->addJs('$("#' . $id . '").slimScroll();');
-
-			return '
-				<div id="' . $id . '" class="scroller">
-					' . $content . '
-				</div>';
 		}
+
+		$id = $this->func->id('scroller');
+		$this->func->addJs('$("#' . $id . '").slimScroll();');
+
+		return '
+			<div id="' . $id . '" class="scroller">
+				' . $content . '
+			</div>';
 	}
 
 	public function v_activeSwitcher($table, $field_id, $active)
@@ -487,8 +487,8 @@ class Utils
 
 				<option value="newsletter_only_foodsharer">NL Abonnenten NUR Foodsharer</option>
 				<option value="botschafter">Alle Botschafter weltweit</option>
-				<option value="filialverantwortlich">Alle Filialverantwortlichen weltweit</option>
-				<option value="filialbot">Alle Filialverantwortlichen + Botschafter</option>
+				<option value="storemanagers">Alle Betriebsverantwortlichen weltweit</option>
+				<option value="storemanagers_and_ambs">Alle Betriebsverantwortlichen + Botschafter</option>
 				<option value="all_no_botschafter">Alle Foodsaver ohne Botschafter</option>
 				<option value="orgateam">Orgateam</option>
 				<option value="choose">' . $this->func->s('recip_choose_bezirk') . '</option>
@@ -794,15 +794,15 @@ class Utils
 				<div class="ui-widget ui-widget-content ui-corner-all ui-padding">
 					' . $out . '
 				</div>';
-		} else {
-			return '
-				<h3 class="head ui-widget-header ui-corner-top">' . $title . '</h3>
-				<div class="ui-widget ui-widget-content ui-corner-bottom margin-bottom ui-padding">
-					<div id="' . $id . '">
-						' . $out . '
-					</div>
-				</div>';
 		}
+
+		return '
+			<h3 class="head ui-widget-header ui-corner-top">' . $title . '</h3>
+			<div class="ui-widget ui-widget-content ui-corner-bottom margin-bottom ui-padding">
+				<div id="' . $id . '">
+					' . $out . '
+				</div>
+			</div>';
 
 		return $out;
 	}

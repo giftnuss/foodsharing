@@ -387,7 +387,7 @@ class StoreGateway extends BaseGateway
 			[':betrieb_id' => $betrieb_id]);
 	}
 
-	public function getAllFilialverantwortlich(): array
+	public function getAllStoreManagers(): array
 	{
 		$verant = $this->db->fetchAll('
 			SELECT 	fs.`id`,
@@ -443,7 +443,7 @@ class StoreGateway extends BaseGateway
 		return $out;
 	}
 
-	public function isVerantwortlich($fs_id, $betrieb_id)
+	public function isResponsible($fs_id, $betrieb_id)
 	{
 		return $this->db->exists('fs_betrieb_team', [
 			'betrieb_id' => $betrieb_id,

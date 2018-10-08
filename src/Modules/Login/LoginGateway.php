@@ -20,9 +20,9 @@ class LoginGateway extends BaseGateway
 			);
 
 			return $fsid;
-		} else {
-			return null;
 		}
+
+		return null;
 	}
 
 	/**
@@ -51,28 +51,28 @@ class LoginGateway extends BaseGateway
 		if ($user['password']) {
 			if (password_verify($pass, $user['password'])) {
 				return $user['id'];
-			} else {
-				return false;
 			}
+
+			return false;
 
 			// old hashing algorithm
-		} else {
-			if (
-				($user['passwd'] && $user['passwd'] == $this->encryptMd5($email, $pass)) || // md5
-				($user['fs_password'] && $user['fs_password'] == $this->fs_sha1hash($pass))  // sha1
-			) {
-				// update stored password to modern
-				$this->db->update(
-					'fs_foodsaver',
-					['fs_password' => null, 'passwd' => null, 'password' => $this->password_hash($pass)],
-					['id' => $user['id']]
-				);
-
-				return $user['id'];
-			} else {
-				return false;
-			}
 		}
+
+		if (
+			($user['passwd'] && $user['passwd'] == $this->encryptMd5($email, $pass)) || // md5
+			($user['fs_password'] && $user['fs_password'] == $this->fs_sha1hash($pass))  // sha1
+		) {
+			// update stored password to modern
+			$this->db->update(
+				'fs_foodsaver',
+				['fs_password' => null, 'passwd' => null, 'password' => $this->password_hash($pass)],
+				['id' => $user['id']]
+			);
+
+			return $user['id'];
+		}
+
+		return false;
 	}
 
 	/**

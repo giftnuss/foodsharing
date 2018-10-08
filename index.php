@@ -22,25 +22,34 @@ if(isset($_GET['g_path']))
 */
 
 use Foodsharing\Debug\DebugBar;
-use Foodsharing\DI;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Routing;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 require __DIR__ . '/includes/setup.php';
+require_once 'config.inc.php';
+
+/* @var $container Container */
+global $container;
+$container = initializeContainer();
 
 require_once 'lib/inc.php';
 
+/* @var $mem Mem */
+$mem = $container->get(Mem::class);
+
 /* @var $view_utils Utils */
-$view_utils = DI::$shared->get(Utils::class);
+$view_utils = $container->get(Utils::class);
 
 /* @var $func Func */
-$func = DI::$shared->get(Func::class);
+$func = $container->get(Func::class);
 
 /* @var $session Session */
-$session = DI::$shared->get(Session::class);
+$session = $container->get(Session::class);
 
 $g_broadcast_message = $db->qOne('SELECT `body` FROM fs_content WHERE `id` = 51');
 
@@ -55,7 +64,7 @@ if (DebugBar::isEnabled()) {
 if ($session->may()) {
 	if (isset($_GET['uc'])) {
 		if ($func->fsId() != $_GET['uc']) {
-			Mem::logout($session->id());
+			$mem->logout($session->id());
 			$func->goLogin();
 		}
 	}
@@ -65,11 +74,15 @@ $app = $func->getPage();
 
 if (($class = $session->getRouteOverride()) === null) {
 	$class = Routing::getClassName($app, 'Control');
+	try {
+		$obj = $container->get(ltrim($class, '\\'));
+	} catch (ServiceNotFoundException $e) {
+	}
+} else {
+	$obj = $container->get(ltrim($class, '\\'));
 }
 
-if ($class) {
-	$obj = DI::$shared->get(ltrim($class, '\\'));
-
+if (isset($obj)) {
 	if (isset($_GET['a']) && is_callable(array($obj, $_GET['a']))) {
 		$meth = $_GET['a'];
 		$obj->$meth($request, $response);
@@ -80,6 +93,9 @@ if ($class) {
 	if ($sub !== false && is_callable(array($obj, $sub))) {
 		$obj->$sub($request, $response);
 	}
+} else {
+	$response->setStatusCode(404);
+	$response->setContent('');
 }
 
 $page = $response->getContent();
@@ -88,7 +104,7 @@ if ($isUsingResponse) {
 	$response->send();
 } else {
 	/* @var $twig \Twig\Environment */
-	$twig = DI::$shared->get(\Twig\Environment::class);
+	$twig = $container->get(\Twig\Environment::class);
 	$page = $twig->render('layouts/' . $g_template . '.twig', $func->generateAndGetGlobalViewData());
 }
 

@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Core;
 
-use Foodsharing\DI;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
@@ -31,6 +30,11 @@ abstract class Control
 	protected $func;
 
 	/**
+	 * @var Mem
+	 */
+	protected $mem;
+
+	/**
 	 * @var \Foodsharing\Lib\Session
 	 */
 	protected $session;
@@ -57,11 +61,13 @@ abstract class Control
 
 	public function __construct()
 	{
-		$this->func = DI::$shared->get(Func::class);
-		$this->session = DI::$shared->get(Session::class);
-		$this->v_utils = DI::$shared->get(Utils::class);
-		$this->legacyDb = DI::$shared->get(Db::class);
-		$this->foodsaverGateway = DI::$shared->get(FoodsaverGateway::class);
+		global $container;
+		$this->func = $container->get(Func::class);
+		$this->mem = $container->get(Mem::class);
+		$this->session = $container->get(Session::class);
+		$this->v_utils = $container->get(Utils::class);
+		$this->legacyDb = $container->get(Db::class);
+		$this->foodsaverGateway = $container->get(FoodsaverGateway::class);
 
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;
@@ -119,7 +125,7 @@ abstract class Control
 				}
 			}
 		}
-		Mem::updateActivity($this->session->id());
+		$this->mem->updateActivity($this->session->id());
 	}
 
 	/**
@@ -166,12 +172,10 @@ abstract class Control
 	public function getRequest($name)
 	{
 		if (isset($_REQUEST[$name])) {
-			$val = $_REQUEST[$name];
-
-			return $val;
-		} else {
-			return false;
+			return $_REQUEST[$name];
 		}
+
+		return false;
 	}
 
 	public function wallposts($table, $id)
@@ -378,7 +382,7 @@ abstract class Control
 
 	public function getPostTime($name)
 	{
-		if (isset($_POST[$name]['hour']) && isset($_POST[$name]['min'])) {
+		if (isset($_POST[$name]['hour'], $_POST[$name]['min'])) {
 			return array(
 				'hour' => (int)$_POST[$name]['hour'],
 				'min' => (int)$_POST[$name]['min']
@@ -428,11 +432,11 @@ abstract class Control
 		 * only send email if the user is not online
 		 */
 
-		if (!Mem::userOnline($recipient['id'])) {
+		if (!$this->mem->userOnline($recipient['id'])) {
 			/*
 			 * only send email if the user want to retrieve emails
 			 */
-			if (Mem::user($recipient['id'], 'infomail')) {
+			if ($this->mem->user($recipient['id'], 'infomail')) {
 				if (!isset($_SESSION['lastMailMessage']) || !is_array($sessdata = $_SESSION['lastMailMessage'])) {
 					$sessdata = array();
 				}
@@ -482,7 +486,7 @@ abstract class Control
 				$_SESSION['lastMailMessage'] = array();
 			}
 
-			if (!Mem::userIsActive($recip_id)) {
+			if (!$this->mem->userIsActive($recip_id)) {
 				if (!isset($_SESSION['lastMailMessage'][$recip_id]) || (time() - $_SESSION['lastMailMessage'][$recip_id]) > 600) {
 					$_SESSION['lastMailMessage'][$recip_id] = time();
 					$foodsaver = $this->foodsaverGateway->getOne_foodsaver($recip_id);

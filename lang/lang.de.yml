@@ -109,14 +109,14 @@ register:
   select_your_gender: Für die Anrede...
   woman: weiblich
   man: männlich
-  other: sonstiges/anders
+  other: sonstiges/anderes
   error: Es ist ein Fehler aufgetreten
   error_name: Bitte gib einen Namen ein
   error_email: Mit Deiner E-Mail-Adresse stimmt etwas nicht
   error_passwd: Dein Passwort muss mindestens 5 und darf maximal 30 Zeichen haben
   error_image: Dein Foto konnte nicht hochgeladen werden
-  error_birthdate: Aus datenschutz- und haftungsrechtlichen Gründen musst du mindestens 18 Jahre alt sein, um bei foodsharing.de mitzumachen.
-  activation_success: '<strong>Aktivierung erfolgreich.</strong> Logge Dich jetzt Mit Deiner E-Mail-Adresse und Deinem gewählten Passwort ein.'
+  error_birthdate: Aus datenschutz- und haftungsrechtlichen Gründen musst du mindestens 18 Jahre alt sein, um bei foodsharing mitzumachen.
+  activation_success: '<strong>Aktivierung erfolgreich.</strong> Logge Dich jetzt mit Deiner E-Mail-Adresse und Deinem gewählten Passwort ein.'
   activation_failed: '<strong>Aktivierung fehlgeschlagen!</strong> Ist der eingegebene Link auch korrekt?'
   pass1: Dein neues gewünschtes Passwort
   pass2: Passwortwiederholung

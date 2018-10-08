@@ -73,6 +73,7 @@ class DashboardControl extends Control
 		}
 
 		if (isset($_SESSION['client']['botschafter']) && is_array($_SESSION['client']['botschafter']) && count($_SESSION['client']['botschafter']) > 0) {
+			//this is is_bieb on purpose; prevents group administrators to be notified about the ambassador quiz
 			$is_bieb = true;
 		}
 
@@ -584,7 +585,7 @@ class DashboardControl extends Control
 		if ($betriebe = $this->storeGateway->getMyBetriebe($this->session->id(), $this->session->getCurrentBezirkId(), array('sonstige' => false))) {
 			$this->func->addContent($this->view->u_myBetriebe($betriebe), CNT_LEFT);
 		} else {
-			$this->func->addContent($this->v_utils->v_info('Du bist bis jetzt in keinem Filial-Team.'), CNT_LEFT);
+			$this->func->addContent($this->v_utils->v_info('Du bist bis jetzt in keinem Betriebsteam.'), CNT_LEFT);
 		}
 	}
 }

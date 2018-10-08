@@ -125,7 +125,7 @@ class BellXhr extends Control
 				'icon' => $bell['icon'][0] != '/' ? $bell['icon'] : null,
 				'image' => $bell['icon'][0] == '/' ? $bell['icon'] : null,
 				'createdAt' => str_replace(' ', 'T', $bell['time']),
-				'isRead' => (bool)$bell['closeable'],
+				'isRead' => (bool)$bell['seen'],
 				'isCloseable' => (bool)$bell['closeable']
 			];
 		}, $bells));
@@ -139,5 +139,14 @@ class BellXhr extends Control
 	public function delbell()
 	{
 		$this->gateway->delBellForFoodsaver($_GET['id'], $this->session->id());
+	}
+
+	/**
+	 * ajax call to set bell as seen.
+	 */
+	public function markBellsAsRead(): void
+	{
+		$ids = json_decode($_GET['ids']);
+		$this->gateway->setBellsAsSeen($ids, $this->session->id());
 	}
 }

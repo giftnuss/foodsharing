@@ -6,7 +6,6 @@ use Ddeboer\Imap\Server;
 use Flourish\fEmail;
 use Flourish\fFile;
 use Flourish\fSMTP;
-use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Mailbox\MailboxModel;
@@ -23,6 +22,7 @@ class MailsControl extends ConsoleControl
 
 	public function __construct(MailsModel $model, MailboxModel $mailboxModel, Database $database)
 	{
+		echo "creating mailscontrl!!!!\n";
 		error_reporting(E_ALL);
 		ini_set('display_errors', '1');
 		self::$smtp = false;
@@ -30,12 +30,14 @@ class MailsControl extends ConsoleControl
 		$this->mailboxModel = $mailboxModel;
 		$this->database = $database;
 		parent::__construct();
+		echo "-------------------------------------\n";
 	}
 
 	public function queueWorker()
 	{
+		$this->mem->ensureConnected();
 		while (1) {
-			$elem = Mem::$cache->brpoplpush('workqueue', 'workqueueprocessing', 10);
+			$elem = $this->mem->cache->brpoplpush('workqueue', 'workqueueprocessing', 10);
 			if ($elem !== false && $e = unserialize($elem)) {
 				switch ($e['type']) {
 					case 'email':
@@ -48,7 +50,7 @@ class MailsControl extends ConsoleControl
 						break;
 				}
 				if ($res) {
-					Mem::$cache->lrem('workqueueprocessing', $elem, 1);
+					$this->mem->cache->lrem('workqueueprocessing', $elem, 1);
 				} else {
 					// TODO handle failed tasks?
 				}

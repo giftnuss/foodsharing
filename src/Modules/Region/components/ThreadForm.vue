@@ -11,7 +11,7 @@
           v-model="text"
           class="form-control"
           rows="3"
-          @keyup.shift.enter="submit"/>
+          @keyup.ctrl.enter="submit"/>
       </div>
       <div class="card-footer">
         <div class="row">
