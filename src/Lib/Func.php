@@ -36,7 +36,7 @@ class Func
 	private $viewUtils;
 	private $sanitizerService;
 	private $regionGateway;
-	private $emailTemplateGateway;
+	private $emailTemplateAdminGateway;
 
 	private $webpackScripts;
 	private $webpackStylesheets;
@@ -62,12 +62,12 @@ class Func
 		Utils $viewUtils,
 		SanitizerService $sanitizerService,
 		RegionGateway $regionGateway,
-		EmailTemplateGateway $emailTemplateGateway
+		EmailTemplateAdminGateway $emailTemplateAdminGateway
 	) {
 		$this->viewUtils = $viewUtils;
 		$this->sanitizerService = $sanitizerService;
 		$this->regionGateway = $regionGateway;
-		$this->emailTemplateGateway = $emailTemplateGateway;
+		$this->emailTemplateAdminGateway = $emailTemplateAdminGateway;
 		$this->content_main = '';
 		$this->content_right = '';
 		$this->content_left = '';

@@ -57,7 +57,7 @@ class EmailTemplateAdminGateway extends BaseGateway
 				'language_id' => (int)$data['language_id'],
 				'name' => strip_tags($data['name']),
 				'subject' => strip_tags($data['subject']),
-				'body' => strip_tags($data['body']),
+				'body' => strip_tags($data['body'])
 			],
 			['id' => (int)$id]
 		);
