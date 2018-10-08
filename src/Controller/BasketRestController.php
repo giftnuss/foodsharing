@@ -130,10 +130,9 @@ class BasketRestController extends FOSRestController
 
 		$basket = $this->gateway->getBasket($basketId);
 		if (!$basket || $basket['status'] == Status::DELETED_OTHER_REASON) {
-			throw new HttpException(404, "basket does not exist");
-		}
-		else if($basket['status'] == Status::DELETED_PICKED_UP) {
-			throw new HttpException(404, "basket was already picked up");
+			throw new HttpException(404, 'basket does not exist');
+		} elseif ($basket['status'] == Status::DELETED_PICKED_UP) {
+			throw new HttpException(404, 'basket was already picked up');
 		}
 
 		$data = $this->normalizeBasket($basket);
@@ -271,7 +270,7 @@ class BasketRestController extends FOSRestController
 		$status = $this->gateway->removeBasket($basketId, $this->session->id());
 
 		if ($status == 0) {
-			throw new HttpException(404, "basket was not found or cannot be deleted");
+			throw new HttpException(404, 'basket was not found or cannot be deleted');
 		} else {
 			return $this->handleView($this->view([]), 200);
 		}
