@@ -515,10 +515,10 @@ class StoreGateway extends BaseGateway
 				'betrieb_fetch',
 				'img img-store brown',
 				['href' => '/?page=fsbetrieb&id=' . $storeId],
-				[
+				array(
 					'betrieb' => $storeName,
 					'count' => $messageCount
-				],
+				),
 				$messageIdentifier,
 				0,
 				$messageTimestamp,
@@ -531,10 +531,10 @@ class StoreGateway extends BaseGateway
 				$messageBody,
 				$messageIcon,
 				['href' => $messageHref],
-				[
+				array(
 					'betrieb' => $storeName,
 					'count' => $messageCount
-				],
+				),
 				$messageIdentifier,
 				0,
 				$messageTimestamp
