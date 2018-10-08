@@ -18,6 +18,7 @@
 - stat_fetchrate is calculated correctly and shown in profile #281 @k.miklobusec
 - fix mail sending by passing instance of Mem to AsyncMail constructor !551 @nicksellen
 - fixed wrong html formatting in quick replies to forum posts !534 @peter.toennies
+- fixed index check in BasketGateway #354 !556 @alex.simm
 
 ## Refactoring
 - Unify Symfony DI configuration !544 @nicksellen

@@ -39,12 +39,13 @@ class BasketGatewayTest extends \Codeception\Test\Unit
 	{
 		$this->assertEquals(10, $this->gateway->getUpdateCount($this->foodsaver['id']));
 	}
-	
-	public function testGetBasket() {
+
+	public function testGetBasket()
+	{
 		//existing basket
 		$result = $this->gateway->getBasket($this->basketIds[0]);
 		$this->assertInternalType('array', $result);
-		
+
 		//non-existing basket
 		$this->assertEquals(false, $this->gateway->getBasket(99999));
 	}
