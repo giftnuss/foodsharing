@@ -125,13 +125,15 @@ class BasketRestController extends FOSRestController
 	public function getBasketAction($basketId)
 	{
 		if (!$this->session->may()) {
-			throw new HttpException(401);
+			throw new HttpException(401, 'not logged in');
 		}
 
-		//TODO: this throws (500 "Notice: Undefined index: foodsaver_id") instead of a 400 code
 		$basket = $this->gateway->getBasket($basketId);
-		if ($basket['status'] == Status::DELETED_OTHER_REASON || $basket['status'] == Status::DELETED_PICKED_UP) {
-			throw new HttpException(404);
+		if (!$basket || $basket['status'] == Status::DELETED_OTHER_REASON) {
+			throw new HttpException(404, "basket does not exist");
+		}
+		else if($basket['status'] == Status::DELETED_PICKED_UP) {
+			throw new HttpException(404, "basket was already picked up");
 		}
 
 		$data = $this->normalizeBasket($basket);
@@ -176,16 +178,13 @@ class BasketRestController extends FOSRestController
 	public function addBasketAction(ParamFetcher $paramFetcher)
 	{
 		if (!$this->session->may()) {
-			throw new HttpException(401);
+			throw new HttpException(401, 'not logged in');
 		}
 
 		//prepare and check description
 		$description = trim(strip_tags($paramFetcher->get('description')));
 		if (empty($description)) {
-			throw new HttpException(400, 'the description must not be empty: ' .
-					$paramFetcher->get('description')
-					. ' ' . strip_tags($paramFetcher->get('description'))
-					. ' ' . trim(strip_tags($paramFetcher->get('description'))));
+			throw new HttpException(400, 'the description must not be empty');
 		}
 
 		//find user's location
@@ -261,7 +260,7 @@ class BasketRestController extends FOSRestController
 	 * of the user was found and deleted, 404 if no such basket was found, or
 	 * 401 if not logged in.
 	 *
-	 * @Rest\Get("baskets/remove/{basketId}", requirements={"basketId" = "\d+"})
+	 * @Rest\Delete("baskets/remove/{basketId}", requirements={"basketId" = "\d+"})
 	 */
 	public function removeBasketAction($basketId)
 	{
@@ -272,7 +271,7 @@ class BasketRestController extends FOSRestController
 		$status = $this->gateway->removeBasket($basketId, $this->session->id());
 
 		if ($status == 0) {
-			throw new HttpException(404);
+			throw new HttpException(404, "basket was not found or cannot be deleted");
 		} else {
 			return $this->handleView($this->view([]), 200);
 		}
