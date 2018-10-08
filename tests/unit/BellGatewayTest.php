@@ -59,4 +59,57 @@ class BellGatewayTest extends \Codeception\Test\Unit
 		$this->tester->seeNumRecords(0, 'fs_bell');
 		$this->tester->seeNumRecords(0, 'fs_foodsaver_has_bell');
 	}
+
+	public function testGetOneByIdentifier()
+	{
+		$this->tester->clearTable('fs_bell');
+
+		$user1 = $this->tester->createFoodsaver();
+		$user2 = $this->tester->createFoodsaver();
+
+		$identifier = 'my-custom-identifier';
+
+		$this->tester->addBells([$user1, $user2], ['identifier' => $identifier]);
+
+		$bellId = $this->gateway->getOneByIdentifier($identifier);
+
+		$this->tester->seeInDatabase('fs_bell', ['id' => $bellId, 'identifier' => $identifier]);
+	}
+
+	public function testUpdateBell()
+	{
+		$this->tester->clearTable('fs_bell');
+
+		$user1 = $this->tester->createFoodsaver();
+		$user2 = $this->tester->createFoodsaver();
+
+		$title = 'title';
+		$body = $this->faker->text(50);
+		$icon = 'some-icon';
+		$identifier = 'some-identifier';
+		$closable = 0;
+
+		$this->gateway->addBell([$user1, $user2], $title, $body, $icon, [], [], $identifier, $closable);
+		$bellId = $this->tester->grabFromDatabase('fs_bell', 'id', ['name' => $title, 'body' => $body]);
+
+		$updatedTitle = 'updated title';
+		$updatedBody = $this->faker->text(50);
+		$updatedIcon = 'some-updated-icon';
+		$updatedIdentifier = 'some-updated-identifier';
+		$updatedClosable = 1;
+
+		$this->gateway->updateBell($bellId, $updatedTitle, $updatedBody, $updatedIcon, [], [], $updatedIdentifier, $updatedClosable);
+
+		$this->tester->seeInDatabase(
+			'fs_bell',
+			array(
+				'id' => $bellId,
+				'name' => $updatedTitle,
+				'body' => $updatedBody,
+				'icon' => $updatedIcon,
+				'identifier' => $updatedIdentifier,
+				'closeable' => $updatedClosable
+			)
+		);
+	}
 }
