@@ -1,6 +1,5 @@
 <?php
 
-
 class BellGatewayTest extends \Codeception\Test\Unit
 {
 	/**

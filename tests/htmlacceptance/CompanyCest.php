@@ -1,6 +1,5 @@
 <?php
 
-
 class CompanyCest
 {
 	private $bezirk_id = 241;

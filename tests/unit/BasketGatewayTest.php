@@ -1,6 +1,5 @@
 <?php
 
-
 class BasketGatewayTest extends \Codeception\Test\Unit
 {
 	/**
