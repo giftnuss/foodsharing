@@ -5,6 +5,7 @@ namespace Foodsharing\Controller;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
+use Foodsharing\Services\BasketService;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class BasketRestController extends FOSRestController
 {
 	private $gateway;
+	private $service;
 	private $session;
 
 	// literal constants
@@ -34,9 +36,10 @@ class BasketRestController extends FOSRestController
 	private const LON = 'lon';
 	private const TEL = 'tel';
 
-	public function __construct(BasketGateway $gateway, Session $session)
+	public function __construct(BasketGateway $gateway, BasketService $service, Session $session)
 	{
 		$this->gateway = $gateway;
+		$this->service = $service;
 		$this->session = $session;
 	}
 
@@ -225,7 +228,6 @@ class BasketRestController extends FOSRestController
 		}
 
 		// find user's location
-		$location_type = 0;
 		$loc = $this->session->getLocation();
 		$lat = $loc[self::LAT];
 		$lon = $loc[self::LON];
@@ -233,67 +235,21 @@ class BasketRestController extends FOSRestController
 			throw new HttpException(400, 'The user profile has no address.');
 		}
 
-		// parse contact type and phone numbers
-		$contactString = '1';
-		$phone = [
-			self::TEL => '',
-			self::MOBILE_NUMBER => ''
-		];
-		$contactTypes = $paramFetcher->get(self::CONTACT_TYPES);
-		if ($contactTypes !== null && \is_array($contactTypes)) {
-			$contactString = implode(':', $contactTypes);
-			if (\in_array(2, $contactTypes, true)) {
-				$phone = [
-					self::TEL => preg_replace('/[^0-9\-\/]/', '', $paramFetcher->get(self::TEL)),
-					self::MOBILE_NUMBER => preg_replace('/[^0-9\-\/]/', '', $paramFetcher->get(self::MOBILE_NUMBER)),
-				];
-			}
-		}
-
-		//check lifetime
-		$lifetime = $paramFetcher->get('lifetime');
-		if ($lifetime < 1 || $lifetime > 21) {
-			$lifetime = 7;
-		}
-
 		//add basket
-		$basketId = $this->gateway->addBasket($description, '', $phone, $contactString,
-				$paramFetcher->get('weight'), $location_type, $lat, $lon,
-				$lifetime * 60 * 60 * 24,
-				$this->session->user('bezirk_id'), $this->session->id()
-		);
-		if ($basketId === 0) {
+		$basket = $this->service->addBasket($description, '', $paramFetcher->get(self::CONTACT_TYPES),
+				$paramFetcher->get(self::TEL), $paramFetcher->get(self::MOBILE_NUMBER),
+				$paramFetcher->get('weight'), $lat, $lon,
+				$paramFetcher->get('lifetime'));
+		if (!$basket) {
 			throw new HttpException(400, 'Unable to create the basket.');
 		}
 
-		// add food types
-		$foodTypes = $paramFetcher->get('foodTypes');
-		if ($foodTypes !== null && \is_array($foodTypes)) {
-			$types = array();
-			foreach ($foodTypes as $ft) {
-				if ((int)$ft > 0) {
-					$types[] = (int)$ft;
-				}
-			}
-
-			$this->gateway->addTypes($basketId, $types);
-		}
-
-		// add kinds of food
-		$foodKinds = $paramFetcher->get('foodKinds');
-		if ($foodKinds !== null && \is_array($foodKinds)) {
-			$kinds = array();
-			foreach ($foodKinds as $fk) {
-				if ((int)$fk > 0) {
-					$kinds[] = (int)$fk;
-				}
-			}
-
-			$this->gateway->addKind($basketId, $kinds);
-		}
+		// add types and kinds of food
+		$this->service->addFoodTypes($basket['id'], $paramFetcher->get('foodTypes'));
+		$this->service->addFoodKinds($basket['id'], $paramFetcher->get('foodKinds'));
 
 		// return the created basket
-		$data = $this->normalizeBasket($this->gateway->getBasket($basketId));
+		$data = $this->normalizeBasket($basket);
 
 		return $this->handleView($this->view(['basket' => $data], 200));
 	}
