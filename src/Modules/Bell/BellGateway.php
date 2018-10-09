@@ -61,8 +61,8 @@ class BellGateway extends BaseGateway
 				'vars' => strip_tags($vars),
 				'attr' => strip_tags($link_attributes),
 				'icon' => strip_tags($icon),
-				'identifier' => strip_tags($identifier, $timestamp),
-				'time' => date('Y-m-d H:i:s'),
+				'identifier' => strip_tags($identifier),
+				'time' => date('Y-m-d H:i:s', $timestamp),
 				'closeable' => $closeable
 			]
 		);
