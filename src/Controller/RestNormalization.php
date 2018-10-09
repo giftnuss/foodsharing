@@ -12,16 +12,16 @@ class RestNormalization
 	 * Returns the response data for a foodsaver including id, name, photo url,
 	 * and sleep-status.
 	 *
-	 * @param $data the foodsaver data
-	 * @param $photoVersion type of the photo, one of '', 'crop_', 'thumb_crop_', 'mini_q', '130_q_'
+	 * @param array $data the foodsaver data from the database
+	 * @param string $photoVersion type of the photo, one of '', 'crop_', 'thumb_crop_', 'mini_q', '130_q_'
+	 *
+	 * @return array
 	 */
-	public static function normalizeFoodsaver($data, $photoVersion = '')
+	public static function normalizeFoodsaver($data, $photoVersion = ''): array
 	{
 		return [
 			'id' => (int)$data['fs_id'],
 			'name' => $data['fs_name'],
-			//TODO:
-			//'nachname' => (in_array('fs_nachname', $data) ? $data['fs_nachname'] : ''),
 			'avatar' => $data['fs_photo'] ? ('/images/' . $photoVersion . $data['fs_photo']) : null,
 			'sleepStatus' => $data['sleep_status'],
 		];
