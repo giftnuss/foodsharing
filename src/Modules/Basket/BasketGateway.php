@@ -91,6 +91,7 @@ class BasketGateway extends BaseGateway
 				b.lon,
 				b.foodsaver_id,
 				UNIX_TIMESTAMP(b.time) AS time_ts,
+				UNIX_TIMESTAMP(b.update) AS update_ts,
 				UNIX_TIMESTAMP(b.until) AS until_ts,
 				fs.id AS fs_id,
 				fs.name AS fs_name,
@@ -309,7 +310,23 @@ class BasketGateway extends BaseGateway
 	{
 		return $this->db->update(
 			'fs_basket',
-			['status' => Status::DELETED_OTHER_REASON],
+			[
+				'status' => Status::DELETED_OTHER_REASON,
+				'update' => date('Y-m-d H:i:s')
+			],
+			['id' => $id, 'foodsaver_id' => $fsId]
+		);
+	}
+
+	public function editBasket($id, $desc, $pic, $fsId): int
+	{
+		return $this->db->update(
+			'fs_basket',
+			[
+				'update' => date('Y-m-d H:i:s'),
+				'description' => strip_tags($desc),
+				'picture' => strip_tags($pic),
+			],
 			['id' => $id, 'foodsaver_id' => $fsId]
 		);
 	}

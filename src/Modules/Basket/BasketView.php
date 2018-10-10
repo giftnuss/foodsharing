@@ -10,10 +10,10 @@ class BasketView extends View
 {
 	public function find($baskets, $location)
 	{
-		$page = new vPage('Essenskörbe', $this->findMap($location));
+		$page = new vPage($this->func->s('baskets'), $this->findMap($location));
 
 		if ($baskets) {
-			$page->addSectionRight($this->closeBaskets($baskets), 'In Deiner Nähe');
+			$page->addSectionRight($this->closeBaskets($baskets), $this->func->s('basket_near'));
 		}
 
 		$page->render();
@@ -63,7 +63,7 @@ class BasketView extends View
 		$out .= '
 		</ul>
 		<div style="text-align:center;">
-			<a class="button" href="/karte?load=baskets">Alle Körbe auf der Karte</a>
+			<a class="button" href="/karte?load=baskets">' . $this->func->s('basket_on_map') . '</a>
 		</div>';
 
 		return $out;
@@ -72,7 +72,7 @@ class BasketView extends View
 	public function basket($basket, $wallposts, $requests)
 	{
 		$page = new vPage(
-			'Essenskorb #' . $basket['id'], '
+			$this->func->s('basket') . ' #' . $basket['id'], '
 		
 		<div class="pure-g">
 		    <div class="pure-u-1 pure-u-md-1-3">
@@ -85,17 +85,13 @@ class BasketView extends View
 		'
 		);
 
-		$page->setSubTitle(
-			'<p>Veröffentlicht am <strong>' . $this->func->niceDate(
-				$basket['time_ts']
-			) . '</strong></p><p>Gültig bis <strong>' . $this->func->niceDate($basket['until_ts']) . '</strong></p>'
-		);
+		$page->setSubTitle($this->getSubtitle($basket));
 
 		if ($wallposts) {
-			$page->addSection($wallposts, 'Pinnwand');
+			$page->addSection($wallposts, $this->func->s('wallboard'));
 		}
 		if ($this->session->may()) {
-			$page->addSectionRight($this->userBox($basket), 'AnbieterIn');
+			$page->addSectionRight($this->userBox($basket), $this->func->s('provider'));
 
 			if ($basket['lat'] != 0 || $basket['lon'] != 0) {
 				$map = new vMap([$basket['lat'], $basket['lon']]);
@@ -109,11 +105,11 @@ class BasketView extends View
 			}
 
 			if ($basket['fs_id'] == $this->session->id() && $requests) {
-				$page->addSectionRight($this->requests($requests), count($requests) . ' Anfragen');
+				$page->addSectionRight($this->requests($requests), $this->func->sv('req_count', array('count' => count($requests))));
 			}
 		} else {
 			$page->addSectionRight(
-				$this->v_utils->v_info('Für detaillierte Infos musst Du eingeloggt sein. Bist du noch nicht als Foodsharer registriert? Dann klick oben auf <b>Mach mit!</b> um loszulegen!', 'Hinweis!'),
+				$this->v_utils->v_info($this->func->s('basket_detail_login_hint'), $this->func->s('reference')),
 				false,
 				array('wrapper' => false)
 			);
@@ -125,11 +121,11 @@ class BasketView extends View
 	public function basketTaken($basket)
 	{
 		$page = new vPage(
-			'Essenskorb #' . $basket['id'], '
+			$this->func->s('basket') . ' #' . $basket['id'], '
 		
 		<div class="pure-g">
 		    <div class="pure-u-1 pure-u-md-2-3">
-				<p>Dieser Essenskorb wurde bereits abgeholt</p>
+				<p>' . $this->func->s('basket_picked_up') . '</p>
 			</div>
 		</div>
 		'
@@ -157,14 +153,31 @@ class BasketView extends View
 		return $out;
 	}
 
+	private function getSubtitle($basket)
+	{
+		$subtitle = '<p>' . $this->func->s('create_at') . ' <strong>' . $this->func->niceDate(
+				$basket['time_ts']
+			) . '</strong>';
+
+		$subtitle .= '</p><p>' . $this->func->s('until') . ' <strong>' . $this->func->niceDate($basket['until_ts']) . '</strong></p>';
+		if ($basket['update_ts']) {
+			$subtitle .= '<p>' . $this->func->s('update_at') . ' <strong>' . $this->func->niceDate($basket['update_ts']) . '</strong></p>';
+		}
+
+		return $subtitle;
+	}
+
 	private function userBox($basket)
 	{
-		$request = '';
-
 		if ($basket['fs_id'] != $this->session->id()) {
-			$request = '<div><a class="button button-big" href="#" onclick="ajreq(\'request\',{app:\'basket\',id:' . (int)$basket['id'] . '});">Essenskorb anfragen</a>	</div>';
+			$request = '<div><a class="button button-big" href="#" onclick="ajreq(\'request\',{app:\'basket\',id:' . (int)$basket['id'] . '});">' . $this->func->s('basket_request') . '</a>	</div>';
 		} else {
-			$request = '<div><a class="button button-big" href="#" onclick="ajreq(\'removeBasket\',{app:\'basket\',id:' . (int)$basket['id'] . '});">Essenskorb löschen</a>	</div>';
+			$request = '
+				<div class="ui-padding-bottom">
+					<a class="button button-big" href="#" onclick="ajreq(\'editBasket\',{app:\'basket\',id:' . (int)$basket['id'] . '});">' . $this->func->s('basket_edit') . '</a>
+				</div><div>
+					<a class="button button-big" href="#" onclick="ajreq(\'removeBasket\',{app:\'basket\',id:' . (int)$basket['id'] . '});">' . $this->func->s('basket_delete') . '</a>
+				</div>';
 		}
 
 		return $this->fsAvatarList(
@@ -176,7 +189,7 @@ class BasketView extends View
 						'sleep_status' => $basket['sleep_status'],
 					),
 				),
-				array('height' => 60, 'scroller' => false)
+				array('height' => 600, 'scroller' => false)
 			) .
 			$request;
 	}
@@ -285,6 +298,16 @@ class BasketView extends View
 		return $out;
 	}
 
+	public function basketEditForm($basket): string
+	{
+		$out = '';
+
+		$out .= $this->v_utils->v_form_textarea('description', array('maxlength' => 1705, 'value' => $basket['description']));
+		$out .= $this->v_utils->v_form_hidden('basket_id', $basket['id']);
+
+		return $out;
+	}
+
 	public function contactMsg(): string
 	{
 		return $this->v_utils->v_form_textarea('contactmessage');
@@ -293,7 +316,7 @@ class BasketView extends View
 	public function contactTitle($basket): string
 	{
 		return '<img src="' . $this->func->img($basket['fs_photo']) . '" style="float:left;margin-right:15px;" />
-		<p>' . $basket['fs_name'] . ' kontaktieren</p>
+		<p>' . $this->func->sv('foodsaver_contact', array('name' => $basket['fs_name'])) . '</p>
 		<div style="clear:both;"></div>';
 	}
 
@@ -302,13 +325,13 @@ class BasketView extends View
 		$out = '';
 		$content = '';
 		if (!empty($basket['tel'])) {
-			$content .= ('<tr><td>Festnetz: &nbsp;</td><td>' . $basket['tel'] . '</td></tr>');
+			$content .= ('<tr><td>' . $this->func->s('telefon') . ': &nbsp;</td><td>' . $basket['tel'] . '</td></tr>');
 		}
 		if (!empty($basket['handy'])) {
-			$content .= ('<tr><td>Handy: &nbsp;</td><td>' . $basket['handy'] . '</td></tr>');
+			$content .= ('<tr><td>' . $this->func->s('handy') . ': &nbsp;</td><td>' . $basket['handy'] . '</td></tr>');
 		}
 		if (!empty($content)) {
-			$out .= $this->v_utils->v_input_wrapper('Telefonisch kontaktieren', '<table>' . $content . '</table>');
+			$out .= $this->v_utils->v_input_wrapper($this->func->s('phone_contact'), '<table>' . $content . '</table>');
 		}
 
 		return $out;
@@ -323,9 +346,9 @@ class BasketView extends View
 
 		return '
 		' . $img . '
-		' . $this->v_utils->v_input_wrapper('Beschreibung', nl2br($this->func->autolink($basket['description']))) . '
+		' . $this->v_utils->v_input_wrapper($this->func->s('desc'), nl2br($this->func->autolink($basket['description']))) . '
 		' .
-			'<div style="text-align:center;"><a class="fsbutton" href="' . BASE_URL . '/essenskoerbe/' . $basket['fsf_id'] . '" target="_blank">Essenskorb anfragen auf foodsharing.de</a></div>';
+			'<div style="text-align:center;"><a class="fsbutton" href="' . BASE_URL . '/essenskoerbe/' . $basket['fsf_id'] . '" target="_blank">' . $this->func->s('basket_request_on_page') . '</a></div>';
 	}
 
 	public function bubbleNoUser($basket): string
@@ -337,7 +360,7 @@ class BasketView extends View
 
 		return '
 		' . $img . '
-		' . $this->v_utils->v_input_wrapper('Beschreibung', nl2br($this->func->autolink($basket['description']))) . '
+		' . $this->v_utils->v_input_wrapper($this->func->s('desc'), nl2br($this->func->autolink($basket['description']))) . '
 		';
 	}
 
@@ -350,8 +373,8 @@ class BasketView extends View
 
 		return '
 		' . $img . '
-		' . $this->v_utils->v_input_wrapper('Einstelldatum', $this->func->niceDate($basket['time_ts'])) . '
-		' . $this->v_utils->v_input_wrapper('Beschreibung', nl2br($this->func->autolink($basket['description']))) . '
+		' . $this->v_utils->v_input_wrapper($this->func->s('set_date'), $this->func->niceDate($basket['time_ts'])) . '
+		' . $this->v_utils->v_input_wrapper($this->func->s('desc'), nl2br($this->func->autolink($basket['description']))) . '
 		';
 	}
 }
