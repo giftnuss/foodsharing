@@ -37,7 +37,7 @@ class WallPostPermissions
 				/* ToDo merge with access logic inside event */
 				$event = $this->eventGateway->getEventWithInvites($targetId);
 
-				return $event['public'] || isset($event['may'][$fsId]);
+				return $event['public'] || isset($event['invites']['may'][$fsId]);
 			case 'foodsaver':
 				return $fsId > 0;
 			case 'fairteiler':
