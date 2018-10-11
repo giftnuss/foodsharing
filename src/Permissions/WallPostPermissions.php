@@ -47,7 +47,7 @@ class WallPostPermissions
 			case 'usernotes':
 				return $this->regionGateway->hasMember($fsId, 432);
 			default:
-				return false;
+				return $fsId > 0;
 		}
 	}
 
