@@ -29,8 +29,6 @@ class WallPostPermissions
 	public function mayReadWall($fsId, $target, $targetId)
 	{
 		switch ($target) {
-			case 'basket':
-				return $fsId > 0;
 			case 'bezirk':
 				return $this->regionGateway->hasMember($fsId, $targetId);
 			case 'event':
@@ -38,8 +36,6 @@ class WallPostPermissions
 				$event = $this->eventGateway->getEventWithInvites($targetId);
 
 				return $event['public'] || isset($event['invites']['may'][$fsId]);
-			case 'foodsaver':
-				return $fsId > 0;
 			case 'fairteiler':
 				return true;
 			case 'question':
