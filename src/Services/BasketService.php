@@ -92,7 +92,7 @@ class BasketService
 				}
 			}
 
-			if (!empty(types)) {
+			if (!empty($types)) {
 				$this->basketGateway->addTypes($basketId, $types);
 
 				return true;
@@ -121,7 +121,7 @@ class BasketService
 				}
 			}
 
-			if (!empty(kinds)) {
+			if (!empty($kinds)) {
 				$this->basketGateway->addKind($basketId, $kinds);
 
 				return true;
