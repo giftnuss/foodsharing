@@ -9,8 +9,8 @@ modules:
     enabled:
         - Sequence
         - Db:
-            populate: true
             cleanup: true
+            populator: 'mysql -u$user -h$host -p$password $dbname < migrations/_reload_data.sql'
         - Asserts
         - \Helper\WebDriver:
             url: 'http://web:8080/'
