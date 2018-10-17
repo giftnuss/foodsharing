@@ -1330,7 +1330,7 @@ class XhrMethods
 		$betrieb = $this->model->getVal('name', 'betrieb', $data['id']);
 		$bezirk_id = $this->model->getVal('bezirk_id', 'betrieb', $data['id']);
 		if ($biebs = $this->storeGateway->getBiebsForStore($data['id'])) {
-			$msg = 'Der Verartwortliche wurde über Deine Anfrage informiert und wird sich bei Dir melden!';
+			$msg = 'Der Verantwortliche wurde über Deine Anfrage informiert und wird sich bei Dir melden.';
 
 			$this->bellGateway->addBell($biebs, 'store_new_request_title', 'store_new_request', 'img img-store brown', array(
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['id']
@@ -1339,7 +1339,7 @@ class XhrMethods
 				'name' => $betrieb
 			), 'store-request-' . (int)$data['id']);
 		} else {
-			$msg = 'Für Diesen Betrieb gibt es noch keinen Verantwortlichen, Der Botschafter wurde informiert';
+			$msg = 'Für diesen Betrieb gibt es noch keinen Verantwortlichen. Die Botschafter wurden informiert.';
 
 			$botsch = array();
 			$add = '';
