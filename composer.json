@@ -6,7 +6,7 @@
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",
-    "codeception/codeception": "^2.2",
+    "codeception/codeception": "^2.5",
     "friendsofphp/php-cs-fixer": "2.*",
     "filp/whoops": "^2.1",
     "mashape/unirest-php": "^3.0",
