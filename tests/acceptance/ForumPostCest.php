@@ -1,6 +1,5 @@
 <?php
 
-
 class ForumPostCest
 {
 	private $ambassador;

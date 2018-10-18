@@ -1,6 +1,5 @@
 <?php
 
-
 class ChatCest
 {
 	public function _before(AcceptanceTester $I)

@@ -29,17 +29,13 @@ class WallPostPermissions
 	public function mayReadWall($fsId, $target, $targetId)
 	{
 		switch ($target) {
-			case 'basket':
-				return $fsId > 0;
 			case 'bezirk':
 				return $this->regionGateway->hasMember($fsId, $targetId);
 			case 'event':
 				/* ToDo merge with access logic inside event */
 				$event = $this->eventGateway->getEventWithInvites($targetId);
 
-				return $event['public'] || isset($event['may'][$fsId]);
-			case 'foodsaver':
-				return $fsId > 0;
+				return $event['public'] || isset($event['invites']['may'][$fsId]);
 			case 'fairteiler':
 				return true;
 			case 'question':
@@ -47,7 +43,7 @@ class WallPostPermissions
 			case 'usernotes':
 				return $this->regionGateway->hasMember($fsId, 432);
 			default:
-				return false;
+				return $fsId > 0;
 		}
 	}
 

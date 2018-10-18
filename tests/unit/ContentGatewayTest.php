@@ -1,6 +1,5 @@
 <?php
 
-
 class ContentGatewayTest extends \Codeception\Test\Unit
 {
 	/**

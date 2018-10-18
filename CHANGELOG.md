@@ -27,6 +27,7 @@
 - Unify Symfony DI configuration !544 @nicksellen
 
 ## Dev/Test/CI stuff
+- Add php extensions as composer dependencies, upgrade codeception !558 @nicksellen
 
 # 2018-08-19 Hotfix
 

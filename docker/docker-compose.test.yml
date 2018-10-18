@@ -143,7 +143,9 @@ services:
     image: phpmyadmin/phpmyadmin
     container_name: foodsharing_test_phpmyadmin
     environment:
-      - PMA_ARBITRARY=1
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
     restart: always
     ports:
       - 28081:80
