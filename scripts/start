@@ -12,9 +12,9 @@ dir=$(dirname "$0")
 source $dir/inc.sh
 
 echo "Bringing up containers"
-# dc is defined in inc.sh and start docker-compose with following arguments
-# up starts the container, -d: run in background as a deamon
-dc up -d
+# dc is defined in inc.sh and starts docker-compose with following arguments
+# up starts the container, --detach: run in background as a deamon
+dc up --detach
 $dir/mkdirs
 
 echo "Running composer install"
