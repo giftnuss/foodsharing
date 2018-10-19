@@ -5249,11 +5249,7 @@ leaflet.markercluster@0.4.0:
   dependencies:
     leaflet "~0.7.1"
 
-leaflet@0.7.2:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-0.7.2.tgz#814a5887d04447da90b563c06519b79346d71e40"
-
-leaflet@~0.7.1:
+leaflet@^0.7.7, leaflet@~0.7.1:
   version "0.7.7"
   resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-0.7.7.tgz#1e352ba54e63d076451fa363c900890cb2cf75ee"
 
