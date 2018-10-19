@@ -2,7 +2,7 @@
 
 export FS_ENV=dev
 
-# set -e tells the shell to exit as a command exits with non-zero status, i.e. fails
+# set -e tells the shell to exit as soon as a command exits with non-zero status, i.e. fails
 set -e
 
 # . is a bash builtin, synonymous to source

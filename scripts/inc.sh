@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# set -e tells the shell to exit as a command exits with non-zero status, i.e. fails
+# set -e tells the shell to exit as soon as a command exits with non-zero status, i.e. fails
 set -e
 
 # :- is an shell operator. If FS_ENV is set and not the empty string, use FS_ENV, otherwise use dev
