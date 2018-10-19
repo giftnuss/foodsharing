@@ -3,7 +3,7 @@
 # which command to run by docker-compose and additional arguments is specified by the arguments
 # of this script
 
-set -e
+set -o errexit
 
 dir=$(dirname "$0")
 
