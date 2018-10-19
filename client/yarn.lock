@@ -5243,9 +5243,9 @@ leaflet.awesome-markers@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/leaflet.awesome-markers/-/leaflet.awesome-markers-2.0.4.tgz#66fea2090c9c8a0ab6d1f3b6bdd02fb37cf4ba1a"
 
-leaflet.markercluster@0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/leaflet.markercluster/-/leaflet.markercluster-0.4.0.tgz#c9a9b543ccfc45957d153d4abdae212403d30f21"
+leaflet.markercluster@^0.5.0:
+  version "0.5.0"
+  resolved "http://registry.npmjs.org/leaflet.markercluster/-/leaflet.markercluster-0.5.0.tgz#804a5c2b02ecacb19c064a253396ab60d5df699b"
   dependencies:
     leaflet "~0.7.1"
 
