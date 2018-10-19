@@ -35,7 +35,7 @@
     "socket.io-client": "^1.7.4",
     "timeago": "^1.4.1",
     "tinysort": "^2.3.6",
-    "twemoji": "^11.0.1",
+    "twemoji": "^11.2.0",
     "typeahead-addresspicker": "^1.0.1",
     "typeface-alfa-slab-one": "0.0.54",
     "underscore": "^1.9.1",
