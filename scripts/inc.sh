@@ -18,7 +18,7 @@ MYSQL_PASSWORD=${MYSQL_PASSWORD:-root}
 dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
 
 function log-header() {
-  # prints a log header, take one argument as the printed title
+  # print a log header, take one argument as the printed title
   local text=$1;
   echo
   echo "============================================"
