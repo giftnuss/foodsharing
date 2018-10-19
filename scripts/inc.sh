@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# set -e tells the shell to exit as soon as a command exits with non-zero status, i.e. fails
+# set -o errexit tells the shell to exit as soon as a command exits with non-zero status, i.e. fails
 set -o errexit
 
 # :- is an shell operator. If FS_ENV is set and not the empty string, use FS_ENV, otherwise use dev
