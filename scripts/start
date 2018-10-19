@@ -7,8 +7,7 @@ set -o errexit
 
 dir=$(dirname "$0")
 
-# . is a bash builtin, synonymous to source
-# it runs the content of the argument as if there were here (without launching a subshell!)
+# source runs the content of the argument as if there were here (without launching a subshell!)
 # inc.sh defines basic functions, mainly to run commands in containers
 source $dir/inc.sh
 
