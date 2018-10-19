@@ -28,6 +28,7 @@
 
 ## Dev/Test/CI stuff
 - Add php extensions as composer dependencies, upgrade codeception !558 @nicksellen
+- Updated several npm packages (most of them for ci) !564 @peter.toennies
 
 # 2018-08-19 Hotfix
 
