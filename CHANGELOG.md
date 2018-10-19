@@ -25,6 +25,7 @@
 
 ## Refactoring
 - Unify Symfony DI configuration !544 @nicksellen
+- Add comments in scripts for quicker start of new developers !563 @flukx
 
 ## Dev/Test/CI stuff
 - Add php extensions as composer dependencies, upgrade codeception !558 @nicksellen
