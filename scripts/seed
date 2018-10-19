@@ -2,7 +2,7 @@
 
 export FS_ENV=dev
 
-# set -e tells the shell to exit as soon as a command exits with non-zero status, i.e. fails
+# set -o errexit tells the shell to exit as soon as a command exits with non-zero status, i.e. fails
 set -o errexit
 
 # . is a bash builtin, synonymous to source
