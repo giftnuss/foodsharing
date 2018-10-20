@@ -128,22 +128,39 @@ class BasketRestController extends FOSRestController
 	}
 
 	/**
-	 * Returns a list of all basket IDs together with the coordinates. Returns
-	 * 200 or 401, if not logged in.
+	 * Returns a list of baskets depending on the type.
+	 * 'mine': lists all baskets of the current user.
+	 * 'coordinates': lists all basket IDs together with the coordinates.
 	 *
-	 * @Rest\Get("baskets/coordinates")
+	 * Returns 200 and a list of baskets or 401 if not logged in.
+	 *
+	 * @Rest\Get("baskets")
+	 * @Rest\QueryParam(name="type", requirements="(mine|coordinates)", default="mine")
+	 *
+	 * @param ParamFetcher $paramFetcher
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function getBasketCoordinatesAction(): \Symfony\Component\HttpFoundation\Response
+	public function listBasketsAction(ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
 	{
 		if (!$this->session->may()) {
 			throw new HttpException(401, self::NOT_LOGGED_IN);
 		}
 
-		$baskets = $this->gateway->getBasketCoordinates();
+		switch ($paramFetcher->get('type')) {
+			case 'mine':
+				$updates = $this->gateway->listUpdates($this->session->id());
+				$baskets = $this->gateway->listMyBaskets($this->session->id());
+				$data = array_map(function ($b) use ($updates) {
+					return $this->normalizeMyBasket($b, $updates);
+				}, $baskets);
+				break;
+			case 'coordinates':
+				$data = $this->gateway->getBasketCoordinates();
+				break;
+		}
 
-		return $this->handleView($this->view(['baskets' => $baskets], 200));
+		return $this->handleView($this->view(['baskets' => $data], 200));
 	}
 
 	/**
@@ -172,29 +189,6 @@ class BasketRestController extends FOSRestController
 		$data = $this->normalizeBasket($basket);
 
 		return $this->handleView($this->view(['basket' => $data], 200));
-	}
-
-	/**
-	 * Lists all baskets of the current user. Returns 200 and a list of
-	 * baskets or 401, if not logged in.
-	 *
-	 * @Rest\Get("baskets/mybaskets")
-	 *
-	 * @return \Symfony\Component\HttpFoundation\Response
-	 */
-	public function listMyBasketsAction(): \Symfony\Component\HttpFoundation\Response
-	{
-		if (!$this->session->may()) {
-			throw new HttpException(401, self::NOT_LOGGED_IN);
-		}
-
-		$updates = $this->gateway->listUpdates($this->session->id());
-		$baskets = $this->gateway->listMyBaskets($this->session->id());
-		$data = array_map(function ($b) use ($updates) {
-			return $this->normalizeMyBasket($b, $updates);
-		}, $baskets);
-
-		return $this->handleView($this->view(['baskets' => $data], 200));
 	}
 
 	/**
