@@ -1,0 +1,17 @@
+FROM registry.gitlab.com/foodsharing-dev/images/chat:1.1
+
+COPY . /app/chat
+
+WORKDIR /app/chat
+
+COPY package.json .
+
+# see https://github.com/npm/npm/issues/9863#issuecomment-255506533
+RUN \
+  mkdir -p node_modules && \
+  mv node_modules node_modules.tmp && \
+  mv node_modules.tmp node_modules && \
+  npm install && \
+  npm prune
+
+CMD ["node", "server.js"]

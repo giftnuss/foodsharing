@@ -1,226 +1,36 @@
-version: '2'
+version: '3'
 services:
 
-  # nginx
-  #------------------------------------
-
-  # proxies connections to app/chat
-
   web:
-    container_name: foodsharing_dev_web
-    image: registry.gitlab.com/foodsharing-dev/images/web:1.5
     ports:
-      - 18080:8080
-    depends_on:
-      - app
-      - chat
-    volumes:
-      - ../:/app
-
-  # main php app
-  #------------------------------------
+      - "18080:8080"
 
   app:
-    container_name: foodsharing_dev_app
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.11
-    working_dir: /app
-    expose:
-      - 9000
-    links:
-      - redis:redis
-      - db:db
-      - chat:chat
-    depends_on:
-      - db
-      - redis
-      - mailqueuerunner
     volumes:
-      - ../:/app
       - ${PWD}/docker/conf/app/php.dev.ini:/usr/local/etc/php/conf.d/dev-config.ini
-    environment:
-      FS_ENV: dev
-
-  # webpack client javascript
-  #------------------------------------
 
   client:
-    container_name: foodsharing_dev_client
-    image: node:10.12
     ports:
       - "8080:8080"
       - "8081:8081"
-    # we don't run webpack dev mode by default, make them run ./scripts/dev
-    command: 'true'
-    working_dir: /app/client
-    user: "${UID}"
-    volumes:
-      - ../:/app
-      - client-node-modules:/app/client/node_modules
-    environment:
-      HOST: 0.0.0.0
-      PROXY_TARGET: http://web:8080
-
-  # php mail queue runner
-  #------------------------------------
-
-  mailqueuerunner:
-    container_name: foodsharing_dev_mailqueuerunner
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.11
-    command: php run.php Mails queueWorker
-    restart: always
-    depends_on:
-      - db
-      - redis
-    working_dir: /app
-    links:
-      - maildev
-      - redis:redis
-      - db:db
-    volumes:
-      - ../:/app
-    environment:
-      FS_ENV: dev
-
-  # light frontend
-  #------------------------------------
-
-  light:
-    container_name: foodsharing_dev_light
-    image: registry.gitlab.com/foodsharing-dev/images/light:1.0
-    command: >
-      sh -c "
-      (test -f package.json || (echo 'If you want fslight run \"git clone https://github.com/foodsharing-dev/foodsharing-light.git light\"' && exit 1)) &&
-      yarn &&
-      yarn dev
-      "
-    ports:
-      - 18082:8080
-    environment:
-      FOODSHARING_BACKEND: http://web:8080
-      CHAT_BACKEND: http://chat:1337
-      API_BACKEND: http://api:8000
-    volumes:
-      - ../:/app
-      - light-node-modules:/app/light/node_modules
-      - light-yarn-cache:/usr/local/share/.cache/yarn
-    working_dir: /app/light
-
-  # django api
-  #------------------------------------
-
-  api:
-    container_name: foodsharing_dev_api
-    image: python:3.5.3
-    command: >
-      sh -c "
-      (test -f manage.py || (echo 'If you want the api run \"git clone https://github.com/foodsharing-dev/foodsharing-django-api.git api\"' && exit 1)) &&
-      (command -v virtualenv || /usr/local/bin/pip install virtualenv) &&
-      (test -d env/bin || virtualenv --no-site-packages env) &&
-      (test -f env/bin/pip-sync || env/bin/pip install pip-tools) &&
-      env/bin/pip-sync &&
-      wait-for-it db:3306 &&
-      env/bin/python manage.py migrate &&
-      env/bin/python manage.py runserver 0.0.0.0:8000
-      "
-    volumes:
-      - ../:/app
-      - ../docker/conf/api/local_settings.py:/app/api/foodsharing_api/local_settings.py
-      - ../docker/wait-for-it:/usr/local/bin/wait-for-it
-      - api-virtualenv:/app/api/env
-      - api-pip-cache:/root/.cache/pip
-    environment:
-      REDIS_HOST: redis
-    ports:
-      - 18000:8000
-    working_dir: /app/api
-
-  # nodejs socket.io server
-  #------------------------------------
 
   chat:
-    container_name: foodsharing_dev_chat
-    command: sh -c "yarn && node server.js 0.0.0.0"
-    image: registry.gitlab.com/foodsharing-dev/images/chat:1.1
-    working_dir: /app/chat
-    depends_on:
-      - redis
-    environment:
-      REDIS_HOST: redis
-    expose:
-      - 1337
-      - 1338
     ports:
-      - 11337:1337
-      - 11338:1338
-    volumes:
-      - ../:/app
-      - chat-node-modules:/app/node_modules
-
-  # mysql
-  #------------------------------------
+      - "11337:1337"
+      - "11338:1338"
 
   db:
-    container_name: foodsharing_dev_db
-    image: registry.gitlab.com/foodsharing-dev/images/db/dev:1.0
-    # so we can mount tmpfs inside container
-    privileged: true
-    expose:
-      - 3306
     ports:
-      - 13306:3306
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-    volumes:
-      - ../:/app
-
-  # redis
-  #------------------------------------
+      - "13306:3306"
 
   redis:
-    container_name: foodsharing_dev_redis
-    image: redis:alpine
     ports:
-        - 16379:6379
-    expose:
-      - 6379
-
-  # phpmyadmin
-  #------------------------------------
+      - "16379:6379"
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: foodsharing_dev_phpmyadmin
-    environment:
-      PMA_HOST: db
-      PMA_USER: root
-      PMA_PASSWORD: root
-    restart: always
     ports:
-      - 18081:80
-    volumes:
-      - ${PWD}/docker/conf/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
-      - /sessions
-
-  # maildev
-  # changed ports, since 18083 is used by virtualbox (vboxwebsrv)
-  #------------------------------------
+      - "18081:80"
 
   maildev:
-    command: >
-      bin/maildev
-        --web 80
-        --smtp 25
-        --hide-extensions STARTTLS
-    image: djfarrelly/maildev
-    container_name: foodsharing_dev_maildev
     ports:
-      - 18084:80
-
-
-volumes:
-  client-node-modules:
-  light-node-modules:
-  light-yarn-cache:
-  api-virtualenv:
-  api-pip-cache:
-  chat-node-modules:
+      - "18084:80"
