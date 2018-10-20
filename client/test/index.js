@@ -34,16 +34,24 @@ function run (fn) {
   })
 }
 
-if (watch) {
-  compiler.watch({}, (err, stats) => {
-    handleErrors(err, stats, false)
-    if (runner) {
+function rerun (abortCurrent = false) {
+  if (runner) {
+    if (abortCurrent) {
       console.log('aborting existing run!')
       runner.abort()
-      runAgain = true
-    } else {
-      run()
     }
+    runAgain = true
+  } else {
+    run()
+  }
+}
+
+if (watch) {
+  listenForKeypress()
+  onEnter(rerun)
+  compiler.watch({}, (err, stats) => {
+    handleErrors(err, stats, false)
+    rerun(true)
   })
 } else {
   compiler.run((err, stats) => {
@@ -70,4 +78,20 @@ function handleErrors (err, stats, exit) {
   }
 
   if (stats.hasErrors() && exit) process.exit(1)
+}
+
+
+function onEnter (fn) {
+  process.stdin.on('keypress', (letter, key) => {
+    if (key.ctrl && key.name === 'c') {
+      process.exit()
+    } else if (key.name === 'return' || key.name === 'enter') {
+      fn()
+    }
+  })
+}
+
+function listenForKeypress () {
+  process.stdin.setRawMode(true)
+  require('readline').emitKeypressEvents(process.stdin)
 }
