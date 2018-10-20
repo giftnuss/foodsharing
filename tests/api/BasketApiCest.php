@@ -10,7 +10,7 @@ class BasketApiCest
 	private $user;
 
 	private const EMAIL = 'email';
-	private const API_BASKETS_BASKET = 'api/baskets/basket/';
+	private const API_BASKETS = 'api/baskets';
 	private const ID = 'id';
 
 	public function _before(\ApiTester $I)
@@ -23,7 +23,7 @@ class BasketApiCest
 		$basket = $I->createFoodbasket($this->user[self::ID]);
 
 		$I->login($this->user[self::EMAIL]);
-		$I->sendGET(self::API_BASKETS_BASKET . $basket[self::ID]);
+		$I->sendGET(self::API_BASKETS . '/' . $basket[self::ID]);
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeResponseIsJson();
 	}
@@ -33,16 +33,16 @@ class BasketApiCest
 		$basket = $I->createFoodbasket($this->user[self::ID]);
 
 		$I->login($this->user[self::EMAIL]);
-		$I->sendDELETE('api/baskets/remove/' . $basket[self::ID]);
+		$I->sendDELETE(self::API_BASKETS . '/' . $basket[self::ID]);
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
-		$I->sendGET(self::API_BASKETS_BASKET . $basket[self::ID]);
+		$I->sendGET(self::API_BASKETS . '/' . $basket[self::ID]);
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::NOT_FOUND);
 	}
 
 	public function removeNonExistingBasket(\ApiTester $I)
 	{
 		$I->login($this->user[self::EMAIL]);
-		$I->sendDELETE('api/baskets/remove/999999');
+		$I->sendDELETE(self::API_BASKETS . '/999999');
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::NOT_FOUND);
 	}
 
@@ -51,7 +51,7 @@ class BasketApiCest
 		$I->createFoodbasket($this->user[self::ID]);
 
 		$I->login($this->user[self::EMAIL]);
-		$I->sendGET('api/baskets/mybaskets');
+		$I->sendGET(self::API_BASKETS . '/mybaskets');
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeResponseIsJson();
 	}
@@ -61,7 +61,7 @@ class BasketApiCest
 		$I->createFoodbasket($this->user[self::ID]);
 
 		$I->login($this->user[self::EMAIL]);
-		$I->sendGET('api/baskets/coordinates');
+		$I->sendGET(self::API_BASKETS . '/coordinates');
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeResponseIsJson();
 	}
@@ -69,7 +69,7 @@ class BasketApiCest
 	public function addBasket(\ApiTester $I)
 	{
 		$I->login($this->user[self::EMAIL]);
-		$I->sendPOST('api/baskets/add', ['description' => 'test description']);
+		$I->sendPOST(self::API_BASKETS, ['description' => 'test description']);
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeResponseIsJson();
 	}
@@ -78,15 +78,15 @@ class BasketApiCest
 	{
 		$basket = $I->createFoodbasket($this->user[self::ID]);
 
-		$I->sendGET('api/baskets/coordinates');
+		$I->sendGET(self::API_BASKETS . '/coordinates');
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::UNAUTHORIZED);
-		$I->sendGET('api/baskets/mybaskets');
+		$I->sendGET(self::API_BASKETS . '/mybaskets');
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::UNAUTHORIZED);
-		$I->sendGET(self::API_BASKETS_BASKET . $basket[self::ID]);
+		$I->sendGET(self::API_BASKETS . '/' . $basket[self::ID]);
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::UNAUTHORIZED);
-		$I->sendDELETE('api/baskets/remove/' . $basket[self::ID]);
+		$I->sendDELETE(self::API_BASKETS . '/' . $basket[self::ID]);
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::UNAUTHORIZED);
-		$I->sendPOST('api/baskets/add');
+		$I->sendPOST(self::API_BASKETS);
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::UNAUTHORIZED);
 	}
 }

@@ -150,7 +150,7 @@ class BasketRestController extends FOSRestController
 	 * Returns details of the basket with the given ID. Returns 200 and the
 	 * basket, 500 if the basket does not exist, or 401 if not logged in.
 	 *
-	 * @Rest\Get("baskets/basket/{basketId}", requirements={"basketId" = "\d+"})
+	 * @Rest\Get("baskets/{basketId}", requirements={"basketId" = "\d+"})
 	 *
 	 * @param int $basketId
 	 *
@@ -201,7 +201,7 @@ class BasketRestController extends FOSRestController
 	 * Adds a new basket. The description must not be empty. All other
 	 * parameters are optional. Returns the created basket.
 	 *
-	 * @Rest\Post("baskets/add")
+	 * @Rest\Post("baskets")
 	 * @Rest\RequestParam(name="description", nullable=false)
 	 * @Rest\RequestParam(name="contactTypes", nullable=true)
 	 * @Rest\RequestParam(name="tel", nullable=true)
@@ -259,7 +259,7 @@ class BasketRestController extends FOSRestController
 	 * of the user was found and deleted, 404 if no such basket was found, or
 	 * 401 if not logged in.
 	 *
-	 * @Rest\Delete("baskets/remove/{basketId}", requirements={"basketId" = "\d+"})
+	 * @Rest\Delete("baskets/{basketId}", requirements={"basketId" = "\d+"})
 	 *
 	 * @param int $basketId
 	 *
