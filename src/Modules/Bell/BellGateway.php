@@ -74,7 +74,7 @@ class BellGateway extends BaseGateway
 			}
 
 			$this->db->insert('fs_foodsaver_has_bell', ['foodsaver_id' => (int)$id, 'bell_id' => $bid, 'seen' => 0]);
-			$this->notifyFoodsaver((int)$id);
+			$this->updateFoodsaverClient((int)$id);
 		}
 	}
 
@@ -128,7 +128,7 @@ class BellGateway extends BaseGateway
 			$this->db->update('fs_foodsaver_has_bell', ['seen' => 0], ['foodsaver_id' => $foodsaverIds, 'bell_id' => $bellId]);
 		}
 
-		$this->notifyFoodsavers($foodsaverIds);
+		$this->updateMultipleFoodsaversClients($foodsaverIds);
 	}
 
 	/**
@@ -206,7 +206,7 @@ class BellGateway extends BaseGateway
 	public function delBellForFoodsaver($id, $fsId): int
 	{
 		$result = $this->db->delete('fs_foodsaver_has_bell', ['bell_id' => (int)$id, 'foodsaver_id' => (int)$fsId]);
-		$this->notifyFoodsaver($fsId);
+		$this->updateFoodsaverClient($fsId);
 
 		return $result;
 	}
@@ -222,7 +222,7 @@ class BellGateway extends BaseGateway
 
 		$this->db->delete('fs_bell', ['identifier' => $identifier]);
 
-		$this->notifyFoodsavers($foodsaverIds);
+		$this->updateMultipleFoodsaversClients($foodsaverIds);
 	}
 
 	public function setBellsAsSeen(array $bids, int $foodsaverId): void
@@ -231,16 +231,16 @@ class BellGateway extends BaseGateway
 		$this->db->execute($stm);
 	}
 
-	private function notifyFoodsaver(int $foodsaverId): void
+	private function updateFoodsaverClient(int $foodsaverId): void
 	{
-		$this->webSocketSender->sendSock($foodsaverId, 'bell', 'notify', []);
+		$this->webSocketSender->sendSock($foodsaverId, 'bell', 'update', []);
 	}
 
 	/**
 	 * @param int[] $foodsaverIds
 	 */
-	private function notifyFoodsavers(array $foodsaverIds): void
+	private function updateMultipleFoodsaversClients(array $foodsaverIds): void
 	{
-		$this->webSocketSender->sendSockMulti($foodsaverIds, 'bell', 'notify', []);
+		$this->webSocketSender->sendSockMulti($foodsaverIds, 'bell', 'update', []);
 	}
 }
