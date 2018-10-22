@@ -234,3 +234,4 @@ $g_lang['menu_email_tpl'] = 'E-Mail-Vorlagen';
 $g_lang['menu_blog'] = 'Blogbeiträge bearbeiten';
 
 $g_lang['changelog'] = 'Changelog';
+$g_lang['wallboard'] = 'Pinnwand';

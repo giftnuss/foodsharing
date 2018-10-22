@@ -1,6 +1,9 @@
 #!/bin/bash
 
-set -eu
+# exit shell as soon as a command fails (exit status not 0):
+set -o errexit
+# Treat unset variables as an error when substituting:
+set -o nounset
 
 if [ ! -z "$SLACK_WEBHOOK_URL" ]; then
 

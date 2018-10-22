@@ -2,13 +2,13 @@
 
 export FS_ENV=dev
 
-set -e
+set -o errexit
 
 dir=$(dirname "$0")
 
 base_dir=$(readlink -f "$dir/..")
 
-. $dir/inc.sh
+source $dir/inc.sh
 
 echo "Removing local node_modules"
 (cd $dir && rm -rf node_modules)

@@ -50,7 +50,7 @@ class FoodsaverView extends View
 			$position = $this->v_utils->v_form_text('position');
 			$options = array(
 				'values' => array(
-					array('id' => 1, 'name' => 'ist im Bundesweiten Orgateam dabei')
+					array('id' => 1, 'name' => 'ist im bundesweiten Orgateam dabei')
 				)
 			);
 
@@ -65,7 +65,7 @@ class FoodsaverView extends View
 					array('id' => 1, 'name' => 'Foodsaver/in (FS)'),
 					array('id' => 2, 'name' => 'Betriebsverantwortliche/r (BIEB)'),
 					array('id' => 3, 'name' => 'Botschafter/in (BOT)'),
-					array('id' => 4, 'name' => 'Orgamensch/in (ORG)')
+					array('id' => 4, 'name' => 'Orgamensch (ORG)')
 				)
 			));
 		}
@@ -122,7 +122,7 @@ class FoodsaverView extends View
 			$this->v_utils->v_form_select('geschlecht', array('values' => array(
 				array('name' => 'Frau', 'id' => 2),
 				array('name' => 'Mann', 'id' => 1),
-				array('name' => 'beides oder Sonstiges', 'id' => 3)
+				array('name' => 'Beides oder Sonstiges', 'id' => 3)
 			),
 				array('required' => true)
 			)),

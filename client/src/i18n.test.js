@@ -16,11 +16,11 @@ describe('i18n', () => {
   })
 
   it('basic translation', () => {
-    assert.equal(i18n('foo'), 'my nice translation')
+    assert.strictEqual(i18n('foo'), 'my nice translation')
   })
 
   it('translation with variables', () => {
-    assert.equal(i18n('bar', {
+    assert.strictEqual(i18n('bar', {
       NAME: 'Peter',
       AGE: 23
     }), 'my name is Peter and I am 23 years old')

@@ -102,10 +102,11 @@ class StoreUserView extends View
 			//date at which user was added
 			$memberSince = '';
 			if ($betrieb['verantwortlich']) {
-				$addDate = $fs['add_date'] ? date('d.m.Y', $fs['add_date'])
-						: '(' . $this->func->sv('stat_since_unknown', array()) . ')';
+				$addedAt = (!is_null($fs['add_date']) && $fs['add_date'] > 0)
+						? date('d.m.Y', $fs['add_date'])
+						: '(' . $this->func->s('stat_since_unknown') . ')';
 				$memberSince = $this->func->sv('stat_teammember_since', array(
-					'date' => $addDate
+					'date' => $addedAt
 				));
 			}
 
@@ -158,9 +159,11 @@ class StoreUserView extends View
 				}
 
 				//date at which jumper was added
-				$dateAdded = $fs['add_date'] ? date('d.m.Y', $fs['add_date']) : '(' . $this->func->sv('stat_since_unknown', array()) . ')';
+				$addedAt = (!is_null($fs['add_date']) && $fs['add_date'] > 0)
+						? date('d.m.Y', $fs['add_date'])
+						: '(' . $this->func->s('stat_since_unknown') . ')';
 				$jumperSince = $this->func->sv('stat_jumper_since', array(
-					'date' => $dateAdded
+					'date' => $addedAt
 				));
 
 				$onclick = ' onclick="' . $click . 'return false;"';

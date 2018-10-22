@@ -9,6 +9,7 @@
 - Added a second line to hover texts in stores #88 !547 @alex.simm
 - New selection for expiration of baskets #340 !553 @alex.simm
 - Making the "tpl_msg_to_team" canceling message more informative !545 @jofranz
+- Possibility to edit food baskets #342 !549 @annaos
 
 ## Bugfixes
 - Orga members are now able to leave stores they are not responsible for #283 !524 @annaos
@@ -21,11 +22,15 @@
 - fix mail sending by passing instance of Mem to AsyncMail constructor !551 @nicksellen
 - fixed wrong html formatting in quick replies to forum posts !534 @peter.toennies
 - fixed index check in BasketGateway #354 !556 @alex.simm
+- removed fallback for the add date for members in stores  #361 !562 @alex.simm
 
 ## Refactoring
 - Unify Symfony DI configuration !544 @nicksellen
+- Add comments in scripts for quicker start of new developers !563 @flukx
 
 ## Dev/Test/CI stuff
+- Add php extensions as composer dependencies, upgrade codeception !558 @nicksellen
+- Updated several npm packages (most of them for ci) !564 @peter.toennies
 
 # 2018-08-19 Hotfix
 

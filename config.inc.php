@@ -1,6 +1,5 @@
 <?php
 
-
 $FS_ENV = getenv('FS_ENV');
 $env_filename = 'config.inc.' . $FS_ENV . '.php';
 define('FS_ENV', $FS_ENV);
