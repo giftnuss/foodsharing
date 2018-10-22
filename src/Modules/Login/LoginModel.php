@@ -140,9 +140,9 @@ class LoginModel extends Db
 				$this->func->tplMail(10, $fs['email'], $vars);
 
 				return true;
-			} else {
-				return $key;
 			}
+
+			return $key;
 		}
 
 		return false;

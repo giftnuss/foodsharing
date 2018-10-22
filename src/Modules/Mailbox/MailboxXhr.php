@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Mailbox;
 
-use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Services\SanitizerService;
@@ -68,7 +67,7 @@ class MailboxXhr extends Control
 
 	public function loadmails()
 	{
-		$last_refresh = (int)Mem::get('mailbox_refresh');
+		$last_refresh = (int)$this->mem->get('mailbox_refresh');
 
 		$cur_time = (int)time();
 
@@ -77,7 +76,7 @@ class MailboxXhr extends Control
 			||
 			($cur_time - $last_refresh) > 30
 		) {
-			Mem::set('mailbox_refresh', $cur_time);
+			$this->mem->set('mailbox_refresh', $cur_time);
 			$ref = $this->refresh();
 		}
 
@@ -120,13 +119,13 @@ class MailboxXhr extends Control
 						' . $nc_js . '
 					'
 				);
-			} else {
-				return array(
-					'status' => 1,
-					'html' => $this->view->noMessage(),
-					'append' => '#messagelist tbody'
-				);
 			}
+
+			return array(
+				'status' => 1,
+				'html' => $this->view->noMessage(),
+				'append' => '#messagelist tbody'
+			);
 		}
 	}
 
@@ -153,12 +152,12 @@ class MailboxXhr extends Control
 		if (isset($_GET['mid']) && $this->model->mayMessage($_GET['mid'])) {
 			if ($message = $this->model->getMessage($_GET['mid'])) {
 				$sender = @json_decode($message['sender'], true);
-				if ($sender != null && isset($sender['mailbox']) && isset($sender['host'])) {
+				if (isset($sender['mailbox'], $sender['host']) && $sender != null) {
 					$subject = 'Re: ' . trim(str_replace(array('Re:', 'RE:', 're:', 'aw:', 'Aw:', 'AW:'), '', $message['subject']));
 
 					$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von " . $this->func->niceDate($message['time_ts']) . " ---------\n\n>\t" . str_replace("\n", "\n>\t", $message['body']);
 
-					$mail = new AsyncMail();
+					$mail = new AsyncMail($this->mem);
 					$mail->setFrom($message['mailbox'] . '@' . DEFAULT_EMAIL_HOST, $this->session->user('name'));
 					if ($sender['personal']) {
 						$mail->addRecipient($sender['mailbox'] . '@' . $sender['host'], $sender['personal']);
@@ -197,7 +196,7 @@ class MailboxXhr extends Control
 			sub		betr
 		 */
 
-		if ($last = (int)Mem::user($this->func->fsId(), 'mailbox-last')) {
+		if ($last = (int)$this->mem->user($this->func->fsId(), 'mailbox-last')) {
 			if ((time() - $last) < 15) {
 				return array(
 					'status' => 1,
@@ -206,7 +205,7 @@ class MailboxXhr extends Control
 			}
 		}
 
-		Mem::userSet($this->func->fsId(), 'mailbox-last', time());
+		$this->mem->userSet($this->func->fsId(), 'mailbox-last', time());
 
 		if ($this->model->mayMailbox($_POST['mb'])) {
 			if ($mailbox = $this->model->getMailbox($_POST['mb'])) {
@@ -227,7 +226,7 @@ class MailboxXhr extends Control
 				if (isset($_POST['attach']) && is_array($_POST['attach'])) {
 					$attach = array();
 					foreach ($_POST['attach'] as $a) {
-						if (isset($a['name']) && isset($a['tmp'])) {
+						if (isset($a['name'], $a['tmp'])) {
 							$tmp = str_replace(array('/', '\\'), '', $a['tmp']);
 							$name = strtolower($a['name']);
 							str_replace(array('ä', 'ö', 'ü', 'ß', ' '), array('ae', 'oe', 'ue', 'ss', '_'), $name);
@@ -386,7 +385,7 @@ class MailboxXhr extends Control
 			$from_name = $from['name'];
 		}
 
-		$mail = new AsyncMail();
+		$mail = new AsyncMail($this->mem);
 
 		$mail->setFrom($from_email, $from_name);
 

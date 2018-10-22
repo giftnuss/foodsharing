@@ -1,6 +1,5 @@
 <?php
 
-use Foodsharing\DI;
 
 $FS_ENV = getenv('FS_ENV');
 $env_filename = 'config.inc.' . $FS_ENV . '.php';
@@ -53,7 +52,3 @@ define('CNT_LEFT', 4);
 define('CNT_OVERTOP', 5);
 
 define('DSN', 'mysql:host=' . DB_HOST . ';dbname=' . DB_DB . ';charset=utf8');
-
-DI::$shared->compile();
-
-Foodsharing\Lib\Db\Mem::connect();

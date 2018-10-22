@@ -19,6 +19,7 @@
         :key="bell.id"
         :bell="bell"
         @remove="onBellDelete"
+        @bellClick="onBellClick"
       />
     </div>
   </nav-item-dropdown>
@@ -53,6 +54,17 @@ export default {
       } catch (err) {
         pulseError(i18n('error_unexpected'))
       }
+    },
+    async onBellClick (bell) {
+      if (!bell.isRead) {
+        try {
+          await bellStore.markAsRead(bell)
+        } catch (err) {
+          pulseError(i18n('error_unexpected'))
+        }
+      }
+
+      window.location.href = bell.href
     }
   }
 }

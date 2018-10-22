@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Lib\View;
 
-use Foodsharing\DI;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Func;
 
@@ -27,8 +26,9 @@ class vMap extends vCore
 
 	public function __construct($center = false)
 	{
-		$this->func = DI::$shared->get(Func::class);
-		$this->model = DI::$shared->get(Db::class);
+		global $container;
+		$this->func = $container->get(Func::class);
+		$this->model = $container->get(Db::class);
 
 		if (!$center) {
 			$center = [50.89, 10.13];

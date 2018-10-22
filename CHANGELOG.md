@@ -2,6 +2,12 @@
 
 ## Features
 - Fix conversation name when changing store (name) #294 !508 @surrim
+- Notify user when bell notifications arrive without need for page reload #328 !542 @janopae
+- Fix read/unread behavior for bell notifications #328 !542 @janopae
+- New non-festival homepage !546 @michi-zuri
+- Only set session cookie when logged in !544 @nicksellen
+- Added a second line to hover texts in stores #88 !547 @alex.simm
+- New selection for expiration of baskets #340 !553 @alex.simm
 - Making the "tpl_msg_to_team" canceling message more informative !545 @jofranz
 
 ## Bugfixes
@@ -9,9 +15,15 @@
 - check user permissions in quickreply() in RegionXhr !499 #85 @annaos
 - fix exception if request have no "msg"-Attribute in quickreply() in WallPostXhr !499 @annaos
 - removed not needed add store button from the dashboard !523 @peter.toennies
+- limit conversations sent to client at page loading !542 @janopae
+- check permissions before saving a wallpost in WallpostXhr !542 @janopae
 - stat_fetchrate is calculated correctly and shown in profile #281 @k.miklobusec
+- fix mail sending by passing instance of Mem to AsyncMail constructor !551 @nicksellen
+- fixed wrong html formatting in quick replies to forum posts !534 @peter.toennies
+- fixed index check in BasketGateway #354 !556 @alex.simm
 
 ## Refactoring
+- Unify Symfony DI configuration !544 @nicksellen
 
 ## Dev/Test/CI stuff
 

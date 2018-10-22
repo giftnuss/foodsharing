@@ -61,15 +61,15 @@ class Utils
 	{
 		if ($this->func->isMob()) {
 			return $content;
-		} else {
-			$id = $this->func->id('scroller');
-			$this->func->addJs('$("#' . $id . '").slimScroll();');
-
-			return '
-				<div id="' . $id . '" class="scroller">
-					' . $content . '
-				</div>';
 		}
+
+		$id = $this->func->id('scroller');
+		$this->func->addJs('$("#' . $id . '").slimScroll();');
+
+		return '
+			<div id="' . $id . '" class="scroller">
+				' . $content . '
+			</div>';
 	}
 
 	public function v_activeSwitcher($table, $field_id, $active)
@@ -794,15 +794,15 @@ class Utils
 				<div class="ui-widget ui-widget-content ui-corner-all ui-padding">
 					' . $out . '
 				</div>';
-		} else {
-			return '
-				<h3 class="head ui-widget-header ui-corner-top">' . $title . '</h3>
-				<div class="ui-widget ui-widget-content ui-corner-bottom margin-bottom ui-padding">
-					<div id="' . $id . '">
-						' . $out . '
-					</div>
-				</div>';
 		}
+
+		return '
+			<h3 class="head ui-widget-header ui-corner-top">' . $title . '</h3>
+			<div class="ui-widget ui-widget-content ui-corner-bottom margin-bottom ui-padding">
+				<div id="' . $id . '">
+					' . $out . '
+				</div>
+			</div>';
 
 		return $out;
 	}

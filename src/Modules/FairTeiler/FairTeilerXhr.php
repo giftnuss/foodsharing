@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\FairTeiler;
 
 use Foodsharing\Lib\Db\Db;
+use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 
@@ -24,12 +25,12 @@ class FairTeilerXhr extends Control
 	public function infofollower()
 	{
 		if (!$this->mayFairteiler($_GET['fid'])) {
-			return false;
+			return XhrResponses::PERMISSION_DENIED;
 		}
 		$post = '';
 
 		if ($ft = $this->gateway->getFairteiler($_GET['fid'])) {
-			if ($follower = $this->gateway->getEmailFollower($_GET['fid'])) {
+			if ($followers = $this->gateway->getEmailFollower($_GET['fid'])) {
 				$post = $this->gateway->getLastFtPost($_GET['fid']);
 
 				$body = nl2br($post['body']);
@@ -46,7 +47,7 @@ class FairTeilerXhr extends Control
 					}
 				}
 
-				foreach ($follower as $f) {
+				foreach ($followers as $f) {
 					$this->func->tplMail(18, $f['email'], array(
 						'link' => BASE_URL . '/?page=fairteiler&sub=ft&id=' . (int)$_GET['fid'],
 						'name' => $f['name'],
@@ -57,9 +58,10 @@ class FairTeilerXhr extends Control
 				}
 			}
 
-			if ($follower = $this->gateway->getInfoFollower($_GET['fid'])) {
+			if ($followers = $this->gateway->getInfoFollowerIds($_GET['fid'])) {
+				$followersWithoutPostAuthor = array_diff($followers, [$this->session->id()]);
 				$this->bellGateway->addBell(
-					$follower,
+					$followersWithoutPostAuthor,
 					'ft_update_title',
 					'ft_update',
 					'img img-recycle yellow',
@@ -77,12 +79,6 @@ class FairTeilerXhr extends Control
 
 	private function mayFairteiler($fid)
 	{
-		if ($ids = $this->gateway->getFairteilerIds($this->func->fsId())) {
-			if (in_array($fid, $ids)) {
-				return true;
-			}
-		}
-
-		return false;
+		return $this->gateway->mayFairteiler($this->session->id(), $fid);
 	}
 }

@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Core;
 
-use Foodsharing\DI;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
@@ -259,15 +258,15 @@ class View
 				' . $out . '
 			</ul>
 		</div>';
-		} else {
-			return '
-			<h3 class="head ui-widget-header ui-corner-top">' . $title . '</h3>
-			<div class="ui-widget ui-widget-content ui-corner-bottom ui-padding margin-bottom">
-				<ul class="linklist">
-					' . $out . '
-				</ul>
-			</div>';
 		}
+
+		return '
+		<h3 class="head ui-widget-header ui-corner-top">' . $title . '</h3>
+		<div class="ui-widget ui-widget-content ui-corner-bottom ui-padding margin-bottom">
+			<ul class="linklist">
+				' . $out . '
+			</ul>
+		</div>';
 	}
 
 	public function peopleChooser($id, $option = array())
@@ -351,8 +350,9 @@ class View
 		if (isset($options['location'])) {
 			$data = array_merge(['zoom' => 14], $options['location']);
 		} else {
+			global $container;
 			/* @var $db Db */
-			$db = DI::$shared->get(Db::class);
+			$db = $container->get(Db::class);
 			$data = $db->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
 			$data['zoom'] = 14;
 		}

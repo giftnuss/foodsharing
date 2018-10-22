@@ -147,11 +147,13 @@ class StoreModel extends Db
 	{
 		if ($date !== null && $bid !== null) {
 			return $this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` = ' . $this->dateval($date));
-		} elseif ($bid !== null) {
-			return $this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
-		} else {
-			return $this->del('DELETE FROM `fs_abholer` WHERE `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
 		}
+
+		if ($bid !== null) {
+			return $this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
+		}
+
+		return $this->del('DELETE FROM `fs_abholer` WHERE `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
 	}
 
 	public function signout($bid, $fsid)
@@ -521,7 +523,7 @@ class StoreModel extends Db
 
 		return $this->update('
 					UPDATE 	 	`fs_betrieb_team`
-					SET 		`active` = 1
+					SET 		`active` = 1, `stat_add_date` = NOW()
 					WHERE 		`betrieb_id` = ' . (int)$bid . '
 					AND 		`foodsaver_id` = ' . (int)$fsid . '
 		');
@@ -544,7 +546,7 @@ class StoreModel extends Db
 
 		return $this->update('
 					UPDATE 	 	`fs_betrieb_team`
-					SET 		`active` = 2
+					SET 		`active` = 2, `stat_add_date` = NOW()
 					WHERE 		`betrieb_id` = ' . (int)$bid . '
 					AND 		`foodsaver_id` = ' . (int)$fsid . '
 		');
@@ -692,8 +694,8 @@ class StoreModel extends Db
 			');
 
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 }

@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Lib\View;
 
-use Foodsharing\DI;
 use Foodsharing\Lib\Func;
 
 class vAccordion
@@ -17,7 +16,8 @@ class vAccordion
 
 	public function __construct($option = array())
 	{
-		$this->func = DI::$shared->get(Func::class);
+		global $container;
+		$this->func = $container->get(Func::class);
 		$this->panels = array();
 
 		$this->id = 'acc-' . uniqid();

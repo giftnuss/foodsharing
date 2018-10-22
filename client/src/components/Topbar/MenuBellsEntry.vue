@@ -1,7 +1,8 @@
 <template>
   <a
-    :href="bell.href"
     :class="classes"
+    href="#"
+    @click="$emit('bellClick', bell)"
   >
     <div class="row">
       <div class="col-2 icon-side">

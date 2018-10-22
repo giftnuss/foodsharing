@@ -88,15 +88,11 @@ class FairTeilerGateway extends BaseGateway
 		);
 	}
 
-	public function getInfoFollower($id)
+	public function getInfoFollowerIds($id)
 	{
-		return $this->db->fetchAll(
+		return $this->db->fetchAllValues(
 			'
-			SELECT 	fs.`id`,
-					fs.`name`,
-					fs.`nachname`,
-					fs.`email`,
-					fs.sleep_status
+			SELECT 	fs.`id`
 
 			FROM 	`fs_fairteiler_follower` ff,
 					`fs_foodsaver` fs
@@ -349,5 +345,16 @@ class FairTeilerGateway extends BaseGateway
 		}
 
 		return $ft_id;
+	}
+
+	public function mayFairteiler(int $foodsaverId, int $fairteilerId): bool
+	{
+		$ids = $this->getFairteilerIds($foodsaverId);
+
+		if ($ids && in_array($fairteilerId, $ids, true)) {
+			return true;
+		}
+
+		return false;
 	}
 }

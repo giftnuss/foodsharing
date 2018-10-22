@@ -138,18 +138,18 @@ class ProfileXhr extends Control
 					pulseSuccess("Termin gelöscht");
 					reload();'
 				);
-			} else {
-				return array(
-					'status' => 1,
-					'script' => 'pulseError("Es ist ein Fehler aufgetreten!");'
-				);
 			}
-		} else {
+
 			return array(
 				'status' => 1,
-				'script' => 'pulseError("Du kannst nur Termine aus Deinem eigenen Bezirk löschen.");'
+				'script' => 'pulseError("Es ist ein Fehler aufgetreten!");'
 			);
 		}
+
+		return array(
+			'status' => 1,
+			'script' => 'pulseError("Du kannst nur Termine aus Deinem eigenen Bezirk löschen.");'
+		);
 	}
 
 	public function quickprofile()

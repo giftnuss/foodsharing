@@ -6,7 +6,11 @@ services:
 
     Foodsharing\:
         resource: '../src/*'
-        exclude: '../src/{Lib/Flourish,Lib/Cache,Lib/View/v*,Dev,Debug,RestKernel.php}'
+        exclude: '../src/{Lib/Flourish,Lib/Cache,Lib/Session,Lib/View/v*,Dev,Debug,FoodsharingKernel.php}'
+
+    Foodsharing\Lib\Session:
+        calls:
+        - [initIfCookieExists]
 
     Twig_Loader_Filesystem:
         class: Twig_Loader_Filesystem
@@ -115,6 +119,7 @@ services:
     Intervention\Image\ImageManager:
         arguments:
             - driver: 'imagick'
+
     mysqli:
       class: mysqli
       arguments:

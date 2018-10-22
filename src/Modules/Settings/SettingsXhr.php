@@ -39,10 +39,10 @@ class SettingsXhr extends Control
 			$dia->addButton('E-Mail-Adresse ändern', 'ajreq(\'changemail2\',{email:$(\'#newmail\').val()});');
 
 			return $dia->xhrout();
-		} else {
-			echo '0';
-			die();
 		}
+
+		echo '0';
+		die();
 	}
 
 	public function changemail2()
@@ -109,12 +109,12 @@ class SettingsXhr extends Control
 							'status' => 1,
 							'script' => 'pulseInfo("Deine E-Mail-Adresse wurde geändert!");$("#' . $did . '").dialog("close");'
 						);
-					} else {
-						return array(
-							'status' => 1,
-							'script' => 'pulseInfo(\'Die E-Mail-Adresse konnte nicht geändert werden, jemand anderes benutzt sie schon!\');'
-						);
 					}
+
+					return array(
+						'status' => 1,
+						'script' => 'pulseInfo(\'Die E-Mail-Adresse konnte nicht geändert werden, jemand anderes benutzt sie schon!\');'
+					);
 				}
 			}
 		}

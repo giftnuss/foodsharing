@@ -43,7 +43,7 @@ export default {
 
   computed: {
     conversations () {
-      return conversationStore.conversations.slice(0, 10)
+      return conversationStore.conversations
     },
     unread () {
       return conversationStore.unreadCount

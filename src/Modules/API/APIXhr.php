@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\API;
 
 use Flourish\fImage;
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\WebSocketSender;
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Login\LoginGateway;
@@ -16,19 +16,22 @@ class APIXhr extends Control
 	private $basketGateway;
 	private $apiGateway;
 	private $loginGateway;
+	private $webSocketSender;
 
 	public function __construct(
 		APIGateway $apiGateway,
 		LoginGateway $loginGateway,
 		MessageModel $messageModel,
 		BasketGateway $basketGateway,
-		Db $model
+		Db $model,
+		WebSocketSender $websocketSender
 	) {
 		$this->apiGateway = $apiGateway;
 		$this->loginGateway = $loginGateway;
 		$this->messageModel = $messageModel;
 		$this->basketGateway = $basketGateway;
 		$this->model = $model;
+		$this->webSocketSender = $websocketSender;
 		parent::__construct();
 
 		if ($_GET['m'] != 'login' && !$this->session->may()) {
@@ -66,9 +69,9 @@ class APIXhr extends Control
 				if ($member = $this->messageModel->listConversationMembers($conversation_id)) {
 					foreach ($member as $m) {
 						if ($m['id'] != $this->func->fsId()) {
-							Mem::userAppend($m['id'], 'msg-update', $conversation_id);
+							$this->mem->userAppend($m['id'], 'msg-update', $conversation_id);
 
-							$this->func->sendSock($m['id'], 'conv', 'push', [
+							$this->webSocketSender->sendSock($m['id'], 'conv', 'push', [
 								'id' => $id,
 								'cid' => $conversation_id,
 								'fs_id' => $this->func->fsId(),
@@ -129,7 +132,7 @@ class APIXhr extends Control
 
 	public function logout(): void
 	{
-		Mem::logout($this->session->id());
+		$this->mem->logout($this->session->id());
 		$_SESSION['login'] = false;
 		$_SESSION = array();
 
@@ -151,7 +154,7 @@ class APIXhr extends Control
 		$fs_id = $this->loginGateway->login($_GET['e'], $_GET['p']);
 
 		if ($fs_id !== null) {
-			$this->session->refreshFromDatabase($fs_id);
+			$this->session->login($fs_id);
 
 			$fs = $this->model->getValues(['telefon', 'handy', 'geschlecht', 'name', 'lat', 'lon', 'photo'], 'foodsaver', $this->session->id());
 
@@ -248,6 +251,13 @@ class APIXhr extends Control
 					}
 				}
 
+				//fix lifetime between 1 and 21 days and convert from days to seconds
+				$lifetime = (float)$_GET['lifetime'];
+				if ($lifetime < 1 || $lifetime > 21) {
+					$lifetime = 7;
+				}
+				$lifetime *= 60 * 60 * 24;
+
 				if ($id = $this->basketGateway->addBasket(
 					$desc,
 					$photo, // pic
@@ -257,6 +267,7 @@ class APIXhr extends Control
 					(int)$_GET['fetchart'], // location type
 					$lat, // lat
 					$lon, // lon
+					$lifetime,
 					$this->session->user('bezirk_id'),
 					$this->session->id()
 				)

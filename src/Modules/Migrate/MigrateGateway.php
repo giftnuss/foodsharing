@@ -21,8 +21,8 @@ class MigrateGateway extends BaseGateway
 				' WHERE `time` < :time';
 
 			return $this->db->execute($q, ['time' => $date])->rowCount();
-		} else {
-			return $this->db->execute($q)->rowCount();
 		}
+
+		return $this->db->execute($q)->rowCount();
 	}
 }

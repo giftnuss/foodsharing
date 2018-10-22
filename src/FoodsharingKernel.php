@@ -2,7 +2,6 @@
 
 namespace Foodsharing;
 
-use Foodsharing\Lib\Session;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\FileResource;
@@ -10,10 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
-$session = DI::$shared->get(Session::class);
-$session->init();
-
-class RestKernel extends BaseKernel
+class FoodsharingKernel extends BaseKernel
 {
 	use MicroKernelTrait;
 

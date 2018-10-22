@@ -46,7 +46,7 @@ class StoreXhr extends Control
 
 	public function deldate()
 	{
-		if (isset($_GET['id']) && isset($_GET['time']) && strtotime($_GET['time']) > 0) {
+		if (isset($_GET['id'], $_GET['time']) && strtotime($_GET['time']) > 0) {
 			$this->model->deldate($_GET['id'], $_GET['time']);
 
 			$this->func->info('Abholtermin wurde gelöscht.');

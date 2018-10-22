@@ -6,7 +6,6 @@ use Exception;
 use Flourish\fDate;
 use Flourish\fFile;
 use Flourish\fImage;
-use Foodsharing\DI;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\View\Utils;
@@ -36,6 +35,8 @@ class Func
 	private $add_css;
 	private $viewUtils;
 	private $sanitizerService;
+	private $regionGateway;
+	private $emailTemplateGateway;
 
 	private $webpackScripts;
 	private $webpackStylesheets;
@@ -52,10 +53,21 @@ class Func
 	 */
 	private $session;
 
-	public function __construct(Utils $viewUtils, SanitizerService $sanitizerService)
-	{
+	/**
+	 * @var Mem
+	 */
+	private $mem;
+
+	public function __construct(
+		Utils $viewUtils,
+		SanitizerService $sanitizerService,
+		RegionGateway $regionGateway,
+		EmailTemplateGateway $emailTemplateGateway
+	) {
 		$this->viewUtils = $viewUtils;
 		$this->sanitizerService = $sanitizerService;
+		$this->regionGateway = $regionGateway;
+		$this->emailTemplateGateway = $emailTemplateGateway;
 		$this->content_main = '';
 		$this->content_right = '';
 		$this->content_left = '';
@@ -89,6 +101,14 @@ class Func
 	public function setSession(Session $session)
 	{
 		$this->session = $session;
+	}
+
+	/**
+	 * @required
+	 */
+	public function setMem(Mem $mem)
+	{
+		$this->mem = $mem;
 	}
 
 	public function jsonSafe($str)
@@ -186,13 +206,13 @@ class Func
 	{
 		if (date('Y-m-d', $ts) == date('Y-m-d')) {
 			return $this->s('today') . ' ' . date('H:i', $ts);
-		} else {
-			return date('j.m.Y. H:i', $ts);
 		}
+
+		return date('j.m.Y. H:i', $ts);
 	}
 
-	//given a unix time $ts (=time seconds) provides a human readable full date format.
-	//parameter $extendWithAbsoluteDate == true adds the date between "heute/morgen" and the time.
+	// given a unix time it provides a human readable full date format.
+	// parameter $relativePlusDate == true adds the date between "today/tomorrow" and the time while false leaves it empty.
 	public function niceDate(int $ts, bool $extendWithAbsoluteDate = false): string
 	{
 		$date = new fDate($ts);
@@ -233,9 +253,9 @@ class Func
 
 		if (isset($g_lang[$id])) {
 			return $g_lang[$id];
-		} else {
-			return $id;
 		}
+
+		return $id;
 	}
 
 	public function format_d($ts)
@@ -260,9 +280,9 @@ class Func
 		$p = explode(':', $time);
 		if (count($p) >= 2) {
 			return (int)$p[0] . '.' . $p[1] . ' Uhr';
-		} else {
-			return '';
 		}
+
+		return '';
 	}
 
 	public function ts_day($ts)
@@ -285,15 +305,19 @@ class Func
 		if ($diff < 600) {
 			// letzte 10 minuten
 			return $this->s('currently');
-		} elseif ($diff < 86400) {
+		}
+
+		if ($diff < 86400) {
 			// heute noch
 			return $this->sv('today_time', $this->ts_time($ts));
-		} elseif ($diff < 604800) {
+		}
+
+		if ($diff < 604800) {
 			// diese woche noch
 			return $this->ts_day($ts) . ', ' . $this->ts_time($ts);
-		} else {
-			return $this->s('before_one_week');
 		}
+
+		return $this->s('before_one_week');
 	}
 
 	public function makeThumbs($pic)
@@ -353,9 +377,9 @@ class Func
 			}
 
 			return str_replace($search, $replace, $g_lang[$id]);
-		} else {
-			return str_replace('{var}', $var, $g_lang[$id]);
 		}
+
+		return str_replace('{var}', $var, $g_lang[$id]);
 	}
 
 	public function addBread($name, $href = '')
@@ -378,9 +402,9 @@ class Func
 	{
 		if (isset($_GET['a']) && $_GET['a'] == $a) {
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function pageLink($page, $id, $action = '')
@@ -394,20 +418,18 @@ class Func
 
 	public function getActionId($a)
 	{
-		if (isset($_GET['a']) && $_GET['a'] == $a && isset($_GET['id']) && (int)$_GET['id'] > 0) {
+		if (isset($_GET['a'], $_GET['id']) && $_GET['a'] == $a && (int)$_GET['id'] > 0) {
 			return (int)$_GET['id'];
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function isBotForA($regions_ids, $include_groups = true, $include_parent_regions = false): bool
 	{
 		if (is_array($regions_ids) && count($regions_ids) && $this->session->isBotschafter()) {
 			if ($include_parent_regions) {
-				/* @var $gw RegionGateway */
-				$gw = DI::$shared->get(RegionGateway::class);
-				$regions_ids = $gw->listRegionsIncludingParents($regions_ids);
+				$regions_ids = $this->regionGateway->listRegionsIncludingParents($regions_ids);
 			}
 			foreach ($_SESSION['client']['botschafter'] as $b) {
 				foreach ($regions_ids as $bid) {
@@ -514,9 +536,9 @@ class Func
 	{
 		if ($i < 10) {
 			return '0' . $i;
-		} else {
-			return $i;
 		}
+
+		return $i;
 	}
 
 	public function getDow()
@@ -622,7 +644,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function tplMail($tpl_id, $to, $var = array(), $from_email = false)
 	{
-		$mail = new AsyncMail();
+		$mail = new AsyncMail($this->mem);
 
 		if ($from_email !== false && $this->validEmail($from_email)) {
 			$mail->setFrom($from_email);
@@ -630,9 +652,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$mail->setFrom(DEFAULT_EMAIL, DEFAULT_EMAIL_NAME);
 		}
 
-		/* @var $gw EmailTemplateGateway */
-		$gw = DI::$shared->get(EmailTemplateGateway::class);
-		$message = $gw->getOne_message_tpl($tpl_id);
+		$message = $this->emailTemplateGateway->getOne_message_tpl($tpl_id);
 
 		$search = array();
 		$replace = array();
@@ -674,9 +694,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		if (!empty($file)) {
 			return 'images/' . str_replace('/', '/' . $size . '_', $file);
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function img($file = false, $size = 'mini', $format = 'q', $altimg = false)
@@ -692,22 +712,22 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			}
 
 			return '/images/' . $size . '_' . $format . '_' . $file;
-		} else {
-			if ($altimg === false) {
-				return '/img/' . $size . '_' . $format . '_avatar.png';
-			} else {
-				return $altimg;
-			}
 		}
+
+		if ($altimg === false) {
+			return '/img/' . $size . '_' . $format . '_avatar.png';
+		}
+
+		return $altimg;
 	}
 
 	public function isMob()
 	{
 		if (isset($_SESSION['mob']) && $_SESSION['mob'] == 1) {
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function id($name)
@@ -754,9 +774,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 				'mime' => mime_content_type('./data/attach/' . $new_name),
 				'size' => $size
 			);
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function checkInput($option, $name)
@@ -798,9 +818,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		if (isset($_POST)) {
 			return $_POST;
-		} else {
-			return array();
 		}
+
+		return array();
 	}
 
 	public function getValue($id)
@@ -809,9 +829,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 		if (isset($g_data[$id])) {
 			return $g_data[$id];
-		} else {
-			return '';
 		}
+
+		return '';
 	}
 
 	public function jsSafe($str, $quote = "'")
@@ -871,18 +891,18 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		if (isset($_GET[$name]) && (int)$_GET[$name] > 0) {
 			return (int)$_GET[$name];
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function getGet($name)
 	{
 		if (isset($_GET[$name])) {
 			return $_GET[$name];
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function addGet($name, $val)
@@ -989,33 +1009,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$_SESSION['msg']['error'][] = $t . $msg;
 	}
 
-	public function session_init()
-	{
-		ini_set('session.use_only_cookies', 1);
-		//ini_set("session.cookie_lifetime","86400");
-		//@session_name('fs_session');
-		@session_start();
-		if (false) {
-			$session_name = 'fs_session'; // Set a custom session name
-			$secure = false; // Set to true if using https.
-			$httponly = true; // This stops javascript being able to access the session id.
-
-			ini_set('session.use_only_cookies', 1); // Forces sessions to only use cookies.
-			$cookieParams = session_get_cookie_params(); // Gets current cookies params.
-			session_set_cookie_params($cookieParams['lifetime'], $cookieParams['path'], $cookieParams['domain'], $secure, $httponly);
-			session_name($session_name); // Sets the session name to the one set above.
-			session_start(); // Start the php session
-			session_regenerate_id(true); // regenerated the session, delete the old one.
-		}
-
-		if (!isset($_SESSION['msg'])) {
-			$_SESSION['msg'] = array();
-			$_SESSION['msg']['info'] = array();
-			$_SESSION['msg']['error'] = array();
-			$_SESSION['msg']['success'] = array();
-		}
-	}
-
 	public function getMessages()
 	{
 		global $g_error;
@@ -1060,9 +1053,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		if (isset($_SESSION['client']) && $_SESSION['client']['id'] > 0) {
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function addWebpackScript($src)
@@ -1258,16 +1251,18 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		if ($this->loggedIn()) {
 			return $_SESSION['client']['id'];
-		} else {
-			return 0;
 		}
+
+		return 0;
 	}
 
 	public function isVerified()
 	{
 		if ($this->session->isOrgaTeam()) {
 			return true;
-		} elseif (isset($_SESSION['client']['verified']) && $_SESSION['client']['verified'] == 1) {
+		}
+
+		if (isset($_SESSION['client']['verified']) && $_SESSION['client']['verified'] == 1) {
 			return true;
 		}
 
@@ -1278,9 +1273,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function validUrl($url)
@@ -1327,7 +1322,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			return false;
 		}
 
-		$mail = new AsyncMail();
+		$mail = new AsyncMail($this->mem);
 		$mail->setFrom($bezirk['email'], $bezirk['email_name']);
 		$mail->addRecipient($email);
 		if (!$subject) {
@@ -1351,10 +1346,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function getBezirk()
 	{
-		/* @var $gw RegionGateway */
-		$gw = DI::$shared->get(RegionGateway::class);
-
-		return $gw->getBezirk($this->session->getCurrentBezirkId());
+		return $this->regionGateway->getBezirk($this->session->getCurrentBezirkId());
 	}
 
 	public function genderWord($gender, $m, $w, $other)
@@ -1456,7 +1448,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	 */
 	public function mayGroup($group)
 	{
-		if (isset($_SESSION) && isset($_SESSION['client']['group'][$group])) {
+		if (isset($_SESSION['client']['group'][$group])) {
 			return true;
 		}
 
@@ -1476,7 +1468,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function mayEditBlog()
 	{
-		if ($all_group_admins = Mem::get('all_global_group_admins')) {
+		if ($all_group_admins = $this->mem->get('all_global_group_admins')) {
 			return $this->session->may('orga') || in_array($this->fsId(), unserialize($all_group_admins));
 		}
 
@@ -1485,11 +1477,11 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function may()
 	{
-		if (isset($_SESSION) && isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0) {
+		if (isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0) {
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function getRolle($gender_id, $rolle_id)
@@ -1754,28 +1746,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		);
 
 		return $roles[$roleStr];
-	}
-
-	public function sendSock($fsid, $app, $method, $options)
-	{
-		$query = http_build_query(array(
-			'u' => $fsid, // user id
-			'a' => $app, // app
-			'm' => $method, // method
-			'o' => json_encode($options) // options
-		));
-		file_get_contents(SOCK_URL . '?' . $query);
-	}
-
-	public function sendSockMulti($fsids, $app, $method, $options)
-	{
-		$query = http_build_query(array(
-			'us' => join(',', $fsids), // user ids
-			'a' => $app, // app
-			'm' => $method, // method
-			'o' => json_encode($options) // options
-		));
-		file_get_contents(SOCK_URL . '?' . $query);
 	}
 
 	// https://stackoverflow.com/a/834355
