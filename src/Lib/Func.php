@@ -212,10 +212,10 @@ class Func
 	}
 
 	// given a unix time it provides a human readable full date format.
-	// parameter $relativePlusDate == true adds the date between "today/tomorrow" and the time while false leaves it empty.
-	public function niceDate(int $ts, bool $extendWithAbsoluteDate = false): string
+	// parameter $extendWithAbsoluteDate == true adds the date between "today/tomorrow" and the time while false leaves it empty.
+	public function niceDate(int $unixTimeStamp, bool $extendWithAbsoluteDate = false): string
 	{
-		$date = new fDate($ts);
+		$date = new fDate($unixTimeStamp);
 
 		if ($date->eq('today')) {
 			$dateString = $this->s('today') . ', ';
@@ -230,15 +230,15 @@ class Func
 
 		if ($extendWithAbsoluteDate == true) {
 			$days = $this->getDow();
-			$dateString = $dateString . $days[date('w', $ts)] . ', ' . (int)date('d', $ts) . '. ' . $this->s('smonth_' . date('n', $ts));
-			$year = date('Y', $ts);
+			$dateString = $dateString . $days[date('w', $unixTimeStamp)] . ', ' . (int)date('d', $unixTimeStamp) . '. ' . $this->s('smonth_' . date('n', $unixTimeStamp));
+			$year = date('Y', $unixTimeStamp);
 			if ($year != date('Y')) {
 				$dateString = $dateString . ' ' . $year;
 			}
 			$dateString = $dateString . ', ';
 		}
 
-		return $dateString . date('H:i', $ts) . ' ' . $this->s('clock');
+		return $dateString . date('H:i', $unixTimeStamp) . ' ' . $this->s('clock');
 	}
 
 	public function incLang($id)
