@@ -192,33 +192,33 @@ class Func
 	}
 
 	//given a unix time $ts (=time seconds) provides a human readable full date format.
-	//Parameter $relativePlusDate == true adds the date between "heute/morgen" and the time while false leaves it empty
-	public function niceDate($ts, $relativePlusDate = false)
+	//parameter $extendWithAbsoluteDate == true adds the date between "heute/morgen" and the time.
+	public function niceDate(int $ts, bool $extendWithAbsoluteDate = false): string
 	{
 		$date = new fDate($ts);
 
 		if ($date->eq('today')) {
-			$pre = $this->s('today') . ', ';
+			$dateString = $this->s('today') . ', ';
 		} elseif ($date->eq('tomorrow')) {
-			$pre = $this->s('tomorrow') . ', ';
+			$dateString = $this->s('tomorrow') . ', ';
 		} elseif ($date->eq('-1 day')) {
-			$pre = $this->s('yesterday') . ', ';
+			$dateString = $this->s('yesterday') . ', ';
 		} else {
-			$pre = '';
-			$relativePlusDate = true;
+			$dateString = '';
+			$extendWithAbsoluteDate = true;
 		}
 
-		if ($relativePlusDate == true) {
+		if ($extendWithAbsoluteDate == true) {
 			$days = $this->getDow();
-			$pre = $pre . $days[date('w', $ts)] . ', ' . (int)date('d', $ts) . '. ' . $this->s('smonth_' . date('n', $ts));
+			$dateString = $dateString . $days[date('w', $ts)] . ', ' . (int)date('d', $ts) . '. ' . $this->s('smonth_' . date('n', $ts));
 			$year = date('Y', $ts);
 			if ($year != date('Y')) {
-				$pre = $pre . ' ' . $year;
+				$dateString = $dateString . ' ' . $year;
 			}
-			$pre = $pre . ', ';
+			$dateString = $dateString . ', ';
 		}
 
-		return $pre . date('H:i', $ts) . ' ' . $this->s('clock');
+		return $dateString . date('H:i', $ts) . ' ' . $this->s('clock');
 	}
 
 	public function incLang($id)
