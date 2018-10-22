@@ -1,42 +1,113 @@
-version: '3'
+version: '2'
 services:
 
+  # nginx
+  #------------------------------------
+
+  # proxies connections to app/chat
+
   web:
-    image: "foodsharing_${FS_ENV}_web_build"
+    container_name: foodsharing_ci_web
     build:
       context: ..
-      dockerfile: docker/ci/web/Dockerfile
+      dockerfile: docker/Dockerfile.web.ci
     ports:
-      - "38080:8080"
+      - 38080:8080
+    expose:
+      - 8080
+    depends_on:
+      - app
+      - chat
+
+  # main php app
+  #------------------------------------
 
   app:
-    image: "foodsharing_${FS_ENV}_app_build"
+    container_name: foodsharing_ci_app
+    image: foodsharing_ci_app
     build:
       context: ..
-      dockerfile: docker/ci/php/Dockerfile
+      dockerfile: docker/Dockerfile.php.ci
+    expose:
+      - 9000
+    depends_on:
+      - db
+      - redis
+      - mailqueuerunner
+    links:
+      - redis:redis
+      - db:db
+      - chat:chat
+    environment:
+      FS_ENV: test
     volumes:
       - selenium_downloads:/downloads
-      - php_vendor:/app/vendor
+      - vendor_cache:/app/vendor
       - /dev/null:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
+  # php mail queue runner
+  #------------------------------------
+
   mailqueuerunner:
+    container_name: foodsharing_ci_mailqueuerunner
+    image: foodsharing_ci_app
+    command: php run.php Mails queueWorker
+    working_dir: /app
+    restart: always
+    depends_on:
+      - db
+      - redis
+    links:
+      - maildev
+      - redis:redis
+      - db:db
     volumes:
       - selenium_downloads:/downloads
-      - php_vendor:/app/vendor
+      - vendor_cache:/app/vendor
+    environment:
+      FS_ENV: test
 
   chat:
-    image: "foodsharing_${FS_ENV}_chat_build"
+    container_name: foodsharing_ci_chat
+    command: sh -c "yarn && node server.js 0.0.0.0"
     build:
       context: ../chat
-      dockerfile: ci/chat/Dockerfile
+      dockerfile: docker/Dockerfile.chat.ci
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOST: redis
+    expose:
+      - 1337
+      - 1338
+    volumes:
+      - chat_node_modules_cache:/app/chat/node_modules
+
+  # mysql
+  #------------------------------------
 
   db:
-    image: "foodsharing_${FS_ENV}_db_build"
+    container_name: foodsharing_ci_db
     build:
       context: ..
-      dockerfile: docker/ci/db/Dockerfile
+      dockerfile: docker/Dockerfile.db.ci
+    # so we can mount tmpfs inside container
+    privileged: true
+    expose:
+      - 3306
     ports:
-      - "33306:3306"
+      - 33306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+
+  # redis
+  #------------------------------------
+
+  redis:
+    container_name: foodsharing_ci_redis
+    image: redis:alpine
+    expose:
+      - 6379
 
   # selenium
   #------------------------------------
@@ -44,7 +115,7 @@ services:
   # for running browser-based tests
 
   selenium:
-    container_name: "foodsharing_${FS_ENV}_selenium"
+    container_name: foodsharing_ci_selenium
     image: registry.gitlab.com/foodsharing-dev/images/selenium:1.2
     shm_size: 256M
     links:
@@ -54,6 +125,20 @@ services:
     volumes:
       - selenium_downloads:/home/seluser/Downloads
 
+  # maildev
+  #------------------------------------
+
+  maildev:
+    command: >
+      bin/maildev
+        --web 80
+        --smtp 25
+        --hide-extensions STARTTLS
+    image: djfarrelly/maildev
+    container_name: foodsharing_ci_maildev
+
 volumes:
   selenium_downloads:
-  php_vendor:
+  vendor_cache:
+  client_node_modules_cache:
+  chat_node_modules_cache:
