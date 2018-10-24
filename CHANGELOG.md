@@ -1,6 +1,7 @@
 # Unreleased
 
 ## Features
+- shows reference in food basket about public information #373 @k.miklobusec
 - Fix conversation name when changing store (name) #294 !508 @surrim
 - Notify user when bell notifications arrive without need for page reload #328 !542 @janopae
 - Fix read/unread behavior for bell notifications #328 !542 @janopae
