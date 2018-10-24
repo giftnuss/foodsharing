@@ -213,8 +213,12 @@ class Func
 
 	// given a unix time it provides a human readable full date format.
 	// parameter $extendWithAbsoluteDate == true adds the date between "today/tomorrow" and the time while false leaves it empty.
-	public function niceDate(int $unixTimeStamp, bool $extendWithAbsoluteDate = false): string
+	public function niceDate(?int $unixTimeStamp, bool $extendWithAbsoluteDate = false): string
 	{
+		if (is_null($unixTimeStamp)) {
+			return '- -';
+		}
+
 		$date = new fDate($unixTimeStamp);
 
 		if ($date->eq('today')) {
