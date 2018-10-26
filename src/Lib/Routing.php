@@ -31,7 +31,6 @@ class Routing
 		'msg' => 'Message',
 		'message' => 'Message',
 		'message_tpl' => 'EmailTemplateAdmin',
-		'newarea' => 'NewArea',
 		'passgen' => 'PassportGenerator',
 		'profile' => 'Profile',
 		'quiz' => 'Quiz',
