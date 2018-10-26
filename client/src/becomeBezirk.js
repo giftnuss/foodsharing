@@ -4,22 +4,11 @@ import $ from 'jquery'
 
 import {
   pulseError,
-  goTo,
   showLoader,
   hideLoader
 } from '@/script'
 
 import 'jquery-ui'
-
-const swapMsg = 'Welcher Bezirk soll neu angelegt werden?'
-
-$('#becomebezirkchooser-notAvail').hide()
-
-$('#becomebezirkchooser-btna').button().click(function () {
-  $('#becomebezirkchooser-btna').fadeOut(200, function () {
-    $('#becomebezirkchooser-notAvail').fadeIn()
-  })
-})
 
 $('#becomebezirkchooser-button').button().click(function () {
   if (parseInt($('#becomebezirkchooser').val()) > 0) {
@@ -38,14 +27,10 @@ $('#becomebezirkchooser-button').button().click(function () {
       const bid = part[0]
       showLoader()
 
-      let neu = ''
-      if ($('#becomebezirkchooser-neu').val() != swapMsg) {
-        neu = $('#becomebezirkchooser-neu').val()
-      }
       $.ajax({
         dataType: 'json',
         url: '/xhr.php?f=becomeBezirk',
-        data: 'b=' + bid + '&new=' + neu,
+        data: 'b=' + bid,
         success: function (data) {
           if (data.status == 1) {
             goTo('/?page=relogin&url=' + encodeURIComponent('/?page=bezirk&bid=' + $('#becomebezirkchooser').val()))
@@ -64,7 +49,7 @@ $('#becomebezirkchooser-button').button().click(function () {
       return false
     }
   } else {
-    pulseError('<p><strong>Du musst eine Auswahl treffen.</strong></p><p>Gibt es Deine Stadt, Deinen Bezirk oder Deine Region noch nicht, dann triff die passende übergeordnete Auswahl</p><p>(also für Köln-Ehrenfeld z. B. Köln)</p><p>und schreibe die Region, welche neu angelegt werden soll, in das Feld unten!</p>')
+    pulseError('<p><strong>Du musst eine Auswahl treffen.</strong></p><p>Gibt es Deine Stadt, Deinen Bezirk oder Deine Region noch nicht, dann triff die passende übergeordnete Auswahl (also für Köln-Ehrenfeld z. B. Köln)!</p>')
   }
 })
 
@@ -78,10 +63,6 @@ export function u_printChildBezirke (element) {
   if (parent == -1) {
     $('#becomebezirkchooser').val('')
     return false
-  }
-
-  if (parent == -2) {
-    $('#becomebezirkchooser-notAvail').fadeIn()
   }
 
   $('#becomebezirkchooser').val(element.value)
