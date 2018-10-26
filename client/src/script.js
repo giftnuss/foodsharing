@@ -170,8 +170,6 @@ export function initialize () {
       })
     }
 
-    // $('.select').customSelect();
-
     $(function () {
       $('#dialog-confirm').dialog({
         resizable: false,
