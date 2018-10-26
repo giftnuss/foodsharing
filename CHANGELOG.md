@@ -11,6 +11,7 @@
 - New selection for expiration of baskets #340 !553 @alex.simm
 - Making the "tpl_msg_to_team" canceling message more informative !545 @jofranz
 - Possibility to edit food baskets #342 !549 @annaos
+- The possibility to automatically ask for new regions has been removed #329 !571 @peter.toennies
 
 ## Bugfixes
 - Orga members are now able to leave stores they are not responsible for #283 !524 @annaos
