@@ -29,7 +29,7 @@ class BellGateway extends BaseGateway
 	 * @param int|int[] $foodsaver_ids
 	 * @param string[] $link_attributes
 	 * @param string[] $vars
-	 * @param int|null $expiration A unix timestamp that defines when the time since when the bell will be outdated and not shown anymore - null means it doesn't expire
+	 * @param int|null $expiration A unix timestamp that defines when the time since when the bell will be outdated - null means it doesn't expire
 	 * @param int|null $timestamp A unix timestamp for the bell's time - null means current date and time
 	 */
 	public function addBell(
