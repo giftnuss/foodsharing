@@ -234,9 +234,6 @@ export function initialize () {
       maxWidth: 470,
       minHeight: 450,
       scrolling: 'auto',
-      beforeClose: function () {
-        g_firstChatUpdate = true
-      },
       helpers: {
         overlay: { closeClick: false }
       }
@@ -489,29 +486,6 @@ export function img (photo, size) {
   } else {
     return '/img/' + size + '_q_avatar.png'
   }
-}
-
-var g_firstChatUpdate = true
-export function updateChat () {
-  $.ajax({
-    dataType: 'json',
-    url: '/xhr.php?f=updateChat&fsid=' + $('#xhr_sender_id').val() + '&fu=' + g_firstChatUpdate,
-    success: function (data) {
-      hideLoader()
-      if (data.status == 1) {
-        $('ul#xv_message').html(data.html)
-
-        if (data.script != undefined) {
-          $.globalEval(data.script)
-        }
-
-        if (g_firstChatUpdate) {
-          $('#scrollbar1').tinyscrollbar_update('bottom')
-          g_firstChatUpdate = false
-        }
-      }
-    }
-  })
 }
 
 export function fancy_xhr (func, loader) {
