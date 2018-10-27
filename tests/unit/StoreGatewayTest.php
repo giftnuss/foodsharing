@@ -111,4 +111,52 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 			]
 		);
 	}
+
+	public function testUpdateExpiredBellsRemovesBellIfNoUnconfirmedFetchesAreInTheFuture()
+	{
+		$store = $this->tester->createStore($this->region_id);
+		$foodsaver = $this->tester->createFoodsaver();
+
+		$this->gateway->addFetcher($foodsaver['id'], $store['id'], '1970-01-01');
+
+		$this->tester->updateInDatabase(
+			'fs_bell',
+			['expiration' => '1970-01-01'],
+			['identifier' => 'store-' . $store['id']]
+		); // outdate bell notification
+
+		$this->gateway->updateExpiredBells();
+
+		$this->tester->dontSeeInDatabase('fs_bell', ['identifier' => 'store-' . $store['id']]);
+	}
+
+	public function testUpdateExpiredBellsUpdatesBellCountIfStillUnconfirmedFetchesAreInTheFuture()
+	{
+		$store = $this->tester->createStore($this->region_id);
+		$foodsaver = $this->tester->createFoodsaver();
+
+		$this->gateway->addFetcher($foodsaver['id'], $store['id'], '2150-01-01');
+		$this->gateway->addFetcher($foodsaver['id'], $store['id'], '2150-01-02');
+
+		// As we can't cange the NOW() time in the database for the test, we have to move one fetch date to the past:
+		$this->tester->updateInDatabase(
+			'fs_abholer',
+			['date' => '1970-01-01'],
+			['date' => '2150-01-01']
+		);
+
+		/* Now, we have two unconfirmed fetch dates in the database: One that is in the future (2150-01-02) and one
+		 * that is in the past (1970-01-01).
+		 */
+
+		$this->tester->updateInDatabase(
+			'fs_bell',
+			['expiration' => '1970-01-01'],
+			['identifier' => 'store-' . $store['id']]
+		); // outdate bell notification
+
+		$this->gateway->updateExpiredBells();
+
+		$this->tester->seeInDatabase('fs_bell', ['vars like' => '%"count";i:1;%']); // The bell should have a count of 1 now - vars are serialized, that's why it looks so strange
+	}
 }

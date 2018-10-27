@@ -3,21 +3,29 @@
 namespace Foodsharing\Modules\Store;
 
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\BellUpdaterInterface;
+use Foodsharing\Modules\Bell\BellUpdateTrigger;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Region\RegionGateway;
 
-class StoreGateway extends BaseGateway
+class StoreGateway extends BaseGateway implements BellUpdaterInterface
 {
 	private $regionGateway;
 	private $bellGateway;
 
-	public function __construct(Database $db, RegionGateway $regionGateway, BellGateway $bellGateway)
-	{
+	public function __construct(
+		Database $db,
+		RegionGateway $regionGateway,
+		BellGateway $bellGateway,
+		BellUpdateTrigger $bellUpdateTrigger
+	) {
 		parent::__construct($db);
 
 		$this->regionGateway = $regionGateway;
 		$this->bellGateway = $bellGateway;
+
+		$bellUpdateTrigger->subscribe($this);
 	}
 
 	public function getBetrieb($id): array
@@ -491,16 +499,11 @@ class StoreGateway extends BaseGateway
 	public function updateBellNotificationForBiebs(int $storeId, bool $markNotificationAsUnread = false): void
 	{
 		$storeName = $this->db->fetchValueByCriteria('fs_betrieb', 'name', ['id' => $storeId]);
-		$messagTitle = 'betrieb_fetch_title';
-		$messageBody = 'betrieb_fetch';
-		$messageIcon = 'img img-store brown';
-		$messageHref = '/?page=fsbetrieb&id=' . $storeId;
 		$messageIdentifier = 'store-' . $storeId;
-
 		$messageCount = $this->getUnconfirmedFetchesCount($storeId);
+		$messageVars = ['betrieb' => $storeName, 'count' => $messageCount];
 		$messageTimestamp = $this->getNextUnconfirmedFetchTime($storeId);
-
-		$responsibleFoodsaverIds = $this->getResponsibleFoodsavers($storeId);
+		$messageExpiration = $messageTimestamp;
 
 		$oldBellExists = $this->bellGateway->bellWithIdentifierExists($messageIdentifier);
 
@@ -508,35 +511,23 @@ class StoreGateway extends BaseGateway
 			$this->bellGateway->delBellsByIdentifier($messageIdentifier);
 		} elseif ($messageCount > 0 && $oldBellExists) {
 			$oldBellId = $this->bellGateway->getOneByIdentifier($messageIdentifier);
-
-			$this->bellGateway->updateBell(
-				$oldBellId,
+			$data = [
+				'vars' => $messageVars,
+				'timestamp' => $messageTimestamp,
+				'expiration' => $messageExpiration
+			];
+			$this->bellGateway->updateBell($oldBellId, $data, $markNotificationAsUnread);
+		} elseif ($messageCount > 0 && !$oldBellExists) {
+			$this->bellGateway->addBell(
+				$this->getResponsibleFoodsavers($storeId),
 				'betrieb_fetch_title',
 				'betrieb_fetch',
 				'img img-store brown',
 				['href' => '/?page=fsbetrieb&id=' . $storeId],
-				array(
-					'betrieb' => $storeName,
-					'count' => $messageCount
-				),
+				$messageVars,
 				$messageIdentifier,
 				0,
-				$messageTimestamp,
-				$markNotificationAsUnread
-			);
-		} elseif ($messageCount > 0 && !$oldBellExists) {
-			$this->bellGateway->addBell(
-				$responsibleFoodsaverIds,
-				$messagTitle,
-				$messageBody,
-				$messageIcon,
-				['href' => $messageHref],
-				array(
-					'betrieb' => $storeName,
-					'count' => $messageCount
-				),
-				$messageIdentifier,
-				0,
+				$messageExpiration,
 				$messageTimestamp
 			);
 		}
@@ -815,5 +806,24 @@ class StoreGateway extends BaseGateway
 				'verantwortlich' => 1
 			]
 		);
+	}
+
+	public function updateExpiredBells(): void
+	{
+		$expiredBells = $this->bellGateway->getExpiredByIdentifier('store-%');
+
+		foreach ($expiredBells as $bell) {
+			$storeId = substr($bell['identifier'], 6);
+			$storeName = $this->db->fetchValueByCriteria('fs_betrieb', 'name', ['id' => $storeId]);
+			$newMessageCount = $this->getUnconfirmedFetchesCount($storeId);
+
+			$newMessageData = [
+				'vars' => ['betrieb' => $storeName, 'count' => $newMessageCount],
+				'timestamp' => $this->getNextUnconfirmedFetchTime($storeId),
+				'expiration' => $this->getNextUnconfirmedFetchTime($storeId)
+			];
+
+			$this->bellGateway->updateBell($bell['id'], $newMessageData, false, false);
+		}
 	}
 }
