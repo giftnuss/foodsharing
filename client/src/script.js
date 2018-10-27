@@ -243,19 +243,8 @@ export function initialize () {
 
 export function chat (fsid) {
   conv.userChat(fsid)
-  /*
-  closeDialogs();
-  showLoader();
-  fancy_xhr("getMsg&id=" + fsid, false);
-  */
 }
-export function closeDialogs () {
-  $('.dialogbox').each(function () {
-    if ($(this).dialog('isOpen')) {
-      $(this).dialog('close')
-    }
-  })
-}
+
 export function addbanana (fsid) {
   $('.vouch-banana').tooltip('close')
 
@@ -486,37 +475,6 @@ export function img (photo, size) {
   } else {
     return '/img/' + size + '_q_avatar.png'
   }
-}
-
-export function fancy_xhr (func, loader) {
-  if (loader == undefined) {
-    loader = true
-  }
-  if (loader) {
-    showLoader()
-  }
-
-  $.ajax({
-    dataType: 'json',
-    url: '/xhr.php?f=' + func,
-    success: function (data) {
-      if (data.status == 1) {
-        $('#fancy').html(data.html)
-        $('#fancylink').trigger('click')
-
-        if (data.script != undefined) {
-          $.globalEval(data.script)
-        }
-      } else {
-        error(data.msg)
-      }
-    },
-    complete: function () {
-      if (loader) {
-        hideLoader()
-      }
-    }
-  })
 }
 
 export function stopHeartbeats () {
