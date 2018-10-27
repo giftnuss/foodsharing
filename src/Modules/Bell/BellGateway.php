@@ -12,18 +12,24 @@ class BellGateway extends BaseGateway
 	 * @var WebSocketSender
 	 */
 	private $webSocketSender;
+	/**
+	 * @var BellUpdateTrigger
+	 */
+	private $bellUpdateTrigger;
 
-	public function __construct(Database $db, WebSocketSender $webSocketSender)
+	public function __construct(Database $db, WebSocketSender $webSocketSender, BellUpdateTrigger $bellUpdateTrigger)
 	{
 		parent::__construct($db);
 
 		$this->webSocketSender = $webSocketSender;
+		$this->bellUpdateTrigger = $bellUpdateTrigger;
 	}
 
 	/**
 	 * @param int|int[] $foodsaver_ids
 	 * @param string[] $link_attributes
 	 * @param string[] $vars
+	 * @param int|null $expiration A unix timestamp that defines when the time since when the bell will be outdated and not shown anymore - null means it doesn't expire
 	 * @param int|null $timestamp A unix timestamp for the bell's time - null means current date and time
 	 */
 	public function addBell(
@@ -35,6 +41,7 @@ class BellGateway extends BaseGateway
 		array $vars,
 		string $identifier = '',
 		int $closeable = 1,
+		?int $expiration = null,
 		?int $timestamp = null
 	): void {
 		if (!is_array($foodsaver_ids)) {
@@ -63,7 +70,8 @@ class BellGateway extends BaseGateway
 				'icon' => strip_tags($icon),
 				'identifier' => strip_tags($identifier),
 				'time' => date('Y-m-d H:i:s', $timestamp),
-				'closeable' => $closeable
+				'closeable' => $closeable,
+				'expiration' => date('Y-m-d H:i:s', $expiration)
 			]
 		);
 
@@ -79,48 +87,24 @@ class BellGateway extends BaseGateway
 	}
 
 	/**
-	 * @param string[] $link_attributes
-	 * @param string[] $vars
-	 * @param int|null $timestamp A unix timestamp for the bells time - null means current date and time
+	 * @param array $data - the data to be updated. $data['var'] and data['attr'] must not be serialized.
 	 */
-	public function updateBell(
-		int $bellId,
-		string $title,
-		string $body,
-		string $icon,
-		array $link_attributes,
-		array $vars,
-		string $identifier = '',
-		int $closeable = 1,
-		?int $timestamp = null,
-		bool $setUnseen = false
-	): void {
-		if ($link_attributes !== false) {
-			$link_attributes = serialize($link_attributes);
+	public function updateBell(int $bellId, array $data, bool $setUnseen = false, bool $updateClients = true): void
+	{
+		if (isset($data['attr'])) {
+			$data['attr'] = serialize($data['attr']);
 		}
 
-		if ($vars !== false) {
-			$vars = serialize($vars);
+		if (isset($data['vars'])) {
+			$data['vars'] = serialize($data['vars']);
 		}
 
-		if ($timestamp === null) {
-			$timestamp = time();
+		if (isset($data['timestamp'])) {
+			$data['time'] = date('Y-m-d H:i:s', $data['timestamp']);
+			unset($data['timestamp']);
 		}
 
-		$this->db->update(
-			'fs_bell',
-			[
-				'name' => strip_tags($title),
-				'body' => strip_tags($body),
-				'vars' => strip_tags($vars),
-				'attr' => strip_tags($link_attributes),
-				'icon' => strip_tags($icon),
-				'identifier' => strip_tags($identifier),
-				'time' => date('Y-m-d H:i:s', $timestamp),
-				'closeable' => $closeable
-			],
-			['id' => $bellId]
-		);
+		$this->db->update('fs_bell', $data, ['id' => $bellId]);
 
 		$foodsaverIds = $this->db->fetchAllValuesByCriteria('fs_foodsaver_has_bell', 'foodsaver_id', ['bell_id' => $bellId]);
 
@@ -128,7 +112,9 @@ class BellGateway extends BaseGateway
 			$this->db->update('fs_foodsaver_has_bell', ['seen' => 0], ['foodsaver_id' => $foodsaverIds, 'bell_id' => $bellId]);
 		}
 
-		$this->updateMultipleFoodsaversClients($foodsaverIds);
+		if ($updateClients) {
+			$this->updateMultipleFoodsaversClients($foodsaverIds);
+		}
 	}
 
 	/**
@@ -141,6 +127,8 @@ class BellGateway extends BaseGateway
 	 */
 	public function listBells($fsId, $limit = '')
 	{
+		$this->bellUpdateTrigger->triggerUpdate();
+
 		if ($limit !== '') {
 			$limit = ' LIMIT 0,' . (int)$limit;
 		}
@@ -174,18 +162,7 @@ class BellGateway extends BaseGateway
 		';
 		if ($bells = $this->db->fetchAll($stm, [':foodsaver_id' => $fsId])
 		) {
-			$ids = array();
-			foreach ($bells as $i => $iValue) {
-				$ids[] = (int)$bells[$i]['id'];
-
-				if (!empty($bells[$i]['vars'])) {
-					$bells[$i]['vars'] = unserialize($bells[$i]['vars'], array('allowed_classes' => false));
-				}
-
-				if (!empty($bells[$i]['attr'])) {
-					$bells[$i]['attr'] = unserialize($bells[$i]['attr'], array('allowed_classes' => false));
-				}
-			}
+			$bells = $this->unserializeBells($bells);
 
 			return $bells;
 		}
@@ -193,9 +170,42 @@ class BellGateway extends BaseGateway
 		return [];
 	}
 
+	/**
+	 * @param string $identifier - can contain SQL wildcards
+	 *
+	 * @return int - id of the bell
+	 */
 	public function getOneByIdentifier(string $identifier): int
 	{
-		return $this->db->fetchValueByCriteria('fs_bell', 'id', ['identifier' => $identifier]);
+		return $this->db->fetchValueByCriteria('fs_bell', 'id', ['identifier like' => $identifier]);
+	}
+
+	/**
+	 * @param string $identifier - can contain SQL wildcards
+	 *
+	 * @return array - [index => ['id', 'name', 'body', 'vars', 'attr', 'icon', 'identifier', 'time', 'time_ts', 'closable']
+	 */
+	public function getExpiredByIdentifier(string $identifier): array
+	{
+		$bells = $this->db->fetchAll('
+            SELECT 
+                `id`,
+				`name`, 
+				`body`, 
+				`vars`, 
+				`attr`, 
+				`icon`, 
+				`identifier`, 
+				`time`,
+				UNIX_TIMESTAMP(`time`) AS time_ts,
+				`closeable` 
+            FROM `fs_bell`
+            WHERE `identifier` LIKE :identifier
+            AND `expiration` < NOW()',
+			[':identifier' => $identifier]
+		);
+
+		return $this->unserializeBells($bells);
 	}
 
 	public function bellWithIdentifierExists(string $identifier): bool
@@ -242,5 +252,25 @@ class BellGateway extends BaseGateway
 	private function updateMultipleFoodsaversClients(array $foodsaverIds): void
 	{
 		$this->webSocketSender->sendSockMulti($foodsaverIds, 'bell', 'update', []);
+	}
+
+	/**
+	 * @param array $bells - 2D-array with bell data, needs indexes []['vars'] and []['attr'] to contain serialized data
+	 *
+	 * @return array - array with the same structure as the input, but with unserialized []['vars'] and []['attr']
+	 */
+	private function unserializeBells(array $bells): array
+	{
+		foreach ($bells as $i => $iValue) {
+			if (!empty($bells[$i]['vars'])) {
+				$bells[$i]['vars'] = unserialize($bells[$i]['vars'], array('allowed_classes' => false));
+			}
+
+			if (!empty($bells[$i]['attr'])) {
+				$bells[$i]['attr'] = unserialize($bells[$i]['attr'], array('allowed_classes' => false));
+			}
+		}
+
+		return $bells;
 	}
 }
