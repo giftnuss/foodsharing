@@ -8,7 +8,7 @@ namespace Foodsharing\Modules\Bell;
 interface BellUpdaterInterface
 {
 	/**
-	 * This method gets called by the BellUpdateTrigger when a Bell is found that reached its expiration date and
+	 * This method gets called by the BellUpdateTrigger when a bell is found that reached its expiration date and
 	 * needs to be updated. Implement a function that gets all of your expired bells from the database and updates
 	 * them.
 	 *
