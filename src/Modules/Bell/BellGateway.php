@@ -113,7 +113,7 @@ class BellGateway extends BaseGateway
 		}
 
 		if ($updateClients) {
-			$this->updateMultipleFoodsaversClients($foodsaverIds);
+			$this->updateMultipleFoodsaverClients($foodsaverIds);
 		}
 	}
 
@@ -232,7 +232,7 @@ class BellGateway extends BaseGateway
 
 		$this->db->delete('fs_bell', ['identifier' => $identifier]);
 
-		$this->updateMultipleFoodsaversClients($foodsaverIds);
+		$this->updateMultipleFoodsaverClients($foodsaverIds);
 	}
 
 	public function setBellsAsSeen(array $bids, int $foodsaverId): void
@@ -249,7 +249,7 @@ class BellGateway extends BaseGateway
 	/**
 	 * @param int[] $foodsaverIds
 	 */
-	private function updateMultipleFoodsaversClients(array $foodsaverIds): void
+	private function updateMultipleFoodsaverClients(array $foodsaverIds): void
 	{
 		$this->webSocketSender->sendSockMulti($foodsaverIds, 'bell', 'update', []);
 	}
