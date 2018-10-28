@@ -162,10 +162,8 @@ class BellGateway extends BaseGateway
 		';
 		if ($bells = $this->db->fetchAll($stm, [':foodsaver_id' => $fsId])
 		) {
-			$bells = $this->unserializeBells($bells);
-
-			return $bells;
-		}
+			return $this->unserializeBells($bells);
+        }
 
 		return [];
 	}
