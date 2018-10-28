@@ -31,10 +31,9 @@ class BellUpdateTriggerTest extends \Codeception\Test\Unit
 		 * @var BellUpdaterInterface|PHPUnit\Framework\MockObject\MockObject
 		 */
 		$bellUpdater = $this->getMockBuilder(BellUpdaterInterface::class)->getMock();
+		$bellUpdater->expects($this->once())->method('updateExpiredBells');
 
 		$this->bellUpdateTrigger->subscribe($bellUpdater);
 		$this->bellUpdateTrigger->triggerUpdate();
-
-		$bellUpdater->expects($this->once())->method('updateExpiredBells');
 	}
 }
