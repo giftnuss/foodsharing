@@ -108,26 +108,18 @@ class BellGatewayTest extends \Codeception\Test\Unit
 		$closable = 0;
 
 		$this->gateway->addBell([$user1, $user2], $title, $body, $icon, [], [], $identifier, $closable);
-		$bellId = $this->tester->grabFromDatabase('fs_bell', 'id', ['name' => $title, 'body' => $body]);
+		$bellId = $this->tester->grabFromDatabase('fs_bell', 'id', ['name' => $title, 'body' => $body])[0];
 
-		$updatedTitle = 'updated title';
-		$updatedBody = $this->faker->text(50);
-		$updatedIcon = 'some-updated-icon';
-		$updatedIdentifier = 'some-updated-identifier';
-		$updatedClosable = 1;
+		$updatedData = [
+			'name' => 'updated title',
+			'body' => $this->faker->text(50),
+			'icon' => 'some-updated-icon',
+			'identifier' => 'some-updated-identifier',
+			'closeable' => 1
+		];
 
-		$this->gateway->updateBell($bellId, $updatedTitle, $updatedBody, $updatedIcon, [], [], $updatedIdentifier, $updatedClosable);
+		$this->gateway->updateBell($bellId, $updatedData);
 
-		$this->tester->seeInDatabase(
-			'fs_bell',
-			array(
-				'id' => $bellId,
-				'name' => $updatedTitle,
-				'body' => $updatedBody,
-				'icon' => $updatedIcon,
-				'identifier' => $updatedIdentifier,
-				'closeable' => $updatedClosable
-			)
-		);
+		$this->tester->seeInDatabase('fs_bell', $updatedData);
 	}
 }
