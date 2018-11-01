@@ -20,8 +20,8 @@ class NewAreaView extends View
 
 			$rows[] = array(
 				array('cnt' => '<input class="wantnewcheck" type="checkbox" name="ordersaver[]" value="' . $d['id'] . '" />'),
-				array('cnt' => '<span class="photo"><a href="#" onclick="profile(' . (int)$d['id'] . ');return false;"><img src="' . $this->func->img($d['photo']) . '" /></a></span>'),
-				array('cnt' => '<a class="linkrow ui-corner-all" href="#" onclick="profile(' . (int)$d['id'] . ');return false;">' . $d['name'] . '</a>'),
+				array('cnt' => '<span class="photo"><a href="/profile/' . (int)$d['id'] . '"><img src="' . $this->func->img($d['photo']) . '" /></a></span>'),
+				array('cnt' => '<a class="linkrow ui-corner-all" href="/profile/' . (int)$d['id'] . '">' . $d['name'] . '</a>'),
 				array('cnt' => $d['anschrift'] . ', ' . $d['plz'] . ' ' . $d['stadt']),
 				array('cnt' => $beziks),
 				array('cnt' => $d['new_bezirk'])

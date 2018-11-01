@@ -57,7 +57,7 @@ class ReportXhr extends Control
 				$content .= $this->v_utils->v_input_wrapper('Beschreibung', nl2br($report['msg']));
 			}
 
-			$content .= $this->v_utils->v_input_wrapper('Gemeldet von', '<a href="#" onclick="profile(' . (int)$report['rp_id'] . ');">' . $report['rp_name'] . ' ' . $report['rp_nachname'] . '</a>');
+			$content .= $this->v_utils->v_input_wrapper('Gemeldet von', '<a href="/profile/' . (int)$report['rp_id'] . '">' . $report['rp_name'] . ' ' . $report['rp_nachname'] . '</a>');
 			$dialog->addContent($content);
 			$dialog->addOpt('width', '600px');
 

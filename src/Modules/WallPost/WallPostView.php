@@ -67,7 +67,7 @@ class WallPostView extends View
 				<tr class="' . $odd . ' bpost wallpost-' . $p['id'] . '">
 					<td class="img">
 						<input type="hidden" name="pid" class="pid" value="' . $p['id'] . '" />
-						<a href="#" onclick="profile(' . $p['foodsaver_id'] . ');return false;">
+						<a href="/profile/' . $p['foodsaver_id'] . '">
 							<img src="' . $this->func->img($p['photo']) . '" />
 						</a>
 					</td>
