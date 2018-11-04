@@ -74,8 +74,8 @@ class BellGatewayTest extends \Codeception\Test\Unit
 		$betrieb_bells = $this->gateway->getStoreBells([$bids1['id']]);
 		$this->assertEquals(1, count($betrieb_bells));
 		$bell = $betrieb_bells[0];
-		$this->assertEquals($bids1['id'],$bell['id']);
-		$this->assertEquals(2,$bell['count']);
-		$this->assertEquals($collSoon['date'],$bell['date']);
+		$this->assertEquals($bids1['id'], $bell['id']);
+		$this->assertEquals(2, $bell['count']);
+		$this->assertEquals($collSoon['date'], $bell['date']);
 	}
 }
