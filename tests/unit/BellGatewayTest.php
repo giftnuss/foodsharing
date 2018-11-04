@@ -69,7 +69,6 @@ class BellGatewayTest extends \Codeception\Test\Unit
 		$collSoon = $this->tester->addCollector($user1['id'], $bids1['id'], ['confirmed' => 0, 'date' => $this->faker->dateTimeBetween('+1 days', '+2 days')]);
 		$collFuture = $this->tester->addCollector($user1['id'], $bids1['id'], ['confirmed' => 0, 'date' => $this->faker->dateTimeBetween('+7 days', '+14 days')]);
 
-		$this->tester->seeNumRecords(1, 'fs_betrieb');
 		$this->tester->seeNumRecords(3, 'fs_abholer');
 		$betrieb_bells = $this->gateway->getStoreBells([$bids1['id']]);
 		$this->assertEquals(1, count($betrieb_bells));
