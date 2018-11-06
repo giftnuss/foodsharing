@@ -137,6 +137,8 @@ class StoreXhr extends Control
 								var now = new Date();
 								if(date.toDateString() == now.toDateString()) {
 									to = to + " " + preZero(now.getHours()) + ":" + preZero(now.getMinutes()) + ":59"
+								} else {
+									to = to + " " + "23:59:59"
 								}
 							}
 					
