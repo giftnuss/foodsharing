@@ -1,6 +1,7 @@
 # Unreleased
 
 ## Features
+- Pickuphistory now shows past pickups from the same day !577 @jofranz
 - shows hint in food basket about public information #373 !570 @k.miklobusec
 - Fix conversation name when changing store (name) #294 !508 @surrim
 - Notify user when bell notifications arrive without need for page reload #328 !542 @janopae
