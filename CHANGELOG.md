@@ -25,6 +25,8 @@
 - fixed index check in BasketGateway #354 !556 @alex.simm
 - removed fallback for the add date for members in stores  #361 !562 @alex.simm
 - show correct date in bells for pickups for more than one date !575 #337 by @mirka-henninger
+@D0nPiano
+- fixed statistic box on profile page overlapping on small screens
 
 ## Refactoring
 - Unify Symfony DI configuration !544 @nicksellen
