@@ -47,22 +47,18 @@ class EventControl extends Control
 		}
 	}
 
-	private function isEventAdmin($event)
+	private function isEventAdmin($event): bool
 	{
-		if ($event['fs_id'] == $this->func->fsId() || $this->func->isBotFor($event['bezirk_id']) || $this->session->may('orga')) {
-			return true;
-		}
-
-		return false;
+		return $event['fs_id'] == $this->func->fsId() || $this->func->isBotFor(
+				$event['bezirk_id']
+			) || $this->session->may('orga');
 	}
 
-	private function mayEvent($event)
+	private function mayEvent($event): bool
 	{
-		if ($event['public'] == 1 || $this->session->may('orga') || $this->func->isBotFor($event['bezirk_id']) || isset($event['invites']['may'][$this->func->fsId()])) {
-			return true;
-		}
-
-		return false;
+		return $event['public'] == 1 || $this->session->may('orga') || $this->func->isBotFor(
+				$event['bezirk_id']
+			) || isset($event['invites']['may'][$this->func->fsId()]);
 	}
 
 	public function edit()

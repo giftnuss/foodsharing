@@ -25,14 +25,18 @@
 - fixed wrong html formatting in quick replies to forum posts !534 @peter.toennies
 - fixed index check in BasketGateway #354 !556 @alex.simm
 - removed fallback for the add date for members in stores  #361 !562 @alex.simm
+- show correct date in bells for pickups for more than one date !575 #337 by @mirka-henninger
+@D0nPiano
+- fixed statistic box on profile page overlapping on small screens
 
 ## Refactoring
 - Unify Symfony DI configuration !544 @nicksellen
 - Add comments in scripts for quicker start of new developers !563 @flukx
+- Minor refactoring of control flow all over the source !554 and !555 @peter.toennies
 
 ## Dev/Test/CI stuff
 - Add php extensions as composer dependencies, upgrade codeception !558 @nicksellen
-- Updated several npm packages (most of them for ci) !564 @peter.toennies
+- Updated several npm packages (most of them for ci) !564 !565 @peter.toennies
 
 # 2018-08-19 Hotfix
 

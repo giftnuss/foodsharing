@@ -124,7 +124,7 @@ class BellGateway extends BaseGateway
 	public function getStoreBells($bids): array
 	{
 		$stm = '
-			SELECT COUNT( b.id ) AS count, b.name, b.id, MAX( a.date ) AS `date`, UNIX_TIMESTAMP(MAX( a.date )) AS date_ts 
+			SELECT COUNT( b.id ) AS count, b.name, b.id, MIN( a.date ) AS `date`, UNIX_TIMESTAMP(MIN( a.date )) AS date_ts
 			FROM `fs_betrieb` b, fs_abholer a	
 			WHERE a.betrieb_id = b.id AND a.betrieb_id IN(' . implode(',', $bids) . ') AND	a.confirmed = 0  AND a.`date` > NOW() 
 			GROUP BY b.id';
