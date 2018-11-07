@@ -10,6 +10,8 @@ You can use the docker-compose setup if you are using one of:
 
 If you are not using one of those, then try the vagrant + docker-compose setup.
 
+For Git we are recommending to use SSH (and the following documentation is supposing that). See e.g. [this documenation](https://docs.gitlab.com/ce/ssh/README.html) if you need to configure GitLab for this!
+
 ## Linux
 
 Install

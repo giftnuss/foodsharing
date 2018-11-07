@@ -39,16 +39,14 @@ class MailsControl extends ConsoleControl
 		while (1) {
 			$elem = $this->mem->cache->brpoplpush('workqueue', 'workqueueprocessing', 10);
 			if ($elem !== false && $e = unserialize($elem)) {
-				switch ($e['type']) {
-					case 'email':
-						$res = $this->handleEmail($e['data']);
-						// very basic email rate limit
-						usleep(100000);
-						break;
-					default:
-						$res = false;
-						break;
+				if ($e['type'] == 'email') {
+					$res = $this->handleEmail($e['data']);
+					// very basic email rate limit
+					usleep(100000);
+				} else {
+					$res = false;
 				}
+
 				if ($res) {
 					$this->mem->cache->lrem('workqueueprocessing', $elem, 1);
 				} else {

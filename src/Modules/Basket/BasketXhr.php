@@ -75,6 +75,8 @@ class BasketXhr extends Control
 		$dia = new XhrDialog();
 		$dia->setTitle($this->func->s('basket_offer'));
 
+		$dia->addContent($this->v_utils->v_info($this->func->s('basket_reference_info'), $this->func->s('basket_reference')));
+
 		$dia->addPictureField('picture');
 
 		$foodsaver = $this->model->getValues(['telefon', 'handy'], 'foodsaver', $this->session->id());
