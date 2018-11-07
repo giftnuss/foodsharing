@@ -23,7 +23,7 @@ function deleteMarked () {
 function u_getChecked () {
   let del = ''
   $('.wantnewcheck:checked').each(function () {
-    del += '-' + $(this).val()
+    del += `-${$(this).val()}`
   })
   return del.substring(1)
 }

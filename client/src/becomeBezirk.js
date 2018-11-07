@@ -45,10 +45,10 @@ $('#becomebezirkchooser-button').button().click(function () {
       $.ajax({
         dataType: 'json',
         url: '/xhr.php?f=becomeBezirk',
-        data: 'b=' + bid + '&new=' + neu,
+        data: `b=${bid}&new=${neu}`,
         success: function (data) {
           if (data.status == 1) {
-            goTo('/?page=relogin&url=' + encodeURIComponent('/?page=bezirk&bid=' + $('#becomebezirkchooser').val()))
+            goTo(`/?page=relogin&url=${encodeURIComponent('/?page=bezirk&bid=' + $('#becomebezirkchooser').val())}`)
             $.fancybox.close()
           }
           if (data.script != undefined) {
@@ -69,7 +69,7 @@ $('#becomebezirkchooser-button').button().click(function () {
 })
 
 export function u_printChildBezirke (element) {
-  const val = element.value + ''
+  const val = `${element.value}`
 
   const part = val.split(':')
 
@@ -104,15 +104,15 @@ export function u_printChildBezirke (element) {
     el.next().remove()
   }
 
-  $('#xv-childbezirk-' + parent).remove()
+  $(`#xv-childbezirk-${parent}`).remove()
 
   showLoader()
   $.ajax({
     dataType: 'json',
-    url: '/xhr.php?f=childBezirke&parent=' + parent,
+    url: `/xhr.php?f=childBezirke&parent=${parent}`,
     success: function (data) {
       if (data.status == 1) {
-        $('#becomebezirkchooser-childs-' + parent).remove()
+        $(`#becomebezirkchooser-childs-${parent}`).remove()
         $('#becomebezirkchooser-wrapper').append(data.html)
       } else {
 

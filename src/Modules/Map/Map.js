@@ -95,7 +95,7 @@ const map = {
       }
     }
     for (let i = 0; i < items.length; i++) {
-      $('#map-control .linklist a.' + items[i]).addClass('active')
+      $(`#map-control .linklist a.${items[i]}`).addClass('active')
     }
 
     loadMarker(items)
@@ -136,7 +136,7 @@ function u_loadDialog (purl) {
   $('#b_content').dialog('open')
   const pos = $('#topbar .container').offset()
   $('#b_content').parent().css({
-    'left': pos.left + 'px',
+    'left': `${pos.left}px`,
     'top': '80px'
   })
 
@@ -208,16 +208,16 @@ function loadMarker (types, loader) {
           const type = el.layer.options.type
 
           if (type === 'fs') {
-            url = '/xhr.php?f=fsBubble&id=' + fsid
+            url = `/xhr.php?f=fsBubble&id=${fsid}`
             showLoader()
           } else if (type === 'bk') {
             ajreq('bubble', { app: 'basket', id: fsid })
           } else if (type === 'b') {
-            url = '/xhr.php?f=bBubble&id=' + fsid
+            url = `/xhr.php?f=bBubble&id=${fsid}`
             u_loadDialog()
           } else if (type === 'f') {
             const bid = (el.layer.options.bid)
-            goTo('/?page=fairteiler&sub=ft&bid=' + bid + '&id=' + fsid)
+            goTo(`/?page=fairteiler&sub=ft&bid=${bid}&id=${fsid}`)
           }
           if (url != '') {
             $.ajax({
