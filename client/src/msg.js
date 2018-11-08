@@ -308,7 +308,7 @@ const msg = {
   },
 
   msgTpl: function (message) {
-    return $('<li id="msg-' + message.id + '" style="display:none;"><span class="img"><a title="' + message.fs_name + '" href="#" onclick="profile(' + message.fs_id + ');return false;"><img height="35" src="' + img(message.fs_photo, 'mini') + '" /></a></span><span class="body">' + nl2br(autoLink(message.body)) + '<span class="time">' + timeformat.nice(message.time) + '</span></span><span class="clear"></span></li>')
+    return $(`<li id="msg-${message.id}" style="display:none;"><span class="img"><a title="${message.fs_name}" href="/profile/${message.fs_id}"><img height="35" src="${img(message.fs_photo, 'mini')}" /></a></span><span class="body">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><span class="clear"></span></li>`)
   },
 
   getRecipients: function () {
@@ -358,7 +358,7 @@ const msg = {
 
       if (currentMember) {
         title = `
-          <a title="${currentMember.name}" href="#" onclick="profile(${currentMember.id});return false;">
+          <a title="${currentMember.name}" href="/profile/${currentMember.id}">
             <img src="${img(member.photo, 'mini')}" width="22" alt="${currentMember.name}" />
           </a>
         `

@@ -11,8 +11,10 @@
 - New selection for expiration of baskets #340 !553 @alex.simm
 - Making the "tpl_msg_to_team" canceling message more informative !545 @jofranz
 - Possibility to edit food baskets #342 !549 @annaos
+- it is now possible to open profiles in new tabs via middle mouse button !574 @peter.toennies
 
 ## Bugfixes
+- Foodsavers list is now sorted by name and doesn't reshuffle !578 #54 @oded.neaman
 - Orga members are now able to leave stores they are not responsible for #283 !524 @annaos
 - check user permissions in quickreply() in RegionXhr !499 #85 @annaos
 - fix exception if request have no "msg"-Attribute in quickreply() in WallPostXhr !499 @annaos
