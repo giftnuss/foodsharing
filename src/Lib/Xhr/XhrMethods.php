@@ -195,25 +195,25 @@ class XhrMethods
 
 						$msg = '
 					<div class="milestone">
-						<a href="#" onclick="profile(' . (int)$o['fsid'] . ');return false;">' . $o['name'] . '</a> ' . $this->func->sv('betrieb_added', $this->func->format_d($o['zeit'])) . '
+						<a href="/profile/"' . (int)$o['fsid'] . '">' . $o['name'] . '</a> ' . $this->func->sv('betrieb_added', $this->func->format_d($o['zeit'])) . '
 					</div>';
 
 						$pic = 'img/milestone.png';
 					} elseif ($o['milestone'] == 2) {
 						$odd .= ' milestone';
-						$msg = '<span class="msg">' . $this->func->sv('accept_request', '<a href="#" onclick="profile(' . (int)$o['fsid'] . ');return false">' . $this->model->getVal('name', 'foodsaver', $o['fsid']) . '</a>') . '</span>';
+						$msg = '<span class="msg">' . $this->func->sv('accept_request', '<a href="/profile/' . (int)$o['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $o['fsid']) . '</a>') . '</span>';
 					} elseif ($o['milestone'] == 3) {
 						$odd .= ' milestone';
 						$pic = 'img/milestone.png';
 						$msg = '<span class="msg"><strong>' . $this->func->sv('status_change_at', $this->func->format_d($o['zeit'])) . '</strong> ' . $this->func->s($o['text']) . '</span>';
 					} elseif ($o['milestone'] == 5) {
 						$odd .= ' milestone';
-						$msg = '<span class="msg">' . $this->func->sv('quiz_dropped', '<a href="#" onclick="profile(' . (int)$o['fsid'] . ');return false">' . $this->model->getVal('name', 'foodsaver', $o['fsid']) . '</a>') . '</span>';
+						$msg = '<span class="msg">' . $this->func->sv('quiz_dropped', '<a href="/profile/' . (int)$o['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $o['fsid']) . '</a>') . '</span>';
 					}
 
 					$html .= '
 					<tr class="' . $odd . ' bpost bpost-' . $o['id'] . '">
-						<td class="img"><a href="#"><img src="' . $pic . '" onclick="profile(' . (int)$o['fsid'] . ');return false;" /></a></td>
+						<td class="img"><a href="/profile/' . (int)$o['fsid'] . '"><img src="' . $pic . '" /></a></td>
 						<td>' . $msg . '</td>
 					</tr>';
 				}
@@ -1250,7 +1250,7 @@ class XhrMethods
 
 				$verantwortlicher = '';
 				if ($v = $this->storeGateway->getTeamleader($b['id'])) {
-					$verantwortlicher = '<p><a href="#" onclick="profile(' . (int)$b['id'] . ');return false;"><img src="' . $this->func->img() . '" /></a><a href="#" onclick="profile(' . (int)$b['id'] . ');return false;">' . $v['name'] . '</a> ist verantwortlich</p>';
+					$verantwortlicher = '<p><a href="/profile/' . (int)$b['id'] . '"><img src="' . $this->func->img() . '" /></a><a href="/profile/' . (int)$b['id'] . '">' . $v['name'] . '</a> ist verantwortlich</p>';
 				}
 
 				$out['betriebe'][$i]['bubble'] = '<div style="height:110px;overflow:hidden;width:270px;"><div style="margin-right:5px;float:right;">' . $img . '</div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a onclick="betrieb(' . (int)$b['id'] . ');return false;" href="#">' . $this->func->jsSafe($b['name']) . '</a></h1><p>' . $this->func->jsSafe($b['str'] . ' ' . $b['hsnr']) . '</p><p>' . $this->func->jsSafe($b['plz']) . ' ' . $this->func->jsSafe($b['stadt']) . '</p>' . $button . '</div><div style="clear:both;"></div>';
@@ -1527,7 +1527,7 @@ class XhrMethods
 								'new_foodsaver_title',
 								'new_foodsaver_verified',
 								$this->func->img($foodsaver['photo'], 50),
-								array('href' => '#', 'onclick' => 'profile(' . (int)$this->func->fsId() . ');return false;'),
+								array('href' => '/profile/' . (int)$this->func->fsId() . ''),
 								array(
 									'name' => $foodsaver['name'] . ' ' . $foodsaver['nachname'],
 									'bezirk' => $bezirk['name']
@@ -1540,7 +1540,7 @@ class XhrMethods
 								'new_foodsaver_title',
 								'new_foodsaver',
 								$this->func->img($foodsaver['photo'], 50),
-								array('href' => '#', 'onclick' => 'profile(' . (int)$this->func->fsId() . ');return false;'),
+								array('href' => '/profile/' . (int)$this->func->fsId() . ''),
 								array(
 									'name' => $foodsaver['name'] . ' ' . $foodsaver['nachname'],
 									'bezirk' => $bezirk['name']
