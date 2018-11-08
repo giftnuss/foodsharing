@@ -37,7 +37,7 @@ class FoodsaverModel extends Db
 		    OR
 			fs.last_login IS NULL)' : '') . '
 		    ORDER BY
-			fs.name ASC
+			fs.last_login DESC
 		');
 	}
 
