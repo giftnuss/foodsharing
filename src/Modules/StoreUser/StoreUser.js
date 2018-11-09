@@ -103,7 +103,7 @@ $('#u_undate').dialog({
           dataType: 'json',
           success: function (ret) {
             if (ret.status == 1) {
-              $('.fetch-' + $('#undate-date').val().replace(/[^0-9]/g, '') + '-' + user.id).hide()
+              $(`.fetch-${$('#undate-date').val().replace(/[^0-9]/g, '')}-${user.id}`).hide()
             } else {
               hideLoader()
             }
@@ -136,7 +136,7 @@ $('#u_undate').dialog({
           dataType: 'json',
           success: function (ret) {
             if (ret.status == 1) {
-              $('.fetch-' + $('#undate-date').val().replace(/[^0-9]/g, '') + '-' + user.id).hide()
+              $(`.fetch-${$('#undate-date').val().replace(/[^0-9]/g, '')}-${user.id}`).hide()
             } else {
               hideLoader()
             }
@@ -169,7 +169,7 @@ $('div#pinnwand form').submit(function (e) {
     $.ajax({
       dataType: 'json',
       data: $('div#pinnwand form').serialize(),
-      url: 'xhr.php?f=addPinPost&team=' + store.team_js,
+      url: `xhr.php?f=addPinPost&team=${store.team_js}`,
       success: function (data) {
         if (data.status == 1) {
           $('div#pinnwand form textarea').val($('div#pinnwand form textarea').attr('title'))
@@ -220,7 +220,7 @@ $('#delete_shure').dialog({
           data: { 'pid': pid },
           success: function (ret) {
             if (ret == 1) {
-              $('.bpost-' + pid).remove()
+              $(`.bpost-${pid}`).remove()
               $('#delete_shure').dialog('close')
             }
           },
@@ -249,7 +249,7 @@ $('.timedialog-add-me').click(function () {
     const id = $(this).children('input')[1].value
 
     $('#timedialog-date').val(date)
-    $('#date-label').html(day + ', ' + label)
+    $('#date-label').html(`${day}, ${label}`)
     $('#range-day-label').html(day.toLowerCase())
     $('#timedialog-id').val(id)
     $('#timedialog').dialog('open')
@@ -280,12 +280,12 @@ $('#timedialog').dialog({
           if (ret == '2') {
             reload()
           } else if (ret != 0) {
-            $('#' + $('#timedialog-id').val() + '-button').last().remove()
+            $(`#${$('#timedialog-id').val()}-button`).last().remove()
 
-            const li = $('<li><a class="img-link" href="#"><img src="' + ret + '" title="Du" /><span>&nbsp;</span></a></li>')
+            const li = $(`<li><a class="img-link" href="#"><img src="${ret}" title="Du" /><span>&nbsp;</span></a></li>`)
               .addClass(store.verantwortlich ? 'confirmed' : 'unconfirmed')
 
-            $('#' + $('#timedialog-id').val() + '-imglist')
+            $(`#${$('#timedialog-id').val()}-imglist`)
               .prepend(li)
               .find('.img-link')
               .click(e => {
@@ -295,15 +295,15 @@ $('#timedialog').dialog({
 
             if (!store.verantwortlich) pulseInfo(i18n('wait_for_confirm'))
 
-            if ($('#' + $('#timedialog-id').val() + '-imglist li:last').hasClass('empty')) {
-              $('#' + $('#timedialog-id').val() + '-imglist li:last').remove()
+            if ($(`#${$('#timedialog-id').val()}-imglist li:last`).hasClass('empty')) {
+              $(`#${$('#timedialog-id').val()}-imglist li:last`).remove()
             }
 
-            $('#' + $('#timedialog-id').val() + '-imglist li.empty a').attr('title', '')
-            $('#' + $('#timedialog-id').val() + '-imglist li.empty').unbind('click')
-            $('#' + $('#timedialog-id').val() + '-imglist li.empty').addClass('nohover')
-            $('#' + $('#timedialog-id').val() + '-imglist li.empty').removeClass('filled')
-            $('#' + $('#timedialog-id').val() + '-imglist li.empty a').tooltip('option', { disabled: true }).tooltip('close')
+            $(`#${$('#timedialog-id').val()}-imglist li.empty a`).attr('title', '')
+            $(`#${$('#timedialog-id').val()}-imglist li.empty`).unbind('click')
+            $(`#${$('#timedialog-id').val()}-imglist li.empty`).addClass('nohover')
+            $(`#${$('#timedialog-id').val()}-imglist li.empty`).removeClass('filled')
+            $(`#${$('#timedialog-id').val()}-imglist li.empty a`).tooltip('option', { disabled: true }).tooltip('close')
           }
         }
       })
@@ -316,20 +316,20 @@ $('#timedialog').dialog({
       $('#timedialog-from').datepicker({
         defaultDate: '+1w',
         minDate: '0',
-        maxDate: '+' + days,
+        maxDate: `+${days}`,
         numberOfMonths: 1,
         onClose: function (selectedDate) {
           if (selectedDate != '') {
             $('#timedialog-to').datepicker('option', 'minDate', selectedDate)
           }
-          $('#timedialog-to').datepicker('option', 'maxDate', '+' + days)
+          $('#timedialog-to').datepicker('option', 'maxDate', `+${days}`)
         }
       })
 
       $('#timedialog-to').datepicker({
         defaultDate: '+1w',
         minDate: '+2',
-        maxDate: '+' + days,
+        maxDate: `+${days}`,
         numberOfMonths: 1,
         onClose: function (selectedDate) {
           $('#timedialog-from').datepicker('option', 'maxDate', selectedDate)
@@ -368,7 +368,7 @@ addContextMenu('.context-jumper', 95, createJumperMenu)
 
 $('.timetable').on('keyup', '.fetchercount', function () {
   if (this.value != '') {
-    let val = parseInt('0' + this.value, 10)
+    let val = parseInt(`0${this.value}`, 10)
     if (val == 0) {
       val = 1
     } else if (val > 2) {

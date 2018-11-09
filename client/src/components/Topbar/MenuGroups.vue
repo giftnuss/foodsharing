@@ -11,7 +11,7 @@
       :key="group.id"
       class="group">
       <a
-        v-b-toggle="'topbargroup_'+group.id"
+        v-b-toggle="`topbargroup_${group.id}`"
         v-if="!alwaysOpen"
         role="menuitem"
         class="dropdown-item text-truncate"
@@ -27,7 +27,7 @@
       </h3>
       <b-collapse
         :visible="alwaysOpen"
-        :id="'topbargroup_'+group.id"
+        :id="`topbargroup_${group.id}`"
         :accordion="alwaysOpen ? null : 'groups'"
         class="sub">
         <a

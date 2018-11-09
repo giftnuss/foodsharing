@@ -311,7 +311,7 @@ class ProfileView extends View
 				}
 				$bananacount .= '
 				<tr class="' . $odd . ' bpost">
-					<td class="img"><a title="' . $b['name'] . '" href="#"><img onclick="profile(' . $b['id'] . ');return false;" src="' . $this->func->img($b['photo']) . '"></a></td>
+					<td class="img"><a title="' . $b['name'] . '" href="/profile/' . $b['id'] . '"><img src="' . $this->func->img($b['photo']) . '"></a></td>
 					<td><span class="msg">' . nl2br($b['msg']) . '</span>
 					<div class="foot">
 						<span class="time">' . $this->func->niceDate($b['time_ts']) . ' von ' . $b['name'] . '</span>
@@ -370,7 +370,7 @@ class ProfileView extends View
 			if (!is_null($h['bot_id'])) {
 				$out .= '
 				<li>
-					<a class="corner-all" href="#" onclick="profile(' . (int)$h['bot_id'] . ');return false;">
+					<a class="corner-all" href="/profile/' . (int)$h['bot_id'] . '">
 						<span class="n">' . $h['name'] . ' ' . $h['nachname'] . '</span>
 						<span class="t"></span>
 						<span class="c"></span>
@@ -632,7 +632,7 @@ class ProfileView extends View
 				}
 				$tabs .= '
 				<tr class="' . $odd . ' bpost">
-					<td class="img"><a class="tooltip" title="' . $b['name'] . '" href="#"><img onclick="profile(' . $b['id'] . ');return false;" src="' . $this->func->img($b['photo']) . '"></a></td>
+					<td class="img"><a class="tooltip" title="' . $b['name'] . '" href="/profile/' . $b['id'] . '"><img src="' . $this->func->img($b['photo']) . '"></a></td>
 					<td><span class="msg">' . nl2br($b['msg']) . '</span>
 					<div class="foot">
 						<span class="time">' . $this->func->niceDate($b['time_ts']) . ' von ' . $b['name'] . '</span>
