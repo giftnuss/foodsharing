@@ -40,11 +40,11 @@ class ViewUtils
 	{
 		return '<div style="height:80px;overflow:hidden;width:200px;">
 				<div style="margin-right:10px;float:left;margin-bottom:33px">
-					<a href="#" onclick="profile(' . (int)$fs['id'] . ');return false;">
+					<a href="/profile/' . (int)$fs['id'] . '">
 							<img src="' . $this->func->img($fs['photo']) . '">
 					</a>
 				</div>
-				<h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a href="#" onclick="profile(' . (int)$fs['id'] . ');return false;">' . $fs['name'] . '</a></h1>
+				<h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a href="/profile/' . (int)$fs['id'] . '">' . $fs['name'] . '</a></h1>
 				<div style="clear:both;"></div>
 			</div>';
 	}
@@ -65,7 +65,7 @@ class ViewUtils
 		foreach ($b['foodsaver'] as $fs) {
 			if ($fs['verantwortlich'] == 1) {
 				$verantwortlich .= '
-			<li><a style="background-color:transparent !important;" href="#" onclick="profile(' . (int)$fs['id'] . ');return false;">' . $this->func->avatar($fs, 50) . '</a></li>';
+			<li><a style="background-color:transparent !important;" href="/profile/' . (int)$fs['id'] . '">' . $this->func->avatar($fs, 50) . '</a></li>';
 			}
 		}
 		$verantwortlich .= '

@@ -81,7 +81,7 @@ export default {
   computed: {
     resultsStyle () {
       return {
-        left: this.posX + 'px'
+        left: `${this.posX}px`
       }
     }
   },

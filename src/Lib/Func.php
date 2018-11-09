@@ -402,13 +402,9 @@ class Func
 		$g_data = $data;
 	}
 
-	public function getAction($a)
+	public function getAction($a): bool
 	{
-		if (isset($_GET['a']) && $_GET['a'] == $a) {
-			return true;
-		}
-
-		return false;
+		return isset($_GET['a']) && $_GET['a'] == $a;
 	}
 
 	public function pageLink($page, $id, $action = '')
@@ -725,13 +721,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return $altimg;
 	}
 
-	public function isMob()
+	public function isMob(): bool
 	{
-		if (isset($_SESSION['mob']) && $_SESSION['mob'] == 1) {
-			return true;
-		}
-
-		return false;
+		return isset($_SESSION['mob']) && $_SESSION['mob'] == 1;
 	}
 
 	public function id($name)
@@ -977,13 +969,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return $out;
 	}
 
-	public function submitted()
+	public function submitted(): bool
 	{
-		if (isset($_POST) && !empty($_POST)) {
-			return true;
-		}
-
-		return false;
+		return isset($_POST) && !empty($_POST);
 	}
 
 	public function info($msg, $title = false)
@@ -1053,13 +1041,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return preg_replace('/[^a-zA-Z0-9]/', '', $txt);
 	}
 
-	public function loggedIn()
+	public function loggedIn(): bool
 	{
-		if (isset($_SESSION['client']) && $_SESSION['client']['id'] > 0) {
-			return true;
-		}
-
-		return false;
+		return isset($_SESSION['client']) && $_SESSION['client']['id'] > 0;
 	}
 
 	public function addWebpackScript($src)
@@ -1433,13 +1417,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return JSMin::minify($buffer);
 	}
 
-	public function hasBezirk($bid)
+	public function hasBezirk($bid): bool
 	{
-		if (isset($_SESSION['client']['bezirke'][$bid]) || $this->isBotFor($bid)) {
-			return true;
-		}
-
-		return false;
+		return isset($_SESSION['client']['bezirke'][$bid]) || $this->isBotFor($bid);
 	}
 
 	public function mayBezirk($bid): bool
@@ -1479,13 +1459,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return $this->session->may('orga');
 	}
 
-	public function may()
+	public function may(): bool
 	{
-		if (isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0) {
-			return true;
-		}
-
-		return false;
+		return isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0;
 	}
 
 	public function getRolle($gender_id, $rolle_id)

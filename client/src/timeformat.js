@@ -16,16 +16,16 @@ const timeformat = {
     const date = parts[0]
 
     parts = date.split('-')
-    let out = parts[2] + '.' + parts[1] + '.' + parts[0] + ' '
+    let out = `${parts[2]}.${parts[1]}.${parts[0]} `
 
     parts = time.split(':')
-    return out + parts[0] + '.' + parts[1] + ' Uhr'
+    return `${out + parts[0]}.${parts[1]} Uhr`
   },
 
   niceDate (dbtime) {
     const parts = dbtime.split('-')
 
-    return parts[2] + '.' + parts[1] + '.' + parts[0]
+    return `${parts[2]}.${parts[1]}.${parts[0]}`
   }
 
 }

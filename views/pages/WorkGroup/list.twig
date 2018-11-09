@@ -19,7 +19,7 @@
                 {% block content %}
                     <div class="members">
                         {% for leader in group.leaders %}
-                            <a class="member" href="#" onclick="profile({{ leader.id }});return false;">
+                            <a class="member" href="/profile/{{ leader.id }}">
                                 <img src="{{ leader.image }}" alt="{{ leader.name }}"/>
                             </a>
                         {% endfor %}

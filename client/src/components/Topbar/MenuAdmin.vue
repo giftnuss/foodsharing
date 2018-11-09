@@ -49,11 +49,6 @@ export default {
             label: this.$i18n('menu_regions_without_bots')
           },
           {
-            url: '/?page=newarea',
-            icon: 'far fa-map',
-            label: this.$i18n('menu_newarea')
-          },
-          {
             url: '/?page=email',
             icon: 'fas fa-envelope',
             label: this.$i18n('menu_email')

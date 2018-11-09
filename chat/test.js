@@ -304,7 +304,7 @@ test('works with two connections per user', t => {
 				m: 'some-method', // method
 				o: 'some-payload', // options a.k.a payload
 			})
-			httpRequest(HTTP_URL + '?' + query, (res) => {
+			httpRequest(`${HTTP_URL}?${query}`, (res) => {
 				t.equal(res.statusCode, 200)
 			})
 			.on('error', t.error)
@@ -332,7 +332,7 @@ test('does not send to other users', t => {
 				m: 'some-method', // method
 				o: 'some-payload', // options a.k.a payload
 			})
-			httpRequest('http://localhost:1338/?' + query, (res) => {
+			httpRequest(`http://localhost:1338/?${query}`, (res) => {
 				t.equal(res.statusCode, 200)
 				setTimeout(() => t.end(), 100) // 100ms window to see if user2 receives event...
 			})
@@ -372,7 +372,7 @@ function sendMessage(params, callback){
 };
 
 function fetchStats(callback) {
-	request(HTTP_URL + '/stats', (err, response, body) => {
+	request(`${HTTP_URL}/stats`, (err, response, body) => {
 		if (err) return callback(err);
 		try {
 			callback(null, JSON.parse(body));

@@ -20,7 +20,7 @@ export const dialogs = {
   },
   closeAll: function () {
     for (var i = 0; i < dialogs.dialogs.length; i++) {
-      var $dia = $('#' + dialogs.dialogs[i])
+      var $dia = $(`#${dialogs.dialogs[i]}`)
       if ($dia.length > 0) {
         if ($dia.dialog('isOpen') === true) {
           $dia.dialog('close')
@@ -32,8 +32,8 @@ export const dialogs = {
 }
 
 export function collapse_wrapper (id) {
-  let $content = $('#' + id + '-wrapper .element-wrapper')
-  let $label = $('#' + id + '-wrapper .wrapper-label i')
+  let $content = $(`#${id}-wrapper .element-wrapper`)
+  let $label = $(`#${id}-wrapper .wrapper-label i`)
   if ($content.is(':visible')) {
     $content.hide()
     $label.removeClass('fa-caret-down').addClass('fa-caret-right')
@@ -59,7 +59,7 @@ export const sleepmode = {
   init: function () {
     $('.sleepmode-1, .sleepmode-2').mouseover(function () {
       var $this = $(this)
-      $this.append('<span class="corner-all bubble bubble-right ui-shadow">' + $this.text() + ' nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus</span>')
+      $this.append(`<span class="corner-all bubble bubble-right ui-shadow">${$this.text()} nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus</span>`)
     })
     $('.sleepmode-1, .sleepmode-2').mouseout(function () {
       var $this = $(this)
@@ -93,7 +93,7 @@ export function initialize () {
 
       if ($this.height() > 100) {
         $this.css({
-          'height': height + 'px',
+          'height': `${height}px`,
           'overflow': 'hidden'
         })
       }
@@ -102,7 +102,7 @@ export function initialize () {
     $('.moreswaplink').each(function () {
       let $this = $(this)
       $this.prev().css({
-        'height': g_moreswapheight + 'px',
+        'height': `${g_moreswapheight}px`,
         'overflow': 'hidden'
       })
       $this.click(function (ev) {
@@ -116,7 +116,7 @@ export function initialize () {
           $this.attr('data-show', 1)
         } else {
           $this.prev().css({
-            'height': g_moreswapheight + 'px',
+            'height': `${g_moreswapheight}px`,
             'overflow': 'hidden'
           })
           $this.text('Mehr anzeigen')
@@ -150,7 +150,7 @@ export function initialize () {
           var el = $(this)
           if (el.attr('title').substring(0, 4) == '#tt-') {
             const id = el.attr('title').substring(4)
-            return $('.' + id).html()
+            return $(`.${id}`).html()
           } else {
             return el.attr('title')
           }
@@ -263,7 +263,7 @@ export function addbanana (fsid) {
 
 export function profile (id) {
   showLoader()
-  goTo('/profile/' + id)
+  goTo(`/profile/${id}`)
 }
 
 export function quickprofile (id) {
@@ -271,7 +271,7 @@ export function quickprofile (id) {
 
   $.ajax({
     dataType: 'json',
-    url: '/xhrapp.php?app=profile&m=quickprofile&id=' + id,
+    url: `/xhrapp.php?app=profile&m=quickprofile&id=${id}`,
     success: function (data) {
       hideLoader()
       if (data.status == 1) {
@@ -377,7 +377,7 @@ export const ajax = {
     }
 
     return $.ajax({
-      url: '/xhrapp.php?app=' + app + '&m=' + method,
+      url: `/xhrapp.php?app=${app}&m=${method}`,
       data: opt.data,
       dataType: 'json',
       method: opt.method,
@@ -471,9 +471,9 @@ export function img (photo, size) {
     size = 'med'
   }
   if (photo && photo.length > 3) {
-    return '/images/' + size + '_q_' + photo
+    return `/images/${size}_q_${photo}`
   } else {
-    return '/img/' + size + '_q_avatar.png'
+    return `/img/${size}_q_avatar.png`
   }
 }
 
@@ -486,12 +486,12 @@ export function fancy (content, title, subtitle) {
   let t = ''
   let s = ''
   if (title != undefined) {
-    t = '<h3>' + title + '</h3>'
+    t = `<h3>${title}</h3>`
   }
   if (subtitle != undefined) {
-    s = '<p class="subtitle">' + subtitle + '</p>'
+    s = `<p class="subtitle">${subtitle}</p>`
   }
-  $('#fancy').html('<div class="popbox">' + t + s + content + '</div>')
+  $('#fancy').html(`<div class="popbox">${t}${s}${content}</div>`)
   $('#fancylink').trigger('click')
 }
 
@@ -499,7 +499,7 @@ export function xhrf (func) {
   showLoader()
   $.ajax({
     dataType: 'json',
-    url: '/xhr.php?f=' + func,
+    url: `/xhr.php?f=${func}`,
     success: function (data) {
       hideLoader()
       if (data.status == 1) {
@@ -517,7 +517,7 @@ export function reload () {
 }
 
 export function v_field (content, title, id) {
-  return '<div id="' + id + '"><div class="head ui-widget-header ui-corner-top">' + title + '</div><div class="ui-widget ui-widget-content ui-corner-bottom margin-bottom ui-padding">' + content + '</div></div>'
+  return `<div id="${id}"><div class="head ui-widget-header ui-corner-top">${title}</div><div class="ui-widget ui-widget-content ui-corner-bottom margin-bottom ui-padding">${content}</div></div>`
 }
 
 export function openPhotoDialog (fs_id) {
@@ -527,9 +527,9 @@ export function openPhotoDialog (fs_id) {
 
 export function info (txt) {
   if ($('#info-msg').length == 0) {
-    $('#top').after('<div class="ui-widget ui-msg"><div class="ui-state-highlight ui-corner-all ui-padding"><span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-info"></span><ul id="info-msg">' + txt + '</ul><div class="clear"></div></div></div>')
+    $('#top').after(`<div class="ui-widget ui-msg"><div class="ui-state-highlight ui-corner-all ui-padding"><span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-info"></span><ul id="info-msg">${txt}</ul><div class="clear"></div></div></div>`)
   } else {
-    $('#info-msg').append('<li>' + txt + '</li>')
+    $('#info-msg').append(`<li>${txt}</li>`)
   }
 }
 export function error (txt) {
@@ -541,30 +541,30 @@ export function uploadPhoto () {
 }
 
 export function uploadPhotoReady (id, file) {
-  $('#miniq-' + id).attr('src', file)
+  $(`#miniq-${id}`).attr('src', file)
   $('#uploadPhoto').dialog('close')
   info('Foto erfolgreich hochgeladen!')
 }
 
 export function addSelect (id) {
-  if ($('#' + id + 'neu').val().length > 0) {
+  if ($(`#${id}neu`).val().length > 0) {
     $.ajax({
       dataType: 'json',
-      url: '/xhr.php?f=add' + ucfirst(id) + '&neu=' + encodeURIComponent($('#' + id + 'neu').val()),
+      url: `/xhr.php?f=add${ucfirst(id)}&neu=${encodeURIComponent($('#' + id + 'neu').val())}`,
       success: function (data) {
-        $('#' + id).append('<option value="' + data.id + '">' + data.name + '</option>')
+        $(`#${id}`).append(`<option value="${data.id}">${data.name}</option>`)
 
-        $('#' + id + 'neu').val('')
-        $('#' + id + '-dialog').dialog('close')
-        $('#' + id + ' option').removeAttr('selected')
-        $('#' + id + ' option').last().attr('selected', true)
+        $(`#${id}neu`).val('')
+        $(`#${id}-dialog`).dialog('close')
+        $(`#${id} option`).removeAttr('selected')
+        $(`#${id} option`).last().attr('selected', true)
       }
     })
   }
 }
 
 export function betrieb (id) {
-  goTo('/?page=betrieb&id=' + id)
+  goTo(`/?page=betrieb&id=${id}`)
 }
 
 export function ucfirst (str) {
@@ -586,44 +586,44 @@ export function ifconfirm (url, question, title) {
 }
 
 export function picFinish (img, id) {
-  $('#' + id + '-action').val('upload')
+  $(`#${id}-action`).val('upload')
   $.fancybox.close()
   let d = new Date()
-  let imgp = img + '?' + d.getTime()
-  $('#' + id + '-open').html('<img src="images/' + imgp + '" /><input type="hidden" name="photo" value="' + img + '" />')
+  let imgp = `${img}?${d.getTime()}`
+  $(`#${id}-open`).html(`<img src="images/${imgp}" /><input type="hidden" name="photo" value="${img}" />`)
   hideLoader()
   reload()
 }
 export function pic_error (msg, id) {
-  msg = '<div class="ui-widget"><div style="padding: 15px;" class="ui-state-error ui-corner-all"><p><span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-alert"></span><strong>Fehler:</strong> ' + msg + '</p></div></div>'
-  $('#' + id + '-placeholder').html(msg)
+  msg = `<div class="ui-widget"><div style="padding: 15px;" class="ui-state-error ui-corner-all"><p><span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-alert"></span><strong>Fehler:</strong> ${msg}</p></div></div>`
+  $(`#${id}-placeholder`).html(msg)
   hideLoader()
 }
 export function fotoupload (file, id) {
-  $('#' + id + '-file').val(file)
+  $(`#${id}-file`).val(file)
   let d = new Date()
-  let img = file + '?' + d.getTime()
+  let img = `${file}?${d.getTime()}`
 
-  $('#' + id + '-placeholder').html('<img src="./tmp/' + img + '" />')
-  $('#' + id + '-placeholder img').Jcrop({
+  $(`#${id}-placeholder`).html(`<img src="./tmp/${img}" />`)
+  $(`#${id}-placeholder img`).Jcrop({
     setSelect: [ 100, 0, 400, 400 ],
     aspectRatio: 35 / 45,
     onSelect: function (c) {
-      $('#' + id + '-x').val(c.x)
-      $('#' + id + '-y').val(c.y)
-      $('#' + id + '-w').val(c.w)
-      $('#' + id + '-h').val(c.h)
+      $(`#${id}-x`).val(c.x)
+      $(`#${id}-y`).val(c.y)
+      $(`#${id}-w`).val(c.w)
+      $(`#${id}-h`).val(c.h)
     }
   })
-  $('#' + id + '-save').show()
-  $('#' + id + '-save').button().click(function () {
+  $(`#${id}-save`).show()
+  $(`#${id}-save`).button().click(function () {
     showLoader()
-    $('#' + id + '-action').val('crop')
-    $('#' + id + '-form')[0].submit()
+    $(`#${id}-action`).val('crop')
+    $(`#${id}-form`)[0].submit()
     return false
   })
 
-  $('#' + id + '-placeholder').css('height', 'auto')
+  $(`#${id}-placeholder`).css('height', 'auto')
   hideLoader()
   setTimeout(function () {
     $.fancybox.update()
@@ -637,30 +637,30 @@ export function closeBox () {
 }
 
 export function pictureReady (id, img) {
-  $('#' + id + '-preview').html('<img src="images/' + id + '/thumb_' + img + '" />')
-  $('#' + id).val(id + '/' + img)
+  $(`#${id}-preview`).html(`<img src="images/${id}/thumb_${img}" />`)
+  $(`#${id}`).val(`${id}/${img}`)
 
   $.fancybox.close()
   hideLoader()
 }
 
 export function pictureCrop (id, img) {
-  let ratio = $.parseJSON($('#' + id + '-ratio').val())
-  let ratio_val = $.parseJSON($('#' + id + '-ratio-val').val())
+  let ratio = $.parseJSON($(`#${id}-ratio`).val())
+  let ratio_val = $.parseJSON($(`#${id}-ratio-val`).val())
 
-  let ratio_i = parseInt($('#' + id + '-ratio-i').val())
+  let ratio_i = parseInt($(`#${id}-ratio-i`).val())
 
   if (ratio[ratio_i] != undefined) {
-    $('#' + id + '-ratio-i').val((ratio_i + 1))
-    $('#' + id + '-crop').html('<img src="images/' + id + '/' + img + '" /><br /><span id="' + id + '-crop-save">Speichern</span>')
-    $('#' + id + '-crop img').Jcrop({
+    $(`#${id}-ratio-i`).val((ratio_i + 1))
+    $(`#${id}-crop`).html(`<img src="images/${id}/${img}" /><br /><span id="${id}-crop-save">Speichern</span>`)
+    $(`#${id}-crop img`).Jcrop({
       setSelect: [ 100, 0, 400, 400 ],
       aspectRatio: ratio[ratio_i],
       onSelect: function (c) {
-        $('#' + id + '-x').val(c.x)
-        $('#' + id + '-y').val(c.y)
-        $('#' + id + '-w').val(c.w)
-        $('#' + id + '-h').val(c.h)
+        $(`#${id}-x`).val(c.x)
+        $(`#${id}-y`).val(c.y)
+        $(`#${id}-w`).val(c.w)
+        $(`#${id}-h`).val(c.h)
       }
     })
     hideLoader()
@@ -670,39 +670,39 @@ export function pictureCrop (id, img) {
       $.fancybox.toggle()
     }, 200)
 
-    $('#' + id + '-crop-save').button().click(function () {
+    $(`#${id}-crop-save`).button().click(function () {
       ratio_val[ratio_val.length] = {
-        x: Math.round($('#' + id + '-x').val()),
+        x: Math.round($(`#${id}-x`).val()),
         y: Math.round($('#' + id + '-y').val()),
         w: Math.round($('#' + id + '-w').val()),
         h: Math.round($('#' + id + '-h').val())
       }
-      $('#' + id + '-ratio-val').val(JSON.stringify(ratio_val))
+      $(`#${id}-ratio-val`).val(JSON.stringify(ratio_val))
 
       pictureCrop(id, img)
     })
   } else {
     showLoader()
-    $('#' + id + '-form').attr('action', 'xhr.php?f=pictureCrop&id=' + id + '&img=' + img)
-    $('#' + id + '-form').submit()
+    $(`#${id}-form`).attr('action', `xhr.php?f=pictureCrop&id=${id}&img=${img}`)
+    $(`#${id}-form`).submit()
   }
 }
 export function nl2br (str, is_xhtml) {
   var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br ' + '/>' : '<br>' // Adjust comment to avoid issue on phpjs.org display
-  return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2')
+  return (`${str}`).replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, `$1${breakTag}$2`)
 }
 
 export function u_loadCoords (addressdata, func) {
   let anschrift = ''
   if (addressdata.str != undefined) {
-    anschrift = addressdata.str + ' ' + addressdata.hsnr
+    anschrift = `${addressdata.str} ${addressdata.hsnr}`
   } else {
     let tmp = addressdata.anschrift.split('/')
     anschrift = tmp[0]
   }
-  let address = encodeURIComponent(anschrift + ', ' + addressdata.plz + ', ' + addressdata.stadt + ', Germany')
+  let address = encodeURIComponent(`${anschrift}, ${addressdata.plz}, ${addressdata.stadt}, Germany`)
 
-  let url = 'https://search.mapzen.com/v1/search?text=' + address
+  let url = `https://search.mapzen.com/v1/search?text=${address}`
 
   showLoader()
   $(document).ready(function () {
@@ -754,7 +754,7 @@ export function rejectBetriebRequest (fsid, bid) {
   showLoader()
   $.ajax({
     dataType: 'json',
-    data: 'fsid=' + fsid + '&bid=' + bid,
+    data: `fsid=${fsid}&bid=${bid}`,
     url: '/xhr.php?f=denyRequest',
     success: function (data) {
       if (data.status == 1) {
@@ -782,8 +782,8 @@ export function preZero (number, length) {
   if (length == undefined) {
     length = 2
   }
-  var num = '' + number
-  while (num.length < length) num = '0' + num
+  var num = `${number}`
+  while (num.length < length) num = `0${num}`
   return num
 }
 

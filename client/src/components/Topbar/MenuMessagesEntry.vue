@@ -6,7 +6,7 @@
   >
     <div class="row">
       <div class="col-2">
-        <div :class="['avatar', 'avatar_'+avatars.length]">
+        <div :class="['avatar', `avatar_${avatars.length}`]">
           <div
             v-for="avatar in avatars"
             :key="avatar"

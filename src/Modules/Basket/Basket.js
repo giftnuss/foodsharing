@@ -48,7 +48,7 @@ const mapsearch = {
     let img = '/img/basket.png'
 
     if (basket.picture != '') {
-      img = '/images/basket/thumb-' + basket.picture
+      img = `/images/basket/thumb-${basket.picture}`
     }
 
     let distance = Math.round(basket.distance)
@@ -56,12 +56,12 @@ const mapsearch = {
     if (distance == 1) {
       distance = '1 km'
     } else if (distance < 1) {
-      distance = (distance * 1000) + ' m'
+      distance = `${distance * 1000} m`
     } else {
-      distance = distance + ' km'
+      distance = `${distance} km`
     }
 
-    this.$basketList.append('<li><a class="ui-corner-all" onclick="ajreq(\'bubble\',{app:\'basket\',id:' + basket.id + ',modal:1});return false;" href="#"><span style="float:left;margin-right:7px;"><img width="35px" src="' + img + '" class="ui-corner-all"></span><span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' + distance + ')</strong>' + basket.description + '</span><span style="clear:both;"></span></a></li>')
+    this.$basketList.append(`<li><a class="ui-corner-all" onclick="ajreq('bubble',{app:'basket',id:${basket.id},modal:1});return false;" href="#"><span style="float:left;margin-right:7px;"><img width="35px" src="${img}" class="ui-corner-all"></span><span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(${distance})</strong>${basket.description}</span><span style="clear:both;"></span></a></li>`)
   }
 }
 
