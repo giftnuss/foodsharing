@@ -11,10 +11,11 @@
 - New selection for expiration of baskets #340 !553 @alex.simm
 - Making the "tpl_msg_to_team" canceling message more informative !545 @jofranz
 - Possibility to edit food baskets #342 !549 @annaos
+- The possibility to automatically ask for new regions has been removed #329 !571 @peter.toennies
 - it is now possible to open profiles in new tabs via middle mouse button !574 @peter.toennies
 
 ## Bugfixes
-- Foodsavers list is now sorted by name and doesn't reshuffle !578 #54 @oded.neaman
+- Foodsavers list is now sorted by name and doesn't reshuffle !578 #54 @odedNea
 - Orga members are now able to leave stores they are not responsible for #283 !524 @annaos
 - check user permissions in quickreply() in RegionXhr !499 #85 @annaos
 - fix exception if request have no "msg"-Attribute in quickreply() in WallPostXhr !499 @annaos
@@ -27,8 +28,8 @@
 - fixed index check in BasketGateway #354 !556 @alex.simm
 - removed fallback for the add date for members in stores  #361 !562 @alex.simm
 - show correct date in bells for pickups for more than one date !575 #337 by @mirka-henninger
-@D0nPiano
-- fixed statistic box on profile page overlapping on small screens
+- fixed statistic box on profile page overlapping on small screens @D0nPiano
+- Fixed bug in pickuphistory not showing the end date. Now it also shows past pickups from the same day !577 @jofranz
 
 ## Refactoring
 - Unify Symfony DI configuration !544 @nicksellen

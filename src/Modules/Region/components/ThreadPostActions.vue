@@ -127,7 +127,7 @@ export default {
       let names = users.map(u => u.id === user.id ? 'Du' : u.name)
       if (names.length === 1) return names[0]
 
-      return names.slice(0, names.length - 1).join(', ') + ' & ' + names[names.length - 1]
+      return `${names.slice(0, names.length - 1).join(', ')} & ${names[names.length - 1]}`
     }
   }
 }

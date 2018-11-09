@@ -25,7 +25,7 @@ var join = {
   },
   readyUpload: function (name) {
     $('#joinform .avatar .container').html('').css({
-      'background-image': 'url(/tmp/' + name + ')'
+      'background-image': `url(/tmp/${name})`
     })
     join.isLoading = false
     $('#joinform .avatar form').removeClass('load')
@@ -106,10 +106,10 @@ var join = {
   step: function (step) {
     if (join.currentStep >= step || join.stepCheck(step)) {
       $('.step').hide()
-      $('.step' + step).show()
+      $(`.step${step}`).show()
       $('.linklist.join li').removeClass('active').children('a').children('i').remove()
-      $('.linklist.join li.step' + step).addClass('active')
-      $('.linklist.join li.step' + step).removeClass('hidden').children('a').append('<i class="far hand-point-right"></i>')
+      $(`.linklist.join li.step${step}`).addClass('active')
+      $(`.linklist.join li.step${step}`).removeClass('hidden').children('a').append('<i class="far hand-point-right"></i>')
 
       if (step === 2) join.loadMap()
 
