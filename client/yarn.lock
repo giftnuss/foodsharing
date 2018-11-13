@@ -4525,11 +4525,6 @@ jquery-jcrop@^0.9.13:
   resolved "https://registry.yarnpkg.com/jquery-jcrop/-/jquery-jcrop-0.9.13.tgz#cda8c9557fffc56540008cc7b6291a0ec4071bf5"
   integrity sha1-zajJVX//xWVAAIzHtikaDsQHG/U=
 
-jquery-migrate@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/jquery-migrate/-/jquery-migrate-1.4.1.tgz#85152f3ec99a95625f4f7d0bcf62e9b8638f5a76"
-  integrity sha1-hRUvPsmalWJfT30Lz2LpuGOPWnY=
-
 jquery-slimscroll@^1.3.8:
   version "1.3.8"
   resolved "https://registry.yarnpkg.com/jquery-slimscroll/-/jquery-slimscroll-1.3.8.tgz#8481c44e7a47687653908a28f7f70aed64c84e36"
