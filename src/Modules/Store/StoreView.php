@@ -43,7 +43,7 @@ class StoreView extends View
 			}
 			$out .= '
 				<li>
-					<a class="corner-all" href="#" onclick="profile(' . (int)$h['id'] . ');return false;">
+					<a class="corner-all" href="/profile/' . (int)$h['id'] . '">
 						<span class="i"><img src="' . $this->func->img($h['photo']) . '" /></span>
 						<span class="n">' . $h['name'] . ' ' . $h['nachname'] . '</span>
 						<span class="t"></span>

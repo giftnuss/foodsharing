@@ -374,19 +374,13 @@ class FairTeilerControl extends Control
 		return isset($this->follower['all'][$this->func->fsId()]);
 	}
 
-	private function mayEdit()
+	private function mayEdit(): bool
 	{
-		if (
-			$this->func->isBotFor($this->bezirk_id) ||
+		return $this->func->isBotFor($this->bezirk_id) ||
 			$this->session->isOrgaTeam() ||
 			(
 				isset($this->follower['all'][$this->func->fsId()]) &&
 				$this->follower['all'][$this->func->fsId()] == 'verantwortlich'
-			)
-		) {
-			return true;
-		}
-
-		return false;
+			);
 	}
 }

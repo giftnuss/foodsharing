@@ -44,7 +44,8 @@ plugins.push(
           data[entryName] = assets.map(asset => join(stats.publicPath, asset))
         }
         // We do not emit the data like a proper plugin as we want to create the file when running the dev server too
-        const json = JSON.stringify(data, null, 2) + '\n'
+        const json = `${JSON.stringify(data, null, 2)}
+`
         mkdirp.sync(assetsPath)
         writeFileSync(modulesJsonPath, json)
         return Promise.resolve()

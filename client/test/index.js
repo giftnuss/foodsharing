@@ -80,7 +80,6 @@ function handleErrors (err, stats, exit) {
   if (stats.hasErrors() && exit) process.exit(1)
 }
 
-
 function onEnter (fn) {
   process.stdin.on('keypress', (letter, key) => {
     if (key.ctrl && key.name === 'c') {
