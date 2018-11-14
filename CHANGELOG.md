@@ -31,6 +31,8 @@
 - show correct date in bells for pickups for more than one date !575 #337 by @mirka-henninger
 - fixed statistic box on profile page overlapping on small screens @D0nPiano
 - Fixed bug in pickuphistory not showing the end date. Now it also shows past pickups from the same day !577 @jofranz
+- Adding pictures to blog posts and Fairteiler work again !581 @NerdyProjects
+- Redirect after joining a new region works again !581 @NerdyProjects
 
 ## Refactoring
 - Unify Symfony DI configuration !544 @nicksellen
