@@ -1,4 +1,5 @@
 #!/bin/bash
+# create necessary directories in container app (the main php app container)
 
 export FS_ENV=${FS_ENV:-dev}
 
