@@ -145,7 +145,7 @@ function wait-for-mysql() {
 function install-chat-dependencies() {
   # TODO: move this into scripts/mkdirs when MR#97 is merged
   run-in-container-asroot chat \
-    "mkdir -p node_modules && chown -R $(id -u):$(id -g) node_modules"
+    "mkdir --parents node_modules && chown --recursive $(id --user):$(id --group) node_modules"
 
   # have to do run, not exec, as container will not start until
   # node_modules is installed, this will run up a fresh container and
