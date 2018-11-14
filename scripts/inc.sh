@@ -66,6 +66,8 @@ function run-in-container-with-service-ports() {
 function exec-in-container-asroot() {
   local container=$1; shift;
   local command=$@;
+  # -T : do not allocate a TTY: not necessary since we just execute a command
+  # but need not interactivity
   dc exec --user root -T $container sh -c "$command"
 }
 
