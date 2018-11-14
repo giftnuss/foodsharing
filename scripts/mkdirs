@@ -1,6 +1,7 @@
 #!/bin/bash
 # create necessary directories in container app (the main php app container)
 
+# use dev if not specified yet
 export FS_ENV=${FS_ENV:-dev}
 
 set -o errexit
