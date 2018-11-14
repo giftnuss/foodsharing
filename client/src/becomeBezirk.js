@@ -9,7 +9,7 @@ import {
 } from '@/script'
 
 import {
-  goto
+  goTo
 } from '@/browser'
 
 import 'jquery-ui'
