@@ -74,6 +74,11 @@ function exec-in-container-asroot() {
 function run-in-container-asroot() {
   local container=$1; shift;
   local command=$@;
+  # run : create a new container to execute the command
+  # --user root : set the user who executes the command
+  # --rm : remove the container after executing the command
+  # sh -c "..." : what is executed in the container: a shell that
+  # interprets "..."
   dc run --user root --rm $container sh -c "$command"
 }
 
