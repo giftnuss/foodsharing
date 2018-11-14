@@ -8,6 +8,10 @@ import {
   hideLoader
 } from '@/script'
 
+import {
+  goto
+} from '@/browser'
+
 import 'jquery-ui'
 
 $('#becomebezirkchooser-button').button().click(function () {
