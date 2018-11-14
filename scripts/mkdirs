@@ -30,6 +30,6 @@ dirs="\
 echo "Creating directories"
 
 exec-in-container-asroot app \
-  "mkdir -p $dirs && chmod 777 $dirs && chown -R www-data:www-data $dirs"
+  "mkdir --parents $dirs && chmod 777 $dirs && chown --recursive www-data:www-data $dirs"
 
 echo "Done"
