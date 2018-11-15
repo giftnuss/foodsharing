@@ -52,7 +52,7 @@ class BasketRestController extends FOSRestController
 	 */
 	private function normalizeRequest($request): array
 	{
-		$user = RestNormalization::normalizeFoodsaver($request);
+		$user = RestNormalization::normalizeFoodsaver($request, 'fs_');
 
 		return [
 			'user' => $user,
@@ -99,7 +99,7 @@ class BasketRestController extends FOSRestController
 	private function normalizeBasket($b): array
 	{
 		// set main properties
-		$creator = RestNormalization::normalizeFoodsaver($b);
+		$creator = RestNormalization::normalizeFoodsaver($b, 'fs_');
 		$basket = [
 			self::ID => (int)$b[self::ID],
 			self::STATUS => (int)$b[self::STATUS],
@@ -125,6 +125,15 @@ class BasketRestController extends FOSRestController
 		$basket[self::MOBILE_NUMBER] = $handy;
 
 		return $basket;
+	}
+	
+	/**
+	 * Checks if the number is a valid value in the given range.
+	 */
+	function isValidNumber($value, $lowerBound, $upperBound): bool
+	{
+		return !isNull($value) && !isNan($value) 
+			&& ($lowerBound <= $value) && ($upperBound >= $value);
 	}
 
 	/**
@@ -204,6 +213,8 @@ class BasketRestController extends FOSRestController
 	 * @Rest\RequestParam(name="foodTypes", nullable=true)
 	 * @Rest\RequestParam(name="foodKinds", nullable=true)
 	 * @Rest\RequestParam(name="lifetime", nullable=true, default=7)
+	 * @Rest\RequestParam(name="lat", nullable=true)
+	 * @Rest\RequestParam(name="lon", nullable=true)
 	 *
 	 * @param ParamFetcher $paramFetcher
 	 *
@@ -221,12 +232,16 @@ class BasketRestController extends FOSRestController
 			throw new HttpException(400, 'The description must not be empty.');
 		}
 
-		// find user's location
-		$loc = $this->session->getLocation();
-		$lat = $loc[self::LAT];
-		$lon = $loc[self::LON];
-		if ($lat === 0 && $lon === 0) {
-			throw new HttpException(400, 'The user profile has no address.');
+		$lat = $paramFetcher->get(self::LAT)
+		$lon = $paramFetcher->get(self::LON)
+		if (!isValidNumber($lat, -90.0, 90.0) || !isValidNumber($lon, 0.0, 180.0)) {
+			// find user's location
+			$loc = $this->session->getLocation();
+			$lat = $loc[self::LAT];
+			$lon = $loc[self::LON];
+			if ($lat === 0 && $lon === 0) {
+				throw new HttpException(400, 'The user profile has no address.');
+			}
 		}
 
 		//add basket
