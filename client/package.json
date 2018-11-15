@@ -40,7 +40,6 @@
     "typeface-alfa-slab-one": "0.0.54",
     "underscore": "^1.9.1",
     "vue": "^2.5.17",
-    "webpack-dev-server": "^3.1.10",
     "whatwg-fetch": "^2.0.4"
   },
   "devDependencies": {
@@ -85,6 +84,7 @@
     "webpack": "^4.25.1",
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10",
     "webpack-merge": "^4.1.4",
     "yaml-loader": "^0.5.0"
   },
