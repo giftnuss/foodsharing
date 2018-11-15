@@ -132,7 +132,7 @@ class BasketRestController extends FOSRestController
 	 */
 	function isValidNumber($value, $lowerBound, $upperBound): bool
 	{
-		return !isNull($value) && !isNan($value) 
+		return !is_null($value) && !is_nan($value) 
 			&& ($lowerBound <= $value) && ($upperBound >= $value);
 	}
 
@@ -232,9 +232,9 @@ class BasketRestController extends FOSRestController
 			throw new HttpException(400, 'The description must not be empty.');
 		}
 
-		$lat = $paramFetcher->get(self::LAT)
-		$lon = $paramFetcher->get(self::LON)
-		if (!isValidNumber($lat, -90.0, 90.0) || !isValidNumber($lon, 0.0, 180.0)) {
+		$lat = $paramFetcher->get(self::LAT);
+		$lon = $paramFetcher->get(self::LON);
+		if (!$this->isValidNumber($lat, -90.0, 90.0) || !$this->isValidNumber($lon, 0.0, 180.0)) {
 			// find user's location
 			$loc = $this->session->getLocation();
 			$lat = $loc[self::LAT];

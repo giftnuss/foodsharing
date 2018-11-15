@@ -20,9 +20,15 @@ class RestNormalization
 	 */
 	public static function normalizeFoodsaver($data, $prefix = '', $photoVersion = ''): array
 	{
-		$sleepStatus = $data[$prefix . 'sleep_status'];
-		if (isNull($sleepStatus) || isEmpty($sleepStatus)) {
+		//sleep_status is used with and without prefix
+		if (isset($data[$prefix . 'sleep_status'])) {
+			$sleepStatus = $data[$prefix . 'sleep_status'];
+		}
+		else if (isset($data['sleep_status'])) {
 			$sleepStatus = $data['sleep_status'];
+		}
+		else {
+			$sleepStatus = null;
 		}
 
 		return [
