@@ -23,11 +23,9 @@ class RestNormalization
 		//sleep_status is used with and without prefix
 		if (isset($data[$prefix . 'sleep_status'])) {
 			$sleepStatus = $data[$prefix . 'sleep_status'];
-		}
-		else if (isset($data['sleep_status'])) {
+		} elseif (isset($data['sleep_status'])) {
 			$sleepStatus = $data['sleep_status'];
-		}
-		else {
+		} else {
 			$sleepStatus = null;
 		}
 

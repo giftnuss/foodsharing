@@ -126,13 +126,13 @@ class BasketRestController extends FOSRestController
 
 		return $basket;
 	}
-	
+
 	/**
 	 * Checks if the number is a valid value in the given range.
 	 */
-	function isValidNumber($value, $lowerBound, $upperBound): bool
+	private function isValidNumber($value, $lowerBound, $upperBound): bool
 	{
-		return !is_null($value) && !is_nan($value) 
+		return !is_null($value) && !is_nan($value)
 			&& ($lowerBound <= $value) && ($upperBound >= $value);
 	}
 
@@ -210,8 +210,6 @@ class BasketRestController extends FOSRestController
 	 * @Rest\RequestParam(name="tel", nullable=true)
 	 * @Rest\RequestParam(name="handy", nullable=true)
 	 * @Rest\RequestParam(name="weight", nullable=true)
-	 * @Rest\RequestParam(name="foodTypes", nullable=true)
-	 * @Rest\RequestParam(name="foodKinds", nullable=true)
 	 * @Rest\RequestParam(name="lifetime", nullable=true, default=7)
 	 * @Rest\RequestParam(name="lat", nullable=true)
 	 * @Rest\RequestParam(name="lon", nullable=true)
@@ -252,10 +250,6 @@ class BasketRestController extends FOSRestController
 		if (!$basket) {
 			throw new HttpException(400, 'Unable to create the basket.');
 		}
-
-		// add types and kinds of food
-		$this->service->addFoodTypes($basket['id'], $paramFetcher->get('foodTypes'));
-		$this->service->addFoodKinds($basket['id'], $paramFetcher->get('foodKinds'));
 
 		// return the created basket
 		$data = $this->normalizeBasket($basket);
