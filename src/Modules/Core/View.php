@@ -138,7 +138,7 @@ class View
 				--$i;
 				$out .= '
 				<li>
-					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->func->img($fs['photo']) . ');" href="#" onclick="profile(' . (int)$fs['id'] . ');return false;"><span></span></a>	
+					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->func->img($fs['photo']) . ');" href="/profile/' . (int)$fs['id'] . '"><span></span></a>	
 				</li>';
 				if ($i <= 0) {
 					$out .= '<li class="row">...und ' . (count($foodsaver) - 52) . ' weitere</li>';
@@ -258,15 +258,15 @@ class View
 				' . $out . '
 			</ul>
 		</div>';
-		} else {
-			return '
-			<h3 class="head ui-widget-header ui-corner-top">' . $title . '</h3>
-			<div class="ui-widget ui-widget-content ui-corner-bottom ui-padding margin-bottom">
-				<ul class="linklist">
-					' . $out . '
-				</ul>
-			</div>';
 		}
+
+		return '
+		<h3 class="head ui-widget-header ui-corner-top">' . $title . '</h3>
+		<div class="ui-widget ui-widget-content ui-corner-bottom ui-padding margin-bottom">
+			<ul class="linklist">
+				' . $out . '
+			</ul>
+		</div>';
 	}
 
 	public function peopleChooser($id, $option = array())

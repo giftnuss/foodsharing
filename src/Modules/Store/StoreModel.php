@@ -490,14 +490,16 @@ class StoreModel extends Db
 							`betrieb_id`,
 							`foodsaver_id`,
 							`verantwortlich`,
-							`active`
+							`active`,
+							`stat_add_date`
 						)
 						VALUES
 						(
 							' . (int)$id . ',
 							' . (int)$foodsaver_id . ',
 							1,
-							1
+							1,
+							NOW()
 						)
 					');
 			}
@@ -553,7 +555,7 @@ class StoreModel extends Db
 
 		return $this->update('
 					UPDATE 	 	`fs_betrieb_team`
-					SET 		`active` = 2, `stat_add_date` = NOW()
+					SET 		`active` = 2
 					WHERE 		`betrieb_id` = ' . (int)$bid . '
 					AND 		`foodsaver_id` = ' . (int)$fsid . '
 		');
@@ -675,12 +677,12 @@ class StoreModel extends Db
 				$v = 1;
 			}
 			$member_ids[] = (int)$m;
-			$values[] = '(' . (int)$bid . ',' . (int)$m . ',' . $v . ',1)';
+			$values[] = '(' . (int)$bid . ',' . (int)$m . ',' . $v . ',1,NOW())';
 		}
 
 		$this->del('DELETE FROM `fs_betrieb_team` WHERE `betrieb_id` = ' . (int)$bid . ' AND active = 1 AND foodsaver_id NOT IN(' . implode(',', $member_ids) . ')');
 
-		$sql = 'INSERT IGNORE INTO `fs_betrieb_team` (`betrieb_id`,`foodsaver_id`,`verantwortlich`,`active`) VALUES ' . implode(',', $values);
+		$sql = 'INSERT IGNORE INTO `fs_betrieb_team` (`betrieb_id`,`foodsaver_id`,`verantwortlich`,`active`,`stat_add_date`) VALUES ' . implode(',', $values);
 
 		if ($cid = $this->storeGateway->getBetriebConversation($bid)) {
 			$this->messageModel->setConversationMembers($cid, $member_ids);
@@ -701,8 +703,8 @@ class StoreModel extends Db
 			');
 
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 }

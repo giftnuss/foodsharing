@@ -1,6 +1,5 @@
 <?php
 
-
 class FoodsaverGatewayTest extends \Codeception\Test\Unit
 {
 	/**

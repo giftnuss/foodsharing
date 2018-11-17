@@ -9,14 +9,14 @@
       v-for="region in regionsSorted"
       :key="region.id">
       <a
-        v-b-toggle="'topbarregion_'+region.id"
+        v-b-toggle="`topbarregion_${region.id}`"
         v-if="region.id !== activeRegionId || regions.length !== 1"
         role="menuitem"
         href="#"
         target="_self"
         class="dropdown-item text-truncate">{{ region.name }}</a>
       <b-collapse
-        :id="'topbarregion_'+region.id"
+        :id="`topbarregion_${region.id}`"
         :visible="region.id === activeRegionId"
         class="sub"
         accordion="regions">

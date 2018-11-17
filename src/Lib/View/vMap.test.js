@@ -48,7 +48,7 @@ describe('vMap', () => {
   })
 
   it('gets initialized by leaflet', () => {
-    assert.equal(document.querySelectorAll('.leaflet-map-pane').length, 1)
+    assert.strictEqual(document.querySelectorAll('.leaflet-map-pane').length, 1)
     assert($.getScript.called)
   })
 })

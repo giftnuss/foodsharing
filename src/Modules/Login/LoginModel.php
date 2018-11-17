@@ -19,13 +19,13 @@ class LoginModel extends Db
 		$this->loginGateway = $loginGateway;
 	}
 
-	public function activate($email, $token)
+	public function activate($email, $token): bool
 	{
-		if ((int)$this->update('UPDATE fs_foodsaver SET `active` = 1 WHERE email = ' . $this->strval($email) . ' AND `token` = ' . $this->strval($token)) > 0) {
-			return true;
-		}
-
-		return false;
+		return (int)$this->update(
+				'UPDATE fs_foodsaver SET `active` = 1 WHERE email = ' . $this->strval(
+					$email
+				) . ' AND `token` = ' . $this->strval($token)
+			) > 0;
 	}
 
 	public function insertNewUser($data, $token)
@@ -140,9 +140,9 @@ class LoginModel extends Db
 				$this->func->tplMail(10, $fs['email'], $vars);
 
 				return true;
-			} else {
-				return $key;
 			}
+
+			return $key;
 		}
 
 		return false;

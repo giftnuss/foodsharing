@@ -206,32 +206,43 @@ class Func
 	{
 		if (date('Y-m-d', $ts) == date('Y-m-d')) {
 			return $this->s('today') . ' ' . date('H:i', $ts);
-		} else {
-			return date('j.m.Y. H:i', $ts);
 		}
+
+		return date('j.m.Y. H:i', $ts);
 	}
 
-	public function niceDate($ts)
+	// given a unix time it provides a human readable full date format.
+	// parameter $extendWithAbsoluteDate == true adds the date between "today/tomorrow" and the time while false leaves it empty.
+	public function niceDate(?int $unixTimeStamp, bool $extendWithAbsoluteDate = false): string
 	{
-		$pre = '';
-		$date = new fDate($ts);
-
-		if ($date->eq('today')) {
-			$pre = $this->s('today');
-		} elseif ($date->eq('tomorrow')) {
-			$pre = $this->s('tomorrow');
-		} elseif ($date->eq('-1 day')) {
-			$pre = $this->s('yesterday');
-		} else {
-			$days = $this->getDow();
-			$pre = $days[date('w', $ts)] . ', ' . (int)date('d', $ts) . '. ' . $this->s('smonth_' . date('n', $ts));
-			$year = date('Y', $ts);
-			if ($year != date('Y')) {
-				$pre = $pre . ' ' . $year;
-			}
+		if (is_null($unixTimeStamp)) {
+			return '- -';
 		}
 
-		return $pre . ', ' . date('H:i', $ts) . ' ' . $this->s('clock');
+		$date = new fDate($unixTimeStamp);
+
+		if ($date->eq('today')) {
+			$dateString = $this->s('today') . ', ';
+		} elseif ($date->eq('tomorrow')) {
+			$dateString = $this->s('tomorrow') . ', ';
+		} elseif ($date->eq('-1 day')) {
+			$dateString = $this->s('yesterday') . ', ';
+		} else {
+			$dateString = '';
+			$extendWithAbsoluteDate = true;
+		}
+
+		if ($extendWithAbsoluteDate == true) {
+			$days = $this->getDow();
+			$dateString = $dateString . $days[date('w', $unixTimeStamp)] . ', ' . (int)date('d', $unixTimeStamp) . '. ' . $this->s('smonth_' . date('n', $unixTimeStamp));
+			$year = date('Y', $unixTimeStamp);
+			if ($year != date('Y')) {
+				$dateString = $dateString . ' ' . $year;
+			}
+			$dateString = $dateString . ', ';
+		}
+
+		return $dateString . date('H:i', $unixTimeStamp) . ' ' . $this->s('clock');
 	}
 
 	public function incLang($id)
@@ -246,9 +257,9 @@ class Func
 
 		if (isset($g_lang[$id])) {
 			return $g_lang[$id];
-		} else {
-			return $id;
 		}
+
+		return $id;
 	}
 
 	public function format_d($ts)
@@ -273,9 +284,9 @@ class Func
 		$p = explode(':', $time);
 		if (count($p) >= 2) {
 			return (int)$p[0] . '.' . $p[1] . ' Uhr';
-		} else {
-			return '';
 		}
+
+		return '';
 	}
 
 	public function ts_day($ts)
@@ -298,15 +309,19 @@ class Func
 		if ($diff < 600) {
 			// letzte 10 minuten
 			return $this->s('currently');
-		} elseif ($diff < 86400) {
+		}
+
+		if ($diff < 86400) {
 			// heute noch
 			return $this->sv('today_time', $this->ts_time($ts));
-		} elseif ($diff < 604800) {
+		}
+
+		if ($diff < 604800) {
 			// diese woche noch
 			return $this->ts_day($ts) . ', ' . $this->ts_time($ts);
-		} else {
-			return $this->s('before_one_week');
 		}
+
+		return $this->s('before_one_week');
 	}
 
 	public function makeThumbs($pic)
@@ -366,9 +381,9 @@ class Func
 			}
 
 			return str_replace($search, $replace, $g_lang[$id]);
-		} else {
-			return str_replace('{var}', $var, $g_lang[$id]);
 		}
+
+		return str_replace('{var}', $var, $g_lang[$id]);
 	}
 
 	public function addBread($name, $href = '')
@@ -387,13 +402,9 @@ class Func
 		$g_data = $data;
 	}
 
-	public function getAction($a)
+	public function getAction($a): bool
 	{
-		if (isset($_GET['a']) && $_GET['a'] == $a) {
-			return true;
-		} else {
-			return false;
-		}
+		return isset($_GET['a']) && $_GET['a'] == $a;
 	}
 
 	public function pageLink($page, $id, $action = '')
@@ -407,11 +418,11 @@ class Func
 
 	public function getActionId($a)
 	{
-		if (isset($_GET['a']) && $_GET['a'] == $a && isset($_GET['id']) && (int)$_GET['id'] > 0) {
+		if (isset($_GET['a'], $_GET['id']) && $_GET['a'] == $a && (int)$_GET['id'] > 0) {
 			return (int)$_GET['id'];
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function isBotForA($regions_ids, $include_groups = true, $include_parent_regions = false): bool
@@ -525,9 +536,9 @@ class Func
 	{
 		if ($i < 10) {
 			return '0' . $i;
-		} else {
-			return $i;
 		}
+
+		return $i;
 	}
 
 	public function getDow()
@@ -683,9 +694,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		if (!empty($file)) {
 			return 'images/' . str_replace('/', '/' . $size . '_', $file);
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function img($file = false, $size = 'mini', $format = 'q', $altimg = false)
@@ -701,22 +712,18 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			}
 
 			return '/images/' . $size . '_' . $format . '_' . $file;
-		} else {
-			if ($altimg === false) {
-				return '/img/' . $size . '_' . $format . '_avatar.png';
-			} else {
-				return $altimg;
-			}
 		}
+
+		if ($altimg === false) {
+			return '/img/' . $size . '_' . $format . '_avatar.png';
+		}
+
+		return $altimg;
 	}
 
-	public function isMob()
+	public function isMob(): bool
 	{
-		if (isset($_SESSION['mob']) && $_SESSION['mob'] == 1) {
-			return true;
-		} else {
-			return false;
-		}
+		return isset($_SESSION['mob']) && $_SESSION['mob'] == 1;
 	}
 
 	public function id($name)
@@ -763,9 +770,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 				'mime' => mime_content_type('./data/attach/' . $new_name),
 				'size' => $size
 			);
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function checkInput($option, $name)
@@ -807,9 +814,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		if (isset($_POST)) {
 			return $_POST;
-		} else {
-			return array();
 		}
+
+		return array();
 	}
 
 	public function getValue($id)
@@ -818,9 +825,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 		if (isset($g_data[$id])) {
 			return $g_data[$id];
-		} else {
-			return '';
 		}
+
+		return '';
 	}
 
 	public function jsSafe($str, $quote = "'")
@@ -880,18 +887,18 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		if (isset($_GET[$name]) && (int)$_GET[$name] > 0) {
 			return (int)$_GET[$name];
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function getGet($name)
 	{
 		if (isset($_GET[$name])) {
 			return $_GET[$name];
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function addGet($name, $val)
@@ -962,13 +969,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return $out;
 	}
 
-	public function submitted()
+	public function submitted(): bool
 	{
-		if (isset($_POST) && !empty($_POST)) {
-			return true;
-		}
-
-		return false;
+		return isset($_POST) && !empty($_POST);
 	}
 
 	public function info($msg, $title = false)
@@ -1038,13 +1041,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return preg_replace('/[^a-zA-Z0-9]/', '', $txt);
 	}
 
-	public function loggedIn()
+	public function loggedIn(): bool
 	{
-		if (isset($_SESSION['client']) && $_SESSION['client']['id'] > 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return isset($_SESSION['client']) && $_SESSION['client']['id'] > 0;
 	}
 
 	public function addWebpackScript($src)
@@ -1240,16 +1239,18 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		if ($this->loggedIn()) {
 			return $_SESSION['client']['id'];
-		} else {
-			return 0;
 		}
+
+		return 0;
 	}
 
 	public function isVerified()
 	{
 		if ($this->session->isOrgaTeam()) {
 			return true;
-		} elseif (isset($_SESSION['client']['verified']) && $_SESSION['client']['verified'] == 1) {
+		}
+
+		if (isset($_SESSION['client']['verified']) && $_SESSION['client']['verified'] == 1) {
 			return true;
 		}
 
@@ -1260,9 +1261,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	{
 		if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function validUrl($url)
@@ -1416,13 +1417,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return JSMin::minify($buffer);
 	}
 
-	public function hasBezirk($bid)
+	public function hasBezirk($bid): bool
 	{
-		if (isset($_SESSION['client']['bezirke'][$bid]) || $this->isBotFor($bid)) {
-			return true;
-		}
-
-		return false;
+		return isset($_SESSION['client']['bezirke'][$bid]) || $this->isBotFor($bid);
 	}
 
 	public function mayBezirk($bid): bool
@@ -1435,7 +1432,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	 */
 	public function mayGroup($group)
 	{
-		if (isset($_SESSION) && isset($_SESSION['client']['group'][$group])) {
+		if (isset($_SESSION['client']['group'][$group])) {
 			return true;
 		}
 
@@ -1462,13 +1459,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return $this->session->may('orga');
 	}
 
-	public function may()
+	public function may(): bool
 	{
-		if (isset($_SESSION) && isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0;
 	}
 
 	public function getRolle($gender_id, $rolle_id)

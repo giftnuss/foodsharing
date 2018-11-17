@@ -28,7 +28,7 @@ $('#signout_sure').dialog({
         ajax.req('bezirk', 'signout', {
           data: $('input', this).serialize(),
           success: function () {
-            goTo('/?page=relogin&url=' + encodeURIComponent('/?page=dashboard'))
+            goTo(`/?page=relogin&url=${encodeURIComponent('/?page=dashboard')}`)
           }
         })
       }

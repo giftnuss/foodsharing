@@ -27,6 +27,7 @@ class BasketGateway extends BaseGateway
 		$location_type,
 		$lat,
 		$lon,
+		$lifetime, //in seconds
 		$bezirk_id,
 		$fsId
 	): int {
@@ -53,11 +54,21 @@ class BasketGateway extends BaseGateway
 				'lon' => (float)$lon,
 				'bezirk_id' => (int)$bezirk_id,
 				'appost' => $appost,
-				'until' => date('Y-m-d', time() + 1209600),
+				'until' => date('Y-m-d', time() + $lifetime),
 			]
 		);
 	}
 
+	/**
+	 * Fetches a basket from the database. Returns details of the basket with
+	 * the given id or false if the basket does not yet exist. If the status is
+	 * set only a basket that matches this will be returned.
+	 *
+	 * @param int $id the basket's id
+	 * @param int|bool $status a basket status or false
+	 *
+	 * @return array|bool the details of the basket or false
+	 */
 	public function getBasket($id, $status = false)
 	{
 		$status_sql = '';
@@ -80,6 +91,7 @@ class BasketGateway extends BaseGateway
 				b.lon,
 				b.foodsaver_id,
 				UNIX_TIMESTAMP(b.time) AS time_ts,
+				UNIX_TIMESTAMP(b.update) AS update_ts,
 				UNIX_TIMESTAMP(b.until) AS until_ts,
 				fs.id AS fs_id,
 				fs.name AS fs_name,
@@ -99,6 +111,11 @@ class BasketGateway extends BaseGateway
 		';
 		$basket = $this->db->fetch($stm, [':id' => $id]);
 
+		//check if the first fetch succeeded
+		if (empty($basket) || !isset($basket['foodsaver_id']) || !isset($basket['fsf_id'])) {
+			return false;
+		}
+
 		$stm = '
 				SELECT 
 					fs.name AS fs_name,
@@ -109,12 +126,11 @@ class BasketGateway extends BaseGateway
 					fs_foodsaver fs
 					
 				WHERE
-					fs.id = ' . (int)$basket['foodsaver_id'] . '
-					
+					fs.id = :foodsaver_id
 			';
 		if ('0' === $basket['fsf_id'] && $fs = $this->db->fetch(
 				$stm,
-				['foodsaver_id' => $basket['foodsaver_id']]
+				[':foodsaver_id' => $basket['foodsaver_id']]
 			)) {
 			$basket = array_merge($basket, $fs);
 		}
@@ -294,7 +310,23 @@ class BasketGateway extends BaseGateway
 	{
 		return $this->db->update(
 			'fs_basket',
-			['status' => Status::DELETED_OTHER_REASON],
+			[
+				'status' => Status::DELETED_OTHER_REASON,
+				'update' => date('Y-m-d H:i:s')
+			],
+			['id' => $id, 'foodsaver_id' => $fsId]
+		);
+	}
+
+	public function editBasket($id, $desc, $pic, $fsId): int
+	{
+		return $this->db->update(
+			'fs_basket',
+			[
+				'update' => date('Y-m-d H:i:s'),
+				'description' => strip_tags($desc),
+				'picture' => strip_tags($pic),
+			],
 			['id' => $id, 'foodsaver_id' => $fsId]
 		);
 	}

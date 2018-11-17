@@ -142,9 +142,7 @@ class Database
 
 		$this->preparedQuery($query, array_values($data));
 
-		$lastInsertId = (int)$this->pdo->lastInsertId();
-
-		return $lastInsertId;
+		return (int)$this->pdo->lastInsertId();
 	}
 
 	public function update(string $table, array $data, array $criteria = []): int

@@ -65,17 +65,23 @@ class Session
 		}
 	}
 
-	public function init()
+	public function init($rememberMe = false)
 	{
 		if ($this->initialized) {
 			throw new Exception('Session is already initialized');
 		}
+
 		$this->initialized = true;
 
 		ini_set('session.save_handler', 'redis');
 		ini_set('session.save_path', 'tcp://' . REDIS_HOST . ':' . REDIS_PORT);
 
 		fSession::setLength('24 hours', '1 week');
+
+		if ($rememberMe) {
+			// This regenerates the session id even if it's already persistent, we want to only set it when logging in
+			fSession::enablePersistence();
+		}
 
 		fAuthorization::setAuthLevels(
 			array(
@@ -330,7 +336,7 @@ class Session
 
 	public function mayGroup($group)
 	{
-		if (isset($_SESSION) && isset($_SESSION['client']['group'][$group])) {
+		if (isset($_SESSION['client']['group'][$group])) {
 			return true;
 		}
 
@@ -351,11 +357,17 @@ class Session
 		return false;
 	}
 
-	public function refreshFromDatabase($fs_id = null)
+	public function login($fs_id = null, $rememberMe = false)
 	{
 		if (!$this->initialized) {
-			$this->init();
+			$this->init($rememberMe);
 		}
+		$this->refreshFromDatabase($fs_id);
+	}
+
+	public function refreshFromDatabase($fs_id = null)
+	{
+		$this->checkInitialized();
 
 		if ($fs_id === null) {
 			$fs_id = $this->id();

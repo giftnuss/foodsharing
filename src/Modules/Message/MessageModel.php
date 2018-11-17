@@ -95,9 +95,7 @@ class MessageModel extends Db
 
 	public function conversationLocked($cid)
 	{
-		$res = $this->qOne('SELECT locked FROM fs_conversation WHERE id = ' . (int)$cid);
-
-		return $res;
+		return $this->qOne('SELECT locked FROM fs_conversation WHERE id = ' . (int)$cid);
 	}
 
 	public function updateConversation($cid, $last_fs_id, $body, $last_message_id)
@@ -282,18 +280,19 @@ class MessageModel extends Db
 
 		if ($cache === 0) {
 			return false;
-		} elseif (is_array($cache)) {
+		}
+
+		if (is_array($cache)) {
 			$this->mem->userSet($this->func->fsId(), 'msg-update', 0);
 
 			return $cache;
-		} /*
+		}  /*
 		 * Memcache is not settedso get coonversation ids direct fromdm
 		 */
-		else {
-			$this->mem->userSet($this->func->fsId(), 'msg-update', 0);
 
-			return $this->getUpdatedConversationIds();
-		}
+		$this->mem->userSet($this->func->fsId(), 'msg-update', 0);
+
+		return $this->getUpdatedConversationIds();
 	}
 
 	private function getUpdatedConversationIds()

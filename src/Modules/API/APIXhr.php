@@ -154,7 +154,7 @@ class APIXhr extends Control
 		$fs_id = $this->loginGateway->login($_GET['e'], $_GET['p']);
 
 		if ($fs_id !== null) {
-			$this->session->refreshFromDatabase($fs_id);
+			$this->session->login($fs_id);
 
 			$fs = $this->model->getValues(['telefon', 'handy', 'geschlecht', 'name', 'lat', 'lon', 'photo'], 'foodsaver', $this->session->id());
 
@@ -251,6 +251,13 @@ class APIXhr extends Control
 					}
 				}
 
+				//fix lifetime between 1 and 21 days and convert from days to seconds
+				$lifetime = (float)$_GET['lifetime'];
+				if ($lifetime < 1 || $lifetime > 21) {
+					$lifetime = 7;
+				}
+				$lifetime *= 60 * 60 * 24;
+
 				if ($id = $this->basketGateway->addBasket(
 					$desc,
 					$photo, // pic
@@ -260,6 +267,7 @@ class APIXhr extends Control
 					(int)$_GET['fetchart'], // location type
 					$lat, // lat
 					$lon, // lon
+					$lifetime,
 					$this->session->user('bezirk_id'),
 					$this->session->id()
 				)

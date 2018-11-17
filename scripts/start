@@ -2,17 +2,23 @@
 
 export FS_ENV=dev
 
-set -e
+# set -o errexit tells the shell to exit as soon as a command exits with non-zero status, i.e. fails
+set -o errexit
 
 dir=$(dirname "$0")
 
-. $dir/inc.sh
+# source runs the content of the argument as if it was here (without launching a subshell!)
+# inc.sh defines basic functions, mainly to run commands in containers
+source $dir/inc.sh
 
 echo "Bringing up containers"
-dc up -d
+# dc is defined in inc.sh and starts docker-compose with following arguments
+# up starts the container, --detach: run in background as a deamon
+dc up --detach
 $dir/mkdirs
 
 echo "Running composer install"
+# exec-in-container is defined in inc.sh
 exec-in-container app composer install
 exec-in-container-asroot app rm -rf cache/.views-cache cache/di-cache.php
 

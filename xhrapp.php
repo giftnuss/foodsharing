@@ -12,7 +12,7 @@ require_once 'config.inc.php';
 global $container;
 $container = initializeContainer();
 
-if (isset($_GET['app']) && isset($_GET['m'])) {
+if (isset($_GET['app'], $_GET['m'])) {
 	$app = str_replace('/', '', $_GET['app']);
 	$meth = str_replace('/', '', $_GET['m']);
 

@@ -394,10 +394,6 @@ class FairTeilerGateway extends BaseGateway
 	{
 		$ids = $this->getFairteilerIds($foodsaverId);
 
-		if ($ids && in_array($fairteilerId, $ids, true)) {
-			return true;
-		}
-
-		return false;
+		return $ids && in_array($fairteilerId, $ids, true);
 	}
 }

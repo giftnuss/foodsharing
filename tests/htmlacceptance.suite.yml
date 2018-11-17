@@ -4,9 +4,7 @@ modules:
         - PhpBrowser:
             url: http://web:8080/
         - Sequence
-        - Db:
-            populate: true
-            cleanup: true
+        - Db
         - \Helper\HtmlAcceptance
         - \Helper\Foodsharing
         - \Helper\FoodsharingUrl

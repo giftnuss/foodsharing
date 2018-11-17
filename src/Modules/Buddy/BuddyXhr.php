@@ -54,7 +54,7 @@ class BuddyXhr extends Control
 			$icon = $this->func->img($this->session->user('photo'));
 
 			// whats happen when click on the bell content
-			$link_attributes = array('href' => '#', 'onclick' => 'profile(' . (int)$this->func->fsId() . ');return false;');
+			$link_attributes = array('href' => '/profile/' . (int)$this->func->fsId() . '');
 
 			// variables for the language strings
 			$vars = array('name' => $this->session->user('name'));

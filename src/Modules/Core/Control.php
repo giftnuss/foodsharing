@@ -172,12 +172,10 @@ abstract class Control
 	public function getRequest($name)
 	{
 		if (isset($_REQUEST[$name])) {
-			$val = $_REQUEST[$name];
-
-			return $val;
-		} else {
-			return false;
+			return $_REQUEST[$name];
 		}
+
+		return false;
 	}
 
 	public function wallposts($table, $id)
@@ -317,7 +315,7 @@ abstract class Control
 
 					<span id="wallpost-loader"></span><span id="wallpost-attach-image"><i class="far fa-image"></i> ' . $this->func->s('attach_image') . '</span>
 					<a href="#" id="wall-submit">' . $this->func->s('send') . '</a>
-					<div style="overflow:hidden;height:1px;">
+					<div style="overflow:hidden;height:0px;">
 						<form id="wallpost-attachimage-form" action="/xhrapp.php?app=wallpost&m=attachimage&table=' . $table . '&id=' . $id . '" method="post" enctype="multipart/form-data" target="wallpost-frame">
 							<input id="wallpost-attach-trigger" type="file" maxlength="100000" size="chars" name="etattach" />
 						</form>
@@ -340,14 +338,10 @@ abstract class Control
 		</div>';
 	}
 
-	public function isSubmitted($form = false)
+	public function isSubmitted($form = false): bool
 	{
 		if (isset($_POST) && !empty($_POST)) {
-			if ($form !== false && $_POST['submitted'] != $form) {
-				return false;
-			}
-
-			return true;
+			return $form === false || $_POST['submitted'] == $form;
 		}
 
 		return false;
@@ -384,7 +378,7 @@ abstract class Control
 
 	public function getPostTime($name)
 	{
-		if (isset($_POST[$name]['hour']) && isset($_POST[$name]['min'])) {
+		if (isset($_POST[$name]['hour'], $_POST[$name]['min'])) {
 			return array(
 				'hour' => (int)$_POST[$name]['hour'],
 				'min' => (int)$_POST[$name]['min']

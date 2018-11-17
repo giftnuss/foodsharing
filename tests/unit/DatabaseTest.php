@@ -1,6 +1,5 @@
 <?php
 
-
 class DatabaseTest extends \Codeception\Test\Unit
 {
 	/**

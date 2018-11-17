@@ -46,7 +46,7 @@ class StoreXhr extends Control
 
 	public function deldate()
 	{
-		if (isset($_GET['id']) && isset($_GET['time']) && strtotime($_GET['time']) > 0) {
+		if (isset($_GET['id'], $_GET['time']) && strtotime($_GET['time']) > 0) {
 			$this->model->deldate($_GET['id'], $_GET['time']);
 
 			$this->func->info('Abholtermin wurde gelöscht.');
@@ -133,6 +133,13 @@ class StoreXhr extends Control
 							else
 							{
 								to = date.getFullYear() + "-" + preZero((date.getMonth()+1)) + "-" + preZero(date.getDate());
+
+								var now = new Date();
+								if(date.toDateString() == now.toDateString()) {
+									to = to + " " + preZero(now.getHours()) + ":" + preZero(now.getMinutes()) + ":59"
+								} else {
+									to = to + " " + "23:59:59"
+								}
 							}
 					
 							ajreq("getfetchhistory",{app:"betrieb",from:from,to:to,bid:' . (int)$_GET['bid'] . '});

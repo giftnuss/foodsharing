@@ -30,7 +30,9 @@ class MessageRestController extends FOSRestController
 		// check if the conversation in stored in the session
 		if (isset($ids[(int)$conversation_id])) {
 			return true;
-		} elseif ($this->model->mayConversation($conversation_id)) {
+		}
+
+		if ($this->model->mayConversation($conversation_id)) {
 			$ids[$conversation_id] = true;
 			$this->session->set('msg_conversations', $ids);
 

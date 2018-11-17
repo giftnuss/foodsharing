@@ -89,9 +89,9 @@ class BusinessCardControl extends Control
 				readfile($file);
 
 				exit();
-			} else {
-				$this->func->goPage();
 			}
+
+			$this->func->goPage();
 		}
 	}
 }

@@ -133,7 +133,7 @@ $('#work_group_form_photo-link').fancybox({
             $.fancybox.close()
           },
           error: (data) => {
-            uploadError.innerHTML = 'Upload failed: ' + data
+            uploadError.innerHTML = `Upload failed: ${data}`
           }
         })
       })

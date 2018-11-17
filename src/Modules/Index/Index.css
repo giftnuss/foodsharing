@@ -63,9 +63,8 @@ body.fp-viewing-festival #topbar .navbar {
 }
 
 #campaignimg {
-  background-position: 50% 0;
-  background-size: contain;
-  background-repeat: no-repeat;
+  background: no-repeat 50%;
+  background-size: auto 85%;
 }
 
 @media (max-aspect-ratio: 3/2) {

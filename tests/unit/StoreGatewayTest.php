@@ -1,6 +1,5 @@
 <?php
 
-
 class StoreGatewayTest extends \Codeception\Test\Unit
 {
 	/**

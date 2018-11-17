@@ -42,9 +42,9 @@ class Mem
 			}
 			if ($options) {
 				return $this->cache->set($key, $data, $options);
-			} else {
-				return $this->cache->set($key, $data);
 			}
+
+			return $this->cache->set($key, $data);
 		}
 
 		return false;

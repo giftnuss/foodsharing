@@ -56,7 +56,7 @@ const msg = {
     this.initComposer()
 
     if (!msg.isMob()) {
-      var height = ($(window).height() - 200) + 'px'
+      var height = `${$(window).height() - 200}px`
       this.$conversation.css('height', height)
 
       this.$conversation.slimScroll({
@@ -77,12 +77,12 @@ const msg = {
      */
     $(window).resize(function () {
       if (!msg.isMob()) {
-        var height = ($(window).height() - 200) + 'px'
+        var height = `${$(window).height() - 200}px`
         msg.$conversation.css('height', height)
         msg.$conversation.parent('.slimScrollDiv').css('height', height)
         msg.$conversation.slimScroll({
           height: height,
-          scrollTo: $('#msg-conversation').prop('scrollHeight') + 'px'
+          scrollTo: `${$('#msg-conversation').prop('scrollHeight')}px`
         })
       } else {
         /* THIS CODE IS BROKEN BECAUSE app.resize does not exist, it's a copy-and-paste from stackoverflow error
@@ -106,7 +106,7 @@ const msg = {
     $('#msg_answer').autosize()
 
     $('#msg_answer').resize(function () {
-      $('#msg_answer').css('margin-top', '-' + ($('#msg_answer').height() - 40) + 'px')
+      $('#msg_answer').css('margin-top', `-${$('#msg_answer').height() - 40}px`)
     })
 
     /*
@@ -194,7 +194,7 @@ const msg = {
   },
 
   updateConvList: function (message) {
-    const $item = $('#convlist-' + message.cid)
+    const $item = $(`#convlist-${message.cid}`)
     const $itemLink = $item.children('a')
     if ($item.length > 0) {
       $itemLink.children('.msg').html(message.body)
@@ -231,7 +231,7 @@ const msg = {
     if (ret.convs) {
       for (let i = 0; i < ret.convs.length; i++) {
         // if the element exist remove to add it new on the top
-        $('#convlist-' + ret.convs[i].id).remove()
+        $(`#convlist-${ret.convs[i].id}`).remove()
         msg.appendConvList(ret.convs[i], true)
       }
     }
@@ -308,7 +308,7 @@ const msg = {
   },
 
   msgTpl: function (message) {
-    return $('<li id="msg-' + message.id + '" style="display:none;"><span class="img"><a title="' + message.fs_name + '" href="#" onclick="profile(' + message.fs_id + ');return false;"><img height="35" src="' + img(message.fs_photo, 'mini') + '" /></a></span><span class="body">' + nl2br(autoLink(message.body)) + '<span class="time">' + timeformat.nice(message.time) + '</span></span><span class="clear"></span></li>')
+    return $(`<li id="msg-${message.id}" style="display:none;"><span class="img"><a title="${message.fs_name}" href="/profile/${message.fs_id}"><img height="35" src="${img(message.fs_photo, 'mini')}" /></a></span><span class="body">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><span class="clear"></span></li>`)
   },
 
   getRecipients: function () {
@@ -358,7 +358,7 @@ const msg = {
 
       if (currentMember) {
         title = `
-          <a title="${currentMember.name}" href="#" onclick="profile(${currentMember.id});return false;">
+          <a title="${currentMember.name}" href="/profile/${currentMember.id}">
             <img src="${img(member.photo, 'mini')}" width="22" alt="${currentMember.name}" />
           </a>
         `
@@ -416,10 +416,10 @@ const msg = {
             msg.prependMsg(ret.messages[i])
           }
 
-          let position = $('#msg-' + lmid).position()
+          let position = $(`#msg-${lmid}`).position()
 
           if (!msg.isMob()) {
-            $('#msg-conversation').slimScroll({ scrollTo: position.top + 'px' })
+            $('#msg-conversation').slimScroll({ scrollTo: `${position.top}px` })
           } else {
             $(window).scrollTop(position.top)
           }
@@ -487,8 +487,8 @@ const msg = {
 
       for (var y = 0; y < conversation.member.length; y++) {
         if (msg.fsid != conversation.member[y].id) {
-          pics += '<img width="' + picwidth + '" src="' + img(conversation.member[y].photo, size) + '" />'
-          names += ', ' + conversation.member[y].name
+          pics += `<img width="${picwidth}" src="${img(conversation.member[y].photo, size)}" />`
+          names += `, ${conversation.member[y].name}`
         }
       }
     }
@@ -500,7 +500,7 @@ const msg = {
       cssclass = ' class="active"'
     }
 
-    const $el = $('<li style="display:none;" id="convlist-' + conversation.id + '"' + cssclass + '><a href="#" onclick="msg.loadConversation(' + conversation.id + ');return false;"><span class="pics">' + pics + '</span><span class="names">' + names + '</span><span class="msg">' + conversation.body + '</span><span class="time">' + timeformat.nice(conversation.time) + '</span><span class="clear"></span></a></li>')
+    const $el = $(`<li style="display:none;" id="convlist-${conversation.id}"${cssclass}><a href="#" onclick="msg.loadConversation(${conversation.id});return false;"><span class="pics">${pics}</span><span class="names">${names}</span><span class="msg">${conversation.body}</span><span class="time">${timeformat.nice(conversation.time)}</span><span class="clear"></span></a></li>`)
 
     if (prepend != undefined) {
       msg.$convs.prepend($el)
@@ -518,7 +518,7 @@ const msg = {
   },
   scrollBottom: function () {
     if (!msg.isMob()) {
-      $('#msg-conversation').slimScroll({ scrollTo: $('#msg-conversation').prop('scrollHeight') + 'px' })
+      $('#msg-conversation').slimScroll({ scrollTo: `${$('#msg-conversation').prop('scrollHeight')}px` })
     } else {
       $(window).scrollTop($(document).height())
     }

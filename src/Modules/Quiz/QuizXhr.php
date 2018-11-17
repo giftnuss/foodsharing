@@ -34,7 +34,7 @@ class QuizXhr extends Control
 )
 		 */
 		if ($this->func->mayEditQuiz()) {
-			if (isset($_GET['text']) && isset($_GET['fp']) && isset($_GET['qid'])) {
+			if (isset($_GET['text'], $_GET['fp'], $_GET['qid'])) {
 				$fp = (int)$_GET['fp'];
 				$text = strip_tags($_GET['text']);
 				$duration = (int)$_GET['duration'];
@@ -92,7 +92,7 @@ class QuizXhr extends Control
 		 */
 
 		if ($this->func->mayEditQuiz()) {
-			if (isset($_GET['text']) && isset($_GET['right']) && isset($_GET['qid'])) {
+			if (isset($_GET['text'], $_GET['right'], $_GET['qid'])) {
 				$text = strip_tags($_GET['text']);
 				$exp = strip_tags($_GET['explanation']);
 				$right = (int)$_GET['right'];
@@ -117,7 +117,7 @@ class QuizXhr extends Control
 	public function updateansw()
 	{
 		if ($this->func->mayEditQuiz()) {
-			if (isset($_GET['text']) && isset($_GET['right']) && isset($_GET['id'])) {
+			if (isset($_GET['text'], $_GET['right'], $_GET['id'])) {
 				$text = strip_tags($_GET['text']);
 				$exp = strip_tags($_GET['explanation']);
 				$right = (int)$_GET['right'];
@@ -133,12 +133,12 @@ class QuizXhr extends Control
 						'status' => 1,
 						'script' => 'pulseInfo("Antwort wurde geändert");$("#answer-' . (int)$_GET['id'] . '").replaceWith(\'<li id="answer-' . (int)$_GET['id'] . '" class="right-' . (int)$right . '">' . $this->func->jsSafe(nl2br(strip_tags($text))) . '</li>\');$( "#questions" ).accordion( "refresh" );'
 					);
-				} else {
-					return array(
-						'status' => 1,
-						'script' => 'pulseError("Du solltest einen Text angeben ;)");'
-					);
 				}
+
+				return array(
+					'status' => 1,
+					'script' => 'pulseError("Du solltest einen Text angeben ;)");'
+				);
 			}
 		}
 	}
@@ -326,10 +326,12 @@ class QuizXhr extends Control
 			$return['script'] .= $this->abortOrOpenDialog($session['id']);
 
 			return $return;
-		} /*
+		}
+
+		/*
 		 * Otherwise, we start a new quiz session
 		 */
-		elseif ($quiz = $this->model->getQuiz($_GET['qid'])) {
+		if ($quiz = $this->model->getQuiz($_GET['qid'])) {
 			/*
 			 * if foodsaver quiz, user can choose between easy and quick mode
 			*/
@@ -844,15 +846,15 @@ class QuizXhr extends Control
 						' . $quizbreath;
 
 						return $return;
-					} else {
-						++$i;
-						$this->session->set('quiz-index', $i);
-
-						return array(
-							'status' => 1,
-							'script' => 'pulseError("Diese Frage hat keine Antworten. Überspringe...");ajreq("next",{app:"quiz"});'
-						);
 					}
+
+					++$i;
+					$this->session->set('quiz-index', $i);
+
+					return array(
+						'status' => 1,
+						'script' => 'pulseError("Diese Frage hat keine Antworten. Überspringe...");ajreq("next",{app:"quiz"});'
+					);
 				}
 			} else {
 				return $this->quizResult();
@@ -1161,7 +1163,7 @@ class QuizXhr extends Control
 				 [text] => test
 				 [fp] => 3
 			 */
-			if (isset($_GET['text']) && isset($_GET['fp']) && isset($_GET['id'])) {
+			if (isset($_GET['text'], $_GET['fp'], $_GET['id'])) {
 				$fp = (int)$_GET['fp'];
 				$text = strip_tags($_GET['text']);
 				$duration = (int)$_GET['duration'];
@@ -1175,12 +1177,12 @@ class QuizXhr extends Control
 						'status' => 1,
 						'script' => 'reload();'
 					);
-				} else {
-					return array(
-						'status' => 1,
-						'script' => 'pulseError("Du solltest einen Text angeben ;)");'
-					);
 				}
+
+				return array(
+					'status' => 1,
+					'script' => 'pulseError("Du solltest einen Text angeben ;)");'
+				);
 			}
 		}
 	}
