@@ -26,7 +26,8 @@ define('EMAIL_PUBLIC', 'info@lebensmittelretten.de');
 define('EMAIL_PUBLIC_NAME', 'Foodsharing Freiwillige');
 define('DEFAULT_EMAIL_HOST', 'lebensmittelretten.de');
 define('MAPZEN_API_KEY', 'mapzen-RaXru7A');
-define('GOOGLE_API_KEY', 'AIzaSyCkFfCoOnj8ZjGGcApHS1rX6Rt6OxrW6hQ');
+//define('GOOGLE_API_KEY', 'AIzaSyCkFfCoOnj8ZjGGcApHS1rX6Rt6OxrW6hQ'); // Original key; API limit reached 20181121
+define('GOOGLE_API_KEY', 'AIzaSyD6MLWJNn7I_Qdpkixxo2uL77hW5srdQwk'); // This key is sponsored by @Jo for testing purpose.
 
 define('MAILBOX_OWN_DOMAINS', array('lebensmittelretten.de'));
 
