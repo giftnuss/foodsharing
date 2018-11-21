@@ -100,7 +100,7 @@ class BellGateway extends BaseGateway
 				}
 			}
 
-			$this->setBellsAsSeen($ids);
+			//$this->setBellsAsSeen($ids); // commented out for page load reasons. Temporary
 
 			return $bells;
 		}
@@ -153,9 +153,9 @@ class BellGateway extends BaseGateway
 		$this->db->delete('fs_bell', ['identifier' => $identifier]);
 	}
 
-	private function setBellsAsSeen($bids): void
-	{
-		$stm = 'UPDATE `fs_foodsaver_has_bell` SET `seen` = 1 WHERE `bell_id` IN (' . implode(',', $bids) . ')';
-		$this->db->execute($stm);
-	}
+	//private function setBellsAsSeen($bids): void // commented out for page load reasons. Temporary
+	//{
+		//$stm = 'UPDATE `fs_foodsaver_has_bell` SET `seen` = 1 WHERE `bell_id` IN (' . implode(',', $bids) . ')';
+		//$this->db->execute($stm);
+	//}
 }
