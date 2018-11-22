@@ -121,23 +121,4 @@ class BellGatewayTest extends \Codeception\Test\Unit
 
 		$this->tester->seeInDatabase('fs_bell', $updatedData);
 	}
-
-	public function testGetStoreBells()
-	{
-		$this->tester->clearTable('fs_abholer');
-
-		$user1 = $this->tester->createFoodsaver();
-		$bids1 = $this->tester->createStore(0);
-		$collPast = $this->tester->addCollector($user1['id'], $bids1['id'], ['confirmed' => 0, 'date' => $this->faker->dateTimeBetween($max = 'now')]);
-		$collSoon = $this->tester->addCollector($user1['id'], $bids1['id'], ['confirmed' => 0, 'date' => $this->faker->dateTimeBetween('+1 days', '+2 days')]);
-		$collFuture = $this->tester->addCollector($user1['id'], $bids1['id'], ['confirmed' => 0, 'date' => $this->faker->dateTimeBetween('+7 days', '+14 days')]);
-
-		$this->tester->seeNumRecords(3, 'fs_abholer');
-		$betrieb_bells = $this->gateway->getStoreBells([$bids1['id']]);
-		$this->assertEquals(1, count($betrieb_bells));
-		$bell = $betrieb_bells[0];
-		$this->assertEquals($bids1['id'], $bell['id']);
-		$this->assertEquals(2, $bell['count']);
-		$this->assertEquals($collSoon['date'], $bell['date']);
-	}
 }
