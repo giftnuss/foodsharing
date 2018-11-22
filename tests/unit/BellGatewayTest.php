@@ -107,7 +107,7 @@ class BellGatewayTest extends \Codeception\Test\Unit
 		$closable = 0;
 
 		$this->gateway->addBell([$user1, $user2], $title, $body, $icon, [], [], $identifier, $closable);
-		$bellId = $this->tester->grabFromDatabase('fs_bell', 'id', ['name' => $title, 'body' => $body])[0];
+		$bellId = $this->tester->grabFromDatabase('fs_bell', 'id', ['name' => $title, 'body' => $body]);
 
 		$updatedData = [
 			'name' => 'updated title',
