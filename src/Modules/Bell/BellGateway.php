@@ -29,8 +29,8 @@ class BellGateway extends BaseGateway
 	 * @param int|int[] $foodsaver_ids
 	 * @param string[] $link_attributes
 	 * @param string[] $vars
-	 * @param int|null $expiration A unix timestamp that defines when the time since when the bell will be outdated - null means it doesn't expire
-	 * @param int|null $timestamp A unix timestamp for the bell's time - null means current date and time
+	 * @param \DateTime $expiration A DateTime object that defines when the time since when the bell will be outdated - null means it doesn't expire
+	 * @param \DateTime $timestamp A DateTime object for the bell's time - null means current date and time
 	 */
 	public function addBell(
 		$foodsaver_ids,
@@ -41,8 +41,8 @@ class BellGateway extends BaseGateway
 		array $vars,
 		string $identifier = '',
 		int $closeable = 1,
-		?int $expiration = null,
-		?int $timestamp = null
+		\DateTime $expiration = null,
+		\DateTime $timestamp = null
 	): void {
 		if (!is_array($foodsaver_ids)) {
 			$foodsaver_ids = array($foodsaver_ids);
@@ -57,7 +57,7 @@ class BellGateway extends BaseGateway
 		}
 
 		if ($timestamp === null) {
-			$timestamp = time();
+			$timestamp = new \DateTime();
 		}
 
 		$bid = $this->db->insert(
@@ -69,9 +69,9 @@ class BellGateway extends BaseGateway
 				'attr' => strip_tags($link_attributes),
 				'icon' => strip_tags($icon),
 				'identifier' => strip_tags($identifier),
-				'time' => date('Y-m-d H:i:s', $timestamp),
+				'time' => $timestamp->format('Y-m-d H:i:s'),
 				'closeable' => $closeable,
-				'expiration' => date('Y-m-d H:i:s', $expiration)
+				'expiration' => $expiration ? $expiration->format('Y-m-d H:i:s') : null
 			]
 		);
 
@@ -99,9 +99,12 @@ class BellGateway extends BaseGateway
 			$data['vars'] = serialize($data['vars']);
 		}
 
-		if (isset($data['timestamp'])) {
-			$data['time'] = date('Y-m-d H:i:s', $data['timestamp']);
-			unset($data['timestamp']);
+		if (isset($data['time']) && is_a($data['time'], \DateTime::class)) {
+			$data['time'] = $data['time']->format('Y-m-d H:i:s');
+		}
+
+		if (isset($data['expiration']) && is_a($data['expiration'], \DateTime::class)) {
+			$data['expiration'] = $data['expiration']->format('Y-m-d H:i:s');
 		}
 
 		$this->db->update('fs_bell', $data, ['id' => $bellId]);

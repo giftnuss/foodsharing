@@ -513,7 +513,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			$oldBellId = $this->bellGateway->getOneByIdentifier($messageIdentifier);
 			$data = [
 				'vars' => $messageVars,
-				'timestamp' => $messageTimestamp,
+				'time' => $messageTimestamp,
 				'expiration' => $messageExpiration
 			];
 			$this->bellGateway->updateBell($oldBellId, $data, $markNotificationAsUnread);
@@ -735,17 +735,16 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $this->db->fetchAllByCriteria('fs_betrieb_team', ['betrieb_id'], ['foodsaver_id' => $fsId, 'verantwortlich' => 1]);
 	}
 
-	/**
-	 * returns a unix time stamp.
-	 */
-	private function getNextUnconfirmedFetchTime(int $storeId): ?int
+	private function getNextUnconfirmedFetchTime(int $storeId): \DateTime
 	{
-		return $this->db->fetchValue(
-			'SELECT MIN(UNIX_TIMESTAMP(`date`)) 
-                   FROM `fs_abholer`
-                   WHERE `betrieb_id` = :storeId AND `confirmed` = 0 AND `date` > NOW()',
+		$date = $this->db->fetchValue(
+			'SELECT MIN(`date`) 
+					   FROM `fs_abholer`
+					   WHERE `betrieb_id` = :storeId AND `confirmed` = 0 AND `date` > NOW()',
 			[':storeId' => $storeId]
 		);
+
+		return new \DateTime($date);
 	}
 
 	private function getUnconfirmedFetchesCount(int $storeId)
@@ -819,7 +818,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 			$newMessageData = [
 				'vars' => ['betrieb' => $storeName, 'count' => $newMessageCount],
-				'timestamp' => $this->getNextUnconfirmedFetchTime($storeId),
+				'time' => $this->getNextUnconfirmedFetchTime($storeId),
 				'expiration' => $this->getNextUnconfirmedFetchTime($storeId)
 			];
 
