@@ -170,7 +170,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 	 * have the date of the soonest fetch as its date, and it should contain the number of only the unconfirmed fetch
 	 * dates that are in the future.
 	 */
-	public function testStoreBellsBecomeGeneratedCorrectly()
+	public function testStoreBellsAreGeneratedCorrectly()
 	{
 		$this->tester->clearTable('fs_abholer');
 

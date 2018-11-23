@@ -30,7 +30,7 @@ class BellGateway extends BaseGateway
 	 * @param string[] $link_attributes
 	 * @param string[] $vars
 	 * @param \DateTime $expiration A DateTime object that defines when the time since when the bell will be outdated - null means it doesn't expire
-	 * @param \DateTime $timestamp A DateTime object for the bell's time - null means current date and time
+	 * @param \DateTime $time A DateTime object for the bell's time - null means current date and time
 	 */
 	public function addBell(
 		$foodsaver_ids,
@@ -42,7 +42,7 @@ class BellGateway extends BaseGateway
 		string $identifier = '',
 		int $closeable = 1,
 		\DateTime $expiration = null,
-		\DateTime $timestamp = null
+		\DateTime $time = null
 	): void {
 		if (!is_array($foodsaver_ids)) {
 			$foodsaver_ids = array($foodsaver_ids);
@@ -56,8 +56,8 @@ class BellGateway extends BaseGateway
 			$vars = serialize($vars);
 		}
 
-		if ($timestamp === null) {
-			$timestamp = new \DateTime();
+		if ($time === null) {
+			$time = new \DateTime();
 		}
 
 		$bid = $this->db->insert(
@@ -69,13 +69,12 @@ class BellGateway extends BaseGateway
 				'attr' => strip_tags($link_attributes),
 				'icon' => strip_tags($icon),
 				'identifier' => strip_tags($identifier),
-				'time' => $timestamp->format('Y-m-d H:i:s'),
+				'time' => $time->format('Y-m-d H:i:s'),
 				'closeable' => $closeable,
 				'expiration' => $expiration ? $expiration->format('Y-m-d H:i:s') : null
 			]
 		);
 
-		$values = array();
 		foreach ($foodsaver_ids as $id) {
 			if (is_array($id)) {
 				$id = $id['id'];
