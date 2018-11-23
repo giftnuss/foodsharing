@@ -1,6 +1,5 @@
 <?php
 
-
 class EventGatewayTest extends \Codeception\Test\Unit
 {
 	/**

@@ -46,11 +46,11 @@ expose({
 function u_getGeo (id) {
   showLoader()
 
-  if ($('#fs' + id + 'plz').val() != '' && $('#fs' + id + 'stadt').val() != '' && $('#fs' + id + 'anschrift').val() != '') {
+  if ($(`#fs${id}plz`).val() != '' && $('#fs' + id + 'stadt').val() != '' && $('#fs' + id + 'anschrift').val() != '') {
     u_loadCoords({
-      plz: $('#fs' + id + 'plz').val(),
-      stadt: $('#fs' + id + 'stadt').val(),
-      anschrift: $('#fs' + id + 'anschrift').val(),
+      plz: $(`#fs${id}plz`).val(),
+      stadt: $(`#fs${id}stadt`).val(),
+      anschrift: $(`#fs${id}anschrift`).val(),
       complete: function () {
         hideLoader()
       }
@@ -61,7 +61,7 @@ function u_getGeo (id) {
 }
 
 function mb_finishFile (newname) {
-  $('ul#et-file-list li:last').addClass('finish').append('<input type="hidden" class="tmp" value="' + newname + '" name="tmp_' + $('ul#et-file-list li').length + '" />')
+  $('ul#et-file-list li:last').addClass('finish').append(`<input type="hidden" class="tmp" value="${newname}" name="tmp_${$('ul#et-file-list li').length}" />`)
   $('#etattach-button').button('option', 'disabled', false)
 }
 
@@ -114,7 +114,7 @@ function mb_answer () {
 
   let subject = $('#mb-hidden-subject').val()
   if (subject.substring(0, 3) != 'Re:') {
-    subject = 'Re: ' + subject
+    subject = `Re: ${subject}`
   }
 
   $('#message-editor').dialog('option', {
@@ -140,12 +140,12 @@ function mb_forward () {
 
 function mb_setMailbox (mb_id) {
   if ($('#edit-von').length > 0) {
-    let email = $('#edit-von option.mb-' + mb_id).text()
-    $('#edit-von option.mb-' + mb_id).remove()
+    let email = $(`#edit-von option.mb-${mb_id}`).text()
+    $(`#edit-von option.mb-${mb_id}`).remove()
     let html = $('#edit-von').html()
     $('#edit-von').html('')
 
-    $('#edit-von').html('<option value="' + mb_id + '" class="mb-' + mb_id + '">' + email + '</option>' + html)
+    $('#edit-von').html(`<option value="${mb_id}" class="mb-${mb_id}">${email}</option>${html}`)
   }
 }
 
@@ -200,7 +200,7 @@ function mb_send_message () {
 
   let an = ''
   $('.edit-an').each(function () {
-    an = an + ';' + $(this).val()
+    an = `${an};${$(this).val()}`
   })
 
   if (an.indexOf('@') == -1) {
@@ -299,7 +299,7 @@ function u_handleNewEmail (email, el) {
     u_addTypeHead()
     var height = $('#edit-body').height() - (availmail_count * 28)
     if (height > 40) {
-      $('#edit-body').css('height', height + 'px')
+      $('#edit-body').css('height', `${height}px`)
     }
 
     $('.edit-an:last').focus()

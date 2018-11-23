@@ -26,7 +26,7 @@
           <tr
             v-for="post in posts"
             :key="post.id"
-            :class="['bpost', 'wallpost-' + post.id]">
+            :class="['bpost', `wallpost-${post.id}`]">
             <td class="img">
               <a :href="`/profile/${post.author.id}`">
                 <img :src="post.author.avatar">

@@ -97,7 +97,6 @@ class StatsControl extends ConsoleControl
 				foreach ($team as $fs) {
 					$newdata = array(
 						'stat_first_fetch' => $fs['stat_first_fetch'],
-						'stat_add_date' => $fs['stat_add_date'],
 						'foodsaver_id' => $fs['id'],
 						'betrieb_id' => $bid,
 						'verantwortlich' => $fs['verantwortlich'],
@@ -108,19 +107,11 @@ class StatsControl extends ConsoleControl
 					/* first_fetch */
 					if ($first_fetch = $this->model->getFirstFetchInBetrieb($bid, $fs['id'])) {
 						$newdata['stat_first_fetch'] = $first_fetch;
-						if ((int)$fs['add_date'] == 0) {
-							$newdata['stat_add_date'] = $first_fetch;
-						}
 					}
 
 					/*last fetch*/
 					if ($last_fetch = $this->model->getLastFetchInBetrieb($bid, $fs['id'])) {
 						$newdata['stat_last_fetch'] = $last_fetch;
-					}
-
-					/* add date*/
-					if ((int)$newdata['stat_add_date'] == 0) {
-						$newdata['stat_add_date'] = $added;
 					}
 
 					/*fetchcount*/
@@ -129,7 +120,7 @@ class StatsControl extends ConsoleControl
 					$this->model->updateBetriebStat(
 						$bid, // Betrieb id
 						$fs['id'], // foodsaver_id
-						$newdata['stat_add_date'], // add date
+						$fs['stat_add_date'], // add date
 						$newdata['stat_first_fetch'], // erste mal abholen
 						$fetchcount, // anzahl abholungen
 						$newdata['stat_last_fetch']

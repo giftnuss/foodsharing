@@ -8,7 +8,5 @@ modules:
         - Asserts
         - Cli
         - Sequence
-        - Db:
-            populate: true
-            cleanup: true
+        - Db
         - \Helper\Foodsharing

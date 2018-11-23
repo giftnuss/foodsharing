@@ -7,21 +7,21 @@ expose({ u_delPost, mb_finishImage })
 
 export function u_delPost (postId, module, wallId) {
   $.ajax({
-    url: '/xhrapp.php?app=wallpost&m=delpost&table=' + module + '&id=' + wallId + '&post=' + postId,
+    url: `/xhrapp.php?app=wallpost&m=delpost&table=${module}&id=${wallId}&post=${postId}`,
     dataType: 'JSON',
     success: function (data) {
       if (data.status == 1) {
-        $('.wallpost-' + postId).remove()
+        $(`.wallpost-${postId}`).remove()
       }
     }
   })
 }
 
 export function mb_finishImage (file) {
-  $('#wallpost-attach').append('<input type="hidden" name="attach[]" value="image-' + file + '" />')
+  $('#wallpost-attach').append(`<input type="hidden" name="attach[]" value="image-${file}" />`)
   $('#attach-preview div:last').remove()
   $('.attach-load').remove()
-  $('#attach-preview').append('<a rel="wallpost-gallery" class="preview-thumb" href="images/wallpost/' + file + '"><img src="images/wallpost/thumb_' + file + '" height="60" /></a>')
+  $('#attach-preview').append(`<a rel="wallpost-gallery" class="preview-thumb" href="images/wallpost/${file}"><img src="images/wallpost/thumb_${file}" height="60" /></a>`)
   $('#attach-preview').append('<div style="clear:both;"></div>')
   $('#attach-preview a').fancybox()
   mb_clear()
@@ -61,7 +61,7 @@ export function init (module, wallId) {
 
       let attach = ''
       $('#wallpost-attach input').each(function () {
-        attach = attach + ':' + $(this).val()
+        attach = `${attach}:${$(this).val()}`
       })
       if (attach.length > 0) {
         attach = attach.substring(1)
@@ -73,7 +73,7 @@ export function init (module, wallId) {
       }
 
       $.ajax({
-        url: '/xhrapp.php?app=wallpost&m=post&table=' + module + '&id=' + wallId,
+        url: `/xhrapp.php?app=wallpost&m=post&table=${module}&id=${wallId}`,
         type:
           'POST',
         data:
@@ -106,7 +106,7 @@ export function init (module, wallId) {
     $('#wall-submit')[0].focus()
   })
   $.ajax({
-    url: '/xhrapp.php?app=wallpost&m=update&table=' + module + '&id=' + wallId + '&last=0',
+    url: `/xhrapp.php?app=wallpost&m=update&table=${module}&id=${wallId}&last=0`,
     dataType:
       'JSON',
     success:

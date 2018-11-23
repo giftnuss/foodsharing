@@ -1,6 +1,5 @@
 <?php
 
-
 class DashboardGatewayTest extends \Codeception\Test\Unit
 {
 	/**

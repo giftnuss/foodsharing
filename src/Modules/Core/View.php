@@ -138,7 +138,7 @@ class View
 				--$i;
 				$out .= '
 				<li>
-					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->func->img($fs['photo']) . ');" href="#" onclick="profile(' . (int)$fs['id'] . ');return false;"><span></span></a>	
+					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->func->img($fs['photo']) . ');" href="/profile/' . (int)$fs['id'] . '"><span></span></a>	
 				</li>';
 				if ($i <= 0) {
 					$out .= '<li class="row">...und ' . (count($foodsaver) - 52) . ' weitere</li>';

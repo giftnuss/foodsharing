@@ -16,7 +16,7 @@ const redisClient = redis.createClient({
 	port: process.env.REDIS_PORT || 6379
 });
 
-const sessionIdsScriptFilename = __dirname + '/session-ids.lua';
+const sessionIdsScriptFilename = `${__dirname}/session-ids.lua`;
 let sessionIdsScriptSHA;
 
 const connectedClients = {};
@@ -168,11 +168,11 @@ loadSessionIdsScript((err, sha) => {
 });
 
 inputServer.listen(inputPort, listenHost, () => {
-	console.log('http server started on', listenHost + ':' + inputPort);
+	console.log('http server started on', `${listenHost}:${inputPort}`);
 });
 
 chatServer.listen(chatPort, listenHost, () => {
-	console.log('socket.io started on port', listenHost + ':' + chatPort);
+	console.log('socket.io started on port', `${listenHost}:${chatPort}`);
 });
 
 module.exports = {

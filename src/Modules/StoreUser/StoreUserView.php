@@ -32,8 +32,8 @@ class StoreUserView extends View
 			}
 			$out .= '
 		<tr class="' . $odd . ' request-' . $r['id'] . '">
-			<td class="img" width="35px"><a href="#" onclick="profile(' . (int)$r['id'] . ');return false;"><img src="' . $this->func->img($r['photo']) . '" /></a></td>
-			<td style="padding-top:17px;"><span class="msg"><a href="#" onclick="profile(' . (int)$r['id'] . ');return false;">' . $r['name'] . '</a></span></td>
+			<td class="img" width="35px"><a href="/profile/' . (int)$r['id'] . '"><img src="' . $this->func->img($r['photo']) . '" /></a></td>
+			<td style="padding-top:17px;"><span class="msg"><a href="/profile/' . (int)$r['id'] . '">' . $r['name'] . '</a></span></td>
 			<td style="width:92px;padding-top:17px;"><span class="msg"><ul class="toolbar"><li class="ui-state-default ui-corner-left" title="Ablehnen" onclick="denyRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-closethick"></span></li><li class="ui-state-default" title="Auf die Springerliste setzen" onclick="warteRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-star"></span></li><li class="ui-state-default ui-corner-right" title="Akzeptieren" onclick="acceptRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-heart"></span></li></ul></span></td>
 		</tr>';
 		}
@@ -102,10 +102,11 @@ class StoreUserView extends View
 			//date at which user was added
 			$memberSince = '';
 			if ($betrieb['verantwortlich']) {
-				$addDate = $fs['add_date'] ? date('d.m.Y', $fs['add_date'])
-						: '(' . $this->func->sv('stat_since_unknown', array()) . ')';
+				$addedAt = (!is_null($fs['add_date']) && $fs['add_date'] > 0)
+						? date('d.m.Y', $fs['add_date'])
+						: '(' . $this->func->s('stat_since_unknown') . ')';
 				$memberSince = $this->func->sv('stat_teammember_since', array(
-					'date' => $addDate
+					'date' => $addedAt
 				));
 			}
 
@@ -158,9 +159,11 @@ class StoreUserView extends View
 				}
 
 				//date at which jumper was added
-				$dateAdded = $fs['add_date'] ? date('d.m.Y', $fs['add_date']) : '(' . $this->func->sv('stat_since_unknown', array()) . ')';
+				$addedAt = (!is_null($fs['add_date']) && $fs['add_date'] > 0)
+						? date('d.m.Y', $fs['add_date'])
+						: '(' . $this->func->s('stat_since_unknown') . ')';
 				$jumperSince = $this->func->sv('stat_jumper_since', array(
-					'date' => $dateAdded
+					'date' => $addedAt
 				));
 
 				$onclick = ' onclick="' . $click . 'return false;"';
@@ -411,7 +414,7 @@ class StoreUserView extends View
 				}
 
 				if ($fs['id'] == $this->func->fsId() && !$ago) {
-					$click = 'u_undate(\'' . $date . '\',\'' . $this->func->format_db_date($date) . '\');return false;';
+					$click = 'u_undate(\'' . $date . '\',\'' . $this->func->niceDate(strtotime($date), true) . '\');return false;';
 					$aclass = '';
 				}
 

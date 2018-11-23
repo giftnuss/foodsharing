@@ -2,14 +2,15 @@
 
 export FS_ENV=test
 
-set -e
+set -o errexit
 
-. $(dirname "$0")/inc.sh
+source $(dirname "$0")/inc.sh
 
 #echo "Installing chat dependencies"
 #install-chat-dependencies
 
 echo "Bring up containers"
+# up starts the container, -d: run in background as a deamon
 dc up -d
 
 echo "Waiting for mysql to start"
