@@ -14,6 +14,7 @@
 - Updated to JQuery 2.2.x !572 @peter.toennies
 - The possibility to automatically ask for new regions has been removed #329 !571 @peter.toennies
 - it is now possible to open profiles in new tabs via middle mouse button !574 @peter.toennies
+- Database functions can now be called with critera that contain arrays !559 @janopae
 
 ## Bugfixes
 - Foodsavers list is now sorted by name and doesn't reshuffle !578 #54 @odedNea
@@ -33,6 +34,8 @@
 - Fixed bug in pickuphistory not showing the end date. Now it also shows past pickups from the same day !577 @jofranz
 - Adding pictures to blog posts and Fairteiler work again !581 @NerdyProjects
 - Redirect after joining a new region works again !581 @NerdyProjects
+- Bell notifications for store fetch confirmations and for new fairteilers are now generated and stored in the database like normal ones #353 !559 @janopae
+
 
 ## Refactoring
 - Unify Symfony DI configuration !544 @nicksellen
