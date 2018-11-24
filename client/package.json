@@ -40,7 +40,7 @@
     "typeface-alfa-slab-one": "0.0.54",
     "underscore": "^1.9.1",
     "vue": "^2.5.17",
-    "whatwg-fetch": "^2.0.4"
+    "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",

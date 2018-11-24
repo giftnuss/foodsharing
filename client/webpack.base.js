@@ -8,7 +8,7 @@ const webpack = require('webpack')
 const plugins = [
   new VueLoaderPlugin(),
   new webpack.ProvidePlugin({
-    'window.fetch': 'exports-loader?self.fetch!whatwg-fetch'
+    fetch: 'exports-loader?self.fetch!whatwg-fetch'
   })
 ]
 
