@@ -47,6 +47,7 @@
 - Add php extensions as composer dependencies, upgrade codeception !558 @nicksellen
 - Updated several npm packages (most of them for ci) !564 !565 @peter.toennies
 - Use webpack-dev-server instead of webpack-serve !582 @NerdyProjects
+- updated webpack and switched to terser !584 @peter.toennies
 
 # 2018-08-19 Hotfix
 
