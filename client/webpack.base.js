@@ -33,6 +33,7 @@ module.exports = {
       ...shims.alias,
       'fonts': resolve('../fonts'),
       'img': resolve('../img'),
+      './img': resolve('../img'),
       'css': resolve('../css'),
       'js': resolve('lib'),
       '@': resolve('src'),
@@ -78,12 +79,7 @@ module.exports = {
         use: [
           production ? MiniCssExtractPlugin.loader : 'style-loader',
           {
-            loader: 'css-loader',
-            options: {
-              alias: {
-                './img': ('img')
-              }
-            }
+            loader: 'css-loader'
           }
         ]
       },
