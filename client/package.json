@@ -17,7 +17,7 @@
     "copy-webpack-plugin": "^4.6.0",
     "cropperjs": "^1.4.3",
     "date-fns": "^1.29.0",
-    "fullpage.js": "2.9.5",
+    "fullpage.js": "<3.0.0",
     "install": "^0.12.2",
     "jquery": "^2.2.4",
     "jquery-contextmenu": "^2.7.1",
