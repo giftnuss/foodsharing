@@ -5,12 +5,7 @@ import L from 'leaflet'
 // import 'leaflet.css'
 
 import 'leaflet.awesome-markers'
-// import 'leaflet.awesome-markers.css'
-// import 'leaflet.awesome-markers.foodsharing-overrides.css'
-
 import 'leaflet.markercluster'
-// import 'leaflet.markercluster/dist/MarkerCluster.css'
-// import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 
 import AddressPicker from 'typeahead-addresspicker'
 
@@ -76,7 +71,7 @@ function initializeSearchpanel (searchpanel, cb = null) {
   const icon = L.AwesomeMarkers.icon({
     icon: 'smile',
     markerColor: 'orange',
-    prefix: 'img'
+    prefix: 'fa'
   })
 
   $searchpanel.typeahead(null, {

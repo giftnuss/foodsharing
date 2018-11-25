@@ -132,7 +132,7 @@
         var fsIcon = L.AwesomeMarkers.icon({
 			  icon: "smile",
 			  markerColor: "orange",
-			  prefix: "img"
+			  prefix: "fa"
 		});
         this.marker = L.marker(this.mapOptions.center, {icon: fsIcon}).addTo(this.map);
       };

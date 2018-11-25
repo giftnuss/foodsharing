@@ -28,30 +28,27 @@ expose({
   u_loadDialog
 })
 
+L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa';
+
 const fsIcon = L.AwesomeMarkers.icon({
   icon: 'smile',
-  markerColor: 'orange',
-  prefix: 'img'
+  markerColor: 'orange'
 })
 const bkIcon = L.AwesomeMarkers.icon({
-  icon: 'basket',
-  markerColor: 'green',
-  prefix: 'img'
+  icon: 'shopping-basket',
+  markerColor: 'green'
 })
 const botIcon = L.AwesomeMarkers.icon({
   icon: 'smile',
-  markerColor: 'red',
-  prefix: 'img'
+  markerColor: 'red'
 })
 const bIcon = L.AwesomeMarkers.icon({
-  icon: 'store',
-  markerColor: 'brown',
-  prefix: 'img'
+  icon: 'shopping-cart',
+  markerColor: 'darkred'
 })
 const fIcon = L.AwesomeMarkers.icon({
   icon: 'recycle',
-  markerColor: 'yellow',
-  prefix: 'img'
+  markerColor: 'beige'
 })
 
 const map = {
