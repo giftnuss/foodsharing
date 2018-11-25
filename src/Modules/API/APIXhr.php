@@ -231,7 +231,7 @@ class APIXhr extends Control
 					(int)$_GET['fetchart'], // location type
 					$lat, // lat
 					$lon, // lon
-					(float)$_GET['lifetime']
+					(int)$_GET['lifetime']
 				)
 				) {
 					if (isset($_GET['art'])) {
