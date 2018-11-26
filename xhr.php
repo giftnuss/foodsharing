@@ -20,8 +20,11 @@ $session->initIfCookieExists();
 /* @var $mem Mem */
 $mem = $container->get(Mem::class);
 
+/* @var $influxdb \Foodsharing\Modules\Core\InfluxMetrics */
+$influxdb = $container->get(\Foodsharing\Modules\Core\InfluxMetrics::class);
+
 if (isset($g_page_cache)) {
-	$cache = new Caching($g_page_cache, $session, $mem);
+	$cache = new Caching($g_page_cache, $session, $mem, $influxdb);
 	$cache->lookup();
 }
 
