@@ -160,10 +160,10 @@ class MailsControl extends ConsoleControl
 								}
 							}
 						}
-						$attach = json_encode($attach);
 						if ($attach) {
 							++$stats['has-attachment'];
 						}
+						$attach = json_encode($attach);
 
 						$date = null;
 						try {
