@@ -17,6 +17,7 @@
 - Database functions can now be called with critera that contain arrays !559 @janopae
 - Added a Rest controller for food baskets #345 !557 @alex.simm
 - Allow platform mailing system to work with multiple email domains !583 @NerdyProjects
+- Changes MessageRestController limit and offsets to use query parameters
 
 ## Bugfixes
 - Foodsavers list is now sorted by name and doesn't reshuffle !578 #54 @odedNea

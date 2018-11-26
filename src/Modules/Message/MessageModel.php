@@ -212,12 +212,11 @@ class MessageModel extends Db
 	 *
 	 * @return Ambigous <boolean, array >
 	 */
-	public function listConversations(int $limit = -1)
+	public function listConversations(int $limit = -1, int $offset = 0)
 	{
-		if ($limit === -1) {
-			$limit = '';
-		} else {
-			$limit = ' LIMIT 0,' . $limit;
+		$paginate = '';
+		if ($limit !== -1) {
+			$paginate = ' LIMIT ' . (int)$offset . ',' . (int)$limit;
 		}
 
 		if ($convs = $this->q('
@@ -241,10 +240,10 @@ class MessageModel extends Db
 			AND
 				hc.foodsaver_id = ' . (int)$this->func->fsId() . '
 
-			ORDER BY 
+			ORDER BY
 				hc.unread DESC,
 				c.`last` DESC
-			' . $limit . '
+			' . $paginate . '
 		')
 		) {
 			for ($i = 0; $i < count($convs); ++$i) {
