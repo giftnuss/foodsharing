@@ -69,7 +69,7 @@ class Func
 		SanitizerService $sanitizerService,
 		RegionGateway $regionGateway,
 		EmailTemplateAdminGateway $emailTemplateAdminGateway,
-	    InfluxMetrics $metrics
+		InfluxMetrics $metrics
 	) {
 		$this->viewUtils = $viewUtils;
 		$this->sanitizerService = $sanitizerService;
