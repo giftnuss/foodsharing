@@ -3,13 +3,9 @@ const clientRoot = path.resolve(__dirname)
 const shims = require('./shims')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const webpack = require('webpack')
 
 const plugins = [
-  new VueLoaderPlugin(),
-  new webpack.ProvidePlugin({
-    fetch: 'exports-loader?self.fetch!whatwg-fetch'
-  })
+  new VueLoaderPlugin()
 ]
 
 const production = process.env.NODE_ENV === 'production'
