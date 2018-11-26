@@ -20,8 +20,11 @@ $session->initIfCookieExists();
 /* @var $mem Mem */
 $mem = $container->get(Mem::class);
 
+/* @var $influxdb \Foodsharing\Modules\Core\InfluxMetrics */
+$influxdb = $container->get(\Foodsharing\Modules\Core\InfluxMetrics::class);
+
 if (isset($g_page_cache)) {
-	$cache = new Caching($g_page_cache, $session, $mem);
+	$cache = new Caching($g_page_cache, $session, $mem, $influxdb);
 	$cache->lookup();
 }
 
@@ -35,6 +38,8 @@ if (isset($_GET['f'])) {
 	$xhr = $container->get(XhrMethods::class);
 	$func = 'xhr_' . $action;
 	if (method_exists($xhr, $func)) {
+		$metrics = $container->get(\Foodsharing\Modules\Core\InfluxMetrics::class);
+		$metrics->addPageStatData(['controller' => $func]);
 		/*
 		 * check for page caching
 		*/

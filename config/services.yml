@@ -140,3 +140,7 @@ services:
         - [ setAttribute, [!php/const PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION]]
         - [ setAttribute, [!php/const PDO::MYSQL_ATTR_INIT_COMMAND, 'SET NAMES "utf8"']]
 
+    InfluxDB\Database:
+        factory: ['InfluxDB\Client', 'fromdsn']
+        arguments:
+            - !php/const INFLUX_DSN

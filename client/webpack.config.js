@@ -3,7 +3,7 @@ const merge = require('webpack-merge')
 const webpackBase = require('./webpack.base')
 const { writeFileSync } = require('fs')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const path = require('path')
 const clientRoot = path.resolve(__dirname)
@@ -102,10 +102,7 @@ module.exports = merge(webpackBase, {
   plugins,
   optimization: {
     minimizer: [
-      new UglifyJsPlugin({
-        uglifyOptions: {
-          safari10: true
-        },
+      new TerserPlugin({
         sourceMap: true
       })
     ],

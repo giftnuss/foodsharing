@@ -10,6 +10,7 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\Core\InfluxMetrics;
 use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateAdminGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Services\SanitizerService;
@@ -58,16 +59,23 @@ class Func
 	 */
 	private $mem;
 
+	/**
+	 * @var InfluxMetrics
+	 */
+	private $metrics;
+
 	public function __construct(
 		Utils $viewUtils,
 		SanitizerService $sanitizerService,
 		RegionGateway $regionGateway,
-		EmailTemplateAdminGateway $emailTemplateAdminGateway
+		EmailTemplateAdminGateway $emailTemplateAdminGateway,
+	    InfluxMetrics $metrics
 	) {
 		$this->viewUtils = $viewUtils;
 		$this->sanitizerService = $sanitizerService;
 		$this->regionGateway = $regionGateway;
 		$this->emailTemplateAdminGateway = $emailTemplateAdminGateway;
+		$this->metrics = $metrics;
 		$this->content_main = '';
 		$this->content_right = '';
 		$this->content_left = '';
@@ -678,6 +686,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 		$mail->addRecipient($to);
 		$mail->send();
+		$this->metrics->addPoint('outgoing_email', ['template' => $tpl_id], ['count' => 1]);
 	}
 
 	public function dt($ts)

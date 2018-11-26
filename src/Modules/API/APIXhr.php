@@ -6,6 +6,7 @@ use Flourish\fImage;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\WebSocketSender;
 use Foodsharing\Modules\Basket\BasketGateway;
+use Foodsharing\Services\BasketService;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Message\MessageModel;
@@ -17,6 +18,7 @@ class APIXhr extends Control
 	private $apiGateway;
 	private $loginGateway;
 	private $webSocketSender;
+	private $basketService;
 
 	public function __construct(
 		APIGateway $apiGateway,
@@ -24,7 +26,8 @@ class APIXhr extends Control
 		MessageModel $messageModel,
 		BasketGateway $basketGateway,
 		Db $model,
-		WebSocketSender $websocketSender
+		WebSocketSender $websocketSender,
+		BasketService $basketService
 	) {
 		$this->apiGateway = $apiGateway;
 		$this->loginGateway = $loginGateway;
@@ -32,6 +35,7 @@ class APIXhr extends Control
 		$this->basketGateway = $basketGateway;
 		$this->model = $model;
 		$this->webSocketSender = $websocketSender;
+		$this->basketService = $basketService;
 		parent::__construct();
 
 		if ($_GET['m'] != 'login' && !$this->session->may()) {
@@ -190,30 +194,6 @@ class APIXhr extends Control
 			$desc = strip_tags($_GET['desc']);
 			$tmp = array();
 
-			if (isset($_GET['art'])) {
-				$kinds = $_GET['art'];
-				foreach ($kinds as $kind) {
-					if ((int)$kind > 0) {
-						$tmp[] = (int)$kind;
-					}
-				}
-			}
-			$kinds = $tmp;
-
-			$tmp = array();
-
-			if (isset($_GET['types'])) {
-				$types = $_GET['types'];
-				foreach ($types as $type) {
-					if ((int)$type > 0) {
-						$tmp[] = (int)$type;
-					}
-				}
-			}
-			$types = $tmp;
-
-			$tmp = array();
-
 			$cTypes = $this->contactTypes($tmp);
 
 			if (empty($cTypes)) {
@@ -221,16 +201,6 @@ class APIXhr extends Control
 			}
 
 			if (!empty($desc)) {
-				$weight = (float)$_GET['weight'];
-				if ($weight <= 0) {
-					$weight = 3;
-				}
-
-				$tel = [
-					'tel' => preg_replace('[^0-9\ \+]', '', $_GET['phone']),
-					'handy' => preg_replace('[^0-9\ \+]', '', $_GET['phone_mobile'])
-				];
-
 				$photo = '';
 				if (isset($_GET['photo']) && !empty($_GET['photo']) && $this->resizePic($_GET['photo'])) {
 					$photo = strip_tags($_GET['photo']);
@@ -251,32 +221,24 @@ class APIXhr extends Control
 					}
 				}
 
-				//fix lifetime between 1 and 21 days and convert from days to seconds
-				$lifetime = (float)$_GET['lifetime'];
-				if ($lifetime < 1 || $lifetime > 21) {
-					$lifetime = 7;
-				}
-				$lifetime *= 60 * 60 * 24;
-
-				if ($id = $this->basketGateway->addBasket(
+				if ($basket = $this->basketService->addBasket(
 					$desc,
 					$photo, // pic
-					$tel, // phone
-					implode(':', $cTypes),
-					$weight, // weight
+					$_GET['phone'], // tel
+					$_GET['phone_mobile'], //handy
+					$cTypes,
+					(float)$_GET['weight'], // weight
 					(int)$_GET['fetchart'], // location type
 					$lat, // lat
 					$lon, // lon
-					$lifetime,
-					$this->session->user('bezirk_id'),
-					$this->session->id()
+					(int)$_GET['lifetime']
 				)
 				) {
-					if (!empty($kinds)) {
-						$this->basketGateway->addKind($id, $kinds);
+					if (isset($_GET['art'])) {
+						$this->basketService->addFoodKinds($basket['id'], $_GET['art']);
 					}
-					if (!empty($types)) {
-						$this->basketGateway->addTypes($id, $types);
+					if (isset($_GET['types'])) {
+						$this->basketService->addFoodTypes($basket['id'], $_GET['types']);
 					}
 
 					$this->appout([
