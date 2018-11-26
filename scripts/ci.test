@@ -95,7 +95,7 @@ fi
 
 log-header "Running chat tests"
 SECONDS=0
-run-in-container chat npm test
+run-in-container chat 'npm run lint && npm test'
 echo $SECONDS seconds elapsed
 
 log-header "Done!"

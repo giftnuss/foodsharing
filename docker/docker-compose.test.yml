@@ -49,7 +49,7 @@ services:
 
   client:
     container_name: foodsharing_test_client
-    image: node:10.12
+    image: node:10.12-alpine
     # We don't run anything long running in here yet - build is run via ./scripts/build-assets
     command: 'true'
     working_dir: /app/client
@@ -81,7 +81,7 @@ services:
 
   chat:
     container_name: foodsharing_test_chat
-    image: registry.gitlab.com/foodsharing-dev/images/chat:1.1
+    image: node:10.12-alpine
     command: sh -c "yarn && node server.js 0.0.0.0"
     working_dir: /app/chat
     depends_on:
