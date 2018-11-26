@@ -38,6 +38,7 @@ services:
       - redis:redis
       - db:db
       - chat:chat
+      - influxdb
     environment:
       FS_ENV: test
     volumes:
@@ -137,8 +138,21 @@ services:
     image: djfarrelly/maildev
     container_name: foodsharing_ci_maildev
 
+  influxdb:
+    container_name: foodsharing_ci_influxdb
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.influxdb.ci
+    image: influxdb:1.6.4-alpine
+    command: >
+      influxd -config /etc/influxdb/influxdb.toml
+    environment:
+      INFLUXDB_ADMIN_ENABLED: "true"
+      INFLUXDB_DB: "foodsharing"
+
 volumes:
   selenium_downloads:
   vendor_cache:
   client_node_modules_cache:
   chat_node_modules_cache:
+

@@ -13,6 +13,7 @@ $I->login($user['email'], $pass);
 // request mail with link
 $I->amOnPage('/?page=settings&sub=general');
 $I->click('E-Mail-Adresse ändern');
+$I->waitForElementVisible('#newmail');
 $I->fillField('#newmail', $newmail);
 $I->executeJS("$('button:contains(E-Mail-Adresse ändern)').click()");
 $I->waitForElementVisible('#pulse-info', 4);
@@ -28,6 +29,7 @@ $link = $matches[1];
 
 // open link, fill in password and submit
 $I->amOnPage($link);
+$I->waitForElementVisible('#passcheck');
 $I->fillField('#passcheck', $pass);
 $I->executeJS("$('button:contains(Bestätigen)').click()");
 $I->waitForElementVisible('#pulse-info', 4);

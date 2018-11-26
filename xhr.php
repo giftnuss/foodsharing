@@ -35,6 +35,8 @@ if (isset($_GET['f'])) {
 	$xhr = $container->get(XhrMethods::class);
 	$func = 'xhr_' . $action;
 	if (method_exists($xhr, $func)) {
+		$metrics = $container->get(\Foodsharing\Modules\Core\InfluxMetrics::class);
+		$metrics->addPageStatData(['controller' => $func]);
 		/*
 		 * check for page caching
 		*/

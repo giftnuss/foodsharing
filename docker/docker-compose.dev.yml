@@ -34,6 +34,7 @@ services:
       - db
       - redis
       - mailqueuerunner
+      - influxdb
     volumes:
       - ../:/app
       - ${PWD}/docker/conf/app/php.dev.ini:/usr/local/etc/php/conf.d/dev-config.ini
@@ -216,6 +217,29 @@ services:
     ports:
       - 18084:80
 
+  influxdb:
+    container_name: foodsharing_dev_influxdb
+    image: influxdb:1.6.4-alpine
+    command: >
+      influxd -config /etc/influxdb/influxdb.toml
+    ports:
+    - 8083:8083
+    - 18086:8086
+    environment:
+      INFLUXDB_ADMIN_ENABLED: "true"
+      INFLUXDB_DB: "foodsharing"
+    volumes:
+    - influxdb:/var/lib/influxdb
+    - ./conf/influxdb/influxdb.toml:/etc/influxdb/influxdb.toml
+
+  grafana:
+    image: grafana/grafana:5.3.2
+    ports:
+    - 4000:3000
+    volumes:
+    - grafana:/var/lib/grafana
+
+
 
 volumes:
   client-node-modules:
@@ -224,3 +248,5 @@ volumes:
   api-virtualenv:
   api-pip-cache:
   chat-node-modules:
+  influxdb:
+  grafana:

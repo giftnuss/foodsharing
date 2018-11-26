@@ -32,6 +32,7 @@ services:
       - redis:redis
       - db:db
       - chat:chat
+      - influxdb
     depends_on:
       - db
       - redis
@@ -166,6 +167,21 @@ services:
     ports:
       - 28083:80
 
+  influxdb:
+    container_name: foodsharing_test_influxdb
+    image: influxdb:1.6.4-alpine
+    command: >
+      influxd -config /etc/influxdb/influxdb.toml
+    ports:
+    - 28086:8086
+    environment:
+      INFLUXDB_ADMIN_ENABLED: "true"
+      INFLUXDB_DB: "foodsharing"
+    volumes:
+    - influxdb:/var/lib/influxdb
+    - ./conf/influxdb/influxdb.toml:/etc/influxdb/influxdb.toml
+
 
 volumes:
   selenium_downloads:
+  influxdb:

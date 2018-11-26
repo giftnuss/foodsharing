@@ -16,6 +16,7 @@
 - it is now possible to open profiles in new tabs via middle mouse button !574 @peter.toennies
 - Database functions can now be called with critera that contain arrays !559 @janopae
 - Added a Rest controller for food baskets #345 !557 @alex.simm
+- Allow platform mailing system to work with multiple email domains !583 @NerdyProjects
 
 ## Bugfixes
 - Foodsavers list is now sorted by name and doesn't reshuffle !578 #54 @odedNea
@@ -36,6 +37,7 @@
 - Adding pictures to blog posts and Fairteiler work again !581 @NerdyProjects
 - Redirect after joining a new region works again !581 @NerdyProjects
 - Bell notifications for store fetch confirmations and for new fairteilers are now generated and stored in the database like normal ones #353 !559 @janopae
+- More stability for internal email system as emails are handled like external ones now !583 @NerdyProjects
 
 
 ## Refactoring
@@ -49,6 +51,7 @@
 - Use webpack-dev-server instead of webpack-serve !582 @NerdyProjects
 - updated webpack and switched to terser !584 @peter.toennies
 - Updated whatwg-fetch to version 3 !585 @peter.toennies
+- Gather statistics about incoming and outgoing emails !583 @NerdyProjects
 
 # 2018-08-19 Hotfix
 

@@ -54,7 +54,8 @@
     "ext-gd": "*",
     "ext-zlib": "*",
     "ext-openssl": "*",
-    "ext-intl": "*"
+    "ext-intl": "*",
+    "influxdb/influxdb-php": "^1.14"
   },
   "autoload": {
     "psr-4": {"Foodsharing\\": "src/",
