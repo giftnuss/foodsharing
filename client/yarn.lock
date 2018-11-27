@@ -4294,7 +4294,7 @@ jquery-slimscroll@^1.3.8:
   dependencies:
     jquery ">= 1.7"
 
-jquery-ui@1.10.5:
+jquery-ui@<1.12.0-beta.1:
   version "1.10.5"
   resolved "https://registry.yarnpkg.com/jquery-ui/-/jquery-ui-1.10.5.tgz#826aed3dd1f88d32ae75d74df48643dc431a5815"
   integrity sha1-gmrtPdH4jTKudddN9IZD3EMaWBU=
@@ -4304,15 +4304,15 @@ jquery.ui.position@^1.11.4:
   resolved "https://registry.yarnpkg.com/jquery.ui.position/-/jquery.ui.position-1.11.4.tgz#372a8d197f4175dffdbdbc1ee9bbc5d2abd1d28c"
   integrity sha1-NyqNGX9Bdd/9vbwe6bvF0qvR0ow=
 
+jquery@<3.0.0-alpha1:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-2.2.4.tgz#2c89d6889b5eac522a7eea32c14521559c6cbf02"
+  integrity sha1-LInWiJterFIqfuoywUUhVZxsvwI=
+
 "jquery@>= 1.7", jquery@>=1.2.3, jquery@>=1.6.0:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
   integrity sha512-Ubldcmxp5np52/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg==
-
-jquery@^2.2.4:
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-2.2.4.tgz#2c89d6889b5eac522a7eea32c14521559c6cbf02"
-  integrity sha1-LInWiJterFIqfuoywUUhVZxsvwI=
 
 js-base64@^2.1.8:
   version "2.4.8"
@@ -7298,7 +7298,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typeface-alfa-slab-one@0.0.54:
+typeface-alfa-slab-one@^0.0.54:
   version "0.0.54"
   resolved "https://registry.yarnpkg.com/typeface-alfa-slab-one/-/typeface-alfa-slab-one-0.0.54.tgz#b37e22da816c20ff89253fe4cda77745fdf01982"
   integrity sha512-N83eDD22QLJeXoXS7Y0GeqjDEuzr6MhwiK36eKt9IbKlH+LpvzyuU6wFPQrtaZz9ynkQ3BXmFPO9j1V8YRdHIQ==
