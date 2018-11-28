@@ -195,7 +195,7 @@ final class MessageModel extends Db
 	}
 
 	/**
-	 * Method returns an array of all conversation from the user.
+	 * Method returns an array of all conversations from the logged in user.
 	 *
 	 * @param int $limit
 	 * @param int $offset
