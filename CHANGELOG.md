@@ -55,6 +55,7 @@
 - updated webpack and switched to terser !584 @peter.toennies
 - Updated whatwg-fetch to version 3 !585 @peter.toennies
 - Gather statistics about incoming and outgoing emails !583 @NerdyProjects
+- Updated sebastian/diff to version 3 (and phpunit to version 7.3.5) !591 @peter.toennies
 
 # 2018-08-19 Hotfix
 

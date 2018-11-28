@@ -11,7 +11,7 @@
     "filp/whoops": "^2.3.1",
     "mashape/unirest-php": "^3.0.4",
     "codeception/c3": "^2.4.1",
-    "sebastian/diff": "^2.0.1"
+    "sebastian/diff": "^3.0.1"
   },
   "require": {
     "sentry/sentry": "^1.10.0",
