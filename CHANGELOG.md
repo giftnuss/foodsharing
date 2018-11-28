@@ -18,6 +18,7 @@
 - Added a Rest controller for food baskets #345 !557 @alex.simm
 - Allow platform mailing system to work with multiple email domains !583 @NerdyProjects
 - Changes MessageRestController limit and offsets to use query parameters
+- update htmlpurifier to version 2 !594 @peter.toennies
 
 ## Bugfixes
 - Foodsavers list is now sorted by name and doesn't reshuffle !578 #54 @odedNea
