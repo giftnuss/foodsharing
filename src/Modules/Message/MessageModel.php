@@ -246,6 +246,12 @@ final class MessageModel extends Db
 					$members = $this->updateDenormalizedConversationData($conversations[$i]['id']);
 					$member = $members[0];
 				}
+
+				// Strip emails from response
+				foreach ($member as $index => $value) {
+					unset($member[$index]['email']);
+				}
+
 				$conversations[$i]['member'] = $member;
 			}
 

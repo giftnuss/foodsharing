@@ -118,7 +118,13 @@ class MessageRestController extends AbstractFOSRestController
 		$limit = $paramFetcher->get('limit');
 		$offset = $paramFetcher->get('offset');
 
-		$conversations = $this->model->listConversations($limit, $offset);
+		// Filter out any conversations with the wrong member type (this should rarely happen).
+		$conversations = array_filter(
+			$this->model->listConversations($limit, $offset),
+			function($c) {
+				return is_array($c['member']);
+		});
+
 		$view = $this->view($conversations, 200);
 
 		return $this->handleView($view);
