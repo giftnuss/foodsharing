@@ -121,9 +121,9 @@ class MessageRestController extends AbstractFOSRestController
 		// Filter out any conversations with the wrong member type (this should rarely happen).
 		$conversations = array_filter(
 			$this->model->listConversations($limit, $offset),
-			function($c) {
+			function ($c) {
 				return is_array($c['member']);
-		});
+			});
 
 		$view = $this->view($conversations, 200);
 
