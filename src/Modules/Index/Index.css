@@ -3,24 +3,18 @@ body.fp-viewing-festival #topbar .navbar {
 }
 
 #campaign {
-  height: 100vh;
-  width: 150vh;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, 0);
-}
-
-#campaign .topbarpadding {
   padding: 41px 0;
+  height: 100vh;
   width: 100%;
-  height: 100%;
-  box-sizing: border-box;
+  display: flex;
+  align-items: center;
 }
 
 #campaigntext, #campaignimg {
-  height: 100%;
+  height: 80%;
   width: 50%;
+  display: flex;
+  align-items: center;
 }
 
 #campaigntext {
@@ -30,7 +24,6 @@ body.fp-viewing-festival #topbar .navbar {
   color: #f9f5e0;
   text-shadow: 0 1px #555;
   -webkit-text-size-adjust: none;
-  padding-top: 15vh;
 }
 
 #campaigntext h2 {
@@ -68,48 +61,30 @@ body.fp-viewing-festival #topbar .navbar {
 }
 
 @media (max-aspect-ratio: 3/2) {
-  #campaign {
-    width: 100vw;
-    height: 66vw;
-    top: 50%;
-    left: 0;
-    transform: translate(0, -50%);
-  }
-
   #campaigntext {
     font-size: 1.5vw;
-  }
-
-  #campaigntext div img {
-    width: 4.5vw;
   }
 }
 
 @media (max-aspect-ratio: 9/10) {
   #campaign {
-    width: 100%;
-    height: 120vh;
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: none;
+    padding: 73px 0;
+    flex-wrap: wrap;
+    height: calc(100vh - 73px);
   }
 
-  #campaigntext {
+  #campaigntext, #campaignimg {
     width: 100%;
-    height: 40em;
-    font-size: 1.9vw;
-    padding-top: 0.5vh;
-  }
-
-  #campaigntext div img {
-    display: none;
   }
 
   #campaignimg {
-    width: 100%;
-    height: 60vw;
-    background-position: center;
+    height: 50%;
+  }
+
+  #campaigntext {
+    font-size: 1.9vw;
+    padding-top: 0.5vh;
+    height: 20%;
   }
 }
 
@@ -170,24 +145,21 @@ body.fp-viewing-festival #topbar .navbar {
   opacity: 0.8;
 }
 
-#joinbuttoninfootersection {
-  display: block;
-  position: absolute;
-  top: 50px;
-  left: 50%;
-  transform: translate(-50%, 0);
-  text-align: center;
-  font-size: 8vw;
-  font-weight: normal;
-  background-color: #64ae24;
-  color: white;
-  font-family: "Alfa Slab One", Arial;
-  width: 8em;
-  border-radius: 1em;
-  text-decoration: none;
-  letter-spacing: 0.4px;
+.section {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
 }
 
-#joinbuttoninfootersection:hover {
-  opacity: 0.8;
+.section--dark-brown {
+  background-color: rgb(83, 58, 32);
+}
+
+.section--beige {
+    background-color: rgb(241, 231, 201);
+}
+
+.section--light-beige {
+  background-color: rgb(249, 245, 224);
 }
