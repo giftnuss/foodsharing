@@ -11,6 +11,7 @@ class IndexView extends View
 		$params = array(
 			'first_content' => $first_content,
 		);
+
 		return $this->twig->render('pages/Index/page.twig', $params);
 	}
 }
