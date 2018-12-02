@@ -36,7 +36,7 @@ system of ours. We hope you will enjoy it.
 - removed not needed add store button from the dashboard !523 @peter.toennies
 - limit conversations sent to client at page loading !542 @janopae
 - check permissions before saving a wallpost in WallpostXhr !542 @janopae
-- stat_fetchrate is calculated correctly and shown in profile #281 @k.miklobusec
+- stat_fetchrate is calculated correctly and shown in profile added tvalue in select #281 @k.miklobusec
 - fix mail sending by passing instance of Mem to AsyncMail constructor !551 @nicksellen
 - fixed wrong html formatting in quick replies to forum posts !534 @peter.toennies
 - fixed index check in BasketGateway #354 !556 @alex.simm
