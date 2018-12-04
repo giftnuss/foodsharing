@@ -167,11 +167,10 @@ export default {
             font-size: .9em;
         }
         input.form-control {
-            padding: 0.1rem 0.75rem;
-            font-size: 1em;
-            border: none;
-            padding-left: 0;
-            font-weight: bold;
+          font-size: 1em;
+          border: none;
+          padding: 0.1rem 0.75rem 0.1rem 0;
+          font-weight: bold;
             &:focus {
                 box-shadow: none;
                 border: none;
@@ -179,9 +178,9 @@ export default {
         }
     }
 }
+
 #search-results {
     display: block;
-    // width: 100%;
     width: 250px;
 }
 </style>

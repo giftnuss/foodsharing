@@ -98,10 +98,9 @@ p {
   because we are on a white background we have to override this with a black one
 */
 .img-store {
-    font-family: "Font Awesome 5 Free";
+    font-family: "Font Awesome 5 Free",monospace;
     font-style: normal;
     font-weight: 900;
-    font-size: 14px;
     font-size: inherit;
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
