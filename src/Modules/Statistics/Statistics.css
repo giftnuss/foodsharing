@@ -47,10 +47,10 @@
 }
 
 .stat_text h4 {
-  paddin: 0;
+  padding: 0;
   margin: 10px 0;
   font-size: 33px;
-  font-family: "Alfa Slab One";
+  font-family: "Alfa Slab One", serif;
   font-weight: normal;
 }
 
@@ -81,11 +81,9 @@ table.stat_cities {
 
 table.stat_cities td.city div.percentbar {
   width: 200px;
-  background-color: #FFFFF;
+  background-color: #FFFFFF;
   border: 1px solid #b3ab9f;
   height: 10px;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
   border-radius: 6px;
 }
 
@@ -99,8 +97,6 @@ table.stat_cities td.city div.percentbar div.inner {
   background: linear-gradient(to right, #598939 0%, #a4bc71 100%, #a4bc71 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#598939', endColorstr='#a4bc71', GradientType=1);
   height: 10px;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
   border-radius: 6px;
 }
 
@@ -110,14 +106,13 @@ table.stat_cities .city {
 }
 
 table.stat_cities td p {
-  margin: 0;
   padding: 0;
   display: block;
-  margin-top: 3px;
+  margin: 3px 0 0;
 }
 
 table.stat_cities td h4 {
-  font-family: "Alfa Slab One";
+  font-family: "Alfa Slab One", serif;
   margin: 0;
   padding: 0;
   display: block;
