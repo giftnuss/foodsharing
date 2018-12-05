@@ -52,7 +52,15 @@ class StoreUserView extends View
 		if ($betrieb[$id] != '') {
 			$betrieb[$id] = trim($betrieb[$id]);
 			nl2br($betrieb[$id]);
-			$out = '<div class="innerRow"><span class="label">' . $this->func->s($id) . '</span><span class="cnt">' . $betrieb[$id] . '</span></div><div style="clear:both"></div>';
+
+			if ($id == 'telefon' || $id == 'handy') {
+				$content = '<a href="tel:' . $betrieb[$id] . '">' . $betrieb[$id] . '</a>';
+			} else {
+				$content = $betrieb[$id];
+			}
+
+			$out = '<div class="innerRow"><span class="label">' . $this->func->s($id) . '</span>
+			<span class="cnt">' . $content . '</span></div><div style="clear:both"></div>';
 		}
 
 		return $out;
