@@ -9,8 +9,6 @@
 .stat_badge {
   display: inline-block;
   background-color: #599022;
-  -webkit-border-radius: 300px;
-  -moz-border-radius: 300px;
   border-radius: 300px;
   height: 220px;
   line-height: 300px;

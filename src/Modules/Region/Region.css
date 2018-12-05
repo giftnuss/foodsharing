@@ -180,8 +180,6 @@ div.event {
 .user_pic .avatar {
   margin-top: 7px;
   margin-left: 7px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
   border-radius: 3px;
 }
 
