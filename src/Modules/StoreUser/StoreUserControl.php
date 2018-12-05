@@ -298,12 +298,12 @@ class StoreUserControl extends Control
 
 				$days = $this->func->getDow();
 
-				$scroller = '';
+				$zeit_content = '';
 
 				foreach ($next_dates as $date => $time) {
 					$part = explode(' ', $date);
 					$date = $part[0];
-					$scroller .= $this->view->u_form_checkboxTagAlt(
+					$zeit_content .= $this->view->u_form_checkboxTagAlt(
 						$date . ' ' . $time['time'],
 						array(
 							'data' => $betrieb['team'],
@@ -318,7 +318,7 @@ class StoreUserControl extends Control
 					);
 				}
 
-				$zeit_cnt .= $this->v_utils->v_scroller($scroller, 200);
+				$zeit_cnt .= $zeit_content;
 
 				if ($betrieb['verantwortlich'] && empty($next_dates)) {
 					$zeit_cnt = $this->v_utils->v_info($this->func->sv('no_fetchtime', array('name' => $betrieb['name'])), $this->func->s('attention') . '!') .
