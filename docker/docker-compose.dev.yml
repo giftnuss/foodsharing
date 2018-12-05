@@ -8,7 +8,7 @@ services:
 
   web:
     container_name: foodsharing_dev_web
-    image: registry.gitlab.com/foodsharing-dev/images/web:1.5
+    image: registry.gitlab.com/foodsharing-dev/images/web:1.6
     ports:
       - 18080:8080
     depends_on:
@@ -34,6 +34,7 @@ services:
       - db
       - redis
       - mailqueuerunner
+      - influxdb
     volumes:
       - ../:/app
       - ${PWD}/docker/conf/app/php.dev.ini:/usr/local/etc/php/conf.d/dev-config.ini
@@ -45,7 +46,7 @@ services:
 
   client:
     container_name: foodsharing_dev_client
-    image: node:10.12
+    image: node:10.12-alpine
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -140,7 +141,7 @@ services:
   chat:
     container_name: foodsharing_dev_chat
     command: sh -c "yarn && node server.js 0.0.0.0"
-    image: registry.gitlab.com/foodsharing-dev/images/chat:1.1
+    image: node:10.12-alpine
     working_dir: /app/chat
     depends_on:
       - redis
@@ -216,6 +217,29 @@ services:
     ports:
       - 18084:80
 
+  influxdb:
+    container_name: foodsharing_dev_influxdb
+    image: influxdb:1.6.4-alpine
+    command: >
+      influxd -config /etc/influxdb/influxdb.toml
+    ports:
+    - 8083:8083
+    - 18086:8086
+    environment:
+      INFLUXDB_ADMIN_ENABLED: "true"
+      INFLUXDB_DB: "foodsharing"
+    volumes:
+    - influxdb:/var/lib/influxdb
+    - ./conf/influxdb/influxdb.toml:/etc/influxdb/influxdb.toml
+
+  grafana:
+    image: grafana/grafana:5.3.2
+    ports:
+    - 4000:3000
+    volumes:
+    - grafana:/var/lib/grafana
+
+
 
 volumes:
   client-node-modules:
@@ -224,3 +248,5 @@ volumes:
   api-virtualenv:
   api-pip-cache:
   chat-node-modules:
+  influxdb:
+  grafana:

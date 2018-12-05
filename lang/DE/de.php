@@ -220,7 +220,6 @@ $g_lang['user_add_success'] = 'Prima! Dein Account wurde angelegt!';
 $g_lang['menu_manage_regions'] = 'Bezirke verwalten';
 $g_lang['menu_quiz'] = 'Quiz verwalten';
 $g_lang['menu_reports'] = 'Meldungen';
-$g_lang['menu_newarea'] = 'Bezirkswünsche von Foodsavern';
 $g_lang['menu_all_fs'] = 'Alle Foodsaver';
 $g_lang['menu_all_store'] = 'Alle Betriebe';
 $g_lang['menu_email'] = 'E-Mail-Verteiler';

@@ -3,13 +3,9 @@ const clientRoot = path.resolve(__dirname)
 const shims = require('./shims')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const webpack = require('webpack')
 
 const plugins = [
-  new VueLoaderPlugin(),
-  new webpack.ProvidePlugin({
-    'window.fetch': 'exports-loader?self.fetch!whatwg-fetch'
-  })
+  new VueLoaderPlugin()
 ]
 
 const production = process.env.NODE_ENV === 'production'
@@ -33,6 +29,7 @@ module.exports = {
       ...shims.alias,
       'fonts': resolve('../fonts'),
       'img': resolve('../img'),
+      './img': resolve('../img'),
       'css': resolve('../css'),
       'js': resolve('lib'),
       '@': resolve('src'),
@@ -78,12 +75,7 @@ module.exports = {
         use: [
           production ? MiniCssExtractPlugin.loader : 'style-loader',
           {
-            loader: 'css-loader',
-            options: {
-              alias: {
-                './img': ('img')
-              }
-            }
+            loader: 'css-loader'
           }
         ]
       },

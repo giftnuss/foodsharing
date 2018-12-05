@@ -7,7 +7,7 @@ set -o errexit
 source $(dirname "$0")/inc.sh
 
 echo "Running chat tests"
-run-in-container chat npm test
+run-in-container chat 'npm run lint && npm test'
 
 echo "Done!"
 

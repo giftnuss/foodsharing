@@ -69,5 +69,5 @@ $teamList.find('.foot i').click(function (ev) {
 $teamList.find('.foot i').mouseout(function () {
   var $this = $(this).parent().parent()
 
-  $this.attr('href', '/team/' + $this.attr('id').substring(2)).attr('target', '_self')
+  $this.attr('href', `/team/${$this.attr('id').substring(2)}`).attr('target', '_self')
 })

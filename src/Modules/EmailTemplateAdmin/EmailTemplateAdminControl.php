@@ -6,13 +6,12 @@ use Foodsharing\Modules\Core\Control;
 
 class EmailTemplateAdminControl extends Control
 {
-	private $emailTemplateGateway;
+	private $emailTemplateAdminGateway;
 
-	public function __construct(EmailTemplateAdminModel $model, EmailTemplateAdminView $view, EmailTemplateGateway $emailTemplateGateway)
+	public function __construct(EmailTemplateAdminView $view, EmailTemplateAdminGateway $emailTemplateAdminGateway)
 	{
-		$this->model = $model;
 		$this->view = $view;
-		$this->emailTemplateGateway = $emailTemplateGateway;
+		$this->emailTemplateAdminGateway = $emailTemplateAdminGateway;
 
 		parent::__construct();
 
@@ -35,7 +34,7 @@ class EmailTemplateAdminControl extends Control
 				$this->func->pageLink('message_tpl', 'back_to_overview')
 			)), $this->func->s('actions')), CNT_RIGHT);
 		} elseif ($id = $this->func->getActionId('delete')) {
-			if ($this->model->del_message_tpl($id)) {
+			if ($this->emailTemplateAdminGateway->del_message_tpl($id)) {
 				$this->func->info($this->func->s('message_tpl_deleted'));
 				$this->func->goPage();
 			}
@@ -45,7 +44,7 @@ class EmailTemplateAdminControl extends Control
 			$this->func->addBread($this->func->s('bread_message_tpl'), '/?page=message_tpl');
 			$this->func->addBread($this->func->s('bread_edit_message_tpl'));
 
-			$data = $this->emailTemplateGateway->getOne_message_tpl($id);
+			$data = $this->emailTemplateAdminGateway->getOne_message_tpl($id);
 			$this->func->setEditData($data);
 
 			$this->func->addContent($this->view->message_tpl_form());
@@ -56,7 +55,7 @@ class EmailTemplateAdminControl extends Control
 		} else {
 			$this->func->addBread($this->func->s('message_tpl_bread'), '/?page=message_tpl');
 
-			if ($data = $this->model->getBasics_message_tpl()) {
+			if ($data = $this->emailTemplateAdminGateway->getBasics_message_tpl()) {
 				$rows = array();
 				foreach ($data as $d) {
 					$rows[] = array(
@@ -85,7 +84,7 @@ class EmailTemplateAdminControl extends Control
 	{
 		global $g_data;
 		if ($this->func->submitted()) {
-			if ($this->model->update_message_tpl($_GET['id'], $g_data)) {
+			if ($this->emailTemplateAdminGateway->update_message_tpl($_GET['id'], $g_data)) {
 				$this->func->info($this->func->s('message_tpl_edit_success'));
 				$this->func->goPage();
 			} else {
@@ -98,7 +97,7 @@ class EmailTemplateAdminControl extends Control
 	{
 		global $g_data;
 		if ($this->func->submitted()) {
-			if ($this->emailTemplateGateway->add_message_tpl($g_data)) {
+			if ($this->emailTemplateAdminGateway->add_message_tpl($g_data)) {
 				$this->func->info($this->func->s('message_tpl_add_success'));
 				$this->func->goPage();
 			} else {

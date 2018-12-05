@@ -407,7 +407,7 @@ class DashboardView extends View
 			);
 			$out .= '
 			<div class="updatepost">
-					<a class="poster ui-corner-all" href="#" onclick="profile(' . (int)$u['foodsaver_id'] . ');return false;">
+					<a class="poster ui-corner-all" href="/profile/' . (int)$u['foodsaver_id'] . '">
 						' . $this->func->avatar($fs, 50) . '
 					</a>
 					<div class="post">
@@ -428,7 +428,7 @@ class DashboardView extends View
 				<div class="activity_feed_content">
 					<div class="activity_feed_content_text">
 						<div class="activity_feed_content_info">
-							<a href="#" onclick="profile(' . (int)$u['foodsaver_id'] . ');return false;">' . $u['foodsaver_name'] . '</a> hat etwas zum Thema "<a href="/?page=bezirk&bid=' . $u['bezirk_id'] . '&sub=forum&tid=' . $u['id'] . '&pid=' . $u['last_post_id'] . '#post' . $u['last_post_id'] . '">' . $u['name'] . '</a>" ins Forum geschrieben.
+							<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> hat etwas zum Thema "<a href="/?page=bezirk&bid=' . $u['bezirk_id'] . '&sub=forum&tid=' . $u['id'] . '&pid=' . $u['last_post_id'] . '#post' . $u['last_post_id'] . '">' . $u['name'] . '</a>" ins Forum geschrieben.
 						</div>
 					</div>
 	
@@ -451,7 +451,7 @@ class DashboardView extends View
 				<div class="activity_feed_content">
 					<div class="activity_feed_content_text">
 						<div class="activity_feed_content_info">
-							<a href="#" onclick="profile(' . (int)$u['foodsaver_id'] . ');">' . $u['foodsaver_name'] . '</a> hat etwas zum Thema "<a href="/?page=bezirk&bid=' . $u['bezirk_id'] . '&sub=botforum&tid=' . $u['id'] . '&pid=' . $u['last_post_id'] . '#post' . $u['last_post_id'] . '">' . $u['name'] . '</a>" ins Botschafterforum geschrieben.
+							<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> hat etwas zum Thema "<a href="/?page=bezirk&bid=' . $u['bezirk_id'] . '&sub=botforum&tid=' . $u['id'] . '&pid=' . $u['last_post_id'] . '#post' . $u['last_post_id'] . '">' . $u['name'] . '</a>" ins Botschafterforum geschrieben.
 						</div>
 					</div>
 	
@@ -474,7 +474,7 @@ class DashboardView extends View
 				<div class="activity_feed_content">
 					<div class="activity_feed_content_text">
 						<div class="activity_feed_content_info">
-							<a href="#" onclick="profile(' . (int)$u['foodsaver_id'] . ');">' . $u['foodsaver_name'] . '</a> hat etwas auf die Pinnwand von <a href="/?page=fsbetrieb&id=' . $u['betrieb_id'] . '">' . $u['betrieb_name'] . '</a> geschrieben.
+							<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> hat etwas auf die Pinnwand von <a href="/?page=fsbetrieb&id=' . $u['betrieb_id'] . '">' . $u['betrieb_name'] . '</a> geschrieben.
 						</div>
 					</div>
 	

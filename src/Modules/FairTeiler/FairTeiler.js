@@ -4,19 +4,22 @@ import '@/globals'
 import $ from 'jquery'
 import 'jquery-tagedit'
 import 'jquery-tagedit-auto-grow-input'
+import 'jquery-jcrop'
 import 'typeahead'
 import 'typeahead-addresspicker'
 import 'leaflet'
 import 'leaflet.awesome-markers'
 import {
   ajreq,
-  pictureCrop
+  pictureCrop,
+  pictureReady
 } from '@/script'
 import { expose } from '@/utils'
 import './FairTeiler.css'
 
 expose({
   pictureCrop,
+  pictureReady,
   u_wallpostReady
 })
 

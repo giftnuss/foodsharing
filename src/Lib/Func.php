@@ -10,7 +10,8 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
-use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
+use Foodsharing\Modules\Core\InfluxMetrics;
+use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateAdminGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Services\SanitizerService;
 use JSMin\JSMin;
@@ -36,7 +37,7 @@ class Func
 	private $viewUtils;
 	private $sanitizerService;
 	private $regionGateway;
-	private $emailTemplateGateway;
+	private $emailTemplateAdminGateway;
 
 	private $webpackScripts;
 	private $webpackStylesheets;
@@ -58,16 +59,23 @@ class Func
 	 */
 	private $mem;
 
+	/**
+	 * @var InfluxMetrics
+	 */
+	private $metrics;
+
 	public function __construct(
 		Utils $viewUtils,
 		SanitizerService $sanitizerService,
 		RegionGateway $regionGateway,
-		EmailTemplateGateway $emailTemplateGateway
+		EmailTemplateAdminGateway $emailTemplateAdminGateway,
+		InfluxMetrics $metrics
 	) {
 		$this->viewUtils = $viewUtils;
 		$this->sanitizerService = $sanitizerService;
 		$this->regionGateway = $regionGateway;
-		$this->emailTemplateGateway = $emailTemplateGateway;
+		$this->emailTemplateAdminGateway = $emailTemplateAdminGateway;
+		$this->metrics = $metrics;
 		$this->content_main = '';
 		$this->content_right = '';
 		$this->content_left = '';
@@ -402,13 +410,9 @@ class Func
 		$g_data = $data;
 	}
 
-	public function getAction($a)
+	public function getAction($a): bool
 	{
-		if (isset($_GET['a']) && $_GET['a'] == $a) {
-			return true;
-		}
-
-		return false;
+		return isset($_GET['a']) && $_GET['a'] == $a;
 	}
 
 	public function pageLink($page, $id, $action = '')
@@ -656,7 +660,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$mail->setFrom(DEFAULT_EMAIL, DEFAULT_EMAIL_NAME);
 		}
 
-		$message = $this->emailTemplateGateway->getOne_message_tpl($tpl_id);
+		$message = $this->emailTemplateAdminGateway->getOne_message_tpl($tpl_id);
 
 		$search = array();
 		$replace = array();
@@ -682,6 +686,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 		$mail->addRecipient($to);
 		$mail->send();
+		$this->metrics->addPoint('outgoing_email', ['template' => $tpl_id], ['count' => 1]);
 	}
 
 	public function dt($ts)
@@ -725,13 +730,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return $altimg;
 	}
 
-	public function isMob()
+	public function isMob(): bool
 	{
-		if (isset($_SESSION['mob']) && $_SESSION['mob'] == 1) {
-			return true;
-		}
-
-		return false;
+		return isset($_SESSION['mob']) && $_SESSION['mob'] == 1;
 	}
 
 	public function id($name)
@@ -977,13 +978,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return $out;
 	}
 
-	public function submitted()
+	public function submitted(): bool
 	{
-		if (isset($_POST) && !empty($_POST)) {
-			return true;
-		}
-
-		return false;
+		return isset($_POST) && !empty($_POST);
 	}
 
 	public function info($msg, $title = false)
@@ -1053,13 +1050,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return preg_replace('/[^a-zA-Z0-9]/', '', $txt);
 	}
 
-	public function loggedIn()
+	public function loggedIn(): bool
 	{
-		if (isset($_SESSION['client']) && $_SESSION['client']['id'] > 0) {
-			return true;
-		}
-
-		return false;
+		return isset($_SESSION['client']) && $_SESSION['client']['id'] > 0;
 	}
 
 	public function addWebpackScript($src)
@@ -1433,13 +1426,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return JSMin::minify($buffer);
 	}
 
-	public function hasBezirk($bid)
+	public function hasBezirk($bid): bool
 	{
-		if (isset($_SESSION['client']['bezirke'][$bid]) || $this->isBotFor($bid)) {
-			return true;
-		}
-
-		return false;
+		return isset($_SESSION['client']['bezirke'][$bid]) || $this->isBotFor($bid);
 	}
 
 	public function mayBezirk($bid): bool
@@ -1479,13 +1468,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return $this->session->may('orga');
 	}
 
-	public function may()
+	public function may(): bool
 	{
-		if (isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0) {
-			return true;
-		}
-
-		return false;
+		return isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0;
 	}
 
 	public function getRolle($gender_id, $rolle_id)

@@ -3,6 +3,8 @@
 use Foodsharing\FoodsharingKernel;
 use Symfony\Component\DependencyInjection\Container;
 
+$script_start_time = microtime(true);
+
 require __DIR__ . '/../vendor/autoload.php';
 
 \Doctrine\Common\Annotations\AnnotationRegistry::registerLoader('class_exists');

@@ -32,12 +32,12 @@ stages:
 
 build:
   <<: *defaults
-  image: node:10.12
+  image: node:10.12-alpine
   stage: build
   script:
   - (cd client && yarn && yarn lint && yarn build)
   cache:
-    key: client:build
+    key: client:build:v2
     paths:
     - client/node_modules
   artifacts:
@@ -46,7 +46,7 @@ build:
 
 build:docs:
   <<: *defaults
-  image: node:10.12
+  image: node:10.12-alpine
   stage: build
   script:
   - yarn global add gitbook-cli
@@ -82,12 +82,12 @@ test:
 
 test:client:
   <<: *defaults
-  image: node:10.12
+  image: node:10.12-alpine
   stage: test
   script:
   - (cd client && yarn && yarn test)
   cache:
-    key: client:build
+    key: client:build:v2
     paths:
     - client/node_modules
 

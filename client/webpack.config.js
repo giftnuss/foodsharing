@@ -3,7 +3,7 @@ const merge = require('webpack-merge')
 const webpackBase = require('./webpack.base')
 const { writeFileSync } = require('fs')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const path = require('path')
 const clientRoot = path.resolve(__dirname)
@@ -44,7 +44,8 @@ plugins.push(
           data[entryName] = assets.map(asset => join(stats.publicPath, asset))
         }
         // We do not emit the data like a proper plugin as we want to create the file when running the dev server too
-        const json = JSON.stringify(data, null, 2) + '\n'
+        const json = `${JSON.stringify(data, null, 2)}
+`
         mkdirp.sync(assetsPath)
         writeFileSync(modulesJsonPath, json)
         return Promise.resolve()
@@ -101,10 +102,7 @@ module.exports = merge(webpackBase, {
   plugins,
   optimization: {
     minimizer: [
-      new UglifyJsPlugin({
-        uglifyOptions: {
-          safari10: true
-        },
+      new TerserPlugin({
         sourceMap: true
       })
     ],

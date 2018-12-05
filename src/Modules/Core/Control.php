@@ -59,6 +59,11 @@ abstract class Control
 	 */
 	private $foodsaverGateway;
 
+	/**
+	 * @var InfluxMetrics
+	 */
+	private $metrics;
+
 	public function __construct()
 	{
 		global $container;
@@ -68,6 +73,7 @@ abstract class Control
 		$this->v_utils = $container->get(Utils::class);
 		$this->legacyDb = $container->get(Db::class);
 		$this->foodsaverGateway = $container->get(FoodsaverGateway::class);
+		$this->metrics = $container->get(InfluxMetrics::class);
 
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;
@@ -126,6 +132,7 @@ abstract class Control
 			}
 		}
 		$this->mem->updateActivity($this->session->id());
+		$this->metrics->addPageStatData(['controller' => $className]);
 	}
 
 	/**
@@ -338,14 +345,10 @@ abstract class Control
 		</div>';
 	}
 
-	public function isSubmitted($form = false)
+	public function isSubmitted($form = false): bool
 	{
 		if (isset($_POST) && !empty($_POST)) {
-			if ($form !== false && $_POST['submitted'] != $form) {
-				return false;
-			}
-
-			return true;
+			return $form === false || $_POST['submitted'] == $form;
 		}
 
 		return false;

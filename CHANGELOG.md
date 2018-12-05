@@ -11,8 +11,16 @@
 - New selection for expiration of baskets #340 !553 @alex.simm
 - Making the "tpl_msg_to_team" canceling message more informative !545 @jofranz
 - Possibility to edit food baskets #342 !549 @annaos
+- Updated to JQuery 2.2.x !572 @peter.toennies
+- The possibility to automatically ask for new regions has been removed #329 !571 @peter.toennies
+- it is now possible to open profiles in new tabs via middle mouse button !574 @peter.toennies
+- Database functions can now be called with critera that contain arrays !559 @janopae
+- Added a Rest controller for food baskets #345 !557 @alex.simm
+- Allow platform mailing system to work with multiple email domains !583 @NerdyProjects
+- Changes MessageRestController limit and offsets to use query parameters
 
 ## Bugfixes
+- Foodsavers list is now sorted by name and doesn't reshuffle !578 #54 @odedNea
 - Orga members are now able to leave stores they are not responsible for #283 !524 @annaos
 - check user permissions in quickreply() in RegionXhr !499 #85 @annaos
 - fix exception if request have no "msg"-Attribute in quickreply() in WallPostXhr !499 @annaos
@@ -25,14 +33,29 @@
 - fixed index check in BasketGateway #354 !556 @alex.simm
 - removed fallback for the add date for members in stores  #361 !562 @alex.simm
 - show correct date in bells for pickups for more than one date !575 #337 by @mirka-henninger
+- fixed statistic box on profile page overlapping on small screens @D0nPiano
+- Fixed bug in pickuphistory not showing the end date. Now it also shows past pickups from the same day !577 @jofranz
+- Adding pictures to blog posts and Fairteiler work again !581 @NerdyProjects
+- Redirect after joining a new region works again !581 @NerdyProjects
+- Bell notifications for store fetch confirmations and for new fairteilers are now generated and stored in the database like normal ones #353 !559 @janopae
+- More stability for internal email system as emails are handled like external ones now !583 @NerdyProjects
+
 
 ## Refactoring
 - Unify Symfony DI configuration !544 @nicksellen
 - Add comments in scripts for quicker start of new developers !563 @flukx
+- Minor refactoring of control flow all over the source !554 and !555 @peter.toennies
+
+- refactored EmailTemplateAdminGateway from model to gateway !482 #9 @peter.toennies
 
 ## Dev/Test/CI stuff
 - Add php extensions as composer dependencies, upgrade codeception !558 @nicksellen
-- Updated several npm packages (most of them for ci) !564 @peter.toennies
+- Updated several npm packages (most of them for ci) !564 !565 @peter.toennies
+- Use webpack-dev-server instead of webpack-serve !582 @NerdyProjects
+- updated webpack and switched to terser !584 @peter.toennies
+- Updated whatwg-fetch to version 3 !585 @peter.toennies
+- Gather statistics about incoming and outgoing emails !583 @NerdyProjects
+- Updated sebastian/diff to version 3 (and phpunit to version 7.3.5) !591 @peter.toennies
 
 # 2018-08-19 Hotfix
 

@@ -18,6 +18,8 @@ define('DB_DB', 'foodsharing');
 define('ERROR_REPORT', E_ALL);
 define('BASE_URL', $protocol . '://localhost:18080');
 
+define('INFLUX_DSN', 'influxdb://influxdb:8086/foodsharing');
+
 define('DEFAULT_EMAIL', 'noreply@lebensmittelretten.de');
 define('SUPPORT_EMAIL', 'it@lebensmittelretten.de');
 define('DEFAULT_EMAIL_NAME', 'Foodsharing Freiwillige');
@@ -38,6 +40,10 @@ define('MEM_ENABLED', true);
 define('SOCK_URL', 'http://chat:1338/');
 define('REDIS_HOST', 'redis');
 define('REDIS_PORT', 6379);
+
+define('IMAP', [
+	['host' => 'imap', 'user' => 'user', 'password' => 'pass']
+]);
 
 if (!defined('ROOT_DIR')) {
 	define('ROOT_DIR', './');

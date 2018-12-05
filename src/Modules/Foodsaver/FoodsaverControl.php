@@ -116,8 +116,7 @@ class FoodsaverControl extends Control
 				}
 			} else {
 				$g_data['orgateam'] = 0;
-				unset($g_data['email']);
-				unset($g_data['rolle']);
+				unset($g_data['email'], $g_data['rolle']);
 			}
 
 			if ($oldFs = $this->foodsaverGateway->getOne_foodsaver($_GET['id'])) {

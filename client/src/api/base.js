@@ -7,8 +7,8 @@ const DEFAULT_OPTIONS = {
 if (window.fetch) window.fetch.activeFetchCalls = 0
 
 export class HTTPError extends Error {
-  constructor (code, text) {
-    super(`HTTP Error ${code}: ${text}`)
+  constructor (code, text, method, url) {
+    super(`HTTP Error ${code}: ${text} during ${method} ${url}`)
     this.code = code
     this.statusText = text
   }
@@ -17,9 +17,10 @@ export class HTTPError extends Error {
 export async function request (path, options = {}) {
   try {
     window.fetch.activeFetchCalls++
-    const res = await window.fetch(BASE_URL + path, Object.assign({}, DEFAULT_OPTIONS, options))
+    const request = new window.Request(BASE_URL + path, Object.assign({}, DEFAULT_OPTIONS, options))
+    const res = await window.fetch(request)
     if (!res.ok) {
-      throw new HTTPError(res.status, res.statusText)
+      throw new HTTPError(res.status, res.statusText, request.method, request.url)
     }
     if (res.status === 204) {
       window.fetch.activeFetchCalls--
