@@ -53,7 +53,7 @@ class StoreUserView extends View
 			$betrieb[$id] = trim($betrieb[$id]);
 			nl2br($betrieb[$id]);
 
-			if ($id == 'telefon' || $id == 'handy') {
+			if (($id == 'telefon' || $id == 'handy') && strpbrk($betrieb[$id], '1234567890')) {
 				$content = '<a href="tel:' . $betrieb[$id] . '">' . $betrieb[$id] . '</a>';
 			} else {
 				$content = $betrieb[$id];
