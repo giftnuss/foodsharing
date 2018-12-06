@@ -42,8 +42,7 @@ class IndexControl extends Control
 		}
 
 		$this->func->addContent($this->view->index(
-			$page_content['body'],
-			$gerettet // TODO: I don't know what this does? it doesn't seem to be used.
+			$page_content['body']
 		), CNT_OVERTOP);
 	}
 }

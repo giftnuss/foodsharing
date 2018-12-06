@@ -6,7 +6,7 @@ use Foodsharing\Modules\Core\View;
 
 class IndexView extends View
 {
-	public function index($first_content, $gerettet)
+	public function index($first_content)
 	{
 		$params = array(
 			'first_content' => $first_content,
