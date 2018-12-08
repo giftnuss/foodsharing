@@ -104,6 +104,7 @@ class StoreXhr extends Control
 						}
 					});
 					
+					$( "#' . $id . '_to" ).val(new Date(Date.now()).toLocaleDateString("de-DE", {year: "numeric", month: "2-digit", day: "2-digit", }));
 					$( "#' . $id . '_from" ).datepicker("show");
 					
 					
