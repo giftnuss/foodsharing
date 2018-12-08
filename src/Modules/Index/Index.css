@@ -1,148 +1,138 @@
-body.fp-viewing-festival #topbar .navbar {
-  box-shadow: none;
+@import "~/src/scss/bootstrap-theme.scss";
+
+.page-index div#main {
+  min-height: 0;
+  padding-bottom: 0;
 }
 
-#campaign {
+.header {
   padding: 41px 0;
   height: 100vh;
   width: 100%;
   display: flex;
   align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
-#campaigntext, #campaignimg {
+.header__text, .header__image {
   height: 80%;
-  width: 50%;
   display: flex;
   align-items: center;
 }
 
-#campaigntext {
-  text-align: center;
-  font-size: 12px;
+.header__text {
   font-size: 2.5vh;
+  width: 65%;
+  margin-left: 5%;
   color: #f9f5e0;
   text-shadow: 0 1px #555;
   -webkit-text-size-adjust: none;
 }
 
-#campaigntext h2 {
+.header__text h2 {
   font-family: "Alfa Slab One", Arial;
   font-size: 2.6em;
   font-weight: normal;
   padding:2vh;
 }
 
-#campaigntext h4 {
-  font-family: "Alfa Slab One", Arial;
-  font-size: 1.3em;
-  font-weight: normal;
-}
-
-#campaigntext div img {
-  width: 50px;
-  width: 8.5vh;
-  margin: 0 auto;
-}
-
-#campaigntext h3 {
-  font-family: "Alfa Slab One", Arial;
-  font-size: 2em;
-  font-weight: normal;
-}
-
-#campaigntext span {
-  color: #64ae24;
-}
-
-#campaignimg {
+.header__image {
+  width: 30%;
   background: no-repeat 50%;
   background-size: auto 85%;
 }
 
 @media (max-aspect-ratio: 3/2) {
-  #campaigntext {
+  .header__text {
     font-size: 1.5vw;
   }
 }
 
 @media (max-aspect-ratio: 9/10) {
-  #campaign {
+  .header {
     padding: 73px 0;
     flex-wrap: wrap;
     height: calc(100vh - 73px);
   }
 
-  #campaigntext, #campaignimg {
+  .header__text, .header__image {
     width: 100%;
   }
 
-  #campaignimg {
+  .header__image {
     height: 50%;
   }
 
-  #campaigntext {
+  .header__text {
     font-size: 1.9vw;
     padding-top: 0.5vh;
     height: 20%;
+    text-align: center;
   }
 }
 
 .carpetroll {
   color: #533a20;
-  padding: 41px 0;
-  max-width:1000px;
+  padding: 40px 0;
   margin:0 auto;
 }
 
 .carpetroll p {
-  margin: 1rem 2rem 0 2rem;
+  margin: 1rem 0rem 0 0rem;
+  font-size: 1.1em;
 }
 
 .carpetroll h3 {
   color: #64ae24;
-  font-size: 24px;
+  font-size: 2.5em;
+  line-height: 1.75em;
   font-weight: normal;
   font-family: "Alfa Slab One", Arial;
   letter-spacing: 0.4px;
   border-bottom: 4px solid #64ae24;
-  box-sizing: content-box;
-  padding-bottom: 0.3rem;
-  margin: 1rem 2rem 2rem 1rem;
-  display: inline-block;
-  text-align: left;
+  margin: 1rem 0rem 0rem 0rem;
+  display: inline;
 }
 
 .carpetroll .button {
+  background-color: #64ae24;
   font-size: 150%;
   font-family: "Alfa Slab One", Arial;
   font-weight: normal !important;
 }
 
-.carpetroll .whatiswhaticons {
-  background-color: #64ae24;
-  color: white;
-  padding: 0.2em;
-  font-size: 500%;
-  width: 1.1em;
-  height: 1.1em;
-  text-align: center;
-  border-radius: 50%;
-  display: block;
-  margin: 0.5em auto 0.2em;
+.what-is-what .clickable {
+  display: flex;
+  flex-wrap: wrap;
 }
 
-.carpetroll span.iconlegend {
-  display: block;
-  text-align: center;
-  width: 100%;
+.what-is-what .iconlegend {
+  color: rgb(83, 58, 32);
   font-family: "Alfa Slab One", Arial;
-  font-size: 120%;
+  width: 100%;
+  font-size: 0.65em;
+  text-align: center;
+  display: block;
+  margin-top: 0.75em;
 }
 
-.carpetroll .clickable:hover {
+.what-is-what i {
   cursor: pointer;
-  opacity: 0.8;
+  border-radius: 50%;
+  padding: 2rem;
+  font-size: 2em;
+  inline-display: block;
+  margin: 0 auto;
+  color: white;
+  text-align: center;
+  background-color: #64ae24;
+  transition: transform 0.2s ease;
+}
+
+.what-is-what i:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
 }
 
 .section {
