@@ -8,7 +8,7 @@
       <div class="col-2 icon-side">
         <a
           href="#"
-          @click="$emit('remove', bell.id)">
+          @click.stop="$emit('remove', bell.id)">
           <i
             v-if="bell.icon"
             :class="`icon ${bell.icon}`" />

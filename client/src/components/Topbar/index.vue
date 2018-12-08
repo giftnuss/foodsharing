@@ -119,7 +119,7 @@
               no-caret>
               <template slot="button-content">
                 <i class="fas fa-info "/>
-                <span class="d-md-none">Infomationen</span>
+                <span class="d-md-none">Informationen</span>
               </template>
               <a
                 :href="$url('vision')"
