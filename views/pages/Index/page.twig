@@ -10,7 +10,7 @@
 </div>
 
 <!-- Welcome Section -->
-{% embed "pages/Index/_section.html" with {'color': 'light-beige'} %}
+{% embed "pages/Index/_section.twig" with {'color': 'light-beige'} %}
   {% block first %}
     <h3>Willkommen bei foodsharing!</h3>
   {% endblock %}
@@ -26,19 +26,19 @@
 
 
 <!-- How to Section -->
-{% embed "pages/Index/_section.html" with {'color': 'beige'} %}
+{% embed "pages/Index/_section.twig" with {'color': 'beige'} %}
   {% block first %}
     <h3>Wie funktioniert foodsharing?</h3>
   {% endblock %}
   {% block second %}
     <p>Was steckt hinter unserer Initiative und wie kannst Du Dich einbringen?
       Diese und weitere Fragen beantworten wir mit diesem Video.</p>
-    <p><a class="vidlink" href="https://www.youtube-nocookie.com/embed/6lJtk1XE148?rel=0"><img class="corner-all" src="/img/howto.jpg" /></a></p>
+    <p><a class="vidlink" href="https://www.youtube-nocookie.com/embed/6lJtk1XE148?rel=0"><img class="corner-all" alt="play video" src="/img/howto.jpg" /></a></p>
   {% endblock %}
 {% endembed %}
 
 <!-- Join us Section -->
-{% embed "pages/Index/_section.html" with {'color': 'light-beige'} %}
+{% embed "pages/Index/_section.twig" with {'color': 'light-beige'} %}
   {% block first %}
     <h3>Werde aktiv und rette mit!</h3>
   {% endblock %}
@@ -52,7 +52,7 @@
 <!-- What is what Section -->
 <div class="section section--beige bootstrap">
   <div class="container what-is-what">
-    <div class="carpetroll">
+    <div class="carpet-roll">
       <h3>Was ist das?</h3>
     </div>
     <div class="row">
