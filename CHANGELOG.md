@@ -17,7 +17,7 @@
 - Database functions can now be called with critera that contain arrays !559 @janopae
 - Added a Rest controller for food baskets #345 !557 @alex.simm
 - Allow platform mailing system to work with multiple email domains !583 @NerdyProjects
-- Changes MessageRestController limit and offsets to use query parameters
+- Changes MessageRestController limit and offsets to use query parameters !587 @theolampert
 - Hight adjustments of "next fetches" in store #376 !601 @jofranz
 
 
@@ -41,6 +41,7 @@
 - Redirect after joining a new region works again !581 @NerdyProjects
 - Bell notifications for store fetch confirmations and for new fairteilers are now generated and stored in the database like normal ones #353 !559 @janopae
 - More stability for internal email system as emails are handled like external ones now !583 @NerdyProjects
+- Fixed safari issue with the navbar !603 @theolampert
 
 
 ## Refactoring
