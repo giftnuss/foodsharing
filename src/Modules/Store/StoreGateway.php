@@ -499,7 +499,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	public function updateBellNotificationForBiebs(int $storeId, bool $markNotificationAsUnread = false): void
 	{
 		$storeName = $this->db->fetchValueByCriteria('fs_betrieb', 'name', ['id' => $storeId]);
-		$messageIdentifier = 'store-' . $storeId;
+		$messageIdentifier = 'store-urequest-' . $storeId;
 		$messageCount = $this->getUnconfirmedFetchesCount($storeId);
 		$messageVars = ['betrieb' => $storeName, 'count' => $messageCount];
 		$messageTimestamp = $this->getNextUnconfirmedFetchTime($storeId);
@@ -809,10 +809,10 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 	public function updateExpiredBells(): void
 	{
-		$expiredBells = $this->bellGateway->getExpiredByIdentifier('store-%');
+		$expiredBells = $this->bellGateway->getExpiredByIdentifier('store-urequest-%');
 
 		foreach ($expiredBells as $bell) {
-			$storeId = substr($bell['identifier'], strlen('store-'));
+			$storeId = substr($bell['identifier'], strlen('store-urequest-'));
 			$storeName = $this->db->fetchValueByCriteria('fs_betrieb', 'name', ['id' => $storeId]);
 			$newMessageCount = $this->getUnconfirmedFetchesCount($storeId);
 
