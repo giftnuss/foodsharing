@@ -6,20 +6,36 @@
   >
     <div class="row">
       <div class="col-2 icon-side">
+        <i
+          v-if="bell.icon"
+          :class="[
+            `icon ${bell.icon}`,
+            bell.isCloseable ? 'hideonhover' : ''
+          ]"
+        />
+        <div
+          v-if="bell.image"
+          :class="[
+            'icon',
+            bell.isCloseable ? 'hideonhover' : ''
+          ]"
+        >
+          <img :src="bell.image" >
+        </div>
         <a
+          v-if="bell.isCloseable"
+          class="showonhover"
           href="#"
-          @click.stop="$emit('remove', bell.id)">
+          @click.stop="$emit('remove', bell.id)"
+        >
           <i
-            v-if="bell.icon"
-            :class="`icon ${bell.icon}`" />
-          <div
-            v-if="bell.image"
-            class="icon"><img :src="bell.image" ></div>
-          <i class="fas fa-times" />
-          <!-- <div :class="['avatar', 'avatar_'+avatars.length]">
-                        <div v-for="avatar in avatars" :key="avatar" :style="{backgroundImage: `url('${avatar}')`}" />
-                    </div> -->
+            class="fas fa-times"
+          />
         </a>
+        <!-- <div :class="['avatar', 'avatar_'+avatars.length]">
+                          <div v-for="avatar in avatars" :key="avatar" :style="{backgroundImage: `url('${avatar}')`}" />
+                      </div> -->
+
       </div>
       <div class="col-10">
         <div class="mt-1 d-flex w-100 justify-content-between">
@@ -80,14 +96,14 @@ p {
 .icon img {
     width: 100%;
 }
-.fas.fa-times {
+.showonhover {
     display: none;
 }
-.list-group-item:hover .icon {
-    display: none;
-}
-.list-group-item:hover .fas.fa-times {
+.list-group-item:hover .showonhover {
     display: block;
+}
+.list-group-item:hover .hideonhover {
+    display: none;
 }
 .nowrap {
     white-space: nowrap;
