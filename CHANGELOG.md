@@ -1,4 +1,12 @@
-# Unreleased
+# 2018-12-10
+
+We are happy to release our next version of the foodsharing homepage today. The most beautiful part of that release is 
+not its content but the fact that we have input from 15 different developers. The team is growing steadily, which is 
+really nice. 
+
+You will find some new features regarding store pages and food baskets but we have also fixed a big bunch of bugs, 
+updated and cleaned out a lot of stuff, worked on the interface for our upcoming apps and put some work into the mailing
+system of ours. We hope you will enjoy it. 
 
 ## Features
 - shows hint in food basket about public information #373 !570 @k.miklobusec
@@ -19,7 +27,6 @@
 - Allow platform mailing system to work with multiple email domains !583 @NerdyProjects
 - Changes MessageRestController limit and offsets to use query parameters !587 @theolampert
 - Hight adjustments of "next fetches" in store #376 !601 @jofranz
-
 
 ## Bugfixes
 - Foodsavers list is now sorted by name and doesn't reshuffle !578 #54 @odedNea
@@ -43,12 +50,10 @@
 - More stability for internal email system as emails are handled like external ones now !583 @NerdyProjects
 - Fixed safari issue with the navbar !603 @theolampert
 
-
 ## Refactoring
 - Unify Symfony DI configuration !544 @nicksellen
 - Add comments in scripts for quicker start of new developers !563 @flukx
 - Minor refactoring of control flow all over the source !554 and !555 @peter.toennies
-
 - refactored EmailTemplateAdminGateway from model to gateway !482 #9 @peter.toennies
 
 ## Dev/Test/CI stuff
