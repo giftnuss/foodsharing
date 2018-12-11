@@ -8,6 +8,7 @@
 
 ## Dev/Test/CI stuff
 - Updated tap-spec in chat to version 5 (fixes vulnerability of lodash) !606 @peter.toennies
+- updated url to 0.11 and tape-spec to 5. !590 @peter.toennies
 
 # 2018-12-10
 
@@ -74,7 +75,6 @@ system of ours. We hope you will enjoy it.
 - updated webpack and switched to terser !584 @peter.toennies
 - Updated whatwg-fetch to version 3 !585 @peter.toennies
 - Gather statistics about incoming and outgoing emails !583 @NerdyProjects
-- updated url to 0.11 and tape-spec to 5. !590 @peter.toennies
 - Updated sebastian/diff to version 3 (and phpunit to version 7.3.5) !591 @peter.toennies
 
 # 2018-08-19 Hotfix
