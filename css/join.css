@@ -25,7 +25,6 @@
 
 #joinform .content textarea {
   height: 68px;
-
 }
 
 #joinform .bottom {
@@ -86,7 +85,6 @@
 }
 
 .iamchooser {
-
   text-align: center;
 }
 
@@ -103,11 +101,7 @@
 
 .iamchooser a i {
   border: 3px solid transparent;
-
-  -webkit-border-radius: 45px;
-  -moz-border-radius: 45px;
   border-radius: 45px;
-
   color: #4a3520;
   display: inline-block;
   font-size: 50px;
@@ -118,12 +112,10 @@
 }
 
 .iamchooser span {
-
   color: #4a3520;
   font-weight: bold;
   margin-top: 30px;
   font-size: 16px;
-
 }
 
 .iamchooser a:hover span, .iamchooser a:hover {
@@ -198,13 +190,6 @@
   float: right;
   width: 200px;
   text-align: center;
-}
-
-#join_mapview {
-  height: 110px;
-  width: 438px;
-  overflow: hidden;
-  margin-top: 5px;
 }
 
 .leaflet-control-attribution.leaflet-control {

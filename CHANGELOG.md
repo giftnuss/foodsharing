@@ -1,6 +1,25 @@
 # Unreleased
 
 ## Features
+
+## Bugfixes
+
+## Refactoring
+
+## Dev/Test/CI stuff
+- Updated tap-spec in chat to version 5 (fixes vulnerability of lodash) !606 @peter.toennies
+
+# 2018-12-10
+
+We are happy to release our next version of the foodsharing homepage today. The most beautiful part of that release is 
+not its content but the fact that we have input from 15 different developers. The team is growing steadily, which is 
+really nice. 
+
+You will find some new features regarding store pages and food baskets but we have also fixed a big bunch of bugs, 
+updated and cleaned out a lot of stuff, worked on the interface for our upcoming apps and put some work into the mailing
+system of ours. We hope you will enjoy it. 
+
+## Features
 - shows hint in food basket about public information #373 !570 @k.miklobusec
 - Fix conversation name when changing store (name) #294 !508 @surrim
 - Notify user when bell notifications arrive without need for page reload #328 !542 @janopae
@@ -17,7 +36,8 @@
 - Database functions can now be called with critera that contain arrays !559 @janopae
 - Added a Rest controller for food baskets #345 !557 @alex.simm
 - Allow platform mailing system to work with multiple email domains !583 @NerdyProjects
-- Changes MessageRestController limit and offsets to use query parameters
+- Changes MessageRestController limit and offsets to use query parameters !587 @theolampert
+- Hight adjustments of "next fetches" in store #376 !601 @jofranz
 
 ## Bugfixes
 - Foodsavers list is now sorted by name and doesn't reshuffle !578 #54 @odedNea
@@ -27,7 +47,7 @@
 - removed not needed add store button from the dashboard !523 @peter.toennies
 - limit conversations sent to client at page loading !542 @janopae
 - check permissions before saving a wallpost in WallpostXhr !542 @janopae
-- stat_fetchrate is calculated correctly and shown in profile #281 @k.miklobusec
+- stat_fetchrate is calculated correctly and shown in profile added tvalue in select !598 #281 @k.miklobusec
 - fix mail sending by passing instance of Mem to AsyncMail constructor !551 @nicksellen
 - fixed wrong html formatting in quick replies to forum posts !534 @peter.toennies
 - fixed index check in BasketGateway #354 !556 @alex.simm
@@ -39,13 +59,12 @@
 - Redirect after joining a new region works again !581 @NerdyProjects
 - Bell notifications for store fetch confirmations and for new fairteilers are now generated and stored in the database like normal ones #353 !559 @janopae
 - More stability for internal email system as emails are handled like external ones now !583 @NerdyProjects
-
+- Fixed safari issue with the navbar !603 @theolampert
 
 ## Refactoring
 - Unify Symfony DI configuration !544 @nicksellen
 - Add comments in scripts for quicker start of new developers !563 @flukx
 - Minor refactoring of control flow all over the source !554 and !555 @peter.toennies
-
 - refactored EmailTemplateAdminGateway from model to gateway !482 #9 @peter.toennies
 
 ## Dev/Test/CI stuff
@@ -56,6 +75,7 @@
 - Updated whatwg-fetch to version 3 !585 @peter.toennies
 - Gather statistics about incoming and outgoing emails !583 @NerdyProjects
 - updated url to 0.11 and tape-spec to 5. !590 @peter.toennies
+- Updated sebastian/diff to version 3 (and phpunit to version 7.3.5) !591 @peter.toennies
 
 # 2018-08-19 Hotfix
 

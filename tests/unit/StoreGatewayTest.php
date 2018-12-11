@@ -127,12 +127,12 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 		$this->tester->updateInDatabase(
 			'fs_bell',
 			['expiration' => '1970-01-01'],
-			['identifier' => 'store-' . $store['id']]
+			['identifier' => 'store-fetch-unconfirmed-' . $store['id']]
 		); // outdate bell notification
 
 		$this->gateway->updateExpiredBells();
 
-		$this->tester->dontSeeInDatabase('fs_bell', ['identifier' => 'store-' . $store['id']]);
+		$this->tester->dontSeeInDatabase('fs_bell', ['identifier' => 'store-fetch-unconfirmed-' . $store['id']]);
 	}
 
 	public function testUpdateExpiredBellsUpdatesBellCountIfStillUnconfirmedFetchesAreInTheFuture()
@@ -157,7 +157,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 		$this->tester->updateInDatabase(
 			'fs_bell',
 			['expiration' => '1970-01-01'],
-			['identifier' => 'store-' . $store['id']]
+			['identifier' => 'store-fetch-unconfirmed-' . $store['id']]
 		); // outdate bell notification
 
 		$this->gateway->updateExpiredBells();
@@ -187,13 +187,13 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 
 		$this->tester->seeNumRecords(3, 'fs_abholer');
 
-		$this->tester->seeNumRecords(1, 'fs_bell', ['identifier' => 'store-' . $store['id']]);
+		$this->tester->seeNumRecords(1, 'fs_bell', ['identifier' => 'store-fetch-unconfirmed-' . $store['id']]);
 
-		$bellVars = $this->tester->grabFromDatabase('fs_bell', 'vars', ['identifier' => 'store-' . $store['id']]);
+		$bellVars = $this->tester->grabFromDatabase('fs_bell', 'vars', ['identifier' => 'store-fetch-unconfirmed-' . $store['id']]);
 		$vars = unserialize($bellVars);
 		$this->assertEquals(2, $vars['count']);
 
-		$bellDate = $this->tester->grabFromDatabase('fs_bell', 'time', ['identifier' => 'store-' . $store['id']]);
+		$bellDate = $this->tester->grabFromDatabase('fs_bell', 'time', ['identifier' => 'store-fetch-unconfirmed-' . $store['id']]);
 		$this->assertEquals($soonDate, $bellDate);
 	}
 }

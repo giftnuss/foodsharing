@@ -43,7 +43,7 @@ class StatsControl extends ConsoleControl
 
 				$stat_fetchrate = 100;
 
-				$count_not_fetch = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM fs_report WHERE `reporttype` = 1 AND committed = 1 AND foodsaver_id = ' . (int)$fsid);
+				$count_not_fetch = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM fs_report WHERE `reporttype` = 1 AND committed = 1 AND tvalue like \'%Ist gar nicht zum Abholen gekommen%\' AND foodsaver_id = ' . (int)$fsid);
 
 				if ($count_not_fetch > 0 && $stat_fetchcount >= $count_not_fetch) {
 					$stat_fetchrate = round(100 - ($count_not_fetch / ($stat_fetchcount / 100)), 2);

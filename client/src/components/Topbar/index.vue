@@ -119,7 +119,7 @@
               no-caret>
               <template slot="button-content">
                 <i class="fas fa-info "/>
-                <span class="d-md-none">Infomationen</span>
+                <span class="d-md-none">Informationen</span>
               </template>
               <a
                 :href="$url('vision')"
@@ -304,7 +304,7 @@ export default {
 
     // logo
     .navbar-brand {
-        font-family: 'Alfa Slab One';
+        font-family: 'Alfa Slab One',serif;
         color: #ffffff;
         margin-right: 0;
         font-size: 1.1rem;
@@ -337,13 +337,6 @@ export default {
             width: 100%;
         }
     }
-    @media (max-width: 500px) {
-      .navbar {
-          max-height: 100vh;
-          overflow-y: scroll;
-      }
-    }
-
     .navbar-nav {
         align-items: center;
     }
@@ -455,7 +448,7 @@ export default {
         #search-results {
             top: 5em;
             width: 100%;
-            left: 0px !important;
+            left: 0 !important;
         }
     }
     .navbar-collapse.collapsing, .navbar-collapse.show {
@@ -483,7 +476,6 @@ div#main {
 // it shows an brown bar as a placeholder for the actual topbar
 #vue-topbar {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-    height: 2em;
     background-color: #533a20 !important;
     position: fixed;
     top: 0;

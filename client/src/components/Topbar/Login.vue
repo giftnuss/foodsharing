@@ -62,12 +62,12 @@
 </template>
 
 <script>
-import { login } from '@/api/user'
+  import { login } from '@/api/user'
 
-import { pulseError, pulseSuccess } from '@/script'
-import serverData from '@/server-data'
+  import { pulseError, pulseSuccess } from '@/script'
+  import serverData from '@/server-data'
 
-export default {
+  export default {
   data () {
     return {
       email: serverData.isDev ? 'userbot@example.com' : '',
@@ -109,40 +109,42 @@ export default {
 </script>
 
 <style lang="scss">
-
-#topbar .input-group {
+  #topbar .input-group {
     margin-bottom: 0;
     width: 10em;
 
     @media (max-width: 320px) {
-        width: 80%;
+      width: 80%;
     }
-    img, i {
-        height: 1em;
-        width: 1em;
-    }
-    .input-group-text {
-        background-color: white;
-        border: none;
-        padding: 0.1rem 0.4rem;
-        font-size: .9em;
-    }
-    input.form-control {
-        padding: 0.1rem 0.4rem;
-        font-size: 1em;
-        padding-left: 0;
-        font-weight: bold;
-        border: none;
-        &:focus {
-            box-shadow: none;
-            border: none;
-        }
-    }
-}
 
-.loadingButton {
-    img {
-        height: 1em;
+    img, i {
+      height: 1em;
+      width: 1em;
     }
-}
+
+    .input-group-text {
+      background-color: white;
+      border: none;
+      padding: 0.1rem 0.4rem;
+      font-size: .9em;
+    }
+
+    input.form-control {
+      font-size: 1em;
+      padding: 0.1rem 0.4rem 0.1rem 0;
+      font-weight: bold;
+      border: none;
+
+      &:focus {
+        box-shadow: none;
+        border: none;
+      }
+    }
+  }
+
+  .loadingButton {
+    img {
+      height: 1em;
+    }
+  }
 </style>

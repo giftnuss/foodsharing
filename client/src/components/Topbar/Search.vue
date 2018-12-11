@@ -49,13 +49,13 @@
 </template>
 
 <script>
-import SearchResults from './SearchResults'
-import { instantSearch, instantSearchIndex } from '@/api/search'
-import { user } from '@/server-data'
-import clickoutMixin from '@b/mixins/clickout'
-import listenOnRootMixin from '@b/mixins/listen-on-root'
+  import SearchResults from './SearchResults'
+  import { instantSearch, instantSearchIndex } from '@/api/search'
+  import { user } from '@/server-data'
+  import clickoutMixin from '@b/mixins/clickout'
+  import listenOnRootMixin from '@b/mixins/listen-on-root'
 
-export default {
+  export default {
   components: { SearchResults },
   mixins: [clickoutMixin, listenOnRootMixin],
   data () {
@@ -152,36 +152,39 @@ export default {
 </style>
 
 <style lang="scss">
-#topbar-search {
+  #topbar-search {
     .input-group {
-        margin-bottom: 0;
-        width: 100% !important;
-        img, i {
-            height: 1em;
-            width: 1em;
+      margin-bottom: 0;
+      width: 100% !important;
+
+      img, i {
+        height: 1em;
+        width: 1em;
+      }
+
+      .input-group-text {
+        background-color: white;
+        border: none;
+        padding: 0.1rem 0.4rem;
+        font-size: .9em;
+      }
+
+      input.form-control {
+        font-size: 1em;
+        border: none;
+        padding: 0.1rem 0.75rem 0.1rem 0;
+        font-weight: bold;
+
+        &:focus {
+          box-shadow: none;
+          border: none;
         }
-        .input-group-text {
-            background-color: white;
-            border: none;
-            padding: 0.1rem 0.4rem;
-            font-size: .9em;
-        }
-        input.form-control {
-            padding: 0.1rem 0.75rem;
-            font-size: 1em;
-            border: none;
-            padding-left: 0;
-            font-weight: bold;
-            &:focus {
-                box-shadow: none;
-                border: none;
-            }
-        }
+      }
     }
-}
-#search-results {
+  }
+
+  #search-results {
     display: block;
-    // width: 100%;
     width: 250px;
-}
+  }
 </style>
