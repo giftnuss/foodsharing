@@ -1,3 +1,13 @@
+# Unreleased
+
+## Features
+
+## Bugfixes
+
+## Refactoring
+
+## Dev/Test/CI stuff
+
 # 2018-12-10
 
 We are happy to release our next version of the foodsharing homepage today. The most beautiful part of that release is 

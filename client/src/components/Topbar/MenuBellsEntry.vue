@@ -74,57 +74,64 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h5 {
+  h5 {
     font-weight: bold;
     font-size: 0.9em;
-}
-p {
-    font-size: 0.8em;
-}
-.list-group-item {
-    padding: 0.4em 1em;
-}
+  }
 
-.icon-side {
+  p {
+    font-size: 0.8em;
+  }
+
+  .list-group-item {
+    padding: 0.4em 1em;
+  }
+
+  .icon-side {
     font-size: 2em;
     margin-top: 0.2em;
-}
-.icon {
+  }
+
+  .icon {
     display: block;
     width: 2em;
-}
-.icon img {
+  }
+
+  .icon img {
     width: 100%;
-}
-.showonhover {
+  }
+
+  .showonhover {
     display: none;
-}
-.list-group-item:hover .showonhover {
+  }
+
+  .list-group-item:hover .showonhover {
     display: block;
 }
 .list-group-item:hover .hideonhover {
     display: none;
-}
-.nowrap {
-    white-space: nowrap;
-}
+  }
 
-/*
-  some bells use ".img-store", which shows a white store based on a .png
-  because we are on a white background we have to override this with a black one
-*/
-.img-store {
-    font-family: "Font Awesome 5 Free";
+
+
+  .nowrap {
+    white-space: nowrap;
+  }
+
+  /*
+	some bells use ".img-store", which shows a white store based on a .png
+	because we are on a white background we have to override this with a black one
+  */
+  .img-store {
+    font-family: "Font Awesome 5 Free", monospace;
     font-style: normal;
     font-weight: 900;
-    font-size: 14px;
     font-size: inherit;
     text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     background: none;
+
     &:before {
-        content: "\f07a";
+      content: "\f07a";
     }
-}
+  }
 </style>

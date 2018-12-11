@@ -37,8 +37,6 @@ class DashboardView extends View
 		#activity ul.linklist li span.qr
 		{
 			margin-left:58px;
-			-webkit-border-radius: 3px;
-			-moz-border-radius: 3px;
 			border-radius: 3px;
 			opacity:0.5;
 		}
@@ -54,10 +52,6 @@ class DashboardView extends View
 			width:32px;
 			margin-right:-35px;
 			border-right:1px solid #ffffff;
-			-webkit-border-top-left-radius: 3px;
-			-webkit-border-bottom-left-radius: 3px;
-			-moz-border-radius-topleft: 3px;
-			-moz-border-radius-bottomleft: 3px;
 			border-top-left-radius: 3px;
 			border-bottom-left-radius: 3px;
 		}
@@ -68,10 +62,6 @@ class DashboardView extends View
 		    margin-left: 36px;
 		    padding: 8px;
 		    width: 78.6%;
-			-webkit-border-top-right-radius: 3px;
-			-webkit-border-bottom-right-radius: 3px;
-			-moz-border-radius-topright: 3px;
-			-moz-border-radius-bottomright: 3px;
 			border-top-right-radius: 3px;
 			border-bottom-right-radius: 3px;
 			margin-right:-30px;
@@ -126,8 +116,6 @@ class DashboardView extends View
 			margin-bottom:10px;
 			background-color:#ffffff;
 			padding:10px;
-			-webkit-border-radius: 6px;
-			-moz-border-radius: 6px;
 			border-radius: 6px;
 		}
 		
