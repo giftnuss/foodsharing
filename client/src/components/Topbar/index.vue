@@ -337,13 +337,6 @@ export default {
             width: 100%;
         }
     }
-    @media (max-width: 500px) {
-      .navbar {
-          max-height: 100vh;
-          overflow-y: scroll;
-      }
-    }
-
     .navbar-nav {
         align-items: center;
     }

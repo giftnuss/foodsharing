@@ -1,6 +1,5 @@
-.pip-cache
 vendor
 node_modules
-chat/node_modules
 api
 light
+.pip-cache

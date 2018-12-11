@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "22216aff568f0de6a9b06966ae99622e",
+    "content-hash": "0e6aca0a542024e56cb56957b3078f5f",
     "packages": [
         {
             "name": "ddeboer/imap",
@@ -2948,16 +2948,16 @@
         },
         {
             "name": "symfony/form",
-            "version": "v4.1.8",
+            "version": "v4.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/form.git",
-                "reference": "423f0224fa42f0834ff3d90127a44d05f4fa1600"
+                "reference": "a8fad03c074bd1f4e2de42a93d91883f72f6366a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/form/zipball/423f0224fa42f0834ff3d90127a44d05f4fa1600",
-                "reference": "423f0224fa42f0834ff3d90127a44d05f4fa1600",
+                "url": "https://api.github.com/repos/symfony/form/zipball/a8fad03c074bd1f4e2de42a93d91883f72f6366a",
+                "reference": "a8fad03c074bd1f4e2de42a93d91883f72f6366a",
                 "shasum": ""
             },
             "require": {
@@ -3025,7 +3025,7 @@
             ],
             "description": "Symfony Form Component",
             "homepage": "https://symfony.com",
-            "time": "2018-11-20T16:14:00+00:00"
+            "time": "2018-12-06T11:26:33+00:00"
         },
         {
             "name": "symfony/framework-bundle",
