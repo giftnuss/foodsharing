@@ -1,6 +1,7 @@
 # Unreleased
 
 ## Features
+Updated tinysort to v3 @peter.toennies
 
 ## Bugfixes
 
