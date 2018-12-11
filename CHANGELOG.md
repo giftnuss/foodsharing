@@ -8,8 +8,8 @@
 
 ## Dev/Test/CI stuff
 - Updated tap-spec in chat to version 5 (fixes vulnerability of lodash) !606 @peter.toennies
-- Updated url to 0.11 and tape-spec to 5. !590 @peter.toennies
-- Updated several dev packages: vue eslint parser to v4
+- Updated url to 0.11 and tape-spec to version 5 !590 @peter.toennies
+- Updated several dev packages: vue eslint parser to v4, eslint plugin vue to v5 @peter.toennies
 
 # 2018-12-10
 
