@@ -4,34 +4,34 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0e6aca0a542024e56cb56957b3078f5f",
+    "content-hash": "39e9c4efc52d38dbe4d187541a3cd15a",
     "packages": [
         {
             "name": "ddeboer/imap",
-            "version": "1.5.5",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ddeboer/imap.git",
-                "reference": "acf56f54375babb27a245338a13f4e8246975268"
+                "reference": "4d3b31c7cc5eb3cf3a8a0369fabd0d6e3f39cede"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ddeboer/imap/zipball/acf56f54375babb27a245338a13f4e8246975268",
-                "reference": "acf56f54375babb27a245338a13f4e8246975268",
+                "url": "https://api.github.com/repos/ddeboer/imap/zipball/4d3b31c7cc5eb3cf3a8a0369fabd0d6e3f39cede",
+                "reference": "4d3b31c7cc5eb3cf3a8a0369fabd0d6e3f39cede",
                 "shasum": ""
             },
             "require": {
                 "ext-iconv": "*",
                 "ext-imap": "*",
                 "ext-mbstring": "*",
-                "php": "^7.0"
+                "php": "^7.1"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.10",
+                "friendsofphp/php-cs-fixer": "^2.13",
                 "phpstan/phpstan": "^0.9.1",
                 "phpstan/phpstan-phpunit": "^0.9.3",
-                "phpunit/phpunit": "^6.5 || ^7.0",
-                "zendframework/zend-mail": "^2.8"
+                "phpunit/phpunit": "^7.4",
+                "zendframework/zend-mail": "^2.10"
             },
             "type": "library",
             "autoload": {
@@ -63,7 +63,7 @@
                 "imap",
                 "mail"
             ],
-            "time": "2018-08-21T07:30:59+00:00"
+            "time": "2018-12-04T13:35:19+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -1813,16 +1813,16 @@
         },
         {
             "name": "mrclay/jsmin-php",
-            "version": "2.3.2",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mrclay/jsmin-php.git",
-                "reference": "932c9633c35b390beb2cfdea69a41ea7dbc8d759"
+                "reference": "bb05febc9440852d39899255afd5569b7f21a72c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mrclay/jsmin-php/zipball/932c9633c35b390beb2cfdea69a41ea7dbc8d759",
-                "reference": "932c9633c35b390beb2cfdea69a41ea7dbc8d759",
+                "url": "https://api.github.com/repos/mrclay/jsmin-php/zipball/bb05febc9440852d39899255afd5569b7f21a72c",
+                "reference": "bb05febc9440852d39899255afd5569b7f21a72c",
                 "shasum": ""
             },
             "require": {
@@ -1861,7 +1861,7 @@
                 "jsmin",
                 "minify"
             ],
-            "time": "2015-03-30T15:04:42+00:00"
+            "time": "2018-12-06T15:03:38+00:00"
         },
         {
             "name": "phpcollection/phpcollection",
@@ -4349,16 +4349,16 @@
         },
         {
             "name": "twig/extensions",
-            "version": "v1.5.3",
+            "version": "v1.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig-extensions.git",
-                "reference": "e187386bea539a2cc2726689d6b4d468672a8ab4"
+                "reference": "57873c8b0c1be51caa47df2cdb824490beb16202"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig-extensions/zipball/e187386bea539a2cc2726689d6b4d468672a8ab4",
-                "reference": "e187386bea539a2cc2726689d6b4d468672a8ab4",
+                "url": "https://api.github.com/repos/twigphp/Twig-extensions/zipball/57873c8b0c1be51caa47df2cdb824490beb16202",
+                "reference": "57873c8b0c1be51caa47df2cdb824490beb16202",
                 "shasum": ""
             },
             "require": {
@@ -4400,7 +4400,7 @@
                 "i18n",
                 "text"
             ],
-            "time": "2018-11-16T03:34:09+00:00"
+            "time": "2018-12-05T18:34:18+00:00"
         },
         {
             "name": "twig/twig",
