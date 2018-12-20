@@ -1546,7 +1546,7 @@ class XhrMethods
 									'bezirk' => $bezirk['name']
 								),
 								'new-fs-' . $this->func->fsId(),
-								false
+								true
 							);
 						}
 					}
