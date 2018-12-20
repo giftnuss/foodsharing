@@ -1690,16 +1690,16 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		if (isset($foodsaver['quiz_rolle'])) {
 			switch ($foodsaver['quiz_rolle']) {
 				case 1:
-					$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #4A3520;';
+					$bg = 'box-sizing:border-box;border:3px solid #4A3520;';
 					break;
 				case 2:
-					$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #599022;';
+					$bg = 'box-sizing:border-box;border:3px solid #599022;';
 					break;
 				case 3:
-					$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #FFBB00;';
+					$bg = 'box-sizing:border-box;border:3px solid #FFBB00;';
 					break;
 				case 4:
-					$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #FF4800;';
+					$bg = 'box-sizing:border-box;border:3px solid #FF4800;';
 					break;
 				default:
 					break;
