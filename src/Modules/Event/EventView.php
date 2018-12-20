@@ -271,28 +271,16 @@ class EventView extends View
 
 		if (!empty($invites['accepted'])) {
 			$icons = $this->fsIcons($invites['accepted']);
-
-			// if (!$this->func->isMob() && count($invites['accepted']) > 20) {
-			// 	$icons = $this->v_utils->v_scroller($icons, 200);
-			// }
 			$out .= $this->v_utils->v_field($icons, '' . count($invites['accepted']) . ' sind dabei');
 		}
 
 		if (!empty($invites['maybe'])) {
 			$icons = $this->fsIcons($invites['maybe']);
-
-			// if (!$this->func->isMob() && count($invites['maybe']) > 20) {
-			// 	$icons = $this->v_utils->v_scroller($icons, 200);
-			// }
 			$out .= $this->v_utils->v_field($icons, '' . count($invites['maybe']) . ' kommen vielleicht');
 		}
 
 		if (!empty($invites['invited'])) {
 			$icons = $this->fsIcons($invites['invited']);
-
-			// if (!$this->func->isMob() && count($invites['invited']) > 30) {
-			// 	$icons = $this->v_utils->v_scroller($icons, 200);
-			// }
 			$out .= $this->v_utils->v_field($icons, '' . count($invites['invited']) . ' Einladungen');
 		}
 

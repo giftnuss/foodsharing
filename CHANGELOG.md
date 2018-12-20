@@ -47,6 +47,8 @@
 - Minor refactoring of control flow all over the source !554 and !555 @peter.toennies
 
 - refactored EmailTemplateAdminGateway from model to gateway !482 #9 @peter.toennies
+- Removed scrollbars from event view !608 @jofranz
+
 
 ## Dev/Test/CI stuff
 - Add php extensions as composer dependencies, upgrade codeception !558 @nicksellen
