@@ -1,4 +1,4 @@
-# 2018-12-21
+# 2018-12-24
 
 We are happy to release our next version of the foodsharing homepage today. The most beautiful part of that release is 
 not its content but the fact that we have input from 15 different developers. The team is growing steadily, which is 
@@ -7,6 +7,8 @@ really nice.
 You will find some new features regarding store pages and food baskets but we have also fixed a big bunch of bugs, 
 updated and cleaned out a lot of stuff, worked on the interface for our upcoming apps and put some work into the mailing
 system of ours. We hope you will enjoy it. 
+
+Merry Christmas :-)
 
 ## Features
 - shows hint in food basket about public information #373 !570 @k.miklobusec
