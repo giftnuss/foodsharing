@@ -1,4 +1,4 @@
-# 2018-12-10
+# 2018-12-21
 
 We are happy to release our next version of the foodsharing homepage today. The most beautiful part of that release is 
 not its content but the fact that we have input from 15 different developers. The team is growing steadily, which is 
@@ -47,6 +47,7 @@ system of ours. We hope you will enjoy it.
 - Adding pictures to blog posts and Fairteiler work again !581 @NerdyProjects
 - Redirect after joining a new region works again !581 @NerdyProjects
 - Bell notifications for store fetch confirmations and for new fairteilers are now generated and stored in the database like normal ones #353 !559 @janopae
+- Update store bells via new cron command instead on every bell retrieval !610 @NerdyProjects
 - More stability for internal email system as emails are handled like external ones now !583 @NerdyProjects
 - Fixed safari issue with the navbar !603 @theolampert
 
