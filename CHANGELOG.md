@@ -14,6 +14,7 @@ Updated tinysort to v3 @peter.toennies
 - Updated several dev packages: vue eslint parser to v4, eslint plugin vue to v5, css loader to v2 @peter.toennies
 
 # 2018-12-10
+# 2018-12-24
 
 We are happy to release our next version of the foodsharing homepage today. The most beautiful part of that release is 
 not its content but the fact that we have input from 15 different developers. The team is growing steadily, which is 
@@ -22,6 +23,8 @@ really nice.
 You will find some new features regarding store pages and food baskets but we have also fixed a big bunch of bugs, 
 updated and cleaned out a lot of stuff, worked on the interface for our upcoming apps and put some work into the mailing
 system of ours. We hope you will enjoy it. 
+
+Merry Christmas :-)
 
 ## Features
 - shows hint in food basket about public information #373 !570 @k.miklobusec
@@ -62,6 +65,7 @@ system of ours. We hope you will enjoy it.
 - Adding pictures to blog posts and Fairteiler work again !581 @NerdyProjects
 - Redirect after joining a new region works again !581 @NerdyProjects
 - Bell notifications for store fetch confirmations and for new fairteilers are now generated and stored in the database like normal ones #353 !559 @janopae
+- Update store bells via new cron command instead on every bell retrieval !610 @NerdyProjects
 - More stability for internal email system as emails are handled like external ones now !583 @NerdyProjects
 - Fixed safari issue with the navbar !603 @theolampert
 

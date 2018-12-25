@@ -55,7 +55,8 @@
     "ext-zlib": "*",
     "ext-openssl": "*",
     "ext-intl": "*",
-    "influxdb/influxdb-php": "^1.14.7"
+    "influxdb/influxdb-php": "^1.14.7",
+    "symfony/console": "^4.2"
   },
   "autoload": {
     "psr-4": {"Foodsharing\\": "src/",
