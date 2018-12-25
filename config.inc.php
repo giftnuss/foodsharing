@@ -1,7 +1,7 @@
 <?php
 
 $FS_ENV = getenv('FS_ENV');
-$env_filename = 'config.inc.' . $FS_ENV . '.php';
+$env_filename = __DIR__ . '/config.inc.' . $FS_ENV . '.php';
 define('FS_ENV', $FS_ENV);
 
 if (file_exists($env_filename)) {
@@ -19,8 +19,9 @@ locale_set_default('de-DE');
  * Read revision from revision file.
  * It is supposed to define SRC_REVISION.
  */
-if (file_exists('revision.inc.php')) {
-	require_once 'revision.inc.php';
+$revision_filename = __DIR__ . '/revision.inc.php';
+if (file_exists($revision_filename)) {
+	require_once $revision_filename;
 }
 
 /*
