@@ -125,7 +125,9 @@ function migratedb() {
 
   # if running in ci we do not have a mounted folder so we need to
   # manually copy the generated migration file into the container
-  docker cp $dest $(dc ps -q db):/app/$dest
+  # dc ps = docker container ls: list containers
+  # --quiet: only display numeric IDs
+  docker cp $dest $(dc ps --quiet db):/app/$dest
 
   sql-file $database $dest
 
