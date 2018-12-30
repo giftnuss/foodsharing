@@ -12,6 +12,13 @@ export UID
 MYSQL_USERNAME=${MYSQL_USERNAME:-root}
 MYSQL_PASSWORD=${MYSQL_PASSWORD:-root}
 
+# docker-compose arguments:
+# -T : do not allocate a TTY: not necessary since we just execute a command
+# but need not interactivity
+# see: https://docs.docker.com/compose/reference/exec/
+
+# sh -c "..." : run the command "..." in a shell
+
 # BASH_SOURCE is an array with the filenames of the files that were called to get here
 # so BASH_SOURCE[0] is the filename (with path) of this file
 # different to $0 when this file is sourced with "." or source as in many of the scripts
@@ -66,8 +73,6 @@ function run-in-container-with-service-ports() {
 function exec-in-container-asroot() {
   local container=$1; shift;
   local command=$@;
-  # -T : do not allocate a TTY: not necessary since we just execute a command
-  # but need not interactivity
   dc exec --user root -T $container sh -c "$command"
 }
 
