@@ -55,19 +55,19 @@ function sql-dump() {
 function exec-in-container() {
   local container=$1; shift;
   local command=$@;
-  dc exec -T --user $(id -u):$(id -g) $container sh -c "HOME=./ $command"
+  dc exec -T --user $(id --user):$(id --group) $container sh -c "HOME=./ $command"
 }
 
 function run-in-container() {
   local container=$1; shift;
   local command=$@;
-  dc run --rm --user $(id -u):$(id -g) $container sh -c "HOME=./ $command"
+  dc run --rm --user $(id --user):$(id --group) $container sh -c "HOME=./ $command"
 }
 
 function run-in-container-with-service-ports() {
   local container=$1; shift;
   local command=$@;
-  dc run --rm --user $(id -u):$(id -g) --service-ports $container sh -c "HOME=./ $command"
+  dc run --rm --user $(id --user):$(id --group) --service-ports $container sh -c "HOME=./ $command"
 }
 
 function exec-in-container-asroot() {
