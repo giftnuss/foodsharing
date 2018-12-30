@@ -49,7 +49,7 @@ services:
 
   client:
     container_name: foodsharing_test_client
-    image: node:10
+    image: node:10.12
     # We don't run anything long running in here yet - build is run via ./scripts/build-assets
     command: 'true'
     working_dir: /app/client

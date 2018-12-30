@@ -8,6 +8,7 @@
 - Only set session cookie when logged in !544 @nicksellen
 - Added a second line to hover texts in stores #88 !547 @alex.simm
 - New selection for expiration of baskets #340 !553 @alex.simm
+- Making the "tpl_msg_to_team" canceling message more informative !545 @jofranz
 - Possibility to edit food baskets #342 !549 @annaos
 
 ## Bugfixes
@@ -29,6 +30,7 @@
 
 ## Dev/Test/CI stuff
 - Add php extensions as composer dependencies, upgrade codeception !558 @nicksellen
+- Updated several npm packages (most of them for ci) !564 @peter.toennies
 
 # 2018-08-19 Hotfix
 
