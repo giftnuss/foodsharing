@@ -39,7 +39,7 @@ function dc() {
 
 function sql-query() {
   local database=$1 query=$2;
-  dc exec -T db sh -c "mysql --password=$MYSQL_PASSWORD $database -e \"$query\""
+  dc exec -T db sh -c "mysql --password=$MYSQL_PASSWORD $database --execute=\"$query\""
 }
 
 function sql-file() {
@@ -144,7 +144,7 @@ function purge-db() {
 }
 
 function wait-for-mysql() {
-  exec-in-container-asroot db "while ! mysql --password=$MYSQL_PASSWORD --silent -e 'select 1' >/dev/null 2>&1; do sleep 1; done"
+  exec-in-container-asroot db "while ! mysql --password=$MYSQL_PASSWORD --silent --execute='select 1' >/dev/null 2>&1; do sleep 1; done"
 }
 
 function install-chat-dependencies() {
