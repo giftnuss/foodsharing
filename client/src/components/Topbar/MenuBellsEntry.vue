@@ -122,8 +122,8 @@ export default {
   }
 
   /*
-	some bells use ".img-store", which shows a white store based on a .png
-	because we are on a white background we have to override this with a black one
+  some bells use ".img-store", which shows a white store based on a .png
+  because we are on a white background we have to override this with a black one
   */
   .img-store {
     font-family: "Font Awesome 5 Free", monospace;
