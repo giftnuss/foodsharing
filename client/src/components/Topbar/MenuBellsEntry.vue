@@ -20,7 +20,7 @@
             bell.isCloseable ? 'hideonhover' : ''
           ]"
         >
-          <img :src="bell.image" >
+          <img :src="bell.image">
         </div>
         <a
           v-if="bell.isCloseable"
@@ -35,14 +35,19 @@
         <!-- <div :class="['avatar', 'avatar_'+avatars.length]">
                           <div v-for="avatar in avatars" :key="avatar" :style="{backgroundImage: `url('${avatar}')`}" />
                       </div> -->
-
       </div>
       <div class="col-10">
         <div class="mt-1 d-flex w-100 justify-content-between">
-          <h5 class="mb-1">{{ $i18n(`bell.${bell.key}_title`, bell.payload) }}</h5>
-          <small class="text-muted text-right nowrap">{{ bell.createdAt | dateDistanceInWords }}</small>
+          <h5 class="mb-1">
+            {{ $i18n(`bell.${bell.key}_title`, bell.payload) }}
+          </h5>
+          <small class="text-muted text-right nowrap">
+            {{ bell.createdAt | dateDistanceInWords }}
+          </small>
         </div>
-        <p class="mb-1 text-truncate">{{ $i18n(`bell.${bell.key}`, bell.payload) }}</p>
+        <p class="mb-1 text-truncate">
+          {{ $i18n(`bell.${bell.key}`, bell.payload) }}
+        </p>
       </div>
     </div>
   </a>
@@ -111,8 +116,6 @@ export default {
 .list-group-item:hover .hideonhover {
     display: none;
   }
-
-
 
   .nowrap {
     white-space: nowrap;

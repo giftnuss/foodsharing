@@ -2,20 +2,25 @@
   <div
     id="topbar-search"
     class="form-inline my-2 my-lg-0"
-    style="flex-grow: 1">
+    style="flex-grow: 1"
+  >
     <div
       ref="inputgroup"
-      class="input-group">
+      class="input-group"
+    >
       <div class="input-group-prepend">
         <label
           class="input-group-text text-primary"
-          for="searchfield">
+          for="searchfield"
+        >
           <img
             v-if="isLoading"
-            src="/img/469.gif" >
+            src="/img/469.gif"
+          >
           <i
             v-else
-            class="fas fa-search" />
+            class="fas fa-search"
+          />
         </label>
       </div>
       <input
@@ -32,7 +37,8 @@
       v-if="isOpen"
       id="search-results"
       :style="resultsStyle"
-      class="dropdown-menu">
+      class="dropdown-menu"
+    >
       <search-results
         :users="results.users || []"
         :regions="results.regions || []"
@@ -49,13 +55,13 @@
 </template>
 
 <script>
-  import SearchResults from './SearchResults'
-  import { instantSearch, instantSearchIndex } from '@/api/search'
-  import { user } from '@/server-data'
-  import clickoutMixin from '@b/mixins/clickout'
-  import listenOnRootMixin from '@b/mixins/listen-on-root'
+import SearchResults from './SearchResults'
+import { instantSearch, instantSearchIndex } from '@/api/search'
+import { user } from '@/server-data'
+import clickoutMixin from '@b/mixins/clickout'
+import listenOnRootMixin from '@b/mixins/listen-on-root'
 
-  export default {
+export default {
   components: { SearchResults },
   mixins: [clickoutMixin, listenOnRootMixin],
   data () {

@@ -2,14 +2,17 @@
   <form
     class="form-inline my-2 my-lg-0"
     style="flex-grow: 1"
-    @submit.prevent>
+    @submit.prevent
+  >
     <div
       ref="inputgroup"
-      class="input-group mr-2">
+      class="input-group mr-2"
+    >
       <div class="input-group-prepend">
         <label
           class="input-group-text text-primary"
-          for="login-email">
+          for="login-email"
+        >
           <i class="fas fa-user" />
         </label>
       </div>
@@ -26,11 +29,13 @@
     </div>
     <div
       ref="inputgroup"
-      class="input-group mr-2">
+      class="input-group mr-2"
+    >
       <div class="input-group-prepend">
         <label
           class="input-group-text text-primary"
-          for="login-password">
+          for="login-password"
+        >
           <i class="fas fa-key" />
         </label>
       </div>
@@ -49,25 +54,27 @@
       v-if="!isLoading "
       href="#"
       class="btn btn-secondary btn-sm"
-      @click="submit">
+      @click="submit"
+    >
       <i class="fas fa-arrow-right" />
     </button>
     <button
       v-else
       class="btn btn-light btn-sm loadingButton"
-      @click="submit">
-      <img src="/img/469.gif" >
+      @click="submit"
+    >
+      <img src="/img/469.gif">
     </button>
   </form>
 </template>
 
 <script>
-  import { login } from '@/api/user'
+import { login } from '@/api/user'
 
-  import { pulseError, pulseSuccess } from '@/script'
-  import serverData from '@/server-data'
+import { pulseError, pulseSuccess } from '@/script'
+import serverData from '@/server-data'
 
-  export default {
+export default {
   data () {
     return {
       email: serverData.isDev ? 'userbot@example.com' : '',

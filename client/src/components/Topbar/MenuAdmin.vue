@@ -2,16 +2,20 @@
   <nav-item-dropdown
     tooltip="Administration"
     right
-    no-caret>
+    no-caret
+  >
     <template slot="button-content">
-      <i class="fas fa-cog"/>
-      <span class="d-md-none">Administration</span>
+      <i class="fas fa-cog" />
+      <span class="d-md-none">
+        Administration
+      </span>
     </template>
     <a
       v-for="item in items"
       :key="item.url"
       :href="item.url"
-      class="dropdown-item">
+      class="dropdown-item"
+    >
       <i :class="item.icon" /> {{ item.label }}
     </a>
   </nav-item-dropdown>

@@ -1,13 +1,13 @@
 <template>
   <div
     :class="{disabledLoading: isLoading}"
-    class="bootstrap">
-
+    class="bootstrap"
+  >
     <div v-if="isLoading && !regionId">
       <div class="card-header text-white bg-primary">
         {{ title || '...' }}
       </div>
-      <div class="card-body p-5"/>
+      <div class="card-body p-5" />
     </div>
 
     <div
