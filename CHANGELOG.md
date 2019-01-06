@@ -4,6 +4,7 @@
 Updated tinysort to v3 @peter.toennies
 
 ## Bugfixes
+- Improve/correct user profile badge count !612 @pmayd
 
 ## Refactoring
 - Removed scrollbars from event view !608 @jofranz
