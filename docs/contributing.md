@@ -17,13 +17,14 @@ If you feel comfortable submitting a fix too, follow the next section.
 * ensure there is an issue for the change in the [issues](https://gitlab.com/foodsharing-dev/foodsharing/issues)
     (this is a seperate project as it is public, and the repo is not)
     (If you are just submitting a very small change or a doc fix don't worry about creating an issue)
-* make your changes in a new git branch
-    (rather than fork the repo, as it makes permissions trickier)
-* ensure the tests pass locally `./scripts/test`
-* create a merge request for your branch prefixed with the issue number
+* make your changes in a new git branch, prefixed with the issue number
     e.g. issue number `56` would have a branch named `56-some-descriptive-words`
     (optionally add your name, e.g. `56-nicksellen-some-descriptive-words`)
-    Prefix the name of the merge request with `WIP:` if it is not ready to merge yet
+    (rather than fork the repo, as it makes permissions trickier)
+* ensure the tests pass locally `./scripts/test` 
+* create a merge request for your branch early on
+  * prefix the name of the merge request with `WIP:`
+  * select the template "Default"
 * wait! somebody will ready it and ask you questions, or will go ahead and merge
 
 ## Testing
