@@ -176,10 +176,8 @@ export default {
       }
 
       input.form-control {
-        font-size: 1em;
         border: none;
         padding: 0.1rem 0.75rem 0.1rem 0;
-        font-weight: bold;
 
         &:focus {
           box-shadow: none;
