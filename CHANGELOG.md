@@ -8,6 +8,7 @@ Updated tinysort to v3 @peter.toennies
 
 ## Refactoring
 - Removed scrollbars from event view !608 @jofranz
+- The page does not use fullpage anymore. New landing page !597 #393 @theolampert
 
 ## Dev/Test/CI stuff
 - Updated tap-spec in chat to version 5 (fixes vulnerability of lodash) !606 @peter.toennies
