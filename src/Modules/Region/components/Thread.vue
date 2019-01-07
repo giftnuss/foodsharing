@@ -12,7 +12,8 @@
 
     <div
       v-if="regionId"
-      class="card rounded">
+      class="card rounded"
+    >
       <div class="card-header text-white bg-primary">
         <div class="row">
           <div class="col text-truncate ml-2 pt-1 font-weight-bold">
@@ -21,13 +22,15 @@
           <div class="col text-right">
             <a
               class="btn btn-sm btn-secondary"
-              @click="toggleFollow">
+              @click="toggleFollow"
+            >
               {{ $i18n(isFollowing ? 'forum.unfollow' : 'forum.follow') }}
             </a>
             <a
               v-if="mayModerate"
               class="btn btn-sm btn-secondary"
-              @click="toggleStickyness">
+              @click="toggleStickyness"
+            >
               {{ $i18n(isSticky ? 'forum.unstick' : 'forum.stick') }}
             </a>
           </div>
@@ -35,25 +38,34 @@
       </div>
       <div
         v-if="!isActive && mayModerate"
-        class="card-body">
+        class="card-body"
+      >
         <div
           class="alert alert-warning"
-          role="alert">
+          role="alert"
+        >
           {{ $i18n('forum.thread_is_inactive_description') }}
           <hr>
           <button
             class="btn btn-secondary btn-sm"
-            @click="activateThread"><i class="fas fa-check" /> {{ $i18n('forum.activate_thread') }}</button>
+            @click="activateThread"
+          >
+            <i class="fas fa-check" /> {{ $i18n('forum.activate_thread') }}
+          </button>
           <button
             class="btn btn-secondary btn-sm"
-            @click="$refs.deleteModal.show()"><i class="fas fa-trash-alt" /> {{ $i18n('forum.delete_thread') }}</button>
+            @click="$refs.deleteModal.show()"
+          >
+            <i class="fas fa-trash-alt" /> {{ $i18n('forum.delete_thread') }}
+          </button>
         </div>
       </div>
     </div>
 
     <div
       v-for="post in posts"
-      :key="post.id">
+      :key="post.id"
+    >
       <ThreadPost
         :name="`post-${post.id}`"
         :author="post.author"
@@ -73,13 +85,15 @@
     <div
       v-if="!isLoading && !errorMessage && !posts.length"
       class="alert alert-warning"
-      role="alert">
+      role="alert"
+    >
       Bisher keine Beiträge vorhanden
     </div>
     <div
       v-if="errorMessage"
       class="alert alert-danger"
-      role="alert">
+      role="alert"
+    >
       <strong>{{ $i18n('error_unexpected') }}:</strong> {{ errorMessage }}
     </div>
     <ThreadForm
@@ -87,7 +101,8 @@
       :is-following="isFollowing"
       :error-message="errorMessage"
       @submit="createPost"
-      @toggleFollow="toggleFollow" />
+      @toggleFollow="toggleFollow"
+    />
 
     <b-modal
       ref="deleteModal"
