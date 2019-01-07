@@ -112,7 +112,7 @@ $('#work_group_form_photo-link').fancybox({
     const onUploadClick = () => {
       cropper.getCroppedCanvas({
         width: 500,
-        heigth: 500,
+        height: 500,
         maxWidth: 2000,
         maxHeight: 2000,
         fillColor: '#ffffff',

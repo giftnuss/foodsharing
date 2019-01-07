@@ -129,8 +129,6 @@ class BellGateway extends BaseGateway
 	 */
 	public function listBells($fsId, $limit = '')
 	{
-		$this->bellUpdateTrigger->triggerUpdate();
-
 		if ($limit !== '') {
 			$limit = ' LIMIT 0,' . (int)$limit;
 		}
@@ -138,27 +136,27 @@ class BellGateway extends BaseGateway
 		$stm = '
 			SELECT
 				b.`id`,
-				b.`name`, 
-				b.`body`, 
-				b.`vars`, 
-				b.`attr`, 
-				b.`icon`, 
-				b.`identifier`, 
+				b.`name`,
+				b.`body`,
+				b.`vars`,
+				b.`attr`,
+				b.`icon`,
+				b.`identifier`,
 				b.`time`,
 				UNIX_TIMESTAMP(b.`time`) AS time_ts,
 				hb.seen,
 				b.closeable
-	
+
 			FROM
 				fs_bell b,
 				`fs_foodsaver_has_bell` hb
-	
+
 			WHERE
 				hb.bell_id = b.id
-	
+
 			AND
 				hb.foodsaver_id = :foodsaver_id
-	
+
 			ORDER BY b.`time` DESC
 			' . $limit . '
 		';
@@ -188,17 +186,17 @@ class BellGateway extends BaseGateway
 	public function getExpiredByIdentifier(string $identifier): array
 	{
 		$bells = $this->db->fetchAll('
-            SELECT 
+            SELECT
                 `id`,
-				`name`, 
-				`body`, 
-				`vars`, 
-				`attr`, 
-				`icon`, 
-				`identifier`, 
+				`name`,
+				`body`,
+				`vars`,
+				`attr`,
+				`icon`,
+				`identifier`,
 				`time`,
 				UNIX_TIMESTAMP(`time`) AS time_ts,
-				`closeable` 
+				`closeable`
             FROM `fs_bell`
             WHERE `identifier` LIKE :identifier
             AND `expiration` < NOW()',
@@ -213,19 +211,23 @@ class BellGateway extends BaseGateway
 		return $this->db->exists('fs_bell', ['identifier' => $identifier]);
 	}
 
-	public function delBellForFoodsaver($id, $fsId): int
+	public function delBellForFoodsaver($id, $fsId): void
 	{
-		$result = $this->db->delete('fs_foodsaver_has_bell', ['bell_id' => (int)$id, 'foodsaver_id' => (int)$fsId]);
-		$this->updateFoodsaverClient($fsId);
+		$bellIsCloseable = $this->db->fetchValueByCriteria('fs_bell', 'closeable', ['id' => (int)$id]);
 
-		return $result;
+		if (!$bellIsCloseable) {
+			return;
+		}
+
+		$this->db->delete('fs_foodsaver_has_bell', ['bell_id' => (int)$id, 'foodsaver_id' => (int)$fsId]);
+		$this->updateFoodsaverClient($fsId);
 	}
 
 	public function delBellsByIdentifier($identifier): void
 	{
 		$foodsaverIds = $this->db->fetchAllValues(
-			'SELECT `foodsaver_id` 
-            FROM `fs_foodsaver_has_bell` JOIN `fs_bell` 
+			'SELECT `foodsaver_id`
+            FROM `fs_foodsaver_has_bell` JOIN `fs_bell`
             WHERE `identifier` = :identifier',
 			[':identifier' => $identifier]
 		);

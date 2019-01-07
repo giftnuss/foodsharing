@@ -2,20 +2,25 @@
   <div
     id="topbar-search"
     class="form-inline my-2 my-lg-0"
-    style="flex-grow: 1">
+    style="flex-grow: 1"
+  >
     <div
       ref="inputgroup"
-      class="input-group">
+      class="input-group"
+    >
       <div class="input-group-prepend">
         <label
           class="input-group-text text-primary"
-          for="searchfield">
+          for="searchfield"
+        >
           <img
             v-if="isLoading"
-            src="/img/469.gif" >
+            src="/img/469.gif"
+          >
           <i
             v-else
-            class="fas fa-search" />
+            class="fas fa-search"
+          />
         </label>
       </div>
       <input
@@ -32,7 +37,8 @@
       v-if="isOpen"
       id="search-results"
       :style="resultsStyle"
-      class="dropdown-menu">
+      class="dropdown-menu"
+    >
       <search-results
         :users="results.users || []"
         :regions="results.regions || []"
@@ -152,36 +158,39 @@ export default {
 </style>
 
 <style lang="scss">
-#topbar-search {
+  #topbar-search {
     .input-group {
-        margin-bottom: 0;
-        width: 100% !important;
-        img, i {
-            height: 1em;
-            width: 1em;
+      margin-bottom: 0;
+      width: 100% !important;
+
+      img, i {
+        height: 1em;
+        width: 1em;
+      }
+
+      .input-group-text {
+        background-color: white;
+        border: none;
+        padding: 0.1rem 0.4rem;
+        font-size: .9em;
+      }
+
+      input.form-control {
+        font-size: 1em;
+        border: none;
+        padding: 0.1rem 0.75rem 0.1rem 0;
+        font-weight: bold;
+
+        &:focus {
+          box-shadow: none;
+          border: none;
         }
-        .input-group-text {
-            background-color: white;
-            border: none;
-            padding: 0.1rem 0.4rem;
-            font-size: .9em;
-        }
-        input.form-control {
-            padding: 0.1rem 0.75rem;
-            font-size: 1em;
-            border: none;
-            padding-left: 0;
-            font-weight: bold;
-            &:focus {
-                box-shadow: none;
-                border: none;
-            }
-        }
+      }
     }
-}
-#search-results {
+  }
+
+  #search-results {
     display: block;
-    // width: 100%;
     width: 250px;
-}
+  }
 </style>

@@ -88,7 +88,7 @@
   font-size: 2.5em;
   line-height: 1.75em;
   font-weight: normal;
-  font-family: "Alfa Slab One", Arial;
+  font-family: "Alfa Slab One", serif;
   letter-spacing: 0.4px;
   border-bottom: 4px solid #64ae24;
   margin: 1rem 0 0 0;
@@ -98,7 +98,7 @@
 .carpet-roll .button {
   background-color: #64ae24;
   font-size: 150%;
-  font-family: "Alfa Slab One", Arial;
+  font-family: "Alfa Slab One", serif;
   font-weight: normal !important;
 }
 
