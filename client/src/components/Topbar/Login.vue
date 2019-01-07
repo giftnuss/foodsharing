@@ -118,7 +118,7 @@ export default {
 <style lang="scss">
   #topbar .input-group {
     margin-bottom: 0;
-    width: 10em;
+    width: 15em;
 
     @media (max-width: 320px) {
       width: 80%;
@@ -137,9 +137,7 @@ export default {
     }
 
     input.form-control {
-      font-size: 1em;
       padding: 0.1rem 0.4rem 0.1rem 0;
-      font-weight: bold;
       border: none;
 
       &:focus {
