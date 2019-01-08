@@ -1,12 +1,12 @@
 <template>
   <form
-    class="form-inline my-2 my-lg-0"
-    style="flex-grow: 1"
+    id="login-form"
+    class="form-inline my-2 my-lg-0 flex-grow-1"
     @submit.prevent
   >
     <div
       ref="inputgroup"
-      class="input-group mr-2"
+      class="input-group input-group-sm mr-2 my-1"
     >
       <div class="input-group-prepend">
         <label
@@ -29,7 +29,8 @@
     </div>
     <div
       ref="inputgroup"
-      class="input-group mr-2"
+      class="input-group input-group-sm mr-2 my-1
+"
     >
       <div class="input-group-prepend">
         <label
@@ -115,41 +116,16 @@ export default {
 }
 </script>
 
-<style lang="scss">
-  #topbar .input-group {
-    margin-bottom: 0;
-    width: 15em;
-
-    @media (max-width: 320px) {
-      width: 80%;
-    }
-
-    img, i {
-      height: 1em;
-      width: 1em;
-    }
-
-    .input-group-text {
-      background-color: white;
-      border: none;
-      padding: 0.1rem 0.4rem;
-      font-size: .9em;
-    }
-
-    input.form-control {
-      padding: 0.1rem 0.4rem 0.1rem 0;
-      border: none;
-
-      &:focus {
-        box-shadow: none;
-        border: none;
-      }
-    }
-  }
-
+<style lang="scss" scoped>
   .loadingButton {
     img {
       height: 1em;
+    }
+  }
+
+  #login-form .input-group {
+    @media (max-width: 575px) {
+      width: 80%;
     }
   }
 </style>

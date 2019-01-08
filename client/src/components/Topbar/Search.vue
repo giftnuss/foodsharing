@@ -1,12 +1,11 @@
 <template>
   <div
     id="topbar-search"
-    class="form-inline my-2 my-lg-0"
-    style="flex-grow: 1"
+    class="form my-2 my-lg-0 flex-grow-1"
   >
     <div
       ref="inputgroup"
-      class="input-group"
+      class="input-group input-group-sm"
     >
       <div class="input-group-prepend">
         <label
@@ -154,39 +153,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-</style>
-
-<style lang="scss">
-  #topbar-search {
-    .input-group {
-      margin-bottom: 0;
-      width: 100% !important;
-
-      img, i {
-        height: 1em;
-        width: 1em;
-      }
-
-      .input-group-text {
-        background-color: white;
-        border: none;
-        padding: 0.1rem 0.4rem;
-        font-size: .9em;
-      }
-
-      input.form-control {
-        border: none;
-        padding: 0.1rem 0.75rem 0.1rem 0;
-
-        &:focus {
-          box-shadow: none;
-          border: none;
-        }
-      }
-    }
-  }
-
   #search-results {
     display: block;
     width: 250px;
