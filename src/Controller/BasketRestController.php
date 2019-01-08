@@ -266,7 +266,7 @@ class BasketRestController extends FOSRestController
 	 *
 	 * @param int $basketId
 	 *
-	 * @return null|\Symfony\Component\HttpFoundation\Response
+	 * @return \Symfony\Component\HttpFoundation\Response|null
 	 */
 	public function removeBasketAction($basketId): ?\Symfony\Component\HttpFoundation\Response
 	{
