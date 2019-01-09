@@ -46,20 +46,20 @@ class StoreUserView extends View
 		$this->func->addJs('$("#dialog_requests").dialog("open");');
 	}
 
-	public function u_innerRow($id, $betrieb)
+	public function u_innerRow($contentType, $betrieb)
 	{
 		$out = '';
-		if ($betrieb[$id] != '') {
-			$betrieb[$id] = trim($betrieb[$id]);
-			nl2br($betrieb[$id]);
+		if ($betrieb[$contentType] != '') {
+			$betrieb[$contentType] = trim($betrieb[$contentType]);
+			nl2br($betrieb[$contentType]);
 
-			if (($id == 'telefon' || $id == 'handy') && strpbrk($betrieb[$id], '1234567890')) {
-				$content = '<a href="tel:' . $betrieb[$id] . '">' . $betrieb[$id] . '</a>';
+			if (($contentType == 'telefon' || $contentType == 'handy') && strpbrk($betrieb[$contentType], '1234567890')) {
+				$content = '<a href="tel:' . $betrieb[$contentType] . '">' . $betrieb[$contentType] . '</a>';
 			} else {
-				$content = $betrieb[$id];
+				$content = $betrieb[$contentType];
 			}
 
-			$out = '<div class="innerRow"><span class="label">' . $this->func->s($id) . '</span>
+			$out = '<div class="innerRow"><span class="label">' . $this->func->s($contentType) . '</span>
 			<span class="cnt">' . $content . '</span></div><div style="clear:both"></div>';
 		}
 
