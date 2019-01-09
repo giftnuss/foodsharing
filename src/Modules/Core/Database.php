@@ -364,7 +364,7 @@ class Database
 				continue;
 			}
 
-			if (is_array($v) && count($v) === 0) {
+			if (is_array($v) && empty($v)) {
 				throw new \mysqli_sql_exception('The provided array is empty.');
 			}
 
