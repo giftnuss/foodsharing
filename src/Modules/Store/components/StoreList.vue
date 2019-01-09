@@ -2,14 +2,19 @@
   <div class="container bootstrap">
     <div class="card mb-3 rounded">
       <div class="card-header text-white bg-primary">
-        Alle Betriebe aus dem Bezirk {{ regionName }} (<span v-if="stores.length !== storesFiltered.length">{{ storesFiltered.length }} von </span>{{ stores.length }})
+        Alle Betriebe aus dem Bezirk {{ regionName }} (<span v-if="stores.length !== storesFiltered.length">
+          {{ storesFiltered.length }} von
+        </span>{{ stores.length }})
       </div>
       <div
         v-if="stores.length"
-        class="card-body p-0">
+        class="card-body p-0"
+      >
         <div class="form-row p-1 ">
           <div class="col-2 text-center">
-            <label class=" col-form-label col-form-label-sm">Filtern nach...</label>
+            <label class=" col-form-label col-form-label-sm">
+              Filtern nach...
+            </label>
           </div>
           <div class="col-4">
             <input
@@ -23,7 +28,8 @@
             <b-form-select
               v-model="filterStatus"
               :options="statusOptions"
-              size="sm" />
+              size="sm"
+            />
           </div>
           <div class="col">
             <button
@@ -33,9 +39,8 @@
               title="Filter leeren"
               @click="clearFilter"
             >
-              <i class="fas fa-times"/>
+              <i class="fas fa-times" />
             </button>
-
           </div>
         </div>
 
@@ -50,29 +55,38 @@
           responsive
         >
           <template
+            slot="status"
             slot-scope="data"
-            slot="status">
-            <div class="text-center"><StoreStatusIcon :status="data.value" /></div>
+          >
+            <div class="text-center">
+              <StoreStatusIcon :status="data.value" />
+            </div>
           </template>
           <template
+            slot="name"
             slot-scope="data"
-            slot="name">
+          >
             <a
               :href="$url('store', data.item.id)"
-              class="ui-corner-all">{{ data.value }}</a>
+              class="ui-corner-all"
+            >
+              {{ data.value }}
+            </a>
           </template>
         </b-table>
         <div class="float-right p-1 pr-3">
           <b-pagination
+            v-model="currentPage"
             :total-rows="storesFiltered.length"
             :per-page="perPage"
-            v-model="currentPage"
-            class="my-0" />
+            class="my-0"
+          />
         </div>
       </div>
       <div
         v-else
-        class="card-body">
+        class="card-body"
+      >
         Es sind noch keine Betriebe eingetragen
       </div>
     </div>

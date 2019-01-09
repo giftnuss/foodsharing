@@ -303,7 +303,7 @@ class MailboxXhr extends Control
 			$html = $this->model->getVal('body_html', 'mailbox_message', $_GET['id']);
 
 			if (strpos(strtolower($html), '<body') === false) {
-				$html = '<html><head><style type="text/css">body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}</style></head><body onload="parent.u_readyBody();">' . $html . '</body></html>';
+				$html = '<html><head><style type="text/css">body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana,sans-serif;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}</style></head><body onload="parent.u_readyBody();">' . $html . '</body></html>';
 			} else {
 				$html = str_replace(array('<body', '<BODY', '<Body'), '<body onload="parent.u_readyBody();"', $html);
 				$html = str_replace(array('<head>', '<HEAD>', '<Head>'), '<head><style type="text/css">body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}</style>', $html);

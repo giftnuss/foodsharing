@@ -7,10 +7,9 @@ body {
 }
 body.page-map #topbar {
   position: absolute;
-  top: 0px;
+  top: 0;
   width: 100%;
 }
-
 
 .map-wrapper {
   position: absolute;
@@ -21,12 +20,6 @@ body.page-map #topbar {
   overflow: hidden;
 }
 
-#foodsaver_map {
-  width: 100%;
-  height: 100%;
-  background-color: #f1e7c9;
-}
-
 #map {
   position: absolute;
   top: 37px;
@@ -35,14 +28,11 @@ body.page-map #topbar {
   height: 100%;
 }
 
-
-
 @media (max-width: 630px) {
   #map {
     top: 73px;
   }
 }
-
 
 div#main {
   position: absolute;
@@ -82,10 +72,8 @@ div#main {
 }
 
 #map-control ul.linklist a span.icon {
-
   background-repeat: no-repeat;
   background-position: 0 0;
-  padding: 3px;
   height: 17px;
   width: 17px;
   line-height: 17px;
@@ -96,7 +84,6 @@ div#main {
   filter: alpha(opacity=40);
   opacity: 0.40;
   margin-right: 11px;
-
 }
 
 #map-control ul.linklist a span.icon i {
@@ -138,10 +125,6 @@ div#main {
 
 #map-control a {
   padding-left: 0;
-}
-
-#msgbar-infos, #msgbar-messages {
-  z-index: 15;
 }
 
 .leaflet-popup-content p {

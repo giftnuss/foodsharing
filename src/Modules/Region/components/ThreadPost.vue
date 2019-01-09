@@ -16,17 +16,25 @@
           <a
             v-if="!wXS"
             class="btn btn-sm btn-outline-primary"
-            @click="openChat"><i class="fas fa-comments" /> {{ $i18n('chat.open_chat') }}</a>
+            @click="openChat"
+          >
+            <i class="fas fa-comments" /> {{ $i18n('chat.open_chat') }}
+          </a>
         </div>
         <div
           class="col-sm-9"
-          v-html="body" />
+          v-html="body"
+        />
       </div>
       <div class="card-footer">
         <div class="row">
           <div class="col-auto text-muted pt-1 pl-3">
-            <small v-if="wXS">{{ createdAt | dateFormat('full-short') }}</small>
-            <small v-else>{{ createdAt | dateFormat('full-long') }}</small>
+            <small v-if="wXS">
+              {{ createdAt | dateFormat('full-short') }}
+            </small>
+            <small v-else>
+              {{ createdAt | dateFormat('full-long') }}
+            </small>
           </div>
           <div class="col text-right">
             <ThreadPostActions
@@ -39,7 +47,6 @@
               @reactionRemove="$emit('reactionRemove', $event)"
               @reply="$emit('reply', body)"
             />
-
           </div>
         </div>
       </div>
