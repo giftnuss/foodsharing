@@ -293,10 +293,14 @@ class Database
 			throw new \Exception("Query '$query' can't be prepared.");
 		}
 
+		// dehierarchize array – eg. turn ['a', ['b', 'c'], 'd'] into ['a', 'b', 'c', 'd']
 		foreach ($params as $param => $value) {
 			if (is_array($value)) {
-				$value = implode(', ', $value);
+				array_splice($params, $param, 1, $value);
 			}
+		}
+
+		foreach ($params as $param => $value) {
 			if (is_bool($value)) {
 				$type = \PDO::PARAM_INT;
 			} elseif (is_int($value)) {
@@ -360,8 +364,16 @@ class Database
 				continue;
 			}
 
+			if (is_array($v) && count($v) === 0) {
+				throw new \mysqli_sql_exception('The provided array is empty.');
+			}
+
 			if (is_array($v)) {
-				$params[] = $this->getQuotedName($k) . ' IN (?) ';
+				$placeholders = '?';
+				for ($i = 0; $i < (count($v) - 1); ++$i) {
+					$placeholders .= ', ?';
+				}
+				$params[] = $this->getQuotedName($k) . ' IN (' . $placeholders . ') ';
 				continue;
 			}
 
