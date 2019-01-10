@@ -54,7 +54,9 @@ class StoreUserView extends View
 			nl2br($betrieb[$contentType]);
 
 			if (($contentType == 'telefon' || $contentType == 'handy') && strpbrk($betrieb[$contentType], '1234567890')) {
-				$content = '<a href="tel:' . $betrieb[$contentType] . '">' . $betrieb[$contentType] . '</a>';
+				$phoneNumber = preg_replace('/[^0-9\+]/', '', $betrieb[$contentType]);
+
+				$content = '<a href="tel:' . $phoneNumber . '">' . $betrieb[$contentType] . '</a>';
 			} else {
 				$content = $betrieb[$contentType];
 			}
