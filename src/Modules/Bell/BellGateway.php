@@ -110,7 +110,7 @@ class BellGateway extends BaseGateway
 
 		$foodsaverIds = $this->db->fetchAllValuesByCriteria('fs_foodsaver_has_bell', 'foodsaver_id', ['bell_id' => $bellId]);
 
-		if ($setUnseen) {
+		if ($setUnseen && !empty($foodsaverIds)) {
 			$this->db->update('fs_foodsaver_has_bell', ['seen' => 0], ['foodsaver_id' => $foodsaverIds, 'bell_id' => $bellId]);
 		}
 
