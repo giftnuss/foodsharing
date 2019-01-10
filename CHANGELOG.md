@@ -3,7 +3,7 @@
 ## Features
 Updated tinysort to v3 @peter.toennies
 Added link from names in chatbox title to profiles #100 !614 @colomar
-You can now call a BIEB via the lower info box of a store !609 @jofranz
+You can now call a BIEB via the lower info box of a store with just one click !609 @jofranz
 
 ## Bugfixes
 - Improve/correct user profile badge count !612 @pmayd
@@ -64,7 +64,7 @@ Merry Christmas :-)
 - removed fallback for the add date for members in stores  #361 !562 @alex.simm
 - show correct date in bells for pickups for more than one date !575 #337 by @mirka-henninger
 - fixed statistic box on profile page overlapping on small screens @D0nPiano
-- Fixed bug in pickuphistory not showing the end date. Now it also shows past pickups from the same day !577 @jofranz
+- Fixed bug in pickuphistory not showing the end date if it's today. Now it also shows past pickups from pickups happend today !577 @jofranz
 - Adding pictures to blog posts and Fairteiler work again !581 @NerdyProjects
 - Redirect after joining a new region works again !581 @NerdyProjects
 - Bell notifications for store fetch confirmations and for new fairteilers are now generated and stored in the database like normal ones #353 !559 @janopae
