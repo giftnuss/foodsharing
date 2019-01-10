@@ -1,9 +1,9 @@
 # Unreleased
 
 ## Features
-Updated tinysort to v3 @peter.toennies
-Added link from names in chatbox title to profiles #100 !614 @colomar
-You can now call a BIEB via the lower info box of a store with just one click !609 @jofranz
+- Updated tinysort to v3 @peter.toennies
+- Added link from names in chatbox title to profiles #100 !614 @colomar
+- You can now call a BIEB via the lower info box of a store with just one click !609 @jofranz
 
 ## Bugfixes
 - Improve/correct user profile badge count !612 @pmayd
