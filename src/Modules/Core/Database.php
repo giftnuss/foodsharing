@@ -365,7 +365,8 @@ class Database
 			}
 
 			if (is_array($v) && empty($v)) {
-				throw new \mysqli_sql_exception('The provided array is empty.');
+				$params[] = 'false'; // an empty array means that the where clause will be false
+				continue;
 			}
 
 			if (is_array($v)) {
