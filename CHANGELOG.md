@@ -8,6 +8,7 @@
 
 ## Bugfixes
 - Improve/correct user profile badge count !612 @pmayd
+- Datepicker for fetch slots in stores increased to fit 6 week rows #417 !621 @peter.reutlingen
 
 ## Refactoring
 - Removed scrollbars from event view !608 @jofranz
