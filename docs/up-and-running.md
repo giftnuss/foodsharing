@@ -41,7 +41,7 @@ However, in addition to it, you can run
 ```
 ./scripts/dev
 ```
-This will start a webpack dev server which you can access at [0.0.0.0:8080](http://0.0.0.0:8080/) and which will automatically refresh whenever you make any changes to frontend files.
+This will start a webpack dev server which you can access at [localhost:8080](http://localhost:8080/) and which will automatically refresh whenever you make any changes to frontend files.
 
 ## Code style
 
