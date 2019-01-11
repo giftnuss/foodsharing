@@ -35,6 +35,14 @@ PHPMyAdmin is also included: [localhost:18081](http://localhost:18081). Log in w
 | Username | root |
 | Password | root |
 
+## Seeing frontend changes live
+If you make changes to non-PHP frontend files (e.g. .vue, .js or .scss files), those are not direclty reflected in the docker running via the start script.
+However, in addition to it, you can run 
+```
+./scripts/dev
+```
+This will start a webpack dev server which you can access at [0.0.0.0:8080](http://0.0.0.0:8080/) and which will automatically refresh whenever you make any changes to frontend files.
+
 ## Code style
 
 We use php-cs-fixer to format the code style. The aim is to make it use the same style as phpstorm does by default.
