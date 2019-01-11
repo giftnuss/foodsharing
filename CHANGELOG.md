@@ -5,6 +5,7 @@
 - Added link from names in chatbox title to profiles #100 !614 @colomar
 - You can now call a BIEB via the lower info box of a store with just one click !609 @jofranz
 - Changelog page now supports links to issues with a # symbol followed by a number like it has been for merge requests before !622 @jofranz
+- update htmlpurifier to version 2 !594 @peter.toennies
 
 ## Bugfixes
 - Improve/correct user profile badge count !612 @pmayd
@@ -54,8 +55,6 @@ Merry Christmas :-)
 - Database functions can now be called with critera that contain arrays !559 @janopae
 - Added a Rest controller for food baskets #345 !557 @alex.simm
 - Allow platform mailing system to work with multiple email domains !583 @NerdyProjects
-- Changes MessageRestController limit and offsets to use query parameters
-- update htmlpurifier to version 2 !594 @peter.toennies
 - Changes MessageRestController limit and offsets to use query parameters !587 @theolampert
 - Hight adjustments of "next fetches" in store #376 !601 @jofranz
 
