@@ -9,7 +9,7 @@ class StoreView extends View
 	public function dateForm()
 	{
 		return
-			'<div id="datepicker" style="height:195px;"></div>' .
+			'<div id="datepicker" style="height:220px;"></div>' .
 			$this->v_utils->v_input_wrapper('Uhrzeit', $this->v_utils->v_form_time('time')) .
 			$this->v_utils->v_form_select('fetchercount', array('values' => array(
 				array('id' => 0, 'name' => 'Termin fällt aus'),

@@ -3,8 +3,7 @@
     <!-- emoji buttons & selector -->
     <span class="emojis">
       <span
-        v-for="(users, key) in reactions"
-        v-if="users.length"
+        v-for="(users, key) in reactionsWithUsers"
         :key="key"
       >
         <a
@@ -80,6 +79,8 @@
 </template>
 
 <script>
+import pickBy from 'lodash.pickby'
+
 import bDropdown from '@b/components/dropdown/dropdown'
 import bModal from '@b/components/modal/modal'
 import bTooltip from '@b/directives/tooltip/tooltip'
@@ -108,6 +109,11 @@ export default {
   data () {
     return {
       emojis: emojiList
+    }
+  },
+  computed: {
+    reactionsWithUsers () {
+      return pickBy(this.reactions, users => users.length > 0)
     }
   },
   methods: {
