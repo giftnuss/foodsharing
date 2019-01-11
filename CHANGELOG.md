@@ -18,6 +18,8 @@
 - Updated url to 0.11 and tape-spec to version 5 !590 @peter.toennies
 - Updated several dev packages: vue eslint parser to v4, eslint plugin vue to v5, css loader to v2 @peter.toennies
 - Updated vue-eslint-parser to version 5 and file loader to version 3 !613 @peter.toennies
+- Make client eslint actually fail on error !625 @nicksellen
+- Fix a few eslint reported errors !625 @nicksellen
 
 # 2018-12-24
 
