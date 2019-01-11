@@ -21,6 +21,8 @@
 - Upgrade node to 10.15 and yarn to 1.12.3 !624 @nicksellen
 - Remove foodsharing light containers in dev setup !624  @nicksellen
 - Fix "too many layers" docker issue for influxdb container in CI !624 @nicksellen
+- Make client eslint actually fail on error !625 @nicksellen
+- Fix a few eslint reported errors !625 @nicksellen
 
 # 2018-12-24
 

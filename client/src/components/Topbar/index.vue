@@ -302,8 +302,7 @@ export default {
     MenuBells,
     MenuUser,
     Search,
-    Login,
-    bTooltip
+    Login
   },
   directives: { bTooltip },
   props: {

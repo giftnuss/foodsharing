@@ -28,6 +28,7 @@
     "leaflet": "<1.0.0-beta.1",
     "leaflet.awesome-markers": "^2.0.5",
     "leaflet.markercluster": "<1.0.0-rc.1.0",
+    "lodash.pickby": "^4.6.0",
     "magnific-popup": "^1.1.0",
     "node-sass": "^4.11.0",
     "object-path": "^0.11.4",
