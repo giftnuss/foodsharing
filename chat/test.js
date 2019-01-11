@@ -1,9 +1,8 @@
 'use strict'
 
-require('browser-env')()
 const request = require('request')
 const redis = require('redis')
-const randomstring = require('randomstring')
+const randomString = require('randomstring')
 const test = require('tape')
 const { spawn } = require('child_process')
 const { serialize } = require('cookie')
@@ -28,8 +27,6 @@ test.onFinish(() => {
   server.kill()
 })
 
-// Would like to use this one, but extraHeaders seems not to work ok...
-// const io = require('../js/socket.io-1.5.0.min.js');
 const io = require('socket.io-client')
 
 test('simple connection', t => {
@@ -141,7 +138,7 @@ test('unregistering', t => {
   const socket = connect(t, 'somesessionid')
   socket.on('connect', () => {
     socket.emit('register')
-    fetchStats((err, stats) => {
+    fetchStats((err) => {
       socket.disconnect()
       t.error(err, 'does not error')
       fetchStats((err, stats) => {
@@ -231,7 +228,7 @@ test('can send and receive a message for multiple clients', t => {
 test('can send to php users', t => {
   t.timeoutAfter(10000)
   t.plan(4)
-  let sessionId = randomstring.generate()
+  let sessionId = randomString.generate()
   let userId = 1
   addPHPSessionToRedis(userId, sessionId, err => {
     t.error(err)
@@ -258,7 +255,7 @@ test('can send to php users', t => {
 test('can send to api users', t => {
   t.timeoutAfter(10000)
   t.plan(4)
-  let sessionId = randomstring.generate()
+  let sessionId = randomString.generate()
   let userId = 2
   addAPISessionToRedis(userId, sessionId, err => {
     t.error(err)
@@ -344,6 +341,7 @@ test('does not send to other users', t => {
 
 function connect (t, sessionId, cookieName = 'PHPSESSID') {
   let socket = io.connect(WS_URL, {
+    transports: ['websocket'],
     extraHeaders: {
       cookie: serialize(cookieName, sessionId)
     }
@@ -365,11 +363,11 @@ function register (socket, callback) {
 }
 
 function sendMessage (params, callback) {
-  request(HTTP_URL, { qs: params }, (err, response, body) => {
+  request(HTTP_URL, { qs: params }, (err) => {
     if (err) return callback(err)
     callback()
   })
-};
+}
 
 function fetchStats (callback) {
   request(`${HTTP_URL}/stats`, (err, response, body) => {
@@ -408,4 +406,4 @@ function assertStats (t, connections, registrations, sessions, callback) {
     t.equal(stats.sessions, sessions, 'correct session count')
     callback()
   })
-};
+}

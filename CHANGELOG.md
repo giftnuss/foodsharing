@@ -1,6 +1,43 @@
 # Unreleased
 
 ## Features
+- Updated tinysort to v3 @peter.toennies
+- Added link from names in chatbox title to profiles #100 !614 @colomar
+- You can now call a BIEB via the lower info box of a store with just one click !609 @jofranz
+- Changelog page now supports links to issues with a # symbol followed by a number like it has been for merge requests before !622 @jofranz
+
+## Bugfixes
+- Improve/correct user profile badge count !612 @pmayd
+- Datepicker for fetch slots in stores increased to fit 6 week rows #417 !621 @peter.reutlingen
+
+## Refactoring
+- Removed scrollbars from event view !608 @jofranz
+- Restructured / cleaned up CSS for Boostrap / Topbar, leaving Bootstrap defaults where possible !616 @colomar
+
+## Dev/Test/CI stuff
+- Updated tap-spec in chat to version 5 (fixes vulnerability of lodash) !606 @peter.toennies
+- Updated url to 0.11 and tape-spec to version 5 !590 @peter.toennies
+- Updated several dev packages: vue eslint parser to v4, eslint plugin vue to v5, css loader to v2 @peter.toennies
+- Updated vue-eslint-parser to version 5 and file loader to version 3 !613 @peter.toennies
+- Upgrade node to 10.15 and yarn to 1.12.3 !624 @nicksellen
+- Remove foodsharing light and API containers in dev setup !624  @nicksellen
+- Fix "too many layers" docker issue for influxdb container in CI !624 @nicksellen
+- Make client eslint actually fail on error !625 @nicksellen
+- Fix a few eslint reported errors !625 @nicksellen
+
+# 2018-12-24
+
+We are happy to release our next version of the foodsharing homepage today. The most beautiful part of that release is 
+not its content but the fact that we have input from 15 different developers. The team is growing steadily, which is 
+really nice. 
+
+You will find some new features regarding store pages and food baskets but we have also fixed a big bunch of bugs, 
+updated and cleaned out a lot of stuff, worked on the interface for our upcoming apps and put some work into the mailing
+system of ours. We hope you will enjoy it. 
+
+Merry Christmas :-)
+
+## Features
 - shows hint in food basket about public information #373 !570 @k.miklobusec
 - Fix conversation name when changing store (name) #294 !508 @surrim
 - Notify user when bell notifications arrive without need for page reload #328 !542 @janopae
@@ -19,6 +56,8 @@
 - Allow platform mailing system to work with multiple email domains !583 @NerdyProjects
 - Changes MessageRestController limit and offsets to use query parameters
 - update htmlpurifier to version 2 !594 @peter.toennies
+- Changes MessageRestController limit and offsets to use query parameters !587 @theolampert
+- Hight adjustments of "next fetches" in store #376 !601 @jofranz
 
 ## Bugfixes
 - Foodsavers list is now sorted by name and doesn't reshuffle !578 #54 @odedNea
@@ -28,25 +67,25 @@
 - removed not needed add store button from the dashboard !523 @peter.toennies
 - limit conversations sent to client at page loading !542 @janopae
 - check permissions before saving a wallpost in WallpostXhr !542 @janopae
-- stat_fetchrate is calculated correctly and shown in profile #281 @k.miklobusec
+- stat_fetchrate is calculated correctly and shown in profile added tvalue in select !598 #281 @k.miklobusec
 - fix mail sending by passing instance of Mem to AsyncMail constructor !551 @nicksellen
 - fixed wrong html formatting in quick replies to forum posts !534 @peter.toennies
 - fixed index check in BasketGateway #354 !556 @alex.simm
 - removed fallback for the add date for members in stores  #361 !562 @alex.simm
 - show correct date in bells for pickups for more than one date !575 #337 by @mirka-henninger
 - fixed statistic box on profile page overlapping on small screens @D0nPiano
-- Fixed bug in pickuphistory not showing the end date. Now it also shows past pickups from the same day !577 @jofranz
+- Fixed bug in pickuphistory not showing the end date if it's today. Now it also shows past pickups from pickups happend today !577 @jofranz
 - Adding pictures to blog posts and Fairteiler work again !581 @NerdyProjects
 - Redirect after joining a new region works again !581 @NerdyProjects
 - Bell notifications for store fetch confirmations and for new fairteilers are now generated and stored in the database like normal ones #353 !559 @janopae
+- Update store bells via new cron command instead on every bell retrieval !610 @NerdyProjects
 - More stability for internal email system as emails are handled like external ones now !583 @NerdyProjects
-
+- Fixed safari issue with the navbar !603 @theolampert
 
 ## Refactoring
 - Unify Symfony DI configuration !544 @nicksellen
 - Add comments in scripts for quicker start of new developers !563 @flukx
 - Minor refactoring of control flow all over the source !554 and !555 @peter.toennies
-
 - refactored EmailTemplateAdminGateway from model to gateway !482 #9 @peter.toennies
 
 ## Dev/Test/CI stuff
@@ -56,6 +95,7 @@
 - updated webpack and switched to terser !584 @peter.toennies
 - Updated whatwg-fetch to version 3 !585 @peter.toennies
 - Gather statistics about incoming and outgoing emails !583 @NerdyProjects
+- Updated sebastian/diff to version 3 (and phpunit to version 7.3.5) !591 @peter.toennies
 
 # 2018-08-19 Hotfix
 

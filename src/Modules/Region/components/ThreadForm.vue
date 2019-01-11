@@ -11,23 +11,27 @@
           v-model="text"
           class="form-control"
           rows="3"
-          @keyup.ctrl.enter="submit"/>
+          @keyup.ctrl.enter="submit"
+        />
       </div>
       <div class="card-footer">
         <div class="row">
           <div class="col ml-2 pt-2">
             <b-form-checkbox
               :checked="isFollowing"
-              @change="$emit('toggleFollow')" >
+              @change="$emit('toggleFollow')"
+            >
               {{ $i18n('forum.subscribe_thread') }}
             </b-form-checkbox>
-
           </div>
           <div class="col-auto text-right">
             <button
               :disabled="!text.trim()"
               class="btn btn-secondary"
-              @click="submit">Senden</button>
+              @click="submit"
+            >
+              Senden
+            </button>
           </div>
         </div>
       </div>

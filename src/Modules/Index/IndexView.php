@@ -43,6 +43,11 @@ class IndexView extends View
 
 	private function campaign(): string
 	{
+		$remainingdays = intval((strtotime('August 5, 2018 11:59 PM') - time()) / 86400);
+		$dynamic_line = ($remainingdays > -1) ?
+			'<h3>Noch ' . $remainingdays . ' Tage <a href="https://www.startnext.com/foodsharingfestival2018" target=_blank>Crowdfunding</a></h3>' :
+			'<h3>Infos und Anmeldung hier:</h3>';
+
 		return '
 		<div id="campaign" class="pure-g">
 			<div class="topbarpadding">

@@ -10,15 +10,22 @@
           <div
             v-for="avatar in avatars"
             :key="avatar"
-            :style="{backgroundImage: `url('${avatar || '/img/130_q_avatar.png'}')`}" />
+            :style="{backgroundImage: `url('${avatar || '/img/130_q_avatar.png'}')`}"
+          />
         </div>
       </div>
       <div class="col-10">
         <div class="mt-1 d-flex w-100 justify-content-between">
-          <h5 class="mb-1 text-truncate">{{ title }}</h5>
-          <small class="text-muted text-right nowrap">{{ conversation.lastMessageTime | dateDistanceInWords }}</small>
+          <h5 class="mb-1 text-truncate">
+            {{ title }}
+          </h5>
+          <small class="text-muted text-right nowrap">
+            {{ conversation.lastMessageTime | dateDistanceInWords }}
+          </small>
         </div>
-        <p class="mb-1 text-truncate">{{ conversation.lastMessage.bodyRaw }}</p>
+        <p class="mb-1 text-truncate">
+          {{ conversation.lastMessage.bodyRaw }}
+        </p>
       </div>
     </div>
   </a>
