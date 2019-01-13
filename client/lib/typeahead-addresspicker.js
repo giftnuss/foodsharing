@@ -83,6 +83,7 @@
         if (options == null) {
           options = {};
         }
+        this.sessionToken = new google.maps.places.AutocompleteSessionToken();
         this.markerDragged = __bind(this.markerDragged, this);
         this.updateBoundsForPlace = __bind(this.updateBoundsForPlace, this);
         this.updateMap = __bind(this.updateMap, this);
@@ -141,6 +142,7 @@
         var service;
         service = new google.maps.places.AutocompleteService();
         this.options.autocompleteService.input = query;
+        this.options.autocompleteService.sessionToken = this.sessionToken;
         return service.getPlacePredictions(this.options.autocompleteService, (function(_this) {
           return function(predictions) {
             $(_this).trigger('addresspicker:predictions', [predictions]);
@@ -151,6 +153,7 @@
 
       AddressPicker.prototype.updateMap = function(event, place) {
         if (this.options.placeDetails) {
+          place.sessionToken = this.sessionToken
           return this.placeService.getDetails(place, (function(_this) {
             return function(response) {
               var _ref;
@@ -163,6 +166,7 @@
                   _ref.boundsForLocation(response);
                 }
               }
+              _this.sessionToken = new google.maps.places.AutocompleteSessionToken();
               return $(_this).trigger('addresspicker:selected', _this.lastResult);
             };
           })(this));

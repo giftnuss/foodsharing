@@ -1,3 +1,32 @@
+# Unreleased
+
+## Features
+- Updated tinysort to v3 @peter.toennies
+- Added link from names in chatbox title to profiles #100 !614 @colomar
+- You can now call a BIEB via the lower info box of a store with just one click !609 @jofranz
+- Changelog page now supports links to issues with a # symbol followed by a number like it has been for merge requests before !622 @jofranz
+- update htmlpurifier to version 2 !594 @peter.toennies
+- Use google places session based autocompletion for geocoding to cope with API usage quota !628 @NerdyProjects
+
+## Bugfixes
+- Improve/correct user profile badge count !612 @pmayd
+- Datepicker for fetch slots in stores increased to fit 6 week rows #417 !621 @peter.reutlingen
+
+## Refactoring
+- Removed scrollbars from event view !608 @jofranz
+- Restructured / cleaned up CSS for Boostrap / Topbar, leaving Bootstrap defaults where possible !616 @colomar
+
+## Dev/Test/CI stuff
+- Updated tap-spec in chat to version 5 (fixes vulnerability of lodash) !606 @peter.toennies
+- Updated url to 0.11 and tape-spec to version 5 !590 @peter.toennies
+- Updated several dev packages: vue eslint parser to v4, eslint plugin vue to v5, css loader to v2 @peter.toennies
+- Updated vue-eslint-parser to version 5 and file loader to version 3 !613 @peter.toennies
+- Upgrade node to 10.15 and yarn to 1.12.3 !624 @nicksellen
+- Remove foodsharing light and API containers in dev setup !624  @nicksellen
+- Fix "too many layers" docker issue for influxdb container in CI !624 @nicksellen
+- Make client eslint actually fail on error !625 @nicksellen
+- Fix a few eslint reported errors !625 @nicksellen
+
 # 2018-12-24
 
 We are happy to release our next version of the foodsharing homepage today. The most beautiful part of that release is 

@@ -378,7 +378,10 @@ class View
 				placeDetails: true
 			});
 
-			$(\'#addresspicker\').typeahead(null, {
+			$(\'#addresspicker\').typeahead({
+				minLength: 3
+			},
+			{
 				displayKey: \'description\',
 				source: addressPicker.ttAdapter()
 			});
