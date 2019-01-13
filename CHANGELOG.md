@@ -6,7 +6,6 @@
 - You can now call a BIEB via the lower info box of a store with just one click !609 @jofranz
 - Changelog page now supports links to issues with a # symbol followed by a number like it has been for merge requests before !622 @jofranz
 - update htmlpurifier to version 2 !594 @peter.toennies
-- Use google places session based autocompletion for geocoding to cope with API usage quota !628 @NerdyProjects
 
 ## Bugfixes
 - Improve/correct user profile badge count !612 @pmayd
@@ -26,6 +25,10 @@
 - Fix "too many layers" docker issue for influxdb container in CI !624 @nicksellen
 - Make client eslint actually fail on error !625 @nicksellen
 - Fix a few eslint reported errors !625 @nicksellen
+
+# 2019-01-13 Hotfix
+
+- Use google places session based autocompletion for geocoding to cope with API usage quota !628 @NerdyProjects
 
 # 2018-12-24
 
