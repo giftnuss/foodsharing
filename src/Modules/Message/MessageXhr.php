@@ -75,7 +75,7 @@ class MessageXhr extends Control
 
 		if ($this->mayConversation($cid) && !$this->model->conversationLocked($cid)) {
 			$rowCount = $this->messageGateway->deleteEmptyConversation($cid);
-			if ($$rowCount > 0) {
+			if ($rowCount > 0) {
 				$xhr->addData('rowCount', $rowCount);
 				$xhr->setStatus(1);
 			}
