@@ -12,11 +12,13 @@ class MessageXhr extends Control
 	 * @var WebSocketSender
 	 */
 	private $webSocketSender;
+	private $messageGateway;
 
-	public function __construct(MessageModel $model, MessageView $view, WebSocketSender $webSocketSender)
+	public function __construct(MessageModel $model, MessageView $view, MessageGateway $messageGateway, WebSocketSender $webSocketSender)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->messageGateway = $messageGateway;
 		$this->webSocketSender = $webSocketSender;
 
 		parent::__construct();
@@ -60,6 +62,26 @@ class MessageXhr extends Control
 				$xhr->send();
 			}
 		}
+	}
+
+	/**
+	 * ajax call to delete an empty conversation after closing chat.
+	 */
+	final public function deleteEmptyConversation(): void
+	{
+		$cid = $_GET['cid'];
+		$xhr = new Xhr();
+		$xhr->setStatus(0);
+
+		if ($this->mayConversation($cid) && !$this->model->conversationLocked($cid)) {
+			$rowCount = $this->messageGateway->deleteEmptyConversation($cid);
+			if ($$rowCount > 0) {
+				$xhr->addData('rowCount', $rowCount);
+				$xhr->setStatus(1);
+			}
+		}
+
+		$xhr->send();
 	}
 
 	/**
@@ -287,7 +309,7 @@ class MessageXhr extends Control
 
 			if (!empty($recip) && $body != '') {
 				/*
-				 * add conversation if successfull send an success message otherwise error
+				 * add conversation if successful send an success message otherwise error
 				 */
 				if ($cid = $this->model->addConversation($recip, $body)) {
 					/*

@@ -11,6 +11,9 @@
 - Improve/correct user profile badge count !612 @pmayd
 - Datepicker for fetch slots in stores increased to fit 6 week rows #417 !621 @peter.reutlingen
 
+- List of conversations no longer contains empty conversations #420 @pmayd
+- List of conversations no longer contains empty conversations #420 !619 @pmayd
+- 
 ## Refactoring
 - Removed scrollbars from event view !608 @jofranz
 - Restructured / cleaned up CSS for Boostrap / Topbar, leaving Bootstrap defaults where possible !616 @colomar

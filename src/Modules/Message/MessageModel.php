@@ -48,23 +48,43 @@ class MessageModel extends Db
 
 		$conversation_id = false;
 
-		if ($cids = $this->qCol('SELECT hc.conversation_id FROM `fs_foodsaver_has_conversation` hc LEFT JOIN `fs_conversation` c ON c.id = hc.conversation_id WHERE hc.`foodsaver_id` = ' . (int)$this->func->fsId() . ' AND c.locked = 0')) {
+		$cids = $this->qCol('
+            SELECT
+                hc.conversation_id
+                 
+            FROM
+                `fs_foodsaver_has_conversation` hc
+                 
+            LEFT JOIN
+                `fs_conversation` c
+                 
+            ON
+                c.id = hc.conversation_id
+
+            WHERE
+                hc.`foodsaver_id` = ' . (int)$this->func->fsId() . ' 
+                
+            AND 
+                c.locked = 0
+		');
+		if ($cids) {
 			$sql = '
-		SELECT
-		  conversation_id,
-		  GROUP_CONCAT(foodsaver_id ORDER BY foodsaver_id SEPARATOR ":") AS idstring
-
-		FROM
-		  fs_foodsaver_has_conversation
-
-		WHERE
-		  conversation_id IN (' . implode(',', $cids) . ')
-
-		GROUP BY
-		  conversation_id
-
-		HAVING
-		  idstring = "' . implode(':', $recips) . '"';
+                SELECT
+                  conversation_id,
+                  GROUP_CONCAT(foodsaver_id ORDER BY foodsaver_id SEPARATOR ":") AS idstring
+        
+                FROM
+                  fs_foodsaver_has_conversation
+        
+                WHERE
+                  conversation_id IN (' . implode(',', $cids) . ')
+        
+                GROUP BY
+                  conversation_id
+        
+                HAVING
+                  idstring = "' . implode(':', $recips) . '"
+		    ';
 
 			if ($conv = $this->qRow($sql)) {
 				$conversation_id = $conv['conversation_id'];
@@ -122,14 +142,19 @@ class MessageModel extends Db
 		// for orga and bot-welcome team, allow to contact everyone who is foodsaver
 		if ($this->session->may('orga') || (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke']) && in_array(813, $_SESSION['client']['bezirke']))) {
 			$sql = '
-				SELECT fs.id AS id,
-						CONCAT(fs.name," ",fs.nachname ) AS value
+                SELECT 
+                    fs.id AS id,
+                    CONCAT(fs.name," ",fs.nachname ) AS value
+                    
 				FROM
-					fs_foodsaver fs
+                    fs_foodsaver fs
+                    
 				WHERE
-					fs.rolle >= 1
+                    fs.rolle >= 1
+                    
 				AND
-					CONCAT(fs.name," ",fs.nachname ) LIKE "%' . $this->safe($term) . '%"
+                    CONCAT(fs.name," ",fs.nachname ) LIKE "%' . $this->safe($term) . '%"
+                    
 				GROUP BY
 					fs.id
 				';
@@ -159,7 +184,8 @@ class MessageModel extends Db
 					hb.bezirk_id IN(' . implode(',', $ids) . ')
 
 				AND
-					CONCAT(fs.name," ",fs.nachname ) LIKE "%' . $this->safe($term) . '%"
+                    CONCAT(fs.name," ",fs.nachname ) LIKE "%' . $this->safe($term) . '%"
+                    
 				AND
 					fs.deleted_at IS NULL
 			';
@@ -183,7 +209,8 @@ class MessageModel extends Db
 				fs.geschlecht
 
 			FROM
-				`fs_foodsaver_has_conversation` hc
+                `fs_foodsaver_has_conversation` hc
+                
 			INNER JOIN
 				`fs_foodsaver` fs ON fs.id = hc.foodsaver_id
 
@@ -239,6 +266,9 @@ class MessageModel extends Db
 
 			AND
 				hc.foodsaver_id = ' . (int)$this->func->fsId() . '
+				
+			AND
+			    c.last_message <> ""
 
 			ORDER BY
 				hc.unread DESC,
@@ -434,8 +464,28 @@ class MessageModel extends Db
 		} else {
 			$sender_id = (int)$sender_id;
 		}
-		if ($mid = $this->insert('INSERT INTO `fs_msg`(`conversation_id`, `foodsaver_id`, `body`, `time`) VALUES (' . (int)$cid . ',' . $sender_id . ',' . $this->strval($body) . ',NOW())')) {
-			$this->update('UPDATE `fs_foodsaver_has_conversation` SET unread = 1 WHERE conversation_id = ' . (int)$cid . ' AND `foodsaver_id` != ' . (int)$sender_id);
+
+		$mid = $this->insert('
+            INSERT INTO 
+                `fs_msg`(`conversation_id`, `foodsaver_id`, `body`, `time`) 
+
+            VALUES 
+                (' . (int)$cid . ',' . $sender_id . ',' . $this->strval($body) . ',NOW())
+        ');
+		if ($mid) {
+			$this->update('
+                UPDATE 
+                    `fs_foodsaver_has_conversation` 
+
+                SET 
+                    unread = 1 
+
+                WHERE 
+                    conversation_id = ' . (int)$cid . '
+                     
+                AND 
+                    `foodsaver_id` != ' . (int)$sender_id
+			);
 			$this->updateConversation($cid, $sender_id, $body, $mid);
 
 			return $mid;
