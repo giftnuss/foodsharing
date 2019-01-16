@@ -102,6 +102,11 @@ if (isset($obj)) {
 	$response->setContent('');
 }
 
+// Security headers :)
+
+header('X-Frame-Options: DENY');
+header('X-Content-Type-Options: nosniff');
+
 if (defined('CSP_REPORT_URI')) {
 	header($csp->generate(CSP_REPORT_URI, CSP_REPORT_ONLY));
 }

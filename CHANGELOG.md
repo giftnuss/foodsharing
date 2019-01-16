@@ -6,7 +6,7 @@
 - You can now call a BIEB via the lower info box of a store with just one click !609 @jofranz
 - Changelog page now supports links to issues with a # symbol followed by a number like it has been for merge requests before !622 @jofranz
 - update htmlpurifier to version 2 !594 @peter.toennies
-- add content security policy !633 @nicksellen
+- add security headers !633 @nicksellen
 
 ## Bugfixes
 - Improve/correct user profile badge count !612 @pmayd

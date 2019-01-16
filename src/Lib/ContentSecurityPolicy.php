@@ -41,6 +41,9 @@ class ContentSecurityPolicy
 			'frame-src' => [
 				$self
 			],
+			'frame-ancestors' => [
+				$none
+			],
 			'report-uri' => [
 				$reportUri
 			]
