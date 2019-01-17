@@ -29,6 +29,7 @@
 - Fix "too many layers" docker issue for influxdb container in CI !624 @nicksellen
 - Make client eslint actually fail on error !625 @nicksellen
 - Fix a few eslint reported errors !625 @nicksellen
+- Add phpstan !634 @nicksellen
 
 # 2019-01-13 Hotfix
 
