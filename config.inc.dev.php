@@ -22,10 +22,10 @@ define('INFLUX_DSN', 'influxdb://influxdb:8086/foodsharing');
 
 define('DEFAULT_EMAIL', 'noreply@lebensmittelretten.de');
 define('SUPPORT_EMAIL', 'it@lebensmittelretten.de');
-define('DEFAULT_EMAIL_NAME', 'Foodsharing Freiwillige');
+define('DEFAULT_EMAIL_NAME', 'foodsharing-Freiwillige');
 define('VERSION', '0.8.3');
 define('EMAIL_PUBLIC', 'info@lebensmittelretten.de');
-define('EMAIL_PUBLIC_NAME', 'Foodsharing Freiwillige');
+define('EMAIL_PUBLIC_NAME', 'foodsharing-Freiwillige');
 define('DEFAULT_EMAIL_HOST', 'lebensmittelretten.de');
 define('MAPZEN_API_KEY', 'mapzen-RaXru7A');
 //define('GOOGLE_API_KEY', 'AIzaSyCkFfCoOnj8ZjGGcApHS1rX6Rt6OxrW6hQ'); // Original key; API limit reached 20181121

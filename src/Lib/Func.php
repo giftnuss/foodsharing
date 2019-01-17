@@ -673,7 +673,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 		$message['subject'] = str_replace($search, $replace, $message['subject']);
 		if (!$message['subject']) {
-			$message['subject'] = 'Foodsharing-Mail';
+			$message['subject'] = 'foodsharing-Mail';
 		}
 
 		$mail->setSubject($this->sanitizerService->htmlToPlain($message['subject']));
@@ -1323,7 +1323,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$mail->setFrom($bezirk['email'], $bezirk['email_name']);
 		$mail->addRecipient($email);
 		if (!$subject) {
-			$subject = 'Foodsharing-Mail';
+			$subject = 'foodsharing-Mail';
 		}
 		$mail->setSubject($subject);
 		$htmlBody = $this->emailBodyTpl($message, $email, $token);

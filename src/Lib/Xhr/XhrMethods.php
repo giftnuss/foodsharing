@@ -331,7 +331,7 @@ class XhrMethods
 
 			$subtitle = substr($subtitle, 0, (strlen($subtitle) - 2));
 			if ($foodsaver['orgateam'] == 1) {
-				$subtitle .= ', außerdem engagiert ' . $this->func->genderWord($foodsaver['geschlecht'], 'er', 'sie', 'er/sie') . ' sich Foodsharing Orgateam';
+				$subtitle .= ', außerdem engagiert ' . $this->func->genderWord($foodsaver['geschlecht'], 'er', 'sie', 'er/sie') . ' sich im foodsharing-Orgateam';
 			}
 		} elseif ($foodsaver['bezirk_id'] == 0) {
 			$subtitle = 'hat sich bisher für keinen Bezirk entschieden.';
@@ -1019,7 +1019,7 @@ class XhrMethods
 			$data['name'] = str_replace(array('/', '"', "'", '.', ';'), '', $data['name']);
 			$data['has_children'] = 0;
 			$data['email_pass'] = '';
-			$data['email_name'] = 'Foodsharing ' . $data['name'];
+			$data['email_name'] = 'foodsharing ' . $data['name'];
 
 			if (!empty($data['name'])) {
 				if ($out = $this->regionGateway->add_bezirk($data)) {
