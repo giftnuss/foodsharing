@@ -63,7 +63,7 @@ class EmailControl extends Control
 
 		$boxes = $this->mbmodel->getBoxes();
 		foreach ($boxes as $key => $b) {
-			$boxes[$key]['name'] = $b['name'] . '@' . DEFAULT_EMAIL_HOST;
+			$boxes[$key]['name'] = $b['name'] . '@' . NOREPLY_EMAIL_HOST;
 		}
 		$this->func->addContent($this->v_utils->v_form('Nachrichten Verteiler', array(
 			$this->v_utils->v_field(

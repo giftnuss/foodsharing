@@ -38,7 +38,7 @@ class SettingsControl extends Control
 			$this->func->libmail(array(
 				'email' => $this->foodsaver['email'],
 				'email_name' => $this->foodsaver['name'] . ' ' . $this->foodsaver['nachname']
-			), 'loeschen@' . DEFAULT_EMAIL_HOST, $this->foodsaver['name'] . ' hat Account gelöscht', $this->foodsaver['name'] . ' ' . $this->foodsaver['nachname'] . ' hat Account gelöscht' . "\n\nGrund für das Löschen:\n" . strip_tags($_GET['reason']));
+			), 'loeschen@' . PLATFORM_MAILBOX_HOST, $this->foodsaver['name'] . ' hat Account gelöscht', $this->foodsaver['name'] . ' ' . $this->foodsaver['nachname'] . ' hat Account gelöscht' . "\n\nGrund für das Löschen:\n" . strip_tags($_GET['reason']));
 			$this->foodsaverGateway->del_foodsaver($this->func->fsId());
 			$this->func->go('/?page=logout');
 		}
@@ -358,7 +358,7 @@ class SettingsControl extends Control
 						$this->v_utils->v_form_checkbox('tel_public', array('desc' => 'Neben Deinem vollem Namen (und eventuell Foto) ist es für
 										Händler, foodsharing-Freiwillge, Interessierte und die Presse
 										einfacher und direkter, Dich neben der für Deine
-										Region/Stadt/Bezirk zugewiesenen Botschafter-E-Mail-Adresse (z. B. mainz@' . DEFAULT_EMAIL_HOST . ')
+										Region/Stadt/Bezirk zugewiesenen Botschafter-E-Mail-Adresse (z. B. mainz@' . PLATFORM_MAILBOX_HOST . ')
 										über Deine Festnetz- bzw. Handynummer zu erreichen. Bitte gib
 										hier alle Nummern an, die wir veröffentlichen dürfen und am
 										besten noch gewünschte Anrufzeiten.', 'required' => true, 'values' => array(

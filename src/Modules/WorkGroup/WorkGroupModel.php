@@ -149,7 +149,7 @@ class WorkGroupModel extends Db
 				b.`week_num`,
 				b.`fetch_count`,
 				b.`type`,
-				CONCAT(m.name,"@' . DEFAULT_EMAIL_HOST . '") AS email
+				CONCAT(m.name,"@' . PLATFORM_MAILBOX_HOST . '") AS email
 			FROM
 				fs_bezirk b
 			LEFT JOIN
@@ -252,7 +252,7 @@ class WorkGroupModel extends Db
 				b.`banana_count`,
 				b.`week_num`,
 				b.`fetch_count`,
-				CONCAT(m.name,"@' . DEFAULT_EMAIL_HOST . '") AS email
+				CONCAT(m.name,"@' . PLATFORM_MAILBOX_HOST . '") AS email
 				
 			FROM
 				fs_bezirk b
@@ -329,7 +329,7 @@ class WorkGroupModel extends Db
 		return $this->qOne('
 		
 			SELECT
-				CONCAT(mb.name,"@' . DEFAULT_EMAIL_HOST . '")
+				CONCAT(mb.name,"@' . PLATFORM_MAILBOX_HOST . '")
 		
 			FROM
 				fs_mailbox mb,
@@ -349,7 +349,7 @@ class WorkGroupModel extends Db
 		return $this->qOne('
 
 			SELECT 
-				CONCAT(mb.name,"@' . DEFAULT_EMAIL_HOST . '")
+				CONCAT(mb.name,"@' . PLATFORM_MAILBOX_HOST . '")
 				
 			FROM 	
 				fs_mailbox mb,
