@@ -14,6 +14,7 @@
 ## Bugfixes
 - Improve/correct user profile badge count !612 @pmayd
 - Datepicker for fetch slots in stores increased to fit 6 week rows #417 !621 @peter.reutlingen
+- Changed color of the breadcrumb sitenavigation below the topbar !636 @peter.reutlingen
 
 - List of conversations no longer contains empty conversations #420 @pmayd
 - List of conversations no longer contains empty conversations #420 !619 @pmayd
