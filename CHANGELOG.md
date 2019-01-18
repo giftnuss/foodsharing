@@ -41,6 +41,7 @@
 # 2019-01-13 Hotfix
 
 - Use google places session based autocompletion for geocoding to cope with API usage quota !628 @NerdyProjects
+- Changed color and typo for the tiny sitenavigation below the topbar !636 @peter.reutlingen
 
 # 2018-12-24
 
