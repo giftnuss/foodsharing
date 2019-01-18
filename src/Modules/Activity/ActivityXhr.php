@@ -197,7 +197,7 @@ class ActivityXhr extends Control
 					}
 					$listings['mailboxes'][] = [
 						'id' => $b['id'],
-						'name' => $b['name'] . '@' . DEFAULT_EMAIL_HOST,
+						'name' => $b['name'] . '@' . PLATFORM_MAILBOX_HOST,
 						'checked' => $checked
 					];
 				}

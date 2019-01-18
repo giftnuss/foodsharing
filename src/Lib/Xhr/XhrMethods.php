@@ -873,7 +873,7 @@ class XhrMethods
 			$recip = $this->emailGateway->getMailNext($mail_id);
 
 			$mailbox = $this->mailboxModel->getMailbox((int)$mail['mailbox_id']);
-			$mailbox['email'] = $mailbox['name'] . '@' . DEFAULT_EMAIL_HOST;
+			$mailbox['email'] = $mailbox['name'] . '@' . NOREPLY_EMAIL_HOST;
 
 			$sender = $this->model->getValues(array('geschlecht', 'name'), 'foodsaver', $this->func->fsId());
 
