@@ -100,7 +100,7 @@ register:
   login_phone_info: Es kann hilfreich sein, Deine Telefonnummer mit anderen Foodsharern zu teilen
   forgotten_password: Passwort vergessen?
   have_read_the_legal_stuff1: Ich habe die Datenschutzerklärung zur Kenntnis genommen
-  have_read_the_legal_stuff2: Ich habe die <a href="http://wiki.lebensmittelretten.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> zur Kenntnis genommen
+  have_read_the_legal_stuff2: Ich habe die <a href="http://wiki.foodsharing.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> zur Kenntnis genommen
   prev: zur&uumlck
   next: weiter
   finish: Anmeldung absenden
@@ -146,7 +146,7 @@ really_delete: Wirklich löschen?
 yes: Ja
 no: Nein
 options: Optionen
-error_unexpected: Es ist ein Fehler aufgetreten 
+error_unexpected: Es ist ein Fehler aufgetreten
 
 forum:
   from: Von %name%

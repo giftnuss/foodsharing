@@ -49,7 +49,7 @@ class MailboxModel extends Db
 	public function getMailAdresses()
 	{
 		$mails = $this->qCol('
-			SELECT 	CONCAT(mb.name,"@' . DEFAULT_EMAIL_HOST . '")
+			SELECT 	CONCAT(mb.name,"@' . PLATFORM_MAILBOX_HOST . '")
 			FROM 	fs_mailbox mb,
 					fs_bezirk bz
 			WHERE 	bz.mailbox_id = mb.id
@@ -572,8 +572,8 @@ class MailboxModel extends Db
 		) {
 			foreach ($memberb as $m) {
 				if (empty($m['email_name'])) {
-					$m['email_name'] = $m['name'] . '@' . DEFAULT_EMAIL_HOST;
-					$this->update('UPDATE fs_mailbox_member SET email_name = ' . $this->strval($m['name'] . '@' . DEFAULT_EMAIL_HOST) . ' WHERE mailbox_id = ' . (int)$m['id'] . ' AND foodsaver_id = ' . (int)$this->func->fsId());
+					$m['email_name'] = $m['name'] . '@' . PLATFORM_MAILBOX_HOST;
+					$this->update('UPDATE fs_mailbox_member SET email_name = ' . $this->strval($m['name'] . '@' . PLATFORM_MAILBOX_HOST) . ' WHERE mailbox_id = ' . (int)$m['id'] . ' AND foodsaver_id = ' . (int)$this->func->fsId());
 				}
 				$mboxes[] = array(
 					'id' => $m['id'],

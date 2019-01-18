@@ -1,3 +1,7 @@
+# 2019-01-19 Hotfix
+
+- prepare support for separated email domain for platform mailboxes
+
 # 2019-01-13 Hotfix
 
 - Use google places session based autocompletion for geocoding to cope with API usage quota !628 @NerdyProjects

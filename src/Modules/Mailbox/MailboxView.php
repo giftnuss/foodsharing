@@ -19,7 +19,7 @@ class MailboxView extends View
 						$("#mbh-folder").val("inbox");$("#mbh-mailbox").val(' . (int)$b['id'] . ');$("#mbh-type").val("' . $b['type'] . '");';
 			}
 
-			$children[] = '{title: "' . $b['name'] . '@' . DEFAULT_EMAIL_HOST . '", isFolder: true, icon:"mailbox.png",' . $expand . '
+			$children[] = '{title: "' . $b['name'] . '@' . PLATFORM_MAILBOX_HOST . '", isFolder: true, icon:"mailbox.png",' . $expand . '
                     children: [
                         {title: "' . $this->func->s('inbox') . '",ident:' . $b['id'] . ',folder:"inbox",icon:"inbox.png",type:"' . $b['type'] . '"},
                         {title: "' . $this->func->s('sent') . '",ident:' . $b['id'] . ',folder:"sent",icon:"sent.png",type:"' . $b['type'] . '"},
@@ -57,7 +57,7 @@ class MailboxView extends View
 
 	public function manageMemberBox($box)
 	{
-		return $this->v_utils->v_quickform($box['name'] . '@' . DEFAULT_EMAIL_HOST, array(
+		return $this->v_utils->v_quickform($box['name'] . '@' . PLATFORM_MAILBOX_HOST, array(
 			$this->v_utils->v_form_tagselect('foodsaver_' . $box['id'], array('label' => $this->func->s('mailbox_member'), 'xhr' => 'foodsaver')),
 			$this->v_utils->v_input_wrapper($this->func->s('email_name'), '<input type="text" value="' . $box['email_name'] . '" name="email_name" class="input text value">'),
 			$this->v_utils->v_form_hidden('mbid', $box['id'])
@@ -246,13 +246,13 @@ class MailboxView extends View
 			[type] => bot
 		 */
 		if (count($mailboxes) == 1) {
-			$von = $mailboxes[0]['email_name'] . ' (' . $mailboxes[0]['name'] . '@' . DEFAULT_EMAIL_HOST . ')<input type="hidden" id="h-edit-von" value="' . $mailboxes[0]['id'] . '" />';
+			$von = $mailboxes[0]['email_name'] . ' (' . $mailboxes[0]['name'] . '@' . PLATFORM_MAILBOX_HOST . ')<input type="hidden" id="h-edit-von" value="' . $mailboxes[0]['id'] . '" />';
 		} else {
 			$von = '
 			<select class="von-select ui-corner-all" id="edit-von">';
 			foreach ($mailboxes as $m) {
 				$von .= '
-				<option class="mb-' . $m['id'] . '" value="' . $m['id'] . '">' . $m['email_name'] . ' (' . $m['name'] . '@' . DEFAULT_EMAIL_HOST . ')</option>';
+				<option class="mb-' . $m['id'] . '" value="' . $m['id'] . '">' . $m['email_name'] . ' (' . $m['name'] . '@' . PLATFORM_MAILBOX_HOST . ')</option>';
 			}
 			$von .= '
 			</select>';
