@@ -8,6 +8,7 @@
 - update htmlpurifier to version 2 !594 @peter.toennies
 - prepare support for separated email domain for platform mailboxes
 - add security headers !633 @nicksellen
+- changed tile maps to wikimedia !639 @alex.simm
 
 ## Bugfixes
 - Improve/correct user profile badge count !612 @pmayd
