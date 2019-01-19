@@ -31,6 +31,10 @@
 - Make client eslint actually fail on error !625 @nicksellen
 - Fix a few eslint reported errors !625 @nicksellen
 - Add phpstan !634 @nicksellen
+# 2019-01-19 Hotfix
+
+- prepare support for separated email domain for platform mailboxes !630 @NerdyProjects
+- prepare support for separated email domain for platform mailboxes
 
 # 2019-01-13 Hotfix
 
