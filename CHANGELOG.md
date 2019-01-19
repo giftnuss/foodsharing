@@ -1,6 +1,7 @@
 # 2019-01-19 Hotfix
 
 - prepare support for separated email domain for platform mailboxes !630 @NerdyProjects
+- prepare support for separated email domain for platform mailboxes
 
 # 2019-01-13 Hotfix
 
