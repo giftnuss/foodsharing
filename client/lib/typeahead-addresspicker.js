@@ -124,8 +124,8 @@
 		  }
 		  else {
 			  this.map = L.map(this.mapOptions.id, this.mapOptions);
-			  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
-				  attribution: "Geocoding by <a href=\"https://google.com\">Google</a>, Tiles &copy; Esri 2014"
+			  L.tileLayer("https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png", {
+				  attribution: "Geocoding by <a href=\"https://google.com\">Google</a>, Tiles by <a href=\"https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use\">Wikimedia</a>"
 			  }).addTo(this.map);
 		  }
 

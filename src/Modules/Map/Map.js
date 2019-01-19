@@ -67,8 +67,8 @@ const map = {
 
     expose({ u_map }) // need to re-expose it as it is just a variable
 
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri 2014'
+    L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
+	  attribution: 'Tiles by <a href="https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use">Wikimedia</a>'
     }).addTo(u_map)
 
     this.initiated = true
