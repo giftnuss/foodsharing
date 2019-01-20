@@ -147,7 +147,6 @@ services:
 
     BounceMailHandler\BounceMailHandler:
         properties:
-            disableDelete: true
             mailhost: !php/const BOUNCE_IMAP_HOST
             mailboxUserName: !php/const BOUNCE_IMAP_USER
             mailboxPassword: !php/const BOUNCE_IMAP_PASS
@@ -155,4 +154,4 @@ services:
             service: 'imap'
             serviceOption: 'tls'
             boxname: 'INBOX'
-            maxMessages: 20
+            maxMessages: 10000
