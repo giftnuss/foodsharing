@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c693c7909526f0749be258311da14336",
+    "content-hash": "25ed20469e588752526779cbedb372a3",
     "packages": [
         {
             "name": "ddeboer/imap",
@@ -5066,6 +5066,66 @@
                 "templating"
             ],
             "time": "2018-12-16T10:36:48+00:00"
+        },
+        {
+            "name": "voku/bounce-mail-handler",
+            "version": "v6.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/voku/PHPMailer-BMH.git",
+                "reference": "866f28b9a227680cecf5beb8735a6198cb9e69d3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/voku/PHPMailer-BMH/zipball/866f28b9a227680cecf5beb8735a6198cb9e69d3",
+                "reference": "866f28b9a227680cecf5beb8735a6198cb9e69d3",
+                "shasum": ""
+            },
+            "require": {
+                "ext-imap": "*",
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~6.0|~7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "BounceMailHandler": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Andy Prevost",
+                    "email": "andy.prevost@worxteam.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Anthon Pang",
+                    "email": "apang@softwaredevelopment.ca",
+                    "role": "Other Fork Maintainer"
+                },
+                {
+                    "name": "Lars Moelleken",
+                    "email": "lars@moelleken.org",
+                    "role": "Fork Maintainer"
+                }
+            ],
+            "description": "Bounce Mail Handler",
+            "keywords": [
+                "bounce",
+                "bounce-mail",
+                "email",
+                "hard-bounce",
+                "mail",
+                "mailer",
+                "soft-bounce"
+            ],
+            "time": "2018-11-09T22:00:35+00:00"
         },
         {
             "name": "willdurand/jsonp-callback-validator",

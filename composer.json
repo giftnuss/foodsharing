@@ -59,7 +59,8 @@
     "symfony/validator": "4.1.9",
     "symfony/yaml": "^4.2.2",
     "twig/extensions": "^1.5.4",
-    "twig/twig": "^2.6.0"
+    "twig/twig": "^2.6.0",
+    "voku/bounce-mail-handler": "^6.0"
   },
   "autoload": {
     "psr-4": {"Foodsharing\\": "src/",

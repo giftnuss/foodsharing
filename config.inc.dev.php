@@ -47,6 +47,11 @@ define('IMAP', [
 	['host' => 'imap', 'user' => 'user', 'password' => 'pass']
 ]);
 
+define('BOUNCE_IMAP_HOST', null);
+define('BOUNCE_IMAP_USER', null);
+define('BOUNCE_IMAP_PASS', null);
+define('BOUNCE_IMAP_PORT', null);
+
 if (!defined('ROOT_DIR')) {
 	define('ROOT_DIR', './');
 }

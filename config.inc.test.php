@@ -43,6 +43,11 @@ define('SOCK_URL', 'http://chat:1338/');
 define('REDIS_HOST', 'redis');
 define('REDIS_PORT', 6379);
 
+define('BOUNCE_IMAP_HOST', null);
+define('BOUNCE_IMAP_USER', null);
+define('BOUNCE_IMAP_PASS', null);
+define('BOUNCE_IMAP_PORT', null);
+
 if (!defined('ROOT_DIR')) {
 	define('ROOT_DIR', './');
 }
