@@ -18,12 +18,13 @@ class ContentSecurityPolicy
 			'script-src' => [
 				$self,
 				$unsafeInline,
-				$unsafeEval, // lots of `$.globalEval` still ... 😢
-				'https://maps.googleapis.com'
+				$unsafeEval // lots of `$.globalEval` still ... 😢
 			],
 			'connect-src' => [
 				$self,
-				'https://sentry.io'
+				$this->websocketUrlFor(BASE_URL),
+				'https://sentry.io',
+				'https://photon.komoot.de'
 			],
 			'img-src' => [
 				$self,
@@ -59,5 +60,10 @@ class ContentSecurityPolicy
 		}
 
 		return 'Content-Security-Policy: ' . $value;
+	}
+
+	public function websocketUrlFor(string $baseUrl): string
+	{
+		return preg_replace('/^http(s)?:/', 'ws\1:', $baseUrl);
 	}
 }
