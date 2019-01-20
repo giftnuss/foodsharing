@@ -345,8 +345,6 @@ class View
 
 	public function latLonPicker($id, $options = array())
 	{
-		$this->func->addHead('<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=' . GOOGLE_API_KEY . '"></script>');
-
 		if (isset($options['location'])) {
 			$data = array_merge(['zoom' => 14], $options['location']);
 		} else {
@@ -363,42 +361,6 @@ class View
 			$data['lon'] = 10;
 			$data['zoom'] = 5;
 		}
-
-		$this->func->addJs('
-			
-			var addressPicker = new AddressPicker({
-				map: {
-					id: \'map\',
-					center: L.latLng(' . $data['lat'] . ',' . $data['lon'] . '),
-					zoom: ' . $data['zoom'] . '
-				},
-				autocompleteService: {
-					types: ["geocode", "establishment"]
-				},
-				placeDetails: true
-			});
-
-			$(\'#addresspicker\').typeahead({
-				minLength: 3
-			},
-			{
-				displayKey: \'description\',
-				source: addressPicker.ttAdapter()
-			});
-			$(\'#addresspicker\').bind(\'typeahead:selected\', addressPicker.updateMap)
-			$(\'#addresspicker\').bind(\'typeahead:cursorchanged\', addressPicker.updateMap)
-			addressPicker.bindDefaultTypeaheadEvent($(\'#addresspicker\'))
-			$(addressPicker).on(\'addresspicker:selected\', function (event, result) {
-				var number = result.nameForType(\'street_number\') || \'\'
-				var address = result.nameForType(\'route\') || \'\'
-				$(\'#lat\').val(result.lat());
-				$(\'#lon\').val(result.lng());
-				$(\'#plz\').val(result.nameForType(\'postal_code\'));
-				$(\'#ort\').val(result.nameForType(\'locality\'));
-				$(\'#anschrift\').val(address + (number ? (\' \' + number):\'\'));
-			});
-			$("#lat-wrapper,#lon-wrapper").hide();
-		');
 
 		// Default to blank values for these keys
 		foreach (['anschrift', 'plz', 'ort'] as $key) {

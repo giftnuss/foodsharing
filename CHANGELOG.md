@@ -9,6 +9,7 @@
 - prepare support for separated email domain for platform mailboxes
 - add security headers !633 @nicksellen
 - changed tile maps to wikimedia !639 @alex.simm
+- Use typeahead-address-photon for address autocomplete. Update leaflet and typeahead for recent NPM versions in the same go !640 @NerdyProjects
 
 ## Bugfixes
 - Improve/correct user profile badge count !612 @pmayd

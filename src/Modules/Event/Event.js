@@ -1,7 +1,10 @@
 import '@/core'
 import '@/globals'
-import 'typeahead'
-import 'typeahead-addresspicker'
-import 'leaflet'
-import 'leaflet.awesome-markers'
 import './Event.css'
+import { attachAddresspicker } from '@/addresspicker'
+import { GET } from '@/browser'
+
+let sub = GET('sub')
+if (sub === 'add' || sub === 'edit') {
+  attachAddresspicker()
+}

@@ -6,11 +6,9 @@ import StoreList from './components/StoreList.vue'
 
 // import some legacy js files
 // TODO: rewrite their usage with proper js modules using webpack
-import 'typeahead'
-import 'typeahead-addresspicker'
-import 'leaflet'
-import 'leaflet.awesome-markers'
+
 import '@/tablesorter'
+import { attachAddresspicker } from '@/addresspicker'
 import {
   GET
 } from '@/script'
@@ -20,4 +18,8 @@ if (GET('a') === 'undefined') {
     StoreList
   })
   vueApply('#vue-storelist')
+}
+
+if (GET('a') === 'edit' || GET('a') === 'add') {
+  attachAddresspicker()
 }

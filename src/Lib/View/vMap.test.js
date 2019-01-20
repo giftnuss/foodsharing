@@ -3,19 +3,11 @@
 import sinon from 'sinon'
 import assert from 'assert'
 import { resetModules } from '>/utils'
-import $ from 'jquery'
-
-class PlacesService { }
 
 describe('vMap', () => {
   const sandbox = sinon.createSandbox()
 
   beforeEach(() => {
-    sinon.stub($, 'getScript').callsFake((url, callback) => {
-      global.google = { maps: { places: { PlacesService } } }
-      callback()
-    })
-
     const options = {
       center: [50.89, 10.13],
       searchpanel: 'searchpanel',
@@ -49,7 +41,6 @@ describe('vMap', () => {
 
   it('gets initialized by leaflet', () => {
     assert.strictEqual(document.querySelectorAll('.leaflet-map-pane').length, 1)
-    assert($.getScript.called)
   })
 })
 

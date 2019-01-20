@@ -62,15 +62,18 @@ Object.assign(module.exports, convert({
     }
   },
 
-  'typeahead-addresspicker': {
-    resolve: lib('typeahead-addresspicker.js'),
-    imports: {
-      jQuery: 'jquery'
-    },
+  'corejs-typeahead': {
     dependencies: [
-      'typeahead'
-    ],
-    exports: 'AddressPicker'
+      'css/typeahead.css'
+    ]
+  },
+
+  'typeahead-address-photon': {
+    imports: {
+      jQuery: 'jquery',
+      Bloodhound: 'corejs-typeahead'
+    },
+    exports: 'this.PhotonAddressEngine'
   },
 
   'jquery-ui-addons': {
@@ -99,13 +102,6 @@ Object.assign(module.exports, convert({
     dependencies: [
       lib('dynatree/skin/ui.dynatree.css')
     ]
-  },
-
-  'typeahead': {
-    resolve: lib('typeahead.bundle.js'),
-    imports: {
-      'window.jQuery': 'jquery'
-    }
   },
 
   'jquery-tablesorter': {

@@ -280,7 +280,6 @@ class LoginXhr extends Control
 			$dia->addJsBefore('
 
 				var date = new Date();
-				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/fonts/octicons/octicons.css").appendTo("head");
 				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/css/join.css?" + date.getTime()).appendTo("head");
 				join.init();
 			');

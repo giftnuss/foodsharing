@@ -1,25 +1,16 @@
 import $ from 'jquery'
 
 import L from 'leaflet'
-
-// import 'leaflet.css'
-
 import 'leaflet.awesome-markers'
-// import 'leaflet.awesome-markers.css'
-// import 'leaflet.awesome-markers.foodsharing-overrides.css'
 
 import 'leaflet.markercluster'
-// import 'leaflet.markercluster/dist/MarkerCluster.css'
-// import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 
-import AddressPicker from 'typeahead-addresspicker'
-
-import { GOOGLE_API_KEY } from '@/server-data'
+import 'corejs-typeahead'
+import PhotonAddressEngine from 'typeahead-address-photon'
 
 export let map
 export let clusterGroup
 let defaultMarker
-let googleApiScriptLoaded = false
 $(() => {
   $('.vmap').each((i, el) => initializeMap(el))
 })
@@ -47,19 +38,13 @@ export async function initializeMap (el, cb = null) {
     .setView(center, zoom)
 
   L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
-    attribution: 'Geocoding by <a href="https://google.com">Google</a>, Tiles by <a href="https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use">Wikimedia</a>'
+    attribution: 'Geocoding by <a href="https://photon.komoot.de">Komoot Photon</a>, Tiles by <a href="https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use">Wikimedia</a>'
   }).addTo(map)
 
   clearCluster()
 
   if (searchpanel) {
-    if (googleApiScriptLoaded) {
-      initializeSearchpanel(searchpanel, cb)
-    } else {
-      $.getScript(`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=${GOOGLE_API_KEY}`, () => {
-        initializeSearchpanel(searchpanel, cb)
-      })
-    }
+    initializeSearchpanel(searchpanel, cb)
   }
 
   markers.forEach(addMarker)
@@ -69,27 +54,43 @@ export async function initializeMap (el, cb = null) {
 
 function initializeSearchpanel (searchpanel, cb = null) {
   const $searchpanel = $('#' + searchpanel)
-  const addressPicker = new AddressPicker()
 
   let marker
 
-  const icon = L.AwesomeMarkers.icon({
-    icon: 'smile',
-    markerColor: 'orange',
-    prefix: 'img'
-  })
+  const icon = L.AwesomeMarkers.icon(
+    {
+      icon: 'smile',
+      markerColor: 'orange',
+      prefix: 'img'
+    })
 
-  $searchpanel.typeahead(null, {
-    displayKey: 'description',
-    source: addressPicker.ttAdapter()
-  })
+  let engine = new PhotonAddressEngine(
+    {
+      url: 'https://photon.komoot.de',
+      formatResult: function (feature) {
+        let prop = feature.properties
+        let formatted = [prop.name || '', prop.street, prop.housenumber || '', prop.postcode, prop.city, prop.country].filter(Boolean).join(' ')
+        return formatted
+      },
+      lang: 'de'
+    }
+  )
 
-  addressPicker.bindDefaultTypeaheadEvent($searchpanel)
+  $searchpanel.typeahead(
+    {
+      highlight: true,
+      minLength: 3,
+      hint: true
+    },
+    {
+      displayKey: 'description',
+      source: engine.ttAdapter()
+    })
+  engine.bindDefaultTypeaheadEvent($searchpanel)
 
-  $(addressPicker).on('addresspicker:selected', (event, result) => {
-    const { placeResult } = result
-    const { viewport } = placeResult.geometry
-    const latLng = L.latLng(result.lat(), result.lng())
+  $(engine).bind('addresspicker:selected', (event, result) => {
+    console.log(result)
+    const latLng = L.latLng(result.geometry.coordinates[1], result.geometry.coordinates[0])
 
     if (marker) {
       marker.setLatLng(latLng)
@@ -97,15 +98,7 @@ function initializeSearchpanel (searchpanel, cb = null) {
       marker = L.marker(latLng, { icon }).addTo(map)
     }
 
-    if (viewport) {
-      map.fitBounds(L.latLngBounds(
-        L.latLng(viewport.getNorthEast().lat(), viewport.getNorthEast().lng()),
-        L.latLng(viewport.getSouthWest().lat(), viewport.getSouthWest().lng())
-      ))
-    } else {
-      map.setCenter(latLng)
-      map.setZoom(16)
-    }
+    map.setView(latLng, 13)
 
     if (cb) {
       cb(result)

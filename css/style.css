@@ -1482,12 +1482,6 @@ a.light {
   color: #533a20;
 }
 
-.leaflet-top, .leaflet-bottom {
-  z-index: 25 !important;
-  right: auto;
-  left: 0;
-}
-
 .quicks {
   background-color: #c2bab4;
   border: 0 none;

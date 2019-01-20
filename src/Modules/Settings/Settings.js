@@ -4,10 +4,8 @@ import '@/globals'
 import './Settings.css'
 import 'jquery-jcrop'
 import 'jquery-dynatree'
-import 'typeahead'
-import 'typeahead-addresspicker'
-import 'leaflet'
-import 'leaflet.awesome-markers'
+import { attachAddresspicker } from '@/addresspicker'
+
 import {
   fotoupload,
   picFinish,
@@ -20,3 +18,5 @@ expose({
   picFinish,
   collapse_wrapper
 })
+
+attachAddresspicker()

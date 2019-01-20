@@ -5,16 +5,16 @@ import $ from 'jquery'
 import 'jquery-tagedit'
 import 'jquery-tagedit-auto-grow-input'
 import 'jquery-jcrop'
-import 'typeahead'
-import 'typeahead-addresspicker'
-import 'leaflet'
-import 'leaflet.awesome-markers'
+import { attachAddresspicker } from '@/addresspicker'
+
 import {
   ajreq,
   pictureCrop,
   pictureReady
 } from '@/script'
 import { expose } from '@/utils'
+import { GET } from '@/browser'
+
 import './FairTeiler.css'
 
 expose({
@@ -30,3 +30,8 @@ function u_wallpostReady (postid) {
 $('#wall-submit').bind('mousedown', function () {
   $('#ft-public-link').trigger('click')
 })
+
+let sub = GET('sub')
+if (sub === 'add' || sub === 'edit') {
+  attachAddresspicker()
+}
