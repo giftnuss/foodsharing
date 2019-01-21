@@ -492,7 +492,6 @@ class DashboardControl extends Control
 		</div>',
 
 			CNT_TOP
-
 		);
 
 		/*
