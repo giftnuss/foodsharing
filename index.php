@@ -38,6 +38,18 @@ require_once 'config.inc.php';
 global $container;
 $container = initializeContainer();
 
+/* @var $csp ContentSecurityPolicy */
+$csp = $container->get(ContentSecurityPolicy::class);
+
+// Security headers :)
+
+header('X-Frame-Options: DENY');
+header('X-Content-Type-Options: nosniff');
+
+if (defined('CSP_REPORT_URI')) {
+	header($csp->generate(CSP_REPORT_URI, CSP_REPORT_ONLY));
+}
+
 require_once 'lib/inc.php';
 
 /* @var $mem Mem */
@@ -51,9 +63,6 @@ $func = $container->get(Func::class);
 
 /* @var $session Session */
 $session = $container->get(Session::class);
-
-/* @var $csp ContentSecurityPolicy */
-$csp = $container->get(ContentSecurityPolicy::class);
 
 $g_broadcast_message = $db->qOne('SELECT `body` FROM fs_content WHERE `id` = 51');
 
@@ -100,15 +109,6 @@ if (isset($obj)) {
 } else {
 	$response->setStatusCode(404);
 	$response->setContent('');
-}
-
-// Security headers :)
-
-header('X-Frame-Options: DENY');
-header('X-Content-Type-Options: nosniff');
-
-if (defined('CSP_REPORT_URI')) {
-	header($csp->generate(CSP_REPORT_URI, CSP_REPORT_ONLY));
 }
 
 $page = $response->getContent();
