@@ -1,12 +1,9 @@
 /* eslint-env mocha */
 
-import sinon from 'sinon'
 import assert from 'assert'
-import { resetModules } from '>/utils'
+import { resetModules, later } from '>/utils'
 
 describe('vMap', () => {
-  const sandbox = sinon.createSandbox()
-
   beforeEach(() => {
     const options = {
       center: [50.89, 10.13],
@@ -35,12 +32,13 @@ describe('vMap', () => {
   })
 
   afterEach(() => {
-    sandbox.restore()
     resetModules()
   })
 
   it('gets initialized by leaflet', () => {
-    assert.strictEqual(document.querySelectorAll('.leaflet-map-pane').length, 1)
+    return later(() => {
+      assert.strictEqual(document.querySelectorAll('.leaflet-map-pane').length, 1)
+    })
   })
 })
 
