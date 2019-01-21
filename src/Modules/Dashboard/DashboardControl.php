@@ -475,14 +475,24 @@ class DashboardControl extends Control
 
 		$this->func->addContent(
 			'
-		<div class="top corner-all">
-			<div class="img">' . $this->func->avatar($me, 50) . '</div>
-				<h3>Hallo ' . $me['name'] . '</h3>
-				<p>' . $this->func->s('rolle_' . $me['rolle'] . '_' . $me['geschlecht']) . ' für ' . $me['bezirk_name'] . '</a>' . $gerettet . '</p>
-			<div style="clear:both;"></div>		
+		<div class="pure-u-1 ui-padding-bottom">
+		<ul id="conten-top"  class="top corner-all linklist" >
+		<li>
+
+            <a href="profile/' . $me['id'] . '">
+                <div class="ui-padding">
+                    <div class="img">' . $this->func->avatar($me, 50) . '</div>
+                    <h3 class "corner-all">Hallo ' . $me['name'] . '</h3>
+                    <p>' . $this->func->s('rolle_' . $me['rolle'] . '_' . $me['geschlecht']) . ' für ' . $me['bezirk_name'] . $gerettet . '</p>
+                    <div style="clear:both;"></div>
+                </div>
+            </a>
+		</li>
+		</ul>			
 		</div>',
 
 			CNT_TOP
+
 		);
 
 		/*

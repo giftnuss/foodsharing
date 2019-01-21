@@ -1706,7 +1706,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			}
 		}
 
-		return '<a href="profile/' . $foodsaver['id'] . '"><span style="' . $bg . 'background-image:url(' . $this->img($foodsaver['photo'], $size, 'q', $altimg) . ');" class="avatar size-' . $size . ' sleepmode-' . $foodsaver['sleep_status'] . '"><i>' . $foodsaver['name'] . '</i></span></a>';
+		return '<span style="' . $bg . 'background-image:url(' . $this->img($foodsaver['photo'], $size, 'q', $altimg) . ');" class="avatar size-' . $size . ' sleepmode-' . $foodsaver['sleep_status'] . '"><i>' . $foodsaver['name'] . '</i></span>';
 	}
 
 	public function rolleWrapInt($roleInt)
