@@ -1753,7 +1753,7 @@ ul.bread {
 }
 
 ul.bread li, ul.bread li a {
-  font-size: 12px;
+  font-size: 10px;
   font-weight: normal;
 }
 
@@ -1766,7 +1766,7 @@ ul.bread li:before {
   font-family: "Font Awesome 5 Free", monospace;
   font-weight: 900;
   content: "\f0da";
-  font-size: 13px;
+  font-size: 10px;
   margin-right: 10px;
   position: relative;
   top: 1px;
