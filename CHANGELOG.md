@@ -18,7 +18,8 @@
 
 - List of conversations no longer contains empty conversations #420 @pmayd
 - List of conversations no longer contains empty conversations #420 !619 @pmayd
-- 
+- Support falsy (0, '') values for variables in client side translations !641 @NerdyProjects
+
 ## Refactoring
 - Removed scrollbars from event view !608 @jofranz
 - Restructured / cleaned up CSS for Boostrap / Topbar, leaving Bootstrap defaults where possible !616 @colomar
@@ -34,10 +35,10 @@
 - Make client eslint actually fail on error !625 @nicksellen
 - Fix a few eslint reported errors !625 @nicksellen
 - Add phpstan !634 @nicksellen
+
 # 2019-01-19 Hotfix
 
 - prepare support for separated email domain for platform mailboxes !630 @NerdyProjects
-- prepare support for separated email domain for platform mailboxes
 
 # 2019-01-13 Hotfix
 
