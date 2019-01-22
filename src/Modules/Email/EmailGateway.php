@@ -157,13 +157,4 @@ class EmailGateway extends BaseGateway
 
 		return $row;
 	}
-
-	public function addBounceForMail($email, $category, \DateTime $time)
-	{
-		$this->db->insert('fs_email_bounces', [
-			'email' => $email,
-			'bounce_category' => $category,
-			'bounced_at' => $time->format('Y-m-d H:i:s')
-		]);
-	}
 }

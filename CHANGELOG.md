@@ -10,6 +10,7 @@
 - add security headers !633 @nicksellen
 - changed tile maps to wikimedia !639 @alex.simm
 - Use typeahead-address-photon for address autocomplete. Update leaflet and typeahead for recent NPM versions in the same go !640 @NerdyProjects
+- Do not send emails to bouncing addresses !645 @NerdyProjects
 
 ## Bugfixes
 - Improve/correct user profile badge count !612 @pmayd

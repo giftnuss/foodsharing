@@ -6,6 +6,7 @@ use Ddeboer\Imap\Server;
 use Flourish\fEmail;
 use Flourish\fFile;
 use Flourish\fSMTP;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\InfluxMetrics;
@@ -18,17 +19,19 @@ class MailsControl extends ConsoleControl
 	 */
 	public static $smtp = false;
 	public static $last_connect;
+	private $mailsGateway;
 	private $mailboxModel;
 	private $database;
 	private $metrics;
 
-	public function __construct(MailsModel $model, MailboxModel $mailboxModel, Database $database, InfluxMetrics $metrics)
+	public function __construct(Db $model, MailsGateway $mailsGateway, MailboxModel $mailboxModel, Database $database, InfluxMetrics $metrics)
 	{
 		echo "creating mailscontrl!!!!\n";
 		error_reporting(E_ALL);
 		ini_set('display_errors', '1');
 		self::$smtp = false;
 		$this->model = $model;
+		$this->mailsGateway = $mailsGateway;
 		$this->mailboxModel = $mailboxModel;
 		$this->database = $database;
 		$this->metrics = $metrics;
@@ -102,10 +105,10 @@ class MailsControl extends ConsoleControl
 						continue;
 					}
 
-					$mb_ids = $this->model->getMailboxIds($mboxes);
+					$mb_ids = $this->mailsGateway->getMailboxIds($mboxes);
 
 					if (!$mb_ids) {
-						$mb_ids = $this->model->getMailboxIds(array('lost'));
+						$mb_ids = $this->mailsGateway->getMailboxIds(array('lost'));
 						++$stats['unknown-recipient'];
 					}
 
@@ -195,7 +198,7 @@ class MailsControl extends ConsoleControl
 									$from['personal'] = $msg->getFrom()->getName();
 								}
 
-								$this->model->saveMessage(
+								$this->mailsGateway->saveMessage(
 									$id, // mailbox id
 									1, // folder
 									json_encode($from), // sender
@@ -298,7 +301,7 @@ class MailsControl extends ConsoleControl
 
 	public function handleEmail($data)
 	{
-		self::info('mail arrived ...: ' . $data['from'][0] . '@' . $data['from'][1]);
+		self::info('Mail from: ' . $data['from'][0] . ' (' . $data['from'][1] . ')');
 		$email = new fEmail();
 		$email->setFromEmail($data['from'][0], $data['from'][1]);
 		$subject = preg_replace('/\s+/', ' ', trim($data['subject']));
@@ -319,15 +322,18 @@ class MailsControl extends ConsoleControl
 		$has_recip = false;
 		foreach ($data['recipients'] as $r) {
 			$r[0] = strtolower($r[0]);
-			self::info($r[0]);
+			self::info('To: ' . $r[0]);
 			$address = explode('@', $r[0]);
 			if (count($address) != 2) {
 				self::error('invalid address');
 				continue;
 			}
-
-			$email->addRecipient($r[0], $r[1]);
-			$has_recip = true;
+			if (!$this->mailsGateway->emailIsBouncing($r[0])) {
+				$email->addRecipient($r[0], $r[1]);
+				$has_recip = true;
+			} else {
+				self::error('bouncing address');
+			}
 		}
 		if (!$has_recip) {
 			return true;
@@ -338,7 +344,7 @@ class MailsControl extends ConsoleControl
 			self::smtpReconnect();
 		}
 
-		$max_try = 3;
+		$max_try = 2;
 		$sended = false;
 		while (!$sended) {
 			--$max_try;
