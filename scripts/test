@@ -23,7 +23,7 @@ echo "Running migations"
 migratedb foodsharing
 
 echo "Running composer install"
-exec-in-container app composer install
+exec-in-container app 'composer install && composer outdated -D'
 
 echo "Running tests"
 exec-in-container selenium "find /home/seluser/Downloads -type f -print0 | xargs -r -n 1 -0 rm"

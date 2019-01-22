@@ -37,6 +37,7 @@
 - Fix a few eslint reported errors !625 @nicksellen
 - Add phpstan !634 @nicksellen
 - Use PHP 7.3.1 in Dev/Test/CI !644 @NerdyProjects
+- Some restrictions for use of composer !627 @peter.toennies
 
 # 2019-01-19 Hotfix
 
