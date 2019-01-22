@@ -450,7 +450,7 @@ class SettingsView extends View
 					$("#delete-account-confirm").dialog("close");
 				},
 				"' . $this->func->s('delete_account_confirm_bt') . '" : function(){
-					goTo("/?page=settings&deleteaccount=1&reason=" + encodeURIComponent($("#reason_to_delete").val()));
+					goTo("/?page=settings&deleteaccount=1");
 				}
 			}
 		});
@@ -468,7 +468,6 @@ class SettingsView extends View
 		$this->func->addHidden('
 		<div id="delete-account-confirm">
 			' . $this->v_utils->v_info($this->func->s('delete_account_confirm_msg')) . '
-			' . $this->v_utils->v_form_textarea('reason_to_delete') . '
 		</div>
 	');
 

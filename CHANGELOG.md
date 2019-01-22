@@ -11,6 +11,7 @@
 - changed tile maps to wikimedia !639 @alex.simm
 - Use typeahead-address-photon for address autocomplete. Update leaflet and typeahead for recent NPM versions in the same go !640 @NerdyProjects
 - Do not send emails to bouncing addresses !645 @NerdyProjects
+- Do not ask users why they want to delete their account !647 @NerdyProjects
 
 ## Bugfixes
 - Improve/correct user profile badge count !612 @pmayd

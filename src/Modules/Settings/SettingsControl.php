@@ -35,10 +35,6 @@ class SettingsControl extends Control
 		$this->foodsaver = $this->model->getValues(array('rolle', 'email', 'name', 'nachname', 'geschlecht', 'verified'), 'foodsaver', $this->func->fsId());
 
 		if (isset($_GET['deleteaccount'])) {
-			$this->func->libmail(array(
-				'email' => $this->foodsaver['email'],
-				'email_name' => $this->foodsaver['name'] . ' ' . $this->foodsaver['nachname']
-			), 'loeschen@' . PLATFORM_MAILBOX_HOST, $this->foodsaver['name'] . ' hat Account gelöscht', $this->foodsaver['name'] . ' ' . $this->foodsaver['nachname'] . ' hat Account gelöscht' . "\n\nGrund für das Löschen:\n" . strip_tags($_GET['reason']));
 			$this->foodsaverGateway->del_foodsaver($this->func->fsId());
 			$this->func->go('/?page=logout');
 		}
