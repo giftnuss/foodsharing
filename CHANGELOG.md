@@ -34,6 +34,7 @@
 - Make client eslint actually fail on error !625 @nicksellen
 - Fix a few eslint reported errors !625 @nicksellen
 - Add phpstan !634 @nicksellen
+- Use PHP 7.3.1 in Dev/Test/CI !644 @NerdyProjects
 
 # 2019-01-19 Hotfix
 
