@@ -10,15 +10,12 @@
 - add security headers !633 @nicksellen
 - changed tile maps to wikimedia !639 @alex.simm
 - Use typeahead-address-photon for address autocomplete. Update leaflet and typeahead for recent NPM versions in the same go !640 @NerdyProjects
-- Do not send emails to bouncing addresses !645 @NerdyProjects
-- Do not ask users why they want to delete their account !647 @NerdyProjects
 
 ## Bugfixes
 - Improve/correct user profile badge count !612 @pmayd
 - Datepicker for fetch slots in stores increased to fit 6 week rows #417 !621 @peter.reutlingen
 - Changed color of the breadcrumb sitenavigation below the topbar !636 @peter.reutlingen
 - List of conversations no longer contains empty conversations #420 !619 @pmayd
-- Support falsy (0, '') values for variables in client side translations !641 @NerdyProjects
 - Remove fetchrate for users with zero pickups !646 @jofranz
 
 ## Refactoring
@@ -39,6 +36,12 @@
 - Add phpstan !634 @nicksellen
 - Use PHP 7.3.1 in Dev/Test/CI !644 @NerdyProjects
 - Some restrictions for use of composer !627 @peter.toennies
+
+# 2019-01-22 Hotfix
+
+- Do not send emails to bouncing addresses !645 @NerdyProjects
+- Do not ask users why they want to delete their account !647 @NerdyProjects
+- Support falsy (0, '') values for variables in client side translations !641 @NerdyProjects
 
 # 2019-01-19 Hotfix
 
