@@ -83,7 +83,7 @@ const msg = {
         msg.$conversation.parent('.slimScrollDiv').css('height', height)
         msg.$conversation.slimScroll({
           height: height,
-          scrollTo: `${$('#msg-conversation').prop('scrollHeight')}px`
+          scrollTo: `${msg.$conversation.prop('scrollHeight')}px`
         })
       } else {
         /* THIS CODE IS BROKEN BECAUSE app.resize does not exist, it's a copy-and-paste from stackoverflow error
@@ -104,10 +104,10 @@ const msg = {
       }
     })
 
-    autosize($('#msg_answer'))
+    autosize(document.getElementById('msg_answer'))
 
-    $('#msg_answer').on('resize', function () {
-      $('#msg_answer').css('margin-top', `-${$('#msg_answer').height() - 40}px`)
+    msg.$answer.on('resize', function () {
+      msg.$answer.css('margin-top', `-${msg.$answer.height() - 40}px`)
     })
 
     /*
@@ -116,7 +116,7 @@ const msg = {
     $('#msg-control form').on('submit', function (ev) {
       ev.preventDefault()
 
-      var val = $('#msg_answer').val()
+      var val = msg.$answer.val()
       if (val != '') {
         msg.$answer.val('')
         msg.$answer.css('height', '40px')
@@ -246,7 +246,7 @@ const msg = {
     })
   },
   initComposer: function () {
-    autosize($('#compose_body'))
+    autosize(document.getElementById('compose_body'))
     $('#compose_submit').on('click', function (ev) {
       ev.preventDefault()
 
@@ -327,8 +327,8 @@ const msg = {
     }
   },
   compose: function () {
-    $('#compose').show()
-    $('#msg-conversation-wrapper').hide()
+    document.getElementById('compose').style.display = ''
+    document.getElementById('msg-conversation-wrapper').style.display = 'none'
     $('#conversation-list .active').removeClass('active')
     msg.conversation_id = 0
     msg.last_message_id = 0
@@ -336,7 +336,7 @@ const msg = {
   loadConversation: async function (id) {
     if (id == msg.conversation_id) {
       msg.scrollBottom()
-      $('#msg_answer').trigger('select')
+      msg.$answer.trigger('select')
       return false
     }
     msg.conversation_id = id
@@ -382,14 +382,14 @@ const msg = {
         .forEach(m => msg.appendMsg(m))
     }
 
-    $('#compose').hide()
-    $('#msg-conversation-wrapper').show()
+    document.getElementById('compose').style.display = 'none'
+    document.getElementById('msg-conversation-wrapper').style.display = ''
     msg.scrollBottom()
 
     msg.$convs.children('li.active').removeClass('active')
     $(`#convlist-${id}`).addClass('active')
 
-    $('#msg_answer').trigger('select')
+    msg.$answer.trigger('select')
 
     msg.heartbeatRestart()
 
@@ -417,7 +417,7 @@ const msg = {
           let position = $(`#msg-${lmid}`).position()
 
           if (!msg.isMob()) {
-            $('#msg-conversation').slimScroll({ scrollTo: `${position.top}px` })
+            msg.$conversation.slimScroll({ scrollTo: `${position.top}px` })
           } else {
             $(window).scrollTop(position.top)
           }
@@ -516,7 +516,7 @@ const msg = {
   },
   scrollBottom: function () {
     if (!msg.isMob()) {
-      $('#msg-conversation').slimScroll({ scrollTo: `${$('#msg-conversation').prop('scrollHeight')}px` })
+      msg.$conversation.slimScroll({ scrollTo: `${msg.$conversation.prop('scrollHeight')}px` })
     } else {
       $(window).scrollTop($(document).height())
     }
