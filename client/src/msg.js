@@ -1,13 +1,14 @@
 /* eslint-disable eqeqeq */
 
 /*
- * This is mostly only relevent for the Message module, but some of the functions are called from elsewhere
+ * This is mostly only relevant for the Message module, but some of the functions are called from elsewhere
  * (after checking the current page), so this could probably be split into two.
  */
 import $ from 'jquery'
 import info from '@/info'
 import conv from '@/conv'
 import autoLink from '@/autoLink'
+import autosize from 'autosize'
 import timeformat from '@/timeformat'
 import * as api from '@/api/conversations'
 import conversationStore from '@/stores/conversations'
@@ -38,7 +39,7 @@ const msg = {
 
   init: function () {
     /*
-     * to reduce server last stop all other heartbeat functionality
+     * to reduce server load, stop all other heartbeat functionality
      */
     stopHeartbeats()
 
@@ -75,7 +76,7 @@ const msg = {
     /*
      * make the message windows as big as possible
      */
-    $(window).resize(function () {
+    $(window).on('resize', function () {
       if (!msg.isMob()) {
         var height = `${$(window).height() - 200}px`
         msg.$conversation.css('height', height)
@@ -103,16 +104,16 @@ const msg = {
       }
     })
 
-    $('#msg_answer').autosize()
+    autosize($('#msg_answer'))
 
-    $('#msg_answer').resize(function () {
+    $('#msg_answer').on('resize', function () {
       $('#msg_answer').css('margin-top', `-${$('#msg_answer').height() - 40}px`)
     })
 
     /*
      * initiate message submit functionality for conversation form
      */
-    $('#msg-control form').submit(function (ev) {
+    $('#msg-control form').on('submit', function (ev) {
       ev.preventDefault()
 
       var val = $('#msg_answer').val()
@@ -163,14 +164,11 @@ const msg = {
   },
 
   isMob: function () {
-    if ($(window).width() > 600) {
-      return false
-    }
-    return true
+    return $(window).width() <= 600
   },
 
   /**
-   * list heartbeat checks everytime updates on all conversations
+   * list heartbeat checks every time updates on all conversations
    */
   heartbeat: function () {
     info.editService('msg', 'heartbeat', {
@@ -208,7 +206,7 @@ const msg = {
   },
 
   /**
-   * Method will be called if ther arrived something new from the server
+   * Method will be called if there arrived something new from the server
    */
   pushArrived: function (data) {
     let ret = data.msg_heartbeat
@@ -248,8 +246,8 @@ const msg = {
     })
   },
   initComposer: function () {
-    $('#compose_body').autosize()
-    $('#compose_submit').click(function (ev) {
+    autosize($('#compose_body'))
+    $('#compose_submit').on('click', function (ev) {
       ev.preventDefault()
 
       let recip = msg.getRecipients()
@@ -338,7 +336,7 @@ const msg = {
   loadConversation: async function (id) {
     if (id == msg.conversation_id) {
       msg.scrollBottom()
-      $('#msg_answer').select()
+      $('#msg_answer').trigger('select')
       return false
     }
     msg.conversation_id = id
@@ -391,7 +389,7 @@ const msg = {
     msg.$convs.children('li.active').removeClass('active')
     $(`#convlist-${id}`).addClass('active')
 
-    $('#msg_answer').select()
+    $('#msg_answer').trigger('select')
 
     msg.heartbeatRestart()
 
@@ -434,15 +432,15 @@ const msg = {
     if (!msg.isMob()) {
       msg.$conversation.unbind('scroll')
       msg.$conversation.scroll(function () {
-        var $conv = $(this)
+        let $conv = $(this)
         if ($conv.scrollTop() == 0) {
           msg.loadMore()
         }
       })
     } else {
-      $(window).unbind('scroll')
-      $(window).scroll(function () {
-        var $conv = $(this)
+      $(window).off('scroll')
+      $(window).on('scroll', function () {
+        let $conv = $(this)
 
         if ($conv.scrollTop() == 0) {
           msg.loadMore()
