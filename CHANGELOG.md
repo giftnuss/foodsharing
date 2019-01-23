@@ -7,7 +7,7 @@
 - Changelog page now supports links to issues with a # symbol followed by a number like it has been for merge requests before !622 @jofranz
 - update htmlpurifier to version 2 !594 @peter.toennies
 - add security headers !633 @nicksellen
-- link avatar of welcome message to profile #427 !635 @Defka
+- link top area of welcome message to profile #427 !635 @Defka
 
 ## Bugfixes
 - Improve/correct user profile badge count !612 @pmayd
