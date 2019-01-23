@@ -2052,3 +2052,7 @@ footer .linklist li a:hover {
     border-bottom: 1px solid #f1e7c9;
   }
 }
+
+.cryptedmail:after {
+  content: attr(data-name) "@foodsharing.network";
+}
