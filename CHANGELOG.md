@@ -37,6 +37,9 @@
 - Add phpstan !634 @nicksellen
 - Use PHP 7.3.1 in Dev/Test/CI !644 @NerdyProjects
 - Some restrictions for use of composer !627 @peter.toennies
+# 2019-01-24 Hotfix
+
+- Put information about email address change on front page @NerdyProjects
 
 # 2019-01-22 Hotfix
 
