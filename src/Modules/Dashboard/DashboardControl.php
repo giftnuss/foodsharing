@@ -468,7 +468,7 @@ class DashboardControl extends Control
 		$gerettet = $me['stat_fetchweight'];
 
 		if ($gerettet > 0) {
-			$gerettet = '. Du hast <strong>' . number_format($gerettet, 2, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg</strong> gerettet.';
+			$gerettet = '. Du hast <strong style="white-space:nowrap">' . number_format($gerettet, 2, ',', '.') . '&thinsp;kg</strong> gerettet.';
 		} else {
 			$gerettet = '';
 		}
