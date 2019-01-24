@@ -4,7 +4,7 @@ $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure various pages work');
 
 $I->amOnPage('/');
-$I->see('foodsharing ist und bleibt kostenlos');
+$I->see('Ab sofort neue E-Mail-Adressen');
 
 $I->amOnPage('/essenskoerbe');
 $I->seeCurrentUrlEquals('/essenskoerbe/find'); // it redirects
