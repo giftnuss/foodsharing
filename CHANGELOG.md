@@ -1,3 +1,7 @@
+# 2019-01-24 Hotfix
+
+- Put information about email address change on front page @NerdyProjects
+
 # 2019-01-22 Hotfix
 
 - Do not send emails to bouncing addresses !645 @NerdyProjects
