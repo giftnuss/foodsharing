@@ -7,7 +7,7 @@ import 'jquery-slimscroll'
 import 'jquery-fancybox'
 import 'jquery-ui-addons'
 
-import { goTo, isMob, GET } from '@/browser'
+import { GET, goTo, isMob } from '@/browser'
 
 import conv from '@/conv'
 
@@ -191,11 +191,9 @@ export function initialize () {
     $('.dialog').dialog()
     $('.v-switch').buttonset()
 
-    $('ul.toolbar li').hover(
-      function () {
-        $(this).addClass('ui-state-hover')
-      },
-      function () {
+    $('ul.toolbar li').on('mouseenter', function () {
+      $(this).addClass('ui-state-hover')
+    }).on('mouseleave', function () {
         $(this).removeClass('ui-state-hover')
       }
     )
@@ -451,7 +449,10 @@ export const pulseInfo = definePulse('info', 4000)
 export const pulseSuccess = definePulse('success', 5000)
 export const pulseError = definePulse('error', 6000)
 
-export function addHover (sel) { $(sel).hover(function () { $(this).addClass('hover') }, function () { $(this).removeClass('hover') }) }
+export function addHover (sel) {
+  $(sel).on('mouseenter', function () { $(this).addClass('hover') })
+    .on('mouseleave', function () { $(this).removeClass('hover') })
+}
 
 export function aNotify () {
   // $('#xhr-chat-notify')[0].play();
