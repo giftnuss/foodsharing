@@ -194,8 +194,8 @@ export function initialize () {
     $('ul.toolbar li').on('mouseenter', function () {
       $(this).addClass('ui-state-hover')
     }).on('mouseleave', function () {
-        $(this).removeClass('ui-state-hover')
-      }
+      $(this).removeClass('ui-state-hover')
+    }
     )
 
     $('.text, .textarea, select').on('focus',
