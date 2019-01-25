@@ -6,7 +6,7 @@ import 'leaflet.awesome-markers'
 
 let fsIcon = L.AwesomeMarkers.icon({
   icon: 'smile',
-  markerColor: 'lorange',
+  markerColor: 'orange',
   prefix: 'img'
 })
 
@@ -30,8 +30,11 @@ function showSelected (event, selected, map, engine) {
   map.fitBounds(markers.getBounds())
 }
 
-export function attachAddresspicker () {
-  let map = L.map('map').setView([51, 11], 4)
+export function attachAddressPicker () {
+  const data = [$('#lat').val(), $('#lon').val()]
+  let center = [51, 12]
+  let initialZoom = 4
+  let map = L.map('map').setView(center, initialZoom)
   setTimeout(() => (map.invalidateSize()), 400)
 
   L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
@@ -45,12 +48,16 @@ export function attachAddresspicker () {
       url: 'https://photon.komoot.de',
       formatResult: function (feature) {
         let prop = feature.properties
-        let formatted = [prop.name || '', prop.street, prop.housenumber || '', prop.postcode, prop.city, prop.country].filter(Boolean).join(' ')
-        return formatted
+        return [prop.name || '', prop.street, prop.housenumber || '', prop.postcode, prop.city, prop.country].filter(Boolean).join(' ')
       },
       lang: 'de'
     }
   )
+
+  if (data[0] !== '0' || data[1] !== '0') {
+    center = data
+    showSelected(null, { geometry: { coordinates: [center[1], center[0]] } }, map, engine)
+  }
 
   $('#addresspicker').typeahead(
     {
@@ -69,9 +76,16 @@ export function attachAddresspicker () {
     let geo = selectedPlace.geometry.coordinates
     $('#lat').val(geo[1])
     $('#lon').val(geo[0])
-    $('#plz').val(prop.postcode)
-    $('#ort').val(prop.city)
-    $('#anschrift').val(prop.street + (prop.housenumber ? ' ' + prop.housenumber : ''))
+    if (prop.postcode) {
+      $('#plz').val(prop.postcode)
+    }
+    if (prop.city) {
+      $('#ort').val(prop.city)
+    }
+    if (prop.street) {
+      $('#anschrift').val(prop.street + (prop.housenumber ? ' ' + prop.housenumber : ''))
+    }
+
     $('#addresspicker').val(selectedPlace.description)
   })
 

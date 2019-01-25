@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Core;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
@@ -345,21 +344,17 @@ class View
 
 	public function latLonPicker($id, $options = array())
 	{
-		if (isset($options['location'])) {
-			$data = array_merge(['zoom' => 14], $options['location']);
+		if (!isset($options['location'])) {
+			$data = $this->session->getLocation();
 		} else {
-			global $container;
-			/* @var $db Db */
-			$db = $container->get(Db::class);
-			$data = $db->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
-			$data['zoom'] = 14;
+			$data['lat'] = $options['location']['lat'];
+			$data['lon'] = $options['location']['lon'];
 		}
 
 		if (empty($data['lat']) || empty($data['lon'])) {
-			/* set empty coordinates somewhere in germany */
-			$data['lat'] = 51;
-			$data['lon'] = 10;
-			$data['zoom'] = 5;
+			/* set empty coordinates, javascript will take over default location */
+			$data['lat'] = 0;
+			$data['lon'] = 0;
 		}
 
 		// Default to blank values for these keys

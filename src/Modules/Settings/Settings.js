@@ -4,7 +4,7 @@ import '@/globals'
 import './Settings.css'
 import 'jquery-jcrop'
 import 'jquery-dynatree'
-import { attachAddresspicker } from '@/addresspicker'
+import { attachAddressPicker } from '@/addressPicker'
 
 import {
   fotoupload,
@@ -19,4 +19,4 @@ expose({
   collapse_wrapper
 })
 
-attachAddresspicker()
+attachAddressPicker()

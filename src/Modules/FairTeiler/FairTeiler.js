@@ -5,7 +5,7 @@ import $ from 'jquery'
 import 'jquery-tagedit'
 import 'jquery-tagedit-auto-grow-input'
 import 'jquery-jcrop'
-import { attachAddresspicker } from '@/addresspicker'
+import { attachAddressPicker } from '@/addressPicker'
 
 import {
   ajreq,
@@ -33,5 +33,5 @@ $('#wall-submit').bind('mousedown', function () {
 
 let sub = GET('sub')
 if (sub === 'add' || sub === 'edit') {
-  attachAddresspicker()
+  attachAddressPicker()
 }

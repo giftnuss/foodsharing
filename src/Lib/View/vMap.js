@@ -97,8 +97,15 @@ function initializeSearchpanel (searchpanel, cb = null) {
     } else {
       marker = L.marker(latLng, { icon }).addTo(map)
     }
-
-    map.setView(latLng, 13)
+    if (result.properties.extent) {
+      const b = result.properties.extent
+      map.fitBounds([
+        [b[1], b[0]],
+        [b[3], b[2]]
+      ])
+    } else {
+      map.setView(latLng, 15)
+    }
 
     if (cb) {
       cb(result)
