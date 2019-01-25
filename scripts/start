@@ -11,6 +11,9 @@ dir=$(dirname "$0")
 # inc.sh defines basic functions, mainly to run commands in containers
 source $dir/inc.sh
 
+# volume is created as root-owned
+run-in-container-asroot client "chown -R $UID /app/client/node_modules"
+
 echo "Bringing up containers"
 # dc is defined in inc.sh and starts docker-compose with following arguments
 # up starts the container, -d: run in background as a deamon
