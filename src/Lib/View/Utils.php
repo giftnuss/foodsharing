@@ -1240,7 +1240,7 @@ class Utils
 
 			$this->func->addJs('
 
-					$("#' . $id . 'neu").keyup(function(e){
+					$("#' . $id . 'neu").on("keyup", function(e){
 
 						if(e.keyCode == 13)
 						{

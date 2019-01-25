@@ -14,14 +14,14 @@ let $form = $('#contactform-form')
 if ($form.length > 0) {
   var $email = $('#email')
 
-  $email.keyup(function () {
+  $email.on('keyup', function () {
     var $el = $(this)
     if (checkEmail($el.val())) {
       $email.removeClass('input-error')
     }
   })
 
-  $email.trigger('blur')function () {
+  $email.on('blur', function () {
     var $el = $(this)
     if (!checkEmail($el.val())) {
       $email.addClass('input-error')
