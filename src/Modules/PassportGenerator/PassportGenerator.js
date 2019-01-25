@@ -119,7 +119,7 @@ $('a.fsname').on('click', function () {
   return false
 })
 $("a[href='#start']").on('click', function () {
-  $('form#generate').submit()
+  $('form#generate').trigger('submit')
   return false
 })
 $('a.dateclick').on('click', function () {

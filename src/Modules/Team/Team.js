@@ -29,10 +29,10 @@ if ($form.length > 0) {
     }
   })
 
-  $form.submit(function (ev) {
+  $form.on('submit', function (ev) {
     ev.preventDefault()
     if (!checkEmail($email.val())) {
-      $email.select()
+      $email.trigger('select',
       $email.addClass('input-error')
       pulseError('Bitte gib eine gültige E-Mail-Adresse ein, damit wir Dir antworten können!')
     } else {

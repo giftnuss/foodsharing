@@ -644,7 +644,7 @@ class Utils
 					<h3>Fotoupload</h3>
 					<p class="subtitle">Hier kannst Du ein Foto von Deinem Computer ausw&auml;hlen</p>
 					<form id="' . $id . '-form" method="post" enctype="multipart/form-data" target="' . $id . '-frame" action="/xhr.php?f=uploadPhoto">
-						<input type="file" name="uploadpic" onchange="showLoader();$(\'#' . $id . '-form\')[0].submit();" />
+						<input type="file" name="uploadpic" onchange="showLoader();$(\'#' . $id . '-form\')[0].trigger("submit");" />
 						<input type="hidden" id="' . $id . '-action" name="action" value="upload" />
 						<input type="hidden" id="' . $id . '-x" name="x" value="0" />
 						<input type="hidden" id="' . $id . '-y" name="y" value="0" />
@@ -727,7 +727,7 @@ class Utils
 		</form>
 		';
 
-		$this->func->addJs('$("#' . $id . '-form").submit(function(ev){
+		$this->func->addJs('$("#' . $id . '-form").on("submit", function(ev){
 
 			check = true;
 			$("#' . $id . '-form div.required .value").each(function(i,el){
@@ -1080,7 +1080,7 @@ class Utils
 
 				<form id="' . $id . '-form" method="post" enctype="multipart/form-data" target="' . $id . '-iframe" action="/xhr.php?f=uploadPicture&id=' . $id . '&crop=' . $crop . '">
 
-					<input type="file" name="uploadpic" onchange="showLoader();$(\'#' . $id . '-form\')[0].submit();" />
+					<input type="file" name="uploadpic" onchange="showLoader();$(\'#' . $id . '-form\')[0].trigger("submit");" />
 
 					<input type="hidden" id="' . $id . '-action" name="action" value="uploadPicture" />
 					<input type="hidden" id="' . $id . '-id" name="id" value="' . $id . '" />

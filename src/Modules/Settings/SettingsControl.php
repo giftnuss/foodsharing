@@ -315,7 +315,7 @@ class SettingsControl extends Control
 			}
 
 			if ($showform) {
-				$this->func->addJs('$("#upBotsch").submit(function(ev){
+				$this->func->addJs('$("#upBotsch").on("submit", function(ev){
 					check = true;
 					if($("#bezirk").val() == 0)
 					{

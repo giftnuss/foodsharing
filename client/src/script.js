@@ -537,7 +537,7 @@ export function error (txt) {
 }
 
 export function uploadPhoto () {
-  $('#uploadPhoto form').submit()
+  $('#uploadPhoto form').trigger('submit')
 }
 
 export function uploadPhotoReady (id, file) {
@@ -619,7 +619,7 @@ export function fotoupload (file, id) {
   $(`#${id}-save`).button().on('click', function () {
     showLoader()
     $(`#${id}-action`).val('crop')
-    $(`#${id}-form`)[0].submit()
+    $(`#${id}-form`)[0].trigger('submit')
     return false
   })
 
@@ -684,7 +684,7 @@ export function pictureCrop (id, img) {
   } else {
     showLoader()
     $(`#${id}-form`).attr('action', `xhr.php?f=pictureCrop&id=${id}&img=${img}`)
-    $(`#${id}-form`).submit()
+    $(`#${id}-form`).trigger('submit')
   }
 }
 export function nl2br (str, is_xhtml) {

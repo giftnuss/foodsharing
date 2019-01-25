@@ -254,7 +254,7 @@ class DashboardControl extends Control
 		});
 		$("#grab-info-link").trigger("click");
 		
-		$("#grabinfo-form").submit(function(e){
+		$("#grabinfo-form").on("submit", function(e){
 			e.preventDefault();
 			check = true;
 	

@@ -62,7 +62,7 @@ class SettingsView extends View
 			});
 			$("#sleep_msg").css("height","50px").autosize();
 
-			$("#schlafmtzenfunktion-form").submit(function(ev){
+			$("#schlafmtzenfunktion-form").on("submit", function(ev){
 				ev.preventDefault();
 				ajax.req("settings","sleepmode",{
 					method:"post",
@@ -478,7 +478,7 @@ class SettingsView extends View
 	{
 		global $g_data;
 
-		$this->func->addJs('$("#foodsaver-form").submit(function(e){
+		$this->func->addJs('$("#foodsaver-form").on("submit", function(e){
 		if($("#photo_public").length > 0)
 		{
 			$e = e;

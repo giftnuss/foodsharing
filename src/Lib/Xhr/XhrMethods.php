@@ -1179,7 +1179,7 @@ class XhrMethods
 
 		$out['script'] = '
 		$("#bezirkform-form").unbind("submit");
-		$("#bezirkform-form").submit(function(ev){
+		$("#bezirkform-form").on("submit", function(ev){
 			ev.preventDefault();
 
 			$("#dialog-confirm-msg").html("Sicher, dass Du die &Auml;nderungen am Bezirk speichern m&ouml;chtest?");

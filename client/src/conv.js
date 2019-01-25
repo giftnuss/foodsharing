@@ -432,7 +432,7 @@ const conv = {
       $el.children('.chatboxcontent').slimScroll()
       $el.children('.chatboxinput').children('textarea').autosize()
 
-      $el.children('.chatboxinput').children('textarea').focus(function () {
+      $el.children('.chatboxinput').children('textarea').on('focus', function () {
         conv.activeBox = cid
       })
 
@@ -453,7 +453,7 @@ const conv = {
       /*
        * focus textarea
        */
-      $el.children('.chatboxinput').children('textarea').select()
+      $el.children('.chatboxinput').children('textarea').trigger('select')
 
       /*
        * register service new

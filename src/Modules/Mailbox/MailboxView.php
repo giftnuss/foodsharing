@@ -287,7 +287,7 @@ class MailboxView extends View
 				setTimeout(function(){
 					$("#et-file-list").append("<li>"+$("#etattach-info").text()+"</li>");
 				},10);
-				$(".et-filebox form").submit();
+				$(".et-filebox form").trigger("submit");
 			}
 			else
 			{

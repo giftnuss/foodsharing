@@ -229,13 +229,13 @@ abstract class Control
 					$("#attach-preview div:last").remove();
 					$("#attach-preview").append(\'<a rel="wallpost-gallery" class="preview-thumb attach-load" href="#" onclick="return false;">&nbsp;</a>\');
 					$("#attach-preview").append(\'<div style="clear:both;"></div>\');
-					$("#wallpost-attachimage-form").submit();
+					$("#wallpost-attachimage-form").trigger("submit");
 				});
 
 			$("#wallpost-text").blur(function(){
 				$("#wallpost-submit").show();
 			});
-			$("#wallpost-post").submit(function(ev){
+			$("#wallpost-post").on("submit", function(ev){
 				ev.preventDefault();
 
 			});

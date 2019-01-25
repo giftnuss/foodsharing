@@ -78,7 +78,7 @@ $('.cb-verantwortlicher').on('click', function () {
   }
 })
 
-$('#team-form').submit(function (ev) {
+$('#team-form').on("submit", function (ev) {
   if ($('.cb-verantwortlicher:checked').length == 0) {
     pulseError(i18n('verantwortlicher_must_be'))
     ev.preventDefault()
@@ -160,10 +160,10 @@ $('div#pinnwand form textarea').on('focus', function () {
 })
 
 $('div#pinnwand form input.submit').button().bind('keydown', function (event) {
-  $('div#pinnwand form').submit()
+  $('div#pinnwand form').trigger('submit')
 })
 
-$('div#pinnwand form').submit(function (e) {
+$('div#pinnwand form').on('submit', function (e) {
   e.preventDefault()
   if ($('div#pinnwand form textarea').val() != $('div#pinnwand form textarea').attr('title')) {
     $.ajax({

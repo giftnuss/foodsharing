@@ -171,7 +171,7 @@ class XhrDialog
 		$this->addJs('
 				
 			$("#' . $in_id . '-file").on("change", function(){
-				$("#' . $in_id . '-form").submit();
+				$("#' . $in_id . '-form").trigger("submit");
 				$(".ui-dialog-buttonpane .ui-button").button( "option", "disabled", true );
 				$(".attach-preview").show();
 				$(".attach-preview").html(\'<a href="#" class="preview-thumb attach-load" rel="wallpost-gallery">&nbsp;</a><div style="clear:both;"></div>\');

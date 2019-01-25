@@ -17,10 +17,10 @@ class BusinessCardView extends View
 			$("#optionen-form .input-wrapper:last").hide();
 			
 			$("#opt").on("change", function(){
-				$("#optionen-form").submit();
+				$("#optionen-form").trigger("submit");
 			});
 				
-			$("#optionen-form").submit(function(ev){
+			$("#optionen-form").on("submit", function(ev){
 				ev.preventDefault();
 				if($("#opt").val() == "")
 				{
