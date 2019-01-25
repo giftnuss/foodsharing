@@ -71,7 +71,7 @@ class FoodsaverView extends View
 		}
 
 		$this->func->addJs('
-			$("#rolle").change(function(){
+			$("#rolle").on("change", function(){
 				if(this.value == 4)
 				{
 					$("#orgateam-wrapper input")[0].checked = true;

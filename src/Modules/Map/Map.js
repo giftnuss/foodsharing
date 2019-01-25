@@ -323,7 +323,7 @@ $(document).ready(function () {
     return false
   })
 
-  $('#map-options input').change(function () {
+  $('#map-options input').on('change', function () {
     if ($(this).val() === 'allebetriebe') {
       $('#map-options input').prop('checked', false)
       $('#map-options input[value=\'allebetriebe\']').prop('checked', true)

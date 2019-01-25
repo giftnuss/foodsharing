@@ -170,7 +170,7 @@ class XhrDialog
 				'));
 		$this->addJs('
 				
-			$("#' . $in_id . '-file").change(function(){
+			$("#' . $in_id . '-file").on("change", function(){
 				$("#' . $in_id . '-form").submit();
 				$(".ui-dialog-buttonpane .ui-button").button( "option", "disabled", true );
 				$(".attach-preview").show();

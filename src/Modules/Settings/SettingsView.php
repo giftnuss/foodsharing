@@ -40,7 +40,7 @@ class SettingsView extends View
 		}
 
 		$this->func->addJs('
-			$("#sleep_status").change(function(){
+			$("#sleep_status").on("change", function(){
 				var $this = $(this);
 				if($this.val() == 1)
 				{

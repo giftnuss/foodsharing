@@ -38,7 +38,7 @@ export function init (module, wallId) {
     $('#wallpost-submit').show()
   })
 
-  $('#wallpost-attach-trigger').change(function () {
+  $('#wallpost-attach-trigger').on('change', function () {
     $('#attach-preview div:last').remove()
     $('#attach-preview').append('<a rel="wallpost-gallery" class="preview-thumb attach-load" href="#" onclick="return false;">&nbsp;</a>')
     $('#attach-preview').append('<div style="clear:both;"></div>')

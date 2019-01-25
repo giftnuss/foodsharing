@@ -16,7 +16,7 @@ class BusinessCardView extends View
 		$this->func->addJs('
 			$("#optionen-form .input-wrapper:last").hide();
 			
-			$("#opt").change(function(){
+			$("#opt").on("change", function(){
 				$("#optionen-form").submit();
 			});
 				

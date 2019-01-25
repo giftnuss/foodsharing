@@ -39,7 +39,7 @@ class EventView extends View
 			}
 		');
 		$this->func->addJs('
-			$("#online_type").change(function(){
+			$("#online_type").on("change", function(){
 				if($(this).val() == 0)
 				{
 					$("#location_name-wrapper").removeClass("required");
@@ -62,7 +62,7 @@ class EventView extends View
 			$("#dateend-wrapper").hide();
 			$("#date").after(\'<label class="addend"><input type="checkbox" name="addend" id="addend" value="1" /> Das Event geht über mehrere Tage</label>\');
 	
-			$("#addend").change(function(){
+			$("#addend").on("change", function(){
 				if($("#addend:checked").length > 0)
 				{
 					$("#dateend-wrapper").show();
@@ -107,7 +107,7 @@ class EventView extends View
 		}
 
 		$this->func->addJs('
-			$("#public").change(function(){
+			$("#public").on("change", function(){
 				if($("#public:checked").length > 0)
 				{
 					$("#input-wrapper").hide();

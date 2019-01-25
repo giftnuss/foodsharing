@@ -89,7 +89,7 @@ class BasketXhr extends Control
 		$("#tel-wrapper").hide();
 		$("#handy-wrapper").hide();
 		
-		$("input.input.cb-contact_type[value=\'2\']").change(function(){
+		$("input.input.cb-contact_type[value=\'2\']").on("change", function(){
 			if(this.checked)
 			{
 				$("#tel-wrapper").show();

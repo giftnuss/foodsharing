@@ -508,7 +508,7 @@ class Utils
 			</div>';
 
 		$this->func->addJs('
-				$(\'#' . $id . '\').change(function(){
+				$(\'#' . $id . '\').on("change", function(){
 					if($(this).val() == "choose" || $(this).val() == "choosebot" || $(this).val() == "filialbez")
 					{
 						$("#' . $id . '-tree-wrapper").show();
@@ -1125,7 +1125,7 @@ class Utils
 
 		$this->func->addJs('
 		$("#' . $id . '-button").button().on("click", function(){$("#' . $id . '").trigger("click") ;});
-		$("#' . $id . '").change(function(){$("#' . $id . '-info").html($("#' . $id . '").val().split("\\\").pop());});');
+		$("#' . $id . '").on("change", function(){$("#' . $id . '-info").html($("#' . $id . '").val().split("\\\").pop());});');
 
 		$btlabel = $this->func->s('choose_file');
 		if (isset($option['btlabel'])) {

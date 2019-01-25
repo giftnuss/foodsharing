@@ -49,7 +49,7 @@ function handleApplicationConstraintVisibility () {
   }
 }
 
-selectEl.change(handleApplicationConstraintVisibility)
+selectEl.on('change', handleApplicationConstraintVisibility)
 handleApplicationConstraintVisibility()
 
 const onAfterClose = []

@@ -209,7 +209,7 @@ class StoreUserView extends View
 
 		if ($betrieb['verantwortlich']) {
 			$this->func->addJs('
-			$("#team_status").change(function(){
+			$("#team_status").on("change", function(){
 				var val = $(this).val();
 				showLoader();
 				$.ajax({

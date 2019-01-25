@@ -280,7 +280,7 @@ class MailboxView extends View
 				
 		  	}
 		});
-		$("#etattach").change(function(){
+		$("#etattach").on("change", function(){
 			if(this.files[0].size < 1310720)
 			{
 				$("#etattach-button").button( "option", "disabled", true );
