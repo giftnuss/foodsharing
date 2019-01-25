@@ -16,7 +16,6 @@
 - Improve/correct user profile badge count !612 @pmayd
 - Datepicker for fetch slots in stores increased to fit 6 week rows #417 !621 @peter.reutlingen
 - Changed color of the breadcrumb sitenavigation below the topbar !636 @peter.reutlingen
-- List of conversations no longer contains empty conversations #420 !619 @pmayd
 - Remove fetchrate for users with zero pickups !646 @jofranz
 
 ## Refactoring
@@ -37,6 +36,7 @@
 - Add phpstan !634 @nicksellen
 - Use PHP 7.3.1 in Dev/Test/CI !644 @NerdyProjects
 - Some restrictions for use of composer !627 @peter.toennies
+
 # 2019-01-24 Hotfix
 
 - Put information about email address change on front page @NerdyProjects
