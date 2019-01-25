@@ -431,7 +431,7 @@ const msg = {
 
     if (!msg.isMob()) {
       msg.$conversation.unbind('scroll')
-      msg.$conversation.scroll(function () {
+      msg.$conversation.on('scroll', function () {
         let $conv = $(this)
         if ($conv.scrollTop() == 0) {
           msg.loadMore()

@@ -54,7 +54,7 @@ if (['botforum', 'forum'].includes(GET('sub'))) {
     vueApply('#vue-thread')
   } else {
     let loadedPages = []
-    $(window).scroll(function () {
+    $(window).on('scroll', function () {
       if ($(window).scrollTop() < $(document).height() - $(window).height() - 10) {
         return
       }

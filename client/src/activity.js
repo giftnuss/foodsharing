@@ -30,7 +30,7 @@ const activity = {
 
     this.initLoad()
 
-    $(window).scroll(function () {
+    $(window).on('scroll', function () {
       if (!activity.isLoading) {
         if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
           activity.isLoading = true
