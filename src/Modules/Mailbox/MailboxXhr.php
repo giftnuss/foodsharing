@@ -104,12 +104,12 @@ class MailboxXhr extends Control
 					'append' => '#messagelist tbody',
 					'script' => '
 						$("#messagelist .from a:first").text("' . $vontext . '");
-						$("#messagelist tbody tr").mouseover(function(){
+						$("#messagelist tbody tr").on("mouseover", function(){
 							$("#messagelist tbody tr").removeClass("selected focused");
 							$(this).addClass("selected focused");
 							
 						});
-						$("#messagelist tbody tr").mouseout(function(){
+						$("#messagelist tbody tr").on("mouseout", function(){
 							$("#messagelist tbody tr").removeClass("selected focused");							
 						});
 						$("#messagelist tbody tr").on("click", function(){

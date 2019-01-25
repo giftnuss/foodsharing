@@ -13,9 +13,9 @@ if ($groups.length > 3) {
   $groups.children('.head').css({
     'cursor': 'pointer',
     'margin-bottom': '10px'
-  }).mouseover(function () {
+  }).on('mouseover', function () {
     $(this).css('text-decoration', 'underline')
-  }).mouseout(function () {
+  }).on('mouseout', function () {
     $(this).css('text-decoration', 'none')
   }).on('click', function () {
     const $this = $(this)

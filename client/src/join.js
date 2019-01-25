@@ -123,12 +123,12 @@ var join = {
 
         if ($('#login_name').val() === '') {
           pulseInfo('Bitte Gib einen Benutzernamen ein')
-          $('#login_name').trigger('select',
+          $('#login_name').trigger('select')
           return false
         }
         if (!$('#login_email')['0'].validity.valid) {
           pulseError('Mit Deiner E-Mail-Adresse stimmt etwas nicht')
-          $('#login_email').trigger('select',
+          $('#login_email').trigger('select')
           return false
         }
         let birthdate = new Date($('#birthdate').val())
@@ -148,13 +148,13 @@ var join = {
 
         if ($('#login_passwd1').val().length < 4) {
           pulseInfo('Dein Passwort muss länger als 4 Buchstaben sein')
-          $('#login_passwd1').trigger('select',
+          $('#login_passwd1').trigger('select')
           return false
         }
 
         if ($('#login_passwd1').val() !== $('#login_passwd2').val()) {
           pulseInfo('Deine Passwörter stimmen nicht überein')
-          $('#login_passwd1').trigger('select',
+          $('#login_passwd1').trigger('select')
           return false
         }
 

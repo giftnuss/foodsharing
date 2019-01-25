@@ -32,7 +32,7 @@ if ($form.length > 0) {
   $form.on('submit', function (ev) {
     ev.preventDefault()
     if (!checkEmail($email.val())) {
-      $email.trigger('select',
+      $email.trigger('select')
       $email.addClass('input-error')
       pulseError('Bitte gib eine gültige E-Mail-Adresse ein, damit wir Dir antworten können!')
     } else {
@@ -45,7 +45,7 @@ if ($form.length > 0) {
 }
 
 let $teamList = $('#team-list')
-$teamList.find('.foot i').mouseover(function () {
+$teamList.find('.foot i').on('mouseover', function () {
   var $this = $(this)
 
   var val = $this.children('span').text()
@@ -66,7 +66,7 @@ $teamList.find('.foot i').on('click', function (ev) {
   }
 })
 
-$teamList.find('.foot i').mouseout(function () {
+$teamList.find('.foot i').on('mouseout', function () {
   var $this = $(this).parent().parent()
 
   $this.attr('href', `/team/${$this.attr('id').substring(2)}`).attr('target', '_self')
