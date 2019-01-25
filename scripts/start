@@ -31,11 +31,10 @@ createdb foodsharing
 # Migrating db
 migratedb foodsharing || true
 
-# Building assets
-$dir/build-assets
-
 echo
 echo "  Go visit http://localhost:18080 now!"
+echo
+echo "  ...on your first run will take some time"
 echo
 echo "  Or view logs with:"
 echo
@@ -44,4 +43,8 @@ echo
 echo "  Or seed the db with some data:"
 echo
 echo "    ./scripts/seed"
+echo
+echo "  You can find more useful information at:"
+echo
+echo "    https://devdocs.foodsharing.de/up-and-running.html"
 echo

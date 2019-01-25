@@ -10,7 +10,7 @@ services:
     container_name: foodsharing_dev_web
     image: registry.gitlab.com/foodsharing-dev/images/web:1.6
     ports:
-      - 18080:8080
+      - 18090:8080
     depends_on:
       - app
       - chat
@@ -48,10 +48,9 @@ services:
     container_name: foodsharing_dev_client
     image: node:10.15-alpine
     ports:
-      - "8080:8080"
+      - "18080:8080"
       - "8081:8081"
-    # we don't run webpack dev mode by default, make them run ./scripts/dev
-    command: 'true'
+    command: sh -c "yarn && yarn dev"
     working_dir: /app/client
     user: "${UID}"
     volumes:
