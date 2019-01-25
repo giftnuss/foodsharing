@@ -266,14 +266,6 @@ const conv = {
     this.chatboxes = tmp
 
     this.chatCount--
-    // this.rearrange();
-
-    // delete empty conv
-    ajax.req('msg', 'deleteEmptyConversation', {
-      data: {
-        cid: cid
-      }
-    })
 
     // re register polling service
     this.registerPollingService()

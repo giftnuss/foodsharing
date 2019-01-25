@@ -63,26 +63,6 @@ final class MessageXhr extends Control
 	}
 
 	/**
-	 * ajax call to delete an empty conversation after closing chat.
-	 */
-	public function deleteEmptyConversation(): void
-	{
-		$cid = $_GET['cid'];
-		$xhr = new Xhr();
-		$xhr->setStatus(0);
-
-		if ($this->mayConversation($cid) && !$this->model->conversationLocked($cid)) {
-			$rowCount = $this->messageGateway->deleteEmptyConversation($cid);
-			if ($rowCount > 0) {
-				$xhr->addData('rowCount', $rowCount);
-				$xhr->setStatus(1);
-			}
-		}
-
-		$xhr->send();
-	}
-
-	/**
 	 * ajax call to load an existing conversation.
 	 */
 	public function loadconversation(): void
