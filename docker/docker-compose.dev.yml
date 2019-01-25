@@ -188,10 +188,6 @@ services:
 
 volumes:
   client-node-modules:
-  light-node-modules:
-  light-yarn-cache:
-  api-virtualenv:
-  api-pip-cache:
   chat-node-modules:
   influxdb:
   grafana:
