@@ -220,7 +220,7 @@ class Utils
 		}
 		$id = $this->func->id($id);
 
-		$this->func->addJs('$("#' . $id . '-button").button().click(function(){
+		$this->func->addJs('$("#' . $id . '-button").button().on("click", function(){
 			$("#' . $id . '-dialog").dialog("open");
 		});');
 		$this->func->addJs('$("#' . $id . '-dialog").dialog({
@@ -406,7 +406,7 @@ class Utils
 			$btoption[] = 'text:false';
 		}
 
-		$this->func->addJs('$("#' . $new_id . '-button").button({' . implode(',', $btoption) . '}).click(function(){' . $click . $tclick . '$("#dialog_' . $id . '").dialog("open");});');
+		$this->func->addJs('$("#' . $new_id . '-button").button({' . implode(',', $btoption) . '}).on("click", function(){' . $click . $tclick . '$("#dialog_' . $id . '").dialog("open");});');
 
 		return '<span id="' . $new_id . '-button">' . $label . '</span>';
 	}
@@ -582,7 +582,7 @@ class Utils
 					}
 				});
 
-				$("a[href=\'#edit\']").click(function(){
+				$("a[href=\'#edit\']").on("click", function(){
 
 					$("#' . $id . '-placeholder").html(\'<img src="images/' . $original . '" />\');
 					$("#' . $id . '-link").trigger("click");
@@ -599,7 +599,7 @@ class Utils
 					 });
 
 					 $("#' . $id . '-save").show();
-					 $("#' . $id . '-save").button().click(function(){
+					 $("#' . $id . '-save").button().on("click", function(){
 						 showLoader();
 						 $("#' . $id . '-action").val("crop");
 						 $.ajax({
@@ -633,7 +633,7 @@ class Utils
 					 },200);
 				});
 
-				$("a[href=\'#new\']").click(function(){
+				$("a[href=\'#new\']").on("click", function(){
 					$("#' . $id . '-link").trigger("click");
 					return false;
 				});
@@ -1051,7 +1051,7 @@ class Utils
 				}
 			});
 
-			$("#' . $id . '-opener").button().click(function(){
+			$("#' . $id . '-opener").button().on("click", function(){
 
 				$("#' . $id . '-link").trigger("click");
 
@@ -1124,7 +1124,7 @@ class Utils
 		}
 
 		$this->func->addJs('
-		$("#' . $id . '-button").button().click(function(){$("#' . $id . '").click();});
+		$("#' . $id . '-button").button().on("click", function(){$("#' . $id . '").trigger("click") ;});
 		$("#' . $id . '").change(function(){$("#' . $id . '-info").html($("#' . $id . '").val().split("\\\").pop());});');
 
 		$btlabel = $this->func->s('choose_file');
@@ -1253,7 +1253,7 @@ class Utils
 					$("#' . $id . '-add").button({
 						icons:{primary:"ui-icon-plusthick"},
 						text:false
-					}).click(function(event){
+					}).on("click", function(event){
 
 						event.preventDefault();
 						$("#' . $id . '-dialog label").remove();

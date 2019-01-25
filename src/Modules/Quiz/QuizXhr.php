@@ -627,7 +627,7 @@ class QuizXhr extends Control
 							setTimeout(function(){
 								$close = $("#' . $dia->getId() . '").prev().children(".ui-dialog-titlebar-close");
 								$close.unbind("click");
-								$close.click(function(){
+								$close.on("click", function(){
 									ajreq("pause",{app:"quiz",sid:' . (int)$session_id . '});
 									//abortOrPause("' . $dia->getId() . '");
 								});
@@ -777,7 +777,7 @@ class QuizXhr extends Control
 								}	
 							}
 										
-							$("li.noanswer").click(function(){
+							$("li.noanswer").on("click", function(){
 								setTimeout(function(){
 									if($("input.nocheck:checked").length > 0)
 									{
@@ -788,14 +788,14 @@ class QuizXhr extends Control
 								},50);
 							});
 							
-							$("li.answer input").click(function(){
+							$("li.answer input").on("click", function(){
 								if(this.checked)
 								{
 								
 								}
 							});
 							
-							$("li.answer, li.noanswer").click(function(ev){
+							$("li.answer, li.noanswer").on("click", function(ev){
 								
 								var nName = ev.target.nodeName.toLowerCase();
 								
@@ -812,7 +812,7 @@ class QuizXhr extends Control
 								}
 							});
 							
-							$("li.answer").click(function(){
+							$("li.answer").on("click", function(){
 								
 								if($("li.answer input:checked").length > 0)
 								{
@@ -1017,7 +1017,7 @@ class QuizXhr extends Control
 				setTimeout(function(){
 					$close = $("#' . $dia->getId() . '").prev().children(".ui-dialog-titlebar-close");
 					//$close.unbind("click");
-					$close.click(function(){
+					$close.on("click", function(){
 						ajreq(\'next\',{app:\'quiz\'});
 					});
 				},200);

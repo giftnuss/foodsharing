@@ -113,7 +113,7 @@ class StoreXhr extends Control
 						});
 					});
 					
-					$("#daterange_submit").click(function(ev){
+					$("#daterange_submit").on("click", function(ev){
 						ev.preventDefault();
 					
 						var date = $( "#' . $id . '_from" ).datepicker("getDate");
@@ -252,7 +252,7 @@ class StoreXhr extends Control
 					$cnt .= '
 					</div>';
 					$dia->addJs('
-						$("#savebetriebetoselect").click(function(ev){
+						$("#savebetriebetoselect").on("click", function(ev){
 							ev.preventDefault();
 							
 							var saveArr = new Array();

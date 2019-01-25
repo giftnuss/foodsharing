@@ -112,7 +112,7 @@ class MailboxXhr extends Control
 						$("#messagelist tbody tr").mouseout(function(){
 							$("#messagelist tbody tr").removeClass("selected focused");							
 						});
-						$("#messagelist tbody tr").click(function(){
+						$("#messagelist tbody tr").on("click", function(){
 							ajreq("loadMail",{id:($(this).attr("id").split("-")[1])});
 						});
 						$("#messagelist tbody td").disableSelection();

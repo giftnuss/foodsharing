@@ -194,7 +194,7 @@ class ReportView extends View
 		$this->func->addStyle('.tablesorter td{ cursor:pointer; }');
 
 		$this->func->addJs('
-			$(".tablesorter tr").click(function(){
+			$(".tablesorter tr").on("click", function(){
 				rid = parseInt($(this).children("td:first").children("input:first").val());
 				ajreq("loadReport",{id:rid});
 			});

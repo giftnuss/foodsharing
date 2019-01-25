@@ -54,7 +54,7 @@ $teamList.find('.foot i').mouseover(function () {
   }
 })
 
-$teamList.find('.foot i').click(function (ev) {
+$teamList.find('.foot i').on('click', function (ev) {
   var $this = $(this)
   if ($this.hasClass('fa-lock')) {
     ev.preventDefault()

@@ -177,7 +177,7 @@ const activity = {
       type: 'inline'
     })
 
-    $('#activity-save-option').click(function (ev) {
+    $('#activity-save-option').on('click', function (ev) {
       ev.preventDefault()
 
       activity.listOptions = null

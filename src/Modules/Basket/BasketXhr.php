@@ -102,7 +102,7 @@ class BasketXhr extends Control
 			}
 		});
 				
-		$(".cb-food_art[value=3]").click(function(){
+		$(".cb-food_art[value=3]").on("click", function(){
 			if(this.checked)
 			{
 				$(".cb-food_art[value=2]")[0].checked = true;

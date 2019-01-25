@@ -264,13 +264,13 @@ class EmailControl extends Control
 	
 			$("#' . $id . '-link").trigger("click");
 	
-			$("#' . $id . '-continue").button().click(function(){
+			$("#' . $id . '-continue").button().on("click", function(){
 	
 				' . $id . '_continue_xhr();
 				return false;
 			});
 						
-			$("#' . $id . '-abort").button().click(function(){
+			$("#' . $id . '-abort").button().on("click", function(){
 				showLoader();
 				$.ajax({
 					url:"/xhr.php?f=abortEmail",

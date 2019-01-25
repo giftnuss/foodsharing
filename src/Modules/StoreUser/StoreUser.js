@@ -71,7 +71,7 @@ if (seconds >= 86400) {
   days = 7
 }
 
-$('.cb-verantwortlicher').click(function () {
+$('.cb-verantwortlicher').on('click', function () {
   if ($('.cb-verantwortlicher:checked').length >= 4) {
     pulseError(i18n('max_3_leader'))
     return false
@@ -239,7 +239,7 @@ $('#delete_shure').dialog({
   ]
 })
 
-$('.timedialog-add-me').click(function () {
+$('.timedialog-add-me').on('click', function () {
   u_clearDialogs()
 
   if (user.verified) {
@@ -288,7 +288,7 @@ $('#timedialog').dialog({
             $(`#${$('#timedialog-id').val()}-imglist`)
               .prepend(li)
               .find('.img-link')
-              .click(e => {
+              .on('click', e => {
                 e.preventDefault()
                 profile(user.id)
               })
@@ -344,7 +344,7 @@ $('#timedialog').dialog({
   }
 })
 
-$('#changeStatus').button().click(() => {
+$('#changeStatus').button().on('click', () => {
   $('#changeStatus-hidden').dialog({
     title: i18n('change_status'),
     modal: true
@@ -356,7 +356,7 @@ $('.nft-remove').button({
   icons: {
     primary: 'ui-icon-minus'
   }
-}).click(function () {
+}).on('click', function () {
   const $this = $(this)
   $this.parent().parent().remove()
 })
@@ -382,7 +382,7 @@ $('.timetable').on('keyup', '.fetchercount', function () {
 
 $('#nft-add').button({
   text: false
-}).click(function () {
+}).on('click', function () {
   $('table.timetable tbody').append($('table#nft-hidden-row tbody').html())
   let clname = 'odd'
   $('table.timetable tbody tr').each(function () {
@@ -401,7 +401,7 @@ $('#nft-add').button({
     icons: {
       primary: 'ui-icon-minus'
     }
-  }).click(function () {
+  }).on('click', function () {
     const $this = $(this)
     $this.parent().parent().remove()
   })

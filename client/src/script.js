@@ -105,7 +105,7 @@ export function initialize () {
         'height': `${g_moreswapheight}px`,
         'overflow': 'hidden'
       })
-      $this.click(function (ev) {
+      $this.on('click', function (ev) {
         ev.preventDefault()
         if ($this.attr('data-show') == 0) {
           $this.prev().css({
@@ -616,7 +616,7 @@ export function fotoupload (file, id) {
     }
   })
   $(`#${id}-save`).show()
-  $(`#${id}-save`).button().click(function () {
+  $(`#${id}-save`).button().on('click', function () {
     showLoader()
     $(`#${id}-action`).val('crop')
     $(`#${id}-form`)[0].submit()
@@ -670,7 +670,7 @@ export function pictureCrop (id, img) {
       $.fancybox.toggle()
     }, 200)
 
-    $(`#${id}-crop-save`).button().click(function () {
+    $(`#${id}-crop-save`).button().on('click', function () {
       ratio_val[ratio_val.length] = {
         x: Math.round($(`#${id}-x`).val()),
         y: Math.round($('#' + id + '-y').val()),

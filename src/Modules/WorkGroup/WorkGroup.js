@@ -17,7 +17,7 @@ if ($groups.length > 3) {
     $(this).css('text-decoration', 'underline')
   }).mouseout(function () {
     $(this).css('text-decoration', 'none')
-  }).click(function () {
+  }).on('click', function () {
     const $this = $(this)
 
     if (!$this.next('.ui-widget.ui-widget-content.corner-bottom').is(':visible')) {
@@ -146,7 +146,7 @@ $('#work_group_form_photo-link').fancybox({
   }
 })
 
-$('#work_group_form_photo-opener').button().click(function () {
+$('#work_group_form_photo-opener').button().on('click', function () {
   $('#work_group_form_photo-link').trigger('click')
 })
 

@@ -112,7 +112,7 @@ class SettingsView extends View
 				}
 
 				$this->func->addJs('
-					$("input[disabled=\'disabled\']").parent().click(function(){
+					$("input[disabled=\'disabled\']").parent().on("click", function(){
 						pulseInfo("Du bist verantwortlich für diesen Fair-Teiler und somit verpflichtet, die Updates entgegenzunehmen!");
 					});
 				');
@@ -455,7 +455,7 @@ class SettingsView extends View
 			}
 		});
 
-		$("#delete-account").button().click(function(){
+		$("#delete-account").button().on("click", function(){
 			$("#delete-account-confirm").dialog("open");
 		});
 	');

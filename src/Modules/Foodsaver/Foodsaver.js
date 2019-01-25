@@ -8,7 +8,7 @@ import './Foodsaver.css'
 const fsapp = {
   init: function () {
     if ($('#fslist').length > 0) {
-      $('#fslist a').click(function (ev) {
+      $('#fslist a').on('click', function (ev) {
         ev.preventDefault()
         let fsida = $(this).attr('href').split('#')
         let fsid = parseInt(fsida[(fsida.length - 1)])

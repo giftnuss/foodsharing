@@ -148,7 +148,7 @@ class FoodsaverView extends View
 			}
 		});
 
-		$("#delete-account").button().click(function(){
+		$("#delete-account").button().on("click", function(){
 			$("#delete-account-confirm").dialog("open");
 		});
 	');

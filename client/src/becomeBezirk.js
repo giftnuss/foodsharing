@@ -14,7 +14,7 @@ import {
 
 import 'jquery-ui'
 
-$('#becomebezirkchooser-button').button().click(function () {
+$('#becomebezirkchooser-button').button().on('click', function () {
   if (parseInt($('#becomebezirkchooser').val()) > 0) {
     const part = $('#becomebezirkchooser').val().split(':')
 

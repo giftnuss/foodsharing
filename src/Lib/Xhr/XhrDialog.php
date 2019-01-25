@@ -177,7 +177,7 @@ class XhrDialog
 				$(".attach-preview").html(\'<a href="#" class="preview-thumb attach-load" rel="wallpost-gallery">&nbsp;</a><div style="clear:both;"></div>\');
 			});
 			
-			$("#' . $in_id . '").button().click(function(){
+			$("#' . $in_id . '").button().on("click", function(){
 				$("#' . $in_id . '-file").trigger("click");
 			});;	
 		');

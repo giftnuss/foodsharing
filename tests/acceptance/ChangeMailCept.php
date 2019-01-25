@@ -15,7 +15,7 @@ $I->amOnPage('/?page=settings&sub=general');
 $I->click('E-Mail-Adresse ändern');
 $I->waitForElementVisible('#newmail');
 $I->fillField('#newmail', $newmail);
-$I->executeJS("$('button:contains(E-Mail-Adresse ändern)').click()");
+$I->executeJS("$('button:contains(E-Mail-Adresse ändern)').trigger("click") ");
 $I->waitForElementVisible('#pulse-info', 4);
 $I->see('Gehe jetzt zu Deinem');
 
@@ -31,7 +31,7 @@ $link = $matches[1];
 $I->amOnPage($link);
 $I->waitForElementVisible('#passcheck');
 $I->fillField('#passcheck', $pass);
-$I->executeJS("$('button:contains(Bestätigen)').click()");
+$I->executeJS("$('button:contains(Bestätigen)').trigger("click") ");
 $I->waitForElementVisible('#pulse-info', 4);
 $I->see('Deine E-Mail-Adresse wurde geändert!');
 

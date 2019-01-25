@@ -239,10 +239,10 @@ abstract class Control
 				ev.preventDefault();
 
 			});
-			$("#wallpost-attach-image").button().click(function(){
-				$("#wallpost-attach-trigger").click();
+			$("#wallpost-attach-image").button().on("click", function(){
+				$("#wallpost-attach-trigger").trigger("click") ;
 			});
-				$("#wall-submit").button().click(function(ev){
+				$("#wall-submit").button().on("click", function(ev){
 					ev.preventDefault();
 					if(($("#wallpost-text").val() != "" && $("#wallpost-text").val() != "' . $this->func->s('write_teaser') . '") || $("#attach-preview a").length > 0)
 					{

@@ -43,7 +43,7 @@ class RegionAdminControl extends Control
 		$this->func->addStyle('#bezirk-buttons {left: 50%; margin-left: 5px;position: absolute;top: 77px;}');
 
 		$this->func->addJs('
-		$("#deletebezirk").button().click(function(){
+		$("#deletebezirk").button().on("click", function(){
 			if(confirm($("#tree-hidden-name").val()+\' wirklich löschen?\'))
 			{
 				goTo(\'/?page=region&delete=\'+$("#tree-hidden").val());

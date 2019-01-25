@@ -62,7 +62,7 @@ class ReportControl extends Control
 				$this->func->addBread('Meldungen', '/?page=report&sub=foodsaver&id=' . (int)$foodsaver['id']);
 				$this->func->addJs('
 						$(".welcome_profile_image").css("cursor","pointer");
-						$(".welcome_profile_image").click(function(){
+						$(".welcome_profile_image").on("click", function(){
 							$(".user_display_name a").trigger("click");
 						});
 				');
