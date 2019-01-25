@@ -36,6 +36,7 @@ Here we go :-) Just a month after our last release. Expect the next one in a mon
 - changed tile maps to wikimedia !639 @alex.simm
 - Use typeahead-address-photon for address autocomplete. Update leaflet and typeahead for recent NPM versions in the same go !640 @NerdyProjects
 - link top area of welcome message to profile #427 !635 @Defka
+- Added a number conditionally to the dashboard event view if there is more than one event !650 @jofranz
 
 ## Bugfixes
 - Improve/correct user profile badge count !612 @pmayd
@@ -285,7 +286,7 @@ Many thanks to @peter.toennies @NerdyProjects @alangecker @theolampert @nicksell
 - reduced the height of store info popups by removing the warning frame. !388 #216 @peter.toennies
 - The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
 - fixed wrong usage of gateway in API. !400 @peter.toennies
-- fixed missalignment in future-pickups list. !389 # 136 @EmiliaPaz
+- fixed missalignment in future-pickups list. !389 #136 @EmiliaPaz
 - Regaining support for mobile Safari 10 !396 #221 @michi-zuri
 - fix relative loading of some xhr/other urls !422 @nicksellen
 - fixes user autocomplete fetching for conversation creation
@@ -368,7 +369,7 @@ Also, we introduce new frontend technology here. I hope we did not break too muc
 
 ## Refactoring
 - complete tidying up of all team related files !321 by @peter.toennies
-- replaced the PREFIX keyword in the whole source !339 #421 by peter.toennies
+- replaced the PREFIX keyword in the whole source !339 #421 by @peter.toennies
 - refactored and cleaned the whole reports module. !335 by @peter.toennies
 - add webpack for managing frontend assets. !345 @nicksellen
 - use symfony form builder work work group edit page !347 @NerdyProjects
@@ -524,7 +525,7 @@ Thanks to all contributors who made this release possible (in alphabetical order
 - Same for statistics. !211 @peter.toennies
 - fixed the wrong order of foodsaver counts in the lost region list. !187 @peter.toennies
 - It is now possible to create correct passports for Orga members. !217 @peter.toennies
-- Removed not working store creation button and map view selector from the list of stores. !188 peter.toennies
+- Removed not working store creation button and map view selector from the list of stores. !188 @peter.toennies
 
 ## Refactoring
 
