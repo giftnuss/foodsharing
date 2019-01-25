@@ -1221,7 +1221,7 @@ class XhrMethods
 			allowAdd: false
 		});
 
-		$(window).keydown(function(event){
+		$(window).on("keydown", function(event){
 		    if(event.keyCode == 13) {
 		      event.preventDefault();
 		      return false;

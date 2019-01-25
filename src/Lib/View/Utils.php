@@ -1013,7 +1013,7 @@ class Utils
 				animSpeed:100
 			});
 
-			$("#' . $id . '").keydown(function(event){
+			$("#' . $id . '").on("keydown", function(event){
 				if(event.keyCode == 13) {
 				  event.preventDefault();
 				  return false;

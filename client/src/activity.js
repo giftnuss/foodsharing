@@ -111,7 +111,7 @@ const activity = {
         $el.parent().css({ opacity: 1 })
       })
 
-      $el.keydown(function (event) {
+      $el.on('keydown', function (event) {
         if (event.which === 13 && !event.shiftKey && $el.val() != '' && $el.data('load') == '0') {
           event.preventDefault()
 
