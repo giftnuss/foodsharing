@@ -216,7 +216,7 @@ class DashboardControl extends Control
 
 		if (empty($val['lat']) || empty($val['lon'])) {
 			$this->func->addJs('
-		$("#plz, #stadt, #anschrift, #hsnr").bind("blur",function(){
+		$("#plz, #stadt, #anschrift, #hsnr").on("blur",function(){
 			if($("#plz").val() != "" && $("#stadt").val() != "" && $("#anschrift").val() != "")
 			{
 				u_loadCoords({

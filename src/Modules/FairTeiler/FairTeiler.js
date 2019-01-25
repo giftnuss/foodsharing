@@ -27,7 +27,7 @@ function u_wallpostReady (postid) {
   ajreq('infofollower', { fid: $('#ft-id').val(), pid: postid })
 }
 
-$('#wall-submit').bind('mousedown', function () {
+$('#wall-submit').on('mousedown', function () {
   $('#ft-public-link').trigger('click')
 })
 

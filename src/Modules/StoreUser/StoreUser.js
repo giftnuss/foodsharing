@@ -159,7 +159,7 @@ $('div#pinnwand form textarea').on('focus', function () {
   $('#comment-post').show()
 })
 
-$('div#pinnwand form input.submit').button().bind('keydown', function (event) {
+$('div#pinnwand form input.submit').button().on('keydown', function (event) {
   $('div#pinnwand form').trigger('submit')
 })
 
@@ -300,7 +300,7 @@ $('#timedialog').dialog({
             }
 
             $(`#${$('#timedialog-id').val()}-imglist li.empty a`).attr('title', '')
-            $(`#${$('#timedialog-id').val()}-imglist li.empty`).unbind('click')
+            $(`#${$('#timedialog-id').val()}-imglist li.empty`).off('click')
             $(`#${$('#timedialog-id').val()}-imglist li.empty`).addClass('nohover')
             $(`#${$('#timedialog-id').val()}-imglist li.empty`).removeClass('filled')
             $(`#${$('#timedialog-id').val()}-imglist li.empty a`).tooltip('option', { disabled: true }).tooltip('close')

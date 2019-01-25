@@ -430,7 +430,7 @@ const msg = {
     msg.moreIsLoading = false
 
     if (!msg.isMob()) {
-      msg.$conversation.unbind('scroll')
+      msg.$conversation.off('scroll')
       msg.$conversation.on('scroll', function () {
         let $conv = $(this)
         if ($conv.scrollTop() == 0) {

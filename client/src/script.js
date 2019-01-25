@@ -437,12 +437,12 @@ function definePulse (type, defaultTimeout = 5000) {
     el.html(html).stop().fadeIn(animationDuration)
     const hide = () => {
       el.stop().fadeOut(animationDuration)
-      $(document).unbind('click', hide)
+      $(document).off('click', hide)
       clearTimeout(timer)
     }
     const timer = setTimeout(hide, timeout)
     setTimeout(() => {
-      $(document).bind('click', hide)
+      $(document).on('click', hide)
     }, 500)
   }
 }

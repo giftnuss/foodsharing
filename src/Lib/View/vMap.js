@@ -88,7 +88,7 @@ function initializeSearchpanel (searchpanel, cb = null) {
     })
   engine.bindDefaultTypeaheadEvent($searchpanel)
 
-  $(engine).bind('addresspicker:selected', (event, result) => {
+  $(engine).on('addresspicker:selected', (event, result) => {
     console.log(result)
     const latLng = L.latLng(result.geometry.coordinates[1], result.geometry.coordinates[0])
 

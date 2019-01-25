@@ -626,7 +626,7 @@ class QuizXhr extends Control
 						function(){
 							setTimeout(function(){
 								$close = $("#' . $dia->getId() . '").prev().children(".ui-dialog-titlebar-close");
-								$close.unbind("click");
+								$close.off("click");
 								$close.on("click", function(){
 									ajreq("pause",{app:"quiz",sid:' . (int)$session_id . '});
 									//abortOrPause("' . $dia->getId() . '");
@@ -1016,7 +1016,7 @@ class QuizXhr extends Control
 			function(){
 				setTimeout(function(){
 					$close = $("#' . $dia->getId() . '").prev().children(".ui-dialog-titlebar-close");
-					//$close.unbind("click");
+					//$close.off("click");
 					$close.on("click", function(){
 						ajreq(\'next\',{app:\'quiz\'});
 					});

@@ -1178,7 +1178,7 @@ class XhrMethods
 			$this->v_utils->v_input_wrapper('Master-Update', '<a class="button" href="#" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'geoclean\',id:' . (int)$data['id'] . '});}return false;">Master-Update starten</a>', 'masterupdate', array('desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen'));
 
 		$out['script'] = '
-		$("#bezirkform-form").unbind("submit");
+		$("#bezirkform-form").off("submit");
 		$("#bezirkform-form").on("submit", function(ev){
 			ev.preventDefault();
 

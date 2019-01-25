@@ -81,7 +81,7 @@ class FoodsaverView extends View
 					$("#orgateam-wrapper input")[0].checked = false;
 				}
 			});
-			$("#plz, #stadt, #anschrift").bind("blur",function(){
+			$("#plz, #stadt, #anschrift").on("blur",function(){
 
 
 					if($("#plz").val() != "" && $("#stadt").val() != "" && $("#anschrift").val() != "")
