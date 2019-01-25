@@ -154,8 +154,8 @@ class RegionAdminView extends View
 		};
 		
 		var ' . $id . '_map = L.map(document.getElementById("' . $id . '_map"), ' . $id . '_options);
-    L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
-      attribution: "Tiles &copy; Esri 2014"
+    L.tileLayer("https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png", {
+	  attribution: "Tiles by <a href=\"https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use\">Wikimedia</a>"
     }).addTo(' . $id . '_map);
 	');
 	}

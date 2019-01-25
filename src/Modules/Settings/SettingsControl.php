@@ -352,7 +352,7 @@ class SettingsControl extends Control
 							array('id' => 2, 'name' => 'Bitte NUR meinen Namen veröffentlichen')
 						))) .
 						$this->v_utils->v_form_checkbox('tel_public', array('desc' => 'Neben Deinem vollem Namen (und eventuell Foto) ist es für
-										Händler, Foodsharing-Freiwillge, Interessierte und die Presse
+										Händler, foodsharing-Freiwillge, Interessierte und die Presse
 										einfacher und direkter, Dich neben der für Deine
 										Region/Stadt/Bezirk zugewiesenen Botschafter-E-Mail-Adresse (z. B. mainz@' . PLATFORM_MAILBOX_HOST . ')
 										über Deine Festnetz- bzw. Handynummer zu erreichen. Bitte gib

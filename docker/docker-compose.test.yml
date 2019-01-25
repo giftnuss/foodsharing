@@ -24,7 +24,7 @@ services:
 
   app:
     container_name: foodsharing_test_app
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.11
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.15
     working_dir: /app
     expose:
       - 9000
@@ -50,7 +50,7 @@ services:
 
   client:
     container_name: foodsharing_test_client
-    image: node:10.12-alpine
+    image: node:10.15-alpine
     # We don't run anything long running in here yet - build is run via ./scripts/build-assets
     command: 'true'
     working_dir: /app/client
@@ -63,7 +63,7 @@ services:
 
   mailqueuerunner:
     container_name: foodsharing_test_mailqueuerunner
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.11
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.15
     command: php run.php Mails queueWorker
     working_dir: /app
     restart: always
@@ -82,7 +82,7 @@ services:
 
   chat:
     container_name: foodsharing_test_chat
-    image: node:10.12-alpine
+    image: node:10.15-alpine
     command: sh -c "yarn && node server.js 0.0.0.0"
     working_dir: /app/chat
     depends_on:

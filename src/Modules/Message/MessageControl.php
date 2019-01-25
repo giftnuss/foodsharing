@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\Message;
 
 use Foodsharing\Modules\Core\Control;
 
-class MessageControl extends Control
+final class MessageControl extends Control
 {
 	public function __construct(MessageModel $model, MessageView $view)
 	{
@@ -18,12 +18,12 @@ class MessageControl extends Control
 		}
 	}
 
-	public function index()
+	public function index(): void
 	{
 		$this->setTemplate('msg');
 		$this->setContentWidth(5, 8);
 
-		$this->func->addJs('msg.fsid = ' . (int)$this->func->fsId() . ';');
+		$this->func->addJs('msg.fsid = ' . (int)$this->session->id() . ';');
 		$this->func->addBread($this->func->s('messages'));
 		$this->func->addTitle($this->func->s('messages'));
 
@@ -38,6 +38,6 @@ class MessageControl extends Control
 			}
 			$this->session->set('msg_conversations', $ids);
 		}
-		$this->func->addContent($this->view->convListWrapper($this->view->conversationList($conversations)), CNT_RIGHT);
+		$this->func->addContent($this->view->conversationListWrapper($this->view->conversationList($conversations)), CNT_RIGHT);
 	}
 }

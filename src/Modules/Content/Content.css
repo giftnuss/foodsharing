@@ -1,5 +1,4 @@
 div.partner {
-  margin: 0;
   width: 42%;
   display: inline-block;
   height: 400px;
@@ -47,7 +46,7 @@ div.partner h4 {
 
 .faq h3 {
   color: #46891b;
-  font-family: "Alfa Slab One";
+  font-family: "Alfa Slab One", serif;
   font-size: 25px;
   font-weight: normal;
 }

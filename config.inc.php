@@ -40,6 +40,10 @@ if (!defined('RAVEN_JAVASCRIPT_CONFIG') && getenv('RAVEN_JAVASCRIPT_CONFIG')) {
 	define('RAVEN_JAVASCRIPT_CONFIG', getenv('RAVEN_JAVASCRIPT_CONFIG'));
 }
 
+if (!defined('CSP_REPORT_ONLY')) {
+	define('CSP_REPORT_ONLY', true);
+}
+
 define('FPDF_FONTPATH', __DIR__ . '/lib/font/');
 
 /* global definitions for Foodsharing\Lib\Func until they might

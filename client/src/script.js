@@ -840,10 +840,6 @@ $.fn.extend({
       this.onselectstart = function () { return false }
       this.unselectable = 'on'
       $(this).css('user-select', 'none')
-      $(this).css('-o-user-select', 'none')
-      $(this).css('-moz-user-select', 'none')
-      $(this).css('-khtml-user-select', 'none')
-      $(this).css('-webkit-user-select', 'none')
     })
   }
 })

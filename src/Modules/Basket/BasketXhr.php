@@ -395,7 +395,7 @@ class BasketXhr extends Control
 			$msg = strip_tags($_GET['msg']);
 			$msg = trim($msg);
 			if (!empty($msg)) {
-				$this->messageModel->message($fs_id, $this->session->id(), $msg, 0);
+				$this->messageModel->message($fs_id, $msg);
 				$this->mailMessage($this->session->id(), $fs_id, $msg, 22);
 				$this->basketGateway->setStatus($_GET['id'], Status::REQUESTED_MESSAGE_UNREAD, $this->session->id());
 

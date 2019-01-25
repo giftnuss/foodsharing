@@ -673,7 +673,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 		$message['subject'] = str_replace($search, $replace, $message['subject']);
 		if (!$message['subject']) {
-			$message['subject'] = 'Foodsharing-Mail';
+			$message['subject'] = 'foodsharing-Mail';
 		}
 
 		$mail->setSubject($this->sanitizerService->htmlToPlain($message['subject']));
@@ -1143,7 +1143,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'location' => $location,
 			'ravenConfig' => $ravenConfig,
 			'translations' => $this->getTranslations(),
-			'GOOGLE_API_KEY' => GOOGLE_API_KEY,
 			'isDev' => getenv('FS_ENV') === 'dev'
 		]);
 	}
@@ -1323,7 +1322,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$mail->setFrom($bezirk['email'], $bezirk['email_name']);
 		$mail->addRecipient($email);
 		if (!$subject) {
-			$subject = 'Foodsharing-Mail';
+			$subject = 'foodsharing-Mail';
 		}
 		$mail->setSubject($subject);
 		$htmlBody = $this->emailBodyTpl($message, $email, $token);
@@ -1690,16 +1689,16 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		if (isset($foodsaver['quiz_rolle'])) {
 			switch ($foodsaver['quiz_rolle']) {
 				case 1:
-					$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #4A3520;';
+					$bg = 'box-sizing:border-box;border:3px solid #4A3520;';
 					break;
 				case 2:
-					$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #599022;';
+					$bg = 'box-sizing:border-box;border:3px solid #599022;';
 					break;
 				case 3:
-					$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #FFBB00;';
+					$bg = 'box-sizing:border-box;border:3px solid #FFBB00;';
 					break;
 				case 4:
-					$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #FF4800;';
+					$bg = 'box-sizing:border-box;border:3px solid #FF4800;';
 					break;
 				default:
 					break;

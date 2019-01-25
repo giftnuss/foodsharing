@@ -9,7 +9,7 @@ class StoreView extends View
 	public function dateForm()
 	{
 		return
-			'<div id="datepicker" style="height:195px;"></div>' .
+			'<div id="datepicker" style="height:220px;"></div>' .
 			$this->v_utils->v_input_wrapper('Uhrzeit', $this->v_utils->v_form_time('time')) .
 			$this->v_utils->v_form_select('fetchercount', array('values' => array(
 				array('id' => 0, 'name' => 'Termin fällt aus'),
@@ -68,11 +68,6 @@ class StoreView extends View
 			$g_data['foodsaver'] = array($this->func->fsId());
 		}
 
-		$this->func->addJs('
-			$("#lat-wrapper").hide();
-			$("#lon-wrapper").hide();
-		');
-
 		$first_post = '';
 		if ($this->func->getAction('new')) {
 			$first_post = $this->v_utils->v_form_textarea('first_post', array('required' => true));
@@ -98,6 +93,8 @@ class StoreView extends View
 		}
 		if (isset($g_data['lat'], $g_data['lon'])) {
 			$latLonOptions['location'] = ['lat' => $g_data['lat'], 'lon' => $g_data['lon']];
+		} else {
+			$latLonOptions['location'] = ['lat' => 0, 'lon' => 0];
 		}
 
 		return $this->v_utils->v_quickform('betrieb', array(

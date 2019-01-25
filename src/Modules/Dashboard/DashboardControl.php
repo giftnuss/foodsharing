@@ -326,8 +326,6 @@ class DashboardControl extends Control
 			#activity ul.linklist li span.qr
 			{
 				margin-left:58px;
-				-webkit-border-radius: 3px;
-				-moz-border-radius: 3px;
 				border-radius: 3px;
 				opacity:0.5;
 			}
@@ -343,10 +341,6 @@ class DashboardControl extends Control
 				width:32px;
 				margin-right:-35px;
 				border-right:1px solid #ffffff;
-				-webkit-border-top-left-radius: 3px;
-				-webkit-border-bottom-left-radius: 3px;
-				-moz-border-radius-topleft: 3px;
-				-moz-border-radius-bottomleft: 3px;
 				border-top-left-radius: 3px;
 				border-bottom-left-radius: 3px;
 			}
@@ -357,10 +351,6 @@ class DashboardControl extends Control
 				margin-left: 36px;
 				padding: 8px;
 				width: 78.6%;
-				-webkit-border-top-right-radius: 3px;
-				-webkit-border-bottom-right-radius: 3px;
-				-moz-border-radius-topright: 3px;
-				-moz-border-radius-bottomright: 3px;
 				border-top-right-radius: 3px;
 				border-bottom-right-radius: 3px;
 				margin-right:-30px;
@@ -415,8 +405,6 @@ class DashboardControl extends Control
 				margin-bottom:10px;
 				background-color:#ffffff;
 				padding:10px;
-				-webkit-border-radius: 6px;
-				-moz-border-radius: 6px;
 				border-radius: 6px;
 			}
 	
@@ -480,18 +468,27 @@ class DashboardControl extends Control
 		$gerettet = $me['stat_fetchweight'];
 
 		if ($gerettet > 0) {
-			$gerettet = '. Du hast <strong>' . number_format($gerettet, 2, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg</strong> gerettet.';
+			$gerettet = '. Du hast <strong style="white-space:nowrap">' . number_format($gerettet, 2, ',', '.') . '&thinsp;kg</strong> gerettet.';
 		} else {
 			$gerettet = '';
 		}
 
 		$this->func->addContent(
 			'
-		<div class="top corner-all">
-			<div class="img">' . $this->func->avatar($me, 50) . '</div>
-				<h3>Hallo ' . $me['name'] . '</h3>
-				<p>' . $this->func->s('rolle_' . $me['rolle'] . '_' . $me['geschlecht']) . ' für ' . $me['bezirk_name'] . '</a>' . $gerettet . '</p>
-			<div style="clear:both;"></div>		
+		<div class="pure-u-1 ui-padding-bottom">
+		<ul id="conten-top"  class="top corner-all linklist" >
+		<li>
+
+            <a href="profile/' . $me['id'] . '">
+                <div class="ui-padding">
+                    <div class="img">' . $this->func->avatar($me, 50) . '</div>
+                    <h3 class "corner-all">Hallo ' . $me['name'] . '</h3>
+                    <p>' . $this->func->s('rolle_' . $me['rolle'] . '_' . $me['geschlecht']) . ' für ' . $me['bezirk_name'] . $gerettet . '</p>
+                    <div style="clear:both;"></div>
+                </div>
+            </a>
+		</li>
+		</ul>			
 		</div>',
 
 			CNT_TOP
