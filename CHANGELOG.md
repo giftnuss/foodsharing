@@ -20,8 +20,10 @@
 
 ## Refactoring
 - updated jquery to v3 !631 @peter.toennies
+- replaced many outdated jquery functions !655 @peter.toennies
 - Removed scrollbars from event view !608 @jofranz
 - Restructured / cleaned up CSS for Boostrap / Topbar, leaving Bootstrap defaults where possible !616 @colomar
+
 
 ## Dev/Test/CI stuff
 - Updated tap-spec in chat to version 5 (fixes vulnerability of lodash) !606 @peter.toennies

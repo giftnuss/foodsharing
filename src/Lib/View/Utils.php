@@ -1080,7 +1080,7 @@ class Utils
 
 				<form id="' . $id . '-form" method="post" enctype="multipart/form-data" target="' . $id . '-iframe" action="/xhr.php?f=uploadPicture&id=' . $id . '&crop=' . $crop . '">
 
-					<input type="file" name="uploadpic" onchange="showLoader();$(\'#' . $id . '-form\')[0].trigger("submit");" />
+					<input type="file" name="uploadpic" onchange="showLoader();$(\'#' . $id . '-form\')[0].submit();" />
 
 					<input type="hidden" id="' . $id . '-action" name="action" value="uploadPicture" />
 					<input type="hidden" id="' . $id . '-id" name="id" value="' . $id . '" />

@@ -620,7 +620,7 @@ export function fotoupload (file, id) {
   $(`#${id}-save`).button().on('click', function () {
     showLoader()
     $(`#${id}-action`).val('crop')
-    $(`#${id}-form`)[0].trigger('submit')
+    $(`#${id}-form`)[0].submit()
     return false
   })
 
