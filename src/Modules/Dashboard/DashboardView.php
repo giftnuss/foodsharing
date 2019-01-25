@@ -548,6 +548,12 @@ class DashboardView extends View
 			';
 		}
 
-		return $this->v_utils->v_field($out, 'Nächste Events', array('class' => 'ui-padding moreswap'));
+		if (count($events) > 1) {
+			$eventTitle = 'Nächste Events (' . count($events) . ')';
+		} else {
+			$eventTitle = 'Nächstes Event';
+		}
+
+		return $this->v_utils->v_field($out, $eventTitle, array('class' => 'ui-padding moreswap'));
 	}
 }
