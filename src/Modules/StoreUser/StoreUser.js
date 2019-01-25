@@ -155,7 +155,7 @@ $('#u_undate').dialog({
 
 $('#comment-post').hide()
 
-$('div#pinnwand form textarea').focus(function () {
+$('div#pinnwand form textarea').on('focus', function () {
   $('#comment-post').show()
 })
 

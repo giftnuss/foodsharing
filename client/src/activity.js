@@ -107,7 +107,7 @@ const activity = {
       var $loader = $el.next()
 
       $el.autosize()
-      $el.focus(function () {
+      $el.on('focus', function () {
         $el.parent().css({ opacity: 1 })
       })
 

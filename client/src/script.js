@@ -130,7 +130,7 @@ export function initialize () {
       if ($this.val() === '') {
         $this.val($this.attr('title'))
       }
-      $this.focus(function () {
+      $this.on('focus', function () {
         if ($this.val() === $this.attr('title')) {
           $this.val('')
         }
@@ -200,7 +200,7 @@ export function initialize () {
       }
     )
 
-    $('.text, .textarea, select').focus(
+    $('.text, .textarea, select').on('focus',
       function () {
         $(this).addClass('focus')
       }

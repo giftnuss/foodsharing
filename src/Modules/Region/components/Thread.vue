@@ -167,7 +167,7 @@ export default {
     },
     reply (body) {
       // this.$refs.form.text = `> ${body.split('\n').join('\n> ')}\n\n${this.$refs.form.text}`
-      this.$refs.form.focus()
+      this.$refs.form.trigger('focus')
     },
     async reload () {
       try {

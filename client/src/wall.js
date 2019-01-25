@@ -34,7 +34,7 @@ function mb_clear () {
 
 export function init (module, wallId) {
   $('#wallpost-text').autosize()
-  $('#wallpost-text').focus(function () {
+  $('#wallpost-text').on('focus', function () {
     $('#wallpost-submit').show()
   })
 
@@ -98,12 +98,12 @@ export function init (module, wallId) {
       $('#wallpost-text').val('')
       $('#attach-preview').html('')
       $('#wallpost-attach').html('')
-      $('#wallpost-text')[0].focus()
+      $('#wallpost-text')[0].trigger('focus')
       $('#wallpost-text').css('height', '33px')
     }
   })
-  $('#wallpost-attach-trigger').focus(function () {
-    $('#wall-submit')[0].focus()
+  $('#wallpost-attach-trigger').on('focus', function () {
+    $('#wall-submit')[0].trigger('focus')
   })
   $.ajax({
     url: `/xhrapp.php?app=wallpost&m=update&table=${module}&id=${wallId}&last=0`,
