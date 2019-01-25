@@ -45,7 +45,7 @@ export function init (module, wallId) {
     $('#wallpost-attachimage-form').trigger('submit')
   })
 
-  $('#wallpost-text').blur(function () {
+  $('#wallpost-text').on('blur', function () {
     $('#wallpost-submit').show()
   })
   $('#wallpost-post').on('submit', function (ev) {

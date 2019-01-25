@@ -21,7 +21,7 @@ if ($form.length > 0) {
     }
   })
 
-  $email.blur(function () {
+  $email.trigger('blur')function () {
     var $el = $(this)
     if (!checkEmail($el.val())) {
       $email.addClass('input-error')

@@ -135,7 +135,7 @@ export function initialize () {
           $this.val('')
         }
       })
-      $this.blur(function () {
+      $this.on('blur', function () {
         if ($this.val() === '') {
           $this.val($this.attr('title'))
         }
@@ -205,13 +205,13 @@ export function initialize () {
         $(this).addClass('focus')
       }
     )
-    $('.text, .textarea, select').blur(
+    $('.text, .textarea, select').on('blur',
       function () {
         $(this).removeClass('focus')
       }
     )
 
-    $('.value').blur(function () {
+    $('.value').on('blur', function () {
       let el = $(this)
       if (el.val() != '') {
         el.removeClass('input-error')
@@ -288,7 +288,7 @@ export function quickprofile (id) {
           modal: true,
           width: 470,
           open: function () {
-            $(this).find('.ui-dialog-titlebar-close').blur()
+            $(this).find('.ui-dialog-titlebar-close').trigger('blur')
           }
         }).parent().find('.ui-dialog-titlebar-close').prependTo('#tabs-profile').closest('.ui-dialog').children('.ui-dialog-titlebar').remove()
 

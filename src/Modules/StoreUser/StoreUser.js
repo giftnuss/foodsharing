@@ -78,7 +78,7 @@ $('.cb-verantwortlicher').on('click', function () {
   }
 })
 
-$('#team-form').on("submit", function (ev) {
+$('#team-form').on('submit', function (ev) {
   if ($('.cb-verantwortlicher:checked').length == 0) {
     pulseError(i18n('verantwortlicher_must_be'))
     ev.preventDefault()
