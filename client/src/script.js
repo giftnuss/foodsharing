@@ -57,11 +57,11 @@ export function closeAllDialogs () {
 
 export const sleepmode = {
   init: function () {
-    $('.sleepmode-1, .sleepmode-2').mouseover(function () {
+    $('.sleepmode-1, .sleepmode-2').on('mouseover', function () {
       var $this = $(this)
       $this.append(`<span class="corner-all bubble bubble-right ui-shadow">${$this.text()} nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus</span>`)
     })
-    $('.sleepmode-1, .sleepmode-2').mouseout(function () {
+    $('.sleepmode-1, .sleepmode-2').on('mouseout', function () {
       var $this = $(this)
       $this.children('.bubble').remove()
     })
@@ -70,7 +70,7 @@ export const sleepmode = {
 
 export function initialize () {
   var g_moreswapheight = 100
-  $(document).ready(function () {
+  $(function () {
     // $(".sleepmode-1, .sleepmode-2").append('<span class="corner-all bubble bubble-right ui-shadow"> nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus</span>');
     sleepmode.init()
 
@@ -705,7 +705,7 @@ export function u_loadCoords (addressdata, func) {
   let url = `https://search.mapzen.com/v1/search?text=${address}`
 
   showLoader()
-  $(document).ready(function () {
+  $(function () {
     $.getJSON(url,
       function (data) {
         if (data.features) {

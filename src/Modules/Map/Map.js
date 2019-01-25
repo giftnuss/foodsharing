@@ -307,7 +307,7 @@ function loadMarker (types, loader) {
   })
 }
 
-$(document).ready(function () {
+$(function () {
   showLoader()
   $('#map-control li a').on('click', function () {
     $(this).toggleClass('active')

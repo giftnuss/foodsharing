@@ -829,7 +829,7 @@ class QuizXhr extends Control
 								width:width,
 								height:($(window).height()-40)
 							});
-							$(window).resize(function(){
+							$(window).on("resize", function(){
 								var width = 1000;
 								if($(window).width() < 1000)
 								{

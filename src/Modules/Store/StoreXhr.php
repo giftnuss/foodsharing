@@ -107,7 +107,7 @@ class StoreXhr extends Control
 					$( "#' . $id . '_from" ).datepicker("show");
 					
 					
-					$(window).resize(function(){
+					$(window).on("resize", function(){
 						$("#' . $dia->getId() . '").dialog("option",{
 							height:($(window).height()-40)
 						});

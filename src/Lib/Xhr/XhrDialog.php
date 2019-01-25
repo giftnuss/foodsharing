@@ -193,7 +193,7 @@ class XhrDialog
 				$("#' . $this->getId() . '").dialog("option","width",$(window).width()-30);
 			}
 				
-			$(window).resize(function(){
+			$(window).on("resize", function(){
 				$("#' . $this->getId() . '").dialog("option","maxHeight",$(window).height()-30);
 			});	
 		');
