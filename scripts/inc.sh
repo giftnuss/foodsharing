@@ -54,13 +54,13 @@ function exec-in-container() {
 function run-in-container() {
   local container=$1; shift;
   local command=$@;
-  dc run --rm --user $(id -u):$(id -g) $container sh -c "HOME=./ $command"
+  dc run --rm --no-deps --user $(id -u):$(id -g) $container sh -c "HOME=./ $command"
 }
 
 function run-in-container-with-service-ports() {
   local container=$1; shift;
   local command=$@;
-  dc run --rm --user $(id -u):$(id -g) --service-ports $container sh -c "HOME=./ $command"
+  dc run --rm --no-deps --user $(id -u):$(id -g) --service-ports $container sh -c "HOME=./ $command"
 }
 
 function exec-in-container-asroot() {
@@ -72,7 +72,7 @@ function exec-in-container-asroot() {
 function run-in-container-asroot() {
   local container=$1; shift;
   local command=$@;
-  dc run --user root --rm $container sh -c "$command"
+  dc run --rm --no-deps --user root $container sh -c "$command"
 }
 
 function dropdb() {
