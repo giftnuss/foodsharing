@@ -16,7 +16,7 @@ set('git_tty', false);
 
 // Shared files/dirs between deploys
 set('shared_files', ['config.inc.prod.php']);
-set('shared_dirs', ['images', 'data', 'tmp']);
+set('shared_dirs', ['images', 'data', 'tmp', 'cache/searchindex']);
 
 // Writable dirs by web server
 set('writable_dirs', ['tmp', 'cache', 'cache/searchindex', 'cache/htmlpurifier-cache']);

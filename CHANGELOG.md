@@ -3,6 +3,7 @@
 ## Features
 
 ## Bugfixes
+- Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
 
 ## Refactoring
 
