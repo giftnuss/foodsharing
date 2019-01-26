@@ -341,7 +341,7 @@ const msg = {
     }
     msg.conversation_id = id
 
-    const { conversation, member, messages } = await api.getConversation(id)
+    const { name, members, messages } = await api.getConversation(id)
 
     msg.resetConversation()
 
@@ -350,21 +350,20 @@ const msg = {
 
     let title = ''
 
-    if (member != undefined && member.length > 0) {
-      const currentMember = member
+    if (members && members.length > 0) {
+      const currentMember = members
         .find(m => m.id != msg.fsid)
 
       if (currentMember) {
         title = `
           <a title="${currentMember.name}" href="/profile/${currentMember.id}">
-            <img src="${img(member.photo, 'mini')}" width="22" alt="${currentMember.name}" />
+            <img src="${img(currentMember.photo, 'mini')}" width="22" alt="${currentMember.name}" />
           </a>
         `
       }
     }
 
-    const strTitle = conversation.name
-      ? conversation.name : `Unterhaltung mit ${member.map(m => m.name).join(', ')}`
+    const strTitle = name || `Unterhaltung mit ${members.map(m => m.name).join(', ')}`
 
     title = `
       &nbsp;<div class="images">${title}</div>${strTitle}<div style="clear:both;"></div>
