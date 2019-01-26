@@ -60,7 +60,7 @@ class MessageRestController extends FOSRestController
 		$messagesLimit = $paramFetcher->get('messagesLimit');
 		$messagesOffset = $paramFetcher->get('messagesOffset');
 
-		$member = $this->model->listConversationMembers($conversationId);
+		$members = $this->model->listConversationMembers($conversationId);
 		$publicMemberInfo = function ($member) {
 			return [
 				'id' => $member['id'],
@@ -68,7 +68,7 @@ class MessageRestController extends FOSRestController
 				'photo' => $member['photo']
 			];
 		};
-		$member = array_map($publicMemberInfo, $member);
+		$members = array_map($publicMemberInfo, $members);
 
 		$messages = $this->gateway->getConversationMessages($conversationId, $messagesLimit, $messagesOffset);
 		$name = $this->gateway->getConversationName($conversationId);
@@ -76,7 +76,8 @@ class MessageRestController extends FOSRestController
 
 		$data = [
 			'name' => $name,
-			'member' => $member,
+			'member' => $members, // remove this in the future once clients have updated
+			'members' => $members,
 			'messages' => $messages,
 		];
 
