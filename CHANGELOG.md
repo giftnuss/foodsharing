@@ -6,6 +6,7 @@
 - Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
 
 ## Refactoring
+- replaced many outdated jquery functions !655 @peter.toennies
 
 ## Dev/Test/CI stuff
 
@@ -40,10 +41,8 @@ Here we go :-) Just a month after our last release. Expect the next one in a mon
 
 ## Refactoring
 - updated jquery to v3 !631 @peter.toennies
-- replaced many outdated jquery functions !655 @peter.toennies
 - Removed scrollbars from event view !608 @jofranz
 - Restructured / cleaned up CSS for Boostrap / Topbar, leaving Bootstrap defaults where possible !616 @colomar
-
 
 ## Dev/Test/CI stuff
 - Updated tap-spec in chat to version 5 (fixes vulnerability of lodash) !606 @peter.toennies
