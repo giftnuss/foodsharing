@@ -26,3 +26,6 @@ $g_lang['close_foodbaskets'] = 'Essenskörbe in Deiner Nähe';
 $g_lang['more_baskets'] = 'Alle Körbe auf der Karte';
 $g_lang['new_basket'] = 'Neuer Essenskorb';
 $g_lang['all_baskets'] ='Alle Körbe auf der Karte';
+$g_lang['events_headline'] ='Nächste Events';
+$g_lang['event_headline'] ='Nächstes Event';
+$g_lang['you_were_invited'] ='Du wurdest eingeladen';

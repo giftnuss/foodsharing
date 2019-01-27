@@ -516,7 +516,7 @@ class DashboardView extends View
 			';
 		}
 
-		return $this->v_utils->v_field($out, 'Du wurdest eingeladen', array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($out, $this->func->s('you_were_invited'), array('class' => 'ui-padding'));
 	}
 
 	public function u_events($events)
@@ -549,9 +549,9 @@ class DashboardView extends View
 		}
 
 		if (count($events) > 1) {
-			$eventTitle = 'Nächste Events (' . count($events) . ')';
+			$eventTitle = $this->func->s('events_headline') . ' (' . count($events) . ')';
 		} else {
-			$eventTitle = 'Nächstes Event';
+			$eventTitle = $this->func->s('event_headline');
 		}
 
 		return $this->v_utils->v_field($out, $eventTitle, array('class' => 'ui-padding moreswap'));
