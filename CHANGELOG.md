@@ -2,6 +2,7 @@
 
 ## Features
 On dashboard there now is a symbol indicating the confirmation status of a pickup !661 @jofranz
+- Pre fill end date of pickuphistory with todays date for comfort reasons !660 @jofranz
 
 ## Bugfixes
 - Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
