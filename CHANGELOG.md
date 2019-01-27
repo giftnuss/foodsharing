@@ -1,13 +1,33 @@
 # Unreleased
 
 ## Features
+
+## Bugfixes
+- Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
+
+## Refactoring
+
+## Dev/Test/CI stuff
+
+# 2019-01-25
+Matthias: "Are there any concerns about merging the addresspicker / map / geolocation to production?"
+Peter: "I'd even prefer to go completely from beta to prod. The current state looks fine for me. Less work for you, more features for us... "
+
+Here we go :-) Just a month after our last release. Expect the next one in a month, at the end of the next hackweek happening at Kanthaus.
+
+## Major changes
+- All maps use free tiles from wikimedia now
+- Geolocation (Converting address into geographical coordinates) now using a public service provided by komoot instead of google
+- JQuery 3
+- PHP 7.3
+
+## Features
 - Updated tinysort to v3 @peter.toennies
 - Added link from names in chatbox title to profiles #100 !614 @colomar
 - You can now call a BIEB via the lower info box of a store with just one click !609 @jofranz
 - Changelog page now supports links to issues with a # symbol followed by a number like it has been for merge requests before !622 @jofranz
 - update htmlpurifier to version 2 !594 @peter.toennies
-- prepare support for separated email domain for platform mailboxes
-- add security headers !633 @nicksellen
+- add security headers (beta only) !633 @nicksellen
 - changed tile maps to wikimedia !639 @alex.simm
 - Use typeahead-address-photon for address autocomplete. Update leaflet and typeahead for recent NPM versions in the same go !640 @NerdyProjects
 - link top area of welcome message to profile #427 !635 @Defka
