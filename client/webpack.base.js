@@ -3,9 +3,11 @@ const clientRoot = path.resolve(__dirname)
 const shims = require('./shims')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const WriteFilePlugin = require('write-file-webpack-plugin')
 
 const plugins = [
-  new VueLoaderPlugin()
+  new VueLoaderPlugin(),
+  new WriteFilePlugin() // to write files to filesystem when using webpack-dev-server
 ]
 
 const production = process.env.NODE_ENV === 'production'
