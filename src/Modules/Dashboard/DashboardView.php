@@ -219,14 +219,17 @@ class DashboardView extends View
 		$out = '
 		<div class="ui-padding">
 			<ul class="datelist linklist">';
+			
 		foreach ($dates as $d) {
+			$confirmSymbol = $d['confirmed'] == 1 ? '✓ ' : '? ';
+
 			$out .= '
-				<li>
+				<i><li>
 					<a href="/?page=fsbetrieb&id=' . $d['betrieb_id'] . '" class="ui-corner-all">
-						<span class="title">' . $this->func->niceDate($d['date_ts']) . '</span>
+						<span class="title">' . $confirmSymbol . $this->func->niceDate($d['date_ts']) . '</span>
 						<span>' . $d['betrieb_name'] . '</span>
 					</a>
-				</li>';
+				</li></i>';
 		}
 		$out .= '
 			</ul>

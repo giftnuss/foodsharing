@@ -54,7 +54,8 @@ class ProfileModel extends Db
 					UNIX_TIMESTAMP(a.`date`) AS date_ts,
 					b.name AS betrieb_name,
 					b.id AS betrieb_id,
-					b.bezirk_id AS bezirk_id
+					b.bezirk_id AS bezirk_id,
+					confirmed AS confirmed
 			FROM   `fs_abholer` a,
 			       `fs_betrieb` b
 
