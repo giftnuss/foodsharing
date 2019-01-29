@@ -120,7 +120,7 @@ const msg = {
       if (val != '') {
         msg.$answer.val('')
         msg.$answer.css('height', '40px')
-        msg.$answer[0].trigger('focus')
+        msg.$answer[0].focus()
         msg.showLoader()
 
         ajax.req('msg', 'sendmsg', {
