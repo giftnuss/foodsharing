@@ -7,6 +7,7 @@ On dashboard there now is a symbol indicating the confirmation status of a picku
 
 ## Bugfixes
 - Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
+- Fixup conversation header display !658 @nicksellen
 
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies
