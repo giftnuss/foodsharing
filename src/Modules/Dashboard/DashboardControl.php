@@ -260,7 +260,7 @@ class DashboardControl extends Control
 	
 			if($("input[name=\'photo_public\']:checked").val()==4)
 			{
-				$("input[name=\'photo_public\']")[0].trigger("focus");
+				$("input[name=\'photo_public\']")[0].focus();
 				check = false;
 				if(confirm("Sicher, dass Du Deine Daten nicht anzeigen lassen möchstest? So kann Dich kein Foodsaver finden."))
 				{

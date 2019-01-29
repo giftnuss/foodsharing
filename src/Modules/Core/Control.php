@@ -284,12 +284,12 @@ abstract class Control
 					$("#wallpost-text").val("");
 					$("#attach-preview").html("");
 					$("#wallpost-attach").html("");
-						$("#wallpost-text")[0].trigger("focus");
+						$("#wallpost-text")[0].focus();
 						$("#wallpost-text").css("height","33px");
 				}
 				});
 			$("#wallpost-attach-trigger").on("focus", function(){
-					$("#wall-submit")[0].trigger("focus");
+					$("#wall-submit")[0].focus();
 				});
 			$.ajax({
 					url: "/xhrapp.php?app=wallpost&m=update&table=' . $table . '&id=' . $id . '&last=0",

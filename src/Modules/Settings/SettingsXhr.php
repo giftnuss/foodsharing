@@ -121,7 +121,7 @@ class SettingsXhr extends Control
 
 		return array(
 			'status' => 1,
-			'script' => 'pulseError("Das Passwort wahl wohl falsch, vertippt?");$("#passcheck").val("");$("#passcheck")[0].trigger("focus");'
+			'script' => 'pulseError("Das Passwort wahl wohl falsch, vertippt?");$("#passcheck").val("");$("#passcheck")[0].focus();'
 		);
 	}
 

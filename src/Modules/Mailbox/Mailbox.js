@@ -74,12 +74,12 @@ function mb_new_message (email) {
   mb_clearEditor()
   $('#message-editor').dialog('open')
   if ($('.edit-an').length > 0) {
-    $('.edit-an')[0].trigger('focus')
+    $('.edit-an')[0].focus()
   }
   if (email != undefined) {
     $('.edit-an:first').val(email)
     u_handleNewEmail(email, $('.edit-an:first'))
-    $('#edit-subject')[0].trigger('focus')
+    $('#edit-subject')[0].focus()
   }
 }
 
@@ -89,7 +89,7 @@ function mb_mailto (email) {
   $('#message-body').dialog('close')
   $('#message-editor').dialog('open')
   if ($('#edit-subject').length > 0) {
-    $('#edit-subject')[0].trigger('focus')
+    $('#edit-subject')[0].focus()
   }
 }
 
@@ -130,7 +130,7 @@ function mb_answer () {
   $('#message-editor').dialog('open')
 
   if ($('#edit-body').length > 0) {
-    $('#edit-body')[0].trigger('focus')
+    $('#edit-body')[0].focus()
   }
 }
 
@@ -204,7 +204,7 @@ function mb_send_message () {
   })
 
   if (an.indexOf('@') == -1) {
-    $('.edit-an')[0].trigger('focus')
+    $('.edit-an')[0].focus()
     pulseInfo('Du musst einen Empfänger angeben')
   } else {
     ajreq('send_message', {
