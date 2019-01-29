@@ -348,25 +348,20 @@ const msg = {
     const $conversation = $('#msg-conversation ul:first')
     $conversation.html('')
 
-    let title = ''
+    const otherMembers = members.filter(m => m.id !== msg.fsid)
 
-    if (members && members.length > 0) {
-      const currentMember = members
-        .find(m => m.id != msg.fsid)
+    const titleText = name || `Unterhaltung mit ${otherMembers.map(member => member.name).join(', ')}`
 
-      if (currentMember) {
-        title = `
-          <a title="${currentMember.name}" href="/profile/${currentMember.id}">
-            <img src="${img(currentMember.photo, 'mini')}" width="22" alt="${currentMember.name}" />
+    const title = `
+      &nbsp;<div class="images">
+        ${otherMembers.map(member => `
+          <a title="${member.name}" href="/profile/${member.id}">
+            <img src="${img(member.photo, 'mini')}" width="22" alt="${member.name}" />
           </a>
-        `
-      }
-    }
-
-    const strTitle = name || `Unterhaltung mit ${members.map(m => m.name).join(', ')}`
-
-    title = `
-      &nbsp;<div class="images">${title}</div>${strTitle}<div style="clear:both;"></div>
+        `).join('')}  
+      </div>
+      ${titleText}
+      <div style="clear:both;"></div>
     `
 
     $('#msg-conversation-title a').remove()
