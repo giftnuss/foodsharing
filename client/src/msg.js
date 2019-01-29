@@ -348,7 +348,7 @@ const msg = {
     const $conversation = $('#msg-conversation ul:first')
     $conversation.html('')
 
-    const otherMembers = members.filter(m => m.id !== msg.fsid)
+    const otherMembers = members.filter(m => m.id != msg.fsid)
 
     const titleText = name || `Unterhaltung mit ${otherMembers.map(member => member.name).join(', ')}`
 
