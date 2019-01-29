@@ -4,6 +4,14 @@
 
 # 2019-02-16 Hotfix
 - Fixed an SQL injection in a FoodsaverGateway method @alangecker
+## Features
+On dashboard there now is a symbol indicating the confirmation status of a pickup !661 @jofranz
+- Pre fill end date of pickuphistory with todays date for comfort reasons !660 @jofranz
+- Conversation API returns name (or null) !658 @nicksellen 
+
+## Bugfixes
+- Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
+- Fixup conversation header display !658 @nicksellen
 
 # 2019-02-02 Hotfix
 - readded adresspicker functionality to Fair-Teiler creation page !668 @peter.toennies
