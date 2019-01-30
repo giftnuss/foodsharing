@@ -16,12 +16,12 @@ set('git_tty', false);
 
 // Shared files/dirs between deploys
 set('shared_files', ['config.inc.prod.php']);
-set('shared_dirs', ['images', 'data', 'tmp', 'cache/searchindex']);
+set('shared_dirs', ['images', 'data', 'tmp', 'cache']);
 
 // Writable dirs by web server
 set('writable_dirs', ['tmp', 'cache']);
 set('http_user', 'www-data');
-set('clear_paths', ['cache/.views-cache', 'cache/di-cache.php']);
+set('clear_paths', ['cache/.views-cache', 'cache/di-cache.php', 'cache/prod', 'cache/log', 'cache/dev']);
 
 // default timeout of 300 was failing sometimes
 set('default_timeout', 600);
