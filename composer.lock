@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1cb7af97643dab9b849cfa83ef4d20ff",
+    "content-hash": "4b793ddfd8e4dc80fd2837de4f1fe768",
     "packages": [
         {
             "name": "ddeboer/imap",
@@ -3128,16 +3128,16 @@
         },
         {
             "name": "setasign/fpdi",
-            "version": "v2.1.1",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Setasign/FPDI.git",
-                "reference": "356de9cb6b6a826ac952c86aee6599463ea87362"
+                "reference": "3c266002f8044f61b17329f7cd702d44d73f0f7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Setasign/FPDI/zipball/356de9cb6b6a826ac952c86aee6599463ea87362",
-                "reference": "356de9cb6b6a826ac952c86aee6599463ea87362",
+                "url": "https://api.github.com/repos/Setasign/FPDI/zipball/3c266002f8044f61b17329f7cd702d44d73f0f7f",
+                "reference": "3c266002f8044f61b17329f7cd702d44d73f0f7f",
                 "shasum": ""
             },
             "require": {
@@ -3185,25 +3185,25 @@
                 "fpdi",
                 "pdf"
             ],
-            "time": "2018-11-06T10:02:00+00:00"
+            "time": "2019-01-30T14:11:19+00:00"
         },
         {
             "name": "setasign/fpdi-fpdf",
-            "version": "v2.1.0",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Setasign/FPDI-FPDF.git",
-                "reference": "c13ff727115f4fab040d58b559929113cc1be8e2"
+                "reference": "e4363ac09e1b766b38ebea1c3cbe82b3480a11e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Setasign/FPDI-FPDF/zipball/c13ff727115f4fab040d58b559929113cc1be8e2",
-                "reference": "c13ff727115f4fab040d58b559929113cc1be8e2",
+                "url": "https://api.github.com/repos/Setasign/FPDI-FPDF/zipball/e4363ac09e1b766b38ebea1c3cbe82b3480a11e9",
+                "reference": "e4363ac09e1b766b38ebea1c3cbe82b3480a11e9",
                 "shasum": ""
             },
             "require": {
                 "setasign/fpdf": "^1.8",
-                "setasign/fpdi": "^2.1"
+                "setasign/fpdi": "^2.2"
             },
             "type": "library",
             "notification-url": "https://packagist.org/downloads/",
@@ -3224,7 +3224,7 @@
                 "fpdi",
                 "pdf"
             ],
-            "time": "2018-11-06T10:40:46+00:00"
+            "time": "2019-01-30T14:38:19+00:00"
         },
         {
             "name": "symfony/cache",
