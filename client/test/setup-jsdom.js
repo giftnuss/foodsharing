@@ -11,3 +11,4 @@ const html = `
 JSDOMGlobal(html, { url: 'https://foodsharing.de' })
 
 window.localStorage = new LocalStorage('/tmp')
+window.Date = Date
