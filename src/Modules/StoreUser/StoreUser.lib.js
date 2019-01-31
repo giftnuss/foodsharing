@@ -3,7 +3,7 @@
 import $ from 'jquery'
 
 import i18n from '@/i18n'
-import { hideLoader, showLoader, reload, chat, ajreq } from '@/script'
+import { hideLoader, showLoader, reload, chat, ajreq, profile } from '@/script'
 
 import { store } from '@/server-data'
 
@@ -140,7 +140,10 @@ export function denyRequest (fsid, bid) {
 }
 
 export function u_contextAction (action, fsid) {
-  if (action == 'message') {
+  if (action == 'gotoprofile') {
+    profile(fsid)
+  }
+  else if (action == 'message') {
     chat(fsid)
   } else if (action == 'report') {
     ajreq('reportDialog', { app: 'report', fsid: fsid, bid: store.id })
@@ -180,10 +183,11 @@ export function createJumperMenu () {
       u_contextAction(key, fsid)
     },
     items: {
-      'report': { name: 'Melden', icon: 'report' },
-      'toteam': { name: 'Ins Team aufnehmen', icon: 'accept' },
-      'delete': { name: 'Aus Team löschen', icon: 'delete' },
-      'message': { name: 'Nachricht schreiben', icon: 'message' }
+      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user' },
+      'report': { name: 'Melden', icon: 'fas fa-bullhorn' },
+      'toteam': { name: 'Ins Team aufnehmen', icon: 'fas fa-clipboard-check' },
+      'delete': { name: 'Aus Team löschen', icon: 'fas fa-paper-plane' },
+      'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment' }
     }
   }
 }
@@ -198,10 +202,11 @@ export function createMenu () {
       u_contextAction(key, fsid)
     },
     items: {
-      'report': { name: 'Melden', icon: 'report' },
-      'tojumper': { name: 'Auf die Springerliste', icon: 'wait' },
-      'delete': { name: 'Aus Team löschen', icon: 'delete' },
-      'message': { name: 'Nachricht schreiben', icon: 'message' }
+      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user'},
+      'report': { name: 'Melden', icon: 'fas fa-bullhorn' },
+      'tojumper': { name: 'Auf die Springerliste', icon: 'fas fa-mug-hot' },
+      'delete': { name: 'Aus Team löschen', icon: 'fas fa-paper-plane' },
+      'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment' }
     }
   }
 }
@@ -224,8 +229,9 @@ export function createConfirmedMenu () {
       u_timetableAction(key, this)
     },
     items: {
-      'deny': { name: 'Austragen', icon: 'delete' },
-      'message': { name: 'Nachricht schreiben', icon: 'message' }
+      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user'},
+      'deny': { name: 'Austragen', icon: 'fas fa-calendar-times' },
+      'message': { name: 'Nachricht schreiben', icon: 'fas far-comment' }
     }
   }
 }
@@ -236,9 +242,10 @@ export function createUnconfirmedMenu () {
       u_timetableAction(key, this)
     },
     items: {
-      'confirm': { name: 'Bestätigen', icon: 'accept' },
-      'deny': { name: 'Austragen', icon: 'delete' },
-      'message': { name: 'Nachricht schreiben', icon: 'message' }
+      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas far-user'},
+      'confirm': { name: 'Bestätigen', icon: 'fas fa-check' },
+      'deny': { name: 'Austragen', icon: 'fas fa-calendar-times' },
+      'message': { name: 'Nachricht schreiben', icon: 'fas far-comment' }
     }
   }
 }

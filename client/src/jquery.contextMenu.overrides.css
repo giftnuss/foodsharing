@@ -11,7 +11,6 @@
 .context-menu-icon {
   min-height: 32px;
   background-repeat: no-repeat;
-  background-image: url(/img/contextmenu.png);
   overflow: hidden;
 }
 
