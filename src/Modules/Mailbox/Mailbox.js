@@ -274,7 +274,7 @@ function u_addTypeHead () {
     let $this = this
     if ($this.value != '' && !checkEmail($this.value)) {
       pulseError('Diese E-Mail-Adresse ist nicht korrekt')
-      $this.trigger('focus')
+      $this.focus()
     } else if ($this.value != '') {
       window.setTimeout(() => (u_handleNewEmail(this.value, $(this))), 100)
     }
