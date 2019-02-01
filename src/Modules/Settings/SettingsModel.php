@@ -49,7 +49,7 @@ class SettingsModel extends Db
 		');
 	}
 
-	public function getQuizSession($sid)
+	final public function getQuizSession($sid)
 	{
 		$sql = '
 			SELECT
@@ -80,27 +80,27 @@ class SettingsModel extends Db
 			if (!empty($session['quiz_questions'])) {
 				$session['quiz_questions'] = unserialize($session['quiz_questions']);
 
-				foreach ($session['quiz_questions'] as $q) {
-					$tmp[$q['id']] = $q;
+				foreach ($session['quiz_questions'] as $quizQuestion) {
+					$tmp[$quizQuestion['id']] = $quizQuestion;
 					$ttmp = array();
-					if (isset($q['answers'])) {
-						foreach ($q['answers'] as $a) {
-							$ttmp[$a] = $a;
+					if (isset($quizQuestion['answers'])) {
+						foreach ($quizQuestion['answers'] as $answer) {
+							$ttmp[$answer] = $answer;
 						}
 					}
 					if (!empty($ttmp)) {
-						$tmp[$q['id']]['answers'] = $ttmp;
+						$tmp[$quizQuestion['id']]['answers'] = $ttmp;
 					}
 				}
 			}
 
-			if (!empty($session['quiz_questions'])) {
+			if (!empty($session['quiz_result'])) {
 				$session['quiz_result'] = unserialize($session['quiz_result']);
 
-				foreach ($session['quiz_result'] as $k => $r) {
-					$session['quiz_result'][$k]['user'] = $tmp[$r['id']];
+				foreach ($session['quiz_result'] as $k => $quizResult) {
+					$session['quiz_result'][$k]['user'] = $tmp[$quizResult['id']];
 
-					foreach ($r['answers'] as $k2 => $v2) {
+					foreach ($quizResult['answers'] as $k2 => $v2) {
 						$session['quiz_result'][$k]['answers'][$k2]['right'] = 0;
 						if ($v2['right'] == 1) {
 							$session['quiz_result'][$k]['answers'][$k2]['right'] = 1;
