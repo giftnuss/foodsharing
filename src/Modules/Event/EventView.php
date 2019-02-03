@@ -164,7 +164,7 @@ class EventView extends View
 			$public_el,
 			$bezirkchoose,
 			$this->v_utils->v_form_text('name', array('required' => true)),
-			$this->v_utils->v_form_date('date'),
+			$this->v_utils->v_form_date('date', array('required' => true)),
 			$this->v_utils->v_form_date('dateend'),
 			$this->v_utils->v_input_wrapper('Uhrzeit Beginn', $this->v_utils->v_form_time('time_start', $start_time)),
 			$this->v_utils->v_input_wrapper('Uhrzeit Ende', $this->v_utils->v_form_time('time_end', $end_time)),
