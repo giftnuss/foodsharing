@@ -9,7 +9,6 @@
 - Make date in event a mandatory field #436 @tihar
 - Changed the number of avatars in the EventView from 52 to 54
 - Make date in event a mandatory field #436 !669 @tihar
-- Changed the number of avatars in the EventView from 52 to 54 !669s
 
 ## Bugfixes
 - Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
