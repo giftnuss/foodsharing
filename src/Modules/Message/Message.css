@@ -124,10 +124,6 @@ li.unread-1 {
     overflow-x: hidden !important;
   }
 
-  #right {
-    display: none;
-  }
-
   #msg-conversation-wrapper {
     height: 100vh;
     margin: 0;
