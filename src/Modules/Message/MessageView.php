@@ -71,7 +71,7 @@ final class MessageView extends View
 					}
 
 					foreach ($c['member'] as $m) {
-						if ($m['id'] === $this->session->id()) {
+						if ($m['id'] == $this->session->id()) {
 							continue;
 						}
 						$pics .= '<img src="' . $this->func->img($m['photo'], $size) . '" width="' . $pictureWidth . '" />';
