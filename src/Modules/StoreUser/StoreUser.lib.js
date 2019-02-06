@@ -231,7 +231,7 @@ export function createConfirmedMenu () {
     items: {
       'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user'},
       'deny': { name: 'Austragen', icon: 'fas fa-calendar-times' },
-      'message': { name: 'Nachricht schreiben', icon: 'fas far-comment' }
+      'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment' }
     }
   }
 }
@@ -245,7 +245,7 @@ export function createUnconfirmedMenu () {
       'gotoprofile': { name: 'Profil anzeigen', icon: 'fas far-user'},
       'confirm': { name: 'Bestätigen', icon: 'fas fa-check' },
       'deny': { name: 'Austragen', icon: 'fas fa-calendar-times' },
-      'message': { name: 'Nachricht schreiben', icon: 'fas far-comment' }
+      'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment' }
     }
   }
 }
