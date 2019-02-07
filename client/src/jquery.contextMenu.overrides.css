@@ -1,9 +1,21 @@
 .context-menu-item {
-  padding: 0px 8px 0px 34px;
-  line-height: 32px;
-  height: 32px;
+  padding: 0.25em 0 8px 38px;
+  line-height: 25px;
+  height: 25px;
 }
 
+.context-menu-icon.context-menu-icon--fa5 i {
+  color: var(--primary);
+  font-size: 1.25em;
+}
+
+.context-menu-item.context-menu-hover {
+  color: var(--white);
+  cursor: pointer;
+  background-color: var(--primary);
+}
+
+/*
 .context-menu-icon::before {
   display: none;
 }
@@ -53,3 +65,4 @@
 .context-menu-icon-report.hover {
   background-position: 0px -128px;
 }
+*/

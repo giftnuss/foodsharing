@@ -186,7 +186,7 @@ export function createJumperMenu () {
       'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user' },
       'report': { name: 'Melden', icon: 'fas fa-bullhorn' },
       'toteam': { name: 'Ins Team aufnehmen', icon: 'fas fa-clipboard-check' },
-      'delete': { name: 'Aus Team löschen', icon: 'fas fa-paper-plane' },
+      'delete': { name: 'Aus Team löschen', icon: 'fas fa-user-times' },
       'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment' }
     }
   }
@@ -205,7 +205,7 @@ export function createMenu () {
       'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user'},
       'report': { name: 'Melden', icon: 'fas fa-bullhorn' },
       'tojumper': { name: 'Auf die Springerliste', icon: 'fas fa-mug-hot' },
-      'delete': { name: 'Aus Team löschen', icon: 'fas fa-paper-plane' },
+      'delete': { name: 'Aus Team löschen', icon: 'fas fa-user-times' },
       'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment' }
     }
   }
@@ -242,7 +242,7 @@ export function createUnconfirmedMenu () {
       u_timetableAction(key, this)
     },
     items: {
-      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas far-user'},
+      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user'},
       'confirm': { name: 'Bestätigen', icon: 'fas fa-check' },
       'deny': { name: 'Austragen', icon: 'fas fa-calendar-times' },
       'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment' }
