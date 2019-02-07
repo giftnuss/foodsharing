@@ -288,7 +288,6 @@ class BasketRestController extends FOSRestController
 	 * Sets a new picture for this basket.
 	 *
 	 * @Rest\Put("baskets/{basketId}/picture", requirements={"basketId" = "\d+"})
-	 * @Rest\FileParam(name="picture", image=true)
 	 *
 	 * @param int $basketId
 	 *
@@ -337,6 +336,41 @@ class BasketRestController extends FOSRestController
 		//update basket
 		$basket[self::PICTURE] = $picname;
 		$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], $picname, $this->session->id());
+
+		return $this->handleView($this->view(['basket' => $basket], 200));
+	}
+
+	/**
+	 * Sets a new picture for this basket.
+	 *
+	 * @Rest\Delete("baskets/{basketId}/picture", requirements={"basketId" = "\d+"})
+	 *
+	 * @param int $basketId
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function removePictureAction($basketId): \Symfony\Component\HttpFoundation\Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401);
+		}
+
+		//find basket
+		$basket = $this->gateway->getBasket($basketId);
+		if (!$basket || $basket[self::STATUS] == Status::DELETED_OTHER_REASON
+			|| $basket[self::STATUS] == Status::DELETED_PICKED_UP) {
+			throw new HttpException(404, 'Basket does not exist or was deleted.');
+		}
+		if ($basket['fs_id'] != $this->session->id()) {
+			throw new HttpException(401, 'You are not the owner of the basket.');
+		}
+
+		//update basket
+		if (isset($basket[self::PICTURE])) {
+			$this->service->removeResizedPictures($basket[self::PICTURE]);
+			$basket[self::PICTURE] = null;
+			$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], null, $this->session->id());
+		}
 
 		return $this->handleView($this->view(['basket' => $basket], 200));
 	}
