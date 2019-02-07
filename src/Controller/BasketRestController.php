@@ -9,6 +9,7 @@ use Foodsharing\Services\BasketService;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -281,5 +282,62 @@ class BasketRestController extends FOSRestController
 		}
 
 		return $this->handleView($this->view([], 200));
+	}
+
+	/**
+	 * Sets a new picture for this basket.
+	 *
+	 * @Rest\Put("baskets/{basketId}/picture", requirements={"basketId" = "\d+"})
+	 * @Rest\FileParam(name="picture", image=true)
+	 *
+	 * @param int $basketId
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function setPictureAction($basketId, Request $request): \Symfony\Component\HttpFoundation\Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401);
+		}
+
+		//find basket
+		$basket = $this->gateway->getBasket($basketId);
+		if (!$basket || $basket[self::STATUS] == Status::DELETED_OTHER_REASON
+			|| $basket[self::STATUS] == Status::DELETED_PICKED_UP) {
+			throw new HttpException(404, 'Basket does not exist or was deleted.');
+		}
+		if ($basket['fs_id'] != $this->session->id()) {
+			throw new HttpException(401, 'You are not the owner of the basket.');
+		}
+
+		//guess file extension from mime type
+		$type = $request->headers->get('content-type');
+		if (is_null($type) || empty($type)) {
+			throw new HttpException(400, 'Content-type is required.');
+		}
+		$extensions = ['image/gif' => 'gif', 'image/jpeg' => 'jpg', 'image/pjpeg' => 'jpg', 'image/png' => 'png'];
+		if (!isset($extensions[$type])) {
+			throw new HttpException(400, 'Unknown image type.');
+		}
+
+		//save and resize image
+		$tmp = uniqid() . '.' . strtolower($extensions[$type]);
+		file_put_contents('tmp/' . $tmp, $request->getContent());
+		$picname = $this->service->createResizedPictures($tmp);
+		unlink('tmp/' . $tmp);
+		if (is_null($picname)) {
+			throw new HttpException(500, 'Picture could not be resized.');
+		}
+
+		//remove old images
+		if (isset($basket[self::PICTURE])) {
+			$this->service->removeResizedPictures($basket[self::PICTURE]);
+		}
+
+		//update basket
+		$basket[self::PICTURE] = $picname;
+		$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], $picname, $this->session->id());
+
+		return $this->handleView($this->view(['basket' => $basket], 200));
 	}
 }
