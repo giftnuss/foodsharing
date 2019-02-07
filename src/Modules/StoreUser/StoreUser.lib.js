@@ -142,8 +142,7 @@ export function denyRequest (fsid, bid) {
 export function u_contextAction (action, fsid) {
   if (action == 'gotoprofile') {
     profile(fsid)
-  }
-  else if (action == 'message') {
+  } else if (action == 'message') {
     chat(fsid)
   } else if (action == 'report') {
     ajreq('reportDialog', { app: 'report', fsid: fsid, bid: store.id })
@@ -202,7 +201,7 @@ export function createMenu () {
       u_contextAction(key, fsid)
     },
     items: {
-      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user'},
+      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user' },
       'report': { name: 'Melden', icon: 'fas fa-bullhorn' },
       'delete': { name: 'Aus Team löschen', icon: 'fas fa-user-times' },
       'tojumper': { name: 'Auf die Springerliste', icon: 'fas fa-mug-hot' },
@@ -229,7 +228,7 @@ export function createConfirmedMenu () {
       u_timetableAction(key, this)
     },
     items: {
-      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user'},
+      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user' },
       'deny': { name: 'Austragen', icon: 'fas fa-calendar-times' },
       'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment' }
     }
@@ -242,7 +241,7 @@ export function createUnconfirmedMenu () {
       u_timetableAction(key, this)
     },
     items: {
-      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user'},
+      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user' },
       'confirm': { name: 'Bestätigen', icon: 'fas fa-check' },
       'deny': { name: 'Austragen', icon: 'fas fa-calendar-times' },
       'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment' }
