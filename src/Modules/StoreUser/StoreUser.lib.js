@@ -185,8 +185,8 @@ export function createJumperMenu () {
     items: {
       'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user' },
       'report': { name: 'Melden', icon: 'fas fa-bullhorn' },
-      'toteam': { name: 'Ins Team aufnehmen', icon: 'fas fa-clipboard-check' },
       'delete': { name: 'Aus Team löschen', icon: 'fas fa-user-times' },
+      'toteam': { name: 'Ins Team aufnehmen', icon: 'fas fa-clipboard-check' },
       'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment' }
     }
   }
@@ -204,8 +204,8 @@ export function createMenu () {
     items: {
       'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user'},
       'report': { name: 'Melden', icon: 'fas fa-bullhorn' },
-      'tojumper': { name: 'Auf die Springerliste', icon: 'fas fa-mug-hot' },
       'delete': { name: 'Aus Team löschen', icon: 'fas fa-user-times' },
+      'tojumper': { name: 'Auf die Springerliste', icon: 'fas fa-mug-hot' },
       'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment' }
     }
   }
