@@ -86,35 +86,42 @@ class BasketService
 		}
 		$name = preg_replace('/[^a-z0-9\.]/', '', $filename);
 
-		copy('tmp/' . $filename, 'images/basket/' . $name);
-		$img = new fImage('images/basket/' . $name);
-		$img->resize(800, 800);
-		$img->saveChanges();
+		try {
+			copy('tmp/' . $filename, 'images/basket/' . $name);
+			$img = new fImage('images/basket/' . $name);
+			$img->resize(800, 800);
+			$img->saveChanges();
 
-		copy('images/basket/' . $name, 'images/basket/medium-' . $name);
-		$img = new fImage('images/basket/medium-' . $name);
-		$img->resize(450, 450);
-		$img->saveChanges();
+			copy('images/basket/' . $name, 'images/basket/medium-' . $name);
+			$img = new fImage('images/basket/medium-' . $name);
+			$img->resize(450, 450);
+			$img->saveChanges();
 
-		copy('images/basket/medium-' . $name, 'images/basket/thumb-' . $name);
-		$img = new fImage('images/basket/thumb-' . $name);
-		$img->cropToRatio(1, 1);
-		$img->resize(200, 200);
-		$img->saveChanges();
+			copy('images/basket/medium-' . $name, 'images/basket/thumb-' . $name);
+			$img = new fImage('images/basket/thumb-' . $name);
+			$img->cropToRatio(1, 1);
+			$img->resize(200, 200);
+			$img->saveChanges();
 
-		copy('images/basket/thumb-' . $name, 'images/basket/75x75-' . $name);
-		$img = new fImage('images/basket/75x75-' . $name);
-		$img->cropToRatio(1, 1);
-		$img->resize(75, 75);
-		$img->saveChanges();
+			copy('images/basket/thumb-' . $name, 'images/basket/75x75-' . $name);
+			$img = new fImage('images/basket/75x75-' . $name);
+			$img->cropToRatio(1, 1);
+			$img->resize(75, 75);
+			$img->saveChanges();
 
-		copy('images/basket/75x75-' . $name, 'images/basket/50x50-' . $name);
-		$img = new fImage('images/basket/50x50-' . $name);
-		$img->cropToRatio(1, 1);
-		$img->resize(50, 50);
-		$img->saveChanges();
+			copy('images/basket/75x75-' . $name, 'images/basket/50x50-' . $name);
+			$img = new fImage('images/basket/50x50-' . $name);
+			$img->cropToRatio(1, 1);
+			$img->resize(50, 50);
+			$img->saveChanges();
 
-		return $name;
+			return $name;
+		}
+		catch (Exception $e) {
+			// in case of an error remove all created files
+			removeResizedPicture($name);
+			return null;
+		}
 	}
 
 	/**

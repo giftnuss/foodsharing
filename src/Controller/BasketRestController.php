@@ -310,22 +310,15 @@ class BasketRestController extends FOSRestController
 		}
 
 		//guess file extension from mime type
-		$type = $request->headers->get('content-type');
-		if (is_null($type) || empty($type)) {
-			throw new HttpException(400, 'Content-type is required.');
-		}
-		$extensions = ['image/gif' => 'gif', 'image/jpeg' => 'jpg', 'image/pjpeg' => 'jpg', 'image/png' => 'png'];
-		if (!isset($extensions[$type])) {
-			throw new HttpException(400, 'Unknown image type.');
-		}
+		$extension = $this->guessFileExtension($request->headers->get('content-type'));
 
 		//save and resize image
-		$tmp = uniqid() . '.' . strtolower($extensions[$type]);
+		$tmp = uniqid() . '.' . strtolower($extension);
 		file_put_contents('tmp/' . $tmp, $request->getContent());
 		$picname = $this->service->createResizedPictures($tmp);
 		unlink('tmp/' . $tmp);
 		if (is_null($picname)) {
-			throw new HttpException(500, 'Picture could not be resized.');
+			throw new HttpException(400, 'Picture could not be resized.');
 		}
 
 		//remove old images
@@ -373,5 +366,23 @@ class BasketRestController extends FOSRestController
 		}
 
 		return $this->handleView($this->view(['basket' => $basket], 200));
+	}
+
+	private function guessFileExtension($contentType): string {
+		if (is_null($contentType) || empty($contentType)) {
+			throw new HttpException(400, 'Content-type is required.');
+		}
+
+		$pos = strpos($contentType, ';');
+		if ($pos) {
+			$contentType = substr($contentType, 0, $pos);
+		}
+
+		$extensions = ['image/gif' => 'gif', 'image/jpeg' => 'jpg', 'image/pjpeg' => 'jpg', 'image/png' => 'png'];
+		if (!isset($extensions[$contentType])) {
+			throw new HttpException(400, 'Unknown image type.');
+		}
+
+		return $extensions[$contentType];
 	}
 }
