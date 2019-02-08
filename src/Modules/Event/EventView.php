@@ -66,10 +66,12 @@ class EventView extends View
 				if($("#addend:checked").length > 0)
 				{
 					$("#dateend-wrapper").show();
+					$("#dateend-wrapper").addClass("required");
 				}
 				else
 				{
 					$("#dateend-wrapper").hide();
+					$("#dateend-wrapper").removeClass("required");
 				}
 			});
 	
@@ -165,7 +167,7 @@ class EventView extends View
 			$bezirkchoose,
 			$this->v_utils->v_form_text('name', array('required' => true)),
 			$this->v_utils->v_form_date('date', array('required' => true)),
-			$this->v_utils->v_form_date('dateend'),
+			$this->v_utils->v_form_date('dateend', array('required' => true)),
 			$this->v_utils->v_input_wrapper('Uhrzeit Beginn', $this->v_utils->v_form_time('time_start', $start_time)),
 			$this->v_utils->v_input_wrapper('Uhrzeit Ende', $this->v_utils->v_form_time('time_end', $end_time)),
 			$this->v_utils->v_form_textarea('description', array('desc' => $this->func->s('desc_desc'), 'required' => true)),
