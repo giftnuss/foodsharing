@@ -212,13 +212,14 @@ export function createMenu () {
 
 export function u_timetableAction (key, el) {
   const val = $(el).children('input:first').val().split(':::')
-
-  if (key == 'confirm') {
+ if (key == 'confirm') {
     u_fetchconfirm(val[0], val[1], el)
   } else if (key == 'deny') {
     u_fetchdeny(val[0], val[1], el)
   } else if (key == 'message') {
     chat(val[0])
+  } else if (key == 'gotoprofile') {
+    profile(val[0])
   }
 }
 
