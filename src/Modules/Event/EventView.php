@@ -61,7 +61,8 @@ class EventView extends View
 			});
 			$("#dateend-wrapper").hide();
 			$("#date").after(\'<label class="addend"><input type="checkbox" name="addend" id="addend" value="1" /> Das Event geht über mehrere Tage</label>\');
-	
+			$("#dateend-wrapper").removeClass("required");
+						
 			$("#addend").on("change", function(){
 				if($("#addend:checked").length > 0)
 				{
