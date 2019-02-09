@@ -239,6 +239,8 @@ class EventView extends View
 
 		if (date('Y-m-d', $event['start_ts']) != date('Y-m-d', $event['end_ts'])) {
 			$end = ' bis ' . $this->func->niceDate($event['end_ts']);
+		} else {
+			$end = ' bis ' . $this->func->ts_time($event['end_ts']);
 		}
 
 		$out = '
