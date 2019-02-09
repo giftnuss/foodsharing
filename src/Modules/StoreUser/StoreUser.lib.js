@@ -182,11 +182,11 @@ export function createJumperMenu () {
       u_contextAction(key, fsid)
     },
     items: {
-      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user' },
-      'report': { name: 'Melden', icon: 'fas fa-bullhorn' },
-      'delete': { name: 'Aus Team löschen', icon: 'fas fa-user-times' },
-      'toteam': { name: 'Ins Team aufnehmen', icon: 'fas fa-clipboard-check' },
-      'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment' }
+      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user fa-fw' },
+      'report': { name: 'Melden', icon: 'fas fa-bullhorn fa-fw' },
+      'delete': { name: 'Aus Team löschen', icon: 'fas fa-user-times fa-fw' },
+      'toteam': { name: 'Ins Team aufnehmen', icon: 'fas fa-clipboard-check fa-fw' },
+      'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment fa-fw' }
     }
   }
 }
@@ -201,11 +201,11 @@ export function createMenu () {
       u_contextAction(key, fsid)
     },
     items: {
-      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user' },
-      'report': { name: 'Melden', icon: 'fas fa-bullhorn' },
-      'delete': { name: 'Aus Team löschen', icon: 'fas fa-user-times' },
-      'tojumper': { name: 'Auf die Springerliste', icon: 'fas fa-mug-hot' },
-      'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment' }
+      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user fa-fw' },
+      'report': { name: 'Melden', icon: 'fas fa-bullhorn fa-fw' },
+      'delete': { name: 'Aus Team löschen', icon: 'fas fa-user-times fa-fw' },
+      'tojumper': { name: 'Auf die Springerliste', icon: 'fas fa-mug-hot fa-fw' },
+      'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment fa-fw' }
     }
   }
 }
@@ -228,9 +228,9 @@ export function createConfirmedMenu () {
       u_timetableAction(key, this)
     },
     items: {
-      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user' },
-      'deny': { name: 'Austragen', icon: 'fas fa-calendar-times' },
-      'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment' }
+      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user fa-fw' },
+      'deny': { name: 'Austragen', icon: 'fas fa-calendar-times fa-fw' },
+      'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment fa-fw' }
     }
   }
 }
@@ -241,10 +241,10 @@ export function createUnconfirmedMenu () {
       u_timetableAction(key, this)
     },
     items: {
-      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user' },
-      'confirm': { name: 'Bestätigen', icon: 'fas fa-check' },
-      'deny': { name: 'Austragen', icon: 'fas fa-calendar-times' },
-      'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment' }
+      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user fa-fw' },
+      'confirm': { name: 'Bestätigen', icon: 'fas fa-check fa-fw' },
+      'deny': { name: 'Austragen', icon: 'fas fa-calendar-times fa-fw' },
+      'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment fa-fw' }
     }
   }
 }
