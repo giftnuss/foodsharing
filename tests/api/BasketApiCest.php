@@ -89,4 +89,35 @@ class BasketApiCest
 		$I->sendPOST(self::API_BASKETS);
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::UNAUTHORIZED);
 	}
+
+	public function setPicture(\ApiTester $I)
+	{
+		$basket = $I->createFoodbasket($this->user[self::ID]);
+
+		$I->login($this->user[self::EMAIL]);
+		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID] . '/picture');
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST);
+
+		$data = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAACklEQVR4nGNiAAAABgADNjd8qAAAAABJRU5ErkJggg==');
+		$I->haveHttpHeader('Content-Type', 'image/png');
+		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID] . '/picture', $data);
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
+
+		$I->deleteHeader('Content-Type', 'image/png');
+		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID] . '/picture', $data);
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST);
+
+		$I->haveHttpHeader('Content-Type', 'image/png');
+		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID] . '/picture', substr($data, 0, 10));
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST);
+	}
+
+	public function removePicture(\ApiTester $I)
+	{
+		$basket = $I->createFoodbasket($this->user[self::ID]);
+
+		$I->login($this->user[self::EMAIL]);
+		$I->sendDELETE(self::API_BASKETS . '/' . $basket[self::ID] . '/picture');
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
+	}
 }

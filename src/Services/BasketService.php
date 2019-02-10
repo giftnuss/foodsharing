@@ -3,6 +3,7 @@
 namespace Foodsharing\Services;
 
 use Flourish\fImage;
+use Flourish\fException;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Basket\BasketGateway;
 
@@ -116,12 +117,14 @@ class BasketService
 			$img->saveChanges();
 
 			return $name;
-		}
-		catch (Exception $e) {
+		} catch (fException $e) {
 			// in case of an error remove all created files
-			removeResizedPicture($name);
+			$this->removeResizedPictures($name);
+
 			return null;
 		}
+
+		return null;
 	}
 
 	/**

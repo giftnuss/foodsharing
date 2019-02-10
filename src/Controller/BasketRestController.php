@@ -299,20 +299,17 @@ class BasketRestController extends FOSRestController
 			throw new HttpException(401);
 		}
 
-		//find basket
-		$basket = $this->gateway->getBasket($basketId);
-		if (!$basket || $basket[self::STATUS] == Status::DELETED_OTHER_REASON
-			|| $basket[self::STATUS] == Status::DELETED_PICKED_UP) {
-			throw new HttpException(404, 'Basket does not exist or was deleted.');
-		}
-		if ($basket['fs_id'] != $this->session->id()) {
-			throw new HttpException(401, 'You are not the owner of the basket.');
-		}
+		$basket = $this->findEditableBasket($basketId);
 
-		//guess file extension from mime type
-		$extension = $this->guessFileExtension($request->headers->get('content-type'));
+		//check data
+		$data = $request->getContent();
+		echo 'size: ' . strlen($data);
+		if (strlen($data) == 0 || strlen($data) > 3 * 1024 * 1024) {
+			throw new HttpException(400, 'The picture data must not be empty and not exceed 3 MB.');
+		}
 
 		//save and resize image
+		$extension = $this->guessFileExtension($request->headers->get('content-type'));
 		$tmp = uniqid() . '.' . strtolower($extension);
 		file_put_contents('tmp/' . $tmp, $request->getContent());
 		$picname = $this->service->createResizedPictures($tmp);
@@ -348,15 +345,7 @@ class BasketRestController extends FOSRestController
 			throw new HttpException(401);
 		}
 
-		//find basket
-		$basket = $this->gateway->getBasket($basketId);
-		if (!$basket || $basket[self::STATUS] == Status::DELETED_OTHER_REASON
-			|| $basket[self::STATUS] == Status::DELETED_PICKED_UP) {
-			throw new HttpException(404, 'Basket does not exist or was deleted.');
-		}
-		if ($basket['fs_id'] != $this->session->id()) {
-			throw new HttpException(401, 'You are not the owner of the basket.');
-		}
+		$basket = $this->findEditableBasket($basketId);
 
 		//update basket
 		if (isset($basket[self::PICTURE])) {
@@ -368,7 +357,12 @@ class BasketRestController extends FOSRestController
 		return $this->handleView($this->view(['basket' => $basket], 200));
 	}
 
-	private function guessFileExtension($contentType): string {
+	/**
+	 * Guesses a filename extension for an image file based on the mime type.
+	 * Throws an HttpException if the type is invalid or not an image type.
+	 */
+	private function guessFileExtension($contentType): string
+	{
 		if (is_null($contentType) || empty($contentType)) {
 			throw new HttpException(400, 'Content-type is required.');
 		}
@@ -384,5 +378,23 @@ class BasketRestController extends FOSRestController
 		}
 
 		return $extensions[$contentType];
+	}
+
+	/**
+	 * Finds and returns the user's basket with the given id. Throws HttpExceptions
+	 * if the basket does not exist, was deleted, or is owned by a different user.
+	 */
+	private function findEditableBasket($basketId): array
+	{
+		$basket = $this->gateway->getBasket($basketId);
+		if (!$basket || $basket[self::STATUS] == Status::DELETED_OTHER_REASON
+			|| $basket[self::STATUS] == Status::DELETED_PICKED_UP) {
+			throw new HttpException(404, 'Basket does not exist or was deleted.');
+		}
+		if ($basket['fs_id'] != $this->session->id()) {
+			throw new HttpException(401, 'You are not the owner of the basket.');
+		}
+
+		return $basket;
 	}
 }
