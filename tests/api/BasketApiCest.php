@@ -12,6 +12,7 @@ class BasketApiCest
 	private const EMAIL = 'email';
 	private const API_BASKETS = 'api/baskets';
 	private const ID = 'id';
+	private const TEST_PICTURE = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAACklEQVR4nGNiAAAABgADNjd8qAAAAABJRU5ErkJggg==';
 
 	public function _before(\ApiTester $I)
 	{
@@ -90,25 +91,42 @@ class BasketApiCest
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::UNAUTHORIZED);
 	}
 
-	public function setPicture(\ApiTester $I)
+	public function setEmptyPicture(\ApiTester $I)
 	{
 		$basket = $I->createFoodbasket($this->user[self::ID]);
 
 		$I->login($this->user[self::EMAIL]);
 		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID] . '/picture');
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST);
+	}
 
-		$data = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAACklEQVR4nGNiAAAABgADNjd8qAAAAABJRU5ErkJggg==');
+	public function setValidPicture(\ApiTester $I)
+	{
+		$basket = $I->createFoodbasket($this->user[self::ID]);
+
+		$I->login($this->user[self::EMAIL]);
 		$I->haveHttpHeader('Content-Type', 'image/png');
-		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID] . '/picture', $data);
+		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID] . '/picture', base64_decode(self::TEST_PICTURE));
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
+	}
 
+	public function setPictureWithoutMime(\ApiTester $I)
+	{
+		$basket = $I->createFoodbasket($this->user[self::ID]);
+
+		$I->login($this->user[self::EMAIL]);
 		$I->deleteHeader('Content-Type', 'image/png');
-		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID] . '/picture', $data);
+		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID] . '/picture', base64_decode(self::TEST_PICTURE));
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST);
+	}
 
+	public function setInvalidPicture(\ApiTester $I)
+	{
+		$basket = $I->createFoodbasket($this->user[self::ID]);
+
+		$I->login($this->user[self::EMAIL]);
 		$I->haveHttpHeader('Content-Type', 'image/png');
-		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID] . '/picture', substr($data, 0, 10));
+		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID] . '/picture', substr(base64_decode(self::TEST_PICTURE), 0, 10));
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST);
 	}
 

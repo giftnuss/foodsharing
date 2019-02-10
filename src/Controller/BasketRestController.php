@@ -37,6 +37,8 @@ class BasketRestController extends FOSRestController
 	private const LON = 'lon';
 	private const TEL = 'tel';
 
+	private const MAX_PICTURE_SIZE = 3 * 1024 * 1024;
+
 	public function __construct(BasketGateway $gateway, BasketService $service, Session $session)
 	{
 		$this->gateway = $gateway;
@@ -304,8 +306,10 @@ class BasketRestController extends FOSRestController
 		//check data
 		$data = $request->getContent();
 		echo 'size: ' . strlen($data);
-		if (strlen($data) == 0 || strlen($data) > 3 * 1024 * 1024) {
-			throw new HttpException(400, 'The picture data must not be empty and not exceed 3 MB.');
+		if (strlen($data) == 0) {
+			throw new HttpException(400, 'The picture data must not be empty.');
+		} elseif (strlen($data) > self::MAX_PICTURE_SIZE) {
+			throw new HttpException(400, 'The picture data must not exceed ' . (self::MAX_PICTURE_SIZE / 1024 * 1024) . ' MB.');
 		}
 
 		//save and resize image
