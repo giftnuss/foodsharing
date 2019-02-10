@@ -1,7 +1,7 @@
 # Unreleased
 
 ## Features
-On dashboard there now is a symbol indicating the confirmation status of a pickup !661 @jofranz
+- On dashboard there now is a symbol indicating the confirmation status of a pickup !661 @jofranz
 - Pre fill end date of pickuphistory with todays date for comfort reasons !660 @jofranz
 - Conversation API returns name (or null) !658 @nicksellen 
 - Added the amount of events conditionally to the dashboard event headline in case there is more than one event !650 @jofranz
@@ -10,6 +10,7 @@ On dashboard there now is a symbol indicating the confirmation status of a picku
 ## Bugfixes
 - Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
 - Fixup conversation header display !658 @nicksellen
+- Fixed bug in #302 goto_profile_from_teamsite !671 with !675 @peter.reutlingen
 
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies
