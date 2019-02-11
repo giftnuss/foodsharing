@@ -140,11 +140,11 @@ export function denyRequest (fsid, bid) {
 }
 
 export function u_contextAction (action, fsid) {
-  if (action == 'gotoprofile') {
+  if (action === 'gotoprofile') {
     profile(fsid)
-  } else if (action == 'message') {
+  } else if (action === 'message') {
     chat(fsid)
-  } else if (action == 'report') {
+  } else if (action === 'report') {
     ajreq('reportDialog', { app: 'report', fsid: fsid, bid: store.id })
   } else {
     showLoader()
@@ -154,13 +154,13 @@ export function u_contextAction (action, fsid) {
       dataType: 'json',
       success: function (data) {
         if (data.status == 1) {
-          if (action == 'toteam') {
+          if (action === 'toteam') {
             $('.fs-' + fsid).removeClass('jumper')
             $('.fs-' + fsid).addClass('team')
-          } else if (action == 'tojumper') {
+          } else if (action === 'tojumper') {
             $('.fs-' + fsid).removeClass('team')
             $('.fs-' + fsid).addClass('jumper')
-          } else if (action == 'delete') {
+          } else if (action === 'delete') {
             $('.fs-' + fsid).remove()
           }
         }
@@ -212,13 +212,13 @@ export function createMenu () {
 
 export function u_timetableAction (key, el) {
   const val = $(el).children('input:first').val().split(':::')
-  if (key == 'confirm') {
+  if (key === 'confirm') {
     u_fetchconfirm(val[0], val[1], el)
-  } else if (key == 'deny') {
+  } else if (key === 'deny') {
     u_fetchdeny(val[0], val[1], el)
-  } else if (key == 'message') {
+  } else if (key === 'message') {
     chat(val[0])
-  } else if (key == 'gotoprofile') {
+  } else if (key === 'gotoprofile') {
     profile(val[0])
   }
 }
