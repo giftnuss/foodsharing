@@ -2,8 +2,6 @@
 
 namespace Foodsharing\Services;
 
-use Flourish\fImage;
-use Flourish\fException;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Basket\BasketGateway;
 
@@ -73,70 +71,5 @@ class BasketService
 		}
 
 		return $this->basketGateway->getBasket($basketId);
-	}
-
-	/**
-	 * Copies the file from 'tmp/' to 'images/basket/' and creates
-	 * rescaled versions of it. Returns the base name for the created
-	 * files or null if the original file does not exist.
-	 */
-	public function createResizedPictures($filename): ?string
-	{
-		if (empty($filename) || !file_exists('tmp/' . $filename)) {
-			return null;
-		}
-		$name = preg_replace('/[^a-z0-9\.]/', '', $filename);
-
-		try {
-			copy('tmp/' . $filename, 'images/basket/' . $name);
-			$img = new fImage('images/basket/' . $name);
-			$img->resize(800, 800);
-			$img->saveChanges();
-
-			copy('images/basket/' . $name, 'images/basket/medium-' . $name);
-			$img = new fImage('images/basket/medium-' . $name);
-			$img->resize(450, 450);
-			$img->saveChanges();
-
-			copy('images/basket/medium-' . $name, 'images/basket/thumb-' . $name);
-			$img = new fImage('images/basket/thumb-' . $name);
-			$img->cropToRatio(1, 1);
-			$img->resize(200, 200);
-			$img->saveChanges();
-
-			copy('images/basket/thumb-' . $name, 'images/basket/75x75-' . $name);
-			$img = new fImage('images/basket/75x75-' . $name);
-			$img->cropToRatio(1, 1);
-			$img->resize(75, 75);
-			$img->saveChanges();
-
-			copy('images/basket/75x75-' . $name, 'images/basket/50x50-' . $name);
-			$img = new fImage('images/basket/50x50-' . $name);
-			$img->cropToRatio(1, 1);
-			$img->resize(50, 50);
-			$img->saveChanges();
-
-			return $name;
-		} catch (fException $e) {
-			// in case of an error remove all created files
-			$this->removeResizedPictures($name);
-
-			return null;
-		}
-
-		return null;
-	}
-
-	/**
-	 * Removes all rescaled versions of the picture with the given name.
-	 */
-	public function removeResizedPictures($name): void
-	{
-		$prefix = ['', 'medium-', 'thumb-', '75x75-', '50x50-'];
-		foreach ($prefix as $p) {
-			if (file_exists('images/basket/' . $p . $name)) {
-				unlink('images/basket/' . $p . $name);
-			}
-		}
 	}
 }

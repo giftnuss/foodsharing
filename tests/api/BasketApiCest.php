@@ -110,16 +110,6 @@ class BasketApiCest
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 	}
 
-	public function setPictureWithoutMime(\ApiTester $I)
-	{
-		$basket = $I->createFoodbasket($this->user[self::ID]);
-
-		$I->login($this->user[self::EMAIL]);
-		$I->deleteHeader('Content-Type', 'image/png');
-		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID] . '/picture', base64_decode(self::TEST_PICTURE));
-		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST);
-	}
-
 	public function setInvalidPicture(\ApiTester $I)
 	{
 		$basket = $I->createFoodbasket($this->user[self::ID]);

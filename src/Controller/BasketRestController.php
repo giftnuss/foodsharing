@@ -6,6 +6,7 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
 use Foodsharing\Services\BasketService;
+use Foodsharing\Services\ImageService;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -19,6 +20,7 @@ class BasketRestController extends FOSRestController
 {
 	private $gateway;
 	private $service;
+	private $imageService;
 	private $session;
 
 	// literal constants
@@ -37,12 +39,14 @@ class BasketRestController extends FOSRestController
 	private const LON = 'lon';
 	private const TEL = 'tel';
 
-	private const MAX_PICTURE_SIZE = 3 * 1024 * 1024;
+	private const MAX_PICTURE_SIZE = 60 * 1024 * 1024;
+	private $sizes = [800 => '', 450 => 'medium-', 200 => 'thumb-', 75 => '75x75-', 50 => '50x50-'];
 
-	public function __construct(BasketGateway $gateway, BasketService $service, Session $session)
+	public function __construct(BasketGateway $gateway, BasketService $service, ImageService $imageService, Session $session)
 	{
 		$this->gateway = $gateway;
 		$this->service = $service;
+		$this->imageService = $imageService;
 		$this->session = $session;
 	}
 
@@ -305,7 +309,6 @@ class BasketRestController extends FOSRestController
 
 		//check data
 		$data = $request->getContent();
-		echo 'size: ' . strlen($data);
 		if (strlen($data) == 0) {
 			throw new HttpException(400, 'The picture data must not be empty.');
 		} elseif (strlen($data) > self::MAX_PICTURE_SIZE) {
@@ -313,18 +316,17 @@ class BasketRestController extends FOSRestController
 		}
 
 		//save and resize image
-		$extension = $this->guessFileExtension($request->headers->get('content-type'));
-		$tmp = uniqid() . '.' . strtolower($extension);
-		file_put_contents('tmp/' . $tmp, $request->getContent());
-		$picname = $this->service->createResizedPictures($tmp);
-		unlink('tmp/' . $tmp);
+		$tmp = 'tmp/' . uniqid();
+		file_put_contents($tmp, $request->getContent());
+		$picname = $this->imageService->createResizedPictures($tmp, 'images/basket/', $this->sizes);
+		unlink($tmp);
 		if (is_null($picname)) {
 			throw new HttpException(400, 'Picture could not be resized.');
 		}
 
 		//remove old images
 		if (isset($basket[self::PICTURE])) {
-			$this->service->removeResizedPictures($basket[self::PICTURE]);
+			$this->imageService->removeResizedPictures('images/basket/', $basket[self::PICTURE], $this->sizes);
 		}
 
 		//update basket
@@ -353,35 +355,12 @@ class BasketRestController extends FOSRestController
 
 		//update basket
 		if (isset($basket[self::PICTURE])) {
-			$this->service->removeResizedPictures($basket[self::PICTURE]);
+			$this->service->removeResizedPictures('images/basket/', $basket[self::PICTURE], $this->sizes);
 			$basket[self::PICTURE] = null;
 			$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], null, $this->session->id());
 		}
 
 		return $this->handleView($this->view(['basket' => $basket], 200));
-	}
-
-	/**
-	 * Guesses a filename extension for an image file based on the mime type.
-	 * Throws an HttpException if the type is invalid or not an image type.
-	 */
-	private function guessFileExtension($contentType): string
-	{
-		if (is_null($contentType) || empty($contentType)) {
-			throw new HttpException(400, 'Content-type is required.');
-		}
-
-		$pos = strpos($contentType, ';');
-		if ($pos) {
-			$contentType = substr($contentType, 0, $pos);
-		}
-
-		$extensions = ['image/gif' => 'gif', 'image/jpeg' => 'jpg', 'image/pjpeg' => 'jpg', 'image/png' => 'png'];
-		if (!isset($extensions[$contentType])) {
-			throw new HttpException(400, 'Unknown image type.');
-		}
-
-		return $extensions[$contentType];
 	}
 
 	/**
