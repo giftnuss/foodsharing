@@ -5,31 +5,30 @@ namespace Foodsharing\Services;
 use Flourish\fImage;
 use Flourish\fException;
 
-class ImageService
+final class ImageService
 {
 	private $extensions = ['image/gif' => 'gif', 'image/jpeg' => 'jpg', 'image/pjpeg' => 'jpg', 'image/png' => 'png'];
 
 	/**
-	 * Guesses a filename extension for a file. Returns the extension or null if
-	 * the file does not exist or does not contain a known format.
+	 * Guesses a filename extension for a file.
 	 *
 	 * @param string $file the file
+	 *
+	 * @return string|null the extension or null if the file does not exist or
+	 *                     does not contain a known format
 	 */
-	public function guessImageFileExtension($file): ?string
+	public function guessImageFileExtension(string $file): ?string
 	{
 		if (empty($file) || !file_exists($file)) {
 			return null;
 		}
 
-		try {
-			$finfo = finfo_open();
-			$mime = finfo_file($finfo, $file, FILEINFO_MIME_TYPE);
-			finfo_close($finfo);
+		$fileInfo = finfo_open();
+		$mime = finfo_file($fileInfo, $file, FILEINFO_MIME_TYPE);
+		finfo_close($fileInfo);
 
-			if (!is_null($mime) && isset($this->extensions[$mime])) {
-				return $this->extensions[$mime];
-			}
-		} catch (fException $e) {
+		if ($mime !== null && isset($this->extensions[$mime])) {
+			return $this->extensions[$mime];
 		}
 
 		return null;
@@ -37,21 +36,22 @@ class ImageService
 
 	/**
 	 * Creates a copy of the file in the destination directory with a unique
-	 * name and creates rescaled versions of it. Returns the base name for the
-	 * created files or null if the original file does not exist or rescaling
-	 * failed.
+	 * name and creates rescaled versions of it.
 	 *
 	 * @param string $file the original file
 	 * @param string $dstDir destination directory
 	 * @param array $sizes key-value-pairs of size (int) and prefix (string)
+	 *
+	 * @return string|null the base name for the created files or null if the
+	 *                     original file does not exist or rescaling failed
 	 */
-	public function createResizedPictures($file, $dstDir, $sizes): ?string
+	public function createResizedPictures(string $file, string $dstDir, array $sizes): ?string
 	{
 		$extension = $this->guessImageFileExtension($file);
-		if (is_null($extension)) {
+		if ($extension === null) {
 			return null;
 		}
-		$name = uniqid() . '.' . strtolower($extension);
+		$name = uniqid('', true) . '.' . strtolower($extension);
 
 		try {
 			foreach ($sizes as $s => $p) {
@@ -79,9 +79,9 @@ class ImageService
 	 * @param string $name the base name
 	 * @param array $sizes key-value-pairs of size (int) and prefix (string)
 	 */
-	public function removeResizedPictures($dir, $name, $sizes): void
+	public function removeResizedPictures(string $dir, string $name, array $sizes): void
 	{
-		foreach ($sizes as $s => $p) {
+		foreach (array_values($sizes) as $p) {
 			if (file_exists($dir . $p . $name)) {
 				unlink($dir . $p . $name);
 			}

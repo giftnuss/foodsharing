@@ -313,7 +313,7 @@ class BasketRestController extends FOSRestController
 			throw new HttpException(400, 'The picture data must not be empty.');
 		}
 		if (strlen($data) > self::MAX_PICTURE_SIZE_MB) {
-			throw new HttpException(400, 'The picture data must not exceed ' . (self::MAX_PICTURE_SIZE_MB / 1024 * 1024) . ' MB.');
+			throw new HttpException(400, 'The picture data must not exceed ' . (self::MAX_PICTURE_SIZE_MB / (1024 * 1024)) . ' MB.');
 		}
 
 		//save and resize image
@@ -356,7 +356,7 @@ class BasketRestController extends FOSRestController
 
 		//update basket
 		if (isset($basket[self::PICTURE])) {
-			$this->service->removeResizedPictures('images/basket/', $basket[self::PICTURE], self::SIZES);
+			$this->imageService->removeResizedPictures('images/basket/', $basket[self::PICTURE], self::SIZES);
 			$basket[self::PICTURE] = null;
 			$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], null, $this->session->id());
 		}
@@ -367,8 +367,12 @@ class BasketRestController extends FOSRestController
 	/**
 	 * Finds and returns the user's basket with the given id. Throws HttpExceptions
 	 * if the basket does not exist, was deleted, or is owned by a different user.
+	 *
+	 * @param int $basketId id of a basket
+	 *
+	 * @return array the basket's entry from the database
 	 */
-	private function findEditableBasket($basketId): array
+	private function findEditableBasket(int $basketId): array
 	{
 		$basket = $this->gateway->getBasket($basketId);
 		if (!$basket || $basket[self::STATUS] === Status::DELETED_OTHER_REASON
