@@ -289,7 +289,7 @@ class Database
 	// === private methods ===
 
 	/**
-	 * dehierarchize array – eg. turn ['a', ['b', 'c'], 'd'] into ['a', 'b', 'c', 'd']
+	 * dehierarchize array – eg. turn ['a', ['b', 'c'], 'd'] into ['a', 'b', 'c', 'd'].
 	 */
 	private function dehierarchizeArray(array $array): array
 	{
@@ -301,6 +301,7 @@ class Database
 
 		return $array;
 	}
+
 	/**
 	 * @throws \Exception
 	 */
