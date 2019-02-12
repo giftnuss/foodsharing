@@ -46,7 +46,7 @@ services:
 
   client:
     container_name: foodsharing_dev_client
-    image: node:10.12-alpine
+    image: node:10.15-alpine
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -82,66 +82,13 @@ services:
     environment:
       FS_ENV: dev
 
-  # light frontend
-  #------------------------------------
-
-  light:
-    container_name: foodsharing_dev_light
-    image: registry.gitlab.com/foodsharing-dev/images/light:1.0
-    command: >
-      sh -c "
-      (test -f package.json || (echo 'If you want fslight run \"git clone https://github.com/foodsharing-dev/foodsharing-light.git light\"' && exit 1)) &&
-      yarn &&
-      yarn dev
-      "
-    ports:
-      - 18082:8080
-    environment:
-      FOODSHARING_BACKEND: http://web:8080
-      CHAT_BACKEND: http://chat:1337
-      API_BACKEND: http://api:8000
-    volumes:
-      - ../:/app
-      - light-node-modules:/app/light/node_modules
-      - light-yarn-cache:/usr/local/share/.cache/yarn
-    working_dir: /app/light
-
-  # django api
-  #------------------------------------
-
-  api:
-    container_name: foodsharing_dev_api
-    image: python:3.5.3
-    command: >
-      sh -c "
-      (test -f manage.py || (echo 'If you want the api run \"git clone https://github.com/foodsharing-dev/foodsharing-django-api.git api\"' && exit 1)) &&
-      (command -v virtualenv || /usr/local/bin/pip install virtualenv) &&
-      (test -d env/bin || virtualenv --no-site-packages env) &&
-      (test -f env/bin/pip-sync || env/bin/pip install pip-tools) &&
-      env/bin/pip-sync &&
-      wait-for-it db:3306 &&
-      env/bin/python manage.py migrate &&
-      env/bin/python manage.py runserver 0.0.0.0:8000
-      "
-    volumes:
-      - ../:/app
-      - ../docker/conf/api/local_settings.py:/app/api/foodsharing_api/local_settings.py
-      - ../docker/wait-for-it:/usr/local/bin/wait-for-it
-      - api-virtualenv:/app/api/env
-      - api-pip-cache:/root/.cache/pip
-    environment:
-      REDIS_HOST: redis
-    ports:
-      - 18000:8000
-    working_dir: /app/api
-
   # nodejs socket.io server
   #------------------------------------
 
   chat:
     container_name: foodsharing_dev_chat
     command: sh -c "yarn && node server.js 0.0.0.0"
-    image: node:10.12-alpine
+    image: node:10.15-alpine
     working_dir: /app/chat
     depends_on:
       - redis

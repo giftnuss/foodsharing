@@ -35,7 +35,7 @@ class StatsControl extends ConsoleControl
 				$stat_fetchcount = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM fs_abholer WHERE foodsaver_id = ' . (int)$fsid . ' AND `date` < NOW()');
 				$stat_post = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_theme_post WHERE foodsaver_id = ' . (int)$fsid);
 				$stat_post += (int)$this->model->qOne('SELECT COUNT(id) FROM fs_wallpost WHERE foodsaver_id = ' . (int)$fsid);
-				$stat_post += (int)$this->model->qOne('SELECT COUNT(id) FROM fs_betrieb_notiz WHERE foodsaver_id = ' . (int)$fsid);
+				$stat_post += (int)$this->model->qOne('SELECT COUNT(id) FROM fs_betrieb_notiz WHERE milestone = 0 AND foodsaver_id = ' . (int)$fsid);
 
 				$stat_bananacount = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM fs_rating WHERE `ratingtype` = 2 AND foodsaver_id = ' . (int)$fsid);
 

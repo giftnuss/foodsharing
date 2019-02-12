@@ -1,70 +1,106 @@
 <template>
   <b-nav-item-dropdown
     ref="dropdown"
-    class="regionMenu">
+    class="regionMenu"
+  >
     <template slot="button-content">
-      <span class="regionName text-truncate">{{ activeRegion ? activeRegion.name : 'Bezirke' }}</span>
+      <span class="regionName text-truncate">
+        {{ activeRegion ? activeRegion.name : 'Bezirke' }}
+      </span>
     </template>
     <div
       v-for="region in regionsSorted"
-      :key="region.id">
+      :key="region.id"
+    >
       <a
-        v-b-toggle="`topbarregion_${region.id}`"
         v-if="region.id !== activeRegionId || regions.length !== 1"
+        v-b-toggle="`topbarregion_${region.id}`"
         role="menuitem"
         href="#"
         target="_self"
-        class="dropdown-item text-truncate">{{ region.name }}</a>
+        class="dropdown-item text-truncate"
+      >
+        {{ region.name }}
+      </a>
       <b-collapse
         :id="`topbarregion_${region.id}`"
         :visible="region.id === activeRegionId"
         class="sub"
-        accordion="regions">
+        accordion="regions"
+      >
         <a
           :href="$url('forum', region.id)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"><i class="far fa-comment" />Forum</a>
+          class="dropdown-item dropdown-item-sub"
+        >
+          <i class="far fa-comment" />Forum
+        </a>
         <a
           v-if="region.isBot"
           :href="$url('forum', region.id, 1)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"><i class="far fa-comment-dots" />Bot-Forum</a>
+          class="dropdown-item dropdown-item-sub"
+        >
+          <i class="far fa-comment-dots" />Bot-Forum
+        </a>
         <a
           :href="$url('fairteiler', region.id)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"><i class="fas fa-recycle" />Fair-Teiler</a>
+          class="dropdown-item dropdown-item-sub"
+        >
+          <i class="fas fa-recycle" />Fair-Teiler
+        </a>
         <a
           :href="$url('events', region.id)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"><i class="far fa-calendar-alt" />Termine</a>
+          class="dropdown-item dropdown-item-sub"
+        >
+          <i class="far fa-calendar-alt" />Termine
+        </a>
         <a
           :href="$url('stores', region.id)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"><i class="fas fa-cart-plus" />Betriebe</a>
+          class="dropdown-item dropdown-item-sub"
+        >
+          <i class="fas fa-cart-plus" />Betriebe
+        </a>
         <a
           :href="$url('workingGroups', region.id)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"><i class="fas fa-users" />Arbeitsgruppen</a>
+          class="dropdown-item dropdown-item-sub"
+        >
+          <i class="fas fa-users" />Arbeitsgruppen
+        </a>
         <a
           v-if="region.isBot"
           :href="$url('foodsaverList', region.id)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"><i class="fas fa-user" />Foodsaver</a>
+          class="dropdown-item dropdown-item-sub"
+        >
+          <i class="fas fa-user" />Foodsaver
+        </a>
         <a
           v-if="region.isBot"
           :href="$url('passports', region.id)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"><i class="fas fa-address-card" />Ausweise</a>
+          class="dropdown-item dropdown-item-sub"
+        >
+          <i class="fas fa-address-card" />Ausweise
+        </a>
       </b-collapse>
     </div>
     <div
       v-if="regionsSorted.length"
-      class="dropdown-divider"/>
+      class="dropdown-divider"
+    />
     <a
       href="#"
       role="menuitem"
       class="dropdown-item"
-      @click="joinRegionDialog"><small><i class="fas fa-plus" /> Einem Bezirk beitreten</small></a>
+      @click="joinRegionDialog"
+    >
+      <small><i class="fas fa-plus" /> Einem Bezirk beitreten</small>
+    </a>
   </b-nav-item-dropdown>
 </template>
 <script>

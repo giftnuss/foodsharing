@@ -1,15 +1,20 @@
 <template>
   <a
     :href="href"
-    class="dropdown-item text-truncate search-result">
+    class="dropdown-item text-truncate search-result"
+  >
     <div
       v-if="image"
       :style="{backgroundImage: `url('${image}')`}"
-      class="bg-primary image" />
+      class="bg-primary image"
+    />
     {{ title }}
     <small
       v-if="teaser"
-      class="text-truncate">{{ teaser }}</small>
+      class="text-truncate"
+    >
+      {{ teaser }}
+    </small>
   </a>
 </template>
 <script>
