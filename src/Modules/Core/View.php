@@ -132,14 +132,14 @@ class View
 			if (count($foodsaver) > 100) {
 				shuffle($foodsaver);
 			}
-			$i = 54;
+			$maxNumberOfAvatars = 54;
 			foreach ($foodsaver as $fs) {
-				--$i;
+				--$maxNumberOfAvatars;
 				$out .= '
 				<li>
 					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->func->img($fs['photo']) . ');" href="/profile/' . (int)$fs['id'] . '"><span></span></a>	
 				</li>';
-				if ($i <= 0) {
+				if ($maxNumberOfAvatars <= 0) {
 					$out .= '<li class="row">...und ' . (count($foodsaver) - 52) . ' weitere</li>';
 					break;
 				}

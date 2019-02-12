@@ -59,20 +59,24 @@ class EventView extends View
 					$("#location_name-wrapper, #anschrift-wrapper, #plz-wrapper, #ort-wrapper").show();
 				}
 			});
-			$("#dateend-wrapper").hide();
+			
+			var dateend_wrapper = document.getElementById("dateend-wrapper");		
+			dateend_wrapper.style.display = "none";
+			
 			$("#date").after(\'<label class="addend"><input type="checkbox" name="addend" id="addend" value="1" /> Das Event geht über mehrere Tage</label>\');
-			$("#dateend-wrapper").removeClass("required");
-						
+			
+			dateend_wrapper.classList.remove("required");
+
 			$("#addend").on("change", function(){
 				if($("#addend:checked").length > 0)
 				{
-					$("#dateend-wrapper").show();
-					$("#dateend-wrapper").addClass("required");
+					dateend_wrapper.style.display = "block";
+					dateend_wrapper.classList.add("required");
 				}
 				else
 				{
-					$("#dateend-wrapper").hide();
-					$("#dateend-wrapper").removeClass("required");
+					dateend_wrapper.style.display = "none";
+					dateend_wrapper.classList.remove("required");
 				}
 			});
 	
@@ -237,9 +241,9 @@ class EventView extends View
 	public function eventTop($event)
 	{
 		if (date('Y-m-d', $event['start_ts']) != date('Y-m-d', $event['end_ts'])) {
-			$end = ' bis ' . $this->func->niceDate($event['end_ts']);
+			$end = ' ' . $this->func->s('to') . ' ' . $this->func->niceDate($event['end_ts']);
 		} else {
-			$end = ' bis ' . $this->func->ts_time($event['end_ts']);
+			$end = ' ' . $this->func->s('to') . ' ' . $this->func->ts_time($event['end_ts']);
 		}
 
 		$out = '
