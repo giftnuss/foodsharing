@@ -6,7 +6,7 @@
 - Conversation API returns name (or null) !658 @nicksellen 
 - Added the amount of events conditionally to the dashboard event headline in case there is more than one event !650 @jofranz
 - Added a new button to the contextmenu wich appears by clicking the profilepic in shops #302 !671 @peter.reutlingen
-
+- Added a city column to the StoreList in the store-overview #456 !679 @tihar
 ## Bugfixes
 - Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
 - Fixup conversation header display !658 @nicksellen

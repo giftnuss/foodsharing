@@ -135,6 +135,10 @@ export default {
           label: 'Anschrift',
           sortable: true
         },
+        city: {
+          label: 'Ort',
+          sortable: true
+        },
         added: {
           label: 'Eingetragen',
           sortable: true
@@ -178,7 +182,8 @@ export default {
           (!filterText || (
             store.name.toLowerCase().indexOf(filterText) !== -1 ||
             store.address.toLowerCase().indexOf(filterText) !== -1 ||
-            store.region.toLowerCase().indexOf(filterText) !== -1
+            store.region.toLowerCase().indexOf(filterText) !== -1 ||
+            store.city.toLowerCase().indexOf(filterText) !== -1
           ))
         )
       })
