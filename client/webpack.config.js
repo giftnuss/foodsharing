@@ -108,7 +108,8 @@ module.exports = merge(webpackBase, {
     ],
     splitChunks: {
       chunks: 'all',
-      name: dev
+      name: dev,
+      maxInitialRequests: 5
     }
   }
 })
