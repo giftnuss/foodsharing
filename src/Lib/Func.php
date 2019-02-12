@@ -14,7 +14,6 @@ use Foodsharing\Modules\Core\InfluxMetrics;
 use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateAdminGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Services\SanitizerService;
-use JSMin\JSMin;
 
 class Func
 {
@@ -1153,8 +1152,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'title' => implode(' | ', $this->title),
 			'extra' => $this->head,
 			'css' => str_replace(["\r", "\n"], '', $this->add_css),
-			'jsFunc' => JSMin::minify($this->js_func),
-			'js' => JSMin::minify($this->js),
+			'jsFunc' => $this->js_func,
+			'js' => $this->js,
 			'ravenConfig' => null,
 			'stylesheets' => $this->webpackStylesheets,
 			'scripts' => $this->webpackScripts
@@ -1418,11 +1417,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 	});
 	');
-	}
-
-	public function compress($buffer)
-	{
-		return JSMin::minify($buffer);
 	}
 
 	public function hasBezirk($bid): bool

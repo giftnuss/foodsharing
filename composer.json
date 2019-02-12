@@ -45,7 +45,6 @@
     "jms/serializer-bundle": "3.1.0",
     "maximebf/debugbar": "1.15.0",
     "mobiledetect/mobiledetectlib": "2.8.33",
-    "mrclay/jsmin-php": "2.4.0",
     "sensio/framework-extra-bundle": "5.2.4",
     "sentry/sentry": "1.10.0",
     "setasign/fpdi-fpdf": "2.2.0",
