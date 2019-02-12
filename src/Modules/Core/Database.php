@@ -256,6 +256,11 @@ class Database
 
 	// === helper methods ===
 
+	/**
+	 * Generates comma separated question marks for use with SQLs IN() operator.
+	 *
+	 * @param int $length - number of question marks to be generated
+	 */
 	public function generatePlaceholders($length): string
 	{
 		return implode(', ', array_fill(0, $length, '?'));
@@ -284,6 +289,19 @@ class Database
 	// === private methods ===
 
 	/**
+	 * dehierarchize array – eg. turn ['a', ['b', 'c'], 'd'] into ['a', 'b', 'c', 'd']
+	 */
+	private function dehierarchizeArray(array $array): array
+	{
+		foreach ($array as $index => $value) {
+			if (is_array($value)) {
+				array_splice($array, $index, 1, $value);
+			}
+		}
+
+		return $array;
+	}
+	/**
 	 * @throws \Exception
 	 */
 	private function preparedQuery($query, $params)
@@ -293,12 +311,7 @@ class Database
 			throw new \Exception("Query '$query' can't be prepared.");
 		}
 
-		// dehierarchize array – eg. turn ['a', ['b', 'c'], 'd'] into ['a', 'b', 'c', 'd']
-		foreach ($params as $param => $value) {
-			if (is_array($value)) {
-				array_splice($params, $param, 1, $value);
-			}
-		}
+		$params = $this->dehierarchizeArray($params);
 
 		foreach ($params as $param => $value) {
 			if (is_bool($value)) {
@@ -370,11 +383,7 @@ class Database
 			}
 
 			if (is_array($v)) {
-				$placeholders = '?';
-				for ($i = 0; $i < (count($v) - 1); ++$i) {
-					$placeholders .= ', ?';
-				}
-				$params[] = $this->getQuotedName($k) . ' IN (' . $placeholders . ') ';
+				$params[] = $this->getQuotedName($k) . ' IN (' . $this->generatePlaceholders(count($v)) . ') ';
 				continue;
 			}
 
