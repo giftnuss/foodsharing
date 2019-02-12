@@ -39,8 +39,8 @@ class BasketRestController extends FOSRestController
 	private const LON = 'lon';
 	private const TEL = 'tel';
 
-	private const MAX_PICTURE_SIZE = 60 * 1024 * 1024;
-	private $sizes = [800 => '', 450 => 'medium-', 200 => 'thumb-', 75 => '75x75-', 50 => '50x50-'];
+	private const MAX_PICTURE_SIZE_MB = 60 * 1024 * 1024;
+	private const SIZES = [800 => '', 450 => 'medium-', 200 => 'thumb-', 75 => '75x75-', 50 => '50x50-'];
 
 	public function __construct(BasketGateway $gateway, BasketService $service, ImageService $imageService, Session $session)
 	{
@@ -295,11 +295,11 @@ class BasketRestController extends FOSRestController
 	 *
 	 * @Rest\Put("baskets/{basketId}/picture", requirements={"basketId" = "\d+"})
 	 *
-	 * @param int $basketId
+	 * @param int $basketId ID of an existing basket
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function setPictureAction($basketId, Request $request): \Symfony\Component\HttpFoundation\Response
+	public function setPictureAction(int $basketId, Request $request): \Symfony\Component\HttpFoundation\Response
 	{
 		if (!$this->session->may()) {
 			throw new HttpException(401);
@@ -309,24 +309,25 @@ class BasketRestController extends FOSRestController
 
 		//check data
 		$data = $request->getContent();
-		if (strlen($data) == 0) {
+		if ($data === '') {
 			throw new HttpException(400, 'The picture data must not be empty.');
-		} elseif (strlen($data) > self::MAX_PICTURE_SIZE) {
-			throw new HttpException(400, 'The picture data must not exceed ' . (self::MAX_PICTURE_SIZE / 1024 * 1024) . ' MB.');
+		}
+		if (strlen($data) > self::MAX_PICTURE_SIZE_MB) {
+			throw new HttpException(400, 'The picture data must not exceed ' . (self::MAX_PICTURE_SIZE_MB / 1024 * 1024) . ' MB.');
 		}
 
 		//save and resize image
-		$tmp = 'tmp/' . uniqid();
+		$tmp = uniqid('tmp/', true);
 		file_put_contents($tmp, $request->getContent());
-		$picname = $this->imageService->createResizedPictures($tmp, 'images/basket/', $this->sizes);
+		$picname = $this->imageService->createResizedPictures($tmp, 'images/basket/', self::SIZES);
 		unlink($tmp);
-		if (is_null($picname)) {
+		if ($picname === null) {
 			throw new HttpException(400, 'Picture could not be resized.');
 		}
 
 		//remove old images
 		if (isset($basket[self::PICTURE])) {
-			$this->imageService->removeResizedPictures('images/basket/', $basket[self::PICTURE], $this->sizes);
+			$this->imageService->removeResizedPictures('images/basket/', $basket[self::PICTURE], self::SIZES);
 		}
 
 		//update basket
@@ -341,11 +342,11 @@ class BasketRestController extends FOSRestController
 	 *
 	 * @Rest\Delete("baskets/{basketId}/picture", requirements={"basketId" = "\d+"})
 	 *
-	 * @param int $basketId
+	 * @param int $basketId ID of an existing basket
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function removePictureAction($basketId): \Symfony\Component\HttpFoundation\Response
+	public function removePictureAction(int $basketId): \Symfony\Component\HttpFoundation\Response
 	{
 		if (!$this->session->may()) {
 			throw new HttpException(401);
@@ -355,7 +356,7 @@ class BasketRestController extends FOSRestController
 
 		//update basket
 		if (isset($basket[self::PICTURE])) {
-			$this->service->removeResizedPictures('images/basket/', $basket[self::PICTURE], $this->sizes);
+			$this->service->removeResizedPictures('images/basket/', $basket[self::PICTURE], self::SIZES);
 			$basket[self::PICTURE] = null;
 			$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], null, $this->session->id());
 		}
@@ -370,11 +371,11 @@ class BasketRestController extends FOSRestController
 	private function findEditableBasket($basketId): array
 	{
 		$basket = $this->gateway->getBasket($basketId);
-		if (!$basket || $basket[self::STATUS] == Status::DELETED_OTHER_REASON
-			|| $basket[self::STATUS] == Status::DELETED_PICKED_UP) {
+		if (!$basket || $basket[self::STATUS] === Status::DELETED_OTHER_REASON
+			|| $basket[self::STATUS] === Status::DELETED_PICKED_UP) {
 			throw new HttpException(404, 'Basket does not exist or was deleted.');
 		}
-		if ($basket['fs_id'] != $this->session->id()) {
+		if ($basket['fs_id'] !== $this->session->id()) {
 			throw new HttpException(401, 'You are not the owner of the basket.');
 		}
 

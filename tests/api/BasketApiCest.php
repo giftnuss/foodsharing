@@ -105,7 +105,6 @@ class BasketApiCest
 		$basket = $I->createFoodbasket($this->user[self::ID]);
 
 		$I->login($this->user[self::EMAIL]);
-		$I->haveHttpHeader('Content-Type', 'image/png');
 		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID] . '/picture', base64_decode(self::TEST_PICTURE));
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 	}
@@ -115,7 +114,6 @@ class BasketApiCest
 		$basket = $I->createFoodbasket($this->user[self::ID]);
 
 		$I->login($this->user[self::EMAIL]);
-		$I->haveHttpHeader('Content-Type', 'image/png');
 		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID] . '/picture', substr(base64_decode(self::TEST_PICTURE), 0, 10));
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST);
 	}
