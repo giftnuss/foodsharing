@@ -8,7 +8,6 @@
 - Added a new button to the contextmenu which appears by clicking the profilepic in shops #302 !671 @peter.reutlingen
 - Make date in event a mandatory field #436 !669 @tihar
 - Added API endpoints for basket pictures !671 @alex.simm 
-- Added API endpoints for basket pictures !674 @alex.simm 
 
 ## Bugfixes
 - Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
