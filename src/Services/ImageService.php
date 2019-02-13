@@ -4,23 +4,26 @@ namespace Foodsharing\Services;
 
 use Flourish\fImage;
 use Flourish\fException;
+use UnexpectedValueException;
 
 final class ImageService
 {
-	private $extensions = ['image/gif' => 'gif', 'image/jpeg' => 'jpg', 'image/pjpeg' => 'jpg', 'image/png' => 'png'];
+	private $extensions = ['image/gif' => 'gif', 'image/jpeg' => 'jpg', 'image/png' => 'png'];
 
 	/**
 	 * Guesses a filename extension for a file.
 	 *
 	 * @param string $file the file
 	 *
-	 * @return string|null the extension or null if the file does not exist or
-	 *                     does not contain a known format
+	 * @throws UnexpectedValueException if the file does not exist or has an
+	 *                                  unknown image type
+	 *
+	 * @return string the guessed extension
 	 */
-	public function guessImageFileExtension(string $file): ?string
+	public function guessImageFileExtension(string $file): string
 	{
 		if (empty($file) || !file_exists($file)) {
-			return null;
+			throw new UnexpectedValueException('File not found');
 		}
 
 		$fileInfo = finfo_open();
@@ -31,7 +34,7 @@ final class ImageService
 			return $this->extensions[$mime];
 		}
 
-		return null;
+		throw new UnexpectedValueException('Unknown image type');
 	}
 
 	/**
@@ -42,15 +45,16 @@ final class ImageService
 	 * @param string $dstDir destination directory
 	 * @param array $sizes key-value-pairs of size (int) and prefix (string)
 	 *
-	 * @return string|null the base name for the created files or null if the
+	 * @throws UnexpectedValueException if the file does not exist or has an
+	 *                                  unknown image type
+	 * @throws fException if an error occures while resizing the image
+	 *
+	 * @return string the base name for the created files or null if the
 	 *                     original file does not exist or rescaling failed
 	 */
-	public function createResizedPictures(string $file, string $dstDir, array $sizes): ?string
+	public function createResizedPictures(string $file, string $dstDir, array $sizes): string
 	{
 		$extension = $this->guessImageFileExtension($file);
-		if ($extension === null) {
-			return null;
-		}
 		$name = uniqid('', true) . '.' . strtolower($extension);
 
 		try {
@@ -61,14 +65,13 @@ final class ImageService
 				$img->resize($s, $s);
 				$img->saveChanges();
 			}
-
-			return $name;
 		} catch (fException $e) {
 			// in case of an error remove all created files
 			$this->removeResizedPictures($dstDir, $name, $sizes);
+			throw $e;
 		}
 
-		return null;
+		return $name;
 	}
 
 	/**

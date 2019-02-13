@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 /**
  * Rest controller for food baskets.
  */
-class BasketRestController extends FOSRestController
+final class BasketRestController extends FOSRestController
 {
 	private $gateway;
 	private $service;
@@ -319,10 +319,11 @@ class BasketRestController extends FOSRestController
 		//save and resize image
 		$tmp = uniqid('tmp/', true);
 		file_put_contents($tmp, $request->getContent());
-		$picname = $this->imageService->createResizedPictures($tmp, 'images/basket/', self::SIZES);
-		unlink($tmp);
-		if ($picname === null) {
-			throw new HttpException(400, 'Picture could not be resized.');
+		try {
+			$picname = $this->imageService->createResizedPictures($tmp, 'images/basket/', self::SIZES);
+			unlink($tmp);
+		} catch (\Exception $e) {
+			throw new HttpException(400, 'Picture could not be resized: ' . $e->getMessage());
 		}
 
 		//remove old images
