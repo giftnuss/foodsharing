@@ -17,6 +17,7 @@
 - replaced many outdated jquery functions !655 @peter.toennies
 
 ## Dev/Test/CI stuff
+- better webpack splitting !681 @nicksellen
 
 # 2019-01-25
 Matthias: "Are there any concerns about merging the addresspicker / map / geolocation to production?"
