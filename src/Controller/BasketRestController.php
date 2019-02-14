@@ -6,18 +6,21 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
 use Foodsharing\Services\BasketService;
+use Foodsharing\Services\ImageService;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Rest controller for food baskets.
  */
-class BasketRestController extends FOSRestController
+final class BasketRestController extends FOSRestController
 {
 	private $gateway;
 	private $service;
+	private $imageService;
 	private $session;
 
 	// literal constants
@@ -36,10 +39,14 @@ class BasketRestController extends FOSRestController
 	private const LON = 'lon';
 	private const TEL = 'tel';
 
-	public function __construct(BasketGateway $gateway, BasketService $service, Session $session)
+	private const MAX_PICTURE_SIZE_MB = 60 * 1024 * 1024;
+	private const SIZES = [800 => '', 450 => 'medium-', 200 => 'thumb-', 75 => '75x75-', 50 => '50x50-'];
+
+	public function __construct(BasketGateway $gateway, BasketService $service, ImageService $imageService, Session $session)
 	{
 		$this->gateway = $gateway;
 		$this->service = $service;
+		$this->imageService = $imageService;
 		$this->session = $session;
 	}
 
@@ -281,5 +288,102 @@ class BasketRestController extends FOSRestController
 		}
 
 		return $this->handleView($this->view([], 200));
+	}
+
+	/**
+	 * Sets a new picture for this basket.
+	 *
+	 * @Rest\Put("baskets/{basketId}/picture", requirements={"basketId" = "\d+"})
+	 *
+	 * @param int $basketId ID of an existing basket
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function setPictureAction(int $basketId, Request $request): \Symfony\Component\HttpFoundation\Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401);
+		}
+
+		$basket = $this->findEditableBasket($basketId);
+
+		//check data
+		$data = $request->getContent();
+		if ($data === '') {
+			throw new HttpException(400, 'The picture data must not be empty.');
+		}
+		if (strlen($data) > self::MAX_PICTURE_SIZE_MB) {
+			throw new HttpException(400, 'The picture data must not exceed ' . (self::MAX_PICTURE_SIZE_MB / (1024 * 1024)) . ' MB.');
+		}
+
+		//save and resize image
+		$tmp = uniqid('tmp/', true);
+		file_put_contents($tmp, $request->getContent());
+		try {
+			$picname = $this->imageService->createResizedPictures($tmp, 'images/basket/', self::SIZES);
+			unlink($tmp);
+		} catch (\Exception $e) {
+			throw new HttpException(400, 'Picture could not be resized: ' . $e->getMessage());
+		}
+
+		//remove old images
+		if (isset($basket[self::PICTURE])) {
+			$this->imageService->removeResizedPictures('images/basket/', $basket[self::PICTURE], self::SIZES);
+		}
+
+		//update basket
+		$basket[self::PICTURE] = $picname;
+		$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], $picname, $this->session->id());
+
+		return $this->handleView($this->view(['basket' => $basket], 200));
+	}
+
+	/**
+	 * Sets a new picture for this basket.
+	 *
+	 * @Rest\Delete("baskets/{basketId}/picture", requirements={"basketId" = "\d+"})
+	 *
+	 * @param int $basketId ID of an existing basket
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function removePictureAction(int $basketId): \Symfony\Component\HttpFoundation\Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401);
+		}
+
+		$basket = $this->findEditableBasket($basketId);
+
+		//update basket
+		if (isset($basket[self::PICTURE])) {
+			$this->imageService->removeResizedPictures('images/basket/', $basket[self::PICTURE], self::SIZES);
+			$basket[self::PICTURE] = null;
+			$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], null, $this->session->id());
+		}
+
+		return $this->handleView($this->view(['basket' => $basket], 200));
+	}
+
+	/**
+	 * Finds and returns the user's basket with the given id. Throws HttpExceptions
+	 * if the basket does not exist, was deleted, or is owned by a different user.
+	 *
+	 * @param int $basketId id of a basket
+	 *
+	 * @return array the basket's entry from the database
+	 */
+	private function findEditableBasket(int $basketId): array
+	{
+		$basket = $this->gateway->getBasket($basketId);
+		if (!$basket || $basket[self::STATUS] === Status::DELETED_OTHER_REASON
+			|| $basket[self::STATUS] === Status::DELETED_PICKED_UP) {
+			throw new HttpException(404, 'Basket does not exist or was deleted.');
+		}
+		if ($basket['fs_id'] !== $this->session->id()) {
+			throw new HttpException(401, 'You are not the owner of the basket.');
+		}
+
+		return $basket;
 	}
 }

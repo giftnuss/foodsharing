@@ -144,3 +144,14 @@ services:
         factory: ['InfluxDB\Client', 'fromdsn']
         arguments:
             - !php/const INFLUX_DSN
+
+    BounceMailHandler\BounceMailHandler:
+        properties:
+            mailhost: !php/const BOUNCE_IMAP_HOST
+            mailboxUserName: !php/const BOUNCE_IMAP_USER
+            mailboxPassword: !php/const BOUNCE_IMAP_PASS
+            port: !php/const BOUNCE_IMAP_PORT
+            service: 'imap'
+            serviceOption: 'tls'
+            boxname: 'INBOX'
+            maxMessages: 10000

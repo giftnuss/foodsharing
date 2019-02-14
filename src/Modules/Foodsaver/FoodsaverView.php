@@ -71,7 +71,7 @@ class FoodsaverView extends View
 		}
 
 		$this->func->addJs('
-			$("#rolle").change(function(){
+			$("#rolle").on("change", function(){
 				if(this.value == 4)
 				{
 					$("#orgateam-wrapper input")[0].checked = true;
@@ -81,7 +81,7 @@ class FoodsaverView extends View
 					$("#orgateam-wrapper input")[0].checked = false;
 				}
 			});
-			$("#plz, #stadt, #anschrift").bind("blur",function(){
+			$("#plz, #stadt, #anschrift").on("blur",function(){
 
 
 					if($("#plz").val() != "" && $("#stadt").val() != "" && $("#anschrift").val() != "")
@@ -148,7 +148,7 @@ class FoodsaverView extends View
 			}
 		});
 
-		$("#delete-account").button().click(function(){
+		$("#delete-account").button().on("click", function(){
 			$("#delete-account-confirm").dialog("open");
 		});
 	');

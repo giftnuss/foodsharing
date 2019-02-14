@@ -1482,12 +1482,6 @@ a.light {
   color: #533a20;
 }
 
-.leaflet-top, .leaflet-bottom {
-  z-index: 25 !important;
-  right: auto;
-  left: 0;
-}
-
 .quicks {
   background-color: #c2bab4;
   border: 0 none;
@@ -1758,7 +1752,12 @@ ul.bread {
   background-color: transparent !important;
 }
 
-ul.bread li, ul.bread li a, .foot span, .foot a {
+ul.bread li, ul.bread li a {
+  font-size: 10px;
+  font-weight: normal;
+}
+
+.foot span, .foot a {
   font-weight: lighter;
   font-size: 12px;
 }
@@ -1767,7 +1766,7 @@ ul.bread li:before {
   font-family: "Font Awesome 5 Free", monospace;
   font-weight: 900;
   content: "\f0da";
-  font-size: 13px;
+  font-size: 10px;
   margin-right: 10px;
   position: relative;
   top: 1px;
@@ -1777,12 +1776,12 @@ ul.bread li {
   display: block;
   float: left;
   margin-right: 10px;
-  color: #c9b49f;
+  color: var(--primary);
   font-size: 10px;
 }
 
 ul.bread li a {
-  color: #7d6853;
+  color: var(--primary);
   text-decoration: none;
 }
 
@@ -2052,4 +2051,8 @@ footer .linklist li a:hover {
     padding-bottom: 20px;
     border-bottom: 1px solid #f1e7c9;
   }
+}
+
+.cryptedmail:after {
+  content: attr(data-name) "@foodsharing.network";
 }

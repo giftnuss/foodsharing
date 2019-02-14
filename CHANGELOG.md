@@ -1,17 +1,57 @@
 # Unreleased
 
 ## Features
+- On dashboard there now is a symbol indicating the confirmation status of a pickup !661 @jofranz
+- Pre fill end date of pickuphistory with todays date for comfort reasons !660 @jofranz
+- Conversation API returns name (or null) !658 @nicksellen 
+- Added the amount of events conditionally to the dashboard event headline in case there is more than one event !650 @jofranz
+- Added a new button to the contextmenu which appears by clicking the profilepic in shops #302 !671 @peter.reutlingen
+- Make date in event a mandatory field #436 !669 @tihar
+- Added API endpoints for basket pictures !671 @alex.simm 
+
+## Bugfixes
+- Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
+- Fixup conversation header display !658 @nicksellen
+- Fixed bug in #302 goto_profile_from_teamsite !671 with !675 @peter.reutlingen
+
+## Refactoring
+- replaced many outdated jquery functions !655 @peter.toennies
+
+## Dev/Test/CI stuff
+- better webpack splitting !681 @nicksellen
+
+# 2019-01-25
+Matthias: "Are there any concerns about merging the addresspicker / map / geolocation to production?"
+Peter: "I'd even prefer to go completely from beta to prod. The current state looks fine for me. Less work for you, more features for us... "
+
+Here we go :-) Just a month after our last release. Expect the next one in a month, at the end of the next hackweek happening at Kanthaus.
+
+## Major changes
+- All maps use free tiles from wikimedia now
+- Geolocation (Converting address into geographical coordinates) now using a public service provided by komoot instead of google
+- JQuery 3
+- PHP 7.3
+
+## Features
 - Updated tinysort to v3 @peter.toennies
 - Added link from names in chatbox title to profiles #100 !614 @colomar
 - You can now call a BIEB via the lower info box of a store with just one click !609 @jofranz
 - Changelog page now supports links to issues with a # symbol followed by a number like it has been for merge requests before !622 @jofranz
 - update htmlpurifier to version 2 !594 @peter.toennies
+- add security headers (beta only) !633 @nicksellen
+- changed tile maps to wikimedia !639 @alex.simm
+- Use typeahead-address-photon for address autocomplete. Update leaflet and typeahead for recent NPM versions in the same go !640 @NerdyProjects
+- link top area of welcome message to profile #427 !635 @Defka
+- Added a number conditionally to the dashboard event view if there is more than one event !650 @jofranz
 
 ## Bugfixes
 - Improve/correct user profile badge count !612 @pmayd
 - Datepicker for fetch slots in stores increased to fit 6 week rows #417 !621 @peter.reutlingen
+- Changed color of the breadcrumb sitenavigation below the topbar !636 @peter.reutlingen
+- Remove fetchrate for users with zero pickups !646 @jofranz
 
 ## Refactoring
+- updated jquery to v3 !631 @peter.toennies
 - Removed scrollbars from event view !608 @jofranz
 - Restructured / cleaned up CSS for Boostrap / Topbar, leaving Bootstrap defaults where possible !616 @colomar
 
@@ -25,6 +65,28 @@
 - Fix "too many layers" docker issue for influxdb container in CI !624 @nicksellen
 - Make client eslint actually fail on error !625 @nicksellen
 - Fix a few eslint reported errors !625 @nicksellen
+- Add phpstan !634 @nicksellen
+- Use PHP 7.3.1 in Dev/Test/CI !644 @NerdyProjects
+- Some restrictions for use of composer !627 @peter.toennies
+
+# 2019-01-24 Hotfix
+
+- Put information about email address change on front page @NerdyProjects
+
+# 2019-01-22 Hotfix
+
+- Do not send emails to bouncing addresses !645 @NerdyProjects
+- Do not ask users why they want to delete their account !647 @NerdyProjects
+- Support falsy (0, '') values for variables in client side translations !641 @NerdyProjects
+
+# 2019-01-19 Hotfix
+
+- prepare support for separated email domain for platform mailboxes !630 @NerdyProjects
+
+# 2019-01-13 Hotfix
+
+- Use google places session based autocompletion for geocoding to cope with API usage quota !628 @NerdyProjects
+- Changed color and typo for the tiny sitenavigation below the topbar !636 @peter.reutlingen
 
 # 2018-12-24
 
@@ -230,7 +292,7 @@ Many thanks to @peter.toennies @NerdyProjects @alangecker @theolampert @nicksell
 - reduced the height of store info popups by removing the warning frame. !388 #216 @peter.toennies
 - The notification for quiz comments is now for the Bots of the quiz team only. !367 #107 by @peter.toennies
 - fixed wrong usage of gateway in API. !400 @peter.toennies
-- fixed missalignment in future-pickups list. !389 # 136 @EmiliaPaz
+- fixed missalignment in future-pickups list. !389 #136 @EmiliaPaz
 - Regaining support for mobile Safari 10 !396 #221 @michi-zuri
 - fix relative loading of some xhr/other urls !422 @nicksellen
 - fixes user autocomplete fetching for conversation creation
@@ -285,8 +347,8 @@ Also, we introduce new frontend technology here. I hope we did not break too muc
 
 ## Features
 - decreased distance to "close baskets" from 50 to 30 km. !332 #338 by @peter.toennies
-- show date and comment of sleeping hat on profile page. !427 #178 by k.miklobusec
-- show home district on profile page. !427 #237 by k.miklobusec
+- show date and comment of sleeping hat on profile page. !427 #178 by @k.miklobusec
+- show home district on profile page. !427 #237 by @k.miklobusec
 - sort fairtiler list by name. !357 #171 by @k.miklobusec
 - Store Managers business card creation for region. Remove country card. !76 by @k.miklobusec
 - Registered users need to fill their birthday and be 18+ for data protection and liability reasons. !377 @NerdyProjects
@@ -313,7 +375,7 @@ Also, we introduce new frontend technology here. I hope we did not break too muc
 
 ## Refactoring
 - complete tidying up of all team related files !321 by @peter.toennies
-- replaced the PREFIX keyword in the whole source !339 #421 by peter.toennies
+- replaced the PREFIX keyword in the whole source !339 #421 by @peter.toennies
 - refactored and cleaned the whole reports module. !335 by @peter.toennies
 - add webpack for managing frontend assets. !345 @nicksellen
 - use symfony form builder work work group edit page !347 @NerdyProjects
@@ -469,7 +531,7 @@ Thanks to all contributors who made this release possible (in alphabetical order
 - Same for statistics. !211 @peter.toennies
 - fixed the wrong order of foodsaver counts in the lost region list. !187 @peter.toennies
 - It is now possible to create correct passports for Orga members. !217 @peter.toennies
-- Removed not working store creation button and map view selector from the list of stores. !188 peter.toennies
+- Removed not working store creation button and map view selector from the list of stores. !188 @peter.toennies
 
 ## Refactoring
 

@@ -1,21 +1,10 @@
 /* eslint-env mocha */
 
-import sinon from 'sinon'
 import assert from 'assert'
-import { resetModules } from '>/utils'
-import $ from 'jquery'
-
-class PlacesService { }
+import { resetModules, later } from '>/utils'
 
 describe('vMap', () => {
-  const sandbox = sinon.createSandbox()
-
   beforeEach(() => {
-    sinon.stub($, 'getScript').callsFake((url, callback) => {
-      global.google = { maps: { places: { PlacesService } } }
-      callback()
-    })
-
     const options = {
       center: [50.89, 10.13],
       searchpanel: 'searchpanel',
@@ -43,13 +32,13 @@ describe('vMap', () => {
   })
 
   afterEach(() => {
-    sandbox.restore()
     resetModules()
   })
 
   it('gets initialized by leaflet', () => {
-    assert.strictEqual(document.querySelectorAll('.leaflet-map-pane').length, 1)
-    assert($.getScript.called)
+    return later(() => {
+      assert.strictEqual(document.querySelectorAll('.leaflet-map-pane').length, 1)
+    })
   })
 })
 

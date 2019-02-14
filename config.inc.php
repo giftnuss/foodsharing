@@ -2,7 +2,13 @@
 
 $FS_ENV = getenv('FS_ENV');
 $env_filename = __DIR__ . '/config.inc.' . $FS_ENV . '.php';
-define('FS_ENV', $FS_ENV);
+if (defined('FS_ENV')) {
+	if (FS_ENV !== $FS_ENV) {
+		die('different values of FS_ENV const (' . FS_ENV . ') and ENV var (' . $FS_ENV . ')');
+	}
+} else {
+	define('FS_ENV', $FS_ENV);
+}
 
 if (file_exists($env_filename)) {
 	require_once $env_filename;
@@ -38,6 +44,10 @@ if (defined('SENTRY_URL')) {
 
 if (!defined('RAVEN_JAVASCRIPT_CONFIG') && getenv('RAVEN_JAVASCRIPT_CONFIG')) {
 	define('RAVEN_JAVASCRIPT_CONFIG', getenv('RAVEN_JAVASCRIPT_CONFIG'));
+}
+
+if (!defined('CSP_REPORT_ONLY')) {
+	define('CSP_REPORT_ONLY', true);
 }
 
 define('FPDF_FONTPATH', __DIR__ . '/lib/font/');

@@ -18,6 +18,19 @@ export function resetModules () {
   })
 }
 
+export function later (fn) {
+  return new Promise((resolve, reject) => {
+    process.nextTick(() => {
+      try {
+        fn()
+        resolve()
+      } catch (err) {
+        reject(err)
+      }
+    })
+  })
+}
+
 let GETParams
 
 export function setGETParams (params) {

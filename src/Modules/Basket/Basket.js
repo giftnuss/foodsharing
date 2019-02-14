@@ -76,7 +76,7 @@ if ($('#mapsearch').length > 0) {
     }
   })
 
-  $('#map-latLng').change(function () {
+  $('#map-latLng').on('change', function () {
     console.log()
 
     ajax.req('basket', 'closeBaskets', {

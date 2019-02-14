@@ -13,8 +13,7 @@ var join = {
   marker: null,
   isLoading: false,
   mapInitialized: false,
-  init: function (googleApiKey) {
-    this.googleApiKey = googleApiKey
+  init: function () {
     this.mapInitialized = false
   },
   photoUploadError: function (error) {
@@ -32,7 +31,7 @@ var join = {
     $('#join_avatar').val(name)
   },
   startUpload: function () {
-    $('#join_photoform').addClass('load').submit()
+    $('#join_photoform').addClass('load').trigger('submit')
     join.isLoading = true
     $('#joinform .avatar .container').css('background-image', 'none').html('<span class="fas fa-camera-retro"></span><span class="fas fa-circle-notch fa-spin"></span>')
   },
@@ -41,15 +40,15 @@ var join = {
       const mapEL = document.getElementById('map')
       if (mapEL) {
         initializeMap(mapEL, (result) => {
-          var number = result.nameForType('street_number') || ''
-          var address = result.nameForType('route') || ''
-          $('#join_lat').val(result.lat())
-          $('#join_lon').val(result.lng())
-          $('#join_plz').val(result.nameForType('postal_code'))
-          $('#join_ort').val(result.nameForType('locality'))
-          $('#join_str').val(address)
-          $('#join_hsnr').val(number)
-          $('#join_country').val(result.nameForType('country'))
+          let prop = result.properties
+          let geo = result.geometry.coordinates
+          $('#join_lat').val(geo[1])
+          $('#join_lon').val(geo[0])
+          $('#join_plz').val(prop.postcode)
+          $('#join_ort').val(prop.city)
+          $('#join_str').val(prop.street)
+          $('#join_hsnr').val(prop.housenumber)
+          $('#join_country').val(prop.country)
         })
       }
       this.mapInitialized = true
@@ -124,12 +123,12 @@ var join = {
 
         if ($('#login_name').val() === '') {
           pulseInfo('Bitte Gib einen Benutzernamen ein')
-          $('#login_name').select()
+          $('#login_name').trigger('select')
           return false
         }
         if (!$('#login_email')['0'].validity.valid) {
           pulseError('Mit Deiner E-Mail-Adresse stimmt etwas nicht')
-          $('#login_email').select()
+          $('#login_email').trigger('select')
           return false
         }
         let birthdate = new Date($('#birthdate').val())
@@ -149,13 +148,13 @@ var join = {
 
         if ($('#login_passwd1').val().length < 4) {
           pulseInfo('Dein Passwort muss länger als 4 Buchstaben sein')
-          $('#login_passwd1').select()
+          $('#login_passwd1').trigger('select')
           return false
         }
 
         if ($('#login_passwd1').val() !== $('#login_passwd2').val()) {
           pulseInfo('Deine Passwörter stimmen nicht überein')
-          $('#login_passwd1').select()
+          $('#login_passwd1').trigger('select')
           return false
         }
 

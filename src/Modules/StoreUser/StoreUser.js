@@ -71,14 +71,14 @@ if (seconds >= 86400) {
   days = 7
 }
 
-$('.cb-verantwortlicher').click(function () {
+$('.cb-verantwortlicher').on('click', function () {
   if ($('.cb-verantwortlicher:checked').length >= 4) {
     pulseError(i18n('max_3_leader'))
     return false
   }
 })
 
-$('#team-form').submit(function (ev) {
+$('#team-form').on('submit', function (ev) {
   if ($('.cb-verantwortlicher:checked').length == 0) {
     pulseError(i18n('verantwortlicher_must_be'))
     ev.preventDefault()
@@ -155,15 +155,15 @@ $('#u_undate').dialog({
 
 $('#comment-post').hide()
 
-$('div#pinnwand form textarea').focus(function () {
+$('div#pinnwand form textarea').on('focus', function () {
   $('#comment-post').show()
 })
 
-$('div#pinnwand form input.submit').button().bind('keydown', function (event) {
-  $('div#pinnwand form').submit()
+$('div#pinnwand form input.submit').button().on('keydown', function (event) {
+  $('div#pinnwand form').trigger('submit')
 })
 
-$('div#pinnwand form').submit(function (e) {
+$('div#pinnwand form').on('submit', function (e) {
   e.preventDefault()
   if ($('div#pinnwand form textarea').val() != $('div#pinnwand form textarea').attr('title')) {
     $.ajax({
@@ -239,7 +239,7 @@ $('#delete_shure').dialog({
   ]
 })
 
-$('.timedialog-add-me').click(function () {
+$('.timedialog-add-me').on('click', function () {
   u_clearDialogs()
 
   if (user.verified) {
@@ -288,7 +288,7 @@ $('#timedialog').dialog({
             $(`#${$('#timedialog-id').val()}-imglist`)
               .prepend(li)
               .find('.img-link')
-              .click(e => {
+              .on('click', e => {
                 e.preventDefault()
                 profile(user.id)
               })
@@ -300,7 +300,7 @@ $('#timedialog').dialog({
             }
 
             $(`#${$('#timedialog-id').val()}-imglist li.empty a`).attr('title', '')
-            $(`#${$('#timedialog-id').val()}-imglist li.empty`).unbind('click')
+            $(`#${$('#timedialog-id').val()}-imglist li.empty`).off('click')
             $(`#${$('#timedialog-id').val()}-imglist li.empty`).addClass('nohover')
             $(`#${$('#timedialog-id').val()}-imglist li.empty`).removeClass('filled')
             $(`#${$('#timedialog-id').val()}-imglist li.empty a`).tooltip('option', { disabled: true }).tooltip('close')
@@ -344,7 +344,7 @@ $('#timedialog').dialog({
   }
 })
 
-$('#changeStatus').button().click(() => {
+$('#changeStatus').button().on('click', () => {
   $('#changeStatus-hidden').dialog({
     title: i18n('change_status'),
     modal: true
@@ -356,7 +356,7 @@ $('.nft-remove').button({
   icons: {
     primary: 'ui-icon-minus'
   }
-}).click(function () {
+}).on('click', function () {
   const $this = $(this)
   $this.parent().parent().remove()
 })
@@ -382,7 +382,7 @@ $('.timetable').on('keyup', '.fetchercount', function () {
 
 $('#nft-add').button({
   text: false
-}).click(function () {
+}).on('click', function () {
   $('table.timetable tbody').append($('table#nft-hidden-row tbody').html())
   let clname = 'odd'
   $('table.timetable tbody tr').each(function () {
@@ -401,7 +401,7 @@ $('#nft-add').button({
     icons: {
       primary: 'ui-icon-minus'
     }
-  }).click(function () {
+  }).on('click', function () {
     const $this = $(this)
     $this.parent().parent().remove()
   })

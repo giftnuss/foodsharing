@@ -104,16 +104,17 @@ class StoreXhr extends Control
 						}
 					});
 					
+					$( "#' . $id . '_to" ).val(new Date(Date.now()).toLocaleDateString("de-DE", {year: "numeric", month: "2-digit", day: "2-digit", }));
 					$( "#' . $id . '_from" ).datepicker("show");
 					
 					
-					$(window).resize(function(){
+					$(window).on("resize", function(){
 						$("#' . $dia->getId() . '").dialog("option",{
 							height:($(window).height()-40)
 						});
 					});
 					
-					$("#daterange_submit").click(function(ev){
+					$("#daterange_submit").on("click", function(ev){
 						ev.preventDefault();
 					
 						var date = $( "#' . $id . '_from" ).datepicker("getDate");
@@ -252,7 +253,7 @@ class StoreXhr extends Control
 					$cnt .= '
 					</div>';
 					$dia->addJs('
-						$("#savebetriebetoselect").click(function(ev){
+						$("#savebetriebetoselect").on("click", function(ev){
 							ev.preventDefault();
 							
 							var saveArr = new Array();

@@ -13,6 +13,8 @@ echo "Bring up containers"
 # up starts the container, -d: run in background as a deamon
 dc up -d
 
+$dir/mkdirs
+
 echo "Waiting for mysql to start"
 wait-for-mysql
 
@@ -23,7 +25,7 @@ echo "Running migations"
 migratedb foodsharing
 
 echo "Running composer install"
-exec-in-container app composer install
+exec-in-container app 'composer install'
 
 echo "Running tests"
 exec-in-container selenium "find /home/seluser/Downloads -type f -print0 | xargs -r -n 1 -0 rm"

@@ -53,7 +53,7 @@ class IndexView extends View
 			<div class="topbarpadding">
 				<div id="campaignimg" class="pure-u-1 pure-u-sm-1-2" style="background-image:url(/img/fork_logo.svg)"></div>
 				<div id="campaigntext" class="pure-u-1 pure-u-sm-1-2">
-				<h2>foodsharing ist und bleibt kostenlos, nicht kommerziell, unabhängig und werbefrei.</h2>
+				<h2><span style="color: red">Achtung!</span><br>Ab sofort neue E-Mail-Adressen:<br><br>@lebensmittelretten.de wird zu @foodsharing.network</h2>
 				</div>
 			</div>
 		</div>
@@ -80,7 +80,7 @@ class IndexView extends View
 
 	private function howto()
 	{
-		$this->func->addJs('$(".vidlink").click(function(ev){
+		$this->func->addJs('$(".vidlink").on("click", function(ev){
 			ev.preventDefault();
 			$vid = $(this);
 			$vid.parent().html(\'<iframe width="420" height="315" src="\'+$vid.attr(\'href\')+\'" frameborder="0" allowfullscreen></iframe>\');

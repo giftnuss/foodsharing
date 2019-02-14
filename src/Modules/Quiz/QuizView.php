@@ -18,7 +18,7 @@ class QuizView extends View
 		$rows = array();
 
 		$this->func->addJs('
-			$(".usersessionlink").parent().parent().click(function(){
+			$(".usersessionlink").parent().parent().on("click", function(){
 				goTo($(this).children("td").children(".usersessionlink").attr("href"));
 			});		
 		');

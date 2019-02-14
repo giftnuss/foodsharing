@@ -69,7 +69,7 @@ $('#unverifyconfirm-dialog').dialog({
   ]
 })
 
-$('.checker').click(function (el) {
+$('.checker').on('click', function (el) {
   const $this = $(this)
   if ($this[0].checked) {
     $(`input.checkbox.bezirk${$this.attr('value')}`).prop('checked', true)
@@ -78,7 +78,7 @@ $('.checker').click(function (el) {
   }
 })
 
-$('.verify').click(function () {
+$('.verify').on('click', function () {
   const $this = $(this)
 
   verify_el = $this
@@ -109,7 +109,7 @@ $('.verify').click(function () {
 
   return false
 })
-$('a.fsname').click(function () {
+$('a.fsname').on('click', function () {
   const $this = $(this)
   if ($(`input[value='${$this.next().val()}']`)[0].checked) {
     $(`input[value='${$this.next().val()}']`).prop('checked', false)
@@ -118,11 +118,11 @@ $('a.fsname').click(function () {
   }
   return false
 })
-$("a[href='#start']").click(function () {
-  $('form#generate').submit()
+$("a[href='#start']").on('click', function () {
+  $('form#generate').trigger('submit')
   return false
 })
-$('a.dateclick').click(function () {
+$('a.dateclick').on('click', function () {
   const $this = $(this)
   const dstr = $this.next().val()
   if ($(`input.date${dstr}`)[0].checked) {

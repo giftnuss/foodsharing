@@ -13,7 +13,7 @@ import * as wall from '@/wall'
 import { vueRegister, vueApply } from '@/vue'
 import Thread from './components/Thread'
 
-$('a[href=\'#signout\']').click(function () {
+$('a[href=\'#signout\']').on('click', function () {
   $('#signout_sure').dialog('open')
   return false
 })
@@ -54,7 +54,7 @@ if (['botforum', 'forum'].includes(GET('sub'))) {
     vueApply('#vue-thread')
   } else {
     let loadedPages = []
-    $(window).scroll(function () {
+    $(window).on('scroll', function () {
       if ($(window).scrollTop() < $(document).height() - $(window).height() - 10) {
         return
       }

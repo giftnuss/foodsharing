@@ -82,7 +82,7 @@ class FairTeilerView extends View
 
 			$tagselect = $this->v_utils->v_form_tagselect('bfoodsaver', array('valueOptions' => $data['bfoodsaver_values'], 'values' => $data['bfoodsaver']));
 			$this->func->addJs('
-			$("#fairteiler-form").submit(function(ev){
+			$("#fairteiler-form").on("submit", function(ev){
 				if($("#bfoodsaver input[type=\'hidden\']").length == 0)
 				{
 					ev.preventDefault();

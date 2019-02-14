@@ -331,7 +331,7 @@ class XhrMethods
 
 			$subtitle = substr($subtitle, 0, (strlen($subtitle) - 2));
 			if ($foodsaver['orgateam'] == 1) {
-				$subtitle .= ', außerdem engagiert ' . $this->func->genderWord($foodsaver['geschlecht'], 'er', 'sie', 'er/sie') . ' sich Foodsharing Orgateam';
+				$subtitle .= ', außerdem engagiert ' . $this->func->genderWord($foodsaver['geschlecht'], 'er', 'sie', 'er/sie') . ' sich im foodsharing-Orgateam';
 			}
 		} elseif ($foodsaver['bezirk_id'] == 0) {
 			$subtitle = 'hat sich bisher für keinen Bezirk entschieden.';
@@ -873,7 +873,7 @@ class XhrMethods
 			$recip = $this->emailGateway->getMailNext($mail_id);
 
 			$mailbox = $this->mailboxModel->getMailbox((int)$mail['mailbox_id']);
-			$mailbox['email'] = $mailbox['name'] . '@' . DEFAULT_EMAIL_HOST;
+			$mailbox['email'] = $mailbox['name'] . '@' . NOREPLY_EMAIL_HOST;
 
 			$sender = $this->model->getValues(array('geschlecht', 'name'), 'foodsaver', $this->func->fsId());
 
@@ -1019,7 +1019,7 @@ class XhrMethods
 			$data['name'] = str_replace(array('/', '"', "'", '.', ';'), '', $data['name']);
 			$data['has_children'] = 0;
 			$data['email_pass'] = '';
-			$data['email_name'] = 'Foodsharing ' . $data['name'];
+			$data['email_name'] = 'foodsharing ' . $data['name'];
 
 			if (!empty($data['name'])) {
 				if ($out = $this->regionGateway->add_bezirk($data)) {
@@ -1178,8 +1178,8 @@ class XhrMethods
 			$this->v_utils->v_input_wrapper('Master-Update', '<a class="button" href="#" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'geoclean\',id:' . (int)$data['id'] . '});}return false;">Master-Update starten</a>', 'masterupdate', array('desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen'));
 
 		$out['script'] = '
-		$("#bezirkform-form").unbind("submit");
-		$("#bezirkform-form").submit(function(ev){
+		$("#bezirkform-form").off("submit");
+		$("#bezirkform-form").on("submit", function(ev){
 			ev.preventDefault();
 
 			$("#dialog-confirm-msg").html("Sicher, dass Du die &Auml;nderungen am Bezirk speichern m&ouml;chtest?");
@@ -1221,7 +1221,7 @@ class XhrMethods
 			allowAdd: false
 		});
 
-		$(window).keydown(function(event){
+		$(window).on("keydown", function(event){
 		    if(event.keyCode == 13) {
 		      event.preventDefault();
 		      return false;

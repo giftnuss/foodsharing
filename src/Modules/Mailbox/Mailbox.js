@@ -4,7 +4,7 @@ import '@/globals'
 import '@/tablesorter'
 import $ from 'jquery'
 import 'jquery-dynatree'
-import 'typeahead'
+import 'corejs-typeahead'
 import 'jquery-tagedit'
 import 'jquery-tagedit-auto-grow-input'
 import { expose } from '@/utils'
@@ -263,12 +263,13 @@ function u_addTypeHead () {
     minLength: 2
   }, {
     name: 'addresses',
+    displayKey: 'value',
     source: substringMatcher(addresses),
     limit: 15
   })
 
   $('.edit-an').on('typeahead:selected typeahead:autocompleted', function (e, datum) {
-    window.setTimeout(() => (u_handleNewEmail(this.value, $(this))), 100)
+    window.setTimeout(() => (u_handleNewEmail(datum.value, $(this))), 100)
   }).on('blur', function () {
     let $this = this
     if ($this.value != '' && !checkEmail($this.value)) {
@@ -302,7 +303,7 @@ function u_handleNewEmail (email, el) {
       $('#edit-body').css('height', `${height}px`)
     }
 
-    $('.edit-an:last').focus()
+    $('.edit-an:last').trigger('focus')
   }
 }
 

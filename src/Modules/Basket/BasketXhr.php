@@ -89,7 +89,7 @@ class BasketXhr extends Control
 		$("#tel-wrapper").hide();
 		$("#handy-wrapper").hide();
 		
-		$("input.input.cb-contact_type[value=\'2\']").change(function(){
+		$("input.input.cb-contact_type[value=\'2\']").on("change", function(){
 			if(this.checked)
 			{
 				$("#tel-wrapper").show();
@@ -102,7 +102,7 @@ class BasketXhr extends Control
 			}
 		});
 				
-		$(".cb-food_art[value=3]").click(function(){
+		$(".cb-food_art[value=3]").on("click", function(){
 			if(this.checked)
 			{
 				$(".cb-food_art[value=2]")[0].checked = true;
@@ -395,7 +395,7 @@ class BasketXhr extends Control
 			$msg = strip_tags($_GET['msg']);
 			$msg = trim($msg);
 			if (!empty($msg)) {
-				$this->messageModel->message($fs_id, $this->session->id(), $msg, 0);
+				$this->messageModel->message($fs_id, $msg);
 				$this->mailMessage($this->session->id(), $fs_id, $msg, 22);
 				$this->basketGateway->setStatus($_GET['id'], Status::REQUESTED_MESSAGE_UNREAD, $this->session->id());
 

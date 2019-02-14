@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Core;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
@@ -133,14 +132,14 @@ class View
 			if (count($foodsaver) > 100) {
 				shuffle($foodsaver);
 			}
-			$i = 52;
+			$maxNumberOfAvatars = 54;
 			foreach ($foodsaver as $fs) {
-				--$i;
+				--$maxNumberOfAvatars;
 				$out .= '
 				<li>
 					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->func->img($fs['photo']) . ');" href="/profile/' . (int)$fs['id'] . '"><span></span></a>	
 				</li>';
-				if ($i <= 0) {
+				if ($maxNumberOfAvatars <= 0) {
 					$out .= '<li class="row">...und ' . (count($foodsaver) - 52) . ' weitere</li>';
 					break;
 				}
@@ -345,57 +344,18 @@ class View
 
 	public function latLonPicker($id, $options = array())
 	{
-		$this->func->addHead('<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=' . GOOGLE_API_KEY . '"></script>');
-
-		if (isset($options['location'])) {
-			$data = array_merge(['zoom' => 14], $options['location']);
+		if (!isset($options['location'])) {
+			$data = $this->session->getLocation();
 		} else {
-			global $container;
-			/* @var $db Db */
-			$db = $container->get(Db::class);
-			$data = $db->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
-			$data['zoom'] = 14;
+			$data['lat'] = $options['location']['lat'];
+			$data['lon'] = $options['location']['lon'];
 		}
 
 		if (empty($data['lat']) || empty($data['lon'])) {
-			/* set empty coordinates somewhere in germany */
-			$data['lat'] = 51;
-			$data['lon'] = 10;
-			$data['zoom'] = 5;
+			/* set empty coordinates, javascript will take over default location */
+			$data['lat'] = 0;
+			$data['lon'] = 0;
 		}
-
-		$this->func->addJs('
-			
-			var addressPicker = new AddressPicker({
-				map: {
-					id: \'map\',
-					center: L.latLng(' . $data['lat'] . ',' . $data['lon'] . '),
-					zoom: ' . $data['zoom'] . '
-				},
-				autocompleteService: {
-					types: ["geocode", "establishment"]
-				},
-				placeDetails: true
-			});
-
-			$(\'#addresspicker\').typeahead(null, {
-				displayKey: \'description\',
-				source: addressPicker.ttAdapter()
-			});
-			$(\'#addresspicker\').bind(\'typeahead:selected\', addressPicker.updateMap)
-			$(\'#addresspicker\').bind(\'typeahead:cursorchanged\', addressPicker.updateMap)
-			addressPicker.bindDefaultTypeaheadEvent($(\'#addresspicker\'))
-			$(addressPicker).on(\'addresspicker:selected\', function (event, result) {
-				var number = result.nameForType(\'street_number\') || \'\'
-				var address = result.nameForType(\'route\') || \'\'
-				$(\'#lat\').val(result.lat());
-				$(\'#lon\').val(result.lng());
-				$(\'#plz\').val(result.nameForType(\'postal_code\'));
-				$(\'#ort\').val(result.nameForType(\'locality\'));
-				$(\'#anschrift\').val(address + (number ? (\' \' + number):\'\'));
-			});
-			$("#lat-wrapper,#lon-wrapper").hide();
-		');
 
 		// Default to blank values for these keys
 		foreach (['anschrift', 'plz', 'ort'] as $key) {

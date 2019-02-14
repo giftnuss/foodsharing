@@ -89,7 +89,7 @@ class MailboxXhr extends Control
 					if ($newcount = $this->model->getNewCount($boxes)) {
 						foreach ($newcount as $nc) {
 							$nc_js .= '
-								$( "ul.dynatree-container a.dynatree-title:contains(\'' . $nc['name'] . '@' . DEFAULT_EMAIL_HOST . '\')" ).removeClass("nonew").addClass("newmail").text("' . $nc['name'] . '@' . DEFAULT_EMAIL_HOST . ' (' . (int)$nc['count'] . ')");';
+								$( "ul.dynatree-container a.dynatree-title:contains(\'' . $nc['name'] . '@' . PLATFORM_MAILBOX_HOST . '\')" ).removeClass("nonew").addClass("newmail").text("' . $nc['name'] . '@' . PLATFORM_MAILBOX_HOST . ' (' . (int)$nc['count'] . ')");';
 						}
 					}
 				}
@@ -104,15 +104,15 @@ class MailboxXhr extends Control
 					'append' => '#messagelist tbody',
 					'script' => '
 						$("#messagelist .from a:first").text("' . $vontext . '");
-						$("#messagelist tbody tr").mouseover(function(){
+						$("#messagelist tbody tr").on("mouseover", function(){
 							$("#messagelist tbody tr").removeClass("selected focused");
 							$(this).addClass("selected focused");
 							
 						});
-						$("#messagelist tbody tr").mouseout(function(){
+						$("#messagelist tbody tr").on("mouseout", function(){
 							$("#messagelist tbody tr").removeClass("selected focused");							
 						});
-						$("#messagelist tbody tr").click(function(){
+						$("#messagelist tbody tr").on("click", function(){
 							ajreq("loadMail",{id:($(this).attr("id").split("-")[1])});
 						});
 						$("#messagelist tbody td").disableSelection();
@@ -158,7 +158,7 @@ class MailboxXhr extends Control
 					$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von " . $this->func->niceDate($message['time_ts']) . " ---------\n\n>\t" . str_replace("\n", "\n>\t", $message['body']);
 
 					$mail = new AsyncMail($this->mem);
-					$mail->setFrom($message['mailbox'] . '@' . DEFAULT_EMAIL_HOST, $this->session->user('name'));
+					$mail->setFrom($message['mailbox'] . '@' . PLATFORM_MAILBOX_HOST, $this->session->user('name'));
 					if ($sender['personal']) {
 						$mail->addRecipient($sender['mailbox'] . '@' . $sender['host'], $sender['personal']);
 					} else {
@@ -245,7 +245,7 @@ class MailboxXhr extends Control
 				$this->libPlainMail(
 					$an,
 					array(
-						'email' => $mailbox['name'] . '@' . DEFAULT_EMAIL_HOST,
+						'email' => $mailbox['name'] . '@' . PLATFORM_MAILBOX_HOST,
 						'name' => $mailbox['email_name']
 					),
 					$_POST['sub'],
@@ -270,7 +270,7 @@ class MailboxXhr extends Control
 					$_POST['mb'],
 					2,
 					json_encode(array(
-						'host' => DEFAULT_EMAIL_HOST,
+						'host' => PLATFORM_MAILBOX_HOST,
 						'mailbox' => $mailbox['name'],
 						'personal' => $mailbox['email_name']
 					)),

@@ -51,9 +51,13 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->helper->_initialize();
 
 		// Clear existing data to prevent collisions
+		$this->output->writeln('Clearing existing ' . FS_ENV . ' seed data');
 		$this->helper->clear();
 
+		$this->output->writeln('Seeding ' . FS_ENV . ' database');
 		$this->seed();
+
+		$this->output->writeln('All done!');
 	}
 
 	protected function getRandomUser($number = 1)
@@ -70,6 +74,11 @@ class SeedCommand extends Command implements CustomCommandInterface
 		return [];
 	}
 
+	private function writeUser($user, $password, $name = 'user')
+	{
+		$this->output->writeln('Created ' . $name . ' ' . $user['email'] . ' with password "' . $password . '"');
+	}
+
 	protected function seed()
 	{
 		$I = $this->helper;
@@ -78,16 +87,24 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$ag_aktive = '1565';
 		$ag_testimonials = '1564';
 		$ag_quiz = '341';
+		$password = 'user';
 
-		$I->createFoodsharer('user', ['email' => 'user1@example.com', 'name' => 'One', 'bezirk_id' => $bezirk1]);
-		$user2 = $I->createFoodsaver('user', ['email' => 'user2@example.com', 'name' => 'Two', 'bezirk_id' => $bezirk1]);
-		$userbot = $I->createAmbassador('user', [
+		$user1 = $I->createFoodsharer($password, ['email' => 'user1@example.com', 'name' => 'One', 'bezirk_id' => $bezirk1]);
+		$this->writeUser($user1, $password, 'foodsharer');
+
+		$user2 = $I->createFoodsaver($password, ['email' => 'user2@example.com', 'name' => 'Two', 'bezirk_id' => $bezirk1]);
+		$this->writeUser($user2, $password, 'foodsaver');
+
+		$userbot = $I->createAmbassador($password, [
 			'email' => 'userbot@example.com',
 			'name' => 'Bot',
 			'bezirk_id' => $bezirk1,
 			'about_me_public' => 'hello!'
 		]);
-		$userorga = $I->createOrga('user', false, ['email' => 'userorga@example.com', 'name' => 'Orga', 'bezirk_id' => $bezirk1]);
+		$this->writeUser($userbot, $password, 'ambassador');
+
+		$userorga = $I->createOrga($password, false, ['email' => 'userorga@example.com', 'name' => 'Orga', 'bezirk_id' => $bezirk1]);
+		$this->writeUser($userorga, $password, 'orga');
 
 		$I->addBezirkAdmin($bezirk1, $userbot['id']);
 		$I->addBezirkMember($ag_quiz, $userbot['id']);
@@ -118,13 +135,14 @@ class SeedCommand extends Command implements CustomCommandInterface
 		// create users and collect their ids in a list
 		$this->foodsavers = [$user2['id'], $userbot['id'], $userorga['id']];
 		foreach (range(0, 100) as $_) {
-			$user = $I->createFoodsaver('user', ['bezirk_id' => $bezirk1]);
+			$user = $I->createFoodsaver($password, ['bezirk_id' => $bezirk1]);
 			$this->foodsavers[] = $user['id'];
 			$I->addStoreTeam($store['id'], $user['id']);
 			$I->addCollector($user['id'], $store['id']);
 			$I->addStoreNotiz($user['id'], $store['id']);
 			$I->addForumThemePost($theme['id'], $user['id']);
 		}
+		$this->output->writeln('Created some other users');
 
 		// create conversations between users
 		foreach ($this->foodsavers as $user) {
@@ -136,6 +154,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 				}
 			}
 		}
+		$this->output->writeln('Created conversations');
 
 		// create more stores
 		foreach (range(0, 20) as $_) {
@@ -148,6 +167,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 				$I->addRecurringPickup($store['id']);
 			}
 		}
+		$this->output->writeln('Created stores');
 
 		// create foodbaskets
 		foreach (range(0, 500) as $_) {
@@ -156,6 +176,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$commenter = $this->getRandomUser();
 			$I->addFoodbasketWallpost($commenter, $foodbasket['id']);
 		}
+		$this->output->writeln('Created foodbaskets');
 
 		// create fairteiler
 		foreach ($this->getRandomUser(50) as $user) {
@@ -167,9 +188,11 @@ class SeedCommand extends Command implements CustomCommandInterface
 				$I->addFairteilerPost($follower, $fairteiler['id']);
 			}
 		}
+		$this->output->writeln('Created fairteilers');
 
 		foreach (range(0, 20) as $_) {
 			$I->addBlogPost($userbot['id'], $bezirk1);
 		}
+		$this->output->writeln('Created blog posts');
 	}
 }

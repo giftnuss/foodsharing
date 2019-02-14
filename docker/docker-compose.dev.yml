@@ -10,7 +10,7 @@ services:
     container_name: foodsharing_dev_web
     image: registry.gitlab.com/foodsharing-dev/images/web:1.6
     ports:
-      - 18080:8080
+      - 18090:8080
     depends_on:
       - app
       - chat
@@ -22,7 +22,7 @@ services:
 
   app:
     container_name: foodsharing_dev_app
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.11
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.15
     working_dir: /app
     expose:
       - 9000
@@ -48,10 +48,8 @@ services:
     container_name: foodsharing_dev_client
     image: node:10.15-alpine
     ports:
-      - "8080:8080"
-      - "8081:8081"
-    # we don't run webpack dev mode by default, make them run ./scripts/dev
-    command: 'true'
+      - "18080:18080"
+    command: sh -c "yarn && yarn dev"
     working_dir: /app/client
     user: "${UID}"
     volumes:
@@ -66,7 +64,7 @@ services:
 
   mailqueuerunner:
     container_name: foodsharing_dev_mailqueuerunner
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.11
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.15
     command: php run.php Mails queueWorker
     restart: always
     depends_on:
@@ -190,10 +188,6 @@ services:
 
 volumes:
   client-node-modules:
-  light-node-modules:
-  light-yarn-cache:
-  api-virtualenv:
-  api-pip-cache:
   chat-node-modules:
   influxdb:
   grafana:

@@ -22,6 +22,7 @@ if(isset($_GET['g_path']))
 */
 
 use Foodsharing\Debug\DebugBar;
+use Foodsharing\Lib\ContentSecurityPolicy;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Routing;
@@ -36,6 +37,18 @@ require_once 'config.inc.php';
 /* @var $container Container */
 global $container;
 $container = initializeContainer();
+
+/* @var $csp ContentSecurityPolicy */
+$csp = $container->get(ContentSecurityPolicy::class);
+
+// Security headers :)
+
+header('X-Frame-Options: DENY');
+header('X-Content-Type-Options: nosniff');
+
+if (defined('CSP_REPORT_URI')) {
+	header($csp->generate(CSP_REPORT_URI, CSP_REPORT_ONLY));
+}
 
 require_once 'lib/inc.php';
 

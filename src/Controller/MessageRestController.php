@@ -3,6 +3,7 @@
 namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Message\MessageModel;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -12,11 +13,13 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class MessageRestController extends FOSRestController
 {
 	private $model;
+	private $gateway;
 	private $session;
 
-	public function __construct(MessageModel $model, Session $session)
+	public function __construct(MessageModel $model, MessageGateway $gateway, Session $session)
 	{
 		$this->model = $model;
+		$this->gateway = $gateway;
 		$this->session = $session;
 	}
 
@@ -57,7 +60,7 @@ class MessageRestController extends FOSRestController
 		$messagesLimit = $paramFetcher->get('messagesLimit');
 		$messagesOffset = $paramFetcher->get('messagesOffset');
 
-		$member = $this->model->listConversationMembers($conversationId);
+		$members = $this->model->listConversationMembers($conversationId);
 		$publicMemberInfo = function ($member) {
 			return [
 				'id' => $member['id'],
@@ -65,15 +68,16 @@ class MessageRestController extends FOSRestController
 				'photo' => $member['photo']
 			];
 		};
-		$member = array_map($publicMemberInfo, $member);
+		$members = array_map($publicMemberInfo, $members);
 
 		$messages = $this->model->loadConversationMessages($conversationId, $messagesLimit, $messagesOffset);
-		$conversation = $this->model->getValues(array('name'), 'conversation', $conversationId);
+		$name = $this->gateway->getConversationName($conversationId);
 		$this->model->setAsRead([$conversationId]);
 
 		$data = [
-			'conversation' => $conversation,
-			'member' => $member,
+			'name' => $name,
+			'member' => $members, // remove this in the future once clients have updated
+			'members' => $members,
 			'messages' => $messages,
 		];
 

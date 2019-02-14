@@ -13,11 +13,11 @@ if ($groups.length > 3) {
   $groups.children('.head').css({
     'cursor': 'pointer',
     'margin-bottom': '10px'
-  }).mouseover(function () {
+  }).on('mouseover', function () {
     $(this).css('text-decoration', 'underline')
-  }).mouseout(function () {
+  }).on('mouseout', function () {
     $(this).css('text-decoration', 'none')
-  }).click(function () {
+  }).on('click', function () {
     const $this = $(this)
 
     if (!$this.next('.ui-widget.ui-widget-content.corner-bottom').is(':visible')) {
@@ -49,7 +49,7 @@ function handleApplicationConstraintVisibility () {
   }
 }
 
-selectEl.change(handleApplicationConstraintVisibility)
+selectEl.on('change', handleApplicationConstraintVisibility)
 handleApplicationConstraintVisibility()
 
 const onAfterClose = []
@@ -146,7 +146,7 @@ $('#work_group_form_photo-link').fancybox({
   }
 })
 
-$('#work_group_form_photo-opener').button().click(function () {
+$('#work_group_form_photo-opener').button().on('click', function () {
   $('#work_group_form_photo-link').trigger('click')
 })
 

@@ -9,7 +9,6 @@ $g_lang['delete_account'] = 'Account löschen';
 $g_lang['delete_account_confirm_msg'] = 'Du bist dabei Deinen Account zu löschen. Bist Du Dir ganz sicher?';
 $g_lang['delete_account_confirm_title'] = 'Account wirklich löschen?';
 $g_lang['delete_account_confirm_bt'] = 'Ja, Account jetzt löschen';
-$g_lang['reason_to_delete'] = 'Warum möchtest Du die Foodsaver-Community verlassen?';
 
 $g_lang['position_search'] = 'Adresssuche';
 $g_lang['settings_general'] = 'Deine Angaben';

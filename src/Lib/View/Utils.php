@@ -220,7 +220,7 @@ class Utils
 		}
 		$id = $this->func->id($id);
 
-		$this->func->addJs('$("#' . $id . '-button").button().click(function(){
+		$this->func->addJs('$("#' . $id . '-button").button().on("click", function(){
 			$("#' . $id . '-dialog").dialog("open");
 		});');
 		$this->func->addJs('$("#' . $id . '-dialog").dialog({
@@ -406,7 +406,7 @@ class Utils
 			$btoption[] = 'text:false';
 		}
 
-		$this->func->addJs('$("#' . $new_id . '-button").button({' . implode(',', $btoption) . '}).click(function(){' . $click . $tclick . '$("#dialog_' . $id . '").dialog("open");});');
+		$this->func->addJs('$("#' . $new_id . '-button").button({' . implode(',', $btoption) . '}).on("click", function(){' . $click . $tclick . '$("#dialog_' . $id . '").dialog("open");});');
 
 		return '<span id="' . $new_id . '-button">' . $label . '</span>';
 	}
@@ -508,7 +508,7 @@ class Utils
 			</div>';
 
 		$this->func->addJs('
-				$(\'#' . $id . '\').change(function(){
+				$(\'#' . $id . '\').on("change", function(){
 					if($(this).val() == "choose" || $(this).val() == "choosebot" || $(this).val() == "filialbez")
 					{
 						$("#' . $id . '-tree-wrapper").show();
@@ -582,7 +582,7 @@ class Utils
 					}
 				});
 
-				$("a[href=\'#edit\']").click(function(){
+				$("a[href=\'#edit\']").on("click", function(){
 
 					$("#' . $id . '-placeholder").html(\'<img src="images/' . $original . '" />\');
 					$("#' . $id . '-link").trigger("click");
@@ -599,7 +599,7 @@ class Utils
 					 });
 
 					 $("#' . $id . '-save").show();
-					 $("#' . $id . '-save").button().click(function(){
+					 $("#' . $id . '-save").button().on("click", function(){
 						 showLoader();
 						 $("#' . $id . '-action").val("crop");
 						 $.ajax({
@@ -633,7 +633,7 @@ class Utils
 					 },200);
 				});
 
-				$("a[href=\'#new\']").click(function(){
+				$("a[href=\'#new\']").on("click", function(){
 					$("#' . $id . '-link").trigger("click");
 					return false;
 				});
@@ -727,7 +727,7 @@ class Utils
 		</form>
 		';
 
-		$this->func->addJs('$("#' . $id . '-form").submit(function(ev){
+		$this->func->addJs('$("#' . $id . '-form").on("submit", function(ev){
 
 			check = true;
 			$("#' . $id . '-form div.required .value").each(function(i,el){
@@ -1013,7 +1013,7 @@ class Utils
 				animSpeed:100
 			});
 
-			$("#' . $id . '").keydown(function(event){
+			$("#' . $id . '").on("keydown", function(event){
 				if(event.keyCode == 13) {
 				  event.preventDefault();
 				  return false;
@@ -1051,7 +1051,7 @@ class Utils
 				}
 			});
 
-			$("#' . $id . '-opener").button().click(function(){
+			$("#' . $id . '-opener").button().on("click", function(){
 
 				$("#' . $id . '-link").trigger("click");
 
@@ -1124,8 +1124,8 @@ class Utils
 		}
 
 		$this->func->addJs('
-		$("#' . $id . '-button").button().click(function(){$("#' . $id . '").click();});
-		$("#' . $id . '").change(function(){$("#' . $id . '-info").html($("#' . $id . '").val().split("\\\").pop());});');
+		$("#' . $id . '-button").button().on("click", function(){$("#' . $id . '").trigger("click") ;});
+		$("#' . $id . '").on("change", function(){$("#' . $id . '-info").html($("#' . $id . '").val().split("\\\").pop());});');
 
 		$btlabel = $this->func->s('choose_file');
 		if (isset($option['btlabel'])) {
@@ -1240,7 +1240,7 @@ class Utils
 
 			$this->func->addJs('
 
-					$("#' . $id . 'neu").keyup(function(e){
+					$("#' . $id . 'neu").on("keyup", function(e){
 
 						if(e.keyCode == 13)
 						{
@@ -1253,7 +1253,7 @@ class Utils
 					$("#' . $id . '-add").button({
 						icons:{primary:"ui-icon-plusthick"},
 						text:false
-					}).click(function(event){
+					}).on("click", function(event){
 
 						event.preventDefault();
 						$("#' . $id . '-dialog label").remove();

@@ -123,10 +123,10 @@ class ReportXhr extends Control
 		$dialog->addAbortButton();
 
 		$dialog->addJs('
-			$("#betrieb_id").change(function(){
+			$("#betrieb_id").on("change", function(){
 				$("#reportbid").val($(this).val());
 			});
-			$("#reportreason").change(function(){
+			$("#reportreason").on("change", function(){
 			var value = $(this).val();
 			$("#reportreason ~ select").hide();
 			$("#reportreason ~ div.cb").hide();

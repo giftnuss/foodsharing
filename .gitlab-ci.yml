@@ -65,6 +65,7 @@ build:docs:
 test:
   <<: *defaults
   script:
+  - composer validate --no-check-all --strict
   - ./scripts/ci.test
   after_script:
   # collect artifacts

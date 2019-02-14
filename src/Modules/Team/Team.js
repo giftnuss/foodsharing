@@ -14,14 +14,14 @@ let $form = $('#contactform-form')
 if ($form.length > 0) {
   var $email = $('#email')
 
-  $email.keyup(function () {
+  $email.on('keyup', function () {
     var $el = $(this)
     if (checkEmail($el.val())) {
       $email.removeClass('input-error')
     }
   })
 
-  $email.blur(function () {
+  $email.on('blur', function () {
     var $el = $(this)
     if (!checkEmail($el.val())) {
       $email.addClass('input-error')
@@ -29,10 +29,10 @@ if ($form.length > 0) {
     }
   })
 
-  $form.submit(function (ev) {
+  $form.on('submit', function (ev) {
     ev.preventDefault()
     if (!checkEmail($email.val())) {
-      $email.select()
+      $email.trigger('select')
       $email.addClass('input-error')
       pulseError('Bitte gib eine gültige E-Mail-Adresse ein, damit wir Dir antworten können!')
     } else {
@@ -45,7 +45,7 @@ if ($form.length > 0) {
 }
 
 let $teamList = $('#team-list')
-$teamList.find('.foot i').mouseover(function () {
+$teamList.find('.foot i').on('mouseover', function () {
   var $this = $(this)
 
   var val = $this.children('span').text()
@@ -54,7 +54,7 @@ $teamList.find('.foot i').mouseover(function () {
   }
 })
 
-$teamList.find('.foot i').click(function (ev) {
+$teamList.find('.foot i').on('click', function (ev) {
   var $this = $(this)
   if ($this.hasClass('fa-lock')) {
     ev.preventDefault()
@@ -66,7 +66,7 @@ $teamList.find('.foot i').click(function (ev) {
   }
 })
 
-$teamList.find('.foot i').mouseout(function () {
+$teamList.find('.foot i').on('mouseout', function () {
   var $this = $(this).parent().parent()
 
   $this.attr('href', `/team/${$this.attr('id').substring(2)}`).attr('target', '_self')
