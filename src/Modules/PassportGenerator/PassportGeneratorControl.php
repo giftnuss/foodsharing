@@ -88,7 +88,7 @@ class PassportGeneratorControl extends Control
 		}
 	}
 
-	public function generate($foodsaver)
+	public function generate($foodsaver): void
 	{
 		$tmp = array();
 		foreach ($foodsaver as $fs) {
@@ -96,8 +96,6 @@ class PassportGeneratorControl extends Control
 		}
 		$foodsaver = $tmp;
 		$is_generated = array();
-
-		include 'lib/phpqrcode/qrlib.php';
 
 		$pdf = new Fpdi\Fpdi();
 		$pdf->AddPage();
@@ -136,9 +134,6 @@ class PassportGeneratorControl extends Control
 				$pdf->SetTextColor(0, 0, 0);
 				$pdf->AddFont('Ubuntu-L', '', 'Ubuntu-L.php');
 
-				@unlink('tmp/qr_' . $fs_id . '.png');
-				\QRcode::png($fs_id, 'tmp/qr_' . $fs_id . '.png', QR_ECLEVEL_L, 3.4, 0);
-
 				++$card;
 
 				$this->passportGateway->passGen($this->session->id(), $fs['id']);
@@ -167,8 +162,6 @@ class PassportGeneratorControl extends Control
 				$pdf->Text(13.9 + $x, 20.6 + $y, 'Teile Lebensmittel, anstatt sie wegzuwerfen!');
 
 				$pdf->useTemplate($fs_logo, 13.5 + $x, 13.6 + $y, 29.8);
-
-				$pdf->Image('tmp/qr_' . $fs_id . '.png', 70 + $x, 42.1 + $y);
 
 				if ($photo = $this->foodsaverGateway->getPhoto($fs_id)) {
 					if (file_exists('images/crop_' . $photo)) {
