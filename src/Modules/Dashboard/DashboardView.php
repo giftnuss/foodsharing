@@ -335,8 +335,8 @@ class DashboardView extends View
 							u_anfrage_action(key,this);
 						},
 						items: {
-							"deny": {name: "Austragen",icon:"delete"},
-							"map":{name: "Auf Karte anschauen",icon:"accept"}
+							"deny": {name: "Anfrage beenden",icon:"fas fa-trash-alt fa-fw"},
+							"map": {name: "Auf Karte anschauen",icon:"fas fa-map-marked-alt fa-fw"}
 						}
 					};
 				}
