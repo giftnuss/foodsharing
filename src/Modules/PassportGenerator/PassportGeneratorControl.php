@@ -8,54 +8,58 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use setasign\Fpdi;
 
-class PassportGeneratorControl extends Control
+final class PassportGeneratorControl extends Control
 {
-	private $bezirk_id;
-	private $bezirk;
+	private $regionId;
+	private $region;
 	private $bellGateway;
 	private $regionGateway;
-	private $passportGateway;
+	private $passportGeneratorGateway;
 	private $foodsaverGateway;
 
-	public function __construct(PassportGeneratorModel $model, PassportGeneratorView $view, BellGateway $bellGateway, RegionGateway $regionGateway, PassportGateway $passportGateway, FoodsaverGateway $foodsaverGateway)
-	{
-		$this->model = $model;
+	public function __construct(
+		PassportGeneratorView $view,
+		BellGateway $bellGateway,
+		RegionGateway $regionGateway,
+		PassportGeneratorGateway $passportGateway,
+		FoodsaverGateway $foodsaverGateway
+	) {
 		$this->view = $view;
 		$this->bellGateway = $bellGateway;
 		$this->regionGateway = $regionGateway;
-		$this->passportGateway = $passportGateway;
+		$this->passportGeneratorGateway = $passportGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 
 		parent::__construct();
 
-		$this->bezirk_id = false;
-		if (($this->bezirk_id = $this->func->getGetId('bid')) === false) {
-			$this->bezirk_id = $this->session->getCurrentBezirkId();
+		$this->regionId = false;
+		if (($this->regionId = $this->func->getGetId('bid')) === false) {
+			$this->regionId = $this->session->getCurrentBezirkId();
 		}
 
-		if ($this->session->isAdminFor($this->bezirk_id) || $this->session->isOrgaTeam()) {
-			$this->bezirk = false;
-			if ($bezirk = $this->regionGateway->getBezirk($this->bezirk_id)) {
-				$this->bezirk = $bezirk;
+		if ($this->session->isAdminFor($this->regionId) || $this->session->isOrgaTeam()) {
+			$this->region = false;
+			if ($region = $this->regionGateway->getBezirk($this->regionId)) {
+				$this->region = $region;
 			}
 		} else {
 			$this->func->go('/?page=dashboard');
 		}
 	}
 
-	public function index()
+	public function index(): void
 	{
-		$this->func->addBread($this->bezirk['name'], '/?page=bezirk&bid=' . $this->bezirk_id . '&sub=forum');
+		$this->func->addBread($this->region['name'], '/?page=bezirk&bid=' . $this->regionId . '&sub=forum');
 		$this->func->addBread('Pass-Generator', $this->func->getSelf());
 
-		$this->func->addTitle($this->bezirk['name']);
+		$this->func->addTitle($this->region['name']);
 		$this->func->addTitle('Pass Generator');
 
 		if (isset($_POST['foods']) && !empty($_POST['foods'])) {
 			$this->generate($_POST['foods']);
 		}
 
-		if ($bezirke = $this->model->getPassFoodsaver($this->bezirk_id)) {
+		if ($regions = $this->passportGeneratorGateway->getPassFoodsaver($this->regionId)) {
 			$this->func->addHidden('
 			<div id="verifyconfirm-dialog" title="' . $this->func->s('verify_confirm_title') . '">
 				' . $this->v_utils->v_info('<p>' . $this->func->s('verify_confirm') . '</p>', $this->func->s('verify_confirm_title')) . '
@@ -71,8 +75,8 @@ class PassportGeneratorControl extends Control
 			</div>');
 
 			$this->func->addContent('<form id="generate" method="post">');
-			foreach ($bezirke as $b) {
-				$this->func->addContent($this->view->passTable($b));
+			foreach ($regions as $region) {
+				$this->func->addContent($this->view->passTable($region));
 			}
 			$this->func->addContent('</form>');
 			$this->func->addContent($this->view->menubar(), CNT_RIGHT);
@@ -88,13 +92,13 @@ class PassportGeneratorControl extends Control
 		}
 	}
 
-	public function generate($foodsaver): void
+	public function generate(array $foodsavers): void
 	{
 		$tmp = array();
-		foreach ($foodsaver as $fs) {
-			$tmp[$fs] = (int)$fs;
+		foreach ($foodsavers as $foodsaver) {
+			$tmp[$foodsaver] = (int)$foodsaver;
 		}
-		$foodsaver = $tmp;
+		$foodsavers = $tmp;
 		$is_generated = array();
 
 		$pdf = new Fpdi\Fpdi();
@@ -107,26 +111,26 @@ class PassportGeneratorControl extends Control
 		$y = 0;
 		$card = 0;
 
-		$nophoto = array();
+		$noPhoto = array();
 
-		end($foodsaver);
+		end($foodsavers);
 
 		$pdf->setSourceFile('img/foodsharing_logo.pdf');
 		$fs_logo = $pdf->importPage(1);
 
-		foreach ($foodsaver as $i => $fs_id) {
-			if ($fs = $this->model->qRow('SELECT `photo`,`id`,`name`,`nachname`,`geschlecht`,`rolle` FROM fs_foodsaver WHERE `id` = ' . (int)$fs_id . ' ')) {
-				if (empty($fs['photo'])) {
-					$nophoto[] = $fs['name'] . ' ' . $fs['nachname'];
+		foreach ($foodsavers as $fs_id) {
+			if ($foodsaver = $this->passportGeneratorGateway->fetchFoodsaverData($fs_id)) {
+				if (empty($foodsaver['photo'])) {
+					$noPhoto[] = $foodsaver['name'] . ' ' . $foodsaver['nachname'];
 
 					$this->bellGateway->addBell(
-						$fs['id'],
+						$foodsaver['id'],
 						'passgen_failed_title',
 						'passgen_failed',
 						'fas fa-camera',
-						array('href' => '/?page=settings'),
-						array('user' => $this->session->user('name')),
-						'pass-fail-' . $fs['id']
+						['href' => '/?page=settings'],
+						['user' => $this->session->user('name')],
+						'pass-fail-' . $foodsaver['id']
 					);
 					continue;
 				}
@@ -136,14 +140,14 @@ class PassportGeneratorControl extends Control
 
 				++$card;
 
-				$this->passportGateway->passGen($this->session->id(), $fs['id']);
+				$this->passportGeneratorGateway->passGen($this->session->id(), $foodsaver['id']);
 
 				$pdf->Image('img/pass_bg.png', 10 + $x, 10 + $y, 83, 55);
 
 				$pdf->SetFont('Ubuntu-L', '', 10);
 
-				$pdf->Text(41.8 + $x, 34.4 + $y, utf8_decode($fs['name'] . ' ' . $fs['nachname']));
-				$pdf->Text(41.8 + $x, 42.1 + $y, utf8_decode($this->getRole($fs['geschlecht'], $fs['rolle'])));
+				$pdf->Text(41.8 + $x, 34.4 + $y, utf8_decode($foodsaver['name'] . ' ' . $foodsaver['nachname']));
+				$pdf->Text(41.8 + $x, 42.1 + $y, utf8_decode($this->getRole($foodsaver['geschlecht'], $foodsaver['rolle'])));
 				$pdf->Text(41.8 + $x, 49.8 + $y, utf8_decode(date('d. m. Y', time() - 1814400)));
 				$pdf->Text(41.8 + $x, 57.3 + $y, utf8_decode(date('d. m. Y', time() + 94608000)));
 
@@ -185,26 +189,26 @@ class PassportGeneratorControl extends Control
 					$y = 0;
 				}
 
-				$is_generated[] = $fs['id'];
+				$is_generated[] = $foodsaver['id'];
 			}
 		}
-		if (!empty($nophoto)) {
-			$last = array_pop($nophoto);
-			$this->func->info(implode(', ', $nophoto) . ' und ' . $last . ' haben noch kein Foto hochgeladen und ihr Ausweis konnte nicht erstellt werden');
+		if (!empty($noPhoto)) {
+			$last = array_pop($noPhoto);
+			$this->func->info(implode(', ', $noPhoto) . ' und ' . $last . ' haben noch kein Foto hochgeladen und ihr Ausweis konnte nicht erstellt werden');
 		}
 
-		$this->model->updateLastGen($is_generated);
+		$this->passportGeneratorGateway->updateLastGen($is_generated);
 
-		$bez = strtolower($this->bezirk['name']);
+		$bez = strtolower($this->region['name']);
 
-		$bez = str_replace(array('ä', 'ö', 'ü', 'ß'), array('ae', 'oe', 'ue', 'ss'), $bez);
+		$bez = str_replace(['ä', 'ö', 'ü', 'ß'], ['ae', 'oe', 'ue', 'ss'], $bez);
 		$bez = preg_replace('/[^a-zA-Z]/', '', $bez);
 
 		$pdf->Output('D', 'foodsaver_pass_' . $bez . '.pdf');
 		exit();
 	}
 
-	public function getRole($gender_id, $role_id)
+	public function getRole(int $gender_id, int $role_id)
 	{
 		$role = [
 			0 => [ // not defined
@@ -233,18 +237,18 @@ class PassportGeneratorControl extends Control
 		return $role[$gender_id][$role_id];
 	}
 
-	private function download1()
+	private function download1(): void
 	{
 		$this->func->addJs('
-			setTimeout(function(){goTo("/?page=passgen&bid=' . $this->bezirk_id . '&dl2")},100);		
+			setTimeout(function(){goTo("/?page=passgen&bid=' . $this->regionId . '&dl2")},100);		
 		');
 	}
 
-	private function download2()
+	private function download2(): void
 	{
-		$bez = strtolower($this->bezirk['name']);
+		$bez = strtolower($this->region['name']);
 
-		$bez = str_replace(array('ä', 'ö', 'ü', 'ß'), array('ae', 'oe', 'ue', 'ss'), $bez);
+		$bez = str_replace(['ä', 'ö', 'ü', 'ß'], ['ae', 'oe', 'ue', 'ss'], $bez);
 		$bez = preg_replace('/[^a-zA-Z]/', '', $bez);
 		$file = 'data/pass/foodsaver_pass_' . $bez . '.pdf';
 
