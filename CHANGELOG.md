@@ -28,6 +28,7 @@
 - replaced many outdated jquery functions !655 @peter.toennies
 - remove unused methods in XhrMethods !694 @NerdyProjects
 - trigger fairteiler wallpost notifications in backend !700 @NerdyProjects
+- removed the QR code from the fs-passes !685 #144 @peter.toennies
 
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen
