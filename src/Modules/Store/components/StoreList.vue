@@ -109,7 +109,7 @@
                         class="nav-link"
                         >
                         <i class="fas fa-map-marker-alt" />
-                        <span v-if="!loggedIn || !hasFsRole">
+                        <span>
                   Karte
                 </span>
                       </a>
@@ -261,7 +261,6 @@ export default {
     fieldsFiltered: function() {
       var regions=[]
       this.stores.map(function(value, key) {
-        console.log(regions.includes(value['region']))
         if (!regions.includes(value['region'])) {
           regions.push(value['region'])
         }
@@ -279,40 +278,7 @@ export default {
     clearFilter () {
       this.filterStatus = null
       this.filterText = ''
-    },
-    onClose(popover) {
-      this.popoverShow = false;
-    },
-    onOk () {
-
-    },
-    onShow() {
-      this.input1 = '';
-      this.input2 = '';
-      this.input1state = null;
-      this.input2state = null;
-      this.input1Return = '';
-      this.input2Return = '';
-    },
-    onShown () {
-      /* Called just after the popover has been shown */
-      /* Transfer focus to the first input */
-      this.focusRef(this.$refs.input1);
-    },
-    onHidden () {
-      /* Called just after the popover has finished hiding */
-      /* Bring focus back to the button */
-      this.focusRef(this.$refs.button);
-    },
-    focusRef (ref) {
-      /* Some references may be a component, functional component, or plain element */
-      /* This handles that check before focusing, assuming a focus() method exists */
-      /* We do this in a double nextTick to ensure components have updated & popover positioned first */
-      this.$nextTick(() => {
-        this.$nextTick(() => { (ref.$el || ref).focus() });
-      });
     }
-
   }
 }
 </script>
