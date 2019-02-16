@@ -17,6 +17,7 @@
 
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies
+- remove unused methods in XhrMethods !694 @NerdyProjects
 
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen
