@@ -1452,7 +1452,7 @@ class Utils
 
 		$corner = 'corner-bottom';
 		if ($title !== false) {
-			$title = '<div class="head ui-widget-header ui-corner-top">' . $title . '</div>';
+			$title = '<div class="head ui-widget-header ui-corner-top">' . htmlspecialchars($title) . '</div>';
 		} else {
 			$title = '';
 			$corner = 'corner-all';

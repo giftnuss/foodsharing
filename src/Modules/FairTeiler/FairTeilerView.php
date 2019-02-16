@@ -45,9 +45,10 @@ class FairTeilerView extends View
 
 	public function checkFairteiler($ft)
 	{
+		$htmlEscapedName = htmlspecialchars($ft['name']);
 		$content = '';
 		if ($ft['pic']) {
-			$content .= $this->v_utils->v_input_wrapper('Foto', '<img src="' . $ft['pic']['head'] . '" alt="' . $ft['name'] . '" />');
+			$content .= $this->v_utils->v_input_wrapper('Foto', '<img src="' . $ft['pic']['head'] . '" alt="' . $htmlEscapedName . '" />');
 		}
 
 		$content .= $this->v_utils->v_input_wrapper('Adresse', '
