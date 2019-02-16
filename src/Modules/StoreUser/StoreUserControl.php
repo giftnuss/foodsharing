@@ -306,10 +306,7 @@ class StoreUserControl extends Control
 					$pickup_date_content .= $this->view->u_form_checkboxTagAlt(
 						$date . ' ' . $time['time'],
 						array(
-							'data' => $betrieb['team'],
-							'url' => 'jsonTeam&bid=' . (int)$betrieb['id'],
 							'label' => $days[date('w', strtotime($date))] . ' ' . $this->func->format_db_date($date) . ', ' . $this->func->format_time($time['time']),
-							'betrieb_id' => $betrieb['id'],
 							'verantwortlich' => $betrieb['verantwortlich'],
 							'fetcher_count' => $time['fetcher'],
 							'bezirk_id' => $betrieb['bezirk_id'],
