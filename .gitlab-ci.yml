@@ -26,9 +26,21 @@
   - ./scripts/deploy.notifyslack.sh
 
 stages:
+- triage
 - build
 - test
 - deploy
+
+triage:
+  image: ruby:2.1
+  stage: triage
+  script:
+    - gem install gitlab-triage
+    - gitlab-triage --token $API_TOKEN --project-id $CI_PROJECT_PATH
+  only:
+    - schedules
+  tags:
+    - shared
 
 build:
   <<: *defaults
