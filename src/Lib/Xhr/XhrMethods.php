@@ -917,17 +917,6 @@ class XhrMethods
 		}
 	}
 
-	public function xhr_update_bezirk($data)
-	{
-		return json_encode($this->model->update('
-		UPDATE `fs_bezirk`
-		SET 	`email` = ' . $this->model->strval($data['email']) . ',
-				`email_pass` = ' . $this->model->strval($data['email_pass']) . '
-
-				WHERE 	`id` = ' . (int)$data['bezirk_id'] . '
-		'));
-	}
-
 	public function xhr_bezirkTree($data)
 	{
 		if ($bezirk = $this->regionGateway->getBezirkByParent($data['p'], $this->session->isOrgaTeam())) {
