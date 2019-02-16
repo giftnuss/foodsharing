@@ -32,15 +32,7 @@ class FairTeilerView extends View
 
 	public function fairteilerHead()
 	{
-		$style = '';
-
-		if ($this->fairteiler['picture']) {
-			$style = ' style="height:150px;background-image:url(' . $this->fairteiler['pic']['head'] . ');"';
-		}
-
-		$content = '<div class="ft-head ui-corner-bottom"' . $style . '></div>';
-
-		return $this->v_utils->v_field($content, $this->fairteiler['name']);
+		return $this->twig->render('pages/Fairteiler/fairteilerTop.html.twig', ['fairteiler' => $this->fairteiler]);
 	}
 
 	public function checkFairteiler($ft)
