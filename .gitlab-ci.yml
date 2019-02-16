@@ -32,7 +32,7 @@ stages:
 - deploy
 
 triage:
-  image: ruby:2.1
+  image: ruby:2.6-alpine
   stage: triage
   script:
   - gem install gitlab-triage
