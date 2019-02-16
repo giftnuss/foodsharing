@@ -322,8 +322,8 @@ class FairTeilerControl extends Control
 	private function prepareInput(Request $request)
 	{
 		$data = [
-			'name' => strip_tags($request->request->get('name')),
-			'desc' => strip_tags($request->request->get('desc')),
+			'name' => $request->request->get('name'),
+			'desc' => $request->request->get('desc'),
 			'anschrift' => strip_tags($request->request->get('anschrift')),
 			'plz' => preg_replace('[^0-9]', '', $request->request->get('plz')),
 			'ort' => strip_tags($request->request->get('ort')),

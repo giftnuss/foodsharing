@@ -47,7 +47,7 @@ class FairTeilerView extends View
 		' . $ft['anschrift'] . '<br />
 		' . $ft['plz'] . ' ' . $ft['ort']);
 
-		$content .= $this->v_utils->v_input_wrapper('Beschreibung', $ft['desc']);
+		$content .= $this->v_utils->v_input_wrapper('Beschreibung', $this->sanitizerService->markdownToHtml($ft['desc']));
 
 		$content .= $this->v_utils->v_input_wrapper('Hinzugefügt am', date('d.m.Y', $ft['time_ts']));
 		$content .= $this->v_utils->v_input_wrapper('Hinzugefügt von', '<a href="/profile/' . (int)$ft['fs_id'] . '">' . $ft['fs_name'] . ' ' . $ft['fs_nachname'] . '</a>');
@@ -160,7 +160,7 @@ class FairTeilerView extends View
 
 	public function desc()
 	{
-		return $this->v_utils->v_field('<p>' . nl2br($this->fairteiler['desc'] . '</p>'), $this->func->s('desc'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field('<p>' . $this->sanitizerService->markdownToHtml($this->fairteiler['desc']) . '</p>', $this->func->s('desc'), array('class' => 'ui-padding'));
 	}
 
 	public function listFairteiler($bezirke)
