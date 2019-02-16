@@ -31,5 +31,5 @@ $g_lang['infotype'] = 'Benachrichtigung';
 $g_lang['infotype_desc'] = 'Wie möchtest Du über Updates wie Essenslieferungen informiert werden?';
 $g_lang['infotype_email'] = 'über eine E-Mail Benachrichtigung';
 $g_lang['infotype_alert'] = 'nur über interne Infomeldungen';
-$g_lang['desc_desc'] = 'Schreibe hier ein paar grundsätzliche Infos über den Fair-Teiler! Insbesondere wann er zugänglich/geöffnet ist.';
+$g_lang['desc_desc'] = 'Schreibe hier ein paar grundsätzliche Infos über den Fair-Teiler! Insbesondere wann er zugänglich/geöffnet ist. Du kannst zur Formatierung <a href="http://markdown.de/">Markdown</a> verwenden.';
 $g_lang['bfoodsaver'] = 'Verantwortliche Foodsaver';
