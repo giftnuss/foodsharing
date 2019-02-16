@@ -642,11 +642,6 @@ class XhrMethods
 		));
 	}
 
-	public function xhr_getFoodsaver($data)
-	{
-		return $this->xhr_getRecip($data);
-	}
-
 	public function xhr_getRecip($data)
 	{
 		if ($this->func->may()) {
