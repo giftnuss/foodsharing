@@ -278,29 +278,24 @@ class FoodsaverGateway extends BaseGateway
 
 	public function xhrGetFoodsaver($data): array
 	{
+		if (isset($data['bid'])) {
+			throw new Exception('filterung by bezirkIds is not supported anymore');
+		}
+
 		$term = $data['term'];
 		$term = trim($term);
 		$term = preg_replace('/[^a-zA-ZäöüÖÜß]/', '', $term);
-
-		$bezirk = '';
-		if (isset($data['bid'])) {
-			if (is_array($data['bid'])) {
-				$bezirk = 'AND bezirk_id IN(' . implode(',', $data['bid']) . ')';
-			} else {
-				$bezirk = 'AND bezirk_id = ' . (int)$data['bid'];
-			}
-		}
+		$term = $term . '%';
 
 		if (strlen($term) > 2) {
 			$out = $this->db->fetchAll('
 				SELECT		`id`,
 							CONCAT_WS(" ", `name`, `nachname`, CONCAT("(", `id`, ")")) AS value
 				FROM 		fs_foodsaver
-				WHERE 		((`name` LIKE "' . $term . '%"
-				OR 			`nachname` LIKE "' . $term . '%"))
+				WHERE 		((`name` LIKE :term
+				OR 			`nachname` LIKE :term2))
 				AND			deleted_at IS NULL
-				' . $bezirk . '
-			');
+			', [':term' => $term, ':term2' => $term]);
 
 			return $out;
 		}
