@@ -13,6 +13,7 @@
 - Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
 - Fixup conversation header display !658 @nicksellen
 - Fixed bug in #302 goto_profile_from_teamsite !671 with !675 @peter.reutlingen
+- Fixed an SQL injection in an FoodsaverGateway method @alangecker
 
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies
