@@ -46,7 +46,7 @@ services:
 
   client:
     container_name: foodsharing_dev_client
-    image: node:10.15-alpine
+    image: node:11.9.0-alpine
     ports:
       - "18080:18080"
     command: sh -c "yarn && yarn dev"
@@ -86,7 +86,7 @@ services:
   chat:
     container_name: foodsharing_dev_chat
     command: sh -c "yarn && node server.js 0.0.0.0"
-    image: node:10.15-alpine
+    image: node:11.9.0-alpine
     working_dir: /app/chat
     depends_on:
       - redis
