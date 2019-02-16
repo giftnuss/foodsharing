@@ -428,13 +428,6 @@ class XhrMethods
 		));
 	}
 
-	public function xhr_jsonTeam($data)
-	{
-		$fs = $this->model->q(' SELECT fs.`id`,CONCAT(fs.`name`," ",fs.`nachname`) AS name FROM fs_foodsaver fs WHERE `active` = 1 ');
-
-		return 'var foodsaver = ' . json_encode($fs);
-	}
-
 	public function xhr_jsonBetriebe($data)
 	{
 		$b = '';
