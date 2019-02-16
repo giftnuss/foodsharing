@@ -221,7 +221,7 @@ class FairTeilerGateway extends BaseGateway
 
 	public function getFollower($id)
 	{
-		if ($follower = $this->db->fetchAll(
+		$follower = $this->db->fetchAll(
 			'
 			SELECT 	fs.`name`,
 					fs.`nachname`,
@@ -237,29 +237,25 @@ class FairTeilerGateway extends BaseGateway
 
 		',
 			[':id' => $id]
-		)
-		) {
-			$normal = array();
-			$verantwortliche = array();
-			$all = array();
-			foreach ($follower as $f) {
-				if ($f['type'] == 1) {
-					$normal[] = $f;
-					$all[$f['id']] = 'follow';
-				} elseif ($f['type'] == 2) {
-					$verantwortliche[] = $f;
-					$all[$f['id']] = 'verantwortlich';
-				}
+		);
+		$normal = [];
+		$verantwortliche = [];
+		$all = [];
+		foreach ($follower as $f) {
+			if ($f['type'] == 1) {
+				$normal[] = $f;
+				$all[$f['id']] = 'follow';
+			} elseif ($f['type'] == 2) {
+				$verantwortliche[] = $f;
+				$all[$f['id']] = 'verantwortlich';
 			}
-
-			return array(
-				'follow' => $normal,
-				'verantwortlich' => $verantwortliche,
-				'all' => $all,
-			);
 		}
 
-		return false;
+		return [
+			'follow' => $normal,
+			'verantwortlich' => $verantwortliche,
+			'all' => $all,
+		];
 	}
 
 	public function acceptFairteiler($id)
