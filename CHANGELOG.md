@@ -1,3 +1,6 @@
+# 2019-02-16 Hotfix
+- Fixed an SQL injection in a FoodsaverGateway method @alangecker
+
 # 2019-02-02 Hotfix
 - readded adresspicker functionality to Fair-Teiler creation page !668 @peter.toennies
 
