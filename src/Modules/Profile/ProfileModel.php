@@ -28,7 +28,7 @@ class ProfileModel extends Db
 			VALUES
 			(
 				' . (int)$fsid . ',
-				' . (int)$this->func->fsId() . ',
+				' . (int)$this->session->id() . ',
 				' . (int)$rate . ',
 				' . (int)$type . ',
 				' . $this->strval($message) . ',
@@ -43,7 +43,7 @@ class ProfileModel extends Db
 			SELECT 	`msg`
 			FROM	`fs_rating`
 			WHERE 	`foodsaver_id` = ' . (int)$fsid . '
-			AND 	`rater_id` = ' . (int)$this->func->fsId() . '
+			AND 	`rater_id` = ' . (int)$this->session->id() . '
 		');
 	}
 
@@ -123,10 +123,10 @@ class ProfileModel extends Db
 			return false;
 		}
 
-		//echo 'SELECT COUNT(rater_id) FROM `fs_rating` WHERE rater_id = '.(int)$this->func->fsId().' AND foodsaver_id = '.(int)$this->fs_id.' AND ratingtype = 2';
+		//echo 'SELECT COUNT(rater_id) FROM `fs_rating` WHERE rater_id = '.(int)$this->session->id().' AND foodsaver_id = '.(int)$this->fs_id.' AND ratingtype = 2';
 		$data['bouched'] = false;
 		$data['bananen'] = false;
-		if ($this->qOne('SELECT 1 FROM `fs_rating` WHERE rater_id = ' . (int)$this->func->fsId() . ' AND foodsaver_id = ' . (int)$this->fs_id . ' AND ratingtype = 2')) {
+		if ($this->qOne('SELECT 1 FROM `fs_rating` WHERE rater_id = ' . (int)$this->session->id() . ' AND foodsaver_id = ' . (int)$this->fs_id . ' AND ratingtype = 2')) {
 			$data['bouched'] = true;
 		}
 		$data['online'] = $this->mem->userIsActive((int)$this->fs_id);
@@ -342,7 +342,7 @@ class ProfileModel extends Db
 
 	public function buddyStatus($fsid)
 	{
-		if (($status = $this->qOne('SELECT `confirmed` FROM fs_buddy WHERE `foodsaver_id` = ' . (int)$this->func->fsId() . ' AND `buddy_id` = ' . (int)$fsid)) !== false) {
+		if (($status = $this->qOne('SELECT `confirmed` FROM fs_buddy WHERE `foodsaver_id` = ' . (int)$this->session->id() . ' AND `buddy_id` = ' . (int)$fsid)) !== false) {
 			return $status;
 		}
 

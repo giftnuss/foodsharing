@@ -18,7 +18,7 @@ class FoodsaverXhr extends Control
 		parent::__construct();
 
 		// permission check
-		if (!$this->session->may('orga') && !$this->func->isBotFor($_GET['bid'])) {
+		if (!$this->session->may('orga') && !$this->session->isAdminFor($_GET['bid'])) {
 			return false;
 		}
 	}

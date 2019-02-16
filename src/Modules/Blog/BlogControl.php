@@ -136,10 +136,10 @@ class BlogControl extends Control
 		global $g_data;
 
 		if ($this->func->mayEditBlog() && $this->func->submitted()) {
-			$g_data['foodsaver_id'] = $this->func->fsId();
+			$g_data['foodsaver_id'] = $this->session->id();
 			$g_data['time'] = date('Y-m-d H:i:s');
 
-			if ($this->model->canAdd((int)$this->func->fsId(), $g_data['bezirk_id']) && $this->model->add_blog_entry($g_data)) {
+			if ($this->model->canAdd((int)$this->session->id(), $g_data['bezirk_id']) && $this->model->add_blog_entry($g_data)) {
 				$this->func->info($this->func->s('blog_entry_add_success'));
 				$this->func->goPage();
 			} else {

@@ -450,7 +450,7 @@ abstract class Control
 							'name' => $recipient['name'],
 							'chatname' => 'Betrieb ' . $betriebName,
 							'message' => $msg,
-							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->func->fsId() . 'cid=' . (int)$conversation_id
+							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
 						));
 					} elseif ($memberNames = $messageModel->getChatMembers($conversation_id)) {
 						$this->func->tplMail(30, $recipient['email'], array(
@@ -459,7 +459,7 @@ abstract class Control
 							'name' => $recipient['name'],
 							'chatname' => implode(', ', $memberNames),
 							'message' => $msg,
-							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->func->fsId() . 'cid=' . (int)$conversation_id
+							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
 						));
 					} else {
 						$this->func->tplMail($tpl_id, $recipient['email'], array(
@@ -467,7 +467,7 @@ abstract class Control
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
 							'message' => $msg,
-							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->func->fsId() . 'cid=' . (int)$conversation_id
+							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
 						));
 					}
 				}

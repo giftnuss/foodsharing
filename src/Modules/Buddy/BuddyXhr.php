@@ -25,8 +25,8 @@ class BuddyXhr extends Control
 		if ($this->gateway->buddyRequestedMe($_GET['id'], $this->session->id())) {
 			$this->gateway->confirmBuddy($_GET['id'], $this->session->id());
 
-			$this->bellGateway->delBellsByIdentifier('buddy-' . $this->func->fsId() . '-' . (int)$_GET['id']);
-			$this->bellGateway->delBellsByIdentifier('buddy-' . (int)$_GET['id'] . $this->func->fsId());
+			$this->bellGateway->delBellsByIdentifier('buddy-' . $this->session->id() . '-' . (int)$_GET['id']);
+			$this->bellGateway->delBellsByIdentifier('buddy-' . (int)$_GET['id'] . $this->session->id());
 
 			$buddy_ids = array();
 			if ($b = $this->session->get('buddy-ids')) {
@@ -54,12 +54,12 @@ class BuddyXhr extends Control
 			$icon = $this->func->img($this->session->user('photo'));
 
 			// whats happen when click on the bell content
-			$link_attributes = array('href' => '/profile/' . (int)$this->func->fsId() . '');
+			$link_attributes = array('href' => '/profile/' . (int)$this->session->id() . '');
 
 			// variables for the language strings
 			$vars = array('name' => $this->session->user('name'));
 
-			$identifier = 'buddy-' . $this->func->fsId() . '-' . (int)$_GET['id'];
+			$identifier = 'buddy-' . $this->session->id() . '-' . (int)$_GET['id'];
 
 			$this->bellGateway->addBell($_GET['id'], $title, $body, $icon, $link_attributes, $vars, $identifier);
 

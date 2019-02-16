@@ -82,7 +82,7 @@ class StoreUserView extends View
 			$click = 'profile(' . (int)$fs['id'] . ');';
 			if ($fs['verantwortlich'] == 1) {
 				$class .= ' verantwortlich';
-			} elseif ($betrieb['verantwortlich'] || $this->func->isBotFor($betrieb['bezirk_id']) || $this->session->isOrgaTeam()) {
+			} elseif ($betrieb['verantwortlich'] || $this->session->isAdminFor($betrieb['bezirk_id']) || $this->session->isOrgaTeam()) {
 				$class .= ' context-team';
 				$click = '';
 			}
@@ -154,7 +154,7 @@ class StoreUserView extends View
 
 				$class = '';
 				$click = 'profile(' . (int)$fs['id'] . ');';
-				if ($betrieb['verantwortlich'] || $this->func->isBotFor($betrieb['bezirk_id']) || $this->session->isOrgaTeam()) {
+				if ($betrieb['verantwortlich'] || $this->session->isAdminFor($betrieb['bezirk_id']) || $this->session->isOrgaTeam()) {
 					$class .= ' context-jumper';
 					$click = '';
 				}
@@ -407,7 +407,7 @@ class StoreUserView extends View
 
 		if ($values = $this->func->getValue($id)) {
 			foreach ($values as $fs) {
-				if ($fs['id'] == $this->func->fsId()) {
+				if ($fs['id'] == $this->session->id()) {
 					$bindabei = true;
 				}
 
@@ -418,12 +418,12 @@ class StoreUserView extends View
 				if (!$ago && $option['verantwortlich'] && $fs['confirmed'] == 0) {
 					$aclass = 'context-unconfirmed';
 					$click = '';
-				} elseif (!$ago && ($option['verantwortlich'] || $this->func->isBotFor($option['bezirk_id']) || $this->session->isOrgaTeam())) {
+				} elseif (!$ago && ($option['verantwortlich'] || $this->session->isAdminFor($option['bezirk_id']) || $this->session->isOrgaTeam())) {
 					$aclass .= 'context-confirmed';
 					$click = '';
 				}
 
-				if ($fs['id'] == $this->func->fsId() && !$ago) {
+				if ($fs['id'] == $this->session->id() && !$ago) {
 					$click = 'u_undate(\'' . $date . '\',\'' . $this->func->niceDate(strtotime($date), true) . '\');return false;';
 					$aclass = '';
 				}
@@ -469,7 +469,7 @@ class StoreUserView extends View
 
 		$dellink = '';
 
-		if (!$ago && isset($option['field']['additional']) && ($option['verantwortlich'] || $this->session->isOrgaTeam() || $this->func->isBotFor($option['bezirk_id']))) {
+		if (!$ago && isset($option['field']['additional']) && ($option['verantwortlich'] || $this->session->isOrgaTeam() || $this->session->isAdminFor($option['bezirk_id']))) {
 			$dellink = '<br /><a class="button" href="#" onclick="if(confirm(\'Termin wirklich löschen?\')){ajreq(\'deldate\',{app:\'betrieb\',id:\'' . (int)$_GET['id'] . '\',time:\'' . $option['field']['datetime'] . '\'});}return false;">Termin löschen</a>';
 		}
 

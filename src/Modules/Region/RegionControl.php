@@ -92,7 +92,7 @@ class RegionControl extends Control
 
 		if ($isWorkGroup) {
 			$menu[] = ['name' => 'terminology.wall', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=wall'];
-			if ($this->session->may('orga') || $this->func->isBotFor($region['id'])) {
+			if ($this->session->may('orga') || $this->session->isAdminFor($region['id'])) {
 				$menu[] = ['name' => 'Gruppe verwalten', 'href' => '/?page=groups&sub=edit&id=' . (int)$region['id']];
 			}
 		} else {

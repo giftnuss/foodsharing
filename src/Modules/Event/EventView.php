@@ -189,7 +189,7 @@ class EventView extends View
 	{
 		$menu = array();
 
-		if ($event['fs_id'] == $this->func->fsId() || $this->session->isOrgaTeam()) {
+		if ($event['fs_id'] == $this->session->id() || $this->session->isOrgaTeam()) {
 			$menu[] = array(
 				'name' => 'Event bearbeiten',
 				'href' => '/?page=event&sub=edit&id=' . (int)$event['id']

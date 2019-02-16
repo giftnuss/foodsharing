@@ -21,7 +21,7 @@ class BlogModel extends Db
 	public function canEdit($article_id)
 	{
 		if ($val = $this->getValues(array('bezirk_id', 'foodsaver_id'), 'blog_entry', $article_id)) {
-			if ($this->func->fsId() == $val['foodsaver_id'] || $this->func->isBotFor($val['bezirk_id'])) {
+			if ($this->session->id() == $val['foodsaver_id'] || $this->session->isAdminFor($val['bezirk_id'])) {
 				return true;
 			}
 		}
@@ -35,7 +35,7 @@ class BlogModel extends Db
 			return true;
 		}
 
-		if ($this->func->isBotFor($bezirkId)) {
+		if ($this->session->isAdminFor($bezirkId)) {
 			return true;
 		}
 
@@ -158,7 +158,7 @@ class BlogModel extends Db
 		$active = 0;
 		if ($this->session->isOrgaTeam()) {
 			$active = 1;
-		} elseif ($this->func->isBotFor($data['bezirk_id'])) {
+		} elseif ($this->session->isAdminFor($data['bezirk_id'])) {
 			$active = 1;
 		}
 

@@ -104,7 +104,7 @@ class StoreModel extends Db
 				b.id = t.betrieb_id
 				
 			AND
-				t.foodsaver_id = ' . $this->func->fsId() . '
+				t.foodsaver_id = ' . $this->session->id() . '
 				
 			AND
 				t.active = 1
@@ -658,7 +658,7 @@ class StoreModel extends Db
 		}
 		if (!$verantwortlicher) {
 			$verantwortlicher = array(
-				$this->func->fsId() => true
+				$this->session->id() => true
 			);
 		}
 

@@ -49,16 +49,16 @@ class EventControl extends Control
 
 	private function isEventAdmin($event): bool
 	{
-		return $event['fs_id'] == $this->func->fsId() || $this->func->isBotFor(
+		return $event['fs_id'] == $this->session->id() || $this->session->isAdminFor(
 				$event['bezirk_id']
 			) || $this->session->may('orga');
 	}
 
 	private function mayEvent($event): bool
 	{
-		return $event['public'] == 1 || $this->session->may('orga') || $this->func->isBotFor(
+		return $event['public'] == 1 || $this->session->may('orga') || $this->session->isAdminFor(
 				$event['bezirk_id']
-			) || isset($event['invites']['may'][$this->func->fsId()]);
+			) || isset($event['invites']['may'][$this->session->id()]);
 	}
 
 	public function edit()
@@ -67,7 +67,7 @@ class EventControl extends Control
 			if (!$this->isEventAdmin($event)) {
 				return false;
 			}
-			if ($event['fs_id'] == $this->func->fsId() || $this->session->isOrgaTeam() || $this->func->isBotFor($event['bezirk_id'])) {
+			if ($event['fs_id'] == $this->session->id() || $this->session->isOrgaTeam() || $this->session->isAdminFor($event['bezirk_id'])) {
 				$this->func->addBread('Termine', '/?page=event');
 				$this->func->addBread('Neuer Termin');
 

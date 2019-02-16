@@ -58,7 +58,7 @@ class ViewUtils
 		if ($b['team_status'] != 0 && (!$b['inTeam'] && (!$b['pendingRequest']))) {
 			$button .= '<div class="buttonrow"><a class="lbutton" href="#" onclick="betriebRequest(' . (int)$b['id'] . ');return false;">' . $this->func->s('want_to_fetch') . '</a></div>';
 		} elseif ($b['team_status'] != 0 && (!$b['inTeam'] && ($b['pendingRequest']))) {
-			$button .= '<div class="buttonrow"><a class="lbutton" href="#" onclick="rejectBetriebRequest(' . (int)$this->func->fsId() . ',' . (int)$b['id'] . ');return false;">Anfrage zur&uuml;ckziehen </a></div>';
+			$button .= '<div class="buttonrow"><a class="lbutton" href="#" onclick="rejectBetriebRequest(' . (int)$this->session->id() . ',' . (int)$b['id'] . ');return false;">Anfrage zur&uuml;ckziehen </a></div>';
 		}
 
 		$verantwortlich = '<ul class="linklist">';

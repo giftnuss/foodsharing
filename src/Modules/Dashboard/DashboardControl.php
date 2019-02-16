@@ -53,7 +53,7 @@ class DashboardControl extends Control
 			$this->func->go('/');
 		}
 
-		$this->user = $this->dashboardGateway->getUser($this->func->fsId());
+		$this->user = $this->dashboardGateway->getUser($this->session->id());
 	}
 
 	public function index()
@@ -81,19 +81,19 @@ class DashboardControl extends Control
 			(
 				$is_fs
 				&&
-				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)$this->func->fsId()) == 0
+				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)$this->session->id()) == 0
 			)
 			||
 			(
 				$is_bieb
 				&&
-				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 2 AND status = 1 AND foodsaver_id = ' . (int)$this->func->fsId()) == 0
+				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 2 AND status = 1 AND foodsaver_id = ' . (int)$this->session->id()) == 0
 			)
 			||
 			(
 				$is_bot
 				&&
-				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 3 AND status = 1 AND foodsaver_id = ' . (int)$this->func->fsId()) == 0
+				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 3 AND status = 1 AND foodsaver_id = ' . (int)$this->session->id()) == 0
 			)
 		) {
 			$check = true;
@@ -180,7 +180,7 @@ class DashboardControl extends Control
 
 		$this->view->updates();
 
-		if ($this->user['lat'] && ($baskets = $this->dashboardGateway->listCloseBaskets($this->func->fsId(), $this->session->getLocation($this->model)))) {
+		if ($this->user['lat'] && ($baskets = $this->dashboardGateway->listCloseBaskets($this->session->id(), $this->session->getLocation($this->model)))) {
 			$this->func->addContent($this->view->closeBaskets($baskets), CNT_LEFT);
 		} else {
 			if ($baskets = $this->dashboardGateway->getNewestFoodbaskets()) {
@@ -191,7 +191,7 @@ class DashboardControl extends Control
 
 	private function dashFoodsaver()
 	{
-		$val = $this->model->getValues(array('photo_public', 'anschrift', 'plz', 'lat', 'lon', 'stadt'), 'foodsaver', $this->func->fsId());
+		$val = $this->model->getValues(array('photo_public', 'anschrift', 'plz', 'lat', 'lon', 'stadt'), 'foodsaver', $this->session->id());
 
 		if (empty($val['lat']) || empty($val['lon']) ||
 			($val['lat']) == '50.05478727164819' && $val['lon'] == '10.3271484375'
@@ -497,7 +497,7 @@ class DashboardControl extends Control
 		/*
 		 * Nächste Termine
 		*/
-		if ($dates = $this->profileModel->getNextDates($this->func->fsId(), 10)) {
+		if ($dates = $this->profileModel->getNextDates($this->session->id(), 10)) {
 			$this->func->addContent($this->view->u_nextDates($dates), CNT_RIGHT);
 		}
 

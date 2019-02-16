@@ -76,7 +76,7 @@ if (DebugBar::isEnabled()) {
 
 if ($session->may()) {
 	if (isset($_GET['uc'])) {
-		if ($func->fsId() != $_GET['uc']) {
+		if ($session->id() != $_GET['uc']) {
 			$mem->logout($session->id());
 			$func->goLogin();
 		}

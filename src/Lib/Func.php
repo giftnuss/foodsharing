@@ -434,7 +434,7 @@ class Func
 
 	public function isBotForA($regions_ids, $include_groups = true, $include_parent_regions = false): bool
 	{
-		if (is_array($regions_ids) && count($regions_ids) && $this->session->isBotschafter()) {
+		if (is_array($regions_ids) && count($regions_ids) && $this->session->isAmbassador()) {
 			if ($include_parent_regions) {
 				$regions_ids = $this->regionGateway->listRegionsIncludingParents($regions_ids);
 			}
@@ -450,22 +450,6 @@ class Func
 		return false;
 	}
 
-	/**
-	 * @deprecated use $this->session->isAdminFor($regionId) instead
-	 */
-	public function isBotFor($bezirk_id)
-	{
-		return $this->session->isAdminFor($bezirk_id);
-	}
-
-	/**
-	 * @deprecated use $this->session->isBotschafter() instead
-	 */
-	public function isBotschafter()
-	{
-		return $this->session->isBotschafter();
-	}
-
 	public function getMenu()
 	{
 		$regions = [];
@@ -473,7 +457,7 @@ class Func
 		$workingGroups = [];
 		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
 			foreach ($_SESSION['client']['bezirke'] as $region) {
-				$region = array_merge($region, ['isBot' => $this->isBotFor($region['id'])]);
+				$region = array_merge($region, ['isBot' => $this->session->isAdminFor($region['id'])]);
 				if ($region['type'] == Type::WORKING_GROUP) {
 					$workingGroups[] = $region;
 				} else {
@@ -498,7 +482,7 @@ class Func
 			$stores,
 			$workingGroups,
 			$this->session->get('mailbox'),
-			$this->fsId(),
+			(int)$this->session->id(),
 			$loggedIn ? $this->img() : '',
 			$this->session->may('bieb')
 		);
@@ -1104,7 +1088,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$user = $this->session->get('user');
 
 		$userData = [
-			'id' => $this->fsId(),
+			'id' => $this->session->id(),
 			'firstname' => $user['name'],
 			'lastname' => $user['nachname'],
 			'may' => $this->session->may(),
@@ -1239,18 +1223,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->title = array($name);
 	}
 
-	/**
-	 * @deprecated use $this->session->id() instead
-	 */
-	public function fsId()
-	{
-		if ($this->loggedIn()) {
-			return $_SESSION['client']['id'];
-		}
-
-		return 0;
-	}
-
 	public function isVerified()
 	{
 		if ($this->session->isOrgaTeam()) {
@@ -1284,7 +1256,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function isAdmin()
 	{
-		return $this->mayGroup('admin') && $_SESSION['client']['group']['admin'] === true;
+		return $this->session->mayGroup('admin') && $_SESSION['client']['group']['admin'] === true;
 	}
 
 	public function logg($arg)
@@ -1421,41 +1393,29 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function hasBezirk($bid): bool
 	{
-		return isset($_SESSION['client']['bezirke'][$bid]) || $this->isBotFor($bid);
+		return isset($_SESSION['client']['bezirke'][$bid]) || $this->session->isAdminFor($bid);
 	}
 
 	public function mayBezirk($bid): bool
 	{
-		return isset($_SESSION['client']['bezirke'][$bid]) || $this->isBotFor($bid) || $this->session->isOrgaTeam();
-	}
-
-	/**
-	 * @deprecated use $this->session->mayGroup($group) instead
-	 */
-	public function mayGroup($group)
-	{
-		if (isset($_SESSION['client']['group'][$group])) {
-			return true;
-		}
-
-		return false;
+		return isset($_SESSION['client']['bezirke'][$bid]) || $this->session->isAdminFor($bid) || $this->session->isOrgaTeam();
 	}
 
 	public function mayHandleReports()
 	{
 		// group "Regelverletzungen/Meldungen"
-		return $this->session->may('orga') || $this->isBotFor(432);
+		return $this->session->may('orga') || $this->session->isAdminFor(432);
 	}
 
 	public function mayEditQuiz()
 	{
-		return $this->session->may('orga') || $this->isBotFor(341);
+		return $this->session->may('orga') || $this->session->isAdminFor(341);
 	}
 
 	public function mayEditBlog()
 	{
 		if ($all_group_admins = $this->mem->get('all_global_group_admins')) {
-			return $this->session->may('orga') || in_array($this->fsId(), unserialize($all_group_admins));
+			return $this->session->may('orga') || in_array($this->session->id(), unserialize($all_group_admins));
 		}
 
 		return $this->session->may('orga');

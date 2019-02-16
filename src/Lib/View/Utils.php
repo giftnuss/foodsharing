@@ -564,7 +564,7 @@ class Utils
 	public function v_photo_edit($src, $fsid = false)
 	{
 		if (!$fsid) {
-			$fsid = $this->func->fsId();
+			$fsid = (int)$this->session->id();
 		}
 		$id = $this->func->id('fotoupload');
 

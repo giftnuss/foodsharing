@@ -368,7 +368,7 @@ class DashboardView extends View
 				//<a id="anfrage-betrieb" class="ui-corner-all" href="/?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].'</a>
 				$list .= '
 				<li>
-					<a id="store-request" class="ui-corner-all" href="#" onclick="return false;">' . $b['name'] . '<input type="hidden" name="anfrage" value="' . $this->func->fsId() . ':::' . $b['id'] . '" /></a>
+					<a id="store-request" class="ui-corner-all" href="#" onclick="return false;">' . $b['name'] . '<input type="hidden" name="anfrage" value="' . $this->session->id() . ':::' . $b['id'] . '" /></a>
 				</li>';
 			}
 			$list .= '

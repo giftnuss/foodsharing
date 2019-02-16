@@ -124,7 +124,7 @@ class ActivityXhr extends Control
 		$xhr->addData('updates', $updates);
 
 		$xhr->addData('user', [
-			'id' => $this->func->fsId(),
+			'id' => $this->session->id(),
 			'name' => $this->session->user('name'),
 			'avatar' => $this->func->img($this->session->user('photo'))
 		]);

@@ -299,7 +299,7 @@ class StoreXhr extends Control
 		if ($this->storeGateway->isResponsible($this->session->id(), $_GET['id'])) {
 			$xhr->addMessage($this->func->s('signout_error_admin'), 'error');
 		} elseif ($this->storeGateway->isInTeam($this->session->id(), $_GET['id'])) {
-			$this->model->signout($_GET['id'], $this->func->fsId());
+			$this->model->signout($_GET['id'], $this->session->id());
 			$xhr->addScript('goTo("/?page=relogin&url=" + encodeURIComponent("/?page=dashboard") );');
 		} else {
 			$xhr->addMessage($this->func->s('no_member'), 'error');

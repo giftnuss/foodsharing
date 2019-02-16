@@ -65,7 +65,7 @@ class StoreView extends View
 		$bc = $this->v_utils->v_bezirkChooser('bezirk_id', $bezirk);
 
 		if (!isset($g_data['foodsaver'])) {
-			$g_data['foodsaver'] = array($this->func->fsId());
+			$g_data['foodsaver'] = array($this->session->id());
 		}
 
 		$first_post = '';

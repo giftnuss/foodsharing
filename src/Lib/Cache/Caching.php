@@ -25,7 +25,7 @@ class Caching
 
 	public function lookup()
 	{
-		if (isset($this->cacheRules[$_SERVER['REQUEST_URI']][$this->cacheMode]) && ($page = $this->mem->getPageCache()) !== false && !isset($_GET['flush'])) {
+		if (isset($this->cacheRules[$_SERVER['REQUEST_URI']][$this->cacheMode]) && ($page = $this->mem->getPageCache($this->session->id())) !== false && !isset($_GET['flush'])) {
 			$this->metrics->addPageStatData(['cached' => 1]);
 			echo $page;
 			exit();
@@ -43,7 +43,8 @@ class Caching
 	{
 		$this->mem->setPageCache(
 			$content,
-			$this->cacheRules[$_SERVER['REQUEST_URI']][$this->cacheMode]
+			$this->cacheRules[$_SERVER['REQUEST_URI']][$this->cacheMode],
+			$this->session->id()
 		);
 	}
 }

@@ -421,7 +421,7 @@ class SettingsView extends View
 
 	public function settingsCalendar($token)
 	{
-		$url = BASE_URL . '/api.php?f=cal&fs=' . $this->func->fsId() . '&key=' . $token . '&opts=s';
+		$url = BASE_URL . '/api.php?f=cal&fs=' . $this->session->id() . '&key=' . $token . '&opts=s';
 
 		return $this->v_utils->v_field('
 <p>Du kannst Deinen Abholkalender auch mit einem Kalenderprogramm Deiner Wahl ansehen. Abonniere Dir dazu folgenden Kalender!</p>

@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Lib\Db;
 
-use Foodsharing\Lib\Func;
 use Redis;
 
 class Mem
@@ -12,15 +11,6 @@ class Mem
 	 */
 	public $cache;
 	public $connected;
-	/**
-	 * @var Func
-	 */
-	private $func;
-
-	public function __construct(Func $func)
-	{
-		$this->func = $func;
-	}
 
 	public function connect()
 	{
@@ -135,19 +125,19 @@ class Mem
 		return $this->cache->sRem(join(':', array('php', 'user', $fs_id, 'sessions')), $session_id);
 	}
 
-	public function getPageCache()
+	public function getPageCache($fsId)
 	{
-		return $this->get('pc-' . $_SERVER['REQUEST_URI'] . ':' . $this->func->fsId());
+		return $this->get('pc-' . $_SERVER['REQUEST_URI'] . ':' . $fsId);
 	}
 
-	public function setPageCache($page, $ttl)
+	public function setPageCache($page, $ttl, $fsId)
 	{
-		return $this->set('pc-' . $_SERVER['REQUEST_URI'] . ':' . $this->func->fsId(), $page, $ttl);
+		return $this->set('pc-' . $_SERVER['REQUEST_URI'] . ':' . $fsId, $page, $ttl);
 	}
 
-	public function delPageCache($page)
+	public function delPageCache($page, $fsId)
 	{
-		return $this->del('pc-' . $page . ':' . $this->func->fsId());
+		return $this->del('pc-' . $page . ':' . $fsId);
 	}
 
 	/**

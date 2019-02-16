@@ -72,13 +72,13 @@ class APIXhr extends Control
 
 				if ($member = $this->messageModel->listConversationMembers($conversation_id)) {
 					foreach ($member as $m) {
-						if ($m['id'] != $this->func->fsId()) {
+						if ($m['id'] != $this->session->id()) {
 							$this->mem->userAppend($m['id'], 'msg-update', $conversation_id);
 
 							$this->webSocketSender->sendSock($m['id'], 'conv', 'push', [
 								'id' => $id,
 								'cid' => $conversation_id,
-								'fs_id' => $this->func->fsId(),
+								'fs_id' => $this->session->id(),
 								'fs_name' => $this->session->user('name'),
 								'fs_photo' => $this->session->user('photo'),
 								'body' => $message,
@@ -168,7 +168,7 @@ class APIXhr extends Control
 				'gender' => $fs['geschlecht'],
 				'phone' => $fs['telefon'],
 				'phone_mobile' => $fs['handy'],
-				'id' => $this->func->fsId(),
+				'id' => $this->session->id(),
 				'name' => $fs['name'],
 				'lat' => $fs['lat'],
 				'lon' => $fs['lon'],
@@ -206,7 +206,7 @@ class APIXhr extends Control
 					$photo = strip_tags($_GET['photo']);
 				}
 
-				$fs = $this->model->getValues(['lat', 'lon'], 'foodsaver', $this->func->fsId());
+				$fs = $this->model->getValues(['lat', 'lon'], 'foodsaver', $this->session->id());
 
 				$lat = $fs['lat'];
 				$lon = $fs['lon'];

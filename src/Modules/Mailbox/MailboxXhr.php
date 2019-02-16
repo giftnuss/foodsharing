@@ -196,7 +196,7 @@ class MailboxXhr extends Control
 			sub		betr
 		 */
 
-		if ($last = (int)$this->mem->user($this->func->fsId(), 'mailbox-last')) {
+		if ($last = (int)$this->mem->user($this->session->id(), 'mailbox-last')) {
 			if ((time() - $last) < 15) {
 				return array(
 					'status' => 1,
@@ -205,7 +205,7 @@ class MailboxXhr extends Control
 			}
 		}
 
-		$this->mem->userSet($this->func->fsId(), 'mailbox-last', time());
+		$this->mem->userSet($this->session->id(), 'mailbox-last', time());
 
 		if ($this->model->mayMailbox($_POST['mb'])) {
 			if ($mailbox = $this->model->getMailbox($_POST['mb'])) {

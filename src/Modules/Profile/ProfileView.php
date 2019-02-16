@@ -15,7 +15,7 @@ class ProfileView extends View
 		$page = new vPage($this->foodsaver['name'], $this->infos());
 		$page->addSection($wallposts, 'Status-Updates von ' . $this->foodsaver['name']);
 
-		if ($this->func->fsId() != $this->foodsaver['id']) {
+		if ($this->session->id() != $this->foodsaver['id']) {
 			$this->func->addStyle('#wallposts .tools{display:none;}');
 		}
 
@@ -54,7 +54,7 @@ class ProfileView extends View
 							</a>
 						</li>';
 
-			if ($this->session->isOrgaTeam() || $this->func->isBotFor($d['bezirk_id'])) {
+			if ($this->session->isOrgaTeam() || $this->session->isAdminFor($d['bezirk_id'])) {
 				$out .= '<li>
 							<a class="button button-big" href="#" onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',deleteAll:false,bid:' . $d['betrieb_id'] . ',date:' . $d['date_ts'] . '});return false;">austragen</a>
 							</li>';
@@ -270,7 +270,7 @@ class ProfileView extends View
 			$banana_button_class = ' bouched';
 			$givebanana = '';
 
-			if (!$this->foodsaver['bouched'] && ($this->foodsaver['id'] != $this->func->fsId())) {
+			if (!$this->foodsaver['bouched'] && ($this->foodsaver['id'] != $this->session->id())) {
 				$banana_button_class = '';
 				$givebanana = '
 				<a onclick="$(this).hide().next().show().children(\'textarea\').autosize();return false;" href="#">Schenke ' . $this->foodsaver['name'] . ' eine Banane</a>
@@ -418,7 +418,7 @@ class ProfileView extends View
 		if ($showEditButton) {
 			$opt .= '<li><a href="/?page=foodsaver&a=edit&id=' . $this->foodsaver['id'] . '"><i class="fas fa-pencil-alt fa-fw"></i>Profil bearbeiten</a></li>';
 		}
-		if ($this->foodsaver['buddy'] === -1 && $this->foodsaver['id'] != $this->func->fsId()) {
+		if ($this->foodsaver['buddy'] === -1 && $this->foodsaver['id'] != $this->session->id()) {
 			$name = explode(' ', $this->foodsaver['name']);
 			$name = $name[0];
 			$opt .= '<li class="buddyRequest"><a onclick="ajreq(\'request\',{app:\'buddy\',id:' . (int)$this->foodsaver['id'] . '});return false;" href="#"><i class="fas fa-user fa-fw"></i>Ich kenne ' . $name . '</a></li>';
@@ -573,11 +573,11 @@ class ProfileView extends View
 		$topinfos = array();
 
 		$opt = '';
-		if ($this->session->isOrgaTeam() || $this->func->isBotschafter()) {
+		if ($this->session->isOrgaTeam() || $this->session->isAmbassador()) {
 			$opt .= '<li><a href="/?page=foodsaver&a=edit&id=' . $this->foodsaver['id'] . '">bearbeiten</a></li>';
 		}
 
-		if ($this->foodsaver['buddy'] === -1 && $this->foodsaver['id'] != $this->func->fsId()) {
+		if ($this->foodsaver['buddy'] === -1 && $this->foodsaver['id'] != $this->session->id()) {
 			$name = explode(' ', $this->foodsaver['name']);
 			$name = $name[0];
 			$opt .= '<li class="buddyRequest"><a onclick="ajreq(\'request\',{app:\'buddy\',id:' . (int)$this->foodsaver['id'] . '});return false;" href="#">Ich kenne ' . $name . '</a></li>';
@@ -645,7 +645,7 @@ class ProfileView extends View
 				</div>';
 		}
 
-		if ($this->foodsaver['id'] == $this->func->fsId()) {
+		if ($this->foodsaver['id'] == $this->session->id()) {
 			$topinfos[] = array(
 				'name' => 'Vertrauensbananen',
 				'val' => $bval . '<span' . $b_style . ' class="vouch-banana" title="Das sind Deine Bananen"><span>&nbsp;</span></span>'

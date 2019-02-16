@@ -32,10 +32,10 @@ class SettingsControl extends Control
 			$this->handle_newmail();
 		}
 
-		$this->foodsaver = $this->model->getValues(array('rolle', 'email', 'name', 'nachname', 'geschlecht', 'verified'), 'foodsaver', $this->func->fsId());
+		$this->foodsaver = $this->model->getValues(array('rolle', 'email', 'name', 'nachname', 'geschlecht', 'verified'), 'foodsaver', $this->session->id());
 
 		if (isset($_GET['deleteaccount'])) {
-			$this->foodsaverGateway->del_foodsaver($this->func->fsId());
+			$this->foodsaverGateway->del_foodsaver($this->session->id());
 			$this->func->go('/?page=logout');
 		}
 
@@ -87,7 +87,7 @@ class SettingsControl extends Control
 				$this->func->addContent($this->view->simpleContent($this->contentGateway->get(45)));
 			} else {
 				if (($status = $this->quizModel->getQuizStatus(2)) && ($quiz = $this->quizModel->getQuiz(2))) {
-					if ((int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)$this->func->fsId()) == 0) {
+					if ((int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)$this->session->id()) == 0) {
 						$this->func->info('Du darfst zunächst das Foodsaver Quiz machen');
 						$this->func->go('/?page=settings&sub=upgrade/up_fs');
 					}
@@ -225,7 +225,7 @@ class SettingsControl extends Control
 					$this->func->error($this->func->s('not_rv_accepted'));
 				} else {
 					$this->session->set('hastodoquiz', false);
-					$this->mem->delPageCache('/?page=dashboard');
+					$this->mem->delPageCache('/?page=dashboard', $this->session->id());
 					if (!$this->session->may('fs')) {
 						$this->model->updateRole(1, $this->foodsaver['rolle']);
 					}
@@ -299,7 +299,7 @@ class SettingsControl extends Control
 
 				if ($check) {
 					$data = $this->func->unsetAll($_POST, array('photo_public', 'new_bezirk'));
-					$this->model->updateFields($data, 'fs_foodsaver', $this->func->fsId());
+					$this->model->updateFields($data, 'fs_foodsaver', $this->session->id());
 
 					$this->func->addContent($this->v_utils->v_field(
 						$this->v_utils->v_info($this->func->s('upgrade_bot_success')),
@@ -386,7 +386,7 @@ class SettingsControl extends Control
 	{
 		$this->handle_edit();
 
-		$data = $this->foodsaverGateway->getOne_foodsaver($this->func->fsId());
+		$data = $this->foodsaverGateway->getOne_foodsaver($this->session->id());
 
 		$this->func->setEditData($data);
 
@@ -398,7 +398,7 @@ class SettingsControl extends Control
 	public function calendar()
 	{
 		$this->func->addBread($this->func->s('calendar'));
-		$token = $this->generate_api_token($this->func->fsId());
+		$token = $this->generate_api_token($this->session->id());
 		$this->func->addContent($this->view->settingsCalendar($token));
 	}
 
@@ -451,7 +451,7 @@ class SettingsControl extends Control
 		}
 		$this->func->addBread($this->func->s('settings_info'));
 
-		$g_data = $this->model->getValues(array('infomail_message', 'newsletter'), 'foodsaver', $this->func->fsId());
+		$g_data = $this->model->getValues(array('infomail_message', 'newsletter'), 'foodsaver', $this->session->id());
 
 		$fairteiler = $this->model->getFairteiler();
 		$threads = $this->model->getForumThreads();
@@ -504,9 +504,9 @@ class SettingsControl extends Control
 			}
 
 			if ($check) {
-				if ($oldFs = $this->foodsaverGateway->getOne_foodsaver($this->func->fsId())) {
+				if ($oldFs = $this->foodsaverGateway->getOne_foodsaver($this->session->id())) {
 					$logChangedFields = array('stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum');
-					$this->model->logChangedSetting($this->func->fsId(), $oldFs, $data, $logChangedFields);
+					$this->model->logChangedSetting($this->session->id(), $oldFs, $data, $logChangedFields);
 				}
 
 				if (!isset($data['bezirk_id'])) {
