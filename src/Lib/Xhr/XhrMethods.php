@@ -428,16 +428,6 @@ class XhrMethods
 		));
 	}
 
-	public function xhr_jsonBetriebe($data)
-	{
-		$b = '';
-		if (($this->session->isAmbassador() || $this->session->isOrgaTeam() || $this->session->may('fs') || isset($foodsaver['botschafter']))) {
-			$b = $this->model->q(' SELECT `id`,lat,lon FROM fs_betrieb WHERE lat != "" ');
-		}
-
-		return 'var g_betriebe = ' . json_encode($b);
-	}
-
 	public function xhr_bBubble($data)
 	{
 		if ($this->session->may('fs')) {
@@ -474,21 +464,6 @@ class XhrMethods
 		}
 
 		return json_encode(array('status' => 0));
-	}
-
-	public function xhr_jsonBoth($data)
-	{
-		return $this->xhr_jsonFoodsaver($data) . "\n" . $this->xhr_jsonBetriebe($data);
-	}
-
-	public function xhr_jsonFoodsaver($data)
-	{
-		$fs = '';
-		if (($this->session->isAmbassador() || $this->session->isOrgaTeam() || $this->session->may('fs') || isset($foodsaver['botschafter']))) {
-			$fs = $this->model->q(' SELECT `id`, `photo_public`,`lat`,`lon` FROM `fs_foodsaver` WHERE `active` = 1 AND lat != "" ');
-		}
-
-		return 'var foodsaver = ' . json_encode($fs);
 	}
 
 	public function xhr_loadMarker($data)
