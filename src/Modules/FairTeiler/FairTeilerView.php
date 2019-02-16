@@ -175,27 +175,8 @@ class FairTeilerView extends View
 		$content = '';
 		$count = 0;
 		foreach ($bezirke as $bezirk) {
-			$out = '
-			<ul class="linklist fairteilerlist">';
-			foreach ($bezirk['fairteiler'] as $ft) {
-				++$count;
-				$image = '<span class="image noimage ui-corner-all" style="background-image:url(/img/fairteiler_thumb.png);"></span>';
-				if ($ft['pic']) {
-					$image = '<span class="image ui-corner-all" style="background-image:url(' . $ft['pic']['thumb'] . ');"></span>';
-				}
-				$out .= '
-					<li>
-						<a href="/?page=fairteiler&bid=' . $bezirk['id'] . '&sub=ft&id=' . $ft['id'] . '">
-							' . $image . '
-							<span class="name">' . $ft['name'] . '</span>
-							<span class="clear"></span>
-						</a>
-					</li>';
-			}
-			$out .= '
-				</ul>';
-
-			$content .= $this->v_utils->v_field($out, count($bezirk['fairteiler']) . ' Fair-Teiler in ' . $bezirk['name']);
+			$count += count($bezirk['fairteiler']);
+			$content .= $this->twig->render('partials/listFairteilerForRegion.html.twig', ['region' => $bezirk, 'fairteiler' => $bezirk['fairteiler']]);
 		}
 
 		if ($this->bezirk_id > 0) {
