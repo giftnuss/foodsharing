@@ -39,7 +39,7 @@ class EventView extends View
 			}
 		');
 		$this->func->addJs('
-			$("#online_type").change(function(){
+			$("#online_type").on("change", function(){
 				if($(this).val() == 0)
 				{
 					$("#location_name-wrapper").removeClass("required");
@@ -59,17 +59,24 @@ class EventView extends View
 					$("#location_name-wrapper, #anschrift-wrapper, #plz-wrapper, #ort-wrapper").show();
 				}
 			});
-			$("#dateend-wrapper").hide();
+			
+			var dateend_wrapper = document.getElementById("dateend-wrapper");		
+			dateend_wrapper.style.display = "none";
+			
 			$("#date").after(\'<label class="addend"><input type="checkbox" name="addend" id="addend" value="1" /> Das Event geht über mehrere Tage</label>\');
-	
-			$("#addend").change(function(){
+			
+			dateend_wrapper.classList.remove("required");
+
+			$("#addend").on("change", function(){
 				if($("#addend:checked").length > 0)
 				{
-					$("#dateend-wrapper").show();
+					dateend_wrapper.style.display = "block";
+					dateend_wrapper.classList.add("required");
 				}
 				else
 				{
-					$("#dateend-wrapper").hide();
+					dateend_wrapper.style.display = "none";
+					dateend_wrapper.classList.remove("required");
 				}
 			});
 	
@@ -107,7 +114,7 @@ class EventView extends View
 		}
 
 		$this->func->addJs('
-			$("#public").change(function(){
+			$("#public").on("change", function(){
 				if($("#public:checked").length > 0)
 				{
 					$("#input-wrapper").hide();
@@ -164,8 +171,8 @@ class EventView extends View
 			$public_el,
 			$bezirkchoose,
 			$this->v_utils->v_form_text('name', array('required' => true)),
-			$this->v_utils->v_form_date('date'),
-			$this->v_utils->v_form_date('dateend'),
+			$this->v_utils->v_form_date('date', array('required' => true)),
+			$this->v_utils->v_form_date('dateend', array('required' => true)),
 			$this->v_utils->v_input_wrapper('Uhrzeit Beginn', $this->v_utils->v_form_time('time_start', $start_time)),
 			$this->v_utils->v_input_wrapper('Uhrzeit Ende', $this->v_utils->v_form_time('time_end', $end_time)),
 			$this->v_utils->v_form_textarea('description', array('desc' => $this->func->s('desc_desc'), 'required' => true)),
@@ -182,7 +189,7 @@ class EventView extends View
 	{
 		$menu = array();
 
-		if ($event['fs_id'] == $this->func->fsId() || $this->session->isOrgaTeam()) {
+		if ($event['fs_id'] == $this->session->id() || $this->session->isOrgaTeam()) {
 			$menu[] = array(
 				'name' => 'Event bearbeiten',
 				'href' => '/?page=event&sub=edit&id=' . (int)$event['id']
@@ -233,10 +240,10 @@ class EventView extends View
 
 	public function eventTop($event)
 	{
-		$end = '';
-
 		if (date('Y-m-d', $event['start_ts']) != date('Y-m-d', $event['end_ts'])) {
-			$end = ' bis ' . $this->func->niceDate($event['end_ts']);
+			$end = ' ' . $this->func->s('to') . ' ' . $this->func->niceDate($event['end_ts']);
+		} else {
+			$end = ' ' . $this->func->s('to') . ' ' . $this->func->ts_time($event['end_ts']);
 		}
 
 		$out = '
@@ -271,28 +278,16 @@ class EventView extends View
 
 		if (!empty($invites['accepted'])) {
 			$icons = $this->fsIcons($invites['accepted']);
-
-			if (!$this->func->isMob() && count($invites['accepted']) > 20) {
-				$icons = $this->v_utils->v_scroller($icons, 200);
-			}
 			$out .= $this->v_utils->v_field($icons, '' . count($invites['accepted']) . ' sind dabei');
 		}
 
 		if (!empty($invites['maybe'])) {
 			$icons = $this->fsIcons($invites['maybe']);
-
-			if (!$this->func->isMob() && count($invites['maybe']) > 20) {
-				$icons = $this->v_utils->v_scroller($icons, 200);
-			}
 			$out .= $this->v_utils->v_field($icons, '' . count($invites['maybe']) . ' kommen vielleicht');
 		}
 
 		if (!empty($invites['invited'])) {
 			$icons = $this->fsIcons($invites['invited']);
-
-			if (!$this->func->isMob() && count($invites['invited']) > 20) {
-				$icons = $this->v_utils->v_scroller($icons, 200);
-			}
 			$out .= $this->v_utils->v_field($icons, '' . count($invites['invited']) . ' Einladungen');
 		}
 

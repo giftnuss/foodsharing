@@ -3,11 +3,11 @@
 namespace Foodsharing\Modules\FairTeiler;
 
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Lib\Sanitizer;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Services\SanitizerService;
 use Symfony\Component\HttpFoundation\Request;
 
 class FairTeilerControl extends Control
@@ -21,19 +21,22 @@ class FairTeilerControl extends Control
 	private $gateway;
 	private $regionGateway;
 	private $foodsaverGateway;
+	private $sanitizerService;
 
 	public function __construct(
 		FairTeilerView $view,
 		FairTeilerGateway $gateway,
 		RegionGateway $regionGateway,
 		FoodsaverGateway $foodsaverGateway,
-		Db $model
+		Db $model,
+		SanitizerService $sanitizerService
 	) {
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->regionGateway = $regionGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->model = $model;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 	}
@@ -120,7 +123,7 @@ class FairTeilerControl extends Control
 				<input type="hidden" name="ft-publicurl" id="ft-publicurl" value="' . BASE_URL . '/' . $this->bezirk['urlname'] . '/fairteiler/' . $this->fairteiler['id'] . '_' . $this->fairteiler['urlname'] . '" />
 				');
 
-			if ($request->query->has('delete') && ($this->session->isOrgaTeam() || $this->func->isBotFor($this->bezirk_id))) {
+			if ($request->query->has('delete') && ($this->session->isOrgaTeam() || $this->session->isAdminFor($this->bezirk_id))) {
 				$this->delete();
 			}
 		}
@@ -165,7 +168,7 @@ class FairTeilerControl extends Control
 			}
 
 			if ($this->bezirk_id === 0) {
-				$bezirk_ids = $this->regionGateway->listIdsForFoodsaverWithDescendants($this->func->fsId());
+				$bezirk_ids = $this->regionGateway->listIdsForFoodsaverWithDescendants($this->session->id());
 			} else {
 				$bezirk_ids = $this->regionGateway->listIdsForDescendantsAndSelf($this->bezirk_id);
 			}
@@ -201,7 +204,7 @@ class FairTeilerControl extends Control
 			array('name' => $this->func->s('back'), 'href' => '/?page=fairteiler&sub=ft&bid=' . $this->bezirk_id . '&id=' . $this->fairteiler['id'])
 		);
 
-		if ($this->session->isOrgaTeam() || $this->func->isBotFor($this->bezirk_id)) {
+		if ($this->session->isOrgaTeam() || $this->session->isAdminFor($this->bezirk_id)) {
 			$items[] = array('name' => $this->func->s('delete'), 'click' => 'if(confirm(\'' . $this->func->sv('delete_sure', $this->fairteiler['name']) . '\')){goTo(\'/?page=fairteiler&sub=ft&bid=' . $this->bezirk_id . '&id=' . $this->fairteiler['id'] . '&delete=1\');}return false;');
 		}
 
@@ -236,7 +239,7 @@ class FairTeilerControl extends Control
 	public function check(Request $request)
 	{
 		if ($ft = $this->fairteiler) {
-			if ($this->session->isOrgaTeam() || $this->func->isBotFor($ft['bezirk_id'])) {
+			if ($this->session->isOrgaTeam() || $this->session->isAdminFor($ft['bezirk_id'])) {
 				if ($request->query->has('agree')) {
 					if ($request->query->get('agree')) {
 						$this->accept();
@@ -299,7 +302,7 @@ class FairTeilerControl extends Control
 
 		if ($request->request->get('form_submit') == 'fairteiler') {
 			if ($this->handleAddFt($request)) {
-				if ($this->func->isBotFor($this->bezirk_id) || $this->session->isOrgaTeam()) {
+				if ($this->session->isAdminFor($this->bezirk_id) || $this->session->isOrgaTeam()) {
 					$this->func->info($this->func->s('fairteiler_add_success'));
 				} else {
 					$this->func->info($this->func->s('fairteiler_prepare_success'));
@@ -319,8 +322,8 @@ class FairTeilerControl extends Control
 	private function prepareInput(Request $request)
 	{
 		$data = [
-			'name' => strip_tags($request->request->get('name')),
-			'desc' => strip_tags($request->request->get('desc')),
+			'name' => $request->request->get('name'),
+			'desc' => $request->request->get('desc'),
 			'anschrift' => strip_tags($request->request->get('anschrift')),
 			'plz' => preg_replace('[^0-9]', '', $request->request->get('plz')),
 			'ort' => strip_tags($request->request->get('ort')),
@@ -343,7 +346,7 @@ class FairTeilerControl extends Control
 		if ($this->mayEdit()) {
 			$data = $this->prepareInput($request);
 			if ($this->validateInput($data)) {
-				$responsible = Sanitizer::tagSelectIds($request->request->get('bfoodsaver'));
+				$responsible = $this->sanitizerService->tagSelectIds($request->request->get('bfoodsaver'));
 				$this->gateway->updateVerantwortliche($this->fairteiler['id'], $responsible);
 
 				return $this->gateway->updateFairteiler($this->fairteiler['id'], $data);
@@ -358,12 +361,12 @@ class FairTeilerControl extends Control
 		$data = $this->prepareInput($request);
 		if ($this->validateInput($data)) {
 			$status = 0;
-			if ($this->func->isBotFor($this->bezirk_id) || $this->session->isOrgaTeam()) {
+			if ($this->session->isAdminFor($this->bezirk_id) || $this->session->isOrgaTeam()) {
 				$status = 1;
 			}
 			$data['status'] = $status;
 
-			return $this->gateway->addFairteiler($this->func->fsId(), $data);
+			return $this->gateway->addFairteiler($this->session->id(), $data);
 		}
 
 		return false;
@@ -371,22 +374,16 @@ class FairTeilerControl extends Control
 
 	private function isFollower()
 	{
-		return isset($this->follower['all'][$this->func->fsId()]);
+		return isset($this->follower['all'][$this->session->id()]);
 	}
 
-	private function mayEdit()
+	private function mayEdit(): bool
 	{
-		if (
-			$this->func->isBotFor($this->bezirk_id) ||
+		return $this->session->isAdminFor($this->bezirk_id) ||
 			$this->session->isOrgaTeam() ||
 			(
-				isset($this->follower['all'][$this->func->fsId()]) &&
-				$this->follower['all'][$this->func->fsId()] == 'verantwortlich'
-			)
-		) {
-			return true;
-		}
-
-		return false;
+				isset($this->follower['all'][$this->session->id()]) &&
+				$this->follower['all'][$this->session->id()] == 'verantwortlich'
+			);
 	}
 }

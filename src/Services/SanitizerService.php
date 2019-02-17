@@ -33,4 +33,14 @@ class SanitizerService
 
 		return $html->getText();
 	}
+
+	public function tagSelectIds($v): array
+	{
+		$result = [];
+		foreach ($v as $idKey => $value) {
+			$result[] = explode('-', $idKey)[0];
+		}
+
+		return $result;
+	}
 }

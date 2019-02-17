@@ -65,7 +65,7 @@ class FoodsaverControl extends Control
 					);
 				}
 			}
-		} elseif (($id = $this->func->getActionId('edit')) && ($this->func->isBotschafter() || $this->session->isOrgaTeam())) {
+		} elseif (($id = $this->func->getActionId('edit')) && ($this->session->isAmbassador() || $this->session->isOrgaTeam())) {
 			$data = $this->foodsaverGateway->getOne_foodsaver($id);
 			$bids = $this->regionGateway->getFsRegionIds($id);
 			if ($data && ($this->session->isOrgaTeam() || $this->func->isBotForA($bids, false, true))) {
@@ -116,8 +116,7 @@ class FoodsaverControl extends Control
 				}
 			} else {
 				$g_data['orgateam'] = 0;
-				unset($g_data['email']);
-				unset($g_data['rolle']);
+				unset($g_data['email'], $g_data['rolle']);
 			}
 
 			if ($oldFs = $this->foodsaverGateway->getOne_foodsaver($_GET['id'])) {

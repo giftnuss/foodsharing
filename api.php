@@ -118,7 +118,7 @@ function api_generate_calendar($fs, $options, Db $model)
 				$dateend = $c['end_ts'];
 				$uid = $c['id'] . $c['start_ts'] . '@event.foodsharing.de';
 				if ($c['online']) {
-					$address = 'Online, mumble.lebensmittelretten.de';
+					$address = 'Online, mumble.foodsharing.de';
 				} else {
 					$address = $c['loc_name'] . ', ' . $c['street'] . ' ' . $c['zip'] . ', ' . $c['city'];
 				}

@@ -10,10 +10,10 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
-use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
+use Foodsharing\Modules\Core\InfluxMetrics;
+use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateAdminGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Services\SanitizerService;
-use JSMin\JSMin;
 
 class Func
 {
@@ -36,7 +36,7 @@ class Func
 	private $viewUtils;
 	private $sanitizerService;
 	private $regionGateway;
-	private $emailTemplateGateway;
+	private $emailTemplateAdminGateway;
 
 	private $webpackScripts;
 	private $webpackStylesheets;
@@ -58,16 +58,23 @@ class Func
 	 */
 	private $mem;
 
+	/**
+	 * @var InfluxMetrics
+	 */
+	private $metrics;
+
 	public function __construct(
 		Utils $viewUtils,
 		SanitizerService $sanitizerService,
 		RegionGateway $regionGateway,
-		EmailTemplateGateway $emailTemplateGateway
+		EmailTemplateAdminGateway $emailTemplateAdminGateway,
+		InfluxMetrics $metrics
 	) {
 		$this->viewUtils = $viewUtils;
 		$this->sanitizerService = $sanitizerService;
 		$this->regionGateway = $regionGateway;
-		$this->emailTemplateGateway = $emailTemplateGateway;
+		$this->emailTemplateAdminGateway = $emailTemplateAdminGateway;
+		$this->metrics = $metrics;
 		$this->content_main = '';
 		$this->content_right = '';
 		$this->content_left = '';
@@ -213,8 +220,12 @@ class Func
 
 	// given a unix time it provides a human readable full date format.
 	// parameter $extendWithAbsoluteDate == true adds the date between "today/tomorrow" and the time while false leaves it empty.
-	public function niceDate(int $unixTimeStamp, bool $extendWithAbsoluteDate = false): string
+	public function niceDate(?int $unixTimeStamp, bool $extendWithAbsoluteDate = false): string
 	{
+		if (is_null($unixTimeStamp)) {
+			return '- -';
+		}
+
 		$date = new fDate($unixTimeStamp);
 
 		if ($date->eq('today')) {
@@ -398,13 +409,9 @@ class Func
 		$g_data = $data;
 	}
 
-	public function getAction($a)
+	public function getAction($a): bool
 	{
-		if (isset($_GET['a']) && $_GET['a'] == $a) {
-			return true;
-		}
-
-		return false;
+		return isset($_GET['a']) && $_GET['a'] == $a;
 	}
 
 	public function pageLink($page, $id, $action = '')
@@ -427,7 +434,7 @@ class Func
 
 	public function isBotForA($regions_ids, $include_groups = true, $include_parent_regions = false): bool
 	{
-		if (is_array($regions_ids) && count($regions_ids) && $this->session->isBotschafter()) {
+		if (is_array($regions_ids) && count($regions_ids) && $this->session->isAmbassador()) {
 			if ($include_parent_regions) {
 				$regions_ids = $this->regionGateway->listRegionsIncludingParents($regions_ids);
 			}
@@ -443,22 +450,6 @@ class Func
 		return false;
 	}
 
-	/**
-	 * @deprecated use $this->session->isAdminFor($regionId) instead
-	 */
-	public function isBotFor($bezirk_id)
-	{
-		return $this->session->isAdminFor($bezirk_id);
-	}
-
-	/**
-	 * @deprecated use $this->session->isBotschafter() instead
-	 */
-	public function isBotschafter()
-	{
-		return $this->session->isBotschafter();
-	}
-
 	public function getMenu()
 	{
 		$regions = [];
@@ -466,7 +457,7 @@ class Func
 		$workingGroups = [];
 		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
 			foreach ($_SESSION['client']['bezirke'] as $region) {
-				$region = array_merge($region, ['isBot' => $this->isBotFor($region['id'])]);
+				$region = array_merge($region, ['isBot' => $this->session->isAdminFor($region['id'])]);
 				if ($region['type'] == Type::WORKING_GROUP) {
 					$workingGroups[] = $region;
 				} else {
@@ -491,7 +482,7 @@ class Func
 			$stores,
 			$workingGroups,
 			$this->session->get('mailbox'),
-			$this->fsId(),
+			(int)$this->session->id(),
 			$loggedIn ? $this->img() : '',
 			$this->session->may('bieb')
 		);
@@ -652,7 +643,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$mail->setFrom(DEFAULT_EMAIL, DEFAULT_EMAIL_NAME);
 		}
 
-		$message = $this->emailTemplateGateway->getOne_message_tpl($tpl_id);
+		$message = $this->emailTemplateAdminGateway->getOne_message_tpl($tpl_id);
 
 		$search = array();
 		$replace = array();
@@ -665,7 +656,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 		$message['subject'] = str_replace($search, $replace, $message['subject']);
 		if (!$message['subject']) {
-			$message['subject'] = 'Foodsharing-Mail';
+			$message['subject'] = 'foodsharing-Mail';
 		}
 
 		$mail->setSubject($this->sanitizerService->htmlToPlain($message['subject']));
@@ -678,6 +669,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 		$mail->addRecipient($to);
 		$mail->send();
+		$this->metrics->addPoint('outgoing_email', ['template' => $tpl_id], ['count' => 1]);
 	}
 
 	public function dt($ts)
@@ -721,13 +713,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return $altimg;
 	}
 
-	public function isMob()
+	public function isMob(): bool
 	{
-		if (isset($_SESSION['mob']) && $_SESSION['mob'] == 1) {
-			return true;
-		}
-
-		return false;
+		return isset($_SESSION['mob']) && $_SESSION['mob'] == 1;
 	}
 
 	public function id($name)
@@ -973,13 +961,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return $out;
 	}
 
-	public function submitted()
+	public function submitted(): bool
 	{
-		if (isset($_POST) && !empty($_POST)) {
-			return true;
-		}
-
-		return false;
+		return isset($_POST) && !empty($_POST);
 	}
 
 	public function info($msg, $title = false)
@@ -1049,13 +1033,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return preg_replace('/[^a-zA-Z0-9]/', '', $txt);
 	}
 
-	public function loggedIn()
+	public function loggedIn(): bool
 	{
-		if (isset($_SESSION['client']) && $_SESSION['client']['id'] > 0) {
-			return true;
-		}
-
-		return false;
+		return isset($_SESSION['client']) && $_SESSION['client']['id'] > 0;
 	}
 
 	public function addWebpackScript($src)
@@ -1108,7 +1088,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$user = $this->session->get('user');
 
 		$userData = [
-			'id' => $this->fsId(),
+			'id' => $this->session->id(),
 			'firstname' => $user['name'],
 			'lastname' => $user['nachname'],
 			'may' => $this->session->may(),
@@ -1146,7 +1126,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'location' => $location,
 			'ravenConfig' => $ravenConfig,
 			'translations' => $this->getTranslations(),
-			'GOOGLE_API_KEY' => GOOGLE_API_KEY,
 			'isDev' => getenv('FS_ENV') === 'dev'
 		]);
 	}
@@ -1157,8 +1136,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'title' => implode(' | ', $this->title),
 			'extra' => $this->head,
 			'css' => str_replace(["\r", "\n"], '', $this->add_css),
-			'jsFunc' => JSMin::minify($this->js_func),
-			'js' => JSMin::minify($this->js),
+			'jsFunc' => $this->js_func,
+			'js' => $this->js,
 			'ravenConfig' => null,
 			'stylesheets' => $this->webpackStylesheets,
 			'scripts' => $this->webpackScripts
@@ -1244,18 +1223,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->title = array($name);
 	}
 
-	/**
-	 * @deprecated use $this->session->id() instead
-	 */
-	public function fsId()
-	{
-		if ($this->loggedIn()) {
-			return $_SESSION['client']['id'];
-		}
-
-		return 0;
-	}
-
 	public function isVerified()
 	{
 		if ($this->session->isOrgaTeam()) {
@@ -1289,7 +1256,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function isAdmin()
 	{
-		return $this->mayGroup('admin') && $_SESSION['client']['group']['admin'] === true;
+		return $this->session->mayGroup('admin') && $_SESSION['client']['group']['admin'] === true;
 	}
 
 	public function logg($arg)
@@ -1326,7 +1293,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$mail->setFrom($bezirk['email'], $bezirk['email_name']);
 		$mail->addRecipient($email);
 		if (!$subject) {
-			$subject = 'Foodsharing-Mail';
+			$subject = 'foodsharing-Mail';
 		}
 		$mail->setSubject($subject);
 		$htmlBody = $this->emailBodyTpl($message, $email, $token);
@@ -1424,64 +1391,39 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	');
 	}
 
-	public function compress($buffer)
+	public function hasBezirk($bid): bool
 	{
-		return JSMin::minify($buffer);
-	}
-
-	public function hasBezirk($bid)
-	{
-		if (isset($_SESSION['client']['bezirke'][$bid]) || $this->isBotFor($bid)) {
-			return true;
-		}
-
-		return false;
+		return isset($_SESSION['client']['bezirke'][$bid]) || $this->session->isAdminFor($bid);
 	}
 
 	public function mayBezirk($bid): bool
 	{
-		return isset($_SESSION['client']['bezirke'][$bid]) || $this->isBotFor($bid) || $this->session->isOrgaTeam();
-	}
-
-	/**
-	 * @deprecated use $this->session->mayGroup($group) instead
-	 */
-	public function mayGroup($group)
-	{
-		if (isset($_SESSION['client']['group'][$group])) {
-			return true;
-		}
-
-		return false;
+		return isset($_SESSION['client']['bezirke'][$bid]) || $this->session->isAdminFor($bid) || $this->session->isOrgaTeam();
 	}
 
 	public function mayHandleReports()
 	{
 		// group "Regelverletzungen/Meldungen"
-		return $this->session->may('orga') || $this->isBotFor(432);
+		return $this->session->may('orga') || $this->session->isAdminFor(432);
 	}
 
 	public function mayEditQuiz()
 	{
-		return $this->session->may('orga') || $this->isBotFor(341);
+		return $this->session->may('orga') || $this->session->isAdminFor(341);
 	}
 
 	public function mayEditBlog()
 	{
 		if ($all_group_admins = $this->mem->get('all_global_group_admins')) {
-			return $this->session->may('orga') || in_array($this->fsId(), unserialize($all_group_admins));
+			return $this->session->may('orga') || in_array($this->session->id(), unserialize($all_group_admins));
 		}
 
 		return $this->session->may('orga');
 	}
 
-	public function may()
+	public function may(): bool
 	{
-		if (isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0) {
-			return true;
-		}
-
-		return false;
+		return isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0;
 	}
 
 	public function getRolle($gender_id, $rolle_id)
@@ -1701,16 +1643,16 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		if (isset($foodsaver['quiz_rolle'])) {
 			switch ($foodsaver['quiz_rolle']) {
 				case 1:
-					$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #4A3520;';
+					$bg = 'box-sizing:border-box;border:3px solid #4A3520;';
 					break;
 				case 2:
-					$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #599022;';
+					$bg = 'box-sizing:border-box;border:3px solid #599022;';
 					break;
 				case 3:
-					$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #FFBB00;';
+					$bg = 'box-sizing:border-box;border:3px solid #FFBB00;';
 					break;
 				case 4:
-					$bg = 'box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;border:3px solid #FF4800;';
+					$bg = 'box-sizing:border-box;border:3px solid #FF4800;';
 					break;
 				default:
 					break;

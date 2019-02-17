@@ -40,7 +40,7 @@ class SettingsView extends View
 		}
 
 		$this->func->addJs('
-			$("#sleep_status").change(function(){
+			$("#sleep_status").on("change", function(){
 				var $this = $(this);
 				if($this.val() == 1)
 				{
@@ -62,7 +62,7 @@ class SettingsView extends View
 			});
 			$("#sleep_msg").css("height","50px").autosize();
 
-			$("#schlafmtzenfunktion-form").submit(function(ev){
+			$("#schlafmtzenfunktion-form").on("submit", function(ev){
 				ev.preventDefault();
 				ajax.req("settings","sleepmode",{
 					method:"post",
@@ -112,7 +112,7 @@ class SettingsView extends View
 				}
 
 				$this->func->addJs('
-					$("input[disabled=\'disabled\']").parent().click(function(){
+					$("input[disabled=\'disabled\']").parent().on("click", function(){
 						pulseInfo("Du bist verantwortlich für diesen Fair-Teiler und somit verpflichtet, die Updates entgegenzunehmen!");
 					});
 				');
@@ -421,7 +421,7 @@ class SettingsView extends View
 
 	public function settingsCalendar($token)
 	{
-		$url = BASE_URL . '/api.php?f=cal&fs=' . $this->func->fsId() . '&key=' . $token . '&opts=s';
+		$url = BASE_URL . '/api.php?f=cal&fs=' . $this->session->id() . '&key=' . $token . '&opts=s';
 
 		return $this->v_utils->v_field('
 <p>Du kannst Deinen Abholkalender auch mit einem Kalenderprogramm Deiner Wahl ansehen. Abonniere Dir dazu folgenden Kalender!</p>
@@ -450,12 +450,12 @@ class SettingsView extends View
 					$("#delete-account-confirm").dialog("close");
 				},
 				"' . $this->func->s('delete_account_confirm_bt') . '" : function(){
-					goTo("/?page=settings&deleteaccount=1&reason=" + encodeURIComponent($("#reason_to_delete").val()));
+					goTo("/?page=settings&deleteaccount=1");
 				}
 			}
 		});
 
-		$("#delete-account").button().click(function(){
+		$("#delete-account").button().on("click", function(){
 			$("#delete-account-confirm").dialog("open");
 		});
 	');
@@ -468,7 +468,6 @@ class SettingsView extends View
 		$this->func->addHidden('
 		<div id="delete-account-confirm">
 			' . $this->v_utils->v_info($this->func->s('delete_account_confirm_msg')) . '
-			' . $this->v_utils->v_form_textarea('reason_to_delete') . '
 		</div>
 	');
 
@@ -479,7 +478,7 @@ class SettingsView extends View
 	{
 		global $g_data;
 
-		$this->func->addJs('$("#foodsaver-form").submit(function(e){
+		$this->func->addJs('$("#foodsaver-form").on("submit", function(e){
 		if($("#photo_public").length > 0)
 		{
 			$e = e;

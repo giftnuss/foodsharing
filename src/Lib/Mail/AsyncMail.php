@@ -24,7 +24,8 @@ class AsyncMail
 			'body' => '',
 			'html' => false,
 			'subject' => DEFAULT_EMAIL_NAME,
-			'identifier' => '');
+			'identifier' => '',
+			'queuedAt' => new \DateTime());
 	}
 
 	public function addRecipient($email, $name = null)

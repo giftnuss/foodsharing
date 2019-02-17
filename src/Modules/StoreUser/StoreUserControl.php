@@ -49,7 +49,7 @@ class StoreUserControl extends Control
 				'prefetchtime' => $betrieb['prefetchtime']
 			];
 
-			if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $_GET['id']) || $this->func->isBotFor($betrieb['bezirk_id']))) {
+			if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $_GET['id']) || $this->session->isAdminFor($betrieb['bezirk_id']))) {
 				if ($_POST['form_submit'] == 'zeiten') {
 					$range = range(0, 6);
 					global $g_data;
@@ -73,15 +73,15 @@ class StoreUserControl extends Control
 				}
 				$this->func->info($this->func->s('changes_saved'));
 				$this->func->goSelf();
-			} elseif (isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $_GET['id']) || $this->func->isBotFor($betrieb['bezirk_id']))) {
+			} elseif (isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $_GET['id']) || $this->session->isAdminFor($betrieb['bezirk_id']))) {
 				$this->storeGateway->changeBetriebStatus($this->session->id(), $_GET['id'], $_POST['betrieb_status_id']);
 				$this->func->go($this->func->getSelf());
 			}
 
 			$this->func->addTitle($betrieb['name']);
 
-			if ($this->storeGateway->isInTeam($this->session->id(), $_GET['id']) || $this->session->may('orga') || $this->func->isBotFor($betrieb['bezirk_id'])) {
-				if ((!$betrieb['verantwortlich'] && $this->func->isBotFor($betrieb['bezirk_id']))) {
+			if ($this->storeGateway->isInTeam($this->session->id(), $_GET['id']) || $this->session->may('orga') || $this->session->isAdminFor($betrieb['bezirk_id'])) {
+				if ((!$betrieb['verantwortlich'] && $this->session->isAdminFor($betrieb['bezirk_id']))) {
 					$betrieb['verantwortlich'] = true;
 					$this->func->info('<strong>' . $this->func->s('reference') . ':</strong> ' . $this->func->s('not_responsible_but_bot'));
 				} elseif (!$betrieb['verantwortlich'] && $this->session->isOrgaTeam()) {
@@ -185,7 +185,7 @@ class StoreUserControl extends Control
 					$menu[] = array('name' => $this->func->s('edit_team'), 'click' => '$(\'#teamEditor\').dialog({modal:true,width:425,title:\'' . $this->func->s('edit_team') . '\'});');
 					$menu[] = array('name' => $this->func->s('edit_fetchtime'), 'click' => '$(\'#bid\').val(' . (int)$betrieb['id'] . ');$(\'#dialog_abholen\').dialog(\'open\');return false;');
 				}
-				if (!$betrieb['verantwortlich'] || $this->session->isOrgaTeam() || $this->func->isBotschafter()) {
+				if (!$betrieb['verantwortlich'] || $this->session->isOrgaTeam() || $this->session->isAmbassador()) {
 					$menu[] = array('name' => $this->func->s('betrieb_sign_out'), 'click' => 'u_betrieb_sign_out(' . (int)$betrieb['id'] . ');return false;');
 				}
 
@@ -228,9 +228,9 @@ class StoreUserControl extends Control
 				} else {
 					$this->func->addContent($this->v_utils->v_info('Du bist momentan auf der Springerliste. Sobald Hilfe benötigt wird, wirst Du kontaktiert.'));
 				}
-				$zeit_cnt = '';
+				$pickup_date_cnt = '';
 				if ($betrieb['verantwortlich']) {
-					$zeit_cnt .= '<p style="text-align:center;"><a class="button" href="#" onclick="ajreq(\'adddate\',{app:\'betrieb\',id:' . (int)$_GET['id'] . '});return false;">einzelnen Termin eintragen</a></p>';
+					$pickup_date_cnt .= '<p style="text-align:center;"><a class="button" href="#" onclick="ajreq(\'adddate\',{app:\'betrieb\',id:' . (int)$_GET['id'] . '});return false;">einzelnen Termin eintragen</a></p>';
 				}
 
 				if ($verantwortlicher = $this->view->u_getVerantwortlicher($betrieb)) {
@@ -281,9 +281,9 @@ class StoreUserControl extends Control
 					}
 				}
 
-				$zeiten = $this->storeGateway->getAbholzeiten($betrieb['id']);
+				$pickup_dates = $this->storeGateway->getAbholzeiten($betrieb['id']);
 
-				$next_dates = $this->view->u_getNextDates($zeiten, $betrieb, $this->model->listUpcommingFetchDates($_GET['id']));
+				$next_dates = $this->view->u_getNextDates($pickup_dates, $betrieb, $this->model->listUpcommingFetchDates($_GET['id']));
 
 				$fetcherList = $this->storeGateway->listFetcher($betrieb['id'], array_keys($next_dates));
 
@@ -298,18 +298,15 @@ class StoreUserControl extends Control
 
 				$days = $this->func->getDow();
 
-				$scroller = '';
+				$pickup_date_content = '';
 
 				foreach ($next_dates as $date => $time) {
 					$part = explode(' ', $date);
 					$date = $part[0];
-					$scroller .= $this->view->u_form_checkboxTagAlt(
+					$pickup_date_content .= $this->view->u_form_checkboxTagAlt(
 						$date . ' ' . $time['time'],
 						array(
-							'data' => $betrieb['team'],
-							'url' => 'jsonTeam&bid=' . (int)$betrieb['id'],
 							'label' => $days[date('w', strtotime($date))] . ' ' . $this->func->format_db_date($date) . ', ' . $this->func->format_time($time['time']),
-							'betrieb_id' => $betrieb['id'],
 							'verantwortlich' => $betrieb['verantwortlich'],
 							'fetcher_count' => $time['fetcher'],
 							'bezirk_id' => $betrieb['bezirk_id'],
@@ -318,10 +315,10 @@ class StoreUserControl extends Control
 					);
 				}
 
-				$zeit_cnt .= $this->v_utils->v_scroller($scroller, 200);
+				$pickup_date_cnt .= $pickup_date_content;
 
 				if ($betrieb['verantwortlich'] && empty($next_dates)) {
-					$zeit_cnt = $this->v_utils->v_info($this->func->sv('no_fetchtime', array('name' => $betrieb['name'])), $this->func->s('attention') . '!') .
+					$pickup_date_cnt = $this->v_utils->v_info($this->func->sv('no_fetchtime', array('name' => $betrieb['name'])), $this->func->s('attention') . '!') .
 						'<p style="margin-top:10px;text-align:center;"><a class="button" href="#" onclick="ajreq(\'adddate\',{app:\'betrieb\',id:' . (int)$_GET['id'] . '});return false;">einzelnen Termin eintragen</a></p>';
 				}
 
@@ -329,12 +326,12 @@ class StoreUserControl extends Control
 				 * Abholzeiten ändern
 				 */
 				if ($betrieb['verantwortlich'] || $this->session->may('orga')) {
-					$this->func->hiddenDialog('abholen', array($this->view->u_form_abhol_table($zeiten), $this->v_utils->v_form_hidden('bid', 0), '<input type="hidden" name="team" value="' . $betrieb['team_js'] . '" />'), $this->func->s('add_fetchtime'), array('reload' => true, 'width' => 500));
+					$this->func->hiddenDialog('abholen', array($this->view->u_form_abhol_table($pickup_dates), $this->v_utils->v_form_hidden('bid', 0), '<input type="hidden" name="team" value="' . $betrieb['team_js'] . '" />'), $this->func->s('add_fetchtime'), array('reload' => true, 'width' => 500));
 				}
 
 				if (!$betrieb['jumper']) {
 					if (($betrieb['betrieb_status_id'] == 3 || $betrieb['betrieb_status_id'] == 5)) {
-						$this->func->addContent($this->v_utils->v_field($zeit_cnt, $this->func->s('next_fetch_dates'), array('class' => 'ui-padding')), CNT_RIGHT);
+						$this->func->addContent($this->v_utils->v_field($pickup_date_cnt, $this->func->s('next_fetch_dates'), array('class' => 'ui-padding')), CNT_RIGHT);
 					} else {
 						$bt = '';
 						$betriebsStatusName = '';

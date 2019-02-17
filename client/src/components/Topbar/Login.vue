@@ -1,15 +1,18 @@
 <template>
   <form
-    class="form-inline my-2 my-lg-0"
-    style="flex-grow: 1"
-    @submit.prevent>
+    id="login-form"
+    class="form-inline my-2 my-lg-0 flex-grow-1"
+    @submit.prevent
+  >
     <div
       ref="inputgroup"
-      class="input-group mr-2">
+      class="input-group input-group-sm mr-2 my-1"
+    >
       <div class="input-group-prepend">
         <label
           class="input-group-text text-primary"
-          for="login-email">
+          for="login-email"
+        >
           <i class="fas fa-user" />
         </label>
       </div>
@@ -26,11 +29,14 @@
     </div>
     <div
       ref="inputgroup"
-      class="input-group mr-2">
+      class="input-group input-group-sm mr-2 my-1
+"
+    >
       <div class="input-group-prepend">
         <label
           class="input-group-text text-primary"
-          for="login-password">
+          for="login-password"
+        >
           <i class="fas fa-key" />
         </label>
       </div>
@@ -49,14 +55,16 @@
       v-if="!isLoading "
       href="#"
       class="btn btn-secondary btn-sm"
-      @click="submit">
+      @click="submit"
+    >
       <i class="fas fa-arrow-right" />
     </button>
     <button
       v-else
       class="btn btn-light btn-sm loadingButton"
-      @click="submit">
-      <img src="/img/469.gif" >
+      @click="submit"
+    >
+      <img src="/img/469.gif">
     </button>
   </form>
 </template>
@@ -108,41 +116,16 @@ export default {
 }
 </script>
 
-<style lang="scss">
-
-#topbar .input-group {
-    margin-bottom: 0;
-    width: 10em;
-
-    @media (max-width: 320px) {
-        width: 80%;
-    }
-    img, i {
-        height: 1em;
-        width: 1em;
-    }
-    .input-group-text {
-        background-color: white;
-        border: none;
-        padding: 0.1rem 0.4rem;
-        font-size: .9em;
-    }
-    input.form-control {
-        padding: 0.1rem 0.4rem;
-        font-size: 1em;
-        padding-left: 0;
-        font-weight: bold;
-        border: none;
-        &:focus {
-            box-shadow: none;
-            border: none;
-        }
-    }
-}
-
-.loadingButton {
+<style lang="scss" scoped>
+  .loadingButton {
     img {
-        height: 1em;
+      height: 1em;
     }
-}
+  }
+
+  #login-form .input-group {
+    @media (max-width: 575px) {
+      width: 80%;
+    }
+  }
 </style>

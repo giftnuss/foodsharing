@@ -1,8 +1,12 @@
+import 'whatwg-fetch'
+
 import '@/raven'
 
 import '@/style'
 
 import $ from 'jquery'
+import 'jquery-migrate'
+
 import { initialize, ajreq } from '@/script'
 
 import 'jquery-ui'

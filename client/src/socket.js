@@ -32,7 +32,7 @@ export default {
     })
 
     socket.on('bell', function (data) {
-      if (data.m === 'notify') {
+      if (data.m === 'update') {
         bellsStore.loadBells()
       }
     })

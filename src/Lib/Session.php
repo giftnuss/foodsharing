@@ -16,7 +16,7 @@ use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 
-class Session
+final class Session
 {
 	private $func;
 	private $mem;
@@ -174,7 +174,7 @@ class Session
 		}
 		$loc = fSession::get('g_location', false);
 		if (!$loc) {
-			$loc = $this->db->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
+			$loc = $this->db->getValues(array('lat', 'lon'), 'foodsaver', $this->id());
 			$this->set('g_location', $loc);
 		}
 
@@ -280,13 +280,12 @@ class Session
 		return false;
 	}
 
-	public function isAdminFor($regionId)
+	public function isAdminFor(int $regionId): bool
 	{
-		if ($this->isBotschafter()) {
+		if ($this->isAmbassador()) {
 			foreach ($_SESSION['client']['botschafter'] as $b) {
 				if ($b['bezirk_id'] == $regionId) {
 					return true;
-					break;
 				}
 			}
 		}
@@ -334,7 +333,7 @@ class Session
 		$_SESSION['client']['photo'] = $file;
 	}
 
-	public function mayGroup($group)
+	public function mayGroup(string $group): bool
 	{
 		if (isset($_SESSION['client']['group'][$group])) {
 			return true;
@@ -348,7 +347,7 @@ class Session
 		return $this->mayGroup('orgateam');
 	}
 
-	public function isBotschafter()
+	public function isAmbassador(): bool
 	{
 		if (isset($_SESSION['client']['botschafter'])) {
 			return true;

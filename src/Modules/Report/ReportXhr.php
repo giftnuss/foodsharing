@@ -57,7 +57,7 @@ class ReportXhr extends Control
 				$content .= $this->v_utils->v_input_wrapper('Beschreibung', nl2br($report['msg']));
 			}
 
-			$content .= $this->v_utils->v_input_wrapper('Gemeldet von', '<a href="#" onclick="profile(' . (int)$report['rp_id'] . ');">' . $report['rp_name'] . ' ' . $report['rp_nachname'] . '</a>');
+			$content .= $this->v_utils->v_input_wrapper('Gemeldet von', '<a href="/profile/' . (int)$report['rp_id'] . '">' . $report['rp_name'] . ' ' . $report['rp_nachname'] . '</a>');
 			$dialog->addContent($content);
 			$dialog->addOpt('width', '600px');
 
@@ -123,10 +123,10 @@ class ReportXhr extends Control
 		$dialog->addAbortButton();
 
 		$dialog->addJs('
-			$("#betrieb_id").change(function(){
+			$("#betrieb_id").on("change", function(){
 				$("#reportbid").val($(this).val());
 			});
-			$("#reportreason").change(function(){
+			$("#reportreason").on("change", function(){
 			var value = $(this).val();
 			$("#reportreason ~ select").hide();
 			$("#reportreason ~ div.cb").hide();

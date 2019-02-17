@@ -170,14 +170,14 @@ class XhrDialog
 				'));
 		$this->addJs('
 				
-			$("#' . $in_id . '-file").change(function(){
-				$("#' . $in_id . '-form").submit();
+			$("#' . $in_id . '-file").on("change", function(){
+				$("#' . $in_id . '-form").trigger("submit");
 				$(".ui-dialog-buttonpane .ui-button").button( "option", "disabled", true );
 				$(".attach-preview").show();
 				$(".attach-preview").html(\'<a href="#" class="preview-thumb attach-load" rel="wallpost-gallery">&nbsp;</a><div style="clear:both;"></div>\');
 			});
 			
-			$("#' . $in_id . '").button().click(function(){
+			$("#' . $in_id . '").button().on("click", function(){
 				$("#' . $in_id . '-file").trigger("click");
 			});;	
 		');
@@ -193,7 +193,7 @@ class XhrDialog
 				$("#' . $this->getId() . '").dialog("option","width",$(window).width()-30);
 			}
 				
-			$(window).resize(function(){
+			$(window).on("resize", function(){
 				$("#' . $this->getId() . '").dialog("option","maxHeight",$(window).height()-30);
 			});	
 		');

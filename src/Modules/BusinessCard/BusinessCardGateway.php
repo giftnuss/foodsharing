@@ -29,13 +29,13 @@ class BusinessCardGateway extends BaseGateway
 
 		$stm = 'SELECT mb.name FROM fs_mailbox mb, fs_foodsaver fs WHERE fs.mailbox_id = mb.id AND fs.id = :foodsaver_id';
 		if ($isBieb && $mailbox = $this->db->fetchValue($stm, [':foodsaver_id' => $fsId])) {
-			$fs['email'] = $mailbox . '@' . DEFAULT_EMAIL_HOST;
+			$fs['email'] = $mailbox . '@' . PLATFORM_MAILBOX_HOST;
 		}
 
 		$stm = '
 			SELECT 	b.name,
 					b.id,
-					CONCAT(mb.`name`,"@","' . DEFAULT_EMAIL_HOST . '") AS email,
+					CONCAT(mb.`name`,"@","' . PLATFORM_MAILBOX_HOST . '") AS email,
 					mb.name AS mailbox
 
 			FROM 	fs_bezirk b,

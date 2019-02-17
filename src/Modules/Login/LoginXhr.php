@@ -35,12 +35,12 @@ class LoginXhr extends Control
 	 */
 	private function fillMemcacheUserVars()
 	{
-		$info = $this->model->getVal('infomail_message', 'foodsaver', $this->func->fsId());
+		$info = $this->model->getVal('infomail_message', 'foodsaver', $this->session->id());
 
 		if ((int)$info > 0) {
-			$this->mem->userSet($this->func->fsId(), 'infomail', true);
+			$this->mem->userSet($this->session->id(), 'infomail', true);
 		} else {
-			$this->mem->userSet($this->func->fsId(), 'infomail', false);
+			$this->mem->userSet($this->session->id(), 'infomail', false);
 		}
 	}
 
@@ -280,7 +280,6 @@ class LoginXhr extends Control
 			$dia->addJsBefore('
 
 				var date = new Date();
-				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/fonts/octicons/octicons.css").appendTo("head");
 				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/css/join.css?" + date.getTime()).appendTo("head");
 				join.init();
 			');

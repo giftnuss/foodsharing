@@ -37,8 +37,6 @@ class DashboardView extends View
 		#activity ul.linklist li span.qr
 		{
 			margin-left:58px;
-			-webkit-border-radius: 3px;
-			-moz-border-radius: 3px;
 			border-radius: 3px;
 			opacity:0.5;
 		}
@@ -54,10 +52,6 @@ class DashboardView extends View
 			width:32px;
 			margin-right:-35px;
 			border-right:1px solid #ffffff;
-			-webkit-border-top-left-radius: 3px;
-			-webkit-border-bottom-left-radius: 3px;
-			-moz-border-radius-topleft: 3px;
-			-moz-border-radius-bottomleft: 3px;
 			border-top-left-radius: 3px;
 			border-bottom-left-radius: 3px;
 		}
@@ -68,10 +62,6 @@ class DashboardView extends View
 		    margin-left: 36px;
 		    padding: 8px;
 		    width: 78.6%;
-			-webkit-border-top-right-radius: 3px;
-			-webkit-border-bottom-right-radius: 3px;
-			-moz-border-radius-topright: 3px;
-			-moz-border-radius-bottomright: 3px;
 			border-top-right-radius: 3px;
 			border-bottom-right-radius: 3px;
 			margin-right:-30px;
@@ -126,8 +116,6 @@ class DashboardView extends View
 			margin-bottom:10px;
 			background-color:#ffffff;
 			padding:10px;
-			-webkit-border-radius: 6px;
-			-moz-border-radius: 6px;
 			border-radius: 6px;
 		}
 		
@@ -232,10 +220,11 @@ class DashboardView extends View
 		<div class="ui-padding">
 			<ul class="datelist linklist">';
 		foreach ($dates as $d) {
+			$confirmSymbol = $d['confirmed'] == 1 ? '✓ ' : '? ';
 			$out .= '
 				<li>
 					<a href="/?page=fsbetrieb&id=' . $d['betrieb_id'] . '" class="ui-corner-all">
-						<span class="title">' . $this->func->niceDate($d['date_ts']) . '</span>
+						<span class="title">' . $confirmSymbol . $this->func->niceDate($d['date_ts']) . '</span>
 						<span>' . $d['betrieb_name'] . '</span>
 					</a>
 				</li>';
@@ -346,8 +335,8 @@ class DashboardView extends View
 							u_anfrage_action(key,this);
 						},
 						items: {
-							"deny": {name: "Austragen",icon:"delete"},
-							"map":{name: "Auf Karte anschauen",icon:"accept"}
+							"deny": {name: "Anfrage beenden",icon:"fas fa-trash-alt fa-fw"},
+							"map": {name: "Auf Karte anschauen",icon:"fas fa-map-marked-alt fa-fw"}
 						}
 					};
 				}
@@ -379,7 +368,7 @@ class DashboardView extends View
 				//<a id="anfrage-betrieb" class="ui-corner-all" href="/?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].'</a>
 				$list .= '
 				<li>
-					<a id="store-request" class="ui-corner-all" href="#" onclick="return false;">' . $b['name'] . '<input type="hidden" name="anfrage" value="' . $this->func->fsId() . ':::' . $b['id'] . '" /></a>
+					<a id="store-request" class="ui-corner-all" href="#" onclick="return false;">' . $b['name'] . '<input type="hidden" name="anfrage" value="' . $this->session->id() . ':::' . $b['id'] . '" /></a>
 				</li>';
 			}
 			$list .= '
@@ -407,7 +396,7 @@ class DashboardView extends View
 			);
 			$out .= '
 			<div class="updatepost">
-					<a class="poster ui-corner-all" href="#" onclick="profile(' . (int)$u['foodsaver_id'] . ');return false;">
+					<a class="poster ui-corner-all" href="/profile/' . (int)$u['foodsaver_id'] . '">
 						' . $this->func->avatar($fs, 50) . '
 					</a>
 					<div class="post">
@@ -428,7 +417,7 @@ class DashboardView extends View
 				<div class="activity_feed_content">
 					<div class="activity_feed_content_text">
 						<div class="activity_feed_content_info">
-							<a href="#" onclick="profile(' . (int)$u['foodsaver_id'] . ');return false;">' . $u['foodsaver_name'] . '</a> hat etwas zum Thema "<a href="/?page=bezirk&bid=' . $u['bezirk_id'] . '&sub=forum&tid=' . $u['id'] . '&pid=' . $u['last_post_id'] . '#post' . $u['last_post_id'] . '">' . $u['name'] . '</a>" ins Forum geschrieben.
+							<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> hat etwas zum Thema "<a href="/?page=bezirk&bid=' . $u['bezirk_id'] . '&sub=forum&tid=' . $u['id'] . '&pid=' . $u['last_post_id'] . '#post' . $u['last_post_id'] . '">' . $u['name'] . '</a>" ins Forum geschrieben.
 						</div>
 					</div>
 	
@@ -451,7 +440,7 @@ class DashboardView extends View
 				<div class="activity_feed_content">
 					<div class="activity_feed_content_text">
 						<div class="activity_feed_content_info">
-							<a href="#" onclick="profile(' . (int)$u['foodsaver_id'] . ');">' . $u['foodsaver_name'] . '</a> hat etwas zum Thema "<a href="/?page=bezirk&bid=' . $u['bezirk_id'] . '&sub=botforum&tid=' . $u['id'] . '&pid=' . $u['last_post_id'] . '#post' . $u['last_post_id'] . '">' . $u['name'] . '</a>" ins Botschafterforum geschrieben.
+							<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> hat etwas zum Thema "<a href="/?page=bezirk&bid=' . $u['bezirk_id'] . '&sub=botforum&tid=' . $u['id'] . '&pid=' . $u['last_post_id'] . '#post' . $u['last_post_id'] . '">' . $u['name'] . '</a>" ins Botschafterforum geschrieben.
 						</div>
 					</div>
 	
@@ -474,7 +463,7 @@ class DashboardView extends View
 				<div class="activity_feed_content">
 					<div class="activity_feed_content_text">
 						<div class="activity_feed_content_info">
-							<a href="#" onclick="profile(' . (int)$u['foodsaver_id'] . ');">' . $u['foodsaver_name'] . '</a> hat etwas auf die Pinnwand von <a href="/?page=fsbetrieb&id=' . $u['betrieb_id'] . '">' . $u['betrieb_name'] . '</a> geschrieben.
+							<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> hat etwas auf die Pinnwand von <a href="/?page=fsbetrieb&id=' . $u['betrieb_id'] . '">' . $u['betrieb_name'] . '</a> geschrieben.
 						</div>
 					</div>
 	
@@ -527,7 +516,7 @@ class DashboardView extends View
 			';
 		}
 
-		return $this->v_utils->v_field($out, 'Du wurdest eingeladen', array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($out, $this->func->s('you_were_invited'), array('class' => 'ui-padding'));
 	}
 
 	public function u_events($events)
@@ -559,6 +548,12 @@ class DashboardView extends View
 			';
 		}
 
-		return $this->v_utils->v_field($out, 'Nächste Events', array('class' => 'ui-padding moreswap'));
+		if (count($events) > 1) {
+			$eventTitle = $this->func->s('events_headline') . ' (' . count($events) . ')';
+		} else {
+			$eventTitle = $this->func->s('event_headline');
+		}
+
+		return $this->v_utils->v_field($out, $eventTitle, array('class' => 'ui-padding moreswap'));
 	}
 }

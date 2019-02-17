@@ -1,4 +1,4 @@
-FROM registry.gitlab.com/foodsharing-dev/images/php:2.11
+FROM registry.gitlab.com/foodsharing-dev/images/php:2.15
 
 WORKDIR /app
 

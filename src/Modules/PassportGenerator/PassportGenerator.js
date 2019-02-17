@@ -28,7 +28,7 @@ $('#verifyconfirm-dialog').dialog({
       click: function () {
         showLoader()
         $.ajax({
-          url: 'xhr.php?f=verify&fid=' + verify_fid + '&v=1',
+          url: `xhr.php?f=verify&fid=${verify_fid}&v=1`,
           dataType: 'json',
           success: function (data) {
             verify_el.removeClass('verify-n')
@@ -57,7 +57,7 @@ $('#unverifyconfirm-dialog').dialog({
       text: $('#unverifyconfirm-dialog .button_confirm').text(),
       click: function () {
         showLoader()
-        window.location.href = '/profile/' + verify_fid
+        window.location.href = `/profile/${verify_fid}`
       }
     },
     {
@@ -69,16 +69,16 @@ $('#unverifyconfirm-dialog').dialog({
   ]
 })
 
-$('.checker').click(function (el) {
+$('.checker').on('click', function (el) {
   const $this = $(this)
   if ($this[0].checked) {
-    $('input.checkbox.bezirk' + $this.attr('value')).prop('checked', true)
+    $(`input.checkbox.bezirk${$this.attr('value')}`).prop('checked', true)
   } else {
-    $('input.checkbox.bezirk' + $this.attr('value')).prop('checked', false)
+    $(`input.checkbox.bezirk${$this.attr('value')}`).prop('checked', false)
   }
 })
 
-$('.verify').click(function () {
+$('.verify').on('click', function () {
   const $this = $(this)
 
   verify_el = $this
@@ -89,7 +89,7 @@ $('.verify').click(function () {
   } else {
     showLoader()
     $.ajax({
-      url: 'xhr.php?f=verify&fid=' + $this.parent().parent().children('td:first').children('input').val() + '&v=0',
+      url: `xhr.php?f=verify&fid=${$this.parent().parent().children('td:first').children('input').val()}&v=0`,
       dataType: 'json',
       success: function (data) {
         if (data.status == '0') {
@@ -109,26 +109,26 @@ $('.verify').click(function () {
 
   return false
 })
-$('a.fsname').click(function () {
+$('a.fsname').on('click', function () {
   const $this = $(this)
-  if ($("input[value='" + $this.next().val() + "']")[0].checked) {
-    $("input[value='" + $this.next().val() + "']").prop('checked', false)
+  if ($(`input[value='${$this.next().val()}']`)[0].checked) {
+    $(`input[value='${$this.next().val()}']`).prop('checked', false)
   } else {
-    $("input[value='" + $this.next().val() + "']").prop('checked', true)
+    $(`input[value='${$this.next().val()}']`).prop('checked', true)
   }
   return false
 })
-$("a[href='#start']").click(function () {
-  $('form#generate').submit()
+$("a[href='#start']").on('click', function () {
+  $('form#generate').trigger('submit')
   return false
 })
-$('a.dateclick').click(function () {
+$('a.dateclick').on('click', function () {
   const $this = $(this)
   const dstr = $this.next().val()
-  if ($('input.date' + dstr)[0].checked) {
-    $('input.date' + dstr).prop('checked', false)
+  if ($(`input.date${dstr}`)[0].checked) {
+    $(`input.date${dstr}`).prop('checked', false)
   } else {
-    $('input.date' + dstr).prop('checked', true)
+    $(`input.date${dstr}`).prop('checked', true)
   }
   return false
 })

@@ -3,17 +3,24 @@
     tooltip="Benachrichtigungen"
     no-caret
     right
-    class="topbar-bells">
+    class="topbar-bells"
+  >
     <template slot="button-content">
-      <i class="fas fa-bell"/>
+      <i class="fas fa-bell" />
       <span
         v-if="unread"
-        class="badge badge-danger">{{ unread }}</span>
+        class="badge badge-danger"
+      >
+        {{ unread }}
+      </span>
     </template>
     <div class="list-group">
       <small
         v-if="!bells.length"
-        class="list-group-item text-muted">Du hast derzeit keine Benachrichtigungen</small>
+        class="list-group-item text-muted"
+      >
+        Du hast derzeit keine Benachrichtigungen
+      </small>
       <menu-bells-entry
         v-for="bell in bells"
         :key="bell.id"

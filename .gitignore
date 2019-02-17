@@ -1,4 +1,3 @@
-*~
 am_cache
 .idea
 *.swp
@@ -7,10 +6,8 @@ node_modules
 data/**
 /data/logg.txt
 **/menus/
-**/images/
 js/gen/script.js
 css/gen/style.css
-config.inc.php
 cache/**
 tmp/**
 vendor/**
@@ -20,7 +17,6 @@ tests/_support/_generated/
 .composer
 chat/.npm
 api/**
-light/**
 .php_cs.cache
 .php_cs_cache_local
 revision.inc.php
@@ -30,8 +26,6 @@ migrations/_*
 docs/_book
 docs/dist
 docs/node_modules
-.vscode
-.views-cache
 assets
 dev-assets
 client/.env
@@ -41,3 +35,4 @@ client/.yarnrc
 client/dist
 client/test/_compiled.js
 c3.php
+/images/

@@ -61,7 +61,7 @@ class WorkGroupXhr extends Control
 
 				if ($groupmail = $this->model->getGroupMail($_GET['id'])) {
 					if ($group = $this->model->getGroup($_GET['id'])) {
-						if ($fs = $this->model->getValues(array('id', 'name', 'email'), 'foodsaver', $this->func->fsId())) {
+						if ($fs = $this->model->getValues(array('id', 'name', 'email'), 'foodsaver', $this->session->id())) {
 							if ($email = $this->model->getFsMail($fs['id'])) {
 								$fs['email'] = $email;
 							}

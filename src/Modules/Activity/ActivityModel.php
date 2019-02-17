@@ -85,7 +85,7 @@ class ActivityModel extends Db
 			$buddy_ids = $b;
 		}
 
-		$buddy_ids[$this->func->fsId()] = $this->func->fsId();
+		$buddy_ids[$this->session->id()] = $this->session->id();
 
 		$bids = array();
 		foreach ($buddy_ids as $id) {
@@ -108,7 +108,7 @@ class ActivityModel extends Db
 
 				$smTitle = $u['fs_name'] . 's Status';
 
-				if ($u['fs_id'] === $this->func->fsId()) {
+				if ($u['fs_id'] === $this->session->id()) {
 					$smTitle = 'Deine Pinnwand';
 				}
 
@@ -163,7 +163,7 @@ class ActivityModel extends Db
 						'attr' => [
 							'href' => '/?page=mailbox&show=' . $u['id']
 						],
-						'title' => $from . ' <i class="fas fa-angle-right"></i> <a href="/?page=mailbox&show=' . $u['id'] . '">' . $this->func->ttt($u['subject'], 30) . '</a><small>' . $this->func->ttt($u['mb_name'] . '@' . DEFAULT_EMAIL_HOST, 19) . '</small>',
+						'title' => $from . ' <i class="fas fa-angle-right"></i> <a href="/?page=mailbox&show=' . $u['id'] . '">' . $this->func->ttt($u['subject'], 30) . '</a><small>' . $this->func->ttt($u['mb_name'] . '@' . PLATFORM_MAILBOX_HOST, 19) . '</small>',
 						'desc' => $this->textPrepare($u['body']),
 						'time' => $u['time'],
 						'icon' => '/img/mailbox-50x50.png',
@@ -205,7 +205,7 @@ class ActivityModel extends Db
 				$sub = 'forum';
 				if ($u['bot_theme'] === 1) {
 					$sub = 'botforum';
-					if (!$this->func->isBotFor($u['bezirk_id'])) {
+					if (!$this->session->isAdminFor($u['bezirk_id'])) {
 						$check = false;
 					}
 				}

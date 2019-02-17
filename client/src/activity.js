@@ -30,7 +30,7 @@ const activity = {
 
     this.initLoad()
 
-    $(window).scroll(function () {
+    $(window).on('scroll', function () {
       if (!activity.isLoading) {
         if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
           activity.isLoading = true
@@ -94,10 +94,10 @@ const activity = {
     var quickreply = ''
 
     if (up.quickreply != undefined) {
-      quickreply = '<span class="qr"><img src="' + activity.user.avatar + '" /><textarea data-load="0" data-url="' + up.quickreply + '" name="quickreply" class="quickreply noninit" placeholder="Schreibe eine Antwort..."></textarea><span class="loader" style="display:none;"><i class="fas fa-spinner fa-spin"></i></span></span>'
+      quickreply = `<span class="qr"><img src="${activity.user.avatar}" /><textarea data-load="0" data-url="${up.quickreply}" name="quickreply" class="quickreply noninit" placeholder="Schreibe eine Antwort..."></textarea><span class="loader" style="display:none;"><i class="fas fa-spinner fa-spin"></i></span></span>`
     }
 
-    activity.$container.append('<li data-ts="' + up.time + '"><span class="i"><img width="50" src="' + up.icon + '" /></span><span class="n">' + up.title + '</span><span class="t">' + up.desc + '</span>' + quickreply + '<span class="time"><i class="far fa-clock"></i> ' + $.timeago(up.time) + ' <i class="fas fa-angle-right"></i> ' + timeformat.nice(up.time) + '</span><span class="c"></span></li>')
+    activity.$container.append(`<li data-ts="${up.time}"><span class="i"><img width="50" src="${up.icon}" /></span><span class="n">${up.title}</span><span class="t">${up.desc}</span>${quickreply}<span class="time"><i class="far fa-clock"></i> ${$.timeago(up.time)} <i class="fas fa-angle-right"></i> ${timeformat.nice(up.time)}</span><span class="c"></span></li>`)
   },
 
   initQuickreply: function () {
@@ -107,11 +107,11 @@ const activity = {
       var $loader = $el.next()
 
       $el.autosize()
-      $el.focus(function () {
+      $el.on('focus', function () {
         $el.parent().css({ opacity: 1 })
       })
 
-      $el.keydown(function (event) {
+      $el.on('keydown', function (event) {
         if (event.which === 13 && !event.shiftKey && $el.val() != '' && $el.data('load') == '0') {
           event.preventDefault()
 
@@ -171,13 +171,13 @@ const activity = {
 
     html += '<legend><a href="#" id="activity-save-option" class="button" style="float:right;">Einstellungen speichern</a></legend></fieldset></form>'
 
-    $('body').append('<div id="activity-listings" class="corner-all white-popup mfp-hide">' + html + '</div>')
+    $('body').append(`<div id="activity-listings" class="corner-all white-popup mfp-hide">${html}</div>`)
 
     $('#activity-option').magnificPopup({
       type: 'inline'
     })
 
-    $('#activity-save-option').click(function (ev) {
+    $('#activity-save-option').on('click', function (ev) {
       ev.preventDefault()
 
       activity.listOptions = null
@@ -199,13 +199,13 @@ const activity = {
 
   initOptionListing: function (list) {
     if (list.items.length > 0) {
-      let out = '<h4>' + list.name + '</h4><p>'
+      let out = `<h4>${list.name}</h4><p>`
       for (var i = 0; i < list.items.length; i++) {
         let check = ''
         if (list.items[i].checked) {
           check = ' checked="checked"'
         }
-        out += '<label class="pure-checkbox"><input' + check + ' type="checkbox" name="' + list.index + '" value="' + list.items[i].id + '" /> ' + list.items[i].name + '</label>'
+        out += `<label class="pure-checkbox"><input${check} type="checkbox" name="${list.index}" value="${list.items[i].id}" /> ${list.items[i].name}</label>`
       }
       out += '</p>'
 

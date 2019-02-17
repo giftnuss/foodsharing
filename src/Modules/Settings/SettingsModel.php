@@ -28,7 +28,7 @@ class SettingsModel extends Db
 			UPDATE 	`fs_foodsaver`
 			SET 	`newsletter` = ' . (int)$newsletter . ',
 					`infomail_message` = ' . (int)$infomail . '
-			WHERE 	`id` = ' . (int)$this->func->fsId() . '		
+			WHERE 	`id` = ' . (int)$this->session->id() . '		
 		');
 	}
 
@@ -49,7 +49,7 @@ class SettingsModel extends Db
 									VALUES(
 									  NOW(),
 									  ' . (int)$fsid . ',
-									  ' . (int)$this->func->fsId() . ',
+									  ' . (int)$this->session->id() . ',
 									  \'' . $k . '\',
 									  \'' . $old[$k] . '\',
 									  \'' . $new[$k] . '\'
@@ -71,7 +71,7 @@ class SettingsModel extends Db
 				fs_foodsaver
 				
 			WHERE 
-				id = ' . (int)$this->func->fsId() . '
+				id = ' . (int)$this->session->id() . '
 		');
 	}
 
@@ -94,11 +94,11 @@ class SettingsModel extends Db
 				`id` = ' . (int)$sid . '
 				
 			AND
-				`foodsaver_id` = ' . (int)$this->func->fsId() . '
+				`foodsaver_id` = ' . (int)$this->session->id() . '
 		';
 		$tmp = array();
 		if ($session = $this->qRow($sql)) {
-			$session['try_count'] = $this->qOne('SELECT COUNT(quiz_id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND `quiz_id` = ' . (int)$session['quiz_id']);
+			$session['try_count'] = $this->qOne('SELECT COUNT(quiz_id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$this->session->id() . ' AND `quiz_id` = ' . (int)$session['quiz_id']);
 
 			/*
 			 * First of all sort the question array and get al questions_ids etc to calculate the result
@@ -223,7 +223,7 @@ class SettingsModel extends Db
 					`fs_fairteiler` ft
 				
 			WHERE 	ff.fairteiler_id = ft.id
-			AND 	ff.foodsaver_id = ' . (int)$this->func->fsId() . '
+			AND 	ff.foodsaver_id = ' . (int)$this->session->id() . '
 		');
 	}
 
@@ -239,7 +239,7 @@ class SettingsModel extends Db
 			)
 			VALUES
 			(
-				' . (int)$this->func->fsId() . ',
+				' . (int)$this->session->id() . ',
 				' . $this->strval($email) . ',
 				NOW(),
 				' . $this->strval($token) . '
@@ -249,19 +249,19 @@ class SettingsModel extends Db
 
 	public function abortChangemail()
 	{
-		$this->del('DELETE FROM `fs_mailchange` WHERE foodsaver_id = ' . (int)$this->func->fsId());
+		$this->del('DELETE FROM `fs_mailchange` WHERE foodsaver_id = ' . (int)$this->session->id());
 	}
 
 	public function changeMail($email)
 	{
-		$this->del('DELETE FROM `fs_mailchange` WHERE foodsaver_id = ' . (int)$this->func->fsId());
-		$currentMail = $this->qOne('SELECT `email` FROM fs_foodsaver WHERE id = ' . (int)$this->func->fsId());
-		$this->logChangedSetting($this->func->fsId(), ['email' => $currentMail], ['email' => $email], ['email']);
+		$this->del('DELETE FROM `fs_mailchange` WHERE foodsaver_id = ' . (int)$this->session->id());
+		$currentMail = $this->qOne('SELECT `email` FROM fs_foodsaver WHERE id = ' . (int)$this->session->id());
+		$this->logChangedSetting($this->session->id(), ['email' => $currentMail], ['email' => $email], ['email']);
 
 		if ($this->update('
 			UPDATE `fs_foodsaver`
 			SET `email` = ' . $this->strval($email) . '
-			WHERE `id` = ' . (int)$this->func->fsId() . '
+			WHERE `id` = ' . (int)$this->session->id() . '
 		')
 		) {
 			return true;
@@ -272,7 +272,7 @@ class SettingsModel extends Db
 
 	public function getMailchange()
 	{
-		return $this->qOne('SELECT `newmail` FROM fs_mailchange WHERE foodsaver_id = ' . (int)$this->func->fsId());
+		return $this->qOne('SELECT `newmail` FROM fs_mailchange WHERE foodsaver_id = ' . (int)$this->session->id());
 	}
 
 	public function getForumThreads()
@@ -286,7 +286,7 @@ class SettingsModel extends Db
 					`fs_theme` th
 		
 			WHERE 	tf.theme_id = th.id
-			AND 	tf.foodsaver_id = ' . (int)$this->func->fsId() . '
+			AND 	tf.foodsaver_id = ' . (int)$this->session->id() . '
 		');
 	}
 
@@ -296,7 +296,7 @@ class SettingsModel extends Db
 			UPDATE 		`fs_fairteiler_follower`
 			SET 		`infotype` = ' . (int)$infotype . '
 			WHERE 		`fairteiler_id` = ' . (int)$fid . '
-			AND 		`foodsaver_id` = ' . (int)$this->func->fsId() . '
+			AND 		`foodsaver_id` = ' . (int)$this->session->id() . '
 		');
 	}
 
@@ -306,7 +306,7 @@ class SettingsModel extends Db
 			UPDATE 		`fs_theme_follower`
 			SET 		`infotype` = ' . (int)$infotype . '
 			WHERE 		`theme_id` = ' . (int)$tid . '
-			AND 		`foodsaver_id` = ' . (int)$this->func->fsId() . '
+			AND 		`foodsaver_id` = ' . (int)$this->session->id() . '
 		');
 	}
 
@@ -314,7 +314,7 @@ class SettingsModel extends Db
 	{
 		return $this->del('
 			DELETE FROM 	`fs_theme_follower`
-			WHERE 	foodsaver_id = ' . (int)$this->func->fsId() . '
+			WHERE 	foodsaver_id = ' . (int)$this->session->id() . '
 			AND 	theme_id IN(' . implode(',', $unfollow) . ')
 		');
 	}
@@ -323,7 +323,7 @@ class SettingsModel extends Db
 	{
 		return $this->del('
 			DELETE FROM 	`fs_fairteiler_follower`
-			WHERE 	foodsaver_id = ' . (int)$this->func->fsId() . '
+			WHERE 	foodsaver_id = ' . (int)$this->session->id() . '
 			AND 	fairteiler_id IN(' . implode(',', $unfollow) . ')		
 		');
 	}
@@ -347,13 +347,13 @@ class SettingsModel extends Db
 
 	public function getNewMail($token)
 	{
-		return $this->qOne('SELECT newmail FROM fs_mailchange WHERE `token` = ' . $this->strval($token) . ' AND foodsaver_id = ' . (int)$this->func->fsId());
+		return $this->qOne('SELECT newmail FROM fs_mailchange WHERE `token` = ' . $this->strval($token) . ' AND foodsaver_id = ' . (int)$this->session->id());
 	}
 
 	public function updateRole($role_id, $current_role)
 	{
 		if ($role_id > $current_role) {
-			$this->update('UPDATE fs_foodsaver SET `rolle` = ' . (int)$role_id . ' WHERE id = ' . (int)$this->func->fsId());
+			$this->update('UPDATE fs_foodsaver SET `rolle` = ' . (int)$role_id . ' WHERE id = ' . (int)$this->session->id());
 		}
 	}
 
@@ -362,7 +362,7 @@ class SettingsModel extends Db
 		if ($res = $this->qOne('
 				SELECT COUNT(foodsaver_id) AS `count`
 				FROM fs_quiz_session
-				WHERE foodsaver_id =' . (int)$this->func->fsId() . '
+				WHERE foodsaver_id =' . (int)$this->session->id() . '
 				AND quiz_id = ' . (int)$quiz_id . '
 				AND `status` = 1
 			')
@@ -388,7 +388,7 @@ class SettingsModel extends Db
  				`sleep_msg` = ' . $this->strval($msg) . '
 
  			WHERE 
- 				id = ' . (int)$this->func->fsId() . '
+ 				id = ' . (int)$this->session->id() . '
  		');
 	}
 }

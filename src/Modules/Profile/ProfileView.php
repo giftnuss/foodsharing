@@ -15,7 +15,7 @@ class ProfileView extends View
 		$page = new vPage($this->foodsaver['name'], $this->infos());
 		$page->addSection($wallposts, 'Status-Updates von ' . $this->foodsaver['name']);
 
-		if ($this->func->fsId() != $this->foodsaver['id']) {
+		if ($this->session->id() != $this->foodsaver['id']) {
 			$this->func->addStyle('#wallposts .tools{display:none;}');
 		}
 
@@ -25,7 +25,7 @@ class ProfileView extends View
 
 		$page->addSectionLeft($this->photo($showEditButton, $showPassportGenerationHistoryButton, $showVerificationHistoryButton));
 
-		if ($this->foodsaver['stat_buddycount'] > 0 || $this->foodsaver['stat_fetchrate'] > 0 || $this->session->may('orga')) {
+		if ($this->foodsaver['stat_buddycount'] > 0 || $this->foodsaver['stat_fetchcount'] > 0 || $this->session->may('orga')) {
 			$page->addSectionLeft($this->sideInfos(), 'Infos');
 		}
 
@@ -54,7 +54,7 @@ class ProfileView extends View
 							</a>
 						</li>';
 
-			if ($this->session->isOrgaTeam() || $this->func->isBotFor($d['bezirk_id'])) {
+			if ($this->session->isOrgaTeam() || $this->session->isAdminFor($d['bezirk_id'])) {
 				$out .= '<li>
 							<a class="button button-big" href="#" onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',deleteAll:false,bid:' . $d['betrieb_id'] . ',date:' . $d['date_ts'] . '});return false;">austragen</a>
 							</li>';
@@ -134,7 +134,7 @@ class ProfileView extends View
 			);
 		}
 
-		if ($this->foodsaver['stat_fetchrate'] > 0) {
+		if ($this->foodsaver['stat_fetchcount'] > 0) {
 			$infos[] = array(
 				'name' => 'Abholquote',
 				'val' => $this->foodsaver['stat_fetchrate'] . '<span style="white-space:nowrap">&thinsp;</span>%'
@@ -270,7 +270,7 @@ class ProfileView extends View
 			$banana_button_class = ' bouched';
 			$givebanana = '';
 
-			if (!$this->foodsaver['bouched'] && ($this->foodsaver['id'] != $this->func->fsId())) {
+			if (!$this->foodsaver['bouched'] && ($this->foodsaver['id'] != $this->session->id())) {
 				$banana_button_class = '';
 				$givebanana = '
 				<a onclick="$(this).hide().next().show().children(\'textarea\').autosize();return false;" href="#">Schenke ' . $this->foodsaver['name'] . ' eine Banane</a>
@@ -311,7 +311,7 @@ class ProfileView extends View
 				}
 				$bananacount .= '
 				<tr class="' . $odd . ' bpost">
-					<td class="img"><a title="' . $b['name'] . '" href="#"><img onclick="profile(' . $b['id'] . ');return false;" src="' . $this->func->img($b['photo']) . '"></a></td>
+					<td class="img"><a title="' . $b['name'] . '" href="/profile/' . $b['id'] . '"><img src="' . $this->func->img($b['photo']) . '"></a></td>
 					<td><span class="msg">' . nl2br($b['msg']) . '</span>
 					<div class="foot">
 						<span class="time">' . $this->func->niceDate($b['time_ts']) . ' von ' . $b['name'] . '</span>
@@ -370,7 +370,7 @@ class ProfileView extends View
 			if (!is_null($h['bot_id'])) {
 				$out .= '
 				<li>
-					<a class="corner-all" href="#" onclick="profile(' . (int)$h['bot_id'] . ');return false;">
+					<a class="corner-all" href="/profile/' . (int)$h['bot_id'] . '">
 						<span class="n">' . $h['name'] . ' ' . $h['nachname'] . '</span>
 						<span class="t"></span>
 						<span class="c"></span>
@@ -418,7 +418,7 @@ class ProfileView extends View
 		if ($showEditButton) {
 			$opt .= '<li><a href="/?page=foodsaver&a=edit&id=' . $this->foodsaver['id'] . '"><i class="fas fa-pencil-alt fa-fw"></i>Profil bearbeiten</a></li>';
 		}
-		if ($this->foodsaver['buddy'] === -1 && $this->foodsaver['id'] != $this->func->fsId()) {
+		if ($this->foodsaver['buddy'] === -1 && $this->foodsaver['id'] != $this->session->id()) {
 			$name = explode(' ', $this->foodsaver['name']);
 			$name = $name[0];
 			$opt .= '<li class="buddyRequest"><a onclick="ajreq(\'request\',{app:\'buddy\',id:' . (int)$this->foodsaver['id'] . '});return false;" href="#"><i class="fas fa-user fa-fw"></i>Ich kenne ' . $name . '</a></li>';
@@ -573,11 +573,11 @@ class ProfileView extends View
 		$topinfos = array();
 
 		$opt = '';
-		if ($this->session->isOrgaTeam() || $this->func->isBotschafter()) {
+		if ($this->session->isOrgaTeam() || $this->session->isAmbassador()) {
 			$opt .= '<li><a href="/?page=foodsaver&a=edit&id=' . $this->foodsaver['id'] . '">bearbeiten</a></li>';
 		}
 
-		if ($this->foodsaver['buddy'] === -1 && $this->foodsaver['id'] != $this->func->fsId()) {
+		if ($this->foodsaver['buddy'] === -1 && $this->foodsaver['id'] != $this->session->id()) {
 			$name = explode(' ', $this->foodsaver['name']);
 			$name = $name[0];
 			$opt .= '<li class="buddyRequest"><a onclick="ajreq(\'request\',{app:\'buddy\',id:' . (int)$this->foodsaver['id'] . '});return false;" href="#">Ich kenne ' . $name . '</a></li>';
@@ -632,7 +632,7 @@ class ProfileView extends View
 				}
 				$tabs .= '
 				<tr class="' . $odd . ' bpost">
-					<td class="img"><a class="tooltip" title="' . $b['name'] . '" href="#"><img onclick="profile(' . $b['id'] . ');return false;" src="' . $this->func->img($b['photo']) . '"></a></td>
+					<td class="img"><a class="tooltip" title="' . $b['name'] . '" href="/profile/' . $b['id'] . '"><img src="' . $this->func->img($b['photo']) . '"></a></td>
 					<td><span class="msg">' . nl2br($b['msg']) . '</span>
 					<div class="foot">
 						<span class="time">' . $this->func->niceDate($b['time_ts']) . ' von ' . $b['name'] . '</span>
@@ -645,7 +645,7 @@ class ProfileView extends View
 				</div>';
 		}
 
-		if ($this->foodsaver['id'] == $this->func->fsId()) {
+		if ($this->foodsaver['id'] == $this->session->id()) {
 			$topinfos[] = array(
 				'name' => 'Vertrauensbananen',
 				'val' => $bval . '<span' . $b_style . ' class="vouch-banana" title="Das sind Deine Bananen"><span>&nbsp;</span></span>'

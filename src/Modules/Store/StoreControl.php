@@ -92,7 +92,7 @@ class StoreControl extends Control
 			$this->func->addTitle($data['name']);
 			$this->func->addTitle($this->func->s('edit'));
 
-			if (($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $id)) || $this->func->isBotFor($data['bezirk_id'])) {
+			if (($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $id)) || $this->session->isAdminFor($data['bezirk_id'])) {
 				$this->handle_edit();
 
 				$this->func->setEditData($data);
@@ -180,7 +180,7 @@ class StoreControl extends Control
 
 			if ($id = $this->model->add_betrieb($g_data)) {
 				$this->storeGateway->add_betrieb_notiz(array(
-					'foodsaver_id' => $this->func->fsId(),
+					'foodsaver_id' => $this->session->id(),
 					'betrieb_id' => $id,
 					'text' => '{BETRIEB_ADDED}',
 					'zeit' => date('Y-m-d H:i:s', (time() - 10)),
@@ -189,7 +189,7 @@ class StoreControl extends Control
 
 				if (isset($g_data['first_post']) && !empty($g_data['first_post'])) {
 					$this->storeGateway->add_betrieb_notiz(array(
-						'foodsaver_id' => $this->func->fsId(),
+						'foodsaver_id' => $this->session->id(),
 						'betrieb_id' => $id,
 						'text' => $g_data['first_post'],
 						'zeit' => date('Y-m-d H:i:s'),

@@ -18,7 +18,7 @@ class QuizView extends View
 		$rows = array();
 
 		$this->func->addJs('
-			$(".usersessionlink").parent().parent().click(function(){
+			$(".usersessionlink").parent().parent().on("click", function(){
 				goTo($(this).children("td").children(".usersessionlink").attr("href"));
 			});		
 		');
@@ -244,20 +244,20 @@ class QuizView extends View
 			$out .= '
 			<li id="qanswer-' . $a['id'] . '" class="answer" onmouseout="$(this).css(\'background-color\',\'transparent\');" onmouseover="$(this).css(\'background-color\',\'#FFFFFF\');" style="cursor:pointer;border-radius:10px;display:block;list-style:none;padding:10px 10px;font-size:14px;color:#4A3520">
 				<label>
-					<span style="cursor:pointer;-moz-user-select:none;-khtml-user-select: none;float:left">' . ($k + 1) . '. &nbsp;</span>
+					<span style="cursor:pointer;user-select:none;float:left">' . ($k + 1) . '. &nbsp;</span>
 					<input id="qacb-' . $a['id'] . '" style="cursor:pointer;float:left;" type="checkbox" class="qanswers" name="qanswers[]" value="' . $a['id'] . '" />
-					<span style="cursor:pointer;-moz-user-select:none;-khtml-user-select: none;display:block;margin-left:43px;">' . $a['text'] . '</span>
+					<span style="cursor:pointer;user-select:none;display:block;margin-left:43px;">' . $a['text'] . '</span>
 					<span style="clear:both;"></span>
 				</label>
 			</li>';
 		}
 		++$i;
 		$out .= '
-		<li class="noanswer" onmouseout="$(this).css(\'background-color\',\'transparent\');" onmouseover="$(this).css(\'background-color\',\'#FFFFFF\');" style="cursor:pointer;-moz-user-select:none;-khtml-user-select: none;border-radius:10px;display:block;list-style:none;padding:10px 10px;font-size:14px;">
+		<li class="noanswer" onmouseout="$(this).css(\'background-color\',\'transparent\');" onmouseover="$(this).css(\'background-color\',\'#FFFFFF\');" style="cursor:pointer;-moz-user-select:none;border-radius:10px;display:block;list-style:none;padding:10px 10px;font-size:14px;">
 			<label>
-				<span style="cursor:pointer;-moz-user-select:none;-khtml-user-select: none;float:left">' . ($i) . '. &nbsp;</span>
+				<span style="cursor:pointer;user-select:none;float:left">' . ($i) . '. &nbsp;</span>
 				<input class="nocheck" style="float:left;" type="checkbox" name="none" value="0" />
-				<span style="cursor:pointer;-moz-user-select:none;-khtml-user-select: none;display:block;margin-left:43px;color:#4A3520;">Es ist keine Antwort richtig!</span>
+				<span style="cursor:pointer;wouser-select:none;display:block;margin-left:43px;color:#4A3520;">Es ist keine Antwort richtig!</span>
 				<span style="clear:both;"></span>
 			</label>
 		</li>

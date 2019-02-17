@@ -7,18 +7,26 @@
           v-model="text"
           :placeholder="i18n('wall.message_placeholder')"
           rows="3"
-          class="form-control"/>
+          class="form-control"
+        />
       </div>
       <div
         id="wallpost-submit"
-        class="text-right">
+        class="text-right"
+      >
         <button
           class="btn btn-secondary btn-sm"
-          @click="addPost">{{ i18n('button.send') }}
+          @click="addPost"
+        >
+          {{ i18n('button.send') }}
         </button>
       </div>
-      <span v-if="isSending">Sending...</span>
-      <span v-if="error">Es ist ein Fehler aufgetreten</span>
+      <span v-if="isSending">
+        Sending...
+      </span>
+      <span v-if="error">
+        Es ist ein Fehler aufgetreten
+      </span>
     </div>
     <div class="wall-posts">
       <table class="pintable">
@@ -26,7 +34,8 @@
           <tr
             v-for="post in posts"
             :key="post.id"
-            :class="['bpost', 'wallpost-' + post.id]">
+            :class="['bpost', `wallpost-${post.id}`]"
+          >
             <td class="img">
               <a :href="`/profile/${post.author.id}`">
                 <img :src="post.author.avatar">
@@ -40,13 +49,18 @@
                 <img
                   v-for="img in post.gallery"
                   :key="img.thumb"
-                  :src="img.thumb">
+                  :src="img.thumb"
+                >
               </span>
               <div class="foot">
-                <span class="time">{{ post.createdAt }} Uhr von {{ post.author.name }}</span>
+                <span class="time">
+                  {{ post.createdAt }} Uhr von {{ post.author.name }}
+                </span>
                 <button
                   v-if="mayDelete"
-                  @click="deletePost(post)">Delete
+                  @click="deletePost(post)"
+                >
+                  Delete
                 </button>
               </div>
             </td>

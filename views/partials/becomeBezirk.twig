@@ -5,8 +5,9 @@
         <div class="popbox">
             <h3>Wähle den Bezirk aus, in dem Du aktiv werden möchtest!</h3>
             <p class="subtitle">
-                Es besteht auch die Möglichkeit, einen neuen Bezirk zu gründen. Wähle bitte dennoch den entsprechenden
-                übergeordneten Bezirk (Land, Bundesland, Stadt etc.) aus!
+                Solltest Du keinen Bezirk für Dich finden, wähle ein Level höher oder tritt dem nächstgelegenen Bezirk bei.<br>
+                Solltest du keine Möglichkeit haben, Dich in der Umgebung zum Foodsaver ausbilden zu lassen, dann kannst Du Dir überlegen einen eigenen Bezirk zu starten.<br>
+                Lies Dir in diesem Fall bitte die Wiki-Dokumente (hinter dem 'i' zu finden) gut durch! Wenn Du den Bezirk starten möchtest oder explizite Fragen hast, die das Wiki nicht beantwortet, schreib uns eine Mail an <a href="mailto:welcome@foodsharing.network">welcome@foodsharing.network</a>.
             </p>
 
             {% set id = 'becomebezirkchooser' %}
@@ -15,11 +16,6 @@
 
                 {% include 'partials/bezirkChildChooser.twig' with { id: id } %}
 
-                <span id="{{ id }}-btna">Gesuchter Bezirk ist nicht dabei</span>
-                <div class="middle" id="{{ id }}-notAvail">
-                    <h3>Deine Stadt oder Region ist nicht dabei?</h3>
-                    {% include 'partials/swapText.twig' with { id: "#{id}-neu", value: swapMsg } %}
-                </div>
             </div>
             <p class="bottom">
                 <span id="{{ id }}-button">Speichern</span>

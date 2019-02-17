@@ -32,8 +32,8 @@ class StoreUserView extends View
 			}
 			$out .= '
 		<tr class="' . $odd . ' request-' . $r['id'] . '">
-			<td class="img" width="35px"><a href="#" onclick="profile(' . (int)$r['id'] . ');return false;"><img src="' . $this->func->img($r['photo']) . '" /></a></td>
-			<td style="padding-top:17px;"><span class="msg"><a href="#" onclick="profile(' . (int)$r['id'] . ');return false;">' . $r['name'] . '</a></span></td>
+			<td class="img" width="35px"><a href="/profile/' . (int)$r['id'] . '"><img src="' . $this->func->img($r['photo']) . '" /></a></td>
+			<td style="padding-top:17px;"><span class="msg"><a href="/profile/' . (int)$r['id'] . '">' . $r['name'] . '</a></span></td>
 			<td style="width:92px;padding-top:17px;"><span class="msg"><ul class="toolbar"><li class="ui-state-default ui-corner-left" title="Ablehnen" onclick="denyRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-closethick"></span></li><li class="ui-state-default" title="Auf die Springerliste setzen" onclick="warteRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-star"></span></li><li class="ui-state-default ui-corner-right" title="Akzeptieren" onclick="acceptRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-heart"></span></li></ul></span></td>
 		</tr>';
 		}
@@ -46,13 +46,23 @@ class StoreUserView extends View
 		$this->func->addJs('$("#dialog_requests").dialog("open");');
 	}
 
-	public function u_innerRow($id, $betrieb)
+	public function u_innerRow($contentType, $betrieb)
 	{
 		$out = '';
-		if ($betrieb[$id] != '') {
-			$betrieb[$id] = trim($betrieb[$id]);
-			nl2br($betrieb[$id]);
-			$out = '<div class="innerRow"><span class="label">' . $this->func->s($id) . '</span><span class="cnt">' . $betrieb[$id] . '</span></div><div style="clear:both"></div>';
+		if ($betrieb[$contentType] != '') {
+			$betrieb[$contentType] = trim($betrieb[$contentType]);
+			nl2br($betrieb[$contentType]);
+
+			if (($contentType == 'telefon' || $contentType == 'handy') && strpbrk($betrieb[$contentType], '1234567890')) {
+				$phoneNumber = preg_replace('/[^0-9\+]/', '', $betrieb[$contentType]);
+
+				$content = '<a href="tel:' . $phoneNumber . '">' . $betrieb[$contentType] . '</a>';
+			} else {
+				$content = $betrieb[$contentType];
+			}
+
+			$out = '<div class="innerRow"><span class="label">' . $this->func->s($contentType) . '</span>
+			<span class="cnt">' . $content . '</span></div><div style="clear:both"></div>';
 		}
 
 		return $out;
@@ -72,7 +82,7 @@ class StoreUserView extends View
 			$click = 'profile(' . (int)$fs['id'] . ');';
 			if ($fs['verantwortlich'] == 1) {
 				$class .= ' verantwortlich';
-			} elseif ($betrieb['verantwortlich'] || $this->func->isBotFor($betrieb['bezirk_id']) || $this->session->isOrgaTeam()) {
+			} elseif ($betrieb['verantwortlich'] || $this->session->isAdminFor($betrieb['bezirk_id']) || $this->session->isOrgaTeam()) {
 				$class .= ' context-team';
 				$click = '';
 			}
@@ -144,7 +154,7 @@ class StoreUserView extends View
 
 				$class = '';
 				$click = 'profile(' . (int)$fs['id'] . ');';
-				if ($betrieb['verantwortlich'] || $this->func->isBotFor($betrieb['bezirk_id']) || $this->session->isOrgaTeam()) {
+				if ($betrieb['verantwortlich'] || $this->session->isAdminFor($betrieb['bezirk_id']) || $this->session->isOrgaTeam()) {
 					$class .= ' context-jumper';
 					$click = '';
 				}
@@ -199,7 +209,7 @@ class StoreUserView extends View
 
 		if ($betrieb['verantwortlich']) {
 			$this->func->addJs('
-			$("#team_status").change(function(){
+			$("#team_status").on("change", function(){
 				var val = $(this).val();
 				showLoader();
 				$.ajax({
@@ -397,7 +407,7 @@ class StoreUserView extends View
 
 		if ($values = $this->func->getValue($id)) {
 			foreach ($values as $fs) {
-				if ($fs['id'] == $this->func->fsId()) {
+				if ($fs['id'] == $this->session->id()) {
 					$bindabei = true;
 				}
 
@@ -408,12 +418,12 @@ class StoreUserView extends View
 				if (!$ago && $option['verantwortlich'] && $fs['confirmed'] == 0) {
 					$aclass = 'context-unconfirmed';
 					$click = '';
-				} elseif (!$ago && ($option['verantwortlich'] || $this->func->isBotFor($option['bezirk_id']) || $this->session->isOrgaTeam())) {
+				} elseif (!$ago && ($option['verantwortlich'] || $this->session->isAdminFor($option['bezirk_id']) || $this->session->isOrgaTeam())) {
 					$aclass .= 'context-confirmed';
 					$click = '';
 				}
 
-				if ($fs['id'] == $this->func->fsId() && !$ago) {
+				if ($fs['id'] == $this->session->id() && !$ago) {
 					$click = 'u_undate(\'' . $date . '\',\'' . $this->func->niceDate(strtotime($date), true) . '\');return false;';
 					$aclass = '';
 				}
@@ -459,7 +469,7 @@ class StoreUserView extends View
 
 		$dellink = '';
 
-		if (!$ago && isset($option['field']['additional']) && ($option['verantwortlich'] || $this->session->isOrgaTeam() || $this->func->isBotFor($option['bezirk_id']))) {
+		if (!$ago && isset($option['field']['additional']) && ($option['verantwortlich'] || $this->session->isOrgaTeam() || $this->session->isAdminFor($option['bezirk_id']))) {
 			$dellink = '<br /><a class="button" href="#" onclick="if(confirm(\'Termin wirklich löschen?\')){ajreq(\'deldate\',{app:\'betrieb\',id:\'' . (int)$_GET['id'] . '\',time:\'' . $option['field']['datetime'] . '\'});}return false;">Termin löschen</a>';
 		}
 

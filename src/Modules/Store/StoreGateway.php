@@ -2,19 +2,30 @@
 
 namespace Foodsharing\Modules\Store;
 
+use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\BellUpdaterInterface;
+use Foodsharing\Modules\Bell\BellUpdateTrigger;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Region\RegionGateway;
 
-class StoreGateway extends BaseGateway
+class StoreGateway extends BaseGateway implements BellUpdaterInterface
 {
 	private $regionGateway;
+	private $bellGateway;
 
-	public function __construct(Database $db, RegionGateway $regionGateway)
-	{
+	public function __construct(
+		Database $db,
+		RegionGateway $regionGateway,
+		BellGateway $bellGateway,
+		BellUpdateTrigger $bellUpdateTrigger
+	) {
 		parent::__construct($db);
 
 		$this->regionGateway = $regionGateway;
+		$this->bellGateway = $bellGateway;
+
+		$bellUpdateTrigger->subscribe($this);
 	}
 
 	public function getBetrieb($id): array
@@ -466,14 +477,69 @@ class StoreGateway extends BaseGateway
 
 	public function addFetcher($fsid, $bid, $date, $confirm = 0): int
 	{
-		return $this->db->insertIgnore('fs_abholer', [
+		$queryResult = $this->db->insertIgnore('fs_abholer', [
 			'foodsaver_id' => $fsid,
 			'betrieb_id' => $bid,
 			'date' => $date,
 			'confirmed' => $confirm
 		]);
+
+		if ($confirm === 0) {
+			$this->updateBellNotificationForBiebs($bid, true);
+		}
+
+		return $queryResult;
 	}
 
+	/**
+	 * @param bool $markNotificationAsUnread:
+	 * if an older notification exists, that has already been marked as read,
+	 * it can be marked as unread again while updating it
+	 */
+	public function updateBellNotificationForBiebs(int $storeId, bool $markNotificationAsUnread = false): void
+	{
+		$storeName = $this->db->fetchValueByCriteria('fs_betrieb', 'name', ['id' => $storeId]);
+		$messageIdentifier = 'store-fetch-unconfirmed-' . $storeId;
+		$messageCount = $this->getUnconfirmedFetchesCount($storeId);
+		$messageVars = ['betrieb' => $storeName, 'count' => $messageCount];
+		$messageTimestamp = $this->getNextUnconfirmedFetchTime($storeId);
+		$messageExpiration = $messageTimestamp;
+
+		$oldBellExists = $this->bellGateway->bellWithIdentifierExists($messageIdentifier);
+
+		if ($messageCount === 0 && $oldBellExists) {
+			$this->bellGateway->delBellsByIdentifier($messageIdentifier);
+		} elseif ($messageCount > 0 && $oldBellExists) {
+			$oldBellId = $this->bellGateway->getOneByIdentifier($messageIdentifier);
+			$data = [
+				'vars' => $messageVars,
+				'time' => $messageTimestamp,
+				'expiration' => $messageExpiration
+			];
+			$this->bellGateway->updateBell($oldBellId, $data, $markNotificationAsUnread);
+		} elseif ($messageCount > 0 && !$oldBellExists) {
+			$this->bellGateway->addBell(
+				$this->getResponsibleFoodsavers($storeId),
+				'betrieb_fetch_title',
+				'betrieb_fetch',
+				'img img-store brown',
+				['href' => '/?page=fsbetrieb&id=' . $storeId],
+				$messageVars,
+				$messageIdentifier,
+				0,
+				$messageExpiration,
+				$messageTimestamp
+			);
+		}
+	}
+
+	/**
+	 * @deprecated
+	 *
+	 * This function does not match to our database structure. Column 'dow' does not exist
+	 * in 'fs_abholer', but it exists in in 'fs_abholen'. Its only usage in StoreUserControl may need to be
+	 * replaced with addFetcher, otherwise it may lead to exceptions.
+	 */
 	public function addAbholer($betrieb_id, $foodsaver_id, $dow): int
 	{
 		return $this->db->insert('fs_abholer', [
@@ -485,16 +551,23 @@ class StoreGateway extends BaseGateway
 
 	public function clearAbholer($betrieb_id): int
 	{
-		return $this->db->delete('fs_abholer', ['betrieb_id' => $betrieb_id]);
+		$result = $this->db->delete('fs_abholer', ['betrieb_id' => $betrieb_id]);
+		$this->updateBellNotificationForBiebs($betrieb_id);
+
+		return $result;
 	}
 
 	public function confirmFetcher($fsid, $bid, $date): int
 	{
-		return $this->db->update(
+		$result = $this->db->update(
 		'fs_abholer',
 			['confirmed' => 1],
 			['foodsaver_id' => $fsid, 'betrieb_id' => $bid, 'date' => $date]
 		);
+
+		$this->updateBellNotificationForBiebs($bid);
+
+		return $result;
 	}
 
 	public function listFetcher($bid, $dates): array
@@ -662,6 +735,28 @@ class StoreGateway extends BaseGateway
 		return $this->db->fetchAllByCriteria('fs_betrieb_team', ['betrieb_id'], ['foodsaver_id' => $fsId, 'verantwortlich' => 1]);
 	}
 
+	private function getNextUnconfirmedFetchTime(int $storeId): \DateTime
+	{
+		$date = $this->db->fetchValue(
+			'SELECT MIN(`date`) 
+					   FROM `fs_abholer`
+					   WHERE `betrieb_id` = :storeId AND `confirmed` = 0 AND `date` > NOW()',
+			[':storeId' => $storeId]
+		);
+
+		return new \DateTime($date);
+	}
+
+	private function getUnconfirmedFetchesCount(int $storeId)
+	{
+		return $this->db->fetchValue(
+			'SELECT COUNT(`betrieb_id`)
+            FROM `fs_abholer`                                                   
+            WHERE `betrieb_id` = :storeId AND `confirmed` = 0 AND `date` > NOW()',
+			[':storeId' => $storeId]
+		);
+	}
+
 	/*
 	 * Private methods
 	 */
@@ -695,5 +790,39 @@ class StoreGateway extends BaseGateway
 
 			WHERE `betrieb_id` = :id',
 		[':id' => $id]);
+	}
+
+	/**
+	 * @return int[]
+	 */
+	private function getResponsibleFoodsavers(int $storeId): array
+	{
+		return $this->db->fetchAllValuesByCriteria(
+			'fs_betrieb_team',
+			'foodsaver_id',
+			[
+				'betrieb_id' => $storeId,
+				'verantwortlich' => 1
+			]
+		);
+	}
+
+	public function updateExpiredBells(): void
+	{
+		$expiredBells = $this->bellGateway->getExpiredByIdentifier('store-fetch-unconfirmed-%');
+
+		foreach ($expiredBells as $bell) {
+			$storeId = substr($bell['identifier'], strlen('store-fetch-unconfirmed-'));
+			$storeName = $this->db->fetchValueByCriteria('fs_betrieb', 'name', ['id' => $storeId]);
+			$newMessageCount = $this->getUnconfirmedFetchesCount($storeId);
+
+			$newMessageData = [
+				'vars' => ['betrieb' => $storeName, 'count' => $newMessageCount],
+				'time' => $this->getNextUnconfirmedFetchTime($storeId),
+				'expiration' => $this->getNextUnconfirmedFetchTime($storeId)
+			];
+
+			$this->bellGateway->updateBell($bell['id'], $newMessageData, false, false);
+		}
 	}
 }
