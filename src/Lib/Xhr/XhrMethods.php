@@ -150,8 +150,8 @@ class XhrMethods
 
 	public function xhr_getPinPost($data)
 	{
-		$this->func->incLang('Store');
-		$this->func->incLang('StoreUser');
+		$this->incLang('Store');
+		$this->incLang('StoreUser');
 
 		if ($this->storeGateway->isInTeam($this->session->id(), $data['bid']) || $this->session->isAmbassador() || $this->session->isOrgaTeam()) {
 			if ($out = $this->model->q('
@@ -1222,7 +1222,7 @@ class XhrMethods
 			}
 
 			if (!empty($data['to'])) {
-				$this->func->incLang('StoreUser');
+				$this->incLang('StoreUser');
 				if (empty($data['from'])) {
 					$data['from'] = date('Y-m-d');
 				}
@@ -1272,6 +1272,12 @@ class XhrMethods
 
 		return '0';
 	}
+
+	private function incLang(string $moduleName): void
+	{
+		include ROOT_DIR . 'lang/DE/' . $moduleName . '.lang.php';
+	}
+
 
 	public function xhr_delDate($data)
 	{

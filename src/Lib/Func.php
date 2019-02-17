@@ -118,16 +118,7 @@ class Func
 		$this->mem = $mem;
 	}
 
-	public function jsonSafe($str)
-	{
-		if ((string)$str == '' || !is_string($str)) {
-			return '';
-		}
-
-		return htmlentities((string)$str . '', ENT_QUOTES, 'utf-8', false);
-	}
-
-	public function getContent($place = CNT_MAIN)
+	private function getContent($place = CNT_MAIN)
 	{
 		switch ($place) {
 			case CNT_MAIN:
@@ -190,25 +181,6 @@ class Func
 		}
 	}
 
-	public function abhm($id)
-	{
-		$arr = [
-			1 => ['id' => 1, 'name' => '1-3 kg'],
-			2 => ['id' => 2, 'name' => '3-5 kg'],
-			3 => ['id' => 3, 'name' => '5-10 kg'],
-			4 => ['id' => 4, 'name' => '10-20 kg'],
-			5 => ['id' => 5, 'name' => '20-30 kg'],
-			6 => ['id' => 6, 'name' => '40-50 kg'],
-			7 => ['id' => 7, 'name' => 'mehr als 50 kg']
-		];
-
-		if (isset($arr[$id])) {
-			return $arr[$id]['name'];
-		}
-
-		return false;
-	}
-
 	public function niceDateShort($ts)
 	{
 		if (date('Y-m-d', $ts) == date('Y-m-d')) {
@@ -252,12 +224,6 @@ class Func
 		return $dateString . date('H:i', $unixTimeStamp) . ' ' . $this->s('clock');
 	}
 
-	public function incLang($id)
-	{
-		global $g_lang;
-		include ROOT_DIR . 'lang/DE/' . $id . '.lang.php';
-	}
-
 	public function s($id)
 	{
 		global $g_lang;
@@ -278,29 +244,7 @@ class Func
 	{
 		$part = explode('-', $date);
 
-		return (int)$part[2] . '. ' . $this->niceMonth((int)$part[1]);
-	}
-
-	public function niceMonth($month)
-	{
-		return $this->s('month_' . $month);
-	}
-
-	public function format_time($time)
-	{
-		$p = explode(':', $time);
-		if (count($p) >= 2) {
-			return (int)$p[0] . '.' . $p[1] . ' Uhr';
-		}
-
-		return '';
-	}
-
-	public function ts_day($ts)
-	{
-		$days = $this->getDow();
-
-		return $days[date('w')];
+		return (int)$part[2] . '. ' . $this->s('month_' . (int)$part[1]);
 	}
 
 	public function ts_time($ts)
@@ -325,10 +269,17 @@ class Func
 
 		if ($diff < 604800) {
 			// diese woche noch
-			return $this->ts_day($ts) . ', ' . $this->ts_time($ts);
+			return $this->ts_day() . ', ' . $this->ts_time($ts);
 		}
 
 		return $this->s('before_one_week');
+	}
+
+	private function ts_day()
+	{
+		$days = $this->getDow();
+
+		return $days[date('w')];
 	}
 
 	public function makeThumbs($pic)
