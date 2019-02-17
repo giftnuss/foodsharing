@@ -10,7 +10,7 @@
   },
   "require-dev": {
     "codeception/c3": "2.4.1",
-    "codeception/codeception": "2.5.2",
+    "codeception/codeception": "2.5.3",
     "filp/whoops": "2.3.1",
     "friendsofphp/php-cs-fixer": "2.14.0",
     "mashape/unirest-php": "3.0.4",
