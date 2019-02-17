@@ -23,7 +23,7 @@ class ProfileModel extends Db
 				`rating`,
 				`ratingtype`,
 				`msg`,
-				`time`
+				`time`  
 			)
 			VALUES
 			(
@@ -309,8 +309,7 @@ class ProfileModel extends Db
 
 			SELECT 	b.id,
 					b.name,
-					bt.verantwortlich,
-					bt.active
+					bt.verantwortlich
 
 			FROM 	fs_betrieb_team bt,
 					fs_betrieb b
@@ -318,7 +317,7 @@ class ProfileModel extends Db
 			WHERE 	bt.betrieb_id = b.id
 			AND
 					bt.foodsaver_id = ' . (int)$fsid . '
-			ORDER BY bt.active ASC
+			ORDER BY b.name ASC
 
 
 		');
