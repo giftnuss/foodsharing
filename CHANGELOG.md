@@ -18,9 +18,8 @@
 - Fixed an SQL injection in an FoodsaverGateway method @alangecker
 - Properly escape Fairteiler names in all occurences !690 @NerdyProjects
 - Avoid strip_tags on bell data !691 @NerdyProjects
-- Avoid strip_tags on bell data !692 @NerdyProjects
 - Permission checks when joining regions !696 @NerdyProjects
-- Fixed the bug that the number of pickups in the teamlist isnt shown when the name is to long. #381 !688 @peter.reutlingen
+- Fixed the bug that the number of pickups in the team list isn't shown when the name is too long. #381 !688 @peter.reutlingen
 
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies
