@@ -45,16 +45,12 @@ $('#signout_sure').dialog({
 
 if (GET('sub') == 'wall') {
   wall.init('bezirk', GET('bid'))
-}
-
-else if (GET('sub') == 'members') {
+} else if (GET('sub') == 'members') {
   vueRegister({
     MemberList
   })
   vueApply('#vue-memberlist')
-}
-
-else if (['botforum', 'forum'].includes(GET('sub'))) {
+} else if (['botforum', 'forum'].includes(GET('sub'))) {
   if (GET('tid') !== 'undefined') {
     vueRegister({
       Thread

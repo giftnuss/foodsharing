@@ -55,7 +55,7 @@
           slot-scope="data"
         >
           <div>
-            <img :src="data.value"/>
+            <img :src="data.value" />
           </div>
         </template>
         <template
@@ -114,13 +114,13 @@ export default {
         imageUrl: {
           label: '',
           sortable: false,
-          class: 'foto-column',
+          class: 'foto-column'
         },
         'user.name': {
           label: 'Name',
           sortable: false,
-          class: 'align-middle',
-        },
+          class: 'align-middle'
+        }
       },
       compare (a, b, key) {
         const elemA = a[key]
@@ -139,16 +139,17 @@ export default {
     }
   },
   computed: {
-    districtOrWorkGroup() {
+    districtOrWorkGroup () {
       if (this.isWorkGroup) {
         return 'in der AG '
       } else {
         return 'im Bezirk '
       }
     },
-    membersFiltered() {
-      if (!this.filterText.trim())
+    membersFiltered () {
+      if (!this.filterText.trim()) {
         return this.members
+      }
       let filterText = this.filterText ? this.filterText.toLowerCase() : null
       return this.members.filter((member) => {
         return (
