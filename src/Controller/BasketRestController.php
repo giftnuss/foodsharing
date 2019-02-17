@@ -327,7 +327,7 @@ final class BasketRestController extends FOSRestController
 		}
 
 		//remove old images
-		if (isset($basket[self::PICTURE])) {
+		if (isset($basket[self::PICTURE]) && $basket[self::PICTURE] !== '') {
 			$this->imageService->removeResizedPictures('images/basket/', $basket[self::PICTURE], self::SIZES);
 		}
 
@@ -335,7 +335,9 @@ final class BasketRestController extends FOSRestController
 		$basket[self::PICTURE] = $picname;
 		$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], $picname, $this->session->id());
 
-		return $this->handleView($this->view(['basket' => $basket], 200));
+		$data = $this->normalizeBasket($basket);
+
+		return $this->handleView($this->view(['basket' => $data], 200));
 	}
 
 	/**
@@ -362,7 +364,9 @@ final class BasketRestController extends FOSRestController
 			$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], null, $this->session->id());
 		}
 
-		return $this->handleView($this->view(['basket' => $basket], 200));
+		$data = $this->normalizeBasket($basket);
+
+		return $this->handleView($this->view(['basket' => $data], 200));
 	}
 
 	/**
