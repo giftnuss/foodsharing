@@ -336,6 +336,7 @@ final class BasketRestController extends FOSRestController
 		$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], $picname, $this->session->id());
 
 		$data = $this->normalizeBasket($basket);
+
 		return $this->handleView($this->view(['basket' => $data], 200));
 	}
 
@@ -364,6 +365,7 @@ final class BasketRestController extends FOSRestController
 		}
 
 		$data = $this->normalizeBasket($basket);
+
 		return $this->handleView($this->view(['basket' => $data], 200));
 	}
 
