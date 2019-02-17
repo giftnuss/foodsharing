@@ -309,7 +309,8 @@ class ProfileModel extends Db
 
 			SELECT 	b.id,
 					b.name,
-					bt.verantwortlich
+					bt.verantwortlich,
+					bt.active
 
 			FROM 	fs_betrieb_team bt,
 					fs_betrieb b
@@ -317,7 +318,7 @@ class ProfileModel extends Db
 			WHERE 	bt.betrieb_id = b.id
 			AND
 					bt.foodsaver_id = ' . (int)$fsid . '
-			ORDER BY b.name ASC
+			ORDER BY bt.active ASC
 
 
 		');
