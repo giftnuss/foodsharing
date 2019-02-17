@@ -33,7 +33,7 @@ class PassportGeneratorControl extends Control
 			$this->bezirk_id = $this->session->getCurrentBezirkId();
 		}
 
-		if ($this->session->isAdminFor($this->bezirk_id) || $this->session->isOrgaTeam()) {
+		if (($this->session->isAdminFor($this->bezirk_id) || $this->session->isOrgaTeam()) && $this->func->isBotForA((array)$this->bezirk_id, false, true)) {
 			$this->bezirk = false;
 			if ($bezirk = $this->regionGateway->getBezirk($this->bezirk_id)) {
 				$this->bezirk = $bezirk;
@@ -45,10 +45,6 @@ class PassportGeneratorControl extends Control
 
 	public function index()
 	{
-		if (!$this->func->isBotForA((array)$this->bezirk_id, false, true)) {
-			return;
-		}
-
 		$this->func->addBread($this->bezirk['name'], '/?page=bezirk&bid=' . $this->bezirk_id . '&sub=forum');
 		$this->func->addBread('Pass-Generator', $this->func->getSelf());
 
