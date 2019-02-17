@@ -21,6 +21,8 @@ It will give you some dummy users you can use to sign in:
 
 It also generates more dummy users and dummy data to fill the page with life (a bit at least). If you want to modify it, then look at the `SeedCommand.php` file.
 
+If you make changes to non-PHP frontend files (e.g. .vue, .js or .scss files), then those are direclty reflected in the running docker.
+
 To stop everything again, just run:
 
 ```
@@ -34,14 +36,6 @@ PHPMyAdmin is also included: [localhost:18081](http://localhost:18081). Log in w
 | Server | db |
 | Username | root |
 | Password | root |
-
-## Seeing frontend changes live
-If you make changes to non-PHP frontend files (e.g. .vue, .js or .scss files), then those are not direclty reflected in the docker running via the start script.
-However, in addition to it, you can run:
-```
-./scripts/dev
-```
-This will start a webpack dev server which you can access at [localhost:8080](http://localhost:8080/) and which will automatically refresh whenever you make any changes to frontend files.
 
 ## Code style
 
