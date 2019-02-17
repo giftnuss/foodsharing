@@ -7,6 +7,8 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use setasign\Fpdi;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\QrCode;
 
 final class PassportGeneratorControl extends Control
 {
@@ -166,6 +168,14 @@ final class PassportGeneratorControl extends Control
 				$pdf->Text(13.9 + $x, 20.6 + $y, 'Teile Lebensmittel, anstatt sie wegzuwerfen!');
 
 				$pdf->useTemplate($fs_logo, 13.5 + $x, 13.6 + $y, 29.8);
+
+				$qrCode = new QrCode('foodsharing.de/profile/' . $fs_id);
+				$qrCode->setSize(80);
+				$qrCode->setWriterByName('png');
+				$qrCode->setMargin(0);
+				$qrCode->setErrorCorrectionLevel(new ErrorCorrectionLevel(ErrorCorrectionLevel::LOW));
+				$qrCode->writeFile('tmp/qr_' . $fs_id . '.png');
+				$pdf->Image('tmp/qr_' . $fs_id . '.png', 68 + $x, 40 + $y);
 
 				if ($photo = $this->foodsaverGateway->getPhoto($fs_id)) {
 					if (file_exists('images/crop_' . $photo)) {

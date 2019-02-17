@@ -33,6 +33,7 @@
     "ddeboer/imap": "1.6.0",
     "doctrine/annotations": "1.6.0",
     "doctrine/cache": "1.8.0",
+    "endroid/qr-code": "^3.5",
     "erusev/parsedown": "1.7.1",
     "exercise/htmlpurifier-bundle": "2.0.3",
     "friendsofsymfony/rest-bundle": "2.5.0",
