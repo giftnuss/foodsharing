@@ -1,9 +1,22 @@
 <template>
   <div class="container bootstrap">
     <div class="card mb-3 rounded">
-      <div class="card-header text-white bg-primary">
-        Alle Foodsaver {{ districtOrWorkGroup }} {{ regionName }} (<span v-if="members.length !== membersFiltered.length">
-          {{ membersFiltered.length }} von
+      <div
+        v-if="!isWorkGroup"
+        class="card-header text-white bg-primary"
+      >
+        {{ $i18n('memberlist.header_for_district', {bezirk: regionName}) }}
+        (<span v-if="members.length !== membersFiltered.length">
+            {{ $i18n('memberlist.some_in', {some: membersFiltered.length}) }}
+        </span>{{ members.length }})
+      </div>
+      <div
+        v-if="isWorkGroup"
+        class="card-header text-white bg-primary"
+      >
+        {{ $i18n('memberlist.header_for_workgroup', {bezirk: regionName}) }}
+        (<span v-if="members.length !== membersFiltered.length">
+          {{ $i18n('memberlist.some_in', {some: membersFiltered.length}) }}
         </span>{{ members.length }})
       </div>
 
@@ -14,7 +27,7 @@
         <div class="form-row p-1 ">
           <div class="col-2 text-center">
             <label class=" col-form-label col-form-label-sm foo">
-              Filtern nach...
+              {{ $i18n('list.filter_for') }}
             </label>
           </div>
           <div class="col-8">
@@ -82,6 +95,7 @@
 </template>
 
 <script>
+import i18n from '@/i18n'
 import bTable from '@b/components/table/table'
 import bPagination from '@b/components/pagination/pagination'
 import bTooltip from '@b/directives/tooltip/tooltip'

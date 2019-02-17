@@ -228,3 +228,11 @@ bell:
   buddy_request: "{name} kennt Dich."
   sharepoint_activate_title: "Neuer Fair-Teiler in {bezirk}"
   sharepoint_activate: "{name} wurde eingetragen"
+
+list:
+  filter_for: "Filter nach..."
+
+memberlist:
+  header_for_district: "Alle Foodsaver im Bezirk {bezirk}"
+  header_for_workgroup: "Alle Foodsaver in der AG {bezirk}"
+  some_in: "{some} in "
