@@ -7,7 +7,7 @@
       >
         {{ $i18n('memberlist.header_for_district', {bezirk: regionName}) }}
         (<span v-if="members.length !== membersFiltered.length">
-            {{ $i18n('memberlist.some_in', {some: membersFiltered.length}) }}
+          {{ $i18n('memberlist.some_in', {some: membersFiltered.length}) }}
         </span>{{ members.length }})
       </div>
       <div
@@ -95,7 +95,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n'
 import bTable from '@b/components/table/table'
 import bPagination from '@b/components/pagination/pagination'
 import bTooltip from '@b/directives/tooltip/tooltip'

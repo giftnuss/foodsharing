@@ -286,8 +286,8 @@ class RegionControl extends Control
 
 	private function members(Request $request, Response $response, $region)
 	{
-		$this->func->addBread('Mitglieder', '/?page=bezirk&bid=' . $region['id'] . '&sub=members');
-		// $this->func->addTitle($this->translator->trans('group.applications_for', ['%name%' => $region['name']]));
+		$this->func->addBread($this->translator->trans('group.members'), '/?page=bezirk&bid=' . $region['id'] . '&sub=members');
+		$this->func->addTitle($this->translator->trans('group.members'));
 		$sub = $request->query->get('sub');
 		$viewdata = $this->regionViewData($region, $sub);
 		$response->setContent($this->render('pages/Region/members.twig', $viewdata));
