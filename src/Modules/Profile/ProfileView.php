@@ -75,11 +75,9 @@ class ProfileView extends View
 	{
 		$out = '';
 		foreach ($userCompanies as $b) {
+			$userStatusOfStore = $b['active'] == 1 ? '✓ ' : '? ';
 
-
-            $userStatusOfStore = $b['active'] == 1 ? '✓ ' : '? ';
-
-            $out .= '<p><a class="light" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $userStatusOfStore .$b['name'] . '</a></p>';
+			$out .= '<p><a class="light" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $userStatusOfStore . $b['name'] . '</a></p>';
 		}
 
 		return '

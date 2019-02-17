@@ -45,9 +45,9 @@ class PassportGeneratorControl extends Control
 
 	public function index()
 	{
-        if (!$this->func->isBotForA((array)$this->bezirk_id, false, true)) {
-            return;
-        }
+		if (!$this->func->isBotForA((array)$this->bezirk_id, false, true)) {
+			return;
+		}
 
 		$this->func->addBread($this->bezirk['name'], '/?page=bezirk&bid=' . $this->bezirk_id . '&sub=forum');
 		$this->func->addBread('Pass-Generator', $this->func->getSelf());
