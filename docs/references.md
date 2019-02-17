@@ -12,7 +12,7 @@ There are a number of helper scripts available. Most of them obey the `FS_INT` e
 |--------|---------|
 | ./scripts/build-assets | Builds the static assets |
 | ./scripts/watch-assets | Builds the static assets on change |
-| ./scripts/dev | Run webpack dev server for doing js dev |
+| ./scripts/dev | Run webpack dev server for doing js dev (obsolete, included in ./scripts/start) |
 | ./scripts/composer | Run php composer |
 | ./scripts/docker-compose | Docker-compose with the correct options set for the env |
 | ./scripts/dropdb | Drop the database |
