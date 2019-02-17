@@ -29,6 +29,7 @@
 - remove unused methods in XhrMethods !694 @NerdyProjects
 - trigger fairteiler wallpost notifications in backend !700 @NerdyProjects
 - removed the QR code from the fs-passes !685 #144 @peter.toennies
+- removed the old qr code library and chaged the current qr on the fs-passes to show the fs profile !685 #144 @peter.toennies
 
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen
