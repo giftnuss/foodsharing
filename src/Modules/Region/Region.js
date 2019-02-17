@@ -12,6 +12,7 @@ import './Region.css'
 import * as wall from '@/wall'
 import { vueRegister, vueApply } from '@/vue'
 import Thread from './components/Thread'
+import MemberList from './components/MemberList'
 
 $('a[href=\'#signout\']').on('click', function () {
   $('#signout_sure').dialog('open')
@@ -46,7 +47,14 @@ if (GET('sub') == 'wall') {
   wall.init('bezirk', GET('bid'))
 }
 
-if (['botforum', 'forum'].includes(GET('sub'))) {
+else if (GET('sub') == 'members') {
+  vueRegister({
+    MemberList
+  })
+  vueApply('#vue-memberlist')
+}
+
+else if (['botforum', 'forum'].includes(GET('sub'))) {
   if (GET('tid') !== 'undefined') {
     vueRegister({
       Thread
