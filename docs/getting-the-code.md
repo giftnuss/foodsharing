@@ -4,7 +4,7 @@ We use Docker and Docker Compose.
 
 You can use the Docker Compose setup if you are using one of the following:
 
-- Linux
+- Linux (64bit)
 - OSX Yosemite 10.10.3 or higher
 - Windows 10 Pro or higher
 
