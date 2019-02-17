@@ -179,6 +179,7 @@ wall:
 
 fairteiler:
   all_at: Alle Fair-Teiler in %name%
+  n_in_region: '{0} Keine Fair-Teiler in %name%| {1} Ein Fair-Teiler in %name%| [2, Inf[ %count% Fair-Teiler in %name%'
   add_new: Neuer Fair-Teiler
 
 events:

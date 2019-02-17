@@ -8,12 +8,16 @@
 - Added a new button to the contextmenu which appears by clicking the profilepic in shops #302 !671 @peter.reutlingen
 - Make date in event a mandatory field #436 !669 @tihar
 - Added API endpoints for basket pictures !671 @alex.simm 
+- Allow use of markdown in fairteiler description !690 @NerdyProjects
 
 ## Bugfixes
 - Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
 - Fixup conversation header display !658 @nicksellen
 - Fixed bug in #302 goto_profile_from_teamsite !671 with !675 @peter.reutlingen
 - Fixed an SQL injection in an FoodsaverGateway method @alangecker
+- Properly escape Fairteiler names in all occurences !690 @NerdyProjects
+- Avoid strip_tags on bell data !691 @NerdyProjects
+- Avoid strip_tags on bell data !692 @NerdyProjects
 
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies

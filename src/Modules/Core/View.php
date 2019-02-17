@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Core;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Services\SanitizerService;
 
 class View
 {
@@ -14,18 +15,20 @@ class View
 	protected $v_utils;
 	protected $func;
 	protected $session;
+	protected $sanitizerService;
 
 	/**
 	 * @var \Twig\Environment
 	 */
 	public $twig;
 
-	public function __construct(\Twig\Environment $twig, Func $func, Utils $viewUtils, Session $session)
+	public function __construct(\Twig\Environment $twig, Func $func, Utils $viewUtils, Session $session, SanitizerService $sanitizerService)
 	{
 		$this->twig = $twig;
 		$this->func = $func;
 		$this->v_utils = $viewUtils;
 		$this->session = $session;
+		$this->sanitizerService = $sanitizerService;
 	}
 
 	public function setSub($sub)

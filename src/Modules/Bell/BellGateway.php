@@ -63,12 +63,12 @@ class BellGateway extends BaseGateway
 		$bid = $this->db->insert(
 			'fs_bell',
 			[
-				'name' => strip_tags($title),
-				'body' => strip_tags($body),
-				'vars' => strip_tags($vars),
-				'attr' => strip_tags($link_attributes),
-				'icon' => strip_tags($icon),
-				'identifier' => strip_tags($identifier),
+				'name' => $title,
+				'body' => $body,
+				'vars' => $vars,
+				'attr' => $link_attributes,
+				'icon' => $icon,
+				'identifier' => $identifier,
 				'time' => $time->format('Y-m-d H:i:s'),
 				'closeable' => $closeable,
 				'expiration' => $expiration ? $expiration->format('Y-m-d H:i:s') : null

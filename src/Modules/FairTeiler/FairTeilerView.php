@@ -32,29 +32,22 @@ class FairTeilerView extends View
 
 	public function fairteilerHead()
 	{
-		$style = '';
-
-		if ($this->fairteiler['picture']) {
-			$style = ' style="height:150px;background-image:url(' . $this->fairteiler['pic']['head'] . ');"';
-		}
-
-		$content = '<div class="ft-head ui-corner-bottom"' . $style . '></div>';
-
-		return $this->v_utils->v_field($content, $this->fairteiler['name']);
+		return $this->twig->render('pages/Fairteiler/fairteilerTop.html.twig', ['fairteiler' => $this->fairteiler]);
 	}
 
 	public function checkFairteiler($ft)
 	{
+		$htmlEscapedName = htmlspecialchars($ft['name']);
 		$content = '';
 		if ($ft['pic']) {
-			$content .= $this->v_utils->v_input_wrapper('Foto', '<img src="' . $ft['pic']['head'] . '" alt="' . $ft['name'] . '" />');
+			$content .= $this->v_utils->v_input_wrapper('Foto', '<img src="' . $ft['pic']['head'] . '" alt="' . $htmlEscapedName . '" />');
 		}
 
 		$content .= $this->v_utils->v_input_wrapper('Adresse', '
 		' . $ft['anschrift'] . '<br />
 		' . $ft['plz'] . ' ' . $ft['ort']);
 
-		$content .= $this->v_utils->v_input_wrapper('Beschreibung', $ft['desc']);
+		$content .= $this->v_utils->v_input_wrapper('Beschreibung', $this->sanitizerService->markdownToHtml($ft['desc']));
 
 		$content .= $this->v_utils->v_input_wrapper('Hinzugefügt am', date('d.m.Y', $ft['time_ts']));
 		$content .= $this->v_utils->v_input_wrapper('Hinzugefügt von', '<a href="/profile/' . (int)$ft['fs_id'] . '">' . $ft['fs_name'] . ' ' . $ft['fs_nachname'] . '</a>');
@@ -126,7 +119,7 @@ class FairTeilerView extends View
 		$this->func->addJs('
 			$("#follow-hidden").dialog({
 				modal: true,
-				title: "' . $this->func->sv('infotype_title', $this->func->jsSafe($this->fairteiler['name']), '"') . '",
+				title: "' . $this->func->sv('infotype_title', $this->func->jsSafe($this->fairteiler['name'], '"')) . '",
 				autoOpen: false,
 				width: 500,
 				resizable: false,
@@ -167,7 +160,7 @@ class FairTeilerView extends View
 
 	public function desc()
 	{
-		return $this->v_utils->v_field('<p>' . nl2br($this->fairteiler['desc'] . '</p>'), $this->func->s('desc'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field('<p>' . $this->sanitizerService->markdownToHtml($this->fairteiler['desc']) . '</p>', $this->func->s('desc'), array('class' => 'ui-padding'));
 	}
 
 	public function listFairteiler($bezirke)
@@ -175,27 +168,8 @@ class FairTeilerView extends View
 		$content = '';
 		$count = 0;
 		foreach ($bezirke as $bezirk) {
-			$out = '
-			<ul class="linklist fairteilerlist">';
-			foreach ($bezirk['fairteiler'] as $ft) {
-				++$count;
-				$image = '<span class="image noimage ui-corner-all" style="background-image:url(/img/fairteiler_thumb.png);"></span>';
-				if ($ft['pic']) {
-					$image = '<span class="image ui-corner-all" style="background-image:url(' . $ft['pic']['thumb'] . ');"></span>';
-				}
-				$out .= '
-					<li>
-						<a href="/?page=fairteiler&bid=' . $bezirk['id'] . '&sub=ft&id=' . $ft['id'] . '">
-							' . $image . '
-							<span class="name">' . $ft['name'] . '</span>
-							<span class="clear"></span>
-						</a>
-					</li>';
-			}
-			$out .= '
-				</ul>';
-
-			$content .= $this->v_utils->v_field($out, count($bezirk['fairteiler']) . ' Fair-Teiler in ' . $bezirk['name']);
+			$count += count($bezirk['fairteiler']);
+			$content .= $this->twig->render('partials/listFairteilerForRegion.html.twig', ['region' => $bezirk, 'fairteiler' => $bezirk['fairteiler']]);
 		}
 
 		if ($this->bezirk_id > 0) {
