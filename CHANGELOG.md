@@ -10,6 +10,7 @@
 - Added API endpoints for basket pictures !671 @alex.simm 
 - Allow use of markdown in fairteiler description !690 @NerdyProjects
 - Joining regions REST API !696 @NerdyProjects
+- Added member list for districts and work groups !697 @djahnie
 
 ## Bugfixes
 - Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
