@@ -1162,7 +1162,7 @@ class Utils
 		$id = $this->func->id($id);
 		$label = $this->func->s($id);
 
-		$check = $this->func->jsValidate($option, $id, $label);
+		$check = $this->jsValidate($option, $id, $label);
 
 		if (isset($option['selected'])) {
 			$selected = $option['selected'];
@@ -1196,6 +1196,20 @@ class Utils
 		return $this->v_input_wrapper($label, $out, $id, $option);
 	}
 
+	private function jsValidate($option, $id, $name)
+	{
+		$out = array('class' => '', 'msg' => array());
+
+		if (isset($option['required'])) {
+			$out['class'] .= ' required';
+			if (!isset($option['required']['msg'])) {
+				$out['msg']['required'] = $name . ' darf nicht leer sein';
+			}
+		}
+
+		return $out;
+	}
+
 	public function v_form_select($id, $option = array())
 	{
 		$id = $this->func->id($id);
@@ -1206,7 +1220,7 @@ class Utils
 			$selected = $this->func->getValue($id);
 		}
 		$label = $this->func->s($id);
-		$check = $this->func->jsValidate($option, $id, $label);
+		$check = $this->jsValidate($option, $id, $label);
 
 		if (isset($option['values'])) {
 			$values = $option['values'];
@@ -1290,7 +1304,7 @@ class Utils
 		$class = '';
 		$star = '';
 		$error_msg = '';
-		$check = $this->func->jsValidate($option, $id, $label);
+		$check = $this->jsValidate($option, $id, $label);
 
 		if (isset($option['required'])) {
 			$star = '<span class="req-star"> *</span>';
@@ -1555,11 +1569,29 @@ class Utils
 				$sel = ' selected="selected"';
 			}
 			$out .= '
-					<option value="' . $this->func->addGet('v', $id) . '"' . $sel . '>' . $v . '</option>';
+					<option value="' . $this->addGet('v', $id) . '"' . $sel . '>' . $v . '</option>';
 		}
 
 		return $out . '
 				</select>';
+	}
+
+	private function addGet($name, $val)
+	{
+		$url = '';
+
+		$vars = explode('&', $_SERVER['QUERY_STRING']);
+
+		$i = 0;
+		foreach ($vars as $v) {
+			++$i;
+			$ex = explode('=', $v);
+			if ($ex[0] != $name) {
+				$url .= '&' . $v;
+			}
+		}
+
+		return $_SERVER['PHP_SELF'] . '?' . substr($url, 1) . '&' . $name . '=' . $val;
 	}
 
 	public function v_getStatusAmpel($status)

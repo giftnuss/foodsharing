@@ -243,7 +243,7 @@ class EventView extends View
 		if (date('Y-m-d', $event['start_ts']) != date('Y-m-d', $event['end_ts'])) {
 			$end = ' ' . $this->func->s('to') . ' ' . $this->func->niceDate($event['end_ts']);
 		} else {
-			$end = ' ' . $this->func->s('to') . ' ' . $this->func->ts_time($event['end_ts']);
+			$end = ' ' . $this->func->s('to') . ' ' . $this->ts_time($event['end_ts']);
 		}
 
 		$out = '
@@ -271,6 +271,12 @@ class EventView extends View
 
 		return $out;
 	}
+
+	private function ts_time($ts): string
+	{
+		return date('H:i', $ts) . ' Uhr';
+	}
+
 
 	public function invites($invites)
 	{

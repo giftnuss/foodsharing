@@ -412,7 +412,7 @@ class Session
 		$fs['buddys'] = $this->buddyGateway->listBuddyIds($fs_id);
 
 		fAuthorization::setUserToken($fs['id']);
-		$this->setAuthLevel($this->func->rolleWrapInt($fs['rolle']));
+		$this->setAuthLevel($this->rolleWrapInt($fs['rolle']));
 
 		$this->set('user', array(
 			'name' => $fs['name'],
@@ -497,5 +497,19 @@ class Session
 			$mailbox = true;
 		}
 		$this->set('mailbox', $mailbox);
+	}
+
+	private function rolleWrapInt($roleInt)
+	{
+		$roles = array(
+			0 => 'user',
+			1 => 'fs',
+			2 => 'bieb',
+			3 => 'bot',
+			4 => 'orga',
+			5 => 'admin'
+		);
+
+		return $roles[$roleInt];
 	}
 }

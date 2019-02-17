@@ -247,65 +247,6 @@ class Func
 		return (int)$part[2] . '. ' . $this->s('month_' . (int)$part[1]);
 	}
 
-	public function ts_time($ts)
-	{
-		return date('H:i', $ts) . ' Uhr';
-	}
-
-	public function msgTime($ts)
-	{
-		$cur = time();
-		$diff = $cur - $ts;
-
-		if ($diff < 600) {
-			// letzte 10 minuten
-			return $this->s('currently');
-		}
-
-		if ($diff < 86400) {
-			// heute noch
-			return $this->sv('today_time', $this->ts_time($ts));
-		}
-
-		if ($diff < 604800) {
-			// diese woche noch
-			return $this->ts_day() . ', ' . $this->ts_time($ts);
-		}
-
-		return $this->s('before_one_week');
-	}
-
-	private function ts_day()
-	{
-		$days = $this->getDow();
-
-		return $days[date('w')];
-	}
-
-	public function makeThumbs($pic)
-	{
-		if (!file_exists(ROOT_DIR . 'images/mini_q_' . $pic) && file_exists(ROOT_DIR . 'images/' . $pic)) {
-			copy(ROOT_DIR . 'images/' . $pic, ROOT_DIR . 'images/mini_q_' . $pic);
-			copy(ROOT_DIR . 'images/' . $pic, ROOT_DIR . 'images/med_q_' . $pic);
-			copy(ROOT_DIR . 'images/' . $pic, ROOT_DIR . 'images/q_' . $pic);
-
-			$image = new fImage(ROOT_DIR . 'images/mini_q_' . $pic);
-			$image->cropToRatio(1, 1);
-			$image->resize(35, 35);
-			$image->saveChanges();
-
-			$image = new fImage(ROOT_DIR . 'images/med_q_' . $pic);
-			$image->cropToRatio(1, 1);
-			$image->resize(75, 75);
-			$image->saveChanges();
-
-			$image = new fImage(ROOT_DIR . 'images/q_' . $pic);
-			$image->cropToRatio(1, 1);
-			$image->resize(150, 150);
-			$image->saveChanges();
-		}
-	}
-
 	public function handleTagselect($id)
 	{
 		global $g_data;
@@ -320,11 +261,6 @@ class Func
 		}
 
 		$g_data[$id] = $recip;
-	}
-
-	public function format_dt($ts)
-	{
-		return date('d.m.Y H:i', $ts) . ' Uhr';
 	}
 
 	public function sv($id, $var)
@@ -347,11 +283,6 @@ class Func
 	public function addBread($name, $href = '')
 	{
 		$this->bread[] = array('name' => $name, 'href' => $href);
-	}
-
-	public function getBread()
-	{
-		return $this->bread;
 	}
 
 	public function setEditData($data)
@@ -439,7 +370,7 @@ class Func
 		);
 	}
 
-	public function getMenuFn(
+	private function getMenuFn(
 		bool $loggedIn, array $regions, bool $hasFsRole,
 		bool $isOrgaTeam, bool $mayEditBlog, bool $mayEditQuiz, bool $mayHandleReports,
 		array $stores, array $workingGroups,
@@ -468,10 +399,6 @@ class Func
 			'component' => 'topbar',
 			'props' => $params
 		]);
-		// return [
-		// 	'default' => $this->twig->render('partials/menu.default.twig', $params),
-		// 	'mobile' => $this->twig->render('partials/menu.mobile.twig', $params)
-		// ];
 	}
 
 	public function preZero($i)
@@ -515,7 +442,7 @@ class Func
 		return $str;
 	}
 
-	public function emailBodyTpl($message, $email = false, $token = false)
+	private function emailBodyTpl($message, $email = false, $token = false)
 	{
 		$unsubscribe = '
 	<tr>
@@ -623,32 +550,12 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->metrics->addPoint('outgoing_email', ['template' => $tpl_id], ['count' => 1]);
 	}
 
-	public function dt($ts)
-	{
-		return date('n. M. Y H:i', $ts) . ' Uhr';
-	}
-
-	public function makeUnique()
-	{
-		return md5(date('Y-m-d H:i:s') . ':' . uniqid());
-	}
-
-	public function idimg($file = false, $size)
-	{
-		if (!empty($file)) {
-			return 'images/' . str_replace('/', '/' . $size . '_', $file);
-		}
-
-		return false;
-	}
-
 	public function img($file = false, $size = 'mini', $format = 'q', $altimg = false)
 	{
 		if ($file === false) {
 			$file = $_SESSION['client']['photo'];
 		}
 
-		//if(!empty($file) && substr($file,0,1) != '.')
 		if (!empty($file) && file_exists('images/' . $file)) {
 			if (!file_exists('images/' . $size . '_' . $format . '_' . $file)) {
 				$this->resizeImg('images/' . $file, $size, $format);
@@ -676,81 +583,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->ids[$id] = true;
 
 		return $id;
-	}
-
-	public function jsValidate($option, $id, $name)
-	{
-		$out = array('class' => '', 'msg' => array());
-
-		if (isset($option['required'])) {
-			$out['class'] .= ' required';
-			if (!isset($option['required']['msg'])) {
-				$out['msg']['required'] = $name . ' darf nicht leer sein';
-			}
-		}
-
-		return $out;
-	}
-
-	public function handleAttach($name)
-	{
-		if (isset($_FILES[$name]) && $_FILES[$name]['size'] > 0) {
-			$error = 0;
-			$datei = $_FILES[$name]['tmp_name'];
-			$size = $_FILES[$name]['size'];
-			$datein = $_FILES[$name]['name'];
-			$datein = strtolower($datein);
-			$datein = str_replace('.jpeg', '.jpg', $datein);
-			$dateiendung = strtolower(substr($datein, strlen($datein) - 4, 4));
-
-			$new_name = uniqid() . $dateiendung;
-			move_uploaded_file($datei, './data/attach/' . $new_name);
-
-			return array(
-				'name' => $datein,
-				'path' => './data/attach/' . $new_name,
-				'uname' => $new_name,
-				'mime' => mime_content_type('./data/attach/' . $new_name),
-				'size' => $size
-			);
-		}
-
-		return false;
-	}
-
-	public function checkInput($option, $name)
-	{
-		$class = '';
-		if (isset($option['required'])) {
-			$class .= ' required';
-		}
-		if (isset($option['required']) || isset($option['validate'])) {
-			if (isset($_POST) && !empty($_POST)) {
-				if (isset($option['required']) && empty($value)) {
-					error($option['required']);
-					$class .= ' empty';
-				}
-				if (isset($option['validate'])) {
-					foreach ($option['validate'] as $v) {
-						$func = 'valid' . ucfirst($v);
-						if (!$func($value)) {
-							$class .= ' error-' . $v;
-						}
-					}
-				}
-			}
-		}
-
-		if (!empty($class)) {
-			$class .= ' input-error';
-		}
-
-		return $class;
-	}
-
-	public function getPost($id)
-	{
-		return $_POST[$id];
 	}
 
 	public function getPostData()
@@ -795,17 +627,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		exit();
 	}
 
-	public function goLogin()
-	{
-		$this->go('/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']));
-	}
-
-	public function goBack()
-	{
-		header('Location: ' . $_SERVER['HTTP_REFERER']);
-		exit();
-	}
-
 	public function getPage()
 	{
 		$page = $this->getGet('page');
@@ -816,7 +637,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return $page;
 	}
 
-	public function getSubPage()
+	private function getSubPage()
 	{
 		$sub_page = $this->getGet('sub');
 		if (!$sub_page) {
@@ -844,44 +665,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return false;
 	}
 
-	public function addGet($name, $val)
-	{
-		$url = '';
-
-		$vars = explode('&', $_SERVER['QUERY_STRING']);
-
-		$i = 0;
-		foreach ($vars as $v) {
-			++$i;
-			$ex = explode('=', $v);
-			if ($ex[0] != $name) {
-				$url .= '&' . $v;
-			}
-		}
-
-		return $_SERVER['PHP_SELF'] . '?' . substr($url, 1) . '&' . $name . '=' . $val;
-	}
-
 	public function qs($txt)
 	{
 		return $txt;
-	}
-
-	public function safe_html($txt)
-	{
-		return $txt;
-	}
-
-	public function printHidden()
-	{
-		if (!empty($this->hidden)) {
-			echo '<div style="display:none;">' . $this->hidden . '</div>';
-		}
-	}
-
-	public function getHidden()
-	{
-		return $this->hidden;
 	}
 
 	public function addHidden($html)
@@ -926,15 +712,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$_SESSION['msg']['info'][] = $msg;
 	}
 
-	public function success($msg, $title = false)
-	{
-		$t = '';
-		if ($title !== false) {
-			$t = '<strong>' . $title . '</strong> ';
-		}
-		$_SESSION['msg']['success'][] = $t . $msg;
-	}
-
 	public function error($msg, $title = false)
 	{
 		$t = '';
@@ -944,7 +721,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$_SESSION['msg']['error'][] = $t . $msg;
 	}
 
-	public function getMessages()
+	private function getMessages()
 	{
 		global $g_error;
 		global $g_info;
@@ -979,24 +756,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$_SESSION['msg']['error'] = array();
 	}
 
-	public function save($txt)
-	{
-		return preg_replace('/[^a-zA-Z0-9]/', '', $txt);
-	}
-
-	public function loggedIn(): bool
-	{
-		return isset($_SESSION['client']) && $_SESSION['client']['id'] > 0;
-	}
-
 	public function addWebpackScript($src)
 	{
 		$this->webpackScripts[] = $src;
-	}
-
-	public function addScriptTop($src)
-	{
-		array_unshift($this->scripts, $src);
 	}
 
 	public function addJsFunc($nfunc)
@@ -1024,7 +786,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$this->title[] = $name;
 	}
 
-	public function getTranslations()
+	private function getTranslations()
 	{
 		global $g_lang;
 
@@ -1034,7 +796,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	/**
 	 * This is used to set window.serverData on in the frontend.
 	 */
-	public function getServerData()
+	private function getServerData()
 	{
 		$user = $this->session->get('user');
 
@@ -1081,7 +843,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		]);
 	}
 
-	public function getHeadData()
+	private function getHeadData()
 	{
 		return [
 			'title' => implode(' | ', $this->title),
@@ -1128,12 +890,12 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 		return [
 			'head' => $this->getHeadData(),
-			'bread' => $this->getBread(),
+			'bread' => $this->bread,
 			'bodyClasses' => $bodyClasses,
 			'serverDataJSON' => json_encode($this->getServerData()),
 			'menu' => $menu,
 			'dev' => FS_ENV == 'dev',
-			'hidden' => $this->getHidden(),
+			'hidden' => $this->hidden,
 			'isMob' => $this->isMob(),
 			'broadcast_message' => $g_broadcast_message,
 			'SRC_REVISION' => defined('SRC_REVISION') ? SRC_REVISION : null,
@@ -1169,11 +931,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		];
 	}
 
-	public function setTitle($name)
-	{
-		$this->title = array($name);
-	}
-
 	public function isVerified()
 	{
 		if ($this->session->isOrgaTeam()) {
@@ -1194,25 +951,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 
 		return false;
-	}
-
-	public function validUrl($url)
-	{
-		if (!filter_var($url, FILTER_VALIDATE_URL)) {
-			return false;
-		}
-
-		return true;
-	}
-
-	public function isAdmin()
-	{
-		return $this->session->mayGroup('admin') && $_SESSION['client']['group']['admin'] === true;
-	}
-
-	public function logg($arg)
-	{
-		file_put_contents(ROOT_DIR . 'data/logg.txt', json_encode(array('date' => date('Y-m-d H:i:s'), 'session' => $_SESSION, 'data' => $arg, 'add' => array($_GET))) . '-|||-', FILE_APPEND);
 	}
 
 	public function libmail($bezirk, $email, $subject, $message, $attach = false, $token = false)
@@ -1342,11 +1080,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	');
 	}
 
-	public function hasBezirk($bid): bool
-	{
-		return isset($_SESSION['client']['bezirke'][$bid]) || $this->session->isAdminFor($bid);
-	}
-
 	public function mayBezirk($bid): bool
 	{
 		return isset($_SESSION['client']['bezirke'][$bid]) || $this->session->isAdminFor($bid) || $this->session->isOrgaTeam();
@@ -1377,119 +1110,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0;
 	}
 
-	public function getRolle($gender_id, $rolle_id)
-	{
-		return $this->s('rolle_' . $rolle_id . '_' . $gender_id);
-	}
-
-	public function cropImg($path, $img, $i, $x, $y, $w, $h)
-	{
-		$targ_w = $w;
-		$targ_h = $h;
-		$jpeg_quality = 100;
-
-		$ext = explode('.', $img);
-		$ext = end($ext);
-		$ext = strtolower($ext);
-
-		switch ($ext) {
-			case 'gif':
-				$img_r = imagecreatefromgif($path . '/' . $img);
-				break;
-			case 'jpg':
-				$img_r = imagecreatefromjpeg($path . '/' . $img);
-				break;
-			case 'png':
-				$img_r = imagecreatefrompng($path . '/' . $img);
-				break;
-			default:
-				$img_r = null;
-		}
-
-		$dst_r = imagecreatetruecolor($targ_w, $targ_h);
-
-		imagecopyresampled($dst_r, $img_r, 0, 0, $x, $y, $targ_w, $targ_h, $w, $h);
-
-		$new_path = $path . '/crop_' . $i . '_' . $img;
-
-		@unlink($new_path);
-
-		switch ($ext) {
-			case 'gif':
-				imagegif($dst_r, $new_path);
-				break;
-			case 'jpg':
-				imagejpeg($dst_r, $new_path, $jpeg_quality);
-				break;
-			case 'png':
-				imagepng($dst_r, $new_path, 0);
-				break;
-		}
-	}
-
-	public function cropImage($bild, $x, $y, $w, $h)
-	{
-		$targ_w = 467;
-		$targ_h = 600;
-		$jpeg_quality = 100;
-
-		$ext = explode('.', $bild);
-		$ext = end($ext);
-		$ext = strtolower($ext);
-
-		$img_r = null;
-
-		switch ($ext) {
-			case 'gif':
-				$img_r = imagecreatefromgif('./tmp/' . $bild);
-				break;
-			case 'jpg':
-				$img_r = imagecreatefromjpeg('./tmp/' . $bild);
-				break;
-			case 'png':
-				$img_r = imagecreatefrompng('./tmp/' . $bild);
-				break;
-		}
-
-		if ($img_r === null) {
-			return false;
-		}
-
-		$dst_r = imagecreatetruecolor($targ_w, $targ_h);
-
-		imagecopyresampled($dst_r, $img_r, 0, 0, $x, $y, $targ_w, $targ_h, $w, $h);
-
-		@unlink('../tmp/crop_' . $bild);
-
-		switch ($ext) {
-			case 'gif':
-				imagegif($dst_r, './tmp/crop_' . $bild);
-				break;
-			case 'jpg':
-				imagejpeg($dst_r, './tmp/crop_' . $bild, $jpeg_quality);
-				break;
-			case 'png':
-				imagepng($dst_r, './tmp/crop_' . $bild, 0);
-				break;
-		}
-
-		if (file_exists('./tmp/crop_' . $bild)) {
-			try {
-				copy('./tmp/crop_' . $bild, './tmp/thumb_crop_' . $bild);
-				$img = new fImage('./tmp/thumb_crop_' . $bild);
-				$img->resize(200, 0);
-				$img->saveChanges();
-
-				return 'thumb_crop_' . $bild;
-			} catch (Exception $e) {
-				return false;
-			}
-		}
-
-		return false;
-	}
-
-	public function resizeImg($img, $width, $format)
+	private function resizeImg($img, $width, $format)
 	{
 		if (file_exists($img)) {
 			$opt = 'auto';
@@ -1546,40 +1167,11 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return $out;
 	}
 
-	public function is_allowed($img)
-	{
-		$img['name'] = strtolower($img['name']);
-		$img['type'] = strtolower($img['type']);
-
-		$allowed = array('jpg' => true, 'jpeg' => true, 'png' => true, 'gif' => true);
-
-		$filename = $img['name'];
-		$parts = explode('.', $filename);
-		$ext = end($parts);
-
-		$allowed_mime = array('image/gif' => true, 'image/jpeg' => true, 'image/png' => true);
-
-		if (isset($allowed[$ext])) {
-			return true;
-		}
-
-		return false;
-	}
-
 	public function tt($str, $length = 160)
 	{
 		if (strlen($str) > $length) {
 			/* this removes the part of the last word that might have been destroyed by substr */
 			$str = preg_replace('/[^ ]*$/', '', substr($str, 0, $length)) . ' ...';
-		}
-
-		return $str;
-	}
-
-	public function ttt($str, $length = 160)
-	{
-		if (strlen($str) > $length) {
-			$str = substr($str, 0, ($length - 4)) . '...';
 		}
 
 		return $str;
@@ -1611,42 +1203,5 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 
 		return '<span style="' . $bg . 'background-image:url(' . $this->img($foodsaver['photo'], $size, 'q', $altimg) . ');" class="avatar size-' . $size . ' sleepmode-' . $foodsaver['sleep_status'] . '"><i>' . $foodsaver['name'] . '</i></span>';
-	}
-
-	public function rolleWrapInt($roleInt)
-	{
-		$roles = array(
-			0 => 'user',
-			1 => 'fs',
-			2 => 'bieb',
-			3 => 'bot',
-			4 => 'orga',
-			5 => 'admin'
-		);
-
-		return $roles[$roleInt];
-	}
-
-	public function rolleWrap($roleStr)
-	{
-		$roles = array(
-			'user' => 0,
-			'fs' => 1,
-			'bieb' => 2,
-			'bot' => 3,
-			'orga' => 4,
-			'admin' => 5
-		);
-
-		return $roles[$roleStr];
-	}
-
-	// https://stackoverflow.com/a/834355
-	public function endsWith($haystack, $needle)
-	{
-		$length = strlen($needle);
-
-		return $length === 0 ||
-			(substr($haystack, -$length) === $needle);
 	}
 }

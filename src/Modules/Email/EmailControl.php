@@ -106,9 +106,9 @@ class EmailControl extends Control
 	private function handleEmail()
 	{
 		if ($this->func->submitted()) {
-			$betreff = $this->func->getPost('subject');
-			$nachricht = $this->func->getPost('message');
-			$mailbox_id = $this->func->getPost('mailbox_id');
+			$betreff = $this->getPost('subject');
+			$nachricht = $this->getPost('message');
+			$mailbox_id = $this->getPost('mailbox_id');
 
 			$nachricht = $this->handleImages($nachricht);
 
@@ -200,7 +200,7 @@ class EmailControl extends Control
 			}
 
 			if (!empty($foodsaver)) {
-				$attach = $this->func->handleAttach('attachement');
+				$attach = $this->handleAttach('attachement');
 
 				$out = array();
 				foreach ($foodsaver as $fs) {
@@ -216,6 +216,36 @@ class EmailControl extends Control
 				$this->func->error('In den ausgew&auml;hlten Bezirken gibt es noch keine Foodsaver');
 			}
 		}
+	}
+
+	public function getPost($id)
+	{
+		return $_POST[$id];
+	}
+
+	private function handleAttach($name)
+	{
+		if (isset($_FILES[$name]) && $_FILES[$name]['size'] > 0) {
+			$datei = $_FILES[$name]['tmp_name'];
+			$size = $_FILES[$name]['size'];
+			$datein = $_FILES[$name]['name'];
+			$datein = strtolower($datein);
+			$datein = str_replace('.jpeg', '.jpg', $datein);
+			$dateiendung = strtolower(substr($datein, strlen($datein) - 4, 4));
+
+			$new_name = uniqid() . $dateiendung;
+			move_uploaded_file($datei, './data/attach/' . $new_name);
+
+			return array(
+				'name' => $datein,
+				'path' => './data/attach/' . $new_name,
+				'uname' => $new_name,
+				'mime' => mime_content_type('./data/attach/' . $new_name),
+				'size' => $size
+			);
+		}
+
+		return false;
 	}
 
 	private function v_email_statusbox($mail)
@@ -383,12 +413,17 @@ class EmailControl extends Control
 
 			return $html;
 		} catch (Exception $e) {
-			if ($this->func->isAdmin()) {
+			if ($this->isAdmin()) {
 				echo $e->getMessage();
 				die();
 			}
 
 			return $body;
 		}
+	}
+
+	private function isAdmin()
+	{
+		return $this->session->mayGroup('admin') && $_SESSION['client']['group']['admin'] === true;
 	}
 }
