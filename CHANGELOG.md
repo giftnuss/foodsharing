@@ -9,6 +9,7 @@
 - Make date in event a mandatory field #436 !669 @tihar
 - Added API endpoints for basket pictures !671 @alex.simm 
 - Allow use of markdown in fairteiler description !690 @NerdyProjects
+- Joining regions REST API !696 @NerdyProjects
 
 ## Bugfixes
 - Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
@@ -18,6 +19,7 @@
 - Properly escape Fairteiler names in all occurences !690 @NerdyProjects
 - Avoid strip_tags on bell data !691 @NerdyProjects
 - Avoid strip_tags on bell data !692 @NerdyProjects
+- Permission checks when joining regions !696 @NerdyProjects
 
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies
@@ -25,6 +27,7 @@
 
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen
+- disable backup_globals for PHPUnit to have unit tests working in dev again !696 @NerdyProjects
 
 # 2019-01-25
 Matthias: "Are there any concerns about merging the addresspicker / map / geolocation to production?"
