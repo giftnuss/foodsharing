@@ -67,9 +67,11 @@ body.fp-viewing-festival #topbar .navbar {
 }
 
 .campaignimg img {
-  height: 90%;
+  max-width: 100%;
   margin: auto;
   display: block;
+  height: 100%;
+  object-fit: contain;
 }
 
 @media (max-aspect-ratio: 3/2) {
