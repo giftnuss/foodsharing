@@ -228,13 +228,7 @@ class SettingsModel extends Db
 
 	public function changeMail($email)
 	{
-<<<<<<< HEAD
-		$this->del('DELETE FROM `fs_mailchange` WHERE foodsaver_id = ' . (int)$this->func->fsId());
-		$currentMail = $this->qOne('SELECT `email` FROM fs_foodsaver WHERE id = ' . (int)$this->func->fsId());
-		$this->logChangedSetting($this->func->fsId(), ['email' => $currentMail], ['email' => $email], ['email']);
-=======
 		$this->del('DELETE FROM `fs_mailchange` WHERE foodsaver_id = ' . (int)$this->session->id());
->>>>>>> 5590d353... fixed sql injection in SettingsModel::logChangedSetting()
 
 		if ($this->update('
 			UPDATE `fs_foodsaver`
