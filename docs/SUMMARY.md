@@ -4,7 +4,7 @@
 
 ### Getting started
 
-  - [Getting the code](running-the-code.md)
+  - [Running the code: Docker](running-the-code.md)
   - [Setting things up](setting-things-up.md)
 
 ### Contributing
