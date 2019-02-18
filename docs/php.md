@@ -42,6 +42,7 @@ $out = '<ul class="linklist baskets">';
 
 ## Conventions
 
+- Do not use global variables (those indicated by the keyword `global`, can be found in legacy code)
 - Indentation: we use one tabstop per indentation level
 - Variables in strings: we do not use variables in strings but concatenate:
 ```
