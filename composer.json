@@ -47,7 +47,7 @@
     "mobiledetect/mobiledetectlib": "2.8.33",
     "sensio/framework-extra-bundle": "5.2.4",
     "sentry/sentry": "1.10.0",
-    "setasign/fpdi-fpdf": "2.2.0",
+    "setasign/fpdi-tcpdf": "2.2.0",
     "symfony/config": "4.2.3",
     "symfony/console": "4.2.3",
     "symfony/dependency-injection": "4.2.3",

@@ -2,25 +2,26 @@
 
 ## Features
 - On dashboard there now is a symbol indicating the confirmation status of a pickup !661 @jofranz
-- Pre fill end date of pickuphistory with todays date for comfort reasons !660 @jofranz
+- Pre-fill end date of pickup history with today's date for comfort reasons !660 @jofranz
 - Conversation API returns name (or null) !658 @nicksellen 
 - Added the amount of events conditionally to the dashboard event headline in case there is more than one event !650 @jofranz
 - Added a new button to the contextmenu which appears by clicking the profilepic in shops #302 !671 @peter.reutlingen
 - Make date in event a mandatory field #436 !669 @tihar
 - Added API endpoints for basket pictures !671 @alex.simm 
-- Allow use of markdown in fairteiler description !690 @NerdyProjects
+- Allow use of markdown in Fair-Teiler description !690 @NerdyProjects
 - Joining regions REST API !696 @NerdyProjects
 - Start page content over content manager #470 @k.miklobusec
 - Start page content over content manager #470 !701 @k.miklobusec
 - Added profile status infos for store and pickup entries for ambassadors @jofranz
 - Added profile status infos for store and pickup entries for ambassadors !705 @jofranz
+- Scale down font size on passports for long names !685 @NerdyProjects
 
 ## Bugfixes
-- Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
+- Search index is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
 - Fixup conversation header display !658 @nicksellen
 - Fixed bug in #302 goto_profile_from_teamsite !671 with !675 @peter.reutlingen
 - Fixed an SQL injection in an FoodsaverGateway method @alangecker
-- Properly escape Fairteiler names in all occurences !690 @NerdyProjects
+- Properly escape Fair-Teiler names in all occurrences !690 @NerdyProjects
 - Avoid strip_tags on bell data !691 @NerdyProjects
 - Permission checks when joining regions !696 @NerdyProjects
 - Fixed the bug that the number of pickups in the team list isn't shown when the name is too long. #381 !688 @peter.reutlingen
@@ -31,7 +32,9 @@
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies
 - remove unused methods in XhrMethods !694 @NerdyProjects
-- trigger fairteiler wallpost notifications in backend !700 @NerdyProjects
+- trigger Fair-Teiler wallpost notifications in backend !700 @NerdyProjects
+- removed the QR code from the fs-passes !685 #144 @peter.toennies
+- removed the old qr code library and chaged the current qr on the fs-passes to show the fs profile !685 #144 @peter.toennies
 
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen
