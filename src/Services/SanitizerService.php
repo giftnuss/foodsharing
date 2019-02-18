@@ -43,4 +43,20 @@ class SanitizerService
 
 		return $result;
 	}
+
+	public function handleTagselect($id)
+	{
+		global $g_data;
+		$recip = array();
+		if (isset($g_data[$id]) && is_array($g_data[$id])) {
+			foreach ($g_data[$id] as $key => $r) {
+				if ($key != '') {
+					$part = explode('-', $key);
+					$recip[$part[0]] = $part[0];
+				}
+			}
+		}
+
+		$g_data[$id] = $recip;
+	}
 }

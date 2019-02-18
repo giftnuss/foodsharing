@@ -21,6 +21,7 @@ use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Permissions\RegionPermissions;
+use Foodsharing\Services\SanitizerService;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,6 +46,7 @@ class XhrMethods
 	private $emailGateway;
 	private $mailboxGateway;
 	private $imageManager;
+	private $sanitizerService;
 
 	/**
 	 * XhrMethods constructor.
@@ -69,7 +71,9 @@ class XhrMethods
 		FoodsaverGateway $foodsaverGateway,
 		EmailGateway $emailGateway,
 		MailboxGateway $mailboxGateway,
-		ImageManager $imageManager)
+		ImageManager $imageManager,
+		SanitizerService $sanitizerService
+	)
 	{
 		$this->func = $func;
 		$this->mem = $mem;
@@ -89,6 +93,7 @@ class XhrMethods
 		$this->emailGateway = $emailGateway;
 		$this->mailboxGateway = $mailboxGateway;
 		$this->imageManager = $imageManager;
+		$this->sanitizerService = $sanitizerService;
 	}
 
 	public function xhr_verify($data)
@@ -1370,7 +1375,7 @@ class XhrMethods
 				}
 			}
 
-			$this->func->handleTagselect('botschafter');
+			$this->sanitizerService->handleTagselect('botschafter');
 
 			$this->regionGateway->update_bezirkNew($data['bezirk_id'], $g_data);
 

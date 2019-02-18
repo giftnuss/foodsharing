@@ -6,18 +6,23 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
+use Foodsharing\Services\SanitizerService;
 
 class StoreUserControl extends Control
 {
 	private $storeGateway;
 	private $foodsaverGateway;
+	private $sanitizerService;
 
-	public function __construct(StoreModel $model, StoreUserView $view, StoreGateway $storeGateway, FoodsaverGateway $foodsaverGateway)
+	public function __construct(StoreModel $model, StoreUserView $view, StoreGateway $storeGateway, FoodsaverGateway $foodsaverGateway,
+		SanitizerService $sanitizerService
+	)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 
@@ -56,14 +61,14 @@ class StoreUserControl extends Control
 					$this->storeGateway->clearAbholer($_GET['id']);
 					foreach ($range as $r) {
 						if (isset($_POST['dow' . $r])) {
-							$this->func->handleTagselect('dow' . $r);
+							$this->sanitizerService->handleTagselect('dow' . $r);
 							foreach ($g_data['dow' . $r] as $fs_id) {
 								$this->storeGateway->addAbholer($_GET['id'], $fs_id, $r);
 							}
 						}
 					}
 				} else {
-					$this->func->handleTagselect('foodsaver');
+					$this->sanitizerService->handleTagselect('foodsaver');
 
 					if (!empty($g_data['foodsaver'])) {
 						$this->model->addBetriebTeam($_GET['id'], $g_data['foodsaver'], $g_data['verantwortlicher']);
