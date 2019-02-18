@@ -144,7 +144,7 @@ class MailsControl extends ConsoleControl
 						foreach ($msg->getAttachments() as $a) {
 							$filename = $a->getFilename();
 							if ($this->attach_allow($filename, null)) {
-								$new_filename = uniqid();
+								$new_filename = bin2hex(random_bytes(16));
 								$path = 'data/mailattach/';
 								$j = 0;
 								while (file_exists($path . $new_filename)) {

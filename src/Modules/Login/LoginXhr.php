@@ -131,7 +131,7 @@ class LoginXhr extends Control
 			exit();
 		}
 
-		$token = uniqid('', true);
+		$token = bin2hex(random_bytes(12));
 		if ($id = $this->model->insertNewUser($data, $token)) {
 			$activationUrl = BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
 
