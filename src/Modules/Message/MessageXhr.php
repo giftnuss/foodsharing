@@ -69,11 +69,12 @@ final class MessageXhr extends Control
 	 */
 	public function loadconversation(): void
 	{
-		if ($this->mayConversation((int)$_GET['id']) && $member = $this->model->listConversationMembers($_GET['id'])) {
+		$id = (int)$_GET['id'];
+		if ($this->mayConversation($id) && $member = $this->model->listConversationMembers($id)) {
 			$xhr = new Xhr();
 			$xhr->addData('member', $member);
-			$xhr->addData('conversation', $this->model->getValues(array('name'), 'conversation', $_GET['id']));
-			if ($msgs = $this->model->loadConversationMessages($_GET['id'])) {
+			$xhr->addData('conversation', $this->model->getValues(array('name'), 'conversation', $id));
+			if ($msgs = $this->messageGateway->getConversationMessages($id)) {
 				$xhr->addData('messages', $msgs);
 			}
 

@@ -69,7 +69,7 @@ final class MessageModel extends Db
                   conversation_id
         
                 HAVING
-                  idstring = "' . implode(':', $recips) . '"
+                  idstring = "' . implode(':', array_map('intval', $recips)) . '"
 		    ';
 
 			if ($conv = $this->qRow($sql)) {
@@ -477,34 +477,6 @@ final class MessageModel extends Db
 		}
 
 		return false;
-	}
-
-	public function loadConversationMessages(int $conversation_id, int $limit = 20, int $offset = 0): array
-	{
-		return $this->q('
-			SELECT
-				m.id,
-				fs.`id` AS fs_id,
-				fs.name AS fs_name,
-				fs.photo AS fs_photo,
-				m.`body`,
-				m.`time`
-
-			FROM
-				`fs_msg` m,
-				`fs_foodsaver` fs
-
-			WHERE
-				m.foodsaver_id = fs.id
-
-			AND
-				m.conversation_id = ' . $conversation_id . '
-
-			ORDER BY
-				m.`time` DESC
-
-			LIMIT ' . $offset . ',' . $limit . '
-		');
 	}
 
 	public function mayConversation($conversation_id): bool
