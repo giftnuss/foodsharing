@@ -10,7 +10,6 @@ import 'jquery-ui-addons'
 import { GET, goTo, isMob } from '@/browser'
 
 import conv from '@/conv'
-import { getCsrfToken } from '@/api/base'
 
 export { goTo, isMob, GET }
 
@@ -380,9 +379,6 @@ export const ajax = {
       data: opt.data,
       dataType: 'json',
       method: opt.method,
-      headers: {
-        'X-CSRF-TOKEN': getCsrfToken()
-      },
       success: function (ret) {
         if (ret.status == 1) {
           if (ret.msg != undefined) {
@@ -505,9 +501,6 @@ export function xhrf (func) {
   $.ajax({
     dataType: 'json',
     url: `/xhr.php?f=${func}`,
-    headers: {
-      'X-CSRF-TOKEN': getCsrfToken()
-    },
     success: function (data) {
       hideLoader()
       if (data.status == 1) {

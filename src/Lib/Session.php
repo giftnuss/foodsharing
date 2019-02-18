@@ -515,7 +515,7 @@ class Session
 
 	public function isValidCsrfToken(string $key, string $token): bool
 	{
-		if (defined('CSRF_IGNORE') && CSRF_IGNORE) {
+		if (defined('CSRF_TEST_TOKEN') && $token === CSRF_TEST_TOKEN) {
 			return true;
 		}
 

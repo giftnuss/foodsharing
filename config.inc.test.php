@@ -51,4 +51,4 @@ if (!defined('ROOT_DIR')) {
 	define('ROOT_DIR', './');
 }
 
-define('CSRF_IGNORE', true);
+define('CSRF_TEST_TOKEN', '__TESTTOKEN__');
