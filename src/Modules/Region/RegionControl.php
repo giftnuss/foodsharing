@@ -84,7 +84,7 @@ class RegionControl extends Control
 		$menu = [
 			['name' => 'terminology.forum', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=forum'],
 			['name' => 'terminology.events', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=events'],
-			['name' => 'Mitglieder', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=members'],
+			['name' => 'group.members', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=members'],
 		];
 
 		if ($this->forumPermissions->mayAccessAmbassadorBoard($region['id']) && !$isWorkGroup) {

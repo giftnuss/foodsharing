@@ -43,7 +43,7 @@
               v-b-tooltip.hover
               type="button"
               class="btn btn-sm"
-              title="Filter leeren"
+              :title="$i18n('button.clear_filter')"
               @click="clearFilter"
             >
               <i class="fas fa-times" />
@@ -68,7 +68,10 @@
           slot-scope="data"
         >
           <div>
-            <img :src="data.value" />
+            <img 
+              :src="data.value"
+              :alt="$i18n('terminology.profile_picture')"
+            />
           </div>
         </template>
         <template
@@ -85,7 +88,7 @@
       <div class="float-right p-1 pr-3">
         <b-pagination
           v-model="currentPage"
-          :total-rows="members.length"
+          :total-rows="membersFiltered.length"
           :per-page="perPage"
           class="my-0"
         />
@@ -130,7 +133,7 @@ export default {
           class: 'foto-column'
         },
         'user.name': {
-          label: 'Name',
+          label: this.$i18n('group.name'),
           sortable: false,
           class: 'align-middle'
         }
@@ -152,13 +155,6 @@ export default {
     }
   },
   computed: {
-    districtOrWorkGroup () {
-      if (this.isWorkGroup) {
-        return 'in der AG '
-      } else {
-        return 'im Bezirk '
-      }
-    },
     membersFiltered () {
       if (!this.filterText.trim()) {
         return this.members

@@ -12,6 +12,7 @@ button:
   abort: Abbrechen
   send: Senden
   answer: Antworten
+  clear_filter: Filter leeren
 
 group:
   name: Name
@@ -136,6 +137,7 @@ terminology:
   n_ambassadors: 'Ein(e) BotschafterIn|%count% BotschafterInnen'
   n_stores: 'Ein Betrieb|%count% Betriebe'
   n_cooperating_stores: 'Eine laufende Kooperation|%count% laufende Kooperationen'
+  profile_picture: 'Profilbild'
 
 statistics:
   kg_food_saved: '%count% kg Lebensmittel gerettet'
@@ -230,9 +232,9 @@ bell:
   sharepoint_activate: "{name} wurde eingetragen"
 
 list:
-  filter_for: "Filter nach..."
+  filter_for: "Filtern nach..."
 
 memberlist:
-  header_for_district: "Alle Foodsaver im Bezirk {bezirk}"
-  header_for_workgroup: "Alle Foodsaver in der AG {bezirk}"
-  some_in: "{some} in "
+  header_for_district: "Foodsaver im Bezirk {bezirk}"
+  header_for_workgroup: "Foodsaver in der AG {bezirk}"
+  some_in: "{some} von "
