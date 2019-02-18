@@ -210,17 +210,6 @@ class EmailControl extends Control
 				foreach ($out as $o) {
 					$foodsaver[] = $o;
 				}
-				/*
-				 * Array
-				(
-					[form_submit] => nachrichtenverteiler
-					[recip_choose] => bezirk
-					[mode] => 1
-					[subject] => asdasdasd
-					[message] => <p>asdasdafds</p>
-				)
-
-				 */
 				$this->emailGateway->initEmail($this->session->id(), $mailbox_id, $foodsaver, $nachricht, $betreff, $attach);
 				$this->func->goPage();
 			} elseif ($data['recip_choose'] != 'manual') {
