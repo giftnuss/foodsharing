@@ -6,9 +6,8 @@ use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
-use setasign\Fpdi;
-use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\QrCode;
+use setasign\Fpdi\Tcpdf\Fpdi;
 
 final class PassportGeneratorControl extends Control
 {
@@ -103,11 +102,11 @@ final class PassportGeneratorControl extends Control
 		$foodsavers = $tmp;
 		$is_generated = array();
 
-		$pdf = new Fpdi\Fpdi();
+		$pdf = new Fpdi();
 		$pdf->AddPage();
 		$pdf->SetTextColor(0, 0, 0);
-		$pdf->AddFont('Ubuntu-L', '', 'Ubuntu-L.php');
-		$pdf->AddFont('AcmeFont Regular', '', 'acmefontregular.php');
+		$pdf->AddFont('Ubuntu-L', '', 'lib/font/ubuntul.php', true);
+		$pdf->AddFont('AcmeFont Regular', '', 'lib/font/acmefont.php', true);
 
 		$x = 0;
 		$y = 0;
@@ -134,11 +133,10 @@ final class PassportGeneratorControl extends Control
 						['user' => $this->session->user('name')],
 						'pass-fail-' . $foodsaver['id']
 					);
-					continue;
+					//continue;
 				}
 
 				$pdf->SetTextColor(0, 0, 0);
-				$pdf->AddFont('Ubuntu-L', '', 'Ubuntu-L.php');
 
 				++$card;
 
@@ -147,17 +145,33 @@ final class PassportGeneratorControl extends Control
 				$pdf->Image('img/pass_bg.png', 10 + $x, 10 + $y, 83, 55);
 
 				$pdf->SetFont('Ubuntu-L', '', 10);
-
-				$pdf->Text(41.8 + $x, 34.4 + $y, utf8_decode($foodsaver['name'] . ' ' . $foodsaver['nachname']));
-				$pdf->Text(41.8 + $x, 42.1 + $y, utf8_decode($this->getRole($foodsaver['geschlecht'], $foodsaver['rolle'])));
-				$pdf->Text(41.8 + $x, 49.8 + $y, utf8_decode(date('d. m. Y', time() - 1814400)));
-				$pdf->Text(41.8 + $x, 57.3 + $y, utf8_decode(date('d. m. Y', time() + 94608000)));
+				$name = $foodsaver['name'] . ' ' . $foodsaver['nachname'];
+				$maxWidth = 49;
+				if ($pdf->GetStringWidth($name) > $maxWidth) {
+					$pdf->SetFont('Ubuntu-L', '', 8);
+					if ($pdf->GetStringWidth($name) <= $maxWidth) {
+						$pdf->Text(41 + $x, 30 + $y, $name);
+					}
+					$size = 8;
+					while ($pdf->GetStringWidth($foodsaver['name']) > $maxWidth || $pdf->GetStringWidth($foodsaver['nachname']) > $maxWidth) {
+						$size -= 0.5;
+						$pdf->SetFont('Ubuntu-L', '', $size);
+					}
+					$pdf->Text(41 + $x, 30.2 + $y, $foodsaver['name']);
+					$pdf->Text(41 + $x, 33.2 + $y, $foodsaver['nachname']);
+				} else {
+					$pdf->Text(41 + $x, 30 + $y, $name);
+				}
+				$pdf->SetFont('Ubuntu-L', '', 10);
+				$pdf->Text(41 + $x, 39 + $y, $this->getRole($foodsaver['geschlecht'], $foodsaver['rolle']));
+				$pdf->Text(41 + $x, 48 + $y, utf8_decode(date('d. m. Y', time() - 1814400)));
+				$pdf->Text(41 + $x, 57 + $y, utf8_decode(date('d. m. Y', time() + 94608000)));
 
 				$pdf->SetFont('Ubuntu-L', '', 6);
-				$pdf->Text(41.8 + $x, 31.2 + $y, utf8_decode('Name'));
-				$pdf->Text(41.8 + $x, 38.9 + $y, utf8_decode('Rolle'));
-				$pdf->Text(41.8 + $x, 46.6 + $y, utf8_decode('Gültig ab'));
-				$pdf->Text(41.8 + $x, 54.3 + $y, utf8_decode('Gültig bis'));
+				$pdf->Text(41 + $x, 28 + $y, 'Name');
+				$pdf->Text(41 + $x, 37 + $y, 'Rolle');
+				$pdf->Text(41 + $x, 46 + $y, 'Gültig ab');
+				$pdf->Text(41 + $x, 55 + $y, 'Gültig bis');
 
 				$pdf->SetFont('Ubuntu-L', '', 9);
 				$pdf->SetTextColor(255, 255, 255);
@@ -165,17 +179,21 @@ final class PassportGeneratorControl extends Control
 				$pdf->Cell(50, 5, 'ID ' . $fs_id, 0, 0, 'R');
 
 				$pdf->SetFont('AcmeFont Regular', '', 5.3);
-				$pdf->Text(13.9 + $x, 20.6 + $y, 'Teile Lebensmittel, anstatt sie wegzuwerfen!');
+				$pdf->Text(12.8 + $x, 18.6 + $y, 'Teile Lebensmittel, anstatt sie wegzuwerfen!');
 
 				$pdf->useTemplate($fs_logo, 13.5 + $x, 13.6 + $y, 29.8);
 
-				$qrCode = new QrCode('foodsharing.de/profile/' . $fs_id);
-				$qrCode->setSize(80);
-				$qrCode->setWriterByName('png');
-				$qrCode->setMargin(0);
-				$qrCode->setErrorCorrectionLevel(new ErrorCorrectionLevel(ErrorCorrectionLevel::LOW));
-				$qrCode->writeFile('tmp/qr_' . $fs_id . '.png');
-				$pdf->Image('tmp/qr_' . $fs_id . '.png', 68 + $x, 40 + $y);
+				$style = array(
+					'vpadding' => 'auto',
+					'hpadding' => 'auto',
+					'fgcolor' => array(0, 0, 0),
+					'bgcolor' => false, //array(255,255,255)
+					'module_width' => 1, // width of a single module in points
+					'module_height' => 1 // height of a single module in points
+				);
+
+				// QRCODE,L : QR-CODE Low error correction
+				$pdf->write2DBarcode('https://foodsharing.de/profile/' . $fs_id, 'QRCODE,L', 70.5 + $x, 43 + $y, 20, 20, $style, 'N');
 
 				if ($photo = $this->foodsaverGateway->getPhoto($fs_id)) {
 					if (file_exists('images/crop_' . $photo)) {
@@ -214,7 +232,7 @@ final class PassportGeneratorControl extends Control
 		$bez = str_replace(['ä', 'ö', 'ü', 'ß'], ['ae', 'oe', 'ue', 'ss'], $bez);
 		$bez = preg_replace('/[^a-zA-Z]/', '', $bez);
 
-		$pdf->Output('D', 'foodsaver_pass_' . $bez . '.pdf');
+		$pdf->Output('foodsaver_pass_' . $bez . '.pdf', 'D');
 		exit();
 	}
 
