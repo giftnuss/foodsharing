@@ -68,7 +68,7 @@ class StoreXhr extends Control
 					$("daterange_from").datepicker("close");
 					$("daterange_to").datepicker("close");
 						
-					$("#daterange_content").html(\'' . $this->func->jsSafe($this->view->fetchlist($history)) . '\');
+					$("#daterange_content").html(\'' . $this->sanitizerService->jsSafe($this->view->fetchlist($history)) . '\');
 						'
 				);
 			}

@@ -97,7 +97,7 @@ class EmailControl extends Control
 				++$i;
 				$this->func->addContent('<li><a href="#" onclick="$(\'#right-' . $i . '\').dialog(\'open\');return false;">' . date('d.m.', strtotime($m['zeit'])) . ' ' . $m['name'] . '</a></li>', CNT_RIGHT);
 				$divs .= '<div id="right-' . $i . '" style="display:none;">' . nl2br($m['message']) . '</div>';
-				$this->func->addJs('$("#right-' . $i . '").dialog({autoOpen:false,title:"' . $this->func->jsSafe($m['name'], '"') . '",modal:true});');
+				$this->func->addJs('$("#right-' . $i . '").dialog({autoOpen:false,title:"' . $this->sanitizerService->jsSafe($m['name'], '"') . '",modal:true});');
 			}
 		}
 		$this->func->addContent('</ul></div>' . $divs, CNT_RIGHT);

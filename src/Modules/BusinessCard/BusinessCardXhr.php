@@ -125,7 +125,7 @@ class BusinessCardXhr extends Control
 		return array(
 			'status' => 1,
 			'script' => '
-				pulseInfo(\'' . $this->func->jsSafe($this->func->s('generation_success')) . '\');
+				pulseInfo(\'' . $this->sanitizerService->jsSafe($this->func->s('generation_success')) . '\');
 				u_download("' . $type . ':' . $data['id'] . '");'
 		);
 	}

@@ -30,7 +30,7 @@ class FoodsaverXhr extends Control
 
 			return array(
 				'status' => 1,
-				'script' => '$("#fsform").html(\'' . $this->func->jsSafe($html) . '\');$(".button").button();$(".avatarlink img").load(function(){$(".avatarlink img").fadeIn();});'
+				'script' => '$("#fsform").html(\'' . $this->sanitizerService->jsSafe($html) . '\');$(".button").button();$(".avatarlink img").load(function(){$(".avatarlink img").fadeIn();});'
 			);
 		}
 	}
@@ -42,7 +42,7 @@ class FoodsaverXhr extends Control
 	{
 		$foodsaver = $this->model->listFoodsaver($_GET['bid']);
 		$bezirk = $this->regionGateway->getBezirk($_GET['bid']);
-		$html = $this->func->jsSafe($this->view->foodsaverList($foodsaver, $bezirk), "'");
+		$html = $this->sanitizerService->jsSafe($this->view->foodsaverList($foodsaver, $bezirk), "'");
 
 		return array(
 			'status' => 1,

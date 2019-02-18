@@ -44,7 +44,7 @@ class SanitizerService
 		return $result;
 	}
 
-	public function handleTagselect($id)
+	public function handleTagselect($id): void
 	{
 		global $g_data;
 		$recip = array();
@@ -58,5 +58,10 @@ class SanitizerService
 		}
 
 		$g_data[$id] = $recip;
+	}
+
+	public function jsSafe($str, $quote = "'")
+	{
+		return str_replace(array($quote, "\n", "\r"), array('\\' . $quote . '', '\\n', ''), $str);
 	}
 }

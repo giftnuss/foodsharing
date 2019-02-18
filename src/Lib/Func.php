@@ -573,11 +573,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return '';
 	}
 
-	public function jsSafe($str, $quote = "'")
-	{
-		return str_replace(array($quote, "\n", "\r"), array('\\' . $quote . '', '\\n', ''), $str);
-	}
-
 	public function goPage($page = false)
 	{
 		if (!$page) {
@@ -697,7 +692,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 				$msg .= '<div class="item">' . $e . '</div>';
 				//addJs('error("'.$e.'");');
 			}
-			$this->addJs('pulseError("' . $this->jsSafe($msg, '"') . '");');
+			$this->addJs('pulseError("' . $this->sanitizerService->jsSafe($msg, '"') . '");');
 		}
 		if (isset($_SESSION['msg']['info']) && !empty($_SESSION['msg']['info'])) {
 			$msg = '';
@@ -705,14 +700,14 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 				$msg .= '<p>' . $i . '</p>';
 				//addJs('info("'.$i.'");');
 			}
-			$this->addJs('pulseInfo("' . $this->jsSafe($msg, '"') . '");');
+			$this->addJs('pulseInfo("' . $this->sanitizerService->jsSafe($msg, '"') . '");');
 		}
 		if (isset($_SESSION['msg']['info']) && !empty($_SESSION['msg']['info'])) {
 			$msg = '';
 			foreach ($_SESSION['msg']['info'] as $i) {
 				$msg .= '<p>' . $i . '</p>';
 			}
-			$this->addJs('pulseSuccess("' . $this->jsSafe($msg, '"') . '");');
+			$this->addJs('pulseSuccess("' . $this->sanitizerService->jsSafe($msg, '"') . '");');
 		}
 		$_SESSION['msg']['info'] = array();
 		$_SESSION['msg']['success'] = array();

@@ -4,6 +4,7 @@ namespace Foodsharing\Lib\View;
 
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
+use Foodsharing\Services\SanitizerService;
 
 class Utils
 {
@@ -22,10 +23,12 @@ class Utils
 	 * @var \Twig\Environment
 	 */
 	private $twig;
+	private $sanitizerService;
 
-	public function __construct()
+	public function __construct(SanitizerService $sanitizerService)
 	{
 		$this->id = array();
+		$this->sanitizerService = $sanitizerService;
 	}
 
 	/**
@@ -857,7 +860,7 @@ class Utils
 					} else {
 						$cmsg = 'Wirklich l&ouml;schen?';
 					}
-					$out .= '<li onclick="ifconfirm(\'/?page=' . $page . '&a=delete&id=' . $id . '\',\'' . $this->func->jsSafe($cmsg) . '\');" title="l&ouml;schen" class="ui-state-default' . $corner . '"><span class="ui-icon ui-icon-trash"></span></li>';
+					$out .= '<li onclick="ifconfirm(\'/?page=' . $page . '&a=delete&id=' . $id . '\',\'' . $this->sanitizerService->jsSafe($cmsg) . '\');" title="l&ouml;schen" class="ui-state-default' . $corner . '"><span class="ui-icon ui-icon-trash"></span></li>';
 					break;
 
 				default:

@@ -3,17 +3,13 @@
 namespace Foodsharing\Modules\Mailbox;
 
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Services\SanitizerService;
 
 class MailboxControl extends Control
 {
-	private $sanitizerService;
-
-	public function __construct(MailboxModel $model, MailboxView $view, SanitizerService $sanitizerService)
+	public function __construct(MailboxModel $model, MailboxView $view)
 	{
 		$this->model = $model;
 		$this->view = $view;
-		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 	}

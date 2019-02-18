@@ -24,7 +24,7 @@ class BusinessCardView extends View
 				ev.preventDefault();
 				if($("#opt").val() == "")
 				{
-					pulseError(\'' . $this->func->jsSafe($this->func->s('should_choose_option')) . '\');
+					pulseError(\'' . $this->sanitizerService->jsSafe($this->func->s('should_choose_option')) . '\');
 				}
 				else
 				{

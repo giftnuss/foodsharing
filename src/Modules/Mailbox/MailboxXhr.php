@@ -4,17 +4,13 @@ namespace Foodsharing\Modules\Mailbox;
 
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Services\SanitizerService;
 
 class MailboxXhr extends Control
 {
-	private $sanitizerService;
-
-	public function __construct(MailboxModel $model, MailboxView $view, SanitizerService $sanitizerService)
+	public function __construct(MailboxModel $model, MailboxView $view)
 	{
 		$this->model = $model;
 		$this->view = $view;
-		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 
@@ -46,9 +42,9 @@ class MailboxXhr extends Control
 
 			$init = 'window.parent.mb_finishFile("' . $new_filename . '");';
 		} elseif (!$attachmentIsAllowed) {
-			$init = 'window.parent.pulseInfo(\'' . $this->func->jsSafe($this->func->s('wrong_file')) . '\');window.parent.mb_removeLast();';
+			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->func->s('wrong_file')) . '\');window.parent.mb_removeLast();';
 		} else {
-			$init = 'window.parent.pulseInfo(\'' . $this->func->jsSafe($this->func->s('file_to_big')) . '\');window.parent.mb_removeLast();';
+			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->func->s('file_to_big')) . '\');window.parent.mb_removeLast();';
 		}
 
 		echo '<html><head>
@@ -339,7 +335,7 @@ class MailboxXhr extends Control
 					}
 			
 					$("#message-body").dialog("option",{
-						title: \'' . $this->func->jsSafe($mail['subject']) . '\',
+						title: \'' . $this->sanitizerService->jsSafe($mail['subject']) . '\',
 						height: ($( window ).height()-40)
 					});
 					$(".mailbox-body").css({
