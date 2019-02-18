@@ -120,7 +120,7 @@ final class PassportGeneratorControl extends Control
 		$fs_logo = $pdf->importPage(1);
 
 		foreach ($foodsavers as $fs_id) {
-			if ($foodsaver = $this->passportGeneratorGateway->fetchFoodsaverData($fs_id)) {
+			if ($foodsaver = $this->foodsaverGateway->getFoodsaverDetails($fs_id)) {
 				if (empty($foodsaver['photo'])) {
 					$noPhoto[] = $foodsaver['name'] . ' ' . $foodsaver['nachname'];
 
