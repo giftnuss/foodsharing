@@ -8,7 +8,6 @@ import 'jquery-jcrop'
 import { attachAddressPicker } from '@/addressPicker'
 
 import {
-  ajreq,
   pictureCrop,
   pictureReady
 } from '@/script'
@@ -19,13 +18,8 @@ import './FairTeiler.css'
 
 expose({
   pictureCrop,
-  pictureReady,
-  u_wallpostReady
+  pictureReady
 })
-
-function u_wallpostReady (postid) {
-  ajreq('infofollower', { fid: $('#ft-id').val(), pid: postid })
-}
 
 $('#wall-submit').on('mousedown', function () {
   $('#ft-public-link').trigger('click')

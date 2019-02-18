@@ -20,6 +20,7 @@ use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
+use Foodsharing\Permissions\RegionPermissions;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,6 +37,7 @@ class XhrMethods
 	private $mailboxModel;
 	private $messageModel;
 	private $regionGateway;
+	private $regionPermissions;
 	private $forumGateway;
 	private $bellGateway;
 	private $storeGateway;
@@ -60,6 +62,7 @@ class XhrMethods
 		MailboxModel $mailboxModel,
 		MessageModel $messageModel,
 		RegionGateway $regionGateway,
+		RegionPermissions $regionPermissions,
 		ForumGateway $forumGateway,
 		BellGateway $bellGateway,
 		StoreGateway $storeGateway,
@@ -78,6 +81,7 @@ class XhrMethods
 		$this->mailboxModel = $mailboxModel;
 		$this->messageModel = $messageModel;
 		$this->regionGateway = $regionGateway;
+		$this->regionPermissions = $regionPermissions;
 		$this->forumGateway = $forumGateway;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
@@ -1322,86 +1326,6 @@ class XhrMethods
 			$this->storeGateway->confirmFetcher($data['fsid'], $data['bid'], date('Y-m-d H:i:s', strtotime($data['date'])));
 
 			return 1;
-		}
-	}
-
-	/**
-	 * @param $data
-	 *
-	 * @return string
-	 */
-	public function xhr_becomeBezirk($data)
-	{
-		if ($this->func->may()) {
-			$this->mem->delPageCache('/?page=dashboard', $this->session->id());
-			$bezirk_id = (int)$data['b'];
-			$new = '';
-			if (isset($data['new'])) {
-				$new = preg_replace('/a-zA-ZäöüÄÖÜß\ /', '', $data['new']);
-			}
-
-			if (empty($new) && $bezirk_id > 0) {
-				$active = 1;
-				$this->model->insert('
-					REPLACE INTO  `fs_foodsaver_has_bezirk` (`bezirk_id`,`foodsaver_id`,`active`)
-					VALUES (' . (int)$bezirk_id . ',' . $this->session->id() . ', ' . $active . ' )
-				');
-
-				if (!$this->session->getCurrentBezirkId()) {
-					$this->model->update('UPDATE fs_foodsaver SET bezirk_id = ' . (int)$bezirk_id . ' WHERE id = ' . (int)$this->session->id());
-				}
-
-				if ($bots = $this->foodsaverGateway->getBotschafter($bezirk_id)) {
-					if (
-						($foodsaver = $this->model->getValues(array('verified', 'name', 'nachname', 'photo'), 'foodsaver', $this->session->id())) &&
-						($bezirk = $this->model->getValues(array('name'), 'bezirk', $bezirk_id))
-					) {
-						if ($foodsaver['verified'] == 1) {
-							$this->bellGateway->addBell(
-								$bots,
-								'new_foodsaver_title',
-								'new_foodsaver_verified',
-								$this->func->img($foodsaver['photo'], 50),
-								array('href' => '/profile/' . (int)$this->session->id() . ''),
-								array(
-									'name' => $foodsaver['name'] . ' ' . $foodsaver['nachname'],
-									'bezirk' => $bezirk['name']
-								),
-								'new-fs-' . $this->session->id()
-							);
-						} else {
-							$this->bellGateway->addBell(
-								$bots,
-								'new_foodsaver_title',
-								'new_foodsaver',
-								$this->func->img($foodsaver['photo'], 50),
-								array('href' => '/profile/' . (int)$this->session->id() . ''),
-								array(
-									'name' => $foodsaver['name'] . ' ' . $foodsaver['nachname'],
-									'bezirk' => $bezirk['name']
-								),
-								'new-fs-' . $this->session->id(),
-								true
-							);
-						}
-					}
-				}
-
-				if ($botschafter = $this->foodsaverGateway->getBotschafter($bezirk_id)) {
-					return json_encode(array(
-						'active' => $active,
-						'status' => 1,
-						'botschafter' => $botschafter
-					));
-				}
-
-				return json_encode(array(
-					'active' => $active,
-					'status' => 1,
-					'botschafter' => false
-				));
-				//}
-			}
 		}
 	}
 

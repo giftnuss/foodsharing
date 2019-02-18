@@ -16,7 +16,7 @@ use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 
-final class Session
+class Session
 {
 	private $func;
 	private $mem;

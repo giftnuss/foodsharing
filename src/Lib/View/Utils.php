@@ -1443,7 +1443,7 @@ class Utils
 		);
 	}
 
-	public function v_field($content, $title = false, $option = array())
+	public function v_field(string $content, $title = false, array $option = [], string $titleIcon = null, string $titleSpanId = null)
 	{
 		$class = '';
 		if (isset($option['class'])) {
@@ -1452,15 +1452,26 @@ class Utils
 
 		$corner = 'corner-bottom';
 		if ($title !== false) {
-			$title = '<div class="head ui-widget-header ui-corner-top">' . htmlspecialchars($title) . '</div>';
+			$titleHtml = '<div class="head ui-widget-header ui-corner-top">';
+			if ($titleSpanId !== null) {
+				$titleHtml .= '<span id="' . $titleSpanId . '">';
+			}
+			if ($titleIcon) {
+				$titleHtml .= '<i class="' . $titleIcon . '"></i> ';
+			}
+			$titleHtml .= htmlspecialchars($title);
+			if ($titleSpanId !== null) {
+				$titleHtml .= '<span id="' . $titleSpanId . '">';
+			}
+			$titleHtml .= '</div>';
 		} else {
-			$title = '';
+			$titleHtml = '';
 			$corner = 'corner-all';
 		}
 
 		return '
 		<div class="field">
-			' . $title . '
+			' . $titleHtml . '
 			<div class="ui-widget ui-widget-content ' . $corner . ' margin-bottom' . $class . '">
 				' . $content . '
 			</div>
