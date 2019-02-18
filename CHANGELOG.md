@@ -34,6 +34,8 @@
 - remove unused methods in XhrMethods !694 @NerdyProjects
 - trigger Fair-Teiler wallpost notifications in backend !700 @NerdyProjects
 - removed the old qr code library and chaged the current qr on the fs-passes to show the fs profile !685 #144 @peter.toennies
+- trigger fairteiler wallpost notifications in backend !700 @NerdyProjects
+- use API endpoint to delete users to avoid CSRF problems !717 @NerdyProjects
 
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen
