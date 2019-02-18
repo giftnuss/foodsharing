@@ -28,4 +28,36 @@ final class MessageGateway extends BaseGateway
 
 		return array_map(function ($member) { return $member['name']; }, $members);
 	}
+
+	public function getConversationMessages(int $conversation_id, int $limit = 20, int $offset = 0): array
+	{
+		return $this->db->fetchAll('
+			SELECT
+				m.id,
+				fs.`id` AS fs_id,
+				fs.name AS fs_name,
+				fs.photo AS fs_photo,
+				m.`body`,
+				m.`time`
+
+			FROM
+				`fs_msg` m,
+				`fs_foodsaver` fs
+
+			WHERE
+				m.foodsaver_id = fs.id
+
+			AND
+				m.conversation_id = :id
+
+			ORDER BY
+				m.`time` DESC
+
+			LIMIT :offset, :limit
+		', [
+			'id' => $conversation_id,
+			'offset' => $offset,
+			'limit' => $limit,
+		]);
+	}
 }
