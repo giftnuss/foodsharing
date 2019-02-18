@@ -93,7 +93,7 @@ class EmailGateway extends BaseGateway
 		$email_id = $this->db->insert('fs_send_email', [
 			'foodsaver_id' => $fs_id,
 			'mailbox_id' => $mailbox_id,
-			'subject' => strip_tags($subject),
+			'name' => strip_tags($subject),
 			'message' => strip_tags($message),
 			'zeit' => $this->db->now(),
 			'attach' => $attach_db,
