@@ -3,6 +3,7 @@
 namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Services\SearchService;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -16,12 +17,14 @@ class UserRestController extends FOSRestController
 	private $session;
 	private $loginGateway;
 	private $searchService;
+	private $foodsaverGateway;
 
-	public function __construct(Session $session, LoginGateway $loginGateway, SearchService $searchService)
+	public function __construct(Session $session, LoginGateway $loginGateway, SearchService $searchService, FoodsaverGateway $foodsaverGateway)
 	{
 		$this->session = $session;
 		$this->loginGateway = $loginGateway;
 		$this->searchService = $searchService;
+		$this->foodsaverGateway = $foodsaverGateway;
 	}
 
 	/**
@@ -55,5 +58,22 @@ class UserRestController extends FOSRestController
 		}
 
 		throw new HttpException(401, 'email or password are invalid');
+	}
+
+	/**
+	 * @Rest\Delete("user/{userId}", requirements={"userId" = "\d+"})
+	 */
+	public function deleteUserAction(int $userId)
+	{
+		if ($userId != $this->session->id() && !$this->session->may('orga')) {
+			throw new HttpException(403);
+		}
+
+		if ($userId === $this->session->id()) {
+			$this->session->logout();
+		}
+		$this->foodsaverGateway->del_foodsaver($userId);
+
+		return $this->handleView($this->view());
 	}
 }
