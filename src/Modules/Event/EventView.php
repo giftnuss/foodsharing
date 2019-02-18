@@ -277,17 +277,17 @@ class EventView extends View
 		$out = '';
 
 		if (!empty($invites['accepted'])) {
-			$icons = $this->fsIcons($invites['accepted']);
+			$icons = $this->placeFsIcons($invites['accepted'], 60);
 			$out .= $this->v_utils->v_field($icons, '' . count($invites['accepted']) . ' sind dabei');
 		}
 
 		if (!empty($invites['maybe'])) {
-			$icons = $this->fsIcons($invites['maybe']);
+			$icons = $this->placeFsIcons($invites['maybe'], 54);
 			$out .= $this->v_utils->v_field($icons, '' . count($invites['maybe']) . ' kommen vielleicht');
 		}
 
 		if (!empty($invites['invited'])) {
-			$icons = $this->fsIcons($invites['invited']);
+			$icons = $this->placeFsIcons($invites['invited'], 54);
 			$out .= $this->v_utils->v_field($icons, '' . count($invites['invited']) . ' Einladungen');
 		}
 
