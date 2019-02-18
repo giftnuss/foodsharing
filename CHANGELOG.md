@@ -33,6 +33,9 @@
 - better webpack splitting !681 @nicksellen
 - disable backup_globals for PHPUnit to have unit tests working in dev again !696 @NerdyProjects
 
+# 2019-02-18 Hotfix
+- fix for 9 SQL injection vulnerabilities #472 @alangecker
+
 # 2019-01-25
 Matthias: "Are there any concerns about merging the addresspicker / map / geolocation to production?"
 Peter: "I'd even prefer to go completely from beta to prod. The current state looks fine for me. Less work for you, more features for us... "
