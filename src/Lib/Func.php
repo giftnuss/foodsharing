@@ -8,7 +8,6 @@ use Flourish\fFile;
 use Flourish\fImage;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
-use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\InfluxMetrics;
 use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateAdminGateway;
@@ -33,7 +32,6 @@ class Func
 	private $scripts;
 	private $stylesheets;
 	private $add_css;
-	private $viewUtils;
 	private $sanitizerService;
 	private $regionGateway;
 	private $emailTemplateAdminGateway;
@@ -64,13 +62,11 @@ class Func
 	private $metrics;
 
 	public function __construct(
-		Utils $viewUtils,
 		SanitizerService $sanitizerService,
 		RegionGateway $regionGateway,
 		EmailTemplateAdminGateway $emailTemplateAdminGateway,
 		InfluxMetrics $metrics
 	) {
-		$this->viewUtils = $viewUtils;
 		$this->sanitizerService = $sanitizerService;
 		$this->regionGateway = $regionGateway;
 		$this->emailTemplateAdminGateway = $emailTemplateAdminGateway;
