@@ -70,11 +70,4 @@ final class PassportGeneratorGateway extends BaseGateway
 
 		return $out;
 	}
-
-	public function fetchFoodsaverData(int $fs_id): array
-	{
-		$stm = 'SELECT `photo`,`id`,`name`,`nachname`,`geschlecht`,`rolle` FROM fs_foodsaver WHERE `id` = :fsId';
-
-		return $this->db->fetch($stm, [':fsId' => $fs_id]);
-	}
 }
