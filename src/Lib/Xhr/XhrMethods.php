@@ -239,7 +239,6 @@ class XhrMethods
 		return date('d.m.Y H:i', $ts) . ' Uhr';
 	}
 
-
 	public function xhr_activeSwitch($data)
 	{
 		$allowed = array(
@@ -1003,7 +1002,6 @@ class XhrMethods
 		}
 	}
 
-
 	public function xhr_update_newbezirk($data)
 	{
 		if ($this->session->isOrgaTeam()) {
@@ -1250,7 +1248,6 @@ class XhrMethods
 		return false;
 	}
 
-
 	public function xhr_acceptBezirkRequest($data)
 	{
 		if ($this->session->isAdminFor($data['bid']) || $this->session->isOrgaTeam()) {
@@ -1450,7 +1447,6 @@ class XhrMethods
 	{
 		include ROOT_DIR . 'lang/DE/' . $moduleName . '.lang.php';
 	}
-
 
 	public function xhr_delDate($data)
 	{

@@ -277,7 +277,6 @@ class EventView extends View
 		return date('H:i', $ts) . ' Uhr';
 	}
 
-
 	public function invites($invites)
 	{
 		$out = '';

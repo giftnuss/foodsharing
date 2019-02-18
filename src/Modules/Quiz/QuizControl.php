@@ -58,12 +58,10 @@ class QuizControl extends Control
 		exit();
 	}
 
-
 	private function goLogin()
 	{
 		$this->func->go('/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']));
 	}
-
 
 	public function wall()
 	{
