@@ -18,4 +18,14 @@ final class MessageGateway extends BaseGateway
 	{
 		return $this->db->fetchValueByCriteria('fs_conversation', 'name', ['id' => $conversationId]);
 	}
+
+	public function getConversationMemberNames(int $conversationId): array
+	{
+		$members = $this->db->fetchAll(
+			'SELECT fs.name FROM fs_foodsaver_has_conversation fc, fs_foodsaver fs WHERE fs.id = fc.foodsaver_id AND fc.conversation_id = :id AND fs.deleted_at IS NULL',
+			['id' => $conversationId]
+		);
+
+		return array_map(function ($member) { return $member['name']; }, $members);
+	}
 }

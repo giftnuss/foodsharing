@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Message;
 use Foodsharing\Lib\WebSocketSender;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Store\StoreGateway;
 
 final class MessageXhr extends Control
 {
@@ -14,11 +15,12 @@ final class MessageXhr extends Control
 	private $webSocketSender;
 	private $messageGateway;
 
-	public function __construct(MessageModel $model, MessageView $view, MessageGateway $messageGateway, WebSocketSender $webSocketSender)
+	public function __construct(MessageModel $model, MessageView $view, MessageGateway $messageGateway, StoreGateway $storeGateway, WebSocketSender $webSocketSender)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->messageGateway = $messageGateway;
+		$this->storeGateway = $storeGateway;
 		$this->webSocketSender = $webSocketSender;
 
 		parent::__construct();
@@ -142,7 +144,7 @@ final class MessageXhr extends Control
 								 * send an E-Mail if the user is not online
 								*/
 								if ($this->model->wantMsgEmailInfo($m['id'])) {
-									$this->convMessage($m, $_POST['c'], $body, $this->model);
+									$this->convMessage($m, $_POST['c'], $body, $this->messageGateway, $this->storeGateway);
 								}
 							}
 						}
