@@ -1329,7 +1329,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$mail->setHTMLBody($htmlBody);
 
 		$plainBody = $this->sanitizerService->htmlToPlain($htmlBody);
-		$mail->setBody($message);
+		$mail->setBody($plainBody);
 
 		if ($attach !== false) {
 			foreach ($attach as $a) {
