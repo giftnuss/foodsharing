@@ -28,49 +28,23 @@ class SettingsModel extends Db
 			UPDATE 	`fs_foodsaver`
 			SET 	`newsletter` = ' . (int)$newsletter . ',
 					`infomail_message` = ' . (int)$infomail . '
-			WHERE 	`id` = ' . (int)$this->func->fsId() . '		
+			WHERE 	`id` = ' . (int)$this->func->fsId() . '
 		');
-	}
-
-	public function logChangedSetting($fsid, $old, $new, $logChangedKeys)
-	{
-		/* the logic is not exactly matching the update mechanism but should be close enough to get all changes... */
-		foreach ($logChangedKeys as $k) {
-			if (array_key_exists($k, $new) && $new[$k] != $old[$k]) {
-				$this->insert('INSERT INTO
-									  fs_foodsaver_change_history(
-										`date`,
-										`fs_id`,
-										`changer_id`,
-										`object_name`,
-										`old_value`,
-										`new_value`
-									  )
-									VALUES(
-									  NOW(),
-									  ' . (int)$fsid . ',
-									  ' . (int)$this->func->fsId() . ',
-									  \'' . $k . '\',
-									  \'' . $old[$k] . '\',
-									  \'' . $new[$k] . '\'
-									  )');
-			}
-		}
 	}
 
 	public function getSleepData()
 	{
 		return $this->qRow('
-			SELECT 
+			SELECT
 				sleep_status,
 				sleep_from,
 				sleep_until,
 				sleep_msg
-				
-			FROM 
+
+			FROM
 				fs_foodsaver
-				
-			WHERE 
+
+			WHERE
 				id = ' . (int)$this->func->fsId() . '
 		');
 	}
@@ -78,7 +52,7 @@ class SettingsModel extends Db
 	public function getQuizSession($sid)
 	{
 		$sql = '
-			SELECT 
+			SELECT
 				`quiz_id`,
 				`status`,
 				`quiz_index`,
@@ -89,10 +63,10 @@ class SettingsModel extends Db
 
 			FROM
 				fs_quiz_session
-				
+
 			WHERE
 				`id` = ' . (int)$sid . '
-				
+
 			AND
 				`foodsaver_id` = ' . (int)$this->func->fsId() . '
 		';
@@ -221,7 +195,7 @@ class SettingsModel extends Db
 
 			FROM 	`fs_fairteiler_follower` ff,
 					`fs_fairteiler` ft
-				
+
 			WHERE 	ff.fairteiler_id = ft.id
 			AND 	ff.foodsaver_id = ' . (int)$this->func->fsId() . '
 		');
@@ -254,9 +228,13 @@ class SettingsModel extends Db
 
 	public function changeMail($email)
 	{
+<<<<<<< HEAD
 		$this->del('DELETE FROM `fs_mailchange` WHERE foodsaver_id = ' . (int)$this->func->fsId());
 		$currentMail = $this->qOne('SELECT `email` FROM fs_foodsaver WHERE id = ' . (int)$this->func->fsId());
 		$this->logChangedSetting($this->func->fsId(), ['email' => $currentMail], ['email' => $email], ['email']);
+=======
+		$this->del('DELETE FROM `fs_mailchange` WHERE foodsaver_id = ' . (int)$this->session->id());
+>>>>>>> 5590d353... fixed sql injection in SettingsModel::logChangedSetting()
 
 		if ($this->update('
 			UPDATE `fs_foodsaver`
@@ -281,10 +259,10 @@ class SettingsModel extends Db
 			SELECT 	th.id,
 					th.name,
 					tf.infotype
-		
+
 			FROM 	`fs_theme_follower` tf,
 					`fs_theme` th
-		
+
 			WHERE 	tf.theme_id = th.id
 			AND 	tf.foodsaver_id = ' . (int)$this->func->fsId() . '
 		');
@@ -324,7 +302,7 @@ class SettingsModel extends Db
 		return $this->del('
 			DELETE FROM 	`fs_fairteiler_follower`
 			WHERE 	foodsaver_id = ' . (int)$this->func->fsId() . '
-			AND 	fairteiler_id IN(' . implode(',', $unfollow) . ')		
+			AND 	fairteiler_id IN(' . implode(',', $unfollow) . ')
 		');
 	}
 
@@ -333,13 +311,13 @@ class SettingsModel extends Db
 		return (int)$this->qOne('
 			SELECT
 				COUNT(hb.foodsaver_id)
-	
+
 			FROM
 				fs_foodsaver_has_bezirk hb
-	
+
 			WHERE
 				hb.bezirk_id = ' . (int)$bid . '
-	
+
 			AND
 				hb.active = 1
 		');
@@ -378,16 +356,16 @@ class SettingsModel extends Db
 	public function updateSleepMode($status, $from, $to, $msg)
 	{
 		return $this->update('
- 			UPDATE 
- 				fs_foodsaver 
- 				
- 			SET	
+ 			UPDATE
+ 				fs_foodsaver
+
+ 			SET
  				`sleep_status` = ' . (int)$status . ',
  				`sleep_from` = ' . $this->dateval($from) . ',
  				`sleep_until` = ' . $this->dateval($to) . ',
  				`sleep_msg` = ' . $this->strval($msg) . '
 
- 			WHERE 
+ 			WHERE
  				id = ' . (int)$this->func->fsId() . '
  		');
 	}
