@@ -34,7 +34,7 @@ class PassportGeneratorControl extends Control
 		}
 
 		// isBotForA(...) fails if it's used for a working group as it is an exit condition
-		if ($this->func->isBotForA((array)$this->bezirk_id, false, true) && ($this->session->isAdminFor($this->bezirk_id) || $this->session->isOrgaTeam())) {
+		if ($this->func->isBotForA((array)$this->bezirk_id, false, true) || $this->session->isOrgaTeam()) {
 			$this->bezirk = false;
 			if ($bezirk = $this->regionGateway->getBezirk($this->bezirk_id)) {
 				$this->bezirk = $bezirk;
