@@ -82,3 +82,4 @@ Executing the following script will use the dev environment to run the codestyle
 ```
 ./scripts/fix-codestyle
 ```
+If the `-local` version does not work for you, replace `fix-codestyle-local` with `fix-codestyle` in the pre-commit hook.
