@@ -191,7 +191,7 @@ class XhrMethods
 
 					$msg = '<span class="msg">' . nl2br($o['text']) . '</span>
 						<div class="foot">
-							<span class="time">' . $this->func->format_dt($o['zeit']) . ' von ' . $o['name'] . '</span>' . $delete . '
+							<span class="time">' . $this->format_dt($o['zeit']) . ' von ' . $o['name'] . '</span>' . $delete . '
 						</div>';
 
 					if ($o['milestone'] == 1) {
@@ -482,7 +482,7 @@ class XhrMethods
 		$id = strtolower($data['id']);
 		$id = preg_replace('/[^a-z0-9_]/', '', $id);
 		if (isset($_FILES['uploadpic'])) {
-			if ($this->func->is_allowed($_FILES['uploadpic'])) {
+			if ($this->is_allowed($_FILES['uploadpic'])) {
 				$datein = str_replace('.jpeg', '.jpg', strtolower($_FILES['uploadpic']['name']));
 				$ext = strtolower(substr($datein, strlen($datein) - 4, 4));
 

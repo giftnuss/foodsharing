@@ -25,7 +25,7 @@ class QuizControl extends Control
 		// quiz&a=delete&id=9
 		if ($id = $this->func->getActionId('delete')) {
 			$this->model->deleteSession($id);
-			$this->func->goBack();
+			$this->goBack();
 		}
 
 		$this->func->addBread('Quiz', '/?page=quiz');
