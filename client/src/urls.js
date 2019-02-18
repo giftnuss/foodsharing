@@ -36,6 +36,7 @@ export default {
   faq: () => `/faq`,
   guide: () => `/ratgeber`,
   wiki: () => `https://wiki.foodsharing.de/`,
+  grundsaetze: () => `https://wiki.foodsharing.de/Grundsätze`,
   communitiesGermany: () => `/?page=content&sub=communitiesGermany`,
   communitiesAustria: () => `/?page=content&sub=communitiesAustria`,
   communitiesSwitzerland: () => `/?page=content&sub=communitiesSwitzerland`,
