@@ -466,7 +466,7 @@ class QuizModel extends Db
 				' . (int)$quiz_id . ',
 				0,
 				0,
-				' . $this->strval($questions) . ',
+				' . $this->safe($questions) . ',
 				NOW(),
 				0,
 				' . (int)$maxfp . ',
