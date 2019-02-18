@@ -235,7 +235,7 @@ class EventView extends View
 			);
 		}
 
-		return $this->v_utils->v_field($this->menu($menu), '<i class="fas fa-cog"></i> ' . $this->func->s('event_options'));
+		return $this->v_utils->v_field($this->menu($menu), $this->func->s('event_options'), [], 'fas fa-cog');
 	}
 
 	public function eventTop($event)

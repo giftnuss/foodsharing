@@ -14,7 +14,9 @@ import {
 
 import 'jquery-ui'
 
-$('#becomebezirkchooser-button').button().on('click', function () {
+import * as api from '@/api/regions'
+
+$('#becomebezirkchooser-button').button().on('click', async function () {
   if (parseInt($('#becomebezirkchooser').val()) > 0) {
     const part = $('#becomebezirkchooser').val().split(':')
 
@@ -31,23 +33,15 @@ $('#becomebezirkchooser-button').button().on('click', function () {
       const bid = part[0]
       showLoader()
 
-      $.ajax({
-        dataType: 'json',
-        url: '/xhr.php?f=becomeBezirk',
-        data: `b=${bid}`,
-        success: function (data) {
-          if (data.status == 1) {
-            goTo(`/?page=relogin&url=${encodeURIComponent('/?page=bezirk&bid=' + $('#becomebezirkchooser').val())}`)
-            $.fancybox.close()
-          }
-          if (data.script != undefined) {
-            $.globalEval(data.script)
-          }
-        },
-        complete: function () {
-          hideLoader()
-        }
-      })
+      try {
+        await api.join(bid)
+        goTo(`/?page=relogin&url=${encodeURIComponent('/?page=bezirk&bid=' + $('#becomebezirkchooser').val())}`)
+        $.fancybox.close()
+      } catch (err) {
+        pulseError('In diesen Bezirk kannst Du Dich nicht eintragen.')
+      } finally {
+        hideLoader()
+      }
     } else {
       pulseError('In diesen Bezirk kannst Du Dich nicht eintragen.')
       return false

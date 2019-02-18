@@ -590,7 +590,9 @@ ul.team li a .infos .item {
   line-height: 11px;
   margin-bottom: 2px;
   height: 11px;
-  overflow: hidden;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
 }
 
 ul.team li a:hover .infos .item {
