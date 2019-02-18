@@ -24,7 +24,7 @@ class QuizGateway extends BaseGateway
 		);
 	}
 
-	public function getExsistingSession(int $quizId, int $fsId)
+	public function getExistingSession(int $quizId, int $fsId)
 	{
 		$session = $this->db->fetch('
 			SELECT 
