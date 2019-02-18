@@ -9,6 +9,52 @@ use Symfony\Component\DependencyInjection\Container;
 require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';
 
+/*
+	methods wich are excluded from the CSRF Protection.
+	We start with every method and remove one by another
+	NEVER ADD SOMETING TO THIS LIST!
+*/
+$csrf_whitelist = [
+	'verify',
+	'getPinPost',
+	'activeSwitch',
+	'grabInfo',
+	'addPinPost',
+	'childBezirke',
+	'bBubble',
+	'fsBubble',
+	'loadMarker',
+	'uploadPictureRefactorMeSoon',
+	'uploadPicture',
+	'cropagain',
+	'pictureCrop',
+	'out',
+	'getRecip',
+	'addPhoto',
+	'continueMail',
+	'uploadPhoto',
+	'update_newbezirk',
+	'update_abholen',
+	'bezirkTree',
+	'bteamstatus',
+	'getBezirk',
+	'acceptBezirkRequest',
+	'denyBezirkRequest',
+	'denyRequest',
+	'acceptRequest',
+	'warteRequest',
+	'betriebRequest',
+	'saveBezirk',
+	'addFetcher',
+	'delDate',
+	'fetchDeny',
+	'fetchConfirm',
+	'delBPost',
+	'delPost',
+	'abortEmail',
+	'bcontext'
+];
+
 /* @var $container Container */
 global $container;
 $container = initializeContainer();
@@ -34,6 +80,13 @@ $action = $_GET['f'];
 
 $mem->updateActivity($session->id());
 if (isset($_GET['f'])) {
+	if (!in_array($action, $csrf_whitelist)) {
+		if (!$session->isValidCsrfHeader()) {
+			header('HTTP/1.1 403 Forbidden');
+			die('CSRF Failed: CSRF token missing or incorrect.');
+		}
+	}
+
 	/* @var $xhr XhrMethods */
 	$xhr = $container->get(XhrMethods::class);
 	$func = 'xhr_' . $action;
