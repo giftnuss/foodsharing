@@ -318,7 +318,7 @@ class ProfileModel extends Db
 			WHERE 	bt.betrieb_id = b.id
 			AND
 					bt.foodsaver_id = ' . (int)$fsid . '
-			ORDER BY bt.active ASC
+			ORDER BY b.name ASC
 
 
 		');
