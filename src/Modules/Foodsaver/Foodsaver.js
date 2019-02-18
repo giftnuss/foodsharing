@@ -5,8 +5,6 @@ import $ from 'jquery'
 import 'jquery-dynatree'
 import i18n from '@/i18n'
 import { deleteUser } from '@/api/user'
-
-'@/api/user'
 import './Foodsaver.css'
 
 const fsapp = {
@@ -42,7 +40,7 @@ const fsapp = {
       })
     }
   },
-  confirmDeleteUser: async function(fsId) {
+  confirmDeleteUser: async function (fsId) {
     if (window.confirm(i18n('foodsaver.delete_account_sure'))) {
       await deleteUser(fsId)
     }
