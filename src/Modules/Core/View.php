@@ -127,27 +127,27 @@ class View
 		</div>';
 	}
 
-	public function fsIcons($foodsaver)
+	public function placeFsIcons($foodsavers, $maxNumberOfAvatars)
 	{
-		if (!empty($foodsaver)) {
+		if (!empty($foodsavers)) {
 			$out = '<ul class="fsicons">';
 
-			if (count($foodsaver) > 100) {
-				shuffle($foodsaver);
+			if (count($foodsavers) > $maxNumberOfAvatars) {
+				shuffle($foodsavers);
+				$foodsaverDisplayed = array_slice($foodsavers, 0, $maxNumberOfAvatars);
+			} else {
+				$foodsaverDisplayed = $foodsavers;
 			}
-			$maxNumberOfAvatars = 54;
-			foreach ($foodsaver as $fs) {
-				--$maxNumberOfAvatars;
+
+			foreach ($foodsaverDisplayed as $fs) {
 				$out .= '
 				<li>
 					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->func->img($fs['photo']) . ');" href="/profile/' . (int)$fs['id'] . '"><span></span></a>	
 				</li>';
-				if ($maxNumberOfAvatars <= 0) {
-					$out .= '<li class="row">...und ' . (count($foodsaver) - 52) . ' weitere</li>';
-					break;
-				}
 			}
-			$out .= '</ul>';
+			if ((count($foodsaverDisplayed) >= $maxNumberOfAvatars)) {
+				$out .= '<li class="row">...und ' . (count($foodsavers) - $maxNumberOfAvatars) . ' weitere</li></ul>';
+			}
 
 			return $out;
 		}
