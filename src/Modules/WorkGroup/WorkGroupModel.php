@@ -44,14 +44,14 @@ class WorkGroupModel extends Db
 					bezirk_id = ' . (int)$groupId . '
 					
 				AND
-					foodsaver_id NOT IN(' . implode(',', $memberIds) . ')
+					foodsaver_id NOT IN(' . implode(',', array_map('intval', $memberIds)) . ')
 				AND
 					`active` = 1
 			');
 
 			$values = array();
 			foreach ($memberIds as $m) {
-				$values[] = '(' . (int)$m . ',' . $groupId . ',1,NOW())';
+				$values[] = '(' . (int)$m . ',' . (int)$groupId . ',1,NOW())';
 			}
 
 			// insert new members
@@ -82,12 +82,12 @@ class WorkGroupModel extends Db
 					bezirk_id = ' . (int)$groupId . '
 			
 				AND
-					foodsaver_id NOT IN(' . implode(',', $leaderIds) . ')
+					foodsaver_id NOT IN(' . implode(',', array_map('intval', $leaderIds)) . ')
 			');
 
 			$values = array();
 			foreach ($leaderIds as $m) {
-				$values[] = '(' . (int)$m . ',' . $groupId . ')';
+				$values[] = '(' . (int)$m . ',' . (int)$groupId . ')';
 			}
 
 			// insert new group-admins

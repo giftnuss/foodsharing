@@ -10,6 +10,8 @@
 - Added API endpoints for basket pictures !671 @alex.simm 
 - Allow use of markdown in Fair-Teiler description !690 @NerdyProjects
 - Joining regions REST API !696 @NerdyProjects
+- Start page content over content manager #470 @k.miklobusec
+- Start page content over content manager #470 !701 @k.miklobusec
 - Scale down font size on passports for long names !685 @NerdyProjects
 
 ## Bugfixes
@@ -33,6 +35,9 @@
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen
 - disable backup_globals for PHPUnit to have unit tests working in dev again !696 @NerdyProjects
+
+# 2019-02-18 Hotfix
+- fix for 9 SQL injection vulnerabilities #472 @alangecker
 
 # 2019-01-25
 Matthias: "Are there any concerns about merging the addresspicker / map / geolocation to production?"

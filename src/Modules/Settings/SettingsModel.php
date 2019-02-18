@@ -32,32 +32,6 @@ class SettingsModel extends Db
 		');
 	}
 
-	public function logChangedSetting($fsid, $old, $new, $logChangedKeys)
-	{
-		/* the logic is not exactly matching the update mechanism but should be close enough to get all changes... */
-		foreach ($logChangedKeys as $k) {
-			if (array_key_exists($k, $new) && $new[$k] != $old[$k]) {
-				$this->insert('INSERT INTO
-									  fs_foodsaver_change_history(
-										`date`,
-										`fs_id`,
-										`changer_id`,
-										`object_name`,
-										`old_value`,
-										`new_value`
-									  )
-									VALUES(
-									  NOW(),
-									  ' . (int)$fsid . ',
-									  ' . (int)$this->session->id() . ',
-									  \'' . $k . '\',
-									  \'' . $old[$k] . '\',
-									  \'' . $new[$k] . '\'
-									  )');
-			}
-		}
-	}
-
 	public function getSleepData()
 	{
 		return $this->qRow('
@@ -255,8 +229,6 @@ class SettingsModel extends Db
 	public function changeMail($email)
 	{
 		$this->del('DELETE FROM `fs_mailchange` WHERE foodsaver_id = ' . (int)$this->session->id());
-		$currentMail = $this->qOne('SELECT `email` FROM fs_foodsaver WHERE id = ' . (int)$this->session->id());
-		$this->logChangedSetting($this->session->id(), ['email' => $currentMail], ['email' => $email], ['email']);
 
 		if ($this->update('
 			UPDATE `fs_foodsaver`

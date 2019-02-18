@@ -24,7 +24,7 @@ class GeoCleanXhr extends Control
 	public function masterupdate()
 	{
 		if ($bezirke = $this->regionGateway->listIdsForDescendantsAndSelf($_GET['id'])) {
-			$this->model->update('UPDATE fs_bezirk SET `master` = ' . $_GET['id'] . ' WHERE id IN(' . implode(',', $bezirke) . ')');
+			$this->regionGateway->updateMasterRegions($bezirke, $_GET['id']);
 		}
 	}
 
