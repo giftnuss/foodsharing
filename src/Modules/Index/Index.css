@@ -2,7 +2,7 @@ body.fp-viewing-festival #topbar .navbar {
   box-shadow: none;
 }
 
-#campaign {
+.campaign {
   height: 100vh;
   width: 150vh;
   position: absolute;
@@ -11,19 +11,19 @@ body.fp-viewing-festival #topbar .navbar {
   transform: translate(-50%, 0);
 }
 
-#campaign .topbarpadding {
+.campaign .topbarpadding {
   padding: 41px 0;
   width: 100%;
-  height: 100%;
   box-sizing: border-box;
+  margin: auto;
 }
 
-#campaigntext, #campaignimg {
+.campaigntext, .campaignimg {
   height: 100%;
   width: 50%;
 }
 
-#campaigntext {
+.campaigntext {
   text-align: center;
   font-size: 2.5vh;
   color: #f9f5e0;
@@ -32,41 +32,48 @@ body.fp-viewing-festival #topbar .navbar {
   padding-top: 15vh;
 }
 
-#campaigntext h2 {
+.campaigntext h2 {
   font-family: "Alfa Slab One", serif;
   font-size: 2.6em;
   font-weight: normal;
   padding:2vh;
 }
 
-#campaigntext h4 {
+.campaigntext h4 {
   font-family: "Alfa Slab One", serif;
   font-size: 1.3em;
   font-weight: normal;
 }
 
-#campaigntext div img {
+.campaigntext div img {
   width: 8.5vh;
   margin: 0 auto;
 }
 
-#campaigntext h3 {
+.campaigntext h3 {
   font-family: "Alfa Slab One", serif;
   font-size: 2em;
   font-weight: normal;
 }
 
-#campaigntext span {
+.campaigntext span {
   color: #64ae24;
 }
 
-#campaignimg {
+.campaignimg {
   background: no-repeat 50%;
   background-size: auto 85%;
+  height: 80vh;
+}
+
+.campaignimg img {
+  height: 90%;
+  margin: auto;
+  display: block;
 }
 
 @media (max-aspect-ratio: 3/2) {
-  #campaign {
+  .campaign {
     width: 100vw;
     height: 66vw;
     top: 50%;
@@ -74,17 +81,21 @@ body.fp-viewing-festival #topbar .navbar {
     transform: translate(0, -50%);
   }
 
-  #campaigntext {
+  .campaigntext {
     font-size: 1.5vw;
   }
 
-  #campaigntext div img {
+  .campaigntext h4 {
+    font-size: 3.5vw;
+  }
+
+  .campaigntext div img {
     width: 4.5vw;
   }
 }
 
 @media (max-aspect-ratio: 9/10) {
-  #campaign {
+  .campaign {
     width: 100%;
     height: 120vh;
     position: absolute;
@@ -93,18 +104,18 @@ body.fp-viewing-festival #topbar .navbar {
     transform: none;
   }
 
-  #campaigntext {
+  .campaigntext {
     width: 100%;
     height: 40em;
     font-size: 1.9vw;
     padding-top: 0.5vh;
   }
 
-  #campaigntext div img {
+  .campaigntext div img {
     display: none;
   }
 
-  #campaignimg {
+  .campaignimg {
     width: 100%;
     height: 60vw;
     background-position: center;
