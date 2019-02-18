@@ -1,12 +1,11 @@
 #!/bin/bash
 
-export FS_ENV=dev
-
-set -e
-
-dir=$(dirname "$0")
-
-. $dir/inc.sh
-
-echo "Running client/js/webpack dev"
-run-in-container-with-service-ports client 'yarn && yarn dev'
+echo
+echo "  You don't need to use this command any more!"
+echo
+echo "  The hot reloading webpack stuff is now integrated into the main setup"
+echo
+echo "  Just visit http://localhost:18080 and all should work :)"
+echo
+echo "    ... assuming you already ran ./scripts/start"
+echo

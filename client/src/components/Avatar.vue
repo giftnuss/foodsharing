@@ -27,8 +27,8 @@ export default {
   computed: {
     style () {
       return {
-        width: this.size + 'px',
-        height: this.size + 'px',
+        width: `${this.size}px`,
+        height: `${this.size}px`,
         backgroundImage: `url(${this.url ? this.url : AVATAR_DEFAULT})`
       }
     }

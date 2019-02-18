@@ -57,8 +57,8 @@ class WallPostView extends View
 			}
 			$del = '';
 			if (
-				$p['foodsaver_id'] == $this->func->fsId()
-				|| (!in_array($this->table, array('fairteiler', 'foodsaver')) && ($this->func->isBotschafter() || $this->session->isOrgaTeam()))
+				$p['foodsaver_id'] == $this->session->id()
+				|| (!in_array($this->table, array('fairteiler', 'foodsaver')) && ($this->session->isAmbassador() || $this->session->isOrgaTeam()))
 			) {
 				$del = '<span class="dot">·</span><a onclick="u_delPost(' . $p['id'] . ', \'' . $this->table . '\', ' . $this->wallId . ');return false;" href="#p' . $p['id'] . '" class="pdelete light">' . $this->func->s('delete') . '</a>';
 			}
@@ -67,7 +67,7 @@ class WallPostView extends View
 				<tr class="' . $odd . ' bpost wallpost-' . $p['id'] . '">
 					<td class="img">
 						<input type="hidden" name="pid" class="pid" value="' . $p['id'] . '" />
-						<a href="#" onclick="profile(' . $p['foodsaver_id'] . ');return false;">
+						<a href="/profile/' . $p['foodsaver_id'] . '">
 							<img src="' . $this->func->img($p['photo']) . '" />
 						</a>
 					</td>

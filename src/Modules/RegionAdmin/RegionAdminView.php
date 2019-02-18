@@ -54,7 +54,7 @@ class RegionAdminView extends View
 						      title:data.foodsaver[i].name,
 						      icon: image,
 						  }).addTo(' . $id . '_map);
-						  ' . $id . '_markers[i].content = \'<div style="height:80px;overflow:hidden;"><div style="margin-right:10px;float:left;"><a onclick="profile(\'+ data.foodsaver[i].id +\');return false;" href="#"><img src="\'+img(data.foodsaver[i].photo)+\'" /></a></div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a onclick="profile(\'+ data.foodsaver[i].id +\');return false;" href="#">\' + data.foodsaver[i].name + "</a></h1><p>" + data.foodsaver[i].anschrift + "</p><p>" + data.foodsaver[i].plz + " " + data.foodsaver[i].stadt + \'</p><div style="clear:both;"></div></div>\';
+						  ' . $id . '_markers[i].content = \'<div style="height:80px;overflow:hidden;"><div style="margin-right:10px;float:left;"><a href=/profile/\'+ data.foodsaver[i].id +\'"><img src="\'+img(data.foodsaver[i].photo)+\'" /></a></div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a href="/profile/\'+ data.foodsaver[i].id +\'>\' + data.foodsaver[i].name + "</a></h1><p>" + data.foodsaver[i].anschrift + "</p><p>" + data.foodsaver[i].plz + " " + data.foodsaver[i].stadt + \'</p><div style="clear:both;"></div></div>\';
 						      		
 						  ' . $id . '_markers[i].on( \'click\', function(e,ii) {
 						    ' . $id . '_infowindow.setContent(""+this.content);
@@ -154,8 +154,8 @@ class RegionAdminView extends View
 		};
 		
 		var ' . $id . '_map = L.map(document.getElementById("' . $id . '_map"), ' . $id . '_options);
-    L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
-      attribution: "Tiles &copy; Esri 2014"
+    L.tileLayer("https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png", {
+	  attribution: "Tiles by <a href=\"https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use\">Wikimedia</a>"
     }).addTo(' . $id . '_map);
 	');
 	}

@@ -2,11 +2,11 @@
 
 export FS_ENV=ci
 
-set -e
+set -o errexit
 
 dir=$(dirname "$0")
 
-. $dir/inc.sh
+source $dir/inc.sh
 echo $SECONDS seconds elapsed
 
 if [ "x" != "x$CI_BUILD_TOKEN" ]; then
@@ -21,7 +21,7 @@ SECONDS=0
 
 pids=()
 
-for name in app chat web db; do
+for name in app chat web db influxdb; do
   dc build $name &
   pids+=($!)
 done
@@ -35,7 +35,7 @@ echo $SECONDS seconds elapsed
 log-header "Installing composer deps in app container"
 SECONDS=0
 dc up -d --no-build --no-deps app
-exec-in-container-asroot app composer install
+exec-in-container-asroot app 'composer install && composer outdated -D'
 exec-in-container-asroot app rm -rf cache/.views-cache cache/di-cache.php
 echo $SECONDS seconds elapsed
 
@@ -95,7 +95,7 @@ fi
 
 log-header "Running chat tests"
 SECONDS=0
-run-in-container chat npm test
+run-in-container chat 'npm run lint && npm test'
 echo $SECONDS seconds elapsed
 
 log-header "Done!"

@@ -6,7 +6,7 @@
 .groups .photo {
   float: right;
   margin-left: 10px;
-  width: 250px;
+  width: auto;
 }
 
 .groups .bottom_bar {

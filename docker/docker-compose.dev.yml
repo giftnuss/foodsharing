@@ -8,9 +8,9 @@ services:
 
   web:
     container_name: foodsharing_dev_web
-    image: registry.gitlab.com/foodsharing-dev/images/web:1.5
+    image: registry.gitlab.com/foodsharing-dev/images/web:1.7
     ports:
-      - 18080:8080
+      - 18090:8080
     depends_on:
       - app
       - chat
@@ -22,7 +22,7 @@ services:
 
   app:
     container_name: foodsharing_dev_app
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.12
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.16
     working_dir: /app
     expose:
       - 9000
@@ -34,6 +34,7 @@ services:
       - db
       - redis
       - mailqueuerunner
+      - influxdb
     volumes:
       - ../:/app
       - ${PWD}/docker/conf/app/php.dev.ini:/usr/local/etc/php/conf.d/dev-config.ini
@@ -45,12 +46,10 @@ services:
 
   client:
     container_name: foodsharing_dev_client
-    image: node:10
+    image: node:11.9.0-alpine
     ports:
-      - "8080:8080"
-      - "8081:8081"
-    # we don't run webpack dev mode by default, make them run ./scripts/dev
-    command: 'true'
+      - "18080:18080"
+    command: sh -c "yarn && yarn dev"
     working_dir: /app/client
     user: "${UID}"
     volumes:
@@ -65,7 +64,7 @@ services:
 
   mailqueuerunner:
     container_name: foodsharing_dev_mailqueuerunner
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.11
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.16
     command: php run.php Mails queueWorker
     restart: always
     depends_on:
@@ -81,66 +80,13 @@ services:
     environment:
       FS_ENV: dev
 
-  # light frontend
-  #------------------------------------
-
-  light:
-    container_name: foodsharing_dev_light
-    image: registry.gitlab.com/foodsharing-dev/images/light:1.0
-    command: >
-      sh -c "
-      (test -f package.json || (echo 'If you want fslight run \"git clone https://github.com/foodsharing-dev/foodsharing-light.git light\"' && exit 1)) &&
-      yarn &&
-      yarn dev
-      "
-    ports:
-      - 18082:8080
-    environment:
-      FOODSHARING_BACKEND: http://web:8080
-      CHAT_BACKEND: http://chat:1337
-      API_BACKEND: http://api:8000
-    volumes:
-      - ../:/app
-      - light-node-modules:/app/light/node_modules
-      - light-yarn-cache:/usr/local/share/.cache/yarn
-    working_dir: /app/light
-
-  # django api
-  #------------------------------------
-
-  api:
-    container_name: foodsharing_dev_api
-    image: python:3.5.3
-    command: >
-      sh -c "
-      (test -f manage.py || (echo 'If you want the api run \"git clone https://github.com/foodsharing-dev/foodsharing-django-api.git api\"' && exit 1)) &&
-      (command -v virtualenv || /usr/local/bin/pip install virtualenv) &&
-      (test -d env/bin || virtualenv --no-site-packages env) &&
-      (test -f env/bin/pip-sync || env/bin/pip install pip-tools) &&
-      env/bin/pip-sync &&
-      wait-for-it db:3306 &&
-      env/bin/python manage.py migrate &&
-      env/bin/python manage.py runserver 0.0.0.0:8000
-      "
-    volumes:
-      - ../:/app
-      - ../docker/conf/api/local_settings.py:/app/api/foodsharing_api/local_settings.py
-      - ../docker/wait-for-it:/usr/local/bin/wait-for-it
-      - api-virtualenv:/app/api/env
-      - api-pip-cache:/root/.cache/pip
-    environment:
-      REDIS_HOST: redis
-    ports:
-      - 18000:8000
-    working_dir: /app/api
-
   # nodejs socket.io server
   #------------------------------------
 
   chat:
     container_name: foodsharing_dev_chat
     command: sh -c "yarn && node server.js 0.0.0.0"
-    image: registry.gitlab.com/foodsharing-dev/images/chat:1.1
+    image: node:11.9.0-alpine
     working_dir: /app/chat
     depends_on:
       - redis
@@ -216,11 +162,32 @@ services:
     ports:
       - 18084:80
 
+  influxdb:
+    container_name: foodsharing_dev_influxdb
+    image: influxdb:1.6.4-alpine
+    command: >
+      influxd -config /etc/influxdb/influxdb.toml
+    ports:
+    - 8083:8083
+    - 18086:8086
+    environment:
+      INFLUXDB_ADMIN_ENABLED: "true"
+      INFLUXDB_DB: "foodsharing"
+    volumes:
+    - influxdb:/var/lib/influxdb
+    - ./conf/influxdb/influxdb.toml:/etc/influxdb/influxdb.toml
+
+  grafana:
+    image: grafana/grafana:5.3.2
+    ports:
+    - 4000:3000
+    volumes:
+    - grafana:/var/lib/grafana
+
+
 
 volumes:
   client-node-modules:
-  light-node-modules:
-  light-yarn-cache:
-  api-virtualenv:
-  api-pip-cache:
   chat-node-modules:
+  influxdb:
+  grafana:

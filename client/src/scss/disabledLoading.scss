@@ -12,11 +12,10 @@
 }
 .disabledLoading::before {
     position: absolute;
-    background: url('/img/469.gif') center center no-repeat;
     content: '';
     height: 40px;
     width: 40px;
-    background-color: white;
+    background: white url('/img/469.gif') no-repeat center center;
     border-radius: 20px;
     border: 1px solid grey;
     top: 50%;

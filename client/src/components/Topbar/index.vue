@@ -1,70 +1,92 @@
 <template>
   <div
     id="topbar"
-    :class="{bootstrap:true, loggedIn}">
+    :class="{bootstrap:true, loggedIn}"
+  >
     <div class="navbar fixed-top navbar-expand-md navbar-dark bg-primary ">
       <div
         v-if="!loggedIn"
-        class="container">
+        class="container"
+      >
         <div id="topbar-navleft">
           <a
             :href="$url('home')"
-            class="navbar-brand mr-2">food<span>shar<span>i</span>ng</span></a>
-          <login v-if="!isMobile"/>
+            class="navbar-brand mr-2"
+          >
+            food<span>shar<span>i</span>ng</span>
+          </a>
+          <login v-if="!isMobile" />
           <menu-loggedout
             v-if="isMobile"
-            :w-xs="ui.wXS" />
+            :w-xs="ui.wXS"
+          />
         </div>
-        <login v-if="isMobile"/>
+        <login v-if="isMobile" />
         <menu-loggedout
           v-if="!isMobile"
-          :w-xs="ui.wXS" />
+          :w-xs="ui.wXS"
+        />
       </div>
 
       <div
         v-if="loggedIn"
-        class="container">
-
+        class="container"
+      >
         <div id="topbar-navleft">
           <a
             :href="$url('dashboard')"
-            class="navbar-brand">food<span>shar<span>i</span>ng</span></a>
+            class="navbar-brand"
+          >
+            food<span>shar<span>i</span>ng</span>
+          </a>
           <ul class="navbar-nav flex-row no-collapse">
             <li
               v-if="!hasFsRole"
-              class="nav-item ml-2">
+              class="nav-item ml-2"
+            >
               <a
                 :href="$url('upgradeToFs')"
-                class="nav-link">
+                class="nav-link"
+              >
                 <i class="fas fa-rocket" />
-                <small v-if="isMobile">Werde Foodsaver*in</small>
-                <span v-else>Werde Foodsaver*in</span>
+                <small v-if="isMobile">
+                  Werde Foodsaver*in
+                </small>
+                <span v-else>
+                  Werde Foodsaver*in
+                </span>
               </a>
             </li>
             <menu-region
               v-if="hasFsRole"
               :regions="regions"
-              :active-region-id="activeRegionId" />
+              :active-region-id="activeRegionId"
+            />
             <menu-groups
               v-if="hasFsRole"
-              :working-groups="workingGroups" />
+              :working-groups="workingGroups"
+            />
             <menu-stores
               v-if="hasFsRole && stores.length"
               :stores="stores"
-              :may-add-store="may.addStore" />
+              :may-add-store="may.addStore"
+            />
             <menu-baskets :show-label="!hasFsRole && !isMobile" />
             <li
-              v-b-tooltip
               v-if="!isMobile"
+              v-b-tooltip
               class="nav-item"
-              title="Karte">
+              title="Karte"
+            >
               <a
                 :href="$url('map')"
-                class="nav-link">
+                class="nav-link"
+              >
                 <i class="fas fa-map-marker-alt" />
-                <span v-if="!loggedIn || !hasFsRole">Karte</span>
+                <span v-if="!loggedIn || !hasFsRole">
+                  Karte
+                </span>
               </a>
-
             </li>
             <menu-messages v-if="isMobile" />
             <menu-bells v-if="isMobile" />
@@ -72,40 +94,51 @@
           <b-navbar-toggle
             v-if="!hasFsRole"
             target="nav_collapse"
-            class="ml-2"/>
+            class="ml-2"
+          />
         </div>
 
         <search v-if="hasFsRole" />
         <b-navbar-toggle
           v-if="hasFsRole"
           target="nav_collapse"
-          class="ml-2"/>
+          class="ml-2"
+        />
 
         <b-collapse
           id="nav_collapse"
-          is-nav>
+          is-nav
+        >
           <ul class="navbar-nav ml-auto">
             <li
               v-b-tooltip
               class="nav-item"
-              title="Home">
+              title="Home"
+            >
               <a
                 :href="$url('home')"
-                class="nav-link">
+                class="nav-link"
+              >
                 <i class="fas fa-home" />
-                <span class="d-md-none">Startseite</span>
+                <span class="d-md-none">
+                  Startseite
+                </span>
               </a>
             </li>
             <li
-              v-b-tooltip
               v-if="isMobile"
+              v-b-tooltip
               class="nav-item"
-              title="Karte">
+              title="Karte"
+            >
               <a
                 :href="$url('map')"
-                class="nav-link">
+                class="nav-link"
+              >
                 <i class="fas fa-map-marker-alt" />
-                <span class="d-md-none">Karte</span>
+                <span class="d-md-none">
+                  Karte
+                </span>
               </a>
             </li>
             <menu-admin
@@ -116,68 +149,108 @@
             <nav-item-dropdown
               tooltip="Informationen"
               right
-              no-caret>
+              no-caret
+            >
               <template slot="button-content">
-                <i class="fas fa-info "/>
-                <span class="d-md-none">Infomationen</span>
+                <i class="fas fa-info " />
+                <span class="d-md-none">
+                  Informationen
+                </span>
               </template>
               <a
                 :href="$url('vision')"
                 class="dropdown-item"
-                role="menuitem">Vision</a>
+                role="menuitem"
+              >
+                Vision
+              </a>
               <a
                 :href="$url('claims')"
                 class="dropdown-item"
-                role="menuitem">Forderungen</a>
+                role="menuitem"
+              >
+                Forderungen
+              </a>
               <a
                 :href="$url('partner')"
                 class="dropdown-item"
-                role="menuitem">Partner</a>
+                role="menuitem"
+              >
+                Partner
+              </a>
               <a
                 :href="$url('donate')"
                 class="dropdown-item"
-                role="menuitem">Spenden</a>
+                role="menuitem"
+              >
+                Spenden
+              </a>
               <a
                 :href="$url('statistics')"
                 class="dropdown-item"
-                role="menuitem">Statistik</a>
+                role="menuitem"
+              >
+                Statistik
+              </a>
               <div class="dropdown-divider" />
               <a
                 :href="$url('infos')"
                 class="dropdown-item"
-                role="menuitem">Infosammlung</a>
+                role="menuitem"
+              >
+                Infosammlung
+              </a>
               <a
                 :href="$url('blog')"
                 class="dropdown-item"
-                role="menuitem">Blog</a>
+                role="menuitem"
+              >
+                Blog
+              </a>
               <a
                 :href="$url('faq')"
                 class="dropdown-item"
-                role="menuitem">F.A.Q.</a>
+                role="menuitem"
+              >
+                F.A.Q.
+              </a>
               <a
                 :href="$url('guide')"
                 class="dropdown-item"
-                role="menuitem">Ratgeber</a>
+                role="menuitem"
+              >
+                Ratgeber
+              </a>
               <a
                 :href="$url('wiki')"
                 class="dropdown-item"
-                role="menuitem">Wiki</a>
+                role="menuitem"
+              >
+                Wiki
+              </a>
               <a
                 :href="$url('changelog')"
                 class="dropdown-item"
-                role="menuitem">Changelog</a>
+                role="menuitem"
+              >
+                Changelog
+              </a>
             </nav-item-dropdown>
 
             <li
-              v-b-tooltip
               v-if="mailbox"
+              v-b-tooltip
               class="nav-item"
-              title="E-Mail-Postfach">
+              title="E-Mail-Postfach"
+            >
               <a
                 :href="$url('mailbox')"
-                class="nav-link">
+                class="nav-link"
+              >
                 <i class="fas fa-envelope" />
-                <span class="d-md-none">E-Mail-Postfach</span>
+                <span class="d-md-none">
+                  E-Mail-Postfach
+                </span>
               </a>
             </li>
 
@@ -186,8 +259,8 @@
             <menu-user
               :user-id="fsId"
               :avatar="image"
-              :is-mobile="isMobile" />
-
+              :is-mobile="isMobile"
+            />
           </ul>
         </b-collapse>
       </div>
@@ -229,8 +302,7 @@ export default {
     MenuBells,
     MenuUser,
     Search,
-    Login,
-    bTooltip
+    Login
   },
   directives: { bTooltip },
   props: {
@@ -304,7 +376,7 @@ export default {
 
     // logo
     .navbar-brand {
-        font-family: 'Alfa Slab One';
+        font-family: 'Alfa Slab One',serif;
         color: #ffffff;
         margin-right: 0;
         font-size: 1.1rem;
@@ -337,13 +409,6 @@ export default {
             width: 100%;
         }
     }
-    @media (max-width: 500px) {
-      .navbar {
-          max-height: 100vh;
-          overflow-y: scroll;
-      }
-    }
-
     .navbar-nav {
         align-items: center;
     }
@@ -455,7 +520,7 @@ export default {
         #search-results {
             top: 5em;
             width: 100%;
-            left: 0px !important;
+            left: 0 !important;
         }
     }
     .navbar-collapse.collapsing, .navbar-collapse.show {
@@ -483,7 +548,6 @@ div#main {
 // it shows an brown bar as a placeholder for the actual topbar
 #vue-topbar {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-    height: 2em;
     background-color: #533a20 !important;
     position: fixed;
     top: 0;

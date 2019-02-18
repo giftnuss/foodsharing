@@ -46,7 +46,7 @@ class StoreXhr extends Control
 
 	public function deldate()
 	{
-		if (isset($_GET['id']) && isset($_GET['time']) && strtotime($_GET['time']) > 0) {
+		if (isset($_GET['id'], $_GET['time']) && strtotime($_GET['time']) > 0) {
 			$this->model->deldate($_GET['id'], $_GET['time']);
 
 			$this->func->info('Abholtermin wurde gelöscht.');
@@ -104,16 +104,17 @@ class StoreXhr extends Control
 						}
 					});
 					
+					$( "#' . $id . '_to" ).val(new Date(Date.now()).toLocaleDateString("de-DE", {year: "numeric", month: "2-digit", day: "2-digit", }));
 					$( "#' . $id . '_from" ).datepicker("show");
 					
 					
-					$(window).resize(function(){
+					$(window).on("resize", function(){
 						$("#' . $dia->getId() . '").dialog("option",{
 							height:($(window).height()-40)
 						});
 					});
 					
-					$("#daterange_submit").click(function(ev){
+					$("#daterange_submit").on("click", function(ev){
 						ev.preventDefault();
 					
 						var date = $( "#' . $id . '_from" ).datepicker("getDate");
@@ -133,6 +134,13 @@ class StoreXhr extends Control
 							else
 							{
 								to = date.getFullYear() + "-" + preZero((date.getMonth()+1)) + "-" + preZero(date.getDate());
+
+								var now = new Date();
+								if(date.toDateString() == now.toDateString()) {
+									to = to + " " + preZero(now.getHours()) + ":" + preZero(now.getMinutes()) + ":59"
+								} else {
+									to = to + " " + "23:59:59"
+								}
 							}
 					
 							ajreq("getfetchhistory",{app:"betrieb",from:from,to:to,bid:' . (int)$_GET['bid'] . '});
@@ -245,7 +253,7 @@ class StoreXhr extends Control
 					$cnt .= '
 					</div>';
 					$dia->addJs('
-						$("#savebetriebetoselect").click(function(ev){
+						$("#savebetriebetoselect").on("click", function(ev){
 							ev.preventDefault();
 							
 							var saveArr = new Array();
@@ -291,7 +299,7 @@ class StoreXhr extends Control
 		if ($this->storeGateway->isResponsible($this->session->id(), $_GET['id'])) {
 			$xhr->addMessage($this->func->s('signout_error_admin'), 'error');
 		} elseif ($this->storeGateway->isInTeam($this->session->id(), $_GET['id'])) {
-			$this->model->signout($_GET['id'], $this->func->fsId());
+			$this->model->signout($_GET['id'], $this->session->id());
 			$xhr->addScript('goTo("/?page=relogin&url=" + encodeURIComponent("/?page=dashboard") );');
 		} else {
 			$xhr->addMessage($this->func->s('no_member'), 'error');

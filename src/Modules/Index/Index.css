@@ -25,7 +25,6 @@ body.fp-viewing-festival #topbar .navbar {
 
 #campaigntext {
   text-align: center;
-  font-size: 12px;
   font-size: 2.5vh;
   color: #f9f5e0;
   text-shadow: 0 1px #555;
@@ -34,26 +33,25 @@ body.fp-viewing-festival #topbar .navbar {
 }
 
 #campaigntext h2 {
-  font-family: "Alfa Slab One", Arial;
+  font-family: "Alfa Slab One", serif;
   font-size: 2.6em;
   font-weight: normal;
   padding:2vh;
 }
 
 #campaigntext h4 {
-  font-family: "Alfa Slab One", Arial;
+  font-family: "Alfa Slab One", serif;
   font-size: 1.3em;
   font-weight: normal;
 }
 
 #campaigntext div img {
-  width: 50px;
   width: 8.5vh;
   margin: 0 auto;
 }
 
 #campaigntext h3 {
-  font-family: "Alfa Slab One", Arial;
+  font-family: "Alfa Slab One", serif;
   font-size: 2em;
   font-weight: normal;
 }
@@ -63,9 +61,8 @@ body.fp-viewing-festival #topbar .navbar {
 }
 
 #campaignimg {
-  background-position: 50% 0;
-  background-size: contain;
-  background-repeat: no-repeat;
+  background: no-repeat 50%;
+  background-size: auto 85%;
 }
 
 @media (max-aspect-ratio: 3/2) {
@@ -129,7 +126,7 @@ body.fp-viewing-festival #topbar .navbar {
   color: #64ae24;
   font-size: 24px;
   font-weight: normal;
-  font-family: "Alfa Slab One", Arial;
+  font-family: "Alfa Slab One", serif;
   letter-spacing: 0.4px;
   border-bottom: 4px solid #64ae24;
   box-sizing: content-box;
@@ -141,7 +138,7 @@ body.fp-viewing-festival #topbar .navbar {
 
 .carpetroll .button {
   font-size: 150%;
-  font-family: "Alfa Slab One", Arial;
+  font-family: "Alfa Slab One", serif;
   font-weight: normal !important;
 }
 
@@ -162,7 +159,7 @@ body.fp-viewing-festival #topbar .navbar {
   display: block;
   text-align: center;
   width: 100%;
-  font-family: "Alfa Slab One", Arial;
+  font-family: "Alfa Slab One", serif;
   font-size: 120%;
 }
 
@@ -182,7 +179,7 @@ body.fp-viewing-festival #topbar .navbar {
   font-weight: normal;
   background-color: #64ae24;
   color: white;
-  font-family: "Alfa Slab One", Arial;
+  font-family: "Alfa Slab One", serif;
   width: 8em;
   border-radius: 1em;
   text-decoration: none;

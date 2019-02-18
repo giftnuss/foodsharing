@@ -49,20 +49,10 @@ class ForumRestController extends FOSRestController
 		if (isset($thread['post_time'])) {
 			$res['lastPost']['createdAt'] = str_replace(' ', 'T', $thread['post_time']);
 			$res['lastPost']['body'] = $this->sanitizerService->markdownToHtml($thread['post_body']);
-			$res['lastPost']['author'] = [
-				'id' => $thread['foodsaver_id'],
-				'name' => $thread['foodsaver_name'],
-				'avatar' => $thread['foodsaver_photo'] ? ('/images/130_q_' . $thread['foodsaver_photo']) : null,
-				'sleepStatus' => $thread['sleep_status']
-			];
+			$res['lastPost']['author'] = RestNormalization::normalizeFoodsaver($thread, 'foodsaver_', '130_q_');
 		}
 		if (isset($thread['creator_name'])) {
-			$res['creator'] = [
-				'id' => $thread['creator_id'],
-				'name' => $thread['creator_name'],
-				'avatar' => $thread['creator_photo'] ? ('/images/130_q_' . $thread['creator_photo']) : null,
-				'sleepStatus' => $thread['creator_sleep_status']
-			];
+			$res['creator'] = RestNormalization::normalizeFoodsaver($thread, 'creator_', '130_q_');
 		}
 
 		return $res;
@@ -74,12 +64,7 @@ class ForumRestController extends FOSRestController
 			'id' => $post['id'],
 			'body' => $this->sanitizerService->markdownToHtml($post['body']),
 			'createdAt' => str_replace(' ', 'T', $post['time']),
-			'author' => [
-				'id' => $post['author_id'],
-				'name' => $post['author_name'],
-				'avatar' => $post['author_photo'] ? ('/images/130_q_' . $post['author_photo']) : null,
-				'sleepStatus' => $post['author_sleep_status']
-			],
+			'author' => RestNormalization::normalizeFoodsaver($post, 'author_', '130_q_'),
 			'reactions' => $post['reactions'] ?: new \ArrayObject(),
 			'mayDelete' => $this->forumPermissions->mayDeletePost($post)
 		];

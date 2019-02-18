@@ -9,8 +9,11 @@ export default function (key, variables = {}) {
   if (!message) message = translations[key]
   if (!message) throw new Error(`Missing translation for [${key}]`)
   return message.replace(/\{([^}]+)\}/g, (match, name) => {
-    const value = variables[name]
-    if (!value) throw new Error(`Variable [${name}] was not provided for [${key}]`)
-    return value
+    if (variables.hasOwnProperty(name)) {
+      const value = variables[name]
+      return value
+    } else {
+      throw new Error(`Variable [${name}] was not provided for [${key}]`)
+    }
   })
 }

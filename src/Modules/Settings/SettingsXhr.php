@@ -39,10 +39,10 @@ class SettingsXhr extends Control
 			$dia->addButton('E-Mail-Adresse ändern', 'ajreq(\'changemail2\',{email:$(\'#newmail\').val()});');
 
 			return $dia->xhrout();
-		} else {
-			echo '0';
-			die();
 		}
+
+		echo '0';
+		die();
 	}
 
 	public function changemail2()
@@ -58,7 +58,7 @@ class SettingsXhr extends Control
 			$this->model->addNewMail($_GET['email'], $token);
 			// anrede name link
 
-			if ($fs = $this->model->getValues(array('name', 'geschlecht'), 'foodsaver', $this->func->fsId())) {
+			if ($fs = $this->model->getValues(array('name', 'geschlecht'), 'foodsaver', $this->session->id())) {
 				$this->func->tplMail(21, $_GET['email'], array(
 					'anrede' => $this->func->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 					'name' => $fs['name'],
@@ -100,7 +100,7 @@ class SettingsXhr extends Control
 
 	public function changemail4()
 	{
-		if ($fs = $this->model->getValues(array('email'), 'foodsaver', $this->func->fsId())) {
+		if ($fs = $this->model->getValues(array('email'), 'foodsaver', $this->session->id())) {
 			$did = strip_tags($_GET['did']);
 			if ($this->loginGateway->checkClient($fs['email'], $_GET['pw'])) {
 				if ($email = $this->model->getMailchange()) {
@@ -109,12 +109,12 @@ class SettingsXhr extends Control
 							'status' => 1,
 							'script' => 'pulseInfo("Deine E-Mail-Adresse wurde geändert!");$("#' . $did . '").dialog("close");'
 						);
-					} else {
-						return array(
-							'status' => 1,
-							'script' => 'pulseInfo(\'Die E-Mail-Adresse konnte nicht geändert werden, jemand anderes benutzt sie schon!\');'
-						);
 					}
+
+					return array(
+						'status' => 1,
+						'script' => 'pulseInfo(\'Die E-Mail-Adresse konnte nicht geändert werden, jemand anderes benutzt sie schon!\');'
+					);
 				}
 			}
 		}

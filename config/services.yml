@@ -6,7 +6,11 @@ services:
 
     Foodsharing\:
         resource: '../src/*'
-        exclude: '../src/{Lib/Flourish,Lib/Cache,Lib/View/v*,Dev,Debug,RestKernel.php}'
+        exclude: '../src/{Lib/Flourish,Lib/Cache,Lib/Session,Lib/View/v*,Dev,Debug,FoodsharingKernel.php}'
+
+    Foodsharing\Lib\Session:
+        calls:
+        - [initIfCookieExists]
 
     Twig_Loader_Filesystem:
         class: Twig_Loader_Filesystem
@@ -115,6 +119,7 @@ services:
     Intervention\Image\ImageManager:
         arguments:
             - driver: 'imagick'
+
     mysqli:
       class: mysqli
       arguments:
@@ -135,3 +140,18 @@ services:
         - [ setAttribute, [!php/const PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION]]
         - [ setAttribute, [!php/const PDO::MYSQL_ATTR_INIT_COMMAND, 'SET NAMES "utf8"']]
 
+    InfluxDB\Database:
+        factory: ['InfluxDB\Client', 'fromdsn']
+        arguments:
+            - !php/const INFLUX_DSN
+
+    BounceMailHandler\BounceMailHandler:
+        properties:
+            mailhost: !php/const BOUNCE_IMAP_HOST
+            mailboxUserName: !php/const BOUNCE_IMAP_USER
+            mailboxPassword: !php/const BOUNCE_IMAP_PASS
+            port: !php/const BOUNCE_IMAP_PORT
+            service: 'imap'
+            serviceOption: 'tls'
+            boxname: 'INBOX'
+            maxMessages: 10000

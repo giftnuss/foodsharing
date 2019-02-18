@@ -20,7 +20,7 @@ class MapControl extends Control
 		$this->func->addTitle($this->func->s('map'));
 		$this->setTemplate('map');
 
-		$center = $this->model->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
+		$center = $this->model->getValues(array('lat', 'lon'), 'foodsaver', $this->session->id());
 		$this->func->addContent($this->view->mapControl(), CNT_TOP);
 
 		$jsarr = '';

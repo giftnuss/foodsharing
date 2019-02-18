@@ -3,6 +3,7 @@
 $I = new AcceptanceTester($scenario);
 
 $description = sq('yay');
+$updateDescription = sq('upd');
 $pass = sq('pass');
 
 $foodsaver = $I->createFoodsaver($pass);
@@ -29,6 +30,7 @@ $I->dontSeeElement('#handy');
 $I->checkOption('.input.cb-contact_type[value="2"]');
 $I->waitForElement('#handy');
 $I->seeInField('#handy', $foodsaver['handy']);
+$I->seeOptionIsSelected('#lifetime', 'eine Woche');
 
 $I->fillField('description', $description);
 
@@ -46,6 +48,20 @@ $I->seeInDatabase('fs_basket', [
 
 $id = $I->grabFromDatabase('fs_basket', 'id', ['description' => $description,
 	'foodsaver_id' => $foodsaver['id']]);
+
+//Check update of the foodbasket
+$I->amOnPage($I->foodBasketInfoUrl($id));
+$I->click('Essenskorb bearbeiten');
+$I->waitForText('Essenskorb bearbeiten');
+$I->fillField('description', $description . $updateDescription);
+$I->click('Essenskorb veröffentlichen');
+$I->waitForText('Geändert am');
+
+$I->see($updateDescription);
+$I->seeInDatabase('fs_basket', [
+	'description' => $description . $updateDescription,
+	'foodsaver_id' => $foodsaver['id']
+]);
 
 $picker = $I->createFoodsaver();
 

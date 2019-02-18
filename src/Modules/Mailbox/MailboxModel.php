@@ -37,19 +37,19 @@ class MailboxModel extends Db
 				INSERT IGNORE INTO  `fs_foodsaver_has_contact`
 				(`foodsaver_id`,`contact_id`)
 				VALUES
-				(' . (int)$this->func->fsId() . ',' . (int)$id . ')
+				(' . (int)$this->session->id() . ',' . (int)$id . ')
 			');
 
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function getMailAdresses()
 	{
 		$mails = $this->qCol('
-			SELECT 	CONCAT(mb.name,"@' . DEFAULT_EMAIL_HOST . '")
+			SELECT 	CONCAT(mb.name,"@' . PLATFORM_MAILBOX_HOST . '")
 			FROM 	fs_mailbox mb,
 					fs_bezirk bz
 			WHERE 	bz.mailbox_id = mb.id
@@ -60,7 +60,7 @@ class MailboxModel extends Db
 			FROM 	fs_contact c,
 					fs_foodsaver_has_contact fc
 			WHERE 	fc.contact_id = c.id
-			AND 	fc.foodsaver_id = ' . (int)$this->func->fsId() . '
+			AND 	fc.foodsaver_id = ' . (int)$this->session->id() . '
 		')
 		) {
 			$mails = array_merge($mails, $contacts);
@@ -424,9 +424,9 @@ class MailboxModel extends Db
 
 		if (!empty($mb_name)) {
 			return $mb_name;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	/**
@@ -443,7 +443,7 @@ class MailboxModel extends Db
 				fs_botschafter bot
 				
 			WHERE
-				bot.foodsaver_id = ' . (int)$this->func->fsId() . '
+				bot.foodsaver_id = ' . (int)$this->session->id() . '
 				
 		');
 
@@ -452,7 +452,7 @@ class MailboxModel extends Db
 
 	public function getBoxes()
 	{
-		if ($this->func->isBotschafter()) {
+		if ($this->session->isAmbassador()) {
 			$bezirke = $this->getMailboxBezirkIds();
 			$bids = array();
 			$mboxes = array();
@@ -527,7 +527,7 @@ class MailboxModel extends Db
 			}
 		}
 
-		if ($me = $this->getValues(array('mailbox_id', 'name', 'nachname'), 'foodsaver', $this->func->fsId())) {
+		if ($me = $this->getValues(array('mailbox_id', 'name', 'nachname'), 'foodsaver', $this->session->id())) {
 			if ($me['mailbox_id'] == 0 && $this->session->may('bieb')) {
 				$me['name'] = explode(' ', $me['name']);
 				$me['name'] = $me['name'][0];
@@ -552,7 +552,7 @@ class MailboxModel extends Db
 						$tmp_name = $mb_name . $i;
 					}
 
-					if ($this->update('UPDATE `fs_foodsaver` SET mailbox_id = ' . (int)$mb_id . ' WHERE id = ' . (int)$this->func->fsId())) {
+					if ($this->update('UPDATE `fs_foodsaver` SET mailbox_id = ' . (int)$mb_id . ' WHERE id = ' . (int)$this->session->id())) {
 						$me['mailbox_id'] = $mb_id;
 					}
 				}
@@ -567,13 +567,13 @@ class MailboxModel extends Db
 					`fs_mailbox_member` mm
 		
 			WHERE 	mm.mailbox_id = mb.id
-			AND 	mm.foodsaver_id = ' . (int)$this->func->fsId() . '
+			AND 	mm.foodsaver_id = ' . (int)$this->session->id() . '
 		')
 		) {
 			foreach ($memberb as $m) {
 				if (empty($m['email_name'])) {
-					$m['email_name'] = $m['name'] . '@' . DEFAULT_EMAIL_HOST;
-					$this->update('UPDATE fs_mailbox_member SET email_name = ' . $this->strval($m['name'] . '@' . DEFAULT_EMAIL_HOST) . ' WHERE mailbox_id = ' . (int)$m['id'] . ' AND foodsaver_id = ' . (int)$this->func->fsId());
+					$m['email_name'] = $m['name'] . '@' . PLATFORM_MAILBOX_HOST;
+					$this->update('UPDATE fs_mailbox_member SET email_name = ' . $this->strval($m['name'] . '@' . PLATFORM_MAILBOX_HOST) . ' WHERE mailbox_id = ' . (int)$m['id'] . ' AND foodsaver_id = ' . (int)$this->session->id());
 				}
 				$mboxes[] = array(
 					'id' => $m['id'],
@@ -593,7 +593,7 @@ class MailboxModel extends Db
 							`fs_foodsaver` fs
 				
 				WHERE 		fs.mailbox_id = m.id
-				AND 		fs.id = ' . (int)$this->func->fsId() . '
+				AND 		fs.id = ' . (int)$this->session->id() . '
 			')
 		) {
 			$mboxes[] = array(

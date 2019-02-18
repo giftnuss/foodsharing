@@ -92,12 +92,10 @@ class EventXhr extends Control
 		}
 	}
 
-	private function mayEvent()
+	private function mayEvent(): bool
 	{
-		if ($this->event['public'] == 1 || $this->session->may('orga') || $this->func->isBotFor($this->event['bezirk_id']) || isset($this->event['invites']['may'][$this->func->fsId()])) {
-			return true;
-		}
-
-		return false;
+		return $this->event['public'] == 1 || $this->session->may('orga') || $this->session->isAdminFor(
+				$this->event['bezirk_id']
+			) || isset($this->event['invites']['may'][$this->session->id()]);
 	}
 }

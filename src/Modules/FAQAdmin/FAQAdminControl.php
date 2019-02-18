@@ -99,7 +99,7 @@ class FAQAdminControl extends Control
 		global $g_data;
 
 		if ($this->func->submitted()) {
-			$g_data['foodsaver_id'] = $this->func->fsId();
+			$g_data['foodsaver_id'] = $this->session->id();
 			if ($this->faqGateway->update_faq($_GET['id'], $g_data)) {
 				$this->func->info($this->func->s('faq_edit_success'));
 				$this->func->goPage();
@@ -114,7 +114,7 @@ class FAQAdminControl extends Control
 		global $g_data;
 
 		if ($this->func->submitted()) {
-			$g_data['foodsaver_id'] = $this->func->fsId();
+			$g_data['foodsaver_id'] = $this->session->id();
 			if ($this->model->add_faq($g_data)) {
 				$this->func->info($this->func->s('faq_add_success'));
 				$this->func->goPage();

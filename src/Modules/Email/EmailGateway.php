@@ -93,8 +93,8 @@ class EmailGateway extends BaseGateway
 		$email_id = $this->db->insert('fs_send_email', [
 			'foodsaver_id' => $fs_id,
 			'mailbox_id' => $mailbox_id,
-			'subject' => strip_tags($subject),
-			'message' => strip_tags($message),
+			'name' => $subject,
+			'message' => $message,
 			'zeit' => $this->db->now(),
 			'attach' => $attach_db,
 			'mode' => $mode
@@ -153,8 +153,8 @@ class EmailGateway extends BaseGateway
 
 		if ($row['anz'] == 0) {
 			return false;
-		} else {
-			return $row;
 		}
+
+		return $row;
 	}
 }

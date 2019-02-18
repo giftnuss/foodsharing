@@ -5,7 +5,6 @@ namespace Foodsharing\Modules\Login;
 use Exception;
 use Flourish\fImage;
 use Flourish\fUpload;
-use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
@@ -36,12 +35,12 @@ class LoginXhr extends Control
 	 */
 	private function fillMemcacheUserVars()
 	{
-		$info = $this->model->getVal('infomail_message', 'foodsaver', $this->func->fsId());
+		$info = $this->model->getVal('infomail_message', 'foodsaver', $this->session->id());
 
 		if ((int)$info > 0) {
-			Mem::userSet($this->func->fsId(), 'infomail', true);
+			$this->mem->userSet($this->session->id(), 'infomail', true);
 		} else {
-			Mem::userSet($this->func->fsId(), 'infomail', false);
+			$this->mem->userSet($this->session->id(), 'infomail', false);
 		}
 	}
 
@@ -64,12 +63,12 @@ class LoginXhr extends Control
 					pulseSuccess("' . $this->func->s('login_success') . '");
 					reload();'
 			);
-		} else {
-			return array(
-				'status' => 1,
-				'script' => 'pulseError("' . $this->func->s('login_failed') . '");'
-			);
 		}
+
+		return array(
+			'status' => 1,
+			'script' => 'pulseError("' . $this->func->s('login_failed') . '");'
+		);
 	}
 
 	/**
@@ -130,22 +129,22 @@ class LoginXhr extends Control
 				'error' => $data
 			));
 			exit();
-		} else {
-			$token = uniqid('', true);
-			if ($id = $this->model->insertNewUser($data, $token)) {
-				$activationUrl = BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
+		}
 
-				$this->func->tplMail(25, $data['email'], array(
-					'name' => $data['name'],
-					'link' => $activationUrl,
-					'anrede' => $this->func->s('anrede_' . $data['gender'])
-				));
+		$token = uniqid('', true);
+		if ($id = $this->model->insertNewUser($data, $token)) {
+			$activationUrl = BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
 
-				echo json_encode(array(
-					'status' => 1
-				));
-				exit();
-			}
+			$this->func->tplMail(25, $data['email'], array(
+				'name' => $data['name'],
+				'link' => $activationUrl,
+				'anrede' => $this->func->s('anrede_' . $data['gender'])
+			));
+
+			echo json_encode(array(
+				'status' => 1
+			));
+			exit();
 		}
 
 		echo json_encode(array(
@@ -259,7 +258,7 @@ class LoginXhr extends Control
 
 			$email = '';
 			$pass = '';
-			if (isset($_GET['p']) && isset($_GET['e'])) {
+			if (isset($_GET['p'], $_GET['e'])) {
 				if ($this->func->validEmail($_GET['e'])) {
 					$email = strip_tags($_GET['e']);
 				}
@@ -281,7 +280,6 @@ class LoginXhr extends Control
 			$dia->addJsBefore('
 
 				var date = new Date();
-				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/fonts/octicons/octicons.css").appendTo("head");
 				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/css/join.css?" + date.getTime()).appendTo("head");
 				join.init();
 			');
@@ -382,44 +380,45 @@ class LoginXhr extends Control
 		//if($valid['format']) {
 		if (!$valid['format']) {
 			return false;
-		} else {
-			//Set array of new components
-			$components = array('ac' => $matchset[1], //area code
-				'xc' => $matchset[2], //exchange code
-				'sn' => $matchset[3] //subscriber number
-			);
-			//              $components =   array ( 'ac' => $matchset[1], //area code
-			//                                              'xc' => $matchset[2], //exchange code
-			//                                              'sn' => $matchset[3], //subscriber number
-			//                                              'xn' => $matchset[4] //extension number
-			//                                              );
+		}
 
-			//Set array of number variants
-			$numbers = array('original' => $matchset[0],
-				'stripped' => substr(preg_replace('[\D]', '', $matchset[0]), 0, 10)
-			);
+		//Set array of new components
+		$components = array('ac' => $matchset[1], //area code
+			'xc' => $matchset[2], //exchange code
+			'sn' => $matchset[3] //subscriber number
+		);
+		//              $components =   array ( 'ac' => $matchset[1], //area code
+		//                                              'xc' => $matchset[2], //exchange code
+		//                                              'sn' => $matchset[3], //subscriber number
+		//                                              'xn' => $matchset[4] //extension number
+		//                                              );
 
-			//Now let's check the first ten digits against NANPA standards
-			if (preg_match($nanpa_pattern, $numbers['stripped'])) {
-				$valid['nanpa'] = true;
-			}
+		//Set array of number variants
+		$numbers = array('original' => $matchset[0],
+			'stripped' => substr(preg_replace('[\D]', '', $matchset[0]), 0, 10)
+		);
 
-			//If the NANPA guidelines have been met, continue
-			if ($valid['nanpa']) {
-				if (!empty($components['xn'])) {
-					if (preg_match('/^[\d]{1,6}$/', $components['xn'])) {
-						$valid['ext'] = true;
-					}   // end if if preg_match
-				} else {
+		//Now let's check the first ten digits against NANPA standards
+		if (preg_match($nanpa_pattern, $numbers['stripped'])) {
+			$valid['nanpa'] = true;
+		}
+
+		//If the NANPA guidelines have been met, continue
+		if ($valid['nanpa']) {
+			if (!empty($components['xn'])) {
+				if (preg_match('/^[\d]{1,6}$/', $components['xn'])) {
 					$valid['ext'] = true;
-				}   // end if if  !empty
-			}   // end if $valid nanpa
+				}   // end if if preg_match
+			} else {
+				$valid['ext'] = true;
+			}   // end if if  !empty
+		}   // end if $valid nanpa
 
-			//If the extension number is valid or non-existent, continue
-			if ($valid['ext']) {
-				$valid['all'] = true;
-			}   // end if $valid ext
-		}   // end if $valid
+		//If the extension number is valid or non-existent, continue
+		if ($valid['ext']) {
+			$valid['all'] = true;
+		}   // end if $valid ext
+		// end if $valid
 		return $valid['all'];
 	}
 }

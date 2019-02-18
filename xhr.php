@@ -1,21 +1,30 @@
 <?php
 
-use Foodsharing\DI;
 use Foodsharing\Lib\Cache\Caching;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrMethods;
+use Symfony\Component\DependencyInjection\Container;
 
 require __DIR__ . '/includes/setup.php';
-
 require_once 'config.inc.php';
 
-/* @var $session \Foodsharing\Lib\Session */
-$session = DI::$shared->get(Session::class);
-$session->init();
+/* @var $container Container */
+global $container;
+$container = initializeContainer();
+
+/* @var $session Session */
+$session = $container->get(Session::class);
+$session->initIfCookieExists();
+
+/* @var $mem Mem */
+$mem = $container->get(Mem::class);
+
+/* @var $influxdb \Foodsharing\Modules\Core\InfluxMetrics */
+$influxdb = $container->get(\Foodsharing\Modules\Core\InfluxMetrics::class);
 
 if (isset($g_page_cache)) {
-	$cache = new Caching($g_page_cache, $session);
+	$cache = new Caching($g_page_cache, $session, $mem, $influxdb);
 	$cache->lookup();
 }
 
@@ -23,12 +32,14 @@ require_once 'lang/DE/de.php';
 
 $action = $_GET['f'];
 
-Mem::updateActivity($session->id());
+$mem->updateActivity($session->id());
 if (isset($_GET['f'])) {
 	/* @var $xhr XhrMethods */
-	$xhr = DI::$shared->get(XhrMethods::class);
+	$xhr = $container->get(XhrMethods::class);
 	$func = 'xhr_' . $action;
 	if (method_exists($xhr, $func)) {
+		$metrics = $container->get(\Foodsharing\Modules\Core\InfluxMetrics::class);
+		$metrics->addPageStatData(['controller' => $func]);
 		/*
 		 * check for page caching
 		*/

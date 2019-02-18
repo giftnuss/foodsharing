@@ -53,7 +53,7 @@ class DashboardControl extends Control
 			$this->func->go('/');
 		}
 
-		$this->user = $this->dashboardGateway->getUser($this->func->fsId());
+		$this->user = $this->dashboardGateway->getUser($this->session->id());
 	}
 
 	public function index()
@@ -73,6 +73,7 @@ class DashboardControl extends Control
 		}
 
 		if (isset($_SESSION['client']['botschafter']) && is_array($_SESSION['client']['botschafter']) && count($_SESSION['client']['botschafter']) > 0) {
+			//this is is_bieb on purpose; prevents group administrators to be notified about the ambassador quiz
 			$is_bieb = true;
 		}
 
@@ -80,19 +81,19 @@ class DashboardControl extends Control
 			(
 				$is_fs
 				&&
-				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)$this->func->fsId()) == 0
+				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)$this->session->id()) == 0
 			)
 			||
 			(
 				$is_bieb
 				&&
-				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 2 AND status = 1 AND foodsaver_id = ' . (int)$this->func->fsId()) == 0
+				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 2 AND status = 1 AND foodsaver_id = ' . (int)$this->session->id()) == 0
 			)
 			||
 			(
 				$is_bot
 				&&
-				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 3 AND status = 1 AND foodsaver_id = ' . (int)$this->func->fsId()) == 0
+				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 3 AND status = 1 AND foodsaver_id = ' . (int)$this->session->id()) == 0
 			)
 		) {
 			$check = true;
@@ -179,7 +180,7 @@ class DashboardControl extends Control
 
 		$this->view->updates();
 
-		if ($this->user['lat'] && ($baskets = $this->dashboardGateway->listCloseBaskets($this->func->fsId(), $this->session->getLocation($this->model)))) {
+		if ($this->user['lat'] && ($baskets = $this->dashboardGateway->listCloseBaskets($this->session->id(), $this->session->getLocation($this->model)))) {
 			$this->func->addContent($this->view->closeBaskets($baskets), CNT_LEFT);
 		} else {
 			if ($baskets = $this->dashboardGateway->getNewestFoodbaskets()) {
@@ -190,7 +191,7 @@ class DashboardControl extends Control
 
 	private function dashFoodsaver()
 	{
-		$val = $this->model->getValues(array('photo_public', 'anschrift', 'plz', 'lat', 'lon', 'stadt'), 'foodsaver', $this->func->fsId());
+		$val = $this->model->getValues(array('photo_public', 'anschrift', 'plz', 'lat', 'lon', 'stadt'), 'foodsaver', $this->session->id());
 
 		if (empty($val['lat']) || empty($val['lon']) ||
 			($val['lat']) == '50.05478727164819' && $val['lon'] == '10.3271484375'
@@ -215,7 +216,7 @@ class DashboardControl extends Control
 
 		if (empty($val['lat']) || empty($val['lon'])) {
 			$this->func->addJs('
-		$("#plz, #stadt, #anschrift, #hsnr").bind("blur",function(){
+		$("#plz, #stadt, #anschrift, #hsnr").on("blur",function(){
 			if($("#plz").val() != "" && $("#stadt").val() != "" && $("#anschrift").val() != "")
 			{
 				u_loadCoords({
@@ -253,7 +254,7 @@ class DashboardControl extends Control
 		});
 		$("#grab-info-link").trigger("click");
 		
-		$("#grabinfo-form").submit(function(e){
+		$("#grabinfo-form").on("submit", function(e){
 			e.preventDefault();
 			check = true;
 	
@@ -325,8 +326,6 @@ class DashboardControl extends Control
 			#activity ul.linklist li span.qr
 			{
 				margin-left:58px;
-				-webkit-border-radius: 3px;
-				-moz-border-radius: 3px;
 				border-radius: 3px;
 				opacity:0.5;
 			}
@@ -342,10 +341,6 @@ class DashboardControl extends Control
 				width:32px;
 				margin-right:-35px;
 				border-right:1px solid #ffffff;
-				-webkit-border-top-left-radius: 3px;
-				-webkit-border-bottom-left-radius: 3px;
-				-moz-border-radius-topleft: 3px;
-				-moz-border-radius-bottomleft: 3px;
 				border-top-left-radius: 3px;
 				border-bottom-left-radius: 3px;
 			}
@@ -356,10 +351,6 @@ class DashboardControl extends Control
 				margin-left: 36px;
 				padding: 8px;
 				width: 78.6%;
-				-webkit-border-top-right-radius: 3px;
-				-webkit-border-bottom-right-radius: 3px;
-				-moz-border-radius-topright: 3px;
-				-moz-border-radius-bottomright: 3px;
 				border-top-right-radius: 3px;
 				border-bottom-right-radius: 3px;
 				margin-right:-30px;
@@ -414,8 +405,6 @@ class DashboardControl extends Control
 				margin-bottom:10px;
 				background-color:#ffffff;
 				padding:10px;
-				-webkit-border-radius: 6px;
-				-moz-border-radius: 6px;
 				border-radius: 6px;
 			}
 	
@@ -479,18 +468,27 @@ class DashboardControl extends Control
 		$gerettet = $me['stat_fetchweight'];
 
 		if ($gerettet > 0) {
-			$gerettet = '. Du hast <strong>' . number_format($gerettet, 2, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg</strong> gerettet.';
+			$gerettet = '. Du hast <strong style="white-space:nowrap">' . number_format($gerettet, 2, ',', '.') . '&thinsp;kg</strong> gerettet.';
 		} else {
 			$gerettet = '';
 		}
 
 		$this->func->addContent(
 			'
-		<div class="top corner-all">
-			<div class="img">' . $this->func->avatar($me, 50) . '</div>
-				<h3>Hallo ' . $me['name'] . '</h3>
-				<p>' . $this->func->s('rolle_' . $me['rolle'] . '_' . $me['geschlecht']) . ' für ' . $me['bezirk_name'] . '</a>' . $gerettet . '</p>
-			<div style="clear:both;"></div>		
+		<div class="pure-u-1 ui-padding-bottom">
+		<ul id="conten-top"  class="top corner-all linklist" >
+		<li>
+
+            <a href="profile/' . $me['id'] . '">
+                <div class="ui-padding">
+                    <div class="img">' . $this->func->avatar($me, 50) . '</div>
+                    <h3 class "corner-all">Hallo ' . $me['name'] . '</h3>
+                    <p>' . $this->func->s('rolle_' . $me['rolle'] . '_' . $me['geschlecht']) . ' für ' . $me['bezirk_name'] . $gerettet . '</p>
+                    <div style="clear:both;"></div>
+                </div>
+            </a>
+		</li>
+		</ul>			
 		</div>',
 
 			CNT_TOP
@@ -499,7 +497,7 @@ class DashboardControl extends Control
 		/*
 		 * Nächste Termine
 		*/
-		if ($dates = $this->profileModel->getNextDates($this->func->fsId(), 10)) {
+		if ($dates = $this->profileModel->getNextDates($this->session->id(), 10)) {
 			$this->func->addContent($this->view->u_nextDates($dates), CNT_RIGHT);
 		}
 

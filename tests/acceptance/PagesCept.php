@@ -4,7 +4,7 @@ $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure various pages work');
 
 $I->amOnPage('/');
-$I->see('Sei dabei beim foodsharing festival 2018');
+$I->see('Ab sofort neue E-Mail-Adressen');
 
 $I->amOnPage('/essenskoerbe');
 $I->seeCurrentUrlEquals('/essenskoerbe/find'); // it redirects

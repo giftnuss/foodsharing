@@ -1,21 +1,30 @@
 <?php
 
-use Foodsharing\DI;
 use Foodsharing\Lib\Cache\Caching;
 use Foodsharing\Lib\Db\Db;
+use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-require_once 'config.inc.php';
+/* @var $container Container */
+global $container;
 
-$session = DI::$shared->get(Session::class);
-$session->init();
+/* @var $session Session */
+$session = $container->get(Session::class);
+$session->initIfCookieExists();
+
+/* @var $mem Mem */
+$mem = $container->get(Mem::class);
+
+/* @var $influxdb \Foodsharing\Modules\Core\InfluxMetrics */
+$influxdb = $container->get(\Foodsharing\Modules\Core\InfluxMetrics::class);
 
 if (isset($g_page_cache)) {
-	$cache = new Caching($g_page_cache, $session);
+	$cache = new Caching($g_page_cache, $session, $mem, $influxdb);
 	$cache->lookup();
 }
 
@@ -35,16 +44,16 @@ $request = Request::createFromGlobals();
 $response = new Response('--');
 
 /* @var $func Func */
-$func = DI::$shared->get(Func::class);
+$func = $container->get(Func::class);
 
 /* @var $viewUtils Utils */
-$viewUtils = DI::$shared->get(Utils::class);
+$viewUtils = $container->get(Utils::class);
 
 $g_template = 'default';
 $g_data = $func->getPostData();
 
 /* @var $db Db */
-$db = DI::$shared->get(Db::class);
+$db = $container->get(Db::class);
 
 $func->addHidden('<a id="' . $func->id('fancylink') . '" href="#fancy">&nbsp;</a>');
 $func->addHidden('<div id="' . $func->id('fancy') . '"></div>');

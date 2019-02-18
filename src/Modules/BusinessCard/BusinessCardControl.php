@@ -76,7 +76,7 @@ class BusinessCardControl extends Control
 
 			$short[0] = str_replace(array('/', '\\'), '', $short[0]);
 
-			$foodsaver = $this->model->getValues(array('name', 'nachname'), 'foodsaver', $this->func->fsId());
+			$foodsaver = $this->model->getValues(array('name', 'nachname'), 'foodsaver', $this->session->id());
 
 			$file = 'data/visite/' . (int)$short[1] . '_' . $short[0] . '.pdf';
 
@@ -89,9 +89,9 @@ class BusinessCardControl extends Control
 				readfile($file);
 
 				exit();
-			} else {
-				$this->func->goPage();
 			}
+
+			$this->func->goPage();
 		}
 	}
 }

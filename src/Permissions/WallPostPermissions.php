@@ -3,6 +3,7 @@
 namespace Foodsharing\Permissions;
 
 use Foodsharing\Modules\Event\EventGateway;
+use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\WallPost\WallPostGateway;
 
@@ -11,28 +12,30 @@ class WallPostPermissions
 	private $wallPostGateway;
 	private $regionGateway;
 	private $eventGateway;
+	private $fairteilerGateway;
 
-	public function __construct(RegionGateway $regionGateway, WallPostGateway $wallPostGateway, EventGateway $eventGateway)
-	{
+	public function __construct(
+		RegionGateway $regionGateway,
+		WallPostGateway $wallPostGateway,
+		EventGateway $eventGateway,
+		FairteilerGateway $fairteilerGateway
+	) {
 		$this->wallPostGateway = $wallPostGateway;
 		$this->regionGateway = $regionGateway;
 		$this->eventGateway = $eventGateway;
+		$this->fairteilerGateway = $fairteilerGateway;
 	}
 
 	public function mayReadWall($fsId, $target, $targetId)
 	{
 		switch ($target) {
-			case 'basket':
-				return $fsId > 0;
 			case 'bezirk':
 				return $this->regionGateway->hasMember($fsId, $targetId);
 			case 'event':
 				/* ToDo merge with access logic inside event */
 				$event = $this->eventGateway->getEventWithInvites($targetId);
 
-				return $event['public'] || isset($event['may'][$fsId]);
-			case 'foodsaver':
-				return $fsId > 0;
+				return $event['public'] || isset($event['invites']['may'][$fsId]);
 			case 'fairteiler':
 				return true;
 			case 'question':
@@ -40,7 +43,7 @@ class WallPostPermissions
 			case 'usernotes':
 				return $this->regionGateway->hasMember($fsId, 432);
 			default:
-				return false;
+				return $fsId > 0;
 		}
 	}
 
@@ -51,6 +54,8 @@ class WallPostPermissions
 				return $fsId == $targetId;
 			case 'question':
 				return $fsId > 0;
+			case 'fairteiler':
+				return $this->fairteilerGateway->mayFairteiler($fsId, $targetId);
 			default:
 				return $fsId > 0 && $this->mayReadWall($fsId, $target, $targetId);
 		}

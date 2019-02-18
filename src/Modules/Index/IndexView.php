@@ -12,7 +12,7 @@ class IndexView extends View
 		$ps = new vPageslider();
 		$ps->addSection($this->campaign($first_content), array(
 			'color' => '#533a20',
-			'anchor' => 'festival'
+			'anchor' => 'hallowelt'
 		));
 
 		$ps->addSection($this->welcome(), array(
@@ -41,20 +41,19 @@ class IndexView extends View
 		return $ps->render();
 	}
 
-	private function campaign($first_content)
+	private function campaign(): string
 	{
+		$remainingdays = intval((strtotime('August 5, 2018 11:59 PM') - time()) / 86400);
+		$dynamic_line = ($remainingdays > -1) ?
+			'<h3>Noch ' . $remainingdays . ' Tage <a href="https://www.startnext.com/foodsharingfestival2018" target=_blank>Crowdfunding</a></h3>' :
+			'<h3>Infos und Anmeldung hier:</h3>';
+
 		return '
 		<div id="campaign" class="pure-g">
 			<div class="topbarpadding">
-				<a href="http://www.foodsharing-festival.org">
-				<div id="campaignimg" class="pure-u-1 pure-u-sm-1-2" style="background-image:url(/img/festival2018.png)">
-				</div></a>
+				<div id="campaignimg" class="pure-u-1 pure-u-sm-1-2" style="background-image:url(/img/fork_logo.svg)"></div>
 				<div id="campaigntext" class="pure-u-1 pure-u-sm-1-2">
-				<h2>Sei dabei beim foodsharing festival 2018</h2>
-				<h3>21<small style="font-size:80%"> SEP</small> - 23<small style="font-size:80%"> SEP</small></h3>
-				<br>
-				<h3>Infos und Anmeldung hier:</h3>
-				<h3><a href="http://www.foodsharing-festival.org">foodsharing-festival.org</a></h3>
+				<h2><span style="color: red">Achtung!</span><br>Ab sofort neue E-Mail-Adressen:<br><br>@lebensmittelretten.de wird zu @foodsharing.network</h2>
 				</div>
 			</div>
 		</div>
@@ -81,7 +80,7 @@ class IndexView extends View
 
 	private function howto()
 	{
-		$this->func->addJs('$(".vidlink").click(function(ev){
+		$this->func->addJs('$(".vidlink").on("click", function(ev){
 			ev.preventDefault();
 			$vid = $(this);
 			$vid.parent().html(\'<iframe width="420" height="315" src="\'+$vid.attr(\'href\')+\'" frameborder="0" allowfullscreen></iframe>\');

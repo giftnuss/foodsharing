@@ -54,7 +54,7 @@ $g_lang['change_times'] = 'Abholzeiten ändern';
 $g_lang['change_fetcher'] = 'Abholer ändern';
 $g_lang['verantwortlicher'] = 'Verantwortliche Mitglieder';
 $g_lang['next_fetch_dates'] = 'Nächste Abholtermine';
-$g_lang['wait_for_confirm'] = '<strong>Du bist vorgemerkt</strong><br>der Filalverantwortliche muss jetzt nur noch Deine Anfrage bestätigen.';
+$g_lang['wait_for_confirm'] = '<strong>Du bist vorgemerkt</strong><br>Die Betriebsverantwortlichen müssen jetzt nur noch Deine Anfrage bestätigen.';
 $g_lang['not_confirmed'] = '{name} ist noch nicht bestätigt!';
 $g_lang['click_to_confirm'] = 'Unbestätigte Foodsaver kannst Du durch einen Klick auf das kleine Foto aktivieren.';
 $g_lang['info'] = 'Infos';
@@ -77,7 +77,7 @@ $g_lang['date_add_successful'] = '<p><b>Termine wurden erfolgreich hinzugefügt.
 $g_lang['del_and_send'] = 'Termin löschen und Nachricht senden';
 $g_lang['tpl_msg_to_team'] = 'Liebes {BETRIEB}-Team, 
 
-am {DATE} kann ich leider doch keine Lebensmittel abholen. Daher suche ich dringend eine Vertretung. Kannst Du für mich einspringen?
+{DATE} kann ich leider doch keine Lebensmittel abholen. Daher suche ich dringend eine Vertretung. Kannst Du für mich einspringen?
 
 Liebe Grüße';
 $g_lang['team_msg'] = 'Nachricht ans ganze Team';
@@ -102,3 +102,6 @@ $g_lang['reportmessage'] = 'Beschreibe den Vorfall noch etwas genauer!';
 $g_lang['fetch_history'] = 'Abholungshistorie';
 $g_lang['stat_fetchcount'] = 'Letzte Abholung am {date}';
 $g_lang['stat_fetchcount_none'] = 'Noch keine Lebensmittel abgeholt';
+$g_lang['stat_teammember_since'] = 'Im Team seit {date}';
+$g_lang['stat_jumper_since'] = 'Springer seit {date}';
+$g_lang['stat_since_unknown'] = 'unbekannt';

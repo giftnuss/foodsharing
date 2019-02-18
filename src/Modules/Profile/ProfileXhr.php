@@ -40,7 +40,7 @@ class ProfileXhr extends Control
 				$this->foodsaver = $fs;
 				$this->foodsaver['mailbox'] = false;
 				if ($this->session->may('orga') && (int)$fs['mailbox_id'] > 0) {
-					$this->foodsaver['mailbox'] = $this->model->getVal('name', 'mailbox', $fs['mailbox_id']) . '@' . DEFAULT_EMAIL_HOST;
+					$this->foodsaver['mailbox'] = $this->model->getVal('name', 'mailbox', $fs['mailbox_id']) . '@' . PLATFORM_MAILBOX_HOST;
 				}
 
 				/*
@@ -130,7 +130,7 @@ class ProfileXhr extends Control
 	{
 		$betrieb = $this->storeModel->getBetriebBezirkID($_GET['bid']);
 
-		if ($this->session->isOrgaTeam() || $this->func->isBotFor($betrieb['bezirk_id'])) {
+		if ($this->session->isOrgaTeam() || $this->session->isAdminFor($betrieb['bezirk_id'])) {
 			if ($this->storeModel->deleteFetchDate($_GET['fsid'], $_GET['bid'], date('Y-m-d H:i:s', $_GET['date']))) {
 				return array(
 					'status' => 1,
@@ -138,18 +138,18 @@ class ProfileXhr extends Control
 					pulseSuccess("Termin gelöscht");
 					reload();'
 				);
-			} else {
-				return array(
-					'status' => 1,
-					'script' => 'pulseError("Es ist ein Fehler aufgetreten!");'
-				);
 			}
-		} else {
+
 			return array(
 				'status' => 1,
-				'script' => 'pulseError("Du kannst nur Termine aus Deinem eigenen Bezirk löschen.");'
+				'script' => 'pulseError("Es ist ein Fehler aufgetreten!");'
 			);
 		}
+
+		return array(
+			'status' => 1,
+			'script' => 'pulseError("Du kannst nur Termine aus Deinem eigenen Bezirk löschen.");'
+		);
 	}
 
 	public function quickprofile()

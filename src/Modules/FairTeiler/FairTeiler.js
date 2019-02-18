@@ -4,26 +4,28 @@ import '@/globals'
 import $ from 'jquery'
 import 'jquery-tagedit'
 import 'jquery-tagedit-auto-grow-input'
-import 'typeahead'
-import 'typeahead-addresspicker'
-import 'leaflet'
-import 'leaflet.awesome-markers'
+import 'jquery-jcrop'
+import { attachAddressPicker } from '@/addressPicker'
+
 import {
-  ajreq,
-  pictureCrop
+  pictureCrop,
+  pictureReady
 } from '@/script'
 import { expose } from '@/utils'
+import { GET } from '@/browser'
+
 import './FairTeiler.css'
 
 expose({
   pictureCrop,
-  u_wallpostReady
+  pictureReady
 })
 
-function u_wallpostReady (postid) {
-  ajreq('infofollower', { fid: $('#ft-id').val(), pid: postid })
-}
-
-$('#wall-submit').bind('mousedown', function () {
+$('#wall-submit').on('mousedown', function () {
   $('#ft-public-link').trigger('click')
 })
+
+let sub = GET('sub')
+if (sub === 'addFt' || sub === 'edit') {
+  attachAddressPicker()
+}

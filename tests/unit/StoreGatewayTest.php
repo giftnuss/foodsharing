@@ -1,12 +1,16 @@
 <?php
 
-
 class StoreGatewayTest extends \Codeception\Test\Unit
 {
 	/**
 	 * @var \UnitTester
 	 */
 	protected $tester;
+
+	/**
+	 * @var Faker\Generator
+	 */
+	private $faker;
 
 	/**
 	 * @var \Foodsharing\Modules\Store\StoreGateway
@@ -49,6 +53,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 	{
 		$this->gateway = $this->tester->get(\Foodsharing\Modules\Store\StoreGateway::class);
 		$this->foodsaver = $this->tester->createFoodsaver();
+		$this->faker = Faker\Factory::create('de_DE');
 	}
 
 	public function testGetPickupDates()
@@ -110,5 +115,85 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 				'sonstige' => [],
 			]
 		);
+	}
+
+	public function testUpdateExpiredBellsRemovesBellIfNoUnconfirmedFetchesAreInTheFuture()
+	{
+		$store = $this->tester->createStore($this->region_id);
+		$foodsaver = $this->tester->createFoodsaver();
+
+		$this->gateway->addFetcher($foodsaver['id'], $store['id'], '1970-01-01');
+
+		$this->tester->updateInDatabase(
+			'fs_bell',
+			['expiration' => '1970-01-01'],
+			['identifier' => 'store-fetch-unconfirmed-' . $store['id']]
+		); // outdate bell notification
+
+		$this->gateway->updateExpiredBells();
+
+		$this->tester->dontSeeInDatabase('fs_bell', ['identifier' => 'store-fetch-unconfirmed-' . $store['id']]);
+	}
+
+	public function testUpdateExpiredBellsUpdatesBellCountIfStillUnconfirmedFetchesAreInTheFuture()
+	{
+		$store = $this->tester->createStore($this->region_id);
+		$foodsaver = $this->tester->createFoodsaver();
+
+		$this->gateway->addFetcher($foodsaver['id'], $store['id'], '2150-01-01');
+		$this->gateway->addFetcher($foodsaver['id'], $store['id'], '2150-01-02');
+
+		// As we can't cange the NOW() time in the database for the test, we have to move one fetch date to the past:
+		$this->tester->updateInDatabase(
+			'fs_abholer',
+			['date' => '1970-01-01'],
+			['date' => '2150-01-01']
+		);
+
+		/* Now, we have two unconfirmed fetch dates in the database: One that is in the future (2150-01-02) and one
+		 * that is in the past (1970-01-01).
+		 */
+
+		$this->tester->updateInDatabase(
+			'fs_bell',
+			['expiration' => '1970-01-01'],
+			['identifier' => 'store-fetch-unconfirmed-' . $store['id']]
+		); // outdate bell notification
+
+		$this->gateway->updateExpiredBells();
+
+		$this->tester->seeInDatabase('fs_bell', ['vars like' => '%"count";i:1;%']); // The bell should have a count of 1 now - vars are serialized, that's why it looks so strange
+	}
+
+	/**
+	 * If there are muliple fetches to confirm for one BIEB, only one store bell should be generated. It should
+	 * have the date of the soonest fetch as its date, and it should contain the number of only the unconfirmed fetch
+	 * dates that are in the future.
+	 */
+	public function testStoreBellsAreGeneratedCorrectly()
+	{
+		$this->tester->clearTable('fs_abholer');
+
+		$user = $this->tester->createFoodsaver();
+		$store = $this->tester->createStore(0);
+
+		$pastDate = $this->faker->dateTimeBetween($max = 'now')->format('Y-m-d H:i:s');
+		$soonDate = $this->faker->dateTimeBetween('+1 days', '+2 days')->format('Y-m-d H:i:s');
+		$futureDate = $this->faker->dateTimeBetween('+7 days', '+14 days')->format('Y-m-d H:i:s');
+
+		$this->gateway->addFetcher($user['id'], $store['id'], $pastDate);
+		$this->gateway->addFetcher($user['id'], $store['id'], $soonDate);
+		$this->gateway->addFetcher($user['id'], $store['id'], $futureDate);
+
+		$this->tester->seeNumRecords(3, 'fs_abholer');
+
+		$this->tester->seeNumRecords(1, 'fs_bell', ['identifier' => 'store-fetch-unconfirmed-' . $store['id']]);
+
+		$bellVars = $this->tester->grabFromDatabase('fs_bell', 'vars', ['identifier' => 'store-fetch-unconfirmed-' . $store['id']]);
+		$vars = unserialize($bellVars);
+		$this->assertEquals(2, $vars['count']);
+
+		$bellDate = $this->tester->grabFromDatabase('fs_bell', 'time', ['identifier' => 'store-fetch-unconfirmed-' . $store['id']]);
+		$this->assertEquals($soonDate, $bellDate);
 	}
 }

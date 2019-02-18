@@ -4,7 +4,7 @@ body {
 
 body, p, div, td, th {
   font-size: 13px;
-  font-family: Arial;
+  font-family: Arial, sans-serif;
   color: #31210c;
 }
 

@@ -10,19 +10,19 @@ class FoodsaverView extends View
 	{
 		if ($foodsaver === false) {
 			return '<div id="fsform"></div>';
-		} else {
-			$cnt = $this->v_utils->v_input_wrapper('Foto', '<a class="avatarlink corner-all" href="#" onclick="profile(' . (int)$foodsaver['id'] . ');return false;"><img style="display:none;" class="corner-all" src="' . $this->func->img($foodsaver['photo'], 'med') . '" /></a>');
-			$cnt .= $this->v_utils->v_input_wrapper('Name', $foodsaver['name'] . ' ' . $foodsaver['nachname']);
-			$cnt .= $this->v_utils->v_input_wrapper('Rolle', $this->func->s('rolle_' . $foodsaver['rolle'] . '_' . $foodsaver['geschlecht']));
-
-			$cnt .= $this->v_utils->v_input_wrapper('Letzter Login', $foodsaver['last_login']);
-
-			$cnt .= $this->v_utils->v_input_wrapper('Optionen', '
-				<span class="button" onclick="fsapp.delfromBezirk(' . $foodsaver['id'] . ');">Aus Bezirk löschen</span>		
-			');
-
-			return $this->v_utils->v_field($cnt, $foodsaver['name'], array('class' => 'ui-padding'));
 		}
+
+		$cnt = $this->v_utils->v_input_wrapper('Foto', '<a class="avatarlink corner-all" href="/profile/' . (int)$foodsaver['id'] . '"><img style="display:none;" class="corner-all" src="' . $this->func->img($foodsaver['photo'], 'med') . '" /></a>');
+		$cnt .= $this->v_utils->v_input_wrapper('Name', $foodsaver['name'] . ' ' . $foodsaver['nachname']);
+		$cnt .= $this->v_utils->v_input_wrapper('Rolle', $this->func->s('rolle_' . $foodsaver['rolle'] . '_' . $foodsaver['geschlecht']));
+
+		$cnt .= $this->v_utils->v_input_wrapper('Letzter Login', $foodsaver['last_login']);
+
+		$cnt .= $this->v_utils->v_input_wrapper('Optionen', '
+			<span class="button" onclick="fsapp.delfromBezirk(' . $foodsaver['id'] . ');">Aus Bezirk löschen</span>		
+		');
+
+		return $this->v_utils->v_field($cnt, $foodsaver['name'], array('class' => 'ui-padding'));
 	}
 
 	public function foodsaverList($foodsaver, $bezirk, $inactive = false)
@@ -32,7 +32,7 @@ class FoodsaverView extends View
 		return
 			'<div id="' . $name . 'foodsaverlist">' .
 			$this->v_utils->v_field(
-				$this->fsAvatarList($foodsaver, array('id' => 'fslist', 'shuffle' => false)),
+				$this->fsAvatarList($foodsaver, array('id' => 'fslist', 'noshuffle' => true)),
 				$this->func->s('fs_in') . $bezirk['name'] . ($inactive ? $this->func->s('fs_list_not_logged_for_6_months') : '')
 			) . '
 		</div>';
@@ -50,7 +50,7 @@ class FoodsaverView extends View
 			$position = $this->v_utils->v_form_text('position');
 			$options = array(
 				'values' => array(
-					array('id' => 1, 'name' => 'ist im Bundesweiten Orgateam dabei')
+					array('id' => 1, 'name' => 'ist im bundesweiten Orgateam dabei')
 				)
 			);
 
@@ -65,13 +65,13 @@ class FoodsaverView extends View
 					array('id' => 1, 'name' => 'Foodsaver/in (FS)'),
 					array('id' => 2, 'name' => 'Betriebsverantwortliche/r (BIEB)'),
 					array('id' => 3, 'name' => 'Botschafter/in (BOT)'),
-					array('id' => 4, 'name' => 'Orgamensch/in (ORG)')
+					array('id' => 4, 'name' => 'Orgamensch (ORG)')
 				)
 			));
 		}
 
 		$this->func->addJs('
-			$("#rolle").change(function(){
+			$("#rolle").on("change", function(){
 				if(this.value == 4)
 				{
 					$("#orgateam-wrapper input")[0].checked = true;
@@ -81,7 +81,7 @@ class FoodsaverView extends View
 					$("#orgateam-wrapper input")[0].checked = false;
 				}
 			});
-			$("#plz, #stadt, #anschrift").bind("blur",function(){
+			$("#plz, #stadt, #anschrift").on("blur",function(){
 
 
 					if($("#plz").val() != "" && $("#stadt").val() != "" && $("#anschrift").val() != "")
@@ -122,7 +122,7 @@ class FoodsaverView extends View
 			$this->v_utils->v_form_select('geschlecht', array('values' => array(
 				array('name' => 'Frau', 'id' => 2),
 				array('name' => 'Mann', 'id' => 1),
-				array('name' => 'beides oder Sonstiges', 'id' => 3)
+				array('name' => 'Beides oder Sonstiges', 'id' => 3)
 			),
 				array('required' => true)
 			)),
@@ -148,7 +148,7 @@ class FoodsaverView extends View
 			}
 		});
 
-		$("#delete-account").button().click(function(){
+		$("#delete-account").button().on("click", function(){
 			$("#delete-account-confirm").dialog("open");
 		});
 	');

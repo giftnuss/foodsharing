@@ -67,8 +67,8 @@ const map = {
 
     expose({ u_map }) // need to re-expose it as it is just a variable
 
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri 2014'
+    L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
+      attribution: 'Tiles by <a href="https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use">Wikimedia</a>'
     }).addTo(u_map)
 
     this.initiated = true
@@ -95,7 +95,7 @@ const map = {
       }
     }
     for (let i = 0; i < items.length; i++) {
-      $('#map-control .linklist a.' + items[i]).addClass('active')
+      $(`#map-control .linklist a.${items[i]}`).addClass('active')
     }
 
     loadMarker(items)
@@ -136,7 +136,7 @@ function u_loadDialog (purl) {
   $('#b_content').dialog('open')
   const pos = $('#topbar .container').offset()
   $('#b_content').parent().css({
-    'left': pos.left + 'px',
+    'left': `${pos.left}px`,
     'top': '80px'
   })
 
@@ -147,6 +147,8 @@ function u_loadDialog (purl) {
       success: function (data) {
         if (data.status === 1) {
           u_setDialogData(data)
+        } else {
+          $('#b_content').removeClass('loading')
         }
       }
     })
@@ -208,16 +210,16 @@ function loadMarker (types, loader) {
           const type = el.layer.options.type
 
           if (type === 'fs') {
-            url = '/xhr.php?f=fsBubble&id=' + fsid
+            url = `/xhr.php?f=fsBubble&id=${fsid}`
             showLoader()
           } else if (type === 'bk') {
             ajreq('bubble', { app: 'basket', id: fsid })
           } else if (type === 'b') {
-            url = '/xhr.php?f=bBubble&id=' + fsid
+            url = `/xhr.php?f=bBubble&id=${fsid}`
             u_loadDialog()
           } else if (type === 'f') {
             const bid = (el.layer.options.bid)
-            goTo('/?page=fairteiler&sub=ft&bid=' + bid + '&id=' + fsid)
+            goTo(`/?page=fairteiler&sub=ft&bid=${bid}&id=${fsid}`)
           }
           if (url != '') {
             $.ajax({
@@ -307,43 +309,41 @@ function loadMarker (types, loader) {
   })
 }
 
-$(document).ready(function () {
-  showLoader()
-  $('#map-control li a').click(function () {
-    $(this).toggleClass('active')
+showLoader()
+$('#map-control li a').on('click', function () {
+  $(this).toggleClass('active')
 
-    const types = []
-    let i = 0
-    $('#map-control li a.active').each(function (el) {
-      types[i] = $(this).attr('name')
-      i++
-    })
-    loadMarker(types)
-    map.updateStorage()
-    return false
+  const types = []
+  let i = 0
+  $('#map-control li a.active').each(function (el) {
+    types[i] = $(this).attr('name')
+    i++
   })
-
-  $('#map-options input').change(function () {
-    if ($(this).val() === 'allebetriebe') {
-      $('#map-options input').prop('checked', false)
-      $('#map-options input[value=\'allebetriebe\']').prop('checked', true)
-    } else {
-      $('#map-options input[value=\'allebetriebe\']').prop('checked', false)
-    }
-    if ($('#map-options input:checked').length === 0) {
-      $('#map-options input[value=\'allebetriebe\']').prop('checked', true)
-    }
-
-    const types = []
-    let i = 0
-    $('#map-control li a.active').each(function (el) {
-      types[i] = $(this).attr('name')
-      i++
-    })
-    setTimeout(function () {
-      loadMarker(types)
-    }, 100)
-  })
-
-  init_bDialog()
+  loadMarker(types)
+  map.updateStorage()
+  return false
 })
+
+$('#map-options input').on('change', function () {
+  if ($(this).val() === 'allebetriebe') {
+    $('#map-options input').prop('checked', false)
+    $('#map-options input[value=\'allebetriebe\']').prop('checked', true)
+  } else {
+    $('#map-options input[value=\'allebetriebe\']').prop('checked', false)
+  }
+  if ($('#map-options input:checked').length === 0) {
+    $('#map-options input[value=\'allebetriebe\']').prop('checked', true)
+  }
+
+  const types = []
+  let i = 0
+  $('#map-control li a.active').each(function (el) {
+    types[i] = $(this).attr('name')
+    i++
+  })
+  setTimeout(function () {
+    loadMarker(types)
+  }, 100)
+})
+
+init_bDialog()

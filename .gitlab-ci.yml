@@ -26,27 +26,41 @@
   - ./scripts/deploy.notifyslack.sh
 
 stages:
+- triage
 - build
 - test
 - deploy
 
+triage:
+  image: ruby:2.6-alpine
+  stage: triage
+  script:
+  - gem install gitlab-triage
+  - gitlab-triage --token $API_TOKEN --project-id $CI_PROJECT_PATH
+  only:
+  - schedules
+  tags:
+  - shared
+
 build:
   <<: *defaults
-  image: node:10
+  image: node:11.9.0-alpine
   stage: build
   script:
   - (cd client && yarn && yarn lint && yarn build)
   cache:
-    key: client:build
+    key: client:build:v2
     paths:
     - client/node_modules
   artifacts:
     paths:
     - assets
+  except:
+  - schedules
 
 build:docs:
   <<: *defaults
-  image: node:10
+  image: node:11.9.0-alpine
   stage: build
   script:
   - yarn global add gitbook-cli
@@ -61,10 +75,13 @@ build:docs:
     - docs/dist
   only:
   - master
+  except:
+  - schedules
 
 test:
   <<: *defaults
   script:
+  - composer validate --no-check-all --strict
   - ./scripts/ci.test
   after_script:
   # collect artifacts
@@ -79,17 +96,21 @@ test:
     when: always
     paths:
     - tests/_output
+  except:
+  - schedules
 
 test:client:
   <<: *defaults
-  image: node:10
+  image: node:11.9.0-alpine
   stage: test
   script:
   - (cd client && yarn && yarn test)
   cache:
-    key: client:build
+    key: client:build:v2
     paths:
     - client/node_modules
+  except:
+  - schedules
 
 deploy:beta:
   <<: *deploy
@@ -98,6 +119,8 @@ deploy:beta:
     url: https://beta.foodsharing.de
   only:
   - master
+  except:
+  - schedules
 
 deploy:docs:
   <<: *defaults
@@ -112,6 +135,8 @@ deploy:docs:
     url: https://devdocs.foodsharing.de
   only:
   - master
+  except:
+  - schedules
 
 deploy:production:
   <<: *deploy
@@ -120,6 +145,8 @@ deploy:production:
     url: https://foodsharing.de
   only:
   - production
+  except:
+  - schedules
 
 variables:
   # https://docs.docker.com/engine/userguide/storagedriver/selectadriver/

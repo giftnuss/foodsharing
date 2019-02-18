@@ -53,7 +53,7 @@ class EmailControl extends Control
 				array('id' => 1, 'name' => $this->func->s('send_as_pm')),
 				array('id' => 2, 'name' => $this->func->s('send_as_email'))
 			)));
-		} elseif ($this->func->isBotschafter()) {
+		} elseif ($this->session->isAmbassador()) {
 			$recip = $this->v_utils->v_form_recip_chooser_mini();
 		}
 		global $g_data;
@@ -63,7 +63,7 @@ class EmailControl extends Control
 
 		$boxes = $this->mbmodel->getBoxes();
 		foreach ($boxes as $key => $b) {
-			$boxes[$key]['name'] = $b['name'] . '@' . DEFAULT_EMAIL_HOST;
+			$boxes[$key]['name'] = $b['name'] . '@' . NOREPLY_EMAIL_HOST;
 		}
 		$this->func->addContent($this->v_utils->v_form('Nachrichten Verteiler', array(
 			$this->v_utils->v_field(
@@ -80,7 +80,7 @@ class EmailControl extends Control
 
 		$this->func->addStyle('#testemail{width:91%;}');
 
-		$g_data['testemail'] = $this->model->getVal('email', 'foodsaver', $this->func->fsId());
+		$g_data['testemail'] = $this->model->getVal('email', 'foodsaver', $this->session->id());
 
 		$this->func->addContent($this->v_utils->v_field($this->v_utils->v_form_text('testemail') . $this->v_utils->v_input_wrapper('', '<a class="button" href="#" onclick="ajreq(\'testmail\',{email:$(\'#testemail\').val(),subject:$(\'#subject\').val(),message:$(\'#message\').tinymce().getContent()},\'post\');return false;">Test-Mail senden</a>'), 'Newsletter Testen', array('class' => 'ui-padding')), CNT_RIGHT);
 
@@ -121,7 +121,7 @@ class EmailControl extends Control
 
 			$foodsaver = array();
 
-			if ($this->func->isBotschafter() || $this->session->isOrgaTeam()) {
+			if ($this->session->isAmbassador() || $this->session->isOrgaTeam()) {
 				if ($data['recip_choose'] == 'bezirk') {
 					$region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($this->session->getCurrentBezirkId());
 					$foodsaver = $this->foodsaverGateway->getEmailAdressen($region_ids);
@@ -264,13 +264,13 @@ class EmailControl extends Control
 	
 			$("#' . $id . '-link").trigger("click");
 	
-			$("#' . $id . '-continue").button().click(function(){
+			$("#' . $id . '-continue").button().on("click", function(){
 	
 				' . $id . '_continue_xhr();
 				return false;
 			});
 						
-			$("#' . $id . '-abort").button().click(function(){
+			$("#' . $id . '-abort").button().on("click", function(){
 				showLoader();
 				$.ajax({
 					url:"/xhr.php?f=abortEmail",

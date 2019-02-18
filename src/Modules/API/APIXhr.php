@@ -4,38 +4,38 @@ namespace Foodsharing\Modules\API;
 
 use Flourish\fImage;
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\websocketTrait;
+use Foodsharing\Lib\WebSocketSender;
 use Foodsharing\Modules\Basket\BasketGateway;
+use Foodsharing\Services\BasketService;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Message\MessageModel;
-use Foodsharing\Modules\PushNotification\PushNotificationGateway;
 
 class APIXhr extends Control
 {
-    use websocketTrait;
-
 	private $messageModel;
-    private $pushNotificationGateway;
 	private $basketGateway;
 	private $apiGateway;
 	private $loginGateway;
+	private $webSocketSender;
+	private $basketService;
 
 	public function __construct(
-        APIGateway $apiGateway,
-        LoginGateway $loginGateway,
-        MessageModel $messageModel,
-        PushNotificationGateway $pushNotificationGateway,
-        BasketGateway $basketGateway,
-        Db $model
+		APIGateway $apiGateway,
+		LoginGateway $loginGateway,
+		MessageModel $messageModel,
+		BasketGateway $basketGateway,
+		Db $model,
+		WebSocketSender $websocketSender,
+		BasketService $basketService
 	) {
 		$this->apiGateway = $apiGateway;
 		$this->loginGateway = $loginGateway;
 		$this->messageModel = $messageModel;
-        $this->pushNotificationGateway = $pushNotificationGateway;
 		$this->basketGateway = $basketGateway;
 		$this->model = $model;
+		$this->webSocketSender = $websocketSender;
+		$this->basketService = $basketService;
 		parent::__construct();
 
 		if ($_GET['m'] != 'login' && !$this->session->may()) {
@@ -72,24 +72,21 @@ class APIXhr extends Control
 
 				if ($member = $this->messageModel->listConversationMembers($conversation_id)) {
 					foreach ($member as $m) {
-						if ($m['id'] != $this->func->fsId()) {
-							Mem::userAppend($m['id'], 'msg-update', $conversation_id);
+						if ($m['id'] != $this->session->id()) {
+							$this->mem->userAppend($m['id'], 'msg-update', $conversation_id);
 
-                            $this->sendSock($m['id'], 'conv', 'push', [
+							$this->webSocketSender->sendSock($m['id'], 'conv', 'push', [
 								'id' => $id,
 								'cid' => $conversation_id,
-								'fs_id' => $this->func->fsId(),
+								'fs_id' => $this->session->id(),
 								'fs_name' => $this->session->user('name'),
 								'fs_photo' => $this->session->user('photo'),
 								'body' => $message,
 								'time' => date('Y-m-d H:i:s')
 							]);
 
-                            $this->pushNotificationGateway->sendPushNotificationsToFoodsaver($m['id'], $message);
-
 							$this->sendEmailIfUserNotOnline($m, $conversation_id, $message);
-
-                        }
+						}
 					}
 				}
 
@@ -139,7 +136,7 @@ class APIXhr extends Control
 
 	public function logout(): void
 	{
-		Mem::logout($this->session->id());
+		$this->mem->logout($this->session->id());
 		$_SESSION['login'] = false;
 		$_SESSION = array();
 
@@ -161,7 +158,7 @@ class APIXhr extends Control
 		$fs_id = $this->loginGateway->login($_GET['e'], $_GET['p']);
 
 		if ($fs_id !== null) {
-			$this->session->refreshFromDatabase($fs_id);
+			$this->session->login($fs_id);
 
 			$fs = $this->model->getValues(['telefon', 'handy', 'geschlecht', 'name', 'lat', 'lon', 'photo'], 'foodsaver', $this->session->id());
 
@@ -171,7 +168,7 @@ class APIXhr extends Control
 				'gender' => $fs['geschlecht'],
 				'phone' => $fs['telefon'],
 				'phone_mobile' => $fs['handy'],
-				'id' => $this->func->fsId(),
+				'id' => $this->session->id(),
 				'name' => $fs['name'],
 				'lat' => $fs['lat'],
 				'lon' => $fs['lon'],
@@ -197,30 +194,6 @@ class APIXhr extends Control
 			$desc = strip_tags($_GET['desc']);
 			$tmp = array();
 
-			if (isset($_GET['art'])) {
-				$kinds = $_GET['art'];
-				foreach ($kinds as $kind) {
-					if ((int)$kind > 0) {
-						$tmp[] = (int)$kind;
-					}
-				}
-			}
-			$kinds = $tmp;
-
-			$tmp = array();
-
-			if (isset($_GET['types'])) {
-				$types = $_GET['types'];
-				foreach ($types as $type) {
-					if ((int)$type > 0) {
-						$tmp[] = (int)$type;
-					}
-				}
-			}
-			$types = $tmp;
-
-			$tmp = array();
-
 			$cTypes = $this->contactTypes($tmp);
 
 			if (empty($cTypes)) {
@@ -228,22 +201,12 @@ class APIXhr extends Control
 			}
 
 			if (!empty($desc)) {
-				$weight = (float)$_GET['weight'];
-				if ($weight <= 0) {
-					$weight = 3;
-				}
-
-				$tel = [
-					'tel' => preg_replace('[^0-9\ \+]', '', $_GET['phone']),
-					'handy' => preg_replace('[^0-9\ \+]', '', $_GET['phone_mobile'])
-				];
-
 				$photo = '';
 				if (isset($_GET['photo']) && !empty($_GET['photo']) && $this->resizePic($_GET['photo'])) {
 					$photo = strip_tags($_GET['photo']);
 				}
 
-				$fs = $this->model->getValues(['lat', 'lon'], 'foodsaver', $this->func->fsId());
+				$fs = $this->model->getValues(['lat', 'lon'], 'foodsaver', $this->session->id());
 
 				$lat = $fs['lat'];
 				$lon = $fs['lon'];
@@ -258,24 +221,24 @@ class APIXhr extends Control
 					}
 				}
 
-				if ($id = $this->basketGateway->addBasket(
+				if ($basket = $this->basketService->addBasket(
 					$desc,
 					$photo, // pic
-					$tel, // phone
-					implode(':', $cTypes),
-					$weight, // weight
+					$_GET['phone'], // tel
+					$_GET['phone_mobile'], //handy
+					$cTypes,
+					(float)$_GET['weight'], // weight
 					(int)$_GET['fetchart'], // location type
 					$lat, // lat
 					$lon, // lon
-					$this->session->user('bezirk_id'),
-					$this->session->id()
+					(int)$_GET['lifetime']
 				)
 				) {
-					if (!empty($kinds)) {
-						$this->basketGateway->addKind($id, $kinds);
+					if (isset($_GET['art'])) {
+						$this->basketService->addFoodKinds($basket['id'], $_GET['art']);
 					}
-					if (!empty($types)) {
-						$this->basketGateway->addTypes($id, $types);
+					if (isset($_GET['types'])) {
+						$this->basketService->addFoodTypes($basket['id'], $_GET['types']);
 					}
 
 					$this->appout([

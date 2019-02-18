@@ -66,7 +66,7 @@ class WorkGroupControl extends Control
 
 	private function mayAccess($group)
 	{
-		return $this->func->mayBezirk($group['id']) || $this->func->isBotFor($group['parent_id']);
+		return $this->func->mayBezirk($group['id']) || $this->session->isAdminFor($group['parent_id']);
 	}
 
 	private function mayApply($group, $applications, $stats)

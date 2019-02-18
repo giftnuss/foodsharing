@@ -24,9 +24,7 @@ class SanitizerService
 	{
 		$html = $this->parsedown->text($text);
 
-		$purified = $this->htmlPurifier->purify($html);
-
-		return $purified;
+		return $this->htmlPurifier->purify($html);
 	}
 
 	public function htmlToPlain($html)
@@ -34,5 +32,15 @@ class SanitizerService
 		$html = new Html2Text($html);
 
 		return $html->getText();
+	}
+
+	public function tagSelectIds($v): array
+	{
+		$result = [];
+		foreach ($v as $idKey => $value) {
+			$result[] = explode('-', $idKey)[0];
+		}
+
+		return $result;
 	}
 }
