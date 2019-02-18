@@ -1,4 +1,4 @@
-# Getting the code
+# Running the code
 
 We use Docker and Docker Compose.
 

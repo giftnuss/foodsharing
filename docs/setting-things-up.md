@@ -1,6 +1,6 @@
 # Setting things up
 
-You must have completed the [install](./install.md) setup before doing this.
+You must have completed the [install](./running-the-code.md) setup before doing this.
 
 Now go and visit [localhost:18080](http://localhost:18080).
 

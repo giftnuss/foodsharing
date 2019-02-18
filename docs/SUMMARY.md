@@ -4,7 +4,7 @@
 
 ### Getting started
 
-  - [Getting the code](getting-the-code.md)
+  - [Getting the code](running-the-code.md)
   - [Setting things up](setting-things-up.md)
 
 ### Contributing
