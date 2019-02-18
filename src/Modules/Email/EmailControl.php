@@ -46,14 +46,9 @@ class EmailControl extends Control
 		}
 
 		$recip = '';
-		$mode = '';
 		if ($this->session->isOrgaTeam()) {
 			$recip = $this->v_utils->v_form_recip_chooser();
-			$mode = $this->v_utils->v_form_select('mode', array('required' => true, 'values' => array(
-				array('id' => 1, 'name' => $this->func->s('send_as_pm')),
-				array('id' => 2, 'name' => $this->func->s('send_as_email'))
-			)));
-		} elseif ($this->func->isBotschafter()) {
+		} elseif ($this->session->isAmbassador()) {
 			$recip = $this->v_utils->v_form_recip_chooser_mini();
 		}
 		global $g_data;
@@ -67,7 +62,7 @@ class EmailControl extends Control
 		}
 		$this->func->addContent($this->v_utils->v_form('Nachrichten Verteiler', array(
 			$this->v_utils->v_field(
-				$recip . $mode .
+				$recip .
 				$this->v_utils->v_form_select('mailbox_id', array('values' => $boxes, 'required' => true)) .
 				$this->v_utils->v_form_text('subject', array('required' => true)) .
 				$this->v_utils->v_form_file('attachement'),
@@ -226,11 +221,7 @@ class EmailControl extends Control
 				)
 
 				 */
-				$mode = $data['mode'];
-				if (!$this->session->isOrgaTeam()) {
-					$mode = 1;
-				}
-				$this->emailGateway->initEmail($this->session->id(), $mailbox_id, $foodsaver, $nachricht, $betreff, $attach, $mode);
+				$this->emailGateway->initEmail($this->session->id(), $mailbox_id, $foodsaver, $nachricht, $betreff, $attach);
 				$this->func->goPage();
 			} elseif ($data['recip_choose'] != 'manual') {
 				$this->func->error('In den ausgew&auml;hlten Bezirken gibt es noch keine Foodsaver');
@@ -261,15 +252,15 @@ class EmailControl extends Control
 				  overlay : {closeClick: false}
 				}
 			});
-	
+
 			$("#' . $id . '-link").trigger("click");
-	
+
 			$("#' . $id . '-continue").button().click(function(){
-	
+
 				' . $id . '_continue_xhr();
 				return false;
 			});
-						
+
 			$("#' . $id . '-abort").button().click(function(){
 				showLoader();
 				$.ajax({
@@ -278,8 +269,8 @@ class EmailControl extends Control
 					complete:function(){hideLoader();closeBox();}
 				});
 			});
-						
-	
+
+
 		');
 
 		$this->func->addJsFunc('
@@ -320,12 +311,12 @@ class EmailControl extends Control
 				<div class="popbox" id="' . $id . '">
 					<h3>E-Mail senden</h3>
 					<p class="subtitle">Es sind noch <span id="' . $id . '-left">' . $mail['anz'] . '</span> E-Mails zu versenden</p>
-	
+
 					<div id="' . $id . '-comment">
 						' . $this->v_utils->v_input_wrapper('Empfänger', '<div' . $style . '>' . implode(', ', $recip) . '</div>') . '
 						' . $this->v_utils->v_input_wrapper($this->func->s('subject'), $mail['name']) . '
 						' . $this->v_utils->v_input_wrapper($this->func->s('message'), nl2br($mail['message'])) . '
-					
+
 					</div>
 					<a id="' . $id . '-continue" href="#">Mit dem Senden weitermachen</a> <a id="' . $id . '-abort" href="#">Senden Abbrechen</a>
 				</div>');
