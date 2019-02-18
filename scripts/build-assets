@@ -6,6 +6,8 @@ source $(dirname "$0")/inc.sh
 
 echo "Building webpack assets"
 # volume is created as root-owned
+# client is the container in which the command is executed
+# it is newly created and removed afterwards
 run-in-container-asroot client "chown -R $UID /app/client/node_modules"
 run-in-container client 'yarn && yarn build'
 

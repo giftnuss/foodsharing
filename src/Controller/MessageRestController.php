@@ -70,7 +70,7 @@ class MessageRestController extends FOSRestController
 		};
 		$members = array_map($publicMemberInfo, $members);
 
-		$messages = $this->model->loadConversationMessages($conversationId, $messagesLimit, $messagesOffset);
+		$messages = $this->gateway->getConversationMessages($conversationId, $messagesLimit, $messagesOffset);
 		$name = $this->gateway->getConversationName($conversationId);
 		$this->model->setAsRead([$conversationId]);
 

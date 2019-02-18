@@ -407,36 +407,6 @@ class QuizModel extends Db
 		');
 	}
 
-	public function getExsistingSession($quiz_id)
-	{
-		if ($session = $this->qRow('
-			SELECT 
-				id,
-				quiz_index,
-				quiz_questions,
-				easymode
-
-			FROM
-				fs_quiz_session
-				
-			WHERE
-				`quiz_id` = ' . $quiz_id . '
-				
-			AND
-				foodsaver_id = ' . (int)$this->session->id() . '
-				
-			AND
-				`status` = 0
-		')
-		) {
-			$session['quiz_questions'] = unserialize($session['quiz_questions']);
-
-			return $session;
-		}
-
-		return false;
-	}
-
 	public function getQuizStatus($quiz_id)
 	{
 		$out = array(
@@ -496,7 +466,7 @@ class QuizModel extends Db
 				' . (int)$quiz_id . ',
 				0,
 				0,
-				' . $this->strval($questions) . ',
+				' . $this->safe($questions) . ',
 				NOW(),
 				0,
 				' . (int)$maxfp . ',

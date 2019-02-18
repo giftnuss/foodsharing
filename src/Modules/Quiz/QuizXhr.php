@@ -10,10 +10,11 @@ class QuizXhr extends Control
 {
 	private $contentGateway;
 
-	public function __construct(QuizModel $model, QuizView $view, ContentGateway $contentGateway)
+	public function __construct(QuizModel $model, QuizGateway $gateway, QuizView $view, ContentGateway $contentGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->gateway = $gateway;
 		$this->contentGateway = $contentGateway;
 
 		parent::__construct();
@@ -300,7 +301,7 @@ class QuizXhr extends Control
 		/*
 		 * First we want to check if there is a quiz session that the user has lost?
 		 */
-		if ($session = $this->model->getExsistingSession($_GET['qid'])) {
+		if ($session = $this->gateway->getExistingSession($_GET['qid'], $this->session->id())) {
 			// if yes, reinitiate the running quiz session
 			$this->session->set('quiz-id', (int)$_GET['qid']);
 			$this->session->set('quiz-questions', $session['quiz_questions']);

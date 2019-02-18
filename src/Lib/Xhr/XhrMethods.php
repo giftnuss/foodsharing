@@ -757,29 +757,8 @@ class XhrMethods
 
 				//$fs['email'] = 'kontakt@prographix.de';
 				$check = false;
-				if ($mail['mode'] == 2) {
-					if ($this->func->libmail($mailbox, $fs['email'], $subject, $message, $attach, $fs['token'])) {
-						$check = true;
-					}
-				} else {
-					if ($this->messageModel->add_message(array(
-						'sender_id' => $this->session->id(),
-						'recip_id' => $fs['id'],
-						'unread' => 1,
-						'name' => $subject,
-						'msg' => $message,
-						'time' => date('Y-m-d H:i:s'),
-						'attach' => $mail['attach']
-					))
-					) {
-						$this->func->tplMail(9, $fs['email'], array(
-							'name' => $fs['name'],
-							'sender' => $sender['name'],
-							'anrede' => $this->func->genderWord($sender['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-							'link' => BASE_URL . '/?page=message&amp;conv=' . (int)$this->session->id()
-						));
-						$check = true;
-					}
+				if ($this->func->libmail($mailbox, $fs['email'], $subject, $message, $attach, $fs['token'])) {
+					$check = true;
 				}
 
 				if (!$check) {
