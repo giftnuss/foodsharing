@@ -50,3 +50,5 @@ define('BOUNCE_IMAP_PORT', null);
 if (!defined('ROOT_DIR')) {
 	define('ROOT_DIR', './');
 }
+
+define('CSRF_IGNORE', true);
