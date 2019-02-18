@@ -23,7 +23,7 @@ class ProfileModel extends Db
 				`rating`,
 				`ratingtype`,
 				`msg`,
-				`time`  
+				`time`
 			)
 			VALUES
 			(

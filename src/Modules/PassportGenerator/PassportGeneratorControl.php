@@ -33,8 +33,8 @@ class PassportGeneratorControl extends Control
 			$this->bezirk_id = $this->session->getCurrentBezirkId();
 		}
 
-		// isBotForA(...) fails if it's used for a working group as it is an exit condition
-		if ($this->func->isBotForA((array)$this->bezirk_id, false, true) || $this->session->isOrgaTeam()) {
+		// isBotForA() returns true if user is an ambassador (AMB) for this region. If the user is an AMB and the bezirk/region is a working group it returns false
+		if ($this->func->isBotForA([$this->bezirk_id], false, true) || $this->session->isOrgaTeam()) {
 			$this->bezirk = false;
 			if ($bezirk = $this->regionGateway->getBezirk($this->bezirk_id)) {
 				$this->bezirk = $bezirk;

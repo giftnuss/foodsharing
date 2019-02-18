@@ -12,7 +12,6 @@
 - Joining regions REST API !696 @NerdyProjects
 - Prevent group admins to be able to access the passport generation page #706 #392 @jofranz
 
-
 ## Bugfixes
 - Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
 - Fixup conversation header display !658 @nicksellen
