@@ -28,33 +28,71 @@
           Über uns
         </span>
       </template>
+      <h3 class="dropdown-header">
+        Über uns
+      </h3>
+
       <a
         :href="$url('vision')"
-        class="dropdown-item"
+        class="dropdown-item sub"
         role="menuitem"
       >
         Vision
       </a>
       <a
-        :href="$url('claims')"
-        class="dropdown-item"
+        :href="$url('grundsaetze')"
+        class="dropdown-item sub"
         role="menuitem"
       >
-        Forderungen
+        Grundsätze
       </a>
       <a
         :href="$url('partner')"
-        class="dropdown-item"
+        class="dropdown-item sub"
         role="menuitem"
       >
         Partner
       </a>
       <a
         :href="$url('statistics')"
-        class="dropdown-item"
+        class="dropdown-item sub"
         role="menuitem"
       >
         Statistik
+      </a>
+      <h3 class="dropdown-header">
+        Politik
+      </h3>
+      <a
+        :href="$url('fasten')"
+        class="dropdown-item sub"
+        role="menuitem"
+      >
+        Verschwendungsfasten
+      </a>
+      <a
+        :href="$url('claims')"
+        class="dropdown-item sub"
+        role="menuitem"
+      >
+        Forderungen
+      </a>
+      <h3 class="dropdown-header">
+        Bildung
+      </h3>
+      <a
+        :href="$url('fs-academy')"
+        class="dropdown-item sub"
+        role="menuitem"
+      >
+        Akademie
+      </a>
+      <a
+        :href="$url('fs-festival')"
+        class="dropdown-item sub"
+        role="menuitem"
+      >
+        Festival
       </a>
       <a
         :href="$url('infosCompany')"
