@@ -56,7 +56,7 @@ class SettingsXhr extends Control
 					'script' => 'pulseError("Diese E-Mail-Adresse benutzt bereits jemand anderes.");'
 				);
 			}
-			$token = md5(uniqid(mt_rand(), true));
+			$token = bin2hex(random_bytes(16));
 			$this->model->addNewMail($_GET['email'], $token);
 			// anrede name link
 

@@ -40,7 +40,7 @@ class FoodsaverGateway extends BaseGateway
 		);
 	}
 
-	public function getFoodsaverDetails($fs_id)
+	public function getFoodsaverDetails($fs_id): array
 	{
 		return $this->db->fetchByCriteria(
 			'fs_foodsaver',

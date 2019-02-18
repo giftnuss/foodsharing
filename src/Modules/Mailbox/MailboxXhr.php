@@ -24,7 +24,7 @@ class MailboxXhr extends Control
 		// is filesize (10MB) and filetype allowed?
 		$attachmentIsAllowed = $this->attach_allow($_FILES['etattach']['name'], $_FILES['etattach']['type']);
 		if ($attachmentIsAllowed && isset($_FILES['etattach']['size']) && $_FILES['etattach']['size'] < 1310720) {
-			$new_filename = uniqid();
+			$new_filename = bin2hex(random_bytes(16));
 
 			$ext = strtolower($_FILES['etattach']['name']);
 			$ext = explode('.', $ext);
