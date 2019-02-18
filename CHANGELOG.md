@@ -10,6 +10,7 @@
 - Added API endpoints for basket pictures !671 @alex.simm 
 - Allow use of markdown in fairteiler description !690 @NerdyProjects
 - Joining regions REST API !696 @NerdyProjects
+- Scale down font size on passports for long names !685 @NerdyProjects
 
 ## Bugfixes
 - Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
