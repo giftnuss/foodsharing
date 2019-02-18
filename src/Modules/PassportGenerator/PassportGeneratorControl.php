@@ -164,8 +164,8 @@ final class PassportGeneratorControl extends Control
 				}
 				$pdf->SetFont('Ubuntu-L', '', 10);
 				$pdf->Text(41 + $x, 39 + $y, $this->getRole($foodsaver['geschlecht'], $foodsaver['rolle']));
-				$pdf->Text(41 + $x, 48 + $y, utf8_decode(date('d. m. Y', time() - 1814400)));
-				$pdf->Text(41 + $x, 57 + $y, utf8_decode(date('d. m. Y', time() + 94608000)));
+				$pdf->Text(41 + $x, 48 + $y, date('d. m. Y', time() - 1814400));
+				$pdf->Text(41 + $x, 57 + $y, date('d. m. Y', time() + 94608000));
 
 				$pdf->SetFont('Ubuntu-L', '', 6);
 				$pdf->Text(41 + $x, 28 + $y, 'Name');
