@@ -10,104 +10,146 @@ use Minishlink\WebPush\Subscription;
 
 class PushNotificationGateway extends BaseGateway
 {
-    private const pathOfPrivateKeyFile = ROOT_DIR . 'keys/pushnotifications/priv.key';
-    private const pathOfPublicKeyFile = ROOT_DIR . 'keys/pushnotifications/pub.key';
+	private const pathOfPrivateKeyFile = ROOT_DIR . 'keys/pushnotifications/priv.key';
+	private const pathOfPublicKeyFile = ROOT_DIR . 'keys/pushnotifications/pub.key';
 
-    private $privateKey;
-    private $publicKey;
+	/**
+	 * @var string
+	 */
+	private $privateKey;
 
-    private $webpush;
+	/**
+	 * @var string
+	 */
+	private $publicKey;
 
-    public function __construct(Database $db)
-    {
-        parent::__construct($db);
+	/**
+	 * @var WebPush
+	 */
+	private $webpush;
 
-        $auth = [
-            'VAPID' => [
-                'subject' => 'www.foodsharing.de',
-                'publicKey' => $this->getPublicKey(),
-                'privateKey' => $this->getPrivateKey()
-            ],
-        ];
+	public function __construct(Database $db)
+	{
+		parent::__construct($db);
 
-        $this->webpush = new WebPush($auth);
-    }
+		$auth = [
+			'VAPID' => [
+				'subject' => $_SERVER['SERVER_NAME'],
+				'publicKey' => $this->getPublicKey(),
+				'privateKey' => $this->getPrivateKey()
+			],
+		];
 
-    /**
-     * @param string $subscription : The push notification subscription in JSON format, e. g.
-     * {
-     *  "endpoint": "https://some.pushservice.com/something-unique",
-     *  "keys": {
-     *   "p256dh":
-     *   "BIPUL12DLfytvTajnryr2PRdAgXS3HGKiLqndGcJGabyhHheJYlNGCeXl1dn18gSJ1WAkAPIxr4gK0_dQds4yiI=",
-     *   "auth":"FPssNDTKnInHVndSTdbKFw=="
-     *   }
-     * }
-     */
-    public function addSubscription(int $foodsaverId, string $subscription)
-    {
-        $this->db->insert('fs_pushnotificationsubscription', [
-            'foodsaver_id' => $foodsaverId,
-            'subscription' => $subscription
-        ]);
-    }
+		$this->webpush = new WebPush($auth);
+	}
 
-    public function sendPushNotificationsToFoodsaver(int $foodsaverId, string $message)
-    {
-        $subscriptionsAsJson = $this->db->fetchAllByCriteria(
-            'fs_pushnotificationsubscription',
-            ['subscription'],
-            ['foodsaver_id' => $foodsaverId]
-        );
+	/**
+	 * @param string $subscription : The push notification subscription in JSON format, e. g.
+	 * {
+	 *  "endpoint": "https://some.pushservice.com/something-unique",
+	 *  "keys": {
+	 *   "p256dh":
+	 *   "BIPUL12DLfytvTajnryr2PRdAgXS3HGKiLqndGcJGabyhHheJYlNGCeXl1dn18gSJ1WAkAPIxr4gK0_dQds4yiI=",
+	 *   "auth":"FPssNDTKnInHVndSTdbKFw=="
+	 *   }
+	 * }
+	 */
+	public function addSubscription(int $foodsaverId, string $subscription): int
+	{
+		return $this->db->insert('fs_pushnotificationsubscription', [
+			'foodsaver_id' => $foodsaverId,
+			'subscription' => $subscription
+		]);
+	}
 
-        foreach ($subscriptionsAsJson as $subscriptionAsJson) {
-            $subscriptionArray = json_decode($subscriptionAsJson['subscription'], true);
+	/**
+	 * @param string $subscription – @see \Foodsharing\Modules\PushNotification\PushNotificationGateway::addSubscription()
+	 */
+	public function updateSubscription(int $foodsaverId, string $subscription): int
+	{
+		$stm = '
+			UPDATE fs_pushnotificationsubscription 
+			SET subscription = :subscription 
+			WHERE foodsaver_id = :foodsaverId
+			AND JSON_EXTRACT(subscription, $.endpoint) = JSON_EXTRACT(:subscription, $.endpoint)
+		';
 
-            // Fix inconsistent definition of encoding by some clients
-            $subscriptionArray['contentEncoding'] = $subscriptionArray['contentEncoding'] ?? 'aesgcm';
+		return $this->db->execute($stm, [':foodsaverId' => $foodsaverId, ':subscription' => $subscription]);
+	}
 
-            $subscription = Subscription::create($subscriptionArray);
+	/**
+	 * @param string $endpoint – the endpoint the notifications are sent to; part of the subscription JSON
+	 */
+	public function deleteSubscription(int $foodsaverId, string $endpoint): int
+	{
+		$stm = '
+			DELETE FROM fs_pushnotificationsubscription
+			WHERE foodsaver_id = :foodsaverId
+			AND JSON_EXTRACT(subscription, $.endpoint) = :endpoint
+		';
 
-            $this->webpush->sendNotification($subscription, $message);
-        }
-        $this->webpush->flush();
-    }
+		return $this->db->execute($stm, [':foodsaverId' => $foodsaverId, ':endpoint' => $endpoint]);
+	}
 
-    public function getPublicKey()
-    {
-        if ($this->publicKey !== null) {
-            return $this->publicKey;
-        }
+	public function sendPushNotificationsToFoodsaver(int $foodsaverId, string $message): void
+	{
+		$subscriptionsAsJson = $this->db->fetchAllByCriteria(
+			'fs_pushnotificationsubscription',
+			['subscription'],
+			['foodsaver_id' => $foodsaverId]
+		);
 
-        if (is_file(self::pathOfPublicKeyFile)) {
-            return $this->publicKey = file_get_contents(self::pathOfPublicKeyFile);
-        }
+		foreach ($subscriptionsAsJson as $subscriptionAsJson) {
+			$subscriptionArray = json_decode($subscriptionAsJson['subscription'], true);
 
-        $this->generateKeys();
-        return $this->publicKey;
-    }
+			// Fix inconsistent definition of encoding by some clients
+			$subscriptionArray['contentEncoding'] = $subscriptionArray['contentEncoding'] ?? 'aesgcm';
 
-    private function getPrivateKey()
-    {
-        if ($this->privateKey !== null) {
-            return $this->privateKey;
-        }
+			$subscription = Subscription::create($subscriptionArray);
 
-        if (is_file(self::pathOfPrivateKeyFile)) {
-            return $this->privateKey = file_get_contents(self::pathOfPrivateKeyFile);
-        }
+			$this->webpush->sendNotification($subscription, $message);
+		}
+		$this->webpush->flush();
+	}
 
-        $this->generateKeys();
-        return $this->privateKey;
-    }
+	public function getPublicKey(): string
+	{
+		if ($this->publicKey !== null) {
+			return $this->publicKey;
+		}
 
-    private function generateKeys()
-    {
-        $keys = VAPID::createVapidKeys();
-        $this->publicKey = $keys['publicKey'];
-        $this->privateKey = $keys['privateKey'];
+		if (is_file(self::pathOfPublicKeyFile)) {
+			return $this->publicKey = file_get_contents(self::pathOfPublicKeyFile);
+		}
 
-        file_put_contents(self::pathOfPrivateKeyFile, $this->privateKey);
-        file_put_contents(self::pathOfPublicKeyFile, $this->publicKey);
-    }
+		$this->generateKeys();
+
+		return $this->publicKey;
+	}
+
+	private function getPrivateKey(): string
+	{
+		if ($this->privateKey !== null) {
+			return $this->privateKey;
+		}
+
+		if (is_file(self::pathOfPrivateKeyFile)) {
+			return $this->privateKey = file_get_contents(self::pathOfPrivateKeyFile);
+		}
+
+		$this->generateKeys();
+
+		return $this->privateKey;
+	}
+
+	private function generateKeys(): void
+	{
+		$keys = VAPID::createVapidKeys();
+		$this->publicKey = $keys['publicKey'];
+		$this->privateKey = $keys['privateKey'];
+
+		file_put_contents(self::pathOfPrivateKeyFile, $this->privateKey);
+		file_put_contents(self::pathOfPublicKeyFile, $this->publicKey);
+		chmod(self::pathOfPrivateKeyFile, 0600);
+	}
 }
