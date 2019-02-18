@@ -10,7 +10,7 @@
 - Added API endpoints for basket pictures !671 @alex.simm 
 - Allow use of markdown in fairteiler description !690 @NerdyProjects
 - Joining regions REST API !696 @NerdyProjects
-- Prevent group admins accessing passport generation page #392 @jofranz
+- Prevent group admins to be able to access the passport generation page #706 #392 @jofranz
 
 
 ## Bugfixes
