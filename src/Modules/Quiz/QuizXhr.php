@@ -301,7 +301,7 @@ class QuizXhr extends Control
 		/*
 		 * First we want to check if there is a quiz session that the user has lost?
 		 */
-		if ($session = $this->gateway->getExsistingSession($_GET['qid'], $this->session->id())) {
+		if ($session = $this->gateway->getExistingSession($_GET['qid'], $this->session->id())) {
 			// if yes, reinitiate the running quiz session
 			$this->session->set('quiz-id', (int)$_GET['qid']);
 			$this->session->set('quiz-questions', $session['quiz_questions']);
