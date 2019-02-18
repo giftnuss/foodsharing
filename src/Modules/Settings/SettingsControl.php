@@ -36,11 +36,6 @@ class SettingsControl extends Control
 
 		$this->foodsaver = $this->model->getValues(array('rolle', 'email', 'name', 'nachname', 'geschlecht', 'verified'), 'foodsaver', $this->session->id());
 
-		if (isset($_GET['deleteaccount'])) {
-			$this->foodsaverGateway->del_foodsaver($this->session->id());
-			$this->func->go('/?page=logout');
-		}
-
 		if (!isset($_GET['sub'])) {
 			$this->func->go('/?page=settings&sub=general');
 		}
@@ -381,7 +376,7 @@ class SettingsControl extends Control
 	public function deleteaccount()
 	{
 		$this->func->addBread($this->func->s('delete_account'));
-		$this->func->addContent($this->view->delete_account());
+		$this->func->addContent($this->view->delete_account($this->session->id()));
 	}
 
 	public function general()
