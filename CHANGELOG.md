@@ -11,6 +11,7 @@
 - Allow use of markdown in fairteiler description !690 @NerdyProjects
 - Joining regions REST API !696 @NerdyProjects
 - Start page content over content manager #470 @k.miklobusec
+- Start page content over content manager #470 !701 @k.miklobusec
 
 ## Bugfixes
 - Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
