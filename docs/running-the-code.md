@@ -10,8 +10,6 @@ You can use the Docker Compose setup if you are using one of the following:
 
 If you are not using one of those, then try the Vagrant + Docker Compose setup.
 
-For Git, we are recommending to use SSH (and the following documentation is supposing that). See e.g. [this documenation](https://docs.gitlab.com/ce/ssh/README.html) if you need to configure GitLab for this.
-
 ## Linux
 
 Install
