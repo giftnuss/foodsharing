@@ -525,4 +525,9 @@ class RegionGateway extends BaseGateway
 			'added' => $this->db->now()
 		]);
 	}
+
+	public function updateMasterRegions(array $regionIds, int $masterId): void
+	{
+		$this->db->update('fs_bezirk', ['master' => $masterId], ['id' => $regionIds]);
+	}
 }
