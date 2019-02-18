@@ -46,13 +46,8 @@ class EmailControl extends Control
 		}
 
 		$recip = '';
-		$mode = '';
 		if ($this->session->isOrgaTeam()) {
 			$recip = $this->v_utils->v_form_recip_chooser();
-			$mode = $this->v_utils->v_form_select('mode', array('required' => true, 'values' => array(
-				array('id' => 1, 'name' => $this->func->s('send_as_pm')),
-				array('id' => 2, 'name' => $this->func->s('send_as_email'))
-			)));
 		} elseif ($this->session->isAmbassador()) {
 			$recip = $this->v_utils->v_form_recip_chooser_mini();
 		}
@@ -67,7 +62,7 @@ class EmailControl extends Control
 		}
 		$this->func->addContent($this->v_utils->v_form('Nachrichten Verteiler', array(
 			$this->v_utils->v_field(
-				$recip . $mode .
+				$recip .
 				$this->v_utils->v_form_select('mailbox_id', array('values' => $boxes, 'required' => true)) .
 				$this->v_utils->v_form_text('subject', array('required' => true)) .
 				$this->v_utils->v_form_file('attachement'),
@@ -226,11 +221,7 @@ class EmailControl extends Control
 				)
 
 				 */
-				$mode = $data['mode'];
-				if (!$this->session->isOrgaTeam()) {
-					$mode = 1;
-				}
-				$this->emailGateway->initEmail($this->session->id(), $mailbox_id, $foodsaver, $nachricht, $betreff, $attach, $mode);
+				$this->emailGateway->initEmail($this->session->id(), $mailbox_id, $foodsaver, $nachricht, $betreff, $attach);
 				$this->func->goPage();
 			} elseif ($data['recip_choose'] != 'manual') {
 				$this->func->error('In den ausgew&auml;hlten Bezirken gibt es noch keine Foodsaver');
