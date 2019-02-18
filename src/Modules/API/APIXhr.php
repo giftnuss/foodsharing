@@ -10,12 +10,16 @@ use Foodsharing\Services\BasketService;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Message\MessageModel;
+use Foodsharing\Modules\Message\MessageGateway;
+use Foodsharing\Modules\Store\StoreGateway;
 
 class APIXhr extends Control
 {
 	private $messageModel;
+	private $messageGateway;
 	private $basketGateway;
 	private $apiGateway;
+	private $storeGateway;
 	private $loginGateway;
 	private $webSocketSender;
 	private $basketService;
@@ -24,6 +28,8 @@ class APIXhr extends Control
 		APIGateway $apiGateway,
 		LoginGateway $loginGateway,
 		MessageModel $messageModel,
+		MessageGateway $messageGateway,
+		StoreGateway $storeGateway,
 		BasketGateway $basketGateway,
 		Db $model,
 		WebSocketSender $websocketSender,
@@ -32,6 +38,8 @@ class APIXhr extends Control
 		$this->apiGateway = $apiGateway;
 		$this->loginGateway = $loginGateway;
 		$this->messageModel = $messageModel;
+		$this->messageGateway = $messageGateway;
+		$this->storeGateway = $storeGateway;
 		$this->basketGateway = $basketGateway;
 		$this->model = $model;
 		$this->webSocketSender = $websocketSender;
@@ -415,7 +423,7 @@ class APIXhr extends Control
 	private function sendEmailIfUserNotOnline($m, $conversation_id, $message): void
 	{
 		if ($this->messageModel->wantMsgEmailInfo($m['id'])) {
-			$this->convMessage($m, $conversation_id, $message, $this->messageModel);
+			$this->convMessage($m, $conversation_id, $message, $this->messageGateway, $this->conversationGateway);
 		}
 	}
 

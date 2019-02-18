@@ -6,20 +6,6 @@ use Foodsharing\Lib\Db\Db;
 
 final class MessageModel extends Db
 {
-	public function getBetriebname($cid)
-	{
-		return $this->qOne('
-			SELECT name FROM fs_betrieb WHERE team_conversation_id = ' . $cid . ' OR springer_conversation_id = ' . $cid . '
-		');
-	}
-
-	public function getChatMembers($cid): array
-	{
-		return $this->qCol('
-			SELECT fs.name FROM fs_foodsaver_has_conversation fc, fs_foodsaver fs WHERE fs.id = fc.foodsaver_id AND fc.conversation_id = ' . $cid . ' AND fs.deleted_at IS NULL
-		');
-	}
-
 	public function user2conv($fsid)
 	{
 		return $this->addConversation(array($fsid => $fsid));
