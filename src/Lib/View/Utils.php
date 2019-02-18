@@ -1514,7 +1514,7 @@ class Utils
 			<p><span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-alert"></span>';
 
 			foreach ($error as $e) {
-				$out .= $this->func->qs($e) . '<br />';
+				$out .= $e . '<br />';
 			}
 
 			$out .= '
@@ -1529,7 +1529,7 @@ class Utils
 			<p><span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-info"></span>';
 
 			foreach ($info as $i) {
-				$out .= $this->func->qs($i) . '<br />';
+				$out .= $i . '<br />';
 			}
 
 			$out .= '

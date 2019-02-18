@@ -231,18 +231,6 @@ class Func
 		return $id;
 	}
 
-	public function format_d($ts)
-	{
-		return date('d.m.Y', $ts);
-	}
-
-	public function format_db_date($date)
-	{
-		$part = explode('-', $date);
-
-		return (int)$part[2] . '. ' . $this->s('month_' . (int)$part[1]);
-	}
-
 	public function handleTagselect($id)
 	{
 		global $g_data;
@@ -659,11 +647,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 
 		return false;
-	}
-
-	public function qs($txt)
-	{
-		return $txt;
 	}
 
 	public function addHidden($html)
