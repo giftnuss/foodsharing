@@ -14,6 +14,7 @@
 - Start page content over content manager #470 !701 @k.miklobusec
 - Added profile status infos for store and pickup entries for ambassadors !705 @jofranz
 - Scale down font size on passports for long names !685 @NerdyProjects
+- CSRF protection for API requests !715 @alangecker
 
 ## Bugfixes
 - Search index is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
