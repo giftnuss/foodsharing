@@ -6,7 +6,6 @@ use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Services\SanitizerService;
-use PhpParser\Node\Scalar\String_;
 
 class View
 {

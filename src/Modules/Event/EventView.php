@@ -294,33 +294,33 @@ class EventView extends View
 		return $out;
 	}
 
-    private function placeFsAvatars(array $foodsavers, int $maxNumberOfAvatars): string
-    {
-        if (!empty($foodsavers)) {
-            $out = '<ul class="fsicons">';
+	private function placeFsAvatars(array $foodsavers, int $maxNumberOfAvatars): string
+	{
+		if (!empty($foodsavers)) {
+			$out = '<ul class="fsicons">';
 
-            if (count($foodsavers) > $maxNumberOfAvatars) {
-                shuffle($foodsavers);
-                $foodsaverDisplayed = array_slice($foodsavers, 0, $maxNumberOfAvatars);
-            } else {
-                $foodsaverDisplayed = $foodsavers;
-            }
+			if (count($foodsavers) > $maxNumberOfAvatars) {
+				shuffle($foodsavers);
+				$foodsaverDisplayed = array_slice($foodsavers, 0, $maxNumberOfAvatars);
+			} else {
+				$foodsaverDisplayed = $foodsavers;
+			}
 
-            foreach ($foodsaverDisplayed as $fs) {
-                $out .= '
+			foreach ($foodsaverDisplayed as $fs) {
+				$out .= '
 				<li>
 					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->func->img($fs['photo']) . ');" href="/profile/' . (int)$fs['id'] . '"><span></span></a>	
 				</li>';
-            }
-            if (count($foodsavers) > $maxNumberOfAvatars) {
-                $out .= '<li class="row">...und ' . (count($foodsavers) - $maxNumberOfAvatars) . ' weitere</li></ul>';
-            }
+			}
+			if (count($foodsavers) > $maxNumberOfAvatars) {
+				$out .= '<li class="row">...und ' . (count($foodsavers) - $maxNumberOfAvatars) . ' weitere</li></ul>';
+			}
 
-            return $out;
-        }
+			return $out;
+		}
 
-        return '';
-    }
+		return '';
+	}
 
 	public function event($event)
 	{
