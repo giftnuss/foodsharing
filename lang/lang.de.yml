@@ -237,4 +237,4 @@ list:
 memberlist:
   header_for_district: "Foodsaver im Bezirk {bezirk}"
   header_for_workgroup: "Foodsaver in der AG {bezirk}"
-  some_in: "{some} von "
+  some_in_all: "({some} von {all})"

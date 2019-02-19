@@ -6,18 +6,18 @@
         class="card-header text-white bg-primary"
       >
         {{ $i18n('memberlist.header_for_district', {bezirk: regionName}) }}
-        (<span v-if="members.length !== membersFiltered.length">
-          {{ $i18n('memberlist.some_in', {some: membersFiltered.length}) }}
-        </span>{{ members.length }})
+        <span>
+          {{ $i18n('memberlist.some_in_all', {some: membersFiltered.length, all: members.length}) }}
+        </span>
       </div>
       <div
         v-if="isWorkGroup"
         class="card-header text-white bg-primary"
       >
         {{ $i18n('memberlist.header_for_workgroup', {bezirk: regionName}) }}
-        (<span v-if="members.length !== membersFiltered.length">
-          {{ $i18n('memberlist.some_in', {some: membersFiltered.length}) }}
-        </span>{{ members.length }})
+        <span>
+          {{ $i18n('memberlist.some_in_all', {some: membersFiltered.length, all: members.length}) }}
+        </span>
       </div>
 
       <div
