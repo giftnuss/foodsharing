@@ -10,7 +10,7 @@
 - Added API endpoints for basket pictures !671 @alex.simm 
 - Allow use of markdown in Fair-Teiler description !690 @NerdyProjects
 - Joining regions REST API !696 @NerdyProjects
-- Prevent group admins to be able to access the passport generation page #706 #392 @jofranz
+- Prevent group admins to be able to access the passport generation page !706 #392 @jofranz
 - Start page content over content manager #470 !701 @k.miklobusec
 - Added profile status infos for store and pickup entries for ambassadors !705 @jofranz
 - Scale down font size on passports for long names !685 @NerdyProjects
