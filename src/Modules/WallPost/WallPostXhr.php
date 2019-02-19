@@ -50,7 +50,18 @@ class WallPostXhr extends Control
 	{
 		if ((int)$_GET['post'] > 0) {
 			$postId = (int)$_GET['post'];
+
+			if (!$this->wallPostGateway->isLinkedToTarget($postId, $this->table, $this->id)) {
+				return array(
+					'status' => 0
+				);
+			}
+
 			$fs = $this->wallPostGateway->getFsByPost($postId);
+			if ($fs !== $this->session->id() && !$this->wallPostPermissions->mayDeleteFromWall($this->session->id(), $this->table, $this->id)) {
+				return XhrResponses::PERMISSION_DENIED;
+			}
+
 			if ($fs == $this->session->id()
 				|| (!in_array($this->table, array('fairteiler', 'foodsaver')) && ($this->session->isAmbassador() || $this->session->isOrgaTeam()))
 			) {
@@ -75,7 +86,7 @@ class WallPostXhr extends Control
 			if ($posts = $this->wallPostGateway->getPosts($this->table, $this->id)) {
 				return array(
 					'status' => 1,
-					'html' => $this->view->posts($posts)
+					'html' => $this->view->posts($posts, $this->wallPostPermissions->mayDeleteFromWall($this->session->id(), $this->table, $this->id))
 				);
 			}
 		} else {
@@ -87,6 +98,9 @@ class WallPostXhr extends Control
 
 	public function quickreply()
 	{
+		if (!$this->wallPostPermissions->mayWriteWall($this->session->id(), $this->table, $this->id)) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		$message = trim(strip_tags($_POST['msg'] ?? ''));
 
 		if (!empty($message)) {
@@ -140,7 +154,7 @@ class WallPostXhr extends Control
 
 				return array(
 					'status' => 1,
-					'html' => $this->view->posts($this->wallPostGateway->getPosts($this->table, $this->id))
+					'html' => $this->view->posts($this->wallPostGateway->getPosts($this->table, $this->id), $this->wallPostPermissions->mayDeleteFromWall($this->session->id(), $this->table, $this->id))
 				);
 			}
 		}
