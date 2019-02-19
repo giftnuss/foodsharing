@@ -206,7 +206,7 @@ class LoginXhr extends Control
 		$data['country'] = strip_tags($data['country'] ?? null);
 		$data['country'] = strtolower($data['country']);
 		$data['country'] = trim($data['country']);
-		$data['nr'] = $data['nr'] ?? null;
+		$data['nr'] = htmlspecialchars($data['nr']) ?? null;
 
 		$data['newsletter'] = (int)$data['newsletter'];
 		if (!in_array($data['newsletter'], array(0, 1), true)) {
