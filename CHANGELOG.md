@@ -14,6 +14,7 @@
 - Start page content over content manager #470 !701 @k.miklobusec
 - Added profile status infos for store and pickup entries for ambassadors !705 @jofranz
 - Scale down font size on passports for long names !685 @NerdyProjects
+- Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
 
 ## Bugfixes
 - Search index is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
