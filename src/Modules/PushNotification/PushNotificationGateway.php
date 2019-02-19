@@ -10,8 +10,9 @@ use Minishlink\WebPush\Subscription;
 
 class PushNotificationGateway extends BaseGateway
 {
-	private const pathOfPrivateKeyFile = ROOT_DIR . 'keys/pushnotifications/priv.key';
-	private const pathOfPublicKeyFile = ROOT_DIR . 'keys/pushnotifications/pub.key';
+	private const keyFileDirectory = __DIR__ . '/../../../data/keys/pushnotifications';
+	private const privateKeyFileName = 'priv.key';
+	private const publicKeyFileName = 'pub.key';
 
 	/**
 	 * @var string
@@ -34,7 +35,7 @@ class PushNotificationGateway extends BaseGateway
 
 		$auth = [
 			'VAPID' => [
-				'subject' => $_SERVER['SERVER_NAME'],
+				'subject' => $_SERVER['SERVER_NAME'] ?? '',
 				'publicKey' => $this->getPublicKey(),
 				'privateKey' => $this->getPrivateKey()
 			],
@@ -61,35 +62,89 @@ class PushNotificationGateway extends BaseGateway
 			'subscription' => $subscription
 		]);
 	}
-
 	/**
 	 * @param string $subscription – @see \Foodsharing\Modules\PushNotification\PushNotificationGateway::addSubscription()
 	 */
 	public function updateSubscription(int $foodsaverId, string $subscription): int
 	{
-		$stm = '
-			UPDATE fs_pushnotificationsubscription 
-			SET subscription = :subscription 
-			WHERE foodsaver_id = :foodsaverId
-			AND JSON_EXTRACT(subscription, $.endpoint) = JSON_EXTRACT(:subscription, $.endpoint)
-		';
+		$subscriptionsByThisFoodsaver = $this->db->fetchAllValuesByCriteria(
+			'fs_pushnotificationsubscription',
+			'subscription',
+			['foodsaver_id' => $foodsaverId]
+		);
 
-		return $this->db->execute($stm, [':foodsaverId' => $foodsaverId, ':subscription' => $subscription]);
+		$endpointToBeUpdated = json_decode($subscription, true)['endpoint'];
+		$subscriptionsToBeUpdated = [];
+
+		foreach ($subscriptionsByThisFoodsaver as $subscriptionByThisFoodsaver) {
+			$endpoint = json_decode($subscriptionByThisFoodsaver, true)['endpoint'];
+			if($endpoint === $endpointToBeUpdated) {
+				$subscriptionsToBeUpdated[] = $subscriptionByThisFoodsaver;
+			}
+		}
+
+		if (empty($subscriptionsToBeUpdated)) {
+			return 0;
+		}
+
+		return $this->db->update(
+			'fs_pushnotificationsubscription',
+			['subscription' => $subscription],
+			['subscription' => $subscriptionsToBeUpdated, 'foodsaver_id' => $foodsaverId]
+		);
 	}
 
-	/**
-	 * @param string $endpoint – the endpoint the notifications are sent to; part of the subscription JSON
-	 */
-	public function deleteSubscription(int $foodsaverId, string $endpoint): int
+	public function deleteSubscription(int $foodsaverId, string $subscription): int
 	{
-		$stm = '
-			DELETE FROM fs_pushnotificationsubscription
-			WHERE foodsaver_id = :foodsaverId
-			AND JSON_EXTRACT(subscription, $.endpoint) = :endpoint
-		';
+		$subscriptionsByThisFoodsaver = $this->db->fetchAllValuesByCriteria(
+			'fs_pushnotificationsubscription',
+			'subscription',
+			['foodsaver_id' => $foodsaverId]
+		);
 
-		return $this->db->execute($stm, [':foodsaverId' => $foodsaverId, ':endpoint' => $endpoint]);
+		$subscritionsToBeDeleted = [];
+
+		foreach ($subscriptionsByThisFoodsaver as $subscriptionByThisFoodsaver) {
+			if($subscriptionByThisFoodsaver === $subscription) {
+				$subscritionsToBeDeleted[] = $subscriptionByThisFoodsaver;
+			}
+		}
+
+		return $this->db->delete(
+			'fs_pushnotificationsubscription',
+			['foodsaver_id' => $foodsaverId, 'subscription' => $subscription]
+		);
 	}
+
+//  As soon as we have MySQL >= 5.7, we can replace the last 2 functions with the following:
+//	/**
+//	 * @param string $subscription – @see \Foodsharing\Modules\PushNotification\PushNotificationGateway::addSubscription()
+//	 */
+//	public function updateSubscription(int $foodsaverId, string $subscription): int
+//	{
+//		$stm = '
+//			UPDATE fs_pushnotificationsubscription
+//			SET subscription = :subscription
+//			WHERE foodsaver_id = :foodsaverId
+//			AND JSON_EXTRACT(subscription, $.endpoint) = JSON_EXTRACT(:subscription, $.endpoint)
+//		';
+//
+//		return $this->db->execute($stm, [':foodsaverId' => $foodsaverId, ':subscription' => $subscription]);
+//	}
+//
+//	/**
+//	 * @param string $endpoint – the endpoint the notifications are sent to; part of the subscription JSON
+//	 */
+//	public function deleteSubscription(int $foodsaverId, string $endpoint): int
+//	{
+//		$stm = '
+//			DELETE FROM fs_pushnotificationsubscription
+//			WHERE foodsaver_id = :foodsaverId
+//			AND JSON_EXTRACT(subscription, $.endpoint) = :endpoint
+//		';
+//
+//		return $this->db->execute($stm, [':foodsaverId' => $foodsaverId, ':endpoint' => $endpoint]);
+//	}
 
 	public function sendPushNotificationsToFoodsaver(int $foodsaverId, string $message): void
 	{
@@ -118,8 +173,8 @@ class PushNotificationGateway extends BaseGateway
 			return $this->publicKey;
 		}
 
-		if (is_file(self::pathOfPublicKeyFile)) {
-			return $this->publicKey = file_get_contents(self::pathOfPublicKeyFile);
+		if (is_file(self::keyFileDirectory . '/' . self::publicKeyFileName)) {
+			return $this->publicKey = file_get_contents(self::publicKeyFileName);
 		}
 
 		$this->generateKeys();
@@ -133,8 +188,8 @@ class PushNotificationGateway extends BaseGateway
 			return $this->privateKey;
 		}
 
-		if (is_file(self::pathOfPrivateKeyFile)) {
-			return $this->privateKey = file_get_contents(self::pathOfPrivateKeyFile);
+		if (is_file(self::keyFileDirectory . '/' . self::privateKeyFileName)) {
+			return $this->privateKey = file_get_contents(self::privateKeyFileName);
 		}
 
 		$this->generateKeys();
@@ -148,8 +203,11 @@ class PushNotificationGateway extends BaseGateway
 		$this->publicKey = $keys['publicKey'];
 		$this->privateKey = $keys['privateKey'];
 
-		file_put_contents(self::pathOfPrivateKeyFile, $this->privateKey);
-		file_put_contents(self::pathOfPublicKeyFile, $this->publicKey);
-		chmod(self::pathOfPrivateKeyFile, 0600);
+		file_put_contents(self::keyFileDirectory . '/' . self::privateKeyFileName, $this->privateKey);
+		file_put_contents(self::keyFileDirectory . '/' . self::publicKeyFileName, $this->publicKey);
+
+		if (FS_ENV !== 'test' && FS_ENV !== 'dev') { // Tests don't work with restrictive file rights
+			chmod(self::keyFileDirectory . '/' . self::privateKeyFileName, 0600);
+		}
 	}
 }

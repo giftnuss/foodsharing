@@ -31,7 +31,7 @@ class PushNotificationSubscriptionRestController extends FOSRestController
 
 	/**
 	 * @Rest\Post("pushnotification/subscription")
-	 * @Rest\RequestParam("body")
+	 * @Rest\RequestParam(name="body")
 	 */
 	public function subscribeAction(ParamFetcher $paramFetcher)
 	{
@@ -49,7 +49,7 @@ class PushNotificationSubscriptionRestController extends FOSRestController
 
 	/**
 	 * @Rest\Put("pushnotification/subscription")
-	 * @Rest\RequestParam("body")
+	 * @Rest\RequestParam(name="body")
 	 */
 	public function updatePushSubscriptionAction(ParamFetcher $paramFetcher)
 	{
@@ -62,7 +62,7 @@ class PushNotificationSubscriptionRestController extends FOSRestController
 
 		$numberOfAffectedRows = $this->gateway->updateSubscription($foodsaverId, $subscription);
 
-		if ($numberOfAffectedRows == 0) {
+		if ($numberOfAffectedRows === 0) {
 			return $this->handleHttpStatus(404);
 		}
 
@@ -71,7 +71,7 @@ class PushNotificationSubscriptionRestController extends FOSRestController
 
 	/**
 	 * @Rest\Delete("pushnotification/subscription")
-	 * @Rest\RequestParam("body")
+	 * @Rest\RequestParam(name="body")
 	 */
 	public function deletePushSubscriptionAction(ParamFetcher $paramFetcher)
 	{
@@ -79,12 +79,12 @@ class PushNotificationSubscriptionRestController extends FOSRestController
 			return $this->handleHttpStatus(403);
 		}
 
-		$subscriptionArray = json_decode($paramFetcher->get('body'), true);
+		$subscription = $paramFetcher->get('body');
 		$foodsaverId = $this->session->id();
 
-		$numberOfAffectedRows = $this->gateway->deleteSubscription($foodsaverId, $subscriptionArray['endpoint']);
+		$numberOfAffectedRows = $this->gateway->deleteSubscription($foodsaverId, $subscription);
 
-		if ($numberOfAffectedRows == 0) {
+		if ($numberOfAffectedRows === 0) {
 			return $this->handleHttpStatus(404);
 		}
 

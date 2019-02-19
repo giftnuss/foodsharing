@@ -58,18 +58,18 @@ class PushNotificationSubscriptionCest
 		$I->seeResponseCodeIs(HttpCode::OK);
 	}
 
-	public function update403IfNotLoggedIn(\ApiTester $I)
+	public function updateReturns403IfNotLoggedIn(\ApiTester $I)
 	{
 		$I->sendPUT('api/pushnotification/subscription', ['body' => $this->testSubscription]);
 
 		$I->seeResponseCodeIs(HttpCode::FORBIDDEN);
 	}
 
-	public function update404IfSubcriptionDoesntExist(\ApiTester $I)
+	public function updateReturns404IfEndpointDoesntExist(\ApiTester $I)
 	{
 		$updatedSubscription = '
 		{
-			"endpoint": "https://some.pushservice.com/something-unique",
+			"endpoint": "some-non-existing-endpoint",
 			"keys": {
 				"p256dh": "updated",
 				"auth": "updated"
@@ -93,7 +93,7 @@ class PushNotificationSubscriptionCest
 		$I->seeResponseCodeIs(HttpCode::OK);
 	}
 
-	public function deletion404IfSubscriptionDoesntExist(\ApiTester $I)
+	public function deletionReturns404IfSubscriptionDoesntExist(\ApiTester $I)
 	{
 		$I->login($this->user['email']);
 
@@ -102,7 +102,7 @@ class PushNotificationSubscriptionCest
 		$I->seeResponseCodeIs(HttpCode::NOT_FOUND);
 	}
 
-	public function deletion403IfNotLoggedIn(\ApiTester $I)
+	public function deletionReturns403IfNotLoggedIn(\ApiTester $I)
 	{
 		$I->sendDELETE('api/pushnotification/subscription', ['body' => $this->testSubscription]);
 

@@ -23,6 +23,7 @@ dirs="\
   data/mailattach/tmp \
   data/pass \
   data/visite \
+  data/keys \
   cache \
   cache/searchindex \
   cache/htmlpurifier-cache \

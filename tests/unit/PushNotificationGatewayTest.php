@@ -40,7 +40,7 @@ class PushNotificationGatewayTest extends \Codeception\Test\Unit
 	{
 		$this->gateway->addSubscription($this->testUser['id'], $this->testSubscription);
 
-		$this->tester->seeInDatabase('fs_pushnotificatonsubscription', ['foodsaver_id' => $this->testUser['id'], 'subscription' => $this->testSubscription]);
+		$this->tester->seeInDatabase('fs_pushnotificationsubscription', ['foodsaver_id' => $this->testUser['id'], 'subscription' => $this->testSubscription]);
 	}
 
 	public function testUpdateSubscription()
@@ -51,22 +51,23 @@ class PushNotificationGatewayTest extends \Codeception\Test\Unit
 		{
 			"endpoint": "https://some.pushservice.com/something-unique",
 			"keys": {
-				"p256dh": "new-key",
-				"auth": "new-auth"
+				"p256dh": "updated",
+				"auth": "updated"
  			}
 		}';
 
 		$this->gateway->updateSubscription($this->testUser['id'], $newSubscription);
+
 		$this->tester->seeInDatabase('fs_pushnotificationsubscription', ['foodsaver_id' => $this->testUser['id'], 'subscription' => $newSubscription]);
+		$this->tester->dontSeeInDatabase('fs_pushnotificationsubscription', ['foodsaver_id' => $this->testUser['id'], 'subscription' => $this->testSubscription]);
 	}
 
 	public function testDeleteSubscription()
 	{
 		//insert test subsription:
 		$this->gateway->addSubscription($this->testUser['id'], $this->testSubscription);
-		$endpoint = json_encode($this->testSubscription, true)['endpoint'];
 
-		$this->gateway->deleteSubscription($this->testUser['id'], $endpoint);
+		$this->gateway->deleteSubscription($this->testUser['id'], $this->testSubscription);
 
 		$this->tester->dontSeeInDatabase('fs_pushnotificationsubscription', ['foodsaver_id' => $this->testUser['id']]);
 	}
