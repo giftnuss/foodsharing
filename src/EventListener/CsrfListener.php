@@ -4,7 +4,7 @@ namespace Foodsharing\EventListener;
 
 use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException;
 use Foodsharing\Annotation\DisableCsrfProtection;
 use Foodsharing\Lib\Session;
 
@@ -45,7 +45,7 @@ class CsrfListener
 		}
 
 		if (!$this->session->isValidCsrfHeader()) {
-			throw new AccessDeniedHttpException('CSRF Failed: CSRF token missing or incorrect.');
+			throw new SuspiciousOperationException('CSRF Failed: CSRF token missing or incorrect.');
 		}
 	}
 }
