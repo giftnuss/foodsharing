@@ -262,8 +262,8 @@ class LoginXhr extends Control
 	{
 		// prevent path traversal
 		$img = preg_replace('/%/', '', $img);
-		$img = preg_replace('/\.+/', '.', $img); 
-		
+		$img = preg_replace('/\.+/', '.', $img);
+
 		$folder = ROOT_DIR . 'tmp/';
 		if (file_exists($folder . $img)) {
 			$image = new fImage($folder . $img);

@@ -356,9 +356,9 @@ class EmailControl extends Control
 
 				// prevent path traversal attacks
 				$src = preg_replace('/%/', '', $src);
-				$src = preg_replace('/\.+/', '.', $src); 
+				$src = preg_replace('/\.+/', '.', $src);
 				$iname = preg_replace('/%/', '', $iname);
-				$iname = preg_replace('/\.+/', '.', $iname); 
+				$iname = preg_replace('/\.+/', '.', $iname);
 
 				if (!empty($wwith) || !empty($hheight)) {
 					$old_filepath = '';
