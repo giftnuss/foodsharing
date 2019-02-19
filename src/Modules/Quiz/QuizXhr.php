@@ -554,9 +554,7 @@ class QuizXhr extends Control
 			 * Have a look has the user entered an comment for this question?
 			*/
 			if (isset($_GET['comment']) && !empty($_GET['comment'])) {
-				$comment = strip_tags($_GET['comment']);
-
-				$comment = $_GET['commentanswers'] . $comment;
+				$comment = strip_tags($_GET['commentanswers'] . $_GET['comment']);
 
 				// if yes lets store in the db
 				$this->model->addUserComment((int)$_GET['qid'], $comment);
