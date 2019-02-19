@@ -38,8 +38,20 @@
 - better webpack splitting !681 @nicksellen
 - disable backup_globals for PHPUnit to have unit tests working in dev again !696 @NerdyProjects
 
+# 2019-02-19 Hotfix
+- Backport some changes that were needed for yesterdays hotfix
+- Conversation API returns name (or null) !658 @nicksellen 
+- Fixup conversation header display !658 @nicksellen
+
 # 2019-02-18 Hotfix
 - fix for 9 SQL injection vulnerabilities #472 @alangecker
+- Fix mass mail sender and email output formatting !707 @NerdyProjects
+
+# 2019-02-16 Hotfix
+- Fixed an SQL injection in a FoodsaverGateway method @alangecker
+
+# 2019-02-02 Hotfix
+- readded adresspicker functionality to Fair-Teiler creation page !668 @peter.toennies
 
 # 2019-01-25
 Matthias: "Are there any concerns about merging the addresspicker / map / geolocation to production?"
