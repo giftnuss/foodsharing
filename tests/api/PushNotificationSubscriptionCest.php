@@ -27,68 +27,24 @@ class PushNotificationSubscriptionCest
 	public function subscriptionSucceedsIfLoggedIn(\ApiTester $I)
 	{
 		$I->login($this->user['email']);
-		$I->sendPOST('api/pushnotification/subscription', ['body' => $this->testSubscription]);
+		$I->sendPOST('api/pushnotification/webpush/subscription', ['body' => $this->testSubscription]);
 
 		$I->seeResponseCodeIs(HttpCode::OK);
 	}
 
 	public function subscriptionFailsIfNotLoggedIn(\ApiTester $I)
 	{
-		$I->sendPOST('api/pushnotification/subscription', ['body' => $this->testSubscription]);
+		$I->sendPOST('api/pushnotification/webpush/subscription', ['body' => $this->testSubscription]);
 
 		$I->seeResponseCodeIs(HttpCode::FORBIDDEN);
-	}
-
-	public function updateSucceedsIfLoggedInAndSubcriptionExists(\ApiTester $I)
-	{
-		$updatedSubscription = '
-		{
-			"endpoint": "https://some.pushservice.com/something-unique",
-			"keys": {
-				"p256dh": "updated",
-				"auth": "updated"
- 			}
-		}';
-
-		$I->login($this->user['email']);
-		$I->sendPOST('api/pushnotification/subscription', ['body' => $this->testSubscription]);
-
-		$I->sendPUT('api/pushnotification/subscription', ['body' => $updatedSubscription]);
-
-		$I->seeResponseCodeIs(HttpCode::OK);
-	}
-
-	public function updateReturns403IfNotLoggedIn(\ApiTester $I)
-	{
-		$I->sendPUT('api/pushnotification/subscription', ['body' => $this->testSubscription]);
-
-		$I->seeResponseCodeIs(HttpCode::FORBIDDEN);
-	}
-
-	public function updateReturns404IfEndpointDoesntExist(\ApiTester $I)
-	{
-		$updatedSubscription = '
-		{
-			"endpoint": "some-non-existing-endpoint",
-			"keys": {
-				"p256dh": "updated",
-				"auth": "updated"
- 			}
-		}';
-
-		$I->login($this->user['email']);
-
-		$I->sendPUT('api/pushnotification/subscription', ['body' => $updatedSubscription]);
-
-		$I->seeResponseCodeIs(HttpCode::NOT_FOUND);
 	}
 
 	public function deletionSucceedsIfLoggedInAndSubscriptionExists(\ApiTester $I)
 	{
 		$I->login($this->user['email']);
-		$I->sendPOST('api/pushnotification/subscription', ['body' => $this->testSubscription]);
+		$I->sendPOST('api/pushnotification/webpush/subscription', ['body' => $this->testSubscription]);
 
-		$I->sendDELETE('api/pushnotification/subscription', ['body' => $this->testSubscription]);
+		$I->sendDELETE('api/pushnotification/webpush/subscription', ['body' => $this->testSubscription]);
 
 		$I->seeResponseCodeIs(HttpCode::OK);
 	}
@@ -97,14 +53,14 @@ class PushNotificationSubscriptionCest
 	{
 		$I->login($this->user['email']);
 
-		$I->sendDELETE('api/pushnotification/subscription', ['body' => $this->testSubscription]);
+		$I->sendDELETE('api/pushnotification/webpush/subscription', ['body' => $this->testSubscription]);
 
 		$I->seeResponseCodeIs(HttpCode::NOT_FOUND);
 	}
 
 	public function deletionReturns403IfNotLoggedIn(\ApiTester $I)
 	{
-		$I->sendDELETE('api/pushnotification/subscription', ['body' => $this->testSubscription]);
+		$I->sendDELETE('api/pushnotification/webpush/subscription', ['body' => $this->testSubscription]);
 
 		$I->seeResponseCodeIs(HttpCode::FORBIDDEN);
 	}

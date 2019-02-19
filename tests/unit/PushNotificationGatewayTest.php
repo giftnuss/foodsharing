@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\PushNotification\PushNotificationHandlerInterface;
+
 class PushNotificationGatewayTest extends \Codeception\Test\Unit
 {
 	/**
@@ -40,26 +42,7 @@ class PushNotificationGatewayTest extends \Codeception\Test\Unit
 	{
 		$this->gateway->addSubscription($this->testUser['id'], $this->testSubscription);
 
-		$this->tester->seeInDatabase('fs_pushnotificationsubscription', ['foodsaver_id' => $this->testUser['id'], 'subscription' => $this->testSubscription]);
-	}
-
-	public function testUpdateSubscription()
-	{
-		//insert test subscription:
-		$this->gateway->addSubscription($this->testUser['id'], $this->testSubscription);
-		$newSubscription = '
-		{
-			"endpoint": "https://some.pushservice.com/something-unique",
-			"keys": {
-				"p256dh": "updated",
-				"auth": "updated"
- 			}
-		}';
-
-		$this->gateway->updateSubscription($this->testUser['id'], $newSubscription);
-
-		$this->tester->seeInDatabase('fs_pushnotificationsubscription', ['foodsaver_id' => $this->testUser['id'], 'subscription' => $newSubscription]);
-		$this->tester->dontSeeInDatabase('fs_pushnotificationsubscription', ['foodsaver_id' => $this->testUser['id'], 'subscription' => $this->testSubscription]);
+		$this->tester->seeInDatabase('fs_push_notification_subscription', ['foodsaver_id' => $this->testUser['id'], 'data' => $this->testSubscription]);
 	}
 
 	public function testDeleteSubscription()
@@ -69,6 +52,60 @@ class PushNotificationGatewayTest extends \Codeception\Test\Unit
 
 		$this->gateway->deleteSubscription($this->testUser['id'], $this->testSubscription);
 
-		$this->tester->dontSeeInDatabase('fs_pushnotificationsubscription', ['foodsaver_id' => $this->testUser['id']]);
+		$this->tester->dontSeeInDatabase('fs_push_notification_subscription', ['foodsaver_id' => $this->testUser['id']]);
+	}
+
+	public function testAddHandler()
+	{
+		$testHandler = new class() implements PushNotificationHandlerInterface {
+			public static function getTypeIdentifier(): string
+			{
+				return 'test';
+			}
+
+			public function getPublicKey(): string
+			{
+				return '';
+			}
+
+			public function sendPushNotificationsToClients(array $subscriptionData, string $title, string $message, string $action = null): void
+			{
+				return;
+			}
+		};
+
+		$this->gateway->addHandler($testHandler);
+
+		$this->tester->assertTrue($this->gateway->hasHandlerFor('test'));
+	}
+
+	public function testHasHandlerForReturnsFalseIfThereIsNoHandler()
+	{
+		$this->tester->assertFalse($this->gateway->hasHandlerFor('wrong type identifier'));
+	}
+
+	public function testGetPublicKey()
+	{
+		$testHandler = new class() implements PushNotificationHandlerInterface {
+			public static function getTypeIdentifier(): string
+			{
+				return 'test';
+			}
+
+			public function getPublicKey(): string
+			{
+				return 'testPublicKey';
+			}
+
+			public function sendPushNotificationsToClients(array $subscriptionData, string $title, string $message, ?string $action = null): void
+			{
+				return;
+			}
+		};
+		$this->gateway->addHandler($testHandler);
+
+		$publicKey = $this->gateway->getPublicKey('test');
+
+		$this->tester->assertEquals('testPublicKey', $publicKey);
 	}
 }

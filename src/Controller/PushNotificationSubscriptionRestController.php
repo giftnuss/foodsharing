@@ -10,7 +10,14 @@ use FOS\RestBundle\Request\ParamFetcher;
 
 class PushNotificationSubscriptionRestController extends FOSRestController
 {
+	/**
+	 * @var PushNotificationGateway
+	 */
 	private $gateway;
+
+	/**
+	 * @var Session
+	 */
 	private $session;
 
 	public function __construct(PushNotificationGateway $gateway, Session $session)
@@ -20,21 +27,28 @@ class PushNotificationSubscriptionRestController extends FOSRestController
 	}
 
 	/**
-	 * @Rest\Get("pushnotification/publickey")
+	 * @Rest\Get("pushnotification/{type}/publickey")
 	 */
-	public function getPublicKeyAction()
+	public function getPublicKeyAction(string $type)
 	{
-		$view = $this->view($this->gateway->getPublicKey(), 200);
+		if (!$this->gateway->hasHandlerFor($type)) {
+			return $this->handleHttpStatus(404);
+		}
 
+		$view = $this->view($this->gateway->getPublicKey($type), 200);
 		return $this->handleView($view);
 	}
 
 	/**
-	 * @Rest\Post("pushnotification/subscription")
+	 * @Rest\Post("pushnotification/{type}/subscription")
 	 * @Rest\RequestParam(name="body")
 	 */
-	public function subscribeAction(ParamFetcher $paramFetcher)
+	public function subscribeAction(ParamFetcher $paramFetcher, string $type)
 	{
+		if (!$this->gateway->hasHandlerFor($type)) {
+			return $this->handleHttpStatus(404);
+		}
+
 		if (!$this->session->may()) {
 			return $this->handleHttpStatus(403);
 		}
@@ -48,33 +62,15 @@ class PushNotificationSubscriptionRestController extends FOSRestController
 	}
 
 	/**
-	 * @Rest\Put("pushnotification/subscription")
+	 * @Rest\Delete("pushnotification/{type}/subscription")
 	 * @Rest\RequestParam(name="body")
 	 */
-	public function updatePushSubscriptionAction(ParamFetcher $paramFetcher)
+	public function deletePushSubscriptionAction(ParamFetcher $paramFetcher, string $type)
 	{
-		if (!$this->session->may()) {
-			return $this->handleHttpStatus(403);
-		}
-
-		$subscription = $paramFetcher->get('body');
-		$foodsaverId = $this->session->id();
-
-		$numberOfAffectedRows = $this->gateway->updateSubscription($foodsaverId, $subscription);
-
-		if ($numberOfAffectedRows === 0) {
+		if (!$this->gateway->hasHandlerFor($type)) {
 			return $this->handleHttpStatus(404);
 		}
 
-		return $this->handleHttpStatus(200);
-	}
-
-	/**
-	 * @Rest\Delete("pushnotification/subscription")
-	 * @Rest\RequestParam(name="body")
-	 */
-	public function deletePushSubscriptionAction(ParamFetcher $paramFetcher)
-	{
 		if (!$this->session->may()) {
 			return $this->handleHttpStatus(403);
 		}

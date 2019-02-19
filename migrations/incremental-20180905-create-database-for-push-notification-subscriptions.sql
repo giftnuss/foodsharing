@@ -1,1 +1,0 @@
-CREATE TABLE `foodsharing`.`fs_pushnotificationsubscription` ( `foodsaver_id` INT NOT NULL, `subscription` VARCHAR(2400) );
