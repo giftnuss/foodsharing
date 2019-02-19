@@ -594,8 +594,6 @@ class XhrMethods
 
 	public function xhr_pictureCrop($data)
 	{
-		$data['img'];
-		$data['id'];
 		/*
 		 * [ratio-val] => [{"x":37,"y":87,"w":500,"h":281},{"x":64,"y":0,"w":450,"h":450}]
 		  [resize] => [250,528]
@@ -603,6 +601,10 @@ class XhrMethods
 
 		$ratio = json_decode($_POST['ratio-val'], true);
 		$resize = json_decode($_POST['resize']);
+
+		// prevent path traversal
+		$data['id'] = preg_replace('/[^a-z0-9\-_]/', '', $data['id']);
+		$data['img'] = preg_replace('/[^a-z0-9\-_\.]/', '', $data['img']);
 
 		if (is_array($ratio) && is_array($resize)) {
 			foreach ($ratio as $i => $r) {
@@ -671,12 +673,14 @@ class XhrMethods
 
 	private function pictureResize($data)
 	{
-		$id = $data['id'];
-		$img = $data['img'];
+		$id = preg_replace('/[^a-z0-9\-_]/', '', $data['id']);
+		$img = preg_replace('/[^a-z0-9\-_\.]/', '', $data['img']);
+
 		$resize = json_decode($data['resize'], true);
 
 		if (is_array($resize)) {
 			foreach ($resize as $r) {
+				$r = (int)$r;
 				copy(ROOT_DIR . 'images/' . $id . '/' . $img, ROOT_DIR . 'images/' . $id . '/' . $r . '_' . $img);
 				$image = new fImage(ROOT_DIR . 'images/' . $id . '/' . $r . '_' . $img);
 				$image->resize($r, 0);
@@ -847,6 +851,10 @@ class XhrMethods
 			if (isset($_FILES['uploadpic'])) {
 				$error = 0;
 				$datei = $_FILES['uploadpic']['tmp_name'];
+				// prevent path traversal
+				$datei = preg_replace('/%/', '', $datei);
+				$datei = preg_replace('/\.+/', '.', $datei);
+
 				$datein = $_FILES['uploadpic']['name'];
 				$datein = strtolower($datein);
 				$datein = str_replace('.jpeg', '.jpg', $datein);
@@ -869,6 +877,7 @@ class XhrMethods
 			}
 		} elseif (isset($_POST['action']) && $_POST['action'] == 'crop') {
 			$file = str_replace('/', '', $_POST['file']);
+
 			if ($img = $this->cropImage($file, $_POST['x'], $_POST['y'], $_POST['w'], $_POST['h'])) {
 				$id = strip_tags($_POST['pic_id']);
 

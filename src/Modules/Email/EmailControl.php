@@ -354,6 +354,12 @@ class EmailControl extends Control
 				$hheight = $tag->getAttribute('height');
 				$iname = $tag->getAttribute('name');
 
+				// prevent path traversal attacks
+				$src = preg_replace('/%/', '', $src);
+				$src = preg_replace('/\.+/', '.', $src); 
+				$iname = preg_replace('/%/', '', $iname);
+				$iname = preg_replace('/\.+/', '.', $iname); 
+
 				if (!empty($wwith) || !empty($hheight)) {
 					$old_filepath = '';
 
