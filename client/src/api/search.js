@@ -44,5 +44,5 @@ export async function instantSearch (query) {
 }
 
 export async function instantSearchIndex (token) {
-  return mapOldResponseToNewFormat(await get(`/../cache/searchindex/${encodeURIComponent(token)}.json`))
+  return mapOldResponseToNewFormat(await get(`/search/legacyindex`))
 }
