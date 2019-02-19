@@ -34,6 +34,7 @@
 - Fix broken permission checks in foodsaver module @NerdyProjects
 - Fix broken permission checks in foodsaver xhr module @NerdyProjects
 - Fix broken permission checks in geoclean xhr module @NerdyProjects
+- Fix broken permission checks in mailbox xhr module @NerdyProjects
 
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies
