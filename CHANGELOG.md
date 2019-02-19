@@ -31,6 +31,7 @@
 - Only allow edting regions as an orga user !714 @NerdyProjects
 - higher entropy for security & privacy related tokens !709 @alangecker
 - Fix recently broken quiz session storage !730 @NerdyProjects
+- Fix broken permission checks in foodsaver module @NerdyProjects
 
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies

@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Foodsaver;
 
+use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
 
@@ -16,15 +17,13 @@ class FoodsaverXhr extends Control
 		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
-
-		// permission check
-		if (!$this->session->may('orga') && !$this->session->isAdminFor($_GET['bid'])) {
-			return false;
-		}
 	}
 
 	public function loadFoodsaver()
 	{
+		if (!$this->session->may('orga') && !$this->session->isAdminFor($_GET['bid'])) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		if ($foodsaver = $this->model->loadFoodsaver($_GET['id'])) {
 			$html = $this->view->foodsaverForm($foodsaver);
 
@@ -40,6 +39,9 @@ class FoodsaverXhr extends Control
 	 */
 	public function foodsaverrefresh()
 	{
+		if (!$this->session->may('orga') && !$this->session->isAdminFor($_GET['bid'])) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		$foodsaver = $this->model->listFoodsaver($_GET['bid']);
 		$bezirk = $this->regionGateway->getBezirk($_GET['bid']);
 		$html = $this->func->jsSafe($this->view->foodsaverList($foodsaver, $bezirk), "'");
@@ -55,6 +57,9 @@ class FoodsaverXhr extends Control
 	 */
 	public function delfrombezirk()
 	{
+		if (!$this->session->may('orga') && !$this->session->isAdminFor($_GET['bid'])) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		$this->model->delfrombezirk($_GET['bid'], $_GET['id']);
 
 		return array(
