@@ -582,7 +582,6 @@ class Session
 		return false;
 	}
 
-
 	public function generateCrsfToken(string $key)
 	{
 		$token = bin2hex(random_bytes(16));
