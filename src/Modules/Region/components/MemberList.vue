@@ -68,7 +68,7 @@
           slot-scope="data"
         >
           <div>
-            <img 
+            <img
               :src="data.value"
               :alt="$i18n('terminology.profile_picture')"
             />
