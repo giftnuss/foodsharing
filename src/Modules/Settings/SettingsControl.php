@@ -9,15 +9,17 @@ use Foodsharing\Modules\Quiz\QuizModel;
 
 class SettingsControl extends Control
 {
+	private $gateway;
 	private $foodsaver;
 	private $quizModel;
 	private $contentGateway;
 	private $foodsaverGateway;
 
-	public function __construct(SettingsModel $model, SettingsView $view, QuizModel $quizModel, ContentGateway $contentGateway, FoodsaverGateway $foodsaverGateway)
+	public function __construct(SettingsModel $model, SettingsView $view, SettingsGateway $gateway, QuizModel $quizModel, ContentGateway $contentGateway, FoodsaverGateway $foodsaverGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->gateway = $gateway;
 		$this->quizModel = $quizModel;
 		$this->contentGateway = $contentGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -322,12 +324,12 @@ class SettingsControl extends Control
 						check = false;
 						error("Du musst einen Bezirk ausw&auml;hlen");
 					}
-				
+
 					if(!check)
 					{
 						ev.preventDefault();
 					}
-				
+
 				});');
 
 				// Rechtsvereinbarung
@@ -506,7 +508,7 @@ class SettingsControl extends Control
 			if ($check) {
 				if ($oldFs = $this->foodsaverGateway->getOne_foodsaver($this->session->id())) {
 					$logChangedFields = array('stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum');
-					$this->model->logChangedSetting($this->session->id(), $oldFs, $data, $logChangedFields);
+					$this->gateway->logChangedSetting($this->session->id(), $oldFs, $data, $logChangedFields);
 				}
 
 				if (!isset($data['bezirk_id'])) {

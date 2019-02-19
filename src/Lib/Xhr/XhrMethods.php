@@ -755,31 +755,9 @@ class XhrMethods
 				$message = str_replace($search, $replace, $mail['message']);
 				$subject = str_replace($search, $replace, $mail['name']);
 
-				//$fs['email'] = 'kontakt@prographix.de';
 				$check = false;
-				if ($mail['mode'] == 2) {
-					if ($this->func->libmail($mailbox, $fs['email'], $subject, $message, $attach, $fs['token'])) {
-						$check = true;
-					}
-				} else {
-					if ($this->messageModel->add_message(array(
-						'sender_id' => $this->session->id(),
-						'recip_id' => $fs['id'],
-						'unread' => 1,
-						'name' => $subject,
-						'msg' => $message,
-						'time' => date('Y-m-d H:i:s'),
-						'attach' => $mail['attach']
-					))
-					) {
-						$this->func->tplMail(9, $fs['email'], array(
-							'name' => $fs['name'],
-							'sender' => $sender['name'],
-							'anrede' => $this->func->genderWord($sender['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-							'link' => BASE_URL . '/?page=message&amp;conv=' . (int)$this->session->id()
-						));
-						$check = true;
-					}
+				if ($this->func->libmail($mailbox, $fs['email'], $subject, $message, $attach, $fs['token'])) {
+					$check = true;
 				}
 
 				if (!$check) {
@@ -1206,26 +1184,27 @@ class XhrMethods
 
 	public function xhr_saveBezirk($data)
 	{
-		global $g_data;
-		$g_data = $data;
+		if ($this->session->may('orga')) {
+			global $g_data;
+			$g_data = $data;
 
-		$mbid = (int)$this->model->qOne('SELECT mailbox_id FROM fs_bezirk WHERE id = ' . (int)$data['bezirk_id']);
+			$mbid = (int)$this->model->qOne('SELECT mailbox_id FROM fs_bezirk WHERE id = ' . (int)$data['bezirk_id']);
 
-		if (strlen($g_data['mailbox_name']) > 1) {
-			if ($mbid > 0) {
-				$this->model->update('UPDATE fs_mailbox SET name = ' . $this->model->strval($g_data['mailbox_name']) . ' WHERE id = ' . (int)$mbid);
-			} else {
-				$mbid = $this->model->insert('INSERT INTO fs_mailbox(`name`)VALUES(' . $this->model->strval($g_data['mailbox_name']) . ')');
-				$this->model->update('UPDATE fs_bezirk SET mailbox_id = ' . (int)$mbid . ' WHERE id = ' . (int)$data['bezirk_id']);
+			if (strlen($g_data['mailbox_name']) > 1) {
+				if ($mbid > 0) {
+					$this->model->update('UPDATE fs_mailbox SET name = ' . $this->model->strval($g_data['mailbox_name']) . ' WHERE id = ' . (int)$mbid);
+				} else {
+					$mbid = $this->model->insert('INSERT INTO fs_mailbox(`name`)VALUES(' . $this->model->strval($g_data['mailbox_name']) . ')');
+					$this->model->update('UPDATE fs_bezirk SET mailbox_id = ' . (int)$mbid . ' WHERE id = ' . (int)$data['bezirk_id']);
+				}
 			}
+
+			$this->func->handleTagselect('botschafter');
+
+			$this->regionGateway->update_bezirkNew($data['bezirk_id'], $g_data);
+
+			return $this->xhr_out('pulseInfo("' . $this->func->s('edit_success') . '");');
 		}
-
-		$this->func->handleTagselect('botschafter');
-
-		$this->regionGateway->update_bezirkNew($data['bezirk_id'], $g_data);
-		$this->mem->del('cb-' . $data['bezirk_id']);
-
-		return $this->xhr_out('pulseInfo("' . $this->func->s('edit_success') . '");');
 	}
 
 	public function xhr_addFetcher($data)

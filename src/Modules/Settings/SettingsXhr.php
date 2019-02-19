@@ -13,13 +13,15 @@ class SettingsXhr extends Control
 {
 	private $foodsaverGateway;
 	private $loginGateway;
+	private $settingsGateway;
 
-	public function __construct(SettingsModel $model, SettingsView $view, FoodsaverGateway $foodsaverGateway, LoginGateway $loginGateway)
+	public function __construct(SettingsModel $model, SettingsView $view, SettingsGateway $settingsGateway, FoodsaverGateway $foodsaverGateway, LoginGateway $loginGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->loginGateway = $loginGateway;
+		$this->settingsGateway = $settingsGateway;
 
 		parent::__construct();
 
@@ -54,7 +56,7 @@ class SettingsXhr extends Control
 					'script' => 'pulseError("Diese E-Mail-Adresse benutzt bereits jemand anderes.");'
 				);
 			}
-			$token = md5(uniqid(mt_rand(), true));
+			$token = bin2hex(random_bytes(16));
 			$this->model->addNewMail($_GET['email'], $token);
 			// anrede name link
 
@@ -105,6 +107,8 @@ class SettingsXhr extends Control
 			if ($this->loginGateway->checkClient($fs['email'], $_GET['pw'])) {
 				if ($email = $this->model->getMailchange()) {
 					if ($this->model->changeMail($email)) {
+						$this->settingsGateway->logChangedSetting($this->session->id(), ['email' => $this->session->user('email')], ['email' => $email], ['email']);
+
 						return array(
 							'status' => 1,
 							'script' => 'pulseInfo("Deine E-Mail-Adresse wurde geändert!");$("#' . $did . '").dialog("close");'

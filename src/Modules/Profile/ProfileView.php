@@ -42,10 +42,12 @@ class ProfileView extends View
 				<a class="button button-big" href="#" onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',bid:0,date:0});return false;">Aus allen austragen</a>
 					<ul class="datelist linklist" id="double">';
 		foreach ($fetchDates as $d) {
+			$userConfirmedForPickup = $d['confirmed'] == 1 ? '✓ ' : '? ';
+
 			$out .= '
 						<li>
 							<a href="/?page=fsbetrieb&id=' . $d['betrieb_id'] . '" class="ui-corner-all">
-								<span class="title">' . $this->func->niceDate($d['date_ts']) . '</span>
+								<span class="title">' . $userConfirmedForPickup . $this->func->niceDate($d['date_ts']) . '</span>
 							</a>
 						</li>
 						<li>
@@ -75,7 +77,8 @@ class ProfileView extends View
 	{
 		$out = '';
 		foreach ($userCompanies as $b) {
-			$out .= '<p><a class="light" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $b['name'] . '</a></p>';
+			$userStatusOfStore = $b['active'] == 1 ? '✓ ' : '? ';
+			$out .= '<p><a class="light" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $userStatusOfStore . $b['name'] . '</a></p>';
 		}
 
 		return '

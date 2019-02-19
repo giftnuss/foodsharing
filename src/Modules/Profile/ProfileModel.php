@@ -309,7 +309,8 @@ class ProfileModel extends Db
 
 			SELECT 	b.id,
 					b.name,
-					bt.verantwortlich
+					bt.verantwortlich,
+					bt.active
 
 			FROM 	fs_betrieb_team bt,
 					fs_betrieb b

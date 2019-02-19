@@ -4,13 +4,13 @@ namespace Foodsharing\Modules\Foodsaver;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
-use Foodsharing\Modules\Settings\SettingsModel;
+use Foodsharing\Modules\Settings\SettingsGateway;
 use Foodsharing\Modules\Store\StoreModel;
 
 class FoodsaverControl extends Control
 {
 	private $storeModel;
-	private $settingsModel;
+	private $settingsGateway;
 	private $regionGateway;
 	private $foodsaverGateway;
 
@@ -18,14 +18,14 @@ class FoodsaverControl extends Control
 		FoodsaverModel $model,
 		FoodsaverView $view,
 		StoreModel $storeModel,
-		SettingsModel $settingsModel,
+		SettingsGateway $settingsGateway,
 		RegionGateway $regionGateway,
 		FoodsaverGateway $foodsaverGateway
 	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->storeModel = $storeModel;
-		$this->settingsModel = $settingsModel;
+		$this->settingsGateway = $settingsGateway;
 		$this->regionGateway = $regionGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 
@@ -121,7 +121,7 @@ class FoodsaverControl extends Control
 
 			if ($oldFs = $this->foodsaverGateway->getOne_foodsaver($_GET['id'])) {
 				$logChangedFields = array('name', 'nachname', 'stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum', 'rolle', 'orgateam');
-				$this->settingsModel->logChangedSetting($_GET['id'], $oldFs, $g_data, $logChangedFields);
+				$this->settingsGateway->logChangedSetting($_GET['id'], $oldFs, $g_data, $logChangedFields, $this->session->id());
 			}
 			if ($this->model->update_foodsaver($_GET['id'], $g_data, $this->storeModel)) {
 				$this->func->info($this->func->s('foodsaver_edit_success'));

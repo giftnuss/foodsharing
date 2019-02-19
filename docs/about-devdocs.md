@@ -25,6 +25,21 @@ The devdocs are based on the following principles:
 
 But don't worry too much about the last three principles. There are people solely dedicated to improving the devdocs.
 
+### Setting things up
+
+The devdocs are built at every change on the master branch and published [here](https://devdocs.foodsharing.de).
+To see your changes, you can build the devdocs locally.
+You need to have `yarn` installed on your system.
+Run
+```
+yarn global add gitbook-cli
+gitbook install docs
+gitbook serve docs --port 4001
+```
+This makes the current devdocs avaiable via `localhost:4001` in your browser.
+It is updated at every change of the files.
+It would be nice to have a docker setup (to avoid the local `yarn` dependency). Please document it here if you set it up.
+
 ## GitBook
 
 The devdocs are based on [GitBook](https://docs.gitbook.com/).

@@ -4,13 +4,13 @@ namespace Foodsharing\Modules\PassportGenerator;
 
 use Foodsharing\Modules\Core\View;
 
-class PassportGeneratorView extends View
+final class PassportGeneratorView extends View
 {
-	public function passTable($bezirk)
+	public function passTable(array $region): string
 	{
 		$data = array();
 
-		foreach ($bezirk['foodsaver'] as $fs) {
+		foreach ($region['foodsaver'] as $fs) {
 			$last = '<span style="display:none">a0</span> <a href="#" class="dateclick linkrow ui-corner-all"> - ' . $this->func->s('never_generated') . ' - </a>';
 			if ($fs['last_pass'] != '0000-00-00 00:00:00' && $fs['last_pass'] != null) {
 				$last = '<span style="display:none">a' . date('YmdHis', $fs['last_pass_ts']) . '</span> <a href="#" class="dateclick linkrow ui-corner-all">' . $this->func->niceDate($fs['last_pass_ts']) . '</a>';
@@ -27,45 +27,48 @@ class PassportGeneratorView extends View
 				$img = $this->func->img($fs['photo']);
 			}
 
-			$data[] = array(
-				array('cnt' => '<input class="checkbox bezirk' . $bezirk['id'] . ' date' . date('Y-m-d-H-i-s', $fs['last_pass_ts']) . '" type="checkbox" name="foods[]" value="' . $fs['id'] . '" />'),
-				array('cnt' => '<span style="display:none">a' . $fs['photo'] . '</span><a href="#" class="fsname"><img src="' . $img . '" width="35" /></a>'),
-				array('cnt' => '<a href="/?page=foodsaver&a=edit&id=' . $fs['id'] . '" class="linkrow ui-corner-all">' . $fs['name'] . '</a>'),
-				array('cnt' => $last),
-				array('cnt' => $verified)
-			);
+			$data[] = [
+				['cnt' => '<input class="checkbox bezirk' . $region['id'] . ' date' . date('Y-m-d-H-i-s', $fs['last_pass_ts']) . '" type="checkbox" name="foods[]" value="' . $fs['id'] . '" />'],
+				['cnt' => '<span style="display:none">a' . $fs['photo'] . '</span><a href="#" class="fsname"><img src="' . $img . '" width="35" /></a>'],
+				['cnt' => '<a href="/?page=foodsaver&a=edit&id=' . $fs['id'] . '" class="linkrow ui-corner-all">' . $fs['name'] . '</a>'],
+				['cnt' => $last],
+				['cnt' => $verified]
+			];
 		}
 
 		return
 			$this->v_utils->v_field(
-				$this->v_utils->v_tablesorter(array(
-					array('name' => '<input class="checker" type="checkbox" name="checker" value="' . $bezirk['id'] . '" />', 'sort' => false, 'width' => 20),
-					array('name' => $this->func->s('photo'), 'width' => 40),
-					array('name' => $this->func->s('name')),
-					array('name' => $this->func->s('last_generated'), 'width' => 200),
-					array('name' => $this->func->s('verified'), 'width' => 70)
-				), $data),
+				$this->v_utils->v_tablesorter(
+					[
+					['name' => '<input class="checker" type="checkbox" name="checker" value="' . $region['id'] . '" />', 'sort' => false, 'width' => 20],
+					['name' => $this->func->s('photo'), 'width' => 40],
+					['name' => $this->func->s('name')],
+					['name' => $this->func->s('last_generated'), 'width' => 200],
+					['name' => $this->func->s('verified'), 'width' => 70]
+					], $data),
 
-				$bezirk['bezirk']
+				$region['bezirk']
 			);
 	}
 
-	public function menubar()
+	public function menubar(): string
 	{
-		return $this->v_utils->v_menu(array(
-			array('name' => 'Alle markieren', 'click' => 'checkAllCb(true);return false;'),
-			array('name' => 'Keine markieren', 'click' => 'checkAllCb(false);return false;')
-		), $this->func->s('options'));
+		return $this->v_utils->v_menu(
+			[
+			['name' => 'Alle markieren', 'click' => 'checkAllCb(true);return false;'],
+			['name' => 'Keine markieren', 'click' => 'checkAllCb(false);return false;']
+			], $this->func->s('options'));
 	}
 
-	public function start()
+	public function start(): string
 	{
-		return $this->v_utils->v_menu(array(
-			array('name' => 'markierte Ausweise generieren', 'href' => '#start')
-		), $this->func->s('start'));
+		return $this->v_utils->v_menu(
+			[
+			['name' => 'markierte Ausweise generieren', 'href' => '#start']
+			], $this->func->s('start'));
 	}
 
-	public function tips()
+	public function tips(): string
 	{
 		return $this->v_utils->v_info($this->func->s('tips_content'), $this->func->s('tips'));
 	}

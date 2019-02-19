@@ -752,7 +752,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$datein = str_replace('.jpeg', '.jpg', $datein);
 			$dateiendung = strtolower(substr($datein, strlen($datein) - 4, 4));
 
-			$new_name = uniqid() . $dateiendung;
+			$new_name = bin2hex(random_bytes(16)) . $dateiendung;
 			move_uploaded_file($datei, './data/attach/' . $new_name);
 
 			return array(
@@ -1300,7 +1300,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$mail->setHTMLBody($htmlBody);
 
 		$plainBody = $this->sanitizerService->htmlToPlain($htmlBody);
-		$mail->setBody($message);
+		$mail->setBody($plainBody);
 
 		if ($attach !== false) {
 			foreach ($attach as $a) {
