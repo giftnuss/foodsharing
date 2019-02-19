@@ -51,6 +51,7 @@ group:
   quit_name: Team %name% verlassen
   quit: Verlassen
   really_quit_name: Möchtest Du wirklich den Bezirk bzw. das Team %name% verlassen?
+  delete_group_sure: Soll die Arbeitsgruppe/der Bezirk {groupName} wirklich gelöscht werden?
 
 legal:
   pp: Datenschutzerklärung
