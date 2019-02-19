@@ -545,7 +545,6 @@ class Session
 		return $this->may('orga');
 	}
 
-
 	public function isVerified()
 	{
 		if ($this->isOrgaTeam()) {
@@ -558,7 +557,6 @@ class Session
 
 		return false;
 	}
-
 
 	public function isBotForA($regions_ids, $include_groups = true, $include_parent_regions = false): bool
 	{
