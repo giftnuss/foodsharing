@@ -36,6 +36,7 @@
 - removed the old qr code library and chaged the current qr on the fs-passes to show the fs profile !685 #144 @peter.toennies
 - trigger fairteiler wallpost notifications in backend !700 @NerdyProjects
 - use API endpoint to delete users to avoid CSRF problems !717 @NerdyProjects
+- use API endpoint to delete regions/workgroups to avoid CSRF problems !719 @NerdyProjects
 
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen
