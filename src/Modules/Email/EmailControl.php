@@ -241,15 +241,14 @@ class EmailControl extends Control
 				  overlay : {closeClick: false}
 				}
 			});
-	
+
 			$("#' . $id . '-link").trigger("click");
-	
+
 			$("#' . $id . '-continue").button().on("click", function(){
-	
 				' . $id . '_continue_xhr();
 				return false;
 			});
-						
+
 			$("#' . $id . '-abort").button().on("click", function(){
 				showLoader();
 				$.ajax({
@@ -258,8 +257,8 @@ class EmailControl extends Control
 					complete:function(){hideLoader();closeBox();}
 				});
 			});
-						
-	
+
+
 		');
 
 		$this->func->addJsFunc('
@@ -300,12 +299,12 @@ class EmailControl extends Control
 				<div class="popbox" id="' . $id . '">
 					<h3>E-Mail senden</h3>
 					<p class="subtitle">Es sind noch <span id="' . $id . '-left">' . $mail['anz'] . '</span> E-Mails zu versenden</p>
-	
+
 					<div id="' . $id . '-comment">
 						' . $this->v_utils->v_input_wrapper('Empfänger', '<div' . $style . '>' . implode(', ', $recip) . '</div>') . '
 						' . $this->v_utils->v_input_wrapper($this->func->s('subject'), $mail['name']) . '
 						' . $this->v_utils->v_input_wrapper($this->func->s('message'), nl2br($mail['message'])) . '
-					
+
 					</div>
 					<a id="' . $id . '-continue" href="#">Mit dem Senden weitermachen</a> <a id="' . $id . '-abort" href="#">Senden Abbrechen</a>
 				</div>');

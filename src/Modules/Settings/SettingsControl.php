@@ -324,12 +324,12 @@ class SettingsControl extends Control
 						check = false;
 						error("Du musst einen Bezirk ausw&auml;hlen");
 					}
-				
+
 					if(!check)
 					{
 						ev.preventDefault();
 					}
-				
+
 				});');
 
 				// Rechtsvereinbarung
