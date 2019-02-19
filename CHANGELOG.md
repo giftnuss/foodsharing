@@ -29,6 +29,7 @@
 - Only foodsavers add themselves to working groups !713 @NerdyProjects
 - Only allow edting regions as an orga user !714 @NerdyProjects
 - higher entropy for security & privacy related tokens !709 @alangecker
+- Fix recently broken quiz session storage !730 @NerdyProjects
 
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies
