@@ -14,7 +14,7 @@ use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateAdminGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Services\SanitizerService;
 
-class Func
+final class Func
 {
 	private $content_main;
 	private $content_right;
