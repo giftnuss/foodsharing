@@ -24,7 +24,7 @@ class GroupRestController extends AbstractFOSRestController
 	 *
 	 * @Rest\Delete("groups/{groupId}", requirements={"groupId" = "\d+"})
 	 */
-	public function deleteGroupAction($groupId)
+	public function deleteGroupAction(int $groupId)
 	{
 		if (!$this->session->may('orga')) {
 			throw new HttpException(403);

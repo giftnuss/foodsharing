@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: matthias
- * Date: 19.02.19
- * Time: 12:11.
- */
 
 namespace Foodsharing\api;
 
