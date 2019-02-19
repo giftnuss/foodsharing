@@ -106,9 +106,9 @@ class EmailControl extends Control
 	private function handleEmail()
 	{
 		if ($this->func->submitted()) {
-			$betreff = $this->getPost('subject');
-			$nachricht = $this->getPost('message');
-			$mailbox_id = $this->getPost('mailbox_id');
+			$betreff = $_POST['subject'];
+			$nachricht = $_POST['message'];
+			$mailbox_id = $_POST['mailbox_id'];
 
 			$nachricht = $this->handleImages($nachricht);
 
@@ -216,11 +216,6 @@ class EmailControl extends Control
 				$this->func->error('In den ausgew&auml;hlten Bezirken gibt es noch keine Foodsaver');
 			}
 		}
-	}
-
-	public function getPost($id)
-	{
-		return $_POST[$id];
 	}
 
 	private function handleAttach($name)
@@ -413,17 +408,12 @@ class EmailControl extends Control
 
 			return $html;
 		} catch (Exception $e) {
-			if ($this->isAdmin()) {
+			if ($_SESSION['client']['group']['admin'] === true && $this->session->mayGroup('admin')) {
 				echo $e->getMessage();
 				die();
 			}
 
 			return $body;
 		}
-	}
-
-	private function isAdmin()
-	{
-		return $this->session->mayGroup('admin') && $_SESSION['client']['group']['admin'] === true;
 	}
 }

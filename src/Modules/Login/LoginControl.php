@@ -169,7 +169,7 @@ class LoginControl extends Control
 					if ($_POST['pass1'] == $_POST['pass2']) {
 						$check = true;
 						if ($this->model->newPassword($_POST)) {
-							$this->success('Prima, Dein Passwort wurde erfolgreich geändert. Du kannst Dich jetzt Dich einloggen.');
+							$this->view->success('Prima, Dein Passwort wurde erfolgreich geändert. Du kannst Dich jetzt Dich einloggen.');
 						} elseif (strlen($_POST['pass1']) < 5) {
 							$check = false;
 							$this->func->error('Sorry, Dein gewähltes Passwort ist zu kurz.');
@@ -202,14 +202,5 @@ class LoginControl extends Control
 		} else {
 			$this->func->addContent($this->view->passwordRequest());
 		}
-	}
-
-	private function success($msg, $title = false)
-	{
-		$t = '';
-		if ($title !== false) {
-			$t = '<strong>' . $title . '</strong> ';
-		}
-		$_SESSION['msg']['success'][] = $t . $msg;
 	}
 }
