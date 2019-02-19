@@ -2,9 +2,10 @@
   <div class="container bootstrap">
     <div class="card mb-3 rounded">
       <div class="card-header text-white bg-primary">
-        Alle Betriebe aus dem Bezirk {{ regionName }} (<span v-if="stores.length !== storesFiltered.length">
-          {{ storesFiltered.length }} von
-        </span>{{ stores.length }})
+        Alle Betriebe aus dem Bezirk {{ regionName }} 
+        <span>
+          {{ $i18n('memberlist.some_in_all', {some: storesFiltered.length, all: stores.length}) }}
+        </span>
       </div>
       <div
         v-if="stores.length"
