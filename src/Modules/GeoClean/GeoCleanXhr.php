@@ -33,9 +33,9 @@ class GeoCleanXhr extends Control
 		if (!$this->session->may('orga')) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		$lat = $_GET['lat'];
-		$lon = $_GET['lon'];
-		$fsid = $_GET['id'];
+		$lat = floatval($_GET['lat']);
+		$lon = floatval($_GET['lon']);
+		$fsid = (int)$_GET['id'];
 
 		if ($this->model->updateGeo($fsid, $lat, $lon)) {
 			return array(
