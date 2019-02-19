@@ -29,8 +29,6 @@ class Func
 	private $head;
 	private $title;
 	private $ids;
-	private $scripts;
-	private $stylesheets;
 	private $add_css;
 	private $sanitizerService;
 	private $regionGateway;
@@ -85,8 +83,6 @@ class Func
 		$this->title = array('foodsharing');
 
 		$this->ids = array();
-		$this->scripts = array();
-		$this->stylesheets = array();
 		$this->add_css = '';
 	}
 
