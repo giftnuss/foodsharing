@@ -15,7 +15,6 @@ class XhrDialog
 	private $script;
 	private $scriptBefore;
 	private $scriptAfter;
-	private $onclose;
 	private $onopen;
 	private $classnames;
 	/**
@@ -39,7 +38,6 @@ class XhrDialog
 		$this->script = '';
 		$this->content = '';
 		$this->scriptBefore = '';
-		$this->onclose = array();
 		$this->onopen = array();
 		$this->classnames = array();
 		$this->sanitizerService = $container->get(SanitizerService::class);
@@ -109,11 +107,6 @@ class XhrDialog
 		);
 	}
 
-	public function onClose($js)
-	{
-		$this->onclose[] = $js;
-	}
-
 	public function onOpen($js)
 	{
 		$this->onopen[] = $js;
@@ -125,17 +118,6 @@ class XhrDialog
 			'text' => $text,
 			'click' => $click
 		);
-	}
-
-	public function removeTitlebar()
-	{
-		$this->onOpen('$("#' . $this->getId() . '").siblings("div.ui-dialog-titlebar").remove();');
-	}
-
-	public function noClose()
-	{
-		$this->onOpen('$(".ui-dialog-titlebar-close").hide();');
-		$this->addOpt('closeOnEscape', 'false', false);
 	}
 
 	public function setResizeable($val = true)
@@ -213,9 +195,6 @@ class XhrDialog
 
 		$this->addJs('$("#' . $this->id . '").dialog("option", "position", "center");');
 
-		if (!empty($this->onclose)) {
-			$this->addOpt('open', 'function( event, ui ) {alert(0);' . implode(' ', $this->onclose) . '}', false);
-		}
 		if (!empty($this->onopen)) {
 			$this->addOpt('open', 'function( event, ui ) {' . implode(' ', $this->onopen) . '}', false);
 		}

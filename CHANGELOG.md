@@ -14,6 +14,7 @@
 - Start page content over content manager #470 !701 @k.miklobusec
 - Added profile status infos for store and pickup entries for ambassadors !705 @jofranz
 - Scale down font size on passports for long names !685 @NerdyProjects
+- CSRF protection for API requests !715 @alangecker
 
 ## Bugfixes
 - Search index is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
@@ -37,10 +38,12 @@
 - trigger fairteiler wallpost notifications in backend !700 @NerdyProjects
 - use API endpoint to delete users to avoid CSRF problems !717 @NerdyProjects
 - use API endpoint to delete regions/workgroups to avoid CSRF problems !719 @NerdyProjects
+- removed unused php,js and css code !720 @alangecker
 
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen
 - disable backup_globals for PHPUnit to have unit tests working in dev again !696 @NerdyProjects
+- fix xdebug by enabling x-forwarded-for header in webpack devserver !725 @NerdyProjects
 
 # 2019-02-19 Hotfix
 - Backport some changes that were needed for yesterdays hotfix

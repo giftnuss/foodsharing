@@ -16,6 +16,7 @@ module.exports = {
       '!/sockjs-node/**': {
         target,
         changeOrigin: true,
+        xfwd: true,
         ws: true
       }
     }

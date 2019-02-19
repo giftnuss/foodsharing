@@ -354,14 +354,6 @@ class MailboxXhr extends Control
 		}
 	}
 
-	public function refresh()
-	{
-		return array(
-			'status' => 1,
-			'script' => 'mb_refresh();'
-		);
-	}
-
 	private function libPlainMail($to, $from, $subject, $message, $attach = false)
 	{
 		if (is_array($to) && !isset($to['name'])) {
