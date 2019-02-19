@@ -515,6 +515,11 @@ class Session
 
 	public function isValidCsrfToken(string $key, string $token): bool
 	{
+		// enable CSRF Protection only for loggedin users
+		if (!$this->id()) {
+			return true;
+		}
+
 		if (defined('CSRF_TEST_TOKEN') && $token === CSRF_TEST_TOKEN) {
 			return true;
 		}
