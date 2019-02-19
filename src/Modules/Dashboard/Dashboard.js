@@ -3,4 +3,15 @@ import '@/globals'
 
 import activity from '@/activity'
 
-activity.init()
+import { vueRegister, vueApply } from '@/vue'
+import DashboardThread from './components/ActivityThread'
+
+// activity.init()
+
+vueRegister({
+    DashboardThread
+})
+
+vueApply('#activity-thread')
+
+

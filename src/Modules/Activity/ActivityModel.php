@@ -47,6 +47,17 @@ class ActivityModel extends Db
 				$title = 'Essenskorb #' . $u['basket_id'];
 
 				$out[] = [
+					'type' => 'foodbasket',
+					'data' => [
+						'fs_id' => $u['fs_id'],
+						'fs_name' => $u['fs_name'],
+						'basked_id' => $u['basket_id'],
+						'desc' => $u['body'],
+						'time' => $u['time'],
+						'icon' => $this->func->img($u['fs_photo'], 50),
+						'time_ts' => $u['time_ts'],
+						'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=basket&id=' . (int)$u['basket_id']
+					],
 					'attr' => [
 						'href' => '/profile/' . $u['fs_id']
 					],
@@ -113,6 +124,17 @@ class ActivityModel extends Db
 				}
 
 				$out[] = [
+					'type' => 'friendWall',
+					'data' => [
+						'fs_id' => $u['fs_id'],
+						'fs_name' => $u['fs_name'],
+						'poster_id' => $u['poster_id'],
+						'poster_name' => $u['poster_name'],
+						'desc' => $u['body'],
+						'time' => $u['time'],
+						'icon' => $this->func->img($u['fs_photo'], 50),
+						'time_ts' => $u['time_ts']
+					],
 					'attr' => [
 						'href' => '/profile/' . $u['fs_id']
 					],
@@ -160,6 +182,18 @@ class ActivityModel extends Db
 					}
 
 					$out[] = [
+						'type' => 'mailbox',
+						'data' => [
+							'sender_email' => $sender['mailbox'] . '@' . $sender['host'],
+							'mailbox_id' => $u['id'],
+							'subject' => $u['subject'],
+							'mailbox_name' => $u['mb_name'] . '@' . PLATFORM_MAILBOX_HOST,
+							'desc' => $u['body'],
+							'time' => $u['time'],
+							'icon' => '/img/mailbox-50x50.png',
+							'time_ts' => $u['time_ts'],
+							'quickreply' => '/xhrapp.php?app=mailbox&m=quickreply&mid=' . (int)$u['id']
+						],
 						'attr' => [
 							'href' => '/?page=mailbox&show=' . $u['id']
 						],
@@ -214,6 +248,19 @@ class ActivityModel extends Db
 
 				if ($check) {
 					$out[] = [
+						'type' => 'forum',
+						'data' => [
+							'fs_id' => (int)$u['foodsaver_id'],
+							'fs_name' => $u['foodsaver_name'],
+							'forum_href' => $url,
+							'forum_name' => $u['name'],
+							'region_name' => $u['bezirk_name'],
+							'desc' => $u['post_body'],
+							'time' => $u['update_time'],
+							'icon' => $this->func->img($u['foodsaver_photo'], 50),
+							'time_ts' => $u['update_time_ts'],
+							'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $sub
+						],
 						'attr' => [
 							'href' => $url
 						],
@@ -239,6 +286,17 @@ class ActivityModel extends Db
 			$out = array();
 			foreach ($ret as $r) {
 				$out[] = [
+					'type' => 'store',
+					'data' => [
+						'fs_id' => $r['foodsaver_id'],
+						'fs_name' => $r['foodsaver_name'],
+						'store_id' => $r['betrieb_id'],
+						'store_name' => $r['betrieb_name'],
+						'desc' => $r['text'],
+						'time' => $r['update_time'],
+						'icon' => $this->func->img($r['foodsaver_photo'], 50),
+						'time_ts' => $r['update_time_ts']
+					],
 					'attr' => [
 						'href' => '/?page=fsbetrieb&id=' . $r['betrieb_id']
 					],
