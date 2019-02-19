@@ -39,6 +39,7 @@
 - use API endpoint to delete users to avoid CSRF problems !717 @NerdyProjects
 - use API endpoint to delete regions/workgroups to avoid CSRF problems !719 @NerdyProjects
 - removed unused php,js and css code !720 @alangecker
+- user normalisation in conversations API endpoint
 
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen
