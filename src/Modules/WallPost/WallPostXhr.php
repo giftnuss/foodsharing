@@ -82,6 +82,10 @@ class WallPostXhr extends Control
 
 	public function update()
 	{
+		if (!$this->wallPostPermissions->mayReadWall($this->session->id(), $this->table, $this->id)) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+		
 		if ((int)$this->wallPostGateway->getLastPostId($this->table, $this->id) != (int)$_GET['last']) {
 			if ($posts = $this->wallPostGateway->getPosts($this->table, $this->id)) {
 				return array(
