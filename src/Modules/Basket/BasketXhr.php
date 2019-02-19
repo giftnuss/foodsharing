@@ -9,6 +9,7 @@ use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
 use Foodsharing\Modules\Message\MessageModel;
+use Foodsharing\Lib\Xhr\XhrResponses;
 
 class BasketXhr extends Control
 {
@@ -542,14 +543,18 @@ class BasketXhr extends Control
 		];
 	}
 
-	public function editBasket(): array
+	public function editBasket()
 	{
+		$basket = $this->basketGateway->getBasket($_GET['id']);
+
+		if ($basket['fs_id'] !== $this->session->id()) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+
 		$dia = new XhrDialog();
 		$dia->setTitle($this->func->s('basket_edit'));
 
 		$dia->addPictureField('picture');
-
-		$basket = $this->basketGateway->getBasket($_GET['id']);
 
 		$dia->addContent($this->view->basketEditForm($basket));
 
