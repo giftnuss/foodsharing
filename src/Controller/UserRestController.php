@@ -65,7 +65,7 @@ class UserRestController extends FOSRestController
 	 */
 	public function deleteUserAction(int $userId)
 	{
-		if ($userId != $this->session->id() && !$this->session->may('orga')) {
+		if ($userId !== $this->session->id() && !$this->session->may('orga')) {
 			throw new HttpException(403);
 		}
 

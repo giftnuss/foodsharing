@@ -37,6 +37,7 @@ async function confirmDeleteAccount (fsId) {
       goTo('/')
     } catch (err) {
       pulseError(i18n('error_unexpected'))
+      throw err
     }
   }
 }

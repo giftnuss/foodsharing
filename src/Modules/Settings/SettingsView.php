@@ -438,7 +438,7 @@ class SettingsView extends View
 				', 'Dein Abholkalender', array('class' => 'ui-padding'));
 	}
 
-	public function delete_account($fsId)
+	public function delete_account(int $fsId)
 	{
 		$content =
 			'<button type="button" id="delete-account" class="ui-button" onclick="confirmDeleteAccount(' . $fsId . ')">' . $this->func->s('delete_now') . '</button>'
