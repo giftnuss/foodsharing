@@ -42,6 +42,7 @@
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen
 - disable backup_globals for PHPUnit to have unit tests working in dev again !696 @NerdyProjects
+- fix xdebug by enabling x-forwarded-for header in webpack devserver !725 @NerdyProjects
 
 # 2019-02-19 Hotfix
 - Backport some changes that were needed for yesterdays hotfix
