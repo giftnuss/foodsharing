@@ -6,6 +6,7 @@ use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Services\SanitizerService;
+use PhpParser\Node\Scalar\String_;
 
 class View
 {
@@ -125,34 +126,6 @@ class View
 				</div>
 			</div>
 		</div>';
-	}
-
-	public function placeFsIcons($foodsavers, $maxNumberOfAvatars)
-	{
-		if (!empty($foodsavers)) {
-			$out = '<ul class="fsicons">';
-
-			if (count($foodsavers) > $maxNumberOfAvatars) {
-				shuffle($foodsavers);
-				$foodsaverDisplayed = array_slice($foodsavers, 0, $maxNumberOfAvatars);
-			} else {
-				$foodsaverDisplayed = $foodsavers;
-			}
-
-			foreach ($foodsaverDisplayed as $fs) {
-				$out .= '
-				<li>
-					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->func->img($fs['photo']) . ');" href="/profile/' . (int)$fs['id'] . '"><span></span></a>	
-				</li>';
-			}
-			if ((count($foodsaverDisplayed) >= $maxNumberOfAvatars)) {
-				$out .= '<li class="row">...und ' . (count($foodsavers) - $maxNumberOfAvatars) . ' weitere</li></ul>';
-			}
-
-			return $out;
-		}
-
-		return '';
 	}
 
 	public function fsAvatarList($foodsaver, $option = array())
