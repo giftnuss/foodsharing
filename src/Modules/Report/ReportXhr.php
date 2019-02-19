@@ -30,7 +30,7 @@ class ReportXhr extends Control
 
 	public function loadReport(): ?array
 	{
-		if ($this->func->mayHandleReports() && $report = $this->reportGateway->getReport($_GET['id'])) {
+		if ($this->session->mayHandleReports() && $report = $this->reportGateway->getReport($_GET['id'])) {
 			$reason = explode('=>', $report['tvalue']);
 
 			$dialog = new XhrDialog();
@@ -74,7 +74,7 @@ class ReportXhr extends Control
 
 	public function comReport(): ?array
 	{
-		if ($this->func->mayHandleReports()) {
+		if ($this->session->mayHandleReports()) {
 			$this->reportGateway->confirmReport($_GET['id']);
 			$this->func->info('Meldung wurde bestätigt!');
 
@@ -87,7 +87,7 @@ class ReportXhr extends Control
 
 	public function delReport(): ?array
 	{
-		if ($this->func->mayHandleReports()) {
+		if ($this->session->mayHandleReports()) {
 			$this->reportGateway->delReport($_GET['id']);
 			$this->func->info('Meldung wurde gelöscht!');
 

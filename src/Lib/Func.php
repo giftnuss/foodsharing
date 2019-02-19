@@ -278,24 +278,6 @@ class Func
 		return false;
 	}
 
-	public function isBotForA($regions_ids, $include_groups = true, $include_parent_regions = false): bool
-	{
-		if (is_array($regions_ids) && count($regions_ids) && $this->session->isAmbassador()) {
-			if ($include_parent_regions) {
-				$regions_ids = $this->regionGateway->listRegionsIncludingParents($regions_ids);
-			}
-			foreach ($_SESSION['client']['botschafter'] as $b) {
-				foreach ($regions_ids as $bid) {
-					if ($b['bezirk_id'] == $bid && ($include_groups || $b['type'] != Type::WORKING_GROUP)) {
-						return true;
-					}
-				}
-			}
-		}
-
-		return false;
-	}
-
 	public function getMenu()
 	{
 		$regions = [];
@@ -322,9 +304,9 @@ class Func
 			$regions,
 			$this->session->may('fs'),
 			$this->session->isOrgaTeam(),
-			$this->mayEditBlog(),
-			$this->mayEditQuiz(),
-			$this->mayHandleReports(),
+			$this->session->mayEditBlog(),
+			$this->session->mayEditQuiz(),
+			$this->session->mayHandleReports(),
 			$stores,
 			$workingGroups,
 			$this->session->get('mailbox'),
@@ -759,7 +741,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'firstname' => $user['name'],
 			'lastname' => $user['nachname'],
 			'may' => $this->session->may(),
-			'verified' => $this->isVerified(),
+			'verified' => $this->session->isVerified(),
 			'avatar' => [
 				'mini' => $this->img($user['photo'], 'mini'),
 				'50' => $this->img($user['photo'], '50'),
@@ -883,19 +865,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 				]
 			]
 		];
-	}
-
-	public function isVerified()
-	{
-		if ($this->session->isOrgaTeam()) {
-			return true;
-		}
-
-		if (isset($_SESSION['client']['verified']) && $_SESSION['client']['verified'] == 1) {
-			return true;
-		}
-
-		return false;
 	}
 
 	public function validEmail($email)
@@ -1032,36 +1001,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 	});
 	');
-	}
-
-	public function mayBezirk($bid): bool
-	{
-		return isset($_SESSION['client']['bezirke'][$bid]) || $this->session->isAdminFor($bid) || $this->session->isOrgaTeam();
-	}
-
-	public function mayHandleReports()
-	{
-		// group "Regelverletzungen/Meldungen"
-		return $this->session->may('orga') || $this->session->isAdminFor(432);
-	}
-
-	public function mayEditQuiz()
-	{
-		return $this->session->may('orga') || $this->session->isAdminFor(341);
-	}
-
-	public function mayEditBlog()
-	{
-		if ($all_group_admins = $this->mem->get('all_global_group_admins')) {
-			return $this->session->may('orga') || in_array($this->session->id(), unserialize($all_group_admins));
-		}
-
-		return $this->session->may('orga');
-	}
-
-	public function may(): bool
-	{
-		return isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0;
 	}
 
 	private function resizeImg($img, $width, $format)

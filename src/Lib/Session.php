@@ -9,6 +9,7 @@ use Flourish\fSession;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Buddy\BuddyGateway;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Legal\LegalControl;
 use Foodsharing\Modules\Legal\LegalGateway;
@@ -165,6 +166,12 @@ class Session
 		}
 
 		return false;
+	}
+
+	// this is the old versin from Func (which had the same name as the method above)
+	public function mayLegacy(): bool
+	{
+		return isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0;
 	}
 
 	public function getLocation()
@@ -511,5 +518,63 @@ class Session
 		);
 
 		return $roles[$roleInt];
+	}
+
+	public function mayBezirk($bid): bool
+	{
+		return isset($_SESSION['client']['bezirke'][$bid]) || $this->isAdminFor($bid) || $this->isOrgaTeam();
+	}
+
+	public function mayHandleReports()
+	{
+		// group "Regelverletzungen/Meldungen"
+		return $this->may('orga') || $this->isAdminFor(432);
+	}
+
+	public function mayEditQuiz()
+	{
+		return $this->may('orga') || $this->isAdminFor(341);
+	}
+
+	public function mayEditBlog()
+	{
+		if ($all_group_admins = $this->mem->get('all_global_group_admins')) {
+			return $this->may('orga') || in_array($this->id(), unserialize($all_group_admins));
+		}
+
+		return $this->may('orga');
+	}
+
+
+	public function isVerified()
+	{
+		if ($this->isOrgaTeam()) {
+			return true;
+		}
+
+		if (isset($_SESSION['client']['verified']) && $_SESSION['client']['verified'] == 1) {
+			return true;
+		}
+
+		return false;
+	}
+
+
+	public function isBotForA($regions_ids, $include_groups = true, $include_parent_regions = false): bool
+	{
+		if (is_array($regions_ids) && count($regions_ids) && $this->isAmbassador()) {
+			if ($include_parent_regions) {
+				$regions_ids = $this->regionGateway->listRegionsIncludingParents($regions_ids);
+			}
+			foreach ($_SESSION['client']['botschafter'] as $b) {
+				foreach ($regions_ids as $bid) {
+					if ($b['bezirk_id'] == $bid && ($include_groups || $b['type'] != Type::WORKING_GROUP)) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
 	}
 }

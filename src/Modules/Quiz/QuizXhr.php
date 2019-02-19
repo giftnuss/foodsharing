@@ -34,7 +34,7 @@ class QuizXhr extends Control
 	[fp] => fdgh
 )
 		 */
-		if ($this->func->mayEditQuiz()) {
+		if ($this->session->mayEditQuiz()) {
 			if (isset($_GET['text'], $_GET['fp'], $_GET['qid'])) {
 				$fp = (int)$_GET['fp'];
 				$text = strip_tags($_GET['text']);
@@ -61,7 +61,7 @@ class QuizXhr extends Control
 
 	public function delquest()
 	{
-		if ($this->func->mayEditQuiz() && isset($_GET['id'])) {
+		if ($this->session->mayEditQuiz() && isset($_GET['id'])) {
 			$this->model->deleteQuest($_GET['id']);
 
 			return array(
@@ -73,7 +73,7 @@ class QuizXhr extends Control
 
 	public function delanswer()
 	{
-		if ($this->func->mayEditQuiz() && isset($_GET['id'])) {
+		if ($this->session->mayEditQuiz() && isset($_GET['id'])) {
 			$this->model->deleteAnswer($_GET['id']);
 
 			return array(
@@ -92,7 +92,7 @@ class QuizXhr extends Control
 		text	458
 		 */
 
-		if ($this->func->mayEditQuiz()) {
+		if ($this->session->mayEditQuiz()) {
 			if (isset($_GET['text'], $_GET['right'], $_GET['qid'])) {
 				$text = strip_tags($_GET['text']);
 				$exp = strip_tags($_GET['explanation']);
@@ -117,7 +117,7 @@ class QuizXhr extends Control
 
 	public function updateansw()
 	{
-		if ($this->func->mayEditQuiz()) {
+		if ($this->session->mayEditQuiz()) {
 			if (isset($_GET['text'], $_GET['right'], $_GET['id'])) {
 				$text = strip_tags($_GET['text']);
 				$exp = strip_tags($_GET['explanation']);
@@ -146,7 +146,7 @@ class QuizXhr extends Control
 
 	public function editanswer()
 	{
-		if ($this->func->mayEditQuiz()) {
+		if ($this->session->mayEditQuiz()) {
 			if ($answer = $this->model->getAnswer($_GET['id'])) {
 				$answer['isright'] = $answer['right'];
 				$this->func->setEditData($answer);
@@ -224,7 +224,7 @@ class QuizXhr extends Control
 
 	public function editquest()
 	{
-		if ($this->func->mayEditQuiz()) {
+		if ($this->session->mayEditQuiz()) {
 			if ($quest = $this->model->getQuestion($_GET['id'])) {
 				$this->func->setEditData($quest);
 				$dia = new XhrDialog();
@@ -1158,7 +1158,7 @@ class QuizXhr extends Control
 
 	public function updatequest()
 	{
-		if ($this->func->mayEditQuiz()) {
+		if ($this->session->mayEditQuiz()) {
 			/*
 			 *   [id] => 10
 				 [text] => test

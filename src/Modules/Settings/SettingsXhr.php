@@ -32,7 +32,7 @@ class SettingsXhr extends Control
 
 	public function changemail()
 	{
-		if ($this->func->may()) {
+		if ($this->session->mayLegacy()) {
 			$dia = new XhrDialog();
 			$dia->setTitle('E-Mail-Adresse ändern');
 

@@ -99,7 +99,7 @@ class XhrMethods
 	{
 		$bids = $this->regionGateway->getFsRegionIds((int)$data['fid']);
 
-		if ($this->func->isBotForA($bids, false, true) || $this->session->isOrgaTeam()) {
+		if ($this->session->isBotForA($bids, false, true) || $this->session->isOrgaTeam()) {
 			if ($countver = $this->model->qOne('SELECT COUNT(*) FROM fs_verify_history WHERE date BETWEEN NOW()- INTERVAL 20 SECOND AND now() AND bot_id = ' . $this->session->id())) {
 				if ($countver > 10) {
 					return json_encode(array(
@@ -249,7 +249,7 @@ class XhrMethods
 			'blog_entry' => true
 		);
 
-		if ($this->func->may()) {
+		if ($this->session->mayLegacy()) {
 			if (isset($allowed[$data['t']])) {
 				if ($this->model->update('UPDATE `fs_' . $data['t'] . '` SET `active` = ' . (int)$data['value'] . ' WHERE `id` = ' . (int)$data['id'])) {
 					return 1;
@@ -702,7 +702,7 @@ class XhrMethods
 
 	public function xhr_getRecip($data)
 	{
-		if ($this->func->may()) {
+		if ($this->session->mayLegacy()) {
 			$fs = $this->foodsaverGateway->xhrGetFoodsaver($data);
 
 			return json_encode($fs);
@@ -1384,7 +1384,7 @@ class XhrMethods
 
 	public function xhr_addFetcher($data)
 	{
-		if (($this->storeGateway->isInTeam($this->session->id(), $data['bid']) || $this->session->isAmbassador() || $this->session->isOrgaTeam()) && $this->func->isVerified()) {
+		if (($this->storeGateway->isInTeam($this->session->id(), $data['bid']) || $this->session->isAmbassador() || $this->session->isOrgaTeam()) && $this->session->isVerified()) {
 			/*
 			 * 	[f] => addFetcher
 				[date] => 2013-09-23 20:00:00

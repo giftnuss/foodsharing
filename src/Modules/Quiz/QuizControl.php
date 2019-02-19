@@ -15,7 +15,7 @@ class QuizControl extends Control
 
 		if (!$this->session->may()) {
 			$this->goLogin();
-		} elseif (!$this->func->mayEditQuiz()) {
+		} elseif (!$this->session->mayEditQuiz()) {
 			$this->func->go('/');
 		}
 	}
