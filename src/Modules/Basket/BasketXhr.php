@@ -467,13 +467,16 @@ class BasketXhr extends Control
 
 	public function answer()
 	{
-		if ($id = $this->model->getVal('foodsaver_id', 'basket', $_GET['id'])) {
+		$basketId = (int)$_GET['id'];
+		$fsId = (int)$_GET['fid'];
+
+		if ($id = $this->model->getVal('foodsaver_id', 'basket', $basketId)) {
 			if ($id == $this->session->id()) {
-				$this->basketGateway->setStatus($_GET['id'], Status::REQUESTED_MESSAGE_READ, $_GET['fid']);
+				$this->basketGateway->setStatus($basketId, Status::REQUESTED_MESSAGE_READ, $fsId);
 
 				return array(
 					'status' => 1,
-					'script' => 'chat(' . $_GET['fid'] . ');basketStore.loadBaskets();',
+					'script' => 'chat(' . $fsId . ');basketStore.loadBaskets();',
 				);
 			}
 		}
