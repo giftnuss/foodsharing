@@ -9,7 +9,9 @@ if (window.fetch) window.fetch.activeFetchCalls = 0
 
 export function getCsrfToken () {
   if (!document.cookie) return null
-  return document.cookie.match(/CSRF_TOKEN=([0-9a-f]+)/)[1]
+  const match = document.cookie.match(/CSRF_TOKEN=([0-9a-f]+)/)
+  if (!match) return null
+  return match[1]
 }
 
 export class HTTPError extends Error {
