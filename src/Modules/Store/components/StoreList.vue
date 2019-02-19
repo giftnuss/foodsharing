@@ -2,7 +2,7 @@
   <div class="container bootstrap">
     <div class="card mb-3 rounded">
       <div class="card-header text-white bg-primary">
-        Alle Betriebe aus dem Bezirk {{ regionName }} 
+        Alle Betriebe aus dem Bezirk {{ regionName }}
         <span>
           {{ $i18n('memberlist.some_in_all', {some: storesFiltered.length, all: stores.length}) }}
         </span>
@@ -102,8 +102,6 @@ import bFormSelect from '@b/components/form-select/form-select'
 import bTooltip from '@b/directives/tooltip/tooltip'
 import StoreStatusIcon from './StoreStatusIcon.vue'
 
-const noLocale = /^[\w-.\s,]*$/
-
 export default {
   components: { bTable, bPagination, bFormSelect, StoreStatusIcon },
   directives: { bTooltip },
@@ -153,7 +151,7 @@ export default {
         { value: 3, text: 'In Kooperation' },
         { value: 4, text: 'Will nicht kooperieren' },
         { value: 6, text: 'Wirft nichts weg' }
-      ],
+      ]
     }
   },
   computed: {
@@ -174,7 +172,7 @@ export default {
   },
   methods: {
     compare: optimizedCompare,
-    
+
     clearFilter () {
       this.filterStatus = null
       this.filterText = ''

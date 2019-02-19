@@ -2,19 +2,19 @@
   <div class="container bootstrap">
     <div class="card mb-3 rounded">
       <div
-        v-if="!isWorkGroup"
+        v-if="isWorkGroup"
         class="card-header text-white bg-primary"
       >
-        {{ $i18n('memberlist.header_for_district', {bezirk: regionName}) }}
+        {{ $i18n('memberlist.header_for_workgroup', {bezirk: regionName}) }}
         <span>
           {{ $i18n('memberlist.some_in_all', {some: membersFiltered.length, all: members.length}) }}
         </span>
       </div>
       <div
-        v-if="isWorkGroup"
+        v-else
         class="card-header text-white bg-primary"
       >
-        {{ $i18n('memberlist.header_for_workgroup', {bezirk: regionName}) }}
+        {{ $i18n('memberlist.header_for_district', {bezirk: regionName}) }}
         <span>
           {{ $i18n('memberlist.some_in_all', {some: membersFiltered.length, all: members.length}) }}
         </span>
@@ -71,7 +71,7 @@
             <img
               :src="data.value"
               :alt="$i18n('terminology.profile_picture')"
-            />
+            >
           </div>
         </template>
         <template

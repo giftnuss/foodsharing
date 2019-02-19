@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class RegionControl extends Control
+final class RegionControl extends Control
 {
 	private $region;
 	private $gateway;
@@ -284,7 +284,7 @@ class RegionControl extends Control
 		$response->setContent($this->render('pages/Region/applications.twig', $viewdata));
 	}
 
-	private function members(Request $request, Response $response, $region)
+	private function members(Request $request, Response $response, array $region): void
 	{
 		$this->func->addBread($this->translator->trans('group.members'), '/?page=bezirk&bid=' . $region['id'] . '&sub=members');
 		$this->func->addTitle($this->translator->trans('group.members'));
