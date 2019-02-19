@@ -10,6 +10,7 @@
 - Added API endpoints for basket pictures !671 @alex.simm 
 - Allow use of markdown in Fair-Teiler description !690 @NerdyProjects
 - Joining regions REST API !696 @NerdyProjects
+- Prevent group admins to be able to access the passport generation page #706 #392 @jofranz
 - Start page content over content manager #470 !701 @k.miklobusec
 - Added profile status infos for store and pickup entries for ambassadors !705 @jofranz
 - Scale down font size on passports for long names !685 @NerdyProjects
@@ -33,13 +34,27 @@
 - remove unused methods in XhrMethods !694 @NerdyProjects
 - trigger Fair-Teiler wallpost notifications in backend !700 @NerdyProjects
 - removed the old qr code library and chaged the current qr on the fs-passes to show the fs profile !685 #144 @peter.toennies
+- trigger fairteiler wallpost notifications in backend !700 @NerdyProjects
+- use API endpoint to delete users to avoid CSRF problems !717 @NerdyProjects
 
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen
 - disable backup_globals for PHPUnit to have unit tests working in dev again !696 @NerdyProjects
 
+# 2019-02-19 Hotfix
+- Backport some changes that were needed for yesterdays hotfix
+- Conversation API returns name (or null) !658 @nicksellen 
+- Fixup conversation header display !658 @nicksellen
+
 # 2019-02-18 Hotfix
 - fix for 9 SQL injection vulnerabilities #472 @alangecker
+- Fix mass mail sender and email output formatting !707 @NerdyProjects
+
+# 2019-02-16 Hotfix
+- Fixed an SQL injection in a FoodsaverGateway method @alangecker
+
+# 2019-02-02 Hotfix
+- readded adresspicker functionality to Fair-Teiler creation page !668 @peter.toennies
 
 # 2019-01-25
 Matthias: "Are there any concerns about merging the addresspicker / map / geolocation to production?"

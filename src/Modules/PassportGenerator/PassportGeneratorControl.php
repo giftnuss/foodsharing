@@ -38,7 +38,8 @@ final class PassportGeneratorControl extends Control
 			$this->regionId = $this->session->getCurrentBezirkId();
 		}
 
-		if ($this->session->isAdminFor($this->regionId) || $this->session->isOrgaTeam()) {
+		// isBotForA() returns true if user is an ambassador (AMB) for this region. If the user is an AMB and the bezirk/region is a working group it returns false
+		if ($this->func->isBotForA([$this->regionId], false, true) || $this->session->isOrgaTeam()) {
 			$this->region = false;
 			if ($region = $this->regionGateway->getBezirk($this->regionId)) {
 				$this->region = $region;

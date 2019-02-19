@@ -30,10 +30,6 @@ class FoodsaverControl extends Control
 		$this->foodsaverGateway = $foodsaverGateway;
 
 		parent::__construct();
-
-		if (isset($_GET['deleteaccount'])) {
-			$this->deleteAccount($_GET['id']);
-		}
 	}
 
 	/*
@@ -82,26 +78,12 @@ class FoodsaverControl extends Control
 				$this->func->addContent($this->view->foodsaver_form($data['name'] . ' ' . $data['nachname'] . ' bearbeiten', $regionDetails));
 
 				$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-					array('href' => '/profile/' . $data['id'], 'name' => $this->func->s('back_to_profile'))
+					array('href' => '/profile/' . $data['id'], 'name' => $this->func->s('back_to_profile')),
+					array('click' => 'fsapp.confirmDeleteUser(' . $data['id'] . ')', 'name' => $this->func->s('delete_account'))
 				)), $this->func->s('actions')), CNT_RIGHT);
-
-				if ($this->session->isOrgaTeam()) {
-					$this->func->addContent($this->view->u_delete_account(), CNT_RIGHT);
-				}
 			}
 		} else {
 			$this->func->addContent($this->v_utils->v_info('Du hast leider keine Berechtigung für diesen Bezirk'));
-		}
-	}
-
-	private function deleteAccount($id)
-	{
-		if (($this->session->may('orga'))) {
-			$foodsaver = $this->model->getValues(array('email', 'name', 'nachname', 'bezirk_id'), 'foodsaver', $id);
-
-			$this->foodsaverGateway->del_foodsaver($id);
-			$this->func->info('Foodsaver ' . $foodsaver['name'] . ' ' . $foodsaver['nachname'] . ' wurde gelöscht, für die Wiederherstellung wende Dich an ' . SUPPORT_EMAIL);
-			$this->func->go('/?page=dashboard');
 		}
 	}
 

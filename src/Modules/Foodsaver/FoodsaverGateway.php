@@ -548,6 +548,8 @@ class FoodsaverGateway extends BaseGateway
 
 	public function del_foodsaver($id)
 	{
+		$this->db->update('fs_foodsaver', ['password' => null, 'deleted_at' => $this->db->now()], ['id' => $id]);
+
 		$this->db->execute('
 			INSERT INTO fs_foodsaver_archive
 			(

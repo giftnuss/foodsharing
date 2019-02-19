@@ -814,7 +814,6 @@ class XhrMethods
 				$message = str_replace($search, $replace, $mail['message']);
 				$subject = str_replace($search, $replace, $mail['name']);
 
-				//$fs['email'] = 'kontakt@prographix.de';
 				$check = false;
 				if ($this->func->libmail($mailbox, $fs['email'], $subject, $message, $attach, $fs['token'])) {
 					$check = true;
