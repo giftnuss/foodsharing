@@ -28,7 +28,7 @@ $csrf_whitelist = [
 	// 'cropagain',
 	'pictureCrop',
 	// 'out',
-	'getRecip',
+	// 'getRecip',
 	'addPhoto',
 	// 'continueMail',
 	'uploadPhoto',
@@ -95,17 +95,19 @@ if (isset($_GET['f'])) {
 		/*
 		 * check for page caching
 		*/
+		ob_start();
+		echo $xhr->$func($_GET);
+		$page = ob_get_contents();
+		ob_end_clean();
+
+		if($page[0] == '{' || $page[0] == '[') {
+			// just assume it's an JSON, to prevent the browser from interpreting it as 
+			// HTML, which could result in XSS possibilities
+			header('Content-Type: application/json');
+		}
+		echo $page;
 		if (isset($cache) && $cache->shouldCache()) {
-			ob_start();
-			echo $xhr->$func($_GET);
-			$page = ob_get_contents();
 			$cache->cache($page);
-
-			ob_end_clean();
-
-			echo $page;
-		} else {
-			echo $xhr->$func($_GET);
 		}
 	}
 }

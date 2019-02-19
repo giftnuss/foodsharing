@@ -10,6 +10,7 @@ Any API request from the app will be answered with a specially crafted response.
 This response overwrites a javascript method and uses the "relogin" path to not trigger any error messages inside the app and then exchanges the whole shown content with our message.
 */
 if (isset($_GET['format']) && $_GET['format'] == 'jsonp') {
+	header('Content-Type: text/javascript');
 	$out = [
 		'status' => 2,
 		'script' => "document.body.innerHTML='<div style=\"padding: 10px;\"><img src=\"http://lebensmittelretten.de/img/gabel.png\" style=\"float: right; width: 50px; background-color: #533a20;\"><h3>Bitte deinstalliere diese App</h3><br>Liebe*r Nutzer*in, diese lebensmittelretten.de App wird leider schon seit mehr als 4 Jahren nicht mehr weiterentwickelt und enthält Funktionsfehler sowie gravierende Sicherheitsmängel.<br><b>Bitte deinstalliere sie.</b><br> Zudem möchten wir Dich bitten, auf der Desktop-Seite (https://foodsharing.de) dein Passwort zu ändern. Solltest du dein foodsharing-Passwort (insbesondere in Verbindung mit dieser E-Mail-Adresse) auch auf anderen Webseiten verwendet haben, ändere dies bitte auch dort.<br><br>Ein kleiner Trost: Die neue foodsharing App wird in Kürze auf foodsharing.de und im Google Playstore veröffentlicht. Frohes Lebensmittelretten!<br>Dein foodsharing.de Entwicklerteam<br><button onclick=\"navigator.app.exitApp();\">App Beenden</button></div>';"
@@ -194,6 +195,7 @@ if (isset($_GET['app'], $_GET['m'])) {
 
 		$out['script'] = '$(".tooltip").tooltip({show: false,hide:false,position: {	my: "center bottom-20",	at: "center top",using: function( position, feedback ) {	$( this ).css( position );	$("<div>").addClass( "arrow" ).addClass( feedback.vertical ).addClass( feedback.horizontal ).appendTo( this );}}});' . $out['script'];
 
+		header('Content-Type: application/json');
 		echo json_encode($out);
 	}
 }
