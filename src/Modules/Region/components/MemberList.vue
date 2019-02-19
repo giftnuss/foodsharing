@@ -98,11 +98,10 @@
 </template>
 
 <script>
+import { optimizedCompare } from '@/utils'
 import bTable from '@b/components/table/table'
 import bPagination from '@b/components/pagination/pagination'
 import bTooltip from '@b/directives/tooltip/tooltip'
-
-const noLocale = /^[\w-.\s,]*$/
 
 export default {
   components: { bTable, bPagination },
@@ -137,20 +136,6 @@ export default {
           sortable: false,
           class: 'align-middle'
         }
-      },
-      compare (a, b, key) {
-        const elemA = a[key]
-        const elemB = b[key]
-        if (typeof elemA === 'number' || (noLocale.test(elemA) && noLocale.test(elemB))) {
-          if (typeof elemA === 'string') {
-            const a = elemA.toLowerCase()
-            const b = elemB.toLowerCase()
-            return (a > b ? 1 : (a === b ? 0 : -1))
-          }
-          return (elemA > elemB ? 1 : (elemA === elemB ? 0 : -1))
-        } else {
-          return elemA.localeCompare(elemB)
-        }
       }
     }
   },
@@ -169,6 +154,8 @@ export default {
     }
   },
   methods: {
+    compare: optimizedCompare,
+
     clearFilter () {
       this.filterStatus = null
       this.filterText = ''
