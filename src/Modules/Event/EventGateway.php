@@ -138,6 +138,10 @@ class EventGateway extends BaseGateway
 				e.id = :id
 		', [':id' => $id]);
 
+		if (!$event) {
+			return null;
+		}
+
 		$event['location'] = false;
 		$event['invites'] = $this->getEventInvites($id);
 
