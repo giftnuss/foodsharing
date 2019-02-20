@@ -33,7 +33,8 @@ Pull Request
 
 ## REST
 
-_RE_presentianol _S_tate _T_ransfer
+REpresentational State Transfer
+
 ## ToU
 
 Terms of Use
