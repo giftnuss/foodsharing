@@ -180,8 +180,8 @@ class LoginXhr extends Control
 			return $this->func->s('email_exists');
 		}
 
-		if (strlen($data['pw']) < 5 && strlen($data['pw']) > 30) {
-			return $this->func->s('error_password');
+		if (strlen($data['pw']) < 8) {
+			return $this->func->s('error_passwd');
 		}
 
 		$data['gender'] = (int)$data['gender'];
