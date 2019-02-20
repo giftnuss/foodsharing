@@ -304,9 +304,9 @@ class MailsControl extends ConsoleControl
 		self::info('Mail from: ' . $data['from'][0] . ' (' . $data['from'][1] . ')');
 		$email = new fEmail();
 
-		$mailparts = explode('@', $data['from'][0]);
-		$fromDomain = end($mailparts);
-		if(in_array($fromDomain, MAILBOX_OWN_DOMAINS)) {
+		$mailParts = explode('@', $data['from'][0]);
+		$fromDomain = end($mailParts);
+		if (in_array($fromDomain, MAILBOX_OWN_DOMAINS, true)) {
 			$email->setFromEmail($data['from'][0], $data['from'][1]);
 		} else {
 			// use DEFAULT_EMAIL as sender and ReplyTo for the actual sender
