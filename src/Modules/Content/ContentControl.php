@@ -320,6 +320,16 @@ class ContentControl extends Control
 		}
 	}
 
+	public function workshops()
+	{
+		if ($cnt = $this->contentGateway->get(71)) {
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
+
+			$this->func->addContent($this->view->simple($cnt));
+		}
+	}
+
 	public function changelog()
 	{
 		$this->func->addBread('Changelog');

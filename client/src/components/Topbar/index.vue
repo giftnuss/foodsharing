@@ -18,13 +18,13 @@
           <login v-if="!isMobile" />
           <menu-loggedout
             v-if="isMobile"
-            :w-xs="ui.wXS"
+            :is-mobile="ui.wXS || ui.wMD"
           />
         </div>
         <login v-if="isMobile" />
         <menu-loggedout
           v-if="!isMobile"
-          :w-xs="ui.wXS"
+          :is-mobile="ui.wXS || ui.wMD"
         />
       </div>
 
@@ -146,113 +146,9 @@
               :is-orga-team="isOrgaTeam"
               :may="may"
             />
-            <nav-item-dropdown
-              tooltip="Informationen"
-              right
-              no-caret
-            >
-              <template slot="button-content">
-                <i class="fas fa-info " />
-                <span class="d-md-none">
-                  Informationen
-                </span>
-              </template>
-              <a
-                :href="$url('vision')"
-                class="dropdown-item"
-                role="menuitem"
-              >
-                Vision
-              </a>
-              <a
-                :href="$url('claims')"
-                class="dropdown-item"
-                role="menuitem"
-              >
-                Forderungen
-              </a>
-              <a
-                :href="$url('partner')"
-                class="dropdown-item"
-                role="menuitem"
-              >
-                Partner
-              </a>
-              <a
-                :href="$url('donate')"
-                class="dropdown-item"
-                role="menuitem"
-              >
-                Spenden
-              </a>
-              <a
-                :href="$url('statistics')"
-                class="dropdown-item"
-                role="menuitem"
-              >
-                Statistik
-              </a>
-              <div class="dropdown-divider" />
-              <a
-                :href="$url('infos')"
-                class="dropdown-item"
-                role="menuitem"
-              >
-                Infosammlung
-              </a>
-              <a
-                :href="$url('blog')"
-                class="dropdown-item"
-                role="menuitem"
-              >
-                Blog
-              </a>
-              <a
-                :href="$url('faq')"
-                class="dropdown-item"
-                role="menuitem"
-              >
-                F.A.Q.
-              </a>
-              <a
-                :href="$url('guide')"
-                class="dropdown-item"
-                role="menuitem"
-              >
-                Ratgeber
-              </a>
-              <a
-                :href="$url('wiki')"
-                class="dropdown-item"
-                role="menuitem"
-              >
-                Wiki
-              </a>
-              <a
-                :href="$url('changelog')"
-                class="dropdown-item"
-                role="menuitem"
-              >
-                Changelog
-              </a>
-            </nav-item-dropdown>
-
-            <li
-              v-if="mailbox"
-              v-b-tooltip
-              class="nav-item"
-              title="E-Mail-Postfach"
-            >
-              <a
-                :href="$url('mailbox')"
-                class="nav-link"
-              >
-                <i class="fas fa-envelope" />
-                <span class="d-md-none">
-                  E-Mail-Postfach
-                </span>
-              </a>
-            </li>
+            <MenuBullhorn :display-arrow="false" :display-text="ui.wXS || ui.wSM"/>
+            <MenuInformation :display-arrow="false" :display-text="ui.wXS || ui.wSM"/>
+            <MenuEnvelope :display-arrow="false" :display-mailbox="mailbox" :display-text="ui.wXS || ui.wSM"/>
 
             <menu-messages v-if="!isMobile" />
             <menu-bells v-if="!isMobile" />
@@ -279,6 +175,9 @@ import MenuRegion from './MenuRegion'
 import MenuStores from './MenuStores'
 import MenuGroups from './MenuGroups'
 import MenuBaskets from './MenuBaskets'
+import MenuBullhorn from './MenuBullhorn'
+import MenuInformation from './MenuInformation'
+import MenuEnvelope from './MenuEnvelope'
 import MenuAdmin from './MenuAdmin'
 import MenuMessages from './MenuMessages'
 import MenuBells from './MenuBells'
@@ -297,6 +196,9 @@ export default {
     MenuStores,
     MenuGroups,
     MenuBaskets,
+    MenuBullhorn,
+    MenuInformation,
+    MenuEnvelope,
     MenuAdmin,
     MenuMessages,
     MenuBells,
@@ -494,7 +396,7 @@ export default {
     }
 
     .dropdown-menu {
-        max-height: 360px;
+        max-height: 420px;
         max-width: 300px;
         overflow-y: auto;
     }
