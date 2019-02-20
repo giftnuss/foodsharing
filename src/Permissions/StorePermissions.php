@@ -40,7 +40,7 @@ class StorePermissions
 		return false;
 	}
 
-	public function mayEditPickups($storeId)
+	public function mayEditStore($storeId)
 	{
 		$fsId = $this->session->id();
 		if (!$fsId) {
@@ -59,5 +59,15 @@ class StorePermissions
 		}
 
 		return false;
+	}
+
+	public function mayEditPickups($storeId)
+	{
+		return $this->mayEditStore($storeId);
+	}
+
+	public function mayAcceptRequests($storeId)
+	{
+		return $this->mayEditStore($storeId);
 	}
 }

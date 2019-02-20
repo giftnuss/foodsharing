@@ -1327,31 +1327,34 @@ class XhrMethods
 
 	public function xhr_acceptRequest($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid']) || $this->session->isAmbassador()) {
-			$this->storeModel->acceptRequest($data['fsid'], $data['bid']);
-
-			$this->storeGateway->add_betrieb_notiz(array(
-				'foodsaver_id' => $data['fsid'],
-				'betrieb_id' => $data['bid'],
-				'text' => '{ACCEPT_REQUEST}',
-				'zeit' => date('Y-m-d H:i:s'),
-				'milestone' => 2
-			));
-
-			$bezirk_id = $this->model->getVal('bezirk_id', 'betrieb', $data['bid']);
-			$this->regionGateway->linkBezirk($data['fsid'], $bezirk_id);
-
-			return json_encode(array('status' => 1));
+		if (!$this->storePermissions->mayAcceptRequests($data['bid'])) {
+			return XhrResponses::PERMISSION_DENIED;
 		}
+		$this->storeModel->acceptRequest($data['fsid'], $data['bid']);
+
+		$this->storeGateway->add_betrieb_notiz(array(
+			'foodsaver_id' => $data['fsid'],
+			'betrieb_id' => $data['bid'],
+			'text' => '{ACCEPT_REQUEST}',
+			'zeit' => date('Y-m-d H:i:s'),
+			'milestone' => 2
+		));
+
+		$bezirk_id = $this->model->getVal('bezirk_id', 'betrieb', $data['bid']);
+		$this->regionGateway->linkBezirk($data['fsid'], $bezirk_id);
+
+		return json_encode(array('status' => 1));
 	}
 
 	public function xhr_warteRequest($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid']) || $this->session->isAmbassador()) {
-			$this->storeModel->warteRequest($data['fsid'], $data['bid']);
-
-			return json_encode(array('status' => 1));
+		if (!$this->storePermissions->mayAcceptRequests($data['bid'])) {
+			return XhrResponses::PERMISSION_DENIED;
 		}
+
+		$this->storeModel->warteRequest($data['fsid'], $data['bid']);
+
+		return json_encode(array('status' => 1));
 	}
 
 	public function xhr_betriebRequest($data)
