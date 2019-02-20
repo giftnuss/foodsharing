@@ -5,6 +5,7 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrMethods;
 use Symfony\Component\DependencyInjection\Container;
+use Foodsharing\Lib\Xhr\XhrResponses;
 
 require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';
@@ -92,6 +93,16 @@ if (isset($_GET['f'])) {
 	if (method_exists($xhr, $func)) {
 		$metrics = $container->get(\Foodsharing\Modules\Core\InfluxMetrics::class);
 		$metrics->addPageStatData(['controller' => $func]);
+
+		ob_start();
+		echo $xhr->$func($_GET);
+		$page = ob_get_contents();
+		ob_end_clean();
+
+		if ($page === XhrResponses::PERMISSION_DENIED) {
+			header('HTTP/1.1 403 Forbidden');
+			die("Permission denied");
+		}
 		/*
 		 * check for page caching
 		*/
@@ -109,5 +120,6 @@ if (isset($_GET['f'])) {
 		if (isset($cache) && $cache->shouldCache()) {
 			$cache->cache($page);
 		}
+		echo $page;
 	}
 }
