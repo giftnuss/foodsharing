@@ -6,11 +6,11 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Message\MessageModel;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class MessageRestController extends FOSRestController
+class MessageRestController extends AbstractFOSRestController
 {
 	private $model;
 	private $gateway;
