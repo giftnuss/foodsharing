@@ -33,6 +33,7 @@ class UserRestController extends AbstractFOSRestController
 		if (!$this->session->may()) {
 			throw new HttpException(404);
 		}
+
 		return $this->handleUserView();
 	}
 
@@ -55,6 +56,7 @@ class UserRestController extends AbstractFOSRestController
 			if ($mobdet->isMobile()) {
 				$_SESSION['mob'] = 1;
 			}
+
 			return $this->handleUserView();
 		}
 
@@ -81,6 +83,7 @@ class UserRestController extends AbstractFOSRestController
 	private function handleUserView(): Response
 	{
 		$user = $this->session->get('user');
+
 		return $this->handleView($this->view([
 			'id' => $this->session->id(),
 			'name' => $user['name']
