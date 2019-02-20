@@ -2,5 +2,5 @@ FROM registry.gitlab.com/foodsharing-dev/images/php:2.17
 
 WORKDIR /app
 
-COPY . /app
+COPY --chown=www-data:www-data . /app
 RUN chmod 777 --recursive /app
