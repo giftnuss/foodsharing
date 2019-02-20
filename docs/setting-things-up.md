@@ -19,7 +19,7 @@ It will give you some dummy users you can use to sign in:
 | userbot@example.com  | user     |
 | userorga@example.com | user     |
 
-It also generates more dummy users and dummy data to fill the page with life (a bit at least). If you want to modify it, then look at the `SeedCommand.php` file.
+It also generates more dummy users and dummy data to fill the page with life (a bit at least). If you want to modify it, then look at the `/src/Dev/SeedCommand.php` file.
 
 If you make changes to non-PHP frontend files (e.g. .vue, .js or .scss files), then those are direclty reflected in the running docker.
 
