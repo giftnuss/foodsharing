@@ -53,6 +53,7 @@
 <script>
 import serverData from '@/server-data'
 import { sendQuickreply } from "@/api/dashboard";
+import { pulseError, pulseInfo } from '@/script'
 
 /* TODOs
 - quickreply not working yet
@@ -97,7 +98,7 @@ export default {
     async sendQuickreply(txt) {
       console.log('sending reply', this.quickreplyValue)
       this.qrLoading = true
-      await sendQuickreply(this.data.quickreply, this.quickreplyValue)
+      await sendQuickreply(this.data.quickreply, this.quickreplyValue).then((x) => {pulseInfo(x.message)})
       this.qrLoading = false
       return true
     }

@@ -57,14 +57,16 @@ class RegionXhr extends Control
 
 	public function quickreply()
 	{
-		if (isset($_GET['bid'], $_GET['tid'], $_GET['pid'], $_POST['msg']) && $this->session->may(
-			) && $_POST['msg'] != '') {
+		$data = json_decode(file_get_contents('php://input'), true);
+
+		if (isset($_GET['bid'], $_GET['tid'], $_GET['pid'], $data['msg']) && $this->session->may(
+			) && $data['msg'] != '') {
 			$sub = 'forum';
 			if ($_GET['sub'] != 'forum') {
 				$sub = 'botforum';
 			}
 
-			$body = $_POST['msg'];
+			$body = $data['msg'];
 
 			if ($this->forumPermissions->mayPostToThread($_GET['tid'])
 				&& $bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid'])
