@@ -498,13 +498,13 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	public function img($file = false, $size = 'mini', $format = 'q', $altimg = false)
 	{
-		// prevent path traversal
-		$file = preg_replace('/%/', '', $file);
-		$file = preg_replace('/\.+/', '.', $file);
-
 		if ($file === false) {
 			$file = $_SESSION['client']['photo'];
 		}
+
+		// prevent path traversal
+		$file = preg_replace('/%/', '', $file);
+		$file = preg_replace('/\.+/', '.', $file);
 
 		if (!empty($file) && file_exists('images/' . $file)) {
 			if (!file_exists('images/' . $size . '_' . $format . '_' . $file)) {

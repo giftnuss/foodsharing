@@ -606,14 +606,18 @@ class XhrMethods
 		$data['id'] = preg_replace('/[^a-z0-9\-_]/', '', $data['id']);
 		$data['img'] = preg_replace('/[^a-z0-9\-_\.]/', '', $data['img']);
 
-		if (is_array($ratio) && is_array($resize)) {
+		if (is_array($ratio) && is_array($resize) && count($resize) < 5) {
 			foreach ($ratio as $i => $r) {
-				$this->cropImg(ROOT_DIR . 'images/' . $data['id'], $data['img'], $i, $r['x'], $r['y'], $r['w'], $r['h']);
-				foreach ($resize as $r) {
-					copy(ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $data['img'], ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $r . '_' . $data['img']);
-					$image = new fImage(ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $r . '_' . $data['img']);
-					$image->resize($r, 0);
-					$image->saveChanges();
+				if ($r['w'] < 1000 && $r['h'] < 1000) {
+					$this->cropImg(ROOT_DIR . 'images/' . $data['id'], $data['img'], $i, $r['x'], $r['y'], $r['w'], $r['h']);
+					foreach ($resize as $r) {
+						if ($r < 1000) {
+							copy(ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $data['img'], ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $r . '_' . $data['img']);
+							$image = new fImage(ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $r . '_' . $data['img']);
+							$image->resize($r, 0);
+							$image->saveChanges();
+						}
+					}
 				}
 			}
 
