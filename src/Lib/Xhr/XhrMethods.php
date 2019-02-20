@@ -936,6 +936,10 @@ class XhrMethods
 
 	private function cropImage($bild, $x, $y, $w, $h)
 	{
+		if ($w > 2000 || $h > 2000) {
+			return false;
+		}
+
 		$targ_w = 467;
 		$targ_h = 600;
 		$jpeg_quality = 100;
