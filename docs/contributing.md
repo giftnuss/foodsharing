@@ -4,7 +4,8 @@ Feel free to ask questions at the #foodsharing-dev [Slack](https://slackin.yunit
 
 ## Coding guidelines
 
-We do not have specific coding guidelines yet. Please use your common sense and make it fit with the existing code.
+We do have a few coding guideline, mentioned at various places in these devdocs.
+In general, please use your common sense and make it fit with the existing code.
 
 ## Submitting an issue
 
@@ -34,7 +35,7 @@ To submit your change:
   1. Select the template "Default".
   2. Prefix the name of the merge request with `WIP:`.
 4. Make sure your merge request checks all the checkboxes in the "Default" template (and check them in the description).
-5. Once you think your branch is ready to be merged, remove the `WIP:` prefix from the name of your merge request.
+5. Once you think your branch is ready to be merged, remove the `WIP:` prefix from the name of your merge request. Rebase your branch onto master (which might have developed since your branching). It is OK to force-push (`git push -f`) after rebasing.
 6. Submit your merge request.
 
 The next steps will be:
