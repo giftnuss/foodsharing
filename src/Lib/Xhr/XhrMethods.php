@@ -1359,6 +1359,10 @@ class XhrMethods
 
 	public function xhr_betriebRequest($data)
 	{
+		if (!$this->storePermissions->mayJoinStoreRequest($data['id'])) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+
 		$status = 1;
 		$msg = 'Hallo Welt';
 		$foodsaver = $this->model->getVal('name', 'foodsaver', $this->session->id());

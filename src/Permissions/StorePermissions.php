@@ -4,6 +4,7 @@ namespace Foodsharing\Permissions;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Modules\Core\DBConstants\Store\TeamStatus;
 
 class StorePermissions
 {
@@ -16,6 +17,28 @@ class StorePermissions
 	) {
 		$this->storeGateway = $storeGateway;
 		$this->session = $session;
+	}
+
+	public function mayJoinStoreRequest($storeId)
+	{
+		$fsId = $this->session->id();
+		if (!$fsId) {
+			return false;
+		}
+
+		$store = $this->storeGateway->getBetrieb($storeId);
+
+		// store open?
+		if (!in_array($store['team_status'], [TeamStatus::OPEN, TeamStatus::OPEN_SEARCHING])) {
+			return false;
+		}
+
+		// already in team?
+		if ($this->storeGateway->isInTeam($fsId, $storeId)) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public function mayAccessStore($storeId)
