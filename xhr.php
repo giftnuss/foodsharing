@@ -101,7 +101,7 @@ if (isset($_GET['f'])) {
 
 		if ($page === XhrResponses::PERMISSION_DENIED) {
 			header('HTTP/1.1 403 Forbidden');
-			die("Permission denied");
+			die('Permission denied');
 		}
 		/*
 		 * check for page caching

@@ -153,6 +153,10 @@ class WallPostXhr extends Control
 
 	public function attachimage()
 	{
+		if (!$this->wallPostPermissions->mayWriteWall($this->session->id(), $this->table, $this->id)) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+
 		$init = '';
 		if (isset($_FILES['etattach']['size']) && $_FILES['etattach']['size'] < 9136365 && $this->attach_allow($_FILES['etattach']['name'], $_FILES['etattach']['type'])) {
 			$new_filename = uniqid();
