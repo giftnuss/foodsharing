@@ -8,6 +8,7 @@ use Foodsharing\Modules\Login\LoginGateway;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Mobile_Detect;
 
@@ -22,6 +23,17 @@ class UserRestController extends FOSRestController
 		$this->session = $session;
 		$this->loginGateway = $loginGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+	}
+
+	/**
+	 * @Rest\Get("user/current")
+	 */
+	public function userAction()
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(404);
+		}
+		return $this->handleUserView();
 	}
 
 	/**
@@ -43,13 +55,7 @@ class UserRestController extends FOSRestController
 			if ($mobdet->isMobile()) {
 				$_SESSION['mob'] = 1;
 			}
-			$user = $this->session->get('user');
-
-			return $this->handleView($this->view([
-				'id' => $fs_id,
-				'name' => $user['name']
-				// this response can get extended further, once needed
-			], 200));
+			return $this->handleUserView();
 		}
 
 		throw new HttpException(401, 'email or password are invalid');
@@ -70,5 +76,14 @@ class UserRestController extends FOSRestController
 		$this->foodsaverGateway->del_foodsaver($userId);
 
 		return $this->handleView($this->view());
+	}
+
+	private function handleUserView(): Response
+	{
+		$user = $this->session->get('user');
+		return $this->handleView($this->view([
+			'id' => $this->session->id(),
+			'name' => $user['name']
+		], 200));
 	}
 }
