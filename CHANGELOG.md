@@ -16,6 +16,8 @@
 - Scale down font size on passports for long names !685 @NerdyProjects
 - CSRF protection for API requests !715 @alangecker
 - Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
+- Added thumbs of pictures posted on friends walls to dashboard !454 @D0nPiano
+- Link Avatar pictures on dashboard to profiles !464 @D0nPiano
 
 ## Bugfixes
 - Search index is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
@@ -42,6 +44,8 @@
 - use API endpoint to delete regions/workgroups to avoid CSRF problems !719 @NerdyProjects
 - removed unused php,js and css code !720 @alangecker
 - user normalisation in conversations API endpoint
+- recreate Dashboard update-overview with vue components @D0nPiano 
+- changed ActivityModel to return data without HTML or JS @D0nPiano 
 
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen
