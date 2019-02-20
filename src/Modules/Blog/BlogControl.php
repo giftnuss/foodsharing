@@ -66,7 +66,7 @@ class BlogControl extends Control
 
 	public function manage()
 	{
-		if ($this->func->mayEditBlog()) {
+		if ($this->session->mayEditBlog()) {
 			$this->func->addBread($this->func->s('manage_blog'));
 			$title = 'Blog Artikel';
 
@@ -89,7 +89,7 @@ class BlogControl extends Control
 
 	public function post()
 	{
-		if ($this->func->mayEditBlog()) {
+		if ($this->session->mayEditBlog()) {
 			if (isset($_GET['id'])) {
 				if ($post = $this->model->getOne_blog_entry($_GET['id'])) {
 					if ($post['active'] == 1) {
@@ -105,7 +105,7 @@ class BlogControl extends Control
 
 	public function add()
 	{
-		if ($this->func->mayEditBlog()) {
+		if ($this->session->mayEditBlog()) {
 			$this->handle_add();
 
 			$this->func->addBread($this->func->s('bread_new_blog_entry'));
@@ -135,7 +135,7 @@ class BlogControl extends Control
 	{
 		global $g_data;
 
-		if ($this->func->mayEditBlog() && $this->func->submitted()) {
+		if ($this->session->mayEditBlog() && $this->func->submitted()) {
 			$g_data['foodsaver_id'] = $this->session->id();
 			$g_data['time'] = date('Y-m-d H:i:s');
 
@@ -150,7 +150,7 @@ class BlogControl extends Control
 
 	public function edit()
 	{
-		if ($this->func->mayEditBlog() && $this->model->canEdit($_GET['id']) && ($data = $this->model->getOne_blog_entry($_GET['id']))) {
+		if ($this->session->mayEditBlog() && $this->model->canEdit($_GET['id']) && ($data = $this->model->getOne_blog_entry($_GET['id']))) {
 			$this->handle_edit();
 
 			$this->func->addBread($this->func->s('bread_blog_entry'), '/?page=blog&sub=manage');
@@ -173,7 +173,7 @@ class BlogControl extends Control
 	private function handle_edit()
 	{
 		global $g_data;
-		if ($this->func->mayEditBlog() && $this->func->submitted()) {
+		if ($this->session->mayEditBlog() && $this->func->submitted()) {
 			$data = $this->model->getValues(array('time', 'foodsaver_id'), 'blog_entry', $_GET['id']);
 
 			$g_data['foodsaver_id'] = $data['foodsaver_id'];

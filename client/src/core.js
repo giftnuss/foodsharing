@@ -28,6 +28,7 @@ import '@/becomeBezirk'
 import serverData from '@/server-data'
 
 import socket from '@/socket'
+import { getCsrfToken } from '@/api/base'
 
 initialize()
 
@@ -62,3 +63,10 @@ if (serverData.user.may) {
 } else {
   clearInterval(window.g_interval_newBasket)
 }
+
+// add CSRF-Token to all jquery requests
+$.ajaxSetup({
+  beforeSend: function (xhr) {
+    xhr.setRequestHeader('X-CSRF-Token', getCsrfToken())
+  }
+})

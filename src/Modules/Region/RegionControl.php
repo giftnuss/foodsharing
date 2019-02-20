@@ -151,7 +151,7 @@ class RegionControl extends Control
 
 		$region_id = $request->query->getInt('bid', $_SESSION['client']['bezirk_id']);
 
-		if ($this->func->mayBezirk($region_id) && ($region = $this->gateway->getRegionDetails($region_id))) {
+		if ($this->session->mayBezirk($region_id) && ($region = $this->gateway->getRegionDetails($region_id))) {
 			$big = [Type::BIG_CITY, Type::FEDERAL_STATE, Type::COUNTRY];
 			$region['moderated'] = $region['moderated'] || in_array($region['type'], $big);
 			$this->region = $region;

@@ -32,7 +32,7 @@ class SettingsXhr extends Control
 
 	public function changemail()
 	{
-		if ($this->func->may()) {
+		if ($this->session->mayLegacy()) {
 			$dia = new XhrDialog();
 			$dia->setTitle('E-Mail-Adresse ändern');
 
@@ -56,7 +56,7 @@ class SettingsXhr extends Control
 					'script' => 'pulseError("Diese E-Mail-Adresse benutzt bereits jemand anderes.");'
 				);
 			}
-			$token = md5(uniqid(mt_rand(), true));
+			$token = bin2hex(random_bytes(16));
 			$this->model->addNewMail($_GET['email'], $token);
 			// anrede name link
 

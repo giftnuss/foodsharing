@@ -7,7 +7,6 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
-use Foodsharing\Services\SanitizerService;
 use Symfony\Component\HttpFoundation\Request;
 
 class FairTeilerControl extends Control
@@ -21,22 +20,19 @@ class FairTeilerControl extends Control
 	private $gateway;
 	private $regionGateway;
 	private $foodsaverGateway;
-	private $sanitizerService;
 
 	public function __construct(
 		FairTeilerView $view,
 		FairTeilerGateway $gateway,
 		RegionGateway $regionGateway,
 		FoodsaverGateway $foodsaverGateway,
-		Db $model,
-		SanitizerService $sanitizerService
+		Db $model
 	) {
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->regionGateway = $regionGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->model = $model;
-		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 	}

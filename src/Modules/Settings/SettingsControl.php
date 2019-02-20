@@ -36,11 +36,6 @@ class SettingsControl extends Control
 
 		$this->foodsaver = $this->model->getValues(array('rolle', 'email', 'name', 'nachname', 'geschlecht', 'verified'), 'foodsaver', $this->session->id());
 
-		if (isset($_GET['deleteaccount'])) {
-			$this->foodsaverGateway->del_foodsaver($this->session->id());
-			$this->func->go('/?page=logout');
-		}
-
 		if (!isset($_GET['sub'])) {
 			$this->func->go('/?page=settings&sub=general');
 		}
@@ -324,12 +319,12 @@ class SettingsControl extends Control
 						check = false;
 						error("Du musst einen Bezirk ausw&auml;hlen");
 					}
-				
+
 					if(!check)
 					{
 						ev.preventDefault();
 					}
-				
+
 				});');
 
 				// Rechtsvereinbarung
@@ -381,7 +376,7 @@ class SettingsControl extends Control
 	public function deleteaccount()
 	{
 		$this->func->addBread($this->func->s('delete_account'));
-		$this->func->addContent($this->view->delete_account());
+		$this->func->addContent($this->view->delete_account($this->session->id()));
 	}
 
 	public function general()
@@ -473,7 +468,7 @@ class SettingsControl extends Control
 					$data['homepage'] = 'http://' . $data['homepage'];
 				}
 
-				if (!$this->func->validUrl($data['homepage'])) {
+				if (!$this->validUrl($data['homepage'])) {
 					$check = false;
 					$this->func->error('Mit Deiner Homepage URL stimmt etwas nicht');
 				}
@@ -484,7 +479,7 @@ class SettingsControl extends Control
 					$data['github'] = 'https://github.com/' . $data['github'];
 				}
 
-				if (!$this->func->validUrl($data['github'])) {
+				if (!$this->validUrl($data['github'])) {
 					$check = false;
 					$this->func->error('Mit Deiner github URL stimmt etwas nicht');
 				}
@@ -495,7 +490,7 @@ class SettingsControl extends Control
 					$data['twitter'] = 'https://twitter.com/' . $data['twitter'];
 				}
 
-				if (!$this->func->validUrl($data['twitter'])) {
+				if (!$this->validUrl($data['twitter'])) {
 					$check = false;
 					$this->func->error('Mit Deiner twitter URL stimmt etwas nicht');
 				}
@@ -522,6 +517,15 @@ class SettingsControl extends Control
 				}
 			}
 		}
+	}
+
+	private function validUrl($url)
+	{
+		if (!filter_var($url, FILTER_VALIDATE_URL)) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public function picture_box()

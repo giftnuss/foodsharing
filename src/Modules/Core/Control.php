@@ -10,6 +10,7 @@ use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Services\SanitizerService;
 use ReflectionClass;
 
 abstract class Control
@@ -62,6 +63,7 @@ abstract class Control
 	 * @var InfluxMetrics
 	 */
 	private $metrics;
+	protected $sanitizerService;
 
 	public function __construct()
 	{
@@ -73,6 +75,7 @@ abstract class Control
 		$this->legacyDb = $container->get(Db::class);
 		$this->foodsaverGateway = $container->get(FoodsaverGateway::class);
 		$this->metrics = $container->get(InfluxMetrics::class);
+		$this->sanitizerService = $container->get(SanitizerService::class);
 
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;
@@ -118,9 +121,9 @@ abstract class Control
 			$entry = 'Modules/' . $moduleName;
 			if (isset($manifest[$entry])) {
 				foreach ($manifest[$entry] as $asset) {
-					if ($this->func->endsWith($asset, '.js')) {
+					if (substr($asset, -3) === '.js') {
 						$this->func->addWebpackScript($asset);
-					} elseif ($this->func->endsWith($asset, '.css')) {
+					} elseif (substr($asset, -4) === '.css') {
 						$this->func->addWebpackStylesheet($asset);
 					}
 				}

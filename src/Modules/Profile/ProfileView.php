@@ -42,10 +42,12 @@ class ProfileView extends View
 				<a class="button button-big" href="#" onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',bid:0,date:0});return false;">Aus allen austragen</a>
 					<ul class="datelist linklist" id="double">';
 		foreach ($fetchDates as $d) {
+			$userConfirmedForPickup = $d['confirmed'] == 1 ? '✓ ' : '? ';
+
 			$out .= '
 						<li>
 							<a href="/?page=fsbetrieb&id=' . $d['betrieb_id'] . '" class="ui-corner-all">
-								<span class="title">' . $this->func->niceDate($d['date_ts']) . '</span>
+								<span class="title">' . $userConfirmedForPickup . $this->func->niceDate($d['date_ts']) . '</span>
 							</a>
 						</li>
 						<li>
@@ -75,7 +77,8 @@ class ProfileView extends View
 	{
 		$out = '';
 		foreach ($userCompanies as $b) {
-			$out .= '<p><a class="light" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $b['name'] . '</a></p>';
+			$userStatusOfStore = $b['active'] == 1 ? '✓ ' : '? ';
+			$out .= '<p><a class="light" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $userStatusOfStore . $b['name'] . '</a></p>';
 		}
 
 		return '
@@ -430,7 +433,7 @@ class ProfileView extends View
 			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:0});"><i class="fas fa-file-alt fa-fw"></i>Verifizierungshistorie</a></li>';
 		}
 
-		if ($this->func->mayHandleReports()) {
+		if ($this->session->mayHandleReports()) {
 			if (isset($this->foodsaver['note_count'])) {
 				$opt .= '<li><a href="/profile/' . (int)$this->foodsaver['id'] . '/notes/"><i class="far fa-file-alt fa-fw"></i>' . $this->func->sv('notes_count', array('count' => $this->foodsaver['note_count'])) . '</a></li>';
 			}

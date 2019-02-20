@@ -159,7 +159,7 @@ class ProfileModel extends Db
 		$data['foodsaver'] = false;
 		$data['orga'] = false;
 
-		if ($this->func->mayHandleReports()) {
+		if ($this->session->mayHandleReports()) {
 			$data['violation_count'] = (int)$this->getViolationCount($this->fs_id);
 			$data['note_count'] = (int)$this->getNotesCount($this->fs_id);
 		}
@@ -309,7 +309,8 @@ class ProfileModel extends Db
 
 			SELECT 	b.id,
 					b.name,
-					bt.verantwortlich
+					bt.verantwortlich,
+					bt.active
 
 			FROM 	fs_betrieb_team bt,
 					fs_betrieb b

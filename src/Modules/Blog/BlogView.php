@@ -17,7 +17,7 @@ class BlogView extends View
 			} else {
 				$row_tmp[] = array('cnt' => $this->func->s('status_' . $d['active']));
 			}
-			$row_tmp[] = array('cnt' => '<span style="display:none;">a' . $d['time_ts'] . '</span><a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id=' . $d['id'] . '">' . $this->func->format_d($d['time_ts']) . '</a>');
+			$row_tmp[] = array('cnt' => '<span style="display:none;">a' . $d['time_ts'] . '</span><a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id=' . $d['id'] . '">' . date('d.m.Y', $d['time_ts']) . '</a>');
 			$row_tmp[] = array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id=' . $d['id'] . '">' . $d['name'] . '</a>');
 			$row_tmp[] = array('cnt' => $this->v_utils->v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => $this->func->sv('delete_sure', $d['name']))));
 

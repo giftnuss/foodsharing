@@ -189,7 +189,6 @@ export function initialize () {
     })
     // $('.button').button();
     $('.dialog').dialog()
-    $('.v-switch').buttonset()
 
     $('ul.toolbar li').on('mouseenter', function () {
       $(this).addClass('ui-state-hover')

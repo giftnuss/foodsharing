@@ -243,7 +243,7 @@ class EventView extends View
 		if (date('Y-m-d', $event['start_ts']) != date('Y-m-d', $event['end_ts'])) {
 			$end = ' ' . $this->func->s('to') . ' ' . $this->func->niceDate($event['end_ts']);
 		} else {
-			$end = ' ' . $this->func->s('to') . ' ' . $this->func->ts_time($event['end_ts']);
+			$end = ' ' . $this->func->s('to') . ' ' . $this->ts_time($event['end_ts']);
 		}
 
 		$out = '
@@ -272,26 +272,59 @@ class EventView extends View
 		return $out;
 	}
 
+	private function ts_time($ts): string
+	{
+		return date('H:i', $ts) . ' Uhr';
+	}
+
 	public function invites($invites)
 	{
 		$out = '';
 
 		if (!empty($invites['accepted'])) {
-			$icons = $this->fsIcons($invites['accepted']);
-			$out .= $this->v_utils->v_field($icons, '' . count($invites['accepted']) . ' sind dabei');
+			$avatars = $this->placeFsAvatars($invites['accepted'], 60);
+			$out .= $this->v_utils->v_field($avatars, '' . count($invites['accepted']) . ' sind dabei');
 		}
 
 		if (!empty($invites['maybe'])) {
-			$icons = $this->fsIcons($invites['maybe']);
-			$out .= $this->v_utils->v_field($icons, '' . count($invites['maybe']) . ' kommen vielleicht');
+			$avatars = $this->placeFsAvatars($invites['maybe'], 54);
+			$out .= $this->v_utils->v_field($avatars, '' . count($invites['maybe']) . ' kommen vielleicht');
 		}
 
 		if (!empty($invites['invited'])) {
-			$icons = $this->fsIcons($invites['invited']);
-			$out .= $this->v_utils->v_field($icons, '' . count($invites['invited']) . ' Einladungen');
+			$avatars = $this->placeFsAvatars($invites['invited'], 54);
+			$out .= $this->v_utils->v_field($avatars, '' . count($invites['invited']) . ' Einladungen');
 		}
 
 		return $out;
+	}
+
+	private function placeFsAvatars(array $foodsavers, int $maxNumberOfAvatars): string
+	{
+		if (!empty($foodsavers)) {
+			$out = '<ul class="fsicons">';
+
+			if (count($foodsavers) > $maxNumberOfAvatars) {
+				shuffle($foodsavers);
+				$foodsaverDisplayed = array_slice($foodsavers, 0, $maxNumberOfAvatars);
+			} else {
+				$foodsaverDisplayed = $foodsavers;
+			}
+
+			foreach ($foodsaverDisplayed as $fs) {
+				$out .= '
+				<li>
+					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->func->img($fs['photo']) . ');" href="/profile/' . (int)$fs['id'] . '"><span></span></a>	
+				</li>';
+			}
+			if (count($foodsavers) > $maxNumberOfAvatars) {
+				$out .= '<li class="row">...und ' . (count($foodsavers) - $maxNumberOfAvatars) . ' weitere</li></ul>';
+			}
+
+			return $out;
+		}
+
+		return '';
 	}
 
 	public function event($event)

@@ -155,3 +155,9 @@ services:
             serviceOption: 'tls'
             boxname: 'INBOX'
             maxMessages: 10000
+
+    Foodsharing\EventListener\CsrfListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller }
+        arguments:
+            - "@annotation_reader"

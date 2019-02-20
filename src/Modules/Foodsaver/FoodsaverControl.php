@@ -30,10 +30,6 @@ class FoodsaverControl extends Control
 		$this->foodsaverGateway = $foodsaverGateway;
 
 		parent::__construct();
-
-		if (isset($_GET['deleteaccount'])) {
-			$this->deleteAccount($_GET['id']);
-		}
 	}
 
 	/*
@@ -42,7 +38,7 @@ class FoodsaverControl extends Control
 	public function index()
 	{
 		// check bezirk_id and permissions
-		if (isset($_GET['bid']) && ($bezirk = $this->regionGateway->getBezirk($_GET['bid'])) && ($this->session->may('orga') || $this->func->isBotForA(array($_GET['bid']), false, true))) {
+		if (isset($_GET['bid']) && ($bezirk = $this->regionGateway->getBezirk($_GET['bid'])) && ($this->session->may('orga') || $this->session->isBotForA(array($_GET['bid']), false, true))) {
 			// permission granted so we can load the foodsavers
 			if ($foodsaver = $this->model->listFoodsaver($_GET['bid'])) {
 				// add breadcrumps
@@ -68,7 +64,7 @@ class FoodsaverControl extends Control
 		} elseif (($id = $this->func->getActionId('edit')) && ($this->session->isAmbassador() || $this->session->isOrgaTeam())) {
 			$data = $this->foodsaverGateway->getOne_foodsaver($id);
 			$bids = $this->regionGateway->getFsRegionIds($id);
-			if ($data && ($this->session->isOrgaTeam() || $this->func->isBotForA($bids, false, true))) {
+			if ($data && ($this->session->isOrgaTeam() || $this->session->isBotForA($bids, false, true))) {
 				$this->handle_edit();
 				$data = $this->foodsaverGateway->getOne_foodsaver($id);
 
@@ -82,26 +78,12 @@ class FoodsaverControl extends Control
 				$this->func->addContent($this->view->foodsaver_form($data['name'] . ' ' . $data['nachname'] . ' bearbeiten', $regionDetails));
 
 				$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-					array('href' => '/profile/' . $data['id'], 'name' => $this->func->s('back_to_profile'))
+					array('href' => '/profile/' . $data['id'], 'name' => $this->func->s('back_to_profile')),
+					array('click' => 'fsapp.confirmDeleteUser(' . $data['id'] . ')', 'name' => $this->func->s('delete_account'))
 				)), $this->func->s('actions')), CNT_RIGHT);
-
-				if ($this->session->isOrgaTeam()) {
-					$this->func->addContent($this->view->u_delete_account(), CNT_RIGHT);
-				}
 			}
 		} else {
 			$this->func->addContent($this->v_utils->v_info('Du hast leider keine Berechtigung für diesen Bezirk'));
-		}
-	}
-
-	private function deleteAccount($id)
-	{
-		if (($this->session->may('orga'))) {
-			$foodsaver = $this->model->getValues(array('email', 'name', 'nachname', 'bezirk_id'), 'foodsaver', $id);
-
-			$this->foodsaverGateway->del_foodsaver($id);
-			$this->func->info('Foodsaver ' . $foodsaver['name'] . ' ' . $foodsaver['nachname'] . ' wurde gelöscht, für die Wiederherstellung wende Dich an ' . SUPPORT_EMAIL);
-			$this->func->go('/?page=dashboard');
 		}
 	}
 

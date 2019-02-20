@@ -35,7 +35,7 @@ class WorkGroupXhr extends Control
 
 	public function addtogroup()
 	{
-		if ($group = $this->model->getGroup($_GET['id'])) {
+		if ($this->session->may('fs') && $group = $this->model->getGroup($_GET['id'])) {
 			if ($group['apply_type'] == ApplyType::OPEN) {
 				$this->model->addToGroup($_GET['id'], $this->session->id());
 

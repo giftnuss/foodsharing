@@ -51,6 +51,7 @@ group:
   quit_name: Team %name% verlassen
   quit: Verlassen
   really_quit_name: Möchtest Du wirklich den Bezirk bzw. das Team %name% verlassen?
+  delete_group_sure: Soll die Arbeitsgruppe/der Bezirk {groupName} wirklich gelöscht werden?
 
 legal:
   pp: Datenschutzerklärung
@@ -147,6 +148,7 @@ yes: Ja
 no: Nein
 options: Optionen
 error_unexpected: Es ist ein Fehler aufgetreten
+success: Erfolgreich abgeschlossen
 
 forum:
   from: Von %name%
@@ -228,3 +230,9 @@ bell:
   buddy_request: "{name} kennt Dich."
   sharepoint_activate_title: "Neuer Fair-Teiler in {bezirk}"
   sharepoint_activate: "{name} wurde eingetragen"
+
+  passgen_failed: "Bitte lade ein Foto! Dann wird es klappen."
+  passgen_failed_title: "Dein Ausweis konnte nicht erstellt werden"
+
+foodsaver:
+  delete_account_sure: "Soll der Account wirklich gelöscht werden?"
