@@ -383,7 +383,7 @@ class StoreUserControl extends Control
 		return '';
 	}
 
-	private function fetchedQuantity(int $id): bool
+	private function fetchedQuantity($id)
 	{
 		$arr = [
 			1 => ['id' => 1, 'name' => '1-3 kg'],
