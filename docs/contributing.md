@@ -58,14 +58,14 @@ for your second and following runs, you can use `./scripts/test-rerun` which run
 (as long as we keep writing the tests to run idempotently, please do!).
 
 So far, end to end tests (called _acceptance tests_ in codeception) work nicely.
-They run with a headless firefox and selenium inside the docker setup and they are run on CI build too.
+They run with a headless Firefox and Selenium inside the Docker setup and they are run on CI build too.
 
-We are working on [restructing the code](https://gitlab.com/foodsharing-dev/foodsharing/issues/68)
-to enable unit testing.
+We are restructuring the code to enable unit testing.  
+Related issue: [Incremental refactor](https://gitlab.com/foodsharing-dev/foodsharing/issues/68).
 
 The state created during testing is not thrown away, and you can visit the test app
 [in your browser](http://localhost:28080/), and it has
-[it's own phpmyadmin](http://localhost:28081/).
+[its own phpmyadmin](http://localhost:28081/).
 
 If you want to run the tests with debug mode turned on, use: `./scripts/test --debug`.
 
