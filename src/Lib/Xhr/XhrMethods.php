@@ -735,6 +735,10 @@ class XhrMethods
 
 	public function xhr_addPhoto($data)
 	{
+		if (!$this->session->id()) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+
 		$data = $this->func->getPostData();
 
 		if (isset($data['fs_id'])) {
