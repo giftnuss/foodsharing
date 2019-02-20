@@ -1146,7 +1146,9 @@ class XhrMethods
 	public function xhr_getBezirk($data)
 	{
 		global $g_data;
-
+		if (!$this->session->may('orga')) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		$g_data = $this->regionGateway->getOne_bezirk($data['id']);
 
 		$g_data['mailbox_name'] = '';
