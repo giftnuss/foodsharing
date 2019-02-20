@@ -87,7 +87,7 @@ class TeamXhr extends Control
 	REPLACE INTO fs_ipblock
 	(`ip`,`context`,`start`,`duration`)
 	VALUES
-	(' . strip_tags($ip) . ',' . strip_tags($context) . ',NOW(),' . (int)$duration . ')');
+	("' . strip_tags($ip) . '","' . strip_tags($context) . '",NOW(),' . (int)$duration . ')');
 
 		return false;
 	}

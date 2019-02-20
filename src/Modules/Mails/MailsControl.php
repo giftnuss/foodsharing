@@ -303,7 +303,17 @@ class MailsControl extends ConsoleControl
 	{
 		self::info('Mail from: ' . $data['from'][0] . ' (' . $data['from'][1] . ')');
 		$email = new fEmail();
-		$email->setFromEmail($data['from'][0], $data['from'][1]);
+
+		$mailparts = explode('@', $data['from'][0]);
+		$fromDomain = end($mailparts);
+		if(in_array($fromDomain, MAILBOX_OWN_DOMAINS)) {
+			$email->setFromEmail($data['from'][0], $data['from'][1]);
+		} else {
+			// use DEFAULT_EMAIL as sender and ReplyTo for the actual sender
+			$email->setFromEmail(DEFAULT_EMAIL, $data['from'][1]);
+			$email->setReplyToEmail($data['from'][0], $data['from'][1]);
+		}
+
 		$subject = preg_replace('/\s+/', ' ', trim($data['subject']));
 		$email->setSubject($subject);
 		$email->setHTMLBody($data['html']);
