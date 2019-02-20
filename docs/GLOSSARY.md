@@ -15,6 +15,10 @@ Distributed Version Control System
 
 Friends of symfony. We use the FOSRestBundle.
 
+## json
+
+Javascript object notation. Format for XHR and REST data transfer.
+
 ## MR
 
 Merge Request
