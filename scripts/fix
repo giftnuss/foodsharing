@@ -9,5 +9,8 @@ source $(dirname "$0")/inc.sh
 echo "Fixing php code"
 run-in-container app vendor/bin/php-cs-fixer fix
 
-echo "Fixing js code"
+echo "Fixing js client code"
 run-in-container client yarn lint --fix
+
+echo "Fixing js chat code"
+run-in-container chat yarn lint --fix
