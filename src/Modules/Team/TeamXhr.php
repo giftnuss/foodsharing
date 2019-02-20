@@ -6,6 +6,7 @@ use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Services\SanitizerService;
 
 class TeamXhr extends Control
@@ -23,7 +24,7 @@ class TeamXhr extends Control
 		parent::__construct();
 	}
 
-	public function contact(): void
+	public function contact()
 	{
 		$xhr = new Xhr();
 
@@ -34,6 +35,10 @@ class TeamXhr extends Control
 
 		if ($id = $this->getPostInt('id')) {
 			if ($user = $this->gateway->getUser($id)) {
+				if (!$user['contact_public']) {
+					return XhrResponses::PERMISSION_DENIED;
+				}
+
 				$mail = new AsyncMail($this->mem);
 
 				if ($this->func->validEmail($_POST['email'])) {

@@ -141,7 +141,7 @@ $csrf_whitelist = [
 	// 'Store::savebezirkids',
 	// 'Store::setbezirkids',
 	// 'Store::signout',
-	// 'Team::contact',
+	'Team::contact',
 	// 'WallPost::delpost',
 	// 'WallPost::update',
 	'WallPost::quickreply',
