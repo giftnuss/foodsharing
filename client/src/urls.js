@@ -32,6 +32,7 @@ export default {
   fasten: () => `/?page=content&sub=fasten`,
   leeretonne: () => `/?page=content&sub=leeretonne`,
   academy: () => `/?page=content&sub=academy`,
+  workshops: () => `/?page=content&sub=workshops`,
   festival: () => `/?page=content&sub=festival`,
   international: () => `/?page=content&sub=international`,
   transparency: () => `/?page=content&sub=transparency`,
