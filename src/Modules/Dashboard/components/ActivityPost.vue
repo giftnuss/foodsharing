@@ -21,7 +21,7 @@
     </span>
     <span class="t">
       <span class="txt">
-        <p>{{ truncatedText }}</p>
+        <Markdown :source="truncatedText" />
         <a v-if="isTruncatable" v-on:click="isTxtShortend = !isTxtShortend">
           {{ isTxtShortend ? 'alles zeigen' : 'weniger' }}
           <i class="fas fa-angle-down" :class="{ 'fa-rotate-180': !isTxtShortend }"></i>
@@ -54,16 +54,16 @@
 import serverData from '@/server-data'
 import { sendQuickreply } from "@/api/dashboard";
 import { pulseError, pulseInfo } from '@/script'
+import Markdown from '@/components/Markdown/Markdown'
 
 /* TODOs
-- quickreply not working yet
 - text should be markdown
 - time should be "from now"
 - readd ability to display photos
 */
 
 export default {
-  components: {},
+  components: {Markdown},
   props: {
     type: {
       type: String,
