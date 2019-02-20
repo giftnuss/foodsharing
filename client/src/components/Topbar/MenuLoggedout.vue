@@ -21,7 +21,7 @@
       </a>
     </li>
 
-    <nav-item-dropdown rightt>
+    <nav-item-dropdown right>
       <template slot="button-content">
         <i class="fas fa-bullhorn " />
         <span v-if="!wXS">
@@ -33,11 +33,11 @@
       </h3>
 
       <a
-        :href="$url('vision')"
+        :href="$url('mission')"
         class="dropdown-item sub"
         role="menuitem"
       >
-        Vision
+        Mission
       </a>
       <a
         :href="$url('grundsaetze')"
@@ -45,6 +45,13 @@
         role="menuitem"
       >
         Grundsätze
+      </a>
+      <a
+        :href="$url('team')"
+        class="dropdown-item sub"
+        role="menuitem"
+      >
+        Team
       </a>
       <a
         :href="$url('partner')"
@@ -77,29 +84,29 @@
       >
         Forderungen
       </a>
+      <a
+        :href="$url('leeretonne')"
+        class="dropdown-item sub"
+        role="menuitem"
+      >
+        Vergangene Kampagnen
+      </a>
       <h3 class="dropdown-header">
         Bildung
       </h3>
       <a
-        :href="$url('fs-academy')"
+        :href="$url('academy')"
         class="dropdown-item sub"
         role="menuitem"
       >
         Akademie
       </a>
       <a
-        :href="$url('fs-festival')"
+        :href="$url('festival')"
         class="dropdown-item sub"
         role="menuitem"
       >
-        Festival
-      </a>
-      <a
-        :href="$url('infosCompany')"
-        class="dropdown-item"
-        role="menuitem"
-      >
-        Für Unternehmen
+        foodsharing Festival
       </a>
     </nav-item-dropdown>
 
@@ -111,19 +118,12 @@
         </span>
       </template>
       <a
-        :href="$url('infos')"
+        :href="$url('faq')"
         class="dropdown-item"
         role="menuitem"
       >
-        Infosammlung
-      </a>
-      <a
-        :href="$url('donate')"
-        class="dropdown-item"
-        role="menuitem"
-      >
-        Spenden
-      </a>
+        F.A.Q.
+      </a>        
       <a
         :href="$url('blog')"
         class="dropdown-item"
@@ -132,11 +132,11 @@
         Blog
       </a>
       <a
-        :href="$url('faq')"
+        :href="$url('wiki')"
         class="dropdown-item"
         role="menuitem"
       >
-        F.A.Q.
+        Wiki
       </a>
       <a
         :href="$url('guide')"
@@ -146,12 +146,26 @@
         Ratgeber
       </a>
       <a
-        :href="$url('wiki')"
+        :href="$url('transparency')"
         class="dropdown-item"
         role="menuitem"
       >
-        Wiki
+        Transparenz
       </a>
+      <a
+        :href="$url('dataprivacy')"
+        class="dropdown-item"
+        role="menuitem"
+      >
+        Datenschutz
+      </a>
+      <a
+        :href="$url('changelog')"
+        class="dropdown-item"
+        role="menuitem"
+      >
+        Changelog
+      </a>        
     </nav-item-dropdown>
 
     <nav-item-dropdown
@@ -161,8 +175,44 @@
       <template slot="button-content">
         <i class="fas fa-envelope" />
       </template>
+       <a
+        :href="$url('contact')"
+        class="dropdown-item"
+        role="menuitem"
+      >
+        Kontakt
+      </a>        
+      <a
+        :href="$url('donate')"
+        class="dropdown-item"
+        role="menuitem"
+      >
+        Spenden
+      </a>
+      <a
+        :href="$url('press')"
+        class="dropdown-item"
+        role="menuitem"
+      >
+        Presse
+      </a>        
+      <a
+        :href="$url('infosCompany')"
+        class="dropdown-item"
+        role="menuitem"
+      >
+        Für Unternehmen
+      </a>
+      <a
+        :href="$url('imprint')"
+        class="dropdown-item"
+        role="menuitem"
+      >
+        Impressum
+      </a>
+      <div class="dropdown-divider" />
       <h3 class="dropdown-header">
-        Communities
+        Ortsgruppen
       </h3>
       <a
         :href="$url('communitiesGermany')"
@@ -185,27 +235,12 @@
       >
         Schweiz
       </a>
-      <div class="dropdown-divider" />
       <a
-        :href="$url('team')"
-        class="dropdown-item"
+        :href="$url('international')"
+        class="dropdown-item sub"
         role="menuitem"
       >
-        Team
-      </a>
-      <a
-        :href="$url('press')"
-        class="dropdown-item"
-        role="menuitem"
-      >
-        Presse
-      </a>
-      <a
-        :href="$url('imprint')"
-        class="dropdown-item"
-        role="menuitem"
-      >
-        Impressum
+        International
       </a>
     </nav-item-dropdown>
   </ul>

@@ -117,7 +117,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function presse()
+        public function presse()
 	{
 		if ($cnt = $this->contentGateway->get(58)) {
 			$this->func->addBread($cnt['title']);
@@ -167,7 +167,57 @@ class ContentControl extends Control
 		}
 	}
 
-	public function leeretonne()
+        public function contact()
+	{
+		if ($cnt = $this->contentGateway->get(73)) {
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
+
+			$this->func->addContent($this->view->simple($cnt));
+		}
+	}
+        
+        public function academy()
+	{
+		if ($cnt = $this->contentGateway->get(69)) {
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
+
+			$this->func->addContent($this->view->simple($cnt));
+		}
+	}
+        
+        public function festival()
+	{
+		if ($cnt = $this->contentGateway->get(72)) {
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
+
+			$this->func->addContent($this->view->simple($cnt));
+		}
+	}
+
+        public function international()
+	{
+		if ($cnt = $this->contentGateway->get(74)) {
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
+
+			$this->func->addContent($this->view->simple($cnt));
+		}
+	}
+
+        public function transparency()
+	{
+		if ($cnt = $this->contentGateway->get(68)) {
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
+
+			$this->func->addContent($this->view->simple($cnt));
+		}
+	}
+
+        public function leeretonne()
 	{
 		if ($cnt = $this->contentGateway->get(46)) {
 			$this->func->addBread($cnt['title']);
@@ -253,6 +303,16 @@ class ContentControl extends Control
 	public function infohub()
 	{
 		if ($cnt = $this->contentGateway->get(59)) {
+			$this->func->addBread($cnt['title']);
+			$this->func->addTitle($cnt['title']);
+
+			$this->func->addContent($this->view->simple($cnt));
+		}
+	}
+        
+	public function fasten()
+	{
+		if ($cnt = $this->contentGateway->get(66)) {
 			$this->func->addBread($cnt['title']);
 			$this->func->addTitle($cnt['title']);
 

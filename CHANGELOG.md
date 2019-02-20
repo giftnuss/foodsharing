@@ -9,6 +9,7 @@
 - Make date in event a mandatory field #436 !669 @tihar
 - Added API endpoints for basket pictures !671 @alex.simm 
 - Allow use of markdown in fairteiler description !690 @NerdyProjects
+- Reworking menue #473 @k.miklobusec
 
 ## Bugfixes
 - Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
