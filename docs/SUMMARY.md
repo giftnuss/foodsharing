@@ -13,8 +13,11 @@
   - [Testing](testing.md)
 
 ### References
-  - [References](references.md)
-  - [Reference php](php.md)
+  - [scripts](references.md)
+  - [php](php.md)
+  - [request types](requests.md)
+  - [javascript, vue.js](javascript.md)
+  - [Databases](database.md)
   - [Reference language](internationalization.md)
 
 - [About the devdocs](about-devdocs.md)
