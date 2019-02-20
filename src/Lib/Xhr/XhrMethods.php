@@ -608,15 +608,15 @@ class XhrMethods
 
 		if (is_array($ratio) && is_array($resize) && count($resize) < 5) {
 			foreach ($ratio as $i => $r) {
-				if ($r['w'] < 1000 && $r['h'] < 1000) {
-					$this->cropImg(ROOT_DIR . 'images/' . $data['id'], $data['img'], $i, $r['x'], $r['y'], $r['w'], $r['h']);
-					foreach ($resize as $r) {
-						if ($r < 1000) {
-							copy(ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $data['img'], ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $r . '_' . $data['img']);
-							$image = new fImage(ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $r . '_' . $data['img']);
-							$image->resize($r, 0);
-							$image->saveChanges();
-						}
+				$i = preg_replace('/%/', '', $i);
+				$i = preg_replace('/\.+/', '.', $i);
+				$this->cropImg(ROOT_DIR . 'images/' . $data['id'], $data['img'], $i, $r['x'], $r['y'], $r['w'], $r['h']);
+				foreach ($resize as $r) {
+					if ($r < 1000) {
+						copy(ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $data['img'], ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $r . '_' . $data['img']);
+						$image = new fImage(ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $r . '_' . $data['img']);
+						$image->resize($r, 0);
+						$image->saveChanges();
 					}
 				}
 			}
@@ -630,8 +630,15 @@ class XhrMethods
 		}
 	}
 
-	private function cropImg($path, $img, $i, $x, $y, $w, $h)
+	private function cropImg($path, $img, int $i, int $x, int $y, int $w, int $h)
 	{
+		if ($w > 2000) {
+			$w = 2000;
+		}
+		if ($h > 2000) {
+			$h = 2000;
+		}
+
 		$targ_w = $w;
 		$targ_h = $h;
 		$jpeg_quality = 100;
