@@ -1097,4 +1097,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 		return '<span style="' . $bg . 'background-image:url(' . $this->img($foodsaver['photo'], $size, 'q', $altimg) . ');" class="avatar size-' . $size . ' sleepmode-' . $foodsaver['sleep_status'] . '"><i>' . $foodsaver['name'] . '</i></span>';
 	}
+
+	public function goLogin()
+	{
+		$this->go('/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']));
+	}
 }

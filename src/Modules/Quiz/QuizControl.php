@@ -14,7 +14,7 @@ class QuizControl extends Control
 		parent::__construct();
 
 		if (!$this->session->may()) {
-			$this->goLogin();
+			$this->func->goLogin();
 		} elseif (!$this->session->mayEditQuiz()) {
 			$this->func->go('/');
 		}
@@ -56,11 +56,6 @@ class QuizControl extends Control
 	{
 		header('Location: ' . $_SERVER['HTTP_REFERER']);
 		exit();
-	}
-
-	private function goLogin()
-	{
-		$this->func->go('/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']));
 	}
 
 	public function wall()
