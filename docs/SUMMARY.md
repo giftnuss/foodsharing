@@ -13,7 +13,7 @@
   - [Testing](testing.md)
 
 ### References
-  - [Scripts](references.md)
+  - [Scripts](scripts.md)
   - [php](php.md)
   - [request types](requests.md)
   - [javascript, vue.js](javascript.md)

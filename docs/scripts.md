@@ -1,10 +1,4 @@
-# References
-
-## Project structure
-
-(Work in progress.)
-
-## Helper scripts
+# Helper scripts
 
 There are a number of helper scripts available. Most of them obey the `FS_INT` env var. Default is `dev`, you can also set it to `test`.
 
