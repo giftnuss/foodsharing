@@ -163,7 +163,7 @@ class ActivityModel extends Db
 						'attr' => [
 							'href' => '/?page=mailbox&show=' . $u['id']
 						],
-						'title' => $from . ' <i class="fas fa-angle-right"></i> <a href="/?page=mailbox&show=' . $u['id'] . '">' . $this->func->ttt($u['subject'], 30) . '</a><small>' . $this->ttt($u['mb_name'] . '@' . PLATFORM_MAILBOX_HOST, 19) . '</small>',
+						'title' => $from . ' <i class="fas fa-angle-right"></i> <a href="/?page=mailbox&show=' . $u['id'] . '">' . $this->ttt($u['subject'], 30) . '</a><small>' . $this->ttt($u['mb_name'] . '@' . PLATFORM_MAILBOX_HOST, 19) . '</small>',
 						'desc' => $this->textPrepare($u['body']),
 						'time' => $u['time'],
 						'icon' => '/img/mailbox-50x50.png',
