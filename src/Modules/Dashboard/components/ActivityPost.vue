@@ -10,18 +10,21 @@
     </span>
     <span class="n">
       <a v-if="data.fs_id" :href="'/profile/' + data.fs_id">{{ data.fs_name }}</a>
-      <i class="fas fa-angle-right"></i>
+      <i v-if="type != 'friendWall'" class="fas fa-angle-right"></i>
       <a v-if="type == 'forum'" :href="data.forum_href"> {{ data.forum_name }} </a>
       <a v-else-if="type == 'foodbasket'" :href="'/essenskoerbe/' + data.basked_id"> {{ "Essenskorb #" + data.basked_id }} </a>
-      <a v-else-if="type == 'friendWall'" :href="'/profile/' + data.poster_id"> {{ data.poster_name }} </a>
       <a v-else-if="type == 'mailbox'" :href="'/?page=mailbox&show=' + data.mailbox_id"> {{ data.subject }} </a>
       <a v-else-if="type == 'store'" :href="'/?page=fsbetrieb&id=' + data.store_id"> {{ data.store_name }} </a>
       <small v-if="data.region_name">{{ data.region_name }}</small>
       <small v-else-if="data.mailbox_name">{{ data.mailbox_name }}</small>
+      <small v-else-if="type == 'friendWall' && user_id == data.fs_id">Deine Pinnwand</small>
     </span>
     <span class="t">
       <span class="txt">
-        <Markdown :source="truncatedText" />
+        <span v-if="data.gallery">
+          <a :key="img.thumb" v-for="img in data.gallery" :href="'profile/' + data.fs_id  + '/#wallposts'"><img :src="img.thumb"></img></a>
+        </span>
+        <span class="img-text"><Markdown :source="truncatedText" /></span>
         <a v-if="isTruncatable" v-on:click="isTxtShortend = !isTxtShortend">
           {{ isTxtShortend ? 'alles zeigen' : 'weniger' }}
           <i class="fas fa-angle-down" :class="{ 'fa-rotate-180': !isTxtShortend }"></i>
@@ -80,6 +83,7 @@ export default {
     return {
       isTxtShortend: true,
       qrLoading: false,
+      user_id: serverData.user.id,
       user_avatar: serverData.user.avatar.mini,
       quickreplyValue: null
     }
@@ -168,6 +172,19 @@ export default {
   position: relative;
   text-align: left;
   top: -10px;
+}
+.activity-item span.t img {
+    float: left;
+    padding-right: 10px;
+  }
+.activity-item span.t span.img-txt {
+  display: inline;
+  vertical-align: bottom;
+}
+.activity-item span.t span.img-txt span.txt{
+  border: 0;
+  display: inline;
+  padding-left: 0;
 }
 
 .activity-item span.t span.txt {

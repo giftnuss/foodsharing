@@ -113,6 +113,7 @@ class ActivityGateway extends BaseGateway
 				w.id,
 				w.body,
 				w.time,
+				w.attach,
 				UNIX_TIMESTAMP(w.time) AS time_ts,
 				fs.id AS fs_id,
 				fs.name AS fs_name,
@@ -138,10 +139,28 @@ class ActivityGateway extends BaseGateway
 			LIMIT :lower_limit, :upper_limit
 		';
 
-		return $this->db->fetchAll(
+		$posts = $this->db->fetchAll(
 			$stm,
 			[':lower_limit' => (int)$page * self::ITEMS_PER_PAGE, ':upper_limit' => self::ITEMS_PER_PAGE]
 		);
+
+		foreach ($posts as $key => $w) {
+			if (!empty($w['attach'])) {
+				$data = json_decode($w['attach'], true);
+				if (isset($data['image'])) {
+					$gallery = array();
+					foreach ($data['image'] as $img) {
+						$gallery[] = array(
+							'image' => 'images/wallpost/' . $img['file'],
+							'medium' => 'images/wallpost/medium_' . $img['file'],
+							'thumb' => 'images/wallpost/thumb_' . $img['file']
+						);
+					}
+					$posts[$key]['gallery'] = $gallery;
+				}
+			}
+		}
+		return $posts;
 	}
 
 	public function fetchAllMailboxUpdates($mb_ids, $page): array

@@ -133,7 +133,8 @@ class ActivityModel extends Db
 						'desc' => $u['body'],
 						'time' => $u['time'],
 						'icon' => $this->func->img($u['fs_photo'], 50),
-						'time_ts' => $u['time_ts']
+						'time_ts' => $u['time_ts'],
+						'gallery' => $u['gallery']
 					],
 					'attr' => [
 						'href' => '/profile/' . $u['fs_id']
