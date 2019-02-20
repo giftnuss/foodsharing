@@ -76,7 +76,6 @@ class MailboxXhr extends Control
 			($cur_time - $last_refresh) > 30
 		) {
 			$this->mem->set('mailbox_refresh', $cur_time);
-			$ref = $this->refresh();
 		}
 
 		$mb_id = (int)$_GET['mb'];
