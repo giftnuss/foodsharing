@@ -4,7 +4,7 @@ If you have any questions please reach out to us via slack: [yunity slack](https
 
 ## Coding guidelines
 
-We do have a few coding guideline, mentioned at various places in these devdocs.
+We do have a few coding guidelines, mentioned at various places in these devdocs.
 In general, please use your common sense and make it fit with the existing code.
 
 ## Submitting an issue
