@@ -13,7 +13,7 @@ Distributed Version Control System
 
 ## FOS
 
-Friends of symfony. We use the FOSRestBundle.
+Friends of symfony. We use the [FOSRestBundle](https://symfony.com/doc/master/bundles/FOSRestBundle/index.html).
 
 ## json
 
@@ -33,7 +33,7 @@ Pull Request
 
 ## REST
 
-REpresentational State Transfer
+REpresentational State Transfer. We use the [FOSRestBundle](https://symfony.com/doc/master/bundles/FOSRestBundle/index.html)
 
 ## ToU
 
