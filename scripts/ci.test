@@ -35,7 +35,7 @@ echo $SECONDS seconds elapsed
 log-header "Installing composer deps in app container"
 SECONDS=0
 dc up -d --no-build --no-deps app
-exec-in-container app 'composer install && composer outdated -D'
+exec-in-container-with-image-user app 'composer install && composer outdated -D'
 exec-in-container app rm -rf cache/.views-cache cache/di-cache.php
 echo $SECONDS seconds elapsed
 
@@ -58,13 +58,13 @@ echo $SECONDS seconds elapsed
 
 log-header "Checking code style"
 SECONDS=0
-exec-in-container app scripts/php-cs-fixer.ci.sh --cache-file=vendor/php-cs-cache fix
+exec-in-container-with-image-user app scripts/php-cs-fixer.ci.sh --cache-file=vendor/php-cs-cache fix
 echo $SECONDS seconds elapsed
 
 log-header "Running tests"
 failed=0
 SECONDS=0
-exec-in-container app vendor/bin/codecept run --xml --html || failed=1
+exec-in-container-with-image-user app vendor/bin/codecept run --xml --html || failed=1
 echo $SECONDS seconds elapsed
 
 if [ $failed -eq 1 ]; then
@@ -76,7 +76,7 @@ if [ $failed -eq 1 ]; then
 
   log-header "Rerunning failed tests"
   SECONDS=0
-  exec-in-container app vendor/bin/codecept run --xml --html -g failed || failed=2
+  exec-in-container-with-image-user app vendor/bin/codecept run --xml --html -g failed || failed=2
   echo $SECONDS seconds elapsed
 fi
 
@@ -89,7 +89,7 @@ if [ $failed -eq 2 ]; then
 
   log-header "Rerunning failed tests"
   SECONDS=0
-  exec-in-container app vendor/bin/codecept run -g failed
+  exec-in-container-with-image-user app vendor/bin/codecept run -g failed
   echo $SECONDS seconds elapsed
 fi
 

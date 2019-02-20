@@ -58,6 +58,12 @@ function exec-in-container() {
   dc exec -T --user $(id --user):$(id --group) $container sh -c "HOME=./ $command"
 }
 
+function exec-in-container-with-image-user() {
+  local container=$1; shift;
+  local command=$@;
+  dc exec -T $container sh -c "HOME=./ $command"
+}
+
 function run-in-container() {
   local container=$1; shift;
   local command=$@;
