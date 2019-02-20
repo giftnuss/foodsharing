@@ -6,56 +6,62 @@ use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
-use setasign\Fpdi;
+use Endroid\QrCode\QrCode;
+use setasign\Fpdi\Tcpdf\Fpdi;
 
-class PassportGeneratorControl extends Control
+final class PassportGeneratorControl extends Control
 {
-	private $bezirk_id;
-	private $bezirk;
+	private $regionId;
+	private $region;
 	private $bellGateway;
 	private $regionGateway;
-	private $passportGateway;
+	private $passportGeneratorGateway;
 	private $foodsaverGateway;
 
-	public function __construct(PassportGeneratorModel $model, PassportGeneratorView $view, BellGateway $bellGateway, RegionGateway $regionGateway, PassportGateway $passportGateway, FoodsaverGateway $foodsaverGateway)
-	{
-		$this->model = $model;
+	public function __construct(
+		PassportGeneratorView $view,
+		BellGateway $bellGateway,
+		RegionGateway $regionGateway,
+		PassportGeneratorGateway $passportGateway,
+		FoodsaverGateway $foodsaverGateway
+	) {
 		$this->view = $view;
 		$this->bellGateway = $bellGateway;
 		$this->regionGateway = $regionGateway;
-		$this->passportGateway = $passportGateway;
+		$this->passportGeneratorGateway = $passportGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 
 		parent::__construct();
 
-		$this->bezirk_id = false;
-		if (($this->bezirk_id = $this->func->getGetId('bid')) === false) {
-			$this->bezirk_id = $this->session->getCurrentBezirkId();
+		$this->regionId = false;
+		if (($this->regionId = $this->func->getGetId('bid')) === false) {
+			$this->regionId = $this->session->getCurrentBezirkId();
 		}
 
-		if ($this->session->isAdminFor($this->bezirk_id) || $this->session->isOrgaTeam()) {
-			$this->bezirk = false;
-			if ($bezirk = $this->regionGateway->getBezirk($this->bezirk_id)) {
-				$this->bezirk = $bezirk;
+		// isBotForA() returns true if user is an ambassador (AMB) for this region. If the user is an AMB and the bezirk/region is a working group it returns false
+		if ($this->session->isBotForA([$this->regionId], false, true) || $this->session->isOrgaTeam()) {
+			$this->region = false;
+			if ($region = $this->regionGateway->getBezirk($this->regionId)) {
+				$this->region = $region;
 			}
 		} else {
 			$this->func->go('/?page=dashboard');
 		}
 	}
 
-	public function index()
+	public function index(): void
 	{
-		$this->func->addBread($this->bezirk['name'], '/?page=bezirk&bid=' . $this->bezirk_id . '&sub=forum');
+		$this->func->addBread($this->region['name'], '/?page=bezirk&bid=' . $this->regionId . '&sub=forum');
 		$this->func->addBread('Pass-Generator', $this->func->getSelf());
 
-		$this->func->addTitle($this->bezirk['name']);
+		$this->func->addTitle($this->region['name']);
 		$this->func->addTitle('Pass Generator');
 
 		if (isset($_POST['foods']) && !empty($_POST['foods'])) {
 			$this->generate($_POST['foods']);
 		}
 
-		if ($bezirke = $this->model->getPassFoodsaver($this->bezirk_id)) {
+		if ($regions = $this->passportGeneratorGateway->getPassFoodsaver($this->regionId)) {
 			$this->func->addHidden('
 			<div id="verifyconfirm-dialog" title="' . $this->func->s('verify_confirm_title') . '">
 				' . $this->v_utils->v_info('<p>' . $this->func->s('verify_confirm') . '</p>', $this->func->s('verify_confirm_title')) . '
@@ -71,8 +77,8 @@ class PassportGeneratorControl extends Control
 			</div>');
 
 			$this->func->addContent('<form id="generate" method="post">');
-			foreach ($bezirke as $b) {
-				$this->func->addContent($this->view->passTable($b));
+			foreach ($regions as $region) {
+				$this->func->addContent($this->view->passTable($region));
 			}
 			$this->func->addContent('</form>');
 			$this->func->addContent($this->view->menubar(), CNT_RIGHT);
@@ -88,75 +94,85 @@ class PassportGeneratorControl extends Control
 		}
 	}
 
-	public function generate($foodsaver)
+	public function generate(array $foodsavers): void
 	{
 		$tmp = array();
-		foreach ($foodsaver as $fs) {
-			$tmp[$fs] = (int)$fs;
+		foreach ($foodsavers as $foodsaver) {
+			$tmp[$foodsaver] = (int)$foodsaver;
 		}
-		$foodsaver = $tmp;
+		$foodsavers = $tmp;
 		$is_generated = array();
 
-		include 'lib/phpqrcode/qrlib.php';
-
-		$pdf = new Fpdi\Fpdi();
+		$pdf = new Fpdi();
 		$pdf->AddPage();
 		$pdf->SetTextColor(0, 0, 0);
-		$pdf->AddFont('Ubuntu-L', '', 'Ubuntu-L.php');
-		$pdf->AddFont('AcmeFont Regular', '', 'acmefontregular.php');
+		$pdf->AddFont('Ubuntu-L', '', 'lib/font/ubuntul.php', true);
+		$pdf->AddFont('AcmeFont Regular', '', 'lib/font/acmefont.php', true);
 
 		$x = 0;
 		$y = 0;
 		$card = 0;
 
-		$nophoto = array();
+		$noPhoto = array();
 
-		end($foodsaver);
+		end($foodsavers);
 
 		$pdf->setSourceFile('img/foodsharing_logo.pdf');
 		$fs_logo = $pdf->importPage(1);
 
-		foreach ($foodsaver as $i => $fs_id) {
-			if ($fs = $this->model->qRow('SELECT `photo`,`id`,`name`,`nachname`,`geschlecht`,`rolle` FROM fs_foodsaver WHERE `id` = ' . (int)$fs_id . ' ')) {
-				if (empty($fs['photo'])) {
-					$nophoto[] = $fs['name'] . ' ' . $fs['nachname'];
+		foreach ($foodsavers as $fs_id) {
+			if ($foodsaver = $this->foodsaverGateway->getFoodsaverDetails($fs_id)) {
+				if (empty($foodsaver['photo'])) {
+					$noPhoto[] = $foodsaver['name'] . ' ' . $foodsaver['nachname'];
 
 					$this->bellGateway->addBell(
-						$fs['id'],
+						$foodsaver['id'],
 						'passgen_failed_title',
 						'passgen_failed',
 						'fas fa-camera',
-						array('href' => '/?page=settings'),
-						array('user' => $this->session->user('name')),
-						'pass-fail-' . $fs['id']
+						['href' => '/?page=settings'],
+						['user' => $this->session->user('name')],
+						'pass-fail-' . $foodsaver['id']
 					);
-					continue;
+					//continue;
 				}
 
 				$pdf->SetTextColor(0, 0, 0);
-				$pdf->AddFont('Ubuntu-L', '', 'Ubuntu-L.php');
-
-				@unlink('tmp/qr_' . $fs_id . '.png');
-				\QRcode::png($fs_id, 'tmp/qr_' . $fs_id . '.png', QR_ECLEVEL_L, 3.4, 0);
 
 				++$card;
 
-				$this->passportGateway->passGen($this->session->id(), $fs['id']);
+				$this->passportGeneratorGateway->passGen($this->session->id(), $foodsaver['id']);
 
 				$pdf->Image('img/pass_bg.png', 10 + $x, 10 + $y, 83, 55);
 
 				$pdf->SetFont('Ubuntu-L', '', 10);
-
-				$pdf->Text(41.8 + $x, 34.4 + $y, utf8_decode($fs['name'] . ' ' . $fs['nachname']));
-				$pdf->Text(41.8 + $x, 42.1 + $y, utf8_decode($this->getRole($fs['geschlecht'], $fs['rolle'])));
-				$pdf->Text(41.8 + $x, 49.8 + $y, utf8_decode(date('d. m. Y', time() - 1814400)));
-				$pdf->Text(41.8 + $x, 57.3 + $y, utf8_decode(date('d. m. Y', time() + 94608000)));
+				$name = $foodsaver['name'] . ' ' . $foodsaver['nachname'];
+				$maxWidth = 49;
+				if ($pdf->GetStringWidth($name) > $maxWidth) {
+					$pdf->SetFont('Ubuntu-L', '', 8);
+					if ($pdf->GetStringWidth($name) <= $maxWidth) {
+						$pdf->Text(41 + $x, 30 + $y, $name);
+					}
+					$size = 8;
+					while ($pdf->GetStringWidth($foodsaver['name']) > $maxWidth || $pdf->GetStringWidth($foodsaver['nachname']) > $maxWidth) {
+						$size -= 0.5;
+						$pdf->SetFont('Ubuntu-L', '', $size);
+					}
+					$pdf->Text(41 + $x, 30.2 + $y, $foodsaver['name']);
+					$pdf->Text(41 + $x, 33.2 + $y, $foodsaver['nachname']);
+				} else {
+					$pdf->Text(41 + $x, 30 + $y, $name);
+				}
+				$pdf->SetFont('Ubuntu-L', '', 10);
+				$pdf->Text(41 + $x, 39 + $y, $this->getRole($foodsaver['geschlecht'], $foodsaver['rolle']));
+				$pdf->Text(41 + $x, 48 + $y, date('d. m. Y', time() - 1814400));
+				$pdf->Text(41 + $x, 57 + $y, date('d. m. Y', time() + 94608000));
 
 				$pdf->SetFont('Ubuntu-L', '', 6);
-				$pdf->Text(41.8 + $x, 31.2 + $y, utf8_decode('Name'));
-				$pdf->Text(41.8 + $x, 38.9 + $y, utf8_decode('Rolle'));
-				$pdf->Text(41.8 + $x, 46.6 + $y, utf8_decode('Gültig ab'));
-				$pdf->Text(41.8 + $x, 54.3 + $y, utf8_decode('Gültig bis'));
+				$pdf->Text(41 + $x, 28 + $y, 'Name');
+				$pdf->Text(41 + $x, 37 + $y, 'Rolle');
+				$pdf->Text(41 + $x, 46 + $y, 'Gültig ab');
+				$pdf->Text(41 + $x, 55 + $y, 'Gültig bis');
 
 				$pdf->SetFont('Ubuntu-L', '', 9);
 				$pdf->SetTextColor(255, 255, 255);
@@ -164,11 +180,21 @@ class PassportGeneratorControl extends Control
 				$pdf->Cell(50, 5, 'ID ' . $fs_id, 0, 0, 'R');
 
 				$pdf->SetFont('AcmeFont Regular', '', 5.3);
-				$pdf->Text(13.9 + $x, 20.6 + $y, 'Teile Lebensmittel, anstatt sie wegzuwerfen!');
+				$pdf->Text(12.8 + $x, 18.6 + $y, 'Teile Lebensmittel, anstatt sie wegzuwerfen!');
 
 				$pdf->useTemplate($fs_logo, 13.5 + $x, 13.6 + $y, 29.8);
 
-				$pdf->Image('tmp/qr_' . $fs_id . '.png', 70 + $x, 42.1 + $y);
+				$style = array(
+					'vpadding' => 'auto',
+					'hpadding' => 'auto',
+					'fgcolor' => array(0, 0, 0),
+					'bgcolor' => false, //array(255,255,255)
+					'module_width' => 1, // width of a single module in points
+					'module_height' => 1 // height of a single module in points
+				);
+
+				// QRCODE,L : QR-CODE Low error correction
+				$pdf->write2DBarcode('https://foodsharing.de/profile/' . $fs_id, 'QRCODE,L', 70.5 + $x, 43 + $y, 20, 20, $style, 'N');
 
 				if ($photo = $this->foodsaverGateway->getPhoto($fs_id)) {
 					if (file_exists('images/crop_' . $photo)) {
@@ -192,26 +218,26 @@ class PassportGeneratorControl extends Control
 					$y = 0;
 				}
 
-				$is_generated[] = $fs['id'];
+				$is_generated[] = $foodsaver['id'];
 			}
 		}
-		if (!empty($nophoto)) {
-			$last = array_pop($nophoto);
-			$this->func->info(implode(', ', $nophoto) . ' und ' . $last . ' haben noch kein Foto hochgeladen und ihr Ausweis konnte nicht erstellt werden');
+		if (!empty($noPhoto)) {
+			$last = array_pop($noPhoto);
+			$this->func->info(implode(', ', $noPhoto) . ' und ' . $last . ' haben noch kein Foto hochgeladen und ihr Ausweis konnte nicht erstellt werden');
 		}
 
-		$this->model->updateLastGen($is_generated);
+		$this->passportGeneratorGateway->updateLastGen($is_generated);
 
-		$bez = strtolower($this->bezirk['name']);
+		$bez = strtolower($this->region['name']);
 
-		$bez = str_replace(array('ä', 'ö', 'ü', 'ß'), array('ae', 'oe', 'ue', 'ss'), $bez);
+		$bez = str_replace(['ä', 'ö', 'ü', 'ß'], ['ae', 'oe', 'ue', 'ss'], $bez);
 		$bez = preg_replace('/[^a-zA-Z]/', '', $bez);
 
-		$pdf->Output('D', 'foodsaver_pass_' . $bez . '.pdf');
+		$pdf->Output('foodsaver_pass_' . $bez . '.pdf', 'D');
 		exit();
 	}
 
-	public function getRole($gender_id, $role_id)
+	public function getRole(int $gender_id, int $role_id)
 	{
 		$role = [
 			0 => [ // not defined
@@ -240,18 +266,18 @@ class PassportGeneratorControl extends Control
 		return $role[$gender_id][$role_id];
 	}
 
-	private function download1()
+	private function download1(): void
 	{
 		$this->func->addJs('
-			setTimeout(function(){goTo("/?page=passgen&bid=' . $this->bezirk_id . '&dl2")},100);		
+			setTimeout(function(){goTo("/?page=passgen&bid=' . $this->regionId . '&dl2")},100);		
 		');
 	}
 
-	private function download2()
+	private function download2(): void
 	{
-		$bez = strtolower($this->bezirk['name']);
+		$bez = strtolower($this->region['name']);
 
-		$bez = str_replace(array('ä', 'ö', 'ü', 'ß'), array('ae', 'oe', 'ue', 'ss'), $bez);
+		$bez = str_replace(['ä', 'ö', 'ü', 'ß'], ['ae', 'oe', 'ue', 'ss'], $bez);
 		$bez = preg_replace('/[^a-zA-Z]/', '', $bez);
 		$file = 'data/pass/foodsaver_pass_' . $bez . '.pdf';
 

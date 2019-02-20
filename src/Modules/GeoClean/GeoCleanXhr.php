@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\GeoClean;
 
+use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
 
@@ -15,21 +16,23 @@ class GeoCleanXhr extends Control
 		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
-
-		if (!$this->session->may('orga')) {
-			return false;
-		}
 	}
 
 	public function masterupdate()
 	{
+		if (!$this->session->may('orga')) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		if ($bezirke = $this->regionGateway->listIdsForDescendantsAndSelf($_GET['id'])) {
-			$this->model->update('UPDATE fs_bezirk SET `master` = ' . $_GET['id'] . ' WHERE id IN(' . implode(',', $bezirke) . ')');
+			$this->regionGateway->updateMasterRegions($bezirke, $_GET['id']);
 		}
 	}
 
 	public function updateGeo()
 	{
+		if (!$this->session->may('orga')) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		$lat = $_GET['lat'];
 		$lon = $_GET['lon'];
 		$fsid = $_GET['id'];

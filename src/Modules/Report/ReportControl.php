@@ -24,7 +24,7 @@ class ReportControl extends Control
 
 	public function index(): void
 	{
-		if ($this->func->mayHandleReports()) {
+		if ($this->session->mayHandleReports()) {
 			$this->func->addBread('Meldungen', '/?page=report');
 		} else {
 			$this->func->go('/?page=dashboard');
@@ -33,7 +33,7 @@ class ReportControl extends Control
 
 	public function uncom(): void
 	{
-		if ($this->func->mayHandleReports()) {
+		if ($this->session->mayHandleReports()) {
 			$this->func->addContent($this->view->statsMenu($this->reportGateway->getReportStats()), CNT_LEFT);
 
 			if ($reports = $this->reportGateway->getReports(0)) {
@@ -45,7 +45,7 @@ class ReportControl extends Control
 
 	public function com(): void
 	{
-		if ($this->func->mayHandleReports()) {
+		if ($this->session->mayHandleReports()) {
 			$this->func->addContent($this->view->statsMenu($this->reportGateway->getReportStats()), CNT_LEFT);
 
 			if ($reports = $this->reportGateway->getReports(1)) {
@@ -57,7 +57,7 @@ class ReportControl extends Control
 
 	public function foodsaver(): void
 	{
-		if ($this->func->mayHandleReports()) {
+		if ($this->session->mayHandleReports()) {
 			if ($foodsaver = $this->reportGateway->getReportedSaver($_GET['id'])) {
 				$this->func->addBread('Meldungen', '/?page=report&sub=foodsaver&id=' . (int)$foodsaver['id']);
 				$this->func->addJs('

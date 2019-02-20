@@ -15,7 +15,7 @@ class QuizControl extends Control
 
 		if (!$this->session->may()) {
 			$this->func->goLogin();
-		} elseif (!$this->func->mayEditQuiz()) {
+		} elseif (!$this->session->mayEditQuiz()) {
 			$this->func->go('/');
 		}
 	}
@@ -25,7 +25,7 @@ class QuizControl extends Control
 		// quiz&a=delete&id=9
 		if ($id = $this->func->getActionId('delete')) {
 			$this->model->deleteSession($id);
-			$this->func->goBack();
+			$this->goBack();
 		}
 
 		$this->func->addBread('Quiz', '/?page=quiz');
@@ -50,6 +50,12 @@ class QuizControl extends Control
 			$this->func->addContent($this->view->listQuiz($this->model->listQuiz()), CNT_LEFT);
 			$this->func->addContent($this->view->quizMenu(), CNT_LEFT);
 		}
+	}
+
+	private function goBack()
+	{
+		header('Location: ' . $_SERVER['HTTP_REFERER']);
+		exit();
 	}
 
 	public function wall()
@@ -117,7 +123,7 @@ class QuizControl extends Control
 	{
 		if ($fs = $this->model->getValues(array('name', 'nachname', 'photo', 'rolle', 'geschlecht', 'sleep_status'), 'foodsaver', $_GET['fsid'])) {
 			$this->func->addBread('Quiz Sessions von ' . $fs['name'] . ' ' . $fs['nachname']);
-			$this->func->addContent($this->view->topbar('Quiz-Sessions von ' . $fs['name'] . ' ' . $fs['nachname'], $this->func->getRolle($fs['geschlecht'], $fs['rolle']), $this->func->avatar($fs)), CNT_TOP);
+			$this->func->addContent($this->view->topbar('Quiz-Sessions von ' . $fs['name'] . ' ' . $fs['nachname'], $this->getRolle($fs['geschlecht'], $fs['rolle']), $this->func->avatar($fs)), CNT_TOP);
 
 			if ($sessions = $this->model->getUserSessions($_GET['fsid'])) {
 				$this->func->addContent($this->view->userSessions($sessions, $fs));
@@ -125,6 +131,11 @@ class QuizControl extends Control
 				$this->func->addContent($this->view->noSessions($quiz));
 			}
 		}
+	}
+
+	private function getRolle($gender_id, $rolle_id)
+	{
+		return $this->func->s('rolle_' . $rolle_id . '_' . $gender_id);
 	}
 
 	public function sessions()

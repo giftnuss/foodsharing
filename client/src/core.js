@@ -28,6 +28,7 @@ import '@/becomeBezirk'
 import serverData from '@/server-data'
 
 import socket from '@/socket'
+import { getCsrfToken } from '@/api/base'
 
 initialize()
 
@@ -62,3 +63,16 @@ if (serverData.user.may) {
 } else {
   clearInterval(window.g_interval_newBasket)
 }
+
+// add CSRF-Token to all jquery requests
+$.ajaxPrefilter(function (options) {
+  if (!options.beforeSend) {
+    options.beforeSend = function (xhr, settings) {
+      if (settings.url.startsWith('/') && !settings.url.startsWith('//')) {
+        xhr.setRequestHeader('X-CSRF-Token', getCsrfToken())
+      } else {
+        // don't send for external domains (must be a relative url)
+      }
+    }
+  }
+})

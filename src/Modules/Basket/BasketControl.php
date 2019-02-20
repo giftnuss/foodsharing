@@ -50,17 +50,6 @@ class BasketControl extends Control
 		$requests = false;
 
 		if ($this->session->may()) {
-			if ($basket['fs_id'] != $this->session->id()) {
-				$this->func->addJsFunc(
-					'
-				function u_wallpostReady(postid)
-				{
-					ajax.req("basket","follow",{
-						data:{bid:' . (int)$basket['id'] . '}
-					});
-				}'
-				);
-			}
 			$wallPosts = $this->wallposts('basket', $basket['id']);
 			if ($basket['fs_id'] == $this->session->id()) {
 				$requests = $this->basketGateway->listRequests($basket['id'], $this->session->id());

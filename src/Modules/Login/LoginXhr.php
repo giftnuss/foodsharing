@@ -9,20 +9,17 @@ use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Services\SearchService;
 
 class LoginXhr extends Control
 {
-	private $searchService;
 	private $contentGateway;
 	private $foodsaverGateway;
 	private $loginGateway;
 
-	public function __construct(LoginModel $model, LoginView $view, SearchService $searchService, ContentGateway $contentGateway, FoodsaverGateway $foodsaverGateway, LoginGateway $loginGateway)
+	public function __construct(LoginModel $model, LoginView $view, ContentGateway $contentGateway, FoodsaverGateway $foodsaverGateway, LoginGateway $loginGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
-		$this->searchService = $searchService;
 		$this->contentGateway = $contentGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->loginGateway = $loginGateway;
@@ -42,33 +39,6 @@ class LoginXhr extends Control
 		} else {
 			$this->mem->userSet($this->session->id(), 'infomail', false);
 		}
-	}
-
-	public function loginsubmit()
-	{
-		if ($this->loginGateway->login($_GET['u'], $_GET['p'])) {
-			$token_js = '';
-			if ($token = $this->searchService->writeSearchIndexToDisk($this->session->id(), $this->session->user('token'))) {
-				$token_js = 'user.token = "' . $token . '";';
-			}
-
-			$this->fillMemcacheUserVars();
-
-			$menu = $this->func->getMenu();
-
-			return array(
-				'status' => 1,
-				'script' => '
-					' . $token_js . '
-					pulseSuccess("' . $this->func->s('login_success') . '");
-					reload();'
-			);
-		}
-
-		return array(
-			'status' => 1,
-			'script' => 'pulseError("' . $this->func->s('login_failed') . '");'
-		);
 	}
 
 	/**
@@ -131,7 +101,7 @@ class LoginXhr extends Control
 			exit();
 		}
 
-		$token = uniqid('', true);
+		$token = bin2hex(random_bytes(12));
 		if ($id = $this->model->insertNewUser($data, $token)) {
 			$activationUrl = BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
 

@@ -64,7 +64,6 @@ class EmailGateway extends BaseGateway
 			`id`,
 			`foodsaver_id`,
 			`mailbox_id`,
-			`mode`,
 			`complete`,
 			`name`,
 			`message`,
@@ -79,7 +78,7 @@ class EmailGateway extends BaseGateway
 		return $out;
 	}
 
-	public function initEmail($fs_id, $mailbox_id, $foodsaver, $message, $subject, $attach, $mode)
+	public function initEmail($fs_id, $mailbox_id, $foodsaver, $message, $subject, $attach)
 	{
 		if ((int)$mailbox_id == 0) {
 			throw new \Exception('mailbox_id is 0');
@@ -93,11 +92,10 @@ class EmailGateway extends BaseGateway
 		$email_id = $this->db->insert('fs_send_email', [
 			'foodsaver_id' => $fs_id,
 			'mailbox_id' => $mailbox_id,
-			'subject' => strip_tags($subject),
-			'message' => strip_tags($message),
+			'name' => $subject,
+			'message' => $message,
 			'zeit' => $this->db->now(),
-			'attach' => $attach_db,
-			'mode' => $mode
+			'attach' => $attach_db
 		]);
 
 		$query = array();

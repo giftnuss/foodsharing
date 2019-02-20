@@ -404,38 +404,6 @@ class RegionGateway extends BaseGateway
 		$this->db->commit();
 	}
 
-	public function deleteBezirk($id)
-	{
-		$parent_id = $this->db->fetchValueByCriteria(
-			'fs_bezirk',
-			'parent_id',
-			['id' => $id]
-		);
-
-		$this->db->update(
-			'fs_foodsaver',
-			['bezirk_id' => null],
-			['bezirk_id' => $id]
-		);
-		$this->db->update(
-			'fs_bezirk',
-			['parent_id' => 0],
-			['parent_id' => $id]
-		);
-
-		$this->db->delete('fs_bezirk', ['id' => $id]);
-
-		$count = $this->db->fetchValue('SELECT COUNT(`id`) FROM fs_bezirk WHERE `parent_id` = :id', [':id' => $parent_id]);
-
-		if ($count == 0) {
-			$this->db->update(
-				'fs_bezirk',
-				['has_children' => 0],
-				['id' => $parent_id]
-			);
-		}
-	}
-
 	public function denyBezirkRequest($fsid, $bid)
 	{
 		$this->db->delete('fs_foodsaver_has_bezirk', [
@@ -524,5 +492,10 @@ class RegionGateway extends BaseGateway
 			'active' => 1,
 			'added' => $this->db->now()
 		]);
+	}
+
+	public function updateMasterRegions(array $regionIds, int $masterId): void
+	{
+		$this->db->update('fs_bezirk', ['master' => $masterId], ['id' => $regionIds]);
 	}
 }

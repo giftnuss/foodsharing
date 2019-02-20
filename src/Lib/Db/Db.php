@@ -94,7 +94,7 @@ class Db
 		if ($res = $this->sql($sql)) {
 			if ($row = $res->fetch_array()) {
 				if (isset($row[0])) {
-					return $this->func->qs($row[0]);
+					return $row[0];
 				}
 			}
 		}
@@ -110,7 +110,7 @@ class Db
 		$out = array();
 		if ($res = $this->sql($sql)) {
 			while ($row = $res->fetch_array()) {
-				$out[] = $this->func->qs($row[0]);
+				$out[] = $row[0];
 			}
 		}
 
@@ -154,7 +154,7 @@ class Db
 
 			if (is_object($res) && ($row = $res->fetch_assoc())) {
 				foreach ($row as $i => $r) {
-					$row[$i] = $this->func->qs($r);
+					$row[$i] = $r;
 				}
 
 				return $row;
@@ -235,7 +235,7 @@ class Db
 		if ($res = $this->sql($sql)) {
 			while ($row = $res->fetch_assoc()) {
 				foreach ($row as $i => $r) {
-					$row[$i] = $this->func->qs($r);
+					$row[$i] = $r;
 				}
 				$out[] = $row;
 			}

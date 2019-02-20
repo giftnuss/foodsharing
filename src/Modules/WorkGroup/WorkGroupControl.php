@@ -66,13 +66,13 @@ class WorkGroupControl extends Control
 
 	private function mayAccess($group)
 	{
-		return $this->func->mayBezirk($group['id']) || $this->session->isAdminFor($group['parent_id']);
+		return $this->session->mayBezirk($group['id']) || $this->session->isAdminFor($group['parent_id']);
 	}
 
 	private function mayApply($group, $applications, $stats)
 	{
 		return
-			!$this->func->mayBezirk($group['id'])
+			!$this->session->mayBezirk($group['id'])
 			&& !in_array($group['id'], $applications)
 			&& ($group['apply_type'] == ApplyType::EVERYBODY
 			  || ($group['apply_type'] == ApplyType::REQUIRES_PROPERTIES && $this->fulfillApplicationRequirements($group, $stats)));
@@ -81,7 +81,7 @@ class WorkGroupControl extends Control
 	private function mayJoin($group)
 	{
 		return
-			!$this->func->mayBezirk($group['id'])
+			!$this->session->mayBezirk($group['id'])
 			&& $group['apply_type'] == ApplyType::OPEN;
 	}
 

@@ -7,16 +7,19 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Permissions\WallPostPermissions;
+use Foodsharing\Services\NotificationService;
 
 class WallPostXhr extends Control
 {
+	private $notificationService;
 	private $wallPostGateway;
 	private $wallPostPermissions;
 	private $table;
 	private $id;
 
-	public function __construct(WallPostGateway $wallPostGateway, WallPostPermissions $wallPostPermissions, WallPostView $view, Session $session)
+	public function __construct(NotificationService $notificationService, WallPostGateway $wallPostGateway, WallPostPermissions $wallPostPermissions, WallPostView $view, Session $session)
 	{
+		$this->notificationService = $notificationService;
 		$this->wallPostGateway = $wallPostGateway;
 		$this->wallPostPermissions = $wallPostPermissions;
 		$this->view = $view;
@@ -121,15 +124,14 @@ class WallPostXhr extends Control
 					$attach = json_encode($attach);
 				}
 			}
-			if ($post_id = $this->wallPostGateway->addPost($message, $this->session->id(), $this->table, $this->id, $attach)) {
+			if ($this->wallPostGateway->addPost($message, $this->session->id(), $this->table, $this->id, $attach)) {
+				if ($this->table === 'fairteiler') {
+					$this->notificationService->newFairteilerPost($this->id);
+				}
+
 				return array(
 					'status' => 1,
-					'html' => $this->view->posts($this->wallPostGateway->getPosts($this->table, $this->id)),
-					'script' => '
-					if(typeof u_wallpostReady !== \'undefined\' && $.isFunction(u_wallpostReady))
-					{
-						u_wallpostReady(' . (int)$post_id . ');
-					}'
+					'html' => $this->view->posts($this->wallPostGateway->getPosts($this->table, $this->id))
 				);
 			}
 		}
@@ -177,9 +179,9 @@ class WallPostXhr extends Control
 
 			$init = 'window.parent.mb_finishImage("' . $new_filename . '");';
 		} elseif (!$this->attach_allow($_FILES['etattach']['name'])) {
-			$init = 'window.parent.pulseInfo(\'' . $this->func->jsSafe($this->func->s('wrong_file')) . '\');window.parent.mb_clear();';
+			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->func->s('wrong_file')) . '\');window.parent.mb_clear();';
 		} else {
-			$init = 'window.parent.pulseInfo(\'' . $this->func->jsSafe($this->func->s('file_to_big')) . '\');window.parent.mb_clear();';
+			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->func->s('file_to_big')) . '\');window.parent.mb_clear();';
 		}
 
 		echo '<html><head>

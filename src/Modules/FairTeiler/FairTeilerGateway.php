@@ -49,7 +49,8 @@ class FairTeilerGateway extends BaseGateway
 						UNIX_TIMESTAMP(wp.time) AS time_ts,
 						wp.body,
 						wp.attach,
-						fs.name AS fs_name
+						fs.name AS fs_name,
+						fs.id AS fs_id
 
 			FROM 		fs_fairteiler_has_wallpost hw
 			LEFT JOIN 	fs_wallpost wp

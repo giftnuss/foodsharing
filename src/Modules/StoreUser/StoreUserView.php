@@ -41,9 +41,18 @@ class StoreUserView extends View
 		$out .= '</table>';
 
 		$this->func->hiddenDialog('requests', array($out));
-		$this->func->addJs('$("#dialog_requests").dialog("option","title","Anfragen für ' . $this->func->jsonSafe($betrieb['name'], '"') . '");');
+		$this->func->addJs('$("#dialog_requests").dialog("option","title","Anfragen für ' . $this->jsonSafe($betrieb['name'], '"') . '");');
 		$this->func->addJs('$("#dialog_requests").dialog("option","buttons",{});');
 		$this->func->addJs('$("#dialog_requests").dialog("open");');
+	}
+
+	private function jsonSafe(string $str): string
+	{
+		if ($str == '' || !is_string($str)) {
+			return '';
+		}
+
+		return htmlentities($str . '', ENT_QUOTES, 'utf-8', false);
 	}
 
 	public function u_innerRow($contentType, $betrieb)
@@ -446,7 +455,7 @@ class StoreUserView extends View
 					$out .= '
 				<li class="filled empty timedialog-add-me">
 					<a href="#" onclick="return false;" title="' . $this->func->s('add_me_here') . '"><img src="/img/nobody.gif" alt="nobody" /></a>
-					<input type="hidden" name="' . $id . '-date" class="daydate" value="' . $date . '::' . $this->func->format_db_date($date) . '::' . $this->func->s('dow' . date('w', strtotime($date))) . '" />
+					<input type="hidden" name="' . $id . '-date" class="daydate" value="' . $date . '::' . $this->format_db_date($date) . '::' . $this->func->s('dow' . date('w', strtotime($date))) . '" />
 					<input type="hidden" name="' . $id . '-dateid" class="dayid" value="' . $id . '" />
 				</li>';
 				} else {
@@ -474,6 +483,13 @@ class StoreUserView extends View
 		}
 
 		return $this->v_utils->v_input_wrapper($this->func->s($id), $out . $dellink, $id, $option);
+	}
+
+	public function format_db_date($date): string
+	{
+		$part = explode('-', $date);
+
+		return (int)$part[2] . '. ' . $this->func->s('month_' . (int)$part[1]);
 	}
 
 	public function u_form_abhol_table($zeiten = false, $option = array())

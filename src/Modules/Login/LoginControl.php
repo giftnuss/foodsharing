@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Login;
 
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Services\SearchService;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,14 +15,12 @@ class LoginControl extends Control
 	 */
 	private $formFactory;
 
-	private $searchService;
 	private $loginGateway;
 
-	public function __construct(LoginModel $model, LoginView $view, SearchService $searchService, LoginGateway $loginGateway)
+	public function __construct(LoginModel $model, LoginView $view, LoginGateway $loginGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
-		$this->searchService = $searchService;
 		$this->loginGateway = $loginGateway;
 
 		parent::__construct();
@@ -113,8 +110,6 @@ class LoginControl extends Control
 
 		$this->session->login($fs_id);
 
-		$token = $this->searchService->writeSearchIndexToDisk($this->session->id(), $this->session->user('token'));
-
 		if (isset($_POST['ismob'])) {
 			$_SESSION['mob'] = (int)$_POST['ismob'];
 		}
@@ -169,7 +164,7 @@ class LoginControl extends Control
 					if ($_POST['pass1'] == $_POST['pass2']) {
 						$check = true;
 						if ($this->model->newPassword($_POST)) {
-							$this->func->success('Prima, Dein Passwort wurde erfolgreich geändert. Du kannst Dich jetzt Dich einloggen.');
+							$this->view->success('Prima, Dein Passwort wurde erfolgreich geändert. Du kannst Dich jetzt Dich einloggen.');
 						} elseif (strlen($_POST['pass1']) < 5) {
 							$check = false;
 							$this->func->error('Sorry, Dein gewähltes Passwort ist zu kurz.');

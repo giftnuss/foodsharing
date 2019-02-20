@@ -14,9 +14,9 @@ $I->amOnPage('/?page=settings&sub=deleteaccount');
 
 $I->click('#delete-account');
 
-$I->waitForElementVisible('#delete-account-confirm', 4);
-$I->click('Ja, Account jetzt');
-$I->waitForPageBody();
+$I->seeInPopup('wirklich');
+$I->acceptPopup();
+$I->waitForActiveAPICalls();
 
 $I->seeInDatabase('fs_foodsaver', [
 	'id' => $foodsaver['id'],
