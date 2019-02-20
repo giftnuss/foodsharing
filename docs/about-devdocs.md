@@ -25,6 +25,14 @@ The devdocs are based on the following principles:
 
 But don't worry too much about the last three principles. There are people solely dedicated to improving the devdocs.
 
+### What in, what out?
+
+How do I decide if a specific information should be in the devdocs?
+Here are some principles:
+- Is the information specific to foodsharing? -> Yes
+- Were you surprised about it? -> Yes
+- Is the information general enough to be explained in a foodsharing-independent tutorial or documentation? -> No, include a link
+- Is the information specificly about one piece of code and only interesting during reading this code (and not for finding this piece of code)? -> No, explain the code with comments in the code.
 ### Setting things up
 
 The devdocs are built at every change on the master branch and published [here](https://devdocs.foodsharing.de).
