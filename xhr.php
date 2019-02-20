@@ -100,8 +100,8 @@ if (isset($_GET['f'])) {
 		$page = ob_get_contents();
 		ob_end_clean();
 
-		if($page[0] == '{' || $page[0] == '[') {
-			// just assume it's an JSON, to prevent the browser from interpreting it as 
+		if ($page[0] == '{' || $page[0] == '[') {
+			// just assume it's an JSON, to prevent the browser from interpreting it as
 			// HTML, which could result in XSS possibilities
 			header('Content-Type: application/json');
 		}
