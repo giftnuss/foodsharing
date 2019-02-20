@@ -19,7 +19,7 @@ export async function getConversationList (limit = -1) {
     members: c.member && c.member instanceof Array ? c.member.map((m) => ({
       id: parseInt(m.id),
       name: m.name,
-      avatar: m.avatar ? `/images/mini_q_${m.photo}` : null
+      avatar: m.photo ? `/images/mini_q_${m.photo}` : null
     })) : [],
     lastMessage: {
       bodyRaw: c.last_message,
