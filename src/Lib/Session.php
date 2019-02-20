@@ -101,8 +101,14 @@ class Session
 		fSession::open();
 
 		if (!isset($_COOKIE['CSRF_TOKEN']) || !$_COOKIE['CSRF_TOKEN'] || !$this->isValidCsrfToken('cookie', $_COOKIE['CSRF_TOKEN'])) {
-			setcookie('CSRF_TOKEN', $this->generateCrsfToken('cookie'));
+			$cookieExpires = $this->isPersistent() ? strtotime('1 week') : 0;
+			setcookie('CSRF_TOKEN', $this->generateCrsfToken('cookie'), $cookieExpires, '/');
 		}
+	}
+
+	private function isPersistent(): bool
+	{
+		return $_SESSION['fSession::type'] === 'persistent';
 	}
 
 	public function setAuthLevel($role)
@@ -592,11 +598,6 @@ class Session
 
 	public function isValidCsrfToken(string $key, string $token): bool
 	{
-		// enable CSRF Protection only for loggedin users
-		if (!$this->id()) {
-			return true;
-		}
-
 		if (defined('CSRF_TEST_TOKEN') && $token === CSRF_TEST_TOKEN) {
 			return true;
 		}
@@ -606,6 +607,11 @@ class Session
 
 	public function isValidCsrfHeader(): bool
 	{
+		// enable CSRF Protection only for loggedin users
+		if (!$this->id()) {
+			return true;
+		}
+
 		if (!isset($_SERVER['HTTP_X_CSRF_TOKEN'])) {
 			return false;
 		}

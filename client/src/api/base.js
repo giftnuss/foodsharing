@@ -26,7 +26,8 @@ export async function request (path, options = {}) {
   try {
     window.fetch.activeFetchCalls++
     const o = Object.assign({}, DEFAULT_OPTIONS, options)
-    o.headers['X-CSRF-Token'] = getCsrfToken()
+    const csrfToken = getCsrfToken()
+    if (csrfToken) o.headers['X-CSRF-Token'] = csrfToken
     const request = new window.Request(BASE_URL + path, o)
     const res = await window.fetch(request)
     if (!res.ok) {

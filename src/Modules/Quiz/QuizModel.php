@@ -443,39 +443,6 @@ class QuizModel extends Db
 		return $out;
 	}
 
-	public function initQuizSession($quiz_id, $questions, $maxfp, $questcount, $easymode = 0)
-	{
-		$questions = serialize($questions);
-
-		return $this->insert('
-			INSERT INTO fs_quiz_session (
-				foodsaver_id,
-				quiz_id,
-				`status`,
-				quiz_index,
-				quiz_questions,
-				time_start,
-				fp,
-				maxfp,
-				quest_count,
-				easymode
-			)
-			VALUES
-			(
-				' . (int)$this->session->id() . ',
-				' . (int)$quiz_id . ',
-				0,
-				0,
-				' . $this->safe($questions) . ',
-				NOW(),
-				0,
-				' . (int)$maxfp . ',
-				' . (int)$questcount . ',
-				' . (int)$easymode . '
-			)
-		');
-	}
-
 	public function updateQuizSession($session_id, $questions, $quiz_index)
 	{
 		$questions = serialize($questions);
