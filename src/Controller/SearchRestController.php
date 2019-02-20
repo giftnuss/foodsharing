@@ -3,17 +3,20 @@
 namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Services\SearchService;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class SearchRestController extends FOSRestController
+class SearchRestController extends AbstractFOSRestController
 {
 	private $session;
+	private $searchService;
 
-	public function __construct(Session $session)
+	public function __construct(Session $session, SearchService $searchService)
 	{
 		$this->session = $session;
+		$this->searchService = $searchService;
 	}
 
 	/**
@@ -26,14 +29,8 @@ class SearchRestController extends FOSRestController
 		if (!$this->session->id()) {
 			throw new HttpException(403);
 		}
-		$file = 'cache/searchindex/' . $this->session->user('token') . '.json';
-		if (!file_exists($file)) {
-			$data = [];
-		} else {
-			$data = json_decode(file_get_contents($file), true);
-		}
+		$data = $this->searchService->generateIndex($this->session->id());
 
-		// TODO: add caching header
 		$view = $this->view($data, 200);
 
 		return $this->handleView($view);
