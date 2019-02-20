@@ -19,6 +19,7 @@
   - [javascript, vue.js](javascript.md)
   - [Databases](database.md)
   - [Reference language](internationalization.md)
+  - [Glossary](GLOSSARY.md)
 
 - [About the devdocs](about-devdocs.md)
 - [Contributors](contributors.md)
