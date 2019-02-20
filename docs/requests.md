@@ -1,0 +1,68 @@
+# HTTP Request
+
+The traditional loading of a page is a `http`-Request,
+e.g. calling the main address `https://foodsharing.de` calls `/index.php`
+which uses other `php` files to answer the request.
+The `php` builds `html`, `css` and `javascript` and sends it to the client.
+
+# XHR
+
+XHR is widely used throughout the project but should be replaced, so do not implement new features with XHR!
+
+We use XHR ([XMLHttpRequest](https://en.wikipedia.org/wiki/XMLHttpRequest))
+for information transferred from the server to the client which is not a complete new page but javascript-iniatiated.
+For example the Update-Übersicht on the Dashboard is loaded by an XHR that gets a json file with the information of the updates.
+The javascript is found in `/client/src/activity.js`,
+it calls addresses like `http://foodsharing.de/xhrapp.php?app=basket&m=infobar`.
+This requests an answer by `/xhrapp.php` which in turn calls the correct `php` file based on the options that are given after the `?` in the url.
+For example the `activity.js` requests are answered by
+`/src/Modules/Activity/ActivityXHR.php`.
+In this case the database is queried for the information via the `ActivityModel.php` which in turns uses the `/src/Modules/Activity/ActivityGateway.php`.
+
+# nodejs for messages
+
+The chats have a separate way of communication between client and server.
+For all other pages the initiative starts at the client,
+the client sends a request to the (`php`-)server and gets an answer.
+Each request uses one connection that is closed afterwards.
+This is not useful for the chats since the server knows that there are new messages and has to tell the client.
+
+For this case there exists a separate `nodejs` server (on the same machine as the `php`-Server but separate). This holds an open connection to each user that has `foodsharing.de` open on their device. Each time a message arrives at the php-Server, it sends this information to the `nodejs`-Server via a websocket
+<!-- TODO: explanation what a websocket is, on which server is it, is it the right place to explain it? -->
+which uses the connection to the client to send the message.
+Note that their can be several connections to each session, of which there can be several for each user. `nodejs` sends the message to all connections of all addressed users.
+
+The code for the `nodejs`-Server is found in `/chat/server.js` and other files in `/chat`
+chat/socket.io -> nodejs-Server, in chat/server.js. There is documentation for all used parts in `/chat/node_modules/<modulename>/Readme.md`. All `nodejs`-documentation is found on [their webpage](https://nodejs.org/en/docs/).
+  <!-- - php server tells websocket that there is a new message -->
+  <!-- - nodejs-server sends message to all open connections of all sessions of all users -->
+
+## Rest api
+
+The more modern way to build our api is a [REST api](https://symfony.com/doc/master/bundles/FOSRestBundle/index.html) by FOS (friends of symfony)
+<!-- TODO: good link to intro/ tutorial -->
+
+All classes working with REST requests are found in `/src/Modules/Controllers/<..>RestController.php`.
+This is configured in `/config/routes/routing.yml`.
+There it is also configured, that calls to `/api/` are interpreted by the REST api, e.g.
+```
+https://foodsharing.de/api/conversations/<conversationid>
+```
+This is being called when you click on a conversation on the „Alle Nachrichten“ page.
+
+REST ist configured via comments in functions and
+functions need to have special names for symfony to use them.
+
+During the build the comments get translated to convoluted php code.
+REST also takes care of the translation from php data structures to json.
+
+While reading and writing code a (basic) [manual](https://symfony.com/doc/master/bundles/FOSRestBundle/index.html)
+and an [annotation overview](https://symfony.com/doc/master/bundles/FOSRestBundle/annotations-reference.html) will help.
+
+## Services
+
+In `/src/Services` we have services.
+
+## Sockets
+
+In `/src/Sockets`, we have sockets. We use them to reduce the use of [`func.inc.php`](php.md).
