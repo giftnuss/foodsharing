@@ -1,6 +1,6 @@
 # Contributing
 
-Feel free to ask questions at the #foodsharing-dev [Slack](https://slackin.yunity.org/) channel at any time.
+If you have any questions please reach out to us via slack: [yunity slack](https://slackin.yunity.org/) and join the #foodsharing-dev channel.
 
 ## Coding guidelines
 
@@ -11,7 +11,7 @@ In general, please use your common sense and make it fit with the existing code.
 
 If you found an issue on the foodsharing website, then please submit it to our GitLab [issues](https://gitlab.com/foodsharing-dev/foodsharing/issues).
 
-If you feel comfortable submitting a fix too, then follow the next section.
+If you feel comfortable submitting a fix (or if you like to try ;) ) too, then follow the next section.
 
 ## Submitting a change
 
@@ -50,3 +50,24 @@ The next steps will be:
 ## Troubleshooting
 
 (Work in progress.)
+
+## Testing
+
+You can run the tests with `./scripts/test`,
+for your second and following runs, you can use `./scripts/test-rerun` which runs much quicker
+(as long as we keep writing the tests to run idempotently, please do!).
+
+So far, end to end tests (called _acceptance tests_ in codeception) work nicely.
+They run with a headless firefox and selenium inside the docker setup and they are run on CI build too.
+
+We are working on [restructing the code](https://gitlab.com/foodsharing-dev/foodsharing/issues/68)
+to enable unit testing.
+
+The state created during testing is not thrown away, and you can visit the test app
+[in your browser](http://localhost:28080/), and it has
+[it's own phpmyadmin](http://localhost:28081/).
+
+If you want to run the tests with debug mode turned on, use: `./scripts/test --debug`.
+
+If you just want to run one test, pass the path to that test as an argument,
+e.g.: `./scripts/test tests/acceptance/LoginCept.php`.
