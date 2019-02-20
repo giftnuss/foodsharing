@@ -1062,39 +1062,41 @@ class XhrMethods
 
 	public function xhr_update_abholen($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid']) || $this->session->isAmbassador()) {
-			$this->model->del('DELETE FROM 	`fs_abholzeiten` WHERE `betrieb_id` = ' . (int)$data['bid']);
-
-			if (is_array($data['newfetchtime'])) {
-				for ($i = 0; $i < (count($data['newfetchtime']) - 1); ++$i) {
-					$this->model->sql('
-				REPLACE INTO 	`fs_abholzeiten`
-				(
-						`betrieb_id`,
-						`dow`,
-						`time`,
-						`fetcher`
-				)
-				VALUES
-				(
-					' . (int)$data['bid'] . ',
-					' . (int)$data['newfetchtime'][$i] . ',
-					' . $this->model->strval($this->func->preZero($data['nfttime']['hour'][$i]) . ':' . $this->func->preZero($data['nfttime']['min'][$i]) . ':00') . ',
-					' . (int)$data['nft-count'][$i] . '
-				)
-			');
-				}
-			}
-			$betrieb = $this->model->getVal('name', 'betrieb', $data['bid']);
-			$this->bellGateway->addBell($data['team'], 'store_cr_times_title', 'store_cr_times', 'img img-store brown', array(
-				'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
-			), array(
-				'user' => $this->session->user('name'),
-				'name' => $betrieb
-			), 'store-time-' . (int)$data['bid']);
-
-			return json_encode(array('status' => 1));
+		if (!$this->storePermissions->mayEditPickups($data['bid'])) {
+			return XhrResponses::PERMISSION_DENIED;
 		}
+
+		$this->model->del('DELETE FROM 	`fs_abholzeiten` WHERE `betrieb_id` = ' . (int)$data['bid']);
+
+		if (is_array($data['newfetchtime'])) {
+			for ($i = 0; $i < (count($data['newfetchtime']) - 1); ++$i) {
+				$this->model->sql('
+			REPLACE INTO 	`fs_abholzeiten`
+			(
+					`betrieb_id`,
+					`dow`,
+					`time`,
+					`fetcher`
+			)
+			VALUES
+			(
+				' . (int)$data['bid'] . ',
+				' . (int)$data['newfetchtime'][$i] . ',
+				' . $this->model->strval($this->func->preZero($data['nfttime']['hour'][$i]) . ':' . $this->func->preZero($data['nfttime']['min'][$i]) . ':00') . ',
+				' . (int)$data['nft-count'][$i] . '
+			)
+		');
+			}
+		}
+		$betrieb = $this->model->getVal('name', 'betrieb', $data['bid']);
+		$this->bellGateway->addBell($data['team'], 'store_cr_times_title', 'store_cr_times', 'img img-store brown', array(
+			'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
+		), array(
+			'user' => $this->session->user('name'),
+			'name' => $betrieb
+		), 'store-time-' . (int)$data['bid']);
+
+		return json_encode(array('status' => 1));
 	}
 
 	public function xhr_bezirkTree($data)

@@ -39,4 +39,25 @@ class StorePermissions
 
 		return false;
 	}
+
+	public function mayEditPickups($storeId)
+	{
+		$fsId = $this->session->id();
+		if (!$fsId) {
+			return false;
+		}
+
+		if ($this->session->isOrgaTeam()) {
+			return true;
+		}
+		if ($this->storeGateway->isResponsible($fsId, $storeId)) {
+			return true;
+		}
+		$store = $this->storeGateway->getBetrieb($storeId);
+		if ($this->session->isAdminFor($store['bezirk_id'])) {
+			return true;
+		}
+
+		return false;
+	}
 }
