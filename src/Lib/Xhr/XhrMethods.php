@@ -682,13 +682,15 @@ class XhrMethods
 
 		$resize = json_decode($data['resize'], true);
 
-		if (is_array($resize)) {
+		if (is_array($resize) && count($resize) < 5) {
 			foreach ($resize as $r) {
-				$r = (int)$r;
-				copy(ROOT_DIR . 'images/' . $id . '/' . $img, ROOT_DIR . 'images/' . $id . '/' . $r . '_' . $img);
-				$image = new fImage(ROOT_DIR . 'images/' . $id . '/' . $r . '_' . $img);
-				$image->resize($r, 0);
-				$image->saveChanges();
+				if ($r < 1000) {
+					$r = (int)$r;
+					copy(ROOT_DIR . 'images/' . $id . '/' . $img, ROOT_DIR . 'images/' . $id . '/' . $r . '_' . $img);
+					$image = new fImage(ROOT_DIR . 'images/' . $id . '/' . $r . '_' . $img);
+					$image->resize($r, 0);
+					$image->saveChanges();
+				}
 			}
 		}
 
