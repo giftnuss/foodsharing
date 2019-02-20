@@ -35,22 +35,6 @@ $container = initializeContainer();
 $csrf_whitelist = [
 	// 'Activity::loadMore',
 	// 'Activity::load',
-	'API::udata', // used by the legacy fs app
-	'API::sendmsg', // used by the legacy fs app
-	'API::chathistory', // used by the legacy fs app
-	'API::upload', // used by the legacy fs app
-	'API::logout', // used by the legacy fs app
-	'API::login', // used by the legacy fs app
-	'API::initRelogin', // used by the legacy fs app
-	'API::basket_submit', // used by the legacy fs app
-	'API::resizePic', // used by the legacy fs app
-	'API::checklogin', // used by the legacy fs app
-	'API::orgagruppen', // used by the legacy fs app
-	'API::auth', // used by the legacy fs app
-	'API::loadBasket', // used by the legacy fs app
-	'API::allbaskets', // used by the legacy fs app
-	'API::basketsnear', // used by the legacy fs app
-	'API::loadrequests', // used by the legacy fs app
 	// 'Application::accept',
 	// 'Application::decline',
 	// 'Basket::basketCoordinates',
@@ -61,7 +45,7 @@ $csrf_whitelist = [
 	// 'Basket::bubble',
 	// 'Basket::fsBubble',
 	// 'Basket::request',
-	'Basket::sendreqmessage', // used by the legacy fs app
+	// 'Basket::sendreqmessage', // used by the legacy fs app
 	// 'Basket::infobar',
 	// 'Basket::answer',
 	// 'Basket::removeRequest',
