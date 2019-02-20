@@ -11,6 +11,10 @@ Data Protection Policy
 
 Distributed Version Control System
 
+## FOS
+
+Friends of symfony. We use the FOSRestBundle.
+
 ## MR
 
 Merge Request
@@ -23,6 +27,9 @@ Node.js Package Manager (package manager for [javascript](javascript.md))
 
 Pull Request
 
+## REST
+
+_RE_presentianol _S_tate _T_ransfer
 ## ToU
 
 Terms of Use
