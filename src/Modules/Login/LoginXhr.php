@@ -44,33 +44,6 @@ class LoginXhr extends Control
 		}
 	}
 
-	public function loginsubmit()
-	{
-		if ($this->loginGateway->login($_GET['u'], $_GET['p'])) {
-			$token_js = '';
-			if ($token = $this->searchService->writeSearchIndexToDisk($this->session->id(), $this->session->user('token'))) {
-				$token_js = 'user.token = "' . $token . '";';
-			}
-
-			$this->fillMemcacheUserVars();
-
-			$menu = $this->func->getMenu();
-
-			return array(
-				'status' => 1,
-				'script' => '
-					' . $token_js . '
-					pulseSuccess("' . $this->func->s('login_success') . '");
-					reload();'
-			);
-		}
-
-		return array(
-			'status' => 1,
-			'script' => 'pulseError("' . $this->func->s('login_failed') . '");'
-		);
-	}
-
 	/**
 	 * here arrives the photo what user cann upload in the quick join form.
 	 */

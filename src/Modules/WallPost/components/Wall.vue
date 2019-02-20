@@ -73,6 +73,7 @@
 
 <script>
 import i18n from '@/i18n'
+import { getWallPosts, addPost, deletePost } from '@/api/wall'
 
 export default {
   props: {
@@ -96,10 +97,7 @@ export default {
     }
   },
   async created () {
-    const res = await window.fetch(`/api/wall/${this.target}/${this.targetId}`, {
-      credentials: 'same-origin'
-    })
-    const data = await res.json()
+    const data = await getWallPosts(this.target, this.targetId)
     this.posts = data.results
     this.mayDelete = data.mayDelete
     this.mayPost = data.mayPost
@@ -108,16 +106,7 @@ export default {
     async addPost () {
       try {
         this.isSending = true
-        const data = { 'body': this.text }
-        const res = await window.fetch(`/api/wall/${this.target}/${this.targetId}`, {
-          method: 'POST',
-          body: JSON.stringify(data),
-          credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8'
-          }
-        })
-        const result = await res.json()
+        const result = await addPost(this.target, this.targetId, this.text)
         this.posts.unshift(result.post)
       } catch (err) {
         this.error = true
@@ -128,13 +117,7 @@ export default {
     async deletePost (post) {
       try {
         this.isSending = true
-        await window.fetch(`/api/wall/${this.target}/${this.targetId}/${post.id}`, {
-          method: 'DELETE',
-          credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8'
-          }
-        })
+        await deletePost(this.target, this.targetId, post.id)
       } finally {
         this.isSending = false
         let id = this.posts.indexOf(post)

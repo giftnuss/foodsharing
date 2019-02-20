@@ -9,12 +9,13 @@ use Foodsharing\Modules\Core\Control;
 class QuizXhr extends Control
 {
 	private $contentGateway;
+	private $quizGateway;
 
-	public function __construct(QuizModel $model, QuizGateway $gateway, QuizView $view, ContentGateway $contentGateway)
+	public function __construct(QuizModel $model, QuizGateway $quizGateway, QuizView $view, ContentGateway $contentGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
-		$this->gateway = $gateway;
+		$this->quizGateway = $quizGateway;
 		$this->contentGateway = $contentGateway;
 
 		parent::__construct();
@@ -301,7 +302,7 @@ class QuizXhr extends Control
 		/*
 		 * First we want to check if there is a quiz session that the user has lost?
 		 */
-		if ($session = $this->gateway->getExistingSession($_GET['qid'], $this->session->id())) {
+		if ($session = $this->quizGateway->getExistingSession($_GET['qid'], $this->session->id())) {
 			// if yes, reinitiate the running quiz session
 			$this->session->set('quiz-id', (int)$_GET['qid']);
 			$this->session->set('quiz-questions', $session['quiz_questions']);
@@ -492,7 +493,7 @@ class QuizXhr extends Control
 			if ($i == 0) {
 				$quuizz = $this->model->getQuiz($this->session->get('quiz-id'));
 				// init quiz session in DB
-				if ($id = $this->model->initQuizSession($this->session->get('quiz-id'), $quiz, $quuizz['maxfp'], $quuizz['questcount'], $easymode)) {
+				if ($id = $this->quizGateway->initQuizSession($this->session->id(), $this->session->get('quiz-id'), $quiz, $quuizz['maxfp'], $quuizz['questcount'], $easymode)) {
 					$this->session->set('quiz-session', $id);
 				}
 			}

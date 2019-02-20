@@ -98,6 +98,16 @@ class Session
 		);
 
 		fSession::open();
+
+		if (!isset($_COOKIE['CSRF_TOKEN']) || !$_COOKIE['CSRF_TOKEN'] || !$this->isValidCsrfToken('cookie', $_COOKIE['CSRF_TOKEN'])) {
+			$cookieExpires = $this->isPersistent() ? strtotime('1 week') : 0;
+			setcookie('CSRF_TOKEN', $this->generateCrsfToken('cookie'), $cookieExpires, '/');
+		}
+	}
+
+	private function isPersistent(): bool
+	{
+		return $_SESSION['fSession::type'] === 'persistent';
 	}
 
 	public function setAuthLevel($role)
@@ -499,5 +509,36 @@ class Session
 			$mailbox = true;
 		}
 		$this->set('mailbox', $mailbox);
+	}
+
+	public function generateCrsfToken(string $key)
+	{
+		$token = bin2hex(random_bytes(16));
+		$this->set("csrf[$key][$token]", true);
+
+		return $token;
+	}
+
+	public function isValidCsrfToken(string $key, string $token): bool
+	{
+		// enable CSRF Protection only for loggedin users
+		if (!$this->id()) {
+			return true;
+		}
+
+		if (defined('CSRF_TEST_TOKEN') && $token === CSRF_TEST_TOKEN) {
+			return true;
+		}
+
+		return $this->get("csrf[$key][$token]");
+	}
+
+	public function isValidCsrfHeader(): bool
+	{
+		if (!isset($_SERVER['HTTP_X_CSRF_TOKEN'])) {
+			return false;
+		}
+
+		return $this->isValidCsrfToken('cookie', $_SERVER['HTTP_X_CSRF_TOKEN']);
 	}
 }

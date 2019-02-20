@@ -61,13 +61,7 @@ class MessageRestController extends FOSRestController
 		$messagesOffset = $paramFetcher->get('messagesOffset');
 
 		$members = $this->model->listConversationMembers($conversationId);
-		$publicMemberInfo = function ($member) {
-			return [
-				'id' => $member['id'],
-				'name' => $member['name'],
-				'photo' => $member['photo']
-			];
-		};
+		$publicMemberInfo = RestNormalization::normalizeFoodsaver($member, '');
 		$members = array_map($publicMemberInfo, $members);
 
 		$messages = $this->gateway->getConversationMessages($conversationId, $messagesLimit, $messagesOffset);

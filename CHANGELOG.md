@@ -10,10 +10,12 @@
 - Added API endpoints for basket pictures !671 @alex.simm 
 - Allow use of markdown in Fair-Teiler description !690 @NerdyProjects
 - Joining regions REST API !696 @NerdyProjects
-- Prevent group admins to be able to access the passport generation page #706 #392 @jofranz
+- Prevent group admins to be able to access the passport generation page !706 #392 @jofranz
 - Start page content over content manager #470 !701 @k.miklobusec
 - Added profile status infos for store and pickup entries for ambassadors !705 @jofranz
 - Scale down font size on passports for long names !685 @NerdyProjects
+- CSRF protection for API requests !715 @alangecker
+- Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
 
 ## Bugfixes
 - Search index is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
@@ -28,6 +30,7 @@
 - Only foodsavers add themselves to working groups !713 @NerdyProjects
 - Only allow edting regions as an orga user !714 @NerdyProjects
 - higher entropy for security & privacy related tokens !709 @alangecker
+- Fix recently broken quiz session storage !730 @NerdyProjects
 
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies
@@ -36,10 +39,14 @@
 - removed the old qr code library and chaged the current qr on the fs-passes to show the fs profile !685 #144 @peter.toennies
 - trigger fairteiler wallpost notifications in backend !700 @NerdyProjects
 - use API endpoint to delete users to avoid CSRF problems !717 @NerdyProjects
+- use API endpoint to delete regions/workgroups to avoid CSRF problems !719 @NerdyProjects
+- removed unused php,js and css code !720 @alangecker
+- user normalisation in conversations API endpoint
 
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen
 - disable backup_globals for PHPUnit to have unit tests working in dev again !696 @NerdyProjects
+- fix xdebug by enabling x-forwarded-for header in webpack devserver !725 @NerdyProjects
 
 # 2019-02-19 Hotfix
 - Backport some changes that were needed for yesterdays hotfix
