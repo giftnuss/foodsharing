@@ -43,8 +43,8 @@
       </span>
     </span>
     <span class="time">
-      <i class="far fa-clock"></i> 6 minutes ago
-      <i class="fas fa-angle-right"></i> 19.02.2019 17.52 Uhr
+      <i class="far fa-clock"></i> {{ timeago }}
+      <i class="fas fa-angle-right"></i> {{ formatedTime }}
     </span>
     <span class="c"></span>
   </li>
@@ -54,6 +54,8 @@
 import serverData from '@/server-data'
 import { sendQuickreply } from "@/api/dashboard";
 import { pulseError, pulseInfo } from '@/script'
+import timeformat from '@/timeformat'
+import 'timeago/jquery.timeago'
 import Markdown from '@/components/Markdown/Markdown'
 
 /* TODOs
@@ -63,7 +65,7 @@ import Markdown from '@/components/Markdown/Markdown'
 */
 
 export default {
-  components: {Markdown},
+  components: { Markdown },
   props: {
     type: {
       type: String,
@@ -92,6 +94,12 @@ export default {
       } else {
         return this.data.desc
       }
+    },
+    formatedTime(){
+      return timeformat.nice(this.data.time)
+    },
+    timeago(){
+      return $.timeago(this.data.time)
     }
   },
   methods: {

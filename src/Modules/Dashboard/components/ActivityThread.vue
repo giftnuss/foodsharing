@@ -10,6 +10,12 @@
 import { getUpdates } from "@/api/dashboard";
 import ActivityPost from './ActivityPost'
 
+/* TODOs
+- sort updates by time
+- make cog work again
+
+*/
+
 export default {
   components: { ActivityPost },
   props: {},
