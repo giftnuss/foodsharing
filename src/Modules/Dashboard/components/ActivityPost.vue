@@ -61,12 +61,6 @@ import timeformat from '@/timeformat'
 import 'timeago/jquery.timeago'
 import Markdown from '@/components/Markdown/Markdown'
 
-/* TODOs
-- text should be markdown
-- time should be "from now"
-- readd ability to display photos
-*/
-
 export default {
   components: { Markdown },
   props: {

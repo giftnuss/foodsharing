@@ -26,6 +26,7 @@ export default {
   },
   async created() {
     this.updates = await getUpdates(0);
+    this.updates.sort((a, b) => { return b.data.time_ts - a.data.time_ts })
   }
 };
 </script>
