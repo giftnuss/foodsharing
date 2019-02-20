@@ -5,7 +5,6 @@ namespace Foodsharing\Controller;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Login\LoginGateway;
-use Foodsharing\Services\SearchService;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -16,14 +15,12 @@ class UserRestController extends FOSRestController
 {
 	private $session;
 	private $loginGateway;
-	private $searchService;
 	private $foodsaverGateway;
 
-	public function __construct(Session $session, LoginGateway $loginGateway, SearchService $searchService, FoodsaverGateway $foodsaverGateway)
+	public function __construct(Session $session, LoginGateway $loginGateway, FoodsaverGateway $foodsaverGateway)
 	{
 		$this->session = $session;
 		$this->loginGateway = $loginGateway;
-		$this->searchService = $searchService;
 		$this->foodsaverGateway = $foodsaverGateway;
 	}
 
@@ -41,8 +38,6 @@ class UserRestController extends FOSRestController
 		$fs_id = $this->loginGateway->login($email, $password);
 		if ($fs_id) {
 			$this->session->login($fs_id, $rememberMe);
-
-			$token = $this->searchService->writeSearchIndexToDisk($this->session->id(), $this->session->user('token'));
 
 			$mobdet = new Mobile_Detect();
 			if ($mobdet->isMobile()) {
