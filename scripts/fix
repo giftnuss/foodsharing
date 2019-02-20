@@ -1,0 +1,13 @@
+#!/bin/bash
+
+export FS_ENV=dev
+
+set -o errexit
+
+source $(dirname "$0")/inc.sh
+
+echo "Fixing php code"
+run-in-container app vendor/bin/php-cs-fixer fix
+
+echo "Fixing js code"
+run-in-container client yarn lint --fix
