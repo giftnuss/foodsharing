@@ -65,8 +65,14 @@ if (serverData.user.may) {
 }
 
 // add CSRF-Token to all jquery requests
-$.ajaxSetup({
-  beforeSend: function (xhr) {
-    xhr.setRequestHeader('X-CSRF-Token', getCsrfToken())
+$.ajaxPrefilter(function (options) {
+  if (!options.beforeSend) {
+    options.beforeSend = function (xhr, settings) {
+      if (settings.url.startsWith('/') && !settings.url.startsWith('//')) {
+        xhr.setRequestHeader('X-CSRF-Token', getCsrfToken())
+      } else {
+        // don't send for external domains (must be a relative url)
+      }
+    }
   }
 })
