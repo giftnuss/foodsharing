@@ -5,6 +5,21 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Symfony\Component\DependencyInjection\Container;
 
+/* I (Matthias) hereby apologize for the following block. It is meant to warn users of the old lebensmittelretten.de app which was taken out of playstore in ~2017 and not developed since ~2014. It is the only user of the jsonp API and we use that block to hack it to show a message to all users. Working principle:
+Any API request from the app will be answered with a specially crafted response.
+This response overwrites a javascript method and uses the "relogin" path to not trigger any error messages inside the app and then exchanges the whole shown content with our message.
+*/
+if (isset($_GET['format']) && $_GET['format'] == 'jsonp') {
+	$out = [
+		'status' => 2,
+		'script' => "document.body.innerHTML='<div style=\"padding: 10px;\"><img src=\"http://lebensmittelretten.de/img/gabel.png\" style=\"float: right; width: 50px; background-color: #533a20;\"><h3>Bitte deinstalliere diese App</h3><br>Liebe*r Nutzer*in, diese lebensmittelretten.de App wird leider schon seit mehr als 4 Jahren nicht mehr weiterentwickelt und enthält Funktionsfehler sowie gravierende Sicherheitsmängel.<br><b>Bitte deinstalliere sie.</b><br> Zudem möchten wir dich bitten, auf der Desktop-Seite (https://foodsharing.de) dein Passwort zu ändern. Solltest du dein foodsharing Passwort (insbesondere in Verbindung mit dieser E-Mailadresse) auch auf anderen Webseiten verwendet haben, ändere dies bitte auch dort.<br><br>Ein kleiner Trost: Die neue foodsharing App wird in Kürze auf foodsharing.de und im Google Playstore veröffentlicht. Frohes lebensmittelretten!<br>Dein foodsharing.de Entwicklerteam<br><button onclick=\"navigator.app.exitApp();\">App Beenden</button></div>';"
+	];
+	echo 'u.relogin = function() {};';
+	echo $_GET['callback'] . '(' . json_encode($out) . ');';
+
+	exit();
+}
+
 require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';
 
@@ -186,11 +201,6 @@ if (isset($_GET['app'], $_GET['m'])) {
 
 		if ($out === XhrResponses::PERMISSION_DENIED) {
 			header('HTTP/1.1 403 Forbidden');
-			exit();
-		}
-
-		if (isset($_GET['format']) && $_GET['format'] == 'jsonp') {
-			echo $_GET['callback'] . '(' . json_encode($out) . ');';
 			exit();
 		}
 
