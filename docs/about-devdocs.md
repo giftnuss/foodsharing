@@ -33,6 +33,12 @@ Here are some principles:
 - Were you surprised about it? -> Yes
 - Is the information general enough to be explained in a foodsharing-independent tutorial or documentation? -> No, include a link
 - Is the information specificly about one piece of code and only interesting during reading this code (and not for finding this piece of code)? -> No, explain the code with comments in the code.
+
+### Markdown
+
+The devdocs are written in [Markdown](https://toolchain.gitbook.com/syntax/markdown.html) (md).
+Additionally we use the plugin [richquotes](https://github.com/erixtekila/gitbook-plugin-richquotes).
+
 ### Setting things up
 
 The devdocs are built at every change on the master branch and published [here](https://devdocs.foodsharing.de).
@@ -50,4 +56,4 @@ It would be nice to have a docker setup (to avoid the local `yarn` dependency). 
 
 ## GitBook
 
-The devdocs are based on [GitBook](https://docs.gitbook.com/).
+The devdocs are built with [GitBook](https://docs.gitbook.com/).
