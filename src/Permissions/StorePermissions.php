@@ -93,4 +93,19 @@ class StorePermissions
 	{
 		return $this->mayEditStore($storeId);
 	}
+
+	public function mayAddPickup($storeId)
+	{
+		return $this->mayEditPickups($storeId);
+	}
+
+	public function mayDeletePickup($storeId)
+	{
+		return $this->mayEditPickups($storeId);
+	}
+
+	public function maySeeFetchHistory($storeId)
+	{
+		return $this->mayEditStore($storeId);
+	}
 }
