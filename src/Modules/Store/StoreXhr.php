@@ -6,16 +6,23 @@ use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Services\SanitizerService;
 
 class StoreXhr extends Control
 {
 	private $storeGateway;
+	private $sanitizerService;
 
-	public function __construct(StoreModel $model, StoreView $view, StoreGateway $storeGateway)
-	{
+	public function __construct(
+		StoreModel $model,
+		StoreView $view,
+		StoreGateway $storeGateway,
+		SanitizerService $sanitizerService
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->storeGateway = $storeGateway;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 

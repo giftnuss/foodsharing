@@ -8,6 +8,7 @@ use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Permissions\WallPostPermissions;
 use Foodsharing\Services\NotificationService;
+use Foodsharing\Services\SanitizerService;
 
 class WallPostXhr extends Control
 {
@@ -16,14 +17,22 @@ class WallPostXhr extends Control
 	private $wallPostPermissions;
 	private $table;
 	private $id;
+	private $sanitizerService;
 
-	public function __construct(NotificationService $notificationService, WallPostGateway $wallPostGateway, WallPostPermissions $wallPostPermissions, WallPostView $view, Session $session)
-	{
+	public function __construct(
+		NotificationService $notificationService,
+		WallPostGateway $wallPostGateway,
+		WallPostPermissions $wallPostPermissions,
+		WallPostView $view,
+		Session $session,
+		SanitizerService $sanitizerService
+	) {
 		$this->notificationService = $notificationService;
 		$this->wallPostGateway = $wallPostGateway;
 		$this->wallPostPermissions = $wallPostPermissions;
 		$this->view = $view;
 		$this->session = $session;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 

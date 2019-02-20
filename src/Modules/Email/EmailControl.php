@@ -11,6 +11,7 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Services\SanitizerService;
 
 class EmailControl extends Control
 {
@@ -19,15 +20,24 @@ class EmailControl extends Control
 	private $foodsaverGateway;
 	private $emailGateway;
 	private $regionGateway;
+	private $sanitizerService;
 
-	public function __construct(Db $model, MailboxModel $mbmodel, StoreGateway $storeGateway, FoodsaverGateway $foodsaverGateway, EmailGateway $emailGateway, RegionGateway $regionGateway)
-	{
+	public function __construct(
+		Db $model,
+		MailboxModel $mbmodel,
+		StoreGateway $storeGateway,
+		FoodsaverGateway $foodsaverGateway,
+		EmailGateway $emailGateway,
+		RegionGateway $regionGateway,
+		SanitizerService $sanitizerService
+	) {
 		$this->model = $model;
 		$this->mbmodel = $mbmodel;
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->emailGateway = $emailGateway;
 		$this->regionGateway = $regionGateway;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 
