@@ -1,5 +1,6 @@
 FROM registry.gitlab.com/foodsharing-dev/images/php:2.17
 
+RUN mkdir -p /app/vendor && chown -R www-data:www-data /app
 COPY --chown=www-data:www-data . /app
-RUN mkdir /app/vendor && mkdir /downloads && chown www-data:www-data /app/vendor /downloads
+
 WORKDIR /app
