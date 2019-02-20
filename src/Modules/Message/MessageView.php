@@ -96,7 +96,7 @@ final class MessageView extends View
 
 	public function conversationListWrapper(string $list): string
 	{
-		return $this->v_utils->v_field('<div id="conversation-list"><ul class="linklist conversation-list">' . $list . '</ul></div>', '<i class="fas fa-comments"></i> ' . $this->func->s('conversations'));
+		return $this->v_utils->v_field('<div id="conversation-list"><ul class="linklist conversation-list">' . $list . '</ul></div>', $this->func->s('conversations'), [], 'fas fa-comments');
 	}
 
 	public function conversation(): string
@@ -112,6 +112,6 @@ final class MessageView extends View
 				</form>
 			</div>';
 
-		return '<div id="msg-conversation-wrapper" style="display:none;">' . $this->v_utils->v_field($out, '<span id="msg-conversation-title"><i class="fas fa-comment"></i></span>', array('class' => 'ui-padding')) . '</div>';
+		return '<div id="msg-conversation-wrapper" style="display:none;">' . $this->v_utils->v_field($out, '', ['class' => 'ui-padding'], 'fas fa-comment', 'msg-conversation-title') . '</div>';
 	}
 }

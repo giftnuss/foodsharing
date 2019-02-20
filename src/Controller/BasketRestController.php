@@ -7,8 +7,8 @@ use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
 use Foodsharing\Services\BasketService;
 use Foodsharing\Services\ImageService;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 /**
  * Rest controller for food baskets.
  */
-final class BasketRestController extends FOSRestController
+final class BasketRestController extends AbstractFOSRestController
 {
 	private $gateway;
 	private $service;

@@ -1,5 +1,6 @@
 <?php
 $g_lang = array();
+$g_lang['group.delete'] = 'Gruppe löschen';
 $g_lang['email_adress'] = 'E-Mail-Adresse';
 $g_lang['password'] = 'Passwort';
 $g_lang['login'] = 'Login';

@@ -119,7 +119,7 @@ class FairTeilerView extends View
 		$this->func->addJs('
 			$("#follow-hidden").dialog({
 				modal: true,
-				title: "' . $this->func->sv('infotype_title', $this->func->jsSafe($this->fairteiler['name'], '"')) . '",
+				title: "' . $this->func->sv('infotype_title', $this->sanitizerService->jsSafe($this->fairteiler['name'], '"')) . '",
 				autoOpen: false,
 				width: 500,
 				resizable: false,

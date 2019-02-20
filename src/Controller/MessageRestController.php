@@ -6,11 +6,11 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Message\MessageModel;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class MessageRestController extends FOSRestController
+class MessageRestController extends AbstractFOSRestController
 {
 	private $model;
 	private $gateway;
@@ -62,15 +62,11 @@ class MessageRestController extends FOSRestController
 
 		$members = $this->model->listConversationMembers($conversationId);
 		$publicMemberInfo = function ($member) {
-			return [
-				'id' => $member['id'],
-				'name' => $member['name'],
-				'photo' => $member['photo']
-			];
+			return RestNormalization::normalizeFoodsaver($member);
 		};
 		$members = array_map($publicMemberInfo, $members);
 
-		$messages = $this->model->loadConversationMessages($conversationId, $messagesLimit, $messagesOffset);
+		$messages = $this->gateway->getConversationMessages($conversationId, $messagesLimit, $messagesOffset);
 		$name = $this->gateway->getConversationName($conversationId);
 		$this->model->setAsRead([$conversationId]);
 

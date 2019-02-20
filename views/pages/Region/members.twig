@@ -1,0 +1,13 @@
+{% extends 'pages/Region/baseRegion.twig' %}
+
+{% block main %}
+    {% include 'partials/vue-wrapper.twig' with {
+        id: 'vue-memberlist',
+        component: 'member-list',
+        props: {
+            regionName: region.name,
+            members: region.members,
+            isWorkGroup: region.isWorkGroup
+        }
+    } %}
+{% endblock %}

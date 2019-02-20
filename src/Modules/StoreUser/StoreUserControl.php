@@ -56,14 +56,14 @@ class StoreUserControl extends Control
 					$this->storeGateway->clearAbholer($_GET['id']);
 					foreach ($range as $r) {
 						if (isset($_POST['dow' . $r])) {
-							$this->func->handleTagselect('dow' . $r);
+							$this->sanitizerService->handleTagselect('dow' . $r);
 							foreach ($g_data['dow' . $r] as $fs_id) {
 								$this->storeGateway->addAbholer($_GET['id'], $fs_id, $r);
 							}
 						}
 					}
 				} else {
-					$this->func->handleTagselect('foodsaver');
+					$this->sanitizerService->handleTagselect('foodsaver');
 
 					if (!empty($g_data['foodsaver'])) {
 						$this->model->addBetriebTeam($_GET['id'], $g_data['foodsaver'], $g_data['verantwortlicher']);
@@ -141,7 +141,7 @@ class StoreUserControl extends Control
 
 				/*Infos*/
 				$betrieb['menge'] = '';
-				if ($menge = $this->func->abhm($betrieb['abholmenge'])) {
+				if ($menge = $this->fetchedQuantity($betrieb['abholmenge'])) {
 					$betrieb['menge'] = $menge;
 				}
 
@@ -306,7 +306,7 @@ class StoreUserControl extends Control
 					$pickup_date_content .= $this->view->u_form_checkboxTagAlt(
 						$date . ' ' . $time['time'],
 						array(
-							'label' => $days[date('w', strtotime($date))] . ' ' . $this->func->format_db_date($date) . ', ' . $this->func->format_time($time['time']),
+							'label' => $days[date('w', strtotime($date))] . ' ' . $this->view->format_db_date($date) . ', ' . $this->format_time($time['time']),
 							'verantwortlich' => $betrieb['verantwortlich'],
 							'fetcher_count' => $time['fetcher'],
 							'bezirk_id' => $betrieb['bezirk_id'],
@@ -371,5 +371,34 @@ class StoreUserControl extends Control
 			$this->func->addContent($this->view->u_betriebList($betriebe['team'], $this->func->s('you_fetcher'), false));
 			$this->func->addContent($this->view->u_betriebList($betriebe['sonstige'], $this->func->sv('more_stores', array('name' => $bezirk['name'])), false));
 		}
+	}
+
+	private function format_time($time): string
+	{
+		$p = explode(':', $time);
+		if (count($p) >= 2) {
+			return (int)$p[0] . '.' . $p[1] . ' Uhr';
+		}
+
+		return '';
+	}
+
+	private function fetchedQuantity($id)
+	{
+		$arr = [
+			1 => ['id' => 1, 'name' => '1-3 kg'],
+			2 => ['id' => 2, 'name' => '3-5 kg'],
+			3 => ['id' => 3, 'name' => '5-10 kg'],
+			4 => ['id' => 4, 'name' => '10-20 kg'],
+			5 => ['id' => 5, 'name' => '20-30 kg'],
+			6 => ['id' => 6, 'name' => '40-50 kg'],
+			7 => ['id' => 7, 'name' => 'mehr als 50 kg']
+		];
+
+		if (isset($arr[$id])) {
+			return $arr[$id]['name'];
+		}
+
+		return false;
 	}
 }

@@ -56,7 +56,6 @@
 <script>
 import SearchResults from './SearchResults'
 import { instantSearch, instantSearchIndex } from '@/api/search'
-import { user } from '@/server-data'
 import clickoutMixin from '@b/mixins/clickout'
 import listenOnRootMixin from '@b/mixins/listen-on-root'
 
@@ -143,7 +142,7 @@ export default {
       this.isLoading = false
     },
     async fetchIndex () {
-      this.index = await instantSearchIndex(user.token)
+      this.index = await instantSearchIndex()
     },
     clickOutListener () {
       this.isOpen = false

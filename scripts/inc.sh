@@ -12,6 +12,13 @@ export UID
 MYSQL_USERNAME=${MYSQL_USERNAME:-root}
 MYSQL_PASSWORD=${MYSQL_PASSWORD:-root}
 
+# docker-compose arguments:
+# -T : do not allocate a TTY: not necessary since we just execute a command
+# but need not interactivity
+# see: https://docs.docker.com/compose/reference/exec/
+
+# sh -c "..." : run the command "..." in a shell
+
 # BASH_SOURCE is an array with the filenames of the files that were called to get here
 # so BASH_SOURCE[0] is the filename (with path) of this file
 # different to $0 when this file is sourced with "." or source as in many of the scripts
@@ -32,35 +39,41 @@ function dc() {
 
 function sql-query() {
   local database=$1 query=$2;
-  dc exec -T db sh -c "mysql -p$MYSQL_PASSWORD $database -e \"$query\""
+  dc exec -T db sh -c "mysql --password=$MYSQL_PASSWORD $database --execute=\"$query\""
 }
 
 function sql-file() {
   local database=$1 filename=$2;
   echo "Executing sql file $FS_ENV/$database $filename"
-  dc exec -T db sh -c "mysql -p$MYSQL_PASSWORD $database < /app/$filename"
+  dc exec -T db sh -c "mysql --password=$MYSQL_PASSWORD $database < /app/$filename"
 }
 
 function sql-dump() {
-  dc exec -T db mysqldump -p$MYSQL_PASSWORD foodsharing "$@"
+  dc exec -T db mysqldump --password=$MYSQL_PASSWORD foodsharing "$@"
 }
 
 function exec-in-container() {
   local container=$1; shift;
   local command=$@;
-  dc exec -T --user $(id -u):$(id -g) $container sh -c "HOME=./ $command"
+  dc exec -T --user $(id --user):$(id --group) $container sh -c "HOME=./ $command"
+}
+
+function exec-in-container-with-image-user() {
+  local container=$1; shift;
+  local command=$@;
+  dc exec -T $container sh -c "HOME=./ $command"
 }
 
 function run-in-container() {
   local container=$1; shift;
   local command=$@;
-  dc run --rm --no-deps --user $(id -u):$(id -g) $container sh -c "HOME=./ $command"
+  dc run --rm --no-deps --user $(id --user):$(id --group) $container sh -c "HOME=./ $command"
 }
 
 function run-in-container-with-service-ports() {
   local container=$1; shift;
   local command=$@;
-  dc run --rm --no-deps --user $(id -u):$(id -g) --service-ports $container sh -c "HOME=./ $command"
+  dc run --rm --no-deps --user $(id --user):$(id --group) --service-ports $container sh -c "HOME=./ $command"
 }
 
 function exec-in-container-asroot() {
@@ -72,6 +85,11 @@ function exec-in-container-asroot() {
 function run-in-container-asroot() {
   local container=$1; shift;
   local command=$@;
+  # run : create a new container to execute the command
+  # --user root : set the user who executes the command
+  # --rm : remove the container after executing the command
+  # sh -c "..." : what is executed in the container: a shell that
+  # interprets "..."
   dc run --rm --no-deps --user root $container sh -c "$command"
 }
 
@@ -113,7 +131,9 @@ function migratedb() {
 
   # if running in ci we do not have a mounted folder so we need to
   # manually copy the generated migration file into the container
-  docker cp $dest $(dc ps -q db):/app/$dest
+  # dc ps = docker container ls: list containers
+  # --quiet: only display numeric IDs
+  docker cp $dest $(dc ps --quiet db):/app/$dest
 
   sql-file $database $dest
 
@@ -132,13 +152,13 @@ function purge-db() {
 }
 
 function wait-for-mysql() {
-  exec-in-container-asroot db "while ! mysql -p$MYSQL_PASSWORD --silent -e 'select 1' >/dev/null 2>&1; do sleep 1; done"
+  exec-in-container-asroot db "while ! mysql --password=$MYSQL_PASSWORD --silent --execute='select 1' >/dev/null 2>&1; do sleep 1; done"
 }
 
 function install-chat-dependencies() {
   # TODO: move this into scripts/mkdirs when MR#97 is merged
   run-in-container-asroot chat \
-    "mkdir -p node_modules && chown -R $(id -u):$(id -g) node_modules"
+    "mkdir --parents node_modules && chown --recursive $(id --user):$(id --group) node_modules"
 
   # have to do run, not exec, as container will not start until
   # node_modules is installed, this will run up a fresh container and

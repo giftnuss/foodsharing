@@ -619,13 +619,6 @@ class BasketXhr extends Control
 		];
 	}
 
-	public function follow(): void
-	{
-		if (isset($_GET['bid']) && (int)$_GET['bid'] > 0) {
-			$this->basketGateway->follow($_GET['bid'], $this->session->id());
-		}
-	}
-
 	public function finishRequest()
 	{
 		if (isset($_GET['sk']) && (int)$_GET['sk'] > 0 && $this->basketGateway->getRequest(
