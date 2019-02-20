@@ -197,8 +197,8 @@ class LoginXhr extends Control
 		}
 		$data['birthdate'] = $birthdate->format('Y-m-d');
 		$data['mobile_phone'] = strip_tags($data['mobile_phone'] ?? null);
-		$data['lat'] = floatval($data['lat'] ?? null);
-		$data['lon'] = floatval($data['lon'] ?? null);
+		$data['lat'] = (float)$data['lat'] ?? null;
+		$data['lon'] = (float)$data['lon'] ?? null;
 		$data['str'] = strip_tags($data['str'] ?? null);
 		$data['plz'] = preg_replace('[^0-9]', '', $data['plz'] ?? null) . '';
 		$data['city'] = strip_tags($data['city'] ?? null);

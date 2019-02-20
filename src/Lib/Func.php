@@ -761,8 +761,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 		if ($pos = $this->session->get('blocation')) {
 			$location = [
-				'lat' => floatval($pos['lat']),
-				'lon' => floatval($pos['lon']),
+				'lat' => (float)$pos['lat'],
+				'lon' => (float)$pos['lon'],
 			];
 		}
 

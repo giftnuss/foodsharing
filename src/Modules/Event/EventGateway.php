@@ -99,8 +99,8 @@ class EventGateway extends BaseGateway
 
 		return $this->db->insert('fs_location', [
 			'name' => strip_tags($location_name),
-			'lat' => floatval($lat),
-			'lon' => floatval($lon),
+			'lat' => (float)$lat,
+			'lon' => (float)$lon,
 			'zip' => strip_tags($zip),
 			'city' => strip_tags($city),
 			'street' => strip_tags($address)

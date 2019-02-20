@@ -17,8 +17,8 @@ class MapXhr extends Control
 
 	public function savebpos()
 	{
-		$lat = floatval($_GET['lat']);
-		$lon = floatval($_GET['lon']);
+		$lat = (float)$_GET['lat'];
+		$lon = (float)$_GET['lon'];
 
 		$this->session->set('blocation', array(
 			'lat' => $lat,
