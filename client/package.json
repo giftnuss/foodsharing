@@ -110,6 +110,9 @@
       "object-curly-spacing": [
         "error",
         "always"
+      ],
+      "vue/no-v-html": [
+        "off"
       ]
     },
     "overrides": [
