@@ -6,19 +6,22 @@ use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Services\SanitizerService;
 
 class ReportXhr extends Control
 {
 	private $foodsaver;
 	private $reportGateway;
 	private $foodsaverGateway;
+	private $sanitizerService;
 
-	public function __construct(ReportGateway $reportGateway, Db $model, ReportView $view, FoodsaverGateway $foodsaverGateway)
+	public function __construct(ReportGateway $reportGateway, Db $model, ReportView $view, FoodsaverGateway $foodsaverGateway, SanitizerService $sanitizerService)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->reportGateway = $reportGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 
@@ -54,7 +57,7 @@ class ReportXhr extends Control
 			}
 
 			if (!empty($report['msg'])) {
-				$content .= $this->v_utils->v_input_wrapper('Beschreibung', nl2br(htmlspecialchars($report['msg'])));
+				$content .= $this->v_utils->v_input_wrapper('Beschreibung', $this->sanitizerService->plainToHtml($report['msg']));
 			}
 
 			$content .= $this->v_utils->v_input_wrapper('Gemeldet von', '<a href="/profile/' . (int)$report['rp_id'] . '">' . htmlspecialchars($report['rp_name'] . ' ' . $report['rp_nachname']) . '</a>');
