@@ -108,4 +108,17 @@ class StorePermissions
 	{
 		return $this->mayEditStore($storeId);
 	}
+
+	public function mayDoPickup($storeId)
+	{
+		if (!$this->session->isVerified()) {
+			return false;
+		}
+
+		if (!$this->mayAccessStore($storeId)) {
+			return false;
+		}
+
+		return true;
+	}
 }

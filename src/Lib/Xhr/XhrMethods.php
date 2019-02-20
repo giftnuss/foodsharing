@@ -1431,67 +1431,68 @@ class XhrMethods
 
 	public function xhr_addFetcher($data)
 	{
-		if (($this->storeGateway->isInTeam($this->session->id(), $data['bid']) || $this->session->isAmbassador() || $this->session->isOrgaTeam()) && $this->session->isVerified()) {
-			/*
-			 * 	[f] => addFetcher
-				[date] => 2013-09-23 20:00:00
-				[bid] => 1
-			 */
-			$confirm = 0;
-			if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid'])) {
-				$confirm = 1;
+		$storeId = (int)$data['bid'];
+		if (!$this->storePermissions->mayDoPickup($storeId)) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+
+		/*
+			* 	[f] => addFetcher
+			[date] => 2013-09-23 20:00:00
+			[bid] => 1
+			*/
+		$confirm = 0;
+		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $storeId)) {
+			$confirm = 1;
+		}
+
+		if (!empty($data['to'])) {
+			$this->incLang('StoreUser');
+			if (empty($data['from'])) {
+				$data['from'] = date('Y-m-d');
 			}
+			$time = explode(' ', $data['date']);
+			$time = $time[1];
 
-			if (!empty($data['to'])) {
-				$this->incLang('StoreUser');
-				if (empty($data['from'])) {
-					$data['from'] = date('Y-m-d');
-				}
-				$time = explode(' ', $data['date']);
-				$time = $time[1];
+			$from = strtotime($data['from']);
+			$to = strtotime($data['to']);
+			if ($to > time() + 86400 * 7 * 3) {
+				$this->func->info('Das Datum liegt zu weit in der Zukunft!');
 
-				$from = strtotime($data['from']);
-				$to = strtotime($data['to']);
-				if ($to > time() + 86400 * 7 * 3) {
-					$this->func->info('Das Datum liegt zu weit in der Zukunft!');
-
-					return 0;
-				}
-
-				$start = strtotime($data['date']);
-
-				$cur_date = $from;
-
-				$dow = date('w', $start);
-				$count = 0;
-
-				do {
-					if (date('w', $cur_date) == $dow) {
-						++$count;
-						$this->storeGateway->addFetcher($this->session->id(), $data['bid'], date('Y-m-d', $cur_date) . ' ' . $time, $confirm);
-					}
-					if ($count > 20) {
-						break;
-					}
-					// + 1 Tag
-					$cur_date += 86400;
-				} while ($to > $cur_date);
-				$this->func->info($this->func->s('date_add_successful'));
-
-				return '2';
-			}
-
-			if (!empty($data['from'])) {
 				return 0;
 			}
 
-			$data['date'] = date('Y-m-d H:i:s', strtotime($data['date']));
-			if ($this->storeGateway->addFetcher($this->session->id(), $data['bid'], $data['date'], $confirm)) {
-				return $this->func->img($this->model->getVal('photo', 'foodsaver', $this->session->id()));
-			}
+			$start = strtotime($data['date']);
+
+			$cur_date = $from;
+
+			$dow = date('w', $start);
+			$count = 0;
+
+			do {
+				if (date('w', $cur_date) == $dow) {
+					++$count;
+					$this->storeGateway->addFetcher($this->session->id(), $storeId, date('Y-m-d', $cur_date) . ' ' . $time, $confirm);
+				}
+				if ($count > 20) {
+					break;
+				}
+				// + 1 Tag
+				$cur_date += 86400;
+			} while ($to > $cur_date);
+			$this->func->info($this->func->s('date_add_successful'));
+
+			return '2';
 		}
 
-		return '0';
+		if (!empty($data['from'])) {
+			return 0;
+		}
+
+		$data['date'] = date('Y-m-d H:i:s', strtotime($data['date']));
+		if ($this->storeGateway->addFetcher($this->session->id(), $storeId, $data['date'], $confirm)) {
+			return $this->func->img($this->model->getVal('photo', 'foodsaver', $this->session->id()));
+		}
 	}
 
 	private function incLang(string $moduleName): void
