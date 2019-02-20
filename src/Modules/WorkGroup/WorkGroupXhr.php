@@ -97,7 +97,7 @@ class WorkGroupXhr extends Control
 	 */
 	public function sendtogroup()
 	{
-		if(!$this->session->id()) {
+		if (!$this->session->id()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		if (($group = $this->model->getGroup($_GET['id'])) && !empty($group['email'])) {

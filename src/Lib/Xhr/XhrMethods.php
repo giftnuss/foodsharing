@@ -21,6 +21,7 @@ use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Permissions\RegionPermissions;
+use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\SanitizerService;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,6 +40,7 @@ class XhrMethods
 	private $messageModel;
 	private $regionGateway;
 	private $regionPermissions;
+	private $storePermissions;
 	private $forumGateway;
 	private $bellGateway;
 	private $storeGateway;
@@ -68,6 +70,7 @@ class XhrMethods
 		ForumGateway $forumGateway,
 		BellGateway $bellGateway,
 		StoreGateway $storeGateway,
+		StorePermissions $storePermissions,
 		FoodsaverGateway $foodsaverGateway,
 		EmailGateway $emailGateway,
 		MailboxGateway $mailboxGateway,
@@ -88,6 +91,7 @@ class XhrMethods
 		$this->forumGateway = $forumGateway;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
+		$this->storePermissions = $storePermissions;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->emailGateway = $emailGateway;
 		$this->mailboxGateway = $mailboxGateway;
@@ -274,33 +278,36 @@ class XhrMethods
 
 	public function xhr_addPinPost($data)
 	{
-		if ($this->storeGateway->isInTeam($this->session->id(), $data['bid']) || $this->session->isOrgaTeam() || $this->session->isAmbassador()) {
-			if (isset($_SESSION['last_pinPost'])) {
-				if ((time() - $_SESSION['last_pinPost']) < 2) {
-					return $this->xhr_getPinPost($data);
-				}
-			}
-			if ($this->storeGateway->add_betrieb_notiz(array(
-				'foodsaver_id' => $this->session->id(),
-				'betrieb_id' => $data['bid'],
-				'text' => $data['text'],
-				'zeit' => date('Y-m-d H:i:s'),
-				'milestone' => 0,
-				'last' => 1
-			))
-			) {
-				$betrieb = $this->model->getVal('name', 'betrieb', (int)$data['bid']);
+		$storeId = (int)$data['bid'];
+		if (!$this->storePermissions->mayAccessStore($storeId)) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 
-				$this->bellGateway->addBell($data['team'], 'store_wallpost_title', 'store_wallpost', 'img img-store brown', array(
-					'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
-				), array(
-					'user' => $this->session->user('name'),
-					'name' => $betrieb
-				), 'store-wallpost-' . (int)$data['bid']);
-				$_SESSION['last_pinPost'] = time();
-
+		if (isset($_SESSION['last_pinPost'])) {
+			if ((time() - $_SESSION['last_pinPost']) < 2) {
 				return $this->xhr_getPinPost($data);
 			}
+		}
+		if ($this->storeGateway->add_betrieb_notiz(array(
+			'foodsaver_id' => $this->session->id(),
+			'betrieb_id' => $storeId,
+			'text' => $data['text'],
+			'zeit' => date('Y-m-d H:i:s'),
+			'milestone' => 0,
+			'last' => 1
+		))
+		) {
+			$betrieb = $this->model->getVal('name', 'betrieb', $storeId);
+
+			$this->bellGateway->addBell($data['team'], 'store_wallpost_title', 'store_wallpost', 'img img-store brown', array(
+				'href' => '/?page=fsbetrieb&id=' . $storeId
+			), array(
+				'user' => $this->session->user('name'),
+				'name' => $betrieb
+			), 'store-wallpost-' . $storeId);
+			$_SESSION['last_pinPost'] = time();
+
+			return $this->xhr_getPinPost($data);
 		}
 	}
 
