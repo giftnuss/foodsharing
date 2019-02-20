@@ -100,8 +100,14 @@ class Session
 		fSession::open();
 
 		if (!isset($_COOKIE['CSRF_TOKEN']) || !$_COOKIE['CSRF_TOKEN'] || !$this->isValidCsrfToken('cookie', $_COOKIE['CSRF_TOKEN'])) {
-			setcookie('CSRF_TOKEN', $this->generateCrsfToken('cookie'));
+			$cookieExpires = $this->isPersistent() ? strtotime('1 week') : 0;
+			setcookie('CSRF_TOKEN', $this->generateCrsfToken('cookie'), $cookieExpires, '/');
 		}
+	}
+
+	private function isPersistent(): bool
+	{
+		return $_SESSION['fSession::type'] === 'persistent';
 	}
 
 	public function setAuthLevel($role)
