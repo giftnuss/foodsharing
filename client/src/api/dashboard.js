@@ -1,4 +1,4 @@
-import { get } from './base'
+import { get, post } from './base'
 
 export async function getUpdates (pagenumber) {
   if (pagenumber == 0) {
@@ -6,4 +6,8 @@ export async function getUpdates (pagenumber) {
   } else {
     return (await get(`/../xhrapp.php?app=activity&m=loadmore&page=${pagenumber}`)).data.updates
   }
+}
+
+export async function sendQuickreply (href, msg) {
+  return post('/..' + href, { msg })
 }

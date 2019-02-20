@@ -15,8 +15,7 @@
       <a v-else-if="type == 'foodbasket'" :href="'/essenskoerbe/' + data.basked_id"> {{ "Essenskorb #" + data.basked_id }} </a>
       <a v-else-if="type == 'friendWall'" :href="'/profile/' + data.poster_id"> {{ data.poster_name }} </a>
       <a v-else-if="type == 'mailbox'" :href="'/?page=mailbox&show=' + data.mailbox_id"> {{ data.subject }} </a>
-      <a v-else-if="type == 'foodbasket'" :href="'/essenskoerbe/' + data.basked_id"> {{ "Essenskorb #" + data.basked_id }} </a>
-      <a v-else href="/?page=bezirk&amp;bid=25&amp;sub=forum&amp;tid=74194&amp;pid=409456#tpost-409456"> {{ type }} </a>
+      <a v-else-if="type == 'store'" :href="'/?page=fsbetrieb&id=' + data.store_id"> {{ data.store_name }} </a>
       <small v-if="data.region_name">{{ data.region_name }}</small>
       <small v-else-if="data.mailbox_name">{{ data.mailbox_name }}</small>
     </span>
@@ -32,14 +31,14 @@
     <span class="qr" v-if="data.quickreply">
       <img :src="user_avatar">
       <textarea
-        data-load="0"
-        data-url="/xhrapp.php?app=bezirk&amp;m=quickreply&amp;bid=25&amp;tid=74194&amp;pid=409456&amp;sub=forum"
+        v-if="!qrLoading"
+        v-on:keyup.enter="sendQuickreply"
+        v-model="quickreplyValue"
         name="quickreply"
         class="quickreply"
         placeholder="Schreibe eine Antwort..."
-        style="overflow: hidden; overflow-wrap: break-word; resize: none; height: 16px;"
       ></textarea>
-      <span class="loader" style="display:none;">
+      <span v-else class="loader">
         <i class="fas fa-spinner fa-spin"></i>
       </span>
     </span>
@@ -53,6 +52,14 @@
 
 <script>
 import serverData from '@/server-data'
+import { sendQuickreply } from "@/api/dashboard";
+
+/* TODOs
+- quickreply not working yet
+- text should be markdown
+- time should be "from now"
+- readd ability to display photos
+*/
 
 export default {
   components: {},
@@ -69,7 +76,9 @@ export default {
   data () {
     return {
       isTxtShortend: true,
-      user_avatar: serverData.user.avatar.mini
+      qrLoading: false,
+      user_avatar: serverData.user.avatar.mini,
+      quickreplyValue: null
     }
   },
   computed: {
@@ -82,6 +91,15 @@ export default {
       } else {
         return this.data.desc
       }
+    }
+  },
+  methods: {
+    async sendQuickreply(txt) {
+      console.log('sending reply', this.quickreplyValue)
+      this.qrLoading = true
+      await sendQuickreply(this.data.quickreply, this.quickreplyValue)
+      this.qrLoading = false
+      return true
     }
   }
 };
@@ -100,6 +118,15 @@ export default {
   margin-left: 58px;
   border-radius: 3px;
   opacity: 0.5;
+}
+.activity-item span.qr textarea {
+  overflow: hidden;
+  overflow-wrap: break-word;
+  resize: none;
+  height: 16px;
+}
+.activity-item span.qr:focus-within {
+  opacity: 1;
 }
 
 .activity-item span.qr:hover {
