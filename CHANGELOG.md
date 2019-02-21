@@ -5,6 +5,7 @@
 ## Features
 
 ## Bugfixes
+- Orga can delete quizzes #364 !767 @k.miklobusec
 
 ## Refactoring
 
