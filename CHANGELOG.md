@@ -10,6 +10,7 @@
 ## Refactoring
 
 ## Dev/Test/CI stuff
+- Use CI built assets and vendor for deployment !768 @NerdyProjects
 
 # 2019-02-21
 
