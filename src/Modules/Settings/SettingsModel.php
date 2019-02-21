@@ -20,6 +20,8 @@ class SettingsModel extends Db
 	public function __construct(QuizModel $quizModel)
 	{
 		$this->quizModel = $quizModel;
+
+		parent::__construct();
 	}
 
 	public function saveInfoSettings($newsletter, $infomail)
