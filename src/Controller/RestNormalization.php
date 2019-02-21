@@ -14,7 +14,6 @@ class RestNormalization
 	 *
 	 * @param array $data the foodsaver data from the database
 	 * @param string $prefix a prefix for the entries in the data array
-	 * @param string $photoVersion type of the photo, one of '', 'crop_', 'thumb_crop_', 'mini_q', '130_q_'
 	 *
 	 * @return array
 	 */
