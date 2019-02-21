@@ -147,7 +147,6 @@ function mb_setMailbox (mb_id) {
   }
 }
 
-
 function mb_clearEditor () {
   $('#edit-von').val('')
   u_handleNewEmail('') // fixes some wired bug, where the edit-an-field is missing after reopening the form
