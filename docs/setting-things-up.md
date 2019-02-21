@@ -37,6 +37,9 @@ PHPMyAdmin is also included: [localhost:18081](http://localhost:18081). Log in w
 | Username | root |
 | Password | root |
 
+There you can directly look at and manipulate the data in the database
+which can be necessary or very useful for manual testing and troubleshouting.
+
 ## php Code style
 
 We use php-cs-fixer to format the code style. The aim is to make it use the same style as phpstorm does by default.
