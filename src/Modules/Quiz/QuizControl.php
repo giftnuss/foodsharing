@@ -128,8 +128,6 @@ class QuizControl extends Control
 
 			if ($sessions = $this->model->getUserSessions($_GET['fsid'])) {
 				$this->func->addContent($this->view->userSessions($sessions, $fs));
-			} else {
-				$this->func->addContent($this->view->noSessions($quiz));
 			}
 		}
 	}
