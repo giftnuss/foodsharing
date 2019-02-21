@@ -179,7 +179,8 @@ class ActivityXhr extends Control
 					}
 					$listings['buddywalls'][] = [
 						'id' => $b['id'],
-						'name' => '<img style="border-radius:4px;position:relative;top:5px;" src="' . $this->func->img($b['photo']) . '" height="24" /> ' . $b['name'],
+						'imgUrl' => $this->func->img($b['photo']),
+						'name' => $b['name'],
 						'checked' => $checked
 					];
 				}
