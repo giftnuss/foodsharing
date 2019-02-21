@@ -13,6 +13,7 @@
 - Properly escape store names in request popups !778 @NerdyProjects
 
 ## Refactoring
+- removed the geoClean and LostRegion modules !756 #103 @peter.toennies
 
 ## Dev/Test/CI stuff
 - Several reference texts in devdocs about used technologies !741 @flukx
@@ -93,7 +94,6 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - user normalisation in conversations API endpoint
 - remove unused quickprofile method !755 @NerdyProjects
 - fix a few linter warnings !755 @NerdyProjects
-- removed the geoClean and LostRegion modules !756 #103 @peter.toennies
 
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen
