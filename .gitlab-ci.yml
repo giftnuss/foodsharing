@@ -20,6 +20,9 @@
   <<: *defaults
   <<: *ssh
   stage: deploy
+  dependencies:
+  - build:frontend
+  - build:backend
   script:
   - (cd deployer && composer install)
   - deployer/vendor/bin/dep deploy $CI_ENVIRONMENT_NAME --revision $CI_COMMIT_SHA
@@ -42,7 +45,7 @@ triage:
   tags:
   - shared
 
-build:
+build:frontend:
   <<: *defaults
   image: node:11.9.0-alpine
   stage: build
@@ -57,6 +60,16 @@ build:
     - assets
   except:
   - schedules
+
+build:backend:
+  <<: *defaults
+  stage: build
+  script:
+    - composer install --verbose --prefer-dist --no-progress --no-interaction --no-dev -classmap-authoritative --no-suggest
+    - composer dump-autoload --classmap-authoritative
+  artifacts:
+    paths:
+      - vendor
 
 build:docs:
   <<: *defaults
@@ -122,6 +135,16 @@ deploy:beta:
   except:
   - schedules
 
+deploy:production:
+  <<: *deploy
+  environment:
+    name: production
+    url: https://foodsharing.de
+  only:
+    - production
+  except:
+    - schedules
+
 deploy:docs:
   <<: *defaults
   <<: *ssh
@@ -135,16 +158,6 @@ deploy:docs:
     url: https://devdocs.foodsharing.de
   only:
   - master
-  except:
-  - schedules
-
-deploy:production:
-  <<: *deploy
-  environment:
-    name: production
-    url: https://foodsharing.de
-  only:
-  - production
   except:
   - schedules
 
