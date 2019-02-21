@@ -63,10 +63,9 @@ build:frontend:
 
 build:backend:
   <<: *defaults
-  image: registry.gitlab.com/foodsharing-dev/images/php:2.18
   stage: build
   script:
-    - composer install --verbose --prefer-dist --no-progress --no-interaction --no-dev --classmap-authoritative --no-suggest
+    - composer install --verbose --prefer-dist --no-progress --no-interaction --no-dev --classmap-authoritative --no-suggest --no-scripts --ignore-platform-reqs
     - composer dump-autoload --classmap-authoritative
   artifacts:
     paths:
