@@ -42,6 +42,7 @@
 - Fix broken permission checks in mailbox xhr module !731 @NerdyProjects
 - Fix path traversals vulnerabilities !723 @alangecker
 - Fix multiple XSS vulnerabilities !722 @alangecker
+- Properly show quiz as succeeded when errorpoints match max. allowed errorpoints @NerdyProjects
 
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies
