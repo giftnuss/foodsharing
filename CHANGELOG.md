@@ -7,6 +7,8 @@
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
 
+- Store member status icons suitable to status on ambassador view of profiles !766 @flukx
+
 ## Refactoring
 
 ## Dev/Test/CI stuff
