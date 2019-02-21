@@ -82,13 +82,15 @@ build:backend:
   script:
     - composer install --verbose --prefer-dist --no-progress --no-interaction --no-dev --classmap-authoritative --no-suggest --no-scripts --ignore-platform-reqs
     - composer dump-autoload --classmap-authoritative
+  cache:
+    key: backend:build:v1
+    paths:
+      - vendor
   artifacts:
     paths:
       - vendor
-  - cache:
-      key: backend:build:v1
-      paths:
-        - vendor
+  except:
+  - schedules
 
 build:docs:
   <<: *defaults
