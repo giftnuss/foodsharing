@@ -1,4 +1,8 @@
 
+## API
+
+Application interface
+
 ## DOM
 
 [Document Object Model](https://en.wikipedia.org/wiki/Document_Object_Model)
@@ -26,6 +30,10 @@ Merge Request
 ## npm
 
 Node.js Package Manager (package manager for [javascript](javascript.md))
+
+## php
+
+Hypertext Preprocessor. Server side-scripting language
 
 ## PR
 
