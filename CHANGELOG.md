@@ -7,6 +7,7 @@
 ## Bugfixes
 
 ## Refactoring
+- removed the geoClean and LostRegion modules !756 #103 @peter.toennies
 
 ## Dev/Test/CI stuff
 
@@ -84,7 +85,6 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - user normalisation in conversations API endpoint
 - remove unused quickprofile method !755 @NerdyProjects
 - fix a few linter warnings !755 @NerdyProjects
-- removed the geoClean and LostRegion modules !756 #103 @peter.toennies
 
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen
