@@ -2,11 +2,6 @@
 
 If you have any questions please reach out to us via slack: [yunity slack](https://slackin.yunity.org/) and join the #foodsharing-dev channel.
 
-## Coding guidelines
-
-We do have a few coding guidelines, mentioned at various places in these devdocs.
-In general, please use your common sense and make it fit with the existing code.
-
 ## Submitting an issue
 
 If you found an issue on the foodsharing website, then please submit it to our GitLab [issues](https://gitlab.com/foodsharing-dev/foodsharing/issues).

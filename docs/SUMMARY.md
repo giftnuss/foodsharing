@@ -10,6 +10,7 @@
 ### Contributing
 
   - [Making and submitting changes](contributing.md)
+  - [Code style](codestyle.md)
   - [Testing](testing.md)
 
 ### References

@@ -37,7 +37,7 @@ PHPMyAdmin is also included: [localhost:18081](http://localhost:18081). Log in w
 | Username | root |
 | Password | root |
 
-## Code style
+## php Code style
 
 We use php-cs-fixer to format the code style. The aim is to make it use the same style as phpstorm does by default.
 It is based on the @Symfony ruleset, with a few changes.
@@ -83,3 +83,12 @@ Executing the following script will use the dev environment to run the codestyle
 ./scripts/fix-codestyle
 ```
 If the `-local` version does not work for you, replace `fix-codestyle-local` with `fix-codestyle` in the pre-commit hook.
+
+### Using PHPstorm
+
+If you happen to use PHPstorm you can add `php-cs-fixer` to those settings as well:
+<div align="center"><img src="setting-things-up-phpstorm-php-cs-fixer.png" alt="PHPstorm enable php-cs-fixer"</div>
+<div align="center"><img src="setting-things-up-phpstorm-inspections.png" alt="PHPstorm inspections"></div>
+## Editorconfig
+
+Depending on your editor you need to do nothing or install or configure a plugin to use the file `.editorconfig`. Please refer to the section about [Code style](codestyle.md).
