@@ -123,6 +123,10 @@ class ActivityModel extends Db
 					$smTitle = 'Deine Pinnwand';
 				}
 
+				if (empty($u['gallery'])) {
+					$u['gallery'] = '[]';
+				}
+
 				$out[] = [
 					'type' => 'friendWall',
 					'data' => [

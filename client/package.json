@@ -45,6 +45,7 @@
     "typeface-alfa-slab-one": "^0.0.54",
     "underscore": "^1.9.1",
     "vue": "^2.6.6",
+    "vue-infinite-loading": "^2.4.3",
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
