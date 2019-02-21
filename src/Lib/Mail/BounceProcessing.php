@@ -9,7 +9,7 @@ class BounceProcessing
 {
 	private $bounceMailHandler;
 
-	private $emailGateway;
+	private $mailsGateway;
 
 	private $numBounces;
 
