@@ -5,17 +5,17 @@
       <span class="option">
         <a class="wide" :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['store', 'forum', 'mailbox', 'friendWall', 'foodbasket'])}" v-on:click="displayAll">Alle</a>
         <div class="headerDivider"></div>
-        <a class="fa-fw fas fa-comments"        v-on:click="displayedTypes = ['forum']"      :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['forum'])}"></a>
-        <a class="fa-fw fas fa-shopping-basket" v-on:click="displayedTypes = ['foodbasket']" :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['foodbasket'])}"></a>
-        <a class="fa-fw fas fa-user"            v-on:click="displayedTypes = ['friendWall']" :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['friendWall'])}"></a>
-        <a class="fa-fw fas fa-envelope"        v-on:click="displayedTypes = ['mailbox']"    :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['mailbox'])}"></a>
-        <a class="fa-fw fas fa-shopping-cart"   v-on:click="displayedTypes = ['store']"      :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['store'])}"></a>
+        <a class="fa-fw fas fa-comments"        v-on:click="displayOne('forum')"      :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['forum'])}"></a>
+        <a class="fa-fw fas fa-shopping-basket" v-on:click="displayOne('foodbasket')" :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['foodbasket'])}"></a>
+        <a class="fa-fw fas fa-user"            v-on:click="displayOne('friendWall')" :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['friendWall'])}"></a>
+        <a class="fa-fw fas fa-envelope"        v-on:click="displayOne('mailbox')"    :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['mailbox'])}"></a>
+        <a class="fa-fw fas fa-shopping-cart"   v-on:click="displayOne('store')"      :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['store'])}"></a>
         <div class="headerDivider"></div>
 			  <a id="activity-option" :class="{'active': showListings}" v-on:click="toggleOptionListings" class="fas fa-cog"></a>
       </span>
 		</div>
     <div v-if="showListings" class="ui-widget-content corner-bottom margin-bottom ui-padding">
-      <ActivityOptionListings/>
+      <ActivityOptionListings v-on:close="showListings = false"/>
     </div>
     <ActivityThread id="activity" :displayed-types="displayedTypes"/>
   </div>
@@ -36,6 +36,10 @@ export default {
     };
   },
   methods: {
+    displayOne: function (type) {
+      this.displayedTypes = [type]
+      // this.showListings = false
+    },
     displayAll: function () {
       this.displayedTypes = ['store', 'forum', 'mailbox', 'friendWall', 'foodbasket']
     },

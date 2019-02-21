@@ -1,7 +1,7 @@
 <template>
   <div>
     <form id="activity-option-form" class="pure-form pure-form-stacked">
-      <fieldset>
+      <fieldset :class="{disabledLoading: isLoading}">
         <h3>Updates Blockieren</h3>
         <div class="msg-inside info">
           <i class="fas fa-info-circle"></i> Hier kannst Du einstellen, welche Updates auf Deiner Startseite nicht angezeigt werden sollen.
@@ -19,8 +19,11 @@
           <a
             v-on:click="saveOptionListings"
             class="button"
-            style="float:right;"
           >Einstellungen speichern</a>
+          <a
+            v-on:click="$emit('close')"
+            class="button cancel-button"
+          >Abbrechen</a>
       </fieldset>
     </form>
   </div>
@@ -34,16 +37,18 @@ export default {
   props: {},
   data() {
     return {
-      listings: []
+      listings: [],
+      isLoading: true
     };
   },
   async created() {
     this.listings = await getOptionListings();
-    console.log(this.listings);
+    this.isLoading = false
   },
   methods: {
     async saveOptionListings() {
       var res = await saveOptionListings(this.listings);
+      this.$emit('close');
     }
   },
   computed: {
@@ -64,5 +69,13 @@ h3 {
   border-radius:4px;
   position:relative;
   top:5px;
+}
+.button {
+  float: right;
+  cursor: pointer;
+  margin-left: 5px; 
+}
+.cancel-button {
+  background-color: #999999;
 }
 </style>

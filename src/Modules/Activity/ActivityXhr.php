@@ -88,6 +88,10 @@ class ActivityXhr extends Control
 			$this->session->setOption('activity-listings', $options, $this->model);
 		}
 
+		if (isset($_GET['select_all_options'])) {
+			$this->session->setOption('activity-listings', false, $this->model);
+		}
+
 		$page = 0;
 		$hidden_ids = array(
 			'bezirk' => array(),
