@@ -55,11 +55,6 @@ migratedb foodsharing
 $dir/mkdirs
 echo $SECONDS seconds elapsed
 
-log-header "Checking code style"
-SECONDS=0
-exec-in-container-asroot app scripts/php-cs-fixer.ci.sh --cache-file=vendor/php-cs-cache fix
-echo $SECONDS seconds elapsed
-
 log-header "Running tests"
 failed=0
 SECONDS=0
