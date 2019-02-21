@@ -18,13 +18,16 @@ class ContentSecurityPolicy
 			'script-src' => [
 				$self,
 				$unsafeInline,
-				$unsafeEval // lots of `$.globalEval` still ... 😢
+				$unsafeEval, // lots of `$.globalEval` still ... 😢
+				'https://www.bildungsspender.de' // donation formular on /unterstuetzung
 			],
 			'connect-src' => [
 				$self,
 				$this->websocketUrlFor(BASE_URL),
 				'https://sentry.io',
-				'https://photon.komoot.de'
+				'https://photon.komoot.de',
+				'https://search.mapzen.com', // only used in u_loadCoords, gets hopefully replaces soon
+				'https://beta.foodsharing.de', // in beta BASE_URL is foodsharing.de (see https://gitlab.com/foodsharing-dev/foodsharing/issues/479)
 			],
 			'img-src' => [
 				$self,
