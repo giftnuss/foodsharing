@@ -56,6 +56,8 @@
 - use API endpoint to delete regions/workgroups to avoid CSRF problems !719 @NerdyProjects
 - removed unused php,js and css code !720 @alangecker
 - user normalisation in conversations API endpoint
+- remove unused quickprofile method !755 @NerdyProjects
+- fix a few linter warnings !755 @NerdyProjects
 
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen
