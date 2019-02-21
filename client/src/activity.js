@@ -27,10 +27,10 @@ const activity = {
     this.$container = $('#activity > ul.linklist')
     this.$loader = $('#activity > .loader')
     this.$info = $('#activity-info')
-
+    
     this.initLoad()
 
-    $(window).on('scroll', function () {
+    /* $(window).on('scroll', function () {
       if (!activity.isLoading) {
         if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
           activity.isLoading = true
@@ -51,7 +51,7 @@ const activity = {
           })
         }
       }
-    })
+    }) */
   },
 
   initLoad: function (option) {
@@ -79,10 +79,7 @@ const activity = {
           activity.$info.hide()
           activity.user = ret.user
 
-          for (var i = 0; i < ret.updates.length; i++) {
-            activity.append(ret.updates[i])
-          }
-          activity.sortUpdates()
+          // activity.sortUpdates()
         } else {
           activity.$info.show()
         }
@@ -91,6 +88,7 @@ const activity = {
   },
 
   append: function (up) {
+    /*
     var quickreply = ''
 
     if (up.quickreply != undefined) {
@@ -98,10 +96,12 @@ const activity = {
     }
 
     activity.$container.append(`<li data-ts="${up.time}"><span class="i"><img width="50" src="${up.icon}" /></span><span class="n">${up.title}</span><span class="t">${up.desc}</span>${quickreply}<span class="time"><i class="far fa-clock"></i> ${$.timeago(up.time)} <i class="fas fa-angle-right"></i> ${timeformat.nice(up.time)}</span><span class="c"></span></li>`)
+    */
   },
 
   initQuickreply: function () {
     // noninit
+    /*
     $('.quickreply.noninit').each(function () {
       var $el = $(this)
       var $loader = $el.next()
@@ -151,12 +151,15 @@ const activity = {
       })
       $el.removeClass('noninit')
     })
+    */
   },
 
   sortUpdates: function () {
+    /*
     tinysort('#activity li[data-ts]', { order: 'desc', attr: 'data-ts' })
 
     this.initQuickreply()
+    */
   },
 
   initOption: function (listings) {

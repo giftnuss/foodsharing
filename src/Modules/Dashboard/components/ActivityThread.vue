@@ -2,7 +2,7 @@
   <div class>
     <ul class="linklist">
       <ActivityPost v-for="(el, index) in updates" :key="index" :type="el.type" :data="el.data"/>
-      <infinite-loading @infinite="infiniteHandler"></infinite-loading>
+      <infinite-loading spinner="waveDots" @infinite="infiniteHandler"></infinite-loading>
     </ul>
   </div>
 </template>
@@ -15,7 +15,6 @@ import InfiniteLoading from "vue-infinite-loading";
 /* TODOs
 - sort updates by time
 - make cog work again
-
 */
 
 export default {
@@ -28,10 +27,11 @@ export default {
     };
   },
   async created() {
-    /* this.updates = await getUpdates(0);
+    this.updates = await getUpdates(0);
     this.updates.sort((a, b) => {
       return b.data.time_ts - a.data.time_ts;
-    }); */
+    });
+    // activity.initOption(this.updates)
   },
   methods: {
     async infiniteHandler($state) {

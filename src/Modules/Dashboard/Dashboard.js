@@ -6,7 +6,7 @@ import activity from '@/activity'
 import { vueRegister, vueApply } from '@/vue'
 import DashboardThread from './components/ActivityThread'
 
-// activity.init()
+activity.init()
 
 vueRegister({
     DashboardThread
