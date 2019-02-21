@@ -10,6 +10,7 @@
 ## Refactoring
 
 ## Dev/Test/CI stuff
+- Several reference texts in devdocs about used technologies !741 @flukx
 
 # 2019-02-21
 
