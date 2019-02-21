@@ -45,6 +45,20 @@ triage:
   tags:
   - shared
 
+build:lint-backend:
+  <<: *defaults
+  stage: build
+  script:
+  - composer install --verbose --prefer-dist --no-progress --no-interaction --no-suggest --no-scripts --ignore-platform-reqs
+  - vendor/bin/parallel-lint --no-progress --exclude vendor .
+  - vendor/bin/phpstan analyse --memory-limit=768M --no-progress
+  cache:
+    key: backend:lint:v1
+    paths:
+    - vendor
+  except:
+  - schedules
+
 build:frontend:
   <<: *defaults
   image: node:11.9.0-alpine
