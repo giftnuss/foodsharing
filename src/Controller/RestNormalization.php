@@ -18,7 +18,7 @@ class RestNormalization
 	 *
 	 * @return array
 	 */
-	public static function normalizeFoodsaver($data, $prefix = '', $photoVersion = ''): array
+	public static function normalizeFoodsaver($data, $prefix = ''): array
 	{
 		//sleep_status is used with and without prefix
 		if (isset($data[$prefix . 'sleep_status'])) {
@@ -32,7 +32,7 @@ class RestNormalization
 		return [
 			'id' => (int)$data[$prefix . 'id'],
 			'name' => $data[$prefix . 'name'],
-			'avatar' => $data[$prefix . 'photo'] ? ('/images/' . $photoVersion . $data[$prefix . 'photo']) : null,
+			'avatar' => $data[$prefix . 'photo'] ?? null,
 			'sleepStatus' => $sleepStatus,
 		];
 	}
