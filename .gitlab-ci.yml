@@ -85,6 +85,10 @@ build:backend:
   artifacts:
     paths:
       - vendor
+  - cache:
+      key: backend:build:v1
+      paths:
+        - vendor
 
 build:docs:
   <<: *defaults
