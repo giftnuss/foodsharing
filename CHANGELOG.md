@@ -1,3 +1,15 @@
+# Unreleased
+
+## Major changes
+
+## Features
+
+## Bugfixes
+
+## Refactoring
+
+## Dev/Test/CI stuff
+
 # 2019-02-21
 
 We are happy to announce another release which got hundreds of hours of love, lastly from more then 10 people participating in the 2019 february foodsharing.de hackweek, sitting together since last friday at Kanthaus near Leipzig.
