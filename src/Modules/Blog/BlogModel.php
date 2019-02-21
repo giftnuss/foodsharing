@@ -5,17 +5,23 @@ namespace Foodsharing\Modules\Blog;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Services\SanitizerService;
 
 class BlogModel extends Db
 {
 	private $bellGateway;
 	private $foodsaverGateway;
+	private $sanitizerService;
 
-	public function __construct(BellGateway $bellGateway, FoodsaverGateway $foodsaverGateway)
-	{
+	public function __construct(
+		BellGateway $bellGateway,
+		FoodsaverGateway $foodsaverGateway,
+		SanitizerService $sanitizerService
+	) {
 		parent::__construct();
 		$this->bellGateway = $bellGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->sanitizerService = $sanitizerService;
 	}
 
 	public function canEdit($article_id)
@@ -205,7 +211,7 @@ class BlogModel extends Db
 			array('href' => '/?page=blog&sub=edit&id=' . $id),
 			array(
 				'user' => $this->session->user('name'),
-				'teaser' => $this->func->tt($data['teaser'], 100),
+				'teaser' => $this->sanitizerService->tt($data['teaser'], 100),
 				'title' => $data['name']
 			),
 			'blog-check-' . $id

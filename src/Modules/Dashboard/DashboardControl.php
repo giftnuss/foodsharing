@@ -11,6 +11,7 @@ use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Profile\ProfileModel;
 use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Services\SanitizerService;
 
 class DashboardControl extends Control
 {
@@ -23,6 +24,7 @@ class DashboardControl extends Control
 	private $eventGateway;
 	private $twig;
 	private $profileModel;
+	private $sanitizerService;
 
 	public function __construct(
 		DashboardView $view,
@@ -34,7 +36,9 @@ class DashboardControl extends Control
 		EventGateway $eventGateway,
 		Db $model,
 		ProfileModel $profileModel,
-		\Twig\Environment $twig)
+		\Twig\Environment $twig,
+		SanitizerService $sanitizerService
+	)
 	{
 		$this->view = $view;
 		$this->dashboardGateway = $dashboardGateway;
@@ -46,6 +50,7 @@ class DashboardControl extends Control
 		$this->model = $model;
 		$this->twig = $twig;
 		$this->profileModel = $profileModel;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 
@@ -562,7 +567,7 @@ class DashboardControl extends Control
 					<li>
 						<a class="ui-corner-all" onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . ',modal:1});return false;" href="#">
 							<span style="float:left;margin-right:7px;"><img width="35px" alt="Maike" src="' . $img . '" class="ui-corner-all"></span>
-							<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' . $distance . ')</strong>' . $this->func->tt($b['description'], 50) . '</span>
+							<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' . $distance . ')</strong>' . $this->sanitizerService->tt($b['description'], 50) . '</span>
 							
 							<span style="clear:both;"></span>
 						</a>

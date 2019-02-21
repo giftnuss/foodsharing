@@ -64,4 +64,14 @@ class SanitizerService
 	{
 		return str_replace(array($quote, "\n", "\r"), array('\\' . $quote . '', '\\n', ''), $str);
 	}
+
+	public function tt($str, $length = 160)
+	{
+		if (strlen($str) > $length) {
+			/* this removes the part of the last word that might have been destroyed by substr */
+			$str = preg_replace('/[^ ]*$/', '', substr($str, 0, $length)) . ' ...';
+		}
+
+		return $str;
+	}
 }
