@@ -21,9 +21,9 @@
       </a>
     </li>
 
-    <MenuBullhorn/>
-    <MenuInformation :displayText="!isMobile"/>
-    <MenuEnvelope/>
+    <MenuBullhorn />
+    <MenuInformation :displayText="!isMobile" />
+    <MenuEnvelope />
   </ul>
 </template>
 

@@ -146,9 +146,19 @@
               :is-orga-team="isOrgaTeam"
               :may="may"
             />
-            <MenuBullhorn :display-arrow="false" :display-text="ui.wXS || ui.wSM"/>
-            <MenuInformation :display-arrow="false" :display-text="ui.wXS || ui.wSM"/>
-            <MenuEnvelope :display-arrow="false" :display-mailbox="mailbox" :display-text="ui.wXS || ui.wSM"/>
+            <MenuBullhorn
+              :display-arrow="false"
+              :display-text="ui.wXS || ui.wSM"
+            />
+            <MenuInformation
+              :display-arrow="false"
+              :display-text="ui.wXS || ui.wSM"
+            />
+            <MenuEnvelope
+              :display-arrow="false"
+              :display-mailbox="mailbox"
+              :display-text="ui.wXS || ui.wSM"
+            />
 
             <menu-messages v-if="!isMobile" />
             <menu-bells v-if="!isMobile" />
