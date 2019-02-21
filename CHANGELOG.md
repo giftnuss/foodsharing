@@ -1,4 +1,16 @@
-# Unreleased
+# 2019-02-21
+
+We are happy to announce another release which got hundreds of hours of love, lastly from more then 10 people participating in the 2019 february foodsharing.de hackweek, sitting together since last Friday at Kanthaus near Leipzig.
+This release is a milestone as we finally managed to tackle some issues that increase the security of foodsharing.de and by that the privacy of all our users.
+We are very proud to finally release foodsharing with an AGPLv3 licence, making it finally a [Free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software).
+
+## Major changes
+- A security focussed code audit has been done by @alangecker which lead to fixing more than 50 related issues, from which 10 were of critical and 6 of high severity #472
+- AGPLv3 licence added. The [Gitlab repository](https://gitlab.com/foodsharing-dev/foodsharing) is now publically visible
+- [CSRF](https://en.wikipedia.org/wiki/Cross-site_request_forgery) protection for most requests to avoid malicious requests deleting accounts or changing data without the users intention to do so
+- Lots of [XSS](https://en.wikipedia.org/wiki/Cross-site_scripting) vectors have been closed by setting the correct content type on json responses
+- Removed backend code to stop old android app `foodsharing lebensmittelretten` (`de.lebensmittelretten.app`) from working. The development team cannot take the responsibility for using this app as it implements very bad practices regarding security. We advice all current and recent users of that app to change the password they used on foodsharing.de.
+- We are happy with the continuous process of cleaning up our code and reimplementing more and more parts as proper API requests and getting rid of spaghetti-javascript
 
 ## Features
 - On dashboard there now is a symbol indicating the confirmation status of a pickup !661 @jofranz
