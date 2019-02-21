@@ -41,7 +41,7 @@ class StoreUserView extends View
 		$out .= '</table>';
 
 		$this->func->hiddenDialog('requests', array($out));
-		$this->func->addJs('$("#dialog_requests").dialog("option","title","Anfragen für ' . $this->jsonSafe($betrieb['name'], '"') . '");');
+		$this->func->addJs('$("#dialog_requests").dialog("option","title","Anfragen für ' . $this->jsonSafe($betrieb['name']) . '");');
 		$this->func->addJs('$("#dialog_requests").dialog("option","buttons",{});');
 		$this->func->addJs('$("#dialog_requests").dialog("open");');
 	}
