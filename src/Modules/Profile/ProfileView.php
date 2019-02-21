@@ -42,7 +42,7 @@ class ProfileView extends View
 				<a class="button button-big" href="#" onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',bid:0,date:0});return false;">Aus allen austragen</a>
 					<ul class="datelist linklist" id="double">';
 		foreach ($fetchDates as $d) {
-			$userConfirmedForPickup = $d['confirmed'] == 1 ? '✓ ' : '? ';
+			$userConfirmedForPickup = $d['confirmed'] == 1 ? '✓&nbsp;' : '?&nbsp;';
 
 			$out .= '
 						<li>
