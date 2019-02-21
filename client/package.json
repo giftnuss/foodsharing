@@ -35,6 +35,7 @@
     "node-sass": "^4.11.0",
     "object-path": "^0.11.4",
     "raven-js": "^3.27.0",
+    "serviceworker-webpack-plugin": "^1.0.1",
     "socket.io-client": "^2.2.0",
     "timeago": "^1.6.4",
     "tinysort": "^3.2.5",

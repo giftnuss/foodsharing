@@ -9,7 +9,7 @@ use Minishlink\WebPush\WebPush;
 
 class WebPushHandler implements PushNotificationHandlerInterface
 {
-	private const keyFileDirectory = __DIR__ . '/../../../../data/keys/pushnotifications';
+	private const keyFileDirectory = __DIR__ . '/../../../../data/keys/webpush';
 	private const privateKeyFileName = 'priv.key';
 	private const publicKeyFileName = 'pub.key';
 

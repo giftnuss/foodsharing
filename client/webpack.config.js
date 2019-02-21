@@ -9,6 +9,7 @@ const path = require('path')
 const clientRoot = path.resolve(__dirname)
 const { join, dirname } = require('path')
 const glob = require('glob')
+const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin')
 
 const dev = process.env.NODE_ENV !== 'production'
 
@@ -57,6 +58,13 @@ plugins.push(
   new CopyWebpackPlugin([
     { from: './lib/tinymce', to: './tinymce' }
   ])
+)
+
+plugins.push(
+new ServiceWorkerWebpackPlugin({
+  entry: path.join(__dirname, 'src/serviceWorker.js'),
+  filename: '../sw.js'
+})
 )
 
 module.exports = merge(webpackBase, {

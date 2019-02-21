@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Message;
 use Foodsharing\Lib\WebSocketSender;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\PushNotification\PushNotificationGateway;
 
 final class MessageXhr extends Control
 {
@@ -13,13 +14,21 @@ final class MessageXhr extends Control
 	 */
 	private $webSocketSender;
 	private $messageGateway;
+	private $pushNotificationGateway;
 
-	public function __construct(MessageModel $model, MessageView $view, MessageGateway $messageGateway, WebSocketSender $webSocketSender)
+	public function __construct(
+		MessageModel $model,
+		MessageView $view,
+		MessageGateway $messageGateway,
+		WebSocketSender $webSocketSender,
+		PushNotificationGateway $pushNotificationGateway
+	)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->messageGateway = $messageGateway;
 		$this->webSocketSender = $webSocketSender;
+		$this->pushNotificationGateway = $pushNotificationGateway;
 
 		parent::__construct();
 
@@ -133,6 +142,10 @@ final class MessageXhr extends Control
 							'body' => $body,
 							'time' => date('Y-m-d H:i:s')
 						));
+
+						foreach ($user_ids as $user_id) {
+							$this->pushNotificationGateway->sendPushNotificationsToFoodsaver($user_id, 'title', $body);
+						}
 
 						foreach ($member as $m) {
 							if ($m['id'] != $this->session->id()) {

@@ -6,7 +6,7 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\PushNotification\PushNotificationGateway;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Request\ParamFetcher;
+use Symfony\Component\HttpFoundation\Request;
 
 class PushNotificationSubscriptionRestController extends FOSRestController
 {
@@ -36,14 +36,14 @@ class PushNotificationSubscriptionRestController extends FOSRestController
 		}
 
 		$view = $this->view($this->gateway->getPublicKey($type), 200);
+
 		return $this->handleView($view);
 	}
 
 	/**
 	 * @Rest\Post("pushnotification/{type}/subscription")
-	 * @Rest\RequestParam(name="body")
 	 */
-	public function subscribeAction(ParamFetcher $paramFetcher, string $type)
+	public function subscribeAction(Request $request, string $type)
 	{
 		if (!$this->gateway->hasHandlerFor($type)) {
 			return $this->handleHttpStatus(404);
@@ -53,7 +53,7 @@ class PushNotificationSubscriptionRestController extends FOSRestController
 			return $this->handleHttpStatus(403);
 		}
 
-		$pushSubscription = $paramFetcher->get('body');
+		$pushSubscription = $request->getContent();
 		$foodsaverId = $this->session->id();
 
 		$this->gateway->addSubscription($foodsaverId, $pushSubscription);
@@ -63,9 +63,8 @@ class PushNotificationSubscriptionRestController extends FOSRestController
 
 	/**
 	 * @Rest\Delete("pushnotification/{type}/subscription")
-	 * @Rest\RequestParam(name="body")
 	 */
-	public function deletePushSubscriptionAction(ParamFetcher $paramFetcher, string $type)
+	public function deletePushSubscriptionAction(Request $request, string $type)
 	{
 		if (!$this->gateway->hasHandlerFor($type)) {
 			return $this->handleHttpStatus(404);
@@ -75,7 +74,7 @@ class PushNotificationSubscriptionRestController extends FOSRestController
 			return $this->handleHttpStatus(403);
 		}
 
-		$subscription = $paramFetcher->get('body');
+		$subscription = $request->getContent();
 		$foodsaverId = $this->session->id();
 
 		$numberOfAffectedRows = $this->gateway->deleteSubscription($foodsaverId, $subscription);

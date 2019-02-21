@@ -1,0 +1,25 @@
+#button-pushnotifications {
+  display: inline-block;
+}
+
+#close-top-banner-pushnotifications {
+  font-size: 25pt;
+  margin-left: auto;
+}
+
+.top-banner-flex-container {
+  display: flex;
+  align-items: center;
+}
+
+.pushnotifications-icon {
+  fill: currentColor;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+@media all and (max-width: 575.99px) {
+  .pushnotifications-icon {
+    display: none;
+  }
+}
