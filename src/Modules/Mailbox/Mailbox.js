@@ -30,8 +30,6 @@ expose({
   mb_answer,
   mb_forward,
   mb_setMailbox,
-  u_loadBody,
-  u_readyBody,
   mb_clearEditor,
   mb_closeEditor,
   mb_send_message,
@@ -149,18 +147,6 @@ function mb_setMailbox (mb_id) {
   }
 }
 
-function u_loadBody () {
-  if ($('.mailbox-body iframe').length > 0) {
-    $('.mailbox-body-loader').show()
-    $('.mailbox-body').hide()
-  }
-}
-
-function u_readyBody () {
-  hideLoader()
-  $('.mailbox-body').show()
-  $('.mailbox-body-loader').hide()
-}
 
 function mb_clearEditor () {
   $('#edit-von').val('')
@@ -203,7 +189,7 @@ function mb_send_message () {
   $('.edit-an').each(function () {
     an = `${an};${$(this).val()}`
   })
-
+  console.log(an, $('.edit-an'))
   if (an.indexOf('@') == -1) {
     $('.edit-an')[0].focus()
     pulseInfo('Du musst einen Empfänger angeben')
