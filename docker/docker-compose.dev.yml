@@ -22,7 +22,7 @@ services:
 
   app:
     container_name: foodsharing_dev_app
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.16
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.18
     working_dir: /app
     expose:
       - 9000
@@ -64,7 +64,7 @@ services:
 
   mailqueuerunner:
     container_name: foodsharing_dev_mailqueuerunner
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.16
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.18
     command: php run.php Mails queueWorker
     restart: always
     depends_on:

@@ -23,7 +23,7 @@ $dir/mkdirs
 echo "Running composer install"
 # exec-in-container is defined in inc.sh
 exec-in-container app composer install
-exec-in-container-asroot app rm -rf cache/.views-cache cache/di-cache.php
+exec-in-container-asroot app rm -recursive --force cache/.views-cache cache/di-cache.php
 
 echo "Waiting for mysql"
 wait-for-mysql

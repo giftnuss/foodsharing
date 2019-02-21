@@ -88,7 +88,7 @@ class Utils
 					showLoader();
 					$.ajax({
 						url: "/xhr.php?f=activeSwitch",
-						data:{t:"' . $table . '",id:"' . $field_id . '",value:1},
+						data:{t:"' . $table . '",id:"' . (int)$field_id . '",value:1},
 						method:"get",
 						complete:function(){
 							hideLoader();
@@ -99,7 +99,7 @@ class Utils
 					showLoader();
 					$.ajax({
 						url: "/xhr.php?f=activeSwitch",
-						data:{t:"' . $table . '",id:"' . $field_id . '",value:0},
+						data:{t:"' . $table . '",id:"' . (int)$field_id . '",value:0},
 						method:"get",
 						complete:function(){
 							hideLoader();

@@ -35,8 +35,8 @@ echo $SECONDS seconds elapsed
 log-header "Installing composer deps in app container"
 SECONDS=0
 dc up -d --no-build --no-deps app
-exec-in-container-asroot app 'composer install && composer outdated -D'
-exec-in-container-asroot app rm -rf cache/.views-cache cache/di-cache.php
+exec-in-container-asroot app 'composer install && composer outdated --direct'
+exec-in-container-asroot app rm --recursive --force cache/.views-cache cache/di-cache.php
 echo $SECONDS seconds elapsed
 
 log-header "Bring up containers"

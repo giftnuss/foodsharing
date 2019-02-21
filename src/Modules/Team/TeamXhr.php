@@ -6,21 +6,25 @@ use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Lib\Xhr\XhrResponses;
+use Foodsharing\Services\SanitizerService;
 
 class TeamXhr extends Control
 {
 	private $gateway;
+	private $sanitizerService;
 
-	public function __construct(TeamGateway $gateway, Db $model, TeamView $view)
+	public function __construct(TeamGateway $gateway, Db $model, TeamView $view, SanitizerService $sanitizerService)
 	{
 		$this->gateway = $gateway;
 		$this->model = $model;
 		$this->view = $view;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 	}
 
-	public function contact(): void
+	public function contact()
 	{
 		$xhr = new Xhr();
 
@@ -31,6 +35,10 @@ class TeamXhr extends Control
 
 		if ($id = $this->getPostInt('id')) {
 			if ($user = $this->gateway->getUser($id)) {
+				if (!$user['contact_public']) {
+					return XhrResponses::PERMISSION_DENIED;
+				}
+
 				$mail = new AsyncMail($this->mem);
 
 				if ($this->func->validEmail($_POST['email'])) {
@@ -84,7 +92,7 @@ class TeamXhr extends Control
 	REPLACE INTO fs_ipblock
 	(`ip`,`context`,`start`,`duration`)
 	VALUES
-	(' . strip_tags($ip) . ',' . strip_tags($context) . ',NOW(),' . (int)$duration . ')');
+	("' . strip_tags($ip) . '","' . strip_tags($context) . '",NOW(),' . (int)$duration . ')');
 
 		return false;
 	}

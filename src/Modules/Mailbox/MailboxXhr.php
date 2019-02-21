@@ -5,13 +5,17 @@ namespace Foodsharing\Modules\Mailbox;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Services\SanitizerService;
 
 class MailboxXhr extends Control
 {
-	public function __construct(MailboxModel $model, MailboxView $view)
+	private $sanitizerService;
+
+	public function __construct(MailboxModel $model, MailboxView $view, SanitizerService $sanitizerService)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 	}
@@ -76,7 +80,6 @@ class MailboxXhr extends Control
 			($cur_time - $last_refresh) > 30
 		) {
 			$this->mem->set('mailbox_refresh', $cur_time);
-			$ref = $this->refresh();
 		}
 
 		$mb_id = (int)$_GET['mb'];

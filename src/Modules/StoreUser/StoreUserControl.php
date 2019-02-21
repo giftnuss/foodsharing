@@ -6,18 +6,26 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
+use Foodsharing\Services\SanitizerService;
 
 class StoreUserControl extends Control
 {
 	private $storeGateway;
 	private $foodsaverGateway;
+	private $sanitizerService;
 
-	public function __construct(StoreModel $model, StoreUserView $view, StoreGateway $storeGateway, FoodsaverGateway $foodsaverGateway)
-	{
+	public function __construct(
+		StoreModel $model,
+		StoreUserView $view,
+		StoreGateway $storeGateway,
+		FoodsaverGateway $foodsaverGateway,
+		SanitizerService $sanitizerService
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 
@@ -383,7 +391,7 @@ class StoreUserControl extends Control
 		return '';
 	}
 
-	private function fetchedQuantity(int $id): bool
+	private function fetchedQuantity($id)
 	{
 		$arr = [
 			1 => ['id' => 1, 'name' => '1-3 kg'],

@@ -166,11 +166,12 @@ class SettingsView extends View
 
 	public function quizSession($session, $try_count, ContentGateway $contentGateway)
 	{
-		$infotext = $this->v_utils->v_error('mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten leider nicht bestanden. <a href="https://wiki.foodsharing.de/" target="_blank">Informiere Dich im Wiki</a> für den nächsten Versuch.<p>Lies Dir hier noch mal in Ruhe die Fragen und die dazugehörigen Antworten durch, damit es beim nächsten Mal besser klappt</p>');
-		$subtitle = 'Leider nicht bestanden';
-		if ($session['fp'] < $session['maxfp']) {
+		if ($session['fp'] <= $session['maxfp']) {
 			$subtitle = 'Bestanden!';
 			$infotext = $this->v_utils->v_success('Herzlichen Glückwunsch! mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten bestanden!');
+		} else {
+			$infotext = $this->v_utils->v_error('mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten leider nicht bestanden. <a href="https://wiki.foodsharing.de/" target="_blank">Informiere Dich im Wiki</a> für den nächsten Versuch.<p>Lies Dir hier noch mal in Ruhe die Fragen und die dazugehörigen Antworten durch, damit es beim nächsten Mal besser klappt</p>');
+			$subtitle = 'Leider nicht bestanden';
 		}
 		$this->func->addContent('<div class="quizsession">' . $this->topbar($session['name'] . ' Quiz', $subtitle, '<img src="/img/quiz.png" />') . '</div>');
 		$out = '';

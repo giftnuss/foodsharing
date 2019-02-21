@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class RegionControl extends Control
+final class RegionControl extends Control
 {
 	private $region;
 	private $gateway;
@@ -84,6 +84,7 @@ class RegionControl extends Control
 		$menu = [
 			['name' => 'terminology.forum', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=forum'],
 			['name' => 'terminology.events', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=events'],
+			['name' => 'group.members', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=members'],
 		];
 
 		if ($this->forumPermissions->mayAccessAmbassadorBoard($region['id']) && !$isWorkGroup) {
@@ -107,7 +108,8 @@ class RegionControl extends Control
 
 		$avatarListEntry = function ($fs) {
 			return [
-				'user' => ['id' => $fs['id'],
+				'user' => [
+					'id' => $fs['id'],
 					'name' => $fs['name'],
 					'sleep_status' => $fs['sleep_status']
 				],
@@ -131,6 +133,7 @@ class RegionControl extends Control
 			'isWorkGroup' => $isWorkGroup,
 			'stat' => $stat,
 			'admins' => array_map($avatarListEntry, array_slice($this->region['botschafter'], 0, 30)),
+			'members' => array_map($avatarListEntry, $this->region['foodsaver'])
 		];
 
 		$viewdata['nav'] = ['menu' => $menu, 'active' => '=' . $activeSubpage];
@@ -183,6 +186,9 @@ class RegionControl extends Control
 				break;
 			case 'applications':
 				$this->applications($request, $response, $region);
+				break;
+			case 'members':
+				$this->members($request, $response, $region);
 				break;
 			default:
 				if ($this->isWorkGroup($region)) {
@@ -276,5 +282,14 @@ class RegionControl extends Control
 			$viewdata['applications'] = $this->gateway->listRequests($region['id']);
 		}
 		$response->setContent($this->render('pages/Region/applications.twig', $viewdata));
+	}
+
+	private function members(Request $request, Response $response, array $region): void
+	{
+		$this->func->addBread($this->translator->trans('group.members'), '/?page=bezirk&bid=' . $region['id'] . '&sub=members');
+		$this->func->addTitle($this->translator->trans('group.members'));
+		$sub = $request->query->get('sub');
+		$viewdata = $this->regionViewData($region, $sub);
+		$response->setContent($this->render('pages/Region/members.twig', $viewdata));
 	}
 }

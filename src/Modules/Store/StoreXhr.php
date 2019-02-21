@@ -3,19 +3,31 @@
 namespace Foodsharing\Modules\Store;
 
 use Foodsharing\Lib\Xhr\Xhr;
+use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Permissions\StorePermissions;
+use Foodsharing\Services\SanitizerService;
 
 class StoreXhr extends Control
 {
 	private $storeGateway;
+	private $storePermissions;
+	private $sanitizerService;
 
-	public function __construct(StoreModel $model, StoreView $view, StoreGateway $storeGateway)
-	{
+	public function __construct(
+		StoreModel $model,
+		StoreView $view,
+		StoreGateway $storeGateway,
+		StorePermissions $storePermissions,
+		SanitizerService $sanitizerService
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->storeGateway = $storeGateway;
+		$this->storePermissions = $storePermissions;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 
@@ -26,6 +38,11 @@ class StoreXhr extends Control
 
 	public function savedate()
 	{
+		$storeId = (int)$_GET['bid'];
+		if (!$this->storePermissions->mayAddPickup($storeId)) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+
 		if (strtotime($_GET['time']) > 0 && $_GET['fetchercount'] >= 0) {
 			$fetchercount = (int)$_GET['fetchercount'];
 			$time = $_GET['time'];
@@ -33,7 +50,7 @@ class StoreXhr extends Control
 				$fetchercount = 8;
 			}
 
-			if ($this->model->addFetchDate($_GET['bid'], $time, $fetchercount)) {
+			if ($this->model->addFetchDate($storeId, $time, $fetchercount)) {
 				$this->func->info('Abholtermin wurde eingetragen!');
 
 				return array(
@@ -46,8 +63,13 @@ class StoreXhr extends Control
 
 	public function deldate()
 	{
-		if (isset($_GET['id'], $_GET['time']) && strtotime($_GET['time']) > 0) {
-			$this->model->deldate($_GET['id'], $_GET['time']);
+		$storeId = (int)$_GET['id'];
+		if (!$this->storePermissions->mayDeletePickup($storeId)) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+
+		if (isset($storeId, $_GET['time']) && strtotime($_GET['time']) > 0) {
+			$this->model->deldate($storeId, $_GET['time']);
 
 			$this->func->info('Abholtermin wurde gelöscht.');
 
@@ -60,108 +82,121 @@ class StoreXhr extends Control
 
 	public function getfetchhistory()
 	{
-		if ($this->session->may() && ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $_GET['bid']) || $this->session->may('orga'))) {
-			if ($history = $this->model->getFetchHistory($_GET['bid'], $_GET['from'], $_GET['to'])) {
-				return array(
-					'status' => 1,
-					'script' => '
-					$("daterange_from").datepicker("close");
-					$("daterange_to").datepicker("close");
-						
-					$("#daterange_content").html(\'' . $this->sanitizerService->jsSafe($this->view->fetchlist($history)) . '\');
-						'
-				);
-			}
+		$storeId = (int)$_GET['bid'];
+
+		if (!$this->storePermissions->maySeeFetchHistory($storeId)) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+
+		if ($history = $this->model->getFetchHistory($storeId, $_GET['from'], $_GET['to'])) {
+			return array(
+				'status' => 1,
+				'script' => '
+				$("daterange_from").datepicker("close");
+				$("daterange_to").datepicker("close");
+					
+				$("#daterange_content").html(\'' . $this->sanitizerService->jsSafe($this->view->fetchlist($history)) . '\');
+					'
+			);
 		}
 	}
 
 	public function fetchhistory()
 	{
-		if ($this->session->may() && ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $_GET['bid']) || $this->session->may('orga'))) {
-			$dia = new XhrDialog();
-			$dia->setTitle('Abholungshistorie');
+		$storeId = (int)$_GET['bid'];
 
-			$id = 'daterange';
+		if (!$this->storePermissions->maySeeFetchHistory($storeId)) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 
-			$dia->addContent($this->view->fetchHistory());
+		$dia = new XhrDialog();
+		$dia->setTitle('Abholungshistorie');
 
-			$dia->addJsAfter('
+		$id = 'daterange';
 
-					$( "#' . $id . '_from" ).datepicker({
-						changeMonth: true,
-						maxDate: "0",
-						
-						onClose: function( selectedDate ) {
-							$( "#' . $id . '_to" ).datepicker( "option", "minDate", selectedDate );
-						}
+		$dia->addContent($this->view->fetchHistory());
+
+		$dia->addJsAfter('
+
+				$( "#' . $id . '_from" ).datepicker({
+					changeMonth: true,
+					maxDate: "0",
+					
+					onClose: function( selectedDate ) {
+						$( "#' . $id . '_to" ).datepicker( "option", "minDate", selectedDate );
+					}
+				});
+				$( "#' . $id . '_to" ).datepicker({
+					changeMonth: true,
+					maxDate: "0",
+					autoOpen: true,
+					onClose: function( selectedDate ) {
+						$( "#' . $id . '_from" ).datepicker( "option", "maxDate", selectedDate );
+					}
+				});
+				
+				$( "#' . $id . '_to" ).val(new Date(Date.now()).toLocaleDateString("de-DE", {year: "numeric", month: "2-digit", day: "2-digit", }));
+				$( "#' . $id . '_from" ).datepicker("show");
+				
+				
+				$(window).on("resize", function(){
+					$("#' . $dia->getId() . '").dialog("option",{
+						height:($(window).height()-40)
 					});
-					$( "#' . $id . '_to" ).datepicker({
-						changeMonth: true,
-						maxDate: "0",
-						autoOpen: true,
-						onClose: function( selectedDate ) {
-							$( "#' . $id . '_from" ).datepicker( "option", "maxDate", selectedDate );
-						}
-					});
+				});
+				
+				$("#daterange_submit").on("click", function(ev){
+					ev.preventDefault();
+				
+					var date = $( "#' . $id . '_from" ).datepicker("getDate");
 					
-					$( "#' . $id . '_to" ).val(new Date(Date.now()).toLocaleDateString("de-DE", {year: "numeric", month: "2-digit", day: "2-digit", }));
-					$( "#' . $id . '_from" ).datepicker("show");
+					var from = "";
+					var to = "";
 					
+					if(date !== null)
+					{
+						from = date.getFullYear() + "-" + preZero((date.getMonth()+1)) + "-" + preZero(date.getDate());
+						date = $( "#' . $id . '_to" ).datepicker("getDate");
 					
-					$(window).on("resize", function(){
-						$("#' . $dia->getId() . '").dialog("option",{
-							height:($(window).height()-40)
-						});
-					});
-					
-					$("#daterange_submit").on("click", function(ev){
-						ev.preventDefault();
-					
-						var date = $( "#' . $id . '_from" ).datepicker("getDate");
-						
-						var from = "";
-						var to = "";
-						
-						if(date !== null)
+						if(date === null)
 						{
-							from = date.getFullYear() + "-" + preZero((date.getMonth()+1)) + "-" + preZero(date.getDate());
-							date = $( "#' . $id . '_to" ).datepicker("getDate");
-						
-							if(date === null)
-							{
-								to = from;
-							}
-							else
-							{
-								to = date.getFullYear() + "-" + preZero((date.getMonth()+1)) + "-" + preZero(date.getDate());
-
-								var now = new Date();
-								if(date.toDateString() == now.toDateString()) {
-									to = to + " " + preZero(now.getHours()) + ":" + preZero(now.getMinutes()) + ":59"
-								} else {
-									to = to + " " + "23:59:59"
-								}
-							}
-					
-							ajreq("getfetchhistory",{app:"betrieb",from:from,to:to,bid:' . (int)$_GET['bid'] . '});
+							to = from;
 						}
 						else
 						{
-							alert("Du musst erst ein Datum ausw&auml;hlen ;)");
+							to = date.getFullYear() + "-" + preZero((date.getMonth()+1)) + "-" + preZero(date.getDate());
+
+							var now = new Date();
+							if(date.toDateString() == now.toDateString()) {
+								to = to + " " + preZero(now.getHours()) + ":" + preZero(now.getMinutes()) + ":59"
+							} else {
+								to = to + " " + "23:59:59"
+							}
 						}
-					});
-					
-			');
+				
+						ajreq("getfetchhistory",{app:"betrieb",from:from,to:to,bid:' . $storeId . '});
+					}
+					else
+					{
+						alert("Du musst erst ein Datum ausw&auml;hlen ;)");
+					}
+				});
+				
+		');
 
-			$dia->addOpt('width', '500px');
-			$dia->addOpt('height', '($(window).height()-40)', false);
+		$dia->addOpt('width', '500px');
+		$dia->addOpt('height', '($(window).height()-40)', false);
 
-			return $dia->xhrout();
-		}
+		return $dia->xhrout();
 	}
 
 	public function adddate()
 	{
+		$storeId = (int)$_GET['id'];
+		if (!$this->storePermissions->mayAddPickup($storeId)) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+
 		$dia = new XhrDialog();
 		$dia->setTitle('Abholtermin eintragen');
 		$dia->addContent($this->view->dateForm());
@@ -188,7 +223,7 @@ class StoreXhr extends Control
 						app:"betrieb",
 						time:date,
 						fetchercount:$("#fetchercount").val(),
-						bid:' . (int)$_GET['id'] . '
+						bid:' . $storeId . '
 					});
 				}
 				else

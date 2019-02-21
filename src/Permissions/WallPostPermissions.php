@@ -28,6 +28,10 @@ class WallPostPermissions
 
 	public function mayReadWall($fsId, $target, $targetId)
 	{
+		if (!$fsId) {
+			return false;
+		}
+
 		switch ($target) {
 			case 'bezirk':
 				return $this->regionGateway->hasMember($fsId, $targetId);
@@ -49,6 +53,10 @@ class WallPostPermissions
 
 	public function mayWriteWall($fsId, $target, $targetId)
 	{
+		if (!$fsId) {
+			return false;
+		}
+
 		switch ($target) {
 			case 'foodsaver':
 				return $fsId == $targetId;
@@ -70,6 +78,10 @@ class WallPostPermissions
 	 */
 	public function mayDeleteFromWall($fsId, $target, $targetId)
 	{
+		if (!$fsId) {
+			return false;
+		}
+
 		switch ($target) {
 			case 'foodsaver':
 				return $fsId == $targetId;

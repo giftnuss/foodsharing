@@ -1,5 +1,5 @@
 .defaults: &defaults
-  image: registry.gitlab.com/foodsharing-dev/images/ci:1.6
+  image: registry.gitlab.com/foodsharing-dev/images/ci:1.8
 
   # run it on our foodsharing ci server
   tags:

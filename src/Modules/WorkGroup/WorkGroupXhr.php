@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\WorkGroup;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Xhr\XhrDialog;
+use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
 
 class WorkGroupXhr extends Control
@@ -96,6 +97,9 @@ class WorkGroupXhr extends Control
 	 */
 	public function sendtogroup()
 	{
+		if (!$this->session->id()) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		if (($group = $this->model->getGroup($_GET['id'])) && !empty($group['email'])) {
 			$message = strip_tags($_GET['msg']);
 

@@ -10,6 +10,7 @@
 - Added API endpoints for basket pictures !671 @alex.simm 
 - Allow use of markdown in Fair-Teiler description !690 @NerdyProjects
 - Joining regions REST API !696 @NerdyProjects
+- Added member list for districts and work groups !697 @djahnie
 - Prevent group admins to be able to access the passport generation page !706 #392 @jofranz
 - Start page content over content manager #470 !701 @k.miklobusec
 - Added profile status infos for store and pickup entries for ambassadors !705 @jofranz
@@ -40,6 +41,11 @@
 - Fix broken permission checks in foodsaver xhr module !731 @NerdyProjects
 - Fix broken permission checks in geoclean xhr module !731 @NerdyProjects
 - Fix broken permission checks in mailbox xhr module !731 @NerdyProjects
+- Fix path traversals vulnerabilities !723 @alangecker
+- Fix multiple XSS vulnerabilities !722 @alangecker
+- Properly show quiz as succeeded when errorpoints match max. allowed errorpoints @NerdyProjects
+- Fix wrong stated relationship between user role and home district on user dashboard. Add information about user pickups to dashboard.!748 @pmayd
+- Only allow creation of stores in a region you are member of @NerdyProjects
 
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies
@@ -56,6 +62,7 @@
 - better webpack splitting !681 @nicksellen
 - disable backup_globals for PHPUnit to have unit tests working in dev again !696 @NerdyProjects
 - fix xdebug by enabling x-forwarded-for header in webpack devserver !725 @NerdyProjects
+- PHP always runs as www-data inside docker to work around permission problems @NerdyProjects
 
 # 2019-02-19 Hotfix
 - Backport some changes that were needed for yesterdays hotfix

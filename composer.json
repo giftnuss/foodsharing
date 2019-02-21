@@ -13,6 +13,8 @@
     "codeception/codeception": "2.5.3",
     "filp/whoops": "2.3.1",
     "friendsofphp/php-cs-fixer": "2.14.2",
+    "jakub-onderka/php-console-highlighter": "^0.4.0",
+    "jakub-onderka/php-parallel-lint": "^1.0",
     "mashape/unirest-php": "3.0.4",
     "phpstan/phpstan": "0.11.2",
     "roave/security-advisories": "dev-master",

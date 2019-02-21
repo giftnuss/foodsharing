@@ -5,6 +5,22 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Symfony\Component\DependencyInjection\Container;
 
+/* I (Matthias) hereby apologize for the following block. It is meant to warn users of the old lebensmittelretten.de app which was taken out of playstore in ~2017 and not developed since ~2014. It is the only user of the jsonp API and we use that block to hack it to show a message to all users. Working principle:
+Any API request from the app will be answered with a specially crafted response.
+This response overwrites a javascript method and uses the "relogin" path to not trigger any error messages inside the app and then exchanges the whole shown content with our message.
+*/
+if (isset($_GET['format']) && $_GET['format'] == 'jsonp') {
+	header('Content-Type: text/javascript');
+	$out = [
+		'status' => 2,
+		'script' => "document.body.innerHTML='<div style=\"padding: 10px;\"><img src=\"http://lebensmittelretten.de/img/gabel.png\" style=\"float: right; width: 50px; background-color: #533a20;\"><h3>Bitte deinstalliere diese App</h3><br>Liebe*r Nutzer*in, diese lebensmittelretten.de App wird leider schon seit mehr als 4 Jahren nicht mehr weiterentwickelt und enthält Funktionsfehler sowie gravierende Sicherheitsmängel.<br><b>Bitte deinstalliere sie.</b><br> Zudem möchten wir Dich bitten, auf der Desktop-Seite (https://foodsharing.de) dein Passwort zu ändern. Solltest du dein foodsharing-Passwort (insbesondere in Verbindung mit dieser E-Mail-Adresse) auch auf anderen Webseiten verwendet haben, ändere dies bitte auch dort.<br><br>Ein kleiner Trost: Die neue foodsharing App wird in Kürze auf foodsharing.de und im Google Playstore veröffentlicht. Frohes Lebensmittelretten!<br>Dein foodsharing.de Entwicklerteam<br><button onclick=\"navigator.app.exitApp();\">App Beenden</button></div>';"
+	];
+	echo 'u.relogin = function() {};';
+	echo $_GET['callback'] . '(' . json_encode($out) . ');';
+
+	exit();
+}
+
 require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';
 
@@ -20,22 +36,6 @@ $container = initializeContainer();
 $csrf_whitelist = [
 	// 'Activity::loadMore',
 	// 'Activity::load',
-	'API::udata', // used by the legacy fs app
-	'API::sendmsg', // used by the legacy fs app
-	'API::chathistory', // used by the legacy fs app
-	'API::upload', // used by the legacy fs app
-	'API::logout', // used by the legacy fs app
-	'API::login', // used by the legacy fs app
-	'API::initRelogin', // used by the legacy fs app
-	'API::basket_submit', // used by the legacy fs app
-	'API::resizePic', // used by the legacy fs app
-	'API::checklogin', // used by the legacy fs app
-	'API::orgagruppen', // used by the legacy fs app
-	'API::auth', // used by the legacy fs app
-	'API::loadBasket', // used by the legacy fs app
-	'API::allbaskets', // used by the legacy fs app
-	'API::basketsnear', // used by the legacy fs app
-	'API::loadrequests', // used by the legacy fs app
 	// 'Application::accept',
 	// 'Application::decline',
 	// 'Basket::basketCoordinates',
@@ -46,7 +46,7 @@ $csrf_whitelist = [
 	// 'Basket::bubble',
 	// 'Basket::fsBubble',
 	// 'Basket::request',
-	'Basket::sendreqmessage', // used by the legacy fs app
+	// 'Basket::sendreqmessage', // used by the legacy fs app
 	// 'Basket::infobar',
 	// 'Basket::answer',
 	// 'Basket::removeRequest',
@@ -141,7 +141,7 @@ $csrf_whitelist = [
 	// 'Store::savebezirkids',
 	// 'Store::setbezirkids',
 	// 'Store::signout',
-	// 'Team::contact',
+	'Team::contact',
 	// 'WallPost::delpost',
 	// 'WallPost::update',
 	'WallPost::quickreply',
@@ -189,17 +189,13 @@ if (isset($_GET['app'], $_GET['m'])) {
 			exit();
 		}
 
-		if (isset($_GET['format']) && $_GET['format'] == 'jsonp') {
-			echo $_GET['callback'] . '(' . json_encode($out) . ');';
-			exit();
-		}
-
 		if (!isset($out['script'])) {
 			$out['script'] = '';
 		}
 
 		$out['script'] = '$(".tooltip").tooltip({show: false,hide:false,position: {	my: "center bottom-20",	at: "center top",using: function( position, feedback ) {	$( this ).css( position );	$("<div>").addClass( "arrow" ).addClass( feedback.vertical ).addClass( feedback.horizontal ).appendTo( this );}}});' . $out['script'];
 
+		header('Content-Type: application/json');
 		echo json_encode($out);
 	}
 }
