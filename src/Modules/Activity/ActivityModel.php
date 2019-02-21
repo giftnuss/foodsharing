@@ -43,9 +43,6 @@ class ActivityModel extends Db
 				}
 				$hb[$u['basket_id']] = true;
 
-				$smTitle = '';
-				$title = 'Essenskorb #' . $u['basket_id'];
-
 				$out[] = [
 					'type' => 'foodbasket',
 					'data' => [
@@ -57,16 +54,7 @@ class ActivityModel extends Db
 						'icon' => $this->func->img($u['fs_photo'], 50),
 						'time_ts' => $u['time_ts'],
 						'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=basket&id=' . (int)$u['basket_id']
-					],
-					'attr' => [
-						'href' => '/profile/' . $u['fs_id']
-					],
-					'title' => '<a href="/profile/' . $u['fs_id'] . '">' . $u['fs_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="/essenskoerbe/' . $u['basket_id'] . '">' . $title . '</a><small>' . $smTitle . '</small>',
-					'desc' => $this->textPrepare($u['body']),
-					'time' => $u['time'],
-					'icon' => $this->func->img($u['fs_photo'], 50),
-					'time_ts' => $u['time_ts'],
-					'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=basket&id=' . (int)$u['basket_id']
+					]
 				];
 			}
 
@@ -74,18 +62,6 @@ class ActivityModel extends Db
 		}
 
 		return false;
-	}
-
-	private function textPrepare($txt): ?string
-	{
-		$txt = trim($txt);
-		$sanitized = $this->sanitizerService->markdownToHtml($txt);
-
-		if (strlen($txt) > 100) {
-			return '<span class="txt">' . $this->sanitizerService->markdownToHtml($this->func->tt($txt, 90)) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fas fa-angle-down"></i></a></span><span class="txt" style="display:none;">' . $sanitized . ' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fas fa-angle-up"></i></a></span>';
-		}
-
-		return '<span class="txt">' . $sanitized . '</span>';
 	}
 
 	public function loadFriendWallUpdates($hidden_ids, $page = 0)
@@ -117,12 +93,6 @@ class ActivityModel extends Db
 				}
 				$hb[$u['fs_id']] = true;
 
-				$smTitle = $u['fs_name'] . 's Status';
-
-				if ($u['fs_id'] === $this->session->id()) {
-					$smTitle = 'Deine Pinnwand';
-				}
-
 				if (empty($u['gallery'])) {
 					$u['gallery'] = '[]';
 				}
@@ -139,15 +109,7 @@ class ActivityModel extends Db
 						'icon' => $this->func->img($u['fs_photo'], 50),
 						'time_ts' => $u['time_ts'],
 						'gallery' => $u['gallery']
-					],
-					'attr' => [
-						'href' => '/profile/' . $u['fs_id']
-					],
-					'title' => '<a href="/profile/' . $u['poster_id'] . '">' . $u['poster_name'] . '</a> <small>' . $smTitle . '</small>',
-					'desc' => $this->textPrepare($u['body']),
-					'time' => $u['time'],
-					'icon' => $this->func->img($u['fs_photo'], 50),
-					'time_ts' => $u['time_ts']
+					]
 				];
 			}
 
@@ -198,16 +160,7 @@ class ActivityModel extends Db
 							'icon' => '/img/mailbox-50x50.png',
 							'time_ts' => $u['time_ts'],
 							'quickreply' => '/xhrapp.php?app=mailbox&m=quickreply&mid=' . (int)$u['id']
-						],
-						'attr' => [
-							'href' => '/?page=mailbox&show=' . $u['id']
-						],
-						'title' => $from . ' <i class="fas fa-angle-right"></i> <a href="/?page=mailbox&show=' . $u['id'] . '">' . $this->func->ttt($u['subject'], 30) . '</a><small>' . $this->func->ttt($u['mb_name'] . '@' . PLATFORM_MAILBOX_HOST, 19) . '</small>',
-						'desc' => $this->textPrepare($u['body']),
-						'time' => $u['time'],
-						'icon' => '/img/mailbox-50x50.png',
-						'time_ts' => $u['time_ts'],
-						'quickreply' => '/xhrapp.php?app=mailbox&m=quickreply&mid=' . (int)$u['id']
+						]
 					];
 				}
 
@@ -265,16 +218,7 @@ class ActivityModel extends Db
 							'icon' => $this->func->img($u['foodsaver_photo'], 50),
 							'time_ts' => $u['update_time_ts'],
 							'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $sub
-						],
-						'attr' => [
-							'href' => $url
-						],
-						'title' => '<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="' . $url . '">' . $u['name'] . '</a> <small>' . $u['bezirk_name'] . '</small>',
-						'desc' => $this->textPrepare($u['post_body']),
-						'time' => $u['update_time'],
-						'icon' => $this->func->img($u['foodsaver_photo'], 50),
-						'time_ts' => $u['update_time_ts'],
-						'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $sub
+						]
 					];
 				}
 			}
@@ -301,15 +245,7 @@ class ActivityModel extends Db
 						'time' => $r['update_time'],
 						'icon' => $this->func->img($r['foodsaver_photo'], 50),
 						'time_ts' => $r['update_time_ts']
-					],
-					'attr' => [
-						'href' => '/?page=fsbetrieb&id=' . $r['betrieb_id']
-					],
-					'title' => '<a href="/profile/' . $r['foodsaver_id'] . '">' . $r['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="/?page=fsbetrieb&id=' . $r['betrieb_id'] . '">' . $r['betrieb_name'] . '</a>',
-					'desc' => $this->textPrepare($r['text']),
-					'time' => $r['update_time'],
-					'icon' => $this->func->img($r['foodsaver_photo'], 50),
-					'time_ts' => $r['update_time_ts']
+					]
 				];
 			}
 
