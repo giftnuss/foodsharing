@@ -19,20 +19,22 @@ class ContentSecurityPolicy
 				$self,
 				$unsafeInline,
 				$unsafeEval, // lots of `$.globalEval` still ... 😢
-				'https://www.bildungsspender.de' // donation formular on /unterstuetzung
+				'https://www.bildungsspender.de' // donation form on /unterstuetzung
 			],
 			'connect-src' => [
 				$self,
 				$this->websocketUrlFor(BASE_URL),
+				$this->websocketUrlFor('https://beta.foodsharing.de'), // in beta BASE_URL is foodsharing.de (see https://gitlab.com/foodsharing-dev/foodsharing/issues/479)
 				'https://sentry.io',
 				'https://photon.komoot.de',
 				'https://search.mapzen.com', // only used in u_loadCoords, gets hopefully replaces soon
-				'https://beta.foodsharing.de', // in beta BASE_URL is foodsharing.de (see https://gitlab.com/foodsharing-dev/foodsharing/issues/479)
+				'blob:'
 			],
 			'img-src' => [
 				$self,
 				'data:',
-				'https:'
+				'https:',
+				'blob:'
 			],
 			'style-src' => [
 				$self,
@@ -43,7 +45,8 @@ class ContentSecurityPolicy
 				'data:'
 			],
 			'frame-src' => [
-				$self
+				$self,
+				'https://www.bildungsspender.de' // donation form on /unterstuetzung
 			],
 			'frame-ancestors' => [
 				$none
