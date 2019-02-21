@@ -43,6 +43,7 @@
 - Fix path traversals vulnerabilities !723 @alangecker
 - Fix multiple XSS vulnerabilities !722 @alangecker
 - Properly show quiz as succeeded when errorpoints match max. allowed errorpoints @NerdyProjects
+- Fix wrong stated relationship between user role and home district on user dashboard. Add information about user pickups to dashboard.!748 @pmayd
 
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies
