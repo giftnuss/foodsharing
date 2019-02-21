@@ -65,7 +65,7 @@ build:backend:
   <<: *defaults
   stage: build
   script:
-    - composer install --verbose --prefer-dist --no-progress --no-interaction --no-dev -classmap-authoritative --no-suggest
+    - composer install --verbose --prefer-dist --no-progress --no-interaction --no-dev --classmap-authoritative --no-suggest
     - composer dump-autoload --classmap-authoritative
   artifacts:
     paths:
