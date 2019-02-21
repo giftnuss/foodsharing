@@ -92,3 +92,6 @@ $out = '<ul class="linklist baskets">';
 $list = 'bla'
 $list .= $list . 'some text' . $someVariable . 'end text'
 ```
+- When (re)writing php code add types in arguments and return types of functions. If you work with existing code it is not always trivial and is therefore not enforced. In general:
+  -  as a parameter, something should be either the type (e.g. `string`, `int`) OR `null` if okay to not be set. `string $blub = null` works as a parameter definition to allow that.
+  - as a return type, something should always ever be one type, if possible. Throw an exception otherwise. Especially an empty array `[]` is fine to say that there is no data when otherwise data would have been returned as an array.
