@@ -1,5 +1,10 @@
-vendor
+client
 node_modules
 api
 light
 .pip-cache
+tmp
+images
+cache
+data
+tests/_output
