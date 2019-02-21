@@ -8,6 +8,10 @@ export async function getUpdates (pagenumber) {
   }
 }
 
+export async function getOptionListings () {
+  return (await get(`/../xhrapp.php?app=activity&m=load&listings=1`)).data.listings
+}
+
 export async function sendQuickreply (href, msg) {
   return post('/..' + href, { msg })
 }

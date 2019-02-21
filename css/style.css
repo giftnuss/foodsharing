@@ -1059,6 +1059,10 @@ ul.linklist li > a:hover, ul.linklist li > a:hover span {
   border-radius: 6px;
 }
 
+.ui-widget-header.ui-rectangular-bottom {
+  border-radius: 6px 6px 0 0;
+}
+
 .loading {
   background: url(/img/dialog-loader.gif) no-repeat center !important;
 }

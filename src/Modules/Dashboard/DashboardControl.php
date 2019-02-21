@@ -320,14 +320,7 @@ class DashboardControl extends Control
 			$this->func->addContent($this->view->u_events($events));
 		}
 
-		$this->func->addContent('
-		<div class="head ui-widget-header ui-corner-top">
-			Updates-Übersicht<span class="option">
-			<a id="activity-option" href="#activity-listings" class="fas fa-cog"></a></span>
-		</div>
-		<div id="activity">
-			'.$this->view->vueComponent('activity-thread', 'dashboard-thread', []).'
-		</div>');
+		$this->func->addContent($this->view->vueComponent('activity-overview', 'activity-overview', []));
 
 		/*
 		 * Top

@@ -1,17 +1,17 @@
 import '@/core'
 import '@/globals'
 
-import activity from '@/activity'
+// import activity from '@/activity'
 
 import { vueRegister, vueApply } from '@/vue'
-import DashboardThread from './components/ActivityThread'
+import ActivityOverview from './components/ActivityOverview'
 
-activity.init()
+// activity.init()
 
 vueRegister({
-    DashboardThread
+    ActivityOverview
 })
 
-vueApply('#activity-thread')
+vueApply('#activity-overview')
 
 

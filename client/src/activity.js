@@ -23,12 +23,12 @@ const activity = {
   init: function () {
     this.isLoading = false
     this.page = 0
-    $('#activity').append('<ul class="linklist"></ul>')
+    //$('#activity').append('<ul class="linklist"></ul>')
     this.$container = $('#activity > ul.linklist')
     this.$loader = $('#activity > .loader')
     this.$info = $('#activity-info')
     
-    this.initLoad()
+    //this.initLoad()
 
     /* $(window).on('scroll', function () {
       if (!activity.isLoading) {

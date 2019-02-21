@@ -1,7 +1,7 @@
 <template>
-  <div class>
+  <div>
     <ul class="linklist">
-      <ActivityPost v-for="(el, index) in updates" :key="index" :type="el.type" :data="el.data"/>
+      <ActivityPost v-for="(el, index) in filteredUpdates" :key="index" :type="el.type" :data="el.data"/>
       <infinite-loading spinner="waveDots" @infinite="infiniteHandler"></infinite-loading>
     </ul>
   </div>
@@ -19,7 +19,12 @@ import InfiniteLoading from "vue-infinite-loading";
 
 export default {
   components: { ActivityPost, InfiniteLoading },
-  props: {},
+  props: {
+    displayedTypes: {
+      type: Array,
+      default: ['store', 'forum', 'mailbox', 'friendWall', 'foodbasket'],
+    },
+  },
   data() {
     return {
       updates: [],
@@ -27,11 +32,10 @@ export default {
     };
   },
   async created() {
-    this.updates = await getUpdates(0);
+    this.updates = await getUpdates(0)
     this.updates.sort((a, b) => {
-      return b.data.time_ts - a.data.time_ts;
+      return b.data.time_ts - a.data.time_ts
     });
-    // activity.initOption(this.updates)
   },
   methods: {
     async infiniteHandler($state) {
@@ -46,6 +50,11 @@ export default {
       } else {
         $state.complete()
       }
+    }
+  },
+  computed: {
+    filteredUpdates: function () {
+      return this.updates.filter(a => this.displayedTypes.indexOf(a.type) != -1)
     }
   }
 };
