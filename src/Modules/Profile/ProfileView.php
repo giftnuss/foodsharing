@@ -73,11 +73,35 @@ class ProfileView extends View
 		return $out;
 	}
 
-	private function sideInfosCompanies($userCompanies)
+	/**
+	 * Create html for list of stores of the profile.
+	 * Each store has a symbol in front indicating if the user is
+	 *  - waiting for approval (a question mark)
+	 *  - in store (the shopping basket used for Betriebe)
+	 *  - Springer = waiting list (the coffee mug)
+	 * @param array $userCompanies
+	 * @return string: html with the list
+	 */
+	private function sideInfosCompanies(array $userCompanies): string
 	{
 		$out = '';
 		foreach ($userCompanies as $b) {
-			$userStatusOfStore = $b['active'] == 1 ? '✓ ' : '? ';
+		    switch ($b['active']) {
+		        // &nbsp; is a non-breaking space.
+		        // Does not help here since for long store names it breaks after the <i ..></i>.
+		        case 0:  // asked to be in store team
+		            $userStatusOfStore = '<i class="far fa-question-circle"></i>&nbsp;';
+		            break;
+		        case 1: // in store team
+		            $userStatusOfStore = '<i class="fas fa-shopping-cart"></i>&nbsp;';
+		            break;
+		        case 2: // Springer (waiting list)
+		            $userStatusOfStore = '<i class="fas fa-mug-hot"></i>&#160;';
+		            break;
+		        default: // should not happen
+		            $userStatusOfStore = '';
+		            break;
+		    }
 			$out .= '<p><a class="light" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $userStatusOfStore . $b['name'] . '</a></p>';
 		}
 
