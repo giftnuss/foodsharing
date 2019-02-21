@@ -164,6 +164,7 @@ function u_readyBody () {
 
 function mb_clearEditor () {
   $('#edit-von').val('')
+  u_handleNewEmail('') // fixes some wired bug, where the edit-an-field is missing after reopening the form
   for (let i = 1; i < $('.edit-an').length; i++) {
     $('.edit-an:last').parent().parent().parent().remove()
   }
