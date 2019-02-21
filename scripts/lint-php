@@ -7,7 +7,7 @@ set -o errexit
 source $(dirname "$0")/inc.sh
 
 echo "Linting php with parallel-lint"
-run-in-container app vendor/bin/parallel-lint --exclude app --exclude vendor .
+run-in-container app vendor/bin/parallel-lint --exclude vendor .
 
 echo "Linting php with phpstan"
-run-in-container app vendor/bin/phpstan analyse --memory-limit=99999999999
+run-in-container app vendor/bin/phpstan analyse --memory-limit=768M
