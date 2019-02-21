@@ -31,7 +31,8 @@ final class MessageControl extends Control
 		$this->func->addContent($this->view->conversation());
 		$this->func->addContent($this->view->leftMenu(), CNT_RIGHT);
 
-		if ($conversations = $this->model->listConversations()) {
+		$conversations = $this->model->listConversations();
+		if ($conversations) {
 			$ids = array();
 			foreach ($conversations as $c) {
 				$ids[$c['id']] = true;

@@ -13,9 +13,6 @@ class SeedCommand extends Command implements CustomCommandInterface
 {
 	use \Codeception\Command\Shared\Config;
 
-	/**
-	 * @var \Helper\Foodsharing
-	 */
 	protected $helper;
 
 	/**

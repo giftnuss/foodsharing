@@ -3,11 +3,11 @@
 class LoginCest
 {
 	/**
-	 * @example ["createFoodsaver", "Hallo ", "Foodsaver für"]
+	 * @example ["createFoodsaver", "Dein Stammbezirk ist"]
 	 * @example ["createFoodsharer", "Willkommen "]
-	 * @example ["createStoreCoordinator", "Hallo ", "Betriebsverantwortlich"]
-	 * @example ["createAmbassador", "Hallo ", "Botschafter/In für"]
-	 * @example ["createOrga", "Hallo ", "Orgamensch für"]
+	 * @example ["createStoreCoordinator", "Dein Stammbezirk ist"]
+	 * @example ["createAmbassador", "Dein Stammbezirk ist"]
+	 * @example ["createOrga", "Dein Stammbezirk ist"]
 	 */
 	public function checkLogin(\ApiTester $I, \Codeception\Example $example)
 	{
@@ -25,10 +25,7 @@ class LoginCest
 
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeHtml();
-		$I->seeRegExp('~.*' . $example[1] . $user['name'] . '.*~i');
-		if (isset($example[2])) {
-			$I->seeRegExp('~.*' . $example[2] . '.*~i');
-		}
+		$I->seeRegExp('~.*' . $example[1] . '.*~i');
 
 		// initially old md5 password is stored
 		$I->assertNotEmpty($user['passwd']);

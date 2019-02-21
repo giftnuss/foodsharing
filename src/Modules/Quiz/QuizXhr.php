@@ -472,8 +472,6 @@ class QuizXhr extends Control
 
 	/**
 	 * xhr request to get next question stored in the users session.
-	 *
-	 * @return boolean|string|multitype:number string |Ambigous <boolean, multitype:number string , string>
 	 */
 	public function next()
 	{

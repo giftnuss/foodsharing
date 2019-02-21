@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Foodsaver;
 
+use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
 
 class FoodsaverGateway extends BaseGateway

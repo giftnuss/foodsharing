@@ -151,44 +151,4 @@ class ProfileXhr extends Control
 			'script' => 'pulseError("Du kannst nur Termine aus Deinem eigenen Bezirk löschen.");'
 		);
 	}
-
-	public function quickprofile()
-	{
-		if (!is_object($this->model)) {
-			$this->model = new ProfileModel();
-			$this->view = new ProfileView();
-		}
-
-		$bezirk = $this->regionGateway->getBezirk($this->foodsaver['bezirk_id']);
-
-		if ($this->foodsaver['botschafter']) {
-			$subtitle = 'ist ' . $this->func->genderWord($this->foodsaver['geschlecht'], 'Botschafter', 'Botschafterin', 'Botschafter/in') . ' f&uuml;r ';
-			foreach ($this->foodsaver['botschafter'] as $i => $b) {
-				$sep = ', ';
-
-				if ($i == (count($this->foodsaver['botschafter']) - 2)) {
-					$sep = ' und ';
-				}
-
-				$subtitle .= $b['name'] . $sep;
-			}
-
-			$subtitle = substr($subtitle, 0, (strlen($subtitle) - 2));
-			if ($this->foodsaver['orgateam'] == 1) {
-				$subtitle .= ', außerdem engagiert ' . $this->func->genderWord($this->foodsaver['geschlecht'], 'er', 'sie', 'er/sie') . ' sich im Foodsharing Orgateam';
-			}
-		} elseif ($this->foodsaver['bezirk_id'] == 0) {
-			$subtitle = 'hat sich bisher für keinen Bezirk entschieden.';
-		} else {
-			$subtitle = 'ist ' . $this->func->genderWord($this->foodsaver['geschlecht'], 'Foodsaver', 'Foodsaverin', 'Foodsaver') . ' für ' . $bezirk['name'];
-		}
-
-		$photo = $this->func->img($this->foodsaver['photo'], 130, 'q');
-
-		return array(
-			'status' => 1,
-			'html' => $this->view->quickprofile($subtitle),
-			'script' => ''
-		);
-	}
 }
