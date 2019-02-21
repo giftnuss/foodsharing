@@ -27,6 +27,10 @@ Javascript object notation. Format for XHR and REST data transfer.
 
 Merge Request
 
+## MySQL
+
+The database system we are using. Relational database
+
 ## npm
 
 Node.js Package Manager (package manager for [javascript](javascript.md))
@@ -42,6 +46,10 @@ Pull Request
 ## REST
 
 REpresentational State Transfer. We use the [FOSRestBundle](https://symfony.com/doc/master/bundles/FOSRestBundle/index.html)
+
+## SQL
+
+Structured Query Language. Language to ask a database for data
 
 ## ToU
 
