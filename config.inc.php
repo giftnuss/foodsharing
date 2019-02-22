@@ -52,8 +52,7 @@ if (!defined('CSP_REPORT_ONLY')) {
 
 define('FPDF_FONTPATH', __DIR__ . '/lib/font/');
 
-/* global definitions for Foodsharing\Lib\Func until they might
-go away or somewhere else :) */
+/* global definitions for Foodsharing\\Helpers\PageComposition Helper*/
 define('CNT_MAIN', 0);
 define('CNT_RIGHT', 1);
 define('CNT_TOP', 2);

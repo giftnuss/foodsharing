@@ -47,75 +47,7 @@ final class PageCompositionHelper
 		$this->sanitizerService = $sanitizerService;
 	}
 
-	private function getContent($place = CNT_MAIN)
-	{
-		switch ($place) {
-			case CNT_MAIN:
-				return $this->content_main;
-				break;
-			case CNT_RIGHT:
-				return $this->content_right;
-				break;
-			case CNT_TOP:
-				return $this->content_top;
-				break;
-			case CNT_BOTTOM:
-				return $this->content_bottom;
-				break;
-			case CNT_LEFT:
-				return $this->content_left;
-				break;
-			case CNT_OVERTOP:
-				return $this->content_overtop;
-				break;
-			default:
-				return '';
-				break;
-		}
-	}
-
-	public function addContent($new_content, $place = CNT_MAIN)
-	{
-		switch ($place) {
-			case CNT_MAIN:
-
-				$this->content_main .= $new_content;
-				break;
-			case CNT_RIGHT:
-
-				$this->content_right .= $new_content;
-				break;
-
-			case CNT_TOP:
-				$this->content_top .= $new_content;
-				break;
-
-			case CNT_BOTTOM:
-
-				$this->content_bottom .= $new_content;
-				break;
-
-			case CNT_LEFT:
-
-				$this->content_left .= $new_content;
-				break;
-
-			case CNT_OVERTOP:
-
-				$this->content_overtop .= $new_content;
-				break;
-
-			default:
-				break;
-		}
-	}
-
-	public function addBread($name, $href = '')
-	{
-		$this->bread[] = array('name' => $name, 'href' => $href);
-	}
-
-	public function generateAndGetGlobalViewData()
+	public function generateAndGetGlobalViewData(): array
 	{
 		global $g_broadcast_message;
 		global $content_left_width;
@@ -125,17 +57,17 @@ final class PageCompositionHelper
 
 		$this->getMessages();
 
-		$mainwidth = 24;
+		$mainWidth = 24;
 
-		$content_left = $this->getContent(CNT_LEFT);
-		$content_right = $this->getContent(CNT_RIGHT);
+		$contentLeft = $this->getContent(CNT_LEFT);
+		$contentRight = $this->getContent(CNT_RIGHT);
 
-		if (!empty($content_left)) {
-			$mainwidth -= $content_left_width;
+		if (!empty($contentLeft)) {
+			$mainWidth -= $content_left_width;
 		}
 
-		if (!empty($content_right)) {
-			$mainwidth -= $content_right_width;
+		if (!empty($contentRight)) {
+			$mainWidth -= $content_right_width;
 		}
 
 		$bodyClasses = [];
@@ -162,15 +94,15 @@ final class PageCompositionHelper
 			'content' => [
 				'main' => [
 					'html' => $this->getContent(CNT_MAIN),
-					'width' => $mainwidth
+					'width' => $mainWidth
 				],
 				'left' => [
-					'html' => $content_left,
+					'html' => $contentLeft,
 					'width' => $content_left_width,
 					'id' => 'left'
 				],
 				'right' => [
-					'html' => $content_right,
+					'html' => $contentRight,
 					'width' => $content_right_width,
 					'id' => 'right'
 				],
@@ -189,7 +121,7 @@ final class PageCompositionHelper
 		];
 	}
 
-	private function getHeadData()
+	private function getHeadData(): array
 	{
 		return [
 			'title' => implode(' | ', $this->title),
@@ -203,7 +135,7 @@ final class PageCompositionHelper
 		];
 	}
 
-	private function getMessages()
+	private function getMessages(): void
 	{
 		if (!isset($_SESSION['msg'])) {
 			$_SESSION['msg'] = array();
@@ -234,47 +166,107 @@ final class PageCompositionHelper
 		$_SESSION['msg']['error'] = array();
 	}
 
-	public function addHidden($html)
+	private function getContent(int $positionCode = CNT_MAIN): string
 	{
-		$this->hidden .= $html;
+		switch ($positionCode) {
+			case CNT_MAIN:
+				$content = $this->content_main;
+				break;
+			case CNT_RIGHT:
+				$content = $this->content_right;
+				break;
+			case CNT_TOP:
+				$content = $this->content_top;
+				break;
+			case CNT_BOTTOM:
+				$content = $this->content_bottom;
+				break;
+			case CNT_LEFT:
+				$content = $this->content_left;
+				break;
+			case CNT_OVERTOP:
+				$content = $this->content_overtop;
+				break;
+			default:
+				$content = '';
+				break;
+		}
+
+		return $content;
 	}
 
-	public function addWebpackScript($src)
+	public function addContent(string $newContent, int $positionCode = CNT_MAIN): void
+	{
+		switch ($positionCode) {
+			case CNT_MAIN:
+				$this->content_main .= $newContent;
+				break;
+			case CNT_RIGHT:
+				$this->content_right .= $newContent;
+				break;
+			case CNT_TOP:
+				$this->content_top .= $newContent;
+				break;
+			case CNT_BOTTOM:
+				$this->content_bottom .= $newContent;
+				break;
+			case CNT_LEFT:
+				$this->content_left .= $newContent;
+				break;
+			case CNT_OVERTOP:
+				$this->content_overtop .= $newContent;
+				break;
+			default:
+				break;
+		}
+	}
+
+	public function addBread(string $name, string $href = ''): void
+	{
+		$this->bread[] = ['name' => $name, 'href' => $href];
+	}
+
+	public function addWebpackScript(string $src): void
 	{
 		$this->webpackScripts[] = $src;
 	}
 
-	public function addJsFunc($nfunc)
-	{
-		$this->js_func .= $nfunc;
-	}
-
-	public function addJs($njs)
-	{
-		$this->js .= $njs;
-	}
-
-	public function addWebpackStylesheet($src)
+	public function addWebpackStylesheet(string $src): void
 	{
 		$this->webpackStylesheets[] = $src;
 	}
 
-	public function addHead($str)
-	{
-		$this->head .= "\n" . $str;
-	}
-
-	public function addStyle($css)
+	public function addStyle(string $css): void
 	{
 		$this->add_css .= trim($css);
 	}
 
-	public function addTitle($name)
+	public function addJs(string $njs): void
+	{
+		$this->js .= $njs;
+	}
+
+	public function addJsFunc(string $nfunc): void
+	{
+		$this->js_func .= $nfunc;
+	}
+
+	public function addHead(string $str): void
+	{
+		$this->head .= "\n" . $str;
+	}
+
+	public function addTitle(string $name): void
 	{
 		$this->title[] = $name;
 	}
 
-	public function hiddenDialog($table, $fields, $title = '', $option = array())
+	public function addHidden(string $html): void
+	{
+		$this->hidden .= $html;
+	}
+
+	public function hiddenDialog(string $table, array $fields, string $title = '', array $option = array()): void
 	{
 		$width = '';
 		if (isset($option['width'])) {
