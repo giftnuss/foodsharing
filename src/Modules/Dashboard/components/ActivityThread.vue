@@ -63,6 +63,12 @@ export default {
       } else {
         $state.complete()
       }
+    },
+    async reloadData () {
+      this.updates = await getUpdates(0)
+      this.updates.sort((a, b) => {
+        return b.data.time_ts - a.data.time_ts
+      })
     }
   }
 }

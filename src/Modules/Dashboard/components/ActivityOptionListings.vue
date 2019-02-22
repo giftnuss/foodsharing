@@ -34,7 +34,12 @@
               >
               {{ item.name }}
             </label>
-            <label v-if="listing.items.length === 0" class="info-italic">Du hast noch keine {{ listing.name }}</label>
+            <label
+              v-if="listing.items.length === 0"
+              class="info-italic"
+            >
+              Du hast noch keine {{ listing.name }}
+            </label>
           </p>
         </div>
         <a
@@ -79,8 +84,11 @@ export default {
   },
   methods: {
     async saveOptionListings () {
+      this.isLoading = true
       await saveOptionListings(this.listings)
       this.$emit('close')
+      this.isLoading = false
+      this.$emit('reloadData')
     }
   }
 }

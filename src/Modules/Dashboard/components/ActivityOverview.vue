@@ -49,10 +49,14 @@
       v-if="showListings"
       class="ui-widget-content corner-bottom margin-bottom ui-padding"
     >
-      <ActivityOptionListings @close="showListings = false" />
+      <ActivityOptionListings
+        @close="showListings = false"
+        @reloadData="$refs.thread.reloadData()"
+      />
     </div>
     <ActivityThread
       id="activity"
+      ref="thread"
       :displayed-types="displayedTypes"
     />
   </div>
