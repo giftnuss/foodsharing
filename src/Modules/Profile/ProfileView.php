@@ -16,7 +16,7 @@ class ProfileView extends View
 		$page->addSection($wallposts, 'Status-Updates von ' . $this->foodsaver['name']);
 
 		if ($this->session->id() != $this->foodsaver['id']) {
-			$this->func->addStyle('#wallposts .tools{display:none;}');
+			$this->pageCompositionHelper->addStyle('#wallposts .tools{display:none;}');
 		}
 
 		if ($fetchDates) {
@@ -312,7 +312,7 @@ class ProfileView extends View
 				</div>';
 			}
 
-			$this->func->addJs('
+			$this->pageCompositionHelper->addJs('
 			$(".stat_bananacount").magnificPopup({
 				type:"inline"
 			});');

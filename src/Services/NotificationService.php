@@ -5,7 +5,6 @@ namespace Foodsharing\Services;
 use Foodsharing\Lib\Func;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
-use Twig\Node\Expression\Test\SameasTest;
 
 final class NotificationService
 {
@@ -18,7 +17,7 @@ final class NotificationService
 		BellGateway $bellGateway,
 		FairTeilerGateway $fairTeilerGateway,
 		Func $func,
-		SameasTest $sanitizerService
+		SanitizerService $sanitizerService
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->fairteilerGateway = $fairTeilerGateway;

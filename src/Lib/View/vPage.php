@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Lib\View;
 
-use Foodsharing\Lib\Func;
+use Foodsharing\Helpers\PageCompositionHelper;
 
 class vPage
 {
@@ -14,14 +14,13 @@ class vPage
 	private $subtitle;
 	private $bread;
 	/**
-	 * @var Func
+	 * @var PageCompositionHelper
 	 */
-	private $func;
+	private $pageCompositionHelper;
 
 	public function __construct($title, $content)
 	{
 		global $container;
-		$this->func = $container->get(Func::class);
 		$this->setTitle($title);
 		$this->setContent($content);
 
@@ -30,6 +29,7 @@ class vPage
 		$this->sections_right = array();
 		$this->subtitle = false;
 		$this->bread = array($title, false);
+		$this->pageCompositionHelper = $container->get(PageCompositionHelper::class);
 	}
 
 	public function setTitle($title)
@@ -96,15 +96,15 @@ class vPage
 
 	public function render()
 	{
-		$this->func->addBread($this->bread[0], $this->bread[1]);
-		$this->func->addTitle($this->title);
+		$this->pageCompositionHelper->addBread($this->bread[0], $this->bread[1]);
+		$this->pageCompositionHelper->addTitle($this->title);
 
 		$subtitle = '';
 		if ($this->subtitle !== false) {
 			$subtitle = '<small>' . $this->subtitle . '</small>';
 		}
 
-		$this->func->addContent('
+		$this->pageCompositionHelper->addContent('
 		<div class="page ui-padding ui-widget-content corner-all">
 			<div class="h1">
 				<h1>' . $this->title . '</h1>
@@ -119,7 +119,7 @@ class vPage
 				$title = '<h2>' . $s['title'] . '</h2>
 				';
 			}
-			$this->func->addContent('
+			$this->pageCompositionHelper->addContent('
 		<div class="page page-section ui-padding ui-widget-content corner-all">
 			' . $title . $s['cnt'] . '
 		</div>');
@@ -147,7 +147,7 @@ class vPage
 				$s['cnt'] = $title . $s['cnt'];
 			}
 
-			$this->func->addContent($s['cnt'], CNT_LEFT);
+			$this->pageCompositionHelper->addContent($s['cnt'], CNT_LEFT);
 		}
 
 		foreach ($this->sections_right as $i => $s) {
@@ -172,7 +172,7 @@ class vPage
 				$s['cnt'] = $title . $s['cnt'];
 			}
 
-			$this->func->addContent($s['cnt'], CNT_RIGHT);
+			$this->pageCompositionHelper->addContent($s['cnt'], CNT_RIGHT);
 		}
 	}
 }

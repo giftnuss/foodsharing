@@ -31,7 +31,7 @@ class DashboardView extends View
 
 	public function updates()
 	{
-		$this->func->addStyle('
+		$this->pageCompositionHelper->addStyle('
 		#activity ul.linklist li span.time{margin-left:58px;display:block;margin-top:10px;}
 		
 		#activity ul.linklist li span.qr
@@ -156,7 +156,7 @@ class DashboardView extends View
 			}
 		}
 	');
-		$this->func->addContent('
+		$this->pageCompositionHelper->addContent('
 	<div class="head ui-widget-header ui-corner-top">
 		Updates-Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fas fa-cog"></a></span>
 	</div>
@@ -282,7 +282,7 @@ class DashboardView extends View
 		}
 
 		if (!empty($betriebe['anfrage'])) {
-			$this->func->addJsFunc('
+			$this->pageCompositionHelper->addJsFunc('
 				function u_anfrage_action(key,el)
 				{
 					val = $(el).children("input:first").val().split(":::");
@@ -328,7 +328,7 @@ class DashboardView extends View
 						
 					}	
 			');
-			$this->func->addJs('
+			$this->pageCompositionHelper->addJs('
 				function createSignoutMenu() {
 					return {
 						callback: function(key, options) {

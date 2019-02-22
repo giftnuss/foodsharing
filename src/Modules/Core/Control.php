@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Foodsharing\Helpers\PageCompositionHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
@@ -27,6 +28,11 @@ abstract class Control
 	 * @var Func
 	 */
 	protected $func;
+
+	/**
+	 * @var PageCompositionHelper
+	 */
+	protected $pageCompositionHelper;
 
 	/**
 	 * @var Mem
@@ -73,6 +79,7 @@ abstract class Control
 		$this->legacyDb = $container->get(Db::class);
 		$this->foodsaverGateway = $container->get(FoodsaverGateway::class);
 		$this->metrics = $container->get(InfluxMetrics::class);
+		$this->pageCompositionHelper = $container->get(PageCompositionHelper::class);
 
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;
@@ -119,9 +126,9 @@ abstract class Control
 			if (isset($manifest[$entry])) {
 				foreach ($manifest[$entry] as $asset) {
 					if (substr($asset, -3) === '.js') {
-						$this->func->addWebpackScript($asset);
+						$this->pageCompositionHelper->addWebpackScript($asset);
 					} elseif (substr($asset, -4) === '.css') {
-						$this->func->addWebpackStylesheet($asset);
+						$this->pageCompositionHelper->addWebpackStylesheet($asset);
 					}
 				}
 			}
@@ -140,7 +147,7 @@ abstract class Control
 
 	protected function render($template, $data)
 	{
-		$global = $this->func->generateAndGetGlobalViewData();
+		$global = $this->pageCompositionHelper->generateAndGetGlobalViewData();
 		$viewData = array_merge($global, $data);
 
 		return $this->twig->render($template, $viewData);
@@ -182,7 +189,7 @@ abstract class Control
 
 	public function wallposts($table, $id)
 	{
-		$this->func->addJsFunc('
+		$this->pageCompositionHelper->addJsFunc('
 			function u_delPost(id, module, wallId)
 				{
 					var id = id;
@@ -214,7 +221,7 @@ abstract class Control
 					$("a.attach-load").remove();
 				}
 			');
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 				$("#wallpost-text").autosize();
 			$("#wallpost-text").on("focus", function(){
 				$("#wallpost-submit").show();

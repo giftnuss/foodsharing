@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Foodsharing\Helpers\PageCompositionHelper;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
@@ -16,19 +17,27 @@ class View
 	protected $func;
 	protected $session;
 	protected $sanitizerService;
+	protected $pageCompositionHelper;
 
 	/**
 	 * @var \Twig\Environment
 	 */
 	public $twig;
 
-	public function __construct(\Twig\Environment $twig, Func $func, Utils $viewUtils, Session $session, SanitizerService $sanitizerService)
-	{
+	public function __construct(
+		\Twig\Environment $twig,
+		Func $func,
+		Utils $viewUtils,
+		Session $session,
+		SanitizerService $sanitizerService,
+		PageCompositionHelper $pageCompositionHelper
+	) {
 		$this->twig = $twig;
 		$this->func = $func;
 		$this->v_utils = $viewUtils;
 		$this->session = $session;
 		$this->sanitizerService = $sanitizerService;
+		$this->pageCompositionHelper = $pageCompositionHelper;
 	}
 
 	public function setSub($sub)
@@ -182,7 +191,7 @@ class View
 
 		if ($option['scroller']) {
 			$out = $this->v_utils->v_scroller($out, $height);
-			$this->func->addStyle('.scroller .overview{left:0;}.scroller{margin:0}');
+			$this->pageCompositionHelper->addStyle('.scroller .overview{left:0;}.scroller{margin:0}');
 		}
 
 		return $out;
@@ -245,7 +254,7 @@ class View
 
 	public function peopleChooser($id, $option = array())
 	{
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 			var date = new Date(); 
 			tstring = ""+date.getYear() + ""+date.getMonth() + ""+date.getDate() + ""+date.getHours();
 			var localsource = [];

@@ -30,12 +30,12 @@ class ContentControl extends Control
 			if ($this->func->getAction('neu')) {
 				$this->handle_add();
 
-				$this->func->addBread($this->func->s('bread_content'), '/?page=content');
-				$this->func->addBread($this->func->s('bread_new_content'));
+				$this->pageCompositionHelper->addBread($this->func->s('bread_content'), '/?page=content');
+				$this->pageCompositionHelper->addBread($this->func->s('bread_new_content'));
 
-				$this->func->addContent($this->content_form());
+				$this->pageCompositionHelper->addContent($this->content_form());
 
-				$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					$this->func->pageLink('content', 'back_to_overview')
 				)), $this->func->s('actions')), CNT_RIGHT);
 			} elseif ($id = $this->func->getActionId('delete')) {
@@ -46,28 +46,28 @@ class ContentControl extends Control
 			} elseif ($id = $this->func->getActionId('edit')) {
 				$this->handle_edit();
 
-				$this->func->addBread($this->func->s('bread_content'), '/?page=content');
-				$this->func->addBread($this->func->s('bread_edit_content'));
+				$this->pageCompositionHelper->addBread($this->func->s('bread_content'), '/?page=content');
+				$this->pageCompositionHelper->addBread($this->func->s('bread_edit_content'));
 
 				$data = $this->contentGateway->getDetail($id);
 				$this->func->setEditData($data);
 
-				$this->func->addContent($this->content_form());
+				$this->pageCompositionHelper->addContent($this->content_form());
 
-				$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					$this->func->pageLink('content', 'back_to_overview')
 				)), $this->func->s('actions')), CNT_RIGHT);
 			} elseif ($id = $this->func->getActionId('view')) {
 				if ($cnt = $this->contentGateway->get($id)) {
-					$this->func->addBread($cnt['title']);
-					$this->func->addTitle($cnt['title']);
+					$this->pageCompositionHelper->addBread($cnt['title']);
+					$this->pageCompositionHelper->addTitle($cnt['title']);
 
-					$this->func->addContent($this->view->simple($cnt));
+					$this->pageCompositionHelper->addContent($this->view->simple($cnt));
 				}
 			} elseif (isset($_GET['id'])) {
 				$this->func->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
 			} else {
-				$this->func->addBread($this->func->s('content_bread'), '/?page=content');
+				$this->pageCompositionHelper->addBread($this->func->s('content_bread'), '/?page=content');
 
 				if ($data = $this->contentGateway->list()) {
 					$rows = array();
@@ -85,12 +85,12 @@ class ContentControl extends Control
 						array('name' => $this->func->s('actions'), 'sort' => false, 'width' => 50)
 					), $rows);
 
-					$this->func->addContent($this->v_utils->v_field($table, 'Öffentliche Webseiten bearbeiten'));
+					$this->pageCompositionHelper->addContent($this->v_utils->v_field($table, 'Öffentliche Webseiten bearbeiten'));
 				} else {
 					$this->func->info($this->func->s('content_empty'));
 				}
 
-				$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					array('href' => '/?page=content&a=neu', 'name' => $this->func->s('neu_content'))
 				)), 'Aktionen'), CNT_RIGHT);
 			}
@@ -100,97 +100,97 @@ class ContentControl extends Control
 	public function partner()
 	{
 		if ($cnt = $this->contentGateway->get(10)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageCompositionHelper->addBread($cnt['title']);
+			$this->pageCompositionHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->partner($cnt));
+			$this->pageCompositionHelper->addContent($this->view->partner($cnt));
 		}
 	}
 
 	public function unterstuetzung()
 	{
 		if ($cnt = $this->contentGateway->get(42)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageCompositionHelper->addBread($cnt['title']);
+			$this->pageCompositionHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->simple($cnt));
+			$this->pageCompositionHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function presse()
 	{
 		if ($cnt = $this->contentGateway->get(58)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageCompositionHelper->addBread($cnt['title']);
+			$this->pageCompositionHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->simple($cnt));
+			$this->pageCompositionHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function communitiesGermany()
 	{
 		if ($cnt = $this->contentGateway->get(52)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageCompositionHelper->addBread($cnt['title']);
+			$this->pageCompositionHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->simple($cnt));
+			$this->pageCompositionHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function communitiesAustria()
 	{
 		if ($cnt = $this->contentGateway->get(61)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageCompositionHelper->addBread($cnt['title']);
+			$this->pageCompositionHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->simple($cnt));
+			$this->pageCompositionHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function communitiesSwitzerland()
 	{
 		if ($cnt = $this->contentGateway->get(62)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageCompositionHelper->addBread($cnt['title']);
+			$this->pageCompositionHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->simple($cnt));
+			$this->pageCompositionHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function forderungen()
 	{
 		if ($cnt = $this->contentGateway->get(60)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageCompositionHelper->addBread($cnt['title']);
+			$this->pageCompositionHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->simple($cnt));
+			$this->pageCompositionHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function leeretonne()
 	{
 		if ($cnt = $this->contentGateway->get(46)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageCompositionHelper->addBread($cnt['title']);
+			$this->pageCompositionHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->simple($cnt));
+			$this->pageCompositionHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function fairteilerrettung()
 	{
 		if ($cnt = $this->contentGateway->get(49)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageCompositionHelper->addBread($cnt['title']);
+			$this->pageCompositionHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->simple($cnt));
+			$this->pageCompositionHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function faq(): void
 	{
-		$this->func->addBread('F.A.Q');
-		$this->func->addTitle('F.A.Q.');
+		$this->pageCompositionHelper->addBread('F.A.Q');
+		$this->pageCompositionHelper->addTitle('F.A.Q.');
 
 		$cat_ids = array(1, 6, 7);
 		if ($this->session->may('fs')) {
@@ -202,68 +202,68 @@ class ContentControl extends Control
 		}
 
 		if ($faq = $this->contentGateway->listFaq($cat_ids)) {
-			$this->func->addContent($this->view->faq($faq));
+			$this->pageCompositionHelper->addContent($this->view->faq($faq));
 		}
 	}
 
 	public function impressum()
 	{
 		if ($cnt = $this->contentGateway->get(8)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageCompositionHelper->addBread($cnt['title']);
+			$this->pageCompositionHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->impressum($cnt));
+			$this->pageCompositionHelper->addContent($this->view->impressum($cnt));
 		}
 	}
 
 	public function about()
 	{
 		if ($cnt = $this->contentGateway->get(9)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageCompositionHelper->addBread($cnt['title']);
+			$this->pageCompositionHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->about($cnt));
+			$this->pageCompositionHelper->addContent($this->view->about($cnt));
 		}
 	}
 
 	public function ratgeber()
 	{
-		$this->func->addBread('Ratgeber');
-		$this->func->addTitle('Ratgeber Lebensmittelsicherheit');
-		$this->func->addContent($this->view->ratgeber());
+		$this->pageCompositionHelper->addBread('Ratgeber');
+		$this->pageCompositionHelper->addTitle('Ratgeber Lebensmittelsicherheit');
+		$this->pageCompositionHelper->addContent($this->view->ratgeber());
 	}
 
 	public function joininfo()
 	{
-		$this->func->addBread('Mitmachen');
-		$this->func->addTitle('Mitmachen - Unsere Regeln');
-		$this->func->addContent($this->view->joininfo());
+		$this->pageCompositionHelper->addBread('Mitmachen');
+		$this->pageCompositionHelper->addTitle('Mitmachen - Unsere Regeln');
+		$this->pageCompositionHelper->addContent($this->view->joininfo());
 	}
 
 	public function fuer_unternehmen()
 	{
 		if ($cnt = $this->contentGateway->get(4)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageCompositionHelper->addBread($cnt['title']);
+			$this->pageCompositionHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->partner($cnt));
+			$this->pageCompositionHelper->addContent($this->view->partner($cnt));
 		}
 	}
 
 	public function infohub()
 	{
 		if ($cnt = $this->contentGateway->get(59)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageCompositionHelper->addBread($cnt['title']);
+			$this->pageCompositionHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->simple($cnt));
+			$this->pageCompositionHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function changelog()
 	{
-		$this->func->addBread('Changelog');
-		$this->func->addTitle('Changelog');
+		$this->pageCompositionHelper->addBread('Changelog');
+		$this->pageCompositionHelper->addTitle('Changelog');
 		$markdown = file_get_contents('CHANGELOG.md');
 		$markdown = preg_replace('/\@(\S+)/', '[@\1](https://gitlab.com/\1)', $markdown);
 		$markdown = preg_replace('/!([0-9]+)/', '[!\1](https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/\1)', $markdown);
@@ -271,7 +271,7 @@ class ContentControl extends Control
 		$Parsedown = new Parsedown();
 		$cl['body'] = $Parsedown->parse($markdown);
 		$cl['title'] = 'Changelog';
-		$this->func->addContent($this->view->simple($cl));
+		$this->pageCompositionHelper->addContent($this->view->simple($cl));
 	}
 
 	private function content_form($title = 'Content Management')

@@ -20,7 +20,7 @@ class GeoCleanControl extends Control
 
 	public function lostRegion()
 	{
-		$this->func->addBread($this->func->s('lost_regions'));
+		$this->pageCompositionHelper->addBread($this->func->s('lost_regions'));
 		if ($regions = $this->model->q('
 			SELECT 
 				
@@ -55,20 +55,20 @@ class GeoCleanControl extends Control
 					}
 				}
 			}
-			$this->func->addContent($this->view->regionList($tmp));
+			$this->pageCompositionHelper->addContent($this->view->regionList($tmp));
 		}
 	}
 
 	public function index()
 	{
 		if (!isset($_GET['sub'])) {
-			$this->func->addBread('Geo Location Cleaner');
+			$this->pageCompositionHelper->addBread('Geo Location Cleaner');
 
 			if ($foodsaver = $this->model->getFsWithoutGeo()) {
-				$this->func->addContent($this->view->listFs($foodsaver));
+				$this->pageCompositionHelper->addContent($this->view->listFs($foodsaver));
 			}
 
-			$this->func->addContent($this->view->rightmenu(), CNT_RIGHT);
+			$this->pageCompositionHelper->addContent($this->view->rightmenu(), CNT_RIGHT);
 		}
 	}
 }

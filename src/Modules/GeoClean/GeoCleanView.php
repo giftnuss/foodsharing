@@ -29,14 +29,14 @@ class GeoCleanView extends View
 				array('cnt' => $fs['anschrift'] . ', ' . $fs['plz'] . ' ' . $fs['stadt']),
 				array('cnt' => '<a href="/?page=foodsaver&a=edit&id=' . $fs['id'] . '" class="button">' . $this->func->s('edit') . '</a> <a href="#" onclick="u_getGeo(' . (int)$fs['id'] . ');return false;" class="button">Koordinaten ermitteln</a>')
 			);
-			$this->func->addHidden('
+			$this->pageCompositionHelper->addHidden('
 				' . $this->v_utils->v_form_hidden('fs' . $fs['id'] . 'anschrift', $fs['anschrift']) . '
 				' . $this->v_utils->v_form_hidden('fs' . $fs['id'] . 'plz', $fs['plz']) . '	
 				' . $this->v_utils->v_form_hidden('fs' . $fs['id'] . 'stadt', $fs['stadt']) . '	
 			');
 		}
 
-		$this->func->addJsFunc('
+		$this->pageCompositionHelper->addJsFunc('
 			var u_fslist = [' . implode(',', $js) . '];	
 		');
 

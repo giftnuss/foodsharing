@@ -17,7 +17,7 @@ class QuizView extends View
 	{
 		$rows = array();
 
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 			$(".usersessionlink").parent().parent().on("click", function(){
 				goTo($(this).children("td").children(".usersessionlink").attr("href"));
 			});		
@@ -365,7 +365,7 @@ class QuizView extends View
 	public function listQuestions($questions, $quiz_id)
 	{
 		if (is_array($questions)) {
-			$this->func->addJs('
+			$this->pageCompositionHelper->addJs('
 				$("#questions").accordion({
 					heightStyle: "content",
 					animate: 200,

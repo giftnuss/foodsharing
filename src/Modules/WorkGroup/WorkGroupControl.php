@@ -41,7 +41,7 @@ class WorkGroupControl extends Control
 			$this->func->goLogin();
 		}
 
-		$this->func->addBread('Arbeitsgruppen', '/?page=groups');
+		$this->pageCompositionHelper->addBread('Arbeitsgruppen', '/?page=groups');
 
 		if (!$request->query->has('sub')) {
 			$this->list($request, $response);
@@ -148,7 +148,7 @@ class WorkGroupControl extends Control
 				]);
 			}, $groups);
 
-		$this->func->addTitle($this->func->s('groups'));
+		$this->pageCompositionHelper->addTitle($this->func->s('groups'));
 
 		$response->setContent($this->render('pages/WorkGroup/list.twig',
 			['nav' => $this->getSideMenuData('=' . $parent), 'groups' => $groups]
@@ -167,7 +167,7 @@ class WorkGroupControl extends Control
 				$this->func->go('/?page=dashboard');
 			}
 
-			$this->func->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
+			$this->pageCompositionHelper->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
 			$editWorkGroupRequest = EditWorkGroupData::fromGroup($group);
 			$form = $this->formFactory->getFormFactory()->create(WorkGroupForm::class, $editWorkGroupRequest);
 			$form->handleRequest($request);

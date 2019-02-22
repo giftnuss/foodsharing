@@ -16,7 +16,7 @@ class BasketControl extends Control
 
 		parent::__construct();
 
-		$this->func->addBread('Essenskörbe');
+		$this->pageCompositionHelper->addBread('Essenskörbe');
 	}
 
 	public function index(): void
