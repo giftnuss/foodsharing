@@ -19,11 +19,12 @@ class PushNotificationGateway extends BaseGateway
 		$this->addHandler($webPushHandler);
 	}
 
-	public function addSubscription(int $foodsaverId, string $subscriptionData): int
+	public function addSubscription(int $foodsaverId, string $subscriptionData, string $type): int
 	{
 		return $this->db->insert('fs_push_notification_subscription', [
 			'foodsaver_id' => $foodsaverId,
-			'data' => $subscriptionData
+			'data' => $subscriptionData,
+			'type' => $type
 		]);
 	}
 

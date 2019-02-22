@@ -56,7 +56,7 @@ class PushNotificationSubscriptionRestController extends FOSRestController
 		$pushSubscription = $request->getContent();
 		$foodsaverId = $this->session->id();
 
-		$this->gateway->addSubscription($foodsaverId, $pushSubscription);
+		$this->gateway->addSubscription($foodsaverId, $pushSubscription, $type);
 
 		return $this->handleHttpStatus(200);
 	}
