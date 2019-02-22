@@ -1421,7 +1421,7 @@ class XhrMethods
 				}
 			}
 
-			$this->sanitizerService->handleTagselect('botschafter');
+			$this->sanitizerService->handleTagSelect('botschafter');
 
 			$this->regionGateway->update_bezirkNew($data['bezirk_id'], $g_data);
 

@@ -100,7 +100,7 @@ class MailboxControl extends Control
 
 				$index = 'foodsaver_' . (int)$_POST['mbid'];
 
-				$this->sanitizerService->handleTagselect($index);
+				$this->sanitizerService->handleTagSelect($index);
 
 				if ($this->model->updateMember($_POST['mbid'], $g_data[$index])) {
 					$this->func->info($this->func->s('edit_success'));

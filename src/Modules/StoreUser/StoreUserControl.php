@@ -64,14 +64,14 @@ class StoreUserControl extends Control
 					$this->storeGateway->clearAbholer($_GET['id']);
 					foreach ($range as $r) {
 						if (isset($_POST['dow' . $r])) {
-							$this->sanitizerService->handleTagselect('dow' . $r);
+							$this->sanitizerService->handleTagSelect('dow' . $r);
 							foreach ($g_data['dow' . $r] as $fs_id) {
 								$this->storeGateway->addAbholer($_GET['id'], $fs_id, $r);
 							}
 						}
 					}
 				} else {
-					$this->sanitizerService->handleTagselect('foodsaver');
+					$this->sanitizerService->handleTagSelect('foodsaver');
 
 					if (!empty($g_data['foodsaver'])) {
 						$this->model->addBetriebTeam($_GET['id'], $g_data['foodsaver'], $g_data['verantwortlicher']);

@@ -6,35 +6,35 @@ use Html2Text\Html2Text;
 
 class SanitizerService
 {
-	private $parsedown;
+	private $parseDown;
 	private $htmlPurifier;
 
-	public function __construct(\Parsedown $parsedown, \HTMLPurifier $HTMLPurifier)
+	public function __construct(\Parsedown $parseDown, \HTMLPurifier $HTMLPurifier)
 	{
-		$this->parsedown = $parsedown;
+		$this->parseDown = $parseDown;
 		$this->htmlPurifier = $HTMLPurifier;
 	}
 
-	public function plainToHtml($text)
+	public function plainToHtml(string $text): string
 	{
 		return nl2br(htmlspecialchars($text));
 	}
 
-	public function markdownToHtml($text)
+	public function markdownToHtml(string $text): string
 	{
-		$html = $this->parsedown->text($text);
+		$html = $this->parseDown->text($text);
 
 		return $this->htmlPurifier->purify($html);
 	}
 
-	public function htmlToPlain($html)
+	public function htmlToPlain(string $html): string
 	{
 		$html = new Html2Text($html);
 
 		return $html->getText();
 	}
 
-	public function tagSelectIds($v): array
+	public function tagSelectIds(array $v): array
 	{
 		$result = [];
 		foreach ($v as $idKey => $value) {
@@ -44,12 +44,12 @@ class SanitizerService
 		return $result;
 	}
 
-	public function handleTagselect($id): void
+	public function handleTagSelect(string $identifier): void
 	{
 		global $g_data;
 		$recip = array();
-		if (isset($g_data[$id]) && is_array($g_data[$id])) {
-			foreach ($g_data[$id] as $key => $r) {
+		if (isset($g_data[$identifier]) && is_array($g_data[$identifier])) {
+			foreach ($g_data[$identifier] as $key => $r) {
 				if ($key != '') {
 					$part = explode('-', $key);
 					$recip[$part[0]] = $part[0];
@@ -57,15 +57,15 @@ class SanitizerService
 			}
 		}
 
-		$g_data[$id] = $recip;
+		$g_data[$identifier] = $recip;
 	}
 
-	public function jsSafe($str, $quote = "'")
+	public function jsSafe($str, string $quote = "'")
 	{
-		return str_replace(array($quote, "\n", "\r"), array('\\' . $quote . '', '\\n', ''), $str);
+		return str_replace([$quote, "\n", "\r"], ['\\' . $quote . '', '\\n', ''], $str);
 	}
 
-	public function tt($str, $length = 160)
+	public function tt(string $str, int $length = 160): string
 	{
 		if (strlen($str) > $length) {
 			/* this removes the part of the last word that might have been destroyed by substr */
