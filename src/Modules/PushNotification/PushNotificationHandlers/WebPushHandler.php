@@ -70,7 +70,20 @@ class WebPushHandler implements PushNotificationHandlerInterface
 
 			$this->webpush->sendNotification($subscription, $message);
 		}
-		$this->webpush->flush();
+
+		$reports = $this->webpush->flush();
+
+		/**
+		 * Check sent results
+		 * @var MessageSentReport $report
+		 */
+		foreach ($reports as $report) {
+			$endpoint = $report->getRequest()->getUri()->__toString();
+
+			if (!$report->isSuccess()) {
+				error_log("Message failed to sent for subscription {$endpoint}: {$report->getReason()}");
+			}
+		}
 	}
 
 	/**
