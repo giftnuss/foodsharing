@@ -1,6 +1,6 @@
-FROM registry.gitlab.com/foodsharing-dev/images/php:2.17
+FROM registry.gitlab.com/foodsharing-dev/images/php:2.18
 
 WORKDIR /app
 
 COPY . /app
-RUN chmod 777 --recursive /app
+RUN chmod 777 -R /app

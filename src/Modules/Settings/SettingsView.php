@@ -166,11 +166,12 @@ class SettingsView extends View
 
 	public function quizSession($session, $try_count, ContentGateway $contentGateway)
 	{
-		$infotext = $this->v_utils->v_error('mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten leider nicht bestanden. <a href="https://wiki.foodsharing.de/" target="_blank">Informiere Dich im Wiki</a> für den nächsten Versuch.<p>Lies Dir hier noch mal in Ruhe die Fragen und die dazugehörigen Antworten durch, damit es beim nächsten Mal besser klappt</p>');
-		$subtitle = 'Leider nicht bestanden';
-		if ($session['fp'] < $session['maxfp']) {
+		if ($session['fp'] <= $session['maxfp']) {
 			$subtitle = 'Bestanden!';
 			$infotext = $this->v_utils->v_success('Herzlichen Glückwunsch! mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten bestanden!');
+		} else {
+			$infotext = $this->v_utils->v_error('mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten leider nicht bestanden. <a href="https://wiki.foodsharing.de/" target="_blank">Informiere Dich im Wiki</a> für den nächsten Versuch.<p>Lies Dir hier noch mal in Ruhe die Fragen und die dazugehörigen Antworten durch, damit es beim nächsten Mal besser klappt</p>');
+			$subtitle = 'Leider nicht bestanden';
 		}
 		$this->func->addContent('<div class="quizsession">' . $this->topbar($session['name'] . ' Quiz', $subtitle, '<img src="/img/quiz.png" />') . '</div>');
 		$out = '';
@@ -438,38 +439,11 @@ class SettingsView extends View
 				', 'Dein Abholkalender', array('class' => 'ui-padding'));
 	}
 
-	public function delete_account()
+	public function delete_account(int $fsId)
 	{
-		$this->func->addJs('
-		$("#delete-account-confirm").dialog({
-			autoOpen: false,
-			modal: true,
-			title: "' . $this->func->s('delete_account_confirm_title') . '",
-			buttons: {
-				"' . $this->func->s('abort') . '" : function(){
-					$("#delete-account-confirm").dialog("close");
-				},
-				"' . $this->func->s('delete_account_confirm_bt') . '" : function(){
-					goTo("/?page=settings&deleteaccount=1");
-				}
-			}
-		});
-
-		$("#delete-account").button().on("click", function(){
-			$("#delete-account-confirm").dialog("open");
-		});
-	');
-		$content = '
-	<div style="margin:20px;text-align:center;">
-		<span id="delete-account">' . $this->func->s('delete_now') . '</span>
-	</div>
-	' . $this->v_utils->v_info('Du bist dabei Deinen Account zu löschen. Bist Du Dir ganz sicher?', $this->func->s('reference'));
-
-		$this->func->addHidden('
-		<div id="delete-account-confirm">
-			' . $this->v_utils->v_info($this->func->s('delete_account_confirm_msg')) . '
-		</div>
-	');
+		$content =
+			'<button type="button" id="delete-account" class="ui-button" onclick="confirmDeleteAccount(' . $fsId . ')">' . $this->func->s('delete_now') . '</button>'
+		. $this->v_utils->v_info('Du bist dabei Deinen Account zu löschen. Bist Du Dir ganz sicher?', $this->func->s('reference'));
 
 		return $this->v_utils->v_field($content, $this->func->s('delete_account'), array('class' => 'ui-padding'));
 	}

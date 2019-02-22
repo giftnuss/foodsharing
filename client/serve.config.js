@@ -12,10 +12,15 @@ module.exports = {
     index: '',
     contentBase: false,
     publicPath: '/assets/',
+    overlay: {
+      warnings: true,
+      errors: true
+    },
     proxy: {
       '!/sockjs-node/**': {
         target,
         changeOrigin: true,
+        xfwd: true,
         ws: true
       }
     }

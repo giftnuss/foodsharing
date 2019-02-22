@@ -1,35 +1,113 @@
 # Unreleased
 
+## Major changes
+
+## Features
+
+## Bugfixes
+- Orga can delete quizzes #364 !767 @k.miklobusec
+
+## Refactoring
+
+## Dev/Test/CI stuff
+- Use CI built assets and vendor for deployment !768 @NerdyProjects
+- Use php-cs-fixer, parallel-lint and phpstan in CI build:lint step !775 @NerdyProjects
+
+# 2019-02-21
+
+We are happy to announce another release which got hundreds of hours of love, lastly from more then 10 people participating in the 2019 february foodsharing.de hackweek, sitting together since last friday at Kanthaus near Leipzig.
+
+This release is a milestone as we finally managed to tackle some issues that increase the security of foodsharing.de and by that the privacy of all our users.
+
+We are very proud to finally release foodsharing with an **AGPLv3** licence, making it finally a [Free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software).
+
+## Major changes
+- A security focussed code audit has been done by @alangecker which lead to fixing more than 50 related issues, from which 10 were of critical and 6 of high severity #472
+- AGPLv3 licence added. The [Gitlab repository](https://gitlab.com/foodsharing-dev/foodsharing) is now publically visible
+- [CSRF](https://en.wikipedia.org/wiki/Cross-site_request_forgery) protection for most requests to avoid malicious requests deleting accounts or changing data without the users intention to do so
+- Lots of [XSS](https://en.wikipedia.org/wiki/Cross-site_scripting) vectors have been closed by setting the correct content type on json responses
+- Removed backend code to stop old android app *foodsharing lebensmittelretten* (*de.lebensmittelretten.app*) from working. The development team cannot take the responsibility for using this app as it implements very bad practices regarding security. We advice all current and recent users of that app to change the password they used on foodsharing.de.
+- We are happy with the continuous process of cleaning up our code and reimplementing more and more parts as proper API requests and getting rid of spaghetti-javascript
+
 ## Features
 - On dashboard there now is a symbol indicating the confirmation status of a pickup !661 @jofranz
-- Pre fill end date of pickuphistory with todays date for comfort reasons !660 @jofranz
+- Pre-fill end date of pickup history with today's date for comfort reasons !660 @jofranz
 - Conversation API returns name (or null) !658 @nicksellen 
 - Added the amount of events conditionally to the dashboard event headline in case there is more than one event !650 @jofranz
 - Added a new button to the contextmenu which appears by clicking the profilepic in shops #302 !671 @peter.reutlingen
 - Make date in event a mandatory field #436 !669 @tihar
 - Added API endpoints for basket pictures !671 @alex.simm 
-- Allow use of markdown in fairteiler description !690 @NerdyProjects
+- Allow use of markdown in Fair-Teiler description !690 @NerdyProjects
 - Joining regions REST API !696 @NerdyProjects
+- Added member list for districts and work groups !697 @djahnie
+- Prevent group admins to be able to access the passport generation page !706 #392 @jofranz
+- Start page content over content manager #470 !701 @k.miklobusec
+- Added profile status infos for store and pickup entries for ambassadors !705 @jofranz
+- Scale down font size on passports for long names !685 @NerdyProjects
+- CSRF protection for API requests !715 @alangecker
+- Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
+- Disabled caching searchindex for uptodate results !727 @NerdyProjects
 
 ## Bugfixes
-- Searchindex is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
+- Search index is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
 - Fixup conversation header display !658 @nicksellen
 - Fixed bug in #302 goto_profile_from_teamsite !671 with !675 @peter.reutlingen
 - Fixed an SQL injection in an FoodsaverGateway method @alangecker
-- Properly escape Fairteiler names in all occurences !690 @NerdyProjects
+- Properly escape Fair-Teiler names in all occurrences !690 @NerdyProjects
 - Avoid strip_tags on bell data !691 @NerdyProjects
 - Permission checks when joining regions !696 @NerdyProjects
 - Fixed the bug that the number of pickups in the team list isn't shown when the name is too long. #381 !688 @peter.reutlingen
 - Fix mass mail sender and email output formatting !707 @NerdyProjects
+- Only foodsavers add themselves to working groups !713 @NerdyProjects
+- Only allow edting regions as an orga user !714 @NerdyProjects
+- higher entropy for security & privacy related tokens !709 @alangecker
+- Fix recently broken quiz session storage !730 @NerdyProjects
+- Fix broken permission checks in foodsaver module @NerdyProjects
+- Fix broken permission checks in foodsaver xhr module @NerdyProjects
+- Fix broken permission checks in geoclean xhr module @NerdyProjects
+- Fix broken permission checks in mailbox xhr module @NerdyProjects
+- Fix broken permission checks in foodsaver xhr module !731 @NerdyProjects
+- Fix broken permission checks in geoclean xhr module !731 @NerdyProjects
+- Fix broken permission checks in mailbox xhr module !731 @NerdyProjects
+- Fix path traversals vulnerabilities !723 @alangecker
+- Fix multiple XSS vulnerabilities !722 @alangecker
+- Properly show quiz as succeeded when errorpoints match max. allowed errorpoints @NerdyProjects
+- Fix wrong stated relationship between user role and home district on user dashboard. Add information about user pickups to dashboard.!748 @pmayd
+- Only allow creation of stores in a region you are member of @NerdyProjects
 
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies
 - remove unused methods in XhrMethods !694 @NerdyProjects
+- trigger Fair-Teiler wallpost notifications in backend !700 @NerdyProjects
+- removed the old qr code library and chaged the current qr on the fs-passes to show the fs profile !685 #144 @peter.toennies
 - trigger fairteiler wallpost notifications in backend !700 @NerdyProjects
+- use API endpoint to delete users to avoid CSRF problems !717 @NerdyProjects
+- use API endpoint to delete regions/workgroups to avoid CSRF problems !719 @NerdyProjects
+- removed unused php,js and css code !720 @alangecker
+- user normalisation in conversations API endpoint
+- remove unused quickprofile method !755 @NerdyProjects
+- fix a few linter warnings !755 @NerdyProjects
 
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen
 - disable backup_globals for PHPUnit to have unit tests working in dev again !696 @NerdyProjects
+- fix xdebug by enabling x-forwarded-for header in webpack devserver !725 @NerdyProjects
+- PHP always runs as www-data inside docker to work around permission problems @NerdyProjects
+
+# 2019-02-19 Hotfix
+- Backport some changes that were needed for yesterdays hotfix
+- Conversation API returns name (or null) !658 @nicksellen 
+- Fixup conversation header display !658 @nicksellen
+
+# 2019-02-18 Hotfix
+- fix for 9 SQL injection vulnerabilities #472 @alangecker
+- Fix mass mail sender and email output formatting !707 @NerdyProjects
+
+# 2019-02-16 Hotfix
+- Fixed an SQL injection in a FoodsaverGateway method @alangecker
+
+# 2019-02-02 Hotfix
+- readded adresspicker functionality to Fair-Teiler creation page !668 @peter.toennies
 
 # 2019-01-25
 Matthias: "Are there any concerns about merging the addresspicker / map / geolocation to production?"

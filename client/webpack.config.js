@@ -90,6 +90,18 @@ module.exports = merge(webpackBase, {
   module: {
     rules: [
       {
+        enforce: 'pre',
+        test: /\.(js|vue)$/,
+        exclude: [
+          /node_modules/,
+          resolve('lib')
+        ],
+        loader: 'eslint-loader',
+        options: {
+          configFile: resolve('package.json')
+        }
+      },
+      {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {

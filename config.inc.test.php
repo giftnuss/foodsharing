@@ -7,8 +7,9 @@
 Foodsharing\Debug\Whoops::register();
 
 /* Codeception remote codecoverage - only used for testing */
-define('C3_CODECOVERAGE_ERROR_LOG_FILE', '/app/tests/_output/c3_error.log'); //Optional (if not set the default c3 output dir will be used)
+/*define('C3_CODECOVERAGE_ERROR_LOG_FILE', '/app/tests/_output/c3_error.log'); //Optional (if not set the default c3 output dir will be used)
 include __DIR__ . '/vendor/codeception/c3/c3.php';
+*/
 
 $protocol = 'http';
 if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
@@ -50,3 +51,5 @@ define('BOUNCE_IMAP_PORT', null);
 if (!defined('ROOT_DIR')) {
 	define('ROOT_DIR', './');
 }
+
+define('CSRF_TEST_TOKEN', '__TESTTOKEN__');

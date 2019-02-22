@@ -4,6 +4,7 @@ namespace Foodsharing\Lib\View;
 
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
+use Foodsharing\Services\SanitizerService;
 
 class Utils
 {
@@ -22,10 +23,12 @@ class Utils
 	 * @var \Twig\Environment
 	 */
 	private $twig;
+	private $sanitizerService;
 
-	public function __construct()
+	public function __construct(SanitizerService $sanitizerService)
 	{
 		$this->id = array();
+		$this->sanitizerService = $sanitizerService;
 	}
 
 	/**
@@ -85,7 +88,7 @@ class Utils
 					showLoader();
 					$.ajax({
 						url: "/xhr.php?f=activeSwitch",
-						data:{t:"' . $table . '",id:"' . $field_id . '",value:1},
+						data:{t:"' . $table . '",id:"' . (int)$field_id . '",value:1},
 						method:"get",
 						complete:function(){
 							hideLoader();
@@ -96,7 +99,7 @@ class Utils
 					showLoader();
 					$.ajax({
 						url: "/xhr.php?f=activeSwitch",
-						data:{t:"' . $table . '",id:"' . $field_id . '",value:0},
+						data:{t:"' . $table . '",id:"' . (int)$field_id . '",value:0},
 						method:"get",
 						complete:function(){
 							hideLoader();
@@ -115,98 +118,6 @@ class Utils
 				<div id="' . $id . '">
 					<input' . $onck . ' type="checkbox" name="' . $id . '" id="' . $id . '-on" value="1" />
 				</div>';
-	}
-
-	public function v_bezirkChildChooser($id, $options = array())
-	{
-		$this->func->addJsFunc('
-		var u_current_bezirk_type = 0;
-		function u_printChildBezirke(element)
-		{
-				val = element.value + "";
-
-				part = val.split(":");
-
-				var parent = part[0];
-
-				u_current_bezirk_type = part[1];
-
-				if(parent == -1)
-				{
-					$("#' . $id . '").val("");
-					return false;
-				}
-
-				if(parent == -2)
-				{
-					$("#' . $id . '-notAvail").fadeIn();
-				}
-
-				$("#' . $id . '").val(element.value);
-
-				el = $(element);
-
-				if(el.next().next().next().next().next().hasClass("childChanger"))
-				{
-					el.next().next().next().next().next().remove();
-				}
-				if(el.next().next().next().next().hasClass("childChanger"))
-				{
-					el.next().next().next().next().remove();
-				}
-				if(el.next().next().next().hasClass("childChanger"))
-				{
-					el.next().next().next().remove();
-				}
-				if(el.next().next().hasClass("childChanger"))
-				{
-					el.next().next().remove();
-				}
-				if(el.next().hasClass("childChanger"))
-				{
-					el.next().remove();
-				}
-
-				$("#xv-childbezirk-"+parent).remove();
-
-
-				showLoader();
-				$.ajax({
-						dataType:"json",
-						url:"/xhr.php?f=childBezirke&parent=" + parent,
-						success : function(data){
-							if(data.status == 1)
-							{
-
-								$("#' . $id . '-childs-"+parent).remove();
-								$("#' . $id . '-wrapper").append(data.html);
-								//$("#' . $id . '").val("");
-
-								//$("select.childChanger").last().append(\'<option style="font-weight:bold;" value="-2">- Meine Region ist nicht dabei -</option>\');
-
-							}
-							else
-							{
-
-							}
-						},
-						complete: function(){
-							hideLoader();
-						}
-				});
-		}');
-
-		$this->func->addJs('u_printChildBezirke({value:"0:0"});');
-
-		return '<div id="' . $id . '-wrapper"></div><input type="hidden" name="' . $id . '" id="' . $id . '" value="0" />';
-	}
-
-	public function v_swapText($id, $value)
-	{
-		return $this->twig->render('partials/swapText.twig', [
-			'id' => $id,
-			'value' => $value
-		]);
 	}
 
 	public function v_bezirkChooser($id = 'bezirk_id', $bezirk = false, $option = array())
@@ -295,22 +206,6 @@ class Utils
 				<input type="hidden" name="' . $id . 'hId" id="' . $id . '-hId" value="' . $bezirk['id'] . '" />');
 	}
 
-	public function v_login()
-	{
-		$username = '';
-		$password = '';
-		if (getenv('FS_ENV') === 'dev') {
-			$username = 'userbot@example.com';
-			$password = 'user';
-		}
-
-		return '<form id="loginbar" action="/?page=login&ref=%2F%3Fpage%3Ddashboard" method="post">
-					<input style="margin-right:4px;" class="input corner-all" type="email" name="login_form[email_address]" value="' . $username . '" placeholder="E-Mail-Adresse" required />
-					<input class="input corner-all" type="password" name="login_form[password]" value="' . $password . '" placeholder="Passwort" required />
-					<input class="submit corner-right" type="submit" value="&#xf0a9;" />
-				</form>';
-	}
-
 	public function v_success($msg, $title = false)
 	{
 		if ($title !== false) {
@@ -386,27 +281,11 @@ class Utils
 		return $out;
 	}
 
-	public function v_dialog_button($id, $label, $option = array())
+	public function v_dialog_button($id, $label)
 	{
 		$new_id = $this->func->id($id);
-		$click = '';
-		if (isset($option['click'])) {
-			$click = $option['click'] . ';';
-		}
 
-		$tclick = '';
-		if (isset($option['title'])) {
-			$tclick = '$("#dialog_' . $id . '").dialog("option","title","' . $option['title'] . '");';
-		}
-		$btoption = array();
-		if (isset($option['icon'])) {
-			$btoption[] = 'icons: {primary: "ui-icon-' . $option['icon'] . '"}';
-		}
-		if (isset($option['notext'])) {
-			$btoption[] = 'text:false';
-		}
-
-		$this->func->addJs('$("#' . $new_id . '-button").button({' . implode(',', $btoption) . '}).on("click", function(){' . $click . $tclick . '$("#dialog_' . $id . '").dialog("open");});');
+		$this->func->addJs('$("#' . $new_id . '-button").button({}).on("click", function(){$("#dialog_' . $id . '").dialog("open");});');
 
 		return '<span id="' . $new_id . '-button">' . $label . '</span>';
 	}
@@ -679,11 +558,6 @@ class Utils
 			<div style="visibility:hidden"><img src="/images/' . $original . '" /></div>';
 	}
 
-	public function v_form_info($msg, $label = false)
-	{
-		return '<div class="input-wrapper">' . $this->v_info($msg, $label) . '</div>';
-	}
-
 	public function v_form($name, $elements, $option = array())
 	{
 		$js = '';
@@ -857,7 +731,7 @@ class Utils
 					} else {
 						$cmsg = 'Wirklich l&ouml;schen?';
 					}
-					$out .= '<li onclick="ifconfirm(\'/?page=' . $page . '&a=delete&id=' . $id . '\',\'' . $this->func->jsSafe($cmsg) . '\');" title="l&ouml;schen" class="ui-state-default' . $corner . '"><span class="ui-icon ui-icon-trash"></span></li>';
+					$out .= '<li onclick="ifconfirm(\'/?page=' . $page . '&a=delete&id=' . $id . '\',\'' . $this->sanitizerService->jsSafe($cmsg) . '\');" title="l&ouml;schen" class="ui-state-default' . $corner . '"><span class="ui-icon ui-icon-trash"></span></li>';
 					break;
 
 				default:
@@ -1137,32 +1011,12 @@ class Utils
 		return $this->v_input_wrapper($this->func->s($id), $out);
 	}
 
-	public function v_form_list($id, $option = array())
-	{
-		$id = $this->func->id($id);
-		$value = $this->func->getValue($id);
-		$label = $this->func->s($id);
-
-		$out = '<textarea class="input textarea value" name="' . $id . '" id="' . $id . '">';
-
-		$val = '';
-		if (is_array($value)) {
-			foreach ($value as $v) {
-				$out .= $v['name'] . "\r\n";
-			}
-		}
-
-		$out .= '</textarea>';
-
-		return $this->v_input_wrapper($label, $out, $id, $option);
-	}
-
 	public function v_form_radio($id, $option = array())
 	{
 		$id = $this->func->id($id);
 		$label = $this->func->s($id);
 
-		$check = $this->func->jsValidate($option, $id, $label);
+		$check = $this->jsValidate($option, $id, $label);
 
 		if (isset($option['selected'])) {
 			$selected = $option['selected'];
@@ -1196,6 +1050,20 @@ class Utils
 		return $this->v_input_wrapper($label, $out, $id, $option);
 	}
 
+	private function jsValidate($option, $id, $name)
+	{
+		$out = array('class' => '', 'msg' => array());
+
+		if (isset($option['required'])) {
+			$out['class'] .= ' required';
+			if (!isset($option['required']['msg'])) {
+				$out['msg']['required'] = $name . ' darf nicht leer sein';
+			}
+		}
+
+		return $out;
+	}
+
 	public function v_form_select($id, $option = array())
 	{
 		$id = $this->func->id($id);
@@ -1206,7 +1074,7 @@ class Utils
 			$selected = $this->func->getValue($id);
 		}
 		$label = $this->func->s($id);
-		$check = $this->func->jsValidate($option, $id, $label);
+		$check = $this->jsValidate($option, $id, $label);
 
 		if (isset($option['values'])) {
 			$values = $option['values'];
@@ -1290,7 +1158,7 @@ class Utils
 		$class = '';
 		$star = '';
 		$error_msg = '';
-		$check = $this->func->jsValidate($option, $id, $label);
+		$check = $this->jsValidate($option, $id, $label);
 
 		if (isset($option['required'])) {
 			$star = '<span class="req-star"> *</span>';
@@ -1488,78 +1356,6 @@ class Utils
 		}
 
 		return $this->v_input_wrapper($this->func->s($id), '<input' . $pl . ' class="input text" type="password" name="' . $id . '" id="' . $id . '" />', $id, $option);
-	}
-
-	public function v_getMessages($error, $info)
-	{
-		$out = '';
-		if (count($error) > 0) {
-			$out .= '
-			<div class="ui-widget pageblock ui-padding">
-			<div class="ui-state-error ui-corner-all">
-			<p><span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-alert"></span>';
-
-			foreach ($error as $e) {
-				$out .= $this->func->qs($e) . '<br />';
-			}
-
-			$out .= '
-			</div>
-			</div>';
-		}
-
-		if (count($info) > 0) {
-			$out .= '
-			<div class="ui-widget pageblock">
-			<div class="ui-state-highlight ui-corner-all ui-padding">
-			<p><span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-info"></span>';
-
-			foreach ($info as $i) {
-				$out .= $this->func->qs($i) . '<br />';
-			}
-
-			$out .= '
-			</div>
-			</div>';
-		}
-
-		return $out;
-	}
-
-	public function buttonset($buttons = array())
-	{
-		$id = $this->func->id('buttonset');
-		$out = '
-		<div id="' . $id . '">';
-
-		$i = 0;
-		foreach ($buttons as $b) {
-			++$i;
-			$bid = $this->func->makeId($b['name']);
-			$out .= '
-			<a href="#" id="' . $id . '-' . $bid . '">' . $b['name'] . '</a>';
-		}
-
-		$out .= '
-		</div>';
-	}
-
-	public function v_switch($views = array())
-	{
-		$out = '<select class="v-switch"  onchange="goTo(this.value);">';
-
-		foreach ($views as $v) {
-			$id = $this->func->makeId($v);
-			$sel = '';
-			if (isset($_GET['v']) && $id == $_GET['v']) {
-				$sel = ' selected="selected"';
-			}
-			$out .= '
-					<option value="' . $this->func->addGet('v', $id) . '"' . $sel . '>' . $v . '</option>';
-		}
-
-		return $out . '
-				</select>';
 	}
 
 	public function v_getStatusAmpel($status)

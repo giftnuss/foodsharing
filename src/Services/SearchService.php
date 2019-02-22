@@ -37,7 +37,7 @@ class SearchService
 	/**
 	 * Method to generate search Index for instant seach.
 	 */
-	public function generateIndex($fsId, $token)
+	public function generateIndex($fsId)
 	{
 		$index = [];
 
@@ -139,19 +139,6 @@ class SearchService
 			'result' => $result
 		);
 
-		/*
-		 * Get or set an individual token as filename for the public json file
-		*/
 		return $index;
-	}
-
-	public function writeSearchIndexToDisk($fsId, $token)
-	{
-		if (!$token) {
-			return false;
-		}
-		file_put_contents('cache/searchindex/' . $token . '.json', json_encode($this->generateIndex($fsId, $token)));
-
-		return $token;
 	}
 }

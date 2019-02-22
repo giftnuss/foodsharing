@@ -40,12 +40,11 @@ class StoreControl extends Control
 	{
 		/* form methods below work with $g_data */
 		global $g_data;
-		$bezirk_id = $this->func->getGet('bid');
 
-		if (!isset($_GET['bid'])) {
-			$bezirk_id = $this->session->getCurrentBezirkId();
-		} else {
+		if (isset($_GET['bid'])) {
 			$bezirk_id = (int)$_GET['bid'];
+		} else {
+			$bezirk_id = $this->session->getCurrentBezirkId();
 		}
 
 		if (!$this->session->isOrgaTeam() && $bezirk_id == 0) {
@@ -167,6 +166,10 @@ class StoreControl extends Control
 
 			if (!isset($g_data['bezirk_id'])) {
 				$g_data['bezirk_id'] = $this->session->getCurrentBezirkId();
+			}
+			if (!in_array($g_data['bezirk_id'], $this->session->listRegionIDs())) {
+				$this->func->error($this->func->s('store.can_only_create_store_in_member_region'));
+				$this->func->goPage();
 			}
 
 			if (isset($g_data['ort'])) {

@@ -51,6 +51,13 @@
           <i class="fas fa-recycle" />Fair-Teiler
         </a>
         <a
+          :href="$url('members', region.id)"
+          role="menuitem"
+          class="dropdown-item dropdown-item-sub"
+        >
+          <i class="fas fa-user" />Mitglieder
+        </a>
+        <a
           :href="$url('events', region.id)"
           role="menuitem"
           class="dropdown-item dropdown-item-sub"

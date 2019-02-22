@@ -6,20 +6,6 @@ use Foodsharing\Lib\Db\Db;
 
 final class MessageModel extends Db
 {
-	public function getBetriebname($cid)
-	{
-		return $this->qOne('
-			SELECT name FROM fs_betrieb WHERE team_conversation_id = ' . $cid . ' OR springer_conversation_id = ' . $cid . '
-		');
-	}
-
-	public function getChatMembers($cid): array
-	{
-		return $this->qCol('
-			SELECT fs.name FROM fs_foodsaver_has_conversation fc, fs_foodsaver fs WHERE fs.id = fc.foodsaver_id AND fc.conversation_id = ' . $cid . ' AND fs.deleted_at IS NULL
-		');
-	}
-
 	public function user2conv($fsid)
 	{
 		return $this->addConversation(array($fsid => $fsid));
@@ -83,7 +69,7 @@ final class MessageModel extends Db
                   conversation_id
         
                 HAVING
-                  idstring = "' . implode(':', $recips) . '"
+                  idstring = "' . implode(':', array_map('intval', $recips)) . '"
 		    ';
 
 			if ($conv = $this->qRow($sql)) {
@@ -238,13 +224,13 @@ final class MessageModel extends Db
 	 * @param int $limit
 	 * @param int $offset
 	 *
-	 * @return array|bool
+	 * @return array
 	 */
 	public function listConversations(int $limit = -1, int $offset = 0)
 	{
 		$paginate = '';
 		if ($limit !== -1) {
-			$paginate = ' LIMIT ' . $offset . ',' . $limit;
+			$paginate = ' LIMIT ' . (int)$offset . ',' . (int)$limit;
 		}
 
 		if ($conversations = $this->q('
@@ -289,7 +275,7 @@ final class MessageModel extends Db
 			return $conversations;
 		}
 
-		return false;
+		return [];
 	}
 
 	/**
@@ -491,34 +477,6 @@ final class MessageModel extends Db
 		}
 
 		return false;
-	}
-
-	public function loadConversationMessages(int $conversation_id, int $limit = 20, int $offset = 0): array
-	{
-		return $this->q('
-			SELECT
-				m.id,
-				fs.`id` AS fs_id,
-				fs.name AS fs_name,
-				fs.photo AS fs_photo,
-				m.`body`,
-				m.`time`
-
-			FROM
-				`fs_msg` m,
-				`fs_foodsaver` fs
-
-			WHERE
-				m.foodsaver_id = fs.id
-
-			AND
-				m.conversation_id = ' . $conversation_id . '
-
-			ORDER BY
-				m.`time` DESC
-
-			LIMIT ' . $offset . ',' . $limit . '
-		');
 	}
 
 	public function mayConversation($conversation_id): bool

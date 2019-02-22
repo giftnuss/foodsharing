@@ -133,36 +133,11 @@ class FoodsaverView extends View
 
 	public function u_delete_account()
 	{
-		$this->func->addJs('
-		$("#delete-account-confirm").dialog({
-			autoOpen: false,
-			modal: true,
-			title: "' . $this->func->s('delete_account_confirm_title') . '",
-			buttons: {
-				"' . $this->func->s('abort') . '" : function(){
-					$("#delete-account-confirm").dialog("close");
-				},
-				"' . $this->func->s('delete_account_confirm_bt') . '" : function(){
-					goTo("/?page=foodsaver&a=edit&id=' . (int)$_GET['id'] . '&deleteaccount=1");
-				}
-			}
-		});
-
-		$("#delete-account").button().on("click", function(){
-			$("#delete-account-confirm").dialog("open");
-		});
-	');
 		$content = '
 	<div style="text-align:center;margin-bottom:10px;">
 		<span id="delete-account">' . $this->func->s('delete_now') . '</span>
 	</div>
-	' . $this->v_utils->v_info($this->func->s('posible_restore_account'), $this->func->s('reference'));
-
-		$this->func->addHidden('
-		<div id="delete-account-confirm">
-			' . $this->v_utils->v_info($this->func->s('delete_account_confirm_msg')) . '
-		</div>
-	');
+	';
 
 		return $this->v_utils->v_field($content, $this->func->s('delete_account'), array('class' => 'ui-padding'));
 	}

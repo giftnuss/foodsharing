@@ -2,9 +2,10 @@
   <div class="container bootstrap">
     <div class="card mb-3 rounded">
       <div class="card-header text-white bg-primary">
-        Alle Betriebe aus dem Bezirk {{ regionName }} (<span v-if="stores.length !== storesFiltered.length">
-          {{ storesFiltered.length }} von
-        </span>{{ stores.length }})
+        Alle Betriebe aus dem Bezirk {{ regionName }}
+        <span>
+          {{ $i18n('memberlist.some_in_all', {some: storesFiltered.length, all: stores.length}) }}
+        </span>
       </div>
       <div
         v-if="stores.length"
@@ -94,13 +95,12 @@
 </template>
 
 <script>
+import { optimizedCompare } from '@/utils'
 import bTable from '@b/components/table/table'
 import bPagination from '@b/components/pagination/pagination'
 import bFormSelect from '@b/components/form-select/form-select'
 import bTooltip from '@b/directives/tooltip/tooltip'
 import StoreStatusIcon from './StoreStatusIcon.vue'
-
-const noLocale = /^[\w-.\s,]*$/
 
 export default {
   components: { bTable, bPagination, bFormSelect, StoreStatusIcon },
@@ -151,21 +151,7 @@ export default {
         { value: 3, text: 'In Kooperation' },
         { value: 4, text: 'Will nicht kooperieren' },
         { value: 6, text: 'Wirft nichts weg' }
-      ],
-      compare (a, b, key) {
-        const elemA = a[key]
-        const elemB = b[key]
-        if (typeof elemA === 'number' || (noLocale.test(elemA) && noLocale.test(elemB))) {
-          if (typeof elemA === 'string') {
-            const a = elemA.toLowerCase()
-            const b = elemB.toLowerCase()
-            return (a > b ? 1 : (a === b ? 0 : -1))
-          }
-          return (elemA > elemB ? 1 : (elemA === elemB ? 0 : -1))
-        } else {
-          return elemA.localeCompare(elemB)
-        }
-      }
+      ]
     }
   },
   computed: {
@@ -185,6 +171,8 @@ export default {
     }
   },
   methods: {
+    compare: optimizedCompare,
+
     clearFilter () {
       this.filterStatus = null
       this.filterText = ''

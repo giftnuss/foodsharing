@@ -49,6 +49,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 					`fs_betrieb`.telefon,
 					`fs_betrieb`.email,
 					`fs_betrieb`.fax,
+					`fs_betrieb`.team_status,
 					`kette_id`
 
 		FROM 		`fs_betrieb`
@@ -823,6 +824,16 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			];
 
 			$this->bellGateway->updateBell($bell['id'], $newMessageData, false, false);
+		}
+	}
+
+	public function getStoreNameByConversationId(int $id): ?string
+	{
+		$store = $this->db->fetch('SELECT name FROM fs_betrieb WHERE team_conversation_id = ? OR springer_conversation_id = ?', [$id, $id]);
+		if ($store) {
+			return $store['name'];
+		} else {
+			return null;
 		}
 	}
 }

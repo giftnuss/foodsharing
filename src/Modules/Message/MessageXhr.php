@@ -6,20 +6,23 @@ use Foodsharing\Lib\WebSocketSender;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\PushNotification\PushNotificationGateway;
+use Foodsharing\Modules\Store\StoreGateway;
 
 final class MessageXhr extends Control
 {
+	private $messageGateway;
+	private $storeGateway;
 	/**
 	 * @var WebSocketSender
 	 */
 	private $webSocketSender;
-	private $messageGateway;
 	private $pushNotificationGateway;
 
 	public function __construct(
 		MessageModel $model,
 		MessageView $view,
 		MessageGateway $messageGateway,
+		StoreGateway $storeGateway,
 		WebSocketSender $webSocketSender,
 		PushNotificationGateway $pushNotificationGateway
 	)
@@ -27,6 +30,7 @@ final class MessageXhr extends Control
 		$this->model = $model;
 		$this->view = $view;
 		$this->messageGateway = $messageGateway;
+		$this->storeGateway = $storeGateway;
 		$this->webSocketSender = $webSocketSender;
 		$this->pushNotificationGateway = $pushNotificationGateway;
 
@@ -76,11 +80,12 @@ final class MessageXhr extends Control
 	 */
 	public function loadconversation(): void
 	{
-		if ($this->mayConversation((int)$_GET['id']) && $member = $this->model->listConversationMembers($_GET['id'])) {
+		$id = (int)$_GET['id'];
+		if ($this->mayConversation($id) && $member = $this->model->listConversationMembers($id)) {
 			$xhr = new Xhr();
 			$xhr->addData('member', $member);
-			$xhr->addData('conversation', $this->model->getValues(array('name'), 'conversation', $_GET['id']));
-			if ($msgs = $this->model->loadConversationMessages($_GET['id'])) {
+			$xhr->addData('conversation', $this->model->getValues(array('name'), 'conversation', $id));
+			if ($msgs = $this->messageGateway->getConversationMessages($id)) {
 				$xhr->addData('messages', $msgs);
 			}
 
@@ -161,7 +166,7 @@ final class MessageXhr extends Control
 								 * send an E-Mail if the user is not online
 								*/
 								if ($this->model->wantMsgEmailInfo($m['id'])) {
-									$this->convMessage($m, $_POST['c'], $body, $this->model);
+									$this->convMessage($m, $_POST['c'], $body, $this->messageGateway, $this->storeGateway);
 								}
 							}
 						}

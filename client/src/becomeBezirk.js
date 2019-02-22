@@ -103,4 +103,7 @@ export function u_printChildBezirke (element) {
   })
 }
 
-u_printChildBezirke({ value: '0:0' })
+$(() => {
+  // run later, otherwise CSRF-Header for $.ajax are not set yet
+  u_printChildBezirke({ value: '0:0' })
+})

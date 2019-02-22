@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Foodsaver;
 
+use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
 
 class FoodsaverGateway extends BaseGateway
@@ -40,7 +41,7 @@ class FoodsaverGateway extends BaseGateway
 		);
 	}
 
-	public function getFoodsaverDetails($fs_id)
+	public function getFoodsaverDetails($fs_id): array
 	{
 		return $this->db->fetchByCriteria(
 			'fs_foodsaver',
@@ -79,6 +80,7 @@ class FoodsaverGateway extends BaseGateway
 					fs.photo,
 					fs.geschlecht,
 					fs.stat_fetchweight,
+					fs.stat_fetchcount,
 					fs.sleep_status,
 					fs.id
 
@@ -548,6 +550,8 @@ class FoodsaverGateway extends BaseGateway
 
 	public function del_foodsaver($id)
 	{
+		$this->db->update('fs_foodsaver', ['password' => null, 'deleted_at' => $this->db->now()], ['id' => $id]);
+
 		$this->db->execute('
 			INSERT INTO fs_foodsaver_archive
 			(

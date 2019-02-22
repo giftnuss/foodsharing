@@ -132,36 +132,8 @@ const conv = {
       conv.maxbox(data.cid)
       conv.append(key, data)
       conv.scrollBottom(data.cid)
-    } else {
-      // following line got commented out, because it is part of the old topbar
-      // this whole file should get replaced with a vue store
-      // info.badgeInc('msg')
     }
     conversationStore.loadConversations()
-    // alert(key);
-
-    /*
-    if(data.msg_chat.chats != undefined && data.msg_chat.chats.length > 0)
-    {
-      var chats = data.msg_chat.chats;
-      var key = 0;
-
-      for(var i=0;i<chats.length;i++)
-      {
-        key = conv.getKey(chats[i].cid);
-
-        if(chats[i].msg != undefined && chats[i].msg.length > 0)
-        {
-          for(var x=0;x<chats[i].msg.length;x++)
-          {
-            conv.append(key,chats[i].msg[x]);
-          }
-          conv.maxbox(chats[i].cid);
-          conv.scrollBottom(chats[i].cid);
-        }
-      }
-    }
-    */
   },
 
   // minimize or maximize the chatbox
@@ -337,7 +309,7 @@ const conv = {
    */
   append: function (key, message) {
     conv.chatboxes[key].last_mid = parseInt(message.id)
-    conv.chatboxes[key].el.children(`.slimScrollDiv`).children(`.chatboxcontent`).append(`<div title="${message.time}" class="chatboxmessage"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.fs_id}"><img src="${conv.img(message.fs_photo + '', 'mini')}"></a></span><span class="chatboxmessagecontent">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><div style="clear:both;"></div></div>`)
+    conv.chatboxes[key].el.children(`.slimScrollDiv`).children(`.chatboxcontent`).append(`<div title="${message.time}" class="chatboxmessage"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.fs_id}"><img src="${conv.img(message.fs_photo, 'mini')}"></a></span><span class="chatboxmessagecontent">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><div style="clear:both;"></div></div>`)
   },
 
   /**

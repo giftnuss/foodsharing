@@ -8,7 +8,8 @@ use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Message\MessageModel;
+use Foodsharing\Modules\Message\MessageGateway;
+use Foodsharing\Modules\Store\StoreGateway;
 use ReflectionClass;
 
 abstract class Control
@@ -117,9 +118,9 @@ abstract class Control
 			$entry = 'Modules/' . $moduleName;
 			if (isset($manifest[$entry])) {
 				foreach ($manifest[$entry] as $asset) {
-					if ($this->func->endsWith($asset, '.js')) {
+					if (substr($asset, -3) === '.js') {
 						$this->func->addWebpackScript($asset);
-					} elseif ($this->func->endsWith($asset, '.css')) {
+					} elseif (substr($asset, -4) === '.css') {
 						$this->func->addWebpackStylesheet($asset);
 					}
 				}
@@ -423,7 +424,7 @@ abstract class Control
 		return false;
 	}
 
-	public function convMessage($recipient, $conversation_id, $msg, MessageModel $messageModel, $tpl_id = 9)
+	public function convMessage($recipient, $conversation_id, $msg, MessageGateway $messageGateway, StoreGateway $storeGateway, $tpl_id = 9)
 	{
 		/*
 		 * only send email if the user is not online
@@ -441,7 +442,7 @@ abstract class Control
 				if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
 					$sessdata[$recipient['id']] = time();
 
-					if ($betriebName = $messageModel->getBetriebname($conversation_id)) {
+					if ($betriebName = $storeGateway->getStoreNameByConversationId($conversation_id)) {
 						$this->func->tplMail(30, $recipient['email'], array(
 							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => $this->session->user('name'),
@@ -450,7 +451,7 @@ abstract class Control
 							'message' => $msg,
 							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
 						));
-					} elseif ($memberNames = $messageModel->getChatMembers($conversation_id)) {
+					} elseif ($memberNames = $messageGateway->getConversationMemberNames($conversation_id)) {
 						$this->func->tplMail(30, $recipient['email'], array(
 							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => $this->session->user('name'),

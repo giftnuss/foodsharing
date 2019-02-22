@@ -189,7 +189,6 @@ export function initialize () {
     })
     // $('.button').button();
     $('.dialog').dialog()
-    $('.v-switch').buttonset()
 
     $('ul.toolbar li').on('mouseenter', function () {
       $(this).addClass('ui-state-hover')
@@ -264,78 +263,6 @@ export function profile (id) {
   goTo(`/profile/${id}`)
 }
 
-export function quickprofile (id) {
-  showLoader()
-
-  $.ajax({
-    dataType: 'json',
-    url: `/xhrapp.php?app=profile&m=quickprofile&id=${id}`,
-    success: function (data) {
-      hideLoader()
-      if (data.status == 1) {
-        $('#tabs-profile').tabs('destroy')
-        $('#dialog-profile-info').dialog('destroy')
-        $('#u-profile').html(data.html)
-        $('#tabs-profile').tabs()
-
-        $('#dialog-profile-info').dialog({
-          closeOnEscape: false,
-          draggable: false,
-          resizable: false,
-          autoOpen: true,
-          modal: true,
-          width: 470,
-          open: function () {
-            $(this).find('.ui-dialog-titlebar-close').trigger('blur')
-          }
-        }).parent().find('.ui-dialog-titlebar-close').prependTo('#tabs-profile').closest('.ui-dialog').children('.ui-dialog-titlebar').remove()
-
-        $('#dialog-profile-info').css('padding', '0')
-        $('.ui-dialog-titlebar-close').css({
-          'position': 'absolute',
-          'right': '8px',
-          'top': '17px'
-        })
-        $('#tabs-profile').css({
-          'border': 'none',
-          'padding': '0'
-        })
-        $('.vouch-banana').tooltip({
-          position: {
-            my: 'center bottom-20',
-            at: 'center top',
-            using: function (position, feedback) {
-              $(this).css(position)
-              $('<div>')
-                .addClass('arrow')
-                .addClass(feedback.vertical)
-                .addClass(feedback.horizontal)
-                .appendTo(this)
-            }
-          }
-        })
-        $('#fsprofileratemsg').val('')
-
-        $('#tabs-profile').tabs('option', {
-          heightStyle: 'fill'
-        })
-        $('#tabs-profile .ui-tabs-panel:first').css('overflow', 'hidden')
-        $('.xvmoreinfo').slimScroll()
-
-        $('#dialog-profile-info').dialog('option', 'position', 'center')
-
-        if (data.script != undefined) {
-          $.globalEval(data.script)
-        }
-      } else {
-        error(data.msg)
-      }
-    },
-    complete: function () {
-      hideLoader()
-    }
-  })
-}
 export const ajax = {
   data: {},
   msg: function (msg) {
@@ -684,7 +611,7 @@ export function pictureCrop (id, img) {
     })
   } else {
     showLoader()
-    $(`#${id}-form`).attr('action', `xhr.php?f=pictureCrop&id=${id}&img=${img}`)
+    $(`#${id}-form`).attr('action', `/xhr.php?f=pictureCrop&id=${id}&img=${img}`)
     $(`#${id}-form`).trigger('submit')
   }
 }

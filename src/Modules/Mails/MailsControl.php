@@ -144,7 +144,7 @@ class MailsControl extends ConsoleControl
 						foreach ($msg->getAttachments() as $a) {
 							$filename = $a->getFilename();
 							if ($this->attach_allow($filename, null)) {
-								$new_filename = uniqid();
+								$new_filename = bin2hex(random_bytes(16));
 								$path = 'data/mailattach/';
 								$j = 0;
 								while (file_exists($path . $new_filename)) {
@@ -303,7 +303,17 @@ class MailsControl extends ConsoleControl
 	{
 		self::info('Mail from: ' . $data['from'][0] . ' (' . $data['from'][1] . ')');
 		$email = new fEmail();
-		$email->setFromEmail($data['from'][0], $data['from'][1]);
+
+		$mailParts = explode('@', $data['from'][0]);
+		$fromDomain = end($mailParts);
+		if (in_array($fromDomain, MAILBOX_OWN_DOMAINS, true)) {
+			$email->setFromEmail($data['from'][0], $data['from'][1]);
+		} else {
+			// use DEFAULT_EMAIL as sender and ReplyTo for the actual sender
+			$email->setFromEmail(DEFAULT_EMAIL, $data['from'][1]);
+			$email->setReplyToEmail($data['from'][0], $data['from'][1]);
+		}
+
 		$subject = preg_replace('/\s+/', ' ', trim($data['subject']));
 		$email->setSubject($subject);
 		$email->setHTMLBody($data['html']);

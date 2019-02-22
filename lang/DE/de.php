@@ -1,5 +1,7 @@
 <?php
 $g_lang = array();
+$g_lang['group.delete'] = 'Gruppe löschen';
+$g_lang['store.can_only_create_store_in_member_region'] = 'Du kannst Betriebe nur in Regionen anlegen, in denen Du Mitglied bist.';
 $g_lang['email_adress'] = 'E-Mail-Adresse';
 $g_lang['password'] = 'Passwort';
 $g_lang['login'] = 'Login';

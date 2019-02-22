@@ -127,34 +127,6 @@ class View
 		</div>';
 	}
 
-	public function fsIcons($foodsaver)
-	{
-		if (!empty($foodsaver)) {
-			$out = '<ul class="fsicons">';
-
-			if (count($foodsaver) > 100) {
-				shuffle($foodsaver);
-			}
-			$maxNumberOfAvatars = 54;
-			foreach ($foodsaver as $fs) {
-				--$maxNumberOfAvatars;
-				$out .= '
-				<li>
-					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->func->img($fs['photo']) . ');" href="/profile/' . (int)$fs['id'] . '"><span></span></a>	
-				</li>';
-				if ($maxNumberOfAvatars <= 0) {
-					$out .= '<li class="row">...und ' . (count($foodsaver) - 52) . ' weitere</li>';
-					break;
-				}
-			}
-			$out .= '</ul>';
-
-			return $out;
-		}
-
-		return '';
-	}
-
 	public function fsAvatarList($foodsaver, $option = array())
 	{
 		if (!is_array($foodsaver)) {
@@ -278,9 +250,8 @@ class View
 			tstring = ""+date.getYear() + ""+date.getMonth() + ""+date.getDate() + ""+date.getHours();
 			var localsource = [];
 			$.ajax({
-				url: "/cache/searchindex/' . $this->session->user('token') . '.json",
+				url: "/api/search/legacyindex",
 				dataType: "json",
-				data: {t:$.now()},
 				success: function(json){
 					
 					if(json.length > 0 && json[0] != undefined && json[0].key != undefined && json[0].key == "buddies")

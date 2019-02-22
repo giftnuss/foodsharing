@@ -356,7 +356,7 @@ const msg = {
       &nbsp;<div class="images">
         ${otherMembers.map(member => `
           <a title="${member.name}" href="/profile/${member.id}">
-            <img src="${img(member.photo, 'mini')}" width="22" alt="${member.name}" />
+            <img src="${img(member.avatar, 'mini')}" width="22" alt="${member.name}" />
           </a>
         `).join('')}  
       </div>
@@ -409,6 +409,8 @@ const msg = {
           }
 
           let position = $(`#msg-${lmid}`).position()
+
+          if (!position) return
 
           if (!msg.isMob()) {
             msg.$conversation.slimScroll({ scrollTo: `${position.top}px` })
