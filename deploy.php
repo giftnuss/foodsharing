@@ -44,7 +44,7 @@ task('deploy:create_revision', function () {
 });
 
 task('deploy:update_code', function () {
-    upload(__DIR__ . '/', '{{release_path}}', ['--exclude deployer']);
+    upload(__DIR__ . '/', '{{release_path}}', ['--exclude .git', '--exclude deployer', '--compress-level=9']);
 });
 
 desc('Deploy your project');
