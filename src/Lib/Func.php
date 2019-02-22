@@ -491,7 +491,13 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$plainBody = $this->sanitizerService->htmlToPlain($htmlBody);
 		$mail->setBody($plainBody);
 
-		$mail->addRecipient($to);
+		if(is_iterable($to)) {
+            foreach($to as $recipient) {
+                $mail->addRecipient($recipient);
+            }
+        } else {
+            $mail->addRecipient($to);
+        }
 		$mail->send();
 		$this->metrics->addPoint('outgoing_email', ['template' => $tpl_id], ['count' => 1]);
 	}
