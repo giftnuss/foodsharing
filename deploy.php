@@ -40,8 +40,7 @@ host('production')
 desc('Create the revision information');
 task('deploy:create_revision', function () {
 	$revision = input()->getOption('revision');
-	run('echo <?php > ' . get('release_path') . '/revision.inc.php');
-	run('echo define(\'SRC_REVISION\', \'' . $revision . '\'); >> ' . get('release_path') . '/revision.inc.php');
+	task('deploy:create_revision', './scripts/generate-revision.sh ' . $revision);
 });
 
 task('deploy:update_code', function () {
