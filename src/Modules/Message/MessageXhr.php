@@ -130,8 +130,8 @@ final class MessageXhr extends Control
 					/*
 					 * for not so db intensive polling store updates in memcache if the recipients are online
 					*/
-					if ($member = $this->model->listConversationMembers($_POST['c'])) {
-						$user_ids = array_column($member, 'id');
+					if ($members = $this->model->listConversationMembers($_POST['c'])) {
+						$user_ids = array_column($members, 'id');
 
 						$this->webSocketSender->sendSockMulti($user_ids, 'conv', 'push', array(
 							'id' => $message_id,
@@ -143,12 +143,18 @@ final class MessageXhr extends Control
 							'time' => date('Y-m-d H:i:s')
 						));
 
-						foreach ($user_ids as $user_id) {
-							$this->pushNotificationGateway->sendPushNotificationsToFoodsaver($user_id, 'title', $body);
-						}
-
-						foreach ($member as $m) {
+						foreach ($members as $m) {
 							if ($m['id'] != $this->session->id()) {
+
+								/*
+								 * send Push Notification
+								 */
+								$this->pushNotificationGateway->sendPushNotificationsToFoodsaver(
+									$m['id'],
+									'Jemand hat dir geschrieben',
+									['body' => $body]
+								);
+
 								$this->mem->userAppend($m['id'], 'msg-update', (int)$_POST['c']);
 
 								/*

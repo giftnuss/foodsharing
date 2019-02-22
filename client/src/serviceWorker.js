@@ -3,17 +3,12 @@ self.addEventListener('push', function (event) {
     return;
   }
 
-  const sendNotification = body => {
-    // you could refresh a notification badge here with postMessage API
-    const title = "Nachricht!";
-
-    return self.registration.showNotification(title, {
-      body,
-    });
+  const sendNotification = (title, options) => {
+    return self.registration.showNotification(title, options);
   };
 
   if (event.data) {
-    const message = event.data.text();
-    event.waitUntil(sendNotification(message));
+    const data = event.data.json();
+    event.waitUntil(sendNotification(data.title, data.options));
   }
 });
