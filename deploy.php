@@ -40,7 +40,8 @@ host('production')
 desc('Create the revision information');
 task('deploy:create_revision', function () {
 	$revision = input()->getOption('revision');
-	task('deploy:create_revision', './scripts/generate-revision.sh ' . $revision);
+	cd('{{release_path}}');
+	run("./scripts/generate-revision.sh $revision");
 });
 
 task('deploy:update_code', function () {
