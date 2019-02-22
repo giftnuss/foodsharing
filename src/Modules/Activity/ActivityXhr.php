@@ -18,6 +18,139 @@ class ActivityXhr extends Control
 		parent::__construct();
 	}
 
+	public function setOptionList(): void
+	{
+		if (isset($_GET['options'])) {
+			$options = array();
+			foreach ($_GET['options'] as $o) {
+				if ((int)$o['id'] > 0 && isset($o['index'], $o['id'])) {
+					$options[$o['index'] . '-' . $o['id']] = [
+						'index' => $o['index'],
+						'id' => $o['id']
+					];
+				}
+			}
+
+			if (empty($options)) {
+				$options = false;
+			}
+
+			$this->session->setOption('activity-listings', $options, $this->model);
+		}
+
+		if (isset($_GET['select_all_options'])) {
+			$this->session->setOption('activity-listings', false, $this->model);
+		}
+	}
+
+	public function getOptionList(): void
+	{
+		/*
+		 * get forum updates
+		 */
+
+		$xhr = new Xhr();
+
+		$listings = array(
+			'groups' => array(),
+			'regions' => array(),
+			'mailboxes' => array(),
+			'stores' => array(),
+			'buddywalls' => array()
+		);
+
+		$option = array();
+
+		if ($list = $this->session->option('activity-listings')) {
+			$option = $list;
+		}
+
+		/*
+			* listings regions
+		*/
+		if ($bezirke = $this->session->getRegions()) {
+			foreach ($bezirke as $b) {
+				$checked = true;
+				$regionId = 'bezirk-' . $b['id'];
+				if (isset($option[$regionId])) {
+					$checked = false;
+				}
+				$dat = [
+					'id' => $b['id'],
+					'name' => $b['name'],
+					'checked' => $checked
+				];
+				if ($b['type'] == Type::WORKING_GROUP) {
+					$listings['groups'][] = $dat;
+				} else {
+					$listings['regions'][] = $dat;
+				}
+			}
+		}
+
+		/*
+			* listings buddy walls
+			*/
+		if ($buddies = $this->model->getBuddies()) {
+			foreach ($buddies as $b) {
+				$checked = true;
+				$buddyWallId = 'buddywall-' . $b['id'];
+				if (isset($option[$buddyWallId])) {
+					$checked = false;
+				}
+				$listings['buddywalls'][] = [
+					'id' => $b['id'],
+					'imgUrl' => $this->func->img($b['photo']),
+					'name' => $b['name'],
+					'checked' => $checked
+				];
+			}
+		}
+
+		/*
+			* listings mailboxes
+		*/
+		if ($boxes = $this->mailboxModel->getBoxes()) {
+			foreach ($boxes as $b) {
+				$checked = true;
+				$mailboxId = 'mailbox-' . $b['id'];
+				if (isset($option[$mailboxId])) {
+					$checked = false;
+				}
+				$listings['mailboxes'][] = [
+					'id' => $b['id'],
+					'name' => $b['name'] . '@' . PLATFORM_MAILBOX_HOST,
+					'checked' => $checked
+				];
+			}
+		}
+
+		$xhr->addData('listings', [
+			0 => [
+				'name' => $this->func->s('groups'),
+				'index' => 'bezirk',
+				'items' => $listings['groups']
+			],
+			1 => [
+				'name' => $this->func->s('regions'),
+				'index' => 'bezirk',
+				'items' => $listings['regions']
+			],
+			2 => [
+				'name' => $this->func->s('mailboxes'),
+				'index' => 'mailbox',
+				'items' => $listings['mailboxes']
+			],
+			3 => [
+				'name' => $this->func->s('buddywalls'),
+				'index' => 'buddywall',
+				'items' => $listings['buddywalls']
+			],
+		]);
+
+		$xhr->send();
+	}
+
 	public function loadMore(): void
 	{
 		/*
@@ -67,32 +200,11 @@ class ActivityXhr extends Control
 
 	public function load(): void
 	{
-		/*
-		 * get forum updates
-		 */
-		if (isset($_GET['options'])) {
-			$options = array();
-			foreach ($_GET['options'] as $o) {
-				if ((int)$o['id'] > 0 && isset($o['index'], $o['id'])) {
-					$options[$o['index'] . '-' . $o['id']] = [
-						'index' => $o['index'],
-						'id' => $o['id']
-					];
-				}
-			}
-
-			if (empty($options)) {
-				$options = false;
-			}
-
-			$this->session->setOption('activity-listings', $options, $this->model);
+		if (isset($_GET['page'])){
+			$page = $_GET['page'];
+		} else {
+			$page = 0;
 		}
-
-		if (isset($_GET['select_all_options'])) {
-			$this->session->setOption('activity-listings', false, $this->model);
-		}
-
-		$page = 0;
 		$hidden_ids = array(
 			'bezirk' => array(),
 			'mailbox' => array(),
@@ -126,112 +238,6 @@ class ActivityXhr extends Control
 		}
 
 		$xhr->addData('updates', $updates);
-
-		$xhr->addData('user', [
-			'id' => $this->session->id(),
-			'name' => $this->session->user('name'),
-			'avatar' => $this->func->img($this->session->user('photo'))
-		]);
-
-		if (isset($_GET['listings'])) {
-			$listings = array(
-				'groups' => array(),
-				'regions' => array(),
-				'mailboxes' => array(),
-				'stores' => array(),
-				'buddywalls' => array()
-			);
-
-			$option = array();
-
-			if ($list = $this->session->option('activity-listings')) {
-				$option = $list;
-			}
-
-			/*
-			 * listings regions
-			*/
-			if ($bezirke = $this->session->getRegions()) {
-				foreach ($bezirke as $b) {
-					$checked = true;
-					$regionId = 'bezirk-' . $b['id'];
-					if (isset($option[$regionId])) {
-						$checked = false;
-					}
-					$dat = [
-						'id' => $b['id'],
-						'name' => $b['name'],
-						'checked' => $checked
-					];
-					if ($b['type'] == Type::WORKING_GROUP) {
-						$listings['groups'][] = $dat;
-					} else {
-						$listings['regions'][] = $dat;
-					}
-				}
-			}
-
-			/*
-			 * listings buddy walls
-			 */
-			if ($buddies = $this->model->getBuddies()) {
-				foreach ($buddies as $b) {
-					$checked = true;
-					$buddyWallId = 'buddywall-' . $b['id'];
-					if (isset($option[$buddyWallId])) {
-						$checked = false;
-					}
-					$listings['buddywalls'][] = [
-						'id' => $b['id'],
-						'imgUrl' => $this->func->img($b['photo']),
-						'name' => $b['name'],
-						'checked' => $checked
-					];
-				}
-			}
-
-			/*
-			 * listings mailboxes
-			*/
-			if ($boxes = $this->mailboxModel->getBoxes()) {
-				foreach ($boxes as $b) {
-					$checked = true;
-					$mailboxId = 'mailbox-' . $b['id'];
-					if (isset($option[$mailboxId])) {
-						$checked = false;
-					}
-					$listings['mailboxes'][] = [
-						'id' => $b['id'],
-						'name' => $b['name'] . '@' . PLATFORM_MAILBOX_HOST,
-						'checked' => $checked
-					];
-				}
-			}
-
-			$xhr->addData('listings', [
-				0 => [
-					'name' => $this->func->s('groups'),
-					'index' => 'bezirk',
-					'items' => $listings['groups']
-				],
-				1 => [
-					'name' => $this->func->s('regions'),
-					'index' => 'bezirk',
-					'items' => $listings['regions']
-				],
-				2 => [
-					'name' => $this->func->s('mailboxes'),
-					'index' => 'mailbox',
-					'items' => $listings['mailboxes']
-				],
-				3 => [
-					'name' => $this->func->s('buddywalls'),
-					'index' => 'buddywall',
-					'items' => $listings['buddywalls']
-				],
-			]);
-		}
-
 		$xhr->send();
 	}
 }

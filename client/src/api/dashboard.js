@@ -1,15 +1,11 @@
 import { get, post } from './base'
 
 export async function getUpdates (pagenumber) {
-  if (pagenumber === 0) {
-    return (await get(`/../xhrapp.php?app=activity&m=load&listings=1`)).data.updates
-  } else {
-    return (await get(`/../xhrapp.php?app=activity&m=loadmore&page=${pagenumber}`)).data.updates
-  }
+  return (await get(`/../xhrapp.php?app=activity&m=load&page=${pagenumber}`)).data.updates
 }
 
 export async function getOptionListings () {
-  return (await get(`/../xhrapp.php?app=activity&m=load&listings=1`)).data.listings
+  return (await get(`/../xhrapp.php?app=activity&m=getoptionlist`)).data.listings
 }
 
 export async function saveOptionListings (options) {
@@ -26,7 +22,7 @@ export async function saveOptionListings (options) {
   if (optionsString === '') {
     optionsString = '&select_all_options=true'
   }
-  return get(`/../xhrapp.php?app=activity&m=load${optionsString}`)
+  return get(`/../xhrapp.php?app=activity&m=setoptionlist${optionsString}`)
 }
 
 export async function sendQuickreply (href, msg) {

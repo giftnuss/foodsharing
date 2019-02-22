@@ -45,14 +45,15 @@ export default {
     }
   },
   async created () {
-    this.updates = await getUpdates(0)
+    this.page = 0
+    this.updates = await getUpdates(this.page)
     this.updates.sort((a, b) => {
       return b.data.time_ts - a.data.time_ts
     })
   },
   methods: {
     async infiniteHandler ($state) {
-      var res = await getUpdates(0)
+      var res = await getUpdates(this.page)
       if (res.length) {
         this.page += 1
         res.sort((a, b) => {
@@ -65,7 +66,8 @@ export default {
       }
     },
     async reloadData () {
-      this.updates = await getUpdates(0)
+      this.page = 0
+      this.updates = await getUpdates(this.page)
       this.updates.sort((a, b) => {
         return b.data.time_ts - a.data.time_ts
       })
