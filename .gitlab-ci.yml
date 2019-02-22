@@ -86,11 +86,11 @@ build:backend:
   cache:
     key: backend:build:v1
     paths:
-      - vendor
+    - vendor
   artifacts:
     expire_in: 1 week
     paths:
-      - vendor
+    - vendor
   except:
   - schedules
 
@@ -166,9 +166,9 @@ deploy:production:
     name: production
     url: https://foodsharing.de
   only:
-    - production
+  - production
   except:
-    - schedules
+  - schedules
 
 deploy:docs:
   <<: *defaults
