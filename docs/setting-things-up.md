@@ -40,6 +40,8 @@ PHPMyAdmin is also included: [localhost:18081](http://localhost:18081). Log in w
 There you can directly look at and manipulate the data in the database
 which can be necessary or very useful for manual testing and troubleshouting.
 
+MailDev is also included: [localhost:18084](localhost:18084). There you can read all e-mails that you write via the front end.
+
 ## php Code style
 
 We use php-cs-fixer to format the code style. The aim is to make it use the same style as phpstorm does by default.
