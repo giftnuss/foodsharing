@@ -93,7 +93,7 @@ class WorkGroupXhr extends Control
 	}
 
 	/*
-	 * CONTACT GROUP BY E-MAIL
+	 * CONTACT GROUP VIA EMAIL
 	 */
 	public function sendtogroup()
 	{

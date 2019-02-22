@@ -3,7 +3,7 @@
 ## Major changes
 
 ## Features
-- Messages to work groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
+- Messages to working groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
