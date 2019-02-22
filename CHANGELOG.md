@@ -5,11 +5,14 @@
 ## Features
 
 ## Bugfixes
+- Orga can delete quizzes #364 !767 @k.miklobusec
 
 ## Refactoring
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
 
 ## Dev/Test/CI stuff
+- Use CI built assets and vendor for deployment !768 @NerdyProjects
+- Use php-cs-fixer, parallel-lint and phpstan in CI build:lint step !775 @NerdyProjects
 
 # 2019-02-21
 
