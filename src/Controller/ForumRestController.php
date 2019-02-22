@@ -8,11 +8,11 @@ use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Services\ForumService;
 use Foodsharing\Services\SanitizerService;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class ForumRestController extends FOSRestController
+class ForumRestController extends AbstractFOSRestController
 {
 	private $session;
 	private $forumGateway;
@@ -49,10 +49,10 @@ class ForumRestController extends FOSRestController
 		if (isset($thread['post_time'])) {
 			$res['lastPost']['createdAt'] = str_replace(' ', 'T', $thread['post_time']);
 			$res['lastPost']['body'] = $this->sanitizerService->markdownToHtml($thread['post_body']);
-			$res['lastPost']['author'] = RestNormalization::normalizeFoodsaver($thread, 'foodsaver_', '130_q_');
+			$res['lastPost']['author'] = RestNormalization::normalizeFoodsaver($thread, 'foodsaver_');
 		}
 		if (isset($thread['creator_name'])) {
-			$res['creator'] = RestNormalization::normalizeFoodsaver($thread, 'creator_', '130_q_');
+			$res['creator'] = RestNormalization::normalizeFoodsaver($thread, 'creator_');
 		}
 
 		return $res;
@@ -64,7 +64,7 @@ class ForumRestController extends FOSRestController
 			'id' => $post['id'],
 			'body' => $this->sanitizerService->markdownToHtml($post['body']),
 			'createdAt' => str_replace(' ', 'T', $post['time']),
-			'author' => RestNormalization::normalizeFoodsaver($post, 'author_', '130_q_'),
+			'author' => RestNormalization::normalizeFoodsaver($post, 'author_'),
 			'reactions' => $post['reactions'] ?: new \ArrayObject(),
 			'mayDelete' => $this->forumPermissions->mayDeletePost($post)
 		];

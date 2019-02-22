@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Foodsaver;
 
+use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
 
 class FoodsaverGateway extends BaseGateway
@@ -79,6 +80,7 @@ class FoodsaverGateway extends BaseGateway
 					fs.photo,
 					fs.geschlecht,
 					fs.stat_fetchweight,
+					fs.stat_fetchcount,
 					fs.sleep_status,
 					fs.id
 

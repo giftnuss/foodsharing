@@ -21,6 +21,8 @@ use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Permissions\RegionPermissions;
+use Foodsharing\Permissions\StorePermissions;
+use Foodsharing\Services\SanitizerService;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,6 +40,7 @@ class XhrMethods
 	private $messageModel;
 	private $regionGateway;
 	private $regionPermissions;
+	private $storePermissions;
 	private $forumGateway;
 	private $bellGateway;
 	private $storeGateway;
@@ -45,6 +48,7 @@ class XhrMethods
 	private $emailGateway;
 	private $mailboxGateway;
 	private $imageManager;
+	private $sanitizerService;
 
 	/**
 	 * XhrMethods constructor.
@@ -66,11 +70,13 @@ class XhrMethods
 		ForumGateway $forumGateway,
 		BellGateway $bellGateway,
 		StoreGateway $storeGateway,
+		StorePermissions $storePermissions,
 		FoodsaverGateway $foodsaverGateway,
 		EmailGateway $emailGateway,
 		MailboxGateway $mailboxGateway,
-		ImageManager $imageManager)
-	{
+		ImageManager $imageManager,
+		SanitizerService $sanitizerService
+	) {
 		$this->func = $func;
 		$this->mem = $mem;
 		$this->session = $session;
@@ -85,17 +91,19 @@ class XhrMethods
 		$this->forumGateway = $forumGateway;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
+		$this->storePermissions = $storePermissions;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->emailGateway = $emailGateway;
 		$this->mailboxGateway = $mailboxGateway;
 		$this->imageManager = $imageManager;
+		$this->sanitizerService = $sanitizerService;
 	}
 
 	public function xhr_verify($data)
 	{
 		$bids = $this->regionGateway->getFsRegionIds((int)$data['fid']);
 
-		if ($this->func->isBotForA($bids, false, true) || $this->session->isOrgaTeam()) {
+		if ($this->session->isBotForA($bids, false, true) || $this->session->isOrgaTeam()) {
 			if ($countver = $this->model->qOne('SELECT COUNT(*) FROM fs_verify_history WHERE date BETWEEN NOW()- INTERVAL 20 SECOND AND now() AND bot_id = ' . $this->session->id())) {
 				if ($countver > 10) {
 					return json_encode(array(
@@ -150,8 +158,8 @@ class XhrMethods
 
 	public function xhr_getPinPost($data)
 	{
-		$this->func->incLang('Store');
-		$this->func->incLang('StoreUser');
+		$this->incLang('Store');
+		$this->incLang('StoreUser');
 
 		if ($this->storeGateway->isInTeam($this->session->id(), $data['bid']) || $this->session->isAmbassador() || $this->session->isOrgaTeam()) {
 			if ($out = $this->model->q('
@@ -191,7 +199,7 @@ class XhrMethods
 
 					$msg = '<span class="msg">' . nl2br($o['text']) . '</span>
 						<div class="foot">
-							<span class="time">' . $this->func->format_dt($o['zeit']) . ' von ' . $o['name'] . '</span>' . $delete . '
+							<span class="time">' . $this->format_dt($o['zeit']) . ' von ' . $o['name'] . '</span>' . $delete . '
 						</div>';
 
 					if ($o['milestone'] == 1) {
@@ -199,7 +207,7 @@ class XhrMethods
 
 						$msg = '
 					<div class="milestone">
-						<a href="/profile/"' . (int)$o['fsid'] . '">' . $o['name'] . '</a> ' . $this->func->sv('betrieb_added', $this->func->format_d($o['zeit'])) . '
+						<a href="/profile/"' . (int)$o['fsid'] . '">' . $o['name'] . '</a> ' . $this->func->sv('betrieb_added', date('d.m.Y', $o['zeit'])) . '
 					</div>';
 
 						$pic = 'img/milestone.png';
@@ -209,7 +217,7 @@ class XhrMethods
 					} elseif ($o['milestone'] == 3) {
 						$odd .= ' milestone';
 						$pic = 'img/milestone.png';
-						$msg = '<span class="msg"><strong>' . $this->func->sv('status_change_at', $this->func->format_d($o['zeit'])) . '</strong> ' . $this->func->s($o['text']) . '</span>';
+						$msg = '<span class="msg"><strong>' . $this->func->sv('status_change_at', date('d.m.Y', $o['zeit'])) . '</strong> ' . $this->func->s($o['text']) . '</span>';
 					} elseif ($o['milestone'] == 5) {
 						$odd .= ' milestone';
 						$msg = '<span class="msg">' . $this->func->sv('quiz_dropped', '<a href="/profile/' . (int)$o['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $o['fsid']) . '</a>') . '</span>';
@@ -234,13 +242,18 @@ class XhrMethods
 		));
 	}
 
+	private function format_dt($ts)
+	{
+		return date('d.m.Y H:i', $ts) . ' Uhr';
+	}
+
 	public function xhr_activeSwitch($data)
 	{
 		$allowed = array(
 			'blog_entry' => true
 		);
 
-		if ($this->func->may()) {
+		if ($this->session->mayLegacy()) {
 			if (isset($allowed[$data['t']])) {
 				if ($this->model->update('UPDATE `fs_' . $data['t'] . '` SET `active` = ' . (int)$data['value'] . ' WHERE `id` = ' . (int)$data['id'])) {
 					return 1;
@@ -265,33 +278,36 @@ class XhrMethods
 
 	public function xhr_addPinPost($data)
 	{
-		if ($this->storeGateway->isInTeam($this->session->id(), $data['bid']) || $this->session->isOrgaTeam() || $this->session->isAmbassador()) {
-			if (isset($_SESSION['last_pinPost'])) {
-				if ((time() - $_SESSION['last_pinPost']) < 2) {
-					return $this->xhr_getPinPost($data);
-				}
-			}
-			if ($this->storeGateway->add_betrieb_notiz(array(
-				'foodsaver_id' => $this->session->id(),
-				'betrieb_id' => $data['bid'],
-				'text' => $data['text'],
-				'zeit' => date('Y-m-d H:i:s'),
-				'milestone' => 0,
-				'last' => 1
-			))
-			) {
-				$betrieb = $this->model->getVal('name', 'betrieb', (int)$data['bid']);
+		$storeId = (int)$data['bid'];
+		if (!$this->storePermissions->mayAccessStore($storeId)) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 
-				$this->bellGateway->addBell($data['team'], 'store_wallpost_title', 'store_wallpost', 'img img-store brown', array(
-					'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
-				), array(
-					'user' => $this->session->user('name'),
-					'name' => $betrieb
-				), 'store-wallpost-' . (int)$data['bid']);
-				$_SESSION['last_pinPost'] = time();
-
+		if (isset($_SESSION['last_pinPost'])) {
+			if ((time() - $_SESSION['last_pinPost']) < 2) {
 				return $this->xhr_getPinPost($data);
 			}
+		}
+		if ($this->storeGateway->add_betrieb_notiz(array(
+			'foodsaver_id' => $this->session->id(),
+			'betrieb_id' => $storeId,
+			'text' => $data['text'],
+			'zeit' => date('Y-m-d H:i:s'),
+			'milestone' => 0,
+			'last' => 1
+		))
+		) {
+			$betrieb = $this->model->getVal('name', 'betrieb', $storeId);
+
+			$this->bellGateway->addBell($data['team'], 'store_wallpost_title', 'store_wallpost', 'img img-store brown', array(
+				'href' => '/?page=fsbetrieb&id=' . $storeId
+			), array(
+				'user' => $this->session->user('name'),
+				'name' => $betrieb
+			), 'store-wallpost-' . $storeId);
+			$_SESSION['last_pinPost'] = time();
+
+			return $this->xhr_getPinPost($data);
 		}
 	}
 
@@ -477,7 +493,7 @@ class XhrMethods
 		$id = strtolower($data['id']);
 		$id = preg_replace('/[^a-z0-9_]/', '', $id);
 		if (isset($_FILES['uploadpic'])) {
-			if ($this->func->is_allowed($_FILES['uploadpic'])) {
+			if ($this->is_allowed($_FILES['uploadpic'])) {
 				$datein = str_replace('.jpeg', '.jpg', strtolower($_FILES['uploadpic']['name']));
 				$ext = strtolower(substr($datein, strlen($datein) - 4, 4));
 
@@ -585,8 +601,6 @@ class XhrMethods
 
 	public function xhr_pictureCrop($data)
 	{
-		$data['img'];
-		$data['id'];
 		/*
 		 * [ratio-val] => [{"x":37,"y":87,"w":500,"h":281},{"x":64,"y":0,"w":450,"h":450}]
 		  [resize] => [250,528]
@@ -595,14 +609,22 @@ class XhrMethods
 		$ratio = json_decode($_POST['ratio-val'], true);
 		$resize = json_decode($_POST['resize']);
 
-		if (is_array($ratio) && is_array($resize)) {
+		// prevent path traversal
+		$data['id'] = preg_replace('/[^a-z0-9\-_]/', '', $data['id']);
+		$data['img'] = preg_replace('/[^a-z0-9\-_\.]/', '', $data['img']);
+
+		if (is_array($ratio) && is_array($resize) && count($resize) < 5) {
 			foreach ($ratio as $i => $r) {
-				$this->func->cropImg(ROOT_DIR . 'images/' . $data['id'], $data['img'], $i, $r['x'], $r['y'], $r['w'], $r['h']);
+				$i = preg_replace('/%/', '', $i);
+				$i = preg_replace('/\.+/', '.', $i);
+				$this->cropImg(ROOT_DIR . 'images/' . $data['id'], $data['img'], $i, $r['x'], $r['y'], $r['w'], $r['h']);
 				foreach ($resize as $r) {
-					copy(ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $data['img'], ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $r . '_' . $data['img']);
-					$image = new fImage(ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $r . '_' . $data['img']);
-					$image->resize($r, 0);
-					$image->saveChanges();
+					if ($r < 1000) {
+						copy(ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $data['img'], ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $r . '_' . $data['img']);
+						$image = new fImage(ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $r . '_' . $data['img']);
+						$image->resize($r, 0);
+						$image->saveChanges();
+					}
 				}
 			}
 
@@ -615,18 +637,74 @@ class XhrMethods
 		}
 	}
 
+	private function cropImg($path, $img, int $i, int $x, int $y, int $w, int $h)
+	{
+		if ($w > 2000) {
+			$w = 2000;
+		}
+		if ($h > 2000) {
+			$h = 2000;
+		}
+
+		$targ_w = $w;
+		$targ_h = $h;
+		$jpeg_quality = 100;
+
+		$ext = explode('.', $img);
+		$ext = end($ext);
+		$ext = strtolower($ext);
+
+		switch ($ext) {
+			case 'gif':
+				$img_r = imagecreatefromgif($path . '/' . $img);
+				break;
+			case 'jpg':
+				$img_r = imagecreatefromjpeg($path . '/' . $img);
+				break;
+			case 'png':
+				$img_r = imagecreatefrompng($path . '/' . $img);
+				break;
+			default:
+				$img_r = null;
+		}
+
+		$dst_r = imagecreatetruecolor($targ_w, $targ_h);
+
+		imagecopyresampled($dst_r, $img_r, 0, 0, $x, $y, $targ_w, $targ_h, $w, $h);
+
+		$new_path = $path . '/crop_' . $i . '_' . $img;
+
+		@unlink($new_path);
+
+		switch ($ext) {
+			case 'gif':
+				imagegif($dst_r, $new_path);
+				break;
+			case 'jpg':
+				imagejpeg($dst_r, $new_path, $jpeg_quality);
+				break;
+			case 'png':
+				imagepng($dst_r, $new_path, 0);
+				break;
+		}
+	}
+
 	private function pictureResize($data)
 	{
-		$id = $data['id'];
-		$img = $data['img'];
+		$id = preg_replace('/[^a-z0-9\-_]/', '', $data['id']);
+		$img = preg_replace('/[^a-z0-9\-_\.]/', '', $data['img']);
+
 		$resize = json_decode($data['resize'], true);
 
-		if (is_array($resize)) {
+		if (is_array($resize) && count($resize) < 5) {
 			foreach ($resize as $r) {
-				copy(ROOT_DIR . 'images/' . $id . '/' . $img, ROOT_DIR . 'images/' . $id . '/' . $r . '_' . $img);
-				$image = new fImage(ROOT_DIR . 'images/' . $id . '/' . $r . '_' . $img);
-				$image->resize($r, 0);
-				$image->saveChanges();
+				if ($r < 1000) {
+					$r = (int)$r;
+					copy(ROOT_DIR . 'images/' . $id . '/' . $img, ROOT_DIR . 'images/' . $id . '/' . $r . '_' . $img);
+					$image = new fImage(ROOT_DIR . 'images/' . $id . '/' . $r . '_' . $img);
+					$image->resize($r, 0);
+					$image->saveChanges();
+				}
 			}
 		}
 
@@ -648,7 +726,7 @@ class XhrMethods
 
 	public function xhr_getRecip($data)
 	{
-		if ($this->func->may()) {
+		if ($this->session->mayLegacy()) {
 			$fs = $this->foodsaverGateway->xhrGetFoodsaver($data);
 
 			return json_encode($fs);
@@ -657,6 +735,10 @@ class XhrMethods
 
 	public function xhr_addPhoto($data)
 	{
+		if (!$this->session->id()) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+
 		$data = $this->func->getPostData();
 
 		if (isset($data['fs_id'])) {
@@ -668,7 +750,7 @@ class XhrMethods
 
 				@unlink('./images/' . $user_id . '.' . $ext);
 
-				$file = $this->func->makeUnique() . '.' . $ext;
+				$file = $this->makeUnique() . '.' . $ext;
 				if (move_uploaded_file($_FILES['photo']['tmp_name'], './images/' . $file)) {
 					$image = new fImage('./images/' . $file);
 					$image->resize(800, 800);
@@ -708,6 +790,11 @@ class XhrMethods
 				}
 			}
 		}
+	}
+
+	private function makeUnique()
+	{
+		return md5(date('Y-m-d H:i:s') . ':' . uniqid());
 	}
 
 	public function xhr_continueMail($data)
@@ -788,13 +875,17 @@ class XhrMethods
 			if (isset($_FILES['uploadpic'])) {
 				$error = 0;
 				$datei = $_FILES['uploadpic']['tmp_name'];
+				// prevent path traversal
+				$datei = preg_replace('/%/', '', $datei);
+				$datei = preg_replace('/\.+/', '.', $datei);
+
 				$datein = $_FILES['uploadpic']['name'];
 				$datein = strtolower($datein);
 				$datein = str_replace('.jpeg', '.jpg', $datein);
 				$dateiendung = strtolower(substr($datein, strlen($datein) - 4, 4));
-				if ($this->func->is_allowed($_FILES['uploadpic'])) {
+				if ($this->is_allowed($_FILES['uploadpic'])) {
 					try {
-						$file = $this->func->makeUnique() . $dateiendung;
+						$file = $this->makeUnique() . $dateiendung;
 						move_uploaded_file($datei, './tmp/' . $file);
 						$image = new fImage('./tmp/' . $file);
 						$image->resize(550, 0);
@@ -810,7 +901,8 @@ class XhrMethods
 			}
 		} elseif (isset($_POST['action']) && $_POST['action'] == 'crop') {
 			$file = str_replace('/', '', $_POST['file']);
-			if ($img = $this->func->cropImage($file, $_POST['x'], $_POST['y'], $_POST['w'], $_POST['h'])) {
+
+			if ($img = $this->cropImage($file, $_POST['x'], $_POST['y'], $_POST['w'], $_POST['h'])) {
 				$id = strip_tags($_POST['pic_id']);
 
 				@unlink('images/' . $file);
@@ -825,7 +917,7 @@ class XhrMethods
 				@unlink('tmp/crop_' . $file);
 				@unlink('tmp/thumb_crop_' . $file);
 
-				$this->func->makeThumbs($file);
+				$this->makeThumbs($file);
 
 				$this->foodsaverGateway->updatePhoto($this->session->id(), $file);
 
@@ -838,6 +930,116 @@ class XhrMethods
 		echo '<html>
 	<head><title>Upload</title></head><body onload="' . $func . '"></body>
 	</html>';
+	}
+
+	private function is_allowed($img)
+	{
+		$img['name'] = strtolower($img['name']);
+		$img['type'] = strtolower($img['type']);
+
+		$allowed = array('jpg' => true, 'jpeg' => true, 'png' => true, 'gif' => true);
+
+		$filename = $img['name'];
+		$parts = explode('.', $filename);
+		$ext = end($parts);
+
+		$allowed_mime = array('image/gif' => true, 'image/jpeg' => true, 'image/png' => true);
+
+		if (isset($allowed[$ext])) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private function cropImage($bild, $x, $y, $w, $h)
+	{
+		if ($w > 2000 || $h > 2000) {
+			return false;
+		}
+
+		$targ_w = 467;
+		$targ_h = 600;
+		$jpeg_quality = 100;
+
+		$ext = explode('.', $bild);
+		$ext = end($ext);
+		$ext = strtolower($ext);
+
+		$img_r = null;
+
+		switch ($ext) {
+			case 'gif':
+				$img_r = imagecreatefromgif('./tmp/' . $bild);
+				break;
+			case 'jpg':
+				$img_r = imagecreatefromjpeg('./tmp/' . $bild);
+				break;
+			case 'png':
+				$img_r = imagecreatefrompng('./tmp/' . $bild);
+				break;
+		}
+
+		if ($img_r === null) {
+			return false;
+		}
+
+		$dst_r = imagecreatetruecolor($targ_w, $targ_h);
+
+		imagecopyresampled($dst_r, $img_r, 0, 0, $x, $y, $targ_w, $targ_h, $w, $h);
+
+		@unlink('../tmp/crop_' . $bild);
+
+		switch ($ext) {
+			case 'gif':
+				imagegif($dst_r, './tmp/crop_' . $bild);
+				break;
+			case 'jpg':
+				imagejpeg($dst_r, './tmp/crop_' . $bild, $jpeg_quality);
+				break;
+			case 'png':
+				imagepng($dst_r, './tmp/crop_' . $bild, 0);
+				break;
+		}
+
+		if (file_exists('./tmp/crop_' . $bild)) {
+			try {
+				copy('./tmp/crop_' . $bild, './tmp/thumb_crop_' . $bild);
+				$img = new fImage('./tmp/thumb_crop_' . $bild);
+				$img->resize(200, 0);
+				$img->saveChanges();
+
+				return 'thumb_crop_' . $bild;
+			} catch (Exception $e) {
+				return false;
+			}
+		}
+
+		return false;
+	}
+
+	private function makeThumbs($pic)
+	{
+		if (!file_exists(ROOT_DIR . 'images/mini_q_' . $pic) && file_exists(ROOT_DIR . 'images/' . $pic)) {
+			copy(ROOT_DIR . 'images/' . $pic, ROOT_DIR . 'images/mini_q_' . $pic);
+			copy(ROOT_DIR . 'images/' . $pic, ROOT_DIR . 'images/med_q_' . $pic);
+			copy(ROOT_DIR . 'images/' . $pic, ROOT_DIR . 'images/q_' . $pic);
+
+			$image = new fImage(ROOT_DIR . 'images/mini_q_' . $pic);
+			$image->cropToRatio(1, 1);
+			$image->resize(35, 35);
+			$image->saveChanges();
+
+			$image = new fImage(ROOT_DIR . 'images/med_q_' . $pic);
+			$image->cropToRatio(1, 1);
+			$image->resize(75, 75);
+			$image->saveChanges();
+
+			$image = new fImage(ROOT_DIR . 'images/q_' . $pic);
+			$image->cropToRatio(1, 1);
+			$image->resize(150, 150);
+			$image->saveChanges();
+		}
 	}
 
 	public function xhr_update_newbezirk($data)
@@ -864,39 +1066,41 @@ class XhrMethods
 
 	public function xhr_update_abholen($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid']) || $this->session->isAmbassador()) {
-			$this->model->del('DELETE FROM 	`fs_abholzeiten` WHERE `betrieb_id` = ' . (int)$data['bid']);
-
-			if (is_array($data['newfetchtime'])) {
-				for ($i = 0; $i < (count($data['newfetchtime']) - 1); ++$i) {
-					$this->model->sql('
-				REPLACE INTO 	`fs_abholzeiten`
-				(
-						`betrieb_id`,
-						`dow`,
-						`time`,
-						`fetcher`
-				)
-				VALUES
-				(
-					' . (int)$data['bid'] . ',
-					' . (int)$data['newfetchtime'][$i] . ',
-					' . $this->model->strval($this->func->preZero($data['nfttime']['hour'][$i]) . ':' . $this->func->preZero($data['nfttime']['min'][$i]) . ':00') . ',
-					' . (int)$data['nft-count'][$i] . '
-				)
-			');
-				}
-			}
-			$betrieb = $this->model->getVal('name', 'betrieb', $data['bid']);
-			$this->bellGateway->addBell($data['team'], 'store_cr_times_title', 'store_cr_times', 'img img-store brown', array(
-				'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
-			), array(
-				'user' => $this->session->user('name'),
-				'name' => $betrieb
-			), 'store-time-' . (int)$data['bid']);
-
-			return json_encode(array('status' => 1));
+		if (!$this->storePermissions->mayEditPickups($data['bid'])) {
+			return XhrResponses::PERMISSION_DENIED;
 		}
+
+		$this->model->del('DELETE FROM 	`fs_abholzeiten` WHERE `betrieb_id` = ' . (int)$data['bid']);
+
+		if (is_array($data['newfetchtime'])) {
+			for ($i = 0; $i < (count($data['newfetchtime']) - 1); ++$i) {
+				$this->model->sql('
+			REPLACE INTO 	`fs_abholzeiten`
+			(
+					`betrieb_id`,
+					`dow`,
+					`time`,
+					`fetcher`
+			)
+			VALUES
+			(
+				' . (int)$data['bid'] . ',
+				' . (int)$data['newfetchtime'][$i] . ',
+				' . $this->model->strval($this->func->preZero($data['nfttime']['hour'][$i]) . ':' . $this->func->preZero($data['nfttime']['min'][$i]) . ':00') . ',
+				' . (int)$data['nft-count'][$i] . '
+			)
+		');
+			}
+		}
+		$betrieb = $this->model->getVal('name', 'betrieb', $data['bid']);
+		$this->bellGateway->addBell($data['team'], 'store_cr_times_title', 'store_cr_times', 'img img-store brown', array(
+			'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
+		), array(
+			'user' => $this->session->user('name'),
+			'name' => $betrieb
+		), 'store-time-' . (int)$data['bid']);
+
+		return json_encode(array('status' => 1));
 	}
 
 	public function xhr_bezirkTree($data)
@@ -942,7 +1146,9 @@ class XhrMethods
 	public function xhr_getBezirk($data)
 	{
 		global $g_data;
-
+		if (!$this->session->may('orga')) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		$g_data = $this->regionGateway->getOne_bezirk($data['id']);
 
 		$g_data['mailbox_name'] = '';
@@ -1055,7 +1261,7 @@ class XhrMethods
 				$img = '';
 				if ($b['kette_id'] != 0) {
 					if ($img = $this->model->getVal('logo', 'kette', $b['kette_id'])) {
-						$img = '<a href="/?page=betrieb&id=' . (int)$b['id'] . '"><img style="float:right;margin-left:10px;" src="' . $this->func->idimg($img, 100) . '" /></a>';
+						$img = '<a href="/?page=betrieb&id=' . (int)$b['id'] . '"><img style="float:right;margin-left:10px;" src="' . $this->idimg($img, 100) . '" /></a>';
 					}
 				}
 				$button = '';
@@ -1070,11 +1276,20 @@ class XhrMethods
 					$verantwortlicher = '<p><a href="/profile/' . (int)$b['id'] . '"><img src="' . $this->func->img() . '" /></a><a href="/profile/' . (int)$b['id'] . '">' . $v['name'] . '</a> ist verantwortlich</p>';
 				}
 
-				$out['betriebe'][$i]['bubble'] = '<div style="height:110px;overflow:hidden;width:270px;"><div style="margin-right:5px;float:right;">' . $img . '</div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a onclick="betrieb(' . (int)$b['id'] . ');return false;" href="#">' . $this->func->jsSafe($b['name']) . '</a></h1><p>' . $this->func->jsSafe($b['str'] . ' ' . $b['hsnr']) . '</p><p>' . $this->func->jsSafe($b['plz']) . ' ' . $this->func->jsSafe($b['stadt']) . '</p>' . $button . '</div><div style="clear:both;"></div>';
+				$out['betriebe'][$i]['bubble'] = '<div style="height:110px;overflow:hidden;width:270px;"><div style="margin-right:5px;float:right;">' . $img . '</div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a onclick="betrieb(' . (int)$b['id'] . ');return false;" href="#">' . $this->sanitizerService->jsSafe($b['name']) . '</a></h1><p>' . $this->sanitizerService->jsSafe($b['str'] . ' ' . $b['hsnr']) . '</p><p>' . $this->func->jsSafe($b['plz']) . ' ' . $this->func->jsSafe($b['stadt']) . '</p>' . $button . '</div><div style="clear:both;"></div>';
 			}
 		}
 
 		return json_encode($out);
+	}
+
+	private function idimg($file = false, $size)
+	{
+		if (!empty($file)) {
+			return 'images/' . str_replace('/', '/' . $size . '_', $file);
+		}
+
+		return false;
 	}
 
 	public function xhr_acceptBezirkRequest($data)
@@ -1112,35 +1327,42 @@ class XhrMethods
 
 	public function xhr_acceptRequest($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid']) || $this->session->isAmbassador()) {
-			$this->storeModel->acceptRequest($data['fsid'], $data['bid']);
-
-			$this->storeGateway->add_betrieb_notiz(array(
-				'foodsaver_id' => $data['fsid'],
-				'betrieb_id' => $data['bid'],
-				'text' => '{ACCEPT_REQUEST}',
-				'zeit' => date('Y-m-d H:i:s'),
-				'milestone' => 2
-			));
-
-			$bezirk_id = $this->model->getVal('bezirk_id', 'betrieb', $data['bid']);
-			$this->regionGateway->linkBezirk($data['fsid'], $bezirk_id);
-
-			return json_encode(array('status' => 1));
+		if (!$this->storePermissions->mayAcceptRequests($data['bid'])) {
+			return XhrResponses::PERMISSION_DENIED;
 		}
+		$this->storeModel->acceptRequest($data['fsid'], $data['bid']);
+
+		$this->storeGateway->add_betrieb_notiz(array(
+			'foodsaver_id' => $data['fsid'],
+			'betrieb_id' => $data['bid'],
+			'text' => '{ACCEPT_REQUEST}',
+			'zeit' => date('Y-m-d H:i:s'),
+			'milestone' => 2
+		));
+
+		$bezirk_id = $this->model->getVal('bezirk_id', 'betrieb', $data['bid']);
+		$this->regionGateway->linkBezirk($data['fsid'], $bezirk_id);
+
+		return json_encode(array('status' => 1));
 	}
 
 	public function xhr_warteRequest($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid']) || $this->session->isAmbassador()) {
-			$this->storeModel->warteRequest($data['fsid'], $data['bid']);
-
-			return json_encode(array('status' => 1));
+		if (!$this->storePermissions->mayAcceptRequests($data['bid'])) {
+			return XhrResponses::PERMISSION_DENIED;
 		}
+
+		$this->storeModel->warteRequest($data['fsid'], $data['bid']);
+
+		return json_encode(array('status' => 1));
 	}
 
 	public function xhr_betriebRequest($data)
 	{
+		if (!$this->storePermissions->mayJoinStoreRequest($data['id'])) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+
 		$status = 1;
 		$msg = 'Hallo Welt';
 		$foodsaver = $this->model->getVal('name', 'foodsaver', $this->session->id());
@@ -1199,7 +1421,7 @@ class XhrMethods
 				}
 			}
 
-			$this->func->handleTagselect('botschafter');
+			$this->sanitizerService->handleTagselect('botschafter');
 
 			$this->regionGateway->update_bezirkNew($data['bezirk_id'], $g_data);
 
@@ -1209,67 +1431,73 @@ class XhrMethods
 
 	public function xhr_addFetcher($data)
 	{
-		if (($this->storeGateway->isInTeam($this->session->id(), $data['bid']) || $this->session->isAmbassador() || $this->session->isOrgaTeam()) && $this->func->isVerified()) {
-			/*
-			 * 	[f] => addFetcher
-				[date] => 2013-09-23 20:00:00
-				[bid] => 1
-			 */
-			$confirm = 0;
-			if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid'])) {
-				$confirm = 1;
+		$storeId = (int)$data['bid'];
+		if (!$this->storePermissions->mayDoPickup($storeId)) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+
+		/*
+			* 	[f] => addFetcher
+			[date] => 2013-09-23 20:00:00
+			[bid] => 1
+			*/
+		$confirm = 0;
+		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $storeId)) {
+			$confirm = 1;
+		}
+
+		if (!empty($data['to'])) {
+			$this->incLang('StoreUser');
+			if (empty($data['from'])) {
+				$data['from'] = date('Y-m-d');
 			}
+			$time = explode(' ', $data['date']);
+			$time = $time[1];
 
-			if (!empty($data['to'])) {
-				$this->func->incLang('StoreUser');
-				if (empty($data['from'])) {
-					$data['from'] = date('Y-m-d');
-				}
-				$time = explode(' ', $data['date']);
-				$time = $time[1];
+			$from = strtotime($data['from']);
+			$to = strtotime($data['to']);
+			if ($to > time() + 86400 * 7 * 3) {
+				$this->func->info('Das Datum liegt zu weit in der Zukunft!');
 
-				$from = strtotime($data['from']);
-				$to = strtotime($data['to']);
-				if ($to > time() + 86400 * 7 * 3) {
-					$this->func->info('Das Datum liegt zu weit in der Zukunft!');
-
-					return 0;
-				}
-
-				$start = strtotime($data['date']);
-
-				$cur_date = $from;
-
-				$dow = date('w', $start);
-				$count = 0;
-
-				do {
-					if (date('w', $cur_date) == $dow) {
-						++$count;
-						$this->storeGateway->addFetcher($this->session->id(), $data['bid'], date('Y-m-d', $cur_date) . ' ' . $time, $confirm);
-					}
-					if ($count > 20) {
-						break;
-					}
-					// + 1 Tag
-					$cur_date += 86400;
-				} while ($to > $cur_date);
-				$this->func->info($this->func->s('date_add_successful'));
-
-				return '2';
-			}
-
-			if (!empty($data['from'])) {
 				return 0;
 			}
 
-			$data['date'] = date('Y-m-d H:i:s', strtotime($data['date']));
-			if ($this->storeGateway->addFetcher($this->session->id(), $data['bid'], $data['date'], $confirm)) {
-				return $this->func->img($this->model->getVal('photo', 'foodsaver', $this->session->id()));
-			}
+			$start = strtotime($data['date']);
+
+			$cur_date = $from;
+
+			$dow = date('w', $start);
+			$count = 0;
+
+			do {
+				if (date('w', $cur_date) == $dow) {
+					++$count;
+					$this->storeGateway->addFetcher($this->session->id(), $storeId, date('Y-m-d', $cur_date) . ' ' . $time, $confirm);
+				}
+				if ($count > 20) {
+					break;
+				}
+				// + 1 Tag
+				$cur_date += 86400;
+			} while ($to > $cur_date);
+			$this->func->info($this->func->s('date_add_successful'));
+
+			return '2';
 		}
 
-		return '0';
+		if (!empty($data['from'])) {
+			return 0;
+		}
+
+		$data['date'] = date('Y-m-d H:i:s', strtotime($data['date']));
+		if ($this->storeGateway->addFetcher($this->session->id(), $storeId, $data['date'], $confirm)) {
+			return $this->func->img($this->model->getVal('photo', 'foodsaver', $this->session->id()));
+		}
+	}
+
+	private function incLang(string $moduleName): void
+	{
+		include ROOT_DIR . 'lang/DE/' . $moduleName . '.lang.php';
 	}
 
 	public function xhr_delDate($data)

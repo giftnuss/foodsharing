@@ -216,27 +216,27 @@ class DashboardControl extends Control
 
 		if (empty($val['lat']) || empty($val['lon'])) {
 			$this->func->addJs('
-		$("#plz, #stadt, #anschrift, #hsnr").on("blur",function(){
-			if($("#plz").val() != "" && $("#stadt").val() != "" && $("#anschrift").val() != "")
-			{
-				u_loadCoords({
-					plz: $("#plz").val(),
-					stadt: $("#stadt").val(),
-					anschrift: $("#anschrift").val(),
-					complete: function()
-					{
-						hideLoader();
-					}
-				},function(lat,lon){
-					$("#lat").val(lat);
-					$("#lon").val(lon);
-				});
-			}
-		});
-	
-		$("#lat-wrapper").hide();
-		$("#lon-wrapper").hide();
-	');
+                $("#plz, #stadt, #anschrift, #hsnr").on("blur",function(){
+                    if($("#plz").val() != "" && $("#stadt").val() != "" && $("#anschrift").val() != "")
+                    {
+                        u_loadCoords({
+                            plz: $("#plz").val(),
+                            stadt: $("#stadt").val(),
+                            anschrift: $("#anschrift").val(),
+                            complete: function()
+                            {
+                                hideLoader();
+                            }
+                        },function(lat,lon){
+                            $("#lat").val(lat);
+                            $("#lon").val(lon);
+                        });
+                    }
+                });
+            
+                $("#lat-wrapper").hide();
+                $("#lon-wrapper").hide();
+            ');
 			$elements[] = $this->v_utils->v_form_text('anschrift');
 			$elements[] = $this->v_utils->v_form_text('plz');
 			$elements[] = $this->v_utils->v_form_text('stadt');
@@ -248,42 +248,41 @@ class DashboardControl extends Control
 			$out = $this->v_utils->v_form('grabInfo', $elements, array('submit' => 'Speichern'));
 
 			$this->func->addJs('
-		$("#grab-info-link").fancybox({
-			closeClick:false,
-			closeBtn:true,
-		});
-		$("#grab-info-link").trigger("click");
-		
-		$("#grabinfo-form").on("submit", function(e){
-			e.preventDefault();
-			check = true;
-	
-			if($("input[name=\'photo_public\']:checked").val()==4)
-			{
-				$("input[name=\'photo_public\']")[0].focus();
-				check = false;
-				if(confirm("Sicher, dass Du Deine Daten nicht anzeigen lassen möchstest? So kann Dich kein Foodsaver finden."))
-				{
-					check = true;
-				}
-			}
-			if(check)
-			{
-				showLoader();
-				$.ajax({
-					url:"/xhr.php?f=grabInfo",
-					data: $("#grabinfo-form").serialize(),
-					dataType: "json",
-					complete:function(){hideLoader();},
-					success: function(){
-						pulseInfo("Danke Dir!");
-						$.fancybox.close();
-					}
-				});
-			}
-		});
-		
-		');
+                $("#grab-info-link").fancybox({
+                    closeClick:false,
+                    closeBtn:true,
+                });
+                $("#grab-info-link").trigger("click");
+                
+                $("#grabinfo-form").on("submit", function(e){
+                    e.preventDefault();
+                    check = true;
+            
+                    if($("input[name=\'photo_public\']:checked").val()==4)
+                    {
+                        $("input[name=\'photo_public\']")[0].focus();
+                        check = false;
+                        if(confirm("Sicher, dass Du Deine Daten nicht anzeigen lassen möchstest? So kann Dich kein Foodsaver finden."))
+                        {
+                            check = true;
+                        }
+                    }
+                    if(check)
+                    {
+                        showLoader();
+                        $.ajax({
+                            url:"/xhr.php?f=grabInfo",
+                            data: $("#grabinfo-form").serialize(),
+                            dataType: "json",
+                            complete:function(){hideLoader();},
+                            success: function(){
+                                pulseInfo("Danke Dir!");
+                                $.fancybox.close();
+                            }
+                        });
+                    }
+                });
+            ');
 
 			$this->func->addHidden('
 			<div id="grab-info">
@@ -333,12 +332,14 @@ class DashboardControl extends Control
 			$me['geschlecht'] = 0;
 		}
 
+		$pickups = $me['stat_fetchcount'];
 		$gerettet = $me['stat_fetchweight'];
 
-		if ($gerettet > 0) {
-			$gerettet = '. Du hast <strong style="white-space:nowrap">' . number_format($gerettet, 2, ',', '.') . '&thinsp;kg</strong> gerettet.';
-		} else {
-			$gerettet = '';
+		// special case: stat_fetchcount and stat_fetchweight are correlated, each pickup increases both count and weight
+		$pickup_text = '';
+		if ($pickups > 0) {
+			$pickup_text = 'Du hast <strong style="white-space:nowrap">' . $pickups . ' x</strong> Lebensmittel abgeholt und damit <strong style="white-space:nowrap">' .
+				number_format($gerettet, 0, ',', '.') . '&thinsp;kg</strong> gerettet.';
 		}
 
 		$this->func->addContent(
@@ -351,7 +352,7 @@ class DashboardControl extends Control
                 <div class="ui-padding">
                     <div class="img">' . $this->func->avatar($me, 50) . '</div>
                     <h3 class "corner-all">Hallo ' . $me['name'] . '</h3>
-                    <p>' . $this->func->s('rolle_' . $me['rolle'] . '_' . $me['geschlecht']) . ' für ' . $me['bezirk_name'] . $gerettet . '</p>
+                    <p>' . $pickup_text . ' Dein Stammbezirk ist ' . $me['bezirk_name'] . '.</p>
                     <div style="clear:both;"></div>
                 </div>
             </a>

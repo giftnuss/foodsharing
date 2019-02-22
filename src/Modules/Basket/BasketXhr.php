@@ -9,6 +9,7 @@ use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
 use Foodsharing\Modules\Message\MessageModel;
+use Foodsharing\Lib\Xhr\XhrResponses;
 
 class BasketXhr extends Control
 {
@@ -467,13 +468,16 @@ class BasketXhr extends Control
 
 	public function answer()
 	{
-		if ($id = $this->model->getVal('foodsaver_id', 'basket', $_GET['id'])) {
+		$basketId = (int)$_GET['id'];
+		$fsId = (int)$_GET['fid'];
+
+		if ($id = $this->model->getVal('foodsaver_id', 'basket', $basketId)) {
 			if ($id == $this->session->id()) {
-				$this->basketGateway->setStatus($_GET['id'], Status::REQUESTED_MESSAGE_READ, $_GET['fid']);
+				$this->basketGateway->setStatus($basketId, Status::REQUESTED_MESSAGE_READ, $fsId);
 
 				return array(
 					'status' => 1,
-					'script' => 'chat(' . $_GET['fid'] . ');basketStore.loadBaskets();',
+					'script' => 'chat(' . $fsId . ');basketStore.loadBaskets();',
 				);
 			}
 		}
@@ -539,14 +543,18 @@ class BasketXhr extends Control
 		];
 	}
 
-	public function editBasket(): array
+	public function editBasket()
 	{
+		$basket = $this->basketGateway->getBasket($_GET['id']);
+
+		if ($basket['fs_id'] !== $this->session->id()) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+
 		$dia = new XhrDialog();
 		$dia->setTitle($this->func->s('basket_edit'));
 
 		$dia->addPictureField('picture');
-
-		$basket = $this->basketGateway->getBasket($_GET['id']);
 
 		$dia->addContent($this->view->basketEditForm($basket));
 

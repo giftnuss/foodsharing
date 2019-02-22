@@ -57,6 +57,13 @@
           <i class="far fa-calendar-alt" /> Termine
         </a>
         <a
+          :href="$url('members', group.id)"
+          role="menuitem"
+          class="dropdown-item"
+        >
+          <i class="fas fa-user" /> Mitglieder
+        </a>
+        <a
           v-if="group.isBot"
           :href="$url('workingGroupEdit', group.id)"
           role="menuitem"

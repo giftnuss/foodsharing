@@ -146,8 +146,8 @@ var join = {
           return false
         }
 
-        if ($('#login_passwd1').val().length < 4) {
-          pulseInfo('Dein Passwort muss länger als 4 Buchstaben sein')
+        if ($('#login_passwd1').val().length < 8) {
+          pulseInfo('Dein Passwort muss mindestens 8 Zeichen lang sein')
           $('#login_passwd1').trigger('select')
           return false
         }

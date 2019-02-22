@@ -5,18 +5,26 @@ namespace Foodsharing\Modules\Quiz;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Services\SanitizerService;
 
 class QuizXhr extends Control
 {
 	private $contentGateway;
 	private $quizGateway;
+	private $sanitizerService;
 
-	public function __construct(QuizModel $model, QuizGateway $quizGateway, QuizView $view, ContentGateway $contentGateway)
-	{
+	public function __construct(
+		QuizModel $model,
+		QuizGateway $quizGateway,
+		QuizView $view,
+		ContentGateway $contentGateway,
+		SanitizerService $sanitizerService
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->quizGateway = $quizGateway;
 		$this->contentGateway = $contentGateway;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 	}
@@ -35,7 +43,7 @@ class QuizXhr extends Control
 	[fp] => fdgh
 )
 		 */
-		if ($this->func->mayEditQuiz()) {
+		if ($this->session->mayEditQuiz()) {
 			if (isset($_GET['text'], $_GET['fp'], $_GET['qid'])) {
 				$fp = (int)$_GET['fp'];
 				$text = strip_tags($_GET['text']);
@@ -62,7 +70,7 @@ class QuizXhr extends Control
 
 	public function delquest()
 	{
-		if ($this->func->mayEditQuiz() && isset($_GET['id'])) {
+		if ($this->session->mayEditQuiz() && isset($_GET['id'])) {
 			$this->model->deleteQuest($_GET['id']);
 
 			return array(
@@ -74,7 +82,7 @@ class QuizXhr extends Control
 
 	public function delanswer()
 	{
-		if ($this->func->mayEditQuiz() && isset($_GET['id'])) {
+		if ($this->session->mayEditQuiz() && isset($_GET['id'])) {
 			$this->model->deleteAnswer($_GET['id']);
 
 			return array(
@@ -93,7 +101,7 @@ class QuizXhr extends Control
 		text	458
 		 */
 
-		if ($this->func->mayEditQuiz()) {
+		if ($this->session->mayEditQuiz()) {
 			if (isset($_GET['text'], $_GET['right'], $_GET['qid'])) {
 				$text = strip_tags($_GET['text']);
 				$exp = strip_tags($_GET['explanation']);
@@ -103,7 +111,7 @@ class QuizXhr extends Control
 					if ($id = $this->model->addAnswer($_GET['qid'], $text, $exp, $right)) {
 						return array(
 							'status' => 1,
-							'script' => 'pulseInfo("Antwort wurde angelegt");$("#answerlist-' . (int)$_GET['qid'] . '").append(\'<li class="right-' . (int)$right . '">' . $this->func->jsSafe(nl2br(strip_tags($text))) . '</li>\');$( "#questions" ).accordion( "refresh" );'
+							'script' => 'pulseInfo("Antwort wurde angelegt");$("#answerlist-' . (int)$_GET['qid'] . '").append(\'<li class="right-' . (int)$right . '">' . $this->sanitizerService->jsSafe(nl2br(strip_tags($text))) . '</li>\');$( "#questions" ).accordion( "refresh" );'
 						);
 					}
 				} else {
@@ -118,7 +126,7 @@ class QuizXhr extends Control
 
 	public function updateansw()
 	{
-		if ($this->func->mayEditQuiz()) {
+		if ($this->session->mayEditQuiz()) {
 			if (isset($_GET['text'], $_GET['right'], $_GET['id'])) {
 				$text = strip_tags($_GET['text']);
 				$exp = strip_tags($_GET['explanation']);
@@ -133,7 +141,7 @@ class QuizXhr extends Control
 
 					return array(
 						'status' => 1,
-						'script' => 'pulseInfo("Antwort wurde geändert");$("#answer-' . (int)$_GET['id'] . '").replaceWith(\'<li id="answer-' . (int)$_GET['id'] . '" class="right-' . (int)$right . '">' . $this->func->jsSafe(nl2br(strip_tags($text))) . '</li>\');$( "#questions" ).accordion( "refresh" );'
+						'script' => 'pulseInfo("Antwort wurde geändert");$("#answer-' . (int)$_GET['id'] . '").replaceWith(\'<li id="answer-' . (int)$_GET['id'] . '" class="right-' . (int)$right . '">' . $this->sanitizerService->jsSafe(nl2br(strip_tags($text))) . '</li>\');$( "#questions" ).accordion( "refresh" );'
 					);
 				}
 
@@ -147,7 +155,7 @@ class QuizXhr extends Control
 
 	public function editanswer()
 	{
-		if ($this->func->mayEditQuiz()) {
+		if ($this->session->mayEditQuiz()) {
 			if ($answer = $this->model->getAnswer($_GET['id'])) {
 				$answer['isright'] = $answer['right'];
 				$this->func->setEditData($answer);
@@ -225,7 +233,7 @@ class QuizXhr extends Control
 
 	public function editquest()
 	{
-		if ($this->func->mayEditQuiz()) {
+		if ($this->session->mayEditQuiz()) {
 			if ($quest = $this->model->getQuestion($_GET['id'])) {
 				$this->func->setEditData($quest);
 				$dia = new XhrDialog();
@@ -269,7 +277,7 @@ class QuizXhr extends Control
 	private function abortOrOpenDialog($session_id)
 	{
 		return '
-				$("body").append(\'<div id="abortOrPause">' . $this->func->jsSafe($this->view->abortOrPause()) . '</div>\');
+				$("body").append(\'<div id="abortOrPause">' . $this->sanitizerService->jsSafe($this->view->abortOrPause()) . '</div>\');
 				$("#abortOrPause").dialog({
 					autoOpen: false,
 					title: "Quiz wirklich abbrechen?",
@@ -464,8 +472,6 @@ class QuizXhr extends Control
 
 	/**
 	 * xhr request to get next question stored in the users session.
-	 *
-	 * @return boolean|string|multitype:number string |Ambigous <boolean, multitype:number string , string>
 	 */
 	public function next()
 	{
@@ -546,9 +552,7 @@ class QuizXhr extends Control
 			 * Have a look has the user entered an comment for this question?
 			*/
 			if (isset($_GET['comment']) && !empty($_GET['comment'])) {
-				$comment = strip_tags($_GET['comment']);
-
-				$comment = $_GET['commentanswers'] . $comment;
+				$comment = strip_tags($_GET['commentanswers'] . $_GET['comment']);
 
 				// if yes lets store in the db
 				$this->model->addUserComment((int)$_GET['qid'], $comment);
@@ -618,7 +622,7 @@ class QuizXhr extends Control
 						$dia->addButton('Weiter', 'questcheckresult();return false;');
 						$dia->addButton('Pause', 'ajreq(\'pause\',{app:\'quiz\',sid:\'' . $session_id . '\'});');
 
-						$dia->addButton('nächste Frage', 'ajreq(\'next\',{app:\'quiz\',qid:' . (int)$question['id'] . ',commentanswers:"' . $this->func->jsSafe($comment_aswers) . '"});$(".quiz-questiondialog .ui-dialog-buttonset .ui-button").button( "option", "disabled", true );$(".quiz-questiondialog .ui-dialog-buttonset .ui-button span").prepend(\'<i class="fas fa-spinner fa-spin"></i> \')');
+						$dia->addButton('nächste Frage', 'ajreq(\'next\',{app:\'quiz\',qid:' . (int)$question['id'] . ',commentanswers:"' . $this->sanitizerService->jsSafe($comment_aswers) . '"});$(".quiz-questiondialog .ui-dialog-buttonset .ui-button").button( "option", "disabled", true );$(".quiz-questiondialog .ui-dialog-buttonset .ui-button span").prepend(\'<i class="fas fa-spinner fa-spin"></i> \')');
 
 						/*
 						 * add next() Button
@@ -736,7 +740,7 @@ class QuizXhr extends Control
 									special = 0;
 								}
 								clearInterval(counter);
-								ajreq(\'next\',{answer:$(\'.qanswers\').serialize(),noco:$(\'.nocheck:checked\').length,app:\'quiz\',commentanswers:"' . $this->func->jsSafe($comment_aswers) . '",comment:$(\'#quizusercomment\').val(),qid:' . (int)$question['id'] . ',special:special});
+								ajreq(\'next\',{answer:$(\'.qanswers\').serialize(),noco:$(\'.nocheck:checked\').length,app:\'quiz\',commentanswers:"' . $this->sanitizerService->jsSafe($comment_aswers) . '",comment:$(\'#quizusercomment\').val(),qid:' . (int)$question['id'] . ',special:special});
 							}
 							
 							function breaknext()
@@ -1159,7 +1163,7 @@ class QuizXhr extends Control
 
 	public function updatequest()
 	{
-		if ($this->func->mayEditQuiz()) {
+		if ($this->session->mayEditQuiz()) {
 			/*
 			 *   [id] => 10
 				 [text] => test

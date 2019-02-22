@@ -21,7 +21,12 @@ $I->sendPOST('/xhrapp.php?app=login&m=joinsubmit', [
 	'pw' => $pass,
 	'gender' => 0,
 	'birthdate' => $birthdate,
-	'newsletter' => 1
+	'newsletter' => 1,
+	'lat' => 51.36662,
+	'lon' => 12.74167,
+	'str' => 'Kantstraße',
+	'nr' => '5a',
+	'plz' => '12345'
 ]);
 
 $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
@@ -36,6 +41,8 @@ $I->seeInDatabase('fs_foodsaver', [
 	'geb_datum' => $birthdate,
 	'passwd' => null, // no md5 password
 	'fs_password' => null, // no sha1 password
+	'anschrift' => 'Kantstraße 5a',
+	'plz' => '12345'
 ]);
 
 // verify password

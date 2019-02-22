@@ -142,9 +142,9 @@ class ActivityModel extends Db
 
 					if ($sender !== null) {
 						if (isset($sender['from']) && !empty($sender['from'])) {
-							$from = '<a title="' . $sender['mailbox'] . '@' . $sender['host'] . '" href="/?page=mailbox&mailto=' . urlencode($sender['mailbox'] . '@' . $sender['host']) . '">' . $this->func->ttt($sender['personal'], 22) . '</a>';
+							$from = '<a title="' . $sender['mailbox'] . '@' . $sender['host'] . '" href="/?page=mailbox&mailto=' . urlencode($sender['mailbox'] . '@' . $sender['host']) . '">' . $this->ttt($sender['personal'], 22) . '</a>';
 						} elseif (isset($sender['mailbox'])) {
-							$from = '<a title="' . $sender['mailbox'] . '@' . $sender['host'] . '" href="/?page=mailbox&mailto=' . urlencode($sender['mailbox'] . '@' . $sender['host']) . '">' . $this->func->ttt($sender['mailbox'] . '@' . $sender['host'], 22) . '</a>';
+							$from = '<a title="' . $sender['mailbox'] . '@' . $sender['host'] . '" href="/?page=mailbox&mailto=' . urlencode($sender['mailbox'] . '@' . $sender['host']) . '">' . $this->ttt($sender['mailbox'] . '@' . $sender['host'], 22) . '</a>';
 						}
 					}
 
@@ -169,6 +169,15 @@ class ActivityModel extends Db
 		}
 
 		return false;
+	}
+
+	private function ttt($str, $length = 160)
+	{
+		if (strlen($str) > $length) {
+			$str = substr($str, 0, ($length - 4)) . '...';
+		}
+
+		return $str;
 	}
 
 	public function loadForumUpdates($page = 0, $bids_not_load = false)

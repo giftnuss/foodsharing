@@ -9,11 +9,12 @@ use Foodsharing\Modules\Store\StoreGateway;
 
 final class MessageXhr extends Control
 {
+	private $messageGateway;
+	private $storeGateway;
 	/**
 	 * @var WebSocketSender
 	 */
 	private $webSocketSender;
-	private $messageGateway;
 
 	public function __construct(MessageModel $model, MessageView $view, MessageGateway $messageGateway, StoreGateway $storeGateway, WebSocketSender $webSocketSender)
 	{

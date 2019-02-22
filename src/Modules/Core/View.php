@@ -250,9 +250,8 @@ class View
 			tstring = ""+date.getYear() + ""+date.getMonth() + ""+date.getDate() + ""+date.getHours();
 			var localsource = [];
 			$.ajax({
-				url: "/cache/searchindex/' . $this->session->user('token') . '.json",
+				url: "/api/search/legacyindex",
 				dataType: "json",
-				data: {t:$.now()},
 				success: function(json){
 					
 					if(json.length > 0 && json[0] != undefined && json[0].key != undefined && json[0].key == "buddies")

@@ -468,7 +468,7 @@ class SettingsControl extends Control
 					$data['homepage'] = 'http://' . $data['homepage'];
 				}
 
-				if (!$this->func->validUrl($data['homepage'])) {
+				if (!$this->validUrl($data['homepage'])) {
 					$check = false;
 					$this->func->error('Mit Deiner Homepage URL stimmt etwas nicht');
 				}
@@ -479,7 +479,7 @@ class SettingsControl extends Control
 					$data['github'] = 'https://github.com/' . $data['github'];
 				}
 
-				if (!$this->func->validUrl($data['github'])) {
+				if (!$this->validUrl($data['github'])) {
 					$check = false;
 					$this->func->error('Mit Deiner github URL stimmt etwas nicht');
 				}
@@ -490,7 +490,7 @@ class SettingsControl extends Control
 					$data['twitter'] = 'https://twitter.com/' . $data['twitter'];
 				}
 
-				if (!$this->func->validUrl($data['twitter'])) {
+				if (!$this->validUrl($data['twitter'])) {
 					$check = false;
 					$this->func->error('Mit Deiner twitter URL stimmt etwas nicht');
 				}
@@ -517,6 +517,15 @@ class SettingsControl extends Control
 				}
 			}
 		}
+	}
+
+	private function validUrl($url)
+	{
+		if (!filter_var($url, FILTER_VALIDATE_URL)) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public function picture_box()

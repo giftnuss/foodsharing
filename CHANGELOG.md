@@ -1,5 +1,33 @@
 # Unreleased
 
+## Major changes
+
+## Features
+
+## Bugfixes
+- Orga can delete quizzes #364 !767 @k.miklobusec
+
+## Refactoring
+
+## Dev/Test/CI stuff
+- Use CI built assets and vendor for deployment !768 @NerdyProjects
+
+# 2019-02-21
+
+We are happy to announce another release which got hundreds of hours of love, lastly from more then 10 people participating in the 2019 february foodsharing.de hackweek, sitting together since last friday at Kanthaus near Leipzig.
+
+This release is a milestone as we finally managed to tackle some issues that increase the security of foodsharing.de and by that the privacy of all our users.
+
+We are very proud to finally release foodsharing with an **AGPLv3** licence, making it finally a [Free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software).
+
+## Major changes
+- A security focussed code audit has been done by @alangecker which lead to fixing more than 50 related issues, from which 10 were of critical and 6 of high severity #472
+- AGPLv3 licence added. The [Gitlab repository](https://gitlab.com/foodsharing-dev/foodsharing) is now publically visible
+- [CSRF](https://en.wikipedia.org/wiki/Cross-site_request_forgery) protection for most requests to avoid malicious requests deleting accounts or changing data without the users intention to do so
+- Lots of [XSS](https://en.wikipedia.org/wiki/Cross-site_scripting) vectors have been closed by setting the correct content type on json responses
+- Removed backend code to stop old android app *foodsharing lebensmittelretten* (*de.lebensmittelretten.app*) from working. The development team cannot take the responsibility for using this app as it implements very bad practices regarding security. We advice all current and recent users of that app to change the password they used on foodsharing.de.
+- We are happy with the continuous process of cleaning up our code and reimplementing more and more parts as proper API requests and getting rid of spaghetti-javascript
+
 ## Features
 - On dashboard there now is a symbol indicating the confirmation status of a pickup !661 @jofranz
 - Pre-fill end date of pickup history with today's date for comfort reasons !660 @jofranz
@@ -10,6 +38,7 @@
 - Added API endpoints for basket pictures !671 @alex.simm 
 - Allow use of markdown in Fair-Teiler description !690 @NerdyProjects
 - Joining regions REST API !696 @NerdyProjects
+- Added member list for districts and work groups !697 @djahnie
 - Prevent group admins to be able to access the passport generation page !706 #392 @jofranz
 - Start page content over content manager #470 !701 @k.miklobusec
 - Added profile status infos for store and pickup entries for ambassadors !705 @jofranz
@@ -18,6 +47,7 @@
 - Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
 - Added thumbs of pictures posted on friends walls to dashboard !454 @D0nPiano
 - Link Avatar pictures on dashboard to profiles !464 @D0nPiano
+- Disabled caching searchindex for uptodate results !727 @NerdyProjects
 
 ## Bugfixes
 - Search index is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
@@ -33,6 +63,18 @@
 - Only allow edting regions as an orga user !714 @NerdyProjects
 - higher entropy for security & privacy related tokens !709 @alangecker
 - Fix recently broken quiz session storage !730 @NerdyProjects
+- Fix broken permission checks in foodsaver module @NerdyProjects
+- Fix broken permission checks in foodsaver xhr module @NerdyProjects
+- Fix broken permission checks in geoclean xhr module @NerdyProjects
+- Fix broken permission checks in mailbox xhr module @NerdyProjects
+- Fix broken permission checks in foodsaver xhr module !731 @NerdyProjects
+- Fix broken permission checks in geoclean xhr module !731 @NerdyProjects
+- Fix broken permission checks in mailbox xhr module !731 @NerdyProjects
+- Fix path traversals vulnerabilities !723 @alangecker
+- Fix multiple XSS vulnerabilities !722 @alangecker
+- Properly show quiz as succeeded when errorpoints match max. allowed errorpoints @NerdyProjects
+- Fix wrong stated relationship between user role and home district on user dashboard. Add information about user pickups to dashboard.!748 @pmayd
+- Only allow creation of stores in a region you are member of @NerdyProjects
 
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies
@@ -46,11 +88,14 @@
 - user normalisation in conversations API endpoint
 - recreate Dashboard update-overview with vue components @D0nPiano 
 - changed ActivityModel to return data without HTML or JS @D0nPiano 
+- remove unused quickprofile method !755 @NerdyProjects
+- fix a few linter warnings !755 @NerdyProjects
 
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen
 - disable backup_globals for PHPUnit to have unit tests working in dev again !696 @NerdyProjects
 - fix xdebug by enabling x-forwarded-for header in webpack devserver !725 @NerdyProjects
+- PHP always runs as www-data inside docker to work around permission problems @NerdyProjects
 
 # 2019-02-19 Hotfix
 - Backport some changes that were needed for yesterdays hotfix

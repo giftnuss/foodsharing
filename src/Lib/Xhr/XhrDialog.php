@@ -4,6 +4,7 @@ namespace Foodsharing\Lib\Xhr;
 
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Services\SanitizerService;
 
 class XhrDialog
 {
@@ -24,6 +25,10 @@ class XhrDialog
 	 * @var Func
 	 */
 	private $func;
+	/**
+	 * @var SanitizerService
+	 */
+	private $sanitizerService;
 
 	public function __construct($title = false)
 	{
@@ -38,6 +43,7 @@ class XhrDialog
 		$this->scriptBefore = '';
 		$this->onopen = array();
 		$this->classnames = array();
+		$this->sanitizerService = $container->get(SanitizerService::class);
 
 		if ($title !== false) {
 			$this->addOpt('title', $title);
@@ -218,7 +224,7 @@ class XhrDialog
 					$(".xhrDialog").remove();
 				}
 				$("body").append(\'<div class="xhrDialog" style="display:none;" id="' . $this->id . '"></div>\');
-				$("#' . $this->id . '").html(\'' . $this->func->jsSafe($this->content) . '\');
+				$("#' . $this->id . '").html(\'' . $this->sanitizerService->jsSafe($this->content) . '\');
 				$(".xhrDialog .input.textarea").css("height","50px");
 				$(".xhrDialog .input.textarea").autosize();
 				$("#' . $this->id . '").dialog({

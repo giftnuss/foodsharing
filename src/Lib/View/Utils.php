@@ -4,6 +4,7 @@ namespace Foodsharing\Lib\View;
 
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
+use Foodsharing\Services\SanitizerService;
 
 class Utils
 {
@@ -22,10 +23,12 @@ class Utils
 	 * @var \Twig\Environment
 	 */
 	private $twig;
+	private $sanitizerService;
 
-	public function __construct()
+	public function __construct(SanitizerService $sanitizerService)
 	{
 		$this->id = array();
+		$this->sanitizerService = $sanitizerService;
 	}
 
 	/**
@@ -85,7 +88,7 @@ class Utils
 					showLoader();
 					$.ajax({
 						url: "/xhr.php?f=activeSwitch",
-						data:{t:"' . $table . '",id:"' . $field_id . '",value:1},
+						data:{t:"' . $table . '",id:"' . (int)$field_id . '",value:1},
 						method:"get",
 						complete:function(){
 							hideLoader();
@@ -96,7 +99,7 @@ class Utils
 					showLoader();
 					$.ajax({
 						url: "/xhr.php?f=activeSwitch",
-						data:{t:"' . $table . '",id:"' . $field_id . '",value:0},
+						data:{t:"' . $table . '",id:"' . (int)$field_id . '",value:0},
 						method:"get",
 						complete:function(){
 							hideLoader();
@@ -728,7 +731,7 @@ class Utils
 					} else {
 						$cmsg = 'Wirklich l&ouml;schen?';
 					}
-					$out .= '<li onclick="ifconfirm(\'/?page=' . $page . '&a=delete&id=' . $id . '\',\'' . $this->func->jsSafe($cmsg) . '\');" title="l&ouml;schen" class="ui-state-default' . $corner . '"><span class="ui-icon ui-icon-trash"></span></li>';
+					$out .= '<li onclick="ifconfirm(\'/?page=' . $page . '&a=delete&id=' . $id . '\',\'' . $this->sanitizerService->jsSafe($cmsg) . '\');" title="l&ouml;schen" class="ui-state-default' . $corner . '"><span class="ui-icon ui-icon-trash"></span></li>';
 					break;
 
 				default:
@@ -1013,7 +1016,7 @@ class Utils
 		$id = $this->func->id($id);
 		$label = $this->func->s($id);
 
-		$check = $this->func->jsValidate($option, $id, $label);
+		$check = $this->jsValidate($option, $id, $label);
 
 		if (isset($option['selected'])) {
 			$selected = $option['selected'];
@@ -1047,6 +1050,20 @@ class Utils
 		return $this->v_input_wrapper($label, $out, $id, $option);
 	}
 
+	private function jsValidate($option, $id, $name)
+	{
+		$out = array('class' => '', 'msg' => array());
+
+		if (isset($option['required'])) {
+			$out['class'] .= ' required';
+			if (!isset($option['required']['msg'])) {
+				$out['msg']['required'] = $name . ' darf nicht leer sein';
+			}
+		}
+
+		return $out;
+	}
+
 	public function v_form_select($id, $option = array())
 	{
 		$id = $this->func->id($id);
@@ -1057,7 +1074,7 @@ class Utils
 			$selected = $this->func->getValue($id);
 		}
 		$label = $this->func->s($id);
-		$check = $this->func->jsValidate($option, $id, $label);
+		$check = $this->jsValidate($option, $id, $label);
 
 		if (isset($option['values'])) {
 			$values = $option['values'];
@@ -1141,7 +1158,7 @@ class Utils
 		$class = '';
 		$star = '';
 		$error_msg = '';
-		$check = $this->func->jsValidate($option, $id, $label);
+		$check = $this->jsValidate($option, $id, $label);
 
 		if (isset($option['required'])) {
 			$star = '<span class="req-star"> *</span>';

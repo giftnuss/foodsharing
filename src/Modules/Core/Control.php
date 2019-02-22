@@ -118,9 +118,9 @@ abstract class Control
 			$entry = 'Modules/' . $moduleName;
 			if (isset($manifest[$entry])) {
 				foreach ($manifest[$entry] as $asset) {
-					if ($this->func->endsWith($asset, '.js')) {
+					if (substr($asset, -3) === '.js') {
 						$this->func->addWebpackScript($asset);
-					} elseif ($this->func->endsWith($asset, '.css')) {
+					} elseif (substr($asset, -4) === '.css') {
 						$this->func->addWebpackStylesheet($asset);
 					}
 				}

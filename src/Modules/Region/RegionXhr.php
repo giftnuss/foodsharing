@@ -29,7 +29,7 @@ class RegionXhr extends Control
 
 	private function hasThemeAccess($BotThemestatus)
 	{
-		return ($BotThemestatus['bot_theme'] == 0 && $this->func->mayBezirk($BotThemestatus['bezirk_id']))
+		return ($BotThemestatus['bot_theme'] == 0 && $this->session->mayBezirk($BotThemestatus['bezirk_id']))
 			|| ($BotThemestatus['bot_theme'] == 1 && $this->session->isAdminFor($BotThemestatus['bezirk_id']))
 			|| $this->session->isOrgaTeam();
 	}
@@ -38,7 +38,7 @@ class RegionXhr extends Control
 	{
 		$regionId = (int)$_GET['bid'];
 		$ambassadorForum = ($_GET['bot'] == 1);
-		if (isset($_GET['page']) && $this->func->mayBezirk($regionId)) {
+		if (isset($_GET['page']) && $this->session->mayBezirk($regionId)) {
 			if ($ambassadorForum && !$this->session->isAdminFor($regionId)) {
 				return $this->responses->fail_permissions();
 			}
@@ -110,7 +110,7 @@ class RegionXhr extends Control
 	public function signout()
 	{
 		$data = $_GET;
-		if ($this->func->mayBezirk($data['bid'])) {
+		if ($this->session->mayBezirk($data['bid'])) {
 			$this->model->del('DELETE FROM `fs_foodsaver_has_bezirk` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->session->id() . ' ');
 			$this->model->del('DELETE FROM `fs_botschafter` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->session->id() . ' ');
 

@@ -1,5 +1,5 @@
 .defaults: &defaults
-  image: registry.gitlab.com/foodsharing-dev/images/ci:1.6
+  image: registry.gitlab.com/foodsharing-dev/images/ci:1.8
 
   # run it on our foodsharing ci server
   tags:
@@ -20,6 +20,9 @@
   <<: *defaults
   <<: *ssh
   stage: deploy
+  dependencies:
+  - build:frontend
+  - build:backend
   script:
   - (cd deployer && composer install)
   - deployer/vendor/bin/dep deploy $CI_ENVIRONMENT_NAME --revision $CI_COMMIT_SHA
@@ -42,7 +45,22 @@ triage:
   tags:
   - shared
 
-build:
+build:lint-backend:
+  <<: *defaults
+  image: registry.gitlab.com/foodsharing-dev/images/php:2.18
+  stage: build
+  script:
+  - composer install --verbose --prefer-dist --no-progress --no-interaction --no-suggest --no-scripts --ignore-platform-reqs
+  - vendor/bin/parallel-lint --no-progress --exclude vendor .
+  - vendor/bin/phpstan analyse --memory-limit=768M --no-progress
+  cache:
+    key: backend:lint:v1
+    paths:
+    - vendor
+  except:
+  - schedules
+
+build:frontend:
   <<: *defaults
   image: node:11.9.0-alpine
   stage: build
@@ -53,8 +71,26 @@ build:
     paths:
     - client/node_modules
   artifacts:
+    expire_in: 1 week
     paths:
     - assets
+  except:
+  - schedules
+
+build:backend:
+  <<: *defaults
+  stage: build
+  script:
+    - composer install --verbose --prefer-dist --no-progress --no-interaction --no-dev --classmap-authoritative --no-suggest --no-scripts --ignore-platform-reqs
+    - composer dump-autoload --classmap-authoritative
+  cache:
+    key: backend:build:v1
+    paths:
+    - vendor
+  artifacts:
+    expire_in: 1 week
+    paths:
+    - vendor
   except:
   - schedules
 
@@ -71,6 +107,7 @@ build:docs:
     paths:
     - docs/node_modules
   artifacts:
+    expire_in: 1 week
     paths:
     - docs/dist
   only:
@@ -93,6 +130,7 @@ test:
   - FS_ENV=ci ./scripts/rm
   # collect any test output
   artifacts:
+    expire_in: 1 month
     when: always
     paths:
     - tests/_output
@@ -122,6 +160,16 @@ deploy:beta:
   except:
   - schedules
 
+deploy:production:
+  <<: *deploy
+  environment:
+    name: production
+    url: https://foodsharing.de
+  only:
+  - production
+  except:
+  - schedules
+
 deploy:docs:
   <<: *defaults
   <<: *ssh
@@ -135,16 +183,6 @@ deploy:docs:
     url: https://devdocs.foodsharing.de
   only:
   - master
-  except:
-  - schedules
-
-deploy:production:
-  <<: *deploy
-  environment:
-    name: production
-    url: https://foodsharing.de
-  only:
-  - production
   except:
   - schedules
 

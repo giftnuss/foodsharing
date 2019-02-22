@@ -50,4 +50,13 @@ class LoginView extends View
 
 		return $this->v_utils->v_field($cnt, 'Neues Passwort setzen', array('class' => 'ui-padding'));
 	}
+
+	public function success($msg, $title = false)
+	{
+		$t = '';
+		if ($title !== false) {
+			$t = '<strong>' . $title . '</strong> ';
+		}
+		$_SESSION['msg']['success'][] = $t . $msg;
+	}
 }
