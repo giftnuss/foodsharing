@@ -89,11 +89,13 @@
     },
     {
       "login": "alangecker",
-      "name": "Andreas Langecker",
+      "name": "chandi",
       "avatar_url": "https://assets.gitlab-static.net/uploads/-/system/user/avatar/1109912/avatar.png",
       "profile": "https://gitlab.com/alangecker",
       "contributions": [
-        "code"
+        "code",
+        "security",
+        "review"
       ]
     },
     {
