@@ -10,7 +10,6 @@ import 'jquery-tagedit-auto-grow-input'
 import { expose } from '@/utils'
 import {
   ajreq,
-  hideLoader,
   pulseInfo,
   pulseError,
   checkEmail
