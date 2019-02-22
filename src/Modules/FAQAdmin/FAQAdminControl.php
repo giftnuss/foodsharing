@@ -28,7 +28,7 @@ class FAQAdminControl extends Control
 			$this->handle_add();
 
 			$this->pageCompositionHelper->addBread($this->func->s('bread_faq'), '/?page=faq');
-			$this->func->addBread($this->func->s('bread_new_faq'));
+			$this->pageCompositionHelper->addBread($this->func->s('bread_new_faq'));
 
 			$this->pageCompositionHelper->addContent($this->view->faq_form($this->faqGateway->getBasics_faq_category()));
 
@@ -42,8 +42,8 @@ class FAQAdminControl extends Control
 			}
 		} elseif ($id = $this->func->getActionId('edit')) {
 			$this->handle_edit();
-			$this->func->addBread($this->func->s('bread_faq'), '/?page=faq');
-			$this->func->addBread($this->func->s('bread_edit_faq'));
+			$this->pageCompositionHelper->addBread($this->func->s('bread_faq'), '/?page=faq');
+			$this->pageCompositionHelper->addBread($this->func->s('bread_edit_faq'));
 
 			$data = $this->faqGateway->getOne_faq($id);
 			$this->func->setEditData($data);
@@ -57,7 +57,7 @@ class FAQAdminControl extends Control
 			$data = $this->faqGateway->getOne_faq($_GET['id']);
 			print_r($data);
 		} else {
-			$this->func->addBread($this->func->s('faq_bread'), '/?page=faq');
+			$this->pageCompositionHelper->addBread($this->func->s('faq_bread'), '/?page=faq');
 
 			if ($data = $this->faqGateway->get_faq()) {
 				$sort = array();

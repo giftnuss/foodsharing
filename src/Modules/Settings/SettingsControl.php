@@ -257,7 +257,7 @@ class SettingsControl extends Control
 
 	private function confirm_bot()
 	{
-		$this->func->addBread('Botschafter werden');
+		$this->pageCompositionHelper->addBread('Botschafter werden');
 
 		if ($this->model->hasQuizCleared(3)) {
 			$showform = true;
@@ -375,7 +375,7 @@ class SettingsControl extends Control
 
 	public function deleteaccount()
 	{
-		$this->func->addBread($this->func->s('delete_account'));
+		$this->pageCompositionHelper->addBread($this->func->s('delete_account'));
 		$this->pageCompositionHelper->addContent($this->view->delete_account($this->session->id()));
 	}
 
@@ -394,7 +394,7 @@ class SettingsControl extends Control
 
 	public function calendar()
 	{
-		$this->func->addBread($this->func->s('calendar'));
+		$this->pageCompositionHelper->addBread($this->func->s('calendar'));
 		$token = $this->generate_api_token($this->session->id());
 		$this->pageCompositionHelper->addContent($this->view->settingsCalendar($token));
 	}
@@ -446,7 +446,7 @@ class SettingsControl extends Control
 				$this->func->info($this->func->s('changes_saved'));
 			}
 		}
-		$this->func->addBread($this->func->s('settings_info'));
+		$this->pageCompositionHelper->addBread($this->func->s('settings_info'));
 
 		$g_data = $this->model->getValues(array('infomail_message', 'newsletter'), 'foodsaver', $this->session->id());
 

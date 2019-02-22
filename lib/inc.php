@@ -1,6 +1,6 @@
 <?php
 
-use \Foodsharing\Helpers\PageCompositionHelper;
+use Foodsharing\Helpers\PageCompositionHelper;
 use Foodsharing\Lib\Cache\Caching;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;

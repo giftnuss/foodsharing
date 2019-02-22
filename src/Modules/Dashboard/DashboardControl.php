@@ -38,8 +38,7 @@ class DashboardControl extends Control
 		ProfileModel $profileModel,
 		\Twig\Environment $twig,
 		SanitizerService $sanitizerService
-	)
-	{
+	) {
 		$this->view = $view;
 		$this->dashboardGateway = $dashboardGateway;
 		$this->contentGateway = $contentGateway;
