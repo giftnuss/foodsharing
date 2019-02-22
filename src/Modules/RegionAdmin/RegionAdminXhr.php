@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\RegionAdmin;
 
+use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
 
