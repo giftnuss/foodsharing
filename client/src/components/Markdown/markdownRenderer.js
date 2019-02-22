@@ -5,22 +5,22 @@ const md = markdownIt('zero', {
   breaks: true,
   linkify: true,
   typopgrapher: true,
-  quotes: '“”‘’',
+  quotes: '“”‘’'
 })
-.enable([
-  'heading',
-  'emphasis',
-  'strikethrough',
-  'blockquote',
-  'newline',
-  'image',
-  'link',
-  'backticks',
-  'linkify',
-  'hr',
-  'list',
-  'fence',
-  'code',
-])
+  .enable([
+    'heading',
+    'emphasis',
+    'strikethrough',
+    'blockquote',
+    'newline',
+    'image',
+    'link',
+    'backticks',
+    'linkify',
+    'hr',
+    'list',
+    'fence',
+    'code'
+  ])
 
 export default md

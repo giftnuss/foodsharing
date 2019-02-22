@@ -5,8 +5,8 @@ export default {
   props: {
     source: {
       required: true,
-      type: String,
-    },
+      type: String
+    }
   },
   render (h, { props, data }) {
     if (data.style || data.class || data.staticClass) {
@@ -14,13 +14,13 @@ export default {
     }
     return h('div', {
       class: {
-        markdown: true,
+        markdown: true
       },
       domProps: {
-        innerHTML: markdown.render(props.source),
-      },
+        innerHTML: markdown.render(props.source)
+      }
     })
-  },
+  }
 }
 </script>
 

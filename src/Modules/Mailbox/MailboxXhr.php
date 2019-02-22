@@ -154,7 +154,7 @@ class MailboxXhr extends Control
 				$sender = @json_decode($message['sender'], true);
 				if (isset($sender['mailbox'], $sender['host']) && $sender != null) {
 					$subject = 'Re: ' . trim(str_replace(array('Re:', 'RE:', 're:', 'aw:', 'Aw:', 'AW:'), '', $message['subject']));
-					
+
 					$data = json_decode(file_get_contents('php://input'), true);
 					$body = strip_tags($data['msg']) . "\n\n\n\n--------- Nachricht von " . $this->func->niceDate($message['time_ts']) . " ---------\n\n>\t" . str_replace("\n", "\n>\t", $message['body']);
 

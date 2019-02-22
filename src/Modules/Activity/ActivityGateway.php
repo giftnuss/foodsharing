@@ -160,6 +160,7 @@ class ActivityGateway extends BaseGateway
 				}
 			}
 		}
+
 		return $posts;
 	}
 

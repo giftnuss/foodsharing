@@ -1,65 +1,135 @@
 <template>
   <li class="activity-item">
     <span class="i">
-      <a v-if="data.fs_id" :href="'/profile/' + data.fs_id">
-        <img :src="data.icon" width="50">
+      <a
+        v-if="data.fs_id"
+        :href="'/profile/' + data.fs_id"
+      >
+        <img
+          :src="data.icon"
+          width="50"
+        >
       </a>
       <a v-else>
-        <img :src="data.icon" width="50">
+        <img
+          :src="data.icon"
+          width="50"
+        >
       </a>
     </span>
     <span class="n">
-      <a v-if="data.fs_id" :href="'/profile/' + data.fs_id">{{ data.fs_name }}</a>
-      <i v-if="type != 'friendWall'" class="fas fa-angle-right"></i>
-      <a v-if="type == 'forum'" :href="data.forum_href"> {{ data.forum_name }} </a>
-      <a v-else-if="type == 'foodbasket'" :href="'/essenskoerbe/' + data.basked_id"> {{ "Essenskorb #" + data.basked_id }} </a>
-      <a v-else-if="type == 'mailbox'" :href="'/?page=mailbox&show=' + data.mailbox_id"> {{ data.subject }} </a>
-      <a v-else-if="type == 'store'" :href="'/?page=fsbetrieb&id=' + data.store_id"> {{ data.store_name }} </a>
-      <small v-if="data.region_name">{{ data.region_name }}</small>
-      <small v-else-if="data.mailbox_name">{{ data.mailbox_name }}</small>
-      <small v-else-if="type == 'friendWall' && user_id == data.fs_id">Deine Pinnwand</small>
+      <a
+        v-if="data.fs_id"
+        :href="'/profile/' + data.fs_id"
+      >
+        {{ data.fs_name }}
+      </a>
+      <a
+        v-if="data.sender_email"
+        :href="'/?page=mailbox&show=' + data.mailbox_id"
+      >
+        {{ data.sender_email }}
+      </a>
+      <i
+        v-if="type != 'friendWall'"
+        class="fas fa-angle-right"
+      />
+      <a
+        v-if="type == 'forum'"
+        :href="data.forum_href"
+      >
+        {{ data.forum_name }}
+      </a>
+      <a
+        v-else-if="type == 'foodbasket'"
+        :href="'/essenskoerbe/' + data.basked_id"
+      >
+        {{ "Essenskorb #" + data.basked_id }}
+      </a>
+      <a
+        v-else-if="type == 'mailbox'"
+        :href="'/?page=mailbox&show=' + data.mailbox_id"
+      >
+        {{ data.subject }}
+      </a>
+      <a
+        v-else-if="type == 'store'"
+        :href="'/?page=fsbetrieb&id=' + data.store_id"
+      >
+        {{ data.store_name }}
+      </a>
+      <small v-if="data.region_name">
+        {{ data.region_name }}
+      </small>
+      <small v-else-if="data.mailbox_name && data.sender_email != data.mailbox_name">
+        {{ data.mailbox_name }}
+      </small>
+      <small v-else-if="type == 'friendWall' && user_id == data.fs_id">
+        Deine Pinnwand
+      </small>
     </span>
     <span class="t">
       <span class="txt">
         <span v-if="data.gallery">
-          <a :key="img.thumb" v-for="img in data.gallery" :href="'profile/' + data.fs_id  + '/#wallposts'"><img :src="img.thumb"></img></a>
+          <a
+            v-for="img in data.gallery"
+            :key="img.thumb"
+            :href="'profile/' + data.fs_id + '/#wallposts'"
+          >
+            <img :src="img.thumb">
+          </a>
         </span>
-        <span class="img-text"><Markdown :source="truncatedText" /></span>
-        <a v-if="isTruncatable" v-on:click="isTxtShortend = !isTxtShortend">
+        <span class="img-text">
+          <Markdown :source="truncatedText" />
+        </span>
+        <a
+          v-if="isTruncatable"
+          @click="isTxtShortend = !isTxtShortend"
+        >
           {{ isTxtShortend ? 'alles zeigen' : 'weniger' }}
-          <i class="fas fa-angle-down" :class="{ 'fa-rotate-180': !isTxtShortend }"></i>
+          <i
+            class="fas fa-angle-down"
+            :class="{ 'fa-rotate-180': !isTxtShortend }"
+          />
         </a>
       </span>
     </span>
-    <span class="qr" v-if="data.quickreply">
+    <span
+      v-if="data.quickreply"
+      class="qr"
+    >
       <img :src="user_avatar">
       <textarea
         v-if="!qrLoading"
-        v-on:keyup.enter="sendQuickreply"
         v-model="quickreplyValue"
         name="quickreply"
         class="quickreply"
         placeholder="Schreibe eine Antwort..."
-      ></textarea>
-      <span v-else class="loader">
-        <i class="fas fa-spinner fa-spin"></i>
+        @keyup.enter="sendQuickreply"
+      />
+      <span
+        v-else
+        class="loader"
+      >
+        <i class="fas fa-spinner fa-spin" />
       </span>
     </span>
     <span class="time">
-      <i class="far fa-clock"></i> {{ timeago }}
-      <i class="fas fa-angle-right"></i> {{ formatedTime }}
+      <i class="far fa-clock" /> {{ timeago }}
+      <i class="fas fa-angle-right" /> {{ formatedTime }}
     </span>
-    <span class="c"></span>
+    <span class="c" />
   </li>
 </template>
 
 <script>
 import serverData from '@/server-data'
-import { sendQuickreply } from "@/api/dashboard";
-import { pulseError, pulseInfo } from '@/script'
+import { sendQuickreply } from '@/api/dashboard'
+import { pulseInfo } from '@/script'
 import timeformat from '@/timeformat'
 import 'timeago/jquery.timeago'
 import Markdown from '@/components/Markdown/Markdown'
+import $ from 'jquery'
 
 export default {
   components: { Markdown },
@@ -83,33 +153,33 @@ export default {
     }
   },
   computed: {
-    isTruncatable(){
-      return this.data.desc.split(" ").length > 18
+    isTruncatable () {
+      return this.data.desc.split(' ').length > 18
     },
-    truncatedText(){
+    truncatedText () {
       if (this.isTruncatable && this.isTxtShortend) {
-        return this.data.desc.split(" ").splice(0,12).join(" ")+'...'
+        return this.data.desc.split(' ').splice(0, 12).join(' ') + '...'
       } else {
         return this.data.desc
       }
     },
-    formatedTime(){
+    formatedTime () {
       return timeformat.nice(this.data.time)
     },
-    timeago(){
+    timeago () {
       return $.timeago(this.data.time)
     }
   },
   methods: {
-    async sendQuickreply(txt) {
+    async sendQuickreply (txt) {
       console.log('sending reply', this.quickreplyValue)
       this.qrLoading = true
-      await sendQuickreply(this.data.quickreply, this.quickreplyValue).then((x) => {pulseInfo(x.message)})
+      await sendQuickreply(this.data.quickreply, this.quickreplyValue).then((x) => { pulseInfo(x.message) })
       this.qrLoading = false
       return true
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

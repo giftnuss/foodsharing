@@ -79,7 +79,7 @@ class WallPostXhr extends Control
 	public function quickreply()
 	{
 		$data = json_decode(file_get_contents('php://input'), true);
-		$message = $data["msg"];
+		$message = $data['msg'];
 
 		if (!empty($message)) {
 			if ($post_id = $this->wallPostGateway->addPost($message, $this->session->id(), $this->table, $this->id)) {

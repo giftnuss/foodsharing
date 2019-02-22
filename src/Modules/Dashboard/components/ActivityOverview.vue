@@ -1,39 +1,75 @@
 <template>
   <div class="activity-container">
     <div class="head ui-widget-header ui-rectangular-bottom">
-			Updates-Übersicht
+      Updates-Übersicht
       <span class="option">
-        <a class="wide" :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['store', 'forum', 'mailbox', 'friendWall', 'foodbasket'])}" v-on:click="displayAll">Alle</a>
-        <div class="headerDivider"></div>
-        <a class="fa-fw fas fa-comments"        v-on:click="displayOne('forum')"      :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['forum'])}"></a>
-        <a class="fa-fw fas fa-shopping-basket" v-on:click="displayOne('foodbasket')" :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['foodbasket'])}"></a>
-        <a class="fa-fw fas fa-user"            v-on:click="displayOne('friendWall')" :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['friendWall'])}"></a>
-        <a class="fa-fw fas fa-envelope"        v-on:click="displayOne('mailbox')"    :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['mailbox'])}"></a>
-        <a class="fa-fw fas fa-shopping-cart"   v-on:click="displayOne('store')"      :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['store'])}"></a>
-        <div class="headerDivider"></div>
-			  <a id="activity-option" :class="{'active': showListings}" v-on:click="toggleOptionListings" class="fas fa-cog"></a>
+        <a
+          class="wide"
+          :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['store', 'forum', 'mailbox', 'friendWall', 'foodbasket'])}"
+          @click="displayAll"
+        >
+          Alle
+        </a>
+        <div class="headerDivider" />
+        <a
+          class="fa-fw fas fa-comments"
+          :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['forum'])}"
+          @click="displayOne('forum')"
+        />
+        <a
+          class="fa-fw fas fa-shopping-basket"
+          :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['foodbasket'])}"
+          @click="displayOne('foodbasket')"
+        />
+        <a
+          class="fa-fw fas fa-user"
+          :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['friendWall'])}"
+          @click="displayOne('friendWall')"
+        />
+        <a
+          class="fa-fw fas fa-envelope"
+          :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['mailbox'])}"
+          @click="displayOne('mailbox')"
+        />
+        <a
+          class="fa-fw fas fa-shopping-cart"
+          :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['store'])}"
+          @click="displayOne('store')"
+        />
+        <div class="headerDivider" />
+        <a
+          id="activity-option"
+          :class="{'active': showListings}"
+          class="fas fa-cog"
+          @click="toggleOptionListings"
+        />
       </span>
-		</div>
-    <div v-if="showListings" class="ui-widget-content corner-bottom margin-bottom ui-padding">
-      <ActivityOptionListings v-on:close="showListings = false"/>
     </div>
-    <ActivityThread id="activity" :displayed-types="displayedTypes"/>
+    <div
+      v-if="showListings"
+      class="ui-widget-content corner-bottom margin-bottom ui-padding"
+    >
+      <ActivityOptionListings @close="showListings = false" />
+    </div>
+    <ActivityThread
+      id="activity"
+      :displayed-types="displayedTypes"
+    />
   </div>
 </template>
 
 <script>
-import { getOptionListings } from "@/api/dashboard";
-import ActivityThread from "./ActivityThread";
-import ActivityOptionListings from "./ActivityOptionListings";
+import ActivityThread from './ActivityThread'
+import ActivityOptionListings from './ActivityOptionListings'
 
 export default {
   components: { ActivityThread, ActivityOptionListings },
   props: {},
-  data() {
+  data () {
     return {
       displayedTypes: ['store', 'forum', 'mailbox', 'friendWall', 'foodbasket'],
       showListings: false
-    };
+    }
   },
   methods: {
     displayOne: function (type) {
@@ -45,9 +81,9 @@ export default {
     },
     toggleOptionListings: function () {
       this.showListings = !this.showListings
-    },
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

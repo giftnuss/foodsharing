@@ -5,9 +5,7 @@ import { vueRegister, vueApply } from '@/vue'
 import ActivityOverview from './components/ActivityOverview'
 
 vueRegister({
-    ActivityOverview
+  ActivityOverview
 })
 
 vueApply('#activity-overview')
-
-
