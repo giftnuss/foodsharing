@@ -491,8 +491,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$plainBody = $this->sanitizerService->htmlToPlain($htmlBody);
 		$mail->setBody($plainBody);
 
-		if(is_iterable($to)) {
-			foreach($to as $recipient) {
+		if (is_iterable($to)) {
+			foreach ($to as $recipient) {
 				$mail->addRecipient($recipient);
 			}
 		} else {
