@@ -11,6 +11,7 @@
 
 ## Dev/Test/CI stuff
 - Use CI built assets and vendor for deployment !768 @NerdyProjects
+- Use php-cs-fixer, parallel-lint and phpstan in CI build:lint step !775 @NerdyProjects
 
 # 2019-02-21
 
