@@ -1,9 +1,6 @@
 .defaults: &defaults
   image: registry.gitlab.com/foodsharing-dev/images/ci:1.8
 
-  # run it on our foodsharing ci server
-  tags:
-  - non-shared
 
 .ssh: &ssh
   before_script:
@@ -18,6 +15,9 @@
 
 .deploy: &deploy
   <<: *defaults
+  # run it on our foodsharing ci server
+  tags:
+  - non-shared
   <<: *ssh
   stage: deploy
   dependencies:
@@ -119,6 +119,9 @@ build:docs:
 
 test:
   <<: *defaults
+  # run it on our foodsharing ci server
+  tags:
+  - non-shared
   script:
   - composer validate --no-check-all --strict
   - ./scripts/ci.test

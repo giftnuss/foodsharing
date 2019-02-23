@@ -21,6 +21,7 @@
 - Use CI built assets and vendor for deployment !768 @NerdyProjects
 - Use php-cs-fixer, parallel-lint and phpstan in CI build:lint step !775 @NerdyProjects
 - Update mocha to version 6 @peter.toennies
+- Run all jobs except test and deployment on shared CI runners @NerdyProjects
 
 # 2019-02-21
 
