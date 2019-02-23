@@ -92,8 +92,8 @@ If the `-local` version does not work for you, replace `fix-codestyle-local` wit
 ### Using PHPstorm
 
 If you happen to use PHPstorm you can add `php-cs-fixer` to those settings as well:
-<div align="center"><img src="setting-things-up-phpstorm-php-cs-fixer.png" alt="PHPstorm enable php-cs-fixer"</div>
-<div align="center"><img src="setting-things-up-phpstorm-inspections.png" alt="PHPstorm inspections"></div>
+<div align="center"><img src="images/setting-things-up-phpstorm-php-cs-fixer.png" alt="PHPstorm enable php-cs-fixer"</div>
+<div align="center"><img src="images/setting-things-up-phpstorm-inspections.png" alt="PHPstorm inspections"></div>
 ## Editorconfig
 
 Depending on your editor you need to do nothing or install or configure a plugin to use the file `.editorconfig`. Please refer to the section about [Code style](codestyle.md).
