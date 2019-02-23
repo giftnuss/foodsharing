@@ -58,9 +58,10 @@ class WebPushHandler implements PushNotificationHandlerInterface
 	 *
 	 * @var array - an array with subscription strings in JSON format
 	 */
-	public function sendPushNotificationsToClients(array $subscriptionData, $title, array $options): void
+	public function sendPushNotificationsToClients(array $subscriptionData, $title, array $options, array $action = null): void
 	{
-		$payloadJson = json_encode(['title' => $title, 'options' => $options], JSON_FORCE_OBJECT);
+		$options['data']['action'] = $action;
+		$payloadJson = json_encode(['title' => $title, 'options' => $options]);
 
 		foreach ($subscriptionData as $subscriptionAsJson) {
 			$subscriptionArray = json_decode($subscriptionAsJson, true);

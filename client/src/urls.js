@@ -15,7 +15,7 @@ export default {
   wall: (regionId) => `/?page=bezirk&bid=${regionId}&sub=wall`,
   foodsaverList: (regionId) => `/?page=foodsaver&bid=${regionId}`,
   passports: (regionId) => `/?page=passgen&bid=${regionId}`,
-  conversations: () => `/?page=msg`,
+  conversations: (conversationId = null) => `/?page=msg` + (conversationId ? `&cid=${conversationId}` : ''),
   dashboard: () => `/?page=dashboard`,
   map: () => `/karte`,
   home: () => `/`,

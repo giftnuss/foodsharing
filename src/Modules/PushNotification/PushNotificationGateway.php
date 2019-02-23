@@ -42,10 +42,11 @@ class PushNotificationGateway extends BaseGateway
 	}
 
 	/**
-	 *  @param string title: the notification title
-	 *  @param array options: an array of options to be sent to the endpoint - @see PushNotificationHandlerInterface::sendPushNotificationsToClients() for more information
+	 * @param string $title: the notification title
+	 * @param array $options: an array of options to be sent to the endpoint - @see PushNotificationHandlerInterface::sendPushNotificationsToClients() for more information
+	 * @param array $action: the action to be berformed when the user clicks on the notificaation - @see PushNotificationHandlerInterface::sendPushNotificationsToClients()
 	 */
-	public function sendPushNotificationsToFoodsaver(int $foodsaverId, string $title, array $options): void
+	public function sendPushNotificationsToFoodsaver(int $foodsaverId, string $title, array $options, array $action): void
 	{
 		$subscriptions = $this->db->fetchAllByCriteria(
 			'fs_push_notification_subscription',
@@ -62,7 +63,9 @@ class PushNotificationGateway extends BaseGateway
 				}
 			}
 
-			$handler->sendPushNotificationsToClients($subscriptionDataForThisHandler, $title, $options);
+			if(!empty($subscriptionDataForThisHandler)) {
+				$handler->sendPushNotificationsToClients($subscriptionDataForThisHandler, $title, $options, $action);
+			}
 		}
 	}
 

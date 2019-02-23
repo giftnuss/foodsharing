@@ -5,30 +5,43 @@ namespace Foodsharing\Modules\Message;
 use Foodsharing\Lib\WebSocketSender;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\PushNotification\PushNotificationGateway;
 
 final class MessageXhr extends Control
 {
+	/**
+	 * @var MessageGateway
+	 */
 	private $messageGateway;
+	/**
+	 * @var FoodsaverGateway
+	 */
+	private $foodsaverGateway;
 	/**
 	 * @var WebSocketSender
 	 */
 	private $webSocketSender;
+	/**
+	 * @var PushNotificationGateway
+	 */
 	private $pushNotificationGateway;
 
 	public function __construct(
 		MessageModel $model,
 		MessageView $view,
 		MessageGateway $messageGateway,
-		WebSocketSender $webSocketSender,
-		PushNotificationGateway $pushNotificationGateway
+		FoodsaverGateway $foodsaverGateway,
+		PushNotificationGateway $pushNotificationGateway,
+		WebSocketSender $webSocketSender
 	)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->messageGateway = $messageGateway;
-		$this->webSocketSender = $webSocketSender;
+		$this->foodsaverGateway = $foodsaverGateway;
 		$this->pushNotificationGateway = $pushNotificationGateway;
+		$this->webSocketSender = $webSocketSender;
 
 		parent::__construct();
 
@@ -155,14 +168,16 @@ final class MessageXhr extends Control
 								$conversationName = $this->messageGateway->getProperConversationNameForFoodsaver($m['id'], $conversationId);
 
 								if(count($members) > 2) {
-									$notificationTitle = 'In Gruppe ' . $conversationName . 'wurde geschrieben.';
+									$notificationTitle = 'In ' . $conversationName . ' wurde geschrieben.';
 								} else {
 									$notificationTitle = $conversationName . ' hat dir geschrieben.';
 								}
+
 								$this->pushNotificationGateway->sendPushNotificationsToFoodsaver(
 									$m['id'],
 									$notificationTitle,
-									['body' => $body]
+									['body' => $body],
+									['page' => 'conversations', 'params' => [$conversationId]]
 								);
 
 								$this->mem->userAppend($m['id'], 'msg-update', (int)$conversationId);
