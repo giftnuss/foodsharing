@@ -20,14 +20,14 @@ class EmailXhr extends Control
 			return false;
 		}
 
-		if (!$this->mailingHelper->validEmail($_POST['email'])) {
+		if (!$this->emailHelper->validEmail($_POST['email'])) {
 			return array(
 				'status' => 1,
 				'script' => 'pulseError("Mit der E-Mail-Adresse stimmt etwas nicht!");'
 			);
 		}
 
-		$this->mailingHelper->libmail(false, $_POST['email'], $_POST['subject'], $_POST['message']);
+		$this->emailHelper->libmail(false, $_POST['email'], $_POST['subject'], $_POST['message']);
 
 		return array(
 			'status' => 1,

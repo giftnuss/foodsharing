@@ -9,7 +9,7 @@ use Foodsharing\Modules\Core\InfluxMetrics;
 use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateAdminGateway;
 use Foodsharing\Services\SanitizerService;
 
-class MailingHelper
+final class EmailHelper
 {
 	private $mem;
 	/**

@@ -19,15 +19,15 @@ class RegionAdminControl extends Control
 		parent::__construct();
 
 		if (!$this->session->may('orga')) {
-			$this->linkingHelper->go('/');
+			$this->routeHelper->go('/');
 		}
 	}
 
 	public function index()
 	{
 		$id = $this->func->id('tree');
-		$this->pageCompositionHelper->addBread($this->func->s('bezirk_bread'), '/?page=region');
-		$this->pageCompositionHelper->addTitle($this->func->s('bezirk_bread'));
+		$this->pageHelper->addBread($this->func->s('bezirk_bread'), '/?page=region');
+		$this->pageHelper->addTitle($this->func->s('bezirk_bread'));
 		$cnt = '
 		<div>
 			<div style="float:left;width:150px;" id="' . '..' . '"></div>
@@ -35,20 +35,20 @@ class RegionAdminControl extends Control
 			<div style="clear:both;"></div>		
 		</div>';
 
-		$this->pageCompositionHelper->addStyle('#bezirk-buttons {left: 50%; margin-left: 5px;position: absolute;top: 77px;}');
+		$this->pageHelper->addStyle('#bezirk-buttons {left: 50%; margin-left: 5px;position: absolute;top: 77px;}');
 
 		$bezirke = $this->regionGateway->getBasics_bezirk();
 
 		array_unshift($bezirke, array('id' => '0', 'name' => 'Ohne `Eltern` Bezirk'));
 
-		$this->pageCompositionHelper->hiddenDialog('newbezirk', array(
+		$this->pageHelper->hiddenDialog('newbezirk', array(
 			$this->v_utils->v_form_text('Name'),
 			$this->v_utils->v_form_text('email'),
 			$this->v_utils->v_form_select('parent_id', array('values' => $bezirke))
 		), 'Neuer Bezirk');
 
-		$this->pageCompositionHelper->addContent($this->v_utils->v_field('<div><div id="' . $this->func->id('bezirk_form') . '"></div></div>', 'Bezirk bearbeiten', array('class' => 'ui-padding')), CNT_LEFT);
-		$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->view->v_bezirk_tree($id) . '
+		$this->pageHelper->addContent($this->v_utils->v_field('<div><div id="' . $this->func->id('bezirk_form') . '"></div></div>', 'Bezirk bearbeiten', array('class' => 'ui-padding')), CNT_LEFT);
+		$this->pageHelper->addContent($this->v_utils->v_field($this->view->v_bezirk_tree($id) . '
 				<div id="bezirk-buttons" class="bootstrap">
 					<button id="deletebezirk" class="btn btn-secondary btn-sm" style="visibility:hidden;" onclick="deleteActiveGroup()">' . $this->func->s('group.delete') . '</button>
 					' . $this->v_utils->v_dialog_button('newbezirk', 'Neuer Bezirk') . '	

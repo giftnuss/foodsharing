@@ -9,7 +9,7 @@ use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
 use Twig\Environment;
 
-final class PageCompositionHelper
+final class PageHelper
 {
 	private $add_css;
 	private $bread;
@@ -30,7 +30,7 @@ final class PageCompositionHelper
 	private $session;
 	private $sanitizerService;
 	private $imageService;
-	private $linkingHelper;
+	private $routeHelper;
 	private $translationHelper;
 	public $jsData = [];
 	private $twig;
@@ -41,7 +41,7 @@ final class PageCompositionHelper
 		SanitizerService $sanitizerService,
 		ImageService $imageService,
 		Environment $twig,
-		LinkingHelper $linkingHelper,
+		RouteHelper $routeHelper,
 		TranslationHelper $translationHelper
 	) {
 		$this->content_main = '';
@@ -62,7 +62,7 @@ final class PageCompositionHelper
 		$this->sanitizerService = $sanitizerService;
 		$this->imageService = $imageService;
 		$this->twig = $twig;
-		$this->linkingHelper = $linkingHelper;
+		$this->routeHelper = $routeHelper;
 		$this->translationHelper = $translationHelper;
 	}
 
@@ -95,7 +95,7 @@ final class PageCompositionHelper
 			$bodyClasses[] = 'loggedin';
 		}
 
-		$bodyClasses[] = 'page-' . $this->linkingHelper->getPage();
+		$bodyClasses[] = 'page-' . $this->routeHelper->getPage();
 
 		return [
 			'head' => $this->getHeadData(),
@@ -181,8 +181,8 @@ final class PageCompositionHelper
 
 		return array_merge($this->jsData, [
 			'user' => $userData,
-			'page' => $this->linkingHelper->getPage(),
-			'subPage' => $this->linkingHelper->getSubPage(),
+			'page' => $this->routeHelper->getPage(),
+			'subPage' => $this->routeHelper->getSubPage(),
 			'location' => $location,
 			'ravenConfig' => $ravenConfig,
 			'translations' => $this->translationHelper->getTranslations(),
@@ -190,7 +190,7 @@ final class PageCompositionHelper
 		]);
 	}
 
-	private function getMenu()
+	private function getMenu(): string
 	{
 		$regions = [];
 		$stores = [];
@@ -211,61 +211,34 @@ final class PageCompositionHelper
 
 		$loggedIn = $this->session->may();
 
-		return $this->getMenuFn(
-			$loggedIn,
-			$regions,
-			$this->session->may('fs'),
-			$this->session->isOrgaTeam(),
-			$this->session->mayEditBlog(),
-			$this->session->mayEditQuiz(),
-			$this->session->mayHandleReports(),
-			$stores,
-			$workingGroups,
-			$this->session->get('mailbox'),
-			(int)$this->session->id(),
-			$loggedIn ? $this->imageService->img() : '',
-			$this->session->may('bieb')
+		$params = array_merge(
+			[
+				'loggedIn' => $loggedIn,
+				'fsId' => $this->session->id(),
+				'image' => $loggedIn ? $this->imageService->img() : '',
+				'mailbox' => $this->session->get('mailbox'),
+				'hasFsRole' => $this->session->may('fs'),
+				'isOrgaTeam' => $this->session->isOrgaTeam(),
+				'may' => [
+					'editBlog' => $this->session->mayEditBlog(),
+					'editQuiz' => $this->session->mayEditQuiz(),
+					'handleReports' => $this->session->mayHandleReports(),
+					'addStore' => $this->session->may('bieb'),
+				],
+				'stores' => array_values($stores),
+				'regions' => $regions,
+				'workingGroups' => $workingGroups,
+			]
 		);
-	}
 
-	private function getMenuFn(
-		bool $loggedIn,
-		array $regions,
-		bool $hasFsRole,
-		bool $isOrgaTeam,
-		bool $mayEditBlog,
-		bool $mayEditQuiz,
-		bool $mayHandleReports,
-		array $stores,
-		array $workingGroups,
-		$sessionMailbox,
-		int $fsId,
-		string $image,
-		bool $mayAddStore
-	) {
-		$params = array_merge([
-			'loggedIn' => $loggedIn,
-			'fsId' => $fsId,
-			'image' => $image,
-			'mailbox' => $sessionMailbox,
-			'hasFsRole' => $hasFsRole,
-			'isOrgaTeam' => $isOrgaTeam,
-			'may' => [
-				'editBlog' => $mayEditBlog,
-				'editQuiz' => $mayEditQuiz,
-				'handleReports' => $mayHandleReports,
-				'addStore' => $mayAddStore
-			],
-			'stores' => array_values($stores),
-			'regions' => $regions,
-			'workingGroups' => $workingGroups
-		]);
-
-		return $this->twig->render('partials/vue-wrapper.twig', [
-			'id' => 'vue-topbar',
-			'component' => 'topbar',
-			'props' => $params
-		]);
+		return $this->twig->render(
+			'partials/vue-wrapper.twig',
+			[
+				'id' => 'vue-topbar',
+				'component' => 'topbar',
+				'props' => $params,
+			]
+		);
 	}
 
 	private function getHeadData(): array

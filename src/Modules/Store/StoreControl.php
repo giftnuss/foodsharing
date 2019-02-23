@@ -32,7 +32,7 @@ class StoreControl extends Control
 		parent::__construct();
 
 		if (!$this->session->may()) {
-			$this->linkingHelper->goLogin();
+			$this->routeHelper->goLogin();
 		}
 	}
 
@@ -59,37 +59,37 @@ class StoreControl extends Control
 			if ($this->session->may('bieb')) {
 				$this->handle_add($this->session->id(), $bezirk_id);
 
-				$this->pageCompositionHelper->addBread($this->func->s('bread_betrieb'), '/?page=betrieb');
-				$this->pageCompositionHelper->addBread($this->func->s('bread_new_betrieb'));
+				$this->pageHelper->addBread($this->func->s('bread_betrieb'), '/?page=betrieb');
+				$this->pageHelper->addBread($this->func->s('bread_new_betrieb'));
 
 				if (isset($_GET['id'])) {
 					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
 				}
 
-				$this->pageCompositionHelper->addContent($this->view->betrieb_form($bezirk, 'betrieb', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
+				$this->pageHelper->addContent($this->view->betrieb_form($bezirk, 'betrieb', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
 
-				$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					array('name' => $this->func->s('back_to_overview'), 'href' => '/?page=fsbetrieb&bid=' . $bezirk_id)
 				)), $this->func->s('actions')), CNT_RIGHT);
 			} else {
 				$this->func->info('Zum Anlegen eines Betriebes musst Du Betriebsverantwortlicher sein');
-				$this->linkingHelper->go('?page=settings&sub=upgrade/up_bip');
+				$this->routeHelper->go('?page=settings&sub=upgrade/up_bip');
 			}
 		} elseif ($id = $this->func->getActionId('delete')) {
 			/*
 			if($this->model->del_betrieb($id))
 			{
 				$this->func->info($this->func->s('betrieb_deleted'));
-				$this->linkingHelper->goPage();
+				$this->routeHelper->goPage();
 			}
 			*/
 		} elseif ($id = $this->func->getActionId('edit')) {
-			$this->pageCompositionHelper->addBread($this->func->s('bread_betrieb'), '/?page=betrieb');
-			$this->pageCompositionHelper->addBread($this->func->s('bread_edit_betrieb'));
+			$this->pageHelper->addBread($this->func->s('bread_betrieb'), '/?page=betrieb');
+			$this->pageHelper->addBread($this->func->s('bread_edit_betrieb'));
 			$data = $this->model->getOne_betrieb($id);
 
-			$this->pageCompositionHelper->addTitle($data['name']);
-			$this->pageCompositionHelper->addTitle($this->func->s('edit'));
+			$this->pageHelper->addTitle($data['name']);
+			$this->pageHelper->addTitle($this->func->s('edit'));
 
 			if (($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $id)) || $this->session->isAdminFor($data['bezirk_id'])) {
 				$this->handle_edit();
@@ -101,21 +101,21 @@ class StoreControl extends Control
 					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
 				}
 
-				$this->pageCompositionHelper->addContent($this->view->betrieb_form($bezirk, '', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
+				$this->pageHelper->addContent($this->view->betrieb_form($bezirk, '', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
 			} else {
 				$this->func->info('Diesen Betrieb kannst Du nicht bearbeiten');
 			}
 
-			$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 				$this->func->pageLink('betrieb', 'back_to_overview')
 			)), $this->func->s('actions')), CNT_RIGHT);
 		} elseif (isset($_GET['id'])) {
-			$this->linkingHelper->go('/?page=fsbetrieb&id=' . (int)$_GET['id']);
+			$this->routeHelper->go('/?page=fsbetrieb&id=' . (int)$_GET['id']);
 		} else {
-			$this->pageCompositionHelper->addBread($this->func->s('betrieb_bread'), '/?page=betrieb');
+			$this->pageHelper->addBread($this->func->s('betrieb_bread'), '/?page=betrieb');
 
 			if ($this->session->may('bieb')) {
-				$this->pageCompositionHelper->addContent($this->v_utils->v_menu(array(
+				$this->pageHelper->addContent($this->v_utils->v_menu(array(
 					array('href' => '/?page=betrieb&a=new&bid=' . (int)$bezirk_id, 'name' => 'Neuen Betrieb eintragen')
 				), 'Aktionen'), CNT_RIGHT);
 			}
@@ -134,7 +134,7 @@ class StoreControl extends Control
 				];
 			}, $stores);
 
-			$this->pageCompositionHelper->addContent($this->view->vueComponent('vue-storelist', 'store-list', [
+			$this->pageHelper->addContent($this->view->vueComponent('vue-storelist', 'store-list', [
 				'regionName' => $bezirk['name'],
 				'stores' => $storesMapped
 			]));
@@ -151,7 +151,7 @@ class StoreControl extends Control
 
 			if ($this->model->update_betrieb($_GET['id'], $g_data)) {
 				$this->func->info($this->func->s('betrieb_edit_success'));
-				$this->linkingHelper->go('/?page=fsbetrieb&id=' . (int)$_GET['id']);
+				$this->routeHelper->go('/?page=fsbetrieb&id=' . (int)$_GET['id']);
 			} else {
 				$this->func->error($this->func->s('error'));
 			}
@@ -169,7 +169,7 @@ class StoreControl extends Control
 			}
 			if (!in_array($g_data['bezirk_id'], $this->session->listRegionIDs())) {
 				$this->func->error($this->func->s('store.can_only_create_store_in_member_region'));
-				$this->linkingHelper->goPage();
+				$this->routeHelper->goPage();
 			}
 
 			if (isset($g_data['ort'])) {
@@ -211,7 +211,7 @@ class StoreControl extends Control
 
 				$this->func->info($this->func->s('betrieb_add_success'));
 
-				$this->linkingHelper->go('/?page=fsbetrieb&id=' . (int)$id);
+				$this->routeHelper->go('/?page=fsbetrieb&id=' . (int)$id);
 			} else {
 				$this->func->error($this->func->s('error'));
 			}

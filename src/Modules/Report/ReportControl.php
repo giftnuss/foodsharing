@@ -21,40 +21,40 @@ class ReportControl extends Control
 		parent::__construct();
 
 		if (!isset($_GET['sub'])) {
-			$this->linkingHelper->go('/?page=report&sub=uncom');
+			$this->routeHelper->go('/?page=report&sub=uncom');
 		}
 	}
 
 	public function index(): void
 	{
 		if ($this->session->mayHandleReports()) {
-			$this->pageCompositionHelper->addBread('Meldungen', '/?page=report');
+			$this->pageHelper->addBread('Meldungen', '/?page=report');
 		} else {
-			$this->linkingHelper->go('/?page=dashboard');
+			$this->routeHelper->go('/?page=dashboard');
 		}
 	}
 
 	public function uncom(): void
 	{
 		if ($this->session->mayHandleReports()) {
-			$this->pageCompositionHelper->addContent($this->view->statsMenu($this->reportGateway->getReportStats()), CNT_LEFT);
+			$this->pageHelper->addContent($this->view->statsMenu($this->reportGateway->getReportStats()), CNT_LEFT);
 
 			if ($reports = $this->reportGateway->getReports(0)) {
-				$this->pageCompositionHelper->addContent($this->view->listReports($reports));
+				$this->pageHelper->addContent($this->view->listReports($reports));
 			}
-			$this->pageCompositionHelper->addContent($this->view->topbar('Neue Meldungen', \count($reports) . ' insgesamt', '<img src="/img/shit.png" />'), CNT_TOP);
+			$this->pageHelper->addContent($this->view->topbar('Neue Meldungen', \count($reports) . ' insgesamt', '<img src="/img/shit.png" />'), CNT_TOP);
 		}
 	}
 
 	public function com(): void
 	{
 		if ($this->session->mayHandleReports()) {
-			$this->pageCompositionHelper->addContent($this->view->statsMenu($this->reportGateway->getReportStats()), CNT_LEFT);
+			$this->pageHelper->addContent($this->view->statsMenu($this->reportGateway->getReportStats()), CNT_LEFT);
 
 			if ($reports = $this->reportGateway->getReports(1)) {
-				$this->pageCompositionHelper->addContent($this->view->listReports($reports));
+				$this->pageHelper->addContent($this->view->listReports($reports));
 			}
-			$this->pageCompositionHelper->addContent($this->view->topbar('Bestätigte Meldungen', \count($reports) . ' insgesamt', '<img src="/img/shit.png" />'), CNT_TOP);
+			$this->pageHelper->addContent($this->view->topbar('Bestätigte Meldungen', \count($reports) . ' insgesamt', '<img src="/img/shit.png" />'), CNT_TOP);
 		}
 	}
 
@@ -62,11 +62,11 @@ class ReportControl extends Control
 	{
 		if ($this->session->mayHandleReports()) {
 			if ($foodsaver = $this->reportGateway->getReportedSaver($_GET['id'])) {
-				$this->pageCompositionHelper->addBread(
+				$this->pageHelper->addBread(
 					'Meldungen',
 					'/?page=report&sub=foodsaver&id=' . (int)$foodsaver['id']
 				);
-				$this->pageCompositionHelper->addJs(
+				$this->pageHelper->addJs(
 					'
 						$(".welcome_profile_image").css("cursor","pointer");
 						$(".welcome_profile_image").on("click", function(){
@@ -74,7 +74,7 @@ class ReportControl extends Control
 						});
 				'
 				);
-				$this->pageCompositionHelper->addContent(
+				$this->pageHelper->addContent(
 					$this->view->topbar(
 						'Meldungen von <a href="/profile/' . (int)$foodsaver['id'] . '">' . $foodsaver['name'] . ' ' . $foodsaver['nachname'] . '</a>',
 						\count($foodsaver['reports']) . ' gesamt',
@@ -82,19 +82,19 @@ class ReportControl extends Control
 					),
 					CNT_TOP
 				);
-				$this->pageCompositionHelper->addContent(
+				$this->pageHelper->addContent(
 					$this->v_utils->v_field(
 						$this->wallposts('fsreport', (int)$_GET['id']),
 						'Notizen und Entscheidungen'
 					)
 				);
-				$this->pageCompositionHelper->addContent(
+				$this->pageHelper->addContent(
 					$this->view->listReportsTiny($foodsaver['reports']),
 					CNT_RIGHT
 				);
 			}
 		} else {
-			$this->linkingHelper->go('/?page=dashboard');
+			$this->routeHelper->go('/?page=dashboard');
 		}
 	}
 }

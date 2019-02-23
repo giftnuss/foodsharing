@@ -38,11 +38,11 @@ class LoginControl extends Control
 
 	public function unsubscribe()
 	{
-		$this->pageCompositionHelper->addTitle('Newsletter Abmeldung');
-		$this->pageCompositionHelper->addBread('Newsletter Abmeldung');
-		if (isset($_GET['e']) && $this->mailingHelper->validEmail($_GET['e'])) {
+		$this->pageHelper->addTitle('Newsletter Abmeldung');
+		$this->pageHelper->addBread('Newsletter Abmeldung');
+		if (isset($_GET['e']) && $this->emailHelper->validEmail($_GET['e'])) {
 			$this->model->update('UPDATE `fs_' . "foodsaver` SET newsletter=0 WHERE email='" . $this->model->safe($_GET['e']) . "'");
-			$this->pageCompositionHelper->addContent($this->v_utils->v_info('Du wirst nun keine weiteren Newsletter von uns erhalten', 'Erfolg!'));
+			$this->pageHelper->addContent($this->v_utils->v_info('Du wirst nun keine weiteren Newsletter von uns erhalten', 'Erfolg!'));
 		}
 	}
 
@@ -80,7 +80,7 @@ class LoginControl extends Control
 			}
 		} else {
 			if (!isset($_GET['sub']) || $_GET['sub'] != 'unsubscribe') {
-				$this->linkingHelper->go('/?page=dashboard');
+				$this->routeHelper->go('/?page=dashboard');
 			}
 		}
 	}
@@ -89,10 +89,10 @@ class LoginControl extends Control
 	{
 		if ($this->model->activate($_GET['e'], $_GET['t'])) {
 			$this->func->info($this->func->s('activation_success'));
-			$this->linkingHelper->goPage('login');
+			$this->routeHelper->goPage('login');
 		} else {
 			$this->func->error($this->func->s('activation_failed'));
-			$this->linkingHelper->goPage('login');
+			$this->routeHelper->goPage('login');
 		}
 	}
 
@@ -121,11 +121,11 @@ class LoginControl extends Control
 
 		if ((isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], BASE_URL) !== false) || isset($_GET['logout'])) {
 			if (isset($_GET['ref'])) {
-				$this->linkingHelper->go(urldecode($_GET['ref']));
+				$this->routeHelper->go(urldecode($_GET['ref']));
 			}
-			$this->linkingHelper->go(str_replace('/?page=login&logout', '/?page=dashboard', $_SERVER['HTTP_REFERER']));
+			$this->routeHelper->go(str_replace('/?page=login&logout', '/?page=dashboard', $_SERVER['HTTP_REFERER']));
 		} else {
-			$this->linkingHelper->go('/?page=dashboard');
+			$this->routeHelper->go('/?page=dashboard');
 		}
 	}
 
@@ -137,8 +137,8 @@ class LoginControl extends Control
 			$k = strip_tags($_GET['k']);
 		}
 
-		$this->pageCompositionHelper->addTitle('Password zurücksetzen');
-		$this->pageCompositionHelper->addBread('Passwort zurücksetzen');
+		$this->pageHelper->addTitle('Password zurücksetzen');
+		$this->pageHelper->addBread('Passwort zurücksetzen');
 
 		if (isset($_POST['email']) || isset($_GET['m'])) {
 			$mail = '';
@@ -147,7 +147,7 @@ class LoginControl extends Control
 			} else {
 				$mail = $_POST['email'];
 			}
-			if (!$this->mailingHelper->validEmail($mail)) {
+			if (!$this->emailHelper->validEmail($mail)) {
 				$this->func->error('Sorry! Hast Du Dich vielleicht bei Deiner E-Mail-Adresse vertippt?');
 			} else {
 				if ($this->model->addPassRequest($mail)) {
@@ -175,27 +175,27 @@ class LoginControl extends Control
 							$check = false;
 							$this->func->error('Sorry, es gibt ein Problem mir Deinen Daten. Ein Administrator wurde informiert.');
 							/*
-							$this->mailingHelper->tplMail(11, 'kontakt@prographix.de',array(
+							$this->emailHelper->tplMail(11, 'kontakt@prographix.de',array(
 								'data' => '<pre>'.print_r($_POST,true).'</pre>'
 							));
 							*/
 						}
 
 						if ($check) {
-							$this->linkingHelper->go('/?page=login');
+							$this->routeHelper->go('/?page=login');
 						}
 					} else {
 						$this->func->error('Sorry, die Passwörter stimmen nicht überein.');
 					}
 				}
-				$this->pageCompositionHelper->addJs('$("#pass1").val("");');
-				$this->pageCompositionHelper->addContent($this->view->newPasswordForm($k));
+				$this->pageHelper->addJs('$("#pass1").val("");');
+				$this->pageHelper->addContent($this->view->newPasswordForm($k));
 			} else {
 				$this->func->error('Sorry, Du hast ein bisschen zu lange gewartet. Bitte beantrage ein neues Passwort!');
-				$this->pageCompositionHelper->addContent($this->view->passwordRequest(), CNT_LEFT);
+				$this->pageHelper->addContent($this->view->passwordRequest(), CNT_LEFT);
 			}
 		} else {
-			$this->pageCompositionHelper->addContent($this->view->passwordRequest());
+			$this->pageHelper->addContent($this->view->passwordRequest());
 		}
 	}
 }

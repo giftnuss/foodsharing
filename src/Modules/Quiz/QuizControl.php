@@ -18,9 +18,9 @@ class QuizControl extends Control
 		parent::__construct();
 
 		if (!$this->session->may()) {
-			$this->linkingHelper->goLogin();
+			$this->routeHelper->goLogin();
 		} elseif (!$this->session->mayEditQuiz()) {
-			$this->linkingHelper->go('/');
+			$this->routeHelper->go('/');
 		}
 	}
 
@@ -32,14 +32,14 @@ class QuizControl extends Control
 			$this->goBack();
 		}
 
-		$this->pageCompositionHelper->addBread('Quiz', '/?page=quiz');
-		$this->pageCompositionHelper->addTitle('Quiz');
+		$this->pageHelper->addBread('Quiz', '/?page=quiz');
+		$this->pageHelper->addTitle('Quiz');
 
 		$topbtn = '';
 		$slogan = 'Quiz-Fragen für Foodsaver, Betriebsverantwortliche & Botschafter';
 		if (!isset($_GET['sub']) && isset($_GET['id']) && (int)$_GET['id'] > 0) {
 			if ($name = $this->model->getVal('name', 'quiz', $_GET['id'])) {
-				$this->pageCompositionHelper->addBread($name, '/?page=quiz&id=' . (int)$_GET['id']);
+				$this->pageHelper->addBread($name, '/?page=quiz&id=' . (int)$_GET['id']);
 				$topbtn = ' - ' . $name;
 				$slogan = 'Klausurfragen für ' . $name;
 			}
@@ -48,11 +48,11 @@ class QuizControl extends Control
 
 		if (!isset($_GET['sub'])) {
 			if (!isset($_GET['id'])) {
-				$this->linkingHelper->go('/?page=quiz&id=1');
+				$this->routeHelper->go('/?page=quiz&id=1');
 			}
-			$this->pageCompositionHelper->addContent($this->view->topbar('Quiz' . $topbtn, $slogan, '<img src="/img/quiz.png" />'), CNT_TOP);
-			$this->pageCompositionHelper->addContent($this->view->listQuiz($this->model->listQuiz()), CNT_LEFT);
-			$this->pageCompositionHelper->addContent($this->view->quizMenu(), CNT_LEFT);
+			$this->pageHelper->addContent($this->view->topbar('Quiz' . $topbtn, $slogan, '<img src="/img/quiz.png" />'), CNT_TOP);
+			$this->pageHelper->addContent($this->view->listQuiz($this->model->listQuiz()), CNT_LEFT);
+			$this->pageHelper->addContent($this->view->quizMenu(), CNT_LEFT);
 		}
 	}
 
@@ -67,12 +67,12 @@ class QuizControl extends Control
 		$questionId = (int)$_GET['id'];
 		if ($q = $this->model->getQuestion($questionId)) {
 			if ($name = $this->model->getVal('name', 'quiz', $q['quiz_id'])) {
-				$this->pageCompositionHelper->addBread($name, '/?page=quiz&id=' . $questionId);
+				$this->pageHelper->addBread($name, '/?page=quiz&id=' . $questionId);
 			}
-			$this->pageCompositionHelper->addBread('Frage  #' . $q['id'], '/?page=quiz&sub=wall&id=' . (int)$q['id']);
-			$this->pageCompositionHelper->addContent($this->view->topbar('Quizfrage  #' . $q['id'], '<a style="float:right;color:#FFF;font-size:13px;margin-top:-20px;" href="#" class="button" onclick="ajreq(\'editquest\',{id:' . (int)$q['id'] . ',qid:' . (int)$q['quiz_id'] . '});return false;">Frage bearbeiten</a>' . $q['text'] . '<p><strong>' . $q['fp'] . ' Fehlerpunkte, ' . $q['duration'] . ' Sekunden zum Antworten</strong></p>', '<img src="/img/quiz.png" />'), CNT_TOP);
-			$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->wallposts('question', $questionId), 'Kommentare'), CNT_MAIN);
-			$this->pageCompositionHelper->addContent($this->view->answerSidebar($this->model->getAnswers($q['id']), $questionId), CNT_RIGHT);
+			$this->pageHelper->addBread('Frage  #' . $q['id'], '/?page=quiz&sub=wall&id=' . (int)$q['id']);
+			$this->pageHelper->addContent($this->view->topbar('Quizfrage  #' . $q['id'], '<a style="float:right;color:#FFF;font-size:13px;margin-top:-20px;" href="#" class="button" onclick="ajreq(\'editquest\',{id:' . (int)$q['id'] . ',qid:' . (int)$q['quiz_id'] . '});return false;">Frage bearbeiten</a>' . $q['text'] . '<p><strong>' . $q['fp'] . ' Fehlerpunkte, ' . $q['duration'] . ' Sekunden zum Antworten</strong></p>', '<img src="/img/quiz.png" />'), CNT_TOP);
+			$this->pageHelper->addContent($this->v_utils->v_field($this->wallposts('question', $questionId), 'Kommentare'), CNT_MAIN);
+			$this->pageHelper->addContent($this->view->answerSidebar($this->model->getAnswers($q['id']), $questionId), CNT_RIGHT);
 		}
 	}
 
@@ -92,12 +92,12 @@ class QuizControl extends Control
 				if (!empty($name)) {
 					if ($id = $this->model->updateQuiz($_GET['qid'], $name, $desc, $maxfp, $questcount)) {
 						$this->func->info('Quiz wurde erfolgreich geändert!');
-						$this->linkingHelper->go('/?page=quiz&id=' . (int)$id);
+						$this->routeHelper->go('/?page=quiz&id=' . (int)$id);
 					}
 				}
 			}
 			$this->func->setEditData($quiz);
-			$this->pageCompositionHelper->addContent($this->view->quizForm());
+			$this->pageHelper->addContent($this->view->quizForm());
 		}
 	}
 
@@ -116,12 +116,12 @@ class QuizControl extends Control
 			if (!empty($name)) {
 				if ($id = $this->model->addQuiz($name, $desc, $maxfp, $questcount)) {
 					$this->func->info('Quiz wurde erfolgreich angelegt!');
-					$this->linkingHelper->go('/?page=quiz&id=' . (int)$id);
+					$this->routeHelper->go('/?page=quiz&id=' . (int)$id);
 				}
 			}
 		}
 
-		$this->pageCompositionHelper->addContent($this->view->quizForm());
+		$this->pageHelper->addContent($this->view->quizForm());
 	}
 
 	public function sessiondetail()
@@ -131,8 +131,8 @@ class QuizControl extends Control
 			'foodsaver',
 			$_GET['fsid']
 		)) {
-			$this->pageCompositionHelper->addBread('Quiz Sessions von ' . $fs['name'] . ' ' . $fs['nachname']);
-			$this->pageCompositionHelper->addContent(
+			$this->pageHelper->addBread('Quiz Sessions von ' . $fs['name'] . ' ' . $fs['nachname']);
+			$this->pageHelper->addContent(
 				$this->view->topbar(
 					'Quiz-Sessions von ' . $fs['name'] . ' ' . $fs['nachname'],
 					$this->getRolle($fs['geschlecht'], $fs['rolle']),
@@ -142,7 +142,7 @@ class QuizControl extends Control
 			);
 
 			if ($sessions = $this->model->getUserSessions($_GET['fsid'])) {
-				$this->pageCompositionHelper->addContent($this->view->userSessions($sessions, $fs));
+				$this->pageHelper->addContent($this->view->userSessions($sessions, $fs));
 			}
 		}
 	}
@@ -156,24 +156,24 @@ class QuizControl extends Control
 	{
 		if ($quiz = $this->model->getValues(array('id', 'name'), 'quiz', $_GET['id'])) {
 			if ($sessions = $this->model->getSessions($_GET['id'])) {
-				$this->pageCompositionHelper->addContent($this->view->sessionList($sessions, $quiz));
+				$this->pageHelper->addContent($this->view->sessionList($sessions, $quiz));
 			} else {
-				$this->pageCompositionHelper->addContent($this->view->noSessions($quiz));
+				$this->pageHelper->addContent($this->view->noSessions($quiz));
 			}
-			$this->pageCompositionHelper->addBread($quiz['name'], '/?page=quiz&id=' . (int)$_GET['id']);
-			$this->pageCompositionHelper->addBread('Auswertung');
+			$this->pageHelper->addBread($quiz['name'], '/?page=quiz&id=' . (int)$_GET['id']);
+			$this->pageHelper->addBread('Auswertung');
 			$slogan = 'Klausurfragen für ' . $quiz['name'];
 
-			$this->pageCompositionHelper->addContent($this->view->topbar('Auswertung für ' . $quiz['name'] . ' Quiz', $slogan, '<img src="/img/quiz.png" />'), CNT_TOP);
+			$this->pageHelper->addContent($this->view->topbar('Auswertung für ' . $quiz['name'] . ' Quiz', $slogan, '<img src="/img/quiz.png" />'), CNT_TOP);
 		}
 	}
 
 	public function listQuestions($quiz_id)
 	{
-		$this->pageCompositionHelper->addContent($this->view->quizbuttons($quiz_id));
+		$this->pageHelper->addContent($this->view->quizbuttons($quiz_id));
 
-		$this->pageCompositionHelper->addContent($this->view->listQuestions($this->model->listQuestions($quiz_id), $quiz_id));
+		$this->pageHelper->addContent($this->view->listQuestions($this->model->listQuestions($quiz_id), $quiz_id));
 
-		$this->pageCompositionHelper->addContent('<div style="height:15px;"></div>' . $this->view->quizbuttons($quiz_id));
+		$this->pageHelper->addContent('<div style="height:15px;"></div>' . $this->view->quizbuttons($quiz_id));
 	}
 }

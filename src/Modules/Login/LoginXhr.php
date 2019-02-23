@@ -107,7 +107,7 @@ class LoginXhr extends Control
 		if ($id = $this->model->insertNewUser($data, $token)) {
 			$activationUrl = BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
 
-			$this->mailingHelper->tplMail(25, $data['email'], array(
+			$this->emailHelper->tplMail(25, $data['email'], array(
 				'name' => $data['name'],
 				'link' => $activationUrl,
 				'anrede' => $this->func->s('anrede_' . $data['gender'])
@@ -174,7 +174,7 @@ class LoginXhr extends Control
 			return $this->func->s('error_name');
 		}
 
-		if (!$this->mailingHelper->validEmail($data['email'])) {
+		if (!$this->emailHelper->validEmail($data['email'])) {
 			return $this->func->s('error_email');
 		}
 
@@ -231,7 +231,7 @@ class LoginXhr extends Control
 			$email = '';
 			$pass = '';
 			if (isset($_GET['p'], $_GET['e'])) {
-				if ($this->mailingHelper->validEmail($_GET['e'])) {
+				if ($this->emailHelper->validEmail($_GET['e'])) {
 					$email = strip_tags($_GET['e']);
 				}
 				$pass = strip_tags($_GET['p']);

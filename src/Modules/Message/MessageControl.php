@@ -14,7 +14,7 @@ final class MessageControl extends Control
 		parent::__construct();
 
 		if (!$this->session->may()) {
-			$this->linkingHelper->goLogin();
+			$this->routeHelper->goLogin();
 		}
 	}
 
@@ -23,13 +23,13 @@ final class MessageControl extends Control
 		$this->setTemplate('msg');
 		$this->setContentWidth(5, 8);
 
-		$this->pageCompositionHelper->addJs('msg.fsid = ' . (int)$this->session->id() . ';');
-		$this->pageCompositionHelper->addBread($this->func->s('messages'));
-		$this->pageCompositionHelper->addTitle($this->func->s('messages'));
+		$this->pageHelper->addJs('msg.fsid = ' . (int)$this->session->id() . ';');
+		$this->pageHelper->addBread($this->func->s('messages'));
+		$this->pageHelper->addTitle($this->func->s('messages'));
 
-		$this->pageCompositionHelper->addContent($this->view->compose());
-		$this->pageCompositionHelper->addContent($this->view->conversation());
-		$this->pageCompositionHelper->addContent($this->view->leftMenu(), CNT_RIGHT);
+		$this->pageHelper->addContent($this->view->compose());
+		$this->pageHelper->addContent($this->view->conversation());
+		$this->pageHelper->addContent($this->view->leftMenu(), CNT_RIGHT);
 
 		$conversations = $this->model->listConversations();
 		if ($conversations) {
@@ -39,6 +39,6 @@ final class MessageControl extends Control
 			}
 			$this->session->set('msg_conversations', $ids);
 		}
-		$this->pageCompositionHelper->addContent($this->view->conversationListWrapper($this->view->conversationList($conversations)), CNT_RIGHT);
+		$this->pageHelper->addContent($this->view->conversationListWrapper($this->view->conversationList($conversations)), CNT_RIGHT);
 	}
 }

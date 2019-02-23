@@ -41,7 +41,7 @@ class TeamXhr extends Control
 
 				$mail = new AsyncMail($this->mem);
 
-				if ($this->mailingHelper->validEmail($_POST['email'])) {
+				if ($this->emailHelper->validEmail($_POST['email'])) {
 					$mail->setFrom($_POST['email']);
 				} else {
 					$mail->setFrom(DEFAULT_EMAIL);

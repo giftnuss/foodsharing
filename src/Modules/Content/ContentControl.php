@@ -23,51 +23,51 @@ class ContentControl extends Control
 	{
 		if (!isset($_GET['sub'])) {
 			if (!$this->session->may('orga')) {
-				$this->linkingHelper->go('/');
+				$this->routeHelper->go('/');
 			}
 			$this->model;
 
 			if ($this->func->getAction('neu')) {
 				$this->handle_add();
 
-				$this->pageCompositionHelper->addBread($this->func->s('bread_content'), '/?page=content');
-				$this->pageCompositionHelper->addBread($this->func->s('bread_new_content'));
+				$this->pageHelper->addBread($this->func->s('bread_content'), '/?page=content');
+				$this->pageHelper->addBread($this->func->s('bread_new_content'));
 
-				$this->pageCompositionHelper->addContent($this->content_form());
+				$this->pageHelper->addContent($this->content_form());
 
-				$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					$this->func->pageLink('content', 'back_to_overview')
 				)), $this->func->s('actions')), CNT_RIGHT);
 			} elseif ($id = $this->func->getActionId('delete')) {
 				if ($this->contentGateway->delete($id)) {
 					$this->func->info($this->func->s('content_deleted'));
-					$this->linkingHelper->goPage();
+					$this->routeHelper->goPage();
 				}
 			} elseif ($id = $this->func->getActionId('edit')) {
 				$this->handle_edit();
 
-				$this->pageCompositionHelper->addBread($this->func->s('bread_content'), '/?page=content');
-				$this->pageCompositionHelper->addBread($this->func->s('bread_edit_content'));
+				$this->pageHelper->addBread($this->func->s('bread_content'), '/?page=content');
+				$this->pageHelper->addBread($this->func->s('bread_edit_content'));
 
 				$data = $this->contentGateway->getDetail($id);
 				$this->func->setEditData($data);
 
-				$this->pageCompositionHelper->addContent($this->content_form());
+				$this->pageHelper->addContent($this->content_form());
 
-				$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					$this->func->pageLink('content', 'back_to_overview')
 				)), $this->func->s('actions')), CNT_RIGHT);
 			} elseif ($id = $this->func->getActionId('view')) {
 				if ($cnt = $this->contentGateway->get($id)) {
-					$this->pageCompositionHelper->addBread($cnt['title']);
-					$this->pageCompositionHelper->addTitle($cnt['title']);
+					$this->pageHelper->addBread($cnt['title']);
+					$this->pageHelper->addTitle($cnt['title']);
 
-					$this->pageCompositionHelper->addContent($this->view->simple($cnt));
+					$this->pageHelper->addContent($this->view->simple($cnt));
 				}
 			} elseif (isset($_GET['id'])) {
-				$this->linkingHelper->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
+				$this->routeHelper->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
 			} else {
-				$this->pageCompositionHelper->addBread($this->func->s('content_bread'), '/?page=content');
+				$this->pageHelper->addBread($this->func->s('content_bread'), '/?page=content');
 
 				if ($data = $this->contentGateway->list()) {
 					$rows = array();
@@ -85,12 +85,12 @@ class ContentControl extends Control
 						array('name' => $this->func->s('actions'), 'sort' => false, 'width' => 50)
 					), $rows);
 
-					$this->pageCompositionHelper->addContent($this->v_utils->v_field($table, 'Öffentliche Webseiten bearbeiten'));
+					$this->pageHelper->addContent($this->v_utils->v_field($table, 'Öffentliche Webseiten bearbeiten'));
 				} else {
 					$this->func->info($this->func->s('content_empty'));
 				}
 
-				$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					array('href' => '/?page=content&a=neu', 'name' => $this->func->s('neu_content'))
 				)), 'Aktionen'), CNT_RIGHT);
 			}
@@ -100,97 +100,97 @@ class ContentControl extends Control
 	public function partner()
 	{
 		if ($cnt = $this->contentGateway->get(10)) {
-			$this->pageCompositionHelper->addBread($cnt['title']);
-			$this->pageCompositionHelper->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->pageCompositionHelper->addContent($this->view->partner($cnt));
+			$this->pageHelper->addContent($this->view->partner($cnt));
 		}
 	}
 
 	public function unterstuetzung()
 	{
 		if ($cnt = $this->contentGateway->get(42)) {
-			$this->pageCompositionHelper->addBread($cnt['title']);
-			$this->pageCompositionHelper->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->pageCompositionHelper->addContent($this->view->simple($cnt));
+			$this->pageHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function presse()
 	{
 		if ($cnt = $this->contentGateway->get(58)) {
-			$this->pageCompositionHelper->addBread($cnt['title']);
-			$this->pageCompositionHelper->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->pageCompositionHelper->addContent($this->view->simple($cnt));
+			$this->pageHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function communitiesGermany()
 	{
 		if ($cnt = $this->contentGateway->get(52)) {
-			$this->pageCompositionHelper->addBread($cnt['title']);
-			$this->pageCompositionHelper->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->pageCompositionHelper->addContent($this->view->simple($cnt));
+			$this->pageHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function communitiesAustria()
 	{
 		if ($cnt = $this->contentGateway->get(61)) {
-			$this->pageCompositionHelper->addBread($cnt['title']);
-			$this->pageCompositionHelper->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->pageCompositionHelper->addContent($this->view->simple($cnt));
+			$this->pageHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function communitiesSwitzerland()
 	{
 		if ($cnt = $this->contentGateway->get(62)) {
-			$this->pageCompositionHelper->addBread($cnt['title']);
-			$this->pageCompositionHelper->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->pageCompositionHelper->addContent($this->view->simple($cnt));
+			$this->pageHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function forderungen()
 	{
 		if ($cnt = $this->contentGateway->get(60)) {
-			$this->pageCompositionHelper->addBread($cnt['title']);
-			$this->pageCompositionHelper->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->pageCompositionHelper->addContent($this->view->simple($cnt));
+			$this->pageHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function leeretonne()
 	{
 		if ($cnt = $this->contentGateway->get(46)) {
-			$this->pageCompositionHelper->addBread($cnt['title']);
-			$this->pageCompositionHelper->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->pageCompositionHelper->addContent($this->view->simple($cnt));
+			$this->pageHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function fairteilerrettung()
 	{
 		if ($cnt = $this->contentGateway->get(49)) {
-			$this->pageCompositionHelper->addBread($cnt['title']);
-			$this->pageCompositionHelper->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->pageCompositionHelper->addContent($this->view->simple($cnt));
+			$this->pageHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function faq(): void
 	{
-		$this->pageCompositionHelper->addBread('F.A.Q');
-		$this->pageCompositionHelper->addTitle('F.A.Q.');
+		$this->pageHelper->addBread('F.A.Q');
+		$this->pageHelper->addTitle('F.A.Q.');
 
 		$cat_ids = array(1, 6, 7);
 		if ($this->session->may('fs')) {
@@ -202,68 +202,68 @@ class ContentControl extends Control
 		}
 
 		if ($faq = $this->contentGateway->listFaq($cat_ids)) {
-			$this->pageCompositionHelper->addContent($this->view->faq($faq));
+			$this->pageHelper->addContent($this->view->faq($faq));
 		}
 	}
 
 	public function impressum()
 	{
 		if ($cnt = $this->contentGateway->get(8)) {
-			$this->pageCompositionHelper->addBread($cnt['title']);
-			$this->pageCompositionHelper->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->pageCompositionHelper->addContent($this->view->impressum($cnt));
+			$this->pageHelper->addContent($this->view->impressum($cnt));
 		}
 	}
 
 	public function about()
 	{
 		if ($cnt = $this->contentGateway->get(9)) {
-			$this->pageCompositionHelper->addBread($cnt['title']);
-			$this->pageCompositionHelper->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->pageCompositionHelper->addContent($this->view->about($cnt));
+			$this->pageHelper->addContent($this->view->about($cnt));
 		}
 	}
 
 	public function ratgeber()
 	{
-		$this->pageCompositionHelper->addBread('Ratgeber');
-		$this->pageCompositionHelper->addTitle('Ratgeber Lebensmittelsicherheit');
-		$this->pageCompositionHelper->addContent($this->view->ratgeber());
+		$this->pageHelper->addBread('Ratgeber');
+		$this->pageHelper->addTitle('Ratgeber Lebensmittelsicherheit');
+		$this->pageHelper->addContent($this->view->ratgeber());
 	}
 
 	public function joininfo()
 	{
-		$this->pageCompositionHelper->addBread('Mitmachen');
-		$this->pageCompositionHelper->addTitle('Mitmachen - Unsere Regeln');
-		$this->pageCompositionHelper->addContent($this->view->joininfo());
+		$this->pageHelper->addBread('Mitmachen');
+		$this->pageHelper->addTitle('Mitmachen - Unsere Regeln');
+		$this->pageHelper->addContent($this->view->joininfo());
 	}
 
 	public function fuer_unternehmen()
 	{
 		if ($cnt = $this->contentGateway->get(4)) {
-			$this->pageCompositionHelper->addBread($cnt['title']);
-			$this->pageCompositionHelper->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->pageCompositionHelper->addContent($this->view->partner($cnt));
+			$this->pageHelper->addContent($this->view->partner($cnt));
 		}
 	}
 
 	public function infohub()
 	{
 		if ($cnt = $this->contentGateway->get(59)) {
-			$this->pageCompositionHelper->addBread($cnt['title']);
-			$this->pageCompositionHelper->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->pageCompositionHelper->addContent($this->view->simple($cnt));
+			$this->pageHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function changelog()
 	{
-		$this->pageCompositionHelper->addBread('Changelog');
-		$this->pageCompositionHelper->addTitle('Changelog');
+		$this->pageHelper->addBread('Changelog');
+		$this->pageHelper->addTitle('Changelog');
 		$markdown = file_get_contents('CHANGELOG.md');
 		$markdown = preg_replace('/\@(\S+)/', '[@\1](https://gitlab.com/\1)', $markdown);
 		$markdown = preg_replace('/!([0-9]+)/', '[!\1](https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/\1)', $markdown);
@@ -271,7 +271,7 @@ class ContentControl extends Control
 		$Parsedown = new Parsedown();
 		$cl['body'] = $Parsedown->parse($markdown);
 		$cl['title'] = 'Changelog';
-		$this->pageCompositionHelper->addContent($this->view->simple($cl));
+		$this->pageHelper->addContent($this->view->simple($cl));
 	}
 
 	private function content_form($title = 'Content Management')
@@ -295,7 +295,7 @@ class ContentControl extends Control
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
 			if ($this->contentGateway->update($_GET['id'], $g_data)) {
 				$this->func->info($this->func->s('content_edit_success'));
-				$this->linkingHelper->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
+				$this->routeHelper->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
 			} else {
 				$this->func->error($this->func->s('error'));
 			}
@@ -309,7 +309,7 @@ class ContentControl extends Control
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
 			if ($this->contentGateway->create($g_data)) {
 				$this->func->info($this->func->s('content_add_success'));
-				$this->linkingHelper->goPage();
+				$this->routeHelper->goPage();
 			} else {
 				$this->func->error($this->func->s('error'));
 			}

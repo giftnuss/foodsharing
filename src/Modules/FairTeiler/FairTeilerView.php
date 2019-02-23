@@ -74,7 +74,7 @@ class FairTeilerView extends View
 			$title = $this->func->sv('edit_fairteiler_name', $this->fairteiler['name']);
 
 			$tagselect = $this->v_utils->v_form_tagselect('bfoodsaver', array('valueOptions' => $data['bfoodsaver_values'], 'values' => $data['bfoodsaver']));
-			$this->pageCompositionHelper->addJs('
+			$this->pageHelper->addJs('
 			$("#fairteiler-form").on("submit", function(ev){
 				if($("#bfoodsaver input[type=\'hidden\']").length == 0)
 				{
@@ -110,13 +110,13 @@ class FairTeilerView extends View
 
 	public function followHidden()
 	{
-		$this->pageCompositionHelper->addJsFunc('
+		$this->pageHelper->addJsFunc('
 			function u_follow()
 			{
 				$("#follow-hidden").dialog("open");
 			}
 		');
-		$this->pageCompositionHelper->addJs('
+		$this->pageHelper->addJs('
 			$("#follow-hidden").dialog({
 				modal: true,
 				title: "' . $this->func->sv('infotype_title', $this->sanitizerService->jsSafe($this->fairteiler['name'], '"')) . '",
@@ -125,7 +125,7 @@ class FairTeilerView extends View
 				resizable: false,
 				buttons: {
 					"' . $this->func->s('save') . '": function(){
-						goTo("' . $this->linkingHelper->getSelf() . '&follow=1&infotype=" + $("input[name=\'infotype\']:checked").val());
+						goTo("' . $this->routeHelper->getSelf() . '&follow=1&infotype=" + $("input[name=\'infotype\']:checked").val());
 					}
 				}
 			});		
@@ -173,9 +173,9 @@ class FairTeilerView extends View
 		}
 
 		if ($this->bezirk_id > 0) {
-			$this->pageCompositionHelper->addContent($this->topbar($this->func->sv('list_fairteiler', $this->bezirk['name']), 'Es gibt ' . $count . ' Fair-Teiler in ' . $this->bezirk['name'] . ' und allen Unterbezirken', '<img src="/img/fairteiler_thumb.png" />'), CNT_TOP);
+			$this->pageHelper->addContent($this->topbar($this->func->sv('list_fairteiler', $this->bezirk['name']), 'Es gibt ' . $count . ' Fair-Teiler in ' . $this->bezirk['name'] . ' und allen Unterbezirken', '<img src="/img/fairteiler_thumb.png" />'), CNT_TOP);
 		} else {
-			$this->pageCompositionHelper->addContent($this->topbar($this->func->s('your_fairteiler'), 'Es gibt ' . $count . ' Fair-Teiler in allen Bezirken in denen Du aktiv bist', '<img src="/img/fairteiler_thumb.png" />'), CNT_TOP);
+			$this->pageHelper->addContent($this->topbar($this->func->s('your_fairteiler'), 'Es gibt ' . $count . ' Fair-Teiler in allen Bezirken in denen Du aktiv bist', '<img src="/img/fairteiler_thumb.png" />'), CNT_TOP);
 		}
 
 		return $content;

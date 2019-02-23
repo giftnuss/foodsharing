@@ -16,7 +16,7 @@ class BasketControl extends Control
 
 		parent::__construct();
 
-		$this->pageCompositionHelper->addBread('Essenskörbe');
+		$this->pageHelper->addBread('Essenskörbe');
 	}
 
 	public function index(): void
@@ -30,10 +30,10 @@ class BasketControl extends Control
 				if (method_exists($this, $m)) {
 					$this->$m();
 				} else {
-					$this->linkingHelper->go('/essenskoerbe/find');
+					$this->routeHelper->go('/essenskoerbe/find');
 				}
 			} else {
-				$this->linkingHelper->go('/essenskoerbe/find');
+				$this->routeHelper->go('/essenskoerbe/find');
 			}
 		}
 	}

@@ -23,27 +23,27 @@ class EventControl extends Control
 				return false;
 			}
 
-			$this->pageCompositionHelper->addBread('Termine', '/?page=event');
-			$this->pageCompositionHelper->addBread($event['name']);
+			$this->pageHelper->addBread('Termine', '/?page=event');
+			$this->pageHelper->addBread($event['name']);
 
 			$status = $this->gateway->getInviteStatus($event['id'], $this->session->id());
 
-			$this->pageCompositionHelper->addContent($this->view->eventTop($event), CNT_TOP);
-			$this->pageCompositionHelper->addContent($this->view->statusMenu($event, $status), CNT_LEFT);
-			$this->pageCompositionHelper->addContent($this->view->event($event));
+			$this->pageHelper->addContent($this->view->eventTop($event), CNT_TOP);
+			$this->pageHelper->addContent($this->view->statusMenu($event, $status), CNT_LEFT);
+			$this->pageHelper->addContent($this->view->event($event));
 
 			if ($event['online'] == 0 && $event['location'] != false) {
-				$this->pageCompositionHelper->addContent($this->view->location($event['location']), CNT_RIGHT);
+				$this->pageHelper->addContent($this->view->location($event['location']), CNT_RIGHT);
 			} elseif ($event['online'] == 1) {
-				$this->pageCompositionHelper->addContent($this->view->locationMumble(), CNT_RIGHT);
+				$this->pageHelper->addContent($this->view->locationMumble(), CNT_RIGHT);
 			}
 
 			if ($event['invites']) {
-				$this->pageCompositionHelper->addContent($this->view->invites($event['invites']), CNT_RIGHT);
+				$this->pageHelper->addContent($this->view->invites($event['invites']), CNT_RIGHT);
 			}
-			$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->wallposts('event', $event['id']), 'Pinnwand'));
+			$this->pageHelper->addContent($this->v_utils->v_field($this->wallposts('event', $event['id']), 'Pinnwand'));
 		} elseif (!isset($_GET['sub'])) {
-			$this->linkingHelper->go('/?page=dashboard');
+			$this->routeHelper->go('/?page=dashboard');
 		}
 	}
 
@@ -68,8 +68,8 @@ class EventControl extends Control
 				return false;
 			}
 			if ($event['fs_id'] == $this->session->id() || $this->session->isOrgaTeam() || $this->session->isAdminFor($event['bezirk_id'])) {
-				$this->pageCompositionHelper->addBread('Termine', '/?page=event');
-				$this->pageCompositionHelper->addBread('Neuer Termin');
+				$this->pageHelper->addBread('Termine', '/?page=event');
+				$this->pageHelper->addBread('Neuer Termin');
 
 				if ($this->isSubmitted()) {
 					if ($data = $this->validateEvent()) {
@@ -81,7 +81,7 @@ class EventControl extends Control
 								$this->gateway->inviteFullRegion($data['bezirk_id'], $_GET['id'], $data['invitesubs']);
 							}
 							$this->func->info('Event wurde erfolgreich geändert!');
-							$this->linkingHelper->go('/?page=event&id=' . (int)$_GET['id']);
+							$this->routeHelper->go('/?page=event&id=' . (int)$_GET['id']);
 						}
 					}
 				}
@@ -101,17 +101,17 @@ class EventControl extends Control
 
 				$this->func->setEditData($event);
 
-				$this->pageCompositionHelper->addContent($this->view->eventForm($bezirke));
+				$this->pageHelper->addContent($this->view->eventForm($bezirke));
 			} else {
-				$this->linkingHelper->go('/?page=event');
+				$this->routeHelper->go('/?page=event');
 			}
 		}
 	}
 
 	public function add()
 	{
-		$this->pageCompositionHelper->addBread('Termine', '/?page=event');
-		$this->pageCompositionHelper->addBread('Neuer Termin');
+		$this->pageHelper->addBread('Termine', '/?page=event');
+		$this->pageHelper->addBread('Neuer Termin');
 
 		if ($this->isSubmitted()) {
 			if ($data = $this->validateEvent()) {
@@ -120,13 +120,13 @@ class EventControl extends Control
 						$this->gateway->inviteFullRegion($data['bezirk_id'], $id, $data['invitesubs']);
 					}
 					$this->func->info('Event wurde erfolgreich eingetragen!');
-					$this->linkingHelper->go('/?page=event&id=' . (int)$id);
+					$this->routeHelper->go('/?page=event&id=' . (int)$id);
 				}
 			}
 		} else {
 			$bezirke = $this->session->getRegions();
 
-			$this->pageCompositionHelper->addContent($this->view->eventForm($bezirke));
+			$this->pageHelper->addContent($this->view->eventForm($bezirke));
 		}
 	}
 

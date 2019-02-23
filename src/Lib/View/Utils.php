@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Lib\View;
 
-use Foodsharing\Helpers\LinkingHelper;
-use Foodsharing\Helpers\PageCompositionHelper;
+use Foodsharing\Helpers\RouteHelper;
+use Foodsharing\Helpers\PageHelper;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Services\SanitizerService;
@@ -26,18 +26,18 @@ class Utils
 	 */
 	private $twig;
 	private $sanitizerService;
-	private $pageCompositionHelper;
-	private $linkingHelper;
+	private $pageHelper;
+	private $routeHelper;
 
 	public function __construct(
 		SanitizerService $sanitizerService,
-		PageCompositionHelper $pageCompositionHelper,
-		LinkingHelper $linkingHelper
+		PageHelper $pageHelper,
+		RouteHelper $routeHelper
 	) {
 		$this->id = array();
 		$this->sanitizerService = $sanitizerService;
-		$this->pageCompositionHelper = $pageCompositionHelper;
-		$this->linkingHelper = $linkingHelper;
+		$this->pageHelper = $pageHelper;
+		$this->routeHelper = $routeHelper;
 	}
 
 	/**
@@ -76,7 +76,7 @@ class Utils
 		}
 
 		$id = $this->func->id('scroller');
-		$this->pageCompositionHelper->addJs('$("#' . $id . '").slimScroll();');
+		$this->pageHelper->addJs('$("#' . $id . '").slimScroll();');
 
 		return '
 			<div id="' . $id . '" class="scroller">
@@ -88,7 +88,7 @@ class Utils
 	{
 		$id = $this->func->id('activeSwitch');
 
-		$this->pageCompositionHelper->addJs('
+		$this->pageHelper->addJs('
 			$("#' . $id . ' input").switchButton({
 				labels_placement: "right",
 				on_label: "' . $this->func->s('on_label') . '",
@@ -139,10 +139,10 @@ class Utils
 		}
 		$id = $this->func->id($id);
 
-		$this->pageCompositionHelper->addJs('$("#' . $id . '-button").button().on("click", function(){
+		$this->pageHelper->addJs('$("#' . $id . '-button").button().on("click", function(){
 			$("#' . $id . '-dialog").dialog("open");
 		});');
-		$this->pageCompositionHelper->addJs('$("#' . $id . '-dialog").dialog({
+		$this->pageHelper->addJs('$("#' . $id . '-dialog").dialog({
 			autoOpen:false,
 			modal:true,
 			title:"Bezirk ändern",
@@ -162,7 +162,7 @@ class Utils
 			$nodeselect = 'true';
 		}
 
-		$this->pageCompositionHelper->addJs('$("#' . $id . '-tree").dynatree({
+		$this->pageHelper->addJs('$("#' . $id . '-tree").dynatree({
 				onSelect: function(select, node) {
 					$("#' . $id . '-hidden").html("");
 					$.map(node.tree.getSelectedNodes(), function(node){
@@ -201,7 +201,7 @@ class Utils
 					});
 				}
 			});');
-		$this->pageCompositionHelper->addHidden('<div id="' . $id . '-dialog"><div id="' . $id . '-tree"></div></div>');
+		$this->pageHelper->addHidden('<div id="' . $id . '-dialog"><div id="' . $id . '-tree"></div></div>');
 
 		$label = $this->func->s('Stammbezirk');
 		if (isset($option['label'])) {
@@ -293,7 +293,7 @@ class Utils
 	{
 		$new_id = $this->func->id($id);
 
-		$this->pageCompositionHelper->addJs('$("#' . $new_id . '-button").button({}).on("click", function(){$("#dialog_' . $id . '").dialog("open");});');
+		$this->pageHelper->addJs('$("#' . $new_id . '-button").button({}).on("click", function(){$("#dialog_' . $id . '").dialog("open");});');
 
 		return '<span id="' . $new_id . '-button">' . $label . '</span>';
 	}
@@ -304,7 +304,7 @@ class Utils
 		$label = $this->func->s($id);
 		$value = $this->func->getValue($id);
 
-		$this->pageCompositionHelper->addStyle('div#content {width: 580px;}div#right{width:222px;}');
+		$this->pageHelper->addStyle('div#content {width: 580px;}div#right{width:222px;}');
 
 		$css = 'css/content.css,css/jquery-ui.css';
 		$class = 'ui-widget ui-widget-content ui-padding';
@@ -340,7 +340,7 @@ class Utils
 
 		});';
 
-		$this->pageCompositionHelper->addJs($js);
+		$this->pageHelper->addJs($js);
 
 		return $this->v_input_wrapper($label, '<textarea name="' . $id . '" id="' . $id . '">' . $value . '</textarea>', $id, $option);
 	}
@@ -394,7 +394,7 @@ class Utils
 				</div>
 			</div>';
 
-		$this->pageCompositionHelper->addJs('
+		$this->pageHelper->addJs('
 				$(\'#' . $id . '\').on("change", function(){
 					if($(this).val() == "choose" || $(this).val() == "choosebot" || $(this).val() == "filialbez")
 					{
@@ -458,7 +458,7 @@ class Utils
 		$original = explode('_', $src);
 		$original = end($original);
 
-		$this->pageCompositionHelper->addJs('
+		$this->pageHelper->addJs('
 
 				$("#' . $id . '-link").fancybox({
 					minWidth : 600,
@@ -526,7 +526,7 @@ class Utils
 				});
 				');
 
-		$this->pageCompositionHelper->addHidden('
+		$this->pageHelper->addHidden('
 				<div class="fotoupload popbox" style="display:none;" id="' . $id . '">
 					<h3>Fotoupload</h3>
 					<p class="subtitle">Hier kannst Du ein Foto von Deinem Computer ausw&auml;hlen</p>
@@ -548,10 +548,10 @@ class Utils
 				</div>');
 
 		if (isset($_GET['pinit'])) {
-			$this->pageCompositionHelper->addJs('$("#' . $id . '-link").trigger("click");');
+			$this->pageHelper->addJs('$("#' . $id . '-link").trigger("click");');
 		}
 
-		$this->pageCompositionHelper->addHidden('<a id="' . $id . '-link" href="#' . $id . '">&nbsp;</a>');
+		$this->pageHelper->addHidden('<a id="' . $id . '-link" href="#' . $id . '">&nbsp;</a>');
 
 		$menu = array(array('name' => $this->func->s('edit_photo'), 'href' => '#edit'));
 		if ($_GET['page'] == 'settings') {
@@ -582,10 +582,10 @@ class Utils
 				closeOnEscape: false,
 				open: function(event, ui) {$(this).parent().children().children(".ui-dialog-titlebar-close").hide();}';
 			}
-			$this->pageCompositionHelper->addJs('$("#' . $id . '").dialog({modal:true,title:"' . $name . '"' . $noclose . '});');
+			$this->pageHelper->addJs('$("#' . $id . '").dialog({modal:true,title:"' . $name . '"' . $noclose . '});');
 		}
 
-		$action = $this->linkingHelper->getSelf();
+		$action = $this->routeHelper->getSelf();
 		if (isset($option['action'])) {
 			$action = $option['action'];
 		}
@@ -609,7 +609,7 @@ class Utils
 		</form>
 		';
 
-		$this->pageCompositionHelper->addJs('$("#' . $id . '-form").on("submit", function(ev){
+		$this->pageHelper->addJs('$("#' . $id . '-form").on("submit", function(ev){
 
 			check = true;
 			$("#' . $id . '-form div.required .value").each(function(i,el){
@@ -647,7 +647,7 @@ class Utils
 	{
 		$id = $this->func->id('vmenu');
 
-		//$this->pageCompositionHelper->addJs('$("#'.$id.'").menu();');
+		//$this->pageHelper->addJs('$("#'.$id.'").menu();');
 		$out = '
 		<ul class="linklist">';
 
@@ -698,7 +698,7 @@ class Utils
 		if (isset($option['page'])) {
 			$page = $option['page'];
 		} else {
-			$page = $this->linkingHelper->getPage();
+			$page = $this->routeHelper->getPage();
 		}
 
 		if (isset($_GET['bid'])) {
@@ -887,7 +887,7 @@ class Utils
 			$source = 'autocompleteOptions: {source: ' . json_encode($option['valueOptions']) . ',minLength: 0}';
 		}
 
-		$this->pageCompositionHelper->addJs('
+		$this->pageHelper->addJs('
 			$("#' . $id . ' input.tag").tagedit({
 				' . $source . ',
 				allowEdit: false,
@@ -923,7 +923,7 @@ class Utils
 	{
 		$id = $this->func->id($id);
 
-		$this->pageCompositionHelper->addJs('
+		$this->pageHelper->addJs('
 			$("#' . $id . '-link").fancybox({
 				minWidth : 600,
 				scrolling :"auto",
@@ -954,7 +954,7 @@ class Utils
 			$options .= '<input type="hidden" id="' . $id . '-resize" name="resize" value="' . json_encode($option['resize']) . '" />';
 		}
 
-		$this->pageCompositionHelper->addHidden('
+		$this->pageHelper->addHidden('
 		<div id="' . $id . '-fancy">
 			<div class="popbox">
 				<h3>' . $this->func->s($id) . ' Upload</h3>
@@ -1005,7 +1005,7 @@ class Utils
 			$val = substr($val['name'], 0, 30);
 		}
 
-		$this->pageCompositionHelper->addJs('
+		$this->pageHelper->addJs('
 		$("#' . $id . '-button").button().on("click", function(){$("#' . $id . '").trigger("click") ;});
 		$("#' . $id . '").on("change", function(){$("#' . $id . '-info").html($("#' . $id . '").val().split("\\\").pop());});');
 
@@ -1107,14 +1107,14 @@ class Utils
 		</select>';
 
 		if (isset($option['add'])) {
-			$this->pageCompositionHelper->addHidden('
+			$this->pageHelper->addHidden('
 			<div id="' . $id . '-dialog" style="display:none;">
 				' . $this->v_form_text($id . ': NEU') . '
 			</div>');
 
 			$out .= '<a href="#" id="' . $id . '-add" class="select-add">&nbsp;</a>';
 
-			$this->pageCompositionHelper->addJs('
+			$this->pageHelper->addJs('
 
 					$("#' . $id . 'neu").on("keyup", function(e){
 
@@ -1183,7 +1183,7 @@ class Utils
 
 		if (isset($option['collapse'])) {
 			$label = '<i class="fas fa-caret-right"></i> ' . $label;
-			$this->pageCompositionHelper->addJs('
+			$this->pageHelper->addJs('
 				$("#' . $id . '-wrapper .element-wrapper").hide();
 			');
 
@@ -1229,7 +1229,7 @@ class Utils
 			$option['options'] = array('from' => array(), 'to' => array());
 		}
 
-		$this->pageCompositionHelper->addJs('
+		$this->pageHelper->addJs('
 			 $(function() {
 				$( "#' . $id . '_from" ).datepicker({
 					changeMonth: true,
@@ -1272,7 +1272,7 @@ class Utils
 
 		$value = $this->func->getValue($id);
 
-		$this->pageCompositionHelper->addJs('$("#' . $id . '").datepicker({
+		$this->pageHelper->addJs('$("#' . $id . '").datepicker({
 			changeYear: true,
 			changeMonth: true,
 			dateFormat: "yy-mm-dd",

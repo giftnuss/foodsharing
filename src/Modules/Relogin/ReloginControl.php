@@ -12,9 +12,9 @@ class ReloginControl extends Control
 		if (isset($_GET['url']) && !empty($_GET['url'])) {
 			$url = urldecode($_GET['url']);
 			if (substr($url, 0, 4) !== 'http') {
-				$this->linkingHelper->go($url);
+				$this->routeHelper->go($url);
 			}
 		}
-		$this->linkingHelper->go('/?page=dashboard');
+		$this->routeHelper->go('/?page=dashboard');
 	}
 }

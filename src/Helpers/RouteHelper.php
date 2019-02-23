@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Helpers;
 
-final class LinkingHelper
+final class RouteHelper
 {
 	public function go(string $url): void
 	{

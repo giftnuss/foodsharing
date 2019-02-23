@@ -8,7 +8,7 @@ class MapView extends View
 {
 	public function lMap()
 	{
-		$this->pageCompositionHelper->addHidden('
+		$this->pageHelper->addHidden('
 			<div id="b_content" class="loading">
 				<div class="inner">
 					' . $this->v_utils->v_input_wrapper($this->func->s('status'), 'Betrieb spendet', 'bcntstatus') . '

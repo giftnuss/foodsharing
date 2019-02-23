@@ -42,17 +42,17 @@ class EmailControl extends Control
 		parent::__construct();
 
 		if (!$this->session->may('orga')) {
-			$this->linkingHelper->go('/');
+			$this->routeHelper->go('/');
 		}
 	}
 
 	public function index()
 	{
 		$this->handleEmail();
-		$this->pageCompositionHelper->addBread($this->func->s('mailinglist'), '/?page=email');
+		$this->pageHelper->addBread($this->func->s('mailinglist'), '/?page=email');
 
 		if ($emailstosend = $this->emailGateway->getEmailsToSend($this->session->id())) {
-			$this->pageCompositionHelper->addContent($this->v_email_statusbox($emailstosend));
+			$this->pageHelper->addContent($this->v_email_statusbox($emailstosend));
 		}
 
 		$recip = '';
@@ -70,7 +70,7 @@ class EmailControl extends Control
 		foreach ($boxes as $key => $b) {
 			$boxes[$key]['name'] = $b['name'] . '@' . NOREPLY_EMAIL_HOST;
 		}
-		$this->pageCompositionHelper->addContent($this->v_utils->v_form('Nachrichten Verteiler', array(
+		$this->pageHelper->addContent($this->v_utils->v_form('Nachrichten Verteiler', array(
 			$this->v_utils->v_field(
 				$recip .
 				$this->v_utils->v_form_select('mailbox_id', array('values' => $boxes, 'required' => true)) .
@@ -83,16 +83,16 @@ class EmailControl extends Control
 			$this->v_utils->v_field($this->v_utils->v_form_tinymce('message', array('nowrapper' => true, 'type' => 'email')), $this->func->s('message'))
 		), array('submit' => 'Zum Senden Vorbereiten')));
 
-		$this->pageCompositionHelper->addStyle('#testemail{width:91%;}');
+		$this->pageHelper->addStyle('#testemail{width:91%;}');
 
 		$g_data['testemail'] = $this->model->getVal('email', 'foodsaver', $this->session->id());
 
-		$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->v_utils->v_form_text('testemail') . $this->v_utils->v_input_wrapper('', '<a class="button" href="#" onclick="ajreq(\'testmail\',{email:$(\'#testemail\').val(),subject:$(\'#subject\').val(),message:$(\'#message\').tinymce().getContent()},\'post\');return false;">Test-Mail senden</a>'), 'Newsletter Testen', array('class' => 'ui-padding')), CNT_RIGHT);
+		$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_form_text('testemail') . $this->v_utils->v_input_wrapper('', '<a class="button" href="#" onclick="ajreq(\'testmail\',{email:$(\'#testemail\').val(),subject:$(\'#subject\').val(),message:$(\'#message\').tinymce().getContent()},\'post\');return false;">Test-Mail senden</a>'), 'Newsletter Testen', array('class' => 'ui-padding')), CNT_RIGHT);
 
-		$this->pageCompositionHelper->addJs("$('#rightmenu').menu();");
-		$this->pageCompositionHelper->addContent($this->v_utils->v_field('<div class="ui-padding">' . $this->func->s('personal_styling_desc') . '</div>', $this->func->s('personal_styling')), CNT_RIGHT);
+		$this->pageHelper->addJs("$('#rightmenu').menu();");
+		$this->pageHelper->addContent($this->v_utils->v_field('<div class="ui-padding">' . $this->func->s('personal_styling_desc') . '</div>', $this->func->s('personal_styling')), CNT_RIGHT);
 
-		$this->pageCompositionHelper->addContent('
+		$this->pageHelper->addContent('
 	<div id="dialog-confirm" title="E-Mail senden?" style="display:none">
 	<p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>' . $this->func->s('shure') . '</p>
 	</div>
@@ -105,12 +105,12 @@ class EmailControl extends Control
 		if ($mails = $this->emailGateway->getSendMails($this->session->id())) {
 			foreach ($mails as $m) {
 				++$i;
-				$this->pageCompositionHelper->addContent('<li><a href="#" onclick="$(\'#right-' . $i . '\').dialog(\'open\');return false;">' . date('d.m.', strtotime($m['zeit'])) . ' ' . $m['name'] . '</a></li>', CNT_RIGHT);
+				$this->pageHelper->addContent('<li><a href="#" onclick="$(\'#right-' . $i . '\').dialog(\'open\');return false;">' . date('d.m.', strtotime($m['zeit'])) . ' ' . $m['name'] . '</a></li>', CNT_RIGHT);
 				$divs .= '<div id="right-' . $i . '" style="display:none;">' . nl2br($m['message']) . '</div>';
-				$this->pageCompositionHelper->addJs('$("#right-' . $i . '").dialog({autoOpen:false,title:"' . $this->sanitizerService->jsSafe($m['name'], '"') . '",modal:true});');
+				$this->pageHelper->addJs('$("#right-' . $i . '").dialog({autoOpen:false,title:"' . $this->sanitizerService->jsSafe($m['name'], '"') . '",modal:true});');
 			}
 		}
-		$this->pageCompositionHelper->addContent('</ul></div>' . $divs, CNT_RIGHT);
+		$this->pageHelper->addContent('</ul></div>' . $divs, CNT_RIGHT);
 	}
 
 	private function handleEmail()
@@ -183,8 +183,8 @@ class EmailControl extends Control
 							$name = $arr[1];
 						}
 
-						if ($this->mailingHelper->validEmail($email)) {
-							$this->mailingHelper->libmail($bezirk, $email, $betreff, str_replace('{NAME}', $name, $nachricht));
+						if ($this->emailHelper->validEmail($email)) {
+							$this->emailHelper->libmail($bezirk, $email, $betreff, str_replace('{NAME}', $name, $nachricht));
 							++$count;
 						} else {
 							unset($foodsaver[$i]);
@@ -221,7 +221,7 @@ class EmailControl extends Control
 					$foodsaver[] = $o;
 				}
 				$this->emailGateway->initEmail($this->session->id(), $mailbox_id, $foodsaver, $nachricht, $betreff, $attach);
-				$this->linkingHelper->goPage();
+				$this->routeHelper->goPage();
 			} elseif ($data['recip_choose'] != 'manual') {
 				$this->func->error('In den ausgew&auml;hlten Bezirken gibt es noch keine Foodsaver');
 			}
@@ -267,7 +267,7 @@ class EmailControl extends Control
 
 		$id = $this->func->id('mailtosend');
 
-		$this->pageCompositionHelper->addJs('
+		$this->pageHelper->addJs('
 			$("#' . $id . '-link").fancybox({
 				minWidth : 600,
 				scrolling :"auto",
@@ -296,7 +296,7 @@ class EmailControl extends Control
 
 		');
 
-		$this->pageCompositionHelper->addJsFunc('
+		$this->pageHelper->addJsFunc('
 		function ' . $id . '_continue_xhr()
 		{
 				showLoader();
@@ -329,7 +329,7 @@ class EmailControl extends Control
 			$style = ' style="height:100px;overflow:auto;font-size:10px;background-color:#fff;color:#333;padding:5px;"';
 		}
 
-		$this->pageCompositionHelper->addHidden('
+		$this->pageHelper->addHidden('
 				<a id="' . $id . '-link" href="#' . $id . '">&nbsp;</a>
 				<div class="popbox" id="' . $id . '">
 					<h3>E-Mail senden</h3>

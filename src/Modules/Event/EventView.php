@@ -31,14 +31,14 @@ class EventView extends View
 		}
 
 		$title = $this->func->s('new_event');
-		$this->pageCompositionHelper->addStyle('
+		$this->pageHelper->addStyle('
 			label.addend{
 				display:inline-block;
 				margin-left:15px;
 				cursor:pointer;
 			}
 		');
-		$this->pageCompositionHelper->addJs('
+		$this->pageHelper->addJs('
 			$("#online_type").on("change", function(){
 				if($(this).val() == 0)
 				{
@@ -113,7 +113,7 @@ class EventView extends View
 			$bez = '<optgroup label="Deine Bezirke">' . $bez . '</optgroup>';
 		}
 
-		$this->pageCompositionHelper->addJs('
+		$this->pageHelper->addJs('
 			$("#public").on("change", function(){
 				if($("#public:checked").length > 0)
 				{
@@ -149,7 +149,7 @@ class EventView extends View
 			$chk = '';
 			if (isset($g_data['public']) && $g_data['public'] == 1) {
 				$chk = ' checked="checked"';
-				$this->pageCompositionHelper->addJs('$("#input-wrapper").hide();');
+				$this->pageHelper->addJs('$("#input-wrapper").hide();');
 			}
 			$public_el = $this->v_utils->v_input_wrapper('Ist die Veranstaltung öffentlich?', '<label><input id="public" type="checkbox" name="public" value="1"' . $chk . ' /> Ja die Veranstaltung ist Öffentlich</label>');
 		}

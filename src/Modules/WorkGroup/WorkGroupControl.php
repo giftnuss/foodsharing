@@ -38,10 +38,10 @@ class WorkGroupControl extends Control
 	public function index(Request $request, Response $response)
 	{
 		if (!$this->session->may()) {
-			$this->linkingHelper->goLogin();
+			$this->routeHelper->goLogin();
 		}
 
-		$this->pageCompositionHelper->addBread('Arbeitsgruppen', '/?page=groups');
+		$this->pageHelper->addBread('Arbeitsgruppen', '/?page=groups');
 
 		if (!$request->query->has('sub')) {
 			$this->list($request, $response);
@@ -161,7 +161,7 @@ class WorkGroupControl extends Control
 			$groups
 		);
 
-		$this->pageCompositionHelper->addTitle($this->func->s('groups'));
+		$this->pageHelper->addTitle($this->func->s('groups'));
 
 		$response->setContent(
 			$this->render(
@@ -177,13 +177,13 @@ class WorkGroupControl extends Control
 
 		if ($group = $this->model->getGroup($groupId)) {
 			if ($group['type'] != Type::WORKING_GROUP) {
-				$this->linkingHelper->go('/?page=dashboard');
+				$this->routeHelper->go('/?page=dashboard');
 			}
 			if (!$this->mayEdit($group)) {
-				$this->linkingHelper->go('/?page=dashboard');
+				$this->routeHelper->go('/?page=dashboard');
 			}
 
-			$this->pageCompositionHelper->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
+			$this->pageHelper->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
 			$editWorkGroupRequest = EditWorkGroupData::fromGroup($group);
 			$form = $this->formFactory->getFormFactory()->create(WorkGroupForm::class, $editWorkGroupRequest);
 			$form->handleRequest($request);
@@ -193,7 +193,7 @@ class WorkGroupControl extends Control
 					$this->model->updateGroup($group['id'], $data);
 					$this->model->updateTeam($group['id'], $data['member'], $data['leader']);
 					$this->func->info('Änderungen gespeichert!');
-					$this->linkingHelper->goSelf();
+					$this->routeHelper->goSelf();
 				}
 			}
 		}

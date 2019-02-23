@@ -269,7 +269,7 @@ class MailboxXhr extends Control
 
 				$to = array();
 				foreach ($an as $a) {
-					if ($this->mailingHelper->validEmail($a)) {
+					if ($this->emailHelper->validEmail($a)) {
 						$t = explode('@', $a);
 
 						$to[] = array(
@@ -398,7 +398,7 @@ class MailboxXhr extends Control
 
 		if (is_array($email)) {
 			foreach ($email as $e) {
-				if ($this->mailingHelper->validEmail($e)) {
+				if ($this->emailHelper->validEmail($e)) {
 					$this->model->addContact($e);
 					$mail->addRecipient($e);
 				}

@@ -44,56 +44,56 @@ class MailboxControl extends Control
 			}
 		}
 
-		$this->linkingHelper->goPage('mailbox');
+		$this->routeHelper->goPage('mailbox');
 	}
 
 	public function index()
 	{
-		$this->pageCompositionHelper->addBread('Mailboxen');
+		$this->pageHelper->addBread('Mailboxen');
 
 		if ($boxes = $this->model->getBoxes()) {
 			if (isset($_GET['show']) && (int)$_GET['show']) {
 				if ($this->model->mayMessage($_GET['show'])) {
-					$this->pageCompositionHelper->addJs('ajreq("loadMail",{id:' . (int)$_GET['show'] . '});');
+					$this->pageHelper->addJs('ajreq("loadMail",{id:' . (int)$_GET['show'] . '});');
 				}
 			}
 
 			$mailadresses = $this->model->getMailAdresses();
 
-			$this->pageCompositionHelper->addContent($this->view->folder($boxes), CNT_LEFT);
-			$this->pageCompositionHelper->addContent($this->view->folderlist($boxes, $mailadresses));
-			$this->pageCompositionHelper->addContent($this->view->options(), CNT_LEFT);
+			$this->pageHelper->addContent($this->view->folder($boxes), CNT_LEFT);
+			$this->pageHelper->addContent($this->view->folderlist($boxes, $mailadresses));
+			$this->pageHelper->addContent($this->view->options(), CNT_LEFT);
 		}
 
-		if (isset($_GET['mailto']) && $this->mailingHelper->validEmail($_GET['mailto'])) {
-			$this->pageCompositionHelper->addJs('mb_mailto("' . $_GET['mailto'] . '");');
+		if (isset($_GET['mailto']) && $this->emailHelper->validEmail($_GET['mailto'])) {
+			$this->pageHelper->addJs('mb_mailto("' . $_GET['mailto'] . '");');
 		}
 	}
 
 	public function newbox()
 	{
-		$this->pageCompositionHelper->addBread('Mailbox Manager', '/?page=mailbox&a=manage');
-		$this->pageCompositionHelper->addBread('Neue Mailbox');
+		$this->pageHelper->addBread('Mailbox Manager', '/?page=mailbox&a=manage');
+		$this->pageHelper->addBread('Neue Mailbox');
 
 		if ($this->session->isOrgaTeam()) {
 			if (isset($_POST['name'])) {
 				if ($mailbox = $this->model->filterName($_POST['name'])) {
 					if ($this->model->addMailbox($mailbox, 1)) {
 						$this->func->info($this->func->s('mailbox_add_success'));
-						$this->linkingHelper->go('/?page=mailbox&a=manage');
+						$this->routeHelper->go('/?page=mailbox&a=manage');
 					} else {
 						$this->func->error($this->func->s('mailbox_already_exists'));
 					}
 				}
 			}
-			$this->pageCompositionHelper->addContent($this->view->manageOpt(), CNT_LEFT);
-			$this->pageCompositionHelper->addContent($this->view->mailboxform());
+			$this->pageHelper->addContent($this->view->manageOpt(), CNT_LEFT);
+			$this->pageHelper->addContent($this->view->mailboxform());
 		}
 	}
 
 	public function manage()
 	{
-		$this->pageCompositionHelper->addBread('Mailbox Manager');
+		$this->pageHelper->addBread('Mailbox Manager');
 		if ($this->session->isOrgaTeam()) {
 			if (isset($_POST['mbid'])) {
 				global $g_data;
@@ -104,22 +104,22 @@ class MailboxControl extends Control
 
 				if ($this->model->updateMember($_POST['mbid'], $g_data[$index])) {
 					$this->func->info($this->func->s('edit_success'));
-					$this->linkingHelper->go('/?page=mailbox&a=manage');
+					$this->routeHelper->go('/?page=mailbox&a=manage');
 				}
 			}
 
 			if ($boxes = $this->model->getMemberBoxes()) {
-				$this->pageCompositionHelper->addJs('
+				$this->pageHelper->addJs('
 							
 				');
 				foreach ($boxes as $b) {
 					global $g_data;
 					$g_data['foodsaver_' . $b['id']] = $b['member'];
-					$this->pageCompositionHelper->addContent($this->view->manageMemberBox($b));
+					$this->pageHelper->addContent($this->view->manageMemberBox($b));
 				}
 			}
 
-			$this->pageCompositionHelper->addContent($this->view->manageOpt(), CNT_LEFT);
+			$this->pageHelper->addContent($this->view->manageOpt(), CNT_LEFT);
 		}
 	}
 }

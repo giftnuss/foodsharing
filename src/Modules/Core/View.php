@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Modules\Core;
 
-use Foodsharing\Helpers\LinkingHelper;
-use Foodsharing\Helpers\PageCompositionHelper;
+use Foodsharing\Helpers\RouteHelper;
+use Foodsharing\Helpers\PageHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
@@ -20,7 +20,7 @@ class View
 	protected $func;
 	protected $session;
 	protected $sanitizerService;
-	protected $pageCompositionHelper;
+	protected $pageHelper;
 	protected $timeHelper;
 
 	/**
@@ -28,7 +28,7 @@ class View
 	 */
 	public $twig;
 	protected $imageService;
-	protected $linkingHelper;
+	protected $routeHelper;
 
 	public function __construct(
 		\Twig\Environment $twig,
@@ -36,20 +36,20 @@ class View
 		Utils $viewUtils,
 		Session $session,
 		SanitizerService $sanitizerService,
-		PageCompositionHelper $pageCompositionHelper,
+		PageHelper $pageHelper,
 		TimeHelper $timeHelper,
 		ImageService $imageService,
-		LinkingHelper $linkingHelper
+		RouteHelper $routeHelper
 	) {
 		$this->twig = $twig;
 		$this->func = $func;
 		$this->v_utils = $viewUtils;
 		$this->session = $session;
 		$this->sanitizerService = $sanitizerService;
-		$this->pageCompositionHelper = $pageCompositionHelper;
+		$this->pageHelper = $pageHelper;
 		$this->timeHelper = $timeHelper;
 		$this->imageService = $imageService;
-		$this->linkingHelper = $linkingHelper;
+		$this->routeHelper = $routeHelper;
 	}
 
 	public function setSub($sub)
@@ -203,7 +203,7 @@ class View
 
 		if ($option['scroller']) {
 			$out = $this->v_utils->v_scroller($out, $height);
-			$this->pageCompositionHelper->addStyle('.scroller .overview{left:0;}.scroller{margin:0}');
+			$this->pageHelper->addStyle('.scroller .overview{left:0;}.scroller{margin:0}');
 		}
 
 		return $out;
@@ -266,7 +266,7 @@ class View
 
 	public function peopleChooser($id, $option = array())
 	{
-		$this->pageCompositionHelper->addJs('
+		$this->pageHelper->addJs('
 			var date = new Date(); 
 			tstring = ""+date.getYear() + ""+date.getMonth() + ""+date.getDate() + ""+date.getHours();
 			var localsource = [];

@@ -82,7 +82,7 @@ class StoreView extends View
 			$g_data['anschrift'] .= ' ' . $g_data['hsnr'];
 		}
 
-		$this->pageCompositionHelper->addJs('$("textarea").css("height","70px");$("textarea").autosize();');
+		$this->pageHelper->addJs('$("textarea").css("height","70px");$("textarea").autosize();');
 
 		$latLonOptions = [];
 

@@ -24,7 +24,7 @@ final class ProfileControl extends Control
 		parent::__construct();
 
 		if (!$this->session->may()) {
-			$this->linkingHelper->go('/');
+			$this->routeHelper->go('/');
 		}
 
 		if ($id = $this->uriInt(2)) {
@@ -43,13 +43,13 @@ final class ProfileControl extends Control
 						$this->profile();
 					}
 				} else {
-					$this->linkingHelper->goPage('dashboard');
+					$this->routeHelper->goPage('dashboard');
 				}
 			} else {
-				$this->linkingHelper->goPage('dashboard');
+				$this->routeHelper->goPage('dashboard');
 			}
 		} else {
-			$this->linkingHelper->goPage('dashboard');
+			$this->routeHelper->goPage('dashboard');
 		}
 	}
 
@@ -60,7 +60,7 @@ final class ProfileControl extends Control
 
 	private function organotes()
 	{
-		$this->pageCompositionHelper->addBread($this->foodsaver['name'], '/profile/' . $this->foodsaver['id']);
+		$this->pageHelper->addBread($this->foodsaver['name'], '/profile/' . $this->foodsaver['id']);
 		if ($this->session->may('orga')) {
 			$this->view->usernotes(
 				$this->wallposts('usernotes', $this->foodsaver['id']),
@@ -72,7 +72,7 @@ final class ProfileControl extends Control
 				$this->profileGateway->getNextDates($this->foodsaver['id'], 50)
 			);
 		} else {
-			$this->linkingHelper->go('/profile/' . $this->foodsaver['id']);
+			$this->routeHelper->go('/profile/' . $this->foodsaver['id']);
 		}
 	}
 
