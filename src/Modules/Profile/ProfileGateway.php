@@ -196,6 +196,7 @@ final class ProfileGateway extends BaseGateway
 			WHERE
 				r.foodsaver_id = :fs_id
 		';
+
 		return (int)$this->db->fetchValue($stm, [':fs_id' => $fsId]);
 	}
 
