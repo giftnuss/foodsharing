@@ -28,7 +28,7 @@ class MailboxView extends View
                 }';
 		}
 
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 			$("#mailfolder").dynatree({
             onActivate: function(node) {
                 
@@ -222,7 +222,7 @@ class MailboxView extends View
 
 	public function folderlist($mailboxes, $mailadresses)
 	{
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 		setAutocompleteAddresses(' . json_encode($mailadresses) . ');
 		$("#message-body").dialog({
 			autoOpen:false,
@@ -234,7 +234,7 @@ class MailboxView extends View
 		    	$("#message-body").css("overflow", "hidden"); //this line does the actual hiding
 		  	}
 		});');
-		$this->func->addHidden('
+		$this->pageCompositionHelper->addHidden('
 		<div id="message-body">
 			
 		</div>
@@ -257,7 +257,7 @@ class MailboxView extends View
 			$von .= '
 			</select>';
 		}
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 		$("#message-editor").dialog({
 			autoOpen:false,
 			width:980,
@@ -296,7 +296,7 @@ class MailboxView extends View
 		});
 		');
 
-		$this->func->addHidden('
+		$this->pageCompositionHelper->addHidden('
 		<div id="message-editor">
 			<div class="popbox">
 				<div class="message-top">

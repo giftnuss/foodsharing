@@ -16,7 +16,7 @@ class ProfileView extends View
 		$page->addSection($wallposts, 'Status-Updates von ' . $this->foodsaver['name']);
 
 		if ($this->session->id() != $this->foodsaver['id']) {
-			$this->func->addStyle('#wallposts .tools{display:none;}');
+			$this->pageCompositionHelper->addStyle('#wallposts .tools{display:none;}');
 		}
 
 		if ($fetchDates) {
@@ -42,7 +42,7 @@ class ProfileView extends View
 				<a class="button button-big" href="#" onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',bid:0,date:0});return false;">Aus allen austragen</a>
 					<ul class="datelist linklist" id="double">';
 		foreach ($fetchDates as $d) {
-			$userConfirmedForPickup = $d['confirmed'] == 1 ? '✓ ' : '? ';
+			$userConfirmedForPickup = $d['confirmed'] == 1 ? '✓&nbsp;' : '?&nbsp;';
 
 			$out .= '
 						<li>
@@ -73,11 +73,35 @@ class ProfileView extends View
 		return $out;
 	}
 
-	private function sideInfosCompanies($userCompanies)
+	/**
+	 * Create HTML for list of stores on the profile.
+	 * Each store has a symbol in front indicating if the user is
+	 *  - waiting for approval (a question mark)
+	 *  - in store (the shopping basket used for stores)
+	 *  - Springer = waiting list (a coffee mug).
+	 *
+	 * @param array $userCompanies
+	 *
+	 * @return string: HTML with the list
+	 */
+	private function sideInfosCompanies(array $userCompanies): string
 	{
 		$out = '';
 		foreach ($userCompanies as $b) {
-			$userStatusOfStore = $b['active'] == 1 ? '✓ ' : '? ';
+			switch ($b['active']) {
+				case 0:  // asked to be in store team
+					$userStatusOfStore = '<i class="far fa-question-circle fw"></i> ';
+					break;
+				case 1: // in store team
+					$userStatusOfStore = '<i class="fas fa-shopping-cart fw"></i> ';
+					break;
+				case 2: // Springer (waiting list)
+					$userStatusOfStore = '<i class="fas fa-mug-hot fw"></i> ';
+					break;
+				default: // should not happen
+					$userStatusOfStore = '';
+					break;
+			}
 			$out .= '<p><a class="light" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $userStatusOfStore . $b['name'] . '</a></p>';
 		}
 
@@ -288,7 +312,7 @@ class ProfileView extends View
 				</div>';
 			}
 
-			$this->func->addJs('
+			$this->pageCompositionHelper->addJs('
 			$(".stat_bananacount").magnificPopup({
 				type:"inline"
 			});');

@@ -38,11 +38,11 @@ class LoginControl extends Control
 
 	public function unsubscribe()
 	{
-		$this->func->addTitle('Newsletter Abmeldung');
-		$this->func->addBread('Newsletter Abmeldung');
+		$this->pageCompositionHelper->addTitle('Newsletter Abmeldung');
+		$this->pageCompositionHelper->addBread('Newsletter Abmeldung');
 		if (isset($_GET['e']) && $this->func->validEmail($_GET['e'])) {
 			$this->model->update('UPDATE `fs_' . "foodsaver` SET newsletter=0 WHERE email='" . $this->model->safe($_GET['e']) . "'");
-			$this->func->addContent($this->v_utils->v_info('Du wirst nun keine weiteren Newsletter von uns erhalten', 'Erfolg!'));
+			$this->pageCompositionHelper->addContent($this->v_utils->v_info('Du wirst nun keine weiteren Newsletter von uns erhalten', 'Erfolg!'));
 		}
 	}
 
@@ -137,8 +137,8 @@ class LoginControl extends Control
 			$k = strip_tags($_GET['k']);
 		}
 
-		$this->func->addTitle('Password zurücksetzen');
-		$this->func->addBread('Passwort zurücksetzen');
+		$this->pageCompositionHelper->addTitle('Password zurücksetzen');
+		$this->pageCompositionHelper->addBread('Passwort zurücksetzen');
 
 		if (isset($_POST['email']) || isset($_GET['m'])) {
 			$mail = '';
@@ -188,14 +188,14 @@ class LoginControl extends Control
 						$this->func->error('Sorry, die Passwörter stimmen nicht überein.');
 					}
 				}
-				$this->func->addJs('$("#pass1").val("");');
-				$this->func->addContent($this->view->newPasswordForm($k));
+				$this->pageCompositionHelper->addJs('$("#pass1").val("");');
+				$this->pageCompositionHelper->addContent($this->view->newPasswordForm($k));
 			} else {
 				$this->func->error('Sorry, Du hast ein bisschen zu lange gewartet. Bitte beantrage ein neues Passwort!');
-				$this->func->addContent($this->view->passwordRequest(), CNT_LEFT);
+				$this->pageCompositionHelper->addContent($this->view->passwordRequest(), CNT_LEFT);
 			}
 		} else {
-			$this->func->addContent($this->view->passwordRequest());
+			$this->pageCompositionHelper->addContent($this->view->passwordRequest());
 		}
 	}
 }

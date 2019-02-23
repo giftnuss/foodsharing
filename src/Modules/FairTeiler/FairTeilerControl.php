@@ -114,7 +114,7 @@ class FairTeilerControl extends Control
 			$this->fairteiler['urlname'] = $this->func->id($this->fairteiler['urlname']);
 			$this->fairteiler['urlname'] = str_replace('_', '-', $this->fairteiler['urlname']);
 
-			$this->func->addHidden('
+			$this->pageCompositionHelper->addHidden('
 				<a href="#ft-fbshare" id="ft-public-link" target="_blank">&nbsp;</a>
 				<input type="hidden" name="ft-name" id="ft-name" value="' . $this->fairteiler['name'] . '" />
 				<input type="hidden" name="ft-id" id="ft-id" value="' . $this->fairteiler['id'] . '" />
@@ -155,9 +155,9 @@ class FairTeilerControl extends Control
 	public function index(Request $request)
 	{
 		$this->setup($request);
-		$this->func->addBread($this->func->s('your_fairteiler'), '/?page=fairteiler');
+		$this->pageCompositionHelper->addBread($this->func->s('your_fairteiler'), '/?page=fairteiler');
 		if ($this->bezirk_id > 0) {
-			$this->func->addBread($this->bezirk['name'], '/?page=fairteiler&bid=' . $this->bezirk_id);
+			$this->pageCompositionHelper->addBread($this->bezirk['name'], '/?page=fairteiler&bid=' . $this->bezirk_id);
 		}
 		if (!$request->query->has('sub')) {
 			$items = array();
@@ -174,11 +174,11 @@ class FairTeilerControl extends Control
 			}
 
 			if ($fairteiler = $this->gateway->listFairteilerNested($bezirk_ids)) {
-				$this->func->addContent($this->view->listFairteiler($fairteiler));
+				$this->pageCompositionHelper->addContent($this->view->listFairteiler($fairteiler));
 			} else {
-				$this->func->addContent($this->v_utils->v_info($this->func->s('no_fairteiler_available')));
+				$this->pageCompositionHelper->addContent($this->v_utils->v_info($this->func->s('no_fairteiler_available')));
 			}
-			$this->func->addContent($this->view->ftOptions($this->bezirk_id), CNT_RIGHT);
+			$this->pageCompositionHelper->addContent($this->view->ftOptions($this->bezirk_id), CNT_RIGHT);
 		}
 	}
 
@@ -187,8 +187,8 @@ class FairTeilerControl extends Control
 		if (!$this->mayEdit()) {
 			$this->func->go('/?page=fairteiler&sub=ft&id=' . $this->fairteiler['id']);
 		}
-		$this->func->addBread($this->fairteiler['name'], '/?page=fairteiler&sub=ft&bid=' . $this->bezirk_id . '&id=' . $this->fairteiler['id']);
-		$this->func->addBread($this->func->s('edit'));
+		$this->pageCompositionHelper->addBread($this->fairteiler['name'], '/?page=fairteiler&sub=ft&bid=' . $this->bezirk_id . '&id=' . $this->fairteiler['id']);
+		$this->pageCompositionHelper->addBread($this->func->s('edit'));
 		if ($request->request->get('form_submit') == 'fairteiler') {
 			if ($this->handleEditFt($request)) {
 				$this->func->info($this->func->s('fairteiler_edit_success'));
@@ -216,9 +216,9 @@ class FairTeilerControl extends Control
 
 		$data['bfoodsaver_values'] = $this->foodsaverGateway->getFsAutocomplete($this->session->getRegions());
 
-		$this->func->addContent($this->view->options($items), CNT_RIGHT);
+		$this->pageCompositionHelper->addContent($this->view->options($items), CNT_RIGHT);
 
-		$this->func->addContent($this->view->fairteilerForm($data));
+		$this->pageCompositionHelper->addContent($this->view->fairteilerForm($data));
 	}
 
 	private function accept()
@@ -247,8 +247,8 @@ class FairTeilerControl extends Control
 						$this->delete();
 					}
 				}
-				$this->func->addContent($this->view->checkFairteiler($ft));
-				$this->func->addContent($this->view->menu(array(
+				$this->pageCompositionHelper->addContent($this->view->checkFairteiler($ft));
+				$this->pageCompositionHelper->addContent($this->view->menu(array(
 					array('href' => '/?page=fairteiler&sub=check&id=' . (int)$ft['id'] . '&agree=1', 'name' => 'Fair-Teiler freischalten'),
 					array('click' => 'if(confirm(\'Achtung! Wenn Du den Fair-Teiler löschst, kannst Du dies nicht mehr rückgängig machen. Fortfahren?\')){goTo(this.href);}else{return false;}', 'href' => '/?page=fairteiler&sub=check&id=' . (int)$ft['id'] . '&agree=0', 'name' => 'Fair-Teiler ablehnen')
 				), array('title' => 'Optionen')), CNT_RIGHT);
@@ -262,9 +262,9 @@ class FairTeilerControl extends Control
 
 	public function ft(Request $request)
 	{
-		$this->func->addBread($this->fairteiler['name']);
-		$this->func->addTitle($this->fairteiler['name']);
-		$this->func->addContent(
+		$this->pageCompositionHelper->addBread($this->fairteiler['name']);
+		$this->pageCompositionHelper->addTitle($this->fairteiler['name']);
+		$this->pageCompositionHelper->addContent(
 			$this->view->fairteilerHead() . '
 			<div>
 				' . $this->v_utils->v_info('Beachte, dass Deine Beiträge auf der Fair-Teiler-Pinnwand öffentlich einsehbar sind.', 'Hinweis!') . '
@@ -285,20 +285,20 @@ class FairTeilerControl extends Control
 				$items[] = array('name' => $this->func->s('no_more_follow'), 'href' => $this->func->getSelf() . '&follow=0');
 			} else {
 				$items[] = array('name' => $this->func->s('follow'), 'click' => 'u_follow();return false;');
-				$this->func->addHidden($this->view->followHidden());
+				$this->pageCompositionHelper->addHidden($this->view->followHidden());
 			}
 
-			$this->func->addContent($this->view->options($items), CNT_LEFT);
-			$this->func->addContent($this->view->follower(), CNT_LEFT);
+			$this->pageCompositionHelper->addContent($this->view->options($items), CNT_LEFT);
+			$this->pageCompositionHelper->addContent($this->view->follower(), CNT_LEFT);
 		}
 
-		$this->func->addContent($this->view->desc(), CNT_RIGHT);
-		$this->func->addContent($this->view->address(), CNT_RIGHT);
+		$this->pageCompositionHelper->addContent($this->view->desc(), CNT_RIGHT);
+		$this->pageCompositionHelper->addContent($this->view->address(), CNT_RIGHT);
 	}
 
 	public function addFt(Request $request)
 	{
-		$this->func->addBread($this->func->s('add_fairteiler'));
+		$this->pageCompositionHelper->addBread($this->func->s('add_fairteiler'));
 
 		if ($request->request->get('form_submit') == 'fairteiler') {
 			if ($this->handleAddFt($request)) {
@@ -313,8 +313,8 @@ class FairTeilerControl extends Control
 			}
 		}
 
-		$this->func->addContent($this->view->fairteilerForm());
-		$this->func->addContent($this->v_utils->v_menu(array(
+		$this->pageCompositionHelper->addContent($this->view->fairteilerForm());
+		$this->pageCompositionHelper->addContent($this->v_utils->v_menu(array(
 			array('name' => $this->func->s('back'), 'href' => '/?page=fairteiler&bid=' . (int)$this->bezirk_id . '')
 		), $this->func->s('options')), CNT_RIGHT);
 	}

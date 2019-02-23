@@ -13,7 +13,7 @@ class BusinessCardView extends View
 
 	public function optionform($seldata)
 	{
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 			$("#optionen-form .input-wrapper:last").hide();
 			
 			$("#opt").on("change", function(){

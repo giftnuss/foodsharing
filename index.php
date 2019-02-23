@@ -22,6 +22,7 @@ if(isset($_GET['g_path']))
 */
 
 use Foodsharing\Debug\DebugBar;
+use Foodsharing\Helpers\PageCompositionHelper;
 use Foodsharing\Lib\ContentSecurityPolicy;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
@@ -61,17 +62,20 @@ $view_utils = $container->get(Utils::class);
 /* @var $func Func */
 $func = $container->get(Func::class);
 
+/* @var $func PageCompositionHelper */
+$pageCompositionHelper = $container->get(PageCompositionHelper::class);
+
 /* @var $session Session */
 $session = $container->get(Session::class);
 
 $g_broadcast_message = $db->qOne('SELECT `body` FROM fs_content WHERE `id` = 51');
 
 if (DebugBar::isEnabled()) {
-	$func->addHead(DebugBar::renderHead());
+	$pageCompositionHelper->addHead(DebugBar::renderHead());
 }
 
 if (DebugBar::isEnabled()) {
-	$func->addContent(DebugBar::renderContent(), CNT_BOTTOM);
+	$pageCompositionHelper->addContent(DebugBar::renderContent(), CNT_BOTTOM);
 }
 
 if ($session->may()) {
@@ -118,7 +122,7 @@ if ($isUsingResponse) {
 } else {
 	/* @var $twig \Twig\Environment */
 	$twig = $container->get(\Twig\Environment::class);
-	$page = $twig->render('layouts/' . $g_template . '.twig', $func->generateAndGetGlobalViewData());
+	$page = $twig->render('layouts/' . $g_template . '.twig', $pageCompositionHelper->generateAndGetGlobalViewData());
 }
 
 if (isset($cache) && $cache->shouldCache()) {

@@ -8,7 +8,7 @@ class RegionAdminView extends View
 {
 	public function v_bezirk_tree($id)
 	{
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 	$("#' . $id . '").dynatree({
 		onDblClick: function(node, event) {
 			alert(node.data.ident);
@@ -129,7 +129,7 @@ class RegionAdminView extends View
 
 	public function i_map($id)
 	{
-		$this->func->addJsFunc('
+		$this->pageCompositionHelper->addJsFunc('
 	var ' . $id . '_markers = [];
 	var ' . $id . '_bounds = L.latLngBounds([]);
 	var ' . $id . '_infowindow = L.popup();
@@ -140,13 +140,13 @@ class RegionAdminView extends View
 		' . $id . '_markers = [];
 	}');
 
-		$this->func->addContent($this->v_utils->v_field('<div class="map" id="' . $id . '_map"></div>', 'Karte'));
+		$this->pageCompositionHelper->addContent($this->v_utils->v_field('<div class="map" id="' . $id . '_map"></div>', 'Karte'));
 
 		$zoom = 6;
 		$lat = '51.303145';
 		$lon = '10.235595';
 
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 	 	var ' . $id . '_center = L.latLng(' . $lat . ',' . $lon . ');
 		var ' . $id . '_options = {
 		  \'zoom\': ' . $zoom . ',

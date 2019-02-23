@@ -22,7 +22,7 @@ class StoreUserView extends View
 	{
 		$out = '<table class="pintable">';
 		$odd = 'odd';
-		$this->func->addJs('$("table.pintable tr td ul li").tooltip();');
+		$this->pageCompositionHelper->addJs('$("table.pintable tr td ul li").tooltip();');
 
 		foreach ($betrieb['requests'] as $r) {
 			if ($odd == 'even') {
@@ -40,19 +40,10 @@ class StoreUserView extends View
 
 		$out .= '</table>';
 
-		$this->func->hiddenDialog('requests', array($out));
-		$this->func->addJs('$("#dialog_requests").dialog("option","title","Anfragen für ' . $this->jsonSafe($betrieb['name']) . '");');
-		$this->func->addJs('$("#dialog_requests").dialog("option","buttons",{});');
-		$this->func->addJs('$("#dialog_requests").dialog("open");');
-	}
-
-	private function jsonSafe(string $str): string
-	{
-		if ($str == '' || !is_string($str)) {
-			return '';
-		}
-
-		return htmlentities($str . '', ENT_QUOTES, 'utf-8', false);
+		$this->pageCompositionHelper->hiddenDialog('requests', array($out));
+		$this->pageCompositionHelper->addJs('$("#dialog_requests").dialog("option","title","Anfragen für ' . $this->sanitizerService->jsSafe($betrieb['name'], '"') . '");');
+		$this->pageCompositionHelper->addJs('$("#dialog_requests").dialog("option","buttons",{});');
+		$this->pageCompositionHelper->addJs('$("#dialog_requests").dialog("open");');
 	}
 
 	public function u_innerRow($contentType, $betrieb)
@@ -217,7 +208,7 @@ class StoreUserView extends View
 		$out .= $sleeper . '</ul><div style="clear:both"></div>';
 
 		if ($betrieb['verantwortlich']) {
-			$this->func->addJs('
+			$this->pageCompositionHelper->addJs('
 			$("#team_status").on("change", function(){
 				var val = $(this).val();
 				showLoader();

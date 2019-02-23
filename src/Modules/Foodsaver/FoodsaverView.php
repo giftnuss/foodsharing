@@ -70,7 +70,7 @@ class FoodsaverView extends View
 			));
 		}
 
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 			$("#rolle").on("change", function(){
 				if(this.value == 4)
 				{

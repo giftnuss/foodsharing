@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Lib\View;
 
-use Foodsharing\Lib\Func;
+use Foodsharing\Helpers\PageCompositionHelper;
 
 class vAccordion
 {
@@ -10,14 +10,14 @@ class vAccordion
 	private $id;
 	private $options;
 	/**
-	 * @var Func
+	 * @var PageCompositionHelper
 	 */
-	private $func;
+	private $pageCompositionHelper;
 
 	public function __construct($option = array())
 	{
 		global $container;
-		$this->func = $container->get(Func::class);
+		$this->pageCompositionHelper = $container->get(PageCompositionHelper::class);
 		$this->panels = array();
 
 		$this->id = 'acc-' . uniqid();
@@ -34,7 +34,7 @@ class vAccordion
 
 	public function render()
 	{
-		$this->func->addJs('$("#' . $this->id . '").accordion(' . json_encode($this->options) . ');');
+		$this->pageCompositionHelper->addJs('$("#' . $this->id . '").accordion(' . json_encode($this->options) . ');');
 
 		$out = '
 		<div id="' . $this->id . '">';

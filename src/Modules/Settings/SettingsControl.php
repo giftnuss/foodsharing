@@ -40,12 +40,12 @@ class SettingsControl extends Control
 			$this->func->go('/?page=settings&sub=general');
 		}
 
-		$this->func->addTitle($this->func->s('settings'));
+		$this->pageCompositionHelper->addTitle($this->func->s('settings'));
 	}
 
 	public function index()
 	{
-		$this->func->addBread('Einstellungen', '/?page=settings');
+		$this->pageCompositionHelper->addBread('Einstellungen', '/?page=settings');
 
 		$menu = array(
 			array('name' => $this->func->s('settings_general'), 'href' => '/?page=settings&sub=general'),
@@ -55,7 +55,7 @@ class SettingsControl extends Control
 		$menu[] = array('name' => $this->func->s('bcard'), 'href' => '/?page=bcard');
 		//$menu[] = array('name' => $this->func->s('calendar'), 'href' => '/?page=settings&sub=calendar');
 
-		$this->func->addContent($this->view->menu($menu, array('title' => $this->func->s('settings'), 'active' => $this->getSub())), CNT_LEFT);
+		$this->pageCompositionHelper->addContent($this->view->menu($menu, array('title' => $this->func->s('settings'), 'active' => $this->getSub())), CNT_LEFT);
 
 		$menu = array();
 		$menu[] = array('name' => $this->func->s('sleeping_user'), 'href' => '/?page=settings&sub=sleeping');
@@ -67,13 +67,13 @@ class SettingsControl extends Control
 			$menu[] = array('name' => 'Werde ' . $this->func->s('rolle_2_' . $this->foodsaver['geschlecht']), 'href' => '/?page=settings&sub=upgrade/up_bip');
 		}
 		$menu[] = array('name' => $this->func->s('delete_account'), 'href' => '/?page=settings&sub=deleteaccount');
-		$this->func->addContent($this->view->menu($menu, array('title' => $this->func->s('account_option'), 'active' => $this->getSub())), CNT_LEFT);
+		$this->pageCompositionHelper->addContent($this->view->menu($menu, array('title' => $this->func->s('account_option'), 'active' => $this->getSub())), CNT_LEFT);
 	}
 
 	public function sleeping()
 	{
 		if ($sleep = $this->model->getSleepData()) {
-			$this->func->addContent($this->view->sleepMode($sleep));
+			$this->pageCompositionHelper->addContent($this->view->sleepMode($sleep));
 		}
 	}
 
@@ -81,7 +81,7 @@ class SettingsControl extends Control
 	{
 		if ($this->session->may() && $this->foodsaver['rolle'] > 0) {
 			if (!$this->foodsaver['verified']) {
-				$this->func->addContent($this->view->simpleContent($this->contentGateway->get(45)));
+				$this->pageCompositionHelper->addContent($this->view->simpleContent($this->contentGateway->get(45)));
 			} else {
 				if (($status = $this->quizModel->getQuizStatus(2)) && ($quiz = $this->quizModel->getQuiz(2))) {
 					if ((int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)$this->session->id()) == 0) {
@@ -92,16 +92,16 @@ class SettingsControl extends Control
 
 					// Quiz wurde noch gar nicht probiert
 					if ($status['times'] == 0) {
-						$this->func->addContent($this->view->quizIndex($quiz, $desc));
+						$this->pageCompositionHelper->addContent($this->view->quizIndex($quiz, $desc));
 					} // quiz ist bereits bestanden
 					elseif ($status['cleared'] > 0) {
 						return $this->confirm_bip();
 					} // es läuft ein quiz weitermachen
 					elseif ($status['running'] > 0) {
-						$this->func->addContent($this->view->quizContinue($quiz, $desc));
+						$this->pageCompositionHelper->addContent($this->view->quizContinue($quiz, $desc));
 					} // Quiz wurde shcon probiert aber noche keine 3x nicht bestanden
 					elseif ($status['failed'] < 3) {
-						$this->func->addContent($this->view->quizRetry($quiz, $desc, $status['failed'], 3));
+						$this->pageCompositionHelper->addContent($this->view->quizRetry($quiz, $desc, $status['failed'], 3));
 					} // 3x nicht bestanden 30 Tage Lernpause
 					elseif ($status['failed'] == 3 && (time() - $status['last_try']) < (86400 * 30)) {
 						$days_to_wait = ((time() - $status['last_try']) - (86400 * 30) / 30);
@@ -109,10 +109,10 @@ class SettingsControl extends Control
 						return $this->view->pause($days_to_wait, $desc);
 					} // Lernpause vorbei noch keine weiteren 2 Fehlversuche
 					elseif ($status['failed'] >= 3 && $status['failed'] < 5 && (time() - $status['last_try']) >= (86400 * 14)) {
-						$this->func->addContent($this->view->quizIndex($quiz, $desc));
+						$this->pageCompositionHelper->addContent($this->view->quizIndex($quiz, $desc));
 					} // hat alles nichts genützt
 					else {
-						$this->func->addContent($this->view->quizFailed($this->contentGateway->get(13)));
+						$this->pageCompositionHelper->addContent($this->view->quizFailed($this->contentGateway->get(13)));
 					}
 				}
 			}
@@ -122,7 +122,7 @@ class SettingsControl extends Control
 	public function quizsession()
 	{
 		if ($session = $this->model->getQuizSession($_GET['sid'])) {
-			$this->func->addContent($this->view->quizSession($session, $session['try_count'], $this->contentGateway));
+			$this->pageCompositionHelper->addContent($this->view->quizSession($session, $session['try_count'], $this->contentGateway));
 		}
 	}
 
@@ -134,16 +134,16 @@ class SettingsControl extends Control
 
 				// Quiz wurde noch gar nicht probiert
 				if ($status['times'] == 0) {
-					$this->func->addContent($this->view->quizIndex($quiz, $desc));
+					$this->pageCompositionHelper->addContent($this->view->quizIndex($quiz, $desc));
 				} // quiz ist bereits bestanden
 				elseif ($status['cleared'] > 0) {
 					return $this->confirm_fs();
 				} // es läuft ein quiz weitermachen
 				elseif ($status['running'] > 0) {
-					$this->func->addContent($this->view->quizContinue($quiz, $desc));
+					$this->pageCompositionHelper->addContent($this->view->quizContinue($quiz, $desc));
 				} // Quiz wurde shcon probiert aber noche keine 3x nicht bestanden
 				elseif ($status['failed'] < 3) {
-					$this->func->addContent($this->view->quizRetry($quiz, $desc, $status['failed'], 3));
+					$this->pageCompositionHelper->addContent($this->view->quizRetry($quiz, $desc, $status['failed'], 3));
 				} // 3x nicht bestanden 30 Tage Lernpause
 				elseif ($status['failed'] == 3 && (time() - $status['last_try']) < (86400 * 30)) {
 					$this->model->updateRole(0, $this->foodsaver['rolle']);
@@ -152,10 +152,10 @@ class SettingsControl extends Control
 					return $this->view->pause($days_to_wait, $desc);
 				} // Lernpause vorbei noch keine weiteren 2 Fehlversuche
 				elseif ($status['failed'] >= 3 && $status['failed'] < 5 && (time() - $status['last_try']) >= (86400 * 14)) {
-					$this->func->addContent($this->view->quizIndex($quiz, $desc));
+					$this->pageCompositionHelper->addContent($this->view->quizIndex($quiz, $desc));
 				} // hat alles nichts genützt
 				else {
-					$this->func->addContent($this->view->quizFailed($this->contentGateway->get(13)));
+					$this->pageCompositionHelper->addContent($this->view->quizFailed($this->contentGateway->get(13)));
 				}
 			}
 		}
@@ -169,16 +169,16 @@ class SettingsControl extends Control
 
 				// Quiz wurde noch gar nicht probiert
 				if ($status['times'] == 0) {
-					$this->func->addContent($this->view->quizIndex($quiz, $desc));
+					$this->pageCompositionHelper->addContent($this->view->quizIndex($quiz, $desc));
 				} // es läuft ein quiz weitermachen
 				elseif ($status['running'] > 0) {
-					$this->func->addContent($this->view->quizContinue($quiz, $desc));
+					$this->pageCompositionHelper->addContent($this->view->quizContinue($quiz, $desc));
 				} // quiz ist bereits bestanden
 				elseif ($status['cleared'] > 0) {
 					return $this->confirm_bot();
 				} // Quiz wurde shcon probiert aber noche keine 3x nicht bestanden
 				elseif ($status['failed'] < 3) {
-					$this->func->addContent($this->view->quizRetry($quiz, $desc, $status['failed'], 3));
+					$this->pageCompositionHelper->addContent($this->view->quizRetry($quiz, $desc, $status['failed'], 3));
 				} // 3x nicht bestanden 30 Tage Lernpause
 				elseif ($status['failed'] == 3 && (time() - $status['last_try']) < (86400 * 30)) {
 					$days_to_wait = ((time() - $status['last_try']) - (86400 * 30) / 30);
@@ -186,13 +186,13 @@ class SettingsControl extends Control
 					return $this->view->pause($days_to_wait, $desc);
 				} // Lernpause vorbei noch keine weiteren 2 Fehlversuche
 				elseif ($status['failed'] >= 3 && $status['failed'] < 5 && (time() - $status['last_try']) >= (86400 * 14)) {
-					$this->func->addContent($this->view->quizIndex($quiz, $desc));
+					$this->pageCompositionHelper->addContent($this->view->quizIndex($quiz, $desc));
 				} // hat alles nichts genützt
 				else {
 					return $this->view->quizFailed($this->contentGateway->get(13));
 				}
 			} else {
-				$this->func->addContent($this->v_utils->v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:' . SUPPORT_EMAIL . '"">' . SUPPORT_EMAIL . '</a>'));
+				$this->pageCompositionHelper->addContent($this->v_utils->v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:' . SUPPORT_EMAIL . '"">' . SUPPORT_EMAIL . '</a>'));
 			}
 		} else {
 			switch ($this->foodsaver['rolle']) {
@@ -232,7 +232,7 @@ class SettingsControl extends Control
 			}
 			$cnt = $this->contentGateway->get(14);
 			$rv = $this->contentGateway->get(30);
-			$this->func->addContent($this->view->confirmFs($cnt, $rv));
+			$this->pageCompositionHelper->addContent($this->view->confirmFs($cnt, $rv));
 		}
 	}
 
@@ -251,13 +251,13 @@ class SettingsControl extends Control
 			}
 			$cnt = $this->contentGateway->get(15);
 			$rv = $this->contentGateway->get(31);
-			$this->func->addContent($this->view->confirmBip($cnt, $rv));
+			$this->pageCompositionHelper->addContent($this->view->confirmBip($cnt, $rv));
 		}
 	}
 
 	private function confirm_bot()
 	{
-		$this->func->addBread('Botschafter werden');
+		$this->pageCompositionHelper->addBread('Botschafter werden');
 
 		if ($this->model->hasQuizCleared(3)) {
 			$showform = true;
@@ -298,7 +298,7 @@ class SettingsControl extends Control
 					$data = $this->func->unsetAll($_POST, array('photo_public', 'new_bezirk'));
 					$this->model->updateFields($data, 'fs_foodsaver', $this->session->id());
 
-					$this->func->addContent($this->v_utils->v_field(
+					$this->pageCompositionHelper->addContent($this->v_utils->v_field(
 						$this->v_utils->v_info($this->func->s('upgrade_bot_success')),
 						$this->func->s('upgrade_request_send'),
 						array(
@@ -312,7 +312,7 @@ class SettingsControl extends Control
 			}
 
 			if ($showform) {
-				$this->func->addJs('$("#upBotsch").on("submit", function(ev){
+				$this->pageCompositionHelper->addJs('$("#upBotsch").on("submit", function(ev){
 					check = true;
 					if($("#bezirk").val() == 0)
 					{
@@ -331,7 +331,7 @@ class SettingsControl extends Control
 
 				$rv = $this->contentGateway->get(32);
 
-				$this->func->addContent(
+				$this->pageCompositionHelper->addContent(
 					$this->view->confirmBot($this->contentGateway->get(16)) .
 
 					$this->v_utils->v_form('upBotsch', array($this->v_utils->v_field(
@@ -375,8 +375,8 @@ class SettingsControl extends Control
 
 	public function deleteaccount()
 	{
-		$this->func->addBread($this->func->s('delete_account'));
-		$this->func->addContent($this->view->delete_account($this->session->id()));
+		$this->pageCompositionHelper->addBread($this->func->s('delete_account'));
+		$this->pageCompositionHelper->addContent($this->view->delete_account($this->session->id()));
 	}
 
 	public function general()
@@ -387,16 +387,16 @@ class SettingsControl extends Control
 
 		$this->func->setEditData($data);
 
-		$this->func->addContent($this->view->foodsaver_form());
+		$this->pageCompositionHelper->addContent($this->view->foodsaver_form());
 
-		$this->func->addContent($this->picture_box(), CNT_RIGHT);
+		$this->pageCompositionHelper->addContent($this->picture_box(), CNT_RIGHT);
 	}
 
 	public function calendar()
 	{
-		$this->func->addBread($this->func->s('calendar'));
+		$this->pageCompositionHelper->addBread($this->func->s('calendar'));
 		$token = $this->generate_api_token($this->session->id());
-		$this->func->addContent($this->view->settingsCalendar($token));
+		$this->pageCompositionHelper->addContent($this->view->settingsCalendar($token));
 	}
 
 	public function info()
@@ -446,14 +446,14 @@ class SettingsControl extends Control
 				$this->func->info($this->func->s('changes_saved'));
 			}
 		}
-		$this->func->addBread($this->func->s('settings_info'));
+		$this->pageCompositionHelper->addBread($this->func->s('settings_info'));
 
 		$g_data = $this->model->getValues(array('infomail_message', 'newsletter'), 'foodsaver', $this->session->id());
 
 		$fairteiler = $this->model->getFairteiler();
 		$threads = $this->model->getForumThreads();
 
-		$this->func->addContent($this->view->settingsInfo($fairteiler, $threads));
+		$this->pageCompositionHelper->addContent($this->view->settingsInfo($fairteiler, $threads));
 	}
 
 	public function handle_edit()
@@ -544,7 +544,7 @@ class SettingsControl extends Control
 	private function handle_newmail()
 	{
 		if ($email = $this->model->getNewMail($_GET['newmail'])) {
-			$this->func->addJs("ajreq('changemail3');");
+			$this->pageCompositionHelper->addJs("ajreq('changemail3');");
 		}
 	}
 

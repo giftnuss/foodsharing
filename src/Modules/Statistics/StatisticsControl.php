@@ -23,9 +23,9 @@ class StatisticsControl extends Control
 	{
 		$content = $this->contentGateway->get(11);
 
-		$this->func->addTitle($content['title']);
+		$this->pageCompositionHelper->addTitle($content['title']);
 
-		$this->func->addBread($content['title']);
+		$this->pageCompositionHelper->addBread($content['title']);
 
 		$stat_gesamt = $this->statisticsGateway->listTotalStat();
 
@@ -37,10 +37,10 @@ class StatisticsControl extends Control
 
 		$stat_fs = $this->statisticsGateway->listStatFoodsaver();
 
-		$this->func->addContent($this->view->getStatTotal($stat_gesamt), CNT_TOP);
+		$this->pageCompositionHelper->addContent($this->view->getStatTotal($stat_gesamt), CNT_TOP);
 
-		$this->func->addContent($this->view->getStatCities($stat_cities), CNT_LEFT);
-		$this->func->addContent($this->view->getStatFoodsaver($stat_fs), CNT_RIGHT);
+		$this->pageCompositionHelper->addContent($this->view->getStatCities($stat_cities), CNT_LEFT);
+		$this->pageCompositionHelper->addContent($this->view->getStatFoodsaver($stat_fs), CNT_RIGHT);
 
 		$this->setContentWidth(12, 12);
 	}

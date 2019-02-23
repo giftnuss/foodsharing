@@ -10,9 +10,18 @@
 ### Contributing
 
   - [Making and submitting changes](contributing.md)
+  - [Code style](codestyle.md)
   - [Testing](testing.md)
 
-- [References](references.md)
-- [Reference php](php.md)
+### References
+  - [Scripts](scripts.md)
+  - [php](php.md)
+  - [request types](requests.md)
+  - [javascript, vue.js](javascript.md)
+  - [Databases](database.md)
+  - [Translation](internationalization.md)
+  - [Tests](tests.md)
+  - [Glossary](GLOSSARY.md)
+
 - [About the devdocs](about-devdocs.md)
 - [Contributors](contributors.md)

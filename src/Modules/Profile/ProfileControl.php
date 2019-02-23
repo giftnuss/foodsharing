@@ -55,7 +55,7 @@ class ProfileControl extends Control
 
 	private function organotes()
 	{
-		$this->func->addBread($this->foodsaver['name'], '/profile/' . $this->foodsaver['id']);
+		$this->pageCompositionHelper->addBread($this->foodsaver['name'], '/profile/' . $this->foodsaver['id']);
 		if ($this->session->may('orga')) {
 			$this->view->usernotes($this->wallposts('usernotes', $this->foodsaver['id']), true, true, true, $this->model->getCompanies($this->foodsaver['id']), $this->model->getCompaniesCount($this->foodsaver['id']), $this->model->getNextDates($this->foodsaver['id'], 50));
 		} else {

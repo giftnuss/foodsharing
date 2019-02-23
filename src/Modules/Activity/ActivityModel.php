@@ -71,7 +71,7 @@ class ActivityModel extends Db
 		$sanitized = $this->sanitizerService->markdownToHtml($txt);
 
 		if (strlen($txt) > 100) {
-			return '<span class="txt">' . $this->sanitizerService->markdownToHtml($this->func->tt($txt, 90)) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fas fa-angle-down"></i></a></span><span class="txt" style="display:none;">' . $sanitized . ' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fas fa-angle-up"></i></a></span>';
+			return '<span class="txt">' . $this->sanitizerService->markdownToHtml($this->sanitizerService->tt($txt, 90)) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fas fa-angle-down"></i></a></span><span class="txt" style="display:none;">' . $sanitized . ' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fas fa-angle-up"></i></a></span>';
 		}
 
 		return '<span class="txt">' . $sanitized . '</span>';

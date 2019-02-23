@@ -25,12 +25,12 @@ class EmailTemplateAdminControl extends Control
 		if ($this->func->getAction('neu')) {
 			$this->handle_add();
 
-			$this->func->addBread($this->func->s('bread_message_tpl'), '/?page=message_tpl');
-			$this->func->addBread($this->func->s('bread_new_message_tpl'));
+			$this->pageCompositionHelper->addBread($this->func->s('bread_message_tpl'), '/?page=message_tpl');
+			$this->pageCompositionHelper->addBread($this->func->s('bread_new_message_tpl'));
 
-			$this->func->addContent($this->view->message_tpl_form());
+			$this->pageCompositionHelper->addContent($this->view->message_tpl_form());
 
-			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+			$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 				$this->func->pageLink('message_tpl', 'back_to_overview')
 			)), $this->func->s('actions')), CNT_RIGHT);
 		} elseif ($id = $this->func->getActionId('delete')) {
@@ -41,19 +41,19 @@ class EmailTemplateAdminControl extends Control
 		} elseif ($id = $this->func->getActionId('edit')) {
 			$this->handle_edit();
 
-			$this->func->addBread($this->func->s('bread_message_tpl'), '/?page=message_tpl');
-			$this->func->addBread($this->func->s('bread_edit_message_tpl'));
+			$this->pageCompositionHelper->addBread($this->func->s('bread_message_tpl'), '/?page=message_tpl');
+			$this->pageCompositionHelper->addBread($this->func->s('bread_edit_message_tpl'));
 
 			$data = $this->emailTemplateAdminGateway->getOne_message_tpl($id);
 			$this->func->setEditData($data);
 
-			$this->func->addContent($this->view->message_tpl_form());
+			$this->pageCompositionHelper->addContent($this->view->message_tpl_form());
 
-			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+			$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 				$this->func->pageLink('message_tpl', 'back_to_overview')
 			)), $this->func->s('actions')), CNT_RIGHT);
 		} else {
-			$this->func->addBread($this->func->s('message_tpl_bread'), '/?page=message_tpl');
+			$this->pageCompositionHelper->addBread($this->func->s('message_tpl_bread'), '/?page=message_tpl');
 
 			if ($data = $this->emailTemplateAdminGateway->getBasics_message_tpl()) {
 				$rows = array();
@@ -69,12 +69,12 @@ class EmailTemplateAdminControl extends Control
 					array('name' => $this->func->s('name'))
 				), $rows);
 
-				$this->func->addContent($this->v_utils->v_field($table, 'Alle E-Mail-Vorlagen'));
+				$this->pageCompositionHelper->addContent($this->v_utils->v_field($table, 'Alle E-Mail-Vorlagen'));
 			} else {
 				$this->func->info($this->func->s('message_tpl_empty'));
 			}
 
-			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+			$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 				array('href' => '/?page=message_tpl&a=neu', 'name' => $this->func->s('neu_message_tpl'))
 			)), 'Aktionen'), CNT_RIGHT);
 		}

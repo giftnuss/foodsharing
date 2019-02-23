@@ -17,6 +17,7 @@ class SearchService
 	private $regionGateway;
 	private $func;
 	private $session;
+	private $sanitizerService;
 
 	public function __construct(
 		BuddyGateway $buddyGateway,
@@ -24,7 +25,8 @@ class SearchService
 		StoreModel $storeModel,
 		regionGateway $regionGateway,
 		Func $func,
-		Session $session
+		Session $session,
+		SanitizerService $sanitizerService
 	) {
 		$this->buddyGateway = $buddyGateway;
 		$this->workGroupModel = $workGroupModel;
@@ -32,6 +34,7 @@ class SearchService
 		$this->regionGateway = $regionGateway;
 		$this->func = $func;
 		$this->session = $session;
+		$this->sanitizerService = $sanitizerService;
 	}
 
 	/**
@@ -83,7 +86,7 @@ class SearchService
 				}
 				$result[] = array(
 					'name' => $b['name'],
-					'teaser' => $this->func->tt($b['teaser'], 65),
+					'teaser' => $this->sanitizerService->tt($b['teaser'], 65),
 					'img' => $img,
 					'href' => '/?page=bezirk&bid=' . $b['id'] . '&sub=forum',
 					'search' => array(

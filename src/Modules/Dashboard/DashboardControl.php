@@ -11,6 +11,7 @@ use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Profile\ProfileModel;
 use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Services\SanitizerService;
 
 class DashboardControl extends Control
 {
@@ -23,6 +24,7 @@ class DashboardControl extends Control
 	private $eventGateway;
 	private $twig;
 	private $profileModel;
+	private $sanitizerService;
 
 	public function __construct(
 		DashboardView $view,
@@ -34,8 +36,9 @@ class DashboardControl extends Control
 		EventGateway $eventGateway,
 		Db $model,
 		ProfileModel $profileModel,
-		\Twig\Environment $twig)
-	{
+		\Twig\Environment $twig,
+		SanitizerService $sanitizerService
+	) {
 		$this->view = $view;
 		$this->dashboardGateway = $dashboardGateway;
 		$this->contentGateway = $contentGateway;
@@ -46,6 +49,7 @@ class DashboardControl extends Control
 		$this->model = $model;
 		$this->twig = $twig;
 		$this->profileModel = $profileModel;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 
@@ -99,7 +103,7 @@ class DashboardControl extends Control
 			$check = true;
 
 			if ($is_bot) {
-				$this->func->addJs('ajreq("endpopup",{app:"quiz"});');
+				$this->pageCompositionHelper->addJs('ajreq("endpopup",{app:"quiz"});');
 			}
 		}
 
@@ -119,17 +123,17 @@ class DashboardControl extends Control
 			} else {
 				$cnt['body'] = $cnt['body'] . '<p><a href="#" onclick="ajreq(\'quizpopup\',{app:\'quiz\'});return false;">Weiter zum Quiz</a></p><p><a href="#" onclick="$(this).parent().parent().hide();ajax.req(\'quiz\',\'hideinfo\');return false;"><i class="far fa-check-square"></i> Hinweis gelesen und nicht mehr anzeigen</a></p>';
 			}
-			$this->func->addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
+			$this->pageCompositionHelper->addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
 		}
 
-		$this->func->addBread('Dashboard');
-		$this->func->addTitle('Dashboard');
+		$this->pageCompositionHelper->addBread('Dashboard');
+		$this->pageCompositionHelper->addTitle('Dashboard');
 		/*
 		 * User is foodsaver
 		 */
 
 		if ($this->user['rolle'] > 0 && !$this->session->getCurrentBezirkId()) {
-			$this->func->addJs('becomeBezirk();');
+			$this->pageCompositionHelper->addJs('becomeBezirk();');
 		}
 
 		if ($this->session->may('fs')) {
@@ -149,7 +153,7 @@ class DashboardControl extends Control
 			$subtitle = $this->func->sv('saved_food', array('weight' => $this->user['stat_fetchweight']));
 		}
 
-		$this->func->addContent(
+		$this->pageCompositionHelper->addContent(
 			$this->twig->render('partials/topbar.twig', [
 				'title' => $this->func->sv('welcome', ['name' => $this->user['name']]),
 				'subtitle' => $subtitle,
@@ -162,9 +166,9 @@ class DashboardControl extends Control
 			CNT_TOP
 		);
 
-		$this->func->addContent($this->view->becomeFoodsaver());
+		$this->pageCompositionHelper->addContent($this->view->becomeFoodsaver());
 
-		$this->func->addContent($this->view->foodsharerMenu(), CNT_LEFT);
+		$this->pageCompositionHelper->addContent($this->view->foodsharerMenu(), CNT_LEFT);
 
 		$cnt = $this->contentGateway->get(33);
 
@@ -176,15 +180,15 @@ class DashboardControl extends Control
 			$this->func->s('anrede_' . $this->session->user('gender'))
 		), $cnt['body']);
 
-		$this->func->addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
+		$this->pageCompositionHelper->addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
 
 		$this->view->updates();
 
 		if ($this->user['lat'] && ($baskets = $this->dashboardGateway->listCloseBaskets($this->session->id(), $this->session->getLocation($this->model)))) {
-			$this->func->addContent($this->view->closeBaskets($baskets), CNT_LEFT);
+			$this->pageCompositionHelper->addContent($this->view->closeBaskets($baskets), CNT_LEFT);
 		} else {
 			if ($baskets = $this->dashboardGateway->getNewestFoodbaskets()) {
-				$this->func->addContent($this->view->newBaskets($baskets), CNT_LEFT);
+				$this->pageCompositionHelper->addContent($this->view->newBaskets($baskets), CNT_LEFT);
 			}
 		}
 	}
@@ -215,7 +219,7 @@ class DashboardControl extends Control
 		}
 
 		if (empty($val['lat']) || empty($val['lon'])) {
-			$this->func->addJs('
+			$this->pageCompositionHelper->addJs('
                 $("#plz, #stadt, #anschrift, #hsnr").on("blur",function(){
                     if($("#plz").val() != "" && $("#stadt").val() != "" && $("#anschrift").val() != "")
                     {
@@ -247,7 +251,7 @@ class DashboardControl extends Control
 		if (!empty($elements)) {
 			$out = $this->v_utils->v_form('grabInfo', $elements, array('submit' => 'Speichern'));
 
-			$this->func->addJs('
+			$this->pageCompositionHelper->addJs('
                 $("#grab-info-link").fancybox({
                     closeClick:false,
                     closeBtn:true,
@@ -284,7 +288,7 @@ class DashboardControl extends Control
                 });
             ');
 
-			$this->func->addHidden('
+			$this->pageCompositionHelper->addHidden('
 			<div id="grab-info">
 				<div class="popbox">
 					<h3>Bitte noch ein paar Daten vervollständigen bzw. überprüfen!</h3>
@@ -304,22 +308,22 @@ class DashboardControl extends Control
 			}
 			if (!empty($ids)) {
 				if ($bids = $this->model->q('SELECT id,name,bezirk_id,str,hsnr FROM fs_betrieb WHERE id IN(' . implode(',', $ids) . ') AND ( bezirk_id = 0 OR bezirk_id IS NULL)')) {
-					$this->func->addJs('ajax.req("betrieb","setbezirkids");');
+					$this->pageCompositionHelper->addJs('ajax.req("betrieb","setbezirkids");');
 				}
 			}
 		}
 
 		/* Einladungen */
 		if ($invites = $this->eventGateway->getInvites($this->session->id())) {
-			$this->func->addContent($this->view->u_invites($invites));
+			$this->pageCompositionHelper->addContent($this->view->u_invites($invites));
 		}
 
 		/* Events */
 		if ($events = $this->eventGateway->getNextEvents($this->session->id())) {
-			$this->func->addContent($this->view->u_events($events));
+			$this->pageCompositionHelper->addContent($this->view->u_events($events));
 		}
 
-		$this->func->addStyle('
+		$this->pageCompositionHelper->addStyle('
 			#activity ul.linklist li span.time{margin-left:58px;display:block;margin-top:10px;}
 	
 			#activity ul.linklist li span.qr
@@ -444,7 +448,7 @@ class DashboardControl extends Control
 				}
 			}
 		');
-		$this->func->addContent('
+		$this->pageCompositionHelper->addContent('
 		<div class="head ui-widget-header ui-corner-top">
 			Updates-Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fas fa-cog"></a></span>
 		</div>
@@ -474,7 +478,7 @@ class DashboardControl extends Control
 				number_format($gerettet, 0, ',', '.') . '&thinsp;kg</strong> gerettet.';
 		}
 
-		$this->func->addContent(
+		$this->pageCompositionHelper->addContent(
 			'
 		<div class="pure-u-1 ui-padding-bottom">
 		<ul id="conten-top"  class="top corner-all linklist" >
@@ -499,7 +503,7 @@ class DashboardControl extends Control
 		 * Nächste Termine
 		*/
 		if ($dates = $this->profileModel->getNextDates($this->session->id(), 10)) {
-			$this->func->addContent($this->view->u_nextDates($dates), CNT_RIGHT);
+			$this->pageCompositionHelper->addContent($this->view->u_nextDates($dates), CNT_RIGHT);
 		}
 
 		/*
@@ -532,7 +536,7 @@ class DashboardControl extends Control
 				$out .= $this->v_utils->v_field($orga, 'Deine Gruppen', array('class' => 'ui-padding'));
 			}
 
-			$this->func->addContent($out, CNT_RIGHT);
+			$this->pageCompositionHelper->addContent($out, CNT_RIGHT);
 		}
 
 		/*
@@ -562,7 +566,7 @@ class DashboardControl extends Control
 					<li>
 						<a class="ui-corner-all" onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . ',modal:1});return false;" href="#">
 							<span style="float:left;margin-right:7px;"><img width="35px" alt="Maike" src="' . $img . '" class="ui-corner-all"></span>
-							<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' . $distance . ')</strong>' . $this->func->tt($b['description'], 50) . '</span>
+							<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' . $distance . ')</strong>' . $this->sanitizerService->tt($b['description'], 50) . '</span>
 							
 							<span style="clear:both;"></span>
 						</a>
@@ -574,16 +578,16 @@ class DashboardControl extends Control
 				<a class="button" href="/essenskoerbe/find/">Alle Essenskörbe</a>
 			</div>';
 
-			$this->func->addContent($this->v_utils->v_field($out, 'Essenskörbe in Deiner Nähe'), CNT_LEFT);
+			$this->pageCompositionHelper->addContent($this->v_utils->v_field($out, 'Essenskörbe in Deiner Nähe'), CNT_LEFT);
 		}
 
 		/*
 		 * Deine Betriebe
 		*/
 		if ($betriebe = $this->storeGateway->getMyBetriebe($this->session->id(), $this->session->getCurrentBezirkId(), array('sonstige' => false))) {
-			$this->func->addContent($this->view->u_myBetriebe($betriebe), CNT_LEFT);
+			$this->pageCompositionHelper->addContent($this->view->u_myBetriebe($betriebe), CNT_LEFT);
 		} else {
-			$this->func->addContent($this->v_utils->v_info('Du bist bis jetzt in keinem Betriebsteam.'), CNT_LEFT);
+			$this->pageCompositionHelper->addContent($this->v_utils->v_info('Du bist bis jetzt in keinem Betriebsteam.'), CNT_LEFT);
 		}
 	}
 }

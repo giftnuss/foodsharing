@@ -21,9 +21,9 @@ class BusinessCardControl extends Control
 
 	public function index()
 	{
-		$this->func->addBread($this->func->s('bcard_generator'));
+		$this->pageCompositionHelper->addBread($this->func->s('bcard_generator'));
 
-		$this->func->addContent($this->view->top(), CNT_TOP);
+		$this->pageCompositionHelper->addContent($this->view->top(), CNT_TOP);
 
 		if ($data = $this->gateway->getMyData($this->session->id(), $this->session->may('bieb'))) {
 			if (strlen($data['anschrift'] . ', ' . $data['plz'] . ' ' . $data['stadt']) >= 49) {
@@ -66,7 +66,7 @@ class BusinessCardControl extends Control
 				}
 			}
 
-			$this->func->addContent($this->view->optionform($sel_data));
+			$this->pageCompositionHelper->addContent($this->view->optionform($sel_data));
 		}
 	}
 

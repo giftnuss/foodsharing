@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Lib\View;
 
+use Foodsharing\Helpers\PageCompositionHelper;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Services\SanitizerService;
@@ -24,11 +25,13 @@ class Utils
 	 */
 	private $twig;
 	private $sanitizerService;
+	private $pageCompositionHelper;
 
-	public function __construct(SanitizerService $sanitizerService)
+	public function __construct(SanitizerService $sanitizerService, PageCompositionHelper $pageCompositionHelper)
 	{
 		$this->id = array();
 		$this->sanitizerService = $sanitizerService;
+		$this->pageCompositionHelper = $pageCompositionHelper;
 	}
 
 	/**
@@ -67,7 +70,7 @@ class Utils
 		}
 
 		$id = $this->func->id('scroller');
-		$this->func->addJs('$("#' . $id . '").slimScroll();');
+		$this->pageCompositionHelper->addJs('$("#' . $id . '").slimScroll();');
 
 		return '
 			<div id="' . $id . '" class="scroller">
@@ -79,7 +82,7 @@ class Utils
 	{
 		$id = $this->func->id('activeSwitch');
 
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 			$("#' . $id . ' input").switchButton({
 				labels_placement: "right",
 				on_label: "' . $this->func->s('on_label') . '",
@@ -123,7 +126,6 @@ class Utils
 	public function v_bezirkChooser($id = 'bezirk_id', $bezirk = false, $option = array())
 	{
 		if (!$bezirk) {
-			//$bezirk = $this->func->getBezirk();
 			$bezirk = array(
 				'id' => 0,
 				'name' => $this->func->s('no_bezirk_choosen')
@@ -131,10 +133,10 @@ class Utils
 		}
 		$id = $this->func->id($id);
 
-		$this->func->addJs('$("#' . $id . '-button").button().on("click", function(){
+		$this->pageCompositionHelper->addJs('$("#' . $id . '-button").button().on("click", function(){
 			$("#' . $id . '-dialog").dialog("open");
 		});');
-		$this->func->addJs('$("#' . $id . '-dialog").dialog({
+		$this->pageCompositionHelper->addJs('$("#' . $id . '-dialog").dialog({
 			autoOpen:false,
 			modal:true,
 			title:"Bezirk ändern",
@@ -154,7 +156,7 @@ class Utils
 			$nodeselect = 'true';
 		}
 
-		$this->func->addJs('$("#' . $id . '-tree").dynatree({
+		$this->pageCompositionHelper->addJs('$("#' . $id . '-tree").dynatree({
 				onSelect: function(select, node) {
 					$("#' . $id . '-hidden").html("");
 					$.map(node.tree.getSelectedNodes(), function(node){
@@ -193,7 +195,7 @@ class Utils
 					});
 				}
 			});');
-		$this->func->addHidden('<div id="' . $id . '-dialog"><div id="' . $id . '-tree"></div></div>');
+		$this->pageCompositionHelper->addHidden('<div id="' . $id . '-dialog"><div id="' . $id . '-tree"></div></div>');
 
 		$label = $this->func->s('Stammbezirk');
 		if (isset($option['label'])) {
@@ -285,7 +287,7 @@ class Utils
 	{
 		$new_id = $this->func->id($id);
 
-		$this->func->addJs('$("#' . $new_id . '-button").button({}).on("click", function(){$("#dialog_' . $id . '").dialog("open");});');
+		$this->pageCompositionHelper->addJs('$("#' . $new_id . '-button").button({}).on("click", function(){$("#dialog_' . $id . '").dialog("open");});');
 
 		return '<span id="' . $new_id . '-button">' . $label . '</span>';
 	}
@@ -296,7 +298,7 @@ class Utils
 		$label = $this->func->s($id);
 		$value = $this->func->getValue($id);
 
-		$this->func->addStyle('div#content {width: 580px;}div#right{width:222px;}');
+		$this->pageCompositionHelper->addStyle('div#content {width: 580px;}div#right{width:222px;}');
 
 		$css = 'css/content.css,css/jquery-ui.css';
 		$class = 'ui-widget ui-widget-content ui-padding';
@@ -332,7 +334,7 @@ class Utils
 
 		});';
 
-		$this->func->addJs($js);
+		$this->pageCompositionHelper->addJs($js);
 
 		return $this->v_input_wrapper($label, '<textarea name="' . $id . '" id="' . $id . '">' . $value . '</textarea>', $id, $option);
 	}
@@ -386,7 +388,7 @@ class Utils
 				</div>
 			</div>';
 
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 				$(\'#' . $id . '\').on("change", function(){
 					if($(this).val() == "choose" || $(this).val() == "choosebot" || $(this).val() == "filialbez")
 					{
@@ -450,7 +452,7 @@ class Utils
 		$original = explode('_', $src);
 		$original = end($original);
 
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 
 				$("#' . $id . '-link").fancybox({
 					minWidth : 600,
@@ -518,7 +520,7 @@ class Utils
 				});
 				');
 
-		$this->func->addHidden('
+		$this->pageCompositionHelper->addHidden('
 				<div class="fotoupload popbox" style="display:none;" id="' . $id . '">
 					<h3>Fotoupload</h3>
 					<p class="subtitle">Hier kannst Du ein Foto von Deinem Computer ausw&auml;hlen</p>
@@ -540,10 +542,10 @@ class Utils
 				</div>');
 
 		if (isset($_GET['pinit'])) {
-			$this->func->addJs('$("#' . $id . '-link").trigger("click");');
+			$this->pageCompositionHelper->addJs('$("#' . $id . '-link").trigger("click");');
 		}
 
-		$this->func->addHidden('<a id="' . $id . '-link" href="#' . $id . '">&nbsp;</a>');
+		$this->pageCompositionHelper->addHidden('<a id="' . $id . '-link" href="#' . $id . '">&nbsp;</a>');
 
 		$menu = array(array('name' => $this->func->s('edit_photo'), 'href' => '#edit'));
 		if ($_GET['page'] == 'settings') {
@@ -574,7 +576,7 @@ class Utils
 				closeOnEscape: false,
 				open: function(event, ui) {$(this).parent().children().children(".ui-dialog-titlebar-close").hide();}';
 			}
-			$this->func->addJs('$("#' . $id . '").dialog({modal:true,title:"' . $name . '"' . $noclose . '});');
+			$this->pageCompositionHelper->addJs('$("#' . $id . '").dialog({modal:true,title:"' . $name . '"' . $noclose . '});');
 		}
 
 		$action = $this->func->getSelf();
@@ -601,7 +603,7 @@ class Utils
 		</form>
 		';
 
-		$this->func->addJs('$("#' . $id . '-form").on("submit", function(ev){
+		$this->pageCompositionHelper->addJs('$("#' . $id . '-form").on("submit", function(ev){
 
 			check = true;
 			$("#' . $id . '-form div.required .value").each(function(i,el){
@@ -639,7 +641,7 @@ class Utils
 	{
 		$id = $this->func->id('vmenu');
 
-		//$this->func->addJs('$("#'.$id.'").menu();');
+		//$this->pageCompositionHelper->addJs('$("#'.$id.'").menu();');
 		$out = '
 		<ul class="linklist">';
 
@@ -879,7 +881,7 @@ class Utils
 			$source = 'autocompleteOptions: {source: ' . json_encode($option['valueOptions']) . ',minLength: 0}';
 		}
 
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 			$("#' . $id . ' input.tag").tagedit({
 				' . $source . ',
 				allowEdit: false,
@@ -915,7 +917,7 @@ class Utils
 	{
 		$id = $this->func->id($id);
 
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 			$("#' . $id . '-link").fancybox({
 				minWidth : 600,
 				scrolling :"auto",
@@ -946,7 +948,7 @@ class Utils
 			$options .= '<input type="hidden" id="' . $id . '-resize" name="resize" value="' . json_encode($option['resize']) . '" />';
 		}
 
-		$this->func->addHidden('
+		$this->pageCompositionHelper->addHidden('
 		<div id="' . $id . '-fancy">
 			<div class="popbox">
 				<h3>' . $this->func->s($id) . ' Upload</h3>
@@ -997,7 +999,7 @@ class Utils
 			$val = substr($val['name'], 0, 30);
 		}
 
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 		$("#' . $id . '-button").button().on("click", function(){$("#' . $id . '").trigger("click") ;});
 		$("#' . $id . '").on("change", function(){$("#' . $id . '-info").html($("#' . $id . '").val().split("\\\").pop());});');
 
@@ -1099,14 +1101,14 @@ class Utils
 		</select>';
 
 		if (isset($option['add'])) {
-			$this->func->addHidden('
+			$this->pageCompositionHelper->addHidden('
 			<div id="' . $id . '-dialog" style="display:none;">
 				' . $this->v_form_text($id . ': NEU') . '
 			</div>');
 
 			$out .= '<a href="#" id="' . $id . '-add" class="select-add">&nbsp;</a>';
 
-			$this->func->addJs('
+			$this->pageCompositionHelper->addJs('
 
 					$("#' . $id . 'neu").on("keyup", function(e){
 
@@ -1175,7 +1177,7 @@ class Utils
 
 		if (isset($option['collapse'])) {
 			$label = '<i class="fas fa-caret-right"></i> ' . $label;
-			$this->func->addJs('
+			$this->pageCompositionHelper->addJs('
 				$("#' . $id . '-wrapper .element-wrapper").hide();
 			');
 
@@ -1221,7 +1223,7 @@ class Utils
 			$option['options'] = array('from' => array(), 'to' => array());
 		}
 
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 			 $(function() {
 				$( "#' . $id . '_from" ).datepicker({
 					changeMonth: true,
@@ -1264,7 +1266,7 @@ class Utils
 
 		$value = $this->func->getValue($id);
 
-		$this->func->addJs('$("#' . $id . '").datepicker({
+		$this->pageCompositionHelper->addJs('$("#' . $id . '").datepicker({
 			changeYear: true,
 			changeMonth: true,
 			dateFormat: "yy-mm-dd",

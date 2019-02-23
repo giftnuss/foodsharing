@@ -59,16 +59,16 @@ class StoreControl extends Control
 			if ($this->session->may('bieb')) {
 				$this->handle_add($this->session->id(), $bezirk_id);
 
-				$this->func->addBread($this->func->s('bread_betrieb'), '/?page=betrieb');
-				$this->func->addBread($this->func->s('bread_new_betrieb'));
+				$this->pageCompositionHelper->addBread($this->func->s('bread_betrieb'), '/?page=betrieb');
+				$this->pageCompositionHelper->addBread($this->func->s('bread_new_betrieb'));
 
 				if (isset($_GET['id'])) {
 					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
 				}
 
-				$this->func->addContent($this->view->betrieb_form($bezirk, 'betrieb', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
+				$this->pageCompositionHelper->addContent($this->view->betrieb_form($bezirk, 'betrieb', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
 
-				$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					array('name' => $this->func->s('back_to_overview'), 'href' => '/?page=fsbetrieb&bid=' . $bezirk_id)
 				)), $this->func->s('actions')), CNT_RIGHT);
 			} else {
@@ -84,12 +84,12 @@ class StoreControl extends Control
 			}
 			*/
 		} elseif ($id = $this->func->getActionId('edit')) {
-			$this->func->addBread($this->func->s('bread_betrieb'), '/?page=betrieb');
-			$this->func->addBread($this->func->s('bread_edit_betrieb'));
+			$this->pageCompositionHelper->addBread($this->func->s('bread_betrieb'), '/?page=betrieb');
+			$this->pageCompositionHelper->addBread($this->func->s('bread_edit_betrieb'));
 			$data = $this->model->getOne_betrieb($id);
 
-			$this->func->addTitle($data['name']);
-			$this->func->addTitle($this->func->s('edit'));
+			$this->pageCompositionHelper->addTitle($data['name']);
+			$this->pageCompositionHelper->addTitle($this->func->s('edit'));
 
 			if (($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $id)) || $this->session->isAdminFor($data['bezirk_id'])) {
 				$this->handle_edit();
@@ -101,21 +101,21 @@ class StoreControl extends Control
 					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
 				}
 
-				$this->func->addContent($this->view->betrieb_form($bezirk, '', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
+				$this->pageCompositionHelper->addContent($this->view->betrieb_form($bezirk, '', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
 			} else {
 				$this->func->info('Diesen Betrieb kannst Du nicht bearbeiten');
 			}
 
-			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+			$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 				$this->func->pageLink('betrieb', 'back_to_overview')
 			)), $this->func->s('actions')), CNT_RIGHT);
 		} elseif (isset($_GET['id'])) {
 			$this->func->go('/?page=fsbetrieb&id=' . (int)$_GET['id']);
 		} else {
-			$this->func->addBread($this->func->s('betrieb_bread'), '/?page=betrieb');
+			$this->pageCompositionHelper->addBread($this->func->s('betrieb_bread'), '/?page=betrieb');
 
 			if ($this->session->may('bieb')) {
-				$this->func->addContent($this->v_utils->v_menu(array(
+				$this->pageCompositionHelper->addContent($this->v_utils->v_menu(array(
 					array('href' => '/?page=betrieb&a=new&bid=' . (int)$bezirk_id, 'name' => 'Neuen Betrieb eintragen')
 				), 'Aktionen'), CNT_RIGHT);
 			}
@@ -134,7 +134,7 @@ class StoreControl extends Control
 				];
 			}, $stores);
 
-			$this->func->addContent($this->view->vueComponent('vue-storelist', 'store-list', [
+			$this->pageCompositionHelper->addContent($this->view->vueComponent('vue-storelist', 'store-list', [
 				'regionName' => $bezirk['name'],
 				'stores' => $storesMapped
 			]));

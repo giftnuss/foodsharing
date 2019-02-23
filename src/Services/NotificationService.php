@@ -11,12 +11,18 @@ final class NotificationService
 	private $bellGateway;
 	private $fairteilerGateway;
 	private $func;
+	private $sanitizerService;
 
-	public function __construct(BellGateway $bellGateway, FairTeilerGateway $fairTeilerGateway, Func $func)
-	{
+	public function __construct(
+		BellGateway $bellGateway,
+		FairTeilerGateway $fairTeilerGateway,
+		Func $func,
+		SanitizerService $sanitizerService
+	) {
 		$this->bellGateway = $bellGateway;
 		$this->fairteilerGateway = $fairTeilerGateway;
 		$this->func = $func;
+		$this->sanitizerService = $sanitizerService;
 	}
 
 	public function newFairteilerPost(int $fairteilerId)
@@ -57,7 +63,7 @@ final class NotificationService
 					'ft_update',
 					'img img-recycle yellow',
 					array('href' => '/?page=fairteiler&sub=ft&id=' . (int)$fairteilerId),
-					array('name' => $ft['name'], 'user' => $post['fs_name'], 'teaser' => $this->func->tt($post['body'], 100)),
+					array('name' => $ft['name'], 'user' => $post['fs_name'], 'teaser' => $this->sanitizerService->tt($post['body'], 100)),
 					'fairteiler-' . (int)$fairteilerId
 				);
 			}

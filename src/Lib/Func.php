@@ -16,26 +16,10 @@ use Foodsharing\Services\SanitizerService;
 
 final class Func
 {
-	private $content_main;
-	private $content_right;
-	private $content_left;
-	private $content_bottom;
-	private $content_top;
-	private $content_overtop;
-	private $bread;
-	private $hidden;
-	private $js_func;
-	private $js;
-	private $head;
-	private $title;
 	private $ids;
-	private $add_css;
 	private $sanitizerService;
 	private $regionGateway;
 	private $emailTemplateAdminGateway;
-
-	private $webpackScripts;
-	private $webpackStylesheets;
 
 	public $jsData = [];
 
@@ -69,21 +53,7 @@ final class Func
 		$this->regionGateway = $regionGateway;
 		$this->emailTemplateAdminGateway = $emailTemplateAdminGateway;
 		$this->metrics = $metrics;
-		$this->content_main = '';
-		$this->content_right = '';
-		$this->content_left = '';
-		$this->content_bottom = '';
-		$this->content_top = '';
-		$this->content_overtop = '';
-		$this->bread = array();
-		$this->hidden = '';
-		$this->js_func = '';
-		$this->js = '';
-		$this->head = '';
-		$this->title = array('foodsharing');
-
 		$this->ids = array();
-		$this->add_css = '';
 	}
 
 	/**
@@ -108,69 +78,6 @@ final class Func
 	public function setMem(Mem $mem)
 	{
 		$this->mem = $mem;
-	}
-
-	private function getContent($place = CNT_MAIN)
-	{
-		switch ($place) {
-			case CNT_MAIN:
-				return $this->content_main;
-				break;
-			case CNT_RIGHT:
-				return $this->content_right;
-				break;
-			case CNT_TOP:
-				return $this->content_top;
-				break;
-			case CNT_BOTTOM:
-				return $this->content_bottom;
-				break;
-			case CNT_LEFT:
-				return $this->content_left;
-				break;
-			case CNT_OVERTOP:
-				return $this->content_overtop;
-				break;
-			default:
-				return '';
-				break;
-		}
-	}
-
-	public function addContent($new_content, $place = CNT_MAIN)
-	{
-		switch ($place) {
-			case CNT_MAIN:
-
-				$this->content_main .= $new_content;
-				break;
-			case CNT_RIGHT:
-
-				$this->content_right .= $new_content;
-				break;
-
-			case CNT_TOP:
-				$this->content_top .= $new_content;
-				break;
-
-			case CNT_BOTTOM:
-
-				$this->content_bottom .= $new_content;
-				break;
-
-			case CNT_LEFT:
-
-				$this->content_left .= $new_content;
-				break;
-
-			case CNT_OVERTOP:
-
-				$this->content_overtop .= $new_content;
-				break;
-
-			default:
-				break;
-		}
 	}
 
 	public function niceDateShort($ts)
@@ -242,11 +149,6 @@ final class Func
 		}
 
 		return str_replace('{var}', $var, $g_lang[$id]);
-	}
-
-	public function addBread($name, $href = '')
-	{
-		$this->bread[] = array('name' => $name, 'href' => $href);
 	}
 
 	public function setEditData($data)
@@ -491,7 +393,13 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$plainBody = $this->sanitizerService->htmlToPlain($htmlBody);
 		$mail->setBody($plainBody);
 
-		$mail->addRecipient($to);
+		if (is_iterable($to)) {
+			foreach ($to as $recipient) {
+				$mail->addRecipient($recipient);
+			}
+		} else {
+			$mail->addRecipient($to);
+		}
 		$mail->send();
 		$this->metrics->addPoint('outgoing_email', ['template' => $tpl_id], ['count' => 1]);
 	}
@@ -610,11 +518,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return false;
 	}
 
-	public function addHidden($html)
-	{
-		$this->hidden .= $html;
-	}
-
 	public function makeId($text, $ids = false)
 	{
 		$text = strtolower($text);
@@ -661,71 +564,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$_SESSION['msg']['error'][] = $t . $msg;
 	}
 
-	private function getMessages()
-	{
-		global $g_error;
-		global $g_info;
-		if (!isset($_SESSION['msg'])) {
-			$_SESSION['msg'] = array();
-		}
-		if (isset($_SESSION['msg']['error']) && !empty($_SESSION['msg']['error'])) {
-			$msg = '';
-			foreach ($_SESSION['msg']['error'] as $e) {
-				$msg .= '<div class="item">' . $e . '</div>';
-				//addJs('error("'.$e.'");');
-			}
-			$this->addJs('pulseError("' . $this->sanitizerService->jsSafe($msg, '"') . '");');
-		}
-		if (isset($_SESSION['msg']['info']) && !empty($_SESSION['msg']['info'])) {
-			$msg = '';
-			foreach ($_SESSION['msg']['info'] as $i) {
-				$msg .= '<p>' . $i . '</p>';
-				//addJs('info("'.$i.'");');
-			}
-			$this->addJs('pulseInfo("' . $this->sanitizerService->jsSafe($msg, '"') . '");');
-		}
-		if (isset($_SESSION['msg']['info']) && !empty($_SESSION['msg']['info'])) {
-			$msg = '';
-			foreach ($_SESSION['msg']['info'] as $i) {
-				$msg .= '<p>' . $i . '</p>';
-			}
-			$this->addJs('pulseSuccess("' . $this->sanitizerService->jsSafe($msg, '"') . '");');
-		}
-		$_SESSION['msg']['info'] = array();
-		$_SESSION['msg']['success'] = array();
-		$_SESSION['msg']['error'] = array();
-	}
-
-	public function addWebpackScript($src)
-	{
-		$this->webpackScripts[] = $src;
-	}
-
-	public function addJsFunc($nfunc)
-	{
-		$this->js_func .= $nfunc;
-	}
-
-	public function addJs($njs)
-	{
-		$this->js .= $njs;
-	}
-
-	public function addWebpackStylesheet($src)
-	{
-		$this->webpackStylesheets[] = $src;
-	}
-
-	public function addHead($str)
-	{
-		$this->head .= "\n" . $str;
-	}
-
-	public function addTitle($name)
-	{
-		$this->title[] = $name;
-	}
-
 	private function getTranslations()
 	{
 		global $g_lang;
@@ -736,7 +574,7 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 	/**
 	 * This is used to set window.serverData on in the frontend.
 	 */
-	private function getServerData()
+	public function getServerData()
 	{
 		$user = $this->session->get('user');
 
@@ -781,94 +619,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			'translations' => $this->getTranslations(),
 			'isDev' => getenv('FS_ENV') === 'dev'
 		]);
-	}
-
-	private function getHeadData()
-	{
-		return [
-			'title' => implode(' | ', $this->title),
-			'extra' => $this->head,
-			'css' => str_replace(["\r", "\n"], '', $this->add_css),
-			'jsFunc' => $this->js_func,
-			'js' => $this->js,
-			'ravenConfig' => null,
-			'stylesheets' => $this->webpackStylesheets,
-			'scripts' => $this->webpackScripts
-		];
-	}
-
-	public function generateAndGetGlobalViewData()
-	{
-		global $g_broadcast_message;
-		global $content_left_width;
-		global $content_right_width;
-
-		$menu = $this->getMenu();
-
-		$this->getMessages();
-
-		$mainwidth = 24;
-
-		$content_left = $this->getContent(CNT_LEFT);
-		$content_right = $this->getContent(CNT_RIGHT);
-
-		if (!empty($content_left)) {
-			$mainwidth -= $content_left_width;
-		}
-
-		if (!empty($content_right)) {
-			$mainwidth -= $content_right_width;
-		}
-
-		$bodyClasses = [];
-
-		if ($this->session->may()) {
-			$bodyClasses[] = 'loggedin';
-		}
-
-		$bodyClasses[] = 'page-' . $this->getPage();
-
-		return [
-			'head' => $this->getHeadData(),
-			'bread' => $this->bread,
-			'bodyClasses' => $bodyClasses,
-			'serverDataJSON' => json_encode($this->getServerData()),
-			'menu' => $menu,
-			'dev' => FS_ENV == 'dev',
-			'hidden' => $this->hidden,
-			'isMob' => $this->isMob(),
-			'broadcast_message' => $g_broadcast_message,
-			'SRC_REVISION' => defined('SRC_REVISION') ? SRC_REVISION : null,
-			'HTTP_HOST' => $_SERVER['HTTP_HOST'] ?? BASE_URL,
-			'is_foodsharing_dot_at' => strpos($_SERVER['HTTP_HOST'] ?? BASE_URL, 'foodsharing.at') !== false,
-			'content' => [
-				'main' => [
-					'html' => $this->getContent(CNT_MAIN),
-					'width' => $mainwidth
-				],
-				'left' => [
-					'html' => $content_left,
-					'width' => $content_left_width,
-					'id' => 'left'
-				],
-				'right' => [
-					'html' => $content_right,
-					'width' => $content_right_width,
-					'id' => 'right'
-				],
-				'top' => [
-					'html' => $this->getContent(CNT_TOP),
-					'id' => 'content_top'
-				],
-				'bottom' => [
-					'html' => $this->getContent(CNT_BOTTOM),
-					'id' => 'content_bottom'
-				],
-				'overtop' => [
-					'html' => $this->getContent(CNT_OVERTOP)
-				]
-			]
-		];
 	}
 
 	public function validEmail($email)
@@ -944,69 +694,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return $out;
 	}
 
-	public function hiddenDialog($table, $fields, $title = '', $option = array())
-	{
-		$width = '';
-		if (isset($option['width'])) {
-			$width = 'width:' . $option['width'] . ',';
-		}
-		$id = $this->id('dialog_' . $table);
-
-		$form = '';
-		foreach ($fields as $f) {
-			$form .= $f;
-		}
-
-		$get = '';
-		if (isset($_GET['id'])) {
-			$get = '<input type="hidden" name="id" value="' . (int)$_GET['id'] . '" />';
-		}
-
-		$this->addHidden('<div id="' . $id . '"><form>' . $form . $get . '</form></div>');
-		//addJs('hiddenDialog("'.$id.'","'.$table.'","'.$title.'");');
-
-		$success = '';
-		if (isset($option['success'])) {
-			$success = $option['success'];
-		}
-
-		if (isset($option['reload'])) {
-			$success .= 'reload();';
-		}
-
-		$this->addJs('
-		$("#' . $id . '").dialog({
-		' . $width . '
-		autoOpen:false,
-		modal:true,
-		title:"' . $title . '",
-		buttons:
-		{
-			"Speichern":function()
-			{
-				showLoader();
-				$.ajax({
-
-					dataType:"json",
-					url:"/xhr.php?f=update_' . $table . '&" + $("#' . $id . ' form").serialize(),
-					success : function(data){
-						$("#' . $id . '").dialog(\'close\');
-						' . $success . '
-						if(data.script != undefined)
-						{
-							$.globalEval(data.script);
-						}
-					},
-					complete : function(){
-						hideLoader();
-					}
-				});
-			}
-		}
-	});
-	');
-	}
-
 	private function resizeImg($img, $width, $format)
 	{
 		// prevent path traversal
@@ -1040,11 +727,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		return false;
 	}
 
-	public function addStyle($css)
-	{
-		$this->add_css .= trim($css);
-	}
-
 	public function goSelf()
 	{
 		$this->go($this->getSelf());
@@ -1065,16 +747,6 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		}
 
 		return $out;
-	}
-
-	public function tt($str, $length = 160)
-	{
-		if (strlen($str) > $length) {
-			/* this removes the part of the last word that might have been destroyed by substr */
-			$str = preg_replace('/[^ ]*$/', '', substr($str, 0, $length)) . ' ...';
-		}
-
-		return $str;
 	}
 
 	public function avatar($foodsaver, $size = 'mini', $altimg = false)
