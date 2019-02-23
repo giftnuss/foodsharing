@@ -20,6 +20,7 @@
 - Several reference texts in devdocs about used technologies !741 @flukx
 - Use CI built assets and vendor for deployment !768 @NerdyProjects
 - Use php-cs-fixer, parallel-lint and phpstan in CI build:lint step !775 @NerdyProjects
+- Update mocha to version 6 @peter.toennies
 
 # 2019-02-21
 
