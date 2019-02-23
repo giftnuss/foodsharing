@@ -9,7 +9,7 @@ use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Profile\ProfileModel;
+use Foodsharing\Modules\Profile\ProfileGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
@@ -24,7 +24,7 @@ class DashboardControl extends Control
 	private $foodsaverGateway;
 	private $eventGateway;
 	private $twig;
-	private $profileModel;
+	private $profileGateway;
 	private $sanitizerService;
 	private $imageService;
 
@@ -37,7 +37,7 @@ class DashboardControl extends Control
 		FoodsaverGateway $foodsaverGateway,
 		EventGateway $eventGateway,
 		Db $model,
-		ProfileModel $profileModel,
+		ProfileGateway $profileGateway,
 		\Twig\Environment $twig,
 		SanitizerService $sanitizerService,
 		ImageService $imageService
@@ -51,7 +51,7 @@ class DashboardControl extends Control
 		$this->eventGateway = $eventGateway;
 		$this->model = $model;
 		$this->twig = $twig;
-		$this->profileModel = $profileModel;
+		$this->profileGateway = $profileGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->imageService = $imageService;
 
@@ -506,7 +506,7 @@ class DashboardControl extends Control
 		/*
 		 * Nächste Termine
 		*/
-		if ($dates = $this->profileModel->getNextDates($this->session->id(), 10)) {
+		if ($dates = $this->profileGateway->getNextDates($this->session->id(), 10)) {
 			$this->pageCompositionHelper->addContent($this->view->u_nextDates($dates), CNT_RIGHT);
 		}
 

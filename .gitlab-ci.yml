@@ -118,10 +118,10 @@ test:
   - ./scripts/ci.test
   after_script:
   # collect artifacts
-  - docker cp foodsharing_ci_selenium:/home/seluser/Downloads tests/_output/
-  - docker cp foodsharing_ci_app:/app/tests/_output/ tests/_output
-  - docker logs foodsharing_ci_app --since 15m --timestamps &> tests/_output/logs-app.txt
-  - docker logs foodsharing_ci_mailqueuerunner --since 15m --timestamps &> tests/_output/logs-mailqueuerunner.txt
+  - docker cp foodsharing_ci_selenium:/home/seluser/Downloads tests/_output/ || true
+  - docker cp foodsharing_ci_codeception:/app/tests/_output/ tests/_output || true
+  - docker logs foodsharing_ci_app --since 15m --timestamps &> tests/_output/logs-app.txt || true
+  - docker logs foodsharing_ci_mailqueuerunner --since 15m --timestamps &> tests/_output/logs-mailqueuerunner.txt || true
   # stop/kill all the containers
   - FS_ENV=ci ./scripts/rm
   # collect any test output

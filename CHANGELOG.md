@@ -12,9 +12,11 @@
 - Store member status icons suitable to status on ambassador view of profiles !766 @flukx
 - getBezirk in region admin tool fails for all regions that have stores in them #495 !777 @NerdyProjects
 - Properly escape store names in request popups !778 @NerdyProjects
+- Fix forum "Antworten" button !786 @nicksellen
 
 ## Refactoring
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
+- refactored profile from model to gateway !782 #9 @peter.toennies
 
 ## Dev/Test/CI stuff
 - Several reference texts in devdocs about used technologies !741 @flukx
@@ -26,6 +28,7 @@
 - Run frontend lint/test/build and backend lint/build in one CI job each !780 @NerdyProjects
 - Add php-cs-fixer to `./scripts/lint-php`, remove `./scripts/fix-codestyle` in favour of `./scripts/fix` !781 @NerdyProjects
 - Remove `./scripts/build-assets` as they are continuosly built by webpack-dev-server !781 @NerdyProjects
+- Make sure old CI containers are removed in test stage !787 @NerdyProjects
 
 # 2019-02-21
 
