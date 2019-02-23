@@ -1,4 +1,6 @@
 .defaults: &defaults
+  tags:
+  - shared
   image: registry.gitlab.com/foodsharing-dev/images/ci:1.8
 
 
