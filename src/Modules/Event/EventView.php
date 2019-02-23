@@ -314,7 +314,7 @@ class EventView extends View
 			foreach ($foodsaverDisplayed as $fs) {
 				$out .= '
 				<li>
-					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->func->img($fs['photo']) . ');" href="/profile/' . (int)$fs['id'] . '"><span></span></a>	
+					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->imageService->img($fs['photo']) . ');" href="/profile/' . (int)$fs['id'] . '"><span></span></a>	
 				</li>';
 			}
 			if (count($foodsavers) > $maxNumberOfAvatars) {

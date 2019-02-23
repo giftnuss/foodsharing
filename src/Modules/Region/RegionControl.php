@@ -7,9 +7,9 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
-use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Services\ForumService;
+use Foodsharing\Services\ImageService;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +20,6 @@ final class RegionControl extends Control
 	private $region;
 	private $gateway;
 	private $eventGateway;
-	private $foodsaverGateway;
 	private $forumGateway;
 	private $fairteilerGateway;
 
@@ -30,8 +29,8 @@ final class RegionControl extends Control
 	private $formFactory;
 	private $forumService;
 	private $forumPermissions;
-	private $forumModerated;
 	private $regionHelper;
+	private $imageService;
 
 	/**
 	 * @required
@@ -52,23 +51,23 @@ final class RegionControl extends Control
 	public function __construct(
 		EventGateway $eventGateway,
 		FairTeilerGateway $fairteilerGateway,
-		FoodsaverGateway $foodsaverGateway,
 		ForumGateway $forumGateway,
 		ForumPermissions $forumPermissions,
 		ForumService $forumService,
 		Db $model,
 		RegionGateway $gateway,
-		RegionHelper $regionHelper
+		RegionHelper $regionHelper,
+		ImageService $imageService
 	) {
 		$this->model = $model;
 		$this->gateway = $gateway;
 		$this->eventGateway = $eventGateway;
-		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumPermissions = $forumPermissions;
 		$this->forumGateway = $forumGateway;
 		$this->fairteilerGateway = $fairteilerGateway;
 		$this->forumService = $forumService;
 		$this->regionHelper = $regionHelper;
+		$this->imageService = $imageService;
 
 		parent::__construct();
 	}
@@ -114,7 +113,7 @@ final class RegionControl extends Control
 					'sleep_status' => $fs['sleep_status']
 				],
 				'size' => 50,
-				'imageUrl' => $this->func->img($fs['photo'], 50, 'q')
+				'imageUrl' => $this->imageService->img($fs['photo'], 50, 'q')
 			];
 		};
 		$viewdata['isRegion'] = !$isWorkGroup;

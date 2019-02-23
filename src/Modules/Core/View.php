@@ -7,6 +7,7 @@ use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
 
 class View
@@ -25,6 +26,7 @@ class View
 	 * @var \Twig\Environment
 	 */
 	public $twig;
+	protected $imageService;
 
 	public function __construct(
 		\Twig\Environment $twig,
@@ -33,7 +35,8 @@ class View
 		Session $session,
 		SanitizerService $sanitizerService,
 		PageCompositionHelper $pageCompositionHelper,
-		TimeHelper $timeHelper
+		TimeHelper $timeHelper,
+		ImageService $imageService
 	) {
 		$this->twig = $twig;
 		$this->func = $func;
@@ -42,6 +45,7 @@ class View
 		$this->sanitizerService = $sanitizerService;
 		$this->pageCompositionHelper = $pageCompositionHelper;
 		$this->timeHelper = $timeHelper;
+		$this->imageService = $imageService;
 	}
 
 	public function setSub($sub)
@@ -169,7 +173,7 @@ class View
 		foreach ($foodsaver as $fs) {
 			$jssaver[] = (int)$fs['id'];
 
-			$photo = $this->func->avatar($fs);
+			$photo = $this->imageService->avatar($fs);
 
 			$click = ' onclick="profile(' . (int)$fs['id'] . ');return false;"';
 

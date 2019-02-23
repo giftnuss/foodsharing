@@ -32,7 +32,7 @@ class StoreUserView extends View
 			}
 			$out .= '
 		<tr class="' . $odd . ' request-' . $r['id'] . '">
-			<td class="img" width="35px"><a href="/profile/' . (int)$r['id'] . '"><img src="' . $this->func->img($r['photo']) . '" /></a></td>
+			<td class="img" width="35px"><a href="/profile/' . (int)$r['id'] . '"><img src="' . $this->imageService->img($r['photo']) . '" /></a></td>
 			<td style="padding-top:17px;"><span class="msg"><a href="/profile/' . (int)$r['id'] . '">' . $r['name'] . '</a></span></td>
 			<td style="width:92px;padding-top:17px;"><span class="msg"><ul class="toolbar"><li class="ui-state-default ui-corner-left" title="Ablehnen" onclick="denyRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-closethick"></span></li><li class="ui-state-default" title="Auf die Springerliste setzen" onclick="warteRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-star"></span></li><li class="ui-state-default ui-corner-right" title="Akzeptieren" onclick="acceptRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-heart"></span></li></ul></span></td>
 		</tr>';
@@ -130,7 +130,7 @@ class StoreUserView extends View
 			$tmp = '
 				<li class="team fs-' . $fs['id'] . '">
 					<a class="ui-corner-all' . $class . '" title="#tt-tt-' . $fs['id'] . '" href="' . $href . '"' . $onclick . '>
-						' . $this->func->avatar($fs) . '
+						' . $this->imageService->avatar($fs) . '
 						<span class="infos">
 							<span class="item"><strong>' . $fs['name'] . '</strong> <span style="float:right">(' . $fs['stat_fetchcount'] . ')</span></span>
 							' . $tel . '
@@ -186,7 +186,7 @@ class StoreUserView extends View
 				$tmp = '
 					<li class="jumper fs-' . $fs['id'] . '">
 						<a class="ui-corner-all' . $class . '" title="#tt-tt-' . $fs['id'] . '" href="' . $href . '"' . $onclick . '>
-							' . $this->func->avatar($fs) . '
+							' . $this->imageService->avatar($fs) . '
 							<span class="infos">
 								<span class="item"><strong>' . $fs['name'] . '</strong></span>
 								' . $tel . '
@@ -434,7 +434,7 @@ class StoreUserView extends View
 				}
 				$out .= '
 			<li class="filled ' . $class . '">
-				<a class="' . $aclass . '" href="#" onclick="' . $click . 'return false;" title="' . $fs['name'] . '"><input type="hidden" name="date" value="' . $fs['id'] . ':::' . $date . '" /><img src="' . $this->func->img($fs['photo']) . '" alt="' . $fs['name'] . '" /><span>&nbsp;</span></a>
+				<a class="' . $aclass . '" href="#" onclick="' . $click . 'return false;" title="' . $fs['name'] . '"><input type="hidden" name="date" value="' . $fs['id'] . ':::' . $date . '" /><img src="' . $this->imageService->img($fs['photo']) . '" alt="' . $fs['name'] . '" /><span>&nbsp;</span></a>
 			</li>';
 				++$i;
 			}

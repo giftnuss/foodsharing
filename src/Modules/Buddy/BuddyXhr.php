@@ -5,17 +5,20 @@ namespace Foodsharing\Modules\Buddy;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Services\ImageService;
 
 class BuddyXhr extends Control
 {
 	private $bellGateway;
 	private $gateway;
+	private $imageService;
 
-	public function __construct(BuddyGateway $gateway, BellGateway $bellGateway, Db $model)
+	public function __construct(BuddyGateway $gateway, BellGateway $bellGateway, Db $model, ImageService $imageService)
 	{
 		$this->gateway = $gateway;
 		$this->bellGateway = $bellGateway;
 		$this->model = $model;
+		$this->imageService = $imageService;
 
 		parent::__construct();
 	}
@@ -51,7 +54,7 @@ class BuddyXhr extends Control
 			$body = 'buddy_request';
 
 			// icon css class
-			$icon = $this->func->img($this->session->user('photo'));
+			$icon = $this->imageService->img($this->session->user('photo'));
 
 			// whats happen when click on the bell content
 			$link_attributes = array('href' => '/profile/' . (int)$this->session->id() . '');

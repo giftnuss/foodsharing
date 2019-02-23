@@ -5,18 +5,15 @@ namespace Foodsharing\Permissions;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Region\ForumGateway;
-use Foodsharing\Modules\Region\RegionGateway;
 
 class ForumPermissions
 {
 	private $forumGateway;
-	private $regionGateway;
 	private $session;
 
-	public function __construct(ForumGateway $forumGateway, RegionGateway $regionGateway, Session $session)
+	public function __construct(ForumGateway $forumGateway, Session $session)
 	{
 		$this->forumGateway = $forumGateway;
-		$this->regionGateway = $regionGateway;
 		$this->session = $session;
 	}
 

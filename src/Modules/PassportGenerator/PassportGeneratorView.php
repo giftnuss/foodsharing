@@ -24,7 +24,7 @@ final class PassportGeneratorView extends View
 			if (!empty($fs['photo'])) {
 				$img = 'images/thumb_crop_' . $fs['photo'];
 			} else {
-				$img = $this->func->img($fs['photo']);
+				$img = $this->imageService->img($fs['photo']);
 			}
 
 			$data[] = [

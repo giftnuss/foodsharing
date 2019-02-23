@@ -90,4 +90,90 @@ final class ImageService
 			}
 		}
 	}
+
+	public function img($file = false, $size = 'mini', $format = 'q', $altimg = false)
+	{
+		if ($file === false) {
+			$file = $_SESSION['client']['photo'];
+		}
+
+		// prevent path traversal
+		$file = preg_replace('/%/', '', $file);
+		$file = preg_replace('/\.+/', '.', $file);
+
+		if (!empty($file) && file_exists('images/' . $file)) {
+			if (!file_exists('images/' . $size . '_' . $format . '_' . $file)) {
+				$this->resizeImg('images/' . $file, $size, $format);
+			}
+
+			return '/images/' . $size . '_' . $format . '_' . $file;
+		}
+
+		if ($altimg === false) {
+			return '/img/' . $size . '_' . $format . '_avatar.png';
+		}
+
+		return $altimg;
+	}
+
+	private function resizeImg(string $img, string $width, string $format): bool
+	{
+		// prevent path traversal
+		$img = preg_replace('/%/', '', $img);
+		$img = preg_replace('/\.+/', '.', $img);
+		if (file_exists($img)) {
+			$opt = 'auto';
+			if ($format == 'q') {
+				$opt = 'crop';
+			}
+
+			try {
+				$newimg = str_replace('/', '/' . $width . '_' . $format . '_', $img);
+				copy($img, $newimg);
+				$img = new fImage($newimg);
+
+				if ($opt == 'crop') {
+					$img->cropToRatio(1, 1);
+					$img->resize($width, $width);
+				} else {
+					$img->resize($width, 0);
+				}
+
+				$img->saveChanges();
+
+				return true;
+			} catch (Exception $e) {
+			}
+		}
+
+		return false;
+	}
+
+	public function avatar($foodsaver, $size = 'mini', $altimg = false): string
+	{
+		/*
+		 * temporary for quiz
+		 */
+		$bg = '';
+		if (isset($foodsaver['quiz_rolle'])) {
+			switch ($foodsaver['quiz_rolle']) {
+				case 1:
+					$bg = 'box-sizing:border-box;border:3px solid #4A3520;';
+					break;
+				case 2:
+					$bg = 'box-sizing:border-box;border:3px solid #599022;';
+					break;
+				case 3:
+					$bg = 'box-sizing:border-box;border:3px solid #FFBB00;';
+					break;
+				case 4:
+					$bg = 'box-sizing:border-box;border:3px solid #FF4800;';
+					break;
+				default:
+					break;
+			}
+		}
+
+		return '<span style="' . $bg . 'background-image:url(' . $this->img($foodsaver['photo'], $size, 'q', $altimg) . ');" class="avatar size-' . $size . ' sleepmode-' . $foodsaver['sleep_status'] . '"><i>' . $foodsaver['name'] . '</i></span>';
+	}
 }
