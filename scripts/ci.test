@@ -32,11 +32,10 @@ done
 
 echo $SECONDS seconds elapsed
 
-log-header "Installing composer deps in app container"
+log-header "Installing composer deps in codeception container"
 SECONDS=0
-dc up -d --no-build --no-deps app
-exec-in-container-asroot app 'composer install && composer outdated --direct'
-exec-in-container-asroot app rm --recursive --force cache/.views-cache cache/di-cache.php
+dc up -d --no-build --no-deps codeception
+exec-in-container-asroot codeception 'composer install && composer outdated --direct'
 echo $SECONDS seconds elapsed
 
 log-header "Bring up containers"
@@ -56,27 +55,22 @@ migratedb foodsharing
 $dir/mkdirs
 echo $SECONDS seconds elapsed
 
-log-header "Checking code style"
-SECONDS=0
-exec-in-container-asroot app scripts/php-cs-fixer.ci.sh --cache-file=vendor/php-cs-cache fix
-echo $SECONDS seconds elapsed
-
 log-header "Running tests"
 failed=0
 SECONDS=0
-exec-in-container app vendor/bin/codecept run --xml --html || failed=1
+exec-in-container codeception vendor/bin/codecept run --xml --html || failed=1
 echo $SECONDS seconds elapsed
 
 if [ $failed -eq 1 ]; then
   log-header "Check for codeception errors"
   # check if codeception generated a report file that contains failed tests
   # Otherwise, codeception probably failed itself and the whole job should fail
-  exec-in-container app "grep -E '<error|<failure' /app/tests/_output/report.xml" || \
+  exec-in-container codeception "grep -E '<error|<failure' /app/tests/_output/report.xml" || \
     (echo "report.xml is incomplete, aborting" && false)
 
   log-header "Rerunning failed tests"
   SECONDS=0
-  exec-in-container app vendor/bin/codecept run --xml --html -g failed || failed=2
+  exec-in-container codeception vendor/bin/codecept run --xml --html -g failed || failed=2
   echo $SECONDS seconds elapsed
 fi
 
@@ -84,12 +78,25 @@ if [ $failed -eq 2 ]; then
   log-header "Check for codeception errors"
   # check if codeception generated a report file that contains failed tests
   # Otherwise, codeception probably failed itself and the whole job should fail
-  exec-in-container app "grep -E '<error|<failure' /app/tests/_output/report.xml" || \
+  exec-in-container codeception "grep -E '<error|<failure' /app/tests/_output/report.xml" || \
     (echo "report.xml is incomplete, aborting" && false)
 
   log-header "Rerunning failed tests"
   SECONDS=0
-  exec-in-container app vendor/bin/codecept run -g failed
+  exec-in-container codeception vendor/bin/codecept run --xml --html -g failed || failed=3
+  echo $SECONDS seconds elapsed
+fi
+
+if [ $failed -eq 3 ]; then
+  log-header "Check for codeception errors"
+  # check if codeception generated a report file that contains failed tests
+  # Otherwise, codeception probably failed itself and the whole job should fail
+  exec-in-container codeception "grep -E '<error|<failure' /app/tests/_output/report.xml" || \
+    (echo "report.xml is incomplete, aborting" && false)
+
+  log-header "Rerunning failed tests"
+  SECONDS=0
+  exec-in-container codeception vendor/bin/codecept run -g failed
   echo $SECONDS seconds elapsed
 fi
 

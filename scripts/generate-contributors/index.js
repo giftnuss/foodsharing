@@ -13,8 +13,6 @@
  * You can browse the emojis at https://twitter.github.io/twemoji/preview.html and add/change the list below!
  */
 
-const twemoji = require('twemoji')
-
 const { join } = require('path')
 const { readFileSync, writeFileSync } = require('fs')
 const basedir = join(__dirname, '../..')
@@ -23,13 +21,17 @@ const config = JSON.parse(readFileSync(join(basedir, '.all-contributorsrc'), 'ut
 
 const { files, contributors } = config
 
-const peoplePerRow = 6
+shuffle(contributors)
 
-const emojiWidth = 14
+const peoplePerRow = 6
 
 const widthPercentage = Math.floor(100 / peoplePerRow)
 const assumedPageWidth = 600
 const imageSize = Math.floor(assumedPageWidth / peoplePerRow)
+
+const htmlContributionKey = getContributionsInUse().map(({ description, symbol }) => {
+  return `<span>${symbol}&nbsp;=&nbsp;${description}</span>`
+}).join('&nbsp;&nbsp;')
 
 const htmlRows = chunk(contributors, peoplePerRow).map(contributorsRow => {
   const htmlGroup = contributorsRow.map(contributor => {
@@ -59,14 +61,11 @@ function mapName (name) {
 
 function formatContribution (type) {
   const contribution = contributionType(type)
-  const img = twemoji.parse(contribution.symbol, {
-    folder: 'svg',
-    ext: '.svg'
-  }).replace('<img', `<img width="${emojiWidth}px"`)
-  return `<span title="${contribution.description}">${img}</span>`
+  return `<span title="${contribution.description}">${contribution.symbol}</span>`
 }
 
 const html = `
+${htmlContributionKey}
 <table border="0">
   <tbody>
     ${htmlRows}
@@ -113,6 +112,17 @@ function getExtraTypes () {
       description: 'Board member'
     }
   }
+}
+
+function getContributionsInUse () {
+  const obj = {}
+  for (const contributor of contributors) {
+    const { contributions } = contributor
+    for (const type of contributions) {
+      obj[type] = true
+    }
+  }
+  return Object.keys(obj).map(contributionType)
 }
 
 // These keys should match the official all-contributers ones (but can change the icons/descriptions)
@@ -208,4 +218,17 @@ function contributionType (type) {
 
 function typeMissing (type) {
   throw new Error(`no contribution type [${type}]`)
+}
+
+/**
+ * Shuffles array in place. ES6 version
+ * @param {Array} a items An array containing the items.
+ * https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array/6274381#6274381
+ */
+function shuffle (a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
 }

@@ -3,14 +3,20 @@
 ## Major changes
 
 ## Features
+- Messages to working groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
+- Return 404 instead of 403 for non-existing forum threads !761 @NerdyProjects
+- Store member status icons suitable to status on ambassador view of profiles !766 @flukx
+- getBezirk in region admin tool fails for all regions that have stores in them #495 !777 @NerdyProjects
 
 ## Refactoring
 
 ## Dev/Test/CI stuff
 - Several reference texts in devdocs about used technologies !741 @flukx
+- Use CI built assets and vendor for deployment !768 @NerdyProjects
+- Use php-cs-fixer, parallel-lint and phpstan in CI build:lint step !775 @NerdyProjects
 
 # 2019-02-21
 
