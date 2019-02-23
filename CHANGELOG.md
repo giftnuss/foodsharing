@@ -24,6 +24,7 @@
 - Run all jobs except test and deployment on shared CI runners @NerdyProjects
 - Run all jobs except test and deployment on shared CI runners !780 @NerdyProjects
 - Run frontend lint/test/build and backend lint/build in one CI job each !780 @NerdyProjects
+- Add php-cs-fixer to `./scripts/lint-php` !781 @NerdyProjects
 
 # 2019-02-21
 
