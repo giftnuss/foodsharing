@@ -4,6 +4,7 @@
 
 ## Features
 - Messages to working groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
+- it is now possible to sign out from my main/home district (and chose a new one) #26 !778 @peter.toennies
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
