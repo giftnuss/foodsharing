@@ -15,6 +15,7 @@
 
 ## Refactoring
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
+- refactored profile from model to gateway !782 #9 @peter.toennies
 
 ## Dev/Test/CI stuff
 - Several reference texts in devdocs about used technologies !741 @flukx
