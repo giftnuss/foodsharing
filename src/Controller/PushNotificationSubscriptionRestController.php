@@ -35,7 +35,7 @@ class PushNotificationSubscriptionRestController extends FOSRestController
 			return $this->handleHttpStatus(404);
 		}
 
-		$view = $this->view($this->gateway->getPublicKey($type), 200);
+		$view = $this->view(['key' => $this->gateway->getPublicKey($type)], 200);
 
 		return $this->handleView($view);
 	}

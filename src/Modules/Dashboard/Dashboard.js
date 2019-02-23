@@ -14,7 +14,9 @@ if (('PushManager' in window) && (Notification.permission === 'default') && !doc
 
   const pushnotificationsButton = document.querySelector('#button-pushnotifications')
   pushnotificationsButton.onclick = function () {
-    subscribeForPushNotifications()
+    subscribeForPushNotifications().then(
+      pushnotificationsBanner.style.display = 'none'
+    )
   }
 }
 const closeButton = document.querySelector('#close-top-banner-pushnotifications')
