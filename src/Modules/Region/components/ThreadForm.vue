@@ -62,7 +62,7 @@ export default {
       this.text = ''
     },
     focus () {
-      this.$refs.textarea.trigger('focus')
+      this.$refs.textarea.focus()
     }
   }
 }
