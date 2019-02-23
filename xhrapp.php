@@ -69,8 +69,6 @@ $csrf_whitelist = [
 	// 'Foodsaver::loadFoodsaver',
 	// 'Foodsaver::foodsaverrefresh',
 	// 'Foodsaver::delFromRegion',
-	// 'GeoClean::masterupdate',
-	// 'GeoClean::updateGeo',
 	// 'Login::loginsubmit',
 	'Login::photoupload',
 	'Login::joinsubmit',

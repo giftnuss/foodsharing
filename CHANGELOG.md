@@ -14,6 +14,7 @@
 - Properly escape store names in request popups !778 @NerdyProjects
 
 ## Refactoring
+- removed the geoClean and LostRegion modules !756 #103 @peter.toennies
 
 ## Dev/Test/CI stuff
 - Several reference texts in devdocs about used technologies !741 @flukx

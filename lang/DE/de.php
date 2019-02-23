@@ -229,8 +229,6 @@ $g_lang['menu_faq'] = 'FAQs verwalten';
 $g_lang['menu_foodtypes'] = 'Lebensmitteltypen verwalten';
 $g_lang['menu_content'] = 'Inhalte bearbeiten';
 $g_lang['menu_mailbox_manage'] = 'Mailboxen verwalten';
-$g_lang['menu_regions_without_bots'] = 'Bezirke ohne Botschafter';
-$g_lang['menu_foodsaver_without_region'] = 'Foodsaver ohne Koordinaten';
 $g_lang['menu_email_tpl'] = 'E-Mail-Vorlagen';
 $g_lang['menu_blog'] = 'Blogbeiträge bearbeiten';
 
