@@ -40,15 +40,19 @@ class PushNotificationGatewayTest extends \Codeception\Test\Unit
 
 	public function testAddSubscription()
 	{
-		$this->gateway->addSubscription($this->testUser['id'], $this->testSubscription);
+		$testType = 'test type';
+		$this->gateway->addSubscription($this->testUser['id'], $this->testSubscription, $testType);
 
-		$this->tester->seeInDatabase('fs_push_notification_subscription', ['foodsaver_id' => $this->testUser['id'], 'data' => $this->testSubscription]);
+		$this->tester->seeInDatabase(
+			'fs_push_notification_subscription',
+			['foodsaver_id' => $this->testUser['id'], 'data' => $this->testSubscription, 'type' => $testType]
+		);
 	}
 
 	public function testDeleteSubscription()
 	{
 		//insert test subsription:
-		$this->gateway->addSubscription($this->testUser['id'], $this->testSubscription);
+		$this->gateway->addSubscription($this->testUser['id'], $this->testSubscription, '');
 
 		$this->gateway->deleteSubscription($this->testUser['id'], $this->testSubscription);
 
@@ -68,7 +72,7 @@ class PushNotificationGatewayTest extends \Codeception\Test\Unit
 				return '';
 			}
 
-			public function sendPushNotificationsToClients(array $subscriptionData, string $title, string $message, string $action = null): void
+			public function sendPushNotificationsToClients(array $subscriptionData, string $title, array $options): void
 			{
 				return;
 			}
@@ -97,7 +101,7 @@ class PushNotificationGatewayTest extends \Codeception\Test\Unit
 				return 'testPublicKey';
 			}
 
-			public function sendPushNotificationsToClients(array $subscriptionData, string $title, string $message, ?string $action = null): void
+			public function sendPushNotificationsToClients(array $subscriptionData, string $title, array $options): void
 			{
 				return;
 			}

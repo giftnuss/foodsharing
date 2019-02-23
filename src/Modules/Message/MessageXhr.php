@@ -6,12 +6,10 @@ use Foodsharing\Lib\WebSocketSender;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\PushNotification\PushNotificationGateway;
-use Foodsharing\Modules\Store\StoreGateway;
 
 final class MessageXhr extends Control
 {
 	private $messageGateway;
-	private $storeGateway;
 	/**
 	 * @var WebSocketSender
 	 */
@@ -22,7 +20,6 @@ final class MessageXhr extends Control
 		MessageModel $model,
 		MessageView $view,
 		MessageGateway $messageGateway,
-		StoreGateway $storeGateway,
 		WebSocketSender $webSocketSender,
 		PushNotificationGateway $pushNotificationGateway
 	)
@@ -30,7 +27,6 @@ final class MessageXhr extends Control
 		$this->model = $model;
 		$this->view = $view;
 		$this->messageGateway = $messageGateway;
-		$this->storeGateway = $storeGateway;
 		$this->webSocketSender = $webSocketSender;
 		$this->pushNotificationGateway = $pushNotificationGateway;
 
@@ -123,24 +119,26 @@ final class MessageXhr extends Control
 	public function sendmsg(): void
 	{
 		$xhr = new Xhr();
-		if ($this->mayConversation($_POST['c'])) {
+		$conversationId = $_POST['c'];
+
+		if ($this->mayConversation($conversationId)) {
 			$this->session->noWrite();
 
 			if (isset($_POST['b'])) {
 				$body = trim($_POST['b']);
 				$body = htmlentities($body);
-				if (!empty($body) && $message_id = $this->model->sendMessage($_POST['c'], $body)) {
+				if (!empty($body) && $message_id = $this->model->sendMessage($conversationId, $body)) {
 					$xhr->setStatus(1);
 
 					/*
 					 * for not so db intensive polling store updates in memcache if the recipients are online
 					*/
-					if ($members = $this->model->listConversationMembers($_POST['c'])) {
+					if ($members = $this->model->listConversationMembers($conversationId)) {
 						$user_ids = array_column($members, 'id');
 
 						$this->webSocketSender->sendSockMulti($user_ids, 'conv', 'push', array(
 							'id' => $message_id,
-							'cid' => (int)$_POST['c'],
+							'cid' => (int)$conversationId,
 							'fs_id' => $this->session->id(),
 							'fs_name' => $this->session->user('name'),
 							'fs_photo' => $this->session->user('photo'),
@@ -154,19 +152,26 @@ final class MessageXhr extends Control
 								/*
 								 * send Push Notification
 								 */
+								$conversationName = $this->messageGateway->getProperConversationNameForFoodsaver($m['id'], $conversationId);
+
+								if(count($members) > 2) {
+									$notificationTitle = 'In Gruppe ' . $conversationName . 'wurde geschrieben.';
+								} else {
+									$notificationTitle = $conversationName . ' hat dir geschrieben.';
+								}
 								$this->pushNotificationGateway->sendPushNotificationsToFoodsaver(
 									$m['id'],
-									'Jemand hat dir geschrieben',
+									$notificationTitle,
 									['body' => $body]
 								);
 
-								$this->mem->userAppend($m['id'], 'msg-update', (int)$_POST['c']);
+								$this->mem->userAppend($m['id'], 'msg-update', (int)$conversationId);
 
 								/*
 								 * send an E-Mail if the user is not online
 								*/
 								if ($this->model->wantMsgEmailInfo($m['id'])) {
-									$this->convMessage($m, $_POST['c'], $body, $this->messageGateway, $this->storeGateway);
+									$this->convMessage($m, $conversationId, $body);
 								}
 							}
 						}
@@ -385,4 +390,39 @@ final class MessageXhr extends Control
 		echo json_encode(array());
 		exit();
 	}
+
+	private function convMessage($recipient, $conversation_id, $msg)
+	{
+		/*
+		 * only send email if the user is not online
+		 */
+		if (!$this->mem->userOnline($recipient['id'])) {
+			/*
+			 * only send email if the user want to retrieve emails
+			 */
+			if ($this->mem->user($recipient['id'], 'infomail')) {
+				if (!isset($_SESSION['lastMailMessage']) || !is_array($sessdata = $_SESSION['lastMailMessage'])) {
+					$sessdata = array();
+				}
+
+				if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
+					$sessdata[$recipient['id']] = time();
+
+					$chatname = $this->messageGateway->getProperConversationNameForFoodsaver($recipient['id'], $conversation_id);
+
+					$this->func->tplMail(30, $recipient['email'], array(
+						'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						'sender' => $this->session->user('name'),
+						'name' => $recipient['name'],
+						'chatname' => $chatname,
+						'message' => $msg,
+						'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
+					));
+				}
+
+				$_SESSION['lastMailMessage'] = $sessdata;
+			}
+		}
+	}
+
 }
