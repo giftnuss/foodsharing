@@ -790,5 +790,9 @@ final class FoodsaverGateway extends BaseGateway
 	{
 		$this->db->delete('fs_botschafter', ['bezirk_id' => $bezirk_id, 'foodsaver_id' => $foodsaver_id]);
 		$this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => $bezirk_id, 'foodsaver_id' => $foodsaver_id]);
+		$currentHomeDistrict = $this->db->fetchValueByCriteria('fs_foodsaver', 'bezirk_id', ['id' => $foodsaver_id]);
+		if ($currentHomeDistrict === $bezirk_id) {
+			$this->db->update('fs_foodsaver', ['bezirk_id' => ''], ['id' => $foodsaver_id]);
+		}
 	}
 }
