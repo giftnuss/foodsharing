@@ -27,7 +27,7 @@ class SettingsControl extends Control
 		parent::__construct();
 
 		if (!$this->session->may()) {
-			$this->func->goLogin();
+			$this->linkingHelper->goLogin();
 		}
 
 		if (isset($_GET['newmail'])) {
@@ -37,7 +37,7 @@ class SettingsControl extends Control
 		$this->foodsaver = $this->model->getValues(array('rolle', 'email', 'name', 'nachname', 'geschlecht', 'verified'), 'foodsaver', $this->session->id());
 
 		if (!isset($_GET['sub'])) {
-			$this->func->go('/?page=settings&sub=general');
+			$this->linkingHelper->go('/?page=settings&sub=general');
 		}
 
 		$this->pageCompositionHelper->addTitle($this->func->s('settings'));
@@ -86,7 +86,7 @@ class SettingsControl extends Control
 				if (($status = $this->quizModel->getQuizStatus(2)) && ($quiz = $this->quizModel->getQuiz(2))) {
 					if ((int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)$this->session->id()) == 0) {
 						$this->func->info('Du darfst zunächst das Foodsaver Quiz machen');
-						$this->func->go('/?page=settings&sub=upgrade/up_fs');
+						$this->linkingHelper->go('/?page=settings&sub=upgrade/up_fs');
 					}
 					$desc = $this->contentGateway->get(12);
 
@@ -198,16 +198,16 @@ class SettingsControl extends Control
 			switch ($this->foodsaver['rolle']) {
 				case 0:
 					$this->func->info('Du musst erst Foodsaver werden');
-					$this->func->go('/?page=settings&sub=upgrade/up_fs');
+					$this->linkingHelper->go('/?page=settings&sub=upgrade/up_fs');
 					break;
 
 				case 1:
 					$this->func->info('Du musst erst BetriebsverantwortlicheR werden');
-					$this->func->go('/?page=settings&sub=upgrade/up_bip');
+					$this->linkingHelper->go('/?page=settings&sub=upgrade/up_bip');
 					break;
 
 				default:
-					$this->func->go('/?page=settings');
+					$this->linkingHelper->go('/?page=settings');
 					break;
 			}
 		}
@@ -227,7 +227,7 @@ class SettingsControl extends Control
 						$this->model->updateRole(1, $this->foodsaver['rolle']);
 					}
 					$this->func->info('Danke! Du bist jetzt Foodsaver');
-					$this->func->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
+					$this->linkingHelper->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
 				}
 			}
 			$cnt = $this->contentGateway->get(14);
@@ -246,7 +246,7 @@ class SettingsControl extends Control
 				} else {
 					$this->model->updateRole(2, $this->foodsaver['rolle']);
 					$this->func->info('Danke! Du bist jetzt Betriebsverantwortlicher');
-					$this->func->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
+					$this->linkingHelper->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
 				}
 			}
 			$cnt = $this->contentGateway->get(15);

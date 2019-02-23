@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Services;
 
+use Exception;
 use Flourish\fImage;
 use Flourish\fException;
 use UnexpectedValueException;

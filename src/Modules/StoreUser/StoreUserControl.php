@@ -34,7 +34,7 @@ class StoreUserControl extends Control
 		parent::__construct();
 
 		if (!$this->session->may()) {
-			$this->func->goLogin();
+			$this->linkingHelper->goLogin();
 		}
 	}
 
@@ -49,7 +49,7 @@ class StoreUserControl extends Control
 			$betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $_GET['id']);
 
 			if (!$betrieb) {
-				$this->func->goPage();
+				$this->linkingHelper->goPage();
 			}
 
 			$this->func->jsData['store'] = [
@@ -84,10 +84,10 @@ class StoreUserControl extends Control
 					}
 				}
 				$this->func->info($this->func->s('changes_saved'));
-				$this->func->goSelf();
+				$this->linkingHelper->goSelf();
 			} elseif (isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $_GET['id']) || $this->session->isAdminFor($betrieb['bezirk_id']))) {
 				$this->storeGateway->changeBetriebStatus($this->session->id(), $_GET['id'], $_POST['betrieb_status_id']);
-				$this->func->go($this->func->getSelf());
+				$this->linkingHelper->go($this->linkingHelper->getSelf());
 			}
 
 			$this->pageCompositionHelper->addTitle($betrieb['name']);
@@ -225,7 +225,7 @@ class StoreUserControl extends Control
 							<div id="pinnwand">
 								
 								<div class="tools ui-padding">
-									<form method="get" action="' . $this->func->getSelf() . '">
+									<form method="get" action="' . $this->linkingHelper->getSelf() . '">
 										<textarea class="comment textarea inlabel" title="Nachricht schreiben..." name="text"></textarea>
 										<div align="right">
 											<input id="comment-post" type="submit" class="submit" name="msg" value="' . $this->func->s('send') . '" />
@@ -366,9 +366,9 @@ class StoreUserControl extends Control
 				if ($betrieb = $this->storeGateway->getBetrieb($_GET['id'])) {
 					$this->pageCompositionHelper->addBread($betrieb['name']);
 					$this->func->info($this->func->s('not_in_team'));
-					$this->func->go('/?page=map&bid=' . $_GET['id']);
+					$this->linkingHelper->go('/?page=map&bid=' . $_GET['id']);
 				} else {
-					$this->func->go('/karte');
+					$this->linkingHelper->go('/karte');
 				}
 			}
 		} else {

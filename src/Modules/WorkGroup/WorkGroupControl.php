@@ -38,7 +38,7 @@ class WorkGroupControl extends Control
 	public function index(Request $request, Response $response)
 	{
 		if (!$this->session->may()) {
-			$this->func->goLogin();
+			$this->linkingHelper->goLogin();
 		}
 
 		$this->pageCompositionHelper->addBread('Arbeitsgruppen', '/?page=groups');
@@ -177,10 +177,10 @@ class WorkGroupControl extends Control
 
 		if ($group = $this->model->getGroup($groupId)) {
 			if ($group['type'] != Type::WORKING_GROUP) {
-				$this->func->go('/?page=dashboard');
+				$this->linkingHelper->go('/?page=dashboard');
 			}
 			if (!$this->mayEdit($group)) {
-				$this->func->go('/?page=dashboard');
+				$this->linkingHelper->go('/?page=dashboard');
 			}
 
 			$this->pageCompositionHelper->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
@@ -193,7 +193,7 @@ class WorkGroupControl extends Control
 					$this->model->updateGroup($group['id'], $data);
 					$this->model->updateTeam($group['id'], $data['member'], $data['leader']);
 					$this->func->info('Änderungen gespeichert!');
-					$this->func->goSelf();
+					$this->linkingHelper->goSelf();
 				}
 			}
 		}

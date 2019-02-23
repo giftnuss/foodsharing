@@ -45,7 +45,7 @@ class TeamControl extends Control
 				return;
 			}
 
-			$this->func->go('/team');
+			$this->linkingHelper->go('/team');
 
 			return;
 		}

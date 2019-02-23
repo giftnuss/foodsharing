@@ -32,7 +32,7 @@ class StoreControl extends Control
 		parent::__construct();
 
 		if (!$this->session->may()) {
-			$this->func->goLogin();
+			$this->linkingHelper->goLogin();
 		}
 	}
 
@@ -73,14 +73,14 @@ class StoreControl extends Control
 				)), $this->func->s('actions')), CNT_RIGHT);
 			} else {
 				$this->func->info('Zum Anlegen eines Betriebes musst Du Betriebsverantwortlicher sein');
-				$this->func->go('?page=settings&sub=upgrade/up_bip');
+				$this->linkingHelper->go('?page=settings&sub=upgrade/up_bip');
 			}
 		} elseif ($id = $this->func->getActionId('delete')) {
 			/*
 			if($this->model->del_betrieb($id))
 			{
 				$this->func->info($this->func->s('betrieb_deleted'));
-				$this->func->goPage();
+				$this->linkingHelper->goPage();
 			}
 			*/
 		} elseif ($id = $this->func->getActionId('edit')) {
@@ -110,7 +110,7 @@ class StoreControl extends Control
 				$this->func->pageLink('betrieb', 'back_to_overview')
 			)), $this->func->s('actions')), CNT_RIGHT);
 		} elseif (isset($_GET['id'])) {
-			$this->func->go('/?page=fsbetrieb&id=' . (int)$_GET['id']);
+			$this->linkingHelper->go('/?page=fsbetrieb&id=' . (int)$_GET['id']);
 		} else {
 			$this->pageCompositionHelper->addBread($this->func->s('betrieb_bread'), '/?page=betrieb');
 
@@ -151,7 +151,7 @@ class StoreControl extends Control
 
 			if ($this->model->update_betrieb($_GET['id'], $g_data)) {
 				$this->func->info($this->func->s('betrieb_edit_success'));
-				$this->func->go('/?page=fsbetrieb&id=' . (int)$_GET['id']);
+				$this->linkingHelper->go('/?page=fsbetrieb&id=' . (int)$_GET['id']);
 			} else {
 				$this->func->error($this->func->s('error'));
 			}
@@ -169,7 +169,7 @@ class StoreControl extends Control
 			}
 			if (!in_array($g_data['bezirk_id'], $this->session->listRegionIDs())) {
 				$this->func->error($this->func->s('store.can_only_create_store_in_member_region'));
-				$this->func->goPage();
+				$this->linkingHelper->goPage();
 			}
 
 			if (isset($g_data['ort'])) {
@@ -211,7 +211,7 @@ class StoreControl extends Control
 
 				$this->func->info($this->func->s('betrieb_add_success'));
 
-				$this->func->go('/?page=fsbetrieb&id=' . (int)$id);
+				$this->linkingHelper->go('/?page=fsbetrieb&id=' . (int)$id);
 			} else {
 				$this->func->error($this->func->s('error'));
 			}

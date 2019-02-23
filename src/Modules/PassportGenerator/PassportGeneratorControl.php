@@ -45,14 +45,14 @@ final class PassportGeneratorControl extends Control
 				$this->region = $region;
 			}
 		} else {
-			$this->func->go('/?page=dashboard');
+			$this->linkingHelper->go('/?page=dashboard');
 		}
 	}
 
 	public function index(): void
 	{
 		$this->pageCompositionHelper->addBread($this->region['name'], '/?page=bezirk&bid=' . $this->regionId . '&sub=forum');
-		$this->pageCompositionHelper->addBread('Pass-Generator', $this->func->getSelf());
+		$this->pageCompositionHelper->addBread('Pass-Generator', $this->linkingHelper->getSelf());
 
 		$this->pageCompositionHelper->addTitle($this->region['name']);
 		$this->pageCompositionHelper->addTitle('Pass Generator');

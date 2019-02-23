@@ -43,7 +43,7 @@ class EventControl extends Control
 			}
 			$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->wallposts('event', $event['id']), 'Pinnwand'));
 		} elseif (!isset($_GET['sub'])) {
-			$this->func->go('/?page=dashboard');
+			$this->linkingHelper->go('/?page=dashboard');
 		}
 	}
 
@@ -81,7 +81,7 @@ class EventControl extends Control
 								$this->gateway->inviteFullRegion($data['bezirk_id'], $_GET['id'], $data['invitesubs']);
 							}
 							$this->func->info('Event wurde erfolgreich geändert!');
-							$this->func->go('/?page=event&id=' . (int)$_GET['id']);
+							$this->linkingHelper->go('/?page=event&id=' . (int)$_GET['id']);
 						}
 					}
 				}
@@ -103,7 +103,7 @@ class EventControl extends Control
 
 				$this->pageCompositionHelper->addContent($this->view->eventForm($bezirke));
 			} else {
-				$this->func->go('/?page=event');
+				$this->linkingHelper->go('/?page=event');
 			}
 		}
 	}
@@ -120,7 +120,7 @@ class EventControl extends Control
 						$this->gateway->inviteFullRegion($data['bezirk_id'], $id, $data['invitesubs']);
 					}
 					$this->func->info('Event wurde erfolgreich eingetragen!');
-					$this->func->go('/?page=event&id=' . (int)$id);
+					$this->linkingHelper->go('/?page=event&id=' . (int)$id);
 				}
 			}
 		} else {

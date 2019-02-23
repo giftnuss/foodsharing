@@ -148,7 +148,7 @@ final class RegionControl extends Control
 	public function index(Request $request, Response $response)
 	{
 		if (!$this->session->may()) {
-			$this->func->goLogin();
+			$this->linkingHelper->goLogin();
 		}
 
 		$region_id = $request->query->getInt('bid', $_SESSION['client']['bezirk_id']);
@@ -158,7 +158,7 @@ final class RegionControl extends Control
 			$region['moderated'] = $region['moderated'] || in_array($region['type'], $big);
 			$this->region = $region;
 		} else {
-			$this->func->go('/?page=dashboard');
+			$this->linkingHelper->go('/?page=dashboard');
 		}
 
 		$this->pageCompositionHelper->addTitle($region['name']);
@@ -167,7 +167,7 @@ final class RegionControl extends Control
 		switch ($request->query->get('sub')) {
 			case 'botforum':
 				if (!$this->forumPermissions->mayAccessAmbassadorBoard($region_id)) {
-					$this->func->go($this->forumService->url($region_id, false));
+					$this->linkingHelper->go($this->forumService->url($region_id, false));
 				}
 				$this->forum($request, $response, $region, true);
 				break;
@@ -191,9 +191,9 @@ final class RegionControl extends Control
 				break;
 			default:
 				if ($this->isWorkGroup($region)) {
-					$this->func->go('/?page=bezirk&bid=' . $region_id . '&sub=wall');
+					$this->linkingHelper->go('/?page=bezirk&bid=' . $region_id . '&sub=wall');
 				} else {
-					$this->func->go($this->forumService->url($region_id, false));
+					$this->linkingHelper->go($this->forumService->url($region_id, false));
 				}
 				break;
 		}
@@ -230,7 +230,7 @@ final class RegionControl extends Control
 				if ($moderated) {
 					$this->func->info($this->translator->trans('forum.hold_back_for_moderation'));
 				}
-				$this->func->go($this->forumService->url($region['id'], $ambassadorForum));
+				$this->linkingHelper->go($this->forumService->url($region['id'], $ambassadorForum));
 			}
 		}
 

@@ -32,7 +32,7 @@ class FAQListControl extends Control
 
 				$this->pageCompositionHelper->addContent($this->v_utils->v_field($cnt, $res['name'], array('class' => 'ui-padding')));
 			} else {
-				$this->func->goPage('listFaq');
+				$this->linkingHelper->goPage('listFaq');
 			}
 		} else {
 			$this->pageCompositionHelper->addBread('FAQ`s', '/?page=listFaq');

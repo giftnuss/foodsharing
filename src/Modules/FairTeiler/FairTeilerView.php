@@ -125,7 +125,7 @@ class FairTeilerView extends View
 				resizable: false,
 				buttons: {
 					"' . $this->func->s('save') . '": function(){
-						goTo("' . $this->func->getSelf() . '&follow=1&infotype=" + $("input[name=\'infotype\']:checked").val());
+						goTo("' . $this->linkingHelper->getSelf() . '&follow=1&infotype=" + $("input[name=\'infotype\']:checked").val());
 					}
 				}
 			});		

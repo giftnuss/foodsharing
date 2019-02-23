@@ -44,7 +44,7 @@ class MailboxControl extends Control
 			}
 		}
 
-		$this->func->goPage('mailbox');
+		$this->linkingHelper->goPage('mailbox');
 	}
 
 	public function index()
@@ -80,7 +80,7 @@ class MailboxControl extends Control
 				if ($mailbox = $this->model->filterName($_POST['name'])) {
 					if ($this->model->addMailbox($mailbox, 1)) {
 						$this->func->info($this->func->s('mailbox_add_success'));
-						$this->func->go('/?page=mailbox&a=manage');
+						$this->linkingHelper->go('/?page=mailbox&a=manage');
 					} else {
 						$this->func->error($this->func->s('mailbox_already_exists'));
 					}
@@ -104,7 +104,7 @@ class MailboxControl extends Control
 
 				if ($this->model->updateMember($_POST['mbid'], $g_data[$index])) {
 					$this->func->info($this->func->s('edit_success'));
-					$this->func->go('/?page=mailbox&a=manage');
+					$this->linkingHelper->go('/?page=mailbox&a=manage');
 				}
 			}
 

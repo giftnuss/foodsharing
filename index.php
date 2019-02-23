@@ -22,10 +22,10 @@ if(isset($_GET['g_path']))
 */
 
 use Foodsharing\Debug\DebugBar;
+use Foodsharing\Helpers\LinkingHelper;
 use Foodsharing\Helpers\PageCompositionHelper;
 use Foodsharing\Lib\ContentSecurityPolicy;
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Routing;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
@@ -59,8 +59,8 @@ $mem = $container->get(Mem::class);
 /* @var $view_utils Utils */
 $view_utils = $container->get(Utils::class);
 
-/* @var $func Func */
-$func = $container->get(Func::class);
+/* @var $func LinkingHelper */
+$linkingHelper = $container->get(LinkingHelper::class);
 
 /* @var $func PageCompositionHelper */
 $pageCompositionHelper = $container->get(PageCompositionHelper::class);
@@ -82,12 +82,12 @@ if ($session->may()) {
 	if (isset($_GET['uc'])) {
 		if ($session->id() != $_GET['uc']) {
 			$mem->logout($session->id());
-			$func->goLogin();
+			$linkingHelper->goLogin();
 		}
 	}
 }
 
-$app = $func->getPage();
+$app = $linkingHelper->getPage();
 
 if (($class = $session->getRouteOverride()) === null) {
 	$class = Routing::getClassName($app, 'Control');

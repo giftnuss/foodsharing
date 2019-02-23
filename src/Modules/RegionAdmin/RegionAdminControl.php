@@ -19,7 +19,7 @@ class RegionAdminControl extends Control
 		parent::__construct();
 
 		if (!$this->session->may('orga')) {
-			$this->func->go('/');
+			$this->linkingHelper->go('/');
 		}
 	}
 

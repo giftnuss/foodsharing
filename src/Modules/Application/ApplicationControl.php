@@ -38,7 +38,7 @@ class ApplicationControl extends Control
 		$this->view->setBezirk($this->bezirk);
 
 		if (!($this->session->isAdminFor($this->bezirk_id) || $this->session->may('orga'))) {
-			$this->func->go('/');
+			$this->linkingHelper->go('/');
 		}
 	}
 

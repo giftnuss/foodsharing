@@ -26,7 +26,7 @@ class BlogControl extends Control
 			} else {
 				$this->func->info('Diesen Artikel kannst Du nicht löschen');
 			}
-			$this->func->goPage();
+			$this->linkingHelper->goPage();
 		}
 		$this->pageCompositionHelper->addBread($this->func->s('blog_bread'), '/?page=blog');
 		$this->pageCompositionHelper->addTitle($this->func->s('blog_bread'));
@@ -55,7 +55,7 @@ class BlogControl extends Control
 			$this->pageCompositionHelper->addContent($this->v_utils->v_field($out, $this->func->s('news')));
 			$this->pageCompositionHelper->addContent($this->view->pager($page));
 		} elseif ($page > 1) {
-			$this->func->go('/?page=blog');
+			$this->linkingHelper->go('/?page=blog');
 		}
 	}
 
@@ -130,7 +130,7 @@ class BlogControl extends Control
 			)), $this->func->s('actions')), CNT_LEFT);
 		} else {
 			$this->func->info('Du darfst keine Artikel erstellen!');
-			$this->func->goPage();
+			$this->linkingHelper->goPage();
 		}
 	}
 
@@ -144,7 +144,7 @@ class BlogControl extends Control
 
 			if ($this->model->canAdd((int)$this->session->id(), $g_data['bezirk_id']) && $this->model->add_blog_entry($g_data)) {
 				$this->func->info($this->func->s('blog_entry_add_success'));
-				$this->func->goPage();
+				$this->linkingHelper->goPage();
 			} else {
 				$this->func->error($this->func->s('error'));
 			}
@@ -169,7 +169,7 @@ class BlogControl extends Control
 			)), $this->func->s('actions')), CNT_LEFT);
 		} else {
 			$this->func->info('Diesen Artikel kannst Du nicht bearbeiten');
-			$this->func->goPage();
+			$this->linkingHelper->goPage();
 		}
 	}
 
@@ -184,7 +184,7 @@ class BlogControl extends Control
 
 			if ($this->blogGateway->update_blog_entry($_GET['id'], $g_data)) {
 				$this->func->info($this->func->s('blog_entry_edit_success'));
-				$this->func->goPage();
+				$this->linkingHelper->goPage();
 			} else {
 				$this->func->error($this->func->s('error'));
 			}
